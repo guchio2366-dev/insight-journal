@@ -34,25 +34,27 @@ export function westFarmingGeometry(values,layer,stride=4) {
   if(values.length!==width*height)throw Error('Unexpected farming grid length');
   const positive=Array.from(values).filter(value=>Number.isFinite(value)&&value!==noData&&value>0).sort((a,b)=>a-b);
   const threshold=positive.length?positive[Math.floor((positive.length-1)*.75)]:null;
-  const cols=Math.ceil(width/stride),rows=Math.ceil(height/stride),mask=new Uint8Array(cols*rows),points=new Map(),strongPoints=new Map();
+  const cols=Math.ceil(width/stride),rows=Math.ceil(height/stride),mask=new Uint8Array(cols*rows),strongMask=new Uint8Array(cols*rows),points=new Map(),strongPoints=new Map();
   for(let y=0;y<height;y++)for(let x=0;x<width;x++){
     const value=values[y*width+x];
     if(!Number.isFinite(value)||value===noData||value<=0)continue;
     mask[Math.floor(y/stride)*cols+Math.floor(x/stride)]=1;
     const bin=Math.floor(y/height*4)*6+Math.floor(x/width*6),previous=points.get(bin);
     if(!previous||value>previous.value)points.set(bin,{x:x+.5,y:y+.5,value});
-    if(threshold!==null&&value>=threshold){const strongBin=Math.floor(y/height*8)*12+Math.floor(x/width*12),previousStrong=strongPoints.get(strongBin);if(!previousStrong||value>previousStrong.value)strongPoints.set(strongBin,{x:x+.5,y:y+.5,value});}
+    if(threshold!==null&&value>=threshold){strongMask[Math.floor(y/stride)*cols+Math.floor(x/stride)]=1;const strongBin=Math.floor(y/height*8)*12+Math.floor(x/width*12),previousStrong=strongPoints.get(strongBin);if(!previousStrong||value>previousStrong.value)strongPoints.set(strongBin,{x:x+.5,y:y+.5,value});}
   }
   const coverage=cellsPath(width,height,i=>Number.isFinite(values[i])&&values[i]!==noData&&values[i]>0);
   const strongCoverage=threshold===null?'':cellsPath(width,height,i=>Number.isFinite(values[i])&&values[i]!==noData&&values[i]>0&&values[i]>=threshold);
-  let outline='';
-  const active=(x,y)=>x>=0&&y>=0&&x<cols&&y<rows&&mask[y*cols+x]===1;
-  for(let y=0;y<rows;y++)for(let x=0;x<cols;x++)if(active(x,y)){
-    const left=x*stride,top=y*stride,right=Math.min(width,left+stride),bottom=Math.min(height,top+stride);
-    if(!active(x,y-1))outline+=`M${left},${top}H${right}`;
-    if(!active(x+1,y))outline+=`M${right},${top}V${bottom}`;
-    if(!active(x,y+1))outline+=`M${right},${bottom}H${left}`;
-    if(!active(x-1,y))outline+=`M${left},${bottom}V${top}`;
-  }
-  return {coverage,strongCoverage,threshold,outline,points:[...points.values()],strongPoints:[...strongPoints.values()]};
+  const outlineFor=surface=>{
+    let outline='';const active=(x,y)=>x>=0&&y>=0&&x<cols&&y<rows&&surface[y*cols+x]===1;
+    for(let y=0;y<rows;y++)for(let x=0;x<cols;x++)if(active(x,y)){
+      const left=x*stride,top=y*stride,right=Math.min(width,left+stride),bottom=Math.min(height,top+stride);
+      if(!active(x,y-1))outline+=`M${left},${top}H${right}`;
+      if(!active(x+1,y))outline+=`M${right},${top}V${bottom}`;
+      if(!active(x,y+1))outline+=`M${right},${bottom}H${left}`;
+      if(!active(x-1,y))outline+=`M${left},${bottom}V${top}`;
+    }
+    return outline;
+  };
+  return {coverage,strongCoverage,threshold,outline:outlineFor(mask),strongOutline:outlineFor(strongMask),points:[...points.values()],strongPoints:[...strongPoints.values()]};
 }

@@ -63,7 +63,7 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Build site
         run: npm run build
-      - name: Capture only initial and wheat-selection screens
+      - name: Capture only the wheat-selection screen
         run: node scripts/capture-west-asia-food-review.mjs
       - name: Upload compact PC evidence
         if: always()

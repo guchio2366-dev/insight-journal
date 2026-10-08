@@ -306,7 +306,7 @@ async function init(root:HTMLElement){
   }
   if(selected?.kind==='crop'){
    const shape=await farmingShape(layer(t));
-   for(const [color,width] of [['#fffdf5',3],['#203f4a',1.6]])html+=`<path data-west-farm-selected="${esc(t.id)}" d="${shape.outline}" fill="none" stroke="${color}" stroke-width="${width}" vector-effect="non-scaling-stroke" pointer-events="none"/>`;
+   for(const [color,width] of [['#fffdf5',3],['#203f4a',1.6]])html+=`<path data-west-farm-selected="${esc(t.id)}" d="${shape.strongOutline}" fill="none" stroke="${color}" stroke-width="${width}" vector-effect="non-scaling-stroke" pointer-events="none"/>`;
   }
   return html+'</g>';
  }
@@ -427,7 +427,7 @@ async function init(root:HTMLElement){
   const l=layer(t);let html='';
   const swatches=(items:{color:string,label:string}[])=>'<div class="west-swatches">'+items.map(x=>`<span><i style="background:${esc(x.color)}"></i>${esc(x.label)}</span>`).join('')+'</div>';
   if(showFarmingContext(t)){
-   html=swatches([...westFarmingProducts.map(p=>({color:p.color,label:p.label+(p.kind==='crop'?'の強い面':'の強い地点')})),{color:'#344d70',label:'小麦・大麦の強い面の重なり'}])+'<p>2020年。各品目の正値推計格子の中で上位25%を鮮やかに示し、他の正値格子はごく淡く残します。小麦・大麦は収穫面積（ha／格子）、羊・山羊・牛は推計密度（頭／km²）で、互いの値は加算しません。家畜の点は高い格子を8×12区画ごとに最大1点だけ示します。色面・点の数から生産量や頭数は計算できません。'+(nationalOnlyFarm(t)?'選択した品目の細地域分布は未収録で、国別生産量は右のFAOSTAT統計です。':'選択した作物の輪郭は正値範囲全体です。')+'</p>';
+   html=swatches([...westFarmingProducts.map(p=>({color:p.color,label:p.label+(p.kind==='crop'?'の強い面':'の強い地点')})),{color:'#344d70',label:'小麦・大麦の強い面の重なり'}])+'<p>2020年の保存格子。鮮やかな色と選択作物の濃い輪郭は各系列の正値上位25%（試行）、淡い面と細線は残りの正値域です。作物はha／格子、家畜は頭／km²で加算できません。家畜の点は高い格子を8×12区画に最大1点示します。'+(nationalOnlyFarm(t)?'選択品目の細地域分布は未収録で、国別生産量は右欄です。':'')+'</p><details><summary>強調基準の確認</summary><p>5系列すべてが正値の約16.5万格子に対し、上位25%が同時に強いのは4,383格子。上位33%・20%でも、トルコ・イラン・イラク・エジプト周辺の小麦域とイエメン周辺の山羊密度域は残ります。色面や点の数から生産量・頭数は計算できません。</p></details>';
   }else if(t.id==='precipitation'){
    html=swatches(rainfallColors.map((color,i)=>({color,label:i===0?'100未満':i===rainfallBreaks.length?'2,000以上':format(rainfallBreaks[i-1],0)+'〜'+format(rainfallBreaks[i],0)+'未満'})))+'<p>観測所の月別平年値の年合計 · mm／年。18地点の点のみ、期間は地点ごと。</p>';
   }else if(isSettlementTopic(t.id)){

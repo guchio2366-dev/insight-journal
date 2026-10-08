@@ -86,7 +86,6 @@ try{
   const file=label+'.jpg',bytes=await page.screenshot({path:path.join(output,file),type:'jpeg',quality:78,fullPage,animations:'disabled'});
   record.images.push({file,fullPage,map,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')});
  };
- await capture('01-farming-overview');
  await page.locator('[data-west-topic-button="wheat"]').first().click();await ready();
  assert.equal(await page.locator('[data-west-atlas]').getAttribute('data-topic'),'wheat');
  assert.equal(await page.locator('[data-west-farm-context]').count(),5);
@@ -95,9 +94,10 @@ try{
  assert.equal(await page.locator('[data-west-farm-map-label="barley"].is-muted').count(),1);
  assert.equal(await page.locator('[data-west-farm-map-label="sheep"].is-muted').count(),1);
  assert.equal(await page.locator('[data-west-farm-context="sheep"]').getAttribute('opacity'),'.24');
- await capture('02-wheat-selected');
+ assert(await page.locator('[data-west-legend]').innerText().then(text=>text.includes('濃い輪郭は各系列の正値上位25%')));
+ await capture('01-wheat-selected');
  assert.deepEqual(errors,[]);assert.deepEqual(failedResponses,[]);
- assert.equal(record.images.length,2);
+ assert.equal(record.images.length,1);
  record.status='passed';
 }catch(error){record.status='failed';record.error=error.stack??String(error);process.exitCode=1;}
 finally{await browser?.close();await new Promise(resolve=>server.close(resolve));await writeFile(path.join(output,'metadata.json'),JSON.stringify(record,null,2)+'\n');}
