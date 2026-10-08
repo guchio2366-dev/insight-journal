@@ -118,6 +118,20 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  }
  record('Punjab wheat and Central Asian cotton retain livestock context and ignore unrelated background clicks');
 
+
+ await open('south-central-asia/population/?topic=ethnicity');
+ await page.locator('[data-settlement-reading="ethnicity"] [data-settlement-overview]').waitFor({state:'visible'});
+ assert.match(await page.locator('[data-settlement-reading="ethnicity"] [data-settlement-overview]').textContent(),/最多|参考|特徴/);
+ await screenshot('south-central-cultural-distribution');record('Ethnic distribution remains a separate reference from population density and majority classifications');
+
+ await open('central-asia/nature/?topic=terrain');
+ await page.waitForFunction(()=>document.querySelector('[data-map-period]')?.textContent.includes('500m'));
+ await screenshot('central-asia-500m-elevation');record('Central Asian elevation uses the existing 500m contours');
+ assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+ }else{
+  await open('south-central-asia/industry/');await screenshot('south-central-industry-overview');
+  await open('south-central-asia/population/?topic=ethnicity');await screenshot('south-central-cultural-distribution');
+ }
  await open('south-central-asia/agriculture/');
  const supply=page.locator('[data-south-central-supply]'),destinations=page.locator('[data-south-central-destinations]');
  await supply.locator('.sc-flow-track').waitFor({state:'visible'});
@@ -136,20 +150,7 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  await capture(page,profile,'india-rice-export-flow','asia');
  record('India rice export mix and basmati destinations render for overview and rice, and clear on wheat');
 
- await open('south-central-asia/population/?topic=ethnicity');
- await page.locator('[data-settlement-reading="ethnicity"] [data-settlement-overview]').waitFor({state:'visible'});
- assert.match(await page.locator('[data-settlement-reading="ethnicity"] [data-settlement-overview]').textContent(),/最多|参考|特徴/);
- await screenshot('south-central-cultural-distribution');record('Ethnic distribution remains a separate reference from population density and majority classifications');
-
- await open('central-asia/nature/?topic=terrain');
- await page.waitForFunction(()=>document.querySelector('[data-map-period]')?.textContent.includes('500m'));
- await screenshot('central-asia-500m-elevation');record('Central Asian elevation uses the existing 500m contours');
- assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
- }else{
-  await open('south-central-asia/industry/');await screenshot('south-central-industry-overview');
-  await open('south-central-asia/population/?topic=ethnicity');await screenshot('south-central-cultural-distribution');
- }
- // Reuse the fixed 30-image regional budget for two overview references and
+ // Reuse the 33-image regional budget for two overview references, one rice flow, and
  // eight new band scenes across desktop, laptop and the smaller PC viewport.
  for(const [topic,kind,interval,legend] of [['precipitation','rainfall',250,'[data-hydrology-scale]'],['terrain','terrain',500,'[data-physical-legend] .asia-physical-key']]){
   let expected;
