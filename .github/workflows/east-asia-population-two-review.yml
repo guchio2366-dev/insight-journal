@@ -1,0 +1,51 @@
+name: East Asia population two review images
+
+on:
+  push:
+    branches: [review/east-asia-population-20261008]
+    paths:
+      - '.github/workflows/east-asia-population-two-review.yml'
+      - 'scripts/capture-east-population-two-review.mjs'
+
+permissions:
+  contents: read
+
+jobs:
+  images:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Use installed Chrome and Japanese fonts
+        shell: bash
+        run: |
+          set -euo pipefail
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          test -n "$chrome_path"
+          test -n "$(fc-list ':lang=ja' family)"
+          printf 'REVIEW_CHROME_PATH=%s\n' "$chrome_path" >> "$GITHUB_ENV"
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - name: Install existing dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Build local production site
+        run: npm run build
+      - name: Capture the two initial views in Chrome
+        run: node scripts/capture-east-population-two-review.mjs
+      - name: Check artifact size and image count
+        run: |
+          test "$(find review-artifacts/east-population-two -maxdepth 1 -name '*.png' | wc -l)" -eq 2
+          test "$(du -cb review-artifacts/east-population-two/*.png | tail -n 1 | cut -f 1)" -lt 10485760
+      - name: Save only the two PNGs
+        uses: actions/upload-artifact@v4
+        with:
+          name: east-asia-population-two-${{ github.run_id }}
+          path: review-artifacts/east-population-two/*.png
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 7
