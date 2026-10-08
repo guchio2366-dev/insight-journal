@@ -80,7 +80,6 @@ export async function verifySoutheastAsiaRegion(page,{source,capture:takePicture
   return {readingBottom:reading.bottom,statisticsTop:statistics.top,cards};
  });
  assert(lower.readingBottom<=lower.statisticsTop+1&&lower.cards.length===3&&lower.cards.every(card=>card.visible&&card.uncovered),`All three statistics cards must remain visible and uncovered: ${JSON.stringify(lower)}`);
- await takePicture('agriculture-statistics-visible');
  await page.evaluate(()=>{scrollTo({top:0,behavior:'instant'});document.querySelector('[data-southeast-top-workspace]>.asia-reading-panel').scrollTop=0;});
  record('news rail, independent right reading scroll, and full-width regional statistics');
  assert.equal(await page.locator('.southeast-supply-bars li').count(),5);
