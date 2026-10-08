@@ -1,0 +1,66 @@
+name: Review East Asia industry journey
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/atlas-east-industry-journey-review.yml'
+      - 'scripts/capture-east-industry-journey.mjs'
+      - 'scripts/verify-asia-industry-country.mjs'
+      - 'src/components/atlas/AsiaIndustryPanel.astro'
+      - 'src/scripts/atlas-asia-industry.ts'
+      - 'tests/unit/atlas-asia-controller.test.mjs'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: east-industry-journey-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: Verify four country readings in Chrome
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+    steps:
+      - name: Check out the reviewed commit
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - name: Use installed Chrome and Japanese fonts
+        shell: bash
+        run: |
+          set -euo pipefail
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          if [[ -z "$chrome_path" ]]; then
+            echo "::error::Chrome must already be installed on the runner."
+            exit 1
+          fi
+          if [[ -z "$(fc-list ':lang=ja' family)" ]]; then
+            sudo apt-get update
+            sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+          fi
+          test -n "$(fc-list ':lang=ja' family)"
+          printf 'REVIEW_CHROME_PATH=%s\n' "$chrome_path" >> "$GITHUB_ENV"
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - name: Install existing dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Build local production site
+        run: npm run build
+      - name: Verify country paths and capture five PC images
+        run: node scripts/capture-east-industry-journey.mjs
+      - name: Save compact review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: east-industry-journey-${{ github.run_id }}-${{ github.run_attempt }}
+          path: review-artifacts/east-industry
+          if-no-files-found: warn
+          compression-level: 6
+          retention-days: 7

@@ -63,7 +63,7 @@ const config = { industryOverviews, farmingAreas, geography, climateWater, count
         <div class="eu-map-stage" data-map-surface tabindex="0" role="region" aria-label="欧州の地図">
           <EuropeLayoutControls position="map" {field} />
           <div class="eu-map-buttons" role="group" aria-label="地図の縮尺と表示"><button type="button" data-eu-reset>全体へ</button><button type="button" data-eu-zoom="in" aria-label="地図を拡大">＋</button><button type="button" data-eu-zoom="out" aria-label="地図を縮小">−</button><button type="button" data-eu-render>簡易表示</button></div>
-          <div class="eu-map-heading"><div><h2 id="eu-map-title" data-eu-map-title>{initialLayer.title}</h2><p data-eu-map-status>{initialClimateReader?'都市を選ぶと、その観測所の気候を表示します。':agriculture?'作物名を選ぶと、その分布を表示します。':'地図の分布と右側の説明を読み比べます。'}</p></div><p data-eu-focus aria-live="polite">欧州全体</p></div>
+          <div class="eu-map-heading"><div><h2 id="eu-map-title" data-eu-map-title>{initialLayer.title}</h2><p data-eu-map-status>{initialClimateReader?'都市を選ぶと、その観測所の気候を表示します。':agriculture?'作物・家畜の分布を同時表示しています。品目名を選ぶと輪郭を強調します。':'地図の分布と右側の説明を読み比べます。'}</p></div><p data-eu-focus aria-live="polite">欧州全体</p></div>
           <svg class="eu-static-map" data-eu-static viewBox={`0 0 ${frame.width} ${frame.height}`} role="img" aria-labelledby="eu-map-label">
             <title id="eu-map-label">欧州の{initialLayer.title}。{initialLayer.unit}。地図の名前から地点や品目を選べます。</title>
             <rect width={frame.width} height={frame.height} fill="#e7eff1" />

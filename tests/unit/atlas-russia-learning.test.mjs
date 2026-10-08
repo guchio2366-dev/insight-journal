@@ -119,3 +119,17 @@ test('farming representative positions have positive native source values and pe
  }
  window.happyDOM.abort();
 });
+test('Russia farming selection retains other product names faintly and reads only grounded regional examples',()=>{
+ for(const [place,expected] of [['west','ロストフ付近'],['siberia','オムスク付近'],['far-east','ヤクーツク付近']]){
+  assert.match(api.getRussiaFarmingGeography('farming-all',place),new RegExp(expected));
+ }
+ assert.match(api.getRussiaFarmingGeography('wheat','far-east'),/未収録を栽培ゼロと読み替えない/);
+ assert.match(api.getRussiaFarmingGeography('cattle','west'),/乳用・肉用の内訳/);
+ const state=api.createRussiaState('?layer=wheat','agriculture');
+ const initial=api.renderRussiaScene(api.getRussiaLayer('farming-all'),state);
+ const focused=api.renderRussiaScene(api.getRussiaLayer('wheat'),{...state,layer:'wheat'});
+ assert.match(initial,/data-place-product="cattle" opacity="1"/);
+ assert.match(focused,/data-place-product="cattle" opacity="0.32"/);
+ assert.match(focused,/data-place-product="wheat" opacity="1"/);
+ assert.match(focused,/data-farming-product="cattle"/);
+});

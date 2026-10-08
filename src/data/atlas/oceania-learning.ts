@@ -127,6 +127,8 @@ export function getOceaniaFarmingGeography(layerId:string,place='all'):string{
  const wheat='豪州南西部・南東部の小麦の帯は、雨と水利用、土壌を手がかりに読みます。半乾燥域も含み、気候だけで産地は決まりません。栽培技術と経営に、収穫後の貯蔵・集荷・市場への輸送をつなげて考えます。';
  const livestock='豪州の内陸と周縁部、NZの羊・牛を見比べ、牧草と水、干ばつへの備え、飼料・飼養管理の違いを読みます。加工・流通・販売価格も経営に関わります。羊毛と食肉、牛の乳と肉の用途は、この密度図だけでは分けられません。';
  const tropical='PNG・ソロモン諸島などメラネシアのココナツとカカオを、暖かさや雨、島内の集荷と加工、市場への接続から読みます。カカオは収穫後の発酵・乾燥が品質に関わります。道路・港への実際の輸送経路は描いていません。';
+ const newZealand='NZの羊・牛は、豪州の小麦帯とは異なる牧畜のまとまりとして読めます。保存した2020年の家畜密度からは、乳牛と肉牛、羊毛と食肉の内訳も、乳製品・食肉の加工地や輸出先も分かりません。生産から加工・流通へのつながりを考える際は、その違いを別の資料で確かめる必要があります。';
+ if(place==='NZL'&&['farming-all','sheep','cattle'].includes(layerId))return newZealand;
  if(layerId==='farming-all'&&['PNG','SLB','VUT','FJI'].includes(place))return tropical;
  if(layerId==='farming-all'&&['AUS','NZL'].includes(place))return wheat+'\n\n'+livestock;
  return layerId==='wheat'?wheat:layerId==='coconut'||layerId==='cacao'?tropical:layerId==='sheep'||layerId==='cattle'?livestock:wheat+'\n\n'+livestock+'\n\n'+tropical;

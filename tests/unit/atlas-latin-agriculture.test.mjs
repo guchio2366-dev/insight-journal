@@ -88,6 +88,28 @@ test('Latin agriculture: validity images preserve zero/small valid cells separat
 });
 
 async function module(path){const result=await build({entryPoints:[new URL(`../../${path}`,import.meta.url).pathname.replace(/^\/(\w:)/,'$1')],bundle:true,write:false,format:'esm',platform:'node'});return import(`data:text/javascript;base64,${Buffer.from(result.outputFiles[0].text).toString('base64')}`);}
+test('Latin crop ranking stays on the 2020 harvested-area basis and preserves the near misses',async()=>{
+ const lib=await module('src/lib/atlas-latin-agriculture.ts');
+ const manifest=json('public/assets/atlas/latin-america-agriculture-v1/manifest.json');
+ assert.equal(manifest.layers.length,12);
+ assert.equal(manifest.source.license,'CC-BY-SA-4.0');
+ assert.equal(lib.latinCropAreaRanking.length,12);
+ assert.equal(lib.latinCropAreaRanking[0].id,'soyb');
+ assert.equal(lib.latinCropAreaRanking[1].id,'maiz');
+ assert.equal(lib.latinCropAreaRanking[9].id,'temf');
+ assert.equal(lib.latinCropAreaRanking[10].id,'pota');
+ assert.equal(lib.latinCropAreaRanking[11].id,'rcof');
+ assert.equal(Math.round(100*(lib.latinCropAreaRanking[0].areaHa+lib.latinCropAreaRanking[1].areaHa)/lib.latinCropAreaTotalHa),70);
+ for(const item of lib.latinCropAreaRanking){
+  const original=manifest.layers.find(layer=>layer.id===item.id);
+  assert.equal(original.year,2020);
+  assert.equal(original.countries.length,34);
+  assert.ok(original.countries.every(country=>country.code!=='MEX'));
+  assert.equal(item.reportingCountries,original.countries.filter(country=>country.value!==null).length);
+  const selected=data.layers.find(layer=>layer.id===item.id);
+  if(selected)assert.ok(Math.abs(item.areaHa-selected.countries.reduce((sum,country)=>sum+(country.spatial.value??0),0))<0.01,item.id);
+ }
+});
 test('Latin agriculture: exact bin legend, original maps and small positive values remain truthful',async()=>{
  const lib=await module('src/lib/atlas-latin-agriculture.ts');
  const nature=await module('src/lib/atlas-latin-nature.ts');
