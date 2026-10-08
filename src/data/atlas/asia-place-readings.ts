@@ -1,6 +1,7 @@
 import {startAsiaComparison,type AsiaField,type AsiaRegionId,type AsiaState} from '../../lib/atlas-asia-state.ts';
 import {asiaFocusCountries,type AsiaFocusId} from './asia-focus.ts';
 import {southeastAsiaPlaceReadings} from './asia/southeast-asia-place-readings.ts';
+import {eastIndustrySites} from './asia-east-industry-sites.ts';
 
 export type PlaceBridge={label:string;field:AsiaField;topic:string;detail?:string;question?:string;relocate?:boolean;point?:[number,number]};
 export type PlaceReading={id:string;region:AsiaRegionId;field:AsiaField;country:string;topic:string;detail?:string;point?:[number,number];name:string;lead:string;reading:string;scope:string;source:{label:string;url:string};additionalSources?:{label:string;url:string}[];bridges:PlaceBridge[]};
@@ -18,6 +19,7 @@ const uzbekTransport={label:'世界銀行・Uzbekistan Country Case Study（2020
 // All mapped values still come from the existing raster/admin/urban datasets.
 export const asiaPlaceReadings:PlaceReading[]=[
  ...southeastAsiaPlaceReadings,
+ ...eastIndustrySites,
  {id:'north-china-wheat',region:'east-asia',field:'agriculture',country:'CHN',topic:'wheat',point:[115,37.8],name:'華北平原：冬小麦と灌漑',lead:'冬小麦が育つ季節と、雨が多い季節のずれを読む。',reading:'FAOが紹介する1991/92～1999/2000年の6作期の試験は、10～5月に育つ冬小麦への灌漑を扱っています。試験では生育期の雨だけで必要な水を満たせず、井戸や河川・貯水池の水が補っていました。まず生育期に含まれる4月の降水量を開き、7月へ切り替えると、年間合計では隠れる雨の配分を比べられます。',scope:'地図は2020年の小麦の推計収穫面積で、冬小麦だけの内訳や試験圃場を示しません。月降水量は1991～2020年の平年値で、試験各年や現在の取水量・地下水位を表しません。',source:{label:'FAO・Deficit irrigation practices（華北平原、6作期の試験）',url:'https://www.fao.org/4/y3655e/y3655e09.htm'},bridges:[seasonal(4,'冬小麦の生育期の4月と、夏の7月の雨を比べる','冬小麦が育つ10～5月と夏で、同じ地点の降水量はどう違いますか。年間合計だけでは分からない、生育期と雨の配分を月ごとに確かめます。'),nature('precipitation','同じ地点の年降水量を比べる'),nature('groundwater','同じ地点の帯水層を比べる')]},
  {id:'niigata-rice',region:'east-asia',field:'agriculture',country:'JPN',topic:'rice',point:[139.05,37.7],name:'新潟平野：稲が育つ夏と月ごとの雨',lead:'米の分布を、田植え後の夏の雨と水管理から読む。',reading:'新潟県の2023年7月11日の資料は、調査ほ場のコシヒカリの5月田植えと、7月の生育・水管理を説明しています。稲が育つ7月の降水量を開き、1月にも切り替えて、雨や雪が一年のどの時期に配分されるかを比べます。資料では生育状況に応じた水管理も扱われ、年間の降水量だけで栽培条件を説明できないことが分かります。',scope:'2020年の米の推計収穫面積、1991～2020年の月降水量平年値、2023年の県内調査を別時点として読みます。地点は米と12か月の降水を確認できる平野内陸の説明用地点で、特定の調査ほ場を示しません。平年値から2023年7月の天候や現在の水田の状態は分かりません。',source:{label:'新潟県・水稲の生育状況と今後の管理対策（2023年7月11日、1・3頁）',url:'https://www.pref.niigata.lg.jp/uploaded/attachment/370166.pdf'},bridges:[seasonal(7,'稲が育つ7月と、冬の1月の降水量を比べる','5月の田植え後に稲が育つ季節と冬で、同じ地点の降水量はどう違いますか。年間合計に含まれる雨や雪を、月ごとの配分として読み分けます。'),nature('basins','米の地点を含む集水域を比べる')]},
  {id:'mongolia-pasture',region:'east-asia',field:'agriculture',country:'MNG',topic:'sheep',point:[103.8,47.1],name:'モンゴル中部：羊と冬の草地',lead:'家畜の数に加え、草を食べられる季節条件を読む。',reading:'FAOの2019年の報告は、夏の乾燥で草が十分に育たず、その後の雪や凍結で家畜が草へ届かなくなる災害を説明しています。家畜密度が同じでも、餌を確保できる条件は年や季節によって変わります。',scope:'2020年の羊の推計密度を表示しています。現在の積雪、餌の不足、災害の発生場所を示す地図ではありません。',source:{label:'FAO・モンゴルの牧畜と早期支援（2019年1月）',url:'https://www.fao.org/newsroom/story/Acting-early-to-save-livelihoods-in-Mongolia/en'},bridges:[nature('climate','同じ地点の気候区分を比べる'),trade('51','モンゴル全体の羊毛などの輸出を比べる')]},

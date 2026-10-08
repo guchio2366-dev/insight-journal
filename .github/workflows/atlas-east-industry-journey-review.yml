@@ -8,6 +8,8 @@ on:
       - 'scripts/capture-east-industry-journey.mjs'
       - 'scripts/verify-asia-industry-country.mjs'
       - 'src/components/atlas/AsiaIndustryPanel.astro'
+      - 'src/data/atlas/asia-east-industry-sites.ts'
+      - 'src/data/atlas/asia-place-readings.ts'
       - 'src/scripts/atlas-asia-industry.ts'
       - 'tests/unit/atlas-asia-controller.test.mjs'
 
@@ -53,7 +55,7 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Build local production site
         run: npm run build
-      - name: Verify country paths and capture five PC images
+      - name: Verify country and site paths in PC and mobile Chrome
         run: node scripts/capture-east-industry-journey.mjs
       - name: Save compact review evidence
         if: always()

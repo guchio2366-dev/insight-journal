@@ -50,9 +50,9 @@ try{
   await route.continue();
  });
  await context.routeWebSocket('**/*',socket=>{results.externalAttempts.push({url:socket.url(),type:'websocket'});socket.close({code:1008,reason:'Local review only'});});
- async function runCase(name,action){
+ async function runCase(name,action,session=context){
   const record={name,passed:false,errors:[],failedRequests:[]};results.cases.push(record);
-  const page=await context.newPage();page.setDefaultTimeout(12000);
+  const page=await session.newPage();page.setDefaultTimeout(12000);
   page.on('pageerror',error=>record.errors.push(error.message));
   page.on('response',response=>{if(response.status()>=400)record.failedRequests.push({status:response.status(),url:new URL(response.url()).pathname});});
   try{record.evidence=await action(page);assert.deepEqual(record.errors,[]);assert.deepEqual(record.failedRequests,[]);record.passed=true;}
@@ -78,6 +78,36 @@ try{
   const image=`${code.toLowerCase()}.png`;await page.screenshot({path:path.join(output,image),animations:'disabled'});
   return {summary,gap,image};
  });
+ for(const [code,site,reading] of [['KOR','cheongju-memory','M15'],['TWN','tainan-fab','Fab 18']])await runCase(`site-${code}`,async page=>{
+  await page.goto(`${host.origin}${basePath}/atlas/asia/east-asia/industry/?topic=manufacturing&place=${code}`,{waitUntil:'domcontentloaded'});
+  await page.waitForFunction(()=>document.querySelector('[data-industry-status]')?.textContent===''&&!document.querySelector('[data-east-industry-sites]')?.hidden);
+  const buttons=page.locator('[data-east-industry-site-links] button');assert.equal(await buttons.count(),2);
+  await page.locator(`[data-east-industry-site="${site}"]`).click();
+  await page.waitForFunction(id=>new URL(location.href).searchParams.get('story')===id,site);
+  assert.match(await page.locator('[data-place-story-text]').textContent(),new RegExp(reading));
+  assert.match(await page.locator('[data-industry-legend-note]').textContent(),/丸は.*生産量とは別/);
+  assert.equal(await page.locator(`[data-east-industry-site="${site}"]`).getAttribute('aria-pressed'),'true');
+  if(code==='TWN')assert.match(await page.locator('[data-industry-value]').textContent(),/台湾：未掲載/);
+  await page.reload({waitUntil:'domcontentloaded'});
+  await page.waitForFunction(id=>document.querySelector('[data-place-story-text]')?.textContent?.includes(id)&&!document.querySelector('[data-place-story-body]')?.hidden,reading);
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+  await page.evaluate(async()=>{await document.fonts.ready;scrollTo(0,0);});await page.waitForLoadState('networkidle');
+  const image=`site-${code.toLowerCase()}.png`;await page.screenshot({path:path.join(output,image),animations:'disabled',fullPage:true});
+  return {site,story:new URL(page.url()).searchParams.get('story'),image};
+ });
+ const mobile=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:1,hasTouch:true,isMobile:true,serviceWorkers:'block'});
+ await mobile.route('**/*',async route=>{const url=new URL(route.request().url());if(url.origin!==host.origin){results.externalAttempts.push({url:url.origin+url.pathname,method:route.request().method()});await route.abort('blockedbyclient');return;}await route.continue();});
+ await runCase('site-mobile-TWN',async page=>{
+  await page.goto(`${host.origin}${basePath}/atlas/asia/east-asia/industry/?topic=manufacturing&place=TWN`,{waitUntil:'domcontentloaded'});
+  await page.waitForFunction(()=>document.querySelector('[data-industry-status]')?.textContent===''&&!document.querySelector('[data-east-industry-sites]')?.hidden);
+  await page.locator('[data-east-industry-site="hsinchu-fab"]').click();
+  await page.waitForFunction(()=>new URL(location.href).searchParams.get('story')==='hsinchu-fab');
+  assert.match(await page.locator('[data-place-story-text]').textContent(),/Fab 12A/);
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+  await page.evaluate(async()=>{await document.fonts.ready;scrollTo(0,0);});await page.waitForLoadState('networkidle');
+  const image='site-mobile-twn.png';await page.screenshot({path:path.join(output,image),animations:'disabled',fullPage:true});return {image};
+ },mobile);
+ await mobile.close();
  await runCase('us-reference',async page=>{
   await page.goto(`${host.origin}${basePath}/atlas/north-america/industry/?sector=manufacturing&subsector=auto`,{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>document.querySelector('[data-atlas-explorer]')?.dataset.renderState==='ready');
@@ -91,7 +121,7 @@ try{
 }catch(error){results.status='failed';results.failure=error?.stack??String(error);}
 finally{
  await browser?.close();if(host)await new Promise(resolve=>host.server.close(resolve));
- const images=await Promise.all(['chn.png','jpn.png','kor.png','twn.png','us-manufacturing.png'].map(async name=>{try{return (await stat(path.join(output,name))).size;}catch{return 0;}}));
+ const images=await Promise.all(['chn.png','jpn.png','kor.png','twn.png','site-kor.png','site-twn.png','site-mobile-twn.png','us-manufacturing.png'].map(async name=>{try{return (await stat(path.join(output,name))).size;}catch{return 0;}}));
  results.imageBytes=images.reduce((a,b)=>a+b,0);await save();
 }
 assert.equal(results.status,'passed',results.failure??results.cases.filter(c=>!c.passed).map(c=>c.failure).join('\n'));
