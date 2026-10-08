@@ -68,30 +68,31 @@ const formatClimateValue=(value:number|null,unit:string)=>value===null?'未収�
        <div class="africa-detail-scroll">
         <div class="africa-agri-context" data-africa-agri-context hidden></div>
         <div class="africa-city-readings" data-africa-city-readings hidden>
-         {africaClimateCities.map(city=><article class="africa-city-reading" data-africa-city-reading={city.id} aria-labelledby={`africa-city-title-${city.id}`} hidden>
-          <h3 id={`africa-city-title-${city.id}`} class="africa-city-name">{city.name}</h3>
+         {africaClimateCities.map(city=><article class="africa-city-reading" data-africa-city-reading={city.id} aria-label={`${city.name}の雨温図と気候`} hidden>
           <figure class="africa-city-climate-plot atlas-climate-diagram">
            <AtlasClimatePlot name={city.name} period={city.normalPeriod} temperatureC={city.temperatureC} precipitationMm={city.precipitationMm}/>
-           <figcaption><p>{city.normalPeriod}年の月別平年値</p><p><span class="is-cold">棒：降水量 mm</span> · <span class="is-warm">線：平均気温 ℃</span></p></figcaption>
+           <figcaption class="africa-city-climate-key"><span>{city.normalPeriod}の観測所平年値</span><span class="is-cold">棒：降水量 mm</span><span class="is-warm">線：平均気温 ℃</span></figcaption>
           </figure>
           <section class="africa-city-classification" aria-labelledby={`africa-city-class-${city.id}`}>
-           <h4 id={`africa-city-class-${city.id}`}>{city.classification.name}（{city.classification.code}）</h4>
+           <h4 id={`africa-city-class-${city.id}`}>{city.classification.displayName??city.classification.name}（{city.classification.code}）</h4>
            <p>{city.classification.description}</p>
           </section>
           <section class="africa-city-geographic-reason" aria-labelledby={`africa-city-reason-${city.id}`}>
            <h4 id={`africa-city-reason-${city.id}`}>この気候になる地理的な理由</h4>
            <p data-africa-city-geographic-reason={city.id}>{city.geographicReason??city.geographicReasonStatus}</p>
+           <p class="africa-city-mechanism-source"><a href={city.mechanismSourceUrl}>{city.mechanismSourceName}</a>を踏まえた地理的な読み方。</p>
           </section>
+          <p class="africa-city-agriculture">農業・牧畜との関係：{city.agricultureLink}</p>
           <p class="africa-city-reading-summary">{city.reading}</p>
           <p class="africa-city-source">観測所の平年値：<a href={city.sourceUrl}>{city.sourceName} · {city.normalPeriod}</a></p>
           <p class="africa-city-source">地点の気候区分：<a data-africa-city-classification-source={city.id} href={city.classification.sourceUrl}>{city.classification.sourceName}</a> · {city.classification.period} · {city.classification.resolutionDegrees}度格子</p>
           <details class="africa-city-months" data-africa-city-months={city.id}>
            <summary>12か月の数値・観測地点・出典</summary>
-           <p>{city.stationName} · 観測所番号 {city.stationId} · 標高 {city.elevationM.toLocaleString('ja-JP')} m · {city.coordinates[1].toFixed(2)}°N / {city.coordinates[0].toFixed(2)}°E</p>
+           <p>{city.stationName} · 観測所番号 {city.stationId} · 標高 {city.elevationM.toLocaleString('ja-JP')} m · {Math.abs(city.coordinates[1]).toFixed(2)}°{city.coordinates[1]<0?'S':'N'} / {Math.abs(city.coordinates[0]).toFixed(2)}°{city.coordinates[0]<0?'W':'E'}</p>
            <p>平年期間：{city.normalPeriod}。気温と降水量は別の軸で読みます。未収録と降水量0 mmを区別します。</p>
            <table><caption>{city.name}の月別平年値（{city.normalPeriod}）</caption><thead><tr><th scope="col">月</th><th scope="col">平均気温</th><th scope="col">降水量</th></tr></thead><tbody>{city.temperatureC.map((value,index)=><tr><th scope="row">{index+1}月</th><td>{formatClimateValue(value,'℃')}</td><td>{formatClimateValue(city.precipitationMm[index],'mm')}</td></tr>)}</tbody></table>
            {city.notes.map(note=><p>{note}</p>)}
-           <p>平年値の保存日：{city.sourceRetrievedAt}。<a href={city.sourceTermsUrl}>気象庁の利用条件</a>。</p>
+           <p>平年値の保存日：{city.sourceRetrievedAt}。<a href="https://ds.data.jma.go.jp/tcc/tcc/products/climate/climatview/outline.html">気象庁の平年期間と算出方法</a> · <a href={city.sourceTermsUrl}>利用条件</a>。</p>
            <p>気候区分は観測所の座標にある格子の分類です。<a href={city.classification.licenseUrl}>{city.classification.license}</a>。</p>
           </details>
          </article>)}

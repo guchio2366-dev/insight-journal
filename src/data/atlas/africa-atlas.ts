@@ -1,6 +1,7 @@
 import countryData from './africa-countries.json' with {type:'json'};
 import statistics from './africa-statistics.json' with {type:'json'};
 import {themes} from './africa-themes.ts';
+import {africaClimateCityById} from './africa-climate-cities.ts';
 export type Field = 'nature' | 'agriculture' | 'industry' | 'population';
 export type Region = 'all' | 'north' | 'west' | 'central' | 'east' | 'south';
 export const countries = countryData;
@@ -115,7 +116,7 @@ export function normalizeAfricaReaderState(state:State):State {
   state.water=state.field==='nature'?canonicalWater(state.metric,state.water):'';
   state.river=canonicalRiver(state,state.river);
   state.basin=state.field==='nature'&&state.topic==='water'&&state.water==='basin'&&/^b-\d{10}$/.test(state.basin??'')?state.basin:'';
-  state.city=state.field==='nature'&&state.topic==='climate'&&state.city==='helwan'?state.city:'';
+  state.city=state.field==='nature'&&state.topic==='climate'&&africaClimateCityById(state.city)?state.city:'';
   state.industryLocation=state.field==='industry'&&['zambia-copperbelt','zambia-northwest','lusaka','casablanca-industry','casablanca-airport','lagos','accra','nairobi','cairo','alexandria','luxor'].includes(state.industryLocation??'')?state.industryLocation:'';
   state.place='';state.compare='';state.context='';state.sourceState='';state.view='distribution';
   state.cropMeasure='harvested';
