@@ -2,6 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
+import {build} from 'esbuild';
+import {Window} from 'happy-dom';
 import {southeastCropPriority,southeastCropCountries} from '../../src/data/atlas/asia/southeast-asia-crop-priority.mjs';
 
 const data=JSON.parse(readFileSync('public/assets/atlas/southeast-asia-v1/world-shares.json'));
@@ -44,4 +46,28 @@ test('Southeast crop world shares use the matching FAOSTAT release, item, elemen
  assert.ok(rice2020.countries.IDN.share>7&&rice2020.countries.IDN.share<7.1);
  assert.equal(rice2020.countries.SGP,undefined,'missing country rows must remain absent');
  assert.equal(rice2020.reportedRegion.complete,false,'a partial country sum must not be labelled the complete region');
+});
+
+test('the shared under-map panel draws the sourced Southeast trend and handles unsupported crops',async()=>{
+ const output=await build({entryPoints:['src/scripts/atlas-asia-farming-panel.ts'],bundle:true,platform:'node',format:'esm',write:false});
+ const {renderSouthCentralFarmConnections}=await import('data:text/javascript;base64,'+Buffer.from(output.outputFiles[0].text).toString('base64'));
+ const window=new Window(),oldDocument=globalThis.document;globalThis.document=window.document;
+ try{
+  const root=window.document.createElement('main');root.innerHTML='<section data-south-central-farm-connections hidden><div data-south-central-world-share></div></section>';
+  const section=root.querySelector('[data-south-central-farm-connections]'),content=()=>root.querySelector('[data-south-central-world-share]');
+  renderSouthCentralFarmConnections(root,'southeast-asia',true,'overview',undefined);
+  assert.equal(section.hidden,false);
+  assert.match(content().textContent,/インドネシアの米（籾米）.*2024年.*6\.48％/);
+  assert.match(content().textContent,/ベトナム.*タイ.*地域全体の世界比ではありません/);
+  assert.equal(content().querySelectorAll('svg.sc-share-chart').length,1);
+  assert.equal(content().querySelectorAll('tbody tr').length,10);
+  renderSouthCentralFarmConnections(root,'southeast-asia',true,'maize',{code:'VNM',name:'ベトナム'});
+  assert.match(content().textContent,/ベトナムのトウモロコシ.*2024年.*0\.36％/);
+  assert.equal(content().querySelectorAll('svg.sc-share-chart').length,1);
+  renderSouthCentralFarmConnections(root,'southeast-asia',true,'oilpalm',{code:'IDN',name:'インドネシア'});
+  assert.match(content().textContent,/未収録/);
+  assert.equal(content().querySelectorAll('svg').length,0);
+  renderSouthCentralFarmConnections(root,'southeast-asia',false,'rice',undefined);
+  assert.equal(section.hidden,true);
+ }finally{globalThis.document=oldDocument;await window.happyDOM.close();}
 });
