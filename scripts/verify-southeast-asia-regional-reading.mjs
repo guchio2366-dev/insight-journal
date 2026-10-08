@@ -60,9 +60,15 @@ export async function verifySoutheastAsiaRegion(page,{source,capture:takePicture
  await expand('[data-southeast-forest-reading]');await expand('[data-southeast-trade-reading]');
  const readingScroll=await page.locator('.asia-layout>.asia-reading-panel').evaluate(node=>{node.scrollTop=0;const before=node.scrollTop;node.scrollTop=180;return {before,after:node.scrollTop,overflow:getComputedStyle(node).overflowY};});
  assert(readingScroll.after>readingScroll.before&&readingScroll.overflow==='auto','The right reading must scroll inside its fixed frame');
- await page.evaluate(()=>scrollTo(0,0));
- const pageScroll=await page.evaluate(()=>{const before=scrollY;scrollTo(0,Math.min(400,document.documentElement.scrollHeight-innerHeight));return {before,after:scrollY,newsTop:document.querySelector('.atlas-news').getBoundingClientRect().top};});
- assert(pageScroll.after>pageScroll.before&&pageScroll.newsTop<=12,'The page must scroll while the news rail stays fixed');
+ const pageScroll=await page.evaluate(()=>{
+  const news=document.querySelector('.atlas-news'),maxScroll=document.documentElement.scrollHeight-innerHeight;
+  const newsY=news.getBoundingClientRect().top+scrollY;
+  scrollTo(0,Math.min(newsY+100,maxScroll-100));
+  const before=scrollY,firstTop=news.getBoundingClientRect().top;
+  scrollTo(0,Math.min(before+100,maxScroll));
+  return {before,after:scrollY,firstTop,secondTop:news.getBoundingClientRect().top};
+ });
+ assert(pageScroll.after>pageScroll.before&&pageScroll.firstTop<=12&&Math.abs(pageScroll.secondTop-pageScroll.firstTop)<=1,`The page and news rail must scroll independently: ${JSON.stringify(pageScroll)}`);
  await page.evaluate(()=>{scrollTo(0,0);document.querySelector('.asia-layout>.asia-reading-panel').scrollTop=0;});
  record('news rail, independent right reading scroll, and full-width regional statistics');
  assert.equal(await page.locator('.southeast-supply-bars li').count(),5);
