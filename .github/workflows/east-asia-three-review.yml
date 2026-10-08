@@ -1,0 +1,30 @@
+name: East Asia three review images
+
+on:
+  push:
+    branches: [review/east-asia-three-20261008]
+    paths:
+      - '.github/workflows/east-asia-three-review.yml'
+      - 'review-artifacts/east-asia-three/*.png'
+
+permissions:
+  contents: read
+
+jobs:
+  images:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify three PNGs fit one small artifact
+        run: |
+          test "$(find review-artifacts/east-asia-three -maxdepth 1 -name '*.png' | wc -l)" -eq 3
+          test "$(du -cb review-artifacts/east-asia-three/*.png | tail -n 1 | cut -f 1)" -lt 10485760
+      - name: Save review images
+        uses: actions/upload-artifact@v4
+        with:
+          name: east-asia-three-review-${{ github.run_id }}
+          path: review-artifacts/east-asia-three/*.png
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 7
