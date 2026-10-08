@@ -140,6 +140,23 @@
 .eu-workspace-root .eu-verified-food-key li strong { margin-left:auto; font-variant-numeric:tabular-nums; }
 .eu-workspace-root .eu-verified-wood { border-top:2px solid #688078; padding-top:12px; }
 .eu-workspace-root .eu-farm-numbers[data-eu-farm-numbers] > :not(.eu-forest-production) { display:none; }
+.eu-workspace-root .eu-verified-topic { border-top:2px solid #688078; padding-top:12px; }
+.eu-workspace-root .eu-verified-topic h4 { margin:0 0 5px; font:700 16px/1.45 var(--sans); }
+.eu-workspace-root .eu-verified-topic-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:15px; margin:12px 0; }
+.eu-workspace-root .eu-verified-topic-card { border:1px solid #d0d9d1; padding:12px; background:#fafbf7; }
+.eu-workspace-root .eu-verified-topic-trade { display:flex; align-items:center; gap:16px; }
+.eu-workspace-root .eu-verified-topic-trade ul { flex:1; min-width:0; }
+.eu-workspace-root .eu-verified-topic-trade li { display:flex; align-items:center; gap:5px; }
+.eu-workspace-root .eu-verified-topic-trade li strong { margin-left:auto; }
+.eu-workspace-root .eu-verified-topic-missing { margin:0; padding:12px; border-left:3px solid #9a8467; background:#f4f0e6; font:14px/1.7 var(--sans); }
+.eu-workspace-root .eu-verified-topic-country { display:flex; align-items:center; gap:12px; margin:12px 0; font:700 14px/1.5 var(--sans); }
+.eu-workspace-root .eu-verified-topic-country select { min-height:38px; min-width:180px; font:14px/1.5 var(--sans); }
+.eu-workspace-root .eu-farm-numbers[data-eu-farm-numbers].is-topic-country > :is([data-eu-farm-statistics-message],[data-eu-farm-measure-definition],[data-eu-farm-stat-source]):not([hidden]) { display:block; }
+.eu-workspace-root .eu-farm-numbers[data-eu-farm-numbers].is-topic-country > [data-eu-farm-stat-summary]:not([hidden]) { display:grid; }
+.eu-workspace-root .eu-farm-numbers[data-eu-farm-numbers].is-topic-country > [data-eu-farm-series]:not([hidden]) { display:block; }
+.eu-workspace-root .eu-farm-numbers[data-eu-farm-numbers].is-topic-country > [data-eu-farm-statistics-retry]:not([hidden]) { display:inline-block; }
+.eu-workspace-root .eu-farm-numbers[data-eu-farm-numbers].is-topic-country > [data-eu-farm-three-columns] { display:grid; grid-template-columns:minmax(0,1fr); }
+.eu-workspace-root .eu-farm-numbers[data-eu-farm-numbers].is-topic-country > [data-eu-farm-three-columns] > section:not(:first-child) { display:none; }
 .eu-workspace-root .eu-wood-stage { margin:14px 0; }
 .eu-workspace-root .eu-wood-stage h4 { margin:0 0 5px; font:700 16px/1.4 var(--sans); }
 .eu-workspace-root .eu-wood-row { display:grid; grid-template-columns:100px minmax(0,1fr) 110px; gap:10px; align-items:center; margin:5px 0; font:13px/1.4 var(--sans); }

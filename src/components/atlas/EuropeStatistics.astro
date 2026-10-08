@@ -22,7 +22,7 @@ const countryName = (code: string) => countries.find(country => country.code ===
   <section data-eu-farming-statistics hidden={field !== 'agriculture'} aria-labelledby="europe-farming-statistics-title">
     <header class="eu-statistics-heading">
       <h2 id="europe-farming-statistics-title" data-eu-statistics-title>欧州の農林業の統計</h2>
-      <p>対象：<strong data-eu-statistics-item>欧州の農畜産物</strong>。国全体の公表統計と、地図の格子推計を分けて読みます。ロシアの統計は全土です。</p>
+      <p>対象：<strong data-eu-statistics-item>欧州の農畜産物</strong>。地図の格子推計と、公表された欧州地域・国全体の統計は別資料です。ロシアの国別値は全土です。</p>
     </header>
     <EuropeVerifiedStatistics />
     <section class="eu-farm-numbers" data-eu-farm-numbers hidden data-statistics-url={withBase('/assets/atlas/europe/farming-statistics-v1/statistics.json.gz')} aria-labelledby="eu-farm-numbers-title">

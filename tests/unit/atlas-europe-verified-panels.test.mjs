@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {europeVerifiedTopicMatches} from '../../src/data/atlas/europe/verified-topic-statistics.ts';
 
 const root=new URL('../../src/data/atlas/europe/',import.meta.url);
 const data=name=>JSON.parse(readFileSync(new URL(name,root),'utf8'));
@@ -8,6 +9,21 @@ const production=data('europe_production_shares_2023.json');
 const food=data('europe_food_composition_2023.json');
 const trade=data('trade_europe_2021_value_donuts.json');
 const wood=data('europe_wood_key_comparisons_2024.json');
+const areas=data('farming-areas.json');
+
+test('selected farming subjects show only verified figures for the same commodity',()=>{
+  const topics=new Set(areas.features.map(feature=>feature.properties.id));
+  assert.deepEqual(Object.keys(europeVerifiedTopicMatches).sort(),['maize','potato','soybean','wheat']);
+  for(const [topic,match] of Object.entries(europeVerifiedTopicMatches)){
+    assert.ok(topics.has(topic));
+    if(match.productionId)assert.ok(production.items.some(item=>item.id===match.productionId),topic);
+    if(match.tradeId)assert.ok(trade.charts.some(chart=>chart.id===match.tradeId),topic);
+  }
+  assert.equal(europeVerifiedTopicMatches.wheat.productionId,'wheat');
+  assert.equal(europeVerifiedTopicMatches.wheat.tradeId,'wheat_export');
+  assert.equal(europeVerifiedTopicMatches.soybean.tradeId,'soy_import');
+  assert.ok(!europeVerifiedTopicMatches.wheat.tradeId.includes('soy'));
+});
 
 test('2023 Europe shares use the published same-item World denominator',()=>{
   assert.equal(production.year,2023);

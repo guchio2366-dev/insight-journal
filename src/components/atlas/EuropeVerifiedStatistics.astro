@@ -3,6 +3,10 @@ import production from '../../data/atlas/europe/europe_production_shares_2023.js
 import food from '../../data/atlas/europe/europe_food_composition_2023.json';
 import trade from '../../data/atlas/europe/trade_europe_2021_value_donuts.json';
 import wood from '../../data/atlas/europe/europe_wood_key_comparisons_2024.json';
+import farmingAreas from '../../data/atlas/europe/farming-areas.json';
+import countries from '../../data/atlas/europe/countries.json';
+import { europeVerifiedTopicMatches } from '../../data/atlas/europe/verified-topic-statistics';
+import { europeFarmAvailableMetrics } from '../../data/atlas/europe/farming-statistics';
 
 const tradeColors=['#b89138','#608ba3','#688c69','#b7b7a6'];
 const foodColors=['#9e8546','#bd9e62','#bb755e','#928259','#668c63','#a46363','#7494a4','#9987a7','#56838d'];
@@ -17,8 +21,15 @@ const percentage=(value:number)=>`${value.toLocaleString('ja-JP',{maximumFractio
 const number=(value:number)=>value.toLocaleString('ja-JP',{maximumFractionDigits:1});
 const woodCountries:Record<string,string>={DE:'ドイツ',AT:'オーストリア',FI:'フィンランド',SE:'スウェーデン'};
 const woodStages=[{code:'RW_IN',name:'産業用丸太',maximum:Math.max(...wood.balances.filter(row=>row.product_code==='RW_IN').map(row=>row.supply))},{code:'SN',name:'製材',maximum:Math.max(...wood.balances.filter(row=>row.product_code==='SN').map(row=>row.supply))}];
+const topics=[...farmingAreas.features.map(feature=>({id:feature.properties.id,name:feature.properties.name})),{id:'dairy',name:'牛の生乳'}].map(topic=>({
+  ...topic,
+  production:production.items.find(item=>item.id===europeVerifiedTopicMatches[topic.id]?.productionId),
+  trade:trade.charts.find(chart=>chart.id===europeVerifiedTopicMatches[topic.id]?.tradeId),
+  national:europeFarmAvailableMetrics(topic.id).length>0,
+}));
 ---
 <div class="eu-verified-agriculture" data-eu-verified-agriculture>
+  <div data-eu-verified-overview>
   <div class="eu-farm-three-columns">
     <section aria-labelledby="eu-verified-share-title">
       <h3 id="eu-verified-share-title">主要品目の世界生産シェア</h3>
@@ -43,6 +54,19 @@ const woodStages=[{code:'RW_IN',name:'産業用丸太',maximum:Math.max(...wood.
     </section>
   </div>
   <p class="eu-verified-source">出典：<a href={production.source.official_url}>FAO Statistical Yearbook 2025、表21・24・25・49</a>（CC BY 4.0）、<a href="https://comtradeapi.un.org/">UN Comtrade、HS 1001・1201</a>。貿易円は消費量・自給率を示しません。</p>
+  </div>
+  {topics.map(topic=><section class="eu-verified-topic" data-eu-verified-topic={topic.id} hidden>
+    <h3>{topic.name}に対応する確認済み統計</h3>
+    <div class="eu-verified-topic-grid">
+      {topic.production&&<div class="eu-verified-topic-card"><h4>{topic.name}の世界生産シェア</h4><p class="eu-verified-meta">FAO公表の欧州地域 ÷ 世界 · 2023年 · 同じ品目の生産量</p><div class="eu-verified-share-row"><span>{topic.production.label_ja}</span><span class="eu-verified-share-track"><span style={`width:${topic.production.world_share_percent}%`}></span></span><strong>{percentage(topic.production.world_share_percent)}</strong></div><p class="eu-verified-foot">欧州公表行とWorld行の同年・同品目・同単位の比です。ロシアは全土を含み、EU集計ではありません。<a href={production.source.official_url}>FAO原表・表{topic.production.source_table}</a>。</p></div>}
+      {topic.trade&&<div class="eu-verified-topic-card"><h4>{topic.trade.title_ja}</h4><p class="eu-verified-meta">UN Comtrade · 2021年 · HS {topic.trade.hs_code} · 金額割合</p><div class="eu-verified-topic-trade"><div class="eu-verified-donut" style={`background:${bar(topic.trade.segments)}`} role="img" aria-label={`${topic.trade.title_ja}。${topic.trade.segments.map(segment=>`${segment.label_ja}${percentage(segment.share_pct)}`).join('、')}`}></div><ul>{topic.trade.segments.map((segment,index)=><li><span class="eu-verified-trade-key" style={`background:${tradeColors[index]}`}></span>{segment.label_ja} <strong>{percentage(segment.share_pct)}</strong></li>)}</ul></div><p class="eu-verified-foot">対象{topic.trade.reporters_queried}報告国・地域の域外相手別金額が分母。地理帰属不明を除外し、関税領域とM49欧州は完全一致しません。<a href={topic.trade.source_terms_url}>再配布条件</a>。</p></div>}
+      {!topic.production&&!topic.trade&&<p class="eu-verified-topic-missing">この品目に一致する欧州地域の世界生産シェア・域外相手先の確認済み集計は未収録です。別の品目の数値で代用しません。</p>}
+    </div>
+    <p class="eu-verified-foot">地図の2020年頃の分布と統計の地域・年は異なります。{topic.national?'国別の数量と世界比の2015〜2024年推移は、下の「品目の国別詳細」で国を一つ選ぶと表示します。欧州地域の年次推移として読み替えません。':'この地図の集合区分と同じ定義の国別数量も未収録です。'}</p>
+  </section>)}
+  <label class="eu-verified-topic-country" data-eu-topic-country-control hidden>品目の国別詳細
+    <select data-eu-topic-country><option value="">国を選ぶ</option>{countries.map(country=><option value={country.code}>{country.name}</option>)}</select>
+  </label>
 </div>
 
 <section class="eu-verified-wood" data-eu-verified-wood hidden aria-labelledby="eu-verified-wood-title">

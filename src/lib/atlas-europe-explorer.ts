@@ -1,5 +1,6 @@
 import { frame, europeFarmingInitialBounds, project, unproject, wheatCell, displayCell, visibleBounds, readEuropeState, writeEuropeState, defaultEuropeCity, normaliseEuropePoint } from './atlas-europe-view';
 import { farmingPresentation, farmingAtPoint, updateFarmingMap, type FarmingAreas } from './atlas-europe-farming';
+import { europeFarmAvailableMetrics } from '../data/atlas/europe/farming-statistics';
 import { layerColor, fields, europeFieldHeadings, type EuropeLayer } from '../data/atlas/europe/layers';
 import type { EuropeReading } from '../data/atlas/europe/readings';
 import type { Geometry } from './atlas-europe-geometry';
@@ -15,7 +16,6 @@ import drainageManifest from '../../public/assets/atlas/europe/drainage-v1/manif
 import { readEuropeFarmingFocus, writeEuropeFarmingFocus } from '../data/atlas/europe/farming-water-comparisons';
 import { europeIndustryGroupCopy, europeIndustryMatches, europeIndustryOverviewLabels, isEuropeIndustryCountry, normaliseEuropeIndustryGroup } from './atlas-europe-industry';
 import { createEuropeFarmingStatistics } from '../scripts/atlas-europe-farming-statistics';
-import { europeFarmAvailableMetrics } from '../data/atlas/europe/farming-statistics';
 import { createEuropeCultureOverview, europeCultureOverviewPlaces } from './atlas-europe-culture-overview';
 import precipitationLineLabels from '../data/atlas/europe/precipitation-line-labels.json' with {type:'json'};
 import { europeTerrainGuides, europeTerrainPlaceNames } from '../data/atlas/europe/terrain-geography';
@@ -70,6 +70,8 @@ export function initEuropeAtlas() {
       commit(false);
     },
   });
+  const topicCountrySelect=query<HTMLSelectElement>('[data-eu-topic-country]');
+  topicCountrySelect.addEventListener('change',()=>selectCountry(topicCountrySelect.value));
   const cultureActive=()=>state.layer==='ethnicity'||state.layer==='religion';
   const cultureOverview=createEuropeCultureOverview(root);
   let cultureData:CultureMapData={type:'FeatureCollection',features:[]};
@@ -337,12 +339,22 @@ export function initEuropeAtlas() {
     query<HTMLElement>('[data-eu-farming-statistics]').hidden=layer.field!=='agriculture';
     const forestryStatistics=['forest','treecover'].includes(layer.id);
     query<HTMLElement>('[data-eu-verified-agriculture]').hidden=forestryStatistics;
+    const selectedTopic=farm.item?.id??(layer.id==='dairy'?'dairy':'');
+    query<HTMLElement>('[data-eu-verified-overview]').hidden=!!selectedTopic;
+    all<HTMLElement>('[data-eu-verified-topic]').forEach(panel=>{panel.hidden=panel.dataset.euVerifiedTopic!==selectedTopic;});
+    const hasNationalTopic=!!selectedTopic&&europeFarmAvailableMetrics(selectedTopic).length>0;
+    query<HTMLElement>('[data-eu-topic-country-control]').hidden=!hasNationalTopic;
+    topicCountrySelect.value=hasNationalTopic?state.place:'';
     query<HTMLElement>('[data-eu-verified-wood]').hidden=!forestryStatistics;
-    query<HTMLElement>('[data-eu-farm-numbers]').hidden=!forestryStatistics;
+    const nationalDetail=hasNationalTopic&&!!state.place;
+    const farmNumbers=query<HTMLElement>('[data-eu-farm-numbers]');
+    farmNumbers.hidden=!forestryStatistics&&!nationalDetail;
+    farmNumbers.classList.toggle('is-topic-country',nationalDetail);
     const statisticsName=farm.item?.name??(layer.id==='dairy'?'牛の生乳':['forest','treecover'].includes(layer.id)?'林業':'欧州の農畜産物');
     query('[data-eu-statistics-title]').textContent=statisticsName+'の統計';
     all<HTMLElement>('[data-eu-statistics-item]').forEach(el=>{el.textContent=statisticsName;});
-    void farmStatistics.update(state);
+    query('#eu-farm-numbers-title').textContent=nationalDetail?statisticsName+'の国別数値・推移':'生産・飼養・木材の国別数量';
+    void farmStatistics.update(nationalDetail?{...state,farmYear:undefined,farmCompare:undefined}:state);
     query<HTMLElement>('[data-eu-subject-intro]').hidden=!!feature;
     const card=query<HTMLElement>('[data-eu-feature-card]');card.replaceChildren();card.hidden=!feature;
     if(feature){

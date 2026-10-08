@@ -60,9 +60,11 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       assert.match(statistics.textContent,/欠測は0としません/);
       const verified=statistics.querySelector('[data-eu-verified-agriculture]');
       assert.equal(verified.hidden,false);
-      assert.equal(verified.querySelectorAll('.eu-verified-share-row').length,6);
-      assert.equal(verified.querySelectorAll('.eu-verified-donut').length,2);
-      assert.equal(verified.querySelectorAll('.eu-verified-food-band > span').length,9);
+      const overview=verified.querySelector('[data-eu-verified-overview]');
+      assert.equal(overview.hidden,false);
+      assert.equal(overview.querySelectorAll('.eu-verified-share-row').length,6);
+      assert.equal(overview.querySelectorAll('.eu-verified-donut').length,2);
+      assert.equal(overview.querySelectorAll('.eu-verified-food-band > span').length,9);
       assert.match(verified.textContent,/自給率は同年・同群の対応表が未確認/);
       const availability=[...statistics.querySelectorAll('.eu-statistics-availability > div')];
       const unavailable=['販売総額（米ドル）'];
