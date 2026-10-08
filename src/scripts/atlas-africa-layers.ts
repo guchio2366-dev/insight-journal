@@ -119,7 +119,11 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   if(!position)return null;occupied.push(position);
   // Keep the leader outside the interactive group: a long leader enlarges the
   // group's hit box, so a normal click at its center can land on another name.
-  target.append(svg('path',{d:`M${ax},${ay}L${Math.max(position.x,Math.min(position.x+width,ax))},${position.y-5*scale}`,fill:'none',stroke:color,'stroke-width':1,'vector-effect':'non-scaling-stroke','pointer-events':'none','aria-hidden':'true'}));
+  const climate=attrs['data-africa-climate-map-label']!==undefined;
+  const leader=`M${ax},${ay}L${Math.max(position.x,Math.min(position.x+width,ax))},${position.y-5*scale}`;
+  if(climate)target.append(svg('path',{d:leader,fill:'none',stroke:'#fffdf8','stroke-width':5,'vector-effect':'non-scaling-stroke','pointer-events':'none','aria-hidden':'true',class:'africa-climate-map-leader-halo'}));
+  target.append(svg('path',{d:leader,fill:'none',stroke:color,'stroke-width':climate?2:1,'vector-effect':'non-scaling-stroke','pointer-events':'none','aria-hidden':'true',class:climate?'africa-climate-map-leader':'',...(climate?{'data-africa-climate-leader':attrs['data-africa-climate-map-label']}:{})}));
+  if(climate)target.append(svg('circle',{cx:ax,cy:ay,r:3.5*scale,fill:color,stroke:'#fffdf8','stroke-width':1.5,'vector-effect':'non-scaling-stroke','pointer-events':'none','aria-hidden':'true',class:'africa-climate-map-anchor','data-africa-climate-anchor':attrs['data-africa-climate-map-label']}));
   const node=svg('g',attrs),nameNode=svg('text',{x:position.x,y:position.y,'font-size':font,'font-weight':650,fill:color,stroke:'#fffdf8','stroke-width':3*scale,'paint-order':'stroke','stroke-linejoin':'round'});nameNode.textContent=name;node.append(nameNode);target.append(node);return node;
  }
  const basinColors=['#c9dfd7','#d9d2e6','#e2d7b4','#c8dae8','#e5cfc3','#d4ddb8','#c7e0df','#e5d1d9','#d5d8b8'];

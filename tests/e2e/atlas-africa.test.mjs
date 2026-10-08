@@ -75,7 +75,7 @@ test('six station points and names open matching monthly values, classifications
    activate(context,selector);assert.equal(params(window).get('city'),city.id);assert.equal(q('[data-theme-title]').textContent,`${city.name}の雨温図`);
    const article=q(`[data-africa-city-reading="${city.id}"]`);assert.equal(article.hidden,false);assert.equal(q('[data-africa-city-readings]').hidden,false);assert.equal(q('[data-theme-source]').href,city.sourceUrl);
    const rows=[...article.querySelectorAll('tbody tr')];assert.equal(rows.length,12);for(const [index,row] of rows.entries()){assert.equal(row.querySelector('th').textContent,`${index+1}月`);const cells=row.querySelectorAll('td');assert.equal(cells[0].textContent,`${city.temperatureC[index].toFixed(1)} ℃`);assert.equal(cells[1].textContent,`${city.precipitationMm[index].toFixed(1)} mm`);}
-   assert.ok(article.querySelector('svg'));assert.ok(article.textContent.includes(city.classification.name));assert.equal(q(`[data-africa-city-classification-source="${city.id}"]`).href,city.classification.sourceUrl);
+   assert.ok(article.querySelector('svg'));assert.equal(article.querySelector('.africa-city-classification h4').textContent,`${city.classification.displayName??city.classification.name}（${city.classification.code}）`);assert.equal(q(`[data-africa-city-classification-source="${city.id}"]`).href,city.classification.sourceUrl);
    assert.deepEqual([...article.querySelectorAll('.africa-city-climate-key>span')].map(node=>node.textContent),[`${city.normalPeriod}の観測所平年値`,'棒：降水量 mm','線：平均気温 ℃']);
    saved=window.location.search;q('[data-africa-selection-return]').click();assert.equal(article.hidden,true);window.history.back();assert.equal(article.hidden,false);window.history.forward();assert.equal(article.hidden,true);
   }
@@ -85,7 +85,7 @@ test('six station points and names open matching monthly values, classifications
  for(const city of africaClimateCities.slice(1))await page(`?field=nature&topic=climate&city=${city.id}`,({window,root,q})=>{
   assert.equal(params(window).get('city'),city.id);assert.equal(q('[data-theme-title]').textContent,`${city.name}の雨温図`);
   const article=q(`[data-africa-city-reading="${city.id}"]`);assert.equal(article.hidden,false);assert.equal(q('[data-theme-source]').href,city.sourceUrl);
-  assert.equal(article.querySelectorAll('tbody tr').length,12);assert.ok(article.textContent.includes(city.classification.name));
+  assert.equal(article.querySelectorAll('tbody tr').length,12);assert.equal(article.querySelector('.africa-city-classification h4').textContent,`${city.classification.displayName??city.classification.name}（${city.classification.code}）`);
   assert.equal(root.querySelectorAll('[data-africa-city-point]').length,6);
  });
 });

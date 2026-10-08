@@ -38,6 +38,10 @@ test('six African stations retain 12 monthly values, coordinates and individual 
  assert.deepEqual(cape.temperatureC,[21.6,21.7,20.2,17.7,15.3,13.1,12.5,12.9,14.4,16.8,18.5,20.6]);
  assert.deepEqual(cape.precipitationMm,[9.6,10.6,13.1,41.4,63.1,89,81.2,73,44.1,29,26.4,12.1]);
  assert.deepEqual([addis.classification.code,cape.classification.code],['Cwb','Csb']);
+ assert.equal(addis.classification.displayName,'温帯冬季少雨気候');
+ assert.equal(cape.classification.displayName,'地中海性気候・夏が比較的涼しい型');
+ assert.equal(addis.classification.name,manifest.layers.climate.classes.find(row=>row.id===12).name);
+ assert.equal(cape.classification.name,manifest.layers.climate.classes.find(row=>row.id===9).name);
  assert.match(addis.classification.description,/0℃.*22℃.*10分の1/);
  assert.match(cape.classification.description,/0℃.*22℃.*40 mm.*3分の1/);
  assert.ok([addis,cape].every(city=>city.notes.some(note=>note.includes('無欠測だったことを意味しません'))));

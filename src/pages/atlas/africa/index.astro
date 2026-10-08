@@ -74,7 +74,7 @@ const formatClimateValue=(value:number|null,unit:string)=>value===null?'未収�
            <figcaption class="africa-city-climate-key"><span>{city.normalPeriod}の観測所平年値</span><span class="is-cold">棒：降水量 mm</span><span class="is-warm">線：平均気温 ℃</span></figcaption>
           </figure>
           <section class="africa-city-classification" aria-labelledby={`africa-city-class-${city.id}`}>
-           <h4 id={`africa-city-class-${city.id}`}>{city.classification.name}（{city.classification.code}）</h4>
+           <h4 id={`africa-city-class-${city.id}`}>{city.classification.displayName??city.classification.name}（{city.classification.code}）</h4>
            <p>{city.classification.description}</p>
           </section>
           <section class="africa-city-geographic-reason" aria-labelledby={`africa-city-reason-${city.id}`}>
