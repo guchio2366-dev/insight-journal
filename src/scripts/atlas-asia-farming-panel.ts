@@ -2,6 +2,7 @@ import {asiaFarmDefinitions,asiaFarmRegionReading,asiaForestSources,asiaFarmFlag
 import type {AsiaRegionId} from '../lib/atlas-asia-state';
 import southCentralShares from '../../public/assets/atlas/south-central-asia-v1/world-shares.json';
 import southeastShares from '../../public/assets/atlas/southeast-asia-v1/world-shares.json';
+import {renderSouthCentralRiceFlow} from './atlas-south-central-rice-flow';
 type ShareYear={year:number;countries:Record<string,{share:number;flag:string}>};
 type ShareSeries={id:string;label:string;definition:string;years:ShareYear[]};
 const worldShareByTopic:Record<string,string>={rice:'rice-production',wheat:'wheat-production',maize:'maize-production',soybean:'soybean-production',cattle:'cattle-stocks',chicken:'chicken-stocks',sheep:'sheep-stocks',forest:'forest-area'};
@@ -14,6 +15,7 @@ const svgNode=(tag:string,attrs:Record<string,string>)=>{const node=document.cre
 export function renderSouthCentralFarmConnections(root:HTMLElement,region:AsiaRegionId,active:boolean,topic:string|null,country:{code:string;name:string}|undefined){
  const section=root.querySelector<HTMLElement>('[data-south-central-farm-connections]');if(!section)return;
  section.hidden=!active||(region!=='south-central-asia'&&region!=='southeast-asia');if(section.hidden)return;
+ renderSouthCentralRiceFlow(section,region,topic,country?.code);
  const host=section.querySelector<HTMLElement>('[data-south-central-world-share]')!;host.replaceChildren();
  const isSoutheast=region==='southeast-asia',worldSeries=(isSoutheast?southeastShares.series:southCentralShares.series) as ShareSeries[];
  const sharePercent=(value:number)=>isSoutheast?(value>0&&value<.01?'0.01％未満':`${value.toLocaleString('ja-JP',{maximumFractionDigits:2,minimumFractionDigits:2})}％`):percentage(value);

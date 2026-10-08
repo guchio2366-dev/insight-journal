@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "country": "IND",
+  "period": "2023-24年度",
+  "unit": "トン",
+  "source": "https://www.dgciskol.gov.in/writereaddata/Downloads/20240808163758A%20brief%20report%20on%20Export%20of%20Rice%20by%20India.pdf",
+  "sourceNote": "インド商工省DGCIS、2024年8月刊、表1～3。A3はバスマティ米、A4はバスマティ以外の米。輸出量は精米等を含む貿易上の品目で、FAOSTATの籾米生産量とは異なる。",
+  "exports": {
+    "basmati": 5242182,
+    "otherRice": 11116703
+  },
+  "basmatiDestinations": [
+    {"name":"サウジアラビア","quantity":1098039},
+    {"name":"イラク","quantity":824529},
+    {"name":"イラン","quantity":670781},
+    {"name":"アラブ首長国連邦","quantity":308662},
+    {"name":"イエメン","quantity":307121},
+    {"name":"アメリカ合衆国","quantity":234467},
+    {"name":"イギリス","quantity":185553},
+    {"name":"クウェート","quantity":179583},
+    {"name":"オマーン","quantity":164348},
+    {"name":"カタール","quantity":115405}
+  ]
+}

@@ -118,6 +118,7 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  }
  record('Punjab wheat and Central Asian cotton retain livestock context and ignore unrelated background clicks');
 
+
  await open('south-central-asia/population/?topic=ethnicity');
  await page.locator('[data-settlement-reading="ethnicity"] [data-settlement-overview]').waitFor({state:'visible'});
  assert.match(await page.locator('[data-settlement-reading="ethnicity"] [data-settlement-overview]').textContent(),/最多|参考|特徴/);
@@ -131,7 +132,25 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
   await open('south-central-asia/industry/');await screenshot('south-central-industry-overview');
   await open('south-central-asia/population/?topic=ethnicity');await screenshot('south-central-cultural-distribution');
  }
- // Reuse the fixed 30-image regional budget for two overview references and
+ await open('south-central-asia/agriculture/');
+ const supply=page.locator('[data-south-central-supply]'),destinations=page.locator('[data-south-central-destinations]');
+ await supply.locator('.sc-flow-track').waitFor({state:'visible'});
+ assert.match(await supply.textContent(),/16\.36百万トン.*2023-24年度/s);
+ assert.match(await supply.textContent(),/国内仕向けの量は示せません/);
+ assert.match(await destinations.textContent(),/サウジアラビア.*イラク.*イラン/s);
+ assert.equal(await destinations.locator('.sc-flow-pie').count(),1);
+ await page.locator('[data-farm-choice="wheat"]').click();
+ await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]').dataset.farmSelected==='wheat');
+ assert.equal(await destinations.locator('.sc-flow-pie').count(),0);
+ await page.locator('[data-farm-choice="rice"]').click();
+ await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]').dataset.farmSelected==='rice');
+ await destinations.locator('.sc-flow-pie').waitFor({state:'visible'});
+ await page.locator('[data-south-central-farm-connections]').scrollIntoViewIfNeeded();
+ await page.waitForLoadState('networkidle');
+ await page.locator('[data-south-central-farm-connections]').screenshot({path:`review-artifacts/asia-pc/${profile.name}-india-rice-export-flow-section.png`,animations:'disabled'});
+ record('India rice export mix and basmati destinations render for overview and rice, and clear on wheat');
+
+ // Reuse the 30 map-image regional budget for two overview references and
  // eight new band scenes across desktop, laptop and the smaller PC viewport.
  for(const [topic,kind,interval,legend] of [['precipitation','rainfall',250,'[data-hydrology-scale]'],['terrain','terrain',500,'[data-physical-legend] .asia-physical-key']]){
   let expected;
