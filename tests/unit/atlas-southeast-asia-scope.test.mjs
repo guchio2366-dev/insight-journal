@@ -6,6 +6,8 @@ import {southeastIndustryCountryScope} from '../../src/data/atlas/asia/southeast
 import {industryCountryChoices,industryScopeCountries,industryTopicsForPlace,normalizeIndustryState,normalizeScopedIndustryState,industryValues} from '../../src/data/atlas/asia-industry.ts';
 import {tradeTopics} from '../../src/data/atlas/asia-trade.ts';
 import {readAsiaAtlasState,writeAsiaAtlasState,startAsiaComparison,restoreAsiaComparison} from '../../src/lib/atlas-asia-state.ts';
+import {availablePlaceReadings,choosePlaceReading,selectedPlaceReading,startPlaceComparison} from '../../src/data/atlas/asia-place-readings.ts';
+import {southeastCropPriority} from '../../src/data/atlas/asia/southeast-asia-crop-priority.mjs';
 const root=new URL('../../public/assets/atlas/asia-industry-v1/',import.meta.url);
 const original=JSON.parse(readFileSync(new URL('manifest.json',root))).regions['southeast-asia'];
 const region={...original,topics:[...original.topics,...tradeTopics],countryScope:southeastIndustryCountryScope};
@@ -59,4 +61,34 @@ test('outside-country comparisons keep their commodity in regional trade and res
   assert.equal(reloaded.detail,'t-'+chapter);assert.equal(restored.field,'agriculture');assert.equal(restored.place,place);assert.equal(restored.topic,topic);assert.deepEqual(restored.camera,from.camera);
  }
  assert.equal(normalizeScopedIndustryState({...region,countryScope:undefined},{...state,place:'MYS'}).place,'MYS');
+});
+
+test('three population readings connect real urban centres to country-wide industry without changing source years',()=>{
+ const urban=JSON.parse(readFileSync(new URL('../../public/assets/atlas/asia-population-v1/manifest.json',import.meta.url))).regions['southeast-asia'];
+ const scenes=availablePlaceReadings('southeast-asia','population').filter(s=>['jakarta-population','hanoi-population','hochiminh-population'].includes(s.id));
+ assert.equal(scenes.length,3);
+ for(const scene of scenes){
+  const city=urban.cities.find(c=>c.id===scene.detail);
+  assert.equal(city?.country,scene.country);
+  assert.match(scene.scope,/2020年/);assert.match(scene.scope,/2025年/);
+  assert.ok(scene.bridges.some(b=>b.field==='industry'&&b.topic==='manufacturing'));
+  const selected=choosePlaceReading({...state,field:'population'},scene),url=new URL('https://example.org/atlas/asia/southeast-asia/population/');
+  assert.equal(selectedPlaceReading('southeast-asia',selected),scene);
+  const link=scene.bridges.find(b=>b.field==='industry'),compared=startPlaceComparison(url,selected,link);
+  const context={countries:region.countries,cities:[],fields:['population','industry'],bounds:[91,-12,143,30],topics:{population:['urban'],industry:['manufacturing']},details:{population:[scene.detail]},stories:{population:[scene.id]}};
+  assert.equal(restoreAsiaComparison(url,compared,context).story,scene.id);
+ }
+});
+
+test('2020 crop shortlist is computed from reported tonnes and never counts coffee varieties twice',()=>{
+ const statistics=JSON.parse(gunzipSync(readFileSync(new URL('../../public/assets/atlas/asia-farming-v1/statistics.json.gz',import.meta.url))));
+ const farming=JSON.parse(readFileSync(new URL('../../public/assets/atlas/asia-farming-v1/manifest.json',import.meta.url))).regions['southeast-asia'];
+ const priority=southeastCropPriority(statistics);
+ assert.equal(priority.countryCount,11);assert.equal(priority.selected.length,10);assert.equal(priority.all.length,14);
+ assert.deepEqual(priority.selected.slice(0,4).map(r=>r.code),['254','27','156','125']);
+ assert.equal(priority.selected.at(-1).code,'191');assert.equal(priority.selected.at(-1).reportedCountries,1);
+ const coffee=priority.selected.find(r=>r.code==='656');assert.deepEqual(coffee.maps,['arabica','robusta']);
+ assert.equal(coffee.tonnes,priority.all.find(r=>r.code==='656').tonnes);
+ for(const row of priority.all)for(const map of row.maps)assert.ok(map==='rice'||farming.layers.some(layer=>layer.id===map),map);
+ assert.deepEqual(priority.selected.filter(r=>r.maps.length===0).map(r=>r.code),['667','236','191']);
 });
