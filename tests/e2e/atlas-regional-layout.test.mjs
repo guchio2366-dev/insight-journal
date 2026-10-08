@@ -51,7 +51,9 @@ test('all seven regional workspaces retain five main destinations and one map/re
       if(region==='europe')assert.equal(stats.previousElementSibling,d.querySelector('[data-atlas-shell]'),'Europe statistics follow all three columns');
       if(region.startsWith('asia/')){
         assert.equal(stats.parentElement,d.querySelector('[data-atlas-shell]'),'Asia statistics span the news/map/reading shell');
-        assert.equal(root.querySelector('[data-reading-details]').open,true,'Asia details and sources are initially visible like the U.S. reading column');
+        const compactEastFarm=region==='asia/east-asia'&&field==='agriculture';
+        assert.equal(root.querySelector('[data-reading-details]').open,!compactEastFarm,'East Asia farming keeps detailed reading in its compact right panel');
+        if(compactEastFarm)assert.ok(root.querySelector('[data-reading-dock]').contains(root.querySelector('[data-farming-selector]')),'East Asia farming topic picker remains visible');
         assert.equal(root.querySelector('.asia-reading-scroll').tabIndex,0);
       }
     }finally{await w.happyDOM.close();}

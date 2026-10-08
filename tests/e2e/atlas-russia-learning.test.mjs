@@ -154,9 +154,9 @@ test('farming overview and product focus retain both distributions, separate uni
   const frame=one('primary-map').querySelector('svg').getAttribute('viewBox');
   assert.deepEqual([...new Set([...one('primary-map').querySelectorAll('[data-farming-product]')].map(el=>el.dataset.farmingProduct))].sort(),['cattle','wheat']);
   const initialOpacity=Number(one('primary-map').querySelector('[data-farming-product="cattle"][data-farming-mode="texture"]').getAttribute('opacity'));
-  assert.match(one('explanation').textContent,/2品目/);assert.match(one('explanation').textContent,/上位10/);
+  assert.match(one('explanation').textContent,/2品目/);assert.match(one('explanation').textContent,/他の品目の全国分布格子は未収録/);
   assert.match(one('takeaway').textContent,/ロストフ.*オムスク.*ヤクーツク/);
-  assert.equal(one('explanation').closest('details').open,false);assert.match(one('geography-reading').textContent,/生育期.*飼料.*肉・乳/);
+  assert.equal(one('explanation').closest('details').open,false);assert.match(one('geography-reading').textContent,/冬小麦.*春小麦.*飼料.*肉・乳/);
   assert.ok(one('primary-legend').closest('.russia-learning-map-panel'));
   assert.equal(root.querySelector('.russia-learning-reading [data-primary-legend]'),null);
   assert.equal(one('primary-map').querySelectorAll('[data-region-marker]').length,0);assert.equal(one('primary-map').querySelectorAll('[data-farming-place]').length,4);

@@ -1,4 +1,6 @@
 import data from '../../public/assets/atlas/east-asia-v1/farm-foundations.json';
+import {japanWheatSupply as wheat} from '../data/atlas/japan-wheat-supply';
+import {cropImportPartners} from '../data/atlas/east-asia-crop-partners';
 import type {AsiaRegionId} from '../lib/atlas-asia-state';
 
 type Country={code:string;name:string}|undefined;
@@ -16,12 +18,45 @@ const addBar=(host:HTMLElement,label:string,value:number,max:number,unit:string)
  const row=el('div');row.className='east-bar';const name=el('span',label),line=el('i'),number=el('b',format(value,unit));line.style.width=`${Math.max(1,value/max*100)}%`;row.append(name,line,number);host.append(row);
 };
 const svg=(tag:string,attrs:Record<string,string>)=>{const node=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [key,value] of Object.entries(attrs))node.setAttribute(key,value);return node;};
+const thousand=(n:number)=>`${(n/10).toLocaleString('ja-JP',{maximumFractionDigits:1})}万t`;
+function renderJapanWheat(forest:HTMLElement,destinations:HTMLElement,share:HTMLElement){
+ const use=wheat.domesticUse,domestic=use.food+use.processing+use.other;
+ p(forest,`国内生産は総供給の${(wheat.production/domestic*100).toFixed(1)}％、純輸入が${(wheat.netImports/domestic*100).toFixed(1)}％を占めます。`);
+ const total=el('p');total.className='east-wheat-total';total.append('総供給 ',el('strong',thousand(domestic)),' · 2023年度、原麦');forest.append(total);
+ const groups=[{title:'供給元',rows:[{label:'国内生産',value:wheat.production,color:'#326b63'},{label:'純輸入',value:wheat.netImports,color:'#85a762'},{label:'在庫減',value:-wheat.inventoryChange,color:'#d5a760'}]},{title:'行先',rows:[{label:'粗食料',value:use.food,color:'#326b63'},{label:'加工用',value:use.processing,color:'#85a762'},{label:'その他',value:use.other,color:'#d5a760'}]}];
+ for(const group of groups){const band=el('div');band.className='east-wheat-band';band.append(el('b',group.title));const line=el('div');line.className='east-wheat-segments';line.setAttribute('role','img');line.setAttribute('aria-label',`${group.title}：${group.rows.map(row=>`${row.label} ${thousand(row.value)}、${(row.value/domestic*100).toFixed(1)}％`).join('、')}`);for(const row of group.rows){const part=el('span');part.style.width=`${row.value/domestic*100}%`;part.style.background=row.color;line.append(part);}band.append(line);const key=el('div');key.className='east-wheat-legend';for(const row of group.rows){const item=el('span');const swatch=el('i');swatch.style.background=row.color;item.append(swatch,`${row.label} ${(row.value/domestic*100).toFixed(1)}％`);key.append(item);}band.append(key);forest.append(band);}
+ p(forest,`小麦粉の用途別生産：パン用${thousand(wheat.flourUses.bread)}、めん用${thousand(wheat.flourUses.noodles)}、菓子用${thousand(wheat.flourUses.confectionery)}。`);
+ const details=el('details');details.className='east-wheat-details';details.append(el('summary','数量・期間・定義を確認'));const table=el('table');table.innerHTML='<thead><tr><th scope="col">区分</th><th scope="col">数量</th><th scope="col">総供給比</th></tr></thead>';const body=el('tbody');for(const group of groups){const heading=el('tr');const cell=el('th',group.title);cell.colSpan=3;cell.scope='colgroup';heading.append(cell);body.append(heading);for(const row of group.rows){const tr=el('tr');const th=el('th',row.label);th.scope='row';tr.append(th,el('td',thousand(row.value)),el('td',`${(row.value/domestic*100).toFixed(1)}％`));body.append(tr);}}table.append(body);details.append(table);p(details,'食料需給表の2023年度。純輸入は輸入−輸出、在庫減は供給に加算します。粗食料は食用の供給量です。加工用24.2万tはしょうゆ・でん粉等への仕向けで、製粉やパン用を指しません。その他は飼料用・種子用・純旅客用・減耗量の計です。');p(details,'別表の2023年度小麦粉生産はパン用182.3万t、めん用154.1万t、菓子用50.3万t。小麦粉の重量であり、上の原麦重量の内訳ではありません。');forest.append(details);
+ p(destinations,'2023年度 · 食糧用小麦の通関輸入量');
+ const layout=el('div');layout.className='east-wheat-donut-layout';const chart=svg('svg',{viewBox:'0 0 144 144',role:'img','aria-label':'日本の外国産食糧用小麦の輸入相手国。比率は隣の凡例を参照。'});chart.append(svg('circle',{cx:'72',cy:'72',r:'52',class:'east-wheat-donut-base'}));let offset=0;const originColors=['#326b63','#85a762','#d5a760','#a8aeab'];for(const [index,row] of wheat.origins.rows.entries()){const percent=row.tonnes/wheat.origins.total*100;chart.append(svg('circle',{cx:'72',cy:'72',r:'52',pathLength:'100',class:'east-wheat-donut-slice','stroke-dasharray':`${percent} ${100-percent}`,'stroke-dashoffset':String(-offset),transform:'rotate(-90 72 72)',style:`stroke:${originColors[index]}`}));offset+=percent;}for(const [y,label,klass] of [[58,'総輸入量',''],[80,(wheat.origins.total/1e6).toLocaleString('ja-JP',{maximumFractionDigits:2}),'east-wheat-donut-value'],[98,'百万t','']] as const){const text=svg('text',{x:'72',y,'text-anchor':'middle',class:klass});text.textContent=label;chart.append(text);}layout.append(chart);const legend=el('div');legend.className='east-wheat-donut-legend';for(const [index,row] of wheat.origins.rows.entries()){const item=el('div');const swatch=el('i');swatch.style.background=originColors[index];item.append(swatch,el('span',row.name),el('strong',`${(row.tonnes/wheat.origins.total*100).toFixed(1)}％`));legend.append(item);}layout.append(legend);destinations.append(layout);
+ p(destinations,'財務省貿易統計。通関の食糧用輸入量で、左の全用途の純輸入とは範囲が異なります。');
+ p(share,'食料需給表 · 2019–2023年度');
+ const latest=wheat.selfSufficiency.at(-1)!;const current=el('p');current.className='east-wheat-current';current.append(el('strong',`${latest.rate}％`),` ${latest.year}年度`);share.append(current);
+ const trend=svg('svg',{viewBox:'0 0 320 142',class:'east-wheat-trend',role:'img','aria-label':`自給率、縦軸0–20％。${wheat.selfSufficiency.map(row=>`${row.year}年度${row.rate}％`).join('、')}`});
+ const x=(index:number)=>48+index*62,y=(rate:number)=>108-rate*4;
+ for(const rate of [0,10,20]){const py=y(rate);trend.append(svg('line',{x1:'39',y1:String(py),x2:'300',y2:String(py),class:rate===0?'axis':'guide'}));const tick=svg('text',{x:'32',y:String(py+4),'text-anchor':'end',class:'tick'});tick.textContent=`${rate}％`;trend.append(tick);}
+ trend.append(svg('polyline',{points:wheat.selfSufficiency.map((row,index)=>`${x(index)},${y(row.rate)}`).join(' '),class:'trend'}));
+ for(const [index,row] of wheat.selfSufficiency.entries()){trend.append(svg('circle',{cx:String(x(index)),cy:String(y(row.rate)),r:'3.5',class:'dot'}));const value=svg('text',{x:String(x(index)),y:String(y(row.rate)-8),'text-anchor':'middle',class:'value'});value.textContent=`${row.rate}％`;trend.append(value);const year=svg('text',{x:String(x(index)),y:'132','text-anchor':'middle'});year.textContent=String(row.year);trend.append(year);}share.append(trend);
+ p(share,'国内生産109.4万t ÷ 国内消費631.2万t（四捨五入）。食用小麦だけを分母にした率ではありません。');
+ p(share,'2024年FAOSTATの世界小麦生産に占める日本は約0.13％。世界の生産規模だけでは国内の供給構造を読めないため、国内需給を別に示します。');
+}
 export function renderEastAsiaFarmFoundations(root:HTMLElement,region:AsiaRegionId,active:boolean,topic:string|null,country:Country){
  const section=root.querySelector<HTMLElement>('[data-east-farm-foundations]');if(!section)return;
  section.hidden=!active||region!=='east-asia';if(section.hidden)return;
  const code=country?.code,forest=section.querySelector<HTMLElement>('[data-east-forest-flows]')!,destinations=section.querySelector<HTMLElement>('[data-east-export-partners]')!,share=section.querySelector<HTMLElement>('[data-east-world-share]')!;
  forest.replaceChildren();destinations.replaceChildren();share.replaceChildren();
+ const japanWheat=topic==='wheat'&&code==='JPN';
+ const heading=section.querySelector<HTMLElement>('[data-east-foundations-title]'),lead=section.querySelector<HTMLElement>('[data-east-foundations-lead]');
+ if(heading)heading.textContent=japanWheat?'日本の小麦：供給・輸入先・自給率':'生産・貿易・世界での位置';
+ if(lead&&japanWheat)lead.textContent='2023年度の食料需給表で、国内生産・純輸入・在庫変動と国内消費を同じ数量で読みます。輸入先は食糧用小麦の通関量、自給率は国内消費を分母にした値です。';
+ const wheatSources=section.querySelector<HTMLElement>('[data-east-wheat-sources]'),otherSources=section.querySelector<HTMLDetailsElement>('[data-east-other-sources]');
+ if(wheatSources)wheatSources.hidden=!japanWheat;if(otherSources)otherSources.open=!japanWheat;
+ section.querySelector<HTMLElement>('[data-east-partner-title]')!.textContent=japanWheat?'小麦の輸入相手国':'全商品の輸出先';
+ section.querySelector<HTMLElement>('[data-east-share-title]')!.textContent=japanWheat?'小麦の自給率':'世界比と推移';
+ if(japanWheat){section.querySelector<HTMLElement>('[data-east-supply-title]')!.textContent='日本の小麦：供給と国内消費';renderJapanWheat(forest,destinations,share);return;}
  const crop=topic&&Object.hasOwn(data.cropFlows,topic)?data.cropFlows[topic as keyof typeof data.cropFlows]:undefined;
+ if(lead)lead.textContent=crop?'国別の生産重量と対応HS品目の貿易額を分けて示します。輸入元は選んだ品目の輸入額が分母で、国内消費の行先ではありません。':'森林面積、木材の生産・輸出入、商品輸出先は別の統計です。地図の森林色から数量や仕向け先を推定せず、国の公表値と並べて読みます。';
+ section.querySelector<HTMLElement>('[data-east-partner-title]')!.textContent=crop?'品目別の輸入元':'全商品の輸出先';
  section.querySelector<HTMLElement>('[data-east-supply-title]')!.textContent=crop?`${cropLabels[topic!]}の生産・商品貿易`:'丸太・製材の供給と輸出入';
  if(crop){
   if(code&&Object.hasOwn(crop,code)){
@@ -49,6 +84,17 @@ export function renderEastAsiaFarmFoundations(root:HTMLElement,region:AsiaRegion
  }
  if(!crop)p(forest,'生産・輸入・輸出はそれぞれ別の量です。輸入を国内伐採や国内仕向けに読み替えられず、在庫変動を含む需給表でもありません。');
  if(!crop&&topic!=='overview'&&topic!=='forest')p(forest,'選んだ品目に対応する供給・輸出入系列は今回の比較対象外です。上は林産物の参考値です。');
+ if(crop){
+  const row=code&&topic?cropImportPartners[code as keyof typeof cropImportPartners]?.[topic as 'rice'|'wheat'|'maize'|'soybean']:undefined;
+  if(row){
+   const reporter=code==='TWN'?'その他のアジア（台湾等）':names[code!],parts=[...row.top.map((part,index)=>({...part,color:colors[index]})),{name:'その他',value:row.total-row.top.reduce((sum,part)=>sum+part.value,0),color:colors[3]}];
+   p(destinations,`${reporter}のHS ${cropHS[topic!]} ${cropLabels[topic!]}輸入元 · 2023年 · 名目米ドル`);
+   const pie=el('div');pie.className='east-pie';pie.setAttribute('role','img');pie.setAttribute('aria-label',`${reporter}の${cropLabels[topic!]}輸入元。割合は直後の凡例を参照。`);let angle=0;pie.style.background=`conic-gradient(${parts.map(part=>{const start=angle;angle+=part.value/row.total*100;return `${part.color} ${start}% ${angle}%`;}).join(',')})`;destinations.append(pie);
+   for(const part of parts){const key=el('div');key.className='east-pie-key';const square=el('i');square.style.background=part.color;key.append(square,el('span',part.name),el('span',format(part.value/row.total*100,'%')));destinations.append(key);}
+   p(destinations,'分母はこのHS品目の輸入額です。国内生産量や国内消費量への仕向け割合ではありません。台湾の貿易は「Other Asia, nes」（台湾等）区分です。');
+   const source=el('a','2023年の品目別・相手国別原表');source.setAttribute('href',row.source);source.setAttribute('rel','noopener noreferrer');destinations.append(source);
+  }else p(destinations,code?'この品目の輸入元内訳は今回の詳細対象外です。対応HS品目の輸出入総額は左欄に示しています。全商品の相手国をこの品目の相手国に読み替えません。':'国を選ぶと、対象品目の輸入元を確認できます。');
+ }else{
  const exampleCode=code&&Object.hasOwn(data.exportDestinations,code)?code:'CHN',record=data.exportDestinations[exampleCode as keyof typeof data.exportDestinations];
  if(record){
   const reporter=exampleCode==='TWN'?'その他のアジア（台湾等）':names[exampleCode];p(destinations,`${reporter}の全商品輸出先 · 2023年 · 名目米ドル`);
@@ -57,6 +103,7 @@ export function renderEastAsiaFarmFoundations(root:HTMLElement,region:AsiaRegion
   for(const row of parts){const key=el('div');key.className='east-pie-key';const square=el('i'),label=el('span',row.label),value=el('span',format(row.value/record.world*100,'%'));square.style.background=row.color;key.append(square,label,value);destinations.append(key);}
   p(destinations,'分母はこの報告区分の全商品輸出額です。丸太・製材の輸出先や最終消費地ではありません。台湾の位置は「Other Asia, nes」区分で、台湾だけの厳密な値とは言い切れません。');
  }else p(destinations,'この報告区分の輸出相手先は未収録です。');
+ }
  const id=topics[topic??''];if(!id){p(share,'選んだ品目と同じ定義のWorld分母を照合した系列は、今回の7指標に含まれません。');return;}const series=data.series.find(row=>row.id===id);
  if(!series)return;
  if(!code){
