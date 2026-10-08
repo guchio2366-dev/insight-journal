@@ -36,6 +36,14 @@ const countryName = (code: string) => countries.find(country => country.code ===
         <label>比較する国 2<select data-eu-farm-compare="1" aria-label="農林業の比較する国2"><option value="">比較しない</option>{countries.map(country=><option value={country.code}>{country.name}</option>)}</select></label>
       </div>
       <p class="eu-statistic-note" data-eu-farm-measure-definition hidden></p>
+      <section class="eu-forest-production" data-eu-forest-production hidden aria-labelledby="eu-forest-production-title">
+        <h4 id="eu-forest-production-title">森林の分布と木材加工を読み比べる</h4>
+        <p>地図の樹木被覆は2021年の土地被覆です。下の棒は2024年の国全体の丸太・製材生産量で、製材量上位10か国を並べます。森林の広さや樹木の色から生産量を換算していません。</p>
+        <div data-eu-forest-production-rows></div>
+        <p class="eu-statistic-note" data-eu-forest-production-note></p>
+        <p class="eu-statistic-note">丸太には薪材と産業用丸太が含まれ、製材は加工後の製品です。輸入材や在庫なども関わるため、両者を差し引いて歩留まり・国内仕向け・輸出量とは解釈できません。ロシアは欧州側だけでなく全国値です。各国の出典記号は下の国別表で確認できます。</p>
+        <p class="eu-statistic-note">FAO. 2026. FAOSTAT: Forestry Production and Trade. 2026年10月8日参照。<a href="https://www.fao.org/faostat/en/#data/FO">原典</a> · <a href="https://www.fao.org/contact-us/terms/db-terms-of-use/">CC BY 4.0 と利用条件</a>。Insight Journalが上位10か国と棒の尺度を加工。FAOの推薦・保証を示しません。</p>
+      </section>
       <div class="eu-farm-three-columns" data-eu-farm-three-columns>
         <section aria-labelledby="eu-farm-supply-title"><h4 id="eu-farm-supply-title">供給元・行先</h4><p class="eu-statistic-missing"><span data-eu-statistics-item>選択品目</span>の生産・輸入・在庫変動・輸出・国内仕向けと用途別の数量は、同じ年・分類で照合した原表が未収録です。</p><p>需給と国内用途は階層が異なるため、足し合わせません。原表が揃うまで横帯の値を作りません。</p><a href="https://www.fao.org/faostat/en/#data/FBS">FAOSTAT 食料需給表</a></section>
         <section aria-labelledby="eu-farm-export-title"><h4 id="eu-farm-export-title">輸出先</h4><p class="eu-statistic-missing"><span data-eu-statistics-item>選択品目</span>の相手国別輸出量・額と総輸出は未収録です。円の割合は算出できません。</p><p>輸出量（t）と輸出額は別の指標です。輸入国の報告や別年の値で置き換えません。</p><a href="https://www.fao.org/faostat/en/#data/TM">FAOSTAT 詳細貿易行列</a></section>

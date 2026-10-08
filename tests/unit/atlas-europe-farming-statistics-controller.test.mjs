@@ -40,7 +40,7 @@ function fixture() {
         <select data-eu-farm-compare="0">${options}</select><select data-eu-farm-compare="1">${options}</select>
       </div>
       <h4 data-eu-farm-share-title></h4><p data-eu-farm-share-status></p><div data-eu-farm-share-chart></div>
-      <p data-eu-farm-measure-definition hidden></p><div data-eu-farm-stat-summary hidden></div>
+      <p data-eu-farm-measure-definition hidden></p><section data-eu-forest-production hidden><div data-eu-forest-production-rows></div><p data-eu-forest-production-note></p></section><div data-eu-farm-stat-summary hidden></div>
       <details data-eu-farm-country-table hidden><div data-eu-farm-country-rows></div></details>
       <details data-eu-farm-series hidden><div data-eu-farm-series-rows></div></details>
       <details data-eu-farm-stat-source hidden><div data-eu-farm-stat-source-content></div></details>
@@ -171,6 +171,10 @@ test('forest and tree-cover definitions retain their own map years and source in
     assert.match(forest, /森林面積比率/);
     assert.match(forest, /2018年.*国全体の公表統計/);
     assert.doesNotMatch(forest, /2020年頃のモデル|2020.*モデル分布/);
+    assert.equal(ui.q('[data-eu-forest-production]').hidden,false);
+    assert.equal(ui.q('[data-eu-forest-production-rows] tbody').children.length,10);
+    assert.match(ui.q('[data-eu-forest-production-rows] tbody tr').textContent,/ロシア.*205\.5.*37\.2/s);
+    assert.match(ui.q('[data-eu-forest-production-note]').textContent,/次点はウクライナ/);
     await ui.controller.update(state({ layer: 'treecover', farmMeasure: 'forest-area', farmYear: 2018 }));
     const treecover = ui.q('[data-eu-farm-measure-definition]').textContent;
     assert.match(treecover, /ESA\s*WorldCover/);
@@ -179,6 +183,7 @@ test('forest and tree-cover definitions retain their own map years and source in
     assert.match(treecover, /2018年.*国全体の公表統計/);
     assert.doesNotMatch(treecover, /2020年頃のモデル|2020.*モデル分布/);
     await ui.controller.update(state({ farmYear: 2018 }));
+    assert.equal(ui.q('[data-eu-forest-production]').hidden,true);
     assert.match(ui.q('[data-eu-farm-measure-definition]').textContent, /2020年頃のモデル分布/);
   } finally { await ui.close(); }
 });
