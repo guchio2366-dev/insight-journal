@@ -38,6 +38,7 @@ export class Map {
  addSource(id,source){this.sources[id]=source;source.setData=data=>{source.data=data}}addLayer(layer){this.layers[layer.id]=layer}
  removeLayer(id){delete this.layers[id]}removeSource(id){delete this.sources[id]}
  setLayoutProperty(id,key,value){this.layers[id].layout??={};this.layers[id].layout[key]=value}
+ getLayoutProperty(id,key){return this.layers[id]?.layout?.[key]}
  setPaintProperty(id,key,value){this.layers[id].paint??={};this.layers[id].paint[key]=value}
 
  setFilter(id,filter){this.layers[id].filter=filter}getCenter(){return this.center}getZoom(){return this.zoom}getCanvas(){return this.canvas}
@@ -144,7 +145,7 @@ async function setup(query = '', options = {}) {
       conf.industry={...industryManifest.regions[options.industryRegion],data:'east.json.gz'};
       if(options.industryRegion==='east-asia'){
         for(const [code,name] of [['KOR','韓国'],['TWN','台湾']]){conf.countries.push({code,name,bounds:[124,33,133,39]});q('[data-country-select]').insertAdjacentHTML('beforeend',`<option value="${code}">${name}</option>`);}
-        root.insertAdjacentHTML('beforeend','<section data-east-industry-journey hidden><h2 data-east-industry-journey-title></h2><p data-east-industry-journey-summary></p><p data-east-industry-journey-facts></p><p data-east-industry-journey-gap></p><button data-east-industry-next="primary"></button><button data-east-industry-next="secondary"></button></section>');
+        root.insertAdjacentHTML('beforeend','<section data-east-industry-journey hidden><h2 data-east-industry-journey-title></h2><section data-east-industry-selected-site hidden><h3 data-east-industry-selected-title></h3><p data-east-industry-selected-lead></p><p data-east-industry-selected-reading></p><p data-east-industry-selected-scope></p><a data-east-industry-selected-source></a></section><p data-east-industry-journey-summary></p><p data-east-industry-journey-facts></p><div data-east-industry-sites hidden><nav data-east-industry-site-links></nav></div><p data-east-industry-journey-gap></p><button data-east-industry-next="primary"></button><button data-east-industry-next="secondary"></button></section>');
       }
       if(options.industryRegion==='southeast-asia'){
         conf.countries.push({code:'MYS',name:'マレーシア',bounds:[99,0,120,8]});
@@ -408,11 +409,38 @@ test('東アジア4国の読解は原本の国統計と設備能力を区別し�
   const colors=window.__map.layers['asia-industry-national'].paint['fill-color'];
   for(const code of ['CHN','JPN','KOR'])assert.notEqual(colors[colors.indexOf(code)+1],'#d2ceca',`${code} remains coloured while Korea is selected`);
   assert.equal(colors[colors.indexOf('TWN')+1],'#d2ceca','Taiwan WDI stays missing');
+  await until(()=>window.__map.getLayer('asia-industry-site'),'semiconductor examples on map');
+  assert.equal(window.__map.layers['asia-industry-site'].layout.visibility,'visible');
+  assert.deepEqual(JSON.parse(JSON.stringify(window.__map.layers['asia-industry-site'].filter)),['==',['get','country'],'KOR']);
+  assert.deepEqual([...card.querySelectorAll('[data-east-industry-site]')].map(b=>b.textContent),['平沢：半導体の製造','清州：メモリー関連の製造']);
+  await until(()=>q('[data-map-surface]').querySelectorAll('.asia-industry-site-label').length===2,'two Korean city labels');
+  assert.deepEqual([...q('[data-map-surface]').querySelectorAll('.asia-industry-site-label')].map(b=>b.textContent),['平沢','清州']);
+  assert.match(q('[data-industry-legend-note]').textContent,/丸は.*生産量とは別/);
+  card.querySelector('[data-east-industry-site="cheongju-memory"]').click();
+  assert.equal(new URL(window.location.href).searchParams.get('story'),'cheongju-memory');
+  assert.equal(card.querySelector('[data-east-industry-selected-title]').textContent,'清州：メモリー関連の製造');
+  assert.match(card.querySelector('[data-east-industry-selected-reading]').textContent,/既存M15.*M15X.*計画/);
+  assert.match(card.querySelector('[data-east-industry-selected-source]').href,/news\.skhynix\.com/);
+  assert.equal(q('[data-asia-atlas]').dataset.industrySiteSelected,'true');
+  assert.match(q('[data-place-story-text]').textContent,/M15.*TSV/);
+  assert.equal(window.__map.getCenter().lng,127.49);
+  q('[data-country-select]').value='KOR';q('[data-country-select]').dispatchEvent(new window.Event('change'));
   click('secondary');assert.equal(new URL(window.location.href).searchParams.get('topic'),'steel-capacity');
+  await until(()=>q('[data-map-surface]').querySelectorAll('.asia-industry-site-label').length===0,'city labels hidden on steel map');
   click('primary');assert.equal(new URL(window.location.href).searchParams.get('topic'),'manufacturing');
   q('[data-country-select]').value='TWN';q('[data-country-select]').dispatchEvent(new window.Event('change'));
   await until(()=>card.textContent.includes('24,701千t/年'),'Taiwan sourced capacity');
   assert.match(card.textContent,/WDIで未掲載.*公式統計/);
+  assert.deepEqual([...card.querySelectorAll('[data-east-industry-site]')].map(b=>b.textContent),['新竹：半導体受託製造','台南：半導体受託製造']);
+  await until(()=>[...q('[data-map-surface]').querySelectorAll('.asia-industry-site-label')].some(b=>b.textContent==='台南'),'Tainan map label');
+  [...q('[data-map-surface]').querySelectorAll('.asia-industry-site-label')].find(b=>b.textContent==='台南').click();
+  assert.equal(new URL(window.location.href).searchParams.get('story'),'tainan-fab');
+  assert.match(q('[data-place-story-text]').textContent,/Fab 14.*Fab 18/);
+  assert.equal(card.querySelector('[data-east-industry-selected-title]').textContent,'台南：半導体受託製造');
+  await until(()=>window.__map.layers['asia-industry-site'].layout.visibility==='visible','Taiwan semiconductor examples');
+  assert.deepEqual([...q('[data-map-surface]').querySelectorAll('.asia-industry-site-label')].map(b=>b.textContent),['新竹','台南']);
+  assert.equal(window.__map.layers['asia-industry-site'].layout.visibility,'visible');
+  assert.deepEqual(JSON.parse(JSON.stringify(window.__map.layers['asia-industry-site'].filter)),['==',['get','country'],'TWN']);
   assert.match(q('[data-industry-value]').textContent,/台湾：未掲載/);
   click('primary');assert.equal(new URL(window.location.href).searchParams.get('topic'),'steel-capacity');
   click('secondary');assert.equal(new URL(window.location.href).searchParams.get('topic'),'power-all');
