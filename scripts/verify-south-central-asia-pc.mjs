@@ -9,7 +9,7 @@ export const southCentralProfiles=[
  {name:'south-laptop',viewport:{width:1280,height:720}},
  {name:'south-small',viewport:{width:1024,height:768}},
 ];
-export const southCentralImageCount=10*southCentralProfiles.length;
+export const southCentralImageCount=11*southCentralProfiles.length;
 
 export async function verifySouthCentralAsia(page,{source,profile,capture}){
  const checks=[],bandsChecks=[];
@@ -117,6 +117,22 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
   await screenshot(`${region}-${product}-context`);
  }
  record('Punjab wheat and Central Asian cotton retain livestock context and ignore unrelated background clicks');
+
+ await open('south-central-asia/agriculture/');
+ const supply=page.locator('[data-south-central-supply]'),destinations=page.locator('[data-south-central-destinations]');
+ await supply.locator('.sc-flow-track').waitFor({state:'visible'});
+ assert.match(await supply.textContent(),/2023-24年度.*16\.36百万トン/s);
+ assert.match(await supply.textContent(),/国内仕向けの量は示せません/);
+ assert.match(await destinations.textContent(),/サウジアラビア.*イラク.*イラン/s);
+ assert.equal(await destinations.locator('.sc-flow-pie').count(),1);
+ await page.locator('[data-farm-choice="wheat"]').click();
+ assert.equal(await destinations.locator('.sc-flow-pie').count(),0);
+ await page.locator('[data-farm-choice="rice"]').click();
+ await destinations.locator('.sc-flow-pie').waitFor({state:'visible'});
+ await page.locator('[data-south-central-farm-connections]').scrollIntoViewIfNeeded();
+ await page.waitForLoadState('networkidle');
+ await capture(page,profile,'india-rice-export-flow','asia');
+ record('India rice export mix and basmati destinations render for overview and rice, and clear on wheat');
 
  await open('south-central-asia/population/?topic=ethnicity');
  await page.locator('[data-settlement-reading="ethnicity"] [data-settlement-overview]').waitFor({state:'visible'});
