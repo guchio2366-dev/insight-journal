@@ -109,6 +109,7 @@ try{
       assert.ok(await candidates.isVisible());
       assert.match(await candidates.textContent(),/大麦.*テンサイ.*ヒマワリ種子/);
       assert.match(await candidates.textContent(),/ライムギ：.*2022\/23年度生産量は200万t.*全国分布格子は未収録/);
+      assert.doesNotMatch(await candidates.textContent(),/暫定候補|次点候補|掲載の下限/);
       await candidates.locator('summary').click();
       assert.equal(await candidates.locator('li').count(),10);
       assert.match(await candidates.textContent(),/ライムギの全国行.*未収録/);
@@ -127,7 +128,11 @@ try{
       assert.ok(await host.locator('[data-geography-reading]').isVisible(),'Geographical explanation is visible initially');
       assert.equal(await host.locator('[data-explanation]').isVisible(),false,'Technical reading is folded initially');
       assert.match(await host.locator('[data-takeaway]').textContent(),/ロストフ.*オムスク.*ヤクーツク/);
-      assert.match(await host.locator('[data-geography-reading]').textContent(),/生育期.*飼料.*肉・乳/);
+      assert.match(await host.locator('[data-geography-reading]').textContent(),/冬小麦.*春小麦.*飼料.*肉・乳/);
+      assert.doesNotMatch(await host.locator('[data-geography-reading]').textContent(),/4,500万t|USDAの2020\/21年度需給表/);
+      const readingCrop=await reading.evaluate(el=>{const b=el.getBoundingClientRect();return {x:Math.floor(b.left+scrollX),y:Math.floor(b.top+scrollY),width:Math.ceil(b.width),height:Math.ceil(b.height)};});
+      await page.screenshot({path:resolve(output,`russia-agriculture-${width}-reading.png`),fullPage:true,clip:readingCrop});
+      result.screenshots.push(`russia-agriculture-${width}-reading.png`);
       assert.equal(await legend.locator('[data-farming-key]').count(),2);assert.equal(await legend.locator('[data-farming-legend]').count(),0);
       assert.ok((await key.boundingBox()).height<130,'Compact key and closed detail stay short');
       assert.equal(await host.locator('[data-primary-legend-definitions]').isVisible(),false);
@@ -204,7 +209,7 @@ try{
      const shown=async()=>[...new Set(await map.locator('[data-farming-product]').evaluateAll(elements=>elements.map(el=>el.dataset.farmingProduct)))].sort();
      assert.deepEqual(await shown(),products);
      if(region==='oceania')assert.deepEqual(await map.locator('[data-farming-place]').evaluateAll(elements=>elements.map(el=>Number(getComputedStyle(el).opacity))),[1,1,1,1,1]);
-     assert.match(await host.locator('[data-explanation]').textContent(),/上位10/);
+     assert.match(await host.locator('[data-explanation]').textContent(),region==='russia'?/他の品目の全国分布格子は未収録/:/上位10/);
      const cattle=map.locator('[data-farming-product="cattle"][data-farming-mode="texture"]');
      const initialOpacity=Number(await cattle.getAttribute('opacity'));
      const initialAnnotationPixels=new Map();
