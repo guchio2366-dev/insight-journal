@@ -268,8 +268,9 @@ export function initializeAfricaAtlas() {
  function renderReadingLayout(){
   const riverView=isRiverView(),river=africaRiverById(state.river);
   root!.dataset.riverView=String(riverView);
-  map.setAttribute('role',riverView||isAgriMap()||state.field==='industry'&&state.overview?'group':'img');
-  text('#africa-svg-desc',riverView?'収録された河川・湖の中心線。ナイル川とコンゴ川は名前のボタン、または地図の線で選択できます。線にはTabで移動し、Enterかスペースキーで解説を開けます。':isAgriMap()?'作物は品目別の色帯、家畜は小型の種別記号。地図内の品目名・分布や下の色凡例から選択でき、右に地域と生産・利用の説明を表示します。選択しても他分布を残します。':'分布テーマと国別統計を重ねた地図。地図下の凡例と右の説明から、表示した分布を読み取れます。国は選択欄や一覧からも選べます。');
+  const climateView=state.field==='nature'&&state.topic==='climate'&&state.view==='distribution';
+  map.setAttribute('role',riverView||climateView||isAgriMap()||state.field==='industry'&&state.overview?'group':'img');
+  text('#africa-svg-desc',climateView?'気候区分の格子図です。6観測所の都市名や地点を選ぶと、右側に雨温図と観測地点の格子分類が表示されます。Tabで移動し、Enterかスペースキーで選べます。':riverView?'収録された河川・湖の中心線。ナイル川とコンゴ川は名前のボタン、または地図の線で選択できます。線にはTabで移動し、Enterかスペースキーで解説を開けます。':isAgriMap()?'作物は品目別の色帯、家畜は小型の種別記号。地図内の品目名・分布や下の色凡例から選択でき、右に地域と生産・利用の説明を表示します。選択しても他分布を残します。':'分布テーマと国別統計を重ねた地図。地図下の凡例と右の説明から、表示した分布を読み取れます。国は選択欄や一覧からも選べます。');
   const actions=query<HTMLElement>('.africa-theme-actions'),explanation=query<HTMLElement>('[data-theme-takeaway-detail]');
   const countryStatistics=query<HTMLDetailsElement>('[data-country-statistics]'),statisticsMode=actual&&!state.context?'reference':'comparison';
   countryStatistics.hidden=!state.place&&!state.context||riverView&&!state.context;
