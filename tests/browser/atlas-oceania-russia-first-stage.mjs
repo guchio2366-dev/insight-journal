@@ -97,7 +97,7 @@ try{
       assert.deepEqual(await wheatShare.locator('tbody tr td:last-child').allTextContents(),['11.1%','9.7%','12.9%']);
       assert.equal(await wheatShare.locator('svg path.russia-wheat-line').count(),1);
       assert.match(await wheatShare.textContent(),/2023・24年.*非公式値.*除外/);
-      assert.match(await wheatShare.textContent(),/2020年の収穫面積モデル/);
+      assert.match(await wheatShare.textContent(),/2020年収穫面積とは別指標/);
       assert.ok((await wheatShare.boundingBox()).y>bounds.y+bounds.height,'Chart follows the map');
       const crop=await tradeGrid.evaluate(el=>{const b=el.getBoundingClientRect();return {x:Math.floor(b.left+scrollX),y:Math.floor(b.top+scrollY),width:Math.ceil(b.width),height:Math.ceil(b.height)};});
       await page.screenshot({path:resolve(output,`russia-agriculture-${width}-lower-row.png`),fullPage:true,clip:crop});
