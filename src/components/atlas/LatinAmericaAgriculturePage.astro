@@ -2,7 +2,7 @@
 import LatinAmericaWorkspace from './LatinAmericaWorkspace.astro';
 import data from '../../data/atlas/latin-america/agriculture.json';
 import {latinCountries34} from '../../lib/atlas-latin-america-geometry';
-import {agricultureLayerTitle,latinAgricultureReading,renderLatinAgricultureWorkspaceMap,renderLatinAgricultureOverviewLegend,latinAgricultureOverviewReading,formatLatinAgricultureValue,faoFlagLabel,latinCropAreaRanking,latinCropAreaTotalHa} from '../../lib/atlas-latin-agriculture';
+import {agricultureLayerTitle,latinAgricultureReading,renderLatinAgricultureWorkspaceMap,renderLatinAgricultureOverviewLegend,latinAgricultureOverviewReading,formatLatinAgricultureValue,faoFlagLabel,latinCropAreaRanking,latinCropAreaTotalHa,latinWorldProductionShares} from '../../lib/atlas-latin-agriculture';
 import {withBase} from '../../lib/urls';
 import '../../styles/atlas-latin-agriculture.css';
 const state={layer:'all',place:'all',scope:'all',only:false};
@@ -12,6 +12,8 @@ const leadingCrops=latinCropAreaRanking.slice(0,10);
 const nearMisses=latinCropAreaRanking.slice(10);
 const cropArea=(hectares:number)=>`${new Intl.NumberFormat('ja-JP',{maximumFractionDigits:1}).format(hectares/10000)}万ha`;
 const leadingShare=Math.round(100*(leadingCrops[0].areaHa+leadingCrops[1].areaHa)/latinCropAreaTotalHa);
+const productionT=(tonnes:number)=>`${new Intl.NumberFormat('ja-JP',{maximumFractionDigits:0}).format(tonnes)} t`;
+const productionPercent=(tonnes:number|null,worldT:number)=>tonnes===null?'原表行なし':`${new Intl.NumberFormat('ja-JP',{maximumFractionDigits:1}).format(100*tonnes/worldT)}%`;
 ---
 <LatinAmericaWorkspace field="agriculture" title="中南米の農畜産" lead="熱帯のバナナ・高地のコーヒー・内陸の大豆・牛の飼育を、自然条件と市場へのつながりから読む。">
  <Fragment slot="map">
@@ -48,6 +50,18 @@ const leadingShare=Math.round(100*(leadingCrops[0].areaHa+leadingCrops[1].areaHa
   <details><summary>地図と統計の読み方</summary><p data-latin-agriculture-definition>{data.definitions.crop}</p><p data-latin-agriculture-coffee-definition hidden>{data.definitions.coffee}</p><p>{data.definitions.zero} {data.definitions.missing}</p></details>
  </Fragment>
  <Fragment slot="statistics">
+  <section class="latin-world-production" aria-labelledby="latin-world-production-heading" data-latin-world-production>
+   <h2 id="latin-world-production-heading">主要3作物の世界生産シェア</h2>
+   <p class="latin-takeaway">2024年の生産量を、FAOSTATの同年の世界計と比較します。大豆は値のある中南米16か国・地域の合計で世界計の約{Math.round(latinWorldProductionShares.find(item=>item.id==='soyb')!.regionalPercent)}%です。</p>
+   <div class="latin-world-production-grid">{latinWorldProductionShares.map(item=><article class="latin-world-production-card">
+    <h3>{item.name}</h3>
+    <div class="latin-world-production-value"><strong>{item.regionalPercent.toFixed(1)}%</strong><span>中南米の報告国合計 ÷ 世界計</span></div>
+    <div class="latin-world-production-track" role="img" aria-label={`${item.name}：中南米の報告国合計は2024年世界生産量の${item.regionalPercent.toFixed(1)}%`}><i style={`width:${item.regionalPercent}%`}></i></div>
+    <dl><div><dt>中南米の報告国合計</dt><dd>{productionT(item.regionalT)}（{item.reportingCountries}/34）</dd></div><div><dt>FAO世界計</dt><dd>{productionT(item.worldT)}</dd></div><div><dt>ブラジル／世界計</dt><dd>{productionPercent(item.brazilT,item.worldT)}</dd></div><div><dt>アルゼンチン／世界計</dt><dd>{productionPercent(item.argentinaT,item.worldT)}</dd></div></dl>
+   </article>)}</div>
+   <p class="latin-caption">分子は表示対象34か国・地域のうちFAOSTATに値のある国だけの2024年生産量（t）の合計。欠測・原表行なしは0とせず、世界計から差し引いた残りを「域外」とは呼びません。2020年の地図は収穫面積推計（ha）で、コーヒーの地図はアラビカ種のみです。世界シェアは輸出シェアではありません。</p>
+   <p class="latin-caption">対象は既存の上位10作物のうち、保存済み原表に2024年の世界計と国別値が揃う大豆・バナナ・コーヒーです。ほかの7作物は比較用の同年世界計を保持しておらず、省略は生産量の小ささを意味しません。単年値のため推移線は描きません。<a href="https://www.fao.org/faostat/en/#data/QCL" target="_blank" rel="noopener noreferrer">FAO, FAOSTAT Crops and livestock products</a>（2025年12月31日更新、2026年10月1日取得、CC BY 4.0）。</p>
+  </section>
   <section class="latin-crop-area-ranking" aria-labelledby="latin-crop-area-heading" data-latin-crop-area-ranking>
    <h2 id="latin-crop-area-heading">既存12作物の収穫面積：上位10</h2>
    <p class="latin-takeaway">大豆ととうもろこしで、地図に載せた12作物の推計収穫面積合計の約{leadingShare}%を占めます。面積から輸出額や生産価値は読めません。</p>

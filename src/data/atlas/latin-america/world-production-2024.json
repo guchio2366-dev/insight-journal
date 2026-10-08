@@ -1,0 +1,30 @@
+{
+  "year": 2024,
+  "unit": "t",
+  "scope": "FAOSTAT World aggregate",
+  "sourceFile": "data-source/atlas/latin-agriculture/raw/faostat-qcl-2024-selected.csv",
+  "sourceSha256": "12f1a5fd1d6fdfb38eb332b8054ee83d45ecb2ded9fe2473c5259c50c86737d9",
+  "sourceUrl": "https://bulks-faostat.fao.org/production/Production_Crops_Livestock_E_All_Data_(Normalized).zip",
+  "retrieved": "2026-10-01",
+  "licence": "CC BY 4.0",
+  "items": [
+    {
+      "layerId": "soyb",
+      "itemCode": 236,
+      "worldT": 397671688.56,
+      "flag": "A"
+    },
+    {
+      "layerId": "bana",
+      "itemCode": 486,
+      "worldT": 139413684.55,
+      "flag": "A"
+    },
+    {
+      "layerId": "coff",
+      "itemCode": 656,
+      "worldT": 11284877.41,
+      "flag": "A"
+    }
+  ]
+}
