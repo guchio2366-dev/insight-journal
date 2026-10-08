@@ -1,0 +1,76 @@
+name: Southeast Asia crop world share proof
+
+# This isolated branch captures an immutable pull request product source.
+# It is a QA-only create-event job, not a publishing workflow.
+'on': create
+
+permissions:
+  contents: read
+
+jobs:
+  proof:
+    if: github.event.ref_type == 'branch' && github.event.ref == 'codex/southeast-world-share-proof-20261008'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+      REVIEW_HEAD_SHA: a589e0270c4077f1e8c65172651f9d100d6d5424
+    steps:
+      - name: Check out diagnostic code
+        uses: actions/checkout@v7
+        with:
+          path: proof
+          persist-credentials: false
+      - name: Check out the pull request source
+        uses: actions/checkout@v7
+        with:
+          ref: a589e0270c4077f1e8c65172651f9d100d6d5424
+          path: site
+          persist-credentials: false
+      - name: Prepare existing Chrome and Japanese fonts
+        shell: bash
+        run: |
+          set -euo pipefail
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          test -n "$chrome_path"
+          japanese_fonts="$(fc-list ':lang=ja' family)"
+          font_setup="preinstalled"
+          if [[ -z "$japanese_fonts" ]]; then
+            sudo apt-get update
+            sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+            japanese_fonts="$(fc-list ':lang=ja' family)"
+            font_setup="installed-fonts-noto-cjk-from-ubuntu"
+          fi
+          test -n "$japanese_fonts"
+          {
+            printf 'REVIEW_CHROME_PATH=%s\n' "$chrome_path"
+            printf 'REVIEW_JAPANESE_FONT_SETUP=%s\n' "$font_setup"
+            printf '%s\n' 'REVIEW_JAPANESE_FONT_MATCH<<SE_THREE_FONTS'
+            fc-match -f '%{family}\n' 'sans-serif:lang=ja'
+            fc-match -f '%{family}\n' 'serif:lang=ja'
+            printf '%s\n' 'SE_THREE_FONTS'
+          } >> "$GITHUB_ENV"
+      - name: Set up the existing Node version
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: site/.nvmrc
+      - name: Install existing dependencies
+        working-directory: site
+        run: npm ci --no-audit --no-fund
+      - name: Build the fixed pull request source
+        working-directory: site
+        run: |
+          npm run build
+          node scripts/generate-release.mjs --commit "$REVIEW_HEAD_SHA"
+      - name: Capture only the new crop world share panel
+        timeout-minutes: 3
+        run: node proof/scripts/capture-southeast-world-share-proof.mjs site
+      - name: Save the small proof artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: southeast-world-share-proof-${{ github.run_id }}-${{ github.run_attempt }}
+          path: review-artifacts/southeast-world-share
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 6
