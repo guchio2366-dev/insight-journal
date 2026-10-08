@@ -25,7 +25,14 @@ jobs:
         run: |
           set -euo pipefail
           chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
-          test -n "$chrome_path"
+          if [[ -z "$chrome_path" ]]; then
+            echo "::error::Chrome must already be installed on the runner."
+            exit 1
+          fi
+          if [[ -z "$(fc-list ':lang=ja' family)" ]]; then
+            sudo apt-get update
+            sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+          fi
           test -n "$(fc-list ':lang=ja' family)"
           printf 'REVIEW_CHROME_PATH=%s\n' "$chrome_path" >> "$GITHUB_ENV"
       - uses: actions/setup-node@v6
