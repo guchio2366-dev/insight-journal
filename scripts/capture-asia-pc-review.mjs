@@ -492,6 +492,13 @@ async function main(){
     const panel=page.locator(selector);
     await panel.screenshot({path:path.join(output,`${profile.name}-southeast-${name}-panel.png`),animations:'disabled'});
    }
+   if(profile.name==='desktop'){
+    await open(page,host,'/atlas/asia/southeast-asia/nature/?topic=water');
+    await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-map-fallback]')?.hidden&&document.querySelector('[data-hydrology-panel]')&&!document.querySelector('[data-hydrology-panel]').hidden&&document.querySelector('[data-hydrology-status]')?.textContent==='');
+    await page.waitForLoadState('networkidle');
+    await page.evaluate(async()=>{await document.fonts.ready;scrollTo({top:0,behavior:'instant'});await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
+    await page.screenshot({path:path.join(output,'desktop-southeast-water-groundwater-initial.png'),animations:'disabled'});
+   }
    return {imageFiles:['agriculture-workspace-initial','agriculture-reading-scrolled','agriculture-statistics-visible','forestry-panel','trade-panel']};
   });
   for(const profile of profiles)await checkEastContourBands(browser,host,profile);
