@@ -467,3 +467,12 @@
 .eu-workspace-root .eu-label-dot.is-emphasized { stroke-width:3; }
 
 .eu-workspace-root .eu-item-ranking-note { margin:0 0 8px; font:14px/1.7 var(--sans); color:#526561; }
+
+/* Give the Europe industry network the same PC map share as the US industry map. */
+@media(min-width:1200px) {
+ .eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-layout { grid-template-columns:minmax(0,7fr) minmax(290px,3fr); }
+}
+@media(min-width:960px) and (max-width:1199px) {
+ .eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-layout { grid-template-columns:minmax(0,1fr) 290px; }
+ .eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-map-stage { aspect-ratio:1.55; }
+}

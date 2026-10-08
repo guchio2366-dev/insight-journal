@@ -175,8 +175,8 @@ async function snapshot(page, profile, topic, region = 'europe') {
     assert.ok(control.y >= measured.map.y && control.y + control.height <= measured.map.y + measured.map.height + 1);
     if (index) assert.ok(control.y >= measured.controls[index - 1].y + measured.controls[index - 1].height, 'Map controls retain fit / zoom in / zoom out order');
   }
-  // Photograph the changed industry and population readings at both PC widths.
-  const photographStates=['industry-gdp-reading','population-overview'];
+  // Photograph the wider industry map with its overview and country reading.
+  const photographStates=['industry-overview','industry-country-group'];
   if(region!=='europe'||!photographStates.includes(topic))return measured;
   const filename = `${profile.name}-${region}-${topic}.png`;
   const png = await page.screenshot({path: resolve(output, filename), fullPage: false, animations: 'disabled'});
@@ -510,7 +510,15 @@ async function stageOneOperations(page, profile) {
   await snapshot(page, profile, 'drainage-river-reading');
   await openEurope(page, 'atlas/europe/industry/?layer=hubs', 'normal');
   assert.equal(new URL(page.url()).searchParams.has('feature'), false);
-  await snapshot(page, profile, 'industry-overview');
+  const industryOverview = await snapshot(page, profile, 'industry-overview');
+  const usIndustry = await page.context().newPage();
+  try {
+    await usIndustry.goto(new URL('atlas/north-america/industry/', base).href, {waitUntil:'networkidle'});
+    const usMap = await usIndustry.locator('[data-map-frame]').boundingBox();
+    assert.ok(usMap?.width > 0, 'US industry map is the PC width reference');
+    assert.ok(industryOverview.map.width >= usMap.width - 3, `Europe industry map is narrower than US: ${JSON.stringify({europe:industryOverview.map,us:usMap})}`);
+    manifest.comparisons.push({profile:profile.name,topic:'industry map width',europe:industryOverview.map,us:usMap});
+  } finally { await usIndustry.close(); }
   await page.locator('[data-eu-topic-field="industry"] [data-eu-topic="industry"]').click();
   assert.match(await page.locator('[data-eu-subject-intro]').textContent(), /キルナ.*鉱石.*ミュンヘン.*自動車/);
   await snapshot(page, profile, 'industry-gdp-reading');
@@ -676,7 +684,7 @@ try {
   assert.ok(manifest.records.every(record => record.status === 'passed'));
   assert.equal(git('rev-parse', 'HEAD'), manifest.gitHead, 'Checkout changed during capture');
   assert.equal(git('rev-parse', 'HEAD:src'), manifest.gitSrcTree);
-  manifest.status = 'passed'; manifest.checks.push('Changed industry and population readings photographed at 2 PC sizes', 'Processing link matches the displayed contour asset for direct and tab routes at 2 PC sizes', 'Existing operations retained at 2 normal PC profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
+  manifest.status = 'passed'; manifest.checks.push('Europe industry map width meets US industry reference at 2 PC sizes', 'Industry overview and country reading photographed at 2 PC sizes', 'Processing link matches the displayed contour asset for direct and tab routes at 2 PC sizes', 'Existing operations retained at 2 normal PC profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
   console.log(JSON.stringify({status: manifest.status, output, images: manifest.images.length, head: manifest.gitHead}));
 } catch (error) {
   manifest.status = 'failed'; manifest.failure = {message: String(error), stack: error.stack};
