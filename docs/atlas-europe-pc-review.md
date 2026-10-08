@@ -2,7 +2,7 @@
 
 `.github/workflows/atlas-europe-pc-review.yml` は、`main` 向けPRで欧州専用ファイルが変わったときだけ実行する。pushイベントや定期実行は設けず、同じPRの新しい実行が古い実行を取り消す。共通CIのunit・E2E検証はそのまま利用する。
 
-PRのheadをcheckoutしてproduction buildを作り、`_release.json.commitSha` とgit HEADを照合する。画像はそのbuildのloopback previewから毎回新規撮影する。公開サイト、以前保存した画像、外部データサービスは使わない。ブラウザーの外部リクエストは遮断し、検証失敗として記録する。
+PRのheadをcheckoutしてproduction buildを作り、`_release.json.commitSha` とgit HEADを照合する。操作検証用画像はそのbuildのloopback previewから毎回新規撮影する。宗教2枚とドナウ接続区画の検証図は、PR headに保存済みのレビュー画像を別の `source-review/` に同梱し、新規撮影した操作検証画像とは区別する。公開サイトや外部データサービスは使わない。ブラウザーの外部リクエストは遮断し、検証失敗として記録する。
 
 ## 対象
 
@@ -21,7 +21,7 @@ PRのheadをcheckoutしてproduction buildを作り、`_release.json.commitSha` 
 
 ## 成果物と制約
 
-通常のActions artifact `europe-pc-review-<head SHA>-<run ID>` に画像と結果JSONを7日間保存する。結果には実際のHEAD、src tree、build情報、browser、viewport、画像寸法・hash、画面の測定値、操作結果、描画状態、失敗・未確認範囲を含める。最終判定には画像そのものも確認する。
+通常のActions artifact `europe-pc-review-<head SHA>-<run ID>` に画像と結果JSONを7日間保存する。`source-review/` には既存の `religion-regional-samples.png`、`religion-subotica.png`、`danube-connected-review.png` が入る。結果JSONには実際のHEAD、src tree、build情報、browser、viewport、操作検証画像の寸法・hash、画面の測定値、操作結果、描画状態、失敗・未確認範囲を含める。最終判定には画像そのものも確認する。
 
 権限は `contents: read` のみ。既存と同じ公式checkout/setup-node/upload-artifactを用い、秘密情報や公開用権限は受け取らない。標準runnerのChromeを独立したstepで確認し、版とパスを表示する。日本語フォントが不足する場合だけ、runner既定の公式Ubuntuパッケージ配布元から `fonts-noto-cjk` を一時runnerへ導入する。フォントの準備方法・使用可能なfont・解決されたfont名はmanifestに記録する。ブラウザー不足とfont不足は別のエラーとして停止する。
 
