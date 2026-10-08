@@ -358,7 +358,6 @@ async function init(root:HTMLElement){
    statistics.hidden=false;
    statisticsContent.innerHTML=`<h2>生産重量の採用10品目</h2><p>2024年の保存済みFAOSTAT・生産量（t）。20対象の収録値だけを合計し、欠測を0とみなしません。保存済み11候補から選んだ比較で、FAOSTAT全品目の地域上位10や世界シェアではありません。</p><table data-west-production-selection><caption>20か国・地域の収録値の合計。欠測国を含むため品目間の厳密な地域順位には使えません。</caption><thead><tr><th>品目</th><th>収録値の合計</th><th>収録／20</th></tr></thead><tbody>${production.map(row=>`<tr><th><button type="button" data-west-topic-button="${row.id}">${esc(row.label)}</button></th><td>${format(row.sum,0)} t</td><td>${row.reported}／20</td></tr>`).join('')}</tbody></table><p>供給元→仕向け先、輸出先、世界生産シェアは同じ定義・年の数量系列が未収録です。生産量を輸出・消費量へ読み替えません。<a href="https://www.fao.org/faostat/en/#data/QCL">FAOSTATの品目定義</a></p>`;
   }
-  statistics.hidden=true;
   if(state.city&&!['climate','precipitation'].includes(t.id))html+=`<p class="west-persisted">${esc(city?.name)}の選択を保持しています。「気候区分」へ戻ると同じ雨温図を読めます。</p>`;
   if(['climate','precipitation'].includes(t.id)){
    if(city){

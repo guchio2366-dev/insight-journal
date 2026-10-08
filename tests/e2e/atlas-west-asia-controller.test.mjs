@@ -62,6 +62,7 @@ test('中東の採用10品目は国別生産量にだけ切り替わり、欠測
  const {w,q,select}=await setup('agriculture');
  try{
   const table=q('[data-west-production-selection]');
+  assert.equal(q('[data-west-comparison]').hidden,false);
   assert.equal(table.querySelectorAll('tbody tr').length,10);
   assert.match(table.textContent,/牛の生乳.*19／20/);
   assert.match(table.textContent,/水牛の生乳.*6／20/);

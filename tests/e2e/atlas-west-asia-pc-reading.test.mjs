@@ -99,6 +99,7 @@ test('西アジアのPC実画面で地域説明・3か国・欠測年・選択�
    await page.locator('[data-west-farming-selection] summary').click();
    assert((await page.locator('[data-west-farming-selection]').innerText()).includes('保存済みの生産重量11候補'));
    assert.equal(await page.locator('[data-west-production-selection] tbody tr').count(),10);
+   assert.equal(await page.locator('[data-west-production-selection]').isVisible(),true);
    await shot('farming-coverage');
    await page.locator('[data-west-production-selection] [data-west-topic-button="cattle-milk"]').click();
    await page.waitForFunction(()=>document.querySelector('[data-west-atlas]')?.dataset.topic==='cattle-milk'&&document.querySelector('[data-west-atlas]')?.dataset.ready==='true');
