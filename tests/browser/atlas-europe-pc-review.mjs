@@ -272,6 +272,28 @@ async function agricultureClimateRepairs(page,profile){
   networkClean();
 }
 
+async function forestryProductionReview(page,profile){
+  await openEurope(page,'atlas/europe/agriculture/?layer=treecover','normal');
+  const panel=page.locator('[data-eu-forest-production]');
+  await panel.waitFor({state:'visible'});
+  assert.equal(await panel.locator('tbody tr').count(),10);
+  assert.match(await panel.locator('tbody tr').first().innerText(),/ロシア.*205\.5.*37\.2/s);
+  assert.match(await page.locator('[data-eu-forest-production-note]').innerText(),/次点はウクライナ/);
+  const extent=await page.locator('[data-eu-static]').getAttribute('viewBox');
+  await page.locator('select[data-eu-farm-country]').selectOption('DEU');
+  assert.match(await panel.locator('tr.is-selected').innerText(),/ドイツ.*70\.8.*23\.2/s);
+  await page.locator('button[data-eu-layer="forest"]').click();
+  assert.equal(await page.locator('[data-eu-map-title]').innerText(),'森林面積比率');
+  assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'),extent);
+  assert.equal(await panel.locator('tbody tr').count(),10);
+  const filename='compact-pc-europe-forestry-production.png';
+  const png=await panel.screenshot({path:resolve(output,filename),animations:'disabled'});
+  manifest.images.push({file:filename,sourceURL:page.url(),profile:profile.name,viewport:profile.viewport,
+    dimensions:{width:png.readUInt32BE(16),height:png.readUInt32BE(20)},sha256:createHash('sha256').update(png).digest('hex')});
+  manifest.checks.push('Forestry 2024 top ten, next-ranked country, selected-country highlight and retained map extent at 1024px');
+  await save();
+}
+
 async function uniqueElevation(page) {
   assert.equal(await page.locator(resultSelector).count(), 1); assert.equal(await page.locator(`${pointSelector}:visible`).count(), 1);
   assert.equal(await page.locator(resultSelector).isVisible(), true);
@@ -680,6 +702,7 @@ try {
       await stageOneOperations(page, profile);
       await agricultureClimateRepairs(page,profile);
       if (profile.viewport.width === 1024) {
+        await forestryProductionReview(page,profile);
         // Keep the static history checks independent of all preceding normal
         // operations; Chromium caps a tab's accumulated session history.
         const staticPage=await context.newPage();
@@ -688,7 +711,7 @@ try {
       }
     } finally { await context.close(); }
   }
-  networkClean(); assert.equal(manifest.images.length, 1); assert.equal(manifest.records.length, 3);
+  networkClean(); assert.equal(manifest.images.length, 2); assert.equal(manifest.records.length, 3);
   assert.ok(manifest.records.every(record => record.status === 'passed'));
   assert.equal(git('rev-parse', 'HEAD'), manifest.gitHead, 'Checkout changed during capture');
   assert.equal(git('rev-parse', 'HEAD:src'), manifest.gitSrcTree);
