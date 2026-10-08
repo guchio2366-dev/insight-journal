@@ -11,6 +11,7 @@ import { decodeAsiaNumericGrid, readAsiaNumericCell, type AsiaNumericGrid } from
 import { asiaPhysicalReading, asiaNaturalTopics, type AsiaPhysicalFocus } from '../data/atlas/asia-physical-reading';
 import {asiaPopulationTopics,asiaPopulationReading,asiaUrbanReading,type AsiaPopulationRegion,type AsiaPopulationRaster} from '../data/atlas/asia-population';
 import {renderAsiaFarmingPanel,renderSouthCentralFarmConnections} from './atlas-asia-farming-panel';
+import {renderEastAsiaFarmFoundations} from './atlas-east-asia-farm-foundations';
 import {createAsiaIndustry} from './atlas-asia-industry';
 import {hasIndustryCountryScope,industryCountryChoices,normalizeScopedIndustryState} from '../data/atlas/asia-industry';
 import {asiaWaterFocus} from '../data/atlas/asia-water-focus';
@@ -403,6 +404,7 @@ function start(root:HTMLElement) {
   function renderFarming(){
     const active=state.field==='agriculture',layer=farmingLayer(),topic=farmingTopic();
     renderSouthCentralFarmConnections(root,config.regionId,active,topic,config.countries.find(c=>c.code===state.place));
+    renderEastAsiaFarmFoundations(root,config.regionId,active,topic,config.countries.find(c=>c.code===state.place));
     for(const key of farmingGrids.keys())if(key!==layer?.grid)farmingGrids.delete(key);
     optionalHidden('[data-farm-switches]',!active||topic!=='overview'||state.overlay==='water');
     optionalHidden('[data-farming-topics]',true);optionalHidden('[data-farming-panel]',!active||topic==='overview');optionalHidden('[data-farm-overview-reading]',!active||topic!=='overview');optionalHidden('[data-farm-overview-legend]',!active||layer?.kind==='forest');optionalHidden('[data-farming-legend]',!layer||!!config.presentation&&layer.kind!=='forest');
