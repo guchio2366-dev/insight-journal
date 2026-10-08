@@ -32,8 +32,8 @@ test('西アジアの全4分野は共通枠・一つの地図・20の選択肢�
    if(field==='population')assert.ok(q('.atlas-map-column .west-additional-topics [data-west-topic-button="age-older"]'));
    if(field==='natural'){
     const waterTopics=all('[data-west-subgroup="水資源"] button');
-    assert.deepEqual(waterTopics.map(b=>b.textContent),['河川・地下水','年降水量の分布','河川の流域']);
-    assert.deepEqual(waterTopics.map(b=>b.dataset.westTopicButton),['rivers','annual-precipitation','basins']);
+    assert.deepEqual(waterTopics.map(b=>b.textContent),['水系の全体','年降水量の分布','河川の流域']);
+    assert.deepEqual(waterTopics.map(b=>b.dataset.westTopicButton),['water-overview','annual-precipitation','basins']);
     assert.ok(waterTopics.every(b=>!b.disabled),'水資源では年降水量と河川を選び、観測所の月別値は雨温図に残る');
     assert.equal(q('[data-west-unavailable="降水量"]'),null);
    }

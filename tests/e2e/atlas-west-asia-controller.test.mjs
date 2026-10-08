@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {webcrypto} from 'node:crypto';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {build} from 'esbuild';
@@ -16,7 +17,7 @@ async function setup(route,query='',failBasins=false,viewport={width:1024,height
  w.happyDOM.setWindowSize(viewport);
  const media=[],matchMedia=w.matchMedia.bind(w);w.matchMedia=query=>{const result=matchMedia(query);media.push(result);return result;};
  w.document.body.innerHTML=(await readFile(`dist/atlas/west-asia/${route}/index.html`,'utf8')).replace(/<script\b[\s\S]*?<\/script>/g,'');
- const observed=[];w.ResizeObserver=class{constructor(callback){this.callback=callback;}observe(target){observed.push({target,callback:this.callback});}disconnect(){}};w.Response=Response;w.Blob=Blob;w.DecompressionStream=DecompressionStream;
+ const observed=[];w.ResizeObserver=class{constructor(callback){this.callback=callback;}observe(target){observed.push({target,callback:this.callback});}disconnect(){}};Object.defineProperty(w,'crypto',{value:webcrypto});w.Response=Response;w.Blob=Blob;w.DecompressionStream=DecompressionStream;
  w.fetch=async url=>{const injected=fixture.fetch?.(String(url));if(injected!==undefined)return injected;if(failBasins&&String(url).endsWith('basins.json'))throw Error('Test: unavailable vector');return new Response(await readFile('public/'+String(url).replace('/insight-journal/','')));};
  w.eval(bundle.outputFiles[0].text);const q=s=>w.document.querySelector(s);
  await until(()=>fixture.expectFailure?!q('[data-west-retry]').hidden:q('[data-west-loading]').hidden);return {w,q,media,notifyResize:selector=>observed.filter(x=>x.target.matches(selector)).forEach(x=>x.callback([{target:x.target}])),select:(s,v)=>{q(s).value=v;q(s).dispatchEvent(new w.Event('change'));}};

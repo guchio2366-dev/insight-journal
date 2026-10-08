@@ -47,6 +47,9 @@ const network=entry('地域全体の供給網：産地・加工・通過点を�
   'これは地理的な接続の説明です。現在の通航・施設の稼働、実際の輸出先構成、貨物の流量を示す地図ではありません。国別TEU、製造業付加価値、資源レントはそれぞれ別の単位・定義で読みます。',
 ],['transit']);
 export const westTopicReasons = {
+  'water-overview':'雨の少ないエジプトのナイル川沿い、トルコの高地からイラクへ続く流域、河川の少ないアラビア半島の地下水を比べます。雨の降る場所、川が運ぶ水、地下へ補給される水は一致しません。灌漑と水を届ける設備・費用も合わせて読みましょう。',
+  terrain:'アナトリア高原・イランの山地と高原から、イラクの低地へ輪郭を追います。河川は国境を越えて流れるため、標高の起伏と流域を往復すると上流・下流の位置関係を読めます。',
+  contours:'トルコ・イランの高原や山地、イラクの低地、アラビア半島南西部の高地を、海面からの高さで比較します。海面下の色帯を欠測と混同せず、地点の保存格子の値も確認しましょう。',
   'farming-overview':'小麦・大麦はトルコとイランの高原やイラクの川沿い、家畜は高原・山麓とその周辺で比較しましょう。作物の輪郭と家畜の点は2020年の推計からの案内で、点の数は頭数ではありません。灌漑・天水の切替では水の確保方法を比べられます。',
   'annual-precipitation':'黒海沿岸のリゼ、内陸のアンカラ、アラビア半島のリヤドを手掛かりに年降水量の違いを読みます。250mmは雨量の比較に使う目盛りで、天水農業の共通限界ではありません。山地・雨の季節と、灌漑を合わせて確認しましょう。',
   groundwater:waterEnergy,
@@ -64,10 +67,11 @@ export const westTopicReasons = {
 export function westRegionalReading(topic,selection={}) {
   if(topic.field==='industry')return westIndustryCountry(selection.country)?industry[selection.country]:network;
   if(topic.id==='groundwater')return entry('乾燥地の農業と地下水',[],['irrigation','water']);
+  if(topic.id==='water-overview'&&!selection.basin)return entry('乾燥地の農業と水を届ける仕組み',[waterEnergy],['irrigation','water']);
   if(topic.id==='desalination')return entry('水の供給とエネルギー',[],['saudi','water']);
   if(['wheat-irrigated','barley-irrigated','dates'].includes(topic.id))return entry('水を確保して栽培する', [waterEnergy],['irrigation']);
-  if(topic.id==='basins'&&selection.basin==='1060034260')return entry('ナイル川：エジプトの外へ続く上流',['表示流域はエジプトより南の上流も含みます。国別の雨量だけでナイル川沿いの農地の水供給を説明できません。川の近くにある畑でも、取水・送水設備と水の配分を別に確認する必要があります。'],['water']);
-  if(topic.id==='basins'&&selection.basin==='2060073570')return entry('チグリス・ユーフラテス川：高原から低地へ',['トルコなどの上流から、シリア・イラクの下流へつながる流域です。雨や雪解けと貯水・取水の時期が下流へ届く水を変えます。この境界は水利権・現在の流量・地下水の流れを表しません。'],['water']);
+  if(['basins','water-overview'].includes(topic.id)&&selection.basin==='1060034260')return entry('ナイル川：エジプトの外へ続く上流',['表示流域はエジプトより南の上流も含みます。国別の雨量だけでナイル川沿いの農地の水供給を説明できません。川の近くにある畑でも、取水・送水設備と水の配分を別に確認する必要があります。'],['water']);
+  if(['basins','water-overview'].includes(topic.id)&&selection.basin==='2060073570')return entry('チグリス・ユーフラテス川：高原から低地へ',['トルコなどの上流から、シリア・イラクの下流へつながる流域です。雨や雪解けと貯水・取水の時期が下流へ届く水を変えます。この境界は水利権・現在の流量・地下水の流れを表しません。'],['water']);
   return null;
 }
 export const westCityReadings = {
