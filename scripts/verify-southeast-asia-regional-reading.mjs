@@ -50,7 +50,6 @@ export async function verifySoutheastAsiaRegion(page,{source,capture:takePicture
 
  await open('agriculture/');await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmContextStatus==='ready');
  await page.waitForFunction(()=>document.querySelector('.asia-farm-connections-grid > section:first-child h3')?.textContent==='米を生産する国');
- await capture('agriculture-workspace-initial');
  const layout=await page.evaluate(()=>{
   const rectangle=selector=>{const r=document.querySelector(selector).getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,bottom:r.bottom};};
   return {news:rectangle('.atlas-news'),grid:rectangle('.asia-layout'),workspace:rectangle('[data-southeast-top-workspace]'),map:rectangle('[data-southeast-top-workspace]>.atlas-map-column'),reading:rectangle('[data-southeast-top-workspace]>.asia-reading-panel'),statistics:rectangle('.asia-layout>.asia-farm-connections')};
@@ -61,8 +60,6 @@ export async function verifySoutheastAsiaRegion(page,{source,capture:takePicture
  await expand('[data-southeast-forest-reading]');await expand('[data-southeast-trade-reading]');
  const readingScroll=await page.locator('[data-southeast-top-workspace]>.asia-reading-panel').evaluate(node=>{node.scrollTop=0;const before=node.scrollTop;node.scrollTop=180;return {before,after:node.scrollTop,overflow:getComputedStyle(node).overflowY};});
  assert(readingScroll.after>readingScroll.before&&readingScroll.overflow==='auto','The right reading must scroll inside its fixed frame');
- await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));
- await takePicture('agriculture-reading-scrolled');
  const pageScroll=await page.evaluate(()=>{
   const news=document.querySelector('.atlas-news'),shell=news.closest('.atlas-desktop-shell'),maxScroll=document.documentElement.scrollHeight-innerHeight;
   const shellY=shell.getBoundingClientRect().top+scrollY;
