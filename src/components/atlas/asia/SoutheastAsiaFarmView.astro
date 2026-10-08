@@ -85,7 +85,7 @@ const pieStyle=`conic-gradient(${[...topPartners.map((row,index)=>({share:row.sh
   // Bound the sticky reading panel to the map row. The following statistics
   // remain a separate full-width row rather than part of its sticky range.
   const grid=root.querySelector<HTMLElement>('.asia-layout');
-  if(grid){
+  if(grid&&!section.hidden){
    const map=grid.querySelector<HTMLElement>(':scope > .atlas-map-column');
    const reading=grid.querySelector<HTMLElement>(':scope > .asia-reading-panel');
    if(map&&reading){
