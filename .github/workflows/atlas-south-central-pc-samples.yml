@@ -1,4 +1,4 @@
-name: Review South Central population on PC
+name: Review South Central landform and elevation on PC
 
 on:
   pull_request:
@@ -23,7 +23,7 @@ jobs:
     env:
       ASTRO_TELEMETRY_DISABLED: '1'
       REVIEW_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-      REVIEW_SCENE: population-review
+      REVIEW_SCENE: south-central-landform-overview
 
     steps:
       - name: Check out exact sample head
@@ -74,11 +74,11 @@ jobs:
       - name: Build local production site
         run: npm run build
 
-      - name: Capture population and religion initial views
+      - name: Capture landform overview
         timeout-minutes: 3
         run: node scripts/capture-south-central-pc-samples.mjs
 
-      - name: Download the existing ethnicity view
+      - name: Download the existing elevation image
         uses: actions/download-artifact@v4
         with:
           name: asia-pc-review-37758284170-1
@@ -87,35 +87,35 @@ jobs:
           run-id: 37758284170
           path: incoming
 
-      - name: Keep only three initial population views
+      - name: Keep only landform and elevation images
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PYCODE'
           from pathlib import Path
           import shutil
-          out=Path('review-artifacts/south-central-population-review')
+          out=Path('review-artifacts/south-central-terrain-review')
           out.mkdir(parents=True,exist_ok=True)
-          for name in ['south-central-population-initial.png','south-central-religion-initial.png']:
-            source=Path('review-artifacts/south-central-pc-samples')/name
-            assert source.is_file(), name
-            shutil.copyfile(source,out/name)
-          name='south-desktop-south-central-cultural-distribution.png'
+          name='south-central-landform-overview.png'
+          source=Path('review-artifacts/south-central-pc-samples')/name
+          assert source.is_file(), name
+          shutil.copyfile(source,out/name)
+          name='south-desktop-south-central-asia-aligned-terrain-overview.png'
           matches=list(Path('incoming').rglob(name))
           assert len(matches)==1,(name,matches)
           shutil.copyfile(matches[0],out/name)
           images=list(out.glob('*.png'))
-          assert len(images)==3
+          assert len(images)==2
           total=sum(p.stat().st_size for p in images)
           assert total<=10*1024*1024,total
-          print(f'Three PC images: {total} bytes')
+          print(f'Two PC images: {total} bytes')
           PYCODE
 
-      - name: Upload focused population images
+      - name: Upload focused terrain images
         uses: actions/upload-artifact@v4
         with:
-          name: south-central-population-review-${{ github.run_id }}
-          path: review-artifacts/south-central-population-review/*.png
+          name: south-central-terrain-review-${{ github.run_id }}
+          path: review-artifacts/south-central-terrain-review/*.png
           if-no-files-found: error
           compression-level: 6
           retention-days: 7
