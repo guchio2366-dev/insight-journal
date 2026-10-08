@@ -1,4 +1,4 @@
-import {westFields,westTopics,statisticalColors,observation,westReading} from '../data/atlas/west-asia-topics.mjs';
+import {westFields,westTopics,statisticalColors,observation,westReading,westProductionSelection} from '../data/atlas/west-asia-topics.mjs';
 import {readWestState,westSearch,gridIndex,decodeWestGrid,zoomWestView,panWestView} from '../lib/atlas-west-asia-state.mjs';
 import {stationAnnualRainfall,rainfallBreaks,rainfallColors,rainfallColor,isSettlementTopic,settlementSubject,validateSettlementCollection} from '../lib/atlas-west-asia-completion.mjs';
 import {westAnnualPrecipitationId,westPrecipitationManifestPath,westPrecipitationLayer,decodeWestPrecipitationGrid} from '../lib/atlas-west-asia-precipitation.mjs';
@@ -34,7 +34,7 @@ async function init(root:HTMLElement){
  const statistics=$('[data-west-comparison]'),shell=root.closest<HTMLElement>('[data-atlas-shell]');
  const statisticsContent=document.createElement('div'),statisticsControls=document.createElement('div');statisticsContent.dataset.westStatisticsContent='';statisticsControls.dataset.westStatisticsControls='';statistics.append(statisticsControls,statisticsContent);
  const yearLabel=$('[data-west-year-label]');
- if(shell){shell.classList.add('west-layout-shell');statistics.classList.add('west-layout-statistics');shell.append(statistics);statistics.addEventListener('click',event=>{const button=(event.target as Element).closest<HTMLElement>('[data-west-country-button]');if(button)changeCountry(button.dataset.westCountryButton!);});}
+ if(shell){shell.classList.add('west-layout-shell');statistics.classList.add('west-layout-statistics');shell.append(statistics);statistics.addEventListener('click',event=>{const target=event.target as Element;const country=target.closest<HTMLElement>('[data-west-country-button]');if(country){changeCountry(country.dataset.westCountryButton!);return;}const topic=target.closest<HTMLElement>('[data-west-topic-button]');if(topic){readingOverview=false;changeTopic(topic.dataset.westTopicButton!);}});}
  const anchor=(el:Element)=>{const a=document.createComment('west-comparison-home');el.before(a);return a;};
  const legendHome=anchor(legendBox),mapExtrasHome=anchor(mapExtras),agriHome=anchor(agriSwitches),statHome=anchor(statControls),comparisonKeyHome=anchor(comparisonKey),comparisonDetailsHome=anchor(comparisonDetails);
  const desktopComparison=window.matchMedia('(min-width:960px)');
@@ -351,7 +351,13 @@ async function init(root:HTMLElement){
   if(field==='industry')html+=`<nav class="atlas-water-tabs west-water-items" aria-label="産業の説明対象" data-west-industry-scope><button type="button" data-west-country-button="" aria-pressed="${!c}">地域全体の供給網</button>${westIndustryCountries.map(code=>`<button type="button" data-west-country-button="${code}" aria-pressed="${c?.code===code}">${esc(data.countries.find((row:any)=>row.code===code)?.name)}</button>`).join('')}</nav><p class="west-stat-note">国別産業の比較は3か国です。地域全体の供給網には、他国の資源・通過点も含めます。下の国別統計は供給網の流量ではありません。</p>`;
   const regional=westRegionalReading(t,{country:state.country,basin:state.basin});
   if(regional){html+=`<section data-west-regional-reading><h3>${esc(regional.heading)}</h3>${regional.paragraphs.map((paragraph:string)=>`<p>${esc(paragraph)}</p>`).join('')}<details><summary>この地域説明の根拠・対象時点</summary>${regional.sources.map((id:string)=>{const source=westReadingSources[id];return `<p><a href="${esc(source.url)}">${esc(source.label)}</a> · ${esc(source.period)}</p>`;}).join('')}</details></section>`;}
-  if(t.id==='farming-overview')html+=`<details data-west-farming-selection><summary>品目の採用候補・次点・収録範囲</summary>${Object.values(westFarmingSelection).map(text=>`<p>${esc(text)}</p>`).join('')}</details>`;
+  if(t.id==='farming-overview'){
+   html+='<p><a href="#west-statistics">保存済み候補から選んだ生産重量10品目と収録国数</a></p>';
+   html+=`<details data-west-farming-selection><summary>品目の採用候補・次点・収録範囲</summary>${Object.values(westFarmingSelection).map(text=>`<p>${esc(text)}</p>`).join('')}</details>`;
+   const production=westProductionSelection(data,2024);
+   statistics.hidden=false;
+   statisticsContent.innerHTML=`<h2>生産重量の採用10品目</h2><p>2024年の保存済みFAOSTAT・生産量（t）。20対象の収録値だけを合計し、欠測を0とみなしません。保存済み11候補から選んだ比較で、FAOSTAT全品目の地域上位10や世界シェアではありません。</p><table data-west-production-selection><caption>20か国・地域の収録値の合計。欠測国を含むため品目間の厳密な地域順位には使えません。</caption><thead><tr><th>品目</th><th>収録値の合計</th><th>収録／20</th></tr></thead><tbody>${production.map(row=>`<tr><th><button type="button" data-west-topic-button="${row.id}">${esc(row.label)}</button></th><td>${format(row.sum,0)} t</td><td>${row.reported}／20</td></tr>`).join('')}</tbody></table><p>供給元→仕向け先、輸出先、世界生産シェアは同じ定義・年の数量系列が未収録です。生産量を輸出・消費量へ読み替えません。<a href="https://www.fao.org/faostat/en/#data/QCL">FAOSTATの品目定義</a></p>`;
+  }
   statistics.hidden=true;
   if(state.city&&!['climate','precipitation'].includes(t.id))html+=`<p class="west-persisted">${esc(city?.name)}の選択を保持しています。「気候区分」へ戻ると同じ雨温図を読めます。</p>`;
   if(['climate','precipitation'].includes(t.id)){
