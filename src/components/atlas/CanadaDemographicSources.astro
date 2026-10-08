@@ -8,9 +8,9 @@ const count=(v:number|null)=>v===null?'未公表':v.toLocaleString('ja-JP');
 <details class="population-tables" data-demographic-tables hidden><summary>選んだ集団：41都市圏・全国の人数、分母と割合</summary><p data-demographic-table-caption></p><div class="canola-table-scroll"><table class="canola-stats demographic-stats" data-demographic-table><thead><tr><th>都市圏・全国</th><th>集団の人数（人）</th><th>同じ表の分母（人）</th><th>割合（%）</th><th>品質・未回答率</th></tr></thead><tbody></tbody></table></div></details>
 <details class="canada-source-footer population-source-footer" id="canada-demographic-sources"><summary>人口集団・宗教：原典・分類・集積基準</summary>
 <p>2021 Census Profileの全国、41都市圏（CMA）、293統計地域（CD）。私的世帯人口の長形式25%標本による加重推計です。CDは州より細かい行政・統計地域で、米国の郡と同じ制度ではありません。CMAとCDは重なり、合計しません。</p>
-<p>宗教は23末端区分。キリスト教はカトリック、聖公会、ルーテル派、再洗礼派、末日聖徒などに分け、キリスト教全体を重複加算しません。教派不詳も原典どおり残します。自己申告の所属で、実践頻度や政治姿勢は分かりません。</p>
+<p>宗教の原表23末端区分を、11の独立区分・その他キリスト教・その他の宗教の13表示区分に重複なく集約。キリスト教の親分類を二重加算せず、教派不詳など11末端区分だけをその他キリスト教へ合算します。原表23区分は地域を選んだ詳細表に保持。自己申告の所属で、実践頻度・政治姿勢・先住民人口を示しません。</p>
 <p>人種・民族はVisible minority（可視的少数者）の公式区分。「該当しない」は白人と同義ではなく、先住民も含みます。先住民アイデンティティは別集計として併記するため、全行は相互排他的ではありません。従来の都市圏のPopulation group表から変更し、全国・CD・CMAで同じ変数を使用しています。国籍・出生国・民族的出自と読み替えません。</p>
-<p>地域内20%以上、または5%以上かつ全国割合の1.5倍以上を集積対象とし、複数該当なら全国比が最も高い区分を地色にします。同率は凡例順。米国の人種民族図の閾値を共用し、代表区分は今回の指定に従って全国比で選びます。最多・過半数の地図ではなく、有意差の判定でもありません。無宗教と可視的少数者に該当しない区分は概要図の背景とし、凡例を選ぶと実際の割合を表示します。都市の色点は該当する全区分で、点の大きさは人数ではありません。</p>
+<p>宗教の地図は、地域内5%以上かつ全国割合の1.5倍以上を集積点とし、複数該当を同時表示します。その他キリスト教・その他の宗教は合計と表には残し、初期の集積点からは外します。最多・過半数や統計的有意差の地図ではありません。点は地域の表示用基点で、居住位置・人数・信徒数を示しません。都市圏（CMA）と統計地域（CD）は重なる別の集計で、足しません。人口集団は従来の別の集積基準と等幅縞表示を使用します。</p>
 <p>原典の公表0・丸め・未公表・秘匿・品質フラグを保持。欠測を0で補完しません。丸めや標本誤差で閾値付近の判定は変わり得ます。不完全調査の保留地・集落がある地域では原典の注記を確認してください。</p>
 <p>2021年CD境界をDGUIDで結合し、南部600m・代表点が北緯60度以北は3,000mで輪郭を簡略化。通常の縮尺で読めない小島・穴を省いています。気候区分と同じメルカトル投影と南部の表示範囲です。数値はCD全体で、画面外を除いて再集計していません。輪郭の簡略化は統計値を変えません。</p>
 <p><a href="https://www12-2021.statcan.gc.ca/census-recensement/2021/dp-pd/prof/index.cfm?Lang=E">Statistics Canada：2021 Census Profile</a> ／ <a href={withBase('/assets/atlas/canada-demographics-v2/manifest.json')}>出典・抽出方法・検証用ハッシュ</a> ／ <a href="https://www.statcan.gc.ca/en/terms-conditions/open-licence">Statistics Canada Open Licence</a></p>
