@@ -400,6 +400,22 @@ async function checkRequestedCorrections(browser,host,profile){
   await settle(page);
   await contextPicture(page,profile,'east-industry-country-pilot','asia');return checks;
  });
+ await operation(browser,host,profile,'east-industry-four-country-readings',async page=>{
+  const evidence=[];
+  for(const code of ['CHN','JPN','KOR','TWN']){
+   await open(page,host,`/atlas/asia/east-asia/industry/?topic=manufacturing&place=${code}`);
+   await page.locator('[data-east-industry-journey]').waitFor({state:'visible'});
+   await page.waitForFunction(()=>document.querySelector('[data-industry-status]')?.textContent==='');
+   await expand(page.locator('[data-reading-details]'));
+   const summary=await page.locator('[data-east-industry-journey-summary]').textContent();
+   const gap=await page.locator('[data-east-industry-journey-gap]').textContent();
+   assert(summary&&gap,'The selected country has a sourced reading and an explicit data gap');
+   if(code==='TWN')assert.match(await page.locator('[data-east-industry-journey-facts]').textContent(),/未掲載.*24,701千t\/年/);
+   await settle(page);await contextPicture(page,profile,`east-industry-${code.toLowerCase()}-reading`,'asia');
+   evidence.push({code,summary,gap});
+  }
+  return {countries:evidence,retainsRegionalDistribution:true};
+ });
 }
 
 async function checkEastContourBands(browser,host,profile){
