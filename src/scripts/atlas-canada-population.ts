@@ -3,9 +3,12 @@ import {canadaLegacyFrame,canadaMapPath} from '../lib/atlas-canada-map-presentat
 import {renderCanadaPopulationOverview} from './atlas-canada-population-overview';
 import {readCanadaPopulationState,writeCanadaPopulationState,canadaPopulationMapCamera,copyCanadaPopulationMapState,formatCanadaPopulationValue,canadaPopulationDensityColor,canadaPopulationNatureUrl,canadaPopulationIndustryUrl,canadaPopulationFrame,populationStorageKey,type CanadaPopulationState} from '../lib/atlas-canada-population';
 import {readCanadaDemographicsState,writeCanadaDemographicsState,canadaDemographicShare,canadaDemographicShareColor,canadaDemographicShareColors,canadaDemographicShareScale,type CanadaDemographicsState,type CanadaDemographicCell,type CanadaDemographicTopic} from '../lib/atlas-canada-demographics';
+import {buildCanadaReligionView} from '../lib/atlas-canada-religion-view';
+import {renderCanadaReligionMap} from './atlas-canada-religion-map';
 
 export function initCanadaPopulation(root:HTMLElement){
  const config=JSON.parse(root.querySelector('[data-population-config]')!.textContent!),ids=config.cmas.map((r:any)=>r.id);
+ config.demographics.religion=buildCanadaReligionView(config.demographics.religion);
  const catalog=Object.fromEntries(['ethnicity','religion'].map(topic=>[topic,{ids:config.demographics[topic].groups.map((g:any)=>g.id),defaultId:config.demographics[topic].defaultGroup}])) as Parameters<typeof readCanadaDemographicsState>[1];
  const readState=(url:URL)=>{const next=readCanadaPopulationState(url,ids);return url.searchParams.has('metric')?next:{...next,metric:'density' as const,year:2021 as const};};
  let state=readState(new URL(location.href)),demographic=readCanadaDemographicsState(new URL(location.href),catalog);
@@ -63,7 +66,7 @@ export function initCanadaPopulation(root:HTMLElement){
   for(const element of root.querySelectorAll<HTMLElement>('[data-demographic-control]'))element.hidden=isDistribution;
   $('[data-population-distribution-reading]').hidden=!isDistribution;$('[data-demographic-reading]').hidden=isDistribution;
   $('[data-population-distribution-table]').hidden=!isDistribution;$('[data-demographic-tables]').hidden=isDistribution;
-  const selected=(data??config).cmas.find((r:any)=>r.id===state.cma)??(data?data.national:config.national.find((r:any)=>r.id==='Canada')),compare=(data??config).cmas.find((r:any)=>r.id===state.compare),colorData=data??origin?.data,group=data?.groups.find((g:any)=>g.id===demographic.group)??origin?.group,frame=mapCamera??(state.zoom==='south'?[0,0,900,580]:canadaLegacyFrame(canadaPopulationFrame(state,config.geometry))),scale=frame[2]/900;
+  const selected=(data??config).cmas.find((r:any)=>r.id===state.cma)??(data?data.national:config.national.find((r:any)=>r.id==='Canada')),compare=(data??config).cmas.find((r:any)=>r.id===state.compare),colorData=data??origin?.data,group=data?.groups.find((g:any)=>g.id===demographic.group)??origin?.group,frame=mapCamera??(demographic.topic==='religion'&&!new URL(location.href).searchParams.has('zoom')&&!state.cma&&!new URL(location.href).searchParams.has('cd')?[0,0,900,580]:state.zoom==='south'?[0,0,900,580]:canadaLegacyFrame(canadaPopulationFrame(state,config.geometry))),scale=frame[2]/900;
   const density=isDistribution&&state.metric==='density',share=Boolean(origin)||!isDistribution&&demographic.measure==='share',max=isDistribution?density?Math.max(1,...config.cmas.map((r:any)=>r.density2021.value??0)):distributionMax:demographicMax;
   const shareScale=colorData?canadaDemographicShareScale(colorData.cmas.map((r:any)=>canadaDemographicShare(r.values[group.id].value,r.denominator.value)).filter((v:any)=>v!==null)):null;
   root.querySelector('[data-population-map]')!.setAttribute('viewBox',frame.join(' '));
@@ -109,7 +112,8 @@ export function initCanadaPopulation(root:HTMLElement){
  $('[data-population-whole]').addEventListener('click',()=>{const u=new URL(location.href);for(const key of ['mapFrame','cd','cma','compare','only','demographicsReturn'])u.searchParams.delete(key);u.searchParams.set('zoom','country');root.dataset.populationReadingFocus='overview';commitUrl(u);});
  $('[data-population-clear-selection]').addEventListener('click',()=>{const u=new URL(location.href);for(const key of ['cd','cma','compare','only'])u.searchParams.delete(key);root.dataset.populationReadingFocus='overview';commitUrl(u);});
  const map=root.querySelector<SVGSVGElement>('[data-population-map]')!;
- const camera=(frame:number[],commit=true)=>{mapCamera=frame;map.setAttribute('viewBox',frame.join(' '));layoutCanadaPopulationLabels(root);if(commit){const url=new URL(location.href);url.searchParams.set('mapFrame',frame.map(n=>Number(n.toFixed(3))).join(','));history.pushState(null,'',url);}};
+ const refreshReligionMap=()=>{if(demographic.topic!=='religion'||root.dataset.regionsReady!=='true')return;const params=new URL(location.href).searchParams,filtered=params.get('mapGroup')==='1';renderCanadaReligionMap(root,config.demographics.religion,filtered?demographic.group:null,!filtered&&!params.has('cd')&&!state.cma&&!params.has('zoom')&&!params.has('mapFrame'));};
+ const camera=(frame:number[],commit=true)=>{mapCamera=frame;map.setAttribute('viewBox',frame.join(' '));layoutCanadaPopulationLabels(root);if(commit){const url=new URL(location.href);url.searchParams.set('mapFrame',frame.map(n=>Number(n.toFixed(3))).join(','));history.pushState(null,'',url);}refreshReligionMap();};
  for(const button of root.querySelectorAll<HTMLElement>('[data-population-scale]'))button.addEventListener('click',()=>{const [x,y,w,h]=map.getAttribute('viewBox')!.split(' ').map(Number),factor=button.dataset.populationScale==='in'?.7:1/.7;if(w*factor<30||w*factor>1800)return;camera([x+w*(1-factor)/2,y+h*(1-factor)/2,w*factor,h*factor]);});
  let drag:{x:number;y:number;frame:number[];moved:boolean}|null=null,ignoreClick=false;
  map.addEventListener('pointerdown',e=>{if(e.button!==0||e.pointerType==='touch')return;drag={x:e.clientX,y:e.clientY,frame:map.getAttribute('viewBox')!.split(' ').map(Number),moved:false};});
@@ -118,9 +122,9 @@ export function initCanadaPopulation(root:HTMLElement){
  map.addEventListener('click',e=>{if(ignoreClick){e.stopPropagation();ignoreClick=false;}},true);
  map.addEventListener('keydown',e=>{if(e.target!==map)return;const direction:Record<string,number[]>={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]},d=direction[e.key];if(d){e.preventDefault();const [x,y,w,h]=map.getAttribute('viewBox')!.split(' ').map(Number);camera([x+d[0]*w*.15,y+d[1]*h*.15,w,h]);}});
  window.addEventListener('popstate',()=>{mapCamera=readCamera();state=readState(new URL(location.href));demographic=readCanadaDemographicsState(new URL(location.href),catalog);render();});
- if(typeof ResizeObserver!=='undefined'){const observer=new ResizeObserver(()=>{alignQuantityLegend();layoutCanadaPopulationLabels(root);});observer.observe(root.querySelector('[data-population-map]')!);}
- window.addEventListener('resize',()=>{alignQuantityLegend();layoutCanadaPopulationLabels(root);});
- document.fonts?.ready.then(()=>layoutCanadaPopulationLabels(root));
+ if(typeof ResizeObserver!=='undefined'){const observer=new ResizeObserver(()=>{alignQuantityLegend();layoutCanadaPopulationLabels(root);refreshReligionMap();});observer.observe(root.querySelector('[data-population-map]')!);}
+ window.addEventListener('resize',()=>{alignQuantityLegend();layoutCanadaPopulationLabels(root);refreshReligionMap();});
+ document.fonts?.ready.then(()=>{layoutCanadaPopulationLabels(root);refreshReligionMap();});
  render();
  if(typeof fetch==='function')fetch(config.regionsUrl).then(r=>{if(!r.ok)throw Error('Region geometry unavailable');return r.json();}).then(geo=>{
   if(!root.isConnected)return;
@@ -129,5 +133,6 @@ export function initCanadaPopulation(root:HTMLElement){
   const group=root.querySelector('[data-population-regions]')!;
   for(const f of geo.features){const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.dataset.populationRegion=f.id;path.setAttribute('d',canadaMapPath(f.geometry));path.setAttribute('fill-rule','evenodd');path.setAttribute('role','button');path.setAttribute('tabindex','0');const choose=()=>{root.dataset.populationReadingFocus='region';const url=new URL(location.href);url.searchParams.set('cd',f.id);commitUrl(url);};path.addEventListener('click',choose);path.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose();}});group.append(path);}
   root.dataset.regionsReady='true';render();
+  requestAnimationFrame(()=>requestAnimationFrame(()=>refreshReligionMap()));
  }).catch(()=>{if(root.isConnected){root.dataset.regionsError='true';render();}});
 }
