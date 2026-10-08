@@ -69,6 +69,9 @@ try{
    assert.equal(await section.locator('.asia-farm-connections-grid > section').count(),3);
    assert.match(await section.textContent(),/インドの米（籾米）.*26\.6％/s);
    assert.equal(await section.locator('svg.sc-share-chart').count(),1);
+   const cards=await section.locator('.asia-farm-connections-grid > section').evaluateAll(nodes=>nodes.map(node=>node.getBoundingClientRect().height));
+   assert(cards[0]<cards[2]*.7&&cards[1]<cards[2]*.7,'Unavailable cards must end near their content, without stretched blank space');
+   assert.equal(await section.locator('[data-south-central-world-share] details[open]').count(),0,'Source and denominator notes start collapsed');
    await section.scrollIntoViewIfNeeded();
   }},
   {id:'central-asia-wheat-world-share',route:'/atlas/asia/central-asia/agriculture/?place=KAZ&topic=wheat',check:async page=>{
@@ -89,7 +92,9 @@ try{
    await panel.getByText(/2024年は2\.3％/).first().scrollIntoViewIfNeeded();
   }},
  ];
- for(const scene of scenes){
+ const selected=process.env.REVIEW_SCENE?scenes.filter(scene=>scene.id===process.env.REVIEW_SCENE):scenes;
+ assert.equal(selected.length,process.env.REVIEW_SCENE?1:5,'Review scene must be one known capture');
+ for(const scene of selected){
   const page=await context.newPage(),errors=[],failures=[];
   page.setDefaultTimeout(20000);page.setDefaultNavigationTimeout(30000);
   page.on('pageerror',error=>errors.push(error.message));
@@ -106,7 +111,7 @@ try{
    console.log(`PASS ${scene.id} (${image.length} bytes)`);
   }finally{await page.close();await persist();}
  }
- assert.equal(results.captures.length,5);assert.deepEqual(results.externalAttempts,[]);
+ assert.equal(results.captures.length,selected.length);assert.deepEqual(results.externalAttempts,[]);
  results.status='passed';
 }catch(error){results.status='failed';results.failure=error.stack??String(error);console.error(results.failure);process.exitCode=1;}
 finally{await browser?.close();await new Promise(resolve=>server.close(resolve));results.completedAt=new Date().toISOString();await persist();}
