@@ -1,0 +1,59 @@
+name: East Asia farm and water review images
+
+on:
+  push:
+    branches: [review/east-asia-farm-water-20261008]
+    paths:
+      - '.github/workflows/east-asia-farm-water-review.yml'
+      - 'scripts/capture-east-asia-water-review.mjs'
+      - 'review-artifacts/east-farm-water/east-asia-farm-overview.png'
+
+permissions:
+  contents: read
+
+jobs:
+  images:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Use installed Chrome and Japanese fonts
+        shell: bash
+        run: |
+          set -euo pipefail
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          if [[ -z "$chrome_path" ]]; then
+            echo "::error::Chrome must already be installed on the runner."
+            exit 1
+          fi
+          if [[ -z "$(fc-list ':lang=ja' family)" ]]; then
+            sudo apt-get update
+            sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+          fi
+          test -n "$(fc-list ':lang=ja' family)"
+          printf 'REVIEW_CHROME_PATH=%s\n' "$chrome_path" >> "$GITHUB_ENV"
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - name: Install existing dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Build local production site
+        run: npm run build
+      - name: Capture rainfall and basin views in Chrome
+        run: node scripts/capture-east-asia-water-review.mjs
+      - name: Check three images fit one small artifact
+        run: |
+          test "$(find review-artifacts/east-farm-water -maxdepth 1 -name '*.png' | wc -l)" -eq 3
+          test "$(du -cb review-artifacts/east-farm-water/*.png | tail -n 1 | cut -f 1)" -lt 10485760
+      - name: Save only the three PNGs
+        uses: actions/upload-artifact@v4
+        with:
+          name: east-asia-farm-water-${{ github.run_id }}
+          path: review-artifacts/east-farm-water/*.png
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 7
