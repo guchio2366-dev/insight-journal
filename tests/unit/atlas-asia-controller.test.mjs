@@ -142,6 +142,10 @@ async function setup(query = '', options = {}) {
     conf.industryBase='/assets/industry/';conf.industry={data:'east.json.gz',countries:['JPN','CHN','MNG'],topics:[topic('manufacturing','製造業','national'),topic('jp-00','日本製造業','admin','JPN'),topic('power-all','発電所','power',null,'all'),topic('power-coal','石炭','power',null,'Coal')]};
     if(options.industryRegion){
       conf.industry={...industryManifest.regions[options.industryRegion],data:'east.json.gz'};
+      if(options.industryRegion==='east-asia'){
+        for(const [code,name] of [['KOR','韓国'],['TWN','台湾']]){conf.countries.push({code,name,bounds:[124,33,133,39]});q('[data-country-select]').insertAdjacentHTML('beforeend',`<option value="${code}">${name}</option>`);}
+        root.insertAdjacentHTML('beforeend','<section data-east-industry-journey hidden><h2 data-east-industry-journey-title></h2><p data-east-industry-journey-summary></p><p data-east-industry-journey-facts></p><p data-east-industry-journey-gap></p><button data-east-industry-next="primary"></button><button data-east-industry-next="secondary"></button></section>');
+      }
       if(options.industryRegion==='southeast-asia'){
         conf.countries.push({code:'MYS',name:'マレーシア',bounds:[99,0,120,8]});
         q('[data-country-select]').insertAdjacentHTML('beforeend','<option value="MYS">マレーシア</option>');
@@ -391,6 +395,32 @@ function industryCell(table,name){
 function industrySelectedOption(q){
  const select=q('[data-industry-detail]');return [...select.options].find(option=>option.value===select.value);
 }
+
+test('東アジア4国の読解は原本の国統計と設備能力を区別し、台湾の欠測から収録資料へ進める',async()=>{
+ const {window,q}=await setup('?field=industry&topic=manufacturing&place=KOR',{industry:true,industryRegion:'east-asia'});
+ try{
+  const card=q('[data-east-industry-journey]'),click=which=>q(`[data-east-industry-next="${which}"]`).click();
+  await until(()=>!card.hidden&&card.textContent.includes('26.62%'),'Korean national reading');
+  assert.match(card.textContent,/韓国内の地域別・業種別産業統計.*公式地域統計/);
+  assert.match(card.textContent,/80,885千t\/年/);
+  await until(()=>window.__map.getLayer('asia-industry-national'),'national distribution');
+  assert.deepEqual(JSON.parse(JSON.stringify(window.__map.layers['asia-industry-national'].filter)),['in',['get','code'],['literal',['CHN','JPN','KOR','TWN']]]);
+  const colors=window.__map.layers['asia-industry-national'].paint['fill-color'];
+  for(const code of ['CHN','JPN','KOR'])assert.notEqual(colors[colors.indexOf(code)+1],'#d2ceca',`${code} remains coloured while Korea is selected`);
+  assert.equal(colors[colors.indexOf('TWN')+1],'#d2ceca','Taiwan WDI stays missing');
+  click('secondary');assert.equal(new URL(window.location.href).searchParams.get('topic'),'steel-capacity');
+  click('primary');assert.equal(new URL(window.location.href).searchParams.get('topic'),'manufacturing');
+  q('[data-country-select]').value='TWN';q('[data-country-select]').dispatchEvent(new window.Event('change'));
+  await until(()=>card.textContent.includes('24,701千t/年'),'Taiwan sourced capacity');
+  assert.match(card.textContent,/WDIで未掲載.*公式統計/);
+  assert.match(q('[data-industry-value]').textContent,/台湾：未掲載/);
+  click('primary');assert.equal(new URL(window.location.href).searchParams.get('topic'),'steel-capacity');
+  click('secondary');assert.equal(new URL(window.location.href).searchParams.get('topic'),'power-all');
+  assert.equal(new URL(window.location.href).searchParams.get('place'),'TWN');
+  q('[data-country-select]').value='';q('[data-country-select]').dispatchEvent(new window.Event('change'));
+  assert.equal(card.hidden,true);
+ }finally{await window.happyDOM.close();}
+});
 
 test('実配信の愛知県は選択値・24業種・国内比較・年次表で同じ公表値を示す',async()=>{
  const {window,q}=await setup('?field=industry&topic=jp-00&detail=JP-23',{industry:true,industryRegion:'east-asia'});
