@@ -14,6 +14,7 @@ import AsiaClimateDiagram from './AsiaClimateDiagram.astro';
 import AsiaFarmingPanel from './AsiaFarmingPanel.astro';
 import AsiaIndustryPanel from './AsiaIndustryPanel.astro';
 import SoutheastAsiaFarmView from './asia/SoutheastAsiaFarmView.astro';
+import EastAsiaFarmFoundations from './asia/EastAsiaFarmFoundations.astro';
 import {southeastIndustryCountryScope} from '../../data/atlas/asia/southeast-asia-industry';
 import {southeastAsiaInitialReadings} from '../../data/atlas/asia/southeast-asia-reading';
 import AsiaWaterPanel from './AsiaWaterPanel.astro';
@@ -136,6 +137,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
             <section><h3>世界での位置</h3><div data-south-central-world-share aria-live="polite"></div></section>
           </div>
         </section>}
+        {regionId==='east-asia'&&<EastAsiaFarmFoundations />}
         <section class="asia-legend" data-climate-legend hidden={initialField!=='natural'} aria-label="気候区分の凡例"><div class="legend-title"><h3>気候区分</h3><span>区分を選ぶと意味を表示</span></div><div class="asia-family-legend">{familyNames.map(family=><details><summary><i style={`background:${asiaClimateClasses.find(c=>c.group.startsWith(family))?.color??'#aaa'}`}></i>{family}</summary><div class="asia-class-list">{asiaClimateClasses.filter(c=>c.group.startsWith(family)).map(c=><button type="button" data-climate-class={c.id} aria-pressed="false"><i style={`background:${c.color}`}></i><b>{c.code}</b><span>{c.name}</span></button>)}</div></details>)}</div></section>
         <section class="asia-legend" data-agriculture-legend hidden aria-label="米の収穫面積の凡例"><h3>米の収穫面積</h3><div data-rice-scale></div><p>1格子内の年間収穫面積（ha）。二期作などは収穫の回数を含むため、土地の面積とは異なります。</p></section>
         <section class="asia-legend" data-farming-legend hidden aria-label="農林業の凡例"><h3 data-farming-legend-title></h3><div class="asia-physical-key" data-farming-scale></div><p data-farming-legend-note></p></section>
