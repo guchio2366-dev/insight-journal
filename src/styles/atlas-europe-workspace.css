@@ -478,3 +478,30 @@
  .eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="industry"] { align-items:stretch; }
  .eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="industry"] button { height:auto; min-height:64px; padding-block:6px; white-space:normal; }
 }
+
+/* Europe PC: the news rail is fixed and statistics span the content below the map. */
+.eu-workspace-root[data-europe-detail] .eu-country-navigation { display:flex; align-items:center; gap:12px; margin:7px 0 3px; font:700 14px/1.5 var(--sans); }
+.eu-workspace-root[data-europe-detail] .eu-country-navigation label { display:flex; align-items:center; gap:8px; }
+.eu-workspace-root[data-europe-detail] .eu-country-navigation select { min-height:38px; min-width:190px; padding:5px 9px; border:1px solid #9eaca3; background:#fffef5; font:14px var(--sans); }
+.eu-workspace-root[data-europe-detail] .eu-country-navigation a { display:inline-flex; align-items:center; min-height:38px; padding:5px 12px; border:1px solid #9eaca3; color:#173c48; font:700 14px var(--sans); }
+.eu-workspace-root[data-europe-detail] .eu-reader-section-label { margin:8px 0 2px; font:700 14px/1.4 var(--sans); color:#244653; }
+.eu-workspace-root[data-europe-detail] .eu-precipitation-line-label { position:absolute; z-index:2; transform:translate(-50%,-50%); padding:2px 4px; border:1px solid #3d82b4; border-radius:2px; background:#fffef4e8; color:#153b6d; font:700 12px/1.2 var(--sans); pointer-events:none; white-space:nowrap; }
+.eu-workspace-root[data-europe-detail] .eu-terrain-place-label { position:absolute; z-index:2; transform:translate(-50%,-50%); padding:2px 4px; background:#fffef4df; color:#413e36; font:700 12px/1.25 var(--sans); text-shadow:0 1px #fff; pointer-events:none; white-space:nowrap; }
+.eu-workspace-root[data-europe-detail] .eu-terrain-name-options { display:flex; gap:6px; padding:7px 0; }
+.eu-workspace-root[data-europe-detail] .eu-terrain-name-options button { min-height:36px; padding:5px 12px; border:1px solid #9eaca3; background:#fffef5; color:#244653; font:700 14px/1.4 var(--sans); }
+.eu-workspace-root[data-europe-detail] .eu-terrain-name-options button[aria-pressed=true] { background:#35515d; color:#fff; }
+.eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry]:not(.is-point-only) { border-left:4px solid var(--eu-industry-color); background:#fffef4e8; }
+@media (min-width:960px) {
+ .eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="industry"] { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:5px; }
+ .eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="industry"] button { width:100%; min-height:42px; height:auto; padding:6px 3px; font-size:13px; }
+}
+@media (min-width:960px) {
+ .eu-workspace-root[data-europe-detail] .atlas-desktop-shell:not(.is-reading-news) { grid-template-rows:auto auto; row-gap:0; }
+ .eu-workspace-root[data-europe-detail] .atlas-desktop-shell:not(.is-reading-news)>.eu-statistics { grid-column:2; grid-row:2; width:100%; margin:14px 0 0; padding-top:14px; }
+ .eu-workspace-root[data-europe-detail] .eu-layout { grid-template-columns:minmax(0,1.8fr) minmax(315px,1fr); gap:10px; }
+ .eu-workspace-root[data-europe-detail] .eu-map-stage { aspect-ratio:1.42; }
+}
+@media (min-width:1200px) {
+ .eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-layout { grid-template-columns:minmax(0,1.8fr) minmax(315px,1fr); }
+ .eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-map-stage { aspect-ratio:1.42; }
+}

@@ -48,7 +48,7 @@ test('all seven regional workspaces retain five main destinations and one map/re
       const stats=root.querySelector(c.stats)??d.querySelector(c.stats);
       assert.ok(stats&&!reading.contains(stats),`${region}: statistics are outside the right reading column`);
       assert.ok(grid.compareDocumentPosition(stats)&4,`${region}: statistics follow the complete main grid`);
-      if(region==='europe')assert.equal(stats.previousElementSibling,d.querySelector('[data-atlas-shell]'),'Europe statistics follow all three columns');
+      if(region==='europe')assert.equal(stats.parentElement,d.querySelector('[data-atlas-shell]'),'Europe statistics occupy the map and reading width within the shell');
       if(region.startsWith('asia/')){
         assert.equal(stats.parentElement,d.querySelector('[data-atlas-shell]'),'Asia statistics span the news/map/reading shell');
         const compactEastFarm=region==='asia/east-asia'&&field==='agriculture';
@@ -109,7 +109,7 @@ test('regional desktop CSS keeps normal maps at the reference aspect and keyboar
     try{
       assert.equal(w.getComputedStyle(d.querySelector('[data-atlas-shell]')).display,'grid',`${region} ${width}: side-by-side shell`);
       const compactAspect=width<1200&&(region==='europe'||region.startsWith('asia/'));
-      assert.equal(Number.parseFloat(w.getComputedStyle(d.querySelector(c.frame)).aspectRatio),compactAspect?1.65:1.55,`${region} ${width}: normal map reference aspect`);
+      assert.equal(Number.parseFloat(w.getComputedStyle(d.querySelector(c.frame)).aspectRatio),region==='europe'?1.42:compactAspect?1.65:1.55,`${region} ${width}: normal map reference aspect`);
       assert.equal((w.getComputedStyle(d.querySelector(c.grid)).gridTemplateColumns.match(/minmax\(/g)??[]).length,2,`${region} ${width}: map and reading retain two desktop tracks`);
       assert.ok(!['none','hidden'].includes(w.getComputedStyle(d.querySelector(c.reading)).display));
     }finally{await w.happyDOM.close();}

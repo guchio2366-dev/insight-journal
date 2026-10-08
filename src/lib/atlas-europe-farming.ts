@@ -34,23 +34,23 @@ export function farmingAtPoint(data:FarmingAreas, point:number[], visibleIds:str
 export function updateFarmingMap(root:HTMLElement,map:LibreMap|undefined,data:FarmingAreas,state:EuropeState) {
   const view=farmingPresentation(state,data.features.map(feature=>feature.properties));
   const ids=view.visible.map(item=>item.id);
-  const livestockFill=view.item?.kind==='crop'&&!view.single ? .06 : view.single ? .30 : .13;
-  const livestockLine=view.item?.kind==='crop'&&!view.single ? .45 : .85;
-  root.querySelectorAll<SVGPathElement>('[data-eu-farm-area]').forEach(path=>{
+  const livestockFill=view.item?.kind==='crop'&&!view.single ? .05 : view.single ? .22 : .08;
+  const livestockLine=view.item?.kind==='crop'&&!view.single ? .22 : .45;
+  root.querySelectorAll<SVGElement>('[data-eu-farm-area]').forEach(path=>{
     const item=data.features.find(feature=>feature.properties.id===path.dataset.euFarmArea)?.properties;
     path.style.display=ids.includes(path.dataset.euFarmArea!)?'':'none';
-    path.style.fillOpacity=String(item?.kind==='livestock'?livestockFill:(view.single?.65:.44));
-    path.style.strokeOpacity=String(item?.kind==='livestock'?livestockLine:.85);
+    path.style.fillOpacity=String(item?.kind==='livestock'?livestockFill:(view.single?.5:.26));
+    path.style.strokeOpacity=String(item?.kind==='livestock'?livestockLine:.38);
   });
-  root.querySelectorAll<SVGPathElement>('[data-eu-farm-outline]').forEach(path=>{
+  root.querySelectorAll<SVGElement>('[data-eu-farm-outline]').forEach(path=>{
     path.style.display=view.selectedVisible&&path.dataset.euFarmOutline===view.item?.id?'':'none';
   });
   if(map?.getLayer('land')) {
     if(!map.getSource('eu-farming')) {
       map.addSource('eu-farming',{type:'geojson',data:data as any});
       for(const kind of ['crop','livestock'] as const) {
-        map.addLayer({id:'eu-farm-'+kind+'-fill',type:'fill',source:'eu-farming',filter:['==',['get','kind'],kind],paint:{'fill-color':['get','color'],'fill-opacity':kind==='crop'?.44:.13}});
-        map.addLayer({id:'eu-farm-'+kind+'-line',type:'line',source:'eu-farming',filter:['==',['get','kind'],kind],paint:{'line-color':['get','color'],'line-width':kind==='crop'?.8:1.2,...(kind==='livestock'?{'line-dasharray':[4,2]}:{}),'line-opacity':.85}});
+        map.addLayer({id:'eu-farm-'+kind+'-fill',type:'fill',source:'eu-farming',filter:['==',['get','kind'],kind],paint:{'fill-color':['get','color'],'fill-opacity':kind==='crop'?.26:.08}});
+        map.addLayer({id:'eu-farm-'+kind+'-line',type:'line',source:'eu-farming',filter:['==',['get','kind'],kind],paint:{'line-color':['get','color'],'line-width':kind==='crop'?.45:.6,...(kind==='livestock'?{'line-dasharray':[4,2]}:{}),'line-opacity':.38}});
       }
       map.addLayer({id:'eu-farm-selection-halo',type:'line',source:'eu-farming',paint:{'line-color':'#fffdf2','line-width':5}});
       map.addLayer({id:'eu-farm-selection',type:'line',source:'eu-farming',paint:{'line-color':'#173c48','line-width':2.5}});
@@ -58,8 +58,8 @@ export function updateFarmingMap(root:HTMLElement,map:LibreMap|undefined,data:Fa
     for(const kind of ['crop','livestock'] as const) {
       const filter:any=['all',['==',['get','kind'],kind],['in',['get','id'],['literal',ids]]];
       for(const suffix of ['fill','line'])map.setFilter('eu-farm-'+kind+'-'+suffix,filter);
-      map.setPaintProperty('eu-farm-'+kind+'-fill','fill-opacity',kind==='crop'?(view.single?.65:.44):livestockFill);
-      map.setPaintProperty('eu-farm-'+kind+'-line','line-opacity',kind==='crop'?.85:livestockLine);
+      map.setPaintProperty('eu-farm-'+kind+'-fill','fill-opacity',kind==='crop'?(view.single?.5:.26):livestockFill);
+      map.setPaintProperty('eu-farm-'+kind+'-line','line-opacity',kind==='crop'?.38:livestockLine);
     }
     for(const id of ['eu-farm-selection-halo','eu-farm-selection']) {
       map.setFilter(id,['==',['get','id'],view.selectedVisible?view.item!.id:'']);

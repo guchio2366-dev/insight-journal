@@ -54,7 +54,8 @@ test('欧州の概略分布は元格子と照合できる16品目を独立した
   for (const feature of collection.features) {
     const { id, name, kind, color, threshold, unit, period, labelCoordinate } = feature.properties;
     const record = manifest.products.find(product => product.id === id);
-    if (!['rice', 'citrus'].includes(id)) assert.ok(record.retainedComponents <= 5 + record.retainedComparisonAnchors.length, `${id}: 概略図では元格子量が大きい集中域と既存比較例に絞る`);
+    assert.equal(record.retainedComponents, record.supportedComponentsBeforeSelection, `${id}: 条件を満たす集中域を品目内の上位件数で落とさない`);
+    if (id === 'wheat') assert.ok(record.countryCodes.includes('FRA') && record.countryCodes.includes('DEU'), '小麦は初期図からフランス・ドイツを含む');
     const input = manifest.inputs.find(item => item.id === id);
     const raw = gunzipSync(bytes(input.path));
     assert.equal(raw.byteLength, 1080 * 492 * 4);

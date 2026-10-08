@@ -10,7 +10,7 @@ export type ClimateFarmingReading = {
 export const climateFarming: Record<string, ClimateFarmingReading> = {
   Cfb: {
     heading: '農畜産物の例：イングランドの小麦・酪農',
-    body: 'イングランド東部では小麦・大麦の栽培が多く、西部では乳牛や肉牛、羊の飼養が目立ちます。同じイングランドでも、穀物を育てる畑と家畜の草地には分布の違いがあります。',
+    body: 'イングランド東部では小麦・大麦の栽培が多く、西部では乳牛や肉牛、羊の飼養が目立ちます。東部の比較的乾いた低地は穀物の畑作、西部の湿った高地・丘陵は牧草地に向き、土地利用の違いを支えます。',
     sources: [{ label: '英国Defra：イングランド地域別の作物・家畜（2024年）', url: 'https://www.gov.uk/government/statistics/agricultural-facts-england-regional-profiles/agricultural-facts-summary' }],
   },
   Cfa: {

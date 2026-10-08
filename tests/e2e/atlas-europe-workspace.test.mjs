@@ -12,8 +12,9 @@ const europeHtml = async field => {
 
 for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/']) {
   test(`欧州 ${field || '概況'} はニュース・地図・解説と共通の分野移動を備える`, async () => {
-    const window = new Window();
+    const window = new Window({settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true}});
     const doc = window.document;
+    try {
     doc.write(await europeHtml(field));
     assert.equal(doc.querySelectorAll('[data-news-region="europe"]').length, 1);
     assert.equal(doc.querySelector('[data-news-rail] h2').textContent, '欧州のニュース');
@@ -46,8 +47,8 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.equal(doc.querySelectorAll('[data-eu-config]').length, 1);
       const shell=doc.querySelector('[data-atlas-shell]');
       const statistics=doc.querySelector('[data-eu-statistics]');
-      assert.equal(statistics.parentElement,shell.parentElement);
-      assert.ok([...shell.parentElement.children].indexOf(statistics)>[...shell.parentElement.children].indexOf(shell));
+      assert.equal(statistics.parentElement,shell);
+      assert.ok([...shell.children].indexOf(statistics)>[...shell.children].indexOf(doc.querySelector('.eu-workspace')));
       assert.equal(doc.querySelector('.eu-read-panel [data-eu-statistics]'),null);
       assert.equal(doc.querySelectorAll('[data-eu-climate-statistics] [data-eu-city-chart] svg').length,0);
       assert.equal(doc.querySelectorAll('.eu-read-panel [data-eu-city-chart] svg').length,24);
@@ -107,11 +108,11 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
     }
     if (field==='industry/') {
       const topics=doc.querySelector('[data-eu-topic-field="industry"]');
-      assert.deepEqual([...topics.querySelectorAll('[data-eu-industry-group]')].map(button=>button.textContent),['資源・素材','機械・輸送','技術・医薬','物流・サービス']);
-      assert.deepEqual([...topics.querySelectorAll('button:not([data-eu-industry-group])')].map(button=>button.dataset.euTopic),['hubs','manufacturing','industry','services']);
+      assert.deepEqual([...topics.querySelectorAll('[data-eu-industry-group]')].map(button=>button.textContent),['エネルギー','鉱業・素材','自動車・機械','化学・医薬品','航空機','港湾物流','観光','金融','繊維・衣服','食品加工']);
+      assert.deepEqual([...topics.querySelectorAll('button:not([data-eu-industry-group])')].map(button=>button.dataset.euTopic),['hubs']);
       const scope=doc.querySelector('[data-eu-industry-scope]');
       assert.deepEqual([...scope.options].map(option=>option.value),['region:all','region:north','region:west','region:south','region:east','country:DEU','country:GBR','country:FRA','country:ITA']);
-      assert.equal(scope.closest('[data-eu-industry-scope-host]').hidden,false);
+      assert.equal(scope.closest('[data-eu-industry-scope-host]').hidden,true);
       assert.equal(doc.querySelector('[data-eu-region-host]').hidden,true);
       assert.ok(doc.querySelector('.eu-reader-body').open);
       assert.ok(doc.querySelector('.eu-read-panel [data-eu-subject-legend]').open);
@@ -130,6 +131,6 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.deepEqual([...doc.querySelector('[data-culture-case]').options].map(option=>option.textContent),['欧州全体・事例未選択','イングランド・ウェールズ・行政区','クロアチア・全国値']);
       assert.ok(!doc.querySelector('[data-eu-topic-field="population"]').textContent.includes('投票'));
     }
-    window.happyDOM.abort();
+    } finally { await window.happyDOM.close(); }
   });
 }

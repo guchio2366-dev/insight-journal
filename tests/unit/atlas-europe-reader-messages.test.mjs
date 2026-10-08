@@ -9,7 +9,7 @@ const copy = id => europeReaderCopy(europeLayers.find(layer => layer.id === id))
 test('industry and population first readings describe their own map evidence', () => {
   assert.match(copy('industry').body, /キルナ.*鉱石.*ミュンヘン.*自動車/);
   assert.doesNotMatch(copy('industry').body, /人口密度|人口の分布/);
-  assert.match(copy('density').body, /パリ.*ミラノ.*人口の分布/);
+  assert.match(copy('density').takeaway, /人口密度.*パリ.*ポー平原/);
   assert.doesNotMatch(copy('density').body, /鉄鉱石採掘|無線技術/);
   assert.ok(europeReaderSources(europeLayers.find(layer => layer.id === 'density')).some(source => source.url.includes('ghsl.jrc.ec.europa.eu')));
 });
@@ -32,9 +32,9 @@ test('全主題に1文の要点と根拠・地理の説明があり、操作説�
 });
 
 test('農林業は自然条件と人の管理をつなぎ、出典のある地域例の範囲を守る', () => {
-  assert.match(copy('crops').takeaway, /気候や地形/);
-  assert.match(copy('crops').takeaway, /水管理や土地利用/);
-  assert.match(copy('wheat').takeaway, /イングランド.*東部.*西部/);
+  assert.match(copy('crops').takeaway, /英国東部.*フランス北部.*ドイツ.*ポーランド/);
+  assert.match(copy('crops').body, /平野.*気温・降水.*水管理/);
+  assert.match(copy('wheat').takeaway, /フランス北部.*ドイツ.*ポーランド.*英国東部/);
   assert.match(copy('barley').body, /フィンランド.*家畜の餌.*醸造/);
   assert.match(copy('rapeseed').takeaway, /ハンガリー.*油の原料/);
   assert.match(copy('rice').takeaway, /アルプス.*ポー平原/);
@@ -96,7 +96,7 @@ test('自然・産業・人口をつなぐ説明でも欠測、量、位置の�
   assert.match(copy('contours').note, /間隔は標高精度を意味しません/);
   assert.match(copy('hubs').body, /ロッテルダム.*ルートヴィヒスハーフェン/);
   assert.match(copy('hubs').note, /生産量・雇用の大小を表しません/);
-  assert.match(copy('density').body, /パリ.*ミラノ.*人口の分布/);
+  assert.match(copy('density').body, /交通.*仕事.*歴史的な都市形成/);
   assert.match(copy('density').note, /2020年.*現在の人口移動・避難状況.*ではありません/);
   assert.match(copy('density').note, /都市の点は位置のみ/);
 });

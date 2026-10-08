@@ -77,17 +77,17 @@ test('作物選択時も畜産を残して薄く描き、概況で元の濃さ�
   const data={type:'FeatureCollection',features:items.map(properties=>({type:'Feature',properties,geometry:{type:'Polygon',coordinates:[]}}))};
   updateFarmingMap(root,map,data,read('?layer=wheat'));
   assert.deepEqual(areas.map(path=>path.style.display),['','','','']);
-  assert.equal(areas[0].style.fillOpacity,'0.44');
-  assert.equal(areas[2].style.fillOpacity,'0.06');
-  assert.equal(areas[2].style.strokeOpacity,'0.45');
-  assert.equal(paint.get('eu-farm-livestock-fill.fill-opacity'),.06);
-  assert.equal(paint.get('eu-farm-livestock-line.line-opacity'),.45);
+  assert.equal(areas[0].style.fillOpacity,'0.26');
+  assert.equal(areas[2].style.fillOpacity,'0.05');
+  assert.equal(areas[2].style.strokeOpacity,'0.22');
+  assert.equal(paint.get('eu-farm-livestock-fill.fill-opacity'),.05);
+  assert.equal(paint.get('eu-farm-livestock-line.line-opacity'),.22);
   assert.equal(outlines[0].style.display,'');
   updateFarmingMap(root,map,data,read('?layer=crops'));
-  assert.equal(areas[2].style.fillOpacity,'0.13');
-  assert.equal(areas[2].style.strokeOpacity,'0.85');
-  assert.equal(paint.get('eu-farm-livestock-fill.fill-opacity'),.13);
-  assert.equal(paint.get('eu-farm-livestock-line.line-opacity'),.85);
+  assert.equal(areas[2].style.fillOpacity,'0.08');
+  assert.equal(areas[2].style.strokeOpacity,'0.45');
+  assert.equal(paint.get('eu-farm-livestock-fill.fill-opacity'),.08);
+  assert.equal(paint.get('eu-farm-livestock-line.line-opacity'),.45);
 });
 
 test('種類をOFFにしても品目の選択を保持し、もう一方の表示は維持する', () => {
