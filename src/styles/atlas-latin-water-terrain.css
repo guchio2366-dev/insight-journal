@@ -1,0 +1,23 @@
+.latin-workspace [data-latin-section-panel][hidden],.latin-workspace [data-foundation-sources][hidden]{display:none!important}
+.latin-foundation-map{background:#edf3ef;border:1px solid #c7d6ca;display:block}
+.latin-foundation-river-line,.latin-foundation-river-hit{fill:none;vector-effect:non-scaling-stroke}
+.latin-foundation-river-hit{stroke:transparent;stroke-width:12;cursor:pointer;outline:none}
+.latin-foundation-river-hit:hover,.latin-foundation-river-hit:focus-visible{stroke:#d2954966}
+.latin-foundation-river-label{font-family:sans-serif;font-weight:700;fill:#254b5c;stroke:#fffefa;stroke-width:3;paint-order:stroke;pointer-events:none}
+.latin-foundation-river-label.is-selected{fill:#98491f}
+.latin-foundation-label-leader{fill:none;stroke:#64848d;stroke-width:0.7;vector-effect:non-scaling-stroke}
+.latin-workspace .latin-foundation-legend{margin:6px 0;font-size:13px;line-height:1.55}
+.latin-workspace .latin-foundation-legend p{font-size:13px;line-height:1.55;margin:5px 0}
+.latin-foundation-colorbar{height:14px;display:flex;border:1px solid #aab7ba}
+.latin-foundation-ticks{position:relative;height:20px;font-size:12px;line-height:1.6}
+.latin-foundation-ticks span{position:absolute;white-space:nowrap}
+.latin-foundation-extra-key{display:flex;flex-wrap:wrap;gap:4px 12px;margin:5px 0}
+.latin-foundation-extra-key span{display:inline-flex;align-items:center;gap:5px}
+.latin-foundation-extra-key i{display:inline-block;width:18px;height:13px;border:1px solid #87968b;flex:none}
+.latin-workspace [data-foundation-reading] h3{font-size:17px;margin:16px 0 7px}
+.latin-workspace [data-foundation-reading] p{font-size:15px;line-height:1.65;margin:9px 0}
+.latin-workspace [data-foundation-reading] button{min-height:36px;padding:5px 10px}
+.latin-workspace [data-foundation-map-panel]>h2{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.latin-workspace.latin-nature .latin-reading .latin-water-items{gap:4px;margin:0 0 10px}
+.latin-workspace.latin-nature .latin-reading .latin-water-items button{font-size:13px;padding:6px 9px;min-height:36px}
+.latin-workspace.latin-nature[data-latin-active-section]:not([data-latin-active-section="climate"]) .latin-items{display:none}

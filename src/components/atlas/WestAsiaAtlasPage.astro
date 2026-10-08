@@ -6,6 +6,7 @@ import {withBase} from '../../lib/urls';
 import {getOverviewRegion} from '../../data/atlas/country-overview';
 import data from '../../data/atlas/west-asia.json';
 import {westFields,westTopics,observation,westReading} from '../../data/atlas/west-asia-topics.mjs';
+import {westFarmingProducts} from '../../lib/atlas-west-asia-farming.mjs';
 import '../../styles/atlas-west-asia.css';
 import '../../styles/atlas-industry.css';
 import '../../styles/atlas-population.css';
@@ -42,6 +43,7 @@ const region=getOverviewRegion('west-asia');
      <h2 id="west-map-title" class="visually-hidden">{initial.label}</h2>
      <div class="atlas-map-frame">
       <svg data-west-map data-map-surface viewBox={`0 0 ${data.width} ${data.height}`} tabindex="0" role="group" aria-label="西アジア・中東の主題図。矢印キーで移動、プラスとマイナスで拡大・縮小。国・都市は一覧からも選択できます。"><title>西アジア・中東の地図</title><g data-west-scene></g></svg>
+      {initialField==='agriculture'&&<div class="west-farm-map-key" data-west-farm-map-key hidden aria-label="地図内の品目と色"><strong>相対的に集中する格子</strong>{westFarmingProducts.map(product=><span data-west-farm-map-label={product.id} data-kind={product.kind}><i style={`--farm-color:${product.color}`}></i>{product.label}</span>)}<span class="west-farm-map-overlap"><i></i>小麦と大麦</span></div>}
       <div class="atlas-map-tools" aria-label="地図の表示範囲"><button data-west-reset aria-label="地域全体へ戻る">全体</button><button data-west-zoom="0.65" aria-label="地図を拡大">＋</button><button data-west-zoom="1.54" aria-label="地図を縮小">−</button></div>
       <div class="west-map-loading" data-west-loading role="status">地図資料を読み込んでいます。</div>
       <p class="atlas-layer-caption"><span data-west-caption>{initial.label}</span> · <span data-west-period></span></p>
@@ -49,9 +51,10 @@ const region=getOverviewRegion('west-asia');
      <div class="west-swipe" data-west-swipe hidden><div><strong data-west-source-name>左の元図</strong><strong data-west-target-name>右の比較先</strong></div><label>地図の境目<input type="range" min="0" max="100" value="50" data-west-split aria-label="元図と比較先の境目。左端で比較先、右端で元図の全体を表示"/></label></div>
      <div data-west-agri-switches>{initialField==='agriculture'&&<div class="atlas-key west-agri-picker" aria-label="農林業の品目">{groups.map(g=><span class="agri-picker-group" data-west-item-group={g}><strong>{g==='土地・森林'?'林業・土地':g}</strong>{topics.filter(t=>t.group===g&&!t.id.endsWith('-irrigated')&&!t.id.endsWith('-rainfed')).map(t=><button type="button" data-west-topic-button={t.id} aria-pressed={t.id===initial.id}>{topicButton(t)}</button>)}</span>)}</div>}
      {initialField==='population'&&<details class="west-additional-topics"><summary>人口分布に関する追加指標</summary><div class="atlas-key west-item-picker">{topics.filter(t=>t.id!=='density').map(t=><button type="button" data-west-topic-button={t.id}>{topicButton(t)}</button>)}</div></details>}
-     {initialField==='natural'&&<div class="atlas-key west-water-items" data-west-water-items hidden><button type="button" data-west-topic-button="rivers">河川・湖</button><button type="button" data-west-topic-button="groundwater">地下水</button><button type="button" data-west-topic-button="desalination">淡水化と供給</button></div>}
+     {initialField==='natural'&&<div class="atlas-key west-water-items" data-west-water-items hidden><button type="button" data-west-topic-button="rivers">河川・地下水</button><button type="button" data-west-topic-button="groundwater">地下水</button><button type="button" data-west-topic-button="desalination">淡水化と供給</button></div>}
      {initialField==='agriculture'&&['wheat','barley'].map(id=><div class="atlas-water-tabs west-cultivation" aria-label="栽培方法" role="tablist" data-west-cultivation={id} hidden={id!==initial.id}>{topics.filter(t=>t.id===id||t.id.startsWith(id+'-')).map(t=><button type="button" role="tab" data-west-topic-button={t.id} aria-selected={t.id===initial.id} tabindex={t.id===initial.id?0:-1}>{t.id===id?'収穫面積':t.id.endsWith('irrigated')?'灌漑栽培':'天水栽培'}</button>)}</div>)}</div>
      <div class="west-legend" data-west-legend aria-label="地図の凡例"></div>
+     <div class="west-related west-map-related" data-west-related><h3>この関係を地図で確かめる</h3>{westReading(initial).comparisons.map(c=><a href={withBase(`/atlas/west-asia/${westFields.find(f=>f.id===westTopics.find(t=>t.id===c.topic)!.field)!.route}/?topic=${c.topic}`)}>{c.label} →</a>)}</div>
      <div data-west-map-extras><p class="west-map-help" data-west-guide>地図の国・都市名を選ぶと、右側に解説を表示します。</p>
      <label class="west-settlement-picker" data-west-settlement-label hidden>掲載居住域<select data-west-settlement aria-label="掲載された集団・宗教を選択"><option value="">掲載域全体</option></select></label>
      <div class="west-map-lists">
@@ -64,7 +67,7 @@ const region=getOverviewRegion('west-asia');
      <button class="west-retry" data-west-retry hidden>資料を再読み込みする</button></div>
     </section>
     <aside class={`atlas-national west-reading ${initialField==='natural'?'atlas-nature-summary':initialField==='population'?'population-national':initialField==='industry'?'industry-national':'west-agri-reading'}`} data-field-national={initialField} aria-labelledby="west-detail-title">
-     <div data-west-detail><h2 id="west-detail-title">{initial.label}</h2><p><strong>{westReading(initial).message}</strong></p><p>{westReading(initial).reason}</p><div class="west-related west-reading-dock" data-west-related><h3>この関係を地図で確かめる</h3>{westReading(initial).comparisons.map(c=><a href={withBase(`/atlas/west-asia/${westFields.find(f=>f.id===westTopics.find(t=>t.id===c.topic)!.field)!.route}/?topic=${c.topic}`)}>{c.label} →</a>)}</div></div>
+     <div data-west-detail><h2 id="west-detail-title">{initial.label}</h2><p><strong>{westReading(initial).message}</strong></p><p>{westReading(initial).reason}</p></div>
      <div class="west-detail-controls" data-west-stat-controls>
       <label data-west-year-label>国別統計の年<select data-west-year aria-label="国別統計の年">{[2024,2023,2022,2021,2020].map(y=><option value={y}>{y}年</option>)}</select></label>
      </div>

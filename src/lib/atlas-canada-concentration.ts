@@ -1,6 +1,6 @@
 import {canadaDemographicShare} from './atlas-canada-demographics.ts';
-export const concentrationMethod='地域内20%以上、または5%以上かつ全国割合の1.5倍以上を集積対象とします。複数該当なら全国比が最も高い区分を地色にします。同率は凡例順。無宗教と「可視的少数者に該当しない」は概要図の背景とし、凡例で割合を確認できます。';
-export const concentrationNote='色は、その地域に特徴的に集中する宗教・教派または人口集団を示します。地域内で最多、または人口の過半数を占めることを意味しません。';
+export const concentrationMethod='地域内20%以上、または5%以上かつ全国割合の1.5倍以上を集積対象とします。複数該当する統計地域は全区分を等幅の縞で示し、都市圏は等分の色点で示します。縞幅・点の分割面積は割合や人数ではありません。無宗教と「可視的少数者に該当しない」は概要図の背景とし、凡例で割合を確認できます。';
+export const concentrationNote='地色は、その地域に特徴的に集中する宗教・教派または人口集団です。縞は同じ地域の複数集積を示し、幅は割合を表しません。地域内で最多、または人口の過半数を占めることを意味しません。';
 export function demographicComposition(record:any,data:any,topic:string){
  const rows=data.groups.map((g:any)=>{const cell=record.values[g.id],share=canadaDemographicShare(cell?.value??null,record.denominator.value),national=canadaDemographicShare(data.national.values[g.id]?.value??null,data.national.denominator.value);return {...g,count:cell?.value??null,symbol:cell?.symbol??'',share,national,ratio:share!==null&&national!==null&&national>0?share/national:null};});
  const missing=rows.some((g:any)=>g.share===null),qualified=missing?[]:rows.filter((g:any)=>g.id!==(topic==='religion'?'25':'3')&&g.ratio!==null&&(g.share>=20||g.share>=5&&g.ratio>=1.5));

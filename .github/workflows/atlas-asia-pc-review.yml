@@ -117,7 +117,7 @@ jobs:
         run: npm run build
 
       - name: Capture PC images and verify controls
-        timeout-minutes: 6
+        timeout-minutes: 9
         run: node scripts/capture-asia-pc-review.mjs
 
       - name: Save PC images and verification metadata

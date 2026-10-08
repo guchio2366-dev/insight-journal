@@ -1,7 +1,7 @@
 import {withBase} from '../lib/urls';
 import {
  russiaFields,russiaRegions,russiaThemes,russiaOverviewReadings,createRussiaState,
- getRussiaTheme,getRussiaLayer,renderRussiaScene,renderRussiaLegend,
+ getRussiaTheme,getRussiaLayer,renderRussiaScene,renderRussiaLegend,renderRussiaFarmingKey,getRussiaFarmingGeography,
  russiaCoverage,getRussiaComparisonReading,russiaBoundarySources,
 } from '../data/atlas/russia-learning';
 
@@ -13,6 +13,7 @@ const ownKeys=['theme','layer','place','scope','view','compare','reading'];
 
 const climateShortNames:Record<string,string>={BWk:'低温砂漠',BSk:'低温半乾燥',Cfa:'温暖湿潤',Cfb:'西岸海洋性',Dsc:'冷帯夏乾冷夏',Dsd:'冷帯夏乾厳冬',Dwa:'冷帯冬乾暑夏',Dwb:'冷帯冬乾暖夏',Dwc:'冷帯冬乾冷夏',Dwd:'冷帯冬乾厳冬',Dfa:'冷帯湿潤暑夏',Dfb:'冷帯湿潤暖夏',Dfc:'冷帯湿潤冷夏',Dfd:'冷帯湿潤厳冬',ET:'ツンドラ',EF:'氷雪'};
 export function renderRussiaWorkspaceLegend(layer:ReturnType<typeof getRussiaLayer>):string {
+ if(layer.field==='agriculture')return renderRussiaFarmingKey(layer);
  return renderRussiaLegend(layer.id==='climate'?{...layer,legend:layer.legend.map(item=>{const code=item.label.split(' ')[0];return {...item,label:climateShortNames[code]?code+climateShortNames[code]:item.label};})}:layer);
 }
 
@@ -22,7 +23,7 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
  let state=createRussiaState(location.search,field);
  const overview=root.dataset.russiaOverview==='true';
  if(overview){state.layer='cities';if(!new URLSearchParams(location.search).has('compare'))state.compareLayer='density';}
- const isSelectedReading=()=>new URLSearchParams(location.search).get('reading')==='selection'||state.place!=='all'||state.scope!=='all';
+ const isSelectedReading=()=>new URLSearchParams(location.search).get('reading')==='selection'||state.place!=='all'||state.scope!=='all'||(field==='agriculture'&&state.layer!=='farming-all');
  let selected=isSelectedReading();
  const fieldOverview=russiaOverviewReadings[field];
  const one=<T extends HTMLElement=HTMLElement>(hook:string)=>root.querySelector<T>(`[data-${hook}]`)!;
@@ -63,7 +64,7 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
    const focusedPlace=focusedMarker?.dataset.mapPlace;
   const theme=getRussiaTheme(state),layer=getRussiaLayer(state.layer,state),compare=getRussiaLayer(state.compareLayer,state);
   const comparisonReading=getRussiaComparisonReading(state);
-  const contextualReading=selected&&(state.place==='all'||theme.regionCodes.includes(state.place));
+  const contextualReading=selected&&layer.id!=='farming-all'&&(layer.field!=='agriculture'||theme.defaultLayer===layer.id)&&(state.place==='all'||theme.regionCodes.includes(state.place));
   one<HTMLSelectElement>('place').value=state.place;
   one<HTMLSelectElement>('layer').value=state.layer;
   const distribution=root.querySelector<HTMLSelectElement>('[data-distribution-layer]');if(distribution)distribution.value=state.layer;
@@ -87,24 +88,25 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
    text('current-legend-unit',layer.period+'・'+layer.unit);
    text('legend-resolution',layer.resolution??'');one('legend-resolution').hidden=!layer.resolution;
    one('key-legend').dataset.climateLegend=String(layer.id==='climate');
-   one('climate-dictionary').hidden=layer.id!=='climate';
+   one('climate-dictionary').hidden=layer.id!=='climate'&&layer.field!=='agriculture';
    one('primary-legend-definitions').innerHTML=renderRussiaLegend(layer);
   }
   text('reading-status',selected?'選んだ場所・分布の説明':'ロシアの概要');
   text('theme-title',!selected?(overview?'広い国土を、都市と分野の分布から読む':fieldOverview.title):contextualReading?theme.title:selectedName()+'の'+layer.title);text('takeaway',!selected?(overview?'欧州側・シベリア・極東を同じ表示枠で確かめ、自然条件に設備・交通・市場・社会を重ねて読む。都市中心の円は行政人口ではなく、固定された都市範囲の人口です。':fieldOverview.takeaway):contextualReading?theme.takeaway:fieldOverview.takeaway);
   text('explanation',contextualReading?theme.explanation:selected?selectedName()+'を選択しています。 '+layer.coverage:fieldOverview.explanation);text('social-context',theme.social);
+  if(field==='agriculture'&&!overview)text('geography-reading',getRussiaFarmingGeography(layer.id,state.place));
   text('coverage',russiaCoverage(layer,state));
   text('comparison',compare.title+'と比べる →');
   text('return','← '+layer.title+'へ戻る：'+targetName()+(state.scope!=='region'&&state.place!=='all'?'／選択：'+selectedName():''));
   text('comparison-explanation',comparisonReading.message);
   const shorter=one(layer.legend.length<=compare.legend.length?'original-map':'comparison-map').closest('.russia-learning-map-panel');
   shorter?.append(one('comparison-explanation'));
-  sources([...russiaBoundarySources,...layer.sources,...theme.sources,...(state.comparison?[...compare.sources,...comparisonReading.sources]:[])]);
+  sources([...russiaBoundarySources,...layer.sources,...(layer.field==='agriculture'?getRussiaLayer('farming-all').sources:[]),...theme.sources,...(state.comparison?[...compare.sources,...comparisonReading.sources]:[])]);
   root.querySelectorAll<HTMLAnchorElement>('[data-field-link]').forEach(link=>{
    const nextField=link.dataset.fieldLink as RussiaField;
    const available=russiaThemes.filter(item=>item.field===nextField);
    const nextTheme=available.find(item=>item.regionCodes.some(code=>code===state.place))??available[0];
-   link.href=serialized({...state,field:nextField,theme:nextTheme.id,layer:nextTheme.defaultLayer,compareLayer:nextTheme.comparisonLayer,comparison:false},withBase(`/atlas/russia/${nextField}/`)).href;
+   link.href=serialized({...state,field:nextField,theme:nextTheme.id,layer:nextField==='agriculture'?'farming-all':nextTheme.defaultLayer,compareLayer:nextTheme.comparisonLayer,comparison:false},withBase(`/atlas/russia/${nextField}/`)).href;
   });
   root.querySelectorAll<HTMLAnchorElement>('[data-russia-overview-link]').forEach(link=>{link.href=serialized({...state,comparison:false},link.href).href;});
    if(state.comparison){scene('original-map',state.layer);scene('comparison-map',state.compareLayer);}
@@ -117,10 +119,10 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
  };
  one<HTMLSelectElement>('place').addEventListener('change',event=>update(()=>{
   state.place=(event.target as HTMLSelectElement).value as RussiaState['place'];
-  if(state.place==='all')state.scope='all';selected=state.place!=='all';chooseRegionTheme();
+  if(state.place==='all')state.scope='all';selected=state.place!=='all'||(field==='agriculture'&&state.layer!=='farming-all');chooseRegionTheme();
  }));
  const chooseLayer=(event:Event)=>update(()=>{
-  state.layer=(event.target as HTMLSelectElement).value;selected=true;
+  state.layer=(event.target as HTMLSelectElement).value;selected=state.layer!=='farming-all'||state.place!=='all';
   const theme=russiaThemes.find(item=>item.field===field&&item.defaultLayer===state.layer);
   if(theme)state.theme=theme.id;
  });
@@ -132,7 +134,7 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
   state.theme=theme.id;state.layer=theme.defaultLayer;selected=true;
  })));
  root.querySelectorAll<HTMLButtonElement>('[data-scope]').forEach(button=>button.addEventListener('click',()=>update(()=>{
-  state.scope=button.dataset.scope as RussiaState['scope'];selected=state.scope!=='all'||state.place!=='all';
+  state.scope=button.dataset.scope as RussiaState['scope'];selected=state.scope!=='all'||state.place!=='all'||(field==='agriculture'&&state.layer!=='farming-all');
   if(state.scope==='region')chooseRegionTheme();
  })));
  one('comparison').addEventListener('click',()=>update(()=>{state.comparison=true;},'return'));

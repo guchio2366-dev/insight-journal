@@ -5,6 +5,14 @@ import { europeLayers } from '../../src/data/atlas/europe/layers.ts';
 import { europeReaderCopy, europeReaderSources } from '../../src/lib/atlas-europe-reader.ts';
 
 const copy = id => europeReaderCopy(europeLayers.find(layer => layer.id === id));
+
+test('industry and population first readings describe their own map evidence', () => {
+  assert.match(copy('industry').body, /キルナ.*鉱石.*ミュンヘン.*自動車/);
+  assert.doesNotMatch(copy('industry').body, /人口密度|人口の分布/);
+  assert.match(copy('density').body, /パリ.*ミラノ.*人口の分布/);
+  assert.doesNotMatch(copy('density').body, /鉄鉱石採掘|無線技術/);
+  assert.ok(europeReaderSources(europeLayers.find(layer => layer.id === 'density')).some(source => source.url.includes('ghsl.jrc.ec.europa.eu')));
+});
 const statistics = JSON.parse(readFileSync(new URL('../../src/data/atlas/europe/country-statistics.json', import.meta.url)));
 const value = (indicator, country) => statistics.indicators.find(item => item.id === indicator).values[country]['2023'];
 
@@ -88,7 +96,7 @@ test('自然・産業・人口をつなぐ説明でも欠測、量、位置の�
   assert.match(copy('contours').note, /間隔は標高精度を意味しません/);
   assert.match(copy('hubs').body, /ロッテルダム.*ルートヴィヒスハーフェン/);
   assert.match(copy('hubs').note, /生産量・雇用の大小を表しません/);
-  assert.match(copy('density').body, /キルナ.*オウル/);
+  assert.match(copy('density').body, /パリ.*ミラノ.*人口の分布/);
   assert.match(copy('density').note, /2020年.*現在の人口移動・避難状況.*ではありません/);
   assert.match(copy('density').note, /都市の点は位置のみ/);
 });
@@ -104,8 +112,7 @@ test('読解の地域例に対応した一次資料を少数で示し、全国�
   assert.ok(sources('wheat').some(item => item.url.startsWith('https://www.gov.uk/')));
   assert.ok(sources('wheat').some(item => item.url.startsWith('https://www.ksh.hu/')));
   assert.ok(sources('cattle').some(item => item.url.startsWith('https://www.luke.fi/')));
-  assert.ok(sources('density').some(item => item.url.startsWith('https://lkab.com/')));
-  assert.ok(sources('density').some(item => item.url.startsWith('https://events.nokia.com/')));
+  assert.ok(sources('density').some(item => item.url.startsWith('https://ghsl.jrc.ec.europa.eu/')));
   assert.ok(sources('hubs').some(item => item.url.startsWith('https://www.portofrotterdam.com/')));
   assert.ok(sources('hubs').some(item => item.url.startsWith('https://www.basf.com/')));
   assert.ok(sources('hubs').some(item => item.url.startsWith('https://www.airbus.com/')));

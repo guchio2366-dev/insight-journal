@@ -133,7 +133,7 @@ test('terrain and contours query the same real elevation cell in metres, preserv
   }finally{await app.w.happyDOM.close();}
 });
 
-for(const layer of ['terrain','contours']){
+for(const layer of ['terrain']){
   test(`${layer} named feature selection survives comparison return and a fresh page load with its elevation`,async()=>{
     const app=await setup(`?layer=${layer}&render=static`);
     try{
@@ -153,6 +153,24 @@ for(const layer of ['terrain','contours']){
     }finally{await app.w.happyDOM.close();}
   });
 }
+
+test('elevation drops a stale named district but preserves the actual point through comparison and reload',async()=>{
+  const app=await setup('?layer=contours&feature=alps&point='+alps.join(',')+'&render=static');
+  try{
+    await assertReading(app,alps);
+    assert.equal(new URL(app.w.location.href).searchParams.has('feature'),false);
+    assert.equal(app.q('[data-eu-feature-list]').hidden,true);
+    assert.equal(app.q('[data-eu-feature-card]').hidden,true);
+    assert.match(app.q('[data-eu-subject-title]').textContent,/標高/);
+    const comparison=await setup(app.q('[data-eu-comparison-link="nature-density"]').href);
+    try{
+      const back=comparison.q('[data-eu-comparison-return]');
+      const reload=await setup(back.href);
+      try{await assertReading(reload,alps);assert.equal(new URL(reload.w.location.href).searchParams.has('feature'),false);assert.equal(reload.q('[data-eu-feature-list]').hidden,true);}
+      finally{await reload.w.happyDOM.close();}
+    }finally{await comparison.w.happyDOM.close();}
+  }finally{await app.w.happyDOM.close();}
+});
 
 test('back/forward popstate and reload restore arbitrary clicked points without inventing a feature selection',async()=>{
   const app=await setup();

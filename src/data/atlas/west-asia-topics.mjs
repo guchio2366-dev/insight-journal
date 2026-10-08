@@ -1,3 +1,4 @@
+import {westTopicReasons} from './west-asia-readings.mjs';
 export const westFields = [
   {id:'agriculture',label:'農林業',route:'agriculture',first:'farming-overview'},
   {id:'natural',label:'自然環境',route:'nature',first:'climate'},
@@ -6,16 +7,16 @@ export const westFields = [
 ];
 const topic = (id,field,label,group,description,options={}) => ({id,field,label,group,description,...options});
 export const westTopics = [
-  topic('farming-overview','agriculture','農畜産の分布','作物・畜産','小麦・大麦の概略栽培域と、羊・山羊・牛の代表格子を同時に示します。輪郭と点の色は品目の区別です。2020年の正の推計格子から描き、農地の境界や飼養頭数の大小を示す記号ではありません。'),
+  topic('farming-overview','agriculture','農畜産の分布','作物・畜産','小麦・大麦・羊・山羊・牛の正値推計格子を淡く保ち、各品目内で相対的に強い格子を色面と点で示します。選んだ作物の濃い輪郭は強調域に合わせ、弱い正値域の細い輪郭は薄く残します。家畜の点は高い格子から選んだ代表地点です。小麦と大麦がともに強い格子は別色で示します。2020年の推計で、農地や放牧地の境界、生産量の大小ではありません。'),
   topic('climate','natural','気候区分','気候区分','例えば、沿岸と内陸、低地と山地では、気温と雨の季節変化が異なります。色はケッペン＝ガイガーの気候区分です。場所を選ぶと格子の分類を、都市を選ぶと観測所の月別平年値を読めます。',{layer:'climate'}),
-  topic('rivers','natural','河川・湖','水資源','川は水の通り道、流域は雨や雪解け水が集まる範囲です。国の外にある上流まで見ると、水の供給を国境だけで説明できない理由が分かります。線の太さは流量ではありません。',{vector:'rivers'}),
+  topic('rivers','natural','河川・地下水','水資源','河川・湖と、地下水を蓄える地層の広域区分を同時に示します。ナイル川沿い、チグリス・ユーフラテス川沿いの農地と、河川の少ないアラビア半島の地下水を比べます。線の太さは流量、斜線の広さは貯水量ではありません。',{vector:'rivers'}),
   topic('precipitation','natural','降水量（観測所の平年値）','水資源','気象庁ClimatViewに収録した18観測所の月別降水量を表示します。12か月の値が揃う観測所だけ年合計を求めます。点は観測所の値で、点と点の間や国全体の雨量を塗り分けた図ではありません。平年期間は観測所ごとに確認してください。'),
-  topic('annual-precipitation','natural','年降水量の分布','水資源','GPCC／DWD v2025の1991–2020年平年値です。雨量計の観測に基づいて補間された0.25°原格子で、12か月が揃う格子の月別降水量を合計しています。表示と地点の数値には同じ最近傍原格子の値を使います。拡大しても観測点や谷ごとの雨量は分かりません。年降水量は河川流量・地下水涵養量・現在の利用可能な水量とは異なります。',{layer:'annual-precipitation'}),
+  topic('annual-precipitation','natural','年降水量の分布','水資源','GPCC／DWD v2025の1991–2020年平年値です。雨量計の観測に基づいて補間された0.25°原格子で、12か月が揃う格子の月別降水量を合計しています。250mm間隔の青い色帯と境界は同じ広域の平滑化格子から作り、地点の数値は保存済み原格子から読みます。拡大しても観測点や谷ごとの雨量は分かりません。年降水量は河川流量・地下水涵養量・現在の利用可能な水量とは異なります。',{layer:'annual-precipitation'}),
   topic('basins','natural','流域と上下流','水資源','同じ下流の出口につながる小流域をまとめて表示しています。地図で流域を選ぶか一覧を選ぶと、国境の外も含めた流域全体へ移動します。水利用量、飲める水の量、現在の渇水状況を示す図ではありません。',{vector:'basins'}),
   topic('groundwater','natural','地下水を蓄える地層','水資源','地下水は地層のすき間などに蓄えられます。この図は、広い地下水盆、複雑な地質構造、局所的で浅い帯水層を区別します。帯水層とは地下水を含み、水を通しやすい地層です。色が広いほど利用可能な水が多い、という意味ではありません。',{vector:'groundwater'}),
   topic('desalination','natural','淡水化と水の供給','水資源','淡水化は海水などの塩分を取り除いて淡水を得る工程です。河川・地下水などの自然の供給、淡水化、取水、利用後の再利用は別の量です。施設の能力だけでは、実際の供給量や利用可能量は分かりません。この地図は河川・湖を示し、淡水化施設や生産量の分布は示しません。',{vector:'rivers',sourceUrl:'https://www.fao.org/aquastat/en/overview/methodology/'}),
-  topic('terrain','natural','地形','地形','標高の連続した色で、低地・高原・山地の位置関係を読みます。国の一覧からトルコやイランを選び、河川・気候と往復すると、山地が地域の中でどこに位置するかを比べられます。',{layer:'elevation'}),
-  topic('contours','natural','標高（等高線）','標高（等高線）','等高線は、同じ標高の点を結ぶ線です。ここでは500m間隔で表示します。線が近接する場所ほど、広域の図で見た傾斜が大きいことを示します。登山や災害時の経路判断に使う詳細地形図ではありません。',{layer:'elevation',vector:'contours'}),
+  topic('terrain','natural','地形','地形','500m間隔の標高の輪郭だけで、低地・高原・山地の位置関係を読みます。トルコのアナトリア高原、イランの山地と高原、イラクの低地を比べましょう。高さの色面は「標高（等高線）」で確認できます。',{layer:'elevation'}),
+  topic('contours','natural','標高（等高線）','標高（等高線）','500m間隔の高さの色面と、その境界に対応する等高線を表示します。標高は海面を基準とし、海面下の陸地も残します。色面と輪郭は同じ広域の平滑化格子から作り、地点の数値は保存済み原格子から読みます。細かな峰や谷の高さを測る詳細地形図ではありません。',{layer:'elevation',vector:'contours'}),
   ...[['wheat','小麦'],['barley','大麦']].flatMap(([id,label])=>[
     topic(id,'agriculture',label+'の収穫面積','作物','色は2020年の収穫面積を格子へ配分した推計です。詳説の国別生産量はFAOSTATから取得した別の統計で、地図の画素から算出していません。',{layer:id,faoItem:id==='wheat'?'15':'44',faoElement:'5510',unit:'t',breaks:[1e4,1e5,1e6,1e7]}),
     topic(id+'-irrigated','agriculture',label+'・灌漑栽培','作物','灌漑は、川・貯水池・地下水などから農地に水を供給することです。地図は灌漑栽培の収穫面積の推計で、取水量や水の消費量は示しません。',{layer:id+'-irrigated',faoItem:id==='wheat'?'15':'44',faoElement:'5510',unit:'t'}),
@@ -23,6 +24,12 @@ export const westTopics = [
   ]),
   topic('dates','agriculture','ナツメヤシの実・国別生産量','作物','ナツメヤシの実（デーツ）の年間生産量を国別に比較します。国全体に色を付ける比較図なので、国内の栽培地の分布は示しません。',{faoItem:'577',faoElement:'5510',unit:'t',breaks:[1e3,1e4,1e5,1e6]}),
   topic('olives','agriculture','オリーブ・国別生産量','作物','収穫したオリーブの量を比較します。オリーブ油の生産量とは異なります。統計にない国・年は灰色で表示し、0には置き換えません。',{faoItem:'260',faoElement:'5510',unit:'t',breaks:[1e3,1e4,1e5,1e6]}),
+  topic('cattle-milk','agriculture','牛の生乳・国別生産量','畜産','牛から搾った未加工の生乳の国別生産量です。牛の飼養密度から搾乳地や乳製品工場の位置を推測できません。欠測国は0とせず灰色にします。',{faoItem:'882',faoElement:'5510',unit:'t',breaks:[1e4,1e5,1e6,1e7]}),
+  topic('chicken-meat','agriculture','鶏肉・国別生産量','畜産','鶏肉の国別生産量です。飼養農場、飼料の産地、処理施設、輸出先の分布はこの国別統計に含まれません。',{faoItem:'1058',faoElement:'5510',unit:'t',breaks:[1e4,1e5,1e6,1e7]}),
+  topic('hen-eggs','agriculture','鶏卵・国別生産量','畜産','殻付き鶏卵の国別生産量です。卵の数ではなく重量で比較し、飼養頭数や消費量と区別します。',{faoItem:'1062',faoElement:'5510',unit:'t',breaks:[1e3,1e4,1e5,1e6]}),
+  topic('rice','agriculture','米・国別生産量','作物','FAOSTATの米の国別生産量です。国を塗る図から水田の位置、灌漑面積、単収は分かりません。未収録国の値を0にしません。',{faoItem:'27',faoElement:'5510',unit:'t',breaks:[1e3,1e4,1e5,1e6]}),
+  topic('cattle-meat','agriculture','牛肉・国別生産量','畜産','骨付き生鮮・冷蔵牛肉の国別生産量です。牛の飼養頭数・密度、輸入牛の処理量、国内消費量と同じ値ではありません。',{faoItem:'867',faoElement:'5510',unit:'t',breaks:[1e3,1e4,1e5,1e6]}),
+  topic('buffalo-milk','agriculture','水牛の生乳・国別生産量','畜産','水牛から搾った未加工の生乳の国別生産量です。牛の生乳とは別品目で、国全体の値を水牛の飼養地や工場の位置へ配分しません。',{faoItem:'951',faoElement:'5510',unit:'t',breaks:[1e3,1e4,1e5,1e6]}),
   ...[['sheep','羊','976'],['goat','山羊','1016'],['cattle','牛','866']].map(([id,label,item])=>topic(id,'agriculture',label+'の分布','畜産','地図は家畜の頭数を格子へ配分した密度の推計です。詳説の飼養頭数は国別統計です。家畜のいる場所と、牧草地の範囲、飼料を生産する場所は一致するとは限りません。',{layer:id,faoItem:item,faoElement:'5111',unit:'頭'})),
   topic('pasture','agriculture','永年採草・放牧地','土地・森林','多年にわたり草などの飼料植物に使う土地を、国別の面積で比較します。家畜が年間を通じて放牧される場所の精密な地図ではありません。',{faoItem:'6655',faoDomain:'Inputs_LandUse',faoElement:'5110',unit:'1000 ha',breaks:[10,100,1000,10000]}),
   topic('forest','agriculture','森林の分布と面積率','土地・森林','地図は森林の参考分布、国別統計は陸地面積に対する森林の割合です。国別の割合から国内の位置や樹種、木材の生産量は判断できません。',{layer:'forest',indicator:'AG.LND.FRST.ZS',unit:'%',breaks:[1,5,15,30,50]}),
@@ -84,8 +91,20 @@ const readings={
 };
 export function westReading(t){
   const base=t.id.replace(/-(irrigated|rainfed)$/,'');
-  const r=readings[base];
-  if(!r)return {message:t.description,reason:'',comparisons:[]};
+  const original=readings[base];
+  const reason=westTopicReasons[t.id]??westTopicReasons[base]??original?.reason??'';
+  const r=original?{...original,reason}:null;
+  if(!r){
+    const foodMessages={
+      'cattle-milk':'牛の生乳はトルコ・イランで多く、飼料・水・冷蔵輸送まで合わせて読む。',
+      'chicken-meat':'鶏肉はエジプト・トルコ・イランで多く、乾燥地でも飼料と水の供給が生産を支える。',
+      'hen-eggs':'鶏卵の生産重量はトルコ・イランで多く、飼養頭数や消費とは分けて読む。',
+      rice:'米はエジプト・イランの国別生産が大きく、水田への水の供給を考える。',
+      'cattle-meat':'牛肉はトルコの国別生産が大きく、牛の密度と加工後の重量を分けて読む。',
+      'buffalo-milk':'水牛の生乳はエジプトの国別値が大きく、ナイル川沿いの農業と比べる。',
+    };
+    return {message:foodMessages[t.id]??t.description,reason,comparisons:[]};
+  }
   const annualComparison=compare('annual-precipitation','年降水量の分布と比べる',t.id.endsWith('-irrigated')?'2020年の灌漑小麦と1991–2020年の年降水量を比べます。水源・設備・水の配分も考えます。年合計は利用可能な水量を、収穫面積は取水量を示しません。':'2020年の天水小麦と1991–2020年の年降水量を比べます。雨を主な水源とする栽培を探し、生育期の雨・土壌・品種・経営も考えます。年合計は栽培限界や収量を示しません。');
   const annualAdditions=base==='wheat'?[annualComparison]:[];
   if(t.id.endsWith('-irrigated'))return {...r,message:'灌漑は降水を補って栽培を支え、水を届ける設備・費用・管理が関わる。',comparisons:[...r.comparisons,...annualAdditions]};
@@ -102,4 +121,15 @@ export function observation(data, topic, code, year) {
   const r=rows.find(r=>r.item===topic.faoItem&&r.elementCode===topic.faoElement&&r.year===year&&r.domain===(topic.faoDomain??'Production_Crops_Livestock'));
   const unit=r?.unit==='An'?'頭':r?.unit==='1000 An'?'千頭':r?.unit==='1000 ha'?'千ha':r?.unit??topic.unit??'';
   return {value:r?.value??null,year,unit,source:'FAOSTAT',flag:r?.flag??null};
+}
+
+// The 2024 selection is limited to the eleven tonne-denominated series shipped
+// with this region. Keep live country coverage beside every partial sum.
+export const westProductionCandidates=['wheat','cattle-milk','barley','rice','chicken-meat','olives','dates','hen-eggs','cattle-meat','buffalo-milk','pork-meat'];
+export function westProductionSelection(data,year=2024){
+  return westProductionCandidates.map(id=>{
+    const topic=westTopics.find(t=>t.id===id)??{label:'豚肉・国別生産量',faoItem:'1035',faoElement:'5510',unit:'t'};
+    const values=data.countries.map(country=>observation(data,topic,country.code,year).value).filter(value=>Number.isFinite(value));
+    return {id,label:topic.label.replace('・国別生産量','').replace('の収穫面積',''),sum:values.reduce((sum,value)=>sum+value,0),reported:values.length,missing:data.countries.length-values.length};
+  }).sort((a,b)=>b.sum-a.sum).slice(0,10);
 }

@@ -22,6 +22,7 @@ const bundle=await build({stdin:{contents:`
  export {initLatinPopulation} from './src/scripts/atlas-latin-america-population';
  export {initLatinOverviewLinks} from './src/scripts/atlas-latin-overview-layout';
  import './src/scripts/atlas-latin-nature';
+ import './src/scripts/atlas-latin-water-terrain';
  export {initOceaniaLearningAtlas} from './src/scripts/atlas-oceania-learning';`,loader:'ts',resolveDir:repo},bundle:true,write:false,format:'iife',globalName:'RegionalClient',platform:'browser',plugins:[localModules],logLevel:'silent',define:{'import.meta.env.BASE_URL':JSON.stringify('/insight-journal')}});
 // Run the actual region-owned overview controller, including its flag-retaining links.
 const overviewSource=readFileSync(path.join(repo,'src/components/atlas/OceaniaOverviewPage.astro'),'utf8').split('<script>')[1].split('</script>')[0].replace(/^\s*import .*;\r?\n/gm,'');
@@ -79,7 +80,14 @@ test('Latin overview preserves incoming regional scope, then updates scope when 
 function assertLatinSection(win,section){
  const root=win.document.querySelector('[data-latin-workspace]');
  assert.equal(new URL(win.location).searchParams.get('section'),section==='climate'||section==='agriculture'||section==='population'?null:section);
- assert.equal(root.classList.contains('has-unavailable-section'),!['climate','agriculture','population'].includes(section));
+ const ready=['climate','agriculture','population','water','rivers','rainfall','terrain','elevation'].includes(section);
+ assert.equal(root.classList.contains('has-unavailable-section'),!ready);
+ const panelSection=section==='water'?'rivers':section;
+ if(['rivers','rainfall','terrain','elevation'].includes(panelSection)){
+  assert.equal(root.dataset.foundationReady,'true');
+  assert.equal(root.querySelector(`[data-foundation-map="${panelSection}"]`).closest('[data-latin-section-panel]').hidden,false);
+  assert.equal(root.querySelector(`[data-foundation-reading="${panelSection}"]`).hidden,false);
+ }
  assert.equal(root.querySelector(`[data-latin-section="${section}"]`).getAttribute('aria-pressed'),'true');
 }
 

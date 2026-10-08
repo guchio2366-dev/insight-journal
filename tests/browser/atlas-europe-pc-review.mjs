@@ -175,13 +175,101 @@ async function snapshot(page, profile, topic, region = 'europe') {
     assert.ok(control.y >= measured.map.y && control.y + control.height <= measured.map.y + measured.map.height + 1);
     if (index) assert.ok(control.y >= measured.controls[index - 1].y + measured.controls[index - 1].height, 'Map controls retain fit / zoom in / zoom out order');
   }
+  // The map and reading were reviewed at both sizes; check the 1024px GDP captions.
+  if(region!=='europe'||profile.viewport.width!==1024||topic!=='industry-overview')return measured;
   const filename = `${profile.name}-${region}-${topic}.png`;
-  const png = await page.screenshot({path: resolve(output, filename), fullPage: true, animations: 'disabled'});
+  const png = await page.screenshot({path: resolve(output, filename), fullPage: false, animations: 'disabled'});
   manifest.images.push({file: filename, sourceURL: page.url(), profile: profile.name, viewport: profile.viewport, render,
     dimensions: {width: png.readUInt32BE(16), height: png.readUInt32BE(20)}, measurements: measured,
     sha256: createHash('sha256').update(png).digest('hex')});
   await save();
   return measured;
+}
+
+async function agricultureClimateRepairs(page,profile){
+  await openEurope(page,'atlas/europe/agriculture/','normal');
+  const initialExtent=await page.locator('[data-eu-static]').getAttribute('viewBox');
+  assert.notEqual(initialExtent,'0 0 1200 1001','Agriculture starts closer to the main production regions');
+  assert.equal(await page.locator('[data-eu-farm-area]').evaluateAll(nodes=>nodes.filter(node=>node.style.display!=='none').length),16);
+  const labelCount=await page.locator('[data-eu-map-kind="crop"]:visible').count();
+  assert.ok(labelCount>0&&labelCount<=8,'Only representative concentration names are shown initially');
+  const anchors=()=>page.locator('.eu-label-dot').evaluateAll(nodes=>nodes.map(node=>[node.getAttribute('cx'),node.getAttribute('cy')]));
+  const initialAnchors=await anchors();
+  await snapshot(page,profile,'farming-initial');
+  await page.locator('[data-eu-layer="wheat"]').click();
+  await page.waitForFunction(()=>document.querySelector('[data-eu-map-place="wheat"]').getAttribute('aria-pressed')==='true');
+  assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'),initialExtent);
+  assert.deepEqual(await anchors(),initialAnchors,'A selection keeps the actual projected positions of every distribution');
+  assert.equal(await page.locator('[data-eu-farm-area]').evaluateAll(nodes=>nodes.filter(node=>node.style.display!=='none').length),16);
+  assert.equal(await page.locator('[data-eu-farm-outline="wheat"]').evaluateAll(nodes=>nodes.every(node=>node.style.display!=='none')),true);
+  const labels=await page.locator('[data-eu-map-kind="crop"]:visible').evaluateAll(nodes=>nodes.map(node=>({id:node.dataset.euMapPlace,opacity:Number(getComputedStyle(node).opacity)})));
+  for(const label of labels)assert.equal(label.opacity,label.id==='wheat'?1:.22);
+  await snapshot(page,profile,'farming-selected');
+  await page.locator('[data-eu-layer="dairy"]').click();
+  await page.waitForFunction(()=>document.querySelector('[data-eu-farm-measure]').value==='cattle-milk');
+  assert.equal(await page.locator('[data-eu-farm-measure] option').count(),1);
+  assert.match(await page.locator('[data-eu-subject-note]').textContent(),/乳牛.*未収録/);
+  assert.equal(await page.locator('[data-eu-farm-area]').evaluateAll(nodes=>nodes.filter(node=>node.style.display!=='none').length),16);
+  await page.locator('[data-eu-reset]').click();
+  assert.equal(new URL(page.url()).searchParams.get('farmExtent'),'full');
+  await page.waitForFunction(()=>document.querySelector('[data-eu-static]').getAttribute('viewBox')==='0 0 1200 1001');
+  await page.reload({waitUntil:'networkidle'});await ready(page);
+  assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'),'0 0 1200 1001');
+  await openEurope(page,'atlas/europe/nature/','normal');
+  const cityLabels=await page.locator('[data-eu-map-kind="city"]:visible').evaluateAll(nodes=>nodes.filter(node=>!node.classList.contains('is-point-only')).map(node=>{const style=getComputedStyle(node);return {name:node.textContent,background:style.backgroundColor,font:Number.parseFloat(style.fontSize)};}));
+  assert.ok(cityLabels.length<=8);
+  for(const label of cityLabels){assert.equal(label.background,'rgba(0, 0, 0, 0)');assert.ok(label.font>=12&&label.font<=13);}
+  const stationId=await page.locator('[data-eu-map-kind="city"].is-point-only:visible').first().getAttribute('data-eu-map-place');
+  assert.ok(stationId);
+  const point=page.locator(`[data-eu-map-kind="city"][data-eu-map-place="${stationId}"]`);
+  await page.bringToFront();await point.focus();
+  // Exercise real keyboard focus, with the pointer away from the station.
+  await page.mouse.move(5,5);await page.keyboard.press('Tab');await page.keyboard.press('Shift+Tab');
+  await page.waitForFunction(id=>{
+    const node=document.querySelector(`[data-eu-map-kind="city"][data-eu-map-place="${id}"]`);
+    return node&&document.activeElement===node&&Number.parseFloat(getComputedStyle(node).fontSize)===12;
+  },stationId,{timeout:5000});
+  const stationFocus=await point.evaluate(node=>({id:node.dataset.euMapPlace,active:document.activeElement===node,activeId:document.activeElement?.getAttribute('data-eu-map-place'),activeTag:document.activeElement?.tagName,documentFocus:document.hasFocus(),focus:node.matches(':focus'),focusVisible:node.matches(':focus-visible'),font:Number.parseFloat(getComputedStyle(node).fontSize),hidden:node.hidden,style:node.getAttribute('style')}));
+  manifest.checks.push({profile:profile.name,stationFocus});
+  await page.locator('[data-eu-city-choice]').selectOption('london');
+  await page.evaluate(()=>scrollTo(0,0));
+  assert.equal(await page.locator('#eu-city-heading').textContent(),'ロンドンの雨温図');
+  await snapshot(page,profile,'climate-selected');
+  const evidence=await page.locator('[data-city-reading="london"]').evaluate(node=>{
+    const reason=node.querySelector('[data-eu-climate-reason]'),farm=node.querySelector('.eu-climate-farming>p'),reader=node.closest('[data-eu-climate-reader]');
+    return {reason:reason.textContent,farmBottom:farm.getBoundingClientRect().bottom,reasonFont:Number.parseFloat(getComputedStyle(reason).fontSize),farmFont:Number.parseFloat(getComputedStyle(farm).fontSize),classificationFont:Number.parseFloat(getComputedStyle(node.querySelector('.eu-city-climate')).fontSize),farmHeadingFont:Number.parseFloat(getComputedStyle(node.querySelector('.eu-climate-farming h4')).fontSize),overflow:getComputedStyle(reader).overflowY,viewportHeight:innerHeight,duplicates:node.querySelectorAll('.eu-city-selected-note').length};
+  });
+  assert.match(evidence.reason,/大西洋.*偏西風.*海.*冬.*夏/);
+  assert.match(await page.locator('[data-city-reading="london"] .eu-city-reading-details').textContent(),/明瞭な乾季.*5\.7.*19\.0/s);
+  assert.ok(evidence.reasonFont>=14&&evidence.farmFont>=14);
+  assert.ok(evidence.classificationFont>=18&&evidence.farmHeadingFont>=17,'Existing heading sizes are retained');
+  assert.equal(evidence.overflow,'visible');assert.equal(evidence.duplicates,0);
+  assert.ok(evidence.farmBottom<=evidence.viewportHeight-8,'The full farming paragraph is visible in the initial PC viewport: '+JSON.stringify(evidence));
+  assert.equal(stationFocus.active,true,'Keyboard focus returns to the actual station button: '+JSON.stringify(stationFocus));
+  assert.equal(stationFocus.font,12,'Keyboard focus reveals the station name: '+JSON.stringify(stationFocus));
+  manifest.checks.push({profile:profile.name,agricultureClimateEvidence:evidence});
+  // Read each actual city choice without taking additional screenshots. The
+  // cause must stay in the visible panel, ahead of the retained farming prose.
+  const cityChoices=await page.locator('[data-eu-city-choice] option').evaluateAll(nodes=>nodes.map(node=>node.value).filter(Boolean));
+  const geographyRecords=[];
+  manifest.checks.push({profile:profile.name,cityGeography:geographyRecords});
+  for(const cityId of cityChoices){
+    await page.locator('[data-eu-city-choice]').selectOption(cityId);
+    await page.waitForFunction(id=>!document.querySelector(`[data-city-reading="${id}"]`).hidden,cityId);
+    const cityEvidence=await page.locator(`[data-city-reading="${cityId}"]`).evaluate(node=>{
+      const reason=node.querySelector('[data-eu-climate-reason]'),farm=node.querySelector('.eu-climate-farming>p'),details=node.querySelector('.eu-city-reading-details');
+      return {id:reason.dataset.euClimateGeography,reason:reason.textContent,reasonBottom:reason.getBoundingClientRect().bottom,farmBottom:farm.getBoundingClientRect().bottom,reasonFont:Number.parseFloat(getComputedStyle(reason).fontSize),farmFont:Number.parseFloat(getComputedStyle(farm).fontSize),detailsClosed:!details.open,sources:details.querySelectorAll('a').length,viewportHeight:innerHeight};
+    });
+    geographyRecords.push(cityEvidence);
+    await save();
+    assert.equal(cityEvidence.id,cityId);
+    assert.match(cityEvidence.reason,/大西洋|海|内陸|平原|台地|高緯度|山地|日射/);
+    assert.ok(cityEvidence.reasonFont>=14&&cityEvidence.farmFont>=14);
+    assert.ok(cityEvidence.sources>=3&&cityEvidence.detailsClosed);
+    assert.ok(cityEvidence.reasonBottom<cityEvidence.farmBottom);
+    assert.ok(cityEvidence.farmBottom<=cityEvidence.viewportHeight-8,'Each full city reason/farming paragraph stays within the PC viewport: '+JSON.stringify(cityEvidence));
+  }
+  networkClean();
 }
 
 async function uniqueElevation(page) {
@@ -238,8 +326,10 @@ async function europeOperations(page, profile, render) {
   manifest.records.push(record); activeRecord = record;
   const normal = render === 'normal';
   await openEurope(page, 'atlas/europe/nature/?layer=terrain', render);
+  if(normal)await snapshot(page,profile,'terrain-overview');
   const history = await page.evaluate(() => history.length), svgExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
-  await page.locator('[data-eu-feature-select="alps"]').click();
+  assert.equal(await page.locator('[data-eu-feature-list]').isVisible(),false);
+  await page.locator('[data-eu-map-place="alps"][data-eu-map-kind="feature"]').click();
   const elevation = await settled(page), selectedPoint = new URL(page.url()).searchParams.get('point');
   assert.equal(selectedPoint, '9.5,46.6'); assert.match(elevation, /：2,283 m（ETOPO 2022）$/);
   assert.equal(await page.evaluate(() => history.length), history + 1);
@@ -251,6 +341,12 @@ async function europeOperations(page, profile, render) {
   assert.match(await page.locator('[data-eu-legend-title]').textContent(), /500m間隔/);
   assert.doesNotMatch(await page.locator(resultSelector).textContent(), /間隔|標高 m/);
   assert.deepEqual(await page.locator('[data-eu-legend-items] .eu-swatch').evaluateAll(nodes => nodes.slice(0, 2).map(node => getComputedStyle(node).backgroundColor)), ['rgb(184, 161, 130)', 'rgb(134, 103, 71)']);
+  assert.match(await page.locator('[data-eu-subject-image]').getAttribute('href'),/physical-v1\/elevation\.png$/);
+  assert.equal(new URL(page.url()).searchParams.has('feature'),false);
+  assert.equal(await page.locator('[data-eu-feature-list]').isVisible(),false);
+  assert.equal(await page.locator('[data-eu-map-kind="feature"]:visible').count(),0);
+  assert.equal(await page.locator('[data-eu-legend-items] > div').count(),15);
+  assert.match(await page.locator('[data-eu-legend-items]').textContent(),/0〜500m未満.*500〜1,000m未満.*4,500〜5,000m未満/s);
   await uniqueElevation(page);
   const readerCopy = await page.locator('[data-eu-subject-reader]').textContent();
   if (normal) await snapshot(page, profile, 'contours');
@@ -286,7 +382,8 @@ async function europeOperations(page, profile, render) {
   record.checks.push('metres separate from contour interval', 'same point and elevation across terrain/contours', 'single marker/result/legend', 'one history entry per selection', 'SVG extent retained', 'unselected back/forward', 'reload retains reader text', 'named comparison return', 'real map click and history');
 
   await openEurope(page, 'atlas/europe/nature/?layer=drainage', render);
-  await page.locator('[data-eu-feature-select="rhine"]').click(); await settled(page, '表示格子中心.*BasinATLAS');
+  assert.equal(await page.locator('[data-eu-feature-list]').isVisible(),false);
+  await page.locator('[data-eu-map-place="rhine"][data-eu-map-kind="feature"]').click(); await settled(page, '表示格子中心.*BasinATLAS');
   await page.waitForFunction(() => document.querySelector('[data-eu-drainage-selection]').style.display !== 'none');
   const selected = await drainageState(page); assert.ok(selected.point); assert.ok(selected.basin); assert.doesNotMatch(selected.result, /データなし/);
   const selectedFeedback = await feedbackPlacement(page);
@@ -341,6 +438,24 @@ async function europeOperations(page, profile, render) {
 }
 
 async function stageOneOperations(page, profile) {
+  const quietFeatures=async(field)=>{
+    const names=await page.locator('[data-eu-map-kind="feature"]:visible:not(.is-point-only)').evaluateAll(nodes=>nodes.map(node=>{const s=getComputedStyle(node),r=node.getBoundingClientRect();return {id:node.dataset.euMapPlace,font:parseFloat(s.fontSize),background:s.backgroundColor,border:parseFloat(s.borderWidth),left:r.left,right:r.right,top:r.top,bottom:r.bottom};}));
+    assert.ok(names.length>0&&names.length<=4,field+' initial representative names');
+    for(const name of names){assert.ok(name.font>=13);assert.equal(name.background,'rgba(0, 0, 0, 0)');assert.equal(name.border,0);}
+    for(let i=0;i<names.length;i++)for(let j=i+1;j<names.length;j++){const a=names[i],b=names[j];assert.ok(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,field+' names do not overlap');}
+    const points=await page.locator('[data-eu-map-kind="feature"].is-point-only:visible').count();assert.ok(points>0,field+' keeps other real places');
+    const target=page.locator('[data-eu-map-kind="feature"].is-point-only:visible').first(),id=await target.getAttribute('data-eu-map-place');
+    const anchors=()=>page.locator('.eu-label-dot').evaluateAll(nodes=>nodes.map(node=>[node.getAttribute('cx'),node.getAttribute('cy')]));
+    const original=await anchors();await page.bringToFront();await page.mouse.move(5,5);await target.focus();
+    await page.keyboard.press('Tab');await page.keyboard.press('Shift+Tab');
+    await page.waitForFunction(id=>{const node=document.querySelector(`[data-eu-map-kind="feature"][data-eu-map-place="${id}"]`);return node&&document.activeElement===node&&parseFloat(getComputedStyle(node).fontSize)===13;},id,{timeout:5000});
+    assert.equal(await target.evaluate(node=>parseFloat(getComputedStyle(node).fontSize)),13,'Keyboard focus reveals the retained name size');
+    await page.keyboard.press('Enter');await ready(page);
+    assert.equal(new URL(page.url()).searchParams.get('feature'),id);
+    assert.deepEqual(await anchors(),original,'Name selection keeps every actual projected point');
+    assert.equal(await page.locator(`[data-eu-map-kind="feature"][data-eu-map-place="${id}"]`).getAttribute('aria-pressed'),'true');
+    manifest.checks.push({profile:profile.name,quietPlaceLabels:{field,names,otherPoints:points,keyboardSelected:id}});
+  };
   await openEurope(page, 'atlas/europe/nature/?layer=climate', 'normal');
   assert.equal(await page.locator('[data-eu-city-choice]').inputValue(), '');
   assert.equal(await page.locator('[data-eu-climate-overview]').isVisible(), true);
@@ -360,7 +475,33 @@ async function stageOneOperations(page, profile) {
   await openEurope(page, 'atlas/europe/nature/?layer=precipitation', 'normal');
   assert.equal(await page.locator('[data-eu-legend-items] > div').count(), 14);
   assert.match(await page.locator('[data-eu-legend-items]').textContent(), /250未満.*3,000以上/s);
-  await snapshot(page, profile, 'precipitation-250mm');
+  const rainfallPath='/insight-journal/assets/atlas/europe/precipitation-contours-v1/precipitation.png';
+  const rainfallManifestPath=rainfallPath.replace('precipitation.png','manifest.json');
+  const rainState=async()=>({url:page.url(),image:await page.locator('[data-eu-subject-image]').getAttribute('href'),manifest:await page.locator('[data-eu-layer-manifest]').getAttribute('href'),extent:await page.locator('[data-eu-static]').getAttribute('viewBox')});
+  const directRain=await rainState();assert.equal(directRain.image,rainfallPath);
+  assert.equal(directRain.manifest,rainfallManifestPath);
+  const processingLinks=()=>page.locator('a[href*="/europe/precipitation"][href$="manifest.json"]').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('href')));
+  const directProcessingLinks=await processingLinks();assert.ok(directProcessingLinks.length>=2);
+  assert.ok(directProcessingLinks.every(href=>href===rainfallManifestPath),'Reader and page-wide processing links identify the displayed contours');
+  const processing=await page.evaluate(async path=>{const response=await fetch(path,{redirect:'error'});if(!response.ok)throw Error('Rainfall processing record unavailable');return response.json();},directRain.manifest);
+  assert.equal(processing.validation.verifiedLineVertices,8621);
+  assert.equal(processing.validation.verifiedSharedBandEdges,8258);
+  assert.equal(processing.rendering.sourceMissingPixelsFilled,0);
+  assert.match(await page.locator('[data-eu-legend-title]').textContent(),/250mm等雨量線/);
+  assert.match(await page.locator('[data-eu-legend-items]').textContent(),/欠測・補間範囲外/);
+  await snapshot(page, profile, 'precipitation-250mm-direct');
+  await openEurope(page, 'atlas/europe/nature/', 'normal');
+  await page.locator('[data-eu-topic-field="nature"] [data-eu-topic="water"]').click();
+  await page.locator('[data-eu-water-options] [data-eu-topic="precipitation"]').click();await ready(page);
+  const tabRain=await rainState();assert.equal(tabRain.image,rainfallPath);
+  assert.equal(tabRain.manifest,rainfallManifestPath);
+  assert.deepEqual(await processingLinks(),directProcessingLinks);
+  assert.equal(new URL(tabRain.url).searchParams.get('layer'),'precipitation');
+  assert.equal(tabRain.extent,directRain.extent,'Direct and tab routes retain the same map extent');
+  await snapshot(page, profile, 'precipitation-250mm-tabs');
+  assert.ok(manifest.network.requests.some(item=>new URL(item.url).pathname===rainfallPath));
+  assert.equal(manifest.network.requests.filter(item=>new URL(item.url).pathname.endsWith('/precipitation-v1/precipitation.png')).length,0,'Neither route requests the former mesh raster');
+  manifest.checks.push({profile:profile.name,precipitationRoutes:{direct:directRain,tabs:tabRain,formerMeshRequests:0}});
   await openEurope(page, 'atlas/europe/nature/?layer=drainage', 'normal');
   await page.locator('[data-eu-map-place="rhine"][data-eu-map-kind="feature"]').click();
   await page.waitForFunction(() => document.querySelector('[data-eu-basin-summary]').textContent.includes('ライン川'));
@@ -368,9 +509,31 @@ async function stageOneOperations(page, profile) {
   await snapshot(page, profile, 'drainage-river-reading');
   await openEurope(page, 'atlas/europe/industry/?layer=hubs', 'normal');
   assert.equal(new URL(page.url()).searchParams.has('feature'), false);
-  await snapshot(page, profile, 'industry-overview');
+  if(profile.viewport.width===1024){
+    const captions=await page.locator('[data-eu-topic-field="industry"] button:has(small)').evaluateAll(buttons=>buttons.map(button=>{
+      const frame=button.getBoundingClientRect(),caption=button.querySelector('small').getBoundingClientRect();
+      return {label:button.textContent,buttonBottom:frame.bottom,captionBottom:caption.bottom,labelFont:parseFloat(getComputedStyle(button).fontSize),captionFont:parseFloat(getComputedStyle(button.querySelector('small')).fontSize)};
+    }));
+    assert.equal(captions.length,3);
+    for(const caption of captions){assert.ok(caption.captionBottom<=caption.buttonBottom-2,`Industry GDP caption leaves its button: ${JSON.stringify(caption)}`);assert.ok(caption.labelFont>=13&&caption.captionFont>=10);}
+    manifest.checks.push({profile:profile.name,industryGdpCaptions:captions});
+  }
+  const industryOverview = await snapshot(page, profile, 'industry-overview');
+  const usIndustry = await page.context().newPage();
+  try {
+    await usIndustry.goto(new URL('atlas/north-america/industry/', base).href, {waitUntil:'networkidle'});
+    const usMap = await usIndustry.locator('[data-map-frame]').boundingBox();
+    assert.ok(usMap?.width > 0, 'US industry map is the PC width reference');
+    assert.ok(industryOverview.map.width >= usMap.width - 3, `Europe industry map is narrower than US: ${JSON.stringify({europe:industryOverview.map,us:usMap})}`);
+    manifest.comparisons.push({profile:profile.name,topic:'industry map width',europe:industryOverview.map,us:usMap});
+  } finally { await usIndustry.close(); }
+  await page.locator('[data-eu-topic-field="industry"] [data-eu-topic="industry"]').click();
+  assert.match(await page.locator('[data-eu-subject-intro]').textContent(), /キルナ.*鉱石.*ミュンヘン.*自動車/);
+  await snapshot(page, profile, 'industry-gdp-reading');
+  await page.locator('[data-eu-topic-field="industry"] [data-eu-topic="hubs"]:not([data-eu-industry-group])').click();
   const industryExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
   const industryPoints = await page.locator('[data-eu-feature-options] option').count();
+  await quietFeatures('industry');
   await page.locator('[data-eu-industry-group="機械・輸送"]').click();
   assert.equal(new URL(page.url()).searchParams.has('place'), false);
   assert.equal(new URL(page.url()).searchParams.has('feature'), false);
@@ -389,8 +552,10 @@ async function stageOneOperations(page, profile) {
 
   await openEurope(page, 'atlas/europe/population/?layer=density', 'normal');
   assert.equal(new URL(page.url()).searchParams.has('place'), false);
+  assert.match(await page.locator('[data-eu-subject-intro]').textContent(), /パリ.*ミラノ.*人口の分布/);
   await snapshot(page, profile, 'population-overview');
   const populationExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
+  await quietFeatures('population');
   const [parisId] = await page.locator('[data-eu-feature-choice]').selectOption({label:'パリ'});
   await settled(page, '（2020）');
   assert.equal(await page.locator('[data-eu-subject-grid]').evaluate(node => !!node.closest('.eu-read-panel')), true);
@@ -513,14 +678,21 @@ try {
       }
       await europeOperations(page, profile, 'normal');
       await stageOneOperations(page, profile);
-      if (profile.viewport.width === 1024) await europeOperations(page, profile, 'explicit-static');
+      await agricultureClimateRepairs(page,profile);
+      if (profile.viewport.width === 1024) {
+        // Keep the static history checks independent of all preceding normal
+        // operations; Chromium caps a tab's accumulated session history.
+        const staticPage=await context.newPage();
+        try { await europeOperations(staticPage, profile, 'explicit-static'); }
+        finally { await staticPage.close(); }
+      }
     } finally { await context.close(); }
   }
-  networkClean(); assert.equal(manifest.images.length, 32); assert.equal(manifest.records.length, 3);
+  networkClean(); assert.equal(manifest.images.length, 1); assert.equal(manifest.records.length, 3);
   assert.ok(manifest.records.every(record => record.status === 'passed'));
   assert.equal(git('rev-parse', 'HEAD'), manifest.gitHead, 'Checkout changed during capture');
   assert.equal(git('rev-parse', 'HEAD:src'), manifest.gitSrcTree);
-  manifest.status = 'passed'; manifest.checks.push('32 normal-render screenshots', '2 normal PC operation profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
+  manifest.status = 'passed'; manifest.checks.push('Europe industry map width meets US industry reference at 2 PC sizes', 'GDP captions fit within their buttons at 1024px without smaller type', 'Industry overview photographed at 1024px', 'Processing link matches the displayed contour asset for direct and tab routes at 2 PC sizes', 'Existing operations retained at 2 normal PC profiles plus explicit static 1024', 'loopback-only requests', 'no browser exceptions');
   console.log(JSON.stringify({status: manifest.status, output, images: manifest.images.length, head: manifest.gitHead}));
 } catch (error) {
   manifest.status = 'failed'; manifest.failure = {message: String(error), stack: error.stack};

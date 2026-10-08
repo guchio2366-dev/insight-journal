@@ -1,0 +1,15 @@
+---
+import {getAsiaOverview} from '../../../data/atlas/asia-overview';
+const reading=getAsiaOverview('southeast-asia').reading.readings.find(r=>r.id==='industry')!;
+---
+<section data-industry-region-reading hidden aria-label="東南アジアの産業と地域全体の供給網">
+ <h3>国別の産業と、地域全体の供給網を読む</h3>
+ <p>国別産業の学習対象はインドネシア・ベトナム・タイです。製造業・サービス業の国計を比べ、都市や港の立地を別の資料で読みます。地域全体の商品貿易は、収録した11か国・地域を比較する入口です。</p>
+ {reading.paragraphs.map(p=><p>{p}</p>)}
+ <div class="southeast-industry-links"><button type="button" data-industry-reading-topic="trade-exports" data-industry-reading-detail="t-85">電気機器の輸出</button><button type="button" data-industry-reading-topic="trade-imports" data-industry-reading-detail="t-85">電気機器の輸入</button><button type="button" data-industry-reading-topic="trade-exports" data-industry-reading-detail="t-87">車両・部分品の輸出</button></div>
+ <p>商品貿易は2023年の名目米ドルです。港や工場を結ぶ実際の輸送経路、国内仕向け、生産重量を表す図ではありません。</p>
+ <details><summary>立地の説明と統計の出典を読む</summary>{reading.sources.map(s=><p><a href={s.url}>{s.label}</a></p>)}<p><a href="https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NV.IND.MANF.ZS">世界銀行WDI：製造業付加価値</a> · <a href="https://comtradeplus.un.org/">国連Comtrade：商品貿易</a></p></details>
+</section>
+<style>
+ .southeast-industry-links{display:flex;flex-wrap:wrap;gap:8px}.southeast-industry-links button{min-height:44px;padding:8px 12px;background:#edf3f1;color:#264c52;border:1px solid #8a9e9c;font:inherit;font-size:12px}p{font-size:13px;line-height:2}h3{font-size:14px;margin:22px 0 8px}summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:12px}button:focus-visible,summary:focus-visible{outline:3px solid #a74830;outline-offset:2px}[hidden]{display:none!important}
+</style>

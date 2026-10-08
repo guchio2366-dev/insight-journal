@@ -17,14 +17,15 @@ type RegionCase = {
 };
 
 // Representative positions are reading anchors, not irrigation intakes or farm locations.
-// The two basin anchors were checked in the original BasinATLAS L4 polygons and
-// in the published display mask: Po [9.95,45.10] = 2040012730;
-// Portugal [-8.80,38.90] = 2040018470. Neither identifier names a whole river basin.
+// The Po anchor is a retained SPAM rice/maize cell centre in display unit
+// 2040012730. Portugal [-8.80,38.90] remains in display unit 2040018470.
+// Neither identifier names a whole river basin. Tests additionally check exact
+// BasinATLAS containment when the private original GIS is available.
 const regions: Record<string, RegionCase> = {
   plains: { id: 'plains', name: '欧州平原', city: 'warsaw', point: [20.96, 52.16], bounds: [-2, 45, 35, 57] },
   eastern: { id: 'eastern', name: '東欧の平原', city: 'kyiv', point: [30.54, 50.39], bounds: [18, 43, 39, 56] },
   pannonian: { id: 'pannonian', name: '中欧の平原', city: 'budapest', point: [19.18, 47.43], bounds: [13, 43, 25, 50] },
-  po: { id: 'po', name: 'ポー平原', city: '', point: [9.95, 45.10], bounds: [6.5, 43.5, 13.5, 47.5], basin: '2040012730' },
+  po: { id: 'po', name: 'ポー平原', city: '', point: [8.708333333333336, 45.29166666666667], bounds: [6.5, 43.5, 13.5, 47.5], basin: '2040012730' },
   portugal: { id: 'portugal', name: 'ポルトガル中部', city: 'lisbon', point: [-8.80, 38.90], bounds: [-10, 36.5, -6, 42.5], basin: '2040018470' },
   britain: { id: 'britain', name: 'イングランドと周辺', city: 'london', point: [-2.5, 52.5], bounds: [-7, 49, 3, 59] },
   northern: { id: 'northern', name: '北欧', city: 'helsinki', point: [24.95, 60.18], bounds: [10, 55, 32, 68] },

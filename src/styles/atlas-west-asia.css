@@ -27,6 +27,19 @@
 .west-layout-statistics .atlas-climate-diagram{margin:0;max-width:none}
 .west-layout-statistics p{font-size:14px;line-height:1.85}
 .west-layout-statistics .atlas-city-source{font-size:13px}
+.west-layout-statistics:has(.west-production-summary){padding:12px 16px}
+.west-production-summary h2{font-size:19px;line-height:1.35;margin:0}
+.west-layout-statistics .west-production-summary>p{font-size:12px;line-height:1.5;margin:3px 0 6px}
+.west-production-summary ol{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px;list-style:none;margin:0;padding:0}
+.west-production-summary li{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:center;min-height:39px;padding:2px 3px;border-bottom:1px solid #dce2d8;font-size:13px;font-variant-numeric:tabular-nums}
+.west-production-summary li button{min-width:0;min-height:34px;padding:4px 0;border:0;background:transparent;color:#265660;text-decoration:underline;text-align:left;font:inherit;cursor:pointer}
+.west-production-summary li span{white-space:nowrap}
+.west-production-summary li small{white-space:nowrap;color:#526960;font-size:11px}
+.west-production-summary details{margin-top:4px}
+.west-production-summary details summary{min-height:38px;padding:6px 0}
+.west-production-map-choice{margin:8px 0 12px;padding:9px 10px;border-left:3px solid #7b9789;background:#f1f5ee}
+.west-reading .west-production-map-choice p{font-size:12px;line-height:1.55;margin:0 0 6px}
+.west-production-map-choice button{min-height:40px;padding:6px 10px;border:1px solid #66877b;background:#fffef8;color:#254952;font:inherit;cursor:pointer}
 .west-layout-statistics .west-detail-controls{margin:0 0 12px;padding:0}
 .west-layout-statistics [data-west-statistics-controls]:has(>[hidden]){display:none}
 @media(min-width:960px) and (max-width:1199px){
@@ -94,6 +107,14 @@
 }
 .west-subtabs{padding:6px;margin:0;border:1px solid #c7ccbf;border-bottom:0;background:#fbfaf3}
 .west-atlas .atlas-map-frame{background:#e3eff0}
+.west-farm-map-key{position:absolute;z-index:3;top:8px;left:8px;display:grid;grid-template-columns:repeat(2,max-content);gap:3px 10px;max-width:180px;padding:6px 8px;border:1px solid #b7c5b9;border-radius:4px;background:#fffef0ee;box-shadow:0 1px 3px #243b4822;color:#233d42;font:600 11px/1.35 var(--sans);pointer-events:none}
+.west-farm-map-key[hidden]{display:none}
+.west-farm-map-key strong{grid-column:1/-1;font-size:10px;font-weight:700}
+.west-farm-map-key span{display:flex;align-items:center;gap:4px;white-space:nowrap;transition:opacity .15s}
+.west-farm-map-key i{display:inline-block;width:10px;height:10px;flex:none;border:1px solid #fff;background:var(--farm-color)}
+.west-farm-map-key [data-kind=livestock] i{width:9px;height:9px;border-radius:50%}
+.west-farm-map-key .west-farm-map-overlap i{background:#344d70}
+.west-farm-map-key span.is-muted{opacity:.35}
 .west-atlas [data-west-map]{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
 .west-atlas [data-west-map]:active{cursor:grabbing}
 .west-atlas .atlas-map-tools button{min-width:44px;min-height:44px}
@@ -271,3 +292,36 @@
 .west-settlement-key [data-west-settlement-source-key]{display:flex;align-items:center;gap:7px;min-height:40px}
 .west-settlement-key i{display:inline-block;width:15px;height:12px;flex:none;border:1px solid #78918c}
 .west-atlas .west-rain-station circle{stroke:#284f60;stroke-width:1.3}
+.west-map-related{margin:8px 0;padding:10px 0;border-block:1px solid #d1dad3}
+.west-map-related h3{width:100%;margin:0 0 4px;font-size:14px}
+.west-map-related :is(a,button){min-height:40px;display:inline-flex;align-items:center}
+.west-atlas:not([data-comparing=true]) .atlas-map-column .west-regional-climate-key .west-swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:5px 12px;text-align:left;justify-content:start}
+.west-atlas:not([data-comparing=true]) .atlas-map-column .west-swatches{justify-content:flex-start}
+.west-country-line:not([data-country]){cursor:default}
+.west-single-product{min-height:44px;padding:8px 12px;font:inherit;color:#254952;background:#fffef8;border:1px solid #b8c8ba;cursor:pointer}
+@media(min-width:960px){
+ .west-atlas .west-reading .west-reading-header{flex-wrap:wrap}
+ .west-atlas[data-city-climate-active=true] .west-reading .west-reading-header{flex-wrap:wrap;min-height:0;padding-bottom:4px}
+ .west-atlas[data-city-climate-active=true] .west-reading .west-reading-header .atlas-eyebrow{display:none}
+ .west-atlas[data-city-climate-active=true] .west-reading .atlas-city-climate>h3{position:absolute;width:1px;height:1px;margin:0;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+ .west-atlas[data-city-climate-active=true] .west-reading .atlas-climate-diagram>figcaption{margin-top:0}
+ .west-atlas[data-city-climate-active=true] .west-reading .atlas-city-reading{margin-top:8px}
+}
+
+/* West Asia's combined water view keeps metric fills and categorical hatching separate. */
+.west-water-pick p { margin:.3rem 0; font-size:.78rem; font-weight:700; }
+.west-water-pick button { margin:.15rem .15rem .15rem 0; padding:.3rem .5rem; border:1px solid #aabbbd; border-radius:3px; background:#fffdf6; font-size:.76rem; cursor:pointer; }
+.west-water-pick button[aria-pressed="true"] { color:#fff; background:#284e60; border-color:#284e60; }
+.west-natural-selection,.west-natural-value { border-left:3px solid #ab7832; padding-left:.7rem; margin:.7rem 0; }
+.west-natural-selection h3,.west-natural-value h3 { margin:.3rem 0; font-size:.92rem; }
+.west-natural-selection p,.west-natural-value p { margin:.3rem 0; font-size:.82rem; line-height:1.65; }
+.west-contour-label { paint-order:stroke; stroke:#fffdf5; stroke-width:3px; stroke-linejoin:round; fill:#365b6c; }
+.west-water-key { display:flex; flex-wrap:wrap; gap:.35rem .75rem; margin:.5rem 0; font-size:.74rem; }
+.west-water-key span { display:flex; align-items:center; gap:.3rem; }
+.west-water-key i { display:inline-block; width:20px; height:12px; }
+.west-water-river { border-top:2px solid #307aa3; }
+.west-water-basin { border:2px dashed #ad7830; }
+.west-water-aquifer { background:repeating-linear-gradient(55deg,transparent 0 5px,#49687e 5px 6px); border:1px solid #9caaa7; }
+.west-water-aquifer.aquifer-2 { background:repeating-linear-gradient(-55deg,transparent 0 5px,#576d49 5px 6px); }
+.west-water-aquifer.aquifer-3 { background:repeating-linear-gradient(55deg,transparent 0 8px,#8b7752 8px 10px); }
+[data-natural-feature]:focus,[data-basin]:focus,[data-ground]:focus { outline:none; stroke:#a23f2d; stroke-width:3px; }

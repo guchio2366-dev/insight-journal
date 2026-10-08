@@ -3,6 +3,7 @@ import { climateSummary } from '../../lib/atlas-europe-view';
 import mapLabels from '../../data/atlas/europe/map-labels.json';
 import legend from '../../data/atlas/europe/climate-legend.json';
 import { climateFarming, cityFarming } from '../../data/atlas/europe/climate-farming';
+import { cityClimateGeography, climateGeographyScope } from '../../data/atlas/europe/climate-geography';
 import EuropeClimateDiagram from './EuropeClimateDiagram.astro';
 
 interface Props {
@@ -19,18 +20,19 @@ const station = city.stationName.split(' -')[0];
 const code = (mapLabels.cityClasses as Record<string, string>)[city.id];
 const classification = legend.find(entry => entry.code === code);
 const farming = cityFarming[city.id] ?? (code ? climateFarming[code] : undefined);
+const geography = cityClimateGeography[city.id];
 const temperature = city.months.map(month => month.temperature);
 const precipitation = city.months.map(month => month.precipitation);
 const missingRain = precipitation.some(value => value === null);
 const missingTemperature = temperature.some(value => value === null);
 const meanings: Record<string, string> = {
-  Cfb: 'Cは温帯、fは明瞭な乾季がないこと、bは温暖な夏を示します。',
-  Cfa: 'Cは温帯、fは明瞭な乾季がないこと、aは暑い夏を示します。',
-  Csa: 'Cは温帯、sは夏に乾燥すること、aは暑い夏を示します。',
-  Csb: 'Cは温帯、sは夏に乾燥すること、bは温暖な夏を示します。',
-  Dfa: 'Dは冷帯、fは明瞭な乾季がないこと、aは暑い夏を示します。',
-  Dfb: 'Dは冷帯、fは明瞭な乾季がないこと、bは温暖な夏を示します。',
-  BSk: 'Bは乾燥帯、Sはステップ（半乾燥）の区分、kは年平均気温18 ℃未満を示します。',
+  Cfb: '温帯の中でも夏の暑さが穏やかで、明瞭な乾季がない区分です。',
+  Cfa: '温帯の中でも夏が暑く、明瞭な乾季がない区分です。',
+  Csa: '夏が暑く、その夏に降水が少なくなる温帯の区分です。',
+  Csb: '夏の暑さは穏やかですが、その夏に降水が少なくなる温帯の区分です。',
+  Dfa: '冬が寒い冷帯の中で夏が暑く、明瞭な乾季がない区分です。',
+  Dfb: '冬が寒い冷帯の中で夏の暑さは穏やかで、明瞭な乾季がない区分です。',
+  BSk: '乾燥帯の中の半乾燥区分で、年平均気温が18 ℃未満です。',
 };
 const coldMonths = city.months.filter(month => month.temperature !== null && month.temperature === summary.coldest).map(month => `${month.month}月`).join('・');
 const warmMonths = city.months.filter(month => month.temperature !== null && month.temperature === summary.warmest).map(month => `${month.month}月`).join('・');
@@ -42,33 +44,32 @@ const dryMonths = city.months.filter(month => month.precipitation !== null && mo
 ---
 <article class="eu-city-reading" data-city-reading={city.id} hidden aria-labelledby={`city-reading-${city.id}`}>
   <header class="eu-city-reading-head">
-    <h3 class="eu-city-reading-title" id={`city-reading-${city.id}`}>{city.name}の気候と農畜産</h3>
-    <p class="eu-statistic-note eu-city-chart-meta">{country}{city.id === 'london' && ' · 首都ロンドン'} · {city.period}年の平年値<br />観測所 {station}{city.id === 'london' && '（ヒースロー）'}</p>
+    <h3 class="eu-city-reading-title" id={`city-reading-${city.id}`}>{city.name}の雨温図</h3>
   </header>
   <EuropeClimateDiagram city={city} country={country} mode="plot" />
-  <p class="eu-city-selected-note">
-    {classification && <strong>{classification.code} {classification.name} ／ </strong>}
-    {summary.coldest !== null && summary.warmest !== null ? `月平均気温：最寒${coldMonths} ${summary.coldest.toFixed(1)} ℃、最暖${warmMonths} ${summary.warmest.toFixed(1)} ℃。` : '気温に欠測があるため、年間の寒暖差は算出していません。'}
-    {missingRain && ' ×は降水量の欠測（0 mmではありません）。'}
-    {missingTemperature && ' 気温の欠測月では線が途切れます。'}
-  </p>
+  {(missingRain || missingTemperature) && <p class="eu-statistic-note eu-climate-missing">{missingRain && '×は降水量の欠測（0 mmではありません）。'}{missingTemperature && '気温の欠測月では線が途切れます。'}</p>}
   <div class="eu-city-reading-body">
     <section class="eu-city-climate-description" aria-labelledby={`city-classification-${city.id}`}>
-      <h4 class="eu-city-climate" id={`city-classification-${city.id}`}>{classification ? <><strong>{classification.code}</strong> {classification.name}</> : '気候区分：観測地点の分類は未収録です'}</h4>
-      {classification && meanings[code] && <p class="eu-climate-code-meaning">{meanings[code]}</p>}
-      <p class="eu-reader-takeaway">{summary.coldest !== null && summary.warmest !== null ? `最も寒い${coldMonths}の平均気温は${summary.coldest.toFixed(1)} ℃、最も暖かい${warmMonths}は${summary.warmest.toFixed(1)} ℃です。` : '気温に欠測があり、年間の寒暖差は算出していません。'}</p>
-      {summary.annualRain !== null && minRain !== null && maxRain !== null ? <p>月降水量は{wetMonths}が最も多く{maxRain.toFixed(1)} mm、{dryMonths}が最も少なく{minRain.toFixed(1)} mmです。</p> : <p>降水量に欠測があるため、雨の多い季節・少ない季節や年間降水量は、この資料だけでは示せません。</p>}
+      <h4 class="eu-city-climate" id={`city-classification-${city.id}`}>{classification ? <>{classification.name}（<strong>{classification.code}</strong>）</> : '気候区分：観測地点の分類は未収録です'}</h4>
+      <p class="eu-climate-reason" data-eu-climate-reason data-eu-climate-geography={city.id}>地理的な背景：{geography?.body ?? 'この地点の説明は未収録です。'}</p>
     </section>
     <section class="eu-climate-farming" data-eu-climate-farming={city.id} aria-labelledby={`city-farming-${city.id}`}>
-      <h4 id={`city-farming-${city.id}`}>{farming?.heading ?? '特徴的な農畜産物'}</h4>
+      <h4 id={`city-farming-${city.id}`}>{farming?.heading.replace(/^農畜産物の例：/, '') ?? '特徴的な農畜産物'}</h4>
       <p>{farming?.body ?? 'この地点の特徴的な農畜産物の説明は未収録です。'}</p>
-      {farming && <p class="eu-statistic-note">見出しの地域での例です。産地は気候に加え、土壌・地形や水の利用条件にも左右されます。</p>}
-      {farming && <p class="eu-statistic-source">農畜産物の出典：{farming.sources.map((source, index) => <Fragment>{index > 0 && ' ／ '}<a href={source.url} target="_blank" rel="noopener noreferrer">{source.label} ↗</a></Fragment>)}</p>}
     </section>
   </div>
   <details class="eu-city-reading-details">
-    <summary>季節・農畜産との関係・出典</summary>
+    <summary>{city.period}年 · 観測地点・出典・詳しい数値</summary>
+    <p class="eu-statistic-note">{country} · 観測所 {station}{city.id === 'london' && '（ヒースロー）'}。</p>
+    <p class="eu-statistic-note">{classification && meanings[code]}{summary.coldest !== null && summary.warmest !== null ? ` 雨温図の最寒${coldMonths}は${summary.coldest.toFixed(1)} ℃、最暖${warmMonths}は${summary.warmest.toFixed(1)} ℃です。` : ' 気温の欠測から年間の寒暖差は算出していません。'}</p>
+    {geography && <>
+      <p class="eu-statistic-note">{climateGeographyScope}</p>
+      <p class="eu-statistic-source">地理的な背景の根拠：{geography.sources.map((source, index) => <Fragment>{index > 0 && ' ／ '}<a href={source.url} target="_blank" rel="noopener noreferrer">{source.label} ↗</a></Fragment>)}</p>
+    </>}
+    {summary.annualRain !== null && minRain !== null && maxRain !== null ? <p>月降水量は{wetMonths}が最も多く{maxRain.toFixed(1)} mm、{dryMonths}が最も少なく{minRain.toFixed(1)} mmです。</p> : <p>降水量の欠測から雨の多い・少ない季節や年間降水量は示せません。</p>}
     <p class="eu-statistic-note">雨温図は1観測所の値で、都市や国全体の平均ではありません。気候区分は地図の格子の分類で、下段の月別値から計算したものではありません。{!classification && '分類を近隣地点の値で補っていません。'}</p>
+    {farming && <p class="eu-statistic-note">見出しの地域での例です。産地は気候に加え、土壌・地形や水の利用条件にも左右されます。</p>}
+    {farming && <p class="eu-statistic-source">農畜産物の出典：{farming.sources.map((source, index) => <Fragment>{index > 0 && ' ／ '}<a href={source.url} target="_blank" rel="noopener noreferrer">{source.label} ↗</a></Fragment>)}</p>}
     <p class="eu-statistic-source">原典：<a href={city.sourceUrl} target="_blank" rel="noopener noreferrer">気象庁の観測所平年値 ↗</a> ／ <a href="https://www.gloh2o.org/koppen/" target="_blank" rel="noopener noreferrer">Beckほかの気候区分 ↗</a></p>
   </details>
 </article>

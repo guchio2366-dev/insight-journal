@@ -1,0 +1,322 @@
+{
+  "schemaVersion": 1,
+  "region": "oceania",
+  "year": 2020,
+  "generator": "prepare-oceania-russia-farming-overlay.py",
+  "inputs": {
+    "public/assets/atlas/oceania-crops-v1/manifest.json": "a7a11df06a43e39abb94a68bb555519bb98197eb769450082f9c86832faea8b7",
+    "public/assets/atlas/oceania-crops-v1/wheat.values.gz": "f33a98f2b1b6ca87cdb4920c3ea8942afeb129bfc3979dae32fc31d3de1b843a",
+    "public/assets/atlas/oceania-crops-v1/coconut.values.gz": "a96f2ec26cc15b12d7e38931916b20fedc72942eab819e90ceaa4c601776c98f",
+    "public/assets/atlas/oceania-crops-v1/cacao.values.gz": "f7fec4ccb2b7a4e537dd08b1bf484e5daaea40d8aa920258784637c75010ef8c",
+    "public/assets/atlas/oceania-livestock-v1/manifest.json": "fe02aac5c865857ff08aafa02ac5c4dab0dabf7cd4e3406e5eba9413025a692a",
+    "public/assets/atlas/oceania-livestock-v1/sheep.values.gz": "cef98c55a6667365fb6d581e7978614a2802a89f892ede20dc497516f2dc850f",
+    "public/assets/atlas/oceania-livestock-v1/cattle.values.gz": "cd0b8e3f47aba26a3fe42151845dcc4fef2e967219134f70847cf97ffe1390c0"
+  },
+  "layers": [
+    {
+      "id": "wheat",
+      "kind": "crop",
+      "image": "wheat-outline.png",
+      "width": 1680,
+      "height": 996,
+      "displayCellPixels": 4,
+      "boundsUnwrapped": [
+        110,
+        -58,
+        250,
+        25
+      ],
+      "unit": "ha/格子",
+      "year": 2020,
+      "license": "CC BY 4.0",
+      "breaks": [
+        1,
+        10,
+        100,
+        1000,
+        5000
+      ],
+      "colors": [
+        "edf1e3",
+        "d7e7b4",
+        "afd08b",
+        "7fa95c",
+        "4f7e3d",
+        "23582d"
+      ],
+      "quantityImage": "wheat-quantity.png",
+      "sourceGrid": "public/assets/atlas/oceania-crops-v1/wheat.values.gz",
+      "sourceCounts": {
+        "positive": 15780,
+        "zero": 11739,
+        "missing": 1645761
+      }
+    },
+    {
+      "id": "coconut",
+      "kind": "crop",
+      "image": "coconut-outline.png",
+      "width": 1680,
+      "height": 996,
+      "displayCellPixels": 4,
+      "boundsUnwrapped": [
+        110,
+        -58,
+        250,
+        25
+      ],
+      "unit": "ha/格子",
+      "year": 2020,
+      "license": "CC BY 4.0",
+      "breaks": [
+        1,
+        10,
+        100,
+        1000,
+        5000
+      ],
+      "colors": [
+        "f4edf7",
+        "dfc8e8",
+        "c09acd",
+        "a274b1",
+        "80528e",
+        "623570"
+      ],
+      "quantityImage": "coconut-quantity.png",
+      "sourceGrid": "public/assets/atlas/oceania-crops-v1/coconut.values.gz",
+      "sourceCounts": {
+        "positive": 17339,
+        "zero": 3132,
+        "missing": 1652809
+      }
+    },
+    {
+      "id": "cacao",
+      "kind": "crop",
+      "image": "cacao-outline.png",
+      "width": 1680,
+      "height": 996,
+      "displayCellPixels": 4,
+      "boundsUnwrapped": [
+        110,
+        -58,
+        250,
+        25
+      ],
+      "unit": "ha/格子",
+      "year": 2020,
+      "license": "CC BY 4.0",
+      "breaks": [
+        1,
+        10,
+        100,
+        1000,
+        5000
+      ],
+      "colors": [
+        "f8ede7",
+        "eac8b7",
+        "d4a082",
+        "b87954",
+        "93542f",
+        "6e391e"
+      ],
+      "quantityImage": "cacao-quantity.png",
+      "sourceGrid": "public/assets/atlas/oceania-crops-v1/cacao.values.gz",
+      "sourceCounts": {
+        "positive": 16955,
+        "zero": 2743,
+        "missing": 1653582
+      }
+    },
+    {
+      "id": "sheep",
+      "kind": "livestock",
+      "image": "sheep-texture.png",
+      "width": 1680,
+      "height": 996,
+      "displayCellPixels": 4,
+      "boundsUnwrapped": [
+        110,
+        -58,
+        250,
+        25
+      ],
+      "unit": "頭/km²",
+      "year": 2020,
+      "license": "CC BY 4.0",
+      "breaks": [
+        1,
+        10,
+        50,
+        200,
+        1000
+      ],
+      "colors": [
+        "fff3d8",
+        "f4d7a0",
+        "deb779",
+        "c18e4e",
+        "a3702e",
+        "795119"
+      ],
+      "quantityImage": "sheep-quantity.png",
+      "alphas": [
+        16,
+        44,
+        88,
+        140,
+        190,
+        240
+      ],
+      "missingImage": "sheep-missing.png",
+      "dotPixels": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "sourceGrid": "public/assets/atlas/oceania-livestock-v1/sheep.values.gz",
+      "sourceCounts": {
+        "positive": 90942,
+        "zero": 43935,
+        "missing": 1538403
+      }
+    },
+    {
+      "id": "cattle",
+      "kind": "livestock",
+      "image": "cattle-texture.png",
+      "width": 1680,
+      "height": 996,
+      "displayCellPixels": 4,
+      "boundsUnwrapped": [
+        110,
+        -58,
+        250,
+        25
+      ],
+      "unit": "頭/km²",
+      "year": 2020,
+      "license": "CC BY 4.0",
+      "breaks": [
+        1,
+        10,
+        50,
+        200,
+        1000
+      ],
+      "colors": [
+        "a7cbd9",
+        "78adc4",
+        "548ca9",
+        "376d91",
+        "225375",
+        "143d5c"
+      ],
+      "quantityImage": "cattle-quantity.png",
+      "alphas": [
+        16,
+        44,
+        88,
+        140,
+        190,
+        240
+      ],
+      "missingImage": "cattle-missing.png",
+      "dotPixels": [
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ]
+      ],
+      "sourceGrid": "public/assets/atlas/oceania-livestock-v1/cattle.values.gz",
+      "sourceCounts": {
+        "positive": 128046,
+        "zero": 7138,
+        "missing": 1538096
+      }
+    }
+  ],
+  "method": "Display assets only. Native values and geographic cell bounds are unchanged. Positive livestock cells have classed product-colored dots with fixed size and increasing class opacity using the original density breaks. Valid zero is transparent. Missing has a separate exact native-cell mask, drawn as a faint neutral hatch in the browser. Crop outlines follow only the outer edges of positive native cells. No aggregation, interpolation, national totals or cross-unit addition. Oceania quantity images recolor the original native classes per product. White is valid zero and transparency is missing. Sheep and cattle dots occupy separate subcell positions, without changing their source density classes.",
+  "limitations": [
+    "Texture strokes and outlines indicate model-cell distributions, not actual farm boundaries or individual animals.",
+    "At overview scale, source cells are smaller than screen pixels; selecting a product restores its source quantity colors while the other distribution stays visible.",
+    "Available products are not a validated national top-ten ranking."
+  ],
+  "files": {
+    "cacao-outline.png": {
+      "bytes": 142475,
+      "sha256": "a0fae9b39e048d60dc725fb62c5a84de41f83973f3071eec191a24ef99354203"
+    },
+    "cacao-quantity.png": {
+      "bytes": 34328,
+      "sha256": "e9b08ef76c6c8ef9ed097bab8bca941dfe2148c17975bd6d8a7ec5c7f34b5227"
+    },
+    "cattle-missing.png": {
+      "bytes": 21880,
+      "sha256": "61d11c6b083cd25f14929cd67c6436536e84089fe0dcaecde5bf24cafffd948d"
+    },
+    "cattle-quantity.png": {
+      "bytes": 51374,
+      "sha256": "6a2f3ce6d12d1f77e2df136100bcbdf35ca28c7a5193edf21fc008a2959353f6"
+    },
+    "cattle-texture.png": {
+      "bytes": 156060,
+      "sha256": "3fec1a7001aa583e81c0a6d2ceb75d800627bb617c23e08d17b28a53084aae23"
+    },
+    "coconut-outline.png": {
+      "bytes": 144886,
+      "sha256": "f8c2b732bba660cf3534e1f3bd402e16b79859524b3920117c7255c33b0af998"
+    },
+    "coconut-quantity.png": {
+      "bytes": 36736,
+      "sha256": "a5e6d36749f7587d363cb8b1c398c6786d44a3c2621c3e523c947eccc6d13106"
+    },
+    "sheep-missing.png": {
+      "bytes": 21556,
+      "sha256": "5d22ed8ea6ee8e4bd497111f1a795c462f7dd6b3da85f51e9a6e3cdbb385f31a"
+    },
+    "sheep-quantity.png": {
+      "bytes": 46434,
+      "sha256": "21904aeacae849b679e92e1b57354fa7a86d318622b047601796e9f83029b848"
+    },
+    "sheep-texture.png": {
+      "bytes": 144076,
+      "sha256": "24ef27470b8c1a46574266a473fc4af6f7d3753507629da5c76b3f064c762e7b"
+    },
+    "wheat-outline.png": {
+      "bytes": 142078,
+      "sha256": "3ebb5730cc63b67bf9930308c7a9ea02fac46d324769d1df8cb3e12f31e59f08"
+    },
+    "wheat-quantity.png": {
+      "bytes": 31210,
+      "sha256": "7f21e93dda9856b1f1cb458433440529e4be37dca5fce4728ef1299374cbefbf"
+    }
+  }
+}

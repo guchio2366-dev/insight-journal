@@ -1,6 +1,7 @@
 ---
 import AsiaFieldNavigation from './AsiaFieldNavigation.astro';
 import {asiaFocusViews,asiaFocusFieldReadings,asiaFocusCountries,type AsiaFocusId} from '../../data/atlas/asia-focus';
+import {southCentralFieldReadings} from '../../data/atlas/asia-south-central-reading';
 import eastContentGeography from '../../../public/assets/atlas/asia-population-v1/east-asia.geography.json';
 import southeastContentGeography from '../../../public/assets/atlas/asia-population-v1/southeast-asia.geography.json';
 import southContentGeography from '../../../public/assets/atlas/asia-population-v1/south-central-asia.geography.json';
@@ -12,6 +13,9 @@ import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
 import AsiaClimateDiagram from './AsiaClimateDiagram.astro';
 import AsiaFarmingPanel from './AsiaFarmingPanel.astro';
 import AsiaIndustryPanel from './AsiaIndustryPanel.astro';
+import SoutheastAsiaFarmView from './asia/SoutheastAsiaFarmView.astro';
+import {southeastIndustryCountryScope} from '../../data/atlas/asia/southeast-asia-industry';
+import {southeastAsiaInitialReadings} from '../../data/atlas/asia/southeast-asia-reading';
 import AsiaWaterPanel from './AsiaWaterPanel.astro';
 import AsiaSeasonalPrecipitationPanel from './AsiaSeasonalPrecipitationPanel.astro';
 import AsiaSocialPanel from './AsiaSocialPanel.astro';
@@ -47,7 +51,7 @@ interface Props { regionId: AsiaRegionId; initialField?: AsiaField; focusId?: As
 const {regionId,initialField='natural',focusId}=Astro.props;
 const focus=focusId?asiaFocusViews[focusId]:null,pageId=focusId??regionId;
 const region={...regionalMaps[regionId],...(focus?{label:focus.label}:{})},reading={...asiaRegionReading[regionId],...focus};
-const cities=asiaClimateCities.filter(city=>city.regionId===regionId);
+const cities=asiaClimateCities.filter(city=>city.regionId===regionId&&(!focusId||asiaFocusCountries[focusId].includes(city.countryCode)));
 const targets=regionFeatures(regionId);
 const countryCodes=new Set(targets.map(f=>f.properties.code));
 const rings=(f:CountryFeature)=>f.geometry.type==='Polygon'?f.geometry.coordinates as number[][][]:(f.geometry.coordinates as number[][][][]).flat();
@@ -79,13 +83,13 @@ const presentation={...presentationManifest.regions[regionId],settlements:settle
 Object.assign(config,{presentation,presentationBase:withBase('/assets/atlas/asia-presentation-v1/')});
 const familyNames=['熱帯','乾燥帯','温帯','冷帯','寒帯'];
 Object.assign(config,{population,populationBase:withBase('/assets/atlas/asia-population-v1/')});
-const industry={...industryManifest.regions[regionId],topics:[...industryManifest.regions[regionId].topics,...tradeTopics]} as unknown as IndustryRegion;
-Object.assign(config,{industry,industryBase:withBase('/assets/atlas/asia-industry-v1/')});
+const industry={...industryManifest.regions[regionId],topics:[...industryManifest.regions[regionId].topics,...tradeTopics].filter(topic=>focusId!=='central-asia'||!('country' in topic)||topic.country!=='IND'),...(regionId==='southeast-asia'?{countryScope:southeastIndustryCountryScope}:{})} as unknown as IndustryRegion;
+Object.assign(config,{industry,industryBase:withBase('/assets/atlas/asia-industry-v1/'),...(regionId==='south-central-asia'?{industryCountryCodes:focusId==='central-asia'?[]:['IND']}:{})});
 Object.assign(config,{water:waterManifest.regions[regionId],waterBase:withBase('/assets/atlas/asia-water-v1/')});
 Object.assign(config,{seasonalBase:withBase('/assets/atlas/asia-seasonal-precipitation-v1/')});
 const social=withSocialOverviews(socialManifest.regions[regionId] as SocialRegion);
 const farmInsight=asiaFarmInsights[regionId];
-Object.assign(config,{farmInsight,focusReadings:focusId?asiaFocusFieldReadings[focusId]??null:null});
+Object.assign(config,{farmInsight,focusReadings:focusId?asiaFocusFieldReadings[focusId]??null:regionId==='southeast-asia'?southeastAsiaInitialReadings():regionId==='south-central-asia'?southCentralFieldReadings:null});
 Object.assign(config,{social,socialBase:withBase('/assets/atlas/asia-social-v1/')});
 Object.assign(config,{trade:tradeManifest.regions[regionId],tradeBase:withBase('/assets/atlas/asia-trade-v1/'),tradeChapters:tradeManifest.chapters});
 const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林業'},{id:'natural',label:'自然環境'},{id:'industry',label:'主要産業'},{id:'population',label:'人口'}];
@@ -100,7 +104,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
       <div class="atlas-region-controls asia-region-shell">
        <AtlasRegionNavigation group="asia" current={regionId} />
        {regionId==='south-central-asia'&&<nav class="asia-focus-navigation" aria-label="南・中央アジアの表示範囲">{[{id:'south-central-asia',label:'南・中央アジア全体'},...Object.entries(asiaFocusViews).map(([id,v])=>({id,label:v.label}))].map(v=><a href={withBase(`/atlas/asia/${v.id}/${asiaFieldPaths[initialField]}/`)} data-focus-link={v.id} aria-current={pageId===v.id?'page':undefined}>{v.label}</a>)}</nav>}
-       <div class="asia-toolbar"><label>国・地域<select data-country-select aria-label="国・地域を選ぶ"><option value="">{region.label}全体</option>{countries.map(c=><option value={c.code}>{c.name}</option>)}</select></label><button class="asia-reset" type="button" data-reset>全体に戻す</button></div>
+       <div class="asia-toolbar"><label data-country-picker>国・地域<select data-country-select aria-label="国・地域を選ぶ"><option value="">{region.label}全体</option>{countries.map(c=><option value={c.code}>{c.name}</option>)}</select></label><button class="asia-reset" type="button" data-reset>全体に戻す</button></div>
       </div>
       <nav class="atlas-tabs atlas-tabs-with-overview asia-field-tabs" aria-label="地図の分野"><a data-atlas-overview-link href={withBase(`/atlas/asia/${pageId}/overview/`)}>概要</a>{fieldTabs.map(f=><a href={withBase(`/atlas/asia/${pageId}/${asiaFieldPaths[f.id]}/`)} data-field={f.id} aria-current={initialField===f.id?'page':undefined}>{f.label}</a>)}</nav>
       <AsiaFieldNavigation {initialField} {social} {regionId} {industry} forestTopic={farming.layers.find(t=>t.kind==='forest')?.id} />
@@ -124,6 +128,14 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
         <div class="asia-map-items" data-asia-map-items aria-label="地図に表示する項目"></div>
         <div class="asia-map-selection" aria-live="polite"><span class="selection-dot"></span><span data-grid-reading>{initialField==='natural'?'地図上の陸地を選ぶと、気候区分を確認できます。':'地図上の対象地域を選ぶと、格子内の米の収穫面積を確認できます。'}</span></div>
         <p class="asia-gesture" data-map-gesture>都市の点を選ぶと雨温図が開きます。地図は2本指で移動・拡大できます。</p>
+        {(regionId==='south-central-asia'||regionId==='southeast-asia')&&<section class="asia-farm-connections" data-south-central-farm-connections hidden={initialField!=='agriculture'} aria-label="農業の供給と世界での位置">
+          <h2>農業の供給と世界での位置</h2>
+          <div class="asia-farm-connections-grid">
+            <section><h3>供給元と行先</h3><p>仕向け先の内訳は未掲載です。生産量だけでは、国内向けと輸出向けを分けられません。</p></section>
+            <section><h3>主な輸出先</h3><p>品目別の輸出先は未掲載です。生産地からの流れを推定していません。</p></section>
+            <section><h3>世界での位置</h3><div data-south-central-world-share aria-live="polite"></div></section>
+          </div>
+        </section>}
         <section class="asia-legend" data-climate-legend hidden={initialField!=='natural'} aria-label="気候区分の凡例"><div class="legend-title"><h3>気候区分</h3><span>区分を選ぶと意味を表示</span></div><div class="asia-family-legend">{familyNames.map(family=><details><summary><i style={`background:${asiaClimateClasses.find(c=>c.group.startsWith(family))?.color??'#aaa'}`}></i>{family}</summary><div class="asia-class-list">{asiaClimateClasses.filter(c=>c.group.startsWith(family)).map(c=><button type="button" data-climate-class={c.id} aria-pressed="false"><i style={`background:${c.color}`}></i><b>{c.code}</b><span>{c.name}</span></button>)}</div></details>)}</div></section>
         <section class="asia-legend" data-agriculture-legend hidden aria-label="米の収穫面積の凡例"><h3>米の収穫面積</h3><div data-rice-scale></div><p>1格子内の年間収穫面積（ha）。二期作などは収穫の回数を含むため、土地の面積とは異なります。</p></section>
         <section class="asia-legend" data-farming-legend hidden aria-label="農林業の凡例"><h3 data-farming-legend-title></h3><div class="asia-physical-key" data-farming-scale></div><p data-farming-legend-note></p></section>
@@ -154,7 +166,8 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
         <details class="asia-comparison-method" data-comparison-method hidden><summary>比較区分の正式名称・説明・出典を読む</summary><p>元の選択と地図の位置を保存しています。</p><div data-comparison-legend></div></details>
         <section data-focus-reading hidden><h3 data-focus-reading-title></h3><p data-focus-reading-body></p><p class="asia-small">出典：<a data-focus-reading-source></a></p></section>
         <AsiaPopulationPanel {regionId} {population} active={initialField==='population'} />
-        <AsiaIndustryPanel active={initialField==='industry'} />
+        <AsiaIndustryPanel {regionId} active={initialField==='industry'} />
+        {regionId==='southeast-asia'&&<SoutheastAsiaFarmView />}
         <AsiaWaterPanel />
         <AsiaSocialPanel />
         <AsiaSettlementPanel {regionId} {pageId} />
@@ -189,6 +202,8 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
   .asia-topic-picker select{min-width:0;flex:1}.asia-topic-picker{max-width:100%}
   :global([data-farming-scale] span){display:inline-flex;align-items:center;gap:5px;font-size:11px;line-height:1.8}
   :global([data-farming-scale] i){display:inline-block;width:13px;height:13px;flex:none;border:1px solid #50604f55}
+  .asia-farm-connections{margin:18px 0 8px;padding:16px;background:#f7f7f1;border:1px solid #d6dcd1}.asia-farm-connections>h2{margin:0 0 12px;font:700 18px/1.5 var(--serif)}.asia-farm-connections-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:start}.asia-farm-connections-grid>section{min-width:0;align-self:start;padding:12px;background:#fffef9;border:1px solid #dbe0d4}.asia-farm-connections h3{margin:0 0 8px;font-size:13px}.asia-farm-connections p{margin:0;font-size:12px;line-height:1.7}
+  :global([data-south-central-world-share] .sc-share-lead){font-weight:700;font-size:14px;line-height:1.6;color:#294c40}:global([data-south-central-world-share] .sc-share-detail){margin-top:6px;font-size:11px;line-height:1.6}:global([data-south-central-world-share] .sc-share-chart){display:block;width:100%;height:auto;margin:10px 0 4px}:global([data-south-central-world-share] .sc-share-chart text){font:10px var(--sans);fill:#4c6257}:global([data-south-central-world-share] .sc-share-chart .axis){stroke:#97ab9c;stroke-width:1}:global([data-south-central-world-share] .sc-share-chart .trend){fill:none;stroke:#377b5b;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}:global([data-south-central-world-share] .sc-share-chart .dot){fill:#235b45}:global([data-south-central-world-share] details){margin-top:6px;font-size:11px}:global([data-south-central-world-share] summary){cursor:pointer;min-height:35px}:global([data-south-central-world-share] table){width:100%;border-collapse:collapse;font-size:10px}:global([data-south-central-world-share] th),:global([data-south-central-world-share] td){padding:3px;text-align:left;border-bottom:1px solid #dbe0d4}:global([data-south-central-world-share] a){color:#285b60}
   :global(.asia-point-marker){background:#fffef6;color:#2a3f45;border:1px solid #8a4934;border-bottom:4px solid #a24a34;border-radius:3px;padding:5px 8px;font-size:11px;box-shadow:0 1px 5px #0002;pointer-events:none;white-space:nowrap}:global(.asia-point-marker[hidden]){display:none!important}
   .asia-topic-picker{display:flex;align-items:center;gap:12px;font-size:12px;padding:8px 0}.asia-topic-picker select,.asia-detail-picker select{min-height:44px;border:1px solid var(--rule);background:var(--white);font:inherit;padding:8px;max-width:100%}.asia-detail-picker{display:grid;gap:5px;font-size:12px;margin:12px 0}.asia-physical-key{display:flex;flex-wrap:wrap;gap:6px 12px}.asia-physical-key :global(span){display:flex;gap:4px;font-size:10px;align-items:center}.asia-physical-key :global(i){display:inline-block;width:16px;height:12px}.asia-method summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:12px}.asia-method summary:before{content:"＋";margin-right:6px}.asia-method[open] summary:before{content:"−"}
 
