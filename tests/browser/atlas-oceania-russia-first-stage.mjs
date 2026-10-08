@@ -294,5 +294,12 @@ try{
  result.checks.push(farmingOnly?'Farming overlays and focused comparison retain separate source units, true zero and missing; product availability is explicitly limited.':'Crop and livestock comparison uses the same extent and separate units.');
  assert.deepEqual(result.errors,[]);
  result.status='passed';console.log(JSON.stringify({status:result.status,head:result.head,checks:result.checks,viewports:result.viewports,screenshots:result.screenshots},null,2));
-}catch(error){result.status='failed';result.failure=String(error);throw error;}
+}catch(error){
+ result.status='failed';result.failure=String(error);
+ if(process.env.GITHUB_ACTIONS==='true'){
+  const detail=String(error?.stack??error).replaceAll('%','%25').replaceAll('\r','%0D').replaceAll('\n','%0A');
+  console.error(`::error title=Oceania and Russia browser review failed::${detail}`);
+ }
+ throw error;
+}
 finally{await writeFile(resolve(output,'results.json'),JSON.stringify(result,null,2)+'\n');await browser?.close();await new Promise(resolve=>server.close(resolve));}
