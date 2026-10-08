@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {Window} from 'happy-dom';
-import {africaRivers,africaRiverById,africaRiverForFeature,africaRiverSelectedColor} from '../../src/data/atlas/africa-river-reading.ts';
+import {africaRivers,africaRiverById,africaRiverForFeature} from '../../src/data/atlas/africa-river-reading.ts';
 import {africaHydrologyRivers,africaHydrologyRiverForFeature} from '../../src/data/atlas/africa-hydrology-reading.ts';
 import {africaRiverDisplayColors} from '../../src/scripts/atlas-africa-layers.ts';
 import {reading} from '../../src/data/atlas/africa-reading.ts';
