@@ -5,6 +5,7 @@ import {latinAgricultureReading, type LatinAgricultureLayer} from '../data/atlas
 import products from '../data/atlas/latin-america-products.json';
 import overview from '../../public/assets/atlas/latin-america-overview-v1/manifest.json';
 import cropManifest from '../../public/assets/atlas/latin-america-agriculture-v1/manifest.json';
+import worldProduction from '../data/atlas/latin-america/world-production-2024.json';
 
 export {latinAgricultureReading};
 export type {LatinAgricultureLayer};
@@ -17,6 +18,18 @@ export const latinCropAreaRanking = products.filter(product=>product.kind==='cro
  return {id:product.id,name:product.name,color:product.color,areaHa,reportingCountries:layer.countries.filter(country=>country.value!==null).length};
 }).sort((a,b)=>b.areaHa-a.areaHa||a.id.localeCompare(b.id));
 export const latinCropAreaTotalHa=latinCropAreaRanking.reduce((sum,crop)=>sum+crop.areaHa,0);
+/** FAOSTAT 2024 production shares; the 2020 MapSPAM map uses a different measure. */
+export const latinWorldProductionShares=worldProduction.items.map(item=>{
+ const layer=data.layers.find(candidate=>candidate.id===item.layerId);
+ if(!layer)throw Error(`Missing FAOSTAT national production layer: ${item.layerId}`);
+ const values=layer.countries.filter(country=>country.national2024.value!==null);
+ const regionalT=values.reduce((sum,country)=>sum+country.national2024.value!,0);
+ if(regionalT>item.worldT)throw Error(`Reported regional production exceeds World: ${item.layerId}`);
+ return {id:item.layerId,name:item.layerId==='coff'?'コーヒー（生豆・全品種）':layer.label,worldT:item.worldT,regionalT,
+  reportingCountries:values.length,regionalPercent:regionalT/item.worldT*100,
+  brazilT:layer.countries.find(country=>country.code==='BRA')?.national2024.value??null,
+  argentinaT:layer.countries.find(country=>country.code==='ARG')?.national2024.value??null};
+});
 export type LatinAgricultureMapState = {layer:string;place:string;scope:string;only:boolean};
 const escape = (v:unknown) => String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 export const agricultureLayer = (id:string) => data.layers.find(l=>l.id===id)??data.layers[0];
