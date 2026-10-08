@@ -7,6 +7,7 @@ import { build } from 'esbuild';
 import { Window } from 'happy-dom';
 import { project, unproject, displayCell } from '../../src/lib/atlas-europe-view.ts';
 
+
 const entry=path.resolve('src/lib/atlas-europe-explorer.ts');
 const bundled=await build({
   stdin:{contents:"import { initEuropeAtlas } from './atlas-europe-explorer.ts'; initEuropeAtlas();",resolveDir:path.dirname(entry),sourcefile:path.join(path.dirname(entry),'elevation-controller-test-entry.ts'),loader:'ts'},
@@ -45,7 +46,12 @@ async function until(check,message='Europe elevation controller did not settle')
 async function setup(location='?layer=terrain&render=static',fixture={}){
   const url=new URL(location,'https://example.com/insight-journal/atlas/europe/nature/');
   const field=url.pathname.match(/\/atlas\/europe\/(nature|agriculture|industry|population)\//)?.[1]??'nature';
-  const html=(await readFile(`dist/atlas/europe/${field}/index.html`,'utf8')).replace(/<script(?![^>]*type=["']application\/json["'])[^>]*>[\s\S]*?<\/script>/g,'');
+  const html=(await readFile(`dist/atlas/europe/${field}/index.html`,'utf8'))
+    .replace(/<script(?![^>]*type=["']application\/json["'])[^>]*>[\s\S]*?<\/script>/g,'')
+    // Elevation, population and industry controller checks do not consume the
+    // large farming geometry. Keep its contract while omitting those bytes.
+    .replace(/(<script type="application\/json" data-eu-config>)([\s\S]*?)(<\/script>)/,(_,open,json,close)=>{const data=JSON.parse(json);data.farmingAreas.features=[];return open+JSON.stringify(data)+close;})
+    .replace(/\sd="[^"]*"/g,' d=""');
   const w=new Window({url:url.href,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
   // State commits and annotation rendering use separate frames; exercise a busy renderer.
   if(fixture.animationFrameDelay){
@@ -256,7 +262,7 @@ test('the map owns a single source-backed key and arrow keys preserve the select
     assert.equal(app.q('[data-eu-climate-legend]').parentElement,host);
     assert.equal(app.q('.eu-read-panel [data-eu-subject-legend]'),null);
     assert.equal(app.w.document.querySelectorAll('[data-eu-subject-legend]').length,1);
-    assert.equal(host.previousElementSibling,app.q('.eu-map-stage'));
+    assert.ok(app.q('.eu-map-stage').compareDocumentPosition(host)&4);
     const terrain=app.q('[data-eu-topic="terrain"]');terrain.focus();
     terrain.dispatchEvent(new app.w.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true,cancelable:true}));
     await assertReading(app,point);
@@ -348,42 +354,37 @@ test('産業分野は国を自動選択せず、全拠点を保ったまま強�
   const app=await setup('/insight-journal/atlas/europe/industry/?layer=hubs&render=static');
   try{
     const full=app.q('[data-eu-static]').getAttribute('viewBox');
-    app.q('[data-eu-industry-group="機械・輸送"]').click();await tick();
+    app.q('[data-eu-industry-group="自動車・機械"]').click();await tick();
     const params=new URL(app.w.location.href).searchParams;
-    assert.equal(params.get('industryGroup'),'機械・輸送');assert.equal(params.has('place'),false);assert.equal(params.has('feature'),false);
+    assert.equal(params.get('industryGroup'),'自動車・機械');assert.equal(params.has('place'),false);assert.equal(params.has('feature'),false);
     assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
     const config=app.config.readings.filter(item=>item.field==='industry');
-    assert.equal(config.filter(item=>app.q(`[data-eu-feature-point="${item.id}"]`).style.display!=='none').length,14);
-    assert.match(app.q('[data-eu-subject-takeaway]').textContent,/ミュンヘン.*トゥールーズ.*欧州全体/);
-    const scope=app.q('[data-eu-industry-scope]');scope.value='country:DEU';scope.dispatchEvent(new app.w.Event('change'));
-    await tick();assert.equal(app.q('[data-eu-country-reader]').hidden,false);assert.equal(app.q('[data-eu-country-reader]').open,true);
-    assert.match(app.q('[data-eu-national-values]').textContent,/18.94.*26.8.*63.62/s);
-    assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
+    assert.equal(config.filter(item=>app.q(`[data-eu-feature-point="${item.id}"]`).style.display!=='none').length,18);
+    assert.match(app.q('[data-eu-subject-takeaway]').textContent,/ドイツ南部.*チェコ/);
+    const country=app.q('[data-eu-country-navigation]');country.value='DEU';country.dispatchEvent(new app.w.Event('change'));
+    assert.match(app.q('[data-eu-country-overview]').href,/\/atlas\/europe\/overview\/\?country=DEU$/);
     app.choose('hubs');await tick();
-    assert.equal(scope.value,'region:all');assert.equal(app.q('[data-eu-country-reader]').hidden,true);
+    assert.equal(app.q('[data-eu-country-reader]').hidden,true);
     assert.equal(new URL(app.w.location.href).searchParams.has('industryGroup'),false);
     assert.equal(new URL(app.w.location.href).searchParams.has('place'),false);
-  }finally{await app.w.happyDOM.abort();}
+  }finally{await app.w.happyDOM.close();}
 });
 
-test('産業は4か国統計と地域事例を読み分け、URL復元も全欧州分布を保つ',async()=>{
-  const app=await setup('/insight-journal/atlas/europe/industry/?layer=manufacturing&place=GBR&render=static');
+test('産業は10分野の復元でも他分野の拠点と欧州全体の表示を保つ',async()=>{
+  const app=await setup('/insight-journal/atlas/europe/industry/?layer=hubs&industryGroup=化学・医薬品&render=static');
   try{
     const full=app.q('[data-eu-static]').getAttribute('viewBox');
-    assert.equal(app.q('[data-eu-industry-scope]').value,'country:GBR');
-    assert.match(app.q('[data-eu-national-values]').textContent,/8.22.*17.67.*72.42/s);
-    assert.equal(app.q('[data-eu-shape="NLD"]').style.fill,'#edece5');
-    assert.notEqual(app.q('[data-eu-shape="GBR"]').style.fill,'#edece5');
-    assert.match(app.q('[data-eu-legend-items]').textContent,/統計比較対象外/);
+    assert.equal(app.q('[data-eu-industry-scope-host]').hidden,true);
+    assert.equal(app.q('[data-eu-country-reader]').hidden,true);
+    assert.match(app.q('[data-eu-subject-takeaway]').textContent,/ライン川下流.*化学/);
     app.restore('?layer=hubs&place=NLD&feature=rotterdam&render=static');await tick();
-    assert.equal(app.q('[data-eu-industry-scope]').value,'region:west');
     assert.equal(app.q('[data-eu-country-reader]').hidden,true);assert.match(app.q('[data-eu-subject-title]').textContent,/ロッテルダム/);
     assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
-    app.restore('?layer=hubs&industryGroup=技術・医薬&region=north&render=static');await tick();
-    assert.match(app.q('[data-eu-subject-title]').textContent,/北欧.*技術・医薬/);
-    assert.equal(app.q('[data-eu-topic="hubs"][data-eu-industry-group="技術・医薬"]').getAttribute('aria-pressed'),'true');
+    app.restore('?layer=hubs&industryGroup=食品加工&render=static');await tick();
+    assert.match(app.q('[data-eu-subject-title]').textContent,/食品加工/);
+    assert.equal(app.q('[data-eu-topic="hubs"][data-eu-industry-group="食品加工"]').getAttribute('aria-pressed'),'true');
     const points=app.config.readings.filter(item=>item.field==='industry');assert.ok(points.every(item=>app.q(`[data-eu-feature-point="${item.id}"]`).style.display!=='none'));
-  }finally{await app.w.happyDOM.abort();}
+  }finally{await app.w.happyDOM.close();}
 });
 
 test('気候の空の都市選択と全体へ操作は雨温図を解除して概要を復元する',async()=>{

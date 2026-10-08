@@ -31,9 +31,9 @@ const countryName = (code: string) => countries.find(country => country.code ===
       <div class="eu-farm-stat-controls" data-eu-farm-stat-controls hidden>
         <label>国全体の数値<select data-eu-farm-country aria-label="農林業の統計対象国"><option value="">国を選ぶ</option>{countries.map(country=><option value={country.code}>{country.name}</option>)}</select></label>
         <label hidden>数値の対象<select data-eu-farm-measure aria-label="農林業の数値の対象"></select></label>
-        <label hidden>比較年<select data-eu-farm-year aria-label="農林業の比較年"><option value="2024">2024年</option></select></label>
-        <label hidden>比較する国 1<select data-eu-farm-compare="0" aria-label="農林業の比較する国1"><option value="">比較しない</option></select></label>
-        <label hidden>比較する国 2<select data-eu-farm-compare="1" aria-label="農林業の比較する国2"><option value="">比較しない</option></select></label>
+        <label hidden>比較年<select data-eu-farm-year aria-label="農林業の比較年">{Array.from({length:10},(_,i)=>2024-i).map(year=><option value={year} selected={year===2024}>{year}年</option>)}</select></label>
+        <label hidden>比較する国 1<select data-eu-farm-compare="0" aria-label="農林業の比較する国1"><option value="">比較しない</option>{countries.map(country=><option value={country.code}>{country.name}</option>)}</select></label>
+        <label hidden>比較する国 2<select data-eu-farm-compare="1" aria-label="農林業の比較する国2"><option value="">比較しない</option>{countries.map(country=><option value={country.code}>{country.name}</option>)}</select></label>
       </div>
       <p class="eu-statistic-note" data-eu-farm-measure-definition hidden></p>
       <section class="eu-forest-production" data-eu-forest-production hidden aria-labelledby="eu-forest-production-title">

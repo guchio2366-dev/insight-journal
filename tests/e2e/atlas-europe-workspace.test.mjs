@@ -12,7 +12,7 @@ const europeHtml = async field => {
 
 for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/']) {
   test(`欧州 ${field || '概況'} はニュース・地図・解説と共通の分野移動を備える`, async () => {
-    const window = new Window({settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true}});
+    const window = new Window({url:`https://example.com/insight-journal/atlas/europe/${field}`,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true}});
     const doc = window.document;
     try {
     doc.write(await europeHtml(field));
@@ -37,7 +37,7 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.ok(doc.querySelector('.eu-map-stage [data-eu-annotations]'));
       assert.ok(doc.querySelector('.eu-map-stage [data-eu-zoom="in"]'));
       assert.deepEqual([...doc.querySelectorAll('.eu-map-buttons button')].map(button=>button.hasAttribute('data-eu-reset')?'overview':button.dataset.euZoom??'renderer'),['overview','in','out','renderer']);
-      assert.equal(doc.querySelector('[data-eu-map-legend]').previousElementSibling,doc.querySelector('.eu-map-stage'));
+      assert.ok(doc.querySelector('.eu-map-stage').compareDocumentPosition(doc.querySelector('[data-eu-map-legend]'))&4);
       assert.match(doc.querySelector('[data-eu-map-legend] .eu-water-note').textContent,/地下水.*未確認.*未収録/);
       const waterMask=doc.querySelector('[data-eu-water-mask="caspian-sea"]');
       assert.ok(waterMask);

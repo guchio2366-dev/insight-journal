@@ -184,7 +184,7 @@ export function initEuropeAtlas() {
   });
   const farmingView=()=>farmingPresentation(state,farmingItems);
   const features = [...config.populationCities,...config.readings,...europeCultureOverviewPlaces];
-    const visibleFeatures = () => subject().field==='population'&&!cultureActive() ? config.populationCities : subject().field==='industry' ? config.readings.filter(r=>r.field==='industry') : subject().field==='nature'&&['water','drainage'].includes(state.layer) ? config.readings.filter(r=>r.field==='nature'&&r.layer==='water') : [];
+  const visibleFeatures = () => subject().field==='population'&&!cultureActive() ? config.populationCities : subject().field==='industry' ? config.readings.filter(r=>r.field==='industry') : subject().field==='nature'&&['water','drainage','terrain'].includes(state.layer) ? config.readings.filter(r=>r.field==='nature'&&r.layer===(['water','drainage'].includes(state.layer)?'water':'terrain')) : [];
   const featureVisible = (id:string) => {
     const p=visibleFeatures().find(p=>p.id===id); if(!p)return false;
     if(subject().field==='industry')return true;
@@ -211,7 +211,7 @@ export function initEuropeAtlas() {
     node.setAttribute('aria-label',`${label.mm} mm等雨量線`);
     query<HTMLElement>('.eu-map-stage').append(node);return {node,label};
   });
-  const terrainLabels=[...europeTerrainGuides.map(label=>({...label,mode:'landforms'})),...europeTerrainPlaceNames.map(label=>({...label,mode:'coasts'}))].map(label=>{
+  const terrainLabels=[...europeTerrainGuides.filter(label=>label.name!=='アルプス山脈').map(label=>({...label,mode:'landforms'})),...europeTerrainPlaceNames.map(label=>({...label,mode:'coasts'}))].map(label=>{
     const node=document.createElement('span');node.className='eu-terrain-place-label';
     node.textContent=label.name;query<HTMLElement>('.eu-map-stage').append(node);return {node,label};
   });
@@ -249,7 +249,7 @@ export function initEuropeAtlas() {
     if(state.farmMeasure&&!europeFarmAvailableMetrics(id).some(metric=>metric.id===state.farmMeasure))delete state.farmMeasure;
     if(!farmingItems.some(item=>item.id===id))delete state.single;
     query<HTMLElement>('[data-eu-farm-candidates]').hidden=true;
-    if(save)commit(false);
+    if(save)commit(['water','drainage','precipitation','terrain','contours','density'].includes(id)&&state.region==='all'&&!state.place);
   }
   function selectFeature(id:string) {
     const composition=europeCultureOverviewPlaces.find(item=>item.id===id);

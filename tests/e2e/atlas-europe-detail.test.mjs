@@ -44,7 +44,7 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       assert.equal(new Set(farmItems.map(item=>item.id)).size,16);
       const areas=[...doc.querySelectorAll('[data-eu-farm-area]')];
       assert.deepEqual(areas.map(path=>path.dataset.euFarmArea).sort(),farmItems.map(item=>item.id).sort());
-      assert.ok(areas.every(path=>path.getAttribute('d')?.startsWith('M')));
+      assert.ok(areas.every(path=>{const href=path.getAttribute('href');return href?.startsWith('#eu-farm-geometry-')&&doc.querySelector(href)?.getAttribute('d')?.startsWith('M');}));
       assert.notEqual(doc.querySelector('[data-eu-farming-shapes]').style.display,'none');
       assert.ok([...doc.querySelectorAll('[data-eu-farm-outline]')].every(path=>path.style.display==='none'));
       const choices=[...doc.querySelectorAll('[data-eu-farming-children="crop"] button,[data-eu-farming-children="livestock"] button')];
@@ -67,9 +67,10 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       }
       const columns=statistics.querySelectorAll('[data-eu-farm-three-columns] > section');
       assert.equal(columns.length,3);
-      assert.match(columns[0].textContent,/供給元・行先.*国内仕向け.*未収録/s);
-      assert.match(columns[1].textContent,/輸出先.*輸出量・額.*未収録/s);
-      assert.equal(columns[2].querySelector('[data-eu-farm-share-chart]').children.length,0);
+      assert.match(columns[0].textContent,/世界生産シェア.*欠測を0/);
+      assert.equal(columns[0].querySelector('[data-eu-farm-share-chart]').children.length,0);
+      assert.match(columns[1].textContent,/輸出先・輸入元.*照合中/);
+      assert.match(columns[2].textContent,/供給熱量と自給率.*欠測は0/);
       const scope=availability.find(row=>row.querySelector('dt').textContent==='地図と数量の対象');
       assert.match(scope.querySelector('dd').textContent,/格子の収穫面積・家畜密度.*国全体の生産量・頭羽数.*別の資料/);
       assert.match(scope.querySelector('dd').textContent,/集合的な作物区分.*個別品目の統計に置き換えません/);
@@ -121,15 +122,15 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       assert.equal(doc.querySelector('[data-eu-water-options] [data-eu-topic="precipitation"]').disabled,false);
     }
     if(field==='industry'||field==='population'){
-      const title=field==='industry'?'産業の拠点':'人口密度';
+      const title=field==='industry'?'産業別の集積':'人口密度';
       assert.equal(doc.querySelector('[data-eu-map-title]').textContent,title);
-      assert.equal(doc.querySelector('[data-eu-subject-title]').textContent,field==='population'?'人口分布':title);
+      assert.equal(doc.querySelector('[data-eu-subject-title]').textContent,field==='population'?'人口分布':'欧州の産業集積');
       assert.ok(doc.querySelector('[data-eu-legend-title]').textContent.includes(title));
       assert.ok(doc.querySelector('[data-eu-subject-takeaway]').textContent.length>15);
       assert.equal(doc.querySelector('[data-eu-climate-image]').getAttribute('href'),null);
       assert.ok(doc.querySelectorAll('[data-eu-feature-point]:not([hidden])').length>0);
       if(field==='industry'){
-        assert.equal(doc.querySelectorAll('[data-eu-feature-point]:not([hidden])').length,14);
+        assert.equal(doc.querySelectorAll('[data-eu-feature-point]:not([hidden])').length,18);
         assert.equal(doc.querySelector('[data-eu-feature]'),null);
         assert.match(doc.querySelector('[data-eu-subject-note]').textContent,/生産量・雇用の大小を表しません/);
       }else{

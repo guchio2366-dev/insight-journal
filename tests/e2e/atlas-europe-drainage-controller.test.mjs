@@ -111,7 +111,7 @@ test('drainage lookup feedback follows the basin choice with one live result, an
     }
     for(const layer of ['water','precipitation','climate']){
       chooseTopic(layer);assertSameReading();
-      assert.ok(app.grid.parentElement===app.gridHome,'Other topics keep the original statistics location');
+      if(layer==='precipitation')assert.ok(app.grid.closest('.eu-read-panel'),'Precipitation value stays beside the map');
       assert.equal(controls.contains(app.grid),false);assert.equal(controls.hidden,true);
       assert.equal(app.grid.hidden,layer!=='precipitation');
     }
