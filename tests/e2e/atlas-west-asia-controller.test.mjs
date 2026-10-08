@@ -46,6 +46,7 @@ test('中東の農畜産は五品目を同時表示し、作物の輪郭選択�
   assert.equal(q('[data-west-country]').value,'');assert.equal(q('[data-west-atlas]').dataset.topic,'farming-overview');
   assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-raster]').length,0);
   assert.match(q('[data-west-legend]').textContent,/2020年.*濃い輪郭.*上位25%.*淡い面/);
+  assert.match(q('[data-west-legend]').textContent,/生産量シェアや支配的品目の判定ではありません/);
   assert.equal(q('[data-west-farm-map-key]').hidden,false);
   assert.equal(q('[data-west-farm-map-key]').querySelectorAll('[data-west-farm-map-label]').length,5);
   assert.equal(q('[data-west-farm-overlap]')!==null,true);

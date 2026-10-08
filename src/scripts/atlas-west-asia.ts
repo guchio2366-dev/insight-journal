@@ -427,7 +427,7 @@ async function init(root:HTMLElement){
   const l=layer(t);let html='';
   const swatches=(items:{color:string,label:string}[])=>'<div class="west-swatches">'+items.map(x=>`<span><i style="background:${esc(x.color)}"></i>${esc(x.label)}</span>`).join('')+'</div>';
   if(showFarmingContext(t)){
-   html=swatches([...westFarmingProducts.map(p=>({color:p.color,label:p.label+(p.kind==='crop'?'の強い面':'の強い地点')})),{color:'#344d70',label:'小麦・大麦の強い面の重なり'}])+'<p>2020年の保存格子。鮮やかな色と選択作物の濃い輪郭は各系列の正値上位25%（試行）、淡い面と細線は残りの正値域です。作物はha／格子、家畜は頭／km²で加算できません。家畜の点は高い格子を8×12区画に最大1点示します。'+(nationalOnlyFarm(t)?'選択品目の細地域分布は未収録で、国別生産量は右欄です。':'')+'</p><details><summary>強調基準の確認</summary><p>5系列すべてが正値の約16.5万格子に対し、上位25%が同時に強いのは4,383格子。上位33%・20%でも、トルコ・イラン・イラク・エジプト周辺の小麦域とイエメン周辺の山羊密度域は残ります。色面や点の数から生産量・頭数は計算できません。</p></details>';
+   html=swatches([...westFarmingProducts.map(p=>({color:p.color,label:p.label+(p.kind==='crop'?'の強い面':'の強い地点')})),{color:'#344d70',label:'小麦・大麦の強い面の重なり'}])+'<p>2020年の保存格子。鮮やかな色と選択作物の濃い輪郭は各系列の正値上位25%（試行）、淡い面と細線は残りの正値域です。この強調は生産量シェアや支配的品目の判定ではありません。作物はha／格子、家畜は頭／km²で加算できません。家畜の点は高い格子を8×12区画に最大1点示します。'+(nationalOnlyFarm(t)?'選択品目の細地域分布は未収録で、国別生産量は右欄です。':'')+'</p><details><summary>強調基準の確認</summary><p>5系列すべてが正値の約16.5万格子に対し、上位25%が同時に強いのは4,383格子。上位33%・20%でも、トルコ・イラン・イラク・エジプト周辺の小麦域とイエメン周辺の山羊密度域は残ります。色面や点の数から生産量・頭数は計算できません。</p></details>';
   }else if(t.id==='precipitation'){
    html=swatches(rainfallColors.map((color,i)=>({color,label:i===0?'100未満':i===rainfallBreaks.length?'2,000以上':format(rainfallBreaks[i-1],0)+'〜'+format(rainfallBreaks[i],0)+'未満'})))+'<p>観測所の月別平年値の年合計 · mm／年。18地点の点のみ、期間は地点ごと。</p>';
   }else if(isSettlementTopic(t.id)){
