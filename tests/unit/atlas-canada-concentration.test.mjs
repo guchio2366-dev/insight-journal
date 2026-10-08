@@ -1,5 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import {gunzipSync} from 'node:zlib';import {createHash} from 'node:crypto';
 import {demographicComposition} from '../../src/lib/atlas-canada-concentration.ts';
+import {buildCanadaReligionView,canadaReligionComposition,canadaReligionInitialIds} from '../../src/lib/atlas-canada-religion-view.ts';
 const load=t=>JSON.parse(fs.readFileSync(`src/data/atlas/canada/profile-${t}.json`)),religion=load('religion'),ethnicity=load('ethnicity');
 test('Official profile covers 293 CDs and 41 CMAs with 23 religious leaves, no Christian parent duplication',()=>{
  for(const d of [religion,ethnicity]){assert.equal(d.regions.length,293);assert.equal(d.cmas.length,41);assert.equal(new Set(d.regions.map(r=>r.dguid)).size,293);for(const r of [...d.regions,...d.cmas,d.national])for(const g of d.groups){const c=r.values[g.id];assert.ok(c);assert.ok(c.value===null||c.value>=0&&c.value<=r.denominator.value);}}
@@ -11,4 +12,11 @@ test('A characteristic minority can be primary instead of a local majority; miss
  const data={groups:[{id:'8'},{id:'11'},{id:'25'}],national:{denominator:{value:10000},values:{8:{value:3000},11:{value:25},25:{value:4000}}}},r={denominator:{value:10000},values:{8:{value:6000},11:{value:600},25:{value:3400}}};const c=demographicComposition(r,data,'religion');assert.equal(c.primary.id,'11');assert.equal(c.primary.share,6);assert.equal(c.primary.ratio,24);assert.equal(c.qualified.length,2);r.values['11']={value:null,symbol:'x'};assert.equal(demographicComposition(r,data,'religion').primary,null);
 });
 test('No-religion remains in composition but cannot mask distinctive denominations',()=>{const c=demographicComposition(religion.cmas.find(r=>r.id==='933'),religion,'religion');assert.ok(c.rows.find(g=>g.id==='25').share>40);assert.ok(c.qualified.every(g=>g.id!=='25'));});
+test('Canada religion face categories partition the 23 leaves and preserve local coexisting groups',()=>{
+ const view=buildCanadaReligionView(religion);assert.equal(view.groups.length,13);assert.equal(view.sourceGroups.length,23);assert.equal(canadaReligionInitialIds.length,10);
+ assert.deepEqual(view.groups.flatMap(g=>g.members).sort(),religion.groups.map(g=>g.id).sort());
+ assert.equal(view.regions.filter(r=>canadaReligionComposition(r,view).primary).length,272);
+ for(const [id,primary] of [['6001','25'],['6204','6'],['2492','8'],['1005','6'],['3521','22']])assert.equal(canadaReligionComposition(view.regions.find(r=>r.id===id),view).primary.id,primary);
+ const peel=view.regions.find(r=>r.id==='3521'),groups=canadaReligionComposition(peel,view).qualified.map(g=>g.id);assert.deepEqual(groups,['21','19','22']);assert.deepEqual(peel.sourceValues,religion.regions.find(r=>r.id==='3521').values);
+});
 test('Public profile assets retain their audited source hashes and unique geographic join',()=>{const m=JSON.parse(fs.readFileSync('public/assets/atlas/canada-demographics-v2/manifest.json'));for(const [p,x] of Object.entries(m.outputs)){const b=fs.readFileSync(p);assert.equal(b.length,x.bytes);assert.equal(createHash('sha256').update(b).digest('hex'),x.sha256);}const geo=JSON.parse(fs.readFileSync('public/assets/atlas/canada-demographics-v2/regions.geojson'));assert.equal(geo.features.length,293);assert.equal(new Set(geo.features.map(f=>f.id)).size,293);for(const f of geo.features)assert.equal(ethnicity.regions.find(r=>r.id===f.id).dguid,f.properties.dguid);});

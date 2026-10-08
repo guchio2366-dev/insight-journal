@@ -22,6 +22,10 @@
 .population-category-key :is(button,span){display:inline-flex;align-items:center;gap:5px;font-size:14px;min-height:28px;border:0;background:transparent;padding:1px;color:#304f5a}
 .population-category-key button[aria-pressed=true]{box-shadow:inset 0 -2px #365866;font-weight:700}
 .population-category-key i,[data-population-composition] th i{display:inline-block;width:13px;height:10px;margin-right:4px;border:1px solid #687a7a55}
+.population-category-key .population-religion-extra{display:inline-flex;align-items:center;gap:5px;flex-wrap:wrap;margin:0;border:0;padding:0}
+.population-category-key .population-religion-extra summary{cursor:pointer;font-size:14px;color:#385766;white-space:nowrap}
+.population-map [data-religion-region-symbols],.population-map [data-religion-map-callouts]{pointer-events:none}
+.population-map .religion-map-callout text{font-family:var(--sans)}
 .population-map [data-population-label]{fill:#263f48;paint-order:stroke;stroke:#fffdf4;stroke-width:4;stroke-linejoin:round}
 .population-map .population-anchor{fill:#263f48;stroke:#fff;stroke-width:1;r:3}
 .population-map [data-population-boundary]{stroke:#829692;stroke-width:.6}
