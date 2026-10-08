@@ -61,15 +61,15 @@ export async function verifySoutheastAsiaRegion(page,{source,capture:takePicture
  const readingScroll=await page.locator('.asia-layout>.asia-reading-panel').evaluate(node=>{node.scrollTop=0;const before=node.scrollTop;node.scrollTop=180;return {before,after:node.scrollTop,overflow:getComputedStyle(node).overflowY};});
  assert(readingScroll.after>readingScroll.before&&readingScroll.overflow==='auto','The right reading must scroll inside its fixed frame');
  const pageScroll=await page.evaluate(()=>{
-  const news=document.querySelector('.atlas-news'),maxScroll=document.documentElement.scrollHeight-innerHeight;
-  const newsY=news.getBoundingClientRect().top+scrollY;
-  scrollTo(0,Math.min(newsY+100,maxScroll-100));
+  const news=document.querySelector('.atlas-news'),shell=news.closest('.atlas-desktop-shell'),maxScroll=document.documentElement.scrollHeight-innerHeight;
+  const shellY=shell.getBoundingClientRect().top+scrollY;
+  scrollTo({top:Math.min(shellY+100,maxScroll-100),behavior:'instant'});
   const before=scrollY,firstTop=news.getBoundingClientRect().top;
-  scrollTo(0,Math.min(before+100,maxScroll));
+  scrollTo({top:Math.min(before+100,maxScroll),behavior:'instant'});
   return {before,after:scrollY,firstTop,secondTop:news.getBoundingClientRect().top};
  });
  assert(pageScroll.after>pageScroll.before&&pageScroll.firstTop<=12&&Math.abs(pageScroll.secondTop-pageScroll.firstTop)<=1,`The page and news rail must scroll independently: ${JSON.stringify(pageScroll)}`);
- await page.evaluate(()=>{scrollTo(0,0);document.querySelector('.asia-layout>.asia-reading-panel').scrollTop=0;});
+ await page.evaluate(()=>{scrollTo({top:0,behavior:'instant'});document.querySelector('.asia-layout>.asia-reading-panel').scrollTop=0;});
  record('news rail, independent right reading scroll, and full-width regional statistics');
  assert.equal(await page.locator('.southeast-supply-bars li').count(),5);
  assert.match(await page.locator('.asia-farm-connections-grid > section:nth-child(2)').textContent(),/HS15章.*パーム油HS1511だけの相手国ではありません/s);
