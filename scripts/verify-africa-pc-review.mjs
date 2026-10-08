@@ -21,6 +21,7 @@ import {africaLayerPath,africaCommodityColor} from '../src/scripts/atlas-africa-
 import {densityColors} from '../src/data/atlas/population.ts';
 import {ethnicityColors} from '../src/lib/atlas-population-dominant.ts';
 import {religionDominantColors} from '../src/lib/atlas-population-religion.ts';
+import {africaClimateCities} from '../src/data/atlas/africa-climate-cities.ts';
 
 const repo=fileURLToPath(new URL('../',import.meta.url)),dist=path.join(repo,'dist');
 const output=path.resolve(process.env.AFRICA_REVIEW_OUTPUT||path.join(repo,'review-artifacts/africa-pc-review'));
@@ -98,6 +99,13 @@ function assertLayout(measurement,reference){
  if(measurement.southAfrica){const south=measurement.southAfrica,map=measurement.map;assert(south.y>=map.y-1&&south.y+south.height<=map.y+map.height+1,'Southern Africa lies outside the map frame');}
  for(const control of measurement.controls){assert(control.x>=0&&control.x+control.width<=measurement.viewport.width+1,'Header select lies outside viewport');for(const other of measurement.controls)if(other!==control){const area=Math.max(0,Math.min(control.x+control.width,other.x+other.width)-Math.max(control.x,other.x))*Math.max(0,Math.min(control.y+control.height,other.y+other.height)-Math.max(control.y,other.y));assert.equal(area,0,'Header selects overlap');}}
  if(reference){measurement.usDifference=Object.fromEntries(['x','y','width','height'].map(key=>[key,measurement.map[key]-reference.map[key]]));for(const [key,value]of Object.entries(measurement.usDifference))assert(Math.abs(value)<=2,`US/Africa map ${key} differs by ${value}px (limit 2px)`);}
+}
+function assertClimateLayout(measurement,reference,profile){
+ assertLayout(measurement);
+ measurement.usDifference=Object.fromEntries(['x','y','width','height'].map(key=>[key,measurement.map[key]-reference.map[key]]));
+ for(const key of ['x','width','height'])assert(Math.abs(measurement.usDifference[key])<=2,`US/Africa climate map ${key} differs by ${measurement.usDifference[key]}px (limit 2px)`);
+ const expectedY=profile==='desktop1440'?-46:1;
+ assert(Math.abs(measurement.usDifference.y-expectedY)<=2,`Climate header/map vertical offset differs by ${measurement.usDifference.y}px (expected ${expectedY} ±2px)`);
 }
 async function screenshot(page,record,name,{preserveScroll=false}={}){
  if(!preserveScroll)await page.evaluate(()=>{window.scrollTo(0,0);document.querySelector('.africa-detail')?.scrollTo(0,0);});
@@ -237,11 +245,32 @@ async function climateOperations(page,record,reference){
  assert.equal(await page.locator('[data-africa-raster]').getAttribute('href'),image);assert.equal(await page.locator('[data-africa-layer-class]').count(),count);
  const outline=await page.locator('[data-africa-class-outline]').evaluate(node=>({rectangles:node.querySelectorAll('rect').length,paths:[...node.querySelectorAll('path')].map(path=>({stroke:path.getAttribute('stroke'),fill:path.getAttribute('fill'),length:path.getAttribute('d')?.length??0}))}));
  assert.equal(outline.rectangles,0);assert.deepEqual(outline.paths.map(row=>row.stroke),['#ffffff','#183c4a']);assert(outline.paths.every(row=>row.fill==='none'&&row.length>50));
- const measurement=await measure(page,'africa');assertLayout(measurement,reference);record.measurements.push({scene:'climate',...measurement});record.checks.push({check:'climate selection keeps full native raster/legend and native grid outline',status:'passed',legendClasses:count,image,outline});
+ const measurement=await measure(page,'africa');assertClimateLayout(measurement,reference,record.profile);record.measurements.push({scene:'climate',...measurement});record.checks.push({check:'climate selection keeps full native raster/legend and native grid outline',status:'passed',legendClasses:count,image,outline});
  if(record.profile==='desktop1440')await screenshot(page,record,'africa-climate-outline');
  await page.reload();await waitAfrica(page,'climate');await page.locator('[data-africa-class-outline="1"]').waitFor();assert.equal(await page.locator('[data-africa-raster]').getAttribute('href'),image);
  await page.locator('[data-africa-layer-class="1"]').click();assert.equal(await page.locator('[data-africa-class-outline]').count(),0);
  await checkTabs(page,'topic',[['climate','ArrowRight','water'],['water','End','elevation'],['elevation','Home','climate'],['climate','ArrowLeft','elevation'],['elevation','Home','climate']]);await waitAfrica(page,'climate');record.checks.push({check:'nature tabs Arrow/Home/End and climate outline reload/toggle',status:'passed'});
+ for(const selector of ['[data-year]','[data-compare]','[data-place]','.africa-map-tools'])assert.equal(await page.locator(selector).isVisible(),false,`Climate control remains visible: ${selector}`);
+ assert.deepEqual((await page.locator('[data-africa-city-point]').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('data-africa-city-point')))).sort(),africaClimateCities.map(city=>city.id).sort());
+ for(const city of africaClimateCities){
+  await page.locator(`[data-africa-city-point="${city.id}"]`).focus();await page.keyboard.press('Enter');
+  const reading=page.locator(`[data-africa-city-reading="${city.id}"]`);await reading.waitFor({state:'visible'});
+  assert.equal((await state(page)).city,city.id);assert.equal(await page.locator('[data-theme-title]').textContent(),`${city.name}の雨温図`);
+  assert.equal(await page.locator('.africa-detail').evaluate(node=>node.scrollTop),0,'A newly selected city must begin at its climograph');
+  assert.equal(await reading.locator('.atlas-climate-bar').count(),12);assert.match(await reading.locator('.africa-city-classification').innerText(),new RegExp(city.classification.code));
+  assert((await reading.locator('.africa-city-geographic-reason').innerText()).includes(city.geographicReason));
+  assert((await reading.locator('.africa-city-agriculture').innerText()).includes(city.agricultureLink));
+  const layout=await page.evaluate(id=>{const map=document.querySelector('.africa-map-frame').getBoundingClientRect(),detail=document.querySelector('.africa-detail'),box=detail.getBoundingClientRect(),article=document.querySelector(`[data-africa-city-reading="${id}"]`),items=['figure','.africa-city-classification','.africa-city-geographic-reason','.africa-city-agriculture'].map(selector=>article.querySelector(selector).getBoundingClientRect().top);return{mapRight:map.right,mapTop:map.top,detailLeft:box.left,detailTop:box.top,detailBottom:box.bottom,viewportBottom:innerHeight,overflow:getComputedStyle(detail).overflowY,scrollHeight:detail.scrollHeight,clientHeight:detail.clientHeight,readingOrder:items};},city.id);
+  assert(layout.detailLeft>layout.mapRight&&Math.abs(layout.detailTop-layout.mapTop)<=2&&layout.detailBottom<=layout.viewportBottom+2,'Climate map and right reading do not share the viewport');
+  assert.equal(layout.overflow,'auto');assert(layout.scrollHeight>layout.clientHeight,'Selected city reading does not scroll');assert(layout.readingOrder.every((top,index)=>index===0||top>layout.readingOrder[index-1]),'Climate classification, reason or agriculture is out of reading order');
+  await reading.locator('.africa-city-agriculture').scrollIntoViewIfNeeded();assert(await reading.locator('.africa-city-agriculture').isVisible());
+  await page.locator('.africa-detail').evaluate(node=>node.scrollTop=node.scrollHeight);
+  record.checks.push({check:'six-city climate plot, classification, geography, agriculture, keyboard selection and right-panel scroll',city:city.id,status:'passed',layout});
+ }
+ await page.reload();await waitAfrica(page,'climate');assert.equal((await state(page)).city,africaClimateCities.at(-1).id);assert.equal(await page.locator(`[data-africa-city-reading="${africaClimateCities.at(-1).id}"]`).isVisible(),true);
+ await page.locator('[data-africa-city-return]').click();assert.equal((await state(page)).city,undefined);
+ await page.locator('[data-africa-topic=water]').click();assert.equal(await page.locator('.africa-map-tools').isVisible(),true);assert.equal(await page.locator('[data-place]').isVisible(),true);
+ await page.locator('[data-africa-topic=climate]').click();await waitAfrica(page,'climate');assert.equal(await page.locator('.africa-map-tools').isVisible(),false);record.checks.push({check:'city reload/return and shared water/climate navigation preserve field-specific controls',status:'passed'});
 }
 
 async function waitAgriculture(page,key){
@@ -300,7 +329,7 @@ async function agricultureOperations(page,record,reference){
  await page.locator('[data-africa-agri-overview]').click();await waitAgriculture(page);assert.equal(await page.locator('[data-africa-agri-footprint]').count(),0);
  const keyboard=page.locator('[data-africa-agri-pick="livestock-cattle"][tabindex="0"]').first();await keyboard.focus();assert.equal(await keyboard.evaluate(node=>getComputedStyle(node).outlineStyle),'none');assert.equal(await keyboard.getAttribute('role'),'button');assert((await keyboard.getAttribute('aria-label'))?.length>0);await page.keyboard.press('Enter');await waitAgriculture(page,'livestock-cattle');assert.equal((await state(page)).livestock,'cattle');assert.match(await page.locator('[data-theme-title]').textContent(),/牛/);assert.equal((await agricultureLayers(page)).filter(row=>row.visible).length,7);assert.equal(await page.evaluate(()=>document.activeElement?.getAttribute('data-africa-agri-pick')),'livestock-cattle','Map selection loses keyboard focus');
  await checkTabs(page,'topic',[['farming','ArrowRight','forestry']]);await settle(page);assert.equal(await page.locator('[data-africa-commodity-layer]:visible').count(),0);await checkTabs(page,'topic',[['forestry','Home','farming']]);await waitAgriculture(page);assert.equal((await agricultureLayers(page)).filter(row=>row.visible).length,7);
- await page.locator('[data-field=nature]').click();await page.locator('[data-reset]').click();await waitAfrica(page,'climate');assert.equal(await page.locator('[data-place]').inputValue(),'');record.checks.push({check:'Keyboard livestock selection, forestry round trip and existing nature reset remain operable',status:'passed'});
+ await page.locator('[data-field=nature]').click();await page.locator('[data-africa-topic=water]').click();assert.equal(await page.locator('[data-reset]').isVisible(),true);await page.locator('[data-reset]').click();await waitAfrica(page,'climate');assert.equal(await page.locator('[data-place]').inputValue(),'');record.checks.push({check:'Keyboard livestock selection, forestry round trip and water-to-climate reset remain operable',status:'passed'});
  assert(reference,'US agriculture reference was not successfully rendered; Africa captures are retained for diagnosis');
 }
 
@@ -375,12 +404,12 @@ async function delayedAgriculture(page,record){
   try{
    await open(page,'/atlas/africa/?field=agriculture');await Promise.race([requested,new Promise((_,reject)=>{const timer=setTimeout(()=>reject(new Error('Delayed crop request never arrived')),30000);requested.finally(()=>clearTimeout(timer));})]);
    await page.locator('[data-africa-agri-label-text="crop-rice-harvested"]').first().click();await page.locator('[data-africa-agri-label-text="crop-wheat-harvested"]').first().click();
-   if(reset){await page.locator('[data-field=nature]').click();await page.locator('[data-reset]').click();}
+   if(reset){await page.locator('[data-field=nature]').click();await page.locator('[data-africa-topic=water]').click();assert.equal(await page.locator('[data-reset]').isVisible(),true);await page.locator('[data-reset]').click();}
    const completed=page.waitForResponse(response=>response.url().endsWith('/africa-crops-v1/manifest.json'));release();await completed;
    if(reset){await waitAfrica(page,'climate');assert.equal(await page.locator('[data-africa-commodity-layer]').count(),0);assert.equal((await state(page)).field,'nature');}
    else{await waitAgriculture(page,'crop-wheat-harvested');assert.equal((await state(page)).crop,'wheat');assert.equal((await agricultureLayers(page)).filter(row=>row.visible).length,7);assert.equal((await state(page)).overview,'0');}
    record.checks.push({check:reset?'Delayed agriculture cannot undo field change and reset':'Delayed native grids follow the latest map label selection and retain all distributions',status:'passed'});
-  }finally{release();await page.unroute('**/africa-crops-v1/manifest.json');}
+  }finally{release();await page.unrouteAll({behavior:'wait'});}
  }
 }
 
@@ -420,7 +449,7 @@ async function delayedRiver(page,record){
    const completed=page.waitForResponse(response=>response.url().endsWith('/africa-water-v1/rivers.geojson'));release();await completed;
    if(reset){await waitAfrica(page,'climate');assert.equal((await state(page)).river,undefined);assert.equal(await page.locator('[data-africa-river]').count(),0);}else{await waitAfrica(page,'river');await assertRiver(page,'congo');}
    record.checks.push({check:reset?'delayed river cannot undo reset':'delayed river follows newest selection',status:'passed'});
-  }finally{release();await page.unroute('**/africa-water-v1/rivers.geojson');}
+  }finally{release();await page.unrouteAll({behavior:'wait'});}
  }
 }
 

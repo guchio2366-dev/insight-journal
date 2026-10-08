@@ -3,6 +3,7 @@ import {projectAfrica,africaWidth,africaHeight} from '../lib/atlas-africa-geomet
 import {africaAgriFocusedLayer,africaAgriVisibleLayers,countries,type State} from '../data/atlas/africa-atlas.ts';
 import {africaCultureGuides,africaCultureGuideReason} from '../data/atlas/africa-culture-guide.ts';
 import {africaRiverForFeature,africaRiverSelectedColor} from '../data/atlas/africa-river-reading.ts';
+import {africaClimateCities} from '../data/atlas/africa-climate-cities.ts';
 
 type Row=Record<string,any>;
 type Feature={type:string;id?:string;geometry:Row;properties:Row};
@@ -10,6 +11,7 @@ export type AfricaLayerKey={id:string;label:string;color:string;code?:string;des
 export type AfricaLayerView={key:string;ready:boolean;loading:boolean;error:string;title:string;period:string;unit:string;scope:string;method:string;sourceUrl:string;sourceLabel:string;legend:AfricaLayerKey[];takeaway:string;description:string;guide?:boolean;selectedVisible?:boolean;visibleLayers?:{key:string;title:string;unit:string;color:string;ready:boolean;loading:boolean;error:string;period:string;sourceUrl:string;sourceLabel:string}[]};
 type Loaded={value?:any;error?:string;promise?:Promise<void>};
 const SVG='http://www.w3.org/2000/svg';
+export const africaClimateClassAnchors=[{coordinates:[10,24],id:4,label:'BWh 砂漠'},{coordinates:[20,0],id:1,label:'Af 熱帯雨林'},{coordinates:[23,-9],id:3,label:'Aw サバナ'},{coordinates:[38,12],id:12,label:'Cwb 温帯冬季少雨'},{coordinates:[19,-33],id:8,label:'Csa 地中海性'}] as const;
 export const africaCommodityColors:Record<string,string>={maize:'#c59320',rice:'#287daa',wheat:'#8b64aa',cassava:'#268365',cattle:'#98513e',goats:'#aa6b28',sheep:'#50698c'};
 export const africaCommodityLabels:Record<string,string>={maize:'とうもろこし',rice:'稲',wheat:'小麦',cassava:'キャッサバ',cattle:'牛',goats:'ヤギ',sheep:'羊'};
 export function africaCommodityColor(key:string):string{return africaCommodityColors[key.replace(/^crop-|^livestock-/,'').replace(/-harvested$|-production$/,'')]??'#567c77';}
@@ -103,6 +105,30 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   return loaded;
  }
  const svg=(tag:string,attrs:Row)=>{const node=document.createElementNS(SVG,tag);for(const [key,value]of Object.entries(attrs))node.setAttribute(key,String(value));return node;};
+ function paintClimateLabels(state:State,layer:Row,grid:Uint8Array|undefined){
+  const map=group.ownerSVGElement,box=map?.getBoundingClientRect(),viewport=(map?.getAttribute('viewBox')??`0 0 ${africaWidth} ${africaHeight}`).split(/[ ,]+/).map(Number),scale=Math.max(viewport[2]/(box?.width||700),viewport[3]/(box?.height||580));
+  const occupied:{x:number;y:number;w:number;h:number}[]=[];
+  const inside=(coordinates:readonly number[])=>{const [x,y]=projectAfrica([...coordinates]);return x>=viewport[0]&&x<=viewport[0]+viewport[2]&&y>=viewport[1]&&y<=viewport[1]+viewport[3];};
+  function addLabel(name:string,coordinates:readonly number[],color:string,attrs:Row,caption=false){
+   if(!inside(coordinates))return;
+   const [ax,ay]=projectAfrica([...coordinates]),font=14*scale,width=(name.length*14+8)*scale,height=21*scale,gap=5*scale;
+   const minX=viewport[0]+4*scale,maxX=viewport[0]+viewport[2]-width-4*scale,minY=viewport[1]+height,maxY=viewport[1]+viewport[3]-6*scale;
+   const candidates:number[][]=[];for(const offset of [-12,19,-39,46,-66,73,-93,100])candidates.push([gap,offset*scale],[-width-gap,offset*scale]);
+   const position=candidates.map(([dx,dy])=>({x:Math.max(minX,Math.min(maxX,ax+dx)),y:Math.max(minY,Math.min(maxY,ay+dy)),w:width,h:height})).find(candidate=>!occupied.some(other=>candidate.x<other.x+other.w+gap&&candidate.x+candidate.w+gap>other.x&&candidate.y-candidate.h<other.y+gap&&candidate.y+gap>other.y-other.h));
+   if(!position)return;occupied.push(position);
+   const leader=`M${ax},${ay}L${Math.max(position.x,Math.min(position.x+width,ax))},${position.y-5*scale}`;
+   if(caption)group.append(svg('path',{d:leader,fill:'none',stroke:'#fffdf8','stroke-width':5,'vector-effect':'non-scaling-stroke','pointer-events':'none','aria-hidden':'true',class:'africa-climate-map-leader-halo'}));
+   group.append(svg('path',{d:leader,fill:'none',stroke:color,'stroke-width':caption?2:1,'vector-effect':'non-scaling-stroke','pointer-events':'none','aria-hidden':'true',class:caption?'africa-climate-map-leader':'',...(caption?{'data-africa-climate-leader':attrs['data-africa-climate-map-label']}:{})}));
+   if(caption)group.append(svg('circle',{cx:ax,cy:ay,r:3.5*scale,fill:color,stroke:'#fffdf8','stroke-width':1.5,'vector-effect':'non-scaling-stroke','pointer-events':'none','aria-hidden':'true',class:'africa-climate-map-anchor','data-africa-climate-anchor':attrs['data-africa-climate-map-label']}));
+   const node=svg('g',attrs),text=svg('text',{x:position.x,y:position.y,'font-size':font,'font-weight':650,fill:color,stroke:'#fffdf8','stroke-width':3*scale,'paint-order':'stroke','stroke-linejoin':'round'});text.textContent=name;node.append(text);group.append(node);
+  }
+  for(const city of africaClimateCities){if(!inside(city.coordinates))continue;const [cx,cy]=projectAfrica(city.coordinates),selected=state.city===city.id;
+   const marker=svg('g',{'data-africa-city':city.id,'data-africa-city-point':city.id,role:'button',tabindex:0,'aria-label':city.name+'の雨温図を読む','aria-pressed':String(selected),class:'africa-map-pick-label'});
+   marker.append(svg('circle',{cx,cy,r:10*scale,fill:'transparent'}),svg('circle',{cx,cy,r:(selected?5:4)*scale,fill:'#334e68',stroke:'#fff','stroke-width':2,'vector-effect':'non-scaling-stroke'}));group.append(marker);
+   addLabel(city.name,city.coordinates,'#334e68',{'data-africa-city':city.id,'data-africa-city-label':city.id,role:'button',tabindex:0,'aria-label':city.name+'の雨温図を読む','aria-pressed':String(selected),class:'africa-map-pick-label'});
+  }
+  if(grid)for(const item of africaClimateClassAnchors){if(!inside(item.coordinates)||africaGridValue(grid,layer,item.coordinates[0],item.coordinates[1])!==item.id)continue;addLabel(item.label,item.coordinates,'#183d4a',{'data-africa-climate-map-label':String(item.id),'aria-hidden':'true','pointer-events':'none',class:'africa-climate-map-label'},true);}
+ }
  const setup=(key:string)=>{
   if(['climate','terrain','elevation'].includes(key))return {base:withBase('/assets/atlas/africa-physical-v1/'),family:'physical',id:key};
   if(['ethnicity','religion'].includes(key))return {base:withBase('/assets/atlas/africa-settlements-v1/'),family:'social',id:key};
@@ -141,9 +167,12 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   const ready=!!layer.image||!!data?.value;
   const output={...view,ready,loading:!!data?.promise||!!grid?.promise};
   viewCache.set(key,{manifest,layer,base:config.base,view:output,grid:grid?.value});
-  const paint=[key,state.place,state.compare,state.layerClass,state.river,file,ready,data?.value?'loaded':'',grid?.value?'grid':'',layer.image,mode,borders].join('|');
+  const climateMap=key==='climate'?baseGroup.ownerSVGElement:null;
+  const paint=[key,state.place,state.compare,state.layerClass,state.river,file,ready,data?.value?'loaded':'',grid?.value?'grid':'',layer.image,mode,borders,key==='climate'?state.city:'',climateMap?.getAttribute('viewBox')??'',key==='climate'?climateMap?.getBoundingClientRect().width??0:''].join('|');
   if(paint!==lastPaint){
    const focusedRiverFeature=group.contains(document.activeElement)?document.activeElement?.getAttribute('data-africa-river-hit-feature'):null;
+   const focusedCity=group.contains(document.activeElement)?document.activeElement?.getAttribute('data-africa-city'):null;
+   const focusedCityKind=group.contains(document.activeElement)?document.activeElement?.hasAttribute('data-africa-city-label'):false;
    group.replaceChildren();lastPaint=paint;
    if(layer.image){const bounds=layer.bounds??manifest.bounds??[-27,-36,64,39],[x,y]=projectAfrica([bounds[0],bounds[3]]),[right,bottom]=projectAfrica([bounds[2],bounds[1]]);let href=config.base+layer.image;
     if((state.layerClass&&!outlineSelection||mode!=='original')&&grid?.value){const rasterId=[key,state.layerClass,mode].join('|');href=rasterCache.get(rasterId)??'';if(!href){const width=layer.width??manifest.width,height=layer.height??manifest.height,canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const context=canvas.getContext('2d');if(context){const pixels=context.createImageData(width,height),bytes=grid.value as Uint8Array,dataView=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength);for(let index=0;index<width*height;index++){const value=layer.encoding?.includes('float32')?dataView.getFloat32(index*4,true):layer.encoding?.includes('int16')?dataView.getInt16(index*2,true):bytes[index];if(value===layer.noData||mode==='zero'&&value!==0||mode!=='original'&&mode!=='zero'&&value<=0)continue;const category=africaRasterCategory(value,layer);if(!category||state.layerClass&&String(category.id)!==state.layerClass)continue;const color=parseInt((mode==='presence'?africaCommodityColor(key):category.color).replace('#',''),16);pixels.data.set([(color>>16)&255,(color>>8)&255,color&255,255],index*4);}context.putImageData(pixels,0,0);href=canvas.toDataURL('image/png');rasterCache.set(rasterId,href);}}}
@@ -182,6 +211,8 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
    }
    if(ready&&borders)paintBorders(state,group);
    group.append(...riverHits);
+   if(key==='climate')paintClimateLabels(state,{...manifest,...layer},grid?.value);
+   if(focusedCity)group.querySelector<SVGElement>(`[data-africa-city="${focusedCity}"]${focusedCityKind?'[data-africa-city-label]':'[data-africa-city-point]'}`)?.focus({preventScroll:true});
    if(focusedRiverFeature)riverHits.find(hit=>hit.getAttribute('data-africa-river-hit-feature')===focusedRiverFeature)?.focus({preventScroll:true});
   }
   return output;
