@@ -479,8 +479,8 @@ async function main(){
   for(const profile of profiles)await operation(browser,host,profile,'southeast-forestry-trade-images',async page=>{
    await open(page,host,'/atlas/asia/southeast-asia/agriculture/');
    await page.waitForFunction(()=>document.querySelector('.southeast-supply-bars li'));
-   await page.locator('[data-south-central-farm-connections]').scrollIntoViewIfNeeded();
-   await page.screenshot({path:path.join(output,`${profile.name}-southeast-supply-and-partners.png`),animations:'disabled'});
+   await page.locator('[data-south-central-farm-connections]').evaluate(node=>node.scrollIntoView({block:'start',behavior:'instant'}));
+   await page.screenshot({path:path.join(output,`${profile.name}-southeast-agriculture-statistics-visible.png`),animations:'disabled'});
    for(const [selector,name] of [['[data-southeast-forest-reading]','forestry'],['[data-southeast-trade-reading]','trade']]){
     const panel=page.locator(selector);await panel.locator(':scope > summary').click();
     await panel.screenshot({path:path.join(output,`${profile.name}-southeast-${name}-panel.png`),animations:'disabled'});
