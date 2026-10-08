@@ -2,12 +2,16 @@
 import LatinAmericaWorkspace from './LatinAmericaWorkspace.astro';
 import data from '../../data/atlas/latin-america/agriculture.json';
 import {latinCountries34} from '../../lib/atlas-latin-america-geometry';
-import {agricultureLayerTitle,latinAgricultureReading,renderLatinAgricultureWorkspaceMap,renderLatinAgricultureOverviewLegend,latinAgricultureOverviewReading,formatLatinAgricultureValue,faoFlagLabel} from '../../lib/atlas-latin-agriculture';
+import {agricultureLayerTitle,latinAgricultureReading,renderLatinAgricultureWorkspaceMap,renderLatinAgricultureOverviewLegend,latinAgricultureOverviewReading,formatLatinAgricultureValue,faoFlagLabel,latinCropAreaRanking,latinCropAreaTotalHa} from '../../lib/atlas-latin-agriculture';
 import {withBase} from '../../lib/urls';
 import '../../styles/atlas-latin-agriculture.css';
 const state={layer:'all',place:'all',scope:'all',only:false};
 const layer=data.layers[0];
 const reading=latinAgricultureOverviewReading;
+const leadingCrops=latinCropAreaRanking.slice(0,10);
+const nearMisses=latinCropAreaRanking.slice(10);
+const cropArea=(hectares:number)=>`${new Intl.NumberFormat('ja-JP',{maximumFractionDigits:1}).format(hectares/10000)}万ha`;
+const leadingShare=Math.round(100*(leadingCrops[0].areaHa+leadingCrops[1].areaHa)/latinCropAreaTotalHa);
 ---
 <LatinAmericaWorkspace field="agriculture" title="中南米の農畜産" lead="熱帯のバナナ・高地のコーヒー・内陸の大豆・牛の飼育を、自然条件と市場へのつながりから読む。">
  <Fragment slot="map">
@@ -44,6 +48,14 @@ const reading=latinAgricultureOverviewReading;
   <details><summary>地図と統計の読み方</summary><p data-latin-agriculture-definition>{data.definitions.crop}</p><p data-latin-agriculture-coffee-definition hidden>{data.definitions.coffee}</p><p>{data.definitions.zero} {data.definitions.missing}</p></details>
  </Fragment>
  <Fragment slot="statistics">
+  <section class="latin-crop-area-ranking" aria-labelledby="latin-crop-area-heading" data-latin-crop-area-ranking>
+   <h2 id="latin-crop-area-heading">既存12作物の収穫面積：上位10</h2>
+   <p class="latin-takeaway">大豆ととうもろこしで、地図に載せた12作物の推計収穫面積合計の約{leadingShare}%を占めます。面積から輸出額や生産価値は読めません。</p>
+   <p>2020年・MapSPAM推計。中米・カリブ・南米34か国・地域のうち、各作物の値がある国だけ、同じ5分格子の年間収穫面積（ha）を合算しました。欠測は0とせず、有効値のある国数を右欄に示します。家畜密度（頭・羽/km²）は単位が違うため順位に含めません。</p>
+   <ol class="latin-crop-area-list">{leadingCrops.map((crop,index)=><li><span class="latin-crop-area-rank" aria-hidden="true">{index+1}.</span><span class="latin-crop-area-name"><i style={`background:${crop.color}`} aria-hidden="true"></i>{crop.name}</span><span class="latin-crop-area-track" aria-hidden="true"><i style={`width:${(100*crop.areaHa/leadingCrops[0].areaHa).toFixed(3)}%;background:${crop.color}`}></i></span><strong>{cropArea(crop.areaHa)}</strong><span class="latin-crop-area-coverage">{crop.reportingCountries}/34国</span></li>)}</ol>
+   <p class="latin-caption">候補12作物のうち、11位の{nearMisses[0].name}（{cropArea(nearMisses[0].areaHa)}）は10位の{leadingCrops[9].name}（{cropArea(leadingCrops[9].areaHa)}）と約{cropArea(leadingCrops[9].areaHa-nearMisses[0].areaHa)}差、12位の{nearMisses[1].name}は{cropArea(nearMisses[1].areaHa)}。この2作物も上の地図には残します。12作物以外を含む全農産物順位ではなく、複数回収穫を含むため耕地の実面積でもありません。</p>
+   <p class="latin-caption"><a href="https://cgiar-climate-data-hub.github.io/catalog/spam2020/">IFPRI MapSPAM 2020 v2r2</a>・CC BY-SA 4.0。国境内に格子中心を置くセルから概算した当サイトの加工値です。<a href={withBase('/assets/atlas/latin-america-agriculture-v1/manifest.json')}>12作物と国別値の元台帳</a></p>
+  </section>
   <details>
    <summary>2024年の国別生産統計と、2020年の分布推計を確かめる</summary>
    <p class="latin-caption" data-latin-agriculture-stat-note>国別統計はFAOSTATの2024年生産量（t）。地図の2020年収穫面積（ha）とは年・単位が異なります。</p>
