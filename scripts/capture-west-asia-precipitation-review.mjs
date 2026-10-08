@@ -50,7 +50,8 @@ try{
  assert.equal(await page.locator('[data-west-band="rainfall"]').count(),107);
  assert((await page.locator('[data-west-aligned-line="rainfall"]').count())>0);
  assert.match(await page.locator('[data-west-legend]').innerText(),/250/);
- assert.match(await page.locator('[data-west-detail]').innerText(),/1991–2020|GPCC/);
+ assert.match(await page.locator('[data-west-legend]').innerText(),/1991–2020/);
+ assert.match(await page.locator('[data-west-detail]').textContent(),/GPCC/);
  const map=await page.locator('[data-west-map]').boundingBox(),reading=await page.locator('.west-reading').boundingBox();
  assert(map&&map.width>400&&map.height>250&&map.y<evidence.viewport.height);
  assert(reading&&reading.width>300&&reading.x>map.x+map.width);
