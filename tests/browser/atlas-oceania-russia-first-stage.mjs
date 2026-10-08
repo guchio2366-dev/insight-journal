@@ -108,6 +108,7 @@ try{
       const candidates=host.locator('.russia-farming-candidates');
       assert.ok(await candidates.isVisible());
       assert.match(await candidates.textContent(),/大麦.*テンサイ.*ヒマワリ種子/);
+      assert.match(await candidates.textContent(),/ライムギ：.*2022\/23年度生産量は200万t.*全国分布格子は未収録/);
       await candidates.locator('summary').click();
       assert.equal(await candidates.locator('li').count(),10);
       assert.match(await candidates.textContent(),/ライムギの全国行.*未収録/);
@@ -115,6 +116,8 @@ try{
       await page.screenshot({path:resolve(output,`russia-agriculture-${width}-products.png`),fullPage:true,clip:productCrop});
       result.screenshots.push(`russia-agriculture-${width}-products.png`);
       await candidates.locator('summary').click();
+      await page.evaluate(()=>window.scrollTo(0,0));
+      await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
       assert.ok(await map.locator('path[fill="#e5e9e6"]').count()>0,'Initial missing area uses a quiet solid fill');
       assert.equal(await map.locator('[data-farming-product="cattle"][data-farming-mode="missing"]').getAttribute('opacity'),'0.18');
       const legend=host.locator('[data-primary-legend]'),key=host.locator('[data-key-legend]'),reading=host.locator('.russia-learning-reading');
