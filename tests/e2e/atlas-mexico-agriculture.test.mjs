@@ -119,6 +119,7 @@ test('Pine source figures and cattle-milk world comparison remain tied to their 
   assert.match(pine.querySelector('.mexico-pine-flow').textContent,/2021年10月〜2022年9月.*丸太形態.*販売量.*国内消費.*輸出先/s);
   ctx.q('[data-livestock-select="dairy"]').click();
   const milk=ctx.q('[data-mexico-stat-panel="dairy"]');
+  assert.match(ctx.q('#agri-reading-heading').textContent,/酪農/);
   assert.equal(milk.hidden,false);
   assert.match(milk.querySelector('[data-mexico-milk-world-comparison]').textContent,/2024年.*牛の生乳.*FAOSTAT.*2025年.*千L/s);
   assert.equal(ctx.q('[data-mexico-stat-panel="pine"]').hidden,true);

@@ -46,7 +46,7 @@ const countries = [
       {id: 'overview', label: 'メキシコの農林業', reading: 'overview'},
       {id: 'crop', label: 'とうもろこし', reading: 'product', select: '[data-crop-select="corn"]'},
       {id: 'livestock', label: '肉牛', reading: 'product', select: '[data-livestock-select="beef"]'},
-      {id: 'dairy', label: '牛乳', reading: 'product', select: '[data-livestock-select="dairy"]'},
+      {id: 'dairy', label: '酪農', reading: 'product', select: '[data-livestock-select="dairy"]'},
       {id: 'forestry', label: '森林資源と木材生産', reading: 'forestry', select: '[data-forestry-select]'},
     ],
   },
