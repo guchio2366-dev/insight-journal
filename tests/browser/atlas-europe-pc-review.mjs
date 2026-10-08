@@ -511,6 +511,10 @@ async function stageOneOperations(page, profile) {
   await openEurope(page, 'atlas/europe/industry/?layer=hubs', 'normal');
   assert.equal(new URL(page.url()).searchParams.has('feature'), false);
   await snapshot(page, profile, 'industry-overview');
+  await page.locator('[data-eu-topic-field="industry"] [data-eu-topic="industry"]').click();
+  assert.match(await page.locator('[data-eu-subject-intro]').textContent(), /キルナ.*鉱石.*ミュンヘン.*自動車/);
+  await snapshot(page, profile, 'industry-gdp-reading');
+  await page.locator('[data-eu-topic-field="industry"] [data-eu-topic="hubs"]:not([data-eu-industry-group])').click();
   const industryExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
   const industryPoints = await page.locator('[data-eu-feature-options] option').count();
   await quietFeatures('industry');
@@ -532,6 +536,7 @@ async function stageOneOperations(page, profile) {
 
   await openEurope(page, 'atlas/europe/population/?layer=density', 'normal');
   assert.equal(new URL(page.url()).searchParams.has('place'), false);
+  assert.match(await page.locator('[data-eu-subject-intro]').textContent(), /パリ.*ミラノ.*人口の分布/);
   await snapshot(page, profile, 'population-overview');
   const populationExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
   await quietFeatures('population');
