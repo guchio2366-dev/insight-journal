@@ -1,4 +1,4 @@
-name: Review West Asia food on PC
+name: Review West Asia farm map on PC
 
 on:
   pull_request:
@@ -7,7 +7,9 @@ on:
       - '.github/workflows/west-asia-food-pc-review.yml'
       - 'scripts/capture-west-asia-food-review.mjs'
       - 'src/data/atlas/west-asia-*'
+      - 'src/lib/atlas-west-asia-farming.mjs'
       - 'src/scripts/atlas-west-asia.ts'
+      - 'src/styles/atlas-west-asia.css'
       - 'src/components/atlas/WestAsiaAtlasPage.astro'
 
 permissions:
@@ -61,13 +63,13 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Build site
         run: npm run build
-      - name: Capture only two West Asia agriculture screens
+      - name: Capture only initial and wheat-selection screens
         run: node scripts/capture-west-asia-food-review.mjs
       - name: Upload compact PC evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: west-asia-food-pc-${{ github.run_id }}
+          name: west-asia-farm-map-pc-${{ github.run_id }}
           path: review-artifacts/west-asia-food
           if-no-files-found: error
           retention-days: 7

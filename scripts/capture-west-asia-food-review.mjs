@@ -8,8 +8,10 @@ import {constants} from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {chromium} from 'playwright';
+import {gunzipSync} from 'node:zlib';
 import astroConfig from '../astro.config.mjs';
 import {westProductionSelection} from '../src/data/atlas/west-asia-topics.mjs';
+import {westFarmingGeometry,westFarmingProducts} from '../src/lib/atlas-west-asia-farming.mjs';
 
 const repo=fileURLToPath(new URL('../',import.meta.url));
 const output=path.join(repo,'review-artifacts','west-asia-food');
@@ -41,7 +43,12 @@ const server=createServer(async(req,res)=>{
 await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});
 const origin=`http://127.0.0.1:${server.address().port}`;
 let browser;
-const record={status:'running',headSHA:process.env.REVIEW_HEAD_SHA??null,runId:process.env.GITHUB_RUN_ID??null,viewport:{width:1440,height:1000},source:{publisher:'FAOSTAT',domain:'Production_Crops_Livestock',elementCode:'5510',year:2024,unit:'t',targetCountries:20,rawArchive:faoInput.file,rawSHA256:faoInput.sha256,method:source.agriculture.method},selection:selected,images:[],browser:null};
+const display=await Promise.all(westFarmingProducts.map(async product=>{
+ const layer=source.layers.find(row=>row.id===product.id),compressed=await readFile(path.join(repo,'public/assets/atlas/west-asia-v1',layer.grid)),raw=gunzipSync(compressed);
+ const values=new Float32Array(raw.buffer.slice(raw.byteOffset,raw.byteOffset+raw.byteLength)),shape=westFarmingGeometry(values,layer);
+ return {id:product.id,source:layer.source,year:layer.year,unit:layer.unit,threshold:shape.threshold,positiveCells:[...values].filter(value=>value>0&&value!==layer.noData).length,strongCells:[...values].filter(value=>value>=shape.threshold).length};
+}));
+const record={status:'running',headSHA:process.env.REVIEW_HEAD_SHA??null,runId:process.env.GITHUB_RUN_ID??null,viewport:{width:1440,height:1000},source:{publisher:'FAOSTAT',domain:'Production_Crops_Livestock',elementCode:'5510',year:2024,unit:'t',targetCountries:20,rawArchive:faoInput.file,rawSHA256:faoInput.sha256,method:source.agriculture.method},selection:selected,display,images:[],browser:null};
 try{
  const executablePath=process.env.REVIEW_CHROME_PATH;
  assert(executablePath,'Use the runner\'s preinstalled Chrome');await access(executablePath,constants.X_OK);
@@ -62,6 +69,10 @@ try{
  assert.equal(await page.locator('[data-west-country]').inputValue(),'');
  assert.equal(await page.locator('[data-west-atlas]').getAttribute('data-topic'),'farming-overview');
  assert.equal(await page.locator('[data-west-farm-context]').count(),5);
+ assert.equal(await page.locator('[data-west-farm-map-key] [data-west-farm-map-label]').count(),5);
+ assert.equal(await page.locator('[data-west-farm-strong="wheat"]').count(),1);
+ assert.equal(await page.locator('[data-west-farm-strong="barley"]').count(),1);
+ assert.equal(await page.locator('[data-west-farm-overlap]').count(),1);
  assert.equal(await page.locator('[data-west-production-selection] li').count(),10);
  assert(await page.locator('[data-west-production-selection]').isVisible());
  const summary=await page.locator('.west-production-summary').evaluate(el=>({height:el.getBoundingClientRect().height,columns:getComputedStyle(el.querySelector('ol')).gridTemplateColumns.trim().split(/\s+/).length}));
@@ -75,21 +86,16 @@ try{
   const file=label+'.jpg',bytes=await page.screenshot({path:path.join(output,file),type:'jpeg',quality:78,fullPage,animations:'disabled'});
   record.images.push({file,fullPage,map,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')});
  };
- await capture('01-farming-overview',{fullPage:true});
- await page.locator('[data-west-production-selection] [data-west-topic-button="cattle-milk"]').click();await ready();
- assert.equal(await page.locator('[data-west-atlas]').getAttribute('data-topic'),'cattle-milk');
+ await capture('01-farming-overview');
+ await page.locator('[data-west-topic-button="wheat"]').first().click();await ready();
+ assert.equal(await page.locator('[data-west-atlas]').getAttribute('data-topic'),'wheat');
  assert.equal(await page.locator('[data-west-farm-context]').count(),5);
- assert.equal(await page.locator('[data-west-scene] [data-country]').count(),0);
- assert(await page.locator('[data-west-detail]').innerText().then(text=>text.includes('牛の密度図')));
- await page.locator('[data-west-country]').selectOption('TUR');await ready();
- assert(await page.locator('[data-west-detail]').innerText().then(text=>text.includes('FAOSTAT')));
- assert.equal(await page.locator('[data-west-comparison] tbody tr').count(),20);
- await capture('02-cattle-milk-context-turkey');
- await page.locator('[data-west-production-map]').click();await ready();
- assert.equal(await page.locator('[data-west-farm-context]').count(),0);
- assert.equal(await page.locator('[data-west-scene] [data-country]').count(),21);
- await page.locator('[data-west-production-map]').click();await ready();
- assert.equal(await page.locator('[data-west-farm-context]').count(),5);
+ assert.equal(await page.locator('[data-west-farm-selected="wheat"]').count(),2);
+ assert.equal(await page.locator('[data-west-farm-map-label="wheat"].is-muted').count(),0);
+ assert.equal(await page.locator('[data-west-farm-map-label="barley"].is-muted').count(),1);
+ assert.equal(await page.locator('[data-west-farm-map-label="sheep"].is-muted').count(),1);
+ assert.equal(await page.locator('[data-west-farm-context="sheep"]').getAttribute('opacity'),'.24');
+ await capture('02-wheat-selected');
  assert.deepEqual(errors,[]);assert.deepEqual(failedResponses,[]);
  assert.equal(record.images.length,2);
  record.status='passed';

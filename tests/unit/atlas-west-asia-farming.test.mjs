@@ -1,8 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readWestState,westSearch} from '../../src/lib/atlas-west-asia-state.mjs';
-import {westFarmingGeometry,westFarmingProducts,isWestFarmingOverview} from '../../src/lib/atlas-west-asia-farming.mjs';
+import {westFarmingGeometry,westFarmingOverlap,westFarmingProducts,isWestFarmingOverview} from '../../src/lib/atlas-west-asia-farming.mjs';
 import {readFileSync} from 'node:fs';
+import {gunzipSync} from 'node:zlib';
 import {westProductionSelection,westTopics} from '../../src/data/atlas/west-asia-topics.mjs';
 
 test('保存済み重量候補の選択は欠測を0扱いせず、飼養頭数と国別生産を混同しない',()=>{
@@ -35,8 +36,27 @@ test('0・欠測・負値を分布にせず、隣接正値の内部境界を省�
  assert.equal(shape.outline.includes('M1,0V1'),false,'no internal boundary between adjacent positive cells');
  assert.ok(shape.outline.includes('M2,0V1'));
  assert.ok(shape.points.every(p=>values[Math.floor(p.y)*l.width+Math.floor(p.x)]===p.value&&p.value>0));
+ assert.equal(shape.threshold,2);
+ assert.equal(shape.strongCoverage,'M0,0h2v1H0Z');
+ assert.ok(shape.strongPoints.every(p=>p.value>=shape.threshold));
  assert.deepEqual(values,original,'display derivation does not alter source values');
  assert.equal(shape.coverage,'M0,0h2v1H0Z','all positive source cells are retained while zeros, missing and negative cells remain empty');
- assert.deepEqual(westFarmingGeometry(Float32Array.of(0,-9999),{width:2,height:1,noData:-9999}),{coverage:'',outline:'',points:[]});
+ assert.deepEqual(westFarmingGeometry(Float32Array.of(0,-9999),{width:2,height:1,noData:-9999}),{coverage:'',strongCoverage:'',threshold:null,outline:'',points:[],strongPoints:[]});
+ assert.equal(westFarmingOverlap(Float32Array.of(5,1,4),Float32Array.of(7,8,2),4,6,3,1),'M0,0h1v1H0Z');
  assert.throws(()=>westFarmingGeometry(Float32Array.of(1),l),/length/);
+});
+
+test('系列内で強調しても小麦の主要産地とイエメンの山羊密度域が消えない',()=>{
+ const data=JSON.parse(readFileSync('public/assets/atlas/west-asia-v1/data.json','utf8'));
+ const grid=id=>{const layer=data.layers.find(row=>row.id===id),raw=gunzipSync(readFileSync('public/assets/atlas/west-asia-v1/'+layer.grid));return {layer,values:new Float32Array(raw.buffer.slice(raw.byteOffset,raw.byteOffset+raw.byteLength))};};
+ const count=(layer,values,threshold,[west,south,east,north])=>{
+  const mercX=lon=>6378137*lon*Math.PI/180,mercY=lat=>6378137*Math.log(Math.tan(Math.PI/4+lat*Math.PI/360)),b=layer.bounds3857;
+  const left=Math.max(0,Math.floor((mercX(west)-b[0])/(b[2]-b[0])*layer.width)),right=Math.min(layer.width,Math.ceil((mercX(east)-b[0])/(b[2]-b[0])*layer.width));
+  const top=Math.max(0,Math.floor((b[3]-mercY(north))/(b[3]-b[1])*layer.height)),bottom=Math.min(layer.height,Math.ceil((b[3]-mercY(south))/(b[3]-b[1])*layer.height));
+  let n=0;for(let y=top;y<bottom;y++)for(let x=left;x<right;x++)if(values[y*layer.width+x]>=threshold)n++;return n;
+ };
+ const wheat=grid('wheat'),wheatThreshold=westFarmingGeometry(wheat.values,wheat.layer).threshold;
+ for(const [place,bounds,minimum] of [['トルコ周辺',[26,36,45,42],10000],['イラン高原周辺',[44,25,62,40],10000],['イラク周辺',[38,29,49,38],5000],['エジプト周辺',[25,22,36,32],1000]])assert.ok(count(wheat.layer,wheat.values,wheatThreshold,bounds)>minimum,place);
+ const goat=grid('goat'),goatThreshold=westFarmingGeometry(goat.values,goat.layer).threshold;
+ assert.ok(count(goat.layer,goat.values,goatThreshold,[42,12,54,19])>5000,'イエメン周辺');
 });

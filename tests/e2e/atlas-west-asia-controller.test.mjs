@@ -45,10 +45,15 @@ test('中東の農畜産は五品目を同時表示し、作物の輪郭選択�
   assert.deepEqual(contexts(),['wheat','barley','sheep','goat','cattle']);
   assert.equal(q('[data-west-country]').value,'');assert.equal(q('[data-west-atlas]').dataset.topic,'farming-overview');
   assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-raster]').length,0);
-  assert.match(q('[data-west-legend]').textContent,/2020年.*品目.*選択作物/);
+  assert.match(q('[data-west-legend]').textContent,/2020年.*上位25%.*収穫面積.*推計密度/);
+  assert.equal(q('[data-west-farm-map-key]').hidden,false);
+  assert.equal(q('[data-west-farm-map-key]').querySelectorAll('[data-west-farm-map-label]').length,5);
+  assert.equal(q('[data-west-farm-overlap]')!==null,true);
   q('[data-west-topic-button=wheat]').click();await until(()=>q('[data-west-farm-selected=wheat]'));
   assert.deepEqual(contexts(),['wheat','barley','sheep','goat','cattle']);
-  for(const id of ['sheep','goat','cattle'])assert.equal(q('[data-west-farm-context='+id+']').getAttribute('opacity'),'.2');
+  for(const id of ['sheep','goat','cattle']){assert.equal(q('[data-west-farm-context='+id+']').getAttribute('opacity'),'.24');assert.equal(q('[data-west-farm-map-label='+id+']').classList.contains('is-muted'),true);}
+  assert.equal(q('[data-west-farm-map-label=barley]').classList.contains('is-muted'),true);
+  assert.equal(q('[data-west-farm-map-label=wheat]').classList.contains('is-muted'),false);
   assert.equal(q('[data-west-map]').getAttribute('viewBox'),frame);
   q('[data-west-topic-button=sheep]').click();await until(()=>!q('[data-west-farm-selected]')&&q('[data-west-farm-context=sheep]')?.getAttribute('opacity')==='1');
   assert.deepEqual(contexts(),['wheat','barley','sheep','goat','cattle']);
