@@ -11,6 +11,7 @@ import {
 } from '../../data/atlas/russia-learning';
 import '../../styles/atlas-russia-learning.css';
 import {renderRussiaWorkspaceLegend} from '../../scripts/atlas-russia-learning';
+import {russiaWheatWorldShare} from '../../data/atlas/russia-wheat-world-share';
 type RussiaField=keyof typeof russiaFields;
 interface Props {field?:RussiaField;overview?:boolean}
 const {field='nature',overview=false}=Astro.props;
@@ -26,6 +27,11 @@ const fieldThemes=russiaThemes.filter(t=>t.field===field);
 const industryEntryLabels:Record<string,string>={'northern-resources':'鉱業・加工','markets-and-port':'都市・港湾'};
 const fieldLayers=overview?russiaLayers.filter(l=>l.id==='cities'):russiaLayers.filter(l=>l.field===field);
 const scopeOptions=[{id:'all',label:'全体'},{id:'theme',label:'テーマ'},{id:'region',label:'選択地域'}];
+const wheatShareAxis=[0,5,10,15];
+const wheatShareX=(index:number)=>76+index*222;
+const wheatShareY=(share:number)=>196-share/15*150;
+const wheatSharePath=russiaWheatWorldShare.map((point,index)=>`${index?'L':'M'} ${wheatShareX(index)} ${wheatShareY(point.share)}`).join(' ');
+const wheatNumber=new Intl.NumberFormat('ja-JP',{maximumFractionDigits:1});
 ---
 <BaseLayout title={overview?'ロシア｜概要':`ロシア｜${russiaFields[field].label}`} description={overview?'ロシアの都市と地域を確かめ、4分野の分布を読む':russiaFields[field].title} compactAtlas>
  <div class="russia-workspace" data-russia-learning data-field={overview?'population':field} data-russia-overview={overview?'true':undefined}><div class="russia-desktop-shell" data-atlas-shell><RussiaNewsRail /><article class="russia-learning atlas-explorer" data-field={overview?'regional-overview':field}>
@@ -53,6 +59,17 @@ const scopeOptions=[{id:'all',label:'全体'},{id:'theme',label:'テーマ'},{id
     {field==='agriculture'&&!overview?<div class="russia-reading-scroll" tabindex="0" aria-label="地理の読み取りと詳しい資料"><p class="russia-farming-geography" data-geography-reading>{getRussiaFarmingGeography(layer.id,state.place)}</p><div class="russia-learning-detailed-readings"><details class="russia-learning-explanation"><summary>資料・表示方法の詳細</summary><p data-explanation>{fieldOverview.explanation}</p><p class="russia-legend-resolution" data-legend-resolution hidden={!layer.resolution}>{layer.resolution}</p><div class="russia-learning-coverage"><h3>この地図で読める範囲</h3><p data-coverage>{russiaCoverage(layer,state)}</p></div></details><details class="russia-learning-social"><summary>社会・制度とのつながりを読む</summary><p data-social-context>{theme.social}</p></details></div></div>:(<div class="russia-reading-scroll" tabindex="0" aria-label="選んだ場所の詳しい説明">{!overview&&<><p class="russia-legend-resolution" data-legend-resolution hidden={!layer.resolution}>{layer.resolution}</p><div class="russia-learning-coverage"><h3>この地図で読める範囲</h3><p data-coverage>{russiaCoverage(layer,state)}</p></div><details class="russia-climate-dictionary" data-climate-dictionary hidden={layer.id!=='climate'}><summary>気候区分のコードと名前</summary><div class="russia-learning-legend" data-primary-legend-definitions set:html={renderRussiaLegend(layer)}></div></details></>}  <div class="russia-learning-detailed-readings"><details class="russia-learning-explanation"><summary>選んだ場所と分布を詳しく読む</summary><p data-explanation>{fieldOverview.explanation}</p></details><details class="russia-learning-social"><summary>社会・制度とのつながりを読む</summary><p data-social-context>{theme.social}</p></details></div>
 </div>)}
    </aside>
+   {field==='agriculture'&&!overview&&<section class="russia-wheat-share" aria-labelledby="russia-wheat-share-title">
+    <div class="russia-wheat-share-heading"><div><p class="russia-wheat-share-kicker">小麦の生産と世界の中での割合</p><h2 id="russia-wheat-share-title">2022年、ロシアの小麦は世界生産量の{wheatNumber.format(russiaWheatWorldShare[2].share)}%</h2></div><p>2020〜2022年・生産量（t）から計算</p></div>
+    <p class="russia-wheat-share-reading">ロシアの生産量を、同じ年のFAOSTAT世界生産量で割った割合です。地図の色は2020年の収穫面積モデルで、この全国生産量や世界シェアを表しません。</p>
+    <div class="russia-wheat-share-chart"><svg viewBox="0 0 600 250" role="img" aria-labelledby="russia-wheat-chart-title russia-wheat-chart-desc"><title id="russia-wheat-chart-title">ロシアの小麦生産量の世界比、2020〜2022年</title><desc id="russia-wheat-chart-desc">{russiaWheatWorldShare.map(point=>`${point.year}年 ${wheatNumber.format(point.share)}%`).join('、')}。同年のロシアと世界の公表生産量から算出。</desc>
+     {wheatShareAxis.map(tick=><g><line x1="66" x2="530" y1={wheatShareY(tick)} y2={wheatShareY(tick)} class="russia-wheat-grid"/><text x="58" y={wheatShareY(tick)+5} text-anchor="end" class="russia-wheat-axis-label">{tick}%</text></g>)}
+     <path d={wheatSharePath} class="russia-wheat-line"/>
+     {russiaWheatWorldShare.map((point,index)=><g><circle cx={wheatShareX(index)} cy={wheatShareY(point.share)} r="6" class="russia-wheat-dot"/><text x={wheatShareX(index)} y={wheatShareY(point.share)-15} text-anchor="middle" class="russia-wheat-value">{wheatNumber.format(point.share)}%</text><text x={wheatShareX(index)} y="225" text-anchor="middle" class="russia-wheat-year">{point.year}年</text></g>)}
+    </svg></div>
+    <div class="russia-wheat-share-data"><h3>計算に用いた生産量</h3><table><thead><tr><th scope="col">年</th><th scope="col">ロシア（万t）</th><th scope="col">世界（万t）</th><th scope="col">世界比</th></tr></thead><tbody>{russiaWheatWorldShare.map(point=><tr><th scope="row">{point.year}</th><td>{wheatNumber.format(point.russianTonnes/10000)}</td><td>{wheatNumber.format(point.worldTonnes/10000)}</td><td>{wheatNumber.format(point.share)}%</td></tr>)}</tbody></table></div>
+    <p class="russia-wheat-share-source">出典：<a href="https://www.fao.org/faostat/en/#data/QCL">FAOSTAT, Crops and livestock products, Wheat, Production Quantity（ロシア・World）</a>。2025年12月31日公開の保存済み系列、<a href="https://www.fao.org/contact-us/terms/db-terms-of-use/">CC BY 4.0</a>。2023・2024年のロシア値は原資料で非公式値（X）のため、この図には使っていません。2022年は確認できる最新年という意味ではありません。</p>
+   </section>}
   </div>
   <section class="russia-learning-comparison" data-comparison-view hidden aria-label="元の分布と比較する">
    <div class="russia-learning-comparison-grid">

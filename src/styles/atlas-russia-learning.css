@@ -347,6 +347,27 @@
 .russia-workspace .russia-learning[data-field=agriculture] .russia-farming-map-legend [data-primary-legend] { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 14px; line-height: 1.5; }
 .russia-farming-map-legend [data-farming-key] { display: inline-flex; align-items: center; gap: 5px; }
 .russia-farming-map-legend [data-farming-key] small { font-size: 13px; color: #5a696c; }
+
+.russia-wheat-share{grid-column:1/-1;margin-top:10px;padding:20px 24px;border:1px solid #cbd7cc;background:#fffefa;color:#203a42}
+.russia-wheat-share-heading{display:flex;align-items:start;justify-content:space-between;gap:16px}
+.russia-wheat-share-heading h2{font-family:var(--serif);font-size:21px;line-height:1.45}
+.russia-wheat-share-heading>p,.russia-wheat-share-kicker{font-size:13px;color:#526570}
+.russia-wheat-share-kicker{font-weight:700}
+.russia-wheat-share-reading{margin-top:8px!important;max-width:72ch;line-height:1.75}
+.russia-wheat-share-chart{max-width:760px;margin:12px auto 0}
+.russia-wheat-share-chart svg{display:block;width:100%;height:auto;overflow:visible}
+.russia-wheat-grid{stroke:#cbd5d2;stroke-width:1}
+.russia-wheat-line{fill:none;stroke:#24576a;stroke-width:3}
+.russia-wheat-dot{fill:#24576a;stroke:#fff;stroke-width:2}
+.russia-wheat-axis-label,.russia-wheat-year{fill:#425861;font-size:13px}
+.russia-wheat-value{fill:#173e50;font-size:15px;font-weight:700}
+.russia-wheat-share-data{max-width:760px;margin-inline:auto}
+.russia-wheat-share-data h3{font-size:15px;margin-bottom:4px}
+.russia-wheat-share-data table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.russia-wheat-share-data th,.russia-wheat-share-data td{padding:5px 8px;border-bottom:1px solid #dce3dd;text-align:right}
+.russia-wheat-share-data th:first-child{text-align:left}
+.russia-wheat-share-source{margin-top:16px!important;font-size:13px;line-height:1.7;color:#526570}
+@media(max-width:600px){.russia-wheat-share{padding:15px 12px}.russia-wheat-share-heading{display:block}.russia-wheat-share-heading h2{font-size:18px}.russia-wheat-share-data{overflow-x:auto}.russia-wheat-share-data table{min-width:470px}}
 .russia-farming-legend-details { margin-top: 6px; }
 .russia-workspace .russia-learning[data-field=agriculture] .russia-farming-legend-details [data-primary-legend-definitions] { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; font-size: 14px; }
 .russia-farming-legend-details .russia-farming-legend-group { grid-column: auto; }

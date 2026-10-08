@@ -85,6 +85,14 @@ try{
     await shot(`${region}-${field}-${width}-overview`);
     if(farmingOnly){
      if(region==='russia'){
+      const wheatShare=host.locator('.russia-wheat-share');
+      assert.ok(await wheatShare.isVisible(),'Historical wheat share chart is visible below the map');
+      assert.match(await wheatShare.locator('h2').textContent(),/2022年.*12\.9%/);
+      assert.deepEqual(await wheatShare.locator('tbody tr td:last-child').allTextContents(),['11.1%','9.7%','12.9%']);
+      assert.equal(await wheatShare.locator('svg path.russia-wheat-line').count(),1);
+      assert.match(await wheatShare.textContent(),/2023・2024年.*非公式値.*使っていません/);
+      assert.match(await wheatShare.textContent(),/2020年の収穫面積モデル/);
+      assert.ok((await wheatShare.boundingBox()).y>bounds.y+bounds.height,'Chart follows the map');
       const legend=host.locator('[data-primary-legend]'),key=host.locator('[data-key-legend]'),reading=host.locator('.russia-learning-reading');
       assert.equal(await key.evaluate(el=>!!el.closest('.russia-learning-map-panel')),true,'Legend belongs to the map panel');
       assert.equal(await reading.locator('[data-primary-legend]').count(),0,'Right reading is free of the map legend');
