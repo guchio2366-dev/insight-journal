@@ -62,6 +62,13 @@ const output = {
   riverSource: 'Natural Earth v5.1.2 50m rivers, selected lines; see context-v1/manifest.json',
   method: 'Group only identical MAIN_BAS identifiers, follow NEXT_DOWN to the same outlet; do not merge adjacent polygons. Compare the existing river line endpoints with the published basin grid.',
   limitations: ['The Europe grid is a clipped display mask, not original basin geometry.', 'The stored river lines may start downstream of the source.', 'A complete source river and uncut whole-basin polygon need independent verification before the screen can say 全流域・本流・河口.'],
+  proposedFullMainstemSource: {
+    product: 'HydroRIVERS v1, Europe and Middle East shapefile (68 MB)',
+    productUrl: 'https://www.hydrosheds.org/products/hydrorivers',
+    downloadLink: 'Europe and Middle East Shapefile (68 MB), official product page link 32; binary URL not acquired',
+    licenseUrl: 'https://data.hydrosheds.org/file/technical-documentation/HydroSHEDS_TechDoc_v1_4.pdf',
+    decision: 'Not downloaded or published: Appendix A sections 2.1.2–2.1.3 require an end-user license at least as protective as the source agreement, prohibit standalone distribution, and add restrictions that this site’s public asset download has not met. Review a compatible alternative or distribution route before use.',
+  },
   reviews,
 };
 await writeFile(outputPath, JSON.stringify(output, null, 2) + '\n');

@@ -32,6 +32,6 @@ Draft PR 用の確認記録です。1440 × 1000 px の Chromium で本番ビル
 - 林業：欧州域外の輸出入相手先と世界シェアの推移は、加工段階と地域集合を揃えた原表が必要です。既存の丸太・製材国別比較は補助表示として保持。
 - 地下水：BGR/PANGAEA 855274のCC BY 3.0を確認した。公開IMGの通常HTTPS HEADはPANGAEAストア到達前にEnvoyのCONNECT 403となり、GDALでCRS・位置合わせを検査する原画像を取得できなかった。詳細は `data-source/atlas/europe/groundwater/pangaea-855274-assessment.json`。WHYMAPの権利不整合とWISEの国別制限は引き続き保留。
 - 宗教：Czechia・Serbia・Estoniaの7地域の原表抜粋を実画面に追加。英・ウェールズ・クロアチアの公表総計とも混同しない。4か国の全地域表と境界は未収録で、国別調査を自治体へ複写しない。Estoniaの加工抜粋はStatistics Estoniaへの帰属とCC BY-SA 4.0を明示する。
-- 流域：同じMAIN_BASのドナウ9区画はNEXT_DOWNで出口までつながり、既存河道末端は出口区画に入ると確認。ただし表示用格子は45か国枠で切られ、既存のNatural Earth河道は源流を欠く。全流域・本流・河口を同時に示す製品図にはまだ採用しない。
+- 流域：同じMAIN_BASのドナウ9区画はNEXT_DOWNで出口までつながり、既存河道末端は出口区画に入ると確認。ただし表示用格子は45か国枠で切られ、既存のNatural Earth河道は源流を欠く。全流域・本流・河口を同時に示す製品図にはまだ採用しない。代替候補の[HydroRIVERS欧州・中東Shapefile](https://www.hydrosheds.org/products/hydrorivers)は、[HydroSHEDS利用契約Appendix Aの2.1.2–2.1.3節](https://data.hydrosheds.org/file/technical-documentation/HydroSHEDS_TechDoc_v1_4.pdf)で利用者との保護的な契約と単独再配布禁止が規定されている。公開アセットとしての配布方法がこの条件を満たすか未確認のため取得・収録していない。
 
 ローカルの本番ビルド、単体テスト1034件（成功1031、失敗0、既存スキップ3）、欧州E2Eを確認しました。1440×1000 pxのChromiumで代表6画面を確認し、品目別統計の修正後は小麦画面1枚を再撮影して国別詳細まで操作確認しました。1024×800 pxでも農畜産・産業・自然環境の横はみ出しはありません。全地域E2Eと公開境界はPRのCIで確認します。
