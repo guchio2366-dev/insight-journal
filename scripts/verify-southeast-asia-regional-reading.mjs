@@ -49,6 +49,13 @@ export async function verifySoutheastAsiaRegion(page,{source,capture:takePicture
  assert.equal(new URL(page.url()).searchParams.get('detail'),'t-85');record('regional supply view retains all 11 reporters and the HS chapter on reload');await capture('regional-supply');
 
  await open('agriculture/');await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmContextStatus==='ready');
+ await page.waitForFunction(()=>document.querySelector('.asia-farm-connections-grid > section:first-child h3')?.textContent==='米を生産する国');
+ assert.equal(await page.locator('.southeast-supply-bars li').count(),5);
+ assert.match(await page.locator('.asia-farm-connections-grid > section:nth-child(2)').textContent(),/HS15章.*パーム油HS1511だけの相手国ではありません/s);
+ assert.equal(await page.locator('.southeast-partner-list li').count(),5);
+ assert.match(await page.locator('[data-southeast-forest-reading]').textContent(),/丸太材.*製材.*世界比/s);
+ assert.match(await page.locator('[data-southeast-trade-reading]').textContent(),/2023年.*パーム油.*コーヒー.*木材製品.*天然ゴム/s);
+ record('Southeast production bars, correctly scoped HS15 partner pie, forestry ratios and export examples');
  assert.equal(await country.isVisible(),false);assert.equal(await page.locator('.asia-country-list').isVisible(),false);
  const livestock=page.locator('.asia-livestock-point:visible'),count=await livestock.count();assert(count>0);
  await page.locator('[data-farm-choice="maize"]').click();await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmSelected==='maize');
@@ -66,6 +73,7 @@ export async function verifySoutheastAsiaRegion(page,{source,capture:takePicture
  record('returning to all products restores livestock and the regional camera');await capture('farm-all-restored');
 
  await page.locator('[data-farm-group="forestry"]').click();await expand('[data-reading-details]');await page.locator('[data-place-story]').selectOption('peninsula-forest');
+ assert.match(await page.locator('[data-south-central-world-share]').textContent(),/森林面積.*2024年.*世界の森林面積/s);
  assert.doesNotMatch(await page.locator('[data-map-gesture]').textContent(),/国の選択欄/);
  const forest=new URL(page.url());assert.equal(forest.searchParams.get('place'),'MYS');
  const wood=page.locator('[data-place-story-bridges] [data-place-bridge-topic="trade-exports"]');assert.match(await wood.textContent(),/東南アジア全体/);await wood.click();

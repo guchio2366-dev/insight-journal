@@ -3,13 +3,14 @@ import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
 import {resolve} from 'node:path';
 import {southeastCropPriority} from '../../../data/atlas/asia/southeast-asia-crop-priority.mjs';
+import {southeastStudyCountries,southeastCountryNames,southeastExportExamples} from '../../../data/atlas/asia/southeast-asia-forestry-trade';
 import shares from '../../../../public/assets/atlas/southeast-asia-v1/world-shares.json';
 
 const statistics=JSON.parse(gunzipSync(readFileSync(resolve(process.cwd(),'public/assets/atlas/asia-farming-v1/statistics.json.gz'))).toString('utf8'));
 const priority=southeastCropPriority(statistics);
 const amount=(tonnes:number)=>tonnes>0&&tonnes<5000?'<1':Math.round(tonnes/10000).toLocaleString('ja-JP');
 const mapLabels:Record<string,string>={arabica:'アラビカ分布',robusta:'ロブスタ分布'};
-const studyCountries=[['IDN','インドネシア'],['VNM','ベトナム'],['THA','タイ']] as const;
+const studyCountries=southeastStudyCountries;
 const shareText=(value:number|undefined)=>value===undefined?'欠測':value>0&&value<.01?'0.01%未満':`${value.toLocaleString('ja-JP',{maximumFractionDigits:2})}%`;
 const worldRows=shares.series.filter(series=>['rice-production','maize-production','soybean-production'].includes(series.id)).flatMap(series=>studyCountries.map(([code,name])=>({
  item:series.label,country:name,initial:series.years.find(row=>row.year===2020)?.countries[code]?.share,
@@ -18,12 +19,12 @@ const worldRows=shares.series.filter(series=>['rice-production','maize-productio
 const riceShare=(country:string)=>shareText(worldRows.find(row=>row.item==='米'&&row.country===country)?.initial);
 const trade=JSON.parse(gunzipSync(readFileSync(resolve(process.cwd(),'public/assets/atlas/asia-trade-v1/southeast-asia.json.gz'))).toString('utf8'));
 const faoValue=(code:string,item:string,element='Production')=>statistics.countries[code]?.observations.find((o:{domain:string;item:string;element:string;year:number;value:number})=>o.domain===(item==='6646'?'Inputs_LandUse':item==='27'?'Production_Crops_Livestock':'Forestry')&&o.item===item&&o.element===element&&o.year===2024)?.value as number|undefined;
-const countryNames:Record<string,string>={IDN:'インドネシア',VNM:'ベトナム',THA:'タイ',MMR:'ミャンマー',MYS:'マレーシア',PHL:'フィリピン',KHM:'カンボジア',LAO:'ラオス',BRN:'ブルネイ',SGP:'シンガポール',TLS:'東ティモール'};
+const countryNames=southeastCountryNames;
 const quantity=(value:number|undefined)=>value===undefined?'欠測':Math.round(value/10000).toLocaleString('ja-JP');
 const dollars=(value:number|undefined)=>value===undefined?'欠測':(value/1e8).toLocaleString('ja-JP',{maximumFractionDigits:1});
 const forestItems=[['1861','丸太材'],['1872','製材']] as const;
 const forestRows=forestItems.flatMap(([item,label])=>studyCountries.map(([code,name])=>({item:label,name,value:faoValue(code,item),flag:statistics.countries[code]?.observations.find((o:{domain:string;item:string;element:string;year:number;flag:string})=>o.domain==='Forestry'&&o.item===item&&o.element==='Production'&&o.year===2024)?.flag,share:shares.series.find(s=>s.id===(item==='1861'?'roundwood-production':'sawnwood-production'))?.years.find(y=>y.year===2024)?.countries[code]?.share})));
-const tradeItems=[['IDN','1511','パーム油とその分別物'],['VNM','0901','コーヒー'],['VNM','44','木材・木材製品・木炭'],['THA','1006','米'],['THA','4001','天然ゴム']] as const;
+const tradeItems=southeastExportExamples;
 const exportRows=tradeItems.map(([code,hs,label])=>({name:countryNames[code],hs,label,value:trade.countries[code].products[hs]?.X as number|undefined}));
 const riceProducers=Object.keys(countryNames).map(code=>({code,name:countryNames[code],value:faoValue(code,'27')})).filter((r):r is {code:string;name:string;value:number}=>r.value!==undefined).sort((a,b)=>b.value-a.value).slice(0,5);
 const riceMax=riceProducers[0]?.value??1;
