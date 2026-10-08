@@ -286,3 +286,21 @@
  .west-atlas[data-city-climate-active=true] .west-reading .atlas-climate-diagram>figcaption{margin-top:0}
  .west-atlas[data-city-climate-active=true] .west-reading .atlas-city-reading{margin-top:8px}
 }
+
+/* West Asia's combined water view keeps metric fills and categorical hatching separate. */
+.west-water-pick p { margin:.3rem 0; font-size:.78rem; font-weight:700; }
+.west-water-pick button { margin:.15rem .15rem .15rem 0; padding:.3rem .5rem; border:1px solid #aabbbd; border-radius:3px; background:#fffdf6; font-size:.76rem; cursor:pointer; }
+.west-water-pick button[aria-pressed="true"] { color:#fff; background:#284e60; border-color:#284e60; }
+.west-natural-selection,.west-natural-value { border-left:3px solid #ab7832; padding-left:.7rem; margin:.7rem 0; }
+.west-natural-selection h3,.west-natural-value h3 { margin:.3rem 0; font-size:.92rem; }
+.west-natural-selection p,.west-natural-value p { margin:.3rem 0; font-size:.82rem; line-height:1.65; }
+.west-contour-label { paint-order:stroke; stroke:#fffdf5; stroke-width:3px; stroke-linejoin:round; fill:#365b6c; }
+.west-water-key { display:flex; flex-wrap:wrap; gap:.35rem .75rem; margin:.5rem 0; font-size:.74rem; }
+.west-water-key span { display:flex; align-items:center; gap:.3rem; }
+.west-water-key i { display:inline-block; width:20px; height:12px; }
+.west-water-river { border-top:2px solid #307aa3; }
+.west-water-basin { border:2px dashed #ad7830; }
+.west-water-aquifer { background:repeating-linear-gradient(55deg,transparent 0 5px,#49687e 5px 6px); border:1px solid #9caaa7; }
+.west-water-aquifer.aquifer-2 { background:repeating-linear-gradient(-55deg,transparent 0 5px,#576d49 5px 6px); }
+.west-water-aquifer.aquifer-3 { background:repeating-linear-gradient(55deg,transparent 0 8px,#8b7752 8px 10px); }
+[data-natural-feature]:focus,[data-basin]:focus,[data-ground]:focus { outline:none; stroke:#a23f2d; stroke-width:3px; }

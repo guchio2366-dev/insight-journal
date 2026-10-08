@@ -47,6 +47,9 @@ const network=entry('地域全体の供給網：産地・加工・通過点を�
   'これは地理的な接続の説明です。現在の通航・施設の稼働、実際の輸出先構成、貨物の流量を示す地図ではありません。国別TEU、製造業付加価値、資源レントはそれぞれ別の単位・定義で読みます。',
 ],['transit']);
 export const westTopicReasons = {
+  rivers:'雨の少ないエジプトのナイル川沿い、トルコの高地からイラクへ続く流域、河川の少ないアラビア半島の地下水を比べます。雨の降る場所、川が運ぶ水、地下へ補給される水は一致しません。灌漑と水を届ける設備・費用も合わせて読みましょう。',
+  terrain:'アナトリア高原・イランの山地と高原から、イラクの低地へ輪郭を追います。河川は国境を越えて流れるため、標高の起伏と流域を往復すると上流・下流の位置関係を読めます。',
+  contours:'トルコ・イランの高原や山地、イラクの低地、アラビア半島南西部の高地を、海面からの高さで比較します。海面下の色帯を欠測と混同せず、地点の保存格子の値も確認しましょう。',
   'farming-overview':'小麦・大麦はトルコとイランの高原やイラクの川沿い、家畜は高原・山麓とその周辺で比較しましょう。作物の輪郭と家畜の点は2020年の推計からの案内で、点の数は頭数ではありません。灌漑・天水の切替では水の確保方法を比べられます。',
   'annual-precipitation':'黒海沿岸のリゼ、内陸のアンカラ、アラビア半島のリヤドを手掛かりに年降水量の違いを読みます。250mmは雨量の比較に使う目盛りで、天水農業の共通限界ではありません。山地・雨の季節と、灌漑を合わせて確認しましょう。',
   groundwater:waterEnergy,
@@ -64,6 +67,7 @@ export const westTopicReasons = {
 export function westRegionalReading(topic,selection={}) {
   if(topic.field==='industry')return westIndustryCountry(selection.country)?industry[selection.country]:network;
   if(topic.id==='groundwater')return entry('乾燥地の農業と地下水',[],['irrigation','water']);
+  if(topic.id==='rivers')return entry('乾燥地の農業と水を届ける仕組み',[waterEnergy],['irrigation','water']);
   if(topic.id==='desalination')return entry('水の供給とエネルギー',[],['saudi','water']);
   if(['wheat-irrigated','barley-irrigated','dates'].includes(topic.id))return entry('水を確保して栽培する', [waterEnergy],['irrigation']);
   if(topic.id==='basins'&&selection.basin==='1060034260')return entry('ナイル川：エジプトの外へ続く上流',['表示流域はエジプトより南の上流も含みます。国別の雨量だけでナイル川沿いの農地の水供給を説明できません。川の近くにある畑でも、取水・送水設備と水の配分を別に確認する必要があります。'],['water']);
@@ -85,4 +89,10 @@ export const westFarmingSelection = {
   candidates:'10品目への拡充候補は牛乳・鶏肉・鶏卵です。国別のFAOSTAT生産量は保存済みですが、対応する細地域の生産分布は未整備です。牛の密度を牛乳・牛肉の生産分布へ代用しません。',
   next:'次点は米・牛肉・豚肉です。保存済み国別系列はありますが、地域全体の採用順位と細地域分布の根拠を確認してから追加します。現在の7品目は上位10品目の網羅や順位を意味しません。',
   missing:'供給元と国内仕向け・輸出先・世界生産シェアの同一定義・年の数量系列は未収録です。国別生産量を輸出や消費に置き換えず、確認前の割合・円・推移線は作りません。',
+};
+
+export const westWaterIntroductions = {
+  rivers:'雨の少ないエジプトではナイル川沿い、イラクではチグリス・ユーフラテス川沿いに農地が広がります。河川の少ないアラビア半島では地下水が灌漑を支え、揚水と送水に設備・エネルギーが必要です。',
+  'annual-precipitation':'トルコの黒海沿岸のリゼ、アナトリア高原のアンカラ、アラビア半島内陸のリヤドを比べ、沿岸・山地・内陸の年降水量の違いを読みます。農業では雨の量だけでなく、生育期の雨と灌漑も関わります。',
+  basins:'ナイル川の南の上流からエジプトの低地へ、トルコなどの高地からチグリス・ユーフラテス川沿いのシリア・イラクへ、水が集まる範囲を見比べます。初期表示では代表2流域と主要河川を同時に示します。',
 };

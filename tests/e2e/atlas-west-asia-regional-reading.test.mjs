@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {webcrypto} from 'node:crypto';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {build} from 'esbuild';
@@ -10,7 +11,7 @@ async function setup(route,query=''){
  const w=new Window({url:`https://example.com/insight-journal/atlas/west-asia/${route}/${query}`,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true}});
  w.happyDOM.setWindowSize({width:1440,height:1000});
  w.document.body.innerHTML=(await readFile(`dist/atlas/west-asia/${route}/index.html`,'utf8')).replace(/<script\b[\s\S]*?<\/script>/g,'');
- w.ResizeObserver=class{observe(){}disconnect(){}};w.Response=Response;w.Blob=Blob;w.DecompressionStream=DecompressionStream;
+ w.ResizeObserver=class{observe(){}disconnect(){}};Object.defineProperty(w,'crypto',{value:webcrypto});w.Response=Response;w.Blob=Blob;w.DecompressionStream=DecompressionStream;
  w.fetch=async url=>new Response(await readFile('public/'+String(url).replace('/insight-journal/','')));
  w.eval(bundle.outputFiles[0].text);const q=selector=>w.document.querySelector(selector);
  await until(()=>q('[data-west-atlas]')?.dataset.ready==='true'&&q('[data-west-loading]').hidden);
