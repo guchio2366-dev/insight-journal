@@ -40,7 +40,7 @@ try{
     await page.waitForFunction(([topic,title])=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-map-title]')?.textContent===title&&document.querySelector(`[data-settlement-legend="${topic}"]`)?.hidden===false&&document.querySelectorAll('.asia-settlement-label:not([hidden])').length>0,[topic,title],{timeout:60000});
     await page.waitForLoadState('networkidle');
     await page.evaluate(()=>document.fonts.ready);
-    assert.equal(await page.locator('[data-population-topic]').inputValue(),topic);
+    assert.equal(new URL(page.url()).searchParams.get('topic'),topic);
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
     const screenshot=join(output,name);
     await page.screenshot({path:screenshot,fullPage:true,animations:'disabled'});
