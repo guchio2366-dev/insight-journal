@@ -466,7 +466,7 @@ async function capture(browser, origin, profile, country, scene) {
     }
     if (country.id === 'mexico' && profile.name === 'desktop' && scene.id === 'dairy') {
       const detail = page.locator('[data-mexico-milk-world-comparison]');
-      await detail.locator('summary').click();
+      await detail.locator('summary').first().click();
       assert(await detail.locator('[data-world-production="mexico-milk-2024"]').isVisible(), 'Mexico milk world chart is hidden');
       record.statisticsScreenshot = `${name}-milk-world.png`;
       await detail.screenshot({path: path.join(output, record.statisticsScreenshot), animations: 'disabled'});
