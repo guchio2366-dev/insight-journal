@@ -23,7 +23,7 @@ test('elevation clears obsolete country context, keeps all bands and lines on se
  await page('?field=nature&topic=elevation&place=EGY&compare=COD&region=north&zoom=country&view=statistics&year=2023',async({window,root,q,ready})=>{
   await ready();const params=()=>new URL(window.location.href).searchParams;
   for(const key of ['place','compare','region','year','context'])assert.equal(params().has(key),false);
-  assert.equal(params().get('zoom'),'all');assert.equal(q('[data-africa-elevation-note]').hidden,false);assert.equal(q('[data-theme-comparison]').hidden,true);
+  assert.equal(params().get('zoom'),'all');assert.equal(q('[data-africa-elevation-note]').hidden,false);assert.equal(q('[data-theme-comparison]'),null);
   const paths=()=>[...root.querySelectorAll('[data-africa-layer-feature]')].map(p=>p.getAttribute('d'));
   const original=paths();assert.equal(original.length,19);assert.equal(root.querySelectorAll('[data-africa-elevation-band]').length,10);assert.equal(root.querySelectorAll('[data-africa-elevation-contour]').length,9);
   q('[data-africa-layer-class="band-3"]').click();assert.deepEqual(paths(),original);assert.ok(q('[data-africa-class-outline="band-3"]'));assert.match(q('[data-africa-point-reading]').textContent,/1,000–1,500 m/);

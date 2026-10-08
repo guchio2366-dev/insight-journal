@@ -1,70 +1,53 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readState,writeState,canonicalRiver,africaComparisonSnapshot} from '../../src/data/atlas/africa-atlas.ts';
+import {readState,writeState,canonicalRiver} from '../../src/data/atlas/africa-atlas.ts';
 
 const url=()=>new URL('https://example.com/atlas/africa/');
-const riverState=(river)=>readState('?'+new URLSearchParams({field:'nature',topic:'water',water:'river',metric:'ER.H2O.INTR.PC',river,view:'distribution',place:'EGY',compare:'COD',year:'2022',region:'all',zoom:'all'}));
+const rivers=['nile','congo','niger','zambezi','orange','limpopo','senegal','volta','okavango'];
+const riverState=river=>readState('?'+new URLSearchParams({field:'nature',topic:'water',water:'river',river,place:'EGY',compare:'COD',year:'2022',region:'north',zoom:'country',view:'statistics'}));
 
-test('named river URLs round trip with their existing country, year and viewport selections',()=>{
- for(const river of ['nile','congo']){
-  const state=riverState(river),written=writeState({...state},url());
-  assert.equal(state.river,river);assert.equal(written.searchParams.get('river'),river);
-  assert.equal(state.place,'EGY');assert.equal(state.compare,'COD');assert.equal(state.year,2022);assert.equal(state.zoom,'all');
-  assert.deepEqual(readState(written.search),state);
+test('all nine named river selections survive canonical reload without country comparison state',()=>{
+ for(const river of rivers){
+  const state=riverState(river),written=writeState({...state},url()),loaded=readState(written.search);
+  assert.equal(state.river,river);assert.equal(loaded.river,river);assert.equal(written.searchParams.get('river'),river);assert.equal(loaded.water,'river');assert.equal(loaded.topic,'water');
+  assert.equal(state.place,'');assert.equal(state.compare,'');assert.equal(state.zoom,'all');assert.equal(state.region,'all');assert.equal(state.view,'distribution');
+  for(const key of ['place','compare','year','metric','view','context','sourceState'])assert.equal(written.searchParams.has(key),false,key);
  }
- // The established freshwater metric is enough to resolve the river layer.
  assert.equal(readState('?field=nature&topic=water&metric=ER.H2O.INTR.PC&river=congo').river,'congo');
 });
 
-test('only the two named river choices are accepted, without making a selection for legacy URLs',()=>{
+test('river names are allowlisted and known legacy Nile links retain their original reading',()=>{
+ const legacy=readState('?field=nature&theme=nile-water');assert.equal(legacy.river,'nile');assert.equal(legacy.water,'river');assert.equal(legacy.view,'distribution');
  const active={field:'nature',topic:'water',water:'river'};
- for(const invalid of [null,undefined,false,{},[],'','Nile','nile,congo',' nile ','niger','constructor','__proto__','ne50-river-0047']){
-  assert.equal(canonicalRiver(active,invalid),'');
-  if(typeof invalid==='string')assert.equal(riverState(invalid).river,'');
- }
- for(const query of ['', '?field=nature&theme=nile-water', '?field=nature&topic=water&metric=ER.H2O.INTR.PC', '?field=agriculture', '?field=industry', '?field=population']){
-  const state=readState(query),written=writeState({...state},url());
-  assert.equal(state.river,'');assert.equal(written.searchParams.has('river'),false);
-  assert.deepEqual(readState(written.search),state);
- }
- const legacy=readState('?field=nature&theme=nile-water');
- assert.equal(legacy.view,'statistics');assert.equal(legacy.water,'rain');assert.equal(legacy.theme,'nile-water');
-});
-
-test('unrelated fields, topics and water subtypes clear stale selections on both read and write',()=>{
- for(const changes of [
-  {field:'agriculture'}, {field:'industry'}, {field:'population'},
-  {topic:'climate'}, {topic:'terrain'}, {topic:'elevation'},
-  {water:'basin'}, {water:'rain',metric:'AG.LND.PRCP.MM'}
- ]){
-  const stale={...riverState('nile'),...changes};
-  const raw='?'+new URLSearchParams(Object.entries(stale).filter(([,value])=>typeof value==='string'||typeof value==='number'));
-  assert.equal(readState(raw).river,'');
-  const written=writeState(stale,new URL('https://example.com/atlas/africa/?river=congo&utm=test'));
-  assert.equal(stale.river,'');assert.equal(written.searchParams.has('river'),false);assert.equal(written.searchParams.get('utm'),'test');
- }
- assert.equal(readState('?river=nile').river,'');
- const reset=writeState(readState(''),new URL('https://example.com/atlas/africa/?river=congo'));
- assert.equal(reset.searchParams.has('river'),false);assert.equal(readState(reset.search).topic,'climate');
-});
-
-test('freshwater comparison reload and return restore each complete river source snapshot',()=>{
- for(const river of ['nile','congo']){
-  const source={...riverState(river),layerPoint:river==='nile'?'31,25':'20,-2'},snapshot=africaComparisonSnapshot(source);
-  assert.equal(new URLSearchParams(snapshot).get('river'),river);assert.ok(snapshot.length<=1800);
-  const comparison={...source,context:'ER.H2O.INTR.PC',sourceState:snapshot,view:'statistics',place:'KEN',compare:'ETH',zoom:'country',year:2023};
-  const loaded=readState(writeState({...comparison},url()).search);
-  assert.equal(loaded.context,'ER.H2O.INTR.PC');assert.equal(loaded.river,river);assert.equal(loaded.view,'statistics');
-  const restored=readState('?'+loaded.sourceState);
-  assert.deepEqual(restored,source);assert.deepEqual(readState(writeState({...restored},url()).search),source);
-  assert.equal(new URLSearchParams(snapshot).has('sourceState'),false);assert.equal(new URLSearchParams(snapshot).has('context'),false);
+ for(const invalid of [null,undefined,false,{},[],'','Nile','nile,congo',' nile ','constructor','__proto__','ne50-river-0047'])assert.equal(canonicalRiver(active,invalid),'');
+ for(const query of ['', '?field=nature&topic=water&metric=ER.H2O.INTR.PC', '?field=agriculture', '?field=industry', '?field=population']){
+  const state=readState(query),written=writeState({...state},url());assert.equal(state.river,'');assert.equal(written.searchParams.has('river'),false);assert.equal(state.view,'distribution');
  }
 });
 
-test('separate URL history entries keep selection, comparison return and reset independent',()=>{
- const nile=riverState('nile'),congo={...riverState('congo'),place:'COD',compare:'EGY'},comparison={...congo,context:'ER.H2O.INTR.PC',sourceState:africaComparisonSnapshot(congo),view:'statistics'};
- const states=[nile,congo,comparison,readState('')],history=states.map(state=>writeState({...state},url()).search);
- // Visit entries out of order as popstate does; no read depends on the previous selection.
- for(const index of [3,2,1,0,1,2,3])assert.deepEqual(readState(history[index]),states[index]);
- assert.deepEqual(readState('?'+readState(history[2]).sourceState),congo);
+test('river, real basin and climate city selections are scoped to their own layer on read and write',()=>{
+ const cases=[
+  ['?field=nature&topic=water&water=river&river=niger&basin=b-1060034260&city=helwan','niger','',''],
+  ['?field=nature&topic=water&water=basin&river=nile&basin=b-1060034260&city=helwan','','b-1060034260',''],
+  ['?field=nature&topic=climate&river=nile&basin=b-1060034260&city=helwan','','','helwan'],
+  ['?field=nature&topic=water&water=rain&river=nile&basin=b-1060034260&city=helwan','','',''],
+  ['?field=agriculture&river=nile&basin=b-1060034260&city=helwan','','','']
+ ];
+ for(const [query,river,basin,city] of cases){
+  const state=readState(query),loaded=readState(writeState({...state},url()).search);
+  for(const actual of [state,loaded])assert.deepEqual([actual.river,actual.basin,actual.city],[river,basin,city]);
+ }
+ for(const basin of ['Nile','b-123','constructor','b-1060034260,other'])assert.equal(readState('?field=nature&topic=water&water=basin&basin='+basin).basin,'');
+ for(const city of ['cairo','Helwan','constructor'])assert.equal(readState('?field=nature&topic=climate&city='+city).city,'');
+ for(const changes of [{field:'agriculture'},{field:'industry'},{field:'population'},{topic:'climate'},{topic:'terrain'},{topic:'elevation'},{water:'basin'},{water:'rain'}]){
+  const state={...riverState('nile'),...changes};const written=writeState(state,new URL('https://example.com/atlas/africa/?river=congo&utm=test'));assert.equal(state.river,'');assert.equal(written.searchParams.has('river'),false);assert.equal(written.searchParams.get('utm'),'test');
+ }
+});
+
+test('history entries independently restore river, basin, city and reset selections',()=>{
+ const states=[riverState('nile'),riverState('okavango'),readState('?field=nature&topic=water&water=basin&basin=b-1060034260'),readState('?field=nature&topic=climate&city=helwan'),readState('')];
+ const history=states.map(state=>writeState({...state},url()).search);
+ for(const index of [4,3,2,1,0,1,2,3,4]){
+  const loaded=readState(history[index]),source=states[index];for(const key of ['field','topic','water','river','basin','city','zoom','overview'])assert.equal(loaded[key],source[key],key);
+ }
 });

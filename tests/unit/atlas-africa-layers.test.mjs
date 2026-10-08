@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {africaLayerPath,africaGridValue,africaGridValueLabel,africaActualLayerKey,africaRasterCategory,africaGridClassOutline} from '../../src/scripts/atlas-africa-layers.ts';
 import {projectAfrica} from '../../src/lib/atlas-africa-geometry.ts';
-import {readState,writeState,africaComparisonSnapshot} from '../../src/data/atlas/africa-atlas.ts';
+import {readState,writeState} from '../../src/data/atlas/africa-atlas.ts';
 
 test('display grids preserve zero, negative elevation and missing values with north-first cell indexing',()=>{
  const metadata={bounds:[0,0,2,2],width:2,height:2,encoding:'int16-le-gzip',noData:-32768};
@@ -18,25 +18,21 @@ test('separate river lines and polygon holes never acquire invented connectors',
  const path=africaLayerPath({type:'MultiLineString',coordinates:[[[0,0],[1,1]],[[10,10],[11,11]]]});assert.equal((path.match(/M/g)??[]).length,2);assert.equal((path.match(/L/g)??[]).length,2);
  const polygon=africaLayerPath({type:'Polygon',coordinates:[[[0,0],[2,0],[2,2],[0,0]],[[.5,.5],[1,.5],[1,1],[.5,.5]]]});assert.equal((polygon.match(/M/g)??[]).length,2);assert.equal((polygon.match(/Z/g)??[]).length,2);
 });
-test('comparison snapshot restores source topic, class, point, countries, year and viewport after reload',()=>{
- const source=readState('?field=population&topic=distribution&place=EGY&compare=GHA&year=2023&region=north&zoom=country&layerClass=density-6&layerPoint=31.2,30.0');
- const comparison={...source,context:'EN.POP.DNST',sourceState:africaComparisonSnapshot(source)};
- const loaded=readState(writeState(comparison,new URL('https://example.com/atlas/africa/')).search);
- assert.equal(loaded.context,'EN.POP.DNST');assert.deepEqual(readState('?'+loaded.sourceState),source);assert.equal(africaActualLayerKey(loaded),'distribution');
- assert.equal(readState('?layerClass=<invalid>&layerPoint=500,500&sourceState=sourceState=x').layerClass,'');assert.equal(readState('?layerPoint=500,500').layerPoint,'');
- const initial=readState('?field=nature&place=KEN');assert.equal(initial.topic,'climate');assert.equal(initial.zoom,'all');assert.equal(initial.region,'all');assert.equal(initial.place,'KEN');
- const legacy=readState('?field=nature&theme=nile-water');assert.equal(legacy.topic,'water');assert.equal(legacy.view,'statistics');assert.equal(legacy.zoom,'theme');assert.equal(readState('?field=nature&metric=ER.H2O.INTR.PC').water,'river');
- for(const topic of ['ethnicity','religion']){const culture=readState(`?field=population&topic=${topic}&place=NGA&compare=EGY&year=2023&region=west&zoom=country&context=EN.POP.DNST&layerClass=old&layerPoint=7,10&sourceState=old&view=statistics`);for(const key of ['context','layerClass','layerPoint','sourceState'])assert.equal(culture[key],'');assert.equal(culture.place,'NGA');assert.equal(culture.compare,'EGY');assert.equal(culture.year,2023);assert.equal(culture.topic,topic);assert.equal(culture.view,'distribution');assert.deepEqual(readState(writeState(culture,new URL('https://example.com/atlas/africa/')).search),culture);}
+test('source point and class survive reload while retired comparison state cannot restore a statistical map',()=>{
+ const source=readState('?field=population&topic=distribution&place=EGY&compare=GHA&year=2023&region=north&zoom=country&layerClass=density-6&layerPoint=31.2,30.0&context=EN.POP.DNST&sourceState=field%3Dnature&view=statistics');
+ const loaded=readState(writeState({...source},new URL('https://example.com/atlas/africa/')).search);
+ assert.equal(loaded.layerClass,'density-6');assert.equal(loaded.layerPoint,'31.2,30');assert.equal(africaActualLayerKey(loaded),'distribution');
+ for(const key of ['place','compare','context','sourceState'])assert.equal(loaded[key],'');assert.equal(loaded.view,'distribution');assert.equal(loaded.zoom,'all');
+ assert.equal(readState('?layerClass=<invalid>&layerPoint=500,500').layerClass,'');assert.equal(readState('?layerPoint=500,500').layerPoint,'');
+ for(const [field,topic] of [['population','ethnicity'],['population','religion'],['nature','terrain']]){
+  const guide=readState(`?field=${field}&topic=${topic}&layerClass=old&layerPoint=7,10&view=statistics`);
+  assert.equal(guide.layerClass,'');assert.equal(guide.layerPoint,'');assert.equal(guide.view,'distribution');
+ }
 });
-
-test('agriculture comparison snapshots preserve commodity, quantity and the original raster',()=>{
- for(const [topic,crop,cropMeasure,livestock,context,layer] of [
-  ['farming','rice','production','goats','AG.LND.ARBL.ZS','crop-rice-production'],
-  ['livestock','cassava','harvested','sheep','NV.AGR.TOTL.ZS','livestock-sheep']
- ]){
-  const source=readState(`?field=agriculture&topic=${topic}&crop=${crop}&cropMeasure=${cropMeasure}&livestock=${livestock}&place=KEN&compare=ETH&year=2023&region=east&zoom=country&layerClass=positive&layerPoint=38,1`);
-  const comparison={...source,context,sourceState:africaComparisonSnapshot(source)},loaded=readState(writeState(comparison,new URL('https://example.com/atlas/africa/')).search);
-  assert.equal(loaded.context,context);assert.equal(africaActualLayerKey(loaded),layer);assert.deepEqual(readState('?'+loaded.sourceState),source);
+test('legacy production selection resolves to the retained crop area while livestock remains its own source',()=>{
+ for(const [topic,crop,livestock,layer] of [['farming','rice','goats','crop-rice-harvested'],['livestock','cassava','sheep','livestock-sheep']]){
+  const state=readState(`?field=agriculture&topic=${topic}&crop=${crop}&cropMeasure=production&livestock=${livestock}&place=KEN&compare=ETH&layerPoint=38,1`);
+  assert.equal(africaActualLayerKey(state),layer);assert.equal(state.layerPoint,'38,1');assert.equal(state.context,'');
  }
 });
 

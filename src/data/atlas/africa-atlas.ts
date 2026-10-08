@@ -77,7 +77,7 @@ export const agriLayerKeys=[
   'livestock-cattle','livestock-goats','livestock-sheep'
 ] as const;
 export type AgriLayerKey=typeof agriLayerKeys[number];
-export type State={field:Field;metric:string;year:number;place:string;compare:string;region:Region;zoom:'all'|'region'|'country'|'theme';theme:string;overview:boolean;context:string;topic:string;water:string;river:string;crop:Crop;livestock:Livestock;cropMeasure:CropMeasure;agriLayers:string|null;agriOutline:boolean;layerClass:string;layerPoint:string;sourceState:string;view:'distribution'|'statistics'};
+export type State={field:Field;metric:string;year:number;place:string;compare:string;region:Region;zoom:'all'|'region'|'country'|'theme';theme:string;overview:boolean;context:string;topic:string;water:string;river:string;basin:string;city:string;industryLocation:string;crop:Crop;livestock:Livestock;cropMeasure:CropMeasure;agriLayers:string|null;agriOutline:boolean;layerClass:string;layerPoint:string;sourceState:string;view:'distribution'|'statistics'};
 /** An absent layer list shows all seven products; an explicit empty list means all off. */
 export function canonicalAgriLayers(value:unknown):string|null {
   if(typeof value!=='string'||value.length>2048)return null;
@@ -97,17 +97,40 @@ export function africaAgriVisibleLayers(state:Pick<State,'topic'|'crop'|'cropMea
   return selected===null?[...cropChoices.map(row=>`crop-${row.id}-${state.cropMeasure}` as AgriLayerKey),...livestockChoices.map(row=>`livestock-${row.id}` as AgriLayerKey)]:selected===''?[]:selected.split(',') as AgriLayerKey[];
 }
 export function canonicalTopic(field:Field,metric:string,requested=''):string {
-  if(field==='agriculture')return metric==='AG.LND.FRST.ZS'?'forestry':requested==='livestock'?'livestock':'farming';
+  if(field==='agriculture')return ['farming','livestock','forestry'].includes(requested)?requested:metric==='AG.LND.FRST.ZS'?'forestry':'farming';
   if(field==='nature')return ['climate','terrain','elevation'].includes(requested)?requested:'water';
   if(field==='population')return ['ethnicity','religion'].includes(requested)?requested:'distribution';
   return 'regional';
 }
 export function canonicalWater(metric:string,requested=''):string {
-  return requested==='basin'?'basin':metric==='ER.H2O.INTR.PC'?'river':'rain';
+  return ['river','rain','basin'].includes(requested)?requested:metric==='ER.H2O.INTR.PC'?'river':'rain';
 }
 /** Named river selections apply only to the river layer; comparison snapshots retain the source. */
 export function canonicalRiver(state:Pick<State,'field'|'topic'|'water'>,requested:unknown):string {
-  return state.field==='nature'&&state.topic==='water'&&state.water==='river'&&(requested==='nile'||requested==='congo')?requested:'';
+  return state.field==='nature'&&state.topic==='water'&&state.water==='river'&&typeof requested==='string'&&['nile','congo','niger','zambezi','orange','limpopo','senegal','volta','okavango'].includes(requested)?requested:'';
+}
+/** Retire the country-comparison route while preserving source-based map selections. */
+export function normalizeAfricaReaderState(state:State):State {
+  state.topic=canonicalTopic(state.field,state.metric,state.topic);
+  state.water=state.field==='nature'?canonicalWater(state.metric,state.water):'';
+  state.river=canonicalRiver(state,state.river);
+  state.basin=state.field==='nature'&&state.topic==='water'&&state.water==='basin'&&/^b-\d{10}$/.test(state.basin??'')?state.basin:'';
+  state.city=state.field==='nature'&&state.topic==='climate'&&state.city==='helwan'?state.city:'';
+  state.industryLocation=state.field==='industry'&&['zambia-copperbelt','zambia-northwest','lusaka','casablanca-industry','casablanca-airport','lagos','accra','nairobi','cairo','alexandria','luxor'].includes(state.industryLocation??'')?state.industryLocation:'';
+  state.place='';state.compare='';state.context='';state.sourceState='';state.view='distribution';
+  state.cropMeasure='harvested';
+  if(state.field!=='agriculture'){state.region='all';state.zoom='all';}
+  else {
+    state.zoom=state.region==='all'?'all':'region';
+    const focused=africaAgriFocusedLayer(state);
+    const requested=typeof state.agriLayers==='string'?canonicalAgriLayers(state.agriLayers.replaceAll('-production','-harvested')):null;
+    state.agriLayers=!state.overview&&requested===focused?focused:null;
+    state.agriOutline=!state.overview;
+  }
+  if(state.field==='population'&&['ethnicity','religion'].includes(state.topic)||state.field==='nature'&&state.topic==='terrain'){
+    state.layerClass='';state.layerPoint='';
+  }
+  return state;
 }
 export function defaultThemeRegion(themeId:string):Region {
   const theme=themes.find(t=>t.id===themeId)??themes[0];
@@ -133,27 +156,25 @@ export function readState(search:string):State {
   const snapshot=p.get('sourceState')??'';
   const sourceState=snapshot.length<=1800&&!/(?:^|&)sourceState=/.test(snapshot)?snapshot:'';
   const topic=canonicalTopic(safeField,metric.id,p.get('topic')??(defaultClimate?'climate':'')),culture=safeField==='population'&&(topic==='ethnicity'||topic==='religion');
-  const water=safeField==='nature'?canonicalWater(metric.id,p.get('water')??''):'';
-  const river=canonicalRiver({field:safeField,topic,water},p.get('river'));
+  const legacyNile=safeField==='nature'&&!p.has('topic')&&p.get('theme')==='nile-water';
+  const water=safeField==='nature'?canonicalWater(metric.id,p.get('water')??(legacyNile?'river':'')):'';
+  const river=canonicalRiver({field:safeField,topic,water},p.get('river')??(legacyNile?'nile':''));
   const crop=cropChoices.find(row=>row.id===p.get('crop'))?.id??'maize';
   const livestock=livestockChoices.find(row=>row.id===p.get('livestock'))?.id??'cattle';
   const cropMeasure=cropMeasureChoices.find(row=>row.id===p.get('cropMeasure'))?.id??'harvested';
-  return {field:safeField,metric:metric.id,year:years.includes(Number(p.get('year')))?Number(p.get('year')):2021,place,compare:place&&exists(p.get('compare'))&&p.get('compare')!==place?p.get('compare')!:'',region:Object.hasOwn(regionNames,region)?region as Region:'all',zoom:['all','region','country','theme'].includes(zoom)?zoom as State['zoom']:'all',theme:theme.id,overview,context:culture?'':context??'',topic,water,river,crop,livestock,cropMeasure,agriLayers:canonicalAgriLayers(p.get('agriLayers')),agriOutline:p.get('agriOutline')==='1',layerClass:culture?'':layerClass,layerPoint:culture?'':layerPoint,sourceState:culture?'':sourceState,view:culture?'distribution':p.get('view')==='statistics'||!p.has('view')&&p.has('theme')&&!p.has('topic')?'statistics':'distribution'};
+  return normalizeAfricaReaderState({field:safeField,metric:metric.id,year:years.includes(Number(p.get('year')))?Number(p.get('year')):2021,place,compare:place&&exists(p.get('compare'))&&p.get('compare')!==place?p.get('compare')!:'',region:Object.hasOwn(regionNames,region)?region as Region:'all',zoom:['all','region','country','theme'].includes(zoom)?zoom as State['zoom']:'all',theme:theme.id,overview,context:culture?'':context??'',topic,water,river,basin:p.get('basin')??'',city:p.get('city')??'',industryLocation:p.get('industryLocation')??'',crop,livestock,cropMeasure,agriLayers:canonicalAgriLayers(p.get('agriLayers')),agriOutline:p.get('agriOutline')==='1',layerClass:culture?'':layerClass,layerPoint:culture?'':layerPoint,sourceState:culture?'':sourceState,view:'distribution'});
 }
 export function africaComparisonSnapshot(state:State):string {
   return writeState({...state,context:'',sourceState:''},new URL('https://atlas.invalid/')).searchParams.toString();
 }
 export function writeState(state:State,url:URL) {
-  state.topic=canonicalTopic(state.field,state.metric,state.topic);
-  state.water=state.field==='nature'?canonicalWater(state.metric,state.water):'';
-  state.river=canonicalRiver(state,state.river);
-  if(state.field==='population'&&(state.topic==='ethnicity'||state.topic==='religion')){state.context='';state.layerClass='';state.layerPoint='';state.sourceState='';state.view='distribution';}
-  state.agriLayers=canonicalAgriLayers(state.agriLayers);
-  state.agriOutline=state.agriOutline===true;
-  for(const [key,value] of Object.entries(state)){
-    if(key==='agriLayers'||key==='agriOutline'||key==='overview')continue;
+  normalizeAfricaReaderState(state);
+  for(const key of ['place','compare','year','metric','context','sourceState','view','region'])url.searchParams.delete(key);
+  for(const key of ['field','topic','water','river','basin','city','industryLocation','theme','crop','livestock','cropMeasure','layerClass','layerPoint','zoom'] as const){
+    const value=state[key];
     value===''?url.searchParams.delete(key):url.searchParams.set(key,String(value));
   }
+  if(state.field==='agriculture'&&state.region!=='all')url.searchParams.set('region',state.region);
   if(state.agriLayers===null)url.searchParams.delete('agriLayers');else url.searchParams.set('agriLayers',state.agriLayers);
   if(state.agriOutline)url.searchParams.set('agriOutline','1');else url.searchParams.delete('agriOutline');
   url.searchParams.set('overview',state.overview?'1':'0');
