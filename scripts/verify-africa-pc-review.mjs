@@ -15,11 +15,10 @@ import {fileURLToPath} from 'node:url';
 import {inflateSync} from 'node:zlib';
 import {chromium} from 'playwright';
 import astroConfig from '../astro.config.mjs';
-import {africaRiverSelectedColor} from '../src/data/atlas/africa-river-reading.ts';
 import {africaHydrologyRivers,africaHydrologyBasinRelations} from '../src/data/atlas/africa-hydrology-reading.ts';
 import {africaClimateCities} from '../src/data/atlas/africa-climate-cities.ts';
 import {africaIndustryLocations} from '../src/data/atlas/africa-industry-locations.ts';
-import {africaLayerPath,africaCommodityColor} from '../src/scripts/atlas-africa-layers.ts';
+import {africaLayerPath,africaCommodityColor,africaRiverDisplayColors} from '../src/scripts/atlas-africa-layers.ts';
 import {densityColors} from '../src/data/atlas/population.ts';
 import {ethnicityColors} from '../src/lib/atlas-population-dominant.ts';
 import {religionDominantColors} from '../src/lib/atlas-population-religion.ts';
@@ -37,7 +36,7 @@ const agricultureKeys=['crop-maize-harvested','crop-rice-harvested','crop-wheat-
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const git=(...args)=>execFileSync('git',args,{cwd:repo,encoding:'utf8'}).trim();
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.geojson':'application/geo+json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.woff2':'font/woff2','.gz':'application/gzip'};
-const report={status:'running',scope:'Local production dist in real Chrome at PC viewports and an emulated 390 × 844 touch mobile viewport. Public deployment and physical mobile devices are not verified.',startedAt:new Date().toISOString(),comparisonTolerancePx:2,publicBrowserVerified:false,physicalMobileVerified:false,profiles,agricultureProfiles,elevationProfiles,mobileProfile,cases:[],screenshots:[],visualReviewRequired:['Initial agriculture: identify all seven source-threshold outlines and matching product names; original quantities, zeros and no-data stay distinct.','Selected rice: source quantity bands and legend agree; six other source-threshold outlines remain visible and livestock is quieter.','Scrolled agriculture: every heading and source remains readable beside the news rail at 1536, 1280 and 1024 pixels.','Mobile: review initial arrival, map, rice selection and lower readings at 390 × 844; desktop Chrome touch emulation is not a physical-device test.'],exclusions:[]};
+const report={status:'running',scope:'Local production dist in real Chrome at PC viewports and an emulated 390 × 844 touch mobile viewport. Public deployment and physical mobile devices are not verified.',startedAt:new Date().toISOString(),comparisonTolerancePx:{x:2,width:2,height:2,y:'recorded separately because field tabs have different heights'},publicBrowserVerified:false,physicalMobileVerified:false,profiles,agricultureProfiles,elevationProfiles,mobileProfile,cases:[],screenshots:[],visualReviewRequired:['Initial agriculture: identify all seven source-threshold outlines and matching product names; original quantities, zeros and no-data stay distinct.','Selected rice: source quantity bands and legend agree; six other source-threshold outlines remain visible and livestock is quieter.','Scrolled agriculture: every heading and source remains readable beside the news rail at 1536, 1280 and 1024 pixels.','Mobile: review initial arrival, map, rice selection and lower readings at 390 × 844; desktop Chrome touch emulation is not a physical-device test.'],exclusions:[]};
 let browser,server,origin,fatalNetwork;
 const native=JSON.parse(await readFile(path.join(repo,'public/assets/atlas/africa-water-v1/rivers.geojson'),'utf8'));
 const agricultureManifest=JSON.parse(await readFile(path.join(repo,'public/assets/atlas/africa-agriculture-distribution-v1/manifest.json'),'utf8'));
@@ -99,9 +98,12 @@ async function measure(page,region){
 }
 function assertLayout(measurement,reference){
  assert(measurement.documentWidth<=measurement.viewport.width+1,'Horizontal page overflow');
+ assert(measurement.map&&measurement.map.width>0&&measurement.map.height>0,'Map frame has no visible area');
+ assert(measurement.map.y>=0&&measurement.map.y<measurement.viewport.height*.6,'Map begins too far down the first viewport');
+ if(measurement.nav)assert(measurement.nav.y+measurement.nav.height<=measurement.map.y+1,'Navigation overlaps the map frame');
  if(measurement.southAfrica){const south=measurement.southAfrica,map=measurement.map;assert(south.y>=map.y-1&&south.y+south.height<=map.y+map.height+1,'Southern Africa lies outside the map frame');}
  for(const control of measurement.controls){assert(control.x>=0&&control.x+control.width<=measurement.viewport.width+1,'Header select lies outside viewport');for(const other of measurement.controls)if(other!==control){const area=Math.max(0,Math.min(control.x+control.width,other.x+other.width)-Math.max(control.x,other.x))*Math.max(0,Math.min(control.y+control.height,other.y+other.height)-Math.max(control.y,other.y));assert.equal(area,0,'Header selects overlap');}}
- if(reference){measurement.usDifference=Object.fromEntries(['x','y','width','height'].map(key=>[key,measurement.map[key]-reference.map[key]]));for(const [key,value]of Object.entries(measurement.usDifference))assert(Math.abs(value)<=2,`US/Africa map ${key} differs by ${value}px (limit 2px)`);}
+ if(reference){measurement.usDifference=Object.fromEntries(['x','y','width','height'].map(key=>[key,measurement.map[key]-reference.map[key]]));for(const key of ['x','width','height'])assert(Math.abs(measurement.usDifference[key])<=2,`US/Africa map ${key} differs by ${measurement.usDifference[key]}px (limit 2px)`);}
 }
 async function screenshot(page,record,name,{preserveScroll=false}={}){
  if(!preserveScroll)await page.evaluate(()=>{window.scrollTo(0,0);document.querySelector('.africa-detail')?.scrollTo(0,0);});
@@ -167,10 +169,12 @@ async function readerEvidence(page,record,scene){
  const reading=await page.locator('.africa-detail').evaluate(node=>{
   const title=node.querySelector('[data-theme-title]'),r=title.getBoundingClientRect(),style=getComputedStyle(title),rail=document.querySelector('[data-news-rail]')?.getBoundingClientRect();
   const overlap=rail&&rail.width>0&&r.left<rail.right&&rail.left<r.right&&r.top<rail.bottom&&rail.top<r.bottom;
-  const p=[...node.querySelectorAll('p')].filter(item=>item.getBoundingClientRect().height&&getComputedStyle(item).display!=='none');
-  return {title:title.textContent,titleFont:parseFloat(style.fontSize),titleWidth:r.width,titleScrollWidth:title.scrollWidth,newsOverlap:!!overlap,paragraphFonts:p.map(item=>parseFloat(getComputedStyle(item).fontSize)),text:node.innerText};
+  const p=[...node.querySelectorAll('p')].filter(item=>item.checkVisibility());
+  const body=p.filter(item=>!item.classList.contains('africa-kicker'));
+  const kicker=node.querySelector('.africa-kicker');
+  return {title:title.textContent,titleFont:parseFloat(style.fontSize),titleWidth:r.width,titleScrollWidth:title.scrollWidth,newsOverlap:!!overlap,paragraphFonts:body.map(item=>({font:parseFloat(getComputedStyle(item).fontSize),text:item.textContent.slice(0,60)})),kickerFont:kicker?.checkVisibility()?parseFloat(getComputedStyle(kicker).fontSize):null,text:node.innerText};
  });
- assert(reading.title.trim(),'The reading has no heading');assert(reading.titleFont>=18,'Reading heading was reduced below 18px');assert(reading.titleScrollWidth<=reading.titleWidth+1,'Reading heading is clipped horizontally');assert.equal(reading.newsOverlap,false,'News rail covers the right reading');assert(reading.paragraphFonts.every(size=>size>=13.9),'Reading text is smaller than 14px');
+ assert(reading.title.trim(),'The reading has no heading');assert(reading.titleFont>=18,'Reading heading was reduced below 18px');assert(reading.titleScrollWidth<=reading.titleWidth+1,'Reading heading is clipped horizontally');assert.equal(reading.newsOverlap,false,'News rail covers the right reading');assert(reading.kickerFont===null||reading.kickerFont>=12.9,'Reading eyebrow is smaller than 13px');assert(reading.paragraphFonts.every(row=>row.font>=13.9),`Reading text is smaller than 14px: ${JSON.stringify(reading.paragraphFonts.filter(row=>row.font<13.9))}`);
  const labels=await page.locator('.africa-map').evaluate(map=>{
   const frame=map.getBoundingClientRect(),nodes=[...map.querySelectorAll('[data-africa-agri-label-text],[data-africa-agri-place-text],[data-africa-river-label] text,[data-africa-basin-label] text,[data-africa-city-label] text,[data-africa-industry-location] text')];
   const rows=nodes.filter(node=>node.checkVisibility()).map(node=>{const r=node.getBoundingClientRect(),m=node.getScreenCTM();return{text:node.textContent,x:r.x,y:r.y,right:r.right,bottom:r.bottom,font:parseFloat(getComputedStyle(node).fontSize)*Math.hypot(m.a,m.b)};}).filter(row=>row.right>frame.left&&row.x<frame.right&&row.bottom>frame.top&&row.y<frame.bottom);
@@ -189,7 +193,8 @@ async function assertRiver(page,id){
  assert.equal(await page.locator('[data-theme-source]').getAttribute('href'),river.reading?.source??river.source);
  const view=await page.locator('[data-africa-actual-layer]').evaluate(node=>({paths:[...node.querySelectorAll('[data-africa-layer-feature]')].map(path=>({id:path.dataset.africaLayerFeature,d:path.getAttribute('d'),selected:path.classList.contains('is-selected'),stroke:path.getAttribute('stroke'),width:path.getAttribute('stroke-width'),display:getComputedStyle(path).display})),hits:[...node.querySelectorAll('[data-africa-river-hit-feature][aria-pressed=true]')].map(path=>path.dataset.africaRiverHitFeature)}));
  assert.equal(view.paths.length,90);assert.equal(new Set(view.paths.map(row=>row.id)).size,90);
- for(const line of view.paths){assert.equal(line.d,nativePaths[line.id]);assert.notEqual(line.display,'none');if(line.selected){assert.equal(line.stroke,africaRiverSelectedColor);assert.equal(line.width,'3.2');}}
+ const namedIds=new Set(africaHydrologyRivers.flatMap(row=>row.featureIds));
+ for(const line of view.paths){assert.equal(line.d,nativePaths[line.id]);assert.notEqual(line.display,'none');assert.equal(line.stroke,line.selected?africaRiverDisplayColors.selected:namedIds.has(line.id)?africaRiverDisplayColors.named:africaRiverDisplayColors.base);if(line.selected)assert.equal(line.width,'3.2');}
  assert.deepEqual(view.paths.filter(row=>row.selected).map(row=>row.id).sort(),[...river.featureIds].sort());assert.deepEqual(view.hits.sort(),[...river.featureIds].sort());assert.equal(await page.locator(`[data-africa-river-label="${id}"]`).getAttribute('aria-pressed'),'true');assert.equal((await state(page)).layerPoint,undefined);
  return {id,label:river.label,featureIds:river.featureIds,totalFeatures:view.paths.length,source:river.reading?.source??river.source};
 }

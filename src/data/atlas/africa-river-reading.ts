@@ -11,8 +11,6 @@ export type AfricaRiverReading={
  theme?:AfricaTheme;
 };
 
-export const africaRiverSelectedColor='#165a80';
-
 // These IDs identify existing Natural Earth river/lake centreline features.
 // They do not identify catchments, tributaries, or a complete river system.
 // Keep the approved explanations and their sources as the original objects.
