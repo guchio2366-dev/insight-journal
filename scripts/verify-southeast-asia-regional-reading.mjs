@@ -61,6 +61,7 @@ export async function verifySoutheastAsiaRegion(page,{source,capture:takePicture
  await expand('[data-southeast-forest-reading]');await expand('[data-southeast-trade-reading]');
  const readingScroll=await page.locator('[data-southeast-top-workspace]>.asia-reading-panel').evaluate(node=>{node.scrollTop=0;const before=node.scrollTop;node.scrollTop=180;return {before,after:node.scrollTop,overflow:getComputedStyle(node).overflowY};});
  assert(readingScroll.after>readingScroll.before&&readingScroll.overflow==='auto','The right reading must scroll inside its fixed frame');
+ await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));
  await takePicture('agriculture-reading-scrolled');
  const pageScroll=await page.evaluate(()=>{
   const news=document.querySelector('.atlas-news'),shell=news.closest('.atlas-desktop-shell'),maxScroll=document.documentElement.scrollHeight-innerHeight;
