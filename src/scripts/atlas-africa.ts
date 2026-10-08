@@ -112,20 +112,30 @@ export function initializeAfricaAtlas(){
  }
  function renderIndustry(){
   const location=africaIndustryLocationById(state.industryLocation),selected=state.overview||location?undefined:themes.find(row=>row.field==='industry'&&row.id===state.theme),overview=africaIndustryLocationOverview,marks=query<SVGGElement>('[data-theme-marks]'),view=map.getAttribute('viewBox')!.split(' ').map(Number),box=map.getBoundingClientRect(),scale=Math.max(view[2]/(box.width||640),view[3]/(box.height||440));
-  text('.africa-kicker','場所と産業の関係');text('[data-theme-title]',location?.label??selected?.title??overview.title);text('[data-theme-takeaway]',location?.reading??selected?.takeaway??overview.reading);text('[data-theme-takeaway-detail]',location?.note??selected?.caveat??overview.missing);
-  text('[data-theme-caveat]',overview.scope);text('[data-metric-title]','産業と都市の収録事例');text('[data-period]','資料ごとの解説');text('[data-unit]','代表位置');source(location?.sources[0]?.label??selected?.sourceLabel??'',location?.sources[0]?.url??selected?.source??'');
+  text('.africa-kicker','産業が集まる条件');text('[data-theme-title]',location?.label??selected?.title??overview.title);text('[data-theme-takeaway]',location?.reading??selected?.takeaway??overview.reading);text('[data-theme-takeaway-detail]',location?.note??selected?.caveat??overview.missing);
+  text('[data-theme-caveat]',overview.scope);text('[data-metric-title]','資源・製造・物流の代表位置');text('[data-period]','資料ごとの公表年');text('[data-unit]','数量を表さない点');source(location?.sources[0]?.label??selected?.sourceLabel??overview.sources[0].label,location?.sources[0]?.url??selected?.source??overview.sources[0].url);
   const key=query('[data-africa-layer-legend]');key.replaceChildren();query('[data-africa-actual-key]').hidden=false;
-  const colors={resource:'#99527a',manufacturing:'#805832',transport:'#247589',city:'#465e99'},labels={resource:'銅鉱業',manufacturing:'製造業',transport:'交通',city:'都市と仕事・交通'};
-  const major=new Set(['zambia-copperbelt','casablanca-industry','lagos','nairobi','cairo']);
-  for(const item of africaIndustryLocations){
-   const [x,y]=projectAfrica(item.coordinates),active=location?.id===item.id||selected?.id===item.themeId,color=colors[item.kind],g=svg('g',{'data-africa-industry-location':item.id,tabindex:0,role:'button','aria-label':`${item.label}を読む`,'aria-pressed':String(active),class:'africa-industry-hit','data-label-visible':String(active||major.has(item.id))});
-   g.append(svg('circle',{cx:x,cy:y,r:(active?8:6)*scale,fill:color,stroke:active?'#173d46':'#fff','stroke-width':active?2.5:1.5,'vector-effect':'non-scaling-stroke'}),svg('text',{x:x+10*scale,y:y+4*scale,'font-size':14*scale,fill:color,stroke:'#fff','stroke-width':3*scale,'paint-order':'stroke'},item.label));g.append(svg('title',{},`${item.label}：${item.note}`));marks.append(g);
+  const colors={energy:'#a14f3d',metals:'#704d9a',gems:'#917026',manufacturing:'#286a78',transport:'#327345'},labels={energy:'原油・天然ガス',metals:'銅・コバルト',gems:'ダイヤモンド',manufacturing:'航空機関連製造',transport:'港湾物流'};
+  type LabelBox={x:number;y:number;w:number;h:number};const occupied:LabelBox[]=[],gap=5*scale;
+  const positionLabel=(label:string,x:number,y:number):LabelBox=>{
+   const w=(label.length*14+8)*scale,h=21*scale,pad=8*scale;
+   const candidates=[[13,-8],[-w/scale-13,-8],[13,22],[-w/scale-13,22],[13,-36],[-w/scale-13,-36],[13,50],[-w/scale-13,50]];
+   const fits=(b:LabelBox)=>!occupied.some(o=>b.x<o.x+o.w+gap&&b.x+b.w+gap>o.x&&b.y-b.h<o.y+gap&&b.y+gap>o.y-o.h);
+   const boxes=candidates.map(([dx,dy])=>({x:Math.max(view[0]+pad,Math.min(view[0]+view[2]-w-pad,x+dx*scale)),y:Math.max(view[1]+h+pad,Math.min(view[1]+view[3]-pad,y+dy*scale)),w,h}));
+   const chosen=boxes.find(fits)??boxes[0];occupied.push(chosen);return chosen;
+  };
+  const ordered=[...africaIndustryLocations].sort((a,b)=>Number(b.id===location?.id)-Number(a.id===location?.id));
+  for(const item of ordered){
+   const [x,y]=projectAfrica(item.coordinates),active=location?.id===item.id||selected?.id===item.themeId,color=colors[item.kind],box=positionLabel(item.mapLabel,x,y),g=svg('g',{'data-africa-industry-location':item.id,tabindex:0,role:'button','aria-label':`${item.label}を読む`,'aria-pressed':String(active),class:'africa-industry-hit','data-label-visible':'true'});
+   const left=Math.min(x-9*scale,box.x-3*scale),top=Math.min(y-9*scale,box.y-box.h-3*scale),right=Math.max(x+9*scale,box.x+box.w+3*scale),bottom=Math.max(y+9*scale,box.y+3*scale);
+   g.append(svg('rect',{x:left,y:top,width:right-left,height:bottom-top,fill:'transparent','pointer-events':'all'}),svg('circle',{cx:x,cy:y,r:(active?8:6)*scale,fill:color,stroke:active?'#173d46':'#fff','stroke-width':active?2.5:1.5,'vector-effect':'non-scaling-stroke'}),svg('text',{x:box.x,y:box.y,'font-size':14*scale,fill:color,stroke:'#fff','stroke-width':3*scale,'paint-order':'stroke'},item.mapLabel));g.append(svg('title',{},`${item.label}：${item.note}`));marks.append(g);
   }
-  for(const kind of ['resource','manufacturing','transport','city'] as const)key.append(swatch({id:kind,label:labels[kind],color:colors[kind]},false));
+  for(const kind of ['energy','metals','gems','manufacturing','transport'] as const)key.append(swatch({id:kind,label:labels[kind],color:colors[kind]},false));
   if(location){details().append(make('p',location.title),make('p',location.scope));for(const row of location.sources)addSource(row.label,row.url);}
-  else for(const theme of themes.filter(row=>row.field==='industry'&&(!selected||selected.id===row.id))){details().append(make('p',theme.takeaway));for(const item of theme.marks)details().append(make('p',`${item.label} — ${item.note}`));addSource(theme.sourceLabel,theme.source);for(const row of theme.evidenceSources??[])addSource(row.label,row.url);}
+  else if(selected){details().append(make('p',selected.takeaway));for(const item of selected.marks)details().append(make('p',`${item.label} — ${item.note}`));addSource(selected.sourceLabel,selected.source);for(const row of selected.evidenceSources??[])addSource(row.label,row.url);}
+  else for(const row of overview.sources)addSource(row.label,row.url);
   details().append(make('p',overview.missing));
-  text('[data-africa-layer-caption]','点：事例の代表位置 · 小さい点の名前はホバー・フォーカスでも確認できます');text('[data-africa-layer-scope]','国別の割合から資源の位置や産業施設を推定していません。');query('[data-africa-selection-return]').hidden=!selected&&!location;
+  text('[data-africa-layer-caption]','色：産業の種類 · 点：資料に基づく代表位置（数量は示しません）');text('[data-africa-layer-scope]','国別の割合から資源の位置や産業施設を推定していません。');query('[data-africa-selection-return]').hidden=!selected&&!location;
  }
  function renderReading(){
   details().replaceChildren();query('[data-africa-agri-context]').replaceChildren();query('[data-africa-alternatives]').replaceChildren();query('[data-theme-marks]').replaceChildren();

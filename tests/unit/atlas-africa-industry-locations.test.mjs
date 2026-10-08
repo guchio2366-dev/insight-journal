@@ -4,24 +4,22 @@ import {africaIndustryLocations,africaIndustryLocationById,africaIndustryLocatio
 import {themeById} from '../../src/data/atlas/africa-themes.ts';
 import {readState,writeState} from '../../src/data/atlas/africa-atlas.ts';
 
-test('industry and city examples retain the approved representative points, full prose and every source',()=>{
- const expected=['zambia-copperbelt','zambia-northwest','lusaka','casablanca-industry','casablanca-airport','lagos','accra','nairobi','cairo','alexandria','luxor'];
+test('industry examples cover distinct production and service roles with sourced geographic limits',()=>{
+ const expected=['hassi-rmel-gas','niger-delta-oil','drc-copper-cobalt','zambia-copperbelt','jwaneng-diamonds','casablanca-industry','lagos'];
  assert.deepEqual(africaIndustryLocations.map(row=>row.id),expected);
  for(const location of africaIndustryLocations){
-  const theme=themeById(location.themeId),mark=theme.marks.find(row=>row.id===location.id);
   assert.strictEqual(africaIndustryLocationById(location.id),location);
-  assert.ok(mark,'each displayed location belongs to an approved source theme');
-  assert.deepEqual(location.coordinates,mark.coordinates,'no new facility, mine, route or extent is inferred');
   assert.equal(location.coordinates.length,2);assert.ok(location.coordinates.every(Number.isFinite));
-  assert.equal(location.label,mark.label);assert.equal(location.note,mark.note);
-  assert.equal(location.reading,theme.takeaway);
-  assert.deepEqual(location.sources,[{label:theme.sourceLabel,url:theme.source},...(theme.evidenceSources??[])]);
+  assert.ok(location.mapLabel.includes('：'));assert.ok(location.sources.length);
+  for(const source of location.sources){assert.equal(new URL(source.url).protocol,'https:');assert.ok(source.label);}
   assert.equal(location.scope,africaIndustryLocationOverview.scope);
+  if(location.themeId){const theme=themeById(location.themeId),mark=theme.marks.find(row=>row.id===location.id);assert.deepEqual(location.coordinates,mark.coordinates);assert.equal(location.reading,theme.takeaway);assert.deepEqual(location.sources,[{label:theme.sourceLabel,url:theme.source},...(theme.evidenceSources??[])]);}
  }
- assert.match(africaIndustryLocationOverview.scope,/正確な施設位置や境界ではなく/);
- assert.match(africaIndustryLocationOverview.scope,/生産量・埋蔵量・雇用・都市人口を表しません/);
- assert.match(africaIndustryLocationOverview.missing,/原油や複数の鉱物/);
- assert.match(africaIndustryLocationOverview.missing,/未収録/);
+ assert.deepEqual(new Set(africaIndustryLocations.map(row=>row.kind)),new Set(['energy','metals','gems','manufacturing','transport']));
+ assert.match(africaIndustryLocationOverview.reading,/ガス.*原油.*銅・コバルト.*ダイヤモンド/);
+ assert.match(africaIndustryLocationOverview.scope,/産出量、埋蔵量/);
+ assert.match(africaIndustryLocationById('jwaneng-diamonds').reading,/2024年.*ボツワナ全国.*カラット.*米ドル.*埋蔵量ではありません/);
+ assert.match(africaIndustryLocationById('drc-copper-cobalt').reading,/2024年.*コバルト生産国.*埋蔵量/);
 });
 
 test('every industry location reloads independently of obsolete country comparisons and is scoped to industry',()=>{

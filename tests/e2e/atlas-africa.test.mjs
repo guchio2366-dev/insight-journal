@@ -45,24 +45,24 @@ test('every main topic normalizes legacy statistics URLs and removes country con
 test('industry source locations and approved themes retain explanations, sources and reversible selection',async()=>{
  let saved;
  await page('?field=industry&place=EGY&year=2023',context=>{
-  const {window,root,q}=context;assert.equal(root.querySelectorAll('[data-africa-industry-location]').length,africaIndustryLocations.length);assert.equal(africaIndustryLocations.length,11);
+  const {window,root,q}=context;assert.equal(root.querySelectorAll('[data-africa-industry-location]').length,africaIndustryLocations.length);assert.equal(africaIndustryLocations.length,7);
   for(const item of africaIndustryLocations){activate(context,`[data-africa-industry-location="${item.id}"]`);assert.equal(params(window).get('industryLocation'),item.id);assert.equal(q('[data-theme-title]').textContent,item.label);assert.equal(q('[data-theme-takeaway]').textContent,item.reading);for(const source of item.sources)assert.ok([...q('[data-theme-details]').querySelectorAll('a')].some(link=>link.href===source.url));}
   saved=window.location.search;q('[data-africa-selection-return]').click();assert.equal(params(window).has('industryLocation'),false);window.history.back();assert.equal(window.location.search,saved);
-  for(const theme of themes.filter(row=>row.field==='industry')){q(`button[data-theme="${theme.id}"]`).click();assert.equal(q('[data-theme-takeaway]').textContent,theme.takeaway);assert.equal(q('[data-theme-source]').href,theme.source);assert.equal(root.querySelectorAll('[data-africa-industry-location]').length,11);}
-  const pick=q('[data-africa-industry-location="nairobi"]');pick.focus();pick.dispatchEvent(new window.KeyboardEvent('keydown',{key:' ',bubbles:true,cancelable:true}));assert.equal(params(window).get('industryLocation'),'nairobi');assert.equal(window.document.activeElement.getAttribute('data-africa-industry-location'),'nairobi');
+  for(const theme of themes.filter(row=>row.field==='industry')){q(`button[data-theme="${theme.id}"]`).click();assert.equal(q('[data-theme-takeaway]').textContent,theme.takeaway);assert.equal(q('[data-theme-source]').href,theme.source);assert.equal(root.querySelectorAll('[data-africa-industry-location]').length,7);}
+  const pick=q('[data-africa-industry-location="jwaneng-diamonds"]');pick.focus();pick.dispatchEvent(new window.KeyboardEvent('keydown',{key:' ',bubbles:true,cancelable:true}));assert.equal(params(window).get('industryLocation'),'jwaneng-diamonds');assert.equal(window.document.activeElement.getAttribute('data-africa-industry-location'),'jwaneng-diamonds');
  });
  await page(saved,({q,window})=>assert.equal(q(`[data-africa-industry-location="${params(window).get('industryLocation')}"]`).getAttribute('aria-pressed'),'true'));
 });
 
 test('clicking source prose or a passive country boundary never behaves like a field-navigation button',async()=>{
- await page('?field=industry&industryLocation=nairobi&overview=0',context=>{
+ await page('?field=industry&industryLocation=jwaneng-diamonds&overview=0',context=>{
   const {window,q}=context,search=window.location.search,historyLength=window.history.length;
-  assert.equal(q('[data-theme-title]').textContent,africaIndustryLocations.find(row=>row.id==='nairobi').label);
-  for(const selector of ['[data-theme-takeaway]','[data-theme-details]','[data-country-path="KEN"]']){
+  assert.equal(q('[data-theme-title]').textContent,africaIndustryLocations.find(row=>row.id==='jwaneng-diamonds').label);
+  for(const selector of ['[data-theme-takeaway]','[data-theme-details]','[data-country-path="BWA"]']){
    activate(context,selector);
    assert.equal(window.location.search,search,'passive content cannot clear the source selection or push history');
    assert.equal(window.history.length,historyLength);
-   assert.equal(q('[data-africa-industry-location="nairobi"]').getAttribute('aria-pressed'),'true');
+   assert.equal(q('[data-africa-industry-location="jwaneng-diamonds"]').getAttribute('aria-pressed'),'true');
   }
  });
 });

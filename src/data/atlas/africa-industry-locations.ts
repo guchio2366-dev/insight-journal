@@ -1,9 +1,10 @@
 import {themeById,type AfricaCoordinate,type AfricaTheme} from './africa-themes.ts';
 
-export type AfricaIndustryLocationKind='resource'|'manufacturing'|'transport'|'city';
+export type AfricaIndustryLocationKind='energy'|'metals'|'gems'|'manufacturing'|'transport';
 export type AfricaIndustryLocation={
  id:string;
  label:string;
+ mapLabel:string;
  kind:AfricaIndustryLocationKind;
  coordinates:AfricaCoordinate;
  title:string;
@@ -11,21 +12,25 @@ export type AfricaIndustryLocation={
  note:string;
  scope:string;
  sources:readonly {label:string;url:string}[];
- themeId:string;
+ themeId?:string;
 };
 
 export const africaIndustryLocationOverview={
- title:'資源・製造業と、都市の仕事・交通を読む',
- reading:'銅鉱業と製造業の既存事例に、都市と仕事・交通・公共サービスの事例を重ねます。地図の点を選ぶと、その位置を読む説明と出典が表示されます。',
- scope:'点は事例を読む代表位置です。鉱山・工場・空港の正確な施設位置や境界ではなく、点の数や大きさは生産量・埋蔵量・雇用・都市人口を表しません。点の間を結ぶ輸送路や取引量も収録していません。',
- missing:'収録する資源事例はザンビアの銅です。原油や複数の鉱物の産地・生産量、都市別のサービス業統計は未収録です。都市の事例は立地を読む説明であり、都市別産業構成の統計ではありません。',
- sections:[
-  {id:'mineral-manufacturing',label:'銅鉱業・製造業の事例',themeIds:['copperbelt-connections','casablanca-manufacturing']},
-  {id:'city-work-connections',label:'都市と仕事・交通の事例',themeIds:['urban-connections','nile-settlements']}
+ title:'地下資源の帯と、沿岸の製造・物流',
+ reading:'北のアルジェリア内陸では天然ガス、ギニア湾岸のナイジェリアでは原油、南部の銅・コバルト帯とボツワナでは金属・ダイヤモンドの採掘が見られます。資源の位置は地下の地質条件と結び付きます。一方、カサブランカの航空機関連製造とラゴスの港湾物流は、技能、都市の市場、交通接続を使う産業です。採掘地と加工・輸送の場所は同じとは限りません。',
+ scope:'地図の点は資料で特定できる産業地域・施設周辺・港湾の代表位置です。産地全域や鉱床境界、油ガス田の広がりではありません。点の大きさ・数は産出量、埋蔵量、雇用や輸出額を表しません。',
+ missing:'国別の産出量・埋蔵量と地点別の数量は別の資料です。この地図はそれらを点の大きさや色の濃さへ換算していません。',
+ sources:[
+  {label:'米国EIA・ナイジェリア石油・ガス分析（2025）',url:'https://www.eia.gov/international/analysis/country/NGA'},
+  {label:'米国EIA・アルジェリア石油・ガス分析（2025）',url:'https://www.eia.gov/international/analysis/country/DZA'},
+  {label:'米国USGS・コンゴ民主共和国の鉱物産業（2024年資料）',url:'https://www.usgs.gov/centers/national-minerals-information-center/congo-kinshasa'},
+  {label:'Kimberley Process・ボツワナ粗ダイヤ統計（2024）',url:'https://www.kimberleyprocess.com/participants/botswana'},
+  {label:'米国商務省 ITA・モロッコ航空機産業（2025）',url:'https://www.trade.gov/country-commercial-guides/morocco-aerospace'},
+  {label:'ナイジェリア港湾庁・ラゴス港（2025）',url:'https://nigerianports.gov.ng/lagos-port/'}
  ]
 } as const;
 
-function location(themeId:string,markId:string,kind:AfricaIndustryLocationKind):AfricaIndustryLocation {
+function location(themeId:string,markId:string,kind:AfricaIndustryLocationKind,mapLabel:string):AfricaIndustryLocation {
  const theme=themeById(themeId);
  if(!theme)throw new Error(`Unknown Africa industry source theme: ${themeId}`);
  const mark=theme.marks.find(item=>item.id===markId);
@@ -33,33 +38,29 @@ function location(themeId:string,markId:string,kind:AfricaIndustryLocationKind):
   throw new Error(`Africa industry location must reuse an existing point: ${themeId}/${markId}`);
  }
  return {
-  id:mark.id,label:mark.label,kind,coordinates:mark.coordinates as AfricaCoordinate,
+  id:mark.id,label:mark.label,mapLabel,kind,coordinates:mark.coordinates as AfricaCoordinate,
   title:theme.title,reading:theme.takeaway,note:mark.note,
   scope:africaIndustryLocationOverview.scope,
   sources:themeSources(theme),themeId:theme.id
  };
 }
 
+function sourced(item:Omit<AfricaIndustryLocation,'scope'>):AfricaIndustryLocation{return {...item,scope:africaIndustryLocationOverview.scope};}
+
 function themeSources(theme:AfricaTheme){
  return [{label:theme.sourceLabel,url:theme.source},...(theme.evidenceSources??[])];
 }
 
-// Reuse only the approved source text and its representative point coordinates.
-// Urban readings describe shared geographic relationships, not measurements of
-// each city's service economy. No new facility, deposit or transport geometry is
-// inferred. The Nile's approximate river line is deliberately not copied here.
+// New coordinates locate named regions or a documented mine/port. They do not
+// represent surveyed deposits, field boundaries, pipelines or trade flows.
 export const africaIndustryLocations:readonly AfricaIndustryLocation[]=[
- location('copperbelt-connections','zambia-copperbelt','resource'),
- location('copperbelt-connections','zambia-northwest','resource'),
- location('copperbelt-connections','lusaka','city'),
- location('casablanca-manufacturing','casablanca-industry','manufacturing'),
- location('casablanca-manufacturing','casablanca-airport','transport'),
- location('urban-connections','lagos','city'),
- location('urban-connections','accra','city'),
- location('urban-connections','nairobi','city'),
- location('nile-settlements','cairo','city'),
- location('nile-settlements','alexandria','city'),
- location('nile-settlements','luxor','city')
+ sourced({id:'hassi-rmel-gas',label:'ハッシ・ルメル：天然ガス',mapLabel:'ハッシ・ルメル：ガス',kind:'energy',coordinates:[3.3,32.9],title:'サハラのガス田と輸送の接続',reading:'アルジェリアの天然ガス生産は、サハラ内陸のハッシ・ルメルなどのガス田に支えられます。地下の堆積盆地という地質条件に加え、国内需要地や地中海側の輸送設備への接続が産業の位置を決めます。',note:'EIAが主要な生産ガス田として挙げるハッシ・ルメル周辺の代表位置です。ガス田境界や埋蔵量ではありません。',sources:[{label:'米国EIA・アルジェリアの天然ガス分析（2025）',url:'https://www.eia.gov/international/analysis/country/DZA'}]}),
+ sourced({id:'niger-delta-oil',label:'ニジェール・デルタ：原油',mapLabel:'デルタ：原油',kind:'energy',coordinates:[6.6,5.2],title:'デルタの堆積盆地と原油',reading:'ナイジェリアの原油採掘はギニア湾に面するニジェール・デルタとその沖合に集中します。堆積盆地の地質が採掘地を決め、沿岸の積出しやパイプラインなどの設備が市場への接続を左右します。',note:'デルタ地域の代表位置です。個別油田、陸上・沖合の区分、採掘量やパイプラインを示しません。',sources:[{label:'米国EIA・ナイジェリアの石油・ガス分析（2025）',url:'https://www.eia.gov/international/analysis/country/NGA'},{label:'米国EIA・デルタの原油生産地域（2016）',url:'https://www.eia.gov/todayinenergy/detail.php?id=27572'}]}),
+ sourced({id:'drc-copper-cobalt',label:'コンゴ民主共和国南部：銅・コバルト',mapLabel:'コンゴ南部：銅・コバルト',kind:'metals',coordinates:[26.7,-10.6],title:'銅・コバルト帯の地質と電力',reading:'コンゴ民主共和国南部とザンビアにまたがる中央アフリカの銅・コバルト帯は、堆積岩に伴う鉱床が採掘の位置を決めます。コバルトは電池材料にも使われ、採掘後の処理には電力、輸送、労働環境の管理が必要です。USGSは2024年の同国を世界最大のコバルト生産国としています。これは産出量の位置説明であり、埋蔵量や地点別生産量ではありません。',note:'USGSが示す広域の銅・コバルト帯に置いた代表点で、個別鉱山の位置や鉱床境界ではありません。',sources:[{label:'米国USGS・中央アフリカ銅・コバルト帯の地質（2014）',url:'https://pubs.usgs.gov/publication/sir20105090T'},{label:'米国USGS・コンゴ民主共和国の鉱物産業（2024年資料）',url:'https://www.usgs.gov/centers/national-minerals-information-center/congo-kinshasa'},{label:'米国USGS・コバルトの用途',url:'https://www.usgs.gov/centers/national-minerals-information-center/cobalt-statistics-and-information'}]}),
+ location('copperbelt-connections','zambia-copperbelt','metals','ザンビア：銅'),
+ sourced({id:'jwaneng-diamonds',label:'ジュワネン：ダイヤモンド',mapLabel:'ジュワネン：ダイヤ',kind:'gems',coordinates:[24.7,-24.6],title:'キンバーライト鉱床と粗ダイヤ',reading:'ボツワナ南部のジュワネン鉱山はキンバーライトの岩体を採掘します。地質が鉱山の位置を決め、採掘・選鉱と販売は別の段階です。Kimberley Processによる2024年のボツワナ全国の粗ダイヤ生産は約1,813万カラット、約13.6億米ドルでした。これは全国の年間生産量と生産価値であり、ジュワネン単独の量や埋蔵量ではありません。',note:'Debswanaが操業を示すジュワネン鉱山の周辺代表点です。国別の粗ダイヤ生産量を点の大きさに換算していません。',sources:[{label:'Debswana・Jwaneng Mine（操業と地質）',url:'https://www.debswana.com/jwaneng/'},{label:'Kimberley Process・ボツワナ粗ダイヤ統計（2024）',url:'https://www.kimberleyprocess.com/participants/botswana'}]}),
+ location('casablanca-manufacturing','casablanca-industry','manufacturing','カサブランカ：航空機'),
+ sourced({id:'lagos',label:'ラゴス：港湾物流',mapLabel:'ラゴス：港湾物流',kind:'transport',coordinates:[3.4,6.5],title:'沿岸都市の市場と港湾',reading:'ラゴスのアパパ港では、海運から道路・鉄道・水路への接続が物流を支えます。港湾庁は港内の砂糖・塩・製粉工場にも言及しています。大きな都市市場と海岸の積出し条件が重なる場所ですが、この点は港湾の取扱量や都市全体のサービス業の規模を表しません。',note:'港湾庁が説明するアパパ港のあるラゴスの代表位置です。岸壁や工場の正確な座標ではありません。',sources:[{label:'ナイジェリア港湾庁・Lagos Port Complex（2025）',url:'https://nigerianports.gov.ng/lagos-port/'}]})
 ];
 
 export function africaIndustryLocationById(id:string):AfricaIndustryLocation|undefined {
