@@ -4,15 +4,24 @@ import {withBase} from './urls';
 import {latinAgricultureReading, type LatinAgricultureLayer} from '../data/atlas/latin-america/agriculture-reading';
 import products from '../data/atlas/latin-america-products.json';
 import overview from '../../public/assets/atlas/latin-america-overview-v1/manifest.json';
+import cropManifest from '../../public/assets/atlas/latin-america-agriculture-v1/manifest.json';
 
 export {latinAgricultureReading};
 export type {LatinAgricultureLayer};
 export const latinAgricultureLayers = data.layers;
+/** Comparable 2020 harvested-area estimates for the 12 crops already drawn on the overview map. */
+export const latinCropAreaRanking = products.filter(product=>product.kind==='crop').map(product=>{
+ const layer=cropManifest.layers.find(candidate=>candidate.id===product.id);
+ if(!layer||layer.year!==2020||layer.countries.length!==34)throw Error(`Missing comparable MapSPAM crop: ${product.id}`);
+ const areaHa=layer.countries.reduce((sum,country)=>sum+(country.value===null?0:Math.round(country.value*100)),0)/100;
+ return {id:product.id,name:product.name,color:product.color,areaHa,reportingCountries:layer.countries.filter(country=>country.value!==null).length};
+}).sort((a,b)=>b.areaHa-a.areaHa||a.id.localeCompare(b.id));
+export const latinCropAreaTotalHa=latinCropAreaRanking.reduce((sum,crop)=>sum+crop.areaHa,0);
 export type LatinAgricultureMapState = {layer:string;place:string;scope:string;only:boolean};
 const escape = (v:unknown) => String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 export const agricultureLayer = (id:string) => data.layers.find(l=>l.id===id)??data.layers[0];
 export const agricultureLayerTitle = (id:string) => id==='all'?'作物と家畜の分布':id==='cattle'?'牛の飼育密度':`${agricultureLayer(id).label}の収穫面積`;
-export const latinAgricultureOverviewReading={title:'中南米全体の農畜産',takeaway:'熱帯の作物、高地のコーヒー、南米内陸の大豆と牧畜を同時に見渡します。品目を選ぶと分布の輪郭と解説を強調し、他の作物・家畜も残します。',compare:'気候と農畜産の広がりを比べる',steps:[['自然条件から産地へ','気候・標高・雨の季節と、作物や家畜の広がりを比べます。'],['生産から用途・流通へ','収穫面積、家畜密度、国別生産量は異なる量です。品目ごとの解説で加工・用途・市場を読みます。'],['土地・水の管理へ','地域事例から、土壌改良や草地・水の管理と生産のつながりを確かめます。']],examples:Object.values(latinAgricultureReading).flatMap(r=>r.examples),sources:Object.values(latinAgricultureReading).flatMap(r=>r.sources).filter((s,i,a)=>a.findIndex(v=>v.url===s.url)===i)};
+export const latinAgricultureOverviewReading={title:'中南米全体の農畜産',takeaway:'地図で作物・家畜の広がりを見て、下の横棒で12作物の2020年収穫面積を同じ単位で比べます。大豆ととうもろこしの広さが目立っても、バナナやコーヒーの輸出価値は面積からは決まりません。品目を選ぶと分布の輪郭を強調し、他の作物・家畜も残します。',compare:'気候と農畜産の広がりを比べる',steps:[['自然条件から産地へ','気候・標高・雨の季節と、作物や家畜の広がりを比べます。'],['生産から用途・流通へ','収穫面積、家畜密度、国別生産量は異なる量です。品目ごとの解説で加工・用途・市場を読みます。'],['土地・水の管理へ','地域事例から、土壌改良や草地・水の管理と生産のつながりを確かめます。']],examples:Object.values(latinAgricultureReading).flatMap(r=>r.examples),sources:Object.values(latinAgricultureReading).flatMap(r=>r.sources).filter((s,i,a)=>a.findIndex(v=>v.url===s.url)===i)};
 export function renderLatinAgricultureOverviewLegend(selected='all'):string {
  const key=products.map(p=>`<span><i style="background:${p.color}" aria-hidden="true"></i>${escape(p.name)}</span>`).join('');
  return `<div class="latin-agriculture-legend latin-agriculture-overview-legend" data-latin-agriculture-overview-legend><strong>作物：面・縞／家畜：点模様 · 分布推計2020年</strong><div>${key}</div><p>色＝品目。薄色・縞は既存の合成処理による表示調整で、数量の比較ではありません。${selected==='all'?'':'黒白の輪郭＝選択品目。ほかの分布も表示。'}表示下限：作物1 ha/格子・家畜1頭羽/km²。無着色は0・下限未満・欠測・対象外を含みます。</p><details><summary>合成分布の加工と単品の数値を読む</summary><p>${escape(overview.method)}</p><a href="${withBase('/assets/atlas/latin-america-overview-v1/manifest.json')}">既存の合成画像・輪郭・出典とhash台帳</a></details></div>`;
