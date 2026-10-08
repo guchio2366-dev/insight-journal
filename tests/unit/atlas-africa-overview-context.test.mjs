@@ -32,7 +32,7 @@ function page(search){
 
 function fieldQuery(w,field){return new URL(w.document.querySelector(`[data-ao-field=${field}]`).href).searchParams;}
 
-test('Africa overview retains all canonical crop, crop measure and livestock selections through field round trips',async()=>{
+test('Africa overview preserves source links and main entry normalizes their retired quantity and country parameters',async()=>{
  const initial=page('?place=NGA&field=agriculture');
  try{
   for(const crop of cropChoices)for(const cropMeasure of cropMeasureChoices)for(const livestock of livestockChoices){
@@ -43,10 +43,10 @@ test('Africa overview retains all canonical crop, crop measure and livestock sel
      const out=fieldQuery(w,field);assert.equal(out.get('crop'),crop.id);assert.equal(out.get('cropMeasure'),cropMeasure.id);assert.equal(out.get('livestock'),livestock.id);
     }
     const out=fieldQuery(w,'agriculture'),state=readState('?'+out);
-    assert.equal(state.crop,crop.id);assert.equal(state.cropMeasure,cropMeasure.id);assert.equal(state.livestock,livestock.id);assert.equal(state.year,2023);assert.equal(state.compare,'TZA');
+    assert.equal(state.crop,crop.id);assert.equal(state.cropMeasure,'harvested');assert.equal(state.livestock,livestock.id);assert.equal(state.compare,'');assert.equal(state.place,'');assert.equal(state.view,'distribution');
     const overview=writeState(state,new URL('https://example.com/insight-journal/atlas/africa/overview/'));
     const back=page(overview.search);
-    try{const restored=fieldQuery(back,'agriculture');assert.equal(restored.get('crop'),crop.id);assert.equal(restored.get('cropMeasure'),cropMeasure.id);assert.equal(restored.get('livestock'),livestock.id);assert.equal(restored.get('layerClass'),'crop-3');assert.equal(restored.get('layerPoint'),'7.5,9.5');}
+    try{const restored=fieldQuery(back,'agriculture');assert.equal(restored.get('crop'),crop.id);assert.equal(restored.get('cropMeasure'),'harvested');assert.equal(restored.get('livestock'),livestock.id);assert.equal(restored.get('layerClass'),'crop-3');assert.equal(restored.get('layerPoint'),'7.5,9.5');}
     finally{await back.happyDOM.close();}
    }finally{await w.happyDOM.close();}
   }
@@ -73,17 +73,17 @@ test('Africa overview keeps commodity and comparison source state after country 
  }finally{await w.happyDOM.close();}
 });
 
-test('Africa overview retains mixed layers, explicit all-off and outline state through every field and back',async()=>{
+test('Africa overview preserves legacy layer links while main agriculture entry normalizes them to all seven sources',async()=>{
  for(const layers of ['livestock-goats,crop-rice-production,crop-maize-production',''])for(const outline of [false,true]){
   const canonical=canonicalAgriLayers(layers),q=new URLSearchParams({place:'NGA',field:'agriculture',topic:'farming',crop:'rice',cropMeasure:'production',livestock:'goats',agriLayers:layers});if(outline)q.set('agriOutline','1');
   const w=page('?'+q);
   try{
    for(const field of ['overview','agriculture','nature','industry','population']){
     const out=fieldQuery(w,field);assert.equal(out.has('agriLayers'),true);assert.equal(out.get('agriLayers'),canonical);assert.equal(out.get('agriOutline'),outline?'1':null);
-    if(field!=='overview'){const state=readState('?'+out);assert.equal(state.agriLayers,canonical);assert.equal(state.agriOutline,outline);assert.equal(state.crop,'rice');assert.equal(state.livestock,'goats');}
+    if(field!=='overview'){const state=readState('?'+out);assert.equal(state.agriLayers,field==='agriculture'?null:canonical);assert.equal(state.agriOutline,field==='agriculture'?true:outline);assert.equal(state.crop,'rice');assert.equal(state.livestock,'goats');}
    }
    const state=readState('?'+fieldQuery(w,'agriculture')),back=page(writeState(state,new URL('https://example.com/insight-journal/atlas/africa/overview/')).search);
-   try{const restored=fieldQuery(back,'agriculture');assert.equal(restored.has('agriLayers'),true);assert.equal(restored.get('agriLayers'),canonical);assert.equal(restored.get('agriOutline'),outline?'1':null);assert.equal(restored.get('crop'),'rice');assert.equal(restored.get('cropMeasure'),'production');assert.equal(restored.get('livestock'),'goats');}
+   try{const restored=fieldQuery(back,'agriculture');assert.equal(restored.has('agriLayers'),false);assert.equal(restored.get('agriOutline'),'1');assert.equal(restored.get('crop'),'rice');assert.equal(restored.get('cropMeasure'),'harvested');assert.equal(restored.get('livestock'),'goats');}
    finally{await back.happyDOM.close();}
   }finally{await w.happyDOM.close();}
  }

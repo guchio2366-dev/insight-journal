@@ -2,7 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {Window} from 'happy-dom';
-import {africaRivers,africaRiverById,africaRiverForFeature,africaRiverSelectedColor} from '../../src/data/atlas/africa-river-reading.ts';
+import {africaRivers,africaRiverById,africaRiverForFeature} from '../../src/data/atlas/africa-river-reading.ts';
+import {africaHydrologyRivers,africaHydrologyRiverForFeature} from '../../src/data/atlas/africa-hydrology-reading.ts';
+import {africaRiverDisplayColors} from '../../src/scripts/atlas-africa-layers.ts';
 import {reading} from '../../src/data/atlas/africa-reading.ts';
 import {themeById} from '../../src/data/atlas/africa-themes.ts';
 import {readState} from '../../src/data/atlas/africa-atlas.ts';
@@ -48,15 +50,15 @@ async function withRenderer(run,{delayManifest=false,delayRivers=false}={}){
 test('river selection highlights the same original segments and leaves the full source distribution visible',async()=>{
  await withRenderer(async({root,paint,ready})=>{
   await ready();
-  for(const selected of ['nile','congo','']){
+  for(const selected of [...africaHydrologyRivers.map(row=>row.id),'']){
    paint(selected);
    const paths=[...root.querySelectorAll('[data-africa-layer-feature]')];assert.equal(paths.length,rivers.features.length);
-   assert.equal(root.querySelectorAll('.africa-river-path.is-selected').length,selected?2:0);
-   assert.equal(root.querySelectorAll('[data-africa-river][aria-pressed="true"]').length,selected?2:0);
+   assert.equal(root.querySelectorAll('.africa-river-path.is-selected').length,selected?africaHydrologyRivers.find(row=>row.id===selected).featureIds.length:0);
+   assert.equal(root.querySelectorAll('[data-africa-river-hit-feature][aria-pressed="true"]').length,selected?africaHydrologyRivers.find(row=>row.id===selected).featureIds.length:0);
    for(const feature of rivers.features){
-    const path=root.querySelector(`[data-africa-layer-feature="${feature.id}"]`),river=africaRiverForFeature(feature),selectedFeature=river?.id===selected;
+    const path=root.querySelector(`[data-africa-layer-feature="${feature.id}"]`),river=africaHydrologyRiverForFeature(feature),selectedFeature=!!river&&river.id===selected;
     assert.equal(path.getAttribute('d'),africaLayerPath(feature.geometry));
-    assert.equal(path.getAttribute('stroke'),selectedFeature?africaRiverSelectedColor:manifest.layers.rivers.legend[0].color);
+    assert.equal(path.getAttribute('stroke'),selectedFeature?africaRiverDisplayColors.selected:river?africaRiverDisplayColors.named:africaRiverDisplayColors.base);
     if(river){
      const hit=root.querySelector(`[data-africa-river-hit-feature="${feature.id}"]`);
      assert.equal(hit.getAttribute('d'),path.getAttribute('d'));

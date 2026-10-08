@@ -1,0 +1,570 @@
+{
+  "schemaVersion": 1,
+  "sources": {
+    "rivers": {
+      "asset": "public/assets/atlas/africa-water-v1/rivers.geojson",
+      "sha256": "966b43e927f12ae9bc81ab16d45f1f23ad447435ed825a554e479cbcfc3167ae",
+      "sourceName": "Natural Earth 1:50 million rivers and lake centerlines v5.1.2",
+      "sourceUrl": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_50m_rivers_lake_centerlines.geojson",
+      "period": "v5.1.2（データ版。地物の観測年ではない）",
+      "license": "Public domain",
+      "licenseUrl": "https://www.naturalearthdata.com/about/terms-of-use/",
+      "featureCount": 90
+    },
+    "basins": {
+      "asset": "public/assets/atlas/africa-water-v1/basins.geojson.gz",
+      "sha256": "5f058af6deb8c1357cb236d639e03fc584feddaee2a8af5cf025b40ac2eb1f49",
+      "sourceName": "BasinATLAS v1.0 level06 connected catchments",
+      "sourceUrl": "https://figshare.com/articles/dataset/HydroATLAS_version_1_0/9890531/1",
+      "period": "BasinATLAS v1.0（2019年公開版。区画の観測年ではない）",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "featureCount": 1037
+    }
+  },
+  "riverSelectionMethod": "Editorial overview selection of nine named river features already in the pinned Natural Earth file. Not a ranking by river length, flow, basin area or importance. SourceName equality retains the published segments and does not add named tributaries.",
+  "labelMethod": "From River features only: choose the longest existing separate line using cos(latitude)-weighted coordinate distance for locator placement, then select existing vertices nearest 50%, 25% and 75% of cumulative distance. No geometry or label point interpolation. This distance is not a published river-length measurement.",
+  "relationMethod": "For every existing vertex of each selected named river feature, use even-odd point-in-polygon containment in all 1037 existing BasinATLAS display polygons, respecting holes. Choose the polygon containing the most tested vertices. Preserve every match, unmatched count and source identity. No buffers, geometry union, snapping or expansion.",
+  "relationScope": "照合は河道頂点と収録集水区の位置関係です。原本の正式な川名対応ではなく、河道の長さに対する割合や全流域の完全性を示しません。Natural Earth 1:50,000,000 の一般化された線と、HydroBASINS の接続構造を基礎とする BasinATLAS レベル6統合区画（表示境界を0.008度で一般化）は尺度・処理が異なります。頂点間の全線分の包含も保証しません。境界や線の隙間を拡張・接続していません。",
+  "rivers": [
+    {
+      "id": "nile",
+      "label": "ナイル川",
+      "sourceName": "Nile",
+      "featureIds": [
+        "ne50-river-0047",
+        "ne50-river-0298"
+      ],
+      "labelCandidates": [
+        {
+          "featureId": "ne50-river-0298",
+          "partIndex": 0,
+          "vertexIndex": 44,
+          "coordinates": [
+            32.306328,
+            18.889933
+          ]
+        },
+        {
+          "featureId": "ne50-river-0298",
+          "partIndex": 0,
+          "vertexIndex": 19,
+          "coordinates": [
+            33.968811,
+            17.792351
+          ]
+        },
+        {
+          "featureId": "ne50-river-0298",
+          "partIndex": 0,
+          "vertexIndex": 67,
+          "coordinates": [
+            30.487886,
+            19.243063
+          ]
+        }
+      ],
+      "basinRelation": {
+        "basinId": "b-1060034260",
+        "sourceBasinName": "集水区 1060034260（レベル6区画の統合）",
+        "label": "ナイル川の河道と重なる収録集水区",
+        "testedVertices": 199,
+        "containedVertices": 199,
+        "outsideRelatedBasinVertices": 0,
+        "allBasinMatches": [
+          {
+            "basinId": "b-1060034260",
+            "containedVertices": 199
+          }
+        ],
+        "outsideAllCollectedBasinsVertices": 0,
+        "multiplyContainedVertices": 0,
+        "sourceAreaKm2": 2944351.5,
+        "subBasins": 360,
+        "endorheic": false,
+        "coastal": false
+      }
+    },
+    {
+      "id": "congo",
+      "label": "コンゴ川",
+      "sourceName": "Congo",
+      "featureIds": [
+        "ne50-river-0157",
+        "ne50-river-0263"
+      ],
+      "labelCandidates": [
+        {
+          "featureId": "ne50-river-0157",
+          "partIndex": 1,
+          "vertexIndex": 26,
+          "coordinates": [
+            17.899817,
+            -0.390829
+          ]
+        },
+        {
+          "featureId": "ne50-river-0157",
+          "partIndex": 1,
+          "vertexIndex": 15,
+          "coordinates": [
+            20.943818,
+            1.994711
+          ]
+        },
+        {
+          "featureId": "ne50-river-0157",
+          "partIndex": 1,
+          "vertexIndex": 45,
+          "coordinates": [
+            15.990063,
+            -3.766178
+          ]
+        }
+      ],
+      "basinRelation": {
+        "basinId": "b-1060020040",
+        "sourceBasinName": "集水区 1060020040（レベル6区画の統合）",
+        "label": "コンゴ川の河道と重なる収録集水区",
+        "testedVertices": 157,
+        "containedVertices": 157,
+        "outsideRelatedBasinVertices": 0,
+        "allBasinMatches": [
+          {
+            "basinId": "b-1060020040",
+            "containedVertices": 157
+          }
+        ],
+        "outsideAllCollectedBasinsVertices": 0,
+        "multiplyContainedVertices": 0,
+        "sourceAreaKm2": 3705221.0,
+        "subBasins": 313,
+        "endorheic": false,
+        "coastal": false
+      }
+    },
+    {
+      "id": "niger",
+      "label": "ニジェール川",
+      "sourceName": "Niger",
+      "featureIds": [
+        "ne50-river-0046",
+        "ne50-river-0297"
+      ],
+      "labelCandidates": [
+        {
+          "featureId": "ne50-river-0297",
+          "partIndex": 5,
+          "vertexIndex": 55,
+          "coordinates": [
+            -7.452925,
+            12.958331
+          ]
+        },
+        {
+          "featureId": "ne50-river-0297",
+          "partIndex": 5,
+          "vertexIndex": 33,
+          "coordinates": [
+            -9.432571,
+            10.969253
+          ]
+        },
+        {
+          "featureId": "ne50-river-0297",
+          "partIndex": 5,
+          "vertexIndex": 73,
+          "coordinates": [
+            -4.996201,
+            14.154666
+          ]
+        }
+      ],
+      "basinRelation": {
+        "basinId": "b-1060022420",
+        "sourceBasinName": "集水区 1060022420（レベル6区画の統合）",
+        "label": "ニジェール川の河道と重なる収録集水区",
+        "testedVertices": 331,
+        "containedVertices": 302,
+        "outsideRelatedBasinVertices": 29,
+        "allBasinMatches": [
+          {
+            "basinId": "b-1060022420",
+            "containedVertices": 302
+          },
+          {
+            "basinId": "b-1060021940",
+            "containedVertices": 14
+          },
+          {
+            "basinId": "b-1060022430",
+            "containedVertices": 12
+          }
+        ],
+        "outsideAllCollectedBasinsVertices": 3,
+        "multiplyContainedVertices": 0,
+        "sourceAreaKm2": 2119641.6,
+        "subBasins": 297,
+        "endorheic": false,
+        "coastal": false
+      }
+    },
+    {
+      "id": "zambezi",
+      "label": "ザンベジ川",
+      "sourceName": "Zambezi",
+      "featureIds": [
+        "ne50-river-0100",
+        "ne50-river-0448"
+      ],
+      "labelCandidates": [
+        {
+          "featureId": "ne50-river-0448",
+          "partIndex": 4,
+          "vertexIndex": 41,
+          "coordinates": [
+            22.968552,
+            -15.077219
+          ]
+        },
+        {
+          "featureId": "ne50-river-0448",
+          "partIndex": 4,
+          "vertexIndex": 19,
+          "coordinates": [
+            22.580875,
+            -12.689923
+          ]
+        },
+        {
+          "featureId": "ne50-river-0448",
+          "partIndex": 4,
+          "vertexIndex": 55,
+          "coordinates": [
+            24.238242,
+            -17.478054
+          ]
+        }
+      ],
+      "basinRelation": {
+        "basinId": "b-1060011660",
+        "sourceBasinName": "集水区 1060011660（レベル6区画の統合）",
+        "label": "ザンベジ川の河道と重なる収録集水区",
+        "testedVertices": 141,
+        "containedVertices": 134,
+        "outsideRelatedBasinVertices": 7,
+        "allBasinMatches": [
+          {
+            "basinId": "b-1060011660",
+            "containedVertices": 134
+          },
+          {
+            "basinId": "b-1060011670",
+            "containedVertices": 6
+          }
+        ],
+        "outsideAllCollectedBasinsVertices": 1,
+        "multiplyContainedVertices": 0,
+        "sourceAreaKm2": 1378103.7,
+        "subBasins": 193,
+        "endorheic": false,
+        "coastal": false
+      }
+    },
+    {
+      "id": "orange",
+      "label": "オレンジ川",
+      "sourceName": "Orange",
+      "featureIds": [
+        "ne50-river-0049",
+        "ne50-river-0312"
+      ],
+      "labelCandidates": [
+        {
+          "featureId": "ne50-river-0312",
+          "partIndex": 1,
+          "vertexIndex": 57,
+          "coordinates": [
+            20.82677,
+            -28.748477
+          ]
+        },
+        {
+          "featureId": "ne50-river-0312",
+          "partIndex": 1,
+          "vertexIndex": 36,
+          "coordinates": [
+            22.741486,
+            -29.612714
+          ]
+        },
+        {
+          "featureId": "ne50-river-0312",
+          "partIndex": 1,
+          "vertexIndex": 77,
+          "coordinates": [
+            18.310852,
+            -28.886247
+          ]
+        }
+      ],
+      "basinRelation": {
+        "basinId": "b-1060015850",
+        "sourceBasinName": "集水区 1060015850（レベル6区画の統合）",
+        "label": "オレンジ川の河道と重なる収録集水区",
+        "testedVertices": 186,
+        "containedVertices": 186,
+        "outsideRelatedBasinVertices": 0,
+        "allBasinMatches": [
+          {
+            "basinId": "b-1060015850",
+            "containedVertices": 186
+          }
+        ],
+        "outsideAllCollectedBasinsVertices": 0,
+        "multiplyContainedVertices": 0,
+        "sourceAreaKm2": 930164.3,
+        "subBasins": 129,
+        "endorheic": false,
+        "coastal": false
+      }
+    },
+    {
+      "id": "limpopo",
+      "label": "リンポポ川",
+      "sourceName": "Limpopo",
+      "featureIds": [
+        "ne50-river-0259"
+      ],
+      "labelCandidates": [
+        {
+          "featureId": "ne50-river-0259",
+          "partIndex": 0,
+          "vertexIndex": 33,
+          "coordinates": [
+            30.916077,
+            -22.29068
+          ]
+        },
+        {
+          "featureId": "ne50-river-0259",
+          "partIndex": 0,
+          "vertexIndex": 22,
+          "coordinates": [
+            28.695541,
+            -22.53542
+          ]
+        },
+        {
+          "featureId": "ne50-river-0259",
+          "partIndex": 0,
+          "vertexIndex": 49,
+          "coordinates": [
+            32.487764,
+            -23.635766
+          ]
+        }
+      ],
+      "basinRelation": {
+        "basinId": "b-1060012590",
+        "sourceBasinName": "集水区 1060012590（レベル6区画の統合）",
+        "label": "リンポポ川の河道と重なる収録集水区",
+        "testedVertices": 76,
+        "containedVertices": 75,
+        "outsideRelatedBasinVertices": 1,
+        "allBasinMatches": [
+          {
+            "basinId": "b-1060012590",
+            "containedVertices": 75
+          },
+          {
+            "basinId": "b-1060012550",
+            "containedVertices": 1
+          }
+        ],
+        "outsideAllCollectedBasinsVertices": 0,
+        "multiplyContainedVertices": 0,
+        "sourceAreaKm2": 407485.7,
+        "subBasins": 49,
+        "endorheic": false,
+        "coastal": false
+      }
+    },
+    {
+      "id": "senegal",
+      "label": "セネガル川",
+      "sourceName": "Sénégal",
+      "featureIds": [
+        "ne50-river-0386"
+      ],
+      "labelCandidates": [
+        {
+          "featureId": "ne50-river-0386",
+          "partIndex": 0,
+          "vertexIndex": 46,
+          "coordinates": [
+            -13.506999,
+            16.135217
+          ]
+        },
+        {
+          "featureId": "ne50-river-0386",
+          "partIndex": 0,
+          "vertexIndex": 19,
+          "coordinates": [
+            -12.302525,
+            14.817003
+          ]
+        },
+        {
+          "featureId": "ne50-river-0386",
+          "partIndex": 0,
+          "vertexIndex": 68,
+          "coordinates": [
+            -15.121423,
+            16.603586
+          ]
+        }
+      ],
+      "basinRelation": {
+        "basinId": "b-1060027410",
+        "sourceBasinName": "集水区 1060027410（レベル6区画の統合）",
+        "label": "セネガル川の河道と重なる収録集水区",
+        "testedVertices": 86,
+        "containedVertices": 84,
+        "outsideRelatedBasinVertices": 2,
+        "allBasinMatches": [
+          {
+            "basinId": "b-1060027410",
+            "containedVertices": 84
+          },
+          {
+            "basinId": "b-1060027170",
+            "containedVertices": 1
+          }
+        ],
+        "outsideAllCollectedBasinsVertices": 1,
+        "multiplyContainedVertices": 0,
+        "sourceAreaKm2": 450619.6,
+        "subBasins": 57,
+        "endorheic": false,
+        "coastal": false
+      }
+    },
+    {
+      "id": "volta",
+      "label": "ボルタ川",
+      "sourceName": "Volta",
+      "featureIds": [
+        "ne50-river-0094",
+        "ne50-river-0423"
+      ],
+      "labelCandidates": [
+        {
+          "featureId": "ne50-river-0423",
+          "partIndex": 0,
+          "vertexIndex": 4,
+          "coordinates": [
+            0.379853,
+            6.042215
+          ]
+        },
+        {
+          "featureId": "ne50-river-0423",
+          "partIndex": 0,
+          "vertexIndex": 2,
+          "coordinates": [
+            0.156559,
+            6.113684
+          ]
+        },
+        {
+          "featureId": "ne50-river-0423",
+          "partIndex": 0,
+          "vertexIndex": 7,
+          "coordinates": [
+            0.60015,
+            5.968473
+          ]
+        }
+      ],
+      "basinRelation": {
+        "basinId": "b-1060023300",
+        "sourceBasinName": "集水区 1060023300（レベル6区画の統合）",
+        "label": "ボルタ川の河道と重なる収録集水区",
+        "testedVertices": 32,
+        "containedVertices": 31,
+        "outsideRelatedBasinVertices": 1,
+        "allBasinMatches": [
+          {
+            "basinId": "b-1060023300",
+            "containedVertices": 31
+          }
+        ],
+        "outsideAllCollectedBasinsVertices": 1,
+        "multiplyContainedVertices": 0,
+        "sourceAreaKm2": 412648.1,
+        "subBasins": 73,
+        "endorheic": false,
+        "coastal": false
+      }
+    },
+    {
+      "id": "okavango",
+      "label": "オカバンゴ川",
+      "sourceName": "Okavango",
+      "featureIds": [
+        "ne50-river-0308"
+      ],
+      "labelCandidates": [
+        {
+          "featureId": "ne50-river-0308",
+          "partIndex": 0,
+          "vertexIndex": 13,
+          "coordinates": [
+            24.212197,
+            -20.247704
+          ]
+        },
+        {
+          "featureId": "ne50-river-0308",
+          "partIndex": 0,
+          "vertexIndex": 6,
+          "coordinates": [
+            24.399886,
+            -20.705299
+          ]
+        },
+        {
+          "featureId": "ne50-river-0308",
+          "partIndex": 0,
+          "vertexIndex": 19,
+          "coordinates": [
+            23.57699,
+            -20.125851
+          ]
+        }
+      ],
+      "basinRelation": {
+        "basinId": "b-1060040200",
+        "sourceBasinName": "集水区 1060040200（レベル6区画の統合）",
+        "label": "オカバンゴ川の河道と重なる収録集水区",
+        "testedVertices": 68,
+        "containedVertices": 68,
+        "outsideRelatedBasinVertices": 0,
+        "allBasinMatches": [
+          {
+            "basinId": "b-1060040200",
+            "containedVertices": 68
+          }
+        ],
+        "outsideAllCollectedBasinsVertices": 0,
+        "multiplyContainedVertices": 0,
+        "sourceAreaKm2": 644405.8,
+        "subBasins": 81,
+        "endorheic": true,
+        "coastal": false
+      }
+    }
+  ]
+}

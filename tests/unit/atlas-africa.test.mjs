@@ -30,17 +30,27 @@ test('WDI source values match fixed independent source spot checks; missing is n
  assert.equal(defaultYear('NY.GDP.TOTL.RT.ZS'),2021);
  assert.equal(defaultYear('ER.H2O.INTR.PC'),2022);
 });
-test('URL codec preserves four fields, comparison, filters and zoom; rejects invalid and prototype values',()=>{
- const state=readState('?field=industry&metric=NY.GDP.TOTL.RT.ZS&place=COD&compare=ZAF&region=central&year=2021&zoom=country');
- assert.deepEqual(readState(writeState(state,new URL('https://example.com/atlas/africa/?utm=test')).search),state);
- for(const field of ['bad','__proto__','constructor'])assert.equal(readState(`?field=${field}&region=${field}`).field,'nature');
+const retiredKeys=['place','compare','year','metric','context','sourceState','view'];
+const url=()=>new URL('https://example.com/atlas/africa/?utm=test');
+const displayState=state=>Object.fromEntries(Object.entries(state).filter(([key])=>!['year','metric'].includes(key)));
+test('legacy country statistics URLs normalize to source distributions in every field and topic',()=>{
+ const cases=[['nature','climate',''],['nature','terrain',''],['nature','elevation',''],['nature','water','river'],['nature','water','basin'],['nature','water','rain'],['agriculture','farming',''],['agriculture','livestock',''],['agriculture','forestry',''],['industry','regional',''],['population','distribution',''],['population','ethnicity',''],['population','religion','']];
+ for(const [field,topic,water] of cases){
+  const query=new URLSearchParams({field,topic,water,place:'COD',compare:'ZAF',year:'2023',region:'central',zoom:'country',view:'statistics',context:'EN.POP.DNST',sourceState:'field=population&place=COD'});
+  const state=readState('?'+query),written=writeState({...state},new URL('https://example.com/atlas/africa/?'+query));
+  for(const key of ['place','compare','context','sourceState'])assert.equal(state[key],'',`${field}/${topic}: ${key}`);
+  assert.equal(state.view,'distribution');assert.equal(state.topic,topic);
+  for(const key of retiredKeys)assert.equal(written.searchParams.has(key),false,key);
+  assert.equal(state.region,field==='agriculture'?'central':'all');assert.equal(state.zoom,field==='agriculture'?'region':'all');
+  assert.deepEqual(displayState(readState(written.search)),displayState(state));
+ }
+ for(const invalid of ['bad','__proto__','constructor'])assert.equal(readState(`?field=${invalid}&region=${invalid}`).field,'nature');
  assert.equal(readState('?field=population&metric=AG.LND.ARBL.ZS&place=BAD&year=9999&zoom=bad').metric,'SP.POP.TOTL');
- assert.equal(readState('?place=COD&compare=COD').compare,'');
 });
 test('fixed color thresholds distinguish zero, negative growth and missing; counts have proportional symbols',()=>{
  const m=metrics.find(m=>m.id==='SP.POP.GROW');assert.notEqual(fillFor(null,m),fillFor(0,m));assert.notEqual(fillFor(-1,m),fillFor(1,m));
  assert.ok(metrics.find(m=>m.id==='SP.POP.TOTL').symbols);
- const state=readState('?field=population&region=west&year=2023');const rows=rankedCountries(state);
+ const state={...readState('?field=population&year=2023'),region:'west'};const rows=rankedCountries(state);
  assert.ok(rows.every(c=>c.region==='west'));assert.equal(rows[0].code,'NGA');
  assert.equal(metrics.length,15);assert.deepEqual(new Set(metrics.map(m=>m.field)),new Set(['nature','agriculture','industry','population']));
 });
@@ -59,29 +69,17 @@ test('thematic maps identify their qualitative locations and comparison sources'
  }
 });
 
-test('comparison URLs preserve source selection and reject unrelated thematic context',()=>{
- const theme=themes.find(t=>t.field==='agriculture');
- const query=`?field=agriculture&metric=AG.YLD.CREL.KG&place=GHA&compare=CIV&year=2023&region=west&zoom=theme&theme=${theme.id}&context=${theme.compareMetric}`;
- const state=readState(query);
- assert.equal(state.context,theme.compareMetric);assert.equal(state.metric,'AG.YLD.CREL.KG');assert.equal(state.year,2023);
- assert.deepEqual(readState(writeState(state,new URL('https://example.com/atlas/africa/')).search),state);
- assert.equal(readState(query.replace(theme.compareMetric,'NY.GDP.PCAP.CD')).context,'');
- assert.equal(readState(`?field=industry&theme=${theme.id}&context=${theme.compareMetric}`).theme,themes.find(t=>t.field==='industry').id);
-});
-
-test('every field starts with no country and a full-region overview while explicit selections remain authoritative',()=>{
- for(const field of ['nature','agriculture','industry','population']){const initial=readState('?field='+field);assert.equal(initial.place,'');assert.equal(initial.compare,'');assert.equal(initial.zoom,'all');assert.equal(initial.region,'all');assert.equal(initial.overview,true);assert.deepEqual(readState(writeState({...initial},new URL('https://example.com/atlas/africa/')).search),initial);}
- assert.equal(readState('?field=nature&theme=east-highlands').place,'');
- const explicit=readState('?field=industry&place=EGY&region=north&zoom=theme');
- assert.equal(explicit.place,'EGY');assert.equal(explicit.region,'north');assert.equal(explicit.zoom,'theme');
- assert.deepEqual(readState(writeState(explicit,new URL('https://example.com/atlas/africa/')).search),explicit);
-});
-
-test('crop and species states remain independent through URL reload and reject unavailable products',()=>{
- const source=readState('?field=agriculture&topic=livestock&crop=rice&cropMeasure=production&livestock=goats&place=KEN&compare=ETH&year=2023&region=east&zoom=country');
- assert.equal(source.topic,'livestock');assert.equal(source.metric,'NV.AGR.TOTL.ZS');assert.equal(source.crop,'rice');assert.equal(source.cropMeasure,'production');assert.equal(source.livestock,'goats');
- assert.deepEqual(readState(writeState({...source},new URL('https://example.com/atlas/africa/')).search),source);
+test('default entry stays an overview and source selection survives canonical reload without country context',()=>{
+ for(const field of ['nature','agriculture','industry','population']){
+  const initial=readState('?field='+field),written=writeState({...initial},url());
+  assert.equal(initial.place,'');assert.equal(initial.compare,'');assert.equal(initial.zoom,'all');assert.equal(initial.region,'all');assert.equal(initial.overview,true);
+  assert.deepEqual(displayState(readState(written.search)),displayState(initial));assert.equal(written.searchParams.get('utm'),'test');
+ }
+ const state=readState('?field=agriculture&topic=livestock&crop=rice&cropMeasure=production&livestock=goats&place=KEN&compare=ETH&year=2023&region=east&zoom=country');
+ assert.equal(state.topic,'livestock');assert.equal(state.crop,'rice');assert.equal(state.cropMeasure,'harvested');assert.equal(state.livestock,'goats');assert.equal(state.zoom,'region');
+ assert.deepEqual(displayState(readState(writeState({...state},url()).search)),displayState(state));
  const invalid=readState('?field=agriculture&topic=bad&crop=constructor&cropMeasure=yield&livestock=horses');
- assert.equal(invalid.topic,'farming');assert.equal(invalid.crop,'maize');assert.equal(invalid.cropMeasure,'harvested');assert.equal(invalid.livestock,'cattle');assert.equal(invalid.zoom,'all');assert.equal(invalid.region,'all');
- assert.equal(readState('?field=agriculture&metric=AG.LND.FRST.ZS&topic=livestock').topic,'forestry');
+ assert.equal(invalid.topic,'farming');assert.equal(invalid.crop,'maize');assert.equal(invalid.cropMeasure,'harvested');assert.equal(invalid.livestock,'cattle');
+ assert.equal(readState('?field=agriculture&metric=AG.LND.FRST.ZS').topic,'forestry');
+ assert.equal(readState('?field=agriculture&metric=AG.LND.FRST.ZS&topic=livestock').topic,'livestock','explicit source topic outranks an obsolete metric');
 });

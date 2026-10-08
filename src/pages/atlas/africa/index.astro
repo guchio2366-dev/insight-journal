@@ -3,130 +3,137 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import {withBase} from '../../../lib/urls';
 import geography from '../../../data/atlas/africa-geography.json';
 import {africaPath,projectAfrica,africaWidth,africaHeight} from '../../../lib/atlas-africa-geometry';
-import {countries,fields,metrics,regionNames,years,readState,valueAt,formatValue,fillFor,palette,rankedCountries} from '../../../data/atlas/africa-atlas';
+import {countries,fields,metrics,regionNames} from '../../../data/atlas/africa-atlas';
 import {reading} from '../../../data/atlas/africa-reading';
 import {themes} from '../../../data/atlas/africa-themes';
+import {africaClimateCities,africaClimateCityCoverage} from '../../../data/atlas/africa-climate-cities';
 import AtlasNewsRail from '../../../components/atlas/AtlasNewsRail.astro';
+import AtlasClimatePlot from '../../../components/atlas/AtlasClimatePlot.astro';
 import '../../../styles/atlas-explorer.css';
 import '../../../styles/atlas-desktop.css';
 import '../../../styles/atlas-africa.css';
-const state=readState('');
-const metric=metrics[0];
-const ordered=[...countries].sort((a,b)=>a.name.localeCompare(b.name,'ja'));
-const initialTheme=themes.find(theme=>theme.id===state.theme)??themes[0];
-const [themeLeft,themeBottom]=projectAfrica([initialTheme.bounds[0],initialTheme.bounds[1]]);
-const [themeRight,themeTop]=projectAfrica([initialTheme.bounds[2],initialTheme.bounds[3]]);
-const themeWidth=Math.max(themeRight-themeLeft,(themeBottom-themeTop)*africaWidth/africaHeight)*1.12;
-const themeHeight=themeWidth*africaHeight/africaWidth;
-const initialViewBox=state.zoom==='theme'
- ? [(themeLeft+themeRight-themeWidth)/2,(themeTop+themeBottom-themeHeight)/2,themeWidth,themeHeight]
- : [0,0,africaWidth,africaHeight];
-const markScale=Math.max(initialViewBox[2]/640,initialViewBox[3]/300);
-const themeColors:Record<string,string>={river:'#236aa0','area-label':'#655037',crop:'#925b16',resource:'#9c365a',city:'#633898',port:'#164f69'};
-const initialMarks=initialTheme.marks.map((mark,i)=>{
- const line=Array.isArray(mark.coordinates[0]);
- const points=(line?mark.coordinates:[mark.coordinates]) as [number,number][];
- const projected=points.map(projectAfrica);
- const [x,y]=projected[Math.floor(projected.length/2)];
- return {...mark,number:i+1,line,x,y,color:themeColors[mark.kind],path:projected.map(([px,py],j)=>`${j?'L':'M'}${px},${py}`).join('')};
-});
+const climateSource=africaClimateCities[0].classification;
+const formatClimateValue=(value:number|null,unit:string)=>value===null?'未収録':`${value.toFixed(1)} ${unit}`;
 ---
-<BaseLayout title="アフリカ地図" description="アフリカの自然環境・農林業・主要産業・人口を、重要な分布と国別統計から読む。" compactAtlas>
+<BaseLayout title="アフリカ地図" description="アフリカの自然環境・農林業・主要産業・人口を、地図上の分布と地域・地点の説明から読む。" compactAtlas>
  <div class="africa-atlas shell" data-africa-atlas>
   <div class="africa-desktop-shell" data-atlas-shell>
-  <AtlasNewsRail region="africa" mapActions={false} />
-  <article class="africa-main">
-  <header class="africa-heading">
-   <div class="africa-compact-heading"><p class="africa-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / アフリカ</p><span>アフリカ地域</span></div>
-   <h1>アフリカ地図</h1>
-   <div class="africa-region-controls">
-    <div class="africa-region-row"><nav class="africa-region-tabs" aria-label="地域の移動"><a href={withBase('/atlas/')}>世界の地域</a><a href={withBase('/atlas/africa/overview/')} aria-current="page">アフリカ</a></nav><label>地域<select data-region>{Object.entries(regionNames).map(([id,name])=><option value={id}>{name}</option>)}</select></label></div>
-    <div class="africa-country-controls"><label>国・地域<select data-place><option value="" selected={!state.place}>国未選択</option>{ordered.map(c=><option value={c.code} selected={c.code===state.place}>{c.name}</option>)}</select></label><label>比較国<select data-compare disabled={!state.place}><option value="">比較なし</option>{ordered.map(c=><option value={c.code}>{c.name}</option>)}</select></label><label>統計年<select data-year disabled>{[...years].reverse().map(y=><option value={y} selected={y===state.year}>{y}年</option>)}</select></label></div>
-   </div>
-  </header>
-  <nav class="africa-fields" aria-label="分野を選ぶ"><a data-africa-overview-link href={withBase('/atlas/africa/overview/')}>概要</a>{(['agriculture','nature','industry','population'] as const).map(id=><button type="button" data-field={id} aria-pressed={id==='nature'?'true':'false'}>{fields[id].label}</button>)}</nav>
-  <nav class="africa-subfields" data-africa-subfields aria-label="分野内の項目"></nav>
-  <div class="africa-workspace" id="africa-map-panel">
-   <section class="africa-map-card" aria-labelledby="africa-map-title">
-    <div class="africa-map-frame">
-    <div class="africa-agri-map-controls" data-africa-agri-map-controls hidden><label>地域<select data-africa-agri-region aria-label="農畜産の表示地域">{Object.entries(regionNames).map(([id,name])=><option value={id}>{name}</option>)}</select></label></div>
-    <div class="africa-map-heading"><h2 id="africa-map-title" data-metric-title>{metric.label}</h2><span><span data-period>長期平均</span> · <span data-unit>{metric.unit}</span></span></div>
-    <svg class="africa-map" viewBox={initialViewBox.join(' ')} data-theme={initialTheme.id} data-detail={state.zoom!=='all'?'true':'false'} role="img" aria-labelledby="africa-svg-title africa-svg-desc">
-      <title id="africa-svg-title">{initialTheme.title}・国別の年降水量（長期平均）</title><desc id="africa-svg-desc">分布テーマと国別統計を重ねた地図。右の凡例と説明から、表示した分布を読み取れます。国は選択欄や一覧からも選べます。</desc>
-     <defs><pattern id="africa-missing" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#eeeae1"/><path d="M0 7L7 0" stroke="#b5b0a3" stroke-width="1"/></pattern></defs>
-     <rect width={africaWidth} height={africaHeight} fill="#e9f0f0"/>
-     {[-20,0,20].map(lat=><line x1="0" x2={africaWidth} y1={projectAfrica([0,lat])[1]} y2={projectAfrica([0,lat])[1]} class="africa-graticule"/>)}
-     {geography.features.map(f=>{const c=countries.find(c=>c.code===f.properties.code)!;const v=valueAt(metric.id,c.code,state.year);return <path d={africaPath(f.geometry)} data-country-path={c.code} fill={fillFor(v,metric)} fill-rule="evenodd" class:list={['africa-country',{'is-selected':c.code===state.place}]}><title>{c.name}：{formatValue(v,metric)} {v===null?'':metric.unit}</title></path>})}
-     <g data-africa-actual-layer></g>
-     <g data-africa-comparison-layer></g>
-     <g data-symbols></g>
-     {[{name:'大西洋',point:[-18,-12]},{name:'インド洋',point:[56,-8]},{name:'地中海',point:[18,36]}].map(l=><text class="africa-ocean" data-africa-ocean={l.name==='インド洋'?'indian':undefined} x={projectAfrica(l.point)[0]} y={projectAfrica(l.point)[1]}>{l.name}</text>)}
-     {countries.filter(c=>['CPV','STP','COM','SYC','MUS'].includes(c.code)).map(c=><g data-island-marker={c.code}><circle data-country-marker={c.code} cx={projectAfrica(c.point)[0]} cy={projectAfrica(c.point)[1]} r="5" class="africa-island"/><text class="africa-island-label" x={projectAfrica(c.point)[0]+(c.point[0]>=50?-9:9)} y={projectAfrica(c.point)[1]+4} text-anchor={c.point[0]>=50?'end':'start'}>{c.name}</text></g>)}
-     <g data-theme-marks>{initialMarks.map(mark=><g data-theme-mark={mark.id}>
-      {mark.line&&<path d={mark.path} fill="none" stroke={mark.color} stroke-width="3" vector-effect="non-scaling-stroke"/>}
-      <circle cx={mark.x} cy={mark.y} r={7*markScale} fill={mark.color} stroke="#fff" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
-      <text x={mark.x+11*markScale} y={mark.y+5*markScale} fill={mark.color} font-size={14*markScale} font-weight="700" stroke="#fff" stroke-width={3*markScale} paint-order="stroke" stroke-linejoin="round">{mark.number}</text>
-      <title>{mark.number} {mark.label}：{mark.note}</title>
-     </g>)}</g>
-    </svg>
-    <div class="africa-map-tools" aria-label="地図の表示範囲"><button data-zoom="all" type="button">全体</button><button data-zoom="theme" type="button">事例</button><button data-zoom="region" type="button">地域</button><button data-zoom="country" type="button">選択国</button><button data-reset type="button">リセット</button></div>
-    </div>
-    <div class="africa-river-choices" data-africa-river-choices role="group" aria-label="読み解く河川" hidden></div>
-    <div class="africa-commodities" data-africa-commodities role="group" hidden></div>
-    <div class="africa-layer-options" data-africa-layer-options hidden></div>
-    <section class="africa-essential-legend africa-actual-key" data-africa-actual-key hidden aria-label="元分布の全凡例"><p data-africa-layer-caption></p><div data-africa-layer-legend></div><p data-africa-layer-scope></p></section>
-    <div class="africa-map-subfields" data-africa-map-subfields></div>
-    <p class="africa-subfield-status" data-africa-subfield-status hidden role="status" aria-live="polite"></p>
-    <div class="africa-themes" data-themes role="group" aria-label="分布テーマを選ぶ">{themes.filter(theme=>theme.field===state.field).map(theme=><button type="button" data-theme={theme.id} aria-pressed={theme.id===initialTheme.id?'true':'false'}>{theme.title}</button>)}</div>
-    <details class="africa-map-notes"><summary>地図の表示方法と収録状況</summary>
-    <p class="africa-caption" data-map-caption>国平均の色です。国内の気候区分・雨の分布ではありません。島の白丸は選択用の目印です。</p>
-    <p class="africa-coverage" data-coverage></p>
-</details>
-   </section>
-    <aside class="africa-detail" aria-label="分布の読み方と国別比較" tabindex="0">
-    <section class="africa-theme-reading" aria-labelledby="africa-theme-title">
-     <div class="africa-right-fixed">
-     <button class="africa-agri-overview-return" data-africa-agri-overview type="button" hidden>← 農畜産の概要</button>
-     <p class="africa-kicker">地図から持ち帰ること</p>
-     <h2 id="africa-theme-title" data-theme-title>{initialTheme.title}</h2>
-     <p class="africa-takeaway" data-theme-takeaway>{initialTheme.takeaway}</p>
-      <div class="africa-agri-actions" data-africa-agri-actions hidden><button type="button" data-africa-agri-only>この品目だけを表示</button><button type="button" data-africa-agri-all hidden>作物・家畜の全分布へ戻る</button></div>
-      <div class="africa-theme-actions"><button type="button" data-theme-comparison>国別統計と重ねる</button><button type="button" data-theme-return hidden>← {initialTheme.title}へ戻る</button></div>
-      </div>
-       <section class="africa-essential-legend" data-africa-statistics-key aria-label="国別統計の凡例">
-       <p class="africa-essential-legend-heading" data-essential-metric>{metric.label} · 長期平均 · {metric.unit}</p>
-       <div class="africa-legend" data-legend>{palette.map((color,i)=><span><i style={`background:${color}`}/>{i===0?'250未満':i===4?'1,500以上':`${metric.breaks[i-1].toLocaleString()}〜${metric.breaks[i].toLocaleString()}未満`}</span>)}<span><i class="africa-no-data"/>未収録</span></div>
-       <div class="africa-theme-legend" data-theme-legend aria-label="分布テーマの凡例">{initialMarks.map(mark=><span><i style={`background:${mark.color}`}/>{mark.number} {mark.label}</span>)}</div>
-       <p class="africa-essential-legend-note" data-essential-boundary>細線：国境。赤枠：選択国。青い破線：比較国。</p>
-      </section>
-       <div class="africa-detail-scroll">
-       <div class="africa-agri-context" data-africa-agri-context hidden></div>
-       <div class="africa-layer-selection" data-africa-layer-selection hidden><label>表示・読解する分類<select data-africa-layer-category></select></label><p data-africa-point-reading aria-live="polite"></p><button type="button" data-africa-layer-retry hidden>分布データを再読込</button></div>
-      <p class="africa-theme-explanation" data-theme-takeaway-detail>{initialTheme.takeaway}</p>
-      <p class="africa-theme-caveat" data-theme-caveat>{initialTheme.caveat}</p>
-     <a class="africa-theme-source" data-theme-source href={initialTheme.source}>{initialTheme.sourceLabel}</a>
-     <details class="africa-theme-full"><summary>分布の詳しい読み方・出典</summary><div data-theme-details>{initialMarks.map(mark=><p>{mark.number} {mark.label} — {mark.note}</p>)}{initialTheme.evidenceSources?.map(source=><p><a href={source.url}>{source.label}</a></p>)}</div></details>
-    <details class="africa-country-statistics" data-country-statistics hidden><summary>選択国の参考統計</summary><div aria-live="polite" class="africa-selected"><div class="africa-selected-heading"><h2 data-selected-name>国を選んで比較</h2><span data-selected-region></span></div><p class="africa-selected-metric" data-selected-metric>{metric.label}</p><p class="africa-big-value"><strong data-selected-value>{formatValue(valueAt(metric.id,state.place,state.year),metric)}</strong><span data-selected-unit>{metric.unit}</span></p><p data-comparison></p><p data-place-note></p></div></details>
+   <AtlasNewsRail region="africa" mapActions={false} />
+   <article class="africa-main">
+    <header class="africa-heading">
+     <div class="africa-compact-heading"><p class="africa-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / アフリカ</p><span>アフリカ地域</span></div>
+     <h1>アフリカ地図</h1>
+     <div class="africa-region-controls">
+      <div class="africa-region-row"><nav class="africa-region-tabs" aria-label="地域の移動"><a href={withBase('/atlas/')}>世界の地域</a><a href={withBase('/atlas/africa/overview/')} aria-current="page">アフリカ</a></nav></div>
+      <p class="africa-elevation-note" data-africa-elevation-note hidden>500mの等高線と段階色 · 元の表示格子は0.1度 · ETOPO 2022版</p>
      </div>
-    </section>
-   </aside>
-  </div>
-  <div class="africa-secondary">
-<div class="africa-agri-notes" data-africa-agri-notes hidden></div>
-<details class="africa-disclosure africa-statistics-controls"><summary>国別統計の指標・年を選ぶ</summary>  <div class="africa-controls">
-   <label>指標<select data-metric>{metrics.map(m=><option value={m.id} hidden={m.field!=='nature'} selected={m.id===state.metric}>{m.label}</option>)}</select></label>
-   <p data-year-note>長期平均のため年による切替はありません</p>
-   <button type="button" data-latest title="54か国のうち40か国以上の値がある最新年（上限2024年）に切り替えます">収録国が多い最新年</button>
-  </div></details>
-<details class="africa-disclosure"><summary>選択国の指標と2000〜2024年の推移</summary><div class="africa-statistics-grid">    <div class="africa-current-metrics"><h3>この分野の指標</h3><table><thead><tr><th>指標</th><th data-column-place>国未選択</th><th data-column-compare hidden>比較国</th></tr></thead><tbody data-current-metrics>{metrics.filter(m=>m.field==='nature').map(m=><tr><th>{m.label}<small>{m.unit}</small></th><td>{formatValue(valueAt(m.id,state.place,state.year),m)}</td></tr>)}</tbody></table><p data-metric-year></p></div>
-    <section class="africa-trend"><h3>2000〜2024年の推移</h3><div data-trend><p>降水量は長期平均なので、年ごとの推移は表示しません。</p></div><details><summary>年ごとの数値を見る</summary><table><thead><tr><th>年</th><th>選択国</th><th>比較国</th></tr></thead><tbody data-trend-table></tbody></table></details></section></div></details>
-<details class="africa-disclosure"><summary>分野の読み方・統計の定義</summary>  <div class="africa-intro"><h2 data-field-title>{fields.nature.title}</h2><p data-field-summary>{fields.nature.summary}</p></div>  <section class="africa-method" aria-labelledby="africa-method-title"><h2 id="africa-method-title">この指標で分かること</h2><p data-metric-note>{metric.note}</p><p><a data-source href={`https://data.worldbank.org/indicator/${metric.id}`}>世界銀行 WDI・指標の原典</a> · <span data-source-organization>FAOの統計（WDI収録）</span></p><p>統計取得：2026年9月25日。地図と表は保存した同じデータを使用します。収録年は2000〜2024年。欠測は「未収録」とし、補間しません。</p></section></details>
-<details class="africa-disclosure"><summary>場所から、自然・産業・暮らしのつながりを読む</summary>  <section class="africa-reading"><div class="africa-section-heading"><p class="eyebrow">Read the geography</p><h2>場所から、つながりを読む</h2><p>国名を押すと、地図と国別の数値が切り替わります。</p></div>{Object.entries(reading).map(([field,cards])=><div class="africa-reading-grid" data-reading-field={field} hidden={field!=='nature'}>{cards.map(card=><article><h3>{card.title}</h3><p>{card.text}</p><div class="africa-place-links">{card.places.map(code=><button data-focus-country={code} type="button">{countries.find(c=>c.code===code)?.name} ↗</button>)}</div><a href={card.source} class="africa-reading-source">{card.sourceLabel}</a></article>)}</div>)}</section></details>
-<details class="africa-disclosure"><summary>地域の国・地域を数値で比較する</summary>  <section class="africa-ranking"><div class="africa-section-heading"><p class="eyebrow">Compare countries</p><h2>地域の国・地域を比較する</h2><p data-ranking-description>選んだ指標の大きい順。未収録は末尾に表示します。</p></div><div class="africa-table-scroll"><table><thead><tr><th>国・地域</th><th>地域</th><th data-ranking-unit>{metric.unit}</th><th>比較</th></tr></thead><tbody data-ranking>{rankedCountries(state).map(c=><tr><th><button data-focus-country={c.code} type="button">{c.name}</button></th><td>{regionNames[c.region as keyof typeof regionNames]}</td><td>{formatValue(valueAt(metric.id,c.code,state.year),metric)}</td><td><button type="button" data-compare-country={c.code}>比較に追加</button></td></tr>)}</tbody></table></div></section></details>
-<details class="africa-disclosure"><summary>地図・統計の全出典と範囲・CSV</summary>  <footer class="africa-sources"><h2>地図・統計の出典と範囲</h2><p>境界：<a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/">Natural Earth Admin 0 Countries 1:50m</a>（public domain）。西経27度〜東経64度、南緯36度〜北緯39度を等距円筒図法で表示しています。面積を比較する地図ではありません。54か国と西サハラを選択でき、海外領土は選択対象に含みません。</p><p>境界は出典の概略表現で、現在の実効支配や主権を判定するものではありません。西サハラは別の地物として表示し、モロッコの統計を転用しません。ソマリアは統計対象に合わせ、出典のソマリランド地物も同じ選択対象に含めています。</p><p>統計：世界銀行 World Development Indicators（FAO、国民経済計算、人口推計等に由来）。<a href="https://datacatalog.worldbank.org/public-licenses">CC BY 4.0・データの利用条件</a>。国境地物と統計の集計範囲は完全には一致しません。数値は改訂される場合があります。</p><p><a href={withBase('/assets/atlas/africa/indicators.csv')} download>15指標の国別・年別データをCSVで保存</a></p><details><summary>15指標の定義・出典をすべて見る</summary>{metrics.map(m=><div class="africa-source-entry"><h3>{m.label}（{m.unit}）</h3><p>{m.note}</p><a href={`https://data.worldbank.org/indicator/${m.id}`}>{m.id} · 世界銀行</a></div>)}</details></footer></details>
-  </div>
-  <noscript><p class="africa-noscript">JavaScriptが無効のため、ナイルの分布テーマと長期平均降水量の地図を表示しています。分布の説明・出典と、国別の一覧は折畳みを開いて読めます。4分野すべての数値はCSVから確認できます。分野・選択・比較・年の切替にはJavaScriptが必要です。</p></noscript>
-  </article>
+    </header>
+    <nav class="africa-fields" aria-label="分野を選ぶ"><a data-africa-overview-link href={withBase('/atlas/africa/overview/')}>概要</a>{(['agriculture','nature','industry','population'] as const).map(id=><button type="button" data-field={id} aria-pressed={id==='nature'?'true':'false'}>{fields[id].label}</button>)}</nav>
+    <nav class="africa-subfields" data-africa-subfields aria-label="分野内の項目"></nav>
+    <div class="africa-workspace" id="africa-map-panel">
+     <section class="africa-map-card" aria-labelledby="africa-map-title">
+      <div class="africa-map-frame">
+       <div class="africa-agri-map-controls" data-africa-agri-map-controls hidden><label>地域<select data-africa-agri-region aria-label="農畜産の表示地域">{Object.entries(regionNames).map(([id,name])=><option value={id}>{name}</option>)}</select></label></div>
+       <div class="africa-map-heading"><h2 id="africa-map-title" data-metric-title>アフリカの気候</h2><span><span data-period>気候区分を読込中</span> · <span data-unit>国境は位置の目安</span></span></div>
+       <svg class="africa-map" viewBox={`0 0 ${africaWidth} ${africaHeight}`} data-detail="false" role="img" aria-labelledby="africa-svg-title africa-svg-desc">
+        <title id="africa-svg-title">アフリカの国境と位置</title>
+        <desc id="africa-svg-desc">気候区分を読み込む前の国境図です。国境の中は同じ色で、国別統計は表していません。</desc>
+        <rect width={africaWidth} height={africaHeight} fill="#e9f0f0"/>
+        {[-20,0,20].map(lat=><line x1="0" x2={africaWidth} y1={projectAfrica([0,lat])[1]} y2={projectAfrica([0,lat])[1]} class="africa-graticule"/>)}
+        {geography.features.map(feature=>{const country=countries.find(country=>country.code===feature.properties.code)!;return <path d={africaPath(feature.geometry)} data-country-path={country.code} fill="#f3f1e9" fill-rule="evenodd" pointer-events="none" class="africa-country"><title>{country.name}</title></path>})}
+        <g data-africa-actual-layer></g>
+        {[{name:'大西洋',point:[-18,-12]},{name:'インド洋',point:[56,-8]},{name:'地中海',point:[18,36]}].map(label=><text class="africa-ocean" data-africa-ocean={label.name==='インド洋'?'indian':undefined} x={projectAfrica(label.point)[0]} y={projectAfrica(label.point)[1]}>{label.name}</text>)}
+        <g data-theme-marks></g>
+       </svg>
+       <div class="africa-map-tools" aria-label="地図の操作"><button data-reset type="button">リセット</button></div>
+      </div>
+      <div class="africa-commodities" data-africa-commodities role="group" hidden></div>
+      <div class="africa-layer-options" data-africa-layer-options hidden></div>
+      <section class="africa-essential-legend africa-actual-key" data-africa-actual-key hidden aria-label="表示分布の凡例"><p data-africa-layer-caption></p><div data-africa-layer-legend></div><div data-africa-agri-value-legend></div><p data-africa-layer-scope></p></section>
+      <div class="africa-map-subfields" data-africa-map-subfields></div>
+      <p class="africa-subfield-status" data-africa-subfield-status hidden role="status" aria-live="polite"></p>
+      <div class="africa-themes" data-themes role="group" aria-label="分布テーマ" hidden></div>
+      <details class="africa-map-notes"><summary>地図の表示方法と収録状況</summary><p class="africa-caption" data-map-caption>国境は位置を読むための目安です。気候・河川・作物などの分布は、それぞれの出典に基づいて表示します。</p><p class="africa-coverage" data-coverage></p></details>
+     </section>
+     <aside class="africa-detail" aria-label="地域と地点の読み方" tabindex="0">
+      <section class="africa-theme-reading" aria-labelledby="africa-theme-title">
+       <div class="africa-right-fixed">
+        <button class="africa-agri-overview-return" data-africa-agri-overview type="button" hidden>← 農畜産の概要</button>
+        <button class="africa-selection-return" data-africa-selection-return type="button" hidden>← 全域の概説へ戻る</button>
+        <p class="africa-kicker">地図から持ち帰ること</p>
+        <h2 id="africa-theme-title" data-theme-title>アフリカの気候</h2>
+        <p class="africa-takeaway" data-theme-takeaway>湿潤な赤道付近、サハラの乾燥帯、高地や南北端の違いを気候区分で読みます。</p>
+        <div class="africa-agri-actions" data-africa-agri-actions hidden><button type="button" data-africa-agri-only>この品目だけを表示</button><button type="button" data-africa-agri-all hidden>作物・家畜の全分布へ戻る</button></div>
+       </div>
+       <div class="africa-detail-scroll">
+        <div class="africa-agri-context" data-africa-agri-context hidden></div>
+        <div class="africa-city-readings" data-africa-city-readings hidden>
+         {africaClimateCities.map(city=><article class="africa-city-reading" data-africa-city-reading={city.id} aria-labelledby={`africa-city-title-${city.id}`} hidden>
+          <h3 id={`africa-city-title-${city.id}`} class="africa-city-name">{city.name}</h3>
+          <figure class="africa-city-climate-plot atlas-climate-diagram">
+           <AtlasClimatePlot name={city.name} period={city.normalPeriod} temperatureC={city.temperatureC} precipitationMm={city.precipitationMm}/>
+           <figcaption><p>{city.normalPeriod}年の月別平年値</p><p><span class="is-cold">棒：降水量 mm</span> · <span class="is-warm">線：平均気温 ℃</span></p></figcaption>
+          </figure>
+          <section class="africa-city-classification" aria-labelledby={`africa-city-class-${city.id}`}>
+           <h4 id={`africa-city-class-${city.id}`}>{city.classification.name}（{city.classification.code}）</h4>
+           <p>{city.classification.description}</p>
+          </section>
+          <section class="africa-city-geographic-reason" aria-labelledby={`africa-city-reason-${city.id}`}>
+           <h4 id={`africa-city-reason-${city.id}`}>この気候になる地理的な理由</h4>
+           <p data-africa-city-geographic-reason={city.id}>{city.geographicReason??city.geographicReasonStatus}</p>
+          </section>
+          <p class="africa-city-reading-summary">{city.reading}</p>
+          <p class="africa-city-source">観測所の平年値：<a href={city.sourceUrl}>{city.sourceName} · {city.normalPeriod}</a></p>
+          <p class="africa-city-source">地点の気候区分：<a data-africa-city-classification-source={city.id} href={city.classification.sourceUrl}>{city.classification.sourceName}</a> · {city.classification.period} · {city.classification.resolutionDegrees}度格子</p>
+          <details class="africa-city-months" data-africa-city-months={city.id}>
+           <summary>12か月の数値・観測地点・出典</summary>
+           <p>{city.stationName} · 観測所番号 {city.stationId} · 標高 {city.elevationM.toLocaleString('ja-JP')} m · {city.coordinates[1].toFixed(2)}°N / {city.coordinates[0].toFixed(2)}°E</p>
+           <p>平年期間：{city.normalPeriod}。気温と降水量は別の軸で読みます。未収録と降水量0 mmを区別します。</p>
+           <table><caption>{city.name}の月別平年値（{city.normalPeriod}）</caption><thead><tr><th scope="col">月</th><th scope="col">平均気温</th><th scope="col">降水量</th></tr></thead><tbody>{city.temperatureC.map((value,index)=><tr><th scope="row">{index+1}月</th><td>{formatClimateValue(value,'℃')}</td><td>{formatClimateValue(city.precipitationMm[index],'mm')}</td></tr>)}</tbody></table>
+           {city.notes.map(note=><p>{note}</p>)}
+           <p>平年値の保存日：{city.sourceRetrievedAt}。<a href={city.sourceTermsUrl}>気象庁の利用条件</a>。</p>
+           <p>気候区分は観測所の座標にある格子の分類です。<a href={city.classification.licenseUrl}>{city.classification.license}</a>。</p>
+          </details>
+         </article>)}
+         <p class="africa-city-coverage" data-africa-city-coverage>{africaClimateCityCoverage}</p>
+        </div>
+        <div class="africa-alternatives" data-africa-alternatives hidden></div>
+        <div class="africa-layer-selection" data-africa-layer-selection hidden><label>表示・読解する分類<select data-africa-layer-category></select></label><p data-africa-point-reading aria-live="polite"></p><button type="button" data-africa-layer-retry hidden>分布データを再読込</button></div>
+        <p class="africa-theme-explanation" data-theme-takeaway-detail>作物や暮らしには、気候に加え、水の管理・技術・交通・市場も関わります。</p>
+        <p class="africa-theme-caveat" data-theme-caveat>気候区分の格子と、観測所の月別平年値は別の資料です。</p>
+        <a class="africa-theme-source" data-theme-source href={climateSource.sourceUrl}>{climateSource.sourceName}</a>
+        <details class="africa-theme-full"><summary>分布の詳しい読み方・出典</summary><div data-theme-details><p>気候区分：{climateSource.period} · {climateSource.resolutionDegrees}度格子 · <a href={climateSource.licenseUrl}>{climateSource.license}</a>。</p><p>{africaClimateCityCoverage}</p></div></details>
+       </div>
+      </section>
+     </aside>
+    </div>
+    <div class="africa-secondary">
+     <div class="africa-agri-notes" data-africa-agri-notes hidden></div>
+     <details class="africa-disclosure"><summary>場所から、自然・産業・暮らしのつながりを読む</summary>
+      <section class="africa-reading"><div class="africa-section-heading"><p class="eyebrow">Read the geography</p><h2>場所から、つながりを読む</h2><p>収録済みの地域別説明と、その根拠資料です。</p></div>
+       {Object.entries(reading).map(([field,cards])=><section class="africa-reading-field"><h3>{fields[field as keyof typeof fields].label}</h3><div class="africa-reading-grid">{cards.map(card=><article><h4>{card.title}</h4><p>{card.text}</p><div class="africa-place-links">{card.places.map(code=><span>{countries.find(country=>country.code===code)?.name}</span>)}</div><a href={card.source} class="africa-reading-source">{card.sourceLabel}</a></article>)}</div></section>)}
+      </section>
+     </details>
+     <details class="africa-disclosure"><summary>地域の事例・詳しい説明と出典</summary>
+      <section class="africa-reading" aria-label="収録済みの分布テーマの説明">{themes.map(theme=><article class="africa-theme-archive"><h3>{theme.title}</h3><p>{theme.takeaway}</p><p>{theme.caveat}</p><a href={theme.source}>{theme.sourceLabel}</a>{theme.marks.map(mark=><p><strong>{mark.label}</strong> — {mark.note}</p>)}<p>{theme.compareText}</p>{theme.evidenceSources?.map(source=><p><a href={source.url}>{source.label}</a></p>)}</article>)}</section>
+     </details>
+     <details class="africa-disclosure"><summary>保存した国別統計の読み方・分野の説明</summary>
+      <p>以下は保存した国別指標を読むための説明です。現在の分布図の色や記号が、その国別数値を表すものではありません。</p>
+      {Object.entries(fields).map(([id,field])=><section class="africa-intro" data-africa-field-reference={id}><h3>{field.label}：{field.title}</h3><p>{field.summary}</p></section>)}
+     </details>
+     <details class="africa-disclosure"><summary>地図・統計の全出典と範囲・CSV</summary>
+      <footer class="africa-sources"><h2>地図・統計の出典と範囲</h2>
+       <p>境界：<a href="https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries-2/">Natural Earth Admin 0 Countries 1:50m</a>（public domain）。西経27度〜東経64度、南緯36度〜北緯39度を等距円筒図法で表示しています。面積を比較する地図ではありません。54か国と西サハラの境界を収録し、海外領土はこの地域区分に含みません。</p>
+       <p>境界は出典の概略表現で、現在の実効支配や主権を判定するものではありません。西サハラは別の地物として表示し、モロッコの統計を転用しません。ソマリアは保存統計の対象に合わせ、出典のソマリランド地物も同じ区分に含めています。</p>
+       <p>統計：世界銀行 World Development Indicators（FAO、国民経済計算、人口推計等に由来）。<a href="https://datacatalog.worldbank.org/public-licenses">CC BY 4.0・データの利用条件</a>。国境地物と統計の集計範囲は完全には一致しません。数値は改訂される場合があります。</p>
+       <p>統計取得：2026年9月25日。収録年は2000〜2024年。CSVは保存したデータを使用します。欠測を補間しません。長期平均の降水量は年ごとの雨量ではありません。</p>
+       <p><a href={withBase('/assets/atlas/africa/indicators.csv')} download>15指標の国別・年別データをCSVで保存</a></p>
+       <details><summary>15指標の定義・出典をすべて見る</summary>{metrics.map(metric=><div class="africa-source-entry"><h3>{metric.label}（{metric.unit}）</h3><p>{metric.note}</p><a href={`https://data.worldbank.org/indicator/${metric.id}`}>{metric.id} · 世界銀行</a></div>)}</details>
+      </footer>
+     </details>
+    </div>
+    <noscript><p class="africa-noscript">JavaScriptが無効のため、同じ色の国境図を表示しています。下部の折り畳みを開くと、地域の説明・出典・15指標の定義を読めます。保存済みの国別数値はCSVから確認できます。分布の描画や、地図上の河川・都市・品目などの選択にはJavaScriptが必要です。</p></noscript>
+   </article>
   </div>
  </div>
 </BaseLayout>
