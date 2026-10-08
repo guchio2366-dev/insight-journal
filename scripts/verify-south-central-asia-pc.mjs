@@ -121,13 +121,15 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  await open('south-central-asia/agriculture/');
  const supply=page.locator('[data-south-central-supply]'),destinations=page.locator('[data-south-central-destinations]');
  await supply.locator('.sc-flow-track').waitFor({state:'visible'});
- assert.match(await supply.textContent(),/2023-24年度.*16\.36百万トン/s);
+ assert.match(await supply.textContent(),/16\.36百万トン.*2023-24年度/s);
  assert.match(await supply.textContent(),/国内仕向けの量は示せません/);
  assert.match(await destinations.textContent(),/サウジアラビア.*イラク.*イラン/s);
  assert.equal(await destinations.locator('.sc-flow-pie').count(),1);
  await page.locator('[data-farm-choice="wheat"]').click();
+ await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]').dataset.farmSelected==='wheat');
  assert.equal(await destinations.locator('.sc-flow-pie').count(),0);
  await page.locator('[data-farm-choice="rice"]').click();
+ await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]').dataset.farmSelected==='rice');
  await destinations.locator('.sc-flow-pie').waitFor({state:'visible'});
  await page.locator('[data-south-central-farm-connections]').scrollIntoViewIfNeeded();
  await page.waitForLoadState('networkidle');
