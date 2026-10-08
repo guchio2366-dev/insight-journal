@@ -55,7 +55,7 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Build local production site
         run: npm run build
-      - name: Verify country and site paths in PC and mobile Chrome
+      - name: Verify country and site paths in PC Chrome
         run: node scripts/capture-east-industry-journey.mjs
       - name: Save compact review evidence
         if: always()

@@ -2,6 +2,7 @@ import {industryTopic,normalizeIndustryState,industryValues,industryValueLabel,i
 import type {AsiaState,AsiaCamera} from '../lib/atlas-asia-state';
 import {eastIndustrySites} from '../data/atlas/asia-east-industry-sites';
 import {choosePlaceReading} from '../data/atlas/asia-place-readings';
+import {Marker} from 'maplibre-gl';
 type Config={industry:IndustryRegion;industryBase:string;countries:{code:string;name:string}[]};
 const fmt=(value:number|null|undefined)=>value===null||value===undefined?'未掲載':value.toLocaleString('ja-JP',{maximumFractionDigits:2});
 const el=<K extends keyof HTMLElementTagNameMap>(tag:K,text?:string)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
@@ -11,6 +12,8 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
  const $=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const region=config.industry;
  let data:IndustryData|null=null,national:IndustryNational|null=null,pending:Promise<void>|null=null,failed=false,map:import('maplibre-gl').Map|null=null,revision=0;
+ let siteLabels:Marker[]=[];
+ const clearSiteLabels=()=>{for(const marker of siteLabels)marker.remove();siteLabels=[];};
  const countryName=(code:string)=>config.countries.find(c=>c.code===code)?.name??code;
  const current=()=>industryTopic(region,getState());
  const east=hasIndustryCountryScope(region);
@@ -20,8 +23,12 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
  function renderEastJourney(){
   if(!eastJourney)return;
   const state=getState(),code=state.place;
+  const selectedSite=eastIndustrySites.find(site=>site.id===state.story&&site.country===code&&state.topic==='manufacturing');
+  root.dataset.industrySiteSelected=String(Boolean(selectedSite));
   eastJourney.hidden=state.field!=='industry'||!code||!['CHN','JPN','KOR','TWN'].includes(code)||!data||!national;
   if(eastJourney.hidden)return;
+  const selected=eastJourney.querySelector<HTMLElement>('[data-east-industry-selected-site]');
+  if(selected){selected.hidden=!selectedSite;if(selectedSite){selected.querySelector('[data-east-industry-selected-title]')!.textContent=selectedSite.name;selected.querySelector('[data-east-industry-selected-lead]')!.textContent=selectedSite.lead;selected.querySelector('[data-east-industry-selected-reading]')!.textContent=selectedSite.reading;selected.querySelector('[data-east-industry-selected-scope]')!.textContent=selectedSite.scope;const source=selected.querySelector<HTMLAnchorElement>('[data-east-industry-selected-source]')!;source.textContent=selectedSite.source.label;source.href=selectedSite.source.url;}}
   const manufacturing=national!.indicators.find(i=>i.id==='manufacturing')?.observations.find(o=>o.countryCode===code&&o.year===2024)?.value??null;
   const steel=data!.steel[code]?.total??null;
   const percentage=manufacturing===null?'未掲載':manufacturing.toLocaleString('ja-JP',{maximumFractionDigits:2})+'%';
@@ -122,7 +129,7 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
  }
  const layerIds=['asia-industry-national','asia-industry-admin','asia-industry-admin-lines','asia-industry-admin-selected','asia-industry-power','asia-industry-power-hit','asia-industry-power-selected','asia-industry-site','asia-industry-site-hit'];
  async function show(currentMap:import('maplibre-gl').Map){
-  map=currentMap;const seq=++revision;
+  map=currentMap;const seq=++revision;clearSiteLabels();
   for(const id of layerIds)if(map.getLayer(id))map.setLayoutProperty(id,'visibility','none');
   if(getState().field!=='industry'||current().kind==='trade')return;
   // A late map-ready/rebuild must not start a second request behind the retry UI.
@@ -141,6 +148,10 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
    if(!map.getSource('asia-industry-site')){map.addSource('asia-industry-site',{type:'geojson',data:{type:'FeatureCollection',features:eastIndustrySites.map(site=>({type:'Feature',properties:{id:site.id,country:site.country},geometry:{type:'Point',coordinates:site.point!}}))}});map.addLayer({id:'asia-industry-site',type:'circle',source:'asia-industry-site',paint:{'circle-radius':8,'circle-color':'#ae5628','circle-stroke-color':['case',['==',['get','id'],state.story??''],'#a4412e','#fff'],'circle-stroke-width':['case',['==',['get','id'],state.story??''],3,2]}});map.addLayer({id:'asia-industry-site-hit',type:'circle',source:'asia-industry-site',paint:{'circle-radius':16,'circle-opacity':0}});}
    const filter:any=['==',['get','country'],state.place];for(const id of ['asia-industry-site','asia-industry-site-hit']){map.setFilter(id,filter);map.setLayoutProperty(id,'visibility','visible');}
    map.setPaintProperty('asia-industry-site','circle-stroke-color',['case',['==',['get','id'],state.story??''],'#a4412e','#fff']);map.setPaintProperty('asia-industry-site','circle-stroke-width',['case',['==',['get','id'],state.story??''],3,2]);
+   for(const site of eastIndustrySites.filter(site=>site.country===state.place)){
+    const label=el('button',site.name.split('：')[0]);label.type='button';label.className='asia-industry-site-label';label.setAttribute('aria-label',site.name+'の説明を開く');label.setAttribute('aria-pressed',String(state.story===site.id));label.addEventListener('click',event=>{event.stopPropagation();navigate(choosePlaceReading(getState(),site),true);});
+    const above=site.id==='pyeongtaek-semiconductor';siteLabels.push(new Marker({element:label,anchor:above?'right':'left',offset:above?[-12,-10]:[12,site.id==='cheongju-memory'?12:0]}).setLngLat(site.point!).addTo(map));
+   }
   }
  }
  $('[data-industry-retry]').addEventListener('click',()=>{failed=false;render();});

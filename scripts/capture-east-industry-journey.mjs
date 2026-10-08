@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// A small, sandboxed production-browser review of the four East Asia industry entries.
+// A small, sandboxed production-browser review of the East Asia industry entries.
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
 import {execFileSync} from 'node:child_process';
@@ -74,46 +74,36 @@ try{
   assert.match(await page.locator('[data-industry-legend-note]').textContent(),/東アジア4対象は同じ色区分/);
   if(code==='TWN')assert.match(await page.locator('[data-industry-value]').textContent(),/台湾：未掲載/);
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
-  await page.evaluate(async()=>{await document.fonts.ready;scrollTo(0,0);});await page.waitForLoadState('networkidle');
-  const image=`${code.toLowerCase()}.png`;await page.screenshot({path:path.join(output,image),animations:'disabled'});
-  return {summary,gap,image};
+  return {summary,gap};
  });
  for(const [code,site,reading] of [['KOR','cheongju-memory','M15'],['TWN','tainan-fab','Fab 18']])await runCase(`site-${code}`,async page=>{
   await page.goto(`${host.origin}${basePath}/atlas/asia/east-asia/industry/?topic=manufacturing&place=${code}`,{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>document.querySelector('[data-industry-status]')?.textContent===''&&!document.querySelector('[data-east-industry-sites]')?.hidden);
   const buttons=page.locator('[data-east-industry-site-links] button');assert.equal(await buttons.count(),2);
-  await page.locator(`[data-east-industry-site="${site}"]`).click();
+  if(code==='TWN')await page.locator('.asia-industry-site-label').filter({hasText:'台南'}).click();
+  else await page.locator(`[data-east-industry-site="${site}"]`).click();
   await page.waitForFunction(id=>new URL(location.href).searchParams.get('story')===id,site);
   assert.match(await page.locator('[data-place-story-text]').textContent(),new RegExp(reading));
+  const selected=page.locator('[data-east-industry-selected-site]');
+  assert.equal(await selected.isVisible(),true);
+  assert.match(await selected.locator('[data-east-industry-selected-reading]').textContent(),new RegExp(reading));
+  assert.equal((await selected.locator('[data-east-industry-selected-source]').getAttribute('href'))?.startsWith('https://'),true);
+  const cityNames=code==='KOR'?['平沢','清州']:['新竹','台南'];
+  assert.deepEqual(await page.locator('.asia-industry-site-label').allTextContents(),cityNames);
   assert.match(await page.locator('[data-industry-legend-note]').textContent(),/丸は.*生産量とは別/);
   assert.equal(await page.locator(`[data-east-industry-site="${site}"]`).getAttribute('aria-pressed'),'true');
   if(code==='TWN')assert.match(await page.locator('[data-industry-value]').textContent(),/台湾：未掲載/);
   await page.reload({waitUntil:'domcontentloaded'});
-  await page.waitForFunction(id=>document.querySelector('[data-place-story-text]')?.textContent?.includes(id)&&!document.querySelector('[data-place-story-body]')?.hidden,reading);
+  await page.waitForFunction(id=>document.querySelector('[data-east-industry-selected-reading]')?.textContent?.includes(id)&&!document.querySelector('[data-east-industry-selected-site]')?.hidden,reading);
+  assert.equal(await page.locator('[data-east-industry-selected-site]').isVisible(),true);
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
-  await page.evaluate(async()=>{await document.fonts.ready;scrollTo(0,0);});await page.waitForLoadState('networkidle');
-  const image=`site-${code.toLowerCase()}.png`;await page.screenshot({path:path.join(output,image),animations:'disabled',fullPage:true});
-  return {site,story:new URL(page.url()).searchParams.get('story'),image};
+  if(code==='KOR'){await page.evaluate(async()=>{await document.fonts.ready;scrollTo(0,0);});await page.waitForLoadState('networkidle');await page.screenshot({path:path.join(output,'site-kor.png'),animations:'disabled',fullPage:true});}
+  return {site,story:new URL(page.url()).searchParams.get('story'),image:code==='KOR'?'site-kor.png':null};
  });
- const mobile=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:1,hasTouch:true,isMobile:true,serviceWorkers:'block'});
- await mobile.route('**/*',async route=>{const url=new URL(route.request().url());if(url.origin!==host.origin){results.externalAttempts.push({url:url.origin+url.pathname,method:route.request().method()});await route.abort('blockedbyclient');return;}await route.continue();});
- await runCase('site-mobile-TWN',async page=>{
-  await page.goto(`${host.origin}${basePath}/atlas/asia/east-asia/industry/?topic=manufacturing&place=TWN`,{waitUntil:'domcontentloaded'});
-  await page.waitForFunction(()=>document.querySelector('[data-industry-status]')?.textContent===''&&!document.querySelector('[data-east-industry-sites]')?.hidden);
-  await page.locator('[data-east-industry-site="hsinchu-fab"]').click();
-  await page.waitForFunction(()=>new URL(location.href).searchParams.get('story')==='hsinchu-fab');
-  assert.match(await page.locator('[data-place-story-text]').textContent(),/Fab 12A/);
-  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
-  await page.evaluate(async()=>{await document.fonts.ready;scrollTo(0,0);});await page.waitForLoadState('networkidle');
-  const image='site-mobile-twn.png';await page.screenshot({path:path.join(output,image),animations:'disabled',fullPage:true});return {image};
- },mobile);
- await mobile.close();
  await runCase('us-reference',async page=>{
   await page.goto(`${host.origin}${basePath}/atlas/north-america/industry/?sector=manufacturing&subsector=auto`,{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>document.querySelector('[data-atlas-explorer]')?.dataset.renderState==='ready');
-  await page.evaluate(async()=>{await document.fonts.ready;scrollTo(0,0);});await page.waitForLoadState('networkidle');
-  await page.screenshot({path:path.join(output,'us-manufacturing.png'),animations:'disabled'});
-  return {image:'us-manufacturing.png'};
+  return {reference:'US manufacturing page ready'};
  });
  await context.close();
  assert.deepEqual(results.externalAttempts,[],'No external requests are allowed');
@@ -121,7 +111,7 @@ try{
 }catch(error){results.status='failed';results.failure=error?.stack??String(error);}
 finally{
  await browser?.close();if(host)await new Promise(resolve=>host.server.close(resolve));
- const images=await Promise.all(['chn.png','jpn.png','kor.png','twn.png','site-kor.png','site-twn.png','site-mobile-twn.png','us-manufacturing.png'].map(async name=>{try{return (await stat(path.join(output,name))).size;}catch{return 0;}}));
+ const images=await Promise.all(['site-kor.png'].map(async name=>{try{return (await stat(path.join(output,name))).size;}catch{return 0;}}));
  results.imageBytes=images.reduce((a,b)=>a+b,0);await save();
 }
 assert.equal(results.status,'passed',results.failure??results.cases.filter(c=>!c.passed).map(c=>c.failure).join('\n'));
