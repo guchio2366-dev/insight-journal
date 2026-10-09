@@ -94,10 +94,10 @@ try{
  assert.equal(await page.locator('[data-west-farm-map-label="barley"].is-muted').count(),1);
  assert.equal(await page.locator('[data-west-farm-map-label="sheep"].is-muted').count(),1);
  assert.equal(await page.locator('[data-west-farm-context="sheep"]').getAttribute('opacity'),'.24');
- assert(await page.locator('[data-west-legend]').innerText().then(text=>text.includes('濃い輪郭は各系列の正値上位25%')));
+ assert(await page.locator('[data-west-legend]').textContent().then(text=>text.includes('濃い輪郭は各系列の正値上位25%')));
  await capture('01-wheat-selected');
  assert.deepEqual(errors,[]);assert.deepEqual(failedResponses,[]);
  assert.equal(record.images.length,1);
  record.status='passed';
-}catch(error){record.status='failed';record.error=error.stack??String(error);process.exitCode=1;}
+}catch(error){record.status='failed';record.error=error.stack??String(error);console.error(record.error);process.exitCode=1;}
 finally{await browser?.close();await new Promise(resolve=>server.close(resolve));await writeFile(path.join(output,'metadata.json'),JSON.stringify(record,null,2)+'\n');}
