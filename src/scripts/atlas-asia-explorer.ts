@@ -279,7 +279,7 @@ function start(root:HTMLElement) {
       const code=panel?.querySelector('[data-city-class-code]'),name=panel?.querySelector('[data-city-class-name]'),description=panel?.querySelector('[data-city-class-description]');
       if(code)code.textContent=cityClass?.code??'';
       if(name)name.textContent=cityClass?.name??(climateGrid?'気候区分：この地点は未分類':'気候区分：未取得');
-      if(description)description.textContent=city.id==='bangkok'&&cityClass?.code==='Aw'?'最寒月も18℃以上で、乾季の少雨が熱帯モンスーン気候の基準より強く、冬側に乾季がある区分です。':cityClass?.description??(climateGrid?'海岸や小島など、広域格子では分類値がない地点もあります。':'');
+      if(description)description.textContent=city.id==='bangkok'&&cityClass?.code==='Aw'?'Beckら（2023）の地図格子では、乾燥帯を除き最寒月も18℃以上、最少雨月が60mm未満かつ「100－年降水量（mm）÷25」未満のときAwです。雨温図の月値は観測所の平年値で、格子の判定値そのものではありません。':cityClass?.description??(climateGrid?'海岸や小島など、広域格子では分類値がない地点もあります。':'');
     }
     $('[data-class-reading]').hidden=naturalTopic()!=='climate'||!classification||Boolean(city&&cityClass?.id===classification.id);
     $$('[data-climate-class]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.climateClass)===selectedClass)));

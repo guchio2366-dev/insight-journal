@@ -40,9 +40,10 @@ const farmingReading=asiaFarmInsights[city.regionId];
   <div class="chart-key"><span>棒：降水量 mm</span><span>線：気温 ℃</span></div>
   {validRain.length<12&&<p class="chart-missing">×は降水量の未収録を示します。0mmではありません。</p>}
   </figure><section class="city-climate-reading" aria-label={`${city.name}の気候区分と季節の変化`}>
+    {bangkok&&<p class="city-takeaway"><strong>年較差が小さく、雨の季節差が大きい。</strong></p>}
     <h3 data-city-climate-class title="観測地点を含む広域格子の気候区分"><b data-city-class-code></b><span data-city-class-name>気候区分：未取得</span></h3>
     <p class="city-class-description" data-city-class-description></p>
-    <p class="city-takeaway"><strong>{bangkok?'年較差が小さく、雨の季節差が大きい。':city.summary}</strong></p>
+    {!bangkok&&<p class="city-takeaway"><strong>{city.summary}</strong></p>}
     {bangkok?<>
       <p>赤道に近く一年を通じて高温です。南西季節風が湿った空気を運ぶ時期に雨が増え、北東季節風が卓越する時期は雨が少なくなります。観測所の雨温図は、バンコク周辺の乾季と雨季を比べる手掛かりです。</p>
       <section class="city-farming"><h4>周辺の農業と水利用</h4><p>バンコクのあるチャオプラヤ川下流の平野では稲作が行われます。乾季の作付けには貯水池や水路からの灌漑が関わり、雨温図の降水だけで農地へ届く水を決められません。</p><p>出典：<a href="https://www.data.jma.go.jp/cpd/monitor/nrmlist/NrmMonth.php?stn=48455">気象庁・バンコク観測所の平年値</a> · <a href="https://tmd.go.th/media/pdf-eng/climate-0215.pdf">タイ気象局・季節風の説明</a> · <a href="https://documents1.worldbank.org/curated/en/246261468311385750/pdf/multi-page.pdf">世界銀行・チャオプラヤ平野の灌漑</a>。</p><button type="button" data-compare="agriculture">周辺の米の分布を見る →</button></section>
@@ -51,7 +52,7 @@ const farmingReading=asiaFarmInsights[city.regionId];
   <p class="climate-source">{city.normalPeriod} · <a href={city.sourceUrl} title={city.sourceName} target="_blank" rel="noopener noreferrer">{sourceLabel}</a> · <a href="#asia-sources">気候区分の出典</a></p>
   <details class="monthly-values"><summary>月別の数値・観測地点</summary>
   <div class="climate-metrics"><div><small>年間降水量</small><b>{annualRain===null?'欠測あり':`${annualRain.toLocaleString('ja-JP',{maximumFractionDigits:1})} mm`}</b></div><div><small>月平均気温の範囲</small><b>{temperatures.length?`${Math.min(...temperatures).toFixed(1)}〜${Math.max(...temperatures).toFixed(1)} ℃`:'欠測'}</b></div></div>
-  <p class="chart-note">同じ地域の雨温図は共通の目盛りです。気温と降水量は別の軸で読みます。{validRain.length<12&&' ×は降水量の未収録を示します。0mmではありません。'}</p>
+  <p class="chart-note">{bangkok?'この図はバンコクの観測値に合わせた目盛りです。':'同じ地域の雨温図は共通の目盛りです。'}気温と降水量は別の軸で読みます。{validRain.length<12&&' ×は降水量の未収録を示します。0mmではありません。'}</p>
     <p>気候区分は地図の広域格子、雨温図は観測所の平年値を示すため、場所の範囲や解像度によって特徴が一致しないことがあります。</p>
     <p>{city.stationName}{city.elevationM!==undefined?` · 標高 ${city.elevationM.toLocaleString('ja-JP')} m`:''}<br />観測地点 {Math.abs(city.coordinates[1]).toFixed(2)}°{city.coordinates[1]>=0?'N':'S'} / {city.coordinates[0].toFixed(2)}°E</p>
     <table><thead><tr><th scope="col">月</th><th scope="col">平均気温</th><th scope="col">降水量</th></tr></thead><tbody>{city.temperatureC.map((v,i)=><tr><th scope="row">{i+1}月</th><td>{format(v,'℃')}</td><td>{format(city.precipitationMm[i],'mm')}</td></tr>)}</tbody></table>

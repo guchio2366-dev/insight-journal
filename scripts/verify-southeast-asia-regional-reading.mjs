@@ -33,20 +33,26 @@ async function checkSoutheastAsiaRegion(page,{source,capture:takePicture,backgro
  assert.match(await page.locator('[data-industry-region-reading]').textContent(),/11か国.*国内仕向け|11か国.*国内向け/s);
  const markerState=await page.locator('[data-southeast-industry-map]').evaluate(node=>({hidden:node.hidden,size:[node.clientWidth,node.clientHeight],field:document.querySelector('[data-asia-atlas]')?.getAttribute('data-field'),points:[...node.querySelectorAll('[data-southeast-industry-point]')].map(p=>({id:p.getAttribute('data-southeast-industry-point'),hidden:p.hidden,x:p.style.left,y:p.style.top}))}));
  assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point]:visible').count(),9,JSON.stringify(markerState));
+ assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-label]:visible').count(),9);
+ assert.match(await page.locator('[data-southeast-industry-legend]').textContent(),/製造・物流.*ゴム・タイヤ.*木材・家具.*● 産業・加工地点.*◆ 原料産地/s);
+ assert.match(await page.locator('[data-southeast-industry-label="rayong-tires"]').textContent(),/タイヤ製造.*ラヨーン/s);
+ const labelBoxes=await page.locator('[data-southeast-industry-map] [data-southeast-industry-label]:visible').evaluateAll(nodes=>nodes.map(node=>{const r=node.getBoundingClientRect(),frame=node.parentElement.getBoundingClientRect();return {id:node.getAttribute('data-southeast-industry-label'),left:r.left-frame.left,top:r.top-frame.top,right:r.right-frame.left,bottom:r.bottom-frame.top,width:frame.width,height:frame.height};}));
+ assert(labelBoxes.every(box=>box.left>=0&&box.top>=0&&box.right<=box.width&&box.bottom<=box.height),`Industry labels must remain in the map: ${JSON.stringify(labelBoxes)}`);
+ for(let i=0;i<labelBoxes.length;i++)for(let j=i+1;j<labelBoxes.length;j++){const a=labelBoxes[i],b=labelBoxes[j];assert(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,`Industry labels overlap: ${a.id}, ${b.id}`);}
  assert.match(await page.locator('[data-reading-dock-summary]').textContent(),/ジャワ島.*タイ東部/);
  record('initial regional industry explains the three-country scope and broader supply network');await capture('industry-overview');
  await page.locator('[data-southeast-industry-kind="rubber"]').click();
- assert.equal(await page.locator('[data-southeast-industry-map] .rubber:not(.muted)').count(),2);
- assert.equal(await page.locator('[data-southeast-industry-map] .muted').count(),7);
+ assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point].rubber:not(.muted)').count(),2);
+ assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point].muted').count(),7);
  await page.locator('[data-southeast-industry-site="rayong-tires"]').click();
  assert.match(await page.locator('[data-southeast-industry-selected-reading]').textContent(),/タイヤ工場/);
  assert.equal(await page.locator('[data-southeast-industry-selected-source]').getAttribute('href')!==null,true);
  record('all regional sites remain visible while rubber and tire stages are highlighted');await capture('industry-rubber-selected');
  await page.locator('[data-southeast-industry-kind="wood"]').click();
- assert.equal(await page.locator('[data-southeast-industry-map] .wood:not(.muted)').count(),2);
+ assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point].wood:not(.muted)').count(),2);
  assert.match(await page.locator('[data-southeast-industry-summary]').textContent(),/輸入木材/);
  await page.locator('[data-southeast-industry-kind="all"]').click();
- assert.equal(await page.locator('[data-southeast-industry-map] .muted').count(),0);
+ assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point].muted').count(),0);
 
  for(const [code,name,story,expected]of [['IDN','インドネシア','jakarta-industry',/ジャカルタ/],['VNM','ベトナム','hochiminh-industry',/ホーチミン/],['THA','タイ','thailand-coast',/東部臨海部/]]){
   await country.selectOption(code);await page.waitForFunction(name=>document.querySelector('[data-industry-value]')?.textContent.includes(name),name);
@@ -147,7 +153,9 @@ async function checkSoutheastAsiaRegion(page,{source,capture:takePicture,backgro
   if(key==='city'){
    assert.equal(await page.locator('[data-city-panel="bangkok"] [data-climate-place]').textContent(),'バンコク－タイの雨温図');
    assert.match(await page.locator('[data-city-panel="bangkok"] .city-takeaway').textContent(),/年較差が小さく、雨の季節差が大きい/);
-   assert.match(await page.locator('[data-city-panel="bangkok"] .city-class-description').textContent(),/最寒月も18℃以上/);
+   assert.match(await page.locator('[data-city-panel="bangkok"] .city-class-description').textContent(),/最寒月も18℃以上.*60mm未満.*100－年降水量.*÷25/s);
+   const climateOrder=await page.locator('[data-city-panel="bangkok"]').evaluate(node=>{const chart=node.querySelector('figure'),takeaway=node.querySelector('.city-takeaway'),classification=node.querySelector('[data-city-climate-class]');return {chart:chart.getBoundingClientRect().bottom,takeaway:takeaway.getBoundingClientRect().top,class:classification.getBoundingClientRect().top};});
+   assert(climateOrder.takeaway>=climateOrder.chart-1&&climateOrder.class>climateOrder.takeaway,`The rainfall reading must directly follow the chart: ${JSON.stringify(climateOrder)}`);
    assert.doesNotMatch(await page.locator('[data-city-panel="bangkok"] .city-farming').textContent(),/メコン|エーヤワディー/);
    const baseCamera=new URL(page.url());
    for(const city of ['jakarta','haiphong']){
@@ -166,6 +174,7 @@ async function checkSoutheastAsiaRegion(page,{source,capture:takePicture,backgro
  assert.match(await page.locator('[data-southeast-water-overview]').textContent(),/大陸部.*島嶼部/s);
  assert.equal(await page.locator('[data-water-select]').locator('option').count()>5,true);
  assert.equal(await page.locator('.asia-water-city-name').filter({hasText:'マニラ'}).count()>0,true);
+ const riverNames=await page.locator('.asia-river-label:visible').allTextContents();for(const river of ['エーヤワディー川','サルウィン川','メコン川','紅河','カプアス川'])assert(riverNames.includes(river),`The water map must name ${river}: ${riverNames.join('、')}`);
  record('water overview explains mainland and island waters with Manila/Jakarta labels');await capture('water-overview');
  await expand('[data-hydrology-panel] > details:first-of-type');
  await page.locator('[data-hydrology-related="basins"]').click();await page.locator('[data-basin-shortcut]').first().click();
