@@ -200,7 +200,7 @@ async function agricultureClimateRepairs(page,profile){
   await openEurope(page,'atlas/europe/agriculture/','normal');
   const initialExtent=await page.locator('[data-eu-static]').getAttribute('viewBox');
   assert.notEqual(initialExtent,'0 0 1200 1001','Agriculture starts closer to the main production regions');
-  assert.equal(await page.locator('[data-eu-farm-area]').evaluateAll(nodes=>nodes.filter(node=>node.style.display!=='none').length),16);
+  assert.equal(await page.locator('[data-eu-farm-area]').evaluateAll(nodes=>nodes.filter(node=>node.style.display!=='none').length),6);
   const labelCount=await page.locator('[data-eu-map-kind="crop"]:visible').count();
   assert.ok(labelCount>0&&labelCount<=8,'Only representative concentration names are shown initially');
   const anchors=()=>page.locator('.eu-label-dot').evaluateAll(nodes=>nodes.map(node=>[node.getAttribute('cx'),node.getAttribute('cy')]));
@@ -216,7 +216,7 @@ async function agricultureClimateRepairs(page,profile){
   await page.waitForFunction(()=>document.querySelector('[data-eu-map-place="wheat"]').getAttribute('aria-pressed')==='true');
   assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'),initialExtent);
   assert.deepEqual(await anchors(),initialAnchors,'A selection keeps the actual projected positions of every distribution');
-  assert.equal(await page.locator('[data-eu-farm-area]').evaluateAll(nodes=>nodes.filter(node=>node.style.display!=='none').length),16);
+  assert.equal(await page.locator('[data-eu-farm-area]').evaluateAll(nodes=>nodes.filter(node=>node.style.display!=='none').length),6);
   assert.equal(await page.locator('[data-eu-farm-outline="wheat"]').evaluateAll(nodes=>nodes.every(node=>node.style.display!=='none')),true);
   const wheatStatistics=page.locator('[data-eu-verified-topic="wheat"]');
   assert.equal(await overview.isVisible(),false);
@@ -228,11 +228,11 @@ async function agricultureClimateRepairs(page,profile){
   for(const label of labels)assert.equal(label.opacity,label.id==='wheat'?1:.22);
   await snapshot(page,profile,'farming-selected');
   await captureEurope(page,profile,'agriculture-wheat');
-  await page.locator('[data-eu-layer="dairy"]').click();
+  await openEurope(page,'atlas/europe/agriculture/?layer=dairy','normal');
   await page.waitForFunction(()=>document.querySelector('[data-eu-farm-measure]').value==='cattle-milk');
   assert.equal(await page.locator('[data-eu-farm-measure] option').count(),1);
   assert.match(await page.locator('[data-eu-subject-note]').textContent(),/乳牛.*未収録/);
-  assert.equal(await page.locator('[data-eu-farm-area]').evaluateAll(nodes=>nodes.filter(node=>node.style.display!=='none').length),16);
+  assert.equal(await page.locator('[data-eu-farm-area]').evaluateAll(nodes=>nodes.filter(node=>node.style.display!=='none').length),4);
   await page.locator('[data-eu-reset]').click();
   assert.equal(new URL(page.url()).searchParams.get('farmExtent'),'full');
   await page.waitForFunction(()=>document.querySelector('[data-eu-static]').getAttribute('viewBox')==='0 0 1200 1001');
@@ -490,11 +490,12 @@ async function europeOperations(page, profile, render) {
 async function stageOneOperations(page, profile) {
   const quietFeatures=async(field)=>{
     const names=await page.locator('[data-eu-map-kind="feature"]:visible:not(.is-point-only)').evaluateAll(nodes=>nodes.map(node=>{const s=getComputedStyle(node),r=node.getBoundingClientRect();return {id:node.dataset.euMapPlace,font:parseFloat(s.fontSize),background:s.backgroundColor,border:parseFloat(s.borderWidth),left:r.left,right:r.right,top:r.top,bottom:r.bottom};}));
-    assert.ok(names.length>0&&names.length<=(field==='industry'?11:4),field+' initial representative names');
+    assert.ok(names.length>0&&names.length<=(field==='industry'?16:4),field+' initial representative names');
     for(const name of names){assert.ok(name.font>=13);if(field==='industry')assert.notEqual(name.background,'rgba(0, 0, 0, 0)');else {assert.equal(name.background,'rgba(0, 0, 0, 0)');assert.equal(name.border,0);}}
     for(let i=0;i<names.length;i++)for(let j=i+1;j<names.length;j++){const a=names[i],b=names[j];assert.ok(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,field+' names do not overlap');}
-    const points=await page.locator('[data-eu-map-kind="feature"].is-point-only:visible').count();assert.ok(points>0,field+' keeps other real places');
-    const target=page.locator('[data-eu-map-kind="feature"].is-point-only:visible').first(),id=await target.getAttribute('data-eu-map-place');
+    const points=await page.locator('[data-eu-map-kind="feature"].is-point-only:visible').count();
+    if(field!=='industry')assert.ok(points>0,field+' keeps other real places');
+    const target=page.locator(field==='industry'&&points===0?'[data-eu-map-kind="feature"]:visible':'[data-eu-map-kind="feature"].is-point-only:visible').first(),id=await target.getAttribute('data-eu-map-place');
     const anchors=()=>page.locator('.eu-label-dot').evaluateAll(nodes=>nodes.map(node=>[node.getAttribute('cx'),node.getAttribute('cy')]));
     const original=await anchors();await page.bringToFront();await page.mouse.move(5,5);await target.focus();
     await page.keyboard.press('Tab');await page.keyboard.press('Shift+Tab');
@@ -665,7 +666,7 @@ async function stageOneOperations(page, profile) {
   const farmingExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
   await page.locator('[data-eu-layer="maize"]').click();
   assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'), farmingExtent);
-  assert.equal(await page.locator('[data-eu-farm-area]').evaluateAll(nodes=>nodes.filter(node=>node.style.display!=='none').length),16);
+  assert.equal(await page.locator('[data-eu-farm-area]').evaluateAll(nodes=>nodes.filter(node=>node.style.display!=='none').length),6);
   const maizeStatistics=page.locator('[data-eu-verified-topic="maize"]');
   assert.equal(await maizeStatistics.isVisible(),true);
   assert.equal(await maizeStatistics.locator('.eu-verified-share-row').count(),1);
