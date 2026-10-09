@@ -93,7 +93,8 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.ok(config.presentation.farming.products.some(p=>p.kind==='crop')&&config.presentation.farming.products.some(p=>p.kind==='livestock'));
       assert.ok(q('[data-industry-topic]').closest('.asia-reading-panel'));
       assert.ok(q('[data-population-topic]').closest('.asia-reading-panel'));
-      assert.ok(q('[data-farming-topic]').closest('.asia-reading-panel'));
+      if(region==='south-central-asia')assert.ok(q('[data-farming-topic]').closest('[data-asia-map-items]'),'South/Central product selection belongs directly below its map');
+      else assert.ok(q('[data-farming-topic]').closest('.asia-reading-panel'));
       assert.equal(q('[data-city-picker]').hidden,field!=='nature');
       assert.equal(q('[data-climate-legend]').hidden,field!=='nature');
       assert.equal(q('[data-agriculture-legend]').hidden,true);
