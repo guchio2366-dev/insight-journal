@@ -28,11 +28,25 @@ export function createEastIndustryClusters(root:HTMLElement,getState:()=>AsiaSta
  function drawLabels(){
   labels.replaceChildren();if(!map||!active())return;
   const width=labels.clientWidth,height=labels.clientHeight,visible=rows().map(c=>({c,p:map!.project(c.point)})).filter(({p})=>p.x>0&&p.x<width&&p.y>0&&p.y<height);
-  const placed=layoutNatureLabels(visible.map(({c,p})=>({id:c.id,anchor:p,width:c.name.length*11+12,height:24})),{left:0,top:0,right:width,bottom:height},[{left:width-65,top:0,right:width,bottom:150}]);
-  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');labels.append(svg);
-  for(const {c,p} of visible){const kinds=c.industries.filter(id=>getState().topic==='east-clusters'||'east-'+id===getState().topic);for(const [index,id] of kinds.entries()){const mark=document.createElementNS(svg.namespaceURI,kinds.length===1?'circle':'path');if(kinds.length===1){mark.setAttribute('cx',String(p.x));mark.setAttribute('cy',String(p.y));mark.setAttribute('r','5');}else{const a=index/kinds.length*2*Math.PI,b=(index+1)/kinds.length*2*Math.PI;mark.setAttribute('d',`M ${p.x} ${p.y} L ${p.x+5*Math.cos(a)} ${p.y+5*Math.sin(a)} A 5 5 0 ${b-a>Math.PI?1:0} 1 ${p.x+5*Math.cos(b)} ${p.y+5*Math.sin(b)} Z`);}mark.setAttribute('data-industry',id);mark.setAttribute('fill',eastIndustries.find(i=>i.id===id)!.color);mark.setAttribute('stroke','#fff');mark.setAttribute('stroke-width','.6');svg.append(mark);}}
+  const desktop=window.innerWidth>=960;
+  const entries=visible.map(({c,p})=>{
+   const kinds=c.industries.filter(id=>getState().topic==='east-clusters'||'east-'+id===getState().topic);
+   const button=document.createElement('button');button.type='button';button.dataset.industryCluster=c.id;
+   if(desktop){
+    const primary=document.createElement('span');primary.className='east-industry-label-primary';primary.dataset.clusterIndustries='';
+    for(const id of kinds){const kind=document.createElement('span');kind.dataset.industry=id;kind.style.setProperty('--industry-color',eastIndustries.find(i=>i.id===id)!.color);kind.textContent=eastIndustries.find(i=>i.id===id)!.label;primary.append(kind);}
+    const city=document.createElement('span');city.className='east-industry-label-city';city.dataset.clusterCity='';city.textContent=c.name;button.append(primary,city);
+   }else button.textContent=c.name;
+   button.setAttribute('aria-label',kinds.map(id=>eastIndustries.find(i=>i.id===id)!.label).join('、')+'（'+c.name+'）');
+   button.setAttribute('aria-pressed',String(getState().detail===c.id));button.style.visibility='hidden';button.style.width='max-content';
+   button.onclick=e=>{e.stopPropagation();choose(c.id);};labels.append(button);
+   return {c,p,kinds,button};
+  });
+  const placed=layoutNatureLabels(entries.map(({c,p,button})=>{const size=button.getBoundingClientRect();return {id:c.id,anchor:p,width:desktop?Math.ceil(size.width):c.name.length*11+12,height:desktop?Math.ceil(size.height):24};}),{left:0,top:0,right:width,bottom:height},[{left:width-65,top:0,right:width,bottom:150}]);
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');labels.prepend(svg);
+  for(const {c,p,kinds} of entries){for(const [index,id] of kinds.entries()){const mark=document.createElementNS(svg.namespaceURI,kinds.length===1?'circle':'path');if(kinds.length===1){mark.setAttribute('cx',String(p.x));mark.setAttribute('cy',String(p.y));mark.setAttribute('r','5');}else{const a=index/kinds.length*2*Math.PI,b=(index+1)/kinds.length*2*Math.PI;mark.setAttribute('d',`M ${p.x} ${p.y} L ${p.x+5*Math.cos(a)} ${p.y+5*Math.sin(a)} A 5 5 0 ${b-a>Math.PI?1:0} 1 ${p.x+5*Math.cos(b)} ${p.y+5*Math.sin(b)} Z`);}mark.setAttribute('data-industry',id);mark.setAttribute('data-cluster-mark',c.id);mark.setAttribute('fill',eastIndustries.find(i=>i.id===id)!.color);mark.setAttribute('stroke','#fff');mark.setAttribute('stroke-width','.6');svg.append(mark);}}
 
-  for(const rect of placed){const c=rows().find(c=>c.id===rect.id)!,button=document.createElement('button');button.textContent=c.name;button.type='button';button.dataset.industryCluster=c.id;button.setAttribute('aria-label',c.name+'：'+c.industries.map(id=>eastIndustries.find(i=>i.id===id)!.label).join('・'));button.setAttribute('aria-pressed',String(getState().detail===c.id));button.style.left=rect.left+'px';button.style.top=rect.top+'px';button.onclick=e=>{e.stopPropagation();choose(c.id);};labels.append(button);const end=leaderEnd(rect.anchor,rect),line=document.createElementNS(svg.namespaceURI,'line');for(const [key,value] of Object.entries({x1:rect.anchor.x,y1:rect.anchor.y,x2:end.x,y2:end.y}))line.setAttribute(key,String(value));svg.append(line);}
+  for(const rect of placed){const {button}=entries.find(e=>e.c.id===rect.id)!;button.style.left=rect.left+'px';button.style.top=rect.top+'px';button.style.width=(rect.right-rect.left)+'px';button.style.height=(rect.bottom-rect.top)+'px';button.style.visibility='visible';button.dataset.clusterAnchor=JSON.stringify(rect.anchor);const end=leaderEnd(rect.anchor,rect),line=document.createElementNS(svg.namespaceURI,'line');line.setAttribute('data-cluster-leader',rect.id);for(const [key,value] of Object.entries({x1:rect.anchor.x,y1:rect.anchor.y,x2:end.x,y2:end.y}))line.setAttribute(key,String(value));svg.append(line);}
  }
  function show(currentMap:import('maplibre-gl').Map){
   if(map!==currentMap){map=currentMap;map.on('moveend',drawLabels);map.on('resize',drawLabels);}

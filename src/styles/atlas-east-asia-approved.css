@@ -31,6 +31,14 @@
 .east-industry-map-labels line{stroke:#506c6b;stroke-width:1}
 .east-industry-map-labels button{position:absolute;pointer-events:auto;background:#ffffffe0;border:0;padding:2px 5px;font:600 11px/20px sans-serif;white-space:nowrap;color:#25473e}
 .east-industry-map-labels button[aria-pressed=true]{background:#25473e;color:white}
+@media(min-width:960px){
+ .east-industry-map-labels button{padding:2px 5px;text-align:left;line-height:normal}
+ .east-industry-label-primary{display:flex;align-items:center;gap:5px;font-size:12px;line-height:18px;font-weight:700}
+ .east-industry-label-primary>span{display:inline-flex;align-items:center;gap:3px}
+ .east-industry-label-primary>span::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--industry-color);flex:none}
+ .east-industry-label-city{display:block;font-size:10px;line-height:13px;font-weight:400;color:#546a67}
+ .east-industry-map-labels button[aria-pressed=true] .east-industry-label-city{color:#d8e5e0}
+}
 [data-east-cluster-sources]{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:12px}
 [data-east-cluster-detail]{border-left:3px solid #477e6b;padding:8px 12px;background:#f3f7ec}
 

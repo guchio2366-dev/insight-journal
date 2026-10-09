@@ -9,6 +9,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {chromium} from 'playwright';
 import astroConfig from '../astro.config.mjs';
+import {eastClusters,eastIndustries} from '../src/data/atlas/east-asia-industry-clusters.ts';
 const repo=fileURLToPath(new URL('../',import.meta.url));
 const output=path.join(repo,'review-artifacts','east-asia-approved');
 const basePath=`/${String(astroConfig.base??'').replace(/^\/+|\/+$/g,'')}`.replace(/^\/$/,'');
@@ -68,8 +69,24 @@ try{
    const legend=page.locator('[data-reading-map-legend]');await page.waitForFunction(count=>document.querySelectorAll('[data-reading-map-legend] .asia-comparison-compact-key>span').length===count,names.length);
    assert(await legend.isVisible());const items=legend.locator('.asia-comparison-compact-key>span');assert.deepEqual(await items.allTextContents(),names.map(n=>n.label));assert.doesNotMatch(await legend.innerText(),/0未満|0以上0未満/);assert.match(await legend.innerText(),/一定サイズ.*数量/);
    for(const [index,kind] of names.entries()){
-    const swatch=items.nth(index).locator('i'),mark=page.locator(`.east-industry-map-labels [data-industry="${kind.id}"]`).first();assert(await swatch.isVisible());assert(await mark.isVisible());assert.equal(await swatch.evaluate(n=>getComputedStyle(n).backgroundColor),await mark.evaluate(n=>getComputedStyle(n).fill),'the legend color matches '+kind.label+' on the map');
+    const swatch=items.nth(index).locator('i'),mark=page.locator(`.east-industry-map-labels svg [data-industry="${kind.id}"]`).first();assert(await swatch.isVisible());assert(await mark.isVisible());assert.equal(await swatch.evaluate(n=>getComputedStyle(n).backgroundColor),await mark.evaluate(n=>getComputedStyle(n).fill),'the legend color matches '+kind.label+' on the map');
    }
+  }
+  async function industryLabels(page,kind=null){
+   const rows=await page.locator('[data-industry-cluster]:visible').evaluateAll(nodes=>nodes.map(n=>{
+    const box=e=>{const r=e.getBoundingClientRect();return {left:r.left,top:r.top,right:r.right,bottom:r.bottom,width:r.width,height:r.height};};
+    const primary=n.querySelector('[data-cluster-industries]'),city=n.querySelector('[data-cluster-city]'),primaryStyle=getComputedStyle(primary),cityStyle=getComputedStyle(city),anchor=JSON.parse(n.dataset.clusterAnchor),leader=document.querySelector(`line[data-cluster-leader="${n.dataset.industryCluster}"]`);
+    return {id:n.dataset.industryCluster,box:box(n),primaryBox:box(primary),cityBox:box(city),city:city.textContent,industries:[...primary.children].map(e=>({id:e.dataset.industry,label:e.textContent,color:getComputedStyle(e,'::before').backgroundColor})),marks:[...document.querySelectorAll(`svg [data-cluster-mark="${n.dataset.industryCluster}"]`)].map(e=>({id:e.dataset.industry,color:getComputedStyle(e).fill})),font:{primary:parseFloat(primaryStyle.fontSize),city:parseFloat(cityStyle.fontSize),primaryWeight:parseInt(primaryStyle.fontWeight),cityWeight:parseInt(cityStyle.fontWeight)},clipped:primary.scrollWidth>primary.clientWidth+1||city.scrollWidth>city.clientWidth+1,anchor,leader:{x:Number(leader.getAttribute('x1')),y:Number(leader.getAttribute('y1')),length:Math.hypot(Number(leader.getAttribute('x2'))-anchor.x,Number(leader.getAttribute('y2'))-anchor.y)}};
+   }));
+   const expected=eastClusters.filter(c=>!kind||c.industries.includes(kind));assert.deepEqual(rows.map(r=>r.id).sort(),expected.map(c=>c.id).sort(),'all existing sites retain their labels');
+   const frame=(await geometry(page)).map;
+   for(const row of rows){
+    const c=expected.find(c=>c.id===row.id),ids=c.industries.filter(id=>!kind||id===kind);assert.equal(row.city,c.name);assert.deepEqual(row.industries.map(i=>i.id),ids);assert.deepEqual(row.industries.map(i=>i.label),ids.map(id=>eastIndustries.find(i=>i.id===id).label));assert.deepEqual(row.marks.map(i=>i.id),ids);
+    for(const industry of row.industries)assert.equal(industry.color,row.marks.find(m=>m.id===industry.id).color,'each industry name matches its own site marker');
+    assert(row.font.primary>row.font.city&&row.font.primaryWeight>=700&&row.font.cityWeight<=400,'industry names have priority over auxiliary city names');assert(row.primaryBox.bottom<=row.cityBox.top+.5,'industry name precedes the city');assert.equal(row.clipped,false,'the complete name is readable');
+    assert(row.box.left>=frame.left&&row.box.right<=frame.right&&row.box.top>=frame.top&&row.box.bottom<=frame.bottom,'labels stay inside the map');assert.deepEqual(row.leader.x,row.anchor.x);assert.deepEqual(row.leader.y,row.anchor.y);assert(row.leader.length>=7,'a leader identifies the original site');
+    for(const other of rows.filter(r=>r.id!==row.id))assert(!(row.box.left<other.box.right&&row.box.right>other.box.left&&row.box.top<other.box.bottom&&row.box.bottom>other.box.top),'industry labels do not overlap: '+row.id+'/'+other.id);
+   }return rows;
   }
   async function rainfallLeaders(page){
    const evidence=await page.evaluate(()=>{
@@ -103,8 +120,20 @@ try{
    await page.locator('[data-field="industry"]').first().click();await ready(page);assert.equal(await helper.isVisible(),false);await page.locator('[data-field="population"]').first().click();await ready(page);assert.equal(await helper.isVisible(),true);return {initial,city:id,reading};
   });
   await run('industry',async page=>{
-   await open(page,'industry');const initial=await layout(page);await industryLegend(page,[{id:'auto',label:'自動車'},{id:'chips',label:'半導体・電子'},{id:'steel',label:'鉄鋼'},{id:'batteries',label:'電池'},{id:'ships',label:'造船'},{id:'chemicals',label:'石油化学'}]);assert.equal(new URL(page.url()).searchParams.get('topic'),'east-clusters');const host=page.locator('[data-east-cluster-reading]');assert.equal(await host.isVisible(),true);assert.match(await host.textContent(),/台湾/);assert.equal(await page.locator('[data-east-industry-journey]').isVisible(),false);assert(await page.locator('[data-industry-cluster]:visible').count()>5);await shot(page,'industry-initial');
-   await page.locator('[data-industry-feature="east-chips"]').click();await ready(page);assert.match(await host.locator('[data-east-cluster-title]').textContent(),/半導体/);await industryLegend(page,[{id:'chips',label:'半導体・電子'}]);await page.locator('[data-industry-cluster="hsinchu"]').click();await ready(page);assert.match(await host.locator('[data-east-cluster-detail]').textContent(),/新竹/);await shot(page,'industry-chips-hsinchu');await page.goBack();await ready(page);assert.equal(await host.locator('[data-east-cluster-detail]').isVisible(),false);await page.locator('[data-field="natural"]').first().click();await ready(page);assert.equal(await host.isVisible(),false);await page.locator('[data-field="industry"]').first().click();await ready(page);assert.equal(await host.isVisible(),true);return {initial};
+   await open(page,'industry');const initial=await layout(page);
+   await industryLegend(page,eastIndustries);assert.equal(new URL(page.url()).searchParams.get('topic'),'east-clusters');
+   const host=page.locator('[data-east-cluster-reading]');assert.equal(await host.isVisible(),true);assert.match(await host.textContent(),/台湾/);assert.equal(await page.locator('[data-east-industry-journey]').isVisible(),false);
+   const initialLabels=await industryLabels(page);await shot(page,'industry-initial');const selectedLabels={};
+   for(const kind of eastIndustries){
+    await page.locator(`[data-industry-feature="east-${kind.id}"]`).click();await ready(page);await industryLegend(page,[kind]);
+    selectedLabels[kind.id]=await industryLabels(page,kind.id);await shot(page,`industry-${kind.id}-selected`);
+   }
+   await page.locator('[data-industry-feature="east-chips"]').click();await ready(page);assert.match(await host.locator('[data-east-cluster-title]').textContent(),/半導体/);
+   await page.locator('[data-industry-cluster="hsinchu"]').click();await ready(page);assert.match(await host.locator('[data-east-cluster-detail]').textContent(),/新竹/);await industryLabels(page,'chips');await shot(page,'industry-chips-hsinchu');
+   await page.goBack();await ready(page);assert.equal(await host.locator('[data-east-cluster-detail]').isVisible(),false);
+   await page.locator('[data-field="natural"]').first().click();await ready(page);assert.equal(await host.isVisible(),false);
+   await page.locator('[data-field="industry"]').first().click();await ready(page);assert.equal(await host.isVisible(),true);await industryLabels(page);
+   return {initial,initialLabels,selectedLabels};
   });
   await run('farming',async page=>{
    await open(page,'agriculture');const initial=await layout(page),section=page.locator('[data-east-farm-foundations]');const reading=await visibleReading(page,'[data-farm-insight-title]','[data-farm-insight-lead]','[data-farm-overview-reading]>h3+p');assert.equal(await section.isVisible(),true);const text=await section.textContent();assert.match(text,/供給と用途.*域外輸出入相手.*カロリー構成/s);assert.doesNotMatch(text,/丸太生産量|全商品輸出先|丸太・製材の供給/);assert.match(text,/未収録/);assert.match(await page.locator('[data-farm-overview-reading]').textContent(),/日本.*朝鮮半島.*モンゴル/s);await shot(page,'farming-initial');await section.scrollIntoViewIfNeeded();await shot(page,'farming-statistics');
