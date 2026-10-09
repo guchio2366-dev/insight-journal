@@ -15,7 +15,7 @@ import {renderEastAsiaFarmFoundations} from './atlas-east-asia-farm-foundations'
 import {createAsiaIndustry} from './atlas-asia-industry';
 import {hasIndustryCountryScope,industryCountryChoices,normalizeScopedIndustryState} from '../data/atlas/asia-industry';
 import {southCentralReligionCensuses} from '../data/atlas/asia-south-central-religion';
-import {southCentralLandformOverview,southCentralLandformCases} from '../data/atlas/asia-south-central-landform-reading';
+import {southCentralLandformOverview,southCentralLandformCases,southCentralFocusPhysicalReading} from '../data/atlas/asia-south-central-landform-reading';
 import {asiaWaterFocus} from '../data/atlas/asia-water-focus';
 import {createAsiaWater} from './atlas-asia-water';
 import {createAsiaSeasonalPrecipitation} from './atlas-asia-seasonal-precipitation';
@@ -79,7 +79,7 @@ function start(root:HTMLElement) {
     if(restored.field==='industry'&&config.trade&&isTradeTopic(restored.topic))return normalizeTradeState(restored,config.tradeChapters!);
     if(restored.field==='industry'&&config.industry)return industry?.normalize(restored)??normalizeIndustryState(config.industry,restored);
     if(restored.field==='population'){
-      if(['ethnicity','religion'].includes(restored.topic??''))return {...restored,detail:config.presentation?.settlements?.[restored.topic!]?.categories.some(c=>c.id===restored.detail)?restored.detail:null,city:null,point:null,place:config.regionId==='south-central-asia'&&restored.topic==='religion'&&southCentralReligionCensuses.some(c=>c.code===restored.place)?restored.place:null};
+      if(['ethnicity','religion'].includes(restored.topic??''))return {...restored,detail:config.presentation?.settlements?.[restored.topic!]?.categories.some(c=>c.id===restored.detail)?restored.detail:null,city:null,point:null,place:config.regionId==='south-central-asia'&&restored.topic==='religion'&&context.countries.includes(restored.place??'')&&southCentralReligionCensuses.some(c=>c.code===restored.place)?restored.place:null};
       if(config.social&&socialTopic(config.social,restored))return social?.normalize(restored)??normalizeSocialState(config.social,restored);
       const urban=config.population?.cities.find(c=>c.id===restored.detail&&(!restored.place||c.country===restored.place));
       return {...restored,detail:urban?.id??null,place:urban?.country??restored.place,point:restored.point??config.cities.find(c=>c.id===restored.city)?.coordinates??null,city:null};
@@ -142,7 +142,7 @@ function start(root:HTMLElement) {
    if(id&&!config.presentation?.settlements?.[state.topic??'']?.categories.some(c=>c.id===id))return;
    navigate({...state,detail:id,city:null,place:null,point:null,story:null,camera:camera()},false);
   }
-  function createPresentation(){presentation?.destroy();presentation=config.presentation&&$('[data-map-annotations]')?createAsiaPresentation(root,{presentation:config.presentation,allowSingleItem:config.regionId==='southeast-asia',presentationBase:config.presentationBase!,selectSettlement,selectReligionCountry:code=>{if(context.countries.includes(code))navigate({...state,place:code,detail:null,point:null,story:null,camera:camera()},false)},selectFarmKinds:farms=>navigate({...state,farms,single:false,camera:camera()},false),cities:config.cities,population:config.population,riverFile:config.physical&&config.physicalBase!+config.physical.water.split('/').at(-1),riverIds:config.farmInsight?.rivers,landforms:config.physicalFocus,waterFocus:asiaWaterFocus[config.regionId].filter(item=>!config.focusWaterRivers||config.focusWaterRivers.includes(item.river)),selectLandform:id=>{const f=config.physicalFocus?.find(f=>f.id===id);if(f)navigate({...state,topic:'landform',detail:id,point:f.coordinates,city:null,place:f.country,camera:camera()},false);}},()=>state,selectCity,selectUrban,point=>navigate({...state,point,place:countryAtPoint(point),city:null,detail:null,story:null,camera:camera()},false),chooseFarm,message=>{presentationError=message;renderMapStatus();}):null;}
+  function createPresentation(){presentation?.destroy();presentation=config.presentation&&$('[data-map-annotations]')?createAsiaPresentation(root,{presentation:config.presentation,allowSingleItem:config.regionId==='southeast-asia',presentationBase:config.presentationBase!,religionCountries:context.countries,selectSettlement,selectReligionCountry:code=>{if(context.countries.includes(code))navigate({...state,place:code,detail:null,point:null,story:null,camera:camera()},false)},selectFarmKinds:farms=>navigate({...state,farms,single:false,camera:camera()},false),cities:config.cities,population:config.population,riverFile:config.physical&&config.physicalBase!+config.physical.water.split('/').at(-1),riverIds:config.farmInsight?.rivers,landforms:config.physicalFocus,waterFocus:asiaWaterFocus[config.regionId].filter(item=>!config.focusWaterRivers||config.focusWaterRivers.includes(item.river)),selectLandform:id=>{const f=config.physicalFocus?.find(f=>f.id===id);if(f)navigate({...state,topic:'landform',detail:id,point:f.coordinates,city:null,place:f.country,camera:camera()},false);}},()=>state,selectCity,selectUrban,point=>navigate({...state,point,place:countryAtPoint(point),city:null,detail:null,story:null,camera:camera()},false),chooseFarm,message=>{presentationError=message;renderMapStatus();}):null;}
   createPresentation();
 
   async function fetchAsset<T>(url:string,read:(response:Response)=>Promise<T>):Promise<T> {
@@ -178,7 +178,7 @@ function start(root:HTMLElement) {
     if(trade)next=trade.normalize(next);
     if(hydrology)next=hydrology.normalize(next);
     if(seasonal)next=seasonal.normalize(next);
-    if(next.field==='population'&&['ethnicity','religion'].includes(next.topic??''))next={...next,point:null,place:config.regionId==='south-central-asia'&&next.topic==='religion'&&southCentralReligionCensuses.some(c=>c.code===next.place)?next.place:null,city:null};
+    if(next.field==='population'&&['ethnicity','religion'].includes(next.topic??''))next={...next,point:null,place:config.regionId==='south-central-asia'&&next.topic==='religion'&&context.countries.includes(next.place??'')&&southCentralReligionCensuses.some(c=>c.code===next.place)?next.place:null,city:null};
     if(next.field==='population')next={...next,point:next.point??config.cities.find(c=>c.id===next.city)?.coordinates??null,city:null};
     if(social)next=social.normalize(next);
     state=normalizePlaceReading(config.regionId,next);selectedClass=null;selectedPoint=state.point??null;persist(true);render();const reading=$('.asia-reading-scroll');if(reading)reading.scrollTop=0;if(fit)fitSelection();
@@ -450,15 +450,16 @@ function start(root:HTMLElement) {
     const physicalMethod=root.querySelector<HTMLElement>('[data-physical-reading] .asia-method');
     if(physicalMethod){let note=physicalMethod.querySelector<HTMLElement>('[data-terrain-band-method]');if(bands&&!note){note=document.createElement('p');note.dataset.terrainBandMethod='';physicalMethod.querySelector('p')?.before(note);}if(note){note.hidden=!bands;note.textContent='この標高図の線と色帯は、原格子を投影座標上の半径約6kmでならした同じ値から500mごとに補間しています。短い線を省かず、線と面を別々に簡略化しません。下記の短い線と細部の省略は従来の地形表示の生成方法です。地点の標高は平滑化前の原格子値です。';}}
     const landform=naturalTopic()==='landform',waterTopic=naturalTopic()==='water',reading=asiaPhysicalReading[config.regionId];
+    const focusReading=config.focusId?southCentralFocusPhysicalReading[config.focusId]:null;
     const scLandform=landform&&config.regionId==='south-central-asia';
     $('[data-map-title]').textContent=waterTopic?'河川・湖と地形':landform?'山地・高原・平野の位置':'標高と等高線';
     $('[data-map-eyebrow]').textContent='Terrain · ETOPO 2022';$('[data-map-period]').textContent=landform?'地形の着目点 · 背景は標高':'標高 m · 500m等高線';
     $('[data-physical-title]').textContent=waterTopic?'水系と地形を読む':scLandform?'山地・平野・高原の成り立ちを読む':'高低差から地域を読む';
-    $('[data-physical-takeaway]').textContent=waterTopic?reading.water:scLandform?southCentralLandformOverview:reading.terrain;
+    $('[data-physical-takeaway]').textContent=focusReading?(waterTopic?focusReading.water:landform?focusReading.landform:focusReading.terrain):waterTopic?reading.water:scLandform?southCentralLandformOverview:reading.terrain;
     const focus=config.physicalFocus?.find(f=>f.id===state.detail),water=config.physical.waterFeatures.find((f:any)=>f.id===state.detail);
     $('[data-physical-detail-title]').textContent=focus?.name??water?.label??water?.name??(waterTopic?'河川の流路と湖の位置':'高低差と広がり');
-    $('[data-physical-detail]').textContent=scLandform&&focus?(southCentralLandformCases[focus.id]??focus.reading):focus?.reading??(water?`${water.kind==='rivers'?'河川':'湖'}：${water.name}。この表示範囲で接する対象国・地域は${water.countries.map((code:string)=>config.countries.find(c=>c.code===code)?.name??code).join('・')}です。資料の概略形状を表示しており、現在の水量や水面の広がりを示すものではありません。`:waterTopic?reading.waterDetail:scLandform?'地図上でヒマラヤ、パミール、天山、河川平野、デカン高原を選び、位置と成り立ちを順に読みます。':reading.terrainDetail);
-    $('[data-physical-context]').textContent=scLandform?'':focus||water?(waterTopic?reading.waterDetail:reading.terrainDetail):state.place?`${config.countries.find(c=>c.code===state.place)?.name}を選択中です。国内の複数の地点を選び、標高の違いを比較してください。`:'';
+    $('[data-physical-detail]').textContent=scLandform&&focus?(southCentralLandformCases[focus.id]??focus.reading):focus?.reading??(water?`${water.kind==='rivers'?'河川':'湖'}：${water.name}。この表示範囲で接する対象国・地域は${water.countries.map((code:string)=>config.countries.find(c=>c.code===code)?.name??code).join('・')}です。資料の概略形状を表示しており、現在の水量や水面の広がりを示すものではありません。`:focusReading?focusReading.detail:waterTopic?reading.waterDetail:scLandform?'地図上でヒマラヤ、パミール、天山、河川平野、デカン高原を選び、位置と成り立ちを順に読みます。':reading.terrainDetail);
+    $('[data-physical-context]').textContent=scLandform?'':focus||water?(focusReading?focusReading.detail:waterTopic?reading.waterDetail:reading.terrainDetail):state.place?`${config.countries.find(c=>c.code===state.place)?.name}を選択中です。国内の複数の地点を選び、標高の違いを比較してください。`:'';
     optionalHidden('[data-sc-landform-sources]',!scLandform);
     const focusSelect=$<HTMLSelectElement>('[data-physical-focus]');focusSelect.value=focus?.id??'';
     for(const option of focusSelect.options){const allowed=!state.place||!option.value||option.dataset.country===state.place;option.hidden=!allowed;option.disabled=!allowed;}
@@ -472,7 +473,7 @@ function start(root:HTMLElement) {
     const revision=++fieldRevision,natural=naturalTopic()==='climate',rice=farmingTopic()==='rice',physical=isPhysical(),water=['water','basins','groundwater'].includes(naturalTopic()??'');
     // Hide the previous field before awaiting geography or any other asset.
     if(!seasonal?.active())seasonal?.hide();
-    const raiseFocusMask=()=>{if(config.focusId&&map?.getLayer('asia-population-context'))map.moveLayer('asia-population-context');};
+    const raiseFocusMask=()=>{if(config.focusId&&map?.getLayer('asia-population-context')){map.moveLayer('asia-population-context');root.dataset.focusMaskStatus='ready';}};
     void presentation?.show(map).then(raiseFocusMask);
     map.setLayoutProperty('asia-climate','visibility',natural?'visible':'none');
     if(rice&&!config.presentation&&!map.getSource('asia-rice')){
@@ -505,8 +506,10 @@ function start(root:HTMLElement) {
     for(const id of ['asia-population',...(config.population?.cities.filter(c=>c.detail).map(c=>`asia-population-${c.id}`)??[])])if(map.getLayer(id))map.setLayoutProperty(id,'visibility',population&&(id==='asia-population'||id===`asia-population-${selectedUrban?.id}`)?'visible':'none');
     for(const id of ['asia-urban-points','asia-urban-hit'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility',population?'visible':'none');
     for(const id of ['asia-urban-boundary','asia-urban-selected'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility',population&&(urban||!!selectedUrban)?'visible':'none');
+    const focusedAgriculture=!!config.focusId&&state.field==='agriculture';
+    if(focusedAgriculture)root.dataset.focusMaskStatus='loading';
     const populationGeographyVisibility=()=>{
-      if(!map)return;const detailed=(population||social?.active()||!!farm||state.field==='industry'||hydrology?.active()||seasonal?.active()||state.field==='population'&&['ethnicity','religion'].includes(state.topic??''))&&!!map.getSource('asia-population-geography');
+      if(!map)return;const detailed=(population||social?.active()||!!farm||focusedAgriculture||state.field==='industry'||hydrology?.active()||seasonal?.active()||state.field==='population'&&['ethnicity','religion'].includes(state.topic??''))&&!!map.getSource('asia-population-geography');
       // The detailed file clips neighbouring countries to its own coverage.
       // Keep the existing world land/context under it in South/Central Asia:
       // a wider full-region fit must not turn omitted context land into ocean.
@@ -515,7 +518,7 @@ function start(root:HTMLElement) {
       if(map.getLayer('asia-population-country-selected'))map.setFilter('asia-population-country-selected',['==',['get','code'],state.city||hydrology?.active()?'':state.place??'']);
     };
     populationGeographyVisibility();
-    if((population||social?.active()||farm||state.field==='industry'||hydrology?.active()||seasonal?.active()||state.field==='population'&&['ethnicity','religion'].includes(state.topic??''))&&config.population?.geography&&!map.getSource('asia-population-geography')){
+    if((population||social?.active()||farm||focusedAgriculture||state.field==='industry'||hydrology?.active()||seasonal?.active()||state.field==='population'&&['ethnicity','religion'].includes(state.topic??''))&&config.population?.geography&&!map.getSource('asia-population-geography')){
       try{
         populationGeographyPromise??=fetchJson(asset(config.populationBase!,config.population.geography)).catch(error=>{populationGeographyPromise=null;throw error;});const data=await populationGeographyPromise;
         if(revision!==fieldRevision||!mapReady||!map)return;

@@ -15,7 +15,7 @@ export type AsiaPresentation={
  climate:{id:number;code:string;name:string;anchors:Coordinate[];minZoom:number}[];
 };
 type City={id:string;name:string;coordinates:Coordinate;countryCode?:string;country?:string};
-export function createAsiaPresentation(root:HTMLElement,config:{presentation:AsiaPresentation;allowSingleItem?:boolean;presentationBase:string;cities:City[];population?:{cities:City[]};riverFile?:string;riverIds?:string[];landforms?:{id:string;name:string;coordinates:Coordinate}[];selectSettlement?:(id:string|null)=>void;selectReligionCountry?:(code:string)=>void;selectFarmKinds?:(farms:AsiaState['farms'])=>void;waterFocus?:{id:string;name:string;river:string}[];selectLandform?:(id:string)=>void},getState:()=>AsiaState,chooseCity:(id:string)=>void,chooseUrban:(id:string)=>void,choosePoint:(point:Coordinate)=>void,chooseFarm:(id:string)=>void,onStatus:(message:string)=>void){
+export function createAsiaPresentation(root:HTMLElement,config:{presentation:AsiaPresentation;allowSingleItem?:boolean;presentationBase:string;religionCountries?:string[];cities:City[];population?:{cities:City[]};riverFile?:string;riverIds?:string[];landforms?:{id:string;name:string;coordinates:Coordinate}[];selectSettlement?:(id:string|null)=>void;selectReligionCountry?:(code:string)=>void;selectFarmKinds?:(farms:AsiaState['farms'])=>void;waterFocus?:{id:string;name:string;river:string}[];selectLandform?:(id:string)=>void},getState:()=>AsiaState,chooseCity:(id:string)=>void,chooseUrban:(id:string)=>void,choosePoint:(point:Coordinate)=>void,chooseFarm:(id:string)=>void,onStatus:(message:string)=>void){
  const metadata=config.presentation,overlay=root.querySelector<HTMLElement>('[data-map-annotations]')!;
  let map:import('maplibre-gl').Map|null=null,revision=0,scheduled=0,disposed=false;
  let errorMode:string|null=null;
@@ -152,7 +152,7 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
   syncKinds();const seq=++revision,current=mode();schedule();
   if(errorMode!==current){errorMode=null;onStatus('');}
   const censusReligion=root.dataset.region==='south-central-asia'&&current==='religion'&&!getState().detail;
-  if(censusReligion)for(const census of southCentralReligionCensuses){
+  if(censusReligion)for(const census of southCentralReligionCensuses.filter(c=>!config.religionCountries||config.religionCountries.includes(c.code))){
    const marker=document.createElement('button');marker.type='button';marker.className='sc-religion-marker';marker.setAttribute('aria-label',`${census.name}の${census.year}年宗教構成を読む`);marker.setAttribute('aria-pressed',String(getState().place===census.code));
    let angle=0;const colorStops=census.segments.map(segment=>{const next=angle+segment.share*3.6,stop=`${segment.color} ${angle}deg ${next}deg`;angle=next;return stop;});marker.style.background=`conic-gradient(${colorStops.join(',')})`;const label=document.createElement('span');label.textContent=census.name;marker.append(label);
    marker.addEventListener('click',event=>{event.stopPropagation();config.selectReligionCountry?.(census.code);});religionMarkers.push(new Marker({element:marker,anchor:'center'}).setLngLat(census.point).addTo(currentMap));

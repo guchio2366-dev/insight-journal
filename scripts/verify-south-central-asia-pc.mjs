@@ -9,7 +9,7 @@ export const southCentralProfiles=[
  {name:'south-laptop',viewport:{width:1280,height:720}},
  {name:'south-small',viewport:{width:1024,height:768}},
 ];
-export const southCentralImageCount=10*southCentralProfiles.length;
+export const southCentralImageCount=20*southCentralProfiles.length;
 
 export async function verifySouthCentralAsia(page,{source,profile,capture}){
  const checks=[],bandsChecks=[];
@@ -17,7 +17,7 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  const record=name=>checks.push({name,passed:true});
  const ready=()=>page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-map-fallback]')?.hidden);
  const open=async(route)=>{await page.goto(source+`/atlas/asia/${route}`,{waitUntil:'domcontentloaded'});await ready();if(reviewFoundation)await page.waitForLoadState('networkidle');};
- const screenshot=async id=>{if(!id.includes('-aligned-')&&!['south-central-industry-overview','south-central-cultural-distribution'].includes(id))return;await page.waitForLoadState('networkidle');await page.evaluate(async()=>{await document.fonts.ready;scrollTo({top:0,behavior:'instant'});await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});assert.equal(await page.evaluate(()=>scrollY),0,'Regional screenshots must start at the page top');await capture(page,profile,id,'asia');};
+ const screenshot=async id=>{if(!id.includes('-aligned-')&&!id.includes('-review-')&&!id.endsWith('-context')&&!['south-central-industry-overview','south-central-cultural-distribution'].includes(id))return;await page.waitForLoadState('networkidle');await page.evaluate(async()=>{await document.fonts.ready;scrollTo({top:0,behavior:'instant'});await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});assert.equal(await page.evaluate(()=>scrollY),0,'Regional screenshots must start at the page top');await capture(page,profile,id,'asia');};
  const story=async id=>{const picker=page.locator('[data-place-story]');await picker.selectOption(id);await page.waitForFunction(id=>new URL(location.href).searchParams.get('story')===id,id);await page.waitForLoadState('networkidle');};
  const scope=()=>page.locator('[data-country-select] option').evaluateAll(nodes=>nodes.filter(n=>n.value&&!n.disabled&&!n.hidden).map(n=>n.value));
  const extentChecks=[];
@@ -147,6 +147,7 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
 
  for(const [region,product] of [['south-asia','wheat'],['central-asia','cotton']]){
   await open(`${region}/agriculture/`);await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]').dataset.farmContextStatus==='ready');
+  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]').dataset.focusMaskStatus==='ready');
   assert.equal(new URL(page.url()).searchParams.get('place'),null);
   const livestock=page.locator('.asia-livestock-point:visible'),count=await livestock.count();assert(count>0);
   await page.locator(`[data-farm-choice="${product}"]`).click();await page.waitForFunction(product=>document.querySelector('[data-asia-atlas]').dataset.farmSelected===product,product);
@@ -282,5 +283,37 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
   bandsChecks.push({region:'south-asia',kind,interval,point,originalPointValue:value,reloadRetainsURL:true,comparisonRetainsURL:true});
  }
  record('South/Central rainfall 250mm and elevation 500m bands use aligned legends in all three focus views; original point values survive reload and comparison');
+ for(const [region,countries,census] of [
+  ['south-asia',['AFG','BGD','BTN','IND','LKA','MDV','NPL','PAK'],'IND'],
+  ['central-asia',['KAZ','KGZ','TJK','TKM','UZB'],'KAZ'],
+ ]){
+  const expected=new Set(countries);
+  await open(`${region}/industry/`);
+  const industry=await page.locator('[data-asia-config]').evaluate(n=>JSON.parse(n.textContent));
+  assert.deepEqual(industry.countries.map(c=>c.code).sort(),[...countries].sort());
+  assert(industry.industrySites.every(site=>expected.has(site.country)));
+  assert.match(await page.locator('[data-industry-lead]').textContent(),region==='central-asia'?/カザフスタン.*ウズベキスタン/s:/バングラデシュ.*インド/s);
+  await screenshot(`${region}-review-industry`);
+
+  await open(`${region}/population/`);
+  const population=await page.locator('[data-asia-config]').evaluate(n=>JSON.parse(n.textContent));
+  assert(population.population.cities.every(city=>expected.has(city.country)));
+  assert.match(await page.locator('[data-population-takeaway]').textContent(),region==='central-asia'?/都市|タシケント/:/デリー|ベンガル/);
+  await screenshot(`${region}-review-population`);
+
+  await open(`${region}/population/?topic=religion`);
+  const markerCount=region==='central-asia'?1:5;
+  await page.waitForFunction(count=>document.querySelectorAll('.sc-religion-marker').length===count,markerCount);
+  assert.deepEqual(await page.locator('[data-sc-religion-select]').evaluateAll(nodes=>nodes.map(n=>n.dataset.scReligionSelect)),region==='central-asia'?['KAZ']:['IND','PAK','BGD','NPL','LKA']);
+  await screenshot(`${region}-review-religion`);
+  await page.locator(`[data-sc-religion-select="${census}"]`).click();
+  assert.equal(new URL(page.url()).searchParams.get('place'),census);
+  await page.locator(`[data-sc-religion-country="${census}"]`).waitFor({state:'visible'});
+  await screenshot(`${region}-review-religion-selected`);
+  await page.goBack();
+  await page.waitForFunction(()=>new URL(location.href).searchParams.get('place')===null);
+  assert.equal(await page.locator('.sc-religion-marker').count(),markerCount);
+ }
+ record('Focused industry, population and religion screens match their country sets in all PC sizes; census selection and Back restore the same regional map');
  return {profile:profile.name,passed:true,checks,extentChecks,bandsChecks};
 }

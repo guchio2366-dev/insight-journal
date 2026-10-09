@@ -66,6 +66,22 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
     const legendIds=await page.locator(`[data-settlement-legend="${topic}"] [data-settlement-choice]`).evaluateAll(buttons=>buttons.map(button=>button.dataset.settlementChoice));
     assert.deepEqual(legendIds,visibleIds);
    }
+   await page.goto(`${url}/atlas/asia/${region}/agriculture/`,{waitUntil:'domcontentloaded'});
+   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.focusMaskStatus==='ready');
+   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmContextStatus==='ready');
+   await page.goto(`${url}/atlas/asia/${region}/nature/?topic=terrain`,{waitUntil:'domcontentloaded'});
+   await page.waitForFunction(()=>document.querySelector('[data-physical-takeaway]')?.textContent.includes('等高線')||document.querySelector('[data-physical-takeaway]')?.textContent.includes('ヒマラヤ'));
+   const terrainText=await page.locator('[data-physical-reading]').textContent();
+   if(region==='central-asia')assert.doesNotMatch(terrainText,/ネパール|デカン|インド半島|ベンガル/);
+   await page.goto(`${url}/atlas/asia/${region}/population/?topic=religion`,{waitUntil:'domcontentloaded'});
+   await page.waitForFunction(count=>document.querySelectorAll('.sc-religion-marker').length===count,region==='central-asia'?1:5);
+   const markers=await page.locator('.sc-religion-marker').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('aria-label')));
+   assert.equal(markers.some(label=>label.includes('カザフスタン')),region==='central-asia');
+   await page.locator('.sc-religion-marker').first().click();
+   assert.ok(expected.includes(new URL(page.url()).searchParams.get('place')));
+   await page.goBack();
+   await page.waitForFunction(()=>new URL(location.href).searchParams.get('place')===null);
+   assert.equal(await page.locator('.sc-religion-marker').count(),region==='central-asia'?1:5);
   }
   assert.deepEqual(errors,[]);
  }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
