@@ -1,0 +1,57 @@
+name: Review immediate East Asia religion clicks
+
+on:
+  push:
+    branches: [codex/east-asia-religion-click-evidence-20261009]
+
+# Evidence-only branch: the application files must match the approved Draft head.
+permissions:
+  contents: read
+
+concurrency:
+  group: east-religion-click-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: Verify immediate religion selection and industry return
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+      REVIEW_APPLICATION_HEAD: '7b0771def8b14b33dbc4033ca242220eecd9d628'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Verify application files are unchanged
+        run: git diff --exit-code "$REVIEW_APPLICATION_HEAD" HEAD -- src public astro.config.mjs package.json package-lock.json
+      - name: Use installed Chrome and Japanese fonts
+        shell: bash
+        run: |
+          set -euo pipefail
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          test -n "$chrome_path"
+          if [[ -z "$(fc-list ':lang=ja' family)" ]]; then
+            sudo apt-get update
+            sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+          fi
+          test -n "$(fc-list ':lang=ja' family)"
+          printf 'REVIEW_CHROME_PATH=%s\n' "$chrome_path" >> "$GITHUB_ENV"
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - name: Save ordinary-click viewport evidence only
+        run: node scripts/capture-east-religion-click-evidence.mjs
+      - name: Save compact immediate-click evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: east-religion-click-${{ github.run_id }}-${{ github.run_attempt }}
+          path: review-artifacts/east-religion-click
+          if-no-files-found: warn
+          compression-level: 6
+          retention-days: 7
