@@ -54,6 +54,7 @@ export function asiaFocusIndustry(focusId:AsiaFocusId){
   ...group,
   fact:focusId==='south-asia'?'ネパールのカリガンダキとブータンのチュカで、ヒマラヤ側の水力発電を比べます。':'タジキスタンのヌレークとキルギスのトクトグルで、天山・パミール側の水力発電を比べます。',
   reason:focusId==='south-asia'?'山地の高低差と河川水に加え、送電先と季節ごとの流量が立地・利用に関わります。':'山地の高低差と河川水に加え、貯水、送電、下流の灌漑への配分が立地・利用に関わります。',
+  source:focusId==='south-asia'?{label:'ネパール電力庁・発電所一覧',url:'https://genrd.nea.org.np/officelist/251'}:group.source,
  }:group);
  return {groups,sites,overview:asiaFocusIndustryOverview[focusId]};
 }
