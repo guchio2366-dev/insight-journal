@@ -38,6 +38,11 @@
  .east-industry-label-primary>span::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--industry-color);flex:none}
  .east-industry-label-city{display:block;font-size:10px;line-height:13px;font-weight:400;color:#546a67}
  .east-industry-map-labels button[aria-pressed=true] .east-industry-label-city{color:#d8e5e0}
+ .east-industry-group{position:absolute;width:max-content;max-width:156px;box-sizing:border-box;background:#fffffff0;padding:2px 5px;color:#25473e;pointer-events:auto}
+ .east-industry-group .east-industry-label-primary{flex-wrap:wrap;column-gap:5px;row-gap:0}
+ .east-industry-map-labels .east-industry-group-point{width:14px;height:14px;padding:0;border-radius:50%;background:transparent;cursor:pointer}
+ .east-industry-map-labels .east-industry-group-point:is(:focus-visible,[aria-pressed=true]){outline:2px solid #25473e;outline-offset:1px;background:transparent}
+ .east-industry-map-labels .east-industry-group-point:focus-visible::after{content:attr(data-city-name);position:absolute;left:9px;top:9px;background:#fffffff0;padding:2px 4px;font:400 10px/13px sans-serif;color:#25473e;pointer-events:none}
 }
 [data-east-cluster-sources]{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:12px}
 [data-east-cluster-detail]{border-left:3px solid #477e6b;padding:8px 12px;background:#f3f7ec}

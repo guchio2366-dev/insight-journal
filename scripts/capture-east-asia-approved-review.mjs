@@ -73,6 +73,7 @@ try{
    }
   }
   async function industryLabels(page,kind=null){
+   if(!kind)return industryOverviewLabels(page);
    const rows=await page.locator('[data-industry-cluster]:visible').evaluateAll(nodes=>nodes.map(n=>{
     const box=e=>{const r=e.getBoundingClientRect();return {left:r.left,top:r.top,right:r.right,bottom:r.bottom,width:r.width,height:r.height};};
     const primary=n.querySelector('[data-cluster-industries]'),city=n.querySelector('[data-cluster-city]'),primaryStyle=getComputedStyle(primary),cityStyle=getComputedStyle(city),anchor=JSON.parse(n.dataset.clusterAnchor),leader=document.querySelector(`line[data-cluster-leader="${n.dataset.industryCluster}"]`);
@@ -87,6 +88,35 @@ try{
     assert(row.box.left>=frame.left&&row.box.right<=frame.right&&row.box.top>=frame.top&&row.box.bottom<=frame.bottom,'labels stay inside the map');assert.deepEqual(row.leader.x,row.anchor.x);assert.deepEqual(row.leader.y,row.anchor.y);assert(row.leader.length>=7,'a leader identifies the original site');
     for(const other of rows.filter(r=>r.id!==row.id))assert(!(row.box.left<other.box.right&&row.box.right>other.box.left&&row.box.top<other.box.bottom&&row.box.bottom>other.box.top),'industry labels do not overlap: '+row.id+'/'+other.id);
    }return rows;
+  }
+  async function industryOverviewLabels(page){
+   const groups=await page.locator('[data-industry-group]:visible').evaluateAll(nodes=>nodes.map(n=>{
+    const r=n.getBoundingClientRect(),primary=n.querySelector('[data-cluster-industries]');
+    return {id:n.dataset.industryGroup,sites:JSON.parse(n.dataset.groupSites),members:JSON.parse(n.dataset.groupMembers),box:{left:r.left,top:r.top,right:r.right,bottom:r.bottom},industries:[...primary.children].map(s=>({id:s.dataset.industry,label:s.textContent,color:getComputedStyle(s,'::before').backgroundColor})),primarySize:parseFloat(getComputedStyle(primary).fontSize),primaryWeight:parseInt(getComputedStyle(primary).fontWeight),clipped:n.scrollWidth>n.clientWidth+1,leaders:[...document.querySelectorAll(`line[data-group-leader="${n.dataset.industryGroup}"]`)].map(l=>({id:l.dataset.clusterLeader,from:{x:Number(l.getAttribute('x1')),y:Number(l.getAttribute('y1'))},to:{x:Number(l.getAttribute('x2')),y:Number(l.getAttribute('y2'))}}))};
+   }));
+   const points=await page.locator('.east-industry-group-point:visible').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return {id:n.dataset.industryCluster,aria:n.getAttribute('aria-label'),x:(r.left+r.right)/2,y:(r.top+r.bottom)/2};}));
+   assert.equal(groups.length,9,'nearby sites share nine initial industry labels');assert.deepEqual(groups.flatMap(g=>g.members).sort(),eastClusters.map(c=>c.id).sort());assert.deepEqual(points.map(p=>p.id).sort(),eastClusters.map(c=>c.id).sort(),'every original geographic point stays selectable');
+   const frame=(await geometry(page)).map,origin=await page.locator('.east-industry-map-labels').evaluate(n=>{const r=n.getBoundingClientRect();return {left:r.left,top:r.top};}),allLeaders=groups.flatMap(g=>g.leaders.map(l=>({...l,group:g.id}))),lengths=[];
+   const intersects=(a,b,c,d)=>{const turn=(x,y,z)=>(y.x-x.x)*(z.y-x.y)-(y.y-x.y)*(z.x-x.x);return turn(a,b,c)*turn(a,b,d)<-.001&&turn(c,d,a)*turn(c,d,b)<-.001;};
+   for(const g of groups){
+    const members=g.members.map(id=>eastClusters.find(c=>c.id===id));assert.equal(new Set(members.map(c=>c.country)).size,1,'groups stay within the same country/region');
+    const kinds=eastIndustries.filter(i=>members.some(c=>c.industries.includes(i.id)));assert.deepEqual(g.industries.map(i=>i.id),kinds.map(i=>i.id));assert.deepEqual(g.industries.map(i=>i.label),kinds.map(i=>i.label));assert(g.primarySize>=12&&g.primaryWeight>=700);assert.equal(g.clipped,false);assert(g.box.left>=frame.left&&g.box.right<=frame.right&&g.box.top>=frame.top&&g.box.bottom<=frame.bottom);
+    assert.deepEqual(g.leaders.map(l=>l.id).sort(),g.members.toSorted());
+    for(const site of g.sites){
+     const point=points.find(p=>p.id===site.id),c=members.find(c=>c.id===site.id),leader=g.leaders.find(l=>l.id===site.id);assert.match(point.aria,new RegExp(c.name));assert(Math.abs(point.x-origin.left-site.anchor.x)<.5&&Math.abs(point.y-origin.top-site.anchor.y)<.5,'point remains at its original projected position');assert.deepEqual(leader.from,site.anchor);
+     const length=Math.hypot(leader.to.x-leader.from.x,leader.to.y-leader.from.y);lengths.push(length);assert(length>=7&&length<=66.5,'initial labels stay within 66px of every assigned site: '+site.id+' '+length);
+     const marks=page.locator(`.east-industry-map-labels svg [data-cluster-mark="${site.id}"]`);assert.deepEqual(await marks.evaluateAll(nodes=>nodes.map(n=>n.dataset.industry)),c.industries);
+     for(const id of c.industries){const mark=page.locator(`.east-industry-map-labels svg [data-cluster-mark="${site.id}"][data-industry="${id}"]`);assert.equal(await mark.evaluate(n=>getComputedStyle(n).fill),g.industries.find(i=>i.id===id).color);}
+    }
+    for(const other of groups.filter(o=>o.id!==g.id)){
+     assert(!(g.box.left<other.box.right&&g.box.right>other.box.left&&g.box.top<other.box.bottom&&g.box.bottom>other.box.top),'group labels do not overlap');
+     const b={left:other.box.left-origin.left,right:other.box.right-origin.left,top:other.box.top-origin.top,bottom:other.box.bottom-origin.top},edges=[[{x:b.left,y:b.top},{x:b.right,y:b.top}],[{x:b.right,y:b.top},{x:b.right,y:b.bottom}],[{x:b.right,y:b.bottom},{x:b.left,y:b.bottom}],[{x:b.left,y:b.bottom},{x:b.left,y:b.top}]];
+     for(const l of g.leaders)assert(!edges.some(([a,b])=>intersects(l.from,l.to,a,b)),'leaders do not pass through another label');
+    }
+    for(const p of points)assert(!(p.x>g.box.left-5&&p.x<g.box.right+5&&p.y>g.box.top-5&&p.y<g.box.bottom+5),'group labels do not cover geographic points');
+   }
+   for(const a of allLeaders)for(const b of allLeaders.filter(b=>b.group!==a.group))assert(!intersects(a.from,a.to,b.from,b.to),'leaders of different groups do not cross: '+a.id+'/'+b.id);
+   return {groups,pointCount:points.length,maxLeader:Math.max(...lengths),crossings:0};
   }
   async function rainfallLeaders(page){
    const evidence=await page.evaluate(()=>{
@@ -123,7 +153,8 @@ try{
    await open(page,'industry');const initial=await layout(page);
    await industryLegend(page,eastIndustries);assert.equal(new URL(page.url()).searchParams.get('topic'),'east-clusters');
    const host=page.locator('[data-east-cluster-reading]');assert.equal(await host.isVisible(),true);assert.match(await host.textContent(),/台湾/);assert.equal(await page.locator('[data-east-industry-journey]').isVisible(),false);
-   const initialLabels=await industryLabels(page);await shot(page,'industry-initial');const selectedLabels={};
+   const initialLabels=await industryLabels(page);await shot(page,'industry-initial');const mapBox=(await geometry(page)).map;await shot(page,'industry-initial-map',false,{x:mapBox.left,y:mapBox.top,width:mapBox.width,height:mapBox.height});
+   await page.locator('[data-industry-cluster="hsinchu"]').click();await ready(page);assert.match(await host.locator('[data-east-cluster-detail]').textContent(),/新竹/);await industryLabels(page);await page.goBack();await ready(page);assert.equal(await host.locator('[data-east-cluster-detail]').isVisible(),false);const selectedLabels={};
    for(const kind of eastIndustries){
     await page.locator(`[data-industry-feature="east-${kind.id}"]`).click();await ready(page);await industryLegend(page,[kind]);
     selectedLabels[kind.id]=await industryLabels(page,kind.id);await shot(page,`industry-${kind.id}-selected`);
