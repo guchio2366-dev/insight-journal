@@ -13,6 +13,7 @@ import {ASIA_SEASONAL_BREAKS,ASIA_SEASONAL_COLORS,normalizeAsiaSeasonalMonth,val
 import type {AsiaFarmingRegion} from '../data/atlas/asia-farming';
 import type {AsiaPresentation} from './atlas-asia-presentation';
 import {contourBandFiles,contourBandLabels} from '../data/atlas/asia-contour-bands';
+import {southCentralRainfallLegend} from '../data/atlas/asia-south-central-rainfall-legend';
 
 type Key={label:string;color:string;shortLabel?:string};
 type Raster={url:string;coordinates:number[][]};
@@ -130,7 +131,7 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
       }
       if(topic==='climate')return {...base,period:'1991–2020年',unit:'ケッペン＝ガイガー分類',keys:config.classes.filter(c=>config.climate.classIds.includes(c.id)).map(c=>({color:c.color,label:c.code+' '+c.name,shortLabel:c.code})),note:'区分境界は加工した広域格子に基づきます。海岸・小島の欠測を含みます。',raster:{url:asset(config.climateBase,config.climate.image),coordinates:config.climate.imageCoordinates}};
       const bands=topic==='terrain'?config.presentation?.terrain?.bands:topic==='precipitation'?config.presentation?.rainfall?.bands:undefined;
-      if(bands)return {...base,period:topic==='terrain'?'ETOPO 2022':'1981–2010年の推計平年値',unit:topic==='terrain'?'標高 m（EGM2008基準）':'mm/年',keys:contourBandLabels(bands),note:topic==='terrain'?'広域格子の標高です。個別の山頂や谷底の測量値ではありません。線と色帯は同じ平滑化した表示値で、地点の数値は原格子値です。':'年間合計です。雨温図とは資料・期間が異なり、季節配分や現在の雨を表しません。線と色帯は同じ平滑化した表示値で、地点の数値は原格子値です。',geometryFiles:contourBandFiles(bands,'band').map(file=>config.presentationBase!+file),preserveVertices:true};
+      if(bands)return {...base,period:topic==='terrain'?'ETOPO 2022':'1981–2010年の推計平年値',unit:topic==='terrain'?'標高 m（EGM2008基準）':'mm/年',keys:config.regionId==='south-central-asia'&&topic==='precipitation'?southCentralRainfallLegend(bands):contourBandLabels(bands),note:topic==='terrain'?'広域格子の標高です。個別の山頂や谷底の測量値ではありません。線と色帯は同じ平滑化した表示値で、地点の数値は原格子値です。':'年間合計です。雨温図とは資料・期間が異なり、季節配分や現在の雨を表しません。線と色帯は同じ平滑化した表示値で、地点の数値は原格子値です。',geometryFiles:contourBandFiles(bands,'band').map(file=>config.presentationBase!+file),preserveVertices:true};
       if(['terrain','landform'].includes(topic)&&config.physical)return {...base,period:'ETOPO 2022',unit:'標高 m（EGM2008基準）',keys:bins(['b4cfbf','d8e2b5','e0d5a0','cdbc88','b09a78','987d6b','b9aaa0','eee9e1'],[0,200,500,1000,2000,3000,4500]),note:'広域格子の標高です。個別の山頂や谷底の測量値ではありません。',raster:{url:asset(config.physicalBase!,config.physical.image),coordinates:config.physical.imageCoordinates}};
       if(topic==='precipitation'&&config.water)return {...base,period:'1981–2010年の推計平年値',unit:'mm/年',keys:bins(precipitationColors,precipitationBreaks),note:'年間合計です。雨温図とは資料・期間が異なり、季節配分や現在の雨を表しません。',raster:{url:asset(config.waterBase!,config.water.precipitation.image),coordinates:config.water.precipitation.imageCoordinates}};
       if(config.water&&['water','basins','groundwater'].includes(topic)){const basins=topic==='basins',data=await json(config.waterBase!+config.water[basins?'basins':'groundwater']) as WaterDataset,selected=data.records.find(r=>r.id===s.detail),allowed=[...asiaWaterFocus[config.regionId].map(f=>f.id),s.detail];

@@ -4,6 +4,7 @@ import {decodeAsiaNumericGrid,readAsiaNumericCell,type AsiaNumericGrid} from '..
 import type {AsiaState,AsiaCamera,AsiaRegionId} from '../lib/atlas-asia-state';
 import {asiaWaterFocus} from '../data/atlas/asia-water-focus';
 import {southCentralWaterSystems,southCentralWaterOverview,southCentralGroundwaterOverview} from '../data/atlas/asia-south-central-water-reading';
+import {southCentralRainfallLegend} from '../data/atlas/asia-south-central-rainfall-legend';
 
 type Config={regionId:AsiaRegionId;water:WaterRegion;waterBase:string;countries:{code:string;name:string}[];waterFeatures?:{id:string;name:string;label?:string;kind:string;countries:string[]}[];contourBands?:AsiaContourBands};
 const el=<K extends keyof HTMLElementTagNameMap>(tag:K,text?:string)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
@@ -64,7 +65,7 @@ export function createAsiaWater(root:HTMLElement,config:Config,getState:()=>Asia
  function legend(t:WaterTopic){
   const content=$('[data-hydrology-scale]');content.replaceChildren();$('[data-hydrology-legend-title]').textContent=waterTopics[t].title;
   const swatch=(color:string,label:string)=>{const s=el('span'),i=el('i');i.style.backgroundColor=color;s.append(i,document.createTextNode(label));content.append(s);};
-  if(t==='precipitation'){if(config.contourBands)for(const band of contourBandLabels(config.contourBands))swatch(band.color,band.label);swatch('#347d9c','等雨量線：250mm/年間隔（数字は500mmごと）');$('[data-hydrology-legend-note]').textContent='1981–2010年の推計平年値。同じ年間降水量の地点を青い線で結びます。薄い背景色は降水量の広がりを補助的に示します。海・欠測の範囲は線をつなぎません。'+(config.contourBands?' 色帯も250mmごとで、線と同じ平滑化した表示値から作っています。地点の数値は平滑化前の原格子値です。':'');}
+  if(t==='precipitation'){if(config.contourBands)for(const band of config.regionId==='south-central-asia'?southCentralRainfallLegend(config.contourBands):contourBandLabels(config.contourBands))swatch(band.color,band.label);swatch('#347d9c','等雨量線：250mm/年間隔（数字は500mmごと）');$('[data-hydrology-legend-note]').textContent='1981–2010年の推計平年値。同じ年間降水量の地点を青い線で結びます。海・欠測の範囲は線をつなぎません。'+(config.contourBands?(config.regionId==='south-central-asia'?' 色は0～3,000mmの違いを細かく示し、それより多い範囲は色をまとめています。線と面の区切りは250mm間隔、地点の数値は平滑化前の原格子値で、上限に切り詰めていません。':' 色帯も250mmごとで、線と同じ平滑化した表示値から作っています。地点の数値は平滑化前の原格子値です。'):'');}
   else if(t==='basins'){swatch('#176c94','青い線・面：河川・湖');swatch('#b5ced9','主な河川の流域');swatch('#ac432f','赤い輪郭：選択した流域');$('[data-hydrology-legend-note]').textContent='色は水量や面積の大小を表しません。主要な水系を表示し、小さな沿岸区分は省いています。国境を越える流域は輪郭でつなぎ、対象国の範囲を塗っています。主な河川のボタンは代表する出口の集水域を選びます。デルタで出口が異なる枝流などは別の区域です。';}
   else{swatch('#a9d2da','主要な地下水盆地');swatch('#176c94','河川');$('[data-hydrology-legend-note]').textContent='主要な地下水盆地の広がりを示します。白地にも局地的な帯水層は存在し得ます。色は地下水の量や安全に取水できる量を表しません。';}
  }

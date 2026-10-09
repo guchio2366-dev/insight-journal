@@ -42,6 +42,19 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  if(reviewFoundation){
  await open('south-central-asia/industry/');
  assert.equal(new URL(page.url()).searchParams.get('place'),null);
+ assert.match(await page.locator('[data-industry-title]').textContent(),/南・中央アジアの産業分布/);
+ assert.equal(await page.locator('[data-sc-industry-topic]').inputValue(),'sc-overview');
+ assert.equal(await page.locator('[data-industry-coverage]').textContent().then(s=>Number(s.match(/\d+/)?.[0])),27);
+ assert.equal(await page.locator('[data-industry-scale] span').count(),12);
+ await page.locator('[data-sc-industry-topic]').selectOption('sc-hydro');
+ assert.equal(new URL(page.url()).searchParams.get('topic'),'sc-hydro');
+ assert.match(await page.locator('[data-industry-lead]').textContent(),/キルギス.*タジキスタン.*ネパール.*ブータン/s);
+ await page.locator('.sc-industry-site-list button').first().click();
+ assert.match(new URL(page.url()).searchParams.get('detail'),/^sc-/);
+ assert.match(await page.locator('[data-industry-content]').textContent(),/立地を読む/);
+ await page.locator('[data-sc-industry-topic]').selectOption('sc-overview');
+ assert.equal(new URL(page.url()).searchParams.get('detail'),null);
+ record('regional industry topics show sourced locations and explanations before India statistics');
  assert.deepEqual(await scope(),['IND']);
  await page.locator('[data-focus-reading]').waitFor({state:'visible'});
  assert.match(await page.locator('[data-focus-reading-body]').textContent(),/グジャラート.*アナンド.*カルナータカ.*ベンガルール.*ウズベキスタン/s);
@@ -154,7 +167,16 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  await screenshot('central-asia-500m-elevation');record('Central Asian elevation uses the existing 500m contours');
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
  }else{
-  await open('south-central-asia/industry/');await screenshot('south-central-industry-overview');
+  await open('south-central-asia/industry/');
+  assert.equal(await page.locator('[data-sc-industry-topic]').inputValue(),'sc-overview');
+  await page.locator('[data-sc-industry-topic]').selectOption('sc-oilgas');
+  assert.match(await page.locator('[data-industry-lead]').textContent(),/カザフスタン.*トルクメニスタン/s);
+  assert.equal(await page.locator('.sc-industry-site-list button').count(),2);
+  await page.locator('.sc-industry-site-list button').first().click();
+  assert.match(new URL(page.url()).searchParams.get('detail'),/^sc-/);
+  await page.locator('[data-sc-industry-topic]').selectOption('sc-overview');
+  assert.equal(new URL(page.url()).searchParams.get('detail'),null);
+  await screenshot('south-central-industry-overview');record('regional industry overview, oil and gas distribution, and site case selection');
   await open('south-central-asia/population/?topic=ethnicity');await screenshot('south-central-cultural-distribution');
  }
  await open('south-central-asia/agriculture/');
@@ -184,7 +206,8 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
    await page.waitForFunction(kind=>{const r=document.querySelector('[data-asia-atlas]');return r.dataset.contourBandStatus==='ready'&&r.dataset.contourBandKind===kind;},kind);
    expected=await page.locator('[data-asia-config]').evaluate((node,kind)=>JSON.parse(node.textContent).presentation[kind].bands,kind);
    assert.equal(expected.interval,interval);
-   const wanted=await page.evaluate(b=>b.colors.map((color,i)=>{const e=document.createElement('i');e.style.backgroundColor=color;return {color:e.style.backgroundColor,label:`${b.breaks[i].toLocaleString('ja-JP')}–${b.breaks[i+1].toLocaleString('ja-JP')}`};}),expected);
+   const wanted=await page.evaluate(({b,kind})=>{const groups=[];for(let i=0;i<b.colors.length;i++){const last=groups.at(-1);if(kind==='rainfall'&&last?.color===b.colors[i])last.upper=b.breaks[i+1];else groups.push({color:b.colors[i],lower:b.breaks[i],upper:b.breaks[i+1]});}return groups.map(group=>{const e=document.createElement('i');e.style.backgroundColor=group.color;return {color:e.style.backgroundColor,label:`${group.lower.toLocaleString('ja-JP')}–${group.upper.toLocaleString('ja-JP')}`};});},{b:expected,kind});
+   if(kind==='rainfall'){assert.equal(expected.breaks.at(-1),9750);assert.equal(wanted.length,11,'High rain is grouped while the 0–3000 mm classes remain distinct');}
    const actual=await page.locator(`${legend} > span`).evaluateAll(nodes=>nodes.filter(n=>/–/.test(n.textContent)).map(n=>({color:n.querySelector('i').style.backgroundColor,label:n.textContent})));
    assert.deepEqual(actual,wanted,'Visible explanation legend must use the generated intervals and colors');
    const mapLegend=await page.locator('[data-reading-map-legend] .asia-comparison-compact-key > span').evaluateAll(nodes=>nodes.map(n=>({color:n.querySelector('i').style.backgroundColor,label:n.textContent})));

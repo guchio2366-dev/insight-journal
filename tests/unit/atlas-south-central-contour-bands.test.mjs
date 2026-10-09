@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
 import {createHash} from 'node:crypto';
 import {contourBandLabels} from '../../src/data/atlas/asia-contour-bands.ts';
+import {southCentralRainfallLegend} from '../../src/data/atlas/asia-south-central-rainfall-legend.ts';
 
 const base='public/assets/atlas/asia-presentation-v1/';
 const manifest=JSON.parse(readFileSync(base+'manifest.json'));
@@ -22,7 +23,11 @@ for(const [kind,interval] of [['rainfall',250],['terrain',500]]){
   assert.equal(bands.length,meta.bandFeatureCount);assert.equal(lines.length,meta.lineFeatureCount);
   assert.equal(meta.thresholdRule,'lower inclusive, upper exclusive');
   assert.equal(meta.breaks.length,meta.colors.length+1);
-  assert.equal(new Set(meta.colors).size,meta.colors.length,'Every interval has a distinct color, including retained negative coastal elevations');
+  if(kind==='rainfall'){
+   assert.equal(new Set(meta.colors).size,11,'The annual-rainfall legend groups 250 mm numeric bands into 11 readable colors');
+   assert.equal(southCentralRainfallLegend(meta).length,11);
+   assert.equal(meta.breaks.at(-1),9750,'9750 mm is the upper legend edge, not an observed station value');
+  }else assert.equal(new Set(meta.colors).size,meta.colors.length,'Every terrain interval retains a distinct color, including negative coastal elevations');
   for(let i=1;i<meta.breaks.length;i++)assert.equal(meta.breaks[i]-meta.breaks[i-1],interval);
   assert(bands.length>100);assert(lines.length>100);
   const samples=new Map(),levels=new Set();
