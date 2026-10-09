@@ -48,6 +48,7 @@ async function checkSoutheastAsiaRegion(page,{source,capture:takePicture,backgro
  await page.locator('[data-southeast-industry-site="rayong-tires"]').click();
  assert.match(await page.locator('[data-southeast-industry-selected-reading]').textContent(),/タイヤ工場/);
  assert.equal(await page.locator('[data-southeast-industry-selected-source]').getAttribute('href')!==null,true);
+ assert.equal(await page.locator('[data-southeast-industry-selected]').evaluate(node=>Boolean(node.compareDocumentPosition(document.querySelector('[data-southeast-industry-sites]'))&Node.DOCUMENT_POSITION_FOLLOWING)),true,'Selected location reading must precede the long site directory');
  record('all regional sites remain visible while rubber and tire stages are highlighted');await capture('industry-rubber-selected');
  await page.locator('[data-southeast-industry-kind="wood"]').click();
  assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point]:not(.muted)').count(),2);

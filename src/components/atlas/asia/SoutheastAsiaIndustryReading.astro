@@ -8,8 +8,8 @@ const reading=getAsiaOverview('southeast-asia').reading.readings.find(r=>r.id===
  <p>地図の国の色は2024年の製造業付加価値のGDP比です。13産業群の地点は公的資料にある立地事例です。丸は工場・港・都市など、ひし形は広い原料地域の代表位置です。点の数と大きさは産業規模を表しません。</p>
  <nav class="southeast-industry-choices" aria-label="地図上の産業を強調">{southeastIndustryKinds.map(kind=><button type="button" data-southeast-industry-kind={kind.id} aria-pressed={String(kind.id==='all')}>{kind.label}</button>)}</nav>
  <p class="southeast-industry-summary" data-southeast-industry-summary>{southeastIndustryKinds[0].reading}</p>
- <div class="southeast-industry-sites" data-southeast-industry-sites>{southeastIndustrySites.map(site=><button type="button" data-southeast-industry-site={site.id}><span class={`southeast-industry-symbol ${site.kind} ${site.stage}`} aria-hidden="true"></span>{site.label}</button>)}</div>
  <section data-southeast-industry-selected hidden><h4 data-southeast-industry-selected-title></h4><p data-southeast-industry-selected-reading></p><p class="southeast-industry-source">立地の資料（<span data-southeast-industry-selected-year></span>）：<a data-southeast-industry-selected-source></a></p></section>
+ <div class="southeast-industry-sites" data-southeast-industry-sites>{southeastIndustrySites.map(site=><button type="button" data-southeast-industry-site={site.id}><span class={`southeast-industry-symbol ${site.kind} ${site.stage}`} aria-hidden="true"></span>{site.label}</button>)}</div>
  <p>選択した分類の地点を強調し、他の産業群も薄く残します。原料と工場を結ぶ実際の供給路や国内仕向けは示しません。立地事例は出典年当時の情報です。国別産業の詳説はインドネシア・ベトナム・タイ、地域全体の地図は地理的な東南アジア11か国を対象にします。</p>
  <h3>地域全体の供給網を読む</h3>
  {reading.paragraphs.map(p=><p>{p}</p>)}

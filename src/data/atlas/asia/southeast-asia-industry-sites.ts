@@ -15,7 +15,7 @@ export const southeastIndustryKinds:{id:'all'|SoutheastIndustryKind;label:string
  {id:'finance',label:'金融',reading:'シンガポールの金融機関の集積を都市のサービス業として読みます。'},
  {id:'it-bpm',label:'IT-BPM',reading:'マニラ首都圏とセブの顧客対応・事務処理などのIT-BPM拠点を読みます。'},
  {id:'rubber',label:'ゴム・タイヤ',reading:'タイ南部のゴム栽培地域とラヨーンのタイヤ製造を別工程として読みます。'},
- {id:'wood',label:'木材・家具',reading:'ベトナム北中部の植林材とビンズオンの家具製造を区別します。輸入材も使われます。'},
+ {id:'wood',label:'木材・家具',reading:'ベトナム北中部の植林材とビンズオンの家具製造を区別します。加工には輸入木材も使われます。'},
 ];
 const source={
  penang:['マレーシア投資開発庁・電気電子産業','https://www.mida.gov.my/industries/manufacturing/electrical-electronics/','2026閲覧'],
