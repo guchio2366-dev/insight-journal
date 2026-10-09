@@ -13,12 +13,15 @@ export const westReadingSources = {
   irrigation: {label:'FAO：サウジアラビアの灌漑改善 (2024)',url:'https://www.fao.org/neareast/news/stories/details/from-scarcity-to-sustainability--a-leap-toward-efficient-irrigation-in-saudi-arabia/',period:'2024年10月3日。実証農場の事例で、全農場の状態ではありません。'},
   saudi: {label:'EIA：サウジアラビアのエネルギー概況',url:'https://www.eia.gov/international/content/analysis/countries_long/saudi_arabia/',period:'2024年版。施設・発電・淡水化の説明。WDIの統計年とは別です。'},
   uae: {label:'EIA：UAEのエネルギー概況',url:'https://www.eia.gov/international/content/analysis/countries_long/United_Arab_Emirates/',period:'2026年7月28日版。WDIの2020〜2024年系列とは別の概況です。'},
+  adnoc: {label:'ADNOC：上部ザクム油田の沖合位置',url:'https://adnoc.ae/en/news-and-media/press-releases/2025/adnoc-deepens-energy-partnerships-with-us-companies',period:'2025年の事業者説明。アブダビの北西約84km。地図の記号は概略位置です。'},
   jubail: {label:'Chevron Phillips Chemical：ジュバイルの石油化学',url:'https://www.cpchem.com/locations/middle-east/al-jubail-saudi-arabia-s-chem',period:'事業者の施設説明。国全体の生産規模や施設の網羅性を表しません。'},
   port: {label:'DP World：ジュベル・アリ港',url:'https://www.dpworld.com/en/ports-terminals/uae/jebel-ali-port',period:'港湾事業者の立地・機能説明。国別TEUをこの港の値には置き換えません。'},
   auto: {label:'トルコ投資庁：自動車産業',url:'https://www.invest.gov.tr/en/sectors/pages/automotive.aspx',period:'2025年の産業実績・2026年の研究開発の説明を含みます。製造業GDP比は別の指標です。'},
   transit: {label:'EIA：世界の石油輸送の要衝',url:'https://www.eia.gov/international/analysis/special-topics/World_Oil_Transit_Chokepoints',period:'2026年3月3日版・主に2025年前半までの輸送。現在の通航状況は示しません。'},
   suez: {label:'スエズ運河庁：運河の地理',url:'https://www.suezcanal.gov.eg/English/About/SuezCanal/Pages/AboutSuezCanal.aspx',period:'運河庁の地理説明。現在の通航量ではありません。'},
   qatar: {label:'QatarEnergy：ラス・ラファン港',url:'https://www.qatarenergy.qa/en/MarketingAndTrading/Pages/PortsInformation.aspx',period:'事業者の港湾説明。LNGの輸出先構成は示しません。'},
+  nileDam: {label:'NASA：アスワン・ハイダムとナセル湖',url:'https://ntrs.nasa.gov/api/citations/19700017671/downloads/19700017671.pdf',period:'ナイル川沿いの貯水池の位置。現在の貯水量や配水量は示しません。'},
+  euphratesDam: {label:'UNESCO：ユーフラテス川のアタテュルク・ダム',url:'https://unesdoc.unesco.org/ark:/48223/pf0000143430',period:'上流のダムの位置を示す資料。現在の放流量は示しません。'},
 };
 export const westFieldIntroductions = {
   natural:'アラビア半島の乾燥、トルコ・イランの山地、ナイル川とチグリス・ユーフラテス川を比べ、雨・河川・地下水と人が水を届ける仕組みを読みます。',
@@ -54,7 +57,7 @@ export const westTopicReasons = {
   contours:'トルコ・イランの高原や山地、イラクの低地、アラビア半島南西部の高地を、海面からの高さで比較します。海面下の色帯を欠測と混同せず、地点の保存格子の値も確認しましょう。',
   'farming-overview':'小麦・大麦はトルコとイランの高原やイラクの川沿い、家畜は高原・山麓とその周辺で比較しましょう。作物の輪郭と家畜の点は2020年の推計からの案内で、点の数は頭数ではありません。灌漑・天水の切替では水の確保方法を比べられます。',
   'annual-precipitation':'黒海からの湿った空気が山地に当たるリゼ付近は多雨で、アナトリア高原の内陸は沿岸より雨が少なくなります。アラビア半島内陸のリヤドは乾燥帯で、畑では降雨以外の水確保が課題です。250mm線は比較の目盛りで、天水農業の一律の限界ではありません。降る季節、河川・地下水、取水・送水を合わせて読みます。',
-  'industry-network':'サウジ東部の採掘と精製・石油化学、UAEのアブダビとルワイス・ジュベル・アリ、トルコのブルサ・コジャエリを比べます。記号は主要拠点の都市付近を示します。原料の生産、加工、港での積替えや消費地への輸送は別の段階です。',
+  'industry-network':'サウジ東部の採掘と精製・石油化学、UAEのアブダビ沖とルワイス・ジュベル・アリ、トルコのブルサ・コジャエリを比べます。記号は主要拠点の概略位置を示します。原料の生産、加工、港での積替えや消費地への輸送は別の段階です。',
   groundwater:waterEnergy,
   desalination,
   basins:'ナイル川の上流はエジプトの外に、チグリス・ユーフラテス川の上流はトルコなどに続きます。下流の農地が水を得る条件は上流の雨・雪解け、貯水・取水とも関わります。流域は地形で定まる区分で、実際の国家間の水配分や地下水盆とは別です。',
@@ -79,8 +82,8 @@ export function westRegionalReading(topic,selection={}) {
   if(topic.id==='rivers')return entry('乾燥地の農業と水を届ける仕組み',[waterEnergy],['irrigation','water']);
   if(topic.id==='desalination')return entry('水の供給とエネルギー',[],['saudi','water']);
   if(['wheat-irrigated','barley-irrigated','dates'].includes(topic.id))return entry('水を確保して栽培する', [waterEnergy],['irrigation']);
-  if(topic.id==='basins'&&selection.basin==='1060034260')return entry('ナイル川：エジプトの外へ続く上流',['ナイル川はエジプトより南の上流から水を集め、下流の低地とデルタへ続きます。初期の地域表示を保ったまま地図を南へドラッグすると上流側をたどれます。国別の雨量だけでナイル川沿いの農地の水供給は説明できません。取水・貯水・送水と配分も必要です。'],['water']);
-  if(topic.id==='basins'&&selection.basin==='2060073570')return entry('チグリス・ユーフラテス川：高原から低地へ',['トルコなどの上流から、シリア・イラクの下流へつながる流域です。雨や雪解けと貯水・取水の時期が下流へ届く水を変えます。この境界は水利権・現在の流量・地下水の流れを表しません。'],['water']);
+  if(topic.id==='basins'&&selection.basin==='1060034260')return entry('ナイル川：上流から地中海へ',['幹流のナイル川は地域外の南からエジプトへ入り、アスワン・ハイダムとナセル湖を経て低地・デルタへ続き、地中海へ注ぎます。地図の点はダムと河口の案内位置です。南へドラッグすると元資料の上流側をたどれます。農地に届く水は雨だけでなく貯水・取水・送水と配分に関わります。'],['water','nileDam']);
+  if(topic.id==='basins'&&selection.basin==='2060073570')return entry('チグリス・ユーフラテス川：高原から湾へ',['トルコなどの上流から、シリア・イラクの低地へ向かいます。ユーフラテス川上流にはアタテュルク・ダムがあり、イラク下流では両河川がシャット・アル＝アラブへつながってペルシャ湾へ注ぎます。地図の点はダムと河口の案内位置です。降雨・雪解けと貯水・取水の時期は下流へ届く水に関わります。'],['water','euphratesDam']);
   return null;
 }
 export const westCityReadings = {
@@ -97,7 +100,7 @@ export const westFarmingSelection = {
   adopted:'保存済みの生産重量11候補から、主食の小麦・大麦・米、乾燥地と地中海沿岸を対比できるデーツ・オリーブ、水・飼料・都市市場を考える牛乳・鶏肉・鶏卵・牛肉、ナイル川沿いの事例となる水牛乳を採用しました。表示順は採用品目の2024年収録値合計によるもので、選定基準は重量順位ではありません。',
   candidates:'小麦・大麦は2020年の細地域収穫面積を、羊・山羊・牛は家畜密度を表示します。10品目の生産重量は2015〜2024年の国別系列で、デーツ・オリーブと追加6品目は細地域の生産分布がありません。飼養密度を乳・肉・卵の生産地へ代用しません。',
   next:'次点の豚肉は、保存済み11候補のうち2024年の収録合計が最も小さく、今回の乾燥・水・穀物・家畜の関係を示す優先度も低いため、初期10品目から外しました。羊・山羊・牛の飼養頭数は重量tとは別単位なので順位から外します。未収録品目を含む真の地域上位10や世界順位は主張しません。',
-  missing:'供給元と国内仕向け・輸出先・世界生産シェアの同一定義・年の数量系列は未収録です。国別生産量を輸出や消費に置き換えず、確認前の割合・円・推移線は作りません。',
+  missing:'FAOSTAT QCLの同一保存アーカイブに世界合計がある7品目は、20対象の収録国の合計を分子として世界生産比と2015～2024年の推移を示します。デーツ・オリーブ・水牛乳の世界合計、供給元・国内仕向け・相手国別輸出数量はこの保存資料にありません。国別生産量を輸出や消費に置き換えず、確認前の円グラフは作りません。',
 };
 
 export const westWaterIntroductions = {

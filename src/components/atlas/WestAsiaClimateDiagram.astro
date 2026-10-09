@@ -16,6 +16,7 @@ const summary=city.id==='riyadh'?'一年を通じて雨が少なく、とくに�
   <h4 data-west-climate-class>気候区分を確認しています。</h4>
   <p class="atlas-reading-takeaway"><strong>{summary}</strong></p>
   <p data-west-climate-description></p>
+  {city.id==='riyadh'&&<p>「BW」は年間降水量が気温と雨季の偏りから決まる乾燥限界の半分未満となる砂漠気候、「h」は年平均気温18℃以上を表します。リヤドは北緯約25度の内陸にあり、亜熱帯高圧帯で下降する乾いた空気の影響と、湿った海風が届きにくい位置が少雨に関わります。分類は地図の1991–2020年格子、棒・線は観測所の平年値なので、両者を同じ測定値として計算しません。 <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6207062/">区分の計算法</a> · <a href="https://weather.metoffice.gov.uk/learn-about/weather/atmosphere/global-circulation-patterns">大気循環の説明</a></p>}
   <p class="west-stat-note">地図の分類は格子、雨温図は観測所の平年値です。同じ場所でも資料の範囲が異なります。</p>
  </section>
  <p class="atlas-city-source">{city.normalPeriod} · <a href={city.sourceUrl}>気象庁 ClimatView</a> · <a href="#west-sources">気候区分の出典</a></p>

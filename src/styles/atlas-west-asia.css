@@ -51,7 +51,7 @@
  .west-agri-controls .atlas-water-tabs button,.west-atlas .industry-controls button,.west-subtabs button{font-size:14px;line-height:20px;min-height:40px;padding:9px 12px}
  .west-regional-navigation{display:block!important;margin:0 0 10px!important}
  .west-atlas:not([data-comparing=true]) .atlas-primary-grid{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px;align-items:start}
- .west-atlas:not([data-comparing=true]) .atlas-map-frame{height:auto!important;aspect-ratio:1.55;min-height:300px!important;max-height:640px}
+ .west-atlas:not([data-comparing=true]) .atlas-map-frame{height:auto!important;aspect-ratio:1.32;min-height:300px!important;max-height:680px}
  .west-atlas:not([data-comparing=true]) .west-reading{display:flex;flex-direction:column;height:clamp(420px,calc(100dvh - 305px),580px)!important;overflow:hidden;padding:14px 16px}
  .west-atlas:not([data-comparing=true]) .west-reading-header:has([data-west-reading-overview]){display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:8px;align-items:center}
  .west-atlas:not([data-comparing=true]) .west-reading-header:has([data-west-reading-overview]) .atlas-eyebrow{grid-column:1/-1;grid-row:1}
@@ -325,6 +325,9 @@
 .west-water-aquifer.aquifer-2 { background:#c4d4b2; }
 .west-water-aquifer.aquifer-3 { background:#e3d7b8; }
 .west-river-label{fill:#1d6487;font-weight:800;paint-order:stroke;stroke:#f7f8f3;stroke-width:3px}
+.west-basin-place circle{fill:#315f81;stroke:#fffdf3;stroke-width:1.5px}
+.west-basin-place line{stroke:#315f81;stroke-width:1px}
+.west-basin-place text{font-size:11px;font-weight:700;fill:#254f67;paint-order:stroke;stroke:#fffdf3;stroke-width:3px;stroke-linejoin:round}
 .west-industry-marker{cursor:pointer}
 .west-industry-marker circle{fill:#804b2e;stroke:#fffdf3;stroke-width:2px;paint-order:stroke}
 .west-industry-marker[data-kind="resource"] circle{fill:#ad6729}
@@ -333,6 +336,16 @@
 .west-industry-marker[data-kind="transit"] circle{fill:#467f69}
 .west-industry-marker.is-selected circle,.west-industry-marker:focus circle{stroke:#252e33;stroke-width:3px}
 .west-industry-marker text{font-size:11px;font-weight:750;fill:#24343a;paint-order:stroke;stroke:#fffdf3;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+.west-industry-marker line{stroke:#526c70;stroke-width:1px}
+.west-industry-marker.is-context{opacity:.48}
+.west-atlas[data-field=natural] .west-station[data-city] [data-marker-label] text{font-size:11px;font-weight:700;fill:#244958;paint-order:stroke;stroke:#fffdf3;stroke-width:3px;stroke-linejoin:round}
+.west-farm-supply{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:12px 0}
+.west-farm-supply[hidden]{display:none}
+.west-farm-supply section{min-width:0;padding:10px;border:1px solid #cad6ce;background:#fafbf6}
+.west-farm-supply h3{font-size:13px;margin:0 0 6px;color:#2b5357}
+.west-farm-supply p{font-size:12px;line-height:1.5;margin:4px 0}
+.west-farm-supply strong{font-size:18px}
+.west-farm-supply svg{width:100%;height:54px;display:block}
 .west-industry-key{display:flex;flex-wrap:wrap;gap:7px 15px}
 .west-industry-key span{display:inline-flex;align-items:center;gap:5px;font-size:.8rem}
 .west-industry-key i{display:inline-block;width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #8f9a99}

@@ -1,0 +1,519 @@
+{
+  "schemaVersion": 1,
+  "scope": "FAOSTATが収録した西アジア・中東の20対象の生産量合計／FAOSTAT世界合計。未報告国は0としない。",
+  "sourceUrl": "https://bulks-faostat.fao.org/production/Production_Crops_Livestock_E_All_Data_(Normalized).zip",
+  "archiveSha256": "c5835418c18f9322e7decbd6800f93a216eaae3cdfa31acb08f0518c0c6d6853",
+  "yearRange": [
+    2015,
+    2024
+  ],
+  "rows": {
+    "wheat": [
+      {
+        "year": 2015,
+        "region": 52397334,
+        "reported": 18,
+        "world": 737763843.19,
+        "percent": 7.102
+      },
+      {
+        "year": 2016,
+        "region": 52581582.7,
+        "reported": 18,
+        "world": 765075376.91,
+        "percent": 6.873
+      },
+      {
+        "year": 2017,
+        "region": 50171700.16,
+        "reported": 18,
+        "world": 762082346.51,
+        "percent": 6.584
+      },
+      {
+        "year": 2018,
+        "region": 48321239.620000005,
+        "reported": 18,
+        "world": 730694073.2,
+        "percent": 6.613
+      },
+      {
+        "year": 2019,
+        "region": 51911847.2,
+        "reported": 18,
+        "world": 760643589.04,
+        "percent": 6.825
+      },
+      {
+        "year": 2020,
+        "region": 55328632.15,
+        "reported": 18,
+        "world": 775796488.7,
+        "percent": 7.132
+      },
+      {
+        "year": 2021,
+        "region": 47990446.3,
+        "reported": 18,
+        "world": 783124200.41,
+        "percent": 6.128
+      },
+      {
+        "year": 2022,
+        "region": 50242368.3,
+        "reported": 18,
+        "world": 807987812.25,
+        "percent": 6.218
+      },
+      {
+        "year": 2023,
+        "region": 58916806.16,
+        "reported": 17,
+        "world": 794567417.02,
+        "percent": 7.415
+      },
+      {
+        "year": 2024,
+        "region": 57955856.78,
+        "reported": 17,
+        "world": 798481711.07,
+        "percent": 7.258
+      }
+    ],
+    "cattle-milk": [
+      {
+        "year": 2015,
+        "region": 34706219.87,
+        "reported": 20,
+        "world": 668045144.32,
+        "percent": 5.195
+      },
+      {
+        "year": 2016,
+        "region": 35053371.24,
+        "reported": 20,
+        "world": 673166828.55,
+        "percent": 5.207
+      },
+      {
+        "year": 2017,
+        "region": 38170387,
+        "reported": 20,
+        "world": 688767650.89,
+        "percent": 5.542
+      },
+      {
+        "year": 2018,
+        "region": 39386058.1,
+        "reported": 20,
+        "world": 704201767.62,
+        "percent": 5.593
+      },
+      {
+        "year": 2019,
+        "region": 41541185.93,
+        "reported": 20,
+        "world": 721199095.37,
+        "percent": 5.76
+      },
+      {
+        "year": 2020,
+        "region": 44092418.339999996,
+        "reported": 20,
+        "world": 748223400.29,
+        "percent": 5.893
+      },
+      {
+        "year": 2021,
+        "region": 45470478.39,
+        "reported": 20,
+        "world": 765308120.81,
+        "percent": 5.941
+      },
+      {
+        "year": 2022,
+        "region": 42998173.31,
+        "reported": 20,
+        "world": 770055290.07,
+        "percent": 5.584
+      },
+      {
+        "year": 2023,
+        "region": 43104490.769999996,
+        "reported": 19,
+        "world": 785839487.72,
+        "percent": 5.485
+      },
+      {
+        "year": 2024,
+        "region": 44493231.32,
+        "reported": 19,
+        "world": 797287454.1,
+        "percent": 5.581
+      }
+    ],
+    "barley": [
+      {
+        "year": 2015,
+        "region": 15554822.28,
+        "reported": 18,
+        "world": 148269522.48,
+        "percent": 10.491
+      },
+      {
+        "year": 2016,
+        "region": 13944785.1,
+        "reported": 18,
+        "world": 150483451.69,
+        "percent": 9.267
+      },
+      {
+        "year": 2017,
+        "region": 13189934.42,
+        "reported": 18,
+        "world": 144731369.82,
+        "percent": 9.113
+      },
+      {
+        "year": 2018,
+        "region": 12627607.51,
+        "reported": 18,
+        "world": 139919234.59,
+        "percent": 9.025
+      },
+      {
+        "year": 2019,
+        "region": 17704173.82,
+        "reported": 18,
+        "world": 158984732.44,
+        "percent": 11.136
+      },
+      {
+        "year": 2020,
+        "region": 18075464.61,
+        "reported": 18,
+        "world": 161624520.48,
+        "percent": 11.184
+      },
+      {
+        "year": 2021,
+        "region": 10254945.4,
+        "reported": 18,
+        "world": 143924169.64,
+        "percent": 7.125
+      },
+      {
+        "year": 2022,
+        "region": 13458489.74,
+        "reported": 18,
+        "world": 152984970.97,
+        "percent": 8.797
+      },
+      {
+        "year": 2023,
+        "region": 15581657.35,
+        "reported": 17,
+        "world": 142711447.07,
+        "percent": 10.918
+      },
+      {
+        "year": 2024,
+        "region": 15238763.120000001,
+        "reported": 17,
+        "world": 141996861.28,
+        "percent": 10.732
+      }
+    ],
+    "rice": [
+      {
+        "year": 2015,
+        "region": 8197708,
+        "reported": 5,
+        "world": 738286707.99,
+        "percent": 1.11
+      },
+      {
+        "year": 2016,
+        "region": 9336645,
+        "reported": 5,
+        "world": 734901945.2,
+        "percent": 1.27
+      },
+      {
+        "year": 2017,
+        "region": 9348529.7,
+        "reported": 5,
+        "world": 742154772.43,
+        "percent": 1.26
+      },
+      {
+        "year": 2018,
+        "region": 7200296.6,
+        "reported": 7,
+        "world": 766667908.63,
+        "percent": 0.939
+      },
+      {
+        "year": 2019,
+        "region": 10812771,
+        "reported": 7,
+        "world": 755088170.79,
+        "percent": 1.432
+      },
+      {
+        "year": 2020,
+        "region": 10819043.3,
+        "reported": 7,
+        "world": 771604782.77,
+        "percent": 1.402
+      },
+      {
+        "year": 2021,
+        "region": 8708133.3,
+        "reported": 7,
+        "world": 791062868.84,
+        "percent": 1.101
+      },
+      {
+        "year": 2022,
+        "region": 8902945.4,
+        "reported": 7,
+        "world": 778637858.25,
+        "percent": 1.143
+      },
+      {
+        "year": 2023,
+        "region": 10641909.09,
+        "reported": 7,
+        "world": 804744456.37,
+        "percent": 1.322
+      },
+      {
+        "year": 2024,
+        "region": 11171624.78,
+        "reported": 7,
+        "world": 820223277.89,
+        "percent": 1.362
+      }
+    ],
+    "chicken-meat": [
+      {
+        "year": 2015,
+        "region": 7084279.96,
+        "reported": 20,
+        "world": 104836376.8,
+        "percent": 6.757
+      },
+      {
+        "year": 2016,
+        "region": 7138925.3,
+        "reported": 20,
+        "world": 107596333.71,
+        "percent": 6.635
+      },
+      {
+        "year": 2017,
+        "region": 7961851.739999999,
+        "reported": 20,
+        "world": 111797284.26,
+        "percent": 7.122
+      },
+      {
+        "year": 2018,
+        "region": 8250807.550000001,
+        "reported": 20,
+        "world": 114742265.74,
+        "percent": 7.191
+      },
+      {
+        "year": 2019,
+        "region": 8496243.629999999,
+        "reported": 20,
+        "world": 117688372.64,
+        "percent": 7.219
+      },
+      {
+        "year": 2020,
+        "region": 9296770.940000001,
+        "reported": 20,
+        "world": 118865210.64,
+        "percent": 7.821
+      },
+      {
+        "year": 2021,
+        "region": 9655119.620000001,
+        "reported": 20,
+        "world": 119612247.41,
+        "percent": 8.072
+      },
+      {
+        "year": 2022,
+        "region": 9436946.19,
+        "reported": 20,
+        "world": 122287314.59,
+        "percent": 7.717
+      },
+      {
+        "year": 2023,
+        "region": 9477439.63,
+        "reported": 19,
+        "world": 124659230.54,
+        "percent": 7.603
+      },
+      {
+        "year": 2024,
+        "region": 10111690.87,
+        "reported": 19,
+        "world": 128307229.46,
+        "percent": 7.881
+      }
+    ],
+    "olives": null,
+    "dates": null,
+    "hen-eggs": [
+      {
+        "year": 2015,
+        "region": 3223671,
+        "reported": 20,
+        "world": 72479293.12,
+        "percent": 4.448
+      },
+      {
+        "year": 2016,
+        "region": 3351183.72,
+        "reported": 20,
+        "world": 74727792.42,
+        "percent": 4.485
+      },
+      {
+        "year": 2017,
+        "region": 3390544.64,
+        "reported": 20,
+        "world": 79121184.96,
+        "percent": 4.285
+      },
+      {
+        "year": 2018,
+        "region": 3558780.4699999997,
+        "reported": 20,
+        "world": 80469117.87,
+        "percent": 4.423
+      },
+      {
+        "year": 2019,
+        "region": 3948670.5599999996,
+        "reported": 20,
+        "world": 84328766.01,
+        "percent": 4.682
+      },
+      {
+        "year": 2020,
+        "region": 3853006.24,
+        "reported": 19,
+        "world": 87256325.43,
+        "percent": 4.416
+      },
+      {
+        "year": 2021,
+        "region": 3904834.0700000003,
+        "reported": 19,
+        "world": 87774447.66,
+        "percent": 4.449
+      },
+      {
+        "year": 2022,
+        "region": 3951552.3499999996,
+        "reported": 19,
+        "world": 89762006.7,
+        "percent": 4.402
+      },
+      {
+        "year": 2023,
+        "region": 4074491.6999999997,
+        "reported": 18,
+        "world": 92087899.64,
+        "percent": 4.425
+      },
+      {
+        "year": 2024,
+        "region": 4116113.9099999997,
+        "reported": 18,
+        "world": 93693573.42,
+        "percent": 4.393
+      }
+    ],
+    "cattle-meat": [
+      {
+        "year": 2015,
+        "region": 2295894.3099999996,
+        "reported": 20,
+        "world": 61393409.45,
+        "percent": 3.74
+      },
+      {
+        "year": 2016,
+        "region": 2382202.0100000002,
+        "reported": 20,
+        "world": 61164704.93,
+        "percent": 3.895
+      },
+      {
+        "year": 2017,
+        "region": 2406863.45,
+        "reported": 20,
+        "world": 62426548.88,
+        "percent": 3.856
+      },
+      {
+        "year": 2018,
+        "region": 2567463.95,
+        "reported": 20,
+        "world": 64164418.97,
+        "percent": 4.001
+      },
+      {
+        "year": 2019,
+        "region": 2638192.69,
+        "reported": 20,
+        "world": 65297652.08,
+        "percent": 4.04
+      },
+      {
+        "year": 2020,
+        "region": 2720681.96,
+        "reported": 20,
+        "world": 64658456.9,
+        "percent": 4.208
+      },
+      {
+        "year": 2021,
+        "region": 2978042.3000000003,
+        "reported": 20,
+        "world": 65001636.11,
+        "percent": 4.581
+      },
+      {
+        "year": 2022,
+        "region": 3095102.09,
+        "reported": 20,
+        "world": 66165056.75,
+        "percent": 4.678
+      },
+      {
+        "year": 2023,
+        "region": 2996589.2,
+        "reported": 19,
+        "world": 67548292.14,
+        "percent": 4.436
+      },
+      {
+        "year": 2024,
+        "region": 2728114.9299999997,
+        "reported": 19,
+        "world": 69749016.37,
+        "percent": 3.911
+      }
+    ],
+    "buffalo-milk": null
+  }
+}
