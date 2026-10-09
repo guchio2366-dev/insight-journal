@@ -31,7 +31,8 @@ async function checkSoutheastAsiaRegion(page,{source,capture:takePicture,backgro
  assert.equal(await page.locator('[data-industry-topic] option[value="my-p3"]').evaluate(o=>o.disabled),true);
  assert.match(await page.locator('[data-reading-dock-summary]').textContent(),/ジャワ島.*タイ東部.*ベトナムの南北/s);
  assert.match(await page.locator('[data-industry-region-reading]').textContent(),/11か国.*国内仕向け|11か国.*国内向け/s);
- assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point]:visible').count(),9);
+ const markerState=await page.locator('[data-southeast-industry-map]').evaluate(node=>({hidden:node.hidden,size:[node.clientWidth,node.clientHeight],field:document.querySelector('[data-asia-atlas]')?.getAttribute('data-field'),points:[...node.querySelectorAll('[data-southeast-industry-point]')].map(p=>({id:p.getAttribute('data-southeast-industry-point'),hidden:p.hidden,x:p.style.left,y:p.style.top}))}));
+ assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point]:visible').count(),9,JSON.stringify(markerState));
  assert.match(await page.locator('[data-reading-dock-summary]').textContent(),/ジャワ島.*タイ東部/);
  record('initial regional industry explains the three-country scope and broader supply network');await capture('industry-overview');
  await page.locator('[data-southeast-industry-kind="rubber"]').click();
