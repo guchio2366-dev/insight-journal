@@ -1,7 +1,15 @@
 import assert from 'node:assert/strict';
 
 // Use the existing PC review's guarded page, normal browser sandbox and images.
-export async function verifySoutheastAsiaRegion(page,{source,capture:takePicture,background}){
+export async function verifySoutheastAsiaRegion(page,options){
+ try{return await checkSoutheastAsiaRegion(page,options);}catch(error){
+  // The PC review reports the first log line; retain actual/expected and stack there.
+  const detail=error instanceof Error?error.stack??error.message:String(error);
+  throw new Error(detail.replace(/\s*\n\s*/g,' | '));
+ }
+}
+
+async function checkSoutheastAsiaRegion(page,{source,capture:takePicture,background}){
  const base=source.replace(/\/$/,''),checks=[];
  const record=name=>checks.push({name,passed:true});
  // State and reading text update before asynchronous map sources paint. Keep
