@@ -66,7 +66,7 @@ export function fillFor(value:number|null,metric:Metric):string {
   const index=metric.breaks.findIndex(b=>value<b);
   return palette[index<0?palette.length-1:index];
 }
-export const cropChoices=[{id:'maize',label:'とうもろこし'},{id:'rice',label:'稲'},{id:'wheat',label:'小麦'},{id:'cassava',label:'キャッサバ'}] as const;
+export const cropChoices=[{id:'maize',label:'とうもろこし'},{id:'rice',label:'稲'},{id:'wheat',label:'小麦'},{id:'cassava',label:'キャッサバ'},{id:'coffee',label:'コーヒー'},{id:'tea',label:'茶'}] as const;
 export const livestockChoices=[{id:'cattle',label:'牛'},{id:'goats',label:'ヤギ'},{id:'sheep',label:'羊'}] as const;
 export const cropMeasureChoices=[{id:'harvested',label:'収穫面積'},{id:'production',label:'生産量'}] as const;
 export type Crop=typeof cropChoices[number]['id'];
@@ -75,10 +75,11 @@ export type CropMeasure=typeof cropMeasureChoices[number]['id'];
 export const agriLayerKeys=[
   'crop-maize-harvested','crop-maize-production','crop-rice-harvested','crop-rice-production',
   'crop-wheat-harvested','crop-wheat-production','crop-cassava-harvested','crop-cassava-production',
+  'crop-coffee-harvested','crop-tea-harvested','crop-coffee-production','crop-tea-production',
   'livestock-cattle','livestock-goats','livestock-sheep'
 ] as const;
 export type AgriLayerKey=typeof agriLayerKeys[number];
-export type State={field:Field;metric:string;year:number;place:string;compare:string;region:Region;zoom:'all'|'region'|'country'|'theme';theme:string;overview:boolean;context:string;topic:string;water:string;river:string;city:string;crop:Crop;livestock:Livestock;cropMeasure:CropMeasure;agriLayers:string|null;agriOutline:boolean;layerClass:string;layerPoint:string;sourceState:string;view:'distribution'|'statistics'};
+export type State={field:Field;metric:string;year:number;place:string;compare:string;region:Region;zoom:'all'|'region'|'country'|'theme';theme:string;overview:boolean;context:string;topic:string;water:string;river:string;city:string;crop:Crop;livestock:Livestock;cropMeasure:CropMeasure;agriLayers:string|null;agriDisplay:'all'|'crops'|'livestock';agriOutline:boolean;layerClass:string;layerPoint:string;sourceState:string;view:'distribution'|'statistics'};
 /** An absent layer list shows all seven products; an explicit empty list means all off. */
 export function canonicalAgriLayers(value:unknown):string|null {
   if(typeof value!=='string'||value.length>2048)return null;
@@ -93,9 +94,10 @@ export function africaAgriFocusedLayer(state:Pick<State,'topic'|'crop'|'cropMeas
   const measure=cropMeasureChoices.find(row=>row.id===state.cropMeasure)?.id??'harvested';
   return `crop-${crop}-${measure}`;
 }
-export function africaAgriVisibleLayers(state:Pick<State,'topic'|'crop'|'cropMeasure'|'livestock'|'agriLayers'>):AgriLayerKey[] {
+export function africaAgriVisibleLayers(state:Pick<State,'topic'|'crop'|'cropMeasure'|'livestock'|'agriLayers'> & Partial<Pick<State,'agriDisplay'>>):AgriLayerKey[] {
   const selected=canonicalAgriLayers(state.agriLayers);
-  return selected===null?[...cropChoices.map(row=>`crop-${row.id}-${state.cropMeasure}` as AgriLayerKey),...livestockChoices.map(row=>`livestock-${row.id}` as AgriLayerKey)]:selected===''?[]:selected.split(',') as AgriLayerKey[];
+  const keys=selected===null?[...cropChoices.map(row=>`crop-${row.id}-${state.cropMeasure}` as AgriLayerKey),...livestockChoices.map(row=>`livestock-${row.id}` as AgriLayerKey)]:selected===''?[]:selected.split(',') as AgriLayerKey[];
+  return keys.filter(key=>!state.agriDisplay||state.agriDisplay==='all'||key.startsWith(state.agriDisplay==='crops'?'crop-':'livestock-'));
 }
 export function canonicalTopic(field:Field,metric:string,requested=''):string {
   if(field==='agriculture')return metric==='AG.LND.FRST.ZS'?'forestry':requested==='livestock'?'livestock':'farming';
@@ -139,7 +141,7 @@ export function readState(search:string):State {
   const crop=cropChoices.find(row=>row.id===p.get('crop'))?.id??'maize';
   const livestock=livestockChoices.find(row=>row.id===p.get('livestock'))?.id??'cattle';
   const cropMeasure=cropMeasureChoices.find(row=>row.id===p.get('cropMeasure'))?.id??'harvested';
-  return {field:safeField,metric:metric.id,year:years.includes(Number(p.get('year')))?Number(p.get('year')):2021,place,compare:place&&exists(p.get('compare'))&&p.get('compare')!==place?p.get('compare')!:'',region:Object.hasOwn(regionNames,region)?region as Region:'all',zoom:['all','region','country','theme'].includes(zoom)?zoom as State['zoom']:'all',theme:theme.id,overview,context:culture?'':context??'',topic,water,river,city:safeField==='nature'&&topic==='climate'&&africaClimateCityById(p.get('city')??'')?p.get('city')!:'',crop,livestock,cropMeasure,agriLayers:canonicalAgriLayers(p.get('agriLayers')),agriOutline:p.get('agriOutline')==='1',layerClass:culture?'':layerClass,layerPoint:culture?'':layerPoint,sourceState:culture?'':sourceState,view:culture?'distribution':p.get('view')==='statistics'||!p.has('view')&&p.has('theme')&&!p.has('topic')?'statistics':'distribution'};
+  return {field:safeField,metric:metric.id,year:years.includes(Number(p.get('year')))?Number(p.get('year')):2021,place,compare:place&&exists(p.get('compare'))&&p.get('compare')!==place?p.get('compare')!:'',region:Object.hasOwn(regionNames,region)?region as Region:'all',zoom:['all','region','country','theme'].includes(zoom)?zoom as State['zoom']:'all',theme:theme.id,overview,context:culture?'':context??'',topic,water,river,city:safeField==='nature'&&topic==='climate'&&africaClimateCityById(p.get('city')??'')?p.get('city')!:'',crop,livestock,cropMeasure,agriLayers:canonicalAgriLayers(p.get('agriLayers')),agriDisplay:p.get('agriDisplay')==='crops'?'crops':p.get('agriDisplay')==='livestock'?'livestock':'all',agriOutline:p.get('agriOutline')==='1',layerClass:culture?'':layerClass,layerPoint:culture?'':layerPoint,sourceState:culture?'':sourceState,view:culture?'distribution':p.get('view')==='statistics'||!p.has('view')&&p.has('theme')&&!p.has('topic')?'statistics':'distribution'};
 }
 export function africaComparisonSnapshot(state:State):string {
   return writeState({...state,context:'',sourceState:''},new URL('https://atlas.invalid/')).searchParams.toString();

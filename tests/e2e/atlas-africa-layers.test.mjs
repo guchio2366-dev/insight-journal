@@ -69,7 +69,7 @@ test('seven fixed concentration distributions retain each original query grid, u
    const search=family==='crops'?`?field=agriculture&crop=${id.split('-')[0]}&cropMeasure=harvested&zoom=all`:`?field=agriculture&topic=livestock&livestock=${id}&zoom=all`;
    await withLayers(search,({root,renderer,view,requests})=>{
     const key=family==='crops'?`crop-${id}`:`livestock-${id}`;
-    assert.equal(view.key,key);assert.equal(view.unit,layer.unit);assert.equal(view.period,layer.period);assert.match(view.sourceUrl,/^https:\/\//);assert.equal(view.legend.length,7);assert.equal(root.querySelectorAll('[data-africa-commodity-layer]').length,7);
+    assert.equal(view.key,key);assert.equal(view.unit,layer.unit);assert.equal(view.period,layer.period);assert.match(view.sourceUrl,/^https:\/\//);assert.equal(view.legend.length,9);assert.equal(root.querySelectorAll('[data-africa-commodity-layer]').length,7);
     assert.ok(requests.some(url=>url.endsWith('/'+layer.grid)),'the selected item still fetches its original numeric grid');
     const grid=gunzipSync(readFileSync(new URL(`../../public/assets/atlas/africa-${family}-v1/${layer.grid}`,import.meta.url))),indices={zero:-1,positive:-1,missing:-1};
     for(let i=0;i<grid.length/4;i++){const value=grid.readFloatLE(i*4);if(value===0&&indices.zero<0)indices.zero=i;if(value>0&&indices.positive<0)indices.positive=i;if(value===layer.noData&&indices.missing<0)indices.missing=i;if(Object.values(indices).every(index=>index>=0))break;}

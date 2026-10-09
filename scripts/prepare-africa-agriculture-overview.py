@@ -11,6 +11,7 @@ import math
 import platform
 
 import numpy as np
+from PIL import Image, ImageFilter
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / 'public/assets/atlas'
@@ -61,25 +62,22 @@ def land_mask(geography):
     return land
 
 
-def anchors(values, selected, maximum):
-    """Representative labels, never additional distribution observations.
+def anchors(values, selected, maximum=None):
+    """Readability anchors only. All source components remain in the map.
 
-    Rank each selected cell by the sum of the *same commodity's* selected
-    intensities within four degrees. Greedily keep locations >= 22 degrees
-    apart for crop labels and 14 degrees for livestock symbols.
-    apart. Every anchor remains at an actual selected summary-cell centre.
+    Distinct mainland clusters and Madagascar receive source-cell anchors.
+    No top-N component cap; selection covers all retained distribution cells.
     """
     candidates = []
     for row, col in np.argwhere(selected):
-        r0, r1, c0, c1 = max(0, row - 4), min(ROWS, row + 5), max(0, col - 4), min(COLS, col + 5)
-        score = float(np.where(selected[r0:r1, c0:c1], values[r0:r1, c0:c1], 0).sum())
-        candidates.append((score, int(row), int(col)))
-    chosen = []
-    for score, row, col in sorted(candidates, key=lambda x: (-x[0], x[1], x[2])):
-        if all(math.hypot(row - other['row'], col - other['col']) >= (22 if maximum == 2 else 14) for other in chosen):
-            chosen.append({'row': row, 'col': col, 'lon': -27 + col + 0.5, 'lat': 39 - row - 0.5})
-        if len(chosen) == maximum:
-            break
+        r0,r1,c0,c1=max(0,row-4),min(ROWS,row+5),max(0,col-4),min(COLS,col+5)
+        score=float(np.where(selected[r0:r1,c0:c1],values[r0:r1,c0:c1],0).sum())
+        island=bool(40 <= -27+col+.5 <= 51 and -27 <= 39-row-.5 <= -11)
+        candidates.append((score,int(row),int(col),island))
+    chosen=[]
+    for score,row,col,island in sorted(candidates,key=lambda x:-x[0]):
+        if all(island!=other['island'] or math.hypot(row-other['row'],col-other['col'])>=22 for other in chosen):
+            chosen.append({'row':row,'col':col,'lon':-27+col+.5,'lat':39-row-.5,'island':island})
     return chosen
 
 
@@ -107,10 +105,25 @@ def main():
         eligible = (coverage >= MIN_COVERAGE) & (intensity > 0)
         threshold = float(np.quantile(intensity[eligible], QUANTILE, method='linear'))
         selected = eligible & (intensity >= threshold)
+        # Smooth only a display alpha field, then clip it to cells with observed
+        # positive model values and >=50% valid land coverage. Do not fill
+        # zero/missing source cells; no top-N region is discarded.
+        image_scale=8
+        field=Image.fromarray(np.uint8(selected)*255).resize((COLS*image_scale,ROWS*image_scale),Image.Resampling.NEAREST).filter(ImageFilter.GaussianBlur(image_scale*.8))
+        allowed=np.asarray(Image.fromarray(np.uint8(eligible)*255).resize(field.size,Image.Resampling.NEAREST))>0
+        alpha=np.where(allowed,np.asarray(field),0).astype('uint8')
+        commodity=name.removesuffix('-harvested')
+        rgba=np.zeros((ROWS*image_scale,COLS*image_scale,4),dtype='uint8')
+        rgba[:,:,:3]=[int(COLORS[commodity][i:i+2],16) for i in (1,3,5)]
+        rgba[:,:,3]=alpha
+        key=('crop-' if family=='crops' else 'livestock-')+name
+        display_image=OUT/(key+'.png')
+        Image.fromarray(rgba).save(display_image,optimize=True)
+
         key = ('crop-' if family == 'crops' else 'livestock-') + name
         commodity = name.removesuffix('-harvested')
         layers[key] = {
-            'label': LABELS[commodity], 'color': COLORS[commodity], 'kind': 'crop' if family == 'crops' else 'livestock',
+            'displayImage': display_image.name, 'displayImageSha256': sha(display_image), 'label': LABELS[commodity], 'color': COLORS[commodity], 'kind': 'crop' if family == 'crops' else 'livestock',
             'sourceManifest': f'../africa-{family}-v1/manifest.json', 'sourceLayer': name,
             'sourceGrid': f'../africa-{family}-v1/{original["grid"]}', 'sourceGridSha256': sha(grid_path),
             'sourceUrl': original['sourceUrl'], 'sourceLabel': original['sourceLabel'], 'period': original['period'],
@@ -135,9 +148,9 @@ def main():
             'note': '位置を理解するため、既存のETOPO 2022標高画像を彩度0・不透明度22%で背景表示する。2022はモデルの版で観測年は複数。背景は農畜産の抽出・数値・順位には使わない。',
         },
         'method': '元の5分角セルを緯度・経度1°の表示セルに集約。作物は収穫面積haの合計を有効セルの球面面積km²の合計で割り、家畜は頭/km²を有効セル面積で加重平均する。品目ごとに、陸地面積の50%以上に有効値がある正値の集約セルを対象とし、75%分位以上を抽出する。分位は対象の集約セル数に基づく（面積加重の分位ではない）。0は有効値、欠測は分子・分母から除く。色は品目を表し、色の濃さや面積は生産量の順位を表さない。',
-        'display': '作物の重なる集約セルは、同じ幅の別々の色帯で示す。帯の位置・幅は植え付け位置や面積比を表さない。国境で表示をクリップする。家畜記号は同一種の抽出域を要約する位置で、牧場の所在地や頭数を表さない。品目ラベル・記号のアンカーは抽出セル中心だけから選ぶ。選択輪郭はこの抽出形に一致する。',
+        'display': '抽出域の表示アルファを0.8度相当のGaussianBlurで柔らかい帯にする。正値かつ50%以上の有効陸地面積を持つ表示セルでクリップし、0・欠測へは延ばさない。表示色の濃さは数量ではない。全ての抽出域を残し、件数上限で分布を捨てない。ラベル間隔は文字の整理だけに使う。マダガスカルは本土と独立に名前を残す。家畜は薄い分布色と種別記号。選択しても他分布を残す。',
         'limitations': ['1°は一覧のための集約単位で、農地や牧場の境界ではない。集約セル内には元格子の0や欠測を含む場合がある。地点照会では元格子の値・0・欠測を保持する。', '収穫面積には同じ土地での複数回の収穫を含む。ha/km²は作物被覆率ではない。', '品目別の相対的な集中を示す閾値で、他品目との優劣、国別順位、全生産量・公式統計・所得・栄養価・地表の被覆率を表さない。', '抽出されない場所を生産なしとは扱わない。原データの国境セルはセル全体の元値を保持しており、国別合計には使わない。'],
-        'processing': {'generator': 'scripts/prepare-africa-agriculture-overview.py', 'generatorSha256': sha(Path(__file__)), 'python': platform.python_version(), 'numpy': np.__version__, 'earthRadiusKm': RADIUS_KM, 'minimumValidLandAreaFraction': MIN_COVERAGE, 'quantileMethod': 'numpy linear; unweighted eligible positive summary cells', 'inputResampling': 'none', 'sourceAssetsModified': False, 'labelPlacement': 'selected-cell local-intensity score within ±4 degrees; greedy minimum 22-degree crop / 14-degree livestock spacing; anchors are selected summary-cell centres'},
+        'processing': {'generator': 'scripts/prepare-africa-agriculture-overview.py', 'generatorSha256': sha(Path(__file__)), 'python': platform.python_version(), 'numpy': np.__version__, 'earthRadiusKm': RADIUS_KM, 'minimumValidLandAreaFraction': MIN_COVERAGE, 'quantileMethod': 'numpy linear; unweighted eligible positive summary cells', 'inputResampling': 'none', 'sourceAssetsModified': False, 'labelPlacement': 'Uncapped, >=22-degree spacing of exact selected-cell anchors, with Madagascar independent of mainland. This affects text only; every selected component remains in the display alpha field. Regional zoom can add an in-view source-cell label.'},
     }
     OUT.mkdir(exist_ok=True)
     (OUT / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, separators=(',', ':')) + '\n')
