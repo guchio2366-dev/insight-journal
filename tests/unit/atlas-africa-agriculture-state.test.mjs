@@ -4,14 +4,14 @@ import {readState,writeState,africaComparisonSnapshot,agriLayerKeys,canonicalAgr
 
 const url=()=>new URL('https://example.com/atlas/africa/');
 
-test('absent layer lists show all seven products while keeping the reading focus independent',()=>{
+test('absent layer lists show all nine product choices while keeping the reading focus independent',()=>{
  for(const [query,focused] of [
   ['?field=agriculture','crop-maize-harvested'],
   ['?field=agriculture&crop=rice&cropMeasure=production','crop-rice-production'],
   ['?field=agriculture&topic=livestock&livestock=sheep&crop=cassava&cropMeasure=production','livestock-sheep']
  ]){
   const state=readState(query);assert.equal(state.agriLayers,null);assert.equal(state.agriOutline,false);
-  assert.equal(africaAgriFocusedLayer(state),focused);assert.equal(africaAgriVisibleLayers(state).length,7);assert.ok(africaAgriVisibleLayers(state).includes(focused));
+  assert.equal(africaAgriFocusedLayer(state),focused);assert.equal(africaAgriVisibleLayers(state).length,9);assert.ok(africaAgriVisibleLayers(state).includes(focused));
   const written=writeState({...state},url());assert.equal(written.searchParams.has('agriLayers'),false);assert.equal(written.searchParams.has('agriOutline'),false);
   assert.deepEqual(readState(written.search),state);
  }
@@ -22,11 +22,11 @@ test('explicit all-off keeps the empty URL parameter through reload and differs 
  assert.equal(state.agriLayers,'');assert.deepEqual(africaAgriVisibleLayers(state),[]);assert.equal(africaAgriFocusedLayer(state),'crop-rice-harvested');
  const written=writeState({...state},url());assert.equal(written.searchParams.has('agriLayers'),true);assert.equal(written.searchParams.get('agriLayers'),'');
  assert.equal(written.searchParams.get('agriOutline'),'1');assert.deepEqual(readState(written.search),state);
- const defaults=readState('?field=agriculture&crop=rice');assert.equal(africaAgriVisibleLayers(defaults).length,7);
+ const defaults=readState('?field=agriculture&crop=rice');assert.equal(africaAgriVisibleLayers(defaults).length,9);
 });
 
-test('the eleven real layer keys are deduplicated and canonically ordered, with invalid keys excluded',()=>{
- assert.equal(agriLayerKeys.length,11);assert.equal(new Set(agriLayerKeys).size,11);
+test('the fifteen canonical layer keys are deduplicated and canonically ordered, with invalid keys excluded',()=>{
+ assert.equal(agriLayerKeys.length,15);assert.equal(new Set(agriLayerKeys).size,15);
  const raw='livestock-goats, crop-rice-production,constructor,crop-maize-harvested,livestock-goats,crop-maize-yield,livestock-horses';
  const canonical='crop-maize-harvested,crop-rice-production,livestock-goats';
  assert.equal(canonicalAgriLayers(raw),canonical);assert.equal(readState('?agriLayers='+encodeURIComponent(raw)).agriLayers,canonical);

@@ -43,7 +43,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
    <div class="africa-compact-heading"><p class="africa-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / アフリカ</p><span>アフリカ地域</span></div>
    <h1>アフリカ地図</h1>
    <div class="africa-region-controls">
-    <div class="africa-region-row"><nav class="africa-region-tabs" aria-label="地域の移動"><a href={withBase('/atlas/')}>世界の地域</a><a href={withBase('/atlas/africa/overview/')} aria-current="page">アフリカ</a></nav><label>地域<select data-region>{Object.entries(regionNames).map(([id,name])=><option value={id}>{name}</option>)}</select></label></div>
+    <div class="africa-region-row"><nav class="africa-region-tabs" aria-label="地域の移動"><a href={withBase('/atlas/')}>世界の地域</a><a href={withBase('/atlas/africa/overview/')} aria-current="page">アフリカ</a></nav><label data-africa-agri-region-label hidden>地域<select data-africa-agri-region aria-label="農畜産の表示地域">{Object.entries(regionNames).map(([id,name])=><option value={id}>{name}</option>)}</select></label><label>地域<select data-region>{Object.entries(regionNames).map(([id,name])=><option value={id}>{name}</option>)}</select></label></div>
     <div class="africa-country-controls"><label>国・地域<select data-place><option value="" selected={!state.place}>国未選択</option>{ordered.map(c=><option value={c.code} selected={c.code===state.place}>{c.name}</option>)}</select></label><label>比較国<select data-compare disabled={!state.place}><option value="">比較なし</option>{ordered.map(c=><option value={c.code}>{c.name}</option>)}</select></label><label>統計年<select data-year disabled>{[...years].reverse().map(y=><option value={y} selected={y===state.year}>{y}年</option>)}</select></label></div>
    </div>
   </header>
@@ -52,7 +52,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
   <div class="africa-workspace" id="africa-map-panel">
    <section class="africa-map-card" aria-labelledby="africa-map-title">
     <div class="africa-map-frame">
-    <div class="africa-agri-map-controls" data-africa-agri-map-controls hidden><label>地域<select data-africa-agri-region aria-label="農畜産の表示地域">{Object.entries(regionNames).map(([id,name])=><option value={id}>{name}</option>)}</select></label></div>
+    <div class="africa-agri-map-controls" data-africa-agri-map-controls hidden><label>表示<select data-africa-agri-display aria-label="農産物と畜産物の表示"><option value="all">農産物＋畜産物</option><option value="crops">農産物</option><option value="livestock">畜産物</option></select></label></div>
     <div class="africa-map-heading"><h2 id="africa-map-title" data-metric-title>{metric.label}</h2><span><span data-period>長期平均</span> · <span data-unit>{metric.unit}</span></span></div>
     <svg class="africa-map" viewBox={initialViewBox.join(' ')} data-theme={initialTheme.id} data-detail={state.zoom!=='all'?'true':'false'} role="img" aria-labelledby="africa-svg-title africa-svg-desc">
       <title id="africa-svg-title">{initialTheme.title}・国別の年降水量（長期平均）</title><desc id="africa-svg-desc">分布テーマと国別統計を重ねた地図。右の凡例と説明から、表示した分布を読み取れます。国は選択欄や一覧からも選べます。</desc>
@@ -122,8 +122,8 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
           </section>
           <p class="africa-city-agriculture">農業・牧畜との関係：{city.agricultureLink}</p>
           <p class="africa-city-reading-summary">{city.reading}</p>
-          <p class="africa-city-source">観測所の平年値：<a href={city.sourceUrl}>{city.sourceName} · {city.normalPeriod}</a></p>
-          <p class="africa-city-source">地点の気候区分：<a data-africa-city-classification-source={city.id} href={city.classification.sourceUrl}>{city.classification.sourceName}</a> · {city.classification.period} · {city.classification.resolutionDegrees}度格子</p>
+          <p class="africa-city-source">観測所：{city.stationName} · 平年値：<a href={city.sourceUrl}>{city.sourceName} · {city.normalPeriod}</a></p>
+          <p class="africa-city-source">地点の気候区分：<a data-africa-city-classification-source={city.id} href={city.classification.sourceUrl}>{city.classification.sourceName}</a> · {city.classification.period} · {city.classification.resolutionDegrees}度格子{city.classification.maskedMapMissing?"（沿岸は地図マスク欠測・原格子で照合）":""}</p>
           <details class="africa-city-months" data-africa-city-months={city.id}>
            <summary>12か月の数値・観測地点・出典</summary>
            <p>{city.stationName} · 観測所番号 {city.stationId} · 標高 {city.elevationM.toLocaleString('ja-JP')} m · {Math.abs(city.coordinates[1]).toFixed(2)}°{city.coordinates[1]<0?'S':'N'} / {Math.abs(city.coordinates[0]).toFixed(2)}°{city.coordinates[0]<0?'W':'E'}</p>
@@ -147,6 +147,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
     </section>
    </aside>
   </div>
+  <section class="africa-regional-statistics" data-africa-regional-statistics hidden aria-label="地域の農畜産統計"></section>
   <div class="africa-secondary">
 <div class="africa-agri-notes" data-africa-agri-notes hidden></div>
 <details class="africa-disclosure africa-statistics-controls"><summary>国別統計の指標・年を選ぶ</summary>  <div class="africa-controls">

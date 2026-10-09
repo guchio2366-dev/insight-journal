@@ -10,9 +10,9 @@ const root=new URL('../../',import.meta.url);
 const original=JSON.parse(readFileSync(new URL(africaClimateCityReuseSource,root),'utf8'));
 const manifest=JSON.parse(readFileSync(new URL('public/assets/atlas/africa-physical-v1/manifest.json',root),'utf8'));
 
-test('six African stations retain 12 monthly values, coordinates and individual source links',()=>{
- assert.equal(africaClimateCities.length,6);
- assert.match(africaClimateCityCoverage,/6観測所/);
+test('twelve African stations retain 12 monthly values, coordinates and individual source links',()=>{
+ assert.equal(africaClimateCities.length,12);
+ assert.match(africaClimateCityCoverage,/12観測所/);
  assert.match(africaClimateCityCoverage,/赤道雨林.*未収録/);
  const station=africaClimateCityById('helwan'),source=original.find(row=>row.id==='helwan');
  assert.ok(station);assert.ok(source);
@@ -53,9 +53,9 @@ test('every station classification matches the retained Africa grid at its exact
  for(const {classification,coordinates} of africaClimateCities){
  const compressed=readFileSync(new URL(classification.grid,root));
  assert.equal(createHash('sha256').update(compressed).digest('hex'),classification.gridSha256);
- assert.equal(classification.gridSha256,manifest.files[layer.grid].sha256);
+ if(classification.maskedMapMissing){const original=JSON.parse(readFileSync(new URL('data-source/atlas/africa/climate-normals/original-classification.json',root)));assert.equal(classification.gridSha256,original.gridSha256);assert.equal(original.sourceSha256,layer.sourceSha256);assert.equal(createHash('sha256').update(readFileSync(new URL(original.source,root))).digest('hex'),original.sourceSha256);const mapValues=gunzipSync(readFileSync(new URL('public/assets/atlas/africa-physical-v1/climate.values.gz',root)));assert.equal(mapValues[classification.row*layer.width+classification.column],0,'display-mask missing must not be filled');}else assert.equal(classification.gridSha256,manifest.files[layer.grid].sha256);
  const [lon,lat]=coordinates,[west,, ,north]=layer.bounds;
- const column=Math.floor((lon-west)/layer.resolutionDegrees),row=Math.floor((north-lat)/layer.resolutionDegrees);
+ const column=Math.floor((lon-west)*10),row=Math.floor((north-lat)*10);
  assert.equal(column,classification.column);assert.equal(row,classification.row);
  const value=gunzipSync(compressed)[row*layer.width+column];
  assert.notEqual(value,layer.noData);assert.equal(value,classification.id);
@@ -72,9 +72,19 @@ test('station normal and geographic explanation remain distinct',()=>{
 test('every map caption is placed inside its named published climate cell',()=>{
  const layer=manifest.layers.climate,values=gunzipSync(readFileSync(new URL('public/assets/atlas/africa-physical-v1/climate.values.gz',root)));
  for(const anchor of africaClimateClassAnchors){const [lon,lat]=anchor.coordinates,row=Math.floor((layer.bounds[3]-lat)/layer.resolutionDegrees),column=Math.floor((lon-layer.bounds[0])/layer.resolutionDegrees),category=layer.classes.find(item=>item.id===anchor.id);
-  assert.equal(values[row*layer.width+column],anchor.id,anchor.label);assert.ok(category);assert.match(anchor.label,new RegExp(`^${category.code} `));
+  assert.equal(values[row*layer.width+column],anchor.id,anchor.label);assert.ok(category);assert.match(anchor.label,new RegExp(`^${category.code}$`));
  }
- assert.equal(africaClimateClassAnchors.find(row=>row.id===1)?.label,'Af 熱帯雨林');
- assert.equal(africaClimateClassAnchors.find(row=>row.id===12)?.label,'Cwb 温帯冬季少雨');
- assert.equal(africaClimateClassAnchors.find(row=>row.id===8)?.label,'Csa 地中海性');
+ assert.equal(africaClimateClassAnchors.find(row=>row.id===1)?.label,'Af');
+ assert.equal(africaClimateClassAnchors.find(row=>row.id===12)?.label,'Cwb');
+ assert.equal(africaClimateClassAnchors.find(row=>row.id===8)?.label,'Csa');
+});
+
+
+test('additional JMA station arrays, coordinates and IDs agree with retained monthly table evidence',()=>{
+ const original=JSON.parse(readFileSync(new URL('data-source/atlas/africa/climate-normals/additional-stations.json',root)));
+ assert.deepEqual(original.stations.map(row=>row.stationId),['67095','67083','67027','60369','68588','67161']);
+ for(const source of original.stations){const city=africaClimateCityById(source.id);for(const key of ['stationId','stationName','coordinates','elevationM','temperatureC','precipitationMm','normalPeriod','missingMonths'])assert.deepEqual(city[key],source[key],source.id+' '+key);}
+ assert.deepEqual(africaClimateCities.filter(city=>city.classification.maskedMapMissing).map(city=>city.id),['toamasina','mahajanga']);
+ assert.equal(africaClimateCityById('toamasina').classification.code,'Af');assert.equal(africaClimateCityById('mahajanga').classification.code,'Aw');
+ assert.equal(africaClimateCityById('toliara').classification.code,'BSh');assert.equal(africaClimateCityById('algiers').classification.code,'Csa');assert.equal(africaClimateCityById('durban').classification.code,'Cfa');
 });

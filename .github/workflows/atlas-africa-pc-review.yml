@@ -16,6 +16,7 @@ on:
       - 'tests/unit/atlas-africa*.test.mjs'
       - 'tests/e2e/atlas-africa*.test.mjs'
       - 'scripts/verify-africa-pc-review.mjs'
+      - 'scripts/verify-africa-approved-review.mjs'
       - '.github/workflows/atlas-africa-pc-review.yml'
   push:
     branches:
@@ -32,6 +33,7 @@ on:
       - 'tests/unit/atlas-africa*.test.mjs'
       - 'tests/e2e/atlas-africa*.test.mjs'
       - 'scripts/verify-africa-pc-review.mjs'
+      - 'scripts/verify-africa-approved-review.mjs'
       - '.github/workflows/atlas-africa-pc-review.yml'
 
 permissions:
@@ -43,7 +45,7 @@ concurrency:
 
 jobs:
   review:
-    name: Compare Africa and US on PC
+    name: Validate approved Africa maps on PC
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -102,13 +104,22 @@ jobs:
           export AFRICA_REVIEW_JAPANESE_FONTS="$africa_review_japanese_fonts"
           export AFRICA_REVIEW_JAPANESE_FONT_MATCH="${africa_review_sans}"$'\n'"${africa_review_serif}"
           export AFRICA_REVIEW_JAPANESE_FONT_SETUP=official-ubuntu-fonts-noto-cjk
-          node scripts/verify-africa-pc-review.mjs
+          AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node scripts/verify-africa-approved-review.mjs
 
       - name: Upload Africa PC screenshots and validation metadata
-        if: always()
+        if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: africa-pc-review-${{ github.run_id }}
+          name: africa-pc-representative-${{ github.run_id }}
+          path: review-artifacts/africa-pc-review/representative
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Upload failed Africa PC review evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: africa-pc-failed-${{ github.run_id }}
           path: review-artifacts/africa-pc-review
           if-no-files-found: warn
           retention-days: 7

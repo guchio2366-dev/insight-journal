@@ -3,6 +3,7 @@ import {projectAfrica,africaWidth,africaHeight} from '../lib/atlas-africa-geomet
 import {africaAgriFocusedLayer,africaAgriVisibleLayers,countries,type State} from '../data/atlas/africa-atlas.ts';
 import {africaCultureGuides,africaCultureGuideReason} from '../data/atlas/africa-culture-guide.ts';
 import {africaRiverForFeature,africaRiverSelectedColor} from '../data/atlas/africa-river-reading.ts';
+import neighbours from '../data/atlas/africa-neighbours.json' with {type:'json'};
 import {africaClimateCities} from '../data/atlas/africa-climate-cities.ts';
 
 type Row=Record<string,any>;
@@ -11,9 +12,9 @@ export type AfricaLayerKey={id:string;label:string;color:string;code?:string;des
 export type AfricaLayerView={key:string;ready:boolean;loading:boolean;error:string;title:string;period:string;unit:string;scope:string;method:string;sourceUrl:string;sourceLabel:string;legend:AfricaLayerKey[];takeaway:string;description:string;guide?:boolean;selectedVisible?:boolean;visibleLayers?:{key:string;title:string;unit:string;color:string;ready:boolean;loading:boolean;error:string;period:string;sourceUrl:string;sourceLabel:string}[]};
 type Loaded={value?:any;error?:string;promise?:Promise<void>};
 const SVG='http://www.w3.org/2000/svg';
-export const africaClimateClassAnchors=[{coordinates:[10,24],id:4,label:'BWh 砂漠'},{coordinates:[20,0],id:1,label:'Af 熱帯雨林'},{coordinates:[23,-9],id:3,label:'Aw サバナ'},{coordinates:[38,12],id:12,label:'Cwb 温帯冬季少雨'},{coordinates:[19,-33],id:8,label:'Csa 地中海性'}] as const;
-export const africaCommodityColors:Record<string,string>={maize:'#c59320',rice:'#287daa',wheat:'#8b64aa',cassava:'#268365',cattle:'#98513e',goats:'#aa6b28',sheep:'#50698c'};
-export const africaCommodityLabels:Record<string,string>={maize:'とうもろこし',rice:'稲',wheat:'小麦',cassava:'キャッサバ',cattle:'牛',goats:'ヤギ',sheep:'羊'};
+export const africaClimateClassAnchors=[{coordinates:[10,24],id:4,label:'BWh'},{coordinates:[20,0],id:1,label:'Af'},{coordinates:[23,-9],id:3,label:'Aw'},{coordinates:[38,12],id:12,label:'Cwb'},{coordinates:[19,-33],id:8,label:'Csa'}] as const;
+export const africaCommodityColors:Record<string,string>={maize:'#c59320',rice:'#287daa',wheat:'#8b64aa',cassava:'#268365',cattle:'#98513e',goats:'#aa6b28',sheep:'#50698c',coffee:'#7b5546',tea:'#6b8b36'};
+export const africaCommodityLabels:Record<string,string>={maize:'とうもろこし',rice:'稲',wheat:'小麦',cassava:'キャッサバ',cattle:'牛',goats:'ヤギ',sheep:'羊',coffee:'コーヒー',tea:'茶'};
 export function africaCommodityColor(key:string):string{return africaCommodityColors[key.replace(/^crop-|^livestock-/,'').replace(/-harvested$|-production$/,'')]??'#567c77';}
 /** Existing country locator, deliberately distinct from a crop-summary anchor. */
 export function africaAgriContextPlace(overview:boolean,focused:string,activeKeys:string[],viewport:number[]){
@@ -33,6 +34,26 @@ export function africaActualLayerKey(state:Pick<State,'field'|'topic'|'water'> &
  if(state.field==='nature')return state.topic==='water'?`water-${state.water}`:state.topic;
  if(state.field==='agriculture')return state.topic==='farming'?`crop-${state.crop??'maize'}-${state.cropMeasure??'harvested'}`:state.topic==='livestock'?`livestock-${state.livestock??'cattle'}`:'';
  return state.field==='population'?state.topic:'';
+}
+/** Union adjacent source-summary cells into filled belts; keep every component. */
+export function africaProductionZonePath(cells:number[][],bounds:number[]):string {
+ const present=new Set(cells.map(([r,c])=>`${r},${c}`)),edges=new Map<string,string[]>();
+ const add=(a:string,b:string)=>edges.set(a,[...(edges.get(a)??[]),b]);
+ for(const [r,c]of cells){
+  if(!present.has(`${r-1},${c}`))add(`${r},${c}`,`${r},${c+1}`);
+  if(!present.has(`${r},${c+1}`))add(`${r},${c+1}`,`${r+1},${c+1}`);
+  if(!present.has(`${r+1},${c}`))add(`${r+1},${c+1}`,`${r+1},${c}`);
+  if(!present.has(`${r},${c-1}`))add(`${r+1},${c}`,`${r},${c}`);
+ }
+ let d='';
+ while(edges.size){const first=edges.keys().next().value!,ring:number[][]=[];let at=first;
+  do{const [r,c]=at.split(',').map(Number);ring.push(projectAfrica([bounds[0]+c,bounds[3]-r]));const next=edges.get(at)!;at=next.pop()!;if(!next.length)edges.delete(r+','+c);}while(at!==first&&edges.has(at));
+  // A short quadratic corner stays within 0.2 summary degrees. This is a
+  // generalised display of source cells, never a newly measured field edge.
+  const corners=ring.map((point,i)=>{const before=ring[(i+ring.length-1)%ring.length],after=ring[(i+1)%ring.length];return {point,incoming:point.map((v,k)=>v*.8+before[k]*.2),outgoing:point.map((v,k)=>v*.8+after[k]*.2)};});
+  if(corners.length){d+=`M${corners[0].incoming.join(',')}`;for(const c of corners)d+=`Q${c.point.join(',')} ${c.outgoing.join(',')}L${corners[(corners.indexOf(c)+1)%corners.length].incoming.join(',')}`;d+='Z';}
+ }
+ return d;
 }
 export function africaLayerPath(geometry:Row):string {
  const line=(points:number[][])=>points.map((point,index)=>{const [x,y]=projectAfrica(point);return `${index?'L':'M'}${x.toFixed(2)},${y.toFixed(2)}`;}).join('');
@@ -109,25 +130,45 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   const map=group.ownerSVGElement,box=map?.getBoundingClientRect(),viewport=(map?.getAttribute('viewBox')??`0 0 ${africaWidth} ${africaHeight}`).split(/[ ,]+/).map(Number),scale=Math.max(viewport[2]/(box?.width||700),viewport[3]/(box?.height||580));
   const occupied:{x:number;y:number;w:number;h:number}[]=[];
   const inside=(coordinates:readonly number[])=>{const [x,y]=projectAfrica([...coordinates]);return x>=viewport[0]&&x<=viewport[0]+viewport[2]&&y>=viewport[1]&&y<=viewport[1]+viewport[3];};
-  function addLabel(name:string,coordinates:readonly number[],color:string,attrs:Row,caption=false){
-   if(!inside(coordinates))return;
-   const [ax,ay]=projectAfrica([...coordinates]),font=14*scale,width=(name.length*14+8)*scale,height=21*scale,gap=5*scale;
-   const minX=viewport[0]+4*scale,maxX=viewport[0]+viewport[2]-width-4*scale,minY=viewport[1]+height,maxY=viewport[1]+viewport[3]-6*scale;
-   const candidates:number[][]=[];for(const offset of [-12,19,-39,46,-66,73,-93,100])candidates.push([gap,offset*scale],[-width-gap,offset*scale]);
-   const position=candidates.map(([dx,dy])=>({x:Math.max(minX,Math.min(maxX,ax+dx)),y:Math.max(minY,Math.min(maxY,ay+dy)),w:width,h:height})).find(candidate=>!occupied.some(other=>candidate.x<other.x+other.w+gap&&candidate.x+candidate.w+gap>other.x&&candidate.y-candidate.h<other.y+gap&&candidate.y+gap>other.y-other.h));
-   if(!position)return;occupied.push(position);
-   const leader=`M${ax},${ay}L${Math.max(position.x,Math.min(position.x+width,ax))},${position.y-5*scale}`;
-   if(caption)group.append(svg('path',{d:leader,fill:'none',stroke:'#fffdf8','stroke-width':5,'vector-effect':'non-scaling-stroke','pointer-events':'none','aria-hidden':'true',class:'africa-climate-map-leader-halo'}));
-   group.append(svg('path',{d:leader,fill:'none',stroke:color,'stroke-width':caption?2:1,'vector-effect':'non-scaling-stroke','pointer-events':'none','aria-hidden':'true',class:caption?'africa-climate-map-leader':'',...(caption?{'data-africa-climate-leader':attrs['data-africa-climate-map-label']}:{})}));
-   if(caption)group.append(svg('circle',{cx:ax,cy:ay,r:3.5*scale,fill:color,stroke:'#fffdf8','stroke-width':1.5,'vector-effect':'non-scaling-stroke','pointer-events':'none','aria-hidden':'true',class:'africa-climate-map-anchor','data-africa-climate-anchor':attrs['data-africa-climate-map-label']}));
-   const node=svg('g',attrs),text=svg('text',{x:position.x,y:position.y,'font-size':font,'font-weight':650,fill:color,stroke:'#fffdf8','stroke-width':3*scale,'paint-order':'stroke','stroke-linejoin':'round'});text.textContent=name;node.append(text);group.append(node);
+  // Codes sit directly in source-class cells. They never depend on whether
+  // city labels found room, and never acquire leaders, dots or arrows.
+  if(grid)for(const item of africaClimateClassAnchors){
+   if(!inside(item.coordinates)||africaGridValue(grid,layer,item.coordinates[0],item.coordinates[1])!==item.id)continue;
+   const [x,y]=projectAfrica([...item.coordinates]),w=item.label.length*9*scale,h=18*scale;
+   const node=svg('text',{x,y,'text-anchor':'middle','dominant-baseline':'middle','font-size':14*scale,'font-weight':800,fill:'#183d4a',stroke:'#fffdf8','stroke-width':3*scale,'paint-order':'stroke','data-africa-climate-map-label':String(item.id),'pointer-events':'none',class:'africa-climate-map-label'});node.textContent=item.label;group.append(node);
+   occupied.push({x:x-w/2,y:y+h/2,w,h});
   }
-  for(const city of africaClimateCities){if(!inside(city.coordinates))continue;const [cx,cy]=projectAfrica(city.coordinates),selected=state.city===city.id;
+  for(const city of africaClimateCities){
+   if(!inside(city.coordinates))continue;
+   const [cx,cy]=projectAfrica(city.coordinates),selected=state.city===city.id;
    const marker=svg('g',{'data-africa-city':city.id,'data-africa-city-point':city.id,role:'button',tabindex:0,'aria-label':city.name+'の雨温図を読む','aria-pressed':String(selected),class:'africa-map-pick-label'});
-   marker.append(svg('circle',{cx,cy,r:10*scale,fill:'transparent'}),svg('circle',{cx,cy,r:(selected?5:4)*scale,fill:'#334e68',stroke:'#fff','stroke-width':2,'vector-effect':'non-scaling-stroke'}));group.append(marker);
-   addLabel(city.name,city.coordinates,'#334e68',{'data-africa-city':city.id,'data-africa-city-label':city.id,role:'button',tabindex:0,'aria-label':city.name+'の雨温図を読む','aria-pressed':String(selected),class:'africa-map-pick-label'});
+   marker.append(svg('circle',{cx,cy,r:13*scale,fill:'transparent'}),svg('circle',{cx,cy,r:(selected?7:5.5)*scale,fill:selected?'#a64e29':'#214f70',stroke:'#fff','stroke-width':2,'vector-effect':'non-scaling-stroke'}));group.append(marker);
+   const font=14*scale,w=(Array.from(city.name).reduce((n,c)=>n+(/[ -~]/.test(c)?8:14),0)+12)*scale,h=23*scale,gap=5*scale;
+   const minX=viewport[0]+5*scale,maxX=viewport[0]+viewport[2]-w-5*scale,minY=viewport[1]+h+5*scale,maxY=viewport[1]+viewport[3]-6*scale;
+   const candidates:{x:number;y:number;w:number;h:number}[]=[];
+   for(const offset of [-10,24,-39,53,-68,82,-97,111,-126,140,-155,169])for(const dx of [gap,-w-gap])candidates.push({x:Math.max(minX,Math.min(maxX,cx+dx)),y:Math.max(minY,Math.min(maxY,cy+offset*scale)),w,h});
+   // If a dense coastal group needs more room, search the whole quiet ocean
+   // margin. The leader still locates the exact station, never a nearby city.
+   const margin:{x:number;y:number;w:number;h:number}[]=[];
+   for(let y=minY;y<=maxY;y+=28*scale)for(let x=minX;x<=maxX;x+=24*scale)margin.push({x,y,w,h});
+   margin.sort((a,b)=>Math.hypot(a.x+a.w/2-cx,a.y-a.h/2-cy)-Math.hypot(b.x+b.w/2-cx,b.y-b.h/2-cy));
+   candidates.push(...margin);
+   const position=candidates.find(p=>!occupied.some(o=>p.x<o.x+o.w+gap&&p.x+p.w+gap>o.x&&p.y-p.h<o.y+gap&&p.y+gap>o.y-o.h));
+   if(!position)continue;occupied.push(position);
+   const label=svg('g',{'data-africa-city':city.id,'data-africa-city-label':city.id,role:'button',tabindex:0,'aria-label':city.name+'の雨温図を読む','aria-pressed':String(selected),class:'africa-map-pick-label'});
+   label.append(svg('path',{d:`M${cx},${cy}L${Math.max(position.x,Math.min(position.x+w,cx))},${position.y-8*scale}`,fill:'none',stroke:'#315975','stroke-width':1,'vector-effect':'non-scaling-stroke','pointer-events':'none'}));
+   label.append(svg('rect',{x:position.x,y:position.y-h+4*scale,width:w,height:h,rx:3*scale,fill:selected?'#fff0df':'#fffdf8',stroke:selected?'#a64e29':'#43677b','stroke-width':1,'vector-effect':'non-scaling-stroke'}));
+   const title=svg('text',{x:position.x+6*scale,y:position.y-3*scale,'font-size':font,'font-weight':750,fill:'#214f70','text-decoration':'underline'});title.textContent=city.name;label.append(title);group.append(label);
   }
-  if(grid)for(const item of africaClimateClassAnchors){if(!inside(item.coordinates)||africaGridValue(grid,layer,item.coordinates[0],item.coordinates[1])!==item.id)continue;addLabel(item.label,item.coordinates,'#183d4a',{'data-africa-climate-map-label':String(item.id),'aria-hidden':'true','pointer-events':'none',class:'africa-climate-map-label'},true);}
+ }
+ function paintPopulationLabels(){
+  const map=group.ownerSVGElement,box=map?.getBoundingClientRect(),viewport=(map?.getAttribute('viewBox')??`0 0 ${africaWidth} ${africaHeight}`).split(/[ ,]+/).map(Number),scale=Math.max(viewport[2]/(box?.width||700),viewport[3]/(box?.height||580));
+  const labels=svg('g',{'data-africa-population-labels':'','pointer-events':'none'});
+  // Existing country locator coordinates provide context, not density values.
+  for(const country of countries.filter(c=>['DZA','MAR','EGY','NGA','ETH','COD','ZAF','MDG','SDN','KEN','TZA','MLI','NER','AGO'].includes(c.code))){const [x,y]=projectAfrica(country.point);const text=svg('text',{x,y,'text-anchor':'middle','font-size':12*scale,fill:'#536264','fill-opacity':.7,stroke:'#fffdf8','stroke-width':2*scale,'paint-order':'stroke','data-africa-population-country':country.code});text.textContent=country.name;labels.append(text);}
+  const cities:[string,number,number,number,number][]=[['カイロ',31.24,30.04,6,-8],['ラゴス',3.38,6.52,-58,20],['アビジャン',-4.03,5.35,-68,-9],['アクラ',-.2,5.56,-16,35],['カノ',8.52,12,6,-8],['キンシャサ',15.32,-4.32,-80,16],['アディスアベバ',38.75,9.03,-110,-12],['ナイロビ',36.82,-1.29,8,4],['ダルエスサラーム',39.28,-6.82,7,20],['ヨハネスブルク',28.05,-26.2,8,6],['ケープタウン',18.42,-33.93,-65,20],['アンタナナリボ',47.51,-18.88,-116,16]];
+  for(const [name,lon,lat,dx,dy]of cities){const [x,y]=projectAfrica([lon,lat]);if(x<viewport[0]||x>viewport[0]+viewport[2]||y<viewport[1]||y>viewport[1]+viewport[3])continue;labels.append(svg('circle',{cx:x,cy:y,r:2.5*scale,fill:'#273f4b',stroke:'#fff','stroke-width':1,'vector-effect':'non-scaling-stroke'}));const text=svg('text',{x:x+dx*scale,y:y+dy*scale,'font-size':14*scale,'font-weight':750,fill:'#273f4b',stroke:'#fffdf8','stroke-width':3*scale,'paint-order':'stroke','data-africa-population-city':name});text.textContent=name;labels.append(text);}
+  group.append(labels);
  }
  const setup=(key:string)=>{
   if(['climate','terrain','elevation'].includes(key))return {base:withBase('/assets/atlas/africa-physical-v1/'),family:'physical',id:key};
@@ -168,7 +209,7 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   const output={...view,ready,loading:!!data?.promise||!!grid?.promise};
   viewCache.set(key,{manifest,layer,base:config.base,view:output,grid:grid?.value});
   const climateMap=key==='climate'?baseGroup.ownerSVGElement:null;
-  const paint=[key,state.place,state.compare,state.layerClass,state.river,file,ready,data?.value?'loaded':'',grid?.value?'grid':'',layer.image,mode,borders,key==='climate'?state.city:'',climateMap?.getAttribute('viewBox')??'',key==='climate'?climateMap?.getBoundingClientRect().width??0:''].join('|');
+  const paint=[key,state.place,state.compare,state.layerClass,state.river,file,ready,data?.value?'loaded':'',grid?.value?'grid':'',layer.image,mode,borders,key==='climate'?state.city:'',climateMap?.getAttribute('viewBox')??'',['climate','distribution'].includes(key)?climateMap?.getBoundingClientRect().width??0:''].join('|');
   if(paint!==lastPaint){
    const focusedRiverFeature=group.contains(document.activeElement)?document.activeElement?.getAttribute('data-africa-river-hit-feature'):null;
    const focusedCity=group.contains(document.activeElement)?document.activeElement?.getAttribute('data-africa-city'):null;
@@ -212,6 +253,7 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
    if(ready&&borders)paintBorders(state,group);
    group.append(...riverHits);
    if(key==='climate')paintClimateLabels(state,{...manifest,...layer},grid?.value);
+   if(key==='distribution')paintPopulationLabels();
    if(focusedCity)group.querySelector<SVGElement>(`[data-africa-city="${focusedCity}"]${focusedCityKind?'[data-africa-city-label]':'[data-africa-city-point]'}`)?.focus({preventScroll:true});
    if(focusedRiverFeature)riverHits.find(hit=>hit.getAttribute('data-africa-river-hit-feature')===focusedRiverFeature)?.focus({preventScroll:true});
   }
@@ -220,6 +262,7 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
  function paintBorders(state:State,target:SVGGElement){for(const original of root.querySelectorAll<SVGPathElement>('[data-country-path]'))target.append(svg('path',{d:original.getAttribute('d')??'',fill:'none',stroke:original.dataset.countryPath===state.place?'#b13e30':original.dataset.countryPath===state.compare?'#364c91':'#708e91','stroke-width':original.dataset.countryPath===state.place||original.dataset.countryPath===state.compare?2:.65,'stroke-dasharray':original.dataset.countryPath===state.compare?'5 3':'','vector-effect':'non-scaling-stroke','pointer-events':'none'}));}
  function commodityState(state:State,key:string):State {if(key.startsWith('crop-')){const [,crop,cropMeasure]=key.split('-');return {...state,topic:'farming',crop:crop as State['crop'],cropMeasure:cropMeasure as State['cropMeasure']};}return {...state,topic:'livestock',livestock:key.slice(10) as State['livestock']};}
  function commodityView(state:State,key:string,summary:Row|undefined):AfricaLayerView {
+  if(['crop-coffee-harvested','crop-tea-harvested'].includes(key))return {key,ready:true,loading:false,error:'',title:africaCommodityLabels[key.split('-')[1]]+'（分布格子未取得）',period:'未取得',unit:'未取得',scope:'2020年の分布格子は未取得。生産地帯を補作しません。',method:'公式SPAM配布への接続が403 Forbidden。原格子未取得。',sourceUrl:'https://doi.org/10.7910/DVN/SWPENT',sourceLabel:'IFPRI SPAM 2020',legend:[],takeaway:'分布格子は未取得。確認済みの生産背景を読みます。',description:'他の取得済み分布を残して表示します。'};
   const config=setup(key)!,manifestResult=request(config.base+'manifest.json'),manifest=manifestResult.value;
   const layer=manifest?.layers?.[config.id] as Row|undefined;
   const grid=layer?.grid?request(config.base+layer.grid,true):null;
@@ -246,14 +289,14 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   if(!agriMode){baseGroup.replaceChildren();lastPaint='';lastAgriPaint='';}agriMode=true;
   const focused=africaAgriFocusedLayer(state),active:string[]=africaAgriVisibleLayers(state);visibleKeys=active;currentKey=focused;
   const summaryResult=request(withBase('/assets/atlas/africa-agriculture-overview-v1/manifest.json')),summary=summaryResult.value as Row|undefined;
-  const keys=['crop-maize-harvested','crop-rice-harvested','crop-wheat-harvested','crop-cassava-harvested','livestock-cattle','livestock-goats','livestock-sheep'];
+  const keys=['crop-maize-harvested','crop-rice-harvested','crop-wheat-harvested','crop-cassava-harvested','crop-coffee-harvested','crop-tea-harvested','livestock-cattle','livestock-goats','livestock-sheep'];
   const views=keys.map(key=>commodityView(state,key,summary?.layers[key]));
   const selected=views.find(view=>view.key===focused)??views[0];
   const visibleLayers=views.filter(view=>active.includes(view.key)).map(view=>({key:view.key,title:view.title,unit:view.unit,color:africaCommodityColor(view.key),ready:view.ready,loading:view.loading,error:view.error,period:view.period,sourceUrl:view.sourceUrl,sourceLabel:view.sourceLabel}));
   const legend=visibleLayers.map(view=>({id:view.key,label:summary?.layers[view.key]?.label??view.title.split('｜')[0].replace('の推定飼養密度',''),color:view.color}));
-  const thresholdDetails=summary?keys.map(key=>{const layer=summary.layers[key];return `${layer.label}：${Number(layer.threshold).toLocaleString('ja-JP',{maximumFractionDigits:3})} ${layer.unit}以上`;}).join('。'):'';
+  const thresholdDetails=summary?keys.map(key=>{const layer=summary.layers[key];if(!layer)return `${africaCommodityLabels[key.split('-')[1]]}：格子未取得`;return `${layer.label}：${Number(layer.threshold).toLocaleString('ja-JP',{maximumFractionDigits:3})} ${layer.unit}以上`;}).join('。'):'';
   const backgroundSource=summary?.background?`背景出典：${summary.background.sourceLabel}。${summary.background.sourceUrl} ${summary.background.note}`:'';
-  const result:AfricaLayerView={...selected,ready:!!summary&&visibleLayers.every(view=>view.ready),error:summaryResult.error??(selected.error||visibleLayers.find(view=>view.error)?.error||''),selectedVisible:active.includes(focused),loading:!!summaryResult.promise||visibleLayers.some(view=>view.loading),visibleLayers,legend,method:[summary?.method,thresholdDetails,summary?.display,...(summary?.limitations??[]),backgroundSource,selected.method].filter(Boolean).join(' '),scope:'色帯は作物、動物記号は家畜の比較的集中する範囲を示します。1°集約・品目内上位25%を抽出し、数量や品目間の優劣は表しません。抽出外も生産なしとは限りません。'};
+  const result:AfricaLayerView={...selected,ready:!!summary&&visibleLayers.every(view=>view.ready),error:summaryResult.error??(selected.error||visibleLayers.find(view=>view.error)?.error||''),selectedVisible:active.includes(focused),loading:!!summaryResult.promise||visibleLayers.some(view=>view.loading),visibleLayers,legend,method:[summary?.method,thresholdDetails,summary?.display,...(summary?.limitations??[]),backgroundSource,selected.method].filter(Boolean).join(' '),scope:'色の面は作物、薄い色面と種別記号は家畜の連続する生産地帯です。数量の大小や品目間の優劣は示しません。表示外も生産なしとは限りません。コーヒー・茶の分布は未取得。'};
   if(state.overview){result.title='作物と家畜の特徴的な分布';result.period='作物・家畜とも2020年基準のモデル';result.unit='品目内の相対的な集中';result.sourceUrl='';result.sourceLabel='';result.takeaway='作物の帯と家畜の記号から、生産の地域差を読む';result.description='作物は収穫面積、家畜は飼養密度のモデルから、それぞれの品目が比較的集中する範囲を示します。';}
   if(!summary){baseGroup.replaceChildren();lastAgriPaint='';return result;}
   // Summary geometry does not change when an original query grid arrives late.
@@ -268,17 +311,17 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   for(const original of root.querySelectorAll<SVGPathElement>('[data-country-path]'))clip.append(svg('path',{d:original.getAttribute('d')??'','fill-rule':'evenodd','clip-rule':'evenodd'}));
   filter.append(svg('feColorMatrix',{type:'saturate',values:0}));defs.append(clip,filter);baseGroup.append(defs);
   const background=svg('g',{'pointer-events':'none','aria-hidden':'true'});
+  for(const feature of neighbours.features)background.append(svg('path',{d:africaLayerPath(feature.geometry),fill:'#dadad0',stroke:'#b8c2b7','stroke-width':.5,'vector-effect':'non-scaling-stroke','data-africa-neighbour':feature.properties.code}));
   for(const original of root.querySelectorAll<SVGPathElement>('[data-country-path]'))background.append(svg('path',{d:original.getAttribute('d')??'',fill:'#f5f2e9','fill-rule':'evenodd'}));
   background.append(svg('image',{href:withBase('/assets/atlas/africa-physical-v1/elevation.png'),x:0,y:0,width:africaWidth,height:africaHeight,preserveAspectRatio:'none',filter:'url(#africa-agri-neutral-relief)',opacity:.22}));baseGroup.append(background);
-  const memberships=new Map<string,string[]>();
-  for(const key of keys.filter(key=>key.startsWith('crop-')&&active.includes(key)))for(const [row,col]of summary.layers[key].cells){const id=`${row},${col}`,list=memberships.get(id)??[];list.push(key);memberships.set(id,list);}
   const labelJobs:{key:string;anchor:Row;index:number;livestock:boolean}[]=[];
   for(const key of keys){
-   const layer=summary.layers[key],selectedNow=!state.overview&&key===focused,livestock=key.startsWith('livestock-');
-   const node=svg('g',{'data-africa-commodity-layer':key,'data-africa-summary-threshold':layer.threshold}) as SVGGElement;node.style.display=active.includes(key)?'':'none';node.style.opacity=livestock&&!state.overview&&focused.startsWith('crop-')?'.32':'1';agriGroups.set(key,node);
-   if(!livestock){let d='';for(const [row,col]of layer.cells){const all=memberships.get(`${row},${col}`)??[key],slot=all.indexOf(key),parts=all.length;if(slot<0)continue;const [x,y]=projectAfrica([summary.bounds[0]+col,summary.bounds[3]-row-slot/parts]),[right,bottom]=projectAfrica([summary.bounds[0]+col+1,summary.bounds[3]-row-(slot+1)/parts]);d+=`M${x.toFixed(2)},${y.toFixed(2)}H${right.toFixed(2)}V${bottom.toFixed(2)}H${x.toFixed(2)}Z`;}
-    const path=svg('path',{d,fill:africaCommodityColor(key),'fill-opacity':.9,'clip-path':'url(#africa-agri-land-clip)','data-africa-agri-distribution':key,'stroke-linejoin':'round'});agriPick(path,key,key+'-distribution',selectedNow,layer.label);path.style.display=node.style.display;baseGroup.append(path);
-   }
+   const layer=summary.layers[key];if(!layer)continue;const selectedNow=!state.overview&&key===focused,livestock=key.startsWith('livestock-');
+   const node=svg('g',{'data-africa-commodity-layer':key,'data-africa-summary-threshold':layer.threshold}) as SVGGElement;node.style.display=active.includes(key)?'':'none';node.style.opacity=!state.overview&&key!==focused?'.55':'1';agriGroups.set(key,node);
+   const path=svg('image',{href:withBase('/assets/atlas/africa-agriculture-overview-v1/'+layer.displayImage),x:0,y:0,width:africaWidth,height:africaHeight,preserveAspectRatio:'none',opacity:livestock?.16:selectedNow?.95:.65,'clip-path':'url(#africa-agri-land-clip)','data-africa-agri-distribution':key});
+   // The quiet distribution raster is geographic evidence; text and glyphs
+   // are the hit targets, avoiding clicks on transparent ocean rectangles.
+   path.setAttribute('pointer-events','none');node.append(path);
    const inViewport=(anchor:Row)=>{const [x,y]=projectAfrica([anchor.lon,anchor.lat]);return x>=viewport[0]&&x<=viewport[0]+viewport[2]&&y>=viewport[1]&&y<=viewport[1]+viewport[3];};
    let anchors:Row[]=layer.anchors;
    if(state.zoom!=='all'&&state.region!=='all'){
@@ -288,9 +331,9 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
    for(const [index,anchor]of anchors.entries())labelJobs.push({key,anchor,index,livestock});
   }
   paintBorders(state,baseGroup);
-  if(!state.overview&&active.includes(focused)){
+  if(!state.overview&&active.includes(focused)&&summary.layers[focused]){
    const outline=svg('g',{'data-africa-agri-footprint':focused,'pointer-events':'none','aria-hidden':'true','clip-path':'url(#africa-agri-land-clip)'});
-   const d=agriOutline(summary,focused);for(const [stroke,width]of [['#ffffff',3.5],[africaCommodityColor(focused),1.8]]as const)outline.append(svg('path',{d,fill:'none',stroke,'stroke-width':width,'vector-effect':'non-scaling-stroke','stroke-linecap':'round','stroke-linejoin':'round'}));baseGroup.append(outline);
+   const d=africaProductionZonePath(summary.layers[focused].cells,summary.bounds);for(const [stroke,width]of [['#ffffff',3.5],[africaCommodityColor(focused),1.8]]as const)outline.append(svg('path',{d,fill:'none',stroke,'stroke-width':width,'vector-effect':'non-scaling-stroke','stroke-linecap':'round','stroke-linejoin':'round'}));baseGroup.append(outline);
   }
   // Labels carry exact source-summary anchors. Short leaders permit legible names
   // without implying that the displaced label is itself a production location.
@@ -302,7 +345,7 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
    const visibleAnchor=ax>=viewport[0]&&ax<=viewport[0]+viewport[2]&&ay>=viewport[1]&&ay<=viewport[1]+viewport[3];
    const minX=viewport[0]+4*labelScale,maxX=viewport[0]+viewport[2]-width-4*labelScale,minY=viewport[1]+height,maxY=viewport[1]+viewport[3]-6*labelScale;
    let position=candidates.map(([dx,dy])=>({x:Math.max(minX,Math.min(maxX,ax+dx)),y:Math.max(minY,Math.min(maxY,ay+dy)),w:width,h:height})).find(box=>!occupied.some(other=>box.x<other.x+other.w+gap&&box.x+box.w+gap>other.x&&box.y-height<other.y+gap&&box.y+gap>other.y-other.h));
-   position??={x:Math.max(minX,Math.min(maxX,ax+gap)),y:Math.min(maxY,ay+86*labelScale),w:width,h:height};if(active.includes(key)&&visibleAnchor)occupied.push(position);
+   if(!position)continue;if(active.includes(key)&&visibleAnchor)occupied.push(position);
    const labelGroup=svg('g',{'data-africa-agri-label':key,'data-africa-agri-label-anchor':`${anchor.lon},${anchor.lat}`});agriPick(labelGroup,key,`${key}-label-${index}`,selectedNow,layer.label);
    if(!visibleAnchor)labelGroup.setAttribute('display','none');
    labelGroup.append(svg('path',{d:`M${ax},${ay}L${Math.max(position.x,Math.min(position.x+width,ax))},${position.y-5*labelScale}`,fill:'none',stroke:africaCommodityColor(key),'stroke-width':1,'vector-effect':'non-scaling-stroke','pointer-events':'none'}));

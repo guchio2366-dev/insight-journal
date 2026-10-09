@@ -22,8 +22,8 @@ test('legacy agriculture URLs use fixed crop area, latest indicator values and s
   assert.equal(root.querySelectorAll('[data-africa-commodity],[data-africa-crop-measure],[data-africa-agri-layer]').length,0);
   assert.equal(q('[data-africa-layer-legend] [data-africa-agri-pick="crop-rice-harvested"]').getAttribute('aria-pressed'),'true');
   assert.match(q('[data-period]').textContent,/2020/);assert.match(q('[data-unit]').textContent,/収穫面積.*密度/);assert.match(q('[data-metric-year]').textContent,/最新収録年/);
-  assert.match(q('[data-africa-agri-context]').textContent,/マダガスカル/);assert.match(q('[data-africa-agri-context]').textContent,/統計.*未整備/);
-  const supplement=q('[data-theme-details]');assert.match(supplement.textContent,/25%/);assert.match(supplement.textContent,/2001/);assert.match(supplement.textContent,/耕地割合/);assert.ok([...supplement.querySelectorAll('a')].some(a=>a.href.includes('10.7910/DVN/SWPENT')));
+  assert.match(q('[data-africa-agri-context]').textContent,/マダガスカル/);assert.match(q('[data-africa-regional-statistics]').textContent,/未取得/);
+  const supplement=q('[data-theme-details]');assert.match(supplement.textContent,/75%|25%/);assert.match(supplement.textContent,/2001/);assert.match(supplement.textContent,/耕地割合/);assert.ok([...supplement.querySelectorAll('a')].some(a=>a.href.includes('10.7910/DVN/SWPENT')));
   assert.equal(q('[data-theme-comparison]').hidden,true);assert.equal(q('[data-africa-statistics-key]').hidden,true);
   q('[data-africa-layer-legend] [data-africa-agri-pick="livestock-goats"]').click();
   assert.equal(q('[data-africa-topic="farming"]').getAttribute('aria-pressed'),'true');assert.equal(q('[data-africa-topic="livestock"]'),null);assert.match(q('[data-theme-title]').textContent,/ヤギ/);
@@ -70,7 +70,7 @@ test('one agriculture field click starts all seven distributions after the previ
   assert.equal(cropManifestRequests,1,'the first field click must request the crop manifest without help from an earlier layer callback');
   assert.equal(root.dataset.field,'agriculture');assert.equal(root.querySelector('[data-africa-topic="farming"]').getAttribute('aria-pressed'),'true');
   const url=new URL(window.location.href);assert.equal(url.searchParams.get('field'),'agriculture');assert.equal(url.searchParams.get('topic'),'farming');
-  releaseCrop();await wait(()=>root.querySelectorAll('[data-africa-agri-distribution]').length===4&&root.querySelectorAll('[data-africa-commodity-layer]').length===7&&pendingFetches===0&&pendingReads===0,'the first field click must finish the summary geometry and all seven original query grids');
+  releaseCrop();await wait(()=>root.querySelectorAll('[data-africa-agri-distribution]').length===7&&root.querySelectorAll('[data-africa-commodity-layer]').length===7&&pendingFetches===0&&pendingReads===0,'the first field click must finish the summary geometry and all seven original query grids');
   await new Promise(resolve=>setImmediate(resolve));assert.equal(clicks,1);assert.equal(window.document.querySelector('[data-africa-atlas]'),root);assert.equal(root.querySelector('[data-africa-raster="climate"]'),null);assert.equal(root.dataset.actualLayer,'true');assert.match(root.querySelector('[data-period]').textContent,/2020/);
   await new Promise(resolve=>setImmediate(resolve));assert.equal(pendingFetches,0);assert.equal(pendingReads,0);assert.equal(populationManifestRequests,0);
   const populationField=root.querySelector('[data-field="population"]');let populationClicks=0;populationField.addEventListener('click',()=>{populationClicks++;});populationField.click();
