@@ -129,13 +129,14 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
  function paintClimateLabels(state:State,layer:Row,grid:Uint8Array|undefined){
   const map=group.ownerSVGElement,box=map?.getBoundingClientRect(),viewport=(map?.getAttribute('viewBox')??`0 0 ${africaWidth} ${africaHeight}`).split(/[ ,]+/).map(Number),scale=Math.max(viewport[2]/(box?.width||700),viewport[3]/(box?.height||580));
   const occupied:{x:number;y:number;w:number;h:number}[]=[];
+  const classLabels:SVGElement[]=[];
   const inside=(coordinates:readonly number[])=>{const [x,y]=projectAfrica([...coordinates]);return x>=viewport[0]&&x<=viewport[0]+viewport[2]&&y>=viewport[1]&&y<=viewport[1]+viewport[3];};
   // Codes sit directly in source-class cells. They never depend on whether
   // city labels found room, and never acquire leaders, dots or arrows.
   if(grid)for(const item of africaClimateClassAnchors){
    if(!inside(item.coordinates)||africaGridValue(grid,layer,item.coordinates[0],item.coordinates[1])!==item.id)continue;
    const [x,y]=projectAfrica([...item.coordinates]),w=item.label.length*9*scale,h=18*scale;
-   const node=svg('text',{x,y,'text-anchor':'middle','dominant-baseline':'middle','font-size':14*scale,'font-weight':800,fill:'#183d4a',stroke:'#fffdf8','stroke-width':3*scale,'paint-order':'stroke','data-africa-climate-map-label':String(item.id),'pointer-events':'none',class:'africa-climate-map-label'});node.textContent=item.label;group.append(node);
+   const node=svg('text',{x,y,'text-anchor':'middle','dominant-baseline':'middle','font-size':14*scale,'font-weight':800,fill:'#183d4a',stroke:'#fffdf8','stroke-width':3*scale,'paint-order':'stroke','data-africa-climate-map-label':String(item.id),'pointer-events':'none',class:'africa-climate-map-label'});node.textContent=item.label;classLabels.push(node);
    occupied.push({x:x-w/2,y:y+h/2,w,h});
   }
   for(const city of africaClimateCities){
@@ -160,6 +161,8 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
    label.append(svg('rect',{x:position.x,y:position.y-h+4*scale,width:w,height:h,rx:3*scale,fill:selected?'#fff0df':'#fffdf8',stroke:selected?'#a64e29':'#43677b','stroke-width':1,'vector-effect':'non-scaling-stroke'}));
    const title=svg('text',{x:position.x+6*scale,y:position.y-3*scale,'font-size':font,'font-weight':750,fill:'#214f70','text-decoration':'underline'});title.textContent=city.name;label.append(title);group.append(label);
   }
+  // Nearby station points and city leaders cannot obscure the direct codes.
+  group.append(...classLabels);
  }
  function paintPopulationLabels(){
   const map=group.ownerSVGElement,box=map?.getBoundingClientRect(),viewport=(map?.getAttribute('viewBox')??`0 0 ${africaWidth} ${africaHeight}`).split(/[ ,]+/).map(Number),scale=Math.max(viewport[2]/(box?.width||700),viewport[3]/(box?.height||580));

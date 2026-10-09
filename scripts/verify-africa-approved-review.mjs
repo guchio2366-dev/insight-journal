@@ -35,6 +35,7 @@ try{
   await page.goto(origin+'/atlas/africa/?field=nature&topic=climate');await settle(page);await page.locator('[data-africa-raster=climate]').waitFor();
   await capture(page,profile,'climate-layout');const codes=await visibleLabels(page,'[data-africa-climate-map-label]');assert.deepEqual(codes.map(x=>x.id).sort(),africaClimateClassAnchors.map(x=>String(x.id)).sort());assert(codes.every(x=>x.visible&&x.fontPx>=13.9));
   assert.equal(await page.locator('[data-africa-climate-leader],[data-africa-climate-anchor]').count(),0);const cityLabels=await visibleLabels(page,'[data-africa-city-label]');assert.equal(cityLabels.length,12);assert(cityLabels.every(x=>x.visible));noOverlap(cityLabels,'city labels');noOverlap([...codes,...cityLabels],'codes and cities');record.labels.push({scene:'climate',codes,cities:cityLabels});
+  assert(await page.locator('[data-africa-climate-map-label]').evaluateAll(nodes=>nodes.every(n=>[...document.querySelectorAll('[data-africa-city-point]')].every(p=>!!(p.compareDocumentPosition(n)&Node.DOCUMENT_POSITION_FOLLOWING)))),'station points must not obscure direct climate codes');
   const legend=await page.locator('[data-africa-layer-class]').allTextContents();assert(legend.every(x=>/^[A-Z][a-zA-Z]{0,2}$/.test(x.trim())));
   const camera=await page.locator('.africa-map').getAttribute('viewBox');await capture(page,profile,'climate-initial');
   for(const city of africaClimateCities){
