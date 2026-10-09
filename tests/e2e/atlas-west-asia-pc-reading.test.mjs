@@ -42,8 +42,12 @@ test('西アジアのPC実画面で地域説明・3か国・欠測年・選択�
    };
    await open('industry/');
    await assert.doesNotReject(()=>page.locator('[data-west-regional-reading]').filter({hasText:'地域全体の供給網'}).waitFor());
-   assert.equal(await page.locator('[data-west-comparison] tbody tr').count(),3);
+   assert.equal(await page.locator('[data-industry-site]').count(),12);
    await shot('supply-network');
+   await page.locator('[data-industry-site="jubail"]').press('Enter');
+   await page.waitForFunction(()=>document.querySelector('.west-industry-site-reading')?.textContent.includes('石油化学'));
+   assert((await page.locator('.west-industry-site-reading a').getAttribute('href')).includes('cpchem.com'));
+   await shot('jubail-industry-site');
    for(const [code,word] of [['SAU','ジュバイル'],['ARE','ジュベル・アリ'],['TUR','ブルサ']]){
     await page.locator(`[data-west-industry-scope] [data-west-country-button="${code}"]`).click();
     await page.waitForFunction(code=>document.querySelector('[data-west-country]').value===code&&document.querySelector('[data-west-atlas]').dataset.ready==='true',code);
@@ -85,14 +89,13 @@ test('西アジアのPC実画面で地域説明・3か国・欠測年・選択�
    await page.locator('[data-city="riyadh"]').press('Enter');
    await page.waitForFunction(()=>document.querySelector('[data-west-climate-class]')?.textContent.includes('BWh'));
    await open('nature/?topic=basins');
-   await page.locator('[data-west-basin-label] > summary').click();
-   await page.locator('[data-west-basin]').selectOption('1060034260');
+   await page.locator('[data-west-representative-basin="1060034260"]').press('Enter');
    await page.waitForFunction(()=>document.querySelector('[data-west-regional-reading]')?.textContent.includes('南の上流'));
    assert((await page.locator('[data-west-regional-reading]').innerText()).includes('南の上流'));
-   assert(await page.evaluate(()=>{const svg=document.querySelector('[data-west-map]'),frame=svg.viewBox.baseVal,bounds=svg.querySelector('[data-basin="1060034260"]').getBBox();return bounds.x>=frame.x&&bounds.y>=frame.y&&bounds.x+bounds.width<=frame.x+frame.width&&bounds.y+bounds.height<=frame.y+frame.height;}),'the selected Nile basin remains fully inside the map frame');
+   assert.equal(await page.locator('[data-west-map]').getAttribute('viewBox'),climateFrame);
    await shot('nile-basin');
    await open('nature/?topic=basins&basin=1060034260');
-   assert(await page.evaluate(()=>{const svg=document.querySelector('[data-west-map]'),frame=svg.viewBox.baseVal,bounds=svg.querySelector('[data-basin="1060034260"]').getBBox();return bounds.x>=frame.x&&bounds.y>=frame.y&&bounds.x+bounds.width<=frame.x+frame.width&&bounds.y+bounds.height<=frame.y+frame.height;}),'a direct basin URL fits the full Nile basin');
+   assert.equal(await page.locator('[data-west-map]').getAttribute('viewBox'),climateFrame);
    await open('agriculture/');
    assert.equal(await page.locator('[data-west-farm-context]').count(),5);
    assert.equal(await page.locator('[data-west-farm-coverage]').count(),5);

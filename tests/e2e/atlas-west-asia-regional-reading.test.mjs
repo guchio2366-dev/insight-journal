@@ -23,9 +23,13 @@ test('産業は未選択の地域供給網から始まり、国別の比較・�
   const frame=q('[data-west-map]').getAttribute('viewBox');
   assert.equal(q('[data-west-country]').value,'');
   assert.match(q('[data-west-regional-reading]').textContent,/イランとオマーン.*エジプト.*アゼルバイジャン/s);
-  assert.deepEqual([...q('[data-west-comparison]').querySelectorAll('[data-west-country-button]')].map(node=>node.dataset.westCountryButton),westIndustryCountries);
+  assert.deepEqual([...q('[data-west-industry-scope]').querySelectorAll('[data-west-country-button]')].map(node=>node.dataset.westCountryButton).filter(Boolean),westIndustryCountries);assert.equal(q('[data-industry-site]')!==null,true);
   assert.deepEqual([...q('[data-west-country]').options].filter(option=>option.value&&!option.disabled).map(option=>option.value).sort(),[...westIndustryCountries].sort());
-  assert.deepEqual([...new Set([...q('[data-west-scene]').querySelectorAll('[data-country]')].map(node=>node.dataset.country))].sort(),[...westIndustryCountries].sort());
+  assert.equal(q('[data-west-scene]').querySelectorAll('[data-country]').length,0);
+  q('[data-industry-site="jubail"]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
+  await until(()=>q('[data-west-industry-scope]')&&q('.west-industry-site-reading')?.textContent.includes('石油化学'));
+  assert.match(q('.west-industry-site-reading a').href,/cpchem.com/);
+  assert.equal(q('[data-west-map]').getAttribute('viewBox'),frame);
   for(const [code,expected] of [['SAU',/ジュバイル.*ヤンブー/s],['ARE',/アブダビ.*ジュベル・アリ.*輸出.*輸入/s],['TUR',/ブルサ.*イズミット.*欧州市場/s]]){
    q(`[data-west-industry-scope] [data-west-country-button="${code}"]`).click();
    await until(()=>q('[data-west-atlas]').dataset.ready==='true'&&q('[data-west-country]').value===code);
@@ -34,6 +38,7 @@ test('産業は未選択の地域供給網から始まり、国別の比較・�
    assert.equal(new URL(w.location.href).searchParams.get('country'),code);
    assert.equal(q('[data-west-map]').getAttribute('viewBox'),frame,'country industry selection retains the full regional map');
    assert.equal(q(`[data-west-industry-scope] [data-west-country-button="${code}"]`).getAttribute('aria-pressed'),'true');
+   assert(q('[data-industry-site]'));assert([...q('[data-west-scene]').querySelectorAll('[data-industry-site]')].every(node=>node.dataset.industrySite!=='hormuz'&&node.dataset.industrySite!=='suez'));
   }
   q('[data-west-industry-scope] [data-west-country-button=""]').click();
   await until(()=>q('[data-west-atlas]').dataset.ready==='true'&&!q('[data-west-country]').value);
@@ -88,12 +93,12 @@ test('背景国が必要な地図選択を遮らず、国選択は都市も地�
   }finally{await w.happyDOM.close();}
  }
 });
-test('ナイル流域の直接URLと履歴復元は全流域へ合わせ、明示したカメラは保持する',async()=>{
+test('ナイル流域の直接URLと履歴復元は地域範囲を保ち、明示したカメラは保持する',async()=>{
  const full=await setup('nature','?topic=basins&basin=1060034260');
  const explicit=await setup('nature','?topic=basins&basin=1060034260&map=10,20,400,300');
  try{
   const fitted=full.q('[data-west-map]').getAttribute('viewBox');
-  assert.notEqual(fitted,'0 0 1000 987');
+  assert.equal(fitted,'0 0 1000 987');
   assert.equal(explicit.q('[data-west-map]').getAttribute('viewBox'),'10 20 400 300');
   explicit.w.history.replaceState({},'','?topic=basins&basin=1060034260');
   explicit.w.dispatchEvent(new explicit.w.PopStateEvent('popstate'));

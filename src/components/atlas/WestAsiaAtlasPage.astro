@@ -60,10 +60,9 @@ const region=getOverviewRegion('west-asia');
      <div class="west-map-lists">
       <details data-west-city-label><summary>都市の一覧から雨温図を選ぶ</summary><label>観測所<select data-west-city aria-label="雨温図の観測所"><option value="">観測所を選択</option>{data.cities.map(c=><option value={c.id}>{c.name}</option>)}</select></label></details>
       <details data-west-urban-label hidden><summary>都市の一覧から選ぶ</summary><select data-west-urban aria-label="人口を読む都市"><option value="">都市を選択</option>{data.urban.cities.map(c=><option value={c.id}>{c.name}</option>)}</select></details>
-      <details data-west-basin-label hidden><summary>流域の一覧から選ぶ</summary><select data-west-basin aria-label="流域を選択"><option value="">流域を選択</option></select></details>
      </div>
      <p class="west-point" data-west-point aria-live="polite" hidden>場所を選ぶと、ここに地図の値を表示します。</p>
-     <details class="west-map-method"><summary>地図の出典・表示方法</summary><p class="west-method" data-west-method></p><p class="west-source" data-west-source></p><p>ドラッグ・矢印キーで移動できます。スマートフォンでは地図の上下の余白からページをスクロールできます。</p></details>
+     <details class="west-map-method"><summary>地図の出典・表示方法</summary><p class="west-method" data-west-method></p><p class="west-source" data-west-source></p><p>ドラッグ・矢印キーで地図を移動できます。</p></details>
      <button class="west-retry" data-west-retry hidden>資料を再読み込みする</button></div>
     </section>
     <aside class={`atlas-national west-reading ${initialField==='natural'?'atlas-nature-summary':initialField==='population'?'population-national':initialField==='industry'?'industry-national':'west-agri-reading'}`} data-field-national={initialField} aria-labelledby="west-detail-title">

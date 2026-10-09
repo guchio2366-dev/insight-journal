@@ -4,20 +4,24 @@ import type {AsiaClimateCity} from '../../data/atlas/asia-climate-cities';
 const {city}=Astro.props as {city:Omit<AsiaClimateCity,'regionId'>};
 const name=city.name.replace(/（.*?）/g,'');
 const format=(v:number|null,u:string)=>v===null?'未収録':`${v.toFixed(1)} ${u}`;
+const peak=Math.max(0,...city.precipitationMm.filter((v):v is number=>v!==null));
+const rainStep=peak<=80?20:peak<=160?40:peak<=300?100:200;
+const rainMax=Math.max(rainStep*4,Math.ceil(peak/rainStep)*rainStep);
+const summary=city.id==='riyadh'?'一年を通じて雨が少なく、とくに夏はほぼ降らない。内陸の高温・乾燥と、水を確保する農業の関係を読む。':city.summary;
 ---
 <figure class="atlas-climate-diagram">
- <AtlasClimatePlot {name} period={city.normalPeriod} temperatureC={city.temperatureC} precipitationMm={city.precipitationMm}/>
+ <AtlasClimatePlot name={`${name}の雨温図`} period={city.normalPeriod} temperatureC={city.temperatureC} precipitationMm={city.precipitationMm} precipitationMaxMm={rainMax} precipitationTickMm={rainStep} temperatureTickC={10}/>
  <p><span class="is-cold">棒：降水量 mm</span><span class="is-warm">線：気温 ℃</span></p>
  <section class="atlas-city-reading" aria-label={`${name}の気候区分`}>
   <h4 data-west-climate-class>気候区分を確認しています。</h4>
-  <p class="atlas-reading-takeaway"><strong>{city.summary}</strong></p>
+  <p class="atlas-reading-takeaway"><strong>{summary}</strong></p>
   <p data-west-climate-description></p>
   <p class="west-stat-note">地図の分類は格子、雨温図は観測所の平年値です。同じ場所でも資料の範囲が異なります。</p>
  </section>
  <p class="atlas-city-source">{city.normalPeriod} · <a href={city.sourceUrl}>気象庁 ClimatView</a> · <a href="#west-sources">気候区分の出典</a></p>
  <details data-city-numbers><summary>月別の数値・観測地点</summary>
   <p>{city.stationName} · {city.coordinates[1].toFixed(2)}°N / {city.coordinates[0].toFixed(2)}°E{city.elevationM!==undefined?` · 標高 ${city.elevationM} m`:''}</p>
-  <p>北米と同じ目盛りです。気温と降水量は別の軸で読みます。×は未収録を示し、0mmではありません。</p>
+  <p>降水量は各地点の最大月に合わせた等間隔目盛り、気温は10℃間隔です。気温と降水量は別の軸で読みます。×は未収録を示し、0mmではありません。</p>
   <table><thead><tr><th>月</th><th>平均気温</th><th>降水量</th></tr></thead><tbody>{city.temperatureC.map((v,i)=><tr><th>{i+1}月</th><td>{format(v,'℃')}</td><td>{format(city.precipitationMm[i],'mm')}</td></tr>)}</tbody></table>
   {city.notes.map(note=><p>{note}</p>)}
  </details>
