@@ -1,5 +1,13 @@
-// Displayed percentages are the published rounded values, not a reconstructed
-// population estimate. Pew's country rows total 99–101 after rounding.
+// Pew rows are published rounded percentages and total 99–101 after rounding.
+// Mongolia's census source (printed p.5, PDF p.6) reports 59.4% religious
+// among people aged 15+, then religious-group shares conditional on that 59.4%.
+// Mongolia's displayed group shares are converted to all people aged 15+ and
+// rounded to one decimal place; 40.6% with no religion is published directly.
+export const mongoliaReligionCensusBasis={
+ religiousAmongAge15Plus:59.4,
+ noReligionAmongAge15Plus:40.6,
+ amongReligious:{buddhist:87.1,muslim:5.4,shaman:4.2,christian:2.2,other:1.1},
+} as const;
 export const eastAsiaReligionColors={
  buddhist:'#80649b',christian:'#b98051',muslim:'#55907a',shinto:'#b36c88',daoist:'#bb9252',
  confucian:'#7d8a4a',local:'#568d95',none:'#829396',other:'#a6a28d',combined:'#648ba8',unanswered:'#d6d3ca',shaman:'#bd785a',
