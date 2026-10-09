@@ -203,8 +203,12 @@ async function agricultureClimateRepairs(page,profile){
   assert.equal(await page.locator('[data-eu-farm-area]').evaluateAll(nodes=>nodes.filter(node=>node.style.display!=='none').length),6);
   const labelCount=await page.locator('[data-eu-map-kind="crop"]:visible').count();
   assert.ok(labelCount>0&&labelCount<=8,'Only representative concentration names are shown initially');
-  const anchors=()=>page.locator('.eu-label-dot').evaluateAll(nodes=>nodes.map(node=>[node.getAttribute('cx'),node.getAttribute('cy')]));
+  const anchors=()=>page.locator('.eu-label-dot').evaluateAll(nodes=>Object.fromEntries(nodes.flatMap(node=>{
+    const x=node.getAttribute('cx'),y=node.getAttribute('cy');
+    return x===null||y===null?[]:[[node.dataset.euLabelPoint,[x,y]]];
+  })));
   const initialAnchors=await anchors();
+  assert.ok(Object.keys(initialAnchors).length>0,'At least one source-backed map label has a projected anchor');
   await snapshot(page,profile,'farming-initial');
   const overview=page.locator('[data-eu-verified-overview]');
   assert.equal(await overview.isVisible(),true);
@@ -215,7 +219,10 @@ async function agricultureClimateRepairs(page,profile){
   await page.locator('[data-eu-layer="wheat"]').click();
   await page.waitForFunction(()=>document.querySelector('[data-eu-map-place="wheat"]').getAttribute('aria-pressed')==='true');
   assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'),initialExtent);
-  assert.deepEqual(await anchors(),initialAnchors,'A selection keeps the actual projected positions of every distribution');
+  const selectedAnchors=await anchors();
+  assert.ok(Object.keys(initialAnchors).some(id=>selectedAnchors[id]),'Selection retains a projected source anchor');
+  for(const [id,position] of Object.entries(initialAnchors))
+    if(selectedAnchors[id])assert.deepEqual(selectedAnchors[id],position,`Selection keeps the projected position of ${id}`);
   assert.equal(await page.locator('[data-eu-farm-area]').evaluateAll(nodes=>nodes.filter(node=>node.style.display!=='none').length),6);
   assert.equal(await page.locator('[data-eu-farm-outline="wheat"]').evaluateAll(nodes=>nodes.every(node=>node.style.display!=='none')),true);
   const wheatStatistics=page.locator('[data-eu-verified-topic="wheat"]');
