@@ -34,7 +34,7 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
     assert.equal(doc.querySelector('.eu-read-panel').getAttribute('aria-labelledby'),climateReader?'eu-city-heading':'eu-subject-title');
     assert.equal(doc.querySelectorAll('[data-eu-point]:not([hidden])').length,climateReader?8:0);
     if(field==='agriculture'){
-      assert.match(doc.querySelector('[data-eu-map-title]').textContent,/作物.*畜産/);
+      assert.match(doc.querySelector('[data-eu-map-title]').textContent,/穀物・畑作/);
       assert.equal(doc.querySelector('[data-eu-subject-image]').getAttribute('href'),null);
       const config=JSON.parse(doc.querySelector('[data-eu-config]').textContent);
       const farmItems=config.farmingAreas.features.map(feature=>feature.properties);
@@ -47,12 +47,12 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       assert.ok(areas.every(path=>{const href=path.getAttribute('href');return href?.startsWith('#eu-farm-geometry-')&&doc.querySelector(href)?.getAttribute('d')?.startsWith('M');}));
       assert.notEqual(doc.querySelector('[data-eu-farming-shapes]').style.display,'none');
       assert.ok([...doc.querySelectorAll('[data-eu-farm-outline]')].every(path=>path.style.display==='none'));
-      const choices=[...doc.querySelectorAll('[data-eu-farming-children="crop"] button,[data-eu-farming-children="livestock"] button')];
-      assert.deepEqual(choices.map(button=>button.dataset.euLayer).sort(),farmItems.map(item=>item.id).sort());
+      const choices=[...doc.querySelectorAll('[data-eu-farming-children="crops"] button,[data-eu-farming-children="livestock"] button,[data-eu-farming-children="horticulture"] button')];
+      assert.deepEqual(choices.map(button=>button.dataset.euLayer).sort(),['wheat','barley','maize','potato','sugarbeet','rapeseed','cattle','pig','chicken','sheep','citrus','temperatefruit','vegetables'].sort());
       assert.ok(choices.every(button=>button.getAttribute('aria-pressed')==='false'&&button.querySelector('.eu-item-swatch')));
       assert.equal(doc.querySelector('[data-eu-farming-legend]').hidden,false);
-      assert.match(doc.querySelector('[data-eu-farming-legend]').textContent,/作物は実線.*家畜は破線/);
-      assert.match(doc.querySelector('[data-eu-subject-note]').textContent,/ブドウ.*オリーブ.*未収録/);
+      assert.match(doc.querySelector('[data-eu-farming-legend]').textContent,/各色が品目別の集中域/);
+      assert.match(doc.querySelector('[data-eu-farming-children="horticulture"] .eu-farm-missing').textContent,/ブドウ.*オリーブ.*未収録/);
       const statistics=doc.querySelector('[data-eu-farming-statistics]');
       assert.match(statistics.textContent,/販売総額（米ドル）/);
       assert.match(statistics.textContent,/世界生産.*分母/);

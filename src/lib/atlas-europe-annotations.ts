@@ -7,7 +7,7 @@ import { europeIndustryMembership, europeIndustryColors, type EuropeIndustryGrou
 export const majorClimateCities = ['london','paris','moscow','madrid','rome','athens','reykjavik','helsinki'];
 const compactCities = ['london','moscow','madrid','rome','helsinki'];
 /** Names sample distinct crop/livestock concentrations; this is not a value rank. */
-export const overviewFarmingLabels = ['wheat','maize','sunflower','rice','vegetables','cattle','pig','sheep'];
+export const overviewFarmingLabels = ['wheat','barley','maize','potato','cattle','pig','sheep','chicken','citrus','temperatefruit','vegetables'];
 type Place = { id:string; name:string; coordinates:number[] };
 type Annotation = Place & { kind:'city'|'feature'|'crop'; button:HTMLButtonElement; line:SVGLineElement; dot:SVGCircleElement };
 type View = { climate:boolean; crops:boolean; detailed:boolean; city:string; feature?:string; places:Place[]; featureLabelIds?:string[]; farmingIds?:string[]; selectedFarming?:string; emphasizedFeatures?:string[] };
@@ -25,8 +25,15 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
     const industries=kind==='feature'?europeIndustryMembership[place.id]:undefined;
     const industry=industries?.[0];
     const shortIndustry:Partial<Record<EuropeIndustryGroup,string>>={'自動車・機械':'機械','化学・医薬品':'化学','鉱業・素材':'素材','港湾物流':'港湾','繊維・衣服':'繊維'};
-    const name=kind==='feature'?(mapNames[place.id]??(industry?`${place.name}｜${industries!.map(group=>shortIndustry[group]??group).join('・')}`:place.name)):place.name;
-    const button=document.createElement('button');button.type='button';button.className='eu-map-label';button.textContent=name;
+    const sectorName=industry?industries!.map(group=>shortIndustry[group]??group).join('・'):'';
+    const name=kind==='feature'?(mapNames[place.id]??(industry?`${sectorName}｜${place.name}`:place.name)):place.name;
+    const button=document.createElement('button');button.type='button';button.className='eu-map-label';
+    if(industry){
+      const sector=document.createElement('strong'),location=document.createElement('small');
+      sector.className='eu-label-industry';sector.textContent=sectorName;
+      location.className='eu-label-location';location.textContent=place.name;
+      button.append(sector,location);
+    }else button.textContent=name;
     if(kind==='crop'){
       const item=farmingItems.find(item=>item.id===place.id)!;
       button.classList.add('eu-crop-label');button.style.setProperty('--crop-color',item.color);button.dataset.euFarmingKind=item.kind;

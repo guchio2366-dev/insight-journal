@@ -33,7 +33,7 @@ test('全主題に1文の要点と根拠・地理の説明があり、操作説�
 
 test('農林業は自然条件と人の管理をつなぎ、出典のある地域例の範囲を守る', () => {
   assert.match(copy('crops').takeaway, /英国東部.*フランス北部.*ドイツ.*ポーランド/);
-  assert.match(copy('crops').body, /平野.*気温・降水.*水管理/);
+  assert.match(copy('crops').body, /畑.*輸送.*低地.*夏の熱量/);
   assert.match(copy('wheat').takeaway, /フランス北部.*ドイツ.*ポーランド.*英国東部/);
   assert.match(copy('barley').body, /フィンランド.*家畜の餌.*醸造/);
   assert.match(copy('rapeseed').takeaway, /ハンガリー.*油の原料/);
@@ -61,7 +61,9 @@ test('12作物・4家畜と集約区分、分布面の限界を維持する', ()
   assert.match(copy('chicken').note, /肉用・採卵用を分けていません/);
   assert.match(copy('temperatefruit').note, /ブドウ単独の分布ではありません/);
   assert.match(copy('vegetables').note, /VEGE.*「全野菜」ではありません/);
-  assert.match(copy('crops').note, /ブドウ・オリーブ単独の分布は未収録/);
+  assert.match(copy('crops').note, /ライムギ単独の元格子は未収録/);
+  assert.match(copy('horticulture').note, /ブドウ・オリーブ単独の元格子は未収録/);
+  assert.match(copy('livestock').note, /酪農と肉牛を分けた地域資料は未収録/);
 });
 
 test('国全体の対比は固定した2023年の資料に一致し、局所分布の説明へ変えない', () => {

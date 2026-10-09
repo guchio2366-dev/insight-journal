@@ -140,10 +140,11 @@ test('comparison links route to the selected field while source state returns ex
   assert.deepEqual(restored, original);
 });
 
-test('all field selections expose two or three distinct registered cross-field links', () => {
+test('only selections with registered meaningful comparisons expose cross-field links', () => {
   for (const layer of europeLayers) {
     const original = state(`?layer=${layer.id}`), links = europeComparisonLinks(original);
-    assert.ok(links.length >= 2 && links.length <= 3, layer.id);
+    assert.ok(links.length <= 3, layer.id);
+    if(!['livestock','horticulture'].includes(layer.id))assert.ok(links.length >= 2, layer.id);
     assert.equal(new Set(links.map(item => item.id)).size, links.length);
     for (const comparison of links) {
       const target = europeLayers.find(item => item.id === comparison.targetLayer);

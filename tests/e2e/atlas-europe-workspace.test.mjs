@@ -93,13 +93,12 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.ok(doc.querySelectorAll('[data-eu-static-codes] text').length>=15);
     }
     if (field==='agriculture/') {
-      const toggles=doc.querySelector('.eu-map-stage [data-eu-farming-toggles]');
-      assert.equal(toggles.hidden,false);
-      assert.deepEqual([...toggles.querySelectorAll('[data-eu-toggle]')].map(button=>button.dataset.euToggle),['crop','livestock']);
-      assert.ok([...toggles.querySelectorAll('button')].every(button=>button.getAttribute('aria-pressed')==='true'&&!button.disabled));
+      assert.equal(doc.querySelector('[data-eu-farming-toggles]'),null);
+      assert.deepEqual([...doc.querySelectorAll('[data-eu-topic-field="agriculture"] button')].map(button=>button.textContent),['穀物・畑作','酪農・畜産','果樹・園芸','林業']);
       const list=doc.querySelector('.eu-map-panel [data-eu-farming-list]');
       assert.equal(list.hidden,false);
-      assert.deepEqual([...list.querySelectorAll('[data-eu-farming-children]:not([hidden]) h3')].map(heading=>heading.textContent),['作物','畜産','酪農']);
+      assert.deepEqual([...list.querySelectorAll('[data-eu-farming-children]:not([hidden]) h3')].map(heading=>heading.textContent),['穀物・畑作']);
+      assert.equal(doc.querySelectorAll('[data-eu-farm-key-item]:not([hidden])').length,6);
       assert.equal(list.querySelector('[data-eu-farming-children="forest"]').hidden,true);
       assert.equal(list.querySelectorAll('[data-eu-layer][aria-pressed="true"]').length,0);
       assert.equal(doc.querySelector('[data-eu-overview]').hidden,true);

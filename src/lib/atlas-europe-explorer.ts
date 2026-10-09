@@ -1,5 +1,6 @@
 import { frame, europeFarmingInitialBounds, project, unproject, wheatCell, displayCell, visibleBounds, readEuropeState, writeEuropeState, defaultEuropeCity, normaliseEuropePoint } from './atlas-europe-view';
 import { farmingPresentation, farmingAtPoint, updateFarmingMap, type FarmingAreas } from './atlas-europe-farming';
+import { europeFarmingGenreForLayer, europeFarmingGenres } from '../data/atlas/europe/farming-genres.ts';
 import { europeFarmAvailableMetrics } from '../data/atlas/europe/farming-statistics';
 import { layerColor, fields, europeFieldHeadings, type EuropeLayer } from '../data/atlas/europe/layers';
 import type { EuropeReading } from '../data/atlas/europe/readings';
@@ -332,7 +333,7 @@ export function initEuropeAtlas() {
     }
     const overview=query<HTMLButtonElement>('[data-eu-overview]');
     overview.hidden=!farm.item&&!feature&&!europeReligionRegionalEvidence.some(item=>item.id===state.feature)&&!['forest','treecover','dairy'].includes(layer.id);
-    overview.textContent=layer.field==='agriculture'?'← 欧州の農林業':`← ${layer.title}の概論`;
+    overview.textContent=layer.field==='agriculture'?`← ${farm.genre?europeFarmingGenres[farm.genre].title:'林業'}の全体表示`:`← ${layer.title}の概論`;
     const hiddenNote=query<HTMLElement>('[data-eu-hidden-note]');
     hiddenNote.hidden=!farm.item||farm.selectedVisible;
     hiddenNote.textContent=farm.item?`${farm.item.kind==='crop'?'作物':'畜産'}の表示がオフのため、${farm.item.name}の分布は非表示です。説明の選択は維持しています。`:'';
@@ -354,7 +355,7 @@ export function initEuropeAtlas() {
     const farmNumbers=query<HTMLElement>('[data-eu-farm-numbers]');
     farmNumbers.hidden=!forestryStatistics&&!nationalDetail;
     farmNumbers.classList.toggle('is-topic-country',nationalDetail);
-    const statisticsName=farm.item?.name??(layer.id==='dairy'?'牛の生乳':['forest','treecover'].includes(layer.id)?'林業':'欧州の農畜産物');
+    const statisticsName=farm.item?.name??(layer.id==='dairy'?'牛の生乳':['forest','treecover'].includes(layer.id)?'林業':'農畜産物（3ジャンル共通）');
     query('[data-eu-statistics-title]').textContent=statisticsName+'の統計';
     all<HTMLElement>('[data-eu-statistics-item]').forEach(el=>{el.textContent=statisticsName;});
     query('#eu-farm-numbers-title').textContent=nationalDetail?statisticsName+'の国別数値・推移':'生産・飼養・木材の国別数量';
@@ -529,16 +530,16 @@ export function initEuropeAtlas() {
     query<SVGGElement>('[data-eu-farming-shapes]').style.display=farm.active?'':'none';
     query<HTMLElement>('[data-eu-farming-legend]').hidden=!farm.active;
     query<HTMLElement>('[data-eu-inline-farm-key]').hidden=!farm.active;
+    if(farm.genre){
+      const genre=europeFarmingGenres[farm.genre];
+      query('[data-eu-farm-key-title]').textContent=genre.title;
+      query('[data-eu-farm-legend-title]').textContent=`${genre.title}の主な${farm.genre==='livestock'?'飼養地域':'栽培域'} · 2020年頃`;
+      query('[data-eu-farm-missing]').textContent=genre.missing;
+      all<HTMLElement>('[data-eu-farm-key-item]').forEach(item=>{item.hidden=!genre.ids.some(id=>id===item.dataset.euFarmKeyItem);});
+    }
     query<HTMLElement>('[data-eu-farming-list]').hidden=layer.field!=='agriculture';
     query<HTMLElement>('[data-eu-farming-ranking-note]').hidden=['forest','treecover'].includes(layer.id);
-    all<HTMLElement>('[data-eu-farming-children]').forEach(section=>{section.hidden=['forest','treecover'].includes(layer.id)?section.dataset.euFarmingChildren!=='forest':section.dataset.euFarmingChildren==='forest';});
-    query<HTMLElement>('[data-eu-farming-toggles]').hidden=layer.field!=='agriculture'||['forest','treecover'].includes(layer.id);
-    all<HTMLButtonElement>('[data-eu-toggle]').forEach(button=>{
-      const enabled=button.dataset.euToggle==='crop'?state.showCrops!==false:state.showLivestock!==false;
-      button.setAttribute('aria-pressed',String(enabled));
-      button.querySelector('span')!.textContent=enabled?'表示中':'非表示';
-      button.disabled=farm.single||!farm.active;
-    });
+    all<HTMLElement>('[data-eu-farming-children]').forEach(section=>{section.hidden=section.dataset.euFarmingChildren!==(farm.genre??'forest');});
     query<HTMLElement>('[data-eu-city-list]').hidden=!climateReader();
     query<HTMLElement>('[data-eu-water-options]').hidden=!['water','precipitation','drainage'].includes(state.layer);
     const places=visibleFeatures().filter(p=>featureVisible(p.id));
@@ -572,7 +573,7 @@ export function initEuropeAtlas() {
     if(lastLayer!==layerKey){invalidateGridReading();query('[data-eu-subject-result]').textContent='地図を押すと、その位置に対応する格子の数値を表示します。';query('[data-eu-grid-result]').textContent='地図を押すと、その格子に割り当てられた収穫面積（ha）を表示します。';lastLayer=layerKey;}
     query<HTMLElement>('[data-eu-wheat-reading]').hidden = !(layer.id==='wheat'&&(!farm.active||farm.selectedVisible));
     all<HTMLElement>('[data-eu-layer]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.euLayer === state.layer)));
-    query('[data-eu-map-title]').textContent = farm.active?(farm.single?farm.item!.name+'のみの分布':'作物・畜産の主な分布'):layer.title+(state.layer==='overlay'?'と気候を重ねる':'');
+    query('[data-eu-map-title]').textContent = farm.active?(farm.single?farm.item!.name+'のみの分布':europeFarmingGenres[farm.genre!].title+'の主な分布'):layer.title+(state.layer==='overlay'?'と気候を重ねる':'');
     query('#eu-map-label').textContent=layer.title+'。地図の名前から地点を選べます。';
     query<SVGGElement>('[data-eu-static-codes]').style.display=climateVisible?'':'none';
     query<SVGGElement>('[data-eu-static-codes]').removeAttribute('hidden');
@@ -625,7 +626,7 @@ export function initEuropeAtlas() {
   }
 
   function selectionBounds() {
-    if(subject().field==='industry')return [[-13,35],[48,70]] as [[number,number],[number,number]];
+    if(subject().field==='industry')return [[-9,37],[37,60]] as [[number,number],[number,number]];
     const focus=comparisonFocus();
     if(focus)return [[focus.focusBounds[0],focus.focusBounds[1]],[focus.focusBounds[2],focus.focusBounds[3]]] as [[number,number],[number,number]];
     if(subject().field==='agriculture')return state.farmExtent==='full'||!farmingView().active ? [[frame.west,frame.south],[frame.east,frame.north]] as [[number,number],[number,number]] : europeFarmingInitialBounds;
@@ -680,7 +681,7 @@ export function initEuropeAtlas() {
     }else if(cultureRunning){cultureRunning=false;culture.setActive(false);}
     cultureOverview.render(cultureActive(),topic==='religion'?'religion':'ethnicity',state.cultureCase??'');
     cultureOverview.renderEvidence(cultureActive()&&topic==='religion'&&!state.cultureCase,state.feature);
-    const selectedTopic=currentField.id==='agriculture'?(['forest','treecover'].includes(topic)?'treecover':'crops'):currentField.id==='population'?(cultureActive()?topic:'density'):['precipitation','drainage'].includes(topic)?'water':topic;
+    const selectedTopic=currentField.id==='agriculture'?(['forest','treecover'].includes(topic)?'treecover':europeFarmingGenreForLayer(topic)??'crops'):currentField.id==='population'?(cultureActive()?topic:'density'):['precipitation','drainage'].includes(topic)?'water':topic;
     all<HTMLElement>('[data-eu-topic]').forEach(button=>{
       const industryGroup=normaliseEuropeIndustryGroup(button.dataset.euIndustryGroup);
       const selected=button.closest('[data-eu-water-options]')?topic:selectedTopic;
@@ -738,7 +739,7 @@ export function initEuropeAtlas() {
     }else if(restorePoint)void showGrid(state.point,false);
     query<HTMLElement>('.eu-read-panel').setAttribute('aria-labelledby',cultureActive()?'eu-culture-reader-title':climateReader()?'eu-city-heading':'eu-subject-title');
     const farm=farmingView();
-    const guidance=climateReader()?'都市名を押すと、右の説明・雨温図と、下の月別数値が切り替わります。':cultureActive()?'地図下で事例・分類・行政区を選び、同じ表の総人口に対する割合を読みます。':farm.active?farm.single?`${farm.item!.name}だけを表示中です。元の表示には右側のボタンで戻れます。`:!farm.visible.length?'作物・畜産の分布は非表示です。左上のボタンで表示できます。':farm.item&&!farm.selectedVisible?`${farm.item.name}の分布は非表示です。選択した説明は右側に表示しています。`:'品目名を選ぶと、その分布全体の輪郭を強調します。重なる場所では候補を選べます。':visibleFeatures().length?'地図の名前を押すと、その場所の説明を表示します。':subject().id==='precipitation'?'地図を押すと、その地点の年降水量を右側に表示します。':subject().id==='terrain'?'地図の山脈・平原・半島・海域の名前と右側の説明を読みます。':subject().grid?'地図を押すと、その位置の値を右側に表示します。':subject().indicator?'国を押すと、画面下部に国全体の数値を表示します。':'地図の凡例と右側の説明を読み比べます。';
+    const guidance=climateReader()?'都市名を押すと、右の説明・雨温図と、下の月別数値が切り替わります。':cultureActive()?'地図下で事例・分類・行政区を選び、同じ表の総人口に対する割合を読みます。':farm.active?farm.single?`${farm.item!.name}だけを表示中です。元の表示には右側のボタンで戻れます。`:'品目名を選ぶと、その分布全体の輪郭を強調します。重なる場所では候補を選べます。':visibleFeatures().length?'地図の名前を押すと、その場所の説明を表示します。':subject().id==='precipitation'?'地図を押すと、その地点の年降水量を右側に表示します。':subject().id==='terrain'?'地図の山脈・平原・半島・海域の名前と右側の説明を読みます。':subject().grid?'地図を押すと、その位置の値を右側に表示します。':subject().indicator?'国を押すと、画面下部に国全体の数値を表示します。':'地図の凡例と右側の説明を読み比べます。';
     status.textContent=(failed?'簡易地図で表示中。':'')+guidance;
     query<HTMLElement>('[data-eu-statistics]').hidden=all<HTMLElement>('[data-eu-statistics] > *').every(section=>section.hidden);
     all<HTMLElement>('[data-eu-extra-field]').forEach(el=>{el.hidden=el.dataset.euExtraField!==currentField.id;});
@@ -779,7 +780,7 @@ export function initEuropeAtlas() {
     commit(false);
   }
   function returnOverview() {
-    if(subject().field==='agriculture'){state.layer='crops';delete state.single;}
+    if(subject().field==='agriculture'){state.layer=europeFarmingGenreForLayer(state.layer)??'crops';delete state.single;}
     else delete state.feature;
     query<HTMLElement>('[data-eu-farm-candidates]').hidden=true;
     commit(false);
@@ -895,11 +896,6 @@ export function initEuropeAtlas() {
   }));
   all<HTMLElement>('[data-eu-city-select]').forEach(button=>button.addEventListener('click',()=>selectCity(button.dataset.euCitySelect!)));
   query<HTMLSelectElement>('[data-eu-city-choice]').addEventListener('change',event=>selectCity((event.target as HTMLSelectElement).value));
-  all<HTMLElement>('[data-eu-toggle]').forEach(button=>button.addEventListener('click',()=>{
-    if(button.dataset.euToggle==='crop')state.showCrops=state.showCrops===false;
-    else state.showLivestock=state.showLivestock===false;
-    query<HTMLElement>('[data-eu-farm-candidates]').hidden=true;commit(false);
-  }));
   query('[data-eu-single]').addEventListener('click',()=>{if(farmingView().item){state.single=true;commit(false);}});
   query('[data-eu-reading-focus]').addEventListener('click',()=>{if(subject().id==='wheat')selectCountry('GBR');});
   query('[data-eu-return-multi]').addEventListener('click',()=>{delete state.single;commit(false);});

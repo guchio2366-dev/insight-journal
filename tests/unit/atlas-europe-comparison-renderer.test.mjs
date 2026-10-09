@@ -40,11 +40,11 @@ test('crop climate comparison carries the published crop geometry, not a quantit
     assert.equal(root.querySelector('[data-eu-origin-map]').hasAttribute('hidden'),true);
   }finally{window.happyDOM.abort();delete globalThis.document;}
 });
-test('hidden original crop stays hidden; single selection overrides a saved crop toggle',()=>{
+test('legacy crop toggle cannot hide the source; single selection retains its geometry',()=>{
   const {window,root}=setup();try {
     renderEuropeOrigin(root,{...state('wheat'),showCrops:false},europeLayers.find(l=>l.id==='climate'),config);
-    assert.equal(root.querySelectorAll('[data-eu-comparison-overlay] path').length,0);
-    assert.match(root.querySelector('[data-eu-origin-legend]').textContent,/元の選択.*非表示/);
+    assert.equal(root.querySelectorAll('[data-eu-comparison-overlay] path').length,1);
+    assert.match(root.querySelector('[data-eu-origin-legend]').textContent,/小麦.*主な集中域/);
     renderEuropeOrigin(root,{...state('wheat'),showCrops:false,single:true},europeLayers.find(l=>l.id==='climate'),config);
     assert.equal(root.querySelectorAll('[data-eu-comparison-overlay] path').length,1);
   }finally{window.happyDOM.abort();delete globalThis.document;}

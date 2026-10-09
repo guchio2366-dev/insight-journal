@@ -330,6 +330,7 @@
  .eu-workspace-root[data-europe-detail] .eu-item-list section { display:contents; }
  .eu-workspace-root[data-europe-detail] .eu-item-list h3 { margin:0; padding:0 4px; }
  .eu-workspace-root[data-europe-detail] .eu-item-list>div,.eu-workspace-root[data-europe-detail] .eu-item-list section>div { display:contents; }
+ .eu-workspace-root[data-europe-detail] .eu-item-list .eu-farm-missing { flex:0 0 100%; margin:3px 5px 5px; color:#526561; font:12px/1.5 var(--sans); }
  .eu-workspace-root[data-europe-detail] .eu-legend-grid>div { font-size:12px; }
  .eu-workspace-root[data-europe-detail] .eu-water-options button { min-height:44px; padding:7px 10px; }
 }
@@ -474,7 +475,7 @@
 }
 @media(min-width:960px) and (max-width:1199px) {
  .eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-layout { grid-template-columns:minmax(0,1fr) 290px; }
- .eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-map-stage { aspect-ratio:1.55; }
+ .eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-map-stage { aspect-ratio:1.18; }
  .eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="industry"] { align-items:stretch; }
  .eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="industry"] button { height:auto; min-height:64px; padding-block:6px; white-space:normal; }
 }
@@ -503,6 +504,9 @@
 .eu-workspace-root[data-europe-detail] .eu-label-dot[data-eu-industry] { fill:var(--eu-industry-color); stroke:var(--eu-industry-outline,#263e45); stroke-width:2.2; }
 .eu-workspace-root[data-europe-detail] .eu-label-dot[data-eu-industry].is-emphasized { stroke-width:3.5; }
 .eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry]:not(.is-point-only) { border:1px solid #708887; border-left:5px solid var(--eu-industry-color); border-radius:2px; background:#fffef4f2; font-weight:700; }
+.eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry]:not(.is-point-only) { display:inline-flex; align-items:baseline; gap:3px; }
+.eu-workspace-root[data-europe-detail] .eu-label-industry { font:700 12px/1.25 var(--sans); }
+.eu-workspace-root[data-europe-detail] .eu-label-location { font:500 10px/1.25 var(--sans); color:#4b6060; }
 @media (min-width:960px) {
  .eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="industry"] { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:5px; }
  .eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="industry"] button { width:100%; min-height:42px; height:auto; padding:6px 3px; font-size:13px; }

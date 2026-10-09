@@ -25,16 +25,17 @@ OUTPUT = ROOT / 'src/data/atlas/europe/farming-areas.json'
 BOUNDS = [-25, 32, 65, 73]
 ROWS, COLS = 492, 1080
 STEP = 1 / 12
-QUANTILE = .90
-SMOOTH_RADIUS = 2
-MIN_NEIGHBOR_FRACTION = .60
+QUANTILE = .80
+SMOOTH_RADIUS = 3
+SMOOTH_RADIUS_BY_PRODUCT = {'maize': 2}
+MIN_NEIGHBOR_FRACTION = .55
 MIN_AREA_KM2 = 750
 # Irrigated rice and citrus occupy smaller, discontinuous concentrations.
 # Preserve those source-supported regions without widening their value cutoff.
-PRODUCT_RULES = {'rice': (0.50, 500), 'citrus': (0.50, 500)}
+PRODUCT_RULES = {'rice': (0.45, 500), 'citrus': (0.45, 500)}
 # The overview is read at roughly 600–900 CSS pixels across Europe. Retain
 # source-supported components while dropping sub-pixel stair steps at that scale.
-SIMPLIFY_DEGREES = .10
+SIMPLIFY_DEGREES = .16
 RADIUS_KM = 6371.0088
 inputs = []
 
@@ -140,7 +141,8 @@ def main():
         high = positive & (grid >= threshold)
         # Require local concentration and direct positive evidence in each cell.
         # Missing and zero source cells do not acquire evidence from neighbours.
-        neighborhood = box_mean(high, SMOOTH_RADIUS)
+        smoothing_radius = SMOOTH_RADIUS_BY_PRODUCT.get(id, SMOOTH_RADIUS)
+        neighborhood = box_mean(high, smoothing_radius)
         candidate = high & (neighborhood >= neighbor_fraction)
         exact = grid_geometry(candidate).intersection(land)
         source_parts = polygons(exact)
@@ -210,7 +212,7 @@ def main():
         label = [round(float(longitudes[col]), 6), round(float(latitudes[row]), 6)]
         properties = dict(product, threshold=threshold, labelCoordinate=label)
         features.append(dict(type='Feature', properties=properties, geometry=geometry_json))
-        record = dict(id=id, threshold=threshold, minimumNeighborFraction=neighbor_fraction,
+        record = dict(id=id, threshold=threshold, smoothingRadiusCells=smoothing_radius, minimumNeighborFraction=neighbor_fraction,
                       minimumComponentAreaKm2=minimum_area, positiveCells=int(np.sum(positive)),
                       aboveThresholdCells=int(np.sum(high)), candidateCells=int(np.sum(candidate)),
                       originalComponents=len(source_parts), retainedComponents=len(kept),
@@ -228,17 +230,19 @@ def main():
         sourceGrid=dict(width=COLS, height=ROWS, resolutionDegrees=STEP,
                         encoding='gzip little-endian float32', nodata=-1),
         threshold=dict(quantile=QUANTILE, population='各品目の欧州対象国の陸域内にある正値の元格子',
-                       meaning='品目ごとの収穫面積または飼養密度の第90百分位'),
-        processing=dict(smoothing='閾値以上の格子の割合を5×5格子で平均し、原則60%以上の場所を選ぶ。米と柑橘類は50%以上。中心格子も第90百分位以上の値が必要。',
+                       meaning='品目ごとの収穫面積または飼養密度の第80百分位'),
+        processing=dict(smoothing='閾値以上の格子の割合を原則7×7格子（トウモロコシは5×5）で平均し、原則55%以上の場所を選ぶ。米と柑橘類は45%以上。中心格子も第80百分位以上の値が必要。',
                         smoothingRadiusCells=SMOOTH_RADIUS, minimumNeighborFraction=MIN_NEIGHBOR_FRACTION,
+                        smoothingRadiusByProduct=SMOOTH_RADIUS_BY_PRODUCT,
+                        smoothingRadiusReason='トウモロコシはポー平原の高値格子（8.708333°E, 45.291667°N）が7×7近傍では53.1%で切れるため、元の5×5近傍（64%）を保ち、同地点を根拠のある面として残す。',
                         minimumComponentAreaKm2=MIN_AREA_KM2,
                         productRules={id: dict(minimumNeighborFraction=rule[0], minimumComponentAreaKm2=rule[1]) for id, rule in PRODUCT_RULES.items()},
-                        productRuleReason='米と柑橘類は小さく分かれた高値の産地を残すため、近隣比率と最小面積のみ緩和する。元格子の第90百分位は全品目で維持する。',
+                        productRuleReason='米と柑橘類は小さく分かれた産地を残すため、近隣比率と最小面積のみ緩和する。元格子の第80百分位は全品目で維持する。',
                         concentrationSelection='各品目について元格子の閾値・近傍比率・最小面積と最終証拠条件を満たす集中域をすべて保持する。品目内の上位件数では切り詰めない。品目間の生産額順位や国別統計ではない。',
                         minimumAreaMethod='半径6371.0088kmの球面円筒等積投影による概算面積',
                         simplifyToleranceDegrees=SIMPLIFY_DEGREES, coordinatePrecisionDecimalPlaces=6,
                         precisionTopology='6桁への丸め後にmake_validとunion_allで接触辺を修復。緩衝帯や離れた面を結ぶ線を加えない。',
-                        finalEvidence='修復後の原則750km²未満（米・柑橘類は500km²未満）の面と、第90百分位以上の元格子中心を一つも含まない面は表示しない。',
+                        finalEvidence='修復後の原則750km²未満（米・柑橘類は500km²未満）の面と、第80百分位以上の元格子中心を一つも含まない面は表示しない。',
                         clipping='europe-countries.jsonでkind=europeの国を結合し、表示範囲と陸域で切り抜く。周辺国は含めない。',
                         overlaps='16品目をそれぞれ独立に処理し、分布が重なる部分も残す。最大品目だけに割り当てない。',
                         labelPlacement='分布面内の元格子の数量が最大の面を選び、その面の正値の第90百分位以上かつ全体閾値以上の元セル中心を使う。面の比較は作物で収穫面積、家畜で密度×球面格子面積を使う。数量集計は名称配置だけに用い、統計値として提示しない。',

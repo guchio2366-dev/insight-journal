@@ -1,29 +1,25 @@
 import type { Map as LibreMap } from 'maplibre-gl';
 import type { EuropeState } from './atlas-europe-view';
+import { europeFarmingGenreForLayer, europeFarmingGenres } from '../data/atlas/europe/farming-genres.ts';
 
 export type FarmingItem = { id:string; name:string; kind:'crop'|'livestock'; color:string; labelCoordinate:number[] };
 export type FarmingAreas = {type:'FeatureCollection';features:{type:'Feature';properties:FarmingItem;geometry:unknown}[]};
 
-/** The overview keeps every source-backed shape. Five distinctive crops carry
- * the color; the other shapes remain as fine outlines until selected. */
-export const overviewColorCrops=['rice','citrus','sunflower','maize','wheat'] as const;
-const prominent=new Set<string>(overviewColorCrops);
-const outlineLivestock=new Set(['cattle','sheep']);
+/** All source-backed areas in the selected genre carry their own color. */
 export function farmingVisualWeight(item:FarmingItem,selectedId:string|undefined,single:boolean){
-  if(single)return {fill:item.kind==='livestock'?.24:.82,line:.82,width:1.2};
-  if(item.id===selectedId)return {fill:item.kind==='livestock'?.24:.82,line:.82,width:1.2};
-  if(item.kind==='livestock')return {fill:0,line:outlineLivestock.has(item.id)?(selectedId?.24:.58):.24,width:outlineLivestock.has(item.id)?1:.55};
-  if(prominent.has(item.id))return {fill:selectedId?.16:.78,line:selectedId?.28:.65,width:.75};
-  return {fill:selectedId?.012:.035,line:selectedId?.16:.28,width:.5};
+  if(single||item.id===selectedId)return {fill:.8,line:.9,width:1.4};
+  return {fill:selectedId?.42:.57,line:selectedId?.18:.2,width:.55};
 }
 
-/** Selection and visibility are independent; a single-item view preserves both switches. */
+/** A genre shows every available item; selection emphasizes one without hiding peers. */
 export function farmingPresentation(state:EuropeState, items:FarmingItem[]) {
   const item=items.find(item=>item.id===state.layer);
-  const active=state.layer==='crops'||state.layer==='dairy'||!!item;
+  const genre=europeFarmingGenreForLayer(state.layer);
+  const active=!!genre;
   const single=active&&!!item&&state.single===true;
-  const visible=active?items.filter(candidate=>single?candidate.id===item!.id:candidate.kind==='crop'?state.showCrops!==false:state.showLivestock!==false):[];
-  return {active,item,single,visible,selectedVisible:!!item&&visible.some(candidate=>candidate.id===item.id)};
+  const genreContainsItem=!!item&&!!genre&&europeFarmingGenres[genre].ids.some(id=>id===item.id);
+  const visible=genre?(single||item&&!genreContainsItem?items.filter(candidate=>candidate.id===item!.id):europeFarmingGenres[genre].ids.map(id=>items.find(candidate=>candidate.id===id)).filter((candidate):candidate is FarmingItem=>!!candidate)):[];
+  return {active,genre,item,single,visible,selectedVisible:!!item&&visible.some(candidate=>candidate.id===item.id)};
 }
 
 /** Test the same polygons in both renderers, including holes and overlapping items. */

@@ -7,7 +7,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import EuropeClimateReading from './EuropeClimateReading.astro';
 import EuropeStatistics from './EuropeStatistics.astro';
 import farmingAreas from '../../data/atlas/europe/farming-areas.json';
-import { overviewColorCrops, farmingVisualWeight } from '../../lib/atlas-europe-farming';
+import { farmingVisualWeight } from '../../lib/atlas-europe-farming';
+import { europeFarmingGenres, europeFarmingGenreIds } from '../../data/atlas/europe/farming-genres';
 import EuropeSubjectReader from './EuropeSubjectReader.astro';
 import EuropePopulationCases from './EuropePopulationCases.astro';
 import '../../styles/atlas-europe-comparison.css';
@@ -45,7 +46,7 @@ const initialClimateReader = field==='nature';
 const climateOverview = europeReaderCopy(layers.find(l=>l.id==='climate')!);
 const initialFeatures = field==='population'?populationCities:field==='industry'?europeReadings.filter(r=>r.field==='industry'):[];
 const initialPointVisible = (p:{id:string;rank?:number}) => initialFeatures.some(f=>f.id===p.id)&&(p.rank??0)<=1;
-const renderPriority=(feature:(typeof farmingAreas.features)[number])=>feature.properties.kind==='livestock'?10:Math.max(0,overviewColorCrops.indexOf(feature.properties.id as typeof overviewColorCrops[number])+1);
+const renderPriority=(feature:(typeof farmingAreas.features)[number])=>{const index=europeFarmingGenres.crops.ids.indexOf(feature.properties.id as typeof europeFarmingGenres.crops.ids[number]);return index<0?europeFarmingGenres.crops.ids.length:index;};
 const displayFarmingAreas={...farmingAreas,features:[...farmingAreas.features].sort((a,b)=>renderPriority(a)-renderPriority(b))};
 const industryOverviews = Object.fromEntries(europeIndustryCountries.map(code=>{const copy=countryOverview(code)!.topics.industry!;return [code,{...copy,sources:copy.sourceIds.map(id=>countryOverviewSource(id))}];}));
 const config = { industryOverviews, farmingAreas:displayFarmingAreas, geography, climateWater, countries, cities: cities.map(({ id, name, country, coordinates }) => ({ id, name, country, coordinates })), climate, wheat, wheatValues: withBase('/assets/atlas/europe/wheat-v1/values.bin.gz'), initialLayer: currentField.initial, layers, populationCities, readings:europeReadings, statistics };
@@ -68,7 +69,7 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, geography,
         <div class="eu-map-stage" data-map-surface tabindex="0" role="region" aria-label="欧州の地図">
           <EuropeLayoutControls position="map" {field} />
           <div class="eu-map-buttons" role="group" aria-label="地図の縮尺と表示"><button type="button" data-eu-reset>全体へ</button><button type="button" data-eu-zoom="in" aria-label="地図を拡大">＋</button><button type="button" data-eu-zoom="out" aria-label="地図を縮小">−</button><button type="button" data-eu-render>簡易表示</button></div>
-          <div class="eu-map-heading"><div><h2 id="eu-map-title" data-eu-map-title>{initialLayer.title}</h2><p data-eu-map-status>{initialClimateReader?'都市を選ぶと、その観測所の気候を表示します。':agriculture?'作物・家畜の分布を同時表示しています。品目名を選ぶと輪郭を強調します。':'地図の分布と右側の説明を読み比べます。'}</p></div><p data-eu-focus aria-live="polite">欧州全体</p></div>
+          <div class="eu-map-heading"><div><h2 id="eu-map-title" data-eu-map-title>{initialLayer.title}</h2><p data-eu-map-status>{initialClimateReader?'都市を選ぶと、その観測所の気候を表示します。':agriculture?'穀物・畑作の品目を同時表示しています。品目名を選ぶと輪郭を強調します。':'地図の分布と右側の説明を読み比べます。'}</p></div><p data-eu-focus aria-live="polite">欧州全体</p></div>
           <svg class="eu-static-map" data-eu-static viewBox={`0 0 ${frame.width} ${frame.height}`} role="img" aria-labelledby="eu-map-label">
             <title id="eu-map-label">欧州の{initialLayer.title}。{initialLayer.unit}。地図の名前から地点や品目を選べます。</title>
             <rect width={frame.width} height={frame.height} fill="#e7eff1" />
@@ -81,7 +82,7 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, geography,
             <image data-eu-origin-image x="0" y="0" width={frame.width} height={frame.height} preserveAspectRatio="none" style="display:none" />
             <defs>{displayFarmingAreas.features.map(f=><path id={`eu-farm-geometry-${f.properties.id}`} d={viewPath(f.geometry as any)} />)}</defs>
             <g class="eu-farming-areas" style={agriculture?'':'display:none'} data-eu-farming-shapes>
-              {displayFarmingAreas.features.map(f=><use href={`#eu-farm-geometry-${f.properties.id}`} data-eu-farm-area={f.properties.id} fill-rule="evenodd" fill={f.properties.color} fill-opacity={farmingVisualWeight(f.properties,undefined,false).fill} stroke={f.properties.color} stroke-opacity={farmingVisualWeight(f.properties,undefined,false).line} stroke-width={farmingVisualWeight(f.properties,undefined,false).width} stroke-dasharray={f.properties.kind==='livestock'?'5 3':undefined} vector-effect="non-scaling-stroke"><title>{f.properties.name}の主な分布</title></use>)}
+              {displayFarmingAreas.features.map(f=><use href={`#eu-farm-geometry-${f.properties.id}`} data-eu-farm-area={f.properties.id} style={europeFarmingGenres.crops.ids.some(id=>id===f.properties.id)?undefined:'display:none'} fill-rule="evenodd" fill={f.properties.color} fill-opacity={farmingVisualWeight(f.properties,undefined,false).fill} stroke={f.properties.color} stroke-opacity={farmingVisualWeight(f.properties,undefined,false).line} stroke-width={farmingVisualWeight(f.properties,undefined,false).width} stroke-dasharray={f.properties.kind==='livestock'?'5 3':undefined} vector-effect="non-scaling-stroke"><title>{f.properties.name}の主な分布</title></use>)}
             </g>
             <g class="eu-farming-selection">
               {farmingAreas.features.map(f=><g><use href={`#eu-farm-geometry-${f.properties.id}`} data-eu-farm-outline={f.properties.id} fill="none" stroke="#fffdf2" stroke-width="5" vector-effect="non-scaling-stroke" style="display:none"/><use href={`#eu-farm-geometry-${f.properties.id}`} data-eu-farm-outline={f.properties.id} fill="none" stroke="#173c48" stroke-width="2.5" vector-effect="non-scaling-stroke" style="display:none"/></g>)}
@@ -98,7 +99,7 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, geography,
             <g data-eu-culture-layer></g>
           </svg>
           <div class="eu-live-map" data-eu-live aria-label="操作できる欧州地図"></div>
-          <div class="eu-map-inline-key" data-eu-inline-farm-key hidden={!agriculture} aria-label="農畜産分布の主な色"><strong>主な色面</strong>{overviewColorCrops.map(id=>{const item=farmingAreas.features.find(f=>f.properties.id===id)!.properties;return <span><i style={`background:${item.color}`}></i>{item.name}</span>})}<small>他品目は細い輪郭。選択で強調</small></div>
+          <div class="eu-map-inline-key" data-eu-inline-farm-key hidden={!agriculture} aria-label="農畜産分布の品目色"><strong data-eu-farm-key-title>穀物・畑作</strong>{farmingAreas.features.map(f=><span data-eu-farm-key-item={f.properties.id} hidden={!europeFarmingGenres.crops.ids.some(id=>id===f.properties.id)}><i style={`background:${f.properties.color}`}></i>{f.properties.name}</span>)}<small>色は品目、重なりは複数品目</small></div>
           <div class="eu-map-inline-key eu-map-industry-key" data-eu-inline-industry-key hidden={field!=='industry'} aria-label="産業拠点の色と分野">{europeIndustryGroups.map(group=><span><i style={`background:${europeIndustryColors[group]}`}></i>{group}</span>)}</div>
           <div class="eu-map-annotations" data-eu-annotations aria-label="地図の都市と地点"><svg aria-hidden="true"></svg></div>
           <div class="eu-farming-focus-marker" data-eu-farming-focus-marker hidden><span aria-hidden="true"></span><strong data-eu-farming-focus-point-label></strong></div>
@@ -106,10 +107,9 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, geography,
         </div>
         <div class="eu-terrain-name-options" data-eu-terrain-name-options hidden role="group" aria-label="地形名の種類"><button type="button" data-eu-terrain-names="landforms" aria-pressed="true">山地・平原</button><button type="button" data-eu-terrain-names="coasts" aria-pressed="false">半島・島・海域</button></div>
         <div class="eu-map-legend" data-eu-map-legend><p class="eu-water-note">河川・湖の位置、年降水量、流域区画を切り替えます。地下水の歴史的な水理地質図は利用条件を確認済みですが、原画像を取得・位置合わせできていないため未収録です。</p></div>
-        <div class="eu-item-list" data-eu-farming-list hidden={!agriculture} aria-label="農畜産物と林業を選ぶ">
-          <p class="eu-item-ranking-note" data-eu-farming-ranking-note>作物12区分・家畜4種の分布と、酪農の生乳統計です。生産額順位ではありません。野菜・果樹の集合区分と個別作物、生体数と肉・乳・卵を同列に順位付けしません。</p>
-          {(['crop','livestock'] as const).map(kind=><section data-eu-farming-children={kind}><h3>{kind==='crop'?'作物':'畜産'}</h3><div>{farmingAreas.features.filter(f=>f.properties.kind===kind).map(f=><button type="button" data-eu-layer={f.properties.id} aria-pressed="false"><span class:list={['eu-item-swatch',{'is-livestock':kind==='livestock'}]} style={{'--item-color':f.properties.color}}></span>{f.properties.name}</button>)}</div></section>)}
-          <section data-eu-farming-children="dairy"><h3>酪農</h3><button type="button" data-eu-layer="dairy" aria-pressed="false">牛の生乳 · 国別統計</button></section>
+        <div class="eu-item-list" data-eu-farming-list hidden={!agriculture} aria-label="現在のジャンルの品目を選ぶ">
+          <p class="eu-item-ranking-note" data-eu-farming-ranking-note>選んだジャンルの品目を同時表示します。色は品目を表し、面積や濃さで生産量を比較しません。</p>
+          {europeFarmingGenreIds.map(genre=><section data-eu-farming-children={genre} hidden={genre!=='crops'}><h3>{europeFarmingGenres[genre].title}</h3><div>{europeFarmingGenres[genre].ids.map(id=>{const f=farmingAreas.features.find(feature=>feature.properties.id===id);return f?<button type="button" data-eu-layer={id} aria-pressed="false"><span class:list={['eu-item-swatch',{'is-livestock':f.properties.kind==='livestock'}]} style={{'--item-color':f.properties.color}}></span>{f.properties.name}</button>:null;})}</div><p class="eu-farm-missing">{europeFarmingGenres[genre].missing}</p></section>)}
           <section data-eu-farming-children="forest" hidden><h3>林業</h3><button type="button" data-eu-layer="treecover" aria-pressed="false">樹木被覆の分布 · 2021</button><button type="button" data-eu-layer="forest" aria-pressed="false">国別の森林面積比率 · 2023</button></section>
         </div>
         <div class="eu-map-candidates" data-eu-farm-candidates hidden aria-live="polite"></div>
@@ -121,10 +121,10 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, geography,
 
         <details class="eu-legend" data-eu-wheat-legend open hidden><summary>小麦の収穫面積 <span>2020年頃 · ha / 格子</span></summary><div class="eu-legend-grid">{wheatLegend.map(l => <div><span class="eu-swatch" style={`background:${l.color}`}></span><span>{l.label}</span></div>)}<div><span class="eu-swatch" style="background:repeating-linear-gradient(45deg,#fff,#fff 3px,#ccd3cc 3px,#ccd3cc 4px)"></span><span>データなし（下地が透けます）</span></div></div><details class="eu-legend-methods"><summary>対象範囲・出典</summary><p>IFPRI SPAM 2020 v2r2。全栽培方式の合計。0とデータなしを区別しています。重ね合わせでは小麦の色を半透明にするため、気候図と小麦図を切り替えて凡例を確認してください。</p></details></details>
         <div class="eu-farming-key" data-eu-farming-legend hidden={!agriculture}>
-          <p><strong>主な栽培域・飼養地域 · 2020年頃</strong></p>
-          <p>作物は実線、家畜は破線で示します。重なった色は新しい分類ではありません。品目を選ぶと、その分布の輪郭を濃くします。</p>
-          <details class="eu-legend-methods"><summary>対象範囲・出典</summary><p>品目ごとの正値格子の上位10%が集中する場所から、条件を満たす集中域を件数で切らずに残した概略図です。全ての産地を塗った図ではありません。色のない場所や北欧でも生産がないとは限らず、色や面積で品目間の生産量を比較できません。初期表示は主要生産地域を拡大し、「欧州全域へ」で北部も確認できます。</p>
-          <p>牛は肉用・乳用、鶏は肉用・採卵用を分けていません。オリーブ・ブドウ単独の分布は未収録です。</p>
+          <p><strong data-eu-farm-legend-title>穀物・畑作の主な栽培域 · 2020年頃</strong></p>
+          <p>各色が品目別の集中域です。重なった色は複数品目の重なりで、新しい分類ではありません。品目を選ぶと、その分布を強調します。</p>
+          <details class="eu-legend-methods"><summary>対象範囲・出典</summary><p>品目ごとの正値格子の上位20%が集まる場所から、近傍と面積の条件を満たす分布面を件数で切らずに残した概略図です。全ての産地を塗った図ではありません。色のない場所や北欧でも生産がないとは限らず、色や面積で品目間の生産量を比較できません。初期表示は主要生産地域を拡大し、「欧州全域へ」で北部も確認できます。</p>
+          <p data-eu-farm-missing>{europeFarmingGenres.crops.missing}</p>
           <a href={withBase('/assets/atlas/europe/farming-overview-v2/manifest.json')}>出典・分布面の加工方法</a>
           </details>
         </div>

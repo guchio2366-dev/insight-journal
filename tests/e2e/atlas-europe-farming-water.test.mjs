@@ -127,6 +127,7 @@ test('selected commodity statistics keep one subject and one country through URL
     await statisticsReady(app);
     assert.equal(app.q('[data-eu-farm-stat-summary]').children.length,1,'Legacy comparison URL cannot add another visible country');
     assert.match(app.q('[data-eu-farm-share-status]').textContent,/ドイツ.*2024年/,'Legacy year URL cannot change the fixed display year');
+    app.q('[data-eu-topic="livestock"]').click();
     app.q('[data-eu-layer="chicken"]').click(); await statisticsReady(app);
     const chicken=app.q('[data-eu-verified-topic="chicken"]');
     assert.equal(chicken.hidden,false);
@@ -139,12 +140,13 @@ test('selected commodity statistics keep one subject and one country through URL
   } finally { await app.close(); }
 });
 
-test('all 16 farming selections and dairy reveal only figures matching the selected commodity',async()=>{
+test('three genre menus show only figures matching the selected commodity',async()=>{
   const app=await setup();
   try{
     const matches={wheat:[1,1],potato:[1,0],maize:[1,0],soybean:[0,1]};
-    const ids=app.config.farmingAreas.features.map(feature=>feature.properties.id).concat('dairy');
-    for(const id of ids){
+    const genres={crops:['wheat','barley','maize','potato','sugarbeet','rapeseed'],livestock:['cattle','pig','chicken','sheep'],horticulture:['citrus','temperatefruit','vegetables']};
+    for(const [genre,ids] of Object.entries(genres))for(const id of ids){
+      app.q(`[data-eu-topic="${genre}"]`).click();
       app.q(`[data-eu-layer="${id}"]`).click();await tick();
       const visible=[...app.w.document.querySelectorAll('[data-eu-verified-topic]:not([hidden])')];
       assert.deepEqual(visible.map(panel=>panel.dataset.euVerifiedTopic),[id]);
@@ -154,6 +156,7 @@ test('all 16 farming selections and dairy reveal only figures matching the selec
       assert.equal(visible[0].querySelectorAll('.eu-verified-food-band').length,0,id);
       if(!matches[id])assert.match(visible[0].textContent,/別の品目の数値で代用しません/,id);
     }
+    assert.equal(app.q('[data-eu-layer="dairy"]'),null,'A national milk button cannot stand in for a dairy production belt');
     app.q('[data-eu-topic="crops"]').click();await tick();
     assert.equal(app.q('[data-eu-verified-overview]').hidden,false);
     assert.equal(app.w.document.querySelectorAll('[data-eu-verified-topic]:not([hidden])').length,0);
@@ -243,21 +246,21 @@ test('Portugal rice uses its retained water section and livestock choices connec
   }
 });
 
-test('disabled crop and livestock displays remain disabled in the comparison source and saved return choice', async () => {
+test('legacy display-off URL parameters cannot hide a genre map or its fixed comparison source', async () => {
   const source = await setup(route('agriculture', 'layer=rice&place=ITA&render=static&crops=off&livestock=off&farmYear=2018'));
   let target;
   try {
     await statisticsReady(source);
     target = await setup(source.q('[data-eu-comparison-link="rice-po-precipitation"]').href);
     await until(() => target.q('[data-eu-farming-focus-value]').textContent.includes('比較地点：'));
-    assert.match(target.q('[data-eu-origin-legend]').textContent, /元の選択では対象の分布は非表示/);
-    assert.equal(target.q('[data-eu-comparison-overlay]').querySelectorAll('path').length, 0);
+    assert.match(target.q('[data-eu-origin-legend]').textContent, /米/);
+    assert.equal(target.q('[data-eu-comparison-overlay]').querySelectorAll('path').length, 1);
     const back = new URL(target.q('[data-eu-comparison-return]').href);
     assert.equal(back.searchParams.get('crops'), 'off');
     assert.equal(back.searchParams.get('livestock'), 'off');
     assert.equal(back.searchParams.get('farmYear'), '2018');
     source.restore(back.href); await statisticsReady(source);
-    for (const kind of ['crop', 'livestock']) assert.equal(source.q(`[data-eu-toggle="${kind}"]`).getAttribute('aria-pressed'), 'false');
+    assert.equal(source.q('[data-eu-farming-toggles]'),null);
     assert.equal(source.q('[data-eu-farm-year]').value, '2024','The visible country detail uses its fixed year even for a legacy return URL');
     assert.equal(source.q('[data-eu-farm-numbers]').hidden,false);
     assert.match(source.q('[data-eu-farm-stat-summary]').textContent,/2024年/);

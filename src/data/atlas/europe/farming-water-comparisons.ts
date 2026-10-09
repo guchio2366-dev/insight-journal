@@ -34,7 +34,7 @@ const regions: Record<string, RegionCase> = {
   german: { id: 'german', name: 'ドイツと周辺の平原', city: 'berlin', point: [13.3, 52.47], bounds: [4, 46, 23, 56] },
 };
 const products: Record<string, { name: string; region: string; livestock?: boolean; demand?: boolean }> = {
-  crops: { name: '作物・家畜', region: 'plains' },
+  crops: { name: '穀物・畑作', region: 'plains' },
   wheat: { name: '小麦', region: 'plains' }, barley: { name: '大麦', region: 'northern' },
   maize: { name: 'トウモロコシ', region: 'pannonian' },
   rapeseed: { name: '菜種', region: 'pannonian' }, sunflower: { name: 'ヒマワリ', region: 'eastern' },
