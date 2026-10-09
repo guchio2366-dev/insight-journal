@@ -1,0 +1,22 @@
+{
+  "source": "data-source/atlas/russia/nature/koppen_geiger_0p1_1991_2020.tif",
+  "sourceSha256": "7db968672815435562b8428f0752c2e67af7e6bb235e2969eb2db28bce428361",
+  "grid": "data-source/atlas/africa/climate-normals/original-classification.values.gz",
+  "gridSha256": "dfdd1432906ace93faffc58ef15c8e83a80983d78168cf9b79c8bb9561ec4968",
+  "width": 910,
+  "height": 750,
+  "bounds": [
+    -27,
+    -36,
+    64,
+    39
+  ],
+  "resolutionDegrees": 0.1,
+  "sourceWindow": [
+    1530,
+    510,
+    2440,
+    1260
+  ],
+  "method": "Exact source-category window without Africa land mask. Zero remains publisher ocean/noData. Used only to sample original categories at coastal station coordinates; displayed map and existing classifications are unchanged."
+}

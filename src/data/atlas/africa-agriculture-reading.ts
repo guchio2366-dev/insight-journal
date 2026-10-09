@@ -19,6 +19,7 @@ const livestockReadings: Record<string, {name: string; condition: string; manage
 };
 
 export function africaAgricultureReading(state: AfricaAgricultureReadingState) {
+  if(['coffee','tea'].includes(state.crop)&&state.topic!=='livestock')return {title:state.crop==='coffee'?'コーヒーの生産と利用':'茶の生産と利用',takeaway:'確認済みの背景を、加工・流通と合わせて読みます。',reading:'この品目の2020年SPAM原格子は未取得です。図の面分布や地点値を補作していません。',scope:'分布未取得は、生産0や生育不可能を意味しません。',compareMetric:'AG.LND.ARBL.ZS',compareLabel:'国全体の耕地割合と比べる',compareTakeaway:'分布原格子は未取得です。',compareText:'国別の耕地割合から品目の生産量を逆算しません。',sourceLabel:'IFPRI SPAM 2020（未取得格子の原典）',source:'https://doi.org/10.7910/DVN/SWPENT'};
   if (state.topic === 'livestock') {
     const item = livestockReadings[state.livestock] ?? livestockReadings.cattle;
     return {

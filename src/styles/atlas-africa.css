@@ -613,3 +613,26 @@
  .africa-atlas[data-field=nature][data-topic=climate] .africa-region-controls{display:block;min-height:44px;height:auto;grid-template-rows:none}
  .africa-atlas[data-field=nature][data-topic=climate] .africa-detail{height:calc(100dvh - var(--africa-map-top,298px) - 10px);max-height:calc(100dvh - var(--africa-map-top,298px) - 10px);overflow-y:auto;scrollbar-gutter:stable}
 }
+
+/* Approved PC revision: a taller analytical map and compact climate key. */
+@media(min-width:960px){
+ .africa-atlas[data-field=nature][data-topic=climate] .africa-map-frame{height:clamp(480px,calc(100dvh - 285px),660px);min-height:480px;aspect-ratio:auto}
+ .africa-atlas[data-field=nature][data-topic=climate] .africa-map-frame>.africa-map{height:100%;min-height:0;max-height:none}
+ .africa-atlas[data-field=nature][data-topic=climate] .africa-actual-key{padding:4px 8px}
+ .africa-atlas[data-field=nature][data-topic=climate] [data-africa-layer-legend]{display:flex;flex-wrap:wrap;gap:0 7px}
+ .africa-atlas[data-field=nature][data-topic=climate] [data-africa-layer-legend] button{min-height:30px;padding:2px 3px;font-size:13px;width:auto;flex:none}
+ .africa-atlas[data-field=nature][data-topic=climate] [data-africa-layer-legend] i{width:11px;height:10px}
+ .africa-atlas[data-field=population][data-topic=distribution] .africa-map-frame{height:clamp(450px,calc(100dvh - 330px),640px);min-height:450px;aspect-ratio:auto}
+ .africa-atlas[data-field=population][data-topic=distribution] .africa-map-frame>.africa-map{height:100%;min-height:0;max-height:none}
+ .africa-atlas[data-field=agriculture] .africa-region-row>label[data-africa-agri-region-label]{display:flex;margin-left:auto;flex-direction:row;align-items:center;gap:8px}
+ .africa-atlas[data-field=agriculture] .africa-region-row>label[data-africa-agri-region-label] select{width:160px}
+ .africa-atlas[data-field=agriculture] .africa-map-frame{height:clamp(480px,calc(100dvh - 250px),650px);min-height:480px}
+}
+.africa-regional-statistics{margin-top:16px;padding:16px;background:#fffefa;border:1px solid #c7ccbf;max-width:100%;min-width:0}
+.africa-regional-statistics h2{font-size:20px;margin:0 0 6px}
+.africa-regional-statistics p{font-size:14px;line-height:1.7;margin:6px 0 12px}
+.africa-statistics-unavailable{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:16px}
+.africa-regional-statistics h3{margin:0;font-size:16px}
+.africa-map-pick-label:hover rect,.africa-map-pick-label:focus-visible rect{fill:#fff0df;stroke:#a64e29;stroke-width:2px}
+.africa-map-pick-label:focus-visible{outline:none}
+.africa-map-pick-label:focus-visible circle:last-child{stroke:#a64e29;stroke-width:3px}

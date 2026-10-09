@@ -36,12 +36,12 @@ test('map labels select and outline a product while other distributions remain, 
  let reload;
  await withController('?field=agriculture&zoom=all',async({window,root,q})=>{
   assert.deepEqual(visibleKeys(root),[...keys].sort());assert.equal(q('[data-africa-agri-footprint]'),null);
-  assert.equal(root.querySelectorAll('[data-africa-agri-distribution]').length,4);
+  assert.equal(root.querySelectorAll('[data-africa-agri-distribution]').length,7);
   assert.deepEqual(new Set([...root.querySelectorAll('[data-africa-agri-glyph]')].map(node=>node.dataset.africaAgriGlyph)),new Set(['cattle','goats','sheep']));
   const rice=q('[data-africa-agri-label="crop-rice-harvested"]');assert.ok(rice);rice.focus();rice.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
   assert.equal(parameters(window).get('crop'),'rice');assert.equal(parameters(window).get('overview'),'0');
   assert.ok(q('[data-africa-agri-footprint="crop-rice-harvested"]'));assert.deepEqual(visibleKeys(root),[...keys].sort());
-  assert.match(q('[data-theme-title]').textContent,/稲/);assert.match(q('[data-africa-agri-context]').textContent,/マダガスカル/);
+  assert.match(q('[data-theme-title]').textContent,/米|稲/);assert.match(q('[data-africa-agri-context]').textContent,/マダガスカル/);
   assert.equal(window.document.activeElement?.dataset.africaAgriPick,'crop-rice-harvested');
   for(const key of ['livestock-cattle','livestock-goats','livestock-sheep'])assert.ok(Number(q(`[data-africa-commodity-layer="${key}"]`).style.opacity)<1,'livestock is subdued after crop selection');
   assert.equal(q('[data-africa-agri-only]').hidden,false);assert.ok(q('[data-africa-agri-only]').closest('.africa-detail'));
@@ -89,7 +89,7 @@ test('legacy single-item URLs keep only a matching selection and always restore 
    assert.equal(q('[data-africa-agri-footprint]')?.dataset.africaAgriFootprint,row.overview?undefined:focused);
    assert.equal(q('[data-africa-agri-only]').hidden,row.overview||row.only);
    assert.equal(q('[data-africa-agri-all]').hidden,!row.only);
-   assert.match(q('[data-theme-title]').textContent,row.overview?/アフリカの農畜産業/:/稲/);
+   assert.match(q('[data-theme-title]').textContent,row.overview?/アフリカの農畜産業/:/米|稲/);
   });
  });
 });
@@ -117,7 +117,7 @@ async function withSummaryFixture(run){
  for(const [index,key] of keys.entries()){
   const crop=key.startsWith('crop-'),id=crop?key.slice(5):key.slice(10),unit=crop?'ha':'頭/km²';
   manifests[crop?'crops':'livestock'].layers[id]={title:labels[index],period:'2020年モデル',unit,width:3,height:2,bounds,encoding:'float32-le',noData:-1,grid:key+'.bin',sourceUrl:'https://example.com/primary/'+key,sourceLabel:'原典'};
-  summary.layers[key]={label:labels[index],threshold:4,unit,color:'#112233',cells:index<2?[[0,1],[1,0]]:[],anchors:[{lon:-25.5,lat:38.5}]};
+  summary.layers[key]={displayImage:key+'.png',label:labels[index],threshold:4,unit,color:'#112233',cells:index<2?[[0,1],[1,0]]:[],anchors:[{lon:-25.5,lat:38.5}]};
  }
  try{
   window.document.body.innerHTML='<div><svg viewBox="0 0 1100 907"><path data-country-path="KEN" d="M1 1L2 1L2 2Z"></path><g data-africa-actual-layer></g></svg></div>';
@@ -129,20 +129,25 @@ async function withSummaryFixture(run){
  }finally{globalThis.document=previous;await window.happyDOM.abort();}
 }
 
-const rectangles=path=>[...path.matchAll(/M([\d.-]+),([\d.-]+)H([\d.-]+)V([\d.-]+)H[\d.-]+Z/g)].map(([,left,top,right,bottom])=>({left:+left,top:+top,right:+right,bottom:+bottom}));
-test('overlapping crop concentration cells use separate color bands, while queries retain original zero, tiny positive and no-data values',async()=>{
+test('soft sourced belts replace striped cell outlines, while queries retain original zero, tiny positive and no-data values',async()=>{
  await withSummaryFixture(({root,renderer,view,setState})=>{
-  assert.equal(view.visibleLayers.length,7);assert.equal(view.legend.length,7);assert.equal(new Set(view.legend.map(row=>row.color)).size,7);
-  assert.equal(root.querySelector('[data-africa-commodity-layer] image'),null,'summary distribution is geometry, not seven raw-positive alpha rasters');
-  const maize=root.querySelector('[data-africa-agri-distribution="crop-maize-harvested"]'),rice=root.querySelector('[data-africa-agri-distribution="crop-rice-harvested"]');
-  assert.notEqual(maize.getAttribute('fill'),rice.getAttribute('fill'));
-  const first=rectangles(maize.getAttribute('d')),second=rectangles(rice.getAttribute('d'));assert.equal(first.length,2);assert.equal(second.length,2);
-  for(const a of first)for(const b of second)assert.ok(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,'different crop colors never paint the same area');
+  assert.equal(view.visibleLayers.length,9);assert.equal(view.legend.length,9);assert.equal(new Set(view.legend.map(row=>row.color)).size,9);
+  assert.equal(root.querySelectorAll('[data-africa-agri-distribution]').length,7);
+  for(const key of keys){const image=root.querySelector(`[data-africa-agri-distribution="${key}"]`);assert.equal(image.tagName,'image');assert.ok(image.getAttribute('href').endsWith(key+'.png'));assert.equal(image.getAttribute('pointer-events'),'none');assert.equal(image.getAttribute('clip-path'),'url(#africa-agri-land-clip)');}
+  assert.equal(root.querySelector('[data-africa-agri-distribution="crop-coffee-harvested"]'),null);
+  assert.equal(root.querySelector('[data-africa-agri-distribution="crop-tea-harvested"]'),null);
   const outline=root.querySelector('[data-africa-agri-footprint="crop-maize-harvested"] path').getAttribute('d');assert.ok(outline);
   const zero=renderer.inspect(-26.5,38.5),tiny=renderer.inspect(-25.5,38.5),missing=renderer.inspect(-24.5,38.5);
   assert.match(zero,/トウモロコシ：0 ha/);assert.match(zero,/牛：0 頭\/km²/);assert.match(tiny,/トウモロコシ：0\.0000001 ha/);assert.match(missing,/トウモロコシ：値なし/);assert.doesNotMatch(missing,/トウモロコシ：0 ha/);
-  assert.match(view.method,/上位25%/);assert.match(view.scope,/抽出外も生産なしとは限りません/);assert.equal(view.sourceUrl,'https://example.com/primary/crop-maize-harvested');
+  assert.match(view.method,/上位25%/);assert.match(view.scope,/表示外も生産なしとは限りません/);assert.equal(view.sourceUrl,'https://example.com/primary/crop-maize-harvested');
   setState({agriLayers:'crop-maize-harvested'});assert.deepEqual(visibleKeys(root),['crop-maize-harvested']);assert.equal(root.querySelector('[data-africa-agri-footprint] path').getAttribute('d'),outline,'explicit visibility does not alter the selected concentration boundary');
   assert.match(renderer.inspect(-26.5,38.5),/：0 ha/);assert.match(renderer.inspect(-24.5,38.5),/未収録/);
+ });
+});
+
+
+test('unavailable coffee and tea never replace retained production distributions with an empty only view',async()=>{
+ for(const crop of ['coffee','tea'])await withController(`?field=agriculture&crop=${crop}&agriLayers=crop-${crop}-harvested&zoom=all`,({window,root,q})=>{
+  assert.deepEqual(visibleKeys(root),[...keys].sort());assert.equal(parameters(window).get('agriLayers'),null);assert.equal(q('[data-africa-agri-only]').hidden,true);assert.match(q('[data-africa-agri-context]').textContent,/未取得/);assert.equal(q(`[data-africa-agri-distribution="crop-${crop}-harvested"]`),null);
  });
 });

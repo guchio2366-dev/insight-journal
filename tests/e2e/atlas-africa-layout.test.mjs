@@ -91,7 +91,7 @@ test('actual distribution legends live beside the map and remain there during co
   await withAfricaPage(search,({root,q})=>{
    const legend=q('[data-africa-actual-key]');assert.equal(root.querySelectorAll('[data-africa-actual-key]').length,1);assert.equal(legend.hidden,false);assert.ok(q('.africa-map-card').contains(legend));assert.equal(q('.africa-detail').contains(legend),false);assert.ok(legend.querySelector('[data-africa-layer-legend]').children.length>0);
    assert.ok(q('.africa-map').compareDocumentPosition(legend)&4,'the full actual legend follows the map');
-   const labels=legend.textContent;if(root.dataset.field==='agriculture'){assert.equal(q('[data-theme-comparison]').hidden,true);assert.equal(legend.querySelectorAll('[data-africa-agri-pick]').length,7);assert.ok(labels.trim());return;}q('[data-theme-comparison]').click();
+   const labels=legend.textContent;if(root.dataset.field==='agriculture'){assert.equal(q('[data-theme-comparison]').hidden,true);assert.equal(legend.querySelectorAll('[data-africa-agri-pick]').length,9);assert.ok(labels.trim());return;}q('[data-theme-comparison]').click();
    assert.equal(legend.hidden,false);assert.ok(q('.africa-map-card').contains(legend));assert.equal(q('[data-africa-statistics-key]').hidden,false);assert.ok(labels.trim());
    q('[data-theme-return]').click();assert.equal(legend.hidden,false);assert.equal(q('[data-africa-statistics-key]').hidden,true);
   });
@@ -146,7 +146,7 @@ test('agriculture map selection and keyboard focus preserve seven distributions 
  await withAfricaPage('?field=agriculture',async({window,root,q})=>{
   const layers=()=>[...root.querySelectorAll('[data-africa-commodity-layer]')].map(node=>({key:node.dataset.africaCommodityLayer,display:node.style.display,opacity:Number(node.style.opacity)}));
   assert.equal(root.dataset.overview,'true');assert.equal(q('[data-place]').value,'');assert.equal(q('[data-country-statistics]').hidden,true);
-  assert.equal(root.querySelectorAll('[data-africa-layer-legend] [data-africa-agri-pick]').length,7);assert.equal(layers().length,7);assert.ok(layers().every(row=>row.display===''));
+  assert.equal(root.querySelectorAll('[data-africa-layer-legend] [data-africa-agri-pick]').length,9);assert.equal(layers().length,7);assert.ok(layers().every(row=>row.display===''));
   assert.equal(root.querySelectorAll('[data-country-path] title').length,0);assert.equal(q('[data-country-path="EGY"]').style.pointerEvents,'none');
   q('[data-africa-agri-label="crop-rice-harvested"]').dispatchEvent(new window.MouseEvent('click',{bubbles:true}));
   await wait(()=>q('[data-africa-agri-footprint="crop-rice-harvested"]'),'rice selection must show its derived outline');
