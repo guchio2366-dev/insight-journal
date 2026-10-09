@@ -154,7 +154,6 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
   await extentFits(`${region} selected crop context`);
   assert.equal(await livestock.count(),count);for(const opacity of await livestock.evaluateAll(nodes=>nodes.map(n=>getComputedStyle(n).opacity)))assert.equal(Number(opacity),.2);
   const url=page.url();await page.locator('[data-map-surface]').click({position:{x:30,y:30}});assert.equal(page.url(),url);
-  await screenshot(`${region}-${product}-context`);
  }
  record('Punjab wheat and Central Asian cotton retain livestock context and ignore unrelated background clicks');
 
@@ -283,6 +282,13 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
   bandsChecks.push({region:'south-asia',kind,interval,point,originalPointValue:value,reloadRetainsURL:true,comparisonRetainsURL:true});
  }
  record('South/Central rainfall 250mm and elevation 500m bands use aligned legends in all three focus views; original point values survive reload and comparison');
+ for(const [region,product] of [['south-asia','wheat'],['central-asia','cotton']]){
+  await open(`${region}/agriculture/?topic=${product}`);
+  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.focusMaskStatus==='ready');
+  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmContextStatus==='ready');
+  await screenshot(`${region}-${product}-context`);
+ }
+ record('South and Central crop images retain the regional country mask in all PC sizes');
  for(const [region,countries,census] of [
   ['south-asia',['AFG','BGD','BTN','IND','LKA','MDV','NPL','PAK'],'IND'],
   ['central-asia',['KAZ','KGZ','TJK','TKM','UZB'],'KAZ'],
