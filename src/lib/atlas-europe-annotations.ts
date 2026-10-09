@@ -86,7 +86,7 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
       item.button.classList.toggle('is-emphasized',emphasized);item.dot.classList.toggle('is-emphasized',emphasized);
     }
     const stageRect=stage.getBoundingClientRect();
-    const obstacles=[...stage.querySelectorAll<HTMLElement>('.eu-map-buttons,.eu-topic-map:not([hidden])')].map(el=>{
+    const obstacles=[...stage.querySelectorAll<HTMLElement>('.eu-map-buttons,.eu-topic-map:not([hidden]),.eu-map-footer')].map(el=>{
       const r=el.getBoundingClientRect();return {left:r.left-stageRect.left-5,top:r.top-stageRect.top-5,right:r.right-stageRect.left+5,bottom:r.bottom-stageRect.top+5};
     });
     if(relayout) {

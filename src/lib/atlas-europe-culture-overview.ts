@@ -2,6 +2,8 @@ import { europeCultureCompositions, type EuropeCultureComposition } from './atla
 import type { PopulationCaseChoiceKind } from '../data/atlas/europe/population-cases';
 import { europeReligionRegionalEvidence, religionEvidenceShare } from '../data/atlas/europe/religion-regional-evidence';
 import { europeReligionNationalProfiles, europeReligionNationalProfile, type ReligionNationalProfile } from '../data/atlas/europe/religion-national-overview';
+import { pew2020EuropeRow, pew2020EuropeGroups, pew2020EuropeSource, pew2020EuropeTerms } from '../data/atlas/europe/pew-religion-2020';
+import europeCountries from '../data/atlas/europe/countries.json' with {type:'json'};
 
 export const europeCultureOverviewPlaces = [
   ...europeCultureCompositions('ethnicity'),
@@ -48,11 +50,12 @@ export function createEuropeCultureOverview(root:HTMLElement,onSelectLocal:(id:s
       const colorKey=root.querySelector<HTMLElement>('[data-eu-religion-color-key]');if(colorKey)colorKey.hidden=!active||kind!=='religion'||!!caseId;
       if(!key)return;key.hidden=!active||!!caseId;if(key.hidden||rendered===kind)return;
       key.querySelector('[data-eu-culture-key-intro]')!.textContent=kind==='religion'
-        ?'5つの調査対象の国別・全国相当の回答構成です。同じ幅の帯は各対象の公表分母を100%とし、色は回答分類を示します。記号の位置は対象国の目印で、細地域の分布を表しません。'
+        ?'Pew Research Centerの2020年推計から、収録した40か国のキリスト教割合を着色します。国を選ぶと同じ推計の7分類を示します。色は国全体の割合で、国内の宗派や地区の境界を示しません。'
         :'2021年の公表総計 · 円は同じ大きさです。角度は各対象の総人口に占める回答割合で、円の位置は対象を示す目印です。人口規模・個人の位置・細地域の分布を表しません。';
       key.querySelector('[data-eu-culture-key-coverage]')!.textContent=kind==='religion'
-        ?'英・ウェールズ、チェコ、クロアチア、セルビアは国勢調査、エストニアは15歳以上の標本調査推計です。無宗教・所属なし・未回答の設問と年は異なります。未掲載国はデータなしで、0%や最多宗派を意味しません。'
+        ?'7分類はキリスト教・イスラム教・宗教的無所属・仏教・ヒンドゥー教・ユダヤ教・その他の宗教。Pewの広域推計であり、既存の国勢調査・標本調査の宗派や未回答の分類と合算しません。資料対象外の国は0%ではありません。'
         :'イングランド・ウェールズ・クロアチアだけを掲載しています。最多・過半数の分類で土地を塗った地図ではありません。色は各表の分類を区別し、国をまたいだ同色の対応はありません。';
+      key.querySelector<HTMLElement>('[data-eu-pew-attribution]')!.hidden=kind!=='religion';
       key.querySelector('[data-eu-composition-tables]')?.replaceChildren(...(kind==='religion'?[]:europeCultureCompositions(kind).map(table)));rendered=kind;
     },
     decorate(id:string,button:HTMLButtonElement){
@@ -82,14 +85,17 @@ export function createEuropeCultureOverview(root:HTMLElement,onSelectLocal:(id:s
       const name=document.createElement('span');name.textContent=composition.name;button.replaceChildren(name,circle(composition));
       button.setAttribute('aria-label',`${composition.name}・${composition.year}年の回答構成。分母 ${count(composition.denominator)}。${composition.segments.map(segment=>`${segment.label} ${share(segment.share)}`).join('、')}。事例を開く`);
     },
-    renderEvidence(active:boolean,id:string|undefined){
+    renderEvidence(active:boolean,id:string|undefined,place:string){
       if(!evidencePanel)return;
       const evidence=active?europeReligionRegionalEvidence.find(item=>item.id===id):undefined;
-      const national=active?(europeReligionNationalProfile(id)??europeReligionNationalProfiles.find(item=>item.country===evidence?.country)):undefined;
-      evidencePanel.hidden=!national&&!evidence;
-      if(!national&&!evidence)return;
+      const country=evidence?.country||europeReligionNationalProfile(id)?.country||place;
+      const pew=active?pew2020EuropeRow(country):undefined;
+      const national=active?(europeReligionNationalProfile(id)??europeReligionNationalProfiles.find(item=>item.country===country)):undefined;
+      evidencePanel.hidden=!pew&&!national&&!evidence;
+      if(!pew&&!national&&!evidence)return;
       evidencePanel.replaceChildren();
-      const back=document.createElement('button');back.type='button';back.dataset.euReligionBack='';back.textContent='← 国別の全体へ';back.addEventListener('click',onClear);evidencePanel.append(back);
+      const back=document.createElement('button');back.type='button';back.dataset.euReligionBack='';back.textContent='← 欧州全体へ';back.addEventListener('click',onClear);evidencePanel.append(back);
+      if(pew)appendPewReading(evidencePanel,pew);
       if(national)appendNationalReading(evidencePanel,national,evidence?.id,onSelectLocal);
       if(!evidence)return;
       const title=document.createElement('h4');title.textContent=evidence.name+'の原表抜粋';evidencePanel.append(title);
@@ -102,6 +108,18 @@ export function createEuropeCultureOverview(root:HTMLElement,onSelectLocal:(id:s
       const license=document.createElement('p'),licenseLink=document.createElement('a');licenseLink.href=evidence.licenseUrl;licenseLink.textContent=evidence.license;license.append('利用条件：',licenseLink);evidencePanel.append(license);
     },
   };
+}
+
+function appendPewReading(panel:HTMLElement,row:NonNullable<ReturnType<typeof pew2020EuropeRow>>){
+  const name=europeCountries.find(country=>country.code===row.code)?.name??row.code;
+  const title=document.createElement('h4');title.textContent=`${name}の宗教構成 · 2020年推計`;panel.append(title);
+  const intro=document.createElement('p');intro.textContent='Pew Research Centerの全人口推計。キリスト教など7つの広域分類で、国勢調査の宗派分類や地区の分布ではありません。';panel.append(intro);
+  const bar=document.createElement('div');bar.className='eu-religion-reading-bar';bar.setAttribute('role','img');bar.setAttribute('aria-label',pew2020EuropeGroups.map((group,index)=>`${group.label}${row.shares[index]}%`).join('、'));
+  for(const [index,group] of pew2020EuropeGroups.entries()){const share=row.shares[index],part=document.createElement('span');part.style.width=`${share==='<0.1'?.05:Number(share)}%`;part.style.background=group.color;bar.append(part);}panel.append(bar);
+  const list=document.createElement('ul');for(const [index,group] of pew2020EuropeGroups.entries()){const item=document.createElement('li'),swatch=document.createElement('i');swatch.style.background=group.color;swatch.className='eu-religion-reading-swatch';item.append(swatch,document.createTextNode(`${group.label} ${row.shares[index]}%`));list.append(item);}panel.append(list);
+  const note=document.createElement('p');note.textContent='割合は丸めた公表値で、合計が100%と一致しない場合があります。「<0.1%」は0%ではありません。Pew推計を宗派や地方統計へ配分していません。';panel.append(note);
+  const source=document.createElement('a');source.href=pew2020EuropeSource;source.textContent='Hackettほか（2025）, Religious Composition by Country, 2010–2020 · Pew Research Center';panel.append(source);
+  const terms=document.createElement('p'),link=document.createElement('a');link.href=pew2020EuropeTerms;link.textContent='Pew利用条件';terms.append('出典・利用条件：',link);panel.append(terms);
 }
 
 function appendNationalReading(panel:HTMLElement,national:ReligionNationalProfile,selectedLocal:string|undefined,onSelectLocal:(id:string)=>void){

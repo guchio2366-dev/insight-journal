@@ -40,7 +40,7 @@ export function farmingAtPoint(data:FarmingAreas, point:number[], visibleIds:str
   }).map(feature=>feature.properties);
 }
 
-export function updateFarmingMap(root:HTMLElement,map:LibreMap|undefined,data:FarmingAreas,state:EuropeState) {
+export function updateFarmingMap(root:HTMLElement,map:LibreMap|undefined,data:FarmingAreas,dominant:FarmingAreas,state:EuropeState) {
   const view=farmingPresentation(state,data.features.map(feature=>feature.properties));
   const ids=view.visible.map(item=>item.id);
   root.querySelectorAll<SVGElement>('[data-eu-farm-area]').forEach(path=>{
@@ -48,8 +48,9 @@ export function updateFarmingMap(root:HTMLElement,map:LibreMap|undefined,data:Fa
     path.style.display=ids.includes(path.dataset.euFarmArea!)?'':'none';
     if(!item)return;
     const weight=farmingVisualWeight(item,view.selectedVisible?view.item?.id:undefined,view.single);
-    path.style.fillOpacity=String(weight.fill);
-    path.style.strokeOpacity=String(weight.line);
+    const categorical=view.genre==='crops'&&dominant.features.some(feature=>feature.properties.id===item.id);
+    path.style.fillOpacity=String(categorical?1:weight.fill);
+    path.style.strokeOpacity=String(categorical?.35:weight.line);
     path.style.strokeWidth=String(weight.width);
   });
   root.querySelectorAll<SVGElement>('[data-eu-farm-outline]').forEach(path=>{
@@ -58,9 +59,11 @@ export function updateFarmingMap(root:HTMLElement,map:LibreMap|undefined,data:Fa
   if(map?.getLayer('land')) {
     if(!map.getSource('eu-farming')) {
       map.addSource('eu-farming',{type:'geojson',data:data as any});
+      map.addSource('eu-farming-dominant',{type:'geojson',data:dominant as any});
       for(const kind of ['crop','livestock'] as const) {
-        map.addLayer({id:'eu-farm-'+kind+'-fill',type:'fill',source:'eu-farming',filter:['==',['get','kind'],kind],paint:{'fill-color':['get','color'],'fill-opacity':0}});
-        map.addLayer({id:'eu-farm-'+kind+'-line',type:'line',source:'eu-farming',filter:['==',['get','kind'],kind],paint:{'line-color':['get','color'],'line-width':.7,...(kind==='livestock'?{'line-dasharray':[4,2]}:{}),'line-opacity':0}});
+        const source=kind==='crop'?'eu-farming-dominant':'eu-farming';
+        map.addLayer({id:'eu-farm-'+kind+'-fill',type:'fill',source,filter:['==',['get','kind'],kind],paint:{'fill-color':['get','color'],'fill-opacity':0}});
+        map.addLayer({id:'eu-farm-'+kind+'-line',type:'line',source,filter:['==',['get','kind'],kind],paint:{'line-color':['get','color'],'line-width':.7,...(kind==='livestock'?{'line-dasharray':[4,2]}:{}),'line-opacity':0}});
       }
       map.addLayer({id:'eu-farm-selection-halo',type:'line',source:'eu-farming',paint:{'line-color':'#fffdf2','line-width':5}});
       map.addLayer({id:'eu-farm-selection',type:'line',source:'eu-farming',paint:{'line-color':'#173c48','line-width':2.5}});
@@ -69,7 +72,7 @@ export function updateFarmingMap(root:HTMLElement,map:LibreMap|undefined,data:Fa
       const filter:any=['all',['==',['get','kind'],kind],['in',['get','id'],['literal',ids]]];
       for(const suffix of ['fill','line'])map.setFilter('eu-farm-'+kind+'-'+suffix,filter);
       const weights=data.features.filter(feature=>feature.properties.kind===kind).map(feature=>[feature.properties.id,farmingVisualWeight(feature.properties,view.selectedVisible?view.item?.id:undefined,view.single)] as const);
-      const property=(key:'fill'|'line'|'width')=>['match',['get','id'],...weights.flatMap(([id,weight])=>[id,weight[key]]),0] as any;
+      const property=(key:'fill'|'line'|'width')=>['match',['get','id'],...weights.flatMap(([id,weight])=>[id,kind==='crop'&&view.genre==='crops'&&key==='fill'?1:kind==='crop'&&view.genre==='crops'&&key==='line'?.35:weight[key]]),0] as any;
       map.setPaintProperty('eu-farm-'+kind+'-fill','fill-opacity',property('fill'));
       map.setPaintProperty('eu-farm-'+kind+'-line','line-opacity',property('line'));
       map.setPaintProperty('eu-farm-'+kind+'-line','line-width',property('width'));

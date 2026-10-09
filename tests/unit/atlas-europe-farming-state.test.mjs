@@ -59,12 +59,12 @@ test('描画は同じジャンルの他品目を面で残し、他ジャンル�
   const outlines=items.map(item=>({dataset:{euFarmOutline:item.id},style:{}}));
   const root={querySelectorAll:selector=>selector==='[data-eu-farm-area]'?areas:outlines};
   const data={type:'FeatureCollection',features:items.map(properties=>({type:'Feature',properties,geometry:{type:'Polygon',coordinates:[]}}))};
-  updateFarmingMap(root,undefined,data,read('?layer=wheat'));
+  updateFarmingMap(root,undefined,data,data,read('?layer=wheat'));
   const barley=items.findIndex(item=>item.id==='barley'),cattle=items.findIndex(item=>item.id==='cattle');
   assert.equal(areas[barley].style.display,'');assert.ok(Number(areas[barley].style.fillOpacity)>.3);
   assert.equal(areas[cattle].style.display,'none');
   assert.equal(outlines[items.findIndex(item=>item.id==='wheat')].style.display,'');
-  updateFarmingMap(root,undefined,data,read('?layer=livestock'));
+  updateFarmingMap(root,undefined,data,data,read('?layer=livestock'));
   assert.equal(areas[cattle].style.display,'');assert.equal(areas[barley].style.display,'none');
 });
 

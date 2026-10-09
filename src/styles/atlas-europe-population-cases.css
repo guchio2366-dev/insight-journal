@@ -20,6 +20,11 @@
 .eu-religion-color-key[hidden] { display:none; }
 .eu-religion-color-key span { display:inline-flex; align-items:center; gap:4px; }
 .eu-religion-color-key i { width:12px; height:12px; border:1px solid #859390; }
+.eu-pew-map-key { display:flex; flex-wrap:wrap; align-items:center; gap:4px 11px; padding:5px 0; font:12px/1.4 var(--sans); }
+.eu-pew-map-key[hidden] { display:none; }
+.eu-pew-map-key span { display:inline-flex; align-items:center; gap:4px; white-space:nowrap; }
+.eu-pew-map-key i { width:13px; height:13px; border:1px solid #849399; }
+.eu-pew-map-key small { font-size:11px; }
 .eu-religion-evidence-reading { border:1px solid #aabbb3; border-left:5px solid #607d82; padding:9px 11px; margin:10px 0; background:#fafbf6; font-size:13px; }
 .eu-religion-evidence-reading[hidden] { display:none; }
 .eu-religion-evidence-reading h4 { font-size:16px; margin:0 0 4px; }

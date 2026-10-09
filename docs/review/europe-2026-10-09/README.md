@@ -2,16 +2,18 @@
 
 ## 2026-10-09 追加確認
 
-宗教の初期図は、英・ウェールズ、チェコ、クロアチア、セルビア、エストニアの公表国別回答構成を等幅の小帯で示す。宗派・無宗教・未回答を元表の分類のまま保持し、国勢調査の全年齢人数とエストニアの15歳以上標本推計を同じ分母の割合として比較しない。選択後にその国の全分類・人数・設問・対象年齢・出典を右側に開き、他の帯を残す。地域資料は選択後に開く。調査未収録の国は塗らない。
+宗教の初期図は[Pew Research Centerの2020年国別推計](https://www.pewresearch.org/religion/feature/religious-composition-by-country-2010-2020/)の欧州図に該当する40か国の抜粋を使い、キリスト教の割合を濃淡で示す。最多宗教・過半数を示す図ではない。国を選ぶと、7つの広い宗教分類の推計割合を右側の先頭に表示する。未掲載国は0%とせず灰色にする。元の5対象の国勢調査と地方資料は、宗派や未回答の扱いが異なる補足として選択後に残す。Pewの国別推計から国内の宗教分布や宗派を推測して塗らない。
 
 | 宗教 | 1440 px | 1024 px |
 | --- | --- | --- |
 | 初期 | [画像](1440-religion-initial.png) | [画像](1024-religion-initial.png) |
 | セルビア選択 | [画像](1440-religion-selected.png) | [画像](1024-religion-selected.png) |
 
-`scripts/europe/capture-religion-review.mjs` で5対象の初期表示、選択後の他対象維持、横スクロールなし、実行時エラーなしを確認する。国別資料は[チェコ国勢調査](https://scitani.gov.cz/religious-beliefs)、[セルビア国勢調査](https://popis2022.stat.gov.rs/en-us/5-vestisaopstenja/news-events/20230616-st/?a=0&s=0)、[エストニア統計局](https://stat.ee/en/news/population-census-proportion-people-religious-affiliation-remains-stable-orthodox-christianity-still-most-widespread)、既存収録の英国・クロアチア原表に対応する。欧州全域の宗教分布を塗り分ける原表・境界は未収録。
+`scripts/europe/capture-religion-review.mjs` で1440px・1024pxの初期地図とセルビア選択、横スクロールなし、実行時エラーなしを確認する。1024pxでは従来のクロアチア帯と地図下端の衝突がなく、選択時の7分類を右欄の先頭に出した。Pewの表は201か国のうち欧州図に該当する40か国のみを収録し、`<0.1`を0に置換していない。[Pew利用条件](https://www.pewresearch.org/about/terms-and-conditions/)の§1と§13には出典表示、翻訳時の免責文、全表・実質的全表の再掲載禁止がある。地図・右欄には出典と指定の英文免責文を載せた。元の国別資料は[チェコ国勢調査](https://scitani.gov.cz/religious-beliefs)、[セルビア国勢調査](https://popis2022.stat.gov.rs/en-us/5-vestisaopstenja/news-events/20230616-st/?a=0&s=0)、[エストニア統計局](https://stat.ee/en/news/population-census-proportion-people-religious-affiliation-remains-stable-orthodox-christianity-still-most-widespread)、既存収録の英国・クロアチア原表に対応する。国内の細地域宗教分布は未収録。
 
-農畜産は小麦の地域ラベルが畜産・園芸へ残る条件を修正し、PC操作で不表示を検証した。16品目の第80百分位以上の元格子に由来する面は件数で切らず、隣接面の細い隙間を概略図上で閉じ、輪郭を簡略化した。元格子の数量は変更していない。画像の穀物図はなお中欧の品目重複が多く、面積から品目別の生産量を読ませる図ではない。ブドウ・オリーブや乳用・肉用牛については、[Eurostat地域作物統計](https://ec.europa.eu/eurostat/cache/metadata/en/apro_cp_esms.htm)と[果樹統計](https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Agricultural_production_-_orchards)にはEUのNUTS地域資料がある一方、現在の欧州図に含める非EU諸国を含む同年・同品目・同じ地域単位の原表が未確定。EUだけの値を欧州と呼ばず、未収録の面を描き足していない。
+農畜産は16品目の元格子・選択時輪郭を保持し、初期の6作物の彩色のみ同じ単位（ha/格子）の近傍平均が最大の作物に割り当てた。重複した元分布を混色せず、フランス・ドイツの小麦帯を初期から読める。小麦ラベルが畜産・園芸へ残る条件も修正した。色の面積は生産量や品目別の順位ではない。
+
+細分候補の公式表は[Eurostat `ef_lsk_bovine`](https://ec.europa.eu/eurostat/databrowser/view/ef_lsk_bovine/)（NUTS 2の乳牛・非乳牛、2005–2023年）、[`vit_t1`](https://ec.europa.eu/eurostat/databrowser/view/vit_t1/)（NUTS 2のワイン用ブドウ畑、2015/2020年）、[`ef_lus_orcholives`](https://ec.europa.eu/eurostat/databrowser/view/ef_lus_orcholives/)（NUTS 2のオリーブ樹園面積、2023年）まで特定した。ただし非乳牛は肉牛生産量、ブドウ畑は全ブドウ生産量、オリーブ樹園面積はオリーブ収穫量ではない。さらに表ごとに年が異なり、欧州図内の非EU諸国を同じNUTS 2原表で覆えない。新しい面に使う指標・対象地域・境界データを揃えてから収録する。今回はEUだけを欧州と呼ぶ面を描き足していない。
 
 Draft PR #287 の作業ツリーを Chromium で表示。`scripts/europe/capture-genre-review.mjs` が 1440×1000 と 1024×800 で、ジャンル初期表示、品目選択から全体表示への復帰、林業タブへの往復、産業初期表示を確認し、画面内の JavaScript エラーと横スクロールがないことを検査する。各画像で地図は最上部、右に同時に読む概説・解説、左に固定ニュース枠を配置する。
 
@@ -22,7 +24,7 @@ Draft PR #287 の作業ツリーを Chromium で表示。`scripts/europe/capture
 | 果樹・園芸 | [画像](1440-horticulture.png) | [画像](1024-horticulture.png) |
 | 産業 | [画像](1440-industry.png) | [画像](1024-industry.png) |
 
-初期ジャンルは穀物・畑作。収録済みの6品目を同時表示し、1品目を選ぶと輪郭を強調して他品目も残す。樹木被覆・国別森林比率は林業タブに残す。元の16格子を再取得せず、品目別の上位20%の正値格子から条件を満たす分布面を件数制限なく再生成した。フランス・ドイツの小麦、ポー平原のトウモロコシの根拠格子をテストで照合した。畑作画面は中央欧州で多色の重なりが多く、必要なら「穀物」と「その他の畑作」に分ける判断をレビューで行う。
+初期ジャンルは穀物・畑作。収録済みの6品目を同時表示し、1品目を選ぶと元分布の輪郭を強調して他品目も残す。樹木被覆・国別森林比率は林業タブに残す。元の16格子を再取得せず、品目別の上位20%の正値格子から条件を満たす分布面を件数制限なく再生成した。フランス・ドイツの小麦、ポー平原のトウモロコシの根拠格子をテストで照合した。
 
 酪農・畜産の牛格子は乳用と肉用を分けられないため、牛の面を酪農専用と表示していない。ライムギ、ブドウ、オリーブ単独の分布格子も未収録。統計の対象は3ジャンル共通の欧州地域と明記し、個別品目を選んだ場合だけ対応する確定値を出す。欠けた品目や対応しない集計を別の数値で埋めない。
 

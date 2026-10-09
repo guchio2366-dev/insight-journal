@@ -11,16 +11,17 @@ try {
     const errors=[];page.on('pageerror',error=>errors.push(error.message));
     await page.goto(base,{waitUntil:'domcontentloaded'});
     await page.locator('.eu-live-map.is-ready').waitFor({timeout:30000});
-    await page.locator('[data-eu-religion-national]:visible').first().waitFor();
-    assert.equal(await page.locator('[data-eu-religion-national]:visible').count(),5);
+    await page.locator('[data-eu-pew-map-key]:visible').waitFor();
+    assert.equal(await page.locator('[data-eu-religion-national]:visible').count(),0);
+    assert.notEqual(await page.locator('[data-eu-shape="CZE"]').evaluate(node=>node.style.fill),await page.locator('[data-eu-shape="DEU"]').evaluate(node=>node.style.fill));
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
     await page.screenshot({path:resolve(output,`${width}-religion-initial.png`),animations:'disabled'});
-    await page.locator('[data-eu-religion-national="religion-national-serbia"]').click();
-    assert.equal(await page.locator('[data-eu-religion-national]:visible').count(),5);
-    assert.match(await page.locator('[data-eu-religion-evidence-reading]').textContent(),/セルビア/);
+    await page.locator('[data-eu-shape="SRB"]').evaluate(node=>node.dispatchEvent(new MouseEvent('click',{bubbles:true})));
+    assert.match(await page.locator('[data-eu-religion-evidence-reading]').textContent(),/セルビア.*91.5%/s);
+    assert.equal(await page.locator('[data-eu-religion-evidence-reading]').evaluate(node=>node.previousElementSibling===null),true);
     await page.screenshot({path:resolve(output,`${width}-religion-selected.png`),animations:'disabled'});
     assert.deepEqual(errors,[]);
     await page.close();
   }
 }finally{await browser.close();}
-console.log('Religion PC initial and selection: 1440px and 1024px passed');
+console.log('Pew Europe religion PC initial and country selection: 1440px and 1024px passed');

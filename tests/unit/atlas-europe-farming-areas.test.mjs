@@ -10,6 +10,7 @@ const json = path => JSON.parse(bytes(path).toString('utf8'));
 const sha = value => createHash('sha256').update(value).digest('hex');
 const manifest = json('public/assets/atlas/europe/farming-overview-v2/manifest.json');
 const collection = json('src/data/atlas/europe/farming-areas.json');
+const dominant = json('src/data/atlas/europe/farming-dominant-areas.json');
 const cropConfig = json('src/data/atlas/europe/crop-overview.json').crops;
 const countries = json('src/data/atlas/europe-countries.json').features.filter(feature => feature.properties.kind === 'europe');
 const polygons = geometry => geometry.type === 'Polygon' ? [geometry.coordinates] : geometry.coordinates;
@@ -104,4 +105,21 @@ test('overview wheat labels for northern France and central Germany stay inside 
   for(const point of [[2.35938,50.375],[11.55208,51.875]]){
     assert.ok(polygons(wheat.geometry).some(polygon=>polygonContains(polygon,point)),`wheat shape must support label ${point}`);
   }
+});
+
+test('six initial crop belts retain source-backed country coverage and label locations',()=>{
+  const initial=['wheat','barley','maize','potato','sugarbeet','rapeseed'];
+  assert.equal(sha(bytes(manifest.dominantOverview.output.path)),manifest.dominantOverview.output.sha256);
+  for(const id of initial){
+    const feature=dominant.features.find(item=>item.properties.id===id);
+    const full=collection.features.find(item=>item.properties.id===id);
+    assert.ok(feature?.geometry,`${id}: dominant geometry`);
+    assert.ok(polygons(feature.geometry).length>1,`${id}: separate areas`);
+    assert.ok(targetLandContains(feature.properties.labelCoordinate),`${id}: label is on target land`);
+    assert.ok(polygons(feature.geometry).some(polygon=>polygonContains(polygon,feature.properties.labelCoordinate)),`${id}: label is in visible belt`);
+    assert.ok(polygons(full.geometry).some(polygon=>polygonContains(polygon,feature.properties.labelCoordinate)),`${id}: label remains inside source supported area`);
+  }
+  const wheat=dominant.features.find(item=>item.properties.id==='wheat');
+  for(const point of [[2.35938,50.375],[11.55208,51.875]])
+    assert.ok(polygons(wheat.geometry).some(polygon=>polygonContains(polygon,point)),`wheat belt includes ${point}`);
 });

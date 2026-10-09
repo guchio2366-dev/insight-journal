@@ -294,7 +294,7 @@ test('a click outside the published extent clears the old point instead of leavi
   }finally{await app.w.happyDOM.close();}
 });
 
-for(const topic of ['ethnicity','religion'])test(`${topic} keeps the unselected legend and the explicit source scale beneath the map`,async()=>{
+for(const topic of ['ethnicity'])test(`${topic} keeps the unselected legend and the explicit source scale beneath the map`,async()=>{
   const app=await setup(`https://example.com/insight-journal/atlas/europe/population/?layer=${topic}&render=static`);
   try{
     const legend=app.q('.eu-culture-legend');
@@ -352,31 +352,31 @@ for(const topic of ['ethnicity'])test(`${topic} shows all three published respon
   }finally{await app.w.happyDOM.close();}
 });
 
-test('religion starts with national compositions, then opens a local source without hiding other countries',async()=>{
+test('religion colors the 2020 country excerpt and keeps national census details separate',async()=>{
   const app=await setup('/insight-journal/atlas/europe/population/?layer=religion&render=static');
   try{
-    await until(()=>app.w.document.querySelectorAll('[data-eu-religion-national]').length===5);
-    const markers=()=>app.w.document.querySelectorAll('[data-eu-religion-national]:not([hidden])').length;
-    assert.equal(markers(),5);
+    assert.equal(app.w.document.querySelectorAll('[data-eu-religion-national]:not([hidden])').length,0);
     const colorKey=app.q('[data-eu-religion-color-key]');
     assert.equal(colorKey.parentElement,app.q('[data-eu-map-legend]'));
     assert.equal(colorKey.hidden,false);
+    assert.equal(app.q('[data-eu-pew-map-key]').hidden,false);
+    assert.notEqual(app.q('[data-eu-shape="CZE"]').style.fill,app.q('[data-eu-shape="DEU"]').style.fill);
+    assert.match(app.q('[data-eu-shape="VAT"]').style.fill,/(#edece5|rgb\(237, 236, 229\))/);
     assert.equal(app.w.document.querySelectorAll('[data-eu-religion-evidence]:not([hidden])').length,0);
-    assert.match(app.q('[data-culture-takeaway]').textContent,/概説.*カトリック.*正教会.*無宗教/);
-    assert.match(app.q('[data-culture-overview]').textContent,/解説.*歴史的な教会圏/);
-    app.q('[data-eu-religion-national="religion-national-serbia"]').click();
+    assert.match(app.q('[data-culture-takeaway]').textContent,/概説.*67.1%.*25.3%.*6.0%/);
+    assert.match(app.q('[data-culture-overview]').textContent,/解説.*オスマン帝国/);
+    app.q('[data-eu-shape="SRB"]').dispatchEvent(new app.w.MouseEvent('click',{bubbles:true}));
     await until(()=>!app.q('[data-eu-religion-evidence-reading]').hidden);
-    assert.equal(markers(),5);
+    assert.equal(app.q('[data-eu-religion-evidence-reading]').previousElementSibling,null);
     assert.equal(app.q('[data-culture-case]').value,'');
-    assert.match(app.q('[data-eu-religion-evidence-reading]').textContent,/正教会.*5,387,426人.*カトリック.*257,269人/s);
+    assert.match(app.q('[data-eu-religion-evidence-reading]').textContent,/2020年推計.*キリスト教 91.5%.*イスラム教 4.4%.*正教会.*5,387,426人/s);
     app.q('[data-eu-religion-local="religion-subotica"]').click();
-    assert.equal(markers(),5);
     await until(()=>app.w.document.querySelectorAll('[data-eu-religion-evidence]:not([hidden])').length===1);
     assert.match(app.q('[data-eu-religion-evidence-reading]').textContent,/カトリック.*59,748人.*正教会.*37,674人/s);
     assert.equal(new URL(app.w.location.href).searchParams.get('feature'),'religion-subotica');
     app.q('[data-eu-religion-back]').click();
     assert.equal(app.q('[data-eu-religion-evidence-reading]').hidden,true);
-    assert.equal(markers(),5);
+    assert.equal(app.q('[data-eu-pew-map-key]').hidden,false);
   }finally{await app.w.happyDOM.close();}
 });
 

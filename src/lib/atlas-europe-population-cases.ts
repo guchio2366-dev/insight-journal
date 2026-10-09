@@ -173,11 +173,11 @@ export function createEuropePopulationCases(root: HTMLElement, options: CultureO
     caseSelect!.disabled = false; categorySelect!.disabled = !hasCase; areaSelect!.disabled = !hasCase;
     setText('[data-culture-kicker]',kind==='religion'&&!hasCase?'国別の回答構成':'国勢調査の地域事例');
     setText('[data-culture-title]', hasCase ? selected.topic.titleJa : kind === 'religion' ? '欧州の宗教の分布' : '民族的帰属の地域事例');
-    setText('[data-culture-takeaway]', kind==='religion'&&!hasCase?'概説：英・ウェールズにはキリスト教と無宗教、クロアチアにはカトリック、セルビアには正教会、チェコとエストニアには無宗教・無所属が目立ち、同じ国の中にも複数の回答が共存します。':'イングランド・ウェールズの行政区とクロアチアの全国値の事例です。欧州全域の分布ではありません。自己申告の元分類と表ごとの分母を使い、無宗教・未回答・不明を区別します。');
-    setText('[data-culture-overview]', !hasCase ? kind==='religion'?'解説：カトリックと正教会の歴史的な教会圏、宗教改革以後の教会形成、20世紀以後の社会変化が現在の帰属に重なります。ただし歴史だけで個人の回答を決められません。5対象の設問・年・対象年齢は異なり、信仰の有無、宗教団体への所属、礼拝の実践も同じ意味ではありません。':'イングランド・ウェールズ・クロアチアの2021年公表総計から、回答構成を同時に示します。民族は自己認識、宗教は申告した帰属です。言語分布・信仰の実践・欧州全域の細分布を示すものではありません。円の名前から事例を開くと、元の回答分類の分布を選べます。' : !hasCategory ? '元の回答分類を選ぶと、その事例の各地域の割合を表示します。' : '選択した分類の分布全体を表示しています。地域を選ぶと、同じ表の総人口に対する割合と人数を確認できます。');
+    setText('[data-culture-takeaway]', kind==='religion'&&!hasCase?'概説：2020年の国別推計では欧州全体のキリスト教67.1%、宗教的無所属25.3%、イスラム教6.0%。国別にはチェコ・オランダで無所属が多く、アルバニア・ボスニア・コソボではイスラム教の割合が高い。地図の濃淡はキリスト教の割合です。':'イングランド・ウェールズの行政区とクロアチアの全国値の事例です。欧州全域の分布ではありません。自己申告の元分類と表ごとの分母を使い、無宗教・未回答・不明を区別します。');
+    setText('[data-culture-overview]', !hasCase ? kind==='religion'?'解説：カトリック・正教会・プロテスタントの歴史的な教会圏、オスマン帝国期の南東欧、宗教改革以後の制度、20世紀以後の社会変化と移住が国別構成に重なります。国境の濃淡は国内の地区差や宗派を示しません。Pewの広域推計と各国国勢調査は対象・分類・方法が異なります。':'イングランド・ウェールズ・クロアチアの2021年公表総計から、回答構成を同時に示します。民族は自己認識、宗教は申告した帰属です。言語分布・信仰の実践・欧州全域の細分布を示すものではありません。円の名前から事例を開くと、元の回答分類の分布を選べます。' : !hasCategory ? '元の回答分類を選ぶと、その事例の各地域の割合を表示します。' : '選択した分類の分布全体を表示しています。地域を選ぶと、同じ表の総人口に対する割合と人数を確認できます。');
     setText('[data-culture-note]', hasCase ? cultureCaseNote(selected.censusCase, kind) : '民族・宗教は各国の自己申告分類を使います。イングランド・ウェールズの行政区とクロアチアの全国値は粒度が異なり、欧州全域の分布ではありません。');
-    setText('[data-culture-grain]', !hasCase ? kind==='religion'?'確認済み5対象・国別回答構成':'3対象の公表総計 · 詳細は2事例' : selected.censusCase.grain === 'national' ? '全国値 · 1地域' : '行政区（LAD2021）· 331地域');
-    setText('[data-culture-year]', hasCase ? `${selected.topic.year}年国勢調査 · ${selected.topic.censusDate}` : kind==='religion'?'2021・2022年 · 母集団と設問は資料別':'2021年国勢調査');
+    setText('[data-culture-grain]', !hasCase ? kind==='religion'?'Pew 2020年 · 40か国の国別推計':'3対象の公表総計 · 詳細は2事例' : selected.censusCase.grain === 'national' ? '全国値 · 1地域' : '行政区（LAD2021）· 331地域');
+    setText('[data-culture-year]', hasCase ? `${selected.topic.year}年国勢調査 · ${selected.topic.censusDate}` : kind==='religion'?'2020年推計 · 全人口・7分類':'2021年国勢調査');
     query<HTMLElement>('[data-culture-value]')!.hidden = !selected.area || !hasCategory;
     setText('[data-culture-area-name]', selected.area?.name ?? '地域未選択');
     setText('[data-culture-category-name]', selected.category?.label ?? '回答分類未選択');

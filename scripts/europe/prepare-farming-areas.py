@@ -22,6 +22,7 @@ from shapely.ops import transform
 ASSETS = ROOT / 'public/assets/atlas/europe'
 OUT = ASSETS / 'farming-overview-v2'
 OUTPUT = ROOT / 'src/data/atlas/europe/farming-areas.json'
+DOMINANT_OUTPUT = ROOT / 'src/data/atlas/europe/farming-dominant-areas.json'
 BOUNDS = [-25, 32, 65, 73]
 ROWS, COLS = 492, 1080
 STEP = 1 / 12
@@ -41,6 +42,7 @@ SIMPLIFY_DEGREES = .16
 # disconnected concentration that passes the source threshold and area rule.
 BELT_CLOSE_DEGREES = .24
 RADIUS_KM = 6371.0088
+OVERVIEW_CROPS = ('wheat', 'barley', 'maize', 'potato', 'sugarbeet', 'rapeseed')
 inputs = []
 
 
@@ -133,6 +135,7 @@ def main():
                  for id, name, color in [('cattle', '牛', '#593633'), ('pig', '豚', '#694e94'),
                                         ('chicken', '鶏', '#3d7171'), ('sheep', '羊', '#70733a')]]
     features, records = [], []
+    overview_grids, overview_masks = {}, {}
     for product in products:
         id = product['id']
         neighbor_fraction, minimum_area = PRODUCT_RULES.get(id, (MIN_NEIGHBOR_FRACTION, MIN_AREA_KM2))
@@ -148,6 +151,9 @@ def main():
         smoothing_radius = SMOOTH_RADIUS_BY_PRODUCT.get(id, SMOOTH_RADIUS)
         neighborhood = box_mean(high, smoothing_radius)
         candidate = high & (neighborhood >= neighbor_fraction)
+        if id in OVERVIEW_CROPS:
+            overview_grids[id] = grid.copy()
+            overview_masks[id] = candidate.copy()
         exact = grid_geometry(candidate).intersection(land)
         source_parts = polygons(exact)
         kept = [part for part in source_parts if area_km2(part) >= minimum_area]
@@ -231,6 +237,39 @@ def main():
         print(id, 'threshold', round(threshold, 3), 'components', len(kept),
               'display km2', record['approximateDisplayAreaKm2'], flush=True)
     output = write(OUTPUT, dict(type='FeatureCollection', features=features))
+    # Six SPAM crop values all use harvested hectares per source cell. At the
+    # overview scale, assign each supported cell to the largest locally
+    # smoothed harvested area. This is a categorical display of the six
+    # included products, not total harvest or an assertion that only one crop
+    # grows there. Full overlapping concentration outlines remain above.
+    scores = np.stack([box_mean(np.where(overview_masks[id], overview_grids[id], 0), 3)
+                       for id in OVERVIEW_CROPS])
+    for index, id in enumerate(OVERVIEW_CROPS):
+        scores[index, ~overview_masks[id]] = -1
+    winner = np.argmax(scores, axis=0)
+    has_winner = np.max(scores, axis=0) >= 0
+    dominant_features, dominant_records = [], []
+    for index, id in enumerate(OVERVIEW_CROPS):
+        mask = has_winner & (winner == index)
+        exact = grid_geometry(mask).intersection(land)
+        supported = [part for part in polygons(exact) if area_km2(part) >= MIN_AREA_KM2]
+        assert supported, f'No dominant display area for {id}'
+        geometry = make_valid(union_all(supported).simplify(.08, preserve_topology=True)).intersection(land)
+        geometry_json = mapping(geometry)
+        geometry_json['coordinates'] = rounded_coordinates(geometry_json['coordinates'])
+        retained_cells = mask & contains_xy(geometry, longitude_grid, latitude_grid)
+        assert retained_cells.any(), f'No label cell remains in dominant area for {id}'
+        rows, cols = np.where(retained_cells)
+        best = int(np.argmax(overview_grids[id][retained_cells]))
+        properties = dict(next(feature['properties'] for feature in features if feature['properties']['id'] == id))
+        properties['labelCoordinate'] = [round(float(longitudes[cols[best]]), 6), round(float(latitudes[rows[best]]), 6)]
+        dominant_features.append(dict(type='Feature', properties=properties, geometry=geometry_json))
+        dominant_records.append(dict(id=id, retainedComponents=len(supported), candidateCells=int(mask.sum()),
+                                     approximateDisplayAreaKm2=round(area_km2(geometry), 2)))
+        print(id, 'dominant cells', int(mask.sum()), 'components', len(supported), flush=True)
+    dominant_features.extend(feature for feature in features
+                             if feature['properties']['kind'] == 'crop' and feature['properties']['id'] not in OVERVIEW_CROPS)
+    dominant_output = write(DOMINANT_OUTPUT, dict(type='FeatureCollection', features=dominant_features))
     write(OUT / 'manifest.json', dict(
         version=2, coordinateReferenceSystem='EPSG:4326', bounds=BOUNDS,
         sourceGrid=dict(width=COLS, height=ROWS, resolutionDegrees=STEP,
@@ -238,6 +277,7 @@ def main():
         threshold=dict(quantile=QUANTILE, population='各品目の欧州対象国の陸域内にある正値の元格子',
                        meaning='品目ごとの収穫面積または飼養密度の第80百分位'),
         processing=dict(smoothing='閾値以上の格子の割合を原則7×7格子（トウモロコシは5×5）で平均し、原則55%以上の場所を選ぶ。米と柑橘類は45%以上。中心格子も第80百分位以上の値が必要。',
+                        dominantOverview='穀物・畑作の初期彩色のみ、収録済み6作物の候補元格子を同じha/格子の7×7近傍平均で比べ、最大の作物に一色を割り当てる。原則750km²未満の孤立面を省き、輪郭を0.08度で簡略化する。全品目の重複した集中域と選択時輪郭は別の元図に保持する。',
                         smoothingRadiusCells=SMOOTH_RADIUS, minimumNeighborFraction=MIN_NEIGHBOR_FRACTION,
                         smoothingRadiusByProduct=SMOOTH_RADIUS_BY_PRODUCT,
                         smoothingRadiusReason='トウモロコシはポー平原の高値格子（8.708333°E, 45.291667°N）が7×7近傍では53.1%で切れるため、元の5×5近傍（64%）を保ち、同地点を根拠のある面として残す。',
@@ -268,7 +308,7 @@ def main():
             'SPAMの収穫面積は複数作期を含む場合があり、耕地面積と一致しない。',
             '収録済みの12作物と牛・豚・鶏・羊のみ。ブドウ・オリーブ単独の格子は未収録。',
             'ロシアは表示枠内の対象国データを含む。統計・地理区分の境界や領有権を判断する図ではない。',
-        ], inputs=inputs, products=records, output=output))
+        ], inputs=inputs, products=records, output=output, dominantOverview=dict(output=dominant_output,products=dominant_records,cropIds=OVERVIEW_CROPS)))
     print('output', output['bytes'], 'bytes', flush=True)
 
 
