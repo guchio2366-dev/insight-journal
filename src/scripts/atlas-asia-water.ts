@@ -3,6 +3,7 @@ import {contourBandLabels,type AsiaContourBands} from '../data/atlas/asia-contou
 import {decodeAsiaNumericGrid,readAsiaNumericCell,type AsiaNumericGrid} from '../lib/atlas-asia-numeric-grid';
 import type {AsiaState,AsiaCamera,AsiaRegionId} from '../lib/atlas-asia-state';
 import {asiaWaterFocus} from '../data/atlas/asia-water-focus';
+import {southCentralWaterSystems,southCentralWaterOverview,southCentralGroundwaterOverview} from '../data/atlas/asia-south-central-water-reading';
 
 type Config={regionId:AsiaRegionId;water:WaterRegion;waterBase:string;countries:{code:string;name:string}[];waterFeatures?:{id:string;name:string;label?:string;kind:string;countries:string[]}[];contourBands?:AsiaContourBands};
 const el=<K extends keyof HTMLElementTagNameMap>(tag:K,text?:string)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
@@ -83,14 +84,16 @@ export function createAsiaWater(root:HTMLElement,config:Config,getState:()=>Asia
   $('[data-hydrology-title]').textContent=getState().topic==='water'?'河川と、地下水を蓄える主な地域':meta.title;$('[data-hydrology-definition]').textContent=meta.definition;
   $('[data-map-gesture]').textContent=t==='precipitation'?'地点を選ぶと年降水量を読めます。国の背景クリックでは選択を変えません。地図は2本指で移動・拡大できます。':'流域・地下水の区域や河川そのもの、または区域の一覧から選べます。対象外の背景クリックでは選択を変えません。地図は2本指で移動・拡大できます。';
   $('[data-hydrology-status]').textContent=status;$('[data-hydrology-retry]').hidden=!failed.has(t);
-  $('[data-hydrology-lead]').textContent=selectedScene?.lead??(t==='precipitation'?'海から山地、さらに内陸へ、年間に届く水の違いを読みます。':t==='basins'?'川には、その場所の雨だけでなく、上流の広い範囲に降った雨や雪の水も集まります。色分けした流域と青い流路を重ね、国境を越えたつながりを確かめてください。':'青い線は川、淡い青の面は地下水を蓄える主要な地層です。川と地下水域の位置を見比べます。');
+  $('[data-hydrology-lead]').textContent=selectedScene?.lead??(config.regionId==='south-central-asia'&&t==='groundwater'?(getState().topic==='water'?southCentralWaterOverview:southCentralGroundwaterOverview):t==='precipitation'?'海から山地、さらに内陸へ、年間に届く水の違いを読みます。':config.regionId==='south-central-asia'&&t==='basins'?'インダス川、ガンジス川、アムダリヤ川、シルダリヤ川の流域を同時に表示しています。山地の上流と乾いた低地の下流を、青い流路と集水域で見比べます。国境は水の流れの境界ではありません。':t==='basins'?'川には、その場所の雨だけでなく、上流の広い範囲に降った雨や雪の水も集まります。色分けした流域と青い流路を重ね、国境を越えたつながりを確かめてください。':'青い線は川、淡い青の面は地下水を蓄える主要な地層です。川と地下水域の位置を見比べます。');
+  const riverReading=root.querySelector<HTMLElement>('[data-south-central-river-reading]'),riverCase=config.regionId==='south-central-asia'&&getState().topic==='water'?southCentralWaterSystems[river()?.id??'']:undefined;
+  if(riverReading){riverReading.hidden=!riverCase;riverReading.replaceChildren();if(riverCase)riverReading.append(el('h3',riverCase.title),el('p',riverCase.reading),link(riverCase.source.label,riverCase.source.url));}
   const sc=$('[data-hydrology-scene-reading]');sc.replaceChildren();if(selectedScene)sc.append(el('h3',selectedScene.name),el('p',selectedScene.reading),link('この場所の解説の根拠',selectedScene.source));
   const cov=state.place?config.water.coverage[state.place]:null;
   $('[data-hydrology-coverage]').textContent=t==='precipitation'?cov?`${names([state.place!])}では対象格子${fmt(cov.maskCells)}個のうち${fmt(cov.displayCells)}個に値があります。地点値は都市や国の平均ではありません。`:'対象国・地域の陸地に重なる表示格子を収録しています。地点値は都市や国の平均ではありません。':t==='basins'?`主な河川の流域を表示しています。${cov?.basins===0?'選択中の国・地域は、この縮尺の流域資料に区域がありません。河川や排水がないという意味ではありません。':''}`:`主要な地下水盆地だけを塗っています。涵養量の細かな区切りは表示しません。${cov?.groundwater===0?'選択中の国・地域の区域は元資料で確認できません。地下水がないという意味ではありません。':''}`;
   const content=$('[data-hydrology-content]');content.replaceChildren();let message=status;
   const waterPicker=root.querySelector<HTMLElement>('[data-water-picker]');
   if(waterPicker){waterPicker.hidden=getState().topic!=='water';if(!waterPicker.hidden){content.before(waterPicker);const input=waterPicker.querySelector<HTMLSelectElement>('select')!;input.value=river()?.id??'';for(const o of input.options){const allowed=!o.value||!state.place||config.waterFeatures?.find(f=>f.id===o.value)?.countries.includes(state.place);o.hidden=!allowed;o.disabled=!allowed;}}}
-  if(river()){const r=river()!;content.append(el('h3',r.label??r.name),el('p',r.kind==='rivers'?'青い線は川の概略の流路です。背景の淡い青の面は、地下水を蓄える主要な地層の広がりを示します。河川の流域を調べるときは、上の「河川の流域」を選んでください。':'青い面は資料に収録された湖の概略形状です。現在の湖面や貯水量を示すものではありません。周辺の淡い青の面は主要な地下水盆地です。'));}
+  if(river()&&!riverCase){const r=river()!;content.append(el('h3',r.label??r.name),el('p',r.kind==='rivers'?'青い線は川の概略の流路です。背景の淡い青の面は、地下水を蓄える主要な地層の広がりを示します。河川の流域を調べるときは、上の「河川の流域」を選んでください。':'青い面は資料に収録された湖の概略形状です。現在の湖面や貯水量を示すものではありません。周辺の淡い青の面は主要な地下水盆地です。'));}
 
   if(t==='precipitation'){
    if(state.point&&grid){const n=readAsiaNumericCell(grid,...state.point);message=n===null?'この地点はデータなし、または表示範囲外です。降水量0mmとは異なります。':`${state.point[1].toFixed(3)}°, ${state.point[0].toFixed(3)}°：年降水量 ${fmt(n)} mm/年（1981–2010年の推計平年値）`;}

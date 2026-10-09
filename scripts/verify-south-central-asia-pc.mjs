@@ -95,6 +95,10 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
   const station=page.locator(`.asia-climate-station[data-station="${city}"]`);
   assert.equal(await station.evaluate(n=>{const r=n.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('[data-station]')?.getAttribute('data-station');}),city,'A nearby transparent station hit box must not intercept this city');
   await station.click();
+  const cameraAfterFirst=new URL(page.url());
+  const preservedCamera=['lng','lat','z'].map(key=>cameraAfterFirst.searchParams.get(key));
+  await station.click();
+  assert.deepEqual(['lng','lat','z'].map(key=>new URL(page.url()).searchParams.get(key)),preservedCamera,'Repeated city selection keeps the map camera');
   const chart=page.locator(`[data-city-panel="${city}"] [data-city-statistics]`);await chart.waitFor({state:'visible'});
   await page.waitForFunction(city=>!document.querySelector(`[data-city-panel="${city}"] [data-city-class-name]`).textContent.includes('未取得'),city);
   await page.evaluate(()=>scrollTo(0,0));
@@ -105,6 +109,27 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
   await page.reload({waitUntil:'domcontentloaded'});await ready();assert.equal(new URL(page.url()).searchParams.get('city'),city);
  }
  record('South and Central Asia map-city selection leads the right column with a complete rain-temperature chart and preserves selection on reload');
+
+ await open('south-asia/nature/');
+ await page.locator('[data-zoom-in]').click();
+ await page.waitForFunction(()=>new URL(location.href).searchParams.has('z'));
+ await page.locator('[data-zoom-out]').click();
+ for(const city of ['mumbai','kolkata','new-delhi']){
+  const before=new URL(page.url()),camera=['lng','lat','z'].map(key=>before.searchParams.get(key));
+  await page.locator('[data-city-select]').selectOption(city);
+  await page.locator(`[data-city-panel="${city}"] [data-city-statistics]`).waitFor({state:'visible'});
+  assert.deepEqual(['lng','lat','z'].map(key=>new URL(page.url()).searchParams.get(key)),camera,`${city} selection keeps center and zoom`);
+  const text=await page.locator(`[data-city-panel="${city}"] .city-climate-reading`).textContent();
+  assert.match(text,/周辺の農業と水利用/);
+  if(city==='new-delhi')assert.doesNotMatch(text,/デルタ|バングラデシュの低地/);
+ }
+ record('Mumbai, Kolkata and Delhi retain the same regional viewport through repeated city choices and show local agriculture');
+
+ await open('south-central-asia/nature/?topic=water&detail=rivers-29');
+ await page.locator('[data-south-central-river-reading]').waitFor({state:'visible'});
+ assert.match(await page.locator('[data-south-central-river-reading]').textContent(),/インダス川.*灌漑/s);
+ assert.equal(await page.locator('[data-basin-shortcuts]').isVisible(),false);
+ record('Indus selection explains its route and water use in the right panel without a redundant basin picker');
 
  for(const [region,product] of [['south-asia','wheat'],['central-asia','cotton']]){
   await open(`${region}/agriculture/`);await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]').dataset.farmContextStatus==='ready');
