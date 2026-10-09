@@ -1,11 +1,17 @@
-name: Review Asia atlas on PC
+name: Review approved East Asia on PC
 
 on:
   pull_request:
     branches: [main]
     paths:
       - '.github/workflows/atlas-asia-pc-review.yml'
-      - 'scripts/capture-asia-pc-review.mjs'
+      - 'scripts/capture-east-asia-approved-review.mjs'
+      - 'src/data/atlas/east-asia-*'
+      - 'src/scripts/atlas-east-asia-*'
+      - 'src/lib/atlas-east-industry-labels.ts'
+      - 'tests/unit/atlas-east-industry-labels.test.mjs'
+      - 'src/components/atlas/asia/EastAsia*'
+      - 'src/styles/atlas-east-asia-*'
       - 'src/components/atlas/Asia*.astro'
       - 'src/components/atlas/WestAsia*.astro'
       - 'src/data/atlas/west-asia*'
@@ -28,7 +34,13 @@ on:
     branches: [fix/asia-industry-publication-status]
     paths:
       - '.github/workflows/atlas-asia-pc-review.yml'
-      - 'scripts/capture-asia-pc-review.mjs'
+      - 'scripts/capture-east-asia-approved-review.mjs'
+      - 'src/data/atlas/east-asia-*'
+      - 'src/scripts/atlas-east-asia-*'
+      - 'src/lib/atlas-east-industry-labels.ts'
+      - 'tests/unit/atlas-east-industry-labels.test.mjs'
+      - 'src/components/atlas/asia/EastAsia*'
+      - 'src/styles/atlas-east-asia-*'
       - 'src/components/atlas/Asia*.astro'
       - 'src/components/atlas/WestAsia*.astro'
       - 'src/data/atlas/west-asia*'
@@ -58,7 +70,7 @@ concurrency:
 
 jobs:
   review:
-    name: Compare Asia and US PC views
+    name: Verify approved East Asia PC views
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -122,16 +134,18 @@ jobs:
         timeout-minutes: 4
         run: ATLAS_ASIA_BROWSER=1 node --test tests/e2e/atlas-south-central-focus.test.mjs
 
+      # East Asia map expansion supersedes the former exact US frame parity.
+      # The former broad comparison script remains available for manual review.
       - name: Capture PC images and verify controls
         timeout-minutes: 9
-        run: node scripts/capture-asia-pc-review.mjs
+        run: node scripts/capture-east-asia-approved-review.mjs
 
       - name: Save PC images and verification metadata
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: asia-pc-review-${{ github.run_id }}-${{ github.run_attempt }}
-          path: review-artifacts/asia-pc
+          name: east-asia-approved-${{ github.run_id }}-${{ github.run_attempt }}
+          path: review-artifacts/east-asia-approved
           if-no-files-found: warn
           compression-level: 6
           retention-days: 7

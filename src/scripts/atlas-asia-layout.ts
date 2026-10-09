@@ -22,7 +22,8 @@ export function createAsiaLayout(root:HTMLElement){
   climateLegend.replaceChildren(choices);legendHost.append(climateLegend);
  }
  for(const legend of root.querySelectorAll<HTMLElement>('.asia-map-panel>section.asia-legend:not(.asia-farm-key)')){
-  if(legend.hasAttribute('data-settlement-legend'))items.prepend(legend);
+  if(root.dataset.region==='east-asia'&&legend.hasAttribute('data-hydrology-legend')&&legendHost)legendHost.append(legend);
+  else if(legend.hasAttribute('data-settlement-legend'))items.prepend(legend);
   else if(methods)methods.append(legend);
  }
  const controls:{node:HTMLElement;owner:HTMLElement|null;wrapper:HTMLElement}[]=[];
@@ -34,6 +35,7 @@ export function createAsiaLayout(root:HTMLElement){
   const node=query(selector);if(node)items.append(node);
  }
  const cityReading=query('[data-city-reading-host]');
+ const populationPicker=query('.population-picker');if(root.dataset.region==='east-asia'&&populationPicker)items.append(populationPicker);
  for(const button of root.querySelectorAll<HTMLElement>('.city-farming [data-compare]')){
   const owner=button.closest<HTMLElement>('[data-city-panel]'),wrapper=root.ownerDocument.createElement('div');
   wrapper.className='asia-reading-dock-links';wrapper.append(button);items.append(wrapper);controls.push({node:button,owner,wrapper});
@@ -49,7 +51,7 @@ export function createAsiaLayout(root:HTMLElement){
   controls.push({node,owner,wrapper});
  }
  function placeCityPicker(){
-  const destination=notebook.matches&&root.dataset.climateActive==='true'&&root.dataset.cityClimateActive!=='true'&&!query('.asia-focus-navigation')&&readingDock?readingDock:toolbar;
+  const destination=root.dataset.region!=='east-asia'&&notebook.matches&&root.dataset.climateActive==='true'&&root.dataset.cityClimateActive!=='true'&&!query('.asia-focus-navigation')&&readingDock?readingDock:toolbar;
   if(cityControl&&destination&&cityControl.parentElement!==destination)destination.append(cityControl);
  }
  notebook.addEventListener('change',placeCityPicker);
@@ -72,10 +74,12 @@ export function createAsiaLayout(root:HTMLElement){
  const observer=new root.ownerDocument.defaultView!.MutationObserver(synchronize);
  observer.observe(root,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden']});
  return {render(state:AsiaState){
+  const populationHelper=query('.population-picker');if(populationHelper&&root.dataset.region==='east-asia')populationHelper.hidden=state.field!=='population'||!['density','urban'].includes(state.topic??'density');
   const seasonal=state.field==='natural'&&state.topic==='seasonal-precipitation';
   root.dataset.seasonalActive=String(seasonal);
   root.dataset.climateActive=String(state.field==='natural'&&(!state.topic||state.topic==='climate'));
   const countryScope=query('[data-industry-country-scope]');if(countryScope)countryScope.hidden=state.field!=='industry';
+  const eastRelation=query('[data-east-climate-relationship]');if(eastRelation)eastRelation.hidden=root.dataset.climateActive!=='true';
   const cityActive=root.dataset.climateActive==='true'&&Boolean(state.city);
   root.dataset.cityClimateActive=String(cityActive);
   if(cityReading)cityReading.hidden=!cityActive;

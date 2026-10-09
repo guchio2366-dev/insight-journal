@@ -16,6 +16,8 @@ import {contourBandFiles,contourBandLabels} from '../data/atlas/asia-contour-ban
 import {southCentralRainfallLegend} from '../data/atlas/asia-south-central-rainfall-legend';
 import {southCentralReligionCensuses} from '../data/atlas/asia-south-central-religion';
 import {southCentralIndustryGroups,southCentralIndustrySites} from '../data/atlas/asia-south-central-industry';
+import {eastIndustries,eastClusters} from '../data/atlas/east-asia-industry-clusters';
+import {eastAsiaReligionCountries,eastAsiaReligionColors} from '../data/atlas/east-asia-religion';
 
 type Key={label:string;color:string;shortLabel?:string};
 type Raster={url:string;coordinates:number[][]};
@@ -44,7 +46,7 @@ function comparisonMeaning(state:AsiaState,config:Config):{label:string;note:str
   }
   if(state.field==='population'){
     if(topic==='ethnicity')return {label:'民族の居住域',note:'居住域は概略で、密度や個人の民族を示しません。'};
-    if(topic==='religion')return config.regionId==='south-central-asia'&&!state.detail?{label:'国勢調査による全国の宗教構成',note:'円の色は各国が公表した宗教区分で、地点ごとの信者割合ではありません。'}:{label:'宗教と結びついた居住域',note:'居住域は概略で、密度や個人の信仰を示しません。'};
+    if(topic==='religion')return config.regionId==='east-asia'&&!state.detail?{label:'国別の宗教回答',note:'日本・韓国・台湾は2023年成人調査、モンゴルは2020年国勢調査です。地図上の色帯で構成を読みます。'}:config.regionId==='south-central-asia'&&!state.detail?{label:'国勢調査による全国の宗教構成',note:'円の色は各国が公表した宗教区分で、地点ごとの信者割合ではありません。'}:{label:'宗教と結びついた居住域',note:'居住域は概略で、密度や個人の信仰を示しません。'};
     const social=config.social&&socialTopic(config.social,state);
     if(social){const group=config.social?.groups?.find(g=>g.id===social.group),category=group?.id==='jp-nationality'?'外国人住民の国籍':group?.label.split('：').at(-1)?.replace(/の?構成$/,'');return {label:social.key==='overview'&&category?`${category}の最多区分`:social.title,note:social.key==='overview'?'色は区域内の最多区分で、人数や密度ではありません。':'資料の割合・分母を人数や人口密度と区別します。'};}
     return topic==='urban'?{label:'都市範囲と人口密度',note:'都市範囲は行政区域・通勤圏と異なります。'}:{label:'人口密度',note:'密度から民族・信仰・勤務先は分かりません。'};
@@ -100,7 +102,7 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
     if(s.field==='natural')return asiaNaturalTopics.find(t=>t.id===(s.topic??'climate'))?.label??fieldNames[s.field];
     if(s.field==='agriculture')return s.topic==='overview'||!s.topic&&!s.city?'農畜産物の分布':config.farming?.layers.find(t=>t.id===(s.topic??'rice'))?.title??'米の収穫面積';
     if(s.field==='industry')return isTradeTopic(s.topic)?s.topic==='trade-imports'?'商品輸入額':'商品輸出額':config.industry?.topics.find(t=>t.id===s.topic)?.title??fieldNames[s.field];
-    return config.social?.topics.find(t=>t.id===s.topic)?.title??(s.topic==='ethnicity'?'民族の居住域':s.topic==='religion'&&config.regionId==='south-central-asia'&&!s.detail?'国勢調査による宗教構成':s.topic==='religion'?'宗教と結びついた居住域':s.topic==='urban'?'都市の広がりと人口':'人口の分布');
+    return config.social?.topics.find(t=>t.id===s.topic)?.title??(s.topic==='ethnicity'?'民族の居住域':s.topic==='religion'&&config.regionId==='south-central-asia'&&!s.detail?'国勢調査による宗教構成':s.topic==='religion'&&config.regionId==='east-asia'?'国別の宗教回答':s.topic==='religion'?'宗教と結びついた居住域':s.topic==='urban'?'都市の広がりと人口':'人口の分布');
   }
   function subject(s:AsiaState){
     const story=asiaPlaceReadings.find(r=>r.region===config.regionId&&r.id===s.story);
@@ -156,6 +158,7 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
         const years=[...new Set(censuses.map(c=>Number(c.year)))].sort((a,b)=>a-b);
         return {...base,title:selected?`${selected.name}の宗教構成`:'国勢調査で読む宗教構成',period:selected?`${selected.year}年国勢調査`:`各国の国勢調査（${years[0]}–${years.at(-1)}年）`,unit:'全国の構成比（%）',keys,note:'円の色は各国が公表した全国の宗教区分です。同じ色の「その他」等も国ごとに定義が異なり、合算できません。円の位置は国の案内地点で、各地点の信者割合ではありません。'};
       }
+      if(config.regionId==='east-asia'&&s.topic==='religion'&&!s.detail)return {...base,title:'宗教回答で最多の区分',period:'成人調査2023年・モンゴル国勢調査2020年',unit:'各地域の最多回答だけを示す点',keys:[{label:'仏教が最多',color:eastAsiaReligionColors.buddhist},{label:'宗教なしが最多',color:eastAsiaReligionColors.none}],note:'点は各地域の最多回答のみ。全区分の構成と中国の別設問は元の地図へ戻って確認できます。面全体を同じ宗教とみなしません。',points:true,geometry:{type:'FeatureCollection',features:eastAsiaReligionCountries.map(country=>{const largest=[...country.shares].sort((a,b)=>b[2]-a[2])[0];return {type:'Feature',properties:{color:eastAsiaReligionColors[largest[0]],capacity:1000},geometry:{type:'Point',coordinates:country.point}};})}};
       const settlement=config.presentation?.settlements?.[s.topic??''];
       if(settlement){const data=await json(config.presentationBase!.replace('asia-presentation-v1/','asia-settlements-v1/')+settlement.file);return {...base,period:'2020年の資料',unit:'掲載集団の居住域の概略',keys:settlement.categories.map(c=>({color:c.color,label:c.label})),note:'居住域は概略です。色なしは未分類で、個人の民族・宗教を推定できません。',geometry:data};}
       const topic=config.social&&socialTopic(config.social,s),group=config.social&&socialGroup(config.social,s);
@@ -166,6 +169,10 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
         return {...base,period:'2020年の推計',unit:'人/km²（格子面積当たり）',keys:[...asiaPopulationColors.map((color,i)=>({color,label:asiaPopulationLabels[i]})),...(city&&geometry?[{label:`${city.name}の都市範囲（2025年資料の固定境界）`,color:'#9d342c'}]:[])],note:'色なしは推計0・欠測・海を含みます。都市範囲は2025年資料の固定境界で、行政区域や通勤圏とは異なります。',raster:{url:asset(config.populationBase!,record.image),coordinates:record.imageCoordinates},geometry,boundaryOnly:true};}
     }
     if(s.field==='industry'&&config.industry){
+      if(config.regionId==='east-asia'&&s.topic?.startsWith('east-')){
+        const industry=eastIndustries.find(i=>'east-'+i.id===s.topic);
+        return {...base,subject:eastClusters.find(c=>c.id===s.detail)?.name,period:'代表的な立地',unit:'産業の種類',keys:(industry?[industry]:eastIndustries).map(i=>({label:i.label,color:i.color})),compactNote:'● 一定サイズの代表点。複数産業の都市は等分の複数色。大きさは数量を表しません。未掲載の地域にも産業があります。',note:'色は産業の種類。記号は一定サイズで数量を表しません。複数産業の都市は等分の複数色を表示します。未掲載は産業がないという意味ではありません。'};
+      }
       if(config.trade&&isTradeTopic(s.topic)){const data=await json(config.tradeBase!+config.trade.file) as TradeData,values=config.trade.countries.map(code=>({code,value:tradeValue(data.countries[code],tradeChapter(s),tradeFlow(s))})),scale=tradeScale(values.map(v=>v.value));return {...base,period:'2023年',unit:'百万米ドル',keys:[...bins(tradeColors,scale.breaks.map(v=>v/1e6)),missing],note:'国・区分全体の商品貿易額です。生産地や個別の港の取扱量ではありません。',geometry:await countryGeometry(Object.fromEntries(values.map(v=>[v.code,scale.color(v.value)])))};}
       const t=industryTopic(config.industry,s);
       if(t.kind==='regional'){
@@ -196,7 +203,7 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
   function renderMainLegend(state:AsiaState){
     if(!mainLegend)return;
     const agricultureTopic=state.topic??(state.city?'rice':config.presentation?'overview':'rice');
-    const active=!state.back&&(state.field!=='agriculture'||agricultureTopic!=='overview');mainLegend.hidden=!active;
+    const active=!state.back&&(state.field!=='agriculture'||agricultureTopic!=='overview')&&!(config.regionId==='east-asia'&&state.field==='population'&&['ethnicity','religion'].includes(state.topic??''));mainLegend.hidden=!active;
     if(!active){mainKey='';++mainRevision;mainLegend.replaceChildren();return;}
     const next=[state.field,state.topic,state.detail,state.place,state.city,state.overlay,state.farms].join('|');
     if(next===mainKey)return;mainKey=next;const seq=++mainRevision;mainLegend.textContent='地図の凡例を読み込んでいます。';

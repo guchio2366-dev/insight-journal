@@ -1,6 +1,7 @@
 ---
 import type { AsiaClimateCity } from '../../data/atlas/asia-climate-cities';
 import {asiaRiceReading} from '../../data/atlas/asia-agriculture';
+import {tokyoFarming} from '../../data/atlas/east-asia-approved-reading';
 import {asiaFarmInsights} from '../../data/atlas/asia-map-insights';
 import {southCentralCityReadings} from '../../data/atlas/asia-south-central-climate-reading';
 interface Props { city: AsiaClimateCity; precipitationMax: number; countryName?: string }
@@ -48,6 +49,11 @@ const localReading=city.regionId==='south-central-asia'?southCentralCityReadings
     {bangkok?<>
       <p>赤道に近く一年を通じて高温です。南西季節風が湿った空気を運ぶ時期に雨が増え、北東季節風が卓越する時期は雨が少なくなります。観測所の雨温図は、バンコク周辺の乾季と雨季を比べる手掛かりです。</p>
       <section class="city-farming"><h4>周辺の農業と水利用</h4><p>バンコクのあるチャオプラヤ川下流の平野では稲作が行われます。乾季の作付けには貯水池や水路からの灌漑が関わり、雨温図の降水だけで農地へ届く水を決められません。</p><p>出典：<a href="https://www.data.jma.go.jp/cpd/monitor/nrmlist/NrmMonth.php?stn=48455">気象庁・バンコク観測所の平年値</a> · <a href="https://tmd.go.th/media/pdf-eng/climate-0215.pdf">タイ気象局・季節風の説明</a> · <a href="https://documents1.worldbank.org/curated/en/246261468311385750/pdf/multi-page.pdf">世界銀行・チャオプラヤ平野の灌漑</a>。</p><button type="button" data-compare="agriculture">周辺の米の分布を見る →</button></section>
+    </>:city.id==='tokyo'?<>
+    <p class="city-takeaway"><strong>{city.summary}</strong></p>
+    <p>{city.id==='tokyo'?'東京では梅雨期に加え、秋雨前線と台風の影響で秋にも雨が多くなります。夏は太平洋高気圧の縁から暖かく湿った空気が入り、冬は西高東低の気圧配置による北西季節風が日本海側の山地で水分を落とすため、太平洋側の東京は晴れて乾燥する日が多くなります。海に近い低地の温暖さと季節風・前線の移動を合わせて読みます。':city.reading}</p>
+    {city.id==='tokyo'&&<p><a href="https://www.data.jma.go.jp/cpd/j_climate/kanto_koshin/main.html">気象庁：関東甲信の季節と気圧配置</a></p>}
+    <section class="city-farming"><h4>周辺の農畜産と水</h4><p>{city.id==='tokyo'?tokyoFarming:farmingReading.body}</p>{city.id!=='tokyo'&&<p>{asiaRiceReading.relationship}</p>}<p>地域の参考：<a href={city.id==='tokyo'?'https://www.maff.go.jp/kanto/kihon/kikaku/meguji/kanto_meguji_r5.html':farmingReading.source}>農業と水の解説の出典</a>。この観測所の気候から、都市の作物や灌漑を決めることはできません。</p><button type="button" data-compare="agriculture">同じ場所で米の分布を見る →</button></section>
     </>:<>
     <p class="city-takeaway"><strong>{localReading?.pattern??city.summary}</strong></p>
     <p>{localReading?.reason??city.reading}</p>
