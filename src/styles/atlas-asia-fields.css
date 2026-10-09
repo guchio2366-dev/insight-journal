@@ -59,12 +59,12 @@
 .asia-atlas .asia-farm-key .asia-farm-products button{min-height:30px;font-size:12px;padding:4px}
 .asia-atlas .asia-farm-toolbar button[aria-pressed=true]{background:#35515d;color:#fff}
 .asia-atlas .asia-map-annotations .asia-river-label{font-size:12px;padding:2px 4px;border:0;background:#ffffffee;color:#175f7b}
-.asia-atlas[data-region=southeast-asia] .asia-map-annotations .asia-water-city-name{font-size:10px;min-height:20px;padding:1px 3px;background:#ffffffcf;color:#465a5c;border:0}
-.asia-atlas[data-region=southeast-asia] .asia-map-annotations .asia-population-name{font-size:10px;min-height:18px;padding:0 2px;border:0;background:#ffffffb3;color:#273538;cursor:default;pointer-events:none}
-.asia-atlas[data-region=southeast-asia] .southeast-industry-map-sites{position:absolute;inset:0;z-index:3;pointer-events:none}
-.asia-atlas[data-region=southeast-asia] .southeast-industry-map-point{position:absolute;transform:translate(-50%,-50%);width:18px;height:18px;min-height:0;padding:0;border:2px solid #fff;border-radius:50%;background:#355d75;box-shadow:0 0 0 1px #263e49;cursor:pointer;pointer-events:auto}
-.asia-atlas[data-region=southeast-asia] .southeast-industry-map-point.rubber{background:#c25f2e}.asia-atlas[data-region=southeast-asia] .southeast-industry-map-point.wood{background:#827252}.asia-atlas[data-region=southeast-asia] .southeast-industry-map-point.raw{border-radius:2px;transform:translate(-50%,-50%) rotate(45deg)}
-.asia-atlas[data-region=southeast-asia] .southeast-industry-map-point.muted{opacity:.28}.asia-atlas[data-region=southeast-asia] .southeast-industry-map-point.chosen{box-shadow:0 0 0 3px #fff,0 0 0 5px #213b45;z-index:5}.asia-atlas[data-region=southeast-asia] .southeast-industry-map-point:focus-visible{outline:3px solid #a74830;outline-offset:4px}
+.asia-atlas-root[data-region=southeast-asia] .asia-map-annotations .asia-water-city-name{font-size:10px;min-height:20px;padding:1px 3px;background:#ffffffcf;color:#465a5c;border:0}
+.asia-atlas-root[data-region=southeast-asia] .asia-map-annotations .asia-population-name{font-size:10px;min-height:18px;padding:0 2px;border:0;background:#ffffffb3;color:#273538;cursor:default;pointer-events:none}
+.asia-atlas-root[data-region=southeast-asia] .southeast-industry-map-sites{position:absolute;inset:0;z-index:3;pointer-events:none}
+.asia-atlas-root[data-region=southeast-asia] .southeast-industry-map-point{position:absolute;transform:translate(-50%,-50%);width:18px;height:18px;min-height:0;padding:0;border:2px solid #fff;border-radius:50%;background:#355d75;box-shadow:0 0 0 1px #263e49;cursor:pointer;pointer-events:auto}
+.asia-atlas-root[data-region=southeast-asia] .southeast-industry-map-point.rubber{background:#c25f2e}.asia-atlas-root[data-region=southeast-asia] .southeast-industry-map-point.wood{background:#827252}.asia-atlas-root[data-region=southeast-asia] .southeast-industry-map-point.raw{border-radius:2px;transform:translate(-50%,-50%) rotate(45deg)}
+.asia-atlas-root[data-region=southeast-asia] .southeast-industry-map-point.muted{opacity:.28}.asia-atlas-root[data-region=southeast-asia] .southeast-industry-map-point.chosen{box-shadow:0 0 0 3px #fff,0 0 0 5px #213b45;z-index:5}.asia-atlas-root[data-region=southeast-asia] .southeast-industry-map-point:focus-visible{outline:3px solid #a74830;outline-offset:4px}
 .asia-atlas [data-social-scale] button{display:flex;align-items:center;gap:5px;min-height:36px;padding:4px 7px;border:1px solid #c3cbbc;background:#fffdf5;color:#344951;font-size:12px}
 .asia-atlas .asia-insight-places{display:flex;flex-wrap:wrap;gap:6px}
 .asia-atlas .asia-insight-places button{min-height:40px;padding:7px 10px;background:#f0f4ec;border:1px solid #b7c6b0;color:#2d4e53;font-weight:700}
@@ -289,7 +289,7 @@
  .atlas-desktop-shell .asia-atlas[data-field] .asia-map-items .asia-settlement-key button{min-height:24px;padding:2px 4px;font-size:13px;line-height:18px}
 }
 @media(min-width:1600px){.atlas-desktop-shell .asia-atlas[data-field] .asia-layout{grid-template-columns:minmax(0,1.8fr) minmax(280px,1fr);gap:16px}}
-@media(min-width:960px){.atlas-desktop-shell .asia-atlas[data-region=southeast-asia][data-field=industry] .asia-layout{grid-template-columns:minmax(0,1.8fr) minmax(320px,1fr);gap:12px}.atlas-desktop-shell .asia-atlas[data-region=southeast-asia][data-field=industry] .asia-map-frame{aspect-ratio:1.35!important;min-height:380px!important;max-height:620px!important}}
+@media(min-width:960px){.atlas-desktop-shell .asia-atlas-root[data-region=southeast-asia] .asia-atlas[data-field=industry] .asia-layout{grid-template-columns:minmax(0,1.8fr) minmax(320px,1fr);gap:12px}.atlas-desktop-shell .asia-atlas-root[data-region=southeast-asia] .asia-atlas[data-field=industry] .asia-map-frame{aspect-ratio:1.35!important;min-height:380px!important;max-height:620px!important}}
 @media(min-width:960px) and (max-width:1199px){
  .atlas-desktop-shell .asia-atlas:is([data-field=industry],[data-field=population]) .asia-region-shell:not(:has(.asia-focus-navigation))>.regional-navigation,
  [data-climate-active=true] .atlas-desktop-shell .asia-atlas[data-field=natural] .asia-region-shell:not(:has(.asia-focus-navigation))>.regional-navigation{width:auto;flex:0 1 auto}
