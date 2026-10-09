@@ -1,11 +1,12 @@
 ---
 import {settlementReading,settlementCountries} from '../../data/atlas/asia-settlement-reading';
 import manifest from '../../../public/assets/atlas/asia-settlements-v1/manifest.json';
+import {southCentralReligionCensuses,southCentralReligionUnmapped} from '../../data/atlas/asia-south-central-religion';
 const {regionId,pageId}=Astro.props as {regionId:keyof typeof manifest.regions;pageId:string};
 const readings={
  'east-asia':{ethnicity:'チベット系・ウイグル系などの居住域は、中国西部から周辺の高原・内陸へ広がっています。',religion:'掲載範囲では、チベット系集団に結びつく仏教の地域と、新疆などのイスラム教に結びつく地域を見比べられます。'},
  'southeast-asia':{ethnicity:'大陸の河川平野と島しょ部では、特徴的な居住域のまとまりが異なります。マレー系の分布は国境を越えて続きます。',religion:'掲載範囲では、大陸部に仏教と結びついた居住域が広がり、マレー半島からインドネシアにはイスラム教と結びついた居住域が続きます。'},
- 'south-central-asia':{ethnicity:'ベンガルやパンジャーブ、パシュトゥーンの居住域は、国境をまたいで広がっています。国ごとの色分けだけでは見えない分布です。',religion:'掲載範囲では、インドの広い範囲にヒンドゥー教と結びつく集団が分布し、パキスタン・バングラデシュにはイスラム教と結びつく居住域が広がります。'}
+ 'south-central-asia':{ethnicity:'パシュトゥーンはアフガニスタンとパキスタン、ベンガルの集団はインド東部とバングラデシュ、タミルの集団はインド南部とスリランカの両側に掲載されています。中央アジアでもウズベクやタジクの居住域は国境に収まりません。',religion:'掲載した集団に結びつく宗教の事例です。'}
 };
 ---
 {(['ethnicity','religion'] as const).map(topic=><section data-settlement-reading={topic} hidden>
@@ -13,16 +14,27 @@ const readings={
  <p class="eyebrow">Population · Settlement areas · 2020</p>
  <h2>{topic==='ethnicity'?'民族の特徴的な居住域':'宗教と結びついた居住域'}</h2>
  <p class="asia-takeaway">{pageId==='central-asia'?(topic==='religion'?'中央アジアでは、イスラム教と結びつく集団の居住域と、複数の宗教的帰属を含む集団の居住域を区別しています。色面を選ぶと、集団の定義と対象国を確認できます。':'カザフ、ウズベク、キルギス、タジク、トルクメンなどの居住域は、国境と同じ形にはなりません。周辺の国へ続く広がりも確かめられます。'):readings[regionId][topic]}</p>
- <p class="asia-settlement-scope">掲載した集団の居住域を示す概略図です。{topic==='religion'?'各場所での信者の割合や、多数派の宗教を示す地図ではありません。':'各場所での多数派や、全住民の民族を示す地図ではありません。'}</p>
+ <p class="asia-settlement-scope">掲載した集団の居住域を示す概略図です。{topic==='religion'?'各場所での信者の割合や、多数派の宗教を示す地図ではありません。':'GeoEPRが政治的に重要として分類した集団の抜粋です。全住民の民族調査や、個人の自己認識・母語を示す地図ではありません。'}</p>
  <p>灰色は掲載した居住域の重なりです。色のない地域にも人々は暮らしていますが、この図では分類していません。</p>
- <h3>この地図の掲載範囲</h3>
- <p>{regionId==='east-asia'?'この図は中国西部などの特徴的な居住域を抜粋しています。漢族・日本人など全国的に分布する集団や、朝鮮半島全体の分布を網羅していません。':regionId==='southeast-asia'?'大陸部と島しょ部の代表的な居住域を抜粋しています。すべての民族・宗教を網羅しておらず、都市内の混住も表していません。':'南アジアと中央アジアの代表的な居住域を抜粋しています。インドの言語集団は資料が政治・社会上の区分で定めた一部の集団であり、その言語を話すすべての人を含みません。'}</p>
+ {regionId==='south-central-asia'&&topic==='ethnicity'?<><h3>分布を読む背景</h3><p>パンジャーブとベンガルでは、1947年の分割時に新しい国境を越える移動が起こりました。いまの色面だけで個々の家庭の移動歴や、別の地域に暮らす人々の数は分かりません。地形が居住の理由を一つに決めたとも読めません。</p><p>歴史資料：<a href="https://www.partitionmuseum.org/partition-of-india">Partition Museum・1947年の分割と移動</a>。</p></>:<><h3>この地図の掲載範囲</h3><p>{regionId==='east-asia'?'この図は中国西部などの特徴的な居住域を抜粋しています。漢族・日本人など全国的に分布する集団や、朝鮮半島全体の分布を網羅していません。':regionId==='southeast-asia'?'大陸部と島しょ部の代表的な居住域を抜粋しています。すべての民族・宗教を網羅しておらず、都市内の混住も表していません。':'南アジアと中央アジアの代表的な居住域を抜粋しています。'}</p></>}
  </div>
- {manifest.regions[regionId][topic].categories.map(c=><article data-settlement-detail={c.id} data-settlement-topic={topic} hidden><button type="button" class="asia-settlement-back" data-settlement-clear>← 分布全体の説明へ</button><h2>{c.label} — {settlementCountries(c).join('・')||'複数の地域'}</h2><p class="asia-takeaway">{settlementReading(regionId,topic,c)}</p><p>太い輪郭は選択した分布です。離れた部分も含めて同じ分類を強調しています。</p><p>{topic==='religion'?'集団の宗教的な特徴と居住域を結びつけた概略図です。色面の全住民が同じ信仰であることや、地域内の信者の割合を示しません。':'資料に掲載された集団の居住域です。その場所の全住民や、現在の正確な分布を示すものではありません。'}</p></article>)}
- <details class="asia-method"><summary>資料の定義と掲載集団を確認する</summary>
+ {regionId==='south-central-asia'&&topic==='religion'&&<section data-sc-religion-census>
+  <p class="eyebrow">Population · National censuses</p><h2>国勢調査で宗教構成を読む</h2>
+  <p class="asia-takeaway">インド・ネパールではヒンドゥー教、パキスタン・バングラデシュではイスラム教、スリランカでは仏教の割合が大きく、カザフスタンにはイスラム教とキリスト教の両方が記録されています。各国の丸は全国の構成で、その地点だけの信仰を表しません。</p>
+  <p>調査年は2011〜2024年で、質問・公表区分・不明回答の扱いが異なります。国ごとの割合を同じ年・同じ分類の統計として順位づけません。色のない国は宗教人口がないという意味ではなく、この図に使える全住民の宗教別公表表を確認できていない範囲です。</p>
+  <div class="sc-religion-choices" aria-label="宗教構成を読む国">{southCentralReligionCensuses.filter(c=>pageId==='central-asia'?c.code==='KAZ':pageId==='south-asia'?c.code!=='KAZ':true).map(c=><button type="button" data-sc-religion-select={c.code} aria-pressed="false">{c.name} · {c.year}年</button>)}</div>
+  {southCentralReligionCensuses.map(c=><article data-sc-religion-country={c.code} hidden><h3>{c.name}・{c.year}年</h3><p>{c.reading}</p><div class="sc-religion-segments">{c.segments.map(segment=><span><i style={`background:${segment.color}`}></i>{segment.name} {segment.share}%</span>)}</div><p class="asia-settlement-scope">{c.scope}</p><p>出典：<a href={c.source.url}>{c.source.label}</a></p></article>)}
+  <details class="asia-method"><summary>数値を示していない国</summary><ul>{southCentralReligionUnmapped.filter(c=>pageId==='central-asia'?['KGZ','TJK','TKM','UZB'].includes(c.code):pageId==='south-asia'?!['KGZ','TJK','TKM','UZB'].includes(c.code):true).map(c=><li><strong>{c.name}</strong>：{c.reason}</li>)}</ul></details>
+  <details class="asia-method"><summary>EPRの限定的な居住域事例を見る</summary><p>GeoEPR/EPR-EDは政治的に重要な集団の居住域と集団内の宗教構成を記録します。全住民の宗教人口調査ではなく、ここで選んだ事例の色面を全国・地区の信者割合へ読み替えられません。</p><div class="sc-religion-choices">{manifest.regions[regionId].religion.categories.filter(c=>!c.id.endsWith('-shared')).map(c=><button type="button" data-settlement-choice={c.id} data-settlement-topic="religion">{c.label}の事例</button>)}</div></details>
+ </section>}
+ {manifest.regions[regionId][topic].categories.map(c=><article data-settlement-detail={c.id} data-settlement-topic={topic} hidden><button type="button" class="asia-settlement-back" data-settlement-clear>← 分布全体の説明へ</button><h2>{c.label} — {settlementCountries(c).join('・')||'複数の地域'}</h2><p class="asia-takeaway">{settlementReading(regionId,topic,c)}</p><p>太い輪郭は選択した分布です。離れた部分も含めて同じ分類を強調しています。</p><p>{topic==='religion'?'EPR-EDが記録した集団内の宗教的特徴とGeoEPRの居住域を結びつけた限定事例です。集団の割合をその場所の全住民の割合に読み替えられません。':regionId==='south-central-asia'?'GeoEPRが政治的に重要として分類した集団の概略域で、全住民の民族・言語・自己認識を調べた地図ではありません。名称に「語」を含む区分も、その言語の全話者を示しません。':'資料に掲載された集団の居住域です。その場所の全住民や、現在の正確な分布を示すものではありません。'}</p></article>)}
+ <details class="asia-method" data-epr-method={topic}><summary>資料の定義と掲載集団を確認する</summary>
   <p>居住域はGeoEPR 2021のうち、2020年に有効な地域分布を使います。政治的に関係のある集団を扱う研究資料であり、全民族を対象とした人口調査ではありません。全国の境界を居住域とする記録と、都市だけに分布する記録は面表示に使っていません。州別人口の値から境界を作っていません。</p>
   {topic==='religion'&&<p>単一の宗教名の色は、EPR-ED 2021で集団の8割以上に共通すると記録された宗教に対応します。中央アジア3か国のカザフ・ウズベク・キルギスの集団はこの条件を満たさないため、「イスラム教など（複数の帰属）」として別の色で表示します。集団全体の特徴を、その居住域の全住民の信仰と同一視することはできません。個人が複数の信仰を併せ持つ状況や、2020年以後の変化は示しません。</p>}
   <ul>{manifest.regions[regionId][topic].categories.filter(c=>c.sourceGroups.length).map(c=><li><strong>{c.label}</strong>：{c.sourceGroups.map(g=>`${g.statename} / ${g.group}`).join('、')}</li>)}</ul>
   <p>出典：<a href="https://icr.ethz.ch/data/epr/geoepr/">GeoEPR 2021</a>（Wucherpfennigほか、2011；Vogtほか、2015）{topic==='religion'&&<>、<a href="https://icr.ethz.ch/data/epr/ed/">EPR-ED 2021</a>（Bormannほか、2017）</>}。地域の抜粋・同じ分類の結合・重なりの表示はInsight Journalによります。元資料の境界も概略であり、居住地や信仰を個人について判断する用途には使えません。</p>
  </details>
 </section>)}
+<style>
+ .sc-religion-choices{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}.sc-religion-choices button{padding:8px 10px;min-height:40px;background:#fffef9;color:#285247;border:1px solid #afc0b5;font:12px/1.5 var(--sans);cursor:pointer}.sc-religion-choices button[aria-pressed=true]{border:2px solid #914734;background:#fff4e4;font-weight:700}.sc-religion-segments{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 9px}.sc-religion-segments span{display:flex;align-items:start;gap:6px;font-size:12px;line-height:1.5}.sc-religion-segments i{width:12px;height:12px;flex:none;margin-top:3px;border:1px solid #0002}[hidden]{display:none!important}
+</style>

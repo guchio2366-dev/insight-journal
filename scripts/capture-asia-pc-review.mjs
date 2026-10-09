@@ -28,7 +28,7 @@ const scenes=[
  {id:'population',us:'/atlas/north-america/population/',asia:'/atlas/asia/east-asia/population/',alignTop:true,comparisonScope:'layout-only; the US reference does not show a population distribution fill, so distribution rendering equivalence is not assessed'},
 ];
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.mjs':'text/javascript','.css':'text/css','.json':'application/json','.geojson':'application/geo+json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.woff2':'font/woff2','.gz':'application/gzip'};
-const metadata={schemaVersion:1,status:'running',startedAt:new Date().toISOString(),checkedOutSHA:null,headSHA:process.env.REVIEW_HEAD_SHA||null,baseSHA:process.env.REVIEW_BASE_SHA||null,beforeSHA:process.env.REVIEW_BEFORE_SHA||null,githubSHA:process.env.GITHUB_SHA||null,runId:process.env.GITHUB_RUN_ID||null,runAttempt:process.env.GITHUB_RUN_ATTEMPT||null,repository:process.env.GITHUB_REPOSITORY||null,basePath,profiles,output:'review-artifacts/asia-pc',expectedImageCount:108+southCentralImageCount,expectedComparisonCount:8,fonts:{setup:process.env.REVIEW_JAPANESE_FONT_SETUP||'preinstalled',families:process.env.REVIEW_JAPANESE_FONTS||null,match:process.env.REVIEW_JAPANESE_FONT_MATCH||null},browser:null,scope:'Local production build only; public deployment is not accessed.',notes:['US automobiles and Japanese transport equipment retain their respective statistical definitions.','Industry map dimensions use the compact US population frame; other dimensions and all corresponding field tops agree within 1 CSS pixel.','Population is a layout-only comparison: the US reference does not show a population distribution fill; no distribution rendering equivalence is asserted.','Each PNG shows the viewport once; no duplicate map-crop artifacts are generated.']};
+const metadata={schemaVersion:1,status:'running',startedAt:new Date().toISOString(),checkedOutSHA:null,headSHA:process.env.REVIEW_HEAD_SHA||null,baseSHA:process.env.REVIEW_BASE_SHA||null,beforeSHA:process.env.REVIEW_BEFORE_SHA||null,githubSHA:process.env.GITHUB_SHA||null,runId:process.env.GITHUB_RUN_ID||null,runAttempt:process.env.GITHUB_RUN_ATTEMPT||null,repository:process.env.GITHUB_REPOSITORY||null,basePath,profiles,output:'review-artifacts/asia-pc',expectedImageCount:106+southCentralImageCount,expectedComparisonCount:8,fonts:{setup:process.env.REVIEW_JAPANESE_FONT_SETUP||'preinstalled',families:process.env.REVIEW_JAPANESE_FONTS||null,match:process.env.REVIEW_JAPANESE_FONT_MATCH||null},browser:null,scope:'Local production build only; public deployment is not accessed.',notes:['US automobiles and Japanese transport equipment retain their respective statistical definitions.','Industry map dimensions use the compact US population frame; other dimensions and all corresponding field tops agree within 1 CSS pixel.','Population is a layout-only comparison: the US reference does not show a population distribution fill; no distribution rendering equivalence is asserted.','Each PNG shows the viewport once; no duplicate map-crop artifacts are generated.']};
 const results={captures:[],comparisons:[],operations:[],externalCommunicationAttempts:[],blockedWebSockets:[]};
 const failure=error=>error?.stack??String(error);
 async function persist(){
@@ -382,9 +382,18 @@ async function checkRequestedCorrections(browser,host,profile){
   await contextPicture(page,profile,`${region}-rainfall-no-country-popup`,'asia');
   await open(page,host,`/atlas/asia/${region}/nature/?topic=basins`);const basin=page.locator('[data-hydrology-detail]');
   await page.waitForFunction(()=>document.querySelector('[data-hydrology-detail]')?.options.length>1);
-  await expand(page.locator('[data-hydrology-panel] > details').first());
-  const id=await basin.locator('option').evaluateAll(options=>options.find(o=>o.value&&!o.disabled).value);await basin.selectOption(id);
-  await page.waitForFunction(id=>new URL(location.href).searchParams.get('detail')===id,id);
+  let id;
+  if(region==='south-central-asia'){
+   assert.equal(await page.locator('[data-hydrology-detail-label]').isVisible(),false,'South/Central basin selection stays on the map');
+   const river=page.locator('.asia-river-label:visible').first();await river.waitFor({state:'visible'});await river.click();
+   await page.waitForFunction(()=>!!document.querySelector('[data-hydrology-detail]')?.value&&/集水域全体/.test(document.querySelector('[data-hydrology-value]')?.textContent??''));
+   id=await basin.inputValue();
+   assert(new URL(page.url()).searchParams.has('at'),'Map river selection must retain its clicked coordinates');
+  }else{
+   await expand(page.locator('[data-hydrology-panel] > details').first());
+   id=await basin.locator('option').evaluateAll(options=>options.find(o=>o.value&&!o.disabled).value);await basin.selectOption(id);
+   await page.waitForFunction(id=>new URL(location.href).searchParams.get('detail')===id,id);
+  }
   await settle(page);
   await page.locator('[data-map-surface]').scrollIntoViewIfNeeded();
   const basinURL=page.url(),basinValue=await page.locator('[data-hydrology-value]').textContent(),map=await page.locator('[data-map-surface]').boundingBox();
@@ -478,7 +487,8 @@ async function main(){
   for(const profile of profiles)await checkEastContourBands(browser,host,profile);
   for(const profile of southCentralProfiles)await operation(browser,host,profile,'south-central-regional-acceptance',page=>verifySouthCentralAsia(page,{profile,source:host.origin+basePath,capture:contextPicture}));
   metadata.regionalProfiles=southCentralProfiles;
-  metadata.expectedImageCount=108+southCentralImageCount;
+  // Main-branch capture paths contribute 106 images; the regional verifier adds 30.
+  metadata.expectedImageCount=106+southCentralImageCount;
   assert.equal(results.captures.length,metadata.expectedImageCount);assert(results.captures.every(row=>row.passed),'All viewport captures must pass');
   assert.equal(results.comparisons.length,8);assert(results.comparisons.every(row=>row.passed),'All 8 geometry comparisons must pass');
   assert.equal(results.operations.length,40+southCentralProfiles.length);assert(results.operations.every(row=>row.passed),'All PC operation groups must pass');

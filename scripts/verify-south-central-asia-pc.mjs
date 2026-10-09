@@ -126,6 +126,7 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  await open('south-asia/nature/');
  await page.locator('[data-zoom-in]').click();
  await page.waitForFunction(()=>new URL(location.href).searchParams.has('z'));
+ await page.waitForTimeout(350);
  await page.locator('[data-zoom-out]').click();
  for(const city of ['mumbai','kolkata','new-delhi']){
   const before=new URL(page.url()),camera=['lng','lat','z'].map(key=>before.searchParams.get(key));
@@ -179,6 +180,48 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
   await screenshot('south-central-industry-overview');record('regional industry overview, oil and gas distribution, and site case selection');
   await open('south-central-asia/population/?topic=ethnicity');await screenshot('south-central-cultural-distribution');
  }
+ await open('south-central-asia/population/?topic=religion');
+ assert.equal(await page.locator('.sc-religion-marker').count(),6);
+ assert.equal(await page.locator('[data-settlement-legend="religion"]').isVisible(),false);
+ assert.equal(await page.locator('[data-map-title]').textContent(),'国勢調査で読む宗教構成');
+ await page.locator('.sc-religion-marker[aria-label^="バングラデシュ"]').click();
+ assert.equal(new URL(page.url()).searchParams.get('place'),'BGD');
+ assert.equal(await page.locator('.sc-religion-marker').count(),6);
+ assert.match(await page.locator('[data-sc-religion-country="BGD"]').textContent(),/91\.08%.*7\.96%/s);
+ await page.reload({waitUntil:'domcontentloaded'});await ready();
+ assert.equal(new URL(page.url()).searchParams.get('place'),'BGD');
+ await page.locator('[data-sc-religion-census] details').last().evaluate(n=>n.open=true);
+ await page.locator('[data-sc-religion-census] [data-settlement-choice]').first().click();
+ assert.match(new URL(page.url()).searchParams.get('detail'),/^religion-/);
+ await page.locator('[data-settlement-legend="religion"]').waitFor({state:'visible'});
+ assert.equal(await page.locator('.sc-religion-marker').count(),0);
+ await page.locator('[data-settlement-detail]:visible [data-settlement-clear]').click();
+ await page.locator('.sc-religion-marker').first().waitFor({state:'visible'});
+ record('official national religion compositions persist, with EPR available only as an explicit limited case');
+
+ await open('south-central-asia/population/');
+ assert.match(await page.locator('[data-population-takeaway]').textContent(),/ガンジス川.*ベンガル.*タシケント.*アルマトイ/s);
+ assert((await page.locator('.asia-city-name:visible').count())<=9);
+ await extentFits('south-central population overview',true);
+ await open('south-central-asia/population/?topic=ethnicity');
+ const initialLabels=await page.locator('.asia-settlement-label:visible').count();
+ await page.locator('[data-zoom-in]').click();
+ await page.waitForFunction(()=>new URL(location.href).searchParams.has('z'));
+ const beforeEthnicClick=new URL(page.url()),ethnicCamera=['lng','lat','z'].map(key=>beforeEthnicClick.searchParams.get(key));
+ await page.locator('[data-settlement-choice="ethnicity-10"]').click();
+ assert.deepEqual(['lng','lat','z'].map(key=>new URL(page.url()).searchParams.get(key)),ethnicCamera);
+ assert((await page.locator('.asia-settlement-label:visible').count())>=initialLabels);
+ assert.match(await page.locator('[data-settlement-detail="ethnicity-10"]').textContent(),/GeoEPR.*自己認識/s);
+ record('population guide, sparse initial city names, and ethnic selection without automatic camera movement');
+
+ await open('south-central-asia/nature/?topic=landform');
+ assert.match(await page.locator('[data-physical-takeaway]').textContent(),/ヒマラヤ.*堆積物.*玄武岩/s);
+ assert.equal(await page.locator('[data-sc-landform-sources] a').count(),3);
+ await extentFits('south-central landforms',true);
+ await open('south-central-asia/nature/?topic=terrain');
+ await page.waitForFunction(()=>document.querySelector('[data-map-period]')?.textContent.includes('500m'));
+ await extentFits('south-central 500 m elevation',true);
+ record('landform origin and the retained 500 m elevation contours fit the regional map');
  await open('south-central-asia/agriculture/');
  const supply=page.locator('[data-south-central-supply]'),destinations=page.locator('[data-south-central-destinations]');
  await supply.locator('.sc-flow-track').waitFor({state:'visible'});

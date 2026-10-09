@@ -1,0 +1,21 @@
+# South and Central Asia religion source review (2026-10-09)
+
+The primary map may summarize **published whole-population census categories** only at the geography supported by each source. Its six national markers are point locators for whole-country percentages, not local faith percentages. Their dates and questions differ, so the markers do not form a common-year regional estimate. The published percentages are manually transcribed with citations; the site does not redistribute or rehost whole source tables. Reuse permission for source files and subnational geometry has not been established, so this stage links to the official publications and publishes no derived district polygons. Blank countries indicate no validated whole-population category table here, not population zero or an absence of faith.
+
+| Country | Published source, year and grain | Treatment |
+|---|---|---|
+| India | [C-01 census](https://censusindia.gov.in/nada/index.php/catalog/11361), 2011, national/state/district | National composition marker; existing state census topic remains a separate drilldown. Old Andhra Pradesh and Jammu-Kashmir definitions stay historical. |
+| Pakistan | [PBS national report](https://www.pbs.gov.pk/wp-content/uploads/2020/07/National-Census-Report-2023.pdf) and [Table 9 district example](https://www.pbs.gov.pk/wp-content/uploads/census_tables/tables/table_9_kp_districts.pdf), 2023 | National Muslim share and explicitly combined residual; source distinctions for Ahmadi, Hindu Jati, Scheduled Castes and others must not be relabelled as another country's `other`. |
+| Bangladesh | [BBS national report, Table 3.2.15](https://objectstorage.ap-dcc-gazipur-1.oraclecloud15.com/n/axvjbnqprylg/b/V2Ministry/o/office-bbs-chuadanga/2024/12/d1dd88892cfe4c7289a9d76292472e34.pdf), 2022, national/division | National marker using exact published rounded percentages. |
+| Nepal | [NSO thematic report, Table 3.1](https://giwmscdnone.gov.np/media/pdf_upload/Religions%20in%20Nepal_final%20_website_bc3qoeh.pdf), 2021, national/province/district | Keep Kirat separate. The report says its question assumes religion; nonreligion cannot be inferred from this census. |
+| Sri Lanka | [DCS 2024 district Table 2.14](https://www.statistics.gov.lk/abstract2025/CHAP2/2.14.pdf), 2024, district/national, published 2026 | Keep Roman Catholic separate from other Christian. |
+| Kazakhstan | [BNS 2021 census](https://stat.gov.kz/en/national/2021/) and [religion summary](https://stat.gov.kz/upload/medialibrary/67e/14mn8kuji0hjlq1v4ib9yw88ahvfurc7/Popul0%D0%90.pdf), 2021 | Separate nonbeliever and refusal. Boundary definitions are as of 2021. |
+| Afghanistan | No recent enumerated religion-by-population census table validated | No numerical map mark. |
+| Bhutan | Whole-resident religion table and reuse terms not validated | No numerical map mark. |
+| Maldives | [2022 census provisional tables](https://statisticsmaldives.gov.mv/census-2022-provisional-results/) enumerate residents including foreign residents; a religion table for that universe not validated | Do not infer faith from nationality or citizenship. |
+| Kyrgyzstan | 2022 census exists; corresponding whole-resident religion table not validated | No numerical map mark. |
+| Tajikistan | Religion question reported in 2020 census, but a validated public regional result table not obtained | No numerical map mark. |
+| Turkmenistan | 2022 census exists; corresponding religion result table not validated | No numerical map mark. |
+| Uzbekistan | Whole-resident religion census or survey table not validated | No numerical map mark. |
+
+GeoEPR/EPR-ED map polygons are **selected politically relevant group areas**, linked to group-level religious composition. They cannot replace a census of all residents. The EPR map is retained only after explicit selection of an example; the primary view does not color unmeasured populations with those polygons. It is neither a local majority map nor a denominator for any of the national markers.
