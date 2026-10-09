@@ -480,7 +480,7 @@ function start(root:HTMLElement) {
     if(farm&&!map.getSource('asia-farming-'+farm.id)){const id='asia-farming-'+farm.id;map.addSource(id,{type:'image',url:asset(config.farmingBase!,farm.image),coordinates:farm.imageCoordinates});map.addLayer({id,type:'raster',source:id,paint:{'raster-opacity':.95,'raster-resampling':'nearest','raster-fade-duration':0}},'asia-context');}
     for(const layer of config.farming?.layers??[]){const id='asia-farming-'+layer.id;if(map.getLayer(id))map.setLayoutProperty(id,'visibility',farm?.id===layer.id?'visible':'none');}
     if(!physical)for(const id of ['asia-terrain','asia-contours'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility','none');
-    if(!water)for(const id of ['asia-lakes','asia-rivers','asia-rivers-hit','asia-water-selected'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility','none');
+    if(!water)for(const id of ['asia-lakes','asia-rivers','asia-rivers-major','asia-rivers-hit','asia-water-selected'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility','none');
     const population=state.field==='population'&&!!config.population&&!social?.active()&&!['ethnicity','religion'].includes(state.topic??''),urban=population&&state.topic==='urban',selectedUrban=urbanCity();
     if(population){
       for(const [id,record] of [['asia-population',config.population],...(selectedUrban?.detail?[[`asia-population-${selectedUrban.id}`,selectedUrban.detail]]:[])] as [string,AsiaPopulationRaster][]){
@@ -542,7 +542,7 @@ function start(root:HTMLElement) {
     }
     for(const id of ['asia-terrain','asia-contours'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility',physical&&!(naturalTopic()==='terrain'&&config.presentation?.terrain?.bands)&&!(id==='asia-contours'&&(naturalTopic()==='landform'||!!config.presentation?.terrain))?'visible':'none');
     if(map.getLayer('asia-terrain'))map.setPaintProperty('asia-terrain','raster-opacity',naturalTopic()==='terrain'&&config.presentation?.terrain? .3:1);
-    for(const id of ['asia-lakes','asia-rivers','asia-rivers-hit','asia-water-selected'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility',water?'visible':'none');
+    for(const id of ['asia-lakes','asia-rivers','asia-rivers-major','asia-rivers-hit','asia-water-selected'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility',water?'visible':'none');
     if(water&&config.physical&&!map.getSource('asia-water')){
       try{
         waterPromise??=fetchJson(asset(config.physicalBase!,config.physical.water)).catch(error=>{waterPromise=null;throw error;});
@@ -552,6 +552,7 @@ function start(root:HTMLElement) {
           map.addSource('asia-water',{type:'geojson',data});
           map.addLayer({id:'asia-lakes',type:'fill',source:'asia-water',filter:['==',['get','kind'],'lakes'],paint:{'fill-color':'#89bacd','fill-opacity':.9}},'asia-country-border');
           map.addLayer({id:'asia-rivers',type:'line',source:'asia-water',filter:['==',['get','kind'],'rivers'],paint:{'line-color':'#176c94','line-width':['interpolate',['linear'],['zoom'],2,1,7,2]}},'asia-country-border');
+          if(config.regionId==='southeast-asia')map.addLayer({id:'asia-rivers-major',type:'line',source:'asia-water',filter:['in',['get','id'],['literal',asiaWaterFocus[config.regionId].map(f=>f.river)]],paint:{'line-color':'#115878','line-width':2.8,'line-opacity':.95}},'asia-country-border');
           map.addLayer({id:'asia-rivers-hit',type:'line',source:'asia-water',filter:['==',['get','kind'],'rivers'],paint:{'line-width':14,'line-opacity':0}},'asia-country-border');
           map.addLayer({id:'asia-water-selected',type:'line',source:'asia-water',filter:['==',['get','id'],state.detail??''],paint:{'line-color':'#163f66','line-width':3}},'asia-country-border');
         }

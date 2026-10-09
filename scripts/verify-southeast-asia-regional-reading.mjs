@@ -21,7 +21,7 @@ export async function verifySoutheastAsiaRegion(page,{source,capture:takePicture
  assert.equal(await country.inputValue(),'');
  assert.deepEqual(await country.locator('option').evaluateAll(o=>o.filter(x=>!x.disabled).map(x=>x.value)),['','IDN','THA','VNM']);
  assert.equal(await page.locator('[data-industry-topic] option[value="my-p3"]').evaluate(o=>o.disabled),true);
- assert.match(await page.locator('[data-reading-dock-summary]').textContent(),/ジャカルタ.*ハノイ.*ホーチミン.*タイ東部/s);
+ assert.match(await page.locator('[data-reading-dock-summary]').textContent(),/ジャワ島.*タイ東部.*ベトナムの南北/s);
  assert.match(await page.locator('[data-industry-region-reading]').textContent(),/11か国.*国内仕向け|11か国.*国内向け/s);
  assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point]:visible').count(),9);
  assert.match(await page.locator('[data-reading-dock-summary]').textContent(),/ジャワ島.*タイ東部/);
