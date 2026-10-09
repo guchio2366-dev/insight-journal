@@ -2,7 +2,7 @@ import {westTopicReasons} from './west-asia-readings.mjs';
 export const westFields = [
   {id:'agriculture',label:'農林業',route:'agriculture',first:'farming-overview'},
   {id:'natural',label:'自然環境',route:'nature',first:'climate'},
-  {id:'industry',label:'主要産業',route:'industry',first:'manufacturing'},
+  {id:'industry',label:'主要産業',route:'industry',first:'industry-network'},
   {id:'population',label:'人口',route:'population',first:'density'},
 ];
 const topic = (id,field,label,group,description,options={}) => ({id,field,label,group,description,...options});
@@ -12,7 +12,7 @@ export const westTopics = [
   topic('rivers','natural','河川・地下水','水資源','河川・湖と、地下水を蓄える地層の広域区分を同時に示します。ナイル川沿い、チグリス・ユーフラテス川沿いの農地と、河川の少ないアラビア半島の地下水を比べます。線の太さは流量、斜線の広さは貯水量ではありません。',{vector:'rivers'}),
   topic('precipitation','natural','降水量（観測所の平年値）','水資源','気象庁ClimatViewに収録した18観測所の月別降水量を表示します。12か月の値が揃う観測所だけ年合計を求めます。点は観測所の値で、点と点の間や国全体の雨量を塗り分けた図ではありません。平年期間は観測所ごとに確認してください。'),
   topic('annual-precipitation','natural','年降水量の分布','水資源','GPCC／DWD v2025の1991–2020年平年値です。雨量計の観測に基づいて補間された0.25°原格子で、12か月が揃う格子の月別降水量を合計しています。250mm間隔の青い色帯と境界は同じ広域の平滑化格子から作り、地点の数値は保存済み原格子から読みます。拡大しても観測点や谷ごとの雨量は分かりません。年降水量は河川流量・地下水涵養量・現在の利用可能な水量とは異なります。',{layer:'annual-precipitation'}),
-  topic('basins','natural','流域と上下流','水資源','同じ下流の出口につながる小流域をまとめて表示しています。地図で流域を選ぶか一覧を選ぶと、国境の外も含めた流域全体へ移動します。水利用量、飲める水の量、現在の渇水状況を示す図ではありません。',{vector:'basins'}),
+  topic('basins','natural','流域と上下流','水資源','同じ下流の出口につながる小流域をまとめて表示しています。代表流域を地図で選ぶと説明が切り替わり、表示範囲は維持します。地図はドラッグして上流へたどれます。水利用量、飲める水の量、現在の渇水状況を示す図ではありません。',{vector:'basins'}),
   topic('groundwater','natural','地下水を蓄える地層','水資源','地下水は地層のすき間などに蓄えられます。この図は、広い地下水盆、複雑な地質構造、局所的で浅い帯水層を区別します。帯水層とは地下水を含み、水を通しやすい地層です。色が広いほど利用可能な水が多い、という意味ではありません。',{vector:'groundwater'}),
   topic('desalination','natural','淡水化と水の供給','水資源','淡水化は海水などの塩分を取り除いて淡水を得る工程です。河川・地下水などの自然の供給、淡水化、取水、利用後の再利用は別の量です。施設の能力だけでは、実際の供給量や利用可能量は分かりません。この地図は河川・湖を示し、淡水化施設や生産量の分布は示しません。',{vector:'rivers',sourceUrl:'https://www.fao.org/aquastat/en/overview/methodology/'}),
   topic('terrain','natural','地形','地形','500m間隔の標高の輪郭だけで、低地・高原・山地の位置関係を読みます。トルコのアナトリア高原、イランの山地と高原、イラクの低地を比べましょう。高さの色面は「標高（等高線）」で確認できます。',{layer:'elevation'}),
@@ -33,6 +33,12 @@ export const westTopics = [
   ...[['sheep','羊','976'],['goat','山羊','1016'],['cattle','牛','866']].map(([id,label,item])=>topic(id,'agriculture',label+'の分布','畜産','地図は家畜の頭数を格子へ配分した密度の推計です。詳説の飼養頭数は国別統計です。家畜のいる場所と、牧草地の範囲、飼料を生産する場所は一致するとは限りません。',{layer:id,faoItem:item,faoElement:'5111',unit:'頭'})),
   topic('pasture','agriculture','永年採草・放牧地','土地・森林','多年にわたり草などの飼料植物に使う土地を、国別の面積で比較します。家畜が年間を通じて放牧される場所の精密な地図ではありません。',{faoItem:'6655',faoDomain:'Inputs_LandUse',faoElement:'5110',unit:'1000 ha',breaks:[10,100,1000,10000]}),
   topic('forest','agriculture','森林の分布と面積率','土地・森林','地図は森林の参考分布、国別統計は陸地面積に対する森林の割合です。国別の割合から国内の位置や樹種、木材の生産量は判断できません。',{layer:'forest',indicator:'AG.LND.FRST.ZS',unit:'%',breaks:[1,5,15,30,50]}),
+  topic('industry-network','industry','主な産業の立地','地域主要産業','公的機関・事業者が説明する主要な産業集積・港・通過点を都市付近の記号で示します。施設の敷地、企業や油田の網羅図、実際の輸送量・方向ではありません。国別産業の対象はサウジアラビア・UAE・トルコの3か国です。'),
+  topic('industry-extraction','industry','採掘・資源','地域主要産業','サウジ東部の油田地帯とアブダビ沖の上部ザクム油田の概略位置を示します。油田境界・埋蔵量・生産量ではありません。'),
+  topic('industry-refining','industry','精製','地域主要産業','ラス・タヌラ、ルワイスなど原油を燃料に精製する拠点を示します。採掘量や精製量の大小は記号から分かりません。'),
+  topic('industry-petrochemical','industry','石油化学','地域主要産業','ジュバイルなど化学原料や製品への加工が集まる場所を示します。原油の採掘・製油・化学製品の製造は別の活動です。'),
+  topic('industry-ports','industry','港湾・通過点','地域主要産業','ジュベル・アリ港、ホルムズ海峡、スエズ運河などを地域供給網の接続点として示します。通過貨物を所在地の生産量や輸出量に数えません。'),
+  topic('industry-automotive','industry','自動車製造','地域主要産業','ブルサとコジャエリの自動車産業の集積を示します。施設敷地・生産台数・輸出先の分布ではありません。'),
   topic('oil','industry','石油資源レント','石油・天然ガス','資源レントは、石油の産出価値から採掘費用を差し引いた推計額です。ここではGDPに対する割合を比較します。産油量、輸出額、政府の石油収入とは異なる指標です。',{indicator:'NY.GDP.PETR.RT.ZS',unit:'%（GDP比）',breaks:[1,5,10,20,40]}),
   topic('gas','industry','天然ガス資源レント','石油・天然ガス','天然ガスの産出価値から採掘費用を差し引いた推計額の、GDPに対する割合です。生産量や埋蔵量の順位ではありません。石油と天然ガスを別の系列で確認できます。',{indicator:'NY.GDP.NGAS.RT.ZS',unit:'%（GDP比）',breaks:[.1,1,5,10,20]}),
   topic('manufacturing','industry','製造業の付加価値','製造業','付加価値は、生産額から中間投入の費用を差し引いた額です。GDPに占める製造業の割合を示します。鉱業や建設業を含む「産業全体」の割合とは区別します。工場の位置は示しません。',{indicator:'NV.IND.MANF.ZS',unit:'%（GDP比）',breaks:[5,10,15,20,30]}),
@@ -123,13 +129,14 @@ export function observation(data, topic, code, year) {
   return {value:r?.value??null,year,unit,source:'FAOSTAT',flag:r?.flag??null};
 }
 
-// The 2024 selection is limited to the eleven tonne-denominated series shipped
-// with this region. Keep live country coverage beside every partial sum.
+// Editorial set: staple grains, dryland fruits, feed/water-intensive livestock,
+// and the Nile-specific buffalo milk case. Rank only the adopted set by tonnes.
 export const westProductionCandidates=['wheat','cattle-milk','barley','rice','chicken-meat','olives','dates','hen-eggs','cattle-meat','buffalo-milk','pork-meat'];
+export const westProductionAdopted=westProductionCandidates.filter(id=>id!=='pork-meat');
 export function westProductionSelection(data,year=2024){
-  return westProductionCandidates.map(id=>{
+  return westProductionAdopted.map(id=>{
     const topic=westTopics.find(t=>t.id===id)??{label:'豚肉・国別生産量',faoItem:'1035',faoElement:'5510',unit:'t'};
     const values=data.countries.map(country=>observation(data,topic,country.code,year).value).filter(value=>Number.isFinite(value));
     return {id,label:topic.label.replace('・国別生産量','').replace('の収穫面積',''),sum:values.reduce((sum,value)=>sum+value,0),reported:values.length,missing:data.countries.length-values.length};
-  }).sort((a,b)=>b.sum-a.sum).slice(0,10);
+  }).sort((a,b)=>b.sum-a.sum);
 }

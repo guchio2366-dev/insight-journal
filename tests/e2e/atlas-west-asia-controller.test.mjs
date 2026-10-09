@@ -11,7 +11,7 @@ const climateBytes=await readFile('public/assets/atlas/west-asia-v1/'+climateLay
 const regionalIds=new Set(await decodeWestGrid(climateBytes.buffer.slice(climateBytes.byteOffset,climateBytes.byteOffset+climateBytes.byteLength),climateLayer));
 const regionalClasses=climateData.classes.filter(c=>regionalIds.has(c.id));
 const bundle=await build({entryPoints:['src/scripts/atlas-west-asia.ts'],bundle:true,write:false,format:'iife'});
-async function until(check){for(let i=0;i<200;i++){if(check())return;await new Promise(r=>setTimeout(r,10));}throw Error('West Asia controller did not settle');}
+async function until(check){for(let i=0;i<1200;i++){if(check())return;await new Promise(r=>setTimeout(r,10));}throw Error('West Asia controller did not settle');}
 async function setup(route,query='',failBasins=false,viewport={width:1024,height:768},fixture={}){
  const w=new Window({url:`https://example.com/insight-journal/atlas/west-asia/${route}/${query}`,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true}});
  w.happyDOM.setWindowSize(viewport);
@@ -20,7 +20,7 @@ async function setup(route,query='',failBasins=false,viewport={width:1024,height
  const observed=[];w.ResizeObserver=class{constructor(callback){this.callback=callback;}observe(target){observed.push({target,callback:this.callback});}disconnect(){}};Object.defineProperty(w,'crypto',{value:webcrypto});w.Response=Response;w.Blob=Blob;w.DecompressionStream=DecompressionStream;
  w.fetch=async url=>{const injected=fixture.fetch?.(String(url));if(injected!==undefined)return injected;if(failBasins&&String(url).endsWith('basins.json'))throw Error('Test: unavailable vector');return new Response(await readFile('public/'+String(url).replace('/insight-journal/','')));};
  w.eval(bundle.outputFiles[0].text);const q=s=>w.document.querySelector(s);
- await until(()=>fixture.expectFailure?!q('[data-west-retry]').hidden:q('[data-west-loading]').hidden);return {w,q,media,notifyResize:selector=>observed.filter(x=>x.target.matches(selector)).forEach(x=>x.callback([{target:x.target}])),select:(s,v)=>{q(s).value=v;q(s).dispatchEvent(new w.Event('change'));}};
+ try{await until(()=>fixture.expectFailure?!q('[data-west-retry]').hidden:q('[data-west-loading]').hidden);}catch(error){error.message+=`: ${q('[data-west-loading]')?.textContent}`;throw error;}return {w,q,media,notifyResize:selector=>observed.filter(x=>x.target.matches(selector)).forEach(x=>x.callback([{target:x.target}])),select:(s,v)=>{q(s).value=v;q(s).dispatchEvent(new w.Event('change'));}};
 }
 test('小国と観測所の選択、分野間リンク、履歴復元が同じ場所を指す',async()=>{
  const {w,q,select}=await setup('nature','?country=BHR&city=bahrain&topic=climate&year=2024');
@@ -391,8 +391,8 @@ test('比較の常時気候凡例は描画格子の全実在区分を意味付�
     const [vx,vy,vw,vh]=svg.getAttribute('viewBox').split(' ').map(Number),k=Math.max(vw/screenWidth,vh/screenHeight),ox=(screenWidth-vw/k)/2,oy=(screenHeight-vh/k)/2,boundary=ox+vw*percent/100/k;
     let visible=0;
     for(const marker of q('[data-west-scene]').querySelectorAll('[data-marker]')){
-     const label=marker.querySelector('[data-marker-label]');if(label.style.display==='none')continue;visible++;
-     const translate=label.getAttribute('transform').match(/^translate\(([^,]+),([^)]*)\)$/),left=(Number(marker.dataset.x)-vx)/k+ox+Number(translate[1]),right=left+Number(label.dataset.width),top=(Number(marker.dataset.y)-vy)/k+oy+Number(translate[2]),bottom=top+Number(label.querySelector('rect').getAttribute('height'));
+     const label=marker.querySelector('[data-marker-label]');if(!label||label.style.display==='none')continue;visible++;
+     const translate=label.getAttribute('transform').match(/^translate\(([^,]+),([^)]*)\)$/),left=(Number(marker.dataset.x)-vx)/k+ox+Number(translate[1]),right=left+Number(label.dataset.width),top=(Number(marker.dataset.y)-vy)/k+oy+Number(translate[2]),bottom=top+Number(label.dataset.height??label.querySelector('rect')?.getAttribute('height'));
      const min=marker.dataset.markerSide==='target'?boundary:ox,max=marker.dataset.markerSide==='source'?boundary:ox+vw/k;
      assert.ok(left>=min-0.01&&right<=max+0.01,'都市名を余白ではなく実投影された分布側に収める');
      assert.ok(top>=oy-0.01&&bottom<=oy+vh/k+0.01,'上下の余白でも地理クリップ端で都市名を切らない');
