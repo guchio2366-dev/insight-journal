@@ -120,7 +120,7 @@ test('密度・社会構成・GDP比・輸出比・貿易・MW・森林を別の
   config.farming.layers.push({id:'sheep',title:'羊の密度',kind:'livestock'},{id:'forest',title:'森林参考図',kind:'forest'});
   config.social={topics:[{id:'age',title:'65歳以上の割合',key:'old'},{id:'nationality',title:'外国籍の割合',key:'foreign'},{id:'language',title:'母語の割合',key:'language'},{id:'religion-share',title:'宗教別の割合',key:'hindu'},{id:'growth',title:'人口増減率',key:'rate'},{id:'composition',title:'区域内の最多区分',key:'overview'}]};
   const cases=[
-    ['population','density',/人口密度/,/民族・信仰・勤務先/],['population','urban',/都市範囲と人口密度/,/行政区域・通勤圏/],['population','religion',/宗教調査の掲載範囲/,/灰色は無宗教/],
+    ['population','density',/人口密度/,/民族・信仰・勤務先/],['population','urban',/都市範囲と人口密度/,/行政区域・通勤圏/],['population','religion',/国別の宗教回答/,/地図上の色帯/],
     ...config.social.topics.map(t=>['population',t.id,new RegExp(t.title),t.key==='overview'?/最多区分で、人数や密度ではありません/:/割合・分母/]),
     ['industry','manufacturing',/製造業のGDP比/,/GDP比は工場の集積や生産額の規模を示しません/],['industry','power',/発電施設の設備容量/,/MWは設備容量で、発電量ではありません/],
     ['industry','steel-capacity',/国別の粗鋼生産能力/,/国全体の生産能力で、実際の生産量ではありません/],

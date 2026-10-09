@@ -1205,7 +1205,8 @@ test('民族・宗教は人口密度や行政区の塗りを重ねず、切り�
   assert.equal(app.q('[data-settlement-reading=ethnicity]').hidden,false);assert.equal(app.q('[data-population-reading]').hidden,true);
   assert.equal(app.window.__map.getLayer('asia-population'),undefined);
   await until(()=>app.q('.asia-settlement-label')&&!app.q('.asia-settlement-label').hidden,'settlement label positioned');const settlementCamera={...app.window.__map.getCenter(),zoom:app.window.__map.getZoom()};app.q('.asia-settlement-label').click();await delay();assert.deepEqual({...app.window.__map.getCenter(),zoom:app.window.__map.getZoom()},settlementCamera,'choosing a settlement only changes its reading and outline');assert.equal(new URL(app.window.location.href).searchParams.get('detail'),'a');assert.equal(new URL(app.window.location.href).searchParams.has('at'),false);assert.equal(new URL(app.window.location.href).searchParams.has('place'),false);await until(()=>app.window.__map.layers['asia-settlement-selected'].filter[2]==='a','outline matches selection');
-  app.q('[data-population-group=religion]').click();await until(()=>app.window.__map.getLayer('asia-religion-survey-coverage'),'religion census coverage ready');await delay();
+  app.q('[data-population-group=religion]').click();await until(()=>app.q('.asia-religion-marker[data-country=JPN]'),'religion composition markers ready');await delay();
+  assert.equal(app.window.__map.getLayer('asia-religion-survey-coverage'),undefined,'the religion map does not paint one coverage color');
   assert.equal(app.requests.some(r=>r.endsWith('religion.json.gz')),false,'East Asia census overview does not request the EPR case geometry');
   assert.equal(app.q('[data-settlement-reading=religion]').hidden,false);assert.equal(app.q('[data-settlement-reading=ethnicity]').hidden,true);
   app.q('[data-field=natural]').click();await delay();assert.equal(app.window.__map.layers['asia-settlement-fill'].layout.visibility,'none');

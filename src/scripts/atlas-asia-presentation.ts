@@ -3,6 +3,7 @@ import {layoutClimateCodes,type CodeInput} from '../lib/atlas-climate-code-label
 import type {AsiaState} from '../lib/atlas-asia-state';
 import {majorClimateCities,indiaPopulationLabels} from '../data/atlas/asia-focus';
 import {contourBandFiles,type AsiaContourBands} from '../data/atlas/asia-contour-bands';
+import {eastAsiaReligionCountries,eastAsiaReligionColors} from '../data/atlas/east-asia-religion';
 type Coordinate=[number,number];
 type Annotation={id:string;text:string;coordinate:Coordinate;anchors?:Coordinate[];product?:string;kind?:string;color?:string;value?:number};
 export type AsiaPresentation={
@@ -98,10 +99,16 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
    if(config.regionId==='east-asia'&&active==='religion'&&!getState().detail)continue;
    annotation.push({id:c.id,text:c.label,coordinate:c.anchors[0],anchors:c.anchors,color:c.color,kind:'settlement'});
   }
-  if(config.regionId==='east-asia'&&active==='religion'&&!state.detail)for(const item of [{text:'日本 · 調査',short:'日本',point:[138.5,37.4] as Coordinate},{text:'韓国 · 調査',short:'韓国',point:[127.8,36.4] as Coordinate},{text:'台湾 · 調査',short:'台湾',point:[121.0,23.7] as Coordinate},{text:'モンゴル · 国勢',short:'モンゴル',point:[103.8,46.8] as Coordinate}]){
-   const p=project(item.point);if(p.x<0||p.x>width||p.y<0||p.y>height)continue;
-   const marker=document.createElement('span');marker.className='asia-religion-marker';marker.textContent=compact?item.short:item.text;marker.style.left=p.x+'px';marker.style.top=p.y+'px';overlay.append(marker);
+  if(config.regionId==='east-asia'&&active==='religion'&&!state.detail)for(const country of eastAsiaReligionCountries){
+   const p=project(country.point);if(p.x<0||p.x>width||p.y<0||p.y>height)continue;
+   const marker=document.createElement('div');marker.className='asia-religion-marker';marker.dataset.country=country.code;marker.style.left=p.x+'px';marker.style.top=p.y+'px';
+   const label=document.createElement('strong');label.textContent=country.name+' · '+country.year;marker.append(label);
+   const headline=document.createElement('span');headline.textContent=country.headline;marker.append(headline);
+   const bar=document.createElement('span');bar.className='asia-religion-map-bar';bar.setAttribute('role','img');bar.setAttribute('aria-label',country.name+'：'+country.shares.filter(share=>share[2]>0).map(([,name,value])=>name+value+'％').join('、'));
+   for(const [id,,value] of country.shares.filter(share=>share[2]>0)){const part=document.createElement('i');part.style.background=eastAsiaReligionColors[id];part.style.flexGrow=String(value);bar.append(part);}
+   marker.append(bar);overlay.append(marker);
   }
+  if(config.regionId==='east-asia'&&active==='religion'&&!state.detail){const p=project([105,34]);if(p.x>=0&&p.x<=width&&p.y>=0&&p.y<=height){const marker=document.createElement('div');marker.className='asia-religion-marker asia-religion-china-marker';marker.style.left=p.x+'px';marker.style.top=p.y+'px';marker.innerHTML='<strong>中国 · 別設問</strong><span>宗教帰属 10％（CGSS）</span><span>仏・菩薩を信じる 33％（CFPS）</span>';overlay.append(marker);}}
   if(['water','basins'].includes(active??'')&&config.riverFile&&datasets.has(config.riverFile))for(const focus of config.waterFocus??[]){
    const feature=datasets.get(config.riverFile).features.find((f:any)=>f.properties.id===focus.river);if(!feature)continue;
    const lines=feature.geometry.type==='MultiLineString'?feature.geometry.coordinates:[feature.geometry.coordinates],path=[...lines].sort((a:any,b:any)=>b.length-a.length)[0];if(path?.length)annotation.push({id:focus.river,text:focus.name,coordinate:path[Math.floor(path.length/2)],kind:'river'});
@@ -156,8 +163,8 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
   root.dataset.contourBandStatus=bands?'loading':'inactive';root.dataset.contourBandKind=bands?(terrain?'terrain':'rainfall'):'';
   root.dataset.farmContextStatus=farm?'loading':'inactive';
   if(farm){const reading=root.querySelector<HTMLElement>('[data-grid-reading]');if(reading&&(!selectedFarm()||!getState().point))reading.textContent=singleFarm()?singleFarm()!.title+'の概略分布だけを表示しています。右のボタンで全品目へ戻れます。':water?'米の概略栽培域（緑）・主な川（青）・250mm間隔の年降水量を重ねています。':selectedFarm()?.kind==='crop'?'色は各作物の概略分布、太い輪郭は選択した作物です。家畜の代表点は薄く表示しています。':selectedKinds.size===2?'作物の栽培域と畜産の代表点を表示しています。品目名を選ぶと詳しい分布を読めます。':selectedKinds.size===0?'作物・畜産は非表示です。左上のボタンで表示できます。':selectedKinds.has('crop')?'作物の特徴的な分布を表示しています。家畜の分布は非表示です。':'家畜の特徴的な分布を表示しています。作物の分布は非表示です。';}
-  for(const id of ['asia-religion-survey-coverage','asia-settlement-fill','asia-settlement-selected-halo','asia-settlement-selected','asia-farm-overview-fill','asia-farm-overview-crop','asia-farm-overview-selected-halo','asia-farm-overview-selected','asia-farm-overview-livestock-fill','asia-farm-overview-livestock','asia-rainfall-lines','asia-terrain-lines','asia-rainfall-aligned-lines','asia-terrain-aligned-lines','asia-rainfall-bands','asia-terrain-bands','asia-farm-rivers'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility','none');
-  if(config.regionId==='east-asia'&&current==='religion'&&!getState().detail){const id='asia-religion-survey-coverage';if(!map.getLayer(id))map.addLayer({id,type:'fill',source:'asia-countries',filter:['in',['get','code'],['literal',['JPN','KOR','TWN','MNG']]],paint:{'fill-color':'#c7ddd7','fill-opacity':1}},'asia-country-border');map.setLayoutProperty(id,'visibility','visible');errorMode=null;onStatus('');}
+  for(const id of ['asia-settlement-fill','asia-settlement-selected-halo','asia-settlement-selected','asia-farm-overview-fill','asia-farm-overview-crop','asia-farm-overview-selected-halo','asia-farm-overview-selected','asia-farm-overview-livestock-fill','asia-farm-overview-livestock','asia-rainfall-lines','asia-terrain-lines','asia-rainfall-aligned-lines','asia-terrain-aligned-lines','asia-rainfall-bands','asia-terrain-bands','asia-farm-rivers'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility','none');
+  if(config.regionId==='east-asia'&&current==='religion'&&!getState().detail){errorMode=null;onStatus('');}
   if(!farm&&current!=='precipitation'&&!terrain&&!settlement)return;
   const requested=[...(settlement?[config.presentationBase.replace('asia-presentation-v1/','asia-settlements-v1/')+settlement.file]:[]),...(farm?[metadata.farming.file]:[]),...bandFiles,...lineFiles,...(!bands&&(current==='precipitation'||water)?[metadata.rainfall.file]:[]),...(!bands&&terrain?[metadata.terrain!.file]:[]),...(water&&config.riverFile?[config.riverFile]:[])];
   try{

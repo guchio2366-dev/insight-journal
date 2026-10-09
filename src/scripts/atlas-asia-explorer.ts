@@ -194,6 +194,7 @@ function start(root:HTMLElement) {
     else if(state.detail&&(isPhysical()||naturalTopic()==='water')){const focus=config.physicalFocus?.find(f=>f.id===state.detail),water=config.physical?.waterFeatures.find((f:any)=>f.id===state.detail);if(focus)map.jumpTo({center:focus.coordinates,zoom:5});else if(water){const b=water.bounds;map.fitBounds([[b[0],b[1]],[b[2],b[3]]],{padding:35,maxZoom:7,duration:0});}}
     else if(state.city){const c=config.cities.find(c=>c.id===state.city)!;map.jumpTo({center:c.coordinates,zoom:5});}
     else {const eastSettlement=config.regionId==='east-asia'&&state.field==='population'&&['ethnicity','religion'].includes(state.topic??'');const b=eastSettlement?[77,20,148,51]:config.countries.find(c=>c.code===state.place)?.bounds??config.contentExtent??config.bounds;map.fitBounds([[b[0],b[1]],[b[2],b[3]]],{padding:eastSettlement?8:12,maxZoom:9,duration:0});}
+    if(config.regionId==='east-asia'&&state.field==='population'&&['ethnicity','religion'].includes(state.topic??'')){const center=map.getCenter();root.dataset.mapCamera=JSON.stringify({lng:center.lng,lat:center.lat,zoom:map.getZoom()});}
     requestAnimationFrame(()=>{suppressCamera=false;});
   }
   function industryCountryCodes(){return config.industryCountryCodes??(config.industry&&hasIndustryCountryScope(config.industry)?industryCountryChoices(config.industry).map(c=>c.code):null);}
@@ -287,7 +288,7 @@ function start(root:HTMLElement) {
   }
   function renderGridReading() {
     if(state.field==='industry'||hydrology?.active()||seasonal?.active()||social?.active())return;
-    if(state.field==='population'&&['ethnicity','religion'].includes(state.topic??'')){$('[data-grid-reading]').textContent='面は掲載した集団の居住域の概略です。灰色は居住域の重なり、色のない地域は未分類です。';return;}
+    if(state.field==='population'&&['ethnicity','religion'].includes(state.topic??'')){$('[data-grid-reading]').textContent=config.regionId==='east-asia'&&state.topic==='religion'&&!state.detail?'地図上の色帯は各国の宗教回答の構成です。中国の二つの数値は別の質問で、色帯に合算していません。背景の灰色は無宗教を示しません。':'面は掲載した集団の居住域の概略です。灰色は居住域の重なり、色のない地域は未分類です。';return;}
     if(farmingTopic()==='overview'){$('[data-grid-reading]').textContent='作物と家畜の特徴的な分布を同時に表示しています。品目名を選ぶと詳しい分布を読めます。';return;}
     const farm=farmingLayer();
     if(farm){
@@ -357,6 +358,7 @@ function start(root:HTMLElement) {
     const settlement=state.field==='population'&&['ethnicity','religion'].includes(state.topic??'');
     for(const e of $$<HTMLElement>('[data-settlement-reading]'))e.hidden=!settlement||e.dataset.settlementReading!==state.topic;
     for(const e of $$<HTMLElement>('[data-settlement-legend]'))e.hidden=!settlement||e.dataset.settlementLegend!==state.topic;
+    for(const e of $$<HTMLElement>('[data-religion-overview-key]'))e.hidden=!!state.detail;
     const active=state.field==='population'&&!social?.active()&&!settlement;
     for(const e of $$<HTMLElement>('[data-settlement-overview]'))e.hidden=!!state.detail;
     for(const e of $$<HTMLElement>('[data-settlement-detail]'))e.hidden=!settlement||e.dataset.settlementTopic!==state.topic||e.dataset.settlementDetail!==state.detail;
@@ -664,7 +666,7 @@ function start(root:HTMLElement) {
       // Our ResizeObserver owns sizing (trackResize is false). MapLibre emits
       // moveend on resize too; that event must not turn an automatic fit into
       // a saved camera and prevent the next width change from fitting again.
-      map.on('moveend',event=>{if(event.asiaLayoutResize||suppressCamera||!mapReady)return;clearTimeout(moveTimer);moveTimer=setTimeout(()=>{state={...state,camera:camera()};persist(false);},120);});
+      map.on('moveend',event=>{if(config.regionId==='east-asia'&&state.field==='population'&&['ethnicity','religion'].includes(state.topic??'')){const center=map!.getCenter();root.dataset.mapCamera=JSON.stringify({lng:center.lng,lat:center.lat,zoom:map!.getZoom()});}if(event.asiaLayoutResize||suppressCamera||!mapReady)return;clearTimeout(moveTimer);moveTimer=setTimeout(()=>{state={...state,camera:camera()};persist(false);},120);});
       map.on('error',event=>{if(currentAttempt!==attempt)return;if(event.sourceId?.startsWith('asia-seasonal-precipitation-m-'))return;sourceFailed=true;console.warn('Asia map asset failed',event.error?.message);status('地図の一部を読み込めませんでした。都市の図表・出典は引き続き読めます。',true);});
       map.getCanvas().addEventListener('webglcontextlost',()=>{mapReady=false;$('[data-map-fallback]').hidden=false;root.dataset.mapReady='false';status('地図の描画が停止しました。国の一覧と都市の図表は利用できます。',true);},{once:true});
     }catch(error){console.warn('Asia map unavailable',error);$('[data-map-fallback]').hidden=false;status('詳細地図を読み込めませんでした。国の位置と都市の図表は利用できます。',true);}
