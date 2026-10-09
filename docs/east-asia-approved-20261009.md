@@ -78,4 +78,6 @@ https://www.fao.org/statistics/highlights-archive/highlights-detail/food-balance
 
 `scripts/capture-east-asia-approved-review.mjs` は本番ビルドをローカル静的serverで読み、外部通信を遮断したsandbox有効のChromeで、2 PC寸法の初期・選択・戻る・タブ往復を検証する。軽量JPEGと `results.json` を同じartifactへ保存。headと画像SHAを記録する。
 
+人口・農畜産は本文の見出しと分布要約の可視性、初期右スクロール枠内への収まり、要約→原因説明の順を検証する。産業は地図直下の6色・名称と地図記号の色の一致を確認し、数値のない点に数値凡例を出さない。年降水は数値を等雨量線のanchorから離し、4500・5500mm付近を保護する。両PC幅で引出線の長さとanchorがラベルに覆われないことを検証し、この2値の周辺の拡大キャプチャもartifactへ含める。農畜産3列の原表取得障害は引き続き残件であり、全項目の完成とは扱わない。
+
 ローカルChrome起動は `/usr/lib/chromium/chrome-sandbox` がroot所有でないため `SUID sandbox helper binary was found, but is not configured correctly` で停止。`--no-sandbox` 等は使わず、実画面検証はCIへ移す。CIの最終結果と画像目視はPRコメントに追記する。

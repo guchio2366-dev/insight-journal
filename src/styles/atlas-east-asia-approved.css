@@ -9,6 +9,8 @@
  [data-region=east-asia] .asia-reading-dock{display:none!important}
  [data-region=east-asia] .asia-reading-details>summary{display:none}
  [data-region=east-asia] .asia-reading-details .asia-reading-scroll{overflow:visible!important;height:auto!important;max-height:none!important}
+ [data-region=east-asia] .atlas-desktop-shell .asia-atlas[data-field] .asia-reading-scroll :is(h2,.asia-takeaway):not([hidden]){display:block!important}
+ [data-region=east-asia] .asia-reading-scroll .asia-takeaway{font-size:14px;line-height:1.75;margin:0 0 14px}
  [data-region=east-asia] .asia-statistics{grid-column:2;min-width:0}
  [data-region=east-asia] [data-east-farm-foundations]{width:100%;margin-top:20px}
  [data-region=east-asia] .asia-industry-sectors,[data-region=east-asia] .asia-industry-subsectors{display:none!important}
@@ -21,6 +23,7 @@
  [data-region=east-asia] .asia-map-legend [data-hydrology-legend] p{max-width:75ch}
 }
 .east-industry-choices{display:flex;flex-wrap:wrap;gap:5px;padding:6px 0}
+[data-region=east-asia] .asia-atlas[data-industry-clusters=true] .asia-main-legend .asia-comparison-key i{border-radius:50%}
 .east-industry-choices button{min-height:36px;padding:6px 10px;background:#fafbf5;border:1px solid #bdcbc1;color:#2d4b46;font-size:13px}
 .east-industry-choices button[aria-pressed=true]{background:#355b52;color:white}
 .east-industry-map-labels{position:absolute;inset:0;pointer-events:none}

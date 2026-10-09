@@ -13,6 +13,7 @@ import {ASIA_SEASONAL_BREAKS,ASIA_SEASONAL_COLORS,normalizeAsiaSeasonalMonth,val
 import type {AsiaFarmingRegion} from '../data/atlas/asia-farming';
 import type {AsiaPresentation} from './atlas-asia-presentation';
 import {contourBandFiles,contourBandLabels} from '../data/atlas/asia-contour-bands';
+import {eastIndustries,eastClusters} from '../data/atlas/east-asia-industry-clusters';
 
 type Key={label:string;color:string;shortLabel?:string};
 type Raster={url:string;coordinates:number[][]};
@@ -150,6 +151,10 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
         return {...base,period:'2020年の推計',unit:'人/km²（格子面積当たり）',keys:[...asiaPopulationColors.map((color,i)=>({color,label:asiaPopulationLabels[i]})),...(city&&geometry?[{label:`${city.name}の都市範囲（2025年資料の固定境界）`,color:'#9d342c'}]:[])],note:'色なしは推計0・欠測・海を含みます。都市範囲は2025年資料の固定境界で、行政区域や通勤圏とは異なります。',raster:{url:asset(config.populationBase!,record.image),coordinates:record.imageCoordinates},geometry,boundaryOnly:true};}
     }
     if(s.field==='industry'&&config.industry){
+      if(config.regionId==='east-asia'&&s.topic?.startsWith('east-')){
+        const industry=eastIndustries.find(i=>'east-'+i.id===s.topic);
+        return {...base,subject:eastClusters.find(c=>c.id===s.detail)?.name,period:'代表的な立地',unit:'産業の種類',keys:(industry?[industry]:eastIndustries).map(i=>({label:i.label,color:i.color})),compactNote:'● 一定サイズの代表点。複数産業の都市は等分の複数色。大きさは数量を表しません。未掲載の地域にも産業があります。',note:'色は産業の種類。記号は一定サイズで数量を表しません。複数産業の都市は等分の複数色を表示します。未掲載は産業がないという意味ではありません。'};
+      }
       if(config.trade&&isTradeTopic(s.topic)){const data=await json(config.tradeBase!+config.trade.file) as TradeData,values=config.trade.countries.map(code=>({code,value:tradeValue(data.countries[code],tradeChapter(s),tradeFlow(s))})),scale=tradeScale(values.map(v=>v.value));return {...base,period:'2023年',unit:'百万米ドル',keys:[...bins(tradeColors,scale.breaks.map(v=>v/1e6)),missing],note:'国・区分全体の商品貿易額です。生産地や個別の港の取扱量ではありません。',geometry:await countryGeometry(Object.fromEntries(values.map(v=>[v.code,scale.color(v.value)])))};}
       const [data,national]=await Promise.all([json(config.industryBase!+config.industry.data),json(config.industryBase!+'national.json.gz')]) as [IndustryData,IndustryNational],t=industryTopic(config.industry,s),values=industryValues(t,data,national,config.industry.countries),scale=industryScale(t,values);
       Object.assign(base,{subject:(t.kind==='power'?data.power:data.admin).find(r=>r.id===s.detail)?.name});
