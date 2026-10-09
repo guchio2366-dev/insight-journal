@@ -5,7 +5,7 @@ import {fileURLToPath} from 'node:url';
 
 // Uses the existing CI's guarded, normally sandboxed browser and local build.
 export const southCentralProfiles=[
- {name:'south-desktop',viewport:{width:1536,height:864}},
+ {name:'south-desktop',viewport:{width:1440,height:1000}},
  {name:'south-laptop',viewport:{width:1280,height:720}},
  {name:'south-small',viewport:{width:1024,height:768}},
 ];
