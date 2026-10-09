@@ -36,11 +36,13 @@ try {
     await page.locator('[data-eu-overview]').click();
     await page.locator('[data-eu-topic="livestock"]').click();
     await check('livestock','酪農・畜産',['cattle','pig','chicken','sheep']);
+    assert.equal(await page.locator('.eu-wheat-region-label:visible').count(),0,'小麦の地域ラベルは畜産図に残さない');
     await page.locator('[data-eu-layer="pig"]').click();
     assert.notEqual(await page.locator('[data-eu-farm-area="cattle"]').first().getAttribute('style'), 'display: none;');
     await page.locator('[data-eu-overview]').click();
     await page.locator('[data-eu-topic="horticulture"]').click();
     await check('horticulture','果樹・園芸',['citrus','temperatefruit','vegetables']);
+    assert.equal(await page.locator('.eu-wheat-region-label:visible').count(),0,'小麦の地域ラベルは園芸図に残さない');
     await page.locator('[data-eu-topic="treecover"]').click();
     assert.match(await page.locator('[data-eu-map-title]').textContent(),/樹木被覆/);
     await page.locator('[data-eu-topic="crops"]').click();

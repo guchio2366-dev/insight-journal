@@ -10,10 +10,11 @@ const levels = ['aggregate', 'detail'] as const;
 ---
 <section class="eu-culture" data-eu-culture-reader data-culture-topic={topic} data-culture-initial-case={state.cultureCase} data-culture-initial-category={state.cultureCategory} data-culture-initial-area={state.cultureArea} aria-labelledby={`${id}-title`}>
   <header class="eu-culture-head">
-    <p class="eu-culture-kicker" data-culture-kicker>国勢調査の地域事例</p>
-    <h3 id={`${id}-title`} data-culture-title>{hasCase ? selected.topic.titleJa : topic === 'religion' ? '宗教的帰属の地域事例' : '民族的帰属の地域事例'}</h3>
-    <p class="eu-culture-takeaway" data-culture-takeaway>{topic === 'religion' ? '確認済み地域で、無宗教・宗派・無所属など異なる回答の集まり方を同時に示します。' : '2021年の自己申告分類を、同じ公表表の総人口に占める割合で読みます。'}</p>
-    <p data-culture-overview>{topic === 'religion' ? '地図の点札はCzechia・Serbiaの国勢調査とEstoniaの15歳以上の標本調査から抜き出した地域値です。円は英・ウェールズ・クロアチアの別の総計です。欧州全域を埋めた分布ではありません。点札を選ぶと右に原表・母集団・分母を示します。' : '欧州全体を表示しています。事例と元の回答分類を選ぶと、その分類の分布を表示します。'}</p>
+    <p class="eu-culture-kicker" data-culture-kicker>{topic === 'religion' ? '国別の回答構成' : '国勢調査の地域事例'}</p>
+    <h3 id={`${id}-title`} data-culture-title>{hasCase ? selected.topic.titleJa : topic === 'religion' ? '欧州の宗教の分布' : '民族的帰属の地域事例'}</h3>
+    <p class="eu-culture-takeaway" data-culture-takeaway>{topic === 'religion' ? '概説：英・ウェールズにはキリスト教と無宗教、クロアチアにはカトリック、セルビアには正教会、チェコとエストニアには無宗教・無所属が目立ち、同じ国の中にも複数の回答が共存します。' : '2021年の自己申告分類を、同じ公表表の総人口に占める割合で読みます。'}</p>
+    <p data-culture-overview>{topic === 'religion' ? '解説：カトリックと正教会の歴史的な教会圏、宗教改革以後の教会形成、20世紀以後の社会変化が現在の帰属に重なります。ただし歴史だけで個人の回答を決められません。5対象の設問・年・対象年齢は異なり、信仰の有無、宗教団体への所属、礼拝の実践も同じ意味ではありません。' : '欧州全体を表示しています。事例と元の回答分類を選ぶと、その分類の分布を表示します。'}</p>
+    {topic === 'religion' && <p class="eu-culture-source-inline">歴史地理の参照：<a href="https://www.pewresearch.org/religion/2017/05/10/religious-belief-and-national-belonging-in-central-and-eastern-europe/">Pew Research Center</a>。数値は下記の各国統計機関を使用。</p>}
   </header>
   <section class="eu-religion-evidence-reading" data-eu-religion-evidence-reading hidden aria-live="polite"></section>
   <div class="eu-culture-controls">

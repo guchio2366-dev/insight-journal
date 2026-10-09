@@ -1,4 +1,17 @@
-# 欧州・農林業ジャンルと産業地図のPC確認
+# 欧州・農林業と宗教のPC確認
+
+## 2026-10-09 追加確認
+
+宗教の初期図は、英・ウェールズ、チェコ、クロアチア、セルビア、エストニアの公表国別回答構成を等幅の小帯で示す。宗派・無宗教・未回答を元表の分類のまま保持し、国勢調査の全年齢人数とエストニアの15歳以上標本推計を同じ分母の割合として比較しない。選択後にその国の全分類・人数・設問・対象年齢・出典を右側に開き、他の帯を残す。地域資料は選択後に開く。調査未収録の国は塗らない。
+
+| 宗教 | 1440 px | 1024 px |
+| --- | --- | --- |
+| 初期 | [画像](1440-religion-initial.png) | [画像](1024-religion-initial.png) |
+| セルビア選択 | [画像](1440-religion-selected.png) | [画像](1024-religion-selected.png) |
+
+`scripts/europe/capture-religion-review.mjs` で5対象の初期表示、選択後の他対象維持、横スクロールなし、実行時エラーなしを確認する。国別資料は[チェコ国勢調査](https://scitani.gov.cz/religious-beliefs)、[セルビア国勢調査](https://popis2022.stat.gov.rs/en-us/5-vestisaopstenja/news-events/20230616-st/?a=0&s=0)、[エストニア統計局](https://stat.ee/en/news/population-census-proportion-people-religious-affiliation-remains-stable-orthodox-christianity-still-most-widespread)、既存収録の英国・クロアチア原表に対応する。欧州全域の宗教分布を塗り分ける原表・境界は未収録。
+
+農畜産は小麦の地域ラベルが畜産・園芸へ残る条件を修正し、PC操作で不表示を検証した。16品目の第80百分位以上の元格子に由来する面は件数で切らず、隣接面の細い隙間を概略図上で閉じ、輪郭を簡略化した。元格子の数量は変更していない。画像の穀物図はなお中欧の品目重複が多く、面積から品目別の生産量を読ませる図ではない。ブドウ・オリーブや乳用・肉用牛については、[Eurostat地域作物統計](https://ec.europa.eu/eurostat/cache/metadata/en/apro_cp_esms.htm)と[果樹統計](https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Agricultural_production_-_orchards)にはEUのNUTS地域資料がある一方、現在の欧州図に含める非EU諸国を含む同年・同品目・同じ地域単位の原表が未確定。EUだけの値を欧州と呼ばず、未収録の面を描き足していない。
 
 Draft PR #287 の作業ツリーを Chromium で表示。`scripts/europe/capture-genre-review.mjs` が 1440×1000 と 1024×800 で、ジャンル初期表示、品目選択から全体表示への復帰、林業タブへの往復、産業初期表示を確認し、画面内の JavaScript エラーと横スクロールがないことを検査する。各画像で地図は最上部、右に同時に読む概説・解説、左に固定ニュース枠を配置する。
 

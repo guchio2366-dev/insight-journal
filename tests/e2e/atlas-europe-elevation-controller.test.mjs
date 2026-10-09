@@ -318,7 +318,7 @@ for(const topic of ['ethnicity','religion'])test(`${topic} keeps the unselected 
   }finally{await app.w.happyDOM.close();}
 });
 
-for(const topic of ['ethnicity','religion'])test(`${topic} shows all three published response compositions without an initial case and preserves explicit selection/history`,async()=>{
+for(const topic of ['ethnicity'])test(`${topic} shows all three published response compositions without an initial case and preserves explicit selection/history`,async()=>{
   const app=await setup(`/insight-journal/atlas/europe/population/?layer=${topic}&render=static`,{animationFrameDelay:40});
   try{
     const visibleCompositions=()=>app.w.document.querySelectorAll('[data-eu-composition]:not([hidden])').length;
@@ -352,21 +352,31 @@ for(const topic of ['ethnicity','religion'])test(`${topic} shows all three publi
   }finally{await app.w.happyDOM.close();}
 });
 
-test('religion regional excerpts remain simultaneous and a selected source stays in the right reader',async()=>{
+test('religion starts with national compositions, then opens a local source without hiding other countries',async()=>{
   const app=await setup('/insight-journal/atlas/europe/population/?layer=religion&render=static');
   try{
-    await until(()=>app.w.document.querySelectorAll('[data-eu-religion-evidence]').length===7);
-    const markers=()=>app.w.document.querySelectorAll('[data-eu-religion-evidence]:not([hidden])').length;
-    assert.equal(markers(),7);
-    app.q('[data-eu-religion-evidence="religion-subotica"]').click();
+    await until(()=>app.w.document.querySelectorAll('[data-eu-religion-national]').length===5);
+    const markers=()=>app.w.document.querySelectorAll('[data-eu-religion-national]:not([hidden])').length;
+    assert.equal(markers(),5);
+    const colorKey=app.q('[data-eu-religion-color-key]');
+    assert.equal(colorKey.parentElement,app.q('[data-eu-map-legend]'));
+    assert.equal(colorKey.hidden,false);
+    assert.equal(app.w.document.querySelectorAll('[data-eu-religion-evidence]:not([hidden])').length,0);
+    assert.match(app.q('[data-culture-takeaway]').textContent,/概説.*カトリック.*正教会.*無宗教/);
+    assert.match(app.q('[data-culture-overview]').textContent,/解説.*歴史的な教会圏/);
+    app.q('[data-eu-religion-national="religion-national-serbia"]').click();
     await until(()=>!app.q('[data-eu-religion-evidence-reading]').hidden);
-    assert.equal(markers(),7);
+    assert.equal(markers(),5);
     assert.equal(app.q('[data-culture-case]').value,'');
+    assert.match(app.q('[data-eu-religion-evidence-reading]').textContent,/正教会.*5,387,426人.*カトリック.*257,269人/s);
+    app.q('[data-eu-religion-local="religion-subotica"]').click();
+    assert.equal(markers(),5);
+    await until(()=>app.w.document.querySelectorAll('[data-eu-religion-evidence]:not([hidden])').length===1);
     assert.match(app.q('[data-eu-religion-evidence-reading]').textContent,/カトリック.*59,748人.*正教会.*37,674人/s);
     assert.equal(new URL(app.w.location.href).searchParams.get('feature'),'religion-subotica');
-    app.q('[data-eu-overview]').click();
+    app.q('[data-eu-religion-back]').click();
     assert.equal(app.q('[data-eu-religion-evidence-reading]').hidden,true);
-    assert.equal(markers(),7);
+    assert.equal(markers(),5);
   }finally{await app.w.happyDOM.close();}
 });
 

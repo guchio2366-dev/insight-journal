@@ -8,7 +8,7 @@ const definitions: TopicGroup[] = [
   {field:'agriculture',items:[['crops','穀物・畑作'],['livestock','酪農・畜産'],['horticulture','果樹・園芸'],['treecover','林業']]},
   {field:'nature',items:[['climate','気候区分'],['water','水資源'],['terrain','地形'],['contours','標高（等高線）']]},
   {field:'industry',items:[['hubs','全産業'],...europeIndustryGroups.map(group=>['hubs',group,group])]},
-  {field:'population',items:[['density','人口分布'],['ethnicity','人種・民族（事例）'],['religion','宗教（事例）']],choices:['density','urban','age','growth']},
+  {field:'population',items:[['density','人口分布'],['ethnicity','人種・民族（事例）'],['religion','宗教']],choices:['density','urban','age','growth']},
 ];
 const groups = position === 'above' ? definitions : [];
 ---

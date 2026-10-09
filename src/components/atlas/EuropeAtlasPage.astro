@@ -26,6 +26,7 @@ import wheatLegend from '../../data/atlas/europe/wheat-legend.json';
 import mapLabels from '../../data/atlas/europe/map-labels.json';
 import climateWater from '../../data/atlas/europe/climate-water.json';
 import { europeTerrainGuides } from '../../data/atlas/europe/terrain-geography';
+import { europeReligionColors } from '../../data/atlas/europe/religion-national-overview';
 
 import { majorClimateCities } from '../../lib/atlas-europe-annotations';
 import { europeIndustryCountries, europeIndustryGroups, europeIndustryColors } from '../../lib/atlas-europe-industry';
@@ -131,6 +132,9 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, geography,
         <div class="eu-culture-composition-key" data-eu-culture-composition-key hidden>
           <p data-eu-culture-key-intro>2021年の公表総計 · 円は同じ大きさです。角度は各対象の総人口に占める回答割合で、円の位置は対象を示す目印です。人口規模・個人の位置・細地域の分布を表しません。</p>
           <p data-eu-culture-key-coverage>イングランド・ウェールズ・クロアチアだけを掲載しています。最多・過半数の分類で土地を塗った地図ではありません。色は各表の分類を区別し、国をまたいだ同色の対応はありません。</p>
+          <div class="eu-religion-color-key" data-eu-religion-color-key hidden>{[
+            ['catholic','カトリック'],['orthodox','正教会'],['protestant','プロテスタント・ルター派'],['christian','キリスト教（元表分類）'],['believer','教会非所属の信者'],['islam','イスラム教'],['none','無宗教・所属なし（設問別）'],['unstated','未回答'],['unknown','不明'],['other','その他・原分類'],
+          ].map(([id,label])=><span><i style={`background:${europeReligionColors[id as keyof typeof europeReligionColors]}`}></i>{label}</span>)}</div>
           <div class="eu-composition-tables" data-eu-composition-tables></div>
         </div>
         <p class="eu-map-caption">線は国境です。ロシアは欧州側の表示枠内を掲載しています。境界は概略で、係争地の帰属を示すものではありません。</p>

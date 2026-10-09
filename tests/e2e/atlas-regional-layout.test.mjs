@@ -72,7 +72,7 @@ test('regional agriculture, nature/water and population controls preserve the le
         if(field==='nature')assert.ok(d.querySelectorAll('[data-eu-water-options] button').length>=3);
         if(field==='population'){
           assert.equal(buttons.filter(b=>b.disabled).length,0,'Published bounded case studies are enabled');
-          assert.deepEqual(buttons.slice(1).map(button=>button.textContent),['人種・民族（事例）','宗教（事例）']);
+          assert.deepEqual(buttons.slice(1).map(button=>button.textContent),['人種・民族（事例）','宗教']);
           const cases=d.querySelector('[data-culture-case]');
           assert.deepEqual([...cases.options].filter(option=>option.value).map(option=>option.value),['england-wales-2021','croatia-national-2021'],'Two source cases do not imply complete European coverage');
           assert.equal(cases.value,'','The overview placeholder does not automatically select a source case');

@@ -36,6 +36,10 @@ PRODUCT_RULES = {'rice': (0.45, 500), 'citrus': (0.45, 500)}
 # The overview is read at roughly 600–900 CSS pixels across Europe. Retain
 # source-supported components while dropping sub-pixel stair steps at that scale.
 SIMPLIFY_DEGREES = .16
+# The overview is a belt map, not a parcel map. Close narrow gaps between
+# adjacent source-supported cells before simplifying, while retaining every
+# disconnected concentration that passes the source threshold and area rule.
+BELT_CLOSE_DEGREES = .24
 RADIUS_KM = 6371.0088
 inputs = []
 
@@ -150,7 +154,9 @@ def main():
         assert kept, f'No supported area remains for {id}'
         # Simplification only generalizes the edges. Clip once more so it cannot
         # bleed into the sea or any context country surrounding Europe.
-        simplified = make_valid(union_all(kept).simplify(SIMPLIFY_DEGREES, preserve_topology=True))
+        joined = union_all(kept)
+        belt = make_valid(joined.buffer(BELT_CLOSE_DEGREES, quad_segs=3).buffer(-BELT_CLOSE_DEGREES, quad_segs=3))
+        simplified = make_valid(belt.simplify(SIMPLIFY_DEGREES, preserve_topology=True))
         clipped = simplified.intersection(land)
         kept = [part for part in polygons(clipped) if area_km2(part) >= minimum_area]
         kept.sort(key=lambda part: (-area_km2(part), part.bounds))
@@ -240,8 +246,10 @@ def main():
                         productRuleReason='米と柑橘類は小さく分かれた産地を残すため、近隣比率と最小面積のみ緩和する。元格子の第80百分位は全品目で維持する。',
                         concentrationSelection='各品目について元格子の閾値・近傍比率・最小面積と最終証拠条件を満たす集中域をすべて保持する。品目内の上位件数では切り詰めない。品目間の生産額順位や国別統計ではない。',
                         minimumAreaMethod='半径6371.0088kmの球面円筒等積投影による概算面積',
-                        simplifyToleranceDegrees=SIMPLIFY_DEGREES, coordinatePrecisionDecimalPlaces=6,
-                        precisionTopology='6桁への丸め後にmake_validとunion_allで接触辺を修復。緩衝帯や離れた面を結ぶ線を加えない。',
+                        simplifyToleranceDegrees=SIMPLIFY_DEGREES, beltClosingRadiusDegrees=BELT_CLOSE_DEGREES,
+                        beltClosingMeaning='概略図の表示縮尺で隣接する元格子由来の面の細い隙間を閉じ、主要な帯を読みやすくする。離れた高値集中域を件数で選別しない。面積や輪郭は農地境界・収穫面積の集計値ではない。',
+                        coordinatePrecisionDecimalPlaces=6,
+                        precisionTopology='隣接する元面の狭い隙間を描画尺度で閉じ、6桁への丸め後にmake_validとunion_allで接触辺を修復。離れた集中域を任意の線で結ばない。',
                         finalEvidence='修復後の原則750km²未満（米・柑橘類は500km²未満）の面と、第80百分位以上の元格子中心を一つも含まない面は表示しない。',
                         clipping='europe-countries.jsonでkind=europeの国を結合し、表示範囲と陸域で切り抜く。周辺国は含めない。',
                         overlaps='16品目をそれぞれ独立に処理し、分布が重なる部分も残す。最大品目だけに割り当てない。',
@@ -254,7 +262,7 @@ def main():
                       boundaries='Natural Earth public domain'),
         limitations=[
             '主要な集中帯を読むための概略図。条件を満たす集中域を件数で切り詰めない。耕地・牧場の実際の境界や全分布を示さない。',
-            '輪郭の簡略化により元格子との境界にずれが生じる。格子の数量・0・欠測は変更せず、品目別の詳細図で確認する。',
+            '帯の細い隙間の補間と輪郭の簡略化により元格子との境界にずれが生じる。格子の数量・0・欠測は変更せず、品目別の詳細図で確認する。',
             '色の面積や輪郭の大小から、品目間の生産量・収穫面積・飼養頭羽数を比較できない。',
             '原則750km²未満（米・柑橘類は500km²未満）の孤立域は省略するが、離れた主産地は一つに結ばず別々の面として残す。',
             'SPAMの収穫面積は複数作期を含む場合があり、耕地面積と一致しない。',
