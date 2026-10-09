@@ -352,7 +352,7 @@ for(const topic of ['ethnicity'])test(`${topic} shows all three published respon
   }finally{await app.w.happyDOM.close();}
 });
 
-test('religion colors the 2020 country excerpt and keeps national census details separate',async()=>{
+test('religion shows the 2020 country compositions and keeps national census details separate',async()=>{
   const app=await setup('/insight-journal/atlas/europe/population/?layer=religion&render=static');
   try{
     assert.equal(app.w.document.querySelectorAll('[data-eu-religion-national]:not([hidden])').length,0);
@@ -360,12 +360,15 @@ test('religion colors the 2020 country excerpt and keeps national census details
     assert.equal(colorKey.parentElement,app.q('[data-eu-map-legend]'));
     assert.equal(colorKey.hidden,false);
     assert.equal(app.q('[data-eu-pew-map-key]').hidden,false);
-    assert.notEqual(app.q('[data-eu-shape="CZE"]').style.fill,app.q('[data-eu-shape="DEU"]').style.fill);
-    assert.match(app.q('[data-eu-shape="VAT"]').style.fill,/(#edece5|rgb\(237, 236, 229\))/);
+    assert.equal(app.w.document.querySelectorAll('[data-eu-pew-marker]').length,40);
+    assert.equal(app.q('[data-eu-shape="CZE"]').style.fill,app.q('[data-eu-shape="DEU"]').style.fill);
+    assert.equal(app.q('[data-eu-pew-marker="CZE"] .eu-pew-marker-bar').children[2].style.width,'72.8%');
+    assert.equal(app.q('[data-eu-pew-marker="ALB"] .eu-pew-marker-bar').children[1].style.width,'74.5%');
+    assert.match(app.q('[data-eu-shape="VAT"]').style.fill,/(#f2eee5|rgb\(242, 238, 229\))/);
     assert.equal(app.w.document.querySelectorAll('[data-eu-religion-evidence]:not([hidden])').length,0);
     assert.match(app.q('[data-culture-takeaway]').textContent,/概説.*67.1%.*25.3%.*6.0%/);
     assert.match(app.q('[data-culture-overview]').textContent,/解説.*オスマン帝国/);
-    app.q('[data-eu-shape="SRB"]').dispatchEvent(new app.w.MouseEvent('click',{bubbles:true}));
+    app.q('[data-eu-pew-marker="SRB"]').click();
     await until(()=>!app.q('[data-eu-religion-evidence-reading]').hidden);
     assert.equal(app.q('[data-eu-religion-evidence-reading]').previousElementSibling,null);
     assert.equal(app.q('[data-culture-case]').value,'');

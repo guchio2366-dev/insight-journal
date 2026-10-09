@@ -11,6 +11,7 @@ const sha = value => createHash('sha256').update(value).digest('hex');
 const manifest = json('public/assets/atlas/europe/farming-overview-v2/manifest.json');
 const collection = json('src/data/atlas/europe/farming-areas.json');
 const dominant = json('src/data/atlas/europe/farming-dominant-areas.json');
+const secondary = json('src/data/atlas/europe/farming-secondary-areas.json');
 const cropConfig = json('src/data/atlas/europe/crop-overview.json').crops;
 const countries = json('src/data/atlas/europe-countries.json').features.filter(feature => feature.properties.kind === 'europe');
 const polygons = geometry => geometry.type === 'Polygon' ? [geometry.coordinates] : geometry.coordinates;
@@ -122,4 +123,16 @@ test('six initial crop belts retain source-backed country coverage and label loc
   const wheat=dominant.features.find(item=>item.properties.id==='wheat');
   for(const point of [[2.35938,50.375],[11.55208,51.875]])
     assert.ok(polygons(wheat.geometry).some(polygon=>polygonContains(polygon,point)),`wheat belt includes ${point}`);
+});
+
+test('all six crops retain distinct secondary contours when another fill occupies their source area',()=>{
+  const ids=['wheat','barley','maize','potato','sugarbeet','rapeseed'];
+  assert.equal(sha(bytes(manifest.secondaryContours.output.path)),manifest.secondaryContours.output.sha256);
+  assert.deepEqual(new Set(secondary.features.map(feature=>feature.properties.id)),new Set(ids));
+  for(const feature of secondary.features){
+    assert.ok(polygons(feature.geometry).length>0,feature.properties.id);
+    assert.ok(manifest.secondaryContours.products.find(product=>product.id===feature.properties.id).approximateDisplayAreaKm2>0);
+    for(const polygon of polygons(feature.geometry))
+      assert.ok(targetLandContains(polygon[0][0]),`${feature.properties.id}: contour is on European target land`);
+  }
 });

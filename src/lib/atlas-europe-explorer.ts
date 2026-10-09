@@ -20,7 +20,8 @@ import { createEuropeFarmingStatistics } from '../scripts/atlas-europe-farming-s
 import { createEuropeCultureOverview, europeCultureOverviewPlaces } from './atlas-europe-culture-overview';
 import { europeReligionRegionalEvidence } from '../data/atlas/europe/religion-regional-evidence';
 import { europeReligionNationalProfiles, europeReligionNationalProfile } from '../data/atlas/europe/religion-national-overview';
-import { pew2020EuropeRow, pew2020Share, pew2020ChristianColor } from '../data/atlas/europe/pew-religion-2020';
+import { pew2020EuropeRow } from '../data/atlas/europe/pew-religion-2020';
+import { createEuropePewMarkers } from './atlas-europe-pew-markers';
 import precipitationLineLabels from '../data/atlas/europe/precipitation-line-labels.json' with {type:'json'};
 import { europeTerrainGuides, europeTerrainPlaceNames } from '../data/atlas/europe/terrain-geography';
 type Country = { code: string; name: string; region: string };
@@ -33,7 +34,7 @@ export function initEuropeAtlas() {
   const root = document.querySelector<HTMLElement>('[data-europe-detail]');
   if (!root || root.dataset.initialized) return;
   root.dataset.initialized = 'true';
-  const config = JSON.parse(root.querySelector('[data-eu-config]')!.textContent!) as { industryOverviews:Record<string,{takeaway:string;body:string;evidenceNote?:string;sources:{label:string;url:string;period:string}[]}>; farmingAreas:FarmingAreas; farmingDominantAreas:FarmingAreas; countries: Country[]; cities: City[]; geography: { type: 'FeatureCollection'; features: Feature[] }; climateWater: { type:'FeatureCollection';features:{type:'Feature';properties:{id:string;name:string};geometry:Geometry}[] }; climate: string; wheat: string; wheatValues: string; initialLayer: string; layers:EuropeLayer[];populationCities:Place[];readings:EuropeReading[];statistics:{indicators:Indicator[]} };
+  const config = JSON.parse(root.querySelector('[data-eu-config]')!.textContent!) as { industryOverviews:Record<string,{takeaway:string;body:string;evidenceNote?:string;sources:{label:string;url:string;period:string}[]}>; farmingAreas:FarmingAreas; farmingDominantAreas:FarmingAreas; farmingSecondaryAreas:FarmingAreas; countries: Country[]; cities: City[]; geography: { type: 'FeatureCollection'; features: Feature[] }; climateWater: { type:'FeatureCollection';features:{type:'Feature';properties:{id:string;name:string};geometry:Geometry}[] }; climate: string; wheat: string; wheatValues: string; initialLayer: string; layers:EuropeLayer[];populationCities:Place[];readings:EuropeReading[];statistics:{indicators:Indicator[]} };
   const { countries, cities, geography } = config;
   const query = <T extends Element>(selector: string) => root.querySelector<T>(selector)!;
   const all = <T extends Element>(selector: string) => Array.from(root.querySelectorAll<T>(selector));
@@ -189,6 +190,14 @@ export function initEuropeAtlas() {
     countryOverviewLink.href=destination.href;
   });
   const farmingView=()=>farmingPresentation(state,farmingItems);
+  const stage=query<HTMLElement>('.eu-map-stage');
+  const overlayProject=(coordinate:[number,number])=>{
+    if(map&&liveMap.classList.contains('is-ready'))return map.project(coordinate);
+    const [x,y]=project(coordinate),matrix=staticMap.getScreenCTM(),rect=stage.getBoundingClientRect();
+    const point=matrix?new DOMPoint(x,y).matrixTransform(matrix):new DOMPoint();
+    return {x:point.x-rect.left,y:point.y-rect.top};
+  };
+  const pewMarkers=createEuropePewMarkers(stage,selectCountry);
   const features = [...config.populationCities,...config.readings,...europeCultureOverviewPlaces];
   const visibleFeatures = () => subject().field==='population'&&!cultureActive() ? config.populationCities : subject().field==='industry' ? config.readings.filter(r=>r.field==='industry') : subject().field==='nature'&&['water','drainage','terrain'].includes(state.layer) ? config.readings.filter(r=>r.field==='nature'&&r.layer===(['water','drainage'].includes(state.layer)?'water':'terrain')) : [];
   const featureVisible = (id:string) => {
@@ -203,14 +212,9 @@ export function initEuropeAtlas() {
     const top=query<HTMLElement>('.eu-map-stage').getBoundingClientRect().top+window.scrollY;
     root!.style.setProperty('--eu-reader-height',`${Math.max(220,window.innerHeight-top-12)}px`);
   }
-  const annotations=createEuropeAnnotations(query<HTMLElement>('.eu-map-stage'),cities,features,
+  const annotations=createEuropeAnnotations(stage,cities,features,
     ()=>({climate:climateReader(),crops:farmingView().active,farmingIds:farmingView().visible.map(item=>item.id),selectedFarming:farmingView().item?.id,city:state.city,feature:state.feature,featureLabelIds:subject().field==='industry'?(state.industryGroup?industryEmphasized():[...europeIndustryOverviewLabels]):subject().field==='population'&&!cultureActive()?config.populationCities.filter(city=>['ロンドン','パリ','モスクワ','ローマ'].includes(city.name)).map(city=>city.id):undefined,detailed:map&&liveMap.classList.contains('is-ready')?map.getBounds().getEast()-map.getBounds().getWest()<60:box[2]<frame.width*.65,emphasizedFeatures:industryEmphasized(),places:cultureActive()&&!state.cultureCase?(state.layer==='religion'?europeReligionRegionalEvidence.filter(item=>item.id===state.feature):europeCultureOverviewPlaces.filter(item=>item.id.startsWith('ethnicity-'))):visibleFeatures().filter(p=>featureVisible(p.id))}),
-    coordinate=>{
-      if(map&&liveMap.classList.contains('is-ready'))return map.project(coordinate as [number,number]);
-      const [x,y]=project(coordinate), matrix=staticMap.getScreenCTM(),rect=query<HTMLElement>('.eu-map-stage').getBoundingClientRect();
-      const point=matrix?new DOMPoint(x,y).matrixTransform(matrix):new DOMPoint();
-      return {x:point.x-rect.left,y:point.y-rect.top};
-    },(kind,id)=>kind==='city'?selectCity(id):kind==='crop'?setLayer(id):selectFeature(id),farmingItems,cultureOverview.decorate);
+    coordinate=>overlayProject(coordinate as [number,number]),(kind,id)=>kind==='city'?selectCity(id):kind==='crop'?setLayer(id):selectFeature(id),farmingItems,cultureOverview.decorate);
   const precipitationLabels=precipitationLineLabels.map(label=>{
     const node=document.createElement('span');node.className='eu-precipitation-line-label';
     node.textContent=label.mm.toLocaleString('ja-JP')+' mm';
@@ -531,13 +535,12 @@ export function initEuropeAtlas() {
     const indicator=layer.field==='industry'?undefined:config.statistics.indicators.find(i=>i.id===layer.indicator);
     const fills=countries.map(c=>[c.code,indicator?layer.field==='industry'&&!isEuropeIndustryCountry(c.code)?'#edece5':layerColor(layer,indicator.values[c.code]?.['2023']??null):'#edece5'] as const);
     const religionOverview=state.layer==='religion'&&!state.cultureCase;
-    const cultureBase=cultureColor(null);
-    const pewFills=countries.map(country=>[country.code,pew2020ChristianColor(pew2020Share(pew2020EuropeRow(country.code)?.shares[0]??''))] as const);
-    all<SVGElement>('[data-eu-shape]').forEach(shape=>{shape.style.fill=religionOverview?pewFills.find(([code])=>code===shape.dataset.euShape)?.[1]??'#edece5':cultureActive()?cultureBase:indicator?fills.find(([code])=>code===shape.dataset.euShape)?.[1]??'#d9dcda':'transparent';});
-    if(map?.getLayer('land'))map.setPaintProperty('land','fill-color',religionOverview?['match',['get','code'],...pewFills.flat(),'#edece5']:cultureActive()?cultureBase:indicator?['match',['get','code'],...fills.flat(),'#edece5']:'#edece5');
+    const cultureBase=religionOverview?'#f2eee5':cultureColor(null);
+    all<SVGElement>('[data-eu-shape]').forEach(shape=>{shape.style.fill=cultureActive()?cultureBase:indicator?fills.find(([code])=>code===shape.dataset.euShape)?.[1]??'#d9dcda':'transparent';});
+    if(map?.getLayer('land'))map.setPaintProperty('land','fill-color',cultureActive()?cultureBase:indicator?['match',['get','code'],...fills.flat(),'#edece5']:'#edece5');
     query<HTMLElement>('[data-eu-pew-map-key]').hidden=!religionOverview;
     paintCulture();
-    updateFarmingMap(root,map,config.farmingAreas,config.farmingDominantAreas,state);
+    updateFarmingMap(root,map,config.farmingAreas,config.farmingDominantAreas,config.farmingSecondaryAreas,state);
     query<SVGGElement>('[data-eu-farming-shapes]').style.display=farm.active?'':'none';
     query<HTMLElement>('[data-eu-farming-legend]').hidden=!farm.active;
     query<HTMLElement>('[data-eu-inline-farm-key]').hidden=!farm.active;
@@ -545,8 +548,8 @@ export function initEuropeAtlas() {
       const genre=europeFarmingGenres[farm.genre];
       query('[data-eu-farm-key-title]').textContent=genre.title;
       query('[data-eu-farm-legend-title]').textContent=`${genre.title}の主な${farm.genre==='livestock'?'飼養地域':'栽培域'} · 2020年頃`;
-      query('[data-eu-farm-key-note]').textContent=farm.genre==='crops'?'同じ格子で面積最大の品目':'色は品目、重なりは複数品目';
-      query('[data-eu-farm-explanation]').textContent=farm.genre==='crops'?'6作物が集中する元格子のうち、同じ格子で収穫面積が最大の品目を一色で示します。複数品目を栽培する場所もあります。品目を選ぶと、その品目の重なりを含む集中域全体の輪郭を強調します。':'各色が品目別の集中域です。重なった色は複数品目の重なりで、新しい分類ではありません。品目を選ぶと、その分布を強調します。';
+      query('[data-eu-farm-key-note]').textContent=farm.genre==='crops'?'点線＝色面外に続く各品目の集中域':'色は品目、重なりは複数品目';
+      query('[data-eu-farm-explanation]').textContent=farm.genre==='crops'?'6作物の集中域を同時に示します。色面が重なる場所では混色を避けるため1品目を主彩色とし、色面に隠れる別品目の集中域を品目色の点線で残します。品目を選ぶと、重なりを含む元の全分布を強調します。':'各色が品目別の集中域です。重なった色は複数品目の重なりで、新しい分類ではありません。品目を選ぶと、その分布を強調します。';
       query('[data-eu-farm-missing]').textContent=genre.missing;
       all<HTMLElement>('[data-eu-farm-key-item]').forEach(item=>{item.hidden=!genre.ids.some(id=>id===item.dataset.euFarmKeyItem);});
     }
@@ -752,11 +755,11 @@ export function initEuropeAtlas() {
     }else if(restorePoint)void showGrid(state.point,false);
     query<HTMLElement>('.eu-read-panel').setAttribute('aria-labelledby',cultureActive()?'eu-culture-reader-title':climateReader()?'eu-city-heading':'eu-subject-title');
     const farm=farmingView();
-    const guidance=climateReader()?'都市名を押すと、右の説明・雨温図と、下の月別数値が切り替わります。':state.layer==='religion'?'Pewの2020年国別推計でキリスト教割合を着色しています。国を押すと7分類の構成を右に示します。':cultureActive()?'地図下で事例・分類・行政区を選び、同じ表の総人口に対する割合を読みます。':farm.active?farm.single?`${farm.item!.name}だけを表示中です。元の表示には右側のボタンで戻れます。`:'品目名を選ぶと、その分布全体の輪郭を強調します。重なる場所では候補を選べます。':visibleFeatures().length?'地図の名前を押すと、その場所の説明を表示します。':subject().id==='precipitation'?'地図を押すと、その地点の年降水量を右側に表示します。':subject().id==='terrain'?'地図の山脈・平原・半島・海域の名前と右側の説明を読みます。':subject().grid?'地図を押すと、その位置の値を右側に表示します。':subject().indicator?'国を押すと、画面下部に国全体の数値を表示します。':'地図の凡例と右側の説明を読み比べます。';
+    const guidance=climateReader()?'都市名を押すと、右の説明・雨温図と、下の月別数値が切り替わります。':state.layer==='religion'?'Pewの2020年国別推計を地図上の小さな構成帯で示します。国を押すと7分類の値を右に示します。':cultureActive()?'地図下で事例・分類・行政区を選び、同じ表の総人口に対する割合を読みます。':farm.active?farm.single?`${farm.item!.name}だけを表示中です。元の表示には右側のボタンで戻れます。`:'品目名を選ぶと、その分布全体の輪郭を強調します。重なる場所では候補を選べます。':visibleFeatures().length?'地図の名前を押すと、その場所の説明を表示します。':subject().id==='precipitation'?'地図を押すと、その地点の年降水量を右側に表示します。':subject().id==='terrain'?'地図の山脈・平原・半島・海域の名前と右側の説明を読みます。':subject().grid?'地図を押すと、その位置の値を右側に表示します。':subject().indicator?'国を押すと、画面下部に国全体の数値を表示します。':'地図の凡例と右側の説明を読み比べます。';
     status.textContent=(failed?'簡易地図で表示中。':'')+guidance;
     query<HTMLElement>('[data-eu-statistics]').hidden=all<HTMLElement>('[data-eu-statistics] > *').every(section=>section.hidden);
     all<HTMLElement>('[data-eu-extra-field]').forEach(el=>{el.hidden=el.dataset.euExtraField!==currentField.id;});
-    requestAnimationFrame(() => { sizeReader(); map?.resize(); if (refit) fit(); annotations.refresh(); positionPrecipitationLabels(); positionWheatRegionalLabels(); positionTerrainLabels(); updatePointMarker(); });
+    requestAnimationFrame(() => { sizeReader(); map?.resize(); if (refit) fit(); annotations.refresh(); pewMarkers.update(state.layer==='religion'&&!state.cultureCase,overlayProject); positionPrecipitationLabels(); positionWheatRegionalLabels(); positionTerrainLabels(); updatePointMarker(); });
   }
   function invalidateGridReading() {
     gridRequest++;
@@ -845,8 +848,8 @@ export function initEuropeAtlas() {
       loadTimer = setTimeout(() => { if (token === generation) fallback(); }, 15000);
       if (matchMedia('(pointer: coarse)').matches) map.dragPan.disable();
       // The map footer and source sections provide attribution for the local datasets.
-      map.on('move',()=>{annotations.refresh(false);positionPrecipitationLabels();positionWheatRegionalLabels();positionTerrainLabels();updateFocusMarker();});
-      map.on('moveend',()=>{annotations.refresh();positionPrecipitationLabels();positionWheatRegionalLabels();positionTerrainLabels();updateFocusMarker();});
+      map.on('move',()=>{annotations.refresh(false);pewMarkers.update(state.layer==='religion'&&!state.cultureCase,overlayProject);positionPrecipitationLabels();positionWheatRegionalLabels();positionTerrainLabels();updateFocusMarker();});
+      map.on('moveend',()=>{annotations.refresh();pewMarkers.update(state.layer==='religion'&&!state.cultureCase,overlayProject);positionPrecipitationLabels();positionWheatRegionalLabels();positionTerrainLabels();updateFocusMarker();});
       map.on('error', () => { if (!failed && token === generation) fallback(); });
       map.getCanvas().addEventListener('webglcontextlost', fallback, { once: true });
       map.on('load', () => {
@@ -932,7 +935,7 @@ export function initEuropeAtlas() {
     const factor = button.dataset.euZoom === 'in' ? .7 : 1 / .7;
     if (map) { factor < 1 ? map.zoomIn() : map.zoomOut(); return; }
     const w = Math.min(frame.width * 2, Math.max(24, box[2] * factor));
-    const h = w / box[2] * box[3]; box = [box[0] + (box[2] - w) / 2, box[1] + (box[3] - h) / 2, w, h]; staticMap.setAttribute('viewBox', box.join(' '));staticSymbols();annotations.refresh();updateFocusMarker();
+    const h = w / box[2] * box[3]; box = [box[0] + (box[2] - w) / 2, box[1] + (box[3] - h) / 2, w, h]; staticMap.setAttribute('viewBox', box.join(' '));staticSymbols();annotations.refresh();pewMarkers.update(state.layer==='religion'&&!state.cultureCase,overlayProject);updateFocusMarker();
   }));
   query('[data-eu-render]').addEventListener('click', () => { state.render = failed || state.render === 'static' ? 'auto' : 'static'; disposeMap(); commit(true,true); void startMap(); });
   window.addEventListener('popstate', () => { invalidateGridReading();const previousRender = state.render; state = readEuropeState(location.search, countries, ids, config.initialLayer); state.compare=[]; render(true); if (previousRender !== state.render) { disposeMap(); void startMap(); } });

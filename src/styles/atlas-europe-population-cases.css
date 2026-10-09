@@ -25,6 +25,18 @@
 .eu-pew-map-key span { display:inline-flex; align-items:center; gap:4px; white-space:nowrap; }
 .eu-pew-map-key i { width:13px; height:13px; border:1px solid #849399; }
 .eu-pew-map-key small { font-size:11px; }
+.eu-workspace-root .eu-pew-markers { position:absolute; inset:0; z-index:3; overflow:hidden; pointer-events:none; }
+.eu-workspace-root .eu-pew-markers[hidden] { display:none; }
+.eu-workspace-root .eu-pew-marker-guides { position:absolute; inset:0; width:100%; height:100%; overflow:hidden; pointer-events:none; }
+.eu-workspace-root .eu-pew-marker-guides line { stroke:#64767c; stroke-width:1; opacity:.8; }
+.eu-workspace-root .eu-pew-marker { position:absolute; display:block; box-sizing:border-box; width:33px; min-width:0; height:11px; min-height:0; padding:1px; border:1px solid #354c56; border-radius:2px; transform:translate(-50%,-50%); background:#fffef8; box-shadow:0 1px 2px #172e3c88; pointer-events:auto; cursor:pointer; }
+.eu-workspace-root .eu-pew-marker[hidden] { display:none; }
+.eu-workspace-root .eu-pew-marker:hover,.eu-workspace-root .eu-pew-marker:focus-visible { z-index:2; outline:2px solid #842b42; outline-offset:1px; }
+.eu-workspace-root .eu-pew-marker-bar { display:flex; width:100%; height:100%; overflow:hidden; }
+.eu-workspace-root .eu-pew-marker-bar i { display:block; height:100%; flex:none; }
+.eu-workspace-root .eu-pew-region-note { position:absolute; left:9px; top:8px; width:205px; max-width:calc(100% - 78px); margin:0; padding:4px 6px; border-left:3px solid #5e777f; background:#fffef5ee; color:#253d47; font:700 11px/1.4 var(--sans); pointer-events:none; }
+.eu-workspace-root .eu-pew-region-note[hidden] { display:none; }
+@media(max-width:1199px) { .eu-workspace-root .eu-pew-marker { width:28px; } }
 .eu-religion-evidence-reading { border:1px solid #aabbb3; border-left:5px solid #607d82; padding:9px 11px; margin:10px 0; background:#fafbf6; font-size:13px; }
 .eu-religion-evidence-reading[hidden] { display:none; }
 .eu-religion-evidence-reading h4 { font-size:16px; margin:0 0 4px; }

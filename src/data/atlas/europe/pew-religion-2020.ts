@@ -62,12 +62,6 @@ export const pew2020EuropeRows=[
 export type Pew2020EuropeCode=(typeof pew2020EuropeRows)[number]['code'];
 export const pew2020EuropeRow=(code:string)=>pew2020EuropeRows.find(row=>row.code===code);
 export const pew2020Share=(value:string)=>!value||value==='<0.1'?null:Number(value);
-export const pew2020ChristianColor=(value:number|null)=>value===null?'#edece5':value<20?'#e5eef1':value<40?'#c7dbe4':value<60?'#99bbcb':value<80?'#648fa8':'#315f80';
-export const pew2020ChristianLegend=[
-  {label:'20%未満',color:'#e5eef1'}, {label:'20〜40%未満',color:'#c7dbe4'},
-  {label:'40〜60%未満',color:'#99bbcb'}, {label:'60〜80%未満',color:'#648fa8'},
-  {label:'80%以上',color:'#315f80'}, {label:'Pewの対象外',color:'#edece5'},
-] as const;
 export const pew2020EuropeSource='https://www.pewresearch.org/religion/feature/religious-composition-by-country-2010-2020/';
 export const pew2020EuropeTerms='https://www.pewresearch.org/about/terms-and-conditions/';
 

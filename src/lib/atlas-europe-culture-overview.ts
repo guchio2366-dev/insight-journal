@@ -50,7 +50,7 @@ export function createEuropeCultureOverview(root:HTMLElement,onSelectLocal:(id:s
       const colorKey=root.querySelector<HTMLElement>('[data-eu-religion-color-key]');if(colorKey)colorKey.hidden=!active||kind!=='religion'||!!caseId;
       if(!key)return;key.hidden=!active||!!caseId;if(key.hidden||rendered===kind)return;
       key.querySelector('[data-eu-culture-key-intro]')!.textContent=kind==='religion'
-        ?'Pew Research Centerの2020年推計から、収録した40か国のキリスト教割合を着色します。国を選ぶと同じ推計の7分類を示します。色は国全体の割合で、国内の宗派や地区の境界を示しません。'
+        ?'Pew Research Centerの2020年推計から、収録した40か国の7分類の構成を国の位置に小帯で示します。小帯の各色の幅はその国の全人口に占める割合で、国内の宗派や地区の境界を示しません。'
         :'2021年の公表総計 · 円は同じ大きさです。角度は各対象の総人口に占める回答割合で、円の位置は対象を示す目印です。人口規模・個人の位置・細地域の分布を表しません。';
       key.querySelector('[data-eu-culture-key-coverage]')!.textContent=kind==='religion'
         ?'7分類はキリスト教・イスラム教・宗教的無所属・仏教・ヒンドゥー教・ユダヤ教・その他の宗教。Pewの広域推計であり、既存の国勢調査・標本調査の宗派や未回答の分類と合算しません。資料対象外の国は0%ではありません。'

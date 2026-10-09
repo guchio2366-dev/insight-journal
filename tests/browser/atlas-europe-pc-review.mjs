@@ -665,8 +665,9 @@ async function stageOneOperations(page, profile) {
   assert.equal(await page.locator('[data-eu-religion-color-key]').isVisible(),true);
   assert.equal(await page.locator('[data-eu-religion-color-key]').evaluate(node=>node.parentElement?.hasAttribute('data-eu-map-legend')),true);
   assert.equal(await page.locator('[data-eu-pew-map-key]').isVisible(),true);
-  assert.notEqual(await page.locator('[data-eu-shape="CZE"]').evaluate(node=>node.style.fill),await page.locator('[data-eu-shape="DEU"]').evaluate(node=>node.style.fill));
-  await page.locator('[data-eu-shape="SRB"]').evaluate(node=>node.dispatchEvent(new MouseEvent('click',{bubbles:true})));
+  assert.equal(await page.locator('[data-eu-pew-marker]').count(),40);
+  assert.equal(await page.locator('[data-eu-pew-marker="CZE"] .eu-pew-marker-bar i').nth(2).evaluate(node=>node.style.width),'72.8%');
+  await page.locator('[data-eu-pew-marker="SRB"]').click();
   assert.match(await page.locator('[data-eu-religion-evidence-reading]').textContent(),/セルビア.*2020年推計.*キリスト教 91.5%.*正教会.*5,387,426人/s);
   assert.equal(await page.locator('[data-eu-religion-evidence-reading]').evaluate(node=>node.previousElementSibling===null),true);
   await page.locator('[data-eu-religion-back]').click();

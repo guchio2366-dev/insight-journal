@@ -2,7 +2,7 @@
 
 ## 2026-10-09 追加確認
 
-宗教の初期図は[Pew Research Centerの2020年国別推計](https://www.pewresearch.org/religion/feature/religious-composition-by-country-2010-2020/)の欧州図に該当する40か国の抜粋を使い、キリスト教の割合を濃淡で示す。最多宗教・過半数を示す図ではない。国を選ぶと、7つの広い宗教分類の推計割合を右側の先頭に表示する。未掲載国は0%とせず灰色にする。元の5対象の国勢調査と地方資料は、宗派や未回答の扱いが異なる補足として選択後に残す。Pewの国別推計から国内の宗教分布や宗派を推測して塗らない。
+宗教の初期図は[Pew Research Centerの2020年国別推計](https://www.pewresearch.org/religion/feature/religious-composition-by-country-2010-2020/)の欧州図に該当する40か国の抜粋を使い、各国の位置に7分類の構成比を小帯で同時に示す。小国の帯は地図内の近傍で整理し、海上へ大きく引き出さない。地図内の短い注記は無所属が多い国、イスラム教が高い国、キリスト教が多い国を示す。最多宗教・過半数の塗り分け図ではない。国を選ぶと7分類の推計割合を右側の先頭に表示する。未掲載国は0%としない。元の5対象の国勢調査と地方資料は、宗派や未回答の扱いが異なる補足として選択後に残す。Pewの国別推計から国内の宗教分布や宗派を推測して塗らない。
 
 | 宗教 | 1440 px | 1024 px |
 | --- | --- | --- |
@@ -11,7 +11,7 @@
 
 `scripts/europe/capture-religion-review.mjs` で1440px・1024pxの初期地図とセルビア選択、横スクロールなし、実行時エラーなしを確認する。1024pxでは従来のクロアチア帯と地図下端の衝突がなく、選択時の7分類を右欄の先頭に出した。Pewの表は201か国のうち欧州図に該当する40か国のみを収録し、`<0.1`を0に置換していない。[Pew利用条件](https://www.pewresearch.org/about/terms-and-conditions/)の§1と§13には出典表示、翻訳時の免責文、全表・実質的全表の再掲載禁止がある。地図・右欄には出典と指定の英文免責文を載せた。元の国別資料は[チェコ国勢調査](https://scitani.gov.cz/religious-beliefs)、[セルビア国勢調査](https://popis2022.stat.gov.rs/en-us/5-vestisaopstenja/news-events/20230616-st/?a=0&s=0)、[エストニア統計局](https://stat.ee/en/news/population-census-proportion-people-religious-affiliation-remains-stable-orthodox-christianity-still-most-widespread)、既存収録の英国・クロアチア原表に対応する。国内の細地域宗教分布は未収録。
 
-農畜産は16品目の元格子・選択時輪郭を保持し、初期の6作物の彩色のみ同じ単位（ha/格子）の近傍平均が最大の作物に割り当てた。重複した元分布を混色せず、フランス・ドイツの小麦帯を初期から読める。小麦ラベルが畜産・園芸へ残る条件も修正した。色の面積は生産量や品目別の順位ではない。
+農畜産は16品目の元格子・選択時輪郭を保持する。初期の6作物は混色を避ける色面に加え、色面に隠れる各品目の集中域をその品目色の点線輪郭で同時に示す。色面は同じ単位（ha/格子）の近傍平均による代表色であり、唯一の作物という意味ではない。フランス・ドイツの小麦帯は初期から読め、選択時は元の重複を含む全分布を強調する。小麦ラベルが畜産・園芸へ残る条件も修正した。色の面積は生産量や品目別の順位ではない。
 
 細分候補の公式表は[Eurostat `ef_lsk_bovine`](https://ec.europa.eu/eurostat/databrowser/view/ef_lsk_bovine/)（NUTS 2の乳牛・非乳牛、2005–2023年）、[`vit_t1`](https://ec.europa.eu/eurostat/databrowser/view/vit_t1/)（NUTS 2のワイン用ブドウ畑、2015/2020年）、[`ef_lus_orcholives`](https://ec.europa.eu/eurostat/databrowser/view/ef_lus_orcholives/)（NUTS 2のオリーブ樹園面積、2023年）まで特定した。ただし非乳牛は肉牛生産量、ブドウ畑は全ブドウ生産量、オリーブ樹園面積はオリーブ収穫量ではない。さらに表ごとに年が異なり、欧州図内の非EU諸国を同じNUTS 2原表で覆えない。新しい面に使う指標・対象地域・境界データを揃えてから収録する。今回はEUだけを欧州と呼ぶ面を描き足していない。
 

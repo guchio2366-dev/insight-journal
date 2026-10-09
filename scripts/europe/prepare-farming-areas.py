@@ -23,6 +23,7 @@ ASSETS = ROOT / 'public/assets/atlas/europe'
 OUT = ASSETS / 'farming-overview-v2'
 OUTPUT = ROOT / 'src/data/atlas/europe/farming-areas.json'
 DOMINANT_OUTPUT = ROOT / 'src/data/atlas/europe/farming-dominant-areas.json'
+SECONDARY_OUTPUT = ROOT / 'src/data/atlas/europe/farming-secondary-areas.json'
 BOUNDS = [-25, 32, 65, 73]
 ROWS, COLS = 492, 1080
 STEP = 1 / 12
@@ -270,6 +271,26 @@ def main():
     dominant_features.extend(feature for feature in features
                              if feature['properties']['kind'] == 'crop' and feature['properties']['id'] not in OVERVIEW_CROPS)
     dominant_output = write(DOMINANT_OUTPUT, dict(type='FeatureCollection', features=dominant_features))
+    # A one-color ground keeps the map legible, while each product's dashed
+    # secondary contour restores every sizeable concentration that would be
+    # hidden by that ground color. The full, independently generated source
+    # geometry is still used for selection and point hit testing.
+    secondary_features, secondary_records = [], []
+    for id in OVERVIEW_CROPS:
+        full = shape(next(feature['geometry'] for feature in features if feature['properties']['id'] == id))
+        ground = shape(next(feature['geometry'] for feature in dominant_features if feature['properties']['id'] == id))
+        secondary = make_valid(full.difference(ground.buffer(.015))).intersection(land)
+        parts = [part for part in polygons(secondary) if area_km2(part) >= 350]
+        if not parts:
+            continue
+        geometry = make_valid(union_all(parts).simplify(.08, preserve_topology=True)).intersection(land)
+        geometry_json = mapping(geometry)
+        geometry_json['coordinates'] = rounded_coordinates(geometry_json['coordinates'])
+        properties = dict(next(feature['properties'] for feature in features if feature['properties']['id'] == id))
+        secondary_features.append(dict(type='Feature', properties=properties, geometry=geometry_json))
+        secondary_records.append(dict(id=id, retainedComponents=len(parts),
+                                      approximateDisplayAreaKm2=round(area_km2(geometry), 2)))
+    secondary_output = write(SECONDARY_OUTPUT, dict(type='FeatureCollection', features=secondary_features))
     write(OUT / 'manifest.json', dict(
         version=2, coordinateReferenceSystem='EPSG:4326', bounds=BOUNDS,
         sourceGrid=dict(width=COLS, height=ROWS, resolutionDegrees=STEP,
@@ -277,7 +298,8 @@ def main():
         threshold=dict(quantile=QUANTILE, population='各品目の欧州対象国の陸域内にある正値の元格子',
                        meaning='品目ごとの収穫面積または飼養密度の第80百分位'),
         processing=dict(smoothing='閾値以上の格子の割合を原則7×7格子（トウモロコシは5×5）で平均し、原則55%以上の場所を選ぶ。米と柑橘類は45%以上。中心格子も第80百分位以上の値が必要。',
-                        dominantOverview='穀物・畑作の初期彩色のみ、収録済み6作物の候補元格子を同じha/格子の7×7近傍平均で比べ、最大の作物に一色を割り当てる。原則750km²未満の孤立面を省き、輪郭を0.08度で簡略化する。全品目の重複した集中域と選択時輪郭は別の元図に保持する。',
+                        dominantOverview='穀物・畑作の色面だけ、収録済み6作物の候補元格子を同じha/格子の7×7近傍平均で比べ、最大の作物に一色を割り当てる。色面に隠れる別品目の集中域はその品目色の点線輪郭で同時表示する。原則750km²未満の孤立面を省き、輪郭を0.08度で簡略化する。全品目の重複した集中域と選択時輪郭は元図に保持する。',
+                        secondaryContours='品目ごとの元集中域から同じ品目の色面を除いた残りのうち、350km²以上の面を点線輪郭にする。色面に隠れた別品目や周辺の集中域を見せる補助表示であり、栽培境界ではない。',
                         smoothingRadiusCells=SMOOTH_RADIUS, minimumNeighborFraction=MIN_NEIGHBOR_FRACTION,
                         smoothingRadiusByProduct=SMOOTH_RADIUS_BY_PRODUCT,
                         smoothingRadiusReason='トウモロコシはポー平原の高値格子（8.708333°E, 45.291667°N）が7×7近傍では53.1%で切れるため、元の5×5近傍（64%）を保ち、同地点を根拠のある面として残す。',
@@ -308,7 +330,7 @@ def main():
             'SPAMの収穫面積は複数作期を含む場合があり、耕地面積と一致しない。',
             '収録済みの12作物と牛・豚・鶏・羊のみ。ブドウ・オリーブ単独の格子は未収録。',
             'ロシアは表示枠内の対象国データを含む。統計・地理区分の境界や領有権を判断する図ではない。',
-        ], inputs=inputs, products=records, output=output, dominantOverview=dict(output=dominant_output,products=dominant_records,cropIds=OVERVIEW_CROPS)))
+        ], inputs=inputs, products=records, output=output, dominantOverview=dict(output=dominant_output,products=dominant_records,cropIds=OVERVIEW_CROPS),secondaryContours=dict(output=secondary_output,products=secondary_records)))
     print('output', output['bytes'], 'bytes', flush=True)
 
 
