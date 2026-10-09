@@ -706,7 +706,11 @@ function start(root:HTMLElement) {
     // the map's aspect ratio nor a short article determines the pane height.
     for(const [selector,property] of [['.asia-reading-panel','--asia-reading-height'],['.atlas-news','--asia-news-height']] as const){
       const pane=$(selector);if(!pane)continue;
-      const value=window.innerWidth>=960?`${Math.max(0,Math.floor(window.innerHeight-Math.max(12,pane.getBoundingClientRect().top)-12))}px`:'';
+      // A selected religion case shortens the map column. Keep the sticky
+      // reading inside that column so its top cannot be pushed off screen.
+      const selectedReligion=selector==='.asia-reading-panel'&&config.regionId==='east-asia'&&state.field==='population'&&state.topic==='religion'&&!!state.detail;
+      const bottom=selectedReligion?Math.min(window.innerHeight-12,$('.asia-map-panel')?.getBoundingClientRect().bottom??window.innerHeight-12):window.innerHeight-12;
+      const value=window.innerWidth>=960?`${Math.max(0,Math.floor(bottom-Math.max(12,pane.getBoundingClientRect().top)))}px`:'';
       if(root.style.getPropertyValue(property)!==value){if(value)root.style.setProperty(property,value);else root.style.removeProperty(property);}
     }
   }
