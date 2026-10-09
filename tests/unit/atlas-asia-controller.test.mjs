@@ -1305,3 +1305,16 @@ test('自動全景は実extentと小余白を使い、resizeのmoveend後も全�
  const saved=await setup('?lng=120&lat=35&z=6',{contentExtent:extent});
  try{assert.equal(saved.window.__map.getCenter().lng,120);assert.equal(saved.window.__map.getZoom(),6);}finally{await saved.window.happyDOM.close();}
 });
+
+test('宗教・民族の表示範囲から産業へ戻るリンクとクリックは東アジア全景を復帰する',async()=>{
+ const extent=[73.602256,15.776109,145.824962,53.567791];
+ for(const topic of ['religion','ethnicity']){
+  const app=await setup(`?field=population&topic=${topic}&lng=112.5&lat=37.05777&z=2.848`,{population:true,presentation:true,settlements:true,industry:true,contentExtent:extent});
+  try{
+   const link=app.q('.atlas-tabs [data-field=industry]');assert.equal(new URL(link.href).searchParams.has('lng'),false,'opening the industry link must not inherit the settlement crop');
+   link.click();await delay();
+   assert.deepEqual(JSON.parse(JSON.stringify(app.window.__map.lastFit.bounds)),[[extent[0],extent[1]],[extent[2],extent[3]]]);
+   assert.equal(app.window.__map.lastFit.options.padding,5);
+  }finally{await app.window.happyDOM.close();}
+ }
+});
