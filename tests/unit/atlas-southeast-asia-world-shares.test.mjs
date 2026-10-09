@@ -18,9 +18,10 @@ test('Southeast crop world shares use the matching FAOSTAT release, item, elemen
  assert.equal(country.inputs.find(row=>row.file===data.sources.archive.file).sha256,data.sources.archive.sha256);
  assert.equal(world.sources.find(row=>row.id==='QCL').archive.sha256,data.sources.archive.sha256);
  assert.deepEqual(data.countries,southeastCropCountries);
- assert.deepEqual(data.series.map(row=>row.itemCode),['27','56','236']);
- assert.deepEqual([...data.series.map(row=>row.itemCode),...data.unavailable.map(row=>row.itemCode)].sort(),southeastCropPriority(country).selected.map(row=>row.code).sort());
- for(const series of data.series){
+ const cropSeries=data.series.filter(row=>row.unit==='t');
+ assert.deepEqual(cropSeries.map(row=>row.itemCode),['27','56','236']);
+ assert.deepEqual([...cropSeries.map(row=>row.itemCode),...data.unavailable.map(row=>row.itemCode)].sort(),southeastCropPriority(country).selected.map(row=>row.code).sort());
+ for(const series of cropSeries){
   assert.equal(series.years.length,10);
   for(const year of series.years){
    const denominator=world.world.observations.filter(row=>row[0]===series.id&&row[1]===year.year);
@@ -46,6 +47,25 @@ test('Southeast crop world shares use the matching FAOSTAT release, item, elemen
  assert.ok(rice2020.countries.IDN.share>7&&rice2020.countries.IDN.share<7.1);
  assert.equal(rice2020.countries.SGP,undefined,'missing country rows must remain absent');
  assert.equal(rice2020.reportedRegion.complete,false,'a partial country sum must not be labelled the complete region');
+});
+
+test('Southeast forestry and forest-area shares use their matching archives and units',()=>{
+ for(const [id,domain,item,element,unit] of [['roundwood-production','Forestry','1861','5516','m3'],['sawnwood-production','Forestry','1872','5516','m3'],['forest-area','Inputs_LandUse','6646','5110','1000 ha']]){
+  const series=data.series.find(row=>row.id===id);
+  assert.equal(series?.unit,unit);
+  const source=data.sources.archives.find(row=>row.domain===(domain==='Forestry'?'FO':'RL'));
+  assert.equal(country.inputs.find(row=>row.file===source.file)?.sha256,source.sha256);
+  assert.equal(world.sources.find(row=>row.id===source.domain)?.archive.sha256,source.sha256);
+  for(const year of series.years){
+   const worldRow=world.world.observations.find(row=>row[0]===id&&row[1]===year.year);
+   assert.equal(year.world,Number(worldRow[2]));assert.equal(worldRow[3],unit);
+   for(const [code,result] of Object.entries(year.countries)){
+    const observation=country.countries[code].observations.find(row=>row.domain===domain&&row.item===item&&row.elementCode===element&&row.year===year.year&&row.unit===unit);
+    assert.equal(result.value,observation.value);assert.equal(result.flag,observation.flag);
+    assert.ok(Math.abs(result.share-result.value/year.world*100)<1e-9);
+   }
+  }
+ }
 });
 
 test('the shared under-map panel draws the sourced Southeast trend and handles unsupported crops',async()=>{

@@ -129,3 +129,23 @@ jobs:
           if-no-files-found: warn
           compression-level: 6
           retention-days: 7
+
+      - name: Save Southeast editorial review images
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: southeast-editorial-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            review-artifacts/asia-pc/desktop-southeast-industry-overview.png
+            review-artifacts/asia-pc/laptop-southeast-industry-overview.png
+            review-artifacts/asia-pc/desktop-southeast-industry-rubber-selected.png
+            review-artifacts/asia-pc/laptop-southeast-industry-rubber-selected.png
+            review-artifacts/asia-pc/desktop-southeast-climate-background.png
+            review-artifacts/asia-pc/laptop-southeast-climate-background.png
+            review-artifacts/asia-pc/desktop-southeast-water-overview.png
+            review-artifacts/asia-pc/laptop-southeast-water-overview.png
+            review-artifacts/asia-pc/desktop-southeast-population-overview.png
+            review-artifacts/asia-pc/laptop-southeast-population-overview.png
+          if-no-files-found: error
+          compression-level: 6
+          retention-days: 7

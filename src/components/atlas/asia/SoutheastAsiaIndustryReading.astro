@@ -1,15 +1,23 @@
 ---
 import {getAsiaOverview} from '../../../data/atlas/asia-overview';
+import {southeastIndustryKinds,southeastIndustrySites} from '../../../data/atlas/asia/southeast-asia-industry-sites';
 const reading=getAsiaOverview('southeast-asia').reading.readings.find(r=>r.id==='industry')!;
 ---
 <section data-industry-region-reading hidden aria-label="東南アジアの産業と地域全体の供給網">
- <h3>国別の産業と、地域全体の供給網を読む</h3>
- <p>国別産業の学習対象はインドネシア・ベトナム・タイです。製造業・サービス業の国計を比べ、都市や港の立地を別の資料で読みます。地域全体の商品貿易は、収録した11か国・地域を比較する入口です。</p>
+ <h3>主要産業の広がりを読む</h3>
+ <p>地図の国の色は2024年の製造業付加価値のGDP比です。13産業群の地点は公的資料にある立地事例です。丸は工場・港・都市など、ひし形は広い原料地域の代表位置です。点の数と大きさは産業規模を表しません。</p>
+ <nav class="southeast-industry-choices" aria-label="地図上の産業を強調">{southeastIndustryKinds.map(kind=><button type="button" data-southeast-industry-kind={kind.id} aria-pressed={String(kind.id==='all')}>{kind.label}</button>)}</nav>
+ <p class="southeast-industry-summary" data-southeast-industry-summary>{southeastIndustryKinds[0].reading}</p>
+ <section data-southeast-industry-selected hidden><h4 data-southeast-industry-selected-title></h4><p data-southeast-industry-selected-reading></p><p class="southeast-industry-source">立地の資料（<span data-southeast-industry-selected-year></span>）：<a data-southeast-industry-selected-source></a></p></section>
+ <div class="southeast-industry-sites" data-southeast-industry-sites>{southeastIndustrySites.map(site=><button type="button" data-southeast-industry-site={site.id}><span class={`southeast-industry-symbol ${site.kind} ${site.stage}`} aria-hidden="true"></span>{site.label}</button>)}</div>
+ <p>選択した分類の地点を強調し、他の産業群も薄く残します。原料と工場を結ぶ実際の供給路や国内仕向けは示しません。立地事例は出典年当時の情報です。国別産業の詳説はインドネシア・ベトナム・タイ、地域全体の地図は地理的な東南アジア11か国を対象にします。</p>
+ <h3>地域全体の供給網を読む</h3>
  {reading.paragraphs.map(p=><p>{p}</p>)}
  <div class="southeast-industry-links"><button type="button" data-industry-reading-topic="trade-exports" data-industry-reading-detail="t-85">電気機器の輸出</button><button type="button" data-industry-reading-topic="trade-imports" data-industry-reading-detail="t-85">電気機器の輸入</button><button type="button" data-industry-reading-topic="trade-exports" data-industry-reading-detail="t-87">車両・部分品の輸出</button></div>
  <p>商品貿易は2023年の名目米ドルです。港や工場を結ぶ実際の輸送経路、国内仕向け、生産重量を表す図ではありません。</p>
  <details><summary>立地の説明と統計の出典を読む</summary>{reading.sources.map(s=><p><a href={s.url}>{s.label}</a></p>)}<p><a href="https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NV.IND.MANF.ZS">世界銀行WDI：製造業付加価値</a> · <a href="https://comtradeplus.un.org/">国連Comtrade：商品貿易</a></p></details>
 </section>
 <style>
+ .southeast-industry-choices,.southeast-industry-sites{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}.southeast-industry-choices button,.southeast-industry-sites button{min-height:35px;padding:5px 8px;border:1px solid #9baea8;background:#fff;color:#264c52;font:600 11px/1.4 var(--sans);cursor:pointer}.southeast-industry-choices button[aria-pressed=true],.southeast-industry-sites button[aria-pressed=true]{background:#e4ede8;border-color:#315b61;box-shadow:inset 0 -2px #315b61}.southeast-industry-sites button{display:inline-flex;align-items:center;gap:5px}.southeast-industry-sites button.muted{opacity:.42}.southeast-industry-summary{font-weight:600}.southeast-industry-symbol{width:8px;height:8px;border-radius:50%;background:#355d75}.southeast-industry-symbol:is(.rubber,.wood,.metals,.energy){background:#9d6028}.southeast-industry-symbol:is(.logistics){background:#17806f}.southeast-industry-symbol:is(.tourism,.finance,.it-bpm){background:#885c99}.southeast-industry-symbol.raw{border-radius:0;transform:rotate(45deg)}[data-southeast-industry-selected]{padding:8px 10px;background:#f2f6ed;border-left:3px solid #477e6b}[data-southeast-industry-selected] h4{margin:0;font-size:13px}.southeast-industry-source{font-size:11px}
  .southeast-industry-links{display:flex;flex-wrap:wrap;gap:8px}.southeast-industry-links button{min-height:44px;padding:8px 12px;background:#edf3f1;color:#264c52;border:1px solid #8a9e9c;font:inherit;font-size:12px}p{font-size:13px;line-height:2}h3{font-size:14px;margin:22px 0 8px}summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:12px}button:focus-visible,summary:focus-visible{outline:3px solid #a74830;outline-offset:2px}[hidden]{display:none!important}
 </style>

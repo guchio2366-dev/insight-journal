@@ -109,7 +109,7 @@ test('regional desktop CSS keeps normal maps at the reference aspect and keyboar
     try{
       assert.equal(w.getComputedStyle(d.querySelector('[data-atlas-shell]')).display,'grid',`${region} ${width}: side-by-side shell`);
       const compactAspect=width<1200&&(region==='europe'||region.startsWith('asia/'));
-      assert.equal(Number.parseFloat(w.getComputedStyle(d.querySelector(c.frame)).aspectRatio),region==='europe'?1.32:compactAspect?1.65:1.55,`${region} ${width}: normal map reference aspect`);
+      assert.equal(Number.parseFloat(w.getComputedStyle(d.querySelector(c.frame)).aspectRatio),region==='europe'||region==='west-asia'?1.32:compactAspect?1.65:1.55,`${region} ${width}: normal map reference aspect`);
       assert.equal((w.getComputedStyle(d.querySelector(c.grid)).gridTemplateColumns.match(/minmax\(/g)??[]).length,2,`${region} ${width}: map and reading retain two desktop tracks`);
       assert.ok(!['none','hidden'].includes(w.getComputedStyle(d.querySelector(c.reading)).display));
     }finally{await w.happyDOM.close();}
