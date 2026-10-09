@@ -145,7 +145,15 @@ try{
    }
    const china=rows.find(r=>r.country==='CHN');assert.equal(china.bar,null);assert.match(china.text,/別設問.*宗教帰属 10％.*33％/s);return rows;
   }
-  async function sameStations(page,before,message){const after=await stations(page);assert.deepEqual(after.map(x=>x.id),before.map(x=>x.id),message);for(const row of after){const old=before.find(x=>x.id===row.id);assert(Math.abs(parseFloat(row.x)-parseFloat(old.x))<=.5&&Math.abs(parseFloat(row.y)-parseFloat(old.y))<=.5,message+': '+JSON.stringify({id:row.id,before:old,after:row}));}}
+  async function sameStations(page,before,message){
+   const expected=before.map(x=>x.id);
+   await page.waitForFunction(ids=>{
+    const actual=[...document.querySelectorAll('[data-station]')].filter(n=>!n.hidden&&n.getClientRects().length).map(n=>n.dataset.station).sort();
+    return actual.length===ids.length&&actual.every((id,index)=>id===ids[index]);
+   },expected);
+   const after=await stations(page);assert.deepEqual(after.map(x=>x.id),expected,message);
+   for(const row of after){const old=before.find(x=>x.id===row.id);assert(Math.abs(parseFloat(row.x)-parseFloat(old.x))<=.5&&Math.abs(parseFloat(row.y)-parseFloat(old.y))<=.5,message+': '+JSON.stringify({id:row.id,before:old,after:row}));}
+  }
   async function run(name,action){const record={profile:profile.name,name,passed:false,errors:[],failedRequests:[]};results.cases.push(record);const page=await context.newPage();page.setDefaultTimeout(20000);page.on('pageerror',e=>record.errors.push(e.message));page.on('response',r=>{if(r.status()>=400)record.failedRequests.push({url:new URL(r.url()).pathname,status:r.status()});});try{record.evidence=await action(page);assert.deepEqual(record.errors,[]);assert.deepEqual(record.failedRequests,[]);record.passed=true;}catch(e){record.failure=e.stack??String(e);record.url=page.url();record.geometry=await geometry(page).catch(()=>null);console.log(JSON.stringify(record));await shot(page,name+'-failure').catch(()=>{});}finally{await page.close();await save();}console.log(`${record.passed?'PASS':'FAIL'} ${profile.name} ${name}${record.failure?': '+record.failure.split('\n')[0]:''}`);}
   await run('religion',async page=>{
    await open(page,'population');await page.locator('[data-population-group="religion"]').click();await ready(page);const initial=await layout(page),cards=await religionCards(page),reading=page.locator('[data-settlement-reading="religion"]');assert(await reading.isVisible());
