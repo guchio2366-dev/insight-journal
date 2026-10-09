@@ -32,25 +32,31 @@ async function checkSoutheastAsiaRegion(page,{source,capture:takePicture,backgro
  assert.match(await page.locator('[data-reading-dock-summary]').textContent(),/ジャワ島.*タイ東部.*ベトナムの南北/s);
  assert.match(await page.locator('[data-industry-region-reading]').textContent(),/11か国.*国内仕向け|11か国.*国内向け/s);
  const markerState=await page.locator('[data-southeast-industry-map]').evaluate(node=>({hidden:node.hidden,size:[node.clientWidth,node.clientHeight],field:document.querySelector('[data-asia-atlas]')?.getAttribute('data-field'),points:[...node.querySelectorAll('[data-southeast-industry-point]')].map(p=>({id:p.getAttribute('data-southeast-industry-point'),hidden:p.hidden,x:p.style.left,y:p.style.top}))}));
- assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point]:visible').count(),9,JSON.stringify(markerState));
- assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-label]:visible').count(),9);
- assert.match(await page.locator('[data-southeast-industry-legend]').textContent(),/製造・物流.*ゴム・タイヤ.*木材・家具.*● 産業・加工地点.*◆ 原料産地/s);
- assert.match(await page.locator('[data-southeast-industry-label="rayong-tires"]').textContent(),/タイヤ製造.*ラヨーン/s);
+ assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point]:visible').count(),30,JSON.stringify(markerState));
+ assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-label]:visible').count(),13);
+ assert.equal(await page.locator('[data-southeast-industry-kind]').count(),14);
+ assert.match(await page.locator('[data-southeast-industry-legend]').textContent(),/● 工場・港・都市.*◆ 原料地域の代表位置/s);
+ assert.match(await page.locator('[data-southeast-industry-label="southern-rubber"]').textContent(),/ゴム・タイヤ.*タイ南部/s);
  const labelBoxes=await page.locator('[data-southeast-industry-map] [data-southeast-industry-label]:visible').evaluateAll(nodes=>nodes.map(node=>{const r=node.getBoundingClientRect(),frame=node.parentElement.getBoundingClientRect();return {id:node.getAttribute('data-southeast-industry-label'),left:r.left-frame.left,top:r.top-frame.top,right:r.right-frame.left,bottom:r.bottom-frame.top,width:frame.width,height:frame.height};}));
  assert(labelBoxes.every(box=>box.left>=0&&box.top>=0&&box.right<=box.width&&box.bottom<=box.height),`Industry labels must remain in the map: ${JSON.stringify(labelBoxes)}`);
  for(let i=0;i<labelBoxes.length;i++)for(let j=i+1;j<labelBoxes.length;j++){const a=labelBoxes[i],b=labelBoxes[j];assert(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,`Industry labels overlap: ${a.id}, ${b.id}`);}
  assert.match(await page.locator('[data-reading-dock-summary]').textContent(),/ジャワ島.*タイ東部/);
  record('initial regional industry explains the three-country scope and broader supply network');await capture('industry-overview');
  await page.locator('[data-southeast-industry-kind="rubber"]').click();
- assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point].rubber:not(.muted)').count(),2);
- assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point].muted').count(),7);
+ assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point]:not(.muted)').count(),2);
+ assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point].muted').count(),28);
  await page.locator('[data-southeast-industry-site="rayong-tires"]').click();
  assert.match(await page.locator('[data-southeast-industry-selected-reading]').textContent(),/タイヤ工場/);
  assert.equal(await page.locator('[data-southeast-industry-selected-source]').getAttribute('href')!==null,true);
  record('all regional sites remain visible while rubber and tire stages are highlighted');await capture('industry-rubber-selected');
  await page.locator('[data-southeast-industry-kind="wood"]').click();
- assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point].wood:not(.muted)').count(),2);
+ assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point]:not(.muted)').count(),2);
  assert.match(await page.locator('[data-southeast-industry-summary]').textContent(),/輸入木材/);
+ for(const [group,count] of [['electronics',3],['automotive',2],['textiles',2],['food',2],['metals',2],['energy',3],['petrochemicals',3],['logistics',3],['tourism',3],['finance',1],['it-bpm',2]]){
+  await page.locator(`[data-southeast-industry-kind="${group}"]`).click();
+  assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point]:not(.muted)').count(),count,group);
+  assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-label]:visible').count(),count,group);
+ }
  await page.locator('[data-southeast-industry-kind="all"]').click();
  assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point].muted').count(),0);
 
