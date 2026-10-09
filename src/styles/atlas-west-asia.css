@@ -112,7 +112,9 @@
 .west-farm-map-key strong{grid-column:1/-1;font-size:10px;font-weight:700}
 .west-farm-map-key span{display:flex;align-items:center;gap:4px;white-space:nowrap;transition:opacity .15s}
 .west-farm-map-key i{display:inline-block;width:10px;height:10px;flex:none;border:1px solid #fff;background:var(--farm-color)}
-.west-farm-map-key [data-kind=livestock] i{width:9px;height:9px;border-radius:50%}
+.west-farm-map-key [data-kind=livestock] i{width:11px;height:11px;border-radius:50%;border:1.5px solid #fff;box-shadow:0 0 0 1px #63716b}
+.west-farm-map-key [data-product=sheep] i{border-radius:1px}
+.west-farm-map-key [data-product=goat] i{border-radius:1px;transform:rotate(45deg) scale(.8)}
 .west-farm-map-key .west-farm-map-overlap i{background:#344d70}
 .west-farm-map-key span.is-muted{opacity:.35}
 .west-atlas [data-west-map]{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
@@ -329,12 +331,13 @@
 .west-basin-place line{stroke:#315f81;stroke-width:1px}
 .west-basin-place text{font-size:11px;font-weight:700;fill:#254f67;paint-order:stroke;stroke:#fffdf3;stroke-width:3px;stroke-linejoin:round}
 .west-industry-marker{cursor:pointer}
-.west-industry-marker circle{fill:#804b2e;stroke:#fffdf3;stroke-width:2px;paint-order:stroke}
+.west-industry-marker circle,.west-industry-marker rect,.west-industry-marker .west-industry-symbol{fill:#804b2e;stroke:#fffdf3;stroke-width:2px;paint-order:stroke}
 .west-industry-marker[data-kind="resource"] circle{fill:#ad6729}
-.west-industry-marker[data-kind="processing"] circle{fill:#ad4541}
+.west-industry-marker[data-industry-role="refining"] rect{fill:#ad4541}
+.west-industry-marker[data-industry-role="petrochemical"] .west-industry-symbol{fill:#853474}
 .west-industry-marker[data-kind="manufacturing"] circle{fill:#3f7696}
 .west-industry-marker[data-kind="transit"] circle{fill:#467f69}
-.west-industry-marker.is-selected circle,.west-industry-marker:focus circle{stroke:#252e33;stroke-width:3px}
+.west-industry-marker.is-selected :is(circle,rect,.west-industry-symbol),.west-industry-marker:focus :is(circle,rect,.west-industry-symbol){stroke:#252e33;stroke-width:3px}
 .west-industry-marker text{font-size:11px;font-weight:750;fill:#24343a;paint-order:stroke;stroke:#fffdf3;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
 .west-industry-marker line{stroke:#526c70;stroke-width:1px}
 .west-industry-marker.is-context{opacity:.48}
@@ -350,7 +353,8 @@
 .west-industry-key span{display:inline-flex;align-items:center;gap:5px;font-size:.8rem}
 .west-industry-key i{display:inline-block;width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #8f9a99}
 .west-industry-key i[data-industry-kind="resource"]{background:#ad6729}
-.west-industry-key i[data-industry-kind="processing"]{background:#ad4541}
+.west-industry-key i[data-industry-kind="refining"]{background:#ad4541;border-radius:1px}
+.west-industry-key i[data-industry-kind="petrochemical"]{background:#853474;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);border:0}
 .west-industry-key i[data-industry-kind="manufacturing"]{background:#3f7696}
 .west-industry-key i[data-industry-kind="transit"]{background:#467f69}
 .west-industry-site-reading{border-left:3px solid #3f7696;padding-left:10px;margin:10px 0}

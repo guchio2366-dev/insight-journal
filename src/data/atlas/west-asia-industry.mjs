@@ -15,7 +15,8 @@ export const westIndustrySites = [
   {id:'suez',name:'スエズ運河',country:'network',kind:'transit',coordinates:[32.34,30.14],source:'suez',description:'紅海と地中海を結ぶ通過点です。運河の位置は貨物の輸出先や通航量を表しません。'},
   {id:'ras-laffan',name:'ラス・ラファン',country:'network',kind:'transit',coordinates:[51.53,25.92],source:'qatar',description:'カタールのLNG輸出港です。地域供給網の例であり、国別産業比較の対象には含めません。'},
 ];
-export const westIndustryKind = {resource:'採掘・資源',processing:'精製・石油化学',manufacturing:'自動車製造',transit:'港・通過点'};
+export const westIndustryKind = {resource:'採掘・資源',refining:'精製',petrochemical:'石油化学',manufacturing:'自動車製造',transit:'港・通過点'};
+export const westIndustryRole = site => site.kind === 'processing' ? site.activity : site.kind;
 export const westIndustryRoles = {
   'industry-network':null,
   'industry-extraction':['resource'],

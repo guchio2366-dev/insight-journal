@@ -43,7 +43,7 @@ const region=getOverviewRegion('west-asia');
      <h2 id="west-map-title" class="visually-hidden">{initial.label}</h2>
      <div class="atlas-map-frame">
       <svg data-west-map data-map-surface viewBox={`0 0 ${data.width} ${data.height}`} tabindex="0" role="group" aria-label="西アジア・中東の主題図。矢印キーで移動、プラスとマイナスで拡大・縮小。国・都市は一覧からも選択できます。"><title>西アジア・中東の地図</title><g data-west-scene></g></svg>
-      {initialField==='agriculture'&&<div class="west-farm-map-key" data-west-farm-map-key hidden aria-label="地図内の品目と色"><strong>相対的に集中する格子</strong>{westFarmingProducts.map(product=><span data-west-farm-map-label={product.id} data-kind={product.kind}><i style={`--farm-color:${product.color}`}></i>{product.label}</span>)}<span class="west-farm-map-overlap"><i></i>小麦と大麦</span></div>}
+      {initialField==='agriculture'&&<div class="west-farm-map-key" data-west-farm-map-key hidden aria-label="地図内の品目と色・形"><strong>作物の面・畜産の代表点</strong>{westFarmingProducts.map(product=><span data-west-farm-map-label={product.id} data-kind={product.kind} data-product={product.id}><i style={`--farm-color:${product.color}`}></i>{product.label}</span>)}<span class="west-farm-map-overlap"><i></i>小麦と大麦</span></div>}
       <div class="atlas-map-tools" aria-label="地図の表示範囲"><button data-west-reset aria-label="元の表示範囲へ戻る" hidden>範囲を戻す</button><button data-west-zoom="0.65" aria-label="地図を拡大">＋</button><button data-west-zoom="1.54" aria-label="地図を縮小">−</button></div>
       <div class="west-map-loading" data-west-loading role="status">地図資料を読み込んでいます。</div>
       <p class="atlas-layer-caption"><span data-west-caption>{initial.label}</span> · <span data-west-period></span></p>

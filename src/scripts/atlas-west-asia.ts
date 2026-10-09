@@ -4,7 +4,7 @@ import {stationAnnualRainfall,rainfallBreaks,rainfallColors,rainfallColor,isSett
 import {westAnnualPrecipitationId,westPrecipitationManifestPath,westPrecipitationLayer,decodeWestPrecipitationGrid} from '../lib/atlas-west-asia-precipitation.mjs';
 import {westFarmingProducts,westFarmingProduct,isWestFarmingOverview,westFarmingGeometry,westFarmingOverlap} from '../lib/atlas-west-asia-farming.mjs';
 import {westFieldIntroductions,westIndustryCountries,westIndustryCountry,westIndustryTakeaway,westRegionalReading,westReadingSources,westCityReadings,westFarmingSelection,westWaterIntroductions} from '../data/atlas/west-asia-readings.mjs';
-import {westIndustrySites,westIndustryKind,westIndustryRoles} from '../data/atlas/west-asia-industry.mjs';
+import {westIndustrySites,westIndustryKind,westIndustryRole,westIndustryRoles} from '../data/atlas/west-asia-industry.mjs';
 import westWorldShares from '../data/atlas/west-asia-world-shares.json';
 import {westNaturalAssets,westRiverGroundwater,westRepresentativeBasins,westNaturalKind,validateWestNaturalManifest,decodeWestNaturalCollection,assembleWestNaturalChunks,westGroundwaterReading,westWaterFeatureReading,westGeometryVisible} from '../lib/atlas-west-asia-natural.mjs';
 
@@ -286,14 +286,14 @@ async function init(root:HTMLElement){
  }
  async function farmingMarkup(t:any,selection:any,interactive=false){
   const selected=westFarmingProduct(t),items=await Promise.all(westFarmingProducts.map(async product=>({product,shape:await farmingShape(data.layers.find((l:any)=>l.id===product.id))})));
-  let html='<g clip-path="url(#west-target-land)">';
+  let html='<g clip-path="url(#west-target-land)">',livestockHtml='';
   for(const {product,shape} of items){
    if(interactive&&farmingOnlySelected&&selected&&product.id!==selected.id)continue;
    const attrs=interactive?`data-west-farm="${product.id}" role="button" tabindex="0" aria-label="${product.label}の分布を選択" aria-pressed="${selected?.id===product.id}"`:'';
    const dimmed=!!selected&&selected.id!==product.id;
    html+=`<g data-west-farm-context="${product.id}" opacity="${dimmed?(product.kind==='livestock'&&selected.kind==='crop'?'.24':'.48'):'1'}"><path data-west-farm-coverage="${product.id}" d="${shape.coverage}" fill="${product.color}" fill-opacity="${selected?.id===product.id?'.12':product.kind==='crop'?'.045':'.045'}" pointer-events="none"/>`;
    if(product.kind==='crop')html+=`<path data-west-farm-strong="${product.id}" d="${shape.strongCoverage}" fill="${product.color}" fill-opacity=".42" pointer-events="none"/><path d="${shape.outline}" fill="none" stroke="${product.color}" stroke-opacity=".32" stroke-width=".45" vector-effect="non-scaling-stroke" ${attrs}/>`;
-   else html+=shape.strongPoints.map((p:any)=>`<circle data-west-farm-strong="${product.id}" cx="${p.x}" cy="${p.y}" r="${selected?.id===product.id?3.8:3.1}" fill="${product.color}" stroke="#fffdf5" stroke-width=".8" vector-effect="non-scaling-stroke" ${attrs}/>`).join('');
+   else {const size=selected?.id===product.id?5.6:4.9;livestockHtml+=`<g data-west-farm-symbols="${product.id}" opacity="${dimmed?(selected.kind==='crop'?'.28':'.5'):'1'}">`+shape.strongPoints.map((p:any)=>product.id==='sheep'?`<rect data-west-farm-strong="${product.id}" x="${p.x-size}" y="${p.y-size}" width="${size*2}" height="${size*2}" fill="${product.color}" stroke="#fffdf5" stroke-width="1.4" vector-effect="non-scaling-stroke" ${attrs}/>`:product.id==='goat'?`<path data-west-farm-strong="${product.id}" d="M${p.x} ${p.y-size*1.3}L${p.x+size} ${p.y}L${p.x} ${p.y+size*1.3}L${p.x-size} ${p.y}Z" fill="${product.color}" stroke="#fffdf5" stroke-width="1.4" vector-effect="non-scaling-stroke" ${attrs}/>`:`<circle data-west-farm-strong="${product.id}" cx="${p.x}" cy="${p.y}" r="${size}" fill="${product.color}" stroke="#fffdf5" stroke-width="1.4" vector-effect="non-scaling-stroke" ${attrs}/>`).join('')+'</g>';}
    html+='</g>';
   }
   if(!(interactive&&farmingOnlySelected&&selected)){
@@ -307,7 +307,7 @@ async function init(root:HTMLElement){
    const shape=await farmingShape(layer(t));
    for(const [color,width] of [['#fffdf5',3],['#203f4a',1.6]])html+=`<path data-west-farm-selected="${esc(t.id)}" d="${shape.strongOutline}" fill="none" stroke="${color}" stroke-width="${width}" vector-effect="non-scaling-stroke" pointer-events="none"/>`;
   }
-  return html+'</g>';
+  return html+livestockHtml+'</g>';
  }
  async function readPoint(coord:number[],label='選択地点',selectedTopic=topic()){
   const version=++pointVersion,l=layer(selectedTopic);if(!l)return;
@@ -347,7 +347,7 @@ async function init(root:HTMLElement){
   if(!subject||!Object.hasOwn(westWorldShares.rows,id)){box.hidden=true;box.innerHTML='';return;}
   box.hidden=false;
   const latest=rows?.at(-1),trend=rows?.map((r,i)=>`${8+i*16},${45-r.percent/Math.max(1,...rows.map(x=>x.percent))*37}`).join(' ');
-  box.innerHTML=`<section><h3>供給元 → 国内仕向け・輸出</h3><p>国別生産量は収録済みです。国別・相手国別の輸入量と国内仕向け量は今回の保存資料にありません。生産量を輸出量や消費量には換算しません。</p></section><section><h3>輸出先の構成</h3><p>相手国別の輸出数量は未収録です。割合の分母を確認できないため、円グラフは表示しません。</p></section><section><h3>${esc(subject.label.replace('・国別生産量','').replace('の収穫面積',''))}の世界生産比</h3>${latest?`<strong>${format(latest.percent,2)}%（2024年）</strong><svg viewBox="0 0 165 52" role="img" aria-label="2015～2024年の世界生産比の推移"><polyline fill="none" stroke="#326b76" stroke-width="2" points="${trend}"/></svg><p>2015～2024年。20対象の収録値合計／FAOSTAT世界生産量。2024年は${latest.reported}／20対象の値です。欠測国は0として加えていません。</p>`:'<p>同じ品目・単位のFAOSTAT世界合計が保存されていません。世界生産比と推移は未算出です。</p>'}<p><a href="https://www.fao.org/faostat/en/#data/QCL">FAOSTAT QCL・生産量（t）</a></p></section>`;
+  box.innerHTML=`<section><h3>供給元 → 国内仕向け・輸出</h3><p>国別生産量は収録済みです。2024年・同じ品目と単位の輸入、輸出、在庫変化、国内仕向けは保存していません。<a href="https://www.fao.org/4/x9892e/x9892e02.htm">FAOの需給定義</a>に合わせた帯グラフにはこれらが必要です。生産量を輸出量や消費量には換算しません。</p></section><section><h3>輸出先の構成</h3><p><a href="https://data.fao.org/catalog/iso/955a7b61-ce56-4a04-adf5-61a3012eec84">FAOSTAT詳細貿易マトリックス</a>に相手国別数量の資料がありますが、今回の20対象・品目・2024年の原表を取得・照合できていません。分母を確認できるまで円グラフは保留です。</p></section><section><h3>${esc(subject.label.replace('・国別生産量','').replace('の収穫面積',''))}の世界生産比</h3>${latest?`<strong>${format(latest.percent,2)}%（2024年）</strong><svg viewBox="0 0 165 52" role="img" aria-label="2015～2024年の世界生産比の推移"><polyline fill="none" stroke="#326b76" stroke-width="2" points="${trend}"/></svg><p>2015～2024年。20対象の収録値合計／FAOSTAT世界生産量。2024年は${latest.reported}／20対象の値です。欠測国は0として加えていません。</p>`:'<p>今回保存したFAOSTAT QCL世界合計に、この品目の行がありません。同じ原表・定義・2015～2024年の世界行を再取得・照合するまで未算出です。資料が存在しないという意味ではありません。</p>'}<p><a href="https://www.fao.org/faostat/en/#data/QCL">FAOSTAT QCL・生産量（t）</a></p></section>`;
  }
  function details(){
   const t=topic(),c=country(),city=data.cities.find((x:any)=>x.id===state.city),urban=data.urban.cities.find((x:any)=>x.id===state.urban);
@@ -373,7 +373,7 @@ async function init(root:HTMLElement){
   if(nationalOnlyFarm(t))html+=`<div class="west-production-map-choice"><p>${productionCountryMap?'地図は国別生産量の比較です。国内の生産地は示しません。':'地図には出典のある小麦・大麦・羊・山羊・牛の分布を残しています。この品目の細地域分布は未収録です。'}</p><button type="button" data-west-production-map aria-pressed="${productionCountryMap}">${productionCountryMap?'既存5品目の分布へ戻る':'国別生産量の地図を表示'}</button></div>`;
   if(t.id in westIndustryRoles){
    const site=westIndustrySites.find(s=>s.id===industrySite);
-   if(site)html+=`<section class="west-industry-site-reading"><h3>${esc(site.name)} · ${esc((westIndustryKind as any)[site.kind])}</h3><p>${esc(site.description)}</p><p><a href="${esc((westReadingSources as any)[site.source].url)}">立地・活動の根拠</a></p></section>`;
+   if(site)html+=`<section class="west-industry-site-reading"><h3>${esc(site.name)} · ${esc((westIndustryKind as any)[westIndustryRole(site)])}</h3><p>${esc(site.description)}</p><p><a href="${esc((westReadingSources as any)[site.source].url)}">立地・活動の根拠</a></p></section>`;
    html+='<p class="west-stat-note">記号は油田海域・産業集積・港・通過点の概略位置です。施設の敷地や貨物の実際の流れ・量は表しません。</p>';
    html+='<details><summary>主要産業の候補と採用理由</summary><p>採用：サウジアラビアの採掘・精製・石油化学、UAEの沖合採掘・精製・港湾物流、トルコの自動車製造。原料、加工、物流、市場への接続という異なる地理的役割を、公的機関と事業者の資料で場所とともに説明できます。</p><p>次点：トルコの機械・繊維産業、各国の観光・金融、建設、再生可能エネルギー。これらも重要ですが、今回は地域全体の資源から製造・港湾までの接続を読める役割を優先しました。統計年の不一致だけを除外理由にはしていません。</p></details>';
   }
@@ -642,7 +642,7 @@ async function init(root:HTMLElement){
   ].map(([name,coordinate]:any)=>{const p=project(coordinate),width=[...name].length*12+8;return `<g class="west-basin-place" data-marker data-x="${p[0]}" data-y="${p[1]}"><title>${esc(name)}付近・概略位置</title><line x1="0" y1="0" x2="0" y2="0"/><circle r="3"/><g data-marker-label data-width="${width}" data-height="20"><text x="2" y="15">${esc(name)}</text></g></g>`;}).join('');
   if(t.id in westIndustryRoles){
    const sites=westIndustrySites.filter(s=>{const roles=westIndustryRoles[t.id as keyof typeof westIndustryRoles];return !roles||(roles.includes(s.kind)&&(!['industry-refining','industry-petrochemical'].includes(t.id)||s.activity===t.id.replace('industry-','')));});
-   html+=sites.map(s=>{const p=project(s.coordinates),selected=industrySite===s.id,label=selected||['eastern-oil','upper-zakum','jubail','jebel-ali','bursa','hormuz','suez'].includes(s.id),width=Math.max(70,[...s.name].length*13+12);return `<g class="west-industry-marker ${selected?'is-selected':''} ${state.country&&s.country!==state.country?'is-context':''}" data-marker data-x="${p[0]}" data-y="${p[1]}" data-industry-site="${s.id}" data-kind="${s.kind}" role="button" tabindex="0" aria-label="${esc(s.name)}を選択" aria-pressed="${selected}"><title>${esc(s.name)} · ${esc((westIndustryKind as any)[s.kind])}</title><line x1="0" y1="0" x2="0" y2="0"/><circle r="5"/>${label?`<g data-marker-label data-width="${width}" data-height="20"><text x="2" y="15">${esc(s.name)}</text></g>`:''}</g>`;}).join('');
+   html+=sites.map(s=>{const p=project(s.coordinates),selected=industrySite===s.id,label=selected||['eastern-oil','upper-zakum','jubail','jebel-ali','bursa','hormuz','suez'].includes(s.id),width=Math.max(70,[...s.name].length*13+12),role=westIndustryRole(s),symbol=role==='refining'?'<rect x="-5" y="-5" width="10" height="10"/>':role==='petrochemical'?'<path class="west-industry-symbol" d="M0 -6 L6 0 L0 6 L-6 0 Z"/>':'<circle r="5"/>';return `<g class="west-industry-marker ${selected?'is-selected':''} ${state.country&&s.country!==state.country?'is-context':''}" data-marker data-x="${p[0]}" data-y="${p[1]}" data-industry-site="${s.id}" data-kind="${s.kind}" data-industry-role="${role}" role="button" tabindex="0" aria-label="${esc(s.name)}を選択" aria-pressed="${selected}"><title>${esc(s.name)} · ${esc((westIndustryKind as any)[role])}</title><line x1="0" y1="0" x2="0" y2="0"/>${symbol}${label?`<g data-marker-label data-width="${width}" data-height="20"><text x="2" y="15">${esc(s.name)}</text></g>`:''}</g>`;}).join('');
   }
   if(t.id==='climate'){
    const grid=await getGrid(l);if(version!==renderVersion)return;
