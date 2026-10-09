@@ -19,7 +19,7 @@ jobs:
     timeout-minutes: 10
     env:
       ASTRO_TELEMETRY_DISABLED: '1'
-      REVIEW_APPLICATION_HEAD: '7b0771def8b14b33dbc4033ca242220eecd9d628'
+      REVIEW_APPLICATION_HEAD: 'bf62a20'
     steps:
       - uses: actions/checkout@v7
         with:
