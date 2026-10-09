@@ -69,7 +69,7 @@ export function createAsiaWater(root:HTMLElement,config:Config,getState:()=>Asia
   else{swatch('#a9d2da','主要な地下水盆地');swatch('#176c94','河川');$('[data-hydrology-legend-note]').textContent='主要な地下水盆地の広がりを示します。白地にも局地的な帯水層は存在し得ます。色は地下水の量や安全に取水できる量を表しません。';}
   if(t==='precipitation'&&config.regionId==='east-asia'&&config.contourBands){
    content.replaceChildren();const scale=el('div');scale.className='east-rain-scale';scale.setAttribute('role','img');scale.setAttribute('aria-label','年間降水量。0から6000mmまで250mm刻みの青の段階色。');scale.style.background='linear-gradient(to right,'+config.contourBands.colors.flatMap((color,i)=>[`${color} ${i/config.contourBands!.colors.length*100}%`,`${color} ${(i+1)/config.contourBands!.colors.length*100}%`]).join(',')+')';content.append(scale);const ticks=el('div');ticks.className='east-rain-ticks';for(const n of [0,1000,2000,3000,4000,5000,6000])ticks.append(el('span',n.toLocaleString('ja-JP')));content.append(ticks);
-   $('[data-hydrology-legend-note]').textContent='mm/年 · 線と段階色は250mm刻み。数字と引出線の先端は同じ等雨量線を示します。1981–2010年の推計平年値で、東京の雨温図（1991–2020年）とは期間が異なります。地点選択値は平滑化前の格子値です。';
+   $('[data-hydrology-legend-note]').textContent='mm/年 · 線と段階色は250mm刻み。数字と引出線の先端は同じ等雨量線を示します。1981–2010年の推計平年値で、東京の雨温図（1991–2020年）とは期間が異なります。地点選択値は平滑化前の原格子値です。';
   }
  }
  function method(t:WaterTopic){

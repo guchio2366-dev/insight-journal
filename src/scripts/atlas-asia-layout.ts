@@ -51,7 +51,7 @@ export function createAsiaLayout(root:HTMLElement){
   controls.push({node,owner,wrapper});
  }
  function placeCityPicker(){
-  const destination=notebook.matches&&root.dataset.climateActive==='true'&&root.dataset.cityClimateActive!=='true'&&!query('.asia-focus-navigation')&&readingDock?readingDock:toolbar;
+  const destination=root.dataset.region!=='east-asia'&&notebook.matches&&root.dataset.climateActive==='true'&&root.dataset.cityClimateActive!=='true'&&!query('.asia-focus-navigation')&&readingDock?readingDock:toolbar;
   if(cityControl&&destination&&cityControl.parentElement!==destination)destination.append(cityControl);
  }
  notebook.addEventListener('change',placeCityPicker);
