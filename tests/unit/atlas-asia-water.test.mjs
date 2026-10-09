@@ -81,6 +81,6 @@ test('主な川の流域リンクは既存資料の出口と実際の河川を�
  const physical=JSON.parse(fs.readFileSync('public/assets/atlas/asia-physical-v1/manifest.json','utf8'));
  for(const [region,focus] of Object.entries(asiaWaterFocus)){
   const data=JSON.parse(z.gunzipSync(fs.readFileSync(`public/assets/atlas/asia-water-v1/${region}.basins.json.gz`)));
-  for(const item of focus){const basin=data.records.find(r=>r.id===item.id),river=physical.regions[region].waterFeatures.find(f=>f.id===item.river);assert.ok(basin&&!basin.coastal);assert.ok(river);assert.ok(basin.rivers.includes(river.name));}
+  for(const item of focus){const basin=data.records.find(r=>r.id===item.id),river=physical.regions[region].waterFeatures.find(f=>f.id===item.river);assert.ok(basin&&!basin.coastal);assert.ok(river);assert.ok(basin.rivers.includes(item.sourceRiverName??river.name));}
  }
 });
