@@ -10,6 +10,7 @@ import {fileURLToPath} from 'node:url';
 import {chromium} from 'playwright';
 import astroConfig from '../astro.config.mjs';
 import {eastClusters,eastIndustries} from '../src/data/atlas/east-asia-industry-clusters.ts';
+import {eastAsiaReligionCountries,eastAsiaReligionColors,eastAsiaChinaReligionMeasures} from '../src/data/atlas/east-asia-religion.ts';
 const repo=fileURLToPath(new URL('../',import.meta.url));
 const output=path.join(repo,'review-artifacts','east-asia-approved');
 const basePath=`/${String(astroConfig.base??'').replace(/^\/+|\/+$/g,'')}`.replace(/^\/$/,'');
@@ -134,8 +135,28 @@ try{
    }return evidence;
   }
   async function stations(page){return page.locator('[data-station]:visible').evaluateAll(nodes=>nodes.map(n=>({id:n.dataset.station,x:n.style.left,y:n.style.top})).sort((a,b)=>a.id.localeCompare(b.id)));}
+  async function religionCards(page){
+   const rows=await page.locator('.asia-religion-marker:visible').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect(),bar=n.querySelector('.asia-religion-map-bar'),b=bar?.getBoundingClientRect();return {country:n.dataset.country??'CHN',text:n.textContent,box:{left:r.left,right:r.right,top:r.top,bottom:r.bottom},bar:b?{width:b.width,height:b.height,aria:bar.getAttribute('aria-label'),shares:[...bar.children].map(p=>({value:Number(p.style.flexGrow),color:p.style.backgroundColor}))}:null};}));
+   const frame=(await geometry(page)).map;assert.equal(rows.length,5);assert.deepEqual(rows.filter(r=>r.bar).map(r=>r.country).sort(),eastAsiaReligionCountries.map(c=>c.code).sort());
+   for(const row of rows){assert(row.box.left>=frame.left&&row.box.right<=frame.right&&row.box.top>=frame.top&&row.box.bottom<=frame.bottom,'religion cards fit the shared PC map frame: '+JSON.stringify(row));for(const other of rows.filter(r=>r.country!==row.country))assert(!(row.box.left<other.box.right&&row.box.right>other.box.left&&row.box.top<other.box.bottom&&row.box.bottom>other.box.top),'religion cards do not overlap: '+row.country+'/'+other.country);if(!row.bar)continue;
+    const country=eastAsiaReligionCountries.find(c=>c.code===row.country),nonzero=country.shares.filter(s=>s[2]>0);assert(row.bar.width>100&&row.bar.height>=8);assert.deepEqual(row.bar.shares.map(s=>s.value),nonzero.map(s=>s[2]));assert.match(row.text,new RegExp(String(country.year)));assert.match(row.text,new RegExp(country.headline));
+    for(const [index,[id,label,value]] of nonzero.entries()){assert(row.bar.aria.includes(label+value+'％'));const color=eastAsiaReligionColors[id],rgb='rgb('+[1,3,5].map(p=>parseInt(color.slice(p,p+2),16)).join(', ')+')';assert.equal(row.bar.shares[index].color,rgb);}
+   }
+   const china=rows.find(r=>r.country==='CHN');assert.equal(china.bar,null);assert.match(china.text,/別設問.*宗教帰属 10％.*33％/s);return rows;
+  }
   async function sameStations(page,before,message){const after=await stations(page);assert.deepEqual(after.map(x=>x.id),before.map(x=>x.id),message);for(const row of after){const old=before.find(x=>x.id===row.id);assert(Math.abs(parseFloat(row.x)-parseFloat(old.x))<=.5&&Math.abs(parseFloat(row.y)-parseFloat(old.y))<=.5,message+': '+JSON.stringify({id:row.id,before:old,after:row}));}}
   async function run(name,action){const record={profile:profile.name,name,passed:false,errors:[],failedRequests:[]};results.cases.push(record);const page=await context.newPage();page.setDefaultTimeout(20000);page.on('pageerror',e=>record.errors.push(e.message));page.on('response',r=>{if(r.status()>=400)record.failedRequests.push({url:new URL(r.url()).pathname,status:r.status()});});try{record.evidence=await action(page);assert.deepEqual(record.errors,[]);assert.deepEqual(record.failedRequests,[]);record.passed=true;}catch(e){record.failure=e.stack??String(e);record.url=page.url();record.geometry=await geometry(page).catch(()=>null);console.log(JSON.stringify(record));await shot(page,name+'-failure').catch(()=>{});}finally{await page.close();await save();}console.log(`${record.passed?'PASS':'FAIL'} ${profile.name} ${name}${record.failure?': '+record.failure.split('\n')[0]:''}`);}
+  await run('religion',async page=>{
+   await open(page,'population');await page.locator('[data-population-group="religion"]').click();await ready(page);const initial=await layout(page),cards=await religionCards(page),reading=page.locator('[data-settlement-reading="religion"]');assert(await reading.isVisible());
+   const text=await reading.innerText();assert.match(text,/2023年.*18歳以上/s);assert.match(text,/15歳以上.*59.4％.*40.6％.*分母.*換算/s);assert.match(text,/28\/31省級地域.*新疆・チベット・海南/s);
+   for(const m of eastAsiaChinaReligionMeasures)assert(text.includes(m.question)&&text.includes(m.value+'％'));assert.match(text,/帰属と信仰・実践を同じ宗教構成へ足しません/);assert.match(await page.locator('[data-grid-reading]').innerText(),/宗教回答の構成/);
+   await shot(page,'religion-initial');const mapBox=(await geometry(page)).map;await shot(page,'religion-initial-map',false,{x:mapBox.left,y:mapBox.top,width:mapBox.width,height:mapBox.height});
+   const camera=JSON.parse(await page.locator('[data-asia-atlas]').getAttribute('data-map-camera'));
+   await page.locator('.asia-settlement-cases summary').click();await page.locator('[data-settlement-topic="religion"][data-settlement-choice="religion-0"]').click();await ready(page);const detail=page.locator('[data-settlement-detail="religion-0"]');assert(await detail.isVisible());assert.match(await detail.innerText(),/GeoEPR.*全住民.*割合/s);assert.deepEqual(JSON.parse(await page.locator('[data-asia-atlas]').getAttribute('data-map-camera')),camera);assert.equal(await page.locator('.asia-religion-marker:visible').count(),0);await detail.scrollIntoViewIfNeeded();await shot(page,'religion-selected');
+   await page.reload();await ready(page);assert(await detail.isVisible());await page.locator('[data-settlement-reading="religion"] [data-settlement-clear]:visible').click();await ready(page);await religionCards(page);
+   await page.locator('[data-field="industry"]').first().click();await ready(page);await industryLegend(page,eastIndustries);await industryLabels(page);assert.equal(await page.locator('.asia-religion-marker:visible').count(),0);
+   await page.locator('[data-field="population"]').first().click();await ready(page);await page.locator('[data-population-group="religion"]').click();await ready(page);await religionCards(page);return {initial,cards,selectedCamera:camera,sourceData:'four independent published composition rows; China questions remain independent'};
+  });
   await run('climate',async page=>{
    await open(page,'nature');const initial=await layout(page),before=await stations(page);assert(before.length>0);await shot(page,'climate-initial');
    await page.locator('[data-station="tokyo"]').click();await ready(page);const selected=page.locator('[data-city-panel="tokyo"]');assert.equal(await selected.isVisible(),true);assert.match(await selected.locator('h2').textContent(),/東京の雨温図/);assert.match(await selected.locator('[data-city-class-description]').textContent(),/0℃超.*22℃以上.*40mm未満/);const text=await selected.textContent();assert.match(text,/秋雨前線.*台風/);assert.match(text,/西高東低.*山地/);assert.match(text,/関東平野/);assert.doesNotMatch(text,/長江|黄河|二期作/);await sameStations(page,before,'Tokyo must preserve all geographic station positions');await shot(page,'climate-tokyo');
