@@ -299,6 +299,14 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
   assert.deepEqual(industry.countries.map(c=>c.code).sort(),[...countries].sort());
   assert(industry.industrySites.every(site=>expected.has(site.country)));
   assert.match(await page.locator('[data-industry-lead]').textContent(),region==='central-asia'?/カザフスタン.*ウズベキスタン/s:/バングラデシュ.*インド/s);
+  const industryKey=page.locator('[data-reading-map-legend]');
+  await page.waitForFunction(()=>document.querySelector('[data-reading-map-legend]')?.textContent.includes('業種別の案内地点'));
+  assert.doesNotMatch(await industryKey.textContent(),/0未満|0以上0未満/);
+  assert.match(await page.locator('[data-industry-legend-note]').textContent(),/色は産業の種類.*生産規模/);
+  const expectedColors=industry.industryGroups.map(group=>group.color);
+  const actualColors=await industryKey.locator('.asia-comparison-compact-key i').evaluateAll(nodes=>nodes.map(node=>node.style.backgroundColor));
+  const cssColors=await page.evaluate(colors=>colors.map(color=>{const item=document.createElement('i');item.style.backgroundColor=color;return item.style.backgroundColor;}),expectedColors);
+  assert.deepEqual(actualColors,cssColors,'The map-side industry legend must use the same group colors as its points');
   await screenshot(`${region}-review-industry`);
 
   await open(`${region}/population/`);
@@ -311,10 +319,20 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
   const markerCount=region==='central-asia'?1:5;
   await page.waitForFunction(count=>document.querySelectorAll('.sc-religion-marker').length===count,markerCount);
   assert.deepEqual(await page.locator('[data-sc-religion-select]').evaluateAll(nodes=>nodes.map(n=>n.dataset.scReligionSelect)),region==='central-asia'?['KAZ']:['IND','PAK','BGD','NPL','LKA']);
+  assert.match(await page.locator('[data-reading-dock-summary]').textContent(),region==='central-asia'?/カザフスタン.*イスラム教.*キリスト教/s:/インド.*ヒンドゥー教.*パキスタン.*イスラム教/s);
+  const censusKey=page.locator('[data-reading-map-legend]');
+  await page.waitForFunction(()=>document.querySelector('[data-reading-map-legend]')?.textContent.includes('全国の構成比'));
+  assert.match(await censusKey.textContent(),region==='central-asia'?/2021年/:/2011–2024年/);
+  assert.doesNotMatch(await censusKey.textContent(),/2020年の資料|掲載集団の居住域|イスラム教など|重なり/);
+  assert.match(await page.locator('[data-grid-reading]').textContent(),/全国の宗教構成/);
   await screenshot(`${region}-review-religion`);
   await page.locator(`[data-sc-religion-select="${census}"]`).click();
   assert.equal(new URL(page.url()).searchParams.get('place'),census);
   await page.locator(`[data-sc-religion-country="${census}"]`).waitFor({state:'visible'});
+  await page.waitForFunction(year=>document.querySelector('[data-reading-map-legend]')?.textContent.includes(`${year}年国勢調査`),region==='central-asia'?'2021':'2011');
+  const articleColors=await page.locator(`[data-sc-religion-country="${census}"] .sc-religion-segments i`).evaluateAll(nodes=>nodes.map(node=>node.style.backgroundColor));
+  const keyColors=await censusKey.locator('.asia-comparison-compact-key i').evaluateAll(nodes=>nodes.map(node=>node.style.backgroundColor));
+  assert.deepEqual(keyColors,articleColors,'The selected census key must match every segment color in the right-side table');
   await screenshot(`${region}-review-religion-selected`);
   await page.goBack();
   await page.waitForFunction(()=>new URL(location.href).searchParams.get('place')===null);

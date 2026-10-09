@@ -290,6 +290,7 @@ function start(root:HTMLElement) {
   }
   function renderGridReading() {
     if(state.field==='industry'||hydrology?.active()||seasonal?.active()||social?.active())return;
+    if(state.field==='population'&&state.topic==='religion'&&config.regionId==='south-central-asia'&&!state.detail){$('[data-grid-reading]').textContent='各国の円は公表年が異なる全国の宗教構成です。色は各国の公表区分を示し、円の地点の信者割合や2020年の居住域ではありません。';return;}
     if(state.field==='population'&&['ethnicity','religion'].includes(state.topic??'')){$('[data-grid-reading]').textContent='面は掲載した集団の居住域の概略です。灰色は居住域の重なり、色のない地域は未分類です。';return;}
     if(farmingTopic()==='overview'){$('[data-grid-reading]').textContent='作物と家畜の特徴的な分布を同時に表示しています。品目名を選ぶと詳しい分布を読めます。';return;}
     const farm=farmingLayer();

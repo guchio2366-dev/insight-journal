@@ -14,11 +14,13 @@ import type {AsiaFarmingRegion} from '../data/atlas/asia-farming';
 import type {AsiaPresentation} from './atlas-asia-presentation';
 import {contourBandFiles,contourBandLabels} from '../data/atlas/asia-contour-bands';
 import {southCentralRainfallLegend} from '../data/atlas/asia-south-central-rainfall-legend';
+import {southCentralReligionCensuses} from '../data/atlas/asia-south-central-religion';
+import {southCentralIndustryGroups,southCentralIndustrySites} from '../data/atlas/asia-south-central-industry';
 
 type Key={label:string;color:string;shortLabel?:string};
 type Raster={url:string;coordinates:number[][]};
 type Reading={title:string;period:string;unit:string;keys:Key[];note:string;compactNote?:string;subject?:string;raster?:Raster;geometry?:any;geometryFile?:string;geometryFiles?:string[];preserveVertices?:boolean;points?:boolean;boundaryOnly?:boolean;farmContext?:boolean};
-type Config={regionId:'east-asia'|'southeast-asia'|'south-central-asia';label:string;countries:{code:string;name:string}[];cities:{id:string;name:string}[];classes:{id:number;code:string;name:string;color:string}[];climate:any;climateBase:string;agricultureBase:string;geographyUrl:string;physical?:any;physicalBase?:string;physicalFocus?:{id:string;name:string}[];population?:AsiaPopulationRegion;populationBase?:string;farming?:AsiaFarmingRegion;farmingBase?:string;water?:WaterRegion;waterBase?:string;seasonalBase?:string;industry?:IndustryRegion;industryBase?:string;social?:SocialRegion;socialBase?:string;trade?:TradeRegion;tradeBase?:string;tradeChapters?:Record<string,string>;presentation?:AsiaPresentation;presentationBase?:string;farmInsight?:{rivers:string[]}};
+type Config={regionId:'east-asia'|'southeast-asia'|'south-central-asia';label:string;countries:{code:string;name:string}[];cities:{id:string;name:string}[];classes:{id:number;code:string;name:string;color:string}[];climate:any;climateBase:string;agricultureBase:string;geographyUrl:string;physical?:any;physicalBase?:string;physicalFocus?:{id:string;name:string}[];population?:AsiaPopulationRegion;populationBase?:string;farming?:AsiaFarmingRegion;farmingBase?:string;water?:WaterRegion;waterBase?:string;seasonalBase?:string;industry?:IndustryRegion;industryBase?:string;industryGroups?:typeof southCentralIndustryGroups;industrySites?:typeof southCentralIndustrySites;social?:SocialRegion;socialBase?:string;trade?:TradeRegion;tradeBase?:string;tradeChapters?:Record<string,string>;presentation?:AsiaPresentation;presentationBase?:string;farmInsight?:{rivers:string[]}};
 const fieldNames:Record<AsiaField,string>={natural:'自然環境',agriculture:'農林畜産業',industry:'主要産業',population:'人口・社会'};
 const asset=(base:string,file:string)=>base+file.split('/').at(-1);
 const fmt=(n:number)=>n.toLocaleString('ja-JP',{maximumFractionDigits:2});
@@ -42,7 +44,7 @@ function comparisonMeaning(state:AsiaState,config:Config):{label:string;note:str
   }
   if(state.field==='population'){
     if(topic==='ethnicity')return {label:'民族の居住域',note:'居住域は概略で、密度や個人の民族を示しません。'};
-    if(topic==='religion')return {label:'宗教と結びついた居住域',note:'居住域は概略で、密度や個人の信仰を示しません。'};
+    if(topic==='religion')return config.regionId==='south-central-asia'&&!state.detail?{label:'国勢調査による全国の宗教構成',note:'円の色は各国が公表した宗教区分で、地点ごとの信者割合ではありません。'}:{label:'宗教と結びついた居住域',note:'居住域は概略で、密度や個人の信仰を示しません。'};
     const social=config.social&&socialTopic(config.social,state);
     if(social){const group=config.social?.groups?.find(g=>g.id===social.group),category=group?.id==='jp-nationality'?'外国人住民の国籍':group?.label.split('：').at(-1)?.replace(/の?構成$/,'');return {label:social.key==='overview'&&category?`${category}の最多区分`:social.title,note:social.key==='overview'?'色は区域内の最多区分で、人数や密度ではありません。':'資料の割合・分母を人数や人口密度と区別します。'};}
     return topic==='urban'?{label:'都市範囲と人口密度',note:'都市範囲は行政区域・通勤圏と異なります。'}:{label:'人口密度',note:'密度から民族・信仰・勤務先は分かりません。'};
@@ -52,6 +54,7 @@ function comparisonMeaning(state:AsiaState,config:Config):{label:string;note:str
   if(!industry)return {label:'産業統計',note:'指標の単位と対象区域を確認します。'};
   const label=industry.title;
   if(industry.kind==='power')return {label,note:'MWは設備容量で、発電量ではありません。'};
+  if(industry.kind==='regional')return {label,note:'点の色は業種を示します。点の数や大きさは生産規模を示しません。'};
   if(industry.id==='cn-steel')return {label,note:'生産能力は実際の生産量・出荷額ではありません。'};
   if(industry.kind==='admin')return {label,note:industry.id.startsWith('jp-')?'県の製造品出荷額は付加価値や工場の位置と異なります。':'州の付加価値は都市や工場ごとの値ではありません。'};
   if(['manufacturing','industry','services','resource-rents'].includes(industry.id))return {label,note:industry.id==='resource-rents'?'生産費を差し引いたGDP比で、資源の売上額ではありません。':'GDP比は工場の集積や生産額の規模を示しません。'};
@@ -97,7 +100,7 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
     if(s.field==='natural')return asiaNaturalTopics.find(t=>t.id===(s.topic??'climate'))?.label??fieldNames[s.field];
     if(s.field==='agriculture')return s.topic==='overview'||!s.topic&&!s.city?'農畜産物の分布':config.farming?.layers.find(t=>t.id===(s.topic??'rice'))?.title??'米の収穫面積';
     if(s.field==='industry')return isTradeTopic(s.topic)?s.topic==='trade-imports'?'商品輸入額':'商品輸出額':config.industry?.topics.find(t=>t.id===s.topic)?.title??fieldNames[s.field];
-    return config.social?.topics.find(t=>t.id===s.topic)?.title??(s.topic==='ethnicity'?'民族の居住域':s.topic==='religion'?'宗教と結びついた居住域':s.topic==='urban'?'都市の広がりと人口':'人口の分布');
+    return config.social?.topics.find(t=>t.id===s.topic)?.title??(s.topic==='ethnicity'?'民族の居住域':s.topic==='religion'&&config.regionId==='south-central-asia'&&!s.detail?'国勢調査による宗教構成':s.topic==='religion'?'宗教と結びついた居住域':s.topic==='urban'?'都市の広がりと人口':'人口の分布');
   }
   function subject(s:AsiaState){
     const story=asiaPlaceReadings.find(r=>r.region===config.regionId&&r.id===s.story);
@@ -141,6 +144,18 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
       if(config.physical){const data=await json(asset(config.physicalBase!,config.physical.water));return {...base,period:'Natural Earth v5.1.2',unit:'河川の流路・湖の概略範囲',keys:[{label:'河川・湖',color:'#176c94'}],note:'現在の水量や湖面の広がりを示しません。線の太さは河川幅ではありません。',geometry:{...data,features:data.features.map((f:any)=>({...f,properties:{...f.properties,color:'#176c94'}}))}};}
     }
     if(s.field==='population'){
+      if(config.regionId==='south-central-asia'&&s.topic==='religion'&&!s.detail){
+        const censuses=southCentralReligionCensuses.filter(c=>config.countries.some(country=>country.code===c.code));
+        const selected=censuses.find(c=>c.code===s.place);
+        const byColor=new Map<string,Set<string>>();
+        for(const census of selected?[selected]:censuses)for(const segment of census.segments){
+          if(!byColor.has(segment.color))byColor.set(segment.color,new Set());
+          byColor.get(segment.color)!.add(segment.name);
+        }
+        const keys=[...byColor].map(([color,names])=>({color,label:[...names].join('／')}));
+        const years=[...new Set(censuses.map(c=>Number(c.year)))].sort((a,b)=>a-b);
+        return {...base,title:selected?`${selected.name}の宗教構成`:'国勢調査で読む宗教構成',period:selected?`${selected.year}年国勢調査`:`各国の国勢調査（${years[0]}–${years.at(-1)}年）`,unit:'全国の構成比（%）',keys,note:'円の色は各国が公表した全国の宗教区分です。同じ色の「その他」等も国ごとに定義が異なり、合算できません。円の位置は国の案内地点で、各地点の信者割合ではありません。'};
+      }
       const settlement=config.presentation?.settlements?.[s.topic??''];
       if(settlement){const data=await json(config.presentationBase!.replace('asia-presentation-v1/','asia-settlements-v1/')+settlement.file);return {...base,period:'2020年の資料',unit:'掲載集団の居住域の概略',keys:settlement.categories.map(c=>({color:c.color,label:c.label})),note:'居住域は概略です。色なしは未分類で、個人の民族・宗教を推定できません。',geometry:data};}
       const topic=config.social&&socialTopic(config.social,s),group=config.social&&socialGroup(config.social,s);
@@ -152,7 +167,14 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
     }
     if(s.field==='industry'&&config.industry){
       if(config.trade&&isTradeTopic(s.topic)){const data=await json(config.tradeBase!+config.trade.file) as TradeData,values=config.trade.countries.map(code=>({code,value:tradeValue(data.countries[code],tradeChapter(s),tradeFlow(s))})),scale=tradeScale(values.map(v=>v.value));return {...base,period:'2023年',unit:'百万米ドル',keys:[...bins(tradeColors,scale.breaks.map(v=>v/1e6)),missing],note:'国・区分全体の商品貿易額です。生産地や個別の港の取扱量ではありません。',geometry:await countryGeometry(Object.fromEntries(values.map(v=>[v.code,scale.color(v.value)])))};}
-      const [data,national]=await Promise.all([json(config.industryBase!+config.industry.data),json(config.industryBase!+'national.json.gz')]) as [IndustryData,IndustryNational],t=industryTopic(config.industry,s),values=industryValues(t,data,national,config.industry.countries),scale=industryScale(t,values);
+      const t=industryTopic(config.industry,s);
+      if(t.kind==='regional'){
+        const groups=(config.industryGroups??southCentralIndustryGroups).filter(group=>t.id==='sc-overview'||group.id===t.id);
+        const colors=Object.fromEntries(groups.map(group=>[group.id,group.color]));
+        const sites=(config.industrySites??southCentralIndustrySites).filter(site=>site.group in colors&&(!s.place||site.country===s.place)&&config.countries.some(country=>country.code===site.country));
+        return {...base,title:t.title,period:'出典で確認した地域事例',unit:'業種別の案内地点',keys:groups.map(group=>({color:group.color,label:group.title})),note:'色は業種です。点は代表的な地域の案内位置で、施設の敷地・生産額・雇用者数・施設総数を示しません。',points:true,geometry:{type:'FeatureCollection',features:sites.map(site=>({type:'Feature',properties:{color:colors[site.group]},geometry:{type:'Point',coordinates:site.point}}))}};
+      }
+      const [data,national]=await Promise.all([json(config.industryBase!+config.industry.data),json(config.industryBase!+'national.json.gz')]) as [IndustryData,IndustryNational],values=industryValues(t,data,national,config.industry.countries),scale=industryScale(t,values);
       Object.assign(base,{subject:(t.kind==='power'?data.power:data.admin).find(r=>r.id===s.detail)?.name});
       if(t.kind==='power')return {...base,period:t.year,unit:'設備容量 MW',keys:Object.entries(industryFuelColors).filter(([fuel])=>t.fuel==='all'||fuel===t.fuel).map(([fuel,color])=>({color,label:industryFuelNames[fuel]})),compactNote:'100MW＝3px / 1,000MW＝9px / 4,000MW以上＝18px',note:'点は資料にある発電施設の位置です。点の半径は設備容量の平方根に比例し、見やすさのため3–18pxに制限しています（100MWで3px、1,000MWで9px、4,000MW以上で18px）。点の重なりと上下限があるため、色の面積から合計容量は読み取れません。稼働状況や現在の発電量を示す値ではありません。',points:true,geometry:{type:'FeatureCollection',features:data.power.filter(p=>(t.fuel==='all'||p.fuel===t.fuel)&&(!s.place||s.place===p.country)).map(p=>({type:'Feature',properties:{color:industryFuelColors[p.fuel],capacity:p.capacity??0},geometry:{type:'Point',coordinates:p.point}}))}};
       const colors=Object.fromEntries(values.map(v=>[v.id,scale.color(v.value)]));return {...base,title:t.title,period:t.year,unit:t.unit,keys:[...bins(scale.colors,scale.breaks),{label:industryMissingLabel(t),color:'#d2ceca'}],note:t.note,geometry:t.kind==='admin'?{...data.geometry,features:data.geometry.features.filter((f:any)=>f.properties.country===t.country).map((f:any)=>({...f,properties:{...f.properties,color:colors[f.properties.id]??'#d2ceca'}}))}:await countryGeometry(colors)};
@@ -199,7 +221,7 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
     if(next===key)return;key=next;reading=null;hide();showFilled=false;const seq=++revision;
     if(legend)legend.textContent='元の分布と両方の凡例を読み込んでいます。';
     if(compact)compact.textContent='元と比較先の凡例を読み込んでいます。';
-    void Promise.all([describe(from),describe(state)]).then(([original,current])=>{if(seq!==revision||key!==next)return;reading=original;renderCompact(original,current);if(back&&original.subject&&!from.story)back.textContent=`${original.subject}の${topicName(from)}へ戻る`;if(legend){legend.replaceChildren();const toggle=document.createElement('button');toggle.type='button';toggle.dataset.comparisonOriginal='';toggle.textContent='元の色面を確認';toggle.setAttribute('aria-pressed','false');toggle.addEventListener('click',()=>{showFilled=!showFilled;toggle.setAttribute('aria-pressed',String(showFilled));toggle.textContent=showFilled?'比較の地図へ戻す':'元の色面を確認';if(map)void show(map);});legend.append(toggle);const detail=document.createElement('details'),label=document.createElement('summary');detail.open=true;label.textContent='元分布と比較先の全凡例';detail.append(label);detail.append(storyLead(comparisonStory(from,getState(),config)));detail.append(Object.assign(document.createElement('p'),{textContent:'比較中の色付き輪郭は元の分布の色区分を示します。「元の色面を確認」で元の分布を同じ位置に表示します。比較先の数値は比較先の指標です。'}));appendKeys(detail,original);appendKeys(detail,current);legend.append(detail);}if(map)void show(map);}).catch(()=>{if(seq===revision){if(legend)legend.textContent='元分布・凡例を取得できませんでした。対象名付きの戻るボタンで元の解説を確認できます。';if(compact)compact.textContent='比較凡例を取得できませんでした。';}});
+    void Promise.all([describe(from),describe(state)]).then(([original,current])=>{if(seq!==revision||key!==next)return;reading=original;renderCompact(original,current);if(back&&original.subject&&!from.story)back.textContent=`${original.subject}の${topicName(from)}へ戻る`;if(legend){legend.replaceChildren();const hasOriginal=Boolean(original.raster||original.geometry||original.geometryFile||original.geometryFiles);if(hasOriginal){const toggle=document.createElement('button');toggle.type='button';toggle.dataset.comparisonOriginal='';toggle.textContent='元の色面を確認';toggle.setAttribute('aria-pressed','false');toggle.addEventListener('click',()=>{showFilled=!showFilled;toggle.setAttribute('aria-pressed',String(showFilled));toggle.textContent=showFilled?'比較の地図へ戻す':'元の色面を確認';if(map)void show(map);});legend.append(toggle);}const detail=document.createElement('details'),label=document.createElement('summary');detail.open=true;label.textContent='元分布と比較先の全凡例';detail.append(label);detail.append(storyLead(comparisonStory(from,getState(),config)));detail.append(Object.assign(document.createElement('p'),{textContent:hasOriginal?'比較中の色付き輪郭は元の分布の色区分を示します。「元の色面を確認」で元の分布を同じ位置に表示します。比較先の数値は比較先の指標です。':'元の国勢調査円は複数区分の全国構成なので、比較先の地図へ単色の面として重ねません。元の図へ戻ると各国の円を確認できます。'}));appendKeys(detail,original);appendKeys(detail,current);legend.append(detail);}if(map)void show(map);}).catch(()=>{if(seq===revision){if(legend)legend.textContent='元分布・凡例を取得できませんでした。対象名付きの戻るボタンで元の解説を確認できます。';if(compact)compact.textContent='比較凡例を取得できませんでした。';}});
   }
   function hide(){if(map?.getStyle())for(const id of ids)if(map.getLayer(id))map.setLayoutProperty(id,'visibility','none');}
   async function outlined(url:string):Promise<string>{
