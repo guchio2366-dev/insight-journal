@@ -202,7 +202,7 @@ function start(root:HTMLElement) {
   function selectCity(id:string) {const city=config.cities.find(c=>c.id===id);if(!city)return;navigate({...state,field:'natural',topic:null,detail:null,place:city.countryCode,city:id,camera:camera(),back:null,point:null},false);}
   function selectNaturalTopic(topic:string) {navigate({...state,field:'natural',topic:topic==='climate'?null:topic,detail:null,city:topic==='climate'?state.city:null,point:state.point??config.cities.find(c=>c.id===state.city)?.coordinates??null,camera:camera()},false);}
   function clearDetail() {navigate({...state,detail:null,point:null,city:null,camera:camera()},false);}
-  function selectUrban(id:string){if(!id){clearDetail();return;}const city=config.population?.cities.find(c=>c.id===id);if(city)navigate({...state,field:'population',topic:'urban',detail:city.id,place:city.country,city:null,point:city.coordinates,camera:camera()},false);}
+  function selectUrban(id:string){if(!id){if(config.regionId==='southeast-asia')navigate({...state,detail:null,point:null,place:null,city:null,camera:camera()},false);else clearDetail();return;}const city=config.population?.cities.find(c=>c.id===id);if(city)navigate({...state,field:'population',topic:'urban',detail:city.id,place:city.country,city:null,point:city.coordinates,camera:camera()},false);}
   function selectWater(id:string) {if(!id){clearDetail();return;}const water=config.physical?.waterFeatures.find((f:any)=>f.id===id);if(!water)return;navigate({...state,field:'natural',topic:'water',detail:id,city:null,point:null,camera:camera(),place:state.place&&water.countries.includes(state.place)?state.place:water.countries.length===1?water.countries[0]:null});}
 
   function render() {

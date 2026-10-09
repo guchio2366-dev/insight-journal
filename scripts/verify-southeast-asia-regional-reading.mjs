@@ -178,7 +178,7 @@ async function checkSoutheastAsiaRegion(page,{source,capture:takePicture,backgro
  assert.match(await page.locator('[data-population-detail]').textContent(),/港.*交通.*工業/s);
  record('population overview has Southeast Asia geography and does not infer ethnicity or religion');await capture('population-overview');
  await page.locator('[data-population-city]').selectOption('uc-5472');await page.locator('[data-population-city-facts]').waitFor({state:'visible'});
- await page.locator('[data-population-city]').selectOption('');assert.equal(new URL(page.url()).searchParams.get('detail'),null);
+ await page.locator('[data-population-city]').selectOption('');assert.equal(new URL(page.url()).searchParams.get('detail'),null);assert.equal(new URL(page.url()).searchParams.get('place'),null);
  await page.locator('.asia-field-tabs [data-field="industry"]').click();await page.locator('[data-industry-region-reading]').waitFor({state:'visible'});
  assert.equal(await page.locator('[data-southeast-industry-map]').isVisible(),true);
  record('population city selection and return, then industry tab, retain regional overview');
