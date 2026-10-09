@@ -38,7 +38,7 @@ test('産業は未選択の地域供給網から始まり、国別の比較・�
    assert.equal(new URL(w.location.href).searchParams.get('country'),code);
    assert.equal(q('[data-west-map]').getAttribute('viewBox'),frame,'country industry selection retains the full regional map');
    assert.equal(q(`[data-west-industry-scope] [data-west-country-button="${code}"]`).getAttribute('aria-pressed'),'true');
-   assert(q('[data-industry-site]'));assert([...q('[data-west-scene]').querySelectorAll('[data-industry-site]')].every(node=>node.dataset.industrySite!=='hormuz'&&node.dataset.industrySite!=='suez'));
+   assert(q('[data-industry-site]'));assert([...q('[data-west-scene]').querySelectorAll('[data-industry-site]')].some(node=>node.dataset.industrySite==='hormuz')&&[...q('[data-west-scene]').querySelectorAll('[data-industry-site]')].some(node=>node.dataset.industrySite==='suez'));
   }
   q('[data-west-industry-scope] [data-west-country-button=""]').click();
   await until(()=>q('[data-west-atlas]').dataset.ready==='true'&&!q('[data-west-country]').value);
@@ -60,7 +60,7 @@ test('対象外の旧産業URLは地域供給網へ復元し、明示した未�
  }finally{await w.happyDOM.close();}
 });
 test('地域水説明・元流域・雨温図の具体的理由を既存資料と一緒に保持する',async()=>{
- for(const [query,pattern] of [['?topic=groundwater',/再生しにくい地下水.*アル・アハサー.*エネルギー/s],['?topic=desalination',/電力.*送水.*小麦畑.*断定/s],['?topic=basins&basin=1060034260',/ナイル川.*南の上流/s],['?topic=basins&basin=2060073570',/チグリス・ユーフラテス.*シリア・イラク/s]]){
+ for(const [query,pattern] of [['?topic=groundwater',/再生しにくい地下水.*アル・アハサー.*エネルギー/s],['?topic=desalination',/電力.*送水.*小麦畑.*断定/s],['?topic=basins&basin=1060034260',/ナイル川.*地域外の南/s],['?topic=basins&basin=2060073570',/チグリス・ユーフラテス.*シリア・イラク/s]]){
   const {w,q}=await setup('nature',query);try{assert.match(q('[data-west-detail]').textContent,pattern);assert.ok(q('[data-west-regional-reading] a'));}finally{await w.happyDOM.close();}
  }
  const {w,q}=await setup('nature','?topic=climate&city=helwan&country=EGY');

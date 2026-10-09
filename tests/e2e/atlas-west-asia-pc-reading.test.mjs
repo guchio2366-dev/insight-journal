@@ -90,8 +90,8 @@ test('西アジアのPC実画面で地域説明・3か国・欠測年・選択�
    await page.waitForFunction(()=>document.querySelector('[data-west-climate-class]')?.textContent.includes('BWh'));
    await open('nature/?topic=basins');
    await page.locator('[data-west-representative-basin="1060034260"]').press('Enter');
-   await page.waitForFunction(()=>document.querySelector('[data-west-regional-reading]')?.textContent.includes('南の上流'));
-   assert((await page.locator('[data-west-regional-reading]').innerText()).includes('南の上流'));
+   await page.waitForFunction(()=>document.querySelector('[data-west-regional-reading]')?.textContent.includes('地域外の南'));
+   assert((await page.locator('[data-west-regional-reading]').innerText()).includes('地域外の南'));
    assert.equal(await page.locator('[data-west-map]').getAttribute('viewBox'),climateFrame);
    await shot('nile-basin');
    await open('nature/?topic=basins&basin=1060034260');

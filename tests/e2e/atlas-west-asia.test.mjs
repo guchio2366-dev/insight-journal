@@ -24,11 +24,11 @@ test('西アジアの全4分野は共通枠・一つの地図・20の選択肢�
    assert.ok(q('.atlas-map-column .west-legend'));assert.ok(q('.atlas-map-column .west-map-lists'));
    const expected={natural:['気候区分','水資源','地形','標高（等高線）'],agriculture:['農畜産','林業'],industry:['地域主要産業'],population:['人口分布','人種・民族','宗教']};
    const groups=field==='industry'?all('.industry-tab-row [data-west-topic-button]'):all('[role=tablist] [data-west-standard-group]');
-   if(field==='industry')assert.deepEqual(groups.map(b=>b.dataset.westTopicButton),['industry-network','oil','gas','manufacturing','industrial-total','ports','services']);else assert.deepEqual(groups.map(b=>b.dataset.westStandardGroup),expected[field]);
+   if(field==='industry')assert.deepEqual(groups.map(b=>b.dataset.westTopicButton),['industry-network','industry-extraction','industry-refining','industry-petrochemical','industry-ports','industry-automotive']);else assert.deepEqual(groups.map(b=>b.dataset.westStandardGroup),expected[field]);
    const active=groups.filter(b=>b.getAttribute('aria-selected')==='true');assert.equal(active.length,1);assert.equal(active[0].getAttribute('tabindex'),'0');
    for(const b of groups.filter(b=>b!==active[0])){assert.equal(b.getAttribute('aria-selected'),'false');assert.equal(b.getAttribute('tabindex'),'-1');}
    if(field==='agriculture')assert.ok(q('.atlas-map-column .atlas-key [data-west-topic-button]'));
-   if(field==='industry'){assert.ok(q('.industry-controls .industry-tab-row [data-west-topic-button="manufacturing"]'));assert.equal(q('.atlas-map-column [data-west-topic-button]'),null);}
+   if(field==='industry'){assert.ok(q('.industry-controls .industry-tab-row [data-west-topic-button="industry-refining"]'));assert.ok(q('.atlas-map-column .west-additional-topics [data-west-topic-button="manufacturing"]'));}
    if(field==='population')assert.ok(q('.atlas-map-column .west-additional-topics [data-west-topic-button="age-older"]'));
    if(field==='natural'){
     const waterTopics=all('[data-west-subgroup="水資源"] button');
