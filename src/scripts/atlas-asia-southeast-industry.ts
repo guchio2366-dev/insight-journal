@@ -15,6 +15,12 @@ export function createSoutheastIndustryLocations(root:HTMLElement,getState:()=>A
  const leaders=document.createElementNS('http://www.w3.org/2000/svg','svg');leaders.classList.add('southeast-industry-leaders');leaders.setAttribute('aria-hidden','true');overlay.append(leaders);
  const legend=document.createElement('div');legend.className='southeast-industry-map-legend';legend.dataset.southeastIndustryLegend='';legend.textContent='● 工場・港・都市　◆ 原料地域の代表位置 ／ 青=製造、橙=資源、緑=港、紫=サービス';overlay.append(legend);
  const family=(site:typeof southeastIndustrySites[number])=>site.kind==='rubber'||site.kind==='wood'||site.kind==='metals'||site.kind==='energy'?'resource':site.kind==='tourism'||site.kind==='finance'||site.kind==='it-bpm'?'service':site.kind==='logistics'?'network':'factory';
+ const overviewSites=new Map<SoutheastIndustryKind,string>([
+  ['electronics','bacninh'],['automotive','java-auto'],['textiles','phnom-textile'],['food','kiengiang-food'],
+  ['metals','sulawesi-nickel'],['energy','kalimantan-coal'],['petrochemicals','maptaphut-petro'],
+  ['logistics','port-klang'],['tourism','bali-tourism'],['finance','singapore-finance'],
+  ['it-bpm','manila-itbpm'],['rubber','southern-rubber'],['wood','north-central-timber'],
+ ]);
  for(const site of southeastIndustrySites){
   const button=document.createElement('button');button.type='button';button.className=`southeast-industry-map-point ${family(site)} ${site.stage}`;button.setAttribute('aria-label',site.industryName+'・'+site.placeName+'：'+(site.stage==='raw'?'原料地域の代表位置':site.stage==='service'?'サービス拠点':'加工・産業拠点'));button.title=site.label;button.dataset.southeastIndustryPoint=site.id;button.addEventListener('click',event=>{event.stopPropagation();chooseSite(site.id);});overlay.append(button);points.set(site.id,button);
   const label=document.createElement('div');label.className=`southeast-industry-map-label ${family(site)}`;label.dataset.southeastIndustryLabel=site.id;label.setAttribute('aria-hidden','true');const industry=document.createElement('strong');industry.textContent=site.industryName;const place=document.createElement('small');place.textContent=site.placeName;label.append(industry,place);overlay.append(label);labels.set(site.id,label);
@@ -25,18 +31,38 @@ export function createSoutheastIndustryLocations(root:HTMLElement,getState:()=>A
   const locations=southeastIndustrySites.map(site=>({site,p:map!.project(site.point)}));
   for(const {site,p} of locations){const point=points.get(site.id)!;point.style.left=p.x+'px';point.style.top=p.y+'px';point.hidden=p.x<8||p.x>width-8||p.y<8||p.y>height-8;labels.get(site.id)!.hidden=true;}
   // In the overview, one callout per group keeps all distribution dots visible without 30 labels.
-  const visible=kind==='all'?southeastIndustryKinds.slice(1).map(group=>locations.find(x=>x.site.kind===group.id)!).filter(x=>x&&!points.get(x.site.id)!.hidden):locations.filter(x=>x.site.kind===kind&&!points.get(x.site.id)!.hidden);
-  const westKinds=new Set<SoutheastIndustryKind>(['electronics','automotive','petrochemicals','logistics','tourism','rubber','finance']);
-  for(const side of ['west','east'] as const){
-   const lane=visible.filter(({site})=>(kind==='all'?westKinds.has(site.kind):site.point[0]<105)===(side==='west')).sort((a,b)=>a.p.y-b.p.y);
-   const labelHeight=kind==='all'?30:36,gap=3,start=side==='west'?53:8;
-   lane.forEach(({site,p},index)=>{const label=labels.get(site.id)!,labelWidth=kind==='all'?112:132;const left=side==='west'?8:width-labelWidth-8;
-    const top=kind==='all'?start+index*(labelHeight+gap):Math.min(height-labelHeight-5,Math.max(start+index*(labelHeight+gap),p.y-labelHeight/2));
-    label.hidden=false;label.style.left=left+'px';label.style.top=top+'px';label.style.width=labelWidth+'px';label.style.height=labelHeight+'px';
-    if(kind==='all'){label.querySelector('strong')!.textContent=southeastIndustryKinds.find(x=>x.id===site.kind)!.label;label.querySelector('small')!.textContent=site.placeName;}
-    else{label.querySelector('strong')!.textContent=site.industryName;label.querySelector('small')!.textContent=site.placeName;}
-    const line=document.createElementNS('http://www.w3.org/2000/svg','line');line.setAttribute('x1',String(p.x));line.setAttribute('y1',String(p.y));line.setAttribute('x2',String(side==='west'?left+labelWidth:left));line.setAttribute('y2',String(top+labelHeight/2));leaders.append(line);
-   });
+  const visible=kind==='all'?southeastIndustryKinds.slice(1).map(group=>locations.find(x=>x.site.id===overviewSites.get(group.id as SoutheastIndustryKind))!).filter(x=>x&&!points.get(x.site.id)!.hidden):locations.filter(x=>x.site.kind===kind&&!points.get(x.site.id)!.hidden);
+  const compact=width<600,labelWidth=kind==='all'?(compact?94:112):compact?(kind==='rubber'?94:112):132,labelHeight=kind==='all'?(compact?29:32):compact?32:36;
+  type Box={left:number;top:number;right:number;bottom:number};
+  const overlaps=(a:Box,b:Box,padding=0)=>a.left<b.right+padding&&a.right>b.left-padding&&a.top<b.bottom+padding&&a.bottom>b.top-padding;
+  const frame=overlay.getBoundingClientRect();
+  const reserved=[legend,root.querySelector<HTMLElement>('.asia-map-tools')].filter((node):node is HTMLElement=>!!node).map(node=>{const r=node.getBoundingClientRect();return {left:r.left-frame.left-5,top:r.top-frame.top-5,right:r.right-frame.left+5,bottom:r.bottom-frame.top+5};});
+  const occupied:Box[]=[];
+  // Dense places go first. Each callout stays near its mapped point, while every
+  // plotted dot, including unlabelled sites and rotated raw-resource diamonds,
+  // keeps a clear hit area. The controls and legend are reserved like map marks.
+  const ordered=visible.map(entry=>({...entry,density:locations.filter(other=>other!==entry&&Math.hypot(other.p.x-entry.p.x,other.p.y-entry.p.y)<90).length})).sort((a,b)=>b.density-a.density||a.p.y-b.p.y);
+  for(const {site,p} of ordered){
+   const label=labels.get(site.id)!;
+   if(kind==='all'){label.querySelector('strong')!.textContent=southeastIndustryKinds.find(x=>x.id===site.kind)!.label;label.querySelector('small')!.textContent=site.placeName;}
+   else{label.querySelector('strong')!.textContent=site.industryName;label.querySelector('small')!.textContent=site.placeName;}
+   let best:{box:Box;score:number}|null=null;
+   for(const distance of [20,36,55,78,105,135,170,205])for(const shift of [0,-20,20,-40,40,-60,60,-80,80,-100,100])for(const direction of ['right','left','above','below'] as const){
+    const x=direction==='right'?p.x+distance:direction==='left'?p.x-distance-labelWidth:p.x-labelWidth/2+shift;
+    const y=direction==='below'?p.y+distance:direction==='above'?p.y-distance-labelHeight:p.y-labelHeight/2+shift;
+    const box={left:x,top:y,right:x+labelWidth,bottom:y+labelHeight};
+    if(box.left<5||box.top<5||box.right>width-5||box.bottom>height-5)continue;
+    if(reserved.some(area=>overlaps(box,area,3))||occupied.some(area=>overlaps(box,area,4)))continue;
+    if(locations.some(other=>!points.get(other.site.id)!.hidden&&overlaps(box,{left:other.p.x-15,top:other.p.y-15,right:other.p.x+15,bottom:other.p.y+15},2)))continue;
+    const edgeX=Math.max(box.left,Math.min(p.x,box.right)),edgeY=Math.max(box.top,Math.min(p.y,box.bottom));
+    const length=Math.hypot(edgeX-p.x,edgeY-p.y);
+    const score=length+Math.abs(shift)*.12+(direction==='above'||direction==='below'?2:0);
+    if(!best||score<best.score)best={box,score};
+   }
+   if(!best)continue;
+   const {box}=best;occupied.push(box);label.hidden=false;label.style.left=box.left+'px';label.style.top=box.top+'px';label.style.width=labelWidth+'px';label.style.height=labelHeight+'px';
+   const x=Math.max(box.left,Math.min(p.x,box.right)),y=Math.max(box.top,Math.min(p.y,box.bottom));
+   const line=document.createElementNS('http://www.w3.org/2000/svg','line');line.setAttribute('x1',String(p.x));line.setAttribute('y1',String(p.y));line.setAttribute('x2',String(x));line.setAttribute('y2',String(y));leaders.append(line);
   }
  }
  function render(){

@@ -40,6 +40,16 @@ async function checkSoutheastAsiaRegion(page,{source,capture:takePicture,backgro
  const labelBoxes=await page.locator('[data-southeast-industry-map] [data-southeast-industry-label]:visible').evaluateAll(nodes=>nodes.map(node=>{const r=node.getBoundingClientRect(),frame=node.parentElement.getBoundingClientRect();return {id:node.getAttribute('data-southeast-industry-label'),left:r.left-frame.left,top:r.top-frame.top,right:r.right-frame.left,bottom:r.bottom-frame.top,width:frame.width,height:frame.height};}));
  assert(labelBoxes.every(box=>box.left>=0&&box.top>=0&&box.right<=box.width&&box.bottom<=box.height),`Industry labels must remain in the map: ${JSON.stringify(labelBoxes)}`);
  for(let i=0;i<labelBoxes.length;i++)for(let j=i+1;j<labelBoxes.length;j++){const a=labelBoxes[i],b=labelBoxes[j];assert(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,`Industry labels overlap: ${a.id}, ${b.id}`);}
+ const calloutGeometry=await page.locator('[data-southeast-industry-map]').evaluate(node=>{
+  const rect=element=>{const r=element.getBoundingClientRect();return {left:r.left,top:r.top,right:r.right,bottom:r.bottom};};
+  const hit=(a,b,padding=0)=>a.left<b.right+padding&&a.right>b.left-padding&&a.top<b.bottom+padding&&a.bottom>b.top-padding;
+  const labels=[...node.querySelectorAll('[data-southeast-industry-label]:not([hidden])')];
+  const points=[...node.querySelectorAll('[data-southeast-industry-point]:not([hidden])')];
+  const tools=rect(document.querySelector('.asia-map-tools')),legend=rect(node.querySelector('[data-southeast-industry-legend]'));
+  return {covered:labels.flatMap(label=>[...points,...[document.querySelector('.asia-map-tools'),node.querySelector('[data-southeast-industry-legend]')]].filter(other=>hit(rect(label),rect(other),2)).map(other=>`${label.dataset.southeastIndustryLabel}: ${other.dataset.southeastIndustryPoint??other.className}`)),longest:[...node.querySelectorAll('.southeast-industry-leaders line')].reduce((max,line)=>Math.max(max,Math.hypot(+line.getAttribute('x1')-+line.getAttribute('x2'),+line.getAttribute('y1')-+line.getAttribute('y2'))),0),tools,legend};
+ });
+ assert.deepEqual(calloutGeometry.covered,[],`Industry labels must leave every site marker and map control readable: ${JSON.stringify(calloutGeometry)}`);
+ assert(calloutGeometry.longest<=145,`Industry overview leader lines should stay near their sites: ${JSON.stringify(calloutGeometry)}`);
  assert.match(await page.locator('[data-reading-dock-summary]').textContent(),/ジャワ島.*タイ東部/);
  record('initial regional industry explains the three-country scope and broader supply network');await capture('industry-overview');
  await page.locator('[data-southeast-industry-kind="rubber"]').click();
@@ -49,7 +59,12 @@ async function checkSoutheastAsiaRegion(page,{source,capture:takePicture,backgro
  assert.match(await page.locator('[data-southeast-industry-selected-reading]').textContent(),/タイヤ工場/);
  assert.equal(await page.locator('[data-southeast-industry-selected-source]').getAttribute('href')!==null,true);
  assert.equal(await page.locator('[data-southeast-industry-selected]').evaluate(node=>Boolean(node.compareDocumentPosition(document.querySelector('[data-southeast-industry-sites]'))&Node.DOCUMENT_POSITION_FOLLOWING)),true,'Selected location reading must precede the long site directory');
+ await page.locator('.asia-reading-panel').evaluate(panel=>{const selected=panel.querySelector('[data-southeast-industry-selected]');panel.scrollTop+=selected.getBoundingClientRect().top-panel.getBoundingClientRect().top-55;});
+ const selectedSource=await page.locator('[data-southeast-industry-selected-source]').evaluate(node=>{const r=node.getBoundingClientRect(),panel=document.querySelector('.asia-reading-panel').getBoundingClientRect();return {top:r.top,bottom:r.bottom,panelTop:panel.top,panelBottom:panel.bottom,text:node.textContent};});
+ assert(selectedSource.top>selectedSource.panelTop&&selectedSource.bottom<selectedSource.panelBottom&&selectedSource.text.length>0,`Selected site source and year must be visible in the representative image: ${JSON.stringify(selectedSource)}`);
  record('all regional sites remain visible while rubber and tire stages are highlighted');await capture('industry-rubber-selected');
+ const rubberPoint=await page.locator('[data-southeast-industry-point="southern-rubber"]').boundingBox(),rubberLabel=await page.locator('[data-southeast-industry-label="southern-rubber"]').boundingBox();
+ assert(rubberPoint&&rubberLabel&&(rubberLabel.x+rubberLabel.width<rubberPoint.x||rubberPoint.x+rubberPoint.width<rubberLabel.x||rubberLabel.y+rubberLabel.height<rubberPoint.y||rubberPoint.y+rubberPoint.height<rubberLabel.y),'The Thai rubber raw-resource diamond must stay clear of its callout');
  await page.locator('[data-southeast-industry-kind="wood"]').click();
  assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point]:not(.muted)').count(),2);
  assert.match(await page.locator('[data-southeast-industry-summary]').textContent(),/輸入木材/);
