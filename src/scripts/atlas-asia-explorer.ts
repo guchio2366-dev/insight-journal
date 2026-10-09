@@ -620,6 +620,7 @@ function start(root:HTMLElement) {
         // Crop/livestock keys and the labelled product points own agriculture
         // selection. A click on the unrelated background cannot select a country.
         if(state.field==='agriculture')return;
+        if(config.focusId&&!countryAtPoint([event.lngLat.lng,event.lngLat.lat]))return;
         if(state.field==='population'&&['ethnicity','religion'].includes(state.topic??'')){if(config.regionId==='south-central-asia'&&state.topic==='religion'&&!state.detail)return;const hit=map.getLayer('asia-settlement-fill')?map.queryRenderedFeatures(event.point,{layers:['asia-settlement-fill']})[0]:null;selectSettlement(hit?.properties.id??null);return;}
         if(social?.active()){
           if(social.hit(event.point,[event.lngLat.lng,event.lngLat.lat]))return;

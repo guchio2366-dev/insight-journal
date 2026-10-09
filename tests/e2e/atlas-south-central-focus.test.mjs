@@ -37,6 +37,11 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    assert.equal(config.cities.some(c=>c.id===city),true);
    assert.equal(await page.locator(`[data-country-select] option[value="${foreign}"]`).count(),0);
    assert.equal(await page.locator(`.regional-tabs a[href$="/${region}/"]`).getAttribute('aria-current'),'page');
+   await page.locator('[data-city-select]').selectOption(city);
+   assert.equal(new URL(page.url()).searchParams.get('city'),city);
+   await page.locator(`[data-city-panel="${city}"]`).waitFor({state:'visible'});
+   await page.locator('[data-reset]').click();
+   assert.equal(new URL(page.url()).searchParams.get('city'),null);
    await page.locator('[data-country-select]').selectOption(selected);
    assert.equal(new URL(page.url()).searchParams.get('place'),selected);
    await page.locator('[data-reset]').click();
@@ -54,6 +59,13 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    await page.waitForURL(`**/atlas/asia/${region}/population/**`);
    const population=JSON.parse(await page.locator('[data-asia-config]').textContent());
    assert.ok(population.population.cities.every(item=>expected.includes(item.country)));
+   const censusCodes=await page.locator('[data-sc-religion-select]').evaluateAll(buttons=>buttons.map(button=>button.dataset.scReligionSelect));
+   assert.deepEqual(censusCodes,region==='central-asia'?['KAZ']:['IND','PAK','BGD','NPL','LKA']);
+   for(const topic of ['ethnicity','religion']){
+    const visibleIds=population.presentation.settlements[topic].categories.map(category=>category.id);
+    const legendIds=await page.locator(`[data-settlement-legend="${topic}"] [data-settlement-choice]`).evaluateAll(buttons=>buttons.map(button=>button.dataset.settlementChoice));
+    assert.deepEqual(legendIds,visibleIds);
+   }
   }
   assert.deepEqual(errors,[]);
  }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}

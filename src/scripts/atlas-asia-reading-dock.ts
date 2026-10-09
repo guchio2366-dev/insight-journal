@@ -37,7 +37,7 @@ export function createAsiaReadingDock(root:HTMLElement) {
   if(focused&&overview){title.textContent=focused.title;summary.textContent=focused.takeaway;}
   const focusPanel=root.querySelector<HTMLElement>('[data-focus-reading]');
   if(focusPanel){
-   focusPanel.hidden=!focused||!overview;
+   focusPanel.hidden=!focused||!overview||Boolean(config?.focusId&&['agriculture','population'].includes(state.field));
    if(focused){
     focusPanel.querySelector<HTMLElement>('[data-focus-reading-title]')!.textContent=focused.title;
     focusPanel.querySelector<HTMLElement>('[data-focus-reading-body]')!.textContent=focused.reading;
