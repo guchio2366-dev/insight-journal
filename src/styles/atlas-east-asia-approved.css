@@ -2,8 +2,8 @@
 @media(min-width:960px){
  [data-region=east-asia] .atlas-desktop-shell{display:grid!important;grid-template-columns:clamp(190px,17vw,270px) minmax(0,1fr)!important;gap:14px;padding-inline:14px;align-items:start}
  [data-region=east-asia] .atlas-desktop-shell .atlas-news{position:sticky;top:12px;width:auto;height:var(--asia-news-height,calc(100dvh - 80px))}
- [data-region=east-asia] .atlas-desktop-shell .asia-atlas[data-field] .asia-layout{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(290px,1fr)!important;gap:14px!important;align-items:start}
- [data-region=east-asia] .atlas-desktop-shell .asia-atlas[data-field] .asia-map-frame{height:min(620px,var(--asia-map-available-height,620px))!important;max-height:none!important;min-height:320px!important;aspect-ratio:auto!important}
+ [data-region=east-asia] .atlas-desktop-shell .asia-atlas[data-field] .asia-layout{display:grid;grid-template-columns:minmax(0,1fr) clamp(290px,22.3vw,320px)!important;gap:14px!important;align-items:start}
+ [data-region=east-asia] .atlas-desktop-shell .asia-atlas[data-field] .asia-map-frame{height:min(620px,var(--asia-map-available-height,620px),var(--east-map-content-height,620px))!important;max-height:none!important;min-height:320px!important;aspect-ratio:auto!important}
  [data-region=east-asia] .atlas-desktop-shell .asia-atlas[data-field] .asia-reading-panel{position:sticky!important;top:12px!important;height:var(--asia-reading-height,600px)!important;overflow:auto!important;overscroll-behavior:contain;scrollbar-gutter:stable}
  [data-region=east-asia] .asia-city-reading-host{max-height:none!important;overflow:visible!important}
  [data-region=east-asia] .asia-reading-dock{display:none!important}
