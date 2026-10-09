@@ -9,6 +9,7 @@ import {Window} from 'happy-dom';
 const fields=['agriculture','nature','industry','population'];
 const regions=['europe','asia/east-asia','asia/southeast-asia','asia/south-central-asia','asia/south-asia','asia/central-asia','west-asia'];
 const cssCache=new Map();
+const eastApprovedCss=await readFile('src/styles/atlas-east-asia-approved.css','utf8');
 const configurations={
   europe:{root:'[data-europe-detail]',nav:'.eu-field-nav',grid:'.eu-layout',frame:'.eu-map-stage',reading:'.eu-read-panel',stats:'[data-eu-statistics]'},
   asia:{root:'[data-asia-atlas]',nav:'.asia-field-tabs',grid:'.asia-layout',frame:'.asia-map-frame',reading:'.asia-reading-panel',stats:'[data-asia-statistics]'},
@@ -52,7 +53,7 @@ test('all seven regional workspaces retain five main destinations and one map/re
       if(region.startsWith('asia/')){
         assert.equal(stats.parentElement,d.querySelector('[data-atlas-shell]'),'Asia statistics span the news/map/reading shell');
         const compactEastFarm=region==='asia/east-asia'&&field==='agriculture';
-        assert.equal(root.querySelector('[data-reading-details]').open,!compactEastFarm,'East Asia farming keeps detailed reading in its compact right panel');
+        assert.equal(root.querySelector('[data-reading-details]').open,true,'approved regional reading is initially open beside the map');
         if(compactEastFarm)assert.ok(root.querySelector('[data-reading-dock]').contains(root.querySelector('[data-farming-selector]')),'East Asia farming topic picker remains visible');
         assert.equal(root.querySelector('.asia-reading-scroll').tabIndex,0);
       }
@@ -103,14 +104,25 @@ test('regional agriculture, nature/water and population controls preserve the le
   }
 });
 
-test('regional desktop CSS keeps normal maps at the reference aspect and keyboard-accessible right reading',async()=>{
+test('regional desktop CSS keeps extent-sized East Asia maps and keyboard-accessible right reading',async()=>{
   for(const region of regions)for(const width of [1180,1366]){
     const w=await page(region,'nature',width,true),d=w.document,c=configuration(region);
     try{
       assert.equal(w.getComputedStyle(d.querySelector('[data-atlas-shell]')).display,'grid',`${region} ${width}: side-by-side shell`);
       const compactAspect=width<1200&&(region==='europe'||region.startsWith('asia/'));
-      assert.equal(Number.parseFloat(w.getComputedStyle(d.querySelector(c.frame)).aspectRatio),compactAspect?1.65:1.55,`${region} ${width}: normal map reference aspect`);
-      assert.equal((w.getComputedStyle(d.querySelector(c.grid)).gridTemplateColumns.match(/minmax\(/g)??[]).length,2,`${region} ${width}: map and reading retain two desktop tracks`);
+      if(region==='asia/east-asia'){
+        const frameStyle=w.getComputedStyle(d.querySelector(c.frame)),readingStyle=w.getComputedStyle(d.querySelector(c.reading));
+        assert.equal(frameStyle.aspectRatio,'auto','East Asia fits the geographic extent through frame dimensions');
+        assert.equal(frameStyle.minHeight,'320px','the enlarged map keeps a usable minimum height');
+        // Happy DOM drops clamp() grid tracks; native East Asia QA checks their
+        // actual widths, alignment and overflow at both approved PC sizes.
+        assert.match(eastApprovedCss,/\.asia-layout\{[^}]*grid-template-columns:minmax\(0,1fr\) clamp\(290px,/,'map and bounded reading retain separate desktop tracks');
+        assert.equal(readingStyle.position,'sticky');
+        assert.equal(readingStyle.overflow,'auto','the explanation scrolls independently beside the map');
+      }else{
+        assert.equal(Number.parseFloat(w.getComputedStyle(d.querySelector(c.frame)).aspectRatio),compactAspect?1.65:1.55,`${region} ${width}: normal map reference aspect`);
+        assert.equal((w.getComputedStyle(d.querySelector(c.grid)).gridTemplateColumns.match(/minmax\(/g)??[]).length,2,`${region} ${width}: map and reading retain two desktop tracks`);
+      }
       assert.ok(!['none','hidden'].includes(w.getComputedStyle(d.querySelector(c.reading)).display));
     }finally{await w.happyDOM.close();}
   }
