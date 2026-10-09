@@ -139,22 +139,47 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
    const node=svg('text',{x,y,'text-anchor':'middle','dominant-baseline':'middle','font-size':14*scale,'font-weight':800,fill:'#183d4a',stroke:'#fffdf8','stroke-width':3*scale,'paint-order':'stroke','data-africa-climate-map-label':String(item.id),'pointer-events':'none',class:'africa-climate-map-label'});node.textContent=item.label;classLabels.push(node);
    occupied.push({x:x-w/2,y:y+h/2,w,h});
   }
+  const matrix=map?.getScreenCTM?.();
+  const labelViewport=matrix&&box&&matrix.a>0&&matrix.d>0?[(box.left-matrix.e)/matrix.a,(box.top-matrix.f)/matrix.d,box.width/matrix.a,box.height/matrix.d]:viewport;
+  const cityWidth=(name:string)=>(Array.from(name).reduce((n,c)=>n+(/[ -~]/.test(c)?8:14),0)+12)*scale;
+  const islandIds=['mahajanga','toamasina','antananarivo','toliara'];
+  const islandCities=islandIds.map(id=>africaClimateCities.find(city=>city.id===id)!);
+  const islandPositions=new Map<string,{x:number;y:number;w:number;h:number}>();
+  if(islandCities.every(city=>inside(city.coordinates))){
+   const points=new Map(islandCities.map(city=>[city.id,projectAfrica(city.coordinates)]));
+   const [northX,northY]=points.get('mahajanga')!;
+   const westEdge=northX-12*scale;
+   for(const city of islandCities){
+    const [cx,cy]=points.get(city.id)!,w=cityWidth(city.name),h=23*scale;
+    // Two short, ordered columns around the actual Madagascar station cluster.
+    // Reserve these nearby names before placing the more widely spaced cities.
+    const west=city.id==='mahajanga'||city.id==='antananarivo';
+    const leftEdge=city.id==='antananarivo'?Math.min(westEdge,points.get('toliara')![0]-11*scale):westEdge;
+    const x=west?leftEdge-w:cx+12*scale;
+    const y=city.id==='antananarivo'?cy+22*scale:city.id==='toliara'?cy+32*scale:city.id==='mahajanga'?northY+8*scale:northY-15*scale;
+    islandPositions.set(city.id,{x:Math.max(labelViewport[0]+5*scale,Math.min(labelViewport[0]+labelViewport[2]-w-5*scale,x)),y:Math.max(labelViewport[1]+h+5*scale,Math.min(labelViewport[1]+labelViewport[3]-6*scale,y)),w,h});
+   }
+  }
+  const pointBoxes=africaClimateCities.filter(city=>inside(city.coordinates)).map(city=>{const [x,y]=projectAfrica(city.coordinates);return {x:x-9*scale,y:y-9*scale,w:18*scale,h:18*scale};});
   for(const city of africaClimateCities){
    if(!inside(city.coordinates))continue;
    const [cx,cy]=projectAfrica(city.coordinates),selected=state.city===city.id;
    const marker=svg('g',{'data-africa-city':city.id,'data-africa-city-point':city.id,role:'button',tabindex:0,'aria-label':city.name+'の雨温図を読む','aria-pressed':String(selected),class:'africa-map-pick-label'});
    marker.append(svg('circle',{cx,cy,r:13*scale,fill:'transparent'}),svg('circle',{cx,cy,r:(selected?7:5.5)*scale,fill:selected?'#a64e29':'#214f70',stroke:'#fff','stroke-width':2,'vector-effect':'non-scaling-stroke'}));group.append(marker);
-   const font=14*scale,w=(Array.from(city.name).reduce((n,c)=>n+(/[ -~]/.test(c)?8:14),0)+12)*scale,h=23*scale,gap=5*scale;
-   const minX=viewport[0]+5*scale,maxX=viewport[0]+viewport[2]-w-5*scale,minY=viewport[1]+h+5*scale,maxY=viewport[1]+viewport[3]-6*scale;
+   const font=14*scale,w=cityWidth(city.name),h=23*scale,gap=5*scale;
+   const minX=labelViewport[0]+5*scale,maxX=labelViewport[0]+labelViewport[2]-w-5*scale,minY=labelViewport[1]+h+5*scale,maxY=labelViewport[1]+labelViewport[3]-6*scale;
    const candidates:{x:number;y:number;w:number;h:number}[]=[];
-   for(const offset of [-10,24,-39,53,-68,82,-97,111,-126,140,-155,169])for(const dx of [gap,-w-gap])candidates.push({x:Math.max(minX,Math.min(maxX,cx+dx)),y:Math.max(minY,Math.min(maxY,cy+offset*scale)),w,h});
+   for(const offset of [-18,32,-10,24,-39,53,-68,82,-97,111,-126,140,-155,169])for(const dx of [gap,-w-gap])candidates.push({x:Math.max(minX,Math.min(maxX,cx+dx)),y:Math.max(minY,Math.min(maxY,cy+offset*scale)),w,h});
    // If a dense coastal group needs more room, search the whole quiet ocean
    // margin. The leader still locates the exact station, never a nearby city.
    const margin:{x:number;y:number;w:number;h:number}[]=[];
    for(let y=minY;y<=maxY;y+=28*scale)for(let x=minX;x<=maxX;x+=24*scale)margin.push({x,y,w,h});
-   margin.sort((a,b)=>Math.hypot(a.x+a.w/2-cx,a.y-a.h/2-cy)-Math.hypot(b.x+b.w/2-cx,b.y-b.h/2-cy));
    candidates.push(...margin);
-   const position=candidates.find(p=>!occupied.some(o=>p.x<o.x+o.w+gap&&p.x+p.w+gap>o.x&&p.y-p.h<o.y+gap&&p.y+gap>o.y-o.h));
+   const distance=(p:{x:number;y:number;w:number;h:number})=>Math.hypot(Math.max(p.x-cx,0,cx-p.x-p.w),Math.max(p.y-p.h+4*scale-cy,0,cy-p.y-4*scale));
+   candidates.sort((a,b)=>distance(a)-distance(b)||Math.hypot(a.x+a.w/2-cx,a.y-a.h/2-cy)-Math.hypot(b.x+b.w/2-cx,b.y-b.h/2-cy));
+   const clear=(p:{x:number;y:number;w:number;h:number})=>![...islandPositions].some(([id,o])=>id!==city.id&&p.x<o.x+o.w+gap&&p.x+p.w+gap>o.x&&p.y-p.h<o.y+gap&&p.y+gap>o.y-o.h)&&!occupied.some(o=>p.x<o.x+o.w+gap&&p.x+p.w+gap>o.x&&p.y-p.h<o.y+gap&&p.y+gap>o.y-o.h)&&!pointBoxes.some(o=>p.x<o.x+o.w&&p.x+p.w>o.x&&p.y-p.h+4*scale<o.y+o.h&&p.y+4*scale>o.y);
+   const local=islandPositions.get(city.id);
+   const position=local&&clear(local)?local:candidates.find(clear);
    if(!position)continue;occupied.push(position);
    const label=svg('g',{'data-africa-city':city.id,'data-africa-city-label':city.id,role:'button',tabindex:0,'aria-label':city.name+'の雨温図を読む','aria-pressed':String(selected),class:'africa-map-pick-label'});
    label.append(svg('path',{d:`M${cx},${cy}L${Math.max(position.x,Math.min(position.x+w,cx))},${position.y-8*scale}`,fill:'none',stroke:'#315975','stroke-width':1,'vector-effect':'non-scaling-stroke','pointer-events':'none'}));

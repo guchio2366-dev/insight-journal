@@ -104,6 +104,11 @@ jobs:
           export AFRICA_REVIEW_JAPANESE_FONTS="$africa_review_japanese_fonts"
           export AFRICA_REVIEW_JAPANESE_FONT_MATCH="${africa_review_sans}"$'\n'"${africa_review_serif}"
           export AFRICA_REVIEW_JAPANESE_FONT_SETUP=official-ubuntu-fonts-noto-cjk
+          # An explicit trailer selects the reviewer-requested limited check.
+          # Ordinary future commits continue to run the full Africa review.
+          if [[ "$(git log -1 --format='%(trailers:key=Africa-Review-Scope,valueonly)')" == madagascar ]]; then
+            export AFRICA_REVIEW_SCOPE=madagascar
+          fi
           AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node scripts/verify-africa-approved-review.mjs
 
       - name: Upload Africa PC screenshots and validation metadata
