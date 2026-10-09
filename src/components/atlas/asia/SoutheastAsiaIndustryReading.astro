@@ -10,7 +10,7 @@ const reading=getAsiaOverview('southeast-asia').reading.readings.find(r=>r.id===
  <p class="southeast-industry-summary" data-southeast-industry-summary>{southeastIndustryKinds[0].reading}</p>
  <div class="southeast-industry-sites" data-southeast-industry-sites>{southeastIndustrySites.map(site=><button type="button" data-southeast-industry-site={site.id}><span class={`southeast-industry-symbol ${site.kind} ${site.stage}`} aria-hidden="true"></span>{site.label}</button>)}</div>
  <section data-southeast-industry-selected hidden><h4 data-southeast-industry-selected-title></h4><p data-southeast-industry-selected-reading></p><p class="southeast-industry-source">立地の資料（<span data-southeast-industry-selected-year></span>）：<a data-southeast-industry-selected-source></a></p></section>
- <p>選択した分類の地点を強調し、他の産業群も薄く残します。原料と工場を結ぶ実際の供給路や国内仕向けは示しません。立地事例は出典年当時の情報で、投資計画は稼働実績と区別しています。国別産業の詳説はインドネシア・ベトナム・タイ、地域全体の地図は地理的な東南アジア11か国を対象にします。</p>
+ <p>選択した分類の地点を強調し、他の産業群も薄く残します。原料と工場を結ぶ実際の供給路や国内仕向けは示しません。立地事例は出典年当時の情報です。国別産業の詳説はインドネシア・ベトナム・タイ、地域全体の地図は地理的な東南アジア11か国を対象にします。</p>
  <h3>地域全体の供給網を読む</h3>
  {reading.paragraphs.map(p=><p>{p}</p>)}
  <div class="southeast-industry-links"><button type="button" data-industry-reading-topic="trade-exports" data-industry-reading-detail="t-85">電気機器の輸出</button><button type="button" data-industry-reading-topic="trade-imports" data-industry-reading-detail="t-85">電気機器の輸入</button><button type="button" data-industry-reading-topic="trade-exports" data-industry-reading-detail="t-87">車両・部分品の輸出</button></div>
