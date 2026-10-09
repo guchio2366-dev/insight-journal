@@ -167,6 +167,7 @@ async function checkSoutheastAsiaRegion(page,{source,capture:takePicture,backgro
  assert.equal(await page.locator('[data-water-select]').locator('option').count()>5,true);
  assert.equal(await page.locator('.asia-water-city-name').filter({hasText:'マニラ'}).count()>0,true);
  record('water overview explains mainland and island waters with Manila/Jakarta labels');await capture('water-overview');
+ await expand('[data-hydrology-panel] > details:first-of-type');
  await page.locator('[data-hydrology-related="basins"]').click();await page.locator('[data-basin-shortcut]').first().click();
  assert.equal(await page.locator('[data-hydrology-panel]').isVisible(),true);
  await page.locator('[data-hydrology-related="groundwater"]').click();assert.equal(await page.locator('[data-hydrology-panel]').isVisible(),true);
