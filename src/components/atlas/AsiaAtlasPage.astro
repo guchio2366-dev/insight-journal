@@ -119,6 +119,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
           </div>
           <div class="asia-map-state" data-map-state role="status">地図を読み込んでいます</div>
           <div class="asia-map-annotations" data-map-annotations hidden></div>
+          {regionId==='southeast-asia'&&<div class="southeast-industry-map-sites" data-southeast-industry-map hidden aria-label="東南アジアの産業立地事例"></div>}
           <div class="asia-farm-switches" data-farm-switches hidden={initialField!=='agriculture'} role="group" aria-label="農業地図の表示"><button type="button" data-farm-toggle="crop" aria-pressed="true">作物 <span>表示</span></button><button type="button" data-farm-toggle="livestock" aria-pressed="true">畜産 <span>表示</span></button></div>
           <div class="asia-map-tools"><button type="button" data-zoom-in aria-label="地図を拡大">＋</button><button type="button" data-zoom-out aria-label="地図を縮小">−</button><button type="button" data-map-fit aria-label="選択範囲に地図を合わせる">全景</button></div>
           <button class="asia-map-retry" data-map-retry type="button" hidden>地図を再読み込み</button>

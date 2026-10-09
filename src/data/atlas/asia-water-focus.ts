@@ -1,7 +1,7 @@
 import type {AsiaRegionId} from '../../lib/atlas-asia-state';
 // Explicit links to the existing BasinATLAS NEXT_SINK records, not guessed
 // drainage polygons. Delta branches with separate outlets remain separate.
-export const asiaWaterFocus:Record<AsiaRegionId,{id:string;name:string;river:string}[]>={
+export const asiaWaterFocus:Record<AsiaRegionId,{id:string;name:string;river:string;displayName?:string;sourceRiverName?:string}[]>={
  'east-asia':[
   {id:'b-4060009880',name:'長江',river:'rivers-145'},
   {id:'b-4060007850',name:'黄河',river:'rivers-213'},
@@ -12,6 +12,8 @@ export const asiaWaterFocus:Record<AsiaRegionId,{id:string;name:string;river:str
   {id:'b-4060017020',name:'メコン川',river:'rivers-254'},
   {id:'b-4060023810',name:'エーヤワディー川',river:'rivers-121'},
   {id:'b-4060023060',name:'サルウィン川',river:'rivers-351'},
+  {id:'b-4060015000',name:'紅河',sourceRiverName:'Red',river:'rivers-210'},
+  {id:'b-5060017030',name:'Kapuas',displayName:'カプアス川',river:'rivers-234'},
  ],
  'south-central-asia':[
   {id:'b-4060025450',name:'ガンジス・ブラマプトラ水系',river:'rivers-194'},

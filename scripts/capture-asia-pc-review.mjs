@@ -478,7 +478,7 @@ async function main(){
   for(const profile of profiles)await checkEastContourBands(browser,host,profile);
   for(const profile of southCentralProfiles)await operation(browser,host,profile,'south-central-regional-acceptance',page=>verifySouthCentralAsia(page,{profile,source:host.origin+basePath,capture:contextPicture}));
   metadata.regionalProfiles=southCentralProfiles;
-  metadata.expectedImageCount=108+southCentralImageCount;
+  metadata.expectedImageCount=112+southCentralImageCount;
   assert.equal(results.captures.length,metadata.expectedImageCount);assert(results.captures.every(row=>row.passed),'All viewport captures must pass');
   assert.equal(results.comparisons.length,8);assert(results.comparisons.every(row=>row.passed),'All 8 geometry comparisons must pass');
   assert.equal(results.operations.length,40+southCentralProfiles.length);assert(results.operations.every(row=>row.passed),'All PC operation groups must pass');

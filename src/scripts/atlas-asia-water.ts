@@ -16,7 +16,7 @@ export function createAsiaWater(root:HTMLElement,config:Config,getState:()=>Asia
  const datasets=new Map<WaterTopic,WaterDataset>(),pending=new Map<WaterTopic,Promise<void>>(),failed=new Set<WaterTopic>();
  let grid:AsiaNumericGrid|null=null,map:import('maplibre-gl').Map|null=null,revision=0;
  const river=()=>getState().topic==='water'?config.waterFeatures?.find(f=>f.id===getState().detail):undefined;
- const basinName=(b:BasinRecord)=>(asiaWaterFocus[config.regionId].find(f=>f.id===b.id)?.name??b.name.replace(/を含む集水域$/,''))+'を含む集水域';
+ const basinName=(b:BasinRecord)=>{const focus=asiaWaterFocus[config.regionId].find(f=>f.id===b.id);return (focus?.displayName??focus?.name??b.name.replace(/を含む集水域$/,''))+'を含む集水域';};
  const names=(codes:string[])=>codes.map(code=>config.countries.find(c=>c.code===code)?.name??code).join('・');
  const scene=()=>waterScenes.find(s=>s.region===config.regionId&&s.id===getState().detail);
  async function bytes(file:string){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);try{const r=await fetch(config.waterBase+file,{signal:controller.signal});if(!r.ok)throw Error(String(r.status));return new Uint8Array(await r.arrayBuffer());}finally{clearTimeout(timer);}}
@@ -77,13 +77,14 @@ export function createAsiaWater(root:HTMLElement,config:Config,getState:()=>Asia
  function render(){
   const t=topic(),active=!!t;$('[data-hydrology-panel]').hidden=!active;$('[data-hydrology-legend]').hidden=!active;if(!t)return;
   const state=getState(),meta=waterTopics[t],selectedScene=scene(),record=detail(),ready=loaded(t),status=failed.has(t)?'この主題の数値を取得できませんでした。再読み込みをお試しください。':!ready&&(t!=='precipitation'||state.point)?'選んだ主題の資料を読み込んでいます。':'';
+  const southeastOverview=root.querySelector<HTMLElement>('[data-southeast-water-overview]');if(southeastOverview)southeastOverview.hidden=config.regionId!=='southeast-asia'||getState().topic!=='water'||Boolean(state.detail||state.point||state.place);
   const shortcuts=root.querySelector<HTMLElement>('[data-basin-shortcuts]');
-  if(shortcuts){shortcuts.hidden=t!=='basins';shortcuts.replaceChildren();if(t==='basins')for(const item of asiaWaterFocus[config.regionId]){const b=el('button',item.name);b.type='button';b.dataset.basinShortcut=item.id;b.disabled=!datasets.get(t)?.records.some(r=>r.id===item.id);b.setAttribute('aria-pressed',String(record?.id===item.id));b.onclick=()=>select(item.id);shortcuts.append(b);}}
+  if(shortcuts){shortcuts.hidden=t!=='basins';shortcuts.replaceChildren();if(t==='basins')for(const item of asiaWaterFocus[config.regionId]){const b=el('button',item.displayName??item.name);b.type='button';b.dataset.basinShortcut=item.id;b.disabled=!datasets.get(t)?.records.some(r=>r.id===item.id);b.setAttribute('aria-pressed',String(record?.id===item.id));b.onclick=()=>select(item.id);shortcuts.append(b);}}
   $('[data-map-title]').textContent=meta.title;$('[data-map-eyebrow]').textContent='Water · '+meta.period;$('[data-map-period]').textContent=meta.unit;
   $('[data-hydrology-title]').textContent=getState().topic==='water'?'河川と、地下水を蓄える主な地域':meta.title;$('[data-hydrology-definition]').textContent=meta.definition;
   $('[data-map-gesture]').textContent=t==='precipitation'?'地点を選ぶと年降水量を読めます。国の背景クリックでは選択を変えません。地図は2本指で移動・拡大できます。':'流域・地下水の区域や河川そのもの、または区域の一覧から選べます。対象外の背景クリックでは選択を変えません。地図は2本指で移動・拡大できます。';
   $('[data-hydrology-status]').textContent=status;$('[data-hydrology-retry]').hidden=!failed.has(t);
-  $('[data-hydrology-lead]').textContent=selectedScene?.lead??(t==='precipitation'?'海から山地、さらに内陸へ、年間に届く水の違いを読みます。':t==='basins'?'川には、その場所の雨だけでなく、上流の広い範囲に降った雨や雪の水も集まります。色分けした流域と青い流路を重ね、国境を越えたつながりを確かめてください。':'青い線は川、淡い青の面は地下水を蓄える主要な地層です。川と地下水域の位置を見比べます。');
+  $('[data-hydrology-lead]').textContent=selectedScene?.lead??(t==='precipitation'?'海から山地、さらに内陸へ、年間に届く水の違いを読みます。':t==='basins'?'川には、その場所の雨だけでなく、上流の広い範囲に降った雨や雪の水も集まります。色分けした流域と青い流路を重ね、国境を越えたつながりを確かめてください。':config.regionId==='southeast-asia'&&getState().topic==='water'?'大陸部の長い川筋と、島ごとの流域・地下水域を同じ地図で比べます。':'青い線は川、淡い青の面は地下水を蓄える主要な地層です。川と地下水域の位置を見比べます。');
   const sc=$('[data-hydrology-scene-reading]');sc.replaceChildren();if(selectedScene)sc.append(el('h3',selectedScene.name),el('p',selectedScene.reading),link('この場所の解説の根拠',selectedScene.source));
   const cov=state.place?config.water.coverage[state.place]:null;
   $('[data-hydrology-coverage]').textContent=t==='precipitation'?cov?`${names([state.place!])}では対象格子${fmt(cov.maskCells)}個のうち${fmt(cov.displayCells)}個に値があります。地点値は都市や国の平均ではありません。`:'対象国・地域の陸地に重なる表示格子を収録しています。地点値は都市や国の平均ではありません。':t==='basins'?`主な河川の流域を表示しています。${cov?.basins===0?'選択中の国・地域は、この縮尺の流域資料に区域がありません。河川や排水がないという意味ではありません。':''}`:`主要な地下水盆地だけを塗っています。涵養量の細かな区切りは表示しません。${cov?.groundwater===0?'選択中の国・地域の区域は元資料で確認できません。地下水がないという意味ではありません。':''}`;

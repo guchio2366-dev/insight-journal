@@ -23,7 +23,21 @@ export async function verifySoutheastAsiaRegion(page,{source,capture:takePicture
  assert.equal(await page.locator('[data-industry-topic] option[value="my-p3"]').evaluate(o=>o.disabled),true);
  assert.match(await page.locator('[data-reading-dock-summary]').textContent(),/ジャカルタ.*ハノイ.*ホーチミン.*タイ東部/s);
  assert.match(await page.locator('[data-industry-region-reading]').textContent(),/11か国.*国内仕向け|11か国.*国内向け/s);
+ assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point]:visible').count(),9);
+ assert.match(await page.locator('[data-reading-dock-summary]').textContent(),/ジャワ島.*タイ東部/);
  record('initial regional industry explains the three-country scope and broader supply network');await capture('industry-overview');
+ await page.locator('[data-southeast-industry-kind="rubber"]').click();
+ assert.equal(await page.locator('[data-southeast-industry-map] .rubber:not(.muted)').count(),2);
+ assert.equal(await page.locator('[data-southeast-industry-map] .muted').count(),7);
+ await page.locator('[data-southeast-industry-site="rayong-tires"]').click();
+ assert.match(await page.locator('[data-southeast-industry-selected-reading]').textContent(),/タイヤ工場/);
+ assert.equal(await page.locator('[data-southeast-industry-selected-source]').getAttribute('href')!==null,true);
+ record('all regional sites remain visible while rubber and tire stages are highlighted');await capture('industry-rubber-selected');
+ await page.locator('[data-southeast-industry-kind="wood"]').click();
+ assert.equal(await page.locator('[data-southeast-industry-map] .wood:not(.muted)').count(),2);
+ assert.match(await page.locator('[data-southeast-industry-summary]').textContent(),/輸入木材/);
+ await page.locator('[data-southeast-industry-kind="all"]').click();
+ assert.equal(await page.locator('[data-southeast-industry-map] .muted').count(),0);
 
  for(const [code,name,story,expected]of [['IDN','インドネシア','jakarta-industry',/ジャカルタ/],['VNM','ベトナム','hochiminh-industry',/ホーチミン/],['THA','タイ','thailand-coast',/東部臨海部/]]){
   await country.selectOption(code);await page.waitForFunction(name=>document.querySelector('[data-industry-value]')?.textContent.includes(name),name);
@@ -122,20 +136,42 @@ export async function verifySoutheastAsiaRegion(page,{source,capture:takePicture
   const before=page.url();await page.mouse.click(point.x,point.y);
   assert.equal(page.url(),before);assert.equal(new URL(page.url()).searchParams.get(key),value);record(id+' preserves the selected city or landform');await capture(id);
   if(key==='city'){
+   assert.equal(await page.locator('[data-city-panel="bangkok"] [data-climate-place]').textContent(),'バンコク－タイの雨温図');
+   assert.match(await page.locator('[data-city-panel="bangkok"] .city-takeaway').textContent(),/年較差が小さく、雨の季節差が大きい/);
+   assert.match(await page.locator('[data-city-panel="bangkok"] .city-class-description').textContent(),/最寒月も18℃以上/);
+   assert.doesNotMatch(await page.locator('[data-city-panel="bangkok"] .city-farming').textContent(),/メコン|エーヤワディー/);
+   const baseCamera=new URL(page.url());
    for(const city of ['jakarta','haiphong']){
     await page.locator('[data-city-select]').selectOption(city);await page.locator(`[data-city-panel="${city}"]`).waitFor({state:'visible'});
     await page.waitForFunction(city=>!document.querySelector(`[data-city-panel="${city}"] [data-city-class-name]`).textContent.includes('未取得'),city);
     const position=await page.locator(`[data-city-panel="${city}"] [data-city-statistics]`).evaluate(node=>{const p=document.querySelector('.asia-reading-panel'),a=p.getBoundingClientRect(),b=node.getBoundingClientRect();return {first:p.firstElementChild.hasAttribute('data-city-reading-host'),offset:b.top-a.top,bottom:b.bottom};});
     assert(position.first&&position.offset<=24&&position.bottom<=page.viewportSize().height);await capture('city-'+city);
+    const currentCamera=new URL(page.url());for(const param of ['lng','lat','z'])assert(Math.abs(Number(currentCamera.searchParams.get(param))-Number(baseCamera.searchParams.get(param)))<.01,'Selecting another city must preserve the Southeast map camera');
    }
    await page.locator('[data-city-select]').selectOption('');assert.equal(new URL(page.url()).searchParams.get('place'),null);
    record('regional city picker reaches Jakarta and Haiphong directly and clears to the whole region');
   }
 
  }
+ await open('nature/?topic=water');await page.waitForFunction(()=>document.querySelector('[data-hydrology-status]')?.textContent===''&&!document.querySelector('[data-southeast-water-overview]')?.hidden);
+ assert.match(await page.locator('[data-southeast-water-overview]').textContent(),/大陸部.*島嶼部/s);
+ assert.equal(await page.locator('[data-water-select]').locator('option').count()>5,true);
+ assert.equal(await page.locator('.asia-water-city-name').filter({hasText:'マニラ'}).count()>0,true);
+ record('water overview explains mainland and island waters with Manila/Jakarta labels');await capture('water-overview');
+ await page.locator('[data-hydrology-related="basins"]').click();await page.locator('[data-basin-shortcut]').first().click();
+ assert.equal(await page.locator('[data-hydrology-panel]').isVisible(),true);
+ await page.locator('[data-hydrology-related="groundwater"]').click();assert.equal(await page.locator('[data-hydrology-panel]').isVisible(),true);
+ record('representative basin and groundwater topic remain selectable');
  await open('population/');await page.waitForFunction(()=>document.querySelector('[data-population-reading]')?.textContent.includes('ジャワ島'));
- assert.equal(new URL(page.url()).searchParams.get('place'),null);assert.match(await page.locator('[data-reading-dock-summary]').textContent(),/ジャワ島.*人口密度/s);
+ assert.equal(new URL(page.url()).searchParams.get('place'),null);assert.match(await page.locator('[data-reading-dock-summary]').textContent(),/ジャワ島.*大都市/s);
+ assert.equal(await page.locator('.asia-population-name:not([disabled])').count(),0);
+ assert.match(await page.locator('[data-population-detail]').textContent(),/港.*交通.*工業/s);
  record('population overview has Southeast Asia geography and does not infer ethnicity or religion');await capture('population-overview');
+ await page.locator('[data-population-city]').selectOption('uc-5472');await page.locator('[data-population-city-facts]').waitFor({state:'visible'});
+ await page.locator('[data-population-city]').selectOption('');assert.equal(new URL(page.url()).searchParams.get('detail'),null);
+ await page.locator('.asia-field-tabs [data-field="industry"]').click();await page.locator('[data-industry-region-reading]').waitFor({state:'visible'});
+ assert.equal(await page.locator('[data-southeast-industry-map]').isVisible(),true);
+ record('population city selection and return, then industry tab, retain regional overview');
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);record('no horizontal page overflow');
  return {passed:true,checks};
 }
