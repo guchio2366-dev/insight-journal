@@ -65,8 +65,14 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.equal(q('[data-rice-reading]').hidden,true);
       assert.equal(q('[data-farm-overview-reading]').hidden,field!=='agriculture');
       assert.equal(all('[data-farm-kind]').length,0);
-      const features=all('[data-industry-feature]:not([data-industry-current-feature])');
+      const features=all('.asia-industry-subsectors [data-industry-feature]:not([data-industry-current-feature])');
       assert.ok(features.length>=4&&features.length<=6);assert.equal(all('[data-farm-toggle]').length,2);assert.ok(q('[data-industry-all]'));for(const b of features)assert.ok(config.industry.topics.some(t=>t.id===b.dataset.industryFeature));
+      if(region==='east-asia'){
+        const clusters=all('.east-industry-choices [data-industry-feature]');
+        assert.equal(clusters.length,7,'regional overview and six consistently defined industries are offered');
+        assert.equal(clusters[0].dataset.industryFeature,'east-clusters');
+        for(const b of clusters)assert.ok(config.industry.topics.some(t=>t.id===b.dataset.industryFeature));
+      }
       assert.equal(all('[data-industry-sector]').length,5,'industry uses the same parent categories as the US');
       for(const current of all('[data-industry-current-feature]'))assert.equal(current.hidden,true,'current-topic placeholders cannot imply unpublished data before initialization');
       assert.equal(all('[data-industry-subsector]').length,0);
@@ -81,7 +87,7 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.equal(q('[data-asia-statistics]').parentElement,q('[data-atlas-shell]'),'statistics share the shell and align with the map/reading column');
       assert.equal(q('[data-asia-statistics]').previousElementSibling,q('[data-asia-explorer]'),'statistics follow the main map and right reading');
       const compactEastFarm=region==='east-asia'&&field==='agriculture';
-      assert.equal(q('[data-reading-details]').open,!compactEastFarm,'East Asia farming keeps its topic picker visible while detailed reading is collapsible');
+      assert.equal(q('[data-reading-details]').open,true,'the approved reading is initially open beside the map');
       if(compactEastFarm){
         assert.equal(q('[data-farming-selector]').hidden,false);
         assert.ok(q('[data-reading-dock]').contains(q('[data-farming-selector]')));
