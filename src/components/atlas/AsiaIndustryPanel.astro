@@ -1,8 +1,10 @@
 ---
+import EastAsiaIndustryClusters from './asia/EastAsiaIndustryClusters.astro';
 import SoutheastAsiaIndustryReading from './asia/SoutheastAsiaIndustryReading.astro';
 interface Props{active:boolean;regionId?:string}
 const {active,regionId}=Astro.props;
 ---
+{regionId==='east-asia'&&<EastAsiaIndustryClusters />}
 {regionId==='east-asia'&&<section class="east-industry-journey" data-east-industry-journey hidden aria-label="選択した国の産業を読む">
  <h2 data-east-industry-journey-title></h2>
  <section class="east-industry-selected-site" data-east-industry-selected-site hidden aria-label="選択した半導体拠点"><h3 data-east-industry-selected-title></h3><p class="east-industry-selected-lead" data-east-industry-selected-lead></p><p data-east-industry-selected-reading></p><p data-east-industry-selected-scope></p><p class="east-industry-journey-sources">出典：<a data-east-industry-selected-source></a></p></section>

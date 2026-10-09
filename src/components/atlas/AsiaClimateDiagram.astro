@@ -1,6 +1,7 @@
 ---
 import type { AsiaClimateCity } from '../../data/atlas/asia-climate-cities';
 import {asiaRiceReading} from '../../data/atlas/asia-agriculture';
+import {tokyoFarming} from '../../data/atlas/east-asia-approved-reading';
 import {asiaFarmInsights} from '../../data/atlas/asia-map-insights';
 interface Props { city: AsiaClimateCity; precipitationMax: number; countryName?: string }
 const { city, precipitationMax, countryName } = Astro.props;
@@ -37,10 +38,11 @@ const farmingReading=asiaFarmInsights[city.regionId];
   {validRain.length<12&&<p class="chart-missing">×は降水量の未収録を示します。0mmではありません。</p>}
   </figure><section class="city-climate-reading" aria-label={`${city.name}の気候区分と季節の変化`}>
     <h3 data-city-climate-class title="観測地点を含む広域格子の気候区分"><b data-city-class-code></b><span data-city-class-name>気候区分：未取得</span></h3>
-    <p class="city-takeaway"><strong>{city.summary}</strong></p>
     <p class="city-class-description" data-city-class-description></p>
-    <p>{city.reading}</p>
-    <section class="city-farming"><h4>地域の農林業と水の季節を読む</h4><p>{farmingReading.body}</p><p>{asiaRiceReading.relationship}</p><p>地域の参考：<a href={farmingReading.source}>農業と水の解説の出典</a>。この観測所の気候から、都市の作物や灌漑を決めることはできません。</p><button type="button" data-compare="agriculture">同じ場所で米の分布を見る →</button></section>
+    <p class="city-takeaway"><strong>{city.summary}</strong></p>
+    <p>{city.id==='tokyo'?'東京では梅雨期に加え、秋雨前線と台風の影響で秋にも雨が多くなります。夏は太平洋高気圧の縁から暖かく湿った空気が入り、冬は西高東低の気圧配置による北西季節風が日本海側の山地で水分を落とすため、太平洋側の東京は晴れて乾燥する日が多くなります。海に近い低地の温暖さと季節風・前線の移動を合わせて読みます。':city.reading}</p>
+    {city.id==='tokyo'&&<p><a href="https://www.data.jma.go.jp/cpd/j_climate/kanto_koshin/main.html">気象庁：関東甲信の季節と気圧配置</a></p>}
+    <section class="city-farming"><h4>周辺の農畜産と水</h4><p>{city.id==='tokyo'?tokyoFarming:farmingReading.body}</p>{city.id!=='tokyo'&&<p>{asiaRiceReading.relationship}</p>}<p>地域の参考：<a href={city.id==='tokyo'?'https://www.maff.go.jp/kanto/kihon/kikaku/meguji/kanto_meguji_r5.html':farmingReading.source}>農業と水の解説の出典</a>。この観測所の気候から、都市の作物や灌漑を決めることはできません。</p><button type="button" data-compare="agriculture">同じ場所で米の分布を見る →</button></section>
   </section>
   <p class="climate-source">{city.normalPeriod} · <a href={city.sourceUrl} title={city.sourceName} target="_blank" rel="noopener noreferrer">{sourceLabel}</a> · <a href="#asia-sources">気候区分の出典</a></p>
   <details class="monthly-values"><summary>月別の数値・観測地点</summary>

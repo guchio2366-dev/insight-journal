@@ -60,24 +60,15 @@ test('East under-map reading changes with country and topic without treating mis
   const root=window.document.createElement('main');root.innerHTML='<section data-east-farm-foundations hidden><h2 data-east-foundations-title></h2><p data-east-foundations-lead></p><h3 data-east-supply-title></h3><div data-east-forest-flows></div><h3 data-east-partner-title></h3><div data-east-export-partners></div><h3 data-east-share-title></h3><div data-east-world-share></div></section>';
   const section=root.querySelector('[data-east-farm-foundations]');
   renderEastAsiaFarmFoundations(root,'east-asia',true,'overview',undefined);
-  assert.equal(section.hidden,false);assert.match(section.textContent,/4対象の丸太生産量/);
-  assert.equal(section.querySelectorAll('[data-east-world-share] .east-bar').length,4);
-  renderEastAsiaFarmFoundations(root,'east-asia',true,'forest',{code:'TWN',name:'台湾'});
-  assert.match(section.querySelector('[data-east-world-share]').textContent,/森林面積は未掲載.*公表0とは異なります/);
-  assert.match(section.querySelector('[data-east-export-partners]').textContent,/その他のアジア（台湾等）の全商品輸出先/);
-  assert.match(section.querySelector('[data-east-export-partners]').textContent,/全商品輸出先.*丸太・製材の輸出先/);
-  for(const [code,name,topic,partner] of [['CHN','中国','rice','ベトナム'],['CHN','中国','wheat','豪州'],['CHN','中国','maize','ブラジル'],['CHN','中国','soybean','ブラジル'],['KOR','韓国','rice','中国'],['TWN','台湾','rice','米国']]){
-   renderEastAsiaFarmFoundations(root,'east-asia',true,topic,{code,name});
-   assert.equal(section.querySelector('[data-east-partner-title]').textContent,'品目別の輸入元');
-   assert.match(section.querySelector('[data-east-foundations-lead]').textContent,/選んだ品目の輸入額が分母/);
-   assert.match(section.querySelector('[data-east-export-partners]').textContent,new RegExp(`${partner}.*輸入額`));
-   assert.doesNotMatch(section.querySelector('[data-east-export-partners]').textContent,/全商品輸出先/);
-   assert.match(section.querySelector('[data-east-export-partners] a').href,/wits\.worldbank\.org/);
-  }
-  for(const [code,name,topic] of [['KOR','韓国','wheat'],['TWN','台湾','soybean']]){
-   renderEastAsiaFarmFoundations(root,'east-asia',true,topic,{code,name});
-   assert.match(section.querySelector('[data-east-export-partners]').textContent,/詳細対象外/);
-   assert.equal(section.querySelectorAll('[data-east-export-partners] .east-pie').length,0);
+  assert.equal(section.hidden,false);
+  for(const [topic,country] of [['overview',undefined],['rice',{code:'CHN',name:'中国'}],['wheat',{code:'KOR',name:'韓国'}],['cotton',{code:'TWN',name:'台湾'}]]){
+   renderEastAsiaFarmFoundations(root,'east-asia',true,topic,country);
+   assert.match(section.textContent,/主要品目の供給と用途/);
+   assert.match(section.textContent,/域外輸出入相手/);
+   assert.match(section.textContent,/カロリー構成と自給/);
+   assert.match(section.textContent,/未収録/);
+   assert.doesNotMatch(section.textContent,/丸太生産量|製材の供給|全商品輸出先/);
+   assert.equal(section.querySelectorAll('.east-pie,.east-bar').length,0,'no fabricated amounts or unrelated chart');
   }
   renderEastAsiaFarmFoundations(root,'east-asia',true,'wheat',{code:'JPN',name:'日本'});
   assert.match(section.querySelector('[data-east-supply-title]').textContent,/日本の小麦：供給と国内消費/);
@@ -92,12 +83,8 @@ test('East under-map reading changes with country and topic without treating mis
   assert.match(section.querySelector('[data-east-export-partners]').textContent,/カナダ.*米国.*豪州.*財務省貿易統計/);
   assert.match(section.querySelector('[data-east-export-partners] svg').textContent,/総輸入量.*4.48.*百万t/);
   assert.match(section.querySelector('[data-east-export-partners]').textContent,/範囲が異なります/);
-  assert.equal(section.querySelectorAll('[data-east-world-share] .east-wheat-trend circle').length,5);
-  assert.match(section.querySelector('[data-east-world-share] .east-wheat-trend').textContent,/0％.*10％.*20％.*16％.*15％.*17％/);
-  assert.match(section.querySelector('[data-east-world-share]').textContent,/17％.*631.2万t.*0.13％/);
-  assert.doesNotMatch(section.querySelector('[data-east-world-share]').textContent,/次候補/);
-  renderEastAsiaFarmFoundations(root,'east-asia',true,'cotton',{code:'CHN',name:'中国'});
-  assert.match(section.querySelector('[data-east-world-share]').textContent,/今回の7指標に含まれません/);
+  assert.match(section.querySelector('[data-east-world-share]').textContent,/数量自給率.*別の定義/);
+  assert.equal(section.querySelectorAll('[data-east-world-share] svg').length,0);
   renderEastAsiaFarmFoundations(root,'east-asia',false,'wheat',{code:'JPN',name:'日本'});
   assert.equal(section.hidden,true);
  }finally{globalThis.document=old;await window.happyDOM.close();}

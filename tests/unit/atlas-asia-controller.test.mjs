@@ -1284,7 +1284,7 @@ test('自動全景は実extentと小余白を使い、resizeのmoveend後も全�
  const extent=[73.602256,15.776109,145.824962,53.567791],fitted=await setup('',{contentExtent:extent});
  try{
   assert.deepEqual(JSON.parse(JSON.stringify(fitted.window.__map.lastFit.bounds)),[[extent[0],extent[1]],[extent[2],extent[3]]]);
-  assert.equal(fitted.window.__map.lastFit.options.padding,12);assert.equal(fitted.window.__map.lastFit.options.maxZoom,9);
+  assert.equal(fitted.window.__map.lastFit.options.padding,5);assert.equal(fitted.window.__map.lastFit.options.maxZoom,9);
   assert.equal(fitted.window.__map.options.trackResize,false,'the controller owns container resizing');
   const frame=fitted.q('.asia-map-frame');let width=900;
   Object.defineProperty(frame,'clientWidth',{get:()=>width});Object.defineProperty(frame,'clientHeight',{get:()=>500});

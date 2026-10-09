@@ -1,3 +1,4 @@
+import {createEastIndustryClusters} from './atlas-east-asia-industry-clusters';
 import {industryTopic,normalizeIndustryState,industryValues,industryValueLabel,industryMissingLabel,industryScale,industryColors,industryFuelNames,industryFuelColors,industryDomesticNotes,industryMalaysiaReading,industryScopeCountries,hasIndustryCountryScope,isEastIndustryRegion,type IndustryRegion,type IndustryData,type IndustryNational,type IndustrySeries,type IndustryAdmin} from '../data/atlas/asia-industry';
 import type {AsiaState,AsiaCamera} from '../lib/atlas-asia-state';
 import {eastIndustrySites} from '../data/atlas/asia-east-industry-sites';
@@ -11,6 +12,7 @@ const option=(label:string,value:string)=>{const o=el('option',label);o.value=va
 export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>AsiaState,navigate:(state:AsiaState,fit?:boolean)=>void,camera:()=>AsiaCamera|null,onReady:()=>void){
  const $=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const region=config.industry;
+ const clusters=createEastIndustryClusters(root,getState,navigate,camera);
  let data:IndustryData|null=null,national:IndustryNational|null=null,pending:Promise<void>|null=null,failed=false,map:import('maplibre-gl').Map|null=null,revision=0;
  let siteLabels:Marker[]=[];
  const clearSiteLabels=()=>{for(const marker of siteLabels)marker.remove();siteLabels=[];};
@@ -80,6 +82,8 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
   for(const r of records){const observation=values.find(v=>v.id===r.id);selectEl.append(option(r.name+' · '+countryName(r.country)+' · '+industryValueLabel(observation),r.id));}selectEl.value=state.detail??'';
  }
  function render(){
+  clusters.render();
+  if(clusters.active()){for(const selector of ['[data-industry-panel]','[data-east-industry-journey]','[data-industry-country-reading]','[data-industry-region-reading]']){const node=root.querySelector<HTMLElement>(selector);if(node)node.hidden=true;}$('[data-industry-status]').textContent='';$<HTMLSelectElement>('[data-industry-topic]').value=getState().topic!;return;}
   const state=getState(),active=state.field==='industry'&&current().kind!=='trade';$('[data-industry-panel]').hidden=!active;$('[data-industry-topics]').hidden=state.field!=='industry';$('[data-industry-legend]').hidden=!active;
   renderEastJourney();
   const regionReading=root.querySelector<HTMLElement>('[data-industry-region-reading]');if(regionReading)regionReading.hidden=!east||state.field!=='industry'||!!state.place;
@@ -131,6 +135,7 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
  async function show(currentMap:import('maplibre-gl').Map){
   map=currentMap;const seq=++revision;clearSiteLabels();
   for(const id of layerIds)if(map.getLayer(id))map.setLayoutProperty(id,'visibility','none');
+  clusters.show(currentMap);if(clusters.active())return;
   if(getState().field!=='industry'||current().kind==='trade')return;
   // A late map-ready/rebuild must not start a second request behind the retry UI.
   if(failed){render();return;}
@@ -159,5 +164,5 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
  $<HTMLSelectElement>('[data-industry-detail]').addEventListener('change',e=>select((e.target as HTMLSelectElement).value));
  $<HTMLInputElement>('[data-industry-search]').addEventListener('input',picker);
  $<HTMLSelectElement>('[data-industry-topic]').addEventListener('change',e=>{const topic=region.topics.find(t=>t.id===(e.target as HTMLSelectElement).value)!;navigate({...getState(),field:'industry',sector:null,subsector:null,topic:topic.id,detail:topic.kind==='trade'&&current().kind==='trade'?getState().detail:null,place:topic.country??getState().place,point:null,city:null,camera:topic.country&&topic.country!==getState().place?null:camera()},!!topic.country&&topic.country!==getState().place);});
- return{render,show,select,detail,normalize:(state:AsiaState)=>normalizeIndustryState(region,state,data),hit:(point:any)=>{if(!map)return false;const t=current();if(t.id==='manufacturing'&&map.getLayer('asia-industry-site-hit')&&map.getLayoutProperty('asia-industry-site-hit','visibility')==='visible'){const feature=map.queryRenderedFeatures(point,{layers:['asia-industry-site-hit']})[0],site=eastIndustrySites.find(s=>s.id===feature?.properties?.id&&s.country===getState().place);if(site){navigate(choosePlaceReading(getState(),site),true);return true;}}const layer=t.kind==='admin'?'asia-industry-admin':t.kind==='power'?'asia-industry-power-hit':null;if(!layer||!map.getLayer(layer))return false;const f=map.queryRenderedFeatures(point,{layers:[layer]})[0];if(f?.properties.id){select(f.properties.id);return true;}return false;}};
+ return{render,show,select,detail,normalize:(state:AsiaState)=>normalizeIndustryState(region,state,data),hit:(point:any)=>{if(clusters.hit(point))return true;if(!map)return false;const t=current();if(t.id==='manufacturing'&&map.getLayer('asia-industry-site-hit')&&map.getLayoutProperty('asia-industry-site-hit','visibility')==='visible'){const feature=map.queryRenderedFeatures(point,{layers:['asia-industry-site-hit']})[0],site=eastIndustrySites.find(s=>s.id===feature?.properties?.id&&s.country===getState().place);if(site){navigate(choosePlaceReading(getState(),site),true);return true;}}const layer=t.kind==='admin'?'asia-industry-admin':t.kind==='power'?'asia-industry-power-hit':null;if(!layer||!map.getLayer(layer))return false;const f=map.queryRenderedFeatures(point,{layers:[layer]})[0];if(f?.properties.id){select(f.properties.id);return true;}return false;}};
 }

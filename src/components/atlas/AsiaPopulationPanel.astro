@@ -8,7 +8,7 @@ const {regionId,population,active}=Astro.props;
 <section data-population-reading hidden={!active}>
  <p class="eyebrow">Population · 2020</p><h2 data-population-title>人口の分布を読む</h2>
  <p class="asia-takeaway" data-population-takeaway>{asiaPopulationReading[regionId].takeaway}</p>
- <label class="population-picker">都市を選ぶ<select data-population-city aria-label="人口を見る都市を選ぶ"><option value="">地域の分布を見る</option>{population.cities.map(c=><option value={c.id} data-country={c.country}>{c.name} · {japaneseNames[c.country]}{c.detail?'（詳細図あり）':''}</option>)}</select></label>
+
  <p data-population-coverage hidden></p>
  <div class="population-point" data-population-value aria-live="polite">地図上の地点を選ぶと、格子面積当たりの推計人口を表示します。</div>
  <div data-population-city-facts hidden>
@@ -19,6 +19,7 @@ const {regionId,population,active}=Astro.props;
   <p class="population-note">値は整数に丸めています。1人単位の正確さを保証する値ではありません。この表から、都市の面積が何年に拡大したかを読み取ることはできません。</p>
  </div>
  <h3>分布から読み取る</h3><p class="asia-takeaway" data-population-city-note hidden></p><p data-population-detail>{asiaPopulationReading[regionId].reading}</p>
+ <label class="population-picker">都市一覧（補助）<select data-population-city aria-label="人口を見る都市を選ぶ"><option value="">地域の分布を見る</option>{population.cities.map(c=><option value={c.id} data-country={c.country}>{c.name} · {japaneseNames[c.country]}{c.detail?'（詳細図あり）':''}</option>)}</select></label>
  <details><summary>色と数値の意味を確認する</summary><p>元資料はGHS-POP R2023Aの2020年の推計人口です。地表で1km²になる格子に人口を割り当てた資料を使います。広域図では5×5格子をまとめ、推計人口の合計を、有効な元格子の面積で割っています。「詳細図あり」の都市では、元の1km格子を表示します。</p><p>海岸では海を含む格子も計算に含まれます。そのため、数値は陸地の面積だけで割った人口密度とは異なります。推計0人とデータがない場合は別々に扱い、選択した地点の説明で区別します。国の概略境界で人口データを切り取ったり、近隣の値で小島を埋めたりはしていません。</p><p>都市の一覧には、各地域で2020年の推計人口が多い12都市に加え、各国で最も人口の多い都市と詳細図の対象都市を掲載しています。すべての都市や首都を網羅した一覧ではありません。</p></details>
  <p class="population-note">出典：<a href="https://doi.org/10.2905/2FF68A52-5B5B-4A22-8F40-C41DA8332CFE">Schiavinaほか（2023）、GHS-POP R2023A</a>、<a href="https://human-settlement.emergency.copernicus.eu/ghs_ucdb_2024.php">欧州委員会JRC、GHS-UCDB R2024A V1.2</a>。手法は<a href="https://human-settlement.emergency.copernicus.eu/GHSLhowToCite.php">Pesaresiほか（2024）と利用条件</a>を参照してください。CC BY 4.0に基づき、Insight Journalが地域の抽出・集約・色分けを行っています。人口図の海岸線と国境には、<a href="https://www.naturalearthdata.com/about/terms-of-use/">Natural Earth v5.1.2の1:10m資料（パブリックドメイン）</a>を使っています。縮尺1:10mは1千万分の1を表し、10mの細かさを意味するものではありません。</p>
 </section>

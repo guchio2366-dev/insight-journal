@@ -14,7 +14,7 @@ export function createAsiaReadingDock(root:HTMLElement) {
  const storyBridges=root.querySelector<HTMLElement>('[data-place-story-bridges]');
  if(storyBridges)dock.append(storyBridges);
  const candidates=[
-  '[data-seasonal-panel]',
+  '[data-east-cluster-reading]','[data-seasonal-panel]',
   '[data-place-story-body]','[data-trade-panel]','[data-hydrology-panel]',
   '[data-physical-reading]','[data-settlement-detail]','[data-settlement-overview]',
   '[data-social-panel]','[data-population-reading]','[data-industry-panel]',

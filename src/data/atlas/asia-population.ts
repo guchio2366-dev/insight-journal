@@ -1,3 +1,4 @@
+import {eastPopulation} from './east-asia-approved-reading';
 import type { AsiaRegionId } from '../../lib/atlas-asia-state';
 
 export type AsiaPopulationRaster = {width:number;height:number;bounds3857:number[];bounds4326:number[];imageCoordinates:[number,number][];image:string;grid:string;sourceCellKm:number};
@@ -7,7 +8,7 @@ export const asiaPopulationTopics=[{id:'density',label:'人口の分布'},{id:'u
 export const asiaPopulationColors=['#f0f1e8','#dce8df','#b0d2cc','#7ab5bb','#438b9f','#28627f','#173b60'];
 export const asiaPopulationLabels=['0超–1未満','1–10未満','10–100未満','100–500未満','500–2,000未満','2,000–10,000未満','10,000以上'];
 export const asiaPopulationReading:Record<string,{takeaway:string;reading:string}>={
- 'east-asia':{takeaway:'中国東部の平野・沿海部、朝鮮半島、日本の主要都市周辺に人口が集中し、乾燥した内陸や高原では疎らになります。',reading:'人口が多い格子が連続する範囲と、都市の周りだけにまとまる範囲を見比べます。同じ色の目盛りで、人口の集中と疎らな地域を読み取れます。'},
+ 'east-asia':eastPopulation,
  'southeast-asia':{takeaway:'ジャワ島や大陸部の大河川の平野などに、人口の集中が見られます。山地・森林域との違いを色の濃淡で確かめられます。',reading:'一つの都市だけでなく、色の濃い格子がどの方向へ続くかを見てください。島や半島の全体が一様に密集しているわけではありません。'},
  'south-central-asia':{takeaway:'南アジアの河川平野では人口が帯状に広がり、中央アジアでは周囲の人口が少ない地域の中に都市や灌漑地域の集まりが見えます。',reading:'ガンジス川流域からベンガルの平野へ続く人口の集中と、乾燥した内陸・高山域の疎らな分布を見比べてください。色は2020年の推計人口密度で、現在の正確な居住者数ではありません。'},
 };
