@@ -653,7 +653,17 @@ async function stageOneOperations(page, profile) {
   await compositionCheck();
   await openEurope(page, 'atlas/europe/population/?layer=religion', 'normal');
   for (const name of ['case', 'category', 'area']) assert.equal(await page.locator(`[data-culture-${name}]`).inputValue(), '');
-  await compositionCheck();await snapshot(page,profile,'religion-overview');
+  const nationalReligion=page.locator('[data-eu-religion-national]:visible');
+  assert.equal(await nationalReligion.count(),5);
+  assert.equal(await page.locator('[data-eu-composition]:visible').count(),0);
+  assert.equal(await page.locator('[data-eu-religion-color-key]').isVisible(),true);
+  assert.equal(await page.locator('[data-eu-religion-color-key]').evaluate(node=>node.parentElement?.hasAttribute('data-eu-map-legend')),true);
+  await page.locator('[data-eu-religion-national="religion-national-serbia"]').click();
+  assert.equal(await nationalReligion.count(),5);
+  assert.match(await page.locator('[data-eu-religion-evidence-reading]').textContent(),/セルビア.*正教会.*5,387,426人/s);
+  await page.locator('[data-eu-religion-back]').click();
+  assert.equal(await nationalReligion.count(),5);
+  await snapshot(page,profile,'religion-overview');
   await openEurope(page, 'atlas/europe/agriculture/?layer=wheat', 'normal');
   const verified=page.locator('[data-eu-verified-topic="wheat"]');
   await verified.waitFor({state:'visible'});
