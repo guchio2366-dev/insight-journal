@@ -2,11 +2,12 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import AtlasRegionNavigation from '../../../components/atlas/AtlasRegionNavigation.astro';
 import { asiaMapIds, regionalMaps, regionFeatures } from '../../../data/atlas/regional-atlas';
+import {asiaFocusCountries} from '../../../data/atlas/asia-focus';
 import { withBase } from '../../../lib/urls';
-const routes = Object.fromEntries(asiaMapIds.map(id => [id, withBase(regionalMaps[id].href)]));
-const countryRoutes = Object.fromEntries(asiaMapIds.flatMap(id => regionFeatures(id).map(feature => [feature.properties.code, id])));
+const routes = Object.fromEntries([...asiaMapIds.map(id => [id, withBase(regionalMaps[id].href)]),...Object.keys(asiaFocusCountries).map(id=>[id,withBase(`/atlas/asia/${id}/`)])]);
+const countryRoutes = Object.fromEntries([...asiaMapIds.filter(id=>id!=='south-central-asia').flatMap(id => regionFeatures(id).map(feature => [feature.properties.code, id])),...Object.entries(asiaFocusCountries).flatMap(([id,codes])=>codes.map(code=>[code,id]))]);
 ---
-<BaseLayout title="アジア地図" description="東アジア・東南アジア・南・中央アジアの地域別地図。" compactAtlas noindex>
+<BaseLayout title="アジア地図" description="東アジア・東南アジア・南アジア・中央アジアの地域別地図。" compactAtlas noindex>
   <section class="shell asia-legacy" data-asia-legacy data-routes={JSON.stringify(routes)} data-country-routes={JSON.stringify(countryRoutes)}>
     <p><a href={withBase('/atlas/')}>地図から見る</a> / アジア</p><h1>アジア地図</h1>
     <p>地域別の地図へ移動します。移動しない場合は、地域を選択してください。</p>
@@ -18,7 +19,7 @@ const countryRoutes = Object.fromEntries(asiaMapIds.flatMap(id => regionFeatures
   if (root) {
     const routes: Record<string,string> = JSON.parse(root.dataset.routes!);
     const countryRoutes: Record<string,string> = JSON.parse(root.dataset.countryRoutes!);
-    const oldRegions: Record<string,string> = {east:'east-asia', southeast:'southeast-asia', south:'south-central-asia', central:'south-central-asia'};
+    const oldRegions: Record<string,string> = {east:'east-asia', southeast:'southeast-asia', south:'south-asia', central:'central-asia'};
     const params = new URLSearchParams(location.search);
     const place = params.get('place') ?? '';
     const region = countryRoutes[place] ?? oldRegions[params.get('region') ?? ''] ?? 'east-asia';

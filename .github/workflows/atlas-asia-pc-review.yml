@@ -22,6 +22,7 @@ on:
       - 'src/pages/atlas/asia/**'
       - 'public/assets/atlas/asia*/**'
       - 'tests/e2e/atlas-asia-*.test.mjs'
+      - 'tests/e2e/atlas-south-central-focus.test.mjs'
       - 'tests/unit/atlas-asia-*.test.mjs'
   push:
     branches: [fix/asia-industry-publication-status]
@@ -44,6 +45,7 @@ on:
       - 'src/pages/atlas/asia/**'
       - 'public/assets/atlas/asia*/**'
       - 'tests/e2e/atlas-asia-*.test.mjs'
+      - 'tests/e2e/atlas-south-central-focus.test.mjs'
       - 'tests/unit/atlas-asia-*.test.mjs'
 
 # Test artifacts only: no deployment, repository writes, or application secrets.
@@ -115,6 +117,10 @@ jobs:
 
       - name: Build local production site
         run: npm run build
+
+      - name: Verify South and Central Asia regional journeys
+        timeout-minutes: 4
+        run: ATLAS_ASIA_BROWSER=1 node --test tests/e2e/atlas-south-central-focus.test.mjs
 
       - name: Capture PC images and verify controls
         timeout-minutes: 9

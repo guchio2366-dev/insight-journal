@@ -29,7 +29,8 @@ test('世界地図と地域名から、公開されている各地域の地図�
     ['europe', 'atlas/europe/'],
     ['east-asia', 'atlas/asia/east-asia/'],
     ['southeast-asia', 'atlas/asia/southeast-asia/'],
-    ['south-central-asia', 'atlas/asia/south-central-asia/'],
+    ['south-asia', 'atlas/asia/south-asia/'],
+    ['central-asia', 'atlas/asia/central-asia/'],
     ['west-asia', 'atlas/west-asia/']
   ]);
   for (const id of ['africa', 'oceania', 'russia']) {
@@ -60,23 +61,37 @@ test('世界地図と地域名から、公開されている各地域の地図�
   const regionFor = code => svg.querySelector(`a[href] [data-world-country="${code}"]`)?.closest('[data-world-region]')?.getAttribute('data-world-region');
   assert.equal(regionFor('MEX'), 'north-america', 'Mexico belongs to the published North America map');
   assert.equal(regionFor('IRN'), 'west-asia', 'Iran opens the editorial West Asia / Middle East grouping');
+  assert.equal(regionFor('IND'), 'south-asia');
+  assert.equal(regionFor('KAZ'), 'central-asia');
   assert.equal(regionFor('GRL'), undefined, 'Greenland is not one of the three published North America countries');
   assert.equal(regionFor('RUS'), 'europe', 'the published western Russia shape opens Europe');
   assert.equal(svg.querySelector('a[data-world-region="russia"] [data-world-country="RUS"]')?.closest('a').getAttribute('href'), '/insight-journal/atlas/russia/', 'the dedicated whole Russia shape opens its four fields');
   assert.equal(svg.querySelector('[data-world-country="ATA"]'), null, 'Antarctica is omitted from this navigation map');
 });
 
-test('アジアの3ページは選択対象を分離し、中東・ロシアを選択肢に含めない', async () => {
+test('アジアの地域ページは選択対象を分離し、中東・ロシアを選択肢に含めない', async () => {
   const expected = {
     'east-asia': ['CHN','JPN','KOR','MNG','PRK','TWN'],
     'southeast-asia': ['BRN','IDN','KHM','LAO','MMR','MYS','PHL','SGP','THA','TLS','VNM'],
-    'south-central-asia': ['AFG','BGD','BTN','IND','KAZ','KGZ','LKA','MDV','NPL','PAK','TJK','TKM','UZB']
+    'south-central-asia': ['AFG','BGD','BTN','IND','KAZ','KGZ','LKA','MDV','NPL','PAK','TJK','TKM','UZB'],
+    'south-asia':['AFG','BGD','BTN','IND','LKA','MDV','NPL','PAK'],
+    'central-asia':['KAZ','KGZ','TJK','TKM','UZB']
   };
   for (const [region, codes] of Object.entries(expected)) {
     const doc = await page(`atlas/asia/${region}`);
-    assert.deepEqual(selections(doc), codes.sort());
-    assert.equal(doc.querySelectorAll('.regional-tabs a').length, 3);
-    assert.equal(doc.querySelectorAll('.regional-tabs [aria-current="page"]').length, 1);
+    if(region==='south-central-asia'){
+      assert.deepEqual(selections(doc), [], 'the combined regional overview has no redundant country buttons');
+      const config=JSON.parse(doc.querySelector('[data-asia-config]').textContent);
+      assert.deepEqual(config.countries.map(country=>country.code).sort(), codes.sort(), 'the geographic scope still contains all 13 countries');
+      assert.deepEqual([...doc.querySelectorAll('[data-country-select] option')].map(option=>option.value).filter(Boolean).sort(),codes,'the map country picker retains the regional scope');
+      assert.deepEqual(config.industryCountryCodes,['IND'],'only India has a country-level industry entry');
+    }else if(region==='south-asia'||region==='central-asia'){
+      const config=JSON.parse(doc.querySelector('[data-asia-config]').textContent);
+      assert.deepEqual(config.countries.map(country=>country.code).sort(),codes.sort());
+      assert.deepEqual(selections(doc),[]);
+    }else assert.deepEqual(selections(doc), codes.sort());
+    assert.equal(doc.querySelectorAll('.regional-tabs a').length, 4);
+    assert.equal(doc.querySelectorAll('.regional-tabs [aria-current="page"]').length, region==='south-central-asia'?0:1);
     assert.ok(doc.querySelector('svg[data-default-frame] path[data-map-country]'));
     assert.equal(doc.querySelector('meta[name="robots"]'), null);
   }
@@ -107,9 +122,10 @@ test('旧アジアURLから地域・国を復元でき、新しい地域ペー�
   const countries = JSON.parse(legacy.dataset.countryRoutes);
   assert.equal(countries.JPN, 'east-asia');
   assert.equal(countries.SGP, 'southeast-asia');
-  assert.equal(countries.KAZ, 'south-central-asia');
+  assert.equal(countries.KAZ, 'central-asia');
+  assert.equal(countries.IND, 'south-asia');
   assert.equal(countries.IRN, undefined);
   assert.equal(countries.RUS, undefined);
   const sitemap = await readFile(path.join(dist, 'sitemap.xml'), 'utf8');
-  for (const route of ['asia/east-asia','asia/southeast-asia','asia/south-central-asia','latin-america','north-america/canada','north-america/mexico']) assert.ok(sitemap.includes(`/atlas/${route}/`));
+  for (const route of ['asia/east-asia','asia/southeast-asia','asia/south-central-asia','asia/south-asia','asia/central-asia','latin-america','north-america/canada','north-america/mexico']) assert.ok(sitemap.includes(`/atlas/${route}/`));
 });

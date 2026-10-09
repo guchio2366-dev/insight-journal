@@ -3,6 +3,8 @@ import {layoutClimateCodes,type CodeInput,type CodePlacement} from '../lib/atlas
 import type {AsiaState} from '../lib/atlas-asia-state';
 import {majorClimateCities,indiaPopulationLabels} from '../data/atlas/asia-focus';
 import {contourBandFiles,type AsiaContourBands} from '../data/atlas/asia-contour-bands';
+import {southCentralReligionCensuses} from '../data/atlas/asia-south-central-religion';
+import {Marker} from 'maplibre-gl';
 type Coordinate=[number,number];
 type Annotation={id:string;text:string;coordinate:Coordinate;anchors?:Coordinate[];product?:string;kind?:string;color?:string;value?:number};
 export type AsiaPresentation={
@@ -36,7 +38,7 @@ function layoutSoutheastRiverNames(items:CodeInput[],bounds:Box,obstacles:Box[])
  }
  return placed;
 }
-export function createAsiaPresentation(root:HTMLElement,config:{presentation:AsiaPresentation;allowSingleItem?:boolean;presentationBase:string;cities:City[];population?:{cities:City[]};riverFile?:string;riverIds?:string[];landforms?:{id:string;name:string;coordinates:Coordinate}[];selectSettlement?:(id:string|null)=>void;selectFarmKinds?:(farms:AsiaState['farms'])=>void;waterFocus?:{id:string;name:string;displayName?:string;river:string}[];selectLandform?:(id:string)=>void},getState:()=>AsiaState,chooseCity:(id:string)=>void,chooseUrban:(id:string)=>void,choosePoint:(point:Coordinate)=>void,chooseFarm:(id:string)=>void,onStatus:(message:string)=>void){
+export function createAsiaPresentation(root:HTMLElement,config:{presentation:AsiaPresentation;allowSingleItem?:boolean;presentationBase:string;religionCountries?:string[];cities:City[];population?:{cities:City[]};riverFile?:string;riverIds?:string[];landforms?:{id:string;name:string;coordinates:Coordinate}[];selectSettlement?:(id:string|null)=>void;selectReligionCountry?:(code:string)=>void;selectFarmKinds?:(farms:AsiaState['farms'])=>void;waterFocus?:{id:string;name:string;displayName?:string;river:string}[];selectLandform?:(id:string)=>void},getState:()=>AsiaState,chooseCity:(id:string)=>void,chooseUrban:(id:string)=>void,choosePoint:(point:Coordinate)=>void,chooseFarm:(id:string)=>void,onStatus:(message:string)=>void){
  const metadata=config.presentation,overlay=root.querySelector<HTMLElement>('[data-map-annotations]')!;
  let map:import('maplibre-gl').Map|null=null,revision=0,scheduled=0,disposed=false;
  let errorMode:string|null=null;
@@ -48,6 +50,8 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
  const datasets=new Map<string,any>(),pending=new Map<string,Promise<any>>();
  const sourceWaits=new Set<()=>void>();
  const buttons=new Map<string,HTMLButtonElement>();
+ let religionMarkers:Marker[]=[];
+ const clearReligionMarkers=()=>{for(const marker of religionMarkers)marker.remove();religionMarkers=[];};
  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('aria-hidden','true');overlay.append(svg);
  const selectedFarm=()=>getState().field==='agriculture'?metadata.farming.products.find(p=>p.id===getState().topic):undefined;
  const singleFarm=()=>config.allowSingleItem&&getState().single?selectedFarm():undefined;
@@ -75,7 +79,7 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
   const project=(p:Coordinate)=>map!.project(p);
   const southeastPopulation=active==='population'&&root.dataset.region==='southeast-asia';
   const waterCities=['water','basins','groundwater'].includes(active??'');
-  const cities=active==='climate'?config.cities:active==='population'?config.population?.cities??[]:waterCities?config.cities.filter(c=>majorClimateCities.has(c.id)):[];
+  const cities=active==='climate'?config.cities:active==='population'?config.population?.cities??[]:waterCities?config.cities.filter(c=>majorClimateCities.has(c.id)&&(root.dataset.region!=='south-central-asia'||['new-delhi','karachi','dhaka','tashkent','astana'].includes(c.id))):[];
   let visible=cities.filter(c=>{const p=project(c.coordinates);return p.x>=0&&p.x<=width&&p.y>=0&&p.y<=height;});
   if(active==='climate'||active==='population'){
    // Station points survive label thinning and collisions. Hover/focus names
@@ -98,8 +102,9 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
    visible=visible.filter(c=>active==='climate'?majorClimateCities.has(c.id)||c.id===state.city:c.country!=='IND'||!!indiaPopulationLabels[c.id]||state.point?.every((n,i)=>Math.abs(n-c.coordinates[i])<.001));
   }
   if(active==='population'&&map.getZoom()<5){
-   const ordered=[...visible].sort((a,b)=>Number(b.id===state.detail)-Number(a.id===state.detail));
-   const chosen:City[]=[];const limit=compact?8:12;
+   const priority=root.dataset.region==='south-central-asia'?['uc-6090','uc-7963','uc-11352','uc-2457','uc-7794','uc-2907','uc-2847','uc-4865','uc-632','uc-1822']:[];
+   const ordered=[...visible].sort((a,b)=>Number(b.id===state.detail)-Number(a.id===state.detail)||(priority.indexOf(a.id)<0?99:priority.indexOf(a.id))-(priority.indexOf(b.id)<0?99:priority.indexOf(b.id)));
+   const chosen:City[]=[];const limit=root.dataset.region==='south-central-asia'?compact?6:9:compact?8:12;
    for(const city of ordered){const p=project(city.coordinates);if(city.id===state.detail||chosen.every(c=>{const q=project(c.coordinates);return Math.hypot(p.x-q.x,p.y-q.y)>43;}))chosen.push(city);if(chosen.length===limit)break;}
    visible=chosen;
   }
@@ -116,16 +121,23 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
    codes.push({id,code:text,anchors:cls.anchors.map(project),width:measuredWidth(b,cls.code.length*9+12),height:24});
   }
   const annotation:Annotation[]=[];
-  if(active&&metadata.settlements?.[active])for(const c of metadata.settlements[active].categories.filter(c=>!c.id.endsWith('-shared')))annotation.push({id:c.id,text:c.label,coordinate:c.anchors[0],anchors:c.anchors,color:c.color,kind:'settlement'});
+  if(active&&metadata.settlements?.[active]&&!(root.dataset.region==='south-central-asia'&&active==='religion'&&!state.detail)){
+   const major=new Set(['ethnicity-0','ethnicity-1','ethnicity-2','ethnicity-4','ethnicity-5','ethnicity-7','ethnicity-10','ethnicity-13','ethnicity-14']);
+   const detailed=map.getZoom()>=4.7||!!state.detail;
+   for(const c of metadata.settlements[active].categories.filter(c=>!c.id.endsWith('-shared')&&(root.dataset.region!=='south-central-asia'||active!=='ethnicity'||detailed||major.has(c.id))))annotation.push({id:c.id,text:c.label,coordinate:c.anchors[0],anchors:c.anchors,color:c.color,kind:'settlement'});
+  }
   if(['water','basins'].includes(active??'')&&config.riverFile&&datasets.has(config.riverFile))for(const focus of config.waterFocus??[]){
    const feature=datasets.get(config.riverFile).features.find((f:any)=>f.properties.id===focus.river);if(!feature)continue;
    const lines=feature.geometry.type==='MultiLineString'?feature.geometry.coordinates:[feature.geometry.coordinates],path=[...lines].sort((a:any,b:any)=>b.length-a.length)[0];if(path?.length){const anchors=root.dataset.region==='southeast-asia'?[.5,.7,.3,.85,.15].map(f=>path[Math.floor((path.length-1)*f)]):undefined;annotation.push({id:focus.river,text:focus.displayName??focus.name,coordinate:path[Math.floor(path.length/2)],anchors,kind:'river'});}
   }
   if(active==='landform')annotation.push(...(config.landforms??[]).map(f=>({id:f.id,text:f.name,coordinate:f.coordinates,kind:'landform'})));
-  if(active==='overview'&&!water&&datasets.has(metadata.farming.file)){const groups=metadata.farming.products.map(p=>{const labels=metadata.farming.labels.filter(a=>a.product===p.id);return labels.length?{...labels[0],id:p.id,anchors:labels.map(a=>a.coordinate)}:null;}).filter((a):a is NonNullable<typeof a>=>!!a&&selectedKinds.has(a.kind??'crop')&&(!singleFarm()||a.product===singleFarm()!.id));annotation.push(...groups.filter(a=>a.kind==='crop'));
+  if(active==='overview'&&!water&&datasets.has(metadata.farming.file)){const southCentral=root.dataset.region==='south-central-asia';const groups=metadata.farming.products.map(p=>{const labels=metadata.farming.labels.filter(a=>a.product===p.id);return labels.length?{...labels[0],id:p.id,anchors:labels.map(a=>a.coordinate)}:null;}).filter((a):a is NonNullable<typeof a>=>!!a&&selectedKinds.has(a.kind??'crop')&&(!singleFarm()||a.product===singleFarm()!.id));const cropGroups=groups.filter(a=>a.kind==='crop');if(southCentral&&selectedFarm()?.kind==='crop')cropGroups.sort((a,b)=>Number(b.product===selectedFarm()!.id)-Number(a.product===selectedFarm()!.id));annotation.push(...cropGroups);
    if(selectedKinds.has('livestock')){
     const points=metadata.farming.labels.filter(a=>a.kind==='livestock'&&(!singleFarm()||a.product===singleFarm()!.id)).filter(a=>Number(a.id.split('-').at(-1))<3);
+    const pointPositions:{x:number;y:number}[]=[];
     for(const a of points){const p=project(a.coordinate);if(p.x<12||p.y<12||p.x>width-12||p.y>height-12)continue;
+     if(southCentral&&pointPositions.some(q=>Math.hypot(p.x-q.x,p.y-q.y)<17))continue;
+     pointPositions.push(p);
      const b=button('animal-point-'+a.id,'','asia-climate-station asia-livestock-point',()=>chooseFarm(a.product!));b.style.opacity=selectedFarm()?.kind==='crop'?'.2':'1';b.style.left=p.x+'px';b.style.top=p.y+'px';b.style.setProperty('--label-color',a.color??'#80583b');b.setAttribute('aria-label',a.text+'の代表地点');b.setAttribute('aria-pressed',String(state.topic===a.product));const name=document.createElement('span');name.textContent=a.text;b.append(name);b.hidden=false;
      obstacles.push({left:p.x-6,top:p.y-6,right:p.x+6,bottom:p.y+6});
      // One permanent name per kind; all representative points keep hover names.
@@ -142,7 +154,7 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
   if(water&&config.riverFile&&datasets.has(config.riverFile))for(const f of datasets.get(config.riverFile).features.filter((f:any)=>config.riverIds?.includes(f.properties.id))){const lines=f.geometry.type==='MultiLineString'?f.geometry.coordinates:[f.geometry.coordinates];const line=[...lines].sort((a:any,b:any)=>b.length-a.length)[0];annotation.push({id:f.properties.id,text:f.properties.label,coordinate:line[Math.floor(line.length/2)],kind:'river'});}
   const isoline=active==='terrain'?(metadata.terrain?.bands??metadata.terrain):active==='precipitation'?(metadata.rainfall.bands??metadata.rainfall):water?metadata.rainfall:null;
   if(isoline&&('file' in isoline&&isoline.file?datasets.has(isoline.file):contourBandFiles(isoline as AsiaContourBands,'band').every(file=>datasets.has(file))))annotation.push(...isoline.labels.filter(a=>!a.value||a.value%(water?1000:active==='terrain'?1000:500)===0).slice(0,water?6:12));
-  for(const a of annotation){const id=active+'-'+a.id;const b=button(id,a.text,a.kind==='river'?'asia-river-label':a.kind==='landform'?'asia-landform-label':a.product?'asia-farm-label':a.kind==='settlement'?'asia-settlement-label':'asia-rain-label',()=>a.product?chooseFarm(a.product):a.kind==='landform'&&config.selectLandform?config.selectLandform(a.id):choosePoint(a.coordinate));if(a.color)b.style.setProperty('--label-color',a.color);if(a.kind==='settlement'){b.onclick=event=>{event.stopPropagation();config.selectSettlement?.(a.id);};b.setAttribute('aria-pressed',String(state.detail===a.id));}b.setAttribute('aria-label',a.product?a.text+'の詳しい分布':['river','landform','settlement'].includes(a.kind??'')?a.text:`${a.text}${active==='terrain'?'mの等高線':'mmの等雨量線'}`);codes.push({id,code:a.text,anchors:(a.anchors??[a.coordinate]).map(project),width:measuredWidth(b,a.text.length*11+10),height:24});}
+  for(const a of annotation){const id=active+'-'+a.id;const b=button(id,a.text,a.kind==='river'?'asia-river-label':a.kind==='landform'?'asia-landform-label':a.product?'asia-farm-label':a.kind==='settlement'?'asia-settlement-label':'asia-rain-label',()=>a.product?chooseFarm(a.product):a.kind==='landform'&&config.selectLandform?config.selectLandform(a.id):choosePoint(a.coordinate));if(a.color)b.style.setProperty('--label-color',a.color);if(a.product&&root.dataset.region==='south-central-asia'){b.dataset.product=a.product;b.dataset.kind=a.kind??'';b.style.opacity=selectedFarm()?.kind==='crop'&&a.product!==selectedFarm()!.id?'.38':'1';b.setAttribute('aria-pressed',String(a.product===state.topic));}if(a.kind==='settlement'){b.onclick=event=>{event.stopPropagation();config.selectSettlement?.(a.id);};b.setAttribute('aria-pressed',String(state.detail===a.id));}b.setAttribute('aria-label',a.product?a.text+'の詳しい分布':['river','landform','settlement'].includes(a.kind??'')?a.text:`${a.text}${active==='terrain'?'mの等高線':'mmの等雨量線'}`);codes.push({id,code:a.text,anchors:(a.anchors??[a.coordinate]).map(project),width:measuredWidth(b,a.text.length*11+10),height:24});}
   const southeastRiverIds=root.dataset.region==='southeast-asia'&&['water','basins'].includes(active??'')?new Set(config.waterFocus?.map(f=>active+'-'+f.river)):new Set<string>();
   const riverCodes=codes.filter(c=>southeastRiverIds.has(c.id));
   const riverPlacements=layoutSoutheastRiverNames(riverCodes,bounds,[...obstacles,...placed]);
@@ -163,10 +175,17 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
  }
  async function show(currentMap:import('maplibre-gl').Map){
   for(const cancel of sourceWaits)cancel();
+  clearReligionMarkers();
   if(map!==currentMap){map=currentMap;map.on('movestart',()=>{overlay.hidden=true;});map.on('moveend',schedule);map.on('resize',schedule);}
   syncKinds();const seq=++revision,current=mode();schedule();
   if(errorMode!==current){errorMode=null;onStatus('');}
-  const settlement=current?metadata.settlements?.[current]:undefined;
+  const censusReligion=root.dataset.region==='south-central-asia'&&current==='religion'&&!getState().detail;
+  if(censusReligion)for(const census of southCentralReligionCensuses.filter(c=>!config.religionCountries||config.religionCountries.includes(c.code))){
+   const marker=document.createElement('button');marker.type='button';marker.className='sc-religion-marker';marker.setAttribute('aria-label',`${census.name}の${census.year}年宗教構成を読む`);marker.setAttribute('aria-pressed',String(getState().place===census.code));
+   let angle=0;const colorStops=census.segments.map(segment=>{const next=angle+segment.share*3.6,stop=`${segment.color} ${angle}deg ${next}deg`;angle=next;return stop;});marker.style.background=`conic-gradient(${colorStops.join(',')})`;const label=document.createElement('span');label.textContent=census.name;marker.append(label);
+   marker.addEventListener('click',event=>{event.stopPropagation();config.selectReligionCountry?.(census.code);});religionMarkers.push(new Marker({element:marker,anchor:'center'}).setLngLat(census.point).addTo(currentMap));
+  }
+  const settlement=censusReligion?undefined:current?metadata.settlements?.[current]:undefined;
   const farm=current==='overview',water=farm&&getState().overlay==='water',terrain=current==='terrain'&&!!metadata.terrain;
   const bands=current==='precipitation'?metadata.rainfall.bands:terrain?metadata.terrain?.bands:undefined;
   const bandFiles=bands?contourBandFiles(bands,'band'):[],lineFiles=bands?contourBandFiles(bands,'line'):[];
@@ -213,5 +232,5 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
  }
  for(const b of toggles)b.addEventListener('click',()=>{const kind=b.dataset.farmToggle!;if(selectedKinds.has(kind))selectedKinds.delete(kind);else selectedKinds.add(kind);const value=selectedKinds.size===2?null:selectedKinds.size===0?'none':[...selectedKinds][0] as 'crop'|'livestock';config.selectFarmKinds?.(value);if(map&&!config.selectFarmKinds)void show(map);},{signal:events.signal});
  for(const control of controls)control.addEventListener('change',()=>{if(control.checked)selectedKinds.add(control.dataset.farmKind!);else selectedKinds.delete(control.dataset.farmKind!);config.selectFarmKinds?.(selectedKinds.size===2?null:selectedKinds.size===0?'none':[...selectedKinds][0] as 'crop'|'livestock');if(map&&!config.selectFarmKinds)void show(map);},{signal:events.signal});
- return {show,refresh:schedule,setRivers(data:any){if(config.riverFile)datasets.set(config.riverFile,data);schedule();},destroy(){disposed=true;for(const cancel of sourceWaits)cancel();events.abort();cancelAnimationFrame(scheduled);overlay.replaceChildren();onStatus('');}};
+ return {show,refresh:schedule,setRivers(data:any){if(config.riverFile)datasets.set(config.riverFile,data);schedule();},destroy(){disposed=true;clearReligionMarkers();for(const cancel of sourceWaits)cancel();events.abort();cancelAnimationFrame(scheduled);overlay.replaceChildren();onStatus('');}};
 }

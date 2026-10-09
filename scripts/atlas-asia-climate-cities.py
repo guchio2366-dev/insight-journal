@@ -53,6 +53,7 @@ STATIONS: list[tuple[str, str, str, str, str]] = [
     ("cebu", "southeast-asia", "PHL", "セブ（マクタン）", "98646"),
     ("new-delhi", "south-central-asia", "IND", "ニューデリー", "42182"),
     ("mumbai", "south-central-asia", "IND", "ムンバイ", "43057"),
+    ("kolkata", "south-central-asia", "IND", "コルカタ", "42807"),
     ("chennai", "south-central-asia", "IND", "チェンナイ", "43279"),
     ("karachi", "south-central-asia", "PAK", "カラチ", "41780"),
     ("islamabad", "south-central-asia", "PAK", "イスラマバード", "41571"),

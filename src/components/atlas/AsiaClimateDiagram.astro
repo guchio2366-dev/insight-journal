@@ -2,6 +2,7 @@
 import type { AsiaClimateCity } from '../../data/atlas/asia-climate-cities';
 import {asiaRiceReading} from '../../data/atlas/asia-agriculture';
 import {asiaFarmInsights} from '../../data/atlas/asia-map-insights';
+import {southCentralCityReadings} from '../../data/atlas/asia-south-central-climate-reading';
 interface Props { city: AsiaClimateCity; precipitationMax: number; countryName?: string }
 const { city, precipitationMax, countryName } = Astro.props;
 // Compact North American proportions; retain scales covering Asian stations.
@@ -22,6 +23,7 @@ const temperatures=city.temperatureC.filter(v=>v!==null) as number[];
 const format=(v:number|null,unit:string)=>v===null?'欠測':`${v.toLocaleString('ja-JP',{minimumFractionDigits:1,maximumFractionDigits:1})} ${unit}`;
 const sourceLabel=city.countryCode==='TWN'?'台湾・中央気象署':'気象庁';
 const farmingReading=asiaFarmInsights[city.regionId];
+const localReading=city.regionId==='south-central-asia'?southCentralCityReadings[city.id]:undefined;
 ---
 <div class="asia-climate-diagram"><figure data-city-statistics>
   <figcaption><strong data-climate-place>{bangkok?'バンコク－タイの雨温図':`${city.name}${countryName?` — ${countryName}`:''}`}</strong></figcaption>
@@ -43,11 +45,14 @@ const farmingReading=asiaFarmInsights[city.regionId];
     {bangkok&&<p class="city-takeaway"><strong>年較差が小さく、雨の季節差が大きい。</strong></p>}
     <h3 data-city-climate-class title="観測地点を含む広域格子の気候区分"><b data-city-class-code></b><span data-city-class-name>気候区分：未取得</span></h3>
     <p class="city-class-description" data-city-class-description></p>
-    {!bangkok&&<p class="city-takeaway"><strong>{city.summary}</strong></p>}
     {bangkok?<>
       <p>赤道に近く一年を通じて高温です。南西季節風が湿った空気を運ぶ時期に雨が増え、北東季節風が卓越する時期は雨が少なくなります。観測所の雨温図は、バンコク周辺の乾季と雨季を比べる手掛かりです。</p>
       <section class="city-farming"><h4>周辺の農業と水利用</h4><p>バンコクのあるチャオプラヤ川下流の平野では稲作が行われます。乾季の作付けには貯水池や水路からの灌漑が関わり、雨温図の降水だけで農地へ届く水を決められません。</p><p>出典：<a href="https://www.data.jma.go.jp/cpd/monitor/nrmlist/NrmMonth.php?stn=48455">気象庁・バンコク観測所の平年値</a> · <a href="https://tmd.go.th/media/pdf-eng/climate-0215.pdf">タイ気象局・季節風の説明</a> · <a href="https://documents1.worldbank.org/curated/en/246261468311385750/pdf/multi-page.pdf">世界銀行・チャオプラヤ平野の灌漑</a>。</p><button type="button" data-compare="agriculture">周辺の米の分布を見る →</button></section>
-    </>:<><p>{city.reading}</p><section class="city-farming"><h4>地域の農林業と水の季節を読む</h4><p>{farmingReading.body}</p><p>{asiaRiceReading.relationship}</p><p>地域の参考：<a href={farmingReading.source}>農業と水の解説の出典</a>。この観測所の気候から、都市の作物や灌漑を決めることはできません。</p><button type="button" data-compare="agriculture">同じ場所で米の分布を見る →</button></section></>}
+    </>:<>
+    <p class="city-takeaway"><strong>{localReading?.pattern??city.summary}</strong></p>
+    <p>{localReading?.reason??city.reading}</p>
+    <section class="city-farming"><h4>{localReading?'周辺の農業と水利用':'地域の農林業と水の季節を読む'}</h4><p>{localReading?.agriculture??farmingReading.body}</p>{!localReading&&<p>{asiaRiceReading.relationship}</p>}<p>{localReading?<a href={localReading.agricultureSource.url}>{localReading.agricultureSource.label}</a>:<>地域の参考：<a href={farmingReading.source}>農業と水の解説の出典</a>。この観測所の気候から、都市の作物や灌漑を決めることはできません。</>}</p><button type="button" data-compare="agriculture">同じ場所で米の分布を見る →</button></section>
+    </>}
   </section>
   <p class="climate-source">{city.normalPeriod} · <a href={city.sourceUrl} title={city.sourceName} target="_blank" rel="noopener noreferrer">{sourceLabel}</a> · <a href="#asia-sources">気候区分の出典</a></p>
   <details class="monthly-values"><summary>月別の数値・観測地点</summary>

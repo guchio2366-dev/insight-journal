@@ -277,7 +277,7 @@ async function checkOperations(browser,host,profile,source){
   await page.locator('[data-reset]').click();assert.equal(await page.locator('[data-country-select]').inputValue(),'');assert.equal(new URL(page.url()).searchParams.get('place'),null);
   await open(page,host,'/atlas/asia/south-central-asia/industry/?topic=manufacturing');
   for(const [focus,country] of [['south-asia','IND'],['central-asia',null]]){
-   assert.deepEqual(await page.locator('[data-focus-link]').evaluateAll(links=>links.map(link=>link.dataset.focusLink)),['south-central-asia','south-asia','central-asia']);
+   assert.deepEqual(await page.locator('[data-focus-link]').evaluateAll(links=>links.map(link=>link.dataset.focusLink)),['south-asia','central-asia']);
    await page.locator(`[data-focus-link="${focus}"]`).focus();await page.keyboard.press('Enter');await page.waitForURL(`**/atlas/asia/${focus}/industry/**`);
    if(country){await page.locator('[data-country-select]').selectOption(country);assert.equal(new URL(page.url()).searchParams.get('place'),country);}
    else {assert.deepEqual(await page.locator('[data-country-select] option').evaluateAll(options=>options.filter(o=>o.value&&!o.disabled&&!o.hidden).map(o=>o.value)),[]);await page.locator('[data-place-story]').selectOption('uzbekistan-market');assert.equal(new URL(page.url()).searchParams.get('story'),'uzbekistan-market');}
@@ -382,9 +382,18 @@ async function checkRequestedCorrections(browser,host,profile){
   await contextPicture(page,profile,`${region}-rainfall-no-country-popup`,'asia');
   await open(page,host,`/atlas/asia/${region}/nature/?topic=basins`);const basin=page.locator('[data-hydrology-detail]');
   await page.waitForFunction(()=>document.querySelector('[data-hydrology-detail]')?.options.length>1);
-  await expand(page.locator('[data-hydrology-panel] > details').first());
-  const id=await basin.locator('option').evaluateAll(options=>options.find(o=>o.value&&!o.disabled).value);await basin.selectOption(id);
-  await page.waitForFunction(id=>new URL(location.href).searchParams.get('detail')===id,id);
+  let id;
+  if(region==='south-central-asia'){
+   assert.equal(await page.locator('[data-hydrology-detail-label]').isVisible(),false,'South/Central basin selection stays on the map');
+   const river=page.locator('.asia-river-label:visible').first();await river.waitFor({state:'visible'});await river.click();
+   await page.waitForFunction(()=>!!document.querySelector('[data-hydrology-detail]')?.value&&/集水域全体/.test(document.querySelector('[data-hydrology-value]')?.textContent??''));
+   id=await basin.inputValue();
+   assert(new URL(page.url()).searchParams.has('at'),'Map river selection must retain its clicked coordinates');
+  }else{
+   await expand(page.locator('[data-hydrology-panel] > details').first());
+   id=await basin.locator('option').evaluateAll(options=>options.find(o=>o.value&&!o.disabled).value);await basin.selectOption(id);
+   await page.waitForFunction(id=>new URL(location.href).searchParams.get('detail')===id,id);
+  }
   await settle(page);
   await page.locator('[data-map-surface]').scrollIntoViewIfNeeded();
   const basinURL=page.url(),basinValue=await page.locator('[data-hydrology-value]').textContent(),map=await page.locator('[data-map-surface]').boundingBox();
