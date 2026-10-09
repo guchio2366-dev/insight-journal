@@ -1,6 +1,7 @@
 // Focus pages share the verified South/Central Asia datasets and their scope.
 // The viewport changes; national statistics are not relabelled as subregional totals.
 import type {AsiaField} from '../../lib/atlas-asia-state';
+import {southCentralIndustryGroups,southCentralIndustrySites} from './asia-south-central-industry.ts';
 export const asiaFocusViews = {
  'south-asia': {
   label:'南アジア', bounds:[60.8,5.5,97.6,37.2] as [number,number,number,number],
@@ -22,6 +23,40 @@ export const asiaFocusCountries:Record<AsiaFocusId,readonly string[]>={
  'south-asia':['AFG','BGD','BTN','IND','LKA','MDV','NPL','PAK'],
  'central-asia':['KAZ','KGZ','TJK','TKM','UZB'],
 };
+// The underlying rasters cover both regions. These lists define what a
+// regional entrance may offer as a named example, without changing the source
+// grid or presenting a combined-region statistic as a regional total.
+export const asiaFocusIndustryGroups:Record<AsiaFocusId,readonly string[]>={
+ 'south-asia':['sc-textiles','sc-steel','sc-refining','sc-auto','sc-pharma','sc-it','sc-hydro','sc-tourism','sc-tea'],
+ 'central-asia':['sc-oilgas','sc-minerals','sc-cotton','sc-hydro'],
+};
+export const asiaFocusIndustryOverview:Record<AsiaFocusId,string>={
+ 'south-asia':'バングラデシュの衣料縫製、インド東部の鉄鋼と南西部の精製、ヒマラヤ側の水力など、確認できる立地例を示します。原料、加工、交通や市場の役割を地点ごとに読みます。国別の州内産業統計はインドだけを対象とします。',
+ 'central-asia':'カザフスタン西部の油田と北東部の銅、トルクメニスタンのガス、ウズベキスタンの綿繊維、天山・パミールの水力を確認できる地点で示します。鉱床、加工、送電や輸送を分けて読みます。',
+};
+export const asiaFocusWaterRivers:Record<AsiaFocusId,readonly string[]>={
+ 'south-asia':['rivers-194','rivers-29'],
+ 'central-asia':['rivers-112','rivers-79'],
+};
+export const asiaFocusWaterOverview:Record<AsiaFocusId,string>={
+ 'south-asia':'インダス川とガンジス・ブラマプトラ水系は山地から平野へ続きます。青い流路と流域を重ね、雨の降る場所と上流から水が届く場所を分けて読みます。帯水層の位置は取水可能量を示しません。',
+ 'central-asia':'アムダリヤ川とシルダリヤ川はパミール・天山側から乾いた低地へ続きます。国境を越える流域と青い流路を重ね、上流の水と下流の灌漑を読みます。帯水層の位置は取水可能量を示しません。',
+};
+export const asiaFocusShareExample:Record<AsiaFocusId,{country:string;product:string}>={
+ 'south-asia':{country:'IND',product:'rice-production'},
+ 'central-asia':{country:'KAZ',product:'wheat-production'},
+};
+export function asiaFocusIndustry(focusId:AsiaFocusId){
+ const countries=new Set(asiaFocusCountries[focusId]);
+ const allowed=new Set(asiaFocusIndustryGroups[focusId]);
+ const sites=southCentralIndustrySites.filter(site=>countries.has(site.country)&&allowed.has(site.group));
+ const groups=southCentralIndustryGroups.filter(group=>sites.some(site=>site.group===group.id)).map(group=>group.id==='sc-hydro'?{
+  ...group,
+  fact:focusId==='south-asia'?'ネパールのカリガンダキとブータンのチュカで、ヒマラヤ側の水力発電を比べます。':'タジキスタンのヌレークとキルギスのトクトグルで、天山・パミール側の水力発電を比べます。',
+  reason:focusId==='south-asia'?'山地の高低差と河川水に加え、送電先と季節ごとの流量が立地・利用に関わります。':'山地の高低差と河川水に加え、貯水、送電、下流の灌漑への配分が立地・利用に関わります。',
+ }:group);
+ return {groups,sites,overview:asiaFocusIndustryOverview[focusId]};
+}
 export function asiaFocusForPath(pathname:string):AsiaFocusId|undefined{
  return asiaFocusIds.find(id=>pathname.includes(`/atlas/asia/${id}/`));
 }
