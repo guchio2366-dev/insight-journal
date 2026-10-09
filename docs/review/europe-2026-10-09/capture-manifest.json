@@ -1,0 +1,158 @@
+{
+  "baseCommit": "88728a46d2e531502947864a7647b6f6abe7e80a",
+  "source": "local working tree; screenshots captured after the code changes listed in this Draft PR",
+  "records": [
+    {
+      "width": 1440,
+      "name": "crops",
+      "title": "穀物・畑作の主な分布",
+      "ids": [
+        "barley",
+        "maize",
+        "potato",
+        "rapeseed",
+        "sugarbeet",
+        "wheat"
+      ],
+      "labels": [
+        "小麦",
+        "大麦",
+        "トウモロコシ",
+        "ジャガイモ"
+      ],
+      "file": "1440-crops.png"
+    },
+    {
+      "width": 1440,
+      "name": "livestock",
+      "title": "酪農・畜産の主な分布",
+      "ids": [
+        "cattle",
+        "chicken",
+        "pig",
+        "sheep"
+      ],
+      "labels": [
+        "牛",
+        "豚",
+        "鶏",
+        "羊"
+      ],
+      "file": "1440-livestock.png"
+    },
+    {
+      "width": 1440,
+      "name": "horticulture",
+      "title": "果樹・園芸の主な分布",
+      "ids": [
+        "citrus",
+        "temperatefruit",
+        "vegetables"
+      ],
+      "labels": [
+        "その他の野菜",
+        "温帯果樹",
+        "柑橘類"
+      ],
+      "file": "1440-horticulture.png"
+    },
+    {
+      "width": 1440,
+      "name": "industry",
+      "labels": [
+        "化学・港湾ロッテルダム",
+        "化学ルートヴィヒスハーフェン",
+        "機械ミュンヘン",
+        "機械ムラダー・ボレスラフ",
+        "機械クヴァシニ",
+        "航空機トゥールーズ",
+        "航空機・港湾ハンブルク",
+        "航空機ブラショフ",
+        "機械フェルトホーフェン",
+        "化学カロンボー",
+        "金融フランクフルト",
+        "エネルギーノルウェー沖（Johan Sverdrup）",
+        "観光アドリア海沿岸",
+        "繊維ポルト・ブラガ周辺",
+        "食品加工パルマ周辺"
+      ],
+      "file": "1440-industry.png"
+    },
+    {
+      "width": 1024,
+      "name": "crops",
+      "title": "穀物・畑作の主な分布",
+      "ids": [
+        "barley",
+        "maize",
+        "potato",
+        "rapeseed",
+        "sugarbeet",
+        "wheat"
+      ],
+      "labels": [
+        "小麦",
+        "大麦",
+        "トウモロコシ",
+        "ジャガイモ"
+      ],
+      "file": "1024-crops.png"
+    },
+    {
+      "width": 1024,
+      "name": "livestock",
+      "title": "酪農・畜産の主な分布",
+      "ids": [
+        "cattle",
+        "chicken",
+        "pig",
+        "sheep"
+      ],
+      "labels": [
+        "牛",
+        "豚",
+        "鶏",
+        "羊"
+      ],
+      "file": "1024-livestock.png"
+    },
+    {
+      "width": 1024,
+      "name": "horticulture",
+      "title": "果樹・園芸の主な分布",
+      "ids": [
+        "citrus",
+        "temperatefruit",
+        "vegetables"
+      ],
+      "labels": [
+        "その他の野菜",
+        "温帯果樹",
+        "柑橘類"
+      ],
+      "file": "1024-horticulture.png"
+    },
+    {
+      "width": 1024,
+      "name": "industry",
+      "labels": [
+        "化学・港湾ロッテルダム",
+        "化学ルートヴィヒスハーフェン",
+        "機械ミュンヘン",
+        "機械ムラダー・ボレスラフ",
+        "機械クヴァシニ",
+        "航空機トゥールーズ",
+        "航空機・港湾ハンブルク",
+        "航空機ブラショフ",
+        "機械フェルトホーフェン",
+        "化学カロンボー",
+        "金融フランクフルト",
+        "エネルギーノルウェー沖（Johan Sverdrup）",
+        "観光アドリア海沿岸",
+        "繊維ポルト・ブラガ周辺",
+        "食品加工パルマ周辺"
+      ],
+      "file": "1024-industry.png"
+    }
+  ]
+}
