@@ -1,6 +1,6 @@
 ---
 import AsiaFieldNavigation from './AsiaFieldNavigation.astro';
-import {asiaFocusViews,asiaFocusFieldReadings,asiaFocusCountries,type AsiaFocusId} from '../../data/atlas/asia-focus';
+import {asiaFocusViews,asiaFocusFieldReadings,asiaFocusCountries,asiaFocusIndustry,asiaFocusWaterRivers,asiaFocusWaterOverview,asiaFocusShareExample,asiaFocusFarmKindReading,type AsiaFocusId} from '../../data/atlas/asia-focus';
 import {southCentralFieldReadings} from '../../data/atlas/asia-south-central-reading';
 import eastContentGeography from '../../../public/assets/atlas/asia-population-v1/east-asia.geography.json';
 import southeastContentGeography from '../../../public/assets/atlas/asia-population-v1/southeast-asia.geography.json';
@@ -55,7 +55,7 @@ const {regionId,initialField='natural',focusId}=Astro.props;
 const focus=focusId?asiaFocusViews[focusId]:null,pageId=focusId??regionId;
 const region={...regionalMaps[regionId],...(focus?{label:focus.label}:{})},reading={...asiaRegionReading[regionId],...focus};
 const cities=asiaClimateCities.filter(city=>city.regionId===regionId&&(!focusId||asiaFocusCountries[focusId].includes(city.countryCode)));
-const targets=regionFeatures(regionId);
+const targets=regionFeatures(regionId).filter(f=>!focusId||asiaFocusCountries[focusId].includes(f.properties.code));
 const countryCodes=new Set(targets.map(f=>f.properties.code));
 const rings=(f:CountryFeature)=>f.geometry.type==='Polygon'?f.geometry.coordinates as number[][][]:(f.geometry.coordinates as number[][][][]).flat();
 const countryBounds=(f:CountryFeature)=>{const p=rings(f).flat();return [Math.min(...p.map(p=>p[0])),Math.min(...p.map(p=>p[1])),Math.max(...p.map(p=>p[0])),Math.max(...p.map(p=>p[1]))];};
@@ -72,30 +72,37 @@ const visibleCountries=new Set(focusId?asiaFocusCountries[focusId]:countries.map
 const contentExtent=contentBounds(contentGeography.features.filter(f=>visibleCountries.has(f.properties.code)).map(f=>f.geometry.coordinates));
 const longitudeScale=Math.cos(region.latitude*Math.PI/180);
 const project=([lon,lat]:number[])=>[lon*longitudeScale,-lat];
-const bounds=reading.bounds;
+const bounds=focusId?contentExtent:reading.bounds;
 const frame=[bounds[0]*longitudeScale,-bounds[3],(bounds[2]-bounds[0])*longitudeScale,bounds[3]-bounds[1]];
 const path=(f:CountryFeature)=>rings(f).map(ring=>ring.map((p,i)=>{const [x,y]=project(p);return `${i?'L':'M'}${x.toFixed(3)},${y.toFixed(3)}`;}).join('')+'Z').join('');
 const nearby=features.filter(f=>!countryCodes.has(f.properties.code)&&rings(f).some(r=>r.some(p=>p[0]>bounds[0]-10&&p[0]<bounds[2]+10&&p[1]>bounds[1]-10&&p[1]<bounds[3]+10)));
 const precipitationMax=Math.max(400,Math.ceil(Math.max(...cities.flatMap(c=>c.precipitationMm.filter(v=>v!==null) as number[]))/200)*200);
-const physical=physicalManifest.regions[regionId], physicalFocus=asiaPhysicalFocus.filter(f=>f.region===regionId);
-const population=populationManifest.regions[regionId] as unknown as AsiaPopulationRegion;
-const config={regionId,label:region.label,bounds,contentExtent,dataBounds:asiaRegionReading[regionId].bounds,countries,cities,classes:asiaClimateClasses,climate:climateManifest.regions[regionId],physical,physicalFocus,geographyUrl:withBase('/assets/atlas/asia-geography-v1.json'),climateBase:withBase('/assets/atlas/asia-climate-v2/'),agricultureBase:withBase('/assets/atlas/asia-agriculture-v1/'),physicalBase:withBase('/assets/atlas/asia-physical-v1/')};
+const physical={...physicalManifest.regions[regionId],waterFeatures:physicalManifest.regions[regionId].waterFeatures.filter(f=>!focusId||f.countries.some(code=>asiaFocusCountries[focusId].includes(code)))}, physicalFocus=asiaPhysicalFocus.filter(f=>f.region===regionId&&(!focusId||asiaFocusCountries[focusId].includes(f.country)));
+const population={...populationManifest.regions[regionId],cities:populationManifest.regions[regionId].cities.filter(c=>!focusId||asiaFocusCountries[focusId].includes(c.country))} as unknown as AsiaPopulationRegion;
+const config={regionId,focusId,label:region.label,bounds,contentExtent,dataBounds:focusId?bounds:asiaRegionReading[regionId].bounds,countries,cities,classes:asiaClimateClasses,climate:climateManifest.regions[regionId],physical,physicalFocus,geographyUrl:withBase('/assets/atlas/asia-geography-v1.json'),climateBase:withBase('/assets/atlas/asia-climate-v2/'),agricultureBase:withBase('/assets/atlas/asia-agriculture-v1/'),physicalBase:withBase('/assets/atlas/asia-physical-v1/')};
 const farming=farmingManifest.regions[regionId] as unknown as AsiaFarmingRegion;
 Object.assign(config,{farming,farmingBase:withBase('/assets/atlas/asia-farming-v1/')});
-const presentation={...presentationManifest.regions[regionId],settlements:settlementManifest.regions[regionId]};
+const pointInRing=([x,y]:number[],ring:number[][])=>{let inside=false;for(let i=0,j=ring.length-1;i<ring.length;j=i++)if((ring[i][1]>y)!==(ring[j][1]>y)&&x<(ring[j][0]-ring[i][0])*(y-ring[i][1])/(ring[j][1]-ring[i][1])+ring[i][0])inside=!inside;return inside;};
+const focusShapes=contentGeography.features.filter(feature=>visibleCountries.has(feature.properties.code));
+const inFocus=(point:number[])=>!focusId||focusShapes.some(feature=>{const polygons=feature.geometry.type==='Polygon'?[feature.geometry.coordinates]:feature.geometry.coordinates;return polygons.some((rings:number[][][])=>pointInRing(point,rings[0])&&!rings.slice(1).some(ring=>pointInRing(point,ring)));});
+const originalPresentation=presentationManifest.regions[regionId];
+const presentation={...originalPresentation,farming:{...originalPresentation.farming,labels:originalPresentation.farming.labels.filter(label=>inFocus(label.coordinate))},settlements:Object.fromEntries(Object.entries(settlementManifest.regions[regionId]).map(([key,value])=>[key,{...value,categories:value.categories.map(category=>({...category,anchors:category.anchors.filter(inFocus)})).filter(category=>category.anchors.length)}]))};
 Object.assign(config,{presentation,presentationBase:withBase('/assets/atlas/asia-presentation-v1/')});
 const familyNames=['熱帯','乾燥帯','温帯','冷帯','寒帯'];
 Object.assign(config,{population,populationBase:withBase('/assets/atlas/asia-population-v1/')});
-const regionalIndustryTopics=regionId==='south-central-asia'?[{id:'sc-overview',title:'南・中央アジアの産業分布',parent:'地域の特徴',kind:'regional',unit:'立地の事例',year:'地域概観',source:'https://www.ilo.org/media/438656/download',note:'出典で確認した代表的な地域を点で示します。施設の全数や生産量ではありません。'},...southCentralIndustryGroups.map(group=>({id:group.id,title:group.title,parent:'地域の特徴',kind:'regional',unit:'立地の事例',year:'地域概観',source:group.source.url,note:'出典で確認した代表的な地域を点で示します。施設の全数や生産量ではありません。'}))]:[];
-const industry={...industryManifest.regions[regionId],topics:[...regionalIndustryTopics,...industryManifest.regions[regionId].topics,...tradeTopics].filter(topic=>focusId!=='central-asia'||!('country' in topic)||topic.country!=='IND'),...(regionId==='southeast-asia'?{countryScope:southeastIndustryCountryScope}:{})} as unknown as IndustryRegion;
-Object.assign(config,{industry,industryBase:withBase('/assets/atlas/asia-industry-v1/'),...(regionId==='south-central-asia'?{industryCountryCodes:focusId==='central-asia'?[]:['IND']}:{})});
+const focusIndustry=focusId?asiaFocusIndustry(focusId):null;
+const regionalIndustryGroups=focusIndustry?.groups??southCentralIndustryGroups;
+const regionalIndustryTopics=regionId==='south-central-asia'?[{id:'sc-overview',title:`${region.label}の産業分布`,parent:'地域の特徴',kind:'regional',unit:'立地の事例',year:'地域概観',source:'https://www.ilo.org/media/438656/download',note:'出典で確認した代表的な地域を点で示します。施設の全数や生産量ではありません。'},...regionalIndustryGroups.map(group=>({id:group.id,title:group.title,parent:'地域の特徴',kind:'regional',unit:'立地の事例',year:'地域概観',source:group.source.url,note:'出典で確認した代表的な地域を点で示します。施設の全数や生産量ではありません。'}))]:[];
+const industry={...industryManifest.regions[regionId],...(focusId?{countries:asiaFocusCountries[focusId]}:{}),topics:[...regionalIndustryTopics,...industryManifest.regions[regionId].topics,...tradeTopics].filter(topic=>focusId!=='central-asia'||!('country' in topic)||topic.country!=='IND'),...(regionId==='southeast-asia'?{countryScope:southeastIndustryCountryScope}:{})} as unknown as IndustryRegion;
+Object.assign(config,{industry,industryBase:withBase('/assets/atlas/asia-industry-v1/'),industrySites:focusIndustry?.sites,industryGroups:focusIndustry?.groups,industryOverview:focusIndustry?.overview,...(regionId==='south-central-asia'?{industryCountryCodes:focusId==='central-asia'?[]:['IND']}:{})});
 Object.assign(config,{water:waterManifest.regions[regionId],waterBase:withBase('/assets/atlas/asia-water-v1/')});
 Object.assign(config,{seasonalBase:withBase('/assets/atlas/asia-seasonal-precipitation-v1/')});
-const social=withSocialOverviews(socialManifest.regions[regionId] as SocialRegion);
+const socialBase=withSocialOverviews(socialManifest.regions[regionId] as SocialRegion);
+const social=focusId?{...socialBase,countries:asiaFocusCountries[focusId],groups:socialBase.groups.filter(group=>!group.country||asiaFocusCountries[focusId].includes(group.country)),topics:socialBase.topics.filter(topic=>!socialBase.groups.some(group=>group.id===topic.group&&group.country&&!asiaFocusCountries[focusId].includes(group.country)))}:socialBase;
 const farmInsight=asiaFarmInsights[regionId];
-Object.assign(config,{farmInsight,focusReadings:focusId?asiaFocusFieldReadings[focusId]??null:regionId==='southeast-asia'?southeastAsiaInitialReadings():regionId==='south-central-asia'?southCentralFieldReadings:null});
+Object.assign(config,{farmInsight,focusWaterRivers:focusId?asiaFocusWaterRivers[focusId]:null,focusWaterOverview:focusId?asiaFocusWaterOverview[focusId]:null,focusShareExample:focusId?asiaFocusShareExample[focusId]:null,focusFarmKindReading:focusId?asiaFocusFarmKindReading[focusId]:null,focusReadings:focusId?asiaFocusFieldReadings[focusId]??null:regionId==='southeast-asia'?southeastAsiaInitialReadings():regionId==='south-central-asia'?southCentralFieldReadings:null});
 Object.assign(config,{social,socialBase:withBase('/assets/atlas/asia-social-v1/')});
-Object.assign(config,{trade:tradeManifest.regions[regionId],tradeBase:withBase('/assets/atlas/asia-trade-v1/'),tradeChapters:tradeManifest.chapters});
+Object.assign(config,{trade:{...tradeManifest.regions[regionId],...(focusId?{countries:asiaFocusCountries[focusId]}:{})},tradeBase:withBase('/assets/atlas/asia-trade-v1/'),tradeChapters:tradeManifest.chapters});
 const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林業'},{id:'natural',label:'自然環境'},{id:'industry',label:'主要産業'},{id:'population',label:'人口'}];
 ---
 <BaseLayout title={`${region.label}地図｜自然環境・農林業・主要産業・人口`} description={reading.summary} compactAtlas canonicalPath={`/atlas/asia/${pageId}/${asiaFieldPaths[initialField]}/`}>
@@ -106,8 +113,8 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
       <div class="atlas-compact-heading"><nav aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a><span> / </span><a href={withBase(`/atlas/asia/${pageId}/nature/`)}>{region.label}</a></nav><span data-current-place>{region.label}全体</span></div>
       <h1 class="visually-hidden">{region.label}の地図から自然環境・農林業・主要産業・人口を読む</h1>
       <div class="atlas-region-controls asia-region-shell">
-       <AtlasRegionNavigation group="asia" current={regionId} />
-       {regionId==='south-central-asia'&&<nav class="asia-focus-navigation" aria-label="南・中央アジアの表示範囲">{[{id:'south-central-asia',label:'南・中央アジア全体'},...Object.entries(asiaFocusViews).map(([id,v])=>({id,label:v.label}))].map(v=><a href={withBase(`/atlas/asia/${v.id}/${asiaFieldPaths[initialField]}/`)} data-focus-link={v.id} aria-current={pageId===v.id?'page':undefined}>{v.label}</a>)}</nav>}
+       <AtlasRegionNavigation group="asia" current={pageId} />
+       {regionId==='south-central-asia'&&<nav class="asia-focus-navigation" aria-label="南・中央アジアの地域">{Object.entries(asiaFocusViews).map(([id,v])=><a href={withBase(`/atlas/asia/${id}/${asiaFieldPaths[initialField]}/`)} data-focus-link={id} aria-current={pageId===id?'page':undefined}>{v.label}</a>)}</nav>}
        <div class="asia-toolbar"><label data-country-picker>国・地域<select data-country-select aria-label="国・地域を選ぶ"><option value="">{region.label}全体</option>{countries.map(c=><option value={c.code}>{c.name}</option>)}</select></label><button class="asia-reset" type="button" data-reset>全体に戻す</button></div>
       </div>
       <nav class="atlas-tabs atlas-tabs-with-overview asia-field-tabs" aria-label="地図の分野"><a data-atlas-overview-link href={withBase(`/atlas/asia/${pageId}/overview/`)}>概要</a>{fieldTabs.map(f=><a href={withBase(`/atlas/asia/${pageId}/${asiaFieldPaths[f.id]}/`)} data-field={f.id} aria-current={initialField===f.id?'page':undefined}>{f.label}</a>)}</nav>
@@ -129,7 +136,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
         </div>
         <div class="asia-map-legend" data-asia-map-legend></div>
         <section class="asia-legend asia-farm-key" data-farm-overview-legend hidden={initialField!=='agriculture'} aria-label="農畜産物の品目一覧"><p class="asia-farm-period">2020年・概略分布</p><button class="asia-farm-return" type="button" data-farm-choice="overview" hidden>全品目の分布へ</button>{['crop','livestock'].map(kind=><div class="asia-farm-key-row"><strong>{kind==='crop'?'作物':'家畜'}</strong><div class="asia-farm-products">{presentation.farming.products.filter(p=>p.kind===kind).map(p=><button type="button" data-farm-choice={p.id} data-kind={p.kind} aria-pressed="false" style={`--product-color:${p.color}`} title={`${p.title}の詳しい分布を表示`}><i></i>{p.title}</button>)}</div></div>)}<p class="asia-farm-density-key" data-farm-density-key><span>2020年の概略分布</span><span><i class="core"></i>作物の集中域</span><span><i class="spread"></i>周辺の分布</span><span>● 畜産の代表点（数量を表しません）</span></p></section>
-        <div class="asia-map-items" data-asia-map-items aria-label="地図に表示する項目">{regionId==='south-central-asia'&&<><label class="asia-topic-picker asia-south-central-product-picker" data-farming-selector hidden={initialField!=='agriculture'}>品目別の詳しい分布<select data-farming-topic aria-label="農林業の主題"><option value="overview">農畜産物の分布</option><option value="rice">米</option>{farming.layers.map(t=><option value={t.id}>{t.title}</option>)}</select></label><label class="asia-topic-picker" data-sc-industry-picker hidden={initialField!=='industry'}>地域の産業分布<select data-sc-industry-topic aria-label="南・中央アジアの産業を選ぶ"><option value="sc-overview">全体の産業分布</option>{southCentralIndustryGroups.map(g=><option value={g.id}>{g.title}</option>)}{focusId!=='central-asia'&&<><option value="in-manufacturing">インドの州別製造業</option><option value="in-services">インドの州別サービス業</option></>}</select></label></>}</div>
+        <div class="asia-map-items" data-asia-map-items aria-label="地図に表示する項目">{regionId==='south-central-asia'&&<><label class="asia-topic-picker asia-south-central-product-picker" data-farming-selector hidden={initialField!=='agriculture'}>品目別の詳しい分布<select data-farming-topic aria-label="農林業の主題"><option value="overview">農畜産物の分布</option><option value="rice">米</option>{farming.layers.map(t=><option value={t.id}>{t.title}</option>)}</select></label><label class="asia-topic-picker" data-sc-industry-picker hidden={initialField!=='industry'}>地域の産業分布<select data-sc-industry-topic aria-label="南・中央アジアの産業を選ぶ"><option value="sc-overview">全体の産業分布</option>{regionalIndustryGroups.map(g=><option value={g.id}>{g.title}</option>)}{focusId!=='central-asia'&&<><option value="in-manufacturing">インドの州別製造業</option><option value="in-services">インドの州別サービス業</option></>}</select></label></>}</div>
         <div class="asia-map-selection" aria-live="polite"><span class="selection-dot"></span><span data-grid-reading>{initialField==='natural'?'地図上の陸地を選ぶと、気候区分を確認できます。':'地図上の対象地域を選ぶと、格子内の米の収穫面積を確認できます。'}</span></div>
         <p class="asia-gesture" data-map-gesture>都市の点を選ぶと雨温図が開きます。地図は2本指で移動・拡大できます。</p>
         {(regionId==='south-central-asia'||regionId==='southeast-asia')&&<section class="asia-farm-connections" data-south-central-farm-connections hidden={initialField!=='agriculture'} aria-label="農業の供給と世界での位置">

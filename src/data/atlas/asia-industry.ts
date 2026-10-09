@@ -32,7 +32,7 @@ export function normalizeIndustryState(region:IndustryRegion,state:AsiaState,dat
  const topic=industryTopic(region,state);
  if(state.topic&&state.topic!==topic.id)state={...state,detail:null,point:null};
  const candidate=state.detail&&isIndustryDetailId(state.detail)?state.detail:null;
- if(topic.kind==='regional')return {...state,topic:topic.id,place:null,detail:candidate,city:null};
+ if(topic.kind==='regional')return {...state,topic:topic.id,place:state.place&&region.countries.includes(state.place)?state.place:null,detail:candidate,city:null};
  if(topic.kind==='trade')return {...state,topic:topic.id,city:null};
  // Keep a bounded URL candidate until the lazy dataset can validate it. No
  // facility names, coordinates or selections are displayed from this ID alone.

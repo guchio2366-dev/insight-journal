@@ -277,7 +277,7 @@ async function checkOperations(browser,host,profile,source){
   await page.locator('[data-reset]').click();assert.equal(await page.locator('[data-country-select]').inputValue(),'');assert.equal(new URL(page.url()).searchParams.get('place'),null);
   await open(page,host,'/atlas/asia/south-central-asia/industry/?topic=manufacturing');
   for(const [focus,country] of [['south-asia','IND'],['central-asia',null]]){
-   assert.deepEqual(await page.locator('[data-focus-link]').evaluateAll(links=>links.map(link=>link.dataset.focusLink)),['south-central-asia','south-asia','central-asia']);
+   assert.deepEqual(await page.locator('[data-focus-link]').evaluateAll(links=>links.map(link=>link.dataset.focusLink)),['south-asia','central-asia']);
    await page.locator(`[data-focus-link="${focus}"]`).focus();await page.keyboard.press('Enter');await page.waitForURL(`**/atlas/asia/${focus}/industry/**`);
    if(country){await page.locator('[data-country-select]').selectOption(country);assert.equal(new URL(page.url()).searchParams.get('place'),country);}
    else {assert.deepEqual(await page.locator('[data-country-select] option').evaluateAll(options=>options.filter(o=>o.value&&!o.disabled&&!o.hidden).map(o=>o.value)),[]);await page.locator('[data-place-story]').selectOption('uzbekistan-market');assert.equal(new URL(page.url()).searchParams.get('story'),'uzbekistan-market');}

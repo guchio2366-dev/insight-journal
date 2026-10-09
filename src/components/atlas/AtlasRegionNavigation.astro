@@ -3,7 +3,10 @@ import { americaLinks, asiaMapIds, northAmericaLinks, regionalMaps, type AtlasGr
 import { withBase } from '../../lib/urls';
 interface Props { group: AtlasGroup; current: string; country?: string }
 const { group, current, country } = Astro.props;
-const links = group === 'asia' ? asiaMapIds.map(id => ({id, ...regionalMaps[id]})) : americaLinks;
+const links = group === 'asia' ? asiaMapIds.flatMap(id => id === 'south-central-asia' ? [
+  {id:'south-asia',label:'南アジア',href:'/atlas/asia/south-asia/'},
+  {id:'central-asia',label:'中央アジア',href:'/atlas/asia/central-asia/'},
+] : [{id, ...regionalMaps[id]}]) : americaLinks;
 ---
 <div class="regional-navigation">
   <nav class="regional-tabs" aria-label={group === 'asia' ? 'アジアの地域' : '南北アメリカの地域'}>

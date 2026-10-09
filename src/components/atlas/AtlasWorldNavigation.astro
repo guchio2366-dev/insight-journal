@@ -1,5 +1,6 @@
 ---
 import { features, belongsToRegion, type CountryFeature, type RegionalId } from '../../data/atlas/regional-atlas';
+import {asiaFocusCountries} from '../../data/atlas/asia-focus';
 import europe from '../../data/atlas/europe-countries.json';
 import { europeRings } from '../../lib/atlas-europe-geometry';
 import { withBase } from '../../lib/urls';
@@ -11,7 +12,8 @@ const regions = [
   { id:'latin-america', label:'中南米', href:'/atlas/latin-america/', x:31, y:69, color:'#aabe93' },
   { id:'europe', label:'欧州', href:'/atlas/europe/', x:53, y:24, color:'#b6aed1' },
   { id:'east-asia', label:'東アジア', href:'/atlas/asia/east-asia/', x:84, y:31, color:'#8ebfba' },
-  { id:'south-central-asia', label:'南・中央アジア', href:'/atlas/asia/south-central-asia/', x:68, y:48, color:'#d7b57b' },
+  { id:'central-asia', label:'中央アジア', href:'/atlas/asia/central-asia/', x:68, y:34, color:'#d4bb86' },
+  { id:'south-asia', label:'南アジア', href:'/atlas/asia/south-asia/', x:74, y:52, color:'#d7b57b' },
   { id:'west-asia', label:'西アジア・中東', href:'/atlas/west-asia/', x:61, y:38, color:'#c9ae96' },
   { id:'southeast-asia', label:'東南アジア', href:'/atlas/asia/southeast-asia/', x:83, y:61, color:'#a8bd83' },
   { id:'africa', label:'アフリカ', href:'/atlas/africa/', x:53, y:60, color:'#d6a38d', optional:true },
@@ -39,6 +41,7 @@ function regionCountries(id: string) {
     if (id === 'west-asia') return ['ARM','AZE','BHR','CYP','CYN','GEO','IRQ','ISR','JOR','KWT','LBN','OMN','QAT','SAU','PSE','PSX','SYR','TUR','ARE','YEM','IRN','EGY'].includes(feature.properties.code);
     if (id === 'africa') return feature.properties.region === 'Africa';
     if (id === 'oceania') return feature.properties.region === 'Oceania';
+    if (id === 'south-asia' || id === 'central-asia') return asiaFocusCountries[id].includes(feature.properties.code);
     return belongsToRegion(feature, id as RegionalId);
   }).map(feature => ({ code:feature.properties.code, d:path(rings(feature)) }));
 }

@@ -120,6 +120,10 @@ jobs:
         timeout-minutes: 9
         run: node scripts/capture-asia-pc-review.mjs
 
+      - name: Verify South and Central Asia regional journeys
+        timeout-minutes: 4
+        run: ATLAS_ASIA_BROWSER=1 node --test tests/e2e/atlas-south-central-focus.test.mjs
+
       - name: Save PC images and verification metadata
         if: always()
         uses: actions/upload-artifact@v4

@@ -46,6 +46,18 @@ export const asiaFocusShareExample:Record<AsiaFocusId,{country:string;product:st
  'south-asia':{country:'IND',product:'rice-production'},
  'central-asia':{country:'KAZ',product:'wheat-production'},
 };
+export const asiaFocusFarmKindReading:Record<AsiaFocusId,Record<'crop'|'livestock'|'forest',string>>={
+ 'south-asia':{
+  crop:'ベンガルの低地の米とパンジャーブの米・小麦を、雨季、冬の栽培と灌漑から比べます。茶はダージリン・アッサムの産地を確認できます。色は2020年の推計分布で、生産量の順位ではありません。',
+  livestock:'インド・パキスタン周辺の牛・水牛の分布を見ます。西部グジャラート州のアナンド方式では村の集乳と地区の加工をつなぎます。家畜密度は乳量や集乳所の位置ではありません。',
+  forest:'ネパールの丘陵の住民管理と、インドの森林被覆を別の資料から読みます。樹木作物の茶や森林面積、丸太・製材の量を同じ値としません。',
+ },
+ 'central-asia':{
+  crop:'カザフスタン北部の小麦とウズベキスタンなどの河川灌漑地の綿花を比べます。栽培時期、水を運ぶ設備、輸送と加工を分けて読みます。色は2020年の推計分布で、生産量の順位ではありません。',
+  livestock:'羊・山羊の分布を草地や水場との位置関係から見ます。家畜の推計密度は、肉や乳の生産量、移動する群れの現在位置ではありません。',
+  forest:'森林の参考画像と国別森林面積、丸太・製材の統計は資料・単位が異なります。乾燥地や山地の画像上の色だけから木材生産量を読み取れません。',
+ },
+};
 export function asiaFocusIndustry(focusId:AsiaFocusId){
  const countries=new Set(asiaFocusCountries[focusId]);
  const allowed=new Set(asiaFocusIndustryGroups[focusId]);

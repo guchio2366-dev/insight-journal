@@ -152,7 +152,8 @@ test('南アジア・中央アジアは別URLと初期範囲を持ち、元資�
   try{
    window.document.write(await readFile(`dist/atlas/asia/${id}/${field}/index.html`,'utf8'));
    const q=s=>window.document.querySelector(s),cfg=JSON.parse(q('[data-asia-config]').textContent);
-   assert.equal(cfg.label,label);assert.equal(cfg.regionId,'south-central-asia');assert.notDeepEqual(cfg.bounds,cfg.dataBounds);
+   assert.equal(cfg.label,label);assert.equal(cfg.regionId,'south-central-asia');assert.equal(cfg.focusId,id);assert.deepEqual(cfg.bounds,cfg.contentExtent);
+   assert.deepEqual(cfg.countries.map(c=>c.code).sort(),(id==='south-asia'?['AFG','BGD','BTN','IND','LKA','MDV','NPL','PAK']:['KAZ','KGZ','TJK','TKM','UZB']));
    assert.equal(cfg.climate.image.includes('south-central-asia'),true);
    assert.ok(q('link[rel=canonical]').href.endsWith(`/atlas/asia/${id}/${field}/`));
    assert.ok(q('[data-focus-link="'+id+'"][aria-current="page"]'));
