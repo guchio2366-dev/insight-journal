@@ -1042,7 +1042,9 @@ test('東アジアの線と色帯・凡例を一緒に切り替え、地点の�
   assert.equal(map.getLayer('asia-hydrology-rain'),undefined,'Do not blend an unrelated raster palette');
   assert(requests.includes('/assets/presentation/rainfall-bands.json.gz'));
   assert(requests.includes('/assets/presentation/rainfall-aligned.json.gz'));
-  assert.match(q('[data-hydrology-scale]').textContent,/0–250.*250–500/);
+  assert.match(q('[data-hydrology-scale]').textContent,/0.*1,000.*6,000/);
+  assert.match(q('.east-rain-scale').getAttribute('aria-label'),/250mm刻み/);
+  assert.match(q('.east-rain-scale').style.background,/linear-gradient/);
   assert.match(q('[data-hydrology-legend-note]').textContent,/原格子値/);
   q('[data-natural-topic=terrain]').click();
   await until(()=>root.dataset.contourBandStatus==='ready'&&root.dataset.contourBandKind==='terrain','aligned terrain');

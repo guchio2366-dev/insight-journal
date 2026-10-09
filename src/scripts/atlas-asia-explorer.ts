@@ -382,7 +382,7 @@ function start(root:HTMLElement) {
     optionalHidden('[data-population-city-facts]',!city);
     if(city){
       $('[data-urban-population]').textContent=`約${Math.round(city.population).toLocaleString('ja-JP')} 人`;$('[data-urban-area]').textContent=`${city.areaKm2.toLocaleString('ja-JP')} km²`;$('[data-urban-density]').textContent=city.density===null?'資料に値がありません':`${Math.round(city.density).toLocaleString('ja-JP')} 人/km²`;
-      const table=$('[data-urban-history]');table.replaceChildren();for(const [year,value] of Object.entries(city.history)){const row=document.createElement('tr'),label=document.createElement('th'),cell=document.createElement('td');label.scope='row';label.textContent=`${year}年`;cell.textContent=value===null?'資料に値がありません':Math.round(value).toLocaleString('ja-JP');row.append(label,cell);table.append(row);}
+      const table=$('[data-urban-history]');table.replaceChildren();for(const [year,value] of Object.entries(city.history)){if(config.regionId==='east-asia'&&Number(year)>2020)continue;const row=document.createElement('tr'),label=document.createElement('th'),cell=document.createElement('td');label.scope='row';label.textContent=`${year}年`;cell.textContent=value===null?'資料に値がありません':Math.round(value).toLocaleString('ja-JP');row.append(label,cell);table.append(row);}
     }
     if(selectedPoint&&!populationGrids.has(record.grid))void loadPopulationGrid(record).then(()=>{if(state.field==='population'&&!social?.active())renderGridReading();}).catch(()=>{if(state.field==='population'&&!social?.active()&&populationRaster()?.grid===record.grid){const message='人口の数値を取得できませんでした。再読み込みをお試しください。';$('[data-population-value]').textContent=message;status(message,true);}});
   }
