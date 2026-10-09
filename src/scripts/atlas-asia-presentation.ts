@@ -110,6 +110,13 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
    marker.append(bar);overlay.append(marker);
   }
   if(config.regionId==='east-asia'&&active==='religion'&&!state.detail){const p=project([105,34]);if(p.x>=0&&p.x<=width&&p.y>=0&&p.y<=height){const marker=document.createElement('div');marker.className='asia-religion-marker asia-religion-china-marker';marker.style.left=p.x+'px';marker.style.top=p.y+'px';marker.innerHTML='<strong>中国 · 別設問</strong><span>宗教帰属 10％（CGSS）</span><span>仏・菩薩を信じる 33％（CFPS）</span>';overlay.append(marker);}}
+  if(config.regionId==='east-asia'&&active==='religion'&&!state.detail&&window.innerWidth>=960){
+   const origin=overlay.getBoundingClientRect(),cards=[...overlay.querySelectorAll<HTMLElement>('.asia-religion-marker')].map(marker=>{const box=marker.getBoundingClientRect();return {marker,id:marker.dataset.country??'CHN',anchor:project(eastAsiaReligionCountries.find(c=>c.code===marker.dataset.country)?.point??[105,34]),width:Math.ceil(box.width),height:Math.ceil(box.height),box:{left:box.left-origin.left,top:box.top-origin.top,right:box.right-origin.left,bottom:box.bottom-origin.top}};});
+   const intersects=(a:Box,b:Box)=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
+   if(cards.some(c=>c.box.left<0||c.box.top<0||c.box.right>width||c.box.bottom>height||cards.some(other=>other.id!==c.id&&intersects(c.box,other.box)))){
+    for(const rect of layoutNatureLabels(cards,bounds,obstacles)){const card=cards.find(c=>c.id===rect.id)!.marker;card.style.transform='none';card.style.left=rect.left+'px';card.style.top=rect.top+'px';const end=leaderEnd(rect.anchor,rect),line=document.createElementNS(svg.namespaceURI,'line');line.setAttribute('class','asia-religion-leader');line.setAttribute('stroke','#567a74');line.setAttribute('stroke-width','1');for(const [key,value] of Object.entries({x1:rect.anchor.x,y1:rect.anchor.y,x2:end.x,y2:end.y}))line.setAttribute(key,String(value));svg.append(line);}
+   }
+  }
   if(['water','basins'].includes(active??'')&&config.riverFile&&datasets.has(config.riverFile))for(const focus of config.waterFocus??[]){
    const feature=datasets.get(config.riverFile).features.find((f:any)=>f.properties.id===focus.river);if(!feature)continue;
    const lines=feature.geometry.type==='MultiLineString'?feature.geometry.coordinates:[feature.geometry.coordinates],path=[...lines].sort((a:any,b:any)=>b.length-a.length)[0];if(path?.length)annotation.push({id:focus.river,text:focus.name,coordinate:path[Math.floor(path.length/2)],kind:'river'});
