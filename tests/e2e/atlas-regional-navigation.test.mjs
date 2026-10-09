@@ -74,7 +74,13 @@ test('アジアの3ページは選択対象を分離し、中東・ロシアを�
   };
   for (const [region, codes] of Object.entries(expected)) {
     const doc = await page(`atlas/asia/${region}`);
-    assert.deepEqual(selections(doc), codes.sort());
+    if(region==='south-central-asia'){
+      assert.deepEqual(selections(doc), [], 'the combined regional overview has no redundant country buttons');
+      const config=JSON.parse(doc.querySelector('[data-asia-config]').textContent);
+      assert.deepEqual(config.countries.map(country=>country.code).sort(), codes.sort(), 'the geographic scope still contains all 13 countries');
+      assert.deepEqual([...doc.querySelectorAll('[data-country-select] option')].map(option=>option.value).filter(Boolean).sort(),codes,'the map country picker retains the regional scope');
+      assert.deepEqual(config.industryCountryCodes,['IND'],'only India has a country-level industry entry');
+    }else assert.deepEqual(selections(doc), codes.sort());
     assert.equal(doc.querySelectorAll('.regional-tabs a').length, 3);
     assert.equal(doc.querySelectorAll('.regional-tabs [aria-current="page"]').length, 1);
     assert.ok(doc.querySelector('svg[data-default-frame] path[data-map-country]'));
