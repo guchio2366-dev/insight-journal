@@ -1042,7 +1042,9 @@ test('東アジアの線と色帯・凡例を一緒に切り替え、地点の�
   assert.equal(map.getLayer('asia-hydrology-rain'),undefined,'Do not blend an unrelated raster palette');
   assert(requests.includes('/assets/presentation/rainfall-bands.json.gz'));
   assert(requests.includes('/assets/presentation/rainfall-aligned.json.gz'));
-  assert.match(q('[data-hydrology-scale]').textContent,/0–250.*250–500/);
+  assert.match(q('[data-hydrology-scale]').textContent,/0.*1,000.*6,000/);
+  assert.match(q('.east-rain-scale').getAttribute('aria-label'),/250mm刻み/);
+  assert.match(q('.east-rain-scale').style.background,/linear-gradient/);
   assert.match(q('[data-hydrology-legend-note]').textContent,/原格子値/);
   q('[data-natural-topic=terrain]').click();
   await until(()=>root.dataset.contourBandStatus==='ready'&&root.dataset.contourBandKind==='terrain','aligned terrain');
@@ -1204,8 +1206,10 @@ test('民族・宗教は人口密度や行政区の塗りを重ねず、切り�
   await until(()=>app.window.__map.getLayer('asia-settlement-fill'),'ethnicity area loaded');
   assert.equal(app.q('[data-settlement-reading=ethnicity]').hidden,false);assert.equal(app.q('[data-population-reading]').hidden,true);
   assert.equal(app.window.__map.getLayer('asia-population'),undefined);
-  await until(()=>app.q('.asia-settlement-label')&&!app.q('.asia-settlement-label').hidden,'settlement label positioned');app.q('.asia-settlement-label').click();await delay();assert.equal(new URL(app.window.location.href).searchParams.get('detail'),'a');assert.equal(new URL(app.window.location.href).searchParams.has('at'),false);assert.equal(new URL(app.window.location.href).searchParams.has('place'),false);await until(()=>app.window.__map.layers['asia-settlement-selected'].filter[2]==='a','outline matches selection');
-  app.q('[data-population-group=religion]').click();await until(()=>app.requests.some(r=>r.endsWith('religion.json.gz')),'religion area loaded');await delay();
+  await until(()=>app.q('.asia-settlement-label')&&!app.q('.asia-settlement-label').hidden,'settlement label positioned');const settlementCamera={...app.window.__map.getCenter(),zoom:app.window.__map.getZoom()};app.q('.asia-settlement-label').click();await delay();assert.deepEqual({...app.window.__map.getCenter(),zoom:app.window.__map.getZoom()},settlementCamera,'choosing a settlement only changes its reading and outline');assert.equal(new URL(app.window.location.href).searchParams.get('detail'),'a');assert.equal(new URL(app.window.location.href).searchParams.has('at'),false);assert.equal(new URL(app.window.location.href).searchParams.has('place'),false);await until(()=>app.window.__map.layers['asia-settlement-selected'].filter[2]==='a','outline matches selection');
+  app.q('[data-population-group=religion]').click();await until(()=>app.q('.asia-religion-marker[data-country=JPN]'),'religion composition markers ready');await delay();
+  assert.equal(app.window.__map.getLayer('asia-religion-survey-coverage'),undefined,'the religion map does not paint one coverage color');
+  assert.equal(app.requests.some(r=>r.endsWith('religion.json.gz')),false,'East Asia census overview does not request the EPR case geometry');
   assert.equal(app.q('[data-settlement-reading=religion]').hidden,false);assert.equal(app.q('[data-settlement-reading=ethnicity]').hidden,true);
   app.q('[data-field=natural]').click();await delay();assert.equal(app.window.__map.layers['asia-settlement-fill'].layout.visibility,'none');
  }finally{await app.window.happyDOM.close();}
@@ -1284,7 +1288,7 @@ test('自動全景は実extentと小余白を使い、resizeのmoveend後も全�
  const extent=[73.602256,15.776109,145.824962,53.567791],fitted=await setup('',{contentExtent:extent});
  try{
   assert.deepEqual(JSON.parse(JSON.stringify(fitted.window.__map.lastFit.bounds)),[[extent[0],extent[1]],[extent[2],extent[3]]]);
-  assert.equal(fitted.window.__map.lastFit.options.padding,12);assert.equal(fitted.window.__map.lastFit.options.maxZoom,9);
+  assert.equal(fitted.window.__map.lastFit.options.padding,5);assert.equal(fitted.window.__map.lastFit.options.maxZoom,9);
   assert.equal(fitted.window.__map.options.trackResize,false,'the controller owns container resizing');
   const frame=fitted.q('.asia-map-frame');let width=900;
   Object.defineProperty(frame,'clientWidth',{get:()=>width});Object.defineProperty(frame,'clientHeight',{get:()=>500});
@@ -1300,4 +1304,17 @@ test('自動全景は実extentと小余白を使い、resizeのmoveend後も全�
  }finally{await fitted.window.happyDOM.close();}
  const saved=await setup('?lng=120&lat=35&z=6',{contentExtent:extent});
  try{assert.equal(saved.window.__map.getCenter().lng,120);assert.equal(saved.window.__map.getZoom(),6);}finally{await saved.window.happyDOM.close();}
+});
+
+test('宗教・民族の表示範囲から産業へ戻るリンクとクリックは東アジア全景を復帰する',async()=>{
+ const extent=[73.602256,15.776109,145.824962,53.567791];
+ for(const topic of ['religion','ethnicity']){
+  const app=await setup(`?field=population&topic=${topic}&lng=112.5&lat=37.05777&z=2.848`,{population:true,presentation:true,settlements:true,industry:true,contentExtent:extent});
+  try{
+   const link=app.q('.atlas-tabs [data-field=industry]');assert.equal(new URL(link.href).searchParams.has('lng'),false,'opening the industry link must not inherit the settlement crop');
+   link.click();await delay();
+   assert.deepEqual(JSON.parse(JSON.stringify(app.window.__map.lastFit.bounds)),[[extent[0],extent[1]],[extent[2],extent[3]]]);
+   assert.equal(app.window.__map.lastFit.options.padding,5);
+  }finally{await app.window.happyDOM.close();}
+ }
 });

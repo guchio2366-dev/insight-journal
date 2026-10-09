@@ -2,9 +2,12 @@ import {isWaterTopic,waterDatasetTopic,normalizeWaterState,waterTopics,waterScen
 import {contourBandLabels,type AsiaContourBands} from '../data/atlas/asia-contour-bands';
 import {decodeAsiaNumericGrid,readAsiaNumericCell,type AsiaNumericGrid} from '../lib/atlas-asia-numeric-grid';
 import type {AsiaState,AsiaCamera,AsiaRegionId} from '../lib/atlas-asia-state';
+import {eastRainfall,eastBasinOverview,eastBasinReading} from '../data/atlas/east-asia-approved-reading';
 import {asiaWaterFocus} from '../data/atlas/asia-water-focus';
+import {southCentralWaterSystems,southCentralWaterOverview,southCentralGroundwaterOverview} from '../data/atlas/asia-south-central-water-reading';
+import {southCentralRainfallLegend} from '../data/atlas/asia-south-central-rainfall-legend';
 
-type Config={regionId:AsiaRegionId;water:WaterRegion;waterBase:string;countries:{code:string;name:string}[];waterFeatures?:{id:string;name:string;label?:string;kind:string;countries:string[]}[];contourBands?:AsiaContourBands};
+type Config={regionId:AsiaRegionId;water:WaterRegion;waterBase:string;countries:{code:string;name:string}[];waterFeatures?:{id:string;name:string;label?:string;kind:string;countries:string[]}[];contourBands?:AsiaContourBands;focusWaterRivers?:string[];focusWaterOverview?:string};
 const el=<K extends keyof HTMLElementTagNameMap>(tag:K,text?:string)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
 const option=(label:string,value:string)=>{const o=el('option',label);o.value=value;return o;};
 const link=(label:string,url:string)=>{const a=el('a',label);a.href=url;return a;};
@@ -63,9 +66,13 @@ export function createAsiaWater(root:HTMLElement,config:Config,getState:()=>Asia
  function legend(t:WaterTopic){
   const content=$('[data-hydrology-scale]');content.replaceChildren();$('[data-hydrology-legend-title]').textContent=waterTopics[t].title;
   const swatch=(color:string,label:string)=>{const s=el('span'),i=el('i');i.style.backgroundColor=color;s.append(i,document.createTextNode(label));content.append(s);};
-  if(t==='precipitation'){if(config.contourBands)for(const band of contourBandLabels(config.contourBands))swatch(band.color,band.label);swatch('#347d9c','等雨量線：250mm/年間隔（数字は500mmごと）');$('[data-hydrology-legend-note]').textContent='1981–2010年の推計平年値。同じ年間降水量の地点を青い線で結びます。薄い背景色は降水量の広がりを補助的に示します。海・欠測の範囲は線をつなぎません。'+(config.contourBands?' 色帯も250mmごとで、線と同じ平滑化した表示値から作っています。地点の数値は平滑化前の原格子値です。':'');}
-  else if(t==='basins'){swatch('#176c94','青い線・面：河川・湖');swatch('#b5ced9','主な河川の流域');swatch('#ac432f','赤い輪郭：選択した流域');$('[data-hydrology-legend-note]').textContent='色は水量や面積の大小を表しません。主要な水系を表示し、小さな沿岸区分は省いています。国境を越える流域は輪郭でつなぎ、対象国の範囲を塗っています。主な河川のボタンは代表する出口の集水域を選びます。デルタで出口が異なる枝流などは別の区域です。';}
+  if(t==='precipitation'){if(config.contourBands)for(const band of config.regionId==='south-central-asia'?southCentralRainfallLegend(config.contourBands):contourBandLabels(config.contourBands))swatch(band.color,band.label);swatch('#347d9c','等雨量線：250mm/年間隔（数字は500mmごと）');$('[data-hydrology-legend-note]').textContent='1981–2010年の推計平年値。同じ年間降水量の地点を青い線で結びます。'+(config.regionId==='east-asia'?'薄い背景色は降水量の広がりを補助的に示します。':'')+'海・欠測の範囲は線をつなぎません。'+(config.contourBands?(config.regionId==='south-central-asia'?' 色は0～3,000mmの違いを細かく示し、それより多い範囲は色をまとめています。線と面の区切りは250mm間隔、地点の数値は平滑化前の原格子値で、上限に切り詰めていません。':' 色帯も250mmごとで、線と同じ平滑化した表示値から作っています。地点の数値は平滑化前の原格子値です。'):'');}
+  else if(t==='basins'){if(config.regionId==='east-asia')for(const f of asiaWaterFocus[config.regionId])swatch(basinColor(f.id),f.name);swatch('#176c94','青い線・面：河川・湖');swatch('#b5ced9','主な河川の流域');swatch('#ac432f','赤い輪郭：選択した流域');$('[data-hydrology-legend-note]').textContent='色は水量や面積の大小を表しません。主要な水系を表示し、小さな沿岸区分は省いています。国境を越える流域は輪郭でつなぎ、対象国の範囲を塗っています。地図の河川名・範囲を選ぶと、その出口へ集まる水系を読めます。デルタで出口が異なる枝流などは別の区域です。';}
   else{swatch('#a9d2da','主要な地下水盆地');swatch('#176c94','河川');$('[data-hydrology-legend-note]').textContent='主要な地下水盆地の広がりを示します。白地にも局地的な帯水層は存在し得ます。色は地下水の量や安全に取水できる量を表しません。';}
+  if(t==='precipitation'&&config.regionId==='east-asia'&&config.contourBands){
+   content.replaceChildren();const scale=el('div');scale.className='east-rain-scale';scale.setAttribute('role','img');scale.setAttribute('aria-label','年間降水量。0から6000mmまで250mm刻みの青の段階色。');scale.style.background='linear-gradient(to right,'+config.contourBands.colors.flatMap((color,i)=>[`${color} ${i/config.contourBands!.colors.length*100}%`,`${color} ${(i+1)/config.contourBands!.colors.length*100}%`]).join(',')+')';content.append(scale);const ticks=el('div');ticks.className='east-rain-ticks';for(const n of [0,1000,2000,3000,4000,5000,6000])ticks.append(el('span',n.toLocaleString('ja-JP')));content.append(ticks);
+   $('[data-hydrology-legend-note]').textContent='mm/年 · 線と段階色は250mm刻み。数字と引出線の先端は同じ等雨量線を示します。1981–2010年の推計平年値で、東京の雨温図（1991–2020年）とは期間が異なります。地点選択値は平滑化前の原格子値です。';
+  }
  }
  function method(t:WaterTopic){
   const c=$('[data-hydrology-method]');c.replaceChildren(el('p',waterTopics[t].period+'。'+waterTopics[t].definition),link('地図データの提供元を開く',waterTopics[t].source));
@@ -79,19 +86,21 @@ export function createAsiaWater(root:HTMLElement,config:Config,getState:()=>Asia
   const state=getState(),meta=waterTopics[t],selectedScene=scene(),record=detail(),ready=loaded(t),status=failed.has(t)?'この主題の数値を取得できませんでした。再読み込みをお試しください。':!ready&&(t!=='precipitation'||state.point)?'選んだ主題の資料を読み込んでいます。':'';
   const southeastOverview=root.querySelector<HTMLElement>('[data-southeast-water-overview]');if(southeastOverview)southeastOverview.hidden=config.regionId!=='southeast-asia'||getState().topic!=='water'||Boolean(state.detail||state.point||state.place);
   const shortcuts=root.querySelector<HTMLElement>('[data-basin-shortcuts]');
-  if(shortcuts){shortcuts.hidden=t!=='basins';shortcuts.replaceChildren();if(t==='basins')for(const item of asiaWaterFocus[config.regionId]){const b=el('button',item.displayName??item.name);b.type='button';b.dataset.basinShortcut=item.id;b.disabled=!datasets.get(t)?.records.some(r=>r.id===item.id);b.setAttribute('aria-pressed',String(record?.id===item.id));b.onclick=()=>select(item.id);shortcuts.append(b);}}
+  if(shortcuts){shortcuts.hidden=t!=='basins'||config.regionId==='east-asia';shortcuts.replaceChildren();if(t==='basins')for(const item of asiaWaterFocus[config.regionId].filter(item=>!config.focusWaterRivers||config.focusWaterRivers.includes(item.river))){const b=el('button',item.displayName??item.name);b.type='button';b.dataset.basinShortcut=item.id;b.disabled=!datasets.get(t)?.records.some(r=>r.id===item.id);b.setAttribute('aria-pressed',String(record?.id===item.id));b.onclick=()=>select(item.id);shortcuts.append(b);}}
   $('[data-map-title]').textContent=meta.title;$('[data-map-eyebrow]').textContent='Water · '+meta.period;$('[data-map-period]').textContent=meta.unit;
   $('[data-hydrology-title]').textContent=getState().topic==='water'?'河川と、地下水を蓄える主な地域':meta.title;$('[data-hydrology-definition]').textContent=meta.definition;
   $('[data-map-gesture]').textContent=t==='precipitation'?'地点を選ぶと年降水量を読めます。国の背景クリックでは選択を変えません。地図は2本指で移動・拡大できます。':'流域・地下水の区域や河川そのもの、または区域の一覧から選べます。対象外の背景クリックでは選択を変えません。地図は2本指で移動・拡大できます。';
   $('[data-hydrology-status]').textContent=status;$('[data-hydrology-retry]').hidden=!failed.has(t);
-  $('[data-hydrology-lead]').textContent=selectedScene?.lead??(t==='precipitation'?'海から山地、さらに内陸へ、年間に届く水の違いを読みます。':t==='basins'?'川には、その場所の雨だけでなく、上流の広い範囲に降った雨や雪の水も集まります。色分けした流域と青い流路を重ね、国境を越えたつながりを確かめてください。':config.regionId==='southeast-asia'&&getState().topic==='water'?'大陸部の長い川筋と、島ごとの流域・地下水域を同じ地図で比べます。':'青い線は川、淡い青の面は地下水を蓄える主要な地層です。川と地下水域の位置を見比べます。');
-  const sc=$('[data-hydrology-scene-reading]');sc.replaceChildren();if(selectedScene)sc.append(el('h3',selectedScene.name),el('p',selectedScene.reading),link('この場所の解説の根拠',selectedScene.source));
+  $('[data-hydrology-lead]').textContent=selectedScene?.lead??(config.focusWaterOverview&&['groundwater','basins'].includes(t)?config.focusWaterOverview:config.regionId==='south-central-asia'&&t==='groundwater'?(getState().topic==='water'?southCentralWaterOverview:southCentralGroundwaterOverview):t==='precipitation'?'海から山地、さらに内陸へ、年間に届く水の違いを読みます。':config.regionId==='south-central-asia'&&t==='basins'?'インダス川、ガンジス川、アムダリヤ川、シルダリヤ川の流域を同時に表示しています。山地の上流と乾いた低地の下流を、青い流路と集水域で見比べます。国境は水の流れの境界ではありません。':t==='basins'?'川には、その場所の雨だけでなく、上流の広い範囲に降った雨や雪の水も集まります。色分けした流域と青い流路を重ね、国境を越えたつながりを確かめてください。':config.regionId==='southeast-asia'&&getState().topic==='water'?'大陸部の長い川筋と、島ごとの流域・地下水域を同じ地図で比べます。':'青い線は川、淡い青の面は地下水を蓄える主要な地層です。川と地下水域の位置を見比べます。');
+  const riverReading=root.querySelector<HTMLElement>('[data-south-central-river-reading]'),riverCase=config.regionId==='south-central-asia'&&getState().topic==='water'?southCentralWaterSystems[river()?.id??'']:undefined;
+  if(riverReading){riverReading.hidden=!riverCase;riverReading.replaceChildren();if(riverCase)riverReading.append(el('h3',riverCase.title),el('p',riverCase.reading),link(riverCase.source.label,riverCase.source.url));}
+  const sc=$('[data-hydrology-scene-reading]');if(config.regionId==='east-asia')$('[data-hydrology-lead]').after(sc);sc.replaceChildren();if(config.regionId==='east-asia'&&(t==='precipitation'||t==='basins')){const chosen=record&&eastBasinReading[record.id];const reading=t==='precipitation'?eastRainfall:eastBasinOverview;$('[data-hydrology-lead]').textContent=chosen?chosen.title:reading.lead;sc.append(el('h3',chosen?'水源・流向・終着先と利用':'この分布になる理由'),el('p',chosen?chosen.reading:reading.reading));}else if(selectedScene)sc.append(el('h3',selectedScene.name),el('p',selectedScene.reading),link('この場所の解説の根拠',selectedScene.source));
   const cov=state.place?config.water.coverage[state.place]:null;
   $('[data-hydrology-coverage]').textContent=t==='precipitation'?cov?`${names([state.place!])}では対象格子${fmt(cov.maskCells)}個のうち${fmt(cov.displayCells)}個に値があります。地点値は都市や国の平均ではありません。`:'対象国・地域の陸地に重なる表示格子を収録しています。地点値は都市や国の平均ではありません。':t==='basins'?`主な河川の流域を表示しています。${cov?.basins===0?'選択中の国・地域は、この縮尺の流域資料に区域がありません。河川や排水がないという意味ではありません。':''}`:`主要な地下水盆地だけを塗っています。涵養量の細かな区切りは表示しません。${cov?.groundwater===0?'選択中の国・地域の区域は元資料で確認できません。地下水がないという意味ではありません。':''}`;
   const content=$('[data-hydrology-content]');content.replaceChildren();let message=status;
   const waterPicker=root.querySelector<HTMLElement>('[data-water-picker]');
   if(waterPicker){waterPicker.hidden=getState().topic!=='water';if(!waterPicker.hidden){content.before(waterPicker);const input=waterPicker.querySelector<HTMLSelectElement>('select')!;input.value=river()?.id??'';for(const o of input.options){const allowed=!o.value||!state.place||config.waterFeatures?.find(f=>f.id===o.value)?.countries.includes(state.place);o.hidden=!allowed;o.disabled=!allowed;}}}
-  if(river()){const r=river()!;content.append(el('h3',r.label??r.name),el('p',r.kind==='rivers'?'青い線は川の概略の流路です。背景の淡い青の面は、地下水を蓄える主要な地層の広がりを示します。河川の流域を調べるときは、上の「河川の流域」を選んでください。':'青い面は資料に収録された湖の概略形状です。現在の湖面や貯水量を示すものではありません。周辺の淡い青の面は主要な地下水盆地です。'));}
+  if(river()&&!riverCase){const r=river()!;content.append(el('h3',r.label??r.name),el('p',r.kind==='rivers'?'青い線は川の概略の流路です。背景の淡い青の面は、地下水を蓄える主要な地層の広がりを示します。河川の流域を調べるときは、上の「河川の流域」を選んでください。':'青い面は資料に収録された湖の概略形状です。現在の湖面や貯水量を示すものではありません。周辺の淡い青の面は主要な地下水盆地です。'));}
 
   if(t==='precipitation'){
    if(state.point&&grid){const n=readAsiaNumericCell(grid,...state.point);message=n===null?'この地点はデータなし、または表示範囲外です。降水量0mmとは異なります。':`${state.point[1].toFixed(3)}°, ${state.point[0].toFixed(3)}°：年降水量 ${fmt(n)} mm/年（1981–2010年の推計平年値）`;}
@@ -134,5 +143,5 @@ export function createAsiaWater(root:HTMLElement,config:Config,getState:()=>Asia
  $('[data-hydrology-scene]').addEventListener('change',e=>{const s=waterScenes.find(s=>s.region===config.regionId&&s.id===(e.target as HTMLSelectElement).value);if(s)navigate({...getState(),detail:s.id,place:s.country,point:s.point,city:null,camera:camera()},false);else navigate({...getState(),detail:null,point:null,camera:camera()},false);});
  for(const b of root.querySelectorAll<HTMLButtonElement>('[data-hydrology-related]'))b.addEventListener('click',()=>navigate({...getState(),topic:b.dataset.hydrologyRelated==='climate'?null:b.dataset.hydrologyRelated,detail:isWaterTopic(b.dataset.hydrologyRelated)?scene()?.id??null:null,city:null,camera:camera()},false));
  $('[data-hydrology-retry]').addEventListener('click',()=>{const t=topic();if(t){failed.delete(t);render();if(map)void show(map);}});
- return {render,show,hit,detail,scene,normalize,active:()=>!!topic()};
+ return {render,show,hit,detail,scene,select,normalize,active:()=>!!topic()};
 }

@@ -1,0 +1,51 @@
+/* Approved PC composition: news, a larger map, and one scrollable reading. */
+@media(min-width:960px){
+ [data-region=east-asia] .atlas-desktop-shell{display:grid!important;grid-template-columns:clamp(190px,17vw,270px) minmax(0,1fr)!important;gap:14px;padding-inline:14px;align-items:start}
+ [data-region=east-asia] .atlas-desktop-shell .atlas-news{position:sticky;top:12px;width:auto;height:var(--asia-news-height,calc(100dvh - 80px))}
+ [data-region=east-asia] .atlas-desktop-shell .asia-atlas[data-field] .asia-layout{display:grid;grid-template-columns:minmax(0,1fr) clamp(290px,22.3vw,320px)!important;gap:14px!important;align-items:start}
+ [data-region=east-asia] .atlas-desktop-shell .asia-atlas[data-field] .asia-map-frame{height:min(620px,var(--asia-map-available-height,620px),var(--east-map-content-height,620px))!important;max-height:none!important;min-height:320px!important;aspect-ratio:auto!important}
+ [data-region=east-asia] .atlas-desktop-shell .asia-atlas[data-field] .asia-reading-panel{position:sticky!important;top:12px!important;height:var(--asia-reading-height,600px)!important;overflow:auto!important;overscroll-behavior:contain;scrollbar-gutter:stable}
+ [data-region=east-asia] .asia-city-reading-host{max-height:none!important;overflow:visible!important}
+ [data-region=east-asia] .asia-reading-dock{display:none!important}
+ [data-region=east-asia] .asia-reading-details>summary{display:none}
+ [data-region=east-asia] .asia-reading-details .asia-reading-scroll{overflow:visible!important;height:auto!important;max-height:none!important}
+ [data-region=east-asia] .atlas-desktop-shell .asia-atlas[data-field] .asia-reading-scroll :is(h2,.asia-takeaway):not([hidden]){display:block!important}
+ [data-region=east-asia] .asia-reading-scroll .asia-takeaway{font-size:14px;line-height:1.75;margin:0 0 14px}
+ [data-region=east-asia] .asia-statistics{grid-column:2;min-width:0}
+ [data-region=east-asia] [data-east-farm-foundations]{width:100%;margin-top:20px}
+ [data-region=east-asia] .asia-industry-sectors,[data-region=east-asia] .asia-industry-subsectors{display:none!important}
+ [data-region=east-asia] .asia-city-reading-host .asia-city-card>h2{position:static;clip:auto;width:auto;height:auto;overflow:visible;white-space:normal;margin:0 0 8px;font-size:24px}
+ [data-region=east-asia] .asia-map-method{margin-top:8px}
+ [data-region=east-asia] .asia-map-items>.population-picker{display:flex;align-items:center;gap:8px;font-size:12px;margin:6px 0}
+ [data-region=east-asia] .asia-map-items>.population-picker select{min-height:34px;max-width:260px}
+ [data-region=east-asia] .asia-map-legend:has([data-hydrology-legend]:not([hidden])) .asia-main-legend{display:none}
+ [data-region=east-asia] .asia-map-legend [data-hydrology-legend]{border:0;padding:6px 0}
+ [data-region=east-asia] .asia-map-legend [data-hydrology-legend] p{max-width:75ch}
+}
+.east-industry-choices{display:flex;flex-wrap:wrap;gap:5px;padding:6px 0}
+[data-region=east-asia] .asia-atlas[data-industry-clusters=true] .asia-main-legend .asia-comparison-key i{border-radius:50%}
+.east-industry-choices button{min-height:36px;padding:6px 10px;background:#fafbf5;border:1px solid #bdcbc1;color:#2d4b46;font-size:13px}
+.east-industry-choices button[aria-pressed=true]{background:#355b52;color:white}
+.east-industry-map-labels{position:absolute;inset:0;pointer-events:none}
+.east-industry-map-labels svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.east-industry-map-labels line{stroke:#506c6b;stroke-width:1}
+.east-industry-map-labels button{position:absolute;pointer-events:auto;background:#ffffffe0;border:0;padding:2px 5px;font:600 11px/20px sans-serif;white-space:nowrap;color:#25473e}
+.east-industry-map-labels button[aria-pressed=true]{background:#25473e;color:white}
+@media(min-width:960px){
+ .east-industry-map-labels button{padding:2px 5px;text-align:left;line-height:normal}
+ .east-industry-label-primary{display:flex;align-items:center;gap:5px;font-size:12px;line-height:18px;font-weight:700}
+ .east-industry-label-primary>span{display:inline-flex;align-items:center;gap:3px}
+ .east-industry-label-primary>span::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--industry-color);flex:none}
+ .east-industry-label-city{display:block;font-size:10px;line-height:13px;font-weight:400;color:#546a67}
+ .east-industry-map-labels button[aria-pressed=true] .east-industry-label-city{color:#d8e5e0}
+ .east-industry-group{position:absolute;width:max-content;max-width:156px;box-sizing:border-box;background:#fffffff0;padding:2px 5px;color:#25473e;pointer-events:auto}
+ .east-industry-group .east-industry-label-primary{flex-wrap:wrap;column-gap:5px;row-gap:0}
+ .east-industry-map-labels .east-industry-group-point{width:14px;height:14px;padding:0;border-radius:50%;background:transparent;cursor:pointer}
+ .east-industry-map-labels .east-industry-group-point:is(:focus-visible,[aria-pressed=true]){outline:2px solid #25473e;outline-offset:1px;background:transparent}
+ .east-industry-map-labels .east-industry-group-point:focus-visible::after{content:attr(data-city-name);position:absolute;left:9px;top:9px;background:#fffffff0;padding:2px 4px;font:400 10px/13px sans-serif;color:#25473e;pointer-events:none}
+}
+[data-east-cluster-sources]{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:12px}
+[data-east-cluster-detail]{border-left:3px solid #477e6b;padding:8px 12px;background:#f3f7ec}
+
+.east-rain-scale{height:14px;width:100%;margin:5px 0}.east-rain-ticks{display:flex;justify-content:space-between;font-size:10px;width:100%;font-variant-numeric:tabular-nums}
+.east-climate-relationship{border-top:1px solid var(--rule);margin-top:20px;padding:16px 0;font-size:13px;line-height:1.8}.east-climate-relationship h2{font-size:20px}

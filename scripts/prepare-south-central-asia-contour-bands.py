@@ -17,16 +17,18 @@ engine = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(engine)
 REGION = "south-central-asia"
 original_color = engine.color
-
-
 def rainfall_color(value, kind):
-    # Preserve the common absolute scale through 8,000 mm/year. The existing
-    # South/Central source exceeds that anchor; distinguish its upper intervals.
-    if kind != "rainfall" or value <= 8000:
+    # Distinguish the dry-to-monsoon range. Higher values retain their
+    # original numeric bands and 250 mm contours, but share broader colors.
+    if kind != "rainfall":
         return original_color(value, kind)
-    start, end = np.array([11, 49, 90]), np.array([6, 28, 55])
-    fraction = min(1, (value - 8000) / 2000)
-    return "#" + bytes(round(float(v)) for v in start + (end - start) * fraction).hex()
+    groups = [(250, "#f7f7ed"), (500, "#e9d28f"),
+              (1000, "#c6d37e"), (1500, "#87c99a"),
+              (2000, "#43b8ae"), (2500, "#247d9d"),
+              (3000, "#275e9a"), (4500, "#384681"),
+              (6500, "#39346b"), (8000, "#342655"),
+              (float("inf"), "#2b1842")]
+    return next(color for upper, color in groups if value < upper)
 
 
 def write_parts(stem, collection):
@@ -94,9 +96,12 @@ def main():
             method="Same land-valid moving-mean field and contourpy marching-quadrilateral interpolation for fills and lines. No line filtering or independent simplification. Missing corners stay masked. Coordinates rounded to 0.000001 degree; point lookup retains the original unsmoothed grid.",
             geometryEngine=str(ENGINE.relative_to(ROOT)),
             geometryEngineSHA256=hashlib.sha256(ENGINE.read_bytes()).hexdigest(),
-            paletteNote="Common absolute scale through 8000 mm/year; South/Central source upper intervals continue to a darker blue at 10000 mm/year." if kind == "rainfall" else "Confirmed East Asia elevation palette with retained below-sea-level interval.",
+            paletteNote="Seven distinct dry-to-monsoon classes through 3000 mm/year and four broader upper classes. Numeric fills and lines still use the uncapped 250 mm intervals." if kind == "rainfall" else "Confirmed East Asia elevation palette with retained below-sea-level interval.",
             bandFeatureCount=len(bands["features"]), lineFeatureCount=len(lines["features"]))
-        assert len(set(metadata["colors"])) == len(metadata["colors"])
+        if kind == "rainfall":
+            assert len(set(metadata["colors"])) == 11
+        else:
+            assert len(set(metadata["colors"])) == len(metadata["colors"])
         manifest["regions"][REGION][kind]["bands"] = metadata
         print(kind, "bands", len(bands["features"]), "lines", len(lines["features"]), "range", metadata["minimum"], metadata["maximum"], flush=True)
     path.write_text(json.dumps(manifest, ensure_ascii=False, separators=(",", ":"), allow_nan=False) + "\n")

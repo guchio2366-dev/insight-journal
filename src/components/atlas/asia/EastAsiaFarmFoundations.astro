@@ -4,13 +4,13 @@ const names:Record<string,string>={rice:'米',wheat:'小麦',maize:'トウモロ
 const cropName=(s:string)=>s.startsWith('Maize')?names.maize:s==='Rice'?names.rice:s==='Wheat'?names.wheat:s==='Sugar cane'?names['sugar cane']:s.startsWith('Soya')?names.soybean:s.startsWith('Seed cotton')?names.cotton:s.startsWith('Tea')?names.tea:s.startsWith('Cassava')?names.cassava:s==='Millet'?names.millet:s.startsWith('Natural rubber')?names.rubber:s.startsWith('Oil palm')?names.oil:s.startsWith('Lentils')?names.lentils:s.startsWith('Coffee')?names.coffee:names.chick;
 const amount=(n:number)=>n>=10000?`${(n/10000).toLocaleString('ja-JP',{maximumFractionDigits:1})}万t`:`${n.toLocaleString('ja-JP')}t`;
 ---
-<section class="east-farm-foundations" data-east-farm-foundations hidden aria-label="東アジアの農林業と世界比">
- <h2 data-east-foundations-title>生産・貿易・世界での位置</h2>
- <p class="lead" data-east-foundations-lead>森林面積、木材の生産・輸出入、商品輸出先は別の統計です。地図の森林色から数量や仕向け先を推定せず、国の公表値と並べて読みます。</p>
+<section class="east-farm-foundations" data-east-farm-foundations hidden aria-label="東アジアの農畜産の供給と自給">
+ <h2 data-east-foundations-title>農畜産の供給・域外貿易・食料自給</h2>
+ <p class="lead" data-east-foundations-lead>主要品目の供給用途、域外貿易相手、食料供給カロリーと自給状況を、年・単位・分母を揃えて扱います。未収録は0ではありません。</p>
  <div class="columns">
-  <section><h3 data-east-supply-title>丸太・製材の供給と輸出入</h3><div data-east-forest-flows aria-live="polite"></div></section>
-  <section><h3 data-east-partner-title>全商品の輸出先</h3><div data-east-export-partners aria-live="polite"></div></section>
-  <section><h3 data-east-share-title>世界比と推移</h3><div data-east-world-share aria-live="polite"></div></section>
+  <section><h3 data-east-supply-title>主要品目の供給と用途</h3><div data-east-forest-flows aria-live="polite"></div></section>
+  <section><h3 data-east-partner-title>主要品目の域外輸出入相手</h3><div data-east-export-partners aria-live="polite"></div></section>
+  <section><h3 data-east-share-title>品目群のカロリー構成と自給状況</h3><div data-east-world-share aria-live="polite"></div></section>
  </div>
  <details class="priority"><summary>2020年の主要作物候補と次点を確認</summary><p>収録済み14品目の2020年 FAOSTAT 生産重量（t）を4対象で足した候補順位です。対象外品目を含む全作物順位でも、金額順位でもありません。欠測は0にせず、値のある国数を併記します。</p><table><caption>上位10候補 · 生産重量</caption><thead><tr><th scope="col">品目</th><th scope="col">4対象の報告値合計</th><th scope="col">有効数</th></tr></thead><tbody>{data.cropCandidates.selected.map(row=><tr><th scope="row">{cropName(row.label)}</th><td>{amount(row.tonnes)}</td><td>{row.reportedCountries}/4</td></tr>)}</tbody></table><p>次点：{data.cropCandidates.next.map(row=>`${cropName(row.label)}（${amount(row.tonnes)}、${row.reportedCountries}/4）`).join('、')}。地図で示せる作物は資料と対象品目が異なるため、この順位の重量を格子へ配分していません。</p></details>
  <p class="sources" data-east-wheat-sources hidden>日本の小麦：農林水産省 <a href="https://www.maff.go.jp/j/seisan/boueki/mugi_zyukyuu/attach/pdf/index-178.pdf">麦の需給と価格の参考統計</a>（小麦粉の用途別生産量4頁、食料需給表28頁、財務省貿易統計34頁）。「加工用」と原麦・小麦粉の区別は<a href="https://www.maff.go.jp/j/tokei/kouhyou/zyukyu/gaiyou/index.html">食料需給表の概要</a>。小麦粉の用途別生産量は原麦の国内消費量と加算できません。2024年の世界比は <a href="https://www.fao.org/faostat/en/#data/QCL">FAOSTAT</a>。</p>

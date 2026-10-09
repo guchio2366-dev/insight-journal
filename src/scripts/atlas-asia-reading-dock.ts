@@ -14,9 +14,9 @@ export function createAsiaReadingDock(root:HTMLElement) {
  const storyBridges=root.querySelector<HTMLElement>('[data-place-story-bridges]');
  if(storyBridges)dock.append(storyBridges);
  const candidates=[
-  '[data-seasonal-panel]',
+  '[data-east-cluster-reading]','[data-seasonal-panel]',
   '[data-place-story-body]','[data-trade-panel]','[data-hydrology-panel]',
-  '[data-physical-reading]','[data-settlement-detail]','[data-settlement-overview]',
+  '[data-physical-reading]','[data-sc-religion-country]','[data-sc-religion-census]','[data-settlement-detail]','[data-settlement-overview]',
   '[data-social-panel]','[data-population-reading]','[data-industry-panel]',
   '[data-farming-extra]','[data-rice-reading]','[data-farm-overview-reading]',
   '[data-city-panel]','[data-class-reading]','[data-overview]'
@@ -28,6 +28,7 @@ export function createAsiaReadingDock(root:HTMLElement) {
   const lead=panel?.querySelector<HTMLElement>('.asia-takeaway,.city-takeaway,[data-place-story-lead],[data-trade-lead],[data-class-description]');
   title.textContent=heading?.textContent?.trim()||original.title;
   summary.textContent=lead?.textContent?.trim()||original.summary;
+  if(panel?.matches('[data-sc-religion-country]'))summary.textContent=panel.querySelector('h3 + p')?.textContent?.trim()||summary.textContent;
   if(state.field==='natural'&&state.topic==='seasonal-precipitation'){
    title.textContent='雨の季節配分を読む';
    summary.textContent='月を切り替えて雨が増減する季節を確かめ、作物が育つ時期と水管理を考えます。';
@@ -37,7 +38,7 @@ export function createAsiaReadingDock(root:HTMLElement) {
   if(focused&&overview){title.textContent=focused.title;summary.textContent=focused.takeaway;}
   const focusPanel=root.querySelector<HTMLElement>('[data-focus-reading]');
   if(focusPanel){
-   focusPanel.hidden=!focused||!overview;
+   focusPanel.hidden=!focused||!overview||Boolean(config?.focusId&&['agriculture','population'].includes(state.field));
    if(focused){
     focusPanel.querySelector<HTMLElement>('[data-focus-reading-title]')!.textContent=focused.title;
     focusPanel.querySelector<HTMLElement>('[data-focus-reading-body]')!.textContent=focused.reading;

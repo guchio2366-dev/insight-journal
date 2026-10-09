@@ -5,11 +5,11 @@ import {fileURLToPath} from 'node:url';
 
 // Uses the existing CI's guarded, normally sandboxed browser and local build.
 export const southCentralProfiles=[
- {name:'south-desktop',viewport:{width:1536,height:864}},
+ {name:'south-desktop',viewport:{width:1440,height:1000}},
  {name:'south-laptop',viewport:{width:1280,height:720}},
  {name:'south-small',viewport:{width:1024,height:768}},
 ];
-export const southCentralImageCount=10*southCentralProfiles.length;
+export const southCentralImageCount=20*southCentralProfiles.length;
 
 export async function verifySouthCentralAsia(page,{source,profile,capture}){
  const checks=[],bandsChecks=[];
@@ -17,7 +17,7 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  const record=name=>checks.push({name,passed:true});
  const ready=()=>page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-map-fallback]')?.hidden);
  const open=async(route)=>{await page.goto(source+`/atlas/asia/${route}`,{waitUntil:'domcontentloaded'});await ready();if(reviewFoundation)await page.waitForLoadState('networkidle');};
- const screenshot=async id=>{if(!id.includes('-aligned-')&&!['south-central-industry-overview','south-central-cultural-distribution'].includes(id))return;await page.waitForLoadState('networkidle');await page.evaluate(async()=>{await document.fonts.ready;scrollTo({top:0,behavior:'instant'});await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});assert.equal(await page.evaluate(()=>scrollY),0,'Regional screenshots must start at the page top');await capture(page,profile,id,'asia');};
+ const screenshot=async id=>{if(!id.includes('-aligned-')&&!id.includes('-review-')&&!id.endsWith('-context')&&!['south-central-industry-overview','south-central-cultural-distribution'].includes(id))return;await page.waitForLoadState('networkidle');await page.evaluate(async()=>{await document.fonts.ready;scrollTo({top:0,behavior:'instant'});await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});assert.equal(await page.evaluate(()=>scrollY),0,'Regional screenshots must start at the page top');await capture(page,profile,id,'asia');};
  const story=async id=>{const picker=page.locator('[data-place-story]');await picker.selectOption(id);await page.waitForFunction(id=>new URL(location.href).searchParams.get('story')===id,id);await page.waitForLoadState('networkidle');};
  const scope=()=>page.locator('[data-country-select] option').evaluateAll(nodes=>nodes.filter(n=>n.value&&!n.disabled&&!n.hidden).map(n=>n.value));
  const extentChecks=[];
@@ -42,6 +42,19 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  if(reviewFoundation){
  await open('south-central-asia/industry/');
  assert.equal(new URL(page.url()).searchParams.get('place'),null);
+ assert.match(await page.locator('[data-industry-title]').textContent(),/南・中央アジアの産業分布/);
+ assert.equal(await page.locator('[data-sc-industry-topic]').inputValue(),'sc-overview');
+ assert.equal(await page.locator('[data-industry-coverage]').textContent().then(s=>Number(s.match(/\d+/)?.[0])),27);
+ assert.equal(await page.locator('[data-industry-scale] span').count(),12);
+ await page.locator('[data-sc-industry-topic]').selectOption('sc-hydro');
+ assert.equal(new URL(page.url()).searchParams.get('topic'),'sc-hydro');
+ assert.match(await page.locator('[data-industry-lead]').textContent(),/キルギス.*タジキスタン.*ネパール.*ブータン/s);
+ await page.locator('.sc-industry-site-list button').first().click();
+ assert.match(new URL(page.url()).searchParams.get('detail'),/^sc-/);
+ assert.match(await page.locator('[data-industry-content]').textContent(),/立地を読む/);
+ await page.locator('[data-sc-industry-topic]').selectOption('sc-overview');
+ assert.equal(new URL(page.url()).searchParams.get('detail'),null);
+ record('regional industry topics show sourced locations and explanations before India statistics');
  assert.deepEqual(await scope(),['IND']);
  await page.locator('[data-focus-reading]').waitFor({state:'visible'});
  assert.match(await page.locator('[data-focus-reading-body]').textContent(),/グジャラート.*アナンド.*カルナータカ.*ベンガルール.*ウズベキスタン/s);
@@ -95,6 +108,10 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
   const station=page.locator(`.asia-climate-station[data-station="${city}"]`);
   assert.equal(await station.evaluate(n=>{const r=n.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('[data-station]')?.getAttribute('data-station');}),city,'A nearby transparent station hit box must not intercept this city');
   await station.click();
+  const cameraAfterFirst=new URL(page.url());
+  const preservedCamera=['lng','lat','z'].map(key=>cameraAfterFirst.searchParams.get(key));
+  await station.click();
+  assert.deepEqual(['lng','lat','z'].map(key=>new URL(page.url()).searchParams.get(key)),preservedCamera,'Repeated city selection keeps the map camera');
   const chart=page.locator(`[data-city-panel="${city}"] [data-city-statistics]`);await chart.waitFor({state:'visible'});
   await page.waitForFunction(city=>!document.querySelector(`[data-city-panel="${city}"] [data-city-class-name]`).textContent.includes('未取得'),city);
   await page.evaluate(()=>scrollTo(0,0));
@@ -106,15 +123,37 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  }
  record('South and Central Asia map-city selection leads the right column with a complete rain-temperature chart and preserves selection on reload');
 
+ await open('south-asia/nature/');
+ await page.locator('[data-zoom-in]').click();
+ await page.waitForFunction(()=>new URL(location.href).searchParams.has('z'));
+ await page.waitForTimeout(350);
+ await page.locator('[data-zoom-out]').click();
+ for(const city of ['mumbai','kolkata','new-delhi']){
+  const before=new URL(page.url()),camera=['lng','lat','z'].map(key=>before.searchParams.get(key));
+  await page.locator('[data-city-select]').selectOption(city);
+  await page.locator(`[data-city-panel="${city}"] [data-city-statistics]`).waitFor({state:'visible'});
+  assert.deepEqual(['lng','lat','z'].map(key=>new URL(page.url()).searchParams.get(key)),camera,`${city} selection keeps center and zoom`);
+  const text=await page.locator(`[data-city-panel="${city}"] .city-climate-reading`).textContent();
+  assert.match(text,/周辺の農業と水利用/);
+  if(city==='new-delhi')assert.doesNotMatch(text,/デルタ|バングラデシュの低地/);
+ }
+ record('Mumbai, Kolkata and Delhi retain the same regional viewport through repeated city choices and show local agriculture');
+
+ await open('south-central-asia/nature/?topic=water&detail=rivers-29');
+ await page.locator('[data-south-central-river-reading]').waitFor({state:'visible'});
+ assert.match(await page.locator('[data-south-central-river-reading]').textContent(),/インダス川.*灌漑/s);
+ assert.equal(await page.locator('[data-basin-shortcuts]').isVisible(),false);
+ record('Indus selection explains its route and water use in the right panel without a redundant basin picker');
+
  for(const [region,product] of [['south-asia','wheat'],['central-asia','cotton']]){
   await open(`${region}/agriculture/`);await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]').dataset.farmContextStatus==='ready');
+  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]').dataset.focusMaskStatus==='ready');
   assert.equal(new URL(page.url()).searchParams.get('place'),null);
   const livestock=page.locator('.asia-livestock-point:visible'),count=await livestock.count();assert(count>0);
   await page.locator(`[data-farm-choice="${product}"]`).click();await page.waitForFunction(product=>document.querySelector('[data-asia-atlas]').dataset.farmSelected===product,product);
   await extentFits(`${region} selected crop context`);
   assert.equal(await livestock.count(),count);for(const opacity of await livestock.evaluateAll(nodes=>nodes.map(n=>getComputedStyle(n).opacity)))assert.equal(Number(opacity),.2);
   const url=page.url();await page.locator('[data-map-surface]').click({position:{x:30,y:30}});assert.equal(page.url(),url);
-  await screenshot(`${region}-${product}-context`);
  }
  record('Punjab wheat and Central Asian cotton retain livestock context and ignore unrelated background clicks');
 
@@ -129,9 +168,60 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  await screenshot('central-asia-500m-elevation');record('Central Asian elevation uses the existing 500m contours');
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
  }else{
-  await open('south-central-asia/industry/');await screenshot('south-central-industry-overview');
+  await open('south-central-asia/industry/');
+  assert.equal(await page.locator('[data-sc-industry-topic]').inputValue(),'sc-overview');
+  await page.locator('[data-sc-industry-topic]').selectOption('sc-oilgas');
+  assert.match(await page.locator('[data-industry-lead]').textContent(),/カザフスタン.*トルクメニスタン/s);
+  assert.equal(await page.locator('.sc-industry-site-list button').count(),2);
+  await page.locator('.sc-industry-site-list button').first().click();
+  assert.match(new URL(page.url()).searchParams.get('detail'),/^sc-/);
+  await page.locator('[data-sc-industry-topic]').selectOption('sc-overview');
+  assert.equal(new URL(page.url()).searchParams.get('detail'),null);
+  await screenshot('south-central-industry-overview');record('regional industry overview, oil and gas distribution, and site case selection');
   await open('south-central-asia/population/?topic=ethnicity');await screenshot('south-central-cultural-distribution');
  }
+ await open('south-central-asia/population/?topic=religion');
+ assert.equal(await page.locator('.sc-religion-marker').count(),6);
+ assert.equal(await page.locator('[data-settlement-legend="religion"]').isVisible(),false);
+ assert.equal(await page.locator('[data-map-title]').textContent(),'国勢調査で読む宗教構成');
+ await page.locator('.sc-religion-marker[aria-label^="バングラデシュ"]').click();
+ assert.equal(new URL(page.url()).searchParams.get('place'),'BGD');
+ assert.equal(await page.locator('.sc-religion-marker').count(),6);
+ assert.match(await page.locator('[data-sc-religion-country="BGD"]').textContent(),/91\.08%.*7\.96%/s);
+ await page.reload({waitUntil:'domcontentloaded'});await ready();
+ assert.equal(new URL(page.url()).searchParams.get('place'),'BGD');
+ await page.locator('[data-sc-religion-census] details').last().evaluate(n=>n.open=true);
+ await page.locator('[data-sc-religion-census] [data-settlement-choice]').first().click();
+ assert.match(new URL(page.url()).searchParams.get('detail'),/^religion-/);
+ await page.locator('[data-settlement-legend="religion"]').waitFor({state:'visible'});
+ assert.equal(await page.locator('.sc-religion-marker').count(),0);
+ await page.locator('[data-settlement-detail]:visible [data-settlement-clear]').click();
+ await page.locator('.sc-religion-marker').first().waitFor({state:'visible'});
+ record('official national religion compositions persist, with EPR available only as an explicit limited case');
+
+ await open('south-central-asia/population/');
+ assert.match(await page.locator('[data-population-takeaway]').textContent(),/ガンジス川.*ベンガル.*タシケント.*アルマトイ/s);
+ assert((await page.locator('.asia-city-name:visible').count())<=9);
+ await extentFits('south-central population overview',true);
+ await open('south-central-asia/population/?topic=ethnicity');
+ const initialLabels=await page.locator('.asia-settlement-label:visible').count();
+ await page.locator('[data-zoom-in]').click();
+ await page.waitForFunction(()=>new URL(location.href).searchParams.has('z'));
+ const beforeEthnicClick=new URL(page.url()),ethnicCamera=['lng','lat','z'].map(key=>beforeEthnicClick.searchParams.get(key));
+ await page.locator('[data-settlement-choice="ethnicity-10"]').click();
+ assert.deepEqual(['lng','lat','z'].map(key=>new URL(page.url()).searchParams.get(key)),ethnicCamera);
+ assert((await page.locator('.asia-settlement-label:visible').count())>=initialLabels);
+ assert.match(await page.locator('[data-settlement-detail="ethnicity-10"]').textContent(),/GeoEPR.*自己認識/s);
+ record('population guide, sparse initial city names, and ethnic selection without automatic camera movement');
+
+ await open('south-central-asia/nature/?topic=landform');
+ assert.match(await page.locator('[data-physical-takeaway]').textContent(),/ヒマラヤ.*堆積物.*玄武岩/s);
+ assert.equal(await page.locator('[data-sc-landform-sources] a').count(),3);
+ await extentFits('south-central landforms',true);
+ await open('south-central-asia/nature/?topic=terrain');
+ await page.waitForFunction(()=>document.querySelector('[data-map-period]')?.textContent.includes('500m'));
+ await extentFits('south-central 500 m elevation',true);
+ record('landform origin and the retained 500 m elevation contours fit the regional map');
  await open('south-central-asia/agriculture/');
  const supply=page.locator('[data-south-central-supply]'),destinations=page.locator('[data-south-central-destinations]');
  await supply.locator('.sc-flow-track').waitFor({state:'visible'});
@@ -159,7 +249,8 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
    await page.waitForFunction(kind=>{const r=document.querySelector('[data-asia-atlas]');return r.dataset.contourBandStatus==='ready'&&r.dataset.contourBandKind===kind;},kind);
    expected=await page.locator('[data-asia-config]').evaluate((node,kind)=>JSON.parse(node.textContent).presentation[kind].bands,kind);
    assert.equal(expected.interval,interval);
-   const wanted=await page.evaluate(b=>b.colors.map((color,i)=>{const e=document.createElement('i');e.style.backgroundColor=color;return {color:e.style.backgroundColor,label:`${b.breaks[i].toLocaleString('ja-JP')}–${b.breaks[i+1].toLocaleString('ja-JP')}`};}),expected);
+   const wanted=await page.evaluate(({b,kind})=>{const groups=[];for(let i=0;i<b.colors.length;i++){const last=groups.at(-1);if(kind==='rainfall'&&last?.color===b.colors[i])last.upper=b.breaks[i+1];else groups.push({color:b.colors[i],lower:b.breaks[i],upper:b.breaks[i+1]});}return groups.map(group=>{const e=document.createElement('i');e.style.backgroundColor=group.color;return {color:e.style.backgroundColor,label:`${group.lower.toLocaleString('ja-JP')}–${group.upper.toLocaleString('ja-JP')}`};});},{b:expected,kind});
+   if(kind==='rainfall'){assert.equal(expected.breaks.at(-1),9750);assert.equal(wanted.length,11,'High rain is grouped while the 0–3000 mm classes remain distinct');}
    const actual=await page.locator(`${legend} > span`).evaluateAll(nodes=>nodes.filter(n=>/–/.test(n.textContent)).map(n=>({color:n.querySelector('i').style.backgroundColor,label:n.textContent})));
    assert.deepEqual(actual,wanted,'Visible explanation legend must use the generated intervals and colors');
    const mapLegend=await page.locator('[data-reading-map-legend] .asia-comparison-compact-key > span').evaluateAll(nodes=>nodes.map(n=>({color:n.querySelector('i').style.backgroundColor,label:n.textContent})));
@@ -191,5 +282,62 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
   bandsChecks.push({region:'south-asia',kind,interval,point,originalPointValue:value,reloadRetainsURL:true,comparisonRetainsURL:true});
  }
  record('South/Central rainfall 250mm and elevation 500m bands use aligned legends in all three focus views; original point values survive reload and comparison');
+ for(const [region,product] of [['south-asia','wheat'],['central-asia','cotton']]){
+  await open(`${region}/agriculture/?topic=${product}`);
+  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.focusMaskStatus==='ready');
+  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmContextStatus==='ready');
+  await screenshot(`${region}-${product}-context`);
+ }
+ record('South and Central crop images retain the regional country mask in all PC sizes');
+ for(const [region,countries,census] of [
+  ['south-asia',['AFG','BGD','BTN','IND','LKA','MDV','NPL','PAK'],'IND'],
+  ['central-asia',['KAZ','KGZ','TJK','TKM','UZB'],'KAZ'],
+ ]){
+  const expected=new Set(countries);
+  await open(`${region}/industry/`);
+  const industry=await page.locator('[data-asia-config]').evaluate(n=>JSON.parse(n.textContent));
+  assert.deepEqual(industry.countries.map(c=>c.code).sort(),[...countries].sort());
+  assert(industry.industrySites.every(site=>expected.has(site.country)));
+  assert.match(await page.locator('[data-industry-lead]').textContent(),region==='central-asia'?/カザフスタン.*ウズベキスタン/s:/バングラデシュ.*インド/s);
+  const industryKey=page.locator('[data-reading-map-legend]');
+  await page.waitForFunction(()=>document.querySelector('[data-reading-map-legend]')?.textContent.includes('業種別の案内地点'));
+  assert.doesNotMatch(await industryKey.textContent(),/0未満|0以上0未満/);
+  assert.match(await page.locator('[data-industry-legend-note]').textContent(),/色は産業の種類.*生産規模/);
+  const expectedColors=industry.industryGroups.map(group=>group.color);
+  const actualColors=await industryKey.locator('.asia-comparison-compact-key i').evaluateAll(nodes=>nodes.map(node=>node.style.backgroundColor));
+  const cssColors=await page.evaluate(colors=>colors.map(color=>{const item=document.createElement('i');item.style.backgroundColor=color;return item.style.backgroundColor;}),expectedColors);
+  assert.deepEqual(actualColors,cssColors,'The map-side industry legend must use the same group colors as its points');
+  await screenshot(`${region}-review-industry`);
+
+  await open(`${region}/population/`);
+  const population=await page.locator('[data-asia-config]').evaluate(n=>JSON.parse(n.textContent));
+  assert(population.population.cities.every(city=>expected.has(city.country)));
+  assert.match(await page.locator('[data-population-takeaway]').textContent(),region==='central-asia'?/都市|タシケント/:/デリー|ベンガル/);
+  await screenshot(`${region}-review-population`);
+
+  await open(`${region}/population/?topic=religion`);
+  const markerCount=region==='central-asia'?1:5;
+  await page.waitForFunction(count=>document.querySelectorAll('.sc-religion-marker').length===count,markerCount);
+  assert.deepEqual(await page.locator('[data-sc-religion-select]').evaluateAll(nodes=>nodes.map(n=>n.dataset.scReligionSelect)),region==='central-asia'?['KAZ']:['IND','PAK','BGD','NPL','LKA']);
+  assert.match(await page.locator('[data-reading-dock-summary]').textContent(),region==='central-asia'?/カザフスタン.*イスラム教.*キリスト教/s:/インド.*ヒンドゥー教.*パキスタン.*イスラム教/s);
+  const censusKey=page.locator('[data-reading-map-legend]');
+  await page.waitForFunction(()=>document.querySelector('[data-reading-map-legend]')?.textContent.includes('全国の構成比'));
+  assert.match(await censusKey.textContent(),region==='central-asia'?/2021年/:/2011–2024年/);
+  assert.doesNotMatch(await censusKey.textContent(),/2020年の資料|掲載集団の居住域|イスラム教など|重なり/);
+  assert.match(await page.locator('[data-grid-reading]').textContent(),/全国の宗教構成/);
+  await screenshot(`${region}-review-religion`);
+  await page.locator(`[data-sc-religion-select="${census}"]`).click();
+  assert.equal(new URL(page.url()).searchParams.get('place'),census);
+  await page.locator(`[data-sc-religion-country="${census}"]`).waitFor({state:'visible'});
+  await page.waitForFunction(year=>document.querySelector('[data-reading-map-legend]')?.textContent.includes(`${year}年国勢調査`),region==='central-asia'?'2021':'2011');
+  const articleColors=await page.locator(`[data-sc-religion-country="${census}"] .sc-religion-segments i`).evaluateAll(nodes=>nodes.map(node=>node.style.backgroundColor));
+  const keyColors=await censusKey.locator('.asia-comparison-compact-key i').evaluateAll(nodes=>nodes.map(node=>node.style.backgroundColor));
+  assert.deepEqual(keyColors,articleColors,'The selected census key must match every segment color in the right-side table');
+  await screenshot(`${region}-review-religion-selected`);
+  await page.goBack();
+  await page.waitForFunction(()=>new URL(location.href).searchParams.get('place')===null);
+  assert.equal(await page.locator('.sc-religion-marker').count(),markerCount);
+ }
+ record('Focused industry, population and religion screens match their country sets in all PC sizes; census selection and Back restore the same regional map');
  return {profile:profile.name,passed:true,checks,extentChecks,bandsChecks};
 }

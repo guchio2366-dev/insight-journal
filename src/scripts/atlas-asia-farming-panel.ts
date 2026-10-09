@@ -12,21 +12,21 @@ const percentage=(n:number)=>n<0.05?'0.05％未満':`${n.toLocaleString('ja-JP',
 const sourceFlag=(flag:string)=>asiaFarmFlagLabels[flag]??`原資料区分 ${flag}`;
 const svgNode=(tag:string,attrs:Record<string,string>)=>{const node=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [key,value] of Object.entries(attrs))node.setAttribute(key,value);return node;};
 /** Source-matched country/world ratios; never repurpose them as trade or domestic supply. */
-export function renderSouthCentralFarmConnections(root:HTMLElement,region:AsiaRegionId,active:boolean,topic:string|null,country:{code:string;name:string}|undefined){
+export function renderSouthCentralFarmConnections(root:HTMLElement,region:AsiaRegionId,active:boolean,topic:string|null,country:{code:string;name:string}|undefined,focusExample?:{country:string;product:string}){
  const section=root.querySelector<HTMLElement>('[data-south-central-farm-connections]');if(!section)return;
  section.hidden=!active||(region!=='south-central-asia'&&region!=='southeast-asia');if(section.hidden)return;
- renderSouthCentralRiceFlow(section,region,topic,country?.code);
+ renderSouthCentralRiceFlow(section,region,topic,country?.code??focusExample?.country);
  const host=section.querySelector<HTMLElement>('[data-south-central-world-share]')!;host.replaceChildren();
  const isSoutheast=region==='southeast-asia',worldSeries=(isSoutheast?southeastShares.series:southCentralShares.series) as ShareSeries[];
  const sharePercent=(value:number)=>isSoutheast?(value>0&&value<.01?'0.01％未満':`${value.toLocaleString('ja-JP',{maximumFractionDigits:2,minimumFractionDigits:2})}％`):percentage(value);
- let code=country?.code??(isSoutheast?'IDN':'IND'),id=worldShareByTopic[topic??''];
+ let code=country?.code??focusExample?.country??(isSoutheast?'IDN':'IND'),id=worldShareByTopic[topic??''];
  if(topic==='overview'){
   const candidates=isSoutheast?['rice-production','maize-production','soybean-production']:['rice-production','wheat-production','maize-production','soybean-production'];
-  id=candidates.map(key=>({key,share:worldSeries.find(s=>s.id===key)?.years.find(y=>y.year===2024)?.countries[code]?.share??-1})).sort((a,b)=>b.share-a.share)[0]?.key;
+  id=focusExample?.product??candidates.map(key=>({key,share:worldSeries.find(s=>s.id===key)?.years.find(y=>y.year===2024)?.countries[code]?.share??-1})).sort((a,b)=>b.share-a.share)[0]?.key;
  }
  const series=worldSeries.find(s=>s.id===id),record=series?.years.find(y=>y.year===2024)?.countries[code];
  if(!series||!record){const p=document.createElement('p');p.textContent=topic==='overview'?'この地域の代表品目について、2024年の比較値がありません。':'選んだ品目と国・地域の同じ定義による世界比率は未収録です。';host.append(p);return;}
- const name=country?.name??(isSoutheast?'インドネシア':'インド'),measure=shareName[id]??series.label;
+ const name=country?.name??(code==='KAZ'?'カザフスタン':isSoutheast?'インドネシア':'インド'),measure=shareName[id]??series.label;
  const lead=document.createElement('p');lead.className='sc-share-lead';lead.textContent=`${name}の${measure}は、2024年に${shareKind(id)}の${sharePercent(record.share)}。`;host.append(lead);
  const first=series.years.find(y=>y.year===2015)?.countries[code];
  const change=document.createElement('p');change.className='sc-share-detail';
@@ -49,7 +49,7 @@ export function renderSouthCentralFarmConnections(root:HTMLElement,region:AsiaRe
   const vietnam=rice?.countries.VNM,thailand=rice?.countries.THA;
   if(vietnam&&thailand){const p=document.createElement('p');p.className='sc-share-detail';p.textContent=`別の米の例：ベトナム${sharePercent(vietnam.share)}、タイ${sharePercent(thailand.share)}（2024年）。これは3か国の比較で、欠測のある地域全体の世界比ではありません。`;host.append(p);}
  }
- if(!country&&topic==='overview'&&!isSoutheast){
+ if(!country&&topic==='overview'&&!isSoutheast&&!focusExample){
   const kaz=worldSeries.find(s=>s.id==='wheat-production')?.years.find(y=>y.year===2024)?.countries.KAZ;
   if(kaz){const p=document.createElement('p');p.className='sc-share-detail';p.textContent=`別の代表例：カザフスタンの小麦は2024年の世界生産量の${sharePercent(kaz.share)}。品目名や国を選ぶと、その系列に切り替わります。`;host.append(p);}
  }
@@ -73,13 +73,13 @@ export function farmSeries(topic:string,layer:AsiaFarmingLayer|undefined,rows:As
  const item=topic==='rice'?'27':String(layer?.faoItem),base=rows.filter(r=>r.domain==='Production_Crops_Livestock'&&r.item===item);
  return layer?.kind==='livestock'?[{title:'飼養頭数・羽数',rows:base.filter(r=>r.element==='Stocks')}]:[{title:'生産量',rows:base.filter(r=>r.element==='Production')},{title:'収穫面積',rows:base.filter(r=>r.element==='Area harvested')}];
 }
-export function renderAsiaFarmingPanel(root:HTMLElement,region:AsiaRegionId,topic:string,layer:AsiaFarmingLayer|undefined,country:{code:string;name:string}|undefined,statistics:AsiaFarmStatistics|null){
+export function renderAsiaFarmingPanel(root:HTMLElement,region:AsiaRegionId,topic:string,layer:AsiaFarmingLayer|undefined,country:{code:string;name:string}|undefined,statistics:AsiaFarmStatistics|null,focusKindReading?:Record<'crop'|'livestock'|'forest',string>){
  const $=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const definition=asiaFarmDefinitions[topic];if(!definition)return;
  $('[data-farming-extra]').hidden=!layer;$('[data-farming-map-method]').hidden=!layer;
  if(layer){
   $('[data-farming-title]').textContent=`${country?country.name+'の':''}${layer.title}を読む`;
-  $('[data-farming-takeaway]').textContent=asiaFarmRegionReading[region][layer.kind];
+  $('[data-farming-takeaway]').textContent=focusKindReading?.[layer.kind]??asiaFarmRegionReading[region][layer.kind];
   $('[data-farming-definition]').textContent=definition.definition;
   const coverage=country?layer.countryCoverage?.[country.code]:null;
   $('[data-farming-coverage]').textContent=coverage?.maskPixels===0?'この国・地域の島は、広域図の格子の中心に収まりません。地図の空白から生産がないと判断せず、下の国別統計を参照してください。':coverage?.validPixels===0?'この国・地域の範囲には、採用した資料の有効な表示格子がありません。統計がある場合は下の表で確認できます。':coverage?.positivePixels===0?'この国・地域の範囲では、採用した表示格子に正の値がありません。ほかの品目や農業全体の不存在を意味するものではありません。':'';

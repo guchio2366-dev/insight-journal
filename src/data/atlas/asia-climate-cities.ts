@@ -1660,6 +1660,28 @@ export const asiaClimateCities: AsiaClimateCity[] = [
     "reading": "月平均気温は1月の24.9℃から5月の30.7℃まで変化する。月降水量は7月が790.5mm、1月が0.6mm。12か月の降水量平年値の合計は2,250.7mm。都市全域の平均ではなく、掲載した観測所の平年値を示す。"
   },
   {
+    "id": "kolkata",
+    "regionId": "south-central-asia",
+    "countryCode": "IND",
+    "name": "コルカタ",
+    "stationId": "42807",
+    "stationName": "KOLKATA/ALIPORE",
+    "coordinates": [88.33, 22.53],
+    "elevationM": 6,
+    "temperatureC": [19.9, 23.8, 28.2, 30.6, 31.2, 30.6, 29.5, 29.4, 29.4, 28.3, 25.1, 21.1],
+    "precipitationMm": [11.9, 23.8, 37.6, 55.5, 129.4, 279.1, 387.8, 369.9, 319.2, 177.1, 34.8, 6.0],
+    "normalPeriod": "1991–2020",
+    "sourceUrl": "https://ds.data.jma.go.jp/gmd/tcc/tcc/products/climate/climatview/graph_mkhtml_nrm.php?e=7&k=0&m=3&n=42807&r=1&s=1&y=2025",
+    "sourceName": "気象庁 ClimatView・月別平年値",
+    "sourceRetrievedAt": "2026-10-09",
+    "sourceTermsUrl": "https://www.jma.go.jp/jma/kishou/info/coment.html",
+    "sourceSha256": ["385984291145905b0c693c831989e4258ebad02a61929c42e7e48dc3d72c46db"],
+    "missingMonths": {"temperature": [], "precipitation": []},
+    "notes": ["出典のNormal列を月順に転記。SHA-256は転記したdata-source/atlas/asia/kolkata-alipore-normal-1991-2020.jsonの値で、原サイトのHTMLのハッシュではありません。"],
+    "summary": "6～9月に雨が集中し、冬は乾きます。",
+    "reading": "ベンガルの低地にある観測所で、夏の雨季と冬の乾季の違いを読みます。月別の数値は表で確認できます。"
+  },
+  {
     "id": "chennai",
     "regionId": "south-central-asia",
     "countryCode": "IND",

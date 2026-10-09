@@ -65,8 +65,14 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.equal(q('[data-rice-reading]').hidden,true);
       assert.equal(q('[data-farm-overview-reading]').hidden,field!=='agriculture');
       assert.equal(all('[data-farm-kind]').length,0);
-      const features=all('[data-industry-feature]:not([data-industry-current-feature])');
+      const features=all('.asia-industry-subsectors [data-industry-feature]:not([data-industry-current-feature])');
       assert.ok(features.length>=4&&features.length<=6);assert.equal(all('[data-farm-toggle]').length,2);assert.ok(q('[data-industry-all]'));for(const b of features)assert.ok(config.industry.topics.some(t=>t.id===b.dataset.industryFeature));
+      if(region==='east-asia'){
+        const clusters=all('.east-industry-choices [data-industry-feature]');
+        assert.equal(clusters.length,7,'regional overview and six consistently defined industries are offered');
+        assert.equal(clusters[0].dataset.industryFeature,'east-clusters');
+        for(const b of clusters)assert.ok(config.industry.topics.some(t=>t.id===b.dataset.industryFeature));
+      }
       assert.equal(all('[data-industry-sector]').length,5,'industry uses the same parent categories as the US');
       for(const current of all('[data-industry-current-feature]'))assert.equal(current.hidden,true,'current-topic placeholders cannot imply unpublished data before initialization');
       assert.equal(all('[data-industry-subsector]').length,0);
@@ -81,7 +87,7 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.equal(q('[data-asia-statistics]').parentElement,q('[data-atlas-shell]'),'statistics share the shell and align with the map/reading column');
       assert.equal(q('[data-asia-statistics]').previousElementSibling,q('[data-asia-explorer]'),'statistics follow the main map and right reading');
       const compactEastFarm=region==='east-asia'&&field==='agriculture';
-      assert.equal(q('[data-reading-details]').open,!compactEastFarm,'East Asia farming keeps its topic picker visible while detailed reading is collapsible');
+      assert.equal(q('[data-reading-details]').open,true,'the approved reading is initially open beside the map');
       if(compactEastFarm){
         assert.equal(q('[data-farming-selector]').hidden,false);
         assert.ok(q('[data-reading-dock]').contains(q('[data-farming-selector]')));
@@ -93,7 +99,8 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.ok(config.presentation.farming.products.some(p=>p.kind==='crop')&&config.presentation.farming.products.some(p=>p.kind==='livestock'));
       assert.ok(q('[data-industry-topic]').closest('.asia-reading-panel'));
       assert.ok(q('[data-population-topic]').closest('.asia-reading-panel'));
-      assert.ok(q('[data-farming-topic]').closest('.asia-reading-panel'));
+      if(region==='south-central-asia')assert.ok(q('[data-farming-topic]').closest('[data-asia-map-items]'),'South/Central product selection belongs directly below its map');
+      else assert.ok(q('[data-farming-topic]').closest('.asia-reading-panel'));
       assert.equal(q('[data-city-picker]').hidden,field!=='nature');
       assert.equal(q('[data-climate-legend]').hidden,field!=='nature');
       assert.equal(q('[data-agriculture-legend]').hidden,true);
@@ -151,7 +158,8 @@ test('南アジア・中央アジアは別URLと初期範囲を持ち、元資�
   try{
    window.document.write(await readFile(`dist/atlas/asia/${id}/${field}/index.html`,'utf8'));
    const q=s=>window.document.querySelector(s),cfg=JSON.parse(q('[data-asia-config]').textContent);
-   assert.equal(cfg.label,label);assert.equal(cfg.regionId,'south-central-asia');assert.notDeepEqual(cfg.bounds,cfg.dataBounds);
+   assert.equal(cfg.label,label);assert.equal(cfg.regionId,'south-central-asia');assert.equal(cfg.focusId,id);assert.deepEqual(cfg.bounds,cfg.contentExtent);
+   assert.deepEqual(cfg.countries.map(c=>c.code).sort(),(id==='south-asia'?['AFG','BGD','BTN','IND','LKA','MDV','NPL','PAK']:['KAZ','KGZ','TJK','TKM','UZB']));
    assert.equal(cfg.climate.image.includes('south-central-asia'),true);
    assert.ok(q('link[rel=canonical]').href.endsWith(`/atlas/asia/${id}/${field}/`));
    assert.ok(q('[data-focus-link="'+id+'"][aria-current="page"]'));

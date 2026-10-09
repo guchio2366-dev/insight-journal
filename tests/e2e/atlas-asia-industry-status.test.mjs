@@ -373,7 +373,7 @@ test('real browser: Asia desktop headers and maps align with the US reference',{
       await openAsia(page,'south-central-asia/industry/?topic=manufacturing');
       for(const [focus,country] of [['south-asia','IND'],['central-asia','KAZ']]){
        const focusLinks=await rects(page.locator('[data-focus-link]'));
-       assert.deepEqual(await page.locator('[data-focus-link]').evaluateAll(links=>links.map(link=>link.dataset.focusLink)),['south-central-asia','south-asia','central-asia']);
+       assert.deepEqual(await page.locator('[data-focus-link]').evaluateAll(links=>links.map(link=>link.dataset.focusLink)),['south-asia','central-asia']);
        sameRow(focusLinks,'South/Central Asia focus links');
        const countryControls=await rects(page.locator('[data-country-select], [data-reset]'));
        assert.ok(countryControls.every(box=>box.width>0&&box.height>=40),'focus pages retain visible country and reset controls');
@@ -382,6 +382,7 @@ test('real browser: Asia desktop headers and maps align with the US reference',{
        await page.waitForURL(`**/atlas/asia/${focus}/industry/**`);
        await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true');
        assert.equal(await page.locator(`[data-focus-link="${focus}"]`).getAttribute('aria-current'),'page');
+       if(focus==='central-asia')assert.equal(JSON.parse(await page.locator('[data-asia-config]').textContent()).industryCountryCodes.length,0);
        await page.locator('[data-country-select]').selectOption(country);
        assert.equal(new URL(page.url()).searchParams.get('place'),country);
        await page.locator('[data-reset]').click();

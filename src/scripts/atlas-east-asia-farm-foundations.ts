@@ -50,10 +50,28 @@ export function renderEastAsiaFarmFoundations(root:HTMLElement,region:AsiaRegion
  if(heading)heading.textContent=japanWheat?'日本の小麦：供給・輸入先・自給率':'生産・貿易・世界での位置';
  if(lead&&japanWheat)lead.textContent='2023年度の食料需給表で、国内生産・純輸入・在庫変動と国内消費を同じ数量で読みます。輸入先は食糧用小麦の通関量、自給率は国内消費を分母にした値です。';
  const wheatSources=section.querySelector<HTMLElement>('[data-east-wheat-sources]'),otherSources=section.querySelector<HTMLDetailsElement>('[data-east-other-sources]');
- if(wheatSources)wheatSources.hidden=!japanWheat;if(otherSources)otherSources.open=!japanWheat;
+ if(wheatSources)wheatSources.hidden=!japanWheat;if(otherSources){otherSources.hidden=false;otherSources.open=!japanWheat;}
  section.querySelector<HTMLElement>('[data-east-partner-title]')!.textContent=japanWheat?'小麦の輸入相手国':'全商品の輸出先';
  section.querySelector<HTMLElement>('[data-east-share-title]')!.textContent=japanWheat?'小麦の自給率':'世界比と推移';
- if(japanWheat){section.querySelector<HTMLElement>('[data-east-supply-title]')!.textContent='日本の小麦：供給と国内消費';renderJapanWheat(forest,destinations,share);return;}
+ if(japanWheat){section.querySelector<HTMLElement>('[data-east-supply-title]')!.textContent='日本の小麦：供給と国内消費';renderJapanWheat(forest,destinations,share);share.replaceChildren();section.querySelector<HTMLElement>('[data-east-share-title]')!.textContent='品目群のカロリー構成と自給状況';p(share,'未収録：品目群の食料供給カロリーとカロリー自給率。小麦の国内生産重量÷国内消費重量による17％（2023年度）は数量自給率であり、この欄のカロリー統計とは別の定義です。');return;}
+ // Agricultural views must never inherit forestry or all-goods indicators.
+ if(topic!=='forest'){
+  if(heading)heading.textContent='農畜産の供給・域外貿易・食料自給';
+  if(lead)lead.textContent='地域全体は中国・日本・朝鮮半島・モンゴル・台湾を対象とします。対応する需給・相手国別・カロリー系列を照合できていないため、数値と円の面積は表示していません。未収録は0ではありません。';
+  section.querySelector<HTMLElement>('[data-east-supply-title]')!.textContent='主要品目の供給と用途';
+  section.querySelector<HTMLElement>('[data-east-partner-title]')!.textContent='主要品目の域外輸出入相手';
+  section.querySelector<HTMLElement>('[data-east-share-title]')!.textContent='品目群のカロリー構成と自給状況';
+  p(forest,'未収録：同一年・同一品目・重量単位の食料需給表。生産＋輸入＋在庫取崩しを、食用・飼料・加工・種子・損失・輸出・在庫積増し等へ対応させます。食用は摂取量ではなく供給量です。');
+  p(destinations,'未収録：全相手国を含む品目別貿易行列。中国・日本・朝鮮半島・モンゴル・台湾との域内取引を除き、域外輸出と域外輸入を別々の分母で示す必要があります。保存済みの上位3相手＋その他では域内分を除去できません。');
+  p(share,'未収録：同一年・同一対象の食料供給カロリーと品目別国内生産。重量比や世界生産比をカロリー自給率に読み替えません。');
+  p(share,'表示案：上段は食料供給カロリー構成、下段は同じ幅の品目群に自給状況の濃淡。100％超は別記号と実数を併記し、欠測は斜線にする案を検討中です。数値のない帯は描いていません。');
+  p(forest,'出典候補：FAOSTAT Food Balances（2010–2023年公開）。取得先が403を返したため、地域合計・対象年・数量は未確定です。');
+  destinations.append(el('a','FAOSTAT 品目別貿易行列'));
+  destinations.querySelector('a')!.href='https://www.fao.org/faostat/en/#data/TM';
+  forest.append(el('a','FAOSTAT 食料需給表'));forest.querySelector('a')!.href='https://www.fao.org/faostat/en/#data/FBS';
+  if(otherSources)otherSources.hidden=true;
+  return;
+ }
  const crop=topic&&Object.hasOwn(data.cropFlows,topic)?data.cropFlows[topic as keyof typeof data.cropFlows]:undefined;
  if(lead)lead.textContent=crop?'国別の生産重量と対応HS品目の貿易額を分けて示します。輸入元は選んだ品目の輸入額が分母で、国内消費の行先ではありません。':'森林面積、木材の生産・輸出入、商品輸出先は別の統計です。地図の森林色から数量や仕向け先を推定せず、国の公表値と並べて読みます。';
  section.querySelector<HTMLElement>('[data-east-partner-title]')!.textContent=crop?'品目別の輸入元':'全商品の輸出先';

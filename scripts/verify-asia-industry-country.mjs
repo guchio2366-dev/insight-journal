@@ -20,7 +20,7 @@ export async function verifyAsiaIndustryCountry(page,{profile,source}){
   await page.waitForFunction(()=>document.querySelector('[data-industry-value]')?.textContent.includes('中国')&&document.querySelector('[data-industry-status]')?.textContent==='');
   assert.equal(new URL(page.url()).searchParams.get('topic'),'manufacturing');assert.equal(new URL(page.url()).searchParams.get('detail'),null);
   assert.equal(await page.locator('[data-industry-topic] option[value="jp-31"]').evaluate(o=>o.disabled),true);
-  await page.locator('[data-industry-feature="cn-steel"]').click();assert.equal(new URL(page.url()).searchParams.get('place'),'CHN');record('China uses relevant topics and clears incompatible Japanese detail');
+  await journey.locator('[data-east-industry-next="secondary"]').click();assert.equal(new URL(page.url()).searchParams.get('place'),'CHN');record('China uses relevant topics and clears incompatible Japanese detail');
   assert.match(await journey.textContent(),/中国.*24\.84%.*省別の粗鋼設備/);
   await journey.locator('[data-east-industry-next="primary"]').click();assert.equal(new URL(page.url()).searchParams.get('topic'),'manufacturing');record('China reading returns to its national WDI measure');
   await page.locator('[data-country-select]').selectOption('KOR');assert.equal(new URL(page.url()).searchParams.get('topic'),'manufacturing');

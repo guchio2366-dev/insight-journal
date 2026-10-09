@@ -1,5 +1,6 @@
+import {eastClusters} from './east-asia-industry-clusters.ts';
 import type {AsiaState} from '../../lib/atlas-asia-state';
-export type IndustryTopic={id:string;title:string;parent:string;kind:'national'|'admin'|'power'|'steel'|'trade';unit:string;year:string;source:string;note:string;country?:string;fuel?:string};
+export type IndustryTopic={id:string;title:string;parent:string;kind:'national'|'admin'|'power'|'steel'|'trade'|'regional'|'clusters';unit:string;year:string;source:string;note:string;country?:string;fuel?:string};
 export type IndustryCountryScope={label:string;countries:{code:string;name:string}[];regionalTrade?:boolean;readings?:Record<string,{title:string;reading:string;scope:string;source:{label:string;url:string}}>};
 export type IndustryRegion={data:string;topics:IndustryTopic[];powerCount:number;adminCount:number;countries:string[];countryScope?:IndustryCountryScope};
 export type IndustryObservation={value:number|null;status?:string};
@@ -18,7 +19,7 @@ export function industryCountryChoices(region:IndustryRegion){return region.coun
 export function hasIndustryCountryScope(region:IndustryRegion){return industryCountryChoices(region).length>0;}
 export function industryTopicsForPlace(region:IndustryRegion,place:string|null){const choices=industryCountryChoices(region);return choices.length?region.topics.filter(t=>!t.country||(place?t.country===place:choices.some(c=>c.code===t.country))):region.topics;}
 export function industryScopeCountries(region:IndustryRegion,place:string|null){return hasIndustryCountryScope(region)?industryCountryChoices(region).filter(c=>!place||c.code===place).map(c=>c.code):region.countries;}
-export function industryTopic(region:IndustryRegion,state:AsiaState){const topics=industryTopicsForPlace(region,state.place);return topics.find(t=>t.id===state.topic)??topics.find(t=>t.id==='manufacturing')??topics[0];}
+export function industryTopic(region:IndustryRegion,state:AsiaState){const topics=industryTopicsForPlace(region,state.place);return topics.find(t=>t.id===state.topic)??topics.find(t=>t.id==='sc-overview'&&!state.place)??topics.find(t=>t.id==='in-manufacturing'&&state.place==='IND')??topics.find(t=>t.id==='east-clusters')??topics.find(t=>t.id==='manufacturing')??topics[0];}
 export function isIndustryDetailId(id:string){return /^[A-Za-z0-9_-]{1,64}$/.test(id);}
 export function normalizeScopedIndustryState(region:IndustryRegion|undefined,state:AsiaState):AsiaState{
  if(!region?.countryScope?.regionalTrade||state.field!=='industry'||!state.place||industryCountryChoices(region).some(c=>c.code===state.place))return state;
@@ -32,6 +33,8 @@ export function normalizeIndustryState(region:IndustryRegion,state:AsiaState,dat
  const topic=industryTopic(region,state);
  if(state.topic&&state.topic!==topic.id)state={...state,detail:null,point:null};
  const candidate=state.detail&&isIndustryDetailId(state.detail)?state.detail:null;
+ if(topic.kind==='regional')return {...state,topic:topic.id,place:state.place&&region.countries.includes(state.place)?state.place:null,detail:candidate,city:null};
+ if(topic.kind==='clusters')return {...state,topic:topic.id,city:null,detail:eastClusters.some(c=>c.id===candidate&&(!state.place||c.country===state.place))?candidate:null};
  if(topic.kind==='trade')return {...state,topic:topic.id,city:null};
  // Keep a bounded URL candidate until the lazy dataset can validate it. No
  // facility names, coordinates or selections are displayed from this ID alone.
