@@ -1,0 +1,33 @@
+# 4地域の林業の基礎説明と森林被覆の取得状況
+
+基点は main ab2bf515。Canada・Asia・Europe の既存表示を確認し、数値原表とは独立した林業の基本説明を追加した。森林面積、生産量、貿易・自給・世界シェアは再取得していない。
+
+## 使用できた資料
+
+ロシア西部の被覆は main に保存済みの public/assets/atlas/europe/tree-cover-v1。ESA WorldCover 2021 v200、CC BY 4.0、樹木被覆分類10。元画像の座標範囲 [-25,32,65,73] を変えず、既存のロシア地物へSVGで切り抜く。元画像と分類マスクのhash、実際のMoscow付近の原画素との座標一致をテストした。西部以外へ補間・延長しない。
+
+4地域の基本説明は src/data/atlas/regional-forestry.json に資料URL・対象時期を記録。FAO、各国政府・森林担当機関、World Bank の文章を要約。古い資料の予測・企業情報・貿易先を現在の実績に置き換えない。代表位置は著者による概略座標で、森林境界、伐採区画、加工施設や調査地点ではない。小さな林業国を一律に詳細化しない。
+
+## 未取得範囲と403
+
+availability.json は正確な接続先・方法・失敗・再利用ファイルのhashを保存し、public配信版と同一。
+
+ESA WorldCover 公開COGへのNode直接接続はタイムアウト、環境のHTTP CONNECT経由のHEADは403。原典が拒否したかは確認できず、環境の接続制限として記録した。別資料としてAsiaで採用済みのJRC GFC2020の正式WMSにGetCapabilitiesを要求したが、同じくCONNECT段階で403。別ホスト・ミラーへの変更、拒否の迂回、有料契約、権限拡大、アカウント作成、新たな規約同意は行っていない。
+
+未取得はアフリカ全域、中南米全域、オセアニア全域、ロシアの東経65度以東・北緯73度以北。取得済み元画像のnodataも欠測として残す。樹木被覆と森林面積・木材生産量・森林タイプ・商業伐採地は異なる。分類95のマングローブ、分類20の低木は分類10に加えない。
+
+## 表示・操作
+
+/atlas/{africa,latin-america,oceania,russia}/agriculture/forestry/ に独立モジュールを作成。初期は地域全体の地図と右の概説→解説。選択で他地域の位置・取得済み被覆面を維持。全体・拡大縮小・マウス移動・キーボード移動・選択解除・URL復元を提供。国比較・年度比較・長方形選択枠・インサイト遷移は追加していない。公開共通UIのスタイルは変更していない。
+
+## 検証
+
+既存unit suiteは新規テスト追加前に1,054 pass、3 skip、0 fail。新規unit4件と既存ESA原画素テスト4件、built-site3件が成功。production build成功。ローカルChromeはSUID/namespace sandboxを利用できず、sandboxや権限は変更していない。
+
+Regional forestry PC review は既存GitHubランナーの通常sandbox付きChromeで1536×864と1920×1080を撮影する。PR headのSHAを検証し、全域／選択の画像・サイズ・操作・リクエスト失敗をartifactに保存する。PC目視の結果はPRと引継ぎ報告に記載する。
+
+## 再現用取得処理と残件
+
+scripts/regional-forestry/prepare-tree-cover.mjs はEuropeの既存COG概観抽出アルゴリズムを使う独立した地域用処理。今回は原図を取得できず配信画像を生成していない。通常の正規接続が可能な環境でのみ、例えば node scripts/regional-forestry/prepare-tree-cover.mjs --region africa --fetch --cache /tmp/regional-forestry-source-cache で取得できる。403は停止し、森林面を代替生成しない。
+
+4地域全域の被覆取得、表示への接続と検証は残件で、このDraftでは完了扱いにしない。数値統計は別担当の成果と統合する必要がある。マージ・公開は行わない。

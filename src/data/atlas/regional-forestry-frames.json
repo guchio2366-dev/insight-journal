@@ -1,0 +1,6 @@
+{
+  "africa": {"bounds":[-26,-36,60,38],"geography":"src/data/atlas/africa-geography.json","countryCount":55,"wrap":false,"proofTiles":["N00E021","S27E030"]},
+  "latin-america": {"bounds":[-93,-56,-33,28],"geography":"src/data/atlas/latin-america/countries.json","countryCount":34,"wrap":false,"proofTiles":["S03W063","S36W072"]},
+  "oceania": {"bounds":[110,-50,240,25],"geography":"src/data/atlas/oceania-countries.json","kind":"oceania","countryCount":25,"wrap":true,"proofTiles":["S09E144","S39E174"]},
+  "russia": {"bounds":[18,40,191,83],"geography":"src/data/atlas/russia-countries.json","kind":"russia","countryCount":1,"wrap":true,"proofTiles":["N60E027","N54E105"]}
+}

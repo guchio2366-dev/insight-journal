@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-10-10",
+  "baseCommit": "ab2bf51581f6874fb141b5e858892c7a2faf9f2e",
+  "accessFailure": "Execution environment HTTP CONNECT proxy returned 403; upstream publisher refusal is not established. Node direct fetch timed out. No alternate-host download, account creation or permission escalation performed.",
+  "attempts": [
+    {
+      "url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N00E021_Map.tif",
+      "method": "HTTP HEAD via environment proxy",
+      "status": "CONNECT tunnel 403; source bytes not acquired",
+      "license": "CC BY 4.0, verified in existing source metadata and ESA official documentation"
+    },
+    {
+      "url": "https://ies-ows.jrc.ec.europa.eu/iforce/gfc2020/wms.py?service=WMS&request=GetCapabilities",
+      "method": "GET via environment proxy",
+      "status": "CONNECT tunnel 403; source bytes not acquired",
+      "role": "Separate JRC GFC2020 dataset already used for Asia; not an alternate ESA route"
+    }
+  ],
+  "regions": {
+    "africa": {
+      "bounds": [
+        -26,
+        -36,
+        60,
+        38
+      ],
+      "coverage": "not-acquired",
+      "missing": "Entire target-country tree-cover raster; no forest type or harvest boundaries acquired",
+      "treeClass": null,
+      "year": null,
+      "plannedSource": "ESA WorldCover 2021 v200 public COGs; access blocked",
+      "geography": "src/data/atlas/africa-geography.json",
+      "countryCount": 55,
+      "geometryHash": "cefce22f53e415d7a13e2ca514d36a6ec8c6a6ef22454734fdb7b6c8f334d9db",
+      "locatorMethod": "Author-selected approximate representative coordinates anchored to named regions in cited literature. These are not measured forest/harvest/site points."
+    },
+    "latin-america": {
+      "bounds": [
+        -93,
+        -56,
+        -33,
+        28
+      ],
+      "coverage": "not-acquired",
+      "missing": "Entire target-country tree-cover raster; no forest type or harvest boundaries acquired",
+      "treeClass": null,
+      "year": null,
+      "plannedSource": "ESA WorldCover 2021 v200 public COGs; access blocked",
+      "geography": "src/data/atlas/latin-america/countries.json",
+      "countryCount": 34,
+      "geometryHash": "b9a343e2541469c3c790500e61a734d7b78e9a18d640c428260c973bad3dfb91",
+      "locatorMethod": "Author-selected approximate representative coordinates anchored to named regions in cited literature. These are not measured forest/harvest/site points."
+    },
+    "oceania": {
+      "bounds": [
+        110,
+        -50,
+        240,
+        25
+      ],
+      "coverage": "not-acquired",
+      "missing": "Entire target-country tree-cover raster; no forest type or harvest boundaries acquired",
+      "treeClass": null,
+      "year": null,
+      "plannedSource": "ESA WorldCover 2021 v200 public COGs; access blocked",
+      "geography": "src/data/atlas/oceania-countries.json",
+      "countryCount": 25,
+      "geometryHash": "dd9e4f68e17a741ca7ce3cc378e3d043524d94f0f48673c2ce024c1ce0af48a1",
+      "locatorMethod": "Author-selected approximate representative coordinates anchored to named regions in cited literature. These are not measured forest/harvest/site points."
+    },
+    "russia": {
+      "bounds": [
+        18,
+        40,
+        191,
+        83
+      ],
+      "coverage": "partial-western-Russia",
+      "missing": "East of 65°E or north of 73°N, and original source nodata",
+      "treeClass": 10,
+      "year": 2021,
+      "plannedSource": "ESA WorldCover 2021 v200 public COGs; access blocked",
+      "geography": "src/data/atlas/russia-countries.json",
+      "countryCount": 1,
+      "geometryHash": "ede9cbfd062912d7a10fff01b111ad9ca8fa4f8eb719cc28c9f4904a96da2d4f",
+      "locatorMethod": "Author-selected approximate representative coordinates anchored to named regions in cited literature. These are not measured forest/harvest/site points."
+    }
+  },
+  "reusedInputs": [
+    {
+      "path": "public/assets/atlas/europe/tree-cover-v1/manifest.json",
+      "sha256": "da3a35f190ab0582d57fb48b13cf03627cb76cf86ec1846fac53bd7183cbe0f7",
+      "bytes": 15313,
+      "role": "Previously acquired western Russia tree cover; reused without new download"
+    },
+    {
+      "path": "public/assets/atlas/europe/tree-cover-v1/tree-cover.png",
+      "sha256": "0b506f7703783b7b1edc217cf10a99b5f81e50ac62a3c1bb47a867732cc43903",
+      "bytes": 191241,
+      "role": "Previously acquired western Russia tree cover; reused without new download"
+    },
+    {
+      "path": "public/assets/atlas/europe/tree-cover-v1/mask.bin.gz",
+      "sha256": "1c47ebf4debf896cc5c6723dbfd45e0eb8a6606128714570840784feb3d2347a",
+      "bytes": 194141,
+      "role": "Previously acquired western Russia tree cover; reused without new download"
+    },
+    {
+      "path": "data-source/atlas/europe/tree-cover/range-inputs.json",
+      "sha256": "6320488dbeb0aa6c87a978223bd8510d3154112b8051981070a9626887c0cb36",
+      "bytes": 304247,
+      "role": "Previously acquired western Russia tree cover; reused without new download"
+    }
+  ]
+}

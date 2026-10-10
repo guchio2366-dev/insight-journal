@@ -1,0 +1,8 @@
+---
+import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
+import RussiaNewsRail from './RussiaNewsRail.astro';
+import type {ForestryRegion} from '../../lib/atlas-regional-forestry';
+interface Props {region:ForestryRegion}
+const {region}=Astro.props;
+---
+{region==='russia'?<div class="atlas-desktop-shell" data-atlas-shell><RussiaNewsRail/><slot/></div>:<AtlasWorkspaceFrame {region} mapActions={false}><slot/></AtlasWorkspaceFrame>}
