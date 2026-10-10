@@ -6,14 +6,20 @@ on:
       - '.github/workflows/regional-forestry-pc-review.yml'
       - 'src/**/regional-forestry*'
       - 'src/components/atlas/RegionalForestry*'
+      - 'src/components/atlas/LatinAmericaWorkspace.astro'
+      - 'src/components/atlas/LatinAgricultureNavigation.astro'
+      - 'src/styles/atlas-latin-learning.css'
+      - 'src/scripts/atlas-latin-workspace-layout.ts'
       - 'src/lib/atlas-regional-forestry.ts'
       - 'src/scripts/atlas-regional-forestry.ts'
       - 'src/styles/atlas-regional-forestry.css'
       - 'src/pages/atlas/[region]/agriculture/forestry/**'
       - 'public/assets/atlas/regional-forestry-v1/**'
       - 'scripts/verify-regional-forestry-pc.mjs'
+      - 'scripts/verify-latin-forestry-workspace.mjs'
       - 'tests/unit/atlas-regional-forestry.test.mjs'
       - 'tests/e2e/atlas-regional-forestry.test.mjs'
+      - 'tests/e2e/atlas-latin-forestry-workspace.test.mjs'
 permissions:
   contents: read
 concurrency:
@@ -50,11 +56,50 @@ jobs:
       - run: node --test tests/unit/atlas-regional-forestry.test.mjs tests/unit/atlas-europe-tree-cover-data.test.mjs
       - run: npm run build
       - run: node --test tests/e2e/atlas-regional-forestry.test.mjs
+      - run: node --test tests/e2e/atlas-latin-forestry-workspace.test.mjs tests/e2e/atlas-latin-workspace-navigation.test.mjs
       - run: node scripts/verify-regional-forestry-pc.mjs
         env:
           FORESTRY_REVIEW_OUTPUT: ${{ runner.temp }}/regional-forestry-review
-          FORESTRY_REVIEW_INLINE_PREVIEWS: '1'
+          FORESTRY_REVIEW_INLINE_PREVIEWS: '0'
           FORESTRY_REVIEW_VIEWPORTS: '1440x900,1024x768'
+      - name: Capture Latin farming and forestry at the exact PR head
+        run: node scripts/verify-latin-forestry-workspace.mjs
+        env:
+          LATIN_FORESTRY_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+          LATIN_FORESTRY_OUTPUT: ${{ runner.temp }}/regional-forestry-review/latin-after
+          LATIN_FORESTRY_INLINE_PREVIEWS: '1'
+      - name: Check out the unmodified PR base for matching before images
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: .review-baseline
+          persist-credentials: false
+      - name: Build and capture the same viewports at the PR base
+        working-directory: .review-baseline
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+          node "$GITHUB_WORKSPACE/scripts/verify-latin-forestry-workspace.mjs"
+        env:
+          LATIN_FORESTRY_BASELINE: '1'
+          LATIN_FORESTRY_OUTPUT: ${{ runner.temp }}/regional-forestry-review/latin-before
+          LATIN_FORESTRY_INLINE_PREVIEWS: '1'
+      - name: Confirm extraction leaves the other forestry regions unchanged
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {readFileSync} from 'node:fs';
+          const read=phase=>JSON.parse(readFileSync(`${process.env.RUNNER_TEMP}/regional-forestry-review/latin-${phase}/report.json`));
+          const before=read('before'),after=read('after');
+          for(let index=0;index<before.viewports.length;index++){
+            assert.deepEqual(after.viewports[index].agriculture.newsContent,before.viewports[index].agriculture.newsContent,'Farming news typography changed');
+          }
+          for(const original of before.otherRegions){
+            const current=after.otherRegions.find(item=>item.region===original.region);
+            assert.deepEqual(current.layout,original.layout,original.region+' layout changed');
+            assert.equal(current.image.sha256,original.image.sha256,original.region+' screenshot changed');
+          }
+          JS
       - name: Upload screenshots and exact-head report
         if: always()
         uses: actions/upload-artifact@v4

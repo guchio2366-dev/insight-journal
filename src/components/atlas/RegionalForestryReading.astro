@@ -1,0 +1,19 @@
+---
+import {forestryReading,forestryRaster,forestryReferences,type ForestryRegion} from '../../lib/atlas-regional-forestry';
+interface Props {region:ForestryRegion;part:'heading'|'body'}
+const {region,part}=Astro.props;
+const reading=forestryReading(region),raster=forestryRaster(region),references=forestryReferences(region);
+---
+{part==='heading'&&<Fragment>
+      <div class="forest-reading-heading"><p data-forest-kicker>地域全体</p><h2 data-forest-reading-title>{reading.name}の森林と木材利用</h2><p data-forest-takeaway>{reading.overview}</p><button type="button" data-forest-clear hidden>← 全体の概説へ</button></div>
+</Fragment>}
+{part==='body'&&<Fragment>
+      <div class="forest-reading-scroll" tabindex="0" aria-label="概説・解説・出典">
+       <section><h3>概説：地図から分かること</h3><p data-forest-fact>{reading.distribution}</p></section>
+       <section><h3>解説：環境・輸送・利用のつながり</h3><p data-forest-reason>{reading.reason}</p></section>
+       <section data-forest-use-section hidden><h3>木材は何に使われるか</h3><p data-forest-use/></section>
+       <section><h3>根拠のある範囲</h3><p>森林被覆、商業伐採地、森林面積、木材生産量は別の量です。番号は概略の代表位置で、事業所や森林調査の地点ではありません。</p><p>{raster?'ESA WorldCover 2021 v200 の分類10（樹木被覆10%以上）。植林や樹木作物も含み、FAOの森林定義とは一致しません。マングローブは別分類95で、この面には含みません。元データは約10mですが、表示は粗い既存概観画像です。小さな林は省略され、面積・生産量を計算できません。':'対象年・樹種を持つ被覆格子が未取得のため、森林面積・被覆割合・樹種はこの地図から判断できません。天然林・人工林の説明は下の文章資料に基づきます。'}</p></section>
+       {references.length>0&&<section><h3>2020年の森林参考表示の制約</h3><p>JRC GFC2020 v3 はFAO-FRA／EUDRの森林定義に沿って土地利用等を組み合わせた地図で、ESAの樹木被覆分類とは異なります。ここでは保存済みの提供元描画WMS画像を使います。画素の原分類値・欠測値は収録されていないため、透明な場所が森林不在か欠測かを判定せず斜線を残します。樹種・天然林／人工林・伐採地や面積は判定できません。{region==='russia'&&'シベリアの低密度樹林では過大推計があると提供元が報告しています。'}</p></section>}
+       <section><h3>説明の出典・対象時期</h3><ul data-forest-reading-sources>{reading.examples.flatMap(example=>example.sources).map(source=><li><a href={source.url}>{source.title}</a><small>{source.period}</small></li>)}</ul></section>
+      </div>
+</Fragment>}

@@ -1,0 +1,33 @@
+---
+import {withBase} from '../../lib/urls';
+import {forestryReading,forestryFrame,forestryGeography,forestryPath,forestryRaster,forestryReferences,forestryDisputes,projectForestry,type ForestryRegion} from '../../lib/atlas-regional-forestry';
+interface Props {region:ForestryRegion}
+const {region}=Astro.props;
+const reading=forestryReading(region),frame=forestryFrame(region),raster=forestryRaster(region);
+const references=forestryReferences(region),referenceMask=`forest-reference-mask-${region}`;
+const hasCoverage=!!raster||references.length>0;
+const countries=forestryGeography(region);
+const forestClip=`forest-land-${region}`,missing=`forest-missing-${region}`,disputed=`forest-disputed-${region}`;
+---
+      <div class="forest-map-heading"><h2>{raster?'樹木被覆と森林参考図':references.length?'森林参考図と林業の地域':'林業を読む地域の位置'}</h2><span>{raster?'2021年：西部／2020年参考図：南部の一部':references.length?'2020年参考図：PNG西部などの一部':'全域の森林被覆面：未取得'}</span></div>
+      <div class="forest-map-stage">
+       <svg data-forest-map viewBox={`0 0 ${frame.width} ${frame.height}`} tabindex="0" role="group" aria-label={`${reading.name}の林業地図。番号は解説の代表位置。${hasCoverage?'斜線は未取得・欠測・分類未判定。':'中立色の基図は森林の有無を示しません。'}矢印キーで移動、＋・−で拡大縮小。`}>
+        <title>{reading.name}の林業を読む地域</title><desc>{reading.distribution}</desc>
+        <defs>
+         {hasCoverage&&<pattern id={missing} width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" fill="#f1eee5"/><path d="M0 9L9 0" stroke="#c5c0b4" stroke-width="0.8"/></pattern>}
+         <pattern id={disputed} width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0 0L7 7" stroke="#566a76" stroke-width="0.8"/></pattern>
+         <clipPath id={forestClip}>{countries.map(feature=><path d={forestryPath(region,feature.geometry)} fill-rule="evenodd" clip-rule="evenodd"/>)}</clipPath>
+         {raster&&<mask id={referenceMask} maskUnits="userSpaceOnUse" x="0" y="0" width={frame.width} height={frame.height}><rect width={frame.width} height={frame.height} fill="white"/><rect x={raster.x} y={raster.y} width={raster.width} height={raster.height} fill="black"/></mask>}
+        </defs>
+        <rect x="0" y="0" width={frame.width} height={frame.height} fill="#e9f0f1"/>
+        <g data-forest-land data-forest-base={hasCoverage?'partial-coverage':'unacquired'}>{countries.map(feature=><path d={forestryPath(region,feature.geometry)} fill={hasCoverage?`url(#${missing})`:'#f1eee5'} fill-rule="evenodd"/>)}</g>
+        {raster&&<image data-forest-raster href={withBase(raster.href)} x={raster.x} y={raster.y} width={raster.width} height={raster.height} preserveAspectRatio="none" clip-path={`url(#${forestClip})`}/>}
+        {references.map(reference=><image data-forest-reference={reference.id} href={withBase(reference.href)} x={reference.x} y={reference.y} width={reference.width} height={reference.height} preserveAspectRatio="none" clip-path={`url(#${forestClip})`} mask={raster?`url(#${referenceMask})`:undefined}/>)}
+        <g class="forest-boundaries">{countries.map(feature=><path d={forestryPath(region,feature.geometry)} fill="none" fill-rule="evenodd" vector-effect="non-scaling-stroke"/>)}</g>
+        {region==='russia'&&forestryDisputes().map(area=><path d={area.path} fill={`url(#${disputed})`} stroke="#566a76" stroke-dasharray="3 3" stroke-width="0.8" vector-effect="non-scaling-stroke"><title>{area.name}：Natural Earth の係争区分</title></path>)}
+        <g data-forest-locators>{reading.examples.map((example,index)=>{const [x,y]=projectForestry(region,example.point);return <a href={`?example=${example.id}`} data-forest-example={example.id} aria-label={`${index+1} ${example.title}の解説`} transform={`translate(${x},${y})`}><g data-forest-symbol><circle r="10"/><text class="forest-marker-number" text-anchor="middle" y="4">{index+1}</text><text class="forest-marker-label" x="16" y="5">{example.label}</text></g><title>{example.title}：説明を読むための代表位置。森林・伐採地の境界ではありません。</title></a>})}</g>
+       </svg>
+       <div class="forest-map-tools" aria-label="地図の操作"><button type="button" data-forest-zoom="in" aria-label="地図を拡大">＋</button><button type="button" data-forest-zoom="out" aria-label="地図を縮小">−</button><button type="button" data-forest-reset>全体</button></div>
+      </div>
+      <div class="forest-legend" aria-label="凡例">{raster&&<><span><i class="tree"/>樹木被覆（ESA・2021年）</span><span><i class="other"/>その他の有効な被覆</span></>}{references.length>0&&<span><i class="reference"/>森林参考表示（JRC・2020年）</span>}<span><i class={hasCoverage?'missing':'neutral'}/>{hasCoverage?'未取得・欠測・分類未判定':'基図（全域の被覆未取得）'}</span><span><i class="locator"/>番号：解説の代表位置</span>{region==='russia'&&<span><i class="disputed"/>資料上の係争区分</span>}</div>
+      <p class="forest-map-note" data-forest-map-note>{raster?'西部の樹木被覆と南部の一部の森林参考図。両者は分類・年が異なります。緑は商業伐採地・樹種を表しません。':references.length?'PNG西部などの保存済み森林参考図だけを表示。斜線は未取得、または画像だけでは分類できない場所です。':'全域の森林被覆面は未取得です。基図の中立色は森林の有無を示しません。番号は説明の代表位置です。'}</p>
