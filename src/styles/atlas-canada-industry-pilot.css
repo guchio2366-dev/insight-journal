@@ -69,6 +69,7 @@
 }
 @media(min-width:1200px) and (max-width:1599px){
  .atlas-desktop-shell:not(.is-reading-news) .canada-industry-pilot[data-field] .atlas-primary-grid{grid-template-columns:minmax(0,1.9fr) minmax(320px,1fr)}
+ .atlas-desktop-shell .canada-industry-pilot[data-field] .atlas-map-frame{min-height:620px}
  .ca-pilot-map-label{width:136px;padding:3px 5px}
  .ca-pilot-map-label button strong{font-size:12px}
  .ca-pilot-map-label>small,.ca-pilot-map-label button span{font-size:10px}
