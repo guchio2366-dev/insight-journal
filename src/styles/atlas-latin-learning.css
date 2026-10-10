@@ -260,3 +260,5 @@
 .latin-workspace[data-latin-reading-population=true] .lp-density-legend{display:flex;flex-wrap:wrap;gap:4px 16px;list-style:none;padding:0;margin:4px 0}
 .latin-workspace[data-latin-reading-population=true] .lp-density-legend li{display:flex;align-items:center;gap:4px}
 .latin-workspace[data-latin-reading-population=true] .lp-density-legend i{display:inline-block;width:15px;height:12px;border:1px solid #71827c}
+
+.latin-workspace[data-latin-reading-population=true]:is([data-latin-active-section=ethnicity],[data-latin-active-section=religion]) [data-lp-status]{margin:3px 0;line-height:1.45!important}
