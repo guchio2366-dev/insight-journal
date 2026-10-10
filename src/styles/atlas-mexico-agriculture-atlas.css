@@ -76,6 +76,25 @@
 .mexico-agriculture-census-overview{font-size:12px;line-height:1.7}.mexico-agriculture-census-overview button{display:block;font:inherit;padding:7px;margin:5px 0;min-height:40px}
 @media(max-width:599px){.mexico-agriculture-atlas .mexico-agriculture-state-bar{grid-template-columns:90px minmax(0,1fr) 110px;font-size:11px}.mexico-agriculture-atlas .mexico-agriculture-state-bar strong{font-size:10px}.mexico-agriculture-relations>div{grid-template-columns:1fr}}
 .mexico-agriculture-takeaway>small{display:block;font-size:11px;color:#66796c;margin-bottom:5px}
+.mexico-pine-flow{margin:18px 0;padding:18px;border:1px solid #c7d4c5;border-radius:5px;background:#f7f8f1}
+.mexico-pine-flow h3{font:700 19px var(--serif);margin:0 0 6px;color:#264d3c}
+.mexico-pine-flow header p{margin:0 0 14px;line-height:1.7}
+.mexico-pine-flow-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}
+.mexico-pine-flow-grid figure{margin:0;padding:14px;border:1px solid #d3dbcf;background:#fffef9;min-width:0}
+.mexico-pine-flow-grid figcaption{display:grid;gap:2px;margin-bottom:12px}
+.mexico-pine-flow-grid figcaption strong{font-size:15px}
+.mexico-pine-flow-grid figcaption span,.mexico-pine-flow-grid figure>p,.mexico-pine-flow-source{font-size:12px;line-height:1.7;color:#53695d}
+.mexico-pine-form-bars{list-style:none;padding:0;margin:0;display:grid;gap:7px}
+.mexico-pine-form-bars li{display:grid;grid-template-columns:92px minmax(60px,1fr) 112px 43px;gap:7px;align-items:center;font-size:12px}
+.mexico-pine-form-bars li>i{height:13px;background:linear-gradient(to right,#477a60 var(--pine-share),#e6eee5 var(--pine-share));border-radius:2px}
+.mexico-pine-form-bars li>strong,.mexico-pine-form-bars li>small{text-align:right;font-variant-numeric:tabular-nums}
+.mexico-pine-sale-bar{height:23px;background:#e6eee5;border:1px solid #bfd0bd;border-radius:3px;overflow:hidden}
+.mexico-pine-sale-bar span{height:100%;display:block;background:#477a60}
+.mexico-pine-flow dl{margin:12px 0;display:grid;gap:7px}
+.mexico-pine-flow dl>div{display:flex;justify-content:space-between;gap:8px;font-size:13px}
+.mexico-pine-flow dd{font-weight:700;margin:0;font-variant-numeric:tabular-nums}
+.mexico-pine-flow-source{margin:12px 0 0}
+@media(max-width:760px){.mexico-pine-flow-grid{grid-template-columns:1fr}.mexico-pine-form-bars li{grid-template-columns:80px minmax(40px,1fr) 94px 35px;gap:4px;font-size:11px}.mexico-pine-flow{padding:12px}}
 @media(min-width:960px){
  .mexico-agriculture-atlas .atlas-livestock-marker{min-width:28px;min-height:28px;gap:3px;padding:2px 5px 2px 3px;border-radius:15px;font-size:11px;box-shadow:0 1px 3px #243b4835}
  .mexico-agriculture-atlas .atlas-livestock-marker i{width:18px;height:18px;box-sizing:border-box;border-width:1px;font-size:11px}

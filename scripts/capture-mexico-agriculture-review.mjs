@@ -46,6 +46,7 @@ const countries = [
       {id: 'overview', label: 'メキシコの農林業', reading: 'overview'},
       {id: 'crop', label: 'とうもろこし', reading: 'product', select: '[data-crop-select="corn"]'},
       {id: 'livestock', label: '肉牛', reading: 'product', select: '[data-livestock-select="beef"]'},
+      {id: 'dairy', label: '酪農', reading: 'product', select: '[data-livestock-select="dairy"]'},
       {id: 'forestry', label: '森林資源と木材生産', reading: 'forestry', select: '[data-forestry-select]'},
     ],
   },
@@ -456,6 +457,20 @@ async function capture(browser, origin, profile, country, scene) {
     record.screenshot = `${name}.png`;
     await writeFile(path.join(output, record.screenshot), png);
     await captureWorkspace(page, country, name, record);
+    if (country.id === 'mexico' && profile.name === 'desktop' && scene.id === 'forestry') {
+      const flow = page.locator('[data-mexico-stat-panel="pine"] .mexico-pine-flow');
+      assert(await flow.isVisible(), 'Pine flow chart is hidden');
+      assert((await flow.innerText()).includes('7,135,745'), 'Pine sales figure is missing');
+      record.statisticsScreenshot = `${name}-pine-flow.png`;
+      await flow.screenshot({path: path.join(output, record.statisticsScreenshot), animations: 'disabled'});
+    }
+    if (country.id === 'mexico' && profile.name === 'desktop' && scene.id === 'dairy') {
+      const detail = page.locator('[data-mexico-milk-world-comparison]');
+      await detail.locator('summary').first().click();
+      assert(await detail.locator('[data-world-production="mexico-milk-2024"]').isVisible(), 'Mexico milk world chart is hidden');
+      record.statisticsScreenshot = `${name}-milk-world.png`;
+      await detail.screenshot({path: path.join(output, record.statisticsScreenshot), animations: 'disabled'});
+    }
     assert.deepEqual(errors, [], 'Browser JavaScript errors');
     assert.deepEqual(consoleMessages.filter(message => message.type === 'error'), [], 'Browser console errors');
     assert.deepEqual(failedRequests, [], 'Failed page or data requests');
