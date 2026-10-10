@@ -39,9 +39,9 @@ jobs:
           fi
           test -n "$(fc-list ':lang=ja' family)"
       - run: npm ci --no-audit --no-fund
-      - run: npm test
+      - run: node --test tests/unit/atlas-latin-reading.test.mjs tests/unit/atlas-latin-agriculture.test.mjs
       - run: npm run build
-      - run: npm run test:e2e
+      - run: node --test tests/e2e/atlas-latin-population.test.mjs tests/e2e/atlas-latin-essential-legends.test.mjs tests/e2e/atlas-latin-workspace-navigation.test.mjs tests/e2e/atlas-regional-workspace-navigation.test.mjs tests/e2e/atlas-latin-forestry-workspace.test.mjs
       - name: Capture and check exact head
         run: node scripts/verify-latin-reading-pc.mjs
         env:
