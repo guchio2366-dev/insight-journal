@@ -484,13 +484,39 @@ async function main(){
    capture:id=>contextPicture(page,profile,'southeast-'+id,'asia'),
    background:async()=>{await settle(page);await page.locator('[data-map-surface]').scrollIntoViewIfNeeded();const box=await page.locator('[data-map-surface]').boundingBox();const buttons=await page.locator('[data-map-surface] button,[data-map-annotations] button').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};}).filter(r=>r.width>0&&r.height>0));return mapPixels(await page.screenshot({fullPage:false,animations:'disabled'}),box,buttons).backgroundPoint;}
   }));
+  // QA-only artifact for the new Southeast agriculture and forestry panels.
+  for(const profile of profiles)await operation(browser,host,profile,'southeast-forestry-trade-images',async page=>{
+   await open(page,host,'/atlas/asia/southeast-asia/agriculture/');
+   await page.waitForFunction(()=>document.querySelector('.southeast-supply-bars li'));
+   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-map-fallback]')?.hidden);
+   await page.evaluate(async()=>{await document.fonts.ready;scrollTo({top:0,behavior:'instant'});await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
+   await page.screenshot({path:path.join(output,`${profile.name}-southeast-agriculture-workspace-initial.png`),animations:'disabled'});
+   for(const selector of ['[data-southeast-forest-reading]','[data-southeast-trade-reading]'])await page.locator(selector).locator(':scope > summary').click();
+   await page.locator('[data-southeast-top-workspace]>.asia-reading-panel').evaluate(node=>node.scrollTop=180);
+   await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));
+   await page.screenshot({path:path.join(output,`${profile.name}-southeast-agriculture-reading-scrolled.png`),animations:'disabled'});
+   await page.locator('[data-south-central-farm-connections]').evaluate(node=>node.scrollIntoView({block:'start',behavior:'instant'}));
+   await page.screenshot({path:path.join(output,`${profile.name}-southeast-agriculture-statistics-visible.png`),animations:'disabled'});
+   for(const [selector,name] of [['[data-southeast-forest-reading]','forestry'],['[data-southeast-trade-reading]','trade']]){
+    const panel=page.locator(selector);
+    await panel.screenshot({path:path.join(output,`${profile.name}-southeast-${name}-panel.png`),animations:'disabled'});
+   }
+   if(profile.name==='desktop'){
+    await open(page,host,'/atlas/asia/southeast-asia/nature/?topic=water');
+    await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-map-fallback]')?.hidden&&document.querySelector('[data-hydrology-panel]')&&!document.querySelector('[data-hydrology-panel]').hidden&&document.querySelector('[data-hydrology-status]')?.textContent==='');
+    await page.waitForLoadState('networkidle');
+    await page.evaluate(async()=>{await document.fonts.ready;scrollTo({top:0,behavior:'instant'});await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
+    await page.screenshot({path:path.join(output,'desktop-southeast-water-groundwater-initial.png'),animations:'disabled'});
+   }
+   return {imageFiles:['agriculture-workspace-initial','agriculture-reading-scrolled','agriculture-statistics-visible','forestry-panel','trade-panel']};
+  });
   for(const profile of profiles)await checkEastContourBands(browser,host,profile);
   for(const profile of southCentralProfiles)await operation(browser,host,profile,'south-central-regional-acceptance',page=>verifySouthCentralAsia(page,{profile,source:host.origin+basePath,capture:contextPicture}));
   metadata.regionalProfiles=southCentralProfiles;
   metadata.expectedImageCount=112+southCentralImageCount;
   assert.equal(results.captures.length,metadata.expectedImageCount);assert(results.captures.every(row=>row.passed),'All viewport captures must pass');
   assert.equal(results.comparisons.length,8);assert(results.comparisons.every(row=>row.passed),'All 8 geometry comparisons must pass');
-  assert.equal(results.operations.length,40+southCentralProfiles.length);assert(results.operations.every(row=>row.passed),'All PC operation groups must pass');
+  assert.equal(results.operations.length,42+southCentralProfiles.length);assert(results.operations.every(row=>row.passed),'All PC operation groups must pass');
   assert.deepEqual(results.externalCommunicationAttempts,[]);assert.deepEqual(results.blockedWebSockets,[]);
   metadata.status='passed';
  }catch(error){metadata.status='failed';metadata.failure=failure(error);process.exitCode=1;}
