@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
 import {Window} from 'happy-dom';
-import {industryCountryFacts,eastIndustryCountries,industryTopicsForPlace,industryScopeCountries,normalizeIndustryState} from '../../src/data/atlas/asia-industry.ts';
+import {eastIndustryCountries,industryTopicsForPlace,industryScopeCountries,normalizeIndustryState} from '../../src/data/atlas/asia-industry.ts';
 import {createAsiaNavigation} from '../../src/scripts/atlas-asia-navigation.ts';
 import {tradeTopics} from '../../src/data/atlas/asia-trade.ts';
 const base=new URL('../../public/assets/atlas/asia-industry-v1/',import.meta.url);
@@ -59,12 +59,4 @@ test('地域・国・産業の操作は対象国を保ち、国変更で他国�
   current={...current,topic:'trade-exports',detail:'t-85'};navigation.render();q('[data-industry-country="CHN"]').click();
   assert.equal(current.place,'CHN');assert.equal(current.topic,'trade-exports');assert.equal(current.detail,'t-85','a country change retains the compatible HS chapter');
  }finally{await window.happyDOM.close();}
-});
-
-test('保存済み国別数量は全国GDP比・共通2024年で限定5対象に接続し台湾の欠測を保持する',()=>{
- const national=JSON.parse(gunzipSync(readFileSync(new URL('national.json.gz',base))));
- const expected={KOR:[26.6179725157922,57.5005082410932],TWN:[null,null],IDN:[18.984004004374,43.7709161521491],VNM:[24.3330816740279,42.3541982658904],THA:[24.2392268675556,59.270961161831]};
- for(const [code,values] of Object.entries(expected)){const facts=industryCountryFacts(national,code);assert.deepEqual(facts.map(f=>f.value),values);assert.ok(facts.every(f=>f.year===2024&&f.unit==='GDP比 %'&&f.sourceUrl.includes('metadataglossary')));}
- for(const code of ['MYS','JPN','SGP',null])assert.deepEqual(industryCountryFacts(national,code),[]);
- assert.deepEqual(industryCountryFacts(null,'KOR'),[]);
 });

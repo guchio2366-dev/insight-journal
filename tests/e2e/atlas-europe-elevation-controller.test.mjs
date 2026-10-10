@@ -453,3 +453,14 @@ test('a named population city reads its published density cell beside the map wi
     assert.equal(new URL(app.w.location.href).searchParams.get('feature'),paris.id);
   }finally{await app.w.happyDOM.abort();}
 });
+
+test('industry country readings retain existing quantities and add only relevant WDI definition links',async()=>{
+ const baseline=JSON.parse(await readFile('src/data/atlas/europe/country-overview-society.json','utf8'));
+ for(const code of ['DEU','GBR','FRA','ITA']){const app=await setup(`/insight-journal/atlas/europe/industry/?layer=hubs&place=${code}&render=static`);try{
+  assert.equal(app.q('[data-eu-subject-intro]').textContent,baseline.countries[code].industry.body);
+  assert.equal(app.config.industryOverviews[code].facts,undefined);
+  const definitions=[...app.q('[data-eu-reading-sources]').querySelectorAll('[data-eu-industry-definition]')];assert.equal(definitions.length,2);assert.deepEqual(definitions.map(a=>new URL(a.href).pathname.split('/').at(-1)).sort(),['NV.IND.MANF.ZS','NV.SRV.TOTL.ZS']);
+  assert.match(app.q('[data-eu-subject-note]').textContent,/国全体のGDP.*製造業は鉱工業・建設業/);
+  if(code==='FRA')assert.match(app.q('[data-eu-subject-note]').textContent,/海外領土/);
+ }finally{await app.w.happyDOM.close();}}
+});

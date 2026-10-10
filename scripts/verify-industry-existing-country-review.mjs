@@ -2,17 +2,65 @@
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
 import {readFile,mkdir,writeFile} from 'node:fs/promises';
+import {execFileSync} from 'node:child_process';
 import path from 'node:path';
 import {chromium} from 'playwright';
 import config from '../astro.config.mjs';
-const dist=path.resolve('dist'),output=path.resolve('review-artifacts/industry-existing-country'),base=String(config.base??'').replace(/\/$/,'');
+
+const dist=path.resolve('dist'),output=path.resolve('review-artifacts/industry-existing-country');
+const base=String(config.base??'').replace(/\/$/,'');
+const society=JSON.parse(await readFile('src/data/atlas/europe/country-overview-society.json','utf8'));
+const report={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),status:'running',sandboxRequired:true,scope:'Definition links only; no new regional or national quantities.',cases:[],screenshots:[]};
+const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.svg':'image/svg+xml','.json':'application/json','.png':'image/png'};
 await mkdir(output,{recursive:true});
-const report={status:'running',cases:[],screenshots:[]},mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.svg':'image/svg+xml','.json':'application/json','.png':'image/png'};
-const server=createServer(async(req,res)=>{try{let url=new URL(req.url,'http://local').pathname;if(base&&url.startsWith(base))url=url.slice(base.length);if(url.endsWith('/'))url+='index.html';const file=path.resolve(dist,'.'+url);assert(file.startsWith(dist+'/'));res.writeHead(200,{'content-type':mime[path.extname(file)]??'application/octet-stream'});res.end(await readFile(file));}catch{res.writeHead(404);res.end();}});
-await new Promise(r=>server.listen(0,'127.0.0.1',r));
-const browser=await chromium.launch({executablePath:process.env.INDUSTRY_REVIEW_CHROME_PATH||'/usr/bin/chromium',args:['--no-sandbox']}),origin=`http://127.0.0.1:${server.address().port}${base}`;
-const asiaExpected={KOR:['26.62','57.5'],TWN:['未掲載','未掲載'],IDN:['18.98','43.77'],VNM:['24.33','42.35'],THA:['24.24','59.27']},europeExpected={DEU:['18.94','63.62'],GBR:['8.22','72.42'],FRA:['9.77','70.21'],ITA:['15.47','64.31']};
-try{for(const [profile,width,height] of [['1024',1024,768],['1440',1440,900]]){const context=await browser.newContext({viewport:{width,height}}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
- for(const [region,codes] of [['east-asia',['KOR','TWN']],['southeast-asia',['IDN','VNM','THA']]]){await page.goto(`${origin}/atlas/asia/${region}/industry/?topic=manufacturing&place=${codes[0]}`,{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('[data-industry-country-facts]')?.textContent.includes('2024'));assert.equal(await page.locator('[data-country-select] option:not([value=""]):not(:disabled)').count(),region==='east-asia'?4:3);await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:path.join(output,`${profile}-${region}-map.png`)});report.screenshots.push(`${profile}-${region}-map.png`);const details=page.locator('[data-reading-details]');if(await details.count()&&!await details.evaluate(n=>n.open))await details.locator('summary').first().click();for(const code of codes){await page.locator('[data-country-select]').selectOption(code);await page.waitForFunction(()=>document.querySelector('[data-industry-country-facts]')?.textContent.includes('2024'));const facts=page.locator('[data-industry-country-facts]'),text=await facts.textContent();for(const value of asiaExpected[code])assert(text.includes(value),`${code} value ${value}: ${text}`);assert(text.includes('国全体')&&text.includes('GDP比')&&text.includes('都市・工場'));assert.equal(await facts.locator('a').count(),2);for(const href of await facts.locator('a').evaluateAll(nodes=>nodes.map(n=>n.href)))assert(href.includes('metadataglossary'));await facts.scrollIntoViewIfNeeded();await page.screenshot({path:path.join(output,`${profile}-${code}-facts.png`)});report.screenshots.push(`${profile}-${code}-facts.png`);assert.equal(new URL(page.url()).searchParams.get('place'),code);await page.reload({waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('[data-industry-country-facts]')?.textContent.includes('2024'));assert.equal(new URL(page.url()).searchParams.get('place'),code);report.cases.push({profile,country:code,year:2024,status:'passed'});}}
- for(const [code,values] of Object.entries(europeExpected)){await page.goto(`${origin}/atlas/europe/industry/?layer=hubs&place=${code}`,{waitUntil:'domcontentloaded'});const reader=page.locator('[data-eu-subject-intro]');await page.waitForFunction(()=>document.querySelector('[data-eu-subject-intro]')?.textContent.includes('2023年・国全体：'));const text=await reader.textContent();for(const value of values)assert(text.includes(value),`${code} value ${value}: ${text}`);assert(text.includes('GDP比'));assert.equal(await page.locator('[data-eu-reading-sources] a').filter({hasText:'原系列'}).count(),2);await page.evaluate(()=>document.fonts.ready);await reader.scrollIntoViewIfNeeded();await page.screenshot({path:path.join(output,`${profile}-${code}-facts.png`)});report.screenshots.push(`${profile}-${code}-facts.png`);await page.reload({waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('[data-eu-subject-intro]')?.textContent.includes('2023年・国全体：'));assert.equal(new URL(page.url()).searchParams.get('place'),code);report.cases.push({profile,country:code,year:2023,status:'passed'});}
- assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert.deepEqual(errors,[]);await context.close();}report.status='passed';}catch(e){report.status='failed';report.error=e.stack;process.exitCode=1;console.error(e);}finally{await writeFile(path.join(output,'verification.json'),JSON.stringify(report,null,2)+'\n');await browser.close();await new Promise(r=>server.close(r));console.log(JSON.stringify({status:report.status,output}));}
+const server=createServer(async(req,res)=>{try{let url=new URL(req.url,'http://local').pathname;if(base&&url.startsWith(base))url=url.slice(base.length);if(url.endsWith('/'))url+='index.html';const file=path.resolve(dist,'.'+url);assert(file.startsWith(dist+'/'));const bytes=await readFile(file);res.writeHead(200,{'content-type':mime[path.extname(file)]??'application/octet-stream'});res.end(bytes);}catch{res.writeHead(404);res.end();}});
+await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+const origin=`http://127.0.0.1:${server.address().port}${base}`;
+let browser;
+async function picture(page,filename){await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:path.join(output,filename)});report.screenshots.push(filename);}
+try{
+ browser=await chromium.launch({executablePath:process.env.INDUSTRY_REVIEW_CHROME_PATH||'/usr/bin/chromium',chromiumSandbox:true,ignoreDefaultArgs:['--unsafely-disable-devtools-self-xss-warnings']});
+ for(const [profile,width,height] of [['1024',1024,768],['1440',1440,900]]){
+  const context=await browser.newContext({viewport:{width,height}}),page=await context.newPage(),errors=[];
+  page.on('pageerror',error=>errors.push(error.message));
+  for(const [region,codes] of [['east-asia',['KOR','TWN']],['southeast-asia',['IDN','VNM','THA']]]){
+   for(const code of codes){
+    await page.goto(`${origin}/atlas/asia/${region}/industry/?topic=manufacturing&place=${code}`,{waitUntil:'domcontentloaded'});
+    await page.waitForFunction(()=>document.querySelector('[data-industry-value]')?.textContent.trim()&&document.querySelector('[data-industry-status]')?.textContent==='');
+    assert.equal(await page.locator('[data-industry-country-facts]').count(),0,'No uniform national GDP block in country/site readings');
+    assert.equal(await page.locator('[data-country-select] option:not([value=""]):not(:disabled)').count(),region==='east-asia'?4:3);
+    assert.equal(new URL(page.url()).searchParams.get('place'),code);
+    const method=page.locator('[data-industry-method]');
+    assert.equal(await method.locator('a').first().getAttribute('href'),'https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NV.IND.MANF.ZS');
+    await picture(page,`${profile}-${code}-manufacturing.png`);
+    await page.goto(`${origin}/atlas/asia/${region}/industry/?topic=steel-capacity&place=${code}`,{waitUntil:'domcontentloaded'});
+    await page.waitForFunction(()=>document.querySelector('[data-industry-value]')?.textContent.trim()&&document.querySelector('[data-industry-status]')?.textContent==='');
+    assert.equal(await method.locator('a').first().getAttribute('href'),'https://globalenergymonitor.org/projects/global-iron-steel-tracker/');
+    assert.equal(await page.locator('[data-industry-country-facts]').count(),0);
+    await picture(page,`${profile}-${code}-steel.png`);
+    assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+    report.cases.push({profile,country:code,status:'passed',checks:['Existing national figures and selected-topic definitions retained','No added GDP ratios for unrelated sectors','Existing country scope retained']});
+   }
+  }
+  for(const code of ['DEU','GBR','FRA','ITA']){
+   await page.goto(`${origin}/atlas/europe/industry/?layer=hubs&place=${code}`,{waitUntil:'domcontentloaded'});
+   const copy=society.countries[code].industry;
+   await page.waitForFunction(body=>document.querySelector('[data-eu-subject-intro]')?.textContent===body,copy.body);
+   assert.equal(await page.locator('[data-eu-subject-intro]').textContent(),copy.body,'Existing numbers and precision remain unchanged');
+   const definitions=page.locator('[data-eu-reading-sources] [data-eu-industry-definition]');
+   assert.equal(await definitions.count(),2);
+   assert.deepEqual((await definitions.evaluateAll(nodes=>nodes.map(n=>new URL(n.href).pathname.split('/').at(-1)))).sort(),['NV.IND.MANF.ZS','NV.SRV.TOTL.ZS']);
+   assert.match(await page.locator('[data-eu-subject-note]').textContent(),/国全体のGDP.*製造業は鉱工業・建設業/);
+   if(code==='FRA')assert.match(await page.locator('[data-eu-subject-note]').textContent(),/海外領土/);
+   await picture(page,`${profile}-${code}-definitions.png`);
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.waitForFunction(body=>document.querySelector('[data-eu-subject-intro]')?.textContent===body,copy.body);
+   assert.equal(new URL(page.url()).searchParams.get('place'),code);
+   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+   report.cases.push({profile,country:code,status:'passed',checks:['No duplicate quantities','Existing primary source links plus relevant definition links','National denominator and France coverage','Reload']});
+  }
+  assert.deepEqual(errors,[]);await context.close();
+ }
+ report.status='passed';
+}catch(error){report.status=browser?'failed':'blocked';report.error=error.stack;if(!browser)report.reason='Sandbox-enabled Chrome could not launch; browser validation did not run. No fallback or security-setting change is allowed.';process.exitCode=1;console.error(error);}
+finally{await writeFile(path.join(output,'verification.json'),JSON.stringify(report,null,2)+'\n');await browser?.close();await new Promise(resolve=>server.close(resolve));console.log(JSON.stringify({status:report.status,output}));}
