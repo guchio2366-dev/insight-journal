@@ -40,4 +40,4 @@ scripts/regional-forestry/prepare-tree-cover.mjs はEuropeの既存COG概観抽�
 
 親担当から2026年10月10日に指定されたDraft PR #296（https://github.com/guchio2366-dev/insight-journal/pull/296）、head e2f7a5d に依存する。`src/data/atlas/russia-forestry-statistics.json` は森林面積・丸太・製材の2015〜2024年30行を既存の欧州保存値から接続したもの。独立表示は `src/components/atlas/RussiaForestryStatistics.astro`。こちらでは同じ数値を再取得・再実装していない。
 
-親が #296 の数値と画像を確認後、最終統合時に上記データ・コンポーネントの必要部分だけを接続する。`RegionalForestryPage.astro` の地図＋右解説の `forest-primary-grid` の後へ、`region==='russia'` のときだけ独立表示を配置できる。森林面積・木材生産量は分布の凡例や画素から算出せず、統計表の対象年2015〜2024と地図の2020／2021年を区別する。#296 の全変更を繰り返し取り込む必要はない。
+コンポーネントを読んだところ、上記ロシア系列に加えて `src/data/atlas/shared-forestry-summary.json` もimportしているため、このデータも接続に必要。propsは不要。親が #296 の数値と画像を確認後、最終統合時にこの3ファイルの必要部分だけを接続する。`RegionalForestryPage.astro` の地図＋右解説の `forest-primary-grid` の後へ、`region==='russia'` のときだけ独立表示を配置できる。森林面積・木材生産量は分布の凡例や画素から算出せず、統計表の対象年2015〜2024と地図の2020／2021年を区別する。#296 の全変更を繰り返し取り込む必要はない。
