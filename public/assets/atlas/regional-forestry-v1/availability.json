@@ -60,7 +60,7 @@
         25
       ],
       "coverage": "partial-JRC-2020-reference-only",
-      "missing": "Australia, New Zealand, PNG east of 143E, islands outside saved Southeast Asia WMS extent; source classification and nonforest/nodata remain unqueried even within reference extent",
+      "missing": "Australia except a small northern tip within the saved WMS bounds, New Zealand, PNG east of 143E, islands outside saved Southeast Asia WMS extent; source classification and nonforest/nodata remain unqueried even within reference extent",
       "treeClass": null,
       "year": null,
       "plannedSource": "ESA WorldCover 2021 v200 public COGs; access blocked",
