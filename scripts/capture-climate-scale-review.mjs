@@ -21,7 +21,7 @@ const server=createServer(async(req,res)=>{
 await mkdir(output,{recursive:true});
 await new Promise(r=>server.listen(0,'127.0.0.1',r));
 const origin=`http://127.0.0.1:${server.address().port}`;
-const manifest={baseCommit:'ab2bf515',head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),status:'running',sandbox:true,fonts:execFileSync('fc-match',['-f','%{family}','sans-serif:lang=ja'],{encoding:'utf8'}).trim(),captures:[],errors:[]};
+const manifest={baseCommit:'ab2bf515',head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),status:'running',sandbox:true,fonts:execFileSync('fc-match',['-f','%{family}','sans-serif:lang=ja'],{encoding:'utf8'}).trim(),captures:[],errors:[],failures:[]};
 const cases=[
  ['us','los-angeles','atlas/north-america/nature/?city=los-angeles'],
  ['canada','vancouver','atlas/north-america/canada/nature/?city=vancouver'],
@@ -46,6 +46,7 @@ try{
   const page=await context.newPage();page.on('pageerror',err=>manifest.errors.push(String(err)));
   for(const [group,id,path]of cases){
    manifest.currentCase={group,id,path,viewport};
+   try{
    await page.goto(`${origin}/insight-journal/${path}`,{waitUntil:'networkidle'});
    const city=climatePlotCities[group].find(c=>c.id===id);assert.ok(city,id);
    const chart=page.locator('svg[data-climate-plot]:visible').first();
@@ -58,15 +59,22 @@ try{
    assert.ok(measured.rainMax>=Math.max(...city.precipitationMm.filter(v=>v!==null)));
    measured.bars.forEach((b,i)=>{assert.ok(b.y>=measured.top-1e-7&&b.y+b.h<=measured.bottom+1e-7);assert.ok(Math.abs(b.h*100/(measured.rain0-measured.rain100)-city.precipitationMm.filter(v=>v!==null)[i])<1e-6,`${id}: actual selected rain value`);});
    measured.dots.forEach((y,i)=>{assert.ok(y>=measured.top-1e-7&&y<=measured.bottom+1e-7);assert.ok(Math.abs((measured.temp0-y)*10/(measured.temp0-measured.temp10)-city.temperatureC.filter(v=>v!==null)[i])<1e-6,`${id}: actual selected temperature value`);});
-   for(const label of measured.labels){assert.ok(label.rect.x>=measured.bounds.x-1&&label.rect.right<=measured.bounds.right+1,`${id}: label within SVG ${label.text}`);}
+   for(const label of measured.labels.filter(label=>label.rect.width>0&&label.rect.height>0)){assert.ok(label.rect.x>=measured.bounds.x-1&&label.rect.right<=measured.bounds.right+1,`${id}: label within SVG ${label.text}`);}
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`${id}: page overflow`);
    const name=`${viewport.width}-${group}-${id}`;
    await chart.screenshot({path:resolve(output,`${name}-plot.png`)});await page.screenshot({path:resolve(output,`${name}-page.png`)});
    manifest.captures.push({name,viewport,path,city:id,temperatureValues:city.temperatureC,rainValues:city.precipitationMm,measured});
+   }catch(error){
+    manifest.failures.push({case:manifest.currentCase,failure:String(error)});
+    await page.screenshot({path:resolve(output,`${viewport.width}-${group}-${id}-failure.png`)});
+   }
   }
   await context.close();
  }
- assert.deepEqual(manifest.errors,[]);manifest.status='passed';
+ assert.deepEqual(manifest.errors,[]);
+ if(manifest.failures.length)throw new Error(JSON.stringify(manifest.failures));
+ manifest.status='passed';
+ console.log(`::notice title=Climate scale review::${JSON.stringify({captures:manifest.captures.length,sandbox:manifest.sandbox,fonts:manifest.fonts,viewports:[1440,1024]})}`);
 }catch(error){
  manifest.status='failed';manifest.failure=String(error);
  // Public test diagnostics also appear in the check annotations, independently

@@ -63,6 +63,24 @@ jobs:
       - name: Build production site
         run: npm run build
 
+      - name: Capture climate scales at two PC sizes
+        timeout-minutes: 6
+        shell: bash
+        run: |
+          set -euo pipefail
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          test -n "$chrome_path"
+          REVIEW_CHROME_PATH="$chrome_path" node scripts/capture-climate-scale-review.mjs
+
+      - name: Upload climate scale screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: climate-scale-review-${{ github.run_id }}
+          path: review-artifacts/climate-scales
+          if-no-files-found: warn
+          retention-days: 7
+
       # Real screenshots of this exact build, using Chrome already installed on
       # the runner. No browser downloads, deployment, or additional permissions.
       - name: Capture US and Mexico agriculture review
@@ -91,24 +109,6 @@ jobs:
             exit 1
           fi
           REVIEW_CHROME_PATH="$chrome_path" npm run test:review:agriculture
-
-      - name: Capture climate scales at two PC sizes
-        timeout-minutes: 6
-        shell: bash
-        run: |
-          set -euo pipefail
-          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
-          test -n "$chrome_path"
-          REVIEW_CHROME_PATH="$chrome_path" node scripts/capture-climate-scale-review.mjs
-
-      - name: Upload climate scale screenshots
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: climate-scale-review-${{ github.run_id }}
-          path: review-artifacts/climate-scales
-          if-no-files-found: warn
-          retention-days: 7
 
       - name: Upload agriculture screenshots and validation metadata
         if: always()
