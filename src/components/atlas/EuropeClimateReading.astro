@@ -19,20 +19,23 @@ const summary = climateSummary(city.months);
 const station = city.stationName.split(' -')[0];
 const code = (mapLabels.cityClasses as Record<string, string>)[city.id];
 const classification = legend.find(entry => entry.code === code);
-const farming = cityFarming[city.id] ?? (code ? climateFarming[code] : undefined);
+// A climate class spans multiple countries. Its example must never become a
+// claim about a different selected city's surroundings.
+const classExampleCity: Record<string,string> = {london:'Cfb',belgrade:'Cfa',rome:'Csa',lisbon:'Csb',budapest:'Dfa',helsinki:'Dfb',madrid:'BSk'};
+const farming = cityFarming[city.id] ?? (classExampleCity[city.id]===code ? climateFarming[code] : undefined);
 const geography = cityClimateGeography[city.id];
 const temperature = city.months.map(month => month.temperature);
 const precipitation = city.months.map(month => month.precipitation);
 const missingRain = precipitation.some(value => value === null);
 const missingTemperature = temperature.some(value => value === null);
 const meanings: Record<string, string> = {
-  Cfb: '温帯の中でも夏の暑さが穏やかで、明瞭な乾季がない区分です。',
-  Cfa: '温帯の中でも夏が暑く、明瞭な乾季がない区分です。',
-  Csa: '夏が暑く、その夏に降水が少なくなる温帯の区分です。',
-  Csb: '夏の暑さは穏やかですが、その夏に降水が少なくなる温帯の区分です。',
-  Dfa: '冬が寒い冷帯の中で夏が暑く、明瞭な乾季がない区分です。',
-  Dfb: '冬が寒い冷帯の中で夏の暑さは穏やかで、明瞭な乾季がない区分です。',
-  BSk: '乾燥帯の中の半乾燥区分で、年平均気温が18 ℃未満です。',
+  Cfb: 'C＝最寒月0 ℃超・18 ℃未満、b＝最暖月22 ℃未満で10 ℃以上の月が４か月以上、f＝明瞭な乾季なし。',
+  Cfa: 'C＝最寒月0 ℃超・18 ℃未満、a＝最暖月22 ℃以上、f＝明瞭な乾季なし。',
+  Csa: 'C＝最寒月0 ℃超・18 ℃未満、s＝最乾夏月40 mm未満かつ最湿冬月の３分の１未満、a＝最暖月22 ℃以上。',
+  Csb: 'C＝最寒月0 ℃超・18 ℃未満、s＝最乾夏月40 mm未満かつ最湿冬月の３分の１未満、b＝最暖月22 ℃未満で10 ℃以上の月が４か月以上。',
+  Dfa: 'D＝最寒月0 ℃以下、最暖月10 ℃超、f＝明瞭な乾季なし、a＝最暖月22 ℃以上。',
+  Dfb: 'D＝最寒月0 ℃以下、最暖月10 ℃超、f＝明瞭な乾季なし、b＝最暖月22 ℃未満で10 ℃以上の月が４か月以上。',
+  BSk: 'BS＝年降水量が季節別の乾燥限界の半分以上・限界未満、k＝年平均気温18 ℃未満。',
 };
 const coldMonths = city.months.filter(month => month.temperature !== null && month.temperature === summary.coldest).map(month => `${month.month}月`).join('・');
 const warmMonths = city.months.filter(month => month.temperature !== null && month.temperature === summary.warmest).map(month => `${month.month}月`).join('・');
@@ -62,7 +65,6 @@ const dryMonths = city.months.filter(month => month.precipitation !== null && mo
   <details class="eu-city-reading-details">
     <summary>{city.period}年 · 観測地点・出典・詳しい数値</summary>
     <p class="eu-statistic-note">{country} · 観測所 {station}{city.id === 'london' && '（ヒースロー）'}。</p>
-    <p class="eu-statistic-note">{classification && meanings[code]}{summary.coldest !== null && summary.warmest !== null ? ` 雨温図の最寒${coldMonths}は${summary.coldest.toFixed(1)} ℃、最暖${warmMonths}は${summary.warmest.toFixed(1)} ℃です。` : ' 気温の欠測から年間の寒暖差は算出していません。'}</p>
     {geography && <>
       <p class="eu-statistic-note">{climateGeographyScope}</p>
       <p class="eu-statistic-source">地理的な背景の根拠：{geography.sources.map((source, index) => <Fragment>{index > 0 && ' ／ '}<a href={source.url} target="_blank" rel="noopener noreferrer">{source.label} ↗</a></Fragment>)}</p>
@@ -71,6 +73,6 @@ const dryMonths = city.months.filter(month => month.precipitation !== null && mo
     <p class="eu-statistic-note">雨温図は1観測所の値で、都市や国全体の平均ではありません。気候区分は地図の格子の分類で、下段の月別値から計算したものではありません。{!classification && '分類を近隣地点の値で補っていません。'}</p>
     {farming && <p class="eu-statistic-note">見出しの地域での例です。産地は気候に加え、土壌・地形や水の利用条件にも左右されます。</p>}
     {farming && <p class="eu-statistic-source">農畜産物の出典：{farming.sources.map((source, index) => <Fragment>{index > 0 && ' ／ '}<a href={source.url} target="_blank" rel="noopener noreferrer">{source.label} ↗</a></Fragment>)}</p>}
-    <p class="eu-statistic-source">原典：<a href={city.sourceUrl} target="_blank" rel="noopener noreferrer">気象庁の観測所平年値 ↗</a> ／ <a href="https://www.gloh2o.org/koppen/" target="_blank" rel="noopener noreferrer">Beckほかの気候区分 ↗</a></p>
+    <p class="eu-statistic-source">原典：<a href={city.sourceUrl} target="_blank" rel="noopener noreferrer">気象庁の観測所平年値 ↗</a> ／ <a href="https://www.gloh2o.org/koppen/" target="_blank" rel="noopener noreferrer">Beckほかの気候区分 ↗</a> ／ <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12813620/" target="_blank" rel="noopener noreferrer">Beck 2023版の区分条件 ↗</a></p>
   </details>
 </article>

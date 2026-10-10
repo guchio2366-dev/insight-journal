@@ -227,6 +227,8 @@
 
 /* Keep the question, map and comparison entries together on laptop screens. */
 .eu-workspace-root .eu-comparison-links { display:grid; gap:7px; margin:10px 0; }
+.eu-workspace-root .eu-comparison-aux { margin-top:12px; padding-top:8px; border-top:1px solid #c7cec3; }
+.eu-workspace-root .eu-comparison-aux>summary { cursor:pointer; font:13px/1.7 var(--sans); }
 .eu-workspace-root .eu-comparison-links a { display:block; padding:7px 9px; border:1px solid #a5b9ad; background:#f0f4e9; color:#24453e; font:13px/1.6 var(--sans); }
 .eu-workspace-root .eu-comparison-context { margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid #c7cec3; }
 .eu-workspace-root .eu-comparison-context h2 { margin:0 0 5px; font:700 17px/1.5 var(--sans); }
@@ -520,6 +522,9 @@
 .eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry]:not(.is-point-only) { display:inline-flex; align-items:baseline; gap:3px; }
 .eu-workspace-root[data-europe-detail] .eu-label-industry { font:700 12px/1.25 var(--sans); }
 .eu-workspace-root[data-europe-detail] .eu-label-location { font:500 10px/1.25 var(--sans); color:#4b6060; }
+.eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry].is-point-only>:is(strong,small) { display:none; }
+.eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry].is-point-only:is(:hover,:focus-visible) { width:auto; height:auto; padding:2px 4px; border:1px solid #708887; border-left:4px solid var(--eu-industry-color); background:#fffef4; }
+.eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry].is-point-only:is(:hover,:focus-visible)>:is(strong,small) { display:inline; }
 @media (min-width:960px) {
  .eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="industry"] { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:5px; }
  .eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="industry"] button { width:100%; min-height:42px; height:auto; padding:6px 3px; font-size:13px; }

@@ -67,7 +67,9 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
     const selected=(item:Annotation)=>item.kind==='city'?item.id===view.city:item.kind==='crop'?farmingIds.has(item.id)&&item.id===view.selectedFarming:item.id===view.feature;
     const inputs=visible.map(item=>{
       item.button.hidden=false;
-      const pointOnly=!view.detailed&&(item.kind==='city'&&!major.includes(item.id)&&item.id!==view.city||item.kind==='feature'&&!!view.featureLabelIds&&!view.featureLabelIds.includes(item.id)&&item.id!==view.feature);
+      const pointOnly=(item.kind==='city'&&!view.detailed&&!major.includes(item.id)&&item.id!==view.city)
+        ||(item.kind==='feature'&&!!view.featureLabelIds&&!view.featureLabelIds.includes(item.id)&&item.id!==view.feature
+          &&(!!europeIndustryMembership[item.id]||!view.detailed));
       item.button.classList.toggle('is-point-only',pointOnly);
       item.button.classList.toggle('is-muted',item.kind==='crop'&&!!view.selectedFarming&&item.id!==view.selectedFarming);
       item.button.title=item.name;

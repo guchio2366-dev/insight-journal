@@ -136,6 +136,16 @@ async function openEurope(page, path, render) {
   return ready(page, 'europe', render);
 }
 
+async function followComparison(page, id) {
+  const menu = page.locator('[data-eu-comparison-aux]');
+  await menu.waitFor({state: 'visible'});
+  if (!(await menu.evaluate(node => node.open))) await menu.locator('summary').click();
+  assert.equal(await menu.evaluate(node => node.open), true);
+  const link = menu.locator(`[data-eu-comparison-link="${id}"]`);
+  await link.waitFor({state: 'visible'});
+  await link.click();
+}
+
 async function settled(page, pattern = '（ETOPO 2022）') {
   await page.waitForFunction(pattern => {
     const node = document.querySelector('[data-eu-subject-result]');
@@ -270,7 +280,7 @@ async function agricultureClimateRepairs(page,profile){
     return {reason:reason.textContent,farmBottom:farm.getBoundingClientRect().bottom,reasonFont:Number.parseFloat(getComputedStyle(reason).fontSize),farmFont:Number.parseFloat(getComputedStyle(farm).fontSize),classificationFont:Number.parseFloat(getComputedStyle(node.querySelector('.eu-city-climate')).fontSize),farmHeadingFont:Number.parseFloat(getComputedStyle(node.querySelector('.eu-climate-farming h4')).fontSize),overflow:getComputedStyle(reader).overflowY,viewportHeight:innerHeight,duplicates:node.querySelectorAll('.eu-city-selected-note').length};
   });
   assert.match(evidence.reason,/大西洋.*偏西風.*海.*冬.*夏/);
-  assert.match(await page.locator('[data-city-reading="london"] .eu-city-reading-details').textContent(),/明瞭な乾季.*5\.7.*19\.0/s);
+  assert.match(await page.locator('[data-city-reading="london"] .eu-climate-plot-note').textContent(),/明瞭な乾季.*5\.7.*19\.0/s);
   assert.ok(evidence.reasonFont>=14&&evidence.farmFont>=14);
   assert.ok(evidence.classificationFont>=18&&evidence.farmHeadingFont>=17,'Existing heading sizes are retained');
   assert.equal(evidence.overflow,'visible');assert.equal(evidence.duplicates,0);
@@ -415,7 +425,7 @@ async function europeOperations(page, profile, render) {
   await page.goForward(); await ready(page, 'europe', render); assert.equal(await settled(page), elevation);
   await page.reload({waitUntil: 'networkidle'}); await ready(page, 'europe', render); assert.equal(await settled(page), elevation);
   assert.equal(await page.locator('[data-eu-subject-reader]').textContent(), readerCopy);
-  await page.locator('[data-eu-comparison-link="nature-density"]').click(); await page.waitForURL('**/population/**'); await ready(page, 'europe', render);
+  await followComparison(page, 'nature-density'); await page.waitForURL('**/population/**'); await ready(page, 'europe', render);
   assert.equal(new URL(page.url()).searchParams.get('point'), selectedPoint);
   await page.locator('[data-eu-comparison-return]').click(); await page.waitForURL('**/nature/**'); await ready(page, 'europe', render);
   assert.equal(await settled(page), elevation); assert.equal(new URL(page.url()).searchParams.get('point'), selectedPoint);
@@ -474,7 +484,7 @@ async function europeOperations(page, profile, render) {
   const [longitude, latitude] = sourcePoint.split(',').map(Number);
   // At the compact frame, one screen pixel spans about 0.2° near London.
   assert.ok(Math.hypot(longitude + .1187, latitude - 51.5019) < .5, sourcePoint);
-  await page.locator('[data-eu-comparison-link="population-terrain"]').click(); await page.waitForURL('**/nature/**'); await ready(page, 'europe', render);
+  await followComparison(page, 'population-terrain'); await page.waitForURL('**/nature/**'); await ready(page, 'europe', render);
   const targetURL = new URL(page.url());
   assert.equal(targetURL.searchParams.get('feature'), 'alps');
   assert.equal(await page.locator('[data-eu-subject-grid]').isVisible(),false);
@@ -645,7 +655,7 @@ async function stageOneOperations(page, profile) {
   assert.equal(page.url(), selectedURL);
   assert.equal(await page.locator('[data-culture-value]').textContent(), selectedValue);
   assert.equal(await extent(), fullExtent);
-  await page.locator('[data-eu-comparison-link="culture-hubs"]').click(); await page.waitForURL('**/industry/**'); await ready(page);
+  await followComparison(page, 'culture-hubs'); await page.waitForURL('**/industry/**'); await ready(page);
   assert.match(await page.locator('[data-eu-origin-caption]').textContent(), /Middlesbrough/);
   await page.locator('[data-eu-comparison-return]').click(); await page.waitForURL('**/population/**'); await ready(page);
   assert.equal(await page.locator('[data-culture-value]').textContent(), selectedValue);
@@ -653,22 +663,25 @@ async function stageOneOperations(page, profile) {
   await page.locator('[data-culture-case]').selectOption(''); await ready(page);
   for (const name of ['case', 'category', 'area']) assert.equal(new URL(page.url()).searchParams.has(`culture${name[0].toUpperCase()}${name.slice(1)}`), false);
   assert.equal(await page.locator('[data-culture-value]').isVisible(), false);
-  await page.locator('[data-eu-comparison-link="culture-hubs"]').click(); await page.waitForURL('**/industry/**'); await ready(page);
+  await followComparison(page, 'culture-hubs'); await page.waitForURL('**/industry/**'); await ready(page);
   assert.match(await page.locator('[data-eu-origin-caption]').textContent(), /未選択/);
   await page.locator('[data-eu-comparison-return]').click(); await page.waitForURL('**/population/**'); await ready(page);
   assert.equal(await page.locator('[data-culture-case]').inputValue(), '');
   await compositionCheck();
   await openEurope(page, 'atlas/europe/population/?layer=religion', 'normal');
   for (const name of ['case', 'category', 'area']) assert.equal(await page.locator(`[data-culture-${name}]`).inputValue(), '');
-  assert.equal(await page.locator('[data-eu-religion-national]:visible').count(),0);
+  assert.equal(await page.locator('[data-eu-religion-national]:visible').count(),5);
   assert.equal(await page.locator('[data-eu-composition]:visible').count(),0);
   assert.equal(await page.locator('[data-eu-religion-color-key]').isVisible(),true);
   assert.equal(await page.locator('[data-eu-religion-color-key]').evaluate(node=>node.parentElement?.hasAttribute('data-eu-map-legend')),true);
   assert.equal(await page.locator('[data-eu-pew-map-key]').isVisible(),true);
   assert.equal(await page.locator('[data-eu-pew-marker]').count(),40);
+  assert.equal(await page.locator('[data-eu-pew-marker]:visible').count(),35);
+  assert.equal(await page.locator('[data-eu-pew-marker="SRB"]').isVisible(),false,'The separate Serbian census profile occupies this country on the overview');
   assert.equal(await page.locator('[data-eu-pew-marker="CZE"] .eu-pew-marker-bar i').nth(2).evaluate(node=>node.style.width),'72.8%');
-  await page.locator('[data-eu-pew-marker="SRB"]').click();
+  await page.locator('[data-eu-religion-national="religion-national-serbia"]').click();
   assert.match(await page.locator('[data-eu-religion-evidence-reading]').textContent(),/セルビア.*2020年推計.*キリスト教 91.5%.*正教会.*5,387,426人/s);
+  assert.equal(await page.locator('[data-eu-pew-marker]:visible').count(),35,'Other country distributions stay visible after selecting Serbia');
   assert.equal(await page.locator('[data-eu-religion-evidence-reading]').evaluate(node=>node.previousElementSibling===null),true);
   await page.locator('[data-eu-religion-back]').click();
   assert.equal(await page.locator('[data-eu-religion-evidence-reading]').isVisible(),false);

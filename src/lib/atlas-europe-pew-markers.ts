@@ -1,5 +1,6 @@
 import anchors from '../data/atlas/europe/pew-religion-anchors.json' with {type:'json'};
 import { pew2020EuropeGroups, pew2020EuropeRow } from '../data/atlas/europe/pew-religion-2020';
+import { europeReligionNationalProfiles } from '../data/atlas/europe/religion-national-overview';
 
 type Point={x:number;y:number};
 type Project=(coordinates:[number,number])=>Point;
@@ -8,6 +9,7 @@ type Project=(coordinates:[number,number])=>Point;
 export function createEuropePewMarkers(stage:HTMLElement,onSelect:(code:string)=>void){
   const layer=document.createElement('div');layer.className='eu-pew-markers';layer.dataset.euPewMarkers='';layer.hidden=true;
   const guides=document.createElementNS('http://www.w3.org/2000/svg','svg');guides.classList.add('eu-pew-marker-guides');guides.setAttribute('aria-hidden','true');layer.append(guides);
+  const detailedCountries=new Set(europeReligionNationalProfiles.map(profile=>profile.country));
   const nodes=anchors.map(anchor=>{
     const row=pew2020EuropeRow(anchor.code)!;
     const button=document.createElement('button');button.type='button';button.className='eu-pew-marker';button.dataset.euPewMarker=anchor.code;
@@ -42,7 +44,9 @@ export function createEuropePewMarkers(stage:HTMLElement,onSelect:(code:string)=
     const ordered=[...nodes].sort((a,b)=>rank(a.anchor.code)-rank(b.anchor.code)||a.anchor.code.localeCompare(b.anchor.code));
     for(const {anchor,button,guide} of ordered){
       const point=project(anchor.coordinates as [number,number]);
-      const offscreen=point.x<7||point.x>width-7||point.y<12||point.y>safeBottom+24;
+      // A separately sourced national denominator and denomination bar takes
+      // this country's visible position; Pew remains in its selected reading.
+      const offscreen=detailedCountries.has(anchor.code)||point.x<7||point.x>width-7||point.y<12||point.y>safeBottom+24;
       button.hidden=offscreen;guide.style.display=offscreen?'none':'';if(offscreen)continue;
       let chosen=candidates[0],best=Infinity;
       for(const candidate of candidates){

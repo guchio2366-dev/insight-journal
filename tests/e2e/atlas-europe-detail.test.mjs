@@ -141,7 +141,7 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       assert.equal(doc.querySelector('[data-eu-climate-image]').getAttribute('href'),null);
       assert.ok(doc.querySelectorAll('[data-eu-feature-point]:not([hidden])').length>0);
       if(field==='industry'){
-        assert.equal(doc.querySelectorAll('[data-eu-feature-point]:not([hidden])').length,18);
+        assert.equal(doc.querySelectorAll('[data-eu-feature-point]:not([hidden])').length,22);
         assert.equal(doc.querySelector('[data-eu-feature]'),null);
         assert.match(doc.querySelector('[data-eu-subject-note]').textContent,/生産量・雇用の大小を表しません/);
       }else{

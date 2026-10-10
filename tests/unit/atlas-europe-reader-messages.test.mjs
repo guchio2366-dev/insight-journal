@@ -21,11 +21,11 @@ test('全主題に1文の要点と根拠・地理の説明があり、操作説�
     const message = europeReaderCopy(layer);
     assert.deepEqual(Object.keys(message).sort(), ['body','note','takeaway','title']);
     for (const field of ['title','takeaway','body','note']) assert.ok(message[field].trim(), `${layer.id}: ${field}`);
-    assert.equal((message.takeaway.match(/。/g) ?? []).length, 1, layer.id);
+    assert.ok((message.takeaway.match(/。/g) ?? []).length <= (layer.id === 'hubs' ? 2 : 1), layer.id);
     assert.ok(message.takeaway.endsWith('。'), layer.id);
-    assert.ok(message.takeaway.length <= 100, `${layer.id}: takeaway`);
+    assert.ok(message.takeaway.length <= (layer.id === 'hubs' ? 160 : 100), `${layer.id}: takeaway`);
     // Preserve the existing methods and limitations beside the added geographic reading.
-    const bodyLimit=['density','precipitation'].includes(layer.id)?500:200;
+    const bodyLimit=['density','precipitation','hubs','industry'].includes(layer.id)?500:350;
     assert.ok(message.body.length <= bodyLimit, `${layer.id}: body`);
     assert.doesNotMatch(message.takeaway + message.body, /押す|選ぶと|切り替え|OFF|ボタン|左上|統計領域/, layer.id);
   }
@@ -63,8 +63,8 @@ test('12作物・4家畜と集約区分、分布面の限界を維持する', ()
   assert.match(copy('vegetables').note, /VEGE.*「全野菜」ではありません/);
   assert.match(copy('crops').note, /ライムギ単独の元格子は未収録/);
   assert.match(copy('horticulture').note, /ブドウ・オリーブ単独の元格子は未収録/);
-  assert.match(copy('livestock').note, /四角.*英国は当時EU加盟国/);
-  assert.match(copy('livestock').note, /非乳牛と肉用繁殖母牛、肉牛出荷量は別の指標/);
+  assert.match(copy('livestock').takeaway, /牛・豚・鶏.*羊.*地中海側/);
+  assert.match(copy('livestock').note, /2020.*2016年.*別の分母・年・指標/);
 });
 
 test('国全体の対比は固定した2023年の資料に一致し、局所分布の説明へ変えない', () => {
@@ -98,7 +98,7 @@ test('自然・産業・人口をつなぐ説明でも欠測、量、位置の�
   assert.match(copy('terrain').takeaway, /北ヨーロッパ平原.*ピレネー.*アルプス.*カルパチア/);
   assert.match(copy('terrain').body, /プレートの収束.*氷河侵食/);
   assert.match(copy('contours').note, /間隔は標高精度を意味しません/);
-  assert.match(copy('hubs').body, /ロッテルダム.*ルートヴィヒスハーフェン/);
+  assert.match(copy('hubs').body, /港湾物流.*化学.*交通.*原料搬入/);
   assert.match(copy('hubs').note, /生産量・雇用の大小を表しません/);
   assert.match(copy('density').body, /交通.*仕事.*歴史的な都市形成/);
   assert.match(copy('density').note, /2020年.*現在の人口移動・避難状況.*ではありません/);

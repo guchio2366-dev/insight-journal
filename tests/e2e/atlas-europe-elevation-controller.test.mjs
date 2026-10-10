@@ -393,7 +393,7 @@ test('産業分野は国を自動選択せず、全拠点を保ったまま強�
     assert.equal(params.get('industryGroup'),'自動車・機械');assert.equal(params.has('place'),false);assert.equal(params.has('feature'),false);
     assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
     const config=app.config.readings.filter(item=>item.field==='industry');
-    assert.equal(config.filter(item=>app.q(`[data-eu-feature-point="${item.id}"]`).style.display!=='none').length,18);
+    assert.equal(config.filter(item=>app.q(`[data-eu-feature-point="${item.id}"]`).style.display!=='none').length,22);
     assert.match(app.q('[data-eu-subject-takeaway]').textContent,/ドイツ南部.*チェコ/);
     const country=app.q('[data-eu-country-navigation]');country.value='DEU';country.dispatchEvent(new app.w.Event('change'));
     assert.match(app.q('[data-eu-country-overview]').href,/\/atlas\/europe\/overview\/\?country=DEU$/);

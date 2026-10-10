@@ -1,0 +1,112 @@
+[
+  {
+    "name": "agriculture",
+    "width": 1440,
+    "ready": true,
+    "overflow": false,
+    "industryLabels": 0,
+    "berlinReason": false,
+    "religionPew": 0,
+    "religionNational": 0,
+    "errors": []
+  },
+  {
+    "name": "climate-bergen",
+    "width": 1440,
+    "ready": true,
+    "overflow": false,
+    "industryLabels": 0,
+    "berlinReason": false,
+    "religionPew": 0,
+    "religionNational": 0,
+    "errors": []
+  },
+  {
+    "name": "terrain-alps",
+    "width": 1440,
+    "ready": true,
+    "overflow": false,
+    "industryLabels": 0,
+    "berlinReason": false,
+    "religionPew": 0,
+    "religionNational": 0,
+    "errors": []
+  },
+  {
+    "name": "water-danube",
+    "width": 1440,
+    "ready": true,
+    "overflow": false,
+    "industryLabels": 0,
+    "berlinReason": false,
+    "religionPew": 0,
+    "religionNational": 0,
+    "errors": []
+  },
+  {
+    "name": "industry",
+    "width": 1440,
+    "ready": true,
+    "overflow": false,
+    "industryLabels": 9,
+    "berlinReason": false,
+    "religionPew": 0,
+    "religionNational": 0,
+    "errors": []
+  },
+  {
+    "name": "population-berlin",
+    "width": 1440,
+    "ready": true,
+    "overflow": false,
+    "industryLabels": 0,
+    "berlinReason": true,
+    "religionPew": 0,
+    "religionNational": 0,
+    "errors": []
+  },
+  {
+    "name": "religion",
+    "width": 1440,
+    "ready": true,
+    "overflow": false,
+    "industryLabels": 0,
+    "berlinReason": false,
+    "religionPew": 35,
+    "religionNational": 5,
+    "errors": []
+  },
+  {
+    "name": "agriculture",
+    "width": 1024,
+    "ready": true,
+    "overflow": false,
+    "industryLabels": 0,
+    "berlinReason": false,
+    "religionPew": 0,
+    "religionNational": 0,
+    "errors": []
+  },
+  {
+    "name": "industry",
+    "width": 1024,
+    "ready": true,
+    "overflow": false,
+    "industryLabels": 9,
+    "berlinReason": false,
+    "religionPew": 0,
+    "religionNational": 0,
+    "errors": []
+  },
+  {
+    "name": "religion",
+    "width": 1024,
+    "ready": true,
+    "overflow": false,
+    "industryLabels": 0,
+    "berlinReason": false,
+    "religionPew": 35,
+    "religionNational": 5,
+    "errors": []
+  }
+]

@@ -52,9 +52,19 @@ export const climateFarming: Record<string, ClimateFarmingReading> = {
   },
 };
 
-// No cityClass is recorded for these two observation points. Do not infer a
-// neighbouring class: present sourced national examples and the missing class.
+// City readings use explicitly located sources. A class-wide example is never
+// silently substituted for a selected city's surrounding region.
 export const cityFarming: Record<string, ClimateFarmingReading> = {
+  bergen: {
+    heading: '農畜産物の例：ベルゲンを含むヴェストラン県の酪農・羊・果樹',
+    body: 'ベルゲン市街ではなく周囲のヴェストラン県では、草地を使う酪農と羊の飼養が基幹です。フィヨルド沿いの一部では果樹・ベリーも栽培されます。湿った西岸と山地の地形は草地利用に関わり、果樹は条件の合う場所に限られます。',
+    sources: [{label:'ヴェストラン県：農業行動計画2022（5–6頁、9頁）',url:'https://www.vestlandfylke.no/globalassets/innovasjon-og-naringsutvikling/seksjon-for-naturressursar-landbruk-og-reiseliv/landbruk/handlingsplan-for-landbruk-i-vestland-2022-oppdatert-etter-politisk-vedtak.pdf'}],
+  },
+  moscow: {
+    heading: '農畜産物の例：モスクワ州の穀物・ジャガイモ・野菜',
+    body: 'モスクワ市街ではなく周囲のモスクワ州では、穀物・豆類、ジャガイモ、露地野菜を収穫しています。2025年の州農業省資料は州内の収穫地区を示します。寒い冬と短い生育期を持つ内陸でも作物ごとに生産域があり、この観測所だけから州内の収穫量は推定できません。',
+    sources: [{label:'モスクワ州農業・食品省：2025年の州内の作物収穫',url:'https://msh.mosreg.ru/sobytiya/novosti-ministerstva/moskovskaia-oblast-demonstriruet-rost-urozaia-zernovyx-kartofelia-i-ovoshhei-v-2025-godu'}],
+  },
   athens: {
     heading: '農畜産物の例：ギリシャのオリーブ・羊乳チーズ',
     body: 'ギリシャ国内の例として、オリーブの栽培と、羊の乳を主原料とするフェタチーズづくりが挙げられます。フェタにはヤギの乳を混ぜることもあります。ここではアテネ市内に限らず、国内や指定生産地域の農業を紹介しています。',

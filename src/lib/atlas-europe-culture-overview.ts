@@ -50,10 +50,10 @@ export function createEuropeCultureOverview(root:HTMLElement,onSelectLocal:(id:s
       const colorKey=root.querySelector<HTMLElement>('[data-eu-religion-color-key]');if(colorKey)colorKey.hidden=!active||kind!=='religion'||!!caseId;
       if(!key)return;key.hidden=!active||!!caseId;if(key.hidden||rendered===kind)return;
       key.querySelector('[data-eu-culture-key-intro]')!.textContent=kind==='religion'
-        ?'Pew Research Centerの2020年推計から、収録した40か国の7分類の構成を国の位置に小帯で示します。小帯の各色の幅はその国の全人口に占める割合で、国内の宗派や地区の境界を示しません。'
+        ?'Pew Research Centerの2020年推計（40か国・7分類）は小帯、国勢調査などで宗派まで判明する対象は名前付きの構成帯で示します。帯の幅は各資料が定める分母に対する割合です。'
         :'2021年の公表総計 · 円は同じ大きさです。角度は各対象の総人口に占める回答割合で、円の位置は対象を示す目印です。人口規模・個人の位置・細地域の分布を表しません。';
       key.querySelector('[data-eu-culture-key-coverage]')!.textContent=kind==='religion'
-        ?'7分類はキリスト教・イスラム教・宗教的無所属・仏教・ヒンドゥー教・ユダヤ教・その他の宗教。Pewの広域推計であり、既存の国勢調査・標本調査の宗派や未回答の分類と合算しません。資料対象外の国は0%ではありません。'
+        ?'名前付きの構成帯は英・ウェールズ、チェコ、クロアチア、セルビア、エストニアの公式原表です。これら５対象ではPewの小帯を重ねず、国選択後にPew推計も別掲します。最多・過半数塗りではありません。宗派、無宗教、未回答、年齢条件は原表どおりで、対象外は0%ではありません。'
         :'イングランド・ウェールズ・クロアチアだけを掲載しています。最多・過半数の分類で土地を塗った地図ではありません。色は各表の分類を区別し、国をまたいだ同色の対応はありません。';
       key.querySelector<HTMLElement>('[data-eu-pew-attribution]')!.hidden=kind!=='religion';
       key.querySelector('[data-eu-composition-tables]')?.replaceChildren(...(kind==='religion'?[]:europeCultureCompositions(kind).map(table)));rendered=kind;
