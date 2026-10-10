@@ -6,6 +6,8 @@ import {execFileSync} from 'node:child_process';
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
 import {climatePlotCities} from '../tests/fixtures/climate-plot-cities.mjs';
+const japaneseFonts=execFileSync('fc-list',[':lang=ja','family'],{encoding:'utf8'}).trim();
+assert.ok(japaneseFonts,'PC captures require a Japanese-capable font');
 const output=resolve(process.env.CLIMATE_REVIEW_OUTPUT??'review-artifacts/climate-scales');
 const directory=resolve('dist');
 const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.gz':'application/gzip'};
@@ -21,7 +23,7 @@ const server=createServer(async(req,res)=>{
 await mkdir(output,{recursive:true});
 await new Promise(r=>server.listen(0,'127.0.0.1',r));
 const origin=`http://127.0.0.1:${server.address().port}`;
-const manifest={baseCommit:'ab2bf515',head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),status:'running',sandbox:true,fonts:execFileSync('fc-match',['-f','%{family}','sans-serif:lang=ja'],{encoding:'utf8'}).trim(),captures:[],errors:[],failures:[]};
+const manifest={baseCommit:'ab2bf515',head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),status:'running',sandbox:true,japaneseFonts:japaneseFonts.split('\n'),fonts:execFileSync('fc-match',['-f','%{family}','sans-serif:lang=ja'],{encoding:'utf8'}).trim(),captures:[],errors:[],failures:[]};
 const cases=[
  ['us','los-angeles','atlas/north-america/nature/?city=los-angeles'],
  ['canada','vancouver','atlas/north-america/canada/nature/?city=vancouver'],
@@ -51,7 +53,7 @@ try{
    const city=climatePlotCities[group].find(c=>c.id===id);assert.ok(city,id);
    const chart=page.locator('svg[data-climate-plot]:visible').first();
    await chart.waitFor({state:'visible',timeout:20000});await chart.scrollIntoViewIfNeeded();await page.evaluate(()=>document.fonts.ready);
-   const measured=await chart.evaluate(svg=>({min:Number(svg.dataset.temperatureMin),max:Number(svg.dataset.temperatureMax),rainMax:Number(svg.dataset.rainMax),months:[...svg.querySelectorAll('[data-climate-month]')].map(n=>Number(n.textContent)),bars:[...svg.querySelectorAll('rect')].map(n=>({y:Number(n.getAttribute('y')),h:Number(n.getAttribute('height'))})),dots:[...svg.querySelectorAll('circle')].map(n=>Number(n.getAttribute('cy'))),rain0:Number(svg.querySelector('[data-rain-tick="0"]').getAttribute('y1')),rain100:Number(svg.querySelector('[data-rain-tick="100"]').getAttribute('y1')),temp0:Number(svg.querySelector('[data-temperature-tick="0"]').getAttribute('y1')),temp10:Number(svg.querySelector('[data-temperature-tick="10"]').getAttribute('y1')),top:Number(svg.dataset.plotTop),bottom:Number(svg.dataset.plotBottom),labels:[...svg.querySelectorAll('text')].map(n=>({text:n.textContent,rect:n.getBoundingClientRect().toJSON()})),bounds:svg.getBoundingClientRect().toJSON(),text:svg.textContent}));
+   const measured=await chart.evaluate(svg=>({min:Number(svg.dataset.temperatureMin),max:Number(svg.dataset.temperatureMax),rainMax:Number(svg.dataset.rainMax),months:[...svg.querySelectorAll('[data-climate-plot-month]')].map(n=>Number(n.textContent)),bars:[...svg.querySelectorAll('rect')].map(n=>({y:Number(n.getAttribute('y')),h:Number(n.getAttribute('height'))})),dots:[...svg.querySelectorAll('circle')].map(n=>Number(n.getAttribute('cy'))),rain0:Number(svg.querySelector('[data-rain-tick="0"]').getAttribute('y1')),rain100:Number(svg.querySelector('[data-rain-tick="100"]').getAttribute('y1')),temp0:Number(svg.querySelector('[data-temperature-tick="0"]').getAttribute('y1')),temp10:Number(svg.querySelector('[data-temperature-tick="10"]').getAttribute('y1')),top:Number(svg.dataset.plotTop),bottom:Number(svg.dataset.plotBottom),labels:[...svg.querySelectorAll('text')].map(n=>({text:n.textContent,rect:n.getBoundingClientRect().toJSON()})),bounds:svg.getBoundingClientRect().toJSON(),text:svg.textContent}));
    assert.deepEqual(measured.months,Array.from({length:12},(_,i)=>i+1));
    assert.equal(measured.bars.length,city.precipitationMm.filter(v=>v!==null).length,id);
    assert.equal(measured.dots.length,city.temperatureC.filter(v=>v!==null).length,id);
@@ -74,7 +76,7 @@ try{
  assert.deepEqual(manifest.errors,[]);
  if(manifest.failures.length)throw new Error(JSON.stringify(manifest.failures));
  manifest.status='passed';
- console.log(`::notice title=Climate scale review::${JSON.stringify({captures:manifest.captures.length,sandbox:manifest.sandbox,fonts:manifest.fonts,viewports:[1440,1024]})}`);
+ console.log(`::notice title=Climate scale review::${JSON.stringify({captures:manifest.captures.length,sandbox:manifest.sandbox,fonts:manifest.fonts,japaneseFonts:manifest.japaneseFonts,viewports:[1440,1024]})}`);
 }catch(error){
  manifest.status='failed';manifest.failure=String(error);
  // Public test diagnostics also appear in the check annotations, independently

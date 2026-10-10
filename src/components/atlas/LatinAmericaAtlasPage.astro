@@ -96,7 +96,7 @@ const chartX=(i:number)=>38+i*24;
  {c.precipitationMm.map((v,i)=>v!==null&&<rect x={chartX(i)-6} y={py(v)} width="12" height={145-py(v)} fill="#78b4d1"/>)}
  {segments.map(points=><polyline {points} fill="none" stroke="#c95042" stroke-width="2.5"/>)}
  {c.temperatureC.map((v,i)=>v!==null&&<circle cx={chartX(i)} cy={ty(v)} r="2.7" fill="#ab493b"/>)}
- {Array.from({length:12},(_,i)=><text data-climate-month={i+1} x={chartX(i)} y="163" text-anchor="middle">{i+1}</text>)}
+ {Array.from({length:12},(_,i)=><text data-climate-plot-month={i+1} x={chartX(i)} y="163" text-anchor="middle">{i+1}</text>)}
  <text x="42" y="191" fill="#78b4d1">■ 降水量</text><text x="165" y="191" fill="#ab493b">● 平均気温</text>
  {axes.peakLabel&&<text x="175" y="219" text-anchor="middle">{axes.peakLabel}</text>}
  </svg><section><h3>{c.name}の気候</h3><p class="latin-takeaway">{c.summary}</p><p class="latin-small">{c.period} · 観測所：{c.stationName}{c.elevationM!=null?` · 標高${c.elevationM.toLocaleString()}m`:""}</p></section><details><summary>月別の数値を見る</summary><table class="latin-months"><thead><tr><th>月</th><th>気温 ℃</th><th>降水量 mm</th></tr></thead><tbody>{c.temperatureC.map((v,i)=><tr><th>{i+1}</th><td>{v??'欠測'}</td><td>{c.precipitationMm[i]??'欠測'}</td></tr>)}</tbody></table></details><a class="latin-source-link" href={c.sourceUrl}>{c.sourceName} · 観測所 {c.stationId}</a><button class="latin-compare" type="button" data-compare-field="agriculture">この都市の周辺で作物分布を見る →</button></article>;})}

@@ -63,6 +63,31 @@ jobs:
       - name: Build production site
         run: npm run build
 
+      - name: Prepare Japanese fonts for PC reviews
+        shell: bash
+        run: |
+          set -euo pipefail
+          japanese_fonts="$(fc-list ':lang=ja' family)"
+          font_setup="preinstalled"
+          if [[ -z "$japanese_fonts" ]]; then
+            sudo apt-get update
+            sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+            japanese_fonts="$(fc-list ':lang=ja' family)"
+            font_setup="installed-fonts-noto-cjk-from-ubuntu"
+          fi
+          if [[ -z "$japanese_fonts" ]]; then
+            echo "::error::No Japanese-capable font is available; screenshots would be unreadable."
+            exit 1
+          fi
+          export REVIEW_JAPANESE_FONTS="$japanese_fonts"
+          export REVIEW_JAPANESE_FONT_SETUP="$font_setup"
+          export REVIEW_JAPANESE_FONT_MATCH="$(fc-match -f '%{family}\n' 'sans-serif:lang=ja'; fc-match -f '%{family}\n' 'serif:lang=ja')"
+          {
+            printf '%s\n' 'REVIEW_JAPANESE_FONTS<<CLIMATE_REVIEW_FONTS' "$REVIEW_JAPANESE_FONTS" 'CLIMATE_REVIEW_FONTS'
+            printf '%s\n' "REVIEW_JAPANESE_FONT_SETUP=$REVIEW_JAPANESE_FONT_SETUP"
+            printf '%s\n' 'REVIEW_JAPANESE_FONT_MATCH<<CLIMATE_REVIEW_MATCH' "$REVIEW_JAPANESE_FONT_MATCH" 'CLIMATE_REVIEW_MATCH'
+          } >> "$GITHUB_ENV"
+
       - name: Capture climate scales at two PC sizes
         timeout-minutes: 6
         shell: bash
@@ -88,21 +113,6 @@ jobs:
         timeout-minutes: 6
         run: |
           set -euo pipefail
-          japanese_fonts="$(fc-list ':lang=ja' family)"
-          font_setup="preinstalled"
-          if [[ -z "$japanese_fonts" ]]; then
-            sudo apt-get update
-            sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
-            japanese_fonts="$(fc-list ':lang=ja' family)"
-            font_setup="installed-fonts-noto-cjk-from-ubuntu"
-          fi
-          if [[ -z "$japanese_fonts" ]]; then
-            echo "::error::No Japanese-capable font is available; screenshots would be unreadable."
-            exit 1
-          fi
-          export REVIEW_JAPANESE_FONTS="$japanese_fonts"
-          export REVIEW_JAPANESE_FONT_SETUP="$font_setup"
-          export REVIEW_JAPANESE_FONT_MATCH="$(fc-match -f '%{family}\n' 'sans-serif:lang=ja'; fc-match -f '%{family}\n' 'serif:lang=ja')"
           chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
           if [[ -z "$chrome_path" ]]; then
             echo "::error::The GitHub runner does not have Google Chrome installed."

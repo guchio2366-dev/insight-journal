@@ -7,7 +7,7 @@ import {climatePlotCities} from '../fixtures/climate-plot-cities.mjs';
 const num = (el, key) => Number(el.getAttribute(key));
 function verify(svg, city) {
  assert.ok(svg, city.id);
- assert.deepEqual([...svg.querySelectorAll('[data-climate-month]')].map(n => Number(n.textContent)), Array.from({length:12}, (_,i) => i+1));
+ assert.deepEqual([...svg.querySelectorAll('[data-climate-plot-month]')].map(n => Number(n.textContent)), Array.from({length:12}, (_,i) => i+1));
  assert.match(svg.textContent, /mm/); assert.match(svg.textContent, /℃|°C/);
  const rain = [...svg.querySelectorAll('[data-rain-tick]')], temp = [...svg.querySelectorAll('[data-temperature-tick]')];
  const checkGrid = (lines, key, step) => {
@@ -37,7 +37,7 @@ function verify(svg, city) {
  const rainMax=Number(svg.dataset.rainMax);
  assert.ok([...svg.querySelectorAll('text')].some(n=>Number(n.textContent)===rainMax), `${city.id}: visible upper bound`);
  if(values.some(v=>v>350)) assert.ok(svg.textContent.includes('最多雨：'));
- const x=[...svg.querySelectorAll('[data-climate-month]')].map(n=>num(n,'x'));
+ const x=[...svg.querySelectorAll('[data-climate-plot-month]')].map(n=>num(n,'x'));
  x.slice(1).forEach((v,i)=>assert.ok(Math.abs(v-x[i]-(x[1]-x[0]))<1e-8));
 }
 const regions = [

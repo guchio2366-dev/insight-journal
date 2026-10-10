@@ -44,4 +44,8 @@ Oceania・Russiaはこの基点に都市雨温図・12か月データが未実�
 - ローカル全unit：1060件中1057 pass・3 skip・0 fail。描画/Mexico既存E2E：21件 pass。production build・release境界検査 pass。
 - PC画像：1440×1000／1024×800。既存Validateジョブで `capture-climate-scale-review.mjs` を実行し、13事例×2幅の図・画面と数値・幾何メタデータを保存する。Chrome sandboxは有効、外部ページ・データは読み込まず、このcheckoutのbuildだけを確認する。
 
-ローカルChromiumはSUID sandboxの設定不備で起動を拒否した。sandbox無効化・権限変更は行っていない。初回Validate run `38041504793` は雨温図PC検証で失敗。画像artifactは生成されたが、画像・詳細ログの配信先がForbiddenを返したため取得を停止した。失敗の都市・理由を次のrunでcheck annotationsにも記録して診断する。既存Europe PC run `38041504860`、East Asia PC run `38041504775` は成功。画像の目視は未実施。
+ローカルChromiumはSUID sandboxの設定不備で起動を拒否した。sandbox無効化・権限変更は行っていない。初回PC検証はEuropeの非表示の都市名まで枠内検査して失敗した。表示中のラベルだけを対象に修正し、run `38042335559` では13事例×2幅の数値・幾何確認と52枚の画像生成に成功した。画像・詳細ログの配信先がForbiddenを返したため取得を停止し、画像の目視は未実施。最終版は既存の日本語フォント準備を雨温図撮影より前へ移し、日本語対応フォントを必須条件として再撮影する。
+
+初回の全サイトE2Eは539 pass・7 skip・1ファイルSIGKILL。追加した検証用 `data-climate-month` が、廃止済みの共通UIの識別子を検査する既存テストと衝突し、DOM不一致を出力する際にOOMとなっていた。雨温図専用 `data-climate-plot-month` へ修正し、米国自然環境の22件すべてが単独で成功した。元mainの正確な12図に戻した比較試行も22 passだった。修正後の関連unit16件・全描画11件も成功。最終版の全E2EとCIの結果は追記する。
+
+既存Europe PC run `38041504860`、East Asia PC run `38041504775` も成功している。Oceania/Russiaの雨温図未実装と、生成画像の目視未実施は残件として区別する。

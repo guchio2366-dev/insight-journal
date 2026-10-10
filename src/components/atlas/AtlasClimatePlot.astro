@@ -25,7 +25,7 @@ if(segment)segments.push(segment);
  {precipitationMm.map((v,i)=>v===null?<text class="atlas-climate-month" x={x(i)} y={bottom-3}>×</text>:<rect class="atlas-climate-bar" x={x(i)-7.5} y={py(v)} width="15" height={bottom-py(v)}/>)}
  {segments.map(points=><polyline class="atlas-climate-line" {points}/>)}
  {temperatureC.map((v,i)=>v!==null&&<circle class="atlas-climate-dot" cx={x(i)} cy={ty(v)} r="2.2"/>)}
- {Array.from({length:12},(_,i)=><text data-climate-month={i+1} class="atlas-climate-month" x={x(i)} y="177">{i+1}</text>)}
+ {Array.from({length:12},(_,i)=><text data-climate-plot-month={i+1} class="atlas-climate-month" x={x(i)} y="177">{i+1}</text>)}
  {[...axes.temperatureTicks,...(axes.temperatureMin===-3?[-3]:[])].map(v=><text class="atlas-climate-temp-label" x="291" y={v===-3?bottom+12:ty(v)+3}>{v}</text>)}
  <text class="atlas-climate-axis-title" x="160" y="195">月</text>
  {axes.peakLabel&&<text class="atlas-climate-axis-title" x="160" y="216">{axes.peakLabel}</text>}
