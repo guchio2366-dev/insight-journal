@@ -52,6 +52,7 @@ try{
    assert.deepEqual((await definitions.evaluateAll(nodes=>nodes.map(n=>new URL(n.href).pathname.split('/').at(-1)))).sort(),['NV.IND.MANF.ZS','NV.SRV.TOTL.ZS']);
    assert.match(await page.locator('[data-eu-subject-note]').textContent(),/国全体のGDP.*製造業は鉱工業・建設業/);
    if(code==='FRA')assert.match(await page.locator('[data-eu-subject-note]').textContent(),/海外領土/);
+   await definitions.last().scrollIntoViewIfNeeded();
    await picture(page,`${profile}-${code}-definitions.png`);
    await page.reload({waitUntil:'domcontentloaded'});
    await page.waitForFunction(body=>document.querySelector('[data-eu-subject-intro]')?.textContent===body,copy.body);
