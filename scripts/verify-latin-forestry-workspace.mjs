@@ -28,7 +28,7 @@ try{
    const box=element=>{if(!element)return null;const r=element.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};};
    const b=selector=>box(document.querySelector(selector)),style=element=>{const s=getComputedStyle(element);return {fontSize:s.fontSize,fontWeight:s.fontWeight,color:s.color,background:s.backgroundColor,borderRadius:s.borderRadius,padding:s.padding};};
    const nav=document.querySelector('.latin-fields,.forest-fields');
-   return {cssViewport:{width:innerWidth,height:innerHeight},dpr:devicePixelRatio,visualViewportScale:visualViewport.scale,browserZoomPercent:100,scroll:{x:scrollX,y:scrollY},news:b('.atlas-news'),fields:box(nav),fieldLinks:[...nav.children].map(el=>({text:el.textContent.trim(),active:el.getAttribute('aria-current'),box:box(el),style:style(el)})),subfields:b('.latin-agriculture-subfields,.forest-subfields'),subfieldLinks:[...document.querySelectorAll('.latin-agriculture-subfields>*:not(script),.forest-subfields>a')].map(el=>({text:el.textContent.trim(),active:el.getAttribute('aria-current')==='page'||el.getAttribute('aria-pressed')==='true',box:box(el),style:style(el)})),map:b('.forest-map-stage,.latin-agriculture-map'),reading:b('.latin-reading,.forest-reading'),overflow:document.documentElement.scrollWidth>innerWidth};
+   return {cssViewport:{width:innerWidth,height:innerHeight},dpr:devicePixelRatio,visualViewportScale:visualViewport.scale,browserZoomPercent:devicePixelRatio*100,scroll:{x:scrollX,y:scrollY},news:b('.atlas-news'),fields:box(nav),fieldLinks:[...nav.children].map(el=>({text:el.textContent.trim(),active:el.getAttribute('aria-current'),box:box(el),style:style(el)})),subfields:b('.latin-agriculture-subfields,.forest-subfields'),subfieldLinks:[...document.querySelectorAll('.latin-agriculture-subfields>*:not(script),.forest-subfields>a')].map(el=>({text:el.textContent.trim(),active:el.getAttribute('aria-current')==='page'||el.getAttribute('aria-pressed')==='true',box:box(el),style:style(el)})),map:b('.forest-map-stage,.latin-agriculture-map'),reading:b('.latin-reading,.forest-reading'),overflow:document.documentElement.scrollWidth>innerWidth};
   });
   const shot=async(name)=>{const file=`${name}-${viewport.width}.png`,bytes=await page.screenshot({path:path.join(output,file),animations:'disabled',fullPage:false});return {file,sha256:crypto.createHash('sha256').update(bytes).digest('hex'),imagePixels:{width:bytes.readUInt32BE(16),height:bytes.readUInt32BE(20)}};};
   await page.goto(base+'/atlas/latin-america/agriculture/',{waitUntil:'networkidle'});await ready();
@@ -37,7 +37,7 @@ try{
   const forestry=await measure(),forestryImage=await shot('forestry');
   report.viewports.push({viewport,primary:viewport.width===1920,agriculture,forestry,agricultureImage,forestryImage});await save();
   if(!baseline){
-   const assertCommon=(a,b)=>{for(const key of ['cssViewport','dpr','visualViewportScale','scroll','news','fields','fieldLinks','map','reading','subfields'])assert.deepEqual(a[key],b[key],`Common ${key} changed at ${viewport.width}`);assert.deepEqual(b.fieldLinks.map(el=>el.text),['概要','農林業','自然環境','主要産業','人口']);assert.deepEqual(b.subfieldLinks.map(el=>el.text),['農畜産','林業']);assert.deepEqual(b.subfieldLinks.map(el=>el.active),[false,true]);assert.equal(b.overflow,false);};
+   const assertCommon=(a,b)=>{for(const key of ['cssViewport','dpr','visualViewportScale','scroll','news','fields','fieldLinks','map','reading','subfields'])assert.deepEqual(a[key],b[key],`Common ${key} changed at ${viewport.width}`);assert.deepEqual(b.fieldLinks.map(el=>el.text),['概要','農林業','自然環境','主要産業','人口']);assert.deepEqual(b.subfieldLinks.map(el=>el.text),['農畜産','林業']);assert.deepEqual(a.subfieldLinks.map(el=>el.active),[true,false]);assert.deepEqual(b.subfieldLinks.map(el=>el.active),[false,true]);for(let i=0;i<2;i++){assert.deepEqual(a.subfieldLinks[i].box,b.subfieldLinks[i].box,'Subtab size/position changed');for(const key of ['fontSize','fontWeight','borderRadius','padding'])assert.equal(a.subfieldLinks[i].style[key],b.subfieldLinks[i].style[key],'Subtab '+key+' changed');}for(const key of ['color','background']){assert.equal(a.subfieldLinks[0].style[key],b.subfieldLinks[1].style[key],'Active subtab '+key+' changed');assert.equal(a.subfieldLinks[1].style[key],b.subfieldLinks[0].style[key],'Inactive subtab '+key+' changed');}assert.equal(b.overflow,false);};
    assertCommon(agriculture,forestry);
    await page.goBack({waitUntil:'networkidle'});await ready();assert.deepEqual(await measure(),agriculture);
    await page.goForward({waitUntil:'networkidle'});await ready();assertCommon(agriculture,await measure());
@@ -57,4 +57,15 @@ try{
   await context.close();await save();
  }
  assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedRequests,[]);report.result=baseline?'baseline-recorded':'passed';await save();
+ if(process.env.LATIN_FORESTRY_INLINE_PREVIEWS==='1'){
+  const {default:sharp}=await import('sharp');
+  for(const view of report.viewports)for(const shot of [view.agricultureImage,view.forestryImage]){
+   const bytes=await sharp(path.join(output,shot.file)).webp({quality:90}).toBuffer(),encoded=bytes.toString('base64'),parts=Math.ceil(encoded.length/8192);
+   const name=(baseline?'before-':'after-')+shot.file.replace(/\.png$/,'.webp');
+   shot.preview={file:name,sha256:crypto.createHash('sha256').update(bytes).digest('hex'),imagePixels:shot.imagePixels};
+   console.log(`LATIN_FORESTRY_VISUAL ${name} ${parts} ${shot.preview.sha256}`);
+   for(let part=0;part<parts;part++)console.log(`LATIN_FORESTRY_VISUAL_PART ${name} ${part} ${encoded.slice(part*8192,(part+1)*8192)}`);
+  }
+  await save();console.log('LATIN_FORESTRY_REPORT '+JSON.stringify(report));
+ }
 }catch(error){report.result='failed';report.failure=error.stack;await save();throw error;}finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}

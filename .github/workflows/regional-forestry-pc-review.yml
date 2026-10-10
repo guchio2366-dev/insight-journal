@@ -60,13 +60,14 @@ jobs:
       - run: node scripts/verify-regional-forestry-pc.mjs
         env:
           FORESTRY_REVIEW_OUTPUT: ${{ runner.temp }}/regional-forestry-review
-          FORESTRY_REVIEW_INLINE_PREVIEWS: '1'
+          FORESTRY_REVIEW_INLINE_PREVIEWS: '0'
           FORESTRY_REVIEW_VIEWPORTS: '1440x900,1024x768'
       - name: Capture Latin farming and forestry at the exact PR head
         run: node scripts/verify-latin-forestry-workspace.mjs
         env:
           LATIN_FORESTRY_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
           LATIN_FORESTRY_OUTPUT: ${{ runner.temp }}/regional-forestry-review/latin-after
+          LATIN_FORESTRY_INLINE_PREVIEWS: '1'
       - name: Check out the unmodified PR base for matching before images
         uses: actions/checkout@v7
         with:
@@ -82,6 +83,7 @@ jobs:
         env:
           LATIN_FORESTRY_BASELINE: '1'
           LATIN_FORESTRY_OUTPUT: ${{ runner.temp }}/regional-forestry-review/latin-before
+          LATIN_FORESTRY_INLINE_PREVIEWS: '1'
       - name: Confirm extraction leaves the other forestry regions unchanged
         run: |
           node --input-type=module <<'JS'
