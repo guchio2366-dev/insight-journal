@@ -1,0 +1,44 @@
+{
+  "findings": [
+    {
+      "width": 1440,
+      "genre": "livestock",
+      "visible": [
+        "ie-south-dairy",
+        "ie-nw-other-cows",
+        "austrian-alps-dairy"
+      ]
+    },
+    {
+      "width": 1440,
+      "genre": "horticulture",
+      "visible": [
+        "rioja-vines",
+        "languedoc-vines",
+        "friuli-vines",
+        "attica-vines",
+        "mediterranean-olives"
+      ]
+    },
+    {
+      "width": 1024,
+      "genre": "livestock",
+      "visible": [
+        "ie-south-dairy",
+        "ie-nw-other-cows",
+        "austrian-alps-dairy"
+      ]
+    },
+    {
+      "width": 1024,
+      "genre": "horticulture",
+      "visible": [
+        "rioja-vines",
+        "languedoc-vines",
+        "friuli-vines",
+        "attica-vines",
+        "mediterranean-olives"
+      ]
+    }
+  ]
+}

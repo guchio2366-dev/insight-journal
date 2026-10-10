@@ -1,0 +1,11 @@
+/** Source-reported regional examples, not farm locations or polygon boundaries. */
+export const europeFarmingRegionalEvidence = [
+  {id:'ie-south-dairy',genre:'livestock',kind:'dairy',name:'アイルランド南部・乳牛',coordinates:[-8.2,52.1],period:'2020',detail:'南部NUTS 2に乳牛1,124,842頭。',source:'https://www.cso.ie/en/releasesandpublications/ep/p-coa/censusofagriculture2020-preliminaryresults/livestock/'},
+  {id:'ie-nw-other-cows',genre:'livestock',kind:'other-cows',name:'同北西部・非乳牛',coordinates:[-8.8,54.1],period:'2020',detail:'北部・西部NUTS 2に非乳牛395,751頭。肉牛の出荷量ではありません。',source:'https://www.cso.ie/en/releasesandpublications/ep/p-coa/censusofagriculture2020-preliminaryresults/livestock/'},
+  {id:'austrian-alps-dairy',genre:'livestock',kind:'dairy',name:'アルプス・山地酪農',coordinates:[12.4,47.3],period:'資料記述',detail:'オーストリア農業省が山間地の酪農経営を説明。点は生乳量の多い場所の順位ではありません。',source:'https://www.bmluk.gv.at/en/topics/agriculture/agriculture-in-austria/animal-production-in-austria/dairy-farming-in-austria.html'},
+  {id:'rioja-vines',genre:'horticulture',kind:'vines',name:'リオハ・ワイン用ブドウ畑',coordinates:[-2.5,42.3],period:'2020',detail:'農用地に占めるブドウ畑20.1%。収穫量や食用ブドウ面積ではありません。',source:'https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Vineyards_in_the_EU_-_statistics'},
+  {id:'languedoc-vines',genre:'horticulture',kind:'vines',name:'ラングドック・ブドウ畑',coordinates:[3.1,43.6],period:'2020',detail:'農用地に占めるブドウ畑21.3%。地域内の畑の場所は示しません。',source:'https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Vineyards_in_the_EU_-_statistics'},
+  {id:'friuli-vines',genre:'horticulture',kind:'vines',name:'フリウリ・ブドウ畑',coordinates:[13.1,46.1],period:'2020',detail:'農用地に占めるブドウ畑は約15%。',source:'https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Vineyards_in_the_EU_-_statistics'},
+  {id:'attica-vines',genre:'horticulture',kind:'vines',name:'アッティカ・ブドウ畑',coordinates:[23.7,38.0],period:'2020',detail:'農用地に占めるブドウ畑9.4%。',source:'https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Vineyards_in_the_EU_-_statistics'},
+  {id:'mediterranean-olives',genre:'horticulture',kind:'olives',name:'地中海側・オリーブ樹園',coordinates:[15.7,39.5],period:'2023',detail:'Eurostatは樹園面積が主に地中海周辺に分布すると説明。点は地域境界や収穫位置ではありません。',source:'https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Agricultural_production_-_orchards'},
+] as const;
