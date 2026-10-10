@@ -20,7 +20,7 @@ export function initLatinEssentialLegends():void {
    if(field==='industry'){
     const control=root.querySelector<HTMLSelectElement>('[data-industry-layer]');
     const layer=root.dataset.layer??(routeLayer&&['ores','manufactures','canal'].includes(routeLayer)?routeLayer:control?.value);
-    note.textContent=layer==='canal'?'2024会計年度の説明図。矢印＝淡水と物流のつながり。位置・流量・数量の比例図ではありません。':'細線：国境。太枠：選択国。色は国の商品輸出額に占める割合（%）、2024年。';
+    note.textContent=layer==='locations'?'点＝産業の代表位置。色＝産業の分類。数量・全国輸出比率は点に割り当てていません。':layer==='canal'?'2024会計年度の説明図。矢印＝淡水と物流のつながり。位置・流量・数量の比例図ではありません。':'細線：国境。太枠：選択国。色は国の商品輸出額に占める割合（%）、2024年。';
    }else if(field==='population'){
     const control=root.querySelector<HTMLSelectElement>('[data-lp-layer-select]');
     const layer=root.dataset.lpLayer??(routeLayer&&['spatial','density','population','scale'].includes(routeLayer)?routeLayer:control?.value);
