@@ -41,3 +41,7 @@ scripts/regional-forestry/prepare-tree-cover.mjs はEuropeの既存COG概観抽�
 親担当から2026年10月10日に指定されたDraft PR #296（https://github.com/guchio2366-dev/insight-journal/pull/296）、head e2f7a5d に依存する。`src/data/atlas/russia-forestry-statistics.json` は森林面積・丸太・製材の2015〜2024年30行を既存の欧州保存値から接続したもの。独立表示は `src/components/atlas/RussiaForestryStatistics.astro`。こちらでは同じ数値を再取得・再実装していない。
 
 コンポーネントを読んだところ、上記ロシア系列に加えて `src/data/atlas/shared-forestry-summary.json` もimportしているため、このデータも接続に必要。propsは不要。親が #296 の数値と画像を確認後、最終統合時にこの3ファイルの必要部分だけを接続する。`RegionalForestryPage.astro` の地図＋右解説の `forest-primary-grid` の後へ、`region==='russia'` のときだけ独立表示を配置できる。森林面積・木材生産量は分布の凡例や画素から算出せず、統計表の対象年2015〜2024と地図の2020／2021年を区別する。#296 の全変更を繰り返し取り込む必要はない。
+
+## 全域未取得の基図（親レビュー反映）
+
+Africa・中南米では全域が一律未取得のため、全面の斜線を外し、中立色の基図と代表位置を表示する。「全域の森林被覆面：未取得」と短い説明で、基図の色が森林の有無を表さないことを明記。Russia・Oceaniaは取得済み範囲との区別のため斜線を維持する。これは森林分布の完成ではなく、代表地域と林業利用の説明を先に整える部分成果。追加取得の再試行・新規調査は行わない。
