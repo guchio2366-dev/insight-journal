@@ -41,6 +41,7 @@ export function initOceaniaLearningAtlas(root:HTMLElement):void{
   one('source-list').innerHTML=unique.map(s=>`<div class="oceania-learning-citation"><a href="${htmlEscape(s.url)}">${htmlEscape(s.title)}</a>${s.note?`<p>${htmlEscape(s.note)}</p>`:''}</div>`).join('');
  };
  const render=()=>{
+  climateSelection.beforeRender();
   const theme=getOceaniaTheme(state),layer=getOceaniaLayer(state.layer,state),compare=getOceaniaLayer(state.compareLayer,state);
   const contextualReading=selectedReading&&layer.id!=='farming-all'&&(state.place==='all'||theme.countryCodes.includes(state.place));
   const selectedName=oceaniaCountries.find(country=>country.code===state.place)?.name;

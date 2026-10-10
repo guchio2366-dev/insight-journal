@@ -33,8 +33,11 @@ for(const region of ['oceania','russia'])test(`${region}: every station opens co
    p.win.history.replaceState({},'',selectedUrl);p.win.dispatchEvent(new p.win.PopStateEvent('popstate'));assert.equal(p.panel.hidden,false);assert.equal(p.panel.dataset.city,c.id);assert.equal(p.frame(),frame);
    p.panel.querySelector('[data-clear-climate-city]').click();
   }
-  const first=cities.find(c=>c.region===region);p.marker(first.id).dispatchEvent(new p.win.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));assert.equal(p.panel.dataset.city,first.id);assert.equal(p.panel.hidden,false);
+  const first=cities.find(c=>c.region===region);p.marker(first.id).focus();p.marker(first.id).dispatchEvent(new p.win.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));assert.equal(p.panel.dataset.city,first.id);assert.equal(p.panel.hidden,false);assert.equal(p.win.document.activeElement?.getAttribute('data-regional-climate-city'),first.id);
  }finally{p.win.happyDOM.abort();}
+});
+test('comparison mode retains its existing maps without advertising city buttons for a hidden reading pane',()=>{
+ for(const region of ['oceania','russia']){const p=page(region,'?view=comparison&layer=climate');try{assert.equal(p.panel.hidden,true);assert.equal(p.root.querySelectorAll('[data-original-map] [data-regional-climate-city],[data-comparison-map] [data-regional-climate-city]').length,0);}finally{p.win.happyDOM.abort();}}
 });
 test('city deep links are region-specific, safely reject unknown ids, and retain scoped camera without automatic selection',()=>{
  for(const [region,id,scope,place] of [['oceania','perth','country','AUS'],['russia','moscow','region','west']]){

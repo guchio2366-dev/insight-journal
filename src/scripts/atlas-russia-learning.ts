@@ -63,6 +63,7 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
   one('source-list').innerHTML=unique.map(source=>`<div class="russia-learning-citation"><a href="${htmlEscape(source.url)}">${htmlEscape(source.title)}</a>${source.note?`<p>${htmlEscape(source.note)}</p>`:''}</div>`).join('');
  };
   const render=()=>{
+   climateSelection.beforeRender();
    const active=document.activeElement as Element|null;
    const focusedIndustry=active?.closest<SVGElement>('[data-russia-industry-location]')?.dataset.russiaIndustryLocation;
    const focusedMarker=active&&root.contains(active)?active.closest<SVGElement>('[data-region-marker]'):null;

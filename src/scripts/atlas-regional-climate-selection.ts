@@ -3,6 +3,7 @@ import {climateCity} from '../data/atlas/oceania-russia-climate-reading';
 // City selection belongs to these nature panes, not to country/region/camera state.
 export function createRegionalClimateSelection(root:HTMLElement,region:string,enabled:()=>boolean,commit:(mutate:()=>void)=>void){
  let id:string|undefined;
+ let focusedId:string|undefined;
  const read=()=>{id=climateCity(region,new URLSearchParams(location.search).get('city'))?.id;};
  read();
  const focus=(cityId:string|undefined)=>{if(cityId)root.querySelector<SVGElement>(`[data-primary-map] [data-regional-climate-city="${cityId}"]`)?.focus({preventScroll:true});};
@@ -22,6 +23,7 @@ export function createRegionalClimateSelection(root:HTMLElement,region:string,en
  });
  return {
   read,
+  beforeRender(){const active=document.activeElement;focusedId=active&&root.contains(active)?(active.closest('[data-regional-climate-city]') as SVGElement|null)?.dataset.regionalClimateCity:undefined;},
   serialize(url:URL,allowed:boolean){url.searchParams.delete('city');if(allowed&&enabled()&&id)url.searchParams.set('city',id);},
   render(){
    const panel=root.querySelector<HTMLElement>('[data-regional-climate-reading]');if(!panel)return;
@@ -32,6 +34,7 @@ export function createRegionalClimateSelection(root:HTMLElement,region:string,en
     panel.replaceChildren(template.content.cloneNode(true));panel.dataset.city=id;
    }
    root.querySelectorAll<SVGElement>('[data-regional-climate-city]').forEach(marker=>marker.setAttribute('aria-pressed',String(show&&marker.dataset.regionalClimateCity===id)));
+   if(enabled())focus(focusedId);
   },
  };
 }
