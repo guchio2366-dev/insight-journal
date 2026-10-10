@@ -2,7 +2,7 @@ import {initLatinEssentialLegends} from './atlas-latin-essential-legends.ts';
 export function initLatinWorkspaceLayout():void {
  for(const root of document.querySelectorAll<HTMLElement>('[data-latin-workspace]')){
   if(root.dataset.layoutReady==='true')continue;root.dataset.layoutReady='true';
-  const navigation=root.querySelector<HTMLElement>('[data-latin-navigation-selection]');if(navigation){for(const selector of ['[data-latin-agriculture-scope]','[data-latin-agriculture-place]','[data-nature-scope]','[data-nature-place]','[data-industry-scope]','[data-industry-place]','[data-lp-scope-select]','[data-lp-place-select]']){const label=root.querySelector(selector)?.closest('label');if(label)navigation.append(label);}}
+  const navigation=root.querySelector<HTMLElement>('[data-latin-navigation-selection]');if(navigation){for(const selector of ['[data-latin-agriculture-scope]','[data-latin-agriculture-place]','[data-nature-scope]','[data-nature-place]','[data-industry-scope]','[data-industry-place]','[data-lp-scope-select]','[data-lp-place-select]','[data-lp-layer-select]']){const label=root.querySelector(selector)?.closest('label');if(label)navigation.append(label);}}
   const syncFieldLinks=()=>{
    const placeSelect=root.querySelector<HTMLSelectElement>('[data-latin-agriculture-place],[data-nature-place],[data-industry-place],[data-lp-place-select]'),scopeSelect=root.querySelector<HTMLSelectElement>('[data-latin-agriculture-scope],[data-nature-scope],[data-industry-scope],[data-lp-scope-select]'),params=new URLSearchParams(location.search),routePlace=params.get('place'),routeScope=params.get('scope');
    // Route selection is already available while field modules hydrate their SSR controls.

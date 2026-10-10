@@ -1,3 +1,6 @@
+import {latinReadingProducts,latinProductReading} from '../data/atlas/latin-america/reading-products';
+import {initLatinMapCamera,latinProductAtPointer} from './atlas-latin-reading-map';
+import cropManifest from '../../public/assets/atlas/latin-america-agriculture-v1/manifest.json';
 import data from '../data/atlas/latin-america/agriculture.json';
 import {latinCountries34,latinCountryName} from '../lib/atlas-latin-america-geometry';
 import {agricultureLayer,agricultureLayerTitle,latinAgricultureReading,renderLatinAgricultureMap,renderLatinAgricultureLegend,renderLatinAgricultureWorkspaceMap,renderLatinAgricultureOverviewLegend,latinAgricultureOverviewReading,formatLatinAgricultureValue,faoFlagLabel,type LatinAgricultureLayer} from '../lib/atlas-latin-agriculture';
@@ -6,7 +9,7 @@ import {withBase} from '../lib/urls';
 import {renderLatinNatureMap,renderLatinNatureLegend,natureScopeForPlace} from '../lib/atlas-latin-nature';
 
 const escape=(v:unknown)=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
-const layers=['all',...data.layers.map(l=>l.id)];
+const layers=['all',...latinReadingProducts.map(l=>l.id)];
 const base=withBase('/atlas/latin-america/');
 export function initialiseLatinAgriculture():void {
  const workspace=document.querySelector<HTMLElement>('[data-latin-field="agriculture"]');
@@ -22,9 +25,9 @@ export function initialiseLatinAgriculture():void {
   if(replace)window.history.replaceState({},'',url);else window.history.pushState({},'',url);
  };
  const render=()=>{
-  const overview=state.layer==='all',layer=agricultureLayer(state.layer),reading=overview?latinAgricultureOverviewReading:latinAgricultureReading[layer.id as LatinAgricultureLayer];
+  const overview=state.layer==='all',layer=agricultureLayer(state.layer),reading=overview?latinAgricultureOverviewReading:latinProductReading(state.layer);
   const selected=layer.countries.find(c=>c.code===state.place);
-  const isComparison=state.source?.field==='nature';
+  const originalLayer=data.layers.some(l=>l.id===state.layer),isComparison=(state.layer==='all'||originalLayer)&&state.source?.field==='nature';
   workspace.classList.toggle('is-comparison',isComparison);
   query('map-panes').classList.toggle('is-comparison',isComparison);
   query<HTMLElement>('source-pane').hidden=!isComparison;
@@ -44,19 +47,20 @@ export function initialiseLatinAgriculture():void {
   query<HTMLInputElement>('only').checked=state.only;
   query<HTMLInputElement>('only').disabled=state.place==='all';
   query<HTMLButtonElement>('fallback').setAttribute('aria-pressed',String(state.fallback));
-  text('title',agricultureLayerTitle(state.layer));
+  text('title',state.layer==='all'?'作物と牛の分布':latinReadingProducts.find(p=>p.id===state.layer)!.name+'の分布');
   query('map-container').innerHTML=isComparison?renderLatinAgricultureMap(state,'latin-agriculture-main'):renderLatinAgricultureWorkspaceMap(state,'latin-agriculture-main');
   query('legend-container').innerHTML=isComparison?renderLatinAgricultureLegend(state.layer):renderLatinAgricultureOverviewLegend(state.layer);
+  initLatinMapCamera(query('map-container'));
   query<HTMLElement>('normal-container').hidden=state.fallback&&!isComparison;
   query<HTMLElement>('map-container').hidden=state.fallback;
   query<HTMLElement>('legend-container').hidden=state.fallback&&!isComparison;
   const fallbackContainer=query<HTMLElement>('fallback-container');
   if(isComparison)query('target-pane').append(fallbackContainer);else query('normal-container').after(fallbackContainer);
   query<HTMLElement>('fallback-container').hidden=!state.fallback;
-  text('map-caption',!isComparison?'12作物と3家畜の既存格子推計を合成。色は品目で、数量を比較する尺度ではありません。':layer.id==='cattle'?'約9kmの格子の牛の密度推計。頭数や牧場面積を示す色ではありません。':'約9kmの格子に推計された年間収穫面積。農地の境界を示す図ではありません。');
-  text('reading-title',overview?reading.title:isComparison?`気候と${layer.label}の分布を比べる`:`${latinCountryName(state.place)}：${agricultureLayerTitle(state.layer)}`);text('takeaway',overview?reading.takeaway:`地域事例：${reading.title}。${reading.takeaway}`);
-  text('selected-name',latinCountryName(state.place));
-  text('selected-spatial',overview&&selected?data.layers.map(l=>`${l.label} ${formatLatinAgricultureValue(l.countries.find(c=>c.code===state.place)?.spatial.value,l.id==='cattle'?'頭/km²':'ha',l.countries.find(c=>c.code===state.place)?.spatial.status)}`).join(' ／ '):selected?formatLatinAgricultureValue(selected.spatial.value,unit,selected.spatial.status):'国を選ぶと値を読めます');
+  text('map-caption',!isComparison?'採用10作物と牛の2020年格子推計。色は品目で、量の比較ではありません。全品目の実分布は選択輪郭で確認できます。':layer.id==='cattle'?'約9kmの格子の牛の密度推計。頭数や牧場面積を示す色ではありません。':'約9kmの格子に推計された年間収穫面積。農地の境界を示す図ではありません。');
+  text('reading-title',overview?reading.title:isComparison?`気候と${layer.label}の分布を比べる`:reading.title);text('takeaway',overview?reading.takeaway:`地域事例：${reading.title}。${reading.takeaway}`);
+  text('selected-name',state.layer==='all'?'中南米全体':latinReadingProducts.find(p=>p.id===state.layer)!.name);
+  text('selected-spatial',overview&&selected?data.layers.map(l=>`${l.label} ${formatLatinAgricultureValue(l.countries.find(c=>c.code===state.place)?.spatial.value,l.id==='cattle'?'頭/km²':'ha',l.countries.find(c=>c.code===state.place)?.spatial.status)}`).join(' ／ '):selected?formatLatinAgricultureValue(selected.spatial.value,unit,selected.spatial.status):'2020年の推計分布。右の概説と解説で産地の条件を読む');
   text('selected-unit',overview?'国別の年間収穫面積・牛の平均密度推計（2020年）。品目間の数量を合計していません。':layer.id==='cattle'?'国の有効格子の面積加重平均密度・2020年':'国全体の年間収穫面積推計・2020年');
   query('steps').innerHTML=reading.steps.map(([title,body],index)=>`<details${index===0?' open':''}><summary>${escape(title)}</summary><p>${escape(body)}</p></details>`).join('');
   query('examples').innerHTML=reading.examples.map(e=>`<button type="button" data-latin-agriculture-example="${e.place}">${escape(e.label)}<span>${escape(e.text)}</span></button>`).join('');
@@ -79,8 +83,17 @@ export function initialiseLatinAgriculture():void {
    statTable.querySelector('thead')!.innerHTML=`<tr><th>国・地域</th>${data.layers.map(l=>`<th>${escape(l.label)} ${l.id==='cattle'?'飼養頭数 頭':l.id==='coff'?'生豆・全品種 t':'生産量 t'}（2024）・FAO注記</th>`).join('')}</tr>`;
    statRows.innerHTML=layer.countries.map(c=>`<tr><th>${escape(latinCountryName(c.code))}</th>${data.layers.map(l=>{const row=l.countries.find(r=>r.code===c.code)!;return `<td>${escape(formatLatinAgricultureValue(row.national2024.value,l.id==='cattle'?'頭':'t',row.national2024.status))}（${escape(faoFlagLabel(row.national2024.flag))}）</td>`;}).join('')}</tr>`).join('');
   }
-  text('stat-caption',`${overview?'農畜産':layer.label}・34か国／地域`);
+  if(!overview&&!originalLayer){
+   const product=latinReadingProducts.find(p=>p.id===state.layer)!,rows=cropManifest.layers.find(l=>l.id===state.layer)!.countries;
+   const row=rows.find(c=>c.code===state.place);text('selected-spatial',row?formatLatinAgricultureValue(row.value,'ha'):'2020年の年間収穫面積推計');text('selected-unit','MapSPAM2020・ha。2024年生産量はこの品目では未収録。');
+   query('fallback-rows').innerHTML=rows.map(r=>`<tr><th>${escape(latinCountryName(r.code))}</th><td>${escape(formatLatinAgricultureValue(r.value,'ha'))}</td></tr>`).join('');
+   text('fallback-caption',`${product.name}・2020年国別収穫面積推計`);text('fallback-unit','年間収穫面積 ha');
+   statTable.querySelector('thead')!.innerHTML='<tr><th>国・地域</th><th>年間収穫面積 ha（2020年推計）</th></tr>';
+   statRows.innerHTML=rows.map(r=>`<tr><th>${escape(latinCountryName(r.code))}</th><td>${escape(formatLatinAgricultureValue(r.value,'ha'))}</td></tr>`).join('');compare.hidden=true;
+  }else compare.hidden=false;
+  text('stat-caption',`${overview?'農畜産':latinReadingProducts.find(p=>p.id===state.layer)?.name??layer.label}・34か国／地域`);
   text('stat-note',overview?'国別統計はFAOSTATの2024年生産量（t）・飼養頭数（頭）です。地図の2020年格子推計とは年・単位が異なります。コーヒーは生豆・全品種。その他の品目は基礎地図・既存の詳しい資料から確認できます。':layer.id==='cattle'?'地図は2020年の牛密度推計。2024年の飼養頭数・牛肉・牛乳はFAOSTATの国別統計です。製品の生産量はtで示し、頭数と区別します。':layer.id==='coff'?data.definitions.coffee:'国別統計はFAOSTATの2024年生産量（t）。地図の2020年収穫面積（ha）とは年・単位が異なります。');
+  if(!overview&&!originalLayer)text('stat-note','MapSPAM2020の年間収穫面積推計（ha）。この品目の2024年FAOSTAT生産量は未収録。別品目の値で補いません。');
   workspace.dataset.latinAgricultureCurrentLayer=state.layer;workspace.dataset.latinAgricultureCurrentPlace=state.place;workspace.dataset.latinAgricultureRenderMode=state.fallback?'fallback':'normal';
  };
  workspace.addEventListener('change',event=>{
@@ -103,9 +116,9 @@ export function initialiseLatinAgriculture():void {
   if(button){state.layer=button.dataset.latinAgricultureLayer!;render();push();return;}
   if(target.closest('[data-latin-agriculture-fallback]')){state.fallback=!state.fallback;render();push();}
  };
- workspace.addEventListener('click',event=>{if(event.target instanceof Element)choose(event.target);});
+ workspace.addEventListener('click',async event=>{if(!(event.target instanceof Element)||event.defaultPrevented)return;const image=event.target.closest<SVGImageElement>('[data-latin-product-distribution]');if(image){const product=await latinProductAtPointer(image,event as MouseEvent);if(product){state.layer=product;render();push();}return;}choose(event.target);});
  workspace.addEventListener('keydown',event=>{
-  if((event.key==='Enter'||event.key===' ')&&event.target instanceof SVGElement&&(event.target.hasAttribute('data-latin-agriculture-country')||event.target.hasAttribute('data-nature-country'))){event.preventDefault();choose(event.target);}
+  if((event.key==='Enter'||event.key===' ')&&event.target instanceof SVGElement&&(event.target.hasAttribute('data-latin-agriculture-layer')||event.target.hasAttribute('data-latin-agriculture-country')||event.target.hasAttribute('data-nature-country'))){event.preventDefault();choose(event.target);}
  });
  const restore=()=>{state=readLatinLearningState(window.location.search,'agriculture',layers,'all');render();};
  window.addEventListener('popstate',restore);window.addEventListener('latin-section-change',restore);

@@ -5,6 +5,8 @@ import {latinAgricultureReading, type LatinAgricultureLayer} from '../data/atlas
 import products from '../data/atlas/latin-america-products.json';
 import overview from '../../public/assets/atlas/latin-america-overview-v1/manifest.json';
 import cropManifest from '../../public/assets/atlas/latin-america-agriculture-v1/manifest.json';
+import readingOverview from '../../public/assets/atlas/latin-reading-products-v1/manifest.json';
+import {latinReadingProducts} from '../data/atlas/latin-america/reading-products';
 import worldProduction from '../data/atlas/latin-america/world-production-2024.json';
 
 export {latinAgricultureReading};
@@ -33,14 +35,43 @@ export const latinWorldProductionShares=worldProduction.items.map(item=>{
 export type LatinAgricultureMapState = {layer:string;place:string;scope:string;only:boolean};
 const escape = (v:unknown) => String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 export const agricultureLayer = (id:string) => data.layers.find(l=>l.id===id)??data.layers[0];
-export const agricultureLayerTitle = (id:string) => id==='all'?'作物と家畜の分布':id==='cattle'?'牛の飼育密度':`${agricultureLayer(id).label}の収穫面積`;
-export const latinAgricultureOverviewReading={title:'中南米全体の農畜産',takeaway:'地図で作物・家畜の広がりを見て、下の横棒で12作物の2020年収穫面積を同じ単位で比べます。大豆ととうもろこしの広さが目立っても、バナナやコーヒーの輸出価値は面積からは決まりません。品目を選ぶと分布の輪郭を強調し、他の作物・家畜も残します。',compare:'気候と農畜産の広がりを比べる',steps:[['自然条件から産地へ','気候・標高・雨の季節と、作物や家畜の広がりを比べます。'],['生産から用途・流通へ','収穫面積、家畜密度、国別生産量は異なる量です。品目ごとの解説で加工・用途・市場を読みます。'],['土地・水の管理へ','地域事例から、土壌改良や草地・水の管理と生産のつながりを確かめます。']],examples:Object.values(latinAgricultureReading).flatMap(r=>r.examples),sources:Object.values(latinAgricultureReading).flatMap(r=>r.sources).filter((s,i,a)=>a.findIndex(v=>v.url===s.url)===i)};
+export const agricultureLayerTitle = (id:string) => id==='all'?'作物と家畜の分布':id==='cattle'?'牛の飼育密度':`${data.layers.find(p=>p.id===id)?.label??latinReadingProducts.find(p=>p.id===id)?.name??agricultureLayer(id).label}の収穫面積`;
+export const latinAgricultureOverviewReading={title:'中南米全体の農畜産',takeaway:'ブラジル内陸の大豆・とうもろこし、南米南部の穀物と牛、中米の熱帯低地のバナナと高地のコーヒー、アンデスのジャガイモが異なる産地をつくります。雨季・標高・土壌に加え、栽培技術と加工・港への輸送が分布を支えます。',compare:'気候と農畜産の広がりを比べる',steps:[['概説：低地・高地・平原','熱帯の低地、高地、ブラジル内陸、パンパでは代表的な作物と牛の飼育が異なります。南米南部にも小麦・牛・果樹の重要な産地があるため、南端を切り落としません。'],['生産から用途・流通へ','収穫面積、家畜密度、国別生産量は異なる量です。品目ごとの解説で加工・用途・市場を読みます。'],['土地・水の管理へ','地域事例から、土壌改良や草地・水の管理と生産のつながりを確かめます。']],examples:Object.values(latinAgricultureReading).flatMap(r=>r.examples),sources:Object.values(latinAgricultureReading).flatMap(r=>r.sources).filter((s,i,a)=>a.findIndex(v=>v.url===s.url)===i)};
 export function renderLatinAgricultureOverviewLegend(selected='all'):string {
+ const key=`<button type="button" data-latin-agriculture-layer="all" aria-pressed="${selected==='all'}">全体の分布</button>`+latinReadingProducts.map(p=>`<button type="button" data-latin-agriculture-layer="${p.id}" aria-pressed="${selected===p.id}"><i style="background:${p.color}" aria-hidden="true"></i>${escape(p.name)}</button>`).join('');
+ return `<div class="latin-agriculture-legend latin-agriculture-overview-legend" data-latin-agriculture-overview-legend><strong>色＝品目 · 2020年の分布推計</strong><div>${key}</div><p>1セルにつき表示スコア最大の1品目。色は数量・面積比率ではありません。選択した品目の全分布を黒白の輪郭で重ね、ほかの品目も残します。無着色は0・表示下限未満・欠測・対象外を含みます。</p></div>`;
+}
+/** Shared geographic frame, actual product hit image, and complete selected outline. */
+export function renderLatinAgricultureWorkspaceMap(state:LatinAgricultureMapState,idPrefix='latin-agriculture-overview'):string {
+ const height=740,{frame,transform,k,tx,ty}=latinMapLayout(state.scope,state.place,height);
+ const [left,top]=projectLatin([overview.bounds[0],overview.bounds[3]]),[right,bottom]=projectLatin([overview.bounds[2],overview.bounds[1]]);
+ const prefix=idPrefix.replace(/[^a-zA-Z0-9_-]/g,'');
+ const image=(directory:string,file:string,extra='')=>`<image href="${withBase('/assets/atlas/'+directory+'/'+file)}" x="${left}" y="${top}" width="${right-left}" height="${bottom-top}" preserveAspectRatio="none" style="image-rendering:pixelated" ${extra}/>`;
+ const paths=latinCountries34.map(c=>`<path d="${c.path}" fill="#f0ede3" stroke="#7c8b87" stroke-width=".65" vector-effect="non-scaling-stroke" pointer-events="none"/>`).join('');
+ // Label anchors come from an actual positive source cell; leaders separate nearby names.
+ const occupied:{x:number;y:number;width:number;height:number}[]=[];
+ const visibleLabels=readingOverview.labels.filter(p=>{const [x,y]=projectLatin(p.coordinate);return x*k+tx>=0&&x*k+tx<=900&&y*k+ty>=0&&y*k+ty<=height;});
+ const labels=visibleLabels.map(p=>{
+  const [px,py]=projectLatin(p.coordinate),x=px*k+tx,y=py*k+ty,width=Array.from(p.name).length*18+8;
+  const candidates=[-36,36,-72,72,-108,108,-160,160].flatMap(dx=>[-12,24,-40,52,-72,84,-104,116,-140,152].map(dy=>({dx,dy}))).sort((a,b)=>a.dx*a.dx+a.dy*a.dy-b.dx*b.dx-b.dy*b.dy);
+  const position=candidates.find(({dx,dy})=>{const left=x+dx-(dx<0?width:0),top=y+dy-19;return left>=20&&left+width<=880&&top>=65&&top+27<=height-35&&!occupied.some(r=>left<r.x+r.width+8&&left+width+8>r.x&&top<r.y+r.height+8&&top+35>r.y);})??{dx:-x+25,dy:80+occupied.length*35-y};
+  const {dx,dy}=position,anchor=dx<0?'end':'start';occupied.push({x:x+dx-(dx<0?width:0),y:y+dy-19,width,height:27});
+  return `<g data-latin-agriculture-layer="${p.id}" role="button" tabindex="0" aria-label="${escape(p.name)}の概説と解説" aria-pressed="${state.layer===p.id}" class="latin-product-label"><path d="M${x},${y}l${dx},${dy}" fill="none" stroke="#425c55"/><text data-latin-product-label-text x="${x+dx}" y="${y+dy}" text-anchor="${anchor}">${escape(p.name)}</text></g>`;
+ }).join('');
+ return `<svg class="latin-map latin-agriculture-map" data-latin-map data-latin-agriculture-map data-map-layer="${escape(state.layer)}" data-agriculture-frame="${frame.join(' ')}" viewBox="0 0 900 ${height}" role="group" aria-labelledby="${prefix}-title" width="900" height="${height}"><title id="${prefix}-title">中南米の採用10作物と牛の分布（2020年）</title><rect width="900" height="${height}" fill="#e8f0f3"/><g transform="${transform}" data-agriculture-geography>${paths}<g data-agriculture-original-distribution>${image('latin-reading-products-v1','distribution.png',`data-latin-product-distribution data-hit-image="${withBase('/assets/atlas/latin-reading-products-v1/hit-index.png')}"`)}${state.layer!=='all'?`<g data-agriculture-selected-outline pointer-events="none">${image('latin-america-overview-v1',state.layer+'-outline.png')}</g>`:''}</g></g>${labels}</svg>`;
+}
+export function formatLatinAgricultureValue(value:number|null|undefined, unit:string, status?:string):string {
+ if(value===null||value===undefined)return status==='unavailable'?'原表行なし':status==='unfetched'?'未取得':status==='confidential'?'秘匿':'欠測';
+ if(value===0)return `0 ${unit}`;
+ if(value<0.01)return `<0.01 ${unit}`;
+ return `${new Intl.NumberFormat('ja-JP',{maximumFractionDigits:value<1?2:unit==='頭/km²'?1:0}).format(value)} ${unit}`;
+}
+// Existing nature/industry comparisons retain PR316's map, quantity definitions and key.
+function renderLatinAgricultureComparisonOverviewLegend(selected='all'):string {
  const key=products.map(p=>`<span><i style="background:${p.color}" aria-hidden="true"></i>${escape(p.name)}</span>`).join('');
  return `<div class="latin-agriculture-legend latin-agriculture-overview-legend" data-latin-agriculture-overview-legend><strong>作物：面・縞／家畜：点模様 · 分布推計2020年</strong><div>${key}</div><p>色＝品目。薄色・縞は既存の合成処理による表示調整で、数量の比較ではありません。${selected==='all'?'':'黒白の輪郭＝選択品目。ほかの分布も表示。'}表示下限：作物1 ha/格子・家畜1頭羽/km²。無着色は0・下限未満・欠測・対象外を含みます。</p><details><summary>合成分布の加工と単品の数値を読む</summary><p>${escape(overview.method)}</p><a href="${withBase('/assets/atlas/latin-america-overview-v1/manifest.json')}">既存の合成画像・輪郭・出典とhash台帳</a></details></div>`;
 }
-/** Existing composited distributions and complete product outlines, in the same native frame. */
-export function renderLatinAgricultureWorkspaceMap(state:LatinAgricultureMapState,idPrefix='latin-agriculture-overview'):string {
+function renderLatinAgricultureComparisonOverviewMap(state:LatinAgricultureMapState,idPrefix='latin-agriculture-overview'):string {
  const {frame,transform}=latinMapLayout(state.scope,state.place),country=latinCountries34.find(c=>c.code===state.place);
  const [left,top]=projectLatin([overview.bounds[0],overview.bounds[3]]),[right,bottom]=projectLatin([overview.bounds[2],overview.bounds[1]]);
  const prefix=idPrefix.replace(/[^a-zA-Z0-9_-]/g,''),clipId=prefix+'-country-clip';
@@ -50,20 +81,14 @@ export function renderLatinAgricultureWorkspaceMap(state:LatinAgricultureMapStat
  const outlines=latinCountries34.map(c=>`<path d="${c.path}" fill="transparent" stroke="${c.code===state.place?'#122f40':'#728079'}" stroke-width="${c.code===state.place?'3':'.65'}" vector-effect="non-scaling-stroke" tabindex="0" role="button" aria-label="${escape(c.name)}を選ぶ" aria-pressed="${c.code===state.place}" data-latin-agriculture-country="${c.code}"/>`).join('');
  return `<svg class="latin-map latin-agriculture-map" data-latin-map data-latin-agriculture-map data-map-layer="${escape(state.layer)}" data-agriculture-frame="${frame.join(' ')}" viewBox="0 0 ${latinWidth} ${latinHeight}" role="group" aria-labelledby="${prefix}-title" width="${latinWidth}" height="${latinHeight}"><title id="${prefix}-title">中南米の作物・家畜の分布（2020年）</title><defs>${country?`<clipPath id="${clipId}"><path d="${country.path}"/></clipPath>`:''}</defs><rect width="${latinWidth}" height="${latinHeight}" fill="#e8f0f3"/><g transform="${transform}" data-agriculture-geography>${paths}<g data-agriculture-original-distribution>${state.only&&country?distributions(.16)+`<g clip-path="url(#${clipId})">${distributions()}</g>`:distributions()}</g>${outlines}</g></svg>`;
 }
-export function formatLatinAgricultureValue(value:number|null|undefined, unit:string, status?:string):string {
- if(value===null||value===undefined)return status==='unavailable'?'原表行なし':status==='unfetched'?'未取得':status==='confidential'?'秘匿':'欠測';
- if(value===0)return `0 ${unit}`;
- if(value<0.01)return `<0.01 ${unit}`;
- return `${new Intl.NumberFormat('ja-JP',{maximumFractionDigits:value<1?2:unit==='頭/km²'?1:0}).format(value)} ${unit}`;
-}
 export function renderLatinAgricultureLegend(id:string):string {
- if(id==='all')return renderLatinAgricultureOverviewLegend();
+ if(id==='all')return renderLatinAgricultureComparisonOverviewLegend();
  const layer=agricultureLayer(id);const unit=id==='cattle'?'頭/km²':'ha/格子';
  const swatches=layer.breaks.map((v,i)=>`<span><i style="background:${layer.colors[i]}" aria-hidden="true"></i>${v.toLocaleString('ja-JP')}${layer.breaks[i+1]?`–${layer.breaks[i+1].toLocaleString('ja-JP')}未満`:'以上'}</span>`).join('');
  return `<div class="latin-agriculture-legend" data-latin-agriculture-legend="${escape(id)}" aria-label="${escape(layer.label)}の凡例"><strong>${escape(layer.label)}・2020年 ${unit}</strong><div>${swatches}<span><i style="background:#d8dee0" aria-hidden="true"></i>0–1未満（有効値）</span><span><i style="background:#f0ede3" aria-hidden="true"></i>欠測・対象外</span></div></div>`;
 }
 export function renderLatinAgricultureMap(state:LatinAgricultureMapState, idPrefix='latin-agriculture'):string {
- if(state.layer==='all')return renderLatinAgricultureWorkspaceMap(state,idPrefix);
+ if(state.layer==='all')return renderLatinAgricultureComparisonOverviewMap(state,idPrefix);
  const layer=agricultureLayer(state.layer);
  const place=latinCountries34.find(c=>c.code===state.place);
  const {frame,transform}=latinMapLayout(state.scope,state.place);

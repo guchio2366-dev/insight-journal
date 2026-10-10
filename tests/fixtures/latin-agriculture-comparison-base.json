@@ -1,0 +1,33 @@
+{
+  "base": "1ea3382cdbff9e018d5b50c5bdcf7aa6e2c3b3f5",
+  "states": [
+    {
+      "state": {
+        "layer": "all",
+        "scope": "all",
+        "place": "all",
+        "only": false
+      },
+      "mapSha256": "845ffdd7de65207a87050428a79fa2edc97b505b4d9ff5bc2542f31e09e57ba5"
+    },
+    {
+      "state": {
+        "layer": "all",
+        "scope": "south",
+        "place": "BRA",
+        "only": false
+      },
+      "mapSha256": "e41b0e2ee3d31c3f51b50025049b338310c658a4b05285551aa65cf335de1678"
+    },
+    {
+      "state": {
+        "layer": "all",
+        "scope": "country",
+        "place": "ARG",
+        "only": true
+      },
+      "mapSha256": "475837be97b73a5c7b63ef87480247bd8f979e870c86c3a5d53f2400b5b9bf96"
+    }
+  ],
+  "legendSha256": "3f13ca2a7f7e246b925a7479665f801334dad26d640a650f8191a171108a3541"
+}

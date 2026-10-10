@@ -15,7 +15,7 @@ async function withPage(field,run){
  }finally{for(const [key,value] of Object.entries(previous)){if(value===undefined)delete globalThis[key];else globalThis[key]=value;}await w.happyDOM.close();}
 }
 
-for(const field of ['agriculture','nature','industry','population'])test(`Latin ${field} keeps country, scope and display flags when controls move and another field opens`,async()=>{
+for(const field of ['agriculture','nature','industry'])test(`Latin ${field} keeps country, scope and display flags when controls move and another field opens`,async()=>{
  await withPage(field,async(d,w)=>{
   const root=d.querySelector('[data-latin-workspace]');
   const place=root.querySelector('[data-latin-agriculture-place],[data-nature-place],[data-industry-place],[data-lp-place-select]');
@@ -44,3 +44,5 @@ test('Latin overview country selection opens all four fields with the same count
   for(const link of links){const url=new URL(link.href);assert.equal(url.searchParams.get('place'),'CRI');assert.equal(url.searchParams.get('scope'),'country');assert.equal(url.searchParams.get('only'),'1');assert.equal(url.searchParams.get('fallback'),'1');}
  });
 });
+
+ test('Latin population moves its region and display selectors left without adding country selection',async()=>{await withPage('population',async(d,w)=>{initLatinWorkspaceLayout();const controls=d.querySelector('[data-latin-navigation-selection]');assert.equal(controls.querySelectorAll('select').length,2);assert.ok(controls.querySelector('[data-lp-scope-select]'));assert.equal(d.querySelector('[data-lp-place-select]'),null);assert.equal(d.querySelectorAll('.latin-fields>a').length,5);});});
