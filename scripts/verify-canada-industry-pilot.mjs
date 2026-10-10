@@ -30,6 +30,12 @@ export async function verifyCanadaIndustryPilot({page,url,output,result}){
    await page.locator('[data-ca-clear]').click();const next=sector==='services'?'resources':'services',before=(await state()).frame;await page.locator(`[data-ca-sector="${next}"]`).click();assert.deepEqual((await state()).frame,before,'Category switch preserves camera');await page.goBack();await wait(page);assert.equal((await state()).sector,sector);assert.deepEqual((await state()).frame,before);
    result.viewports.push({width,height,role,sector,sourceClusters:count,checks:['initial','industry highlight retains peers','site selection','explicit only','clear','category switch without camera change','history','reload']});
   }
+  for(const action of ['in','out']){
+   for(let n=0;n<20;n++)await page.locator(`[data-ca-camera="${action}"]`).click();await wait(page);const before=(await state()).frame;
+   await page.reload({waitUntil:'networkidle'});await wait(page);const restored=(await state()).frame;restored.forEach((value,i)=>assert(Math.abs(value-before[i])<=.001,'Camera scale survives reload at both zoom limits'));
+  }
+  await page.locator('[data-ca-camera=reset]').click();await checkDistribution((await state()).sector);
+  result.checks.push(`${width} CSS px: minimum and maximum zoom survive reload`);
  }
  await page.setViewportSize({width:1920,height:1080});await page.goto(route,{waitUntil:'networkidle'});await wait(page);
  for(const id of ['edmonton','sudbury','kitimat']){

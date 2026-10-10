@@ -29,3 +29,14 @@ test('URL state retains camera and only mode through history while rejecting cro
  for(const q of ['?industryFrame=1,2,0,100','?industryFrame=1,,900,500','?industryFrame=NaN,1,900,500'])assert.equal(read(q).frame,null);
  const u=lib.writePilotState(new URL('https://example.com/industry/?year=2025&metric=mining&compare=Quebec'),state);assert.equal(u.searchParams.has('year'),false);assert.equal(u.searchParams.has('metric'),false);assert.deepEqual(lib.readPilotState(u,['Ontario','Alberta']),state);
 });
+test('Both PC aspect ratios retain their minimum and maximum camera scales after URL reload',()=>{
+ for(const ratio of [1.85,715.703125/760]){
+  let frame=[50,220,940,940/ratio];
+  for(const factor of [.8,1.25]){
+   for(let n=0;n<40;n++)frame=lib.zoomPilotFrame(frame,factor);
+   const url=lib.writePilotState(new URL('https://example.com/industry/'),{sector:'resources',industry:null,site:null,only:false,province:null,frame});
+   const restored=lib.readPilotState(url,[]).frame;assert(restored,'The camera remains valid at both zoom limits');
+   restored.forEach((value,i)=>assert(Math.abs(value-frame[i])<=.001));
+  }
+ }
+});

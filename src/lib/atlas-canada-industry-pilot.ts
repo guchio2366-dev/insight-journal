@@ -7,6 +7,10 @@ export const pilotClusters = (sector:string, industry:string|null=null) => canad
 export const pilotIndustry = (id:string) => canadaIndustryPilot.industries.find(i=>i.id===id);
 export const pilotIndustryLabel = (id:string,sector:string) => id==='nickel'&&sector==='manufacturing'?'ニッケル精錬':pilotIndustry(id)?.label??'';
 export type PilotState = {sector:PilotSector;industry:string|null;site:string|null;only:boolean;province:string|null;frame:number[]|null};
+export function zoomPilotFrame(frame:number[],factor:number):number[] {
+ const ratio=frame[2]/frame[3],width=Math.max(Math.max(150,100*ratio),Math.min(Math.min(2600,2600*ratio),frame[2]*factor)),height=width/ratio;
+ return [frame[0]+(frame[2]-width)/2,frame[1]+(frame[3]-height)/2,width,height];
+}
 export function readPilotState(url:URL,provinceIds:string[]):PilotState {
  const p=url.searchParams,legacy=p.get('metric');
  const sector=(['resources','manufacturing','services'].includes(p.get('sector')??'')?p.get('sector'):legacy==='services'?'services':legacy==='manufacturing'?'manufacturing':'resources') as PilotSector;
