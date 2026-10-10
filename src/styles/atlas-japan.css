@@ -3,7 +3,7 @@
 .japan-heading{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:12px;padding:8px 0}
 .japan-heading a{color:var(--japan-ink)}.japan-heading>a{font-weight:700;min-height:32px;display:flex;align-items:center}
 .japan-region{display:flex;justify-content:space-between;flex-wrap:wrap;align-items:center;gap:8px;font-size:12px}
-.japan-region .regional-navigation{margin:4px 0 6px}
+.japan-atlas .japan-region .regional-navigation{margin:4px 0 6px}
 .japan-preview{font-size:11px;background:#f0e5cb;padding:3px 6px;margin-left:8px;color:#715927}
 .japan-tabs{margin:10px 0 8px}.japan-tabs>a{flex:1;text-align:center}
 .japan-controls{min-height:72px;padding:3px 0 8px}.japan-control-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0;font-size:12px}
@@ -47,9 +47,8 @@
  .japan-atlas-root .atlas-news{position:sticky!important;top:12px;width:auto!important;height:calc(100dvh - 100px)!important;min-height:400px}
  .japan-reading{position:sticky;top:12px;height:var(--japan-reading-height,calc(100dvh - 350px))}
  .japan-atlas-root .japan-map-frame{height:clamp(320px,var(--japan-map-height,calc(100dvh - 350px)),640px)}
- .japan-statistics{margin-right:314px}
 }
-@media(min-width:960px) and (max-width:1199px){.japan-primary-grid{grid-template-columns:minmax(0,1fr) 260px}.japan-statistics{margin-right:274px}.japan-reading{padding:13px}.japan-control-row select{max-width:220px}.japan-climate-grid{grid-template-columns:1fr}}
+@media(min-width:960px) and (max-width:1199px){.japan-primary-grid{grid-template-columns:minmax(0,1fr) 260px}.japan-reading{padding:13px}.japan-control-row select{max-width:220px}.japan-climate-grid{grid-template-columns:1fr}}
 @media(max-width:959px){.japan-primary-grid{grid-template-columns:1fr}.japan-map-frame{height:560px}.japan-reading{max-height:none;overflow:visible}.japan-climate-grid{grid-template-columns:1fr}.japan-map-heading h2{font-size:17px}}
 @media(max-width:540px){.japan-region>span{width:100%}.japan-map-frame{height:520px}.japan-heading{font-size:11px}.japan-controls{min-height:0}.japan-control-row select{max-width:240px}.japan-climate-grid{gap:10px}.japan-statistics{padding:12px}.japan-map-labels button{font-size:11px;padding:2px 4px}.japan-map-labels small{font-size:9px}}
 @media(pointer:coarse){.japan-control-row button,.japan-control-row select,.japan-map-tools button,.japan-statistics button{min-height:44px}}
