@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/atlas-japan-pc-review.yml'
       - 'scripts/capture-japan-review.mjs'
+      - 'scripts/export-japan-review.mjs'
       - 'src/**/*japan*'
       - 'src/components/atlas/JapanAtlasPage.astro'
       - 'src/scripts/atlas-asia-explorer.ts'
@@ -53,3 +54,6 @@ jobs:
           path: review-artifacts/japan
           if-no-files-found: warn
           retention-days: 7
+      - name: Preserve compact evidence in the read-only job log
+        if: always()
+        run: node scripts/export-japan-review.mjs
