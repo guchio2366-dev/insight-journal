@@ -65,6 +65,10 @@ try{
   assert(panel&&panel.width>800);
   const file=label+'.jpg',bytes=await page.screenshot({path:path.join(output,file),type:'jpeg',quality:82,fullPage:true,animations:'disabled'});
   const statisticsFile=label+'-statistics.jpg',statisticsBytes=await page.locator('.west-sawnwood').screenshot({path:path.join(output,statisticsFile),type:'jpeg',quality:90,animations:'disabled'});
+  const encoded=statisticsBytes.toString('base64');
+  console.log('REVIEW_IMAGE_BEGIN '+JSON.stringify({file:statisticsFile,headSHA:record.headSHA,mime:'image/jpeg',sha256:createHash('sha256').update(statisticsBytes).digest('hex')}));
+  for(let offset=0;offset<encoded.length;offset+=4096)console.log('REVIEW_IMAGE_CHUNK '+encoded.slice(offset,offset+4096));
+  console.log('REVIEW_IMAGE_END');
   record.images.push({file,map,panel,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),statistics:{file:statisticsFile,bytes:statisticsBytes.length,sha256:createHash('sha256').update(statisticsBytes).digest('hex')}});
  };
  await capture('01-forest-overview');
@@ -74,6 +78,6 @@ try{
  assert.match(await page.locator('.west-sawnwood-panels>section').nth(2).innerText(),/サウジアラビアの輸入量/);
  await capture('02-saudi-selected');
  assert.deepEqual(errors,[]);assert.deepEqual(failedResponses,[]);
- record.status='passed';
+ record.status='passed';console.log('REVIEW_METADATA '+JSON.stringify(record));
 }catch(error){record.status='failed';record.error=error.stack??String(error);process.exitCode=1;}
 finally{await browser?.close();await new Promise(resolve=>server.close(resolve));await writeFile(path.join(output,'metadata.json'),JSON.stringify(record,null,2)+'\n');}
