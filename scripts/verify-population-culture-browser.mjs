@@ -6,7 +6,7 @@ import path from 'node:path';
 import {createServer} from 'node:http';
 import {createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
-const out=fileURLToPath(new URL('../docs/reviews/population-culture-20261010',import.meta.url));
+const out=process.env.CULTURE_REVIEW_OUTPUT??fileURLToPath(new URL('../docs/reviews/population-culture-20261010',import.meta.url));
 fs.mkdirSync(out,{recursive:true});
 const base=astroConfig.base.replace(/\/$/,'');
 const dist=fileURLToPath(new URL('../dist/',import.meta.url));
@@ -51,7 +51,7 @@ for(const [label,width,height] of [['pc-1280',1280,665],['pc-1024',1024,665]]){
    await page.reload();assert.equal(await page.locator(`[data-culture-panel=${topic}] .culture-selected table`).isVisible(),true);assert.ok(new URL(page.url()).searchParams.get('culturePlace'));assert.equal(new URL(page.url()).searchParams.get('keep'),'review');
   }
   await page.screenshot({path:`${out}/${region}-${topic}-${label}.png`,fullPage:true});
-  const geometry=await panel.locator('.culture-marker').evaluateAll(nodes=>nodes.map(n=>{const a=n.getBoundingClientRect(),b=n.parentElement.getBoundingClientRect();return {id:n.dataset.cultureRecord,inside:a.x>=b.x&&a.y>=b.y&&a.right<=b.right&&a.bottom<=b.bottom};}));assert.ok(geometry.every(g=>g.inside),JSON.stringify(geometry));
+  const geometry=await panel.locator('.culture-marker').evaluateAll(nodes=>nodes.map(n=>{const a=n.getBoundingClientRect(),b=n.parentElement.getBoundingClientRect();return {id:n.dataset.cultureRecord,marker:a.toJSON(),map:b.toJSON(),inside:a.x>=b.x&&a.y>=b.y&&a.right<=b.right&&a.bottom<=b.bottom};}));assert.ok(geometry.every(g=>g.inside),JSON.stringify(geometry));
   await page.locator(region==='africa'?'[data-africa-topic=distribution]':'[data-population-topic=distribution]').click();assert.equal(await page.locator('[data-population-culture]').isVisible(),false);assert.equal(await page.locator(region==='africa'?'.africa-workspace':'[data-normal-view]').isVisible(),true);
   if(region==='africa'){await page.locator('[data-field=nature]').click();assert.equal(await page.locator('[data-population-culture]').isVisible(),false);await page.goBack();}
   await page.goBack();assert.equal(await page.locator('[data-population-culture]').isVisible(),true);
