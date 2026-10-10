@@ -29,8 +29,8 @@ export function layoutJapanLabels(anchors:JapanLabelAnchor[],width:number,height
  function search(index:number,placed:JapanLabelRect[]):boolean{
   if(placed.length>best.length)best=[...placed];
   if(index===items.length)return placed.length===items.length;
-  if(++visits>30000)return false;
-  for(const rect of items[index].candidates){if(placed.some(p=>overlaps(p,rect)))continue;placed.push(rect);if(search(index+1,placed))return true;placed.pop();}
+  if(visits>=30000)return false;visits++;
+  for(const rect of items[index].candidates){if(visits>=30000)break;if(placed.some(p=>overlaps(p,rect)))continue;placed.push(rect);if(search(index+1,placed))return true;placed.pop();}
   return false;
  }
  search(0,[]);

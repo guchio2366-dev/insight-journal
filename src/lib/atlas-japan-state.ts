@@ -1,8 +1,8 @@
 import {asiaFieldPaths,type AsiaField,type AsiaCamera,type AsiaState,writeAsiaAtlasState} from './atlas-asia-state.ts';
 
-export type JapanState={field:AsiaField;topic:string;prefecture:string|null;city:string|null;site:string|null;camera:AsiaCamera|null;returnTo:string|null};
-export const japanDefaults:Record<AsiaField,string>={industry:'clusters',natural:'stations',agriculture:'wheat',population:'density'};
-export const japanTopics:Record<AsiaField,readonly string[]>={industry:['clusters','auto','chips','steel','batteries','ships','chemicals',...['00',...Array.from({length:24},(_,i)=>String(i+9).padStart(2,'0'))].map(id=>'jp-'+id)],natural:['stations'],agriculture:['wheat','rice','forest'],population:['density','urban']};
+export type JapanState={field:AsiaField;topic:string;prefecture:string|null;city:string|null;site:string|null;feature:string|null;camera:AsiaCamera|null;returnTo:string|null};
+export const japanDefaults:Record<AsiaField,string>={industry:'clusters',natural:'climate',agriculture:'all',population:'density'};
+export const japanTopics:Record<AsiaField,readonly string[]>={industry:['clusters','auto','chips','steel','batteries','ships','chemicals',...['00',...Array.from({length:24},(_,i)=>String(i+9).padStart(2,'0'))].map(id=>'jp-'+id)],natural:['stations','climate','precipitation','water','groundwater','elevation'],agriculture:['all','wheat','rice','potato','cabbage','tomato','apple','mandarin','milk','beef','pork','forest'],population:['density','urban']};
 
 // Only a same-site East Asia field URL can become a return target. Never trust
 // an arbitrary redirect, or infer entry intent from place=JPN (cities set it too).
@@ -21,7 +21,7 @@ export function japanEntryURL(url:URL,state:AsiaState):URL {
  target.searchParams.set('return',source.pathname+source.search);
  return target;
 }
-export function readJapanState(url:URL,context:{prefectures:readonly string[];cities:readonly string[];climateCities?:readonly string[];urbanCities?:readonly string[];sites:readonly string[];siteIndustries?:Record<string,readonly string[]>}):JapanState {
+export function readJapanState(url:URL,context:{prefectures:readonly string[];cities:readonly string[];climateCities?:readonly string[];urbanCities?:readonly string[];sites:readonly string[];siteIndustries?:Record<string,readonly string[]>;agricultureSites?:readonly string[];naturalFeatures?:readonly string[]}):JapanState {
  const field=Object.entries(asiaFieldPaths).find(([,p])=>url.pathname.endsWith('/'+p+'/'))?.[0] as AsiaField|undefined;
  const current=field??'industry',q=url.searchParams;
  const topic=japanTopics[current].includes(q.get('topic')??'')?q.get('topic')!:japanDefaults[current];
@@ -29,8 +29,10 @@ export function readJapanState(url:URL,context:{prefectures:readonly string[];ci
  const n=(key:string,min:number,max:number)=>{const raw=q.get(key);const v=raw?.trim()?Number(raw):NaN;return Number.isFinite(v)&&v>=min&&v<=max?v:null;};
  const lng=n('lng',110,160),lat=n('lat',15,55),zoom=n('z',2,10);
  const cities=current==='natural'?context.climateCities??context.cities:context.urbanCities??context.cities;
+ const naturePrefix:Record<string,RegExp>={climate:/^climate-region-/,water:/^(b-|river-)/,groundwater:/^g-/,elevation:/^elevation-/,precipitation:/^precipitation-/};
+ const naturalFeatures=(context.naturalFeatures??[]).filter(id=>naturePrefix[topic]?.test(id));
  const sites=topic==='clusters'||!context.siteIndustries?context.sites:context.sites.filter(id=>context.siteIndustries![id]?.includes(topic));
- return {field:current,topic,prefecture:current==='industry'&&topic.startsWith('jp-')?candidate('prefecture',context.prefectures):null,city:current==='natural'||current==='population'&&topic==='urban'?candidate('city',cities):null,site:current==='industry'&&!topic.startsWith('jp-')?candidate('site',sites):null,camera:lng!==null&&lat!==null&&zoom!==null?{lng,lat,zoom}:null,returnTo:safeJapanReturn(q.get('return'),url)};
+ return {field:current,topic,prefecture:current==='industry'&&topic.startsWith('jp-')?candidate('prefecture',context.prefectures):null,city:current==='natural'||current==='population'?candidate('city',cities):null,site:current==='agriculture'?topic==='forest'?null:candidate('site',context.agricultureSites??[]):current==='industry'&&!topic.startsWith('jp-')?candidate('site',sites):null,feature:current==='natural'?candidate('feature',naturalFeatures):null,camera:lng!==null&&lat!==null&&zoom!==null?{lng,lat,zoom}:null,returnTo:safeJapanReturn(q.get('return'),url)};
 }
 export function writeJapanState(url:URL,state:JapanState):URL {
  const next=new URL(url);next.pathname=next.pathname.replace(/\/(nature|agriculture|industry|population)\/$/,'/'+asiaFieldPaths[state.field]+'/');next.search='';
@@ -38,6 +40,7 @@ export function writeJapanState(url:URL,state:JapanState):URL {
  if(state.prefecture)next.searchParams.set('prefecture',state.prefecture);
  if(state.city)next.searchParams.set('city',state.city);
  if(state.site)next.searchParams.set('site',state.site);
+ if(state.feature)next.searchParams.set('feature',state.feature);
  if(state.camera){next.searchParams.set('lng',state.camera.lng.toFixed(5));next.searchParams.set('lat',state.camera.lat.toFixed(5));next.searchParams.set('z',state.camera.zoom.toFixed(3));}
  const back=safeJapanReturn(state.returnTo,next);if(back)next.searchParams.set('return',back);
  return next;

@@ -1,0 +1,151 @@
+[
+  {
+    "id": "municipal-2024",
+    "title": "農林水産省：2024年市町村別農業産出額（推計）詳細品目",
+    "href": "https://www.maff.go.jp/j/tokei/kouhyou/sityoson_sansyutu/attach/xls/index-25.xlsx",
+    "period": "2024年・2026年8月3日更新",
+    "accessed": "2026-10-10",
+    "license": "PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）",
+    "status": "download-blocked",
+    "note": "この実装環境の取得はHTTPプロキシ403。原表の数値・順位は未収録。市町村別の価格・単収差を反映しない按分推計で、xは秘匿。"
+  },
+  {
+    "id": "municipal-method",
+    "title": "農林水産省：市町村別農業産出額の作成方法・利用上の注意",
+    "href": "https://www.maff.go.jp/j/tokei/kouhyou/sityoson_sansyutu/gaiyou/",
+    "period": "2024年推計の説明",
+    "accessed": "2026-10-10",
+    "license": "PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）",
+    "status": "verified-html"
+  },
+  {
+    "id": "tokachi",
+    "title": "北海道農政事務所：十勝地域の農業の概要",
+    "href": "https://www.maff.go.jp/hokkaido/obihiro/kannnaigaiyou/zenntai.html",
+    "period": "2020年センサス・2023年産出額を参照する地域説明",
+    "accessed": "2026-10-10",
+    "license": "PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）",
+    "status": "verified-html"
+  },
+  {
+    "id": "nakasatsunai",
+    "title": "農林水産省白書：中札内村の小麦と輪作",
+    "href": "https://www.maff.go.jp/j/wpaper/w_maff/r6/r6_h/trend/part1/chap2/c2_2_00.html",
+    "period": "2024年度の事例",
+    "accessed": "2026-10-10",
+    "license": "PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）",
+    "status": "verified-html"
+  },
+  {
+    "id": "tsumagoi",
+    "title": "農林水産省：嬬恋の高原キャベツ",
+    "href": "https://www.maff.go.jp/j/nousin/sekkei/museum/m_siki/20_tumago/index.html",
+    "period": "地域事例・2015年度への言及を含む（最新数量ではない）",
+    "accessed": "2026-10-10",
+    "license": "PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）",
+    "status": "verified-html"
+  },
+  {
+    "id": "yatsushiro",
+    "title": "農林水産省GI登録：くまもと塩トマトの生産地",
+    "href": "https://www.maff.go.jp/j/shokusan/gi_act/register/0111/index.html",
+    "period": "2021年10月7日登録・2024年10月29日更新",
+    "accessed": "2026-10-10",
+    "license": "PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）",
+    "status": "verified-html",
+    "note": "八代市・氷川町・宇城市の干拓地に限るGI事例。一般の熊本県産トマトすべての範囲ではない。"
+  },
+  {
+    "id": "tomato-season",
+    "title": "農林水産省：冬春・夏秋トマトの産地とハウス栽培",
+    "href": "https://www.maff.go.jp/j/pr/aff/2208/spe1_01.html",
+    "period": "2022年8月",
+    "accessed": "2026-10-10",
+    "license": "PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）",
+    "status": "verified-html"
+  },
+  {
+    "id": "hirosaki",
+    "title": "農林水産省：弘前のりんご産地",
+    "href": "https://www.maff.go.jp/j/pr/aff/2011/producer01.html",
+    "period": "2020年11月・2018年統計への言及を含む",
+    "accessed": "2026-10-10",
+    "license": "PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）",
+    "status": "verified-html"
+  },
+  {
+    "id": "aridagawa",
+    "title": "農林水産省：有田川町のみかんと段々畑",
+    "href": "https://www.maff.go.jp/j/pr/aff/1701/spe1_02.html",
+    "period": "2017年1月の産地取材",
+    "accessed": "2026-10-10",
+    "license": "PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）",
+    "status": "verified-html"
+  },
+  {
+    "id": "betsukai",
+    "title": "北海道農政事務所：別海町の酪農と生乳加工",
+    "href": "https://www.maff.go.jp/hokkaido/kushiro/douga/240325betsukaidouga.html",
+    "period": "2023年10–11月撮影・2024年3月掲載",
+    "accessed": "2026-10-10",
+    "license": "PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）",
+    "status": "verified-html"
+  },
+  {
+    "id": "betsukai-land",
+    "title": "農林水産省：別海町の冷涼な気候・牧草地と酪農",
+    "href": "https://www.maff.go.jp/j/pr/aff/1806/characterinformation.html",
+    "period": "2018年6月の産地取材",
+    "accessed": "2026-10-10",
+    "license": "PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）",
+    "status": "verified-html"
+  },
+  {
+    "id": "agano",
+    "title": "農林水産省：阿賀野市の米づくりと食品企業",
+    "href": "https://sannyu-portal.maff.go.jp/",
+    "period": "掲載事例・数量統計ではない",
+    "accessed": "2026-10-10",
+    "license": "PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）",
+    "status": "verified-html"
+  },
+  {
+    "id": "miyakonojo",
+    "title": "都城市：畜産と地域の産業",
+    "href": "https://www.city.miyakonojo.miyazaki.jp/site/kanko/1753.html",
+    "period": "現行地域紹介・順位の対象年未記載",
+    "accessed": "2026-10-10",
+    "license": "事実の独自要約のみ。原文・写真・図を再配布しない。",
+    "status": "verified-html",
+    "note": "対象年のない「日本一」は数値・順位として採用しない。"
+  },
+  {
+    "id": "wheat-supply",
+    "title": "農林水産省：小麦の需給と価格に関する資料",
+    "href": "https://www.maff.go.jp/j/seisan/boueki/mugi_zyukyuu/attach/pdf/index-178.pdf",
+    "period": "2023年度・28頁、34頁（既存収録値）",
+    "accessed": "2026-10-10",
+    "license": "PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）",
+    "status": "existing-checked-in"
+  },
+  {
+    "id": "forest-resources",
+    "title": "林野庁：森林資源の現況",
+    "href": "https://www.rinya.maff.go.jp/j/keikaku/genkyou/r4/index.html",
+    "period": "2022年3月31日現在",
+    "accessed": "2026-10-10",
+    "license": "PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）",
+    "status": "verified-html",
+    "note": "森林の面積・蓄積の資料。全国の詳細森林被覆図はこの便で未収録。"
+  },
+  {
+    "id": "wood-balance",
+    "title": "林野庁：2024年木材需給表",
+    "href": "https://www.rinya.maff.go.jp/j/press/kikaku/attach/pdf/251121-1.pdf",
+    "period": "2024暦年・2025年11月公表",
+    "accessed": "2026-10-10",
+    "license": "PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）",
+    "status": "verified-pdf",
+    "note": "丸太換算材積。需要・供給・輸出を区別。端数処理で内訳の合計が総数に一致しない場合がある。"
+  }
+]

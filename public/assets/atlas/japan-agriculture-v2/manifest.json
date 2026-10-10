@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "prepared": "2026-10-10",
+  "region": "Japan",
+  "files": [
+    {
+      "name": "sites.geojson",
+      "bytes": 6179,
+      "sha256": "1f547eadd17f55c53b4a440b80f18b7e19640bd92b62c543d832eee0626db358"
+    },
+    {
+      "name": "sources.json",
+      "bytes": 7327,
+      "sha256": "7bfd0affa1885b23cc3b7a8a0b7a9acd579efc1b372555cae77483708bb751b1"
+    },
+    {
+      "name": "selection.json",
+      "bytes": 3440,
+      "sha256": "f40caca9915d4e4f96896986a3a2724e5395ee9a5e69ae0f5e932d232f4baec1"
+    },
+    {
+      "name": "wood-balance-2024.json",
+      "bytes": 1153,
+      "sha256": "2a07a6c5853860034a86c0d4b49ed647c2f2ee2214b7b87542f61e90907e9581"
+    }
+  ],
+  "sourceInput": {
+    "path": "src/data/atlas/japan-agriculture-v2.ts",
+    "sha256": "39b826ac4ab071a182c8b0947927cb9fd84d1f88d82fe85e4bd61afcf589db42"
+  },
+  "products": [
+    {
+      "id": "rice",
+      "title": "米"
+    },
+    {
+      "id": "wheat",
+      "title": "小麦"
+    },
+    {
+      "id": "potato",
+      "title": "ばれいしょ"
+    },
+    {
+      "id": "cabbage",
+      "title": "キャベツ"
+    },
+    {
+      "id": "tomato",
+      "title": "トマト"
+    },
+    {
+      "id": "apple",
+      "title": "りんご"
+    },
+    {
+      "id": "mandarin",
+      "title": "みかん"
+    },
+    {
+      "id": "milk",
+      "title": "生乳・酪農"
+    },
+    {
+      "id": "beef",
+      "title": "肉用牛"
+    },
+    {
+      "id": "pork",
+      "title": "豚"
+    }
+  ],
+  "method": "Editorial representative-locality anchors from verified public-source descriptions. EPSG:4326. No polygons, inferred agricultural extent, density, municipality statistics or production ranking. Quantity and extent remain null. Forestry quantities are the Forestry Agency 2024 roundwood-equivalent balance, independently transcribed from the cited public table.",
+  "acquisition": {
+    "municipalWorkbook": "blocked-proxy-403",
+    "treeCoverOverview": "blocked-proxy-403",
+    "newExternalServices": 0
+  },
+  "limitations": [
+    "Ten products are an editorial selection, not the statistical top ten.",
+    "Locality sources have different dates; no claim of same-year national distribution.",
+    "Municipal 2024 detailed workbook unavailable. Suppression/unknown values are never changed to zero.",
+    "No detailed tree-cover layer; regional basemap fill is not forest extent.",
+    "Wood import/export partner amounts unavailable; all-goods trade is never substituted."
+  ],
+  "reproduce": "node scripts/prepare-japan-agriculture-v2.mjs"
+}

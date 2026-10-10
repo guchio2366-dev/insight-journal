@@ -1,0 +1,58 @@
+{
+  "sourceAndMask": {
+    "climate": {
+      "allPixelsCompared": 2107488,
+      "landPixels": 150067,
+      "valid": 150036,
+      "missing": 31,
+      "matchesOriginal": true,
+      "noPaintOutsideDetailedCoast": true
+    },
+    "elevation": {
+      "allPixelsCompared": 2107488,
+      "landPixels": 150067,
+      "valid": 150067,
+      "missing": 0,
+      "matchesOriginal": true,
+      "noPaintOutsideDetailedCoast": true
+    },
+    "precipitation": {
+      "allPixelsCompared": 2107488,
+      "landPixels": 150067,
+      "valid": 150066,
+      "missing": 1,
+      "matchesOriginal": true,
+      "noPaintOutsideDetailedCoast": true
+    }
+  },
+  "geometry": {
+    "elevation-bands": {
+      "features": 7,
+      "outsideCoastDegrees": 0.0,
+      "interval": 500
+    },
+    "elevation-contours": {
+      "features": 6,
+      "outsideCoastDegrees": 0.0,
+      "interval": 500
+    },
+    "precipitation-bands": {
+      "features": 17,
+      "outsideCoastDegrees": 8.147407960583494e-16,
+      "interval": 250
+    },
+    "precipitation-contours": {
+      "features": 16,
+      "outsideCoastDegrees": 1.8454312534998664e-13,
+      "interval": 250
+    }
+  },
+  "method": "Independent nearest native source indexing at every delivered Mercator pixel; original monthly annual sums recomputed, no published-output-value reuse.",
+  "boundaryBounds": [
+    122.938162,
+    24.212104,
+    145.824962,
+    45.520413
+  ],
+  "files": 15
+}

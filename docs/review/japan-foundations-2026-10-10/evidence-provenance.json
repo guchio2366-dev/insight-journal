@@ -1,0 +1,16 @@
+{
+  "headCommit": "b04adf49255322978fbc7077df3b4f9caf0dfc2d",
+  "baseCommit": "9e76627679b4e517c952833925d401072075737f",
+  "pullRequest": "https://github.com/guchio2366-dev/insight-journal/pull/310",
+  "workflow": "https://github.com/guchio2366-dev/insight-journal/actions/runs/38051436291",
+  "jobId": 114211198733,
+  "artifactId": 11669658357,
+  "artifactUrl": "https://github.com/guchio2366-dev/insight-journal/actions/runs/38051436291/artifacts/11669658357",
+  "packedEvidenceSha256": "a71b337d7556290bc26ec84ea23dd5734a37361cf619c6900960743f23fb59cd",
+  "transport": "GitHub read-only decoded job logs, gzip/base64 verified; original JPEGs unchanged",
+  "browser": "154.0.8037.97",
+  "chromiumSandbox": true,
+  "cases": 50,
+  "images": 45,
+  "errors": []
+}
