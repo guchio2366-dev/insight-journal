@@ -14,7 +14,12 @@ export async function verifyAsiaIndustryCountry(page,{profile,source}){
   await journey.waitFor({state:'visible'});
   assert.match(await journey.textContent(),/日本.*18\.82%.*県別の製造品出荷額/);
   const cameraBefore=new URL(page.url());await page.locator('[data-country-select]').selectOption('JPN');
-  const sameCountry=new URL(page.url());assert.equal(sameCountry.searchParams.get('detail'),'JP-43');for(const key of ['lng','lat','z'])assert.equal(sameCountry.searchParams.get(key),cameraBefore.searchParams.get(key));record('same country preserves detail and camera');
+  await page.waitForFunction(()=>document.querySelector('[data-japan-atlas]')?.dataset.mapReady==='true');
+  assert.match(new URL(page.url()).pathname,/\/atlas\/japan\/industry\/$/);
+  await page.locator('[data-japan-return]').click();
+  await page.waitForFunction(()=>document.querySelector('[data-industry-detail]')?.options.length>1&&document.querySelector('[data-industry-status]')?.textContent==='');
+  const sameCountry=new URL(page.url());assert.equal(sameCountry.searchParams.get('detail'),'JP-43');for(const key of ['lng','lat','z'])assert.equal(sameCountry.searchParams.get(key),cameraBefore.searchParams.get(key));record('explicit Japan country entry uses national page and restores East Asia detail and camera');
+  await open('[data-reading-details]');
   await journey.locator('[data-east-industry-next="secondary"]').click();assert.equal(new URL(page.url()).searchParams.get('topic'),'jp-00');record('Japan reading opens its own prefectural statistics');
   await page.locator('[data-country-select]').selectOption('CHN');
   await page.waitForFunction(()=>document.querySelector('[data-industry-value]')?.textContent.includes('中国')&&document.querySelector('[data-industry-status]')?.textContent==='');

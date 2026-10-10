@@ -1,0 +1,55 @@
+.japan-atlas-root{--japan-ink:#2f514c;--japan-paper:#fbfaf3;color:#31444b}
+.japan-atlas{min-width:0;max-width:none!important;margin:0!important;padding:0!important}
+.japan-heading{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:12px;padding:8px 0}
+.japan-heading a{color:var(--japan-ink)}.japan-heading>a{font-weight:700;min-height:32px;display:flex;align-items:center}
+.japan-region{display:flex;justify-content:space-between;flex-wrap:wrap;align-items:center;gap:8px;font-size:12px}
+.japan-atlas .japan-region .regional-navigation{margin:4px 0 6px}
+.japan-preview{font-size:11px;background:#f0e5cb;padding:3px 6px;margin-left:8px;color:#715927}
+.japan-tabs{margin:10px 0 8px}.japan-tabs>a{flex:1;text-align:center}
+.japan-controls{min-height:0;padding:0 0 12px;margin-bottom:12px;border-bottom:1px solid #c7ccbf}.japan-control-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0;font-size:12px}
+.japan-atlas button,.japan-atlas select{font:inherit;color:var(--japan-ink)}
+.japan-control-row button,.japan-control-row select{min-height:34px;background:#fafbf5;border:1px solid #bdcbc1;padding:5px 9px;border-radius:2px}
+.japan-control-row label{display:flex;gap:6px;align-items:center}.japan-control-row select{max-width:270px;min-width:110px}
+.japan-control-row button[aria-pressed=true]{background:var(--japan-ink);color:#fff;border-color:var(--japan-ink)}
+.japan-control-row i{display:inline-block;width:7px;height:7px;background:var(--industry-color);border-radius:50%;margin-right:5px}
+.japan-primary-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:14px;align-items:start}
+.japan-map-column{min-width:0}.japan-map-heading{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px}
+.japan-map-heading h2{font:700 19px/1.4 var(--sans);margin:0}.japan-map-heading>span{font-size:11px;color:#5b6a63}
+.japan-map-frame{position:relative;width:100%;height:560px;border:1px solid #afbeb6;background:#e6eef0;overflow:hidden}
+.japan-map-surface,.japan-map-fallback,.japan-map-labels{position:absolute;inset:0}.japan-map-frame .japan-map-surface{position:absolute;inset:0;width:100%;height:100%;overscroll-behavior:contain}.japan-map-fallback svg{width:100%;height:100%;padding:6px;box-sizing:border-box}.japan-map-fallback path{fill:#e2e8d8;stroke:#6a8178;stroke-width:.035}
+.japan-map-state{position:absolute;left:10px;right:70px;top:8px;z-index:3;background:#fffdf3ee;padding:8px 10px;font-size:12px;margin:0;pointer-events:none}
+.japan-map-caption{position:absolute;bottom:8px;left:8px;right:64px;font-size:10px;line-height:1.5;color:#486460;background:#ffffffe0;width:max-content;max-width:calc(100% - 82px);padding:4px 6px;pointer-events:none}
+.japan-map-tools{position:absolute;left:8px;top:8px;display:grid;gap:4px;z-index:4}.japan-map-tools button{background:#fffdf4;border:1px solid #a9beb1;min-width:38px;min-height:36px;cursor:pointer;font-size:12px;padding:5px}
+.japan-map-tools button[data-japan-zoom]{font-size:21px}
+.japan-map-labels{pointer-events:none}.japan-map-labels svg{position:absolute;inset:0;width:100%;height:100%}.japan-map-labels line{stroke:#758f88;stroke-width:1}
+.japan-map-labels text{fill:#677f77;font:10px var(--sans)}
+.japan-map-labels button{position:absolute;pointer-events:auto;background:#fffffff0;border:1px solid #b9c6b988;padding:3px 6px;text-align:left;white-space:nowrap;cursor:pointer;font:700 12px/1.45 var(--sans)}
+.japan-map-labels button:before{content:'';display:inline-block;width:7px;height:7px;background:var(--point-color,#4d756d);border-radius:50%;margin-right:5px}.japan-map-labels small{display:block;font-weight:400;font-size:10px;color:#5d716a;margin-left:12px}
+.japan-map-labels button[aria-pressed=true]{outline:2px solid #314c47;background:#eaf1df}
+.japan-point{width:16px;height:16px;padding:0;border:0;background:transparent;cursor:pointer}.japan-point:before{content:'';display:block;width:7px;height:7px;margin:4px;border:1px solid #fff;background:var(--point-color,#446e65);border-radius:50%;box-shadow:0 0 0 1px #52716a}
+.japan-legend{display:flex;flex-wrap:wrap;gap:6px 12px;margin:8px 0;font-size:11px;line-height:1.5}.japan-legend>span{display:flex;align-items:center;gap:5px}.japan-legend i{display:inline-block;width:15px;height:10px;border:1px solid #71817966}
+.japan-map-method{font-size:11px;line-height:1.65;margin:5px 0;color:#536b63}
+.japan-reading{background:var(--japan-paper);border:1px solid #c7ccbf;padding:16px;box-sizing:border-box;max-height:650px;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+.japan-reading h2{font:700 23px/1.5 var(--serif);margin:0 0 16px}.japan-reading h3{font:700 16px/1.5 var(--sans);margin:18px 0 5px}.japan-reading h3 small{display:block;font-size:11px;font-weight:400;color:#64766c}
+.japan-reading p{font-size:13px;line-height:1.85;margin:5px 0 12px}.japan-reading a{font-size:12px}.japan-eyebrow{font-size:10px!important;letter-spacing:.14em;color:#8a6146}
+.japan-gap{border-top:1px solid #d3d9ca;padding-top:14px;margin-top:18px}.japan-gap strong{font-size:12px;color:#7b6237}.japan-gap p{font-size:12px}
+[data-japan-selection]{border-left:3px solid #718f62;padding-left:10px}
+.japan-statistics{min-width:0;margin-top:20px;padding:16px;border-top:1px solid #b8c9b9;background:#f9faf3}.japan-statistics h2{font-size:20px;margin:0 0 12px}.japan-statistics h3{font-size:16px;margin:10px 0}.japan-statistics p{font-size:12px;line-height:1.75}
+.japan-table-scroll{overflow:auto;max-height:410px;overscroll-behavior:contain}.japan-statistics table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
+.japan-statistics th,.japan-statistics td{padding:8px 10px;border-bottom:1px solid #dce2d5;text-align:right;white-space:nowrap}.japan-statistics th:first-child{text-align:left}.japan-statistics thead{position:sticky;top:0;background:#eef3e8;z-index:1}
+.japan-statistics button{border:0;background:transparent;text-decoration:underline;cursor:pointer;padding:3px 0;font-size:12px}.japan-statistics tr[aria-selected=true]{background:#e1eccc}
+.japan-metrics{display:flex;flex-wrap:wrap;gap:12px 26px;margin:12px 0}.japan-metrics small{display:block;font-size:11px}.japan-metrics b{display:block;font:700 20px/1.7 var(--sans);font-variant-numeric:tabular-nums}
+.japan-supply-bar{display:flex;height:18px;margin-top:14px}.japan-climate-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.japan-climate-grid>div{padding:8px;border:1px solid #d5ded0;background:#fffdf7}.japan-climate-grid>div.is-selected{border:2px solid #526e58}.japan-climate-grid .city-farming{display:none}.japan-climate-grid .city-climate-reading h3{font-size:15px}.japan-climate-grid .city-climate-reading p{font-size:12px}
+.japan-sources{border-top:1px solid #c6d1c1;margin:20px 0;padding:14px 0;font-size:12px;line-height:1.8}.japan-sources summary{cursor:pointer;font-weight:700;min-height:36px}.japan-atlas [hidden]{display:none!important}
+.japan-atlas :is(button,select,a,summary):focus-visible{outline:3px solid #a74830;outline-offset:2px}
+@media(min-width:960px){
+ .japan-atlas-root .atlas-desktop-shell{display:grid!important;grid-template-columns:clamp(180px,17vw,250px) minmax(0,1fr)!important;gap:14px;padding:12px 14px 28px;align-items:start}
+ .japan-atlas-root .atlas-news{position:sticky!important;top:12px;width:auto!important;height:calc(100dvh - 100px)!important;min-height:400px}
+ .japan-primary-grid{grid-template-columns:minmax(0,var(--japan-map-width,480px)) minmax(280px,1fr)}
+ .japan-reading{position:sticky;top:12px;height:var(--japan-reading-height,calc(100dvh - 350px))}
+ .japan-atlas-root .japan-map-frame{height:clamp(360px,var(--japan-map-height,calc(100dvh - 260px)),700px)}
+}
+@media(min-width:960px) and (max-width:1199px){.japan-reading{padding:13px}.japan-control-row select{max-width:220px}.japan-climate-grid{grid-template-columns:1fr}}
+@media(max-width:959px){.japan-primary-grid{grid-template-columns:1fr}.japan-map-frame{height:560px}.japan-reading{max-height:none;overflow:visible}.japan-climate-grid{grid-template-columns:1fr}.japan-map-heading h2{font-size:17px}}
+@media(max-width:540px){.japan-region>span{width:100%}.japan-map-frame{height:520px}.japan-heading{font-size:11px}.japan-controls{min-height:0}.japan-control-row select{max-width:240px}.japan-climate-grid{gap:10px}.japan-statistics{padding:12px}.japan-map-labels button{font-size:11px;padding:2px 4px}.japan-map-labels small{font-size:9px}}
+@media(pointer:coarse){.japan-control-row button,.japan-control-row select,.japan-map-tools button,.japan-statistics button{min-height:44px}}

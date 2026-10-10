@@ -1,0 +1,621 @@
+{
+  "baseCommit": "ab2bf51581f6874fb141b5e858892c7a2faf9f2e",
+  "browser": "151.0.7922.173",
+  "chromiumSandbox": false,
+  "network": "only localhost; all external requests blocked",
+  "cases": [
+    {
+      "width": 1440,
+      "name": "default-clusters",
+      "geometry": {
+        "map": {
+          "x": 274.796875,
+          "y": 367.59375,
+          "width": 837.203125,
+          "height": 620,
+          "right": 1112
+        },
+        "news": {
+          "x": 14,
+          "y": 61,
+          "width": 244.796875,
+          "height": 900,
+          "right": 258.796875
+        },
+        "reading": {
+          "x": 1126,
+          "y": 335,
+          "width": 300,
+          "height": 650,
+          "right": 1426
+        },
+        "overflow": false,
+        "labels": [
+          {
+            "id": "toyota",
+            "text": "自動車豊田・中京",
+            "rect": {
+              "x": 787.6875,
+              "y": 654.359375,
+              "width": 76,
+              "height": 39.890625,
+              "right": 863.6875
+            }
+          },
+          {
+            "id": "kitakyushu",
+            "text": "鉄鋼北九州",
+            "rect": {
+              "x": 470.328125,
+              "y": 685.328125,
+              "width": 56,
+              "height": 39.890625,
+              "right": 526.328125
+            }
+          },
+          {
+            "id": "kumamoto",
+            "text": "半導体・電子熊本",
+            "rect": {
+              "x": 642.875,
+              "y": 781.890625,
+              "width": 98.015625,
+              "height": 39.890625,
+              "right": 740.890625
+            }
+          },
+          {
+            "id": "osaka",
+            "text": "電池大阪・関西",
+            "rect": {
+              "x": 585.453125,
+              "y": 677.796875,
+              "width": 76,
+              "height": 39.890625,
+              "right": 661.453125
+            }
+          },
+          {
+            "id": "imabari",
+            "text": "造船今治・瀬戸内",
+            "rect": {
+              "x": 554.546875,
+              "y": 834.296875,
+              "width": 86,
+              "height": 39.890625,
+              "right": 640.546875
+            }
+          },
+          {
+            "id": "nagasaki",
+            "text": "造船長崎",
+            "rect": {
+              "x": 495.796875,
+              "y": 797.03125,
+              "width": 50.015625,
+              "height": 39.890625,
+              "right": 545.8125
+            }
+          },
+          {
+            "id": "yokkaichi",
+            "text": "石油化学四日市",
+            "rect": {
+              "x": 617.046875,
+              "y": 728.3125,
+              "width": 74.015625,
+              "height": 39.890625,
+              "right": 691.0625
+            }
+          }
+        ]
+      }
+    },
+    {
+      "width": 1440,
+      "name": "prefecture-transport",
+      "geometry": {
+        "map": {
+          "x": 274.796875,
+          "y": 367.59375,
+          "width": 837.203125,
+          "height": 620,
+          "right": 1112
+        },
+        "news": {
+          "x": 14,
+          "y": 61,
+          "width": 244.796875,
+          "height": 900,
+          "right": 258.796875
+        },
+        "reading": {
+          "x": 1126,
+          "y": 335,
+          "width": 300,
+          "height": 650,
+          "right": 1426
+        },
+        "overflow": false,
+        "labels": []
+      }
+    },
+    {
+      "width": 1440,
+      "name": "natural",
+      "geometry": {
+        "map": {
+          "x": 274.796875,
+          "y": 348.59375,
+          "width": 837.203125,
+          "height": 620,
+          "right": 1112
+        },
+        "news": {
+          "x": 14,
+          "y": 61,
+          "width": 244.796875,
+          "height": 900,
+          "right": 258.796875
+        },
+        "reading": {
+          "x": 1126,
+          "y": 316,
+          "width": 300,
+          "height": 650,
+          "right": 1426
+        },
+        "overflow": false,
+        "labels": [
+          {
+            "id": "tokyo",
+            "text": "東京35.7°N",
+            "rect": {
+              "x": 822.796875,
+              "y": 632.921875,
+              "width": 57.734375,
+              "height": 39.890625,
+              "right": 880.53125
+            }
+          },
+          {
+            "id": "sapporo",
+            "text": "札幌43.0°N",
+            "rect": {
+              "x": 857.28125,
+              "y": 423.46875,
+              "width": 57.734375,
+              "height": 39.890625,
+              "right": 915.015625
+            }
+          },
+          {
+            "id": "naha",
+            "text": "那覇26.2°N",
+            "rect": {
+              "x": 557.6875,
+              "y": 876.453125,
+              "width": 57.734375,
+              "height": 39.890625,
+              "right": 615.421875
+            }
+          }
+        ]
+      }
+    },
+    {
+      "width": 1440,
+      "name": "agriculture",
+      "geometry": {
+        "map": {
+          "x": 274.796875,
+          "y": 348.59375,
+          "width": 837.203125,
+          "height": 620,
+          "right": 1112
+        },
+        "news": {
+          "x": 14,
+          "y": 61,
+          "width": 244.796875,
+          "height": 900,
+          "right": 258.796875
+        },
+        "reading": {
+          "x": 1126,
+          "y": 316,
+          "width": 300,
+          "height": 650,
+          "right": 1426
+        },
+        "overflow": false,
+        "labels": []
+      }
+    },
+    {
+      "width": 1440,
+      "name": "population",
+      "geometry": {
+        "map": {
+          "x": 274.796875,
+          "y": 348.59375,
+          "width": 837.203125,
+          "height": 620,
+          "right": 1112
+        },
+        "news": {
+          "x": 14,
+          "y": 61,
+          "width": 244.796875,
+          "height": 900,
+          "right": 258.796875
+        },
+        "reading": {
+          "x": 1126,
+          "y": 316,
+          "width": 300,
+          "height": 650,
+          "right": 1426
+        },
+        "overflow": false,
+        "labels": []
+      }
+    },
+    {
+      "width": 1440,
+      "name": "population numeric lookup",
+      "value": "選択地点 35.725°N / 139.713°E：19,907.3 人/km²（2020年・5km集約推計）"
+    },
+    {
+      "width": 1440,
+      "name": "URL reload history explicit country return",
+      "restored": "http://127.0.0.1:42083/insight-journal/atlas/asia/east-asia/nature/?place=CHN&city=beijing&lng=128.00000&lat=35.00000&z=4.200"
+    },
+    {
+      "width": 1440,
+      "name": "Tokyo remains on East Asia with unchanged camera",
+      "before": null,
+      "url": "http://127.0.0.1:42083/insight-journal/atlas/asia/east-asia/nature/?place=JPN&city=tokyo&lng=128.00000&lat=35.00000&z=4.200"
+    },
+    {
+      "width": 1440,
+      "name": "industry country uses same explicit entry"
+    },
+    {
+      "width": 1440,
+      "name": "direct URL and reload industry"
+    },
+    {
+      "width": 1440,
+      "name": "direct URL and reload nature"
+    },
+    {
+      "width": 1440,
+      "name": "direct URL and reload agriculture"
+    },
+    {
+      "width": 1440,
+      "name": "direct URL and reload population"
+    },
+    {
+      "width": 1024,
+      "name": "default-clusters",
+      "geometry": {
+        "map": {
+          "x": 208,
+          "y": 367.59375,
+          "width": 528,
+          "height": 520,
+          "right": 736
+        },
+        "news": {
+          "x": 14,
+          "y": 61,
+          "width": 180,
+          "height": 800,
+          "right": 194
+        },
+        "reading": {
+          "x": 750,
+          "y": 335,
+          "width": 260,
+          "height": 650,
+          "right": 1010
+        },
+        "overflow": false,
+        "labels": [
+          {
+            "id": "toyota",
+            "text": "自動車豊田・中京",
+            "rect": {
+              "x": 556.359375,
+              "y": 601.734375,
+              "width": 76,
+              "height": 39.890625,
+              "right": 632.359375
+            }
+          },
+          {
+            "id": "kitakyushu",
+            "text": "鉄鋼北九州",
+            "rect": {
+              "x": 261.96875,
+              "y": 627.40625,
+              "width": 56,
+              "height": 39.890625,
+              "right": 317.96875
+            }
+          },
+          {
+            "id": "kumamoto",
+            "text": "半導体・電子熊本",
+            "rect": {
+              "x": 434.609375,
+              "y": 719.546875,
+              "width": 98.015625,
+              "height": 39.890625,
+              "right": 532.625
+            }
+          },
+          {
+            "id": "osaka",
+            "text": "電池大阪・関西",
+            "rect": {
+              "x": 360.140625,
+              "y": 623.453125,
+              "width": 76,
+              "height": 39.890625,
+              "right": 436.140625
+            }
+          },
+          {
+            "id": "imabari",
+            "text": "造船今治・瀬戸内",
+            "rect": {
+              "x": 338.359375,
+              "y": 683.203125,
+              "width": 86,
+              "height": 39.890625,
+              "right": 424.359375
+            }
+          },
+          {
+            "id": "nagasaki",
+            "text": "造船長崎",
+            "rect": {
+              "x": 291.03125,
+              "y": 734.171875,
+              "width": 50.015625,
+              "height": 39.890625,
+              "right": 341.046875
+            }
+          },
+          {
+            "id": "yokkaichi",
+            "text": "石油化学四日市",
+            "rect": {
+              "x": 387.65625,
+              "y": 769.203125,
+              "width": 74.015625,
+              "height": 39.890625,
+              "right": 461.671875
+            }
+          }
+        ]
+      }
+    },
+    {
+      "width": 1024,
+      "name": "prefecture-transport",
+      "geometry": {
+        "map": {
+          "x": 208,
+          "y": 367.59375,
+          "width": 528,
+          "height": 520,
+          "right": 736
+        },
+        "news": {
+          "x": 14,
+          "y": 61,
+          "width": 180,
+          "height": 800,
+          "right": 194
+        },
+        "reading": {
+          "x": 750,
+          "y": 335,
+          "width": 260,
+          "height": 650,
+          "right": 1010
+        },
+        "overflow": false,
+        "labels": []
+      }
+    },
+    {
+      "width": 1024,
+      "name": "natural",
+      "geometry": {
+        "map": {
+          "x": 208,
+          "y": 348.59375,
+          "width": 528,
+          "height": 520,
+          "right": 736
+        },
+        "news": {
+          "x": 14,
+          "y": 61,
+          "width": 180,
+          "height": 800,
+          "right": 194
+        },
+        "reading": {
+          "x": 750,
+          "y": 316,
+          "width": 260,
+          "height": 650,
+          "right": 1010
+        },
+        "overflow": false,
+        "labels": [
+          {
+            "id": "tokyo",
+            "text": "東京35.7°N",
+            "rect": {
+              "x": 581.984375,
+              "y": 583.03125,
+              "width": 57.734375,
+              "height": 39.890625,
+              "right": 639.71875
+            }
+          },
+          {
+            "id": "sapporo",
+            "text": "札幌43.0°N",
+            "rect": {
+              "x": 610.75,
+              "y": 408.359375,
+              "width": 57.734375,
+              "height": 39.890625,
+              "right": 668.484375
+            }
+          },
+          {
+            "id": "naha",
+            "text": "那覇26.2°N",
+            "rect": {
+              "x": 360.90625,
+              "y": 786.109375,
+              "width": 57.734375,
+              "height": 39.890625,
+              "right": 418.640625
+            }
+          }
+        ]
+      }
+    },
+    {
+      "width": 1024,
+      "name": "agriculture",
+      "geometry": {
+        "map": {
+          "x": 208,
+          "y": 348.59375,
+          "width": 528,
+          "height": 520,
+          "right": 736
+        },
+        "news": {
+          "x": 14,
+          "y": 61,
+          "width": 180,
+          "height": 800,
+          "right": 194
+        },
+        "reading": {
+          "x": 750,
+          "y": 316,
+          "width": 260,
+          "height": 650,
+          "right": 1010
+        },
+        "overflow": false,
+        "labels": []
+      }
+    },
+    {
+      "width": 1024,
+      "name": "population",
+      "geometry": {
+        "map": {
+          "x": 208,
+          "y": 348.59375,
+          "width": 528,
+          "height": 520,
+          "right": 736
+        },
+        "news": {
+          "x": 14,
+          "y": 61,
+          "width": 180,
+          "height": 800,
+          "right": 194
+        },
+        "reading": {
+          "x": 750,
+          "y": 316,
+          "width": 260,
+          "height": 650,
+          "right": 1010
+        },
+        "overflow": false,
+        "labels": []
+      }
+    },
+    {
+      "width": 1024,
+      "name": "population numeric lookup",
+      "value": "選択地点 35.692°N / 139.695°E：16,970.6 人/km²（2020年・5km集約推計）"
+    },
+    {
+      "width": 1024,
+      "name": "URL reload history explicit country return",
+      "restored": "http://127.0.0.1:42083/insight-journal/atlas/asia/east-asia/nature/?place=CHN&city=beijing&lng=128.00000&lat=35.00000&z=4.200"
+    },
+    {
+      "width": 1024,
+      "name": "Tokyo remains on East Asia with unchanged camera",
+      "before": null,
+      "url": "http://127.0.0.1:42083/insight-journal/atlas/asia/east-asia/nature/?place=JPN&city=tokyo&lng=128.00000&lat=35.00000&z=4.200"
+    },
+    {
+      "width": 1024,
+      "name": "industry country uses same explicit entry"
+    },
+    {
+      "width": 1024,
+      "name": "direct URL and reload industry"
+    },
+    {
+      "width": 1024,
+      "name": "direct URL and reload nature"
+    },
+    {
+      "width": 1024,
+      "name": "direct URL and reload agriculture"
+    },
+    {
+      "width": 1024,
+      "name": "direct URL and reload population"
+    },
+    {
+      "width": 390,
+      "name": "mobile layout and keyboard topic"
+    },
+    {
+      "width": 1024,
+      "name": "asset failure keeps base and statistics; retry restores real map"
+    }
+  ],
+  "errors": [],
+  "images": [
+    "1440-industry-clusters.jpg",
+    "1440-industry-prefectures.jpg",
+    "1440-natural.jpg",
+    "1440-natural-statistics.jpg",
+    "1440-agriculture.jpg",
+    "1440-population.jpg",
+    "1440-population-city.jpg",
+    "1024-industry-clusters.jpg",
+    "1024-industry-prefectures.jpg",
+    "1024-natural.jpg",
+    "1024-natural-statistics.jpg",
+    "1024-agriculture.jpg",
+    "1024-population.jpg",
+    "1024-population-city.jpg",
+    "390-industry.jpg"
+  ],
+  "status": "passed"
+}

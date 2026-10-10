@@ -1,0 +1,59 @@
+name: Review Japan national atlas
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/atlas-japan-pc-review.yml'
+      - 'scripts/capture-japan-review.mjs'
+      - 'scripts/export-japan-review.mjs'
+      - 'src/**/*japan*'
+      - 'src/components/atlas/JapanAtlasPage.astro'
+      - 'src/scripts/atlas-asia-explorer.ts'
+      - 'public/assets/atlas/japan-v1/**'
+permissions:
+  contents: read
+concurrency:
+  group: japan-atlas-review-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  review:
+    name: Japan 1440x900 and 1024x768 in sandboxed Chrome
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - name: Locate standard installed Chrome
+        shell: bash
+        run: |
+          set -euo pipefail
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          test -n "$chrome_path"
+          printf 'REVIEW_CHROME_PATH=%s\n' "$chrome_path" >> "$GITHUB_ENV"
+          if [[ -z "$(fc-list ':lang=ja' family)" ]]; then
+            sudo apt-get update
+            sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+          fi
+          test -n "$(fc-list ':lang=ja' family)"
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - name: Verify map, labels, live cameras and navigation
+        run: node scripts/capture-japan-review.mjs
+      - name: Save evidence including unverified launch failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: japan-atlas-${{ github.run_id }}-${{ github.run_attempt }}
+          path: review-artifacts/japan
+          if-no-files-found: warn
+          retention-days: 7
+      - name: Preserve compact evidence in the read-only job log
+        if: always()
+        run: node scripts/export-japan-review.mjs
