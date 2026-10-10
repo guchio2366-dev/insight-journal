@@ -1,10 +1,10 @@
 .latin-workspace{min-width:0;width:100%;background:#fffefa;border:1px solid #deded5;border-radius:12px;padding:14px;color:#253b3d}
 .latin-workspace [hidden]{display:none!important}
-.latin-workspace h1{font-size:26px;line-height:1.35;margin:0 0 5px}
-.latin-workspace h2{font-size:18px;line-height:1.45;margin:0 0 8px}
-.latin-workspace h3{font-size:16px;line-height:1.5;margin:12px 0 5px}
-.latin-workspace p{font-size:14px;line-height:1.75;margin:7px 0}
-.latin-workspace a{color:#255f51;text-underline-offset:3px}
+.latin-workspace-content h1{font-size:26px;line-height:1.35;margin:0 0 5px}
+.latin-workspace-content h2{font-size:18px;line-height:1.45;margin:0 0 8px}
+.latin-workspace-content h3{font-size:16px;line-height:1.5;margin:12px 0 5px}
+.latin-workspace-content p{font-size:14px;line-height:1.75;margin:7px 0}
+.latin-workspace-content a{color:#255f51;text-underline-offset:3px}
 .latin-header{margin:5px 0 7px}.latin-lead{margin:0!important;font-size:15px!important;line-height:1.65!important}
 .latin-fields{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 10px;border-bottom:1px solid #d9ded6;padding-bottom:8px}
 .latin-fields a{display:inline-flex;align-items:center;min-height:34px;padding:5px 10px;border:1px solid #d4ddd5;border-radius:5px;font-size:14px;text-decoration:none;color:#314d45}
