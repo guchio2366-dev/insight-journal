@@ -1,6 +1,7 @@
 import {countries,fields,metrics,regionNames,years,readState,writeState,africaComparisonSnapshot,canonicalTopic,canonicalWater,canonicalAgriLayers,africaAgriVisibleLayers,metricById,valueAt,latestValueAt,formatValue,fillFor,rankedCountries,palette,sources,defaultYear,cropChoices,livestockChoices,cropMeasureChoices,type Field,type Region,type Metric,type Crop,type Livestock,type CropMeasure} from '../data/atlas/africa-atlas.ts';
 import {projectAfrica,africaWidth,africaHeight} from '../lib/atlas-africa-geometry.ts';
 import {themes,type AfricaTheme} from '../data/atlas/africa-themes.ts';
+import {africaIndustryLocations,africaIndustryLocationById,africaIndustryLocationOverview} from '../data/atlas/africa-industry-locations.ts';
 import {africaForestryReading} from '../data/atlas/africa-forestry-reading.ts';
 import {agricultureContextOverview,agricultureProductContext,agricultureContextPeriodNote} from '../data/atlas/africa-agriculture-context.ts';
 import {africaAgricultureReading} from '../data/atlas/africa-agriculture-reading.ts';
@@ -28,7 +29,8 @@ export function initializeAfricaAtlas() {
  const isAgriMap=()=>state.field==='agriculture'&&state.topic!=='forestry';
  const publicStateURL=(input:typeof state,url:URL)=>{const result=writeState(input,url);if(input.field==='agriculture'){result.searchParams.delete('year');result.searchParams.delete('compare');}return result;};
  const isAgriOverview=()=>state.field==='agriculture'&&state.topic!=='forestry'&&state.overview;
- const countryInteractive=()=>!!state.context||!actual&&!isRiverView();
+ const industryMap=()=>state.field==='industry'&&!state.context;
+ const countryInteractive=()=>!!state.context||!actual&&!isRiverView()&&!industryMap();
  const topicItems={
   agriculture:[['farming','農畜産',false],['forestry','林業',false]],
   nature:[['climate','気候区分',true],['water','水資源',false],['terrain','地形',true],['elevation','標高',true]],
@@ -50,7 +52,7 @@ export function initializeAfricaAtlas() {
    const overview=make('button','全域概要') as HTMLButtonElement;overview.type='button';overview.dataset.africaIndustryOverview='';overview.setAttribute('aria-pressed',String(state.overview));nav.append(overview);
    const labels:Record<string,string>={'copperbelt-connections':'銅鉱業','casablanca-manufacturing':'カサブランカの製造業'};
    for(const theme of themes.filter(t=>t.field==='industry')){const button=make('button',labels[theme.id]??theme.title) as HTMLButtonElement;button.type='button';button.dataset.theme=theme.id;button.title=theme.title;button.setAttribute('aria-pressed',String(!state.overview&&state.theme===theme.id));nav.append(button);}
-   const caption=make('p','収録済み2事例 · 色は国別統計');caption.className='africa-subfield-caption';nav.append(caption);
+   const caption=make('p','収録済み7地点 · 色は産業の種類');caption.className='africa-subfield-caption';nav.append(caption);
   }else for(const [id,label] of items){const button=make('button',label) as HTMLButtonElement;button.type='button';button.dataset.africaTopic=id;button.setAttribute('aria-pressed',String(topic===id));button.setAttribute('aria-selected',String(topic===id));button.setAttribute('role','tab');button.setAttribute('aria-controls','africa-map-panel');button.tabIndex=topic===id?0:-1;nav.append(button);}
   if(state.field==='industry')nav.setAttribute('role','group');
   if(state.field==='industry'||state.field==='population'){
@@ -81,7 +83,7 @@ export function initializeAfricaAtlas() {
  function chooseRiver(id:string){const river=africaRiverById(id);if(id&&!river)return;state.river=id;state.context='';state.sourceState='';state.layerClass='';state.layerPoint='';state.zoom='all';render(true);}
  readSelectionPins();
  function chooseTheme(id:string){
-  const theme=themes.find(t=>t.id===id)!;state.theme=id;state.overview=false;state.context='';state.zoom=state.field==='industry'||state.field==='nature'&&state.topic==='climate'||(state.field==='population'||state.field==='agriculture')&&state.view==='distribution'?'all':'theme';
+  const theme=themes.find(t=>t.id===id)!;state.industryLocation='';state.theme=id;state.overview=false;state.context='';state.zoom=state.field==='industry'||state.field==='nature'&&state.topic==='climate'||(state.field==='population'||state.field==='agriculture')&&state.view==='distribution'?'all':'theme';
   state.sourceState='';state.layerClass='';state.layerPoint='';
   if(!regionPinned)state.region='all';
  }
@@ -89,6 +91,7 @@ export function initializeAfricaAtlas() {
  const map=query<SVGSVGElement>('.africa-map');
  function fitMap() {
   map.dataset.detail=String(state.zoom!=='all');
+  if(state.field==='industry'){map.setAttribute('viewBox',`0 0 ${africaWidth} ${africaHeight}`);return;}
   if(isRiverView()&&state.zoom==='theme'){map.setAttribute('viewBox',`0 0 ${africaWidth} ${africaHeight}`);return;}
   if(state.zoom==='theme'){
    const theme=themes.find(t=>t.id===state.theme)!;
@@ -272,28 +275,52 @@ export function initializeAfricaAtlas() {
   }
  }
  function renderIndustryOverview(){
-  if(state.field!=='industry'||!state.overview)return;
-  text('.africa-kicker','全域の概要');text('[data-theme-title]','アフリカの主要産業');text('[data-theme-takeaway]',fields.industry.title);text('[data-theme-takeaway-detail]',fields.industry.summary);
-  text('[data-theme-caveat]','色は選択した指標の国別統計。記号は収録済み2事例の代表位置で、生産量・雇用・施設数を表しません。');
-  query<HTMLElement>('[data-theme-comparison]').hidden=true;query<HTMLElement>('[data-theme-return]').hidden=true;query<HTMLElement>('[data-theme-source]').hidden=true;
-  const marks=query<SVGGElement>('[data-theme-marks]'),legend=query<HTMLElement>('[data-theme-legend]'),details=query<HTMLElement>('[data-theme-details]');marks.replaceChildren();legend.replaceChildren();details.replaceChildren();
-  const view=map.getAttribute('viewBox')!.split(' ').map(Number),box=map.getBoundingClientRect(),scale=Math.max(view[2]/(box.width||640),view[3]/(box.height||440));
-  for(const theme of themes.filter(row=>row.field==='industry')){
-   const mark=theme.marks[0],point=mark.coordinates as [number,number],[x,y]=projectAfrica(point),name=theme.id==='copperbelt-connections'?'銅鉱業':'航空機関連製造業';
-   const g=svgEl('g',{'data-africa-industry-theme':theme.id,tabindex:0,role:'button','aria-label':`${theme.title}を読む`,class:'africa-industry-hit'});
-   g.append(svgEl('circle',{cx:x,cy:y,r:7*scale,fill:'#9c365a',stroke:'#fff','stroke-width':1.5,'vector-effect':'non-scaling-stroke'}),svgEl('text',{x:x+11*scale,y:y+4*scale,'font-size':14*scale,fill:'#623448',stroke:'#fff','stroke-width':3*scale,'paint-order':'stroke'},name));marks.append(g);
-   const item=make('span',`${name}：${mark.label}`),swatch=make('i');swatch.style.background='#9c365a';item.prepend(swatch);legend.append(item);const p=make('p',theme.takeaway),a=make('a',theme.sourceLabel) as HTMLAnchorElement;a.href=theme.source;p.append(make('span',' · '),a);details.append(p);
+  query<HTMLElement>('[data-africa-industry-return]').hidden=state.field!=='industry'||state.overview;
+  if(state.field!=='industry')return;
+  const details=()=>query<HTMLElement>('[data-theme-details]');
+  const addSource=(label:string,url:string)=>{const p=make('p'),a=make('a',label) as HTMLAnchorElement;a.href=url;p.append(a);details().append(p);};
+  const source=(label:string,url:string)=>{const a=query<HTMLAnchorElement>('[data-theme-source]');a.hidden=false;a.textContent=label;a.href=url;};
+  const svg=svgEl;
+  query<SVGGElement>('[data-theme-marks]').replaceChildren();details().replaceChildren();
+  query<HTMLElement>('[data-theme-comparison]').hidden=true;query<HTMLElement>('[data-theme-return]').hidden=true;
+  query<HTMLElement>('[data-themes]').replaceChildren();query<HTMLElement>('[data-theme-legend]').replaceChildren();
+  const location=africaIndustryLocationById(state.industryLocation),selected=state.overview||location?undefined:themes.find(row=>row.field==='industry'&&row.id===state.theme),overview=africaIndustryLocationOverview,marks=query<SVGGElement>('[data-theme-marks]'),view=map.getAttribute('viewBox')!.split(' ').map(Number),box=map.getBoundingClientRect(),scale=Math.max(view[2]/(box.width||640),view[3]/(box.height||440));
+  text('.africa-kicker',`産業が集まる条件${state.place?' · '+countries.find(c=>c.code===state.place)?.name:''}`);text('[data-theme-title]',location?.label??selected?.title??overview.title);text('[data-theme-takeaway]',location?.reading??selected?.takeaway??overview.reading);text('[data-theme-takeaway-detail]',location?.reading??(state.context?selected?.compareText:selected?.takeaway)??overview.reading);text('[data-theme-takeaway]',location?.title??selected?.title??'北のガス・西の原油、南の金属とダイヤ、沿岸の製造・物流');
+  text('[data-theme-caveat]',state.context?metricById(state.context).note:overview.scope);text('[data-metric-title]','資源・製造・物流の代表位置');text('[data-period]','資料ごとの公表年');text('[data-unit]','数量を表さない点');source(location?.sources[0]?.label??selected?.sourceLabel??overview.sources[0].label,location?.sources[0]?.url??selected?.source??overview.sources[0].url);
+  const key=query('[data-africa-layer-legend]');key.replaceChildren();query('[data-africa-actual-key]').hidden=false;
+  const colors={energy:'#a14f3d',metals:'#704d9a',gems:'#917026',manufacturing:'#286a78',transport:'#327345'},labels={energy:'原油・天然ガス',metals:'銅・コバルト',gems:'ダイヤモンド',manufacturing:'航空機関連製造',transport:'港湾物流'};
+  type LabelBox={x:number;y:number;w:number;h:number};const occupied:LabelBox[]=[],gap=5*scale;
+  const positionLabel=(label:string,x:number,y:number):LabelBox=>{
+   const fontSize=box.width>0&&box.width<480?12:14;const w=(label.length*fontSize+8)*scale,h=21*scale,pad=8*scale;
+   const candidates=[[13,-8],[-w/scale-13,-8],[13,22],[-w/scale-13,22],[13,-36],[-w/scale-13,-36],[13,50],[-w/scale-13,50]];
+   const fits=(b:LabelBox)=>!africaIndustryLocations.some(item=>{const [px,py]=projectAfrica(item.coordinates);return px>b.x-10*scale&&px<b.x+b.w+10*scale&&py>b.y-b.h-10*scale&&py<b.y+10*scale;})&&!occupied.some(o=>b.x<o.x+o.w+gap&&b.x+b.w+gap>o.x&&b.y-b.h<o.y+gap&&b.y+gap>o.y-o.h);
+   const boxes=candidates.map(([dx,dy])=>({x:Math.max(view[0]+pad,Math.min(view[0]+view[2]-w-pad,x+dx*scale)),y:Math.max(view[1]+h+pad,Math.min(view[1]+view[3]-pad,y+dy*scale)),w,h}));
+   const chosen=boxes.find(fits)??boxes[0];occupied.push(chosen);return chosen;
+  };
+  const ordered=africaIndustryLocations;
+  const shortLabels:Record<string,string>={'hassi-rmel-gas':'ガス：ハッシ・ルメル','niger-delta-oil':'原油：デルタ','drc-copper-cobalt':'銅・コバルト：コンゴ南部','zambia-copperbelt':'銅：ザンビア','jwaneng-diamonds':'ダイヤ：ジュワネン','casablanca-industry':'航空機：カサブランカ','lagos':'物流：ラゴス'};
+  for(const item of ordered){
+   const [x,y]=projectAfrica(item.coordinates),active=location?.id===item.id||!!selected&&selected.id===item.themeId,color=colors[item.kind],mapLabel=box.width>0&&box.width<480?shortLabels[item.id]:item.mapLabel,labelBox=positionLabel(mapLabel,x,y),g=svg('g',{'data-africa-industry-location':item.id,tabindex:0,role:'button','aria-label':`${item.label}を読む`,'aria-pressed':String(active),class:'africa-industry-hit','data-label-visible':'true'});
+   const nearest=Math.min(...africaIndustryLocations.filter(other=>other.id!==item.id).map(other=>{const [ox,oy]=projectAfrica(other.coordinates);return Math.hypot(ox-x,oy-y);})),hitRadius=Math.min(20*scale,nearest*.45);
+   g.append(svg('circle',{cx:x,cy:y,r:hitRadius,fill:'transparent','pointer-events':'all'}),svg('rect',{x:labelBox.x-3*scale,y:labelBox.y-labelBox.h,width:labelBox.w+6*scale,height:labelBox.h+6*scale,fill:'transparent','pointer-events':'all'}),svg('circle',{cx:x,cy:y,r:(active?8:6)*scale,fill:color,stroke:active?'#173d46':'#fff','stroke-width':active?2.5:1.5,'vector-effect':'non-scaling-stroke'}),svg('text',{x:labelBox.x,y:labelBox.y,'font-size':(box.width>0&&box.width<480?12:14)*scale,fill:color,stroke:'#fff','stroke-width':3*scale,'paint-order':'stroke'},mapLabel));g.append(svg('title',{},`${item.label}：${item.note}`));marks.append(g);
   }
+  for(const kind of ['energy','metals','gems','manufacturing','transport'] as const){const row=make('span',labels[kind]),swatch=make('i');swatch.style.background=colors[kind];row.prepend(swatch);key.append(row);};
+  if(location){details().append(make('p',location.note));for(const row of location.sources)addSource(row.label,row.url);}
+  else if(selected){details().append(make('p',selected.takeaway));for(const item of selected.marks)details().append(make('p',`${item.label} — ${item.note}`));addSource(selected.sourceLabel,selected.source);for(const row of selected.evidenceSources??[])addSource(row.label,row.url);}
+  else for(const row of overview.sources)addSource(row.label,row.url);
+  details().append(make('p',overview.missing));text('#africa-svg-title','アフリカの主要産業の代表位置');text('[data-map-caption]',overview.scope);query<HTMLElement>('[data-africa-statistics-key]').hidden=!state.context;query<HTMLElement>('[data-country-statistics]').hidden=!state.context;
+  query<HTMLElement>('[data-theme-comparison]').hidden=!selected||!!state.context;query<HTMLElement>('[data-theme-return]').hidden=!state.context;
+  text('[data-africa-layer-caption]','色：産業の種類 · 点：資料に基づく代表位置（数量は示しません）');text('[data-africa-layer-scope]','国別の割合から資源の位置や産業施設を推定していません。');query<HTMLElement>('[data-africa-industry-return]').hidden=!selected&&!location;
  }
  function renderReadingLayout(){
   const riverView=isRiverView(),river=africaRiverById(state.river);
   root!.dataset.riverView=String(riverView);
   const climateView=state.field==='nature'&&state.topic==='climate'&&state.view==='distribution';
-  map.setAttribute('role',riverView||climateView||isAgriMap()||state.field==='industry'&&state.overview?'group':'img');
-  text('#africa-svg-desc',climateView?'気候区分の格子図です。12観測所の都市名や地点を選ぶと、右側に雨温図と観測地点の格子分類が表示されます。Tabで移動し、Enterかスペースキーで選べます。':riverView?'収録された河川・湖の中心線。ナイル川とコンゴ川は名前のボタン、または地図の線で選択できます。線にはTabで移動し、Enterかスペースキーで解説を開けます。':isAgriMap()?'作物は品目別の色帯、家畜は小型の種別記号。地図内の品目名・分布や下の色凡例から選択でき、右に地域と生産・利用の説明を表示します。選択しても他分布を残します。':'分布テーマと国別統計を重ねた地図。地図下の凡例と右の説明から、表示した分布を読み取れます。国は選択欄や一覧からも選べます。');
+  map.setAttribute('role',riverView||climateView||isAgriMap()||state.field==='industry'?'group':'img');
+  text('#africa-svg-desc',industryMap()?'産業名の付いた7地点の代表位置。点と産業名をクリック、またはTabで移動してEnterかスペースで読むことができます。選択しても他産業を残します。':climateView?'気候区分の格子図です。12観測所の都市名や地点を選ぶと、右側に雨温図と観測地点の格子分類が表示されます。Tabで移動し、Enterかスペースキーで選べます。':riverView?'収録された河川・湖の中心線。ナイル川とコンゴ川は名前のボタン、または地図の線で選択できます。線にはTabで移動し、Enterかスペースキーで解説を開けます。':isAgriMap()?'作物は品目別の色帯、家畜は小型の種別記号。地図内の品目名・分布や下の色凡例から選択でき、右に地域と生産・利用の説明を表示します。選択しても他分布を残します。':'分布テーマと国別統計を重ねた地図。地図下の凡例と右の説明から、表示した分布を読み取れます。国は選択欄や一覧からも選べます。');
   const actions=query<HTMLElement>('.africa-theme-actions'),explanation=query<HTMLElement>('[data-theme-takeaway-detail]');
   const countryStatistics=query<HTMLDetailsElement>('[data-country-statistics]'),statisticsMode=actual&&!state.context?'reference':'comparison';
-  countryStatistics.hidden=!state.place&&!state.context||riverView&&!state.context;
+  countryStatistics.hidden=industryMap()||!state.place&&!state.context||riverView&&!state.context;
   if(countryStatistics.dataset.mode!==statisticsMode){countryStatistics.open=statisticsMode==='comparison';countryStatistics.dataset.mode=statisticsMode;}
   query<HTMLElement>('.africa-selected').hidden=false;
   query<HTMLElement>('[data-theme-takeaway-detail]').hidden=!riverView&&query<HTMLElement>('[data-theme-takeaway-detail]').textContent===query<HTMLElement>('[data-theme-takeaway]').textContent;
@@ -383,6 +410,7 @@ export function initializeAfricaAtlas() {
  }
  function render(write=false) {
   state.topic=canonicalTopic(state.field,state.metric,state.topic);
+  if(state.field!=='industry')state.industryLocation='';
   if(state.field!=='nature'||state.topic!=='climate'||state.view!=='distribution')state.city='';
   if(state.field==='agriculture'){
    state.cropMeasure='harvested';state.compare='';state.context='';state.sourceState='';
@@ -429,7 +457,7 @@ export function initializeAfricaAtlas() {
    text('[data-period]',period);text('[data-metric-title]',metric.label);text('[data-unit]',metric.unit);text('#africa-svg-title',`${metric.label}・${period}`);
    text('[data-essential-metric]',`${metric.label} · ${period} · ${metric.unit}${metric.symbols?'（円の面積）':''}`);
    text('[data-essential-boundary]',`${metric.symbols?'円は国人口。':'色は国全体。'}国境：細線／選択：赤枠／比較：青破線／白丸：島の選択用。`);
-  for(const path of paths){const code=path.dataset.countryPath!;const c=countries.find(c=>c.code===code)!;const v=agricultureField?latestValueAt(metric.id,code)?.value??null:valueAt(metric.id,code,state.year);path.setAttribute('fill',actual||isRiverView()?'#f3f1e9':fillFor(v,metric));path.classList.toggle('is-selected',code===state.place);path.classList.toggle('is-compared',code===state.compare);path.classList.toggle('is-muted',!actual&&!isRiverView()&&state.zoom!=='theme'&&state.region!=='all'&&c.region!==state.region&&code!==state.place&&code!==state.compare);path.style.pointerEvents=countryInteractive()?'auto':'none';const title=path.querySelector('title');if(countryInteractive()){const label=title??svgEl('title',{});label.textContent=`${c.name}：${formatValue(v,metric)}${v===null?'':` ${metric.unit}`}（${agricultureField?`${latestValueAt(metric.id,code)?.year??'年未収録'}年`:period}）`;if(!title)path.append(label);}else title?.remove();}
+  for(const path of paths){const code=path.dataset.countryPath!;const c=countries.find(c=>c.code===code)!;const v=agricultureField?latestValueAt(metric.id,code)?.value??null:valueAt(metric.id,code,state.year);path.setAttribute('fill',actual||isRiverView()||industryMap()?'#f3f1e9':fillFor(v,metric));path.classList.toggle('is-selected',code===state.place);path.classList.toggle('is-compared',code===state.compare);path.classList.toggle('is-muted',!actual&&!isRiverView()&&!industryMap()&&state.zoom!=='theme'&&state.region!=='all'&&c.region!==state.region&&code!==state.place&&code!==state.compare);path.style.pointerEvents=countryInteractive()?'auto':'none';const title=path.querySelector('title');if(countryInteractive()){const label=title??svgEl('title',{});label.textContent=`${c.name}：${formatValue(v,metric)}${v===null?'':` ${metric.unit}`}（${agricultureField?`${latestValueAt(metric.id,code)?.year??'年未収録'}年`:period}）`;if(!title)path.append(label);}else title?.remove();}
   fitMap();
   const view=map.getAttribute('viewBox')!.split(' ').map(Number),box=map.getBoundingClientRect();
   const symbolScale=Math.max(view[2]/(box.width||640),view[3]/(box.height||528));
@@ -450,7 +478,7 @@ export function initializeAfricaAtlas() {
    if(metric.symbols){const key=svgEl('svg',{viewBox:'0 0 310 48',width:310,height:48,role:'img','aria-label':'人口の円面積。100万人、1000万人、1億人の大きさ。'});[1e6,1e7,1e8].forEach((v,i)=>{const r=Math.sqrt(v/1e6)*2.2;key.append(svgEl('circle',{cx:[5,87,200][i],cy:24,r,fill:'#3c7968','fill-opacity':.6}));key.append(svgEl('text',{x:[13,99,225][i],y:29,'text-anchor':'start','font-size':14},`${v/1e4}万人`));});legend.append(key);}
   else palette.forEach((color,i)=>{const label=i===0?`${metric.breaks[0].toLocaleString()}未満`:i===4?`${metric.breaks[3].toLocaleString()}以上`:`${metric.breaks[i-1].toLocaleString()}〜${metric.breaks[i].toLocaleString()}未満`;const span=make('span');const swatch=make('i');swatch.style.background=color;span.append(swatch,document.createTextNode(label));legend.append(span);});
   const missing=make('span');const swatch=make('i');swatch.className='africa-no-data';missing.append(swatch,document.createTextNode('未収録'));legend.append(missing);
-  text('[data-map-caption]',isRiverView()?actual?.ready?actual.scope:'河道データを取得すると、収録された中心線を表示します。背景は国境の参照図です。':actual?.ready?actual.scope:metric.symbols?'円の面積は人口に比例。国を示す位置に置いており、都市人口や居住範囲ではありません。':'色は国平均・国全体の割合です。国内の分布・産地・都市の境界を表しません。島の白丸は選択用の目印です。');
+  text('[data-map-caption]',industryMap()?africaIndustryLocationOverview.scope:isRiverView()?actual?.ready?actual.scope:'河道データを取得すると、収録された中心線を表示します。背景は国境の参照図です。':actual?.ready?actual.scope:metric.symbols?'円の面積は人口に比例。国を示す位置に置いており、都市人口や居住範囲ではありません。':'色は国平均・国全体の割合です。国内の分布・産地・都市の境界を表しません。島の白丸は選択用の目印です。');
   const ranked=agricultureField?countries.filter(c=>state.region==='all'||c.region===state.region).map(c=>({...c,value:latestValueAt(metric.id,c.code)?.value??null,year:latestValueAt(metric.id,c.code)?.year})).sort((a,b)=>(b.value??-Infinity)-(a.value??-Infinity)||a.name.localeCompare(b.name,'ja')):rankedCountries({...state,metric:metric.id});const count=ranked.filter(c=>c.value!==null).length;
   text('[data-coverage]',`${regionNames[state.region]}：${ranked.length}の国・地域のうち${count}件を収録、${ranked.length-count}件は未収録。${agricultureField?'国別参考統計は各指標の最新収録年です。':'赤枠は選択国、青い破線は比較国。'}`);
   text('[data-selected-name]',country?.name??'国を選んで比較');text('[data-selected-region]',country?regionNames[country.region as Region]:'');text('[data-selected-value]',country?formatValue(agricultureField?latestValueAt(metric.id,country.code)?.value??null:valueAt(metric.id,country.code,state.year),metric):'');text('[data-selected-unit]',country?metric.unit:'');text('[data-selected-metric]',`${actual?.ready?'参考：国別統計 · ':''}${metric.label}`);
@@ -476,7 +504,7 @@ export function initializeAfricaAtlas() {
  function chooseCountry(code:string,preservePoint=false){if(code&&!countries.some(c=>c.code===code))return;countryPinned=!!code;state.place=code;if(!preservePoint)state.layerPoint='';if(state.topic==='ethnicity')state.layerClass='';if(!code||state.compare===code)state.compare='';if(code&&state.region!=='all')state.region=countries.find(c=>c.code===code)!.region as Region;if(!code||state.zoom==='theme'&&!themes.find(t=>t.id===state.theme)!.places.includes(code))state.zoom='all';render(true);}
  function chooseAgriLayer(key:string){if(!/^crop-(maize|rice|wheat|cassava|coffee|tea)-harvested$|^livestock-(cattle|goats|sheep)$/.test(key))return;state.agriLayers=null;state.agriDisplay='all';if(key.startsWith('crop-')){const [,crop,measure]=key.split('-');state.topic='farming';state.crop=crop as Crop;state.cropMeasure=measure as CropMeasure;state.metric='AG.LND.ARBL.ZS';}else{state.topic='livestock';state.livestock=key.slice(10) as Livestock;state.metric='NV.AGR.TOTL.ZS';}state.overview=false;state.agriOutline=true;state.context='';state.sourceState='';state.layerClass='';state.layerPoint='';state.view='distribution';render(true);}
  root.addEventListener('click',event=>{
-  const target=(event.target as Element).closest<HTMLElement>('[data-field],[data-focus-country],[data-compare-country],[data-country-path],[data-country-marker],[data-zoom],[data-reset],button[data-theme],[data-theme-comparison],[data-theme-return],[data-africa-topic],[data-africa-water],[data-africa-commodity],[data-africa-crop-measure],[data-africa-layer-class],[data-africa-layer-retry],[data-africa-river],[data-africa-river-choice],[data-africa-city],[data-africa-city-return],[data-africa-overview-layer],[data-africa-agri-overview],[data-africa-industry-overview],[data-africa-industry-theme],[data-africa-agri-pick],[data-africa-agri-only],[data-africa-agri-all]');if(!target)return;
+  const target=(event.target as Element).closest<HTMLElement>('[data-field],[data-focus-country],[data-compare-country],[data-country-path],[data-country-marker],[data-zoom],[data-reset],button[data-theme],[data-theme-comparison],[data-theme-return],[data-africa-topic],[data-africa-water],[data-africa-commodity],[data-africa-crop-measure],[data-africa-layer-class],[data-africa-layer-retry],[data-africa-river],[data-africa-river-choice],[data-africa-city],[data-africa-city-return],[data-africa-overview-layer],[data-africa-agri-overview],[data-africa-industry-overview],[data-africa-industry-theme],[data-africa-industry-location],[data-africa-industry-return],[data-africa-agri-pick],[data-africa-agri-only],[data-africa-agri-all]');if(!target)return;
   if(target.hasAttribute('data-africa-city-return')){state.city='';render(true);return;}
   if(target.hasAttribute('data-africa-city')){const city=africaClimateCityById(target.dataset.africaCity!);if(!city||state.field!=='nature'||state.topic!=='climate')return;state.city=city.id;state.context='';state.sourceState='';state.layerPoint='';state.view='distribution';render(true);return;}
   if((target.hasAttribute('data-country-path')||target.hasAttribute('data-country-marker'))&&!countryInteractive())return;
@@ -485,7 +513,9 @@ export function initializeAfricaAtlas() {
   if(target.hasAttribute('data-africa-agri-all')){state.agriLayers=null;render(true);return;}
   if(target.hasAttribute('data-africa-agri-overview')){state.overview=true;state.topic='farming';state.agriLayers=null;state.agriOutline=false;state.cropMeasure='harvested';state.context='';state.sourceState='';state.layerClass='';state.layerPoint='';state.view='distribution';render(true);return;}
   if(target.hasAttribute('data-africa-overview-layer')){chooseAgriLayer(target.dataset.africaOverviewLayer!);return;}
-  if(target.hasAttribute('data-africa-industry-overview')){state.overview=true;state.zoom='all';state.context='';state.sourceState='';render(true);return;}
+  if(target.hasAttribute('data-africa-industry-location')){const id=target.dataset.africaIndustryLocation!;if(!africaIndustryLocationById(id))return;state.industryLocation=id;state.overview=false;state.context='';state.sourceState='';state.view='distribution';render(true);root!.querySelector<SVGElement>(`[data-africa-industry-location="${id}"]`)?.focus({preventScroll:true});return;}
+  if(target.hasAttribute('data-africa-industry-return')){state.industryLocation='';state.overview=true;state.context='';state.sourceState='';render(true);return;}
+  if(target.hasAttribute('data-africa-industry-overview')){state.industryLocation='';state.overview=true;state.zoom='all';state.context='';state.sourceState='';render(true);return;}
   if(target.dataset.africaIndustryTheme){state.view='statistics';chooseTheme(target.dataset.africaIndustryTheme);render(true);return;}
   if(target.hasAttribute('data-africa-river')||target.hasAttribute('data-africa-river-choice')){chooseRiver(target.dataset.africaRiver??target.dataset.africaRiverChoice??'');return;}
   if(target.hasAttribute('data-africa-layer-class')){state.layerClass=state.layerClass===target.dataset.africaLayerClass?'':target.dataset.africaLayerClass!;state.layerPoint='';render(true);return;}
@@ -507,6 +537,7 @@ export function initializeAfricaAtlas() {
   if(event.defaultPrevented)return;
   const city=(event.target as Element).closest<SVGElement>('[data-africa-city]');if(city&&['Enter',' '].includes(event.key)){event.preventDefault();city.dispatchEvent(new MouseEvent('click',{bubbles:true}));return;}
   const agri=(event.target as Element).closest<SVGElement>('[data-africa-agri-pick]');if(agri&&['Enter',' '].includes(event.key)){event.preventDefault();const key=agri.dataset.africaAgriPick!;chooseAgriLayer(key);root!.querySelector<SVGElement>(`[data-africa-agri-pick="${key}"][tabindex]`)?.focus({preventScroll:true});return;}
+  const industryLocation=(event.target as Element).closest<SVGElement>('[data-africa-industry-location]');if(industryLocation&&['Enter',' '].includes(event.key)){event.preventDefault();industryLocation.dispatchEvent(new window.MouseEvent('click',{bubbles:true}));return;}
   const industry=(event.target as Element).closest<SVGElement>('[data-africa-industry-theme]');if(industry&&['Enter',' '].includes(event.key)){event.preventDefault();state.view='statistics';chooseTheme(industry.dataset.africaIndustryTheme!);render(true);return;}
   const tab=(event.target as Element).closest<HTMLButtonElement>('[role="tab"]');
   if(tab&&['ArrowRight','ArrowLeft','Home','End'].includes(event.key)){const tabs=[...tab.closest('[role="tablist"]')!.querySelectorAll<HTMLButtonElement>('[role="tab"]')],index=tabs.indexOf(tab),next=event.key==='Home'?0:event.key==='End'?tabs.length-1:(index+(event.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;event.preventDefault();tabs[next].focus({preventScroll:true});tabs[next].click();return;}

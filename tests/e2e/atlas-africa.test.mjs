@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 import {Window} from 'happy-dom';
 import {initializeAfricaAtlas} from '../../src/scripts/atlas-africa.ts';
 import {latestValueAt,formatValue,metricById} from '../../src/data/atlas/africa-atlas.ts';
+import {africaIndustryLocations} from '../../src/data/atlas/africa-industry-locations.ts';
 import {themes} from '../../src/data/atlas/africa-themes.ts';
 const html=()=>readFileSync(new URL('../../dist/atlas/africa/index.html',import.meta.url),'utf8');
 function withAfricaPage(url,run){
@@ -33,7 +34,7 @@ test('actual industry entries change the theme, map and reader while preserving 
   assert.equal(q('button[data-theme="copperbelt-connections"]').getAttribute('aria-pressed'),'false');
   assert.ok(q('[data-theme-title]').textContent.includes(casablanca.title));
   assert.equal(q('[data-theme-takeaway-detail]').textContent,casablanca.takeaway);
-  assert.equal(q('[data-theme-legend]').children.length,casablanca.marks.length);
+  assert.equal(w.document.querySelectorAll('[data-africa-industry-location]').length,7);assert.equal(q('[data-africa-layer-legend]').children.length,5);
   for(const [key,value] of Object.entries({place:'EGY',compare:'GHA',year:'2023',only:'1',fallback:'1'}))assert.equal(new URL(w.location.href).searchParams.get(key),value);
   w.history.back();assert.equal(q('.africa-map').dataset.theme,'copperbelt-connections');
   assert.equal(q('button[data-theme="copperbelt-connections"]').getAttribute('aria-pressed'),'true');
@@ -151,11 +152,11 @@ test('each thematic comparison retains the source marks, all legends and named r
    const sourceMarks=q('[data-theme-marks]').innerHTML;
    assert.equal(q('[data-theme-title]').textContent,theme.title);
    assert.ok(q('.africa-kicker').textContent.includes('ガーナ'));
-   assert.equal(q('[data-theme-legend]').children.length,theme.marks.length);
+   assert.equal(q('[data-theme-legend]').children.length,theme.field==='industry'?0:theme.marks.length);
    assert.equal(q('[data-legend]').children.length,sourceMetric==='SP.POP.TOTL'?2:6);
    q('[data-theme-comparison]').click();
    assert.equal(q('[data-theme-marks]').innerHTML,sourceMarks);
-   assert.equal(q('[data-theme-legend]').children.length,theme.marks.length);
+   assert.equal(q('[data-theme-legend]').children.length,theme.field==='industry'?0:theme.marks.length);
    assert.equal(q('[data-legend]').children.length,6);
    assert.equal(q('[data-theme-takeaway-detail]').textContent,theme.compareText);
    assert.ok(q('[data-theme-takeaway]').textContent.trim());
@@ -190,8 +191,8 @@ test('theme entry aligns unselected countries and preserves explicit selection w
   initializeAfricaAtlas();const q=s=>w.document.querySelector(s);
   q('[data-field="agriculture"]').click();assert.equal(q('[data-place]').value,'');
   q('[data-field="industry"]').click();assert.equal(q('[data-place]').value,'');
-  assert.equal(q('[data-africa-industry-overview]').getAttribute('aria-pressed'),'true');assert.equal(w.document.querySelectorAll('[data-africa-industry-theme]').length,2);assert.equal(q('.africa-map').getAttribute('viewBox'),'0 0 1100 907');
-  q('[data-africa-industry-theme="casablanca-manufacturing"]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));assert.equal(q('[data-africa-atlas]').dataset.overview,'false');assert.equal(q('[data-place]').value,'');assert.equal(q('[data-theme-takeaway-detail]').textContent,themes.find(t=>t.id==='casablanca-manufacturing').takeaway);
+  assert.equal(q('[data-africa-industry-overview]').getAttribute('aria-pressed'),'true');assert.equal(w.document.querySelectorAll('[data-africa-industry-location]').length,7);assert.equal(q('.africa-map').getAttribute('viewBox'),'0 0 1100 907');
+  q('[data-africa-industry-location="casablanca-industry"]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));assert.equal(q('[data-africa-atlas]').dataset.overview,'false');assert.equal(q('[data-place]').value,'');assert.equal(q('[data-theme-takeaway-detail]').textContent,themes.find(t=>t.id==='casablanca-manufacturing').takeaway);
   q('[data-field="population"]').click();assert.equal(q('[data-place]').value,'');assert.equal(q('.africa-map').getAttribute('viewBox'),'0 0 1100 907');
   q('[data-place]').value='EGY';q('[data-place]').dispatchEvent(new w.Event('change'));
   q('[data-field="agriculture"]').click();assert.equal(q('[data-place]').value,'EGY');
@@ -206,6 +207,29 @@ test('theme entry aligns unselected countries and preserves explicit selection w
   assert.equal(q('.africa-map').getAttribute('viewBox'),sourceView);
   q('[data-field="industry"]').click();assert.equal(q('[data-place]').value,'EGY');assert.equal(q('[data-region]').value,'north');
   assert.ok(q('[data-place-note]').textContent.includes('テーマの代表地点の数値ではありません'));
-  q('[data-zoom="region"]').click();assert.ok(w.document.querySelectorAll('.africa-country.is-muted').length>0);
+  q('[data-zoom="region"]').click();assert.equal(w.document.querySelectorAll('.africa-country.is-muted').length,0);
  }finally{for(const k of Object.keys(previous))globalThis[k]=previous[k];w.happyDOM.abort();}
+});
+
+
+test('all seven sourced industry locations retain other marks, sources, focus, URL and overview return',()=>{
+ let saved;
+ withAfricaPage('https://example.com/atlas/africa/?field=industry&place=EGY&year=2023&unknown=keep',(w,q)=>{
+  for(const item of africaIndustryLocations){
+   const selector=`[data-africa-industry-location="${item.id}"]`;
+   q(selector).dispatchEvent(new w.KeyboardEvent('keydown',{key:' ',bubbles:true}));
+   assert.equal(new URL(w.location.href).searchParams.get('industryLocation'),item.id);
+   assert.equal(q('[data-theme-title]').textContent,item.label);
+   assert.equal(q('[data-theme-takeaway-detail]').textContent,item.reading);
+   assert.equal(w.document.querySelectorAll('[data-africa-industry-location]').length,7);
+   assert.equal(w.document.activeElement.getAttribute('data-africa-industry-location'),item.id);
+   for(const source of item.sources)assert.ok([...q('[data-theme-details]').querySelectorAll('a')].some(a=>a.href===source.url));
+  }
+  saved=w.location.href;q('[data-africa-industry-return]').click();
+  assert.equal(new URL(w.location.href).searchParams.has('industryLocation'),false);
+  assert.match(q('[data-theme-takeaway-detail]').textContent,/原油/);
+  w.history.back();assert.equal(q('[data-africa-industry-location="lagos"]').getAttribute('aria-pressed'),'true');
+  assert.equal(new URL(w.location.href).searchParams.get('unknown'),'keep');
+ });
+ withAfricaPage(saved,(_w,q)=>assert.equal(q('[data-africa-industry-location="lagos"]').getAttribute('aria-pressed'),'true'));
 });
