@@ -1,5 +1,11 @@
 name: Review regional industry additions
 on:
+  workflow_dispatch:
+    inputs:
+      expected_release_sha:
+        description: 'Exact main SHA already deployed to the existing Pages site'
+        required: true
+        type: string
   pull_request:
     branches: [main]
     paths:
@@ -17,7 +23,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: industry-review-${{ github.event.pull_request.number }}
+  group: industry-review-${{ github.event.pull_request.number || github.run_id }}
   cancel-in-progress: true
 jobs:
   review:
@@ -26,15 +32,17 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
       - uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
       - run: npm ci --no-audit --no-fund
       - run: npm run build
+        if: github.event_name == 'pull_request'
       - run: sudo apt-get update && sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
       - name: Verify industry maps and capture evidence
+        if: github.event_name == 'pull_request'
         shell: bash
         run: |
           set -euo pipefail
@@ -43,6 +51,16 @@ jobs:
           for review in scripts/verify-latin-industry-locations-review.mjs scripts/verify-russia-industry-review.mjs scripts/verify-industry-existing-country-review.mjs scripts/capture-canada-industry-pilot-review.mjs; do
             if [[ -f "$review" ]]; then node "$review"; fi
           done
+      - name: Verify the deployed approved Pages release
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        env:
+          EXPECTED_RELEASE_SHA: ${{ inputs.expected_release_sha }}
+        run: |
+          set -euo pipefail
+          test -n "$(fc-list ':lang=ja' family)"
+          export INDUSTRY_REVIEW_CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)"
+          node scripts/verify-approved-pages-release.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
