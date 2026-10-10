@@ -54,6 +54,7 @@ jobs:
         env:
           FORESTRY_REVIEW_OUTPUT: ${{ runner.temp }}/regional-forestry-review
           FORESTRY_REVIEW_INLINE_PREVIEWS: '1'
+          FORESTRY_REVIEW_VIEWPORTS: '1440x900,1024x768'
       - name: Upload screenshots and exact-head report
         if: always()
         uses: actions/upload-artifact@v4
