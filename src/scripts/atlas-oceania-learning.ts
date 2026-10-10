@@ -1,4 +1,5 @@
 import {withBase} from '../lib/urls';
+import {createRegionalClimateSelection} from './atlas-regional-climate-selection';
 import {renderOceaniaRequiredLegend} from './atlas-oceania-legend';
 import {getOceaniaComparisonReading} from '../data/atlas/oceania-comparison-reading';
 import {oceaniaFields,oceaniaCountries,oceaniaLayers,oceaniaThemes,oceaniaPopulationReading,oceaniaOverviewReadings,getOceaniaFarmingGeography,createOceaniaState,getOceaniaTheme,getOceaniaLayer,renderOceaniaScene,renderOceaniaLegend,oceaniaCoverage,oceaniaFocusName,type OceaniaField,type OceaniaState,type OceaniaSource} from '../data/atlas/oceania-learning';
@@ -9,6 +10,7 @@ export function initOceaniaLearningAtlas(root:HTMLElement):void{
  if(root.dataset.oceaniaReady==='true')return;
  const field=root.dataset.field as OceaniaField;
  let state=createOceaniaState(location.search,field);
+ const climateSelection=createRegionalClimateSelection(root,'oceania',()=>field==='nature'&&state.layer==='climate'&&!state.comparison,mutate=>update(mutate));
  const isSelectedReading=()=>new URLSearchParams(location.search).get('reading')==='selection'||state.place!=='all'||state.scope!=='all'||(field==='agriculture'&&state.layer!=='farming-all');
  let selectedReading=isSelectedReading();
  const overview=oceaniaOverviewReadings[field];
@@ -17,6 +19,7 @@ export function initOceaniaLearningAtlas(root:HTMLElement):void{
  const targetName=()=>state.scope==='country'?(oceaniaCountries.find(c=>c.code===state.place)?.name??'オセアニア全体'):state.scope==='theme'?getOceaniaTheme(state).title:'オセアニア全体';
  const serialized=(s:OceaniaState,href=location.href)=>{
   const url=new URL(href,location.href);for(const key of ownKeys)url.searchParams.delete(key);
+  climateSelection.serialize(url,s.field==='nature'&&s.layer==='climate'&&!s.comparison&&url.pathname.includes('/nature/'));
   url.searchParams.set('theme',s.theme);url.searchParams.set('layer',s.layer);url.searchParams.set('place',s.place);url.searchParams.set('scope',s.scope);
   if(s.comparison)url.searchParams.set('view','comparison');url.searchParams.set('compare',s.compareLayer);if(selectedReading)url.searchParams.set('reading','selection');const params=new URLSearchParams(location.search);for(const flag of ['only','fallback']){const value=params.get(flag);if(value==='0'||value==='1')url.searchParams.set(flag,value);else url.searchParams.delete(flag);}return url;
  };
@@ -38,6 +41,7 @@ export function initOceaniaLearningAtlas(root:HTMLElement):void{
   one('source-list').innerHTML=unique.map(s=>`<div class="oceania-learning-citation"><a href="${htmlEscape(s.url)}">${htmlEscape(s.title)}</a>${s.note?`<p>${htmlEscape(s.note)}</p>`:''}</div>`).join('');
  };
  const render=()=>{
+  climateSelection.beforeRender();
   const theme=getOceaniaTheme(state),layer=getOceaniaLayer(state.layer,state),compare=getOceaniaLayer(state.compareLayer,state);
   const contextualReading=selectedReading&&layer.id!=='farming-all'&&(state.place==='all'||theme.countryCodes.includes(state.place));
   const selectedName=oceaniaCountries.find(country=>country.code===state.place)?.name;
@@ -64,6 +68,7 @@ export function initOceaniaLearningAtlas(root:HTMLElement):void{
   });
   root.querySelectorAll<HTMLAnchorElement>('[data-oceania-overview-link],[data-oceania-base-link]').forEach(a=>{a.href=serialized({...state,comparison:false},a.href).href;});
   if(state.comparison){scene('original-map',state.layer);scene('comparison-map',state.compareLayer);}else scene('primary-map',state.layer);
+  climateSelection.render();
  };
  const update=(mutate:()=>void,focus?:string)=>{
   mutate();history.pushState({},'',serialized(state));render();if(focus)one(focus).focus();
@@ -76,7 +81,7 @@ export function initOceaniaLearningAtlas(root:HTMLElement):void{
  one('comparison').addEventListener('click',()=>update(()=>{state.comparison=true;},'return'));
  one('return').addEventListener('click',()=>update(()=>{state.comparison=false;},'comparison'));
  root.addEventListener('click',e=>{const selected=(e.target as Element).closest<SVGElement>('[data-map-place]');if(selected)update(()=>{selectedReading=true;state.place=selected.dataset.mapPlace!;chooseCountryTheme();});});
- window.addEventListener('popstate',()=>{state=createOceaniaState(location.search,field);selectedReading=isSelectedReading();render();});
+ window.addEventListener('popstate',()=>{state=createOceaniaState(location.search,field);selectedReading=isSelectedReading();climateSelection.read();render();});
  history.replaceState({},'',serialized(state));render();
  let resizing=false;new ResizeObserver(()=>{if(resizing)return;resizing=true;requestAnimationFrame(()=>{render();resizing=false;});}).observe(root);
  root.dataset.oceaniaReady='true';

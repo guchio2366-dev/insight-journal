@@ -7,6 +7,12 @@ on:
     paths:
       - '.github/workflows/atlas-oceania-russia-pc-review.yml'
       - 'tests/browser/atlas-oceania-russia-first-stage.mjs'
+      - 'tests/browser/atlas-oceania-russia-climate-cities.mjs'
+      - 'src/components/atlas/RegionalClimateCityReading.astro'
+      - 'src/data/atlas/oceania-russia-climate-cities.json'
+      - 'src/lib/atlas-regional-climate-cities.ts'
+      - 'src/scripts/atlas-regional-climate-selection.ts'
+      - 'src/styles/atlas-regional-climate-cities.css'
       - 'src/components/atlas/OceaniaLearningPage.astro'
       - 'src/components/atlas/RussiaLearningPage.astro'
       - 'src/data/atlas/oceania-*.ts'
@@ -41,20 +47,41 @@ jobs:
       - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 2
           persist-credentials: false
       - name: Select changed region for PC review
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_ACTION: ${{ github.event.action }}
         shell: bash
         run: |
           set -euo pipefail
           git fetch --no-tags --depth=1 origin "$BASE_SHA"
-          region_files="$(git diff --name-only "$BASE_SHA" HEAD -- src public/assets/atlas)"
+          region_files="$(git diff --name-only "$BASE_SHA" HEAD -- src public/assets/atlas tests/browser/atlas-oceania-russia-climate-cities.mjs)"
           regions=()
           if [[ "$region_files" == *[Oo]ceania* ]]; then regions+=(oceania); fi
           if [[ "$region_files" == *[Rr]ussia* ]]; then regions+=(russia); fi
           if [[ "${#regions[@]}" -eq 0 ]]; then regions=(oceania russia); fi
           (IFS=,; echo "REGION_REVIEW_REGIONS=${regions[*]}") >> "$GITHUB_ENV"
+          if [[ "$region_files" == *climate-cit* || "$region_files" == *climate-reading* || "$region_files" == *RegionalClimateCityReading* ]]; then
+            echo 'REGION_REVIEW_CLIMATE_CITIES=1' >> "$GITHUB_ENV"
+            if [[ "$region_files" != *farming* && "$region_files" != *crops* && "$region_files" != *livestock* ]]; then
+              echo 'REGION_REVIEW_CLIMATE_ONLY=1' >> "$GITHUB_ENV"
+            fi
+          fi
+          # Incremental label-only follow-up after the initial full review.
+          # Changes to data, controllers, plot/pane styles or components still run all cities.
+          recent_files="$(git diff-tree --no-commit-id --name-only -r HEAD)"
+          label_only=1
+          while IFS= read -r file; do
+            case "$file" in
+              src/lib/atlas-regional-climate-cities.ts|tests/unit/atlas-regional-climate-labels.test.mjs|tests/browser/atlas-oceania-russia-climate-cities.mjs|docs/oceania-russia-climate-cities-review-20261010.md|.github/workflows/atlas-oceania-russia-pc-review.yml) ;;
+              *) label_only=0 ;;
+            esac
+          done <<< "$recent_files"
+          if [[ "$PR_ACTION" == synchronize && "$label_only" -eq 1 && "$recent_files" == *src/lib/atlas-regional-climate-cities.ts* ]]; then
+            echo 'REGIONAL_CLIMATE_REVIEW_FOCUS=perth-1024' >> "$GITHUB_ENV"
+          fi
       - uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
@@ -78,9 +105,15 @@ jobs:
           node scripts/generate-release.mjs --commit "$REGION_REVIEW_EXPECTED_HEAD"
           node scripts/verify-release.mjs --commit "$REGION_REVIEW_EXPECTED_HEAD"
       - name: Review changed farming maps and product selection
+        if: env.REGION_REVIEW_CLIMATE_ONLY != '1'
         env:
           REGION_REVIEW_OUTPUT: ${{ runner.temp }}/oceania-russia-pc-review
         run: node tests/browser/atlas-oceania-russia-first-stage.mjs
+      - name: Review Oceania and Russia climate cities at both PC sizes
+        if: env.REGION_REVIEW_CLIMATE_CITIES == '1'
+        env:
+          REGIONAL_CLIMATE_REVIEW_OUTPUT: ${{ runner.temp }}/oceania-russia-pc-review/climate-cities
+        run: node tests/browser/atlas-oceania-russia-climate-cities.mjs
       - name: Upload new screenshots and measurements
         if: always()
         uses: actions/upload-artifact@v4
