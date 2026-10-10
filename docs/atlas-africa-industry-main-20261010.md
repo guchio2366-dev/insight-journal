@@ -32,3 +32,7 @@
 ## 検証
 
 `verify-africa-industry-review.mjs` は production build を使い、1024×768・1440×900・390×844 で全7点の通常クリック・産業名クリック・キーボードとフォーカス、全地点保持、出典本文とリンク、戻る・進む・再読込、ラベルと点の重なり、枠外と横はみ出し、全国ダイヤ量の範囲を検査し画面を記録する。スマホはChromiumのtouch emulationで実機ではない。
+
+## 独立レビュー後の安全な再検証
+
+新規レビューのsandbox無効化指定を除去し、chromiumSandbox:trueで起動する。Playwright既定のself-XSS警告無効化引数も除外する。安全な起動ができなければ停止し、設定変更・権限拡大・fallbackは行わない。元のsandbox無効実行の画像を修正後の検証証拠として扱わない。ローカル環境はSUID sandbox未構成のため再実行しない。修正後headの画面確認は標準CI runnerでのみ実施し、結果をPRへ記録する。

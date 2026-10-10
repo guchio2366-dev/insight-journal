@@ -233,3 +233,17 @@ test('all seven sourced industry locations retain other marks, sources, focus, U
  });
  withAfricaPage(saved,(_w,q)=>assert.equal(q('[data-africa-industry-location="lagos"]').getAttribute('aria-pressed'),'true'));
 });
+
+test('industry point selection clears unrelated theme buttons and keeps Nigeria and Jwaneng names correct',()=>{
+ withAfricaPage('https://example.com/atlas/africa/?field=industry',(w,q)=>{
+  const pick=id=>q(`[data-africa-industry-location="${id}"]`).dispatchEvent(new w.MouseEvent('click',{bubbles:true}));
+  const pressedThemes=()=>[...w.document.querySelectorAll('[data-africa-subfields] button[data-theme][aria-pressed="true"]')].map(n=>n.dataset.theme);
+  q('button[data-theme="copperbelt-connections"]').click();assert.deepEqual(pressedThemes(),['copperbelt-connections']);
+  pick('jwaneng-diamonds');assert.equal(q('[data-theme-title]').textContent,'ダイヤ：ジュワネン');assert.deepEqual(pressedThemes(),[]);assert.equal(q('[data-africa-industry-location="jwaneng-diamonds"]').getAttribute('aria-pressed'),'true');
+  pick('niger-delta-oil');assert.equal(q('[data-theme-title]').textContent,'原油：ニジェール川デルタ（ナイジェリア）');assert.match(q('[data-africa-industry-location="niger-delta-oil"] text').textContent,/ナイジェリア/);assert.deepEqual(pressedThemes(),[]);assert.equal(q('[data-africa-industry-location="jwaneng-diamonds"]').getAttribute('aria-pressed'),'false');
+  pick('zambia-copperbelt');assert.deepEqual(pressedThemes(),['copperbelt-connections']);
+  pick('casablanca-industry');assert.deepEqual(pressedThemes(),['casablanca-manufacturing']);
+  q('[data-africa-industry-return]').click();assert.deepEqual(pressedThemes(),[]);assert.equal(q('[data-africa-industry-overview]').getAttribute('aria-pressed'),'true');assert.equal(w.document.querySelectorAll('[data-africa-industry-location][aria-pressed="true"]').length,0);
+  pick('jwaneng-diamonds');assert.deepEqual(pressedThemes(),[]);
+ });
+});

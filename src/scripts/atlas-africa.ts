@@ -51,7 +51,7 @@ export function initializeAfricaAtlas() {
   if(state.field==='industry'){
    const overview=make('button','全域概要') as HTMLButtonElement;overview.type='button';overview.dataset.africaIndustryOverview='';overview.setAttribute('aria-pressed',String(state.overview));nav.append(overview);
    const labels:Record<string,string>={'copperbelt-connections':'銅鉱業','casablanca-manufacturing':'カサブランカの製造業'};
-   for(const theme of themes.filter(t=>t.field==='industry')){const button=make('button',labels[theme.id]??theme.title) as HTMLButtonElement;button.type='button';button.dataset.theme=theme.id;button.title=theme.title;button.setAttribute('aria-pressed',String(!state.overview&&state.theme===theme.id));nav.append(button);}
+   for(const theme of themes.filter(t=>t.field==='industry')){const button=make('button',labels[theme.id]??theme.title) as HTMLButtonElement;button.type='button';button.dataset.theme=theme.id;button.title=theme.title;button.setAttribute('aria-pressed',String(!state.overview&&(state.industryLocation?africaIndustryLocationById(state.industryLocation)?.themeId:state.theme)===theme.id));nav.append(button);}
    const caption=make('p','収録済み7地点 · 色は産業の種類');caption.className='africa-subfield-caption';nav.append(caption);
   }else for(const [id,label] of items){const button=make('button',label) as HTMLButtonElement;button.type='button';button.dataset.africaTopic=id;button.setAttribute('aria-pressed',String(topic===id));button.setAttribute('aria-selected',String(topic===id));button.setAttribute('role','tab');button.setAttribute('aria-controls','africa-map-panel');button.tabIndex=topic===id?0:-1;nav.append(button);}
   if(state.field==='industry')nav.setAttribute('role','group');
@@ -298,7 +298,7 @@ export function initializeAfricaAtlas() {
    const chosen=boxes.find(fits)??boxes[0];occupied.push(chosen);return chosen;
   };
   const ordered=africaIndustryLocations;
-  const shortLabels:Record<string,string>={'hassi-rmel-gas':'ガス：ハッシ・ルメル','niger-delta-oil':'原油：デルタ','drc-copper-cobalt':'銅・コバルト：コンゴ南部','zambia-copperbelt':'銅：ザンビア','jwaneng-diamonds':'ダイヤ：ジュワネン','casablanca-industry':'航空機：カサブランカ','lagos':'物流：ラゴス'};
+  const shortLabels:Record<string,string>={'hassi-rmel-gas':'ガス：ハッシ・ルメル','niger-delta-oil':'原油：ナイジェリア','drc-copper-cobalt':'銅・コバルト：コンゴ南部','zambia-copperbelt':'銅：ザンビア','jwaneng-diamonds':'ダイヤ：ジュワネン','casablanca-industry':'航空機：カサブランカ','lagos':'物流：ラゴス'};
   for(const item of ordered){
    const [x,y]=projectAfrica(item.coordinates),active=location?.id===item.id||!!selected&&selected.id===item.themeId,color=colors[item.kind],mapLabel=box.width>0&&box.width<480?shortLabels[item.id]:item.mapLabel,labelBox=positionLabel(mapLabel,x,y),g=svg('g',{'data-africa-industry-location':item.id,tabindex:0,role:'button','aria-label':`${item.label}を読む`,'aria-pressed':String(active),class:'africa-industry-hit','data-label-visible':'true'});
    const nearest=Math.min(...africaIndustryLocations.filter(other=>other.id!==item.id).map(other=>{const [ox,oy]=projectAfrica(other.coordinates);return Math.hypot(ox-x,oy-y);})),hitRadius=Math.min(20*scale,nearest*.45);
