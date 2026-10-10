@@ -37,6 +37,7 @@
 .west-production-summary li small{white-space:nowrap;color:#526960;font-size:11px}
 .west-production-summary details{margin-top:4px}
 .west-production-summary details summary{min-height:38px;padding:6px 0}
+@media(min-width:960px){.atlas-desktop-shell>.west-layout-statistics:has(.west-sawnwood){grid-column:2;min-width:0}}
 .west-sawnwood header h2{margin:0;font-size:21px}
 .west-sawnwood header p{margin:2px 0 13px;color:#4b615d}
 .west-sawnwood-panels{display:grid;grid-template-columns:1.2fr .8fr .9fr;gap:14px}

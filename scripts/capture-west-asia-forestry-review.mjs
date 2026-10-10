@@ -57,13 +57,19 @@ try{
  assert.equal(await page.locator('.west-sawnwood>details').evaluate(node=>node.open),false);
  assert.match(await page.locator('[data-west-forestry-reading]').innerText(),/9,425,000 m³.*0 m³.*1,697,646 m³/s);
  const capture=async(label)=>{
-  await page.evaluate(()=>{window.scrollTo(0,0);return new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
+  await page.evaluate(()=>{window.scrollTo({top:0,left:0,behavior:'instant'});return new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   const map=await page.locator('[data-west-map]').boundingBox();
   const panel=await page.locator('.west-sawnwood').boundingBox();
-  assert(map&&map.width>400&&map.height>250&&map.y<record.viewport.height);
+  assert(map&&map.width>400&&map.height>250&&map.y>=0&&map.y<record.viewport.height);
   assert(panel&&panel.width>800);
   const file=label+'.jpg',bytes=await page.screenshot({path:path.join(output,file),type:'jpeg',quality:82,fullPage:true,animations:'disabled'});
+  await page.locator('.west-sawnwood').evaluate(node=>node.scrollIntoView({block:'center',behavior:'instant'}));
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  assert(await page.locator('.west-sawnwood').evaluate(node=>{
+    const header=node.querySelector('h2').getBoundingClientRect(),first=node.querySelector('.west-sawnwood-panels li').getBoundingClientRect();
+    return [header,first].every(box=>{const hit=document.elementFromPoint(box.x+4,box.y+box.height/2);return hit&&node.contains(hit);});
+  }),'Forestry header or first flow row is covered by another panel');
   const statisticsFile=label+'-statistics.jpg',statisticsBytes=await page.locator('.west-sawnwood').screenshot({path:path.join(output,statisticsFile),type:'jpeg',quality:90,animations:'disabled'});
   const encoded=statisticsBytes.toString('base64');
   console.log('REVIEW_IMAGE_BEGIN '+JSON.stringify({file:statisticsFile,headSHA:record.headSHA,mime:'image/jpeg',sha256:createHash('sha256').update(statisticsBytes).digest('hex')}));
