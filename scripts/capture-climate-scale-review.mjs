@@ -45,6 +45,7 @@ try{
   await context.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());
   const page=await context.newPage();page.on('pageerror',err=>manifest.errors.push(String(err)));
   for(const [group,id,path]of cases){
+   manifest.currentCase={group,id,path,viewport};
    await page.goto(`${origin}/insight-journal/${path}`,{waitUntil:'networkidle'});
    const city=climatePlotCities[group].find(c=>c.id===id);assert.ok(city,id);
    const chart=page.locator('svg[data-climate-plot]:visible').first();
@@ -66,6 +67,13 @@ try{
   await context.close();
  }
  assert.deepEqual(manifest.errors,[]);manifest.status='passed';
-}catch(error){manifest.status='failed';manifest.failure=String(error);throw error;}
+}catch(error){
+ manifest.status='failed';manifest.failure=String(error);
+ // Public test diagnostics also appear in the check annotations, independently
+ // of artifact delivery; they contain no credentials or external-app data.
+ const diagnostic=JSON.stringify({case:manifest.currentCase,failure:manifest.failure,completed:manifest.captures.map(c=>c.name),errors:manifest.errors}).replaceAll('%','%25').replaceAll('\r','%0D').replaceAll('\n','%0A');
+ console.error(`::error title=Climate scale review::${diagnostic}`);
+ throw error;
+}
 finally{if(browser)await browser.close();await new Promise(r=>server.close(r));await writeFile(resolve(output,'manifest.json'),JSON.stringify(manifest,null,2)+'\n');}
 console.log(`Climate scales: ${manifest.captures.length} PC captures passed.`);

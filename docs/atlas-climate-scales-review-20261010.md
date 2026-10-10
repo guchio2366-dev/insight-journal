@@ -44,4 +44,4 @@ Oceania・Russiaはこの基点に都市雨温図・12か月データが未実�
 - ローカル全unit：1060件中1057 pass・3 skip・0 fail。描画/Mexico既存E2E：21件 pass。production build・release境界検査 pass。
 - PC画像：1440×1000／1024×800。既存Validateジョブで `capture-climate-scale-review.mjs` を実行し、13事例×2幅の図・画面と数値・幾何メタデータを保存する。Chrome sandboxは有効、外部ページ・データは読み込まず、このcheckoutのbuildだけを確認する。
 
-ローカルChromiumはSUID sandboxの設定不備で起動を拒否した。sandbox無効化・権限変更は行っていない。CI画像・目視の結果は取得後にこの記録へ追記する。
+ローカルChromiumはSUID sandboxの設定不備で起動を拒否した。sandbox無効化・権限変更は行っていない。初回Validate run `38041504793` は雨温図PC検証で失敗。画像artifactは生成されたが、画像・詳細ログの配信先がForbiddenを返したため取得を停止した。失敗の都市・理由を次のrunでcheck annotationsにも記録して診断する。既存Europe PC run `38041504860`、East Asia PC run `38041504775` は成功。画像の目視は未実施。
