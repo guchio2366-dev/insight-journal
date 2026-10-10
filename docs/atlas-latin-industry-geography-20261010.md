@@ -15,3 +15,7 @@
 ## 検証
 
 単体16件、対象E2E10件成功。production build成功。`scripts/verify-latin-industry-locations-review.mjs` が1024×768・1440×900・390×844で8点/ラベル選択、全点保持、数量の範囲・リンク、キーボード、履歴/再読込、概要復帰、ラベル/点の重なり・横はみ出し・JSエラーを確認し、初期/イタイプ選択の画像とmetadataを生成する。CI artifactにも保存。公開サイト・実機スマホは未検証。マージ・公開はしない。
+
+## 独立レビュー後の安全な再検証
+
+新規レビューのsandbox無効化指定を除去し、chromiumSandbox:trueで起動する。Playwright既定のself-XSS警告無効化引数も除外する。安全な起動ができなければ停止し、設定変更・権限拡大・fallbackは行わない。元のsandbox無効実行の画像を修正後の検証証拠として扱わない。ローカル環境はSUID sandbox未構成のため再実行しない。修正後headの画面確認は標準CI runnerでのみ実施し、結果をPRへ記録する。
