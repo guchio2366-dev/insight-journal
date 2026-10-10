@@ -75,7 +75,7 @@ test('Agriculture and population source selections, fallback and nature case sur
 test('South, central and Caribbean causes have official sources; highland stations are not city averages',()=>{
  for(const place of ['BRA','CRI','CUB','PAN','BOL']){const c=nature.latinNatureCases.find(c=>c.place===place);assert.ok(c);assert.ok(c.takeaway.length>30);assert.ok(c.sources.every(s=>new URL(s.url).protocol==='https:'));}
  const chart=nature.renderLatinNatureNormals('san-jose');assert.match(chart,/908m/);assert.match(chart,/観測所1点/);assert.match(chart,/1991–2020/);assert.match(chart,/月平均気温/);assert.match(chart,/降水量/);
- assert.match(chart,/<g font-size="24"/);assert.match(chart,/x="42" y="44" text-anchor="end"/);assert.match(chart,/左：降水量/);assert.match(chart,/右：月平均気温/);
+ assert.match(chart,/data-rain-tick="100"/);assert.match(chart,/data-temperature-tick="10"/);assert.match(chart,/左：降水量/);assert.match(chart,/右：月平均気温/);
  const water=nature.renderLatinNatureNormals('');assert.match(water,/雨 → 貯水/);assert.equal(/polyline/.test(water),false);
  assert.equal(nature.natureScopeForPlace('BRA','central'),'south');assert.equal(nature.natureScopeForPlace('CRI','south'),'central');assert.equal(nature.natureScopeForPlace('JAM','south'),'central');assert.equal(nature.natureScopeForPlace('BRA','all'),'all');assert.equal(nature.natureScopeForPlace('all','country'),'all');
 });

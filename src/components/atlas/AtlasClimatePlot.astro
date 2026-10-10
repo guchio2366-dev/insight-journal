@@ -1,34 +1,32 @@
 ---
+import { climateAxes } from '../../lib/atlas-climate-axes';
 interface Props {
   name: string;
   period?: string;
   temperatureC: (number|null)[];
   precipitationMm: (number|null)[];
-  minTemperatureC?: number;
-  precipitationMaxMm?: number;
-  precipitationTickMm?: number;
-  temperatureTickC?: number;
 }
-const {name,period='1991–2020',temperatureC,precipitationMm,minTemperatureC=-10,precipitationMaxMm=350,precipitationTickMm=0,temperatureTickC=0}=Astro.props;
+const {name,period='1991–2020',temperatureC,precipitationMm}=Astro.props;
+const axes=climateAxes(temperatureC,precipitationMm);
 // Shared scale and drawing for regional rain/temperature diagrams.
 const left=34,right=286,top=29,bottom=159;
 const x=(i:number)=>left+(right-left)*(i+.5)/12;
-const py=(v:number)=>bottom-v/precipitationMaxMm*(bottom-top);
-const ty=(v:number)=>bottom-(v-minTemperatureC)/(40-minTemperatureC)*(bottom-top);
-const precipitationTicks=precipitationTickMm?Array.from({length:Math.floor(precipitationMaxMm/precipitationTickMm)+1},(_,i)=>i*precipitationTickMm):[0,100,200,350];
-const temperatureTicks=temperatureTickC?Array.from({length:Math.floor((40-minTemperatureC)/temperatureTickC)+1},(_,i)=>40-i*temperatureTickC):(minTemperatureC===-10?[40,20,0,-10]:[40,20,0,minTemperatureC]);
+const py=(v:number)=>bottom-v/axes.rainMax*(bottom-top);
+const ty=(v:number)=>bottom-(v-axes.temperatureMin)/(axes.temperatureMax-axes.temperatureMin)*(bottom-top);
 const segments:string[]=[];let segment='';
 temperatureC.forEach((v,i)=>{if(v===null){if(segment)segments.push(segment);segment='';}else segment+=`${segment?' ':''}${x(i).toFixed(1)},${ty(v).toFixed(1)}`;});
 if(segment)segments.push(segment);
 ---
-<svg viewBox="0 0 320 198" role="img" aria-label={`${name}の${period}の月平均気温と月降水量`}>
- <g class="atlas-climate-grid">{precipitationTicks.map(v=><><line x1={left} x2={right} y1={py(v)} y2={py(v)}/><text x="2" y={py(v)+3}>{v}</text></>)}</g>
+<svg viewBox={`0 0 320 ${axes.peakLabel?220:198}`} role="img" aria-label={`${name}の${period}の月平均気温と月降水量`} data-climate-plot data-temperature-min={axes.temperatureMin} data-temperature-max={axes.temperatureMax} data-rain-max={axes.rainMax} data-plot-top={top} data-plot-bottom={bottom}>
+ <g class="atlas-climate-grid">{axes.rainTicks.map(v=><><line data-rain-tick={v} x1={left} x2={right} y1={py(v)} y2={py(v)} stroke="#b6cedb" stroke-dasharray="2 3"/><text x="2" y={v===axes.rainMax?top-4:py(v)+3}>{v}</text></>)}{!axes.rainTicks.includes(axes.rainMax)&&<text x="2" y={top-4} data-rain-upper>{axes.rainMax}</text>}</g>
+ <g class="atlas-climate-grid">{axes.temperatureTicks.map(v=><line data-temperature-tick={v} x1={left} x2={right} y1={ty(v)} y2={ty(v)} stroke="#dcc8be"/>)}</g>
  <text class="atlas-climate-unit" x="2" y="12">mm</text><text class="atlas-climate-unit atlas-climate-unit--temp" x="294" y="12">℃</text>
  <text class="atlas-climate-city-name" x="160" y="13" text-anchor="middle">{name}</text>
  {precipitationMm.map((v,i)=>v===null?<text class="atlas-climate-month" x={x(i)} y={bottom-3}>×</text>:<rect class="atlas-climate-bar" x={x(i)-7.5} y={py(v)} width="15" height={bottom-py(v)}/>)}
  {segments.map(points=><polyline class="atlas-climate-line" {points}/>)}
  {temperatureC.map((v,i)=>v!==null&&<circle class="atlas-climate-dot" cx={x(i)} cy={ty(v)} r="2.2"/>)}
- {Array.from({length:12},(_,i)=><text class="atlas-climate-month" x={x(i)} y="177">{i+1}</text>)}
- {temperatureTicks.map(v=><text class="atlas-climate-temp-label" x="291" y={ty(v)+3}>{v}</text>)}
+ {Array.from({length:12},(_,i)=><text data-climate-month={i+1} class="atlas-climate-month" x={x(i)} y="177">{i+1}</text>)}
+ {[...axes.temperatureTicks,...(axes.temperatureMin===-3?[-3]:[])].map(v=><text class="atlas-climate-temp-label" x="291" y={v===-3?bottom+12:ty(v)+3}>{v}</text>)}
  <text class="atlas-climate-axis-title" x="160" y="195">月</text>
+ {axes.peakLabel&&<text class="atlas-climate-axis-title" x="160" y="216">{axes.peakLabel}</text>}
 </svg>

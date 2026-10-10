@@ -191,10 +191,9 @@ test('Built SSR includes both SMN plots, twelve source values each, and the defa
         assert.ok(Math.abs(height * 100 / (gridY(0) - gridY(100)) - station.precipitationMm[index]) < 0.01);
       });
       dots.forEach((dot, index) => {
-        // The lowest temperature tick aligns with the rainfall zero baseline.
-        // Differences between tick positions remove their text-baseline offset.
-        const minimumTick = Math.min(...temperatureLabels.map(label => Number(label.textContent)));
-        const y0 = gridY(0) - (labelY(minimumTick) - labelY(0)), span = labelY(0) - labelY(20);
+        // Use two regular temperature ticks; the −3 lower-bound label sits
+        // below the plot to keep it clear of the 0℃ label.
+        const y0 = labelY(0) - 3, span = labelY(0) - labelY(20);
         const recovered = (y0 - Number(dot.getAttribute('cy'))) * 20 / span;
         assert.ok(Math.abs(recovered - station.temperatureC[index]) < 0.01);
         assert.ok(Math.abs(Number(dot.getAttribute('cx')) - Number(bars[index].getAttribute('x')) - Number(bars[index].getAttribute('width')) / 2) < 0.001);

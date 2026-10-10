@@ -130,7 +130,7 @@ import '../../styles/atlas-canada-country-parity.css';
       <div class="canada-climate-cards">
        {climate.stations.map(s=><section class="canada-climate-card" data-canada-climate-card={s.id} hidden={s.id!=='ottawa'}>
 
-        <AtlasClimatePlot name={s.name} period="1991–2020" temperatureC={s.temperatureC} precipitationMm={s.precipitationMm} minTemperatureC={-30} />
+        <AtlasClimatePlot name={s.name} period="1991–2020" temperatureC={s.temperatureC} precipitationMm={s.precipitationMm} />
         <p class="canada-plot-key">青棒：降水量mm ／ 赤線：平均気温℃ ／ ×：未収録</p>
         <div class="canada-forest-climate-bridge" data-canada-forest-climate-bridge hidden>
          <p class="canada-takeaway" data-canada-forest-climate-bridge-text></p>

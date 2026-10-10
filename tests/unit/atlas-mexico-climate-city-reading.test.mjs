@@ -21,7 +21,9 @@ async function compile(file, imports = {}) {
  for (const [specifier, url] of Object.entries(imports)) code = code.replaceAll(JSON.stringify(specifier), JSON.stringify(url));
  return dataUrl((await stripTypes(code, {loader:'ts',format:'esm'})).code);
 }
-const plot = await compile('src/components/atlas/AtlasClimatePlot.astro');
+const plot = await compile('src/components/atlas/AtlasClimatePlot.astro', {
+ '../../lib/atlas-climate-axes': new URL('../../src/lib/atlas-climate-axes.ts', import.meta.url).href,
+});
 const componentUrl = await compile('src/components/atlas/MexicoClimateDiagrams.astro', {
  './AtlasClimatePlot.astro': plot,
  '../../data/atlas/mexico/climate-normals.json': dataUrl(`export default ${JSON.stringify(normals)}`),
