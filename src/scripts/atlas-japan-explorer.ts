@@ -27,7 +27,7 @@ async function start(root:HTMLElement){
  let state=readJapanState(new URL(location.href),context);
  let map:import('maplibre-gl').Map|null=null,lib:typeof import('maplibre-gl')|null=null;
  let industry:Industry|null=null,population:Population|null=null,grid:AsiaNumericGrid|null=null,gridPromise:Promise<AsiaNumericGrid>|null=null;
- let nature:JapanNatureLayers|null=null,natureSample=0;
+ let nature:JapanNatureLayers|null=null,natureSample=0,renderRevision=0;
  let ready=false,suppressCamera=false,generation=0,timer:ReturnType<typeof setTimeout>|undefined;
  const markers:import('maplibre-gl').Marker[]=[];
  let point:[number,number]|null=null;
@@ -54,7 +54,7 @@ async function start(root:HTMLElement){
  function site(id:string){if(state.field==='agriculture'){navigate({...state,site:state.site===id?null:id,city:null,prefecture:null,feature:null,camera:camera()});return;}const s=config.sites.find(s=>s.id===id);if(!s)return;navigate({...state,site:id,city:null,prefecture:null,camera:camera()});}
  function prefecture(id:string){navigate({...state,prefecture:id||null,site:null,city:null,camera:camera()});}
  function render(){
-  $('.japan-atlas').dataset.field=state.field;
+  $('.japan-atlas').dataset.field=state.field;root.dataset.field=state.field;
   root.dataset.topic=state.topic;root.dataset.prefecture=state.prefecture??'';root.dataset.city=state.city??'';root.dataset.site=state.site??'';root.dataset.feature=state.feature??'';
   for(const e of all('[data-japan-controls]'))e.hidden=e.dataset.japanControls!==state.field;
   for(const e of all('[data-japan-statistics]'))e.hidden=e.dataset.japanStatistics!==state.field;
@@ -130,7 +130,7 @@ async function start(root:HTMLElement){
    if(presentation.selection){const selected=presentation.selection;selection(selected.title,selected.body,selected.source);}
   }
   $('[data-japan-map-title]').textContent=title;$('[data-japan-map-period]').textContent=period;$('[data-japan-method]').textContent=method;
-  if(ready&&map){map.setLayoutProperty('japan-prefecture-fill','visibility',isQuantity?'visible':'none');map.setLayoutProperty('japan-population','visibility',state.field==='population'?'visible':'none');map.setFilter('japan-prefecture-selected',['==',['get','id'],state.prefecture??'']);if(map.getLayer('japan-urban'))map.setLayoutProperty('japan-urban','visibility',state.field==='population'&&state.topic==='urban'?'visible':'none');nature?.show(state.field==='natural'?state.topic:'',state.feature);root.dataset.natureTopic=state.field==='natural'?state.topic:'';renderMarkers();}
+  if(ready&&map){map.setLayoutProperty('japan-prefecture-fill','visibility',isQuantity?'visible':'none');map.setLayoutProperty('japan-population','visibility',state.field==='population'?'visible':'none');map.setFilter('japan-prefecture-selected',['==',['get','id'],state.prefecture??'']);if(map.getLayer('japan-urban'))map.setLayoutProperty('japan-urban','visibility',state.field==='population'&&state.topic==='urban'?'visible':'none');nature?.show(state.field==='natural'?state.topic:'',state.feature);root.dataset.natureTopic=state.field==='natural'?state.topic:'';renderMarkers();const revision=++renderRevision;root.dataset.renderedTopic='';const rendered=state.field+':'+state.topic;map.once('idle',()=>{if(revision===renderRevision)root.dataset.renderedTopic=rendered;});map.triggerRepaint();}
   syncLinks();
  }
  function selection(title:string,body:string,source:string){$('[data-japan-selection]').hidden=false;$('[data-japan-selection-title]').textContent=title;$('[data-japan-selection-body]').textContent=body;$<HTMLAnchorElement>('[data-japan-selection-source]').href=source;}
