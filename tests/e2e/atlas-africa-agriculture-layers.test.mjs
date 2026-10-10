@@ -54,11 +54,11 @@ test('map labels select and outline a product while other distributions remain, 
  await withController(reload,({root,q})=>{assert.deepEqual(visibleKeys(root),['crop-rice-harvested']);assert.ok(q('[data-africa-agri-footprint="crop-rice-harvested"]'));assert.equal(q('[data-africa-agri-all]').hidden,false);q('[data-africa-agri-all]').click();assert.deepEqual(visibleKeys(root),[...keys].sort());});
 });
 
-test('forestry has its own tab and history restores a selected animal with all distributions',async()=>{
+test('legacy forestry metrics and history restore a selected animal with all distributions',async()=>{
  await withController('?field=agriculture&topic=livestock&livestock=goats&place=KEN&zoom=all',async({window,root,q})=>{
   assert.equal(q('[data-africa-topic="farming"]').getAttribute('aria-pressed'),'true');assert.equal(q('[data-africa-topic="livestock"]'),null);
   assert.ok(q('[data-africa-agri-footprint="livestock-goats"]'));const selected=window.location.search;
-  q('[data-africa-topic="forestry"]').click();assert.equal(parameters(window).get('topic'),'forestry');assert.match(q('[data-theme-title]').textContent,/森林/);assert.equal(q('[data-africa-commodity-layer]'),null);
+  q('[data-metric]').value='AG.LND.FRST.ZS';q('[data-metric]').dispatchEvent(new window.Event('change'));assert.equal(parameters(window).get('topic'),'forestry');assert.match(q('[data-theme-title]').textContent,/森林/);assert.equal(q('[data-africa-commodity-layer]'),null);
   window.history.back();assert.equal(window.location.search,selected);assert.equal(q('[data-africa-topic="farming"]').getAttribute('aria-pressed'),'true');assert.ok(q('[data-africa-agri-footprint="livestock-goats"]'));assert.deepEqual(visibleKeys(root),[...keys].sort());
   window.history.forward();assert.equal(q('[data-africa-topic="forestry"]').getAttribute('aria-pressed'),'true');
   q('[data-africa-topic="farming"]').click();assert.equal(parameters(window).get('overview'),'1');assert.equal(q('[data-africa-agri-footprint]'),null);assert.deepEqual(visibleKeys(root),[...keys].sort());
