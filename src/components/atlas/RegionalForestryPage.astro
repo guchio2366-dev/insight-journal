@@ -1,24 +1,34 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import RegionalForestryMap from './RegionalForestryMap.astro';
+import RegionalForestryReading from './RegionalForestryReading.astro';
+import RegionalForestrySources from './RegionalForestrySources.astro';
+import LatinAmericaWorkspace from './LatinAmericaWorkspace.astro';
 import RegionalForestryFrame from './RegionalForestryFrame.astro';
 import RussiaForestryStatistics from './RussiaForestryStatistics.astro';
 import {withBase} from '../../lib/urls';
-import {forestryReading,forestryFrame,forestryGeography,forestryPath,forestryRaster,forestryReferences,forestryDisputes,projectForestry,type ForestryRegion} from '../../lib/atlas-regional-forestry';
+import {forestryReading,forestryFrame,type ForestryRegion} from '../../lib/atlas-regional-forestry';
 import '../../styles/atlas-regional-forestry.css';
 interface Props {region:ForestryRegion}
 const {region}=Astro.props;
-const reading=forestryReading(region),frame=forestryFrame(region),raster=forestryRaster(region);
-const references=forestryReferences(region),referenceMask=`forest-reference-mask-${region}`;
-const hasCoverage=!!raster||references.length>0;
+const reading=forestryReading(region),frame=forestryFrame(region);
 const home=region==='africa'?'/atlas/africa/?field=agriculture&topic=farming':`/atlas/${region}/agriculture/`;
 const overview=region==='russia'?'/atlas/russia/':`/atlas/${region}/overview/`;
 const fieldLinks=[['agriculture','農林業'],['nature','自然環境'],['industry','主要産業'],['population','人口']];
 const fieldURL=(field:string)=>region==='africa'?`/atlas/africa/?field=${field}`:`/atlas/${region}/${field}/`;
-const countries=forestryGeography(region);
-const forestClip=`forest-land-${region}`,missing=`forest-missing-${region}`,disputed=`forest-disputed-${region}`;
 const config={region,reading,frame};
 ---
-<BaseLayout title={`${reading.name}の林業｜森林の場所と木材の利用`} description={reading.overview} compactAtlas>
+{region==='latin-america'?<LatinAmericaWorkspace field="agriculture" agricultureSection="forestry" title={`${reading.name}の林業`} lead={reading.overview}>
+ <RegionalForestryMap slot="map" {region}/>
+ <Fragment slot="items">
+      <div class="forest-example-choices" aria-label="重要な林業の事例"><button type="button" data-forest-overview aria-pressed="true">全体の概説</button>{reading.examples.map((example,index)=><button type="button" data-forest-example={example.id} aria-pressed="false">{index+1} {example.label}</button>)}</div>
+ </Fragment>
+ <RegionalForestryReading slot="reading-heading" {region} part="heading"/>
+ <RegionalForestryReading slot="reading" {region} part="body"/>
+ <RegionalForestrySources slot="sources" {region}/>
+ <script type="application/json" data-forest-config set:html={JSON.stringify(config).replaceAll('<','\\u003c')}/>
+ <noscript><p>全体の概説と資料の範囲を表示しています。各地域の詳しい説明はJavaScriptを有効にして選べます。</p></noscript>
+</LatinAmericaWorkspace>:<BaseLayout title={`${reading.name}の林業｜森林の場所と木材の利用`} description={reading.overview} compactAtlas>
  <div class="regional-forestry-page" data-regional-forestry data-region={region}>
   <RegionalForestryFrame {region}>
    <article class="regional-forestry-content">
@@ -27,49 +37,22 @@ const config={region,reading,frame};
     <nav class="forest-fields" aria-label={`${reading.name}の分野`}><a href={withBase(overview)}>概要</a>{fieldLinks.map(([field,label])=><a href={withBase(fieldURL(field))} aria-current={field==='agriculture'?'page':undefined}>{label}</a>)}</nav>
     <div class="forest-primary-grid">
      <section class="forest-map-column" aria-label="森林の資料と重要な地域の位置">
-      <div class="forest-map-heading"><h2>{raster?'樹木被覆と森林参考図':references.length?'森林参考図と林業の地域':'林業を読む地域の位置'}</h2><span>{raster?'2021年：西部／2020年参考図：南部の一部':references.length?'2020年参考図：PNG西部などの一部':'全域の森林被覆面：未取得'}</span></div>
-      <div class="forest-map-stage">
-       <svg data-forest-map viewBox={`0 0 ${frame.width} ${frame.height}`} tabindex="0" role="group" aria-label={`${reading.name}の林業地図。番号は解説の代表位置。${hasCoverage?'斜線は未取得・欠測・分類未判定。':'中立色の基図は森林の有無を示しません。'}矢印キーで移動、＋・−で拡大縮小。`}>
-        <title>{reading.name}の林業を読む地域</title><desc>{reading.distribution}</desc>
-        <defs>
-         {hasCoverage&&<pattern id={missing} width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" fill="#f1eee5"/><path d="M0 9L9 0" stroke="#c5c0b4" stroke-width="0.8"/></pattern>}
-         <pattern id={disputed} width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0 0L7 7" stroke="#566a76" stroke-width="0.8"/></pattern>
-         <clipPath id={forestClip}>{countries.map(feature=><path d={forestryPath(region,feature.geometry)} fill-rule="evenodd" clip-rule="evenodd"/>)}</clipPath>
-         {raster&&<mask id={referenceMask} maskUnits="userSpaceOnUse" x="0" y="0" width={frame.width} height={frame.height}><rect width={frame.width} height={frame.height} fill="white"/><rect x={raster.x} y={raster.y} width={raster.width} height={raster.height} fill="black"/></mask>}
-        </defs>
-        <rect x="0" y="0" width={frame.width} height={frame.height} fill="#e9f0f1"/>
-        <g data-forest-land data-forest-base={hasCoverage?'partial-coverage':'unacquired'}>{countries.map(feature=><path d={forestryPath(region,feature.geometry)} fill={hasCoverage?`url(#${missing})`:'#f1eee5'} fill-rule="evenodd"/>)}</g>
-        {raster&&<image data-forest-raster href={withBase(raster.href)} x={raster.x} y={raster.y} width={raster.width} height={raster.height} preserveAspectRatio="none" clip-path={`url(#${forestClip})`}/>}
-        {references.map(reference=><image data-forest-reference={reference.id} href={withBase(reference.href)} x={reference.x} y={reference.y} width={reference.width} height={reference.height} preserveAspectRatio="none" clip-path={`url(#${forestClip})`} mask={raster?`url(#${referenceMask})`:undefined}/>)}
-        <g class="forest-boundaries">{countries.map(feature=><path d={forestryPath(region,feature.geometry)} fill="none" fill-rule="evenodd" vector-effect="non-scaling-stroke"/>)}</g>
-        {region==='russia'&&forestryDisputes().map(area=><path d={area.path} fill={`url(#${disputed})`} stroke="#566a76" stroke-dasharray="3 3" stroke-width="0.8" vector-effect="non-scaling-stroke"><title>{area.name}：Natural Earth の係争区分</title></path>)}
-        <g data-forest-locators>{reading.examples.map((example,index)=>{const [x,y]=projectForestry(region,example.point);return <a href={`?example=${example.id}`} data-forest-example={example.id} aria-label={`${index+1} ${example.title}の解説`} transform={`translate(${x},${y})`}><g data-forest-symbol><circle r="10"/><text class="forest-marker-number" text-anchor="middle" y="4">{index+1}</text><text class="forest-marker-label" x="16" y="5">{example.label}</text></g><title>{example.title}：説明を読むための代表位置。森林・伐採地の境界ではありません。</title></a>})}</g>
-       </svg>
-       <div class="forest-map-tools" aria-label="地図の操作"><button type="button" data-forest-zoom="in" aria-label="地図を拡大">＋</button><button type="button" data-forest-zoom="out" aria-label="地図を縮小">−</button><button type="button" data-forest-reset>全体</button></div>
-      </div>
-      <div class="forest-legend" aria-label="凡例">{raster&&<><span><i class="tree"/>樹木被覆（ESA・2021年）</span><span><i class="other"/>その他の有効な被覆</span></>}{references.length>0&&<span><i class="reference"/>森林参考表示（JRC・2020年）</span>}<span><i class={hasCoverage?'missing':'neutral'}/>{hasCoverage?'未取得・欠測・分類未判定':'基図（全域の被覆未取得）'}</span><span><i class="locator"/>番号：解説の代表位置</span>{region==='russia'&&<span><i class="disputed"/>資料上の係争区分</span>}</div>
-      <p class="forest-map-note" data-forest-map-note>{raster?'西部の樹木被覆と南部の一部の森林参考図。両者は分類・年が異なります。緑は商業伐採地・樹種を表しません。':references.length?'PNG西部などの保存済み森林参考図だけを表示。斜線は未取得、または画像だけでは分類できない場所です。':'全域の森林被覆面は未取得です。基図の中立色は森林の有無を示しません。番号は説明の代表位置です。'}</p>
+      <RegionalForestryMap {region}/>
       <nav class="forest-subfields" aria-label="農林業の項目"><a href={withBase(home)}>農畜産</a><a href={withBase(`/atlas/${region}/agriculture/forestry/`)} aria-current="page">林業</a></nav>
       <div class="forest-example-choices" aria-label="重要な林業の事例"><button type="button" data-forest-overview aria-pressed="true">全体の概説</button>{reading.examples.map((example,index)=><button type="button" data-forest-example={example.id} aria-pressed="false">{index+1} {example.label}</button>)}</div>
      </section>
      <aside class="forest-reading" aria-label="地図の概説と林業の解説">
-      <div class="forest-reading-heading"><p data-forest-kicker>地域全体</p><h2 data-forest-reading-title>{reading.name}の森林と木材利用</h2><p data-forest-takeaway>{reading.overview}</p><button type="button" data-forest-clear hidden>← 全体の概説へ</button></div>
-      <div class="forest-reading-scroll" tabindex="0" aria-label="概説・解説・出典">
-       <section><h3>概説：地図から分かること</h3><p data-forest-fact>{reading.distribution}</p></section>
-       <section><h3>解説：環境・輸送・利用のつながり</h3><p data-forest-reason>{reading.reason}</p></section>
-       <section data-forest-use-section hidden><h3>木材は何に使われるか</h3><p data-forest-use/></section>
-       <section><h3>根拠のある範囲</h3><p>森林被覆、商業伐採地、森林面積、木材生産量は別の量です。番号は概略の代表位置で、事業所や森林調査の地点ではありません。</p><p>{raster?'ESA WorldCover 2021 v200 の分類10（樹木被覆10%以上）。植林や樹木作物も含み、FAOの森林定義とは一致しません。マングローブは別分類95で、この面には含みません。元データは約10mですが、表示は粗い既存概観画像です。小さな林は省略され、面積・生産量を計算できません。':'対象年・樹種を持つ被覆格子が未取得のため、森林面積・被覆割合・樹種はこの地図から判断できません。天然林・人工林の説明は下の文章資料に基づきます。'}</p></section>
-       {references.length>0&&<section><h3>2020年の森林参考表示の制約</h3><p>JRC GFC2020 v3 はFAO-FRA／EUDRの森林定義に沿って土地利用等を組み合わせた地図で、ESAの樹木被覆分類とは異なります。ここでは保存済みの提供元描画WMS画像を使います。画素の原分類値・欠測値は収録されていないため、透明な場所が森林不在か欠測かを判定せず斜線を残します。樹種・天然林／人工林・伐採地や面積は判定できません。{region==='russia'&&'シベリアの低密度樹林では過大推計があると提供元が報告しています。'}</p></section>}
-       <section><h3>説明の出典・対象時期</h3><ul data-forest-reading-sources>{reading.examples.flatMap(example=>example.sources).map(source=><li><a href={source.url}>{source.title}</a><small>{source.period}</small></li>)}</ul></section>
-      </div>
+      <RegionalForestryReading {region} part="heading"/>
+      <RegionalForestryReading {region} part="body"/>
      </aside>
     </div>
     {region==='russia'&&<RussiaForestryStatistics />}
-    <details class="forest-source-ledger"><summary>分布の取得状況・加工・利用条件</summary><p>2026年10月10日：ESA WorldCover の公開COG配信とJRCの正式WMSへ接続したところ、実行環境の接続段階で403となり、新たな原図を取得できませんでした。未取得を0として埋めず、森林境界を文章から作図していません。</p><p>{raster?'使用した画像は main に保存済みの Europe 樹木被覆画像を再利用。座標範囲を変更せず、既存のロシア地物に切り抜いて表示しています。東経65度以東・北緯73度以北にはESAの樹木被覆格子がありません。南部のJRC参考図とは区別します。':hasCoverage?'地域全域を判断できる分布格子・森林境界は未取得です。保存済みの参考図がある場合も、斜線は森林不在を意味しません。':'地域全域の森林被覆面は未取得です。中立色の基図は森林不在を意味しません。'}</p><p><a href={withBase('/assets/atlas/regional-forestry-v1/availability.json')}>取得状況と正確な取得先</a>{raster&&<> · <a href={withBase('/assets/atlas/europe/tree-cover-v1/manifest.json')}>使用画像の年・分類・hash台帳</a></>}</p>{raster&&<p><a href="https://doi.org/10.5281/zenodo.7254221">Zanaga et al. (2022), ESA WorldCover 10 m 2021 v200</a>、CC BY 4.0。© ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium。元画像の作成方法は既存のEurope台帳に記録しています。</p>}{references.length>0&&<><p>JRC参考画像は main のAsia資料を再利用。PNGなどは [90,-12,143,30]、ロシア南部は [44,-2,100,57] と [72,17,147,55] の保存範囲に限ります。ロシア西部のESA範囲にはJRCを重ねません。投影座標を保ち既存地物に切り抜くだけで、原画像を再分類していません。</p><p><a href="https://forobs.jrc.ec.europa.eu/GFC/v3">Bourgoin et al. (2025), Global map of forest cover 2020 - version 3, European Commission, Joint Research Centre (JRC)</a>。Copernicus/JRCの出典明記による再利用。<a href={withBase('/assets/atlas/asia-farming-v1/manifest.json')}>保存済み画像の正式WMS要求・年・hash</a>。新しい規約同意・ダウンロードは行っていません。</p></>}<p>国境・海岸線：既存の Natural Earth 地物（public domain）。投影：Web Mercator。高緯度ほど面積が大きく見えるため、地域の面積比較には使えません。{region==='russia'&&'係争地は既存のNatural Earth区分を斜線で表示し、森林面を補っていません。'}</p></details>
+    <RegionalForestrySources {region}/>
    </article>
   </RegionalForestryFrame>
   <script type="application/json" data-forest-config set:html={JSON.stringify(config).replaceAll('<','\\u003c')}/>
   <noscript><p>全体の概説と資料の範囲を表示しています。各地域の詳しい説明はJavaScriptを有効にして選べます。</p></noscript>
  </div>
-</BaseLayout>
+</BaseLayout>}
+
 <script>import {initRegionalForestry} from '../../scripts/atlas-regional-forestry';initRegionalForestry();</script>

@@ -23,7 +23,8 @@ try{
   const context=await browser.newContext({viewport,deviceScaleFactor:1,serviceWorkers:'block'});
   await context.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());
   const page=await context.newPage();page.on('pageerror',error=>report.errors.push(error.message));page.on('response',response=>{if(response.status()>=400)report.failedRequests.push(response.url());});
-  for(const region of ['africa','latin-america','oceania','russia']){
+  // Latin America is measured against its farming shell by verify-latin-forestry-workspace.mjs.
+  for(const region of ['africa','oceania','russia']){
    const route=base+`/atlas/${region}/agriculture/forestry/`;
    await page.goto(route,{waitUntil:'networkidle'});await page.evaluate(()=>document.fonts.ready);
    await page.waitForFunction(()=>document.querySelector('[data-regional-forestry]')?.dataset.forestInitialized==='true');
@@ -63,9 +64,9 @@ try{
  const context=await browser.newContext({viewport:{width:1536,height:864},serviceWorkers:'block'});await context.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());const page=await context.newPage();
  for(const region of ['africa','latin-america','oceania','russia']){
   await page.goto(base+(region==='africa'?'/atlas/africa/?field=agriculture&topic=farming':`/atlas/${region}/agriculture/`),{waitUntil:'networkidle'});
-  const control=region==='africa'?page.locator('[data-africa-topic="forestry"]'):page.getByRole('link',{name:'林業',exact:true});await control.click();await page.waitForURL(`**/atlas/${region}/agriculture/forestry/`);assert.equal(await page.locator('[data-regional-forestry]').getAttribute('data-region'),region);
+  const control=region==='africa'?page.locator('[data-africa-topic="forestry"]'):page.getByRole('link',{name:'林業',exact:true});await control.click();await page.waitForURL(url=>url.pathname.endsWith(`/atlas/${region}/agriculture/forestry/`));assert.equal(await page.locator('[data-regional-forestry]').getAttribute('data-region'),region);
  }
- report.checks.push(`${viewports.length*4} PC region/viewport combinations, initial and selected: zero-scroll viewport screenshots with left news, complete map/all region labels, right explanation and legend visible simultaneously; exact CSS innerWidth/innerHeight recorded separately from screenshot/preview pixels; no overlap or horizontal overflow; all locators/raster retained on selection; zoom/clear/reset, keyboard, marker click and reload restore; 4 existing forestry entries`);
+ report.checks.push(`${viewports.length*3} PC region/viewport combinations, initial and selected: zero-scroll viewport screenshots with left news, complete map/all region labels, right explanation and legend visible simultaneously; exact CSS innerWidth/innerHeight recorded separately from screenshot/preview pixels; no overlap or horizontal overflow; all locators/raster retained on selection; zoom/clear/reset, keyboard, marker click and reload restore; 4 existing forestry entries`);
  await context.close();assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedRequests,[]);delete report.currentViewport;report.result='passed';await save();
  // Public local-site screenshots only. Optional readable previews also let the
  // authorized job-log reader inspect evidence when ZIP transfer is unavailable.

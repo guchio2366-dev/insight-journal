@@ -1,0 +1,9 @@
+---
+import {withBase} from '../../lib/urls';
+interface Props {current:'agriculture'|'forestry'}
+const {current}=Astro.props;
+const sections=[['agriculture','農畜産'],['forestry','林業']] as const;
+---
+<nav class="latin-subfields latin-agriculture-subfields" aria-label="農林業の項目">
+ {sections.map(([id,label])=>id==='agriculture'&&current==='agriculture'?<button type="button" data-latin-section="agriculture" aria-pressed="true">{label}</button>:<a href={withBase(`/atlas/latin-america/agriculture/${id==='forestry'?'forestry/':''}`)} data-latin-agriculture-link={id} aria-current={current===id?'page':undefined}>{label}</a>)}
+</nav>
