@@ -13,8 +13,8 @@
 .culture-mini-bars{min-width:0}.culture-mini-bars>span{min-width:0;overflow:hidden}.culture-mini-bars em{display:flex;gap:4px}.culture-mini-bars em>span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}.culture-mini-bars b{font-weight:400;flex:none}.russia-subcontrols[hidden]{display:none!important}
 
 [data-culture-active=true] .oceania-learning-place,[data-culture-active=true] .russia-region-countries,[data-culture-active=true] [data-return],[data-culture-active=true] .oceania-learning-compare-layer,[data-culture-active=true] .russia-learning-compare-layer{display:none!important}
-.culture-marker{left:clamp(112px,var(--culture-x),calc(100% - 112px));top:clamp(var(--culture-half-height),var(--culture-y),calc(100% - var(--culture-half-height)))}
-@media(max-width:1100px){.culture-marker{left:clamp(96px,var(--culture-x),calc(100% - 96px));top:clamp(var(--culture-half-height),var(--culture-y),calc(100% - var(--culture-half-height)))}}
+.culture-marker{left:clamp(112px,var(--culture-x),calc(100% - 112px));top:clamp(min(var(--culture-half-height),50%),var(--culture-y),max(calc(100% - var(--culture-half-height)),50%))}
+@media(max-width:1100px){.culture-marker{left:clamp(96px,var(--culture-x),calc(100% - 96px));top:clamp(min(var(--culture-half-height),50%),var(--culture-y),max(calc(100% - var(--culture-half-height)),50%))}}
 
 [data-africa-atlas][data-culture-active=true] .africa-workspace{display:none!important}
 
