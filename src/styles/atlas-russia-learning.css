@@ -391,3 +391,10 @@
 .russia-farming-geography { font-size: 15px; line-height: 1.8; padding: 4px 0 14px; }
 .russia-learning-scene .russia-farming-place text { fill: currentColor; stroke: none; font-family: var(--sans); font-weight: 600; }
 .russia-learning-scene .russia-farming-geography-label { fill: #58716f; font-family: var(--sans); font-weight: 400; stroke-width: 2px; }
+
+[data-field=industry] [data-russia-industry-location] text{font-family:var(--sans);stroke-width:2px;pointer-events:all}
+[data-russia-industry-location]:focus-visible circle{stroke:#a54223;stroke-width:3px}
+
+.russia-learning[data-field=industry] .russia-region{pointer-events:none}
+
+@media(max-width:600px){.russia-learning[data-field=industry] .russia-region-marker{display:none}.russia-workspace .russia-learning[data-field=industry] .russia-learning-scene{height:400px;min-height:400px;max-height:none;aspect-ratio:auto}}

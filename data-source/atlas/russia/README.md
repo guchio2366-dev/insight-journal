@@ -6,7 +6,7 @@ Five routes provide an entry and four learning fields. Existing world entries ar
 | --- | --- | --- |
 | Nature | Original Beck Köppen–Geiger 0.1° classes | 1991–2020 climate; not weather, rainfall amounts, terrain or soil |
 | Agriculture | MapSPAM wheat; GLW4 cattle | 2020 model harvested ha per native 5′ cell; cattle head/km² |
-| Industry | Four primary-source examples | Norilsk, Moscow, Murmansk, Vladivostok; 2024/2025 descriptions and checked port coordinates, no quantity or invented routes |
+| Industry | Eight primary-source examples | Metals, oil, gas, coal, refining, management and two ports; dated national output/refinery capacity in text, representative points without quantity encoding or invented routes |
 | Population | GHS-POP density and UCDB urban centres | 2020 model population; 5×5 valid 1km-cell density; 2025 fixed urban footprints containing 2020 population |
 
 Every comparison retains the original map, both full legends, year/unit labels, an identical explicitly clipped frame, selected learning region and a named return. Missing cells remain distinct from valid zero. Raster display uses nearest-neighbour rendering. Natural conditions are read with management, transport, markets and institutions; neither layers nor explanations claim climate alone determines society.
