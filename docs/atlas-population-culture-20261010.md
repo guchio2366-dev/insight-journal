@@ -54,7 +54,7 @@
 
 - `npm test`：1,061試験、1,058成功、既存3 skip、失敗0。
 - `npm run build`：成功。`ASTRO_TELEMETRY_DISABLED=1`を指定して、この実行環境の読取専用ホームへのtelemetry書込を避けた。
-- アフリカ既存回帰の対象24ケースと関連単体63ケースは成功。全体E2Eは最終実行中で、結果を追記する。`npm run verify:release`は成功（local, 1 articles）。
+- 全体E2E：548試験、541成功、既存7 skip、失敗0。アフリカ既存回帰の対象24ケースと関連単体63ケースも成功。`npm run verify:release`は成功（local, 1 articles）。
 - `scripts/verify-population-culture-browser.mjs`：ビルド済みdistをループバックで配信し、1280×665、1024×665の2PC想定で6状態ずつ、12ケースを操作検証。実機2台の操作ではない。初期・選択後画像、取得年・定義・全区分・切れ・戻る・再読込・密度への復帰を確認。初期の記号切れ、豪州/NZ記号の枠の重なり、狭いロシア地図の右欄へのはみ出しを修正し、最終画像を再取得・目視済み。
 - この環境のChromium SUID sandbox helperの設定不備でsandbox付き起動が失敗した。ローカルビルドのレビューに限って `CULTURE_CHROMIUM_SANDBOX=0 node scripts/verify-population-culture-browser.mjs` を使用。スクリプトの既定はsandbox有効。ブラウザー版・設定・結果は `docs/reviews/population-culture-20261010/browser-results.json`。
 - この候補ではマージ・公開を行わない。親の統合・新画像レビュー・公開照合が別途必要。
