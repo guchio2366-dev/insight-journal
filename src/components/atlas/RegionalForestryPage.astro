@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import RegionalForestryFrame from './RegionalForestryFrame.astro';
+import RussiaForestryStatistics from './RussiaForestryStatistics.astro';
 import {withBase} from '../../lib/urls';
 import {forestryReading,forestryFrame,forestryGeography,forestryPath,forestryRaster,forestryReferences,forestryDisputes,projectForestry,type ForestryRegion} from '../../lib/atlas-regional-forestry';
 import '../../styles/atlas-regional-forestry.css';
@@ -63,6 +64,7 @@ const config={region,reading,frame};
       </div>
      </aside>
     </div>
+    {region==='russia'&&<RussiaForestryStatistics />}
     <details class="forest-source-ledger"><summary>分布の取得状況・加工・利用条件</summary><p>2026年10月10日：ESA WorldCover の公開COG配信とJRCの正式WMSへ接続したところ、実行環境の接続段階で403となり、新たな原図を取得できませんでした。未取得を0として埋めず、森林境界を文章から作図していません。</p><p>{raster?'使用した画像は main に保存済みの Europe 樹木被覆画像を再利用。座標範囲を変更せず、既存のロシア地物に切り抜いて表示しています。東経65度以東・北緯73度以北にはESAの樹木被覆格子がありません。南部のJRC参考図とは区別します。':hasCoverage?'地域全域を判断できる分布格子・森林境界は未取得です。保存済みの参考図がある場合も、斜線は森林不在を意味しません。':'地域全域の森林被覆面は未取得です。中立色の基図は森林不在を意味しません。'}</p><p><a href={withBase('/assets/atlas/regional-forestry-v1/availability.json')}>取得状況と正確な取得先</a>{raster&&<> · <a href={withBase('/assets/atlas/europe/tree-cover-v1/manifest.json')}>使用画像の年・分類・hash台帳</a></>}</p>{raster&&<p><a href="https://doi.org/10.5281/zenodo.7254221">Zanaga et al. (2022), ESA WorldCover 10 m 2021 v200</a>、CC BY 4.0。© ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium。元画像の作成方法は既存のEurope台帳に記録しています。</p>}{references.length>0&&<><p>JRC参考画像は main のAsia資料を再利用。PNGなどは [90,-12,143,30]、ロシア南部は [44,-2,100,57] と [72,17,147,55] の保存範囲に限ります。ロシア西部のESA範囲にはJRCを重ねません。投影座標を保ち既存地物に切り抜くだけで、原画像を再分類していません。</p><p><a href="https://forobs.jrc.ec.europa.eu/GFC/v3">Bourgoin et al. (2025), Global map of forest cover 2020 - version 3, European Commission, Joint Research Centre (JRC)</a>。Copernicus/JRCの出典明記による再利用。<a href={withBase('/assets/atlas/asia-farming-v1/manifest.json')}>保存済み画像の正式WMS要求・年・hash</a>。新しい規約同意・ダウンロードは行っていません。</p></>}<p>国境・海岸線：既存の Natural Earth 地物（public domain）。投影：Web Mercator。高緯度ほど面積が大きく見えるため、地域の面積比較には使えません。{region==='russia'&&'係争地は既存のNatural Earth区分を斜線で表示し、森林面を補っていません。'}</p></details>
    </article>
   </RegionalForestryFrame>
