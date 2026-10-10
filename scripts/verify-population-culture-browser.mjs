@@ -62,4 +62,7 @@ for(const [label,width,height] of [['pc-1280',1280,665],['pc-1024',1024,665]]){
 const noJs=await browser.newPage({javaScriptEnabled:false});await noJs.goto(`${origin}${base}/atlas/oceania/population/`);assert.equal(await noJs.locator('[data-population-culture]').isVisible(),true);assert.equal(await noJs.locator('[data-culture-panel=ethnicity]').isVisible(),true);await noJs.close();
 fs.writeFileSync(`${out}/browser-results.json`,JSON.stringify({browser:browser.version(),chromiumSandbox:true,sandboxStatus,reviewedCommit,capturedAt:new Date().toISOString(),releaseBuiltAt:release.builtAt,runId:process.env.GITHUB_RUN_ID??null,runAttempt:process.env.GITHUB_RUN_ATTEMPT??null,japaneseFonts:process.env.CULTURE_REVIEW_JAPANESE_FONTS??null,screenshots:Object.fromEntries(fs.readdirSync(out).filter(name=>name.endsWith('.png')).map(name=>[name,createHash('sha256').update(fs.readFileSync(path.join(out,name))).digest('hex')])),results,noJavascript:'both source tables available'},null,2)+'\n');console.log(`${results.length} population culture browser cases passed; screenshots: ${out}`);
 
+}catch(error){
+ const message=String(error?.stack??error).replaceAll('%','%25').replaceAll('\r','%0D').replaceAll('\n','%0A');
+ console.error(`::error title=Population culture sandboxed review::${message}`);throw error;
 }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
