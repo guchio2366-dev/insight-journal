@@ -1,0 +1,74 @@
+name: Population culture sandboxed review
+
+on:
+  push:
+    branches:
+      - codex/regions-population-composition-20261010
+      - codex/panama-census-identity-20261010
+
+permissions:
+  contents: read
+
+concurrency:
+  group: population-culture-review-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: Population culture PC review with sandbox
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+      CULTURE_REVIEW_EXPECTED_HEAD: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - name: Verify Chrome and Japanese fonts
+        shell: bash
+        run: |
+          set -euo pipefail
+          review_chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          test -n "$review_chrome_path"
+          echo "REVIEW_CHROME_PATH=$review_chrome_path" >> "$GITHUB_ENV"
+          if [[ -z "$(fc-list ':lang=ja' family)" ]]; then
+            sudo apt-get update -o APT::Update::Error-Mode=any
+            sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+          fi
+          review_japanese_fonts="$(fc-list ':lang=ja' family)"
+          test -n "$review_japanese_fonts"
+          {
+            echo 'CULTURE_REVIEW_JAPANESE_FONTS<<CULTURE_FONTS'
+            echo "$review_japanese_fonts"
+            echo 'CULTURE_FONTS'
+          } >> "$GITHUB_ENV"
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - name: Verify the built commit
+        run: |
+          test "$(git rev-parse HEAD)" = "$CULTURE_REVIEW_EXPECTED_HEAD"
+          node scripts/verify-release.mjs --commit "$CULTURE_REVIEW_EXPECTED_HEAD"
+      - name: Review all national composition views with sandbox enabled
+        env:
+          CULTURE_REVIEW_OUTPUT: ${{ runner.temp }}/population-culture-review/regions
+        run: node scripts/verify-population-culture-browser.mjs
+      - name: Review Panama when included in this head
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -f src/data/atlas/latin-america-culture.ts ]]; then
+            CULTURE_REVIEW_SCOPE=panama CULTURE_REVIEW_OUTPUT="$RUNNER_TEMP/population-culture-review/panama" node scripts/verify-population-culture-browser.mjs
+          fi
+      - name: Upload validated images and sandbox metadata
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: population-culture-sandboxed-${{ github.sha }}
+          path: ${{ runner.temp }}/population-culture-review
+          if-no-files-found: error
+          retention-days: 14

@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PopulationCulture from '../../../components/atlas/PopulationCulture.astro';
+import {africaCulture} from '../../../data/atlas/africa-culture';
 import {withBase} from '../../../lib/urls';
 import geography from '../../../data/atlas/africa-geography.json';
 import {africaPath,projectAfrica,africaWidth,africaHeight} from '../../../lib/atlas-africa-geometry';
@@ -49,6 +51,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
   </header>
   <nav class="africa-fields" aria-label="分野を選ぶ"><a data-africa-overview-link href={withBase('/atlas/africa/overview/')}>概要</a>{(['agriculture','nature','industry','population'] as const).map(id=><button type="button" data-field={id} aria-pressed={id==='nature'?'true':'false'}>{fields[id].label}</button>)}</nav>
   <nav class="africa-subfields" data-africa-subfields aria-label="分野内の項目"></nav>
+  <PopulationCulture data={africaCulture} map={geography.features.map(f=>`<path d="${africaPath(f.geometry)}" fill-rule="evenodd"/>`).join('')} width={africaWidth} height={africaHeight} project={projectAfrica} names={countries.map(c=>c.name)} />
   <div class="africa-workspace" id="africa-map-panel">
    <section class="africa-map-card" aria-labelledby="africa-map-title">
     <div class="africa-map-frame">

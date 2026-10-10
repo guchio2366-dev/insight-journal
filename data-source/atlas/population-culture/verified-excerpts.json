@@ -1,0 +1,222 @@
+{
+  "checkedOn": "2026-10-10",
+  "method": "Manual transcription checked against primary publisher HTML/PDF table text through web tools. Original download bytes were not obtained; these are verification excerpts, not original source files.",
+  "scope": "National aggregates only. No residual groups, subnational polygons, estimates of missing data or renormalization.",
+  "tables": [
+    {
+      "id": "AUS-ancestry",
+      "year": 2021,
+      "source": "https://www.abs.gov.au/census/find-census-data/quickstats/2021/AUS",
+      "locator": "Ancestry, top responses",
+      "definition": "Usual residents, all ages, at most two ancestry responses. Denominator includes not stated. Ancestry is not ethnicity, race, citizenship or birthplace.",
+      "license": "CC BY 4.0; Commonwealth of Australia. Website exceptions (logos, microdata, third-party content) do not cover these published Census aggregate tables.",
+      "licenseUrl": "https://www.abs.gov.au/website-privacy-copyright-and-disclaimer",
+      "rows": [
+        [
+          "English",
+          "33.0"
+        ],
+        [
+          "Australian",
+          "29.9"
+        ],
+        [
+          "Irish",
+          "9.5"
+        ],
+        [
+          "Scottish",
+          "8.6"
+        ],
+        [
+          "Chinese",
+          "5.5"
+        ]
+      ]
+    },
+    {
+      "id": "AUS-indigenous-status",
+      "year": 2021,
+      "source": "https://www.abs.gov.au/statistics/people/people-and-communities/snapshot-australia/latest-release",
+      "locator": "Aboriginal and Torres Strait Islander population: 812,728 Census counted people",
+      "definition": "Separate Indigenous status question. Share of all usual residents, not a share within the Indigenous population. Census count, not adjusted estimated resident population.",
+      "license": "CC BY 4.0; Commonwealth of Australia",
+      "rows": [
+        [
+          "Aboriginal and/or Torres Strait Islander origin",
+          "3.2"
+        ]
+      ]
+    },
+    {
+      "id": "AUS-religion",
+      "year": 2021,
+      "source": "https://www.abs.gov.au/articles/religious-affiliation-australia",
+      "locator": "Religious affiliation, Total row",
+      "definition": "All-age religious affiliation including not stated / inadequately described. Broad Secular Beliefs and Other Spiritual Beliefs and No Religious Affiliation, not just No Religion so described.",
+      "license": "CC BY 4.0; Commonwealth of Australia",
+      "rows": [
+        [
+          "Christianity",
+          "43.9"
+        ],
+        [
+          "Other religions",
+          "10.0"
+        ],
+        [
+          "Secular Beliefs and Other Spiritual Beliefs and No Religious Affiliation",
+          "38.9"
+        ],
+        [
+          "Not stated / inadequately described",
+          "7.3"
+        ]
+      ]
+    },
+    {
+      "id": "NZL-ethnicity",
+      "year": 2023,
+      "source": "https://www.stats.govt.nz/infographics/2023-census-national-and-regional-data/",
+      "locator": "New Zealand ethnic groups, 10 June 2024 infographic; major four also checked against 29 May 2024 Census release",
+      "definition": "Census usually resident population, all ages, total response ethnic self-identification. Not Maori descent, language or ancestry. Six broad groups; multiple responses produce totals above 100%.",
+      "license": "CC BY 4.0; Stats NZ",
+      "licenseUrl": "https://www.stats.govt.nz/about-us/copyright/",
+      "rows": [
+        [
+          "European",
+          "67.8"
+        ],
+        [
+          "Māori",
+          "17.8"
+        ],
+        [
+          "Asian",
+          "17.3"
+        ],
+        [
+          "Pacific peoples",
+          "8.9"
+        ],
+        [
+          "Middle Eastern/Latin American/African",
+          "1.9"
+        ],
+        [
+          "Other ethnicity",
+          "1.1"
+        ]
+      ]
+    },
+    {
+      "id": "NZL-religion",
+      "year": 2023,
+      "source": "https://www.stats.govt.nz/information-releases/2023-census-population-dwelling-and-housing-highlights/",
+      "locator": "3 October 2024 release, cultural diversity religious affiliation highlights",
+      "definition": "All-age Census usually resident population. Published affiliation highlights only. Other religious affiliations and response states are not inferred from the residual.",
+      "license": "CC BY 4.0; Stats NZ",
+      "rows": [
+        [
+          "No religion",
+          "51.6"
+        ],
+        [
+          "Christian",
+          "32.3"
+        ],
+        [
+          "Hinduism",
+          "2.9"
+        ]
+      ]
+    },
+    {
+      "id": "ZAF-population-group",
+      "year": 2022,
+      "source": "https://census.statssa.gov.za/assets/documents/2022/P03014_Census_2022_Statistical_Release.pdf",
+      "locator": "Figure 2.3 printed p.7 / PDF page 18, 2022 column",
+      "definition": "All-age population group (racial self-identification broad categories), not ethnicity or language. Four published categories only; Other not extracted.",
+      "license": "Stats SA permits processing, publishing and distribution with source credit and explicit independent processing; not CC. Related Census report has no-sale restriction, so adopt free presentation only.",
+      "licenseUrl": "https://www.statssa.gov.za/?page_id=425",
+      "rows": [
+        [
+          "Black African",
+          "81.4"
+        ],
+        [
+          "Coloured",
+          "8.2"
+        ],
+        [
+          "White",
+          "7.3"
+        ],
+        [
+          "Indian/Asian",
+          "2.7"
+        ]
+      ]
+    },
+    {
+      "id": "ZAF-religion",
+      "year": 2022,
+      "source": "https://census.statssa.gov.za/assets/documents/2022/P03014_Census_2022_Statistical_Release.pdf",
+      "locator": "Table 2.10 printed p.24 / PDF page 35, SA column",
+      "definition": "All-age religious affiliation/belief, ten original broad categories. Preserve rounded 0.0, separate no affiliation, atheism and agnosticism. No rescaling.",
+      "license": "Stats SA source credit + explicit independent processing; adopt free presentation only.",
+      "licenseUrl": "https://www.statssa.gov.za/?page_id=425",
+      "rows": [
+        [
+          "Christianity",
+          "85.3"
+        ],
+        [
+          "Islam",
+          "1.6"
+        ],
+        [
+          "Traditional African",
+          "7.8"
+        ],
+        [
+          "Hinduism",
+          "1.1"
+        ],
+        [
+          "Buddhism",
+          "0.0"
+        ],
+        [
+          "Judaism",
+          "0.1"
+        ],
+        [
+          "Atheism",
+          "0.1"
+        ],
+        [
+          "Agnosticism",
+          "0.1"
+        ],
+        [
+          "No religious affiliation",
+          "2.9"
+        ],
+        [
+          "Other",
+          "1.0"
+        ]
+      ]
+    }
+  ],
+  "reusedPew": {
+    "module": "src/data/atlas/europe/pew-religion-2020.ts",
+    "row": "RUS",
+    "year": 2020,
+    "locator": "Appendix B printed page 16 / PDF page index 15, Russia 2020",
+    "source": "https://www.pewresearch.org/wp-content/uploads/sites/20/2025/06/PR_2025.06.09_global-religious-change_appendix-b.pdf",
+    "terms": "https://www.pewresearch.org/about/terms-and-conditions/",
+    "decision": "Reuse the existing European excerpt row, adding no countries and no independent public source table. All-age seven-group estimate; no Christian denominations or domestic distribution. Preserve <0.1 bounds. Required translation disclaimer appears beside data. This is not an open data license. Do not expand this excerpt into a substantial portion of the global table."
+  }
+}

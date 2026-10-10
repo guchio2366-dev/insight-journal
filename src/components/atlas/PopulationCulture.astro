@@ -1,0 +1,48 @@
+---
+import type {CultureRegion,CultureTopic} from '../../lib/atlas-culture';
+import {cultureColors,cultureShare,culturePercentage,cultureShortLabel} from '../../lib/atlas-culture';
+import '../../styles/atlas-culture.css';
+interface Props {data:CultureRegion;map:string;width:number;height:number;project:(point:number[])=>number[];names:string[];boundaryNote?:string}
+const {data,map,width,height,project,names,boundaryNote='境界背景：既存のNatural Earth 1:50m。国別構成の対象領域を境界形状から再計算していません。'}=Astro.props;
+const missingNames=(topic:CultureTopic)=>names.filter(name=>!data.records.some(record=>record.name===name&&record.topics[topic]));
+---
+<section id={`${data.id}-population-culture-panel`} class="population-culture" data-population-culture={data.id} hidden aria-label={`${data.name}の民族・宗教の基礎構成`}>
+ <script type="application/json" data-culture-config set:html={JSON.stringify(data).replace(/</g,'\u003c')}/>
+ {(['ethnicity','religion'] as const).map(topic=><div data-culture-panel={topic} hidden={topic!=='religion'}>
+  <div class="culture-grid">
+   <section class="culture-map-column">
+    <h2>{data.name}：{topic==='religion'?'宗教':'祖先・民族'}の公表構成</h2>
+    <p class="culture-method">国・地域の集計を位置に結び付けた記号です。国内の居住域や地域多数派の面ではありません。</p>
+    <div class="culture-map" style={`aspect-ratio:${width}/${height}`}>
+     <svg viewBox={`0 0 ${width} ${height}`} aria-label={`${data.name}の国境と集計記号の位置`}><g set:html={map}/>{data.records.filter(r=>r.topics[topic]).map(record=>{const [x,y]=project(record.point),[cx,cy]=project(record.chartPoint??record.point);return <g class="culture-leader"><line x1={x} y1={y} x2={cx} y2={cy}/><circle cx={x} cy={y} r="5"><title>{record.name}の全国集計を結ぶ代表位置。居住域ではありません。</title></circle></g>;})}</svg>
+     {data.records.filter(r=>r.topics[topic]).map(record=>{
+      const [x,y]=project(record.chartPoint??record.point),table=record.topics[topic]!;
+      return <button type="button" class="culture-marker" data-culture-record={record.id} style={`--culture-half-height:${Math.ceil((table.rows.length*23+84+(table.supplement?32:0))/2)}px;--culture-x:${x/width*100}%;--culture-y:${y/height*100}%`} aria-pressed="false" aria-label={`${record.name} ${record.year}年の全収録区分と定義を開く`}>
+       <strong>{record.name}<small>{record.year}年 · {table.rows.length}区分</small></strong>
+       <span class="culture-mini-bars" aria-hidden="true">{table.rows.map(([label,value],index)=><span><i style={`background:${table.colors?.[index]??cultureColors[index%cultureColors.length]};${cultureShare(value)===null?'width:4px;border-left:2px dotted #243a43':`width:${cultureShare(value)}%`}`}/><em title={`${label} ${culturePercentage(value)}`}><span>{cultureShortLabel(label)}</span><b>{culturePercentage(value)}</b></em></span>)}</span>
+       {table.supplement&&<small class="culture-supplement">別質問：{table.supplement.label} {culturePercentage(table.supplement.value)}</small>}
+      </button>;
+     })}
+    </div>
+    <p class="culture-neutral">白い国土は位置の背景です。未収録・無所属・無宗教・特定民族を色分けした面ではありません。各横棒は0〜100%の独立した尺度で、重複回答や抜粋の残差を補いません。0.1%未満は棒長を付けない点線記号です。</p>
+    <p class="culture-neutral">{boundaryNote}</p>
+   </section>
+   <aside class="culture-reading" aria-label="概説から分布の背景と構成へ">
+    <h2>{data.topics[topic].title}</h2>
+    <p class="culture-overview">{data.topics[topic].overview}</p>
+    <p>{data.topics[topic].explanation}</p>
+    {data.topics[topic].sources&&<p class="culture-neutral">背景の資料：{data.topics[topic].sources!.map((source,index)=><>{index>0?' ／ ':''}<a href={source.url}>{source.title}</a></>)}</p>}
+    <div class="culture-record-choices" aria-label="構成を読む対象">{data.records.filter(r=>r.topics[topic]).map(r=><button type="button" data-culture-record={r.id} aria-pressed="false">{r.name}</button>)}<button type="button" data-culture-reset>全体の概説</button></div>
+    <div class="culture-selected" data-culture-selected aria-live="polite"><p>国・地域を選ぶと、全収録区分と調査定義をここに表示します。他の構成記号は地図に残ります。</p></div>
+    <details class="culture-gaps" open><summary>収録範囲・未把握の地域</summary><p>{data.topics[topic].gap}</p>{missingNames(topic).length>0&&<p>{missingNames(topic).join('、')}：この版に数値を収録していません。</p>}</details>
+   </aside>
+  </div>
+  <details class="culture-source-tables"><summary>採用した全数値・定義・出典・利用条件</summary>{data.records.filter(r=>r.topics[topic]).map(record=>{const table=record.topics[topic]!;return <section><h3>{record.name} · {record.year}年</h3><p>{table.definition}</p><table><thead><tr><th>原区分・日本語の補足</th><th>公表割合</th></tr></thead><tbody>{table.rows.map(([name,value])=><tr><th scope="row">{name}</th><td>{culturePercentage(value)}</td></tr>)}</tbody></table>{table.supplement&&<p>別質問：{table.supplement.label} {culturePercentage(table.supplement.value)}。{table.supplement.definition} <a href={table.supplement.source}>{table.supplement.sourceTitle}</a></p>}<p>{table.note}</p><p><a href={table.source}>{table.sourceTitle}</a> ／ <a href={table.licenseUrl}>{table.license}</a>。公表抜粋の選定、日本語の補足、記号化：Insight Journal。</p></section>;})}</details>
+ </div>)}
+</section>
+<noscript><style>.population-culture[data-population-culture],.population-culture [data-culture-panel]{display:block!important}</style><p>JavaScriptが無効です。民族・宗教の2項目と、折畳み内の全数値・定義・出典を読めます。対象の選択にはJavaScriptが必要です。</p></noscript>
+<script>
+ import {initPopulationCulture} from '../../scripts/atlas-culture';
+ const initialize=()=>document.querySelectorAll<HTMLElement>('[data-population-culture]').forEach(initPopulationCulture);
+ initialize();document.addEventListener('astro:page-load',initialize);
+</script>

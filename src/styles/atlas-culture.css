@@ -1,0 +1,29 @@
+.population-culture[hidden],.population-culture [hidden]{display:none!important}
+.culture-grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(290px,1fr);gap:20px;padding:12px 8px;color:#253c42;font-size:14px}
+.culture-grid h2{font-size:18px;line-height:1.4;margin:0 0 8px}.culture-grid p{line-height:1.65;margin:8px 0}.culture-method,.culture-neutral{font-size:12px}.culture-map{position:relative;width:100%;min-height:0;background:#e5eef0;border:1px solid #b7c7ca;overflow:hidden}.culture-map>svg{display:block;width:100%;height:100%}.culture-map path{fill:#fffdf4;stroke:#afbcba;stroke-width:1;vector-effect:non-scaling-stroke}.culture-marker{position:absolute;transform:translate(-50%,-50%);width:185px;padding:8px;border:1px solid #596e75;border-radius:5px;background:#fffcf4;color:#243a43;text-align:left;cursor:pointer;box-shadow:0 2px 5px #263c421c}.culture-marker[aria-pressed=true]{outline:3px solid #233e55}.culture-marker strong{display:block;font-size:13px}.culture-marker small{display:block;font-weight:400;font-size:11px}.culture-mini-bars{display:grid;gap:3px;margin-top:5px}.culture-mini-bars>span{position:relative;display:block;height:16px;background:#f0eeea}.culture-mini-bars i{position:absolute;height:100%;opacity:.55;left:0;top:0}.culture-mini-bars em{position:relative;display:block;font-style:normal;font-size:11px;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.culture-record-choices{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}.culture-record-choices button,.culture-selected select{min-height:32px;border:1px solid #8c9c9e;border-radius:4px;padding:4px 8px;background:#fffdf6;color:inherit;font-size:12px}.culture-record-choices [aria-pressed=true]{background:#d9e8ec}.culture-overview{font-weight:650}.culture-selected h3{font-size:16px;margin:12px 0 5px}.culture-selected table,.culture-source-tables table{width:100%;border-collapse:collapse;font-size:12px}.culture-selected th,.culture-source-tables th{text-align:left;font-weight:400}.culture-selected td,.culture-source-tables td{text-align:right;white-space:nowrap}.culture-selected th,.culture-selected td,.culture-source-tables th,.culture-source-tables td{padding:4px 0;border-bottom:1px solid #d9deda}.culture-selected label{display:block;font-size:12px;margin:8px 0}.culture-gaps{font-size:12px;margin-top:14px}.culture-source-tables{margin:14px;padding:12px;font-size:13px}.culture-source-tables section{margin:16px 0}.culture-reading{max-height:620px;overflow:auto;padding-right:5px}.culture-single-value{padding:8px;background:#eef1ec}.culture-topic-controls{display:flex;gap:6px;align-items:center}.culture-topic-controls button{padding:6px 10px;min-height:34px;font-size:13px;border:1px solid #9cacb0;background:#fffdf7;border-radius:4px}.culture-topic-controls [aria-pressed=true]{background:#d7e7eb}
+[data-culture-active=true] .russia-learning-normal,[data-culture-active=true] .russia-learning-comparison,[data-culture-active=true] .oceania-learning-normal,[data-culture-active=true] .oceania-learning-comparison{display:none!important}
+@media(max-width:1100px){.culture-grid{grid-template-columns:minmax(0,1.35fr) minmax(280px,1fr);gap:10px}.culture-marker{width:150px;padding:5px}.culture-mini-bars em{font-size:10px}.culture-grid h2{font-size:16px}.culture-reading{max-height:510px}}
+@media(max-width:760px){.culture-grid{display:block}.culture-reading{max-height:none;overflow:visible;margin-top:14px}.culture-marker{width:130px}.culture-mini-bars>span{height:13px}.culture-mini-bars em{font-size:8px;line-height:13px}}
+
+[data-oceania-learning][data-field=population] .oceania-workspace-subviews[hidden]{display:none!important}
+.culture-supplement{margin-top:8px;border-top:1px solid #d9deda;padding-top:5px}.culture-map svg .culture-dispute{fill:url(#culture-russia-disputed);stroke:#455d65;stroke-dasharray:3 3}
+
+.culture-leader line{stroke:#435e67;stroke-width:1.2;vector-effect:non-scaling-stroke}.culture-leader circle{fill:#435e67;stroke:#fff;stroke-width:1;vector-effect:non-scaling-stroke}.culture-marker{width:210px}.culture-mini-bars>span{height:20px}.culture-mini-bars em{line-height:20px;font-size:11px}@media(max-width:1100px){.culture-marker{width:175px}.culture-mini-bars em{font-size:10px}}
+
+.culture-mini-bars{min-width:0}.culture-mini-bars>span{min-width:0;overflow:hidden}.culture-mini-bars em{display:flex;gap:4px}.culture-mini-bars em>span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}.culture-mini-bars b{font-weight:400;flex:none}.russia-subcontrols[hidden]{display:none!important}
+
+[data-culture-active=true] .oceania-learning-place,[data-culture-active=true] .russia-region-countries,[data-culture-active=true] [data-return],[data-culture-active=true] .oceania-learning-compare-layer,[data-culture-active=true] .russia-learning-compare-layer{display:none!important}
+.culture-marker{left:clamp(112px,var(--culture-x),calc(100% - 112px));top:clamp(min(var(--culture-half-height),50%),var(--culture-y),max(calc(100% - var(--culture-half-height)),50%))}
+@media(max-width:1100px){.culture-marker{left:clamp(96px,var(--culture-x),calc(100% - 96px));top:clamp(min(var(--culture-half-height),50%),var(--culture-y),max(calc(100% - var(--culture-half-height)),50%))}}
+
+[data-africa-atlas][data-culture-active=true] .africa-workspace{display:none!important}
+
+[data-africa-atlas][data-culture-active=true] .africa-country-controls,[data-africa-atlas][data-culture-active=true] .africa-region-row label{display:none!important}
+@media(max-width:760px){
+ .culture-map{aspect-ratio:auto!important}
+ .culture-map>svg{height:auto}
+ .culture-marker{position:relative;left:auto;top:auto;transform:none;width:calc(100% - 16px);margin:8px;font-size:13px}
+ .culture-mini-bars>span{height:22px}
+ .culture-mini-bars em{font-size:12px;line-height:22px}
+ .culture-leader line{display:none}
+}

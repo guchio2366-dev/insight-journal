@@ -33,7 +33,7 @@ export function initializeAfricaAtlas() {
   agriculture:[['farming','農畜産',false],['forestry','林業',false]],
   nature:[['climate','気候区分',true],['water','水資源',false],['terrain','地形',true],['elevation','標高',true]],
   industry:[['regional','地域の主要産業',false]],
-  population:[['distribution','人口分布',false],['ethnicity','人種・民族',true],['religion','宗教',true]]
+  population:[['distribution','人口分布',false],['ethnicity','人口集団・民族',true],['religion','宗教',true]]
  } as const;
   function renderTopics(){
   const items=topicItems[state.field];
@@ -45,16 +45,16 @@ export function initializeAfricaAtlas() {
   nav.setAttribute('aria-label',state.field==='industry'?'収録済みの主要産業を選ぶ':'分野内の項目');
   root!.querySelectorAll('.africa-main>.africa-subitems').forEach(row=>row.remove());
   if(state.field==='agriculture')query<HTMLElement>('[data-africa-map-subfields]').append(nav);
-  else query<HTMLElement>('.africa-main').insertBefore(nav,query<HTMLElement>('.africa-workspace'));
+  else query<HTMLElement>('.africa-main').insertBefore(nav,root!.querySelector('[data-population-culture]')??query<HTMLElement>('.africa-workspace'));
   if(state.field==='industry'){
    const overview=make('button','全域概要') as HTMLButtonElement;overview.type='button';overview.dataset.africaIndustryOverview='';overview.setAttribute('aria-pressed',String(state.overview));nav.append(overview);
    const labels:Record<string,string>={'copperbelt-connections':'銅鉱業','casablanca-manufacturing':'カサブランカの製造業'};
    for(const theme of themes.filter(t=>t.field==='industry')){const button=make('button',labels[theme.id]??theme.title) as HTMLButtonElement;button.type='button';button.dataset.theme=theme.id;button.title=theme.title;button.setAttribute('aria-pressed',String(!state.overview&&state.theme===theme.id));nav.append(button);}
    const caption=make('p','収録済み2事例 · 色は国別統計');caption.className='africa-subfield-caption';nav.append(caption);
-  }else for(const [id,label] of items){const button=make('button',label) as HTMLButtonElement;button.type='button';button.dataset.africaTopic=id;button.setAttribute('aria-pressed',String(topic===id));button.setAttribute('aria-selected',String(topic===id));button.setAttribute('role','tab');button.setAttribute('aria-controls','africa-map-panel');button.tabIndex=topic===id?0:-1;nav.append(button);}
+  }else for(const [id,label] of items){const button=make('button',label) as HTMLButtonElement;button.type='button';button.dataset.africaTopic=id;button.setAttribute('aria-pressed',String(topic===id));button.setAttribute('aria-selected',String(topic===id));button.setAttribute('role','tab');button.setAttribute('aria-controls',state.field==='population'&&(id==='ethnicity'||id==='religion')?'africa-population-culture-panel':'africa-map-panel');button.tabIndex=topic===id?0:-1;nav.append(button);}
   if(state.field==='industry')nav.setAttribute('role','group');
   if(state.field==='industry'||state.field==='population'){
-   nav.setAttribute('aria-label',state.field==='industry'?'実例の主要産業を選ぶ':'人口分布・掲載集団の事例を選ぶ');
+   nav.setAttribute('aria-label',state.field==='industry'?'実例の主要産業を選ぶ':'人口分布・全国構成と収録状況を選ぶ');
   }
   if(state.field==='nature'&&topic==='water'){
    const row=make('div');row.className='africa-subitems';row.setAttribute('role','tablist');row.setAttribute('aria-label','水資源の項目');
@@ -70,7 +70,7 @@ export function initializeAfricaAtlas() {
   const status=query<HTMLElement>('[data-africa-subfield-status]');
   if(state.field==='population'){
    nav.after(status);status.hidden=false;
-   status.textContent=actual?.error?`${actual.title}：分布データを取得できませんでした。再読込できます。`:actual?.ready?actual.guide?actual.scope:populationDensityScope:actual?`${actual.title}のデータを読み込んでいます。`:metricById(state.metric).note;
+   status.textContent=actual?.error?`${actual.title}：分布データを取得できませんでした。再読込できます。`:actual?.ready?actual.guide?(root!.querySelector('[data-population-culture]')?'国勢調査2022年の全国構成：南アフリカ。他国・国内分布は未収録です。':actual.scope):populationDensityScope:actual?`${actual.title}のデータを読み込んでいます。`:metricById(state.metric).note;
   }else{
    query<HTMLElement>('[data-themes]').before(status);
    status.hidden=!actual||actual.ready&&!actual.error;status.textContent=actual?.error?`${actual.title}：分布データを取得できませんでした。再読込できます。`:actual?`${actual.title}の分布データを読み込んでいます。国別統計は参考として残しています。`:'';
@@ -471,6 +471,8 @@ export function initializeAfricaAtlas() {
   for(const c of ranked){const tr=make('tr');tr.classList.toggle('is-selected',c.code===state.place);tr.classList.toggle('is-compared',c.code===state.compare);const th=make('th');const button=make('button',c.name);button.setAttribute('type','button');button.dataset.focusCountry=c.code;th.append(button);const compare=make('td');const compareButton=make('button',c.code===state.compare?'比較中':'比較に追加');compareButton.setAttribute('type','button');compareButton.dataset.compareCountry=c.code;compareButton.setAttribute('aria-label',`${c.name}を比較に追加`);(compareButton as HTMLButtonElement).disabled=!state.place||c.code===state.place;compare.append(compareButton);tr.append(th,make('td',regionNames[c.region as Region]),make('td',formatValue(c.value,metric)+(agricultureField&&'year' in c&&c.year?`（${c.year}年）`:'')),compare);rows.append(tr);}
   renderComparisonOverlay(metric);
   if(write){const url=publicStateURL(state,new URL(location.href));if(url.href!==location.href)history.pushState(null,'',url);}
+  const culturePanel=root!.querySelector('[data-population-culture]');
+  if(culturePanel){const event=root!.ownerDocument.createEvent('Event');event.initEvent('population-culture-state',false,false);culturePanel.dispatchEvent(event);}
   const overview=root!.querySelector<HTMLAnchorElement>('[data-africa-overview-link]');if(overview){const url=publicStateURL({...state},new URL(overview.href));url.searchParams.delete('country');if(!countryPinned)url.searchParams.delete('place');const params=new URLSearchParams(location.search);for(const flag of ['only','fallback']){const value=params.get(flag);if(value==='0'||value==='1')url.searchParams.set(flag,value);else url.searchParams.delete(flag);}overview.href=url.href;}
  }
  function chooseCountry(code:string,preservePoint=false){if(code&&!countries.some(c=>c.code===code))return;countryPinned=!!code;state.place=code;if(!preservePoint)state.layerPoint='';if(state.topic==='ethnicity')state.layerClass='';if(!code||state.compare===code)state.compare='';if(code&&state.region!=='all')state.region=countries.find(c=>c.code===code)!.region as Region;if(!code||state.zoom==='theme'&&!themes.find(t=>t.id===state.theme)!.places.includes(code))state.zoom='all';render(true);}

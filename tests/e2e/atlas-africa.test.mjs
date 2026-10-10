@@ -71,7 +71,7 @@ test('spatial categories and water depth persist across reload, country changes 
   const saved=withAfricaPage(`https://example.com/insight-journal/atlas/africa/?field=${field}&topic=${ready}&place=EGY&unknown=preserve`,(w,q)=>{
    q(`[data-africa-topic="${planned}"]`).click();
    assert.equal(new URL(w.location.href).searchParams.get('topic'),planned);
-   assert.equal(q('[data-africa-subfield-status]').hidden,false);if(field==='population'){assert.match(q('[data-africa-subfield-status]').textContent,/この画面に分布図はありません/);assert.equal(q('[data-africa-subfield-status]').previousElementSibling,q('[data-africa-subfields]'));}
+   assert.equal(q('[data-africa-subfield-status]').hidden,false);if(field==='population'){assert.match(q('[data-africa-subfield-status]').textContent,/国勢調査2022年の全国構成：南アフリカ。他国・国内分布は未収録/);assert.equal(q('[data-africa-subfield-status]').previousElementSibling,q('[data-africa-subfields]'));}
    const saved=w.location.href;
    q('[data-place]').value='GHA';q('[data-place]').dispatchEvent(new w.Event('change'));
    w.history.back();assert.equal(q('[data-place]').value,'EGY');
@@ -80,9 +80,9 @@ test('spatial categories and water depth persist across reload, country changes 
    assert.equal(q('[data-africa-subfield-status]').hidden,field==='nature');
    w.history.forward();assert.equal(q(`[data-africa-topic="${planned}"]`).getAttribute('aria-pressed'),'true');
    w.history.forward();assert.equal(q('[data-place]').value,'GHA');
-   assert.equal(q('[data-africa-subfield-status]').hidden,false);if(field==='population'){assert.match(q('[data-africa-subfield-status]').textContent,/この画面に分布図はありません/);assert.equal(q('[data-africa-subfield-status]').previousElementSibling,q('[data-africa-subfields]'));}return saved;
+   assert.equal(q('[data-africa-subfield-status]').hidden,false);if(field==='population'){assert.match(q('[data-africa-subfield-status]').textContent,/国勢調査2022年の全国構成：南アフリカ。他国・国内分布は未収録/);assert.equal(q('[data-africa-subfield-status]').previousElementSibling,q('[data-africa-subfields]'));}return saved;
   });
-  withAfricaPage(saved,(_w,q)=>{assert.equal(q(`[data-africa-topic="${planned}"]`).getAttribute('aria-pressed'),'true');assert.equal(q('[data-africa-subfield-status]').hidden,false);if(field==='population'){assert.match(q('[data-africa-subfield-status]').textContent,/この画面に分布図はありません/);assert.equal(q('[data-africa-subfield-status]').previousElementSibling,q('[data-africa-subfields]'));}});
+  withAfricaPage(saved,(_w,q)=>{assert.equal(q(`[data-africa-topic="${planned}"]`).getAttribute('aria-pressed'),'true');assert.equal(q('[data-africa-subfield-status]').hidden,false);if(field==='population'){assert.match(q('[data-africa-subfield-status]').textContent,/国勢調査2022年の全国構成：南アフリカ。他国・国内分布は未収録/);assert.equal(q('[data-africa-subfield-status]').previousElementSibling,q('[data-africa-subfields]'));}});
  }
  const basinURL=withAfricaPage('https://example.com/insight-journal/atlas/africa/?field=nature&topic=water&place=EGY',(w,q)=>{
   q('[data-africa-water="river"]').click();assert.equal(q('[data-metric]').value,'ER.H2O.INTR.PC');
@@ -106,7 +106,7 @@ test('Africa build includes sitemap, all fields, countries, sources and CSV fall
  assert.equal(doc.querySelector('[data-place]').options.length,56);
  assert.equal(doc.querySelector('[data-place]').options[0].value,'');
  assert.equal(doc.querySelector('[data-metric]').options.length,15);
- assert.ok(doc.querySelector('noscript').textContent.includes('CSV'));
+ assert.ok([...doc.querySelectorAll('noscript')].some(node=>node.textContent.includes('CSV')));
  assert.ok(readFileSync(new URL('../../dist/sitemap.xml',import.meta.url),'utf8').includes('/insight-journal/atlas/africa/'));
  const csv=readFileSync(new URL('../../dist/assets/atlas/africa/indicators.csv',import.meta.url),'utf8');
  assert.ok(csv.includes('NGA,ナイジェリア,SP.POP.TOTL,2023,227882945'));
