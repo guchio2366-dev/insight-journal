@@ -51,6 +51,6 @@ test('北米と西アジアの雨温図は同じ軸・凡例・描画を使用�
   assert.ok(city.temperatureC.every(v=>v===null||(v>=-10&&v<=40)));assert.ok(city.precipitationMm.every(v=>v===null||(v>=0&&v<=350)));
  }
  for(const path of ['dist/atlas/north-america/nature/index.html','dist/atlas/west-asia/nature/index.html']){
-  const html=await read(path,'utf8');assert.match(html,/viewBox="0 0 320 198"/);assert.match(html,/class="atlas-climate-bar"/);assert.match(html,/棒：降水量 mm/);assert.match(html,/線：気温 ℃/);
+  const html=await read(path,'utf8');assert.match(html,/viewBox="0 0 320 \d+"[^>]*data-climate-plot/);assert.match(html,/data-rain-max="350"/);assert.match(html,/data-rain-tick="100"/);assert.match(html,/data-temperature-tick="40"/);assert.match(html,/class="atlas-climate-bar"/);assert.match(html,/棒：降水量 mm/);assert.match(html,/線：気温 ℃/);
  }
 });
