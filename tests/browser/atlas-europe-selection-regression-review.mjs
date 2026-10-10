@@ -26,6 +26,17 @@ async function ready(page,render){
   if(render==='auto')await page.locator('[data-eu-live].is-ready').waitFor();
   else await page.waitForFunction(()=>getComputedStyle(document.querySelector('[data-eu-static]')).visibility==='visible');
 }
+async function followComparison(page,id){
+  const link=page.locator(`[data-eu-comparison-link="${id}"]`);
+  if(!old){
+    const menu=page.locator('[data-eu-comparison-aux]');
+    await menu.waitFor({state:'visible'});
+    if(!(await menu.evaluate(node=>node.open)))await menu.locator('summary').click();
+    assert.equal(await menu.evaluate(node=>node.open),true);
+    await link.waitFor({state:'visible'});
+  }
+  await link.click();
+}
 async function snapshot(page,name){
   await page.evaluate(()=>scrollTo(0,0));
   await page.screenshot({path:`${output}/${name}.png`,fullPage:true});
@@ -126,7 +137,7 @@ try{
    const density=await settled(page,'（2020）');
    const sourceUrl=page.url(),sourcePoint=new URL(sourceUrl).searchParams.get('point');assert.ok(sourcePoint);
    const [lng,lat]=sourcePoint.split(',').map(Number);assert.ok(Math.abs(lng+.1187)<.3&&Math.abs(lat-51.5019)<.3,`London click: ${sourcePoint}`);
-   await page.locator('[data-eu-comparison-link="population-terrain"]').click();
+   await followComparison(page,'population-terrain');
    await page.waitForURL('**/nature/**');await ready(page,render);const targetValue=await settled(page,'（ETOPO 2022）');
    const target={url:page.url(),point:new URL(page.url()).searchParams.get('point'),feature:new URL(page.url()).searchParams.get('feature'),value:targetValue,heading:await page.locator('[data-eu-feature-card]').textContent()};
    assert.equal(target.feature,'alps');assert.match(target.heading,/アルプス/);

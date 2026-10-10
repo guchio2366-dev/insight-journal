@@ -136,6 +136,16 @@ async function openEurope(page, path, render) {
   return ready(page, 'europe', render);
 }
 
+async function followComparison(page, id) {
+  const menu = page.locator('[data-eu-comparison-aux]');
+  await menu.waitFor({state: 'visible'});
+  if (!(await menu.evaluate(node => node.open))) await menu.locator('summary').click();
+  assert.equal(await menu.evaluate(node => node.open), true);
+  const link = menu.locator(`[data-eu-comparison-link="${id}"]`);
+  await link.waitFor({state: 'visible'});
+  await link.click();
+}
+
 async function settled(page, pattern = '（ETOPO 2022）') {
   await page.waitForFunction(pattern => {
     const node = document.querySelector('[data-eu-subject-result]');
@@ -415,7 +425,7 @@ async function europeOperations(page, profile, render) {
   await page.goForward(); await ready(page, 'europe', render); assert.equal(await settled(page), elevation);
   await page.reload({waitUntil: 'networkidle'}); await ready(page, 'europe', render); assert.equal(await settled(page), elevation);
   assert.equal(await page.locator('[data-eu-subject-reader]').textContent(), readerCopy);
-  await page.locator('[data-eu-comparison-link="nature-density"]').click(); await page.waitForURL('**/population/**'); await ready(page, 'europe', render);
+  await followComparison(page, 'nature-density'); await page.waitForURL('**/population/**'); await ready(page, 'europe', render);
   assert.equal(new URL(page.url()).searchParams.get('point'), selectedPoint);
   await page.locator('[data-eu-comparison-return]').click(); await page.waitForURL('**/nature/**'); await ready(page, 'europe', render);
   assert.equal(await settled(page), elevation); assert.equal(new URL(page.url()).searchParams.get('point'), selectedPoint);
@@ -474,7 +484,7 @@ async function europeOperations(page, profile, render) {
   const [longitude, latitude] = sourcePoint.split(',').map(Number);
   // At the compact frame, one screen pixel spans about 0.2° near London.
   assert.ok(Math.hypot(longitude + .1187, latitude - 51.5019) < .5, sourcePoint);
-  await page.locator('[data-eu-comparison-link="population-terrain"]').click(); await page.waitForURL('**/nature/**'); await ready(page, 'europe', render);
+  await followComparison(page, 'population-terrain'); await page.waitForURL('**/nature/**'); await ready(page, 'europe', render);
   const targetURL = new URL(page.url());
   assert.equal(targetURL.searchParams.get('feature'), 'alps');
   assert.equal(await page.locator('[data-eu-subject-grid]').isVisible(),false);
@@ -645,7 +655,7 @@ async function stageOneOperations(page, profile) {
   assert.equal(page.url(), selectedURL);
   assert.equal(await page.locator('[data-culture-value]').textContent(), selectedValue);
   assert.equal(await extent(), fullExtent);
-  await page.locator('[data-eu-comparison-link="culture-hubs"]').click(); await page.waitForURL('**/industry/**'); await ready(page);
+  await followComparison(page, 'culture-hubs'); await page.waitForURL('**/industry/**'); await ready(page);
   assert.match(await page.locator('[data-eu-origin-caption]').textContent(), /Middlesbrough/);
   await page.locator('[data-eu-comparison-return]').click(); await page.waitForURL('**/population/**'); await ready(page);
   assert.equal(await page.locator('[data-culture-value]').textContent(), selectedValue);
@@ -653,7 +663,7 @@ async function stageOneOperations(page, profile) {
   await page.locator('[data-culture-case]').selectOption(''); await ready(page);
   for (const name of ['case', 'category', 'area']) assert.equal(new URL(page.url()).searchParams.has(`culture${name[0].toUpperCase()}${name.slice(1)}`), false);
   assert.equal(await page.locator('[data-culture-value]').isVisible(), false);
-  await page.locator('[data-eu-comparison-link="culture-hubs"]').click(); await page.waitForURL('**/industry/**'); await ready(page);
+  await followComparison(page, 'culture-hubs'); await page.waitForURL('**/industry/**'); await ready(page);
   assert.match(await page.locator('[data-eu-origin-caption]').textContent(), /未選択/);
   await page.locator('[data-eu-comparison-return]').click(); await page.waitForURL('**/population/**'); await ready(page);
   assert.equal(await page.locator('[data-culture-case]').inputValue(), '');
