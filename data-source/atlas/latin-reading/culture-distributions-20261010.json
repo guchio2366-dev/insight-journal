@@ -19,8 +19,8 @@
       "period": "2014年11月13日、2013–14年調査を背景とする地域説明",
       "terms": "Pew Research Center利用条件 §1–2。CCライセンスではありません。",
       "termsUrl": "https://www.pewresearch.org/about/terms-and-conditions/",
-      "evidence": "グアテマラ・エルサルバドル・ニカラグアを中米の例として記述。カトリックと、福音派・ペンテコステ系を含むプロテスタントの併存。",
-      "restriction": "短い独自の事実要約。国別回答割合を国内の宗教領域へ変換しない。中米全住民の教派や2026年の構成を表さない。"
+      "evidence": "中南米の歴史的カトリック基盤と、ブラジル・コロンビアなど南米を含むプロテスタントへの転向。中米3国の併存例。Protestantは歴史的教会・ペンテコステ系・その他を含む分類。",
+      "restriction": "2014年概説と2013–14年調査の短い独自要約。大きな広域注記は地域全体の背景で、居住境界・密度帯ではない。Protestantの集計値を福音派だけの値へ置き換えず、2026年の現在の構成とは扱わない。"
     },
     {
       "id": "mavcor-andes",
@@ -422,6 +422,85 @@
   ],
   "religion": [
     {
+      "id": "catholic-foundation",
+      "label": "カトリックの基盤",
+      "color": "#a35b29",
+      "scope": "all",
+      "kind": "macro-description",
+      "title": "中南米全体：歴史的に広いカトリックの基盤",
+      "overview": "中南米には、20世紀を通じて広いカトリックの基盤がありました。Pewの2013–14年調査でも、南米を含む多くの国でカトリックが多数を占めています。",
+      "explanation": "まず宗教構成の大きな背景を読みます。Pewの2014年概説は、カトリックの歴史的な広がりと、所属割合の低下を並べて説明しています。大きな注記は地域全体への説明で、カトリックだけが暮らす領域や、現在の信者割合ではありません。全国の原表は地図下へ分けています。",
+      "definition": "Pew2014概説・2013–14年の全国調査に基づく広域の背景。地図内の注記位置・枠の面積は居住域・人数・密度を表しません。",
+      "sources": [
+        "pew-regional"
+      ],
+      "paths": [],
+      "anchor": [
+        -65,
+        -15
+      ],
+      "offset": [
+        0,
+        0
+      ],
+      "macro": {
+        "headings": [
+          "中南米に広い",
+          "歴史的なカトリック基盤"
+        ],
+        "lines": [
+          "20世紀を通じた宗教の背景。",
+          "2013–14年調査でも、",
+          "南米を含む多くの国で多数。"
+        ],
+        "y": {
+          "all": 200,
+          "central": 20,
+          "south": 20
+        }
+      }
+    },
+    {
+      "id": "protestant-change",
+      "label": "プロテスタント",
+      "color": "#397780",
+      "scope": "all",
+      "kind": "macro-description",
+      "title": "中南米全体：プロテスタントの広がりと教会構成の変化",
+      "overview": "中米だけでなく、ブラジル・コロンビアなど南米でもプロテスタント教会が存在し、カトリックからの転向による構成の変化がPewの2014年概説に記されています。福音派教会への転向も報告されています。",
+      "explanation": "PewのProtestantは、歴史的プロテスタント教会、ペンテコステ系、その他のプロテスタント教会を含む集計分類です。福音派という名称は地域で広く使われますが、ここではProtestant全体の集計を福音派だけの値とは扱いません。宗教構成が同じ地域の中で変化していることを読み、国別値から居住境界や密度帯を作りません。",
+      "definition": "2013–14年調査を背景とする2014年概説。広がりと転向は当時の記述で、2026年の現在値・国全体の教派領域ではありません。",
+      "sources": [
+        "pew-regional"
+      ],
+      "paths": [],
+      "anchor": [
+        -65,
+        -15
+      ],
+      "offset": [
+        0,
+        0
+      ],
+      "macro": {
+        "headings": [
+          "プロテスタントの広がり",
+          "福音派への転向も報告"
+        ],
+        "lines": [
+          "中米・ブラジルなど南米にも。",
+          "改宗による増加を2014年に報告。",
+          "Protestant全体と福音派の",
+          "分類範囲は区別します。"
+        ],
+        "y": {
+          "all": 435,
+          "central": 260,
+          "south": 435
+        }
+      }
+    },
+    {
       "id": "protestant",
       "label": "中米の教会",
       "mapLabel": "中米：カトリックと福音派",
@@ -509,7 +588,7 @@
       ],
       "offset": [
         -35,
-        -10
+        40
       ],
       "width": 20
     },
@@ -822,8 +901,9 @@
     "projection": "existing Web Mercator latinMapLayout; not an area scale",
     "geometry": "Independently drawn named-region guide strokes and place anchors, not copied boundaries; widths in screen space only",
     "nationalReligion": "Native survey shares are supplemental statistics below the map; no national comparison bars on the map, no generated territories/densities/counts",
-    "coverage": "Seven ethnicity/language/culture themes and six documented religious regional features; observation/publication dates differ, not current shares or exhaustive residence boundaries",
-    "externalAssetsUsed": false
+    "coverage": "Ethnicity seven themes preserved. Religion begins with two region-wide Pew2014 macro descriptions, followed by six documented local examples. Different observation/publication years, no current shares or exhaustive residence boundaries.",
+    "externalAssetsUsed": false,
+    "macroReligion": "Large text annotations describe the region as a whole; screen position/area and unused representative anchor do not indicate density or residence boundaries. Protestant is broader than evangelical; published2014, survey2013–14."
   },
   "notAdopted": [
     {

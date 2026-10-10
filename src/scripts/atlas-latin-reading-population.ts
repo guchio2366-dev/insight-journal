@@ -29,10 +29,10 @@ export function initLatinReadingPopulation(root:HTMLElement){
    const kind=section as LatinCultureSection,groups=latinCultureGroups[kind],host=root.querySelector<HTMLElement>(`[data-lc-map="${section}"]`)!;
    const supplement=kind==='ethnicity'?latinCultureSupplementReading(choice):null;
    const [regionId,groupId]=choice.split(':'),region=latinCultureRegions.find(r=>r.id===regionId),index=groups.findIndex(g=>g.id===groupId),valid=(region||regionId==='PAN'&&kind==='ethnicity')&&index>=0;
-   const requested=culturePattern(kind,choice),pattern=requested&&(scope==='all'||requested.scope===scope)?requested:undefined;if(!valid&&!supplement&&!pattern)choice='';if(!pattern)cultureOnly=false;
+   const requested=culturePattern(kind,choice),pattern=requested&&(scope==='all'||requested.scope==='all'||requested.scope===scope)?requested:undefined;if(!valid&&!supplement&&!pattern)choice='';if(!pattern)cultureOnly=false;
    host.innerHTML=renderLatinCulturePatterns(kind,scope,choice,cultureOnly);initLatinMapCamera(host);
    const reading=culturePatternReading(kind,choice,cultureOnly);
-   q('map-heading').textContent=kind==='ethnicity'?'民族・文化の地域的なつながり':'宗教文化と世俗化の地域的な特色';
+   q('map-heading').textContent=kind==='ethnicity'?'民族・文化の地域的なつながり':'宗教の大枠と地域の特色';
    heading.textContent=supplement?supplement.title:valid?`${region?.name??'パナマ全国'}：${groups[index].name}`:reading.title;
    overview.textContent=supplement?supplement.overview:valid?`${region?.name??'パナマ全国'}の公表人数は${(region?(kind==='ethnicity'?region.identity:region.religion)[index]:latinCultureNational.ethnicity[1].values[index]).toLocaleString('ja-JP')}人です。${region?'チリ2024年・州全体の集計':'パナマ2023年・全国の別設問指標'}。`:reading.overview;
    const selection=supplement?latinCultureSupplementSelection(choice):null;

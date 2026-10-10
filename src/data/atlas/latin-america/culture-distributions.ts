@@ -6,8 +6,9 @@ export interface CultureSource {
  evidence:string; restriction:string;
 }
 export interface CulturePattern {
- id:string; label:string; color:string; scope:'central'|'south';
- kind:'regional-description'|'cultural-place'|'historical-context';
+ id:string; label:string; color:string; scope:'all'|'central'|'south';
+ kind:'macro-description'|'regional-description'|'cultural-place'|'historical-context';
+ macro?:{headings:string[];lines:string[];y:{all:number;central:number;south:number}};
  mapLabel?:string;
  title:string; overview:string; explanation:string; definition:string;
  sources:string[]; paths:CulturePosition[][]; anchor:CulturePosition;
@@ -27,8 +28,8 @@ export const cultureSources:CultureSource[]=[pewReligionSource,{
  id:'pew-regional',title:'Pew Research Center, Religion in Latin America: Overview',
  url:'https://www.pewresearch.org/religion/2014/11/13/religion-in-latin-america/',period:'2014年11月13日、2013–14年調査を背景とする地域説明',
  terms:'Pew Research Center利用条件 §1–2。CCライセンスではありません。',termsUrl:'https://www.pewresearch.org/about/terms-and-conditions/',
- evidence:'グアテマラ・エルサルバドル・ニカラグアを中米の例として記述。カトリックと、福音派・ペンテコステ系を含むプロテスタントの併存。',
- restriction:'短い独自の事実要約。国別回答割合を国内の宗教領域へ変換しない。中米全住民の教派や2026年の構成を表さない。'
+ evidence:'中南米の歴史的カトリック基盤と、ブラジル・コロンビアなど南米を含むプロテスタントへの転向。中米3国の併存例。Protestantは歴史的教会・ペンテコステ系・その他を含む分類。',
+ restriction:'2014年概説と2013–14年調査の短い独自要約。大きな広域注記は地域全体の背景で、居住境界・密度帯ではない。Protestantの集計値を福音派だけの値へ置き換えず、2026年の現在の構成とは扱わない。'
 },{
  id:'mavcor-andes',title:'Raúl Montero Quispe, Qoyllur rit’i: The Lord of the Snow Star, MAVCOR Journal 5(2)',
  url:'https://mavcor.yale.edu/mavcor-journal/qoyllur-rit-i-lord-snow-star',period:'2021年。2001–2018年の現地訪問・観察を含む',
@@ -101,8 +102,10 @@ export const religionSurvey=[
  ['HND',46,41,10,2],['URY',42,15,37,6]
 ].map(([code,catholic,protestant,unaffiliated,other])=>({code:String(code),values:[Number(catholic),Number(protestant),Number(unaffiliated),Number(other)]}));
 export const religionPatterns:CulturePattern[]=[
+ {id:'catholic-foundation',label:'カトリックの基盤',color:'#a35b29',scope:'all',kind:'macro-description',title:'中南米全体：歴史的に広いカトリックの基盤',overview:'中南米には、20世紀を通じて広いカトリックの基盤がありました。Pewの2013–14年調査でも、南米を含む多くの国でカトリックが多数を占めています。',explanation:'まず宗教構成の大きな背景を読みます。Pewの2014年概説は、カトリックの歴史的な広がりと、所属割合の低下を並べて説明しています。大きな注記は地域全体への説明で、カトリックだけが暮らす領域や、現在の信者割合ではありません。全国の原表は地図下へ分けています。',definition:'Pew2014概説・2013–14年の全国調査に基づく広域の背景。地図内の注記位置・枠の面積は居住域・人数・密度を表しません。',sources:['pew-regional'],paths:[],anchor:[-65,-15],offset:[0,0],macro:{headings:['中南米に広い','歴史的なカトリック基盤'],lines:['20世紀を通じた宗教の背景。','2013–14年調査でも、','南米を含む多くの国で多数。'],y:{all:200,central:20,south:20}}},
+ {id:'protestant-change',label:'プロテスタント',color:'#397780',scope:'all',kind:'macro-description',title:'中南米全体：プロテスタントの広がりと教会構成の変化',overview:'中米だけでなく、ブラジル・コロンビアなど南米でもプロテスタント教会が存在し、カトリックからの転向による構成の変化がPewの2014年概説に記されています。福音派教会への転向も報告されています。',explanation:'PewのProtestantは、歴史的プロテスタント教会、ペンテコステ系、その他のプロテスタント教会を含む集計分類です。福音派という名称は地域で広く使われますが、ここではProtestant全体の集計を福音派だけの値とは扱いません。宗教構成が同じ地域の中で変化していることを読み、国別値から居住境界や密度帯を作りません。',definition:'2013–14年調査を背景とする2014年概説。広がりと転向は当時の記述で、2026年の現在値・国全体の教派領域ではありません。',sources:['pew-regional'],paths:[],anchor:[-65,-15],offset:[0,0],macro:{headings:['プロテスタントの広がり','福音派への転向も報告'],lines:['中米・ブラジルなど南米にも。','改宗による増加を2014年に報告。','Protestant全体と福音派の','分類範囲は区別します。'],y:{all:435,central:260,south:435}}},
  {id:'protestant',label:'中米の教会',mapLabel:'中米：カトリックと福音派',color:'#397780',scope:'central',kind:'regional-description',title:'中米：カトリックと福音派などの教会が併存',overview:'グアテマラ・エルサルバドル・ニカラグアは、歴史的なカトリックの伝統に加え、福音派・ペンテコステ系を含むプロテスタントの存在が目立つ地域例です。',explanation:'Pewの2014年の地域説明を手がかりに、複数の教派が同じ地域に暮らすことを読みます。福音派はプロテスタント全部と同じ意味ではありません。短い案内帯は国の位置を示し、国境の内外を一つの教派の領域には分けません。',definition:'3国の教会構成を述べる地域記述。国内の信者居住域・密度・現在の割合ではありません。全国割合は地図下の補助統計です。',sources:['pew-regional'],paths:[[[-90.5,15],[-89,13.8]],[[-86,13.5],[-85.8,12]]],anchor:[-89,14],offset:[-25,32],width:18},
- {id:'andean',label:'アンデスの巡礼',mapLabel:'南ペルー：キリスト教と山の信仰',color:'#91723d',scope:'south',kind:'regional-description',title:'南ペルーのアンデス：キリスト教と山・大地の信仰',overview:'クスコ地方のQoyllur rit’i巡礼には、南ペルーのアンデスやティティカカ湖流域から人々が集まり、キリストへの祈りと山の霊Apusへの供物が重なります。',explanation:'現地観察が述べるクスコ諸谷とティティカカ湖流域を、離れた案内帯で位置づけます。カトリックと土地の信仰が重なる巡礼文化の例で、全住民が同じ儀礼を行うことや、アンデス全域の宗教領域を表していません。民族や言語から信仰を割り当てていません。',definition:'2021年公表の現地記述。南ペルーの巡礼文化の地域例、信者割合や正確な巡礼経路ではありません。',sources:['mavcor-andes'],paths:[[[-72.5,-13.2],[-71.5,-14.2]],[[-70,-15.5],[-69.6,-16]]],anchor:[-72,-13.8],offset:[-35,-10],width:20},
+ {id:'andean',label:'アンデスの巡礼',mapLabel:'南ペルー：キリスト教と山の信仰',color:'#91723d',scope:'south',kind:'regional-description',title:'南ペルーのアンデス：キリスト教と山・大地の信仰',overview:'クスコ地方のQoyllur rit’i巡礼には、南ペルーのアンデスやティティカカ湖流域から人々が集まり、キリストへの祈りと山の霊Apusへの供物が重なります。',explanation:'現地観察が述べるクスコ諸谷とティティカカ湖流域を、離れた案内帯で位置づけます。カトリックと土地の信仰が重なる巡礼文化の例で、全住民が同じ儀礼を行うことや、アンデス全域の宗教領域を表していません。民族や言語から信仰を割り当てていません。',definition:'2021年公表の現地記述。南ペルーの巡礼文化の地域例、信者割合や正確な巡礼経路ではありません。',sources:['mavcor-andes'],paths:[[[-72.5,-13.2],[-71.5,-14.2]],[[-70,-15.5],[-69.6,-16]]],anchor:[-72,-13.8],offset:[-35,40],width:20},
  {id:'santeria',label:'サンテリア',mapLabel:'キューバ西部：サンテリア',color:'#5877a6',scope:'central',kind:'regional-description',title:'キューバ西部：ヨルバ系サンテリアの儀礼伝統',overview:'ハバナとマタンサスでは、アフリカのヨルバ宗教に由来するサンテリアの太鼓と歌の儀礼が記録されています。',explanation:'公的な現地記録にあるキューバ西部の地域を案内します。ハイチのヴードゥーやブラジルのカンドンブレとは別の宗教です。記録は1983–84年で、現在の信者割合やキューバ全域の分布を示すものではありません。',definition:'ハバナ／マタンサスの宗教文化への模式案内。帯の幅は信者数・密度・宗教の境界を表しません。',sources:['folkways-santeria'],paths:[[[-82.4,23.1],[-81.5,23]]],anchor:[-82,23],offset:[-20,-30],width:18},
  {id:'vodou',label:'ヴードゥー',mapLabel:'ハイチ：ヴードゥーの巡礼',color:'#976580',scope:'central',kind:'regional-description',title:'ハイチ：アフリカ由来のヴードゥーの巡礼文化',overview:'中央高原北端のサン・ミシェル郊外やスヴナンスなどには、ヴードゥーの巡礼文化が記述されています。',explanation:'ヴードゥーは西・中央アフリカの宗教伝統とカトリックなどが関わって成立した、ハイチの宗教文化です。巡礼地の地域例を示し、全国の住民を一宗教に分類していません。サンテリアと同じ宗教名ではなく、どちらもアフリカ由来の伝統を持つ別の文化として読みます。',definition:'2017年記事の現地観察に基づく中央高原北部の案内。記事の全国過半数推計は採用していません。',sources:['smithsonian-vodou'],paths:[[[-72.3,19.4],[-72.7,19.5]]],anchor:[-72.5,19.4],offset:[35,8],width:18},
  {id:'candomble',label:'カンドンブレ',mapLabel:'バイーア：カンドンブレ',color:'#a84b68',scope:'south',kind:'regional-description',title:'バイーア：サルバドールとレコンカヴォのカンドンブレ',overview:'サルバドールと周辺のレコンカヴォでは、イタパリカ、カショエイラなどにカンドンブレの宗教施設と文化が記述されています。',explanation:'アフリカ由来の伝統を受け継ぐブラジルの宗教文化です。サルバドールの寺院群と、カショエイラの現地研究を地域のつながりとして読みます。ウンバンダとは別の宗教です。湾周辺が連続した信者居住域であることや、ブラジル全体の所属を示していません。',definition:'2019年の現地研究（CC BY 4.0、独自日本語要約）と2024年の公的記事。3都市の模式案内で、寺院の正確な位置や信者割合ではありません。',sources:['odeere-cachoeira','palmares-salvador'],paths:[[[-38.5,-13],[-38.7,-12.9]],[[-39,-12.6]]],anchor:[-38.7,-12.8],offset:[20,-16],width:18},
@@ -122,5 +125,5 @@ export const culturePatterns=(section:CultureSection)=>section==='ethnicity'?eth
 export const culturePattern=(section:CultureSection,selection:string)=>culturePatterns(section).find(p=>'pattern:'+p.id===selection);
 export const cultureOverview={
  ethnicity:{title:'民族・文化の地域的なつながり',overview:'中米のマヤ・ガリフナ、ペルーのケチュア語・アイマラ語地域、チリ中南部のマプチェの歴史的地域、沿岸のアフロ系文化を、資料の地域記述から読みます。',explanation:'国境と民族・言語・文化の広がりは一致しません。ここでは文献の地域例を区別して示します。都市への移住や地域内の多様性があるため、淡い帯の内部を一つの集団だけが占めるとは読みません。未掲載の集団・地域もあります。'},
- religion:{title:'宗教文化と世俗化の地域的な特色',overview:'中米ではカトリックと福音派などの教会が併存し、南ペルーではキリスト教と山・大地の信仰が重なる巡礼文化があります。カリブとバイーアには別々のアフリカ由来の宗教文化があり、ウルグアイには世俗化の歴史があります。',explanation:'点線帯と注記は、文献が記す宗教文化の地域への案内です。サンテリア・ヴードゥー・カンドンブレを区別し、国全体を一宗教の領域として塗りません。同じ地域でも信仰や実践は重なり、多様です。幅・色の濃さは信者割合や密度を表しません。全国割合は地図下の補助統計で確かめられます。'}
+ religion:{title:'カトリックの基盤と宗教構成の変化',overview:'中南米には歴史的に広いカトリックの基盤があります。Pewの2014年概説では、多くの国でカトリックが多数を占める一方、中米に加えブラジルなど南米でもプロテスタント教会への転向による変化を報告しています。',explanation:'2013–14年調査に基づく当時の記述です。Protestantには歴史的教会・ペンテコステ系・その他の教会が含まれ、福音派だけの分類とは区別します。2つの大きな注記で広域の背景を読み、その後に6地域の補助例を確かめます。国全体を一宗教の領域にせず、注記や帯の面積から信者割合・密度を読まない図です。'}
 };
