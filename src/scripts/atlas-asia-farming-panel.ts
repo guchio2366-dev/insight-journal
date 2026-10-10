@@ -3,6 +3,7 @@ import type {AsiaRegionId} from '../lib/atlas-asia-state';
 import southCentralShares from '../../public/assets/atlas/south-central-asia-v1/world-shares.json';
 import southeastShares from '../../public/assets/atlas/southeast-asia-v1/world-shares.json';
 import {renderSouthCentralRiceFlow} from './atlas-south-central-rice-flow';
+import {farmWorldComparison,validFarmValue} from '../lib/atlas-shared-world-statistics';
 type ShareYear={year:number;countries:Record<string,{share:number;flag:string}>};
 type ShareSeries={id:string;label:string;definition:string;years:ShareYear[]};
 const worldShareByTopic:Record<string,string>={rice:'rice-production',wheat:'wheat-production',maize:'maize-production',soybean:'soybean-production',cattle:'cattle-stocks',chicken:'chicken-stocks',sheep:'sheep-stocks',forest:'forest-area'};
@@ -67,11 +68,14 @@ const definitions={
 export function farmSeries(topic:string,layer:AsiaFarmingLayer|undefined,rows:AsiaFarmObservation[]){
  if(topic==='forest')return [
   {title:'森林面積',rows:rows.filter(r=>r.domain==='Inputs_LandUse'&&r.item==='6646'&&r.element==='Area')},
-  {title:'丸太の生産量（燃料用を含む）',rows:rows.filter(r=>r.domain==='Forestry'&&r.item==='1861'&&r.element==='Production')},
-  {title:'製材の生産量',rows:rows.filter(r=>r.domain==='Forestry'&&r.item==='1872'&&r.element==='Production')},
+  ...([['1861','丸太（燃料用を含む）'],['1872','製材']] as const).flatMap(([item,label])=>([['5516','生産量'],['5616','輸入量'],['5916','輸出量']] as const).map(([element,title])=>({title:label+'の'+title,rows:rows.filter(r=>r.domain==='Forestry'&&r.item===item&&r.elementCode===element)}))),
  ];
  const item=topic==='rice'?'27':String(layer?.faoItem),base=rows.filter(r=>r.domain==='Production_Crops_Livestock'&&r.item===item);
- return layer?.kind==='livestock'?[{title:'飼養頭数・羽数',rows:base.filter(r=>r.element==='Stocks')}]:[{title:'生産量',rows:base.filter(r=>r.element==='Production')},{title:'収穫面積',rows:base.filter(r=>r.element==='Area harvested')}];
+ if(layer?.kind==='livestock'){
+  const products:Record<string,[string,string][]>={cattle:[['867','牛肉（骨付き、生鮮・冷蔵）'],['882','牛の生乳']],buffalo:[['951','水牛の生乳']],pig:[['1035','豚肉（骨付き、生鮮・冷蔵）']],chicken:[['1058','鶏肉（生鮮・冷蔵）'],['1062','鶏卵（殻付き）']]};
+  return [{title:'飼養頭数・羽数',rows:base.filter(r=>r.element==='Stocks')},...(products[topic]??[]).map(([item,label])=>({title:label+'の生産量',rows:rows.filter(r=>r.domain==='Production_Crops_Livestock'&&r.item===item&&r.elementCode==='5510')}))];
+ }
+ return [{title:'生産量',rows:base.filter(r=>r.element==='Production')},{title:'収穫面積',rows:base.filter(r=>r.element==='Area harvested')}];
 }
 export function renderAsiaFarmingPanel(root:HTMLElement,region:AsiaRegionId,topic:string,layer:AsiaFarmingLayer|undefined,country:{code:string;name:string}|undefined,statistics:AsiaFarmStatistics|null,focusKindReading?:Record<'crop'|'livestock'|'forest',string>){
  const $=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
@@ -93,20 +97,25 @@ export function renderAsiaFarmingPanel(root:HTMLElement,region:AsiaRegionId,topi
  const status=$('[data-farming-statistics-status]');
  if(!country){status.textContent=region==='southeast-asia'?'雨温図や地域事例から同じ場所を比較すると、その国全体の2015–2024年の統計を表示します。':'国・地域を選ぶと、2015–2024年の統計を表示します。';return;}
  if(!statistics){status.textContent='国・地域の統計を読み込んでいます。';return;}
+ if(topic==='forest'){const note=document.createElement('p');note.className='farming-note';note.textContent='丸太と製材は別製品です。生産・輸入・輸出を個別に示し、異なる製品の量を差し引いた収支や国内消費は計算しません。輸出相手国・用途・在庫とパルプは未収録です。';tables.append(note);}
  const record=statistics.countries[country.code];status.textContent=country.code==='CHN'?'この表はFAOの中国本土の統計です。香港・マカオ・台湾を含むChina集計とは区別しています。':country.code==='TWN'?'この表はFAOの台湾区分（M49:158）を使っています。':'';
  for(const series of farmSeries(topic,layer,record?.observations??[])){
   // A source element with a unit change must not be drawn as one time series.
   const units=[...new Set(series.rows.map(r=>r.unit))];
   for(const unit of units.length?units:['']){
    const observations=series.rows.filter(r=>r.unit===unit),table=document.createElement('table');table.className='asia-stat-table';const caption=document.createElement('caption');caption.textContent=`${series.title}${unit?'（'+asiaFarmUnit(unit,topic)+'）':''}`;table.append(caption);
-   const head=document.createElement('thead'),hr=document.createElement('tr');for(const text of ['年','値・資料の区分']){const th=document.createElement('th');th.scope='col';th.textContent=text;hr.append(th);}head.append(hr);table.append(head);
+   const comparisons=observations.some(row=>farmWorldComparison(statistics,row)!==null),isArea=observations.some(row=>row.domain==='Inputs_LandUse'),isStock=observations.some(row=>row.elementCode==='5111'||row.elementCode==='5112');
+   const shareLabel=isArea?'世界面積比':isStock?'世界飼養数比':'世界生産比';
+   const head=document.createElement('thead'),hr=document.createElement('tr');for(const text of ['年','値・資料の区分',...(comparisons?['世界値・区分',shareLabel]:[])]){const th=document.createElement('th');th.scope='col';th.textContent=text;hr.append(th);}head.append(hr);table.append(head);
    const body=document.createElement('tbody');for(let year=2015;year<=2024;year++){
     const row=document.createElement('tr'),th=document.createElement('th'),td=document.createElement('td'),value=observations.find(r=>r.year===year);th.scope='row';th.textContent=String(year);
-    td.textContent=value?.value!=null?value.value.toLocaleString('ja-JP',{maximumFractionDigits:2}):'未掲載';if(value){const note=document.createElement('small');note.textContent=(asiaFarmFlagLabels[value.flag]??value.flag)+(value.note?` · ${value.note}`:'');td.append(note);}row.append(th,td);body.append(row);
+    const number=validFarmValue(value);td.textContent=number!==null?number.toLocaleString('ja-JP',{maximumFractionDigits:2}):'未掲載';if(value){const note=document.createElement('small');note.textContent=(asiaFarmFlagLabels[value.flag]??value.flag)+(value.note?` · ${value.note}`:'');td.append(note);}row.append(th,td);
+    if(comparisons){const comparison=farmWorldComparison(statistics,value),worldCell=document.createElement('td'),shareCell=document.createElement('td');worldCell.textContent=comparison?comparison.value.toLocaleString('ja-JP',{maximumFractionDigits:2}):'未収録';shareCell.textContent=comparison?(comparison.share===0?'0％':percentage(comparison.share)):'未収録';if(comparison){const flag=document.createElement('small');flag.textContent=sourceFlag(comparison.flag);worldCell.append(flag);}row.append(worldCell,shareCell);}body.append(row);
    }table.append(body);
-   const values=observations.filter(r=>r.value!==null&&r.value>=0),max=Math.max(0,...values.map(r=>r.value!));
-   if(max>0){const scale=document.createElement('p');scale.className='farming-note';scale.textContent=`${series.title}の推移を示します。棒の高さは0から${max.toLocaleString('ja-JP',{maximumFractionDigits:2})} ${asiaFarmUnit(unit,topic)}の範囲です。`;tables.append(scale);const chart=document.createElement('div');chart.className='asia-stat-chart';chart.setAttribute('role','img');chart.setAttribute('aria-label',`${series.title}の2015年から2024年の推移。正確な値と欠測は直後の表に示します。`);for(let year=2015;year<=2024;year++){const value=observations.find(r=>r.year===year),bar=document.createElement('span');bar.style.height=value?.value!=null?`${value.value/max*100}%`:'0';if(value?.value==null)bar.style.background='transparent';bar.title=`${year}: ${value?.value??'未掲載'}`;const label=document.createElement('b');label.textContent=String(year).slice(2);bar.append(label);chart.append(bar);}tables.append(chart);}
+   const values=observations.filter(r=>validFarmValue(r)!==null),max=Math.max(0,...values.map(r=>r.value!));
+   if(max>0){const scale=document.createElement('p');scale.className='farming-note';scale.textContent=`${series.title}の推移を示します。棒の高さは0から${max.toLocaleString('ja-JP',{maximumFractionDigits:2})} ${asiaFarmUnit(unit,topic)}の範囲です。`;tables.append(scale);const chart=document.createElement('div');chart.className='asia-stat-chart';chart.setAttribute('role','img');chart.setAttribute('aria-label',`${series.title}の2015年から2024年の推移。正確な値と欠測は直後の表に示します。`);for(let year=2015;year<=2024;year++){const value=observations.find(r=>r.year===year),bar=document.createElement('span');bar.style.height=validFarmValue(value)!==null?`${value!.value!/max*100}%`:'0';if(validFarmValue(value)===null)bar.style.background='transparent';bar.title=`${year}: ${validFarmValue(value)??'未掲載'}`;const label=document.createElement('b');label.textContent=String(year).slice(2);bar.append(label);chart.append(bar);}tables.append(chart);}
    tables.append(table);
+   if(comparisons){const note=document.createElement('p');note.className='farming-note';note.textContent=`${shareLabel}＝国別値÷同じ原表版・品目・要素・年・単位のWorld公表値。世界値も${asiaFarmUnit(unit,topic)}。輸出構成比や自給率ではありません。世界行がない年は未収録です。`;tables.append(note);}
   }
  }
 }

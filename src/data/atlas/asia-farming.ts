@@ -2,7 +2,7 @@ import type {AsiaRegionId} from '../../lib/atlas-asia-state';
 export type AsiaFarmingLayer={id:string;title:string;kind:'crop'|'livestock'|'forest';image:string;grid?:string;width:number;height:number;bounds3857:number[];imageCoordinates:[number,number][];unit?:string;year:number;faoItem?:number;breaks?:number[];colors?:string[];countryCoverage?:Record<string,{maskPixels:number;validPixels:number;positivePixels:number}>};
 export type AsiaFarmingRegion={layers:AsiaFarmingLayer[]};
 export type AsiaFarmObservation={domain:string;item:string;element:string;elementCode:string;year:number;unit:string;value:number|null;flag:string;note:string|null};
-export type AsiaFarmStatistics={countries:Record<string,{m49:number;sourceNames:Record<string,{name:string;areaCode:string}>;observations:AsiaFarmObservation[]}>;items:Record<string,string>;flags:Record<string,string>};
+export type AsiaFarmStatistics={countries:Record<string,{m49:number;sourceNames:Record<string,{name:string;areaCode:string}>;observations:AsiaFarmObservation[]}>;items:Record<string,string>;flags:Record<string,string>;inputs?:{file:string;sha256:string;url:string}[]};
 export const asiaFarmDefinitions:Record<string,{statName:string;definition:string}>={
  rice:{statName:'米',definition:'米の生産量と収穫面積を示します。地図の収穫面積と国の統計は、別々の資料から取得しています。精米後の供給量や消費量を示す表ではありません。'},
  wheat:{statName:'小麦',definition:'小麦の生産量と収穫面積を示します。面積が大きいことと、1ha当たりの収量が高いことは異なります。'},
