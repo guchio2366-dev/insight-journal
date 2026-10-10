@@ -2,6 +2,7 @@ import {renderLatinUrbanMap,renderLatinReadingDensityMap,latinReadingDensityLege
 import {latinUrbanPopulations,latinUrbanSource} from '../data/atlas/latin-america/urban-population-2018';
 import {renderLatinCultureMap} from '../lib/atlas-latin-reading-culture';
 import {latinCultureGroups,latinCultureRegions,latinCultureNational,latinCultureOverview,latinCultureCoverage,type LatinCultureSection} from '../data/atlas/latin-america/culture-reading';
+import {latinCultureSupplementReading,latinCultureSupplementLinks} from '../lib/atlas-latin-culture-supplement';
 import {initLatinMapCamera} from './atlas-latin-reading-map';
 const escape=(s:unknown)=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 export function initLatinReadingPopulation(root:HTMLElement){
@@ -24,12 +25,13 @@ export function initLatinReadingPopulation(root:HTMLElement){
    q('status').textContent=layer==='urban'?'国連WUP2018・CC BY3.0 IGO。都市域の定義は国ごとに異なり、現在人口ではありません。中米・カリブの都市人数は未収録。':'GHSL2020・CC BY4.0。配信原値は変更していません。';
   }else{
    const kind=section as LatinCultureSection,groups=latinCultureGroups[kind],info=latinCultureOverview[kind],host=root.querySelector<HTMLElement>(`[data-lc-map="${section}"]`)!;
+   const supplement=kind==='ethnicity'?latinCultureSupplementReading(choice):null;
    const [regionId,groupId]=choice.split(':'),region=latinCultureRegions.find(r=>r.id===regionId),index=groups.findIndex(g=>g.id===groupId),valid=(region||regionId==='PAN'&&kind==='ethnicity')&&index>=0;
-   if(!valid)choice='';host.innerHTML=renderLatinCultureMap(kind,scope,choice);initLatinMapCamera(host);
-   q('map-heading').textContent=kind==='ethnicity'?'帰属・自己認識の州別計数と全国補助統計':'宗教・信条の州別計数';heading.textContent=valid?`${region?.name??'パナマ全国'}：${groups[index].name}`:info.title;
-   overview.textContent=valid?`${region?.name??'パナマ全国'}の公表人数は${(region?(kind==='ethnicity'?region.identity:region.religion)[index]:latinCultureNational.ethnicity[1].values[index]).toLocaleString('ja-JP')}人です。${region?'チリ2024年・州全体の集計':'パナマ2023年・全国の別設問指標'}。`:info.overview;
-   body.innerHTML=`<h3>解説：設問と統計範囲を保って読む</h3><p>${escape(info.explanation)}</p><p>${escape(kind==='ethnicity'?'チリ：全年齢、設問ごとの未回答を分母から除外。パナマ：最終通常居住者4,064,780人。先住民とアフリカ系は別設問で、足し合わせません。':'チリ：宗教・信条の設問に回答した15歳以上の通常居住者。掲載3分類以外の回答もあるため、残差を新しい宗教として作りません。')}</p><p>${escape(latinCultureCoverage)}</p><div>${groups.map(g=>`<p><strong style="color:${g.color}">${g.name}</strong></p>`).join('')}</div><details open><summary>原典・利用条件</summary>${latinCultureNational[kind].map(r=>`<p>${r.name}・${r.year}年：<a href="${r.source}">国勢調査原典</a> · <a href="${r.licenseUrl}">${r.license}</a></p>`).join('')}<p>抽出・日本語表示・記号配置はInsight Journal。全国割合から居住域を描いていません。</p></details>`;
-   legend.innerHTML=`<div class="latin-culture-key">${groups.map(g=>`<span><i style="background:${g.color}"></i>${g.name}</span>`).join('')}</div><p>丸：チリ州全体の統計を州都に置く同サイズの記号。${kind==='ethnicity'?'四角：パナマ全国の補助統計。':''}人数は右で確認。位置・記号面積は居住域ではありません。</p>`;q('status').textContent=latinCultureCoverage;
+   if(!valid&&!supplement)choice='';host.innerHTML=renderLatinCultureMap(kind,scope,choice);initLatinMapCamera(host);
+   q('map-heading').textContent=kind==='ethnicity'?'帰属・自己認識の州別計数と全国補助統計':'宗教・信条の州別計数';heading.textContent=supplement?supplement.title:valid?`${region?.name??'パナマ全国'}：${groups[index].name}`:info.title;
+   overview.textContent=supplement?supplement.overview:valid?`${region?.name??'パナマ全国'}の公表人数は${(region?(kind==='ethnicity'?region.identity:region.religion)[index]:latinCultureNational.ethnicity[1].values[index]).toLocaleString('ja-JP')}人です。${region?'チリ2024年・州全体の集計':'パナマ2023年・全国の別設問指標'}。`:info.overview;
+   body.innerHTML=supplement?supplement.body:`${kind==='ethnicity'?latinCultureSupplementLinks(choice):''}<h3>解説：設問と統計範囲を保って読む</h3><p>${escape(info.explanation)}</p><p>${escape(kind==='ethnicity'?'チリ：全年齢、設問ごとの未回答を分母から除外。パナマ：最終通常居住者4,064,780人。先住民とアフリカ系は別設問で、足し合わせません。':'チリ：宗教・信条の設問に回答した15歳以上の通常居住者。掲載3分類以外の回答もあるため、残差を新しい宗教として作りません。')}</p><p>${escape(latinCultureCoverage)}</p><div>${groups.map(g=>`<p><strong style="color:${g.color}">${g.name}</strong></p>`).join('')}</div><details open><summary>原典・利用条件</summary>${latinCultureNational[kind].map(r=>`<p>${r.name}・${r.year}年：<a href="${r.source}">国勢調査原典</a> · <a href="${r.licenseUrl}">${r.license}</a></p>`).join('')}<p>抽出・日本語表示・記号配置はInsight Journal。全国割合から居住域を描いていません。</p></details>`;
+   legend.innerHTML=`<div class="latin-culture-key">${groups.map(g=>`<span><i style="background:${g.color}"></i>${g.name}</span>`).join('')}</div><p>丸：チリ州全体の統計を州都に置く同サイズの記号。${kind==='ethnicity'?'色四角：パナマ全国の別設問。＋四角：グアテマラ・コロンビアの資料別補助統計。':''}人数は右で確認。位置・記号面積は居住域ではありません。</p>`;q('status').textContent=latinCultureCoverage;
   }
  };
  root.addEventListener('change',e=>{const t=e.target as HTMLSelectElement;if(t.matches('[data-lp-scope-select]'))scope=t.value;else if(t.matches('[data-lp-layer-select]'))layer=t.value;else return;render();write();});

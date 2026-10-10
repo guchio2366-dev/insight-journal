@@ -40,6 +40,22 @@ try{
    await page.locator('[data-lp-target-map] [data-lp-city=lima]').click();assert.equal(await page.locator('[data-lp-target-map] [data-city-population]').count(),7);assert.match(await page.locator('[data-lp-overview]').textContent(),/10,391,000/);await shot('population-selected');await page.reload({waitUntil:'networkidle'});await ready();assert.match(await page.locator('[data-lp-reading-title]').textContent(),/リマ/);view.checks.push('actual city selection, other cities retained, reload');
    await page.locator('[data-lp-layer-select]').selectOption('spatial');await shot('density');assert.equal(await page.locator('[data-lp-target-legend] li').count(),5);if(view.primary){const decoded=await page.locator('[data-lp-target-legend]').evaluate(el=>{const r=el.getBoundingClientRect();return{bottom:r.bottom,height:r.height};});assert.ok(decoded.bottom<=viewport.height,'Density decoding extends past the primary review viewport');}
    for(const section of ['ethnicity','religion']){await page.locator(`[data-latin-section=${section}]`).click();await page.evaluate(()=>scrollTo(0,0));const count=await page.locator(`[data-lc-map=${section}] [data-lc-select]`).count();await shot(section);await readableLabels(`[data-lc-map=${section}] [data-latin-culture-label-text]`);await page.locator(`[data-lc-map=${section}] [data-lc-select="biobio:${section==='ethnicity'?'afro':'protestant'}"]`).click();assert.equal(await page.locator(`[data-lc-map=${section}] [data-lc-select]`).count(),count);assert.match(await page.locator('[data-lp-reading-title]').textContent(),/ビオビオ/);await page.reload({waitUntil:'networkidle'});await ready();assert.equal(await page.locator(`[data-latin-section-panel=${section}]`).isVisible(),true);view.checks.push(section+' keeps all source-region indicators and restores direct selection');}
+   await page.locator('[data-latin-section=ethnicity]').click();
+   const cultureCount=await page.locator('[data-lc-map=ethnicity] [data-lc-select]').count();
+   for(const [country,id,count,value,name] of [['GTM','maya',6,'41.7%','guatemala'],['COL','la-guajira',33,'394,683人','colombia']]){
+    await page.locator(`[data-lc-map=ethnicity] [data-lc-source=${country}]`).click();
+    assert.equal(await page.locator(`[data-lc-supplement-table=${country}] tbody tr`).count(),count);
+    await page.evaluate(()=>{scrollTo(0,0);document.querySelector('.latin-reading-scroll').scrollTop=0;});await shot('ethnicity-'+name);
+    await page.locator(`[data-lc-supplement-table=${country}] [data-lc-select="${country}:${id}"]`).click();
+    assert.ok((await page.locator('[data-lp-overview]').textContent()).includes(value));
+    assert.equal(await page.locator('[data-lc-map=ethnicity] [data-lc-select]').count(),cultureCount);
+    assert.equal(await page.locator(`[data-lc-supplement-table=${country}] tbody tr`).count(),count);
+    await page.evaluate(()=>{scrollTo(0,0);document.querySelector('.latin-reading-scroll').scrollTop=0;});await shot('ethnicity-'+name+'-selected');
+    await page.reload({waitUntil:'networkidle'});await ready();assert.ok((await page.locator('[data-lp-overview]').textContent()).includes(value));
+    await page.goBack({waitUntil:'networkidle'});await ready();assert.equal(new URL(page.url()).searchParams.get('group'),country+':national');
+    view.checks.push(country+' source marker opens '+count+' original rows; row selection, reload and back retain all indicators');
+   }
+   await page.locator('[data-lc-supplement-table=COL] [data-lc-select="COL:san-andres-providencia-y-santa-catalina"]').click();assert.match(await page.locator('[data-lp-overview]').textContent(),/20人/);
    await page.locator('[data-latin-section=population]').click();assert.equal(await page.locator('[data-latin-section-panel=population]').isVisible(),true);
    for(const geometry of Object.values(view.measurements)){assert.equal(geometry.overflow,false);assert.ok(geometry.map.y+geometry.map.height<=viewport.height-40,'Map extends past the fixed review viewport');assert.equal(geometry.visualViewportScale,1);assert.equal(geometry.dpr,1);assert.deepEqual(geometry.scroll,{x:0,y:0});}
   }

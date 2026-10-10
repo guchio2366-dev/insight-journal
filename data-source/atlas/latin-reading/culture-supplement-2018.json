@@ -1,0 +1,313 @@
+{
+  "retrievedAt": "2026-10-10",
+  "method": "Official published aggregate excerpts transcribed via web tool. No binary PDF acquisition or binary hash claimed.",
+  "coverageComplete": false,
+  "guatemala": {
+    "country": "GTM",
+    "name": "グアテマラ",
+    "year": 2018,
+    "grain": "全国",
+    "unit": "公表割合・%",
+    "definition": "Censo 2018を出典とする政府概要の自己認識6区分。母語・宗教の分類とは別。",
+    "denominator": "出典の表記は全国の総人口。政府概要に設問対象年齢・未回答処理の詳細は明記されていません。公表割合だけを使い、掲載された2023年推計人口を掛けて人数を作りません。",
+    "source": "https://vicepresidencia.gob.gt/politica-migratoria/2-datos-generales",
+    "sourceLocation": "Datos generales: self-identification paragraph and figure source Censo 2018",
+    "terms": "CC BY-SA 4.0",
+    "termsUrl": "https://vicepresidencia.gob.gt/politica-migratoria/2-datos-generales",
+    "attribution": "Vicepresidencia de la República de Guatemala / INE Censo 2018。抜粋・日本語表示はInsight Journal、CC BY-SA 4.0。",
+    "rows": [
+      {
+        "id": "ladino",
+        "name": "ラディーノ",
+        "original": "Ladino",
+        "value": 56
+      },
+      {
+        "id": "maya",
+        "name": "マヤ",
+        "original": "Maya",
+        "value": 41.7
+      },
+      {
+        "id": "xinca",
+        "name": "シンカ",
+        "original": "Xinca",
+        "value": 1.8
+      },
+      {
+        "id": "afro-creole",
+        "name": "アフリカ系／クレオール／アフロメスティソ",
+        "original": "Afrodescendiente/creole/afromestizo",
+        "value": 0.2
+      },
+      {
+        "id": "garifuna",
+        "name": "ガリフナ",
+        "original": "Garífuna",
+        "value": 0.1
+      },
+      {
+        "id": "foreign",
+        "name": "外国人",
+        "original": "Extranjero",
+        "value": 0.2
+      }
+    ],
+    "limitations": "National percentages only; no department distribution, no original exact counts. Do not multiply by 2023 projection to invent 2018 counts; do not make residential territories. Language paragraph is a separate measure."
+  },
+  "colombia": {
+    "country": "COL",
+    "name": "コロンビア",
+    "year": 2018,
+    "grain": "32県＋Bogotá D.C.（33行政区分）",
+    "unit": "自己認識した先住民の公表人数・人",
+    "definition": "DANE CNPV2018の先住民自己認識のセンサス人数。行政区分の全域集計で、民族の居住域・言語・宗教・人口推計ではありません。",
+    "denominator": "人数は先住民と自己認識したセンサス対象者の公表計数。全国の同計数1,905,617人を区分間の分布を読む分母に使えます。各区分の総人口・民族設問回答者数は未収録なので、総人口に占める割合を作りません。",
+    "source": "https://www.dane.gov.co/files/investigaciones/boletines/grupos-etnicos/presentacion-grupos-etnicos-2019.pdf",
+    "sourceLocation": "PDF index 24 (25th page), Población indígena por departamentos CG2005-CNPV2018; use right CNPV2018 values",
+    "terms": "DANE利用条件第2項（指定出典表示で利用・変換・分析可）",
+    "termsUrl": "https://www.dane.gov.co/index.php/terrminos-y-condiciones-dane",
+    "attribution": "Fuente: Departamento Administrativo Nacional de Estadística: www.dane.gov.co",
+    "nationalTotal": 1905617,
+    "rows": [
+      {
+        "id": "la-guajira",
+        "name": "LA GUAJIRA",
+        "original": "LA GUAJIRA",
+        "value": 394683
+      },
+      {
+        "id": "cauca",
+        "name": "CAUCA",
+        "original": "CAUCA",
+        "value": 308455
+      },
+      {
+        "id": "narino",
+        "name": "NARIÑO",
+        "original": "NARIÑO",
+        "value": 206455
+      },
+      {
+        "id": "cordoba",
+        "name": "CÓRDOBA",
+        "original": "CÓRDOBA",
+        "value": 202621
+      },
+      {
+        "id": "sucre",
+        "name": "SUCRE",
+        "original": "SUCRE",
+        "value": 104890
+      },
+      {
+        "id": "choco",
+        "name": "CHOCÓ",
+        "original": "CHOCÓ",
+        "value": 68415
+      },
+      {
+        "id": "caldas",
+        "name": "CALDAS",
+        "original": "CALDAS",
+        "value": 55801
+      },
+      {
+        "id": "cesar",
+        "name": "CESAR",
+        "original": "CESAR",
+        "value": 51233
+      },
+      {
+        "id": "putumayo",
+        "name": "PUTUMAYO",
+        "original": "PUTUMAYO",
+        "value": 50694
+      },
+      {
+        "id": "tolima",
+        "name": "TOLIMA",
+        "original": "TOLIMA",
+        "value": 45269
+      },
+      {
+        "id": "vichada",
+        "name": "VICHADA",
+        "original": "VICHADA",
+        "value": 44578
+      },
+      {
+        "id": "atlantico",
+        "name": "ATLÁNTICO",
+        "original": "ATLÁNTICO",
+        "value": 39061
+      },
+      {
+        "id": "amazonas",
+        "name": "AMAZONAS",
+        "original": "AMAZONAS",
+        "value": 38130
+      },
+      {
+        "id": "antioquia",
+        "name": "ANTIOQUIA",
+        "original": "ANTIOQUIA",
+        "value": 37628
+      },
+      {
+        "id": "guainia",
+        "name": "GUAINÍA",
+        "original": "GUAINÍA",
+        "value": 33280
+      },
+      {
+        "id": "valle-del-cauca",
+        "name": "VALLE DEL CAUCA",
+        "original": "VALLE DEL CAUCA",
+        "value": 30844
+      },
+      {
+        "id": "vaupes",
+        "name": "VAUPÉS",
+        "original": "VAUPÉS",
+        "value": 30787
+      },
+      {
+        "id": "risaralda",
+        "name": "RISARALDA",
+        "original": "RISARALDA",
+        "value": 29909
+      },
+      {
+        "id": "magdalena",
+        "name": "MAGDALENA",
+        "original": "MAGDALENA",
+        "value": 20938
+      },
+      {
+        "id": "meta",
+        "name": "META",
+        "original": "META",
+        "value": 20528
+      },
+      {
+        "id": "bogota-d-c",
+        "name": "BOGOTÁ D.C.",
+        "original": "BOGOTÁ D.C.",
+        "value": 19063
+      },
+      {
+        "id": "huila",
+        "name": "HUILA",
+        "original": "HUILA",
+        "value": 12194
+      },
+      {
+        "id": "cundinamarca",
+        "name": "CUNDINAMARCA",
+        "original": "CUNDINAMARCA",
+        "value": 9949
+      },
+      {
+        "id": "caqueta",
+        "name": "CAQUETÁ",
+        "original": "CAQUETÁ",
+        "value": 8825
+      },
+      {
+        "id": "boyaca",
+        "name": "BOYACÁ",
+        "original": "BOYACÁ",
+        "value": 7151
+      },
+      {
+        "id": "casanare",
+        "name": "CASANARE",
+        "original": "CASANARE",
+        "value": 6893
+      },
+      {
+        "id": "guaviare",
+        "name": "GUAVIARE",
+        "original": "GUAVIARE",
+        "value": 6856
+      },
+      {
+        "id": "arauca",
+        "name": "ARAUCA",
+        "original": "ARAUCA",
+        "value": 6573
+      },
+      {
+        "id": "bolivar",
+        "name": "BOLÍVAR",
+        "original": "BOLÍVAR",
+        "value": 5204
+      },
+      {
+        "id": "norte-de-santander",
+        "name": "NORTE DE SANTANDER",
+        "original": "NORTE DE SANTANDER",
+        "value": 4545
+      },
+      {
+        "id": "quindio",
+        "name": "QUINDÍO",
+        "original": "QUINDÍO",
+        "value": 2883
+      },
+      {
+        "id": "santander",
+        "name": "SANTANDER",
+        "original": "SANTANDER",
+        "value": 1262
+      },
+      {
+        "id": "san-andres-providencia-y-santa-catalina",
+        "name": "SAN ANDRÉS, PROVIDENCIA Y SANTA CATALINA",
+        "original": "SAN ANDRÉS, PROVIDENCIA Y SANTA CATALINA",
+        "value": 20
+      }
+    ],
+    "limitations": "Subnational administrative counts, not ethnic land or residential territory. Indigenous share uses persons reporting ethnic affiliation; no denominator or share inferred here. Afro-descendant census counts versus adjusted estimates must be reviewed separately; religion not in this excerpt.",
+    "validation": {
+      "sumOf33Rows": 1905617,
+      "matchesPublishedNationalTotal": true
+    }
+  },
+  "urbanAcquisitionBlocker": {
+    "id": "central-caribbean-urban-counts",
+    "targets": [
+      "Guatemala City",
+      "La Habana",
+      "Santo Domingo",
+      "San José",
+      "Panama City",
+      "Port-au-Prince"
+    ],
+    "status": "Same-definition WUP2018 city rows not acquired. Existing report TableIII.6 only covers cities >=5 million; it cannot provide these rows.",
+    "requests": [
+      {
+        "url": "https://population.un.org/wup/Download/Files/WUP2018-F12-Cities_Over_300K.xls",
+        "result": "Executor HTTP tunnel 403; requested once"
+      },
+      {
+        "url": "https://www.un.org/en/development/desa/population/publications/pdf/urbanization/the_worlds_cities_in_2018_data_booklet.pdf",
+        "result": "Web fetch Internal Error"
+      },
+      {
+        "url": "https://www.un.org/development/desa/pd/content/worlds-cities-2018-data-booklet",
+        "result": "Web fetch 403"
+      },
+      {
+        "url": "https://digitallibrary.un.org/record/3799524?ln=en",
+        "result": "Web fetch Internal Error"
+      },
+      {
+        "url": "https://www.un.org/en/events/citiesday/assets/pdf/the_worlds_cities_in_2018_data_booklet.pdf",
+        "result": "Web fetch 403"
+      }
+    ],
+    "action": "Do not repeat denied destinations or substitute municipality counts under WUP2018. No city counts added."
+  }
+}

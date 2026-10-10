@@ -55,6 +55,32 @@
       "licenseEvidence": "https://www.inec.gob.pa/publicaciones/Default3.aspx?ID_CATEGORIA=19&ID_PUBLICACION=1199&ID_SUBCATEGORIA=7",
       "scope": "national, separate affirmative indicators; final usual-resident denominator 4064780",
       "priorDataReview": "PR307 bebf096ef097c563a10b808ac29726a6cfd48106; data only, whole branch not merged"
+    },
+    {
+      "id": "gtm-identity2018",
+      "url": "https://vicepresidencia.gob.gt/politica-migratoria/2-datos-generales",
+      "year": 2018,
+      "scope": "全国",
+      "unit": "公表割合・%",
+      "denominator": "出典の表記は全国の総人口。政府概要に設問対象年齢・未回答処理の詳細は明記されていません。公表割合だけを使い、掲載された2023年推計人口を掛けて人数を作りません。",
+      "license": "CC BY-SA 4.0",
+      "licenseEvidence": "https://vicepresidencia.gob.gt/politica-migratoria/2-datos-generales",
+      "attribution": "Vicepresidencia de la República de Guatemala / INE Censo 2018。抜粋・日本語表示はInsight Journal、CC BY-SA 4.0。",
+      "dataFile": "culture-supplement-2018.json",
+      "sourceLocation": "Datos generales: self-identification paragraph and figure source Censo 2018"
+    },
+    {
+      "id": "col-identity2018",
+      "url": "https://www.dane.gov.co/files/investigaciones/boletines/grupos-etnicos/presentacion-grupos-etnicos-2019.pdf",
+      "year": 2018,
+      "scope": "32県＋Bogotá D.C.（33行政区分）",
+      "unit": "自己認識した先住民の公表人数・人",
+      "denominator": "人数は先住民と自己認識したセンサス対象者の公表計数。全国の同計数1,905,617人を区分間の分布を読む分母に使えます。各区分の総人口・民族設問回答者数は未収録なので、総人口に占める割合を作りません。",
+      "license": "DANE利用条件第2項（指定出典表示で利用・変換・分析可）",
+      "licenseEvidence": "https://www.dane.gov.co/index.php/terrminos-y-condiciones-dane",
+      "attribution": "Fuente: Departamento Administrativo Nacional de Estadística: www.dane.gov.co",
+      "dataFile": "culture-supplement-2018.json",
+      "sourceLocation": "PDF index 24 (25th page), Población indígena por departamentos CG2005-CNPV2018; use right CNPV2018 values"
     }
   ],
   "blocked": [
@@ -71,12 +97,39 @@
       "reason": "IBGE official source/download access 403 and reuse terms unverified; values not copied"
     },
     {
-      "id": "peru-guatemala-colombia",
-      "reason": "Source rows and/or explicit reuse terms not both verified; unadopted"
+      "id": "peru-culture",
+      "reason": "Peru source rows and/or explicit reuse terms not both verified; unadopted. Guatemala and Colombia adopted separately in culture-supplement-2018.json."
     },
     {
       "id": "undata-alternative",
       "reason": "UNdata conditions of use verified (free copying with citation), but country-filtered religion rows remained inaccessible; no country data copied"
+    },
+    {
+      "id": "central-caribbean-urban-counts",
+      "reason": "Same-definition WUP2018 city rows not acquired. Existing report TableIII.6 only covers cities >=5 million; it cannot provide these rows.",
+      "requestEvidence": "culture-supplement-2018.json#urbanAcquisitionBlocker",
+      "requests": [
+        {
+          "url": "https://population.un.org/wup/Download/Files/WUP2018-F12-Cities_Over_300K.xls",
+          "result": "Executor HTTP tunnel 403; requested once"
+        },
+        {
+          "url": "https://www.un.org/en/development/desa/population/publications/pdf/urbanization/the_worlds_cities_in_2018_data_booklet.pdf",
+          "result": "Web fetch Internal Error"
+        },
+        {
+          "url": "https://www.un.org/development/desa/pd/content/worlds-cities-2018-data-booklet",
+          "result": "Web fetch 403"
+        },
+        {
+          "url": "https://digitallibrary.un.org/record/3799524?ln=en",
+          "result": "Web fetch Internal Error"
+        },
+        {
+          "url": "https://www.un.org/en/events/citiesday/assets/pdf/the_worlds_cities_in_2018_data_booklet.pdf",
+          "result": "Web fetch 403"
+        }
+      ]
     }
   ],
   "coverageComplete": false,
