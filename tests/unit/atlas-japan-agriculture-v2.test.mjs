@@ -13,9 +13,10 @@ test('代表点は県全域・市町村全域・園地境界や生産量へ変�
  const geo=japanAgriculturePointCollection();assert.equal(geo.features.length,sites.length);
  for(const f of geo.features){assert.equal(f.geometry.type,'Point');assert.equal(f.properties.geometryKind,'representative-point');assert.equal(f.properties.quantity,null);assert.equal(f.properties.extent,null);assert(f.properties.coordinateMethod.includes('概略'));for(const id of f.properties.sourceIds)assert(sources.some(s=>s.id===id));const [lng,lat]=f.geometry.coordinates;assert(lng>=129&&lng<=146&&lat>=30&&lat<=46);}
 });
-test('選択で商品と関係のある地点だけ解説し、不明・無関係な地点は全国または商品へ戻す',()=>{
+test('残した別品目の参照地点も実際の地点を解説し、森林・不明選択は適切な概説へ戻す',()=>{
  assert.equal(getJapanAgricultureReading('milk','betsukai-milk').title,'酪農｜別海');
- assert.equal(getJapanAgricultureReading('rice','betsukai-milk').title,'米');
+ assert.equal(getJapanAgricultureReading('rice','betsukai-milk').title,'酪農｜別海');
+ assert.equal(getJapanAgricultureReading('rice','unknown').title,'米');
  assert.equal(getJapanAgricultureReading('forest','betsukai-milk').title,'森林の存在と、木材を使う仕組みを分ける');
  assert.equal(getJapanAgricultureReading('missing','unknown').title,'日本の農畜産業を、産地の事例から読む');
  assert(sources.find(s=>s.id==='municipal-2024').status==='download-blocked');

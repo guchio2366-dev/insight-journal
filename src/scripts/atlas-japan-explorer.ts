@@ -136,6 +136,7 @@ async function start(root:HTMLElement){
  function selection(title:string,body:string,source:string){$('[data-japan-selection]').hidden=false;$('[data-japan-selection-title]').textContent=title;$('[data-japan-selection-body]').textContent=body;$<HTMLAnchorElement>('[data-japan-selection-source]').href=source;}
  type Label={id:string;title:string;subtitle:string;point:[number,number];color:string;offset:[number,number];select:()=>void;selected:boolean;muted?:boolean};
  let labels:{data:Label;button:HTMLButtonElement;line:SVGLineElement}[]=[];
+ let placementKey='',placement:ReturnType<typeof layoutJapanLabels>|null=null;
  function renderMarkers(){
   if(!map||!lib)return;markers.splice(0).forEach(m=>m.remove());const overlay=$('[data-japan-labels]');overlay.replaceChildren();labels=[];
   const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('aria-hidden','true');overlay.append(svg);
@@ -154,7 +155,9 @@ async function start(root:HTMLElement){
   if(!map)return;const frame=$('.japan-map-frame');
   for(const text of all<SVGTextElement & HTMLElement>('[data-latitude]')){const y=map.project([146.3,Number(text.dataset.latitude)]).y;text.setAttribute('x',String(frame.clientWidth-8));text.setAttribute('y',String(y-4));text.style.display=y>12&&y<frame.clientHeight-35?'':'none';}
   const anchors=labels.map(({data,button})=>{button.hidden=false;const p=map!.project(data.point);return {id:data.id,x:p.x,y:p.y,width:button.offsetWidth,height:button.offsetHeight,offset:data.offset};});
-  const placed=layoutJapanLabels(anchors,frame.clientWidth,frame.clientHeight);
+  const key=JSON.stringify([frame.clientWidth,frame.clientHeight,anchors]);
+  if(key!==placementKey||!placement){placement=layoutJapanLabels(anchors,frame.clientWidth,frame.clientHeight);placementKey=key;}
+  const placed=placement;
   for(const {data,button,line} of labels){const rect=placed.get(data.id),p=map.project(data.point);button.hidden=!rect;line.style.display=rect?'':'none';if(!rect)continue;
    button.style.left=rect.x+'px';button.style.top=rect.y+'px';button.dataset.leaderLength=String(rect.leaderLength);
    line.setAttribute('x1',String(p.x));line.setAttribute('y1',String(p.y));line.setAttribute('x2',String(rect.endX));line.setAttribute('y2',String(rect.endY));
