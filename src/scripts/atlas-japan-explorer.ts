@@ -140,7 +140,7 @@ async function start(root:HTMLElement){
  }
  function positionLabels(){
   if(!map)return;const frame=$('.japan-map-frame');
-  for(const text of all<SVGTextElement & HTMLElement>('[data-latitude]')){const y=map.project([146.3,Number(text.dataset.latitude)]).y;text.setAttribute('x',String(frame.clientWidth-8));text.setAttribute('y',String(y-4));text.style.display=y>150&&y<frame.clientHeight-35?'':'none';}
+  for(const text of all<SVGTextElement & HTMLElement>('[data-latitude]')){const y=map.project([146.3,Number(text.dataset.latitude)]).y;text.setAttribute('x',String(frame.clientWidth-8));text.setAttribute('y',String(y-4));text.style.display=y>12&&y<frame.clientHeight-35?'':'none';}
   const anchors=labels.map(({data,button})=>{button.hidden=false;const p=map!.project(data.point);return {id:data.id,x:p.x,y:p.y,width:button.offsetWidth,height:button.offsetHeight,offset:data.offset};});
   const placed=layoutJapanLabels(anchors,frame.clientWidth,frame.clientHeight);
   for(const {data,button,line} of labels){const rect=placed.get(data.id),p=map.project(data.point);button.hidden=!rect;line.style.display=rect?'':'none';if(!rect)continue;
@@ -148,7 +148,7 @@ async function start(root:HTMLElement){
    line.setAttribute('x1',String(p.x));line.setAttribute('y1',String(p.y));line.setAttribute('x2',String(rect.endX));line.setAttribute('y2',String(rect.endY));
   }
  }
- function fit(){if(!map||!ready)return;suppressCamera=true;if(state.camera)map.jumpTo({center:[state.camera.lng,state.camera.lat],zoom:state.camera.zoom});else map.fitBounds([[config.bounds[0],config.bounds[1]],[config.bounds[2],config.bounds[3]]],{padding:8,duration:0});suppressCamera=false;positionLabels();recordCamera();}
+ function fit(){if(!map||!ready)return;suppressCamera=true;if(state.camera)map.jumpTo({center:[state.camera.lng,state.camera.lat],zoom:state.camera.zoom});else map.fitBounds([[config.bounds[0],config.bounds[1]],[config.bounds[2],config.bounds[3]]],{padding:{top:8,bottom:34,left:12,right:12},duration:0});suppressCamera=false;positionLabels();recordCamera();}
  function recordCamera(){if(map){const c=map.getCenter();root.dataset.mapCamera=JSON.stringify({lng:c.lng,lat:c.lat,zoom:map.getZoom()});root.dataset.mapExtent=JSON.stringify(map.getBounds().toArray());}}
  async function fetchJson<T>(name:string):Promise<T>{const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),20000);try{const r=await fetch(config.assetBase+name,{signal:controller.signal});if(!r.ok)throw new Error('Asset '+r.status);return await r.json();}finally{clearTimeout(timeout);}}
  async function loadGrid(){
@@ -189,17 +189,20 @@ async function start(root:HTMLElement){
  $<HTMLSelectElement>('[data-japan-urban-city]').addEventListener('change',event=>city((event.target as HTMLSelectElement).value,'population'));
  for(const b of all('[data-japan-zoom]'))b.addEventListener('click',()=>map?.zoomTo(map.getZoom()+Number(b.dataset.japanZoom),{duration:0}));
  $('[data-japan-fit]').addEventListener('click',()=>{state={...state,camera:null};persist(true);fit();});
+ $('[data-japan-okinawa]').addEventListener('click',()=>{if(!map||!ready)return;clearTimeout(timer);suppressCamera=true;map.fitBounds([[122.8,23.9],[131.4,28.1]],{padding:{top:8,bottom:34,left:12,right:12},duration:0});state={...state,camera:camera()};suppressCamera=false;persist(true);positionLabels();recordCamera();});
  $('[data-japan-retry]').addEventListener('click',()=>{state={...state,camera:camera()};void initialise();});
  window.addEventListener('popstate',()=>{clearTimeout(timer);state=readJapanState(new URL(location.href),context);point=null;render();fit();});
  function sizePanels(){
   const frame=$('.japan-map-frame'),reading=$('.japan-reading');
   // Document positions avoid changing the map's size while the user scrolls.
   const frameTop=frame.getBoundingClientRect().top+window.scrollY,readingTop=reading.getBoundingClientRect().top+window.scrollY;
-  root.style.setProperty('--japan-map-height',Math.max(320,Math.min(640,innerHeight-frameTop-72))+'px');
+  const mapHeight=Math.max(360,Math.min(700,innerHeight-frameTop-72));
+  root.style.setProperty('--japan-map-height',mapHeight+'px');
+  const available=$('.japan-primary-grid').clientWidth;root.style.setProperty('--japan-map-width',Math.max(340,Math.min(available-294,mapHeight*.88))+'px');
   root.style.setProperty('--japan-reading-height',Math.max(320,Math.min(650,innerHeight-readingTop-16))+'px');
  }
  window.addEventListener('resize',sizePanels);
- const panelObserver=new ResizeObserver(sizePanels);for(const element of all('.japan-heading,.japan-region,.japan-tabs,.japan-controls'))panelObserver.observe(element);
+ const panelObserver=new ResizeObserver(sizePanels);for(const element of all('.japan-heading,.japan-region,.japan-tabs,.japan-controls,.japan-map-heading'))panelObserver.observe(element);
  sizePanels();
  let size='';const observer=new ResizeObserver(()=>{const frame=$('.japan-map-frame'),next=frame.clientWidth+':'+frame.clientHeight;if(next===size)return;size=next;if(map){suppressCamera=true;map.resize({japanResize:true});suppressCamera=false;if(ready&&!state.camera)fit();positionLabels();}});observer.observe($('.japan-map-frame'));
  window.addEventListener('pagehide',()=>{clearTimeout(timer);if(ready&&state.camera){state={...state,camera:camera()};persist(false);}});
