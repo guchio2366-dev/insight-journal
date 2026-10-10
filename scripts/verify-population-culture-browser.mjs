@@ -6,7 +6,11 @@ import path from 'node:path';
 import {createServer} from 'node:http';
 import {createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
-const out=process.env.CULTURE_REVIEW_OUTPUT??fileURLToPath(new URL('../docs/reviews/population-culture-20261010',import.meta.url));
+const panamaOnly=process.env.CULTURE_REVIEW_SCOPE==='panama';
+const out=process.env.CULTURE_REVIEW_OUTPUT??fileURLToPath(new URL(panamaOnly?'../docs/reviews/panama-census-identity-20261010':'../docs/reviews/population-culture-20261010',import.meta.url));
+const cases=panamaOnly?[['latin-america','ethnicity'],['latin-america','religion']]:[['oceania','ethnicity'],['oceania','religion'],['russia','religion'],['russia','ethnicity'],['africa','religion'],['africa','ethnicity']];
+const topicSelector=(region,topic)=>region==='africa'?'[data-africa-topic='+topic+']':region==='latin-america'?'[data-latin-section='+(topic==='distribution'?'population':topic)+']':'[data-population-topic='+topic+']';
+const normalSelector=region=>region==='africa'?'.africa-workspace':region==='latin-america'?'.latin-primary-grid':'[data-normal-view]';
 fs.mkdirSync(out,{recursive:true});
 const base=astroConfig.base.replace(/\/$/,'');
 const dist=fileURLToPath(new URL('../dist/',import.meta.url));
@@ -37,29 +41,30 @@ try{
 
 for(const [label,width,height] of [['pc-1280',1280,665],['pc-1024',1024,665]]){
  const page=await browser.newPage({viewport:{width,height}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
- for(const [region,topic] of [['oceania','ethnicity'],['oceania','religion'],['russia','religion'],['russia','ethnicity'],['africa','religion'],['africa','ethnicity']]){
-  await page.goto(`${origin}${base}/atlas/${region}/${region==='africa'?'':'population/'}?${region==='africa'?'field=population&':''}topic=${topic}&keep=review`);await page.waitForTimeout(200);
-  assert.ok(await page.locator(region==='africa'?'[data-africa-topic='+topic+']':'[data-population-topic='+topic+']').isVisible());
+ for(const [region,topic] of cases){
+  await page.goto(`${origin}${base}/atlas/${region}/${region==='africa'?'':'population/'}?${region==='africa'?'field=population&':''}${region==='latin-america'?'section':'topic'}=${topic}&keep=review${panamaOnly?'&place=CRI&scope=country&fallback=1':''}`);await page.waitForTimeout(200);
+  assert.ok(await page.locator(topicSelector(region,topic)).isVisible());
   const panel=page.locator(`[data-culture-panel=${topic}]`);
-  if(topic==='religion'||region==='oceania')await page.screenshot({path:`${out}/${region}-${topic}-${label}-initial.png`,fullPage:true});assert.equal(await page.locator(region==='africa'?'.africa-workspace':'[data-normal-view]').isVisible(),false);assert.equal(await panel.isVisible(),true);
+  if(topic==='religion'||region==='oceania'||panamaOnly)await page.screenshot({path:`${out}/${region}-${topic}-${label}-initial.png`,fullPage:true});assert.equal(await page.locator(normalSelector(region)).isVisible(),false);assert.equal(await panel.isVisible(),true);
   const fits=await panel.locator('.culture-map').evaluate(element=>{const map=element.getBoundingClientRect(),aside=element.closest('.culture-grid').querySelector('.culture-reading').getBoundingClientRect();return map.right<=aside.left;});assert.ok(fits,'map must not cover the reader');
   const overlaps=await panel.locator('.culture-marker').evaluateAll(nodes=>nodes.some((node,index)=>nodes.slice(index+1).some(other=>{const a=node.getBoundingClientRect(),b=other.getBoundingClientRect();return a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;})));assert.equal(overlaps,false,'country charts must not overlap');
   const map=await panel.locator('.culture-map').innerHTML();
   const records=await panel.locator('.culture-marker').count();
   if(records){await panel.locator('.culture-marker').first().click();assert.equal(await panel.locator('.culture-marker').count(),records);assert.equal(await panel.locator('.culture-map').innerHTML().then(s=>s.replaceAll('aria-pressed="true"','aria-pressed="false"')),map);
-   await panel.getByLabel('右欄内の単一区分').click();await panel.getByLabel('右欄内の単一区分').selectOption('0');assert.equal(await panel.locator('.culture-single-value').isVisible(),true);assert.equal(await panel.locator('.culture-selected table').isVisible(),false);assert.equal(await panel.locator('.culture-marker').count(),records);
-   await page.reload();assert.equal(await page.locator(`[data-culture-panel=${topic}] .culture-selected table`).isVisible(),true);assert.ok(new URL(page.url()).searchParams.get('culturePlace'));assert.equal(new URL(page.url()).searchParams.get('keep'),'review');
+   await panel.locator('.culture-selected select').click();await panel.locator('.culture-selected select').selectOption('0');assert.equal(await panel.locator('.culture-single-value').isVisible(),true);assert.equal(await panel.locator('.culture-selected table').isVisible(),false);assert.equal(await panel.locator('.culture-marker').count(),records);
+   await page.reload();assert.equal(await page.locator(`[data-culture-panel=${topic}] .culture-selected table`).isVisible(),true);assert.ok(new URL(page.url()).searchParams.get('culturePlace'));if(panamaOnly){for(const [key,value] of [['place','CRI'],['scope','country'],['fallback','1']])assert.equal(new URL(page.url()).searchParams.get(key),value);}else assert.equal(new URL(page.url()).searchParams.get('keep'),'review');
+   if(panamaOnly){await panel.locator('.culture-selected table').scrollIntoViewIfNeeded();await page.evaluate(()=>window.scrollTo(0,0));}
   }
   await page.screenshot({path:`${out}/${region}-${topic}-${label}.png`,fullPage:true});
   const geometry=await panel.locator('.culture-marker').evaluateAll(nodes=>nodes.map(n=>{const a=n.getBoundingClientRect(),b=n.parentElement.getBoundingClientRect();return {id:n.dataset.cultureRecord,marker:a.toJSON(),map:b.toJSON(),inside:a.x>=b.x&&a.y>=b.y&&a.right<=b.right&&a.bottom<=b.bottom};}));assert.ok(geometry.every(g=>g.inside),JSON.stringify(geometry));
-  await page.locator(region==='africa'?'[data-africa-topic=distribution]':'[data-population-topic=distribution]').click();assert.equal(await page.locator('[data-population-culture]').isVisible(),false);assert.equal(await page.locator(region==='africa'?'.africa-workspace':'[data-normal-view]').isVisible(),true);
+  await page.locator(topicSelector(region,'distribution')).click();assert.equal(await page.locator('[data-population-culture]').isVisible(),false);assert.equal(await page.locator(normalSelector(region)).isVisible(),true);
   if(region==='africa'){await page.locator('[data-field=nature]').click();assert.equal(await page.locator('[data-population-culture]').isVisible(),false);await page.goBack();}
   await page.goBack();assert.equal(await page.locator('[data-population-culture]').isVisible(),true);
   results.push({region,topic,label,width,height,records,markerBounds:geometry,errors:[...errors]});assert.equal(errors.length,0,JSON.stringify(errors));
  }
  await page.close();
 }
-const noJs=await browser.newPage({javaScriptEnabled:false});await noJs.goto(`${origin}${base}/atlas/oceania/population/`);assert.equal(await noJs.locator('[data-population-culture]').isVisible(),true);assert.equal(await noJs.locator('[data-culture-panel=ethnicity]').isVisible(),true);await noJs.close();
+const noJs=await browser.newPage({javaScriptEnabled:false});await noJs.goto(`${origin}${base}/atlas/${panamaOnly?'latin-america':'oceania'}/population/`);assert.equal(await noJs.locator('[data-population-culture]').isVisible(),true);assert.equal(await noJs.locator('[data-culture-panel=ethnicity]').isVisible(),true);await noJs.close();
 const evidence={browser:browser.version(),chromiumSandbox:true,sandboxStatus,reviewedCommit,capturedAt:new Date().toISOString(),releaseBuiltAt:release.builtAt,runId:process.env.GITHUB_RUN_ID??null,runAttempt:process.env.GITHUB_RUN_ATTEMPT??null,japaneseFonts:process.env.CULTURE_REVIEW_JAPANESE_FONTS??null,screenshots:Object.fromEntries(fs.readdirSync(out).filter(name=>name.endsWith('.png')).map(name=>[name,createHash('sha256').update(fs.readFileSync(path.join(out,name))).digest('hex')])),results,noJavascript:'both source tables available'};fs.writeFileSync(`${out}/browser-results.json`,JSON.stringify(evidence,null,2)+'\n');
 const evidenceText=JSON.stringify(evidence),parts=Math.ceil(evidenceText.length/2500);
 for(let part=0;part<parts;part++)console.log(`::notice title=Population culture sandbox evidence ${part+1}/${parts}::${evidenceText.slice(part*2500,(part+1)*2500).replaceAll('%','%25')}`);console.log(`${results.length} population culture browser cases passed; screenshots: ${out}`);
