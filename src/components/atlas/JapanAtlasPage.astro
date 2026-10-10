@@ -46,7 +46,7 @@ const series=farming.series.filter(s=>['rice-production','wheat-production','rou
        <div class="japan-map-fallback" data-japan-fallback><svg viewBox={`${west} ${north} ${east-west} ${south-north}`} role="img" aria-label="日本全国の基図。主題は地図下の表で確認できます。"><path d={outline} fill-rule="evenodd" /></svg></div>
        <div class="japan-map-labels" data-japan-labels></div>
        <p class="japan-map-state" data-japan-map-status role="status">全国図を読み込んでいます</p>
-       <div class="japan-map-caption" data-japan-map-caption>初期表示は北海道〜九州。沖縄は「沖縄へ」または地図の移動で。</div>
+       <div class="japan-map-caption" data-japan-map-caption>初期：北海道〜九州。沖縄へ移動できます。</div>
        <div class="japan-map-tools"><button type="button" data-japan-zoom="1" aria-label="地図を拡大">＋</button><button type="button" data-japan-zoom="-1" aria-label="地図を縮小">−</button><button type="button" data-japan-fit>北海道〜九州</button><button type="button" data-japan-okinawa>沖縄へ</button><button type="button" data-japan-retry hidden>再読み込み</button></div>
       </div>
       <div class="japan-legend" data-japan-legend></div>
