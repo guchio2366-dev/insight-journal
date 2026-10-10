@@ -1,0 +1,70 @@
+// Review the actual built MapLibre page, including cross-page browser history.
+// Only localhost assets are allowed. This container lacks Chromium's OS sandbox;
+// the report records that limitation rather than claiming sandboxed evidence.
+import assert from 'node:assert/strict';
+import {createServer} from 'node:http';
+import {readFile,mkdir,stat,writeFile} from 'node:fs/promises';
+import {execFileSync} from 'node:child_process';
+import path from 'node:path';
+import {chromium} from 'playwright';
+const output=path.resolve('docs/review/japan-2026-10-10');await mkdir(output,{recursive:true});
+const mime={'.html':'text/html;charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.png':'image/png','.jpg':'image/jpeg','.svg':'image/svg+xml','.gz':'application/gzip','.woff2':'font/woff2'};
+const root=path.resolve('dist'),base='/insight-journal';
+const server=createServer(async(req,res)=>{try{let name=decodeURIComponent(new URL(req.url,'http://localhost').pathname);assert(name.startsWith(base+'/'));let file=path.resolve(root,'.'+name.slice(base.length));assert(file.startsWith(root+'/'));if((await stat(file)).isDirectory())file=path.join(file,'index.html');res.writeHead(200,{'Content-Type':mime[path.extname(file)]??'application/octet-stream'});res.end(await readFile(file));}catch{res.writeHead(404);res.end('Missing');}});
+await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const origin=`http://127.0.0.1:${server.address().port}`;
+const report={baseCommit:execFileSync('git',['rev-parse','origin/main'],{encoding:'utf8'}).trim(),browser:null,chromiumSandbox:false,network:'only localhost; all external requests blocked',cases:[],errors:[],images:[]};
+let browser;
+try{
+ browser=await chromium.launch({executablePath:process.env.REVIEW_CHROME_PATH??'/usr/bin/chromium',headless:true,chromiumSandbox:false,args:['--enable-unsafe-swiftshader']});report.browser=browser.version();
+ for(const width of [1440,1024]){
+  const context=await browser.newContext({viewport:{width,height:width===1440?1000:900},deviceScaleFactor:1,serviceWorkers:'block'});
+  await context.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());
+  const page=await context.newPage();page.on('pageerror',error=>report.errors.push({width,error:error.message}));
+  const ready=async japan=>{await page.waitForFunction(japan=>document.querySelector(japan?'[data-japan-atlas]':'[data-asia-atlas]')?.dataset.mapReady==='true',japan,{timeout:30000});await page.waitForLoadState('networkidle');await page.evaluate(()=>document.fonts.ready);if(japan){const surface=await page.locator('.japan-map-surface').boundingBox(),canvas=await page.locator('.japan-map-surface canvas').boundingBox();assert(surface.height>440);assert(Math.abs(canvas.height-surface.height)<2);}};
+  const open=async(field,query='')=>{await page.goto(origin+base+'/atlas/japan/'+field+'/'+query);await ready(true);};
+  const camera=()=>page.locator('[data-japan-atlas]').getAttribute('data-map-camera').then(JSON.parse);
+  const shot=async(name)=>{const file=`${width}-${name}.jpg`;await page.screenshot({path:path.join(output,file),type:'jpeg',quality:82,animations:'disabled'});report.images.push(file);};
+  const check=async(name)=>{const geometry=await page.evaluate(()=>{const rect=s=>{const b=document.querySelector(s).getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height,right:b.right};};return {map:rect('.japan-map-frame'),news:rect('.atlas-news'),reading:rect('.japan-reading'),overflow:document.documentElement.scrollWidth>innerWidth,labels:[...document.querySelectorAll('[data-japan-map-label]')].filter(b=>!b.hidden).map(b=>({id:b.dataset.japanMapLabel,text:b.textContent,rect:rect('[data-japan-map-label="'+b.dataset.japanMapLabel+'"]')}))};});assert.equal(geometry.overflow,false);assert(geometry.news.right<=geometry.map.x);assert(geometry.map.right<=geometry.reading.x);assert(geometry.map.width>300);assert(geometry.map.height>=450);report.cases.push({width,name,geometry});};
+  await open('industry');assert.equal(await page.locator('[data-japan-prefecture]').inputValue(),'');const extent=JSON.parse(await page.locator('[data-japan-atlas]').getAttribute('data-map-extent'));assert(extent[0][0]<122.938162&&extent[0][1]<24.212104&&extent[1][0]>145.824962&&extent[1][1]>45.520413,'the entire recorded Japan coast is inside the frame');await check('default-clusters');await shot('industry-clusters');
+  const initial=await camera();await page.locator('[data-japan-map-label="toyota"]').click();assert.deepEqual(await camera(),initial);assert.match(await page.locator('[data-japan-selection-title]').textContent(),/自動車/);
+  await page.locator('[data-japan-mode="jp-00"]').click();await page.locator('[data-japan-industry-topic]').selectOption('jp-31');await page.locator('[data-japan-prefecture]').selectOption('JP-23');assert.equal(await page.locator('[data-japan-industry-table] tr').count(),47);assert.match(await page.locator('[data-japan-selection-title]').textContent(),/愛知/);assert.deepEqual(await camera(),initial);await check('prefecture-transport');await shot('industry-prefectures');
+  const selectedURL=page.url();await page.reload();await ready(true);assert.equal(page.url(),selectedURL);assert.equal(await page.locator('[data-japan-prefecture]').inputValue(),'JP-23');
+  for(const [field,route] of [['natural','nature'],['agriculture','agriculture'],['population','population']]){
+   await page.locator(`[data-japan-field="${field}"]`).click();await page.waitForURL('**/atlas/japan/'+route+'/**');await check(field);await shot(field);
+   assert.equal(await page.locator(`[data-japan-controls="${field}"]`).isVisible(),true);
+   if(field==='natural'){const before=await camera();await page.locator('[data-japan-climate-city]').selectOption('tokyo');assert.deepEqual(await camera(),before);assert.equal(await page.locator('[data-japan-climate-chart]').count(),3);await page.locator('[data-japan-statistics="natural"]').scrollIntoViewIfNeeded();await shot('natural-statistics');await page.evaluate(()=>scrollTo(0,0));}
+   if(field==='population'){
+    const before=await camera(),frame=await page.locator('.japan-map-frame').boundingBox(),world=512*2**before.zoom;
+    const mercator=lat=>180/Math.PI*Math.log(Math.tan(Math.PI/4+lat*Math.PI/360));
+    await page.mouse.click(frame.x+frame.width/2+(139.75-before.lng)*world/360,frame.y+frame.height/2+(mercator(before.lat)-mercator(35.69))*world/360);
+    await page.waitForFunction(()=>document.querySelector('[data-japan-grid-value]')?.textContent.includes('人/km²（2020年・5km集約推計）'));
+    report.cases.push({width,name:'population numeric lookup',value:await page.locator('[data-japan-grid-value]').textContent()});
+    await page.locator('[data-japan-urban-city]').selectOption('uc-5929');assert.deepEqual(await camera(),before);await shot('population-city');
+   }
+  }
+  await page.goBack();await page.waitForURL('**/atlas/japan/population/**');assert.equal(await page.locator('[data-japan-atlas]').getAttribute('data-city'),'');await page.goForward();assert.equal(await page.locator('[data-japan-atlas]').getAttribute('data-city'),'uc-5929');
+  // Direct entry, no return target, same-field fallback to East Asia.
+  await open('agriculture');await page.locator('[data-japan-return]').click();await ready(false);assert.match(page.url(),/east-asia\/agriculture\/$/);
+  // A city can set place=JPN but must never trigger the national-page entry.
+  const original=origin+base+'/atlas/asia/east-asia/nature/?place=CHN&lng=128&lat=35&z=4.2';await page.goto(original);await ready(false);
+  await page.locator('[data-city-select]').selectOption('beijing');await page.waitForLoadState('networkidle');assert.match(page.url(),/east-asia\/nature/);
+  // Capture exact state just before explicit Japan selection, including city.
+  const from=page.url();await page.locator('[data-country-select]').selectOption('JPN');await ready(true);assert.match(page.url(),/japan\/nature/);const entry=page.url();
+  await page.locator('[data-japan-field="industry"]').click();await page.reload();await ready(true);await page.locator('[data-japan-return]').click();await ready(false);assert.equal(page.url(),from);
+  await page.goBack();await ready(true);await page.goBack();await ready(true);assert.equal(page.url(),entry);await page.goBack();await ready(false);assert.equal(page.url(),from);await page.goForward();await ready(true);assert.equal(page.url(),entry);
+  report.cases.push({width,name:'URL reload history explicit country return',restored:from});
+  // Tokyo selected while already on the East Asia climate map stays there.
+  await page.goto(origin+base+'/atlas/asia/east-asia/nature/?lng=128&lat=35&z=4.2');await ready(false);
+  const before=await page.locator('[data-asia-atlas]').getAttribute('data-map-camera');await page.locator('[data-city-select]').selectOption('tokyo');assert.match(page.url(),/east-asia\/nature/);assert.equal(new URL(page.url()).searchParams.get('place'),'JPN');assert.equal(new URL(page.url()).searchParams.get('z'),'4.200');
+  report.cases.push({width,name:'Tokyo remains on East Asia with unchanged camera',before,url:page.url()});
+  await page.goto(origin+base+'/atlas/asia/east-asia/industry/?lng=128&lat=35&z=4.2');await ready(false);await page.locator('[data-country-select]').selectOption('JPN');await ready(true);assert.match(page.url(),/japan\/industry/);report.cases.push({width,name:'industry country uses same explicit entry'});
+  for(const [route,field] of [['industry','industry'],['nature','natural'],['agriculture','agriculture'],['population','population']]){await open(route);assert.equal(await page.locator(`[data-japan-statistics="${field}"]`).isVisible(),true);assert.equal(await page.locator('[data-japan-atlas]').getAttribute('data-prefecture'),'');await page.reload();await ready(true);assert.equal(await page.locator(`[data-japan-controls="${field}"]`).isVisible(),true);report.cases.push({width,name:'direct URL and reload '+route});}
+  assert.equal(report.errors.length,0,JSON.stringify(report.errors));await context.close();
+ }
+ // Narrow-screen and keyboard paths; actual WebGL fallback keeps statistics.
+ const context=await browser.newContext({viewport:{width:390,height:844},serviceWorkers:'block'});await context.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());const page=await context.newPage();await page.goto(origin+base+'/atlas/japan/industry/');await page.waitForFunction(()=>document.querySelector('[data-japan-atlas]')?.dataset.mapReady==='true');assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);await page.locator('[data-japan-topic="ships"]').focus();await page.keyboard.press('Enter');assert.equal(await page.locator('[data-japan-atlas]').getAttribute('data-topic'),'ships');await page.locator('.japan-map-frame').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(output,'390-industry.jpg'),type:'jpeg',quality:82});report.images.push('390-industry.jpg');report.cases.push({width:390,name:'mobile layout and keyboard topic'});await context.close();
+ const fallbackContext=await browser.newContext({viewport:{width:1024,height:900},serviceWorkers:'block'});await fallbackContext.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());await fallbackContext.route('**/japan-v1/industry.json',route=>route.fulfill({status:503,body:'unavailable'}));const fallback=await fallbackContext.newPage();await fallback.goto(origin+base+'/atlas/japan/population/');await fallback.waitForFunction(()=>document.querySelector('[data-japan-atlas]')?.dataset.mapError==='true');assert.equal(await fallback.locator('[data-japan-fallback]').isVisible(),true);assert.equal(await fallback.locator('[data-japan-statistics="population"] table tbody tr').count(),3);await fallbackContext.unroute('**/japan-v1/industry.json');await fallback.locator('[data-japan-retry]').click();await fallback.waitForFunction(()=>document.querySelector('[data-japan-atlas]')?.dataset.mapReady==='true');assert.equal(await fallback.locator('[data-japan-fallback]').isVisible(),false);report.cases.push({width:1024,name:'asset failure keeps base and statistics; retry restores real map'});await fallbackContext.close();
+ report.status='passed';
+}catch(error){report.status='failed';report.failure=error.stack;throw error;}
+finally{await writeFile(path.join(output,'report.json'),JSON.stringify(report,null,2)+'\n');await browser?.close();server.close();}
+console.log(`Japan review passed: ${report.cases.length} cases, ${report.images.length} images`);

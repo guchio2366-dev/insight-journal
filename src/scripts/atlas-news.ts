@@ -1,5 +1,6 @@
-export type AtlasNewsRegion = 'europe' | 'north-america' | 'latin-america' | 'east-asia' | 'southeast-asia' | 'south-central-asia' | 'west-asia' | 'africa' | 'oceania';
+export type AtlasNewsRegion = 'japan' | 'europe' | 'north-america' | 'latin-america' | 'east-asia' | 'southeast-asia' | 'south-central-asia' | 'west-asia' | 'africa' | 'oceania';
 export const atlasNewsRegions = {
+  'japan': { label: '日本', articleRegion: 'asia', countries: ['JP'], bounds: [122.5,23.8,146.3,46] },
   'africa': { label: 'アフリカ', articleRegion: 'africa', countries: [], bounds: [-25,-40,65,40] },
   'oceania': { label: 'オセアニア', articleRegion: 'oceania', countries: [], bounds: [-180,-60,180,30] },
   'west-asia': { label: '西アジア・中東', articleRegion: 'middle_east', countries: ['AM','AZ','BH','CY','GE','IQ','IL','JO','KW','LB','OM','QA','SA','PS','SY','TR','AE','YE','IR','EG'], bounds: [23,10,64,45] },
@@ -13,6 +14,7 @@ export const atlasNewsRegions = {
 
 export function articleMatchesNewsRegion(data:{regions:readonly string[];countries:readonly string[]},region:AtlasNewsRegion='north-america') {
   const config=atlasNewsRegions[region];
+  if(region==='japan')return data.countries.includes('JP');
   return data.countries.some(code=>config.countries.includes(code))||(data.regions.includes(config.articleRegion)&&(config.articleRegion!=='asia'||data.countries.length===0));
 }
 

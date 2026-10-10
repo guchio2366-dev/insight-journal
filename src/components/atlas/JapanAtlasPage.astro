@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
+import AtlasRegionNavigation from './AtlasRegionNavigation.astro';
+import AsiaClimateDiagram from './AsiaClimateDiagram.astro';
+import {withBase} from '../../lib/urls';
+import {asiaFieldPaths,type AsiaField} from '../../lib/atlas-asia-state';
+import {japanReadings} from '../../data/atlas/japan-reading';
+import {eastClusters,eastIndustries} from '../../data/atlas/east-asia-industry-clusters';
+import {asiaClimateCities} from '../../data/atlas/asia-climate-cities';
+import {japanWheatSupply as wheat} from '../../data/atlas/japan-wheat-supply';
+import industry from '../../../public/assets/atlas/japan-v1/industry.json';
+import geography from '../../../public/assets/atlas/japan-v1/geography.json';
+import population from '../../../public/assets/atlas/japan-v1/population.json';
+import farming from '../../../public/assets/atlas/east-asia-v1/farm-foundations.json';
+import '../../styles/atlas-japan.css';
+import 'maplibre-gl/dist/maplibre-gl.css';
+interface Props {initialField:AsiaField}
+const {initialField}=Astro.props;
+const tabs=[{id:'agriculture',label:'農林業'},{id:'natural',label:'自然環境'},{id:'industry',label:'主要産業'},{id:'population',label:'人口'}] as const;
+const cities=asiaClimateCities.filter(c=>c.countryCode==='JPN');
+const sites=eastClusters.filter(c=>c.country==='JPN');
+const rainMax=Math.max(400,Math.ceil(Math.max(...cities.flatMap(c=>c.precipitationMm.filter(v=>v!==null) as number[]))/200)*200);
+const japan=geography.features.find(f=>f.properties.code==='JPN')!;
+const project=([x,y]:number[])=>[x, -180/Math.PI*Math.log(Math.tan(Math.PI/4+y*Math.PI/360))];
+const rings=japan.geometry.type==='Polygon'?japan.geometry.coordinates:(japan.geometry.coordinates as number[][][][]).flat();
+const outline=(rings as number[][][]).map(r=>r.map((p,i)=>{const [x,y]=project(p);return `${i?'L':'M'}${x},${y}`;}).join('')+'Z').join('');
+const [west,north]=project([122.5,46]),[east,south]=project([146.3,23.8]);
+const config={initialField,bounds:[122.5,23.8,146.3,46],assetBase:withBase('/assets/atlas/japan-v1/'),cities,sites,industries:eastIndustries,populationCities:population.cities};
+const supply=wheat.domesticUse.food+wheat.domesticUse.processing+wheat.domesticUse.other;
+const number=(v:number|null|undefined)=>v==null?'未掲載':v.toLocaleString('ja-JP',{maximumFractionDigits:1});
+const series=farming.series.filter(s=>['rice-production','wheat-production','roundwood-production','forest-area'].includes(s.id));
+---
+<BaseLayout title="日本全国の地図｜農林業・自然環境・主要産業・人口" description="日本専用の全国図で産業の集積と県別数量、観測所の気候、農林業の全国統計、人口分布を読む。" compactAtlas canonicalPath={`/atlas/japan/${asiaFieldPaths[initialField]}/`}>
+ <div class="japan-atlas-root" data-japan-atlas data-region="japan">
+  <AtlasWorkspaceFrame region="japan" mapActions={false}>
+   <article class="atlas-explorer japan-atlas" data-field={initialField}>
+    <div class="japan-heading"><nav aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a><span> / </span><a href={withBase('/atlas/asia/east-asia/nature/')}>東アジア</a><span> / 日本</span></nav><a data-japan-return href={withBase(`/atlas/asia/east-asia/${asiaFieldPaths[initialField]}/`)}>← 東アジアへ戻る</a></div>
+    <div class="japan-region"><AtlasRegionNavigation group="asia" current="east-asia" /><span>日本専用の全国図 <b class="japan-preview">初便・一部整備中</b></span></div>
+    <h1 class="visually-hidden">日本の農林業・自然環境・主要産業・人口</h1>
+    <nav class="atlas-tabs japan-tabs" aria-label="日本の地図の分野">{tabs.map(t=><a data-japan-field={t.id} href={withBase(`/atlas/japan/${asiaFieldPaths[t.id]}/`)} aria-current={initialField===t.id?'page':undefined}>{t.label}</a>)}</nav>
+    <div class="japan-controls">
+     <div data-japan-controls="industry" hidden={initialField!=='industry'}>
+      <div class="japan-control-row" role="group" aria-label="産業地図の種類"><button data-japan-mode="clusters" type="button">代表的な集積</button><button data-japan-mode="jp-00" type="button">県別の製造品出荷額等</button></div>
+      <div class="japan-control-row" data-japan-cluster-controls role="group" aria-label="集積の産業"><button data-japan-topic="clusters" type="button">全産業</button>{eastIndustries.map(i=><button data-japan-topic={i.id} type="button" style={`--industry-color:${i.color}`}><i></i>{i.label}</button>)}</div>
+      <div class="japan-control-row" data-japan-quantity-controls hidden><label>業種 <select data-japan-industry-topic>{industry.topics.map(t=><option value={t.id}>{t.title.replace('日本：','')}</option>)}</select></label><label>都道府県 <select data-japan-prefecture><option value="">全国・未選択</option>{industry.admin.map(a=><option value={a.id}>{a.name}</option>)}</select></label></div>
+     </div>
+     <div data-japan-controls="natural" hidden={initialField!=='natural'} class="japan-control-row"><label>観測所 <select data-japan-climate-city><option value="">3地点を比較・未選択</option>{cities.map(c=><option value={c.id}>{c.name}（{c.coordinates[1].toFixed(1)}°N）</option>)}</select></label><span>1991–2020年の平年値</span></div>
+     <div data-japan-controls="agriculture" hidden={initialField!=='agriculture'} class="japan-control-row" role="group" aria-label="農林業の全国統計">{[{id:'wheat',label:'小麦と需給'},{id:'rice',label:'米の生産'},{id:'forest',label:'森林と木材'}].map(t=><button data-japan-topic={t.id} type="button">{t.label}</button>)}</div>
+     <div data-japan-controls="population" hidden={initialField!=='population'} class="japan-control-row"><button data-japan-topic="density" type="button">人口密度</button><button data-japan-topic="urban" type="button">都市域の比較</button><label>都市域 <select data-japan-urban-city><option value="">未選択</option>{population.cities.map(c=><option value={c.id}>{c.name}</option>)}</select></label></div>
+    </div>
+    <div class="japan-primary-grid">
+     <section class="japan-map-column" aria-labelledby="japan-map-title">
+      <header class="japan-map-heading"><h2 id="japan-map-title" data-japan-map-title>日本全国</h2><span data-japan-map-period></span></header>
+      <div class="japan-map-frame">
+       <div class="japan-map-surface" data-map-surface tabindex="0" role="region" aria-label="日本全国の操作できる地図"></div>
+       <div class="japan-map-fallback" data-japan-fallback><svg viewBox={`${west} ${north} ${east-west} ${south-north}`} role="img" aria-label="日本全国の基図。主題は地図下の表で確認できます。"><path d={outline} fill-rule="evenodd" /></svg></div>
+       <div class="japan-map-labels" data-japan-labels></div>
+       <p class="japan-map-state" data-japan-map-status role="status">全国図を読み込んでいます</p>
+       <div class="japan-map-caption" data-japan-map-caption>沖縄も実際の位置・同じ縮尺。別枠への移動なし。</div>
+       <div class="japan-map-tools"><button type="button" data-japan-zoom="1" aria-label="地図を拡大">＋</button><button type="button" data-japan-zoom="-1" aria-label="地図を縮小">−</button><button type="button" data-japan-fit>全国へ</button><button type="button" data-japan-retry hidden>再読み込み</button></div>
+      </div>
+      <div class="japan-legend" data-japan-legend></div>
+      <p class="japan-map-method" data-japan-method></p>
+      <p class="japan-map-method">基図：Natural Earth 1:10m。県境は薄線で表示。ごく小さい島の一部は基図に未収録です。</p>
+     </section>
+     <aside class="japan-reading" aria-labelledby="japan-reading-title"><p class="japan-eyebrow">日本を読む</p><h2 id="japan-reading-title" data-japan-reading-title>{japanReadings[initialField].title}</h2><h3>概説 <small>地図で確認できること</small></h3><p data-japan-overview>{japanReadings[initialField].overview}</p><h3>解説 <small>分布を考える手がかり</small></h3><p data-japan-reason>{japanReadings[initialField].reason}</p><section data-japan-selection hidden aria-label="選択した場所"><h3 data-japan-selection-title></h3><p data-japan-selection-body></p><a data-japan-selection-source href="https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html">選択した資料の出典</a></section><div class="japan-gap"><strong>収録範囲・これから整備するもの</strong><p data-japan-gap>{japanReadings[initialField].gap}</p></div><p><a href="#asia-sources">出典・データの範囲を確認 ↓</a></p></aside>
+    </div>
+    <section class="japan-statistics" aria-labelledby="japan-statistics-title"><h2 id="japan-statistics-title">統計と資料</h2>
+     <section data-japan-statistics="industry" hidden={initialField!=='industry'}>
+      <div data-japan-cluster-statistics><h3>収録した産業立地の事例</h3><p>点は都市・工業地域の概略位置。施設の全数や生産量は表しません。</p><div class="japan-table-scroll"><table><thead><tr><th scope="col">産業</th><th scope="col">都市・工業地域</th><th scope="col">確認資料</th></tr></thead><tbody>{sites.map(s=><tr data-japan-site-row={s.id}><th scope="row">{s.industries.map(id=>eastIndustries.find(i=>i.id===id)?.label).join('・')}</th><td><button type="button" data-japan-site={s.id}>{s.name}</button></td><td><a href={s.source}>事業者の資料</a></td></tr>)}</tbody></table></div></div>
+      <div data-japan-quantity-statistics hidden><h3 data-japan-quantity-title>県別の製造品出荷額等</h3><p>2024年の年間金額（百万円）。従業者は製造業計・2025年6月1日時点で、業種別の従業者数ではありません。個人経営の事業所を除きます。</p><div class="japan-metrics"><div><small>47都道府県の公表値合計</small><b data-japan-total></b></div><div><small>公表値がある県</small><b data-japan-observed></b></div></div><div class="japan-table-scroll"><table><thead><tr><th scope="col">都道府県</th><th scope="col">出荷額等（百万円）</th><th scope="col">原表の状態</th><th scope="col">製造業計の従業者（人）</th></tr></thead><tbody data-japan-industry-table></tbody></table></div><p>秘匿・該当なし・未掲載は0に置き換えません。金額に原材料・中間製品の価値を含み、付加価値とは異なります。</p></div>
+     </section>
+     <section data-japan-statistics="natural" hidden={initialField!=='natural'}><h3>札幌・東京・那覇の雨温図</h3><p>同じ3地点の目盛りを共通にしています。都市選択で地図のカメラは動かしません。</p><div class="japan-climate-grid">{cities.map(city=><div data-japan-climate-chart={city.id}><AsiaClimateDiagram {city} precipitationMax={rainMax} countryName="日本" /></div>)}</div></section>
+     <section data-japan-statistics="agriculture" hidden={initialField!=='agriculture'}>
+      <section data-japan-farm-panel="wheat"><h3>小麦の供給と用途</h3><p>2023年度・原麦。国内生産と輸入、在庫変動を別々に読みます。</p><div class="japan-metrics"><div><small>総供給</small><b>{number(supply)} 千t</b></div><div><small>国内生産</small><b>{number(wheat.production)} 千t</b></div><div><small>純輸入（輸入 − 輸出）</small><b>{number(wheat.netImports)} 千t</b></div><div><small>在庫減</small><b>{number(-wheat.inventoryChange)} 千t</b></div></div><div class="japan-supply-bar" role="img" aria-label={`国内生産${(wheat.production/supply*100).toFixed(1)}%、純輸入${(wheat.netImports/supply*100).toFixed(1)}%、在庫減${(-wheat.inventoryChange/supply*100).toFixed(1)}%`}>{[{label:'国内生産',value:wheat.production,color:'#326b63'},{label:'純輸入',value:wheat.netImports,color:'#789762'},{label:'在庫減',value:-wheat.inventoryChange,color:'#b8934a'}].map(p=><span style={`width:${p.value/supply*100}%;background:${p.color}`} title={p.label}></span>)}</div><p>国内生産 {(wheat.production/supply*100).toFixed(1)}% ／ 純輸入 {(wheat.netImports/supply*100).toFixed(1)}% ／ 在庫減 {(-wheat.inventoryChange/supply*100).toFixed(1)}%</p><p>自給率：{wheat.selfSufficiency.map(v=>`${v.year}年度 ${v.rate}%`).join(' → ')}。自給率は公表系列、上の比率は需給数量からの計算値です。</p><p>粗食料 {number(wheat.domesticUse.food)} 千t、加工用 {number(wheat.domesticUse.processing)} 千t、その他 {number(wheat.domesticUse.other)} 千t。加工用はしょうゆ・でん粉等で、製粉用途の内訳ではありません。</p><p><a href="https://www.maff.go.jp/j/seisan/boueki/mugi_zyukyuu/attach/pdf/index-178.pdf">農林水産省・小麦需給参考資料（28・34ページ）</a></p></section>
+      <section data-japan-farm-panel="rice" hidden><h3>米の全国生産量</h3><p>FAOSTATのRice（籾）の重量です。日本の精米や主食用米だけの量とは異なります。県別分布は未収録です。</p></section>
+      <section data-japan-farm-panel="forest" hidden><h3>森林面積と丸太の生産</h3><p>森林面積と木材生産量は単位も対象も異なります。森林が広いことだけで、木材生産量の大小は決まりません。</p><div class="japan-table-scroll"><table><thead><tr><th scope="col">2024年・丸太</th><th scope="col">量（m³）</th><th scope="col">FAOフラグ</th></tr></thead><tbody>{Object.entries(farming.forestFlows.JPN.roundwood).map(([key,r])=><tr><th scope="row">{{production:'生産',imports:'輸入',exports:'輸出'}[key]}</th><td>{number(r.value)}</td><td>{r.flag}</td></tr>)}</tbody></table></div><p>生産・輸入・輸出は別の公表数量で、国内使用量や自給率として扱いません。Eは推計値です。</p></section>
+      <h3>全国値の推移</h3><div class="japan-table-scroll"><table><thead><tr><th scope="col">系列・単位</th>{Array.from({length:10},(_,i)=><th scope="col">{2015+i}</th>)}</tr></thead><tbody>{series.map(s=><tr data-japan-farm-series={s.id}><th scope="row">{s.label}（{s.unit==='m3'?'m³':s.unit==='1000 ha'?'千ha':s.unit}）</th>{s.years.map(y=><td title={y.countries.JPN?.flag?`FAOフラグ: ${y.countries.JPN.flag}`:'未掲載'}>{number(y.countries.JPN?.value)}</td>)}</tr>)}</tbody></table></div><p>FAOフラグ：A＝公式値、E＝推計、X＝国際機関の値。欠測は未掲載として保持します。<a href="https://www.fao.org/faostat/en/#data/QCL">FAOSTAT（作物）</a>・<a href="https://www.fao.org/faostat/en/#data/FO">林産物</a>・<a href="https://www.fao.org/faostat/en/#data/RL">土地利用</a>。</p>
+     </section>
+     <section data-japan-statistics="population" hidden={initialField!=='population'}><h3>都市域の人口と面積</h3><p>2020年の人口を、2025年の同じ都市域の範囲で比較。市や都道府県の人口ではありません。</p><div class="japan-table-scroll"><table><thead><tr><th scope="col">都市域</th><th scope="col">人口（人）</th><th scope="col">面積（km²）</th><th scope="col">密度（人/km²）</th></tr></thead><tbody>{population.cities.map(c=><tr><th scope="row"><button type="button" data-japan-urban={c.id}>{c.name}</button></th><td>{Math.round(c.population).toLocaleString('ja-JP')}</td><td>{number(c.areaKm2)}</td><td>{Math.round(c.density).toLocaleString('ja-JP')}</td></tr>)}</tbody></table></div><p data-japan-grid-value>地図上の陸地を選ぶと5km集約値の人口密度を確認できます。</p><p><a href="https://human-settlement.emergency.copernicus.eu/ghs_pop2023.php">GHSL人口推計</a>・<a href="https://human-settlement.emergency.copernicus.eu/ghs_ucdb_2024.php">GHSL都市域</a>（CC BY 4.0）。</p></section>
+    </section>
+    <details class="japan-sources" id="asia-sources"><summary>出典・処理・初便の収録範囲</summary><p>全国基図と県境はNatural Earth v5.1.2。国形状は既存の1:10mデータを再利用し、県別数量ポリゴンを同じ海岸線で切り抜きます。簡略化の違いによる未割当の沿岸部分は中立色で残します。</p><p><a href="https://www.meti.go.jp/statistics/tyo/kkj/seizo_result.html">経済産業省・2025年経済構造実態調査 製造業事業所調査</a>。金額は2024年、従業者は2025年6月1日。既存の原表値と秘匿等の状態を保持。</p><p><a href="https://www.naturalearthdata.com/about/terms-of-use/">Natural Earth（Public domain）</a>、<a href="https://human-settlement.emergency.copernicus.eu/GHSLhowToCite.php">GHSL（CC BY 4.0）</a>。人口の既存5km集約値を元の画素端で切り出し、日本の詳細国形状でマスクしました。値の補間・高解像度化は行っていません。</p><p>雨温図は各観測所の気象庁1991–2020年平年値。既存共通部品を使用しています。気候区分・標高の原資料はこのcheckoutにないため、日本用に欠けた沿岸・島を復元する作業は未実施です。河川・湖の全国レイヤー、農林業・人口の県別国内原表も追加が必要です。</p><p>このページは4分野の骨格と主要産業の初便です。すべての分野を完成した全国主題図としては扱いません。</p></details>
+    <script type="application/json" data-japan-config set:html={JSON.stringify(config).replaceAll('<','\\u003c')} />
+   </article>
+  </AtlasWorkspaceFrame>
+ </div>
+</BaseLayout>
+<script>import '../../scripts/atlas-japan-explorer';</script>

@@ -2,7 +2,7 @@ import {industryTopicGroup,industrySectors,industrySubsectors,naturalGroup,popul
 import {industryCountryChoices,hasIndustryCountryScope,industryTopicsForPlace,type IndustryRegion} from '../data/atlas/asia-industry.ts';
 import type {AsiaState} from '../lib/atlas-asia-state';
 import type {IndustrySector} from '../data/atlas/industry-catalog';
-export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|undefined,getState:()=>AsiaState,navigate:(s:AsiaState,fit?:boolean)=>void,choosePopulation:(topic:string)=>void,chooseNatural:(topic:string)=>void,chooseFarm:(topic:string)=>void){
+export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|undefined,getState:()=>AsiaState,navigate:(s:AsiaState,fit?:boolean)=>void,choosePopulation:(topic:string)=>void,chooseNatural:(topic:string)=>void,chooseFarm:(topic:string)=>void,enterCountry?:(code:string|null,field?:AsiaState['field'])=>boolean){
  const $=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s);
  const all=<T extends HTMLElement=HTMLElement>(s:string)=>[...root.querySelectorAll<T>(s)];
  for(const b of all('[data-natural-group]'))b.addEventListener('click',()=>chooseNatural(b.dataset.naturalGroup!));
@@ -16,6 +16,7 @@ export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|un
   if(!industry||!east)return;
   const state=getState(),place=b.dataset.industryCountry==='all'?null:b.dataset.industryCountry!;
   if(place&&!countries.some(c=>c.code===place))return;
+  if(enterCountry?.(place,'industry'))return;
   const same=place===state.place,topics=industryTopicsForPlace(industry,place);
   const current=topics.find(t=>t.id===state.topic&&(!!place||!t.country)),target=current??topics.find(t=>t.id==='manufacturing')??topics[0];
   const keepDetail=same||target.kind==='trade'&&target.id===state.topic;

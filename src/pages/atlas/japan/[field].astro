@@ -1,0 +1,6 @@
+---
+import JapanAtlasPage from '../../../components/atlas/JapanAtlasPage.astro';
+export function getStaticPaths(){return ['agriculture','nature','industry','population'].map(field=>({params:{field},props:{initialField:field==='nature'?'natural':field}}));}
+const {initialField}=Astro.props;
+---
+<JapanAtlasPage {initialField} />

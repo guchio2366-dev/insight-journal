@@ -119,7 +119,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
       <div class="atlas-region-controls asia-region-shell">
        <AtlasRegionNavigation group="asia" current={pageId} />
        {regionId==='south-central-asia'&&<nav class="asia-focus-navigation" aria-label="南・中央アジアの地域">{Object.entries(asiaFocusViews).map(([id,v])=><a href={withBase(`/atlas/asia/${id}/${asiaFieldPaths[initialField]}/`)} data-focus-link={id} aria-current={pageId===id?'page':undefined}>{v.label}</a>)}</nav>}
-       <div class="asia-toolbar"><label data-country-picker>国・地域<select data-country-select aria-label="国・地域を選ぶ"><option value="">{region.label}全体</option>{countries.map(c=><option value={c.code}>{c.name}</option>)}</select></label><button class="asia-reset" type="button" data-reset>全体に戻す</button></div>
+       <div class="asia-toolbar"><label data-country-picker>国・地域<select data-country-select aria-label="国・地域を選ぶ"><option value="">{region.label}全体</option>{countries.map(c=><option value={c.code}>{c.name}</option>)}</select></label><button class="asia-reset" type="button" data-reset>全体に戻す</button>{regionId==='east-asia'&&<a data-japan-entry href={withBase(`/atlas/japan/${asiaFieldPaths[initialField]}/`)}>日本の全国図 →</a>}</div>
       </div>
       <nav class="atlas-tabs atlas-tabs-with-overview asia-field-tabs" aria-label="地図の分野"><a data-atlas-overview-link href={withBase(`/atlas/asia/${pageId}/overview/`)}>概要</a>{fieldTabs.map(f=><a href={withBase(`/atlas/asia/${pageId}/${asiaFieldPaths[f.id]}/`)} data-field={f.id} aria-current={initialField===f.id?'page':undefined}>{f.label}</a>)}</nav>
       <AsiaFieldNavigation {initialField} {social} {regionId} {industry} forestTopic={farming.layers.find(t=>t.kind==='forest')?.id} />
