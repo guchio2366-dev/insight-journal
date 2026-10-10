@@ -1,0 +1,1295 @@
+{
+  "baseCommit": "ab2bf51581f6874fb141b5e858892c7a2faf9f2e",
+  "headCommit": "106dfe328d26a3cfcf87791b7e093a8199c2c644",
+  "workingTree": "clean",
+  "browser": "154.0.8037.97",
+  "chromiumSandbox": true,
+  "network": "only localhost; all external requests blocked",
+  "cases": [
+    {
+      "width": 1440,
+      "name": "mainland extent and northern margin",
+      "extent": [
+        [
+          128.58906024020024,
+          29.690265384458925
+        ],
+        [
+          146.66093975980448,
+          45.801540643932185
+        ]
+      ],
+      "hokkaidoTop": 11.151227268949993
+    },
+    {
+      "width": 1440,
+      "name": "default-clusters",
+      "geometry": {
+        "map": {
+          "x": 274.796875,
+          "y": 256.59375,
+          "width": 502.828125,
+          "height": 571.40625,
+          "right": 777.625,
+          "bottom": 828
+        },
+        "news": {
+          "x": 14,
+          "y": 61,
+          "width": 244.796875,
+          "height": 800,
+          "right": 258.796875,
+          "bottom": 861
+        },
+        "reading": {
+          "x": 791.625,
+          "y": 224,
+          "width": 634.375,
+          "height": 650,
+          "right": 1426,
+          "bottom": 874
+        },
+        "viewportHeight": 900,
+        "scrollY": 0,
+        "overflow": false,
+        "labels": [
+          {
+            "id": "toyota",
+            "text": "自動車豊田・中京",
+            "leaderLength": 10,
+            "rect": {
+              "x": 475.125,
+              "y": 659.53125,
+              "width": 76,
+              "height": 39.890625,
+              "right": 551.125,
+              "bottom": 699.421875
+            }
+          },
+          {
+            "id": "kitakyushu",
+            "text": "鉄鋼北九州",
+            "leaderLength": 10,
+            "rect": {
+              "x": 310.46875,
+              "y": 639.890625,
+              "width": 56,
+              "height": 39.890625,
+              "right": 366.46875,
+              "bottom": 679.78125
+            }
+          },
+          {
+            "id": "kumamoto",
+            "text": "半導体・電子熊本",
+            "leaderLength": 31.112698372208097,
+            "rect": {
+              "x": 359.90625,
+              "y": 745.421875,
+              "width": 98.015625,
+              "height": 39.890625,
+              "right": 457.921875,
+              "bottom": 785.3125
+            }
+          },
+          {
+            "id": "osaka",
+            "text": "電池大阪・関西",
+            "leaderLength": 14.142135623730951,
+            "rect": {
+              "x": 381.375,
+              "y": 612.71875,
+              "width": 76,
+              "height": 39.890625,
+              "right": 457.375,
+              "bottom": 652.609375
+            }
+          },
+          {
+            "id": "imabari",
+            "text": "造船今治・瀬戸内",
+            "leaderLength": 10,
+            "rect": {
+              "x": 355.078125,
+              "y": 693.53125,
+              "width": 86,
+              "height": 39.890625,
+              "right": 441.078125,
+              "bottom": 733.421875
+            }
+          },
+          {
+            "id": "nagasaki",
+            "text": "造船長崎",
+            "leaderLength": 10,
+            "rect": {
+              "x": 281.796875,
+              "y": 737.375,
+              "width": 50.015625,
+              "height": 39.890625,
+              "right": 331.8125,
+              "bottom": 777.265625
+            }
+          },
+          {
+            "id": "yokkaichi",
+            "text": "石油化学四日市",
+            "leaderLength": 10,
+            "rect": {
+              "x": 461.421875,
+              "y": 603.25,
+              "width": 74.015625,
+              "height": 39.890625,
+              "right": 535.4375,
+              "bottom": 643.140625
+            }
+          }
+        ]
+      }
+    },
+    {
+      "width": 1440,
+      "name": "Okinawa view is explicit, retained across reload and history",
+      "islandCamera": {
+        "lng": 127.10000000000002,
+        "lat": 25.807966494344143,
+        "zoom": 5.285361892520451
+      }
+    },
+    {
+      "width": 1440,
+      "name": "prefecture-transport",
+      "geometry": {
+        "map": {
+          "x": 274.796875,
+          "y": 256.59375,
+          "width": 502.828125,
+          "height": 571.40625,
+          "right": 777.625,
+          "bottom": 828
+        },
+        "news": {
+          "x": 14,
+          "y": 61,
+          "width": 244.796875,
+          "height": 800,
+          "right": 258.796875,
+          "bottom": 861
+        },
+        "reading": {
+          "x": 791.625,
+          "y": 224,
+          "width": 634.375,
+          "height": 650,
+          "right": 1426,
+          "bottom": 874
+        },
+        "viewportHeight": 900,
+        "scrollY": 0,
+        "overflow": false,
+        "labels": []
+      }
+    },
+    {
+      "width": 1440,
+      "name": "natural",
+      "geometry": {
+        "map": {
+          "x": 274.796875,
+          "y": 256.59375,
+          "width": 502.828125,
+          "height": 571.40625,
+          "right": 777.625,
+          "bottom": 828
+        },
+        "news": {
+          "x": 14,
+          "y": 61,
+          "width": 244.796875,
+          "height": 800,
+          "right": 258.796875,
+          "bottom": 861
+        },
+        "reading": {
+          "x": 791.625,
+          "y": 224,
+          "width": 634.375,
+          "height": 650,
+          "right": 1426,
+          "bottom": 874
+        },
+        "viewportHeight": 900,
+        "scrollY": 0,
+        "overflow": false,
+        "labels": [
+          {
+            "id": "tokyo",
+            "text": "東京35.7°N",
+            "leaderLength": 10,
+            "rect": {
+              "x": 595.203125,
+              "y": 608.796875,
+              "width": 60.75,
+              "height": 39.890625,
+              "right": 655.953125,
+              "bottom": 648.6875
+            }
+          },
+          {
+            "id": "sapporo",
+            "text": "札幌43.0°N",
+            "leaderLength": 10,
+            "rect": {
+              "x": 638.734375,
+              "y": 344.40625,
+              "width": 60.75,
+              "height": 39.890625,
+              "right": 699.484375,
+              "bottom": 384.296875
+            }
+          }
+        ]
+      }
+    },
+    {
+      "width": 1440,
+      "name": "three Japan cities use common #300 axes and matching tick gridlines",
+      "plots": [
+        {
+          "city": "tokyo",
+          "min": -3,
+          "max": 40,
+          "rain": 350,
+          "top": 35,
+          "bottom": 165,
+          "values": [
+            139.6046511627907,
+            137.48837209302326,
+            127.51162790697674,
+            112.69767441860465,
+            99.09302325581395,
+            89.72093023255815,
+            78.23255813953489,
+            74.6046511627907,
+            85.48837209302326,
+            101.51162790697674,
+            118.13953488372093,
+            132.65116279069767
+          ],
+          "bars": [
+            142.8257142857143,
+            144.0142857142857,
+            121.91428571428571,
+            115.34,
+            113.11142857142858,
+            102.6742857142857,
+            106.98285714285714,
+            107.54,
+            81.46571428571428,
+            77.78857142857142,
+            129.23142857142858,
+            143.49428571428572
+          ],
+          "rainTicks": [
+            {
+              "value": 0,
+              "y": 165,
+              "y2": 165
+            },
+            {
+              "value": 100,
+              "y": 127.85714285714286,
+              "y2": 127.85714285714286
+            },
+            {
+              "value": 200,
+              "y": 90.71428571428572,
+              "y2": 90.71428571428572
+            },
+            {
+              "value": 300,
+              "y": 53.571428571428584,
+              "y2": 53.571428571428584
+            }
+          ],
+          "tempTicks": [
+            {
+              "value": 0,
+              "y": 155.93023255813952,
+              "y2": 155.93023255813952
+            },
+            {
+              "value": 10,
+              "y": 125.69767441860466,
+              "y2": 125.69767441860466
+            },
+            {
+              "value": 20,
+              "y": 95.46511627906978,
+              "y2": 95.46511627906978
+            },
+            {
+              "value": 30,
+              "y": 65.23255813953487,
+              "y2": 65.23255813953487
+            },
+            {
+              "value": 40,
+              "y": 35,
+              "y2": 35
+            }
+          ]
+        },
+        {
+          "city": "sapporo",
+          "min": -10,
+          "max": 40,
+          "rain": 350,
+          "top": 35,
+          "bottom": 165,
+          "values": [
+            147.32,
+            146.02,
+            136.14,
+            120.02,
+            105.19999999999999,
+            94.8,
+            84.14,
+            81.02000000000001,
+            90.63999999999999,
+            107.53999999999999,
+            125.48,
+            141.34
+          ],
+          "bars": [
+            124.73714285714286,
+            130.8657142857143,
+            136.17714285714285,
+            144.72,
+            144.3857142857143,
+            142.56571428571428,
+            131.31142857142856,
+            117.90285714285714,
+            112.18285714285715,
+            124.18,
+            122.73142857142858,
+            122.47142857142858
+          ],
+          "rainTicks": [
+            {
+              "value": 0,
+              "y": 165,
+              "y2": 165
+            },
+            {
+              "value": 100,
+              "y": 127.85714285714286,
+              "y2": 127.85714285714286
+            },
+            {
+              "value": 200,
+              "y": 90.71428571428572,
+              "y2": 90.71428571428572
+            },
+            {
+              "value": 300,
+              "y": 53.571428571428584,
+              "y2": 53.571428571428584
+            }
+          ],
+          "tempTicks": [
+            {
+              "value": -10,
+              "y": 165,
+              "y2": 165
+            },
+            {
+              "value": 0,
+              "y": 139,
+              "y2": 139
+            },
+            {
+              "value": 10,
+              "y": 113,
+              "y2": 113
+            },
+            {
+              "value": 20,
+              "y": 87,
+              "y2": 87
+            },
+            {
+              "value": 30,
+              "y": 61,
+              "y2": 61
+            },
+            {
+              "value": 40,
+              "y": 35,
+              "y2": 35
+            }
+          ]
+        },
+        {
+          "city": "naha",
+          "min": -3,
+          "max": 40,
+          "rain": 350,
+          "top": 35,
+          "bottom": 165,
+          "values": [
+            103.62790697674419,
+            103.02325581395348,
+            98.1860465116279,
+            90.93023255813954,
+            82.76744186046511,
+            73.69767441860465,
+            67.95348837209302,
+            68.25581395348837,
+            71.5813953488372,
+            78.83720930232559,
+            87.90697674418604,
+            98.48837209302326
+          ],
+          "bars": [
+            127.26285714285714,
+            122.47142857142858,
+            111.96,
+            105.19999999999999,
+            73.88857142857142,
+            59.36571428571429,
+            95.13428571428572,
+            75.85714285714286,
+            62.782857142857154,
+            98.44,
+            120.76285714285714,
+            124.14285714285714
+          ],
+          "rainTicks": [
+            {
+              "value": 0,
+              "y": 165,
+              "y2": 165
+            },
+            {
+              "value": 100,
+              "y": 127.85714285714286,
+              "y2": 127.85714285714286
+            },
+            {
+              "value": 200,
+              "y": 90.71428571428572,
+              "y2": 90.71428571428572
+            },
+            {
+              "value": 300,
+              "y": 53.571428571428584,
+              "y2": 53.571428571428584
+            }
+          ],
+          "tempTicks": [
+            {
+              "value": 0,
+              "y": 155.93023255813952,
+              "y2": 155.93023255813952
+            },
+            {
+              "value": 10,
+              "y": 125.69767441860466,
+              "y2": 125.69767441860466
+            },
+            {
+              "value": 20,
+              "y": 95.46511627906978,
+              "y2": 95.46511627906978
+            },
+            {
+              "value": 30,
+              "y": 65.23255813953487,
+              "y2": 65.23255813953487
+            },
+            {
+              "value": 40,
+              "y": 35,
+              "y2": 35
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "name": "agriculture",
+      "geometry": {
+        "map": {
+          "x": 274.796875,
+          "y": 256.59375,
+          "width": 502.828125,
+          "height": 571.40625,
+          "right": 777.625,
+          "bottom": 828
+        },
+        "news": {
+          "x": 14,
+          "y": 61,
+          "width": 244.796875,
+          "height": 800,
+          "right": 258.796875,
+          "bottom": 861
+        },
+        "reading": {
+          "x": 791.625,
+          "y": 224,
+          "width": 634.375,
+          "height": 650,
+          "right": 1426,
+          "bottom": 874
+        },
+        "viewportHeight": 900,
+        "scrollY": 0,
+        "overflow": false,
+        "labels": []
+      }
+    },
+    {
+      "width": 1440,
+      "name": "population",
+      "geometry": {
+        "map": {
+          "x": 274.796875,
+          "y": 256.59375,
+          "width": 502.828125,
+          "height": 571.40625,
+          "right": 777.625,
+          "bottom": 828
+        },
+        "news": {
+          "x": 14,
+          "y": 61,
+          "width": 244.796875,
+          "height": 800,
+          "right": 258.796875,
+          "bottom": 861
+        },
+        "reading": {
+          "x": 791.625,
+          "y": 224,
+          "width": 634.375,
+          "height": 650,
+          "right": 1426,
+          "bottom": 874
+        },
+        "viewportHeight": 900,
+        "scrollY": 0,
+        "overflow": false,
+        "labels": []
+      }
+    },
+    {
+      "width": 1440,
+      "name": "population numeric lookup",
+      "value": "選択地点 35.684°N / 139.742°E：10,855.3 人/km²（2020年・5km集約推計）"
+    },
+    {
+      "width": 1440,
+      "name": "URL reload history explicit country return",
+      "restored": "http://127.0.0.1:38415/insight-journal/atlas/asia/east-asia/nature/?place=CHN&city=beijing&lng=128.00000&lat=35.00000&z=4.200"
+    },
+    {
+      "width": 1440,
+      "name": "Tokyo remains on East Asia with unchanged camera",
+      "before": {
+        "lng": 128,
+        "lat": 35,
+        "zoom": 4.2
+      },
+      "after": {
+        "lng": 128,
+        "lat": 35,
+        "zoom": 4.2
+      },
+      "url": "http://127.0.0.1:38415/insight-journal/atlas/asia/east-asia/nature/?place=JPN&city=tokyo&lng=128.00000&lat=35.00000&z=4.200"
+    },
+    {
+      "width": 1440,
+      "name": "industry country uses same explicit entry"
+    },
+    {
+      "width": 1440,
+      "name": "direct URL and reload industry"
+    },
+    {
+      "width": 1440,
+      "name": "direct URL and reload nature"
+    },
+    {
+      "width": 1440,
+      "name": "direct URL and reload agriculture"
+    },
+    {
+      "width": 1440,
+      "name": "direct URL and reload population"
+    },
+    {
+      "width": 1024,
+      "name": "mainland extent and northern margin",
+      "extent": [
+        [
+          128.36075887432844,
+          29.333596028516553
+        ],
+        [
+          146.8892411256748,
+          45.868728990473045
+        ]
+      ],
+      "hokkaidoTop": 10.361925562114344
+    },
+    {
+      "width": 1024,
+      "name": "default-clusters",
+      "geometry": {
+        "map": {
+          "x": 208,
+          "y": 256.59375,
+          "width": 386.671875,
+          "height": 439.40625,
+          "right": 594.671875,
+          "bottom": 696
+        },
+        "news": {
+          "x": 14,
+          "y": 61,
+          "width": 180,
+          "height": 668,
+          "right": 194,
+          "bottom": 729
+        },
+        "reading": {
+          "x": 608.671875,
+          "y": 224,
+          "width": 401.328125,
+          "height": 528,
+          "right": 1010,
+          "bottom": 752
+        },
+        "viewportHeight": 768,
+        "scrollY": 0,
+        "overflow": false,
+        "labels": [
+          {
+            "id": "toyota",
+            "text": "自動車豊田・中京",
+            "leaderLength": 31.112698372208094,
+            "rect": {
+              "x": 413.625,
+              "y": 491.359375,
+              "width": 76,
+              "height": 39.890625,
+              "right": 489.625,
+              "bottom": 531.25
+            }
+          },
+          {
+            "id": "kitakyushu",
+            "text": "鉄鋼北九州",
+            "leaderLength": 64,
+            "rect": {
+              "x": 215,
+              "y": 479.609375,
+              "width": 56,
+              "height": 39.890625,
+              "right": 271,
+              "bottom": 519.5
+            }
+          },
+          {
+            "id": "kumamoto",
+            "text": "半導体・電子熊本",
+            "leaderLength": 38,
+            "rect": {
+              "x": 215,
+              "y": 530.75,
+              "width": 98.015625,
+              "height": 39.890625,
+              "right": 313.015625,
+              "bottom": 570.640625
+            }
+          },
+          {
+            "id": "osaka",
+            "text": "電池大阪・関西",
+            "leaderLength": 22,
+            "rect": {
+              "x": 319.34375,
+              "y": 501.234375,
+              "width": 76,
+              "height": 39.890625,
+              "right": 395.34375,
+              "bottom": 541.125
+            }
+          },
+          {
+            "id": "imabari",
+            "text": "造船今治・瀬戸内",
+            "leaderLength": 14.142135623730951,
+            "rect": {
+              "x": 315.390625,
+              "y": 588.84375,
+              "width": 86,
+              "height": 39.890625,
+              "right": 401.390625,
+              "bottom": 628.734375
+            }
+          },
+          {
+            "id": "nagasaki",
+            "text": "造船長崎",
+            "leaderLength": 11.125206978289835,
+            "rect": {
+              "x": 250.359375,
+              "y": 616.59375,
+              "width": 50.015625,
+              "height": 39.890625,
+              "right": 300.375,
+              "bottom": 656.484375
+            }
+          },
+          {
+            "id": "yokkaichi",
+            "text": "石油化学四日市",
+            "leaderLength": 22,
+            "rect": {
+              "x": 402.609375,
+              "y": 536.15625,
+              "width": 74.015625,
+              "height": 39.890625,
+              "right": 476.625,
+              "bottom": 576.046875
+            }
+          }
+        ]
+      }
+    },
+    {
+      "width": 1024,
+      "name": "Okinawa view is explicit, retained across reload and history",
+      "islandCamera": {
+        "lng": 127.10000000000002,
+        "lat": 25.740145291080637,
+        "zoom": 4.883371463402111
+      }
+    },
+    {
+      "width": 1024,
+      "name": "prefecture-transport",
+      "geometry": {
+        "map": {
+          "x": 208,
+          "y": 283.1875,
+          "width": 363.265625,
+          "height": 412.8125,
+          "right": 571.265625,
+          "bottom": 696
+        },
+        "news": {
+          "x": 14,
+          "y": 61,
+          "width": 180,
+          "height": 668,
+          "right": 194,
+          "bottom": 729
+        },
+        "reading": {
+          "x": 585.265625,
+          "y": 224,
+          "width": 424.734375,
+          "height": 528,
+          "right": 1010,
+          "bottom": 752
+        },
+        "viewportHeight": 768,
+        "scrollY": 0,
+        "overflow": false,
+        "labels": []
+      }
+    },
+    {
+      "width": 1024,
+      "name": "natural",
+      "geometry": {
+        "map": {
+          "x": 208,
+          "y": 256.59375,
+          "width": 386.671875,
+          "height": 439.40625,
+          "right": 594.671875,
+          "bottom": 696
+        },
+        "news": {
+          "x": 14,
+          "y": 61,
+          "width": 180,
+          "height": 668,
+          "right": 194,
+          "bottom": 729
+        },
+        "reading": {
+          "x": 608.671875,
+          "y": 224,
+          "width": 401.328125,
+          "height": 528,
+          "right": 1010,
+          "bottom": 752
+        },
+        "viewportHeight": 768,
+        "scrollY": 0,
+        "overflow": false,
+        "labels": [
+          {
+            "id": "tokyo",
+            "text": "東京35.7°N",
+            "leaderLength": 10,
+            "rect": {
+              "x": 455.65625,
+              "y": 517.8125,
+              "width": 60.75,
+              "height": 39.890625,
+              "right": 516.40625,
+              "bottom": 557.703125
+            }
+          },
+          {
+            "id": "sapporo",
+            "text": "札幌43.0°N",
+            "leaderLength": 10,
+            "rect": {
+              "x": 488.28125,
+              "y": 319.65625,
+              "width": 60.75,
+              "height": 39.890625,
+              "right": 549.03125,
+              "bottom": 359.546875
+            }
+          }
+        ]
+      }
+    },
+    {
+      "width": 1024,
+      "name": "three Japan cities use common #300 axes and matching tick gridlines",
+      "plots": [
+        {
+          "city": "tokyo",
+          "min": -3,
+          "max": 40,
+          "rain": 350,
+          "top": 35,
+          "bottom": 165,
+          "values": [
+            139.6046511627907,
+            137.48837209302326,
+            127.51162790697674,
+            112.69767441860465,
+            99.09302325581395,
+            89.72093023255815,
+            78.23255813953489,
+            74.6046511627907,
+            85.48837209302326,
+            101.51162790697674,
+            118.13953488372093,
+            132.65116279069767
+          ],
+          "bars": [
+            142.8257142857143,
+            144.0142857142857,
+            121.91428571428571,
+            115.34,
+            113.11142857142858,
+            102.6742857142857,
+            106.98285714285714,
+            107.54,
+            81.46571428571428,
+            77.78857142857142,
+            129.23142857142858,
+            143.49428571428572
+          ],
+          "rainTicks": [
+            {
+              "value": 0,
+              "y": 165,
+              "y2": 165
+            },
+            {
+              "value": 100,
+              "y": 127.85714285714286,
+              "y2": 127.85714285714286
+            },
+            {
+              "value": 200,
+              "y": 90.71428571428572,
+              "y2": 90.71428571428572
+            },
+            {
+              "value": 300,
+              "y": 53.571428571428584,
+              "y2": 53.571428571428584
+            }
+          ],
+          "tempTicks": [
+            {
+              "value": 0,
+              "y": 155.93023255813952,
+              "y2": 155.93023255813952
+            },
+            {
+              "value": 10,
+              "y": 125.69767441860466,
+              "y2": 125.69767441860466
+            },
+            {
+              "value": 20,
+              "y": 95.46511627906978,
+              "y2": 95.46511627906978
+            },
+            {
+              "value": 30,
+              "y": 65.23255813953487,
+              "y2": 65.23255813953487
+            },
+            {
+              "value": 40,
+              "y": 35,
+              "y2": 35
+            }
+          ]
+        },
+        {
+          "city": "sapporo",
+          "min": -10,
+          "max": 40,
+          "rain": 350,
+          "top": 35,
+          "bottom": 165,
+          "values": [
+            147.32,
+            146.02,
+            136.14,
+            120.02,
+            105.19999999999999,
+            94.8,
+            84.14,
+            81.02000000000001,
+            90.63999999999999,
+            107.53999999999999,
+            125.48,
+            141.34
+          ],
+          "bars": [
+            124.73714285714286,
+            130.8657142857143,
+            136.17714285714285,
+            144.72,
+            144.3857142857143,
+            142.56571428571428,
+            131.31142857142856,
+            117.90285714285714,
+            112.18285714285715,
+            124.18,
+            122.73142857142858,
+            122.47142857142858
+          ],
+          "rainTicks": [
+            {
+              "value": 0,
+              "y": 165,
+              "y2": 165
+            },
+            {
+              "value": 100,
+              "y": 127.85714285714286,
+              "y2": 127.85714285714286
+            },
+            {
+              "value": 200,
+              "y": 90.71428571428572,
+              "y2": 90.71428571428572
+            },
+            {
+              "value": 300,
+              "y": 53.571428571428584,
+              "y2": 53.571428571428584
+            }
+          ],
+          "tempTicks": [
+            {
+              "value": -10,
+              "y": 165,
+              "y2": 165
+            },
+            {
+              "value": 0,
+              "y": 139,
+              "y2": 139
+            },
+            {
+              "value": 10,
+              "y": 113,
+              "y2": 113
+            },
+            {
+              "value": 20,
+              "y": 87,
+              "y2": 87
+            },
+            {
+              "value": 30,
+              "y": 61,
+              "y2": 61
+            },
+            {
+              "value": 40,
+              "y": 35,
+              "y2": 35
+            }
+          ]
+        },
+        {
+          "city": "naha",
+          "min": -3,
+          "max": 40,
+          "rain": 350,
+          "top": 35,
+          "bottom": 165,
+          "values": [
+            103.62790697674419,
+            103.02325581395348,
+            98.1860465116279,
+            90.93023255813954,
+            82.76744186046511,
+            73.69767441860465,
+            67.95348837209302,
+            68.25581395348837,
+            71.5813953488372,
+            78.83720930232559,
+            87.90697674418604,
+            98.48837209302326
+          ],
+          "bars": [
+            127.26285714285714,
+            122.47142857142858,
+            111.96,
+            105.19999999999999,
+            73.88857142857142,
+            59.36571428571429,
+            95.13428571428572,
+            75.85714285714286,
+            62.782857142857154,
+            98.44,
+            120.76285714285714,
+            124.14285714285714
+          ],
+          "rainTicks": [
+            {
+              "value": 0,
+              "y": 165,
+              "y2": 165
+            },
+            {
+              "value": 100,
+              "y": 127.85714285714286,
+              "y2": 127.85714285714286
+            },
+            {
+              "value": 200,
+              "y": 90.71428571428572,
+              "y2": 90.71428571428572
+            },
+            {
+              "value": 300,
+              "y": 53.571428571428584,
+              "y2": 53.571428571428584
+            }
+          ],
+          "tempTicks": [
+            {
+              "value": 0,
+              "y": 155.93023255813952,
+              "y2": 155.93023255813952
+            },
+            {
+              "value": 10,
+              "y": 125.69767441860466,
+              "y2": 125.69767441860466
+            },
+            {
+              "value": 20,
+              "y": 95.46511627906978,
+              "y2": 95.46511627906978
+            },
+            {
+              "value": 30,
+              "y": 65.23255813953487,
+              "y2": 65.23255813953487
+            },
+            {
+              "value": 40,
+              "y": 35,
+              "y2": 35
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "name": "agriculture",
+      "geometry": {
+        "map": {
+          "x": 208,
+          "y": 256.59375,
+          "width": 386.671875,
+          "height": 439.40625,
+          "right": 594.671875,
+          "bottom": 696
+        },
+        "news": {
+          "x": 14,
+          "y": 61,
+          "width": 180,
+          "height": 668,
+          "right": 194,
+          "bottom": 729
+        },
+        "reading": {
+          "x": 608.671875,
+          "y": 224,
+          "width": 401.328125,
+          "height": 528,
+          "right": 1010,
+          "bottom": 752
+        },
+        "viewportHeight": 768,
+        "scrollY": 0,
+        "overflow": false,
+        "labels": []
+      }
+    },
+    {
+      "width": 1024,
+      "name": "population",
+      "geometry": {
+        "map": {
+          "x": 208,
+          "y": 256.59375,
+          "width": 386.671875,
+          "height": 439.40625,
+          "right": 594.671875,
+          "bottom": 696
+        },
+        "news": {
+          "x": 14,
+          "y": 61,
+          "width": 180,
+          "height": 668,
+          "right": 194,
+          "bottom": 729
+        },
+        "reading": {
+          "x": 608.671875,
+          "y": 224,
+          "width": 401.328125,
+          "height": 528,
+          "right": 1010,
+          "bottom": 752
+        },
+        "viewportHeight": 768,
+        "scrollY": 0,
+        "overflow": false,
+        "labels": []
+      }
+    },
+    {
+      "width": 1024,
+      "name": "population numeric lookup",
+      "value": "選択地点 35.683°N / 139.718°E：16,970.6 人/km²（2020年・5km集約推計）"
+    },
+    {
+      "width": 1024,
+      "name": "URL reload history explicit country return",
+      "restored": "http://127.0.0.1:38415/insight-journal/atlas/asia/east-asia/nature/?place=CHN&city=beijing&lng=128.00000&lat=35.00000&z=4.200"
+    },
+    {
+      "width": 1024,
+      "name": "Tokyo remains on East Asia with unchanged camera",
+      "before": {
+        "lng": 128,
+        "lat": 35,
+        "zoom": 4.2
+      },
+      "after": {
+        "lng": 128,
+        "lat": 35,
+        "zoom": 4.2
+      },
+      "url": "http://127.0.0.1:38415/insight-journal/atlas/asia/east-asia/nature/?place=JPN&city=tokyo&lng=128.00000&lat=35.00000&z=4.200"
+    },
+    {
+      "width": 1024,
+      "name": "industry country uses same explicit entry"
+    },
+    {
+      "width": 1024,
+      "name": "direct URL and reload industry"
+    },
+    {
+      "width": 1024,
+      "name": "direct URL and reload nature"
+    },
+    {
+      "width": 1024,
+      "name": "direct URL and reload agriculture"
+    },
+    {
+      "width": 1024,
+      "name": "direct URL and reload population"
+    },
+    {
+      "width": 390,
+      "name": "mobile layout and keyboard topic"
+    },
+    {
+      "width": 1024,
+      "name": "asset failure keeps base and statistics; retry restores real map"
+    }
+  ],
+  "errors": [],
+  "images": [
+    "1440x900-industry-clusters.jpg",
+    "1440x900-industry-cluster-statistics.jpg",
+    "1440x900-okinawa-retained.jpg",
+    "1440x900-industry-prefectures.jpg",
+    "1440x900-industry-prefecture-statistics.jpg",
+    "1440x900-natural.jpg",
+    "1440x900-natural-statistics.jpg",
+    "1440x900-agriculture.jpg",
+    "1440x900-agriculture-statistics.jpg",
+    "1440x900-population.jpg",
+    "1440x900-population-city.jpg",
+    "1440x900-population-statistics.jpg",
+    "1024x768-industry-clusters.jpg",
+    "1024x768-industry-cluster-statistics.jpg",
+    "1024x768-okinawa-retained.jpg",
+    "1024x768-industry-prefectures.jpg",
+    "1024x768-industry-prefecture-statistics.jpg",
+    "1024x768-natural.jpg",
+    "1024x768-natural-statistics.jpg",
+    "1024x768-agriculture.jpg",
+    "1024x768-agriculture-statistics.jpg",
+    "1024x768-population.jpg",
+    "1024x768-population-city.jpg",
+    "1024x768-population-statistics.jpg",
+    "390-industry.jpg"
+  ],
+  "status": "passed"
+}

@@ -1,0 +1,9 @@
+{
+  "pullRequest": 300,
+  "sourceHead": "5ae3d4ed300416b2de0fcc1677013d94c19552ea",
+  "integrationOrder": "Integrate #300 before #306. These two shared files are byte-identical to the #300 head; other #300 callers/tests remain with their owner.",
+  "files": {
+    "src/lib/atlas-climate-axes.ts": "646c25d7e7a1dc762b5fff459c8d9ccb303190d6fc923b7aca98bf7aecbdcc7b",
+    "src/components/atlas/AsiaClimateDiagram.astro": "930b699aff11fbd0b15386c9dab5cb95faeda202b9b182322b8c2201b7f51c92"
+  }
+}
