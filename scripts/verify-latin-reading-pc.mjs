@@ -26,7 +26,7 @@ try{
   await go('agriculture/');view.measurements.agriculture=await measure();await shot('agriculture');
   if(!baseline){
    await readableLabels('[data-latin-product-label-text]');
-   if(view.primary){const bottom=await page.locator('[data-latin-agriculture-overview-legend]').evaluate(el=>el.getBoundingClientRect().bottom);assert.ok(bottom<=viewport.height,'Product decoding extends past the primary review viewport');}
+   if(view.primary){const bottom=await page.locator('[data-latin-agriculture-overview-legend]').evaluate(el=>el.getBoundingClientRect().bottom);assert.ok(bottom<=viewport.height,'Product decoding extends past the primary review viewport: '+bottom);}
    assert.equal(await page.locator('[data-latin-agriculture-map] [data-latin-agriculture-country]').count(),0);assert.equal(await page.locator('[data-latin-agriculture-map] g[data-latin-agriculture-layer]').count(),11);
    const image=page.locator('[data-latin-product-distribution]'),href=await image.getAttribute('href');
    // Choose an actual colored source pixel, then map it through the production SVG transform.
