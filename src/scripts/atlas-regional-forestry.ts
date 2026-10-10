@@ -25,7 +25,8 @@ export function initRegionalForestry(root=document.querySelector<HTMLElement>('[
   setText('[data-forest-kicker]',example?'重要な林業の事例 · 代表位置':'地域全体');
   setText('[data-forest-reading-title]',example?.title??`${reading.name}の森林と木材利用`);
   setText('[data-forest-takeaway]',example?.fact??reading.overview);
-  setText('[data-forest-fact]',root!.dataset.forestRasterStatus==='failed'?'樹木被覆画像を表示できないため、緑の分布は読めません。番号は解説の代表位置、斜線は欠測です。':example?`${example.fact} 番号は説明の代表位置です。選んでも他地域の位置と取得済みの被覆面を残します。`:reading.distribution);
+  setText('[data-forest-fact]',root!.dataset.forestRasterStatus==='failed'?'2021年の樹木被覆画像を表示できません。2020年の参考表示とは別の資料です。番号は解説の代表位置、斜線は欠測・分類未判定です。':example?`${example.fact} 番号は説明の代表位置です。選んでも他地域の位置と取得済みの被覆面を残します。`:reading.distribution);
+  if(root!.dataset.forestReferenceStatus==='failed')q('[data-forest-fact]').textContent+=' 一部の2020年参考画像を表示できません。表示に失敗した範囲の森林分布は読めません。';
   setText('[data-forest-reason]',example?.explanation??reading.reason);
   setText('[data-forest-use]',example?.use??'');
   q('[data-forest-use-section]').hidden=!example;q('[data-forest-clear]').hidden=!example;
@@ -77,6 +78,15 @@ export function initRegionalForestry(root=document.querySelector<HTMLElement>('[
   // this controller attached to the server-rendered SVG image.
   const probe=new Image();probe.onload=()=>{if(root!.dataset.forestRasterStatus!=='failed')root!.dataset.forestRasterStatus='ready';};probe.onerror=failed;probe.src=image.getAttribute('href')!;
  }else root.dataset.forestRasterStatus='not-acquired';
+ const references=[...root.querySelectorAll<SVGImageElement>('[data-forest-reference]')];
+ root.dataset.forestReferenceStatus=references.length?'loading':'not-used';
+ let remaining=references.length;
+ for(const reference of references){
+  let finished=false;
+  const fail=()=>{if(finished)return;finished=true;reference.remove();root!.dataset.forestReferenceStatus='failed';setText('[data-forest-map-note]','一部の2020年森林参考画像を読み込めませんでした。その範囲は斜線と代表位置で表示します。再読込できます。');choose(selected,false);};
+  reference.addEventListener('error',fail);
+  const probe=new Image();probe.onerror=fail;probe.onload=()=>{if(finished)return;finished=true;if(--remaining===0&&root!.dataset.forestReferenceStatus!=='failed')root!.dataset.forestReferenceStatus='ready';};probe.src=reference.getAttribute('href')!;
+ }
  new ResizeObserver(()=>draw(false)).observe(svg);
  window.addEventListener('popstate',restore);
  restore();

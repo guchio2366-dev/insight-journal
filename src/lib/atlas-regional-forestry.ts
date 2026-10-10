@@ -6,6 +6,7 @@ import oceania from '../data/atlas/oceania-countries.json';
 import russia from '../data/atlas/russia-countries.json';
 import disputes from '../data/atlas/russia-disputed-areas.json';
 import europeTreeCover from '../../public/assets/atlas/europe/tree-cover-v1/manifest.json';
+import asiaForestry from '../../public/assets/atlas/asia-farming-v1/manifest.json';
 
 export type ForestryRegion = keyof typeof frames;
 type Geometry = {type:string;coordinates:number[][][]|number[][][][]};
@@ -36,6 +37,15 @@ export function forestryGeography(region:ForestryRegion) {
  return features.filter(feature=>region==='russia'?feature.properties.kind==='russia':region==='oceania'?feature.properties.kind==='oceania':true);
 }
 export const forestryDisputes=()=>disputes.features.map(feature=>({path:forestryPath('russia',feature.geometry as Geometry),name:feature.properties.name}));
+export function forestryReferences(region:ForestryRegion) {
+ const names=region==='russia'?['south-central-asia','east-asia']:region==='oceania'?['southeast-asia']:[];
+ return names.map(name=>{
+  const source=asiaForestry.regions[name as keyof typeof asiaForestry.regions].layers.find(layer=>layer.id==='forest')!;
+  const coordinates=source.imageCoordinates,[west,north]=coordinates[0],[east,south]=coordinates[2];
+  const [x,y]=projectForestry(region,[west,north]),[right,bottom]=projectForestry(region,[east,south]);
+  return {id:name,href:`/assets/atlas/asia-farming-v1/${name}.forest.png`,x,y,width:right-x,height:bottom-y,bounds:[west,south,east,north],year:2020};
+ });
+}
 export function forestryRaster(region:ForestryRegion) {
  if(region!=='russia')return null;
  const [west,south,east,north]=europeTreeCover.bounds;

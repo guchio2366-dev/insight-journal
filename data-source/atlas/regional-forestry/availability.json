@@ -59,15 +59,23 @@
         240,
         25
       ],
-      "coverage": "not-acquired",
-      "missing": "Entire target-country tree-cover raster; no forest type or harvest boundaries acquired",
+      "coverage": "partial-JRC-2020-reference-only",
+      "missing": "Australia, New Zealand, PNG east of 143E, islands outside saved Southeast Asia WMS extent; source classification and nonforest/nodata remain unqueried even within reference extent",
       "treeClass": null,
       "year": null,
       "plannedSource": "ESA WorldCover 2021 v200 public COGs; access blocked",
       "geography": "src/data/atlas/oceania-countries.json",
       "countryCount": 25,
       "geometryHash": "dd9e4f68e17a741ca7ce3cc378e3d043524d94f0f48673c2ce024c1ce0af48a1",
-      "locatorMethod": "Author-selected approximate representative coordinates anchored to named regions in cited literature. These are not measured forest/harvest/site points."
+      "locatorMethod": "Author-selected approximate representative coordinates anchored to named regions in cited literature. These are not measured forest/harvest/site points.",
+      "referenceBounds": [
+        [
+          90,
+          -12,
+          143,
+          30
+        ]
+      ]
     },
     "russia": {
       "bounds": [
@@ -76,15 +84,29 @@
         191,
         83
       ],
-      "coverage": "partial-western-Russia",
-      "missing": "East of 65°E or north of 73°N, and original source nodata",
+      "coverage": "ESA-western-Russia-plus-JRC-southern-reference",
+      "missing": "Outside ESA [-25,32,65,73] and saved southern JRC reference extents; original ESA nodata; transparent JRC WMS pixels unclassified",
       "treeClass": 10,
       "year": 2021,
       "plannedSource": "ESA WorldCover 2021 v200 public COGs; access blocked",
       "geography": "src/data/atlas/russia-countries.json",
       "countryCount": 1,
       "geometryHash": "ede9cbfd062912d7a10fff01b111ad9ca8fa4f8eb719cc28c9f4904a96da2d4f",
-      "locatorMethod": "Author-selected approximate representative coordinates anchored to named regions in cited literature. These are not measured forest/harvest/site points."
+      "locatorMethod": "Author-selected approximate representative coordinates anchored to named regions in cited literature. These are not measured forest/harvest/site points.",
+      "referenceBounds": [
+        [
+          44,
+          -2,
+          100,
+          57
+        ],
+        [
+          72,
+          17,
+          147,
+          55
+        ]
+      ]
     }
   },
   "reusedInputs": [
@@ -111,6 +133,41 @@
       "sha256": "6320488dbeb0aa6c87a978223bd8510d3154112b8051981070a9626887c0cb36",
       "bytes": 304247,
       "role": "Previously acquired western Russia tree cover; reused without new download"
+    },
+    {
+      "path": "public/assets/atlas/asia-farming-v1/east-asia.forest.png",
+      "sha256": "9690d2d685d4d8cfd3837a4e7c1a87295e99485186cbc15b28ba3e74ff603f48",
+      "bytes": 189130,
+      "role": "Previously acquired JRC 2020 publisher-rendered forest reference; reused without new download"
+    },
+    {
+      "path": "public/assets/atlas/asia-farming-v1/south-central-asia.forest.png",
+      "sha256": "8a8257bbec3376ac709d1f19e718fcdb006cb2b3b0b5453d300992a3f9bb532d",
+      "bytes": 203706,
+      "role": "Previously acquired JRC 2020 publisher-rendered forest reference; reused without new download"
+    },
+    {
+      "path": "public/assets/atlas/asia-farming-v1/southeast-asia.forest.png",
+      "sha256": "841b75e1bcb06094792d4f9439a530d3da0757f1f8728efb8fba3d4253c042fa",
+      "bytes": 170031,
+      "role": "Previously acquired JRC 2020 publisher-rendered forest reference; reused without new download"
+    },
+    {
+      "path": "public/assets/atlas/asia-farming-v1/manifest.json",
+      "sha256": "3c0c916346fb3071a04e12999999e42e4cdb4c7b92196656dd82a1b09bf52499",
+      "bytes": 64103,
+      "role": "Existing saved WMS source bounds, URLs, editions, acknowledgement and source image hashes"
     }
-  ]
+  ],
+  "referenceSource": {
+    "name": "JRC Global map of forest cover 2020 version 3",
+    "year": 2020,
+    "documentation": "https://forobs.jrc.ec.europa.eu/GFC/v3",
+    "checkedAt": "2026-10-10",
+    "license": "Copernicus/JRC free reuse with proper acknowledgement; official documentation verified",
+    "definition": "Harmonized forest according to FAO-FRA/EUDR definitions; distinct from ESA WorldCover tree cover class 10",
+    "method": "Reuse unchanged saved publisher-rendered WMS PNGs, georeferenced from existing manifest. Clip to existing region countries; in Russia exclude entire saved ESA extent to retain its distinct 2021 tree class. No recolouring, colour extraction, class query or area calculation.",
+    "noData": "Transparent WMS pixels do not distinguish non-forest and nodata; leave hatch and explicitly mark unclassified. No source class/nodata grid was acquired.",
+    "knownIssue": "Producer reports overestimation in low-density Siberian tree landscapes; reference views are not accurate forest/harvest boundaries."
+  }
 }

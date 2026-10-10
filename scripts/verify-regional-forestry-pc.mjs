@@ -26,16 +26,18 @@ try{
    const route=base+`/atlas/${region}/agriculture/forestry/`;
    await page.goto(route,{waitUntil:'networkidle'});await page.evaluate(()=>document.fonts.ready);
    await page.waitForFunction(()=>document.querySelector('[data-regional-forestry]')?.dataset.forestInitialized==='true');
+   if(['russia','oceania'].includes(region))await page.waitForFunction(()=>document.querySelector('[data-regional-forestry]')?.dataset.forestReferenceStatus==='ready');
    if(region==='russia')await page.waitForFunction(()=>document.querySelector('[data-regional-forestry]')?.dataset.forestRasterStatus==='ready');
    assert.equal(await page.locator('[data-forest-raster]').count(),region==='russia'?1:0);
    assert.equal(await page.locator('select').count(),0);
+   const references=region==='russia'?2:region==='oceania'?1:0;assert.equal(await page.locator('[data-forest-reference]').count(),references);
    const config=await page.locator('[data-forest-config]').evaluate(element=>JSON.parse(element.textContent));
    const map=page.locator('[data-forest-map]'),camera=await map.getAttribute('viewBox'),locators=await page.locator('svg [data-forest-example]').count();
    const measure=await page.evaluate(()=>{const b=selector=>{const r=document.querySelector(selector).getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};};return {map:b('.forest-map-stage'),reading:b('.forest-reading'),overflow:document.documentElement.scrollWidth>innerWidth};});
    assert.equal(measure.overflow,false);assert.ok(measure.map.width>480&&measure.map.height>440);assert.ok(measure.reading.x>measure.map.x+measure.map.width-2);
    const shot=async suffix=>{const name=`${region}-${viewport.width}-${suffix}.png`,bytes=await page.screenshot({path:path.join(output,name),animations:'disabled',fullPage:true});return {file:name,sha256:crypto.createHash('sha256').update(bytes).digest('hex')};};
    const initial=await shot('overview');
-   for(const example of config.reading.examples){await page.locator(`button[data-forest-example="${example.id}"]`).click();assert.equal(await page.locator('[data-forest-reading-title]').textContent(),example.title);assert.equal(await map.getAttribute('viewBox'),camera);assert.equal(await page.locator('svg [data-forest-example]').count(),locators);assert.equal(await page.locator('[data-forest-raster]').count(),region==='russia'?1:0);}
+   for(const example of config.reading.examples){await page.locator(`button[data-forest-example="${example.id}"]`).click();assert.equal(await page.locator('[data-forest-reading-title]').textContent(),example.title);assert.equal(await map.getAttribute('viewBox'),camera);assert.equal(await page.locator('svg [data-forest-example]').count(),locators);assert.equal(await page.locator('[data-forest-raster]').count(),region==='russia'?1:0);assert.equal(await page.locator('[data-forest-reference]').count(),references);}
    const selected=await shot('selected');
    await page.locator('[data-forest-zoom=in]').click();const zoomed=await map.getAttribute('viewBox');assert.notEqual(zoomed,camera);
    await page.locator('[data-forest-clear]').click();assert.equal(await map.getAttribute('viewBox'),zoomed);
@@ -45,7 +47,7 @@ try{
    await map.focus();await page.keyboard.press('ArrowRight');assert.notEqual(await map.getAttribute('viewBox'),zoomed);
    await page.locator('[data-forest-reset]').click();assert.equal(await map.getAttribute('viewBox'),camera);assert.equal(await page.locator('[data-forest-clear]').isVisible(),false);
    await page.locator(`svg [data-forest-example="${first.id}"]`).click();assert.equal(await page.locator('[data-forest-reading-title]').textContent(),first.title);
-   report.viewports.push({region,viewport,...measure,locators,raster:region==='russia'?'western-Russia-only':'not-acquired',initial,selected});
+   report.viewports.push({region,viewport,...measure,locators,references,raster:region==='russia'?'western-Russia-only':'not-acquired',initial,selected});
   }
   await context.close();await save();
  }
