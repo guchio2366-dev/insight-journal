@@ -61,7 +61,13 @@ try{
    assert.ok(measured.rainMax>=Math.max(...city.precipitationMm.filter(v=>v!==null)));
    measured.bars.forEach((b,i)=>{assert.ok(b.y>=measured.top-1e-7&&b.y+b.h<=measured.bottom+1e-7);assert.ok(Math.abs(b.h*100/(measured.rain0-measured.rain100)-city.precipitationMm.filter(v=>v!==null)[i])<1e-6,`${id}: actual selected rain value`);});
    measured.dots.forEach((y,i)=>{assert.ok(y>=measured.top-1e-7&&y<=measured.bottom+1e-7);assert.ok(Math.abs((measured.temp0-y)*10/(measured.temp0-measured.temp10)-city.temperatureC.filter(v=>v!==null)[i])<1e-6,`${id}: actual selected temperature value`);});
-   for(const label of measured.labels.filter(label=>label.rect.width>0&&label.rect.height>0)){assert.ok(label.rect.x>=measured.bounds.x-1&&label.rect.right<=measured.bounds.right+1,`${id}: label within SVG ${label.text}`);}
+   for(const label of measured.labels.filter(label=>label.rect.width>0&&label.rect.height>0)){assert.ok(label.rect.x>=measured.bounds.x-1&&label.rect.right<=measured.bounds.right+1&&label.rect.y>=measured.bounds.y-1&&label.rect.bottom<=measured.bounds.bottom+1,`${id}: label within SVG ${label.text}`);}
+   const visibleLabels=measured.labels.filter(label=>label.rect.width>0&&label.rect.height>0);
+   for(let i=0;i<visibleLabels.length;i++)for(let j=i+1;j<visibleLabels.length;j++){
+    const a=visibleLabels[i],b=visibleLabels[j];
+    const overlapX=Math.min(a.rect.right,b.rect.right)-Math.max(a.rect.x,b.rect.x),overlapY=Math.min(a.rect.bottom,b.rect.bottom)-Math.max(a.rect.y,b.rect.y);
+    assert.ok(overlapX<=.5||overlapY<=.5,`${id}: labels overlap ${a.text}/${b.text}`);
+   }
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`${id}: page overflow`);
    const name=`${viewport.width}-${group}-${id}`;
    await chart.screenshot({path:resolve(output,`${name}-plot.png`)});await page.screenshot({path:resolve(output,`${name}-page.png`)});
