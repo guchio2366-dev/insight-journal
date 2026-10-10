@@ -29,7 +29,7 @@ function assertTabs({window,root,q},selector,id,{focused=true}={}){
  const tabs=[...root.querySelectorAll(selector)],active=tabs.find(tab=>tab.getAttribute(selector.slice(1,-1))===id);
  assert.ok(active,`${selector} ${id}`);assert.equal(active.closest('[role="tablist"]')?.getAttribute('role'),'tablist');
  assert.equal(tabs.filter(tab=>tab.tabIndex===0).length,1);assert.equal(tabs.filter(tab=>tab.getAttribute('aria-selected')==='true').length,1);
- for(const tab of tabs){const selected=tab===active;assert.equal(tab.getAttribute('role'),'tab');assert.equal(tab.getAttribute('aria-selected'),String(selected));assert.equal(tab.getAttribute('aria-pressed'),String(selected));assert.equal(tab.tabIndex,selected?0:-1);assert.equal(tab.getAttribute('aria-controls'),'africa-map-panel');assert.ok(q('#'+tab.getAttribute('aria-controls')));}
+ for(const tab of tabs){const selected=tab===active;assert.equal(tab.getAttribute('role'),'tab');assert.equal(tab.getAttribute('aria-selected'),String(selected));assert.equal(tab.getAttribute('aria-pressed'),String(selected));assert.equal(tab.tabIndex,selected?0:-1);assert.equal(tab.getAttribute('aria-controls'),root.dataset.field==='population'&&['ethnicity','religion'].includes(tab.dataset.africaTopic)?'africa-population-culture-panel':'africa-map-panel');assert.ok(q('#'+tab.getAttribute('aria-controls')));}
  if(focused)assert.equal(window.document.activeElement,active,'keyboard focus must survive control replacement');
 }
 
@@ -58,25 +58,26 @@ test('water subtabs keep their own keyboard selection independent of the nature 
  });
 });
 
-test('population tabs retain roving focus when changing between density and the two source guides',async()=>{
+test('population tabs retain roving focus when changing between density and the two national composition views',async()=>{
  await withAfricaPage('?field=population&topic=distribution&zoom=all',context=>{
   assertTabs(context,'[data-africa-topic]','distribution',{focused:false});
   navigateTabs(context,'data-africa-topic',[['ArrowRight','ethnicity'],['End','religion'],['ArrowRight','distribution'],['ArrowLeft','religion'],['ArrowLeft','ethnicity'],['Home','distribution']]);
 });
 });
 
-test('population data status follows the tabs and distinguishes density estimates from unpublished source guides',async()=>{
+test('population data status follows the tabs and distinguishes density estimates from the limited census coverage',async()=>{
  await withAfricaPage('?field=population&topic=distribution&zoom=all',async context=>{
   const {root,q}=context,status=q('[data-africa-subfield-status]'),nav=q('[data-africa-subfields]');
-  assert.equal(status.previousElementSibling,nav);assert.equal(status.nextElementSibling,q('.africa-workspace'));
+  assert.equal(status.previousElementSibling,nav);assert.equal(status.nextElementSibling,q('[data-population-culture]'));
   assert.equal(status.getAttribute('role'),'status');assert.equal(status.hidden,false);
   assert.equal(status.textContent,'色は人口密度の推計区分。国の平均とは異なります。');
   assert.equal(q('[data-africa-layer-scope]').hidden,true,'the same explanation must not repeat below the legend');
   assert.equal(root.querySelectorAll('[data-africa-layer-class]').length,7,'all original density classes remain available');
   navigateTabs(context,'data-africa-topic',[['ArrowRight','ethnicity']]);
-  assert.match(status.textContent,/2021版.*この画面に分布図はありません/);assert.equal(status.previousElementSibling,nav);
+  assert.match(status.textContent,/国勢調査2022年の全国構成：南アフリカ。他国・国内分布は未収録/);assert.equal(status.previousElementSibling,nav);
+  assert.equal(q('[data-africa-topic="ethnicity"]').getAttribute('aria-controls'),'africa-population-culture-panel');
   navigateTabs(context,'data-africa-topic',[['End','religion']]);
-  assert.match(status.textContent,/2020年の局所観測ではなく、この画面に分布図はありません/);
+  assert.match(status.textContent,/国勢調査2022年の全国構成：南アフリカ。他国・国内分布は未収録/);
   navigateTabs(context,'data-africa-topic',[['Home','distribution']]);
   assert.equal(status.textContent,'色は人口密度の推計区分。国の平均とは異なります。');
   q('.africa-fields [data-field="nature"]').click();
