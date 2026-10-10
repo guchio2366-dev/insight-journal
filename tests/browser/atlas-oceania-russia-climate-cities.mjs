@@ -7,6 +7,7 @@ import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {chromium} from 'playwright';
 const output=resolve(process.env.REGIONAL_CLIMATE_REVIEW_OUTPUT??'/tmp/oceania-russia-climate-cities');
+const perthFocus=process.env.REGIONAL_CLIMATE_REVIEW_FOCUS==='perth-1024';
 const dir=resolve('dist');const cities=JSON.parse(await readFile('src/data/atlas/oceania-russia-climate-cities.json','utf8'));
 const types={'.html':'text/html','.js':'application/javascript','.css':'text/css','.json':'application/json','.png':'image/png','.svg':'image/svg+xml','.woff2':'font/woff2','.webp':'image/webp'};
 const server=createServer(async(req,res)=>{
@@ -14,7 +15,7 @@ const server=createServer(async(req,res)=>{
 });
 await mkdir(output,{recursive:true});await new Promise(r=>server.listen(0,'127.0.0.1',r));
 const base=`http://127.0.0.1:${server.address().port}/insight-journal/`;
-const report={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),build:JSON.parse(await readFile('dist/_release.json','utf8')),sandbox:true,fonts:execFileSync('fc-list',[':lang=ja','family'],{encoding:'utf8'}).trim(),status:'running',checks:[],screenshots:[],errors:[]};
+const report={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),build:JSON.parse(await readFile('dist/_release.json','utf8')),sandbox:true,focus:perthFocus?'perth-1024':'all-cities-two-PC-sizes',fonts:execFileSync('fc-list',[':lang=ja','family'],{encoding:'utf8'}).trim(),status:'running',checks:[],screenshots:[],errors:[]};
 let browser,page;
 try{
  assert.ok(report.fonts,'Japanese fonts required');if(process.env.REGION_REVIEW_EXPECTED_HEAD){assert.equal(report.head,process.env.REGION_REVIEW_EXPECTED_HEAD);assert.equal(report.build.commitSha,report.head);}
@@ -23,19 +24,24 @@ try{
  await context.route('**/*',route=>new URL(route.request().url()).origin===new URL(base).origin?route.continue():route.abort());
  page=await context.newPage();page.on('pageerror',e=>report.errors.push(String(e)));
  const capture=async(name)=>{const file=resolve(output,name+'.png');await page.screenshot({path:file,fullPage:false});report.screenshots.push({file:name+'.png',sha256:createHash('sha256').update(await readFile(file)).digest('hex')});};
- for(const [width,height] of [[1440,900],[1024,768]]){
+ for(const [width,height] of perthFocus?[[1024,768]]:[[1440,900],[1024,768]]){
   await page.setViewportSize({width,height});
-  for(const region of ['oceania','russia']){
+  for(const region of perthFocus?['oceania']:['oceania','russia']){
    await page.goto(base+`atlas/${region}/nature/?review=climate#atlas`,{waitUntil:'networkidle'});
    const root=page.locator(`[data-${region}-learning]`),panel=root.locator('[data-regional-climate-reading]'),map=root.locator('[data-primary-map]>svg');
    await root.waitFor();await page.waitForFunction(r=>document.querySelector(`[data-${r}-learning]`)?.dataset[r+'Ready']==='true',region);
    await page.evaluate(()=>document.fonts.ready);await root.locator('[data-primary-map] image').evaluateAll(items=>Promise.all(items.map(el=>new Promise(resolve=>{const img=new Image();img.onload=img.onerror=resolve;img.src=el.getAttribute('href');}))));
    const frame=await map.getAttribute('viewBox'),baseline=new URL(page.url());assert.equal(await panel.isVisible(),false);
+   const checkPerthLeader=async()=>{
+    const position=await map.locator('[data-regional-climate-city="perth"]').evaluate(g=>{const svg=g.ownerSVGElement,point=g.querySelector('circle'),text=g.querySelector('text'),matrix=svg.getScreenCTM();const p=svg.createSVGPoint(),q=svg.createSVGPoint();p.x=Number(point.getAttribute('cx'));p.y=Number(point.getAttribute('cy'));q.x=Number(text.getAttribute('x'));q.y=Number(text.getAttribute('y'))-Number(text.getAttribute('font-size'))*4/15;const a=p.matrixTransform(matrix),b=q.matrixTransform(matrix);return {point:{x:a.x,y:a.y},label:{x:b.x,y:b.y},leaderPixels:Math.hypot(a.x-b.x,a.y-b.y)};});
+    assert.ok(position.leaderPixels<=80,`Perth name escaped its neighborhood: ${JSON.stringify(position)}`);return position;
+   };
+   if(perthFocus)report.checks.push({region,width,height,phase:'initial-labels',perth:await checkPerthLeader()});
    assert.ok((await root.locator('[data-theme-title]').textContent()).includes('自然環境'));
    const names=await map.locator('[data-regional-climate-city] text').evaluateAll(items=>items.map(el=>{const r=el.getBoundingClientRect();return {name:el.textContent,x:r.x,y:r.y,w:r.width,h:r.height};}));
    for(let i=0;i<names.length;i++)for(let j=i+1;j<names.length;j++){const a=names[i],b=names[j];assert.ok(!(a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y),`City labels overlap: ${width}/${region}/${a.name}/${b.name}`);}
    await capture(`${width}-${region}-initial`);
-   for(const city of cities.filter(c=>c.region===region)){
+   for(const city of cities.filter(c=>c.region===region&&(!perthFocus||['perth','rotuma'].includes(c.id)))){
     const marker=map.locator(`[data-regional-climate-city="${city.id}"]`);await marker.locator('text').click();
     await panel.waitFor({state:'visible'});assert.equal(await panel.locator('h2').textContent(),`${city.name}－${city.countryName}の雨温図`);assert.equal(await map.getAttribute('viewBox'),frame);assert.equal(await marker.getAttribute('aria-pressed'),'true');
     const selected=new URL(page.url());for(const key of ['place','scope','layer','theme','compare','reading'])assert.equal(selected.searchParams.get(key),baseline.searchParams.get(key));assert.equal(selected.searchParams.get('review'),'climate');assert.equal(selected.hash,'#atlas');
@@ -54,15 +60,15 @@ try{
     for(const label of measurements.labels)assert.ok(label.x>=-.5&&label.y>=-.5&&label.x+label.w<=measurements.view.width+.5&&label.y+label.h<=measurements.view.height+.5,`${city.id}: clipped SVG label ${JSON.stringify(label)}`);
     const layout=JSON.stringify({width,height,city:city.id,pane:measurements.pane,chart:measurements.chart,heading:measurements.heading,details:measurements.details,pageWidth:measurements.pageWidth});
     assert.ok(measurements.pane.top>=0&&measurements.pane.bottom<=height+1,`Right pane outside viewport: ${layout}`);assert.ok(measurements.chart.top>=measurements.heading.bottom-1,`Chart above heading: ${layout}`);assert.ok(measurements.details.height>=85,`Definition pane too short: ${layout}`);assert.ok(measurements.details.bottom<=height+1,`Details outside viewport: ${layout}`);assert.ok(measurements.pageWidth<=width+1,`Page overflow: ${layout}`);
-    report.checks.push({region,width,height,station:city.stationId,coordinates:city.coordinates,period:city.normalPeriod,temperatureC:city.temperatureC,precipitationMm:city.precipitationMm,frame,...measurements});
+    report.checks.push({region,width,height,station:city.stationId,coordinates:city.coordinates,period:city.normalPeriod,temperatureC:city.temperatureC,precipitationMm:city.precipitationMm,frame,...measurements,...(perthFocus?{perth:await checkPerthLeader()}:{})});
     await capture(`${width}-${region}-${city.id}`);
     await panel.locator('[data-clear-climate-city]').click();assert.equal(await panel.isVisible(),false);assert.equal(await map.getAttribute('viewBox'),frame);assert.equal(new URL(page.url()).searchParams.has('city'),false);
     await page.goBack();await panel.waitFor({state:'visible'});assert.equal(await panel.locator('h2').textContent(),`${city.name}－${city.countryName}の雨温図`);assert.equal(await map.getAttribute('viewBox'),frame);
     await page.goForward();await panel.waitFor({state:'hidden'});assert.equal(await map.getAttribute('viewBox'),frame);
    }
-   const first=cities.find(c=>c.region===region);const marker=map.locator(`[data-regional-climate-city="${first.id}"]`);await marker.focus();await page.keyboard.press('Enter');await panel.waitFor({state:'visible'});await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));assert.equal(await page.evaluate(()=>document.activeElement?.getAttribute('data-regional-climate-city')),first.id);await page.reload({waitUntil:'networkidle'});assert.equal(await panel.locator('h2').textContent(),`${first.name}－${first.countryName}の雨温図`);assert.equal(await map.getAttribute('viewBox'),frame);await panel.locator('[data-clear-climate-city]').click();await capture(`${width}-${region}-cleared`);
+   const first=cities.find(c=>c.region===region&&(!perthFocus||c.id==='perth'));const marker=map.locator(`[data-regional-climate-city="${first.id}"]`);await marker.focus();await page.keyboard.press('Enter');await panel.waitFor({state:'visible'});await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));assert.equal(await page.evaluate(()=>document.activeElement?.getAttribute('data-regional-climate-city')),first.id);await page.reload({waitUntil:'networkidle'});assert.equal(await panel.locator('h2').textContent(),`${first.name}－${first.countryName}の雨温図`);assert.equal(await map.getAttribute('viewBox'),frame);await panel.locator('[data-clear-climate-city]').click();await capture(`${width}-${region}-cleared`);
   }
  }
- assert.deepEqual(report.errors,[]);report.status='passed';console.log(`Climate cities: ${report.checks.length} selections / 2 PC sizes, ${report.screenshots.length} screenshots; sandbox enabled.`);
+ assert.deepEqual(report.errors,[]);report.status='passed';console.log(`Climate cities: ${perthFocus?'Perth label delta at 1024×768':report.checks.length+' selections / 2 PC sizes'}, ${report.screenshots.length} screenshots; sandbox enabled.`);
 }catch(error){report.status='failed';report.errors.push(String(error));console.error(`::error::${String(error)}`);if(page)await page.screenshot({path:resolve(output,'failure.png'),fullPage:false}).catch(()=>{});process.exitCode=1;}
 finally{await writeFile(resolve(output,'manifest.json'),JSON.stringify(report,null,2)+'\n');if(browser)await browser.close();await new Promise(r=>server.close(r));}
