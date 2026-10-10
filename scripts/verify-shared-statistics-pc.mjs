@@ -30,6 +30,18 @@ try{
   report.checks.push({case:'Russia forestry',width,metrics});report.screenshots.push(`russia-forestry-${width}.png`);
  }
  await page.setViewportSize({width:1440,height:1000});
+ for(const width of [1440,1024,390]){
+  await page.setViewportSize({width,height:1000});
+  await page.goto(origin+'/insight-journal/atlas/oceania/agriculture/',{waitUntil:'networkidle'});
+  const panel=page.locator('[data-oceania-livestock-production]');await panel.waitFor();
+  assert.match(await panel.innerText(),/21,531,000/);assert.match(await panel.innerText(),/2.7％/);
+  assert.equal(await panel.locator('tbody tr').count(),4);
+  const metrics=await panel.evaluate(el=>({width:el.clientWidth,scrollWidth:el.scrollWidth,pageWidth:document.documentElement.clientWidth,pageScrollWidth:document.documentElement.scrollWidth}));
+  assert.ok(metrics.scrollWidth<=metrics.width+1);assert.ok(metrics.pageScrollWidth<=metrics.pageWidth+1);
+  await panel.screenshot({path:resolve(output,`oceania-production-${width}.png`)});
+  report.checks.push({case:'Oceania cattle production',width,metrics});report.screenshots.push(`oceania-production-${width}.png`);
+ }
+ await page.setViewportSize({width:1440,height:1000});
  for(const [topic,place,expected] of [['forest','IND','製材の輸入量'],['cattle','IND','牛の生乳の生産量']]){
   await page.goto(origin+`/insight-journal/atlas/asia/south-central-asia/agriculture/?topic=${topic}&place=${place}`,{waitUntil:'networkidle'});
   const tables=page.locator('[data-farming-statistics-tables]');await tables.getByText(expected,{exact:false}).first().waitFor();

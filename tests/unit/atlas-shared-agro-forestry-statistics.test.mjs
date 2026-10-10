@@ -39,6 +39,25 @@ test('shared joins refuse different releases, units, missing flags and nonfinite
  assert.ok(!Object.keys(shared.world).some(key=>key.includes(':5616:')||key.includes(':5916:')),'a production denominator is not reused for imports/exports');
 });
 
+test('Oceania beef and raw cow milk match the retained 2024 source and separate World denominators',()=>{
+ const data=json('src/data/atlas/oceania-livestock-production.json');
+ const rows=json('data-source/atlas/livestock/faostat-qcl-2024-extract.json');
+ assert.equal(data.series.length,2);
+ for(const series of data.series){
+  assert.equal(series.year,2024);assert.equal(series.unit,'t');assert.equal(series.elementCode,'5510');
+  const total=rows.find(r=>r['Area Code']==='5000'&&r['Item Code']===series.itemCode&&r.Year==='2024');
+  assert.equal(series.worldRawValue,total.Value);assert.equal(series.worldFlag,total.Flag);
+  for(const country of series.countries){
+   const original=rows.find(r=>Number(r['Area Code (M49)'].replace("'",''))===country.m49&&r['Item Code']===series.itemCode&&r.Year==='2024');
+   assert.equal(country.rawValue,original.Value);assert.equal(country.flag,original.Flag);
+   const expected=Number(original.Value)/Number(total.Value)*100;
+   assert.ok(Math.abs(country.worldShare-expected)<=expected*Number.EPSILON*4);
+  }
+ }
+ assert.equal(data.series.find(s=>s.itemCode==='882').countries.find(c=>c.code==='NZL').rawValue,'21531000.000000');
+ assert.match(data.limits[0],/no 2015/);
+});
+
 test('Asia forestry and livestock outputs keep product/element definitions separate',()=>{
  const forest=panel.farmSeries('forest',undefined,asia.countries.JPN.observations);
  assert.equal(forest.length,7);

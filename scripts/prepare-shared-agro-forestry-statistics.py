@@ -56,7 +56,8 @@ for metric, year, raw, unit, flag, *note in eu['world']['observations']:
 path = 'data-source/atlas/livestock/faostat-qcl-2024-extract.json'
 source = load('data-source/atlas/livestock/faostat-source.json')
 assert source['sha256'] == QCL
-for r in load(path, source['extractSha256']):
+livestock_rows = load(path, source['extractSha256'])
+for r in livestock_rows:
     if r['Area Code'] == '5000':
         assert r['Area'] == 'World'
         add('QCL', r['Item Code'], r['Element Code'], r['Year'], r['Value'], r['Unit'],
@@ -123,6 +124,22 @@ assert summary['dataYear'] == 2024
 assert [(r['id'], r['unit']) for r in summary['rows']] == [('roundwood', 'million m3'), ('sawnwood', 'million m3'), ('wood-pulp', 'million tonnes')]
 assert all(isinstance(r[k], int) and r[k] > 0 for r in summary['rows'] for k in ['production', 'exports'])
 write(OUT / 'shared-forestry-summary.json', summary)
+oceania = []
+for item, label, definition in [('867', '牛肉', '骨付き、生鮮・冷蔵の牛肉。飼養頭数や水牛肉とは別の品目。'), ('882', '牛の生乳', '牛から搾った未加工の乳。乳製品や他の動物種の乳とは別の品目。')]:
+    total = world[f'QCL:{item}:5510:2024:t']
+    country_rows = []
+    for code, m49, name in [('AUS', 36, 'オーストラリア'), ('NZL', 554, 'ニュージーランド')]:
+        matches = [r for r in livestock_rows if int(r['Area Code (M49)'].lstrip("'")) == m49 and r['Item Code'] == item and r['Year'] == '2024' and r['Element Code'] == '5510']
+        if len(matches) != 1 or matches[0]['Unit'] != 't':
+            raise ValueError('Missing/duplicate/wrong-unit Oceania observation')
+        row = matches[0]
+        value = Decimal(row['Value']) if row['Value'].strip() and row['Flag'] not in ['M', 'L'] else None
+        denominator = Decimal(total['rawValue']) if total['rawValue'].strip() and total['flag'] not in ['M', 'L'] else None
+        if value is not None and (not value.is_finite() or value < 0):
+            raise ValueError('Invalid Oceania observation')
+        country_rows.append({'code': code, 'm49': m49, 'name': name, 'publisherName': row['Area'], 'areaCode': row['Area Code'], 'rawValue': row['Value'], 'flag': row['Flag'], 'note': row.get('Note') or None, 'worldShare': float(value / denominator * 100) if value is not None and denominator is not None and denominator > 0 else None})
+    oceania.append({'itemCode': item, 'elementCode': '5510', 'label': label, 'definition': definition, 'unit': 't', 'year': 2024, 'worldRawValue': total['rawValue'], 'worldFlag': total['flag'], 'countries': country_rows})
+write(OUT / 'oceania-livestock-production.json', {'schemaVersion': 1, 'series': oceania, 'source': sources['QCL'], 'retainedSource': 'data-source/atlas/livestock/faostat-qcl-2024-extract.json', 'method': method, 'limits': ['Only 2024 national rows for these two countries are retained; no 2015–2023 trend is inferred.', 'Two-country comparison, not a complete Oceania regional total.', 'No domestic uses, export destinations or self-sufficiency are calculated.']})
 write(OUT / 'shared-world-statistics.json', {'schemaVersion': 1, 'years': list(range(2015,2025)), 'world': dict(sorted(world.items())), 'sources': list(sources.values()), 'method': method})
 write(OUT / 'russia-forestry-statistics.json', {'schemaVersion': 1, 'country': 'RUS', 'm49': 643, 'scope': 'Entire Russian Federation as reported by FAOSTAT; not learning regions or map extent.', 'measures': [metrics[k] for k in ['forest-area','roundwood-production','sawnwood-production']], 'observations': russia, 'sources': [sources['FO'], sources['RL']], 'flags': {'FO': eu['flags']['FO'], 'RL': eu['flags']['RL']}, 'method': method})
 write(LEDGER / 'provenance.json', {'schemaVersion': 1, 'base': 'ab2bf515', 'preparedOn': '2026-10-10', 'preparationScript': 'scripts/prepare-shared-agro-forestry-statistics.py', 'inputs': inputs, 'worldRows': len(world), 'countryWorldJoinCoverage': coverage, 'method': method, 'limits': ['Only retained source coverage is available. No FBS or detailed trade matrix was acquired.', 'Pulp is not in retained FO extracts; no pulp series is manufactured.', 'No domestic consumption or balance is calculated from different forest products.']})

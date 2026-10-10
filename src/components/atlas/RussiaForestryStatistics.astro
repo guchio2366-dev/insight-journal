@@ -2,7 +2,7 @@
 import statistics from '../../data/atlas/russia-forestry-statistics.json';
 import summary from '../../data/atlas/shared-forestry-summary.json';
 const pulp = summary.rows.find(row=>row.id==='wood-pulp')!;
-const number = (raw:string|null) => raw===null?'未収録':Number(raw).toLocaleString('ja-JP',{maximumFractionDigits:2});
+const number = (raw:string|null,sourceFlag:string|null='A') => raw===null||raw.trim()===''||['M','L'].includes(sourceFlag??'')?'未収録':Number(raw).toLocaleString('ja-JP',{maximumFractionDigits:2});
 const flag = (value:string|null) => value===null?'':({A:'公的報告値',E:'推計値',I:'補完値',X:'外部機関の値'}[value]??value);
 const series = statistics.measures.map(measure=>({measure,rows:statistics.observations.filter(row=>row.measureId===measure.id)}));
 const labels:Record<string,string>={'forest-area':'森林面積','roundwood-production':'丸太生産量','sawnwood-production':'製材生産量'};
@@ -14,16 +14,16 @@ const labels:Record<string,string>={'forest-area':'森林面積','roundwood-prod
  {series.map(({measure,rows})=>{
   const latest=rows.find(row=>row.year===2024)!;
   const unit=measure.unit==='m3'?'m³':'千ha';
-  const usable=rows.filter(row=>row.rawValue!==null&&!['M','L'].includes(row.flag??''));
+  const usable=rows.filter(row=>row.rawValue!==null&&row.rawValue.trim()!==''&&!['M','L'].includes(row.flag??''));
   const max=Math.max(0,...usable.map(row=>Number(row.rawValue)));
   return <section aria-labelledby={'russia-'+measure.id}>
    <h3 id={'russia-'+measure.id}>{labels[measure.id]}</h3>
-   <p class="forestry-latest">2024年 <strong>{number(latest.rawValue)} {unit}</strong> <span>{flag(latest.flag)}（{latest.flag}）</span></p>
+   <p class="forestry-latest">2024年 <strong>{number(latest.rawValue,latest.flag)} {unit}</strong> <span>{flag(latest.flag)}（{latest.flag}）</span></p>
    <p>世界{measure.id==='forest-area'?'森林面積':'生産量'}比：{latest.worldShare===null?'未収録':latest.worldShare.toLocaleString('ja-JP',{maximumFractionDigits:2})+'％'}。分母は同年・同品目・同単位のWorld公表値。</p>
    <svg viewBox="0 0 310 140" role="img" aria-label={`${labels[measure.id]}の2015–2024年推移。縦軸は0〜${number(String(max))}${unit}。年別の値と区分は直後の表を参照。`}>
     <line x1="12" x2="300" y1="105" y2="105" stroke="#ccc"/>
     <text x="12" y="14">{number(String(max))} {unit}</text>
-    {rows.map((row,index)=>{const value=row.rawValue!==null&&!['M','L'].includes(row.flag??'')?Number(row.rawValue):null;return <g>
+    {rows.map((row,index)=>{const value=row.rawValue!==null&&row.rawValue.trim()!==''&&!['M','L'].includes(row.flag??'')?Number(row.rawValue):null;return <g>
      {value!==null&&max>0&&<rect x={14+index*29} y={105-value/max*78} width="18" height={value/max*78} fill="#537c58"/>}
      <text x={23+index*29} y="123" text-anchor="middle">{String(row.year).slice(2)}</text>
     </g>})}
@@ -32,7 +32,7 @@ const labels:Record<string,string>={'forest-area':'森林面積','roundwood-prod
    <details><summary>年別の値・世界値・原資料の区分</summary><div class="forestry-table-scroll"><table>
     <caption>{labels[measure.id]}（{unit}）</caption>
     <thead><tr><th scope="col">年</th><th scope="col">全国値</th><th scope="col">世界値</th><th scope="col">世界比</th></tr></thead>
-    <tbody>{rows.map(row=><tr><th scope="row">{row.year}</th><td>{number(row.rawValue)}<small>{flag(row.flag)}（{row.flag}）{row.note?' · '+row.note:''}</small></td><td>{number(row.worldRawValue)}<small>{flag(row.worldFlag)}（{row.worldFlag}）</small></td><td>{row.worldShare===null?'未収録':row.worldShare.toLocaleString('ja-JP',{maximumFractionDigits:2})+'％'}</td></tr>)}</tbody>
+    <tbody>{rows.map(row=><tr><th scope="row">{row.year}</th><td>{number(row.rawValue,row.flag)}<small>{flag(row.flag)}（{row.flag}）{row.note?' · '+row.note:''}</small></td><td>{number(row.worldRawValue,row.worldFlag)}<small>{flag(row.worldFlag)}（{row.worldFlag}）</small></td><td>{row.worldShare===null?'未収録':row.worldShare.toLocaleString('ja-JP',{maximumFractionDigits:2})+'％'}</td></tr>)}</tbody>
    </table></div></details>
    <p class="forestry-source">出典：<a href={'https://www.fao.org/faostat/en/#data/'+measure.domain}>FAOSTAT {measure.domain}</a>（{statistics.sources.find(source=>source.id===measure.domain)?.releaseDate}公開の保存済み原表）。<a href="https://www.fao.org/contact-us/terms/db-terms-of-use/">CC BY 4.0</a>。提供元の推計・補完区分を保持。</p>
   </section>;
@@ -42,5 +42,5 @@ const labels:Record<string,string>={'forest-area':'森林面積','roundwood-prod
  <p>木材の輸出入・相手国・在庫・用途とパルプのロシア全国系列は、この保存資料では未収録です。未収録を0として扱いません。</p>
 </section>
 <style>
- .russia-forestry-statistics{grid-column:1/-1;border-top:1px solid var(--rule);margin:20px 0;padding:20px 0}.russia-forestry-statistics h2{font-size:20px}.russia-forestry-series{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}.russia-forestry-series h3{font-size:16px}.russia-forestry-statistics p{font-size:13px;line-height:1.8}.forestry-latest strong{display:block;font-size:19px}.forestry-latest span{font-size:12px}.russia-forestry-series svg{width:100%;height:auto}.russia-forestry-series svg text{font-size:12px;fill:currentColor}.forestry-table-scroll{overflow-x:auto}.russia-forestry-series table{border-collapse:collapse;width:100%;font-size:12px;font-variant-numeric:tabular-nums}.russia-forestry-series th,.russia-forestry-series td{padding:7px 4px;border-bottom:1px solid var(--rule);text-align:right}.russia-forestry-series th:first-child{text-align:left}.russia-forestry-series small{display:block;font-size:11px}.russia-forestry-series summary{cursor:pointer;padding:12px 0;font-size:13px}.forestry-source{color:var(--ink-soft)}@media(max-width:959px){.russia-forestry-series{grid-template-columns:1fr}}
+ .russia-forestry-statistics{grid-column:1/-1;border-top:1px solid var(--rule);margin:20px 0;padding:20px 0}.russia-forestry-statistics h2{font-size:20px}.russia-forestry-series{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}.russia-forestry-series h3{font-size:16px}.russia-forestry-statistics p{font-size:13px;line-height:1.8}.forestry-latest strong{display:block;font-size:19px}.forestry-latest span{font-size:12px}.russia-forestry-series svg{width:100%;height:auto}.russia-forestry-series svg text{font-size:15px;fill:currentColor}.forestry-table-scroll{overflow-x:auto}.russia-forestry-series table{border-collapse:collapse;width:100%;font-size:12px;font-variant-numeric:tabular-nums}.russia-forestry-series th,.russia-forestry-series td{padding:7px 4px;border-bottom:1px solid var(--rule);text-align:right}.russia-forestry-series th:first-child{text-align:left}.russia-forestry-series small{display:block;font-size:11px}.russia-forestry-series summary{cursor:pointer;padding:12px 0;font-size:13px}.forestry-source{color:var(--ink-soft)}@media(max-width:1399px){.russia-forestry-series{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:959px){.russia-forestry-series{grid-template-columns:1fr}}
 </style>
