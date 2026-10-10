@@ -12,7 +12,7 @@ import {verifyCanadaAgricultureOverview} from './verify-canada-agriculture-overv
 import {projectCanadaMap} from '../src/lib/atlas-canada-map-presentation.ts';
 const ottawaPoint=projectCanadaMap(JSON.parse(await readFile('src/data/atlas/canada/climate.json','utf8')).stations.find(station=>station.id==='ottawa').coordinates);
 const output=process.env.ATLAS_QA_OUTPUT??'/tmp/atlas-canada-qa';await mkdir(output,{recursive:true});
-const browser=await chromium.launch({executablePath:process.env.ATLAS_CHROMIUM_PATH,headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader']});console.log('Chromium launched');
+const browser=await chromium.launch({executablePath:process.env.ATLAS_CHROMIUM_PATH,headless:true,chromiumSandbox:true});console.log('Chromium launched');
 const page=await browser.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));const base=path.resolve('dist');
 await page.route('https://atlas.test/**',async route=>{let rel=decodeURIComponent(new URL(route.request().url()).pathname).replace(/^\/insight-journal/,'');if(rel.endsWith('/'))rel+='index.html';const file=path.join(base,rel);if(!file.startsWith(base+path.sep))return route.fulfill({status:400});try{await route.fulfill({body:await readFile(file),contentType:{'.html':'text/html','.js':'application/javascript','.mjs':'application/javascript','.css':'text/css','.json':'application/json','.geojson':'application/json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.woff2':'font/woff2'}[path.extname(file)]??'application/octet-stream'});}catch{await route.fulfill({status:404,body:'missing built asset'});}});
 const url=route=>'https://atlas.test/insight-journal/atlas/north-america/'+route;
