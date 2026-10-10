@@ -87,7 +87,7 @@ export const japanAgricultureTopics:JapanAgricultureTopic[]=['all',...japanAgric
 export function getJapanAgricultureReading(topic:string,siteId?:string|null){
  const site=japanAgricultureSites.find(s=>s.id===siteId);
  const product=japanAgricultureProducts.find(p=>p.id===topic);
- if(site&&(topic==='all'||site.products.some(p=>p===topic)))return {title:site.name,overview:site.overview,reason:site.reason,sourceIds:site.sourceIds};
+ if(site&&topic!=='forest')return {title:site.name,overview:site.overview,reason:site.reason,sourceIds:site.sourceIds};
  if(product)return {title:product.title,overview:product.overview,reason:product.reason,sourceIds:product.sourceIds};
  return {...japanAgricultureReading[topic==='forest'?'forest':'all'],sourceIds:topic==='forest'?['forest-resources','wood-balance']:['municipal-method']};
 }

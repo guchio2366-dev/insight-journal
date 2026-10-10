@@ -23,7 +23,7 @@ async function start(root:HTMLElement){
  const $=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const all=<T extends HTMLElement=HTMLElement>(s:string)=>[...root.querySelectorAll<T>(s)];
  const config:Config=JSON.parse($('[data-japan-config]').textContent!);
- const context={prefectures:Array.from({length:47},(_,i)=>'JP-'+String(i+1).padStart(2,'0')),cities:[...config.cities,...config.populationCities].map(c=>c.id),climateCities:config.cities.map(c=>c.id),urbanCities:config.populationPlaces.map(c=>c.id),agricultureSites:japanAgricultureSites.map(s=>s.id),naturalFeatures:[...Object.values(japanNatureFeatureIds).flat(),...Array.from({length:8},(_,i)=>'elevation-'+i*500),...Array.from({length:18},(_,i)=>'precipitation-'+(i+1)*250)],sites:config.sites.map(s=>s.id),siteIndustries:Object.fromEntries(config.sites.map(s=>[s.id,s.industries]))};
+ const context={prefectures:Array.from({length:47},(_,i)=>'JP-'+String(i+1).padStart(2,'0')),cities:[...config.cities,...config.populationCities].map(c=>c.id),climateCities:config.cities.map(c=>c.id),urbanCities:config.populationPlaces.map(c=>c.id),agricultureSites:japanAgricultureSites.map(s=>s.id),naturalFeatures:[...Object.values(japanNatureFeatureIds).flat(),...Array.from({length:7},(_,i)=>'elevation-'+i*500),...Array.from({length:17},(_,i)=>'precipitation-'+(i+1)*250)],sites:config.sites.map(s=>s.id),siteIndustries:Object.fromEntries(config.sites.map(s=>[s.id,s.industries]))};
  let state=readJapanState(new URL(location.href),context);
  let map:import('maplibre-gl').Map|null=null,lib:typeof import('maplibre-gl')|null=null;
  let industry:Industry|null=null,population:Population|null=null,grid:AsiaNumericGrid|null=null,gridPromise:Promise<AsiaNumericGrid>|null=null;

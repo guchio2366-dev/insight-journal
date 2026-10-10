@@ -29,8 +29,10 @@ export function readJapanState(url:URL,context:{prefectures:readonly string[];ci
  const n=(key:string,min:number,max:number)=>{const raw=q.get(key);const v=raw?.trim()?Number(raw):NaN;return Number.isFinite(v)&&v>=min&&v<=max?v:null;};
  const lng=n('lng',110,160),lat=n('lat',15,55),zoom=n('z',2,10);
  const cities=current==='natural'?context.climateCities??context.cities:context.urbanCities??context.cities;
+ const naturePrefix:Record<string,RegExp>={climate:/^climate-region-/,water:/^(b-|river-)/,groundwater:/^g-/,elevation:/^elevation-/,precipitation:/^precipitation-/};
+ const naturalFeatures=(context.naturalFeatures??[]).filter(id=>naturePrefix[topic]?.test(id));
  const sites=topic==='clusters'||!context.siteIndustries?context.sites:context.sites.filter(id=>context.siteIndustries![id]?.includes(topic));
- return {field:current,topic,prefecture:current==='industry'&&topic.startsWith('jp-')?candidate('prefecture',context.prefectures):null,city:current==='natural'||current==='population'?candidate('city',cities):null,site:current==='agriculture'?candidate('site',context.agricultureSites??[]):current==='industry'&&!topic.startsWith('jp-')?candidate('site',sites):null,feature:current==='natural'?candidate('feature',context.naturalFeatures??[]):null,camera:lng!==null&&lat!==null&&zoom!==null?{lng,lat,zoom}:null,returnTo:safeJapanReturn(q.get('return'),url)};
+ return {field:current,topic,prefecture:current==='industry'&&topic.startsWith('jp-')?candidate('prefecture',context.prefectures):null,city:current==='natural'||current==='population'?candidate('city',cities):null,site:current==='agriculture'?topic==='forest'?null:candidate('site',context.agricultureSites??[]):current==='industry'&&!topic.startsWith('jp-')?candidate('site',sites):null,feature:current==='natural'?candidate('feature',naturalFeatures):null,camera:lng!==null&&lat!==null&&zoom!==null?{lng,lat,zoom}:null,returnTo:safeJapanReturn(q.get('return'),url)};
 }
 export function writeJapanState(url:URL,state:JapanState):URL {
  const next=new URL(url);next.pathname=next.pathname.replace(/\/(nature|agriculture|industry|population)\/$/,'/'+asiaFieldPaths[state.field]+'/');next.search='';

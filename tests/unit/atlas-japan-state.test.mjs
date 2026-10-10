@@ -16,6 +16,8 @@ test('農産地と自然の選択を独立URLに保持し、別分野の同名�
  assert.equal(readJapanState(url('japan/population/?city=jp-pop-niigata&feature=river-ishikari'),scoped).city,'jp-pop-niigata');
  assert.equal(readJapanState(url('japan/population/?city=jp-pop-niigata&feature=river-ishikari'),scoped).feature,null);
  assert.equal(readJapanState(url('japan/nature/?feature=unverified'),scoped).feature,null);
+ assert.equal(readJapanState(url('japan/nature/?topic=climate&feature=river-ishikari'),scoped).feature,null);
+ assert.equal(readJapanState(url('japan/agriculture/?topic=forest&site=tokachi-farming'),scoped).site,null);
 });
 test('日本への明示入口は現在分野を引き継ぎ元の地図範囲と選択をURLで保存する',()=>{
  const original=url('asia/east-asia/nature/?city=tokyo&place=JPN&lng=137&lat=38&z=4.5');
