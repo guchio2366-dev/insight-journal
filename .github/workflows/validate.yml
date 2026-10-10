@@ -107,7 +107,7 @@ jobs:
         run: |
           set -euo pipefail
           chrome_path="$(command -v google-chrome || command -v google-chrome-stable)"
-          SHARED_STAT_CHROME_PATH="$chrome_path" SHARED_STAT_REVIEW_OUTPUT="review-artifacts/shared-statistics" SHARED_STAT_REVIEW_SCOPE="asia-compact" node scripts/verify-shared-statistics-pc.mjs
+          SHARED_STAT_CHROME_PATH="$chrome_path" SHARED_STAT_REVIEW_OUTPUT="review-artifacts/shared-statistics" SHARED_STAT_REVIEW_SCOPE="forest-footer" node scripts/verify-shared-statistics-pc.mjs
 
       - name: Upload shared statistics review
         if: always()

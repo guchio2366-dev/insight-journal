@@ -76,3 +76,8 @@ node scripts/verify-shared-statistics-pc.mjs
 - PC確認は今回変更したインド林業／牛の統計部分のみ、1440px・1024pxの4ケース。`SHARED_STAT_REVIEW_SCOPE=asia-compact node scripts/verify-shared-statistics-pc.mjs` は原数値の初期非表示・開閉後の行数・推移切替・欠測・2024年値・文字サイズ・収まりを検証し、統計部分の画像と実測高さを保存する。PRの最終headに対応するCI artifactを参照する。
 
 ローカルの既存Chromiumは引き続きSUID sandbox設定不備で起動できず、権限やsandboxを変更しての代替は行わない。CIの既存Chromeで撮影し、親側へ今回の4画像を引き継ぐ。Mexico #274とWest #271は参照のみで未統合、新規取得を重ねない。
+
+
+### 林業の末尾注記・出典の追確認
+
+親側の4画像目視で、林業の要素単位スクリーンショット下端に濃紺の帯が見えたため、通常ページ上の読み取りを1440px／1024pxに限定して追加検証する。`SHARED_STAT_REVIEW_SCOPE=forest-footer` は通常のEnd／PageUp／PageDown操作で末尾へ移動し、2つの注記・出典段落の各文字行が画面内にあることと、`elementFromPoint`で他要素に覆われていないことを検査する。表示やフッターを隠す操作、表示幅・高さの変更は行わず、1000px高の通常ビューポートを撮影する。画像と文字行の座標・フッター位置・ヒットテスト結果はartifactへ保存する。今回の追加は撮影／検証スクリプトのみで、統計表示・原表・レイアウトの追加変更は行わない。
