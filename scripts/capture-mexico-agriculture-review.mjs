@@ -6,6 +6,7 @@
  */
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
+import {createHash} from 'node:crypto';
 import {access, mkdir, readFile, realpath, stat, writeFile} from 'node:fs/promises';
 import {constants} from 'node:fs';
 import path from 'node:path';
@@ -46,6 +47,7 @@ const countries = [
       {id: 'overview', label: 'メキシコの農林業', reading: 'overview'},
       {id: 'crop', label: 'とうもろこし', reading: 'product', select: '[data-crop-select="corn"]'},
       {id: 'livestock', label: '肉牛', reading: 'product', select: '[data-livestock-select="beef"]'},
+      {id: 'dairy', label: '酪農', reading: 'product', select: '[data-livestock-select="dairy"]'},
       {id: 'forestry', label: '森林資源と木材生産', reading: 'forestry', select: '[data-forestry-select]'},
     ],
   },
@@ -384,6 +386,15 @@ async function assertCropPaint(page,country,name,record){
   await writeFile(path.join(output,`${name}-crops-visible-proof.png`),on);await writeFile(path.join(output,`${name}-crops-hidden-proof.png`),off);
 }
 
+async function emitReviewImage(locator,file){
+  if(process.env.REVIEW_MEXICO_FORESTRY_ONLY!=='1')return;
+  const bytes=await locator.screenshot({type:'jpeg',quality:85,animations:'disabled'});
+  const encoded=bytes.toString('base64');
+  console.log('REVIEW_IMAGE_BEGIN '+JSON.stringify({file,headSHA:process.env.REVIEW_HEAD_SHA??process.env.GITHUB_SHA,mime:'image/jpeg',sha256:createHash('sha256').update(bytes).digest('hex')}));
+  for(let offset=0;offset<encoded.length;offset+=4096)console.log('REVIEW_IMAGE_CHUNK '+encoded.slice(offset,offset+4096));
+  console.log('REVIEW_IMAGE_END');
+}
+
 async function capture(browser, origin, profile, country, scene) {
   const name = `${country.id}-${profile.name}-${scene.id}`;
   const {name: profileName, ...contextOptions} = profile;
@@ -403,7 +414,7 @@ async function capture(browser, origin, profile, country, scene) {
     if (request.failure()?.errorText !== 'net::ERR_ABORTED') failedRequests.push({url: request.url(), error: request.failure()?.errorText});
   });
   const requestedUrl = `${origin}${basePath}${country.route}`;
-  const record = {name, commit: process.env.GITHUB_SHA, country: country.id, scene: scene.id, profile, requestedUrl, status: 'failed', errors, consoleMessages, failedRequests};
+  const record = {name, commit: process.env.REVIEW_HEAD_SHA??process.env.GITHUB_SHA, country: country.id, scene: scene.id, profile, requestedUrl, status: 'failed', errors, consoleMessages, failedRequests};
   try {
     const response = await page.goto(requestedUrl, {waitUntil: 'domcontentloaded'});
     assert.equal(response.status(), 200, 'Page did not load successfully');
@@ -456,6 +467,25 @@ async function capture(browser, origin, profile, country, scene) {
     record.screenshot = `${name}.png`;
     await writeFile(path.join(output, record.screenshot), png);
     await captureWorkspace(page, country, name, record);
+    if (country.id === 'mexico' && profile.name === 'desktop' && scene.id === 'forestry') {
+      const flow = page.locator('[data-mexico-stat-panel="pine"] .mexico-pine-flow');
+      assert(await flow.isVisible(), 'Pine flow chart is hidden');
+      assert((await flow.innerText()).includes('7,135,745'), 'Pine sales figure is missing');
+      const charcoal=flow.locator('.mexico-pine-form-bars li').filter({hasText:'炭向け'});
+      assert.match(await charcoal.innerText(),/1,587 m³[\s\S]*0.1%未満/);
+      record.statisticsScreenshot = `${name}-pine-flow.png`;
+      await flow.screenshot({path: path.join(output, record.statisticsScreenshot), animations: 'disabled'});
+      await emitReviewImage(flow,'mexico-pine-flow.jpg');
+    }
+    if (country.id === 'mexico' && profile.name === 'desktop' && scene.id === 'dairy') {
+      const detail = page.locator('[data-mexico-milk-world-comparison]');
+      await detail.locator('summary').first().click();
+      assert(await detail.locator('[data-world-production="mexico-milk-2024"]').isVisible(), 'Mexico milk world chart is hidden');
+      assert.match(await detail.locator('.atlas-us-production').innerText(),/13,962,372.1 t[\s\S]*1.8%/);
+      record.statisticsScreenshot = `${name}-milk-world.png`;
+      await detail.screenshot({path: path.join(output, record.statisticsScreenshot), animations: 'disabled'});
+      await emitReviewImage(detail,'mexico-milk-world.jpg');
+    }
     assert.deepEqual(errors, [], 'Browser JavaScript errors');
     assert.deepEqual(consoleMessages.filter(message => message.type === 'error'), [], 'Browser console errors');
     assert.deepEqual(failedRequests, [], 'Failed page or data requests');
@@ -496,7 +526,8 @@ async function main() {
   assert(executablePath, 'Set REVIEW_CHROME_PATH to the runner-installed Google Chrome.');
   await access(executablePath, constants.X_OK);
   await mkdir(output, {recursive: true});
-  const metadata = {status: 'running', commit: process.env.GITHUB_SHA, repository: process.env.GITHUB_REPOSITORY, runId: process.env.GITHUB_RUN_ID, runAttempt: process.env.GITHUB_RUN_ATTEMPT, basePath, startedAt: new Date().toISOString(), profiles, fonts: {setup: process.env.REVIEW_JAPANESE_FONT_SETUP, japaneseCapableFamilies: process.env.REVIEW_JAPANESE_FONTS.split('\n'), genericJapaneseMatches: process.env.REVIEW_JAPANESE_FONT_MATCH.split('\n')}, captures: []};
+  const event=process.env.GITHUB_EVENT_PATH?JSON.parse(await readFile(process.env.GITHUB_EVENT_PATH,'utf8')):{};
+  const metadata = {status: 'running', headSHA:event.pull_request?.head?.sha??process.env.GITHUB_SHA, commit: process.env.REVIEW_HEAD_SHA??process.env.GITHUB_SHA, repository: process.env.GITHUB_REPOSITORY, runId: process.env.GITHUB_RUN_ID, runAttempt: process.env.GITHUB_RUN_ATTEMPT, basePath, startedAt: new Date().toISOString(), profiles, fonts: {setup: process.env.REVIEW_JAPANESE_FONT_SETUP, japaneseCapableFamilies: process.env.REVIEW_JAPANESE_FONTS.split('\n'), genericJapaneseMatches: process.env.REVIEW_JAPANESE_FONT_MATCH.split('\n')}, captures: []};
   await writeFile(path.join(output, 'metadata.json'), `${JSON.stringify(metadata, null, 2)}\n`);
   let server, browser;
   try {
@@ -505,7 +536,10 @@ async function main() {
     metadata.browserVersion = browser.version();
     metadata.browserExecutable = executablePath;
     metadata.browserLaunch = {headless: true, chromiumSandbox: true, additionalFlags: []};
+    const focused=process.env.REVIEW_MEXICO_FORESTRY_ONLY==='1';
+    metadata.scope=focused?'mexico-forestry-and-dairy':'existing-agriculture-review';
     for (const profile of profiles) for (const country of countries) for (const scene of country.cases) {
+      if(focused&&(profile.name!=='desktop'||country.id!=='mexico'||!['forestry','dairy'].includes(scene.id)))continue;
       if (profile.name === 'mobile' && !['overview', 'crop'].includes(scene.id)) continue;
       if (profile.name === 'small-desktop' && scene.id !== 'overview') continue;
       const result = await capture(browser, hosted.origin, profile, country, scene);
@@ -513,11 +547,12 @@ async function main() {
       await writeFile(path.join(output, 'metadata.json'), `${JSON.stringify(metadata, null, 2)}\n`);
       console.log(`${result.status.toUpperCase()}: ${result.name}${result.failure ? `: ${result.failure.split('\n')[0]}` : ''}`);
     }
-    metadata.pcReview = await captureMexicoPCReview({browser, origin: hosted.origin, basePath, output: path.join(output, 'pc-review')});
-    assert.equal(metadata.pcReview.status, 'passed', 'PC comparison capture failed. Inspect mexico-agriculture/pc-review metadata and PNGs.');
+    if(!focused)metadata.pcReview = await captureMexicoPCReview({browser, origin: hosted.origin, basePath, output: path.join(output, 'pc-review')});
+    if(!focused)assert.equal(metadata.pcReview.status, 'passed', 'PC comparison capture failed. Inspect mexico-agriculture/pc-review metadata and PNGs.');
     const failures = metadata.captures.filter(item => item.status !== 'passed');
     assert.equal(failures.length, 0, `${failures.length} browser capture(s) failed. Inspect review-artifacts/mexico-agriculture metadata and failure PNGs.`);
     metadata.status = 'passed';
+    if(focused)console.log('REVIEW_METADATA '+JSON.stringify(metadata));
   } catch (error) {
     metadata.status = 'failed'; metadata.failure = error.stack ?? String(error);
     throw error;

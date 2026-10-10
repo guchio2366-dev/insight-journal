@@ -6,6 +6,7 @@ import {westFarmingProducts,westFarmingProduct,isWestFarmingOverview,westFarming
 import {westFieldIntroductions,westIndustryCountries,westIndustryCountry,westIndustryTakeaway,westRegionalReading,westReadingSources,westCityReadings,westFarmingSelection,westWaterIntroductions} from '../data/atlas/west-asia-readings.mjs';
 import {westIndustrySites,westIndustryKind,westIndustryRole,westIndustryRoles} from '../data/atlas/west-asia-industry.mjs';
 import westWorldShares from '../data/atlas/west-asia-world-shares.json';
+import {westSawnwoodRow,westSawnwoodSeries} from '../data/atlas/west-asia-forestry.mjs';
 import {westNaturalAssets,westRiverGroundwater,westRepresentativeBasins,westNaturalKind,validateWestNaturalManifest,decodeWestNaturalCollection,assembleWestNaturalChunks,westGroundwaterReading,westWaterFeatureReading,westGeometryVisible} from '../lib/atlas-west-asia-natural.mjs';
 
 // All classes present in the national-mask grid (1991–2020), including Cwb's four cells.
@@ -349,6 +350,19 @@ async function init(root:HTMLElement){
   const latest=rows?.at(-1),trend=rows?.map((r,i)=>`${8+i*16},${45-r.percent/Math.max(1,...rows.map(x=>x.percent))*37}`).join(' ');
   box.innerHTML=`<section><h3>供給元 → 国内仕向け・輸出</h3><p>国別生産量は収録済みです。2024年・同じ品目と単位の輸入、輸出、在庫変化、国内仕向けは保存していません。<a href="https://www.fao.org/4/x9892e/x9892e02.htm">FAOの需給定義</a>に合わせた帯グラフにはこれらが必要です。生産量を輸出量や消費量には換算しません。</p></section><section><h3>輸出先の構成</h3><p><a href="https://data.fao.org/catalog/iso/955a7b61-ce56-4a04-adf5-61a3012eec84">FAOSTAT詳細貿易マトリックス</a>に相手国別数量の資料がありますが、今回の20対象・品目・2024年の原表を取得・照合できていません。分母を確認できるまで円グラフは保留です。</p></section><section><h3>${esc(subject.label.replace('・国別生産量','').replace('の収穫面積',''))}の世界生産比</h3>${latest?`<strong>${format(latest.percent,2)}%（2024年）</strong><svg viewBox="0 0 165 52" role="img" aria-label="2015～2024年の世界生産比の推移"><polyline fill="none" stroke="#326b76" stroke-width="2" points="${trend}"/></svg><p>2015～2024年。20対象の収録値合計／FAOSTAT世界生産量。2024年は${latest.reported}／20対象の値です。欠測国は0として加えていません。</p>`:'<p>今回保存したFAOSTAT QCL世界合計に、この品目の行がありません。同じ原表・定義・2015～2024年の世界行を再取得・照合するまで未算出です。資料が存在しないという意味ではありません。</p>'}<p><a href="https://www.fao.org/faostat/en/#data/QCL">FAOSTAT QCL・生産量（t）</a></p></section>`;
  }
+ function sawnwoodHtml(selectedCode:string){
+  const codes=[...new Set([selectedCode,'TUR','EGY','SAU','ARE','IRN'].filter(Boolean))];
+  const rows=codes.map(code=>({...westSawnwoodRow(data,code,2024),name:data.countries.find((c:any)=>c.code===code)?.name??code}));
+  const complete=rows.filter(row=>row.production&&row.imports&&row.exports);
+  const name=(code:string)=>data.countries.find((c:any)=>c.code===code)?.name??code;
+  const note=(value:any)=>value?`${format(value.value,0)} m³（${esc(value.flag)}）`:'未収録';
+  const bars=complete.map(row=>{const total=row.production.value+row.imports.value,percent=total?row.production.value/total*100:0;return `<li><strong>${esc(row.name)}</strong><span class="west-sawnwood-bar" role="img" aria-label="${esc(row.name)}：生産${format(row.production.value,0)}、輸入${format(row.imports.value,0)}立方メートル"><i style="width:${percent.toFixed(2)}%"></i></span><small>生産 ${format(row.production.value,0)} ／ 輸入 ${format(row.imports.value,0)} m³</small></li>`;}).join('');
+  const table=data.countries.map((country:any)=>{const row=westSawnwoodRow(data,country.code,2024);return `<tr><th>${esc(country.name)}</th><td>${note(row.production)}</td><td>${note(row.imports)}</td><td>${note(row.exports)}</td></tr>`;}).join('');
+  const chosen=selectedCode||'SAU',series=westSawnwoodSeries(data,chosen),values=series.map(row=>row.imports?.value??null),max=Math.max(1,...values.filter((v):v is number=>v!==null));
+  const points=values.map((value,index)=>value===null?'':`${(index/(values.length-1)*100).toFixed(2)},${(92-value/max*80).toFixed(2)}`).filter(Boolean).join(' ');
+  const first=series[0].imports,last=series.at(-1).imports;
+  return `<section class="west-sawnwood" aria-label="製材品の生産・輸入・輸出"><header><h2>製材品の供給と貿易</h2><p>2024年 · FAOSTAT Forestry · 立方メートル（m³）。森林面積率（${state.year}年）や森林の参考分布とは別の国別統計です。</p></header><div class="west-sawnwood-panels"><section><h3>生産と輸入の二つの流れ</h3><p>棒の左側が国内生産、右側が輸入。幅はこの二つの合計に占める割合で、国間の総量を比べる幅ではありません。</p><ul>${bars}</ul><p class="west-sawnwood-key"><i></i>生産 <i></i>輸入</p></section><section><h3>同じ年の輸出</h3><p>輸出は別の流量です。国内消費量を求めるために差し引きません。</p><ol>${complete.map(row=>`<li><span>${esc(row.name)}</span><strong>${format(row.exports.value,0)} m³</strong></li>`).join('')}</ol></section><section><h3>${esc(name(chosen))}の輸入量の推移</h3><p>2015–2024年。国を選ぶと同じ指標の系列を表示します。</p><svg viewBox="0 0 100 100" role="img" aria-label="${esc(name(chosen))}の製材品輸入量、2015年から2024年"><line x1="0" x2="100" y1="92" y2="92"/><polyline points="${points}"/><circle cx="100" cy="${(92-(last?.value??0)/max*80).toFixed(2)}" r="2.3"/></svg><p>${first?`2015年 ${format(first.value,0)} m³`:'2015年 未収録'} → ${last?`2024年 ${format(last.value,0)} m³`:'2024年 未収録'}</p></section></div><details><summary>対象20か国・地域の値、原資料フラグと読み方</summary><p>A＝公式値、E＝推計値、X＝外部機関値。0は原資料の0で、未収録と区別しています。</p><div class="west-sawnwood-table"><table><caption>FAOSTAT Forestry、Sawnwood（品目1872）。生産5516、輸入5616、輸出5916。2024年、m³。</caption><thead><tr><th>国・地域</th><th>生産</th><th>輸入</th><th>輸出</th></tr></thead><tbody>${table}</tbody></table></div><p>生産＋輸入は調達経路の比較です。在庫増減や再輸出などを調整していないため、国内消費・国内仕向け量ではありません。輸出の相手国、世界生産量は今回の保存資料に含まれず、国別の輸出先割合・世界シェアは算出しません。</p><p><a href="https://www.fao.org/faostat/en/#data/FO">FAOSTAT Forestryの原資料</a> · <a href="https://www.fao.org/contact-us/terms/db-terms-of-use/">利用条件</a>（通常CC BY 4.0、個別例外は原資料の表示を確認）</p></details></section>`;
+ }
  function details(){
   const t=topic(),c=country(),city=data.cities.find((x:any)=>x.id===state.city),urban=data.urban.cities.find((x:any)=>x.id===state.urban);
   farmSupply(t);
@@ -380,6 +394,7 @@ async function init(root:HTMLElement){
   if(field==='industry')html+=`<nav class="atlas-water-tabs west-water-items" aria-label="産業の説明対象" data-west-industry-scope><button type="button" data-west-country-button="" aria-pressed="${!c}">地域全体の供給網</button>${westIndustryCountries.map(code=>`<button type="button" data-west-country-button="${code}" aria-pressed="${c?.code===code}">${esc(data.countries.find((row:any)=>row.code===code)?.name)}</button>`).join('')}</nav><p class="west-stat-note">国別産業の比較は3か国です。地域全体の供給網には、他国の資源・通過点も含めます。下の国別統計は供給網の流量ではありません。</p>`;
   const regional=westRegionalReading(t,{country:state.country,basin:state.basin});
   if(regional){html+=`<section data-west-regional-reading><h3>${esc(regional.heading)}</h3>${regional.paragraphs.map((paragraph:string)=>`<p>${esc(paragraph)}</p>`).join('')}<details><summary>この地域説明の根拠・対象時点</summary>${regional.sources.map((id:string)=>{const source=westReadingSources[id];return `<p><a href="${esc(source.url)}">${esc(source.label)}</a> · ${esc(source.period)}</p>`;}).join('')}</details></section>`;}
+  if(t.id==='forest'&&!source){const turkey=westSawnwoodRow(data,'TUR',2024),gulf=westSawnwoodRow(data,'SAU',2024);html+=`<section data-west-forestry-reading><h3>森林と製材品の調達は別に読む</h3><p>2024年の製材品は、トルコの生産 ${format(turkey.production?.value??null,0)} m³に対し、サウジアラビアでは原資料の生産値が ${format(gulf.production?.value??null,0)} m³、輸入が ${format(gulf.imports?.value??null,0)} m³です。黒海沿岸やカスピ海沿岸の森林の位置と、乾燥地の木材調達の違いを比べてください。国別の製材品量から国内の伐採地や森林の健全性は判断できません。</p></section>`;}
   if(t.id==='farming-overview'){
    html+='<p><a href="#west-statistics">重要な農畜産品目の採用理由と国別生産量</a></p>';
    const production=westProductionSelection(data,2024);
@@ -423,6 +438,7 @@ async function init(root:HTMLElement){
    const comparison=statisticsContent;statistics.hidden=false;
    comparison.innerHTML=`<h2>${esc(t.label)}の国別統計</h2><details><summary>${scope}を同じ年で比較する</summary><table><caption>${state.year}年 · ${esc(t.unit??'原資料の単位')}。国単位の値で、国内の分布を示しません。</caption><thead><tr><th>国・地域</th><th>値</th></tr></thead><tbody>${rows.map(({c,r}:any)=>`<tr><th><button data-west-country-button="${c.code}">${esc(c.name)}</button></th><td>${format(r.value,t.unit==='人'||t.unit==='TEU'?0:1)}</td></tr>`).join('')}</tbody></table></details>`;
   }
+  if(t.id==='forest'&&!source){statistics.hidden=false;statisticsContent.insertAdjacentHTML('afterbegin',sawnwoodHtml(c?.code??''));html+='<p><a href="#west-statistics">製材品の生産・輸入・輸出を国別に比べる</a></p>';}
   if(selectedNatural&&waterReading)html+=`<details data-west-natural-method><summary>選択した対象の資料・数値の意味</summary><p>${esc(naturalSelection.description)}</p></details>`;
   if(westNaturalKind(t)&&state.point)html+='<details class="west-natural-value"><summary>選択地点の数値・出典</summary><p data-west-natural-value aria-live="polite">数値を読み込んでいます。</p></details>';
   html+=`<details class="west-reading-definitions"><summary>この指標の意味・資料の範囲</summary><p>${esc(t.description)}</p>`;
