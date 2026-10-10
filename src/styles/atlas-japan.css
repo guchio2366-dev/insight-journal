@@ -3,6 +3,7 @@
 .japan-heading{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:12px;padding:8px 0}
 .japan-heading a{color:var(--japan-ink)}.japan-heading>a{font-weight:700;min-height:32px;display:flex;align-items:center}
 .japan-region{display:flex;justify-content:space-between;flex-wrap:wrap;align-items:center;gap:8px;font-size:12px}
+.japan-region .regional-navigation{margin:4px 0 6px}
 .japan-preview{font-size:11px;background:#f0e5cb;padding:3px 6px;margin-left:8px;color:#715927}
 .japan-tabs{margin:10px 0 8px}.japan-tabs>a{flex:1;text-align:center}
 .japan-controls{min-height:72px;padding:3px 0 8px}.japan-control-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0;font-size:12px}
@@ -25,7 +26,7 @@
 .japan-map-labels button{position:absolute;pointer-events:auto;background:#fffffff0;border:1px solid #b9c6b988;padding:3px 6px;text-align:left;white-space:nowrap;cursor:pointer;font:700 12px/1.45 var(--sans)}
 .japan-map-labels button:before{content:'';display:inline-block;width:7px;height:7px;background:var(--point-color,#4d756d);border-radius:50%;margin-right:5px}.japan-map-labels small{display:block;font-weight:400;font-size:10px;color:#5d716a;margin-left:12px}
 .japan-map-labels button[aria-pressed=true]{outline:2px solid #314c47;background:#eaf1df}
-.japan-point{width:7px;height:7px;border:1px solid #fff;background:#446e65;border-radius:50%;box-shadow:0 0 0 1px #52716a}
+.japan-point{width:16px;height:16px;padding:0;border:0;background:transparent;cursor:pointer}.japan-point:before{content:'';display:block;width:7px;height:7px;margin:4px;border:1px solid #fff;background:var(--point-color,#446e65);border-radius:50%;box-shadow:0 0 0 1px #52716a}
 .japan-legend{display:flex;flex-wrap:wrap;gap:6px 12px;margin:8px 0;font-size:11px;line-height:1.5}.japan-legend>span{display:flex;align-items:center;gap:5px}.japan-legend i{display:inline-block;width:15px;height:10px;border:1px solid #71817966}
 .japan-map-method{font-size:11px;line-height:1.65;margin:5px 0;color:#536b63}
 .japan-reading{background:var(--japan-paper);border:1px solid #c7ccbf;padding:16px;box-sizing:border-box;max-height:650px;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
@@ -44,8 +45,8 @@
 @media(min-width:960px){
  .japan-atlas-root .atlas-desktop-shell{display:grid!important;grid-template-columns:clamp(180px,17vw,250px) minmax(0,1fr)!important;gap:14px;padding:12px 14px 28px;align-items:start}
  .japan-atlas-root .atlas-news{position:sticky!important;top:12px;width:auto!important;height:calc(100dvh - 100px)!important;min-height:400px}
- .japan-reading{position:sticky;top:12px;height:min(650px,calc(100dvh - 100px))}
- .japan-atlas-root .japan-map-frame{height:clamp(360px,calc(100dvh - 380px),630px)}
+ .japan-reading{position:sticky;top:12px;height:var(--japan-reading-height,calc(100dvh - 350px))}
+ .japan-atlas-root .japan-map-frame{height:clamp(320px,var(--japan-map-height,calc(100dvh - 350px)),640px)}
  .japan-statistics{margin-right:314px}
 }
 @media(min-width:960px) and (max-width:1199px){.japan-primary-grid{grid-template-columns:minmax(0,1fr) 260px}.japan-statistics{margin-right:274px}.japan-reading{padding:13px}.japan-control-row select{max-width:220px}.japan-climate-grid{grid-template-columns:1fr}}

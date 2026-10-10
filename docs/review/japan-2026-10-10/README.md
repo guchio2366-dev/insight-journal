@@ -1,4 +1,6 @@
-# 日本専用全国図：初便
+# 日本専用全国図：初便（旧headの参考記録）
+
+このディレクトリの画像・ブラウザ結果は `d83ffbd`、1440×1000 / 1024×900での旧試作です。sandboxを無効にして実行したため、安全なブラウザ検証の証拠には使いません。修正版の検証・画像は [r2記録](../japan-2026-10-10-r2/README.md) を参照してください。
 
 基点は取得した main `ab2bf51581f6874fb141b5e858892c7a2faf9f2e`。Draft PR 用の試作で、マージ・公開は実行していません。
 
@@ -43,7 +45,7 @@
 
 残る4分野の整備・地理照合・PC検証は、原資料の取得と公開条件を確認したうえで **追加2〜4作業日が暫定見込み**。原表の粒度・河川データの加工量によって変わります。雨温図の全地域共通軸修正は別担当の変更を後で接続する前提です。
 
-## 検証の再現
+## 旧headでの検証記録
 
 | 検証 | 結果 |
 | --- | --- |
@@ -59,7 +61,7 @@ checkout内にAGENTS.mdと`.agents/skills`は見つかりませんでした。�
 ```sh
 npm ci --cache /tmp/insight-npm-cache
 ASTRO_TELEMETRY_DISABLED=1 XDG_CONFIG_HOME=/tmp/insight-config npm run build
-node --test tests/unit/atlas-japan-state.test.mjs
+node --test tests/unit/atlas-japan-state.test.mjs tests/unit/atlas-japan-label-layout.test.mjs
 XDG_CONFIG_HOME=/tmp/insight-config XDG_CACHE_HOME=/tmp/insight-cache node scripts/capture-japan-review.mjs
 ```
 

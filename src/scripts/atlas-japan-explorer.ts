@@ -1,3 +1,4 @@
+import {layoutJapanLabels} from '../lib/atlas-japan-label-layout';
 import {readJapanState,writeJapanState,japanReturnURL,japanDefaults,type JapanState} from '../lib/atlas-japan-state';
 import {japanReadings,japanIndustryReadings} from '../data/atlas/japan-reading';
 import {industryScale,industryValueLabel,type IndustryAdmin,type IndustryTopic} from '../data/atlas/asia-industry';
@@ -133,18 +134,18 @@ async function start(root:HTMLElement){
    const offsets:Record<string,[number,number]>={'東京':[24,-45],'大阪':[-100,16],'名古屋':[-75,-50]};
    for(const c of config.populationCities)items.push({id:c.id,title:c.name,subtitle:Math.round(c.population/10000).toLocaleString('ja-JP')+'万人',point:c.coordinates,color:'#28627f',offset:offsets[c.name]??[10,10],select:()=>city(c.id,'population'),selected:state.city===c.id});
   }
-  for(const data of items){const dot=document.createElement('div');dot.className='japan-point';dot.style.background=data.color;dot.setAttribute('aria-hidden','true');markers.push(new lib.Marker({element:dot}).setLngLat(data.point).addTo(map));const button=document.createElement('button');button.type='button';button.dataset.japanMapLabel=data.id;button.style.setProperty('--point-color',data.color);button.append(document.createTextNode(data.title));const small=document.createElement('small');small.textContent=data.subtitle;button.append(small);button.setAttribute('aria-pressed',String(data.selected));button.addEventListener('click',data.select);overlay.append(button);const line=document.createElementNS('http://www.w3.org/2000/svg','line');svg.append(line);labels.push({data,button,line});}
+  for(const data of items){const dot=document.createElement('button');dot.type='button';dot.className='japan-point';dot.style.setProperty('--point-color',data.color);dot.setAttribute('aria-label',data.title+'（'+data.subtitle+'）');dot.addEventListener('click',data.select);markers.push(new lib.Marker({element:dot}).setLngLat(data.point).addTo(map));const button=document.createElement('button');button.type='button';button.dataset.japanMapLabel=data.id;button.style.setProperty('--point-color',data.color);button.append(document.createTextNode(data.title));const small=document.createElement('small');small.textContent=data.subtitle;button.append(small);button.setAttribute('aria-pressed',String(data.selected));button.addEventListener('click',data.select);overlay.append(button);const line=document.createElementNS('http://www.w3.org/2000/svg','line');svg.append(line);labels.push({data,button,line});}
   for(const lat of [25,30,35,40,45]){const text=document.createElementNS('http://www.w3.org/2000/svg','text');text.dataset.latitude=String(lat);text.textContent=lat+'°N';text.setAttribute('text-anchor','end');svg.append(text);}
   positionLabels();
  }
  function positionLabels(){
-  if(!map)return;const frame=$('.japan-map-frame'),placed:{x:number;y:number;w:number;h:number}[]=[];
+  if(!map)return;const frame=$('.japan-map-frame');
   for(const text of all<SVGTextElement & HTMLElement>('[data-latitude]')){const y=map.project([146.3,Number(text.dataset.latitude)]).y;text.setAttribute('x',String(frame.clientWidth-8));text.setAttribute('y',String(y-4));text.style.display=y>150&&y<frame.clientHeight-35?'':'none';}
-  for(const {data,button,line} of labels){const p=map.project(data.point),w=button.offsetWidth,h=button.offsetHeight;const visible=p.x>=0&&p.x<=frame.clientWidth&&p.y>=0&&p.y<=frame.clientHeight;button.hidden=!visible;line.style.display=visible?'':'none';if(!visible)continue;
-   let x=Math.max(5,Math.min(frame.clientWidth-w-50,p.x+data.offset[0])),y=Math.max(5,Math.min(frame.clientHeight-h-40,p.y+data.offset[1]));
-   for(let attempt=0;attempt<12&&placed.some(r=>x<r.x+r.w+4&&x+w+4>r.x&&y<r.y+r.h+4&&y+h+4>r.y);attempt++)y=Math.min(frame.clientHeight-h-45,y+h+7);
-   placed.push({x,y,w,h});button.style.left=x+'px';button.style.top=y+'px';
-   line.setAttribute('x1',String(p.x));line.setAttribute('y1',String(p.y));line.setAttribute('x2',String(Math.max(x,Math.min(x+w,p.x))));line.setAttribute('y2',String(Math.max(y,Math.min(y+h,p.y))));
+  const anchors=labels.map(({data,button})=>{button.hidden=false;const p=map!.project(data.point);return {id:data.id,x:p.x,y:p.y,width:button.offsetWidth,height:button.offsetHeight,offset:data.offset};});
+  const placed=layoutJapanLabels(anchors,frame.clientWidth,frame.clientHeight);
+  for(const {data,button,line} of labels){const rect=placed.get(data.id),p=map.project(data.point);button.hidden=!rect;line.style.display=rect?'':'none';if(!rect)continue;
+   button.style.left=rect.x+'px';button.style.top=rect.y+'px';button.dataset.leaderLength=String(rect.leaderLength);
+   line.setAttribute('x1',String(p.x));line.setAttribute('y1',String(p.y));line.setAttribute('x2',String(rect.endX));line.setAttribute('y2',String(rect.endY));
   }
  }
  function fit(){if(!map||!ready)return;suppressCamera=true;if(state.camera)map.jumpTo({center:[state.camera.lng,state.camera.lat],zoom:state.camera.zoom});else map.fitBounds([[config.bounds[0],config.bounds[1]],[config.bounds[2],config.bounds[3]]],{padding:8,duration:0});suppressCamera=false;positionLabels();recordCamera();}
@@ -190,6 +191,16 @@ async function start(root:HTMLElement){
  $('[data-japan-fit]').addEventListener('click',()=>{state={...state,camera:null};persist(true);fit();});
  $('[data-japan-retry]').addEventListener('click',()=>{state={...state,camera:camera()};void initialise();});
  window.addEventListener('popstate',()=>{clearTimeout(timer);state=readJapanState(new URL(location.href),context);point=null;render();fit();});
+ function sizePanels(){
+  const frame=$('.japan-map-frame'),reading=$('.japan-reading');
+  // Document positions avoid changing the map's size while the user scrolls.
+  const frameTop=frame.getBoundingClientRect().top+window.scrollY,readingTop=reading.getBoundingClientRect().top+window.scrollY;
+  root.style.setProperty('--japan-map-height',Math.max(320,Math.min(640,innerHeight-frameTop-72))+'px');
+  root.style.setProperty('--japan-reading-height',Math.max(320,Math.min(650,innerHeight-readingTop-16))+'px');
+ }
+ window.addEventListener('resize',sizePanels);
+ const panelObserver=new ResizeObserver(sizePanels);for(const element of all('.japan-heading,.japan-region,.japan-tabs,.japan-controls'))panelObserver.observe(element);
+ sizePanels();
  let size='';const observer=new ResizeObserver(()=>{const frame=$('.japan-map-frame'),next=frame.clientWidth+':'+frame.clientHeight;if(next===size)return;size=next;if(map){suppressCamera=true;map.resize({japanResize:true});suppressCamera=false;if(ready&&!state.camera)fit();positionLabels();}});observer.observe($('.japan-map-frame'));
  window.addEventListener('pagehide',()=>{clearTimeout(timer);if(ready&&state.camera){state={...state,camera:camera()};persist(false);}});
  render();await initialise();
