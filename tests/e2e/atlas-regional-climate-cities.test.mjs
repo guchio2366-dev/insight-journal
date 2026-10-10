@@ -11,7 +11,7 @@ for(const region of ['oceania','russia']){
 }
 after(()=>stop());
 function page(region,query=''){
- const win=new Window({url:`https://example.test/insight-journal/atlas/${region}/nature/${query}`,settings:{enableJavaScriptEvaluation:true,disableCSSFileLoading:true,disableJavaScriptFileLoading:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
+ const win=new Window({url:`https://example.test/insight-journal/atlas/${region}/nature/${query}`,settings:{enableJavaScriptEvaluation:true,disableCSSFileLoading:true,disableJavaScriptFileLoading:true}});
  win.document.body.innerHTML=readFileSync(`dist/atlas/${region}/nature/index.html`,'utf8').replace(/<script(?![^>]*type="application\/json")[^>]*>[\s\S]*?<\/script>/g,'');
  win.ResizeObserver=class{observe(){}};win.eval(bundles[region]);const root=win.document.querySelector(`[data-${region}-learning]`);win.initRegion(root);
  return {win,root,marker:id=>root.querySelector(`[data-primary-map] [data-regional-climate-city="${id}"]`),panel:root.querySelector('[data-regional-climate-reading]'),frame:()=>root.querySelector('[data-primary-map]>svg').getAttribute('viewBox')};
