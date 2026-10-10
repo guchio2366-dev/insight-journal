@@ -17,6 +17,7 @@ on:
       - 'tests/e2e/atlas-africa*.test.mjs'
       - 'scripts/verify-africa-pc-review.mjs'
       - 'scripts/verify-africa-approved-review.mjs'
+      - 'scripts/verify-africa-industry-review.mjs'
       - '.github/workflows/atlas-africa-pc-review.yml'
   push:
     branches:
@@ -34,6 +35,7 @@ on:
       - 'tests/e2e/atlas-africa*.test.mjs'
       - 'scripts/verify-africa-pc-review.mjs'
       - 'scripts/verify-africa-approved-review.mjs'
+      - 'scripts/verify-africa-industry-review.mjs'
       - '.github/workflows/atlas-africa-pc-review.yml'
 
 permissions:
@@ -110,13 +112,16 @@ jobs:
             export AFRICA_REVIEW_SCOPE=madagascar
           fi
           AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node scripts/verify-africa-approved-review.mjs
+          node scripts/verify-africa-industry-review.mjs
 
       - name: Upload Africa PC screenshots and validation metadata
         if: success()
         uses: actions/upload-artifact@v4
         with:
           name: africa-pc-representative-${{ github.run_id }}
-          path: review-artifacts/africa-pc-review/representative
+          path: |
+            review-artifacts/africa-pc-review/representative
+            review-artifacts/africa-industry-review
           if-no-files-found: warn
           retention-days: 7
 
