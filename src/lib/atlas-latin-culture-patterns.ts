@@ -1,12 +1,12 @@
 import {latinCountries34,latinMapLayout,projectLatin} from './atlas-latin-america-geometry';
 import {culturePatterns,culturePattern,cultureSources,cultureOverview,religionSurvey,type CultureSection} from '../data/atlas/latin-america/culture-distributions';
 const escape=(s:unknown)=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
-const callouts:Record<string,[number,number]>={GTM:[118,90],SLV:[118,132],HND:[118,174],NIC:[118,216],CRI:[118,258],PAN:[118,300],COL:[118,342],ECU:[118,384],PER:[118,426],CHL:[118,468],DOM:[670,60],PRI:[670,102],VEN:[670,162],BRA:[670,270],BOL:[670,332],PRY:[670,402],URY:[670,466],ARG:[670,528]};
+const callouts:Record<string,[number,number]>={GTM:[118,120],SLV:[118,162],HND:[118,204],NIC:[118,246],CRI:[118,288],PAN:[118,330],COL:[118,372],ECU:[118,414],PER:[118,456],CHL:[118,498],DOM:[670,60],PRI:[670,102],VEN:[670,162],BRA:[670,270],BOL:[670,332],PRY:[670,402],URY:[670,466],ARG:[670,528]};
 function religionCallout(code:string,scope:string):[number,number]{
  if(scope==='all')return callouts[code];
  const left=scope==='central'?['GTM','SLV','HND','NIC','CRI','PAN']:['COL','ECU','PER','CHL'];
  const right=scope==='central'?['DOM','PRI']:['VEN','BRA','BOL','PRY','URY','ARG'];
- const index=left.indexOf(code);return index>=0?[118,85+index*75]:[670,85+right.indexOf(code)*75];
+ const index=left.indexOf(code);return index>=0?[118,120+index*75]:[670,120+right.indexOf(code)*75];
 }
 export function renderLatinCulturePatterns(section:CultureSection,scope='all',selected='',only=false){
  const layout=latinMapLayout(scope,'all',740),{k,tx,ty,transform,frame}=layout;
@@ -24,7 +24,7 @@ export function renderLatinCulturePatterns(section:CultureSection,scope='all',se
   }else{const [x,y]=point(p.anchor);shapes=`<circle cx="${x}" cy="${y}" r="${chosen?8:6}" fill="${p.color}" stroke="#fffefa" stroke-width="2"/><circle cx="${x}" cy="${y}" r="14" fill="none" stroke="${p.color}" stroke-dasharray="3 4"/>`;}
   const [x,y]=point(p.anchor),[dx,dy]=p.offset;
   const column=['catholic','protestant','unaffiliated'].indexOf(p.id);
-  const label=p.kind==='national-survey'?`<text data-latin-culture-label-text x="24" y="${25+column*20}" fill="${p.color}">${escape(p.label)}</text>`:`<path d="M${x},${y}L${x+dx},${y+dy}" stroke="${p.color}" stroke-width=".8" fill="none"/><text data-latin-culture-label-text x="${x+dx+(dx<0?-5:5)}" y="${y+dy}" text-anchor="${dx<0?'end':'start'}">${escape(p.label)}</text>`;
+  const label=p.kind==='national-survey'?`<text data-latin-culture-label-text x="24" y="${25+column*28}" fill="${p.color}">${escape(p.label)}</text>`:`<path d="M${x},${y}L${x+dx},${y+dy}" stroke="${p.color}" stroke-width=".8" fill="none"/><text data-latin-culture-label-text x="${x+dx+(dx<0?-5:5)}" y="${y+dy}" text-anchor="${dx<0?'end':'start'}">${escape(p.label)}</text>`;
   return `<g data-lc-pattern="${p.id}" data-lc-evidence="${p.kind}" role="button" tabindex="0" data-lc-select="pattern:${p.id}" aria-pressed="${chosen}" aria-label="${escape(p.title)}" opacity="${strength}"${hidden}>${shapes}${label}<title>${escape(p.definition)}</title></g>`;
  }).join('');
  let surveyContext='';
