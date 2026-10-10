@@ -1,6 +1,6 @@
 # 日本：農林業・自然環境・人口の初便
 
-主要産業と全国図を整えた #306 に、確認できた資料で3分野を追加しました。後続 Draft PR: https://github.com/guchio2366-dev/insight-journal/pull/310 。base は #306 の `9e76627`、マージ・公開は未実行です。
+主要産業と全国図を整えた #306 に、確認できた資料で3分野を追加しました。後続 Draft PR: https://github.com/guchio2366-dev/insight-journal/pull/310 。実装開始時の基点は #306 の `9e76627`。#306 は担当者によってmainへ統合済みで、現在のPR baseはmainです。この追加便のマージ・公開は未実行です。
 
 ## 実装範囲
 
