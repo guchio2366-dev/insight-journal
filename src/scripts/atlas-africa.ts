@@ -175,12 +175,12 @@ export function initializeAfricaAtlas() {
   text('[data-theme-title]',overview?'アフリカの農畜産業':context.title);
   text('[data-theme-takeaway]',context.takeaway);
   text('[data-metric-title]',overview?'作物と家畜の特徴的な分布':`${context.title.split('：')[0]}${only?'だけを表示':'を強調'}`);
-  text('[data-period]','2020年基準');text('[data-unit]','作物：収穫面積の集中域 ／ 家畜：密度の集中域');
-  text('#africa-svg-title',`${overview?'作物と家畜':context.title.split('：')[0]}の特徴的な分布・2020年基準`);
+  text('[data-period]','既存7品目2020年・コーヒー茶は資料別年');text('[data-unit]','収穫面積・飼養密度の集中域と産地の概略帯');
+  text('#africa-svg-title',`${overview?'作物と家畜':context.title.split('：')[0]}の特徴的な分布・既存7品目2020年／コーヒー茶は資料別年`);
   text('#africa-svg-desc','品目内で比較的集中する範囲を、作物は独立した色、家畜は種別の小型記号で示します。地図内の品目名・分布、または色付きの凡例から選べます。選択しても他品目の分布を残します。');
   const host=query<HTMLElement>('[data-africa-agri-context]');host.replaceChildren();
   for(const paragraph of context.paragraphs)host.append(make('p',paragraph));
-  query<HTMLElement>('[data-africa-agri-only]').hidden=overview||only||['coffee','tea'].includes(product);query<HTMLElement>('[data-africa-agri-all]').hidden=overview||!only;
+  query<HTMLElement>('[data-africa-agri-only]').hidden=overview||only;query<HTMLElement>('[data-africa-agri-all]').hidden=overview||!only;
   query<HTMLElement>('[data-theme-comparison]').hidden=true;query<HTMLElement>('[data-theme-return]').hidden=true;
   query<HTMLElement>('[data-africa-statistics-key]').hidden=true;
   const source=query<HTMLAnchorElement>('[data-theme-source]');source.hidden=true;
@@ -196,10 +196,10 @@ export function initializeAfricaAtlas() {
   const full=query<HTMLDetailsElement>('.africa-theme-full');full.querySelector('summary')!.textContent='分布の抽出基準・データと出典';
   const legend=query<HTMLElement>('[data-africa-layer-legend]');legend.replaceChildren();
   const rows=[...cropChoices.map(row=>({key:`crop-${row.id}-harvested`,label:row.label,kind:'crop'})),...livestockChoices.map(row=>({key:`livestock-${row.id}`,label:row.label,kind:'livestock'}))];
-  for(const row of rows){const unavailable=/crop-(coffee|tea)-/.test(row.key);const button=make('button',row.label+(unavailable?'（未取得）':'')) as HTMLButtonElement;button.type='button';button.dataset.africaAgriPick=row.key;button.setAttribute('aria-pressed',String(!overview&&focused===row.key));button.setAttribute('aria-label',`${row.label}の分布と説明`);button.title=`${row.label}を選んでも、他品目の分布を残します`;const swatch=make('i');swatch.style.background=africaCommodityColor(row.key);swatch.dataset.kind=row.kind;if(unavailable)swatch.className='africa-no-data';swatch.setAttribute('aria-hidden','true');button.prepend(swatch);legend.append(button);}
-  text('[data-africa-layer-caption]','作物：収穫面積の集中域　家畜：密度の集中域 · 2020年基準');
-  if(['coffee','tea'].includes(product)&&!overview){text('[data-metric-title]',context.title.split('：')[0]+' · 分布格子未取得');text('[data-africa-layer-scope]','この品目の2020年分布格子は未取得。生産地帯を補作せず、他の取得済み品目を残しています。');}
-  text('[data-africa-layer-scope]',only?'この品目だけを表示中。右のボタンで全分布へ戻れます。':'連続する生産地帯の大まかな分布。作物は面色、家畜は薄い品目色と記号。コーヒー・茶の分布格子は未取得です。');
+  for(const row of rows){const schematic=/crop-(coffee|tea)-/.test(row.key);const button=make('button',row.label+(schematic?'（概略）':'')) as HTMLButtonElement;button.type='button';button.dataset.africaAgriPick=row.key;button.setAttribute('aria-pressed',String(!overview&&focused===row.key));button.setAttribute('aria-label',`${row.label}の分布と説明`);button.title=`${row.label}を選んでも、他品目の分布を残します`;const swatch=make('i');swatch.style.background=africaCommodityColor(row.key);swatch.dataset.kind=row.kind;swatch.setAttribute('aria-hidden','true');button.prepend(swatch);legend.append(button);}
+  text('[data-africa-layer-caption]','既存7品目：2020年の集中域 ／ コーヒー・茶：資料別年の概略帯');
+
+  text('[data-africa-layer-scope]',only?'この品目だけを表示中。右のボタンで全分布へ戻れます。':'連続する生産地帯の大まかな分布。作物は面色、家畜は薄い品目色と記号。コーヒー・茶は資料に記載された産地の概略帯で、面積・数量を示しません。');
   query<HTMLElement>('[data-africa-actual-key]').hidden=!actual.ready;
   const selection=query<HTMLElement>('[data-africa-layer-selection]');selection.hidden=!actual.error&&!state.layerPoint;query<HTMLElement>('[data-africa-layer-selection] label').hidden=true;
   const point=state.layerPoint.split(',').map(Number);text('[data-africa-point-reading]',state.layerPoint?layerRenderer.inspect(point[0],point[1]):'');
@@ -390,7 +390,7 @@ export function initializeAfricaAtlas() {
     state.view='distribution';state.layerClass='';
     const focused=state.topic==='livestock'?`livestock-${state.livestock}`:`crop-${state.crop}-harvested`;
     const requested=state.agriLayers&&state.agriLayers.split(',').length===1?canonicalAgriLayers(state.agriLayers.replace(/-production$/,'-harvested')):null;
-    state.agriLayers=!state.overview&&requested===focused&&!/^crop-(coffee|tea)-/.test(focused)?requested:null;
+    state.agriLayers=!state.overview&&requested===focused?requested:null;
     state.agriOutline=!state.overview;
    }
   }
