@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "source": "INEGI, Censo Agropecuario 2022, ca2022_for18",
+  "sourceUrl": "https://www.inegi.org.mx/contenidos/programas/ca/2022/tabulados/ca2022_for18.xlsx",
+  "sourceSha256": "ae0e72e8598482e604984daa22e446a553766f2ff13441872290d2a588071a71",
+  "period": "2021年10月〜2022年9月",
+  "unit": "m³",
+  "species": "Pino (Pinus spp.)",
+  "obtainedM3": 7528399.0691,
+  "soldM3": 7135745.0738,
+  "categories": [
+    {
+      "id": "sawing",
+      "label": "製材向け",
+      "obtainedM3": 2006367.2634,
+      "soldM3": 1814217.2971
+    },
+    {
+      "id": "roundwood",
+      "label": "丸太形態",
+      "obtainedM3": 5234771.7724,
+      "soldM3": 5093033.5744
+    },
+    {
+      "id": "posts",
+      "label": "杭向け",
+      "obtainedM3": 94072.844,
+      "soldM3": 93411.3123
+    },
+    {
+      "id": "firewood",
+      "label": "薪向け",
+      "obtainedM3": 128475.706,
+      "soldM3": 75618.2485
+    },
+    {
+      "id": "charcoal",
+      "label": "炭向け",
+      "obtainedM3": 1587.0,
+      "soldM3": 1084.0
+    },
+    {
+      "id": "cellulose",
+      "label": "セルロース向け",
+      "obtainedM3": 4445.053,
+      "soldM3": 4421.053
+    },
+    {
+      "id": "other",
+      "label": "その他",
+      "obtainedM3": 58679.4303,
+      "soldM3": 53959.5885
+    }
+  ]
+}

@@ -46,6 +46,7 @@ const countries = [
       {id: 'overview', label: 'メキシコの農林業', reading: 'overview'},
       {id: 'crop', label: 'とうもろこし', reading: 'product', select: '[data-crop-select="corn"]'},
       {id: 'livestock', label: '肉牛', reading: 'product', select: '[data-livestock-select="beef"]'},
+      {id: 'dairy', label: '酪農', reading: 'product', select: '[data-livestock-select="dairy"]'},
       {id: 'forestry', label: '森林資源と木材生産', reading: 'forestry', select: '[data-forestry-select]'},
     ],
   },
@@ -456,6 +457,23 @@ async function capture(browser, origin, profile, country, scene) {
     record.screenshot = `${name}.png`;
     await writeFile(path.join(output, record.screenshot), png);
     await captureWorkspace(page, country, name, record);
+    if (country.id === 'mexico' && profile.name === 'desktop' && scene.id === 'forestry') {
+      const flow = page.locator('[data-mexico-stat-panel="pine"] .mexico-pine-flow');
+      assert(await flow.isVisible(), 'Pine flow chart is hidden');
+      assert((await flow.innerText()).includes('7,135,745'), 'Pine sales figure is missing');
+      const charcoal=flow.locator('.mexico-pine-form-bars li').filter({hasText:'炭向け'});
+      assert.match(await charcoal.innerText(),/1,587 m³[\s\S]*0.1%未満/);
+      record.statisticsScreenshot = `${name}-pine-flow.png`;
+      await flow.screenshot({path: path.join(output, record.statisticsScreenshot), animations: 'disabled'});
+    }
+    if (country.id === 'mexico' && profile.name === 'desktop' && scene.id === 'dairy') {
+      const detail = page.locator('[data-mexico-milk-world-comparison]');
+      await detail.locator('summary').first().click();
+      assert(await detail.locator('[data-world-production="mexico-milk-2024"]').isVisible(), 'Mexico milk world chart is hidden');
+      assert.match(await detail.locator('.atlas-us-production').innerText(),/13,962,372.1 t[\s\S]*1.8%/);
+      record.statisticsScreenshot = `${name}-milk-world.png`;
+      await detail.screenshot({path: path.join(output, record.statisticsScreenshot), animations: 'disabled'});
+    }
     assert.deepEqual(errors, [], 'Browser JavaScript errors');
     assert.deepEqual(consoleMessages.filter(message => message.type === 'error'), [], 'Browser console errors');
     assert.deepEqual(failedRequests, [], 'Failed page or data requests');
@@ -496,7 +514,8 @@ async function main() {
   assert(executablePath, 'Set REVIEW_CHROME_PATH to the runner-installed Google Chrome.');
   await access(executablePath, constants.X_OK);
   await mkdir(output, {recursive: true});
-  const metadata = {status: 'running', commit: process.env.GITHUB_SHA, repository: process.env.GITHUB_REPOSITORY, runId: process.env.GITHUB_RUN_ID, runAttempt: process.env.GITHUB_RUN_ATTEMPT, basePath, startedAt: new Date().toISOString(), profiles, fonts: {setup: process.env.REVIEW_JAPANESE_FONT_SETUP, japaneseCapableFamilies: process.env.REVIEW_JAPANESE_FONTS.split('\n'), genericJapaneseMatches: process.env.REVIEW_JAPANESE_FONT_MATCH.split('\n')}, captures: []};
+  const event=process.env.GITHUB_EVENT_PATH?JSON.parse(await readFile(process.env.GITHUB_EVENT_PATH,'utf8')):{};
+  const metadata = {status: 'running', headSHA:event.pull_request?.head?.sha??process.env.GITHUB_SHA, commit: process.env.GITHUB_SHA, repository: process.env.GITHUB_REPOSITORY, runId: process.env.GITHUB_RUN_ID, runAttempt: process.env.GITHUB_RUN_ATTEMPT, basePath, startedAt: new Date().toISOString(), profiles, fonts: {setup: process.env.REVIEW_JAPANESE_FONT_SETUP, japaneseCapableFamilies: process.env.REVIEW_JAPANESE_FONTS.split('\n'), genericJapaneseMatches: process.env.REVIEW_JAPANESE_FONT_MATCH.split('\n')}, captures: []};
   await writeFile(path.join(output, 'metadata.json'), `${JSON.stringify(metadata, null, 2)}\n`);
   let server, browser;
   try {

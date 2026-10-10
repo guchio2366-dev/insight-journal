@@ -37,6 +37,31 @@
 .west-production-summary li small{white-space:nowrap;color:#526960;font-size:11px}
 .west-production-summary details{margin-top:4px}
 .west-production-summary details summary{min-height:38px;padding:6px 0}
+.west-sawnwood header h2{margin:0;font-size:21px}
+.west-sawnwood header p{margin:2px 0 13px;color:#4b615d}
+.west-sawnwood-panels{display:grid;grid-template-columns:1.2fr .8fr .9fr;gap:14px}
+.west-sawnwood-panels>section{min-width:0;padding:12px;border:1px solid #d2d9ce;background:#fcfcf7}
+.west-sawnwood-panels h3{font-size:16px;margin:0 0 5px}
+.west-sawnwood-panels p{font-size:12px;line-height:1.55;margin:0 0 8px}
+.west-sawnwood-panels ul,.west-sawnwood-panels ol{padding:0;margin:0;list-style:none}
+.west-sawnwood-panels ul li{display:grid;grid-template-columns:86px minmax(0,1fr);gap:2px 8px;margin:7px 0;font-size:12px}
+.west-sawnwood-panels ul strong{font-weight:600}
+.west-sawnwood-panels ul small{grid-column:2;color:#465c59;font-size:11px;font-variant-numeric:tabular-nums}
+.west-sawnwood-bar{height:12px;background:#80abb4;display:block;align-self:center}
+.west-sawnwood-bar i{display:block;height:100%;background:#4d7655}
+.west-sawnwood-key{display:flex;align-items:center;gap:5px;margin-top:10px!important}
+.west-sawnwood-key i{width:11px;height:11px;background:#4d7655;display:inline-block}
+.west-sawnwood-key i:nth-of-type(2){background:#80abb4;margin-left:8px}
+.west-sawnwood-panels ol li{display:flex;justify-content:space-between;gap:6px;border-bottom:1px solid #dce2d8;padding:6px 0;font-size:12px;font-variant-numeric:tabular-nums}
+.west-sawnwood-panels ol strong{white-space:nowrap}
+.west-sawnwood-panels svg{width:100%;height:120px;overflow:visible}
+.west-sawnwood-panels svg line{stroke:#b3c1b9;stroke-width:1}
+.west-sawnwood-panels svg polyline{fill:none;stroke:#286b7a;stroke-width:2.2;vector-effect:non-scaling-stroke}
+.west-sawnwood-panels svg circle{fill:#286b7a}
+.west-sawnwood>details{margin-top:12px;border-top:1px solid #d2d9ce}
+.west-sawnwood-table{overflow-x:auto}
+.west-sawnwood-table th,.west-sawnwood-table td{white-space:nowrap}
+.west-sawnwood-table td{font-variant-numeric:tabular-nums}
 .west-production-map-choice{margin:8px 0 12px;padding:9px 10px;border-left:3px solid #7b9789;background:#f1f5ee}
 .west-reading .west-production-map-choice p{font-size:12px;line-height:1.55;margin:0 0 6px}
 .west-production-map-choice button{min-height:40px;padding:6px 10px;border:1px solid #66877b;background:#fffef8;color:#254952;font:inherit;cursor:pointer}

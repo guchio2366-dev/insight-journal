@@ -1,0 +1,17 @@
+---
+import flow from '../../data/atlas/mexico/pine-flow-2022.json';
+const rows=[...flow.categories].sort((a,b)=>b.obtainedM3-a.obtainedM3);
+const amount=(n:number)=>`${Math.round(n).toLocaleString('ja-JP')} m³`;
+const percent=(n:number,d:number)=>(n/d*100).toFixed(1);
+const percentLabel=(n:number,d:number)=>n>0&&n/d*100<0.1?'0.1%未満':`${percent(n,d)}%`;
+const soldShare=Number(percent(flow.soldM3,flow.obtainedM3));
+---
+<section class="mexico-pine-flow" aria-labelledby="mexico-pine-flow-title">
+ <header><h3 id="mexico-pine-flow-title">松材はどの用途・形態で取得・販売されたか</h3><p>林業生産単位が取得した松材 <strong>{amount(flow.obtainedM3)}</strong> のうち、<strong>{amount(flow.soldM3)}</strong> が販売量として記録されています。</p></header>
+ <div class="mexico-pine-flow-grid">
+  <figure><figcaption><strong>取得材の用途・形態</strong><span>{flow.period} · 全国 · m³</span></figcaption><ol class="mexico-pine-form-bars">{rows.map(row=><li><span>{row.label}</span><i style={`--pine-share:${percent(row.obtainedM3,flow.obtainedM3)}%`}></i><strong>{amount(row.obtainedM3)}</strong><small>{percentLabel(row.obtainedM3,flow.obtainedM3)}</small></li>)}</ol><p>割合の分母は、松材の全国取得量です。原表は用途（製材・杭・薪・炭・セルロース向け）と形態（丸太）を含む区分です。「製材向け」は加工前の木材区分で、製材品の生産量ではありません。</p></figure>
+  <figure><figcaption><strong>取得量と販売量</strong><span>{flow.period} · 全国 · m³</span></figcaption><div class="mexico-pine-sale-bar" role="img" aria-label={`取得量 ${amount(flow.obtainedM3)}。そのうち販売量 ${amount(flow.soldM3)}、${soldShare}%`}><span style={`width:${soldShare}%`}></span></div><dl><div><dt>取得量</dt><dd>{amount(flow.obtainedM3)}</dd></div><div><dt>うち販売量</dt><dd>{amount(flow.soldM3)}（{soldShare}%）</dd></div></dl><p>取得量と販売量の差は、国内消費・在庫・輸出先のどれにも割り当てません。販売先と国境を越えた取引は、この表の対象外です。</p></figure>
+ </div>
+ <details><summary>7区分の取得量・販売量を確認する</summary><div class="mexico-agriculture-table-scroll"><table><caption>全国の松材 / {flow.period} / m³</caption><thead><tr><th>用途・形態</th><th>取得量</th><th>販売量</th></tr></thead><tbody>{rows.map(row=><tr><th>{row.label}</th><td>{amount(row.obtainedM3)}</td><td>{amount(row.soldM3)}</td></tr>)}</tbody></table></div></details>
+ <p class="mexico-pine-flow-source">出典：<a href={flow.sourceUrl} target="_blank" rel="noopener noreferrer">{flow.source}</a>。全国のマツ属を本サイトで集計・図示。森林面積や全樹種の木材量とは区別します。</p>
+</section>
