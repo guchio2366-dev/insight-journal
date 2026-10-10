@@ -34,13 +34,14 @@ test('all three learning windows are finite and preserve a shared comparison fra
   assert.match(api.russiaCoverage(api.getRussiaLayer(state.layer),state),/行政境界ではありません/);
  }
 });
-test('non-farming fields retain learning-region buttons and farming uses source-backed labels without duplicate region buttons',()=>{
+test('industry and farming use source-backed labels; other fields retain geographic learning-region buttons',()=>{
  const window=new Window();
  for(const layer of api.russiaLayers){
   const state=api.createRussiaState('',layer.field);
   window.document.body.innerHTML=api.renderRussiaScene(layer,state,'primary');
   const svg=window.document.querySelector('svg');assert.equal(svg.getAttribute('role'),'group');
-  const markers=[...svg.querySelectorAll('[data-region-marker]')];assert.equal(markers.length,layer.field==='agriculture'?0:3,layer.id);
+  const markers=[...svg.querySelectorAll('[data-region-marker]')];assert.equal(markers.length,layer.field==='agriculture'||layer.kind==='places'?0:3,layer.id);
+  if(layer.kind==='places'){assert.equal(svg.querySelectorAll('[data-russia-industry-location]').length,8);continue;}
   if(layer.field==='agriculture'){assert.equal(svg.querySelectorAll('[data-farming-place]').length,4);continue;}
   for(const region of api.russiaRegions){
    const marker=markers.find(item=>item.dataset.mapPlace===region.code);assert.ok(marker,region.code);
@@ -132,4 +133,12 @@ test('Russia farming selection retains other product names faintly and reads onl
  assert.match(focused,/data-place-product="cattle" opacity="0.32"/);
  assert.match(focused,/data-place-product="wheat" opacity="1"/);
  assert.match(focused,/data-farming-product="cattle"/);
+});
+
+test('industry connects eight representative locations while national output and refinery capacity stay scoped text',async()=>{
+ const {russiaIndustryMarks}=await bundled('src/data/atlas/russia-industry-reading.ts');assert.equal(russiaIndustryMarks.length,8);
+ const provenance=json('data-source/atlas/russia/industry/provenance.json');assert.equal(provenance.recordCount,8);assert.equal(provenance.quantityEncoding,'none');assert.equal(provenance.readingModuleSha256,createHash('sha256').update(read('src/data/atlas/russia-industry-reading.ts')).digest('hex'));
+ for(const m of russiaIndustryMarks){const state=api.createRussiaState('?industryLocation='+m.id,'industry');assert.equal(state.industryLocation,m.id);assert.equal(api.createRussiaState('?industryLocation='+m.id,'nature').industryLocation,undefined);const point=provenance.locations.find(p=>p.id===m.id);assert.deepEqual(point.coordinates,m.coordinates);assert.ok(m.sources.length>=2);}
+ assert.equal(api.createRussiaState('?industryLocation=unknown','industry').industryLocation,undefined);
+ assert.match(russiaIndustryMarks.find(m=>m.id==='kuzbass-coal').reading,/全国.*ショートトン/);assert.match(russiaIndustryMarks.find(m=>m.id==='omsk-refining').reading,/2025年推定.*実際の処理量/);
 });

@@ -270,3 +270,14 @@ test('all four server-rendered Russia pages remain readable without JavaScript a
   }finally{win.happyDOM.abort();}
  }
 });
+
+test('industry location selection keeps all eight examples and scoped quantities, restores the URL and returns to overview',()=>{
+ const {win,root,one}=page('industry');try{
+  assert.equal(root.querySelectorAll('[data-primary-map] [data-russia-industry-location]').length,8);
+  for(const id of ['west-siberia-oil','yamal-nenets-gas','kuzbass-coal','omsk-refining']){root.querySelector(`[data-russia-industry-location="${id}"]`).dispatchEvent(new win.MouseEvent('click',{bubbles:true}));assert.equal(new URL(win.location.href).searchParams.get('industryLocation'),id);assert.equal(root.querySelectorAll('[data-primary-map] [data-russia-industry-location]').length,8);assert.match(one('takeaway').textContent,/全国|推定精製能力/);}
+  assert.match(one('takeaway').textContent,/日量44万バレル.*実際の処理量/);
+  const key=root.querySelector('[data-russia-industry-location="kuzbass-coal"]');key.dispatchEvent(new win.KeyboardEvent('keydown',{key:' ',bubbles:true}));assert.equal(new URL(win.location.href).searchParams.get('industryLocation'),'kuzbass-coal');
+  assert.ok([...root.querySelectorAll('[data-field-link]')].filter(a=>a.dataset.fieldLink!=='industry').every(a=>!new URL(a.href).searchParams.has('industryLocation')));
+  const restored=page('industry',win.location.search);try{assert.match(restored.one('takeaway').textContent,/全国.*ショートトン/);restored.one('russia-industry-return').click();assert.equal(new URL(restored.win.location.href).searchParams.has('industryLocation'),false);assert.equal(restored.root.querySelectorAll('[data-primary-map] [data-russia-industry-location]').length,8);}finally{restored.win.happyDOM.abort();}
+ }finally{win.happyDOM.abort();}
+});
