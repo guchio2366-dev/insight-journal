@@ -34,12 +34,17 @@ try{
    const references=region==='russia'?2:region==='oceania'?1:0;assert.equal(await page.locator('[data-forest-reference]').count(),references);
    const config=await page.locator('[data-forest-config]').evaluate(element=>JSON.parse(element.textContent));
    const map=page.locator('[data-forest-map]'),camera=await map.getAttribute('viewBox'),locators=await page.locator('svg [data-forest-example]').count();
-   const measureLayout=()=>page.evaluate(()=>{const b=selector=>{const r=document.querySelector(selector).getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};};return {cssViewport:{width:innerWidth,height:innerHeight},devicePixelRatio, map:b('.forest-map-stage'),reading:b('.forest-reading'),legend:b('.forest-legend'),overflow:document.documentElement.scrollWidth>innerWidth,contentOverflow:[...document.querySelectorAll('.forest-reading,.forest-reading-scroll,.forest-legend')].filter(element=>element.scrollWidth>element.clientWidth+2).map(element=>element.className)};});
+   const measureLayout=()=>page.evaluate(()=>{const box=element=>{const r=element.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};},b=selector=>box(document.querySelector(selector));return {cssViewport:{width:innerWidth,height:innerHeight},devicePixelRatio,scroll:{x:scrollX,y:scrollY},news:b('.atlas-news'),map:b('.forest-map-stage'),reading:b('.forest-reading'),legend:b('.forest-legend'),markers:[...document.querySelectorAll('svg [data-forest-example]')].map(element=>({id:element.dataset.forestExample,...box(element)})),overflow:document.documentElement.scrollWidth>innerWidth,contentOverflow:[...document.querySelectorAll('.forest-reading,.forest-reading-scroll,.forest-legend')].filter(element=>element.scrollWidth>element.clientWidth+2).map(element=>element.className)};});
    const assertLayout=measure=>{assert.deepEqual(measure.cssViewport,viewport);assert.equal(measure.devicePixelRatio,1);assert.equal(measure.overflow,false);assert.deepEqual(measure.contentOverflow,[]);assert.ok(measure.map.width>480&&measure.map.height>440);assert.ok(measure.reading.x>measure.map.x+measure.map.width-2);assert.ok(measure.legend.y>=measure.map.y+measure.map.height-2);for(const box of [measure.map,measure.reading,measure.legend]){assert.ok(box.x>=0);assert.ok(box.x+box.width<=viewport.width+2);}assert.ok(measure.legend.x+measure.legend.width<=measure.reading.x+2);};
-   const measure=await measureLayout();assertLayout(measure);
-   const shot=async suffix=>{const name=`${region}-${viewport.width}-${suffix}.png`,bytes=await page.screenshot({path:path.join(output,name),animations:'disabled',fullPage:true});return {file:name,imagePixels:{width:bytes.readUInt32BE(16),height:bytes.readUInt32BE(20)},sha256:crypto.createHash('sha256').update(bytes).digest('hex')};};
+   const assertFirstViewport=measure=>{assertLayout(measure);assert.deepEqual(measure.scroll,{x:0,y:0});assert.ok(measure.news.x+measure.news.width<=measure.map.x, 'news remains left of map');assert.ok(measure.map.y<viewport.height/3,'map starts in upper third');for(const box of [measure.news,measure.map,measure.reading,measure.legend,...measure.markers]){assert.ok(box.y>=0);assert.ok(box.y+box.height<=viewport.height+2,'initial map, explanation, legend and all region labels are visible without page scroll');}};
+   const measure=await measureLayout();assertFirstViewport(measure);
+   const shot=async(suffix,fullPage=true)=>{const name=`${region}-${viewport.width}-${suffix}.png`,bytes=await page.screenshot({path:path.join(output,name),animations:'disabled',fullPage});return {file:name,fullPage,scroll:await page.evaluate(()=>({x:scrollX,y:scrollY})),imagePixels:{width:bytes.readUInt32BE(16),height:bytes.readUInt32BE(20)},sha256:crypto.createHash('sha256').update(bytes).digest('hex')};};
    const wholeMissing=['africa','latin-america'].includes(region),landFills=await page.locator('[data-forest-land] path').evaluateAll(paths=>paths.map(path=>path.getAttribute('fill')));assert.ok(landFills.length>0);assert.ok(landFills.every(fill=>wholeMissing?fill==='#f1eee5':fill===`url(#forest-missing-${region})`));if(wholeMissing){assert.match(await page.locator('.forest-map-heading').innerText(),/全域の森林被覆面：未取得/);assert.match(await page.locator('[data-forest-map-note]').innerText(),/中立色は森林の有無を示しません/);}
-   const initial=await shot('overview');
+   const initialViewport=await shot('overview-viewport',false),initial=await shot('overview');
+   // Select an already visible map marker, so the selected viewport also needs
+   // no page scrolling; below-map button operations are verified separately.
+   const last=config.reading.examples.at(-1);await page.locator(`svg [data-forest-example="${last.id}"]`).click();assert.equal(await page.locator('[data-forest-reading-title]').textContent(),last.title);
+   const selectedViewportLayout=await measureLayout();assertFirstViewport(selectedViewportLayout);const selectedViewport=await shot('selected-viewport',false);
    for(const example of config.reading.examples){await page.locator(`button[data-forest-example="${example.id}"]`).click();assert.equal(await page.locator('[data-forest-reading-title]').textContent(),example.title);assert.equal(await map.getAttribute('viewBox'),camera);assert.equal(await page.locator('svg [data-forest-example]').count(),locators);assert.equal(await page.locator('[data-forest-raster]').count(),region==='russia'?1:0);assert.equal(await page.locator('[data-forest-reference]').count(),references);}
    const selectedLayout=await measureLayout();assertLayout(selectedLayout);const selected=await shot('selected');
    await page.locator('[data-forest-zoom=in]').click();const zoomed=await map.getAttribute('viewBox');assert.notEqual(zoomed,camera);
@@ -50,7 +55,7 @@ try{
    await map.focus();await page.keyboard.press('ArrowRight');assert.notEqual(await map.getAttribute('viewBox'),zoomed);
    await page.locator('[data-forest-reset]').click();assert.equal(await map.getAttribute('viewBox'),camera);assert.equal(await page.locator('[data-forest-clear]').isVisible(),false);
    await page.locator(`svg [data-forest-example="${first.id}"]`).click();assert.equal(await page.locator('[data-forest-reading-title]').textContent(),first.title);
-   report.viewports.push({region,viewport,...measure,selectedLayout,locators,references,raster:region==='russia'?'western-Russia-only':'not-acquired',initial,selected});
+   report.viewports.push({region,viewport,...measure,selectedLayout,selectedViewportLayout,locators,references,raster:region==='russia'?'western-Russia-only':'not-acquired',initial,selected,initialViewport,selectedViewport});
   }
   await context.close();await save();
  }
@@ -60,13 +65,13 @@ try{
   await page.goto(base+(region==='africa'?'/atlas/africa/?field=agriculture&topic=farming':`/atlas/${region}/agriculture/`),{waitUntil:'networkidle'});
   const control=region==='africa'?page.locator('[data-africa-topic="forestry"]'):page.getByRole('link',{name:'林業',exact:true});await control.click();await page.waitForURL(`**/atlas/${region}/agriculture/forestry/`);assert.equal(await page.locator('[data-regional-forestry]').getAttribute('data-region'),region);
  }
- report.checks.push(`${viewports.length*4} PC region/viewport combinations, initial and selected: exact CSS innerWidth/innerHeight recorded separately from screenshot/preview pixels; map/right reading/legend have no overlap or horizontal overflow; all locators/raster retained on selection; zoom/clear/reset, keyboard, marker click and reload restore; 4 existing forestry entries`);
+ report.checks.push(`${viewports.length*4} PC region/viewport combinations, initial and selected: zero-scroll viewport screenshots with left news, complete map/all region labels, right explanation and legend visible simultaneously; exact CSS innerWidth/innerHeight recorded separately from screenshot/preview pixels; no overlap or horizontal overflow; all locators/raster retained on selection; zoom/clear/reset, keyboard, marker click and reload restore; 4 existing forestry entries`);
  await context.close();assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedRequests,[]);report.result='passed';await save();
  // Public local-site screenshots only. Optional readable previews also let the
  // authorized job-log reader inspect evidence when ZIP transfer is unavailable.
  if(process.env.FORESTRY_REVIEW_INLINE_PREVIEWS==='1'){
   const {default:sharp}=await import('sharp');
-  for(const view of report.viewports)for(const shot of [view.initial,view.selected]){
+  for(const view of report.viewports)for(const shot of [view.initialViewport,view.selectedViewport]){
    const bytes=await sharp(path.join(output,shot.file)).resize({width:1280,withoutEnlargement:true}).webp({quality:90}).toBuffer();
    const encoded=bytes.toString('base64'),name=shot.file.replace(/\.png$/,'.webp'),parts=Math.ceil(encoded.length/8192);
    const metadata=await sharp(bytes).metadata();shot.preview={file:name,imagePixels:{width:metadata.width,height:metadata.height},sha256:crypto.createHash('sha256').update(bytes).digest('hex')};
