@@ -1,0 +1,21 @@
+---
+import data from '../../data/atlas/oceania-livestock-production.json';
+const number=(raw:string|null,flag='A')=>raw===null||raw.trim()===''||['M','L'].includes(flag)?'未収録':Number(raw).toLocaleString('ja-JP',{maximumFractionDigits:2});
+const flag=(code:string)=>({A:'公的報告値',E:'推計値',I:'補完値',X:'外部機関の値'}[code]??code);
+---
+<section class="oceania-livestock-production" data-oceania-livestock-production aria-labelledby="oceania-livestock-production-title">
+ <h2 id="oceania-livestock-production-title">豪州・NZの牛肉と生乳：世界の生産量と比べる</h2>
+ <p>2024年の2国の全国比較です。オセアニア全体の合計や地図の選択地域の値ではありません。上の輸出割合とは年・分母が異なるため、差し引きません。</p>
+ <div class="oceania-livestock-products">
+ {data.series.map(series=><section aria-labelledby={'oceania-product-'+series.itemCode}>
+  <h3 id={'oceania-product-'+series.itemCode}>{series.label}（2024年）</h3><p>{series.definition}</p>
+  <p>世界生産量：{number(series.worldRawValue,series.worldFlag)}t。{flag(series.worldFlag)}（{series.worldFlag}）。</p>
+  <table><caption>全国生産量と世界生産比</caption><thead><tr><th scope="col">国</th><th scope="col">生産量（t）</th><th scope="col">世界比</th></tr></thead><tbody>{series.countries.map(country=><tr><th scope="row">{country.name}</th><td>{number(country.rawValue,country.flag)}<small>{flag(country.flag)}（{country.flag}）{country.note?' · '+country.note:''}</small></td><td>{country.worldShare===null?'算出不可':country.worldShare.toLocaleString('ja-JP',{maximumFractionDigits:2})+'％'}</td></tr>)}</tbody></table>
+  <p>世界比＝同年・同品目・同単位の全国生産量÷World公表値。輸出比や自給率ではありません。</p>
+ </section>)}
+ </div>
+ <p>出典：<a href={data.source.landingUrl}>FAOSTAT QCL</a>、{data.source.releaseDate}公開の保存済み原表（<a href={data.source.licenseUrl}>CC BY 4.0</a>）。牛肉と生乳を合算しません。保存資料に両国の過去年次行がないため、推移は未収録です。供給用途・相手国・自給率はこの生産量から算出しません。</p>
+</section>
+<style>
+ .oceania-livestock-production{grid-column:1/-1;border-top:1px solid var(--rule);padding:20px 0;margin-top:20px}.oceania-livestock-production h2{font-size:20px}.oceania-livestock-production h3{font-size:16px}.oceania-livestock-products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.oceania-livestock-production p{font-size:13px;line-height:1.8}.oceania-livestock-production table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}.oceania-livestock-production caption{text-align:left}.oceania-livestock-production th,.oceania-livestock-production td{padding:8px 4px;text-align:right;border-bottom:1px solid var(--rule)}.oceania-livestock-production th:first-child{text-align:left}.oceania-livestock-production small{display:block;font-size:11px}@media(max-width:959px){.oceania-livestock-products{grid-template-columns:1fr}}
+</style>

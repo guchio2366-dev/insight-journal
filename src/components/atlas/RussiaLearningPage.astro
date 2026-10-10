@@ -13,6 +13,7 @@ import '../../styles/atlas-russia-learning.css';
 import {renderRussiaWorkspaceLegend} from '../../scripts/atlas-russia-learning';
 import {russiaWheatWorldShare} from '../../data/atlas/russia-wheat-world-share';
 import {russiaFarmingProductCandidates} from '../../data/atlas/russia-farming-products';
+import RussiaForestryStatistics from './RussiaForestryStatistics.astro';
 type RussiaField=keyof typeof russiaFields;
 interface Props {field?:RussiaField;overview?:boolean}
 const {field='nature',overview=false}=Astro.props;
@@ -78,6 +79,7 @@ const usdaWheatUrl='https://apps.fas.usda.gov/newgainapi/api/Report/DownloadRepo
     </section>
    </section>}
    {field==='agriculture'&&!overview&&<section class="russia-farming-candidates" aria-labelledby="russia-farming-candidates-title"><h2 id="russia-farming-candidates-title">小麦・牛以外の主要品目も確かめる</h2><p>大麦・テンサイ・ヒマワリ種子、豚・羊・鶏などの全国統計を収録しました。ライムギは別の公表資料で全国値を確認できます。地図で全域分布を示せるのは、現在は小麦と牛です。</p><p><strong>ライムギ：</strong><a href="https://apps.fas.usda.gov/psdonline/circulars/2025/07/Grain.pdf">USDA FAS の2025年7月公表表</a>では、ロシアの2022/23年度生産量は200万t、同じ表の世界総量は1,214.9万t。EUに次ぐ規模です。年度の区切りと出典が異なるため、下のFAOSTAT暦年値とは同列に順位付けしません。ライムギ単独の全国分布格子は未収録で、地図上の場所は示しません。</p><details><summary>2022年の作物・家畜の全国値</summary><p>作物は生産重量、家畜は飼養頭羽数です。単位が違うため合算・順位付けはできません。</p><div class="russia-farming-candidate-columns"><div><h3>作物生産量</h3><ul>{russiaFarmingProductCandidates.filter(item=>item.group==='crop').map(item=><li><span>{item.label}</span><strong>{wheatNumber.format(item.value/1e6)}百万t</strong></li>)}</ul></div><div><h3>家畜飼養数</h3><ul>{russiaFarmingProductCandidates.filter(item=>item.group==='livestock').map(item=><li><span>{item.label}</span><strong>{wheatNumber.format(item.unit==='1000 An'?item.value/1000:item.value/1e6)}百万{item.id==='chicken-stocks'?'羽':'頭'}</strong></li>)}</ul></div></div><p>出典：<a href="https://www.fao.org/faostat/en/#data/QCL">FAOSTAT QCL</a>、2022年の公表値（A）、<a href="https://www.fao.org/contact-us/terms/db-terms-of-use/">CC BY 4.0</a>。ライムギの全国行はこの保存済み系列に未収録です。上記のUSDA値は異なる年度区分です。</p></details></section>}
+   {field==='agriculture'&&!overview&&<RussiaForestryStatistics />}
   </div>
   <section class="russia-learning-comparison" data-comparison-view hidden aria-label="元の分布と比較する">
    <div class="russia-learning-comparison-grid">

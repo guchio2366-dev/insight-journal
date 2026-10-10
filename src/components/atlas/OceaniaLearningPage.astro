@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
 import OceaniaWorkspaceRegionNavigation from './OceaniaWorkspaceRegionNavigation.astro';
+import OceaniaLivestockProduction from './OceaniaLivestockProduction.astro';
 import {withBase} from '../../lib/urls';
 import {renderOceaniaRequiredLegend} from '../../scripts/atlas-oceania-legend';
 import {
@@ -81,6 +82,7 @@ const australiaExportShares=[
     <p class="oceania-export-note">棒は<strong>2022–23～2024–25年の3年平均・数量ベース</strong>、上の地図は<strong>2020年の収穫面積・家畜密度</strong>です。カノーラの位置は地図に未収録です。羊・牛の密度は羊肉・牛肉の生産量を表しません。輸出先と世界生産シェアは、この品目別資料からは示せません。</p>
     <p class="oceania-export-source">出典：<a href="https://www.agriculture.gov.au/abares/products/insights/snapshot-of-australian-agriculture">Department of Agriculture, Fisheries and Forestry. 2026. <cite>Snapshot of Australian Agriculture 2026</cite>, Figure 6</a>（数値を横棒に再構成、© Department of Agriculture, Fisheries and Forestry 2026、<a href="https://www.agriculture.gov.au/about/copyright">CC BY 4.0</a>）。</p>
    </section>}
+   {field==='agriculture'&&<OceaniaLivestockProduction />}
   </div>
   <section class="oceania-learning-comparison" data-comparison-view hidden aria-label="元の分布と比較する">
    <div class="oceania-learning-comparison-grid">
