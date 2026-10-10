@@ -57,4 +57,16 @@ try{
  }
  report.checks.push('8 PC overview/selected views: no horizontal overflow, right reading alongside large map; all locators/raster retained on selection; zoom/clear/reset, keyboard, marker click and reload restore; 4 existing forestry entries');
  await context.close();assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedRequests,[]);report.result='passed';await save();
+ // Public local-site screenshots only. Optional readable previews also let the
+ // authorized job-log reader inspect evidence when ZIP transfer is unavailable.
+ if(process.env.FORESTRY_REVIEW_INLINE_PREVIEWS==='1'){
+  const {default:sharp}=await import('sharp');
+  for(const view of report.viewports)for(const shot of [view.initial,view.selected]){
+   const bytes=await sharp(path.join(output,shot.file)).resize({width:1280,withoutEnlargement:true}).webp({quality:90}).toBuffer();
+   const encoded=bytes.toString('base64'),name=shot.file.replace(/\.png$/,'.webp'),parts=Math.ceil(encoded.length/8192);
+   console.log(`FORESTRY_VISUAL ${name} ${parts} ${crypto.createHash('sha256').update(bytes).digest('hex')}`);
+   for(let part=0;part<parts;part++)console.log(`FORESTRY_VISUAL_PART ${name} ${part} ${encoded.slice(part*8192,(part+1)*8192)}`);
+  }
+  console.log(`FORESTRY_REPORT ${JSON.stringify(report)}`);
+ }
 }catch(error){report.result='failed';report.failure=error.stack;await save();throw error;}finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}
