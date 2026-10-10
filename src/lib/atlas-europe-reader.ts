@@ -31,6 +31,15 @@ const factualSources: Record<string, ReaderSource[]> = {
   pig:[...climateFarming.Cfa.sources,...climateFarming.Csb.sources],
   chicken:climateFarming.Csb.sources,
   sheep:[...climateFarming.Cfb.sources,...cityFarming.reykjavik.sources,cityFarming.athens.sources[1]],
+  livestock:[
+    {url:'https://sustainbeef.hub.inrae.fr/project/wp2.1-description-of-beef-production-systems/wp2.1.1-beef-production-national-statistics',label:'INRAE：2016年の乳牛・肉用繁殖母牛の主要国'},
+    {url:'https://www.cso.ie/en/releasesandpublications/ep/p-coa/censusofagriculture2020-preliminaryresults/livestock/',label:'アイルランドCSO：2020年農業センサスの乳牛・非乳牛（地域別）'},
+    {url:'https://www.bmluk.gv.at/en/topics/agriculture/agriculture-in-austria/animal-production-in-austria/dairy-farming-in-austria.html',label:'オーストリア農業省：山間地の酪農'},
+  ],
+  horticulture:[
+    {url:'https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Vineyards_in_the_EU_-_statistics',label:'Eurostat：2020年のワイン用ブドウ畑・NUTS 2地域'},
+    {url:'https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Agricultural_production_-_orchards',label:'Eurostat：2023年のオリーブ樹園面積'},
+  ],
   water:readingSources('danube','rhine','rotterdam','ludwigshafen'),
   terrain:[...readingSources('alps'),{url:'https://www.eea.europa.eu/en/analysis/maps-and-charts/mountain-massifs',label:'EEA：欧州の山塊図'},{url:'https://www.nationalgeographic.org/encyclopedia/europe-physical-geography/',label:'National Geographic：欧州の半島・平原・山地'}],
   contours:readingSources('alps'),
@@ -181,14 +190,14 @@ export function europeReaderCopy(layer:EuropeLayer) {
     note:'2020年頃の品目別収穫面積格子から集中域を抽出した概略図です。濃淡は数量順位ではありません。ライムギ単独の元格子は未収録です。',
   };
   if(layer.id==='livestock')return {
-    title:'欧州の酪農・畜産',takeaway:'牛の飼養密度の集中域は西・中欧に広がり、豚・鶏・羊は異なる地域にも集中しますが、地図の牛は乳用と肉用を分けていません。',
-    body:'牧草地、飼料作物、加工・流通先の位置は飼養地域を考える条件です。英国西部の牛・羊と東部の穀物畑、セルビア北部の豚と穀物など、農業の組み合わせは地域で異なります。ただしこの牛の格子だけから酪農地帯や肉牛地帯を特定することはできません。生乳の全国量も地域の分布面に置き換えません。',
-    note:'FAO GLW4 2020の家畜密度モデルから集中域を抽出。牛は乳用・肉用、鶏は肉用・採卵用を区別しません。酪農と肉牛を分けた地域資料は未収録です。',
+    title:'欧州の酪農・畜産',takeaway:'乳牛はドイツ・フランス・ポーランド・イタリア・英国・オランダ、肉用繁殖母牛はフランス・スペイン・英国・アイルランドが2016年の主要国です。',
+    body:'INRAEによると、乳牛の主要6か国は当時のEUの67%、肉用繁殖母牛の主要4か国は71%を占めました。アイルランドの2020年農業センサスでは南部に乳牛1,124,842頭、北部・西部に非乳牛395,751頭。オーストリアの山間地にも酪農があります。牧草地、飼料、加工・流通先が畜産の立地を支えます。',
+    note:'四角は2016年の主要国で、英国は当時EU加盟国でした。国名位置は国内の飼養分布ではありません。色面はFAO GLW4 2020の家畜密度モデルで、牛は乳用・肉用を分けません。丸印は農場やNUTS 2境界ではありません。非乳牛と肉用繁殖母牛、肉牛出荷量は別の指標です。',
   };
   if(layer.id==='horticulture')return {
-    title:'欧州の果樹・園芸',takeaway:'柑橘の集中域は地中海側に、温帯果樹と原資料の野菜区分は南欧・西欧などに分布しますが、ブドウ・オリーブ単独の面は含みません。',
-    body:'地中海側の柑橘には冬の温暖さと水管理が関わり、北側の温帯果樹とは栽培条件が異なります。野菜の立地には灌漑や施設栽培、近隣の消費地・輸送網も関係します。この図は集合区分を含むため、特定の果実や野菜の産地を個別に読み取ることはできません。',
-    note:'SPAM 2020の柑橘・温帯果樹・VEGE区分の集中域。温帯果樹はブドウを表すものではなく、VEGEは全野菜を網羅しません。ブドウ・オリーブ単独の元格子は未収録です。',
+    title:'欧州の果樹・園芸',takeaway:'EUのワイン用ブドウ畑はスペイン・フランス・イタリアに2020年の74.9%、オリーブ樹園はスペイン・イタリア・ギリシャ・ポルトガルに2023年の99%があります。',
+    body:'Eurostatの2020年ワイン用ブドウ畑はスペイン約90万ha、フランス約80万ha、イタリア約70万ha。地域の農用地比はリオハ20.1%、ラングドック21.3%、フリウリ約15%、アッティカ9.4%。2023年のオリーブ樹園はEU約460万haで、スペイン53%、イタリア24%、ギリシャ14%、ポルトガル8%。温暖な冬、夏の乾燥と水管理、加工・販売が栽培を支えます。',
+    note:'地図の四角は主要国の目印です。国別の2020年ワイン用ブドウ畑面積、2023年オリーブ樹園面積は国内の産地境界や収穫量ではありません。細かい地域例は右の説明に記載。色面はSPAM 2020の柑橘・温帯果樹・VEGE集合区分で、ブドウ・オリーブ単独の元格子は未収録です。EUの対象を欧州全域と読み替えません。',
   };
   if(layer.id==='water')return {
     title:'河川・湖',takeaway:'ドナウ川は中欧から黒海へ、ライン川はアルプス方面から北海へ流れ、北欧には多数の湖が分布します。',
