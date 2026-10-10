@@ -1,0 +1,40 @@
+---
+import census from '../../../public/assets/atlas/japan-population-v2/prefectures-2020.json';
+import { japanPopulationSources } from '../../data/atlas/japan-population-v2';
+interface Props { showAge?: boolean }
+const { showAge = true } = Astro.props;
+const number = (value: number) => value.toLocaleString('ja-JP');
+const ageKnown = census.national.population - census.national.age.unknown;
+const share = (value: number) => (value / ageKnown * 100).toFixed(1);
+---
+<section class="japan-population-statistics" data-japan-population-statistics>
+ <h3>国内の人口を、都道府県と年齢から読む</h3>
+ <p>2020年10月1日の国勢調査。全国 <strong>{number(census.national.population)}人</strong>。下の県別人口は行政区域の人数で、GHSL都市域の人数や人口格子の合計とは別の統計です。県の総量から県内の居住地を推定しません。</p>
+ {showAge && <div class="japan-population-age">
+  <h4>全国の年齢3区分</h4>
+  <p>年齢が分かる{number(ageKnown)}人を分母にすると、15歳未満 {share(census.national.age.under15)}%、15〜64歳 {share(census.national.age.from15to64)}%、65歳以上 {share(census.national.age.from65)}%。年齢不詳{number(census.national.age.unknown)}人は分母から除き、人数を別に示します。</p>
+  <div class="japan-population-age-bar" role="img" aria-label={`年齢判明人口を分母とした年齢構成。15歳未満${share(census.national.age.under15)}%、15〜64歳${share(census.national.age.from15to64)}%、65歳以上${share(census.national.age.from65)}%。年齢不詳${number(census.national.age.unknown)}人は含まれません。`}>
+   <span style={`width:${share(census.national.age.under15)}%;background:#c2d4b0`}></span><span style={`width:${share(census.national.age.from15to64)}%;background:#638f8f`}></span><span style={`width:${share(census.national.age.from65)}%;background:#425975`}></span>
+  </div>
+  <p>人口の多さと年齢構成は別の特徴です。生活・医療・交通の需要を考える基礎情報として添えます。2020年の未補完表の値であり、現在の高齢化や将来の人口を示しません。</p>
+ </div>}
+ <div class="japan-table-scroll" tabindex="0" role="region" aria-label="47都道府県の2020年人口表。必要に応じて縦横にスクロールできます。">
+  <table>
+   <caption>2020年国勢調査・都道府県別人口（人、年齢不詳補完前）</caption>
+   <thead><tr><th scope="col">都道府県</th><th scope="col">人口</th>{showAge && <><th scope="col">15歳未満</th><th scope="col">15〜64歳</th><th scope="col">65歳以上</th><th scope="col">年齢不詳</th></>}</tr></thead>
+   <tbody>{census.prefectures.map(row => <tr data-japan-population-row={row.id}><th scope="row">{row.name}</th><td>{number(row.population)}</td>{showAge && <><td>{number(row.age.under15)}</td><td>{number(row.age.from15to64)}</td><td>{number(row.age.from65)}</td><td>{number(row.age.unknown)}</td></>}</tr>)}</tbody>
+   <tfoot><tr><th scope="row">全国</th><td>{number(census.national.population)}</td>{showAge && <><td>{number(census.national.age.under15)}</td><td>{number(census.national.age.from15to64)}</td><td>{number(census.national.age.from65)}</td><td>{number(census.national.age.unknown)}</td></>}</tr></tfoot>
+  </table>
+ </div>
+ <p><a href={japanPopulationSources.census.url}>{japanPopulationSources.census.label}</a>を加工。年齢不詳を0へ置き換えず、各県の3区分＋不詳が人口に一致することを確認しています。</p>
+ <p>人口密度の出典：<a href={japanPopulationSources.grid.doi}>Schiavina, Freire, Carioli &amp; MacManus (2023), GHS-POP R2023A</a>。手法：<a href={japanPopulationSources.method.url}>Pesaresi et al. (2024)</a>。<a href={japanPopulationSources.grid.termsUrl}>GHSL・CC BY 4.0</a>。この全国図は5km集約です。東京周辺の元1km格子は既存資産として保持していますが、全国図の表示に置き換えていません。</p>
+</section>
+<style>
+ .japan-population-age-bar{display:flex;width:100%;height:18px;border-radius:4px;overflow:hidden;margin:8px 0}
+ .japan-population-age-bar span{display:block;height:100%}
+ .japan-population-statistics table{font-variant-numeric:tabular-nums}
+ .japan-population-statistics caption{text-align:left;font-weight:600;padding:8px 0}
+ .japan-population-statistics td{text-align:right;white-space:nowrap}
+ .japan-population-statistics th{white-space:nowrap}
+ .japan-population-statistics tfoot{font-weight:700}
+</style>

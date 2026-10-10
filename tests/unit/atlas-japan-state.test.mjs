@@ -6,6 +6,17 @@ import {japanEntryURL,readJapanState,writeJapanState,japanReturnURL,safeJapanRet
 import {writeAsiaAtlasState} from '../../src/lib/atlas-asia-state.ts';
 const url=path=>new URL('https://example.org/insight-journal/atlas/'+path);
 const context={prefectures:['JP-23'],cities:['tokyo','uc-5929'],sites:['toyota']};
+test('農産地と自然の選択を独立URLに保持し、別分野の同名パラメータを引き継がない',()=>{
+ const scoped={...context,agricultureSites:['tokachi-farming'],naturalFeatures:['river-ishikari','climate-region-japan-sea'],urbanCities:['uc-5929','jp-pop-niigata'],climateCities:['tokyo']};
+ const farm=readJapanState(url('japan/agriculture/?topic=wheat&site=tokachi-farming&feature=river-ishikari'),scoped);
+ assert.equal(farm.site,'tokachi-farming');assert.equal(farm.feature,null);assert.equal(farm.city,null);
+ const water=readJapanState(url('japan/nature/?topic=water&feature=river-ishikari&site=tokachi-farming'),scoped);
+ assert.equal(water.feature,'river-ishikari');assert.equal(water.site,null);
+ assert.deepEqual(readJapanState(writeJapanState(url('japan/nature/'),water),scoped),water);
+ assert.equal(readJapanState(url('japan/population/?city=jp-pop-niigata&feature=river-ishikari'),scoped).city,'jp-pop-niigata');
+ assert.equal(readJapanState(url('japan/population/?city=jp-pop-niigata&feature=river-ishikari'),scoped).feature,null);
+ assert.equal(readJapanState(url('japan/nature/?feature=unverified'),scoped).feature,null);
+});
 test('日本への明示入口は現在分野を引き継ぎ元の地図範囲と選択をURLで保存する',()=>{
  const original=url('asia/east-asia/nature/?city=tokyo&place=JPN&lng=137&lat=38&z=4.5');
  const state={field:'natural',topic:'climate',city:'tokyo',place:'JPN',camera:{lng:137,lat:38,zoom:4.5},back:null};

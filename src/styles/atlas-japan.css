@@ -53,3 +53,7 @@
 @media(max-width:959px){.japan-primary-grid{grid-template-columns:1fr}.japan-map-frame{height:560px}.japan-reading{max-height:none;overflow:visible}.japan-climate-grid{grid-template-columns:1fr}.japan-map-heading h2{font-size:17px}}
 @media(max-width:540px){.japan-region>span{width:100%}.japan-map-frame{height:520px}.japan-heading{font-size:11px}.japan-controls{min-height:0}.japan-control-row select{max-width:240px}.japan-climate-grid{gap:10px}.japan-statistics{padding:12px}.japan-map-labels button{font-size:11px;padding:2px 4px}.japan-map-labels small{font-size:9px}}
 @media(pointer:coarse){.japan-control-row button,.japan-control-row select,.japan-map-tools button,.japan-statistics button{min-height:44px}}
+
+.japan-map-labels button.is-muted,.japan-point.is-muted{opacity:.4}.japan-point.is-selected{outline:2px solid #a74830;border-radius:50%}
+[data-japan-clear-selection]{background:#fafbf5;border:1px solid #bdcbc1;padding:5px 9px;min-height:34px;font-size:12px;cursor:pointer}
+.japan-climate-selected{border-bottom:1px solid #c7ccbf;margin-bottom:12px;padding-bottom:12px}.japan-climate-selected .city-farming,.japan-climate-selected .city-climate-reading,.japan-climate-selected .monthly-values{display:none}.japan-climate-selected .climate-source{font-size:10px}.japan-climate-selected .chart-key{font-size:11px}

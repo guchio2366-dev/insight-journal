@@ -1,7 +1,7 @@
 name: Review Japan national atlas
 on:
   pull_request:
-    branches: [main]
+    branches: [main, codex/japan-atlas-preview]
     paths:
       - '.github/workflows/atlas-japan-pc-review.yml'
       - 'scripts/capture-japan-review.mjs'
@@ -10,6 +10,7 @@ on:
       - 'src/components/atlas/JapanAtlasPage.astro'
       - 'src/scripts/atlas-asia-explorer.ts'
       - 'public/assets/atlas/japan-v1/**'
+      - 'public/assets/atlas/japan-*-v2/**'
 permissions:
   contents: read
 concurrency:

@@ -1,0 +1,18 @@
+---
+import {japanAgricultureProducts} from '../../data/atlas/japan-agriculture-v2';
+interface Props {initialTopic?:string}
+const {initialTopic='all'}=Astro.props;
+---
+<div class="japan-farm-controls">
+ <div class="japan-control-row" role="group" aria-label="農業と林業">
+  <button type="button" data-japan-farm-topic="all" aria-pressed={initialTopic==='all'}>農畜産業の全体</button>
+  <button type="button" data-japan-farm-topic="forest" aria-pressed={initialTopic==='forest'}>森林と木材</button>
+ </div>
+ <div class="japan-control-row" role="group" aria-label="農畜産物の選択">
+  {japanAgricultureProducts.map(product=><button type="button" data-japan-farm-topic={product.id} aria-pressed={initialTopic===product.id} style={`--farm-color:${product.color}`}><i aria-hidden="true"></i>{product.title}</button>)}
+ </div>
+</div>
+<style>
+ .japan-farm-controls button{min-height:32px;line-height:1.4;white-space:normal}
+ .japan-farm-controls i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--farm-color);margin-right:5px}
+</style>

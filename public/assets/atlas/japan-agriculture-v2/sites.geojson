@@ -1,0 +1,236 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "agano-rice",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.225,
+          37.835
+        ]
+      },
+      "properties": {
+        "id": "agano-rice",
+        "name": "米｜阿賀野",
+        "products": [
+          "rice"
+        ],
+        "geometryKind": "representative-point",
+        "coordinateMethod": "資料に記載された地域の概略位置を編集して設定（WGS84経緯度）。農場・園地の測量位置ではない。",
+        "extent": null,
+        "quantity": null,
+        "sourceIds": [
+          "agano"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "tokachi-farming",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          143,
+          42.93
+        ]
+      },
+      "properties": {
+        "id": "tokachi-farming",
+        "name": "畑作・畜産｜十勝",
+        "products": [
+          "wheat",
+          "potato",
+          "milk",
+          "beef"
+        ],
+        "geometryKind": "representative-point",
+        "coordinateMethod": "資料に記載された地域の概略位置を編集して設定（WGS84経緯度）。農場・園地の測量位置ではない。",
+        "extent": null,
+        "quantity": null,
+        "sourceIds": [
+          "tokachi"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "nakasatsunai-wheat",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          143.13,
+          42.697
+        ]
+      },
+      "properties": {
+        "id": "nakasatsunai-wheat",
+        "name": "小麦｜中札内",
+        "products": [
+          "wheat"
+        ],
+        "geometryKind": "representative-point",
+        "coordinateMethod": "資料に記載された地域の概略位置を編集して設定（WGS84経緯度）。農場・園地の測量位置ではない。",
+        "extent": null,
+        "quantity": null,
+        "sourceIds": [
+          "nakasatsunai"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "tsumagoi-cabbage",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          138.47,
+          36.48
+        ]
+      },
+      "properties": {
+        "id": "tsumagoi-cabbage",
+        "name": "キャベツ｜嬬恋",
+        "products": [
+          "cabbage"
+        ],
+        "geometryKind": "representative-point",
+        "coordinateMethod": "資料に記載された地域の概略位置を編集して設定（WGS84経緯度）。農場・園地の測量位置ではない。",
+        "extent": null,
+        "quantity": null,
+        "sourceIds": [
+          "tsumagoi"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "yatsushiro-tomato",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          130.55,
+          32.5
+        ]
+      },
+      "properties": {
+        "id": "yatsushiro-tomato",
+        "name": "トマト｜八代周辺",
+        "products": [
+          "tomato"
+        ],
+        "geometryKind": "representative-point",
+        "coordinateMethod": "資料に記載された地域の概略位置を編集して設定（WGS84経緯度）。農場・園地の測量位置ではない。",
+        "extent": null,
+        "quantity": null,
+        "sourceIds": [
+          "yatsushiro",
+          "tomato-season"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "hirosaki-apple",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          140.47,
+          40.6
+        ]
+      },
+      "properties": {
+        "id": "hirosaki-apple",
+        "name": "りんご｜弘前",
+        "products": [
+          "apple"
+        ],
+        "geometryKind": "representative-point",
+        "coordinateMethod": "資料に記載された地域の概略位置を編集して設定（WGS84経緯度）。農場・園地の測量位置ではない。",
+        "extent": null,
+        "quantity": null,
+        "sourceIds": [
+          "hirosaki"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "aridagawa-mandarin",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          135.27,
+          34.04
+        ]
+      },
+      "properties": {
+        "id": "aridagawa-mandarin",
+        "name": "みかん｜有田川",
+        "products": [
+          "mandarin"
+        ],
+        "geometryKind": "representative-point",
+        "coordinateMethod": "資料に記載された地域の概略位置を編集して設定（WGS84経緯度）。農場・園地の測量位置ではない。",
+        "extent": null,
+        "quantity": null,
+        "sourceIds": [
+          "aridagawa"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "betsukai-milk",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          145.02,
+          43.395
+        ]
+      },
+      "properties": {
+        "id": "betsukai-milk",
+        "name": "酪農｜別海",
+        "products": [
+          "milk"
+        ],
+        "geometryKind": "representative-point",
+        "coordinateMethod": "資料に記載された地域の概略位置を編集して設定（WGS84経緯度）。農場・園地の測量位置ではない。",
+        "extent": null,
+        "quantity": null,
+        "sourceIds": [
+          "betsukai",
+          "betsukai-land"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "miyakonojo-livestock",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          131.062,
+          31.755
+        ]
+      },
+      "properties": {
+        "id": "miyakonojo-livestock",
+        "name": "肉用牛・豚｜都城",
+        "products": [
+          "beef",
+          "pork"
+        ],
+        "geometryKind": "representative-point",
+        "coordinateMethod": "資料に記載された地域の概略位置を編集して設定（WGS84経緯度）。農場・園地の測量位置ではない。",
+        "extent": null,
+        "quantity": null,
+        "sourceIds": [
+          "miyakonojo"
+        ]
+      }
+    }
+  ]
+}

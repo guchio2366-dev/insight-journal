@@ -1,0 +1,50 @@
+{
+  "year": 2024,
+  "period": "2024年1–12月",
+  "unit": "千m³（丸太換算）",
+  "sourceId": "wood-balance",
+  "domesticProduction": 34809,
+  "imports": 47065,
+  "totalSupply": 81874,
+  "domesticConsumption": 77871,
+  "exports": 4003,
+  "domesticUses": [
+    {
+      "id": "sawnwood",
+      "title": "製材用材",
+      "value": 22054
+    },
+    {
+      "id": "plywood",
+      "title": "合板用材",
+      "value": 7542
+    },
+    {
+      "id": "pulp",
+      "title": "パルプ・チップ用材",
+      "value": 25131
+    },
+    {
+      "id": "other",
+      "title": "その他用材",
+      "value": 410
+    },
+    {
+      "id": "shiitake",
+      "title": "しいたけ原木",
+      "value": 154
+    },
+    {
+      "id": "fuel",
+      "title": "燃料材",
+      "value": 22580
+    }
+  ],
+  "selfSufficiency": {
+    "total": 42.5,
+    "construction": 52.9,
+    "nonConstruction": 36.5
+  },
+  "partners": null,
+  "note": "製品重量や森林蓄積ではなく丸太換算材積。総需要に輸出を含む。丸めにより内訳合計が総数と1千m³異なる場合がある。輸入・輸出相手別の数量は未収録。"
+}

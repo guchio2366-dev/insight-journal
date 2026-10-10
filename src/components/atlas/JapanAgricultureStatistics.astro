@@ -1,0 +1,54 @@
+---
+import {japanAgricultureProducts as products,japanAgricultureSites as sites,japanAgricultureSources as sources,japanAgricultureSelectionCandidates as candidates,japanAgricultureWheat as wheat,japanForestrySupply as wood} from '../../data/atlas/japan-agriculture-v2';
+interface Props {initialTopic?:string}
+const {initialTopic='all'}=Astro.props;
+const n=(value:number)=>value.toLocaleString('ja-JP');
+const use=wheat.domesticUse.food+wheat.domesticUse.processing+wheat.domesticUse.other;
+const rate=(value:number,total:number)=>`${(value/total*100).toFixed(1)}%`;
+const source=(id:string)=>sources.find(s=>s.id===id)!;
+const wheatSource=source('wheat-supply');
+const woodSource=source('wood-balance');
+---
+<div class="japan-farm-statistics">
+ <section data-japan-agriculture-panel="all" hidden={initialTopic!=='all'}>
+  <h3>採用した10品目と産地の事例</h3>
+  <p>{candidates.basis}</p>
+  <div class="japan-table-scroll"><table><thead><tr><th scope="col">品目</th><th scope="col">地域の事例</th><th scope="col">採用理由</th></tr></thead><tbody>{products.map(p=><tr><th scope="row"><button type="button" data-japan-farm-topic={p.id}>{p.title}</button></th><td>{sites.filter(s=>s.products.includes(p.id)).map((s,i)=><Fragment>{i?'・':''}<button type="button" data-japan-farm-site={s.id}>{s.name.split('｜')[1]}</button></Fragment>)}</td><td>{p.selectionReason}</td></tr>)}</tbody></table></div>
+  <details><summary>次点の品目と、今回採用を見送った理由</summary><ul>{candidates.next.map(p=><li><strong>{p.title}</strong>：{p.reason}</li>)}</ul><p>{candidates.forestry}</p></details>
+  <p>国内細地域の数量は未収録です。点の大きさや数は生産量を表しません。<a href={source('municipal-2024').href}>市町村別詳細原表</a>は取得障害のため値を未掲載とし、秘匿や欠測を0に変換していません。</p>
+ </section>
+ <section data-japan-agriculture-panel="wheat" hidden={initialTopic!=='wheat'}>
+  <h3>小麦を、供給・用途・輸入先から読む</h3>
+  <p>2023年度。原麦の需給数量、外国産食糧用小麦の輸入先、小麦粉の用途はそれぞれ集計対象が異なります。</p>
+  <div class="japan-farm-three-columns">
+   <section aria-labelledby="jp-wheat-supply"><h4 id="jp-wheat-supply">供給と行先</h4><p class="farm-period">原麦・千t／2023年度</p>
+    <dl><div><dt>国内生産</dt><dd>{n(wheat.production)}</dd></div><div><dt>純輸入（輸入−輸出）</dt><dd>{n(wheat.netImports)}</dd></div><div><dt>在庫減</dt><dd>{n(-wheat.inventoryChange)}</dd></div><div class="farm-total"><dt>国内消費仕向量</dt><dd>{n(use)}</dd></div></dl>
+    <div class="farm-bar" role="img" aria-label={`国内生産${rate(wheat.production,use)}、純輸入${rate(wheat.netImports,use)}、在庫減${rate(-wheat.inventoryChange,use)}`}>{[{v:wheat.production,c:'#326b63',label:'国内生産'},{v:wheat.netImports,c:'#789762',label:'純輸入'},{v:-wheat.inventoryChange,c:'#b8934a',label:'在庫減'}].map(r=><span style={`width:${r.v/use*100}%;background:${r.c}`} title={`${r.label} ${n(r.v)}千t`}></span>)}</div>
+    <p>粗食料 {n(wheat.domesticUse.food)}、加工用 {n(wheat.domesticUse.processing)}、その他 {n(wheat.domesticUse.other)} 千t。</p>
+    <p>小麦粉の用途別生産はパン {n(wheat.flourUses.bread)}、めん {n(wheat.flourUses.noodles)}、菓子 {n(wheat.flourUses.confectionery)} 千t。原麦の需給表へ足し合わせません。</p>
+   </section>
+   <section aria-labelledby="jp-wheat-imports"><h4 id="jp-wheat-imports">輸入先</h4><p class="farm-period">外国産食糧用小麦・t／2023年度</p>
+    <ul class="farm-ranked">{wheat.origins.rows.map(r=><li><div><span>{r.name}</span><b>{n(r.tonnes)} t</b></div><div class="farm-single-bar"><span style={`width:${r.tonnes/wheat.origins.total*100}%`}></span></div><small>{rate(r.tonnes,wheat.origins.total)}</small></li>)}</ul>
+    <p>対象計 {n(wheat.origins.total)} t。国家貿易とそれ以外を含む外国産食糧用小麦。需給表の純輸入とは範囲が異なります。</p>
+   </section>
+   <section aria-labelledby="jp-wheat-self"><h4 id="jp-wheat-self">日本の自給率</h4><p class="farm-period">重量ベース・公表系列</p><p class="farm-key-number">{wheat.selfSufficiency.at(-1)!.rate}<span>%</span></p><p>2023年度</p><table><caption>直近5年度</caption><thead><tr><th scope="col">年度</th><th scope="col">自給率</th></tr></thead><tbody>{wheat.selfSufficiency.map(r=><tr><th scope="row">{r.year}</th><td>{r.rate}%</td></tr>)}</tbody></table><p>公表自給率と、左の供給数量から計算した割合は定義が異なります。世界シェアで穴埋めせず、日本の需給を示します。</p></section>
+  </div><p class="farm-source"><a href={wheatSource.href}>{wheatSource.title}（28・34頁）</a>。既存の確認済み値を再利用。</p>
+ </section>
+ {products.filter(p=>p.id!=='wheat').map(p=><section data-japan-agriculture-panel={p.id} hidden={initialTopic!==p.id}><h3>{p.title}の産地資料</h3><p>確認した地域事例です。各地域の生産量順位・市町村内の園地境界は表していません。</p><div class="japan-table-scroll"><table><thead><tr><th scope="col">地域</th><th scope="col">資料から確認したこと</th><th scope="col">出典・対象時点</th></tr></thead><tbody>{sites.filter(s=>s.products.includes(p.id)).map(s=><tr><th scope="row"><button type="button" data-japan-farm-site={s.id}>{s.name}</button></th><td>{s.overview}</td><td>{s.sourceIds.map(id=><p><a href={source(id).href}>{source(id).title}</a><br/><small>{source(id).period}</small></p>)}</td></tr>)}</tbody></table></div><p>供給・用途・輸出入先・自給率の同一品目原表は、まだ接続できていません。この項目には数量グラフを表示しません。</p></section>)}
+ <section data-japan-agriculture-panel="forest" hidden={initialTopic!=='forest'}>
+  <h3>森林の面積と、木材の供給・利用は別の指標</h3><p>詳細な森林被覆図は未収録。以下は全国の木材需給であり、地図の各場所の伐採量ではありません。</p>
+  <div class="japan-farm-three-columns">
+   <section><h4>供給と行先</h4><p class="farm-period">{wood.period}・{wood.unit}</p><dl><div><dt>国内生産</dt><dd>{n(wood.domesticProduction)}</dd></div><div><dt>輸入</dt><dd>{n(wood.imports)}</dd></div><div class="farm-total"><dt>総供給・総需要</dt><dd>{n(wood.totalSupply)}</dd></div><div><dt>国内消費</dt><dd>{n(wood.domesticConsumption)}</dd></div><div><dt>輸出</dt><dd>{n(wood.exports)}</dd></div></dl><p>製材・合板だけでなく、パルプ・チップや燃料も含みます。丸太に換算した体積です。</p></section>
+   <section><h4>用途と輸出入</h4><p class="farm-period">国内消費・{wood.unit}</p><dl>{wood.domesticUses.map(r=><div><dt>{r.title}</dt><dd>{n(r.value)}</dd></div>)}</dl><p>輸出入相手別の数量は未収録。全商品の輸出相手を木材の相手先として代用しません。</p></section>
+   <section><h4>日本の木材自給率</h4><p class="farm-period">丸太換算・2024年</p><p class="farm-key-number">{wood.selfSufficiency.total}<span>%</span></p><dl><div><dt>建築用材等</dt><dd>{wood.selfSufficiency.construction}%</dd></div><div><dt>非建築用材等</dt><dd>{wood.selfSufficiency.nonConstruction}%</dd></div></dl><p>国内生産 ÷ 総需要。森林面積の割合や、製品の国産材含有率ではありません。</p></section>
+  </div><p>{wood.note}</p><p class="farm-source"><a href={woodSource.href}>{woodSource.title}（本文2–5頁）</a> ／ <a href={source('forest-resources').href}>森林資源の現況（2022年3月31日）</a></p>
+ </section>
+ <details class="farm-source-list"><summary>農林業の出典・取得状況</summary><ul>{sources.map(s=><li><a href={s.href}>{s.title}</a>：{s.period}。{s.status==='download-blocked'?'原表未取得（403）':s.status==='existing-checked-in'?'既存値を再利用':'資料を確認'}。{s.note&&<span>{s.note}</span>}</li>)}</ul><p>農林水産省・林野庁の資料は<a href="https://www.maff.go.jp/j/use/link.html">PDL1.0の利用条件</a>に従って出典を記載。写真・動画・ロゴは使用しません。地域紹介は事実を独自に要約し、原文を転載していません。</p></details>
+</div>
+<style>
+ .japan-farm-statistics p{line-height:1.7}.japan-farm-statistics h4{font-size:1rem;margin:0 0 6px}.japan-farm-statistics details{margin-top:16px}.japan-farm-statistics li{margin-bottom:8px;line-height:1.6}
+ .japan-farm-three-columns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.japan-farm-three-columns>section{border:1px solid #d7ddd7;border-radius:8px;padding:14px;background:#fafbf8;min-width:0}
+ .farm-period,.farm-source,.farm-source-list{font-size:12px;color:#59635d}.japan-farm-statistics dl{margin:12px 0}.japan-farm-statistics dl>div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #e0e5de;padding:7px 0}.japan-farm-statistics dt{font-size:13px}.japan-farm-statistics dd{margin:0;white-space:nowrap;font-variant-numeric:tabular-nums}.farm-total{font-weight:700}
+ .farm-bar{display:flex;height:16px;border-radius:3px;overflow:hidden;margin:12px 0}.farm-bar span{display:block}.farm-ranked{list-style:none;padding:0;margin:14px 0}.farm-ranked li>div:first-child{display:flex;justify-content:space-between;gap:8px;font-size:13px}.farm-single-bar{height:9px;background:#e6ebe4;margin-top:4px}.farm-single-bar span{display:block;height:100%;background:#789762}.farm-ranked small{font-size:12px}.farm-key-number{font-size:38px;font-weight:700;margin:8px 0!important;line-height:1.25!important;color:#326b63}.farm-key-number span{font-size:20px}.japan-farm-statistics table{width:100%;font-size:13px}.japan-farm-statistics caption{text-align:left;font-size:12px;margin-bottom:4px}.japan-farm-statistics th,.japan-farm-statistics td{vertical-align:top}.japan-farm-statistics button{cursor:pointer;text-align:left}.japan-farm-statistics td p{margin:0 0 8px}
+ @media(max-width:1199px){.japan-farm-three-columns{grid-template-columns:1fr}.japan-farm-three-columns>section{padding:14px}.farm-key-number{font-size:34px}}
+</style>
