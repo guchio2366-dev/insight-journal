@@ -1,16 +1,18 @@
 import {renderLatinUrbanMap,renderLatinReadingDensityMap,latinReadingDensityLegend} from '../lib/atlas-latin-reading-population';
 import {latinUrbanPopulations,latinUrbanSource} from '../data/atlas/latin-america/urban-population-2018';
-import {renderLatinCultureMap} from '../lib/atlas-latin-reading-culture';
+import {renderLatinCulturePatterns,renderCulturePatternLegend,culturePatternReading} from '../lib/atlas-latin-culture-patterns';
+import {culturePattern} from '../data/atlas/latin-america/culture-distributions';
 import {latinCultureGroups,latinCultureRegions,latinCultureNational,latinCultureOverview,latinCultureCoverage,type LatinCultureSection} from '../data/atlas/latin-america/culture-reading';
-import {latinCultureSupplementReading,latinCultureSupplementLinks} from '../lib/atlas-latin-culture-supplement';
+import {latinCultureSupplementReading} from '../lib/atlas-latin-culture-supplement';
+import {latinCultureSupplementSelection} from '../data/atlas/latin-america/culture-supplement-2018';
 import {initLatinMapCamera} from './atlas-latin-reading-map';
 const escape=(s:unknown)=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 export function initLatinReadingPopulation(root:HTMLElement){
  if(root.dataset.latinPopulationReady==='1')return;root.dataset.latinPopulationReady='1';
  const q=<T extends HTMLElement=HTMLElement>(name:string)=>root.querySelector<T>(`[data-lp-${name}]`)!;
- let scope='all',layer='urban',section='population',city='',choice='';
- const read=()=>{const p=new URLSearchParams(location.search);scope=['all','central','south'].includes(p.get('scope')!)?p.get('scope')!:'all';layer=p.get('layer')==='spatial'?'spatial':'urban';section=['ethnicity','religion'].includes(p.get('section')!)?p.get('section')!:'population';city=latinUrbanPopulations.some(c=>c.id===p.get('city'))?p.get('city')!:'';choice=p.get('group')??'';};
- const write=()=>{const url=new URL(location.href);for(const key of ['place','only','fallback','from','sourceLayer','sourcePlace','sourceScope','sourceOnly','sourceFallback','sourceCase'])url.searchParams.delete(key);url.searchParams.set('scope',scope);url.searchParams.set('layer',layer);city?url.searchParams.set('city',city):url.searchParams.delete('city');choice?url.searchParams.set('group',choice):url.searchParams.delete('group');history.pushState(null,'',url);};
+ let scope='all',layer='urban',section='population',city='',choice='',cultureOnly=false;
+ const read=()=>{const p=new URLSearchParams(location.search);scope=['all','central','south'].includes(p.get('scope')!)?p.get('scope')!:'all';layer=p.get('layer')==='spatial'?'spatial':'urban';section=['ethnicity','religion'].includes(p.get('section')!)?p.get('section')!:'population';city=latinUrbanPopulations.some(c=>c.id===p.get('city'))?p.get('city')!:'';choice=p.get('group')??'';cultureOnly=p.get('cultureOnly')==='1';};
+ const write=()=>{const url=new URL(location.href);for(const key of ['place','only','fallback','from','sourceLayer','sourcePlace','sourceScope','sourceOnly','sourceFallback','sourceCase'])url.searchParams.delete(key);url.searchParams.set('scope',scope);url.searchParams.set('layer',layer);city?url.searchParams.set('city',city):url.searchParams.delete('city');choice?url.searchParams.set('group',choice):url.searchParams.delete('group');cultureOnly?url.searchParams.set('cultureOnly','1'):url.searchParams.delete('cultureOnly');history.pushState(null,'',url);};
  const render=()=>{
   q<HTMLSelectElement>('scope-select').value=scope;q<HTMLSelectElement>('layer-select').value=layer;q('layer-label').hidden=section!=='population';root.dataset.lpLayer=layer;
   const heading=q('reading-title'),overview=q('overview'),body=q('reading-body'),legend=q('target-legend');
@@ -24,18 +26,27 @@ export function initLatinReadingPopulation(root:HTMLElement){
    legend.innerHTML=layer==='urban'?'<p>円の面積＝都市集積域の人数・2018年。7都市を収録。小さな円を0人と解釈しません。国境面は選択できません。</p>':`<p>色＝居住人口密度推計・2020年（人/km²）</p><ul class="lp-density-legend">${latinReadingDensityLegend.map(b=>`<li><i style="background:${b.color}"></i>${b.label}</li>`).join('')}</ul><p>0は有効な0。透明：欠測・対象外。表示約14km、集計元10km等積格子。人数の図ではありません。</p>`;
    q('status').textContent=layer==='urban'?'国連WUP2018・CC BY3.0 IGO。都市域の定義は国ごとに異なり、現在人口ではありません。中米・カリブの都市人数は未収録。':'GHSL2020・CC BY4.0。配信原値は変更していません。';
   }else{
-   const kind=section as LatinCultureSection,groups=latinCultureGroups[kind],info=latinCultureOverview[kind],host=root.querySelector<HTMLElement>(`[data-lc-map="${section}"]`)!;
+   const kind=section as LatinCultureSection,groups=latinCultureGroups[kind],host=root.querySelector<HTMLElement>(`[data-lc-map="${section}"]`)!;
    const supplement=kind==='ethnicity'?latinCultureSupplementReading(choice):null;
    const [regionId,groupId]=choice.split(':'),region=latinCultureRegions.find(r=>r.id===regionId),index=groups.findIndex(g=>g.id===groupId),valid=(region||regionId==='PAN'&&kind==='ethnicity')&&index>=0;
-   if(!valid&&!supplement)choice='';host.innerHTML=renderLatinCultureMap(kind,scope,choice);initLatinMapCamera(host);
-   q('map-heading').textContent=kind==='ethnicity'?'帰属・自己認識の州別計数と全国補助統計':'宗教・信条の州別計数';heading.textContent=supplement?supplement.title:valid?`${region?.name??'パナマ全国'}：${groups[index].name}`:info.title;
-   overview.textContent=supplement?supplement.overview:valid?`${region?.name??'パナマ全国'}の公表人数は${(region?(kind==='ethnicity'?region.identity:region.religion)[index]:latinCultureNational.ethnicity[1].values[index]).toLocaleString('ja-JP')}人です。${region?'チリ2024年・州全体の集計':'パナマ2023年・全国の別設問指標'}。`:info.overview;
-   body.innerHTML=supplement?supplement.body:`${kind==='ethnicity'?latinCultureSupplementLinks(choice):''}<h3>解説：設問と統計範囲を保って読む</h3><p>${escape(info.explanation)}</p><p>${escape(kind==='ethnicity'?'チリ：全年齢、設問ごとの未回答を分母から除外。パナマ：最終通常居住者4,064,780人。先住民とアフリカ系は別設問で、足し合わせません。':'チリ：宗教・信条の設問に回答した15歳以上の通常居住者。掲載3分類以外の回答もあるため、残差を新しい宗教として作りません。')}</p><p>${escape(latinCultureCoverage)}</p><div>${groups.map(g=>`<p><strong style="color:${g.color}">${g.name}</strong></p>`).join('')}</div><details open><summary>原典・利用条件</summary>${latinCultureNational[kind].map(r=>`<p>${r.name}・${r.year}年：<a href="${r.source}">国勢調査原典</a> · <a href="${r.licenseUrl}">${r.license}</a></p>`).join('')}<p>抽出・日本語表示・記号配置はInsight Journal。全国割合から居住域を描いていません。</p></details>`;
-   legend.innerHTML=`<div class="latin-culture-key">${groups.map(g=>`<span><i style="background:${g.color}"></i>${g.name}</span>`).join('')}</div><p>${kind==='ethnicity'?'丸＝チリ州別計数／色四角＝パナマ全国の別設問／＋四角＝グアテマラ・コロンビアの資料別統計。':'丸＝チリ州別計数。'}位置・面積は人数や居住域を示しません。</p>`;q('status').textContent=kind==='ethnicity'?'部分収録：チリ6州／パナマ全国／グアテマラ全国6分類／コロンビア33行政区分。中南米全域の整備完了を意味しません。':'宗教・信条はチリ2024全国・代表6州の3分類のみ。その他は未収録。中南米全域の整備完了を意味しません。';
+   const requested=culturePattern(kind,choice),pattern=requested&&(scope==='all'||requested.kind==='national-survey'||requested.scope===scope)?requested:undefined;if(!valid&&!supplement&&!pattern)choice='';if(!pattern)cultureOnly=false;
+   host.innerHTML=renderLatinCulturePatterns(kind,scope,choice,cultureOnly);initLatinMapCamera(host);
+   const reading=culturePatternReading(kind,choice,cultureOnly);
+   q('map-heading').textContent=kind==='ethnicity'?'民族・文化の地域的なつながり':'宗教の全国構成と地域文化';
+   heading.textContent=supplement?supplement.title:valid?`${region?.name??'パナマ全国'}：${groups[index].name}`:reading.title;
+   overview.textContent=supplement?supplement.overview:valid?`${region?.name??'パナマ全国'}の公表人数は${(region?(kind==='ethnicity'?region.identity:region.religion)[index]:latinCultureNational.ethnicity[1].values[index]).toLocaleString('ja-JP')}人です。${region?'チリ2024年・州全体の集計':'パナマ2023年・全国の別設問指標'}。`:reading.overview;
+   const selection=supplement?latinCultureSupplementSelection(choice):null;
+   body.innerHTML=selection?`<h3>解説：資料の設問と範囲を確かめる</h3><p>${escape(selection.data.definition)}</p><p>${escape(selection.data.denominator)}</p><p>全国・行政区分の値から、民族の居住域を描いていません。</p><p><a href="#latin-culture-statistics">詳しい統計は地図下へ</a> · <a href="${selection.data.termsUrl}">${escape(selection.data.terms)}</a></p>`:valid?`<h3>解説：以前の統計選択を読む</h3><p>${escape(latinCultureOverview[kind].explanation)}</p><p><a href="#latin-culture-statistics">原表と利用条件は地図下へ</a></p>`:reading.body;
+   legend.innerHTML=renderCulturePatternLegend(kind,choice,scope);
+   q('status').textContent=kind==='ethnicity'?'地域記述に基づく概略。民族の自己認識・言語・文化を区別し、未掲載の集団がいないとは読みません。':'棒：18国・地域の2013–14年調査、18歳以上。記号なしは未調査・未掲載。国内の居住域や現在値ではありません。';
+   for(const table of root.querySelectorAll<HTMLElement>('[data-lc-supplement-source]')){
+    const country=table.dataset.lcSupplementSource!;const detail=table.querySelector<HTMLElement>('[data-lc-supplement-detail]');if(detail)detail.innerHTML=latinCultureSupplementReading(choice.startsWith(country+':')?choice:country+':national')!.body;
+    if(selection&&selection.data.country===country)(table as HTMLDetailsElement).open=true;
+   }
   }
  };
- root.addEventListener('change',e=>{const t=e.target as HTMLSelectElement;if(t.matches('[data-lp-scope-select]'))scope=t.value;else if(t.matches('[data-lp-layer-select]'))layer=t.value;else return;render();write();});
+ root.addEventListener('change',e=>{const t=e.target as HTMLSelectElement;if(t.matches('[data-lp-scope-select]'))scope=t.value;else if(t.matches('[data-lp-layer-select]'))layer=t.value;else if(t.matches('[data-lc-isolate]'))cultureOnly=(t as unknown as HTMLInputElement).checked;else return;render();write();});
  const choose=(target:Element)=>{const cityButton=target.closest<HTMLElement>('[data-lp-city]'),culture=target.closest<HTMLElement>('[data-lc-select]');if(cityButton){city=cityButton.dataset.lpCity!;layer='urban';}else if(culture)choice=culture.dataset.lcSelect!;else return;render();write();};
- root.addEventListener('click',e=>{if(e.target instanceof Element&&!e.defaultPrevented)choose(e.target);});root.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target instanceof SVGElement&&e.target.matches('[data-lp-city],[data-lc-select]')){e.preventDefault();choose(e.target);}});
+ root.addEventListener('click',e=>{if(e.target instanceof Element&&!e.defaultPrevented){if(e.target.closest('[data-lc-reset]')){choice='';cultureOnly=false;render();write();}else choose(e.target);}});root.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target instanceof SVGElement&&e.target.matches('[data-lp-city],[data-lc-select]')){e.preventDefault();choose(e.target);}});
  const restore=()=>{read();render();};window.addEventListener('popstate',restore);window.addEventListener('latin-section-change',restore);read();render();
 }

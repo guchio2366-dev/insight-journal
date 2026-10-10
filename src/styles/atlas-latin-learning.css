@@ -262,3 +262,16 @@
 .latin-workspace[data-latin-reading-population=true] .lp-density-legend i{display:inline-block;width:15px;height:12px;border:1px solid #71827c}
 
 .latin-workspace[data-latin-reading-population=true]:is([data-latin-active-section=ethnicity],[data-latin-active-section=religion]) [data-lp-status]{margin:3px 0;line-height:1.45!important}
+.latin-culture-pattern-map [data-lc-pattern]{cursor:pointer}
+.latin-culture-pattern-map [data-lc-pattern]:focus-visible{outline:3px solid #a64e2a}
+.latin-culture-pattern-map [data-latin-culture-label-text]{font-size:15px;font-weight:600;fill:#29434b;paint-order:stroke;stroke:#fffefa;stroke-width:4px;stroke-linejoin:round}
+.latin-culture-pattern-map [data-lc-survey-label] text{font-size:12px;fill:#3c565b;paint-order:stroke;stroke:#fffefa;stroke-width:3px}
+.latin-culture-pattern-key{display:flex;flex-wrap:wrap;gap:4px 7px}
+.latin-culture-pattern-key button{display:flex;align-items:center;gap:5px;min-height:30px;padding:3px 5px;font-size:12px;border:1px solid #b8c9be;background:#fffefa;color:#263f47;cursor:pointer}
+.latin-culture-pattern-key button[aria-pressed=true]{border-color:#274951;background:#e4eee7;font-weight:700}
+.latin-culture-pattern-key i{width:12px;height:12px;border-radius:2px}
+.latin-culture-reading-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:15px 0}
+.latin-culture-reading-actions label{display:flex;align-items:center;gap:4px;font-size:13px}
+.latin-culture-definition{font-size:13px;color:#586e64}
+.latin-culture-citations{font-size:12px}
+@media(min-width:960px){.latin-workspace:is([data-latin-active-section=ethnicity],[data-latin-active-section=religion]) .latin-map-column .lp-map{height:calc(100dvh - 469px)!important}}

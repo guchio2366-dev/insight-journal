@@ -1,0 +1,23 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {Window} from 'happy-dom';
+import {populationBundle} from './atlas-latin-population-helpers.mjs';
+const code=await populationBundle("export * from './src/lib/atlas-latin-culture-patterns.ts';export * from './src/data/atlas/latin-america/culture-distributions.ts';");
+const lib=await import(`data:text/javascript;base64,${Buffer.from(code).toString('base64')}`);
+const parse=svg=>{const w=new Window();w.document.body.innerHTML=svg;return w;};
+test('Regional evidence distinguishes language/history/culture and has traceable rights, without copying source assets',()=>{
+ assert.equal(lib.ethnicityPatterns.length,7);for(const p of lib.ethnicityPatterns){assert.ok(p.sources.length);for(const id of p.sources){const s=lib.cultureSources.find(s=>s.id===id);assert.ok(s);assert.match(s.url,/^https:/);assert.ok(s.terms&&s.restriction&&s.evidence);}assert.ok(p.paths.flat().every(([lon,lat])=>Number.isFinite(lon)&&Number.isFinite(lat)&&lon>=-93&&lon<=-33&&lat>=-56&&lat<=28));}
+ assert.match(lib.culturePattern('ethnicity','pattern:quechua').definition,/言語.*民族自己認識/);assert.match(lib.culturePattern('ethnicity','pattern:mapuche').definition,/歴史.*現在.*境界ではありません/);assert.equal(lib.culturePattern('religion','pattern:maya'),undefined);
+});
+test('All regional patterns remain present and visible on selection; isolation never changes the underlying geometry',()=>{
+ const before=parse(lib.renderLatinCulturePatterns('ethnicity')),after=parse(lib.renderLatinCulturePatterns('ethnicity','all','pattern:maya')),only=parse(lib.renderLatinCulturePatterns('ethnicity','all','pattern:maya',true));
+ try{for(const w of [before,after,only])assert.equal(w.document.querySelectorAll('[data-lc-pattern]').length,7);assert.ok([...after.document.querySelectorAll('[data-lc-pattern]')].every(el=>el.style.display!=='none'));assert.equal([...only.document.querySelectorAll('[data-lc-pattern]')].filter(el=>el.style.display!=='none').length,1);assert.equal(after.document.querySelectorAll('[data-lc-pattern] path[fill]:not([fill=none])').length,0);assert.equal(after.document.querySelector('image'),null);assert.equal(after.document.querySelector('[data-lp-country]'),null);assert.equal(before.document.querySelectorAll('[data-lc-schematic-region]').length,after.document.querySelectorAll('[data-lc-schematic-region]').length);}finally{for(const w of [before,after,only])w.happyDOM.close();}
+});
+test('National religion data preserve published native percentages, other answers, and year instead of manufacturing territories',()=>{
+ assert.equal(lib.religionSurvey.length,18);assert.equal(lib.religionSurvey.find(r=>r.code==='ARG').values[2],11);assert.deepEqual(lib.religionSurvey.find(r=>r.code==='GTM').values,[50,41,6,3]);assert.deepEqual(lib.religionSurvey.find(r=>r.code==='URY').values,[42,15,37,6]);assert.ok(lib.religionSurvey.some(r=>r.values.reduce((a,b)=>a+b,0)!==100));assert.match(lib.pewReligionSource.period,/2013–14/);assert.match(lib.pewReligionSource.evidence,/18歳以上/);assert.match(lib.pewTranslationNotice,/has not reviewed or approved/);
+ const w=parse(lib.renderLatinCulturePatterns('religion'));try{assert.equal(w.document.querySelectorAll('[data-lc-pattern]').length,4);assert.equal(w.document.querySelectorAll('[data-lc-survey]').length,54);const bars=w.document.querySelector('[data-lc-survey="GTM"][data-lc-share="41"]').querySelectorAll('rect');assert.ok(Math.abs(Number(bars[1].getAttribute('width'))/Number(bars[0].getAttribute('width'))-.41)<1e-9);assert.equal(w.document.querySelectorAll('[data-lc-pattern] path[fill]:not([fill=none])').length,0);}finally{w.happyDOM.close();}
+});
+test('Scopes retain relevant patterns and country survey coverage, with no empty isolated map for an invalid selection',()=>{
+ for(const [scope,n,m] of [['central',2,24],['south',5,30]]){const e=parse(lib.renderLatinCulturePatterns('ethnicity',scope)),r=parse(lib.renderLatinCulturePatterns('religion',scope));try{assert.equal(e.document.querySelectorAll('[data-lc-pattern]').length,n);assert.equal(r.document.querySelectorAll('[data-lc-survey]').length,m);}finally{e.happyDOM.close();r.happyDOM.close();}}
+ const invalid=parse(lib.renderLatinCulturePatterns('religion','all','pattern:fake',true));try{assert.ok([...invalid.document.querySelectorAll('[data-lc-pattern]')].every(el=>el.style.display!=='none'));}finally{invalid.happyDOM.close();}
+});

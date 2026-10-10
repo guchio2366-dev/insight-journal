@@ -7,6 +7,7 @@ on:
       - 'src/data/atlas/latin-america/**'
       - 'public/assets/atlas/latin-reading*/**'
       - 'scripts/verify-latin-reading-pc.mjs'
+      - 'scripts/verify-latin-culture-pc.mjs'
       - '.github/workflows/latin-reading-pc-review.yml'
 permissions:
   contents: read
@@ -39,11 +40,11 @@ jobs:
           fi
           test -n "$(fc-list ':lang=ja' family)"
       - run: npm ci --no-audit --no-fund
-      - run: node --test tests/unit/atlas-latin-reading.test.mjs tests/unit/atlas-latin-agriculture.test.mjs
+      - run: node --test tests/unit/atlas-latin-reading.test.mjs tests/unit/atlas-latin-culture-patterns.test.mjs tests/unit/atlas-latin-agriculture.test.mjs
       - run: npm run build
       - run: node --test tests/e2e/atlas-latin-population.test.mjs tests/e2e/atlas-latin-essential-legends.test.mjs tests/e2e/atlas-latin-workspace-navigation.test.mjs tests/e2e/atlas-regional-workspace-navigation.test.mjs tests/e2e/atlas-latin-forestry-workspace.test.mjs
       - name: Capture and check exact head
-        run: node scripts/verify-latin-reading-pc.mjs
+        run: node scripts/verify-latin-culture-pc.mjs
         env:
           LATIN_READING_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
           LATIN_READING_OUTPUT: ${{ runner.temp }}/latin-reading-review/after
@@ -52,16 +53,16 @@ jobs:
           ref: ${{ github.event.pull_request.base.sha }}
           path: .review-baseline
           persist-credentials: false
-      - name: Capture PR316 dependency at matching viewport and scroll
+      - name: Capture current main at matching viewport and scroll
         working-directory: .review-baseline
         run: |
           npm ci --no-audit --no-fund
           npm run build
-          node "$GITHUB_WORKSPACE/scripts/verify-latin-reading-pc.mjs"
+          node "$GITHUB_WORKSPACE/scripts/verify-latin-culture-pc.mjs"
         env:
           LATIN_READING_BASELINE: '1'
           LATIN_READING_OUTPUT: ${{ runner.temp }}/latin-reading-review/before
-      - name: Confirm nature and pending industry stay unchanged
+      - name: Confirm published farming and forestry geometry stay unchanged
         run: |
           node --input-type=module <<'JS'
           import assert from 'node:assert/strict';

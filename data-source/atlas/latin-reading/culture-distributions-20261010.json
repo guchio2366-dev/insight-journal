@@ -1,0 +1,642 @@
+{
+  "checkedAt": "2026-10-10",
+  "base": "755ec125daf9272e21328ff4c1ecab32756ce917",
+  "sources": [
+    {
+      "id": "pew-2014",
+      "title": "Pew Research Center, Religion in Latin America (2014), p.14 / QCURREL",
+      "url": "https://www.pewresearch.org/wp-content/uploads/sites/20/2014/11/Religion-in-Latin-America-11-12-PM-full-PDF.pdf#page=15",
+      "period": "2013–14年調査、2014年11月13日公表",
+      "terms": "Pew Research Center利用条件 §1–2。CCライセンスではありません。",
+      "termsUrl": "https://www.pewresearch.org/about/terms-and-conditions/",
+      "evidence": "18歳以上の全国面接調査。施設入居者等と一部到達困難地域は対象外。宗教の自己申告による回答割合。",
+      "restriction": "原図・本文の転載ではなく、原表の少量の事実値を独自図表化。その他の分類は地図で省略し、3群を100%へ正規化しない。現在の宗教構成や国内の居住域を表さない。"
+    },
+    {
+      "id": "palmares-salvador",
+      "title": "Fundação Cultural Palmares: Terreiro da Casa Branca celebra 40 anos de tombamento",
+      "url": "https://www.gov.br/palmares/pt-br/assuntos/terreiro-da-casa-branca-celebra-40-anos-de-tombamento",
+      "period": "2024年6月7日",
+      "terms": "CC BY-ND 3.0。原文・画像の改変転載や翻訳転載は行わない。",
+      "termsUrl": "https://creativecommons.org/licenses/by-nd/3.0/",
+      "evidence": "Casa Branca、Gantois、Opô Afonjáなどのカンドンブレ寺院をSalvadorに記述。",
+      "restriction": "事実・地名に基づく独自の都市代表注記。寺院の正確座標、信者の居住域、住民割合を示さない。"
+    },
+    {
+      "id": "unicef-atlas",
+      "title": "UNICEF / FUNPROEIB Andes, Atlas sociolingüístico de pueblos indígenas en América Latina, tomo 2",
+      "url": "https://red.minedu.gob.bo/repositorio/fuente/6660.pdf",
+      "period": "2009年刊。本文581・837・863–864・877・1043頁",
+      "terms": "© UNICEF / FUNPROEIB Andes。明示的なオープンライセンスなし。",
+      "termsUrl": "https://www.unicef.org/legal",
+      "evidence": "マヤ諸民族・言語共同体、ペルーのQuechua/Aimara言語変種、Belizeのガリフナ、Palenqueの地域記述。",
+      "restriction": "本文の短い事実を独自に要約。原図・画像・表・長文は複製しない。2009年の地域記述を現在の民族自己認識の居住境界へ転用しない。"
+    },
+    {
+      "id": "memoria-mapuche",
+      "title": "Biblioteca Nacional de Chile, Memoria Chilena: El pueblo mapuche",
+      "url": "https://www.memoriachilena.gob.cl/602/w3-article-781.html",
+      "period": "歴史的地域の解説。現在の精密分布ではない。",
+      "terms": "minisitio本文はCC BY-SA 3.0。独自の日本語要約も同ライセンス、画像などのデジタル資料は別条件。",
+      "termsUrl": "https://www.memoriachilena.gob.cl/602/w3-article-123838.html",
+      "evidence": "チリ中南部、Itata川〜Toltén川の歴史的地域と都市への移住を記述。",
+      "restriction": "歴史的地域への案内帯のみ。現在の民族居住域を画定せず、写真・原図を使わない。"
+    },
+    {
+      "id": "unesco-garifuna",
+      "title": "UNESCO Archives: Garifuna culture",
+      "url": "https://www.unesco.org/archives/multimedia/document-1",
+      "period": "ベリーズ・グアテマラ・ホンジュラス・ニカラグアの海岸コミュニティの記述",
+      "terms": "映像・静止画の転載許諾は未取得。短い独自の事実注記とリンクのみ。",
+      "termsUrl": "https://www.unesco.org/archives/multimedia/subject/53/Help%2BFAQ",
+      "evidence": "中米4国のカリブ海岸、言語・舞踊・音楽の文化的つながり。",
+      "restriction": "映像・音声・写真・原図を複製しない。連続した専有領域や言語話者の人数にしない。"
+    },
+    {
+      "id": "unesco-marimba",
+      "title": "UNESCO: Marimba music, traditional chants and dances from Colombia and Ecuador",
+      "url": "https://www.unesco.org/tich4sd/en/colombiaecuador/marimba",
+      "period": "コロンビア南太平洋岸・エクアドルEsmeraldasの文化コミュニティの記述",
+      "terms": "本文のオープンライセンス未確認。短い独自の事実注記とリンクのみ。",
+      "termsUrl": "https://www.unesco.org/en/legal-affairs",
+      "evidence": "Tumaco・Esmeraldasのアフロ系コミュニティに伝わるマリンバ文化。",
+      "restriction": "文化を伝える場所の模式表示。民族自己認識の割合・居住境界や原図の複製には使わない。"
+    },
+    {
+      "id": "unesco-bahia",
+      "title": "UNESCO Archives: Samba de Roda of the Recôncavo of Bahia",
+      "url": "https://www.unesco.org/archives/multimedia/document-615",
+      "period": "BahiaのRecôncavo地域の文化記述",
+      "terms": "映像・静止画の転載許諾は未取得。短い独自の事実注記とリンクのみ。",
+      "termsUrl": "https://www.unesco.org/archives/multimedia/subject/53/Help%2BFAQ",
+      "evidence": "Samba de Rodaの地域とアフリカ由来・ポルトガル由来の文化要素。",
+      "restriction": "アフロ・ブラジル文化の地域例。現代の民族自己認識の居住域・人数・割合にしない。原映像・画像は使わない。"
+    }
+  ],
+  "ethnicity": [
+    {
+      "id": "maya",
+      "label": "マヤ諸民族・言語",
+      "color": "#91723d",
+      "scope": "central",
+      "kind": "regional-description",
+      "title": "マヤ：グアテマラ高地とベリーズ南部の地域例",
+      "overview": "グアテマラの西部・中央高地では、NebajやAtitlán周辺などにマヤ諸民族・言語共同体が記述されています。ベリーズ南部ToledoにもQ’eqchi’・Mopanの地域例があります。",
+      "explanation": "マヤは一つの言語・均一な集団ではありません。民族の自己認識と、言語話者の所在地の記述は別です。離れた二つの案内帯で、高地と中米東側の地域例を位置づけています。",
+      "definition": "2009年の民族・言語共同体の地域例。本文837・863–864・877頁。言語の自治体表から民族居住境界を作っていません。",
+      "sources": [
+        "unicef-atlas"
+      ],
+      "paths": [
+        [
+          [
+            -91.5,
+            15.5
+          ],
+          [
+            -91,
+            14.7
+          ],
+          [
+            -90.6,
+            15.3
+          ]
+        ],
+        [
+          [
+            -88.8,
+            16.1
+          ],
+          [
+            -88.7,
+            16.5
+          ]
+        ]
+      ],
+      "anchor": [
+        -91,
+        15
+      ],
+      "offset": [
+        -45,
+        -25
+      ],
+      "width": 18
+    },
+    {
+      "id": "quechua",
+      "label": "ケチュア語の地域",
+      "color": "#4c8b72",
+      "scope": "south",
+      "kind": "regional-description",
+      "title": "ケチュア：ペルー中央・南部アンデスの言語地域",
+      "overview": "Áncash・Junínの中央アンデスから、Ayacucho・Apurímac・Cusco周辺の南部アンデスに、ケチュア語の地域例が記述されています。",
+      "explanation": "ケチュア語には複数の地域変種があります。地図は文献に記された言語地域の例を示し、同じ場所の全住民をケチュア民族と分類していません。ボリビアなど他国の範囲は、このペルーの説明から延長していません。",
+      "definition": "2009年の言語変種の地域説明、本文581頁・表VII.21。民族自己認識や正確な言語境界ではありません。",
+      "sources": [
+        "unicef-atlas"
+      ],
+      "paths": [
+        [
+          [
+            -77.5,
+            -9.5
+          ],
+          [
+            -75.4,
+            -11.5
+          ]
+        ],
+        [
+          [
+            -74.3,
+            -13.2
+          ],
+          [
+            -72.9,
+            -13.7
+          ]
+        ]
+      ],
+      "anchor": [
+        -75,
+        -12
+      ],
+      "offset": [
+        -35,
+        -15
+      ],
+      "width": 22
+    },
+    {
+      "id": "aymara",
+      "label": "アイマラ語の地域",
+      "color": "#5877a6",
+      "scope": "south",
+      "kind": "regional-description",
+      "title": "アイマラ：ペルー南東部高原の地域例",
+      "overview": "ペルー南東部のPuno、Huancané・Moho・El Collao・Yunguyo・Chucuito周辺に、アイマラ語の地域例が記述されています。",
+      "explanation": "アンデス高原の言語地域を、ケチュア語の案内帯と区別して示します。言語を話すことと民族への自己認識は同じ設問ではありません。隣国ボリビア全体まで、この資料の範囲を拡張して塗っていません。",
+      "definition": "2009年のペルーの言語地域説明、本文581頁・表VII.21。湖の周囲の案内帯は居住境界や民族領域ではありません。",
+      "sources": [
+        "unicef-atlas"
+      ],
+      "paths": [
+        [
+          [
+            -69.6,
+            -15.3
+          ],
+          [
+            -69.7,
+            -16.4
+          ]
+        ]
+      ],
+      "anchor": [
+        -69.7,
+        -16
+      ],
+      "offset": [
+        25,
+        5
+      ],
+      "width": 18
+    },
+    {
+      "id": "mapuche",
+      "label": "マプチェの歴史的地域",
+      "color": "#976580",
+      "scope": "south",
+      "kind": "regional-description",
+      "title": "マプチェ：チリ中南部の歴史的地域",
+      "overview": "チリ中南部のItata川からToltén川にかけて、マプチェの歴史的地域が記述されています。",
+      "explanation": "歴史的な地域と現在の居住分布は区別します。都市への移住もあるため、この帯の外にマプチェの人々がいないとは読みません。Mapudungunは言語名で、民族自己認識とは別の属性です。",
+      "definition": "Memoria Chilenaの歴史的地域の独自日本語要約（CC BY-SA 3.0）。現在の民族居住域の境界ではありません。",
+      "sources": [
+        "memoria-mapuche"
+      ],
+      "paths": [
+        [
+          [
+            -72.7,
+            -36.4
+          ],
+          [
+            -72.7,
+            -39.1
+          ]
+        ]
+      ],
+      "anchor": [
+        -72.7,
+        -38
+      ],
+      "offset": [
+        -28,
+        0
+      ],
+      "width": 22
+    },
+    {
+      "id": "garifuna",
+      "label": "ガリフナの海岸文化",
+      "color": "#a9693d",
+      "scope": "central",
+      "kind": "regional-description",
+      "title": "ガリフナ：中米カリブ海岸のコミュニティ",
+      "overview": "ベリーズ、グアテマラ、ホンジュラス、ニカラグアのカリブ海岸に、ガリフナのコミュニティと文化のつながりが記述されています。",
+      "explanation": "アフリカと先住民の歴史を持つ文化と、Arawak系のガリフナ語を区別して読みます。海岸の短い帯は、資料の述べる地域への案内です。連続した専有領域や海岸の全住民の民族分類を示しません。",
+      "definition": "UNESCOの4国の海岸コミュニティ記述とAtlas本文877頁。海岸の地域例を離れた短線で模式化。",
+      "sources": [
+        "unesco-garifuna",
+        "unicef-atlas"
+      ],
+      "paths": [
+        [
+          [
+            -88.3,
+            16.7
+          ],
+          [
+            -88.6,
+            15.8
+          ]
+        ],
+        [
+          [
+            -86.5,
+            15.9
+          ],
+          [
+            -84.8,
+            15.5
+          ]
+        ],
+        [
+          [
+            -83.3,
+            14
+          ],
+          [
+            -83.5,
+            12.5
+          ]
+        ]
+      ],
+      "anchor": [
+        -85.6,
+        15.7
+      ],
+      "offset": [
+        20,
+        22
+      ],
+      "width": 14
+    },
+    {
+      "id": "afro-pacific",
+      "label": "アフロ系の沿岸文化",
+      "color": "#3f8590",
+      "scope": "south",
+      "kind": "regional-description",
+      "title": "アフロ系コミュニティ：太平洋岸とPalenqueの文化",
+      "overview": "コロンビアのTumacoとエクアドルのEsmeraldasには、マリンバ文化を受け継ぐアフロ系コミュニティが記述されています。カリブ側のSan Basilio de Palenqueは、離れた地域例です。",
+      "explanation": "太平洋岸の文化と、カリブ側のPalenqueの言語・歴史は同じ場所ではありません。地域を分けて示し、アフリカ系自己認識の人数や、一様な民族領域にまとめていません。",
+      "definition": "UNESCOの文化コミュニティ記述とAtlas本文1043頁。文化の地域例で、自己認識統計の居住域ではありません。",
+      "sources": [
+        "unesco-marimba",
+        "unicef-atlas"
+      ],
+      "paths": [
+        [
+          [
+            -78.8,
+            1.8
+          ],
+          [
+            -79.7,
+            1
+          ]
+        ],
+        [
+          [
+            -75.2,
+            10.1
+          ]
+        ]
+      ],
+      "anchor": [
+        -79.1,
+        1.4
+      ],
+      "offset": [
+        -22,
+        22
+      ],
+      "width": 20
+    },
+    {
+      "id": "afro-bahia",
+      "label": "アフロ・ブラジル文化",
+      "color": "#ab684b",
+      "scope": "south",
+      "kind": "cultural-place",
+      "title": "バイーア：Recôncavoのアフロ・ブラジル文化",
+      "overview": "ブラジル北東部、サルバドール周辺のRecôncavoには、Samba de Rodaを受け継ぐ文化地域が記述されています。",
+      "explanation": "アフリカ由来とポルトガル由来の要素がつながる、音楽・舞踊文化の地域例です。民族への自己認識や宗教の分類ではなく、ブラジル全域を同じ集団の居住域として塗っていません。",
+      "definition": "UNESCOのRecôncavo地域の文化記述。地域代表位置で、民族人口や現在の居住境界は示しません。",
+      "sources": [
+        "unesco-bahia"
+      ],
+      "paths": [],
+      "anchor": [
+        -38.5,
+        -12.97
+      ],
+      "offset": [
+        20,
+        0
+      ]
+    }
+  ],
+  "religion": [
+    {
+      "id": "catholic",
+      "label": "カトリック",
+      "color": "#a35b29",
+      "scope": "south",
+      "kind": "national-survey",
+      "title": "カトリック：広い地域で高い回答割合",
+      "overview": "2013–14年調査では、パラグアイ89%、コロンビア・エクアドル79%、ペルー76%。中米から南米まで広く信仰され、国によって割合が異なります。",
+      "explanation": "カトリックはキリスト教の一教派です。棒は全国の自己申告による所属割合で、教会への参加頻度や国内の居住域は示しません。ほかの教派・所属なしの回答も同じ地図に残して読めます。",
+      "definition": "PewのCatholic分類。18歳以上、2013–14年の調査値。",
+      "sources": [
+        "pew-2014"
+      ],
+      "paths": [],
+      "anchor": [
+        -72,
+        -10
+      ],
+      "offset": [
+        -220,
+        5
+      ]
+    },
+    {
+      "id": "protestant",
+      "label": "プロテスタント",
+      "color": "#397780",
+      "scope": "central",
+      "kind": "national-survey",
+      "title": "プロテスタント：中米で目立つ回答割合",
+      "overview": "2013–14年調査では、グアテマラ・ホンジュラス41%、ニカラグア40%。ブラジル26%など南米にも分布し、カトリックと同じ国に暮らしています。",
+      "explanation": "Pewのプロテスタント分類には、福音派やペンテコステ系など複数の教会が含まれます。福音派をすべてのプロテスタントと同じ意味にはしません。国別の棒から、その国内のどこに信者が住むかは判断できません。",
+      "definition": "PewのProtestant分類。個別教会の領域や建物の分布ではありません。",
+      "sources": [
+        "pew-2014"
+      ],
+      "paths": [],
+      "anchor": [
+        -86,
+        14
+      ],
+      "offset": [
+        85,
+        80
+      ]
+    },
+    {
+      "id": "unaffiliated",
+      "label": "宗教に所属しない",
+      "color": "#706397",
+      "scope": "south",
+      "kind": "national-survey",
+      "title": "宗教に所属しない：ウルグアイで高い回答割合",
+      "overview": "2013–14年調査では、ウルグアイ37%、ドミニカ共和国18%、チリ16%。特定の宗教に所属しない人も、宗教を持つ人と同じ国・地域に暮らしています。",
+      "explanation": "この分類は、無神論・不可知論・特定宗教なしの回答をまとめたものです。信仰や宗教的な実践が一切ないという意味ではありません。南部全体を「無宗教の領域」として塗っていません。",
+      "definition": "PewのUnaffiliated分類。無神論のみの人数・割合ではありません。",
+      "sources": [
+        "pew-2014"
+      ],
+      "paths": [],
+      "anchor": [
+        -55,
+        -33
+      ],
+      "offset": [
+        120,
+        60
+      ]
+    },
+    {
+      "id": "candomble",
+      "label": "カンドンブレ",
+      "color": "#a84b68",
+      "scope": "south",
+      "kind": "cultural-place",
+      "title": "サルバドール：カンドンブレの寺院群",
+      "overview": "ブラジル北東部のサルバドールには、Casa Branca、Gantois、Opô Afonjáなど、カンドンブレの寺院が記録されています。",
+      "explanation": "カンドンブレはアフリカ由来の伝統を受け継ぐブラジルの宗教文化です。公的記述で確認した寺院群のある都市を示します。ウンバンダとは別の宗教で、記号の面積は信者数や住民割合ではありません。",
+      "definition": "寺院群を記述する都市の事例点。都市代表位置で、寺院の正確な所在地ではありません。",
+      "sources": [
+        "palmares-salvador"
+      ],
+      "paths": [],
+      "anchor": [
+        -38.5,
+        -12.97
+      ],
+      "offset": [
+        15,
+        -16
+      ]
+    }
+  ],
+  "religionSurvey": [
+    {
+      "code": "PRY",
+      "values": [
+        89,
+        7,
+        1,
+        2
+      ]
+    },
+    {
+      "code": "COL",
+      "values": [
+        79,
+        13,
+        6,
+        2
+      ]
+    },
+    {
+      "code": "ECU",
+      "values": [
+        79,
+        13,
+        5,
+        3
+      ]
+    },
+    {
+      "code": "BOL",
+      "values": [
+        77,
+        16,
+        4,
+        3
+      ]
+    },
+    {
+      "code": "PER",
+      "values": [
+        76,
+        17,
+        4,
+        3
+      ]
+    },
+    {
+      "code": "VEN",
+      "values": [
+        73,
+        17,
+        7,
+        4
+      ]
+    },
+    {
+      "code": "ARG",
+      "values": [
+        71,
+        15,
+        11,
+        3
+      ]
+    },
+    {
+      "code": "PAN",
+      "values": [
+        70,
+        19,
+        7,
+        4
+      ]
+    },
+    {
+      "code": "CHL",
+      "values": [
+        64,
+        17,
+        16,
+        3
+      ]
+    },
+    {
+      "code": "CRI",
+      "values": [
+        62,
+        25,
+        9,
+        4
+      ]
+    },
+    {
+      "code": "BRA",
+      "values": [
+        61,
+        26,
+        8,
+        5
+      ]
+    },
+    {
+      "code": "DOM",
+      "values": [
+        57,
+        23,
+        18,
+        2
+      ]
+    },
+    {
+      "code": "PRI",
+      "values": [
+        56,
+        33,
+        8,
+        2
+      ]
+    },
+    {
+      "code": "SLV",
+      "values": [
+        50,
+        36,
+        12,
+        3
+      ]
+    },
+    {
+      "code": "GTM",
+      "values": [
+        50,
+        41,
+        6,
+        3
+      ]
+    },
+    {
+      "code": "NIC",
+      "values": [
+        50,
+        40,
+        7,
+        4
+      ]
+    },
+    {
+      "code": "HND",
+      "values": [
+        46,
+        41,
+        10,
+        2
+      ]
+    },
+    {
+      "code": "URY",
+      "values": [
+        42,
+        15,
+        37,
+        6
+      ]
+    }
+  ],
+  "method": {
+    "projection": "existing Web Mercator latinMapLayout; not an area scale",
+    "geometry": "Independently drawn named-region guide strokes and place anchors, not copied boundaries; widths in screen space only",
+    "nationalReligion": "Native survey shares; not converted to territories, densities, or counts; other retained below map",
+    "coverage": "Selected descriptive themes, not whole regional precision; religion survey 2013–14, not current 2026",
+    "externalAssetsUsed": false
+  },
+  "notAdopted": [
+    {
+      "source": "Guatemala SIC / IBGE news",
+      "reason": "403; no bypass"
+    },
+    {
+      "source": "World Bank via CEPAL",
+      "reason": "Internal Error / executor tunnel 403; no bypass"
+    },
+    {
+      "source": "CIPDH Palenque",
+      "reason": "timeout; Atlas used instead"
+    }
+  ]
+}
