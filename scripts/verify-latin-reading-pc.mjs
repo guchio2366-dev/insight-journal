@@ -43,7 +43,7 @@ try{
    await page.locator('[data-latin-section=population]').click();assert.equal(await page.locator('[data-latin-section-panel=population]').isVisible(),true);
    for(const geometry of Object.values(view.measurements)){assert.equal(geometry.overflow,false);assert.ok(geometry.map.y+geometry.map.height<=viewport.height-40,'Map extends past the fixed review viewport');assert.equal(geometry.visualViewportScale,1);assert.equal(geometry.dpr,1);assert.deepEqual(geometry.scroll,{x:0,y:0});}
   }
-  if(viewport.width===1920)for(const route of ['nature/','industry/']){await go(route);await shot(route.replace('/',''));report.unchanged.push({route,sha256:view.shots.at(-1).sha256});}
+  if(viewport.width===1920)for(const [route,name] of [['nature/','nature'],['industry/','industry'],['industry/?layer=manufactures&place=all&scope=all&from=agriculture&sourceLayer=all&sourcePlace=all&sourceScope=all&sourceOnly=0&sourceFallback=0','industry-agriculture-comparison']]){await go(route);await shot(name);report.unchanged.push({route,sha256:view.shots.at(-1).sha256});}
   await context.close();await save();
  }
  assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedRequests,[]);report.result=baseline?'baseline-recorded':'passed';
