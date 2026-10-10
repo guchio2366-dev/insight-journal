@@ -199,7 +199,7 @@ export function initEuropeAtlas() {
     return {x:point.x-rect.left,y:point.y-rect.top};
   };
   const pewMarkers=createEuropePewMarkers(stage,selectCountry);
-  const regionalEvidence=[...europeFarmingRegionalEvidence,...europeFarmingCountryEvidence].map(item=>{
+  const regionalEvidence=[...europeFarmingRegionalEvidence.filter(item=>item.genre!=='horticulture'),...europeFarmingCountryEvidence].map(item=>{
     const node=document.createElement('span');
     const country='value' in item;
     node.className=country?'eu-farming-country-evidence':'eu-farming-regional-evidence';node.dataset.euFarmingEvidence=item.id;node.dataset.kind=item.kind;
@@ -234,7 +234,7 @@ export function initEuropeAtlas() {
     root!.style.setProperty('--eu-reader-height',`${Math.max(220,window.innerHeight-top-12)}px`);
   }
   const annotations=createEuropeAnnotations(stage,cities,features,
-    ()=>({climate:climateReader(),crops:farmingView().active,farmingIds:farmingView().visible.map(item=>item.id),selectedFarming:farmingView().item?.id,city:state.city,feature:state.feature,featureLabelIds:subject().field==='industry'?(state.industryGroup?industryEmphasized():[...europeIndustryOverviewLabels]):subject().field==='population'&&!cultureActive()?config.populationCities.filter(city=>['ロンドン','パリ','モスクワ','ローマ'].includes(city.name)).map(city=>city.id):undefined,detailed:map&&liveMap.classList.contains('is-ready')?map.getBounds().getEast()-map.getBounds().getWest()<60:box[2]<frame.width*.65,emphasizedFeatures:industryEmphasized(),places:cultureActive()&&!state.cultureCase?(state.layer==='religion'?europeReligionRegionalEvidence.filter(item=>item.id===state.feature):europeCultureOverviewPlaces.filter(item=>item.id.startsWith('ethnicity-'))):visibleFeatures().filter(p=>featureVisible(p.id))}),
+    ()=>({climate:climateReader(),crops:farmingView().active,farmingIds:farmingView().genre==='horticulture'&&!farmingView().item?[]:farmingView().visible.map(item=>item.id),selectedFarming:farmingView().item?.id,city:state.city,feature:state.feature,featureLabelIds:subject().field==='industry'?(state.industryGroup?industryEmphasized():[...europeIndustryOverviewLabels]):subject().field==='population'&&!cultureActive()?config.populationCities.filter(city=>['ロンドン','パリ','モスクワ','ローマ'].includes(city.name)).map(city=>city.id):undefined,detailed:map&&liveMap.classList.contains('is-ready')?map.getBounds().getEast()-map.getBounds().getWest()<60:box[2]<frame.width*.65,emphasizedFeatures:industryEmphasized(),places:cultureActive()&&!state.cultureCase?(state.layer==='religion'?europeReligionRegionalEvidence.filter(item=>item.id===state.feature):europeCultureOverviewPlaces.filter(item=>item.id.startsWith('ethnicity-'))):visibleFeatures().filter(p=>featureVisible(p.id))}),
     coordinate=>overlayProject(coordinate as [number,number]),(kind,id)=>kind==='city'?selectCity(id):kind==='crop'?setLayer(id):selectFeature(id),farmingItems,cultureOverview.decorate);
   const precipitationLabels=precipitationLineLabels.map(label=>{
     const node=document.createElement('span');node.className='eu-precipitation-line-label';

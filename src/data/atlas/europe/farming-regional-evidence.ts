@@ -21,13 +21,11 @@ export const europeFarmingCountryEvidence = [
   {id:'suckler-es',genre:'livestock',kind:'suckler-country',name:'スペイン',coordinates:[-3.7,40.1],value:'繁殖母牛',detail:'2016年の肉用繁殖母牛主要4か国の一つ。'},
   {id:'suckler-uk',genre:'livestock',kind:'suckler-country',name:'英国',coordinates:[-3.4,56.8],value:'繁殖母牛',detail:'2016年、英国がEU加盟国だった当時の肉用繁殖母牛主要4か国の一つ。'},
   {id:'suckler-ie',genre:'livestock',kind:'suckler-country',name:'アイルランド',coordinates:[-7.1,52.9],value:'繁殖母牛',detail:'2016年の肉用繁殖母牛主要4か国の一つ。2020年の非乳牛の地域値とは別の指標。'},
-  {id:'vines-es',genre:'horticulture',kind:'vines-country',name:'スペイン',coordinates:[-5.0,43.0],value:'葡 90万ha',detail:'2020年のワイン用ブドウ畑の国全体の面積、概数。'},
-  {id:'vines-fr',genre:'horticulture',kind:'vines-country',name:'フランス',coordinates:[0.2,46.9],value:'葡 80万ha',detail:'2020年のワイン用ブドウ畑の国全体の面積、概数。'},
-  {id:'vines-it',genre:'horticulture',kind:'vines-country',name:'イタリア',coordinates:[10.2,44.9],value:'葡 70万ha',detail:'2020年のワイン用ブドウ畑の国全体の面積、概数。'},
-  {id:'olives-es',genre:'horticulture',kind:'olives-country',name:'スペイン',coordinates:[-3.3,37.5],value:'オ 53%',detail:'2023年のEUオリーブ樹園面積に占めるスペイン国全体の割合。'},
-  {id:'olives-it',genre:'horticulture',kind:'olives-country',name:'イタリア',coordinates:[15.2,40.3],value:'オ 24%',detail:'2023年のEUオリーブ樹園面積に占めるイタリア国全体の割合。'},
-  {id:'olives-gr',genre:'horticulture',kind:'olives-country',name:'ギリシャ',coordinates:[22.1,37.5],value:'オ 14%',detail:'2023年のEUオリーブ樹園面積に占めるギリシャ国全体の割合。'},
-  {id:'olives-pt',genre:'horticulture',kind:'olives-country',name:'ポルトガル',coordinates:[-8.6,40.4],value:'オ 8%',detail:'2023年のEUオリーブ樹園面積に占めるポルトガル国全体の割合。'},
+  {id:'produce-es',genre:'horticulture',kind:'vines-olives-country',name:'スペイン',coordinates:[-1.7,42.4],value:'葡・オ',detail:'2020年のワイン用ブドウ畑と2023年のオリーブ樹園の主要国。値と分母は右の説明に記載。'},
+  {id:'produce-fr',genre:'horticulture',kind:'vines-country',name:'フランス',coordinates:[0.5,46.5],value:'葡',detail:'2020年のワイン用ブドウ畑の主要国。値と分母は右の説明に記載。'},
+  {id:'produce-it',genre:'horticulture',kind:'vines-olives-country',name:'イタリア',coordinates:[11.5,43.0],value:'葡・オ',detail:'2020年のワイン用ブドウ畑と2023年のオリーブ樹園の主要国。値と分母は右の説明に記載。'},
+  {id:'produce-pt',genre:'horticulture',kind:'olives-country',name:'ポルトガル',coordinates:[-8.7,39.5],value:'オ',detail:'2023年のオリーブ樹園の主要国。値と分母は右の説明に記載。'},
+  {id:'produce-gr',genre:'horticulture',kind:'olives-country',name:'ギリシャ',coordinates:[21.5,38.5],value:'オ',detail:'2023年のオリーブ樹園の主要国。値と分母は右の説明に記載。'},
 ] as const;
 
 export const europeFarmingCountrySources = {

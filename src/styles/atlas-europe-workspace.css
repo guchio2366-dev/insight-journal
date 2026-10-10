@@ -501,6 +501,7 @@
 .eu-workspace-root[data-europe-detail] .eu-farming-country-evidence strong { font-size:10px; }
 .eu-workspace-root[data-europe-detail] .eu-farming-country-evidence[data-kind="suckler-country"] { border-left-color:#9c6547; }
 .eu-workspace-root[data-europe-detail] .eu-farming-country-evidence[data-kind="vines-country"] { border-left-color:#935a86; }
+.eu-workspace-root[data-europe-detail] .eu-farming-country-evidence[data-kind="vines-olives-country"] { border-left-color:#765c7a; }
 .eu-workspace-root[data-europe-detail] .eu-farming-country-evidence[data-kind="olives-country"] { border-left-color:#6f7f3b; }
 .eu-workspace-root[data-europe-detail] .eu-terrain-place-label { position:absolute; z-index:2; transform:translate(-50%,-50%); padding:2px 4px; background:#fffef4df; color:#413e36; font:700 12px/1.25 var(--sans); text-shadow:0 1px #fff; pointer-events:none; white-space:nowrap; }
 .eu-workspace-root[data-europe-detail] .eu-terrain-name-options { display:flex; gap:6px; padding:7px 0; }

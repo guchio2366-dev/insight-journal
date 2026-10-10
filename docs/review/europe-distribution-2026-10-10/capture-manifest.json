@@ -24,20 +24,13 @@
     {
       "width": 1440,
       "genre": "horticulture",
-      "visible": [
-        "rioja-vines",
-        "languedoc-vines",
-        "friuli-vines",
-        "attica-vines"
-      ],
+      "visible": [],
       "countries": [
-        "vines-es",
-        "vines-fr",
-        "vines-it",
-        "olives-es",
-        "olives-it",
-        "olives-gr",
-        "olives-pt"
+        "produce-es",
+        "produce-fr",
+        "produce-gr",
+        "produce-it",
+        "produce-pt"
       ]
     },
     {
@@ -64,20 +57,13 @@
     {
       "width": 1024,
       "genre": "horticulture",
-      "visible": [
-        "rioja-vines",
-        "languedoc-vines",
-        "friuli-vines",
-        "attica-vines"
-      ],
+      "visible": [],
       "countries": [
-        "vines-es",
-        "vines-fr",
-        "vines-it",
-        "olives-es",
-        "olives-it",
-        "olives-gr",
-        "olives-pt"
+        "produce-es",
+        "produce-fr",
+        "produce-gr",
+        "produce-it",
+        "produce-pt"
       ]
     }
   ]
