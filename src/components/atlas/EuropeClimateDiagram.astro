@@ -17,10 +17,7 @@ const station = city.stationName.split(' -')[0];
 const format = (value: number | null) => value === null ? '欠測' : value.toFixed(1);
 const temperature = city.months.map(month => month.temperature);
 const precipitation = city.months.map(month => month.precipitation);
-if (temperature.some(value => value !== null && (value < -10 || value > 40)) ||
-    precipitation.some(value => value !== null && (value < 0 || value > 350))) {
-  throw new Error(`Europe climate values exceed the shared plot scale: ${city.id}`);
-}
+
 ---
 {mode === 'plot' ? <figure class="eu-climate-plot eu-inline-climate-plot" data-eu-city-chart={city.id}>
   <AtlasClimatePlot name={city.name} period={`${city.period}年`} temperatureC={temperature} precipitationMm={precipitation} />

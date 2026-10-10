@@ -79,7 +79,6 @@ const bounds=focusId?contentExtent:reading.bounds;
 const frame=[bounds[0]*longitudeScale,-bounds[3],(bounds[2]-bounds[0])*longitudeScale,bounds[3]-bounds[1]];
 const path=(f:CountryFeature)=>rings(f).map(ring=>ring.map((p,i)=>{const [x,y]=project(p);return `${i?'L':'M'}${x.toFixed(3)},${y.toFixed(3)}`;}).join('')+'Z').join('');
 const nearby=features.filter(f=>!countryCodes.has(f.properties.code)&&rings(f).some(r=>r.some(p=>p[0]>bounds[0]-10&&p[0]<bounds[2]+10&&p[1]>bounds[1]-10&&p[1]<bounds[3]+10)));
-const precipitationMax=Math.max(400,Math.ceil(Math.max(...cities.flatMap(c=>c.precipitationMm.filter(v=>v!==null) as number[]))/200)*200);
 const physical={...physicalManifest.regions[regionId],waterFeatures:physicalManifest.regions[regionId].waterFeatures.filter(f=>!focusId||f.countries.some(code=>asiaFocusCountries[focusId].includes(code)))}, physicalFocus=asiaPhysicalFocus.filter(f=>f.region===regionId&&(!focusId||asiaFocusCountries[focusId].includes(f.country)));
 const population={...populationManifest.regions[regionId],cities:populationManifest.regions[regionId].cities.filter(c=>!focusId||asiaFocusCountries[focusId].includes(c.country))} as unknown as AsiaPopulationRegion;
 const config={regionId,focusId,label:region.label,bounds,contentExtent,dataBounds:focusId?bounds:asiaRegionReading[regionId].bounds,countries,cities,classes:asiaClimateClasses,climate:climateManifest.regions[regionId],physical,physicalFocus,geographyUrl:withBase('/assets/atlas/asia-geography-v1.json'),climateBase:withBase('/assets/atlas/asia-climate-v2/'),agricultureBase:withBase('/assets/atlas/asia-agriculture-v1/'),physicalBase:withBase('/assets/atlas/asia-physical-v1/')};
@@ -166,7 +165,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
       </section>
       <aside class="atlas-field-national asia-reading-panel" data-field-national={initialField} aria-label="地図の解説">
        <div class="asia-city-reading-host" data-city-reading-host hidden>
-        {cities.map(city=><article class="asia-city-card" data-city-panel={city.id} id={`city-${city.id}`} hidden><h2 class="visually-hidden">{city.name}の雨温図</h2><AsiaClimateDiagram {city} {precipitationMax} countryName={japaneseNames[city.countryCode]} /></article>)}
+        {cities.map(city=><article class="asia-city-card" data-city-panel={city.id} id={`city-${city.id}`} hidden><h2 class="visually-hidden">{city.name}の雨温図</h2><AsiaClimateDiagram {city} countryName={japaneseNames[city.countryCode]} /></article>)}
        </div>
        <section class="asia-reading-dock" data-reading-dock aria-label="この地図の要点と比較">
         <p class="eyebrow">この地図の要点</p><h2 data-reading-dock-title>{reading.title}</h2><p data-reading-dock-summary>{reading.summary}</p>
