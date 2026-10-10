@@ -64,10 +64,6 @@ async function start(root:HTMLElement){
   $('[data-japan-cluster-statistics]').hidden=isQuantity;
   $('[data-japan-quantity-statistics]').hidden=!isQuantity;
   for(const b of all('[data-japan-mode]'))b.setAttribute('aria-pressed',String((b.dataset.japanMode==='jp-00')===isQuantity));
-  for(const b of all('[data-japan-farm-site]'))b.addEventListener('click',()=>site(b.dataset.japanFarmSite!));
- for(const b of all('[data-japan-farm-topic]'))b.addEventListener('click',()=>topic(b.dataset.japanFarmTopic!));
- $('[data-japan-clear-selection]').addEventListener('click',()=>navigate({...state,prefecture:null,city:null,site:null,feature:null,camera:camera()}));
- for(const b of all('[data-japan-feature]'))b.addEventListener('click',()=>feature(b.dataset.japanFeature!));
  for(const b of all('[data-japan-topic]'))b.setAttribute('aria-pressed',String(b.dataset.japanTopic===state.topic));
   $<HTMLSelectElement>('[data-japan-prefecture]').value=state.prefecture??'';
   $<HTMLSelectElement>('[data-japan-climate-city]').value=state.field==='natural'?state.city??'':'';
@@ -195,6 +191,10 @@ async function start(root:HTMLElement){
  }
  for(const a of all<HTMLAnchorElement>('[data-japan-field]'))a.addEventListener('click',event=>{if(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey||event.button!==0)return;event.preventDefault();const field=a.dataset.japanField as AsiaField;if(field===state.field)return;navigate({...state,field,topic:japanDefaults[field],prefecture:null,city:null,site:null,feature:null,camera:camera()});});
  for(const b of all('[data-japan-topic]'))b.addEventListener('click',()=>topic(b.dataset.japanTopic!));
+ for(const b of all('[data-japan-farm-site]'))b.addEventListener('click',()=>site(b.dataset.japanFarmSite!));
+ for(const b of all('[data-japan-farm-topic]'))b.addEventListener('click',()=>topic(b.dataset.japanFarmTopic!));
+ $('[data-japan-clear-selection]').addEventListener('click',()=>navigate({...state,prefecture:null,city:null,site:null,feature:null,camera:camera()}));
+ for(const b of all('[data-japan-feature]'))b.addEventListener('click',()=>feature(b.dataset.japanFeature!));
  for(const b of all('[data-japan-mode]'))b.addEventListener('click',()=>topic(b.dataset.japanMode!));
  for(const b of all('[data-japan-site]'))b.addEventListener('click',()=>site(b.dataset.japanSite!));
  for(const b of all('[data-japan-urban]'))b.addEventListener('click',()=>city(b.dataset.japanUrban!,'population'));
