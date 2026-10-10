@@ -4,12 +4,13 @@ import {withBase} from '../../lib/urls';
 import {latinCountries} from '../../lib/atlas-latin-america-geometry';
 import {latinIndustryData,latinIndustryLayers,latinIndustryReadings,renderLatinIndustryMap,renderLatinIndustryLegend,formatLatinIndustryValue,industryCountryName} from '../../lib/atlas-latin-industry';
 import '../../styles/atlas-latin-industry.css';
-const initial={layer:'ores',place:'all',scope:'all',only:false};
+import {latinIndustryLocationOverview,latinIndustryLocations} from '../../data/atlas/latin-america-industry-locations.ts';
+const initial={layer:'locations',place:'all',scope:'all',only:false};
 const reading=latinIndustryReadings[0];
 const base=withBase('/atlas/latin-america/');
 const sources=latinIndustryReadings.flatMap(r=>r.sources).filter((s,i,a)=>a.findIndex(v=>v.url===s.url)===i);
 ---
-<LatinAmericaWorkspace field="industry" title="輸出から読む、中南米の主要産業" lead="鉱石・金属と製造品の輸出構成を比べ、資源の産地・加工・交通・市場のつながりを読みます。">
+<LatinAmericaWorkspace field="industry" title="産地・工業・物流から読む、中南米の主要産業" lead="主要産業の代表位置を見渡し、資源・地形・交通・市場が立地にどう関わるかを読みます。国別の輸出構成は別の図で比べられます。">
  <div class="latin-industry">
   <a class="latin-industry-return" data-industry-return hidden href={`${base}industry/`}>元の分布へ戻る</a>
   <details class="latin-map-options"><summary>地域・表示を選ぶ</summary><div class="latin-map-options-body">  <div class="latin-industry-toolbar" aria-label="地図の分布と範囲">
@@ -21,20 +22,23 @@ const sources=latinIndustryReadings.flatMap(r=>r.sources).filter((s,i,a)=>a.find
   </div>
 </div></details>
   <div class="latin-industry-grid" data-industry-normal>
-   <section class="latin-industry-panel" aria-labelledby="latin-industry-main-title">
-    <h2 id="latin-industry-main-title" data-industry-title>鉱石・金属の輸出比率</h2>
-    <p class="latin-industry-period" data-industry-period>2024年 · 国単位 · 商品輸出額に占める割合（%）</p>
+   <section class="latin-industry-panel" data-layer="locations" aria-labelledby="latin-industry-main-title">
+    <h2 id="latin-industry-main-title" data-industry-title>主要産業の位置</h2>
+    <p class="latin-industry-period" data-industry-period>資料ごとの公表年 · 代表位置（点は数量を表しません）</p>
     <div class="latin-industry-map-grid">
      <div data-industry-primary-map set:html={renderLatinIndustryMap(initial,'latin-industry-main')} />
-     <div data-industry-primary-legend set:html={renderLatinIndustryLegend('ores')} />
+     <div data-industry-primary-legend set:html={renderLatinIndustryLegend('locations')} />
     </div>
-    <p class="latin-industry-map-note" data-industry-map-note>同じ2024年で表示。24国に値、9国・地域は原典欠測、1地域は対象統計なし。0に置き換えていません。</p>
-    <div class="latin-industry-topics" aria-label="代表例">{latinIndustryReadings.map(r=><button type="button" data-industry-topic={r.id} aria-pressed={false}>{r.name}</button>)}</div>
+    <p class="latin-industry-map-note" data-industry-map-note>点は資料に基づく8件の代表位置。産業地域の境界や量の比例記号ではありません。</p>
+    <div class="latin-industry-topics" data-industry-location-choices aria-label="主要産業の代表位置">{latinIndustryLocations.map(row=><button type="button" data-industry-location-choice={row.id} aria-pressed="false">{row.label}</button>)}</div>
+    <div class="latin-industry-topics" data-industry-country-topics hidden aria-label="国別の代表例">{latinIndustryReadings.map(r=><button type="button" data-industry-topic={r.id} aria-pressed={false}>{r.name}</button>)}</div>
    </section>
    <aside class="latin-industry-reading" aria-label="成立条件と比較">
-    <h2 data-industry-reading-title>中南米全体の輸出構成</h2>
-    <p data-industry-takeaway>鉱石・金属と製造品の輸出比率を国ごとに見渡します。各国の商品輸出額を分母とした割合で、生産量・GDPやサービス輸出の規模とは区別します。</p>
-    <div class="latin-industry-selected" data-industry-selected aria-live="polite">中南米全体 · 2024年の商品輸出構成。国を選ぶと二つの比率を確かめられます。</div>
+    <h2 data-industry-reading-title>{latinIndustryLocationOverview.title}</h2>
+    <p data-industry-takeaway>{latinIndustryLocationOverview.distribution}</p>
+    <div data-industry-location-reading><h3>なぜ、その場所にあるか</h3><p>{latinIndustryLocationOverview.reason}</p></div>
+    <button type="button" class="latin-industry-location-return" data-industry-location-return hidden>← 主要産業の全域概要へ戻る</button>
+    <div class="latin-industry-selected" data-industry-selected aria-live="polite">{latinIndustryLocationOverview.scope}</div>
     <div class="latin-industry-actions" aria-label="何を比べて読むか">
      <a data-industry-compare-exports href={`${base}industry/?layer=manufactures&from=industry&sourceLayer=ores`}>鉱石・金属と製造品の比率を並べ、輸出の重心を比べる →</a>
      <a data-industry-compare-population href={`${base}population/?layer=density&from=industry&sourceLayer=ores`}>輸出構成2024年と人口密度2023年を並べ、人口・市場と産業の関係を読む →</a>

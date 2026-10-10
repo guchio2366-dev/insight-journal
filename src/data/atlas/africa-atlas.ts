@@ -1,6 +1,7 @@
 import countryData from './africa-countries.json' with {type:'json'};
 import statistics from './africa-statistics.json' with {type:'json'};
 import {themes} from './africa-themes.ts';
+import {africaIndustryLocationById} from './africa-industry-locations.ts';
 import {africaClimateCityById} from './africa-climate-cities.ts';
 export type Field = 'nature' | 'agriculture' | 'industry' | 'population';
 export type Region = 'all' | 'north' | 'west' | 'central' | 'east' | 'south';
@@ -9,7 +10,7 @@ export const regionNames: Record<Region,string> = {all:'アフリカ全体',nort
 export const fields: Record<Field,{label:string;title:string;summary:string}> = {
   nature:{label:'自然環境',title:'雨の量と、利用できる水は同じではない',summary:'国土に降る雨と、国内で生まれる再生可能な淡水を読み比べます。乾燥地域でも、国外を水源とする川や灌漑が暮らしを支える場合があります。'},
   agriculture:{label:'農林業',title:'作物と家畜の分布から、生産を支える条件を読む',summary:'作物の収穫面積・生産量と家畜密度は2020年のモデル分布です。自然条件に加え、管理・交通・市場・土地の制度を考え、国全体の統計とは分けて読みます。'},
-  industry:{label:'主要産業',title:'資源の豊かさと、産業の構成を読み比べる',summary:'製造業、鉱業や建設を含む工業、サービス業、天然資源レントを比較します。割合だけでは経済の規模を表せないため、一人当たりGDPも併せて確認できます。'},
+  industry:{label:'主要産業',title:'地下資源の帯と、沿岸の製造・物流',summary:'産業名から代表的な産地・製造地域・港湾の位置を読み、地質・技能・市場・交通が立地にどう関わるかを確かめます。全国統計は地点の数量と区別します。'},
   population:{label:'人口',title:'人口の規模、密度、都市化には違う地理がある',summary:'人数は円の面積、人口密度や都市人口率は国の色で表します。広い国の平均密度から都市の混雑を推測せず、人数と割合を切り替えて読みます。'}
 };
 export type Metric = {id:string;field:Field;label:string;unit:string;breaks:number[];note:string;timeless?:boolean;symbols?:boolean};
@@ -79,7 +80,7 @@ export const agriLayerKeys=[
   'livestock-cattle','livestock-goats','livestock-sheep'
 ] as const;
 export type AgriLayerKey=typeof agriLayerKeys[number];
-export type State={field:Field;metric:string;year:number;place:string;compare:string;region:Region;zoom:'all'|'region'|'country'|'theme';theme:string;overview:boolean;context:string;topic:string;water:string;river:string;city:string;crop:Crop;livestock:Livestock;cropMeasure:CropMeasure;agriLayers:string|null;agriDisplay:'all'|'crops'|'livestock';agriOutline:boolean;layerClass:string;layerPoint:string;sourceState:string;view:'distribution'|'statistics'};
+export type State={field:Field;metric:string;year:number;place:string;compare:string;region:Region;zoom:'all'|'region'|'country'|'theme';theme:string;overview:boolean;context:string;topic:string;water:string;river:string;city:string;industryLocation:string;crop:Crop;livestock:Livestock;cropMeasure:CropMeasure;agriLayers:string|null;agriDisplay:'all'|'crops'|'livestock';agriOutline:boolean;layerClass:string;layerPoint:string;sourceState:string;view:'distribution'|'statistics'};
 /** An absent layer list shows all seven products; an explicit empty list means all off. */
 export function canonicalAgriLayers(value:unknown):string|null {
   if(typeof value!=='string'||value.length>2048)return null;
@@ -128,7 +129,8 @@ export function readState(search:string):State {
   const theme=themes.find(t=>t.id===p.get('theme')&&t.field===safeField)??themes.find(t=>t.field===safeField)!;
   const place=exists(p.get('place'))?p.get('place')!:'';
   const region=p.get('region')??'all';
-  const overview=p.get('overview')==='1'||!p.has('overview')&&!p.has('theme')&&!(safeField==='agriculture'&&(p.has('crop')||p.has('livestock')||p.get('topic')==='livestock'));
+  const industryLocation=safeField==='industry'&&africaIndustryLocationById(p.get('industryLocation')??'')?p.get('industryLocation')!:'';
+  const overview=!industryLocation&&(p.get('overview')==='1'||!p.has('overview')&&!p.has('theme')&&!(safeField==='agriculture'&&(p.has('crop')||p.has('livestock')||p.get('topic')==='livestock')));
   const context=metrics.some(m=>m.id===p.get('context'))&&(p.get('context')===theme.compareMetric||p.has('sourceState')||safeField==='agriculture'&&metric.id==='AG.LND.FRST.ZS'&&p.get('context')===metric.id)?p.get('context')!:'';
   const layerClass=/^[a-zA-Z0-9_:.-]{1,100}$/.test(p.get('layerClass')??'')?p.get('layerClass')!:'';
   const point=(p.get('layerPoint')??'').split(',').map(Number);
@@ -141,7 +143,7 @@ export function readState(search:string):State {
   const crop=cropChoices.find(row=>row.id===p.get('crop'))?.id??'maize';
   const livestock=livestockChoices.find(row=>row.id===p.get('livestock'))?.id??'cattle';
   const cropMeasure=cropMeasureChoices.find(row=>row.id===p.get('cropMeasure'))?.id??'harvested';
-  return {field:safeField,metric:metric.id,year:years.includes(Number(p.get('year')))?Number(p.get('year')):2021,place,compare:place&&exists(p.get('compare'))&&p.get('compare')!==place?p.get('compare')!:'',region:Object.hasOwn(regionNames,region)?region as Region:'all',zoom:['all','region','country','theme'].includes(zoom)?zoom as State['zoom']:'all',theme:theme.id,overview,context:culture?'':context??'',topic,water,river,city:safeField==='nature'&&topic==='climate'&&africaClimateCityById(p.get('city')??'')?p.get('city')!:'',crop,livestock,cropMeasure,agriLayers:canonicalAgriLayers(p.get('agriLayers')),agriDisplay:p.get('agriDisplay')==='crops'?'crops':p.get('agriDisplay')==='livestock'?'livestock':'all',agriOutline:p.get('agriOutline')==='1',layerClass:culture?'':layerClass,layerPoint:culture?'':layerPoint,sourceState:culture?'':sourceState,view:culture?'distribution':p.get('view')==='statistics'||!p.has('view')&&p.has('theme')&&!p.has('topic')?'statistics':'distribution'};
+  return {field:safeField,metric:metric.id,year:years.includes(Number(p.get('year')))?Number(p.get('year')):2021,place,compare:place&&exists(p.get('compare'))&&p.get('compare')!==place?p.get('compare')!:'',region:Object.hasOwn(regionNames,region)?region as Region:'all',zoom:['all','region','country','theme'].includes(zoom)?zoom as State['zoom']:'all',theme:theme.id,overview,context:culture?'':context??'',topic,water,river,industryLocation,city:safeField==='nature'&&topic==='climate'&&africaClimateCityById(p.get('city')??'')?p.get('city')!:'',crop,livestock,cropMeasure,agriLayers:canonicalAgriLayers(p.get('agriLayers')),agriDisplay:p.get('agriDisplay')==='crops'?'crops':p.get('agriDisplay')==='livestock'?'livestock':'all',agriOutline:p.get('agriOutline')==='1',layerClass:culture?'':layerClass,layerPoint:culture?'':layerPoint,sourceState:culture?'':sourceState,view:culture?'distribution':p.get('view')==='statistics'||!p.has('view')&&p.has('theme')&&!p.has('topic')?'statistics':'distribution'};
 }
 export function africaComparisonSnapshot(state:State):string {
   return writeState({...state,context:'',sourceState:''},new URL('https://atlas.invalid/')).searchParams.toString();
@@ -150,6 +152,7 @@ export function writeState(state:State,url:URL) {
   state.topic=canonicalTopic(state.field,state.metric,state.topic);
   state.water=state.field==='nature'?canonicalWater(state.metric,state.water):'';
   state.river=canonicalRiver(state,state.river);
+  state.industryLocation=state.field==='industry'&&africaIndustryLocationById(state.industryLocation)?state.industryLocation:'';
   state.city=state.field==='nature'&&state.topic==='climate'&&africaClimateCityById(state.city)?state.city:'';
   if(state.field==='population'&&(state.topic==='ethnicity'||state.topic==='religion')){state.context='';state.layerClass='';state.layerPoint='';state.sourceState='';state.view='distribution';}
   state.agriLayers=canonicalAgriLayers(state.agriLayers);

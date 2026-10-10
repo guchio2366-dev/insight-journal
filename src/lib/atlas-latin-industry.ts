@@ -1,11 +1,13 @@
+import {renderLatinIndustryLocations,renderLatinIndustryLocationsLegend} from './atlas-latin-industry-locations.ts';
 import data from '../data/atlas/latin-america/industry.json';
 import {latinCountries,latinMapLayout,latinWidth,latinHeight} from './atlas-latin-america-geometry';
 
-export type LatinIndustryLayer='ores'|'manufactures'|'canal';
+export type LatinIndustryLayer='locations'|'ores'|'manufactures'|'canal';
 export type LatinIndustryStatus='value'|'zero'|'missing'|'notCovered';
-export interface LatinIndustryMapState {layer:string;place:string;scope:string;only:boolean}
+export interface LatinIndustryMapState {layer:string;place:string;scope:string;only:boolean;case?:string}
 export const latinIndustryData=data;
 export const latinIndustryLayers=[
+ {id:'locations',name:'主要産業の位置',year:2024,unit:'代表位置・数量は本文'},
  {id:'ores',name:'鉱石・金属の輸出比率',year:2024,unit:'商品輸出額に占める割合（%）'},
  {id:'manufactures',name:'製造品の輸出比率',year:2024,unit:'商品輸出額に占める割合（%）'},
  {id:'canal',name:'パナマ運河と淡水・物流',year:2024,unit:'2024会計年度・大型外航船の通航回数'},
@@ -37,7 +39,8 @@ export function industryCountryName(code:string){return latinCountries.find(c=>c
 export const escapeIndustryHtml=(s:unknown)=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 const esc=escapeIndustryHtml;
 const metricId=(id:string):'ores'|'manufactures'=>id==='manufactures'?'manufactures':'ores';
-export function renderLatinIndustryMap(state:LatinIndustryMapState,idPrefix='latin-industry'){
+export function renderLatinIndustryMap(state:LatinIndustryMapState,idPrefix='latin-industry',screen?:{width:number;height:number}){
+ if(state.layer==='locations')return renderLatinIndustryLocations(state,idPrefix,screen);
  if(state.layer==='canal')return renderLatinCanalDiagram(idPrefix);
  const layer=metricId(state.layer),metric=data.metrics.find(m=>m.id===layer)!;
  const {k,tx,ty,transform}=latinMapLayout(state.scope,state.place);
@@ -57,6 +60,7 @@ export function renderLatinIndustryMap(state:LatinIndustryMapState,idPrefix='lat
  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${latinWidth} ${latinHeight}" width="${latinWidth}" height="${latinHeight}" class="latin-industry-map" data-latin-industry-map role="group" aria-labelledby="${esc(idPrefix)}-title"><title id="${esc(idPrefix)}-title">${esc(metric.name)}の輸出比率 · 2024年 · 商品輸出額に占める割合（%）</title><g data-industry-context transform="${transform}" aria-hidden="true">${context}</g><g data-industry-values transform="${transform}">${foreground}</g><g aria-hidden="true">${labels}</g></svg>`;
 }
 export function renderLatinIndustryLegend(layer:string){
+ if(layer==='locations')return renderLatinIndustryLocationsLegend();
  if(layer==='canal')return '<p class="latin-industry-canal-key">矢印：淡水と物流のつながり。位置・流量・数量の比例図ではありません。</p>';
  return `<div class="latin-industry-key" data-latin-industry-legend aria-label="2024年 商品輸出額に占める割合の凡例">${latinIndustryBins.map(b=>`<span><i style="background:${b.color}"></i>${b.label}</span>`).join('')}<span><i style="background:${industryMissingColor}"></i>欠測</span><span><i class="not-covered" style="background:${industryNotCoveredColor}"></i>対象統計なし</span></div>`;
 }

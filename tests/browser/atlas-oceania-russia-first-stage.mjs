@@ -75,7 +75,8 @@ try{
     const host=root(region),map=host.locator('[data-primary-map]'),frame=await map.locator('svg').first().getAttribute('viewBox');
     assert.equal(await host.locator('[data-place]').inputValue(),'all');
     assert.equal(new URL(page.url()).searchParams.get('scope'),'all');
-    assert.ok((await host.locator('[data-theme-title]').textContent()).startsWith(region==='oceania'?'オセアニアの':'ロシアの'));
+    if(region==='russia'&&field==='industry'){assert.equal(await map.locator('[data-russia-industry-location]').count(),8);assert.equal(await host.locator('[data-reading-status]').textContent(),'ロシアの概要');}
+    else assert.ok((await host.locator('[data-theme-title]').textContent()).startsWith(region==='oceania'?'オセアニアの':'ロシアの'));
     assert.equal(await host.locator('[data-theme][aria-pressed=true]').count(),0);
     assert.equal(await host.locator('[data-primary-legend-spacer]').evaluate(el=>el.getBoundingClientRect().height),0);
     assert.ok(await host.locator('[data-primary-legend]').isVisible());
@@ -253,6 +254,7 @@ try{
     const layer=await host.locator('[data-layer]').inputValue(),compare=await host.locator('[data-compare-layer]').inputValue();
     if(region==='oceania')await host.locator('[data-place]').selectOption('PNG');
     else if(field==='agriculture'){await host.locator('[data-place]').focus();await host.locator('[data-place]').press('End');}
+    else if(field==='industry')await host.locator('[data-region-option=far-east]').press('Enter');
     else await map.locator('[data-region-marker][data-map-place=far-east]').press('Enter');
     await ready(region);
     assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
@@ -263,6 +265,8 @@ try{
       assert.equal(await host.locator('[data-place]').inputValue(),'far-east');assert.equal(await map.locator('[data-region-marker]').count(),0);
       assert.match(await host.locator('[data-geography-reading]').textContent(),/ヤクーツク付近.*低密度の正値/);
       assert.equal(await host.locator('[data-place]').evaluate(el=>document.activeElement===el),true,'Native keyboard region focus survives redraw');
+     }else if(field==='industry'){
+      assert.equal(await host.locator('[data-place]').inputValue(),'far-east');assert.equal(await map.locator('[data-region-marker]').count(),0);assert.equal(await map.locator('[data-russia-industry-location]').count(),8);assert.equal(await host.locator('[data-region-option=far-east]').evaluate(el=>document.activeElement===el),true);
      }else{
       assert.equal(await map.locator('[data-region-marker]').count(),3);
       assert.equal(await map.locator('[data-region-marker][data-map-place=far-east]').evaluate(el=>document.activeElement===el),true,'Keyboard focus survives redraw');
@@ -277,7 +281,8 @@ try{
     assert.equal(await host.locator('[data-layer]').inputValue(),layer);
     assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
     await host.locator('[data-place]').selectOption('all');await ready(region);
-    assert.ok((await host.locator('[data-theme-title]').textContent()).startsWith(region==='oceania'?'オセアニアの':'ロシアの'));
+    if(region==='russia'&&field==='industry'){assert.equal(await map.locator('[data-russia-industry-location]').count(),8);assert.equal(await host.locator('[data-reading-status]').textContent(),'ロシアの概要');}
+    else assert.ok((await host.locator('[data-theme-title]').textContent()).startsWith(region==='oceania'?'オセアニアの':'ロシアの'));
    }
    for(const dimension of dimensions){assert.ok(Math.abs(dimension.width-dimensions[0].width)<2,`${region} field map widths agree`);assert.ok(Math.abs(dimension.height-dimensions[0].height)<2,`${region} field map heights agree`);}
    result.viewports.push({region,width,maps:dimensions});

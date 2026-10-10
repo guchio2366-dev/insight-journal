@@ -27,12 +27,12 @@ test('Compact industry buttons drive the original map, legend, reader and URL wh
    assert.equal(params.get('layer'),layer.id);assert.equal(params.get('place'),'PAN');assert.equal(params.get('scope'),'central');assert.equal(params.get('only'),'1');
    assert.equal(q(w,'[data-industry-layer]').value,layer.id);assert.equal(q(w,'[data-latin-industry]').dataset.layer,layer.id);
    assert.deepEqual(buttons.filter(button=>button.getAttribute('aria-pressed')==='true').map(button=>button.dataset.industryLayerOption),[layer.id]);
-   assert.equal(q(w,'[data-industry-reading-title]').textContent,lib.industryReadingForPlace('PAN',layer.id).title);
-   assert.equal(q(w,'[data-industry-takeaway]').textContent,lib.industryReadingForPlace('PAN',layer.id).takeaway);
+   assert.equal(q(w,'[data-industry-reading-title]').textContent,layer.id==='locations'?lib.latinIndustryLocationOverview.title:lib.industryReadingForPlace('PAN',layer.id).title);
+   assert.equal(q(w,'[data-industry-takeaway]').textContent,layer.id==='locations'?lib.latinIndustryLocationOverview.distribution:lib.industryReadingForPlace('PAN',layer.id).takeaway);
    const expected=w.document.createElement('div');expected.innerHTML=lib.renderLatinIndustryLegend(layer.id);
    assert.equal(q(w,'[data-industry-primary-legend]').textContent,expected.textContent);
    if(layer.id==='canal')assert.ok(q(w,'[data-industry-primary-map] .latin-industry-canal'));
-   else assert.equal(q(w,'[data-industry-primary-map] [data-industry-country=PAN]').getAttribute('fill'),lib.latinIndustryColor(data.rows.find(row=>row.country==='PAN').values[layer.id].value,data.rows.find(row=>row.country==='PAN').values[layer.id].status));
+   else if(layer.id==='locations')assert.ok(q(w,'[data-industry-primary-map] [data-industry-location=panama-logistics]'));else assert.equal(q(w,'[data-industry-primary-map] [data-industry-country=PAN]').getAttribute('fill'),lib.latinIndustryColor(data.rows.find(row=>row.country==='PAN').values[layer.id].value,data.rows.find(row=>row.country==='PAN').values[layer.id].status));
   }
   change(w,'[data-industry-layer]','ores');assert.equal(q(w,'[data-industry-layer-option=ores]').getAttribute('aria-pressed'),'true');
   w.history.replaceState(null,'','?layer=manufactures&place=PAN&scope=central&only=1');w.dispatchEvent(new w.PopStateEvent('popstate'));
@@ -57,10 +57,10 @@ test('Industry SSR exposes 34 country values, a meaningful map and full common l
  const w=await page('',false);try{
   assert.equal(w.document.querySelectorAll('[data-industry-primary-map] [data-industry-country]').length,34);
   assert.equal(w.document.querySelectorAll('[data-industry-context] path').length,34);
-  assert.equal(q(w,'[data-industry-primary-legend]').querySelectorAll('span').length,8);
+  assert.equal(q(w,'[data-industry-primary-legend]').querySelectorAll('span').length,5);
   assert.equal(w.document.querySelectorAll('tbody tr').length,34);
   assert.equal(w.document.querySelectorAll('details[open]').length,0);
-  assert.match(q(w,'[data-industry-title]').textContent,/鉱石・金属/);assert.match(q(w,'[data-industry-period]').textContent,/2024.*%/);
+  assert.match(q(w,'[data-industry-title]').textContent,/主要産業の位置/);assert.match(q(w,'[data-industry-period]').textContent,/代表位置/);assert.equal(q(w,'[data-industry-primary-map]').querySelectorAll('[data-industry-location]').length,8);
   for(const file of ['industry-selected-2024.csv','manifest.json'])await access(`dist/assets/atlas/latin-industry-v1/${file}`);
  }finally{await w.happyDOM.close();}
 });
@@ -140,4 +140,27 @@ test('Explicit image fallback is made from the current selected distributions an
   for(const side of ['source','target']){const img=q(w,`[data-industry-${side}-map] img`);assert.ok(img);const svg=decodeURIComponent(img.src.split(',')[1]);assert.match(svg,/data-industry-country="DOM"/);assert.equal((svg.match(/data-industry-country=/g)??[]).length,1);assert.match(svg,/data-industry-context/);}
   change(w,'[data-industry-place]','CRI');await w.happyDOM.whenAsyncComplete();assert.match(q(w,'[data-industry-return]').textContent,/コスタリカ/);assert.equal(new URL(q(w,'[data-industry-return]').href).searchParams.get('fallback'),'1');
  }finally{await w.happyDOM.close();}
+});
+
+
+test('location default connects all eight existing explanations, quantities and sources with reversible selection',async()=>{
+ const w=await page();let reload;try{
+  assert.equal(q(w,'[data-latin-industry]').dataset.layer,'locations');
+  assert.equal(q(w,'[data-industry-primary-map]').querySelectorAll('[data-industry-location]').length,8);
+  for(const row of lib.latinIndustryLocations){
+   q(w,`[data-industry-location-choice="${row.id}"]`).click();
+   assert.equal(new URL(w.location).searchParams.get('case'),row.id);
+   assert.equal(q(w,'[data-industry-reading-title]').textContent,row.title);
+   assert.equal(q(w,'[data-industry-takeaway]').textContent,row.summary);
+   for(const section of row.sections)assert.ok(q(w,'[data-industry-location-reading]').textContent.includes(section.body));
+   for(const stat of row.stats??[])assert.ok(q(w,'[data-industry-location-reading]').textContent.includes(stat.scope));
+   for(const source of row.sources)assert.ok([...q(w,'[data-industry-location-reading]').querySelectorAll('a')].some(a=>a.href===source.url));
+   assert.equal(q(w,'[data-industry-primary-map]').querySelectorAll('[data-industry-location]').length,8);
+  }
+  reload=await page(w.location.search);assert.equal(q(reload,'[data-industry-location="caribbean-tourism"]').getAttribute('aria-pressed'),'true');
+  const comparison=lib.latinComparisonState(lib.readLatinLearningState(w.location.search,'industry',lib.latinIndustryLayers.map(x=>x.id),'locations'),'industry','ores');
+  const restored=lib.readLatinLearningState(lib.writeLatinLearningState(comparison),'industry',lib.latinIndustryLayers.map(x=>x.id),'locations');
+  assert.equal(restored.source.case,'caribbean-tourism');assert.equal(new URL(lib.latinSourceReturnUrl('/atlas/latin-america/',restored),'https://example.com').searchParams.get('case'),'caribbean-tourism');
+  q(w,'[data-industry-location-return]').click();assert.equal(new URL(w.location).searchParams.has('case'),false);assert.equal(q(w,'[data-industry-primary-map]').querySelectorAll('[data-industry-location]').length,8);
+ }finally{await w.happyDOM.close();if(reload)await reload.happyDOM.close();}
 });
