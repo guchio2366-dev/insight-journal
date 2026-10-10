@@ -26,7 +26,6 @@ jobs:
     env:
       ASTRO_TELEMETRY_DISABLED: '1'
       FORESTRY_REVIEW_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
-      FORESTRY_REVIEW_OUTPUT: ${{ runner.temp }}/regional-forestry-review
     steps:
       - uses: actions/checkout@v7
         with:
@@ -52,6 +51,8 @@ jobs:
       - run: npm run build
       - run: node --test tests/e2e/atlas-regional-forestry.test.mjs
       - run: node scripts/verify-regional-forestry-pc.mjs
+        env:
+          FORESTRY_REVIEW_OUTPUT: ${{ runner.temp }}/regional-forestry-review
       - name: Upload screenshots and exact-head report
         if: always()
         uses: actions/upload-artifact@v4
