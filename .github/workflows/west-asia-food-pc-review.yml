@@ -1,4 +1,4 @@
-name: Review West Asia food and forestry on PC
+name: Review Mexico and West Asia retained forestry on PC
 
 on:
   pull_request:
@@ -6,6 +6,13 @@ on:
     paths:
       - '.github/workflows/west-asia-food-pc-review.yml'
       - 'scripts/capture-west-asia-forestry-review.mjs'
+      - 'scripts/capture-mexico-agriculture-review.mjs'
+      - 'src/components/atlas/MexicoAgriculturePage.astro'
+      - 'src/components/atlas/MexicoPineFlow.astro'
+      - 'src/data/atlas/mexico/pine-flow-2022.json'
+      - 'src/styles/atlas-mexico-agriculture-atlas.css'
+      - 'tests/unit/atlas-west-asia-forestry.test.mjs'
+      - 'tests/e2e/atlas-mexico-agriculture.test.mjs'
       - 'scripts/capture-west-asia-food-review.mjs'
       - 'src/data/atlas/west-asia-*'
       - 'src/lib/atlas-west-asia-farming.mjs'
@@ -62,8 +69,18 @@ jobs:
           node-version-file: .nvmrc
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
+      - name: Test retained forestry and related regional data
+        run: node --test tests/unit/atlas-west-asia*.test.mjs tests/unit/atlas-mexico-agriculture*.test.mjs tests/unit/atlas-production-share*.test.mjs
       - name: Build site
         run: npm run build
+      - name: Test built Mexico agriculture and West Asia controllers
+        run: node --test --test-concurrency=4 tests/e2e/atlas-mexico-agriculture.test.mjs tests/e2e/atlas-west-asia*.test.mjs
+      - name: Verify release boundary
+        run: npm run verify:release
+      - name: Capture Mexico pine and cattle-milk comparison
+        env:
+          REVIEW_MEXICO_FORESTRY_ONLY: '1'
+        run: node scripts/capture-mexico-agriculture-review.mjs
       - name: Capture wheat selection regression
         run: node scripts/capture-west-asia-food-review.mjs
       - name: Capture forestry overview and Saudi selection
@@ -82,5 +99,13 @@ jobs:
         with:
           name: west-asia-forestry-pc-${{ github.run_id }}
           path: review-artifacts/west-asia-forestry
+          if-no-files-found: error
+          retention-days: 7
+      - name: Upload Mexico forestry and dairy evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mexico-forestry-dairy-pc-${{ github.run_id }}
+          path: review-artifacts/mexico-agriculture
           if-no-files-found: error
           retention-days: 7

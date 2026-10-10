@@ -524,7 +524,10 @@ async function main() {
     metadata.browserVersion = browser.version();
     metadata.browserExecutable = executablePath;
     metadata.browserLaunch = {headless: true, chromiumSandbox: true, additionalFlags: []};
+    const focused=process.env.REVIEW_MEXICO_FORESTRY_ONLY==='1';
+    metadata.scope=focused?'mexico-forestry-and-dairy':'existing-agriculture-review';
     for (const profile of profiles) for (const country of countries) for (const scene of country.cases) {
+      if(focused&&(profile.name!=='desktop'||country.id!=='mexico'||!['forestry','dairy'].includes(scene.id)))continue;
       if (profile.name === 'mobile' && !['overview', 'crop'].includes(scene.id)) continue;
       if (profile.name === 'small-desktop' && scene.id !== 'overview') continue;
       const result = await capture(browser, hosted.origin, profile, country, scene);
@@ -532,8 +535,8 @@ async function main() {
       await writeFile(path.join(output, 'metadata.json'), `${JSON.stringify(metadata, null, 2)}\n`);
       console.log(`${result.status.toUpperCase()}: ${result.name}${result.failure ? `: ${result.failure.split('\n')[0]}` : ''}`);
     }
-    metadata.pcReview = await captureMexicoPCReview({browser, origin: hosted.origin, basePath, output: path.join(output, 'pc-review')});
-    assert.equal(metadata.pcReview.status, 'passed', 'PC comparison capture failed. Inspect mexico-agriculture/pc-review metadata and PNGs.');
+    if(!focused)metadata.pcReview = await captureMexicoPCReview({browser, origin: hosted.origin, basePath, output: path.join(output, 'pc-review')});
+    if(!focused)assert.equal(metadata.pcReview.status, 'passed', 'PC comparison capture failed. Inspect mexico-agriculture/pc-review metadata and PNGs.');
     const failures = metadata.captures.filter(item => item.status !== 'passed');
     assert.equal(failures.length, 0, `${failures.length} browser capture(s) failed. Inspect review-artifacts/mexico-agriculture metadata and failure PNGs.`);
     metadata.status = 'passed';
