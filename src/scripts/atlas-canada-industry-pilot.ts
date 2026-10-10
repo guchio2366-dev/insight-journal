@@ -58,7 +58,7 @@ export function initCanadaIndustryPilot(root:HTMLElement){
    const place=document.createElement('small');place.textContent=group[0].c.place;card.append(place);
    for(const {c}of group){const item=pilot.industries.find(i=>i.id===c.industry)!,button=document.createElement('button');button.type='button';button.dataset.caMarker=c.id;button.setAttribute('aria-pressed',String(c.id===state.site));button.className=c.industry===state.industry?'is-highlighted':'';button.style.setProperty('--pilot-color',item.color);
     const label=document.createElement('strong');label.textContent=pilotIndustryLabel(c.industry,state.sector);const icon=document.createElement('i');icon.className=/精|製|構造体|部品|機体/.test(c.stage)?'is-processing':'';icon.setAttribute('aria-hidden','true');label.prepend(icon);
-    button.append(label);if(group.length===1){const stageText=document.createElement('span');stageText.textContent=stageLabel(c);button.append(stageText);}button.setAttribute('aria-label',`${pilotIndustryLabel(c.industry,state.sector)} · ${c.place} · ${stageLabel(c)}`);button.addEventListener('click',()=>chooseSite(c));card.append(button);
+    button.append(label);button.setAttribute('aria-label',`${pilotIndustryLabel(c.industry,state.sector)} · ${c.place} · ${stageLabel(c)}`);button.addEventListener('click',()=>chooseSite(c));card.append(button);
    }
    overlay.append(card);const cw=card.offsetWidth||154,ch=card.offsetHeight||58;const offsets:number[][]=[];
    for(let dy=-260;dy<=260;dy+=26)for(let dx=-310;dx<=310;dx+=32)offsets.push([dx,dy]);offsets.sort((a,b)=>a[0]**2+a[1]**2-b[0]**2-b[1]**2);
