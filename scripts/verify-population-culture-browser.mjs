@@ -4,6 +4,7 @@ import astroConfig from '../astro.config.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import {createServer} from 'node:http';
+import {createHash} from 'node:crypto';
 import assert from 'node:assert/strict';
 const out=fileURLToPath(new URL('../docs/reviews/population-culture-20261010',import.meta.url));
 fs.mkdirSync(out,{recursive:true});
@@ -22,10 +23,18 @@ const server=createServer((req,res)=>{
 });
 await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 const origin=`http://127.0.0.1:${server.address().port}`;
-const chromiumSandbox=process.env.CULTURE_CHROMIUM_SANDBOX!=='0';
-const browser=await chromium.launch({executablePath:process.env.REVIEW_CHROME_PATH??'/usr/bin/chromium',headless:true,chromiumSandbox});
+let browser;
 const results=[];
 try{
+ browser=await chromium.launch({executablePath:process.env.REVIEW_CHROME_PATH??'/usr/bin/chromium',headless:true,chromiumSandbox:true});
+ const sandboxPage=await browser.newPage();await sandboxPage.goto('chrome://sandbox');
+ const sandboxStatus=await sandboxPage.locator('body').innerText();
+ assert.match(sandboxStatus,/Seccomp-BPF sandbox\s+Yes/);
+ assert.match(sandboxStatus,/You are adequately sandboxed\./);
+ await sandboxPage.screenshot({path:`${out}/sandbox-status.png`,fullPage:true});await sandboxPage.close();
+ const release=JSON.parse(fs.readFileSync(path.join(dist,'_release.json'),'utf8'));
+ const reviewedCommit=process.env.CULTURE_REVIEW_EXPECTED_HEAD??release.commitSha;assert.equal(release.commitSha,reviewedCommit);
+
 for(const [label,width,height] of [['pc-1280',1280,665],['pc-1024',1024,665]]){
  const page=await browser.newPage({viewport:{width,height}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
  for(const [region,topic] of [['oceania','ethnicity'],['oceania','religion'],['russia','religion'],['russia','ethnicity'],['africa','religion'],['africa','ethnicity']]){
@@ -51,6 +60,6 @@ for(const [label,width,height] of [['pc-1280',1280,665],['pc-1024',1024,665]]){
  await page.close();
 }
 const noJs=await browser.newPage({javaScriptEnabled:false});await noJs.goto(`${origin}${base}/atlas/oceania/population/`);assert.equal(await noJs.locator('[data-population-culture]').isVisible(),true);assert.equal(await noJs.locator('[data-culture-panel=ethnicity]').isVisible(),true);await noJs.close();
-fs.writeFileSync(`${out}/browser-results.json`,JSON.stringify({browser:browser.version(),chromiumSandbox,sandboxReason:chromiumSandbox?null:'Default sandbox launch failed: installed SUID helper is not configured. Local loopback preview only.',results,noJavascript:'both source tables available'},null,2)+'\n');console.log(`${results.length} population culture browser cases passed; screenshots: ${out}`);
+fs.writeFileSync(`${out}/browser-results.json`,JSON.stringify({browser:browser.version(),chromiumSandbox:true,sandboxStatus,reviewedCommit,capturedAt:new Date().toISOString(),releaseBuiltAt:release.builtAt,runId:process.env.GITHUB_RUN_ID??null,runAttempt:process.env.GITHUB_RUN_ATTEMPT??null,japaneseFonts:process.env.CULTURE_REVIEW_JAPANESE_FONTS??null,screenshots:Object.fromEntries(fs.readdirSync(out).filter(name=>name.endsWith('.png')).map(name=>[name,createHash('sha256').update(fs.readFileSync(path.join(out,name))).digest('hex')])),results,noJavascript:'both source tables available'},null,2)+'\n');console.log(`${results.length} population culture browser cases passed; screenshots: ${out}`);
 
-}finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
+}finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}

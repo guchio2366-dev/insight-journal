@@ -55,6 +55,8 @@
 - `npm test`：1,061試験、1,058成功、既存3 skip、失敗0。
 - `npm run build`：成功。`ASTRO_TELEMETRY_DISABLED=1`を指定して、この実行環境の読取専用ホームへのtelemetry書込を避けた。
 - 全体E2E：548試験、541成功、既存7 skip、失敗0。アフリカ既存回帰の対象24ケースと関連単体63ケースも成功。`npm run verify:release`は成功（local, 1 articles）。
-- `scripts/verify-population-culture-browser.mjs`：ビルド済みdistをループバックで配信し、1280×665、1024×665の2PC想定で6状態ずつ、12ケースを操作検証。実機2台の操作ではない。初期・選択後画像、取得年・定義・全区分・切れ・戻る・再読込・密度への復帰を確認。初期の記号切れ、豪州/NZ記号の枠の重なり、狭いロシア地図の右欄へのはみ出しを修正し、最終画像を再取得・目視済み。
-- この環境のChromium SUID sandbox helperの設定不備でsandbox付き起動が失敗した。ローカルビルドのレビューに限って `CULTURE_CHROMIUM_SANDBOX=0 node scripts/verify-population-culture-browser.mjs` を使用。スクリプトの既定はsandbox有効。ブラウザー版・設定・結果は `docs/reviews/population-culture-20261010/browser-results.json`。
+- 旧sandbox無効状態の画像・metadataは合格証拠から撤回。安全な設定のCIで再取得するまで受入確認は保留。
+- `scripts/verify-population-culture-browser.mjs` は `chromiumSandbox:true` を明示し、`chrome://sandbox` でSeccomp-BPFと十分なsandbox状態を検査する。起動・安全性確認に失敗した場合は停止し、代替の無効化経路を持たない。
+- 再検証はGitHub runnerの既存Chromeと日本語フォントを使い、1280×665と1024×665の12ケースを同等の操作で検証する。実機2台ではない。ソースhead、ブラウザーの安全性表示、画像SHA256とCI runをmetadataへ記録する。
+- 再実行：`REVIEW_CHROME_PATH=/path/to/properly-configured/chrome node scripts/verify-population-culture-browser.mjs`。CIジョブはマージ・公開をしない。
 - この候補ではマージ・公開を行わない。親の統合・新画像レビュー・公開照合が別途必要。
