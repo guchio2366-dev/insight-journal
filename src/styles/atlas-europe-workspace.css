@@ -496,6 +496,12 @@
 .eu-workspace-root[data-europe-detail] .eu-farming-regional-evidence[data-kind="other-cows"] { background:#9c6547; }
 .eu-workspace-root[data-europe-detail] .eu-farming-regional-evidence[data-kind="vines"] { background:#935a86; }
 .eu-workspace-root[data-europe-detail] .eu-farming-regional-evidence[data-kind="olives"] { background:#6f7f3b; }
+.eu-workspace-root[data-europe-detail] .eu-farming-country-evidence { position:absolute; z-index:3; transform:translate(-50%,-50%); display:flex; align-items:center; gap:3px; padding:2px 3px; border:1px solid #50616a; border-left:4px solid #52789e; border-radius:3px; background:#fffef4f2; color:#213642; text-align:center; font:700 10px/1.15 var(--sans); white-space:nowrap; pointer-events:none; box-shadow:0 1px 3px #102b3444; }
+.eu-workspace-root[data-europe-detail] .eu-farming-country-evidence[hidden] { display:none; }
+.eu-workspace-root[data-europe-detail] .eu-farming-country-evidence strong { font-size:10px; }
+.eu-workspace-root[data-europe-detail] .eu-farming-country-evidence[data-kind="suckler-country"] { border-left-color:#9c6547; }
+.eu-workspace-root[data-europe-detail] .eu-farming-country-evidence[data-kind="vines-country"] { border-left-color:#935a86; }
+.eu-workspace-root[data-europe-detail] .eu-farming-country-evidence[data-kind="olives-country"] { border-left-color:#6f7f3b; }
 .eu-workspace-root[data-europe-detail] .eu-terrain-place-label { position:absolute; z-index:2; transform:translate(-50%,-50%); padding:2px 4px; background:#fffef4df; color:#413e36; font:700 12px/1.25 var(--sans); text-shadow:0 1px #fff; pointer-events:none; white-space:nowrap; }
 .eu-workspace-root[data-europe-detail] .eu-terrain-name-options { display:flex; gap:6px; padding:7px 0; }
 .eu-workspace-root[data-europe-detail] .eu-terrain-name-options button { min-height:36px; padding:5px 12px; border:1px solid #9eaca3; background:#fffef5; color:#244653; font:700 14px/1.4 var(--sans); }

@@ -1,7 +1,7 @@
 import { frame, europeFarmingInitialBounds, project, unproject, wheatCell, displayCell, visibleBounds, readEuropeState, writeEuropeState, defaultEuropeCity, normaliseEuropePoint } from './atlas-europe-view';
 import { farmingPresentation, farmingAtPoint, updateFarmingMap, type FarmingAreas } from './atlas-europe-farming';
 import { europeFarmingGenreForLayer, europeFarmingGenres } from '../data/atlas/europe/farming-genres.ts';
-import { europeFarmingRegionalEvidence } from '../data/atlas/europe/farming-regional-evidence.ts';
+import { europeFarmingRegionalEvidence, europeFarmingCountryEvidence } from '../data/atlas/europe/farming-regional-evidence.ts';
 import { europeFarmAvailableMetrics } from '../data/atlas/europe/farming-statistics';
 import { layerColor, fields, europeFieldHeadings, type EuropeLayer } from '../data/atlas/europe/layers';
 import type { EuropeReading } from '../data/atlas/europe/readings';
@@ -199,11 +199,13 @@ export function initEuropeAtlas() {
     return {x:point.x-rect.left,y:point.y-rect.top};
   };
   const pewMarkers=createEuropePewMarkers(stage,selectCountry);
-  const regionalEvidence=europeFarmingRegionalEvidence.map(item=>{
+  const regionalEvidence=[...europeFarmingRegionalEvidence,...europeFarmingCountryEvidence].map(item=>{
     const node=document.createElement('span');
-    node.className='eu-farming-regional-evidence';node.dataset.euFarmingEvidence=item.id;node.dataset.kind=item.kind;
-    node.textContent=({'dairy':'乳','other-cows':'非','vines':'葡','olives':'オ'} as Record<string,string>)[item.kind];
-    node.setAttribute('role','img');node.setAttribute('aria-label',`${item.name}：${item.detail}（${item.period}）`);
+    const country='value' in item;
+    node.className=country?'eu-farming-country-evidence':'eu-farming-regional-evidence';node.dataset.euFarmingEvidence=item.id;node.dataset.kind=item.kind;
+    if(country){const name=document.createElement('span'),value=document.createElement('strong');name.textContent=item.name;value.textContent=item.value;node.append(name,value);}
+    else node.textContent=({'dairy':'乳','other-cows':'非','vines':'葡'} as Record<string,string>)[item.kind];
+    node.setAttribute('role','img');node.setAttribute('aria-label',`${item.name}：${item.detail}${country?'':`（${item.period}）`}`);
     node.hidden=true;stage.append(node);return {item,node};
   });
   function positionRegionalEvidence(){
@@ -213,7 +215,8 @@ export function initEuropeAtlas() {
       if(node.hidden)continue;
       const point=overlayProject(item.coordinates as [number,number]);
       node.style.left=point.x+'px';node.style.top=point.y+'px';
-      node.hidden=point.x<22||point.x>rect.width-22||point.y<42||point.y>rect.height-44;
+      const edge='value' in item?36:22;
+      node.hidden=point.x<edge||point.x>rect.width-edge||point.y<42||point.y>rect.height-44;
     }
   }
   const features = [...config.populationCities,...config.readings,...europeCultureOverviewPlaces];

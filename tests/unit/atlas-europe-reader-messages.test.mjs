@@ -63,8 +63,8 @@ test('12作物・4家畜と集約区分、分布面の限界を維持する', ()
   assert.match(copy('vegetables').note, /VEGE.*「全野菜」ではありません/);
   assert.match(copy('crops').note, /ライムギ単独の元格子は未収録/);
   assert.match(copy('horticulture').note, /ブドウ・オリーブ単独の元格子は未収録/);
-  assert.match(copy('livestock').note, /丸印.*NUTS 2境界ではありません/);
-  assert.match(copy('livestock').note, /非乳牛は肉牛の出荷量ではありません/);
+  assert.match(copy('livestock').note, /四角.*英国は当時EU加盟国/);
+  assert.match(copy('livestock').note, /非乳牛と肉用繁殖母牛、肉牛出荷量は別の指標/);
 });
 
 test('国全体の対比は固定した2023年の資料に一致し、局所分布の説明へ変えない', () => {

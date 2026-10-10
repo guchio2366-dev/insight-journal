@@ -7,6 +7,18 @@
         "ie-south-dairy",
         "ie-nw-other-cows",
         "austrian-alps-dairy"
+      ],
+      "countries": [
+        "dairy-de",
+        "dairy-fr",
+        "dairy-pl",
+        "dairy-it",
+        "dairy-uk",
+        "dairy-nl",
+        "suckler-fr",
+        "suckler-es",
+        "suckler-uk",
+        "suckler-ie"
       ]
     },
     {
@@ -16,8 +28,16 @@
         "rioja-vines",
         "languedoc-vines",
         "friuli-vines",
-        "attica-vines",
-        "mediterranean-olives"
+        "attica-vines"
+      ],
+      "countries": [
+        "vines-es",
+        "vines-fr",
+        "vines-it",
+        "olives-es",
+        "olives-it",
+        "olives-gr",
+        "olives-pt"
       ]
     },
     {
@@ -27,6 +47,18 @@
         "ie-south-dairy",
         "ie-nw-other-cows",
         "austrian-alps-dairy"
+      ],
+      "countries": [
+        "dairy-de",
+        "dairy-fr",
+        "dairy-pl",
+        "dairy-it",
+        "dairy-uk",
+        "dairy-nl",
+        "suckler-fr",
+        "suckler-es",
+        "suckler-uk",
+        "suckler-ie"
       ]
     },
     {
@@ -36,8 +68,16 @@
         "rioja-vines",
         "languedoc-vines",
         "friuli-vines",
-        "attica-vines",
-        "mediterranean-olives"
+        "attica-vines"
+      ],
+      "countries": [
+        "vines-es",
+        "vines-fr",
+        "vines-it",
+        "olives-es",
+        "olives-it",
+        "olives-gr",
+        "olives-pt"
       ]
     }
   ]
