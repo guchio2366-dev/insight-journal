@@ -35,7 +35,7 @@ export function initEuropeAtlas() {
   const root = document.querySelector<HTMLElement>('[data-europe-detail]');
   if (!root || root.dataset.initialized) return;
   root.dataset.initialized = 'true';
-  const config = JSON.parse(root.querySelector('[data-eu-config]')!.textContent!) as { industryOverviews:Record<string,{takeaway:string;body:string;evidenceNote?:string;sources:{label:string;url:string;period:string}[]}>; farmingAreas:FarmingAreas; farmingDominantAreas:FarmingAreas; farmingSecondaryAreas:FarmingAreas; countries: Country[]; cities: City[]; geography: { type: 'FeatureCollection'; features: Feature[] }; climateWater: { type:'FeatureCollection';features:{type:'Feature';properties:{id:string;name:string};geometry:Geometry}[] }; climate: string; wheat: string; wheatValues: string; initialLayer: string; layers:EuropeLayer[];populationCities:Place[];readings:EuropeReading[];statistics:{indicators:Indicator[]} };
+  const config = JSON.parse(root.querySelector('[data-eu-config]')!.textContent!) as { industryOverviews:Record<string,{takeaway:string;body:string;evidenceNote?:string;sources:{label:string;url:string;period:string;definitionUrl?:string}[]}>; farmingAreas:FarmingAreas; farmingDominantAreas:FarmingAreas; farmingSecondaryAreas:FarmingAreas; countries: Country[]; cities: City[]; geography: { type: 'FeatureCollection'; features: Feature[] }; climateWater: { type:'FeatureCollection';features:{type:'Feature';properties:{id:string;name:string};geometry:Geometry}[] }; climate: string; wheat: string; wheatValues: string; initialLayer: string; layers:EuropeLayer[];populationCities:Place[];readings:EuropeReading[];statistics:{indicators:Indicator[]} };
   const { countries, cities, geography } = config;
   const query = <T extends Element>(selector: string) => root.querySelector<T>(selector)!;
   const all = <T extends Element>(selector: string) => Array.from(root.querySelectorAll<T>(selector));
@@ -343,9 +343,9 @@ export function initEuropeAtlas() {
       query('[data-eu-subject-title]').textContent=`${countries.find(c=>c.code===state.place)!.name}の産業構成`;
       query('[data-eu-subject-takeaway]').textContent=industryCountry.takeaway;
       query('[data-eu-subject-intro]').textContent=industryCountry.body;
-      query('[data-eu-subject-note]').textContent=industryCountry.evidenceNote??'2023年・国全体のGDPが分母です。製造業は鉱工業・建設業に含まれ、3指標を足して100%にすることはできません。';
+      query('[data-eu-subject-note]').textContent='2023年・国全体のGDPが分母です。製造業は鉱工業・建設業に含まれ、3指標を足して100%にすることはできません。'+(industryCountry.evidenceNote?' '+industryCountry.evidenceNote:'');
       readingSources.replaceChildren();
-      for(const source of industryCountry.sources){const a=document.createElement('a');a.href=source.url;a.textContent=source.label+' · '+source.period;a.className='eu-source-link';readingSources.append(a);}
+      for(const source of industryCountry.sources){const a=document.createElement('a');a.href=source.url;a.textContent=source.label+' · '+source.period;a.className='eu-source-link';readingSources.append(a);if(source.definitionUrl){const definition=document.createElement('a');definition.href=source.definitionUrl;definition.textContent=source.label+'：指標の定義・分母';definition.className='eu-source-link';definition.dataset.euIndustryDefinition='';readingSources.append(definition);}}
     }else if(layer.field==='industry'&&state.industryGroup){
       const cases=config.readings.filter(p=>p.field==='industry'&&europeIndustryMatches(p.id,state.industryGroup));
       const sector=europeIndustryGroupCopy[state.industryGroup];
