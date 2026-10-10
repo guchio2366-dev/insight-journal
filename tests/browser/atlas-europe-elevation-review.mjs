@@ -25,15 +25,6 @@ async function ready(page,render){
   if(render==='auto')await page.locator('[data-eu-live].is-ready').waitFor();
   else await page.waitForFunction(()=>getComputedStyle(document.querySelector('[data-eu-static]')).visibility==='visible');
 }
-async function followComparison(page,id){
-  const menu=page.locator('[data-eu-comparison-aux]');
-  await menu.waitFor({state:'visible'});
-  if(!(await menu.evaluate(node=>node.open)))await menu.locator('summary').click();
-  assert.equal(await menu.evaluate(node=>node.open),true);
-  const link=menu.locator(`[data-eu-comparison-link="${id}"]`);
-  await link.waitFor({state:'visible'});
-  await link.click();
-}
 async function snapshot(page,name){
   await page.evaluate(()=>scrollTo(0,0));
   await page.screenshot({path:`${output}/${name}.png`,fullPage:true});
@@ -92,7 +83,7 @@ try{
       await page.reload({waitUntil:'networkidle'});await ready(page,render);assert.equal(await settled(page),terrain);
       assert.equal(await page.locator('[data-eu-subject-reader]').textContent(),retainedCopy,'Reload retains the complete reader copy');
 
-      await followComparison(page,'nature-density');
+      await page.locator('[data-eu-comparison-link="nature-density"]').click();
       await page.waitForURL('**/population/**');
       await page.locator('[data-eu-comparison-return]').waitFor();
       assert.match(await page.locator('[data-eu-comparison-return]').textContent(),/アルプス.*元の選択へ戻る/);
