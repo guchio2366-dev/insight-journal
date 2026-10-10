@@ -55,8 +55,8 @@
 - `npm test`：1,061試験、1,058成功、既存3 skip、失敗0。
 - `npm run build`：成功。`ASTRO_TELEMETRY_DISABLED=1`を指定して、この実行環境の読取専用ホームへのtelemetry書込を避けた。
 - 全体E2E：548試験、541成功、既存7 skip、失敗0。アフリカ既存回帰の対象24ケースと関連単体63ケースも成功。`npm run verify:release`は成功（local, 1 articles）。
-- 旧sandbox無効状態の画像・metadataは合格証拠から撤回。安全な設定のCIで再取得するまで受入確認は保留。
+- 旧sandbox無効状態の画像・metadataは合格証拠から撤回。安全な設定のCIで12ケースの再検証は成功（run 38046024870、head 21612ea875a824bf6ad2df5eefbc48b3db35d570）。新画像の目視確認は、artifactのダウンロードが403で拒否されたため未完了。
 - `scripts/verify-population-culture-browser.mjs` は `chromiumSandbox:true` を明示し、`chrome://sandbox` でSeccomp-BPFと十分なsandbox状態を検査する。起動・安全性確認に失敗した場合は停止し、代替の無効化経路を持たない。
 - 再検証はGitHub runnerの既存Chromeと日本語フォントを使い、1280×665と1024×665の12ケースを同等の操作で検証する。実機2台ではない。ソースhead、ブラウザーの安全性表示、画像SHA256とCI runをmetadataへ記録する。
 - 再実行：`REVIEW_CHROME_PATH=/path/to/properly-configured/chrome node scripts/verify-population-culture-browser.mjs`。CIジョブはマージ・公開をしない。
-- この候補ではマージ・公開を行わない。親の統合・新画像レビュー・公開照合が別途必要。
+- この候補ではマージ・公開を行わない。親の統合・新画像レビュー・公開照合が別途必要。最終headの全体CIはPRのChecksで確認する。
