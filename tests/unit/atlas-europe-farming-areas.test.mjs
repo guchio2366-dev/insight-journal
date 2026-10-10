@@ -10,6 +10,8 @@ const json = path => JSON.parse(bytes(path).toString('utf8'));
 const sha = value => createHash('sha256').update(value).digest('hex');
 const manifest = json('public/assets/atlas/europe/farming-overview-v2/manifest.json');
 const collection = json('src/data/atlas/europe/farming-areas.json');
+const dominant = json('src/data/atlas/europe/farming-dominant-areas.json');
+const secondary = json('src/data/atlas/europe/farming-secondary-areas.json');
 const cropConfig = json('src/data/atlas/europe/crop-overview.json').crops;
 const countries = json('src/data/atlas/europe-countries.json').features.filter(feature => feature.properties.kind === 'europe');
 const polygons = geometry => geometry.type === 'Polygon' ? [geometry.coordinates] : geometry.coordinates;
@@ -54,7 +56,8 @@ test('欧州の概略分布は元格子と照合できる16品目を独立した
   for (const feature of collection.features) {
     const { id, name, kind, color, threshold, unit, period, labelCoordinate } = feature.properties;
     const record = manifest.products.find(product => product.id === id);
-    if (!['rice', 'citrus'].includes(id)) assert.ok(record.retainedComponents <= 5 + record.retainedComparisonAnchors.length, `${id}: 概略図では元格子量が大きい集中域と既存比較例に絞る`);
+    assert.equal(record.retainedComponents, record.supportedComponentsBeforeSelection, `${id}: 条件を満たす集中域を品目内の上位件数で落とさない`);
+    if (id === 'wheat') assert.ok(record.countryCodes.includes('FRA') && record.countryCodes.includes('DEU'), '小麦は初期図からフランス・ドイツを含む');
     const input = manifest.inputs.find(item => item.id === id);
     const raw = gunzipSync(bytes(input.path));
     assert.equal(raw.byteLength, 1080 * 492 * 4);
@@ -93,5 +96,43 @@ test('欧州の概略分布は元格子と照合できる16品目を独立した
       }
       assert.ok(supported, `${id}: すべての離れた分布面にも高値の元格子がある`);
     }
+  }
+});
+
+test('overview wheat labels for northern France and central Germany stay inside supported wheat shapes',()=>{
+  const wheat=collection.features.find(feature=>feature.properties.id==='wheat');
+  const record=manifest.products.find(product=>product.id==='wheat');
+  assert.ok(record.countryCodes.includes('FRA')&&record.countryCodes.includes('DEU'));
+  for(const point of [[2.35938,50.375],[11.55208,51.875]]){
+    assert.ok(polygons(wheat.geometry).some(polygon=>polygonContains(polygon,point)),`wheat shape must support label ${point}`);
+  }
+});
+
+test('six initial crop belts retain source-backed country coverage and label locations',()=>{
+  const initial=['wheat','barley','maize','potato','sugarbeet','rapeseed'];
+  assert.equal(sha(bytes(manifest.dominantOverview.output.path)),manifest.dominantOverview.output.sha256);
+  for(const id of initial){
+    const feature=dominant.features.find(item=>item.properties.id===id);
+    const full=collection.features.find(item=>item.properties.id===id);
+    assert.ok(feature?.geometry,`${id}: dominant geometry`);
+    assert.ok(polygons(feature.geometry).length>1,`${id}: separate areas`);
+    assert.ok(targetLandContains(feature.properties.labelCoordinate),`${id}: label is on target land`);
+    assert.ok(polygons(feature.geometry).some(polygon=>polygonContains(polygon,feature.properties.labelCoordinate)),`${id}: label is in visible belt`);
+    assert.ok(polygons(full.geometry).some(polygon=>polygonContains(polygon,feature.properties.labelCoordinate)),`${id}: label remains inside source supported area`);
+  }
+  const wheat=dominant.features.find(item=>item.properties.id==='wheat');
+  for(const point of [[2.35938,50.375],[11.55208,51.875]])
+    assert.ok(polygons(wheat.geometry).some(polygon=>polygonContains(polygon,point)),`wheat belt includes ${point}`);
+});
+
+test('all six crops retain distinct secondary contours when another fill occupies their source area',()=>{
+  const ids=['wheat','barley','maize','potato','sugarbeet','rapeseed'];
+  assert.equal(sha(bytes(manifest.secondaryContours.output.path)),manifest.secondaryContours.output.sha256);
+  assert.deepEqual(new Set(secondary.features.map(feature=>feature.properties.id)),new Set(ids));
+  for(const feature of secondary.features){
+    assert.ok(polygons(feature.geometry).length>0,feature.properties.id);
+    assert.ok(manifest.secondaryContours.products.find(product=>product.id===feature.properties.id).approximateDisplayAreaKm2>0);
+    for(const polygon of polygons(feature.geometry))
+      assert.ok(targetLandContains(polygon[0][0]),`${feature.properties.id}: contour is on European target land`);
   }
 });

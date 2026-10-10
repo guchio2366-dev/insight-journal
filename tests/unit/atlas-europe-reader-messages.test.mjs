@@ -9,7 +9,7 @@ const copy = id => europeReaderCopy(europeLayers.find(layer => layer.id === id))
 test('industry and population first readings describe their own map evidence', () => {
   assert.match(copy('industry').body, /キルナ.*鉱石.*ミュンヘン.*自動車/);
   assert.doesNotMatch(copy('industry').body, /人口密度|人口の分布/);
-  assert.match(copy('density').body, /パリ.*ミラノ.*人口の分布/);
+  assert.match(copy('density').takeaway, /人口密度.*パリ.*ポー平原/);
   assert.doesNotMatch(copy('density').body, /鉄鉱石採掘|無線技術/);
   assert.ok(europeReaderSources(europeLayers.find(layer => layer.id === 'density')).some(source => source.url.includes('ghsl.jrc.ec.europa.eu')));
 });
@@ -32,9 +32,9 @@ test('全主題に1文の要点と根拠・地理の説明があり、操作説�
 });
 
 test('農林業は自然条件と人の管理をつなぎ、出典のある地域例の範囲を守る', () => {
-  assert.match(copy('crops').takeaway, /気候や地形/);
-  assert.match(copy('crops').takeaway, /水管理や土地利用/);
-  assert.match(copy('wheat').takeaway, /イングランド.*東部.*西部/);
+  assert.match(copy('crops').takeaway, /英国東部.*フランス北部.*ドイツ.*ポーランド/);
+  assert.match(copy('crops').body, /畑.*輸送.*低地.*夏の熱量/);
+  assert.match(copy('wheat').takeaway, /フランス北部.*ドイツ.*ポーランド.*英国東部/);
   assert.match(copy('barley').body, /フィンランド.*家畜の餌.*醸造/);
   assert.match(copy('rapeseed').takeaway, /ハンガリー.*油の原料/);
   assert.match(copy('rice').takeaway, /アルプス.*ポー平原/);
@@ -61,7 +61,9 @@ test('12作物・4家畜と集約区分、分布面の限界を維持する', ()
   assert.match(copy('chicken').note, /肉用・採卵用を分けていません/);
   assert.match(copy('temperatefruit').note, /ブドウ単独の分布ではありません/);
   assert.match(copy('vegetables').note, /VEGE.*「全野菜」ではありません/);
-  assert.match(copy('crops').note, /ブドウ・オリーブ単独の分布は未収録/);
+  assert.match(copy('crops').note, /ライムギ単独の元格子は未収録/);
+  assert.match(copy('horticulture').note, /ブドウ・オリーブ単独の元格子は未収録/);
+  assert.match(copy('livestock').note, /酪農と肉牛を分けた地域資料は未収録/);
 });
 
 test('国全体の対比は固定した2023年の資料に一致し、局所分布の説明へ変えない', () => {
@@ -92,11 +94,12 @@ test('自然・産業・人口をつなぐ説明でも欠測、量、位置の�
   assert.match(copy('climate').note, /欠測.*0で補いません/);
   assert.match(copy('water').body, /ドナウ川.*19か国/);
   assert.match(copy('water').note, /太さは流量を表しません/);
-  assert.match(copy('terrain').body, /8か国とEU/);
+  assert.match(copy('terrain').takeaway, /北ヨーロッパ平原.*ピレネー.*アルプス.*カルパチア/);
+  assert.match(copy('terrain').body, /プレートの収束.*氷河侵食/);
   assert.match(copy('contours').note, /間隔は標高精度を意味しません/);
   assert.match(copy('hubs').body, /ロッテルダム.*ルートヴィヒスハーフェン/);
   assert.match(copy('hubs').note, /生産量・雇用の大小を表しません/);
-  assert.match(copy('density').body, /パリ.*ミラノ.*人口の分布/);
+  assert.match(copy('density').body, /交通.*仕事.*歴史的な都市形成/);
   assert.match(copy('density').note, /2020年.*現在の人口移動・避難状況.*ではありません/);
   assert.match(copy('density').note, /都市の点は位置のみ/);
 });

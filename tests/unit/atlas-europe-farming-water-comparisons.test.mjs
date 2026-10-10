@@ -45,7 +45,7 @@ test('crop cases choose regional observations and give Po rice three suitable ma
 });
 
 test('every exposed focus has a readable concise question, a real observation and bounds containing its reference position', () => {
-  for (const product of europeLayers.filter(layer => layer.field === 'agriculture' && !['treecover', 'forest', 'dairy'].includes(layer.id))) {
+  for (const product of europeLayers.filter(layer => layer.field === 'agriculture' && !['treecover', 'forest', 'dairy', 'livestock', 'horticulture'].includes(layer.id))) {
     for (const place of ['', 'GBR', 'FIN', 'UKR', 'ITA', 'PRT']) {
       const choices = europeFarmingComparisonLinks({ layer: product.id, place });
       assert.equal(choices.length, 3);
@@ -58,7 +58,7 @@ test('every exposed focus has a readable concise question, a real observation an
         assert.ok(west < east && south < north && longitude >= west && longitude <= east && latitude >= south && latitude <= north, item.id);
         assert.ok(item.description.length <= 100, item.id);
         assert.equal(item.description.split('。').filter(Boolean).length, 2, item.id);
-        assert.ok(item.question.includes(product.title === '作物・畜産の主な分布' ? '作物・家畜' : product.title));
+        assert.ok(item.question.includes(product.title === '穀物・畑作の主な分布' ? '穀物・畑作' : product.title));
         assert.ok(item.sources.length && item.sources.every(source => /^https:\/\//.test(source.url)));
         if (item.city) assert.deepEqual(item.point, cities.find(city => city.id === item.city).coordinates);
         if (item.targetLayer === 'precipitation') assert.ok(displayCell(rainfall, [...item.point])?.value >= 0, item.id);

@@ -181,14 +181,14 @@ test('配信する画像と格子のハッシュが加工記録に一致し、�
   const index=values.findIndex(v=>v>1000);assert.equal(wheatCell(values,at(index)).value,values[index]);
 });
 
-test('地形と等高線は同じ実格子の標高mを読み、負標高・0m・欠損を区別する', () => {
+test('地形の背景と等高線は同じ格子を参照し、標高の数値読解は等高線で負標高・0m・欠損を区別する', () => {
   const terrain=europeLayers.find(layer=>layer.id==='terrain'),contours=europeLayers.find(layer=>layer.id==='contours');
   assert.equal(terrain.grid,contours.grid);
   assert.equal(terrain.gridType,'display');
   assert.equal(contours.gridType,'display');
   assert.equal(terrain.encoding,'int16');
   assert.equal(contours.encoding,'int16');
-  assert.equal(terrain.valueUnit,'m');
+  assert.equal(terrain.valueUnit,undefined,'地形名の主題には数値単位を掲示しない');
   assert.equal(contours.valueUnit,'m');
   assert.equal(contours.unit,'500m間隔','等高線間隔は値の単位と分けて凡例に残す');
   assert.deepEqual(contours.labels.slice(0,2),['500m間隔','1,000m間隔（濃線）']);
@@ -205,7 +205,7 @@ test('地形と等高線は同じ実格子の標高mを読み、負標高・0m�
   for(const sample of samples) {
     assert.ok(sample.index>=0,`Published grid contains ${sample.label}`);
     const point=at(sample.index),expected=Object.hasOwn(sample,'value')?sample.value:values[sample.index];
-    for(const layer of [terrain,contours]) {
+    for(const layer of [contours]) {
       assert.equal(layer.nodata,-32768);
       const cell=displayCell(values,point,layer.nodata);
       assert.equal(cell.value,expected,`${layer.id}: ${sample.label}`);

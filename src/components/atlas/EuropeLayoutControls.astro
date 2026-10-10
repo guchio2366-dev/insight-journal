@@ -5,19 +5,14 @@ interface Props { position: 'above' | 'map' | 'items'; field: EuropeField }
 const { position, field } = Astro.props;
 type TopicGroup = { field: EuropeField; items: string[][]; choices?: string[] };
 const definitions: TopicGroup[] = [
-  {field:'agriculture',items:[['crops','農畜産'],['treecover','林業']]},
+  {field:'agriculture',items:[['crops','穀物・畑作'],['livestock','酪農・畜産'],['horticulture','果樹・園芸'],['treecover','林業']]},
   {field:'nature',items:[['climate','気候区分'],['water','水資源'],['terrain','地形'],['contours','標高（等高線）']]},
-  {field:'industry',items:[['hubs','全拠点'],...europeIndustryGroups.map(group=>['hubs',group,group]),['manufacturing','製造業'],['industry','鉱工業・建設業'],['services','サービス業']]},
-  {field:'population',items:[['density','人口分布'],['ethnicity','人種・民族（事例）'],['religion','宗教（事例）']],choices:['density','urban','age','growth']},
+  {field:'industry',items:[['hubs','全産業'],...europeIndustryGroups.map(group=>['hubs',group,group])]},
+  {field:'population',items:[['density','人口分布'],['ethnicity','人種・民族（事例）'],['religion','宗教']],choices:['density','urban','age','growth']},
 ];
 const groups = position === 'above' ? definitions : [];
 ---
 {groups.map(group=><div class:list={['eu-topic-tabs',`eu-topic-${position}`]} data-eu-topic-field={group.field} hidden={field!==group.field} role={group.field==='nature'?'tablist':'group'} aria-label={`${group.field==='nature'?'自然環境':group.field==='agriculture'?'農林業':group.field==='industry'?'主要産業':'人口'}の区分`}>
-  {group.items.map(([id,label,industryGroup],i)=><button type="button" role={group.field==='nature'?'tab':undefined} aria-selected={group.field==='nature'?i===0:undefined} tabindex={group.field==='nature'?(i===0?0:-1):undefined} data-eu-topic={id||undefined} data-eu-industry-group={industryGroup} disabled={!id} aria-pressed={id?i===0:undefined}>{label}{group.field==='industry'&&id!=='hubs'&&<small>国別GDP比</small>}{!id&&<small>準備中</small>}</button>)}
+  {group.items.map(([id,label,industryGroup],i)=><button type="button" role={group.field==='nature'?'tab':undefined} aria-selected={group.field==='nature'?i===0:undefined} tabindex={group.field==='nature'?(i===0?0:-1):undefined} data-eu-topic={id||undefined} data-eu-industry-group={industryGroup} disabled={!id} aria-pressed={id?i===0:undefined}>{label}{!id&&<small>準備中</small>}</button>)}
   {group.choices&&<label class="eu-layer-choice">国別指標<select data-eu-layer-choice={group.field} aria-label="人口の図">{group.choices.map(id=>{const layer=europeLayers.find(layer=>layer.id===id)!;return <option value={id}>{layer.title}</option>;})}</select></label>}
 </div>)}
-
-{position==='map'&&<div class="eu-topic-tabs eu-topic-map eu-farming-toggles" data-eu-farming-toggles hidden={field!=='agriculture'} role="group" aria-label="農畜産物の分布表示">
-  <button type="button" data-eu-toggle="crop" aria-pressed="true">作物の分布 <span>表示中</span></button>
-  <button type="button" data-eu-toggle="livestock" aria-pressed="true">畜産の分布 <span>表示中</span></button>
-</div>}

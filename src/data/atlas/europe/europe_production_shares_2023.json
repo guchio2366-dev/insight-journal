@@ -1,0 +1,26 @@
+{
+  "status": "source-verified; ready for an explicitly labeled 2023 production-share panel",
+  "source": {
+    "publisher": "Food and Agriculture Organization of the United Nations (FAO)",
+    "publication": "World Food and Agriculture – Statistical Yearbook 2025",
+    "official_url": "https://doi.org/10.4060/cd4313en",
+    "public_copy_url": "https://www.donorplatform.org/wp-content/uploads/2026/01/cd4313en.pdf",
+    "license": "CC BY 4.0",
+    "access_date": "2026-10-08",
+    "data_cutoff_date": "2025-10-28",
+    "geography": "Published Europe regional aggregate; UN M49-based classification. Russian Federation is its whole national statistical area, not European Russia. EU is not the aggregation boundary.",
+    "coverage_note": "The yearbook uses sums/weighted means and publishes aggregates subject to a sufficiency threshold. Published Europe is not proof of an observation for every microstate/territory. Country and reporting-area coverage can differ across domains."
+  },
+  "year": 2023,
+  "formula": "100 * Europe production / World production for exactly the same commodity and year",
+  "unit": "thousand metric tonnes",
+  "display_share_decimals": 1,
+  "items": [
+    {"id":"wheat","label_ja":"小麦","europe":269261,"world":798975,"world_share_percent":33.7,"source_table":21,"printed_page":184,"pdf_page_1_indexed":198,"source_precision_thousand_tonnes":1},
+    {"id":"potatoes","label_ja":"じゃがいも","europe":99810,"world":383083,"world_share_percent":26.1,"source_table":21,"printed_page":184,"pdf_page_1_indexed":198,"source_precision_thousand_tonnes":1},
+    {"id":"bovine_milk","label_ja":"生乳（牛・水牛）","europe":228241.2,"world":933243.5,"world_share_percent":24.5,"source_table":25,"printed_page":204,"pdf_page_1_indexed":218,"source_precision_thousand_tonnes":0.1},
+    {"id":"pig_meat","label_ja":"豚肉","europe":28155,"world":124668,"world_share_percent":22.6,"source_table":24,"printed_page":199,"pdf_page_1_indexed":213,"source_precision_thousand_tonnes":1},
+    {"id":"chicken_meat","label_ja":"鶏肉","europe":20465,"world":126530,"world_share_percent":16.2,"source_table":24,"printed_page":199,"pdf_page_1_indexed":213,"source_precision_thousand_tonnes":1},
+    {"id":"maize","label_ja":"トウモロコシ","europe":119027,"world":1241558,"world_share_percent":9.6,"source_table":21,"printed_page":184,"pdf_page_1_indexed":198,"source_precision_thousand_tonnes":1}
+  ]
+}

@@ -49,7 +49,7 @@ test('all seven regional workspaces retain five main destinations and one map/re
       const stats=root.querySelector(c.stats)??d.querySelector(c.stats);
       assert.ok(stats&&!reading.contains(stats),`${region}: statistics are outside the right reading column`);
       assert.ok(grid.compareDocumentPosition(stats)&4,`${region}: statistics follow the complete main grid`);
-      if(region==='europe')assert.equal(stats.previousElementSibling,d.querySelector('[data-atlas-shell]'),'Europe statistics follow all three columns');
+      if(region==='europe')assert.equal(stats.parentElement,d.querySelector('[data-atlas-shell]'),'Europe statistics occupy the map and reading width within the shell');
       if(region.startsWith('asia/')){
         assert.equal(stats.parentElement,d.querySelector('[data-atlas-shell]'),'Asia statistics span the news/map/reading shell');
         const compactEastFarm=region==='asia/east-asia'&&field==='agriculture';
@@ -69,11 +69,11 @@ test('regional agriculture, nature/water and population controls preserve the le
         const group=d.querySelector(`[data-eu-topic-field="${field}"]`);
         assert.ok(group,`${region}/${field}: subject group`);
         const buttons=[...group.querySelectorAll('button')];
-        assert.equal(buttons.length,field==='agriculture'?2:field==='nature'?4:3);
+        assert.equal(buttons.length,field==='agriculture'?4:field==='nature'?4:3);
         if(field==='nature')assert.ok(d.querySelectorAll('[data-eu-water-options] button').length>=3);
         if(field==='population'){
           assert.equal(buttons.filter(b=>b.disabled).length,0,'Published bounded case studies are enabled');
-          assert.deepEqual(buttons.slice(1).map(button=>button.textContent),['人種・民族（事例）','宗教（事例）']);
+          assert.deepEqual(buttons.slice(1).map(button=>button.textContent),['人種・民族（事例）','宗教']);
           const cases=d.querySelector('[data-culture-case]');
           assert.deepEqual([...cases.options].filter(option=>option.value).map(option=>option.value),['england-wales-2021','croatia-national-2021'],'Two source cases do not imply complete European coverage');
           assert.equal(cases.value,'','The overview placeholder does not automatically select a source case');
@@ -121,7 +121,7 @@ test('regional desktop CSS keeps extent-sized East Asia maps and keyboard-access
         assert.equal(readingStyle.overflow,'auto','the explanation scrolls independently beside the map');
       }else{
         const southCentral=region==='asia/south-central-asia'||region==='asia/south-asia'||region==='asia/central-asia';
-        assert.equal(Number.parseFloat(w.getComputedStyle(d.querySelector(c.frame)).aspectRatio),region==='west-asia'?1.32:southCentral?1.35:compactAspect?1.65:1.55,`${region} ${width}: regional map aspect`);
+        assert.equal(Number.parseFloat(w.getComputedStyle(d.querySelector(c.frame)).aspectRatio),region==='europe'||region==='west-asia'?1.32:southCentral?1.35:compactAspect?1.65:1.55,`${region} ${width}: regional map aspect`);
         assert.equal((w.getComputedStyle(d.querySelector(c.grid)).gridTemplateColumns.match(/minmax\(/g)??[]).length,2,`${region} ${width}: map and reading retain two desktop tracks`);
       }
       assert.ok(!['none','hidden'].includes(w.getComputedStyle(d.querySelector(c.reading)).display));

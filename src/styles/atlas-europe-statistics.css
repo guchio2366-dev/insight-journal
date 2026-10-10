@@ -112,3 +112,58 @@
 .eu-workspace-root .eu-farm-share-key { display:flex; flex-wrap:wrap; gap:6px 14px; list-style:none; padding:0; margin:8px 0; font:14px/1.5 var(--sans); }
 .eu-workspace-root .eu-farm-share-key span { display:inline-block; width:18px; height:3px; margin:0 6px 4px 0; }
 @media(max-width:959px) { .eu-workspace-root .eu-farm-three-columns { grid-template-columns:minmax(0,1fr); } }
+
+/* Verified regional measures are visible at the first statistics viewport. */
+.eu-workspace-root .eu-verified-agriculture .eu-farm-three-columns { margin:12px 0 8px; gap:15px; }
+.eu-workspace-root .eu-verified-agriculture .eu-farm-three-columns>section { padding:10px 12px; border:1px solid #d0d9d1; border-top:3px solid #688078; background:#fafbf7; }
+.eu-workspace-root .eu-verified-agriculture h3,.eu-workspace-root .eu-verified-wood h3 { margin:0 0 5px; font:700 18px/1.4 var(--sans); }
+.eu-workspace-root .eu-verified-meta { margin:0 0 12px; color:#485d5b; font:13px/1.5 var(--sans); }
+.eu-workspace-root .eu-verified-foot,.eu-workspace-root .eu-verified-source { margin:10px 0 0; color:#42575a; font:12px/1.55 var(--sans); }
+.eu-workspace-root .eu-verified-share-list { display:grid; gap:6px; }
+.eu-workspace-root .eu-verified-share-row { display:grid; grid-template-columns:minmax(80px,1.2fr) minmax(90px,2fr) 45px; align-items:center; gap:5px; font:13px/1.4 var(--sans); }
+.eu-workspace-root .eu-verified-share-row strong { text-align:right; font-variant-numeric:tabular-nums; }
+.eu-workspace-root .eu-verified-share-track { display:block; height:13px; background:#e9eae2; }
+.eu-workspace-root .eu-verified-share-track span { display:block; height:100%; background:#426d79; }
+.eu-workspace-root .eu-verified-trade-charts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.eu-workspace-root .eu-verified-trade-charts figure { margin:0; min-width:0; }
+.eu-workspace-root .eu-verified-trade-charts figcaption { min-height:35px; font:700 13px/1.35 var(--sans); }
+.eu-workspace-root .eu-verified-donut { width:92px; height:92px; margin:2px auto 6px; border-radius:50%; position:relative; }
+.eu-workspace-root .eu-verified-donut::after { content:''; position:absolute; inset:28%; border-radius:50%; background:#fafbf7; }
+.eu-workspace-root .eu-verified-trade-charts ul,.eu-workspace-root .eu-verified-food-key { list-style:none; margin:0; padding:0; font:12px/1.45 var(--sans); }
+.eu-workspace-root .eu-verified-trade-charts li { display:flex; align-items:center; gap:4px; }
+.eu-workspace-root .eu-verified-trade-charts li strong { margin-left:auto; font-variant-numeric:tabular-nums; }
+.eu-workspace-root .eu-verified-trade-key,.eu-workspace-root .eu-verified-food-key li span { width:10px; height:10px; flex:none; display:inline-block; }
+.eu-workspace-root .eu-verified-food-band { display:flex; height:30px; width:100%; overflow:hidden; border:1px solid #40575e; }
+.eu-workspace-root .eu-verified-food-band span { min-width:0; border-right:1px solid #fafbf7; }
+.eu-workspace-root .eu-verified-food-key { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:4px 8px; margin-top:10px; }
+.eu-workspace-root .eu-verified-food-key li { display:flex; align-items:center; gap:4px; min-width:0; }
+.eu-workspace-root .eu-verified-food-key li strong { margin-left:auto; font-variant-numeric:tabular-nums; }
+.eu-workspace-root .eu-verified-wood { border-top:2px solid #688078; padding-top:12px; }
+.eu-workspace-root .eu-farm-numbers[data-eu-farm-numbers] > :not(.eu-forest-production) { display:none; }
+.eu-workspace-root .eu-verified-topic { border-top:2px solid #688078; padding-top:12px; }
+.eu-workspace-root .eu-verified-topic h4 { margin:0 0 5px; font:700 16px/1.45 var(--sans); }
+.eu-workspace-root .eu-verified-topic-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:15px; margin:12px 0; }
+.eu-workspace-root .eu-verified-topic-card { border:1px solid #d0d9d1; padding:12px; background:#fafbf7; }
+.eu-workspace-root .eu-verified-topic-trade { display:flex; align-items:center; gap:16px; }
+.eu-workspace-root .eu-verified-topic-trade ul { flex:1; min-width:0; }
+.eu-workspace-root .eu-verified-topic-trade li { display:flex; align-items:center; gap:5px; }
+.eu-workspace-root .eu-verified-topic-trade li strong { margin-left:auto; }
+.eu-workspace-root .eu-verified-topic-missing { margin:0; padding:12px; border-left:3px solid #9a8467; background:#f4f0e6; font:14px/1.7 var(--sans); }
+.eu-workspace-root .eu-verified-topic-country { display:flex; align-items:center; gap:12px; margin:12px 0; font:700 14px/1.5 var(--sans); }
+.eu-workspace-root .eu-verified-topic-country select { min-height:38px; min-width:180px; font:14px/1.5 var(--sans); }
+.eu-workspace-root .eu-farm-numbers[data-eu-farm-numbers].is-topic-country > :is([data-eu-farm-statistics-message],[data-eu-farm-measure-definition],[data-eu-farm-stat-source]):not([hidden]) { display:block; }
+.eu-workspace-root .eu-farm-numbers[data-eu-farm-numbers].is-topic-country > [data-eu-farm-stat-summary]:not([hidden]) { display:grid; }
+.eu-workspace-root .eu-farm-numbers[data-eu-farm-numbers].is-topic-country > [data-eu-farm-series]:not([hidden]) { display:block; }
+.eu-workspace-root .eu-farm-numbers[data-eu-farm-numbers].is-topic-country > [data-eu-farm-statistics-retry]:not([hidden]) { display:inline-block; }
+.eu-workspace-root .eu-farm-numbers[data-eu-farm-numbers].is-topic-country > [data-eu-farm-three-columns] { display:grid; grid-template-columns:minmax(0,1fr); }
+.eu-workspace-root .eu-farm-numbers[data-eu-farm-numbers].is-topic-country > [data-eu-farm-three-columns] > section:not(:first-child) { display:none; }
+.eu-workspace-root .eu-wood-stage { margin:14px 0; }
+.eu-workspace-root .eu-wood-stage h4 { margin:0 0 5px; font:700 16px/1.4 var(--sans); }
+.eu-workspace-root .eu-wood-row { display:grid; grid-template-columns:100px minmax(0,1fr) 110px; gap:10px; align-items:center; margin:5px 0; font:13px/1.4 var(--sans); }
+.eu-workspace-root .eu-wood-flows { display:grid; gap:3px; }
+.eu-workspace-root .eu-wood-track { display:flex; height:14px; background:#edf0e9; }
+.eu-workspace-root .eu-wood-track span { display:block; height:100%; }
+.eu-workspace-root .eu-wood-domestic { background:#497b69; }.eu-workspace-root .eu-wood-import { background:#b6cf9e; }
+.eu-workspace-root .eu-wood-apparent { background:#557d9a; }.eu-workspace-root .eu-wood-export { background:#d1a373; }
+.eu-workspace-root .eu-wood-key { display:inline-block; width:12px; height:10px; margin-right:3px; }
+.eu-workspace-root .eu-wood-total { text-align:right; font-variant-numeric:tabular-nums; }

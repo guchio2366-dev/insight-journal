@@ -121,7 +121,21 @@ jobs:
           curl --fail --silent "$EUROPE_REVIEW_BASE_URL" > /dev/null
           node tests/browser/atlas-europe-pc-review.mjs
 
-      - name: Save newly captured images and provenance
+      - name: Include existing source review images
+        if: always()
+        shell: bash
+        env:
+          EUROPE_REVIEW_OUTPUT: ${{ runner.temp }}/europe-pc-review
+        run: |
+          set -euo pipefail
+          source_dir=docs/review/europe-2026-10-08
+          mkdir -p "$EUROPE_REVIEW_OUTPUT/source-review"
+          for image in religion-regional-samples.png religion-subotica.png danube-connected-review.png; do
+            test -s "$source_dir/$image"
+            cp "$source_dir/$image" "$EUROPE_REVIEW_OUTPUT/source-review/$image"
+          done
+
+      - name: Save captured images, source review images, and provenance
         if: always()
         uses: actions/upload-artifact@v4
         with:

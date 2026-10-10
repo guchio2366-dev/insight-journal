@@ -61,7 +61,7 @@ test('人口格子と負標高のデータ契約を守り、海域を0にしな�
 test('都市と産業拠点は国・座標・出典を持ち、作物と家畜の単位を混同しない',()=>{
  const cities=json('src/data/atlas/europe/population-cities.json');assert.equal(cities.length,132);
  for(const c of [...cities,...europeReadings]){assert.ok(countries.some(x=>x.code===c.country));assert.ok(c.coordinates[0]>=-25&&c.coordinates[0]<=65&&c.coordinates[1]>=32&&c.coordinates[1]<=73);}
- assert.equal(europeReadings.filter(r=>r.field==='industry').length,14);
+ assert.equal(europeReadings.filter(r=>r.field==='industry').length,18);
  for(const r of europeReadings)assert.ok(r.source.startsWith('https://')&&r.period&&r.body);
  assert.equal(europeLayers.filter(l=>l.unit==='収穫面積 ha / 格子').length,12);
  assert.equal(europeLayers.find(l=>l.id==='chicken').unit,'羽/km²');

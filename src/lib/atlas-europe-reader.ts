@@ -32,7 +32,7 @@ const factualSources: Record<string, ReaderSource[]> = {
   chicken:climateFarming.Csb.sources,
   sheep:[...climateFarming.Cfb.sources,...cityFarming.reykjavik.sources,cityFarming.athens.sources[1]],
   water:readingSources('danube','rhine','rotterdam','ludwigshafen'),
-  terrain:readingSources('alps'),
+  terrain:[...readingSources('alps'),{url:'https://www.eea.europa.eu/en/analysis/maps-and-charts/mountain-massifs',label:'EEA：欧州の山塊図'},{url:'https://www.nationalgeographic.org/encyclopedia/europe-physical-geography/',label:'National Geographic：欧州の半島・平原・山地'}],
   contours:readingSources('alps'),
   hubs:readingSources('rotterdam','ludwigshafen','toulouse'),
   density:[],
@@ -53,7 +53,7 @@ export function europeReaderSources(layer: EuropeLayer): ReaderSource[] {
   if(layer.id==='precipitation')return europePrecipitationReading.sources;
   if(layer.id==='drainage')return drainageReading.sources;
   const sources=factualSources[layer.id]??[];
-  const needsDataSource=Boolean(layer.indicator)||['rice','contours','vegetables','temperatefruit','cattle','chicken'].includes(layer.id)||sources.length===0;
+  const needsDataSource=Boolean(layer.indicator)||['climate','rice','contours','vegetables','temperatefruit','cattle','chicken'].includes(layer.id)||sources.length===0;
   const dataSource:ReaderSource={url:layer.source,label:layer.indicator?'World Bank：'+layer.title+'（'+layer.period+'年）':layer.title+'のデータ原典'};
   const relevant=needsDataSource?[dataSource,...sources]:sources;
   return [...new Map(relevant.map(source=>[source.url,{url:source.url,label:source.label}])).values()];
@@ -64,8 +64,8 @@ export function europeReaderSources(layer: EuropeLayer): ReaderSource[] {
 // every distribution polygon. National contrasts use the recorded WDI 2023 data.
 const farmingMessages: Record<string, ReaderMessage> = {
   wheat: {
-    takeaway:'イングランドでは東部の小麦・大麦と西部の牛・羊が対照をなし、同じ国内でも農業の土地利用が異なります。',
-    body:'小麦はセルビアやハンガリーでも栽培されています。ハンガリーの干ばつの例は、栽培できる気候だけでなく、その年の水の確保も収穫に関わることを示します。',
+    takeaway:'小麦の高い収穫面積の格子はフランス北部からドイツ、ポーランドへ続く低地や、英国東部、ウクライナなどに分布します。',
+    body:'広い平野は機械を使う穀作に適し、温帯から冷帯南部の生育期の気温と水が栽培を支えます。英国では比較的乾いた東部の畑作と湿潤な西部の牧草地という土地利用の差も見られます。年ごとの干ばつは、同じ栽培域でも収穫を変動させます。',
   },
   barley: {
     takeaway:'大麦はイングランドの穀物栽培とフィンランドの農業に見られ、食料以外の用途にも結びついています。',
@@ -171,38 +171,48 @@ export function europeReaderCopy(layer:EuropeLayer) {
   if(layer.id==='precipitation')return {title:europePrecipitationReading.title,takeaway:europePrecipitationReading.takeaway,body:europePrecipitationReading.body,note:europePrecipitationReading.note};
   if(layer.id==='drainage')return {title:drainageReading.title,takeaway:drainageReading.takeaway,body:drainageReading.body,note:drainageReading.note};
   if(layer.id==='climate')return {
-    title:'気候区分',takeaway:'欧州の気温・降水の違いは農業の条件に関わりますが、同じ気候区分でも土地利用や水管理は異なります。',
-    body:'イングランドの穀物と草地、ハンガリーの干ばつ、マドリード州の灌漑は、気候と人の水利用をあわせて考える例です。地域の農業例は、選んだ観測所周辺すべての作付けを表しません。',
+    title:'気候区分',takeaway:'西欧には乾季のない温帯が広がり、東・北ほど冬の寒い区分、地中海沿岸には夏が乾く区分、南東部には乾燥区分が見られます。',
+    body:'大西洋からの湿った空気と西風は西部の降水と穏やかな冬に関わります。内陸ほど海の影響が弱まり、緯度・標高とともに気温の季節差が変わります。地中海沿岸では夏の高気圧も乾燥に関わり、同じ区分内の土地利用は水管理などで異なります。',
     note:layer.note+' 観測地点の平年値は国平均ではありません。未収録の気候区分や降水の欠測は、近隣値や0で補いません。',
   };
   if(layer.id==='crops')return {
-    title:'欧州の農林業',takeaway:'気候や地形は農業の条件に関わり、水管理や土地利用も作物と家畜の分布を形づくります。',
-    body:'イングランド東部では小麦・大麦、西部では牛・羊が目立ちます。ハンガリーの干ばつやマドリード州の灌漑の例は、気候と水をどう確保するかが農業に関わることを示します。',
-    note:'2020年頃のモデル推計から主な分布を取り出した概略図です。色は品目を示し、濃さは数量を示しません。牛の肉用・乳用、鶏の肉用・採卵用は未分離で、ブドウ・オリーブ単独の分布は未収録です。',
+    title:'欧州の穀物・畑作',takeaway:'小麦は英国東部、フランス北部からドイツ・ポーランドの低地、ウクライナに分布し、トウモロコシは中東欧の低地で目立ち、大麦・菜種・テンサイ・ジャガイモもそれぞれの集中域を持ちます。',
+    body:'英国東部から北フランスの穀物帯は広い畑での機械作業に適し、海に近い市場や製粉・飼料・食品加工への輸送とも結びつきます。ドイツ・ポーランドからウクライナの低地にも大きな穀作域が続きます。トウモロコシは夏の熱量が確保できる中東欧の低地に多く、テンサイやジャガイモには食品加工とのつながりがあります。同じ地域の色の重なりは複数作物の集中を示し、同一の畑で同時に栽培する意味ではありません。',
+    note:'2020年頃の品目別収穫面積格子から集中域を抽出した概略図です。濃淡は数量順位ではありません。ライムギ単独の元格子は未収録です。',
+  };
+  if(layer.id==='livestock')return {
+    title:'欧州の酪農・畜産',takeaway:'牛の飼養密度の集中域は西・中欧に広がり、豚・鶏・羊は異なる地域にも集中しますが、地図の牛は乳用と肉用を分けていません。',
+    body:'牧草地、飼料作物、加工・流通先の位置は飼養地域を考える条件です。英国西部の牛・羊と東部の穀物畑、セルビア北部の豚と穀物など、農業の組み合わせは地域で異なります。ただしこの牛の格子だけから酪農地帯や肉牛地帯を特定することはできません。生乳の全国量も地域の分布面に置き換えません。',
+    note:'FAO GLW4 2020の家畜密度モデルから集中域を抽出。牛は乳用・肉用、鶏は肉用・採卵用を区別しません。酪農と肉牛を分けた地域資料は未収録です。',
+  };
+  if(layer.id==='horticulture')return {
+    title:'欧州の果樹・園芸',takeaway:'柑橘の集中域は地中海側に、温帯果樹と原資料の野菜区分は南欧・西欧などに分布しますが、ブドウ・オリーブ単独の面は含みません。',
+    body:'地中海側の柑橘には冬の温暖さと水管理が関わり、北側の温帯果樹とは栽培条件が異なります。野菜の立地には灌漑や施設栽培、近隣の消費地・輸送網も関係します。この図は集合区分を含むため、特定の果実や野菜の産地を個別に読み取ることはできません。',
+    note:'SPAM 2020の柑橘・温帯果樹・VEGE区分の集中域。温帯果樹はブドウを表すものではなく、VEGEは全野菜を網羅しません。ブドウ・オリーブ単独の元格子は未収録です。',
   };
   if(layer.id==='water')return {
-    title:'河川・湖',takeaway:'国境を越える河川は複数の国をつなぎ、水利用・洪水・生態系の管理にも協力が必要になります。',
-    body:'ドナウ川の流域は19か国にまたがります。ライン川では流域の国々が水利用や洪水への対応を協力して進め、海港のロッテルダムと内陸の産業拠点も同じ水系に位置します。',
+    title:'河川・湖',takeaway:'ドナウ川は中欧から黒海へ、ライン川はアルプス方面から北海へ流れ、北欧には多数の湖が分布します。',
+    body:'山地の雪や降水、低地の緩やかな勾配が河川の向きや流域を形づくります。ドナウ川の流域は19か国にまたがり、水利用、洪水や生態系の管理に国際協力が必要です。',
     note:'線の太さは流量を表しません。小さな河川や湖は省略しています。この河川・湖の図は流域界を表示せず、別の「流域の区画」で確認します。地下水・灌漑の範囲は収録していません。',
   };
   if(layer.id==='terrain')return {
-    title:'地形・標高',takeaway:'国境をまたぐアルプスと周辺の低地をあわせて見ると、山地と農地・都市の位置関係を捉えられます。',
-    body:'アルプス北側の低地と南側のポー平原は、山地を囲む地域の対比です。アルプス条約は8か国とEUで山岳地域の保全と持続可能な発展を扱っています。',
-    note:'標高は表示用に平均化しています。細かな峰や谷は省略しています。',
+    title:'欧州の主な地形',takeaway:'北ヨーロッパ平原は西欧から東欧へ、南のピレネー・アルプス・アペニン・カルパチアの山地は弧状に続き、北西のスカンディナヴィア山脈と南の三大半島・地中海の島々が周縁を形づくります。',
+    body:'アルプス・ピレネー・カルパチア・アペニンなどは、アフリカ側とユーラシア側のプレートの収束に伴う地殻変動で隆起し、侵食で現在の谷や峰が刻まれました。北ヨーロッパ平原は古い地盤の低地に氷河・河川の堆積が重なり、スカンディナヴィアでは古い山地が氷河侵食を受けています。半島と海域の配置は地殻変動と海面変化の長い履歴を反映します。',
+    note:'破線は山脈・平原の概略の軸で、正確な境界ではありません。背景の陰影は地形を読む補助です。標高の数値は「標高（等高線）」で確認できます。',
   };
   if(layer.id==='contours')return {
-    title:'標高（等高線）',takeaway:'等高線が示すアルプスの起伏は、周辺の低地との違いを捉える手がかりになります。',
+    title:'標高（等高線）',takeaway:'標高500 m線はアルプス・ピレネー・カルパチアなどの山地を囲み、北ヨーロッパ平原などの低地との高低差を示します。',
     body:'同じ高さを結ぶ線と標高帯の色を500m刻みで示し、1,000mごとの線を濃くしています。山地と平野の対比は農地や都市の位置を考える条件の一つで、立地の理由を標高だけで決めることはできません。',
     note:'表示用に平均化した標高から作った概略図です。等高線の間隔は標高精度を意味しません。',
   };
   if(layer.id==='hubs')return {
-    title:'産業の拠点',takeaway:'港湾・資源・研究開発・生産網が、異なる地域の産業拠点の役割を形づくっています。',
-    body:'ロッテルダムは原料の搬入・加工・貯蔵が近接する港の集積、ルートヴィヒスハーフェンは工程を結ぶ化学拠点です。航空機はトゥールーズなどへの最終組立と、国をまたぐ部品生産で成り立ちます。',
+    title:'欧州の産業集積',takeaway:'北海の港湾とエネルギー、ライン川沿いの化学、ドイツ・チェコの機械、南欧の航空機・観光など、産業ごとに集まる場所が異なります。',
+    body:'ロッテルダムは原料の搬入・加工・貯蔵が近接する港の集積、ルートヴィヒスハーフェンは工程を結ぶ化学拠点です。航空機はトゥールーズなどへの最終組立と、国をまたぐ部品生産で成り立ちます。各産業の分布には資源、市場、技能、交通と研究開発の組み合わせが関わります。',
     note:'点の数や大きさは、生産量・雇用の大小を表しません。工場群や施設全体の境界は描いていません。',
   };
   if(layer.id==='density')return {
-    title:'人口分布',takeaway:'パリやミラノの都市周辺と、欧州北部・山地を同じ人口密度の尺度で読み比べます。',
-    body:'パリ、ミラノ、マドリードの都市周辺をたどり、都市の点の間にも人口の分布が続くかを格子の色で確かめます。ライン川沿いの都市とポー平原、北欧の都市とその周辺を比べると、国の平均だけでは読めない集中と広がりが見えます。国境は人口密度の区分境界ではありません。',
+    title:'人口分布',takeaway:'人口密度はパリ周辺、ライン川沿い、ポー平原などの都市・低地で高く、北欧の内陸や高い山地では低く、国境をまたぐ帯状の集中も見られます。',
+    body:'平野と河川沿いの交通、工業・サービス業の仕事、都市の長い集積が人口を引き寄せます。北部の寒冷さや山地の急な地形は居住・交通の条件を狭めます。ただし人口の差を自然条件だけでは説明できず、歴史的な都市形成や経済活動も関わります。',
     note:'2020年の格子ごとのモデル推計です。現在の人口移動・避難状況を表すものではありません。都市の点は位置のみを示します。',
   };
   if(layer.id==='ethnicity'||layer.id==='religion')return {
