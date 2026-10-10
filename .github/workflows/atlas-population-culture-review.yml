@@ -21,7 +21,6 @@ jobs:
     env:
       ASTRO_TELEMETRY_DISABLED: '1'
       CULTURE_REVIEW_EXPECTED_HEAD: ${{ github.sha }}
-      CULTURE_REVIEW_OUTPUT: ${{ runner.temp }}/population-culture-review/regions
     steps:
       - uses: actions/checkout@v7
         with:
@@ -55,6 +54,8 @@ jobs:
           test "$(git rev-parse HEAD)" = "$CULTURE_REVIEW_EXPECTED_HEAD"
           node scripts/verify-release.mjs --commit "$CULTURE_REVIEW_EXPECTED_HEAD"
       - name: Review all national composition views with sandbox enabled
+        env:
+          CULTURE_REVIEW_OUTPUT: ${{ runner.temp }}/population-culture-review/regions
         run: node scripts/verify-population-culture-browser.mjs
       - name: Review Panama when included in this head
         shell: bash
