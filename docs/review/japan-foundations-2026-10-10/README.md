@@ -14,13 +14,14 @@
 
 ## 検証と画像
 
-最終アプリの固定head・安全Chrome run・artifact・SHAは `evidence-provenance.json` と `report.json` を参照してください。標準Google Chrome / `chromiumSandbox:true`、ローカルホスト以外のネットワーク要求は遮断。1440×900・1024×768の48項目、43画像、pageerror 0。MapLibreの実カメラ・描画完了とレイアウトの安定を確認して検査・撮影しました。
+最終アプリの固定head・安全Chrome run・artifact・SHAは `evidence-provenance.json` と `report.json` を参照してください。標準Google Chrome / `chromiumSandbox:true`、ローカルホスト以外のネットワーク要求は遮断。1440×900・1024×768の50項目、45画像、pageerror 0。MapLibreの実カメラ・描画完了とレイアウトの安定を確認して検査・撮影しました。
 
-4タブ、直接URL・再読込、戻る／進む、東アジア復帰、東京選択による誤遷移防止、実カメラ不変、選択解除、産地点保持、県統計、共通雨温図の軸・補助線、自然の5主題・川名の読み取り、アセット失敗と再試行を検証。
+10品目の連続切替、品目・地点・地域・解除ボタンのイベント登録が各1回であること、4タブ、直接URL・再読込、戻る／進む、東アジア復帰、東京選択による誤遷移防止、実カメラ不変、選択解除、産地点保持、県統計、共通雨温図の軸・補助線、自然の5主題・川名の読み取り、アセット失敗と再試行を検証。
 
 | 画面 | 1440×900 | 1024×768 |
 |---|---|---|
 | 農林業の初期全国図 | [画像](1440x900-agriculture.jpg) | [画像](1024x768-agriculture.jpg) |
+| 酪農・共有地点の品目色 | [画像](1440x900-agriculture-milk.jpg) | [画像](1024x768-agriculture-milk.jpg) |
 | 小麦の選択 | [画像](1440x900-agriculture-wheat-selection.jpg) | [画像](1024x768-agriculture-wheat-selection.jpg) |
 | 小麦の3列統計 | [画像](1440x900-agriculture-statistics.jpg) | [画像](1024x768-agriculture-statistics.jpg) |
 | 自然・気候区分 | [画像](1440x900-natural.jpg) | [画像](1024x768-natural.jpg) |
@@ -33,6 +34,8 @@
 | 人口・年齢補助表 | [画像](1440x900-population-statistics.jpg) | [画像](1024x768-population-statistics.jpg) |
 
 ローカル：全体単体1,081成功・3skip、日本関連27成功、関連E2E13成功、build・release検証成功。自然は全6,322,464表示画素を原資料・詳細海岸maskと照合して一致、全vectorの海岸clip・間隔・SHAを照合。人口は47県合計126,146,099人、各県の年齢3区分＋不詳と合計一致。詳細データQAは下記の出典文書と台帳を参照。
+
+イベントを描画のたびに重複登録していたため、連続操作で処理が増える不具合を `b04adf4` で修正しました。初期化時の1回だけ登録します。先行失敗run 38050920477の証跡は成功扱いにせず、このフォルダは修正後run 38051436291の元画像・レポートへ置き換えました。
 
 ## 出典・取得障害と見込み
 

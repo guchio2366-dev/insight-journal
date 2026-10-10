@@ -1,6 +1,6 @@
 {
   "baseCommit": "ab2bf51581f6874fb141b5e858892c7a2faf9f2e",
-  "headCommit": "80578877219b130de1629658bc755fe0c8c7494e",
+  "headCommit": "b04adf49255322978fbc7077df3b4f9caf0dfc2d",
   "workingTree": "clean",
   "browser": "154.0.8037.97",
   "chromiumSandbox": true,
@@ -851,6 +851,10 @@
     },
     {
       "width": 1440,
+      "name": "all ten products use their own legend color at shared localities, and context points describe the actual selected place"
+    },
+    {
+      "width": 1440,
       "name": "ten agricultural products retain nine reference sites, selection/deselect, separate forest statistics"
     },
     {
@@ -1004,7 +1008,7 @@
     {
       "width": 1440,
       "name": "URL reload history explicit country return",
-      "restored": "http://127.0.0.1:33655/insight-journal/atlas/asia/east-asia/nature/?place=CHN&city=beijing&lng=128.00000&lat=35.00000&z=4.200"
+      "restored": "http://127.0.0.1:33469/insight-journal/atlas/asia/east-asia/nature/?place=CHN&city=beijing&lng=128.00000&lat=35.00000&z=4.200"
     },
     {
       "width": 1440,
@@ -1019,7 +1023,7 @@
         "lat": 35,
         "zoom": 4.2
       },
-      "url": "http://127.0.0.1:33655/insight-journal/atlas/asia/east-asia/nature/?place=JPN&city=tokyo&lng=128.00000&lat=35.00000&z=4.200"
+      "url": "http://127.0.0.1:33469/insight-journal/atlas/asia/east-asia/nature/?place=JPN&city=tokyo&lng=128.00000&lat=35.00000&z=4.200"
     },
     {
       "width": 1440,
@@ -1886,6 +1890,10 @@
     },
     {
       "width": 1024,
+      "name": "all ten products use their own legend color at shared localities, and context points describe the actual selected place"
+    },
+    {
+      "width": 1024,
       "name": "ten agricultural products retain nine reference sites, selection/deselect, separate forest statistics"
     },
     {
@@ -2039,7 +2047,7 @@
     {
       "width": 1024,
       "name": "URL reload history explicit country return",
-      "restored": "http://127.0.0.1:33655/insight-journal/atlas/asia/east-asia/nature/?place=CHN&city=beijing&lng=128.00000&lat=35.00000&z=4.200"
+      "restored": "http://127.0.0.1:33469/insight-journal/atlas/asia/east-asia/nature/?place=CHN&city=beijing&lng=128.00000&lat=35.00000&z=4.200"
     },
     {
       "width": 1024,
@@ -2054,7 +2062,7 @@
         "lat": 35,
         "zoom": 4.2
       },
-      "url": "http://127.0.0.1:33655/insight-journal/atlas/asia/east-asia/nature/?place=JPN&city=tokyo&lng=128.00000&lat=35.00000&z=4.200"
+      "url": "http://127.0.0.1:33469/insight-journal/atlas/asia/east-asia/nature/?place=JPN&city=tokyo&lng=128.00000&lat=35.00000&z=4.200"
     },
     {
       "width": 1024,
@@ -2102,6 +2110,7 @@
     "1440x900-natural-elevation.jpg",
     "1440x900-agriculture.jpg",
     "1440x900-agriculture-wheat-selection.jpg",
+    "1440x900-agriculture-milk.jpg",
     "1440x900-agriculture-forest.jpg",
     "1440x900-agriculture-statistics.jpg",
     "1440x900-population.jpg",
@@ -2123,6 +2132,7 @@
     "1024x768-natural-elevation.jpg",
     "1024x768-agriculture.jpg",
     "1024x768-agriculture-wheat-selection.jpg",
+    "1024x768-agriculture-milk.jpg",
     "1024x768-agriculture-forest.jpg",
     "1024x768-agriculture-statistics.jpg",
     "1024x768-population.jpg",
@@ -2130,6 +2140,268 @@
     "1024x768-population-niigata.jpg",
     "1024x768-population-statistics.jpg",
     "390-industry.jpg"
+  ],
+  "console": [
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[.WebGL-0x2d1401693000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[.WebGL-0x2d1401693000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[.WebGL-0x2d1401693000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels"
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[.WebGL-0x2d1401693000]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1440,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    },
+    {
+      "width": 1024,
+      "type": "warning",
+      "text": "[]Automatic fallback to software WebGL has been deprecated. Please use the --enable-unsafe-swiftshader flag to opt in to lower security guarantees for trusted content."
+    }
   ],
   "status": "passed"
 }
