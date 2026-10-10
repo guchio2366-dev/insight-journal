@@ -1,0 +1,23 @@
+---
+import AtlasClimatePlot from './AtlasClimatePlot.astro';
+import {regionalClimateCities,regionalClimateReading,regionalClimateBackgroundSources} from '../../data/atlas/oceania-russia-climate-reading';
+import {latinStationClimateMethod} from '../../lib/atlas-latin-station-climate';
+import {climateAxisNote} from '../../lib/atlas-climate-axes';
+import '../../styles/atlas-regional-climate-cities.css';
+interface Props{region:'oceania'|'russia';legendHtml:string}
+const {region,legendHtml}=Astro.props;
+---
+<section class="regional-climate-reading" data-regional-climate-reading hidden aria-live="polite" aria-label="選択地点の雨温図"></section>
+{regionalClimateCities.filter(c=>c.region===region).map(city=>{
+ const reading=regionalClimateReading(city);
+ return <template data-regional-climate-template={city.id}>
+  <header class="regional-climate-heading"><h2>{city.name}－{city.countryName}の雨温図</h2><button type="button" data-clear-climate-city aria-label="都市選択を解除して地域の説明へ戻る">都市選択を解除</button></header>
+  <div class="regional-climate-plot"><AtlasClimatePlot name={city.name} period={city.normalPeriod} temperatureC={city.temperatureC} precipitationMm={city.precipitationMm}/><p class="regional-climate-key">青い棒：降水量（左・mm）／ 赤い線：月平均気温（右・℃）</p></div>
+  <div class="regional-climate-details" tabindex="0" aria-label={`${city.name}の気候区分・理由・出典`}>
+   <h3>{reading.name}（{reading.code}）</h3><p data-city-climate-definition>{reading.definition}</p><p class="regional-climate-metrics">{reading.metrics}</p>
+   <h3>この気候になる理由</h3><p>{reading.reason}</p><h3>農業・森林とのつながり</h3><p>{reading.landUse}</p>
+   <details><summary>地図の凡例と観測所の違い</summary><div set:html={legendHtml}/><p>地図と観測所はともに1991–2020年。地図は格子の気候区分、この図は一点の月別平年値で、位置・標高・補間と集計の違いにより区分が一致しない場合があります。区分は観測所の12か月から当サイトが判定しました。</p><p>観測所：{city.stationName}（{city.stationId}）、東経{city.coordinates[0]}°・{city.coordinates[1]<0?'南緯':'北緯'}{Math.abs(city.coordinates[1])}°、標高{city.elevationM} m。{city.stationName.includes('AIRPORT')||city.stationName.includes('AERO')?'空港観測所の値で、市街地全体の平均ではありません。':'地図の点は観測所の位置です。'}</p><p>降水量は雨・雪を水の量に換算した月合計の平年値（mm）です。積雪深ではありません。</p></details>
+   <details><summary>出典・平年期間・目盛り</summary><p><a href={city.sourceUrl}>気象庁 ClimatView：観測所別の平年値</a>を基に当サイトが作図・区分判定。取得：{city.sourceRetrievedAt}。<a href="https://ds.data.jma.go.jp/tcc/tcc/products/climate/explanation/normal.html">1991–2020年平年値の説明</a>：各月に最低8年の利用可能データを要するため、全月30年分が揃うことを意味しません。</p><p><a href={latinStationClimateMethod.url}>気候区分の判定条件（Beck et al. 2023、表1）</a>。夏・冬は気温の高い半年・低い半年で判定。夏乾燥＝夏の最少雨月が40 mm未満かつ冬最多月の1/3未満、冬乾燥＝冬最少月が夏最多月の1/10未満。乾燥帯の判定を先に行います。</p><p>{climateAxisNote}</p><p>地域の理由は月別平年値・緯度・海陸位置と次の地域資料を合わせた説明です。農業・森林の数量や分布をこの点から推計していません。</p>{regionalClimateBackgroundSources.filter((_,i)=>region==='oceania'?i<3:i===3).map(s=><p><a href={s.url}>{s.title}</a></p>)}<p><a href={city.sourceTermsUrl}>気象庁の利用条件</a>（帰属表示・編集表示）。観測値の転載は選択した月別平年値と地点情報に限定しています。</p></details>
+  </div>
+ </template>;
+})}
