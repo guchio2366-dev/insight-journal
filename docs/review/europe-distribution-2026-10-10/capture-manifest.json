@@ -1,0 +1,70 @@
+{
+  "findings": [
+    {
+      "width": 1440,
+      "genre": "livestock",
+      "visible": [
+        "ie-south-dairy",
+        "ie-nw-other-cows",
+        "austrian-alps-dairy"
+      ],
+      "countries": [
+        "dairy-de",
+        "dairy-fr",
+        "dairy-pl",
+        "dairy-it",
+        "dairy-uk",
+        "dairy-nl",
+        "suckler-fr",
+        "suckler-es",
+        "suckler-uk",
+        "suckler-ie"
+      ]
+    },
+    {
+      "width": 1440,
+      "genre": "horticulture",
+      "visible": [],
+      "countries": [
+        "produce-es",
+        "produce-fr",
+        "produce-gr",
+        "produce-it",
+        "produce-pt"
+      ]
+    },
+    {
+      "width": 1024,
+      "genre": "livestock",
+      "visible": [
+        "ie-south-dairy",
+        "ie-nw-other-cows",
+        "austrian-alps-dairy"
+      ],
+      "countries": [
+        "dairy-de",
+        "dairy-fr",
+        "dairy-pl",
+        "dairy-it",
+        "dairy-uk",
+        "dairy-nl",
+        "suckler-fr",
+        "suckler-es",
+        "suckler-uk",
+        "suckler-ie"
+      ]
+    },
+    {
+      "width": 1024,
+      "genre": "horticulture",
+      "visible": [],
+      "countries": [
+        "produce-es",
+        "produce-fr",
+        "produce-gr",
+        "produce-it",
+        "produce-pt"
+      ]
+    }
+  ]
+}
