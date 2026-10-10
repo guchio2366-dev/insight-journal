@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import RussiaNewsRail from './RussiaNewsRail.astro';
+import RegionalClimateCityReading from './RegionalClimateCityReading.astro';
 import '../../styles/atlas-explorer.css';
 import '../../styles/atlas-desktop.css';
 import {withBase} from '../../lib/urls';
@@ -56,6 +57,7 @@ const usdaWheatUrl='https://apps.fas.usda.gov/newgainapi/api/Report/DownloadRepo
     {overview&&<section class="russia-overview-entries"><h2>分野ごとに分布を読む</h2>{mainFields.filter(item=>item.id!=='overview').map(item=><a href={withBase(`/atlas/russia/${item.id}/`)} data-field-link={item.id}>{item.label}<span>地図と場所の理由を読む →</span></a>)}</section>}
    </section>
    <aside class="russia-learning-reading" aria-label="地図から読み取ること">
+    {field==='nature'&&!overview&&<RegionalClimateCityReading region="russia" legendHtml={renderRussiaLegend(layer)}/>}
     <div class="russia-learning-message"><p class="russia-learning-kicker" data-reading-status>ロシアの概要</p><h2 data-theme-title>{overview?'広い国土を、都市と分野の分布から読む':fieldOverview.title}</h2><p class="russia-learning-takeaway" data-takeaway>{overview?'欧州側・シベリア・極東を同じ表示枠で確かめ、自然条件に設備・交通・市場・社会を重ねて読む。都市中心の円は行政人口ではなく、固定された都市範囲の人口です。':fieldOverview.takeaway}</p>{field==='industry'&&<button type="button" data-russia-industry-return hidden>← 全域の産業概要へ戻る</button>}<button type="button" class="russia-learning-comparison-button" data-comparison>{comparison.title}と並べる →</button></div>
     {!overview&&field!=='agriculture'&&<div class="russia-key-legend" data-key-legend data-climate-legend={layer.id==='climate'?'true':'false'}><p data-current-legend-unit>{layer.period}・{layer.unit}</p><div class="russia-learning-legend" data-primary-legend aria-label="地図の全凡例" set:html={renderRussiaWorkspaceLegend(layer)}></div></div>}
     {overview&&<div class="russia-learning-coverage"><h3>この地図で読める範囲</h3><p data-coverage>{russiaCoverage(layer,state)}</p></div>}

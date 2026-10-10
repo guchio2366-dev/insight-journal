@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
 import OceaniaWorkspaceRegionNavigation from './OceaniaWorkspaceRegionNavigation.astro';
+import RegionalClimateCityReading from './RegionalClimateCityReading.astro';
 import {withBase} from '../../lib/urls';
 import {renderOceaniaRequiredLegend} from '../../scripts/atlas-oceania-legend';
 import {
@@ -62,6 +63,7 @@ const australiaExportShares=[
     {field!=='agriculture'&&<div class="oceania-learning-toolbar"><div class="oceania-learning-themes" aria-label="学ぶテーマ">{fieldThemes.map(item=><button type="button" data-theme={item.id} title={item.title} aria-pressed="false">{themeLabels[item.id]??item.title}</button>)}</div><div class="oceania-learning-scope" aria-label="地図の範囲">{scopeOptions.map(item=><button type="button" data-scope={item.id} aria-pressed={item.id===state.scope?'true':'false'} disabled={item.id==='country'&&state.place==='all'}>{item.label}</button>)}</div></div>}
    </section>
    <aside class="oceania-learning-reading" aria-label="地図から読み取ること">
+    {field==='nature'&&<RegionalClimateCityReading region="oceania" legendHtml={primaryLegend}/>}
     <div class="oceania-learning-message"><h2 data-theme-title>オセアニアの{labels[field]}を読む</h2><p class="oceania-learning-takeaway" data-takeaway>{overview.takeaway}</p><button type="button" class="oceania-learning-comparison-button" data-comparison>{comparison.title}と並べる →</button></div>
     {field==='agriculture'?<div class="oceania-workspace-reading-scroll" tabindex="0" aria-label="地理の読み取りと詳しい資料"><p class="oceania-farming-geography" data-geography-reading>{getOceaniaFarmingGeography(layer.id)}</p><details class="oceania-learning-explanation"><summary>資料・表示方法の詳細</summary><p data-explanation>{overview.explanation}</p><div class="oceania-learning-coverage"><h3>この地図で読める範囲</h3><p data-coverage>{oceaniaCoverage(layer,state)}</p></div></details><details class="oceania-learning-social"><summary>経営・加工・市場とのつながりを読む</summary><p data-social-context>{getOceaniaFarmingGeography(layer.id)}</p></details></div>:<>
     <section class="oceania-workspace-required-legend" data-required-legend-layer={layer.id} aria-label="現在の地図の凡例と単位"><p data-primary-legend-unit>{layer.period} ・ {layer.unit}</p><div class="oceania-learning-legend" data-primary-legend aria-label="地図の全凡例" set:html={compactPrimaryLegend}></div></section>
