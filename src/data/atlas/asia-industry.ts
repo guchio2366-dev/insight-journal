@@ -74,3 +74,9 @@ export const industryMalaysiaReading:Record<string,string>={
  'MY-14':'クアラルンプールではサービス業が2025年の地域GDPの91.7%を占めます。DOSMは商業・宿泊飲食と、金融・保険・不動産・事業サービスの伸びを挙げています。この地域の金融だけの数値ではありません。',
  'MY-13':'サラワクでは天然ガスが2025年の鉱業・採石業の72.2%を占めます。DOSMの州経済の説明を、鉱業と製造業の別々の地図で確かめてください。地図の鉱業額をそのまま天然ガスの生産額とは読めません。',
 };
+
+/** Saved WDI observations for the already supported detailed country entries. National GDP shares, never site quantities. */
+export function industryCountryFacts(national:IndustryNational|null,code:string|null){
+ if(!national||!code||!['KOR','TWN','IDN','VNM','THA'].includes(code))return [];
+ return ['manufacturing','services'].map(id=>{const indicator=national.indicators.find(row=>row.id===id)!;return {id,label:indicator.label,value:indicator.observations.find(row=>row.countryCode===code&&row.year===2024)?.value??null,year:2024,unit:indicator.unit,sourceUrl:indicator.metadataUrl};});
+}
