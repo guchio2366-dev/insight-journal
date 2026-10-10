@@ -11,6 +11,8 @@ on:
       - 'src/lib/atlas-latin-learning-state.ts'
       - 'src/scripts/atlas-latin-essential-legends.ts'
       - 'scripts/verify-*-industry*-review.mjs'
+      - 'scripts/*canada-industry*.mjs'
+      - 'src/lib/atlas-canada-industry-pilot.ts'
       - '.github/workflows/industry-regional-review.yml'
 permissions:
   contents: read
@@ -38,7 +40,7 @@ jobs:
           set -euo pipefail
           test -n "$(fc-list ':lang=ja' family)"
           export INDUSTRY_REVIEW_CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)"
-          for review in scripts/verify-latin-industry-locations-review.mjs scripts/verify-russia-industry-review.mjs scripts/verify-industry-existing-country-review.mjs; do
+          for review in scripts/verify-latin-industry-locations-review.mjs scripts/verify-russia-industry-review.mjs scripts/verify-industry-existing-country-review.mjs scripts/capture-canada-industry-pilot-review.mjs; do
             if [[ -f "$review" ]]; then node "$review"; fi
           done
       - uses: actions/upload-artifact@v4

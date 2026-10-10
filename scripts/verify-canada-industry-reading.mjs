@@ -1,36 +1,3 @@
-/** Industry source coordinates, legible reading, and camera/selection acceptance. */
-import assert from 'node:assert/strict';
-import {readFile} from 'node:fs/promises';
-import path from 'node:path';
-export async function verifyCanadaIndustryReading({page,url,output,result}){
- const data=JSON.parse(await readFile('src/data/atlas/canada/industry-parity.json'));
- const wait=async()=>{await page.evaluate(()=>document.fonts.ready);await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));};
- const state=()=>page.locator('[data-ca-industry-parity]').evaluate(r=>r.canadaIndustryView);
- async function positions(){
-  const info=await page.locator('[data-ca-industry-parity]').evaluate(r=>{
-   const rect=n=>{const b=n.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};};
-   const svg=r.querySelector('[data-ca-map]'),matrix=svg.getScreenCTM(),stage=rect(r.querySelector('[data-ca-map-frame]'));
-   return [...r.querySelectorAll('[data-ca-marker]')].map(n=>{const id=n.dataset.caMarker,dot=rect(n.querySelector('i')),a=rect(r.querySelector(`[data-ca-anchor="${id}"]`)),text=n.querySelector('span'),x=dot.x+dot.width/2,y=dot.y+dot.height/2,point=new DOMPoint((x-matrix.e)/matrix.a,(y-matrix.f)/matrix.d),shape=r.querySelector(`[data-ca-province-shape="${id}"]`);return {id,dot,anchor:a,inside:shape.isPointInFill(point),label:text.hidden?null:rect(text),fonts:text.hidden?[]:[...text.children].map(c=>parseFloat(getComputedStyle(c).fontSize)),stage};});
-  });
-  const overlaps=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
-  for(const a of info){assert.ok(a.inside,a.id+': point is inside its own held province geometry');assert.ok(Math.abs(a.dot.x+a.dot.width/2-a.anchor.x-a.anchor.width/2)<.2&&Math.abs(a.dot.y+a.dot.height/2-a.anchor.y-a.anchor.height/2)<.2,a.id+': symbol stays at anchor');if(a.label){a.fonts.forEach(v=>assert.equal(v,14));for(const b of info){assert.ok(!overlaps(a.label,b.dot),a.id+': label does not cover '+b.id+' point');if(a.id!==b.id&&b.label)assert.ok(!overlaps(a.label,b.label),a.id+': labels clear '+b.id);}}}
-  return info;
- }
- for(const [width,height]of [[1536,864],[1280,720],[1024,768]]){
-  await page.setViewportSize({width,height});await page.goto(url('industry/'),{waitUntil:'networkidle'});const us=await page.locator('.atlas-map-frame:visible').boundingBox();await page.goto(url('canada/industry/'),{waitUntil:'networkidle'});await wait();const actual=await page.locator('[data-ca-map-frame]').boundingBox();
-  for(const d of ['x','y','width','height'])assert.ok(Math.abs(us[d]-actual[d])<2,`${width}: US industry ${d} ${us[d]}/${actual[d]}`);
-  assert.equal((await state()).province,null);assert.equal(await page.locator('[data-ca-province-shape][aria-pressed=true]').count(),0);assert.equal(await page.locator('[data-ca-national-patterns] section').count(),3);assert.equal(await page.locator('.canada-industry-statistics').getAttribute('open'),null);assert.equal(await page.locator('[data-ca-bars]>li').count(),data.nationalChart.length);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
-  const p=await positions();assert.equal(p.length,13);assert.ok(p.filter(p=>p.label).length>=5);result.viewports.push({width,height,topic:'industry',us,map:actual,provinceMarkers:p.length,labels:p.filter(p=>p.label).length});await page.screenshot({path:path.join(output,`canada-industry-${width}.png`)});
-  await page.locator('[data-ca-province-shape="Ontario"]').press('Enter');await wait();assert.equal((await state()).province,'Ontario');assert.equal(await page.locator('[data-ca-province-shape="Ontario"]').evaluate(n=>getComputedStyle(n).fill),'rgba(0, 0, 0, 0)');const selected=(await positions()).find(p=>p.id==='Ontario');assert.ok(selected.label,'Selected province label stays visible');assert.equal(await page.locator('[data-ca-marker]').count(),13);await page.locator('[data-ca-clear]').click();await wait();
- }
- result.checks.push('Three PC sizes match actual US industry map position and size; 13 source guide points stay inside their own province; 14px labels do not cover points or each other; selected outline retains every other province');
- await page.setViewportSize({width:1536,height:864});await page.goto(url('canada/industry/'),{waitUntil:'networkidle'});await wait();
- for(const sector of ['manufacturing','resources','services','construction-real-estate','all']){await page.locator(`[data-ca-sector="${sector}"]`).click();await wait();assert.equal((await state()).sector,sector);assert.equal((await state()).province,null);await positions();}
- await page.locator('[data-ca-pattern=manufacturing]').click();await page.locator('[data-ca-subsector=auto]').click();await wait();assert.equal(await page.locator('[data-ca-marker]').count(),5);await positions();await page.locator('[data-ca-marker="Ontario"]').click();await wait();assert.equal((await state()).province,'Ontario');
- const auto=data.metrics.find(m=>m.id==='auto'),ontario=auto.provinces.find(p=>p.id==='Ontario');assert.ok((await page.locator('[data-ca-value]').textContent()).includes(ontario.gdp.toLocaleString('ja-JP',{maximumFractionDigits:1})));await page.locator('[href="#canada-industry-statistics"]').click();assert.notEqual(await page.locator('.canada-industry-statistics').getAttribute('open'),null);
- await page.locator('[data-ca-camera=whole]').click();await wait();const whole=(await state()).frame;assert.ok(whole[2]>900);assert.ok(new URL(page.url()).searchParams.has('industryFrame'));await page.reload({waitUntil:'networkidle'});await wait();(await state()).frame.forEach((v,i)=>assert.ok(Math.abs(v-whole[i])<.001));assert.equal((await state()).province,'Ontario');await positions();await page.screenshot({path:path.join(output,'canada-industry-whole.png')});
- await page.locator('[data-ca-camera=in]').click();await wait();const zoom=(await state()).frame;assert.ok(zoom[2]<whole[2]);await page.locator('[data-ca-map]').focus();await page.keyboard.press('ArrowRight');await wait();assert.ok((await state()).frame[0]>zoom[0]);await page.goBack();await wait();(await state()).frame.forEach((v,i)=>assert.ok(Math.abs(v-zoom[i])<.001));await page.locator('[data-ca-camera=reset]').click();await wait();assert.deepEqual((await state()).frame,[0,0,900,580]);
- const before=(await state()).frame,b=await page.locator('[data-ca-map-frame]').boundingBox();await page.mouse.move(b.x+80,b.y+110);await page.mouse.down();await page.mouse.move(b.x+130,b.y+150,{steps:4});await page.mouse.up();await wait();assert.notDeepEqual((await state()).frame,before);assert.equal((await state()).province,'Ontario');
- await page.locator('[data-ca-clear]').click();await page.locator('[data-ca-sector=resources]').click();await page.locator('[data-ca-subsector=oil-gas]').click();await wait();await positions();await page.locator('[data-ca-province-shape="Alberta"]').press('Enter');await wait();assert.equal((await state()).province,'Alberta');assert.equal(await page.locator('[data-ca-marker]').count(),5);
- result.checks.push('All five sectors, national pattern links, automotive/oil-gas source values, native outline keyboard selection, retained top-five distribution, folded source table, full-north/south, zoom, pan, history and reload work');
-}
+/** The Canada-only pilot replaces the legacy provincial GDP locator acceptance. */
+import {verifyCanadaIndustryPilot} from './verify-canada-industry-pilot.mjs';
+export const verifyCanadaIndustryReading=verifyCanadaIndustryPilot;

@@ -1,0 +1,186 @@
+[
+  {
+    "id": "refining",
+    "label": "石油・石炭製品製造",
+    "sector": "manufacturing",
+    "gdpCodes": [
+      "324"
+    ],
+    "employmentCodes": [],
+    "gdp": 13256.5,
+    "employment": null,
+    "provinces": [
+      {
+        "id": "Newfoundland and Labrador",
+        "name": "ニューファンドランド・ラブラドール",
+        "short": "NL",
+        "gdp": 0
+      },
+      {
+        "id": "Prince Edward Island",
+        "name": "プリンスエドワードアイランド",
+        "short": "PE",
+        "gdp": 3.3
+      },
+      {
+        "id": "Nova Scotia",
+        "name": "ノバスコシア",
+        "short": "NS",
+        "gdp": 16
+      },
+      {
+        "id": "New Brunswick",
+        "name": "ニューブランズウィック",
+        "short": "NB",
+        "gdp": 384.2
+      },
+      {
+        "id": "Quebec",
+        "name": "ケベック",
+        "short": "QC",
+        "gdp": 1695.5
+      },
+      {
+        "id": "Ontario",
+        "name": "オンタリオ",
+        "short": "ON",
+        "gdp": 3785.4
+      },
+      {
+        "id": "Manitoba",
+        "name": "マニトバ",
+        "short": "MB",
+        "gdp": 14.6
+      },
+      {
+        "id": "Saskatchewan",
+        "name": "サスカチュワン",
+        "short": "SK",
+        "gdp": 1252.5
+      },
+      {
+        "id": "Alberta",
+        "name": "アルバータ",
+        "short": "AB",
+        "gdp": 4915.8
+      },
+      {
+        "id": "British Columbia",
+        "name": "ブリティッシュコロンビア",
+        "short": "BC",
+        "gdp": 1189.2
+      },
+      {
+        "id": "Yukon",
+        "name": "ユーコン",
+        "short": "YT",
+        "gdp": 0
+      },
+      {
+        "id": "Northwest Territories",
+        "name": "ノースウエスト準州",
+        "short": "NT",
+        "gdp": 0
+      },
+      {
+        "id": "Nunavut",
+        "name": "ヌナブト",
+        "short": "NU",
+        "gdp": 0
+      }
+    ]
+  },
+  {
+    "id": "transport",
+    "label": "運輸・倉庫",
+    "sector": "services",
+    "gdpCodes": [
+      "48-49"
+    ],
+    "employmentCodes": [
+      "48-49"
+    ],
+    "gdp": 103007.1,
+    "employment": 986.7,
+    "provinces": [
+      {
+        "id": "Newfoundland and Labrador",
+        "name": "ニューファンドランド・ラブラドール",
+        "short": "NL",
+        "gdp": 964
+      },
+      {
+        "id": "Prince Edward Island",
+        "name": "プリンスエドワードアイランド",
+        "short": "PE",
+        "gdp": 204
+      },
+      {
+        "id": "Nova Scotia",
+        "name": "ノバスコシア",
+        "short": "NS",
+        "gdp": 1413
+      },
+      {
+        "id": "New Brunswick",
+        "name": "ニューブランズウィック",
+        "short": "NB",
+        "gdp": 1689.4
+      },
+      {
+        "id": "Quebec",
+        "name": "ケベック",
+        "short": "QC",
+        "gdp": 19217.1
+      },
+      {
+        "id": "Ontario",
+        "name": "オンタリオ",
+        "short": "ON",
+        "gdp": 34647.5
+      },
+      {
+        "id": "Manitoba",
+        "name": "マニトバ",
+        "short": "MB",
+        "gdp": 4643.8
+      },
+      {
+        "id": "Saskatchewan",
+        "name": "サスカチュワン",
+        "short": "SK",
+        "gdp": 3973.6
+      },
+      {
+        "id": "Alberta",
+        "name": "アルバータ",
+        "short": "AB",
+        "gdp": 19181
+      },
+      {
+        "id": "British Columbia",
+        "name": "ブリティッシュコロンビア",
+        "short": "BC",
+        "gdp": 16684.3
+      },
+      {
+        "id": "Yukon",
+        "name": "ユーコン",
+        "short": "YT",
+        "gdp": 89.1
+      },
+      {
+        "id": "Northwest Territories",
+        "name": "ノースウエスト準州",
+        "short": "NT",
+        "gdp": 234.1
+      },
+      {
+        "id": "Nunavut",
+        "name": "ヌナブト",
+        "short": "NU",
+        "gdp": 66.2
+      }
+    ]
+  }
+]

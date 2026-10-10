@@ -1,0 +1,13 @@
+{
+  "accessed": "2026-10-10",
+  "inputGDP": "public/assets/atlas/canada-industry-parity-v1/gdp-2021.csv.gz",
+  "inputGDPsha256": "a231c1bd8473d0538ac52631941bb7d2278c4c4a74df2be03567661ccd8a2ed3",
+  "inputEmploymentsha256": "511eedf85cbb97f775b1def343dff30ba65bb5a9ad4244af9bf08dd4de84a618",
+  "gdpSource": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3610040201",
+  "employmentSource": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1410002301",
+  "newRows": 26,
+  "gdpUnit": "百万CAD・基本価格・当年価格・2021",
+  "employmentUnit": "千人・2021年平均・準州除外",
+  "missing": "精製に対応する細分類雇用はこの抽出原表にない。0にはしない。",
+  "classification": "学習分類に精製・精錬を重複表示。統計は原NAICS区分のまま保持し表示分類を合算しない。"
+}
