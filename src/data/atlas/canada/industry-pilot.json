@@ -1,0 +1,1076 @@
+{
+  "version": 1,
+  "sectors": [
+    {
+      "id": "resources",
+      "label": "資源・エネルギー",
+      "overview": "石油・ガスは西部の堆積盆地と東岸沖、ニッケルはサドベリー・トンプソン・ラブラドールに分布します。精製・精錬の拠点と、水力発電の地域も重ねています。",
+      "why": "資源を採る場所は地質に制約されます。原料を使える状態にする場所には輸送設備やエネルギーが必要です。サドベリーは採掘と精錬が近接し、ヴォイジーズ・ベイでは精鉱を海上輸送してロングハーバーで金属にします。",
+      "insight": "どこで採れ、どこで使える原料・エネルギーになるか"
+    },
+    {
+      "id": "manufacturing",
+      "label": "製造業",
+      "overview": "自動車はオンタリオ南部に複数の製造拠点が連なり、航空機・部品はモントリオール近郊とオンタリオに集まります。西部と東部の精製、サドベリー・東岸の金属精錬、サグネとキティマットのアルミ製錬も同じ地図で読めます。",
+      "why": "組立工業では部品供給、専門人材、市場への交通が立地を支えます。精錬・精製は原料を燃料や金属へ変える製造でもあります。製品の用途と原料の供給関係は区別し、近い工場どうしに取引があるとは推定しません。",
+      "insight": "どこで何がつくられ、調達と用途がどう関わるか"
+    },
+    {
+      "id": "services",
+      "label": "サービス業",
+      "overview": "金融はトロントとモントリオール、情報技術は両都市に加えウォータールー・オタワ・バンクーバー・カルガリーにも集積します。物流は太平洋岸、プレーリー、中央回廊、大西洋岸をつなぐ拠点に分布します。",
+      "why": "金融・情報技術では専門人材、大学・研究機関、企業の意思決定が近くに集まることが仕事を支えます。物流では港・空港・鉄道・道路の接続が人と貨物を集めます。都市規模と、個別サービスの集積は同じ指標ではありません。",
+      "insight": "どこに人・情報・接続機能が集まるか"
+    }
+  ],
+  "industries": [
+    {
+      "id": "oil-gas",
+      "label": "石油・天然ガス",
+      "color": "#97502f",
+      "sectors": [
+        "resources"
+      ],
+      "metrics": {
+        "resources": "oil-gas"
+      },
+      "overview": "北部アルバータのオイルサンド、BC北東部からアルバータへ続くモントニー、ニューファンドランド東方沖が主な例です。",
+      "why": "堆積盆地に蓄積した炭化水素を採取します。オイルサンドのビチューメンは粘りが強く、一部はアップグレーダーで合成原油に加工され、精製へ進みます。"
+    },
+    {
+      "id": "refining",
+      "label": "石油精製",
+      "color": "#a54759",
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "metrics": {
+        "resources": "refining",
+        "manufacturing": "refining"
+      },
+      "overview": "エドモントン周辺に複数の製油所が集まり、サーニア、モントリオール、レヴィ、セントジョン、バーナビーにも拠点があります。",
+      "why": "原油をガソリン・軽油などに変える工程です。西部は産地との接続、東部は輸送網・港・消費市場が立地を支えます。資源側では原油が使える燃料になる場所、製造側では燃料をつくる加工業として同じ拠点を表示します。"
+    },
+    {
+      "id": "nickel",
+      "label": "ニッケル採掘・精錬",
+      "color": "#7861a3",
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "metrics": {
+        "resources": "mining",
+        "manufacturing": "metals"
+      },
+      "overview": "サドベリーには鉱山・選鉱・精錬が集まり、トンプソンとヴォイジーズ・ベイにも鉱山があります。ロングハーバーはラブラドールの精鉱を処理する場所です。",
+      "why": "選鉱は鉱石から有用成分を濃縮する工程、精錬は不純物を除いて金属にする工程です。製造業の地図ではサドベリーとロングハーバーの加工拠点を示します。金属は合金・航空宇宙などに使われますが、この地図は個別の製品工場への販売先を示しません。"
+    },
+    {
+      "id": "aluminum",
+      "label": "アルミ製錬",
+      "color": "#007f83",
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "metrics": {
+        "resources": "metals",
+        "manufacturing": "metals"
+      },
+      "overview": "ケベックのサグネ・ラックサンジャンとBCのキティマットに製錬・水力発電を組み合わせた集積があります。",
+      "why": "アルミ製錬はアルミナから電気分解で金属を得るため、多くの電力を使います。両地域では自社水力発電と結び付きます。カナダの製錬立地を、国内のボーキサイト採掘地と取り違えないことが要点です。"
+    },
+    {
+      "id": "hydro",
+      "label": "水力発電",
+      "color": "#3476ae",
+      "sectors": [
+        "resources"
+      ],
+      "metrics": {
+        "resources": "utilities"
+      },
+      "overview": "BCのピース川・コロンビア川、ケベックのジェームズ湾側とロメーヌ川、さらに製錬に結び付くケマノ・サグネに発電拠点があります。",
+      "why": "河川の流量、落差、貯水、送電設備が大規模発電を支えます。電力をつくる場所と、都市・工業で利用する場所は離れることがあります。ケマノとキティマットの製錬には操業者が示す送電関係があります。"
+    },
+    {
+      "id": "auto",
+      "label": "自動車・バス",
+      "color": "#4f8044",
+      "sectors": [
+        "manufacturing"
+      ],
+      "metrics": {
+        "manufacturing": "auto"
+      },
+      "overview": "ウィンザー、ウッドストック・ケンブリッジ、アリストン、オシャワに乗用車・トラックの製造地域が連なります。バスなど大型車はウィニペグとモントリオール近郊にもあります。",
+      "why": "南部オンタリオには複数メーカーの組立と部品供給が集まります。国境を越える道路・鉄道が北米市場との接続を支えます。車種・稼働状態は年で変わるため、2024・2025年の原表が確認できる拠点を採用しています。"
+    },
+    {
+      "id": "aerospace",
+      "label": "航空機・部品",
+      "color": "#af7620",
+      "sectors": [
+        "manufacturing"
+      ],
+      "metrics": {
+        "manufacturing": "aerospace"
+      },
+      "overview": "ミラベル・モントリオール近郊の航空機・胴体、ミシサガの構造体、フォートエリーのヘリコプター部品が例です。",
+      "why": "専門技能、研究・設計、部品企業を組み合わせて製造します。機体の組立と部品製造は工程が異なります。ここで挙げた生産拠点の間に、原資料にない納入関係の矢印は描きません。"
+    },
+    {
+      "id": "finance",
+      "label": "金融・保険",
+      "color": "#835078",
+      "sectors": [
+        "services"
+      ],
+      "metrics": {
+        "services": "finance"
+      },
+      "overview": "トロントには銀行・証券と金融機関本社が集まり、モントリオールにも国際金融・金融技術の集積があります。",
+      "why": "資金運用、企業への融資、リスク管理には専門人材と情報が必要です。意思決定・専門サービスが都市で近接します。地図は代表的な集積の位置で、全支店や金融取引量を数えたものではありません。"
+    },
+    {
+      "id": "digital",
+      "label": "情報技術・ソフトウェア",
+      "color": "#2f7770",
+      "sectors": [
+        "services"
+      ],
+      "metrics": {},
+      "overview": "トロント・ウォータールー・オタワ・モントリオールに加え、バンクーバーとカルガリーにも技術人材の集積があります。",
+      "why": "ソフトウェアは知識と技能が主な投入です。大学・研究機関と企業が集まる地域で、人材育成と開発が結び付きます。ハードウェア工場の所在地とは区別し、未取得の都市別雇用を0にしません。"
+    },
+    {
+      "id": "logistics",
+      "label": "港湾・陸空物流",
+      "color": "#346b9e",
+      "sectors": [
+        "services"
+      ],
+      "metrics": {
+        "services": "transport"
+      },
+      "overview": "バンクーバー・プリンスルパートの港、カルガリー・ウィニペグの内陸拠点、トロント・モントリオールの中央回廊、ハリファクスの大西洋玄関が連なります。",
+      "why": "港は海運と鉄道・道路を、内陸都市は道路・鉄道・空港を接続します。貨物の通過量と、都市の居住人口・就業者数は別の指標です。地図の記号は数量を表さず、港の貨物量は下段に別単位で示します。"
+    }
+  ],
+  "clusters": [
+    {
+      "id": "athabasca",
+      "place": "アサバスカ／北部アルバータ",
+      "coordinates": [
+        -111.5,
+        57
+      ],
+      "industry": "oil-gas",
+      "stage": "採取・改質",
+      "sources": [
+        "alberta"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": "フォートマクマレー周辺に鉱山とアップグレーダー。地域を示す概略位置。"
+    },
+    {
+      "id": "montney",
+      "place": "モントニー／BC北東部〜AB",
+      "coordinates": [
+        -120.4,
+        56.1
+      ],
+      "industry": "oil-gas",
+      "stage": "ガス採取",
+      "sources": [
+        "british-columbia",
+        "alberta"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": "地層は州境を越えます。点は地層の境界を示しません。"
+    },
+    {
+      "id": "offshore",
+      "place": "ニューファンドランド東方沖",
+      "coordinates": [
+        -50.2,
+        46.7
+      ],
+      "industry": "oil-gas",
+      "stage": "海上採取",
+      "sources": [
+        "newfoundland-labrador"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": "東方沖の産油地域。セントジョンズ市を油田位置に代用していません。"
+    },
+    {
+      "id": "edmonton",
+      "place": "エドモントン〜レッドウォーター",
+      "coordinates": [
+        -113.3,
+        53.8
+      ],
+      "industry": "refining",
+      "stage": "精製",
+      "sources": [
+        "alberta"
+      ],
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "sarnia",
+      "place": "サーニア",
+      "coordinates": [
+        -82.4,
+        42.98
+      ],
+      "industry": "refining",
+      "stage": "精製",
+      "sources": [
+        "ontario"
+      ],
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "montreal-refinery",
+      "place": "モントリオール東部",
+      "coordinates": [
+        -73.5,
+        45.63
+      ],
+      "industry": "refining",
+      "stage": "精製",
+      "sources": [
+        "quebec"
+      ],
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "levis",
+      "place": "レヴィ",
+      "coordinates": [
+        -71.17,
+        46.79
+      ],
+      "industry": "refining",
+      "stage": "精製",
+      "sources": [
+        "quebec"
+      ],
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "saint-john",
+      "place": "セントジョン",
+      "coordinates": [
+        -66.02,
+        45.28
+      ],
+      "industry": "refining",
+      "stage": "精製",
+      "sources": [
+        "new-brunswick"
+      ],
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "burnaby",
+      "place": "バーナビー",
+      "coordinates": [
+        -122.95,
+        49.28
+      ],
+      "industry": "refining",
+      "stage": "精製",
+      "sources": [
+        "british-columbia"
+      ],
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "sudbury",
+      "place": "サドベリー／Copper Cliff",
+      "coordinates": [
+        -81.05,
+        46.49
+      ],
+      "industry": "nickel",
+      "stage": "採掘・精錬",
+      "sources": [
+        "sudbury-complex"
+      ],
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "note": "資源側は鉱山から精錬まで、製造側はCopper Cliffの精錬・金属製品を扱います。"
+    },
+    {
+      "id": "thompson",
+      "place": "トンプソン鉱山地域",
+      "coordinates": [
+        -97.86,
+        55.74
+      ],
+      "industry": "nickel",
+      "stage": "採掘・選鉱",
+      "sources": [
+        "thompson"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": ""
+    },
+    {
+      "id": "voisey",
+      "place": "ヴォイジーズ・ベイ",
+      "coordinates": [
+        -62.1,
+        56.3
+      ],
+      "industry": "nickel",
+      "stage": "採掘・選鉱",
+      "sources": [
+        "voiseys-bay"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": ""
+    },
+    {
+      "id": "long-harbour",
+      "place": "ロングハーバー",
+      "coordinates": [
+        -53.8,
+        47.43
+      ],
+      "industry": "nickel",
+      "stage": "湿式精錬",
+      "sources": [
+        "long-harbour",
+        "voiseys-bay"
+      ],
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "note": "ヴォイジーズ・ベイの精鉱を海上輸送して金属にする加工拠点。"
+    },
+    {
+      "id": "kitimat",
+      "place": "キティマット",
+      "coordinates": [
+        -128.65,
+        54.05
+      ],
+      "industry": "aluminum",
+      "stage": "製錬",
+      "sources": [
+        "bc-works"
+      ],
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "note": "ケマノの水力発電と送電で結ばれます。"
+    },
+    {
+      "id": "saguenay-aluminum",
+      "place": "サグネ・ラックサンジャン",
+      "coordinates": [
+        -71.6,
+        48.5
+      ],
+      "industry": "aluminum",
+      "stage": "アルミナ精製・製錬",
+      "sources": [
+        "saguenay"
+      ],
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "note": "複数の製錬所と自社水力発電が組み合わさる地域。"
+    },
+    {
+      "id": "peace-hydro",
+      "place": "ピース川",
+      "coordinates": [
+        -122.3,
+        56.15
+      ],
+      "industry": "hydro",
+      "stage": "発電",
+      "sources": [
+        "british-columbia"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": ""
+    },
+    {
+      "id": "columbia-hydro",
+      "place": "コロンビア川",
+      "coordinates": [
+        -118,
+        50.5
+      ],
+      "industry": "hydro",
+      "stage": "発電",
+      "sources": [
+        "british-columbia"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": ""
+    },
+    {
+      "id": "james-bay",
+      "place": "ジェームズ湾側／ラ・グランド",
+      "coordinates": [
+        -77.1,
+        53.7
+      ],
+      "industry": "hydro",
+      "stage": "発電",
+      "sources": [
+        "quebec"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": ""
+    },
+    {
+      "id": "romaine",
+      "place": "ロメーヌ川",
+      "coordinates": [
+        -63.2,
+        50.8
+      ],
+      "industry": "hydro",
+      "stage": "発電",
+      "sources": [
+        "quebec"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": ""
+    },
+    {
+      "id": "kemano",
+      "place": "ケマノ",
+      "coordinates": [
+        -127.95,
+        53.5
+      ],
+      "industry": "hydro",
+      "stage": "発電",
+      "sources": [
+        "bc-works"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": ""
+    },
+    {
+      "id": "saguenay-hydro",
+      "place": "サグネ水系",
+      "coordinates": [
+        -71.9,
+        48.8
+      ],
+      "industry": "hydro",
+      "stage": "発電",
+      "sources": [
+        "saguenay"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": ""
+    },
+    {
+      "id": "windsor",
+      "place": "ウィンザー",
+      "coordinates": [
+        -83.03,
+        42.3
+      ],
+      "industry": "auto",
+      "stage": "車両製造",
+      "sources": [
+        "auto"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": "乗用車・バン"
+    },
+    {
+      "id": "cambridge",
+      "place": "ウッドストック〜ケンブリッジ",
+      "coordinates": [
+        -80.6,
+        43.3
+      ],
+      "industry": "auto",
+      "stage": "車両製造",
+      "sources": [
+        "auto"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": "Toyotaの複数拠点。両市の地域案内位置。"
+    },
+    {
+      "id": "alliston",
+      "place": "アリストン",
+      "coordinates": [
+        -79.85,
+        44.15
+      ],
+      "industry": "auto",
+      "stage": "車両製造",
+      "sources": [
+        "auto"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": "Hondaの乗用車"
+    },
+    {
+      "id": "oshawa",
+      "place": "オシャワ",
+      "coordinates": [
+        -78.86,
+        43.9
+      ],
+      "industry": "auto",
+      "stage": "車両製造",
+      "sources": [
+        "auto"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": "GMのトラック"
+    },
+    {
+      "id": "winnipeg-auto",
+      "place": "ウィニペグ",
+      "coordinates": [
+        -97.14,
+        49.89
+      ],
+      "industry": "auto",
+      "stage": "車両製造",
+      "sources": [
+        "auto"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": "バス・コーチ"
+    },
+    {
+      "id": "montreal-bus",
+      "place": "モントリオール近郊",
+      "coordinates": [
+        -73.95,
+        45.65
+      ],
+      "industry": "auto",
+      "stage": "車両製造",
+      "sources": [
+        "auto"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": "サンテュスタッシュのバス・サンテレーズの大型車"
+    },
+    {
+      "id": "mirabel",
+      "place": "ミラベル／モントリオール近郊",
+      "coordinates": [
+        -74.05,
+        45.68
+      ],
+      "industry": "aerospace",
+      "stage": "機体・胴体",
+      "sources": [
+        "airbus"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": "Airbus A220とAirbus Atlantic Canadaの製造。"
+    },
+    {
+      "id": "mississauga",
+      "place": "ミシサガ／トロント近郊",
+      "coordinates": [
+        -79.63,
+        43.6
+      ],
+      "industry": "aerospace",
+      "stage": "航空機構造体",
+      "sources": [
+        "mhi"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "fort-erie",
+      "place": "フォートエリー",
+      "coordinates": [
+        -78.92,
+        42.9
+      ],
+      "industry": "aerospace",
+      "stage": "ヘリ部品",
+      "sources": [
+        "airbus"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "toronto-finance",
+      "place": "トロント",
+      "coordinates": [
+        -79.38,
+        43.65
+      ],
+      "industry": "finance",
+      "stage": "金融機能",
+      "sources": [
+        "toronto-finance"
+      ],
+      "sectors": [
+        "services"
+      ],
+      "note": ""
+    },
+    {
+      "id": "montreal-finance",
+      "place": "モントリオール",
+      "coordinates": [
+        -73.57,
+        45.5
+      ],
+      "industry": "finance",
+      "stage": "金融機能",
+      "sources": [
+        "montreal-finance"
+      ],
+      "sectors": [
+        "services"
+      ],
+      "note": ""
+    },
+    {
+      "id": "vancouver-digital",
+      "place": "バンクーバー",
+      "coordinates": [
+        -123.12,
+        49.28
+      ],
+      "industry": "digital",
+      "stage": "開発・技術人材",
+      "sources": [
+        "technology"
+      ],
+      "sectors": [
+        "services"
+      ],
+      "note": ""
+    },
+    {
+      "id": "calgary-digital",
+      "place": "カルガリー",
+      "coordinates": [
+        -114.07,
+        51.05
+      ],
+      "industry": "digital",
+      "stage": "開発・技術人材",
+      "sources": [
+        "technology"
+      ],
+      "sectors": [
+        "services"
+      ],
+      "note": ""
+    },
+    {
+      "id": "toronto-digital",
+      "place": "トロント",
+      "coordinates": [
+        -79.38,
+        43.65
+      ],
+      "industry": "digital",
+      "stage": "開発・技術人材",
+      "sources": [
+        "technology"
+      ],
+      "sectors": [
+        "services"
+      ],
+      "note": ""
+    },
+    {
+      "id": "waterloo-digital",
+      "place": "ウォータールー",
+      "coordinates": [
+        -80.52,
+        43.46
+      ],
+      "industry": "digital",
+      "stage": "開発・技術人材",
+      "sources": [
+        "technology"
+      ],
+      "sectors": [
+        "services"
+      ],
+      "note": ""
+    },
+    {
+      "id": "ottawa-digital",
+      "place": "オタワ",
+      "coordinates": [
+        -75.7,
+        45.42
+      ],
+      "industry": "digital",
+      "stage": "開発・技術人材",
+      "sources": [
+        "technology"
+      ],
+      "sectors": [
+        "services"
+      ],
+      "note": ""
+    },
+    {
+      "id": "montreal-digital",
+      "place": "モントリオール",
+      "coordinates": [
+        -73.57,
+        45.5
+      ],
+      "industry": "digital",
+      "stage": "開発・技術人材",
+      "sources": [
+        "technology"
+      ],
+      "sectors": [
+        "services"
+      ],
+      "note": ""
+    },
+    {
+      "id": "vancouver-logistics",
+      "place": "バンクーバー",
+      "coordinates": [
+        -123.12,
+        49.28
+      ],
+      "industry": "logistics",
+      "stage": "港・陸空接続",
+      "sources": [
+        "transport"
+      ],
+      "sectors": [
+        "services"
+      ],
+      "note": ""
+    },
+    {
+      "id": "prince-rupert-logistics",
+      "place": "プリンスルパート",
+      "coordinates": [
+        -130.32,
+        54.32
+      ],
+      "industry": "logistics",
+      "stage": "港・鉄道",
+      "sources": [
+        "transport"
+      ],
+      "sectors": [
+        "services"
+      ],
+      "note": ""
+    },
+    {
+      "id": "calgary-logistics",
+      "place": "カルガリー",
+      "coordinates": [
+        -114.07,
+        51.05
+      ],
+      "industry": "logistics",
+      "stage": "陸空接続",
+      "sources": [
+        "transport"
+      ],
+      "sectors": [
+        "services"
+      ],
+      "note": ""
+    },
+    {
+      "id": "winnipeg-logistics",
+      "place": "ウィニペグ",
+      "coordinates": [
+        -97.14,
+        49.89
+      ],
+      "industry": "logistics",
+      "stage": "陸空接続",
+      "sources": [
+        "transport"
+      ],
+      "sectors": [
+        "services"
+      ],
+      "note": ""
+    },
+    {
+      "id": "toronto-logistics",
+      "place": "トロント",
+      "coordinates": [
+        -79.38,
+        43.65
+      ],
+      "industry": "logistics",
+      "stage": "中央回廊・空港",
+      "sources": [
+        "transport"
+      ],
+      "sectors": [
+        "services"
+      ],
+      "note": ""
+    },
+    {
+      "id": "montreal-logistics",
+      "place": "モントリオール",
+      "coordinates": [
+        -73.57,
+        45.5
+      ],
+      "industry": "logistics",
+      "stage": "港・中央回廊",
+      "sources": [
+        "transport"
+      ],
+      "sectors": [
+        "services"
+      ],
+      "note": ""
+    },
+    {
+      "id": "halifax-logistics",
+      "place": "ハリファクス",
+      "coordinates": [
+        -63.57,
+        44.65
+      ],
+      "industry": "logistics",
+      "stage": "港・鉄道・空港",
+      "sources": [
+        "transport"
+      ],
+      "sectors": [
+        "services"
+      ],
+      "note": ""
+    }
+  ],
+  "flows": [
+    {
+      "id": "voisey-long-harbour",
+      "from": "voisey",
+      "to": "long-harbour",
+      "industry": "nickel",
+      "sector": "resources",
+      "source": "voiseys-bay",
+      "label": "精鉱の実輸送（海路は模式）",
+      "kind": "documented-supply"
+    }
+  ],
+  "sources": {
+    "alberta": {
+      "title": "CER：アルバータのエネルギー",
+      "url": "https://www.cer-rec.gc.ca/en/data-analysis/energy-markets/province-territory-energy-profiles/alberta.html",
+      "scope": "生産地域・稼働施設・輸送の記述。統計の参照年は本文ごとに異なる。",
+      "accessed": "2026-10-10"
+    },
+    "british-columbia": {
+      "title": "CER：BCのエネルギー",
+      "url": "https://www.cer-rec.gc.ca/en/data-analysis/energy-markets/province-territory-energy-profiles/british-columbia.html",
+      "scope": "生産地域・稼働施設・輸送の記述。統計の参照年は本文ごとに異なる。",
+      "accessed": "2026-10-10"
+    },
+    "ontario": {
+      "title": "CER：オンタリオのエネルギー",
+      "url": "https://www.cer-rec.gc.ca/en/data-analysis/energy-markets/province-territory-energy-profiles/ontario.html",
+      "scope": "生産地域・稼働施設・輸送の記述。統計の参照年は本文ごとに異なる。",
+      "accessed": "2026-10-10"
+    },
+    "quebec": {
+      "title": "CER：ケベックのエネルギー",
+      "url": "https://www.cer-rec.gc.ca/en/data-analysis/energy-markets/province-territory-energy-profiles/quebec.html",
+      "scope": "生産地域・稼働施設・輸送の記述。統計の参照年は本文ごとに異なる。",
+      "accessed": "2026-10-10"
+    },
+    "new-brunswick": {
+      "title": "CER：ニューブランズウィックのエネルギー",
+      "url": "https://www.cer-rec.gc.ca/en/data-analysis/energy-markets/province-territory-energy-profiles/new-brunswick.html",
+      "scope": "生産地域・稼働施設・輸送の記述。統計の参照年は本文ごとに異なる。",
+      "accessed": "2026-10-10"
+    },
+    "newfoundland-labrador": {
+      "title": "CER：ニューファンドランド・ラブラドールのエネルギー",
+      "url": "https://www.cer-rec.gc.ca/en/data-analysis/energy-markets/province-territory-energy-profiles/newfoundland-labrador.html",
+      "scope": "生産地域・稼働施設・輸送の記述。統計の参照年は本文ごとに異なる。",
+      "accessed": "2026-10-10"
+    },
+    "sudbury-complex": {
+      "title": "Vale Base Metals：サドベリー",
+      "url": "https://valebasemetals.com/our-operations/sudbury-complex/",
+      "scope": "操業者が示す採掘・選鉱・精錬の工程と立地。",
+      "accessed": "2026-10-10"
+    },
+    "voiseys-bay": {
+      "title": "Vale Base Metals：ヴォイジーズ・ベイ",
+      "url": "https://valebasemetals.com/our-operations/voiseys-bay/",
+      "scope": "操業者が示す採掘・選鉱・精錬の工程と立地。",
+      "accessed": "2026-10-10"
+    },
+    "long-harbour": {
+      "title": "Vale Base Metals：ロングハーバー",
+      "url": "https://valebasemetals.com/our-operations/long-harbour/",
+      "scope": "操業者が示す採掘・選鉱・精錬の工程と立地。",
+      "accessed": "2026-10-10"
+    },
+    "thompson": {
+      "title": "Vale Base Metals：トンプソン",
+      "url": "https://valebasemetals.com/our-operations/thompson/",
+      "scope": "操業者が示す採掘・選鉱・精錬の工程と立地。",
+      "accessed": "2026-10-10"
+    },
+    "saguenay": {
+      "title": "Rio Tinto：サグネ・ラックサンジャン",
+      "url": "https://www.riotinto.com/en/operations/canada/saguenay",
+      "scope": "製錬と自社水力発電の立地。鉱石の国内採掘を示さない。",
+      "accessed": "2026-10-10"
+    },
+    "bc-works": {
+      "title": "Rio Tinto：BC Works",
+      "url": "https://www.riotinto.com/en/operations/canada/bc-works",
+      "scope": "製錬と自社水力発電の立地。鉱石の国内採掘を示さない。",
+      "accessed": "2026-10-10"
+    },
+    "auto": {
+      "title": "ISED：カナダ自動車産業",
+      "url": "https://ised-isde.canada.ca/site/ised/en/research-and-business-intelligence/industry-sector-intelligence/manufacturing-industries/canadian-automotive-industry",
+      "scope": "2024年の乗用車・2025年の大型車製造地域。終了・計画を稼働中に読み替えない。",
+      "accessed": "2026-10-10"
+    },
+    "airbus": {
+      "title": "Airbus：カナダの生産拠点",
+      "url": "https://www.airbus.com/en/about-us/our-worldwide-presence/airbus-in-americas/airbus-in-canada",
+      "scope": "ミラベルの機体・胴体、フォートエリーのヘリ部品。オフィスを生産拠点として数えない。",
+      "accessed": "2026-10-10"
+    },
+    "mhi": {
+      "title": "MHI Canada Aerospace",
+      "url": "https://www.mhi.com/group/mhica/",
+      "scope": "ミシサガの航空機構造体製造。",
+      "accessed": "2026-10-10"
+    },
+    "toronto-finance": {
+      "title": "トロント市：金融サービス",
+      "url": "https://www.toronto.ca/business-economy/industry-sector-support/financial-services/",
+      "scope": "金融機関本社・銀行・証券の集積。旧年の市内雇用数は今回の数量比較に使わない。",
+      "accessed": "2026-10-10"
+    },
+    "montreal-finance": {
+      "title": "Finance Montréal：金融集積",
+      "url": "https://www.finance-montreal.com/en/invest-in-montreal",
+      "scope": "地域産業機関が示す国際金融・専門人材の集積。",
+      "accessed": "2026-10-10"
+    },
+    "technology": {
+      "title": "Invest in Canada：技術産業",
+      "url": "https://www.investcanada.ca/industries/technology",
+      "scope": "トロント・バンクーバー・モントリオール・オタワ・ウォータールー・カルガリーの技術集積。ソフトウェアと研究人材の位置。順位・人数は転載しない。",
+      "accessed": "2026-10-10"
+    },
+    "transport": {
+      "title": "Transport Canada：交通網の役割（2024年）",
+      "url": "https://tc.canada.ca/en/corporate-services/transparency/corporate-management-reporting/transportation-canada-annual-reports/transportation-canada-2024/role-canada-s-transportation-network",
+      "scope": "太平洋・プレーリー・中央・大西洋回廊の拠点。港湾貨物量は2024年・港単位。",
+      "accessed": "2026-10-10"
+    }
+  },
+  "positionMethod": "WGS84の概略案内位置を編集作成。地名・工程の存在は各一次資料で確認。鉱床境界、施設外形、密度・数量の測定値ではない。同じ集積内の複数施設を地域単位にまとめる。",
+  "omissions": [
+    "カリ肥料・ウラン・鉄鉱石・銅・金の面的分布と生産量",
+    "食品・木材・機械・電子機器等の製造集積の追加",
+    "医療・教育・観光・行政と都市別のサービス雇用",
+    "操業施設の完全な台帳・集積範囲の実測境界"
+  ]
+}
