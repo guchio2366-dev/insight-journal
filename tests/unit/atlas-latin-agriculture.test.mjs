@@ -141,12 +141,13 @@ test('Latin agriculture overview reuses both existing distributions and preserve
   const html=lib.renderLatinAgricultureWorkspaceMap({layer:id,place:'all',scope:'all',only:false});
   const w=new Window();w.document.body.innerHTML=html;
   assert.equal(w.document.querySelectorAll('[data-latin-agriculture-country][aria-pressed=true]').length,0);
-  assert.ok(w.document.querySelector('[data-agriculture-overview-crops] image[href$="crop.png"]'));
-  const animals=w.document.querySelector('[data-agriculture-overview-livestock] image[href$="livestock.png"]');assert.ok(animals);
-  assert.equal(animals.getAttribute('opacity'),id==='all'||id==='cattle'?'1':'0.3');
+  assert.ok(w.document.querySelector('[data-agriculture-original-distribution] image[href$="distribution.png"]'));
+  assert.equal(w.document.querySelectorAll('[data-latin-agriculture-country]').length,0);
+  assert.equal(w.document.querySelectorAll('g[data-latin-agriculture-layer]').length,11);
+  assert.equal(w.document.querySelector('svg').getAttribute('viewBox'),'0 0 900 740');
   assert.equal(w.document.querySelectorAll('[data-agriculture-selected-outline]').length,id==='all'?0:1);
   if(id!=='all'){const entry=manifest.inputs.find(input=>input.id===id);assert.equal(sha(readFileSync(`public/assets/atlas/latin-america-overview-v1/${entry.outline}`)),entry.outlineSha256);}
-  const legend=lib.renderLatinAgricultureOverviewLegend(id);assert.match(legend,/数量の比較ではありません/);assert.match(legend,/0・下限未満・欠測・対象外/);
+  const legend=lib.renderLatinAgricultureOverviewLegend(id);assert.match(legend,/数量・面積比率ではありません/);assert.match(legend,/0・表示下限未満・欠測・対象外/);
   await w.happyDOM.close();
  }
 });

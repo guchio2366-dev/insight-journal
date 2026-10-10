@@ -1,5 +1,6 @@
 ---
 import LatinAmericaWorkspace from './LatinAmericaWorkspace.astro';
+import {latinReadingProducts} from '../../data/atlas/latin-america/reading-products';
 import data from '../../data/atlas/latin-america/agriculture.json';
 import {latinCountries34} from '../../lib/atlas-latin-america-geometry';
 import {agricultureLayerTitle,latinAgricultureReading,renderLatinAgricultureWorkspaceMap,renderLatinAgricultureOverviewLegend,latinAgricultureOverviewReading,formatLatinAgricultureValue,faoFlagLabel,latinCropAreaRanking,latinCropAreaTotalHa,latinWorldProductionShares} from '../../lib/atlas-latin-agriculture';
@@ -20,7 +21,7 @@ const productionPercent=(tonnes:number|null,worldT:number)=>tonnes===null?'原�
   <div class="latin-agriculture-heading"><h2 data-latin-agriculture-title>{agricultureLayerTitle('all')}</h2><span>分布推計・2020年</span></div>
   <details class="latin-map-options"><summary>地域・表示を選ぶ</summary><div class="latin-map-options-body">  <div class="latin-controls">
    <label>地域 <select data-latin-agriculture-scope aria-label="地図の地域"><option value="central">中米・カリブ</option><option value="south">南米</option><option value="all" selected>中南米全体</option><option value="country">選択国を拡大</option></select></label>
-   <label>読む国 <select data-latin-agriculture-place aria-label="読む国"><option value="all" selected>中南米全体</option>{latinCountries34.map(c=><option value={c.code}>{c.name}</option>)}</select></label>
+   <label>統計の国 <select data-latin-agriculture-place aria-label="読む国"><option value="all" selected>中南米全体</option>{latinCountries34.map(c=><option value={c.code}>{c.name}</option>)}</select></label>
    <label><input type="checkbox" data-latin-agriculture-only /> 選択国を強調</label><button type="button" data-latin-agriculture-fallback aria-pressed="false">数値一覧で読む</button>
   </div>
 </div></details>
@@ -30,7 +31,7 @@ const productionPercent=(tonnes:number|null,worldT:number)=>tonnes===null?'原�
     <div class="latin-agriculture-source-pane" data-latin-agriculture-source-pane hidden><h3 data-latin-agriculture-source-title>元の自然環境</h3><div data-latin-agriculture-source-map /><div data-latin-agriculture-source-legend /></div>
     <div data-latin-agriculture-target-pane><h3 class="latin-agriculture-target-title" data-latin-agriculture-target-title hidden>農畜産の分布</h3><div data-latin-agriculture-map-container set:html={renderLatinAgricultureWorkspaceMap(state)} /><div data-latin-agriculture-legend-container set:html={renderLatinAgricultureOverviewLegend()} /></div>
    </div>
-   <figcaption data-latin-agriculture-map-caption>12作物と3家畜の既存格子推計を合成。色は品目で、数量を比較する尺度ではありません。</figcaption>
+   <figcaption data-latin-agriculture-map-caption>採用10作物と牛の2020年格子推計。色は品目で、数量を比較する尺度ではありません。</figcaption>
   </figure>
   <div class="latin-agriculture-fallback" data-latin-agriculture-fallback-container hidden>
    <p class="latin-caption">同じ34か国・地域の値を読みます。国別の合計と格子の色は異なる尺度です。</p>
@@ -38,12 +39,12 @@ const productionPercent=(tonnes:number|null,worldT:number)=>tonnes===null?'原�
   </div>
  </Fragment>
  <Fragment slot="items">
-  <div class="latin-agriculture-layer-buttons" role="group" aria-label="農畜産の指標"><button type="button" data-latin-agriculture-layer="all" aria-pressed="true">全体の分布</button>{data.layers.map(l=><button type="button" data-latin-agriculture-layer={l.id} aria-pressed={false}>{l.label}</button>)}</div>
+  <div class="latin-agriculture-layer-buttons" role="group" aria-label="農畜産の指標"><button type="button" data-latin-agriculture-layer="all" aria-pressed="true">全体の分布</button>{latinReadingProducts.map(l=><button type="button" data-latin-agriculture-layer={l.id} aria-pressed={false}>{l.name}</button>)}</div>
  </Fragment>
  <Fragment slot="reading">
   <h2 data-latin-agriculture-reading-title>{reading.title}</h2>
   <p class="latin-takeaway" data-latin-agriculture-takeaway>{reading.takeaway}</p>
-  <div class="latin-agriculture-selected"><strong data-latin-agriculture-selected-name>中南米全体</strong><span data-latin-agriculture-selected-spatial>国を選ぶと値を読めます</span><small data-latin-agriculture-selected-unit>収穫面積・家畜密度と生産量は別の量です</small></div>
+  <div class="latin-agriculture-selected"><strong data-latin-agriculture-selected-name>中南米全体</strong><span data-latin-agriculture-selected-spatial>2020年の推計分布。産地の条件を概説と解説で読む</span><small data-latin-agriculture-selected-unit>収穫面積・家畜密度と生産量は別の量です</small></div>
   <a class="latin-comparison-link" data-latin-agriculture-compare href={withBase('/atlas/latin-america/nature/?layer=climate&place=all&scope=all&from=agriculture&sourceLayer=all&sourcePlace=all&sourceScope=all&sourceFallback=0')}>{reading.compare} →</a>
   <div class="latin-agriculture-steps" data-latin-agriculture-steps>{reading.steps.map(([title,body],index)=><details open={index===0}><summary>{title}</summary><p>{body}</p></details>)}</div>
   <details><summary>中米・カリブ・南米の事例を選ぶ</summary><div class="latin-agriculture-examples" data-latin-agriculture-examples>{reading.examples.map(example=><button type="button" data-latin-agriculture-example={example.place}>{example.label}<span>{example.text}</span></button>)}</div></details>
@@ -67,7 +68,7 @@ const productionPercent=(tonnes:number|null,worldT:number)=>tonnes===null?'原�
    <p class="latin-takeaway">大豆ととうもろこしで、地図に載せた12作物の推計収穫面積合計の約{leadingShare}%を占めます。面積から輸出額や生産価値は読めません。</p>
    <p>2020年・MapSPAM推計。中米・カリブ・南米34か国・地域のうち、各作物の値がある国だけ、同じ5分格子の年間収穫面積（ha）を合算しました。欠測は0とせず、有効値のある国数を右欄に示します。家畜密度（頭・羽/km²）は単位が違うため順位に含めません。</p>
    <ol class="latin-crop-area-list">{leadingCrops.map((crop,index)=><li><span class="latin-crop-area-rank" aria-hidden="true">{index+1}.</span><span class="latin-crop-area-name"><i style={`background:${crop.color}`} aria-hidden="true"></i>{crop.name}</span><span class="latin-crop-area-track" aria-hidden="true"><i style={`width:${(100*crop.areaHa/leadingCrops[0].areaHa).toFixed(3)}%;background:${crop.color}`}></i></span><strong>{cropArea(crop.areaHa)}</strong><span class="latin-crop-area-coverage">{crop.reportingCountries}/34国</span></li>)}</ol>
-   <p class="latin-caption">候補12作物のうち、11位の{nearMisses[0].name}（{cropArea(nearMisses[0].areaHa)}）は10位の{leadingCrops[9].name}（{cropArea(leadingCrops[9].areaHa)}）と約{cropArea(leadingCrops[9].areaHa-nearMisses[0].areaHa)}差、12位の{nearMisses[1].name}は{cropArea(nearMisses[1].areaHa)}。この2作物も上の地図には残します。12作物以外を含む全農産物順位ではなく、複数回収穫を含むため耕地の実面積でもありません。</p>
+   <p class="latin-caption">候補12作物のうち、11位の{nearMisses[0].name}（{cropArea(nearMisses[0].areaHa)}）は10位の{leadingCrops[9].name}（{cropArea(leadingCrops[9].areaHa)}）と約{cropArea(leadingCrops[9].areaHa-nearMisses[0].areaHa)}差、12位の{nearMisses[1].name}は{cropArea(nearMisses[1].areaHa)}。ジャガイモはアンデス高地の特徴として初期図に採用。初期図から外したカカオ・ロブスタ種・豚・鶏の元データは基礎資料に残します。12作物以外を含む全農産物順位ではなく、複数回収穫を含むため耕地の実面積でもありません。</p>
    <p class="latin-caption"><a href="https://cgiar-climate-data-hub.github.io/catalog/spam2020/">IFPRI MapSPAM 2020 v2r2</a>・CC BY-SA 4.0。国境内に格子中心を置くセルから概算した当サイトの加工値です。<a href={withBase('/assets/atlas/latin-america-agriculture-v1/manifest.json')}>12作物と国別値の元台帳</a></p>
   </section>
   <details>

@@ -33,29 +33,7 @@ test('Actual industry layer changes keep the real legend and replace export note
  }finally{await w.happyDOM.close();}
 });
 
-test('Actual population layer changes distinguish circle counts, density colors and the combined comparison without losing selection or legends',async()=>{
- const{w,legend}=await page('population','?layer=population&place=CRI&scope=country&only=1',population);
- try{
-  assert.equal(legend.parentElement.className,'latin-essential-legend');assert.match(note(w),/円面積.*2023.*人.*地色は固定/);assert.doesNotMatch(note(w),/平均密度/);assert.match(legend.textContent,/円の面積.*2023/);
-  await change(w,'[data-lp-layer-select]','density');
-  assert.match(note(w),/2023.*平均密度.*人\/陸地km²/);assert.doesNotMatch(note(w),/地色は固定/);assert.equal(legend.querySelectorAll('li').length,6);assert.match(legend.textContent,/対象統計なし.*0人とは区別/);
-  await change(w,'[data-lp-layer-select]','scale');
-  assert.match(note(w),/平均密度.*円面積.*国人口/);assert.equal(legend.querySelectorAll('li').length,6);assert.match(legend.textContent,/円の面積/);assert.equal(legend.closest('figure').className,'lp-target-figure');
-  await change(w,'[data-lp-layer-select]','population');
-  assert.equal(w.document.querySelector('[data-lp-target-legend]'),legend);assert.equal(legend.parentElement.className,'latin-essential-legend');assert.match(note(w),/円面積.*地色は固定/);assert.doesNotMatch(note(w),/平均密度/);
-  assert.equal(state(w).get('place'),'CRI');assert.equal(state(w).get('scope'),'country');assert.equal(state(w).get('only'),'1');
- }finally{await w.happyDOM.close();}
-});
-
-test('The default GHSL overview precedes comparison actions and keeps its eight-class key under the map',async()=>{
- const {w,legend}=await page('population','',population);try{
-  const overview=w.document.querySelector('[data-lp-spatial-summary]');
-  const fixed=w.document.querySelector('.latin-reading-fixed');
-  assert.equal(overview.parentElement,fixed);
-  const children=[...fixed.children];
-  assert.ok(children.indexOf(overview)<children.indexOf(fixed.querySelector('.latin-comparison-link')));
-  assert.equal(legend.closest('figure').className,'lp-target-figure');
-  assert.equal(legend.querySelectorAll('li').length,8);
-  assert.equal(w.document.querySelector('.lp-example-options').open,false);
- }finally{await w.happyDOM.close();}
+test('Population decoding remains with the new reading map and no comparison controls are injected',async()=>{
+ const code=await populationBundle("import {initLatinReadingPopulation} from './src/scripts/atlas-latin-reading-population.ts';initLatinReadingPopulation(document.querySelector('[data-latin-field=population]'));"+layout,'iife','browser',true);
+ const {w,legend}=await page('population','',code);try{assert.equal(w.document.querySelector('.latin-comparison-link'),null);assert.equal(w.document.querySelector('.latin-essential-legend'),null);assert.match(legend.textContent,/都市集積域.*2018/);await change(w,'[data-lp-layer-select]','spatial');assert.equal(legend.querySelectorAll('li').length,5);assert.match(legend.textContent,/人\/km²/);}finally{await w.happyDOM.close();}
 });

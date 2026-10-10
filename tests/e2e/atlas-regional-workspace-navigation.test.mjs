@@ -19,7 +19,7 @@ const bundle=await build({stdin:{contents:`
  export {initOverviewMap} from './src/scripts/atlas-overview-map';
  export {initLatinWorkspaceLayout} from './src/scripts/atlas-latin-workspace-layout';
  export {initialiseLatinAgriculture as initLatinAgriculture} from './src/scripts/atlas-latin-agriculture';
- export {initLatinPopulation} from './src/scripts/atlas-latin-america-population';
+ export {initLatinReadingPopulation as initLatinPopulation} from './src/scripts/atlas-latin-reading-population';
  export {initLatinOverviewLinks} from './src/scripts/atlas-latin-overview-layout';
  import './src/scripts/atlas-latin-nature';
  import './src/scripts/atlas-latin-water-terrain';
@@ -80,7 +80,7 @@ test('Latin overview preserves incoming regional scope, then updates scope when 
 function assertLatinSection(win,section){
  const root=win.document.querySelector('[data-latin-workspace]');
  assert.equal(new URL(win.location).searchParams.get('section'),section==='climate'||section==='agriculture'||section==='population'?null:section);
- const ready=['climate','agriculture','population','water','rivers','rainfall','terrain','elevation'].includes(section);
+ const ready=['climate','agriculture','population','ethnicity','religion','water','rivers','rainfall','terrain','elevation'].includes(section);
  assert.equal(root.classList.contains('has-unavailable-section'),!ready);
  const panelSection=section==='water'?'rivers':section;
  if(['rivers','rainfall','terrain','elevation'].includes(panelSection)){
@@ -112,15 +112,15 @@ test('Latin actual nature controller restores water and rainfall categories on r
 });
 
 for(const [field,section,init,placeSelector,available] of [
- ['population','ethnicity','RegionalClient.initLatinPopulation(document.querySelector("[data-latin-field=population]"));RegionalClient.initLatinWorkspaceLayout();','[data-lp-place-select]','population'],
-])test(`Latin actual ${field} controller retains its unavailable category on reload and restores the ready map on history navigation`,async()=>{
+ ['population','ethnicity','RegionalClient.initLatinPopulation(document.querySelector("[data-latin-field=population]"));RegionalClient.initLatinWorkspaceLayout();','[data-lp-scope-select]','population'],
+])test(`Latin actual ${field} controller retains its populated cultural category on reload and restores the ready map on history navigation`,async()=>{
  const win=open(`latin-america/${field}/?place=CRI&scope=country&only=1`,init);
  try{
   await win.happyDOM.waitUntilComplete();win.document.querySelector(`[data-latin-section="${section}"]`).click();await win.happyDOM.waitUntilComplete();assertLatinSection(win,section);
   const selectedUrl=win.location.href,reload=open(selectedUrl,init);
   try{await reload.happyDOM.waitUntilComplete();assertLatinSection(reload,section);}finally{await reload.happyDOM.close();}
-  const picker=win.document.querySelector(placeSelector);picker.value='BRA';picker.dispatchEvent(new win.Event('change',{bubbles:true}));await win.happyDOM.waitUntilComplete();assertLatinSection(win,section);
-  win.history.back();await win.happyDOM.waitUntilComplete();assert.equal(win.location.href,selectedUrl);assertLatinSection(win,section);assert.equal(picker.value,'CRI');
+  const picker=win.document.querySelector(placeSelector);picker.value='south';picker.dispatchEvent(new win.Event('change',{bubbles:true}));await win.happyDOM.waitUntilComplete();assertLatinSection(win,section);
+  win.history.back();await win.happyDOM.waitUntilComplete();assert.equal(win.location.href,selectedUrl);assertLatinSection(win,section);assert.equal(picker.value,'all');
   win.document.querySelector(`[data-latin-section="${available}"]`).click();await win.happyDOM.waitUntilComplete();assertLatinSection(win,available);
   assert.equal(win.document.querySelector('.latin-fields a[aria-current]').href.includes('section='),false);
  }finally{await win.happyDOM.close();}

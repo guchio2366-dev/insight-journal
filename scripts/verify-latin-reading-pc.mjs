@@ -1,0 +1,48 @@
+/** Exact-head, sandboxed desktop verification; no deployment or external services. */
+import assert from 'node:assert/strict';
+import {createServer} from 'node:http';
+import {readFile,mkdir,stat,writeFile} from 'node:fs/promises';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import {chromium} from 'playwright';
+const baseline=process.env.LATIN_READING_BASELINE==='1',output=process.env.LATIN_READING_OUTPUT??'/tmp/latin-reading-review';
+const report={commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),baseline,viewports:[],unchanged:[],errors:[],failedRequests:[]};
+if(process.env.LATIN_READING_EXPECTED_HEAD)assert.equal(report.commit,process.env.LATIN_READING_EXPECTED_HEAD);await mkdir(output,{recursive:true});
+const server=createServer(async(req,res)=>{try{const pathname=new URL(req.url,'http://localhost').pathname.replace(/^\/insight-journal/,'');let file=path.resolve('dist','.'+pathname);assert.ok(file.startsWith(path.resolve('dist')+path.sep));if((await stat(file)).isDirectory())file=path.join(file,'index.html');const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.png':'image/png','.webp':'image/webp','.json':'application/json','.svg':'image/svg+xml'};res.writeHead(200,{'Content-Type':mime[path.extname(file)]??'application/octet-stream'}).end(await readFile(file));}catch{res.writeHead(404).end();}});
+await new Promise(r=>server.listen(0,'127.0.0.1',r));const origin=`http://127.0.0.1:${server.address().port}`,base=origin+'/insight-journal';let browser;
+const save=()=>writeFile(path.join(output,'report.json'),JSON.stringify(report,null,2)+'\n');
+try{
+ browser=await chromium.launch({executablePath:process.env.REVIEW_CHROME_PATH??'/usr/bin/chromium',headless:true,chromiumSandbox:true});report.browser={version:browser.version(),chromiumSandbox:true};
+ for(const viewport of [{width:1920,height:1080},{width:1440,height:900}]){
+  const context=await browser.newContext({viewport,deviceScaleFactor:1,serviceWorkers:'block'});await context.route('**/*',r=>new URL(r.request().url()).origin===origin?r.continue():r.abort());
+  const page=await context.newPage();page.on('pageerror',e=>report.errors.push(e.message));page.on('response',r=>{if(r.status()>=400)report.failedRequests.push(r.url());});
+  const ready=async()=>{await page.evaluate(()=>document.fonts.ready);await page.waitForFunction(()=>document.querySelector('[data-latin-workspace]')?.dataset.layoutReady==='true');await page.evaluate(()=>scrollTo(0,0));};
+  const go=async route=>{await page.goto(base+'/atlas/latin-america/'+route,{waitUntil:'networkidle'});await ready();};
+  const measure=()=>page.evaluate(()=>{const box=s=>{const el=document.querySelector(s);if(!el)return null;const r=el.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};};const nav=[...document.querySelectorAll('.latin-fields>a')].map(el=>{const s=getComputedStyle(el),r=el.getBoundingClientRect();return{text:el.textContent.trim(),active:el.getAttribute('aria-current'),width:r.width,height:r.height,color:s.color,background:s.backgroundColor,font:s.font,padding:s.padding};});return {cssViewport:{width:innerWidth,height:innerHeight},dpr:devicePixelRatio,visualViewportScale:visualViewport.scale,browserZoomPercent:100,scroll:{x:scrollX,y:scrollY},map:box('.latin-agriculture-map,.forest-map-stage,.lp-map'),reader:box('.latin-reading'),news:box('.atlas-news'),fields:box('.latin-fields'),nav,overflow:document.documentElement.scrollWidth>innerWidth};});
+  const view={viewport,primary:viewport.width===1920,shots:[],measurements:{},checks:[]};report.viewports.push(view);
+  const shot=async name=>{const file=`${baseline?'before':'after'}-${name}-${viewport.width}.png`,bytes=await page.screenshot({path:path.join(output,file),animations:'disabled'});view.shots.push({file,sha256:crypto.createHash('sha256').update(bytes).digest('hex')});};
+  await go('agriculture/');view.measurements.agriculture=await measure();await shot('agriculture');
+  if(!baseline){
+   assert.equal(await page.locator('[data-latin-agriculture-map] [data-latin-agriculture-country]').count(),0);assert.equal(await page.locator('[data-latin-agriculture-map] g[data-latin-agriculture-layer]').count(),11);
+   const image=page.locator('[data-latin-product-distribution]'),href=await image.getAttribute('href');
+   // Choose an actual colored source pixel, then map it through the production SVG transform.
+   const selected=await image.evaluate(async el=>{const bitmap=new Image();bitmap.src=el.dataset.hitImage;await bitmap.decode();const canvas=document.createElement('canvas');canvas.width=bitmap.width;canvas.height=bitmap.height;const c=canvas.getContext('2d');c.drawImage(bitmap,0,0);const values=c.getImageData(0,0,canvas.width,canvas.height).data;for(let y=180;y<canvas.height-180;y++)for(let x=120;x<canvas.width-120;x++){const id=values[(y*canvas.width+x)*4];if(id===1){const p=new DOMPoint(el.x.baseVal.value+(x+.5)/canvas.width*el.width.baseVal.value,el.y.baseVal.value+(y+.5)/canvas.height*el.height.baseVal.value).matrixTransform(el.getScreenCTM());return{x:p.x,y:p.y};}}throw Error('No soybean display cell');});
+   await page.mouse.click(selected.x,selected.y);await page.waitForURL('**layer=soyb**');assert.equal(await image.getAttribute('href'),href);assert.equal(await page.locator('[data-agriculture-selected-outline]').count(),1);assert.match(await page.locator('[data-latin-agriculture-reading-title]').textContent(),/大豆/);await shot('agriculture-selected');view.checks.push('actual distribution pixel selects soy; unchanged composite remains');
+   await go('agriculture/');const farming=await measure();await page.getByRole('link',{name:'林業',exact:true}).click();await page.waitForURL('**/forestry/**');await ready();const forest=await measure();for(const key of ['map','reader','news','fields','nav'])assert.deepEqual(farming[key],forest[key],key+' changed across farming/forestry');await shot('forestry');await page.goBack({waitUntil:'networkidle'});await ready();assert.deepEqual(await measure(),farming);view.checks.push('farming/forestry common geometry, navigation and back');
+  }
+  await go('population/');view.measurements.population=await measure();await shot('population');
+  if(!baseline){
+   assert.equal(await page.locator('[data-lp-country]').count(),0);assert.equal(await page.locator('.latin-comparison-link').count(),0);assert.equal(await page.locator('[data-lp-target-map] [data-city-population]').count(),7);
+   await page.locator('[data-lp-target-map] [data-lp-city=lima]').click();assert.equal(await page.locator('[data-lp-target-map] [data-city-population]').count(),7);assert.match(await page.locator('[data-lp-overview]').textContent(),/10,391,000/);await shot('population-selected');await page.reload({waitUntil:'networkidle'});await ready();assert.match(await page.locator('[data-lp-reading-title]').textContent(),/リマ/);view.checks.push('actual city selection, other cities retained, reload');
+   await page.locator('[data-lp-layer-select]').selectOption('spatial');await shot('density');assert.equal(await page.locator('[data-lp-target-legend] li').count(),5);
+   for(const section of ['ethnicity','religion']){await page.locator(`[data-latin-section=${section}]`).click();await page.evaluate(()=>scrollTo(0,0));const count=await page.locator(`[data-lc-map=${section}] [data-lc-select]`).count();await shot(section);await page.locator(`[data-lc-map=${section}] [data-lc-select="biobio:${section==='ethnicity'?'afro':'protestant'}"]`).click();assert.equal(await page.locator(`[data-lc-map=${section}] [data-lc-select]`).count(),count);assert.match(await page.locator('[data-lp-reading-title]').textContent(),/ビオビオ/);await page.reload({waitUntil:'networkidle'});await ready();assert.equal(await page.locator(`[data-latin-section-panel=${section}]`).isVisible(),true);view.checks.push(section+' keeps all source-region indicators and restores direct selection');}
+   await page.locator('[data-latin-section=population]').click();assert.equal(await page.locator('[data-latin-section-panel=population]').isVisible(),true);
+   for(const geometry of Object.values(view.measurements)){assert.equal(geometry.overflow,false);assert.equal(geometry.visualViewportScale,1);assert.equal(geometry.dpr,1);assert.deepEqual(geometry.scroll,{x:0,y:0});}
+  }
+  if(viewport.width===1920)for(const route of ['nature/','industry/']){await go(route);const bytes=await page.screenshot({animations:'disabled'});report.unchanged.push({route,sha256:crypto.createHash('sha256').update(bytes).digest('hex')});}
+  await context.close();await save();
+ }
+ assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedRequests,[]);report.result=baseline?'baseline-recorded':'passed';
+ const {default:sharp}=await import('sharp');for(const view of report.viewports)for(const shot of view.shots){const bytes=await sharp(path.join(output,shot.file)).webp({quality:90}).toBuffer(),encoded=bytes.toString('base64'),parts=Math.ceil(encoded.length/8192);shot.preview={file:shot.file.replace(/\.png$/,'.webp'),sha256:crypto.createHash('sha256').update(bytes).digest('hex')};console.log(`LATIN_READING_VISUAL ${shot.preview.file} ${parts} ${shot.preview.sha256}`);for(let i=0;i<parts;i++)console.log(`LATIN_READING_VISUAL_PART ${shot.preview.file} ${i} ${encoded.slice(i*8192,(i+1)*8192)}`);}await save();console.log('LATIN_READING_REPORT '+JSON.stringify(report));
+}finally{await save();if(browser)await browser.close();await new Promise(r=>server.close(r));}

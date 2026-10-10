@@ -59,11 +59,11 @@ export function latinViewBox(scope: LatinScope | string = 'all', place = 'all'):
 /** Fit the same geographic frame into a fixed canvas for every thematic renderer.
  * Geographic paths/rasters use transform; symbols use k/tx/ty and retain their
  * fixed-canvas quantity scale, so both comparison panes share geography. */
-export function latinMapLayout(scope: LatinScope | string = 'all', place = 'all') {
+export function latinMapLayout(scope: LatinScope | string = 'all', place = 'all', canvasHeight = latinHeight) {
  const frame=latinViewBox(scope,place);
  const [x,y,width,height]=frame;
- const k=Math.min(latinWidth/width,latinHeight/height);
- const tx=(latinWidth-width*k)/2-x*k,ty=(latinHeight-height*k)/2-y*k;
+ const k=Math.min(latinWidth/width,canvasHeight/height);
+ const tx=(latinWidth-width*k)/2-x*k,ty=(canvasHeight-height*k)/2-y*k;
  return {frame,k,tx,ty,transform:`matrix(${k} 0 0 ${k} ${tx} ${ty})`};
 }
 export function latinRasterFrame(bounds: readonly number[]=latinBounds): {x:number;y:number;width:number;height:number} {

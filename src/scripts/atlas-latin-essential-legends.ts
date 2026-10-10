@@ -4,7 +4,7 @@ export function initLatinEssentialLegends():void {
   if(root.dataset.essentialLegendReady==='true')continue;
   root.dataset.essentialLegendReady='true';
   // Climate charts occupy the reader; combined agriculture has a complete product key below the map.
-  if(root.dataset.latinField==='nature'||root.dataset.latinField==='agriculture')continue;
+  if(root.dataset.latinField==='nature'||root.dataset.latinField==='agriculture'||root.dataset.latinReadingPopulation==='true')continue;
   const reader=root.querySelector<HTMLElement>('.latin-reading,.latin-industry-reading');
   const fixed=reader?.querySelector<HTMLElement>('.latin-reading-fixed,.latin-industry-reading-fixed');
   if(!reader||!fixed)continue;
