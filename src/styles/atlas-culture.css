@@ -17,6 +17,8 @@
 @media(max-width:1100px){.culture-marker{left:clamp(96px,var(--culture-x),calc(100% - 96px));top:clamp(min(var(--culture-half-height),50%),var(--culture-y),max(calc(100% - var(--culture-half-height)),50%))}}
 
 [data-africa-atlas][data-culture-active=true] .africa-workspace{display:none!important}
+[data-latin-workspace][data-culture-active=true] .latin-primary-grid,[data-latin-workspace][data-culture-active=true] .latin-below-workspace,[data-latin-workspace][data-culture-active=true] .latin-navigation-selection{display:none!important}
+[data-latin-workspace] .population-culture .culture-marker[aria-pressed=true]{color:#243a43;background:#fffcf4}
 
 [data-africa-atlas][data-culture-active=true] .africa-country-controls,[data-africa-atlas][data-culture-active=true] .africa-region-row label{display:none!important}
 @media(max-width:760px){

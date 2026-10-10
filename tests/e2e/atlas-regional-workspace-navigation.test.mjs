@@ -20,6 +20,7 @@ const bundle=await build({stdin:{contents:`
  export {initLatinWorkspaceLayout} from './src/scripts/atlas-latin-workspace-layout';
  export {initialiseLatinAgriculture as initLatinAgriculture} from './src/scripts/atlas-latin-agriculture';
  export {initLatinPopulation} from './src/scripts/atlas-latin-america-population';
+ export {initPopulationCulture} from './src/scripts/atlas-culture';
  export {initLatinOverviewLinks} from './src/scripts/atlas-latin-overview-layout';
  import './src/scripts/atlas-latin-nature';
  import './src/scripts/atlas-latin-water-terrain';
@@ -80,7 +81,9 @@ test('Latin overview preserves incoming regional scope, then updates scope when 
 function assertLatinSection(win,section){
  const root=win.document.querySelector('[data-latin-workspace]');
  assert.equal(new URL(win.location).searchParams.get('section'),section==='climate'||section==='agriculture'||section==='population'?null:section);
- const ready=['climate','agriculture','population','water','rivers','rainfall','terrain','elevation'].includes(section);
+ const composition=root.dataset.latinField==='population'&&['ethnicity','religion'].includes(section)&&!!root.querySelector('[data-population-culture]');
+ const ready=['climate','agriculture','population','water','rivers','rainfall','terrain','elevation'].includes(section)||composition;
+ if(composition){assert.equal(root.dataset.cultureActive,'true');assert.equal(root.querySelector('[data-population-culture]').hidden,false);assert.equal(root.querySelector(`[data-culture-panel="${section}"]`).hidden,false);}
  assert.equal(root.classList.contains('has-unavailable-section'),!ready);
  const panelSection=section==='water'?'rivers':section;
  if(['rivers','rainfall','terrain','elevation'].includes(panelSection)){
@@ -113,16 +116,17 @@ test('Latin actual nature controller restores water and rainfall categories on r
 
 for(const [field,section,init,placeSelector,available] of [
  ['agriculture','forestry','RegionalClient.initLatinAgriculture(document.querySelector("[data-latin-field=agriculture]"));RegionalClient.initLatinWorkspaceLayout();','[data-latin-agriculture-place]','agriculture'],
- ['population','ethnicity','RegionalClient.initLatinPopulation(document.querySelector("[data-latin-field=population]"));RegionalClient.initLatinWorkspaceLayout();','[data-lp-place-select]','population'],
-])test(`Latin actual ${field} controller retains its unavailable category on reload and restores the ready map on history navigation`,async()=>{
+ ['population','ethnicity','RegionalClient.initLatinPopulation(document.querySelector("[data-latin-field=population]"));RegionalClient.initLatinWorkspaceLayout();RegionalClient.initPopulationCulture(document.querySelector("[data-population-culture]"));','[data-lp-place-select]','population'],
+])test(`Latin actual ${field} controller retains its ${field==='population'?'national identity indicators':'unavailable'} category on reload and restores the ready map on history navigation`,async()=>{
  const win=open(`latin-america/${field}/?place=CRI&scope=country&only=1`,init);
  try{
   await win.happyDOM.waitUntilComplete();win.document.querySelector(`[data-latin-section="${section}"]`).click();await win.happyDOM.waitUntilComplete();assertLatinSection(win,section);
+  if(field==='population'){const panel=win.document.querySelector('[data-culture-panel=ethnicity]');assert.equal(panel.querySelectorAll('.culture-mini-bars>span').length,2);panel.querySelector('[data-culture-record=PAN]').click();await win.happyDOM.waitUntilComplete();assert.equal(panel.querySelectorAll('.culture-selected tbody tr').length,2);assert.equal(new URL(win.location).searchParams.get('culturePlace'),'PAN');assert.match(panel.textContent,/別設問|別々の設問/);}
   const selectedUrl=win.location.href,reload=open(selectedUrl,init);
-  try{await reload.happyDOM.waitUntilComplete();assertLatinSection(reload,section);}finally{await reload.happyDOM.close();}
+  try{await reload.happyDOM.waitUntilComplete();assertLatinSection(reload,section);if(field==='population'){assert.equal(new URL(reload.location).searchParams.get('culturePlace'),'PAN');assert.equal(reload.document.querySelectorAll('[data-culture-panel=ethnicity] .culture-selected tbody tr').length,2);}}finally{await reload.happyDOM.close();}
   const picker=win.document.querySelector(placeSelector);picker.value='BRA';picker.dispatchEvent(new win.Event('change',{bubbles:true}));await win.happyDOM.waitUntilComplete();assertLatinSection(win,section);
   win.history.back();await win.happyDOM.waitUntilComplete();assert.equal(win.location.href,selectedUrl);assertLatinSection(win,section);assert.equal(picker.value,'CRI');
-  win.document.querySelector(`[data-latin-section="${available}"]`).click();await win.happyDOM.waitUntilComplete();assertLatinSection(win,available);
+  win.document.querySelector(`[data-latin-section="${available}"]`).click();await win.happyDOM.waitUntilComplete();assertLatinSection(win,available);if(field==='population'){assert.equal(win.document.querySelector('[data-population-culture]').hidden,true);assert.equal(win.document.querySelector('[data-lp-place-select]').value,'CRI');assert.equal(new URL(win.location).searchParams.get('scope'),'country');assert.equal(new URL(win.location).searchParams.get('only'),'1');}
   assert.equal(win.document.querySelector('.latin-fields a[aria-current]').href.includes('section='),false);
  }finally{await win.happyDOM.close();}
 });

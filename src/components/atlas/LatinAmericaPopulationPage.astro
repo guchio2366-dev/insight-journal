@@ -1,5 +1,8 @@
 ---
 import LatinAmericaWorkspace from './LatinAmericaWorkspace.astro';
+import PopulationCulture from './PopulationCulture.astro';
+import {latinAmericaCulture} from '../../data/atlas/latin-america-culture';
+import {latinCountries,latinWidth,latinHeight,projectLatin} from '../../lib/atlas-latin-america-geometry';
 import population from '../../data/atlas/latin-america/population.json';
 import {latinPopulationOriginalTopics,latinPopulationSpatialOverview,latinPopulationReadingSources} from '../../data/atlas/latin-america/population-reading';
 import {renderLatinPopulationMap,renderLatinPopulationLegend,latinPopulationValue} from '../../lib/atlas-latin-america-population';
@@ -14,6 +17,7 @@ const barbados=population.countries.find(row=>row.countryCode==='BRB')!;
 const routes={base,assets,spatialAssets};
 ---
 <LatinAmericaWorkspace field="population" title="人口の分布から読む中南米" lead="沿岸・高地・河川沿いの人口集中を、2020年の居住分布と2023年の国別統計で分けて読みます。">
+ <Fragment slot="culture"><PopulationCulture data={latinAmericaCulture} map={latinCountries.map(country=>`<path d="${country.path}" fill-rule="evenodd"><title>${country.name}</title></path>`).join('')} width={latinWidth} height={latinHeight} project={projectLatin} names={population.countries.map(country=>country.nameJa)} boundaryNote="境界背景：既存のNatural Earth由来の国・地域形状。精密な行政境界ではなく、全国集計の対象領域を再計算していません。" /></Fragment>
  <Fragment slot="map">
   <h2 data-lp-map-heading>2020年、国内の居住人口分布を読む</h2>
   <div class="lp-map-comparison-brief" data-lp-map-comparison-brief hidden><p data-lp-map-comparison-text></p><a data-lp-map-return href={`${base}population/?layer=density&place=all&scope=all`}>元の人口分布に戻る</a></div>

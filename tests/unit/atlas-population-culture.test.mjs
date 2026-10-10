@@ -11,6 +11,7 @@ async function bundled(relative){
 const {oceaniaCulture}=await bundled('src/data/atlas/oceania-culture.ts');
 const {africaCulture}=await bundled('src/data/atlas/africa-culture.ts');
 const {russiaCulture}=await bundled('src/data/atlas/russia-culture.ts');
+const {latinAmericaCulture}=await bundled('src/data/atlas/latin-america-culture.ts');
 const {pew2020EuropeRows,pew2020EuropeRow}=await bundled('src/data/atlas/europe/pew-religion-2020.ts');
 const {cultureShare,culturePercentage,cultureShortLabel}=await bundled('src/lib/atlas-culture.ts');
 const {initPopulationCulture}=await bundled('src/scripts/atlas-culture.ts');
@@ -39,6 +40,16 @@ test('South Africa preserves Census population-group definitions, all faith cate
  assert.equal(record.topics.religion.rows.length,10);assert.equal(record.topics.religion.rows[4][1],'0.0');assert.match(record.topics.religion.note,/0.0%は不在ではありません/);
  assert.equal(record.topics.religion.licenseUrl,'https://www.statssa.gov.za/?page_id=425');assert.match(record.topics.religion.note,/Insight Journalによる独自加工/);
  assert.equal(africaCulture.records.length,1,'other African countries are explicitly missing');
+});
+
+test('Panama preserves the final Census denominator and separate self-recognition question indicators',()=>{
+ const table=latinAmericaCulture.records[0].topics.ethnicity,source=verified.tables.find(t=>t.id==='PAN-identity-indicators');
+ assert.deepEqual(table.rows.map(row=>row[1]),source.rows.map(row=>row[1]));assert.equal(table.rowLabel,'質問指標');
+ assert.match(table.definition,/通常居住者・全年齢.*4,064,780.*別設問/);assert.match(table.note,/交差・回答状態.*未収録.*合計・残差は計算しません/);
+ const {censusCountedPopulation,indigenous,afrodescendant}=source.countsForCrossCheck;
+ assert.deepEqual([indigenous,afrodescendant].map(count=>(count/censusCountedPopulation*100).toFixed(1)),['17.2','31.7']);
+ assert.equal(latinAmericaCulture.records[0].topics.religion,undefined);assert.equal(latinAmericaCulture.records.length,1);
+ assert.equal(table.licenseUrl,source.licenseUrl);assert.match(table.license,/CC BY 4.0/);
 });
 
 test('Russia reuses the existing seven-group excerpt, including bounds and translation terms',()=>{

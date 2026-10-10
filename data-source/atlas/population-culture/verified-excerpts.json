@@ -208,6 +208,30 @@
           "1.0"
         ]
       ]
+    },
+    {
+      "id": "PAN-identity-indicators",
+      "year": 2023,
+      "source": "https://www.inec.gob.pa/archivos/P053342420231009161532Comentarios_Poblacion%20RFB%202023%20VF.pdf",
+      "locator": "Comentario de Población, PDF p.3 (index 2), variables étnicas",
+      "definition": "All-age usually resident Census-counted population, 4,064,780. Declaration of membership in an Indigenous ethnic group and self-recognition as Afrodescendant are separate question indicators, not mutually exclusive categories. No intersection, remainder or negative-response groups inferred.",
+      "license": "CC BY 4.0, explicitly shown on this 2023 Census publication landing page. INEC / Contraloría General de la República de Panamá.",
+      "licenseUrl": "https://www.inec.gob.pa/publicaciones/Default3.aspx?ID_CATEGORIA=19&ID_PUBLICACION=1199&ID_SUBCATEGORIA=7",
+      "countsForCrossCheck": {
+        "censusCountedPopulation": 4064780,
+        "indigenous": 698114,
+        "afrodescendant": 1286857
+      },
+      "rows": [
+        [
+          "Indigenous membership declaration",
+          "17.2"
+        ],
+        [
+          "Afrodescendant self-recognition",
+          "31.7"
+        ]
+      ]
     }
   ],
   "reusedPew": {

@@ -15,6 +15,12 @@ export function initLatinPopulation(root:HTMLElement){
  const routes=JSON.parse(config.textContent) as PopulationRoutes;
  const q=<T extends Element=HTMLElement>(selector:string)=>root.querySelector<T>(selector)!;
  let state=readLatinLearningState(location.search,'population',allowed,'spatial');
+ const stateQuery=()=>{
+  const params=new URLSearchParams(writeLatinLearningState(state));
+  const culturePlace=new URLSearchParams(location.search).get('culturePlace');
+  if(root.querySelector('[data-population-culture]')&&culturePlace)params.set('culturePlace',culturePlace);
+  return params.toString();
+ };
  let renderVersion=0;
  let spatialGrid:Promise<LatinPopulationSpatialGrid>|undefined,spatialRaster:Promise<string>|undefined;
  const name=(code:string)=>code==='all'?'中南米全体':latinCountryName(code);
@@ -109,7 +115,7 @@ export function initLatinPopulation(root:HTMLElement){
   state={...state,...patch};
   if(state.place==='all'){state.only=false;if(state.scope==='country')state.scope='all';}
   if(state.source&&('place'in patch||'scope'in patch||'only'in patch))state.source={...state.source,place:state.place,scope:state.scope,only:state.only};
-  history.pushState(null,'',`?${writeLatinLearningState(state)}`);render();
+  history.pushState(null,'',`?${stateQuery()}`);render();
  }
  function choose(code:string){let scope=state.scope;if(!latinPopulationScopeIncludes(code,scope))scope='all';update({place:code,scope});}
  q<HTMLSelectElement>('[data-lp-layer-select]').addEventListener('change',event=>{
@@ -145,7 +151,7 @@ export function initLatinPopulation(root:HTMLElement){
  for(const back of root.querySelectorAll<HTMLAnchorElement>('[data-lp-return],[data-lp-map-return]'))back.addEventListener('click',event=>{if(event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey||state.source?.field!=='population')return;event.preventDefault();const source=state.source;state={...source,field:'population',fallback:source.fallback??state.fallback,source:undefined};update({});});
  const restore=()=>{state=readLatinLearningState(location.search,'population',allowed,'spatial');render();};
  window.addEventListener('popstate',restore);window.addEventListener('latin-section-change',restore);
- render();history.replaceState(null,'',`?${writeLatinLearningState(state)}`);
+ render();history.replaceState(null,'',`?${stateQuery()}`);
  for(const control of root.querySelectorAll<HTMLSelectElement|HTMLButtonElement>('[data-lp-layer-select],[data-lp-scope-select],[data-lp-place-select],[data-lp-all],[data-lp-quick]'))control.disabled=false;
  q<HTMLDetailsElement>('[data-lp-country-table]').open=false;
  root.dataset.latinPopulationReady='1';
