@@ -12,6 +12,18 @@ async function page(region,query='',interactive=true){
 test('all four built pages expose honest coverage and an overview before selection',async()=>{
  for(const region of ['africa','latin-america','oceania','russia']){const window=await page(region,'',false);try{const document=window.document;assert.match(document.querySelector('.forest-reading').textContent,/概説.*解説/s);assert.equal(document.querySelectorAll('[data-forest-raster]').length,region==='russia'?1:0);assert.ok(document.querySelector('.forest-legend').textContent.includes(['africa','latin-america'].includes(region)?'全域の被覆未取得':'欠測'));assert.ok(document.querySelector('.forest-source-ledger').textContent.includes('403'));assert.equal(document.querySelectorAll('select').length,0);assert.match(document.querySelector('.forest-map-heading').textContent,region==='russia'?/2021年：西部.*2020年参考図/:region==='oceania'?/2020年参考図：PNG西部/:/全域の森林被覆面：未取得/);}finally{await window.happyDOM.close();}}
 });
+test('Russia forestry map includes national statistics without presenting them as map coverage',async()=>{
+ const window=await page('russia','',false);try{
+  const section=window.document.querySelector('[data-russia-forestry-statistics]');
+  assert.ok(section);
+  assert.match(section.textContent,/2015–2024年全国統計/);
+  assert.match(section.textContent,/地図や学習地域の範囲ではなく/);
+  assert.match(section.textContent,/森林面積/);
+  assert.match(section.textContent,/丸太生産量/);
+  assert.match(section.textContent,/製材生産量/);
+ }finally{await window.happyDOM.close();}
+ for(const region of ['africa','latin-america','oceania']){const window=await page(region,'',false);try{assert.equal(window.document.querySelector('[data-russia-forestry-statistics]'),null);}finally{await window.happyDOM.close();}}
+});
 test('selection retains raster and every locator; clear, zoom and history restore independently',async()=>{
  for(const region of ['africa','latin-america','oceania','russia']){const window=await page(region);try{const document=window.document,q=selector=>document.querySelector(selector),config=JSON.parse(q('[data-forest-config]').textContent),map=q('[data-forest-map]'),original=map.getAttribute('viewBox'),image=q('[data-forest-raster]'),references=[...document.querySelectorAll('[data-forest-reference]')],first=config.reading.examples[0].id,last=config.reading.examples.at(-1).id,count=document.querySelectorAll('svg [data-forest-example]').length;
   q(`button[data-forest-example="${first}"]`).click();assert.equal(q('[data-forest-reading-title]').textContent,config.reading.examples[0].title);assert.equal(map.getAttribute('viewBox'),original);assert.equal(document.querySelectorAll('svg [data-forest-example]').length,count);assert.equal(q('[data-forest-raster]'),image);assert.deepEqual([...document.querySelectorAll('[data-forest-reference]')],references);
