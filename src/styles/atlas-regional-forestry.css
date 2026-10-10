@@ -10,6 +10,7 @@
  .forest-fields{margin-bottom:10px}
  .forest-primary-grid{grid-template-columns:minmax(0,1.65fr) minmax(300px,1fr);gap:12px}
  .forest-map-stage{height:clamp(380px,calc(100dvh - 320px),500px)}
+ .regional-forestry-page[data-region=russia] .forest-map-stage{height:clamp(380px,calc(100dvh - 350px),470px)}
  .forest-reading{display:flex;flex-direction:column;max-height:calc(100dvh - 200px)}
  .forest-reading-heading{padding:12px;flex:none}
  .forest-reading-scroll{padding-inline:12px;min-height:0;flex:1}
