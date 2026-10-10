@@ -70,9 +70,12 @@ test('Asia forestry and livestock outputs keep product/element definitions separ
 
 test('existing country panel displays world denominators without treating absent years as zero',()=>{
  const window=new Window();globalThis.document=window.document;
- window.document.body.innerHTML='<div data-farming-extra></div><div data-farming-map-method></div><h3 data-farming-statistics-title></h3><p data-farming-statistics-definition></p><div data-farming-statistics-tables></div><p data-farming-statistics-status></p>';
+ window.document.body.innerHTML='<div data-farming-extra></div><div data-farming-map-method></div><h3 data-farming-statistics-title></h3><p data-farming-statistics-definition></p><div data-farming-statistics-tables></div><p data-farming-statistics-status></p><h2 data-farming-title></h2><p data-farming-takeaway></p><p data-farming-definition></p><p data-farming-coverage></p><p data-farming-method></p><p data-farming-map-source></p><div data-farming-reference></div>';
  panel.renderAsiaFarmingPanel(window.document.body,'south-central-asia','forest',undefined,{code:'IND',name:'インド'},asia);
- const tables=[...window.document.querySelectorAll('table')];assert.equal(tables.length,7);
+ const history=window.document.querySelector('.asia-stat-history');assert.equal(history.open,false);
+ const tables=[...history.querySelectorAll('table')];assert.equal(tables.length,7);
+ assert.equal(window.document.querySelector('.asia-stat-current tbody').querySelectorAll('tr').length,7);
+ assert.equal(window.document.querySelectorAll('.asia-stat-chart').length,1);
  const production=tables.find(t=>t.querySelector('caption').textContent.startsWith('製材の生産量'));
  assert.match(production.textContent,/世界値・区分/);assert.match(production.textContent,/世界生産比/);
  const imports=tables.find(t=>t.querySelector('caption').textContent.startsWith('製材の輸入量'));
@@ -80,6 +83,39 @@ test('existing country panel displays world denominators without treating absent
  assert.match(window.document.body.textContent,/別製品/);assert.match(window.document.body.textContent,/自給率ではありません/);
  const missing={...asia,countries:{IND:{...asia.countries.IND,observations:asia.countries.IND.observations.filter(r=>r.year!==2024)}}};
  panel.renderAsiaFarmingPanel(window.document.body,'south-central-asia','forest',undefined,{code:'IND',name:'インド'},missing);
- const last=window.document.querySelector('table tbody tr:last-child');assert.match(last.textContent,/未掲載/);assert.match(last.textContent,/未収録/);
+ const last=window.document.querySelector('.asia-stat-history table tbody tr:last-child');assert.match(last.textContent,/未掲載/);assert.match(last.textContent,/未収録/);
+ window.happyDOM.abort();delete globalThis.document;
+});
+
+
+test('compact cattle summary keeps all available years, preserves missing source notes and switches dimensions',()=>{
+ const window=new Window();globalThis.document=window.document;
+ window.document.body.innerHTML='<div data-farming-extra></div><div data-farming-map-method></div><h3 data-farming-statistics-title></h3><p data-farming-statistics-definition></p><div data-farming-statistics-tables></div><p data-farming-statistics-status></p><h2 data-farming-title></h2><p data-farming-takeaway></p><p data-farming-definition></p><p data-farming-coverage></p><p data-farming-method></p><p data-farming-map-source></p><div data-farming-reference></div>';
+ const original=asia.countries.IND.observations;
+ const data={...asia,countries:{IND:{...asia.countries.IND,observations:original.map(row=>row.item==='867'&&row.year===2018?{...row,note:'source-specific missing note'}:row)}}};
+ panel.renderAsiaFarmingPanel(window.document.body,'south-central-asia','cattle',{kind:'livestock',faoItem:866},{code:'IND',name:'インド'},data);
+ const current=window.document.querySelector('.asia-stat-current');
+ assert.equal(current.querySelectorAll('tbody tr').length,2);assert.match(current.textContent,/194,753,479 頭/);assert.match(current.textContent,/135,000,000 t/);
+ assert.equal(window.document.querySelectorAll('.asia-stat-chart').length,1);
+ const missing=window.document.querySelector('.asia-stat-unavailable');assert.match(missing.textContent,/牛肉/);assert.match(missing.textContent,/2015–2024年は未収録/);assert.match(missing.textContent,/資料上の欠測（M）/);assert.match(missing.textContent,/0を意味しません/);
+ const history=window.document.querySelector('.asia-stat-history');assert.equal(history.open,false);assert.equal(history.querySelectorAll('tbody tr').length,20);
+ assert.ok(![...history.querySelectorAll('caption')].some(c=>c.textContent.includes('牛肉')),'all-missing series has no ten-row empty table');
+ assert.match(history.textContent,/2018年.*source-specific missing note/);assert.match(history.textContent,/2015・2016・2017・2019/);
+ const select=window.document.querySelector('.asia-stat-trend-picker select');assert.equal(select.options.length,2);
+ assert.match(window.document.querySelector('.asia-stat-chart').getAttribute('aria-label'),/飼養頭数/);
+ select.value='1';select.dispatchEvent(new window.Event('change'));
+ const chart=window.document.querySelector('.asia-stat-chart');assert.match(chart.getAttribute('aria-label'),/牛の生乳/);assert.match(chart.lastElementChild.title,/2024: 135,000,000 t/);
+ assert.equal(chart.children.length,10);assert.equal(current.querySelectorAll('tbody tr').length,2);
+ window.happyDOM.abort();delete globalThis.document;
+});
+
+test('compact summary never replaces missing 2024 with an older value and published zero stays in the source table',()=>{
+ const window=new Window();globalThis.document=window.document;
+ window.document.body.innerHTML='<div data-farming-extra></div><div data-farming-map-method></div><h3 data-farming-statistics-title></h3><p data-farming-statistics-definition></p><div data-farming-statistics-tables></div><p data-farming-statistics-status></p><h2 data-farming-title></h2><p data-farming-takeaway></p><p data-farming-definition></p><p data-farming-coverage></p><p data-farming-method></p><p data-farming-map-source></p><div data-farming-reference></div>';
+ const rows=asia.countries.IND.observations.filter(row=>row.item==='1872'&&row.elementCode==='5616').map(row=>row.year===2024?{...row,value:null,flag:'M'}:row.year===2023?{...row,value:0,flag:'A'}:row);
+ panel.renderAsiaFarmingPanel(window.document.body,'south-central-asia','forest',undefined,{code:'IND',name:'インド'},{...asia,countries:{IND:{...asia.countries.IND,observations:rows}}});
+ const current=window.document.querySelector('.asia-stat-current');assert.equal(current.querySelectorAll('tbody tr').length,1);assert.match(current.textContent,/未掲載/);assert.doesNotMatch(current.textContent,/0 m³/);assert.match(current.textContent,/生産比の対象外/);
+ const history=window.document.querySelector('.asia-stat-history table');assert.equal(history.querySelectorAll('tbody tr').length,10);assert.equal(history.querySelectorAll('tbody tr')[8].querySelector('td').firstChild.textContent,'0');assert.match(history.lastElementChild.lastElementChild.textContent,/未掲載/);
+ const chart=window.document.querySelector('.asia-stat-chart');assert.match(chart.children[8].title,/2023: 0 m³/);assert.match(chart.children[9].title,/2024: 未掲載/);assert.equal(chart.children[9].style.background,'transparent');
  window.happyDOM.abort();delete globalThis.document;
 });
