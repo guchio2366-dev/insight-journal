@@ -1,0 +1,27 @@
+name: Canada religion review images
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/canada-religion-review-images.yml'
+      - 'review/canada-religion-20261008/**'
+
+permissions:
+  contents: read
+
+jobs:
+  images:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/upload-artifact@v4
+        with:
+          name: canada-religion-review-images-${{ github.event.pull_request.head.sha }}
+          path: |
+            review/canada-religion-20261008/initial.jpg
+            review/canada-religion-20261008/peel.jpg
+          if-no-files-found: error
+          retention-days: 14
