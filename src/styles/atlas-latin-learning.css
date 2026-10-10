@@ -243,13 +243,14 @@
  .latin-workspace:is(.latin-agriculture,.latin-population):not(.is-comparison) .latin-primary-grid{grid-template-columns:minmax(0,2fr) minmax(320px,1fr)}
  .latin-workspace:is(.latin-agriculture,.latin-population):not(.is-comparison) .latin-map-column :is(.latin-agriculture-map,.forest-map-stage,.lp-map){aspect-ratio:900/740;min-height:400px}
  .latin-workspace.latin-population .latin-navigation-selection{justify-content:flex-start}
- .latin-workspace.latin-population .latin-subfield-band{height:72px;padding-top:6px}
- .latin-workspace.latin-population{--latin-map-top:311px}
- .latin-workspace.latin-population .latin-reading{height:calc(100dvh - 320px);max-height:calc(100dvh - 320px)}
+ .latin-workspace.latin-population .latin-subfield-band{height:84px;padding-top:6px}
+ .latin-workspace.latin-population{--latin-map-top:323px}
+ .latin-workspace.latin-population .latin-reading{height:calc(100dvh - 332px);max-height:calc(100dvh - 332px)}
 }
 
 /* Keep the complete extent and its decoding visible at scroll zero. */
 @media(min-width:960px){
  .latin-workspace.latin-agriculture:not(.is-comparison) .latin-map-column :is(.latin-agriculture-map,.forest-map-stage){height:calc(100dvh - var(--latin-map-top,239px) - 135px)!important;min-height:350px;aspect-ratio:auto}
- .latin-workspace.latin-population .latin-map-column .lp-map{height:calc(100dvh - 385px)!important;min-height:350px;aspect-ratio:auto}
+ .latin-workspace.latin-population .latin-map-column .lp-map{height:calc(100dvh - 397px)!important;min-height:350px;aspect-ratio:auto}
 }
+.latin-workspace.latin-agriculture[data-latin-agriculture-render-mode=normal]:not(.is-comparison) .latin-agriculture-layer-buttons{display:none}
