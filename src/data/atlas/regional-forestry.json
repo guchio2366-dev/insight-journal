@@ -1,0 +1,297 @@
+{
+  "africa": {
+    "name": "アフリカ",
+    "overview": "赤道付近のコンゴ盆地の森林と、南アフリカ東部の人工林は、木材の利用の仕組みが異なります。森林の広さだけで産業の大きさは判断できません。",
+    "distribution": "文章資料ではコンゴ盆地の熱帯林と南アフリカ東部の植林地を確認できます。地図の番号はその説明を読むための代表位置です。全域の森林被覆面は未取得で、中立色の基図は森林の有無を示しません。",
+    "reason": "多雨の赤道域は樹木の生育を支えますが、商業利用には搬出路・加工設備・市場への接続が必要です。一方、人工林では育林と加工業を組み合わせます。燃料としての木材利用も、輸出用の木材産業とは別に重要です。",
+    "examples": [
+      {
+        "id": "congo",
+        "title": "コンゴ盆地",
+        "label": "コンゴ盆地",
+        "point": [
+          21,
+          -2
+        ],
+        "fact": "赤道域に熱帯林が広がります。木材だけでなく食料などの森林資源や、薪・木炭も暮らしを支えます。",
+        "explanation": "多雨の環境は森林を支えます。道路や加工・輸送条件によって利用できる範囲は変わり、被覆の広い場所がすべて商業伐採地になるわけではありません。燃料需要や農地転換、地域住民の利用を合わせて読む必要があります。",
+        "use": "製材用材、薪・木炭、非木材林産物。利用割合や伐採地の境界は未収録。",
+        "sources": [
+          {
+            "title": "FAO：コンゴ盆地の森林と燃料利用",
+            "url": "https://www.fao.org/gcf/news/news-detail/tackling-the-drivers-of-deforestation-in-the-Congo-Basin/en",
+            "period": "2024年5月22日"
+          },
+          {
+            "title": "World Bank：Congo Basin の森林・輸送・木材利用",
+            "url": "https://documents1.worldbank.org/curated/en/175211468257358269/pdf/Deforestation-trends-in-the-Congo-Basin-reconciling-economic-growth-and-forest-protection.pdf",
+            "period": "2013年。背景説明に使用"
+          }
+        ]
+      },
+      {
+        "id": "south-africa",
+        "title": "南アフリカ東部の人工林",
+        "label": "南ア東部",
+        "point": [
+          30.5,
+          -27
+        ],
+        "fact": "ムプマランガ州・クワズールナタール州などの植林と、製材・パルプ・紙の加工業が結び付きます。",
+        "explanation": "植林で木材を供給し、工場・交通網・需要地へつなぐ産業です。コンゴ盆地の天然林の広がりとは区別して読む必要があります。",
+        "use": "製材、パルプ・紙、木材チップなど。",
+        "sources": [
+          {
+            "title": "InvestSA：南アフリカの林業・加工業の地域分布",
+            "url": "https://www.investsa.gov.za/wp-content/uploads/2021/11/Investing-in-South-Africas-Forestry-Sector-Fact-sheet-003.pdf",
+            "period": "2021年"
+          }
+        ]
+      }
+    ]
+  },
+  "latin-america": {
+    "name": "中南米",
+    "overview": "アマゾンの大きな天然林と、ブラジル・チリ・ウルグアイの木材供給用の人工林を区別して読みます。パルプや製材を支える産地は、森林面積の大きい場所と一致するとは限りません。",
+    "distribution": "文章資料ではアマゾンの熱帯林、ブラジルの植林、チリ中南部やウルグアイの人工林を確認できます。番号は代表位置で、森林・植林地の境界ではありません。全域の被覆面は未取得です。 中立色の基図は森林の有無を示しません。",
+    "reason": "熱帯・温帯の生育条件に加えて、植林、工場、道路や港への接続が木材の産地を支えます。保全される天然林と、生産用に管理される人工林では役割が異なります。",
+    "examples": [
+      {
+        "id": "amazon",
+        "title": "アマゾンの天然林",
+        "label": "アマゾン",
+        "point": [
+          -63,
+          -4
+        ],
+        "fact": "アマゾン流域には広大な熱帯林があります。ブラジルの人工林からの供給とは別に、天然林の管理・保全を読む地域です。",
+        "explanation": "多雨の環境が森林を支えます。天然林からの木材利用と、森林転換・保護の扱いを区別する必要があります。被覆面や森林面積だけでは、搬出できる材の量や持続可能性は分かりません。",
+        "use": "天然林由来の木材利用と森林保全。具体的な伐採区画・用途比率は未収録。",
+        "sources": [
+          {
+            "title": "ブラジル森林局：天然林・人工林と木材利用",
+            "url": "https://snif.florestal.gov.br/images/pdf/publicacoes/Boletim-SNIF_Ed1_2019.pdf",
+            "period": "2019年"
+          }
+        ]
+      },
+      {
+        "id": "brazil-planted",
+        "title": "ブラジルの人工林",
+        "label": "ブラジル植林",
+        "point": [
+          -45,
+          -19
+        ],
+        "fact": "ミナスジェライス州などでユーカリやマツを植え、天然林とは別の木材供給を行います。",
+        "explanation": "植林と継続的な育林を、パルプ・紙、製材、木炭などの利用先につなぎます。地図の代表位置は人工林の全分布や加工工場の所在地を示しません。",
+        "use": "パルプ・紙、製材、木炭。",
+        "sources": [
+          {
+            "title": "Minas Gerais 政府：植林・木材・パルプ・木炭",
+            "url": "https://www.agenciaminas.mg.gov.br/noticia/sistema-mg-florestas-lanca-modulo-para-comunicacao-de-colheita-113049",
+            "period": "2022年3月14日"
+          },
+          {
+            "title": "ブラジル森林局：人工林の地域・樹種",
+            "url": "https://snif.florestal.gov.br/images/pdf/publicacoes/Boletim-SNIF_Ed1_2019.pdf",
+            "period": "2019年"
+          }
+        ]
+      },
+      {
+        "id": "chile",
+        "title": "チリ中南部の人工林",
+        "label": "チリ中南部",
+        "point": [
+          -72,
+          -36.7
+        ],
+        "fact": "ニュブレ・ビオビオなどの中南部では、人工林と木材加工業が重要です。",
+        "explanation": "マツやユーカリを育て、製材やパルプなどへ加工します。南部の天然林と人工林は区別が必要です。この地図では樹種・植林地・伐採地の面を示していません。",
+        "use": "製材、パルプなどの林産物。",
+        "sources": [
+          {
+            "title": "CONAF：チリの人工林",
+            "url": "https://www.conaf.cl/manejo-de-ecosistemas/gestion-forestal-suelos-y-agua/plantaciones-forestales/",
+            "period": "2023年の植生台帳を掲載"
+          },
+          {
+            "title": "チリ農業省：ビオビオ・ニュブレの林業",
+            "url": "https://minagri.gob.cl/noticia/destacan-trabajo-de-infor-para-el-desarrollo-del-ciclo-forestal-de-las-regiones-de-biobio-y-nuble/",
+            "period": "背景説明。統計の最新年としては使用しない"
+          }
+        ]
+      },
+      {
+        "id": "uruguay",
+        "title": "ウルグアイの人工林とパルプ",
+        "label": "ウルグアイ",
+        "point": [
+          -56,
+          -32.5
+        ],
+        "fact": "ユーカリの人工林がパルプ生産の原料になります。森林の面積と加工業の重要性は別の指標です。",
+        "explanation": "植林から工場への供給を組み合わせてパルプを生産します。木材を育てる場所と、紙の原料に加工する場所を区別して読みます。",
+        "use": "紙の原料となるパルプ、製材など。",
+        "sources": [
+          {
+            "title": "ウルグアイ政府：植林とパルプの供給網",
+            "url": "https://www.gub.uy/presidencia/comunicacion/noticias/plantas-celulosa-dinamizaron-variada-cadena-productiva-nace-sector-forestal",
+            "period": "2014年7月9日。産業の仕組みの説明"
+          }
+        ]
+      }
+    ]
+  },
+  "oceania": {
+    "name": "オセアニア",
+    "overview": "豪州の天然林と人工林、NZの生産用人工林、PNGの熱帯林を区別して読みます。森林被覆が広いことと、木材の生産・輸出が大きいことは同じではありません。",
+    "distribution": "緑の森林参考表示はJRCの2020年資料で、東経143度以西のPNG西部・パラオなどと豪州北端の小範囲に限られます。豪州のほぼ全域・NZ・PNG東部などは未取得です。斜線には未取得と、参考画像だけでは森林不在・欠測を判別できない場所を含みます。番号は重要な3事例の代表位置です。",
+    "reason": "雨や気温に加え、天然林の保全、人工林の育林、工場・港への輸送が供給を左右します。島々の林業を一律に細分化せず、資料で確認できる主要な事例を扱います。",
+    "examples": [
+      {
+        "id": "australia",
+        "title": "豪州の森林と生産用人工林",
+        "label": "豪州",
+        "point": [
+          147,
+          -36
+        ],
+        "fact": "森林は乾燥した内陸よりも北部・東岸や南東部、南西部などに分布します。天然林と商業人工林は別の区分です。",
+        "explanation": "地域ごとの雨・気温が森林の広がりに関係します。ユーカリなどの天然林に加え、マツやユーカリの人工林が商業用木材を供給します。天然林の保護・管理区分や加工施設への接続も供給を左右します。",
+        "use": "建築・家具・包装・紙など。伐採地や用途比率はこの地図に含まれません。",
+        "sources": [
+          {
+            "title": "ABARES：豪州の森林・人工林",
+            "url": "https://www.agriculture.gov.au/abares/forestsaustralia/australias-forests",
+            "period": "2026年閲覧"
+          },
+          {
+            "title": "ABARES：森林の広域分布",
+            "url": "https://www.agriculture.gov.au/abares/forestsaustralia/profiles/australias-forests-2016",
+            "period": "2013年森林報告を基にした概説。最新面積には使用しない"
+          },
+          {
+            "title": "ABARES：天然林と木材の用途",
+            "url": "https://www.agriculture.gov.au/abares/products/insights/australia-native-forests-and-wood-production",
+            "period": "2025年7月11日"
+          }
+        ]
+      },
+      {
+        "id": "new-zealand",
+        "title": "NZのラジアータマツ人工林",
+        "label": "NZ",
+        "point": [
+          176,
+          -38.5
+        ],
+        "fact": "生産用の人工林ではラジアータマツが主な樹種です。天然林の被覆と生産用人工林の分布は区別が必要です。",
+        "explanation": "人工林を育て、伐採した木材を製材・加工や港への輸送につなぎます。丸太の輸出もありますが、代表位置は港・工場・植林地の境界ではありません。",
+        "use": "丸太、製材、木材加工品、パルプなど。",
+        "sources": [
+          {
+            "title": "MPI：NZの森林と主要樹種",
+            "url": "https://www.mpi.govt.nz/forestry/new-zealand-forests-forest-industry/about-new-zealands-forests",
+            "period": "2026年5月5日"
+          },
+          {
+            "title": "MPI：林業と木材加工",
+            "url": "https://www.mpi.govt.nz/forestry/forest-industry-and-workforce/forestry-wood-processing-data",
+            "period": "2026年8月17日"
+          }
+        ]
+      },
+      {
+        "id": "png",
+        "title": "PNGの熱帯林と木材利用",
+        "label": "PNG",
+        "point": [
+          144,
+          -6
+        ],
+        "fact": "PNGには熱帯林があり、低地の木材利用や丸太の搬出が林業の重要な事例です。",
+        "explanation": "地形と輸送条件、地域住民の慣習的な土地保有が利用の条件になります。天然林を人工林のように扱わず、森林調査と住民の権利、加工と搬出を合わせて読む必要があります。",
+        "use": "丸太・木材加工。古い概説の輸出予測を現在の実績としては扱いません。",
+        "sources": [
+          {
+            "title": "PNG Forestry Authority / FAO：PNG林業の概説",
+            "url": "https://www.fao.org/4/am614e/am614e00.pdf",
+            "period": "2009年。土地・森林・産業の背景に使用。将来予測は不採用"
+          },
+          {
+            "title": "FAO：PNGの国家森林調査",
+            "url": "https://www.fao.org/papua-new-guinea/resources/videos/detail/papua-new-guinea-%28png%29-gef-7-national-forest-inventory-%28nfi%29/en",
+            "period": "2025年7月31日"
+          }
+        ]
+      }
+    ]
+  },
+  "russia": {
+    "name": "ロシア",
+    "overview": "北部のタイガは重要な森林帯ですが、広い森林のすべてを商業利用できるわけではありません。西部・シベリア・極東で、寒冷な環境と加工・輸送の条件を区別して読みます。",
+    "distribution": "濃い緑はESAの2021年樹木被覆で、東経65度以西・北緯73度以南だけを表示します。明るい緑はJRCの2020年森林参考図で、南部の保存済み範囲だけです。異なる年・分類を合計せず読みます。その他の斜線は未取得・欠測・分類未判定で、森林不在を示しません。",
+    "reason": "針葉樹の森林帯が広がる一方、寒冷・永久凍土・遠隔性は育林や搬出の条件を制約します。木材を使うには道路・鉄道・加工設備への接続が必要です。森林面積を生産量に読み替えることはできません。",
+    "examples": [
+      {
+        "id": "northwest",
+        "title": "北西部の森林と加工業",
+        "label": "北西部",
+        "point": [
+          40,
+          63
+        ],
+        "fact": "表示済みの西部被覆面では樹木の広がりを確認できます。北西部は製材・パルプ・紙の加工業を読む重要な地域です。",
+        "explanation": "森林資源を、加工設備や輸送網へつなぐことが木材利用を支えます。地図の被覆面自体は工場・伐採地や樹種を識別しません。",
+        "use": "製材、パルプ・紙、木質材料。",
+        "sources": [
+          {
+            "title": "FAO：北西ロシアの森林産業クラスター",
+            "url": "https://www.fao.org/4/Y3909E/y3909e08.htm",
+            "period": "2002年。産業立地の背景に使用。現行企業・貿易先には使用しない"
+          }
+        ]
+      },
+      {
+        "id": "siberia",
+        "title": "シベリアのタイガと搬出条件",
+        "label": "シベリア",
+        "point": [
+          104,
+          58
+        ],
+        "fact": "シベリア南部の一部には2020年の森林参考表示があります。北部を含む全域の被覆は未取得で、森林の広さや木材生産量はこの図から判断できません。",
+        "explanation": "寒冷な気候、永久凍土や遠隔地の輸送条件が利用を制約します。道路や加工設備への投資なしに森林の広さを木材供給に置き換えることはできません。",
+        "use": "製材・木質材料・パルプなど。位置は地域の代表で、商業伐採域ではありません。",
+        "sources": [
+          {
+            "title": "FAO：ロシア森林部門の概説、3章・5章",
+            "url": "https://www.fao.org/4/i3020e/i3020e.pdf",
+            "period": "2012年。森林環境と輸送の背景に使用。2030年予測は不採用"
+          }
+        ]
+      },
+      {
+        "id": "far-east",
+        "title": "極東の森林と輸送",
+        "label": "極東",
+        "point": [
+          135,
+          53
+        ],
+        "fact": "極東南部の一部では2020年の森林参考表示を確認できます。保存済み参考図は北緯55度・東経147度までで、その外側は未取得です。",
+        "explanation": "遠隔地の森林と道路・加工・港への接続を合わせて読む必要があります。古い概説の輸出先・将来予測を、現在の貿易の姿としては示しません。",
+        "use": "木材・製材・加工。現行の仕向け先や生産量は別の統計が必要です。",
+        "sources": [
+          {
+            "title": "FAO：ロシア森林部門の地域分布・輸送",
+            "url": "https://www.fao.org/4/i3020e/i3020e.pdf",
+            "period": "2012年。背景説明"
+          }
+        ]
+      }
+    ]
+  }
+}

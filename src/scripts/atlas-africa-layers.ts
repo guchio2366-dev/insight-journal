@@ -1,3 +1,4 @@
+import {africaBeverageBelts,africaBeverageLabels,africaBeverageLinks,africaBeverageNote,africaBeveragePointNote,isAfricaBeverage} from '../data/atlas/africa-beverage-belts.ts';
 import {withBase} from '../lib/urls.ts';
 import {projectAfrica,africaWidth,africaHeight} from '../lib/atlas-africa-geometry.ts';
 import {africaAgriFocusedLayer,africaAgriVisibleLayers,countries,type State} from '../data/atlas/africa-atlas.ts';
@@ -13,7 +14,7 @@ export type AfricaLayerView={key:string;ready:boolean;loading:boolean;error:stri
 type Loaded={value?:any;error?:string;promise?:Promise<void>};
 const SVG='http://www.w3.org/2000/svg';
 export const africaClimateClassAnchors=[{coordinates:[10,24],id:4,label:'BWh'},{coordinates:[20,0],id:1,label:'Af'},{coordinates:[23,-9],id:3,label:'Aw'},{coordinates:[38,12],id:12,label:'Cwb'},{coordinates:[19,-33],id:8,label:'Csa'}] as const;
-export const africaCommodityColors:Record<string,string>={maize:'#c59320',rice:'#287daa',wheat:'#8b64aa',cassava:'#268365',cattle:'#98513e',goats:'#aa6b28',sheep:'#50698c',coffee:'#7b5546',tea:'#6b8b36'};
+export const africaCommodityColors:Record<string,string>={maize:'#c59320',rice:'#287daa',wheat:'#8b64aa',cassava:'#268365',cattle:'#98513e',goats:'#aa6b28',sheep:'#50698c',coffee:'#a52c69',tea:'#086d78'};
 export const africaCommodityLabels:Record<string,string>={maize:'とうもろこし',rice:'稲',wheat:'小麦',cassava:'キャッサバ',cattle:'牛',goats:'ヤギ',sheep:'羊',coffee:'コーヒー',tea:'茶'};
 export function africaCommodityColor(key:string):string{return africaCommodityColors[key.replace(/^crop-|^livestock-/,'').replace(/-harvested$|-production$/,'')]??'#567c77';}
 /** Existing country locator, deliberately distinct from a crop-summary anchor. */
@@ -290,7 +291,7 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
  function paintBorders(state:State,target:SVGGElement){for(const original of root.querySelectorAll<SVGPathElement>('[data-country-path]'))target.append(svg('path',{d:original.getAttribute('d')??'',fill:'none',stroke:original.dataset.countryPath===state.place?'#b13e30':original.dataset.countryPath===state.compare?'#364c91':'#708e91','stroke-width':original.dataset.countryPath===state.place||original.dataset.countryPath===state.compare?2:.65,'stroke-dasharray':original.dataset.countryPath===state.compare?'5 3':'','vector-effect':'non-scaling-stroke','pointer-events':'none'}));}
  function commodityState(state:State,key:string):State {if(key.startsWith('crop-')){const [,crop,cropMeasure]=key.split('-');return {...state,topic:'farming',crop:crop as State['crop'],cropMeasure:cropMeasure as State['cropMeasure']};}return {...state,topic:'livestock',livestock:key.slice(10) as State['livestock']};}
  function commodityView(state:State,key:string,summary:Row|undefined):AfricaLayerView {
-  if(['crop-coffee-harvested','crop-tea-harvested'].includes(key))return {key,ready:true,loading:false,error:'',title:africaCommodityLabels[key.split('-')[1]]+'（分布格子未取得）',period:'未取得',unit:'未取得',scope:'2020年の分布格子は未取得。生産地帯を補作しません。',method:'公式SPAM配布への接続が403 Forbidden。原格子未取得。',sourceUrl:'https://doi.org/10.7910/DVN/SWPENT',sourceLabel:'IFPRI SPAM 2020',legend:[],takeaway:'分布格子は未取得。確認済みの生産背景を読みます。',description:'他の取得済み分布を残して表示します。'};
+  if(isAfricaBeverage(key)){const product=key.split('-')[1] as 'coffee'|'tea',source=africaBeverageLinks(product)[0];return {key,ready:true,loading:false,error:'',title:africaCommodityLabels[product]+'（概略帯）',period:'資料別年',unit:'産地の概略',scope:africaBeverageNote,method:'産地記述の地名から独自に概略帯を作成。線の幅と座標は表示上の概略で、栽培境界・数量・密度を推定しません。原図は転載していません。',sourceUrl:source.url,sourceLabel:source.label,legend:[],takeaway:'資料で確認できる特徴的な生産地帯を読む',description:africaBeverageNote};}
   const config=setup(key)!,manifestResult=request(config.base+'manifest.json'),manifest=manifestResult.value;
   const layer=manifest?.layers?.[config.id] as Row|undefined;
   const grid=layer?.grid?request(config.base+layer.grid,true):null;
@@ -322,10 +323,10 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   const selected=views.find(view=>view.key===focused)??views[0];
   const visibleLayers=views.filter(view=>active.includes(view.key)).map(view=>({key:view.key,title:view.title,unit:view.unit,color:africaCommodityColor(view.key),ready:view.ready,loading:view.loading,error:view.error,period:view.period,sourceUrl:view.sourceUrl,sourceLabel:view.sourceLabel}));
   const legend=visibleLayers.map(view=>({id:view.key,label:summary?.layers[view.key]?.label??view.title.split('｜')[0].replace('の推定飼養密度',''),color:view.color}));
-  const thresholdDetails=summary?keys.map(key=>{const layer=summary.layers[key];if(!layer)return `${africaCommodityLabels[key.split('-')[1]]}：格子未取得`;return `${layer.label}：${Number(layer.threshold).toLocaleString('ja-JP',{maximumFractionDigits:3})} ${layer.unit}以上`;}).join('。'):'';
+  const thresholdDetails=summary?keys.map(key=>{const layer=summary.layers[key];if(!layer)return `${africaCommodityLabels[key.split('-')[1]]}：資料記述による概略帯（数量の閾値なし）`;return `${layer.label}：${Number(layer.threshold).toLocaleString('ja-JP',{maximumFractionDigits:3})} ${layer.unit}以上`;}).join('。'):'';
   const backgroundSource=summary?.background?`背景出典：${summary.background.sourceLabel}。${summary.background.sourceUrl} ${summary.background.note}`:'';
-  const result:AfricaLayerView={...selected,ready:!!summary&&visibleLayers.every(view=>view.ready),error:summaryResult.error??(selected.error||visibleLayers.find(view=>view.error)?.error||''),selectedVisible:active.includes(focused),loading:!!summaryResult.promise||visibleLayers.some(view=>view.loading),visibleLayers,legend,method:[summary?.method,thresholdDetails,summary?.display,...(summary?.limitations??[]),backgroundSource,selected.method].filter(Boolean).join(' '),scope:'色の面は作物、薄い色面と種別記号は家畜の連続する生産地帯です。数量の大小や品目間の優劣は示しません。表示外も生産なしとは限りません。コーヒー・茶の分布は未取得。'};
-  if(state.overview){result.title='作物と家畜の特徴的な分布';result.period='作物・家畜とも2020年基準のモデル';result.unit='品目内の相対的な集中';result.sourceUrl='';result.sourceLabel='';result.takeaway='作物の帯と家畜の記号から、生産の地域差を読む';result.description='作物は収穫面積、家畜は飼養密度のモデルから、それぞれの品目が比較的集中する範囲を示します。';}
+  const result:AfricaLayerView={...selected,ready:!!summary&&visibleLayers.every(view=>view.ready),error:summaryResult.error??(selected.error||visibleLayers.find(view=>view.error)?.error||''),selectedVisible:active.includes(focused),loading:!!summaryResult.promise||visibleLayers.some(view=>view.loading),visibleLayers,legend,method:[summary?.method,thresholdDetails,summary?.display,...(summary?.limitations??[]),backgroundSource,selected.method].filter(Boolean).join(' '),scope:'色の面は作物、薄い色面と種別記号は家畜の連続する生産地帯です。数量の大小や品目間の優劣は示しません。表示外も生産なしとは限りません。コーヒー・茶は資料別年の概略帯です。'};
+  if(state.overview){result.title='作物と家畜の特徴的な分布';result.period='既存7品目：2020年基準 ／ コーヒー・茶：資料別年';result.unit='品目内の相対的な集中';result.sourceUrl='';result.sourceLabel='';result.takeaway='作物の帯と家畜の記号から、生産の地域差を読む';result.description='作物は収穫面積、家畜は飼養密度のモデルから、それぞれの品目が比較的集中する範囲を示します。';}
   if(!summary){baseGroup.replaceChildren();lastAgriPaint='';return result;}
   // Summary geometry does not change when an original query grid arrives late.
   // Paint and selection are derived only from the current state supplied here.
@@ -337,6 +338,7 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   baseGroup.replaceChildren();agriGroups.clear();
   const defs=svg('defs',{}),clip=svg('clipPath',{id:'africa-agri-land-clip'}),filter=svg('filter',{id:'africa-agri-neutral-relief'});
   for(const original of root.querySelectorAll<SVGPathElement>('[data-country-path]'))clip.append(svg('path',{d:original.getAttribute('d')??'','fill-rule':'evenodd','clip-rule':'evenodd'}));
+  for(const country of new Set(africaBeverageBelts.map(b=>b.country))){const countryClip=svg('clipPath',{id:'africa-beverage-'+country});const original=root.querySelector<SVGPathElement>(`[data-country-path="${country}"]`);if(original)countryClip.append(svg('path',{d:original.getAttribute('d')??'','fill-rule':'evenodd','clip-rule':'evenodd'}));defs.append(countryClip);}
   filter.append(svg('feColorMatrix',{type:'saturate',values:0}));defs.append(clip,filter);baseGroup.append(defs);
   const background=svg('g',{'pointer-events':'none','aria-hidden':'true'});
   for(const feature of neighbours.features)background.append(svg('path',{d:africaLayerPath(feature.geometry),fill:'#dadad0',stroke:'#b8c2b7','stroke-width':.5,'vector-effect':'non-scaling-stroke','data-africa-neighbour':feature.properties.code}));
@@ -358,18 +360,32 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
    }
    for(const [index,anchor]of anchors.entries())labelJobs.push({key,anchor,index,livestock});
   }
+  for(const product of ['coffee','tea'] as const){
+   const key=`crop-${product}-harvested`,selectedNow=!state.overview&&focused===key,node=svg('g',{'data-africa-commodity-layer':key}) as SVGGElement;
+   node.style.display=active.includes(key)?'':'none';node.style.opacity=!state.overview&&!selectedNow?'.55':'1';agriGroups.set(key,node);
+   const distribution=svg('g',{'data-africa-agri-distribution':key,'data-africa-distribution-kind':'schematic','pointer-events':'none'});
+   for(const belt of africaBeverageBelts.filter(b=>b.product===product)){
+    const d=belt.line.map((p,i)=>(i?'L':'M')+projectAfrica(p).join(',')).join(''),width=belt.radius*2*africaWidth/91,part=svg('g',{'clip-path':`url(#africa-beverage-${belt.country})`,'data-africa-beverage-belt':belt.id,'data-africa-beverage-source':belt.source});
+    const draw=(stroke:string,w:number,opacity:number)=>svg('path',{d,fill:'none',stroke,'stroke-width':w,'stroke-linecap':'round','stroke-linejoin':'round',opacity});
+    if(selectedNow){part.append(draw('#fffdf8',width+5*labelScale,1),draw(africaCommodityColor(key),width+2*labelScale,1));}
+    part.append(draw(africaCommodityColor(key),width,selectedNow?.64:.55));distribution.append(part);
+   }
+   if(selectedNow&&active.includes(key))distribution.setAttribute('data-africa-agri-footprint',key);node.append(distribution);
+  }
   paintBorders(state,baseGroup);
   if(!state.overview&&active.includes(focused)&&summary.layers[focused]){
    const outline=svg('g',{'data-africa-agri-footprint':focused,'pointer-events':'none','aria-hidden':'true','clip-path':'url(#africa-agri-land-clip)'});
    const d=africaProductionZonePath(summary.layers[focused].cells,summary.bounds);for(const [stroke,width]of [['#ffffff',3.5],[africaCommodityColor(focused),1.8]]as const)outline.append(svg('path',{d,fill:'none',stroke,'stroke-width':width,'vector-effect':'non-scaling-stroke','stroke-linecap':'round','stroke-linejoin':'round'}));baseGroup.append(outline);
   }
-  // Labels carry exact source-summary anchors. Short leaders permit legible names
+  // Original labels retain source-summary anchors; beverage labels use rounded
+  // editorial localities. Short leaders permit legible names
   // without implying that the displaced label is itself a production location.
   const occupied:{x:number;y:number;w:number;h:number}[]=[];
-  for(const job of labelJobs){
-   const {key,anchor,index,livestock}=job,layer=summary.layers[key],node=agriGroups.get(key)!,selectedNow=!state.overview&&key===focused;
+  function paintLabels(jobs:typeof labelJobs){for(const job of jobs){
+   const {key,anchor,index,livestock}=job,layer=summary.layers[key]??{label:africaCommodityLabels[key.split('-')[1]]},node=agriGroups.get(key)!,selectedNow=!state.overview&&key===focused;
    const [ax,ay]=projectAfrica([anchor.lon,anchor.lat]),font=14*labelScale,iconScale=.55*labelScale,iconWidth=livestock?22*labelScale:0,width=layer.label.length*font+iconWidth+5*labelScale,height=19*labelScale,gap=5*labelScale;
    const candidates=[[gap,-12*labelScale],[gap,17*labelScale],[-width-gap,-12*labelScale],[-width-gap,17*labelScale],[gap,-35*labelScale],[-width-gap,40*labelScale],[gap,40*labelScale],[-width-gap,-35*labelScale],[gap,-58*labelScale],[-width-gap,63*labelScale]];
+   if(isAfricaBeverage(key)){const nearby:number[][]=[];for(const dx of [28,-width/labelScale-28,56,-width/labelScale-56])for(const dy of [-12,17,-35,40])nearby.push([dx*labelScale,dy*labelScale]);candidates.splice(4,0,...nearby);}
    const visibleAnchor=ax>=viewport[0]&&ax<=viewport[0]+viewport[2]&&ay>=viewport[1]&&ay<=viewport[1]+viewport[3];
    const minX=viewport[0]+4*labelScale,maxX=viewport[0]+viewport[2]-width-4*labelScale,minY=viewport[1]+height,maxY=viewport[1]+viewport[3]-6*labelScale;
    let position=candidates.map(([dx,dy])=>({x:Math.max(minX,Math.min(maxX,ax+dx)),y:Math.max(minY,Math.min(maxY,ay+dy)),w:width,h:height})).find(box=>!occupied.some(other=>box.x<other.x+other.w+gap&&box.x+box.w+gap>other.x&&box.y-height<other.y+gap&&box.y+gap>other.y-other.h));
@@ -386,6 +402,8 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
    }
    const title=svg('text',{x:position.x+iconWidth,y:position.y,'font-size':font,'font-weight':selectedNow?800:700,fill:africaCommodityColor(key),stroke:'#fffdf8','stroke-width':3*labelScale,'paint-order':'stroke','stroke-linejoin':'round','data-africa-agri-label-text':key});title.textContent=layer.label;labelGroup.append(title);node.append(labelGroup);
   }
+  }
+  paintLabels(labelJobs);
   baseGroup.append(...agriGroups.values());
   const contextPlace=africaAgriContextPlace(state.overview,focused,active,viewport);
   if(contextPlace){
@@ -396,17 +414,22 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
    const candidates:number[][]=[];for(const offset of [-12,17,-35,40,-58,63,-81,86])candidates.push([gap,offset*labelScale],[-width-gap,offset*labelScale]);
    const position=maxX>=minX?candidates.map(([dx,dy])=>({x:Math.max(minX,Math.min(maxX,ax+dx)),y:Math.max(minY,Math.min(maxY,ay+dy)),w:width,h:height})).find(box=>!occupied.some(other=>box.x<other.x+other.w+gap&&box.x+box.w+gap>other.x&&box.y-height<other.y+gap&&box.y+gap>other.y-other.h)):undefined;
    if(position){
+    occupied.push(position);
     const place=svg('g',{'data-africa-agri-place-label':contextPlace.code,'data-africa-agri-place-anchor':contextPlace.point.join(','),'pointer-events':'none','aria-label':`国名：${contextPlace.name}`});
     const note=svg('title',{});note.textContent='既存の国位置データによる地名案内。作物の生産地点を表す印ではありません。';place.append(note);
     place.append(svg('path',{d:`M${ax},${ay}L${Math.max(position.x,Math.min(position.x+width,ax))},${position.y-5*labelScale}`,fill:'none',stroke:'#53656a','stroke-width':1,'vector-effect':'non-scaling-stroke'}));
     const name=svg('text',{x:position.x,y:position.y,'font-size':font,'font-weight':600,fill:'#53656a',stroke:'#fffdf8','stroke-width':3*labelScale,'paint-order':'stroke','stroke-linejoin':'round','data-africa-agri-place-text':contextPlace.code});name.textContent=contextPlace.name;place.append(name);baseGroup.append(place);
    }
   }
+  const beverageJobs:typeof labelJobs=[];
+  for(const product of ['tea','coffee'] as const)for(const [index,point]of africaBeverageLabels[product].entries()){const [x,y]=projectAfrica(point);if(x>=viewport[0]&&x<=viewport[0]+viewport[2]&&y>=viewport[1]&&y<=viewport[1]+viewport[3])beverageJobs.push({key:`crop-${product}-harvested`,anchor:{lon:point[0],lat:point[1]},index,livestock:false});}
+  paintLabels(beverageJobs);
   if(focusedElement)baseGroup.querySelector<SVGElement>(`[data-africa-agri-focus="${focusedElement}"]`)?.focus({preventScroll:true});
   return result;
  }
  function inspect(lon:number,lat:number):string {
-  if(agriMode&&(visibleKeys.length!==1||visibleKeys[0]!==currentKey)){const readings=visibleKeys.map(key=>{const row=viewCache.get(key);if(!row?.grid)return `${row?.view.title??key}：${row?.view.error?'取得失敗。再読込できます':'読込中'}`;const value=africaGridValue(row.grid,{...row.manifest,...row.layer},lon,lat);return `${row.view.title}：${value===null?'値なし':`${africaGridValueLabel(value)} ${row.view.unit}`}`;});return readings.length?`${lon.toFixed(2)}°E / ${lat.toFixed(2)}°N（元の5分角格子・推定値、表示桁は丸め・数量は合算しません）：${readings.join(' ／ ')}`:'表示品目はすべてOFFです。読み解く品目の選択は保持しています。';}
+  if(agriMode&&(visibleKeys.length!==1||visibleKeys[0]!==currentKey)){const readings=visibleKeys.map(key=>{if(isAfricaBeverage(key))return `${africaCommodityLabels[key.split('-')[1]]}：${africaBeveragePointNote}`;const row=viewCache.get(key);if(!row?.grid)return `${row?.view.title??key}：${row?.view.error?'取得失敗。再読込できます':'読込中'}`;const value=africaGridValue(row.grid,{...row.manifest,...row.layer},lon,lat);return `${row.view.title}：${value===null?'値なし':`${africaGridValueLabel(value)} ${row.view.unit}`}`;});return readings.length?`${lon.toFixed(2)}°E / ${lat.toFixed(2)}°N（数量格子は元の5分角格子・推定値、表示桁は丸め・数量は合算しません。概略帯の地点数量はありません）：${readings.join(' ／ ')}`:'表示品目はすべてOFFです。読み解く品目の選択は保持しています。';}
+  if(isAfricaBeverage(currentKey))return africaBeveragePointNote;
   const current=viewCache.get(currentKey);if(!current)return 'この地点の分布値はまだ読み込まれていません。';
   const {layer,manifest,view,grid}=current;if(!grid)return '元資料の分類・範囲は凡例と出典で確認できます。';
   const value=africaGridValue(grid,{...manifest,...layer},lon,lat);if(value===null)return 'この表示格子は未収録です。';

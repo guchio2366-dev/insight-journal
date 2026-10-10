@@ -1,7 +1,9 @@
+import {africaBeverageLinks,africaBeverageNote} from './africa-beverage-belts.ts';
 /**
  * Short reading paths through the existing Africa material.
  *
- * Geography in the map is read from the pinned 2020 SPAM / GLW distributions;
+ * The seven original items use pinned 2020 SPAM / GLW distributions;
+ * coffee and tea use independently authored belts from cited locality descriptions;
  * farming-system explanations reuse africa-reading.ts, africa-themes.ts and
  * africa-agriculture-reading.ts. FAO's 2001 background does not date the map or
  * establish present-day crop rankings. The original readings remain intact.
@@ -32,13 +34,14 @@ const livestock = {
 };
 
 /** Keep this with the source/method supplement, rather than ahead of the reading. */
-export const agricultureContextPeriodNote = '分布は2020年を基準とするSPAM・GLWのモデル推定です。営農の背景にはFAOの2001年資料を使い、現在の品目別生産順位や2020年の経済構成としては扱っていません。';
+export const agricultureContextPeriodNote = africaBeverageNote+' 既存7品目の分布は2020年を基準とするSPAM・GLWのモデル推定です。営農の背景にはFAOの2001年資料を使い、現在の品目別生産順位や2020年の経済構成としては扱っていません。';
 
 export const agricultureContextOverview: AfricaAgricultureContext & {statisticNote: string} = {
   title: '食用作物と家畜を、地域の組合せで読む',
   takeaway: 'ギニア湾岸とコンゴ盆地の食用作物、北部の小麦、東部高地とサヘルの農牧業を見比べます。',
   paragraphs: [
     'トウモロコシは西部・東部・南部、小麦は北西アフリカやナイル沿い・東部高地の分布に注目します。キャッサバは湾岸からコンゴ盆地周辺、米は西アフリカの沿岸・河川低地、ナイル沿い、マダガスカルなどで栽培され、主食として利用されます。',
+    'コーヒーはエチオピア南西部・東部高地、コートジボワールやカメルーンの湿潤な産地に、茶はケニアの高地からウガンダ・ルワンダ、タンザニア・マラウイの高地に注目します。両品目の色は資料に記載された産地の概略帯です。',
     '東部高地とサヘルでは、穀物と家畜を組み合わせる営農があります。飼料・水・獣医療が飼養を支え、作物の貯蔵・加工や家畜の集乳・食肉市場への接続が、生産を食料と販売につなぎます。',
   ],
   sourceLinks: [farming, crops, livestock],
@@ -83,16 +86,16 @@ export const agricultureProductContext: Record<AfricaAgricultureProduct, AfricaA
     sourceLinks: [crops, farming],
   },
   coffee: {
-    title:'コーヒー：東部高地と湿潤な西・中央部',
-    takeaway:'東部の高地やギニア湾岸・中央部の生産を、加工と輸出への接続から読みます。',
-    paragraphs:['FAOの農業システム資料では、エチオピア・ウガンダなどの高地の多年生作物、ギニア湾岸から中央部の樹木作物にコーヒーが含まれます。気温・降水・標高に品種や管理が重なり、生産地が形成されます。','果実の収穫から精製・乾燥を経た生豆は、焙煎・飲料用に流通します。品質管理、集荷、道路・港、輸出先の需要と価格も生産者の収入に関わります。2020年の分布格子は未取得で、面の分布を補作していません。'],
-    sourceLinks:[farming,{label:'FAOSTAT QCL：2024年の生豆生産量',url:'https://www.fao.org/faostat/en/#data/QCL'}],
+    title:'コーヒー：東部高地と西・中央部の湿潤産地',
+    takeaway:'エチオピア南西部から東部の高地、コートジボワール・カメルーンの産地を見比べます。',
+    paragraphs:['エチオピアの南西部・南部高地、ウガンダの中央部と山地、ケニア中央高地、タンザニアの北部・南部に産地があります。西部のコートジボワールではMan・Divo・Abengourouなど、中央部のカメルーンでは西部高地・Mungoなどの湿潤域を示します。ルワンダ・ブルンジの高地も見比べます。マダガスカル東岸は2000年の歴史資料を根拠とする概略です。','高地の比較的涼しい条件はアラビカの栽培を支え、暖かい湿潤域ではロブスタの栽培がみられます。雨の季節、土壌、品種、日陰や農園管理が重なり、同じ国でも産地は一様になりません。','収穫した果実は精製・乾燥して生豆にし、焙煎・飲料用に流通します。洗浄施設、品質管理、集荷、道路や港への接続が収穫後の利用と販売を支えます。'],
+    sourceLinks:africaBeverageLinks('coffee'),
   },
   tea: {
-    title:'茶：東部の産地と摘採・製茶・流通',
-    takeaway:'ケニア、ウガンダ、タンザニア、マラウイなどの茶生産を、栽培と加工の連続した仕事から読みます。',
-    paragraphs:['FAOの茶資料で確認できる東部アフリカの生産を読む項目です。茶の生育には地域の農業気候条件が関わり、雨や気温の変化は栽培にも影響します。2020年の分布格子は未取得で、栽培範囲を推測して塗っていません。','摘み取った葉を製茶して飲料として利用します。産地から工場への輸送、加工・品質管理、集荷と港、輸出市場への接続が重要です。茶の輸出収入は、生産国の食料輸入を支える面もあります。'],
-    sourceLinks:[{label:'FAO：茶の生産と市場',url:'https://www.fao.org/markets-and-trade/commodities-overview/beverages/tea/en'},{label:'FAO：茶産地の背景（2013）',url:'https://www.fao.org/fileadmin/templates/mafap/documents/technical_notes/MALAWI/2005-2013/Malawi_TN_tea_web_review.pdf'}],
+    title:'茶：東部の高地と摘採・製茶・流通',
+    takeaway:'ケニアのリフト谷東西の高地、ウガンダ・ルワンダ、タンザニア、マラウイの産地を見比べます。',
+    paragraphs:['ケニアではKericho・Kisii・Nandi側とMount Kenya・Aberdare側の高地に茶産地があります。ウガンダ西部と中央部、ルワンダの北・西・南の高地、タンザニアの南部・北東部・北西部にも産地が分かれます。マラウイでは南東部のThyolo・Mulanjeが特徴的で、北部のNkhata Bay近傍にも産地があります。','高地の穏やかな気温と生育期の雨、水はけや土壌条件が茶樹を支えます。高地ならどこでも一様に栽培されるわけではなく、季節の雨、土地利用、工場と生産者のつながりが産地を形づくります。','摘み取った葉を速やかに工場へ運び、製茶して飲料用に利用します。東部アフリカでは紅茶やブレンド向けの茶が生産され、産地内の輸送、加工・品質管理、集荷と港への接続が販売を支えます。'],
+    sourceLinks:africaBeverageLinks('tea'),
   },
   cattle: {
     title: '牛：東部高地とサヘルの農牧業',

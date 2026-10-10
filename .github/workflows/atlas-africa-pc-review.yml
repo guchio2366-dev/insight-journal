@@ -18,6 +18,8 @@ on:
       - 'scripts/verify-africa-pc-review.mjs'
       - 'scripts/verify-africa-approved-review.mjs'
       - 'scripts/verify-africa-industry-review.mjs'
+      - 'scripts/verify-africa-beverages-review.mjs'
+      - 'tests/fixtures/africa-agriculture-label-layout.json'
       - '.github/workflows/atlas-africa-pc-review.yml'
   push:
     branches:
@@ -36,6 +38,8 @@ on:
       - 'scripts/verify-africa-pc-review.mjs'
       - 'scripts/verify-africa-approved-review.mjs'
       - 'scripts/verify-africa-industry-review.mjs'
+      - 'scripts/verify-africa-beverages-review.mjs'
+      - 'tests/fixtures/africa-agriculture-label-layout.json'
       - '.github/workflows/atlas-africa-pc-review.yml'
 
 permissions:
@@ -108,10 +112,15 @@ jobs:
           export AFRICA_REVIEW_JAPANESE_FONT_SETUP=official-ubuntu-fonts-noto-cjk
           # An explicit trailer selects the reviewer-requested limited check.
           # Ordinary future commits continue to run the full Africa review.
-          if [[ "$(git log -1 --format='%(trailers:key=Africa-Review-Scope,valueonly)')" == madagascar ]]; then
-            export AFRICA_REVIEW_SCOPE=madagascar
+          africa_review_scope="$(git log -1 --format='%(trailers:key=Africa-Review-Scope,valueonly)')"
+          if [[ "$africa_review_scope" == beverages ]]; then
+            AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node scripts/verify-africa-beverages-review.mjs
+          else
+            if [[ "$africa_review_scope" == madagascar ]]; then
+              export AFRICA_REVIEW_SCOPE=madagascar
+            fi
+            AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node scripts/verify-africa-approved-review.mjs
           fi
-          AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node scripts/verify-africa-approved-review.mjs
           node scripts/verify-africa-industry-review.mjs
 
       - name: Upload Africa PC screenshots and validation metadata

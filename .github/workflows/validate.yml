@@ -129,6 +129,23 @@ jobs:
           if-no-files-found: warn
           retention-days: 7
 
+      - name: Capture shared agriculture and Russia forestry statistics
+        shell: bash
+        timeout-minutes: 4
+        run: |
+          set -euo pipefail
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable)"
+          SHARED_STAT_CHROME_PATH="$chrome_path" SHARED_STAT_REVIEW_OUTPUT="review-artifacts/shared-statistics" SHARED_STAT_REVIEW_SCOPE="forest-footer" node scripts/verify-shared-statistics-pc.mjs
+
+      - name: Upload shared statistics review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shared-statistics-review-${{ github.run_id }}
+          path: review-artifacts/shared-statistics
+          if-no-files-found: warn
+          retention-days: 7
+
 
       - name: Run built-site tests
         run: npm run test:e2e
@@ -138,7 +155,15 @@ jobs:
           npx playwright install --with-deps chromium
           sudo apt-get install -y fonts-noto-cjk
       - name: Compare Canada and US in real Chromium
-        run: npm run test:browser:canada
+        shell: bash
+        run: |
+          set -euo pipefail
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          if [[ -z "$chrome_path" ]]; then
+            echo "::error::The GitHub runner does not have Google Chrome installed."
+            exit 1
+          fi
+          ATLAS_CHROMIUM_PATH="$chrome_path" npm run test:browser:canada
       - name: Upload map acceptance screenshots
         if: always()
         uses: actions/upload-artifact@v4

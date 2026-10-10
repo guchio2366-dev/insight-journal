@@ -112,7 +112,6 @@ test('Latin actual nature controller restores water and rainfall categories on r
 });
 
 for(const [field,section,init,placeSelector,available] of [
- ['agriculture','forestry','RegionalClient.initLatinAgriculture(document.querySelector("[data-latin-field=agriculture]"));RegionalClient.initLatinWorkspaceLayout();','[data-latin-agriculture-place]','agriculture'],
  ['population','ethnicity','RegionalClient.initLatinPopulation(document.querySelector("[data-latin-field=population]"));RegionalClient.initLatinWorkspaceLayout();','[data-lp-place-select]','population'],
 ])test(`Latin actual ${field} controller retains its unavailable category on reload and restores the ready map on history navigation`,async()=>{
  const win=open(`latin-america/${field}/?place=CRI&scope=country&only=1`,init);
@@ -124,5 +123,21 @@ for(const [field,section,init,placeSelector,available] of [
   win.history.back();await win.happyDOM.waitUntilComplete();assert.equal(win.location.href,selectedUrl);assertLatinSection(win,section);assert.equal(picker.value,'CRI');
   win.document.querySelector(`[data-latin-section="${available}"]`).click();await win.happyDOM.waitUntilComplete();assertLatinSection(win,available);
   assert.equal(win.document.querySelector('.latin-fields a[aria-current]').href.includes('section='),false);
+ }finally{await win.happyDOM.close();}
+});
+
+test('Latin forestry links to the independent module and legacy section bookmarks keep the ready farming map',async()=>{
+ const init='RegionalClient.initLatinAgriculture(document.querySelector("[data-latin-field=agriculture]"));RegionalClient.initLatinWorkspaceLayout();';
+ const win=open('latin-america/agriculture/?place=CRI&scope=country&section=forestry&only=1',init);
+ try{
+  await win.happyDOM.waitUntilComplete();
+  const root=win.document.querySelector('[data-latin-workspace]'),link=root.querySelector('.latin-agriculture-subfields a');
+  assert.equal(new URL(link.href).pathname,'/insight-journal/atlas/latin-america/agriculture/forestry/');
+  assert.equal(root.querySelector('[data-latin-section="forestry"]'),null);
+  assert.equal(root.classList.contains('has-unavailable-section'),false);
+  assert.equal(root.querySelector('[data-latin-section="agriculture"]').getAttribute('aria-pressed'),'true');
+  const legacy=win.location.href;
+  root.querySelector('[data-latin-section="agriculture"]').click();await win.happyDOM.waitUntilComplete();assertLatinSection(win,'agriculture');
+  win.history.back();await win.happyDOM.waitUntilComplete();assert.equal(win.location.href,legacy);assert.equal(root.classList.contains('has-unavailable-section'),false);assert.equal(new URL(link.href).pathname,'/insight-journal/atlas/latin-america/agriculture/forestry/');
  }finally{await win.happyDOM.close();}
 });

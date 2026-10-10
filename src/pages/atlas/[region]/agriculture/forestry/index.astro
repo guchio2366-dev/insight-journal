@@ -1,0 +1,7 @@
+---
+import RegionalForestryPage from '../../../../../components/atlas/RegionalForestryPage.astro';
+import {forestryRegions} from '../../../../../lib/atlas-regional-forestry';
+export function getStaticPaths(){return forestryRegions.map(region=>({params:{region},props:{region}}));}
+const {region}=Astro.props;
+---
+<RegionalForestryPage {region}/>

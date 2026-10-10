@@ -1,0 +1,22 @@
+{
+  "publisher": "FAO",
+  "title": "Global production and trade in forest products in 2024",
+  "url": "https://www.fao.org/forestry/statistics/data/en",
+  "dataYear": 2024,
+  "readOn": "2026-10-10",
+  "retrievalMode": "Official public page read through the Web connector. Original HTML download via execution-environment urllib subsequently returned CONNECT tunnel 403; original HTML bytes and SHA-256 are unavailable.",
+  "releaseDate": null,
+  "license": "FAO database reuse terms, CC BY 4.0",
+  "licenseUrl": "https://www.fao.org/contact-us/terms/db-terms-of-use/",
+  "precision": "Publisher summary rounded to whole millions. Not substituted for exact FAOSTAT World rows. No observation flags appear in this summary table.",
+  "rows": [
+    {"id": "roundwood", "publisherProduct": "Roundwood", "unit": "million m3", "production": 3905, "exports": 99},
+    {"id": "sawnwood", "publisherProduct": "Sawnwood", "unit": "million m3", "production": 445, "exports": 129},
+    {"id": "wood-pulp", "publisherProduct": "Wood pulp", "unit": "million tonnes", "production": 189, "exports": 73}
+  ],
+  "limits": [
+    "Wood pulp is distinct from pulp for paper (which may include other fibres), recovered paper, and paper and paperboard.",
+    "No country production is derived by multiplying rounded country shares by these rounded world totals.",
+    "Exports are gross cross-border quantities; no regional extra-regional total, destinations, stocks or domestic uses are inferred."
+  ]
+}

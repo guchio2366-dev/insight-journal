@@ -106,6 +106,33 @@ test('Forestry replaces agriculture overlays with the retained forest cover and 
  }finally{await ctx.window.happyDOM.close();}
 });
 
+test('Pine source figures and cattle-milk world comparison remain tied to their own period and units',async()=>{
+ const flow=JSON.parse(await readFile('src/data/atlas/mexico/pine-flow-2022.json','utf8'));
+ assert.equal(flow.sourceSha256,'ae0e72e8598482e604984daa22e446a553766f2ff13441872290d2a588071a71');
+ assert.equal(flow.categories.length,7);
+ assert.equal(flow.obtainedM3,7528399.0691);
+ assert.equal(flow.soldM3,7135745.0738);
+ assert.ok(Math.abs(flow.categories.reduce((sum,row)=>sum+row.obtainedM3,0)-flow.obtainedM3)<.001);
+ assert.ok(Math.abs(flow.categories.reduce((sum,row)=>sum+row.soldM3,0)-flow.soldM3)<.001);
+ const ctx=await page();try{
+  ctx.q('[data-forestry-select]').click();
+  const pine=ctx.q('[data-mexico-stat-panel="pine"]');
+  assert.equal(pine.hidden,false);
+  assert.match(pine.querySelector('.mexico-pine-flow').textContent,/2021年10月〜2022年9月.*丸太形態.*販売量.*国内消費.*輸出先/s);
+  const charcoal=[...pine.querySelectorAll('.mexico-pine-form-bars li')].find(row=>row.textContent.includes('炭向け'));
+  assert.match(charcoal.textContent,/1,587 m³.*0.1%未満/s);
+  assert.equal(pine.querySelectorAll('.mexico-pine-flow table tbody tr').length,7);
+  ctx.q('[data-livestock-select="dairy"]').click();
+  const milk=ctx.q('[data-mexico-stat-panel="dairy"]');
+  assert.match(ctx.q('#agri-reading-heading').textContent,/酪農/);
+  assert.equal(milk.hidden,false);
+  assert.match(milk.querySelector('[data-mexico-milk-world-comparison]').textContent,/2024年.*牛の生乳.*FAOSTAT.*2025年.*千L/s);
+  assert.match(milk.querySelector('[data-world-production="mexico-milk-2024"] .atlas-us-production').textContent,/13,962,372.1 t.*1.8%/s);
+  assert.match(milk.querySelector('#world-desc-mexico-milk-2024').textContent,/797,287,454.1t/);
+  assert.equal(ctx.q('[data-mexico-stat-panel="pine"]').hidden,true);
+ }finally{await ctx.window.happyDOM.close();}
+});
+
 test('Legacy corn/pine/irrigation/cattle links preserve source metric and state in the existing nature comparison',async()=>{
  for(const [metric,item,state]of [['maize','corn','25'],['pine','pine','08'],['irrigation','irrigation','26'],['cattle','cattle','30']]){
   const ctx=await page(`?metric=${metric}&state=${state}&crops=0&reading=item`);try{

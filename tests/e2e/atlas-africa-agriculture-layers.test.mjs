@@ -8,7 +8,8 @@ import {readState} from '../../src/data/atlas/africa-atlas.ts';
 
 const wait=async(condition,message)=>{const end=Date.now()+10000;while(!condition()&&Date.now()<end)await new Promise(resolve=>setImmediate(resolve));assert.ok(condition(),message);};
 const base='https://example.com/insight-journal/atlas/africa/';
-const keys=['crop-maize-harvested','crop-rice-harvested','crop-wheat-harvested','crop-cassava-harvested','livestock-cattle','livestock-goats','livestock-sheep'];
+const sourceKeys=['crop-maize-harvested','crop-rice-harvested','crop-wheat-harvested','crop-cassava-harvested','livestock-cattle','livestock-goats','livestock-sheep'];
+const keys=[...sourceKeys,'crop-coffee-harvested','crop-tea-harvested'];
 const visibleKeys=root=>[...root.querySelectorAll('[data-africa-commodity-layer]')].filter(node=>node.style.display!=='none').map(node=>node.dataset.africaCommodityLayer).sort();
 const parameters=window=>new URL(window.location.href).searchParams;
 const sourceResponse=url=>new Response(readFileSync(new URL('../../public'+new URL(url,base).pathname.replace(/^\/insight-journal/,''),import.meta.url)),{status:200});
@@ -23,20 +24,20 @@ async function withController(search,run,{fetcher=sourceResponse,settled=true}={
   const root=window.document.querySelector('[data-africa-atlas]'),q=selector=>root.querySelector(selector);
   q('.africa-map').getBoundingClientRect=()=>({left:0,top:0,width:645,height:416});
   for(const path of root.querySelectorAll('[data-country-path]'))path.getBBox=()=>({x:10,y:10,width:100,height:100});
-  initializeAfricaAtlas();if(settled)await wait(()=>root.dataset.actualLayer==='true'&&root.querySelectorAll('[data-africa-commodity-layer]').length===7,'all seven distributions and source grids must finish');
+  initializeAfricaAtlas();if(settled)await wait(()=>root.dataset.actualLayer==='true'&&root.querySelectorAll('[data-africa-commodity-layer]').length===9,'all nine distributions and source grids must finish');
   const navigate=search=>{window.history.replaceState(null,'',search);window.dispatchEvent(new window.PopStateEvent('popstate'));};
   await run({window,root,q,navigate});
  }finally{for(const [key,value]of Object.entries(previous))globalThis[key]=value;await window.happyDOM.abort();}
 }
 
 // Checkbox combinations and H/P display switches were deliberately removed.
-// Ordinary selection retains all seven distributions; only the explicit reading
+// Ordinary selection retains all nine distributions; only the explicit reading
 // action changes visibility. Source production quantities remain data contracts.
 test('map labels select and outline a product while other distributions remain, with explicit only/all and history reload',async()=>{
  let reload;
  await withController('?field=agriculture&zoom=all',async({window,root,q})=>{
   assert.deepEqual(visibleKeys(root),[...keys].sort());assert.equal(q('[data-africa-agri-footprint]'),null);
-  assert.equal(root.querySelectorAll('[data-africa-agri-distribution]').length,7);
+  assert.equal(root.querySelectorAll('[data-africa-agri-distribution]').length,9);
   assert.deepEqual(new Set([...root.querySelectorAll('[data-africa-agri-glyph]')].map(node=>node.dataset.africaAgriGlyph)),new Set(['cattle','goats','sheep']));
   const rice=q('[data-africa-agri-label="crop-rice-harvested"]');assert.ok(rice);rice.focus();rice.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
   assert.equal(parameters(window).get('crop'),'rice');assert.equal(parameters(window).get('overview'),'0');
@@ -54,18 +55,18 @@ test('map labels select and outline a product while other distributions remain, 
  await withController(reload,({root,q})=>{assert.deepEqual(visibleKeys(root),['crop-rice-harvested']);assert.ok(q('[data-africa-agri-footprint="crop-rice-harvested"]'));assert.equal(q('[data-africa-agri-all]').hidden,false);q('[data-africa-agri-all]').click();assert.deepEqual(visibleKeys(root),[...keys].sort());});
 });
 
-test('forestry has its own tab and history restores a selected animal with all distributions',async()=>{
+test('legacy forestry metrics and history restore a selected animal with all distributions',async()=>{
  await withController('?field=agriculture&topic=livestock&livestock=goats&place=KEN&zoom=all',async({window,root,q})=>{
   assert.equal(q('[data-africa-topic="farming"]').getAttribute('aria-pressed'),'true');assert.equal(q('[data-africa-topic="livestock"]'),null);
   assert.ok(q('[data-africa-agri-footprint="livestock-goats"]'));const selected=window.location.search;
-  q('[data-africa-topic="forestry"]').click();assert.equal(parameters(window).get('topic'),'forestry');assert.match(q('[data-theme-title]').textContent,/森林/);assert.equal(q('[data-africa-commodity-layer]'),null);
+  q('[data-metric]').value='AG.LND.FRST.ZS';q('[data-metric]').dispatchEvent(new window.Event('change'));assert.equal(parameters(window).get('topic'),'forestry');assert.match(q('[data-theme-title]').textContent,/森林/);assert.equal(q('[data-africa-commodity-layer]'),null);
   window.history.back();assert.equal(window.location.search,selected);assert.equal(q('[data-africa-topic="farming"]').getAttribute('aria-pressed'),'true');assert.ok(q('[data-africa-agri-footprint="livestock-goats"]'));assert.deepEqual(visibleKeys(root),[...keys].sort());
   window.history.forward();assert.equal(q('[data-africa-topic="forestry"]').getAttribute('aria-pressed'),'true');
   q('[data-africa-topic="farming"]').click();assert.equal(parameters(window).get('overview'),'1');assert.equal(q('[data-africa-agri-footprint]'),null);assert.deepEqual(visibleKeys(root),[...keys].sort());
  });
 });
 
-test('legacy multiple-layer and production URLs normalize to the fixed seven-item view without reviving removed controls',async()=>{
+test('legacy multiple-layer and production URLs normalize to the fixed nine-item view without reviving removed controls',async()=>{
  for(const suffix of ['&agriLayers=','&agriLayers=crop-maize-production,crop-rice-harvested,livestock-cattle'])await withController('?field=agriculture&crop=maize&cropMeasure=production&place=KEN&compare=ETH&year=2023&view=statistics&zoom=all'+suffix,({window,root,q})=>{
   assert.equal(parameters(window).get('cropMeasure'),'harvested');assert.equal(parameters(window).get('view'),'distribution');assert.equal(parameters(window).has('compare'),false);assert.equal(parameters(window).has('year'),false);
   assert.deepEqual(visibleKeys(root),[...keys].sort());assert.equal(root.querySelectorAll('[data-africa-agri-layer],[data-africa-crop-measure],[data-africa-commodity]').length,0);
@@ -111,10 +112,10 @@ test('a late original crop grid cannot overwrite a newer map selection or its ex
 async function withSummaryFixture(run){
  const window=new Window(),previous=globalThis.document;globalThis.document=window.document;
  const labels=['トウモロコシ','米','小麦','キャッサバ','牛','山羊','羊'],bounds=[-27,37,-24,39];
- const values=Object.fromEntries(keys.map(key=>[key,[0,.0000001,-1,8,NaN,0]]));
+ const values=Object.fromEntries(sourceKeys.map(key=>[key,[0,.0000001,-1,8,NaN,0]]));
  const summary={bounds,width:3,height:2,method:'1°集約・品目内上位25%',layers:{}};
  const manifests={crops:{layers:{}},livestock:{layers:{}}};
- for(const [index,key] of keys.entries()){
+ for(const [index,key] of sourceKeys.entries()){
   const crop=key.startsWith('crop-'),id=crop?key.slice(5):key.slice(10),unit=crop?'ha':'頭/km²';
   manifests[crop?'crops':'livestock'].layers[id]={title:labels[index],period:'2020年モデル',unit,width:3,height:2,bounds,encoding:'float32-le',noData:-1,grid:key+'.bin',sourceUrl:'https://example.com/primary/'+key,sourceLabel:'原典'};
   summary.layers[key]={displayImage:key+'.png',label:labels[index],threshold:4,unit,color:'#112233',cells:index<2?[[0,1],[1,0]]:[],anchors:[{lon:-25.5,lat:38.5}]};
@@ -132,10 +133,10 @@ async function withSummaryFixture(run){
 test('soft sourced belts replace striped cell outlines, while queries retain original zero, tiny positive and no-data values',async()=>{
  await withSummaryFixture(({root,renderer,view,setState})=>{
   assert.equal(view.visibleLayers.length,9);assert.equal(view.legend.length,9);assert.equal(new Set(view.legend.map(row=>row.color)).size,9);
-  assert.equal(root.querySelectorAll('[data-africa-agri-distribution]').length,7);
-  for(const key of keys){const image=root.querySelector(`[data-africa-agri-distribution="${key}"]`);assert.equal(image.tagName,'image');assert.ok(image.getAttribute('href').endsWith(key+'.png'));assert.equal(image.getAttribute('pointer-events'),'none');assert.equal(image.getAttribute('clip-path'),'url(#africa-agri-land-clip)');}
-  assert.equal(root.querySelector('[data-africa-agri-distribution="crop-coffee-harvested"]'),null);
-  assert.equal(root.querySelector('[data-africa-agri-distribution="crop-tea-harvested"]'),null);
+  assert.equal(root.querySelectorAll('[data-africa-agri-distribution]').length,9);
+  for(const key of sourceKeys){const image=root.querySelector(`[data-africa-agri-distribution="${key}"]`);assert.equal(image.tagName,'image');assert.ok(image.getAttribute('href').endsWith(key+'.png'));assert.equal(image.getAttribute('pointer-events'),'none');assert.equal(image.getAttribute('clip-path'),'url(#africa-agri-land-clip)');}
+  assert.equal(root.querySelector('[data-africa-agri-distribution="crop-coffee-harvested"]').dataset.africaDistributionKind,'schematic');
+  assert.equal(root.querySelector('[data-africa-agri-distribution="crop-tea-harvested"]').dataset.africaDistributionKind,'schematic');
   const outline=root.querySelector('[data-africa-agri-footprint="crop-maize-harvested"] path').getAttribute('d');assert.ok(outline);
   const zero=renderer.inspect(-26.5,38.5),tiny=renderer.inspect(-25.5,38.5),missing=renderer.inspect(-24.5,38.5);
   assert.match(zero,/トウモロコシ：0 ha/);assert.match(zero,/牛：0 頭\/km²/);assert.match(tiny,/トウモロコシ：0\.0000001 ha/);assert.match(missing,/トウモロコシ：値なし/);assert.doesNotMatch(missing,/トウモロコシ：0 ha/);
@@ -146,8 +147,10 @@ test('soft sourced belts replace striped cell outlines, while queries retain ori
 });
 
 
-test('unavailable coffee and tea never replace retained production distributions with an empty only view',async()=>{
+test('sourced coffee and tea support explicit only/all, selection history, and no fabricated point quantities',async()=>{
  for(const crop of ['coffee','tea'])await withController(`?field=agriculture&crop=${crop}&agriLayers=crop-${crop}-harvested&zoom=all`,({window,root,q})=>{
-  assert.deepEqual(visibleKeys(root),[...keys].sort());assert.equal(parameters(window).get('agriLayers'),null);assert.equal(q('[data-africa-agri-only]').hidden,true);assert.match(q('[data-africa-agri-context]').textContent,/未取得/);assert.equal(q(`[data-africa-agri-distribution="crop-${crop}-harvested"]`),null);
+  const key=`crop-${crop}-harvested`;assert.deepEqual(visibleKeys(root),[key]);assert.equal(parameters(window).get('agriLayers'),key);assert.equal(q('[data-africa-agri-only]').hidden,true);assert.equal(q('[data-africa-agri-all]').hidden,false);assert.ok(q(`[data-africa-agri-distribution="${key}"] [data-africa-beverage-belt]`));
+  assert.doesNotMatch(q('[data-africa-agri-context]').textContent,/未取得/);assert.match(q('[data-theme-details]').textContent,/概略帯/);q('[data-africa-agri-all]').click();assert.deepEqual(visibleKeys(root),[...keys].sort());assert.equal(q('[data-africa-agri-only]').hidden,false);
  });
+ await withSummaryFixture(({renderer,setState,requests})=>{for(const crop of ['coffee','tea']){setState({crop,topic:'farming',overview:false,agriLayers:`crop-${crop}-harvested`});assert.match(renderer.inspect(35,-1),/概略生産帯.*地点の生産量・収穫面積は示しません/);assert.doesNotMatch(renderer.inspect(35,-1),/0 ha|読込中|未収録/);}assert(requests.every(url=>!url.includes('coffee')&&!url.includes('tea')),'schematic belts never request or fabricate a quantity grid');});
 });
