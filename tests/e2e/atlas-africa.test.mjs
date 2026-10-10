@@ -41,12 +41,12 @@ test('actual industry entries change the theme, map and reader while preserving 
  });
 });
 
-test('agriculture ready topics follow the actual metric through selection, history and reload',()=>{
+test('legacy agriculture metric URLs follow selection, history and reload',()=>{
  const forestURL=withAfricaPage('https://example.com/insight-journal/atlas/africa/?field=agriculture&place=GHA&unknown=preserve',(w,q)=>{
   assert.equal(q('[data-africa-topic="farming"]').getAttribute('aria-pressed'),'true');
   assert.ok(q('.africa-main').contains(q('[data-africa-subfields]')));
   assert.equal(q('[data-africa-subfields]').closest('[data-africa-map-subfields]'),q('[data-africa-map-subfields]'));
-  q('[data-africa-topic="forestry"]').click();
+  q('[data-metric]').value='AG.LND.FRST.ZS';q('[data-metric]').dispatchEvent(new w.Event('change'));
   assert.equal(q('[data-theme-marks]').children.length,0);
   assert.equal(q('[data-theme-legend]').children.length,0);
   assert.ok(q('[data-theme-title]').textContent.includes('森林'));
@@ -65,6 +65,14 @@ test('agriculture ready topics follow the actual metric through selection, histo
  });
  withAfricaPage(forestURL,(_w,q)=>assert.equal(q('[data-africa-topic="forestry"]').getAttribute('aria-pressed'),'true'));
  withAfricaPage('https://example.com/atlas/africa/?field=agriculture&metric=AG.LND.ARBL.ZS&topic=forestry',(_w,q)=>assert.equal(q('[data-africa-topic="farming"]').getAttribute('aria-pressed'),'true'));
+});
+
+test('the forestry tab opens the independent regional forestry route',()=>{
+ withAfricaPage('https://example.com/insight-journal/atlas/africa/?field=agriculture',(w,q)=>{
+  let destination;w.location.assign=url=>{destination=url;};
+  q('[data-africa-topic="forestry"]').click();
+  assert.equal(destination,'/insight-journal/atlas/africa/agriculture/forestry/');
+ });
 });
 
 test('spatial categories and water depth persist across reload, country changes and back/forward',()=>{

@@ -1,0 +1,65 @@
+name: Regional forestry PC review
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/regional-forestry-pc-review.yml'
+      - 'src/**/regional-forestry*'
+      - 'src/components/atlas/RegionalForestry*'
+      - 'src/lib/atlas-regional-forestry.ts'
+      - 'src/scripts/atlas-regional-forestry.ts'
+      - 'src/styles/atlas-regional-forestry.css'
+      - 'src/pages/atlas/[region]/agriculture/forestry/**'
+      - 'public/assets/atlas/regional-forestry-v1/**'
+      - 'scripts/verify-regional-forestry-pc.mjs'
+      - 'tests/unit/atlas-regional-forestry.test.mjs'
+      - 'tests/e2e/atlas-regional-forestry.test.mjs'
+permissions:
+  contents: read
+concurrency:
+  group: regional-forestry-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+      FORESTRY_REVIEW_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - name: Verify existing Chrome and Japanese fonts
+        shell: bash
+        run: |
+          set -euo pipefail
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          test -n "$chrome_path"
+          echo "REVIEW_CHROME_PATH=$chrome_path" >> "$GITHUB_ENV"
+          if [[ -z "$(fc-list ':lang=ja' family)" ]]; then
+            sudo apt-get update -o APT::Update::Error-Mode=any
+            sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+          fi
+          test -n "$(fc-list ':lang=ja' family)"
+      - run: npm ci --no-audit --no-fund
+      - run: node --test tests/unit/atlas-regional-forestry.test.mjs tests/unit/atlas-europe-tree-cover-data.test.mjs
+      - run: npm run build
+      - run: node --test tests/e2e/atlas-regional-forestry.test.mjs
+      - run: node scripts/verify-regional-forestry-pc.mjs
+        env:
+          FORESTRY_REVIEW_OUTPUT: ${{ runner.temp }}/regional-forestry-review
+          FORESTRY_REVIEW_INLINE_PREVIEWS: '1'
+          FORESTRY_REVIEW_VIEWPORTS: '1440x900,1024x768'
+      - name: Upload screenshots and exact-head report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regional-forestry-pc-review-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/regional-forestry-review
+          if-no-files-found: error
+          retention-days: 7

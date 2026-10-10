@@ -2,6 +2,7 @@ import {countries,fields,metrics,regionNames,years,readState,writeState,africaCo
 import {projectAfrica,africaWidth,africaHeight} from '../lib/atlas-africa-geometry.ts';
 import {themes,type AfricaTheme} from '../data/atlas/africa-themes.ts';
 import {africaIndustryLocations,africaIndustryLocationById,africaIndustryLocationOverview} from '../data/atlas/africa-industry-locations.ts';
+import {withBase} from '../lib/urls.ts';
 import {africaForestryReading} from '../data/atlas/africa-forestry-reading.ts';
 import {agricultureContextOverview,agricultureProductContext,agricultureContextPeriodNote} from '../data/atlas/africa-agriculture-context.ts';
 import {africaAgricultureReading} from '../data/atlas/africa-agriculture-reading.ts';
@@ -520,6 +521,7 @@ export function initializeAfricaAtlas() {
   if(target.hasAttribute('data-africa-river')||target.hasAttribute('data-africa-river-choice')){chooseRiver(target.dataset.africaRiver??target.dataset.africaRiverChoice??'');return;}
   if(target.hasAttribute('data-africa-layer-class')){state.layerClass=state.layerClass===target.dataset.africaLayerClass?'':target.dataset.africaLayerClass!;state.layerPoint='';render(true);return;}
   if(target.hasAttribute('data-africa-layer-retry')){layerRenderer.retry();return;}
+  if(target.dataset.africaTopic==='forestry'){location.assign(withBase('/atlas/africa/agriculture/forestry/'));return;}
   if(target.dataset.africaTopic){state.topic=target.dataset.africaTopic;if(state.field==='agriculture'){state.overview=true;state.agriLayers=null;state.agriOutline=false;}state.context='';state.sourceState='';state.layerClass='';state.layerPoint='';state.view='distribution';if(state.zoom==='theme')state.zoom='all';if(state.topic==='forestry')state.metric='AG.LND.FRST.ZS';if(state.topic==='livestock')state.metric='NV.AGR.TOTL.ZS';if(state.topic==='farming')state.metric='AG.LND.ARBL.ZS';render(true);return;}
   if(target.dataset.africaCommodity){if(state.topic==='farming'&&cropChoices.some(row=>row.id===target.dataset.africaCommodity))chooseAgriLayer(`crop-${target.dataset.africaCommodity}-${state.cropMeasure}`);else if(state.topic==='livestock'&&livestockChoices.some(row=>row.id===target.dataset.africaCommodity))chooseAgriLayer(`livestock-${target.dataset.africaCommodity}`);return;}
   if(target.dataset.africaCropMeasure){if(!cropMeasureChoices.some(row=>row.id===target.dataset.africaCropMeasure))return;state.cropMeasure=target.dataset.africaCropMeasure as CropMeasure;if(state.agriLayers!==null)state.agriLayers=canonicalAgriLayers(africaAgriVisibleLayers(state).map(key=>key.startsWith('crop-')?key.replace(/-(harvested|production)$/,`-${state.cropMeasure}`):key).join(','));state.context='';state.sourceState='';state.layerClass='';state.layerPoint='';state.view='distribution';render(true);return;}
