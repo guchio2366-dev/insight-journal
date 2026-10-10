@@ -27,8 +27,8 @@
 
 - 原表の全国2数値、最終集計の分母と計数、別設問、利用条件を単体検証。関連単体20件成功。
 - `ASTRO_TELEMETRY_DISABLED=1 npm run build`：成功。
-- 中南米人口・共通ナビゲーションの既存E2E12件：成功。追加画面の実ブラウザー4ケース成功。先行3地域の実ブラウザー12ケースも、共通コンポーネント連携変更後に成功。`npm run verify:release`成功。
-- 1280×665と1024×665の2PC想定で、初期の両指標、右欄単一、再読込、戻る、人口密度復帰、既存国・範囲・代替表示状態を確認。実機2台ではない。環境のChromium sandbox helper制限は #305 と同じ。ローカルプレビューのみsandbox無効、スクリプト既定は有効。
-- 再実行：`CULTURE_REVIEW_SCOPE=panama CULTURE_CHROMIUM_SANDBOX=0 node scripts/verify-population-culture-browser.mjs`。証跡は `docs/reviews/panama-census-identity-20261010/`。
+- 中南米人口・共通ナビゲーションの既存E2E12件：成功。旧sandbox無効状態のブラウザー結果は合格証拠から撤回。安全なCIで4ケースと先行12ケースを再検証するまで受入確認は保留。`npm run verify:release`成功。
+- 1280×665と1024×665の2PC想定で、初期の両指標、右欄単一、再読込、戻る、人口密度復帰、既存国・範囲・代替表示状態を確認。実機2台ではない。`chromiumSandbox:true`を明示し、実際のsandbox状態も確認する。安全な起動・確認に失敗した場合は停止する。
+- 再実行：`CULTURE_REVIEW_SCOPE=panama REVIEW_CHROME_PATH=/path/to/properly-configured/chrome node scripts/verify-population-culture-browser.mjs`。証跡は `docs/reviews/panama-census-identity-20261010/`。
 
 マージ・公開はこの作業では実施しない。
