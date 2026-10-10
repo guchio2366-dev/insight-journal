@@ -96,57 +96,71 @@ test('built field pages expose the statistics/focus contract with unique IDs and
   }
 });
 
-test('actual native controls synchronize statistics, map country, URL, reload and history while normalizing comparisons', async () => {
+test('selected commodity statistics keep one subject and one country through URL and reload', async () => {
   const app = await setup();
   try {
     assert.equal(app.requests.some(url => url.includes('farming-statistics-v1')), false, 'The overview must not eagerly fetch national statistics');
+    assert.equal(app.q('[data-eu-verified-overview]').hidden,false);
     app.q('[data-eu-layer="wheat"]').click(); await statisticsReady(app);
     assert.equal(current(app).get('layer'), 'wheat');
-    assert.equal(app.q('[data-eu-farm-country-rows] tbody').children.length, 45);
-    app.q('[data-eu-farm-country-select="RUS"]').click(); await statisticsReady(app);
+    assert.equal(app.q('[data-eu-verified-overview]').hidden,true);
+    const wheat=app.q('[data-eu-verified-topic="wheat"]');
+    assert.equal(wheat.hidden,false);
+    assert.match(wheat.textContent,/33\.7%.*小麦・メスリンの域外輸出先/s);
+    assert.doesNotMatch(wheat.textContent,/大豆の域外輸入相手|食品群の供給熱量構成/);
+    assert.equal(app.q('[data-eu-topic-country-control]').hidden,false);
+    app.select('[data-eu-topic-country]','RUS'); await statisticsReady(app);
     assert.equal(current(app).get('place'), 'RUS');
     assert.equal(app.q('[data-eu-shape="RUS"]').classList.contains('is-selected'), true);
-    assert.match(app.q('[data-eu-farm-quick-summary]').textContent, /ロシア.*82,588,000 t/);
-    app.select('[data-eu-farm-year]', '2021'); await statisticsReady(app);
-    app.select('[data-eu-farm-compare="0"]', 'DEU'); await statisticsReady(app);
-    app.select('[data-eu-farm-compare="1"]', 'FRA'); await statisticsReady(app);
-    assert.equal(current(app).get('farmYear'), '2021');
-    assert.equal(current(app).get('farmCompare'), 'DEU,FRA');
-    const saved = app.w.location.href;
-    app.select('[data-eu-farm-compare="0"]', 'FRA'); await statisticsReady(app);
-    assert.equal(current(app).get('farmCompare'), 'FRA', 'Changing the first slot to the second slot country must deduplicate state');
-    assert.equal(app.q('[data-eu-farm-compare="1"]').value, '');
-    assert.equal(app.q('[data-eu-farm-stat-summary]').children.length, 2);
-    app.restore(saved); await statisticsReady(app);
-    app.q('[data-eu-farm-country-select="FRA"]').click(); await statisticsReady(app);
-    assert.equal(current(app).get('place'), 'FRA');
-    assert.equal(current(app).get('farmCompare'), 'DEU', 'Promoting a comparison country to main must remove its duplicate');
-    assert.equal(app.q('[data-eu-farm-stat-summary]').children.length, 2);
-    assert.equal(app.q('[data-eu-shape="FRA"]').classList.contains('is-selected'), true);
-    app.restore(saved); await statisticsReady(app);
-    assert.equal(app.q('[data-eu-farm-year]').value, '2021');
-    assert.equal(app.q('[data-eu-farm-compare="0"]').value, 'DEU');
-    assert.equal(app.q('[data-eu-farm-compare="1"]').value, 'FRA');
-    const reload = await setup(saved);
+    assert.equal(app.q('[data-eu-farm-numbers]').hidden,false);
+    assert.equal(app.q('[data-eu-farm-stat-summary]').children.length,1);
+    assert.equal(app.q('[data-eu-farm-share-chart]').querySelectorAll('svg').length,1);
+    assert.match(app.q('[data-eu-farm-share-status]').textContent,/ロシア.*2024年.*%/);
+    const reload = await setup(app.w.location.href);
     try {
       await statisticsReady(reload);
-      assert.equal(reload.q('[data-eu-farm-stat-summary]').textContent, app.q('[data-eu-farm-stat-summary]').textContent);
-      assert.equal(reload.q('[data-eu-farm-year]').value, '2021');
+      assert.equal(reload.q('[data-eu-verified-topic="wheat"]').hidden,false);
+      assert.equal(reload.q('[data-eu-topic-country]').value,'RUS');
+      assert.equal(reload.q('[data-eu-farm-stat-summary]').children.length,1);
     } finally { await reload.close(); }
-    app.restore(route('agriculture', 'layer=chicken&render=static&place=DEU&farmYear=2024&farmCompare=DEU,RUS,RUS,FRA,GBR'));
+    app.restore(route('agriculture','layer=wheat&render=static&place=DEU&farmYear=2021&farmCompare=RUS,FRA'));
     await statisticsReady(app);
-    assert.match(app.q('[data-eu-farm-stat-summary]').textContent, /鶏飼養数：未収録/);
-    assert.equal(app.q('[data-eu-farm-stat-summary]').children.length, 3, 'Read state excludes main, deduplicates and caps comparisons at two');
-    assert.equal(app.q('[data-eu-farm-compare="0"]').value, 'RUS');
-    assert.equal(app.q('[data-eu-farm-compare="1"]').value, 'FRA');
-    app.select('[data-eu-farm-measure]', 'chicken-meat'); await statisticsReady(app);
-    assert.equal(current(app).get('farmCompare'), 'RUS,FRA');
-    assert.equal(current(app).get('farmMeasure'), 'chicken-meat');
-    app.q('[data-eu-layer="cattle"]').click(); await statisticsReady(app);
-    assert.equal(current(app).has('farmMeasure'), false, 'A topic change drops an incompatible quantity choice');
-    assert.equal(app.q('[data-eu-farm-measure]').value, 'cattle-stocks');
+    assert.equal(app.q('[data-eu-farm-stat-summary]').children.length,1,'Legacy comparison URL cannot add another visible country');
+    assert.match(app.q('[data-eu-farm-share-status]').textContent,/ドイツ.*2024年/,'Legacy year URL cannot change the fixed display year');
+    app.q('[data-eu-topic="livestock"]').click();
+    app.q('[data-eu-layer="chicken"]').click(); await statisticsReady(app);
+    const chicken=app.q('[data-eu-verified-topic="chicken"]');
+    assert.equal(chicken.hidden,false);
+    assert.doesNotMatch(chicken.textContent,/小麦・メスリン|大豆の域外輸入|33\.7%/);
+    assert.equal(app.q('[data-eu-farm-measure]').value,'chicken-stocks');
+    app.q('[data-eu-topic="crops"]').click(); await tick();
+    assert.equal(app.q('[data-eu-verified-overview]').hidden,false);
+    assert.equal(app.q('[data-eu-farm-numbers]').hidden,true);
     assert.equal(app.requests.filter(url => url.endsWith('/farming-statistics-v1/statistics.json.gz')).length, 1);
   } finally { await app.close(); }
+});
+
+test('three genre menus show only figures matching the selected commodity',async()=>{
+  const app=await setup();
+  try{
+    const matches={wheat:[1,1],potato:[1,0],maize:[1,0],soybean:[0,1]};
+    const genres={crops:['wheat','barley','maize','potato','sugarbeet','rapeseed'],livestock:['cattle','pig','chicken','sheep'],horticulture:['citrus','temperatefruit','vegetables']};
+    for(const [genre,ids] of Object.entries(genres))for(const id of ids){
+      app.q(`[data-eu-topic="${genre}"]`).click();
+      app.q(`[data-eu-layer="${id}"]`).click();await tick();
+      const visible=[...app.w.document.querySelectorAll('[data-eu-verified-topic]:not([hidden])')];
+      assert.deepEqual(visible.map(panel=>panel.dataset.euVerifiedTopic),[id]);
+      assert.equal(app.q('[data-eu-verified-overview]').hidden,true);
+      assert.equal(visible[0].querySelectorAll('.eu-verified-share-row').length,matches[id]?.[0]??0,id);
+      assert.equal(visible[0].querySelectorAll('.eu-verified-donut').length,matches[id]?.[1]??0,id);
+      assert.equal(visible[0].querySelectorAll('.eu-verified-food-band').length,0,id);
+      if(!matches[id])assert.match(visible[0].textContent,/別の品目の数値で代用しません/,id);
+    }
+    assert.equal(app.q('[data-eu-layer="dairy"]'),null,'A national milk button cannot stand in for a dairy production belt');
+    app.q('[data-eu-topic="crops"]').click();await tick();
+    assert.equal(app.q('[data-eu-verified-overview]').hidden,false);
+    assert.equal(app.w.document.querySelectorAll('[data-eu-verified-topic]:not([hidden])').length,0);
+  }finally{await app.close();}
 });
 
 test('rice in Italy opens the actual Po rainfall, drainage and terrain cases and returns the complete original farming selection', async () => {
@@ -232,23 +246,24 @@ test('Portugal rice uses its retained water section and livestock choices connec
   }
 });
 
-test('disabled crop and livestock displays remain disabled in the comparison source and saved return choice', async () => {
+test('legacy display-off URL parameters cannot hide a genre map or its fixed comparison source', async () => {
   const source = await setup(route('agriculture', 'layer=rice&place=ITA&render=static&crops=off&livestock=off&farmYear=2018'));
   let target;
   try {
     await statisticsReady(source);
     target = await setup(source.q('[data-eu-comparison-link="rice-po-precipitation"]').href);
     await until(() => target.q('[data-eu-farming-focus-value]').textContent.includes('比較地点：'));
-    assert.match(target.q('[data-eu-origin-legend]').textContent, /元の選択では対象の分布は非表示/);
-    assert.equal(target.q('[data-eu-comparison-overlay]').querySelectorAll('path').length, 0);
+    assert.match(target.q('[data-eu-origin-legend]').textContent, /米/);
+    assert.equal(target.q('[data-eu-comparison-overlay]').querySelectorAll('path').length, 1);
     const back = new URL(target.q('[data-eu-comparison-return]').href);
     assert.equal(back.searchParams.get('crops'), 'off');
     assert.equal(back.searchParams.get('livestock'), 'off');
     assert.equal(back.searchParams.get('farmYear'), '2018');
     source.restore(back.href); await statisticsReady(source);
-    for (const kind of ['crop', 'livestock']) assert.equal(source.q(`[data-eu-toggle="${kind}"]`).getAttribute('aria-pressed'), 'false');
-    assert.equal(source.q('[data-eu-farm-year]').value, '2018');
-    assert.equal(source.q('[data-eu-farm-country-table]').hidden, false);
+    assert.equal(source.q('[data-eu-farming-toggles]'),null);
+    assert.equal(source.q('[data-eu-farm-year]').value, '2024','The visible country detail uses its fixed year even for a legacy return URL');
+    assert.equal(source.q('[data-eu-farm-numbers]').hidden,false);
+    assert.match(source.q('[data-eu-farm-stat-summary]').textContent,/2024年/);
   } finally { await source.close(); if (target) await target.close(); }
 });
 

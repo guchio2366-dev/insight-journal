@@ -47,6 +47,7 @@ const dryMonths = city.months.filter(month => month.precipitation !== null && mo
     <h3 class="eu-city-reading-title" id={`city-reading-${city.id}`}>{city.name}の雨温図</h3>
   </header>
   <EuropeClimateDiagram city={city} country={country} mode="plot" />
+  <p class="eu-statistic-note eu-climate-plot-note">{classification && meanings[code]}{summary.coldest !== null && summary.warmest !== null ? ` 最寒${coldMonths} ${summary.coldest.toFixed(1)} ℃／最暖${warmMonths} ${summary.warmest.toFixed(1)} ℃。` : ' 年較差は気温の欠測で未算出。'}{summary.annualRain !== null ? ` 年降水量 ${summary.annualRain.toFixed(0)} mm。` : ' 年降水量は欠測で未算出。'}</p>
   {(missingRain || missingTemperature) && <p class="eu-statistic-note eu-climate-missing">{missingRain && '×は降水量の欠測（0 mmではありません）。'}{missingTemperature && '気温の欠測月では線が途切れます。'}</p>}
   <div class="eu-city-reading-body">
     <section class="eu-city-climate-description" aria-labelledby={`city-classification-${city.id}`}>

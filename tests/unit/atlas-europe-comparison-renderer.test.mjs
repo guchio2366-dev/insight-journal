@@ -10,7 +10,7 @@ import { viewPath } from '../../src/lib/atlas-europe-view.ts';
 import { europeCultureData, caseMapData, cultureGeometryPath, cultureBounds, cultureSelection, cultureLegend } from '../../src/lib/atlas-europe-population-cases.ts';
 import { europeDrainageGrid, europeDrainageBasins, europeDrainageOutline, readEuropeDrainageValues } from '../../src/lib/atlas-europe-drainage.ts';
 const json=name=>JSON.parse(readFileSync(new URL('../../src/data/atlas/'+name,import.meta.url),'utf8'));
-const config={layers:europeLayers,farmingAreas:json('europe/farming-areas.json'),geography:json('europe-countries.json'),readings:europeReadings,statistics:json('europe/country-statistics.json'),countries:json('europe/countries.json'),climateWater:json('europe/climate-water.json'),cities:json('europe/climate-cities.json'),populationCities:json('europe/population-cities.json')};
+const config={layers:europeLayers,farmingAreas:json('europe/farming-areas.json'),farmingDominantAreas:json('europe/farming-dominant-areas.json'),farmingSecondaryAreas:json('europe/farming-secondary-areas.json'),geography:json('europe-countries.json'),readings:europeReadings,statistics:json('europe/country-statistics.json'),countries:json('europe/countries.json'),climateWater:json('europe/climate-water.json'),cities:json('europe/climate-cities.json'),populationCities:json('europe/population-cities.json')};
 const state=layer=>({region:'all',place:'',city:'london',compare:[],render:'static',layer,returnLayer:layer});
 const cultureGeometry=id=>JSON.parse(readFileSync(new URL('../../public'+europeCultureData.cases.find(item=>item.id===id).geometryURL,import.meta.url),'utf8'));
 const cultureState=(layer,caseId='england-wales-2021',category=layer==='religion'?(caseId==='croatia-national-2021'?'hr-religion-H':'ts030-02'):(caseId==='croatia-national-2021'?'hr-ethnicity-H':'ts021-17'),area=caseId==='croatia-national-2021'?'HRV':'E06000001')=>({...state(layer),cultureCase:caseId,cultureCategory:category,cultureArea:area});
@@ -40,11 +40,11 @@ test('crop climate comparison carries the published crop geometry, not a quantit
     assert.equal(root.querySelector('[data-eu-origin-map]').hasAttribute('hidden'),true);
   }finally{window.happyDOM.abort();delete globalThis.document;}
 });
-test('hidden original crop stays hidden; single selection overrides a saved crop toggle',()=>{
+test('legacy crop toggle cannot hide the source; single selection retains its geometry',()=>{
   const {window,root}=setup();try {
     renderEuropeOrigin(root,{...state('wheat'),showCrops:false},europeLayers.find(l=>l.id==='climate'),config);
-    assert.equal(root.querySelectorAll('[data-eu-comparison-overlay] path').length,0);
-    assert.match(root.querySelector('[data-eu-origin-legend]').textContent,/元の選択.*非表示/);
+    assert.equal(root.querySelectorAll('[data-eu-comparison-overlay] path').length,1);
+    assert.match(root.querySelector('[data-eu-origin-legend]').textContent,/小麦.*主な集中域/);
     renderEuropeOrigin(root,{...state('wheat'),showCrops:false,single:true},europeLayers.find(l=>l.id==='climate'),config);
     assert.equal(root.querySelectorAll('[data-eu-comparison-overlay] path').length,1);
   }finally{window.happyDOM.abort();delete globalThis.document;}

@@ -42,6 +42,25 @@ test('native contour values are complete twelve-month sums of the pinned source,
   assert.equal(europePrecipitationLayer.grid,'/assets/atlas/europe/precipitation-v1/values.bin.gz');
 });
 
+test('the four printed millimetre labels anchor to vertices on their own verified isohyets',()=>{
+  const labels=json('src/data/atlas/europe/precipitation-line-labels.json');
+  const svg=bytes(base+'precipitation.svg').toString('utf8');
+  const paths=new Map([...svg.matchAll(/<path data-isohyet-mm="(\d+)" d="([^"]*)"\/>/g)].map(match=>[Number(match[1]),match[2]]));
+  const mercator=lat=>Math.log(Math.tan(Math.PI/4+lat*Math.PI/360));
+  const north=mercator(73),south=mercator(32);
+  assert.deepEqual(labels.map(label=>label.mm),[500,750,1000,1500]);
+  for(const label of labels){
+    const path=paths.get(label.mm);assert.ok(path,`${label.mm} mm line exists`);
+    const vertices=[...path.matchAll(/[ML](-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/g)].map(([,x,y])=>{
+      const longitude=Number(x)/1800*90-25;
+      const projected=north-Number(y)/1502*(north-south);
+      const latitude=(2*Math.atan(Math.exp(projected))-Math.PI/2)*180/Math.PI;
+      return [longitude,latitude];
+    });
+    assert.ok(vertices.some(([lon,lat])=>Math.abs(lon-label.coordinates[0])<.000002&&Math.abs(lat-label.coordinates[1])<.000002),`${label.mm} mm label must touch its own line`);
+  }
+});
+
 test('every 250 mm line vertex matches its actual donor values and every segment bounds both adjacent blue bands',()=>{
   assert.deepEqual(geometry.lines.map(line=>line.level),Array.from({length:12},(_,i)=>(i+1)*250));
   const pointKey=p=>p.map(v=>v.toFixed(9)).join(',');

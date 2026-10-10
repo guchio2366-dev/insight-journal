@@ -12,8 +12,9 @@ const europeHtml = async field => {
 
 for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/']) {
   test(`欧州 ${field || '概況'} はニュース・地図・解説と共通の分野移動を備える`, async () => {
-    const window = new Window();
+    const window = new Window({url:`https://example.com/insight-journal/atlas/europe/${field}`,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true}});
     const doc = window.document;
+    try {
     doc.write(await europeHtml(field));
     assert.equal(doc.querySelectorAll('[data-news-region="europe"]').length, 1);
     assert.equal(doc.querySelector('[data-news-rail] h2').textContent, '欧州のニュース');
@@ -36,8 +37,8 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.ok(doc.querySelector('.eu-map-stage [data-eu-annotations]'));
       assert.ok(doc.querySelector('.eu-map-stage [data-eu-zoom="in"]'));
       assert.deepEqual([...doc.querySelectorAll('.eu-map-buttons button')].map(button=>button.hasAttribute('data-eu-reset')?'overview':button.dataset.euZoom??'renderer'),['overview','in','out','renderer']);
-      assert.equal(doc.querySelector('[data-eu-map-legend]').previousElementSibling,doc.querySelector('.eu-map-stage'));
-      assert.match(doc.querySelector('[data-eu-map-legend] .eu-water-note').textContent,/地下水.*未確認.*未収録/);
+      assert.ok(doc.querySelector('.eu-map-stage').compareDocumentPosition(doc.querySelector('[data-eu-map-legend]'))&4);
+      assert.match(doc.querySelector('[data-eu-map-legend] .eu-water-note').textContent,/地下水.*利用条件を確認済み.*位置合わせできていないため未収録/);
       const waterMask=doc.querySelector('[data-eu-water-mask="caspian-sea"]');
       assert.ok(waterMask);
       assert.equal(waterMask.getAttribute('fill'),'#e7eff1');
@@ -46,8 +47,8 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.equal(doc.querySelectorAll('[data-eu-config]').length, 1);
       const shell=doc.querySelector('[data-atlas-shell]');
       const statistics=doc.querySelector('[data-eu-statistics]');
-      assert.equal(statistics.parentElement,shell.parentElement);
-      assert.ok([...shell.parentElement.children].indexOf(statistics)>[...shell.parentElement.children].indexOf(shell));
+      assert.equal(statistics.parentElement,shell);
+      assert.ok([...shell.children].indexOf(statistics)>[...shell.children].indexOf(doc.querySelector('.eu-workspace')));
       assert.equal(doc.querySelector('.eu-read-panel [data-eu-statistics]'),null);
       assert.equal(doc.querySelectorAll('[data-eu-climate-statistics] [data-eu-city-chart] svg').length,0);
       assert.equal(doc.querySelectorAll('.eu-read-panel [data-eu-city-chart] svg').length,24);
@@ -92,13 +93,12 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.ok(doc.querySelectorAll('[data-eu-static-codes] text').length>=15);
     }
     if (field==='agriculture/') {
-      const toggles=doc.querySelector('.eu-map-stage [data-eu-farming-toggles]');
-      assert.equal(toggles.hidden,false);
-      assert.deepEqual([...toggles.querySelectorAll('[data-eu-toggle]')].map(button=>button.dataset.euToggle),['crop','livestock']);
-      assert.ok([...toggles.querySelectorAll('button')].every(button=>button.getAttribute('aria-pressed')==='true'&&!button.disabled));
+      assert.equal(doc.querySelector('[data-eu-farming-toggles]'),null);
+      assert.deepEqual([...doc.querySelectorAll('[data-eu-topic-field="agriculture"] button')].map(button=>button.textContent),['穀物・畑作','酪農・畜産','果樹・園芸','林業']);
       const list=doc.querySelector('.eu-map-panel [data-eu-farming-list]');
       assert.equal(list.hidden,false);
-      assert.deepEqual([...list.querySelectorAll('[data-eu-farming-children]:not([hidden]) h3')].map(heading=>heading.textContent),['作物','畜産','酪農']);
+      assert.deepEqual([...list.querySelectorAll('[data-eu-farming-children]:not([hidden]) h3')].map(heading=>heading.textContent),['穀物・畑作']);
+      assert.equal(doc.querySelectorAll('[data-eu-farm-key-item]:not([hidden])').length,6);
       assert.equal(list.querySelector('[data-eu-farming-children="forest"]').hidden,true);
       assert.equal(list.querySelectorAll('[data-eu-layer][aria-pressed="true"]').length,0);
       assert.equal(doc.querySelector('[data-eu-overview]').hidden,true);
@@ -107,11 +107,11 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
     }
     if (field==='industry/') {
       const topics=doc.querySelector('[data-eu-topic-field="industry"]');
-      assert.deepEqual([...topics.querySelectorAll('[data-eu-industry-group]')].map(button=>button.textContent),['資源・素材','機械・輸送','技術・医薬','物流・サービス']);
-      assert.deepEqual([...topics.querySelectorAll('button:not([data-eu-industry-group])')].map(button=>button.dataset.euTopic),['hubs','manufacturing','industry','services']);
+      assert.deepEqual([...topics.querySelectorAll('[data-eu-industry-group]')].map(button=>button.textContent),['エネルギー','鉱業・素材','自動車・機械','化学・医薬品','航空機','港湾物流','観光','金融','繊維・衣服','食品加工']);
+      assert.deepEqual([...topics.querySelectorAll('button:not([data-eu-industry-group])')].map(button=>button.dataset.euTopic),['hubs']);
       const scope=doc.querySelector('[data-eu-industry-scope]');
       assert.deepEqual([...scope.options].map(option=>option.value),['region:all','region:north','region:west','region:south','region:east','country:DEU','country:GBR','country:FRA','country:ITA']);
-      assert.equal(scope.closest('[data-eu-industry-scope-host]').hidden,false);
+      assert.equal(scope.closest('[data-eu-industry-scope-host]').hidden,true);
       assert.equal(doc.querySelector('[data-eu-region-host]').hidden,true);
       assert.ok(doc.querySelector('.eu-reader-body').open);
       assert.ok(doc.querySelector('.eu-read-panel [data-eu-subject-legend]').open);
@@ -125,11 +125,11 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.ok(doc.querySelector('.eu-reader-body').open);
       const planned=[...doc.querySelectorAll('[data-eu-topic-field="population"] button:disabled')];
       assert.equal(planned.length,0);
-      assert.deepEqual([...doc.querySelectorAll('[data-eu-topic-field="population"] button')].map(b=>b.textContent),['人口分布','人種・民族（事例）','宗教（事例）']);
+      assert.deepEqual([...doc.querySelectorAll('[data-eu-topic-field="population"] button')].map(b=>b.textContent),['人口分布','人種・民族（事例）','宗教']);
       assert.match(doc.querySelector('.eu-culture-kicker').textContent,/地域事例/);
       assert.deepEqual([...doc.querySelector('[data-culture-case]').options].map(option=>option.textContent),['欧州全体・事例未選択','イングランド・ウェールズ・行政区','クロアチア・全国値']);
       assert.ok(!doc.querySelector('[data-eu-topic-field="population"]').textContent.includes('投票'));
     }
-    window.happyDOM.abort();
+    } finally { await window.happyDOM.close(); }
   });
 }

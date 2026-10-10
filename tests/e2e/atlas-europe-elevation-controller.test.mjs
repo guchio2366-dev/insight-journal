@@ -7,6 +7,7 @@ import { build } from 'esbuild';
 import { Window } from 'happy-dom';
 import { project, unproject, displayCell } from '../../src/lib/atlas-europe-view.ts';
 
+
 const entry=path.resolve('src/lib/atlas-europe-explorer.ts');
 const bundled=await build({
   stdin:{contents:"import { initEuropeAtlas } from './atlas-europe-explorer.ts'; initEuropeAtlas();",resolveDir:path.dirname(entry),sourcefile:path.join(path.dirname(entry),'elevation-controller-test-entry.ts'),loader:'ts'},
@@ -42,10 +43,15 @@ async function until(check,message='Europe elevation controller did not settle')
   throw Error(message);
 }
 
-async function setup(location='?layer=terrain&render=static',fixture={}){
+async function setup(location='?layer=contours&render=static',fixture={}){
   const url=new URL(location,'https://example.com/insight-journal/atlas/europe/nature/');
   const field=url.pathname.match(/\/atlas\/europe\/(nature|agriculture|industry|population)\//)?.[1]??'nature';
-  const html=(await readFile(`dist/atlas/europe/${field}/index.html`,'utf8')).replace(/<script(?![^>]*type=["']application\/json["'])[^>]*>[\s\S]*?<\/script>/g,'');
+  const html=(await readFile(`dist/atlas/europe/${field}/index.html`,'utf8'))
+    .replace(/<script(?![^>]*type=["']application\/json["'])[^>]*>[\s\S]*?<\/script>/g,'')
+    // Elevation, population and industry controller checks do not consume the
+    // large farming geometry. Keep its contract while omitting those bytes.
+    .replace(/(<script type="application\/json" data-eu-config>)([\s\S]*?)(<\/script>)/,(_,open,json,close)=>{const data=JSON.parse(json);data.farmingAreas.features=[];return open+JSON.stringify(data)+close;})
+    .replace(/\sd="[^"]*"/g,' d=""');
   const w=new Window({url:url.href,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
   // State commits and annotation rendering use separate frames; exercise a busy renderer.
   if(fixture.animationFrameDelay){
@@ -107,48 +113,50 @@ async function assertReading(app,point){
   assert.equal(result.hasAttribute('aria-busy'),false);assertPoint(app,point);
 }
 
-test('terrain and contours query the same real elevation cell in metres, preserving zero, below-sea-level land and ocean missingness',async()=>{
+test('terrain keeps the named landforms visible; contours query real elevation including zero, below-sea-level land and ocean missingness',async()=>{
   assert.equal(displayCell(elevation,zero,-32768).value,0);
   assert.ok(displayCell(elevation,negative,-32768).value<0);
   assert.equal(displayCell(elevation,ocean,-32768).value,null);
   const app=await setup();
   try{
+    app.choose('terrain');
+    assert.equal(app.q('[data-eu-subject-grid]').hidden,true,'The landform overview does not ask for a numeric grid reading');
+    assert.equal(app.q('[data-eu-subject-legend]').hidden,true,'The landform overview does not repeat the elevation key');
+    assert.match(app.q('[data-eu-map-place="alps"][data-eu-map-kind="feature"]').textContent,/アルプス/);
     for(const point of [alps,zero,negative,ocean]){
-      app.choose('terrain');
+      app.choose('contours');
       const view=app.q('[data-eu-static]').getAttribute('viewBox'),historyLength=app.w.history.length;
       app.clickPoint(point);await assertReading(app,point);
       assert.equal(app.w.history.length,historyLength+1,'One point click creates one restorable history entry');
       assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),view,'Selecting a value retains the current map extent');
       assert.equal(app.q('[data-eu-subject-grid]').closest('.eu-read-panel'),app.q('.eu-read-panel'),'The elevation result is beside the map');
-      const terrain=app.q('[data-eu-subject-result]').textContent;
-      app.choose('contours');await assertReading(app,point);
-      assert.equal(app.q('[data-eu-subject-result]').textContent,terrain,'Both subjects use the exact same display cell value');
       assert.match(app.q('[data-eu-legend-title]').textContent,/500m間隔/);
       assert.match(app.q('[data-eu-layer-note]').textContent,/1,000m間隔.*標高精度を意味しません/);
       assert.match(app.q('[data-eu-grid-title]').textContent,/標高.*m.*ETOPO 2022/);
       assert.doesNotMatch(app.q('[data-eu-subject-result]').textContent,/標高 m|500m間隔/);
     }
-    assert.equal(app.requests.filter(asset=>asset===elevationAsset).length,1,'Terrain and contours share the source grid cache');
+    assert.equal(app.requests.filter(asset=>asset===elevationAsset).length,1,'Contour lookups share the source grid cache');
     assert.deepEqual(app.warnings,[]);
   }finally{await app.w.happyDOM.close();}
 });
 
 for(const layer of ['terrain']){
-  test(`${layer} named feature selection survives comparison return and a fresh page load with its elevation`,async()=>{
+  test(`${layer} named feature selection survives comparison return and a fresh page load`,async()=>{
     const app=await setup(`?layer=${layer}&render=static`);
     try{
-      app.q('[data-eu-map-place="alps"][data-eu-map-kind="feature"]').click();await assertReading(app,alps);
+      app.q('[data-eu-map-place="alps"][data-eu-map-kind="feature"]').click();
       assert.equal(new URL(app.w.location.href).searchParams.get('feature'),'alps');
+      assert.equal(app.q('[data-eu-subject-grid]').hidden,true);
       assert.match(app.q('[data-eu-subject-title]').textContent,/アルプス/);
       const compareUrl=new URL(app.q('[data-eu-comparison-link="nature-density"]').href);
       const source=new URLSearchParams(compareUrl.searchParams.get('europeReturn'));
-      assert.equal(source.get('layer'),layer);assert.equal(source.get('feature'),'alps');assert.deepEqual(source.get('point').split(',').map(Number),alps);
+      assert.equal(source.get('layer'),layer);assert.equal(source.get('feature'),'alps');
       const comparison=await setup(compareUrl.href);
       try{
         const back=comparison.q('[data-eu-comparison-return]');assert.match(back.textContent,/アルプス.*元の選択へ戻る/);
         const backUrl=new URL(back.href);assert.equal(backUrl.pathname,'/insight-journal/atlas/europe/nature/');assert.equal(backUrl.searchParams.get('layer'),layer);assert.equal(backUrl.searchParams.has('europeReturn'),false);
         const reload=await setup(back.href);
-        try{await assertReading(reload,alps);assert.equal(new URL(reload.w.location.href).searchParams.get('feature'),'alps');assert.match(reload.q('[data-eu-subject-title]').textContent,/アルプス/);}finally{await reload.w.happyDOM.close();}
+        try{assert.equal(reload.q('[data-eu-subject-grid]').hidden,true);assert.equal(new URL(reload.w.location.href).searchParams.get('feature'),'alps');assert.match(reload.q('[data-eu-subject-title]').textContent,/アルプス/);}finally{await reload.w.happyDOM.close();}
       }finally{await comparison.w.happyDOM.close();}
     }finally{await app.w.happyDOM.close();}
   });
@@ -190,7 +198,8 @@ test('back/forward popstate and reload restore arbitrary clicked points without 
     const reload=await setup(second);
     try{await assertReading(reload,negative);}finally{await reload.w.happyDOM.close();}
     app.choose('climate');assert.equal(app.q('[data-eu-selected-point]').hidden,true,'A grid selection does not impersonate a climate station');
-    app.choose('terrain');await assertReading(app,negative);
+    app.choose('terrain');assert.equal(app.q('[data-eu-subject-grid]').hidden,true);
+    app.choose('contours');await assertReading(app,negative);
   }finally{await app.w.happyDOM.close();}
 });
 
@@ -250,13 +259,13 @@ test('a slow elevation response cannot overwrite the newer precipitation value a
 test('the map owns a single source-backed key and arrow keys preserve the selected point across nature topics',async()=>{
   const point=[9.5,46.6],app=await setup('?layer=terrain&render=static&point='+point.join(','));
   try{
-    await assertReading(app,point);
+    assert.equal(app.q('[data-eu-subject-grid]').hidden,true);
     const host=app.q('[data-eu-map-legend]');
     assert.equal(app.q('[data-eu-subject-legend]').parentElement,host);
     assert.equal(app.q('[data-eu-climate-legend]').parentElement,host);
     assert.equal(app.q('.eu-read-panel [data-eu-subject-legend]'),null);
     assert.equal(app.w.document.querySelectorAll('[data-eu-subject-legend]').length,1);
-    assert.equal(host.previousElementSibling,app.q('.eu-map-stage'));
+    assert.ok(app.q('.eu-map-stage').compareDocumentPosition(host)&4);
     const terrain=app.q('[data-eu-topic="terrain"]');terrain.focus();
     terrain.dispatchEvent(new app.w.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true,cancelable:true}));
     await assertReading(app,point);
@@ -274,7 +283,7 @@ test('the map owns a single source-backed key and arrow keys preserve the select
 });
 
 test('a click outside the published extent clears the old point instead of leaving its elevation visible',async()=>{
-  const point=[9.5,46.6],app=await setup('?layer=terrain&render=static&point='+point.join(','));
+  const point=[9.5,46.6],app=await setup('?layer=contours&render=static&point='+point.join(','));
   try{
     await assertReading(app,point);
     app.clickPoint([70,50]);
@@ -285,7 +294,7 @@ test('a click outside the published extent clears the old point instead of leavi
   }finally{await app.w.happyDOM.close();}
 });
 
-for(const topic of ['ethnicity','religion'])test(`${topic} keeps the unselected legend and the explicit source scale beneath the map`,async()=>{
+for(const topic of ['ethnicity'])test(`${topic} keeps the unselected legend and the explicit source scale beneath the map`,async()=>{
   const app=await setup(`https://example.com/insight-journal/atlas/europe/population/?layer=${topic}&render=static`);
   try{
     const legend=app.q('.eu-culture-legend');
@@ -295,7 +304,7 @@ for(const topic of ['ethnicity','religion'])test(`${topic} keeps the unselected 
     assert.equal(legend.children.length,7);
     assert.ok([...legend.querySelectorAll('[data-culture-scale-key]')].every(key=>key.hidden));
     assert.equal(legend.lastElementChild.hidden,false);
-    assert.match(legend.lastElementChild.textContent,/未掲載・3対象以外.*0%ではありません/);
+    assert.match(legend.lastElementChild.textContent,topic==='religion'?/未掲載・資料未取得.*0%ではありません/:/未掲載・3対象以外.*0%ではありません/);
     assert.match(legend.lastElementChild.querySelector('i').getAttribute('style'),/#b8bec7/);
     assert.match(app.q('[data-culture-denominator]').textContent,/分母/);
     const select=(selector,value)=>{const node=app.q(selector);node.value=value;node.dispatchEvent(new app.w.Event('change',{bubbles:true}));};
@@ -304,12 +313,12 @@ for(const topic of ['ethnicity','religion'])test(`${topic} keeps the unselected 
     assert.equal(legend.lastElementChild.hidden,true);
     assert.equal(legend.querySelectorAll('[data-culture-scale-key]:not([hidden])').length,6);
     assert.match(legend.querySelectorAll('[data-culture-scale-key]')[5].textContent,/未掲載・数値なし/);
-    app.choose('terrain');
+    app.choose('contours');
     assert.equal(legend.hidden,true);assert.equal(app.q('[data-eu-subject-legend]').hidden,false);
   }finally{await app.w.happyDOM.close();}
 });
 
-for(const topic of ['ethnicity','religion'])test(`${topic} shows all three published response compositions without an initial case and preserves explicit selection/history`,async()=>{
+for(const topic of ['ethnicity'])test(`${topic} shows all three published response compositions without an initial case and preserves explicit selection/history`,async()=>{
   const app=await setup(`/insight-journal/atlas/europe/population/?layer=${topic}&render=static`,{animationFrameDelay:40});
   try{
     const visibleCompositions=()=>app.w.document.querySelectorAll('[data-eu-composition]:not([hidden])').length;
@@ -325,7 +334,7 @@ for(const topic of ['ethnicity','religion'])test(`${topic} shows all three publi
       assert.equal(button.querySelector('svg').getAttribute('viewBox'),'0 0 56 56');
       assert.equal(key.querySelector(`[data-eu-composition-table="${code}"]`).querySelectorAll('tbody tr').length,expected[index]);
     }
-    assert.match(app.q('[data-culture-overview]').textContent,/自己認識.*言語分布.*実践/);
+    assert.match(app.q('[data-culture-overview]').textContent,topic==='religion'?/Czechia.*Estonia.*欧州全域の完成分布ではありません/: /自己認識.*言語分布.*実践/);
     app.q(`[data-eu-composition="${topic}-HRV"]`).click();
     await until(()=>visibleCompositions()===0,'Selecting a census case hides every overview composition');
     assert.equal(app.q('[data-culture-case]').value,'croatia-national-2021');assert.equal(key.hidden,true);
@@ -343,47 +352,73 @@ for(const topic of ['ethnicity','religion'])test(`${topic} shows all three publi
   }finally{await app.w.happyDOM.close();}
 });
 
+test('religion shows the 2020 country compositions and keeps national census details separate',async()=>{
+  const app=await setup('/insight-journal/atlas/europe/population/?layer=religion&render=static');
+  try{
+    assert.equal(app.w.document.querySelectorAll('[data-eu-religion-national]:not([hidden])').length,0);
+    const colorKey=app.q('[data-eu-religion-color-key]');
+    assert.equal(colorKey.parentElement,app.q('[data-eu-map-legend]'));
+    assert.equal(colorKey.hidden,false);
+    assert.equal(app.q('[data-eu-pew-map-key]').hidden,false);
+    assert.equal(app.w.document.querySelectorAll('[data-eu-pew-marker]').length,40);
+    assert.equal(app.q('[data-eu-shape="CZE"]').style.fill,app.q('[data-eu-shape="DEU"]').style.fill);
+    assert.equal(app.q('[data-eu-pew-marker="CZE"] .eu-pew-marker-bar').children[2].style.width,'72.8%');
+    assert.equal(app.q('[data-eu-pew-marker="ALB"] .eu-pew-marker-bar').children[1].style.width,'74.5%');
+    assert.match(app.q('[data-eu-shape="VAT"]').style.fill,/(#f2eee5|rgb\(242, 238, 229\))/);
+    assert.equal(app.w.document.querySelectorAll('[data-eu-religion-evidence]:not([hidden])').length,0);
+    assert.match(app.q('[data-culture-takeaway]').textContent,/概説.*67.1%.*25.3%.*6.0%/);
+    assert.match(app.q('[data-culture-overview]').textContent,/解説.*オスマン帝国/);
+    app.q('[data-eu-pew-marker="SRB"]').click();
+    await until(()=>!app.q('[data-eu-religion-evidence-reading]').hidden);
+    assert.equal(app.q('[data-eu-religion-evidence-reading]').previousElementSibling,null);
+    assert.equal(app.q('[data-culture-case]').value,'');
+    assert.match(app.q('[data-eu-religion-evidence-reading]').textContent,/2020年推計.*キリスト教 91.5%.*イスラム教 4.4%.*正教会.*5,387,426人/s);
+    app.q('[data-eu-religion-local="religion-subotica"]').click();
+    await until(()=>app.w.document.querySelectorAll('[data-eu-religion-evidence]:not([hidden])').length===1);
+    assert.match(app.q('[data-eu-religion-evidence-reading]').textContent,/カトリック.*59,748人.*正教会.*37,674人/s);
+    assert.equal(new URL(app.w.location.href).searchParams.get('feature'),'religion-subotica');
+    app.q('[data-eu-religion-back]').click();
+    assert.equal(app.q('[data-eu-religion-evidence-reading]').hidden,true);
+    assert.equal(app.q('[data-eu-pew-map-key]').hidden,false);
+  }finally{await app.w.happyDOM.close();}
+});
+
 
 test('産業分野は国を自動選択せず、全拠点を保ったまま強調し全体へ戻れる',async()=>{
   const app=await setup('/insight-journal/atlas/europe/industry/?layer=hubs&render=static');
   try{
     const full=app.q('[data-eu-static]').getAttribute('viewBox');
-    app.q('[data-eu-industry-group="機械・輸送"]').click();await tick();
+    app.q('[data-eu-industry-group="自動車・機械"]').click();await tick();
     const params=new URL(app.w.location.href).searchParams;
-    assert.equal(params.get('industryGroup'),'機械・輸送');assert.equal(params.has('place'),false);assert.equal(params.has('feature'),false);
+    assert.equal(params.get('industryGroup'),'自動車・機械');assert.equal(params.has('place'),false);assert.equal(params.has('feature'),false);
     assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
     const config=app.config.readings.filter(item=>item.field==='industry');
-    assert.equal(config.filter(item=>app.q(`[data-eu-feature-point="${item.id}"]`).style.display!=='none').length,14);
-    assert.match(app.q('[data-eu-subject-takeaway]').textContent,/ミュンヘン.*トゥールーズ.*欧州全体/);
-    const scope=app.q('[data-eu-industry-scope]');scope.value='country:DEU';scope.dispatchEvent(new app.w.Event('change'));
-    await tick();assert.equal(app.q('[data-eu-country-reader]').hidden,false);assert.equal(app.q('[data-eu-country-reader]').open,true);
-    assert.match(app.q('[data-eu-national-values]').textContent,/18.94.*26.8.*63.62/s);
-    assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
+    assert.equal(config.filter(item=>app.q(`[data-eu-feature-point="${item.id}"]`).style.display!=='none').length,18);
+    assert.match(app.q('[data-eu-subject-takeaway]').textContent,/ドイツ南部.*チェコ/);
+    const country=app.q('[data-eu-country-navigation]');country.value='DEU';country.dispatchEvent(new app.w.Event('change'));
+    assert.match(app.q('[data-eu-country-overview]').href,/\/atlas\/europe\/overview\/\?country=DEU$/);
     app.choose('hubs');await tick();
-    assert.equal(scope.value,'region:all');assert.equal(app.q('[data-eu-country-reader]').hidden,true);
+    assert.equal(app.q('[data-eu-country-reader]').hidden,true);
     assert.equal(new URL(app.w.location.href).searchParams.has('industryGroup'),false);
     assert.equal(new URL(app.w.location.href).searchParams.has('place'),false);
-  }finally{await app.w.happyDOM.abort();}
+  }finally{await app.w.happyDOM.close();}
 });
 
-test('産業は4か国統計と地域事例を読み分け、URL復元も全欧州分布を保つ',async()=>{
-  const app=await setup('/insight-journal/atlas/europe/industry/?layer=manufacturing&place=GBR&render=static');
+test('産業は10分野の復元でも他分野の拠点と欧州全体の表示を保つ',async()=>{
+  const app=await setup('/insight-journal/atlas/europe/industry/?layer=hubs&industryGroup=化学・医薬品&render=static');
   try{
     const full=app.q('[data-eu-static]').getAttribute('viewBox');
-    assert.equal(app.q('[data-eu-industry-scope]').value,'country:GBR');
-    assert.match(app.q('[data-eu-national-values]').textContent,/8.22.*17.67.*72.42/s);
-    assert.equal(app.q('[data-eu-shape="NLD"]').style.fill,'#edece5');
-    assert.notEqual(app.q('[data-eu-shape="GBR"]').style.fill,'#edece5');
-    assert.match(app.q('[data-eu-legend-items]').textContent,/統計比較対象外/);
+    assert.equal(app.q('[data-eu-industry-scope-host]').hidden,true);
+    assert.equal(app.q('[data-eu-country-reader]').hidden,true);
+    assert.match(app.q('[data-eu-subject-takeaway]').textContent,/ライン川下流.*化学/);
     app.restore('?layer=hubs&place=NLD&feature=rotterdam&render=static');await tick();
-    assert.equal(app.q('[data-eu-industry-scope]').value,'region:west');
     assert.equal(app.q('[data-eu-country-reader]').hidden,true);assert.match(app.q('[data-eu-subject-title]').textContent,/ロッテルダム/);
     assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
-    app.restore('?layer=hubs&industryGroup=技術・医薬&region=north&render=static');await tick();
-    assert.match(app.q('[data-eu-subject-title]').textContent,/北欧.*技術・医薬/);
-    assert.equal(app.q('[data-eu-topic="hubs"][data-eu-industry-group="技術・医薬"]').getAttribute('aria-pressed'),'true');
+    app.restore('?layer=hubs&industryGroup=食品加工&render=static');await tick();
+    assert.match(app.q('[data-eu-subject-title]').textContent,/食品加工/);
+    assert.equal(app.q('[data-eu-topic="hubs"][data-eu-industry-group="食品加工"]').getAttribute('aria-pressed'),'true');
     const points=app.config.readings.filter(item=>item.field==='industry');assert.ok(points.every(item=>app.q(`[data-eu-feature-point="${item.id}"]`).style.display!=='none'));
-  }finally{await app.w.happyDOM.abort();}
+  }finally{await app.w.happyDOM.close();}
 });
 
 test('気候の空の都市選択と全体へ操作は雨温図を解除して概要を復元する',async()=>{

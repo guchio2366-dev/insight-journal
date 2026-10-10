@@ -9,11 +9,13 @@ const hasCase = !!state.cultureCase;
 const levels = ['aggregate', 'detail'] as const;
 ---
 <section class="eu-culture" data-eu-culture-reader data-culture-topic={topic} data-culture-initial-case={state.cultureCase} data-culture-initial-category={state.cultureCategory} data-culture-initial-area={state.cultureArea} aria-labelledby={`${id}-title`}>
+  <section class="eu-religion-evidence-reading" data-eu-religion-evidence-reading hidden aria-live="polite"></section>
   <header class="eu-culture-head">
-    <p class="eu-culture-kicker">国勢調査の地域事例</p>
-    <h3 id={`${id}-title`} data-culture-title>{hasCase ? selected.topic.titleJa : topic === 'religion' ? '宗教的帰属の地域事例' : '民族的帰属の地域事例'}</h3>
-    <p class="eu-culture-takeaway" data-culture-takeaway>2021年の自己申告分類を、同じ公表表の総人口に占める割合で読みます。</p>
-    <p data-culture-overview>欧州全体を表示しています。事例と元の回答分類を選ぶと、その分類の分布を表示します。</p>
+    <p class="eu-culture-kicker" data-culture-kicker>{topic === 'religion' ? '国別の回答構成' : '国勢調査の地域事例'}</p>
+    <h3 id={`${id}-title`} data-culture-title>{hasCase ? selected.topic.titleJa : topic === 'religion' ? '欧州の宗教の分布' : '民族的帰属の地域事例'}</h3>
+    <p class="eu-culture-takeaway" data-culture-takeaway>{topic === 'religion' ? '概説：2020年の国別推計では欧州全体のキリスト教67.1%、宗教的無所属25.3%、イスラム教6.0%。地図の国別構成帯ではチェコ・オランダで無所属が多く、アルバニア・ボスニア・コソボではイスラム教の割合が高い。' : '2021年の自己申告分類を、同じ公表表の総人口に占める割合で読みます。'}</p>
+    <p data-culture-overview>{topic === 'religion' ? '解説：カトリック・正教会・プロテスタントの歴史的な教会圏、オスマン帝国期の南東欧、宗教改革以後の制度、20世紀以後の社会変化と移住が国別構成に重なります。国境の濃淡は国内の地区差や宗派を示しません。Pewの広域推計と各国国勢調査は対象・分類・方法が異なります。' : '欧州全体を表示しています。事例と元の回答分類を選ぶと、その分類の分布を表示します。'}</p>
+    {topic === 'religion' && <p class="eu-culture-source-inline">国別推計：<a href="https://www.pewresearch.org/religion/feature/religious-composition-by-country-2010-2020/">Pew Research Center（2025）</a>。宗派・地方の補足は各国統計機関。</p>}
   </header>
   <div class="eu-culture-controls">
     <label for={`${id}-case`}>対象の事例</label>

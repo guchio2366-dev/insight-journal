@@ -10,8 +10,9 @@ const copy=europeReaderCopy(layer);
   <div class="eu-reader-summary">
   <button class="eu-reader-back" type="button" data-eu-overview hidden>← 欧州の農林業</button>
   <h2 id="eu-subject-title" data-eu-subject-title>{copy.title}</h2>
+  <h3 class="eu-reader-section-label">概説</h3>
   <p class="eu-reader-takeaway" data-eu-subject-takeaway>{copy.takeaway}</p>
-  <button type="button" data-eu-reading-focus hidden>英国の小麦だけを表示して地域例を確かめる</button>
+  <button type="button" data-eu-reading-focus hidden>英国東西の土地利用を見る</button>
   <button type="button" data-eu-single hidden></button>
   <button type="button" data-eu-return-multi hidden>元の分布表示に戻る</button>
   <nav class="eu-comparison-links" data-eu-comparison-links aria-label="分布の条件を比較する"></nav>
@@ -19,7 +20,7 @@ const copy=europeReaderCopy(layer);
   <p class="eu-visibility-note" data-eu-hidden-note hidden></p>
   </div>
   <details class="eu-legend eu-subject-primary-key" data-eu-subject-legend open hidden={layer.id==='climate'||layer.id==='crops'}><summary><span data-eu-legend-title>{layer.title} · {layer.period} · {layer.unit}</span></summary><div class="eu-legend-grid" data-eu-legend-items>{layer.labels?.map((label,i)=><div><span class="eu-swatch" style={`background:${layer.colors![i]}`}></span><span>{label}</span></div>)}{layer.grid&&<div><span class="eu-swatch" style="background:repeating-linear-gradient(45deg,#fff,#fff 3px,#ccd3cc 3px,#ccd3cc 4px)"></span><span>データなし</span></div>}</div><details class="eu-legend-methods"><summary>対象範囲・出典</summary><p data-eu-layer-note>{layer.note}</p><a class="eu-source-link" data-eu-layer-source href={layer.source}>データの出典</a></details></details>
-  <details class="eu-reader-body" open={layer.field==='industry'||layer.field==='population'}><summary>説明・対象範囲・出典</summary>
+  <details class="eu-reader-body" open><summary>解説 · 分布の理由と出典</summary>
   <p data-eu-subject-intro>{copy.body}</p>
   <div class="eu-feature-reading" data-eu-feature-card aria-live="polite" hidden></div>
   <p class="eu-data-note" data-eu-subject-note>{copy.note}</p>

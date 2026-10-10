@@ -34,7 +34,7 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
     assert.equal(doc.querySelector('.eu-read-panel').getAttribute('aria-labelledby'),climateReader?'eu-city-heading':'eu-subject-title');
     assert.equal(doc.querySelectorAll('[data-eu-point]:not([hidden])').length,climateReader?8:0);
     if(field==='agriculture'){
-      assert.match(doc.querySelector('[data-eu-map-title]').textContent,/作物.*畜産/);
+      assert.match(doc.querySelector('[data-eu-map-title]').textContent,/穀物・畑作/);
       assert.equal(doc.querySelector('[data-eu-subject-image]').getAttribute('href'),null);
       const config=JSON.parse(doc.querySelector('[data-eu-config]').textContent);
       const farmItems=config.farmingAreas.features.map(feature=>feature.properties);
@@ -44,20 +44,31 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       assert.equal(new Set(farmItems.map(item=>item.id)).size,16);
       const areas=[...doc.querySelectorAll('[data-eu-farm-area]')];
       assert.deepEqual(areas.map(path=>path.dataset.euFarmArea).sort(),farmItems.map(item=>item.id).sort());
-      assert.ok(areas.every(path=>path.getAttribute('d')?.startsWith('M')));
+      assert.ok(areas.every(path=>{const href=path.getAttribute('href');return href?.startsWith('#eu-farm-')&&doc.querySelector(href)?.getAttribute('d')?.startsWith('M');}));
+      const cropIds=['wheat','barley','maize','potato','sugarbeet','rapeseed'];
+      assert.ok(areas.filter(path=>cropIds.includes(path.dataset.euFarmArea)).every(path=>path.getAttribute('href')===`#eu-farm-dominant-${path.dataset.euFarmArea}`));
+      assert.deepEqual([...doc.querySelectorAll('[data-eu-farm-secondary]')].map(path=>path.dataset.euFarmSecondary).sort(),cropIds.sort());
       assert.notEqual(doc.querySelector('[data-eu-farming-shapes]').style.display,'none');
       assert.ok([...doc.querySelectorAll('[data-eu-farm-outline]')].every(path=>path.style.display==='none'));
-      const choices=[...doc.querySelectorAll('[data-eu-farming-children="crop"] button,[data-eu-farming-children="livestock"] button')];
-      assert.deepEqual(choices.map(button=>button.dataset.euLayer).sort(),farmItems.map(item=>item.id).sort());
+      const choices=[...doc.querySelectorAll('[data-eu-farming-children="crops"] button,[data-eu-farming-children="livestock"] button,[data-eu-farming-children="horticulture"] button')];
+      assert.deepEqual(choices.map(button=>button.dataset.euLayer).sort(),['wheat','barley','maize','potato','sugarbeet','rapeseed','cattle','pig','chicken','sheep','citrus','temperatefruit','vegetables'].sort());
       assert.ok(choices.every(button=>button.getAttribute('aria-pressed')==='false'&&button.querySelector('.eu-item-swatch')));
       assert.equal(doc.querySelector('[data-eu-farming-legend]').hidden,false);
-      assert.match(doc.querySelector('[data-eu-farming-legend]').textContent,/作物は実線.*家畜は破線/);
-      assert.match(doc.querySelector('[data-eu-subject-note]').textContent,/ブドウ.*オリーブ.*未収録/);
+      assert.match(doc.querySelector('[data-eu-farming-legend]').textContent,/6作物の集中域を同時に示します.*色面に隠れる別品目の集中域を品目色の点線で残します/);
+      assert.match(doc.querySelector('[data-eu-farming-children="horticulture"] .eu-farm-missing').textContent,/ブドウ.*オリーブ.*未収録/);
       const statistics=doc.querySelector('[data-eu-farming-statistics]');
       assert.match(statistics.textContent,/販売総額（米ドル）/);
       assert.match(statistics.textContent,/世界生産.*分母/);
       assert.match(statistics.textContent,/FAOSTAT.*World/,'世界比の分母を出版社のWorld行としてJavaScriptなしでも説明する');
-      assert.match(statistics.textContent,/ゼロという意味ではありません/);
+      assert.match(statistics.textContent,/欠測は0としません/);
+      const verified=statistics.querySelector('[data-eu-verified-agriculture]');
+      assert.equal(verified.hidden,false);
+      const overview=verified.querySelector('[data-eu-verified-overview]');
+      assert.equal(overview.hidden,false);
+      assert.equal(overview.querySelectorAll('.eu-verified-share-row').length,6);
+      assert.equal(overview.querySelectorAll('.eu-verified-donut').length,2);
+      assert.equal(overview.querySelectorAll('.eu-verified-food-band > span').length,9);
+      assert.match(verified.textContent,/自給率は同年・同群の対応表が未確認/);
       const availability=[...statistics.querySelectorAll('.eu-statistics-availability > div')];
       const unavailable=['販売総額（米ドル）'];
       for(const label of unavailable){
@@ -67,9 +78,10 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       }
       const columns=statistics.querySelectorAll('[data-eu-farm-three-columns] > section');
       assert.equal(columns.length,3);
-      assert.match(columns[0].textContent,/供給元・行先.*国内仕向け.*未収録/s);
-      assert.match(columns[1].textContent,/輸出先.*輸出量・額.*未収録/s);
-      assert.equal(columns[2].querySelector('[data-eu-farm-share-chart]').children.length,0);
+      assert.match(columns[0].textContent,/世界生産シェア.*欠測を0/);
+      assert.equal(columns[0].querySelector('[data-eu-farm-share-chart]').children.length,0);
+      assert.match(columns[1].textContent,/輸出先・輸入元.*照合中/);
+      assert.match(columns[2].textContent,/供給熱量と自給率.*欠測は0/);
       const scope=availability.find(row=>row.querySelector('dt').textContent==='地図と数量の対象');
       assert.match(scope.querySelector('dd').textContent,/格子の収穫面積・家畜密度.*国全体の生産量・頭羽数.*別の資料/);
       assert.match(scope.querySelector('dd').textContent,/集合的な作物区分.*個別品目の統計に置き換えません/);
@@ -113,7 +125,7 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       const unavailable=[...doc.querySelectorAll('[data-eu-water-options] button:disabled')];
       assert.equal(unavailable.length,0);
       assert.equal(doc.querySelector('[data-eu-water-options] [data-eu-topic="drainage"]').disabled,false);
-      const waterNote='河川・湖の位置、年降水量、流域区画を切り替えます。地下水は公開利用条件が未確認のため未収録です。';
+      const waterNote='河川・湖の位置、年降水量、流域区画を切り替えます。地下水の歴史的な水理地質図は利用条件を確認済みですが、原画像を取得・位置合わせできていないため未収録です。';
       assert.equal(doc.querySelector('[data-eu-map-legend] .eu-water-note').textContent,waterNote,'承認済みの水資源説明を地図下に全文保持する');
       assert.equal(doc.querySelectorAll('.eu-water-note').length,1);
       assert.equal(doc.body.textContent.split(waterNote).length-1,1,'同じ説明を重複表示しない');
@@ -121,15 +133,15 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       assert.equal(doc.querySelector('[data-eu-water-options] [data-eu-topic="precipitation"]').disabled,false);
     }
     if(field==='industry'||field==='population'){
-      const title=field==='industry'?'産業の拠点':'人口密度';
+      const title=field==='industry'?'産業別の集積':'人口密度';
       assert.equal(doc.querySelector('[data-eu-map-title]').textContent,title);
-      assert.equal(doc.querySelector('[data-eu-subject-title]').textContent,field==='population'?'人口分布':title);
+      assert.equal(doc.querySelector('[data-eu-subject-title]').textContent,field==='population'?'人口分布':'欧州の産業集積');
       assert.ok(doc.querySelector('[data-eu-legend-title]').textContent.includes(title));
       assert.ok(doc.querySelector('[data-eu-subject-takeaway]').textContent.length>15);
       assert.equal(doc.querySelector('[data-eu-climate-image]').getAttribute('href'),null);
       assert.ok(doc.querySelectorAll('[data-eu-feature-point]:not([hidden])').length>0);
       if(field==='industry'){
-        assert.equal(doc.querySelectorAll('[data-eu-feature-point]:not([hidden])').length,14);
+        assert.equal(doc.querySelectorAll('[data-eu-feature-point]:not([hidden])').length,18);
         assert.equal(doc.querySelector('[data-eu-feature]'),null);
         assert.match(doc.querySelector('[data-eu-subject-note]').textContent,/生産量・雇用の大小を表しません/);
       }else{
