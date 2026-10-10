@@ -30,6 +30,11 @@ type City = { id: string; name: string; country: string; coordinates: [number, n
 type Feature = { type: 'Feature'; properties: { code: string; kind: string }; geometry: Geometry };
 type Place = City & {rank?:number;capital?:boolean};
 type Indicator = {id:string;label:string;unit:string;year:number;values:Record<string,Record<string,number|null>>;sourceUrl:string};
+const berlinDensityReading={
+  overview:'ベルリンの格子は周囲のブランデンブルク州より高密度です。西側のポツダムと近郊にも高い格子が続き、州の外側へ進むと低い格子が増えます。',
+  reason:'大都市の雇用・教育・サービスが中心部と近郊への居住を支えます。ベルリン周辺の市町村も比較的密で、離れた地域は低密度という勾配がみられます。これは都市圏の形成に沿う説明で、個々の格子の人口を一つの要因から推定したものではありません。',
+  source:'https://www.statistik-berlin-brandenburg.de/news/2025/zensus-umland',
+};
 
 export function initEuropeAtlas() {
   const root = document.querySelector<HTMLElement>('[data-europe-detail]');
@@ -234,7 +239,7 @@ export function initEuropeAtlas() {
     root!.style.setProperty('--eu-reader-height',`${Math.max(220,window.innerHeight-top-12)}px`);
   }
   const annotations=createEuropeAnnotations(stage,cities,features,
-    ()=>({climate:climateReader(),crops:farmingView().active,farmingIds:farmingView().genre==='horticulture'&&!farmingView().item?[]:farmingView().visible.map(item=>item.id),selectedFarming:farmingView().item?.id,city:state.city,feature:state.feature,featureLabelIds:subject().field==='industry'?(state.industryGroup?industryEmphasized():[...europeIndustryOverviewLabels]):subject().field==='population'&&!cultureActive()?config.populationCities.filter(city=>['ロンドン','パリ','モスクワ','ローマ'].includes(city.name)).map(city=>city.id):undefined,detailed:map&&liveMap.classList.contains('is-ready')?map.getBounds().getEast()-map.getBounds().getWest()<60:box[2]<frame.width*.65,emphasizedFeatures:industryEmphasized(),places:cultureActive()&&!state.cultureCase?(state.layer==='religion'?europeReligionRegionalEvidence.filter(item=>item.id===state.feature):europeCultureOverviewPlaces.filter(item=>item.id.startsWith('ethnicity-'))):visibleFeatures().filter(p=>featureVisible(p.id))}),
+    ()=>({climate:climateReader(),crops:farmingView().active,farmingIds:farmingView().genre==='horticulture'&&!farmingView().item?[]:farmingView().visible.map(item=>item.id),selectedFarming:farmingView().item?.id,city:state.city,feature:state.feature,featureLabelIds:subject().field==='industry'?(state.industryGroup?industryEmphasized():[...europeIndustryOverviewLabels]):subject().field==='population'&&!cultureActive()?config.populationCities.filter(city=>['ロンドン','パリ','モスクワ','ローマ'].includes(city.name)).map(city=>city.id):undefined,detailed:map&&liveMap.classList.contains('is-ready')?map.getBounds().getEast()-map.getBounds().getWest()<60:box[2]<frame.width*.65,emphasizedFeatures:industryEmphasized(),places:cultureActive()&&!state.cultureCase?(state.layer==='religion'?[...europeReligionNationalProfiles,...europeReligionRegionalEvidence.filter(item=>item.id===state.feature)]:europeCultureOverviewPlaces.filter(item=>item.id.startsWith('ethnicity-'))):visibleFeatures().filter(p=>featureVisible(p.id))}),
     coordinate=>overlayProject(coordinate as [number,number]),(kind,id)=>kind==='city'?selectCity(id):kind==='crop'?setLayer(id):selectFeature(id),farmingItems,cultureOverview.decorate);
   const precipitationLabels=precipitationLineLabels.map(label=>{
     const node=document.createElement('span');node.className='eu-precipitation-line-label';
@@ -359,7 +364,9 @@ export function initEuropeAtlas() {
       query('[data-eu-subject-title]').textContent=`${feature.name}（${countries.find(country=>country.code===feature.country)?.name??feature.country}）`;
       // Reuse the sourced reading's first sentence; its full text and source
       // remain in the independently scrolling details below.
-      query('[data-eu-subject-takeaway]').textContent='body' in feature
+      query('[data-eu-subject-takeaway]').textContent=layer.id==='density'&&feature.name==='ベルリン'
+        ? berlinDensityReading.overview
+        : 'body' in feature
         ? feature.body.match(/^.*?[。！？]/u)?.[0]??feature.body
         : `${countries.find(c=>c.code===feature.country)?.name}の${feature.capital?'首都':'都市'}です。都市の点は位置を示し、人口の大小を表すものではありません。`;
     }
@@ -395,15 +402,24 @@ export function initEuropeAtlas() {
     query<HTMLElement>('[data-eu-subject-intro]').hidden=!!feature;
     const card=query<HTMLElement>('[data-eu-feature-card]');card.replaceChildren();card.hidden=!feature;
     if(feature){
-      const heading=document.createElement('h3');heading.textContent=feature.name;card.append(heading);
+      if(!(layer.id==='density'&&feature.name==='ベルリン')){const heading=document.createElement('h3');heading.textContent=feature.name;card.append(heading);}
       const add=(text:string)=>{const p=document.createElement('p');p.textContent=text;card.append(p);};
-      if('body' in feature){add(feature.body);const a=document.createElement('a');a.href=feature.source;a.textContent=feature.sourceLabel+' · '+feature.period;a.className='eu-source-link';card.append(a);}
+      if(layer.id==='density'&&feature.name==='ベルリン'){
+        add(berlinDensityReading.reason);
+        const a=document.createElement('a');a.href=berlinDensityReading.source;a.textContent='ベルリン・ブランデンブルク統計局：2022年国勢調査の都市・周辺の人口密度';a.className='eu-source-link';card.append(a);
+        add('地図の格子はGHSLの2020年推計です。上の出典の2022年市町村平均とは年と集計範囲が異なります。');
+      }else if('body' in feature){add(feature.body);const a=document.createElement('a');a.href=feature.source;a.textContent=feature.sourceLabel+' · '+feature.period;a.className='eu-source-link';card.append(a);}
       else add(`${countries.find(c=>c.code===feature.country)?.name}の${feature.capital?'首都':'都市'}です。都市の点は位置を示し、人口の大小を表すものではありません。`);
     }
     const details=query<HTMLDetailsElement>('.eu-reader-body');
     // Keep the climate overview's long explanation in the same independent
     // reading area as the selected station, below its plot and sourced reading.
-    query<HTMLElement>(climateReader()?'[data-eu-climate-reader]':'[data-eu-subject-reader]').append(details);
+    const readerHost=query<HTMLElement>(climateReader()?'[data-eu-climate-reader]':'[data-eu-subject-reader]');
+    readerHost.append(details);
+    // The comparison menu follows the explanation in every subject. Culture
+    // has its own reader, so move the same menu there when it is active.
+    const comparisonAux=query<HTMLElement>('[data-eu-comparison-aux]');
+    (cultureActive()?cultureReader:readerHost).append(comparisonAux);
     // Named source readings stay immediately available; the overview's methods
     // are secondary to the key statement and genuine comparison entries.
     details.open=true;
@@ -437,10 +453,10 @@ export function initEuropeAtlas() {
     }else focusRequest++;
     panel.hidden=!source;root!.classList.toggle('has-eu-comparison',!!source);
     const links=query<HTMLElement>('[data-eu-comparison-links]');links.replaceChildren();
-    query(cultureActive()?'[data-culture-takeaway]':'[data-eu-subject-takeaway]').after(links);
     for(const item of europeComparisonLinks(state)) {
       const a=document.createElement('a');a.href=europeComparisonUrl(new URL(location.href),state,item).href;a.textContent=item.label;a.title=item.question;a.dataset.euComparisonLink=item.id;links.append(a);
     }
+    query<HTMLElement>('[data-eu-comparison-aux]').hidden=links.childElementCount===0;
     if(source) {
       const sourceLayer=config.layers.find(l=>l.id===(source.layer==='overlay'?(source.returnLayer==='climate'?'wheat':source.returnLayer):source.layer))!;
       const current=climateReader()?cities.find(c=>c.id===state.city)?.name:visibleFeatures().find(f=>f.id===state.feature&&featureVisible(f.id))?.name;
