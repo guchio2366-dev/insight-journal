@@ -74,3 +74,20 @@
 @media(max-width:1000px){.latin-industry-chain-grid{grid-template-columns:1fr}}
 @media(max-width:800px){.latin-industry-grid,.latin-industry-comparison{grid-template-columns:1fr}.latin-industry-map-grid{grid-template-columns:minmax(0,1fr) 145px}.latin-industry-toolbar select{max-width:210px}.latin-industry-map,.latin-industry-canal{height:320px}}
 @media(max-width:600px){.latin-industry-chain ol{grid-template-columns:1fr}}
+
+/* The location map uses its full panel width; national export maps keep their existing layout. */
+.latin-industry-panel[data-layer=locations] .latin-industry-map-grid{grid-template-columns:minmax(0,1fr)}
+.latin-industry-panel[data-layer=locations] .latin-industry-map{height:540px}
+.latin-industry-panel[data-layer=locations] .latin-industry-key{display:flex;flex-wrap:wrap;gap:7px 15px}
+.latin-industry-location{cursor:pointer;outline:none}
+.latin-industry-location:focus-visible circle:last-of-type{stroke:#163e42;stroke-width:4px}
+.latin-industry-location text{pointer-events:all}
+.latin-industry-location-return{min-height:44px;padding:8px 12px;background:#fff;border:1px solid #7b9b8c;border-radius:5px;color:#204a43;font:inherit;cursor:pointer}
+[data-industry-location-reading] h3{font-size:16px;margin:14px 0 5px}
+@media(max-width:700px){.latin-industry-panel[data-layer=locations] .latin-industry-map{height:540px}}
+
+[data-industry-location-choices] button{min-height:44px}
+
+.latin-workspace [data-industry-primary-map] .latin-industry-location-map{height:460px!important;min-height:460px;max-height:none;aspect-ratio:auto}
+
+@media(max-width:600px){.latin-workspace[data-latin-field=industry] .latin-subfield-band{height:auto}.latin-workspace[data-latin-field=industry] .latin-subfields{grid-template-columns:repeat(2,minmax(0,1fr))}}

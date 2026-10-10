@@ -141,3 +141,13 @@ test('Argentina industry reading and copper/lithium chains keep their distinct s
  assert.match(page,/cancilleria\.gob\.ar/);
  assert.match(page,/usgs\.gov\/centers\/national-minerals-information-center\/argentina/);
 });
+
+
+test('location records reuse the original geography, source prose and scoped numbers without deriving output from exports',async()=>{
+ const lib=await industryLibrary();
+ assert.equal(lib.latinIndustryLocations.length,8);
+ for(const row of lib.latinIndustryLocations){assert.equal(row.field,'industry');assert.equal(row.location.length,2);assert.ok(row.sources.length);assert.ok(row.label.includes('：'));}
+ for(const id of ['constructor','unknown','andean-copper,brazil-iron'])assert.equal(lib.readLatinLearningState('?layer=locations&case='+id,'industry',['locations'],'locations').case,undefined);
+ const state=lib.readLatinLearningState('?layer=locations&case=lithium-salars','industry',['locations'],'locations');assert.equal(state.case,'lithium-salars');
+ const svg=lib.renderLatinIndustryMap({...state,case:'lithium-salars'});assert.equal((svg.match(/data-industry-location=/g)??[]).length,8);assert.match(svg,/数量|比例/);
+});

@@ -1,0 +1,50 @@
+name: Review regional industry additions
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/**/*industry*'
+      - 'src/**/*Industry*'
+      - 'src/**/*russia*'
+      - 'src/components/atlas/EuropeAtlasPage.astro'
+      - 'src/lib/atlas-europe-explorer.ts'
+      - 'src/lib/atlas-latin-learning-state.ts'
+      - 'src/scripts/atlas-latin-essential-legends.ts'
+      - 'scripts/verify-*-industry*-review.mjs'
+      - '.github/workflows/industry-regional-review.yml'
+permissions:
+  contents: read
+concurrency:
+  group: industry-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - run: sudo apt-get update && sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+      - name: Verify industry maps and capture evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$(fc-list ':lang=ja' family)"
+          export INDUSTRY_REVIEW_CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)"
+          for review in scripts/verify-latin-industry-locations-review.mjs scripts/verify-russia-industry-review.mjs scripts/verify-industry-existing-country-review.mjs; do
+            if [[ -f "$review" ]]; then node "$review"; fi
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: industry-map-review-${{ github.run_id }}
+          path: review-artifacts/
+          retention-days: 7
+          if-no-files-found: error
