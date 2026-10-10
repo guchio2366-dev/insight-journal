@@ -247,3 +247,9 @@
  .latin-workspace.latin-population{--latin-map-top:311px}
  .latin-workspace.latin-population .latin-reading{height:calc(100dvh - 320px);max-height:calc(100dvh - 320px)}
 }
+
+/* Keep the complete extent and its decoding visible at scroll zero. */
+@media(min-width:960px){
+ .latin-workspace.latin-agriculture:not(.is-comparison) .latin-map-column :is(.latin-agriculture-map,.forest-map-stage){height:calc(100dvh - var(--latin-map-top,239px) - 135px)!important;min-height:350px;aspect-ratio:auto}
+ .latin-workspace.latin-population .latin-map-column .lp-map{height:calc(100dvh - 385px)!important;min-height:350px;aspect-ratio:auto}
+}

@@ -1,1 +1,102 @@
-{"retrievedAt":"2026-10-10","method":"Official indexed documents read through web tool; selected published aggregate rows transcribed with source table/page references. No binary PDF hash claimed.","adopted":[{"id":"un-wup2018","url":"https://population.un.org/wup/assets/WUP2018-Report.pdf","pages":[98,99],"table":"III.6","year":2018,"unit":"thousands converted to persons by multiplication by 1000","license":"CC BY 3.0 IGO","scope":"7 urban agglomerations, national urban definitions differ"},{"id":"chile-identity2024","url":"https://censo2024.ine.gob.cl/wp-content/uploads/2025/06/PRESENTACION-NACIONAL_4_CPV2024.pdf","pages":[6,8,9,10,11],"year":2024,"license":"CC BY-SA 4.0","licenseEvidence":"https://www.ine.gob.cl/terminos-de-uso-y-licencia-de-datos-abiertos","scope":"national and 6 selected administrative regions; separate identity questions, not language or residential territories"},{"id":"chile-religion2024","url":"https://censo2024.ine.gob.cl/wp-content/uploads/2025/08/Presentacion-resultados-religion-o-credos_CPV2024.pdf","pages":[7,13,14,15,16,17],"year":2024,"license":"CC BY-SA 4.0","denominator":"usual residents aged 15+ responding to religion/creed question 31","scope":"3 published categories, national and 6 selected administrative regions; other categories are not reclassified"},{"id":"panama-identity2023","url":"https://www.inec.gob.pa/archivos/P053342420231009161532Comentarios_Poblacion%20RFB%202023%20VF.pdf","page":3,"year":2023,"license":"CC BY 4.0","licenseEvidence":"https://www.inec.gob.pa/publicaciones/Default3.aspx?ID_CATEGORIA=19&ID_PUBLICACION=1199&ID_SUBCATEGORIA=7","scope":"national, separate affirmative indicators; final usual-resident denominator 4064780","priorDataReview":"PR307 bebf096ef097c563a10b808ac29726a6cfd48106; data only, whole branch not merged"}],"blocked":[{"id":"ghsl-original-cell-counts","reason":"Pinned official original ZIP request rejected by HTTP tunnel with 403; retained display grid only stores density, not persons plus valid area"},{"id":"wup2025","reason":"Official 2025 summary could not be retrieved with web tool"},{"id":"brazil-culture","reason":"IBGE official source/download access 403 and reuse terms unverified; values not copied"},{"id":"peru-guatemala-colombia","reason":"Source rows and/or explicit reuse terms not both verified; unadopted"},{"id":"undata-alternative","reason":"UNdata conditions of use verified (free copying with citation), but country-filtered religion rows remained inaccessible; no country data copied"}],"coverageComplete":false,"legalAlternative":{"url":"https://data.un.org/Host.aspx?Content=UNdataUse","terms":"Free copying, duplication and redistribution with UNdata citation; verified on 2026-10-10","remainingBlocker":"Country-filtered actual source rows unavailable"}}
+{
+  "retrievedAt": "2026-10-10",
+  "method": "Official indexed documents read through web tool; selected published aggregate rows transcribed with source table/page references. No binary PDF hash claimed.",
+  "adopted": [
+    {
+      "id": "un-wup2018",
+      "url": "https://population.un.org/wup/assets/WUP2018-Report.pdf",
+      "pages": [
+        98,
+        99
+      ],
+      "table": "III.6",
+      "year": 2018,
+      "unit": "thousands converted to persons by multiplication by 1000",
+      "license": "CC BY 3.0 IGO",
+      "scope": "7 urban agglomerations, national urban definitions differ"
+    },
+    {
+      "id": "chile-identity2024",
+      "url": "https://censo2024.ine.gob.cl/wp-content/uploads/2025/06/PRESENTACION-NACIONAL_4_CPV2024.pdf",
+      "pages": [
+        6,
+        8,
+        9,
+        10,
+        11
+      ],
+      "year": 2024,
+      "license": "CC BY-SA 4.0",
+      "licenseEvidence": "https://www.ine.gob.cl/terminos-de-uso-y-licencia-de-datos-abiertos",
+      "scope": "national and 6 selected administrative regions; separate identity questions, not language or residential territories"
+    },
+    {
+      "id": "chile-religion2024",
+      "url": "https://censo2024.ine.gob.cl/wp-content/uploads/2025/08/Presentacion-resultados-religion-o-credos_CPV2024.pdf",
+      "pages": [
+        7,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "year": 2024,
+      "license": "CC BY-SA 4.0",
+      "denominator": "usual residents aged 15+ responding to religion/creed question 31",
+      "scope": "3 published categories, national and 6 selected administrative regions; other categories are not reclassified"
+    },
+    {
+      "id": "panama-identity2023",
+      "url": "https://www.inec.gob.pa/archivos/P053342420231009161532Comentarios_Poblacion%20RFB%202023%20VF.pdf",
+      "page": 3,
+      "year": 2023,
+      "license": "CC BY 4.0",
+      "licenseEvidence": "https://www.inec.gob.pa/publicaciones/Default3.aspx?ID_CATEGORIA=19&ID_PUBLICACION=1199&ID_SUBCATEGORIA=7",
+      "scope": "national, separate affirmative indicators; final usual-resident denominator 4064780",
+      "priorDataReview": "PR307 bebf096ef097c563a10b808ac29726a6cfd48106; data only, whole branch not merged"
+    }
+  ],
+  "blocked": [
+    {
+      "id": "ghsl-original-cell-counts",
+      "reason": "Pinned official original ZIP request rejected by HTTP tunnel with 403; retained display grid only stores density, not persons plus valid area"
+    },
+    {
+      "id": "wup2025",
+      "reason": "Official 2025 summary could not be retrieved with web tool"
+    },
+    {
+      "id": "brazil-culture",
+      "reason": "IBGE official source/download access 403 and reuse terms unverified; values not copied"
+    },
+    {
+      "id": "peru-guatemala-colombia",
+      "reason": "Source rows and/or explicit reuse terms not both verified; unadopted"
+    },
+    {
+      "id": "undata-alternative",
+      "reason": "UNdata conditions of use verified (free copying with citation), but country-filtered religion rows remained inaccessible; no country data copied"
+    }
+  ],
+  "coverageComplete": false,
+  "legalAlternative": {
+    "url": "https://data.un.org/Host.aspx?Content=UNdataUse",
+    "terms": "Free copying, duplication and redistribution with UNdata citation; verified on 2026-10-10",
+    "remainingBlocker": "Country-filtered actual source rows unavailable"
+  },
+  "agricultureBackground": [
+    {
+      "id": "fao-rice-water-management",
+      "url": "https://www.fao.org/4/y5682e/y5682e09.htm",
+      "year": 2004,
+      "use": "Paraphrased background on multiple rice systems and water management; no regional irrigation shares inferred"
+    },
+    {
+      "id": "oecd-fao-cotton2022",
+      "url": "https://www.oecd.org/en/publications/2022/06/oecd-fao-agricultural-outlook-2022-2031_e00c413c/full-report/component-13.html",
+      "year": 2022,
+      "use": "Paraphrased cultivation and Brazil crop rotation background; forecast quantities not adopted"
+    }
+  ]
+}

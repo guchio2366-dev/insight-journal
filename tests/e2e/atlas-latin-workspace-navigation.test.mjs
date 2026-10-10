@@ -45,4 +45,4 @@ test('Latin overview country selection opens all four fields with the same count
  });
 });
 
- test('Latin population moves its single region selector left without adding country selection',async()=>{await withPage('population',async(d,w)=>{initLatinWorkspaceLayout();const controls=d.querySelector('[data-latin-navigation-selection]');assert.equal(controls.querySelectorAll('select').length,1);assert.ok(controls.querySelector('[data-lp-scope-select]'));assert.equal(d.querySelector('[data-lp-place-select]'),null);assert.equal(d.querySelectorAll('.latin-fields>a').length,5);});});
+ test('Latin population moves its region and display selectors left without adding country selection',async()=>{await withPage('population',async(d,w)=>{initLatinWorkspaceLayout();const controls=d.querySelector('[data-latin-navigation-selection]');assert.equal(controls.querySelectorAll('select').length,2);assert.ok(controls.querySelector('[data-lp-scope-select]'));assert.equal(d.querySelector('[data-lp-place-select]'),null);assert.equal(d.querySelectorAll('.latin-fields>a').length,5);});});

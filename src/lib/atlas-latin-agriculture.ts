@@ -46,7 +46,7 @@ export function renderLatinAgricultureWorkspaceMap(state:LatinAgricultureMapStat
  const height=740,{frame,transform}=latinMapLayout(state.scope,state.place,height);
  const [left,top]=projectLatin([overview.bounds[0],overview.bounds[3]]),[right,bottom]=projectLatin([overview.bounds[2],overview.bounds[1]]);
  const prefix=idPrefix.replace(/[^a-zA-Z0-9_-]/g,'');
- const image=(directory:string,file:string,extra='')=>`<image href="${withBase('/assets/atlas/'+directory+'/'+file)}" x="${left}" y="${top}" width="${right-left}" height="${bottom-top}" preserveAspectRatio="none" ${extra}/>`;
+ const image=(directory:string,file:string,extra='')=>`<image href="${withBase('/assets/atlas/'+directory+'/'+file)}" x="${left}" y="${top}" width="${right-left}" height="${bottom-top}" preserveAspectRatio="none" style="image-rendering:pixelated" ${extra}/>`;
  const paths=latinCountries34.map(c=>`<path d="${c.path}" fill="#f0ede3" stroke="#7c8b87" stroke-width=".65" vector-effect="non-scaling-stroke" pointer-events="none"/>`).join('');
  // Label anchors come from an actual positive source cell; leaders separate nearby names.
  const labels=readingOverview.labels.map((p,i)=>{const [x,y]=projectLatin(p.coordinate),dx=i%2===0?-44:35,dy=(i%3-1)*27;return `<g data-latin-agriculture-layer="${p.id}" role="button" tabindex="0" aria-label="${escape(p.name)}の概説と解説" aria-pressed="${state.layer===p.id}" class="latin-product-label"><path d="M${x},${y}l${dx},${dy}" fill="none" stroke="#425c55" vector-effect="non-scaling-stroke"/><text x="${x+dx}" y="${y+dy}" text-anchor="${dx<0?'end':'start'}">${escape(p.name)}</text></g>`;}).join('');
