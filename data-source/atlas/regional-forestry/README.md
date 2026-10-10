@@ -35,3 +35,9 @@ Regional forestry PC review は既存GitHubランナーの通常sandbox付きChr
 scripts/regional-forestry/prepare-tree-cover.mjs はEuropeの既存COG概観抽出アルゴリズムを使う独立した地域用処理。今回は原図を取得できず配信画像を生成していない。通常の正規接続が可能な環境でのみ、例えば node scripts/regional-forestry/prepare-tree-cover.mjs --region africa --fetch --cache /tmp/regional-forestry-source-cache で取得できる。403は停止し、森林面を代替生成しない。
 
 4地域全域の被覆取得、表示への接続と検証は残件で、このDraftでは完了扱いにしない。数値統計は別担当の成果と統合する必要がある。マージ・公開は行わない。
+
+## ロシア数値の統合依存先
+
+親担当から2026年10月10日に指定されたDraft PR #296（https://github.com/guchio2366-dev/insight-journal/pull/296）、head e2f7a5d に依存する。`src/data/atlas/russia-forestry-statistics.json` は森林面積・丸太・製材の2015〜2024年30行を既存の欧州保存値から接続したもの。独立表示は `src/components/atlas/RussiaForestryStatistics.astro`。こちらでは同じ数値を再取得・再実装していない。
+
+親が #296 の数値と画像を確認後、最終統合時に上記データ・コンポーネントの必要部分だけを接続する。`RegionalForestryPage.astro` の地図＋右解説の `forest-primary-grid` の後へ、`region==='russia'` のときだけ独立表示を配置できる。森林面積・木材生産量は分布の凡例や画素から算出せず、統計表の対象年2015〜2024と地図の2020／2021年を区別する。#296 の全変更を繰り返し取り込む必要はない。
