@@ -1,5 +1,6 @@
 import type {Map} from 'maplibre-gl';
 import {formatJapanQuantity} from '../lib/atlas-japan-number';
+import type {JapanFarmVisibility} from '../lib/atlas-japan-agriculture-visibility';
 import reference from '../../public/assets/atlas/japan-agriculture-v3/manifest.json';
 import {decodeAsiaNumericGrid,readAsiaNumericCell,type AsiaNumericGrid} from '../lib/atlas-asia-numeric-grid';
 
@@ -10,14 +11,16 @@ export function mountJapanAgricultureLayers(map:Map,base:string){
   map.addSource('japan-farm-'+layer.id,{type:'image',url:base+layer.image,coordinates:layer.imageCoordinates as [number,number][]});
   map.addLayer({id:'japan-farm-'+layer.id,type:'raster',source:'japan-farm-'+layer.id,layout:{visibility:'none'},paint:{'raster-resampling':'nearest','raster-fade-duration':0}},'japan-prefecture-border');
  }
- return {show(field:string,topic:string){
+ return {show(field:string,topic:string,visibility:JapanFarmVisibility={}){
   for(const layer of reference.layers){
-   const visible=field==='agriculture'&&(topic==='forest'?layer.id==='forest':layer.id!=='forest');
+   const visible=field==='agriculture'&&(topic==='forest'?layer.id==='forest':layer.id!=='forest'&&(layer.id==='pig'?visibility.showLivestock!==false:visibility.showCrops!==false));
    map.setLayoutProperty('japan-farm-'+layer.id,'visibility',visible?'visible':'none');
    map.setPaintProperty('japan-farm-'+layer.id,'raster-opacity',topic==='all'||topic==='forest'||(topic==='pork'?'pig':topic)===layer.id?1:.35);
   }
- },async sample(topic:string,lng:number,lat:number){
-  const selected=topic==='all'?['rice','wheat','pig']:topic==='pork'?['pig']:['rice','wheat'].includes(topic)?[topic]:[];
+ },visibleLayers(){return reference.layers.filter(layer=>map.getLayoutProperty('japan-farm-'+layer.id,'visibility')==='visible').map(layer=>layer.id);},async sample(topic:string,lng:number,lat:number,visibility:JapanFarmVisibility={}){
+  if(topic!=='forest'&&visibility.showCrops===false&&visibility.showLivestock===false)return '作物・畜産の分布は非表示です。表示切替で再び表示できます。';
+  const selected=(topic==='all'?['rice','wheat','pig']:topic==='pork'?['pig']:['rice','wheat'].includes(topic)?[topic]:[]).filter(id=>id==='pig'?visibility.showLivestock!==false:visibility.showCrops!==false);
+  if(!selected.length&&['rice','wheat','pork'].includes(topic))return '選んだ品目の分布は非表示です。作物・畜産の表示切替で再び表示できます。';
   if(!selected.length)return topic==='forest'?'森林はJRCの参考画像で、地点の森林判定や面積計算は行いません。':'この品目の地域数量は未収録。背景の面は米・小麦・豚の別資料です。';
   const parts=await Promise.all(selected.map(async id=>{
    const layer=reference.layers.find(l=>l.id===id)!;

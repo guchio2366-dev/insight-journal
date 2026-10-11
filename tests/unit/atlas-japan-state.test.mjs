@@ -59,3 +59,15 @@ test('全国の金額・時点・原表状態と人口の5km集約値を保持�
  for(let r=0;r<metadata.height;r++)for(let c=0;c<metadata.width;c++){const value=data.readFloatLE((r*metadata.width+c)*4);if(value===-200)continue;assert.equal(value,source.readFloatLE(((row+r)*base.width+col+c)*4));checked++;}
  assert(checked>10000);
 });
+
+test('作物と畜産は品目・産地・カメラと独立してURLと分野移動に保存する',()=>{
+ const scoped={...context,agricultureSites:['tokachi-farming']};
+ const initial=readJapanState(url('japan/agriculture/?topic=wheat&site=tokachi-farming&crops=off&livestock=off&lng=137&lat=38&z=4.5'),scoped);
+ assert.equal(initial.showCrops,false);assert.equal(initial.showLivestock,false);assert.equal(initial.topic,'wheat');assert.equal(initial.site,'tokachi-farming');
+ assert.deepEqual(readJapanState(writeJapanState(url('japan/agriculture/'),initial),scoped),initial);
+ const industry=readJapanState(writeJapanState(url('japan/agriculture/'),{...initial,field:'industry',topic:'clusters',site:null}),scoped);
+ assert.equal(industry.showCrops,false);assert.equal(industry.showLivestock,false);assert.deepEqual(industry.camera,initial.camera);
+ const restored=readJapanState(writeJapanState(url('japan/industry/'),{...industry,field:'agriculture',topic:'wheat'}),scoped);assert.equal(restored.showCrops,false);assert.equal(restored.showLivestock,false);
+ const one=readJapanState(url('japan/agriculture/?livestock=off&crops=garbage'),scoped);assert.equal(one.showCrops,true);assert.equal(one.showLivestock,false);
+ assert.equal(writeJapanState(url('japan/agriculture/?crops=off'),{...one,showLivestock:true}).searchParams.has('crops'),false);
+});
