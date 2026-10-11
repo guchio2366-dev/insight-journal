@@ -16,8 +16,8 @@ await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const origin=`h
 const report={baseCommit:'ab2bf51581f6874fb141b5e858892c7a2faf9f2e',headCommit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),workingTree:execFileSync('git',['status','--porcelain'],{encoding:'utf8'}).trim()||'clean',browser:null,chromiumSandbox:true,network:'only localhost; all external requests blocked',cases:[],errors:[],images:[],console:[]};
 let browser,activePage,phase='launch';
 try{
- browser=await chromium.launch({executablePath:process.env.REVIEW_CHROME_PATH??'/usr/bin/chromium',headless:true,chromiumSandbox:true});report.browser=browser.version();phase='checks';
- for(const [width,height] of [[1440,900],[1024,768]]){
+ browser=await chromium.launch({executablePath:process.env.REVIEW_CHROME_PATH??'/usr/bin/chromium',headless:true,chromiumSandbox:true,ignoreDefaultArgs:['--unsafely-disable-devtools-self-xss-warnings']});report.browser=browser.version();phase='checks';
+ for(const [width,height] of [[1920,1080],[1440,900],[1024,768]]){
   const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:1,serviceWorkers:'block'});
   await context.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());
   const page=await context.newPage();await page.addInitScript(()=>{const counts=new WeakMap();window.japanReviewListeners=counts;const add=EventTarget.prototype.addEventListener;EventTarget.prototype.addEventListener=function(type,callback,options){if(type==='click'&&this instanceof Element&&this.matches('[data-japan-farm-topic],[data-japan-farm-site],[data-japan-feature],[data-japan-clear-selection]'))counts.set(this,(counts.get(this)??0)+1);return add.call(this,type,callback,options);};});activePage=page;page.on('pageerror',error=>report.errors.push({width,error:error.message}));page.on('console',message=>{if(['warning','error'].includes(message.type()))report.console.push({width,type:message.type(),text:message.text()});});
