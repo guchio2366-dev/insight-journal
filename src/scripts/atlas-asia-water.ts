@@ -149,10 +149,8 @@ export function createAsiaWater(root:HTMLElement,config:Config,getState:()=>Asia
    try{await load('basins');}catch{return;}
    if(seq!==revision||getState().topic!=='water'||map!==currentMap)return;
    const outlines=datasets.get('basins')!.outlines;
-   if(!map.getSource('asia-southeast-water-basins')){
-    map.addSource('asia-southeast-water-basins-source',{type:'geojson',data:outlines});
-    map.addLayer({id:'asia-southeast-water-basins',type:'line',source:'asia-southeast-water-basins-source',paint:{'line-color':'#548ba2','line-width':1.15,'line-opacity':.85,'line-dasharray':[2,2]}},before);
-   }
+   if(!map.getSource('asia-southeast-water-basins-source'))map.addSource('asia-southeast-water-basins-source',{type:'geojson',data:outlines});
+   if(!map.getLayer('asia-southeast-water-basins'))map.addLayer({id:'asia-southeast-water-basins',type:'line',source:'asia-southeast-water-basins-source',paint:{'line-color':'#548ba2','line-width':1.15,'line-opacity':.85,'line-dasharray':[2,2]}},before);
    map.setFilter('asia-southeast-water-basins',['in',['get','id'],['literal',asiaWaterFocus['southeast-asia'].map(f=>f.id)]]);
    map.setLayoutProperty('asia-southeast-water-basins','visibility','visible');
   }
