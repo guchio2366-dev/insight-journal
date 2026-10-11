@@ -1,0 +1,51 @@
+#!/usr/bin/env node
+import assert from 'node:assert/strict';
+import {createServer} from 'node:http';
+import {readFile,mkdir,writeFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {extname,join,resolve,sep} from 'node:path';
+import {chromium} from 'playwright';
+
+const root=resolve('dist'),out=resolve('review-artifacts/southeast-second-pass');
+const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.gz':'application/gzip','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.svg':'image/svg+xml','.woff2':'font/woff2'};
+await mkdir(out,{recursive:true});
+const server=createServer(async(req,res)=>{try{let path=decodeURIComponent(new URL(req.url,'http://localhost').pathname);assert(path.startsWith('/insight-journal/'));path=path.slice('/insight-journal'.length);const file=resolve(root,'.'+path,path.endsWith('/')?'index.html':'');assert(file.startsWith(root+sep));res.writeHead(200,{'content-type':mime[extname(file)]??'application/octet-stream'}).end(await readFile(file));}catch{res.writeHead(404).end('Missing static asset');}});
+await new Promise(r=>server.listen(0,'127.0.0.1',r));
+const base=`http://127.0.0.1:${server.address().port}`;let browser;const checks=[],images=[],errors=[],external=[];let failure=null;
+try{
+ browser=await chromium.launch({executablePath:process.env.REVIEW_CHROME_PATH,headless:true,chromiumSandbox:true});
+ const page=await browser.newPage({viewport:{width:1920,height:1080},deviceScaleFactor:1,serviceWorkers:'block'});page.setDefaultTimeout(20000);
+ await page.route('**/*',route=>{if(new URL(route.request().url()).origin!==base){external.push(route.request().url());return route.abort('blockedbyclient');}return route.continue();});
+ page.on('pageerror',e=>errors.push(e.message));
+ const open=async(path)=>{await page.goto(base+'/insight-journal/atlas/asia/southeast-asia/'+path,{waitUntil:'networkidle'});await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-map-fallback]')?.hidden);};
+ const shot=async(name,selector)=>{await page.evaluate(async()=>{await document.fonts.ready;scrollTo(0,0);await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});const filename=name+'.jpg',bytes=selector?await page.locator(selector).screenshot({path:join(out,filename),type:'jpeg',quality:76,animations:'disabled'}):await page.screenshot({path:join(out,filename),type:'jpeg',quality:72,animations:'disabled'});images.push({file:filename,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')});};
+ const check=label=>checks.push(label);
+ await open('agriculture/?topic=forest');await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.southeastFarmTopic==='forest');
+ assert.equal(await page.locator('.southeast-forest-connections').isVisible(),true);
+ assert.equal(await page.locator('.asia-farm-connections-grid').isVisible(),false);
+ assert.equal(await page.locator('[data-southeast-crop-priority]').isVisible(),false);
+ assert.match(await page.locator('.southeast-forest-connections').textContent(),/森林面積.*丸太材.*木材製品の輸出/s);
+ check('forest separates JRC map, FAO forest area and wood production, and HS44 exports');await shot('forest-map');await shot('forest-statistics','.southeast-forest-connections');
+ await page.locator('.southeast-forest-connections a[href*="industryKind=wood"]').click();
+ await page.waitForFunction(()=>document.querySelector('[data-southeast-industry-kind="wood"]')?.getAttribute('aria-pressed')==='true');
+ assert.equal(new URL(page.url()).searchParams.get('industryKind'),'wood');await page.reload({waitUntil:'networkidle'});
+ await page.waitForFunction(()=>document.querySelector('[data-southeast-industry-kind="wood"]')?.getAttribute('aria-pressed')==='true');
+ check('forest to wood industry survives reload');await shot('wood-industry');
+ await open('agriculture/?topic=rubber');assert.equal(await page.locator('.southeast-rubber-bridge').isVisible(),true);
+ await page.locator('.southeast-rubber-bridge a').click();await page.waitForFunction(()=>document.querySelector('[data-southeast-industry-kind="rubber"]')?.getAttribute('aria-pressed')==='true');
+ check('rubber distribution opens rubber and tire sites');await shot('rubber-industry');
+ await open('nature/?topic=water');await page.waitForFunction(()=>document.querySelector('[data-hydrology-status]')?.textContent==='');
+ assert.match(await page.locator('[data-hydrology-legend-note]').textContent(),/5水系/);
+ assert.equal(await page.locator('.asia-river-label:visible').count()>=5,true);
+ await page.locator('[data-water-select]').selectOption('rivers-254');assert.match(await page.locator('[data-hydrology-content]').textContent(),/中国南西部.*南シナ海/s);
+ // The visible legend and the map image are authoritative if internals stay private.
+ check('river, groundwater and five basin outlines share a regional map; Mekong reading names flow and mouth');await shot('water-mekong');
+ await open('nature/?topic=precipitation');assert.match(await page.locator('[data-hydrology-legend-note]').textContent(),/250mm/);check('rainfall uses 250 mm contours');await shot('rainfall');
+ await open('nature/?topic=terrain');assert.match(await page.locator('[data-physical-legend]').textContent(),/500|標高/);check('terrain reading is available');await shot('terrain');
+ await open('nature/?city=jakarta');assert.match(await page.locator('[data-city-panel="jakarta"] [data-climate-place]').textContent(),/雨温図/);check('Jakarta chart has an explicit rain-temperature heading');await shot('jakarta-climate');
+ await open('population/');const options=await page.locator('[data-population-city] option').evaluateAll(nodes=>nodes.map(n=>({id:n.value,country:n.dataset.country,disabled:n.disabled})));const idn=options.find(o=>o.country==='IDN'),vnm=options.find(o=>o.country==='VNM');assert(idn&&vnm&&!idn.disabled&&!vnm.disabled);
+ await page.locator('[data-population-city]').selectOption(idn.id);await page.locator('[data-population-city]').selectOption(vnm.id);assert.equal(await page.locator('[data-population-city]').inputValue(),vnm.id);await page.reload({waitUntil:'networkidle'});assert.equal(await page.locator('[data-population-city]').inputValue(),vnm.id);
+ check('population city can switch Indonesia to Vietnam and survives reload');await shot('population-vietnam');
+ assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
+ console.log(JSON.stringify({passed:true,checks,images:images.length,browser:browser.version(),viewport:'1920x1080 CSS px, DPR 1'}));
+}catch(error){failure=String(error?.stack??error);throw error;}finally{await writeFile(join(out,'results.json'),JSON.stringify({passed:!failure&&errors.length===0&&external.length===0,checks,images,errors,external,failure,head:process.env.REVIEW_HEAD_SHA??null},null,2));await browser?.close();await new Promise(r=>server.close(r));}

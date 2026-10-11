@@ -1,0 +1,58 @@
+name: Review Southeast Asia second pass on PC
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/atlas-southeast-second-pass-pc.yml'
+      - 'scripts/verify-southeast-second-pass-pc.mjs'
+      - 'src/components/atlas/asia/SoutheastAsiaFarmView.astro'
+      - 'src/components/atlas/AsiaClimateDiagram.astro'
+      - 'src/data/atlas/asia-southeast-water-reading.ts'
+      - 'src/scripts/atlas-asia-water.ts'
+      - 'src/scripts/atlas-asia-explorer.ts'
+      - 'src/scripts/atlas-asia-southeast-industry.ts'
+permissions:
+  contents: read
+concurrency:
+  group: southeast-second-pass-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+      REVIEW_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - name: Find sandboxed Chrome and Japanese fonts
+        shell: bash
+        run: |
+          set -euo pipefail
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          if [[ -z "$chrome_path" ]]; then echo 'Chrome is required'; exit 1; fi
+          if [[ -z "$(fc-list ':lang=ja' family)" ]]; then
+            sudo apt-get update
+            sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+          fi
+          if [[ -z "$(fc-list ':lang=ja' family)" ]]; then echo 'Japanese fonts are required'; exit 1; fi
+          printf 'REVIEW_CHROME_PATH=%s\n' "$chrome_path" >> "$GITHUB_ENV"
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - name: Verify 1920x1080 views and operations
+        run: node scripts/verify-southeast-second-pass-pc.mjs
+      - name: Save compact review images
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: southeast-second-pass-${{ github.run_id }}-${{ github.run_attempt }}
+          path: review-artifacts/southeast-second-pass
+          if-no-files-found: warn
+          compression-level: 7
+          retention-days: 7
