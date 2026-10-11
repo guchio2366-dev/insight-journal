@@ -355,12 +355,22 @@ for(const topic of ['ethnicity'])test(`${topic} shows all three published respon
   }finally{await app.w.happyDOM.close();}
 });
 
-test('religion shows the 2020 country compositions and keeps national census details separate',async()=>{
+test('religion starts with 45-country confessions and retains optional Pew and census details',async()=>{
   const app=await setup('/insight-journal/atlas/europe/population/?layer=religion&render=static');
   try{
     assert.equal(app.w.document.querySelectorAll('[data-eu-religion-national]:not([hidden])').length,0);
     const colorKey=app.q('[data-eu-religion-color-key]');
     assert.equal(colorKey.parentElement,app.q('[data-eu-map-legend]'));
+    assert.equal(colorKey.hidden,true);
+    assert.equal(app.q('[data-eu-smre-key]').hidden,false);
+    assert.equal(app.q('[data-eu-pew-map-key]').hidden,true);
+    assert.equal(app.w.document.querySelectorAll('[data-culture-code]').length,0);
+    assert.equal(app.q('[data-eu-shape=POL]').style.fill,app.q('[data-eu-shape=ITA]').style.fill);
+    assert.notEqual(app.q('[data-eu-shape=SWE]').style.fill,app.q('[data-eu-shape=POL]').style.fill);
+    app.q('[data-eu-shape=DEU]').dispatchEvent(new app.w.MouseEvent('click',{bubbles:true}));
+    assert.match(app.q('[data-eu-religion-evidence-reading]').textContent,/ドイツ.*SMRE 2010期.*カトリック 30.2%.*プロテスタント 29.2%.*宗教的帰属なし 33.1%/s);
+    app.q('[data-eu-religion-back]').click();
+    app.q('[data-eu-pew-surface-group=unaffiliated]').click();
     assert.equal(colorKey.hidden,false);
     assert.equal(app.q('[data-eu-pew-map-key]').hidden,false);
     assert.equal(app.w.document.querySelectorAll('[data-eu-pew-marker]').length,40);
@@ -369,7 +379,7 @@ test('religion shows the 2020 country compositions and keeps national census det
     assert.equal(app.q('[data-eu-pew-marker="ALB"] .eu-pew-marker-bar').children[1].style.width,'74.5%');
     assert.match(app.q('[data-eu-shape="VAT"]').style.fill,/(#d9dcda|rgb\(217, 220, 218\))/);
     assert.equal(app.w.document.querySelectorAll('[data-eu-religion-evidence]:not([hidden])').length,0);
-    assert.match(app.q('[data-culture-takeaway]').textContent,/概説.*国別の2020年推計.*キリスト教.*無宗教/);
+    assert.match(app.q('[data-culture-takeaway]').textContent,/概説.*国別の2020年推計.*キリスト教.*無所属/);
     assert.match(app.q('[data-culture-overview]').textContent,/解説.*宗教改革.*南東欧の歴史/);
     app.q('[data-eu-pew-marker="SRB"]').click();
     await until(()=>!app.q('[data-eu-religion-evidence-reading]').hidden);

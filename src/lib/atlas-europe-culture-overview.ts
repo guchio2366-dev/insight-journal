@@ -4,6 +4,7 @@ import { europeReligionRegionalEvidence, religionEvidenceShare } from '../data/a
 import { europeReligionNationalProfiles, europeReligionNationalProfile, type ReligionNationalProfile } from '../data/atlas/europe/religion-national-overview';
 import { pew2020EuropeRow, pew2020EuropeGroups, pew2020EuropeSource, pew2020EuropeTerms } from '../data/atlas/europe/pew-religion-2020';
 import europeCountries from '../data/atlas/europe/countries.json' with {type:'json'};
+import {smreRow,smreGroups,smreSource,smreLargestGroup} from './atlas-europe-smre-surface';
 
 export const europeCultureOverviewPlaces = [
   ...europeCultureCompositions('ethnicity'),
@@ -46,17 +47,17 @@ export function createEuropeCultureOverview(root:HTMLElement,onSelectLocal:(id:s
   const evidencePanel=root.querySelector<HTMLElement>('[data-eu-religion-evidence-reading]');
   let rendered='';
   return {
-    render(active:boolean,kind:PopulationCaseChoiceKind,caseId:string){
-      const colorKey=root.querySelector<HTMLElement>('[data-eu-religion-color-key]');if(colorKey)colorKey.hidden=!active||kind!=='religion'||!!caseId;
-      if(!key)return;key.hidden=!active||!!caseId;if(key.hidden||rendered===kind)return;
+    render(active:boolean,kind:PopulationCaseChoiceKind,caseId:string,mode:'smre'|'pew'='smre'){
+      const colorKey=root.querySelector<HTMLElement>('[data-eu-religion-color-key]');if(colorKey)colorKey.hidden=!active||kind!=='religion'||!!caseId||mode!=='pew';
+      if(!key)return;key.hidden=!active||!!caseId;if(key.hidden||rendered===kind+mode)return;
       key.querySelector('[data-eu-culture-key-intro]')!.textContent=kind==='religion'
-        ?'Pew Research Centerの2020年推計（40か国・7分類）は小帯、国勢調査などで宗派まで判明する対象は名前付きの構成帯で示します。帯の幅は各資料が定める分母に対する割合です。'
+        ?mode==='smre'?'SMREの標準化推計（45か国・8分類）で広域の宗派と宗教を比較します。色は各国の最大分類で、国を選ぶと構成全体を読めます。':'Pew Research Centerの2020年推計（40か国・7分類）は小帯、国勢調査などで宗派まで判明する対象は名前付きの構成帯で示します。帯の幅は各資料が定める分母に対する割合です。'
         :'2021年の公表総計 · 円は同じ大きさです。角度は各対象の総人口に占める回答割合で、円の位置は対象を示す目印です。人口規模・個人の位置・細地域の分布を表しません。';
       key.querySelector('[data-eu-culture-key-coverage]')!.textContent=kind==='religion'
-        ?'名前付きの構成帯は英・ウェールズ、チェコ、クロアチア、セルビア、エストニアの公式原表です。これら５対象ではPewの小帯を重ねず、国選択後にPew推計も別掲します。最多・過半数塗りではありません。宗派、無宗教、未回答、年齢条件は原表どおりで、対象外は0%ではありません。'
+        ?mode==='smre'?'2010期は2006–2015年の資料を統合した推計です。国内差を全国値から作っていません。国選択後の国勢調査と地方統計は、それぞれの年代・質問・年齢条件で別掲します。':'名前付きの構成帯は英・ウェールズ、チェコ、クロアチア、セルビア、エストニアの公式原表です。これら５対象ではPewの小帯を重ねず、国選択後にPew推計も別掲します。最多・過半数塗りではありません。宗派、無宗教、未回答、年齢条件は原表どおりで、対象外は0%ではありません。'
         :'イングランド・ウェールズ・クロアチアだけを掲載しています。最多・過半数の分類で土地を塗った地図ではありません。色は各表の分類を区別し、国をまたいだ同色の対応はありません。';
       key.querySelector<HTMLElement>('[data-eu-pew-attribution]')!.hidden=kind!=='religion';
-      key.querySelector('[data-eu-composition-tables]')?.replaceChildren(...(kind==='religion'?[]:europeCultureCompositions(kind).map(table)));rendered=kind;
+      key.querySelector('[data-eu-composition-tables]')?.replaceChildren(...(kind==='religion'?[]:europeCultureCompositions(kind).map(table)));rendered=kind+mode;
     },
     decorate(id:string,button:HTMLButtonElement){
       const national=europeReligionNationalProfile(id);
@@ -90,11 +91,13 @@ export function createEuropeCultureOverview(root:HTMLElement,onSelectLocal:(id:s
       const evidence=active?europeReligionRegionalEvidence.find(item=>item.id===id):undefined;
       const country=evidence?.country||europeReligionNationalProfile(id)?.country||place;
       const pew=active?pew2020EuropeRow(country):undefined;
+      const smre=active?smreRow(country):undefined;
       const national=active?(europeReligionNationalProfile(id)??europeReligionNationalProfiles.find(item=>item.country===country)):undefined;
-      evidencePanel.hidden=!pew&&!national&&!evidence;
-      if(!pew&&!national&&!evidence)return;
+      evidencePanel.hidden=!smre&&!pew&&!national&&!evidence;
+      if(!smre&&!pew&&!national&&!evidence)return;
       evidencePanel.replaceChildren();
       const back=document.createElement('button');back.type='button';back.dataset.euReligionBack='';back.textContent='← 欧州全体へ';back.addEventListener('click',onClear);evidencePanel.append(back);
+      if(smre)appendSmreReading(evidencePanel,smre);
       if(pew)appendPewReading(evidencePanel,pew);
       if(national)appendNationalReading(evidencePanel,national,evidence?.id,onSelectLocal);
       if(!evidence)return;
@@ -108,6 +111,20 @@ export function createEuropeCultureOverview(root:HTMLElement,onSelectLocal:(id:s
       const license=document.createElement('p'),licenseLink=document.createElement('a');licenseLink.href=evidence.licenseUrl;licenseLink.textContent=evidence.license;license.append('利用条件：',licenseLink);evidencePanel.append(license);
     },
   };
+}
+
+function appendSmreReading(panel:HTMLElement,row:NonNullable<ReturnType<typeof smreRow>>){
+  const name=europeCountries.find(country=>country.code===row.code)?.name??row.code;
+  const title=document.createElement('h4');title.dataset.euSmreReading=row.code;title.textContent=`${name}の宗派・宗教 · SMRE 2010期`;panel.append(title);
+  const context=document.createElement('p');context.textContent=`2006–2015年の資料を統合した国別推計（01/2018版）。最大分類：${smreLargestGroup(row.code)?.label}。各割合は全国値で、国内の均一性を示しません。`;panel.append(context);
+  const bar=document.createElement('div');bar.className='eu-religion-reading-bar';bar.setAttribute('role','img');bar.setAttribute('aria-label',smreGroups.map((group,index)=>`${group.label} ${row.shares[index]}%`).join('、'));
+  const list=document.createElement('ul');
+  smreGroups.forEach((group,index)=>{const part=document.createElement('span');part.style.width=`${row.shares[index]}%`;part.style.background=group.color;bar.append(part);const item=document.createElement('li');item.dataset.euSmreGroup=group.id;item.textContent=`${group.label} ${row.shares[index]}%`;list.append(item);});
+  const total=row.shares.reduce((sum,value)=>sum+value,0);
+  if(Math.abs(total-100)<=.4)panel.append(bar);panel.append(list);
+  const note=document.createElement('p');note.textContent=`資料品質 ${row.quality}：${({1:'信頼できる',2:'おおむね信頼できる',3:'問題があるため注意が必要'} as Record<number,string>)[row.quality]}（SMREの評価）。原表の公表値を保持しています${Math.abs(total-100)>.4?`（8分類の原表合計 ${Math.round(total*10)/10}%：合計の不一致を保持し、構成帯は表示していません）`:''}。100%へ補正していません。「宗教的帰属なし」は公表分類で、未回答・不明の残差として計算した値ではありません。`;panel.append(note);
+  const source=document.createElement('a');source.href=smreSource.source;source.textContent=`Liedhegener・Odermatt（2018）, Appendix A, PDF p.${row.pdfPage}`;panel.append(source);
+  const license=document.createElement('p'),link=document.createElement('a');link.href=smreSource.licenseUrl;link.textContent='SMRE ODbL 1.0 / DBCL 1.0';license.append('利用条件：',link,'。SMRE自身の標準化推計を抜粋・表示用に加工。個別原資料の権利は別です。');panel.append(license);
 }
 
 function appendPewReading(panel:HTMLElement,row:NonNullable<ReturnType<typeof pew2020EuropeRow>>){

@@ -418,6 +418,12 @@
 .eu-workspace-root .eu-pew-surface-scale { display:flex; flex-wrap:wrap; gap:3px 9px; }
 .eu-workspace-root .eu-pew-surface-scale span { display:inline-flex; align-items:center; gap:3px; white-space:nowrap; }
 .eu-workspace-root .eu-pew-surface-scale i { width:14px; height:11px; border:1px solid #7c8c91; }
+@media(min-width:1200px) {
+ .eu-workspace-root[data-europe-detail].is-eu-culture-reading:has([data-eu-smre-key]:not([hidden])) .eu-map-stage { height:clamp(350px,calc(100dvh - 560px),640px); min-height:0; max-height:none; aspect-ratio:auto; }
+ .eu-workspace-root[data-eu-religion-overview="smre"] [data-eu-pew-surface-key]:not([hidden]) { display:flex; flex-wrap:wrap; align-items:center; gap:6px 12px; margin:4px 0; padding:6px; }
+ .eu-workspace-root[data-eu-religion-overview="smre"] [data-eu-pew-surface-key]>strong { display:none; }
+ .eu-workspace-root [data-eu-smre-key] { margin:4px 0; padding:6px; gap:3px; }
+}
 .eu-workspace-root :is(.eu-read-panel,.eu-drainage-choice) .eu-grid-value p { font:14px/1.6 var(--sans); color:#3b4848; }
 
 /* Quiet names keep the climate surface visible. Other stations stay focusable. */

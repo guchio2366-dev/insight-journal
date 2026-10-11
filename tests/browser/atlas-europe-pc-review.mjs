@@ -672,6 +672,10 @@ async function stageOneOperations(page, profile) {
   await compositionCheck();
   await openEurope(page, 'atlas/europe/population/?layer=religion', 'normal');
   for (const name of ['case', 'category', 'area']) assert.equal(await page.locator(`[data-culture-${name}]`).inputValue(), '');
+  assert.equal(await page.locator('[data-eu-smre-key]').isVisible(),true);
+  assert.equal(await page.locator('[data-eu-religion-national]:visible').count(),0);
+  assert.equal(await page.locator('[data-eu-pew-marker]:visible').count(),0);
+  await page.locator('[data-eu-pew-surface-group=unaffiliated]').click();
   assert.equal(await page.locator('[data-eu-religion-national]:visible').count(),5);
   assert.equal(await page.locator('[data-eu-composition]:visible').count(),0);
   assert.equal(await page.locator('[data-eu-religion-color-key]').isVisible(),true);

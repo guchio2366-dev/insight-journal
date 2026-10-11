@@ -141,7 +141,7 @@ export function fetchCaseGeometry(caseId: string, options: { base?: string; fetc
   }
   return sharedGeometry.get(url)!;
 }
-type MapAttachment = { mapLayer?: SVGGElement; project?: (point: number[]) => [number, number]; onFitBounds?: (bounds: CultureBounds) => void; onMapData?: (data: CultureMapData) => void };
+type MapAttachment = { mapLayer?: SVGGElement; project?: (point: number[]) => [number, number]; onFitBounds?: (bounds: CultureBounds) => void; onMapData?: (data: CultureMapData) => void; overviewMap?:()=>boolean };
 export type CultureOptions = MapAttachment & {
   legend?: HTMLElement;
   base?: string;
@@ -276,6 +276,10 @@ export function createEuropePopulationCases(root: HTMLElement, options: CultureO
   function updateMap() {
     const request = ++generation;
     if (!active || destroyed || (!attachment.mapLayer && !attachment.onMapData && !attachment.onFitBounds)) return;
+    if(!state.cultureCase&&attachment.overviewMap?.()===false){
+      attachment.mapLayer?.replaceChildren();attachment.onMapData?.(emptyMap);
+      currentReady=Promise.resolve();return;
+    }
     const censusCase = !state.cultureCase ? europeCultureData.cases.find(item => item.id === 'england-wales-2021')! : cultureSelection(state, kind).censusCase;
     const existing = loaded.get(censusCase.id);
     if (existing) { publishMap(existing); currentReady = Promise.resolve(); return; }

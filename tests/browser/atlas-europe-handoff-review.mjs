@@ -82,6 +82,38 @@ try{
   assert.equal(await page.locator('[data-culture-case]').inputValue(),'');
   await page.screenshot({path:`${output}/ethnicity-europe-extent-1920x1080.png`});
   checks.push({topic:'ethnicity',automaticEnglandWalesZoom:false,wholeEuropeDistributionComplete:false});
+  for(const render of ['auto','static']){
+    await open('population','religion',render);
+    assert.equal(await page.locator('[data-eu-smre-key]').isVisible(),true);
+    assert.match(await page.locator('.eu-map-footer').textContent(),/45か国.*8分類/s);
+    assert.equal(await page.locator('[data-eu-pew-marker]:visible').count(),0);
+    assert.equal(await page.locator('[data-culture-code]').count(),0,'the country overview is not covered by ONS local data');
+    const fills=await page.locator('[data-eu-shape]').evaluateAll(nodes=>Object.fromEntries(nodes.map(node=>[node.dataset.euShape,node.style.fill])));
+    assert.equal(fills.POL,fills.ITA);assert.equal(fills.SWE,fills.NOR);assert.equal(fills.RUS,fills.GRC);
+    assert.notEqual(fills.POL,fills.SWE);assert.notEqual(fills.DEU,fills.CZE);
+    const box=await page.locator('[data-eu-static]').getAttribute('viewBox');
+    await page.locator('[data-eu-religion-country]').selectOption('DEU');
+    assert.match(await page.locator('[data-eu-smre-reading=DEU]').textContent(),/ドイツ.*SMRE 2010期/);
+    assert.match(await page.locator('[data-eu-religion-evidence-reading]').textContent(),/カトリック 30.2%.*プロテスタント 29.2%.*宗教的帰属なし 33.1%/s);
+    assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'),box);
+    await page.locator('[data-eu-religion-back]').click();
+    if(render==='auto'){
+      const bounds=await page.locator('[data-eu-smre-key]').boundingBox();
+      assert.ok(bounds.y+bounds.height<=1080,'the confessional map and complete key fit the PC viewport');
+      await page.screenshot({path:`${output}/religion-confessions-45-1920x1080.png`});
+    }
+    await page.locator('[data-eu-religion-country]').selectOption('SRB');
+    await page.locator('[data-eu-religion-local=religion-subotica]').click();
+    assert.match(await page.locator('[data-eu-religion-evidence-reading]').textContent(),/59,748人.*37,674人/s);
+    await page.locator('[data-eu-religion-back]').click();
+    await page.locator('[data-eu-pew-surface-group=unaffiliated]').click();
+    assert.equal(await page.locator('[data-eu-pew-map-key]').isVisible(),true);
+    await page.locator('[data-eu-smre-overview]').click();
+    assert.equal(await page.locator('[data-eu-smre-key]').isVisible(),true);
+    assert.equal(await page.locator('[data-eu-pew-marker]:visible').count(),0);
+    assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'),box);
+    checks.push({topic:'religion',render,smreCountries:45,denominations:true,originalEightCategories:true,regionalEvidenceRetained:true,pewRetained:true,noAutomaticZoom:true});
+  }
   assert.deepEqual(errors,[]);
   await writeFile(`${output}/checks.json`,JSON.stringify({gitHead,expectedHead,gitStatus:execFileSync('git',['status','--porcelain'],{encoding:'utf8'}),scriptSha256:createHash('sha256').update(await readFile(new URL(import.meta.url))).digest('hex'),browserVersion:browser.version(),viewport:{width:1920,height:1080},deviceScaleFactor:1,zoom:1,checks,errors},null,2)+'\n');
   console.log(JSON.stringify({passed:true,output,checks}));
