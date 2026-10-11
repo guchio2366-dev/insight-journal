@@ -102,7 +102,9 @@ try{
    }
    assert.match(visibility[0].text,/国の統計はFAOSTAT/);assert.match(visibility[1].text,/出典：.*FAOSTAT.*森林生産・貿易/s);
   }
-  const select=tables.locator('.asia-stat-trend-picker select');await select.selectOption(topic==='forest'?'6':'1');
+  const select=tables.locator('.asia-stat-trend-picker select');
+  const trend=topic==='forest'?await select.locator('option',{hasText:'製材の輸出量'}).getAttribute('value'):'1';
+  await select.selectOption(trend);
   assert.match(await tables.locator('.asia-stat-chart').getAttribute('aria-label'),topic==='forest'?/製材の輸出量/:/牛の生乳/);
   if(topic==='cattle')assert.match(await tables.locator('.asia-stat-chart span').last().getAttribute('title'),/135,000,000 t/);
   await history.locator('summary').click();assert.equal(await history.locator('tbody tr:visible').count(),topic==='forest'?90:20);
