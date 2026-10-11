@@ -1,6 +1,10 @@
 /* Country-specific geography only. Layout, controls, key, badges and reading
    typography come from the same components/styles as the U.S. agriculture map. */
 .mexico-agriculture-atlas [hidden]{display:none!important}
+.mexico-agriculture-subtopics{display:flex;gap:8px;padding:8px 0 10px}
+.mexico-agriculture-subtopics button,.mexico-agriculture-subtopics a{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:6px 15px;border:1px solid #a7bbab;border-radius:4px;background:#fffef7;color:#345146;font:700 14px var(--sans);text-decoration:none;cursor:pointer}
+.mexico-agriculture-subtopics [aria-current=page]{background:#dce9dc;border-color:#49725b;color:#214934}
+.mexico-agriculture-subtopics :focus-visible{outline:3px solid #176f89;outline-offset:2px}
 .mexico-agriculture-atlas .mexico-agriculture-map{display:block;width:100%;height:100%;min-height:0;touch-action:pan-y;user-select:none}
 .mexico-agriculture-atlas .mexico-agriculture-map.is-zoomed{touch-action:none}
 .mexico-agriculture-atlas .mexico-agriculture-map.is-panning{cursor:grabbing;touch-action:none}
@@ -29,6 +33,8 @@
 .mexico-agriculture-state-selection path{fill:none;stroke:#203f4b;stroke-width:2.5;vector-effect:non-scaling-stroke}
 .mexico-agriculture-forest-states path{fill:none;stroke:#2e6850;stroke-width:2.5;vector-effect:non-scaling-stroke}
 .mexico-agriculture-forest-states text{font:700 21px var(--sans);text-anchor:middle;fill:#274f42;paint-order:stroke;stroke:#fffef0;stroke-width:4}
+.mexico-agriculture-forest-key{display:flex;align-items:flex-start;gap:8px;margin:8px 0;font-size:12px;line-height:1.65;color:#315341}
+.mexico-agriculture-forest-key i{flex:none;width:17px;height:17px;margin-top:2px;background:#4f8562;border:2px solid #2e6850}
 .mexico-agriculture-map-note{font-size:11px;line-height:1.6;margin:5px 0;color:#5d6d66}
 .mexico-agriculture-relations{margin-top:10px;padding:12px;border:1px solid #c4d0c1;border-top:3px solid #3d6152;background:#f2f5eb}
 .mexico-agriculture-relations h2{font-family:var(--serif);font-size:18px;margin:0 0 7px}

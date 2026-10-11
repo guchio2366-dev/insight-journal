@@ -549,8 +549,8 @@ async function main() {
     }
     if(!focused)metadata.pcReview = await captureMexicoPCReview({browser, origin: hosted.origin, basePath, output: path.join(output, 'pc-review')});
     if(!focused)assert.equal(metadata.pcReview.status, 'passed', 'PC comparison capture failed. Inspect mexico-agriculture/pc-review metadata and PNGs.');
-    if(!focused)metadata.pcReview1920 = await captureMexicoPCReview({browser, origin: hosted.origin, basePath, output: path.join(output, 'pc-review-1920'), profile:{viewport:{width:1920,height:1080},deviceScaleFactor:1,isMobile:false,hasTouch:false}, initialCountries:['mexico'], initialFields:['agriculture','nature','industry','population'], additionalCases:[]});
-    if(!focused)assert.equal(metadata.pcReview1920.status, 'passed', '1920×1080 Mexico capture failed. Inspect mexico-agriculture/pc-review-1920 metadata and PNGs.');
+    metadata.pcReview1920 = await captureMexicoPCReview({browser, origin: hosted.origin, basePath, output: path.join(output, 'pc-review-1920'), profile:{viewport:{width:1920,height:1080},deviceScaleFactor:1,isMobile:false,hasTouch:false}, initialCountries:['mexico'], initialFields:['agriculture','nature','industry','population'], additionalCases:[]});
+    assert.equal(metadata.pcReview1920.status, 'passed', '1920×1080 Mexico capture failed. Inspect mexico-agriculture/pc-review-1920 metadata and PNGs.');
     const failures = metadata.captures.filter(item => item.status !== 'passed');
     assert.equal(failures.length, 0, `${failures.length} browser capture(s) failed. Inspect review-artifacts/mexico-agriculture metadata and failure PNGs.`);
     metadata.status = 'passed';

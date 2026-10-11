@@ -63,7 +63,7 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
    const rect=node.getBoundingClientRect();
    return rect.width&&rect.height?{left:rect.left-frameRect.left,top:rect.top-frameRect.top,right:rect.right-frameRect.left,bottom:rect.bottom-frameRect.top}:null;
   };
-  const obstacles=Array.from(root.querySelectorAll('[data-agri-layers],.atlas-map-tools,.atlas-layer-caption,.atlas-livestock-marker')).filter(node=>!node.closest('[hidden]')).map(box).filter((value):value is AgricultureLabelBox=>!!value);
+  const obstacles=Array.from(root.querySelectorAll('[data-agri-layers],.atlas-map-tools,.atlas-layer-caption,.atlas-livestock-marker,.mexico-agriculture-forest-states text')).filter(node=>!node.closest('[hidden]')).map(box).filter((value):value is AgricultureLabelBox=>!!value);
   const visible=state.crops&&state.item!=='pine';
   const items=cropLabels.filter(node=>visible&&(!state.onlyItem||!state.item||node.dataset.cropLabel===state.item)).map(node=>{
    const selected=node.dataset.cropLabel===state.item,fontSize=selected?15:width<560?12.5:13.5;
@@ -122,9 +122,13 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
    hidden(node,cropVisible&&state.onlyItem&&!!state.item&&id!==state.item);
   }
   hidden(q('[data-agri-layers]'),forestry);hidden(q('[data-mexico-tree-cover]'),!forestry);
+  hidden(q('[data-mexico-forest-states]'),!forestry);hidden(q('[data-mexico-forest-key]'),!forestry);
+  const farmingTab=q('[data-mexico-agriculture-overview]'),forestryTab=q('[data-forestry-select]');
+  if(farmingTab){if(forestry)farmingTab.removeAttribute('aria-current');else farmingTab.setAttribute('aria-current','page');}
+  if(forestryTab){if(forestry)forestryTab.setAttribute('aria-current','page');else forestryTab.removeAttribute('aria-current');}
   for(const link of root.querySelectorAll<HTMLAnchorElement>('[data-crop-select],[data-livestock-select],[data-forestry-select]')){
    const id=link.dataset.cropSelect??link.dataset.livestockSelect??'pine';
-   if(state.item===id)link.setAttribute('aria-current','true');else link.removeAttribute('aria-current');
+   if(state.item===id)link.setAttribute('aria-current',id==='pine'?'page':'true');else link.removeAttribute('aria-current');
    link.setAttribute('aria-controls','agri-reading-heading');
    link.href=writeMexicoAgricultureAtlasState(new URL(location.href),{...state,item:id,state:null,region:null}).href;
   }
@@ -190,6 +194,7 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
   if(['Enter',' '].includes(event.key)){const zone=(event.target as Element).closest<SVGElement>('text[data-crop-zone]');if(zone){event.preventDefault();choose(zone.dataset.cropZone!);}}
  });
  q('[data-agri-overview-button]').addEventListener('click',back);
+ q('[data-mexico-agriculture-overview]').addEventListener('click',back);
  for(const input of root.querySelectorAll<HTMLInputElement>('[data-agri-layer]'))input.addEventListener('change',()=>{state={...state,[input.value]:input.checked};save();});
  q('[data-agri-enable-layers]').addEventListener('click',()=>{if(state.item&&cropIds.has(state.item))state.crops=true;else state.livestock=true;save();});
  q<HTMLInputElement>('[data-mexico-only-item]').addEventListener('change',event=>{state.onlyItem=(event.target as HTMLInputElement).checked;save();});
