@@ -71,7 +71,12 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
     // anchored to the correctly projected county map, including on small phones.
     const layoutBounds=['water','population'].includes(callbacks.mode())?{left:0,top:0,right:frame.clientWidth,bottom:frame.clientHeight-40}:bounds;
     const protectedLines=callbacks.protectedLines?.(project??(p=>projectNatureFallback(p,bounds)))??[];
-    const placed=layoutNatureLabels(inputs,layoutBounds,[...obstacles,...reserved],protectedLines);
+    // CSS transform translations use float precision. This final solver box is
+    // both the rendered placement and the obstacle passed to subsequent labels.
+    const placed=layoutNatureLabels(inputs,layoutBounds,[...obstacles,...reserved],protectedLines).map(box=>{
+      const left=Math.fround(box.left),top=Math.fround(box.top);
+      return {...box,left,top,right:left+box.width,bottom:top+box.height};
+    });
     for(const {entry,button,line,dot} of nodes){
       const box=placed.find(item=>item.id===entry.id);button.hidden=!box;line.style.display=dot.style.display=box?'':'none';
       if(!box)continue;
@@ -79,13 +84,10 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
       const end=leaderEnd(box.anchor,box);line.setAttribute('x1',String(box.anchor.x));line.setAttribute('y1',String(box.anchor.y));line.setAttribute('x2',String(end.x));line.setAttribute('y2',String(end.y));
       dot.setAttribute('cx',String(box.anchor.x));dot.setAttribute('cy',String(box.anchor.y));
     }
-    // Publish the committed city rectangles in the same content-box coordinate
-    // system used by the next label layout, without re-querying CSS selectors.
+    // Publish the solver's committed boxes. DOM reads immediately after a
+    // transform assignment can return an old/intermediate transition position.
     const frameRect=frame.getBoundingClientRect(),origin={x:frameRect.left+frame.clientLeft,y:frameRect.top+frame.clientTop};
-    committed=placed.map(box=>{
-      const r=nodes.find(n=>n.entry.id===box.id)!.button.getBoundingClientRect();
-      return r.width>0&&r.height>0?{...box,left:r.left-origin.x,top:r.top-origin.y,right:r.right-origin.x,bottom:r.bottom-origin.y}:box;
-    });
+    committed=placed.map(box=>({...box}));
     callbacks.diagnostics?.({coordinateSpace:'map-frame-content-box',origin,bounds:layoutBounds,inputs,obstacles,placed:committed});
     if(codeNodes.length){
     const geographic=[...root.querySelectorAll<HTMLElement>('.atlas-geolabel:not([hidden])')].map(node=>{

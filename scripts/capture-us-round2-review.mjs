@@ -47,7 +47,8 @@ try{
      const stories=[...document.querySelectorAll('[data-pop-religion-markers] .atlas-nature-label:not([hidden])')].map(box);
      const layout=JSON.parse(document.querySelector('[data-pop-religion-markers]').dataset.layoutDiagnostics??'null');
      const frame=document.querySelector('[data-map-frame]'),f=frame.getBoundingClientRect(),currentOrigin={x:f.left+frame.clientLeft,y:f.top+frame.clientTop};
-     return {ny,stories,layout,currentOrigin,collisions:stories.map(b=>({...b,overlapWidth:Math.max(0,Math.min(ny.right,b.right)-Math.max(ny.left,b.left)),overlapHeight:Math.max(0,Math.min(ny.bottom,b.bottom)-Math.max(ny.top,b.top))})).filter(b=>b.overlapWidth>0&&b.overlapHeight>0)};
+     const transitions=[...document.querySelectorAll('[data-pop-city-markers] .atlas-nature-label:not([hidden]),[data-pop-religion-markers] .atlas-nature-label:not([hidden])')].map(n=>({id:n.getAttribute('data-pop-city')??n.getAttribute('data-pop-religion-marker'),property:getComputedStyle(n).transitionProperty}));
+     return {ny,stories,layout,currentOrigin,transitions,reducedMotion:matchMedia('(prefers-reduced-motion: reduce)').matches,collisions:stories.map(b=>({...b,overlapWidth:Math.max(0,Math.min(ny.right,b.right)-Math.max(ny.left,b.left)),overlapHeight:Math.max(0,Math.min(ny.bottom,b.bottom)-Math.max(ny.top,b.top))})).filter(b=>b.overlapWidth>0&&b.overlapHeight>0)};
     });
     await writeFile(resolve(out,'build-religion-rectangles.json'),JSON.stringify(rectangles,null,2)+'\n');
     await page.locator('[data-pop-religion-concentrations]').evaluate(n=>n.open=true);
@@ -56,8 +57,10 @@ try{
     assert.match(await page.locator('[data-pop-map-note]').textContent(),/PRRI 2023/);
     assert.equal(await page.locator('[data-pop-religion-concentrations] table').count(),2);
     assert.equal(rectangles.layout.coordinateSpace,'map-frame-content-box');
+    assert.equal(rectangles.reducedMotion,true);assert.ok(rectangles.transitions.every(n=>n.property==='none'),'map labels must not acquire a transform transition under reduced motion');
     const cityObstacle=rectangles.layout.obstacles.find(b=>b.id==='new-york');assert.ok(cityObstacle,'committed New York rectangle must be a story layout input');
     for(const [edge,axis] of [['left','x'],['right','x'],['top','y'],['bottom','y']])assert.ok(Math.abs(cityObstacle[edge]+rectangles.currentOrigin[axis]-rectangles.ny[edge])<1e-6,`New York ${edge}: same coordinate system`);
+    for(const story of rectangles.stories){const box=rectangles.layout.placed.find(b=>b.id===story.id);assert.ok(box);for(const [edge,axis] of [['left','x'],['right','x'],['top','y'],['bottom','y']])assert.ok(Math.abs(box[edge]+rectangles.currentOrigin[axis]-story[edge])<1e-6,`${story.id} ${edge}: committed solver box equals real rectangle`);}
     assert.equal(rectangles.collisions.length>0,false,'religion reference labels must leave New York readable');
    }
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);

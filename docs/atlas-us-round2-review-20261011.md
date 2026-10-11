@@ -55,3 +55,5 @@ checkout/mainと本番 `_release.json` は `755ec125daf9272e21328ff4c1ecab32756c
 親が最終4efc48eの統合Validate38115244720・地域産業38115244751成功を確認。専用撮影38115244730は宗教札とNYの実矩形衝突で停止し、build12画像・operations=[]だった。全操作の成功や地域全体の完成とは扱わない。衝突判定は維持し、配置・本文と地点の対応を修正した次headで再検証する。
 
 親が2ada347の実画像で③ northeast-immigration とNYの11.4033×29.9437px衝突を確認。森林全国需給・宗教2表・油ガスの説明対応は確認済みで維持した。都市配置の確定矩形をmap-frame-content-box座標のまま宗教配置へ直接渡す。宗教入力のbounds/原点/ラベル/全障害物/配置結果を診断JSONに保存し、NY入力を実画面のNY矩形へ戻して一致を検証する。衝突判定・前後関係・地理アンカーは変更しない。新headで後続操作まで再検証する。
+
+親の304755f診断で根本原因を特定。global.cssのreduced-motion一律0.01ms指定と既定transition-property:allにより、地図札のtransformにも遷移が発生した。代入直後のDOM再採寸は途中/旧位置で、障害物と最終札が一致しなかった。米国地図札だけにtransition:none!importantを指定し、solverの確定box（CSS transformのfloat精度）を直接共有する。全ページのアニメーションは変更しない。旧位置を返すDOM境界を再現した回帰が成功。reducedMotion:reduceの通常Chromeでも遷移none・solver/NY/宗教実bbox一致・衝突ゼロを同じ厳密判定で検証し、後続操作まで実行する。

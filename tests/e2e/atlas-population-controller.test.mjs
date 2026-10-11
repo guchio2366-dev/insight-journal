@@ -42,7 +42,7 @@ async function setup(query='',fail=false,field='population'){
 const pick=(window,id)=>{window.__map.queryRenderedFeatures=()=>[{properties:{id}}];window.__map.events.click[0]({point:{x:1,y:1}});};
 const change=(window,element,value)=>{element.value=value;element.dispatchEvent(new window.Event('change'));};
 
-test('都市の確定矩形を宗教配置へ直接渡し、同じ座標系で衝突を避ける',async()=>{
+test('遷移途中のDOM矩形を使わず、solverの都市確定boxで宗教札を避ける',async()=>{
  const {window,q}=await setup('?popView=religion');
  try{
   const proto=window.HTMLElement.prototype;
@@ -50,7 +50,8 @@ test('都市の確定矩形を宗教配置へ直接渡し、同じ座標系で�
   Object.defineProperty(proto,'offsetHeight',{get(){return this.matches('.atlas-nature-label')?32:0;}});
   proto.getBoundingClientRect=function(){
    if(this.hasAttribute('data-map-frame'))return {left:50,top:100,right:850,bottom:600,width:800,height:500};
-   const xy=this.style.transform.match(/translate\(([-\d.]+)px,([-\d.]+)px\)/),left=50+Number(xy?.[1]??0),top=100+Number(xy?.[2]??0),width=this.offsetWidth,height=this.offsetHeight;
+   // Reproduce the observable stale rectangle during a transform transition.
+   const xy=window.__intermediateRectangles&&this.matches('.atlas-nature-label')?null:this.style.transform.match(/translate\(([-\d.]+)px,([-\d.]+)px\)/),left=50+Number(xy?.[1]??0),top=100+Number(xy?.[2]??0),width=this.offsetWidth,height=this.offsetHeight;
    return {left,top,right:left+width,bottom:top+height,width,height};
   };
   const observers=window.__resizeObservers.filter(o=>o.target===q('[data-map-frame]'));
@@ -58,8 +59,10 @@ test('都市の確定矩形を宗教配置へ直接渡し、同じ座標系で�
   const collide=()=>{const ny=q('[data-pop-city="new-york"]').getBoundingClientRect();return [...q('[data-pop-religion-markers]').querySelectorAll('.atlas-nature-label:not([hidden])')].some(n=>{const b=n.getBoundingClientRect();return ny.left<b.right&&ny.right>b.left&&ny.top<b.bottom&&ny.bottom>b.top;});};
   for(const offset of [0,60,-40]){
    window.__map.project=p=>({x:(p[0]+128)*10+offset,y:(52-p[1])*10});
+   window.__intermediateRectangles=true;
    for(const o of [...observers].reverse())o.callback();
    await delay();await delay();await delay();
+   window.__intermediateRectangles=false;
    const layout=JSON.parse(q('[data-pop-religion-markers]').dataset.layoutDiagnostics),ny=q('[data-pop-city="new-york"]').getBoundingClientRect();
    assert.equal(layout.coordinateSpace,'map-frame-content-box');
    const obstacle=layout.obstacles.find(b=>b.id==='new-york');assert.ok(obstacle,'final city rectangle is passed directly to the story layout');
