@@ -16,20 +16,6 @@ spec = importlib.util.spec_from_file_location("confirmed_asia_contours", ENGINE)
 engine = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(engine)
 REGION = "southeast-asia"
-original_color = engine.color
-def rainfall_color(value, kind):
-    # Distinguish the dry-to-monsoon range. Higher values retain their
-    # original numeric bands and 250 mm contours, but share broader colors.
-    if kind != "rainfall":
-        return original_color(value, kind)
-    groups = [(250, "#f7f7ed"), (500, "#e9d28f"),
-              (1000, "#c6d37e"), (1500, "#87c99a"),
-              (2000, "#43b8ae"), (2500, "#247d9d"),
-              (3000, "#275e9a"), (4500, "#384681"),
-              (6500, "#39346b"), (8000, "#342655"),
-              (float("inf"), "#2b1842")]
-    return next(color for upper, color in groups if value < upper)
-
 
 def write_parts(stem, collection):
     # Preserve feature order and every vertex. The connected GitHub transfer
