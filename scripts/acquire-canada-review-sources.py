@@ -15,7 +15,7 @@ output = Path('review-artifacts/canada-source-acquisition')
 output.mkdir(parents=True, exist_ok=True)
 sources = [
     ('population/98100002-eng.zip', 'https://www150.statcan.gc.ca/n1/tbl/csv/98100002-eng.zip'),
-    ('population/lcsd000b21a_e.zip', 'https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/files-fichiers/lcsd000b21a_e.zip'),
+    ('population/subdivisions-official.geojson', 'https://geo.statcan.gc.ca/geo_wa/rest/services/2021/Cartographic_boundary_files/MapServer/9/query?where=1%3D1&outFields=CSDUID,CSDNAME,PRUID&returnGeometry=true&outSR=4326&maxAllowableOffset=0.001&geometryPrecision=7&f=geojson'),
 ]
 for name, identifier in [('toronto', '6158355'), ('montreal', '7025250'), ('calgary', '3031092'), ('halifax', '8202250')]:
     sources.append((f'climate/{name}-1991-2020.html', f'https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id={identifier}&dispBack=0'))
@@ -44,6 +44,6 @@ for name, url in sources:
     print('CANADA_REVIEW_SOURCE_STATUS ' + json.dumps(record), flush=True)
 
 (output / 'acquisition.json').write_text(json.dumps(records, indent=2) + '\n')
-if all((output / f'population/{name}').exists() for name in ['98100002-eng.zip', 'lcsd000b21a_e.zip']):
+if all((output / f'population/{name}').exists() for name in ['98100002-eng.zip', 'subdivisions-official.geojson']):
     completed = subprocess.run(['node', 'scripts/prepare-canada-population-subdivisions.mjs', str(output / 'population')], check=False)
     print('CANADA_REVIEW_SUBDIVISIONS_STATUS ' + json.dumps({'exitCode': completed.returncode}), flush=True)

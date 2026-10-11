@@ -5,8 +5,9 @@ import {gzipSync} from 'node:zlib';
 import path from 'node:path';
 import {readZipEntries,parseDbf,readShapeRecords,inverseCanadaLambert,shapefilePolygonGroups,simplifyPolygonTopology} from './lib/canada-geography.mjs';
 const source=path.resolve(process.argv[2]??'data-source/atlas/canada/population-subdivisions');
-const csvZip=await readFile(path.join(source,'98100002-eng.zip')),boundaryZip=await readFile(path.join(source,'lcsd000b21a_e.zip'));
-const table=readZipEntries(csvZip),boundary=readZipEntries(boundaryZip),entry=(zip,extension)=>[...zip].find(([name])=>name.endsWith(extension))?.[1];
+const csvZip=await readFile(path.join(source,'98100002-eng.zip')),boundaryBytes=await readFile(path.join(source,'subdivisions-official.geojson'));
+const officialGeometry=JSON.parse(boundaryBytes);
+const table=readZipEntries(csvZip),entry=(zip,extension)=>[...zip].find(([name])=>name.endsWith(extension))?.[1];
 function parseCsv(text){const rows=[];let row=[],value='',quoted=false;for(let i=0;i<text.length;i++){const c=text[i];if(c==='"'){if(quoted&&text[i+1]==='"'){value+='"';i++;}else quoted=!quoted;}else if(c===','&&!quoted){row.push(value);value='';}else if((c==='\n'||c==='\r')&&!quoted){if(c==='\r'&&text[i+1]==='\n')i++;row.push(value);if(row.some(Boolean))rows.push(row);row=[];value='';}else value+=c;}if(value||row.length){row.push(value);rows.push(row);}rows[0][0]=rows[0][0].replace(/^\uFEFF/,'');return rows;}
 const rows=parseCsv(entry(table,'.csv').toString('utf8')),headers=rows.shift(),dguidIndex=headers.indexOf('DGUID'),nameIndex=headers.indexOf('GEO'),valueIndex=headers.indexOf('VALUE'),counts=new Map();
 const numeric=(value,symbol='')=>({value:value===''||value===undefined?null:Number(value),symbol});
@@ -16,22 +17,12 @@ for(const row of rows){const dguid=row[dguidIndex];if(!/^2021A0005\d{7}$/.test(d
  counts.set(id,record);
 }
 const records=[...counts.values()];if(records.length!==5161||records.some(r=>!r.population||!r.density||!r.landArea))throw Error('Expected 5,161 source-complete CSD records; received '+records.length);
-const dbf=parseDbf(entry(boundary,'.dbf')),shapes=readShapeRecords(entry(boundary,'.shp')),projection=entry(boundary,'.prj').toString(),licence=entry(boundary,'.xml')?.toString()??'';
-if(!projection.includes('Statistics_Canada_Lambert')||!licence.includes('Open Government Licence'))throw Error('Unverified source CRS/licence');
-const features=[],topology={sourceContacts:0,originalFallbacks:0,rings:0,sourceVertices:0,displayVertices:0};
-for(let index=0;index<dbf.length;index++){
- const id=dbf[index].CSDUID,record=counts.get(id);if(!record)throw Error('Unjoined original CSD '+id);
- const native=shapes[index].rings,polygons=shapefilePolygonGroups(native),coordinates=[];
- for(const indexes of polygons){const rings=indexes.map(i=>native[i]),selected=simplifyPolygonTopology(rings,250,{retryTolerances:[100,25],transform:p=>inverseCanadaLambert(p).map(n=>Number(n.toFixed(7))),transformOriginal:p=>inverseCanadaLambert(p).map(n=>Number(n.toFixed(9)))});
-  if(!selected.output.valid&&!selected.sourceContactsPreserved)throw Error('Unresolved source/display topology '+id+' '+JSON.stringify(selected.output.counts));
-  topology.sourceContacts+=selected.sourceContactsPreserved?1:0;topology.originalFallbacks+=selected.fallback?1:0;topology.rings+=rings.length;topology.sourceVertices+=rings.reduce((n,r)=>n+r.length,0);topology.displayVertices+=selected.outputRings.reduce((n,r)=>n+r.length,0);coordinates.push(selected.outputRings);
- }
- features.push({type:'Feature',id,properties:{name:record.name},geometry:{type:'MultiPolygon',coordinates}});
- if(index%500===0)console.log('Canada population source-boundary joins '+index+'/'+dbf.length);
-}
+if(officialGeometry.type!=='FeatureCollection'||officialGeometry.exceededTransferLimit||officialGeometry.features?.length!==5161)throw Error('Incomplete official boundary response');
+const features=officialGeometry.features.map(f=>{const id=String(f.properties.CSDUID);if(!counts.has(id)||!['Polygon','MultiPolygon'].includes(f.geometry?.type))throw Error('Unjoined/invalid official CSD '+id);return {...f,id,properties:{name:counts.get(id).name}};});
+const topology={generalization:'Official REST service maxAllowableOffset=0.001 degrees; geometryPrecision=7. No client-created boundaries, holes or statistics. Source multipart structure is retained.'};
 if(features.length!==5161||new Set(features.map(f=>f.id)).size!==5161)throw Error('Incomplete original CSD boundary join');
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const files={'subdivisions.json':JSON.stringify({year:2021,geography:'Census subdivision',records})+'\n','subdivisions.geojson':JSON.stringify({type:'FeatureCollection',features})+'\n'};
-const manifest={year:2021,retrievedAt:new Date().toISOString().slice(0,10),geography:'2021 Census subdivision (CSD)',sourceCount:5161,sourceTable:'98-10-0002-01',sourceUrls:['https://www150.statcan.gc.ca/n1/tbl/csv/98100002-eng.zip','https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/files-fichiers/lcsd000b21a_e.zip'],sourceSha256:{tableZip:hash(csvZip),boundaryZip:hash(boundaryZip)},licence:'https://www.statcan.gc.ca/en/terms-conditions/open-licence',method:'Exact DGUID/CSDUID join. Population and density are original 2021 CSD values. No geographic allocation or interpolation. Display boundaries retain multipart/hole structure and use 250 m simplification with 100/25 m retries; invalid candidates retain original vertices. Per-polygon topology checked before and after EPSG:3347 to EPSG:4326 conversion. Cross-CSD topology is not claimed.',topology,outputs:Object.fromEntries(Object.entries(files).map(([name,text])=>[name,{bytes:Buffer.byteLength(text),sha256:hash(text)}]))};
+const manifest={year:2021,retrievedAt:new Date().toISOString().slice(0,10),geography:'2021 Census subdivision (CSD)',sourceCount:5161,sourceTable:'98-10-0002-01',sourceUrls:['https://www150.statcan.gc.ca/n1/tbl/csv/98100002-eng.zip','https://geo.statcan.gc.ca/geo_wa/rest/services/2021/Cartographic_boundary_files/MapServer/9'],sourceSha256:{tableZip:hash(csvZip),boundaryResponse:hash(boundaryBytes)},licence:'https://www.statcan.gc.ca/en/terms-conditions/open-licence',method:'Exact DGUID/CSDUID join. Population and density are original 2021 CSD values. No geographic allocation or interpolation. Display geometry is the official StatCan 2021 cartographic-boundary REST response in EPSG:4326 with 0.001 degree maxAllowableOffset and 7 decimal coordinates. No client interpolation, polygon reconstruction or allocation. Geometry generalization affects displayed borders only; original table density is unchanged.',topology,outputs:Object.fromEntries(Object.entries(files).map(([name,text])=>[name,{bytes:Buffer.byteLength(text),sha256:hash(text)}]))};
 files['subdivisions-manifest.json']=JSON.stringify(manifest,null,2)+'\n';await mkdir(path.join(source,'prepared'),{recursive:true});
 for(const [file,text]of Object.entries(files)){await writeFile(path.join(source,'prepared',file),text);const encoded=gzipSync(text,{mtime:0}).toString('base64');for(let offset=0;offset<encoded.length;offset+=120000)console.log('CANADA_REVIEW_SOURCE '+JSON.stringify({file:'population/prepared/'+file,part:offset/120000,parts:Math.ceil(encoded.length/120000),gzipBase64:encoded.slice(offset,offset+120000)}));}
