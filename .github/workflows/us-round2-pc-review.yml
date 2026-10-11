@@ -11,6 +11,9 @@ on:
       - '.github/workflows/us-round2-pc-review.yml'
 permissions:
   contents: read
+concurrency:
+  group: us-round2-review-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 jobs:
   review:
     runs-on: ubuntu-latest

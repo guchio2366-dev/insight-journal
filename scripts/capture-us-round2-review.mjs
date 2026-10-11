@@ -37,8 +37,8 @@ try{
   }
  }
  const origin=`http://127.0.0.1:${server.address().port}/insight-journal/atlas/north-america/`;
- async function ready(){await page.locator('[data-atlas-explorer][data-render-state=ready]').waitFor();await page.evaluate(()=>document.fonts.ready);}
- async function snapshot(name){await page.screenshot({path:resolve(out,`operation-${name}.jpg`),type:'jpeg',quality:85});report.operations.push({name,url:page.url()});}
+ async function ready(){await page.locator('[data-atlas-explorer][data-render-state=ready]').waitFor();if(await page.locator('[data-atlas-explorer]').getAttribute('data-field')==='natural')await page.locator('[data-atlas-explorer][data-nature-load=ready]').waitFor();await page.evaluate(()=>document.fonts.ready);assert.equal(await page.locator('[data-fallback]').isVisible(),false);}
+ async function snapshot(name){await page.waitForLoadState('networkidle');await ready();await page.waitForTimeout(500);await page.screenshot({path:resolve(out,`operation-${name}.jpg`),type:'jpeg',quality:85});report.operations.push({name,url:page.url(),render:'ready'});}
  await page.goto(origin+'nature/',{waitUntil:'networkidle'});await ready();
  await page.locator('[data-nature-label="city:miami"]').click();
  assert.equal(await page.locator('#city-climate-heading').textContent(),'マイアミの雨温図');
@@ -61,7 +61,7 @@ try{
  await page.reload({waitUntil:'networkidle'});await ready();assert.match(await page.locator('[data-selection-title]').textContent(),/カリフォルニア/);
  await page.goBack({waitUntil:'networkidle'});assert.equal(new URL(page.url()).searchParams.get('industryState'),null);await snapshot('auto-state-back-reload');
  await page.locator('[data-industry-subsector="electronics"]').click();assert.match(await page.locator('[data-industry-economic-legend]').textContent(),/半導体単品ではありません/);
- await page.locator('[data-industry-region-option="austin-electronics"]').first().click();assert.match(await page.locator('[data-selection-title]').textContent(),/オースティン/);await snapshot('electronics-place');
+ await page.locator('[data-industry-description-panel="manufacturing:electronics"] [data-industry-region-option="austin-electronics"]').click();assert.match(await page.locator('[data-selection-title]').textContent(),/オースティン/);await snapshot('electronics-place');
  await page.goto(origin+'agriculture/',{waitUntil:'networkidle'});await ready();assert.match(await page.locator('.atlas-quantity-note').textContent(),/生産量を表しません/);
  await page.locator('[data-crop-select="wheat"]').first().click();await page.reload({waitUntil:'networkidle'});await ready();assert.equal(new URL(page.url()).searchParams.get('crop'),'wheat');await snapshot('agriculture-reload');
  for(const view of ['ethnicity','religion']){await page.goto(origin+'population/?popView='+view,{waitUntil:'networkidle'});await ready();await page.waitForFunction(()=>/郡のデータ/.test(document.querySelector('[data-pop-status]')?.textContent??''));await page.reload({waitUntil:'networkidle'});await ready();assert.equal(await page.locator('[data-pop-view][aria-pressed=true]').getAttribute('data-pop-view'),view);await snapshot(view+'-reload');}

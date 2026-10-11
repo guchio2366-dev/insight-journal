@@ -39,7 +39,7 @@ checkout/mainと本番 `_release.json` は `755ec125daf9272e21328ff4c1ecab32756c
 - USRC元表：`https://www.usreligioncensus.org/sites/default/files/2023-06/2020_USRC_Group_Detail.xlsx`。正規GETが403、同一操作を一度再試行して再び403。既存winner-only派生表から少数派濃集を復元しない。必要：郡FIPS・団体コード名・adherents・congregations・郡人口/分母・報告状態・方法/利用条件。既存監査の原表SHA256は `06d42b268029e828a68b033282573a160ffe5f512a6d1c991288b919324329d1`。
 - 森林全国：`https://unece.org/sites/default/files/2024-10/US_FPMAR_2024-2025.pdf` の正規Web openが403。独立したFAS森林品目ページも403。必要：製品・年・単位がそろう全国生産/輸出入/見かけ需要・用途と公的加工拠点の座標/施設種別/年。州のNC例を全国へ転用しない。
 - PRISM原格子：manifest記載の `https://data.prism.oregonstate.edu/normals/us/4km/ppt/monthly/prism_ppt_us_25m_2020_avg_30y.zip` 正規GETが403。原格子はworkspaceに存在しない。必要：1991–2020年4km格子から1250/1750mm線を原処理で作る。既存1000–1500/1500–2000帯から補間しない。原zipSHA256は `054ee0ea81f38eb2f4d4272b9a6c3905d0df1c0b92bb4e391ebc3f9901ce3246`。
-- 油ガス/精製石化：既存資料は地域・州の例。実油ガス田形状、精製/石化施設の公的位置データは未収録。
+- 油ガス/精製石化：既存資料は地域・州の例。実油ガス田形状、精製/石化施設の公的位置データは未収録。EIA公式地図案内が指す `https://atlas.eia.gov/search` の正規GETも403。取得経路を迂回しない。
 - GitHub artifact：初期正規 `gh run download` がForbidden、同一操作の一度の再試行もForbidden。ローカルへの画像転送は停止済み。親の正規GitHub UI閲覧を使い、別host/app/proxy・ログ再掲載・CIデータ転送などの迂回はしない。
 
 これらは権限承認の欠如/auto-review拒否ではなく、正規配布・実行環境の障害。取得解消時刻が不明なため全残件の完了日は確約しない。UIの既存データ範囲はDraftへ保存し、最終検証後も未達を隠さない。マージ・公開は親の順序調整待ち。
