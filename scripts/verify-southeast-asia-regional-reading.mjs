@@ -31,6 +31,8 @@ async function checkSoutheastAsiaRegion(page,{source,capture:takePicture,backgro
  assert.equal(await page.locator('[data-industry-topic] option[value="my-p3"]').evaluate(o=>o.disabled),true);
  assert.match(await page.locator('[data-reading-dock-summary]').textContent(),/ジャワ島.*タイ東部.*ベトナムの南北/s);
  assert.match(await page.locator('[data-industry-region-reading]').textContent(),/11か国.*国内仕向け|11か国.*国内向け/s);
+ const industryOrder=await page.evaluate(()=>{const region=document.querySelector('[data-industry-region-reading]'),national=document.querySelector('[data-southeast-industry-national-details]'),dock=document.querySelector('[data-reading-dock]'),rubber=document.querySelector('[data-southeast-industry-kind="rubber"]'),wood=document.querySelector('[data-southeast-industry-kind="wood"]'),panel=document.querySelector('.asia-reading-panel').getBoundingClientRect();return {regionTop:region?.getBoundingClientRect().top,nationalTop:national?.getBoundingClientRect().top,closed:!national?.open,choices:dock?.querySelectorAll('[data-southeast-industry-kind]').length,rubberBottom:rubber?.getBoundingClientRect().bottom,woodBottom:wood?.getBoundingClientRect().bottom,panelBottom:panel.bottom};});
+ assert(industryOrder.regionTop<industryOrder.nationalTop&&industryOrder.closed&&industryOrder.choices===14&&industryOrder.rubberBottom<industryOrder.panelBottom&&industryOrder.woodBottom<industryOrder.panelBottom,`Regional classification and rubber/wood must be visible before national data: ${JSON.stringify(industryOrder)}`);
  const markerState=await page.locator('[data-southeast-industry-map]').evaluate(node=>({hidden:node.hidden,size:[node.clientWidth,node.clientHeight],field:document.querySelector('[data-asia-atlas]')?.getAttribute('data-field'),points:[...node.querySelectorAll('[data-southeast-industry-point]')].map(p=>({id:p.getAttribute('data-southeast-industry-point'),hidden:p.hidden,x:p.style.left,y:p.style.top}))}));
  assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point]:visible').count(),30,JSON.stringify(markerState));
  assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-label]:visible').count(),13);
@@ -55,6 +57,7 @@ async function checkSoutheastAsiaRegion(page,{source,capture:takePicture,backgro
  await page.locator('[data-southeast-industry-kind="rubber"]').click();
  assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point]:not(.muted)').count(),2);
  assert.equal(await page.locator('[data-southeast-industry-map] [data-southeast-industry-point].muted').count(),28);
+ await page.locator('.southeast-industry-site-directory > summary').click();
  await page.locator('[data-southeast-industry-site="rayong-tires"]').click();
  assert.match(await page.locator('[data-southeast-industry-selected-reading]').textContent(),/タイヤ工場/);
  assert.equal(await page.locator('[data-southeast-industry-selected-source]').getAttribute('href')!==null,true);
@@ -93,6 +96,7 @@ async function checkSoutheastAsiaRegion(page,{source,capture:takePicture,backgro
  assert.match(await page.locator('[data-place-story-scope]').textContent(),/2011年.*2024年/s);
  record('Hanoi keeps the historical narrative separate from current national values');await capture('industry-hanoi');
  await country.selectOption('');await page.locator('[data-industry-region-reading]').waitFor({state:'visible'});
+ await page.locator('.southeast-industry-network-details > summary').click();
  await page.locator('[data-industry-reading-topic="trade-exports"][data-industry-reading-detail="t-85"]').click();
  await page.waitForFunction(()=>document.querySelector('[data-trade-status]')?.textContent===''&&document.querySelector('[data-trade-chapter]')?.value==='85');
  assert.equal(new URL(page.url()).searchParams.get('place'),null);assert.match(await page.locator('[data-trade-coverage]').textContent(),/11か国/);
