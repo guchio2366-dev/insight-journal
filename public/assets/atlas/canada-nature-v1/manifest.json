@@ -1,10 +1,10 @@
 {
-  "retrievedAt": "2026-09-30",
+  "retrievedAt": "2026-10-11",
   "climate": {
     "publisher": "Environment and Climate Change Canada",
     "period": "1991–2020",
-    "count": 5,
-    "sourceExtractSha256": "b83b47fe64b155d386f46dc55ac8edcbb72de591d60adec8f9df90cee77ddd2c",
+    "count": 9,
+    "sourceExtractSha256": "2af9e62523f8c56cfb81eb71b53a12fe485eb7a340216c8c8a1b56bf65dcfe91",
     "terms": "https://www.canada.ca/en/transparency/terms.html",
     "method": "Extract published numeric facts. Missing or annotated cells stay null; no inferred replacement. 30-year composite values, not current weather or national averages."
   },
@@ -13,10 +13,57 @@
       "file": "rivers.json",
       "count": 84,
       "inputSha256": "c020fc2553727d8517e7405f45a94b662debbae9b9740aac5a969532dcf47639",
-      "sha256": "ccf172c4fbf81690f91ee3eaa5ea8cf3a8618f40590aefd394a71cfa18c880ea",
+      "sha256": "d53cbf632b25711d7333b1ff05494948dead4c7fee43f2126bd9da073dbfb28b",
       "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_50m_rivers_lake_centerlines.geojson",
       "license": "Public domain",
-      "method": "Keep features having a source vertex in Canada display bounds; coordinates unchanged. Includes cross-border waters; not a national clipping or discharge map."
+      "method": "Natural Earth source vertices remain unchanged for all rivers except St. Lawrence, whose original 7-vertex upstream reach is retained in the source archive and whose display uses the unchanged official CGNDB geographical-feature footprint. Cross-border waters retained; no river-flow or basin-area calculation.",
+      "replacementSources": [
+        {
+          "id": "nrcan-cgndb-st-lawrence",
+          "publisher": "Natural Resources Canada / Geographical Names Board of Canada",
+          "title": "CGNDB St. Lawrence River official geographical feature",
+          "catalogueUrl": "https://geonames.nrcan.gc.ca/search-place-names/unique?id=EFGFK",
+          "featureUrl": "https://geogratis.gc.ca/services/geoname/en/features/4d00fe4cba2011d892e2080020a0f4c9.json",
+          "expandedUrl": "https://geogratis.gc.ca/services/geoname/en/geonames/EFGFK.geojson?expand=feature",
+          "termsUrl": "https://www.canada.ca/en/transparency/terms.html",
+          "retrievedAt": "2026-10-11",
+          "featureId": "4d00fe4cba2011d892e2080020a0f4c9",
+          "geonameId": "EFGFK",
+          "status": "official",
+          "sourceRelevance": 5000000,
+          "sourceAccuracy": 100,
+          "sourceMetadataNote": "Relevance and accuracy are held raw API fields; no cartographic scale or accuracy-unit claim is inferred.",
+          "bounds": [
+            -76.4696127,
+            44.1300071,
+            -64.3028586,
+            50.3008614
+          ],
+          "sourceMetadataBounds": [
+            -77.1412943,
+            44.0872357,
+            -64.0730012,
+            50.9542312
+          ],
+          "geometryType": "MultiPolygon",
+          "polygonCount": 1,
+          "ringCount": 1,
+          "vertexCount": 3135,
+          "featureSha256": "ee7df12a7dee9d8e7d737aee4b929a065212677e78fc0c6f11153c6ead0dfd95",
+          "expandedSha256": "be20c9ef313a4e521c62ad47f0c48ac67c633d60b669a9459ff2b2662626d643",
+          "geometrySha256": "292dfbc1ebb2739f1ea99e0cead9fccb99030c591e306607470b35d7a2f7345d",
+          "method": "Replace only the St. Lawrence feature with the exact official geographical-feature MultiPolygon. No clipping, simplification, joining, inferred river centerline or invented downstream coordinates. Display the footprint outline; this is not a wetted-area, navigation-channel, bathymetry or flow-quantity dataset. The original metadata bbox is broader than the geometry bounds; both are recorded independently.",
+          "originalNaturalEarth": {
+            "retainedFile": "data-source/atlas/canada/rivers.geojson",
+            "geometryType": "MultiLineString",
+            "vertexCount": 7,
+            "geometrySha256": "920c2db0b7048662b7e6b546f27d3f4b06dda096884b50f3f748e682c1e419cf"
+          },
+          "otherRiverCount": 83,
+          "otherRiverFeaturesSha256": "f484615fd0a99032dd4e83ff61498625ab86c4562058cb7688458ea1eb0e7d32",
+          "displaySha256": "d53cbf632b25711d7333b1ff05494948dead4c7fee43f2126bd9da073dbfb28b"
+        }
+      ]
     },
     {
       "file": "lakes.json",

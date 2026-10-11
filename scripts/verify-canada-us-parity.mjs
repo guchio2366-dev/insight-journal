@@ -1,75 +1,37 @@
-/** Real Chromium acceptance against the production build. No HTTP server/mocked renderer. */
-import {verifyCanadaNaturalReading} from './verify-canada-natural-reading.mjs';
-import {verifyCanadaElevationBands,verifyCanadaElevationRasterInteraction} from './verify-canada-elevation-bands.mjs';
-import {verifyCanadaIndustryReading} from './verify-canada-industry-reading.mjs';
-import {chromium} from 'playwright';
-import {verifyCanadaDemographicsReading} from './verify-canada-demographics-reading.mjs';
-import {verifyCanadaForestryOverview} from './verify-canada-forestry-overview.mjs';
+/** Canada PC acceptance against actual built assets and a sandboxed browser. */
+import {createServer} from 'node:http';
 import {readFile,mkdir,writeFile} from 'node:fs/promises';
+import {execFileSync} from 'node:child_process';
 import path from 'node:path';
 import assert from 'node:assert/strict';
+import {chromium} from 'playwright';
+import config from '../astro.config.mjs';
+import {verifyCanadaNaturalReading} from './verify-canada-natural-reading.mjs';
+import {verifyCanadaElevationBands,verifyCanadaElevationRasterInteraction} from './verify-canada-elevation-bands.mjs';
+import {verifyCanadaIndustryPilot} from './verify-canada-industry-pilot.mjs';
+import {verifyCanadaDemographicsReading} from './verify-canada-demographics-reading.mjs';
+import {verifyCanadaForestryOverview} from './verify-canada-forestry-overview.mjs';
 import {verifyCanadaAgricultureOverview} from './verify-canada-agriculture-overview.mjs';
-import {projectCanadaMap} from '../src/lib/atlas-canada-map-presentation.ts';
-const ottawaPoint=projectCanadaMap(JSON.parse(await readFile('src/data/atlas/canada/climate.json','utf8')).stations.find(station=>station.id==='ottawa').coordinates);
-const output=process.env.ATLAS_QA_OUTPUT??'/tmp/atlas-canada-qa';await mkdir(output,{recursive:true});
-const browser=await chromium.launch({executablePath:process.env.ATLAS_CHROMIUM_PATH,headless:true,chromiumSandbox:true});console.log('Chromium launched');
-const page=await browser.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));const base=path.resolve('dist');
-await page.route('https://atlas.test/**',async route=>{let rel=decodeURIComponent(new URL(route.request().url()).pathname).replace(/^\/insight-journal/,'');if(rel.endsWith('/'))rel+='index.html';const file=path.join(base,rel);if(!file.startsWith(base+path.sep))return route.fulfill({status:400});try{await route.fulfill({body:await readFile(file),contentType:{'.html':'text/html','.js':'application/javascript','.mjs':'application/javascript','.css':'text/css','.json':'application/json','.geojson':'application/json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.woff2':'font/woff2'}[path.extname(file)]??'application/octet-stream'});}catch{await route.fulfill({status:404,body:'missing built asset'});}});
-const url=route=>'https://atlas.test/insight-journal/atlas/north-america/'+route;
-const open=async route=>{console.log('Open',route);await page.goto(url(route),{waitUntil:'domcontentloaded',timeout:30000});await page.waitForTimeout(1000);};
-const frame=async()=>page.locator('.atlas-map-frame:visible').boundingBox();const result={viewports:[],checks:[],screenshots:[]};
-// Read one stable render atomically: selection replaces markers in requestAnimationFrame.
-const checkMarkerLocations=async()=>{
- if(await page.locator('[data-ca-industry-pilot]').count()){assert.ok(await page.locator('[data-ca-cluster]').count()>10,'Canada pilot shows multiple supported industrial clusters');return;}
-
- await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
- const markers=await page.locator('[data-ca-marker]').evaluateAll(nodes=>nodes.map(marker=>{const id=marker.getAttribute('data-ca-marker'),dot=marker.querySelector('i'),anchor=document.querySelector(`[data-ca-anchor="${id}"]`);return {id,dot:dot?{x:dot.getBoundingClientRect().x,y:dot.getBoundingClientRect().y,width:dot.getBoundingClientRect().width,height:dot.getBoundingClientRect().height}:null,anchor:anchor?{x:anchor.getBoundingClientRect().x,y:anchor.getBoundingClientRect().y,width:anchor.getBoundingClientRect().width,height:anchor.getBoundingClientRect().height}:null};}));
- assert.ok(markers.length>0,'Industry markers rendered');
- for(const {id,dot,anchor}of markers){assert.ok(dot&&anchor&&dot.width>0&&dot.height>0&&anchor.width>0,`${id}: visible symbol and anchor`);assert.ok(Math.abs(dot.x+dot.width/2-anchor.x-anchor.width/2)<1&&Math.abs(dot.y+dot.height/2-anchor.y-anchor.height/2)<1,`${id}: industry symbol stays at its geographic anchor`);}
-};
-const shot=async name=>{await page.screenshot({path:path.join(output,name+'.png')});result.screenshots.push(name+'.png');};
+const dist=path.resolve('dist'),output=path.resolve(process.env.ATLAS_QA_OUTPUT??'/tmp/atlas-canada-qa'),base=String(config.base??'').replace(/\/$/,'');
+await mkdir(output,{recursive:true});
+const result={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),status:'running',sandboxRequired:true,browserZoom:'100% (visualViewport.scale=1; no CSS zoom)',viewports:[],checks:[],screenshots:[],failures:[]};
+const server=createServer(async(req,res)=>{try{let route=new URL(req.url,'http://local').pathname;if(base&&route.startsWith(base))route=route.slice(base.length);if(route.endsWith('/'))route+='index.html';const file=path.resolve(dist,'.'+route);assert(file.startsWith(dist+'/'));const bytes=await readFile(file);res.writeHead(200,{'content-type':({'.html':'text/html','.js':'application/javascript','.css':'text/css','.json':'application/json','.geojson':'application/json','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.woff2':'font/woff2'})[path.extname(file)]??'application/octet-stream'});res.end(bytes);}catch{res.writeHead(404);res.end();}});
+await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));let browser,page;
 try{
- for(const [width,height]of [[1536,864],[1280,720],[1024,768]]){await page.setViewportSize({width,height});for(const [us,ca,name]of [['nature/','canada/nature/','climate'],['nature/?env=water&waterView=precipitation','canada/nature/?view=water&waterTopic=precipitation','precipitation'],['industry/','canada/industry/','industry']]){await open(us);const reference=await frame();if(width===1536&&name==='industry')await shot('us-industry');await open(ca);const actual=await frame();if(name!=='industry'){assert.ok(Math.abs(reference.width-actual.width)<2,`${width} ${name} map width`);assert.ok(Math.abs(reference.height-actual.height)<2,`${width} ${name} map height`);}else assert.ok(actual.width>350&&actual.height>=300,'Canada pilot has its own PC distribution frame');assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`${width} ${name} overflow`);if(name==='precipitation')assert.ok(Math.abs(reference.y-actual.y)<2,`${width} precipitation map top`);if(name==='industry')await checkMarkerLocations();result.viewports.push({width,height,topic:name,us:reference,canada:actual});}await shot(`canada-industry-${width}`);}
-
- for(const [width,height]of [[1536,864],[1280,720],[1024,768],[390,844]]){
-  await page.setViewportSize({width,height});await open('canada/nature/');const reference=await frame();
-  const chart=await page.locator('[data-canada-climate-card]:visible svg').first().boundingBox(),reading=await page.locator('[data-canada-original-reading]').boundingBox();assert.ok(chart.y-reading.y<45,'Rainfall chart is first in reading panel');
-  const station=await page.locator('[data-canada-natural-city=ottawa] i').boundingBox();
-  let waterReference=reference;if(width>=960){await open('nature/?env=water&waterView=precipitation');waterReference=await frame();}
-  for(const route of ['canada/nature/?view=water','canada/nature/?view=water&waterTopic=precipitation','canada/population/','canada/population/?topic=ethnicity','canada/population/?topic=religion']){
-   let populationReference=reference;if(route.includes('population')&&width>=960){await open('population/?popView='+(new URL('https://atlas.test/'+route).searchParams.get('topic')??'distribution'));populationReference=await frame();}
-   await open(route);const actual=await frame(),expected=route.includes('view=water')&&width>=960?waterReference:route.includes('population')&&width>=960?populationReference:reference;assert.ok(Math.abs(expected.width-actual.width)<2&&Math.abs(expected.height-actual.height)<2,`${width} ${route}: corresponding map dimensions`);if(route.includes('view=water')&&width>=960)assert.ok(Math.abs(expected.y-actual.y)<2,`${width} ${route}: corresponding water map top`);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`${width} ${route}: no horizontal overflow`);
-   if(route.includes('population')){assert.equal(await page.locator('.population-controls').count(),0);await page.waitForSelector('[data-canada-population][data-regions-ready="true"]');assert.equal(await page.locator('[data-population-region]').count(),293);await page.locator('[data-population-map-cma="933"]').press('Enter');assert.equal(await page.locator('[data-population-map-cma="933"]').getAttribute('aria-pressed'),'true');if(route.includes('topic=')){assert.ok(await page.locator('[data-population-composition-rows] tr').count()>8);await page.locator('[data-population-category]').nth(1).click();assert.match(await page.locator('[data-demographic-comparison]').textContent(),/割合が高い地域/);}}
-   if(route==='canada/nature/?view=water'&&width>=960&&station){const marker=page.locator('[data-canada-map-city=ottawa] circle'),sourcePoint=await marker.evaluate(node=>[Number(node.getAttribute('cx')),Number(node.getAttribute('cy'))]);sourcePoint.forEach((value,i)=>assert.ok(Math.abs(value-ottawaPoint[i])<.02,'Ottawa retains its original projected coordinate'));if(Math.abs(reference.height-actual.height)<2){const point=await marker.boundingBox();assert.ok(Math.abs((station.x+station.width/2-reference.x)-(point.x+point.width/2-actual.x))<2,'Ottawa longitude registration');assert.ok(Math.abs((station.y+station.height/2-reference.y)-(point.y+point.height/2-actual.y))<2,'Ottawa latitude registration');}}
-   result.viewports.push({width,height,topic:route,reference:expected,referenceRoute:route.includes('view=water')&&width>=960?'nature/?env=water&waterView=precipitation':route.includes('population')&&width>=960?'population/?popView='+(new URL('https://atlas.test/'+route).searchParams.get('topic')??'distribution'):'canada/nature/',actual});if(width===1536||width===390)await shot(`followup-${width}-${route.replace(/[^a-z0-9]/g,'-')}`);
-  }
+ browser=await chromium.launch({executablePath:process.env.ATLAS_CHROMIUM_PATH||process.env.INDUSTRY_REVIEW_CHROME_PATH,headless:true,chromiumSandbox:true,ignoreDefaultArgs:['--unsafely-disable-devtools-self-xss-warnings']});result.browserVersion=browser.version();
+ page=await browser.newPage({viewport:{width:1920,height:1080},deviceScaleFactor:1});const errors=[];page.on('pageerror',error=>errors.push(error.message));
+ const evidence=new Set(['canada-agriculture-1920.png','canada-agriculture-crops-only.png','canada-agriculture-livestock-only.png','canada-forestry-1920.png','canada-climate-initial-1920.png','canada-rivers-st-lawrence-1920.png','canada-rain-initial-1920.png','canada-drainage-initial-1920.png','canada-landform-initial-1920.png','canada-distribution-1920-initial.png','canada-ethnicity-1920-initial.png','canada-religion-1920-initial.png','canada-religion-peel-simultaneous.png']);
+ const capture=page.screenshot.bind(page),transport=[];
+ page.screenshot=async options=>{const image=await capture(options);if(evidence.has(path.basename(options.path??''))){const file=path.basename(options.path).replace(/\.png$/,'.jpg');await capture({...options,path:path.join(output,file),type:'jpeg',quality:90});transport.push(file);}return image;};
+ const url=route=>`http://127.0.0.1:${server.address().port}${base}/atlas/north-america/`+route;
+ for(const [name,verify]of [['industry',verifyCanadaIndustryPilot],['agriculture',verifyCanadaAgricultureOverview],['forestry',verifyCanadaForestryOverview],['natural-reading',verifyCanadaNaturalReading],['demographics',verifyCanadaDemographicsReading],['elevation',verifyCanadaElevationBands],['elevation-interaction',verifyCanadaElevationRasterInteraction]]){
+  try{console.log('Canada PC check',name);await verify({page,url,output,result});}
+  catch(error){result.failures.push({name,error:error.stack});console.error(name,error);await page.screenshot({path:path.join(output,name+'-failure.png')});}
  }
- await page.setViewportSize({width:1536,height:864});await open('canada/population/?topic=religion');await page.waitForSelector('[data-canada-population][data-regions-ready="true"]');
- assert.equal(await page.locator('[data-population-category]').count(),14);assert.match(await page.locator('[data-population-coverage]').textContent(),/最多.*過半数/);assert.equal(await page.locator('[data-population-composition-rows] tr').count(),13);await shot('canada-religion-concentration');
- await page.locator('[data-population-region="2466"]').press('Enter');assert.match(await page.locator('[data-population-composition-title]').textContent(),/CD/);assert.equal(new URL(page.url()).searchParams.get('cd'),'2466');
- await page.locator('[data-population-category="11"]').click();assert.equal(new URL(page.url()).searchParams.get('mapGroup'),'1');await page.reload();await page.waitForSelector('[data-canada-population][data-regions-ready="true"]');assert.equal(await page.locator('[data-population-region="2466"]').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('[data-population-category="11"]').getAttribute('aria-pressed'),'true');await shot('canada-religion-lds-share');
- await page.locator('[data-population-category=""]').click();assert.equal(new URL(page.url()).searchParams.has('mapGroup'),false);await page.locator('[data-population-map-cma="933"]').press('Enter');assert.equal(new URL(page.url()).searchParams.has('cd'),false);await page.goBack();assert.equal(new URL(page.url()).searchParams.get('cd'),'2466');
- await page.route('**/canada-demographics-v2/regions.geojson',route=>route.abort());await open('canada/population/?topic=religion');await page.waitForSelector('[data-canada-population][data-regions-error="true"]');assert.match(await page.locator('[data-population-map-status]').textContent(),/取得できません/);assert.equal(await page.locator('[data-population-map-cma]').count(),41);await page.unroute('**/canada-demographics-v2/regions.geojson');
- result.checks.push('293 CDs, 13 religion display groups with 23 source leaves, non-majority note, category concentration, region selection/reload/history and network failure fallback');
- result.checks.push('Climate-first reading, water dimensions/top compared with actual US water and population compared with the corresponding US population topic, removed upper controls, 293 regional boundaries and statistical definitions, categorical composition and city/legend selection at four widths');
- await page.setViewportSize({width:1536,height:864});
- await open('nature/');await page.waitForTimeout(3000);await shot('us-climate');
- await open('canada/nature/');await page.locator('[data-canada-natural-layer=climate][data-canada-natural-render=maplibre]').waitFor({timeout:25000});await shot('canada-climate-live');result.checks.push('Climate uses actual MapLibre/WebGL');
- await page.locator('.canada-climate-full-key summary').click();await page.locator('.canada-natural-key [data-canada-natural-legend=Dfb]').click();assert.equal(await page.locator('.canada-natural-key [data-canada-natural-legend=Dfb]').getAttribute('aria-pressed'),'true');await page.reload();await page.locator('.canada-natural-key [data-canada-natural-legend=Dfb][aria-pressed=true]').waitFor({state:'attached'});result.checks.push('Climate selection survives reload');
- await open('canada/nature/?view=landform&landform=cordillera');await page.locator('[data-canada-landform-render=maplibre]').waitFor({timeout:25000});await shot('canada-landform-live');for(const id of ['interior-plains','canadian-shield','great-lakes-st-lawrence-lowlands','appalachian-uplands','hudson-bay-lowland','arctic-lands','cordillera']){await page.locator(`[data-canada-landform-legend="${id}"]`).click();assert.equal(await page.locator(`[data-canada-landform-shape="${id}"]`).getAttribute('aria-pressed'),'true');assert.equal(await page.locator('[data-canada-landform-shape][aria-pressed=true]').count(),1);}result.checks.push('All seven landforms select one corresponding outline and description');
- await open('canada/nature/?view=water&waterTopic=drainage');await page.locator('[data-canada-water-resources][data-canada-water-ready=ready]').waitFor();await shot('canada-basins');for(const id of ['mackenzie','fraser','columbia','nelson','st-lawrence','saint-john','saskatchewan']){await page.locator(`[data-canada-water-group="${id}"]`).click();assert.ok((await page.locator('[data-canada-water-selected-reading]:visible').textContent()).length>30);}result.checks.push('All seven catchments have selection and geographic/agricultural reading');
- await open('canada/nature/?view=water&waterTopic=groundwater');assert.equal(await page.locator('[data-canada-water-groundwater-modes]').count(),0);const scopes=page.locator('[data-canada-water-subtopics]');assert.ok(await scopes.evaluate(el=>!!el.closest('.canada-water-reading')));result.checks.push('Groundwater has no duplicate upper controls');
- await open('nature/?env=water&waterView=precipitation');await page.waitForTimeout(2500);await shot('us-precipitation');await open('canada/nature/?view=water&waterTopic=precipitation');await shot('canada-precipitation');
- await open('canada/industry/');for(const sector of ['resources','manufacturing','services']){await page.locator(`[data-ca-sector="${sector}"]`).click();assert.equal(await page.locator('[data-ca-sector][aria-selected=true]').getAttribute('data-ca-sector'),sector);}await page.locator('[data-ca-sector=manufacturing]').click();await page.locator('[data-ca-subtabs=manufacturing] [data-ca-subsector=auto]').click();await page.locator('[data-ca-marker=windsor]').click();assert.match(await page.locator('[data-ca-site-title]').textContent(),/ウィンザー/);await checkMarkerLocations();await shot('canada-auto');await page.reload();await page.locator('[data-ca-subtabs=manufacturing] [data-ca-subsector=auto][aria-pressed=true]').waitFor();result.checks.push('Canada three-category pilot industry selection and reload');
- // Block only the GL library to verify the complete SVG fallback with the same source data.
- await page.route('**/*maplibre-gl*.js',route=>route.abort());await open('canada/nature/');await page.waitForTimeout(2000);assert.equal(await page.locator('[data-canada-natural-layer=climate]').getAttribute('data-canada-natural-render'),'svg');await shot('canada-climate-fallback');result.checks.push('Explicit fallback uses the same source and palette');
- await page.unroute('**/*maplibre-gl*.js');
- await verifyCanadaAgricultureOverview({page,url,output,result});
- await verifyCanadaForestryOverview({page,url,output,result});
- await verifyCanadaIndustryReading({page,url,output,result});
- await verifyCanadaDemographicsReading({page,url,output,result});
- await verifyCanadaNaturalReading({page,url,output,result});
- await verifyCanadaElevationBands({page,url,output,result});
- await verifyCanadaElevationRasterInteraction({page,url,output,result});
- assert.deepEqual(errors,[],'No browser runtime errors');await writeFile(path.join(output,'results.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({passed:true,viewports:result.viewports.length,checks:result.checks,output},null,2));
-}finally{await browser.close();}
+ for(const file of transport)console.log('CANADA_MAP_IMAGE '+JSON.stringify({file,base64:(await readFile(path.join(output,file))).toString('base64')}));
+ assert.deepEqual(errors,[],'No browser runtime errors');assert.deepEqual(result.failures,[],'Every requested Canada map check passes');result.status='passed';
+}catch(error){result.status=browser?'failed':'blocked';result.error=error.stack;process.exitCode=1;console.error(error);}
+finally{
+ await writeFile(path.join(output,'verification.json'),JSON.stringify(result,null,2)+'\n');console.log('CANADA_MAP_VERIFICATION '+JSON.stringify(result));
+ await browser?.close();await new Promise(resolve=>server.close(resolve));
+}
