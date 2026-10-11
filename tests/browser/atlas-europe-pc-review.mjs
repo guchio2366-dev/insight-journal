@@ -619,10 +619,11 @@ async function stageOneOperations(page, profile) {
   await openEurope(page, 'atlas/europe/population/?layer=ethnicity', 'normal');
   const extent = () => page.locator('[data-eu-static]').getAttribute('viewBox');
   const fullExtent = await extent();
+  assert.equal(fullExtent, '0 0 1200 1001', 'The ethnicity overview retains Europe without an automatic case zoom');
   for (const name of ['case', 'category', 'area']) assert.equal(await page.locator(`[data-culture-${name}]`).inputValue(), '');
   assert.equal(await page.locator('[data-culture-value]').isVisible(), false);
   const compositionCheck=async()=>{
-    const buttons=page.locator('[data-eu-composition]:visible');assert.equal(await buttons.count(),2,'Initial focus shows England and Wales; Croatia remains available after panning');
+    const buttons=page.locator('[data-eu-composition]:visible');assert.equal(await buttons.count(),3,'The Europe overview shows the three retained census profiles');
     const boxes=await buttons.evaluateAll(nodes=>nodes.map(node=>{const box=node.getBoundingClientRect();return {left:box.left,top:box.top,right:box.right,bottom:box.bottom,width:box.width,height:box.height,font:parseFloat(getComputedStyle(node).fontSize),svg:node.querySelector('svg').getAttribute('viewBox')};}));
     for(const box of boxes){assert.ok(box.font>=14);assert.equal(box.svg,'0 0 56 56');assert.ok(Math.abs(box.width-boxes[0].width)<.01);}
     for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){const a=boxes[i],b=boxes[j];assert.ok(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,'Composition labels do not overlap');}
@@ -654,12 +655,13 @@ async function stageOneOperations(page, profile) {
   await page.reload({waitUntil: 'networkidle'}); await ready(page);
   assert.equal(page.url(), selectedURL);
   assert.equal(await page.locator('[data-culture-value]').textContent(), selectedValue);
-  assert.equal(await extent(), fullExtent);
+  const restoredCaseExtent = await extent();
+  assert.notEqual(restoredCaseExtent, fullExtent, 'An explicit case URL restores its source extent');
   await followComparison(page, 'culture-hubs'); await page.waitForURL('**/industry/**'); await ready(page);
   assert.match(await page.locator('[data-eu-origin-caption]').textContent(), /Middlesbrough/);
   await page.locator('[data-eu-comparison-return]').click(); await page.waitForURL('**/population/**'); await ready(page);
   assert.equal(await page.locator('[data-culture-value]').textContent(), selectedValue);
-  assert.equal(await extent(), fullExtent);
+  assert.equal(await extent(), restoredCaseExtent);
   await page.locator('[data-culture-case]').selectOption(''); await ready(page);
   for (const name of ['case', 'category', 'area']) assert.equal(new URL(page.url()).searchParams.has(`culture${name[0].toUpperCase()}${name.slice(1)}`), false);
   assert.equal(await page.locator('[data-culture-value]').isVisible(), false);
