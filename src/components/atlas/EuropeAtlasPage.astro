@@ -28,6 +28,7 @@ import wheatLegend from '../../data/atlas/europe/wheat-legend.json';
 import mapLabels from '../../data/atlas/europe/map-labels.json';
 import climateWater from '../../data/atlas/europe/climate-water.json';
 import rivers from '../../../public/assets/atlas/europe/context-v1/rivers.json';
+import riverNames from '../../data/atlas/europe/river-names.json';
 import { europeTerrainGuides } from '../../data/atlas/europe/terrain-geography';
 import { pew2020EuropeGroups } from '../../data/atlas/europe/pew-religion-2020';
 import { pewSurfaceGroups, pewSurfaceColors } from '../../lib/atlas-europe-pew-surface';
@@ -53,8 +54,8 @@ const initialFeatures = field==='population'?populationCities:field==='industry'
 const initialPointVisible = (p:{id:string;rank?:number}) => initialFeatures.some(f=>f.id===p.id)&&(p.rank??0)<=1;
 const renderPriority=(feature:(typeof farmingAreas.features)[number])=>{const index=europeFarmingGenres.crops.ids.indexOf(feature.properties.id as typeof europeFarmingGenres.crops.ids[number]);return index<0?europeFarmingGenres.crops.ids.length:index;};
 const displayFarmingAreas={...farmingAreas,features:[...farmingAreas.features].sort((a,b)=>renderPriority(a)-renderPriority(b))};
-const riverIds:Record<string,string>={Danube:'danube',Rhine:'rhine',Rhein:'rhine',Seine:'seine',Thames:'thames'};
-const majorRivers={type:'FeatureCollection' as const,features:rivers.features.filter(feature=>riverIds[feature.properties.sourceName]).map(feature=>({type:'Feature' as const,properties:{id:riverIds[feature.properties.sourceName],name:feature.properties.name},geometry:feature.geometry}))};
+const riverIds:Record<string,string>={Danube:'danube',Donau:'danube',Rhine:'rhine',Rhein:'rhine',Rhin:'rhine',Seine:'seine',Thames:'thames',...Object.fromEntries(riverNames.flatMap(river=>river.sourceNames.map(name=>[name,river.id])))};
+const majorRivers={type:'FeatureCollection' as const,features:rivers.features.filter(feature=>riverIds[feature.properties.sourceName]).map(feature=>({type:'Feature' as const,properties:{id:riverIds[feature.properties.sourceName],name:riverNames.find(river=>river.id===riverIds[feature.properties.sourceName])?.name??feature.properties.name},geometry:feature.geometry}))};
 const riverPath=(geometry:{type:string;coordinates:unknown})=>{
   const lines=geometry.type==='MultiLineString'?geometry.coordinates as number[][][]:[geometry.coordinates as number[][]];
   return lines.map(line=>line.map((coordinate,index)=>`${index?'L':'M'}${project(coordinate).join(' ')}`).join(' ')).join(' ');
@@ -90,7 +91,7 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, farmingDom
             <image data-eu-wheat-image x="0" y="0" width={frame.width} height={frame.height} preserveAspectRatio="none" />
             <image data-eu-subject-image href={field==='population'?initialLayer.image:undefined} x="0" y="0" width={frame.width} height={frame.height} preserveAspectRatio="none" />
             <g data-eu-terrain-guides style="display:none">{europeTerrainGuides.map(guide=><polyline points={guide.line.map(point=>project(point).join(',')).join(' ')} fill="none" stroke="#574b3c" stroke-width="2" stroke-dasharray="6 4" vector-effect="non-scaling-stroke" />)}</g>
-            <g data-eu-major-rivers style="display:none">{majorRivers.features.map(river=><path d={riverPath(river.geometry)} data-eu-major-river={river.properties.id} fill="none" stroke="#176783" stroke-width="2.5" vector-effect="non-scaling-stroke"><title>{river.properties.name}・Natural Earthに収録された河道の一部</title></path>)}</g>
+            <g data-eu-major-rivers style="display:none">{majorRivers.features.map(river=><g><path d={riverPath(river.geometry)} data-eu-major-river-hit={river.properties.id} fill="none" stroke="#176783" stroke-opacity="0" stroke-width="12" pointer-events="stroke" vector-effect="non-scaling-stroke" /><path d={riverPath(river.geometry)} data-eu-major-river={river.properties.id} fill="none" stroke="#176783" stroke-width="2.5" vector-effect="non-scaling-stroke"><title>{river.properties.name}・Natural Earthに収録された河道の一部</title></path></g>)}</g>
             <image data-eu-drainage-selection x="0" y="0" width={frame.width} height={frame.height} preserveAspectRatio="none" style="display:none" />
             <image data-eu-origin-image x="0" y="0" width={frame.width} height={frame.height} preserveAspectRatio="none" style="display:none" />
             <defs>{displayFarmingAreas.features.map(f=><path id={`eu-farm-geometry-${f.properties.id}`} d={viewPath(f.geometry as any)} />)}{farmingDominantAreas.features.map(f=><path id={`eu-farm-dominant-${f.properties.id}`} d={viewPath(f.geometry as any)} />)}{farmingSecondaryAreas.features.map(f=><path id={`eu-farm-secondary-${f.properties.id}`} d={viewPath(f.geometry as any)} />)}</defs>
@@ -98,7 +99,7 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, farmingDom
               {displayFarmingAreas.features.map(f=><use href={`#eu-farm-dominant-${f.properties.id}`} data-eu-farm-area={f.properties.id} style={europeFarmingGenres.crops.ids.some(id=>id===f.properties.id)?undefined:'display:none'} fill-rule="evenodd" fill={f.properties.color} fill-opacity=".82" stroke={f.properties.color} stroke-opacity=".22" stroke-width={farmingVisualWeight(f.properties,undefined,false).width}  vector-effect="non-scaling-stroke"><title>{f.properties.name}の主な分布</title></use>)}
             </g>
             <g class="eu-farming-secondary" style={agriculture?'':'display:none'} data-eu-farming-secondary>
-              {farmingSecondaryAreas.features.map(f=><use href={`#eu-farm-secondary-${f.properties.id}`} data-eu-farm-secondary={f.properties.id} fill="none" stroke={f.properties.color} stroke-width=".9" stroke-opacity=".46" stroke-dasharray="3 2" vector-effect="non-scaling-stroke" />)}
+              {farmingSecondaryAreas.features.map(f=><use href={`#eu-farm-secondary-${f.properties.id}`} data-eu-farm-secondary={f.properties.id} style={europeFarmingGenres.crops.ids.some(id=>id===f.properties.id)?undefined:'display:none'} fill="none" stroke={f.properties.color} stroke-width=".9" stroke-opacity=".46" stroke-dasharray="3 2" vector-effect="non-scaling-stroke" />)}
             </g>
             <g class="eu-farming-selection">
               {farmingAreas.features.map(f=><g><use href={`#eu-farm-geometry-${f.properties.id}`} data-eu-farm-outline={f.properties.id} fill="none" stroke="#fffdf2" stroke-width="5" vector-effect="non-scaling-stroke" style="display:none"/><use href={`#eu-farm-geometry-${f.properties.id}`} data-eu-farm-outline={f.properties.id} fill="none" stroke="#173c48" stroke-width="2.5" vector-effect="non-scaling-stroke" style="display:none"/></g>)}

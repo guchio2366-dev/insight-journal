@@ -1,0 +1,17 @@
+{
+  "recordedOn": "2026-10-11",
+  "inheritedHead": "7e157e3155b11efca1785d378b95cfadd37a0ae9",
+  "inheritedDenials": [
+    {"product":"BasinATLAS v1.0", "recordedUrl":"https://figshare.com/ndownloader/files/20087237", "recordedStatus":403, "responseHeadersRetained":false, "exactErrorRetained":false, "denialOrigin":"unknown: tunnel versus publisher cannot be determined", "retried":false},
+    {"product":"RiverATLAS v1.0", "recordedDownloadCandidate":"https://figshare.com/ndownloader/files/20087486", "recordedApiUrl":"https://api.figshare.com/v2/articles/9890531", "recordedStatus":403, "downloadCandidateVerified":false, "responseHeadersRetained":false, "exactErrorRetained":false, "denialOrigin":"unknown: tunnel versus publisher cannot be determined", "retried":false},
+    {"product":"CLC2018 official REST distribution", "recordedUrl":null, "recordedStatus":403, "responseHeadersRetained":false, "exactErrorRetained":false, "denialOrigin":"unknown: exact route and tunnel versus publisher cannot be determined", "retried":false}
+  ],
+  "newReadOnlyAttempts": [
+    {"url":"https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/agr_r_milkpr?lang=EN&time=2023", "method":"GET", "client":"Python urllib.request", "error":"URLError(OSError('Tunnel connection failed: 403 Forbidden'))", "denialOrigin":"CONNECT tunnel", "publisherHttpStatus":null, "retried":false},
+    {"url":"https://www.pewresearch.org/religion/2018/05/29/religious-identity/", "method":"GET", "client":"Python urllib.request", "error":"URLError(OSError('Tunnel connection failed: 403 Forbidden'))", "denialOrigin":"CONNECT tunnel", "publisherHttpStatus":null, "retried":false},
+    {"url":"https://www.pewresearch.org/religion/2017/05/10/religious-affiliation/", "method":"GET", "client":"Python urllib.request", "error":"URLError(OSError('Tunnel connection failed: 403 Forbidden'))", "denialOrigin":"CONNECT tunnel", "publisherHttpStatus":null, "retried":false},
+    {"url":"https://www.pewresearch.org/religion/2017/08/31/five-centuries-after-reformation-catholic-protestant-divide-in-western-europe-has-faded/", "method":"GET", "client":"Python urllib.request", "error":"URLError(OSError('Tunnel connection failed: 403 Forbidden'))", "denialOrigin":"CONNECT tunnel", "publisherHttpStatus":null, "retried":false}
+  ],
+  "noBypass":true,
+  "sourceBoundary":"The Pew 2017/2018 article text was read successfully by the web reader BEFORE the direct GET attempts were denied. The text supports broad background, not a complete regional geometry or harmonized census. No denied URL was subsequently retried via another tool."
+}

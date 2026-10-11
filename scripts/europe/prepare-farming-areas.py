@@ -119,6 +119,25 @@ def rounded_coordinates(value):
     return round(float(value), 6)
 
 
+def prepare_secondary(features, dominant_features, land):
+    secondary_features, secondary_records = [], []
+    for id in (*OVERVIEW_CROPS, *OVERVIEW_LIVESTOCK, *OVERVIEW_HORTICULTURE):
+        full = shape(next(feature['geometry'] for feature in features if feature['properties']['id'] == id))
+        ground = shape(next(feature['geometry'] for feature in dominant_features if feature['properties']['id'] == id))
+        secondary = make_valid(full.difference(ground.buffer(.015))).intersection(land)
+        parts = [part for part in polygons(secondary) if area_km2(part) >= 350]
+        if not parts:
+            continue
+        geometry = make_valid(union_all(parts).simplify(.08, preserve_topology=True)).intersection(land)
+        geometry_json = mapping(geometry)
+        geometry_json['coordinates'] = rounded_coordinates(geometry_json['coordinates'])
+        properties = dict(next(feature['properties'] for feature in features if feature['properties']['id'] == id))
+        secondary_features.append(dict(type='Feature', properties=properties, geometry=geometry_json))
+        secondary_records.append(dict(id=id, retainedComponents=len(parts),
+                                      approximateDisplayAreaKm2=round(area_km2(geometry), 2)))
+    return dict(output=write(SECONDARY_OUTPUT, dict(type='FeatureCollection', features=secondary_features)), products=secondary_records)
+
+
 def main():
     countries_path = ROOT / 'src/data/atlas/europe-countries.json'
     countries = json.loads(read(countries_path, role='target-country land boundary'))
@@ -126,6 +145,15 @@ def main():
                if feature['properties']['kind'] == 'europe']
     land = make_valid(union_all([shape(feature['geometry']) for feature in targets]))
     land = land.intersection(box(*BOUNDS))
+    if '--secondary-only' in sys.argv:
+        features = json.loads(OUTPUT.read_text())['features']
+        dominant_features = json.loads(DOMINANT_OUTPUT.read_text())['features']
+        manifest_path = OUT / 'manifest.json'
+        manifest = json.loads(manifest_path.read_text())
+        manifest['secondaryContours'] = prepare_secondary(features, dominant_features, land)
+        manifest['processing']['secondaryContours'] = '3ジャンル13品目で、元集中域から同じ品目の色面を除いた残りのうち、350km²以上の面を点線輪郭にする。色面に隠れた別品目や周辺の集中域を見せる補助表示であり、栽培境界ではない。'
+        write(manifest_path, manifest)
+        return
     longitudes = BOUNDS[0] + (np.arange(COLS) + .5) * STEP
     latitudes = BOUNDS[3] - (np.arange(ROWS) + .5) * STEP
     longitude_grid, latitude_grid = np.meshgrid(longitudes, latitudes)
@@ -328,22 +356,7 @@ def main():
     # secondary contour restores every sizeable concentration that would be
     # hidden by that ground color. The full, independently generated source
     # geometry is still used for selection and point hit testing.
-    secondary_features, secondary_records = [], []
-    for id in OVERVIEW_CROPS:
-        full = shape(next(feature['geometry'] for feature in features if feature['properties']['id'] == id))
-        ground = shape(next(feature['geometry'] for feature in dominant_features if feature['properties']['id'] == id))
-        secondary = make_valid(full.difference(ground.buffer(.015))).intersection(land)
-        parts = [part for part in polygons(secondary) if area_km2(part) >= 350]
-        if not parts:
-            continue
-        geometry = make_valid(union_all(parts).simplify(.08, preserve_topology=True)).intersection(land)
-        geometry_json = mapping(geometry)
-        geometry_json['coordinates'] = rounded_coordinates(geometry_json['coordinates'])
-        properties = dict(next(feature['properties'] for feature in features if feature['properties']['id'] == id))
-        secondary_features.append(dict(type='Feature', properties=properties, geometry=geometry_json))
-        secondary_records.append(dict(id=id, retainedComponents=len(parts),
-                                      approximateDisplayAreaKm2=round(area_km2(geometry), 2)))
-    secondary_output = write(SECONDARY_OUTPUT, dict(type='FeatureCollection', features=secondary_features))
+    secondary = prepare_secondary(features, dominant_features, land)
     write(OUT / 'manifest.json', dict(
         version=2, coordinateReferenceSystem='EPSG:4326', bounds=BOUNDS,
         sourceGrid=dict(width=COLS, height=ROWS, resolutionDegrees=STEP,
@@ -352,7 +365,7 @@ def main():
                        meaning='品目ごとの収穫面積または飼養密度の第80百分位'),
         processing=dict(smoothing='閾値以上の格子の割合を原則7×7格子（トウモロコシは5×5）で平均し、原則55%以上の場所を選ぶ。米と柑橘類は45%以上。中心格子も第80百分位以上の値が必要。',
                         dominantOverview='3ジャンルとも、元の品目別集中域を残しつつ、重なる元格子の代表色を一色に整理する。穀物・畑作は同じha/格子の近傍平均を比較する。畜産・果樹園芸は各品目内の高値を標準化した近傍値で重なりを整理し、異なる動物の頭羽数や作物の量を比較しない。柑橘類は自身が閾値を満たす格子に限り広い集合区分より優先し、南部の根拠ある帯が消えるのを防ぐ。各ジャンルの色面は0.24度未満の細い隙間を概略図の表示尺度で閉じ、縁を0.16度で簡略化する。元図の全分布と選択時の輪郭は保持する。',
-                        secondaryContours='穀物・畑作6品目では、元集中域から同じ品目の色面を除いた残りのうち、350km²以上の面を点線輪郭にする。色面に隠れた別品目や周辺の集中域を見せる補助表示であり、栽培境界ではない。',
+                        secondaryContours='3ジャンル13品目で、元集中域から同じ品目の色面を除いた残りのうち、350km²以上の面を点線輪郭にする。色面に隠れた別品目や周辺の集中域を見せる補助表示であり、栽培境界ではない。',
                         smoothingRadiusCells=SMOOTH_RADIUS, minimumNeighborFraction=MIN_NEIGHBOR_FRACTION,
                         smoothingRadiusByProduct=SMOOTH_RADIUS_BY_PRODUCT,
                         smoothingRadiusReason='トウモロコシはポー平原の高値格子（8.708333°E, 45.291667°N）が7×7近傍では53.1%で切れるため、元の5×5近傍（64%）を保ち、同地点を根拠のある面として残す。',
@@ -383,7 +396,7 @@ def main():
             'SPAMの収穫面積は複数作期を含む場合があり、耕地面積と一致しない。',
             '収録済みの12作物と牛・豚・鶏・羊のみ。ブドウ・オリーブ単独の格子は未収録。',
             'ロシアは表示枠内の対象国データを含む。統計・地理区分の境界や領有権を判断する図ではない。',
-        ], inputs=inputs, products=records, output=output, dominantOverview=dict(output=dominant_output,products=dominant_records,cropIds=OVERVIEW_CROPS,livestockIds=OVERVIEW_LIVESTOCK,horticultureIds=OVERVIEW_HORTICULTURE),secondaryContours=dict(output=secondary_output,products=secondary_records)))
+        ], inputs=inputs, products=records, output=output, dominantOverview=dict(output=dominant_output,products=dominant_records,cropIds=OVERVIEW_CROPS,livestockIds=OVERVIEW_LIVESTOCK,horticultureIds=OVERVIEW_HORTICULTURE),secondaryContours=secondary))
     print('output', output['bytes'], 'bytes', flush=True)
 
 

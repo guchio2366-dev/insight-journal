@@ -125,8 +125,8 @@ test('six initial crop belts retain source-backed country coverage and label loc
     assert.ok(polygons(wheat.geometry).some(polygon=>polygonContains(polygon,point)),`wheat belt includes ${point}`);
 });
 
-test('all six crops retain distinct secondary contours when another fill occupies their source area',()=>{
-  const ids=['wheat','barley','maize','potato','sugarbeet','rapeseed'];
+test('all three genres retain secondary contours when another fill occupies their source area',()=>{
+  const ids=['wheat','barley','maize','potato','sugarbeet','rapeseed','cattle','pig','chicken','sheep','citrus','temperatefruit','vegetables'];
   assert.equal(sha(bytes(manifest.secondaryContours.output.path)),manifest.secondaryContours.output.sha256);
   assert.deepEqual(new Set(secondary.features.map(feature=>feature.properties.id)),new Set(ids));
   for(const feature of secondary.features){

@@ -161,12 +161,12 @@ export function initEuropeAtlas() {
     const token=++drainageRequest;
     try {
       const values=await gridValues(config.layers.find(layer=>layer.id==='drainage')!);
-      if(token!==drainageRequest||state.layer!=='drainage'||state.basin!==selected)return;
+      if(!root!.isConnected||token!==drainageRequest||state.layer!=='drainage'||state.basin!==selected)return;
       const representatives=config.readings.filter(item=>item.field==='nature'&&item.layer==='water').filter(item=>{
         const cell=displayCell(values,item.coordinates,-1),record=cell?.value==null?undefined:europeDrainageBasinByIndex(cell.value);
         return record?.MAIN_BAS===basin.MAIN_BAS;
       });
-      if(!system&&representatives.length)query('[data-eu-basin-summary]').textContent+=` ${representatives.map(item=>item.name).join('、')}の代表地点と同じMAIN_BASのモデル区画です。代表地点の区画と上流・下流の区画は別に分かれることがあります。`;
+      if(representatives.length)query('[data-eu-basin-summary]').textContent+=` ${representatives.map(item=>item.name).join('、')}の代表地点と同じMAIN_BASのモデル区画です。代表地点の区画と上流・下流の区画は別に分かれることがあります。`;
       if(drainageDrawn!==selected){
         const outline=system?europeDrainageMainBasinOutline(values,basin.MAIN_BAS):europeDrainageOutline(values,index),canvas=document.createElement('canvas');canvas.width=1800;canvas.height=1502;
         canvas.getContext('2d')!.putImageData(new ImageData(outline.rgba,1800,1502),0,0);
@@ -183,7 +183,7 @@ export function initEuropeAtlas() {
         map.moveLayer('drainage-selected','context');
         map.setLayoutProperty('drainage-selected','visibility','visible');
       }
-    }catch(error){if(token===drainageRequest){
+    }catch(error){if(root!.isConnected&&token===drainageRequest){
       image.style.display='none';
       if(map?.getLayer('drainage-selected'))map.setLayoutProperty('drainage-selected','visibility','none');
       query('[data-eu-basin-summary]').textContent='選択区画の輪郭を取得できませんでした。区画を選び直して再試行できます。';
@@ -235,7 +235,7 @@ export function initEuropeAtlas() {
   const featureVisible = (id:string) => {
     const p=visibleFeatures().find(p=>p.id===id); if(!p)return false;
     if(subject().field==='industry')return true;
-    if(p.layer==='terrain')return true;
+    if(p.layer==='terrain'||p.layer==='water')return true;
     if(state.place)return p.country===state.place;
     if(state.region!=='all' && countries.find(c=>c.code===p.country)?.region!==state.region)return false;
     return !('rank' in p) || (p.rank??0)<=(state.region==='all'?1:3) || p.id===state.feature;
@@ -269,14 +269,31 @@ export function initEuropeAtlas() {
   terrainLabelOffsets.sort((a,b)=>Math.hypot(...a)-Math.hypot(...b)||a[1]-b[1]);
   const riverLabels=config.readings.filter(reading=>reading.layer==='water').map(label=>{
     const node=document.createElement('button');node.type='button';node.className='eu-river-label';node.textContent=label.name;node.dataset.euRiverLabel=label.id;
-    node.addEventListener('click',event=>{event.stopPropagation();selectFeature(label.id);});stage.append(node);return {node,label};
+    const leader=document.createElementNS('http://www.w3.org/2000/svg','line');leader.dataset.euRiverLeader=label.id;terrainLeader.append(leader);
+    node.addEventListener('click',event=>{event.stopPropagation();selectFeature(label.id);});stage.append(node);return {node,label,leader};
   });
   function positionRiverLabels(){
     const rect=stage.getBoundingClientRect();
-    for(const {node,label} of riverLabels){
-      node.hidden=state.layer!=='water';node.setAttribute('aria-pressed',String(state.feature===label.id));if(node.hidden)continue;
+    terrainLeader.setAttribute('viewBox',`0 0 ${rect.width} ${rect.height}`);
+    const placed:DOMRect[]=[];
+    const heading=query<HTMLElement>('.eu-map-heading').getBoundingClientRect();
+    const buttons=query<HTMLElement>('.eu-map-buttons').getBoundingClientRect();
+    const reserved=[heading,buttons];
+    const overlaps=(a:DOMRect,b:DOMRect)=>a.left<b.right+3&&a.right>b.left-3&&a.top<b.bottom+3&&a.bottom>b.top-3;
+    for(const {node,label,leader} of [...riverLabels].sort((a,b)=>Number(b.label.id===state.feature)-Number(a.label.id===state.feature))){
+      node.hidden=state.layer!=='water';leader.style.display='none';node.setAttribute('aria-pressed',String(state.feature===label.id));if(node.hidden)continue;
       const point=overlayProject(label.coordinates);node.style.left=point.x+'px';node.style.top=point.y+'px';
-      node.hidden=point.x<44||point.x>rect.width-44||point.y<50||point.y>rect.height-48;
+      node.hidden=point.x<5||point.x>rect.width-5||point.y<5||point.y>rect.height-44;
+      if(node.hidden)continue;
+      const {width,height}=node.getBoundingClientRect();
+      for(const [dx,dy] of terrainLabelOffsets){
+        const candidate=new DOMRect(rect.left+point.x+dx-width/2,rect.top+point.y+dy-height/2,width,height);
+        if(candidate.left<rect.left+4||candidate.right>rect.right-4||candidate.top<rect.top+4||candidate.bottom>rect.bottom-44)continue;
+        if([...placed,...reserved].some(other=>overlaps(candidate,other)))continue;
+        node.style.left=point.x+dx+'px';node.style.top=point.y+dy+'px';placed.push(candidate);
+        if(Math.hypot(dx,dy)>12){leader.setAttribute('x1',String(point.x));leader.setAttribute('y1',String(point.y));leader.setAttribute('x2',String(point.x+dx));leader.setAttribute('y2',String(point.y+dy));leader.style.display='';}
+        break;
+      }
     }
   }
   function positionPrecipitationLabels(){
@@ -616,7 +633,11 @@ export function initEuropeAtlas() {
     const religionOverview=state.layer==='religion'&&!state.cultureCase;
     const cultureBase=cultureColor(null);
     const pewFills=config.geography.features.filter(feature=>feature.properties.kind==='europe').map(feature=>[feature.properties.code,pewSurfaceColor(feature.properties.code,pewSurfaceGroup)??'#d9dcda'] as const);
-    all<SVGElement>('[data-eu-shape]').forEach(shape=>{shape.style.fill=religionOverview?pewSurfaceColor(shape.dataset.euShape??'',pewSurfaceGroup)??'#d9dcda':cultureActive()?cultureBase:indicator?fills.find(([code])=>code===shape.dataset.euShape)?.[1]??'#d9dcda':'transparent';});
+    all<SVGElement>('[data-eu-shape]').forEach(shape=>{
+      shape.style.fill=religionOverview?pewSurfaceColor(shape.dataset.euShape??'',pewSurfaceGroup)??'#d9dcda':cultureActive()?cultureBase:indicator?fills.find(([code])=>code===shape.dataset.euShape)?.[1]??'#d9dcda':'transparent';
+      // Transparent country interiors must not intercept physical river lines.
+      shape.style.pointerEvents=indicator||religionOverview?'auto':'none';
+    });
     if(map?.getLayer('land'))map.setPaintProperty('land','fill-color',religionOverview?['match',['get','code'],...pewFills.flat(),'#edece5']:cultureActive()?cultureBase:indicator?['match',['get','code'],...fills.flat(),'#edece5']:'#edece5');
     query<HTMLElement>('[data-eu-pew-map-key]').hidden=!religionOverview;
     query<HTMLElement>('[data-eu-pew-surface-key]').hidden=!religionOverview;
@@ -632,8 +653,8 @@ export function initEuropeAtlas() {
       const genre=europeFarmingGenres[farm.genre];
       query('[data-eu-farm-key-title]').textContent=genre.title;
       query('[data-eu-farm-legend-title]').textContent=`${genre.title}の主な${farm.genre==='livestock'?'飼養地域':'栽培域'} · 2020年頃`;
-      query('[data-eu-farm-key-note]').textContent=farm.genre==='crops'?'点線＝色面外に続く各品目の集中域':'色は品目、重なりは複数品目';
-      query('[data-eu-farm-explanation]').textContent=farm.genre==='crops'?'6作物の集中域を同時に示します。色面が重なる場所では混色を避けるため1品目を主彩色とし、色面に隠れる別品目の集中域を品目色の点線で残します。品目を選ぶと、重なりを含む元の全分布を強調します。':'各色が品目別の集中域です。重なった色は複数品目の重なりで、新しい分類ではありません。品目を選ぶと、その分布を強調します。';
+      query('[data-eu-farm-key-note]').textContent='点線＝色面外に続く各品目の集中域';
+      query('[data-eu-farm-explanation]').textContent=`${genre.ids.length}品目の集中域を同時に示します。重なる場所では1品目を代表色とし、色面に隠れる別品目の集中域を品目色の点線で残します。代表色は品目間の生産量の順位ではありません。品目を選ぶと、重なりを含む元の全分布の輪郭を強調します。`;
       query('[data-eu-farm-missing]').textContent=genre.missing;
       all<HTMLElement>('[data-eu-farm-key-item]').forEach(item=>{item.hidden=!genre.ids.some(id=>id===item.dataset.euFarmKeyItem);});
     }
@@ -708,7 +729,7 @@ export function initEuropeAtlas() {
       // Keep at most three numeric grids; switching subjects does not accumulate all datasets.
       while(valueCache.size>3)valueCache.delete(valueCache.keys().next().value!);
       const cell = layer.gridType==='display'?displayCell(values,point,layer.nodata):wheatCell(values, point);
-      if (request !== gridRequest) return;
+      if (!root!.isConnected || request !== gridRequest) return;
       if(layer.id==='drainage'){
         delete state.feature;
         const basin=cell?.value===null?undefined:europeDrainageBasinByIndex(cell?.value);
@@ -731,7 +752,7 @@ export function initEuropeAtlas() {
     if(focus)return [[focus.focusBounds[0],focus.focusBounds[1]],[focus.focusBounds[2],focus.focusBounds[3]]] as [[number,number],[number,number]];
     if(subject().field==='agriculture')return state.farmExtent==='full'||!farmingView().active ? [[frame.west,frame.south],[frame.east,frame.north]] as [[number,number],[number,number]] : europeFarmingInitialBounds;
     const codes = countries.filter(c => state.place ? c.code === state.place : state.region === 'all' || c.region === state.region).map(c => c.code);
-    if (state.region === 'all' && !state.place) return subject().field==='population' ? [[-13,35],[48,61]] as [[number,number],[number,number]] : subject().id==='climate' ? [[-13,35],[50,65]] as [[number,number],[number,number]] : ['terrain','contours'].includes(subject().id) ? [[-13,35],[50,68]] as [[number,number],[number,number]] : ['water','drainage','precipitation'].includes(subject().id) ? [[-13,37],[48,63]] as [[number,number],[number,number]] : [[-25,32],[65,73]] as [[number,number],[number,number]];
+    if (state.region === 'all' && !state.place) return subject().field==='population' ? [[-13,35],[48,61]] as [[number,number],[number,number]] : subject().id==='climate' ? [[-13,35],[50,65]] as [[number,number],[number,number]] : ['terrain','contours'].includes(subject().id) ? [[-13,35],[50,68]] as [[number,number],[number,number]] : subject().id==='water' ? [[-13,35],[62,66]] as [[number,number],[number,number]] : ['drainage','precipitation'].includes(subject().id) ? [[-13,37],[48,63]] as [[number,number],[number,number]] : [[-25,32],[65,73]] as [[number,number],[number,number]];
     return visibleBounds(geography.features.filter(f => codes.includes(f.properties.code)).map(f => f.geometry));
   }
   function staticSymbols() {
@@ -739,7 +760,7 @@ export function initEuropeAtlas() {
     all<SVGGElement>('[data-eu-point],[data-eu-feature-point]').forEach(g=>{const id=g.dataset.euPoint??g.dataset.euFeaturePoint;const p=[...cities,...features].find(p=>p.id===id);if(!p)return;const [x,y]=project(p.coordinates);g.querySelector('circle')?.setAttribute('r',String(5/scale));const label=g.querySelector('text');label?.setAttribute('x',String(x+9/scale));label?.setAttribute('y',String(y-9/scale));if(label)label.style.fontSize=12/scale+'px';});
   }
   function fit() {
-    const onsCulture=cultureActive()&&(state.cultureCase==='england-wales-2021'||state.layer==='ethnicity'&&!state.cultureCase);
+    const onsCulture=cultureActive()&&state.cultureCase==='england-wales-2021';
     const bounds = onsCulture ? [[-6.5,49.8],[2.2,55.9]] as [[number,number],[number,number]] : cultureActive() ? [[frame.west, frame.south], [frame.east, frame.north]] as [[number,number],[number,number]] : selectionBounds();
     const [left, bottom] = project(bounds[0]);
     const [right, top] = project(bounds[1]);
@@ -767,6 +788,7 @@ export function initEuropeAtlas() {
     query<HTMLElement>('.eu-workspace').dataset.field=currentField.id==='nature'?'natural':currentField.id;
     all<HTMLElement>('[data-eu-topic-field]').forEach(group=>{group.hidden=group.dataset.euTopicField!==currentField.id;});
     const topic=subject().id;
+    root!.classList.toggle('is-eu-water-reading',topic==='water');
     query<HTMLElement>('[data-eu-terrain-guide-note]').hidden=topic!=='terrain';
     query<HTMLElement>('[data-eu-city-hint]').hidden=!climateReader();
     query<HTMLElement>('[data-eu-culture-host]').hidden=!cultureActive();
@@ -964,7 +986,7 @@ export function initEuropeAtlas() {
     } catch { if (token === generation) fallback(); }
   }
   all<SVGImageElement>('image').forEach(img=>img.addEventListener('error',()=>{if(img.style.display!=='none')status.textContent='地図画像を取得できませんでした。出典・解説・国別の数値は確認できます。主題を選び直すか、通常地図への再試行を使ってください。';}));
-  all<SVGPathElement>('[data-eu-major-river]').forEach(path=>path.addEventListener('click',event=>{if(['water','drainage'].includes(state.layer)){event.stopPropagation();selectFeature(path.dataset.euMajorRiver!);}}));
+  all<SVGPathElement>('[data-eu-major-river],[data-eu-major-river-hit]').forEach(path=>path.addEventListener('click',event=>{if(['water','drainage'].includes(state.layer)){event.stopPropagation();selectFeature((path.dataset.euMajorRiver??path.dataset.euMajorRiverHit)!);}}));
   query<HTMLSelectElement>('[data-eu-industry-scope]').addEventListener('change',event=>{
     const [kind,id]=(event.target as HTMLSelectElement).value.split(':');
     if(kind==='country'&&isEuropeIndustryCountry(id)){selectCountry(id);return;}

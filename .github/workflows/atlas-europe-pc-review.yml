@@ -8,6 +8,7 @@ on:
     paths:
       - '.github/workflows/atlas-europe-pc-review.yml'
       - 'tests/browser/atlas-europe-pc-review.mjs'
+      - 'tests/browser/atlas-europe-handoff-review.mjs'
       - 'docs/atlas-europe-pc-review.md'
       - 'src/components/atlas/Europe*.astro'
       - 'src/data/atlas/europe/**'
@@ -120,6 +121,7 @@ jobs:
           done
           curl --fail --silent "$EUROPE_REVIEW_BASE_URL" > /dev/null
           node tests/browser/atlas-europe-pc-review.mjs
+          EUROPE_REVIEW_OUTPUT="$EUROPE_REVIEW_OUTPUT/handoff-1920" node tests/browser/atlas-europe-handoff-review.mjs
 
       - name: Include existing source review images
         if: always()

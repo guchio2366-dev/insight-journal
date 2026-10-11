@@ -1,4 +1,5 @@
 import { europeTerrainGuides, europeTerrainPlaceNames, europeTerrainWinds } from './terrain-geography.ts';
+import riverNames from './river-names.json' with { type: 'json' };
 
 export type EuropeReading = {id:string;name:string;field:'nature'|'industry';country:string;coordinates:[number,number];group:string;body:string;question:string;source:string;sourceLabel:string;period:string;layer:string;overview?:string;explanation?:string;bounds?:readonly [readonly [number,number],readonly [number,number]];explanationSource?:string};
 
@@ -29,6 +30,13 @@ export const europeReadings: EuropeReading[] = [
  {id:'rhine',name:'ライン川',field:'nature',country:'DEU',coordinates:[7.59,50.36],group:'水系',layer:'water',body:'ライン川はアルプス方面から北へ流れ、ドイツ西部の谷と低地を通ってオランダの河口域から北海へ注ぎます。支流の水を集める一方、地図の線だけでは流域界や流量は分かりません。沿岸と内陸を結ぶ水路として利用され、水利用・洪水・生態系は流域の国々が協力して管理しています。',question:'アルプス方面から北海まで河道を追い、沿岸港と内陸の位置関係を確かめます。',source:'https://www.iksr.org/en/icpr/rhine-2040',sourceLabel:'ICPR・Rhine 2040',period:'2040年に向けた流域計画'},
  {id:'seine',name:'セーヌ川',field:'nature',country:'FRA',coordinates:[2.35,48.86],group:'水系',layer:'water',body:'セーヌ川はフランス北部のパリを通り、英仏海峡側へ向かいます。地図に強調した線はNatural Earthの収録区間で、源流から河口までの完全な河道や流域界ではありません。都市と河川の位置が重なる様子を読めます。',question:'パリを通る強調線の位置を確かめます。',source:'https://seine-normandie.eaufrance.fr/',sourceLabel:'Seine-Normandie水情報システム',period:'2026-10-11参照'},
  {id:'thames',name:'テムズ川',field:'nature',country:'GBR',coordinates:[-0.12,51.50],group:'水系',layer:'water',body:'テムズ川はロンドンを通り、東へ北海側の河口域に向かいます。地図に強調した線はNatural Earthの収録区間で、源流から河口までの完全な河道や流域界ではありません。都市と河川の位置が重なる様子を読めます。',question:'ロンドンを通る強調線の位置を確かめます。',source:'https://www.gov.uk/government/organisations/environment-agency',sourceLabel:'英国Environment Agency',period:'2026-10-11参照'},
+ ...riverNames.map((river):EuropeReading=>({
+   id:river.id,name:river.name,coordinates:river.coordinates,field:'nature',country:'',group:'水系',layer:'water',
+   overview:`${river.name}の名称と、Natural Earthに収録された河川線を示します。選ぶと同じ名称の収録区間をまとめて強調します。`,
+   explanation:'河川名は元資料の名称と照合しています。線は縮尺1:5000万の概略河道で、源流から河口までの接続、本支流の全接続、全流域界を示すものではありません。',
+   body:`${river.name}の収録河川線。線の太さは流量を表しません。`,question:'名称を押すか、河川線をクリックして収録区間を確かめます。',
+   source:'https://www.naturalearthdata.com/downloads/50m-physical-vectors/50m-rivers-lake-centerlines/',sourceLabel:'Natural Earth 5.1.2・河川と湖の中心線',period:'Natural Earth 5.1.2',
+ })),
  ...terrainReadings,
  {id:'rotterdam',name:'ロッテルダム',field:'industry',country:'NLD',coordinates:[4.30,51.92],group:'資源・素材',layer:'hubs',body:'港の立地と結びついた化学・石油化学の集積です。原料の搬入、加工、貯蔵が近接する仕組みを、内陸の化学拠点と比較できます。',question:'ライン川の水系図に切り替え、海港と内陸のつながりを確認します。点は港湾地域の代表位置で、施設全体の境界ではありません。',source:'https://www.portofrotterdam.com/en/setting/industry-port/process-industry',sourceLabel:'ロッテルダム港・プロセス産業',period:'2026-09-25参照'},
  {id:'ludwigshafen',name:'ルートヴィヒスハーフェン',field:'industry',country:'DEU',coordinates:[8.43,49.50],group:'資源・素材',layer:'hubs',body:'BASFの統合化学生産拠点。複数の工程を同じ拠点で結びつける生産方式を読む例です。国全体の製造業比率から、この施設の生産額を推定することはできません。',question:'水系と人口の表示で、ライン川・周辺都市との位置関係を比べます。',source:'https://www.basf.com/global/en/who-we-are/organization/locations/europe/german-sites/ludwigshafen',sourceLabel:'BASF・Ludwigshafen',period:'2026-09-25参照'},

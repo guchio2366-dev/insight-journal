@@ -57,9 +57,9 @@ export function updateFarmingMap(root:HTMLElement,map:LibreMap|undefined,data:Fa
     path.style.display=view.selectedVisible&&path.dataset.euFarmOutline===view.item?.id?'':'none';
   });
   const secondaryLayer=root.querySelectorAll<SVGGElement>('[data-eu-farming-secondary]')[0];
-  if(secondaryLayer)secondaryLayer.style.display=view.genre==='crops'?'':'none';
+  if(secondaryLayer)secondaryLayer.style.display=view.active&&!view.single?'':'none';
   root.querySelectorAll<SVGElement>('[data-eu-farm-secondary]').forEach(path=>{
-    path.style.display=view.genre==='crops'&&ids.includes(path.getAttribute('data-eu-farm-secondary')??'')?'':'none';
+    path.style.display=view.active&&!view.single&&ids.includes(path.getAttribute('data-eu-farm-secondary')??'')?'':'none';
   });
   if(map?.getLayer('land')) {
     if(!map.getSource('eu-farming')) {
@@ -84,7 +84,7 @@ export function updateFarmingMap(root:HTMLElement,map:LibreMap|undefined,data:Fa
       map.setPaintProperty('eu-farm-'+kind+'-line','line-opacity',property('line'));
       map.setPaintProperty('eu-farm-'+kind+'-line','line-width',property('width'));
     }
-    map.setFilter('eu-farm-secondary-line',['in',['get','id'],['literal',view.genre==='crops'?ids:[]]]);
+    map.setFilter('eu-farm-secondary-line',['in',['get','id'],['literal',view.active&&!view.single?ids:[]]]);
     for(const id of ['eu-farm-selection-halo','eu-farm-selection']) {
       map.setFilter(id,['==',['get','id'],view.selectedVisible?view.item!.id:'']);
       map.moveLayer(id);
