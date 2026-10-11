@@ -199,7 +199,7 @@ export async function startAtlas() {
         if(points.length)protectedRects.push({left:Math.min(...points.map(p=>p.x))-8,right:Math.max(...points.map(p=>p.x))+8,top:Math.min(...points.map(p=>p.y))-8,bottom:Math.max(...points.map(p=>p.y))+8});
       }
     }
-    for(const node of root.querySelectorAll<HTMLElement>('.atlas-map-tools,[data-layer-caption],.atlas-geolabel:not([hidden]),.atlas-nature-label:not([hidden]),.industry-marker,.atlas-livestock-marker,.atlas-agri-layers'))protectedRects.push(localRect(node));
+    for(const node of root.querySelectorAll<HTMLElement>('.atlas-map-tools,[data-layer-caption],.atlas-geolabel:not([hidden]),.atlas-nature-label:not([hidden]),.industry-marker,.industry-overview-label:not([hidden]),.industry-overview-pin>i,.atlas-livestock-marker,.atlas-agri-layers'))protectedRects.push(localRect(node));
     const result=chooseCardPlacement({width:frame.clientWidth,height:frame.clientHeight},{width:selection.offsetWidth,height:selection.offsetHeight},protectedRects,frame.clientWidth<650?6:9);
     if(!result){moveSelectionBelow();return;}
     selection.dataset.placement=result.id;selection.style.left=`${result.left}px`;selection.style.top=`${result.top}px`;selection.style.visibility='visible';
