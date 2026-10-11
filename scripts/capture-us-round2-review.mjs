@@ -8,7 +8,7 @@ const dir=resolve('dist'),out=resolve('review-artifacts/us-round2');await mkdir(
 const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml'};
 const server=createServer(async(req,res)=>{try{let p=resolve(dir,decodeURIComponent(new URL(req.url,'http://localhost').pathname).replace(/^\/insight-journal\//,''));if(!p.startsWith(dir+sep))throw Error('outside build');if((await stat(p)).isDirectory())p=resolve(p,'index.html');res.writeHead(200,{'Content-Type':mime[extname(p)]??'application/octet-stream'});res.end(await readFile(p));}catch{res.writeHead(404);res.end();}});
 await new Promise(r=>server.listen(0,'127.0.0.1',r));
-const report={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),viewport:{width:1920,height:1080},dpr:1,sandbox:true,captures:[],operations:[],errors:[],status:'running'};
+const report={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),viewport:{width:1920,height:1080},dpr:1,sandbox:true,captures:[],details:[],operations:[],errors:[],status:'running'};
 let browser;
 try{
  browser=await chromium.launch({headless:true,chromiumSandbox:true,executablePath:process.env.REVIEW_CHROME_PATH,ignoreDefaultArgs:['--unsafely-disable-devtools-self-xss-warnings']});
@@ -34,14 +34,29 @@ try{
    if(target==='build'&&['climate','river','precipitation','basins'].includes(name))assert.ok(frame.width>=1050&&frame.height>=680,`${name}: larger primary PC map area`);
    if(target==='build'&&name==='forest'){assert.equal(await page.locator('[data-forest-site]').count(),2);assert.match(await page.locator('[data-forest-national]').textContent(),/2017/);}
    if(target==='build'&&name==='industry')assert.equal(await page.evaluate(()=>{const boxes=[...document.querySelectorAll('[data-industry-markers] .industry-overview-label:not([hidden])')].map(n=>n.getBoundingClientRect());return boxes.some((a,i)=>boxes.slice(i+1).some(b=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top));}),false,'initial all-industry labels must not overlap');
+   // Save the actual screen before layout assertions, including on failure.
+   await page.screenshot({path:resolve(out,`${target}-${name}.jpg`),type:'jpeg',quality:85});
+   const capture={target,name,url:page.url(),frame,dpr:await page.evaluate(()=>devicePixelRatio),render:await page.locator('[data-atlas-explorer]').getAttribute('data-render-state'),checked:false};report.captures.push(capture);
+   if(target==='build'&&name==='forest'){
+    await page.locator('[data-forest-national]').scrollIntoViewIfNeeded();await page.screenshot({path:resolve(out,'build-forest-national.jpg'),type:'jpeg',quality:85});report.details.push({name:'forest-national',url:page.url()});
+   }
    if(target==='build'&&name==='religion'){
+    const rectangles=await page.evaluate(()=>{
+     const box=n=>{const b=n.getBoundingClientRect();return {id:n.getAttribute('data-pop-city')??n.getAttribute('data-pop-religion-marker'),text:n.textContent,left:b.left,top:b.top,right:b.right,bottom:b.bottom};};
+     const ny=box(document.querySelector('[data-pop-city-markers] [data-pop-city="new-york"]'));
+     const stories=[...document.querySelectorAll('[data-pop-religion-markers] .atlas-nature-label:not([hidden])')].map(box);
+     return {ny,stories,collisions:stories.map(b=>({...b,overlapWidth:Math.max(0,Math.min(ny.right,b.right)-Math.max(ny.left,b.left)),overlapHeight:Math.max(0,Math.min(ny.bottom,b.bottom)-Math.max(ny.top,b.top))})).filter(b=>b.overlapWidth>0&&b.overlapHeight>0)};
+    });
+    await writeFile(resolve(out,'build-religion-rectangles.json'),JSON.stringify(rectangles,null,2)+'\n');
+    await page.locator('[data-pop-religion-concentrations]').evaluate(n=>n.open=true);
+    for(let i=0;i<2;i++){await page.locator('[data-pop-religion-concentrations] table').nth(i).screenshot({path:resolve(out,`build-religion-concentrations-${i+1}.jpg`),type:'jpeg',quality:85});report.details.push({name:`religion-concentrations-${i+1}`,url:page.url()});}
+    await page.locator('[data-pop-religion-concentrations]').evaluate(n=>n.open=false);
     assert.match(await page.locator('[data-pop-map-note]').textContent(),/PRRI 2023/);
     assert.equal(await page.locator('[data-pop-religion-concentrations] table').count(),2);
-    assert.equal(await page.evaluate(()=>{const ny=document.querySelector('[data-pop-city-markers] [data-pop-city="new-york"]').getBoundingClientRect();return [...document.querySelectorAll('[data-pop-religion-markers] .atlas-nature-label:not([hidden])')].some(n=>{const b=n.getBoundingClientRect();return ny.left<b.right&&ny.right>b.left&&ny.top<b.bottom&&ny.bottom>b.top;});}),false,'religion reference labels must leave New York readable');
+    assert.equal(rectangles.collisions.length>0,false,'religion reference labels must leave New York readable');
    }
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
-   await page.screenshot({path:resolve(out,`${target}-${name}.jpg`),type:'jpeg',quality:85});
-   report.captures.push({target,name,url:page.url(),frame,dpr:await page.evaluate(()=>devicePixelRatio),render:await page.locator('[data-atlas-explorer]').getAttribute('data-render-state')});
+   capture.checked=true;
   }
  }
  const origin=`http://127.0.0.1:${server.address().port}/insight-journal/atlas/north-america/`;
@@ -71,9 +86,31 @@ try{
  await page.locator('[data-industry-subsector="electronics"]').click();assert.match(await page.locator('[data-industry-economic-legend]').textContent(),/半導体単品ではありません/);
  await page.locator('[data-industry-description-panel="manufacturing:electronics"] [data-industry-region-option="austin-electronics"]').click();assert.match(await page.locator('[data-selection-title]').textContent(),/オースティン/);await snapshot('electronics-place');
  assert.equal(await page.evaluate(()=>{const card=document.querySelector('[data-selection]');if(card.classList.contains('atlas-selection--below'))return false;const a=card.getBoundingClientRect();return [...document.querySelectorAll('[data-industry-markers] .industry-overview-label:not([hidden]),[data-industry-markers] .industry-overview-pin>i')].some(node=>{const b=node.getBoundingClientRect();return a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;});}),false,'selected card must leave industry labels and anchors readable');
+ for(const [sector,subsector,ids] of [['resources','oil-gas',['kern-river-well','hugoton-well']],['manufacturing','chemicals',['puget-refinery','baytown-chemical']]]){
+  await page.goto(origin+`industry/?sector=${sector}&subsector=${subsector}`,{waitUntil:'networkidle'});await ready();
+  const panel=page.locator(`[data-industry-description-panel="${sector}:${subsector}"]`);
+  let previous=null;
+  for(const id of ids){
+   assert.equal(await panel.locator(`[data-industry-region-option="${id}"]`).count(),1);
+   await page.locator(`[data-industry-markers] [data-industry-place="${id}"]`).click();
+   const title=await page.locator('[data-selection-title]').textContent();
+   assert.equal(new URL(page.url()).searchParams.get('industryRegion'),id);
+   await page.locator('[data-selection-link]').click();assert.equal(new URL(page.url()).searchParams.get('industryRegion'),id);
+   assert.equal(await page.locator('[data-selection-title]').textContent(),title);assert.equal(await panel.isVisible(),true);
+   await page.reload({waitUntil:'networkidle'});await ready();assert.equal(await page.locator('[data-selection-title]').textContent(),title);
+   await page.goBack({waitUntil:'networkidle'});await ready();assert.equal(new URL(page.url()).searchParams.get('industryRegion'),id);
+   await page.locator('[data-map-frame]').scrollIntoViewIfNeeded();await snapshot(id+'-detail-back-reload');
+   await page.goBack({waitUntil:'networkidle'});await ready();assert.equal(new URL(page.url()).searchParams.get('industryRegion'),previous);previous=id;
+   // Restore the chosen site before checking the next source location.
+   await panel.locator(`[data-industry-region-option="${id}"]`).click();
+  }
+ }
  await page.goto(origin+'agriculture/',{waitUntil:'networkidle'});await ready();assert.match(await page.locator('.atlas-quantity-note').textContent(),/生産量を表しません/);
  await page.locator('[data-crop-select="wheat"]').first().click();await page.reload({waitUntil:'networkidle'});await ready();assert.equal(new URL(page.url()).searchParams.get('crop'),'wheat');await snapshot('agriculture-reload');
  for(const view of ['ethnicity','religion']){await page.goto(origin+'population/?popView='+view,{waitUntil:'networkidle'});await ready();await page.waitForFunction(()=>/郡のデータ/.test(document.querySelector('[data-pop-status]')?.textContent??''));await page.reload({waitUntil:'networkidle'});await ready();assert.equal(await page.locator('[data-pop-view][aria-pressed=true]').getAttribute('data-pop-view'),view);await snapshot(view+'-reload');}
+ await page.locator('[data-pop-religion-concentrations]').evaluate(n=>n.open=true);await page.locator('[data-pop-religion-concentrations]').scrollIntoViewIfNeeded();await snapshot('religion-concentration-table');
+ await page.goto(origin+'agriculture/?agriReading=forestry:timber',{waitUntil:'networkidle'});await ready();await page.locator('[data-atlas-explorer][data-forest-active=true]').waitFor();
+ await page.locator('[data-forest-national]').scrollIntoViewIfNeeded();assert.equal(await page.locator('[data-forest-national] tbody tr').count(),3);await snapshot('forest-national-supply-trade');
  assert.deepEqual(report.errors,[]);report.status='passed';
 }catch(error){report.status='failed';report.error=String(error);throw error;}
 finally{await writeFile(resolve(out,'report.json'),JSON.stringify(report,null,2)+'\n');await browser?.close();server.close();}

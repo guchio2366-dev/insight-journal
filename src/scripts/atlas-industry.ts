@@ -128,7 +128,8 @@ export function createIndustryController(root:HTMLElement,regions:IndustryRegion
     if(state.industryState){event.preventDefault();q('#industry-detail').scrollIntoView({block:'start'});q('#industry-detail').focus({preventScroll:true});return;}
     if(!state.industryRegion)return;
     const region=regions.find(r=>r.id===state.industryRegion);if(!region)return;
-    event.preventDefault();setScope(region.sector,region.subsector);q('#industry-detail').scrollIntoView({block:'start'});q('#industry-detail').focus({preventScroll:true});
+    // Opening the existing field detail retains the actual site being read.
+    event.preventDefault();setScope(region.sector,region.subsector,false);selectRegion(region.id);q('#industry-detail').scrollIntoView({block:'start'});q('#industry-detail').focus({preventScroll:true});
   });
   new ResizeObserver(()=>renderMarkers()).observe(frame);
   q<HTMLImageElement>('[data-fallback-image]').addEventListener('load',renderMarkers);

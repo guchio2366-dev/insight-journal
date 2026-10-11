@@ -37,6 +37,24 @@ async function setup(query='',fail=false,width=800){
  return {window,requests,root:window.document.querySelector('[data-atlas-explorer]'),q:s=>window.document.querySelector(s)};
 }
 
+test('油ガス・精製石化の実地点と説明が対応し、既存詳説へ移っても地点を保持する',async()=>{
+ for(const [sector,subsector,ids] of [['resources','oil-gas',['kern-river-well','hugoton-well']],['manufacturing','chemicals',['puget-refinery','baytown-chemical']]]){
+  const {window,q}=await setup(`?sector=${sector}&subsector=${subsector}`);
+  try{
+   const panel=q(`[data-industry-description-panel="${sector}:${subsector}"]`);
+   for(const id of ids){
+    assert.ok(panel.querySelector(`[data-industry-region-option="${id}"]`));
+    q(`[data-industry-markers] [data-industry-place="${id}"]`).click();
+    const title=q('[data-selection-title]').textContent;
+    q('[data-selection-link]').click();
+    assert.equal(new URL(window.location.href).searchParams.get('industryRegion'),id);assert.equal(q('[data-selection-title]').textContent,title);
+    const restored=await setup(new URL(window.location.href).search);
+    try{assert.equal(restored.q('[data-selection-title]').textContent,title);assert.equal(restored.q(`[data-industry-description-panel="${sector}:${subsector}"]`).hidden,false);}finally{await restored.window.happyDOM.close();}
+   }
+  }finally{await window.happyDOM.close();}
+ }
+});
+
 test('金融→情報通信で右欄の解説を切り替え、構成比の数値とカメラを保つ',async()=>{
  const {window,root,q}=await setup('?sector=services&subsector=finance&lng=-90&lat=35&z=4');
  try{

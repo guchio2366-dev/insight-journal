@@ -36,7 +36,9 @@ export function createPopulationController(root:HTMLElement,base:string,options:
   holder:el('[data-pop-city-markers]'),attribute:'data-pop-city',controls:'population-city-reading',active:options.active,mode:()=>'population',project,
   obstacleSelector:'.atlas-fallback:not([hidden]) > p',
   fallbackBox:box=>populationFallbackBox(box,extent()),fallbackProject:(coordinate,box)=>projectPopulationFallback(coordinate,box,extent()),
-  select:entry=>choose('city',entry.id),placed:()=>{},
+  // Resize/font/map callbacks can queue the story layout before the cities.
+  // Re-place stories after the final city rectangles are on screen.
+  select:entry=>choose('city',entry.id),placed:()=>storyLabels.schedule(),
  });
  const storyLabels=createNatureLabels(root,religionStories.map(story=>({id:story.id,name:story.number,coordinate:story.coordinate,mode:'population'})),{
   holder:el('[data-pop-religion-markers]'),attribute:'data-pop-religion-marker',controls:'population-city-reading',
