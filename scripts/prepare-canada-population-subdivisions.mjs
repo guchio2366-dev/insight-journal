@@ -35,12 +35,26 @@ function polygonGroups(rings){
  return groups;
 }
 const transform=p=>inverseCanadaLambert(p).map(v=>Math.round(v*1e7)/1e7);
+const originalPages=new Map();
 async function originalFeature(id,index){
- const url='https://geo.statcan.gc.ca/geo_wa/rest/services/2021/Digital_boundary_files/MapServer/9/query?'+new URLSearchParams({where:'1=1',outFields:'CSDUID,CSDNAME,PRUID',returnGeometry:'true',outSR:'3347',f:'json',orderByFields:'OBJECTID',resultOffset:String(index),resultRecordCount:'1'});
- const target=path.join(source,'csd-original-'+id+'.json');
- await promisify(execFile)('python3',['-c','import sys,urllib.request; response=urllib.request.urlopen(sys.argv[1],timeout=45); data=response.read(); open(sys.argv[2],"wb").write(data)',url,target]);
- const bytes=await readFile(target),parsed=JSON.parse(bytes);if(parsed.features?.length!==1||parsed.features[0].attributes.CSDUID!==id)throw Error('Original CSD mismatch '+id);
- await writeFile(path.join(source,'csd-original-'+id+'.json'),bytes);sourceCorrections.push({id,url,sha256:hash(bytes),bytes:bytes.length});return parsed.features[0];
+ // The service can reject a one-record native query while serving its containing
+ // page. Read the unmodified official page and select by the exact source ID.
+ for(const count of [100,25,12,1]){
+  const offset=Math.floor(index/count)*count,key=offset+':'+count;
+  const url='https://geo.statcan.gc.ca/geo_wa/rest/services/2021/Digital_boundary_files/MapServer/9/query?'+new URLSearchParams({where:'1=1',outFields:'CSDUID,CSDNAME,PRUID',returnGeometry:'true',outSR:'3347',f:'json',orderByFields:'OBJECTID',resultOffset:String(offset),resultRecordCount:String(count)});
+  try{
+   if(!originalPages.has(key)){
+    const target=path.join(source,'csd-original-page-'+offset+'-'+count+'.json');
+    await promisify(execFile)('python3',['-c','import sys,urllib.request; response=urllib.request.urlopen(sys.argv[1],timeout=45); data=response.read(); open(sys.argv[2],"wb").write(data)',url,target]);
+    const bytes=await readFile(target),parsed=JSON.parse(bytes);if(!parsed.features?.length||parsed.error)throw Error('Empty original source page');
+    originalPages.set(key,{parsed,url,sha256:hash(bytes),bytes:bytes.length});
+   }
+   const page=originalPages.get(key),feature=page.parsed.features.find(f=>String(f.attributes.CSDUID)===id);
+   if(!feature?.geometry?.rings?.length)throw Error('Original CSD mismatch '+id);
+   sourceCorrections.push({id,url:page.url,sha256:page.sha256,bytes:page.bytes});return feature;
+  }catch(error){console.log('CANADA_REVIEW_ORIGINAL_PAGE '+JSON.stringify({id,offset,count,status:'unavailable',error:error.message.split('\n')[0]}));}
+ }
+ throw Error('Original official CSD unavailable '+id);
 }
 const features=[];
 for(const [sourceIndex,sourceFeature]of officialGeometry.features.entries()){
