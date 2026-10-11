@@ -29,6 +29,7 @@ jobs:
     env:
       INTEGRATION_TARGET: ${{ inputs.target || 'build' }}
       INTEGRATION_EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      INTEGRATION_REVIEW_LOG_IMAGES: '1'
       ASTRO_TELEMETRY_DISABLED: '1'
     steps:
       - uses: actions/checkout@v7

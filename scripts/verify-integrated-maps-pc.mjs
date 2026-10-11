@@ -80,7 +80,7 @@ try{
   const bundles=await page.locator('script[src],link[rel="stylesheet"][href]').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('src')??n.getAttribute('href')).filter(url=>url.startsWith('/insight-journal/_astro/')));
   for(const url of [...new Set(bundles)]){const relative=url.slice('/insight-journal/'.length);if(!report.assets.some(a=>a.path===relative))await checkAsset(relative);}
   await shot(scene.id+'-initial');
-  const before=await camera(scene);let selected;
+  const before=await camera(scene),initialCity=new URL(page.url()).searchParams.get('city');let selected;
   if(scene.selectControl){
    const control=page.locator(scene.selectControl);selected=await control.locator('option').evaluateAll(nodes=>nodes.find(n=>n.value&&!n.disabled&&!n.hidden)?.value);assert(selected,scene.id+' has a selectable city');await control.selectOption(selected);
   }else if(scene.select){
@@ -93,7 +93,7 @@ try{
    await page.reload({waitUntil:'networkidle'});if(scene.ready)await page.locator(scene.ready).waitFor();await settle();assert.equal(page.url(),selectedURL);sameCamera(await camera(scene),before,0.001);
    if(scene.selectControl)assert.equal(await page.locator(scene.selectControl).inputValue(),selected);
    if(['east-asia','south-asia','central-asia','mexico','japan'].includes(scene.id))await shot(scene.id+'-selected-reloaded');
-   await page.goBack({waitUntil:'networkidle'});await settle();assert.equal(new URL(page.url()).searchParams.has('city'),false,scene.id+' restores preceding selection');
+   await page.goBack({waitUntil:'networkidle'});await settle();assert.equal(new URL(page.url()).searchParams.get('city'),initialCity,scene.id+' restores preceding selection');
    report.operations.push({region:scene.id,selection:selected,reload:true,back:true,cameraPreserved:Boolean(scene.svg||scene.cameraRoot)});
   }else{await page.reload({waitUntil:'networkidle'});if(scene.ready)await page.locator(scene.ready).waitFor();assert(await page.locator(scene.map).first().isVisible());}
   report.scenes.push({region:scene.id,url:base+'/atlas/'+scene.path,map:box,metrics});
@@ -125,6 +125,7 @@ try{
 finally{
  report.finishedAt=new Date().toISOString();await writeFile(resolve(out,'report.json'),JSON.stringify(report,null,2)+'\n');
  await browser?.close();if(server)await new Promise(r=>server.close(r));
+ console.log('INTEGRATED_MAP_REPORT '+JSON.stringify(report));
  if(process.env.INTEGRATION_REVIEW_LOG_IMAGES==='1')for(const item of report.images)console.log('INTEGRATED_MAP_IMAGE '+JSON.stringify({...item,base64:(await readFile(resolve(out,item.file))).toString('base64')}));
  console.log(JSON.stringify({status:report.status,head:report.head,target:report.target,scenes:report.scenes.length,operations:report.operations.length,images:report.images.length,assets:report.assets.length}));
 }
