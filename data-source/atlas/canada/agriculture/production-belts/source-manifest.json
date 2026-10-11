@@ -1,0 +1,108 @@
+{
+  "accessedAt": "2026-10-11",
+  "source": "Statistics Canada, Census of Agriculture, 2021 thematic maps",
+  "directAttemptError": "URLError: Tunnel connection failed: 403 Forbidden",
+  "sources": [
+    {
+      "id": "corn",
+      "referenceYear": 2021,
+      "url": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/m-c/m-c-029-eng.jpg",
+      "sourcePage": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-029-eng.htm",
+      "fileName": "corn-map-2021.jpg",
+      "acquisitionStatus": "acquired",
+      "method": "Existing review CI job, ordinary HTTPS; bytes reconstructed from authorized GitHub logs",
+      "bytes": 619792,
+      "sha256": "74678dfcde8ae1a5894634ab2a9f7d5ddc0f9d99776518b7c0d3d1a932d4690e",
+      "visualInspectionStatus": "reviewed",
+      "visualInspectionDate": "2026-10-11"
+    },
+    {
+      "id": "soybeans",
+      "referenceYear": 2021,
+      "url": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/m-c/m-c-031-eng.jpg",
+      "sourcePage": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-031-eng.htm",
+      "fileName": "soybeans-map-2021.jpg",
+      "acquisitionStatus": "acquired",
+      "method": "Existing review CI job, ordinary HTTPS; bytes reconstructed from authorized GitHub logs",
+      "bytes": 615663,
+      "sha256": "48ee46a8a408cd7e97c896757091b3effab05831bd2babc7973d9c4446d27629",
+      "visualInspectionStatus": "reviewed",
+      "visualInspectionDate": "2026-10-11"
+    },
+    {
+      "id": "potatoes",
+      "referenceYear": 2021,
+      "url": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/m-c/m-c-035-eng.jpg",
+      "sourcePage": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-035-eng.htm",
+      "fileName": "potatoes-map-2021.jpg",
+      "acquisitionStatus": "acquired",
+      "method": "Existing review CI job, ordinary HTTPS; bytes reconstructed from authorized GitHub logs",
+      "bytes": 661572,
+      "sha256": "ad033251517ea2ef0f382b200398fae5e83bcb5530b99d52e94ea031ccdbdce1",
+      "visualInspectionStatus": "reviewed",
+      "visualInspectionDate": "2026-10-11"
+    },
+    {
+      "id": "dairy",
+      "referenceYear": 2021,
+      "url": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/m-c/m-c-045-eng.jpg",
+      "sourcePage": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-045-eng.htm",
+      "fileName": "dairy-map-2021.jpg",
+      "acquisitionStatus": "acquired",
+      "method": "Existing review CI job, ordinary HTTPS; bytes reconstructed from authorized GitHub logs",
+      "bytes": 656319,
+      "sha256": "a36c2e01ff6795e0c01107c0c9949d270db0275f364276cd1077e6cb0d454bfa",
+      "visualInspectionStatus": "reviewed",
+      "visualInspectionDate": "2026-10-11"
+    },
+    {
+      "id": "pork",
+      "referenceYear": 2021,
+      "url": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/m-c/m-c-047-eng.jpg",
+      "sourcePage": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-047-eng.htm",
+      "fileName": "pork-map-2021.jpg",
+      "acquisitionStatus": "acquired",
+      "visualInspectionStatus": "reviewed",
+      "method": "Existing review CI job, ordinary HTTPS; bytes reconstructed from authorized GitHub logs",
+      "bytes": 650921,
+      "sha256": "c7207740ba0fc0bb8c83a619573a050a70698243cc1b70b4bc26fd35db09fcdb",
+      "visualInspectionDate": "2026-10-11"
+    },
+    {
+      "id": "chicken",
+      "referenceYear": 2021,
+      "url": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/m-c/m-c-049-eng.jpg",
+      "sourcePage": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-049-eng.htm",
+      "fileName": "chicken-map-2021.jpg",
+      "acquisitionStatus": "acquired",
+      "visualInspectionStatus": "reviewed",
+      "method": "Existing review CI job, ordinary HTTPS; bytes reconstructed from authorized GitHub logs",
+      "bytes": 678002,
+      "sha256": "ae54e30f657bd931e88c5829efab4f150f7987c41319c3db9a0a7acdb9830c76",
+      "visualInspectionDate": "2026-10-11"
+    }
+  ],
+  "retainedReviewedMaps": [
+    "data-source/atlas/canada/agriculture/canola-map-2021.jpg",
+    "data-source/atlas/canada/agriculture/wheat/wheat-map-2021.jpg",
+    "data-source/atlas/canada/agriculture/beef/beef-map-2021.jpg",
+    "data-source/atlas/canada/agriculture/beef/hay-map-2021.jpg",
+    "data-source/atlas/canada/agriculture/beef/pasture-map-2021.jpg"
+  ],
+  "libraryReferenceImages": {
+    "count": 2,
+    "acquisitionStatus": "download failed after normal Library retrieval and authorized consumer-local retry",
+    "visualInspectionStatus": "not-viewed"
+  },
+  "rejectedAlternatives": [
+    {
+      "url": "https://agriculture.canada.ca/maps-cartes/rest/services/census_agriculture_ccs/MapServer/19?f=pjson",
+      "reason": "Broiler variables are under parentLayer 2011, not 2021."
+    },
+    {
+      "url": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2017001/article/54906/catm-ctra-299-eng.htm",
+      "reason": "Broiler production distribution reference year 2015, not 2021."
+    }
+  ],
+  "allAdditionalOfficialMapsReviewed": true
+}

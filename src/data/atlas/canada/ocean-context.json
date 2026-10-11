@@ -1,0 +1,125 @@
+{
+  "method": "Sea labels are cartographic placement. Current lines are simplified explanatory directions, not measured trajectories, velocities, seasonal limits or shipping routes.",
+  "checkedAt": "2026-10-11",
+  "seas": [
+    {
+      "id": "pacific",
+      "name": "太平洋",
+      "coordinates": [
+        -132,
+        50
+      ]
+    },
+    {
+      "id": "atlantic",
+      "name": "大西洋",
+      "coordinates": [
+        -59,
+        43
+      ]
+    },
+    {
+      "id": "arctic",
+      "name": "北極海",
+      "coordinates": [
+        -130,
+        77
+      ]
+    },
+    {
+      "id": "hudson-bay",
+      "name": "ハドソン湾",
+      "coordinates": [
+        -85,
+        59
+      ]
+    },
+    {
+      "id": "labrador-sea",
+      "name": "ラブラドル海",
+      "coordinates": [
+        -57,
+        60
+      ]
+    },
+    {
+      "id": "st-lawrence-gulf",
+      "name": "セントローレンス湾",
+      "coordinates": [
+        -62,
+        48.5
+      ]
+    }
+  ],
+  "currents": [
+    {
+      "id": "labrador",
+      "name": "ラブラドル海流（寒流）",
+      "kind": "cold",
+      "coordinates": [
+        [
+          -56.5,
+          59
+        ],
+        [
+          -54,
+          54
+        ],
+        [
+          -53.5,
+          49
+        ],
+        [
+          -57.5,
+          45.5
+        ]
+      ],
+      "labelAnchor": [
+        -55.5,
+        55
+      ],
+      "sourceIds": [
+        "noaa-northeast"
+      ]
+    },
+    {
+      "id": "gulf-stream",
+      "name": "メキシコ湾流（暖流）",
+      "kind": "warm",
+      "coordinates": [
+        [
+          -65,
+          41.8
+        ],
+        [
+          -61.5,
+          42
+        ],
+        [
+          -57,
+          43
+        ],
+        [
+          -53.5,
+          44.5
+        ]
+      ],
+      "labelAnchor": [
+        -64,
+        42.2
+      ],
+      "sourceIds": [
+        "noaa-northeast"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "noaa-northeast",
+      "publisher": "NOAA Integrated Ecosystem Assessment",
+      "title": "Northeast Currents",
+      "url": "https://www.integratedecosystemassessment.noaa.gov/regions/northeast/northeast-currents",
+      "note": "Northwest Atlantic schematic and explanatory text describe the Gulf Stream and southward Labrador Current. Display coordinates are author-drawn schematic placements."
+    }
+  ]
+}

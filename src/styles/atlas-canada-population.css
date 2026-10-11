@@ -62,3 +62,6 @@
  .atlas-desktop-shell .canada-nature.canada-population[data-canada-population] .canada-country-primary .population-workspace{grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:12px}
  .atlas-desktop-shell .canada-nature.canada-population[data-canada-population] .canada-country-primary .atlas-map-frame{min-height:350px;aspect-ratio:1.65}
 }
+
+[data-population-subdivision]{stroke:#a1b0a7;stroke-width:.15;vector-effect:non-scaling-stroke;cursor:pointer}
+[data-population-subdivision]:hover,[data-population-subdivision]:focus,[data-population-subdivision].is-selected-subdivision{stroke:#203e4a;stroke-width:1.5;outline:none}

@@ -163,6 +163,8 @@ jobs:
             echo "::error::The GitHub runner does not have Google Chrome installed."
             exit 1
           fi
+          if [[ "${GITHUB_HEAD_REF:-}" == "codex/canada-map-revision-20261011" || "${GITHUB_REF_NAME:-}" == "codex/canada-map-revision-20261011" ]]; then export CANADA_REVIEW_LOG_IMAGES=1; fi
+          if [[ "${GITHUB_EVENT_NAME:-}" == "push" ]]; then export CANADA_REVIEW_IMAGE_GROUP=natural; else export CANADA_REVIEW_IMAGE_GROUP=people; fi
           ATLAS_CHROMIUM_PATH="$chrome_path" npm run test:browser:canada
       - name: Upload map acceptance screenshots
         if: always()

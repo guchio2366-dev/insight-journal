@@ -7,6 +7,8 @@ import {southCentralReligionCensuses} from '../data/atlas/asia-south-central-rel
 import {Marker} from 'maplibre-gl';
 import {eastCultureExamples} from '../data/atlas/east-asia-cultural-geography';
 import {eastAsiaReligionCountries,eastAsiaReligionColors} from '../data/atlas/east-asia-religion';
+import southeastLandformExtents from '../data/atlas/asia/southeast-landform-extents.json';
+import {southeastPhilippineEthnicity,southeastPhilippineReligionRegions,southeastReligionCensuses} from '../data/atlas/asia/southeast-census-complements';
 type Coordinate=[number,number];
 type Annotation={id:string;text:string;coordinate:Coordinate;anchors?:Coordinate[];product?:string;kind?:string;color?:string;value?:number};
 export type AsiaPresentation={
@@ -79,6 +81,26 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
   const obstacles:Box[]=[{left:width-(compact?62:70),top:0,right:width,bottom:compact?165:190}];
   if(active==='overview')obstacles.push({left:0,top:0,right:225,bottom:55});
   const project=(p:Coordinate)=>map!.project(p);
+  if(config.regionId==='southeast-asia'&&['terrain','landform'].includes(active??''))for(const footprint of southeastLandformExtents.features){
+   for(const coords of footprint.lines){
+    const path=document.createElementNS(svg.namespaceURI,'path');
+    path.dataset.landformExtent=footprint.id;
+    path.setAttribute('d',coords.map(([lon,lat],index)=>{const p=project([lon,lat]);return `${index?'L':'M'}${p.x.toFixed(1)} ${p.y.toFixed(1)}`;}).join(' '));
+    path.setAttribute('fill','none');path.setAttribute('stroke',state.detail===footprint.id?'#a4422f':'#6d345b');
+    path.setAttribute('stroke-width',state.detail===footprint.id?'2.8':'1.5');path.setAttribute('stroke-dasharray',state.detail===footprint.id?'':'5 3');
+    path.setAttribute('opacity',state.detail&&state.detail!==footprint.id?'.38':'.85');svg.append(path);
+   }
+  }
+  if(config.regionId==='southeast-asia'&&['ethnicity','religion'].includes(active??'')&&!state.detail){
+   const topic=active==='ethnicity'?'ethnicity':'religion';
+   const items=topic==='ethnicity'?southeastPhilippineEthnicity:southeastPhilippineReligionRegions;
+   for(const item of items.filter(item=>'mapLabel' in item)){
+    const p=project(item.point);if(p.x<10||p.y<10||p.x>width-10||p.y>height-10)continue;
+    const labelText=String(item.mapLabel),labelWidth=Math.max(112,labelText.length*10+12),left=Math.max(4,p.x-labelWidth-7),top=p.y-10;
+    const label=document.createElementNS(svg.namespaceURI,'rect');label.dataset[topic==='ethnicity'?'southeastCensusEthnicity':'southeastCensusReligionRegion']=item.region;label.setAttribute('x',String(left));label.setAttribute('y',String(top));label.setAttribute('width',String(labelWidth));label.setAttribute('height','21');label.setAttribute('rx','3');label.setAttribute('fill',topic==='ethnicity'?'#fff7e8':'#fff2ee');label.setAttribute('stroke',topic==='ethnicity'?'#8c5834':'#a7554d');svg.append(label);
+    const name=document.createElementNS(svg.namespaceURI,'text');name.setAttribute('x',String(left+6));name.setAttribute('y',String(top+14));name.setAttribute('font-size','10');name.setAttribute('font-weight','700');name.setAttribute('fill','#573b31');name.textContent=labelText;svg.append(name);
+   }
+  }
   const southeastPopulation=active==='population'&&root.dataset.region==='southeast-asia';
   const waterCities=['water','basins','groundwater'].includes(active??'');
   const cities=active==='climate'?config.cities:active==='population'?config.population?.cities??[]:waterCities?config.cities.filter(c=>majorClimateCities.has(c.id)&&(root.dataset.region!=='south-central-asia'||['new-delhi','karachi','dhaka','tashkent','astana'].includes(c.id))):[];
@@ -159,7 +181,7 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
    const feature=datasets.get(config.riverFile).features.find((f:any)=>f.properties.id===focus.river);if(!feature)continue;
    const lines=feature.geometry.type==='MultiLineString'?feature.geometry.coordinates:[feature.geometry.coordinates],path=[...lines].sort((a:any,b:any)=>b.length-a.length)[0];if(path?.length){const anchors=root.dataset.region==='southeast-asia'?[.5,.7,.3,.85,.15].map(f=>path[Math.floor((path.length-1)*f)]):undefined;annotation.push({id:focus.river,text:focus.displayName??focus.name,coordinate:path[Math.floor(path.length/2)],anchors,kind:'river'});}
   }
-  if(active==='landform')annotation.push(...(config.landforms??[]).map(f=>({id:f.id,text:f.name,coordinate:f.coordinates,kind:'landform'})));
+  if(active==='landform'||active==='terrain'&&config.regionId==='southeast-asia')annotation.push(...(config.landforms??[]).map(f=>({id:f.id,text:f.name,coordinate:f.coordinates,kind:'landform'})));
   if(active==='overview'&&!water&&datasets.has(metadata.farming.file)){const southCentral=root.dataset.region==='south-central-asia';const groups=metadata.farming.products.map(p=>{const labels=metadata.farming.labels.filter(a=>a.product===p.id);return labels.length?{...labels[0],id:p.id,anchors:labels.map(a=>a.coordinate)}:null;}).filter((a):a is NonNullable<typeof a>=>!!a&&selectedKinds.has(a.kind??'crop')&&(!singleFarm()||a.product===singleFarm()!.id));const cropGroups=groups.filter(a=>a.kind==='crop');if(southCentral&&selectedFarm()?.kind==='crop')cropGroups.sort((a,b)=>Number(b.product===selectedFarm()!.id)-Number(a.product===selectedFarm()!.id));annotation.push(...cropGroups);
    if(selectedKinds.has('livestock')){
     const points=metadata.farming.labels.filter(a=>a.kind==='livestock'&&(!singleFarm()||a.product===singleFarm()!.id)).filter(a=>Number(a.id.split('-').at(-1))<3);
@@ -224,6 +246,11 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
    const marker=document.createElement('button');marker.type='button';marker.className='sc-religion-marker';marker.setAttribute('aria-label',`${census.name}の${census.year}年宗教構成を読む`);marker.setAttribute('aria-pressed',String(getState().place===census.code));
    let angle=0;const colorStops=census.segments.map(segment=>{const next=angle+segment.share*3.6,stop=`${segment.color} ${angle}deg ${next}deg`;angle=next;return stop;});marker.style.background=`conic-gradient(${colorStops.join(',')})`;const label=document.createElement('span');label.textContent=census.name;marker.append(label);
    marker.addEventListener('click',event=>{event.stopPropagation();config.selectReligionCountry?.(census.code);});religionMarkers.push(new Marker({element:marker,anchor:'center'}).setLngLat(census.point).addTo(currentMap));
+  }
+  if(config.regionId==='southeast-asia'&&current==='religion'&&!getState().detail)for(const census of southeastReligionCensuses.filter(c=>c.code!=='PHL')){
+   const marker=document.createElement('div');marker.className='sc-religion-marker';marker.dataset.southeastCensusReligion=census.code;marker.setAttribute('role','img');marker.setAttribute('aria-label',`${census.name}の${census.year}年宗教回答：${census.shares.map(([name,share])=>`${name}${share}％`).join('、')}`);
+   let angle=0;marker.style.background=`conic-gradient(${census.shares.map(([,share,color])=>{const start=angle;angle+=share*3.6;return `${color} ${start}deg ${angle}deg`;}).join(',')})`;
+   const label=document.createElement('span');label.textContent=census.name;marker.append(label);religionMarkers.push(new Marker({element:marker,anchor:'center'}).setLngLat(census.point).addTo(currentMap));
   }
   const eastReligion=config.regionId==='east-asia'&&current==='religion'&&!getState().detail;
   const settlement=censusReligion||eastReligion?undefined:current?metadata.settlements?.[current]:undefined;

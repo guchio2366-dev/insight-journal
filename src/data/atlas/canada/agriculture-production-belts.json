@@ -1,0 +1,1521 @@
+{
+  "referenceYear": 2021,
+  "method": "evidence-reviewed-editorial-production-belts",
+  "meaning": "公式2021年分布図と品目ごとのCCS公表値をもとに、特徴的な集積の広がりを汎化した案内図。色面は栽培・飼養の連続した実測境界、行政地域の最大品目、量の大小を表しません。重なりを許容し、帯から面積・頭数を推計しません。",
+  "sources": {
+    "canola": {
+      "title": "Canola area by census division, 2021",
+      "url": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-027-eng.htm",
+      "geography": "CDの農業エクメーネ内にランダム配置された面積ドット"
+    },
+    "wheat": {
+      "title": "Total wheat area by census division, 2021",
+      "url": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-025-eng.htm",
+      "geography": "CDの農業エクメーネ内にランダム配置された面積ドット"
+    },
+    "corn": {
+      "title": "Total area in corn by census division, 2021",
+      "url": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-029-eng.htm",
+      "geography": "南部ON・QCの拡大図、MB南部にも公表面積ドット"
+    },
+    "soybeans": {
+      "title": "Soybean area by census division, 2021",
+      "url": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-031-eng.htm",
+      "geography": "CD別申告面積ドットと保持CCS値"
+    },
+    "potatoes": {
+      "title": "Potato area by census division, 2021",
+      "url": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-035-eng.htm",
+      "geography": "CD別申告面積ドットと保持CCS値"
+    },
+    "lentils": {
+      "title": "Statistics Canada 32-10-0309-01, Lentils, hectares, 2021",
+      "url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210030901",
+      "geography": "保持した2021年CCS別レンズ豆申告面積"
+    },
+    "beef": {
+      "title": "Total beef cows by census division, 2021",
+      "url": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-043-eng.htm",
+      "geography": "肉用母牛の頭数ドット。肥育施設や食肉工場の位置ではない"
+    },
+    "dairy": {
+      "title": "Total milk cows by census division, 2021",
+      "url": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-045-eng.htm",
+      "geography": "乳牛の頭数ドットと保持CCS値"
+    },
+    "pork": {
+      "title": "Total pigs by census division, 2021",
+      "url": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-047-eng.htm",
+      "geography": "南部ON・QC、MB南東部の拡大図。1ドット25,000頭だが丸めドット数から地域頭数を復元しない"
+    },
+    "chicken": {
+      "title": "Total hens and chickens by census division, 2021",
+      "url": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-049-eng.htm",
+      "geography": "南部ON・QC、BC南西部、Annapolisの拡大図。肉用・採卵用を含み、鶏肉のみの分布ではない"
+    },
+    "hay": {
+      "title": "Total hay area by census division, 2021",
+      "url": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-037-eng.htm",
+      "geography": "干草・栽培牧草の面積ドットと保持CCS値"
+    },
+    "pasture": {
+      "title": "Total pasture area by census division, 2021",
+      "url": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-013-eng.htm",
+      "geography": "放牧地の面積ドットと保持CCS値"
+    }
+  },
+  "belts": [
+    {
+      "id": "canola-prairie",
+      "product": "canola",
+      "name": "プレーリーのカノーラ",
+      "label": "カノーラ",
+      "labelAnchor": [
+        -108.3,
+        54.2
+      ],
+      "sourceIds": [
+        "canola"
+      ],
+      "outline": [
+        [
+          -115.3,
+          50
+        ],
+        [
+          -114,
+          53.7
+        ],
+        [
+          -111.5,
+          55.5
+        ],
+        [
+          -106,
+          55.4
+        ],
+        [
+          -101.3,
+          53.6
+        ],
+        [
+          -97,
+          50.4
+        ],
+        [
+          -96.7,
+          49.3
+        ],
+        [
+          -102,
+          49.2
+        ],
+        [
+          -108.6,
+          49.6
+        ],
+        [
+          -115.3,
+          50
+        ]
+      ]
+    },
+    {
+      "id": "canola-peace",
+      "product": "canola",
+      "name": "ピース川地方のカノーラ",
+      "label": "カノーラ",
+      "labelAnchor": [
+        -120,
+        56.3
+      ],
+      "sourceIds": [
+        "canola"
+      ],
+      "outline": [
+        [
+          -121.8,
+          55.1
+        ],
+        [
+          -122.4,
+          56.5
+        ],
+        [
+          -119.7,
+          57.3
+        ],
+        [
+          -117.2,
+          56.8
+        ],
+        [
+          -117.7,
+          55.5
+        ],
+        [
+          -121.8,
+          55.1
+        ]
+      ]
+    },
+    {
+      "id": "wheat-prairie",
+      "product": "wheat",
+      "name": "プレーリーの小麦",
+      "label": "小麦",
+      "labelAnchor": [
+        -107.7,
+        49.6
+      ],
+      "sourceIds": [
+        "wheat"
+      ],
+      "outline": [
+        [
+          -114.5,
+          49.1
+        ],
+        [
+          -114,
+          52
+        ],
+        [
+          -111.5,
+          54.5
+        ],
+        [
+          -107,
+          54.7
+        ],
+        [
+          -102,
+          53
+        ],
+        [
+          -97,
+          51.1
+        ],
+        [
+          -96.4,
+          49.2
+        ],
+        [
+          -102,
+          49
+        ],
+        [
+          -108.5,
+          49
+        ],
+        [
+          -114.5,
+          49.1
+        ]
+      ]
+    },
+    {
+      "id": "wheat-ontario",
+      "product": "wheat",
+      "name": "南西オンタリオの小麦",
+      "label": "小麦",
+      "labelAnchor": [
+        -82,
+        42.6
+      ],
+      "sourceIds": [
+        "wheat"
+      ],
+      "outline": [
+        [
+          -83,
+          42
+        ],
+        [
+          -81.3,
+          42
+        ],
+        [
+          -80.1,
+          43.1
+        ],
+        [
+          -79.9,
+          44
+        ],
+        [
+          -81.2,
+          44.5
+        ],
+        [
+          -82.2,
+          43.7
+        ],
+        [
+          -83,
+          42
+        ]
+      ]
+    },
+    {
+      "id": "lentils-saskatchewan",
+      "product": "lentils",
+      "name": "サスカチュワン南西部のレンズ豆",
+      "label": "レンズ豆",
+      "labelAnchor": [
+        -108.5,
+        51.3
+      ],
+      "sourceIds": [
+        "lentils"
+      ],
+      "outline": [
+        [
+          -110.5,
+          49.1
+        ],
+        [
+          -110.4,
+          51.2
+        ],
+        [
+          -108.7,
+          52.7
+        ],
+        [
+          -105.5,
+          52.2
+        ],
+        [
+          -103.7,
+          50.8
+        ],
+        [
+          -104.9,
+          49.1
+        ],
+        [
+          -110.5,
+          49.1
+        ]
+      ]
+    },
+    {
+      "id": "corn-ontario",
+      "product": "corn",
+      "name": "南西オンタリオのとうもろこし",
+      "label": "とうもろこし",
+      "labelAnchor": [
+        -80.3,
+        44.6
+      ],
+      "sourceIds": [
+        "corn"
+      ],
+      "outline": [
+        [
+          -83.1,
+          42
+        ],
+        [
+          -81.4,
+          41.9
+        ],
+        [
+          -79.8,
+          43.1
+        ],
+        [
+          -79.9,
+          44.3
+        ],
+        [
+          -81.4,
+          44.7
+        ],
+        [
+          -82.4,
+          43.6
+        ],
+        [
+          -83.1,
+          42
+        ]
+      ]
+    },
+    {
+      "id": "corn-st-lawrence",
+      "product": "corn",
+      "name": "セントローレンス低地のとうもろこし",
+      "label": "とうもろこし",
+      "labelAnchor": [
+        -72.1,
+        46.4
+      ],
+      "sourceIds": [
+        "corn"
+      ],
+      "outline": [
+        [
+          -76.2,
+          44.7
+        ],
+        [
+          -75.4,
+          45.6
+        ],
+        [
+          -73.8,
+          46.3
+        ],
+        [
+          -71.1,
+          47
+        ],
+        [
+          -71.2,
+          46
+        ],
+        [
+          -73.1,
+          45
+        ],
+        [
+          -74.5,
+          44.8
+        ],
+        [
+          -76.2,
+          44.7
+        ]
+      ]
+    },
+    {
+      "id": "corn-manitoba",
+      "product": "corn",
+      "name": "マニトバ南部のとうもろこし",
+      "label": "とうもろこし",
+      "labelAnchor": [
+        -96.8,
+        50.1
+      ],
+      "sourceIds": [
+        "corn"
+      ],
+      "outline": [
+        [
+          -99.5,
+          49
+        ],
+        [
+          -99.8,
+          49.9
+        ],
+        [
+          -98.1,
+          50.2
+        ],
+        [
+          -96.3,
+          49.7
+        ],
+        [
+          -96.4,
+          49
+        ],
+        [
+          -99.5,
+          49
+        ]
+      ]
+    },
+    {
+      "id": "soybeans-ontario",
+      "product": "soybeans",
+      "name": "南西オンタリオの大豆",
+      "label": "大豆",
+      "labelAnchor": [
+        -80.9,
+        42
+      ],
+      "sourceIds": [
+        "soybeans"
+      ],
+      "outline": [
+        [
+          -83.1,
+          42
+        ],
+        [
+          -81.6,
+          41.9
+        ],
+        [
+          -79.8,
+          43.2
+        ],
+        [
+          -80,
+          44.1
+        ],
+        [
+          -81.4,
+          44.6
+        ],
+        [
+          -82.5,
+          43.2
+        ],
+        [
+          -83.1,
+          42
+        ]
+      ]
+    },
+    {
+      "id": "soybeans-st-lawrence",
+      "product": "soybeans",
+      "name": "セントローレンス低地の大豆",
+      "label": "大豆",
+      "labelAnchor": [
+        -74.6,
+        45.7
+      ],
+      "sourceIds": [
+        "soybeans"
+      ],
+      "outline": [
+        [
+          -76,
+          44.8
+        ],
+        [
+          -75.6,
+          45.7
+        ],
+        [
+          -73.3,
+          46.5
+        ],
+        [
+          -71.8,
+          46.6
+        ],
+        [
+          -72.3,
+          45.8
+        ],
+        [
+          -73.8,
+          45
+        ],
+        [
+          -76,
+          44.8
+        ]
+      ]
+    },
+    {
+      "id": "soybeans-manitoba",
+      "product": "soybeans",
+      "name": "マニトバ南部の大豆",
+      "label": "大豆",
+      "labelAnchor": [
+        -98.6,
+        49.4
+      ],
+      "sourceIds": [
+        "soybeans"
+      ],
+      "outline": [
+        [
+          -100,
+          49
+        ],
+        [
+          -100.1,
+          50
+        ],
+        [
+          -98.8,
+          50.7
+        ],
+        [
+          -96.8,
+          50.1
+        ],
+        [
+          -96.3,
+          49
+        ],
+        [
+          -100,
+          49
+        ]
+      ]
+    },
+    {
+      "id": "potatoes-alberta",
+      "product": "potatoes",
+      "name": "アルバータ南部のばれいしょ",
+      "label": "ばれいしょ",
+      "labelAnchor": [
+        -112.3,
+        49.4
+      ],
+      "sourceIds": [
+        "potatoes"
+      ],
+      "outline": [
+        [
+          -113.4,
+          49.1
+        ],
+        [
+          -113.2,
+          50.8
+        ],
+        [
+          -111.1,
+          50.8
+        ],
+        [
+          -110.8,
+          49.4
+        ],
+        [
+          -113.4,
+          49.1
+        ]
+      ]
+    },
+    {
+      "id": "potatoes-manitoba",
+      "product": "potatoes",
+      "name": "マニトバ中南部のばれいしょ",
+      "label": "ばれいしょ",
+      "labelAnchor": [
+        -100,
+        50.8
+      ],
+      "sourceIds": [
+        "potatoes"
+      ],
+      "outline": [
+        [
+          -100.7,
+          49.5
+        ],
+        [
+          -100.7,
+          50.8
+        ],
+        [
+          -98.8,
+          51
+        ],
+        [
+          -97.9,
+          50.1
+        ],
+        [
+          -98.7,
+          49.6
+        ],
+        [
+          -100.7,
+          49.5
+        ]
+      ]
+    },
+    {
+      "id": "potatoes-new-brunswick",
+      "product": "potatoes",
+      "name": "ニューブランズウィック北西部のばれいしょ",
+      "label": "ばれいしょ",
+      "labelAnchor": [
+        -68.5,
+        46.5
+      ],
+      "sourceIds": [
+        "potatoes"
+      ],
+      "outline": [
+        [
+          -68.3,
+          46.1
+        ],
+        [
+          -68.5,
+          47.1
+        ],
+        [
+          -67.4,
+          47.3
+        ],
+        [
+          -67.1,
+          46.3
+        ],
+        [
+          -68.3,
+          46.1
+        ]
+      ]
+    },
+    {
+      "id": "potatoes-pei",
+      "product": "potatoes",
+      "name": "プリンスエドワード島のばれいしょ",
+      "label": "ばれいしょ",
+      "labelAnchor": [
+        -63,
+        46.7
+      ],
+      "sourceIds": [
+        "potatoes"
+      ],
+      "outline": [
+        [
+          -64.6,
+          46.3
+        ],
+        [
+          -64.1,
+          46.9
+        ],
+        [
+          -62.6,
+          46.5
+        ],
+        [
+          -61.9,
+          46.1
+        ],
+        [
+          -63.2,
+          45.9
+        ],
+        [
+          -64.6,
+          46.3
+        ]
+      ]
+    },
+    {
+      "id": "beef-prairie",
+      "product": "beef",
+      "name": "西部平原の肉牛繁殖・育成",
+      "label": "肉牛",
+      "labelAnchor": [
+        -113.6,
+        53.3
+      ],
+      "sourceIds": [
+        "beef"
+      ],
+      "outline": [
+        [
+          -115.8,
+          49.1
+        ],
+        [
+          -116.1,
+          52.6
+        ],
+        [
+          -114.5,
+          55
+        ],
+        [
+          -111,
+          55.6
+        ],
+        [
+          -106.2,
+          53.7
+        ],
+        [
+          -100,
+          52
+        ],
+        [
+          -98,
+          49.1
+        ],
+        [
+          -108.4,
+          49
+        ],
+        [
+          -115.8,
+          49.1
+        ]
+      ]
+    },
+    {
+      "id": "beef-peace",
+      "product": "beef",
+      "name": "ピース川地方の肉牛",
+      "label": "肉牛",
+      "labelAnchor": [
+        -118.8,
+        55.8
+      ],
+      "sourceIds": [
+        "beef"
+      ],
+      "outline": [
+        [
+          -122.5,
+          55.3
+        ],
+        [
+          -122.1,
+          56.8
+        ],
+        [
+          -119.7,
+          57.1
+        ],
+        [
+          -117.5,
+          56.4
+        ],
+        [
+          -117.9,
+          55.4
+        ],
+        [
+          -122.5,
+          55.3
+        ]
+      ]
+    },
+    {
+      "id": "beef-interior-bc",
+      "product": "beef",
+      "name": "BC内陸の肉牛",
+      "label": "肉牛",
+      "labelAnchor": [
+        -121.9,
+        51
+      ],
+      "sourceIds": [
+        "beef"
+      ],
+      "outline": [
+        [
+          -123.7,
+          50.7
+        ],
+        [
+          -123.3,
+          52.5
+        ],
+        [
+          -121.7,
+          53.1
+        ],
+        [
+          -120.2,
+          52
+        ],
+        [
+          -119.8,
+          50.7
+        ],
+        [
+          -121.7,
+          50.3
+        ],
+        [
+          -123.7,
+          50.7
+        ]
+      ]
+    },
+    {
+      "id": "dairy-ontario",
+      "product": "dairy",
+      "name": "南部オンタリオの酪農",
+      "label": "酪農",
+      "labelAnchor": [
+        -81.8,
+        44.1
+      ],
+      "sourceIds": [
+        "dairy"
+      ],
+      "outline": [
+        [
+          -82,
+          42.7
+        ],
+        [
+          -82.2,
+          44.4
+        ],
+        [
+          -80.5,
+          45
+        ],
+        [
+          -78.6,
+          44.5
+        ],
+        [
+          -79.2,
+          43.1
+        ],
+        [
+          -82,
+          42.7
+        ]
+      ]
+    },
+    {
+      "id": "dairy-st-lawrence",
+      "product": "dairy",
+      "name": "セントローレンス低地の酪農",
+      "label": "酪農",
+      "labelAnchor": [
+        -71.2,
+        47.3
+      ],
+      "sourceIds": [
+        "dairy"
+      ],
+      "outline": [
+        [
+          -76.7,
+          44.8
+        ],
+        [
+          -75.8,
+          46.1
+        ],
+        [
+          -73.1,
+          47
+        ],
+        [
+          -68.5,
+          48.4
+        ],
+        [
+          -67.3,
+          47.8
+        ],
+        [
+          -70.7,
+          46.3
+        ],
+        [
+          -73.8,
+          45
+        ],
+        [
+          -76.7,
+          44.8
+        ]
+      ]
+    },
+    {
+      "id": "dairy-fraser",
+      "product": "dairy",
+      "name": "フレーザー川下流の酪農",
+      "label": "酪農",
+      "labelAnchor": [
+        -122.6,
+        49.5
+      ],
+      "sourceIds": [
+        "dairy"
+      ],
+      "outline": [
+        [
+          -123.2,
+          49
+        ],
+        [
+          -123.1,
+          49.7
+        ],
+        [
+          -121.5,
+          49.5
+        ],
+        [
+          -121.4,
+          49
+        ],
+        [
+          -123.2,
+          49
+        ]
+      ]
+    },
+    {
+      "id": "pork-manitoba",
+      "product": "pork",
+      "name": "マニトバ南部の養豚",
+      "label": "豚",
+      "labelAnchor": [
+        -97.5,
+        49
+      ],
+      "sourceIds": [
+        "pork"
+      ],
+      "outline": [
+        [
+          -99.5,
+          49
+        ],
+        [
+          -99.6,
+          50.2
+        ],
+        [
+          -97.7,
+          50.4
+        ],
+        [
+          -95.8,
+          49.7
+        ],
+        [
+          -96,
+          49
+        ],
+        [
+          -99.5,
+          49
+        ]
+      ]
+    },
+    {
+      "id": "pork-ontario",
+      "product": "pork",
+      "name": "南西オンタリオの養豚",
+      "label": "豚",
+      "labelAnchor": [
+        -82.5,
+        43.7
+      ],
+      "sourceIds": [
+        "pork"
+      ],
+      "outline": [
+        [
+          -82.3,
+          42.6
+        ],
+        [
+          -82.5,
+          44.2
+        ],
+        [
+          -81,
+          44.6
+        ],
+        [
+          -79.9,
+          43.6
+        ],
+        [
+          -81,
+          42.6
+        ],
+        [
+          -82.3,
+          42.6
+        ]
+      ]
+    },
+    {
+      "id": "pork-quebec",
+      "product": "pork",
+      "name": "ケベック南部の養豚",
+      "label": "豚",
+      "labelAnchor": [
+        -70.5,
+        46.4
+      ],
+      "sourceIds": [
+        "pork"
+      ],
+      "outline": [
+        [
+          -73.7,
+          45
+        ],
+        [
+          -73.7,
+          46.2
+        ],
+        [
+          -71,
+          47
+        ],
+        [
+          -70.3,
+          46.5
+        ],
+        [
+          -71.3,
+          45.4
+        ],
+        [
+          -73.7,
+          45
+        ]
+      ]
+    },
+    {
+      "id": "chicken-fraser",
+      "product": "chicken",
+      "name": "フレーザー川下流の養鶏（肉・卵）",
+      "label": "養鶏",
+      "labelAnchor": [
+        -122.5,
+        48.7
+      ],
+      "sourceIds": [
+        "chicken"
+      ],
+      "outline": [
+        [
+          -123.2,
+          49
+        ],
+        [
+          -123.1,
+          49.7
+        ],
+        [
+          -121.8,
+          49.5
+        ],
+        [
+          -121.4,
+          49
+        ],
+        [
+          -123.2,
+          49
+        ]
+      ]
+    },
+    {
+      "id": "chicken-ontario",
+      "product": "chicken",
+      "name": "南部オンタリオの養鶏（肉・卵）",
+      "label": "養鶏",
+      "labelAnchor": [
+        -79.4,
+        43.8
+      ],
+      "sourceIds": [
+        "chicken"
+      ],
+      "outline": [
+        [
+          -82.1,
+          42.5
+        ],
+        [
+          -82.3,
+          44.3
+        ],
+        [
+          -80.4,
+          44.8
+        ],
+        [
+          -79.7,
+          43.4
+        ],
+        [
+          -80.5,
+          42.6
+        ],
+        [
+          -82.1,
+          42.5
+        ]
+      ]
+    },
+    {
+      "id": "chicken-quebec",
+      "product": "chicken",
+      "name": "ケベック南部の養鶏（肉・卵）",
+      "label": "養鶏",
+      "labelAnchor": [
+        -73.3,
+        47.1
+      ],
+      "sourceIds": [
+        "chicken"
+      ],
+      "outline": [
+        [
+          -74,
+          45.1
+        ],
+        [
+          -74.1,
+          46.3
+        ],
+        [
+          -72.9,
+          46.7
+        ],
+        [
+          -71.6,
+          46
+        ],
+        [
+          -72.1,
+          45.1
+        ],
+        [
+          -74,
+          45.1
+        ]
+      ]
+    },
+    {
+      "id": "chicken-annapolis",
+      "product": "chicken",
+      "name": "アナポリス谷の養鶏（肉・卵）",
+      "label": "養鶏",
+      "labelAnchor": [
+        -64.1,
+        44.5
+      ],
+      "sourceIds": [
+        "chicken"
+      ],
+      "outline": [
+        [
+          -65.4,
+          44.4
+        ],
+        [
+          -65.5,
+          45
+        ],
+        [
+          -64.4,
+          45.2
+        ],
+        [
+          -63.9,
+          44.9
+        ],
+        [
+          -64.6,
+          44.5
+        ],
+        [
+          -65.4,
+          44.4
+        ]
+      ]
+    },
+    {
+      "id": "potatoes-ontario",
+      "product": "potatoes",
+      "name": "南部オンタリオのばれいしょ",
+      "label": "ばれいしょ",
+      "labelAnchor": [
+        -79.3,
+        44.8
+      ],
+      "sourceIds": [
+        "potatoes"
+      ],
+      "outline": [
+        [
+          -80.8,
+          43.7
+        ],
+        [
+          -80.9,
+          44.5
+        ],
+        [
+          -79.4,
+          44.8
+        ],
+        [
+          -79.1,
+          43.8
+        ],
+        [
+          -80.8,
+          43.7
+        ]
+      ]
+    },
+    {
+      "id": "potatoes-quebec",
+      "product": "potatoes",
+      "name": "ケベック中南部のばれいしょ",
+      "label": "ばれいしょ",
+      "labelAnchor": [
+        -72,
+        47.6
+      ],
+      "sourceIds": [
+        "potatoes"
+      ],
+      "outline": [
+        [
+          -73.9,
+          45.9
+        ],
+        [
+          -73.6,
+          46.4
+        ],
+        [
+          -72,
+          47.4
+        ],
+        [
+          -71.3,
+          47.1
+        ],
+        [
+          -72,
+          46.3
+        ],
+        [
+          -73.9,
+          45.9
+        ]
+      ]
+    },
+    {
+      "id": "dairy-alberta",
+      "product": "dairy",
+      "name": "アルバータ中部の酪農",
+      "label": "酪農",
+      "labelAnchor": [
+        -114.8,
+        52
+      ],
+      "sourceIds": [
+        "dairy"
+      ],
+      "outline": [
+        [
+          -114.6,
+          51.8
+        ],
+        [
+          -114.7,
+          53.4
+        ],
+        [
+          -113,
+          53.5
+        ],
+        [
+          -112.9,
+          51.8
+        ],
+        [
+          -114.6,
+          51.8
+        ]
+      ]
+    },
+    {
+      "id": "dairy-saguenay",
+      "product": "dairy",
+      "name": "サグネー・サンジャン湖地方の酪農",
+      "label": "酪農",
+      "labelAnchor": [
+        -72.7,
+        48.9
+      ],
+      "sourceIds": [
+        "dairy"
+      ],
+      "outline": [
+        [
+          -73,
+          48.1
+        ],
+        [
+          -73.2,
+          49
+        ],
+        [
+          -71.2,
+          49.1
+        ],
+        [
+          -70.5,
+          48.5
+        ],
+        [
+          -71.5,
+          48.1
+        ],
+        [
+          -73,
+          48.1
+        ]
+      ]
+    },
+    {
+      "id": "hay-west",
+      "product": "hay",
+      "name": "西部の干草・栽培牧草",
+      "label": "干草",
+      "auxiliary": true,
+      "labelAnchor": [
+        -112,
+        54.8
+      ],
+      "sourceIds": [
+        "hay"
+      ],
+      "outline": [
+        [
+          -115.8,
+          49.4
+        ],
+        [
+          -116,
+          53.8
+        ],
+        [
+          -112.5,
+          55.5
+        ],
+        [
+          -105.1,
+          54.3
+        ],
+        [
+          -98,
+          51.8
+        ],
+        [
+          -98.3,
+          49.4
+        ],
+        [
+          -109,
+          49.1
+        ],
+        [
+          -115.8,
+          49.4
+        ]
+      ]
+    },
+    {
+      "id": "hay-east",
+      "product": "hay",
+      "name": "東部の干草・栽培牧草",
+      "label": "干草",
+      "auxiliary": true,
+      "labelAnchor": [
+        -74.5,
+        47.6
+      ],
+      "sourceIds": [
+        "hay"
+      ],
+      "outline": [
+        [
+          -82,
+          42.5
+        ],
+        [
+          -82,
+          45.5
+        ],
+        [
+          -76.7,
+          46
+        ],
+        [
+          -72.9,
+          48
+        ],
+        [
+          -68.1,
+          48.8
+        ],
+        [
+          -68.7,
+          47.6
+        ],
+        [
+          -74,
+          45
+        ],
+        [
+          -80.4,
+          43
+        ],
+        [
+          -82,
+          42.5
+        ]
+      ]
+    },
+    {
+      "id": "pasture-west",
+      "product": "pasture",
+      "name": "西部の放牧地",
+      "label": "放牧地",
+      "auxiliary": true,
+      "labelAnchor": [
+        -112.4,
+        51.6
+      ],
+      "sourceIds": [
+        "pasture"
+      ],
+      "outline": [
+        [
+          -116,
+          49
+        ],
+        [
+          -116,
+          53.2
+        ],
+        [
+          -112.9,
+          54.3
+        ],
+        [
+          -108,
+          52.8
+        ],
+        [
+          -103.6,
+          51
+        ],
+        [
+          -102,
+          49
+        ],
+        [
+          -116,
+          49
+        ]
+      ]
+    }
+  ]
+}
