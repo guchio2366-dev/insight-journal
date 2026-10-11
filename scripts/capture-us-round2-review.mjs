@@ -38,7 +38,7 @@ try{
  }
  const origin=`http://127.0.0.1:${server.address().port}/insight-journal/atlas/north-america/`;
  async function ready(){await page.locator('[data-atlas-explorer][data-render-state=ready]').waitFor();if(await page.locator('[data-atlas-explorer]').getAttribute('data-field')==='natural')await page.locator('[data-atlas-explorer][data-nature-load=ready]').waitFor();await page.evaluate(()=>document.fonts.ready);assert.equal(await page.locator('[data-fallback]').isVisible(),false);}
- async function snapshot(name){await page.waitForLoadState('networkidle');await ready();await page.waitForTimeout(500);await page.screenshot({path:resolve(out,`operation-${name}.jpg`),type:'jpeg',quality:85});report.operations.push({name,url:page.url(),render:'ready'});}
+ async function snapshot(name){await page.waitForLoadState('networkidle');await ready();await page.waitForTimeout(500);await page.screenshot({path:resolve(out,`operation-${name}.jpg`),type:'jpeg',quality:85});report.operations.push({name,url:page.url(),viewport:page.viewportSize(),render:'ready'});}
  await page.goto(origin+'nature/',{waitUntil:'networkidle'});await ready();
  await page.locator('[data-nature-label="city:miami"]').click();
  assert.equal(await page.locator('#city-climate-heading').textContent(),'マイアミの雨温図');
@@ -65,6 +65,13 @@ try{
  await page.goto(origin+'agriculture/',{waitUntil:'networkidle'});await ready();assert.match(await page.locator('.atlas-quantity-note').textContent(),/生産量を表しません/);
  await page.locator('[data-crop-select="wheat"]').first().click();await page.reload({waitUntil:'networkidle'});await ready();assert.equal(new URL(page.url()).searchParams.get('crop'),'wheat');await snapshot('agriculture-reload');
  for(const view of ['ethnicity','religion']){await page.goto(origin+'population/?popView='+view,{waitUntil:'networkidle'});await ready();await page.waitForFunction(()=>/郡のデータ/.test(document.querySelector('[data-pop-status]')?.textContent??''));await page.reload({waitUntil:'networkidle'});await ready();assert.equal(await page.locator('[data-pop-view][aria-pressed=true]').getAttribute('data-pop-view'),view);await snapshot(view+'-reload');}
+ await page.setViewportSize({width:390,height:844});await page.goto(origin+'industry/',{waitUntil:'networkidle'});await ready();
+ const expectedPlaces=await page.locator('[data-explorer-config]').evaluate(node=>new Set(JSON.parse(node.textContent).industryRegions.map(r=>r.placeId)).size);
+ assert.equal(await page.locator('[data-industry-overview-list] [data-industry-place]').count(),expectedPlaces);
+ assert.equal(await page.locator('[data-industry-markers] .industry-overview-label:visible').count(),0);
+ assert.equal(await page.locator('[data-industry-overview-list]').isVisible(),true);
+ await page.locator('[data-map-frame]').scrollIntoViewIfNeeded();await snapshot('industry-390');
+ await page.locator('[data-industry-overview-list] [data-industry-place="newyork"]').click();assert.equal(await page.locator('[data-selection-title]').textContent(),'ニューヨーク');await snapshot('industry-390-place');
  assert.deepEqual(report.errors,[]);report.status='passed';
 }catch(error){report.status='failed';report.error=String(error);throw error;}
 finally{await writeFile(resolve(out,'report.json'),JSON.stringify(report,null,2)+'\n');await browser?.close();server.close();}

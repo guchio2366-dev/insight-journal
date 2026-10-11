@@ -10,7 +10,7 @@ const stub=`export function setWorkerCount(){};export function setWorkerUrl(url)
  constructor(options){if(window.__failMap)throw Error('Test: WebGL unavailable');window.__map=this;this.options=options;this.events={};this.center={lng:-96,lat:38};this.zoom=3;this.sources=Object.fromEntries(Object.entries(options.style.sources).map(([id,s])=>[id,{data:s.data,setDataCalls:0,setData(d){this.data=d;this.setDataCalls++}}]));this.touchZoomRotate={disableRotation(){}};this.scrollZoom={disable(){}};this.cameraChanges=0;}
  getSource(id){return this.sources[id]} getCenter(){return this.center} getZoom(){return this.zoom}
  getBounds(){return {getWest:()=>-128,getSouth:()=>22,getEast:()=>-64,getNorth:()=>52,contains:()=>true}}
- project(p){return {x:(p[0]+128)*10,y:(52-p[1])*10}} unproject(p){return {lng:p[0]/10-128,lat:52-p[1]/10}}
+ project(p){return {x:(p[0]+128)*10*(window.__projectionWidth/800),y:(52-p[1])*10}} unproject(p){return {lng:p[0]/10-128,lat:52-p[1]/10}}
  setLayoutProperty(){}setPaintProperty(){}setFilter(){}addImage(){}resize(){}remove(){}queryRenderedFeatures(){return []}
  on(name,fn){(this.events[name]??=[]).push(fn)}once(name,fn){this.on(name,fn);if(name==='load')queueMicrotask(()=>fn())}
  jumpTo(o){this.cameraChanges++;this.center={lng:o.center[0],lat:o.center[1]};this.zoom=o.zoom??this.zoom}fitBounds(){this.cameraChanges++}
@@ -19,7 +19,7 @@ const stub=`export function setWorkerCount(){};export function setWorkerUrl(url)
 const bundle=await build({entryPoints:['src/scripts/atlas-explorer.ts'],bundle:true,write:false,format:'iife',globalName:'NatureTest',plugins:[{name:'map-boundary',setup(b){b.onResolve({filter:/^maplibre-gl\/dist\/maplibre-gl-worker\.mjs\?worker&url$/},()=>({path:'worker-url',namespace:'worker-url-stub'}));b.onLoad({filter:/.*/,namespace:'worker-url-stub'},()=>({contents:"export default '/insight-journal/_astro/maplibre-gl-worker.test.js'",loader:'js'}));b.onResolve({filter:/^maplibre-gl$/},()=>({path:'maplibre',namespace:'stub'}));b.onLoad({filter:/.*/,namespace:'stub'},()=>({contents:stub,loader:'js'}));}}]});
 const delay=()=>new Promise(resolve=>setTimeout(resolve,25));
 async function waitFor(check,label){for(let attempt=0;attempt<120;attempt++){if(check())return;await delay();}throw new Error('Timed out: '+label);}
-async function setup(query='',fail=false){
+async function setup(query='',fail=false,width=800){
  const window=new Window({url:'https://example.com/insight-journal/atlas/north-america/industry/'+query,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true}});
  const html=await readFile('dist/atlas/north-america/industry/index.html','utf8');
  window.document.body.innerHTML=html.replace(/<script(?![^>]*application\/json)[\s\S]*?<\/script>/g,'');
@@ -27,7 +27,8 @@ async function setup(query='',fail=false){
  window.createImageBitmap=async()=>({width:1,height:1,close(){}});
  window.HTMLCanvasElement.prototype.getContext=()=>({drawImage(){},getImageData:()=>({width:1,height:1,data:new Uint8ClampedArray([9,0,0,255])})});
  window.__failMap=fail;
- Object.defineProperty(window.HTMLElement.prototype,'clientWidth',{get(){return this.hasAttribute('data-map-frame')?800:0;}});
+ window.__projectionWidth=width;
+ Object.defineProperty(window.HTMLElement.prototype,'clientWidth',{get(){return this.hasAttribute('data-map-frame')?width:0;}});
  Object.defineProperty(window.HTMLElement.prototype,'clientHeight',{get(){return this.hasAttribute('data-map-frame')?500:0;}});
  const requests=[];
  window.fetch=async (url)=>{requests.push(String(url));return new Response(await readFile('public/'+String(url).replace(/^.*?\/insight-journal\//,'')));};
@@ -50,6 +51,21 @@ test('金融→情報通信で右欄の解説を切り替え、構成比の数�
   q('[data-industry-sector="manufacturing"]').click();
   assert.equal(root.dataset.industrySubsector,'all');assert.equal(q('[data-industry-national-panel="manufacturing"]').hidden,false);assert.equal(q('[data-industry-national-summary]').hidden,false);assert.equal(q('[data-industry-description]').hidden,false);assert.equal(q('[data-industry-description-panel="manufacturing:all"]').hidden,false);
   assert.equal(q('[data-industry-national-panel="services"]').hidden,true);assert.equal(map.cameraChanges,moves);assert.equal(window.__map,map);
+ }finally{await window.happyDOM.close();}
+});
+test('狭い全産業図は全地点の記号を保ち、重なる大量の札を地域一覧へ移して選べる',async()=>{
+ const {window,root,q}=await setup('',false,340);
+ try{
+  const regions=JSON.parse(q('[data-explorer-config]').textContent).industryRegions;
+  const ids=[...new Set(regions.map(r=>r.placeId))].sort();
+  assert.deepEqual([...q('[data-industry-overview-list]').children].map(b=>b.dataset.industryPlace).sort(),ids);
+  assert.equal(q('[data-industry-markers]').querySelectorAll('[data-industry-place]').length,ids.length);
+  assert.ok([...q('[data-industry-markers]').querySelectorAll('.industry-overview-label')].every(label=>label.hidden));
+  q('[data-industry-overview-list] [data-industry-place="newyork"]').click();
+  assert.equal(q('[data-selection-title]').textContent,'ニューヨーク');
+  assert.equal(root.dataset.industrySubsector,'all');
+  q('[data-industry-sector="services"]').click();q('[data-industry-subsector="finance"]').click();
+  assert.ok([...q('[data-industry-markers]').querySelectorAll('.industry-overview-label')].every(label=>!label.hidden));
  }finally{await window.happyDOM.close();}
 });
 
