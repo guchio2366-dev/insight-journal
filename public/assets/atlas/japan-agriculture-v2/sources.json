@@ -1,5 +1,95 @@
 [
   {
+    "id": "hamamatsu-potato",
+    "title": "農畜産業振興機構：浜松・湖西の三方原馬鈴薯",
+    "href": "https://vegetable.alic.go.jp/yasaijoho/santi/0803_santi1.html",
+    "period": "2008年3月の産地紹介（現行数量・順位ではない）",
+    "accessed": "2026-10-11",
+    "license": "産地の事実を独自に要約。原文・写真・図を再配布しない。",
+    "status": "verified-html"
+  },
+  {
+    "id": "toyohashi-farming",
+    "title": "農畜産業振興機構・JA豊橋：キャベツと地域の農業",
+    "href": "https://vegetable.alic.go.jp/yasaijoho/santi/1712_santi1.html",
+    "period": "2017年12月の産地紹介・2016年度への言及",
+    "accessed": "2026-10-11",
+    "license": "産地の事実を独自に要約。原文・写真・図を再配布しない。",
+    "status": "verified-html"
+  },
+  {
+    "id": "miura-cabbage",
+    "title": "農畜産業振興機構・神奈川県：三浦半島のキャベツ",
+    "href": "https://vegetable.alic.go.jp/yasaijoho/santi/1203_santi1.html",
+    "period": "2012年3月の産地紹介（現行数量・順位ではない）",
+    "accessed": "2026-10-11",
+    "license": "産地の事実を独自に要約。原文・写真・図を再配布しない。",
+    "status": "verified-html"
+  },
+  {
+    "id": "azumino-apple",
+    "title": "JA長野県：安曇野のりんご産地と摘果",
+    "href": "https://oishii.iijan.or.jp/products/noutiku-20250613",
+    "period": "2025年6月11日の生産者取材",
+    "accessed": "2026-10-11",
+    "license": "産地の事実を独自に要約。原文・写真・図を再配布しない。",
+    "status": "verified-html"
+  },
+  {
+    "id": "nobeyama-milk",
+    "title": "JA長野県：野辺山の酪農と耕畜連携",
+    "href": "https://oishii.iijan.or.jp/products/noutiku01-20250423",
+    "period": "2025年4月23日の生産者取材",
+    "accessed": "2026-10-11",
+    "license": "産地の事実を独自に要約。原文・写真・図を再配布しない。",
+    "status": "verified-html"
+  },
+  {
+    "id": "nanyo-mandarin",
+    "title": "農林水産省：愛媛・南予の柑橘農業システム",
+    "href": "https://www.maff.go.jp/j/pr/aff/2402/heritage05.html",
+    "period": "2024年2月の産地紹介（現行数量・順位ではない）",
+    "accessed": "2026-10-11",
+    "license": "PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）",
+    "status": "verified-html"
+  },
+  {
+    "id": "wood-nichinan",
+    "title": "林野庁白書：日南などのJAS製材",
+    "href": "https://www.rinya.maff.go.jp/j/kikaku/hakusyo/r6hakusyo_h/all/chap3_3_2.html",
+    "period": "2024年度白書・事例3－8",
+    "accessed": "2026-10-11",
+    "license": "PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）",
+    "status": "verified-html"
+  },
+  {
+    "id": "wood-asahikawa",
+    "title": "林野庁白書：旭川のシラカバ材利用",
+    "href": "https://www.rinya.maff.go.jp/j/kikaku/hakusyo/r6hakusyo_h/all/chap3_3_3.html",
+    "period": "2024年度白書・事例3－9",
+    "accessed": "2026-10-11",
+    "license": "PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）",
+    "status": "verified-html"
+  },
+  {
+    "id": "wood-nagai",
+    "title": "林野庁白書：長井・置賜の木質バイオマス熱供給",
+    "href": "https://www.rinya.maff.go.jp/j/kikaku/hakusyo/r6hakusyo_h/all/chap3_2_3.html",
+    "period": "2024年度白書・事例3－5",
+    "accessed": "2026-10-11",
+    "license": "PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）",
+    "status": "verified-html"
+  },
+  {
+    "id": "shonai",
+    "title": "農林水産省：庄内平野・鶴岡市水沢の米づくり",
+    "href": "https://www.maff.go.jp/j/nousin/sekkei/museum/m_siki/13_shounai/index.html",
+    "period": "地域事例・最新数量ではない",
+    "accessed": "2026-10-11",
+    "license": "PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）",
+    "status": "verified-html"
+  },
+  {
     "id": "municipal-2024",
     "title": "農林水産省：2024年市町村別農業産出額（推計）詳細品目",
     "href": "https://www.maff.go.jp/j/tokei/kouhyou/sityoson_sansyutu/attach/xls/index-25.xlsx",

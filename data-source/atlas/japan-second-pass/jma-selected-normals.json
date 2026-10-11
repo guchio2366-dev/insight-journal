@@ -1,0 +1,158 @@
+[
+  {
+    "id": "kanazawa",
+    "name": "金沢",
+    "stationId": "47605",
+    "coordinates": [
+      136.63,
+      36.59
+    ],
+    "temperatureC": [
+      4.0,
+      4.2,
+      7.3,
+      12.6,
+      17.7,
+      21.6,
+      25.8,
+      27.3,
+      23.2,
+      17.6,
+      11.9,
+      6.8
+    ],
+    "precipitationMm": [
+      256.0,
+      162.6,
+      157.2,
+      143.9,
+      138.0,
+      170.3,
+      233.4,
+      179.3,
+      231.9,
+      177.1,
+      250.8,
+      301.1
+    ],
+    "sourceAnnualPrecipitationMm": 2401.5,
+    "summary": "冬にも雨・雪が多い日本海側の観測所。",
+    "reading": "北西季節風が日本海から水蒸気を運び、冬にも降水が多くなります。夏の梅雨・秋の前線の降水も重なり、東京の冬の乾燥と対照をなします。",
+    "sourceUrl": "https://www.data.jma.go.jp/stats/etrn/view/nml_sfc_ym.php?prec_no=56&block_no=47605&year=&month=&day=&view=",
+    "normalPeriod": "1991–2020",
+    "retrievedAt": "2026-10-11",
+    "transport": "Connected web tool: publisher table text; selected temperature/precipitation columns only. Original HTML was not downloaded.",
+    "license": "PDL1.0",
+    "termsUrl": "https://www.jma.go.jp/jma/kishou/info/coment.html",
+    "coordinatesMethod": "Existing Japan climate-region representative locator; approximate location, not a surveyed station coordinate.",
+    "units": {
+      "temperature": "℃ (monthly mean)",
+      "precipitation": "mm (monthly sum normal)"
+    },
+    "sourceAnnualVsMonthlyNote": "Publisher annual row and sum of rounded monthly normals can differ. Monthly entries are unmodified."
+  },
+  {
+    "id": "matsumoto",
+    "name": "松本",
+    "stationId": "47618",
+    "coordinates": [
+      137.97,
+      36.24
+    ],
+    "temperatureC": [
+      -0.3,
+      0.6,
+      4.6,
+      10.8,
+      16.5,
+      20.2,
+      24.2,
+      25.1,
+      20.4,
+      13.9,
+      7.8,
+      2.5
+    ],
+    "precipitationMm": [
+      39.8,
+      38.5,
+      78.0,
+      81.1,
+      94.5,
+      114.9,
+      131.3,
+      101.6,
+      148.0,
+      128.3,
+      56.3,
+      32.7
+    ],
+    "sourceAnnualPrecipitationMm": 1045.1,
+    "summary": "中央高地の盆地で、冬の低温と少ない降水が見られる。",
+    "reading": "標高と内陸の盆地の条件が冬の低温に関わります。周囲の山地で湿った空気が水分を落とすため、盆地の降水は風上側の山地とは異なります。山頂の気候をこの観測所の値で代用しません。",
+    "sourceUrl": "https://www.data.jma.go.jp/stats/etrn/view/nml_sfc_ym.php?prec_no=48&block_no=47618&year=&month=&day=&view=",
+    "normalPeriod": "1991–2020",
+    "retrievedAt": "2026-10-11",
+    "transport": "Connected web tool: publisher table text; selected temperature/precipitation columns only. Original HTML was not downloaded.",
+    "license": "PDL1.0",
+    "termsUrl": "https://www.jma.go.jp/jma/kishou/info/coment.html",
+    "coordinatesMethod": "Existing Japan climate-region representative locator; approximate location, not a surveyed station coordinate.",
+    "units": {
+      "temperature": "℃ (monthly mean)",
+      "precipitation": "mm (monthly sum normal)"
+    },
+    "sourceAnnualVsMonthlyNote": "Publisher annual row and sum of rounded monthly normals can differ. Monthly entries are unmodified."
+  },
+  {
+    "id": "takamatsu",
+    "name": "高松",
+    "stationId": "47891",
+    "coordinates": [
+      134.05,
+      34.32
+    ],
+    "temperatureC": [
+      5.9,
+      6.3,
+      9.4,
+      14.7,
+      19.8,
+      23.3,
+      27.5,
+      28.6,
+      24.7,
+      19.0,
+      13.2,
+      8.1
+    ],
+    "precipitationMm": [
+      39.4,
+      45.8,
+      81.4,
+      74.6,
+      100.9,
+      153.1,
+      159.8,
+      106.0,
+      167.4,
+      120.1,
+      55.0,
+      46.7
+    ],
+    "sourceAnnualPrecipitationMm": 1150.1,
+    "summary": "瀬戸内の観測所で、冬は少雨、梅雨・秋に雨が増える。",
+    "reading": "中国山地と四国山地に挟まれて季節風の風下になることが多く、年降水量が日本海側や太平洋側の風上山地より少なくなります。雨温図は地点の季節変化で、ため池・用水から届く農業用水の量ではありません。",
+    "sourceUrl": "https://www.data.jma.go.jp/stats/etrn/view/nml_sfc_ym.php?prec_no=72&block_no=47891&year=&month=&day=&view=",
+    "normalPeriod": "1991–2020",
+    "retrievedAt": "2026-10-11",
+    "transport": "Connected web tool: publisher table text; selected temperature/precipitation columns only. Original HTML was not downloaded.",
+    "license": "PDL1.0",
+    "termsUrl": "https://www.jma.go.jp/jma/kishou/info/coment.html",
+    "coordinatesMethod": "Existing Japan climate-region representative locator; approximate location, not a surveyed station coordinate.",
+    "units": {
+      "temperature": "℃ (monthly mean)",
+      "precipitation": "mm (monthly sum normal)"
+    },
+    "sourceAnnualVsMonthlyNote": "Publisher annual row and sum of rounded monthly normals can differ. Monthly entries are unmodified."
+  }
+]

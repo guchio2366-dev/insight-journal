@@ -1,7 +1,7 @@
 /** Screen-space labels stay near their real geographic anchors. Never push a
  * crowded label down the country: find a bounded local slot or leave the
  * accessible point and statistics to identify it. */
-export type JapanLabelAnchor={id:string;x:number;y:number;width:number;height:number;offset:[number,number]};
+export type JapanLabelAnchor={id:string;x:number;y:number;width:number;height:number;offset:[number,number];priority?:number};
 export type JapanLabelRect={id:string;x:number;y:number;width:number;height:number;endX:number;endY:number;leaderLength:number};
 export const japanLabelMaxLeader=64;
 export function layoutJapanLabels(anchors:JapanLabelAnchor[],width:number,height:number):Map<string,JapanLabelRect>{
@@ -23,8 +23,9 @@ export function layoutJapanLabels(anchors:JapanLabelAnchor[],width:number,height
   candidates.sort((p,q)=>p.leaderLength-q.leaderLength||Math.hypot(p.x-a.x-a.offset[0],p.y-a.y-a.offset[1])-Math.hypot(q.x-a.x-a.offset[0],q.y-a.y-a.offset[1]));
   return {a,candidates};
  });
- // Most crowded anchors first; bounded backtracking lets neighbours trade slots.
- items.sort((p,q)=>p.candidates.length-q.candidates.length);
+ // Preserve the selected/topic representatives before context labels. Within
+ // each priority, crowded anchors trade local slots with bounded backtracking.
+ items.sort((p,q)=>(q.a.priority??0)-(p.a.priority??0)||p.candidates.length-q.candidates.length);
  let visits=0,best:JapanLabelRect[]=[];
  function search(index:number,placed:JapanLabelRect[]):boolean{
   if(placed.length>best.length)best=[...placed];
