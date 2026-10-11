@@ -68,6 +68,9 @@
 .mexico-population .population-overview-combined{margin:8px 0 5px}
 .mexico-population .population-overview-combined svg{display:block;width:100%;height:auto;aspect-ratio:900/580;background:#eaf1ee;border:1px solid #c5d5cf;border-radius:5px}
 .mexico-population .population-overview-land use{fill:#e2e9df;stroke:#8ba99a;stroke-width:1;vector-effect:non-scaling-stroke}
+.mexico-population .population-overview-regions{fill:none;stroke:var(--region-color);stroke-width:2.7;stroke-opacity:.82;vector-effect:non-scaling-stroke;pointer-events:none}
+.mexico-population .population-overview-regions use{fill:var(--region-color);fill-opacity:.065;stroke:var(--region-color);stroke-width:2.7;stroke-opacity:.82;vector-effect:non-scaling-stroke}
+.mexico-population[data-population-composition=true][data-population-overview=false] .population-overview-regions.is-selected-overview-metric use{fill-opacity:.15;stroke-width:4.5;stroke-opacity:1}
 .mexico-population .population-overview-highlights circle{stroke:#fffefa;stroke-width:2;vector-effect:non-scaling-stroke}
 .mexico-population[data-population-composition=true][data-population-overview=false] .population-overview-highlights{opacity:.65}
 .mexico-population[data-population-composition=true][data-population-overview=false] .population-overview-highlights.is-selected-overview-metric{opacity:1}
