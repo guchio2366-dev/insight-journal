@@ -14,6 +14,9 @@ await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));let browser,pag
 try{
  browser=await chromium.launch({executablePath:process.env.INDUSTRY_REVIEW_CHROME_PATH||'/usr/bin/chromium',headless:true,chromiumSandbox:true,ignoreDefaultArgs:['--unsafely-disable-devtools-self-xss-warnings']});
  result.browserVersion=browser.version();page=await browser.newPage({viewport:{width:1920,height:1080},deviceScaleFactor:1});const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const transportNames=new Set(['1920-resources-initial','1920-manufacturing-initial','1920-services-initial','1920-resources-overlap-sudbury','1920-manufacturing-overlap-sudbury','1920-statistics-three-columns','failure']);
+ const capture=page.screenshot.bind(page);
+ page.screenshot=async options=>{const bytes=await capture(options),name=path.basename(options.path??'').replace(/\.png$/,'');if(process.env.CANADA_REVIEW_LOG_IMAGES==='1'&&transportNames.has(name))await capture({...options,path:path.join(output,name+'.jpg'),type:'jpeg',quality:80});return bytes;};
  await verifyCanadaIndustryPilot({page,url:route=>`http://127.0.0.1:${server.address().port}${base}/atlas/north-america/`+route,output,result});assert.deepEqual(errors,[]);result.status='passed';
 }catch(error){result.status=browser?'failed':'blocked';result.error=error.stack;process.exitCode=1;console.error(error);if(page){await page.screenshot({path:path.join(output,'failure.png')});result.failureViewport=await page.evaluate(()=>({width:innerWidth,height:innerHeight,map:document.querySelector('[data-ca-map-frame]').getBoundingClientRect().toJSON(),sector:document.querySelector('[data-ca-industry-pilot]').canadaIndustryView?.sector}));}}
 finally{
@@ -21,7 +24,7 @@ finally{
  console.log('CANADA_PILOT_VERIFICATION '+JSON.stringify(result));
  // Keep review images readable through the authorized GitHub logs API as well as
  // the artifact ZIP, whose temporary download host may be unavailable to reviewers.
- const evidence=['1920-resources-initial.png','1920-manufacturing-initial.png','1920-services-initial.png','1920-resources-overlap-sudbury.png','1920-manufacturing-overlap-sudbury.png','1920-statistics-three-columns.png','failure.png'];
+ const evidence=['1920-resources-initial.jpg','1920-manufacturing-initial.jpg','1920-services-initial.jpg','1920-resources-overlap-sudbury.jpg','1920-manufacturing-overlap-sudbury.jpg','1920-statistics-three-columns.jpg','failure.jpg'];
  if(process.env.CANADA_REVIEW_LOG_IMAGES==='1')for(const file of evidence){try{console.log('CANADA_PILOT_IMAGE '+JSON.stringify({file,base64:(await readFile(path.join(output,file))).toString('base64')}));}catch{}}
  await browser?.close();await new Promise(resolve=>server.close(resolve));console.log(JSON.stringify({head:result.head,status:result.status,output}));
 }

@@ -41,7 +41,7 @@ import '../../styles/atlas-canada-country-parity.css';
    <h1 class="visually-hidden">カナダの都市圏人口・人口集団・宗教</h1>
    <NorthAmericaCountryFieldNavigation country="canada" field="population" />
    <nav class="country-topic-tabs" aria-label="人口の分野"><button type="button" data-population-topic="distribution" aria-pressed="true">人口分布</button><button type="button" data-population-topic="ethnicity" aria-pressed="false">人種・民族</button><button type="button" data-population-topic="religion" aria-pressed="false">宗教</button></nav>
-   <p class="population-coverage-brief" data-population-coverage-brief>2021年・自治体の人口密度と293統計地域の人口集団・宗教。地域未選択、南部を初期表示。</p>
+   <p class="population-coverage-brief" data-population-coverage-brief>人口密度グリッド（2020年推計）と293統計地域の人口集団・宗教（2021年）。地域未選択、南部を初期表示。</p>
 
    <div class="canada-workspace atlas-primary-grid population-workspace">
     <section class="canada-map-column atlas-map-column" aria-label="都市圏の地図と選択">
@@ -52,8 +52,8 @@ import '../../styles/atlas-canada-country-parity.css';
       {lakes.features.map(f=><g class="population-lake"><path class="canada-lake" d={geometryPath(f.geometry)} fill-rule="evenodd"><title>Ontario湖（オンタリオ湖）</title></path></g>)}
       {rivers.features.filter(f=>f.properties.name==='St. Lawrence').map(f=><path class="canada-river" d={geometryPath(f.geometry)}><title>セントローレンス川</title></path>)}
       <defs data-population-concentration-patterns></defs>
+      <g data-population-grid></g>
       <g data-population-regions></g>
-      <g data-population-subdivisions></g>
       <g data-religion-region-symbols aria-hidden="true"></g>
       {geo.map(g=><g data-population-map-cma={g.id} role="button" tabindex="0" aria-label={`${g.name}都市圏を選ぶ`} aria-pressed="false"><title>{g.name}都市圏、2021年 {fmt(g.population.value)}人{g.population.symbol?' '+g.population.symbol:''}</title><path data-population-boundary style={`fill:${densityColor(g.density)}`} d={g.rings.map(r=>line(r)).join('')} fill-rule="evenodd" /><circle class="population-anchor" cx={canadaLegacyPoint(g.point)[0]} cy={canadaLegacyPoint(g.point)[1]} r="1.8"/><circle data-population-symbol cx={canadaLegacyPoint(g.point)[0]} cy={canadaLegacyPoint(g.point)[1]} r={g.population.value===null?0:Math.sqrt(g.population.value/max)*22} style="display:none"/><text data-population-label x={canadaLegacyPoint(g.point)[0]+7} y={canadaLegacyPoint(g.point)[1]-7} style={['535','462','933'].includes(g.id)?undefined:'display:none'}>{g.name.match(/（(.+)）/)?.[1]??g.name}</text></g>)}
       <g data-religion-map-callouts aria-hidden="true"></g>
@@ -97,7 +97,7 @@ import '../../styles/atlas-canada-country-parity.css';
     <p><a href={sources.cma}>都市圏原表と注記</a> / <a href={sources.national}>全国・州準州原表と注記</a> / <a href={withBase(`${asset}population-selected.csv`)}>抽出CSV</a></p>
    </details>
    <details class="canada-source-footer population-source-footer" id="canada-population-sources"><summary>出典・利用条件・境界の加工と検証</summary>
-    <p>自治体・同等統計区分（CSD）の2021年人口・密度・陸地面積：<a href="https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=9810000201">Statistics Canada 98-10-0002-01</a>。輪郭は<a href="https://geo.statcan.gc.ca/geo_wa/rest/services/2021/Digital_boundary_files/MapServer/9">公式2021年CSD境界サービス</a>の水域を含む行政範囲です。原表DGUIDと原輪郭CSDUIDで結合し、統計地域・州の人口を配分していません。原表の陸地面積に基づく密度をそのまま表示し、輪郭から計算しません。表示用の境界一般化は統計値を変えません。自治体と都市圏・統計地域は異なる集計範囲で、重なる人口を加算しません。<a href={withBase('/assets/atlas/canada-population-v2/subdivisions-manifest.json')}>原資料ハッシュ・表示加工台帳</a> / <a href={withBase('/assets/atlas/canada-population-v2/subdivisions.json')}>CSDの公表値JSON</a></p>
+    <p>分布図：<a href="https://human-settlement.emergency.copernicus.eu/ghs_pop2023.php">JRC GHSL GHS-POP R2023A</a>の2020年人口推計。公表された1 km等面積セルを5×5で集約し、有効な元セル面積で密度を計算。表示セル中心が属する集約値を、画像と選択読取で共用します。州・都市圏の人口を独自に配分しません。公表0と欠測を区別します。元の推計にも国勢調査等と建物分布を用いた空間モデルがあり、直接の世帯観測ではありません。表示画素は約9.9 kmのWeb Mercator間隔で、地上の縮尺は緯度により異なります。国境・水域にまたがる集約セルがあり、表示画素や密度を合計して全国・都市人口を算出しません。都市圏・全国の右側と下の統計は、別の2021年国勢調査です。<a href={withBase('/assets/atlas/canada-population-grid-v1/manifest.json')}>加工・原資料ハッシュ台帳</a> / <a href={withBase('/assets/atlas/canada-population-grid-v1/source-inputs.json')}>公式24タイルの出典</a>。© European Union / European Commission, Joint Research Centre. CC BY 4.0。</p>
     <p lang="en">Adapted from Statistics Canada, Table 98-10-0003-01, Population and dwelling counts: Census metropolitan areas, census agglomerations and census subdivisions (municipalities), and Table 98-10-0001-01, Population and dwelling counts: Canada, provinces and territories, 2021 Census of Population, reference years 2016 and 2021 (accessed September 30, 2026). This does not constitute an endorsement by Statistics Canada of this product.</p>
     <p>人口・密度・陸地面積：<a href={sources.cma}>98-10-0003-01</a>、<a href={sources.national}>98-10-0001-01</a>、2022年2月9日公表。<a href="https://www.statcan.gc.ca/en/terms-conditions/open-licence">Statistics Canada Open Licence</a>に基づく抽出・日本語化・表示。55地域×5指標の原値と直後のSymbols列、地理注記を保持。2026年9月30日取得。全国の2021年人口36,991,981人と41都市圏合計27,281,119人から73.7%を計算しています。</p>
     <p lang="en">Contains information licensed under the Open Government Licence – Canada.</p>
@@ -108,7 +108,7 @@ import '../../styles/atlas-canada-country-parity.css';
    </details>
    <CanadaDemographicSources />
    <noscript><p>南部41都市圏の2021年人口密度図、全国の分布概要、本文・全55地域の数値表・出典を読めます。人口集団と宗教は末尾の全国原人数と定義を確認できます。選択・分野の切替、拡大、履歴やURLからの復帰にはJavaScriptが必要です。</p></noscript>
-   <script type="application/json" data-population-config set:html={JSON.stringify({...data,regionsUrl:withBase('/assets/atlas/canada-demographics-v2/regions.geojson'),subdivisionsUrl:withBase('/assets/atlas/canada-population-v2/subdivisions.json'),subdivisionGeometryUrl:withBase('/assets/atlas/canada-population-v2/subdivisions.geojson'),demographics:{ethnicity,religion},industryProvinces:industry.provinces.map(({id,code})=>({id,code})),geometry:geometry.features.map(({id,point,bounds,provinceCodes})=>({id,point,bounds,provinceCodes}))}).replace(/</g,String.fromCharCode(92)+'u003c')} />
+   <script type="application/json" data-population-config set:html={JSON.stringify({...data,regionsUrl:withBase('/assets/atlas/canada-demographics-v2/regions.geojson'),populationGridBase:withBase('/assets/atlas/canada-population-grid-v1'),demographics:{ethnicity,religion},industryProvinces:industry.provinces.map(({id,code})=>({id,code})),geometry:geometry.features.map(({id,point,bounds,provinceCodes})=>({id,point,bounds,provinceCodes}))}).replace(/</g,String.fromCharCode(92)+'u003c')} />
   </article>
  </AtlasWorkspaceFrame>
 </BaseLayout>

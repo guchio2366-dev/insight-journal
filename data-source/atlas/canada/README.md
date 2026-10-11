@@ -25,9 +25,9 @@ Routes: `/atlas/north-america/canada/` and `/atlas/north-america/canada/nature/`
 
 Local unit, built-output and real-controller Happy DOM tests cover these behaviours. Desktop visual layout and external-link operations need an actual browser; the parent will supplement with cloud Chrome. Automated DOM testing is not reported as actual-browser verification.
 
-## Remaining packages
+## Canada map revision scope
 
-Canada agriculture: official StatCan canola distribution/quantity, Regina climate reference and Prairie production conditions; distinguish random area-quantity dots from farm locations and connect climate to soils, technology, transport and institutions. Canada industry and population remain separate packages. Mexico nature follows with Mexico City default and an explicitly identified Culiacán example only when station identity and all monthly values are confirmed. This pilot does not assert four-field regional completion.
+The Canada-only Draft integrates source-backed crop/livestock production belts, four forest display classes, nine climate stations and existing elevation, river/drainage/rainfall/landform layers, three industry learning sectors, and actual population-grid plus simultaneous population-group/religion distributions. Browser acceptance uses 1920×1080 CSS pixels as primary and 1440×900 as auxiliary, with sandboxed Chrome, DPR and actual map-frame metadata. Source/controller tests and actual screenshot inspection are separate evidence.
 
 ## Four additional official climate stations — 2026-10-11
 
@@ -52,3 +52,21 @@ Run `node scripts/prepare-canada-st-lawrence.mjs` for this replacement alone. Th
 - Expanded GeoJSON SHA-256: `be20c9ef313a4e521c62ad47f0c48ac67c633d60b669a9459ff2b2662626d643`.
 - Actual coordinate bounds: `[-76.4696127, 44.1300071, -64.3028586, 50.3008614]`. The API metadata bbox is broader: `[-77.1412943, 44.0872357, -64.0730012, 50.9542312]`. Both are preserved independently; all geometry lies within the metadata bbox.
 - Original terms link: Government of Canada terms; no unverified dataset-specific licence is claimed. Original bytes and hashes were obtained and checked by the parent through the existing review CI. Actual screen verification remains the separate existing PC-browser CI check.
+
+## Fine population distribution — 2026-10-11
+
+Adopted: JRC GHSL GHS-POP R2023A V1-0, 2020 published population model. All 24 original 1 km equal-area Mollweide tiles required by the existing Canada outline were acquired through ordinary HTTPS. Original ZIP/TIFF hashes, raster dimensions, CRS, transform, NoData and source-cell counts are pinned in `public/assets/atlas/canada-population-grid-v1/source-inputs.json`.
+
+`scripts/prepare-canada-population-grid.py` sums aligned 5×5 original population cells and divides by their valid equal-area source-cell count. Original NoData −200/nonfinite cells are excluded from both numerator and denominator; genuine zero stays zero. The approximately 9.9 km Web Mercator display-cell centre selects its containing original 5 km aggregate. There is no continuous interpolation or independent census allocation. PNG and Float32 lookup use the same array; complete equality and lossless roundtrips were checked during original generation. Ten existing CMA reference-anchor samples were independently checked against the source aggregates; those local samples are neither city centres nor CMA population/mean-density figures.
+
+The 1000×1293 grid contains 525,177 available display cells, including 389,522 genuine zeros and 135,655 positive values. 4,279 Canada-masked cells remain missing. Country-outline/border generalization, water/border-crossing source cells, display resolution, and the 2020 model/2021 census distinction are declared in the manifest and page. Do not sum display pixels or densities for national or city totals.
+
+Reproduce with retained/pinned originals outside the repository:
+
+```sh
+python3 scripts/prepare-canada-population-grid.py --cache /tmp/canada-ghsl-originals --deps /tmp/canada-population-python --download
+```
+
+Python dependencies used in acquisition: Rasterio 1.4.3, NumPy 2.2.6, Pillow 11.3.0. The first reviewed acquisition used `--pin-inputs`; subsequent runs verify the original ZIP hashes. The ordinary-HTTPS optional acquisition script is retained; automatic source acquisition was removed from CI after integration. Sources: https://human-settlement.emergency.copernicus.eu/ghs_pop2023.php and the immutable official tile URLs in the pinned source inventory. Attribution: European Commission, Joint Research Centre; CC BY 4.0.
+
+Next candidate: Statistics Canada 2021 CSD boundaries/table. See `population-subdivisions/README.md` for the retained table and the concrete service/transfer limitations. The application publishes the acquired GHSL distribution instead of replacing the requested fine map with definitions or missing-data prose.
