@@ -85,7 +85,7 @@ try{
   for(const render of ['auto','static']){
     await open('population','religion',render);
     assert.equal(await page.locator('[data-eu-smre-key]').isVisible(),true);
-    assert.match(await page.locator('.eu-map-footer').textContent(),/45か国.*8分類/s);
+    assert.match(await page.locator('[data-eu-map-status]').textContent(),/45か国.*8分類/s);
     assert.equal(await page.locator('[data-eu-pew-marker]:visible').count(),0);
     assert.equal(await page.locator('[data-culture-code]').count(),0,'the country overview is not covered by ONS local data');
     const fills=await page.locator('[data-eu-shape]').evaluateAll(nodes=>Object.fromEntries(nodes.map(node=>[node.dataset.euShape,node.style.fill])));
@@ -108,6 +108,10 @@ try{
     await page.locator('[data-eu-religion-back]').click();
     await page.locator('[data-eu-pew-surface-group=unaffiliated]').click();
     assert.equal(await page.locator('[data-eu-pew-map-key]').isVisible(),true);
+    await page.locator('[data-eu-religion-national=religion-national-serbia]').click();
+    assert.equal(new URL(page.url()).searchParams.get('place'),'SRB');
+    assert.match(await page.locator('[data-eu-religion-evidence-reading]').textContent(),/5,387,426人/);
+    await page.locator('[data-eu-religion-back]').click();
     await page.locator('[data-eu-smre-overview]').click();
     assert.equal(await page.locator('[data-eu-smre-key]').isVisible(),true);
     assert.equal(await page.locator('[data-eu-pew-marker]:visible').count(),0);

@@ -1,0 +1,142 @@
+{
+  "gitHead": "8bc6fbd18046e4654cd553d0997c821973a0441a",
+  "gitStatus": " M src/lib/atlas-europe-annotations.ts\n M src/lib/atlas-europe-explorer.ts\n M src/lib/atlas-europe-pew-markers.ts\n M tests/browser/atlas-europe-handoff-review.mjs\n",
+  "browser": "Chromium /usr/bin/chromium, local production preview only",
+  "deviceScaleFactor": 1,
+  "cssZoom": 1,
+  "records": [
+    {
+      "width": 1920,
+      "render": "auto",
+      "target": {
+        "euMapPlace": "religion-national-serbia",
+        "euMapKind": "feature",
+        "euReligionNational": "religion-national-serbia"
+      },
+      "rect": {
+        "x": 877,
+        "y": 811.366455078125,
+        "width": 112,
+        "height": 37.5,
+        "top": 811.366455078125,
+        "right": 989,
+        "bottom": 848.866455078125,
+        "left": 877
+      }
+    },
+    {
+      "visiblePew": 35
+    },
+    {
+      "width": 1920,
+      "render": "static",
+      "target": {
+        "euMapPlace": "religion-national-serbia",
+        "euMapKind": "feature",
+        "euReligionNational": "religion-national-serbia"
+      },
+      "rect": {
+        "x": 901,
+        "y": 971.417236328125,
+        "width": 112,
+        "height": 37.5,
+        "top": 971.417236328125,
+        "right": 1013,
+        "bottom": 1008.917236328125,
+        "left": 901
+      }
+    },
+    {
+      "visiblePew": 35
+    },
+    {
+      "width": 1440,
+      "render": "auto",
+      "target": {
+        "euMapPlace": "religion-national-serbia",
+        "euMapKind": "feature",
+        "euReligionNational": "religion-national-serbia"
+      },
+      "rect": {
+        "x": 678.59375,
+        "y": 696.8134765625,
+        "width": 112,
+        "height": 37.5,
+        "top": 696.8134765625,
+        "right": 790.59375,
+        "bottom": 734.3134765625,
+        "left": 678.59375
+      }
+    },
+    {
+      "visiblePew": 35
+    },
+    {
+      "width": 1440,
+      "render": "static",
+      "target": {
+        "euMapPlace": "religion-national-serbia",
+        "euMapKind": "feature",
+        "euReligionNational": "religion-national-serbia"
+      },
+      "rect": {
+        "x": 666.59375,
+        "y": 741.495849609375,
+        "width": 112,
+        "height": 37.5,
+        "top": 741.495849609375,
+        "right": 778.59375,
+        "bottom": 778.995849609375,
+        "left": 666.59375
+      }
+    },
+    {
+      "visiblePew": 34
+    },
+    {
+      "width": 1024,
+      "render": "auto",
+      "target": {
+        "euMapPlace": "religion-national-serbia",
+        "euMapKind": "feature",
+        "euReligionNational": "religion-national-serbia"
+      },
+      "rect": {
+        "x": 449.8768005371094,
+        "y": 542.8714599609375,
+        "width": 112.00003051757812,
+        "height": 37.5,
+        "top": 542.8714599609375,
+        "right": 561.8768310546875,
+        "bottom": 580.3714599609375,
+        "left": 449.8768005371094
+      }
+    },
+    {
+      "visiblePew": 35
+    },
+    {
+      "width": 1024,
+      "render": "static",
+      "target": {
+        "euMapPlace": "religion-national-serbia",
+        "euMapKind": "feature",
+        "euReligionNational": "religion-national-serbia"
+      },
+      "rect": {
+        "x": 433,
+        "y": 543.170654296875,
+        "width": 112,
+        "height": 37.5,
+        "top": 543.170654296875,
+        "right": 545,
+        "bottom": 580.670654296875,
+        "left": 433
+      }
+    },
+    {
+      "visiblePew": 34
+    }
+  ],
+  "result": "All six actual clicks selected SRB and retained 40 original Pew rows. The 34 vs 35 visible bars on static views reflect positions outside that viewport, not removed source rows."
+}
