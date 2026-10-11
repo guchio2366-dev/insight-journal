@@ -1,7 +1,7 @@
 """Read original public PDFs over normal HTTPS and save review-only evidence.
 No source graphic is distributed by the site. Nothing changes network security.
 """
-import base64, concurrent.futures, hashlib, json, os, pathlib, subprocess, urllib.request
+import base64, concurrent.futures, hashlib, json, os, pathlib, re, subprocess, urllib.request
 root = pathlib.Path(os.environ.get('LATIN_CULTURE_SOURCE_OUTPUT', '/tmp/latin-culture-sources'))
 root.mkdir(parents=True, exist_ok=True)
 sources = json.loads(pathlib.Path('data-source/atlas/latin-reading/geographic-source-review.json').read_text())['sources']
@@ -18,7 +18,7 @@ def fetch(source):
         subprocess.run(['pdftotext', '-layout', str(document), str(text_path)], check=True)
         pages = text_path.read_text().split('\f')
         if source['id'] == 'peru-profile':
-            selected = [i + 1 for i, page in enumerate(pages) if 'CUADRO N° 2.22' in page or ('Mestizo' in page and 'San Martín' in page and 'Cajamarca' in page)]
+            selected = [i + 1 for i, page in enumerate(pages) if re.search(r'CUADRO\s+N[^\d\n]{0,5}2\.(22|71)\b', page, re.I) or ('Mestizo' in page and 'San Martín' in page and 'Cajamarca' in page)]
             item['pages'] = selected
             for number in selected:
                 print('LATIN_SOURCE_TEXT ' + json.dumps({'id': source['id'], 'page': number, 'text': pages[number - 1]}, ensure_ascii=False))
