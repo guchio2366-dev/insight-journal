@@ -1,0 +1,2379 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-10-11",
+  "scope": "Latin America existing 34 countries; excludes Mexico",
+  "crs": "EPSG:3857 display / EPSG:4326 original geometries",
+  "regionPolygons": {
+    "publisher": "Natural Earth",
+    "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_geography_regions_polys.geojson",
+    "documentation": "https://www.naturalearthdata.com/downloads/10m-physical-vectors/10m-physical-labels/",
+    "license": "public domain",
+    "sha256": "b7b26e50ea917d3696aec87f932def2bf5f890f5770e441d59c162c6f4c92a77",
+    "originalFeatures": 1047,
+    "adoptedFeatures": 8,
+    "meaning": "Natural Earth physical label areas. Approximate geographic name extents, not measured geomorphological boundaries or hydrological drainage basins. Label positions are editorial, source polygons are unchanged."
+  },
+  "riverLines": {
+    "publisher": "Natural Earth",
+    "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_rivers_lake_centerlines.geojson",
+    "license": "public domain",
+    "sha256": "bb854a900ecbd3b408df46d5e16e3e0f974ba55993f9d8b5c26e855273c0905a",
+    "originalFeatures": 1455,
+    "scale": "1:10,000,000",
+    "names": 138,
+    "geometry": "Original paths clipped to display bounds; country outline masks Mexico. No inferred connectors, flow direction, discharge or hydrological basin. Existing 50m IDs retained by exact source name."
+  },
+  "rainfall": {
+    "levels": [
+      0,
+      250,
+      500,
+      750,
+      1000,
+      1250,
+      1500,
+      1750,
+      2000,
+      2250,
+      2500,
+      2750,
+      3000,
+      3250,
+      3500,
+      3750,
+      4000,
+      4250,
+      4500,
+      4750,
+      5000,
+      5250,
+      5500,
+      5750,
+      6000,
+      6250,
+      6500,
+      6750,
+      7000,
+      7250,
+      7500,
+      7750,
+      8000,
+      8250,
+      8500,
+      8750,
+      9000,
+      9250,
+      9500,
+      9750,
+      10000,
+      10250,
+      10500
+    ],
+    "colors": [
+      "#f1f9fc",
+      "#e3f2f8",
+      "#d5ecf4",
+      "#c7e6f1",
+      "#b9dfed",
+      "#a4d5e8",
+      "#90cbe2",
+      "#7cc1dc",
+      "#67b7d7",
+      "#5aa9cb",
+      "#4c9abf",
+      "#3f8cb3",
+      "#327ea7",
+      "#2c7196",
+      "#266486",
+      "#1f5676",
+      "#194965",
+      "#1a4864",
+      "#1b4662",
+      "#1c4561",
+      "#1d4360",
+      "#1e425e",
+      "#1f405d",
+      "#203f5c",
+      "#213d5b",
+      "#223c59",
+      "#233a58",
+      "#243957",
+      "#253755",
+      "#263654",
+      "#273553",
+      "#283351",
+      "#293250",
+      "#2a304f",
+      "#2b2f4d",
+      "#2c2d4c",
+      "#2d2c4b",
+      "#2e2a4a",
+      "#2f2948",
+      "#302747",
+      "#312646",
+      "#322444"
+    ],
+    "emphasizedRange": [
+      0,
+      4000
+    ],
+    "extremeRange": [
+      4000,
+      10500
+    ],
+    "sourceGridSha256": "8c5842b94ca84f28dd4ca69ab1a263c9b1a2c63e027f127dcf7c9be58a580358",
+    "contourInterval": 250,
+    "cornerMask": false,
+    "contourLabels": [
+      {
+        "value": 250,
+        "coordinate": [
+          -68.46119124687996,
+          -25.375
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 250,
+        "coordinate": [
+          -69.1293681024852,
+          -40.625
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 250,
+        "coordinate": [
+          -77.625,
+          -8.939639582776381
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 250,
+        "coordinate": [
+          -71.625,
+          -51.50068630773306
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 250,
+        "coordinate": [
+          -68.27582641154117,
+          -45.875
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 250,
+        "coordinate": [
+          -68.08526501777497,
+          -49.375
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -63.0324942830663,
+          -18.875
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -41.625,
+          -17.26278254498296
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -71.375,
+          -38.815068316179776
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -65.12970879762882,
+          7.625
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -60.375,
+          -17.230733169693913
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -37.875,
+          -7.965908790657119
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -69.78154527239836,
+          9.875
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -39.587323207605195,
+          -4.625
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -78.125,
+          -0.27508015923020596
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -65.125,
+          -26.84803273761247
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -63.875,
+          7.390306098911238
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -41.625,
+          -19.242313297858658
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -67.4549905391694,
+          -7.375
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -64.375,
+          2.324371807391827
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -53.875,
+          -28.188438529394432
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -74.125,
+          5.302725858222015
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -54.125,
+          -4.410863392150129
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -68.14789226724784,
+          -13.125
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -59.375,
+          4.7074173487727755
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -75.24149543919356,
+          -9.375
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -90.18590250287724,
+          16.125
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -79.125,
+          -1.2453094056202785
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -48.125,
+          -13.77159408696936
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -55.375,
+          -15.671429080733995
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -74.98268576514224,
+          -1.625
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -75.9228622869619,
+          5.625
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -64.94070582686652,
+          2.375
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -74.85384253046261,
+          5.375
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -74.125,
+          2.780237035505717
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -89.88515110442206,
+          16.625
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -61.625,
+          -3.9292323168941516
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -83.125,
+          9.126761363713928
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -51.875,
+          2.133278309442465
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -48.319882643238856,
+          -1.625
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -72.48544480220295,
+          5.375
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -79.33433935825491,
+          0.125
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -76.79829428760203,
+          3.875
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -74.875,
+          7.306162036253408
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -77.375,
+          -1.867686040695991
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -76.0161653597967,
+          0.875
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -73.625,
+          3.961342544427538
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -76.875,
+          0.15336411879319725
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -78.375,
+          2.055462973377773
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -74.99020291219159,
+          5.875
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 6000,
+        "coordinate": [
+          -76.91390875610304,
+          4.375
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 6000,
+        "coordinate": [
+          -78.10058576017532,
+          1.375
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 6000,
+        "coordinate": [
+          -77.23013504988525,
+          6.625
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 8000,
+        "coordinate": [
+          -76.55952330676648,
+          5.375
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 8000,
+        "coordinate": [
+          -77.125,
+          2.8278728836402864
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 8000,
+        "coordinate": [
+          -76.8623250490703,
+          4.875
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      },
+      {
+        "value": 10000,
+        "coordinate": [
+          -77.10405505985128,
+          3.125
+        ],
+        "meaning": "An actual vertex of the source-derived interpolated isohyet, mm/year."
+      }
+    ],
+    "samples": [
+      {
+        "name": "San Jose",
+        "coordinate": [
+          -84.0833,
+          9.9333
+        ],
+        "cellCenter": [
+          -84.125,
+          9.875
+        ],
+        "months": [
+          36.31999969482422,
+          30.860000610351562,
+          33.380001068115234,
+          92.8499984741211,
+          270.95001220703125,
+          242.10000610351562,
+          192.0399932861328,
+          230.55999755859375,
+          309.0799865722656,
+          311.94000244140625,
+          188.0399932861328,
+          71.2300033569336
+        ],
+        "annual": 2009.3499755859375,
+        "row": 320,
+        "column": 383
+      },
+      {
+        "name": "Manaus",
+        "coordinate": [
+          -60.0167,
+          -3.1333
+        ],
+        "cellCenter": [
+          -60.125,
+          -3.125
+        ],
+        "months": [
+          307.7099914550781,
+          293.5899963378906,
+          323.17999267578125,
+          324.510009765625,
+          234.1199951171875,
+          115.27999877929688,
+          74.62000274658203,
+          56.22999954223633,
+          78.4000015258789,
+          109.11000061035156,
+          197.41000366210938,
+          252.7899932861328
+        ],
+        "annual": 2366.949951171875,
+        "row": 372,
+        "column": 479
+      },
+      {
+        "name": "Lima",
+        "coordinate": [
+          -77.1167,
+          -12.0167
+        ],
+        "cellCenter": [
+          -77.125,
+          -12.125
+        ],
+        "months": [
+          0.6200000047683716,
+          0.699999988079071,
+          0.41999998688697815,
+          0.5,
+          0.6800000071525574,
+          0.8799999952316284,
+          1.2599999904632568,
+          0.9700000286102295,
+          1.159999966621399,
+          0.8799999952316284,
+          0.6899999976158142,
+          0.699999988079071
+        ],
+        "annual": 9.460000038146973,
+        "row": 408,
+        "column": 411
+      },
+      {
+        "name": "Santiago",
+        "coordinate": [
+          -70.7833,
+          -33.3833
+        ],
+        "cellCenter": [
+          -70.875,
+          -33.375
+        ],
+        "months": [
+          0.4300000071525574,
+          1.1200000047683716,
+          3.630000114440918,
+          13.989999771118164,
+          37.41999816894531,
+          71.01000213623047,
+          43.599998474121094,
+          38.70000076293945,
+          20.260000228881836,
+          9.489999771118164,
+          4.110000133514404,
+          2.4700000286102295
+        ],
+        "annual": 246.22999572753906,
+        "row": 493,
+        "column": 436
+      },
+      {
+        "name": "Bogota",
+        "coordinate": [
+          -74.15,
+          4.7
+        ],
+        "cellCenter": [
+          -74.125,
+          4.625
+        ],
+        "months": [
+          30.59000015258789,
+          42.709999084472656,
+          73.5,
+          98.30999755859375,
+          105.4000015258789,
+          79.12999725341797,
+          75.52999877929688,
+          63.83000183105469,
+          57.099998474121094,
+          88.91999816894531,
+          92.41999816894531,
+          49.72999954223633
+        ],
+        "annual": 857.1699829101562,
+        "row": 341,
+        "column": 423
+      },
+      {
+        "name": "Buenos Aires",
+        "coordinate": [
+          -58.4167,
+          -34.5833
+        ],
+        "cellCenter": [
+          -58.375,
+          -34.625
+        ],
+        "months": [
+          114.13999938964844,
+          115.61000061035156,
+          111.58000183105469,
+          108.5,
+          80.7699966430664,
+          54.939998626708984,
+          65.77999877929688,
+          63.66999816894531,
+          72.0999984741211,
+          110.16999816894531,
+          106.06999969482422,
+          108.87000274658203
+        ],
+        "annual": 1112.199951171875,
+        "row": 498,
+        "column": 486
+      }
+    ],
+    "png": "/assets/atlas/latin-nature-reading-v2/rainfall.png",
+    "svgSha256": "8a4352a1fc1974e18bb635a6292313e175b4f91617aa5f96f4f58ffbcef0a89d",
+    "sourcePeriod": [
+      "1991-01-01",
+      "2020-12-31"
+    ],
+    "sourceResolutionDegrees": 0.25,
+    "method": "Same pinned twelve-month GPCC normal, target-country mask and interpolated 250mm intervals. Recoloured by explicit piecewise RGB ramp; no data clipping or geographic resampling."
+  },
+  "preparation": {
+    "script": "scripts/latin-america/prepare-reading-enhancements.py",
+    "sha256": "6a126cda802ff7bc09ffc02d0249766eab8cd343693628982fde3e3912b03ea7",
+    "extractScript": "scripts/latin-america/extract-reading-rainfall.mjs",
+    "rasterizeScript": "scripts/latin-america/rasterize-reading-enhancements.mjs",
+    "rasterizeScriptSha256": "dfeebe3881c51b779ee0f55a5311cc376e21aacc904a9995d6554f6b59004bbe"
+  },
+  "files": {
+    "geography.json": {
+      "sha256": "2bac8c6be4bc27ce542cfa39ee6b2724d3fb6d3f11f8dcf2bdbd61227d1c7599",
+      "bytes": 671743
+    },
+    "rainfall.png": {
+      "bytes": 209726,
+      "sha256": "d4d89b507040961f90e7907d75f4aac209888180f6a3a596814abeac5417c845",
+      "width": 1800,
+      "height": 1160,
+      "rasterizer": "existing sharp 0.35.4",
+      "actualContourLevels": [
+        250,
+        500,
+        750,
+        1000,
+        1250,
+        1500,
+        1750,
+        2000,
+        2250,
+        2500,
+        2750,
+        3000,
+        3250,
+        3500,
+        3750,
+        4000,
+        4250,
+        4500,
+        4750,
+        5000,
+        5250,
+        5500,
+        5750,
+        6000,
+        6250,
+        6500,
+        6750,
+        7000,
+        7250,
+        7500,
+        7750,
+        8000,
+        8250,
+        8500,
+        8750,
+        9000,
+        9250,
+        9500,
+        9750,
+        10000,
+        10250
+      ]
+    },
+    "elevation.png": {
+      "bytes": 335616,
+      "sha256": "ff42de8d4fd229d0432a3dfad7cbb910699ee31603cb6397cabd13bdfe460479",
+      "width": 1800,
+      "height": 1160,
+      "rasterizer": "existing sharp 0.35.4",
+      "actualContourLevels": [
+        0,
+        500,
+        1000,
+        1500,
+        2000,
+        2500,
+        3000,
+        3500,
+        4000,
+        4500,
+        5000,
+        5500,
+        6000,
+        6500
+      ]
+    }
+  },
+  "elevation": {
+    "sourceGridSha256": "e33dfb988981659f7c11385314dd084879be0fb3cbbfc99f33101a09e19c2187",
+    "sourceEdition": "ETOPO 2022 v1 surface",
+    "sourceResolutionDegrees": 0.016666666666666666,
+    "displaySamplingDegrees": 0.05,
+    "contourInterval": 500,
+    "levels": [
+      -10000,
+      0,
+      500,
+      1000,
+      1500,
+      2000,
+      2500,
+      3000,
+      3500,
+      4000,
+      4500,
+      5000,
+      5500,
+      6000,
+      6500,
+      7000
+    ],
+    "colors": [
+      "#ecf3e5",
+      "#e4efd8",
+      "#d5e3bb",
+      "#c6d69f",
+      "#b8ca82",
+      "#b9c179",
+      "#bfb876",
+      "#c5af73",
+      "#c3a26d",
+      "#b99164",
+      "#af7f5a",
+      "#ad7c5f",
+      "#c5a38d",
+      "#decabc",
+      "#f6f1ea"
+    ],
+    "cornerMask": false,
+    "datum": "EGM2008",
+    "contourLabels": [
+      {
+        "value": 500,
+        "coordinate": [
+          -62.9599274411992,
+          -21.15833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 500,
+        "coordinate": [
+          -52.95959024240345,
+          -28.358333333333327
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 500,
+        "coordinate": [
+          -63.591666666666654,
+          3.319152444681614
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 500,
+        "coordinate": [
+          -36.29582831023388,
+          -9.108333333333334
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 500,
+        "coordinate": [
+          -70.76269719246127,
+          -33.708333333333336
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 500,
+        "coordinate": [
+          -85.76774270524906,
+          12.541666666666668
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 500,
+        "coordinate": [
+          -54.44166666666666,
+          -15.885175140199813
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 500,
+        "coordinate": [
+          -57.44166666666666,
+          -13.734264063859097
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 500,
+        "coordinate": [
+          -88.44166666666666,
+          15.484394896561593
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 500,
+        "coordinate": [
+          -45.641666666666666,
+          -9.015499592257582
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 500,
+        "coordinate": [
+          -68.29166666666666,
+          -54.73661901610215
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 500,
+        "coordinate": [
+          -67.95551299561691,
+          9.791666666666668
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 500,
+        "coordinate": [
+          -43.458330789415484,
+          -9.608333333333334
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 500,
+        "coordinate": [
+          -84.44166666666666,
+          10.350854055464824
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 500,
+        "coordinate": [
+          -70.4678681857228,
+          19.09166666666667
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 500,
+        "coordinate": [
+          -55.09166666666666,
+          -22.60877785622653
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -69.94166666666666,
+          -13.58179033147957
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -72.94166666666666,
+          -50.16434003229002
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -45.44166666666666,
+          -22.19358187245998
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -71.44166666666666,
+          -42.81032223012292
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -72.568408577535,
+          -48.10833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -81.59166666666667,
+          8.662807802594585
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -90.54166666666666,
+          14.844390798140374
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -87.68175550474633,
+          14.14166666666667
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -50.87831248545045,
+          -26.958333333333336
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -71.30254951232114,
+          -17.508333333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -41.53768563684471,
+          -13.458333333333336
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -47.19166666666666,
+          -20.12223309100981
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -61.29166666666666,
+          5.391174719380849
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -64.99015463744615,
+          -32.75833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -47.64166666666666,
+          -15.286475072000563
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1000,
+        "coordinate": [
+          -50.64166666666665,
+          -28.634044293360844
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1500,
+        "coordinate": [
+          -72.44166666666666,
+          -12.630806574610492
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1500,
+        "coordinate": [
+          -75.29166666666666,
+          1.9203313112420761
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1500,
+        "coordinate": [
+          -69.83557021938167,
+          -18.958333333333336
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1500,
+        "coordinate": [
+          -76.72196553836807,
+          3.8416666666666646
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1500,
+        "coordinate": [
+          -72.17303311493619,
+          7.791666666666668
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1500,
+        "coordinate": [
+          -90.54166666666666,
+          15.05620653491215
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1500,
+        "coordinate": [
+          -73.3521946370809,
+          -50.30833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1500,
+        "coordinate": [
+          -82.44026923211439,
+          8.89166666666667
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1500,
+        "coordinate": [
+          -67.09166666666667,
+          -29.260117353377257
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1500,
+        "coordinate": [
+          -64.88581180054315,
+          -32.75833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1500,
+        "coordinate": [
+          -71.80985922463502,
+          -47.90833333333334
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1500,
+        "coordinate": [
+          -73.34836233107313,
+          -47.308333333333344
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1500,
+        "coordinate": [
+          -89.65903147452475,
+          15.091666666666669
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1500,
+        "coordinate": [
+          -73.64166666666667,
+          10.44493634817777
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1500,
+        "coordinate": [
+          -72.94166666666666,
+          9.902040980965062
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 1500,
+        "coordinate": [
+          -67.36662185668743,
+          -31.208333333333336
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -68.39166666666667,
+          -28.891648858969898
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -73.902866874512,
+          4.041666666666668
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -71.94166666666666,
+          7.905002274206744
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -75.85443987791209,
+          5.391666666666666
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -75.49166666666667,
+          2.045573512202955
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -73.44166666666668,
+          -12.613332637828698
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -90.89166666666667,
+          14.707192863144279
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -90.77878543432736,
+          15.441666666666666
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -82.79166666666666,
+          9.08744797666275
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -66.24166666666666,
+          -28.692376523294257
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -67.09166666666667,
+          -29.495030724153473
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -75.62684710345238,
+          6.291666666666668
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -73.50122546612683,
+          10.641666666666666
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -64.91403262329541,
+          -32.25833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -77.66919777511922,
+          -8.008333333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2000,
+        "coordinate": [
+          -64.04166666666666,
+          -18.699187891194036
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2500,
+        "coordinate": [
+          -69.33695257029264,
+          -34.208333333333336
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2500,
+        "coordinate": [
+          -79.3935554499568,
+          -3.80833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2500,
+        "coordinate": [
+          -73.89166666666667,
+          4.14883528368034
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2500,
+        "coordinate": [
+          -79.14166666666667,
+          -5.771859363680065
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2500,
+        "coordinate": [
+          -66.53244374214876,
+          -27.35833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2500,
+        "coordinate": [
+          -71.28381145774561,
+          8.441666666666666
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2500,
+        "coordinate": [
+          -69.04166666666666,
+          -32.76560070243935
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2500,
+        "coordinate": [
+          -68.31745061148632,
+          -23.758333333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2500,
+        "coordinate": [
+          -91.149941507967,
+          14.89166666666667
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2500,
+        "coordinate": [
+          -73.54166666666666,
+          -12.710674075653992
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2500,
+        "coordinate": [
+          -69.24166666666666,
+          -31.197412722605794
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2500,
+        "coordinate": [
+          -77.4762739792658,
+          -6.258333333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2500,
+        "coordinate": [
+          -91.21664775934495,
+          15.391666666666666
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2500,
+        "coordinate": [
+          -73.33237637976045,
+          10.841666666666669
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2500,
+        "coordinate": [
+          -75.49166666666666,
+          6.460799030127516
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 2500,
+        "coordinate": [
+          -79.01406223901978,
+          -6.458333333333329
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -68.94166666666666,
+          -29.540371809980474
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -79.49166666666666,
+          -3.1230723876615674
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -76.24166666666666,
+          2.3076145202706275
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -72.74166666666666,
+          5.500989325867345
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -78.15569547425673,
+          -7.258333333333332
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -79.12706607667045,
+          -3.55833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -71.14166666666665,
+          8.506422835833892
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -74.29166666666666,
+          3.6527004779440078
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -66.22528142087461,
+          -27.40833333333332
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -64.60569792222452,
+          -19.80833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -75.22296859320701,
+          4.541666666666668
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -69.08201880753286,
+          -32.05833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -79.5385896434788,
+          -5.258333333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -72.99166666666666,
+          5.897394504363151
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -74.18534308043246,
+          -13.20833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3000,
+        "coordinate": [
+          -73.49166666666665,
+          10.762587299668583
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3500,
+        "coordinate": [
+          -65.54184194330865,
+          -24.30833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3500,
+        "coordinate": [
+          -69.64166666666665,
+          -34.35307145543726
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3500,
+        "coordinate": [
+          -76.74166666666666,
+          -8.822693718845525
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3500,
+        "coordinate": [
+          -69.94166666666666,
+          -32.32973529600336
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3500,
+        "coordinate": [
+          -78.19166666666666,
+          -0.9226705246709637
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3500,
+        "coordinate": [
+          -66.29294176059449,
+          -23.80833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3500,
+        "coordinate": [
+          -78.59166666666667,
+          -2.410897966662525
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3500,
+        "coordinate": [
+          -78.74166666666666,
+          -1.8942972167582726
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3500,
+        "coordinate": [
+          -68.04166666666666,
+          -26.371897489694064
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3500,
+        "coordinate": [
+          -75.94166666666666,
+          2.9742319335351928
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3500,
+        "coordinate": [
+          -78.04438311904408,
+          -7.158333333333331
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3500,
+        "coordinate": [
+          -67.6216213078563,
+          -26.45833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3500,
+        "coordinate": [
+          -72.27064349601278,
+          6.291666666666668
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3500,
+        "coordinate": [
+          -65.35203088679565,
+          -21.608333333333327
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3500,
+        "coordinate": [
+          -73.19166666666666,
+          -15.625600963736863
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 3500,
+        "coordinate": [
+          -67.75637963086113,
+          -25.008333333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -66.14166666666667,
+          -22.15496595592187
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -66.09166666666667,
+          -19.415167385259476
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -68.12188083370668,
+          -26.40833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -69.63757186244989,
+          -33.30833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -70.04166666666666,
+          -32.78453319223141
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -69.91467387701397,
+          -31.65833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -66.09166666666667,
+          -17.31622678412954
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -68.09361211411233,
+          -17.30833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -65.23372532318744,
+          -22.65833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -72.38982489030121,
+          -13.408333333333331
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -66.82571262726634,
+          -24.108333333333334
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -69.97304358494578,
+          -32.258333333333326
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -71.90110603611893,
+          -13.30833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -65.64166666666665,
+          -24.50136835380945
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -73.49166666666666,
+          -14.110069028598074
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4000,
+        "coordinate": [
+          -71.24166666666666,
+          -14.925979395575617
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4500,
+        "coordinate": [
+          -75.344091170426,
+          -13.05833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4500,
+        "coordinate": [
+          -66.76183469624655,
+          -22.908333333333324
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4500,
+        "coordinate": [
+          -72.44166666666666,
+          -15.580423389977947
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4500,
+        "coordinate": [
+          -68.59166666666667,
+          -27.98855896975647
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4500,
+        "coordinate": [
+          -70.14166666666667,
+          -14.250489710384734
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4500,
+        "coordinate": [
+          -69.94166666666666,
+          -17.463626812987215
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4500,
+        "coordinate": [
+          -69.59166666666667,
+          -29.985905994815887
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4500,
+        "coordinate": [
+          -68.94166666666666,
+          -15.009080467420262
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4500,
+        "coordinate": [
+          -70.46950098206264,
+          -15.508333333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4500,
+        "coordinate": [
+          -68.34166666666667,
+          -25.381512889783277
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4500,
+        "coordinate": [
+          -66.34166666666667,
+          -24.729802368609906
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4500,
+        "coordinate": [
+          -77.1854341259175,
+          -10.008333333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4500,
+        "coordinate": [
+          -66.49166666666666,
+          -26.233803276694918
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4500,
+        "coordinate": [
+          -71.18934949389536,
+          -16.508333333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4500,
+        "coordinate": [
+          -69.25680567398481,
+          -18.208333333333336
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 4500,
+        "coordinate": [
+          -66.59166666666665,
+          -20.028118739023444
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5000,
+        "coordinate": [
+          -70.82492956727022,
+          -14.158333333333331
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5000,
+        "coordinate": [
+          -68.46722765550223,
+          -27.30833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5000,
+        "coordinate": [
+          -68.79166666666666,
+          -28.10015284163295
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5000,
+        "coordinate": [
+          -66.33430587148986,
+          -25.008333333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5000,
+        "coordinate": [
+          -68.69166666666666,
+          -26.56993587221382
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5000,
+        "coordinate": [
+          -67.85176031232275,
+          -22.65833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5000,
+        "coordinate": [
+          -67.81703748311037,
+          -22.40833333333334
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5000,
+        "coordinate": [
+          -67.04304961288928,
+          -26.608333333333327
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5000,
+        "coordinate": [
+          -66.96974954470406,
+          -22.65833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5000,
+        "coordinate": [
+          -67.55811448062063,
+          -23.80833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5000,
+        "coordinate": [
+          -72.04166666666666,
+          -15.411139349348
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5000,
+        "coordinate": [
+          -66.59166666666665,
+          -25.18129593548878
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5000,
+        "coordinate": [
+          -71.66505150984563,
+          -15.508333333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5000,
+        "coordinate": [
+          -67.92467945844776,
+          -25.65833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5000,
+        "coordinate": [
+          -69.72345030048936,
+          -30.55833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5000,
+        "coordinate": [
+          -69.39546381383073,
+          -29.708333333333336
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5500,
+        "coordinate": [
+          -68.5214111186508,
+          -27.30833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5500,
+        "coordinate": [
+          -68.67080025385565,
+          -27.808333333333337
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5500,
+        "coordinate": [
+          -68.89166666666665,
+          -28.020691606388574
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5500,
+        "coordinate": [
+          -68.74166666666666,
+          -28.04745370648203
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5500,
+        "coordinate": [
+          -68.71102611530773,
+          -27.108333333333334
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5500,
+        "coordinate": [
+          -67.88907273750718,
+          -25.608333333333334
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5500,
+        "coordinate": [
+          -69.43525681954436,
+          -29.658333333333324
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5500,
+        "coordinate": [
+          -72.56897646292308,
+          -15.55833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5500,
+        "coordinate": [
+          -68.50472139805092,
+          -26.508333333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5500,
+        "coordinate": [
+          -69.73655703269392,
+          -30.408333333333324
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5500,
+        "coordinate": [
+          -68.50345825083502,
+          -15.858333333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5500,
+        "coordinate": [
+          -67.8282862798213,
+          -29.008333333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5500,
+        "coordinate": [
+          -68.51161975455776,
+          -24.708333333333336
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5500,
+        "coordinate": [
+          -69.78288992482574,
+          -29.108333333333327
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5500,
+        "coordinate": [
+          -68.96238299563355,
+          -28.05833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 5500,
+        "coordinate": [
+          -70.08430914473375,
+          -31.958333333333336
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 6000,
+        "coordinate": [
+          -68.51227243164168,
+          -27.108333333333334
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 6000,
+        "coordinate": [
+          -68.7637439152818,
+          -27.758333333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 6000,
+        "coordinate": [
+          -68.78304404820229,
+          -27.108333333333334
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 6000,
+        "coordinate": [
+          -68.73414336983384,
+          -28.008333333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 6000,
+        "coordinate": [
+          -68.5337516500767,
+          -27.20833333333333
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 6000,
+        "coordinate": [
+          -68.48436070776262,
+          -27.058333333333337
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 6000,
+        "coordinate": [
+          -68.53754140333663,
+          -24.708333333333336
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 6000,
+        "coordinate": [
+          -67.89104276988019,
+          -25.558333333333337
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      },
+      {
+        "value": 6000,
+        "coordinate": [
+          -68.54155442432737,
+          -15.858333333333334
+        ],
+        "meaning": "Actual source-derived interpolated 500m contour vertex; EGM2008 metres, not a summit."
+      }
+    ],
+    "png": "/assets/atlas/latin-nature-reading-v2/elevation.png",
+    "svgSha256": "6ad0e1e83e94ff0706120816a6bcd0648388933d4cec8213beb5b8d759f3b22e",
+    "method": "Same acquired native window and 3-cell source stride as the adopted model. Same contour levels, colours, mask and interpolation; stronger line stroke and actual contour labels. No global-file SHA claim."
+  }
+}

@@ -7,6 +7,14 @@ on:
       - 'src/data/atlas/latin-america/**'
       - 'public/assets/atlas/latin-reading*/**'
       - 'scripts/verify-latin-reading-pc.mjs'
+      - 'scripts/verify-latin-culture-pc.mjs'
+      - 'scripts/verify-latin-nature-reading-pc.mjs'
+      - 'scripts/print-latin-nature-review-previews.py'
+      - 'public/assets/atlas/latin-nature-reading-v2/**'
+      - 'scripts/latin-america/*reading*'
+      - 'data-source/atlas/latin-america/nature-reading/**'
+      - 'scripts/verify-latin-culture-sources.py'
+      - 'data-source/atlas/latin-reading/**'
       - '.github/workflows/latin-reading-pc-review.yml'
 permissions:
   contents: read
@@ -14,6 +22,55 @@ concurrency:
   group: latin-reading-review-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 jobs:
+  source-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - name: Install ordinary PDF readers
+        run: |
+          if ! command -v pdftotext >/dev/null || ! command -v pdftoppm >/dev/null; then
+            sudo apt-get update -o APT::Update::Error-Mode=any
+            sudo apt-get install --yes --no-install-recommends poppler-utils
+          fi
+      - name: Read original culture sources for review
+        run: python3 scripts/verify-latin-culture-sources.py
+        env:
+          LATIN_CULTURE_SOURCE_OUTPUT: ${{ runner.temp }}/latin-culture-source-originals
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: latin-culture-source-originals-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/latin-culture-source-originals
+          retention-days: 7
+          if-no-files-found: error
+  preview:
+    name: PC image preview (${{ matrix.topic }})
+    needs: review
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    strategy:
+      fail-fast: false
+      matrix:
+        topic: [climate-basins, rivers, rainfall, terrain, elevation, agriculture]
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: latin-reading-pc-review-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/latin-reading-preview
+      - name: Print unchanged artifact bytes with their PC measurements and hashes
+        run: python3 scripts/print-latin-nature-review-previews.py "$REVIEW_ARTIFACT_DIRECTORY" "$REVIEW_TOPIC"
+        env:
+          REVIEW_ARTIFACT_DIRECTORY: ${{ runner.temp }}/latin-reading-preview
+          REVIEW_TOPIC: ${{ matrix.topic }}
+          LATIN_READING_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
   review:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -39,29 +96,40 @@ jobs:
           fi
           test -n "$(fc-list ':lang=ja' family)"
       - run: npm ci --no-audit --no-fund
-      - run: node --test tests/unit/atlas-latin-reading.test.mjs tests/unit/atlas-latin-agriculture.test.mjs
+      - run: node --test tests/unit/atlas-latin-reading.test.mjs tests/unit/atlas-latin-culture-patterns.test.mjs tests/unit/atlas-latin-agriculture.test.mjs tests/unit/atlas-latin-nature.test.mjs tests/unit/atlas-latin-water-terrain.test.mjs tests/unit/atlas-latin-nature-reading.test.mjs
       - run: npm run build
-      - run: node --test tests/e2e/atlas-latin-population.test.mjs tests/e2e/atlas-latin-essential-legends.test.mjs tests/e2e/atlas-latin-workspace-navigation.test.mjs tests/e2e/atlas-regional-workspace-navigation.test.mjs tests/e2e/atlas-latin-forestry-workspace.test.mjs
+      - run: node --test tests/e2e/atlas-latin-population.test.mjs tests/e2e/atlas-latin-essential-legends.test.mjs tests/e2e/atlas-latin-workspace-navigation.test.mjs tests/e2e/atlas-regional-workspace-navigation.test.mjs tests/e2e/atlas-latin-forestry-workspace.test.mjs tests/e2e/atlas-latin-nature-reading.test.mjs
       - name: Capture and check exact head
-        run: node scripts/verify-latin-reading-pc.mjs
+        run: node scripts/verify-latin-culture-pc.mjs
         env:
           LATIN_READING_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
           LATIN_READING_OUTPUT: ${{ runner.temp }}/latin-reading-review/after
+      - name: Capture natural-environment readings at the exact head
+        run: node scripts/verify-latin-nature-reading-pc.mjs
+        env:
+          LATIN_READING_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+          LATIN_READING_OUTPUT: ${{ runner.temp }}/latin-reading-review/nature-after
       - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.base.sha }}
           path: .review-baseline
           persist-credentials: false
-      - name: Capture PR316 dependency at matching viewport and scroll
+      - name: Capture current main at matching viewport and scroll
         working-directory: .review-baseline
         run: |
           npm ci --no-audit --no-fund
           npm run build
-          node "$GITHUB_WORKSPACE/scripts/verify-latin-reading-pc.mjs"
+          node "$GITHUB_WORKSPACE/scripts/verify-latin-culture-pc.mjs"
         env:
           LATIN_READING_BASELINE: '1'
           LATIN_READING_OUTPUT: ${{ runner.temp }}/latin-reading-review/before
-      - name: Confirm nature and pending industry stay unchanged
+      - name: Capture current main natural-environment readings at matching viewport and scroll
+        working-directory: .review-baseline
+        run: node "$GITHUB_WORKSPACE/scripts/verify-latin-nature-reading-pc.mjs"
+        env:
+          LATIN_READING_BASELINE: '1'
+          LATIN_READING_OUTPUT: ${{ runner.temp }}/latin-reading-review/nature-before
+      - name: Confirm published farming and forestry geometry stay unchanged
         run: |
           node --input-type=module <<'JS'
           import assert from 'node:assert/strict';

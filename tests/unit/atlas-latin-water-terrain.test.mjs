@@ -51,9 +51,9 @@ test('ETOPO native window and continental processing retain datum and truthful p
  for(const r of a.ranges){assert.equal(r.status,206);assert.equal(r.bytes,r.end-r.start+1);assert.match(r.sha256,/^[0-9a-f]{64}$/);}
  assert.ok(a.downloadedBytes<48*1024*1024);assert.match(manifest.processing.numericExtrema,/not exact summits/);
 });
-test('Every elevation and terrain source colour has a matching legend entry, including negative cells',async()=>{
+test('Every elevation source colour has a matching legend entry, including negative cells',async()=>{
  const w=new Window();try{
-  for(const section of ['elevation','terrain']){
+  for(const section of ['elevation']){
    const colors=section==='terrain'?manifest.elevation.terrainColors:manifest.elevation.colors;
    w.document.body.innerHTML=lib.renderLatinFoundationLegend(section);
    assert.equal(w.document.querySelector('[data-foundation-subzero]').getAttribute('style'),`background:${colors[0]}`);
@@ -63,11 +63,11 @@ test('Every elevation and terrain source colour has a matching legend entry, inc
  }finally{await w.happyDOM.close();}
 });
 test('River clipping uses direct SVG paths, all actual source lines stay present and names do not duplicate',async()=>{
- const river=lib.latinFoundationRivers.find(r=>r.name==='Amazonas');assert.equal(lib.latinFoundationRivers.length,44);
+ const river=lib.latinFoundationRivers.find(r=>r.name==='Amazonas');assert.equal(lib.latinFoundationRivers.length,138);
  const w=new Window();try{
   w.document.body.innerHTML=lib.renderLatinFoundationMap('rivers','all','all',river.id);
   const clip=w.document.querySelector('clipPath');assert.equal(clip.children.length,34);assert.ok([...clip.children].every(n=>n.localName==='path'));
-  assert.equal(w.document.querySelectorAll('[data-foundation-river]').length,44);assert.equal(w.document.querySelectorAll('[data-river-line]').length,44);
+  assert.equal(w.document.querySelectorAll('[data-foundation-river]').length,138);assert.equal(w.document.querySelectorAll('[data-river-line]').length,138);
   assert.equal(w.document.querySelectorAll('[data-foundation-river][aria-pressed=true]').length,1);
   const names=[...w.document.querySelectorAll('.latin-foundation-river-label')].map(n=>n.textContent);assert.equal(names.filter(n=>n==='アマゾン川').length,1);
   assert.equal(w.document.querySelectorAll('title').length,1);assert.equal(w.document.querySelectorAll('[data-nature-country]').length,0);

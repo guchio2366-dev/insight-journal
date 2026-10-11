@@ -164,7 +164,7 @@ test('Latin agriculture: selection, fallback, named return and history/refresh r
  const q=clientFixture(window);Object.assign(globalThis,{window,document:window.document,Element:window.Element,SVGElement:window.SVGElement});
  try{
   const client=await module('src/scripts/atlas-latin-agriculture.ts');
-  const article=window.document.querySelector('article');assert.equal(article.dataset.latinAgricultureReady,'true');
+  const article=window.document.querySelector('article');assert.equal(article.dataset.latinAgricultureReady,'true');assert.match(q('stat-rows').closest('table').querySelector('thead').textContent,/地図：アラビカ収穫面積 ha（2020）.*統計：生豆・全品種の生産量 t（2024）/);
   assert.equal(q('place').value,'HND');assert.equal(q('scope').value,'central');assert.equal(q('only').checked,true);assert.equal(q('normal-container').hidden,true);
   assert.equal(new URL(window.location.href).searchParams.get('campaign'),'retained');
   q('fallback').click();assert.equal(q('fallback-container').hidden,true);assert.equal(q('normal-container').hidden,false);

@@ -1,0 +1,217 @@
+{
+  "schemaVersion": 1,
+  "sourceGrid": "/assets/atlas/latin-america-climate-v1/latin-america.grid.json",
+  "sourceGridSha256": "e0efa44e94a0a65b7a0ffd302ef8a25fb630f7e9be2c62d6c3245b5e6d01b2e9",
+  "period": "1991–2020",
+  "method": "Containment in the adopted EPSG:3857 pixel-centre raster; floor of normalized x / north-origin y. No nearest nonmissing substitution. The containing raster cell is not the station classification or a city-wide value.",
+  "records": [
+    {
+      "cityId": "havana",
+      "stationId": "78325",
+      "coordinate": [
+        -82.35,
+        23.17
+      ],
+      "column": 106,
+      "row": 53,
+      "sourceClassId": 0,
+      "code": null,
+      "name": null
+    },
+    {
+      "cityId": "kingston",
+      "stationId": "78397",
+      "coordinate": [
+        -76.78,
+        17.93
+      ],
+      "column": 162,
+      "row": 109,
+      "sourceClassId": 2,
+      "code": "Am",
+      "name": "熱帯モンスーン気候"
+    },
+    {
+      "cityId": "belize",
+      "stationId": "78583",
+      "coordinate": [
+        -88.3,
+        17.53
+      ],
+      "column": 47,
+      "row": 113,
+      "sourceClassId": 2,
+      "code": "Am",
+      "name": "熱帯モンスーン気候"
+    },
+    {
+      "cityId": "san-jose",
+      "stationId": "78762",
+      "coordinate": [
+        -84.18,
+        9.98
+      ],
+      "column": 88,
+      "row": 191,
+      "sourceClassId": 2,
+      "code": "Am",
+      "name": "熱帯モンスーン気候"
+    },
+    {
+      "cityId": "manaus",
+      "stationId": "82331",
+      "coordinate": [
+        -60.02,
+        -3.13
+      ],
+      "column": 329,
+      "row": 323,
+      "sourceClassId": 1,
+      "code": "Af",
+      "name": "熱帯雨林気候"
+    },
+    {
+      "cityId": "brasilia",
+      "stationId": "83377",
+      "coordinate": [
+        -47.93,
+        -15.78
+      ],
+      "column": 450,
+      "row": 451,
+      "sourceClassId": 3,
+      "code": "Aw",
+      "name": "サバナ気候"
+    },
+    {
+      "cityId": "sao-paulo",
+      "stationId": "83781",
+      "coordinate": [
+        -46.62,
+        -23.5
+      ],
+      "column": 463,
+      "row": 533,
+      "sourceClassId": 14,
+      "code": "Cfa",
+      "name": "温暖湿潤気候"
+    },
+    {
+      "cityId": "recife",
+      "stationId": "82900",
+      "coordinate": [
+        -34.92,
+        -8.05
+      ],
+      "column": 580,
+      "row": 372,
+      "sourceClassId": 2,
+      "code": "Am",
+      "name": "熱帯モンスーン気候"
+    },
+    {
+      "cityId": "lima",
+      "stationId": "84628",
+      "coordinate": [
+        -77.12,
+        -12.02
+      ],
+      "column": 158,
+      "row": 413,
+      "sourceClassId": 4,
+      "code": "BWh",
+      "name": "高温の砂漠気候"
+    },
+    {
+      "cityId": "bogota",
+      "stationId": "80222",
+      "coordinate": [
+        -74.15,
+        4.7
+      ],
+      "column": 188,
+      "row": 244,
+      "sourceClassId": 15,
+      "code": "Cfb",
+      "name": "西岸海洋性気候"
+    },
+    {
+      "cityId": "buenos-aires",
+      "stationId": "87585",
+      "coordinate": [
+        -58.48,
+        -34.58
+      ],
+      "column": 345,
+      "row": 660,
+      "sourceClassId": 14,
+      "code": "Cfa",
+      "name": "温暖湿潤気候"
+    },
+    {
+      "cityId": "santiago",
+      "stationId": "85577",
+      "coordinate": [
+        -70.67,
+        -33.43
+      ],
+      "column": 223,
+      "row": 647,
+      "sourceClassId": 7,
+      "code": "BSk",
+      "name": "低温のステップ気候"
+    },
+    {
+      "cityId": "la-paz",
+      "stationId": "85201",
+      "coordinate": [
+        -68.18,
+        -16.52
+      ],
+      "column": 248,
+      "row": 459,
+      "sourceClassId": 29,
+      "code": "ET",
+      "name": "ツンドラ気候"
+    },
+    {
+      "cityId": "quito-izobamba",
+      "stationId": "84088",
+      "coordinate": [
+        -78.55,
+        -0.37
+      ],
+      "column": 144,
+      "row": 295,
+      "sourceClassId": 15,
+      "code": "Cfb",
+      "name": "西岸海洋性気候"
+    },
+    {
+      "cityId": "punta-arenas",
+      "stationId": "85934",
+      "coordinate": [
+        -70.83,
+        -53
+      ],
+      "column": 221,
+      "row": 919,
+      "sourceClassId": 0,
+      "code": null,
+      "name": null
+    },
+    {
+      "cityId": "montevideo",
+      "stationId": "86580",
+      "coordinate": [
+        -56,
+        -34.83
+      ],
+      "column": 370,
+      "row": 663,
+      "sourceClassId": 14,
+      "code": "Cfa",
+      "name": "温暖湿潤気候"
+    }
+  ]
+}
