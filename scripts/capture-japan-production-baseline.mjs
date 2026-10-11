@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
 import {chromium} from 'playwright';
-const site='https://guchio2366-dev.github.io/insight-journal';
+const site='https://guchio2366-dev.github.io';
 const output='review-artifacts/japan';
 await mkdir(output,{recursive:true});
 const report={kind:'production-baseline',status:'running',viewport:{width:1920,height:1080},dpr:1,browserZoomPercent:100,chromiumSandbox:true,release:null,images:[],checks:[],errors:[],console:[]};
