@@ -133,6 +133,7 @@ export function initCanadaNature(root:HTMLElement){
   if(landformText)landformText.textContent=landform?.description??'西部の山地、中央の平原、東部の盾状地を比較します。地図か凡例で地域を選ぶと、その範囲と説明が対応します。';
   const cityList=root.querySelector<HTMLElement>('.canada-city-list');if(cityList)cityList.hidden=classifiedClimate||state.view==='water'||state.view==='landform'||state.view==='elevation';
   $('[data-canada-water-controls]').hidden=state.view!=='water';
+  const waterSelection=root.querySelector<HTMLElement>('[data-canada-water-selection]');if(waterSelection)waterSelection.hidden=state.view!=='water'||!state.water;
   const group=$<SVGGElement>('[data-canada-water-layers]');group.setAttribute('display',state.view==='water'?'':'none');group.removeAttribute('hidden');
   $<HTMLSelectElement>('[data-canada-water]').value=state.water??'';
   $<HTMLInputElement>('[data-canada-only]').checked=state.only;
