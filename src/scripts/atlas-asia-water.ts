@@ -54,14 +54,15 @@ export function createAsiaWater(root:HTMLElement,config:Config,getState:()=>Asia
   for(const r of waterScenes.filter(r=>r.region===config.regionId&&(!state.place||state.place===r.country)))s.append(option(r.name,r.id));s.value=scene()?.id??'';
   const input=$<HTMLSelectElement>('[data-hydrology-detail]');input.replaceChildren(option('選択を解除する',''));
   $('[data-hydrology-detail-label]').hidden=t==='precipitation';
-  const records=(datasets.get(t)?.records??[]).filter(r=>!state.place||r.countries.includes(state.place)).sort((a,b)=>('areaKm2' in b?b.areaKm2:0)-('areaKm2' in a?a.areaKm2:0));
-  const primary=t==='basins'?records.filter(r=>asiaWaterFocus[config.regionId].some(f=>f.id===r.id)):records;
-  const shown=primary.slice(0,100),selected=detail();if(selected&&!shown.some(r=>r.id===selected.id))shown.unshift(selected);
+  const scopedCountries=config.focusId?new Set(config.countries.map(country=>country.code)):null;
+  const records=(datasets.get(t)?.records??[]).filter(r=>(!scopedCountries||r.countries.some(code=>scopedCountries.has(code)))&&(!state.place||r.countries.includes(state.place))).sort((a,b)=>('areaKm2' in b?b.areaKm2:0)-('areaKm2' in a?a.areaKm2:0));
+  const primary=t==='basins'&&!config.focusId?records.filter(r=>asiaWaterFocus[config.regionId].some(f=>f.id===r.id)):records;
+  const shown=config.focusId?primary:primary.slice(0,100),selected=detail();if(selected&&!shown.some(r=>r.id===selected.id))shown.unshift(selected);
   for(const r of shown)input.append(option(('name' in r?basinName(r):groundwaterClasses[r.class].type+'・涵養'+groundwaterClasses[r.class].recharge+' mm/年')+' · '+names(r.countries)+' · '+r.sourceId,r.id));
   input.value=selected?.id??'';
   $('[data-hydrology-detail-label]').hidden=t==='precipitation';
   $('[data-hydrology-picker-note]').hidden=true;
-  $('[data-hydrology-picker-note]').textContent=t==='precipitation'||!datasets.has(t)?'':`選んだ国・地域に交わる${records.length}区域を収録しています。一覧には${Math.min(100,records.length)}区域${shown.length>100?'と現在の選択':''}を示し、地図では全区域を選べます。${t==='basins'?'一覧は流域面積の大きい順です。':''}`;
+  $('[data-hydrology-picker-note]').textContent=t==='precipitation'||!datasets.has(t)?'':config.focusId?`この地域・選んだ国に交わる${records.length}区域を一覧と地図から選べます。`:`選んだ国・地域に交わる${records.length}区域を収録しています。一覧には${Math.min(100,records.length)}区域${shown.length>100?'と現在の選択':''}を示し、地図では全区域を選べます。${t==='basins'?'一覧は流域面積の大きい順です。':''}`;
  }
  function legend(t:WaterTopic){
   const content=$('[data-hydrology-scale]');content.replaceChildren();$('[data-hydrology-legend-title]').textContent=waterTopics[t].title;

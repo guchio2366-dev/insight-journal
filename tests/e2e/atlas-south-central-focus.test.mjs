@@ -101,6 +101,11 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    const farmChoices=await page.locator('[data-farm-choice]').evaluateAll(nodes=>nodes.map(n=>n.dataset.farmChoice));
    assert.equal(farmChoices.includes(region==='central-asia'?'rice':'tea'),region==='south-asia');
    await capture(`${region}-agriculture`);
+   await page.locator('[data-farming-topic]').selectOption('forest');
+   await page.locator('[data-country-select]').selectOption(region==='south-asia'?'IND':'KAZ');
+   await page.waitForFunction(()=>document.querySelector('[data-farming-statistics-tables]')?.textContent?.includes('燃料材の生産量'));
+   assert.match(await page.locator('[data-farming-statistics-tables]').textContent(),/産業用丸太の生産量/);
+   await capture(`${region}-forest-use`);
    await page.goto(`${url}/atlas/asia/${region}/nature/?topic=terrain`,{waitUntil:'domcontentloaded'});
    await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.contourBandStatus==='ready');
    await capture(`${region}-terrain`);
