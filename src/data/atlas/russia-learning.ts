@@ -184,7 +184,7 @@ export function renderRussiaScene(layer:RussiaLayer,state:RussiaState,sceneId='p
   const regionMarkers=(layer.field==='agriculture'||layer.kind==='places'?[]:russiaRegions.filter(r=>state.scope==='all'||(state.scope==='region'?r.code===state.place:getRussiaTheme(state).regionCodes.includes(r.code)))).map(r=>{
    const [x,y]=projectRussia(r.label);if(!inFrame([x,y]))return '';
    // Keep selection labels above the nearby city and industry annotations; the geographic dot stays fixed.
-   const gaps=layer.kind==='places'?{west:76,siberia:64,'far-east':24}:layer.id==='density'||layer.kind==='cities'?{west:44,siberia:8,'far-east':38}:{west:24,siberia:8,'far-east':24};
+   const gaps=layer.kind==='places'?{west:76,siberia:64,'far-east':24}:layer.kind==='rivers'?{west:24,siberia:72,'far-east':24}:layer.id==='density'||layer.kind==='cities'?{west:44,siberia:8,'far-east':38}:{west:24,siberia:8,'far-east':24};
    const farming=layer.field==='agriculture',width=(r.name.length*14+(farming?20:28))*scale,height=(farming?28:44)*scale,hitHeight=44*scale,gap=gaps[r.code as keyof typeof gaps]*scale;
    const left=Math.max(frame[0]+4*scale,Math.min(x-width/2,frame[0]+frame[2]-width-4*scale));
    let top=Math.max(frame[1]+4*scale,y-height-gap);

@@ -97,6 +97,11 @@ try{
     await host.locator('[data-layer]').selectOption('rivers');await ready(region);
     assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
     assert.equal(await map.locator('[data-river-name]').count(),region==='russia'?5:3);
+    if(region==='russia'&&width===1920){
+     const riverName=await map.locator('[data-river-name="Yenisey"] text').boundingBox();
+     const regionLabel=await map.locator('[data-region-marker][data-map-place="siberia"] .russia-region-marker-label').boundingBox();
+     assert.ok(riverName.x+riverName.width<=regionLabel.x||regionLabel.x+regionLabel.width<=riverName.x||riverName.y+riverName.height<=regionLabel.y||regionLabel.y+regionLabel.height<=riverName.y,'Siberia selector does not cover the Yenisey name');
+    }
     assert.match(await host.locator('[data-primary-unit]').textContent(),/流向は示さない/);
     assert.match(await host.locator('[data-coverage]').textContent(),/流向・河口/);
     await shot(`${region}-nature-${width}-rivers`);
