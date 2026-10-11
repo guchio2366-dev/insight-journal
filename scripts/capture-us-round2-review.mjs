@@ -37,7 +37,7 @@ try{
    if(target==='build'&&name==='religion'){
     assert.match(await page.locator('[data-pop-map-note]').textContent(),/PRRI 2023/);
     assert.equal(await page.locator('[data-pop-religion-concentrations] table').count(),2);
-    assert.equal(await page.evaluate(()=>{const ny=document.querySelector('[data-pop-city-markers] [data-pop-city=newyork]').getBoundingClientRect();return [...document.querySelectorAll('[data-pop-religion-markers] .atlas-nature-label:not([hidden])')].some(n=>{const b=n.getBoundingClientRect();return ny.left<b.right&&ny.right>b.left&&ny.top<b.bottom&&ny.bottom>b.top;});}),false,'religion reference labels must leave New York readable');
+    assert.equal(await page.evaluate(()=>{const ny=document.querySelector('[data-pop-city-markers] [data-pop-city="new-york"]').getBoundingClientRect();return [...document.querySelectorAll('[data-pop-religion-markers] .atlas-nature-label:not([hidden])')].some(n=>{const b=n.getBoundingClientRect();return ny.left<b.right&&ny.right>b.left&&ny.top<b.bottom&&ny.bottom>b.top;});}),false,'religion reference labels must leave New York readable');
    }
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
    await page.screenshot({path:resolve(out,`${target}-${name}.jpg`),type:'jpeg',quality:85});
