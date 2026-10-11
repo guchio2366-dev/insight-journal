@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'scripts/verify-integrated-maps-pc.mjs'
+      - 'scripts/verify-us-religion-paint.mjs'
       - '.github/workflows/integrated-maps-pc-review.yml'
   workflow_dispatch:
     inputs:
@@ -13,6 +14,10 @@ on:
         type: choice
         options: [build, production]
         default: production
+      published_sha:
+        description: Optional pinned production SHA when reviewing test-only changes before merge
+        type: string
+        default: ''
 
 permissions:
   contents: read
@@ -29,6 +34,7 @@ jobs:
     env:
       INTEGRATION_TARGET: ${{ inputs.target || 'build' }}
       INTEGRATION_EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      INTEGRATION_PUBLISHED_SHA: ${{ inputs.published_sha || '' }}
       INTEGRATION_REVIEW_LOG_IMAGES: '1'
       ASTRO_TELEMETRY_DISABLED: '1'
     steps:

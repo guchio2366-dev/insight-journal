@@ -4,6 +4,7 @@ import {resolve,extname,sep} from 'node:path';
 import {execFileSync} from 'node:child_process';
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
+import {waitForUsReligionPaint} from './verify-us-religion-paint.mjs';
 const dir=resolve('dist'),out=resolve('review-artifacts/us-round2');await mkdir(out,{recursive:true});
 const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml'};
 const server=createServer(async(req,res)=>{try{let p=resolve(dir,decodeURIComponent(new URL(req.url,'http://localhost').pathname).replace(/^\/insight-journal\//,''));if(!p.startsWith(dir+sep))throw Error('outside build');if((await stat(p)).isDirectory())p=resolve(p,'index.html');res.writeHead(200,{'Content-Type':mime[extname(p)]??'application/octet-stream'});res.end(await readFile(p));}catch{res.writeHead(404);res.end();}});
@@ -28,6 +29,7 @@ try{
     await page.waitForFunction(()=>/郡のデータ/.test(document.querySelector('[data-pop-status]')?.textContent??''));
     assert.equal(await page.locator('[data-pop-view][aria-pressed=true]').getAttribute('data-pop-view'),name==='density'?'distribution':name);
    }
+   if(name==='religion')report.operations.push({name:'religion-county-paint',target,paint:await waitForUsReligionPaint(page)});
    assert.equal(await page.locator('[data-fallback]').isVisible(),false,`${target}/${name}: actual MapLibre`);
    const frame=await page.locator('[data-map-frame]').boundingBox();
    assert.ok(frame.width>600&&frame.height>300,`${target}/${name}: readable map frame`);
