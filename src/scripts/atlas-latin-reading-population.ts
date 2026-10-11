@@ -1,6 +1,7 @@
 import {renderLatinUrbanMap,renderLatinReadingDensityMap,latinReadingDensityLegend} from '../lib/atlas-latin-reading-population';
 import {latinUrbanPopulations,latinUrbanSource} from '../data/atlas/latin-america/urban-population-2018';
 import {renderLatinCulturePatterns,renderCulturePatternLegend,culturePatternReading} from '../lib/atlas-latin-culture-patterns';
+import {geographicSelection} from '../data/atlas/latin-america/culture-geographic-distributions';
 import {majorSelection} from '../data/atlas/latin-america/culture-major-compositions';
 import {latinCultureGroups,latinCultureRegions,latinCultureNational,latinCultureOverview,latinCultureCoverage,type LatinCultureSection} from '../data/atlas/latin-america/culture-reading';
 import {latinCultureSupplementReading} from '../lib/atlas-latin-culture-supplement';
@@ -29,16 +30,16 @@ export function initLatinReadingPopulation(root:HTMLElement){
    const kind=section as LatinCultureSection,groups=latinCultureGroups[kind],host=root.querySelector<HTMLElement>(`[data-lc-map="${section}"]`)!;
    const supplement=kind==='ethnicity'?latinCultureSupplementReading(choice):null;
    const [regionId,groupId]=choice.split(':'),region=latinCultureRegions.find(r=>r.id===regionId),index=groups.findIndex(g=>g.id===groupId),valid=(region||regionId==='PAN'&&kind==='ethnicity')&&index>=0;
-   const major=majorSelection(kind,choice);if(!valid&&!supplement&&!major)choice='';if(major?.kind!=='distribution')cultureOnly=false;
+   const major=majorSelection(kind,choice)??geographicSelection(kind,choice)??(kind==='religion'&&choice==='distribution:moravian'?{kind:'distribution',id:'moravian'}:undefined);if(!valid&&!supplement&&!major)choice='';if(major?.kind!=='distribution')cultureOnly=false;
    host.innerHTML=renderLatinCulturePatterns(kind,scope,choice,cultureOnly);initLatinMapCamera(host);
    const reading=culturePatternReading(kind,choice,cultureOnly);
-   q('map-heading').textContent=kind==='ethnicity'?'民族・人種の主要構成を一枚で読む':'宗教の主要構成を一枚で読む';
+   q('map-heading').textContent=kind==='ethnicity'?'民族・人種の地域分布を一枚で読む':'宗教の地域分布を一枚で読む';
    heading.textContent=supplement?supplement.title:valid?`${region?.name??'パナマ全国'}：${groups[index].name}`:reading.title;
    overview.textContent=supplement?supplement.overview:valid?`${region?.name??'パナマ全国'}の公表人数は${(region?(kind==='ethnicity'?region.identity:region.religion)[index]:latinCultureNational.ethnicity[1].values[index]).toLocaleString('ja-JP')}人です。${region?'チリ2024年・州全体の集計':'パナマ2023年・全国の別設問指標'}。`:reading.overview;
    const selection=supplement?latinCultureSupplementSelection(choice):null;
    body.innerHTML=selection?`<h3>解説：資料の設問と範囲を確かめる</h3><p>${escape(selection.data.definition)}</p><p>${escape(selection.data.denominator)}</p><p>全国・行政区分の値から、民族の居住域を描いていません。</p><p><a href="#latin-culture-statistics">詳しい統計は地図下へ</a> · <a href="${selection.data.termsUrl}">${escape(selection.data.terms)}</a></p>`:valid?`<h3>解説：以前の統計選択を読む</h3><p>${escape(latinCultureOverview[kind].explanation)}</p><p><a href="#latin-culture-statistics">原表と利用条件は地図下へ</a></p>`:reading.body;
    legend.innerHTML=renderCulturePatternLegend(kind,choice,scope,cultureOnly);
-   q('status').textContent=kind==='ethnicity'?'19国の全国構成。2011年調査＋2012–22年の国勢調査。年・設問が異なり、2026年の現在値ではありません。':'20国・地域の全国構成。Pew2013–14年成人調査＋ガイアナ・スリナム2012年国勢調査。現在値ではありません。';
+   q('status').textContent=kind==='ethnicity'?'行政区別の公表値＋地理記述の概略。2012–23年、2026年現在値ではありません。民族は10%以上を表示。':'州・地区の所属を同時表示。2005–24年、現在値ではありません。宗教は5%以上。年齢・元教派は選択地域の右欄へ。';
    for(const table of root.querySelectorAll<HTMLElement>('[data-lc-supplement-source]')){
     const country=table.dataset.lcSupplementSource!;const detail=table.querySelector<HTMLElement>('[data-lc-supplement-detail]');if(detail)detail.innerHTML=latinCultureSupplementReading(choice.startsWith(country+':')?choice:country+':national')!.body;
     if(selection&&selection.data.country===country)(table as HTMLDetailsElement).open=true;

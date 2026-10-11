@@ -17,6 +17,31 @@ concurrency:
   group: latin-reading-review-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 jobs:
+  source-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - name: Install ordinary PDF readers
+        run: |
+          if ! command -v pdftotext >/dev/null || ! command -v pdftoppm >/dev/null; then
+            sudo apt-get update -o APT::Update::Error-Mode=any
+            sudo apt-get install --yes --no-install-recommends poppler-utils
+          fi
+      - name: Read original culture sources for review
+        run: python3 scripts/verify-latin-culture-sources.py
+        env:
+          LATIN_CULTURE_SOURCE_OUTPUT: ${{ runner.temp }}/latin-culture-source-originals
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: latin-culture-source-originals-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/latin-culture-source-originals
+          retention-days: 7
+          if-no-files-found: error
   review:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -41,14 +66,6 @@ jobs:
             sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
           fi
           test -n "$(fc-list ':lang=ja' family)"
-          if ! command -v pdftotext >/dev/null || ! command -v pdftoppm >/dev/null; then
-            sudo apt-get update -o APT::Update::Error-Mode=any
-            sudo apt-get install --yes --no-install-recommends poppler-utils
-          fi
-      - name: Read original culture sources for review
-        run: python3 scripts/verify-latin-culture-sources.py
-        env:
-          LATIN_CULTURE_SOURCE_OUTPUT: ${{ runner.temp }}/latin-reading-review/source-originals
       - run: npm ci --no-audit --no-fund
       - run: node --test tests/unit/atlas-latin-reading.test.mjs tests/unit/atlas-latin-culture-patterns.test.mjs tests/unit/atlas-latin-agriculture.test.mjs
       - run: npm run build

@@ -277,3 +277,6 @@
 .latin-culture-definition{font-size:13px;color:#586e64}
 .latin-culture-citations{font-size:12px}
 @media(min-width:960px){.latin-workspace:is([data-latin-active-section=ethnicity],[data-latin-active-section=religion]) .latin-map-column .lp-map{height:calc(100dvh - 469px)!important}}
+
+.latin-major-map [data-lc-region]{cursor:pointer}
+.latin-major-map [data-lc-region]:focus-visible{outline:3px solid #a64e2a}

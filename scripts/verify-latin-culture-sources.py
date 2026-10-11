@@ -17,11 +17,8 @@ def fetch(source):
         text_path = document.with_suffix('.txt')
         subprocess.run(['pdftotext', '-layout', str(document), str(text_path)], check=True)
         pages = text_path.read_text().split('\f')
-        if source['id'] == 'peru-profile':
-            selected = [i + 1 for i, page in enumerate(pages) if re.search(r'CUADRO\s+N[^\d\n]{0,5}2\.(22|71)\b', page, re.I) or ('Mestizo' in page and 'San Martín' in page and 'Cajamarca' in page)]
-            item['pages'] = selected
-            for number in selected:
-                print('LATIN_SOURCE_TEXT ' + json.dumps({'id': source['id'], 'page': number, 'text': pages[number - 1]}, ensure_ascii=False))
+        for number in item['pages']:
+            print('LATIN_SOURCE_TEXT ' + json.dumps({'id': source['id'], 'page': number, 'text': pages[number - 1]}, ensure_ascii=False))
         item['previews'] = []
         for number in item['pages']:
             prefix = root / (source['id'] + '-' + str(number))
