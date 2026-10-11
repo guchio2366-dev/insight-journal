@@ -1,8 +1,9 @@
-import {containedMapBox,layoutNatureLabels,leaderEnd,projectNatureFallback,type Box,type Point,type ProtectedLine} from '../lib/atlas-nature-labels';
+import {containedMapBox,layoutNatureLabels,leaderEnd,projectNatureFallback,type Box,type Point,type ProtectedLine,type LabelPlacement,type LabelInput} from '../lib/atlas-nature-labels';
 import {layoutClimateCodes,type ClimateCodeLabel} from '../lib/atlas-climate-code-labels';
 
 type Entry={id:string;name:string;coordinate:[number,number];mode:'climate'|'landform'|'water'|'population'|'precipitation'|'basins'};
-type Callbacks={active:()=>boolean;mode:()=>string;zoom?:()=>number;project:()=>((p:[number,number])=>Point)|null;select:(entry:Entry,trigger:HTMLButtonElement)=>void;placed:()=>void;holder?:HTMLElement;attribute?:string;controls?:string;obstacleSelector?:string;fallbackBox?:(imageBox:Box)=>Box;fallbackProject?:(coordinate:readonly number[],box:Box)=>Point;protectedLines?:(project:(p:[number,number])=>Point)=>ProtectedLine[]};
+type LayoutDiagnostics={coordinateSpace:'map-frame-content-box';origin:Point;bounds:Box;inputs:LabelInput[];obstacles:Box[];placed:LabelPlacement[]};
+type Callbacks={active:()=>boolean;mode:()=>string;zoom?:()=>number;project:()=>((p:[number,number])=>Point)|null;select:(entry:Entry,trigger:HTMLButtonElement)=>void;placed:()=>void;holder?:HTMLElement;attribute?:string;controls?:string;obstacleSelector?:string;obstacles?:()=>readonly Box[];diagnostics?:(layout:LayoutDiagnostics)=>void;fallbackBox?:(imageBox:Box)=>Box;fallbackProject?:(coordinate:readonly number[],box:Box)=>Point;protectedLines?:(project:(p:[number,number])=>Point)=>ProtectedLine[]};
 
 /** Creates a fixed set of buttons once; only placement and state change. */
 export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Callbacks,codeEntries:ClimateCodeLabel[]=[]){
@@ -44,14 +45,14 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
     return {left:r.left-b.left,top:r.top-b.top,right:r.right-b.left,bottom:r.bottom-b.top};
   }
   function fallbackBox():Box {return callbacks.fallbackBox?callbacks.fallbackBox(localBox(image)):containedMapBox(localBox(image));}
-  let queued=0;
+  let queued=0,committed:LabelPlacement[]=[];
   function render(){
     queued=0;holder.hidden=!callbacks.active()||!['climate','landform','water','population','precipitation','basins'].includes(callbacks.mode());
-    if(holder.hidden)return;
+    if(holder.hidden){committed=[];return;}
     const project=callbacks.project(),bounds:Box=project?{left:0,top:0,right:frame.clientWidth,bottom:frame.clientHeight}:fallbackBox();
-    if(bounds.right<=bounds.left||bounds.bottom<=bounds.top)return;
+    if(bounds.right<=bounds.left||bounds.bottom<=bounds.top){committed=[];return;}
     const obstacleSelector='.atlas-map-tools:not([hidden]),[data-layer-caption]'+(callbacks.obstacleSelector?','+callbacks.obstacleSelector:'');
-    const obstacles=[...root.querySelectorAll<HTMLElement>(obstacleSelector)].filter(node=>!holder.contains(node)).map(localBox).filter(r=>r.right>r.left&&r.bottom>r.top);
+    const obstacles=[...[...root.querySelectorAll<HTMLElement>(obstacleSelector)].filter(node=>!holder.contains(node)).map(localBox),...(callbacks.obstacles?.()??[])].filter(r=>r.right>r.left&&r.bottom>r.top);
     const inputs=nodes.filter(({entry})=>entry.mode===callbacks.mode()).map(({entry,button})=>{
       button.hidden=false;const anchor=project?project(entry.coordinate):(callbacks.fallbackProject??projectNatureFallback)(entry.coordinate,bounds);
       return {id:entry.id,anchor,width:button.offsetWidth||entry.name.length*12+14,height:button.offsetHeight||24};
@@ -78,6 +79,14 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
       const end=leaderEnd(box.anchor,box);line.setAttribute('x1',String(box.anchor.x));line.setAttribute('y1',String(box.anchor.y));line.setAttribute('x2',String(end.x));line.setAttribute('y2',String(end.y));
       dot.setAttribute('cx',String(box.anchor.x));dot.setAttribute('cy',String(box.anchor.y));
     }
+    // Publish the committed city rectangles in the same content-box coordinate
+    // system used by the next label layout, without re-querying CSS selectors.
+    const frameRect=frame.getBoundingClientRect(),origin={x:frameRect.left+frame.clientLeft,y:frameRect.top+frame.clientTop};
+    committed=placed.map(box=>{
+      const r=nodes.find(n=>n.entry.id===box.id)!.button.getBoundingClientRect();
+      return r.width>0&&r.height>0?{...box,left:r.left-origin.x,top:r.top-origin.y,right:r.right-origin.x,bottom:r.bottom-origin.y}:box;
+    });
+    callbacks.diagnostics?.({coordinateSpace:'map-frame-content-box',origin,bounds:layoutBounds,inputs,obstacles,placed:committed});
     if(codeNodes.length){
     const geographic=[...root.querySelectorAll<HTMLElement>('.atlas-geolabel:not([hidden])')].map(node=>{
       const r=node.getBoundingClientRect(),f=frame.getBoundingClientRect();return {left:r.left-f.left,right:r.right-f.left,top:r.top-f.top,bottom:r.bottom-f.top};
@@ -93,5 +102,5 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
   }
   function schedule(){if(!queued)queued=requestAnimationFrame(render);}
   new ResizeObserver(schedule).observe(frame);image.addEventListener('load',schedule);document.fonts?.ready.then(schedule);
-  return {schedule,fallbackBox,sync:(selected:string|null)=>nodes.forEach(({entry,button,dot})=>{const active=entry.id===selected;button.setAttribute('aria-pressed',String(active));dot.classList.toggle('is-selected',active);})};
+  return {schedule,fallbackBox,placements:()=>committed.map(box=>({...box})),sync:(selected:string|null)=>nodes.forEach(({entry,button,dot})=>{const active=entry.id===selected;button.setAttribute('aria-pressed',String(active));dot.classList.toggle('is-selected',active);})};
 }

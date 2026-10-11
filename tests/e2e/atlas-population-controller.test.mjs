@@ -42,7 +42,7 @@ async function setup(query='',fail=false,field='population'){
 const pick=(window,id)=>{window.__map.queryRenderedFeatures=()=>[{properties:{id}}];window.__map.events.click[0]({point:{x:1,y:1}});};
 const change=(window,element,value)=>{element.value=value;element.dispatchEvent(new window.Event('change'));};
 
-test('後から移動した都市札の実矩形を使い、宗教札を再配置する',async()=>{
+test('都市の確定矩形を宗教配置へ直接渡し、同じ座標系で衝突を避ける',async()=>{
  const {window,q}=await setup('?popView=religion');
  try{
   const proto=window.HTMLElement.prototype;
@@ -60,6 +60,11 @@ test('後から移動した都市札の実矩形を使い、宗教札を再配�
    window.__map.project=p=>({x:(p[0]+128)*10+offset,y:(52-p[1])*10});
    for(const o of [...observers].reverse())o.callback();
    await delay();await delay();await delay();
+   const layout=JSON.parse(q('[data-pop-religion-markers]').dataset.layoutDiagnostics),ny=q('[data-pop-city="new-york"]').getBoundingClientRect();
+   assert.equal(layout.coordinateSpace,'map-frame-content-box');
+   const obstacle=layout.obstacles.find(b=>b.id==='new-york');assert.ok(obstacle,'final city rectangle is passed directly to the story layout');
+   assert.equal(obstacle.left+layout.origin.x,ny.left);assert.equal(obstacle.top+layout.origin.y,ny.top);
+   for(const story of layout.placed)assert.equal(story.left<obstacle.right&&story.right>obstacle.left&&story.top<obstacle.bottom&&story.bottom>obstacle.top,false);
    assert.equal(collide(),false,'religion stories must follow the final city layout');
   }
  }finally{await window.happyDOM.close();}

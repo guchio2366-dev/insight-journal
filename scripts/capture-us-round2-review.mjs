@@ -45,7 +45,8 @@ try{
      const box=n=>{const b=n.getBoundingClientRect();return {id:n.getAttribute('data-pop-city')??n.getAttribute('data-pop-religion-marker'),text:n.textContent,left:b.left,top:b.top,right:b.right,bottom:b.bottom};};
      const ny=box(document.querySelector('[data-pop-city-markers] [data-pop-city="new-york"]'));
      const stories=[...document.querySelectorAll('[data-pop-religion-markers] .atlas-nature-label:not([hidden])')].map(box);
-     return {ny,stories,collisions:stories.map(b=>({...b,overlapWidth:Math.max(0,Math.min(ny.right,b.right)-Math.max(ny.left,b.left)),overlapHeight:Math.max(0,Math.min(ny.bottom,b.bottom)-Math.max(ny.top,b.top))})).filter(b=>b.overlapWidth>0&&b.overlapHeight>0)};
+     const layout=JSON.parse(document.querySelector('[data-pop-religion-markers]').dataset.layoutDiagnostics??'null');
+     return {ny,stories,layout,collisions:stories.map(b=>({...b,overlapWidth:Math.max(0,Math.min(ny.right,b.right)-Math.max(ny.left,b.left)),overlapHeight:Math.max(0,Math.min(ny.bottom,b.bottom)-Math.max(ny.top,b.top))})).filter(b=>b.overlapWidth>0&&b.overlapHeight>0)};
     });
     await writeFile(resolve(out,'build-religion-rectangles.json'),JSON.stringify(rectangles,null,2)+'\n');
     await page.locator('[data-pop-religion-concentrations]').evaluate(n=>n.open=true);
@@ -53,6 +54,9 @@ try{
     await page.locator('[data-pop-religion-concentrations]').evaluate(n=>n.open=false);
     assert.match(await page.locator('[data-pop-map-note]').textContent(),/PRRI 2023/);
     assert.equal(await page.locator('[data-pop-religion-concentrations] table').count(),2);
+    assert.equal(rectangles.layout.coordinateSpace,'map-frame-content-box');
+    const cityObstacle=rectangles.layout.obstacles.find(b=>b.id==='new-york');assert.ok(cityObstacle,'committed New York rectangle must be a story layout input');
+    for(const [edge,axis] of [['left','x'],['right','x'],['top','y'],['bottom','y']])assert.ok(Math.abs(cityObstacle[edge]+rectangles.layout.origin[axis]-rectangles.ny[edge])<1e-6,`New York ${edge}: same coordinate system`);
     assert.equal(rectangles.collisions.length>0,false,'religion reference labels must leave New York readable');
    }
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);

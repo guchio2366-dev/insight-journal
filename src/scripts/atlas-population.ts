@@ -44,7 +44,9 @@ export function createPopulationController(root:HTMLElement,base:string,options:
   holder:el('[data-pop-religion-markers]'),attribute:'data-pop-religion-marker',controls:'population-city-reading',
   active:()=>options.active()&&state.view==='religion',mode:()=>'population',project,
   fallbackBox:box=>populationFallbackBox(box,extent()),fallbackProject:(coordinate,box)=>projectPopulationFallback(coordinate,box,extent()),
-  obstacleSelector:'.population-city-markers .atlas-nature-label:not([hidden]),.atlas-fallback:not([hidden]) > p',select:entry=>choose('story',entry.id),placed:()=>{},
+  obstacleSelector:'.atlas-fallback:not([hidden]) > p',obstacles:()=>cityLabels.placements(),
+  diagnostics:layout=>{el('[data-pop-religion-markers]').dataset.layoutDiagnostics=JSON.stringify(layout);},
+  select:entry=>choose('story',entry.id),placed:()=>{},
  });
  for(const story of religionStories)root.querySelector('[data-pop-religion-marker="'+story.id+'"]')?.setAttribute('aria-label',story.number+' '+story.title+'の解説を開く');
  function drawMinorities(){
