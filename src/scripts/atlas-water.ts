@@ -1,13 +1,14 @@
 import {waterEditorial} from '../data/atlas/nature-editorial';
 import {renderNatureReading} from '../lib/atlas-nature-reading';
-import {precipitationBands,riverBasins,waterViewNames,type WaterView} from '../data/atlas/water-resources';
+import {usPrecipitationBands as precipitationBands,riverBasins,waterViewNames,type WaterView} from '../data/atlas/water-resources';
 import {readWaterState,writeWaterState,waterContains} from '../lib/atlas-water-state';
 import {waterGeometryLoader} from '../lib/atlas-water-geometry';
 import {createNatureLabels} from './atlas-nature-labels';
 import {unprojectNatureFallback,projectNatureFallback} from '../lib/atlas-nature-labels';
 import {cityAgricultureUrl} from '../lib/atlas-city-agriculture-link';
+import type {Point,ProtectedLine} from '../lib/atlas-nature-labels';
 
-type Callbacks={active:()=>boolean;dragged:()=>boolean;map:()=>any;project:()=>((p:[number,number])=>{x:number;y:number})|null;changed:()=>void;viewChanged:()=>void};
+type Callbacks={active:()=>boolean;dragged:()=>boolean;map:()=>any;project:()=>((p:[number,number])=>{x:number;y:number})|null;changed:()=>void;viewChanged:()=>void;protectedLines?:(project:(p:[number,number])=>Point)=>ProtectedLine[]};
 export function createWaterController(root:HTMLElement,base:string,callbacks:Callbacks){
  const q=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const assetBase=base.replace(/atlas\/north-america\/$/,'assets/atlas/water-v1/');
@@ -15,14 +16,15 @@ export function createWaterController(root:HTMLElement,base:string,callbacks:Cal
  let state=readWaterState(new URL(location.href)),data:any=null,generation=0,applied='';
  const loader=waterGeometryLoader(assetBase),holder=q('[data-water-labels]');
  const ns='http://www.w3.org/2000/svg',highlight=document.createElementNS(ns,'svg'),highlightPath=document.createElementNS(ns,'path');highlight.classList.add('atlas-water-highlight');highlight.setAttribute('aria-hidden','true');highlight.append(highlightPath);q('[data-map-frame]').append(highlight);
- const entries=[...precipitationBands.map(x=>({id:x.id,name:x.title,coordinate:[...x.anchor] as [number,number],mode:'precipitation' as const})),...riverBasins.map(x=>({id:x.id,name:x.title,coordinate:[...x.anchor] as [number,number],mode:'basins' as const}))];
- const labels=createNatureLabels(root,entries,{active:()=>active(),mode:()=>state.waterView,project:callbacks.project,select:(entry,trigger)=>select(entry.id,trigger),placed:()=>paint(),holder,attribute:'data-water-label',controls:'water-reading-title'});
+ const entries=[...precipitationBands.map(x=>({id:x.id,name:x.title,coordinate:[...x.anchor] as [number,number],mode:'precipitation' as const})),...riverBasins.map(x=>({id:x.id,name:x.id==='mississippi'?'ミシシッピ川水系':['missouri','ohio'].includes(x.id)?x.title+'（支流）':x.title,coordinate:[...x.anchor] as [number,number],mode:'basins' as const}))];
+ const labels=createNatureLabels(root,entries,{active:()=>active(),mode:()=>state.waterView,project:callbacks.project,select:(entry,trigger)=>select(entry.id,trigger),placed:()=>paint(),holder,attribute:'data-water-label',controls:'water-reading-title',protectedLines:project=>state.waterView==='basins'?callbacks.protectedLines?.(project)??[]:[]});
  const active=()=>callbacks.active()&&state.waterView!=='rivers';
  const current=()=>state.waterView==='precipitation'?state.precipBand:state.basin;
  const choices=()=>state.waterView==='precipitation'?precipitationBands:riverBasins;
  const ids=['water-fill','water-outline','water-isohyets','water-hit','water-selected'];
  function render(){
   const show=active(),map=callbacks.map();root.dataset.waterView=state.waterView;
+  map?.setLayoutProperty('water-main-rivers','visibility',show&&state.waterView==='basins'?'visible':'none');
   q('[data-water-tabs]').hidden=!callbacks.active();q('[data-water-reading]').hidden=!show;q('[data-water-key]').hidden=!show;
   root.querySelectorAll<HTMLButtonElement>('[data-water-view]').forEach(b=>{const yes=b.dataset.waterView===state.waterView;b.setAttribute('aria-selected',String(yes));b.tabIndex=yes?0:-1;});
   if(map){for(const id of ids)map.setLayoutProperty(id,'visibility',show?'visible':'none');if(show){for(const id of ['aquifers-fill','aquifers-pattern','aquifers-outline','reservoir-points','current-lines','upwelling-line','crop-context-line'])map.setLayoutProperty(id,'visibility','none');map.setLayoutProperty('relief','visibility','none');map.setFilter('water-selected',['all',['==',['get','id'],current()??'__none'],['==',['get','kind'],state.waterView==='basins'?'outline':'band']]);}}
@@ -42,7 +44,7 @@ export function createWaterController(root:HTMLElement,base:string,callbacks:Cal
   q('[data-water-note]').textContent=item?.note??'';q('[data-water-note]').hidden=!item?.note;q('[data-water-scope]').hidden=!item?.note;q('[data-water-parent]').hidden=!item?.parent;
   const credit=q('[data-water-credit]');credit.replaceChildren();if(state.waterView==='precipitation'){const a=document.createElement('a');a.href='https://prism.oregonstate.edu/';a.textContent='PRISM Group, Oregon State University';credit.append(a,' · 2026年9月15日取得');}else credit.textContent='USGS WBD · 主要7対象／その他は灰色';
   const product=q<HTMLAnchorElement>('[data-water-product]');product.hidden=!item?.product;if(item?.product){const names:Record<string,string>={corn:'とうもろこし',wheat:'小麦',rice:'稲作',specialty:'果樹・野菜'};product.textContent=names[item.product]+'の産地と水の条件を見る →';product.href=cityAgricultureUrl(writeWaterState(new URL(location.href),state),base,new URL(location.href).searchParams.get('city')??'',item.product).href;}
-  const key=q('[data-water-key]');key.replaceChildren();for(const x of choices()){const span=document.createElement('span'),i=document.createElement('i');i.style.backgroundColor=x.color;span.append(i,x.title);key.append(span);}if(state.waterView==='basins')key.append('灰色：その他・未収録');
+  const key=q('[data-water-key]');key.replaceChildren();for(const x of choices()){const span=document.createElement('span'),i=document.createElement('i');i.style.backgroundColor=x.color;span.append(i,state.waterView==='basins'?(x.id==='mississippi'?'ミシシッピ川水系（親外枠）':['missouri','ohio'].includes(x.id)?'↳ '+x.title+'（支流域）':x.title):x.title);key.append(span);}if(state.waterView==='basins')key.append('青線：主要本支流／灰色：その他・未収録');
  }
  function select(id:string,trigger?:HTMLElement){
   if(!choices().some(x=>x.id===id))return;

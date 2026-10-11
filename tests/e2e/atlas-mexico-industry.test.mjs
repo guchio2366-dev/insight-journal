@@ -294,6 +294,9 @@ test('Industry geographic labels retain all topics without duplicate state abbre
   assert.equal(points.length,10);assert.equal(visible(w.document,'primary','[data-mi-label]').length,0);
   assert.equal(q('[data-mi-map=primary]').querySelectorAll('.is-selected').length,0,'The initial overview must not invent a Coahuila selection');
   for(const point of points){assert.ok(point.querySelector('[data-mi-region-name]').textContent);assert.ok(point.querySelector('[data-mi-region-topic]').textContent);assert.ok(point.querySelector('[data-mi-region-leader]'));}
+  const construction=points.filter(point=>point.dataset.miRegionSector==='construction-real-estate');
+  assert.equal(construction.length,2);
+  for(const point of construction){assert.equal(point.querySelector('[data-mi-region-topic]').textContent,'建設・不動産');assert.match(point.getAttribute('aria-label'),/建設・不動産／需要の背景/);}
   q('[data-mi-reading-markers] [data-mi-region-option="09"][data-mi-region-sector=services]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
   assert.equal(q('[data-mi-map=primary] [data-mi-shape="09"]').classList.contains('is-selected'),true);
   q('[data-mi-only]').checked=true;q('[data-mi-only]').dispatchEvent(new w.Event('change'));

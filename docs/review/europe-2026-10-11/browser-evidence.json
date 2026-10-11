@@ -1,0 +1,74 @@
+{
+  "viewport": "1920x1080",
+  "records": [
+    {
+      "name": "agriculture",
+      "path": "agriculture/",
+      "file": "agriculture-1920x1080.png",
+      "title": "穀物・畑作の主な分布",
+      "scrollWidth": 1920,
+      "viewportWidth": 1920
+    },
+    {
+      "name": "climate",
+      "path": "nature/",
+      "file": "climate-1920x1080.png",
+      "title": "気候区分",
+      "scrollWidth": 1920,
+      "viewportWidth": 1920
+    },
+    {
+      "name": "rivers",
+      "path": "nature/?layer=water",
+      "file": "rivers-1920x1080.png",
+      "title": "河川・湖",
+      "scrollWidth": 1920,
+      "viewportWidth": 1920
+    },
+    {
+      "name": "terrain",
+      "path": "nature/?layer=terrain",
+      "file": "terrain-1920x1080.png",
+      "title": "欧州の主な地形",
+      "scrollWidth": 1920,
+      "viewportWidth": 1920
+    },
+    {
+      "name": "population",
+      "path": "population/",
+      "file": "population-1920x1080.png",
+      "title": "人口密度",
+      "scrollWidth": 1920,
+      "viewportWidth": 1920
+    },
+    {
+      "name": "ethnicity",
+      "path": "population/?layer=ethnicity",
+      "file": "ethnicity-1920x1080.png",
+      "title": "民族的帰属の地域事例",
+      "scrollWidth": 1920,
+      "viewportWidth": 1920
+    },
+    {
+      "name": "religion",
+      "path": "population/?layer=religion",
+      "file": "religion-1920x1080.png",
+      "title": "宗教の国別推計",
+      "scrollWidth": 1920,
+      "viewportWidth": 1920
+    },
+    {
+      "name": "seine-selection",
+      "title": "セーヌ川（フランス）"
+    },
+    {
+      "name": "alps-selection",
+      "title": "アルプス山脈"
+    },
+    {
+      "name": "religion-category",
+      "pressed": "true"
+    }
+  ],
+  "errors": []
+}

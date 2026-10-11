@@ -11,3 +11,22 @@ export function southCentralRainfallLegend(bands:AsiaContourBands){
  }
  return grouped.map(({color,lower,upper})=>({color,label:`${lower.toLocaleString('ja-JP')}–${upper.toLocaleString('ja-JP')}`}));
 }
+
+// Central Asia uses the same measured contours and 250 mm geometry, but a
+// regional color key. A 9,750 mm combined-region legend conceals the dry
+// lowlands and mountain margins that this focused map is meant to compare.
+export const centralRainfallStops=[
+ {lower:0,color:'#f7f4e6'},
+ {lower:250,color:'#e1e4b9'},
+ {lower:500,color:'#bad8a8'},
+ {lower:750,color:'#8acdae'},
+ {lower:1000,color:'#5dbdb2'},
+ {lower:1500,color:'#359ba9'},
+ {lower:2000,color:'#286b95'},
+] as const;
+export function centralRainfallColor(lower:number){
+ return [...centralRainfallStops].reverse().find(stop=>lower>=stop.lower)!.color;
+}
+export function centralRainfallLegend(){
+ return centralRainfallStops.map((stop,i)=>({color:stop.color,label:i===centralRainfallStops.length-1?'2,000以上':`${stop.lower.toLocaleString('ja-JP')}–${centralRainfallStops[i+1].lower.toLocaleString('ja-JP')}`}));
+}

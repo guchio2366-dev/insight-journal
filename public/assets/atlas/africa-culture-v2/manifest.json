@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "source": "https://github.com/glottolog/glottolog-cldf",
+  "sourceCommit": "072ca0d0410039fb8b779be8fc165bac575d2cda",
+  "sourceBlob": "774cbd8cb1bbdbc2eab64edf5df552b61252e876",
+  "sourceVersion": "Glottolog 5.3 (2026)",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+  "attribution": "Hammarström, Harald; Forkel, Robert; Haspelmath, Martin; Bank, Sebastian (2026). Glottolog 5.3. Max Planck Institute for Evolutionary Anthropology.",
+  "sourceCsvSha256": "1a50a393bc81568b656f9522be18aa4f80f38e94309ba6c863d583234adfbb89",
+  "count": 2222,
+  "method": "Level=language; Macroarea=Africa; finite source coordinates within [-26,-36,64,38]; exclude Bookkeeping, Unattested and Sign Language; retain independently classified families, isolates and Pidgin as a distinct contact-language category. Coordinates rounded to five decimal places; no invented residence areas or density weighting.",
+  "measure": "Language documentation locations, not ethnicity, speaker counts or residence boundaries.",
+  "assetSha256": "1d723bba65acaec54c738bf3f1929a9ca5b83aa551c73c0944dcda8d305e529e"
+}

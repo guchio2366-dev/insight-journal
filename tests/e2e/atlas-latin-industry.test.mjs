@@ -123,7 +123,9 @@ test('Population density and quantity source maps use the original renderer and 
 test('Panama comparison preserves the climate key and attribution, fiscal dates, transit unit and named source return',async()=>{
  const w=await page('?layer=canal&place=PAN&scope=central&only=1&from=nature&sourceLayer=climate&sourcePlace=PAN&sourceScope=central&sourceOnly=1');try{
   assert.match(q(w,'[data-industry-source-period]').textContent,/1991–2020.*0\.1.*5/);
-  assert.equal(q(w,'[data-industry-source-legend]').querySelectorAll('.latin-nature-legend>span').length,7);
+  const climateKey=q(w,'[data-industry-source-legend]');
+  assert.equal(climateKey.querySelectorAll('[data-climate-class]').length,21);
+  for(const climateClass of ['Af','Am','Aw'])assert.ok(climateKey.querySelector(`[data-climate-class="${climateClass}"]`));
   assert.equal(q(w,'[data-industry-source-legend]').querySelector('.latin-nature-period'),null);
   assert.equal(q(w,'[data-industry-source-attribution]').hidden,false);assert.match(q(w,'[data-industry-source-attribution]').textContent,/Beck.*CC BY 4\.0/);
   assert.match(q(w,'[data-industry-target-period]').textContent,/2024会計年度.*大型外航船.*回/);

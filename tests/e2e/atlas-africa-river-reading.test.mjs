@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {gunzipSync} from 'node:zlib';
+import {createHash} from 'node:crypto';
 import {Window} from 'happy-dom';
 import {initializeAfricaAtlas} from '../../src/scripts/atlas-africa.ts';
 import {africaLayerPath} from '../../src/scripts/atlas-africa-layers.ts';
@@ -9,7 +11,16 @@ import {africaRivers,africaRiverSelectedColor} from '../../src/data/atlas/africa
 
 const base='https://example.com/insight-journal/atlas/africa/';
 const initial='?field=nature&topic=water&water=river&metric=ER.H2O.INTR.PC&view=distribution&place=EGY&compare=COD&year=2022&region=all&zoom=all';
-const native=JSON.parse(readFileSync(new URL('../../public/assets/atlas/africa-water-v1/rivers.geojson',import.meta.url)));
+const assetBase=new URL('../../public/assets/atlas/africa-natural-presentation-v2/',import.meta.url);
+const manifest=JSON.parse(readFileSync(new URL('manifest.json',assetBase)));
+const riverFile=manifest.layers.rivers.file;
+const riverBytes=readFileSync(new URL(riverFile,assetBase));
+const native=JSON.parse(gunzipSync(riverBytes));
+const nativeIds=native.features.map(feature=>feature.properties.id).sort();
+const nativeById=new Map(native.features.map(feature=>[feature.properties.id,feature]));
+const sourceFeatures=id=>native.features.filter(feature=>feature.properties.riverId===id);
+const isRiverRequest=path=>path.endsWith('/'+riverFile);
+const delayedRiver={test:isRiverRequest};
 const nativePaths=new Map(native.features.map(feature=>[feature.properties.id,africaLayerPath(feature.geometry)]));
 const parameters=window=>new URL(window.location.href).searchParams;
 const wait=async(condition,message)=>{const end=Date.now()+10000;while(!condition()&&Date.now()<end)await new Promise(resolve=>setImmediate(resolve));assert.ok(condition(),message);};
@@ -50,13 +61,18 @@ function assertRiver({window,root,q},id,{ready=true}={}){
  if(!ready)return;
  assert.equal(root.dataset.actualLayer,'true');
  const all=[...root.querySelectorAll('[data-africa-layer-feature]')];
- assert.equal(all.length,90,'the complete existing collection remains visible');
- assert.equal(new Set(all.map(path=>path.dataset.africaLayerFeature)).size,90);
+ assert.equal(all.length,native.features.length,'every original NE10m feature remains visible');
+ assert.deepEqual(all.map(path=>path.dataset.africaLayerFeature).sort(),nativeIds,'no original segment may be dropped or duplicated');
  for(const path of all){assert.equal(path.getAttribute('d'),nativePaths.get(path.dataset.africaLayerFeature));assert.equal(path.style.display,'');assert.equal(path.getAttribute('fill'),'none');}
  const selected=all.filter(path=>path.classList.contains('is-selected'));
- assert.deepEqual(selected.map(path=>path.dataset.africaLayerFeature).sort(),[...river.featureIds].sort());
+ const expected=sourceFeatures(id);assert.ok(expected.length,`${id} must join to at least one real source feature`);
+ assert.deepEqual(selected.map(path=>path.dataset.africaLayerFeature).sort(),expected.map(feature=>feature.properties.id).sort(),'the riverId join selects every source feature in this water system');
+ for(const path of all)assert.equal(path.dataset.africaRiverFeature,nativeById.get(path.dataset.africaLayerFeature).properties.riverId);
  for(const path of selected){assert.equal(path.getAttribute('stroke'),africaRiverSelectedColor);assert.equal(path.getAttribute('stroke-width'),'3.2');assert.equal(path.querySelector('title').textContent,river.label);}
- for(const hit of root.querySelectorAll('[data-africa-river]')){
+ const hits=[...root.querySelectorAll('[data-africa-river-hit-feature]')];
+ assert.deepEqual(hits.map(hit=>hit.dataset.africaRiverHitFeature).sort(),nativeIds,'every source feature has its own full-shape hit target');
+ for(const hit of hits){
+  assert.equal(hit.dataset.africaRiver,nativeById.get(hit.dataset.africaRiverHitFeature).properties.riverId);
   assert.equal(hit.getAttribute('aria-pressed'),String(hit.dataset.africaRiver===id));
   assert.equal(hit.getAttribute('d'),nativePaths.get(hit.dataset.africaRiverHitFeature));
   assert.equal(hit.getAttribute('fill'),'none');assert.equal(hit.getAttribute('stroke'),'transparent');
@@ -67,14 +83,23 @@ function assertRiver({window,root,q},id,{ready=true}={}){
  assert.doesNotMatch(root.textContent,/アフリカ90河川/);
 }
 
-test('names and either native river segment select the same explanation, sources and two features while keeping all 90 lines',async()=>{
+test('the production NE10m fixture uses the manifest hash and joins all 32 original features to the 11 supported water systems',()=>{
+ assert.equal(riverFile,'major-rivers.geojson.gz');
+ assert.equal(createHash('sha256').update(riverBytes).digest('hex'),manifest.files[riverFile].sha256);
+ assert.equal(native.features.length,32);assert.equal(new Set(nativeIds).size,32);
+ assert.deepEqual([...new Set(native.features.map(feature=>feature.properties.riverId))].sort(),africaRivers.map(river=>river.id).sort());
+ for(const feature of native.features){assert.match(feature.properties.id,/^ne10-river-\d+$/);assert.equal(feature.properties.basinId,feature.properties.riverId);assert.ok(nativePaths.get(feature.properties.id));}
+ for(const id of ['nile','congo','zambezi'])assert.ok(sourceFeatures(id).length>1,`${id} retains its separate original segments`);
+});
+
+test('all names and all original river segments select the same explanation and sources while keeping every source shape',async()=>{
  await withAfricaPage(initial,context=>{
   const {window,root,q}=context;
   assert.equal(q('[data-africa-river-choice=""]').getAttribute('aria-pressed'),'true');
   assert.equal(q('[data-theme-comparison]').hidden,true);assert.equal(q('[data-theme-source]').hidden,true);
   for(const river of africaRivers){
    q(`[data-africa-river-choice="${river.id}"]`).click();assertRiver(context,river.id);
-   for(const feature of river.featureIds){
+   for(const {properties:{id:feature}} of sourceFeatures(river.id)){
     q('[data-africa-river-choice=""]').click();assert.equal(parameters(window).has('river'),false);assert.equal(root.querySelectorAll('.africa-river-path.is-selected').length,0);
     q(`[data-africa-river-hit-feature="${feature}"]`).dispatchEvent(new window.MouseEvent('click',{bubbles:true}));
     assertRiver(context,river.id);assert.equal(parameters(window).has('layerPoint'),false,'line activation must not become a country map-point selection');
@@ -130,8 +155,8 @@ test('name choices, comparison, back/forward and reset restore only the selected
 test('Enter and Space activate native river hit targets while preserving the specific segment focus',async()=>{
  await withAfricaPage(initial,context=>{
   const {window,q}=context;
-  for(const [id,key] of [['nile','Enter'],['congo',' ']]){
-   const river=africaRivers.find(row=>row.id===id),feature=river.featureIds[1],selector=`[data-africa-river-hit-feature="${feature}"]`,hit=q(selector);
+  for(const [id,key] of [['nile','Enter'],['congo',' '],['zambezi','Enter']]){
+   const river=africaRivers.find(row=>row.id===id),feature=sourceFeatures(id)[1].properties.id,selector=`[data-africa-river-hit-feature="${feature}"]`,hit=q(selector);
    assert.equal(hit.getAttribute('role'),'button');assert.equal(hit.getAttribute('tabindex'),'0');assert.equal(hit.getAttribute('aria-label'),`${river.label}を読む`);
    hit.focus();const event=new window.KeyboardEvent('keydown',{key,bubbles:true,cancelable:true});hit.dispatchEvent(event);
    assert.equal(event.defaultPrevented,true,'Space must not scroll the page');assertRiver(context,id);
@@ -148,24 +173,24 @@ test('Enter and Space activate native river hit targets while preserving the spe
 test('delayed river geometry renders the newest name selection and never reverts Congo to Nile',async()=>{
  await withAfricaPage(initial,async context=>{
   const {root,q,requests,release}=context;
-  await wait(()=>requests.some(path=>path.endsWith('/rivers.geojson')),'the real geometry request must be pending');
+  await wait(()=>requests.some(isRiverRequest),'the real geometry request must be pending');
   q('[data-africa-river-choice="nile"]').click();q('[data-africa-river-choice="congo"]').click();
   assertRiver(context,'congo',{ready:false});assert.equal(root.querySelectorAll('[data-africa-layer-feature]').length,0);assert.equal(q('[data-theme-comparison]').disabled,true);
   release();await wait(()=>root.dataset.actualLayer==='true','the delayed geometry must finish');
-  assertRiver(context,'congo');assert.equal(q('[data-theme-comparison]').disabled,false);assert.equal(requests.filter(path=>path.endsWith('/rivers.geojson')).length,1);
- },{delayMatch:/\/rivers\.geojson$/});
+  assertRiver(context,'congo');assert.equal(q('[data-theme-comparison]').disabled,false);assert.equal(requests.filter(isRiverRequest).length,1);
+ },{delayMatch:delayedRiver});
 });
 
 test('delayed river completion cannot overwrite a newer climate selection or restore stale river controls',async()=>{
  await withAfricaPage(initial,async context=>{
   const {window,root,q,requests,completed,release}=context;
-  await wait(()=>requests.some(path=>path.endsWith('/rivers.geojson')),'the real geometry request must be pending');
+  await wait(()=>requests.some(isRiverRequest),'the real geometry request must be pending');
   q('[data-africa-river-choice="nile"]').click();q('[data-africa-river-choice="congo"]').click();q('[data-africa-topic="climate"]').click();
   await wait(()=>q('[data-africa-raster="climate"]'),'the independent climate layer must finish first');
   const title=q('[data-theme-title]').textContent,explanation=q('[data-theme-takeaway-detail]').textContent;
-  release();await wait(()=>completed.some(path=>path.endsWith('/rivers.geojson')),'the abandoned river request must complete');await new Promise(resolve=>setImmediate(resolve));
+  release();await wait(()=>completed.some(isRiverRequest),'the abandoned river request must complete');await new Promise(resolve=>setImmediate(resolve));
   assert.equal(parameters(window).get('topic'),'climate');assert.equal(parameters(window).has('river'),false);assert.equal(root.dataset.riverView,'false');
   assert.equal(q('[data-theme-title]').textContent,title);assert.equal(q('[data-theme-takeaway-detail]').textContent,explanation);assert.equal(q('[data-africa-river-choices]').hidden,true);
   assert.equal(root.querySelectorAll('[data-africa-river],[data-africa-river-feature]').length,0);assert.ok(q('[data-africa-raster="climate"]'));
- },{delayMatch:/\/rivers\.geojson$/});
+ },{delayMatch:delayedRiver});
 });

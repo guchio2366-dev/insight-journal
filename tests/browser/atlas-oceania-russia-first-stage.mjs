@@ -10,6 +10,8 @@ import {chromium} from 'playwright';
 
 const output=resolve(process.env.REGION_REVIEW_OUTPUT??'/tmp/oceania-russia-first-stage');
 const farmingOnly=process.env.REGION_REVIEW_FARMING_ONLY==='1';
+const industryReview=process.env.REGION_REVIEW_INDUSTRY==='1';
+const physicalReview=process.env.REGION_REVIEW_PHYSICAL==='1';
 const representativeOnly=process.env.REGION_REVIEW_REPRESENTATIVE_ONLY==='1';
 const focusDeltaOnly=process.env.REGION_REVIEW_FOCUS_DELTA_ONLY==='1';
 const regions=(process.env.REGION_REVIEW_REGIONS??'oceania,russia').split(',');
@@ -55,7 +57,7 @@ try{
   });
  };
  const open=async(region,field,search='')=>{await page.goto(`${base}atlas/${region}/${field}/${search}`,{waitUntil:'networkidle'});await ready(region);};
- const shot=async name=>{if(focusDeltaOnly&&!/^(?:oceania|russia)-agriculture-1536-(overview|crop-focus|selected-with-other-distributions)$/.test(name))return;if(representativeOnly&&!/^(?:oceania|russia)-agriculture-(1536|1024)-(overview|crop-focus|selected-with-other-distributions)$/.test(name))return;await page.screenshot({path:resolve(output,name+'.png'),fullPage:true});result.screenshots.push(name+'.png');};
+ const shot=async name=>{if(!name.includes('-nature-')){if(focusDeltaOnly&&!/^(?:oceania|russia)-agriculture-(1536|1920)-(overview|crop-focus|single-product|selected-with-other-distributions)$/.test(name))return;if(representativeOnly&&!/^(?:oceania|russia)-agriculture-(1536|1024|1920)-(overview|crop-focus|single-product|selected-with-other-distributions)$/.test(name))return;}await page.screenshot({path:resolve(output,name+'.png'),fullPage:true});result.screenshots.push(name+'.png');};
  const annotationShot=async(map,product)=>{
   // Capture document pixels without element scrolling or a retained SVG handle.
   // Closing the details can resize the root and replace its SVG in the next frame.
@@ -66,8 +68,94 @@ try{
   assert.ok(clip.width>0&&clip.height>0);
   return {clip,png:await page.screenshot({fullPage:true,clip})};
  };
- for(const width of representativeOnly?[1536,1024]:[1536,1280,1024]){
-  await page.setViewportSize({width,height:864});
+ if(industryReview&&regions.includes('oceania')){
+  await page.setViewportSize({width:1920,height:1080});
+  assert.equal(await page.evaluate(()=>devicePixelRatio),1,'PC capture uses DPR 1');
+  await open('oceania','industry');
+  const host=root('oceania'),map=host.locator('[data-primary-map]');
+  const capture=async name=>{const file=`oceania-industry-1920-${name}.png`;await page.screenshot({path:resolve(output,file),fullPage:true});result.screenshots.push(file);};
+  const marks=()=>map.locator('[data-oceania-industry-location]');
+  const mines=()=>map.locator('circle[stroke="#fff"][fill]');
+  const frame=await map.locator('svg').first().getAttribute('viewBox');
+  assert.equal(await host.locator('[data-place]').inputValue(),'all');
+  assert.equal(await host.locator('[data-layer]').inputValue(),'industry-all');
+  assert.equal(await marks().count(),5);
+  assert.equal(await mines().count(),347);
+  assert.equal(await map.locator('[data-oceania-industry-location][aria-pressed="true"]').count(),0);
+  assert.match(await host.locator('[data-theme-title]').textContent(),/オセアニアの主要産業/);
+  await capture('overview');
+  await map.locator('[data-oceania-industry-location="lae-port"] path').click();await ready('oceania');
+  assert.equal(new URL(page.url()).searchParams.get('industryLocation'),'lae-port');
+  assert.equal(await host.locator('[data-theme-title]').textContent(),'ラエ港');
+  assert.match(await host.locator('[data-explanation]').textContent(),/個々の鉱山の輸出港や鉱山からの輸送経路は/);
+  assert.match(await host.locator('[data-source-list]').textContent(),/ラエ港の位置資料/);
+  assert.equal(await host.locator('[data-oceania-industry-return]').isVisible(),true);
+  assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
+  assert.equal(await marks().count(),5);assert.equal(await mines().count(),347);
+  assert.equal(await map.locator('[data-oceania-industry-location="lae-port"]').getAttribute('aria-pressed'),'true');
+  await capture('lae-selected');
+  await page.reload({waitUntil:'networkidle'});await ready('oceania');
+  assert.equal(await host.locator('[data-theme-title]').textContent(),'ラエ港');
+  assert.equal(await marks().count(),5);assert.equal(await mines().count(),347);
+  await capture('lae-reloaded');
+  await host.locator('[data-oceania-industry-return]').click();await ready('oceania');
+  assert.equal(new URL(page.url()).searchParams.has('industryLocation'),false);
+  assert.equal(await host.locator('[data-oceania-industry-return]').isVisible(),false);
+  assert.equal(await marks().count(),5);assert.equal(await mines().count(),347);
+  assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
+  await capture('reset');
+  await page.reload({waitUntil:'networkidle'});await ready('oceania');
+  assert.equal(new URL(page.url()).searchParams.has('industryLocation'),false);
+  assert.equal(await host.locator('[data-oceania-industry-return]').isVisible(),false);
+  assert.equal(await marks().count(),5);assert.equal(await mines().count(),347);
+  result.checks.push('Oceania industry at 1920×1080 CSS pixels and DPR 1: overview, Lae representative selection, reload and reset retain all five named places, 347 Australian mine marks, source reading and the full regional frame.');
+ }
+ if(!farmingOnly||physicalReview){
+  for(const width of [1920,1536,1024]){
+   await page.setViewportSize({width,height:width===1920?1080:864});
+   for(const region of regions){
+    await open(region,'nature');
+    const host=root(region),map=host.locator('[data-primary-map]');
+    if(region==='oceania'){
+     const heading=await host.locator('.oceania-learning-map-heading').first().boundingBox();
+     const mapBounds=await map.boundingBox();
+     assert.ok(heading.y+heading.height<=mapBounds.y+1,'Nature title and selector stay outside the map image');
+    }
+    const frame=await map.locator('svg').first().getAttribute('viewBox');
+    for(const [id,unit,step] of [['precipitation','mm／年','250 mm'],['elevation','m（海抜）','500 m']]){
+     await host.locator('[data-layer]').selectOption(id);await ready(region);
+     assert.equal(new URL(page.url()).searchParams.get('layer'),id);
+     assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
+     assert.equal(await host.locator('[data-place]').inputValue(),'all');
+     assert.ok(await map.locator(`image[href*="${id}.png"]`).count()>0);
+     assert.match(await host.locator('[data-primary-unit]').textContent(),new RegExp(unit.replace(/[()]/g,'\\$&')));
+     assert.match(await host.locator('[data-primary-legend]').textContent(),new RegExp(step));
+     assert.match(await host.locator('[data-coverage]').textContent(),id==='precipitation'?/河川|水量/:/標高/);
+     assert.ok((await host.locator('[data-primary-legend]').boundingBox()).height<190);
+     await shot(`${region}-nature-${width}-${id}`);
+     await page.reload({waitUntil:'networkidle'});await ready(region);
+     assert.equal(await host.locator('[data-layer]').inputValue(),id);
+     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+    }
+    await host.locator('[data-layer]').selectOption('rivers');await ready(region);
+    assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
+    assert.equal(await map.locator('[data-river-name]').count(),region==='russia'?5:3);
+    if(region==='russia'&&width===1920){
+     const riverName=await map.locator('[data-river-name="Yenisey"] text').boundingBox();
+     const regionLabel=await map.locator('[data-region-marker][data-map-place="siberia"] .russia-region-marker-label').boundingBox();
+     assert.ok(riverName.x+riverName.width<=regionLabel.x||regionLabel.x+regionLabel.width<=riverName.x||riverName.y+riverName.height<=regionLabel.y||regionLabel.y+regionLabel.height<=riverName.y,'Siberia selector does not cover the Yenisey name');
+    }
+    assert.match(await host.locator('[data-primary-unit]').textContent(),/流向は示さない/);
+    assert.match(await host.locator('[data-coverage]').textContent(),/流向・河口/);
+    await shot(`${region}-nature-${width}-rivers`);
+    await page.reload({waitUntil:'networkidle'});await ready(region);
+    assert.equal(await host.locator('[data-layer]').inputValue(),'rivers');
+   }
+  }
+  result.checks.push('Annual precipitation, selected named rivers, and elevation retain the whole-region frame, source distinctions, direct URL and reload state at 1920, 1536 and 1024px; Oceania nature controls remain outside the map.');
+ }
+ for(const width of representativeOnly?[1920,1536,1024]:[1920,1536,1280,1024]){
+  await page.setViewportSize({width,height:width===1920?1080:864});
   for(const region of regions){
    const dimensions=[];
    for(const field of farmingOnly?['agriculture']:['agriculture','nature','industry','population']){
@@ -247,6 +335,23 @@ try{
      if(region==='russia')assert.ok(await map.locator('[data-farming-place][data-place-product="wheat"][opacity="0.32"]').count()>0);
      assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
      assert.match(await host.locator('[data-primary-legend-definitions] [data-farming-legend="cattle"] h3').textContent(),/頭／km²/);
+     const single=host.locator('[data-farming-single]');assert.ok(await single.isVisible());
+     await single.click();await ready(region);
+     assert.equal(new URL(page.url()).searchParams.get('single'),'1');
+     assert.equal(await single.getAttribute('aria-pressed'),'true');
+     assert.deepEqual(await shown(),['cattle']);
+     assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
+     assert.equal(await host.locator('[data-primary-legend] [data-farming-key]:visible').count(),1);
+     await shot(`${region}-agriculture-${width}-single-product`);
+     await page.reload({waitUntil:'networkidle'});await ready(region);
+     assert.deepEqual(await shown(),['cattle']);
+     await single.click();await ready(region);
+     assert.equal(new URL(page.url()).searchParams.has('single'),false);
+     assert.deepEqual(await shown(),products);
+     await page.goBack({waitUntil:'networkidle'});await ready(region);
+     assert.deepEqual(await shown(),['cattle']);
+     await page.goForward({waitUntil:'networkidle'});await ready(region);
+     assert.deepEqual(await shown(),products);
      if(width===1536)await shot(`${region}-agriculture-${width}-livestock-focus`);
      if(region==='oceania')for(const product of ['coconut','cacao','sheep']){await host.locator('[data-layer]').selectOption(product);await ready(region);assert.deepEqual(await shown(),products);assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);assert.equal(await map.locator(`[data-farming-product="${product}"][data-farming-mode="quantity"]`).count(),1);}
      await host.locator('[data-layer]').selectOption('farming-all');await ready(region);
@@ -289,7 +394,7 @@ try{
   }
  }
  result.checks.push(farmingOnly?'Changed farming pages start with all saved crop/livestock products, full extent and overview. Product focus, country/native keyboard region selection, reload and reset retain other distributions.':'All eight direct field routes start at full extent and overview without a selected country/region/theme.');
- result.checks.push(farmingOnly?'At the requested PC widths, crop focus keeps the full frame, strengthens its outline and makes livestock thinner. Both units and missing/zero keys remain visible.':'All four field map dimensions agree per region at 1536, 1280 and 1024px; hidden legend duplicates reserve no height.');
+ result.checks.push(farmingOnly?'At the requested PC widths including 1920×1080, crop focus keeps the full frame, and the explicit single-product mode survives reload and restores all saved products.':'All four field map dimensions agree per region at 1920, 1536, 1280 and 1024px; hidden legend duplicates reserve no height.');
  if(farmingOnly&&regions.includes('russia'))result.checks.push('Russia has source-backed crop/cattle names in the map, one left region control, a compact two-product key below the map, visible geographical reading and folded full technical/quantity information. Native keyboard focus and product retention pass.');
  await page.setViewportSize({width:1536,height:864});
  for(const region of regions){

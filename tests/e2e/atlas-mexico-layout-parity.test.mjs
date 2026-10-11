@@ -25,7 +25,7 @@ for(const field of fields){
    if(field==='agriculture'){
     assert.ok(grid.querySelector(':scope>[data-field-national="agriculture"] .atlas-national'));
     assert.ok(grid.querySelector('.atlas-map-frame [data-mexico-map]'));
-    assert.ok(grid.querySelector('.atlas-key [data-forestry-select]'));
+    assert.ok(workspace.querySelector('.mexico-agriculture-subtopics [data-forestry-select]'));
     assert.equal(grid.querySelector('.atlas-national h2').textContent.trim(),'メキシコの農林業');
     assert.ok(grid.querySelector('[data-agri-reading-content]').textContent.trim().length>100);
    }else{

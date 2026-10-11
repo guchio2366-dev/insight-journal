@@ -1,0 +1,1201 @@
+{
+  "source": "INEI Perfil sociodemográfico 2017 Tables2.71 and annex2.22",
+  "url": "https://www.inei.gob.pe/media/MenuRecursivo/publicaciones_digitales/Est/Lib1539/libro.pdf",
+  "pdfSha256": "a066e317f5e8214ccc5a4a9489d140f8beb33b1b1997658a824b6962935dd3c8",
+  "pdfPages": {
+    "ethnicity": [
+      224,
+      225
+    ],
+    "religion": [
+      532,
+      533,
+      534
+    ]
+  },
+  "year": 2017,
+  "denominator": "Censused population age12+ in each actual department/Callao/Lima provincial unit",
+  "ethnicity": {
+    "Amazonas": {
+      "population": 281605,
+      "nativeCounts": {
+        "Mestizo": 202418,
+        "Quechua": 8196,
+        "Blanco": 12470,
+        "Afrodescendiente": 9458,
+        "Aimara": 171,
+        "Nativo o indígena de la amazonía": 5562,
+        "Ashaninka": 10,
+        "Parte de otro pueblo indígena u originario": 253,
+        "Awajún": 29255,
+        "Shipibo Konibo": 20,
+        "Nikkei": 12,
+        "Tusan": 2,
+        "Otro": 1437,
+        "No sabe / No responde": 12341
+      },
+      "publishedPercent": {
+        "Mestizo": 71.9,
+        "Quechua": 2.9,
+        "Blanco": 4.4,
+        "Afrodescendiente": 3.4,
+        "Aimara": 0.1
+      }
+    },
+    "Áncash": {
+      "population": 850507,
+      "nativeCounts": {
+        "Mestizo": 458022,
+        "Quechua": 289222,
+        "Blanco": 49175,
+        "Afrodescendiente": 26925,
+        "Aimara": 816,
+        "Nativo o indígena de la amazonía": 123,
+        "Ashaninka": 15,
+        "Parte de otro pueblo indígena u originario": 259,
+        "Awajún": 20,
+        "Shipibo Konibo": 48,
+        "Nikkei": 170,
+        "Tusan": 200,
+        "Otro": 4630,
+        "No sabe / No responde": 20882
+      },
+      "publishedPercent": {
+        "Mestizo": 53.9,
+        "Quechua": 34.0,
+        "Blanco": 5.8,
+        "Afrodescendiente": 3.2,
+        "Aimara": 0.1
+      }
+    },
+    "Apurímac": {
+      "population": 315006,
+      "nativeCounts": {
+        "Mestizo": 31167,
+        "Quechua": 265041,
+        "Blanco": 3034,
+        "Afrodescendiente": 795,
+        "Aimara": 974,
+        "Nativo o indígena de la amazonía": 85,
+        "Ashaninka": 26,
+        "Parte de otro pueblo indígena u originario": 7847,
+        "Awajún": 8,
+        "Shipibo Konibo": 24,
+        "Nikkei": 5,
+        "Tusan": 13,
+        "Otro": 678,
+        "No sabe / No responde": 5309
+      },
+      "publishedPercent": {
+        "Mestizo": 9.9,
+        "Quechua": 84.1,
+        "Blanco": 1.0,
+        "Afrodescendiente": 0.3,
+        "Aimara": 0.3
+      }
+    },
+    "Arequipa": {
+      "population": 1118223,
+      "nativeCounts": {
+        "Mestizo": 606628,
+        "Quechua": 350183,
+        "Blanco": 55093,
+        "Afrodescendiente": 24259,
+        "Aimara": 36390,
+        "Nativo o indígena de la amazonía": 342,
+        "Ashaninka": 84,
+        "Parte de otro pueblo indígena u originario": 1561,
+        "Awajún": 23,
+        "Shipibo Konibo": 141,
+        "Nikkei": 148,
+        "Tusan": 212,
+        "Otro": 15050,
+        "No sabe / No responde": 28109
+      },
+      "publishedPercent": {
+        "Mestizo": 54.2,
+        "Quechua": 31.3,
+        "Blanco": 4.9,
+        "Afrodescendiente": 2.2,
+        "Aimara": 3.3
+      }
+    },
+    "Ayacucho": {
+      "population": 479120,
+      "nativeCounts": {
+        "Mestizo": 62870,
+        "Quechua": 389029,
+        "Blanco": 9516,
+        "Afrodescendiente": 3893,
+        "Aimara": 1002,
+        "Nativo o indígena de la amazonía": 119,
+        "Ashaninka": 142,
+        "Parte de otro pueblo indígena u originario": 232,
+        "Awajún": 11,
+        "Shipibo Konibo": 31,
+        "Nikkei": 12,
+        "Tusan": 11,
+        "Otro": 1442,
+        "No sabe / No responde": 10810
+      },
+      "publishedPercent": {
+        "Mestizo": 13.1,
+        "Quechua": 81.2,
+        "Blanco": 2.0,
+        "Afrodescendiente": 0.8,
+        "Aimara": 0.2
+      }
+    },
+    "Cajamarca": {
+      "population": 1026734,
+      "nativeCounts": {
+        "Mestizo": 784568,
+        "Quechua": 63553,
+        "Blanco": 76953,
+        "Afrodescendiente": 59924,
+        "Aimara": 739,
+        "Nativo o indígena de la amazonía": 874,
+        "Ashaninka": 9,
+        "Parte de otro pueblo indígena u originario": 1307,
+        "Awajún": 763,
+        "Shipibo Konibo": 19,
+        "Nikkei": 29,
+        "Tusan": 41,
+        "Otro": 7310,
+        "No sabe / No responde": 30645
+      },
+      "publishedPercent": {
+        "Mestizo": 76.4,
+        "Quechua": 6.2,
+        "Blanco": 7.5,
+        "Afrodescendiente": 5.8,
+        "Aimara": 0.1
+      }
+    },
+    "Callao": {
+      "population": 799608,
+      "nativeCounts": {
+        "Mestizo": 569051,
+        "Quechua": 81554,
+        "Blanco": 61576,
+        "Afrodescendiente": 38346,
+        "Aimara": 4987,
+        "Nativo o indígena de la amazonía": 1038,
+        "Ashaninka": 99,
+        "Parte de otro pueblo indígena u originario": 502,
+        "Awajún": 88,
+        "Shipibo Konibo": 204,
+        "Nikkei": 1007,
+        "Tusan": 613,
+        "Otro": 11468,
+        "No sabe / No responde": 29075
+      },
+      "publishedPercent": {
+        "Mestizo": 71.2,
+        "Quechua": 10.2,
+        "Blanco": 7.7,
+        "Afrodescendiente": 4.8,
+        "Aimara": 0.6
+      }
+    },
+    "Cusco": {
+      "population": 950323,
+      "nativeCounts": {
+        "Mestizo": 177487,
+        "Quechua": 710308,
+        "Blanco": 12458,
+        "Afrodescendiente": 2287,
+        "Aimara": 4070,
+        "Nativo o indígena de la amazonía": 5570,
+        "Ashaninka": 1219,
+        "Parte de otro pueblo indígena u originario": 1482,
+        "Awajún": 24,
+        "Shipibo Konibo": 118,
+        "Nikkei": 140,
+        "Tusan": 52,
+        "Otro": 3491,
+        "No sabe / No responde": 31617
+      },
+      "publishedPercent": {
+        "Mestizo": 18.7,
+        "Quechua": 74.7,
+        "Blanco": 1.3,
+        "Afrodescendiente": 0.2,
+        "Aimara": 0.4
+      }
+    },
+    "Huancavelica": {
+      "population": 266825,
+      "nativeCounts": {
+        "Mestizo": 38860,
+        "Quechua": 215551,
+        "Blanco": 5222,
+        "Afrodescendiente": 221,
+        "Aimara": 193,
+        "Nativo o indígena de la amazonía": 17,
+        "Ashaninka": 25,
+        "Parte de otro pueblo indígena u originario": 51,
+        "Awajún": 2,
+        "Shipibo Konibo": 3,
+        "Nikkei": 2,
+        "Tusan": 2,
+        "Otro": 298,
+        "No sabe / No responde": 6378
+      },
+      "publishedPercent": {
+        "Mestizo": 14.6,
+        "Quechua": 80.8,
+        "Blanco": 2.0,
+        "Afrodescendiente": 0.1,
+        "Aimara": 0.1
+      }
+    },
+    "Huánuco": {
+      "population": 551601,
+      "nativeCounts": {
+        "Mestizo": 246124,
+        "Quechua": 236853,
+        "Blanco": 24130,
+        "Afrodescendiente": 12585,
+        "Aimara": 1060,
+        "Nativo o indígena de la amazonía": 973,
+        "Ashaninka": 791,
+        "Parte de otro pueblo indígena u originario": 163,
+        "Awajún": 11,
+        "Shipibo Konibo": 406,
+        "Nikkei": 55,
+        "Tusan": 79,
+        "Otro": 3159,
+        "No sabe / No responde": 25212
+      },
+      "publishedPercent": {
+        "Mestizo": 44.6,
+        "Quechua": 42.9,
+        "Blanco": 4.4,
+        "Afrodescendiente": 2.3,
+        "Aimara": 0.2
+      }
+    },
+    "Ica": {
+      "population": 662444,
+      "nativeCounts": {
+        "Mestizo": 469720,
+        "Quechua": 95056,
+        "Blanco": 38119,
+        "Afrodescendiente": 33280,
+        "Aimara": 2294,
+        "Nativo o indígena de la amazonía": 255,
+        "Ashaninka": 50,
+        "Parte de otro pueblo indígena u originario": 258,
+        "Awajún": 43,
+        "Shipibo Konibo": 444,
+        "Nikkei": 179,
+        "Tusan": 502,
+        "Otro": 6592,
+        "No sabe / No responde": 15652
+      },
+      "publishedPercent": {
+        "Mestizo": 70.9,
+        "Quechua": 14.3,
+        "Blanco": 5.8,
+        "Afrodescendiente": 5.0,
+        "Aimara": 0.3
+      }
+    },
+    "Junín": {
+      "population": 969059,
+      "nativeCounts": {
+        "Mestizo": 508587,
+        "Quechua": 337736,
+        "Blanco": 34700,
+        "Afrodescendiente": 4361,
+        "Aimara": 2128,
+        "Nativo o indígena de la amazonía": 6877,
+        "Ashaninka": 28614,
+        "Parte de otro pueblo indígena u originario": 6451,
+        "Awajún": 31,
+        "Shipibo Konibo": 221,
+        "Nikkei": 221,
+        "Tusan": 138,
+        "Otro": 5898,
+        "No sabe / No responde": 33096
+      },
+      "publishedPercent": {
+        "Mestizo": 52.5,
+        "Quechua": 34.9,
+        "Blanco": 3.6,
+        "Afrodescendiente": 0.5,
+        "Aimara": 0.2
+      }
+    },
+    "La Libertad": {
+      "population": 1379613,
+      "nativeCounts": {
+        "Mestizo": 1037583,
+        "Quechua": 40649,
+        "Blanco": 144606,
+        "Afrodescendiente": 102034,
+        "Aimara": 1303,
+        "Nativo o indígena de la amazonía": 412,
+        "Ashaninka": 38,
+        "Parte de otro pueblo indígena u originario": 1596,
+        "Awajún": 156,
+        "Shipibo Konibo": 107,
+        "Nikkei": 553,
+        "Tusan": 592,
+        "Otro": 18467,
+        "No sabe / No responde": 31517
+      },
+      "publishedPercent": {
+        "Mestizo": 75.2,
+        "Quechua": 2.9,
+        "Blanco": 10.5,
+        "Afrodescendiente": 7.4,
+        "Aimara": 0.1
+      }
+    },
+    "Lambayeque": {
+      "population": 935564,
+      "nativeCounts": {
+        "Mestizo": 686809,
+        "Quechua": 39543,
+        "Blanco": 83908,
+        "Afrodescendiente": 78638,
+        "Aimara": 785,
+        "Nativo o indígena de la amazonía": 335,
+        "Ashaninka": 16,
+        "Parte de otro pueblo indígena u originario": 3950,
+        "Awajún": 265,
+        "Shipibo Konibo": 45,
+        "Nikkei": 352,
+        "Tusan": 503,
+        "Otro": 17033,
+        "No sabe / No responde": 23382
+      },
+      "publishedPercent": {
+        "Mestizo": 73.4,
+        "Quechua": 4.2,
+        "Blanco": 9.0,
+        "Afrodescendiente": 8.4,
+        "Aimara": 0.1
+      }
+    },
+    "Loreto": {
+      "population": 623029,
+      "nativeCounts": {
+        "Mestizo": 473106,
+        "Quechua": 8758,
+        "Blanco": 11884,
+        "Afrodescendiente": 17010,
+        "Aimara": 464,
+        "Nativo o indígena de la amazonía": 31864,
+        "Ashaninka": 59,
+        "Parte de otro pueblo indígena u originario": 9407,
+        "Awajún": 3654,
+        "Shipibo Konibo": 3618,
+        "Nikkei": 38,
+        "Tusan": 176,
+        "Otro": 14435,
+        "No sabe / No responde": 48556
+      },
+      "publishedPercent": {
+        "Mestizo": 75.9,
+        "Quechua": 1.4,
+        "Blanco": 1.9,
+        "Afrodescendiente": 2.7,
+        "Aimara": 0.1
+      }
+    },
+    "Madre de Dios": {
+      "population": 105503,
+      "nativeCounts": {
+        "Mestizo": 48411,
+        "Quechua": 36449,
+        "Blanco": 3444,
+        "Afrodescendiente": 2792,
+        "Aimara": 2115,
+        "Nativo o indígena de la amazonía": 2909,
+        "Ashaninka": 67,
+        "Parte de otro pueblo indígena u originario": 173,
+        "Awajún": 18,
+        "Shipibo Konibo": 423,
+        "Nikkei": 95,
+        "Tusan": 12,
+        "Otro": 1103,
+        "No sabe / No responde": 7492
+      },
+      "publishedPercent": {
+        "Mestizo": 45.9,
+        "Quechua": 34.5,
+        "Blanco": 3.3,
+        "Afrodescendiente": 2.6,
+        "Aimara": 2.0
+      }
+    },
+    "Moquegua": {
+      "population": 142211,
+      "nativeCounts": {
+        "Mestizo": 73357,
+        "Quechua": 20746,
+        "Blanco": 5703,
+        "Afrodescendiente": 3734,
+        "Aimara": 29821,
+        "Nativo o indígena de la amazonía": 82,
+        "Ashaninka": 11,
+        "Parte de otro pueblo indígena u originario": 1556,
+        "Awajún": 4,
+        "Shipibo Konibo": 22,
+        "Nikkei": 22,
+        "Tusan": 54,
+        "Otro": 2317,
+        "No sabe / No responde": 4782
+      },
+      "publishedPercent": {
+        "Mestizo": 51.6,
+        "Quechua": 14.6,
+        "Blanco": 4.0,
+        "Afrodescendiente": 2.6,
+        "Aimara": 21.0
+      }
+    },
+    "Pasco": {
+      "population": 196780,
+      "nativeCounts": {
+        "Mestizo": 85540,
+        "Quechua": 74092,
+        "Blanco": 7448,
+        "Afrodescendiente": 1571,
+        "Aimara": 411,
+        "Nativo o indígena de la amazonía": 3440,
+        "Ashaninka": 8784,
+        "Parte de otro pueblo indígena u originario": 512,
+        "Awajún": 9,
+        "Shipibo Konibo": 38,
+        "Nikkei": 3,
+        "Tusan": 4,
+        "Otro": 632,
+        "No sabe / No responde": 14296
+      },
+      "publishedPercent": {
+        "Mestizo": 43.5,
+        "Quechua": 37.7,
+        "Blanco": 3.8,
+        "Afrodescendiente": 0.8,
+        "Aimara": 0.2
+      }
+    },
+    "Piura": {
+      "population": 1410686,
+      "nativeCounts": {
+        "Mestizo": 1067317,
+        "Quechua": 30972,
+        "Blanco": 114682,
+        "Afrodescendiente": 124961,
+        "Aimara": 1105,
+        "Nativo o indígena de la amazonía": 288,
+        "Ashaninka": 13,
+        "Parte de otro pueblo indígena u originario": 831,
+        "Awajún": 70,
+        "Shipibo Konibo": 32,
+        "Nikkei": 152,
+        "Tusan": 388,
+        "Otro": 16985,
+        "No sabe / No responde": 52890
+      },
+      "publishedPercent": {
+        "Mestizo": 75.7,
+        "Quechua": 2.2,
+        "Blanco": 8.1,
+        "Afrodescendiente": 8.9,
+        "Aimara": 0.1
+      }
+    },
+    "Puno": {
+      "population": 944083,
+      "nativeCounts": {
+        "Mestizo": 52074,
+        "Quechua": 537972,
+        "Blanco": 5837,
+        "Afrodescendiente": 390,
+        "Aimara": 318363,
+        "Nativo o indígena de la amazonía": 87,
+        "Ashaninka": 27,
+        "Parte de otro pueblo indígena u originario": 929,
+        "Awajún": 5,
+        "Shipibo Konibo": 27,
+        "Nikkei": 11,
+        "Tusan": 18,
+        "Otro": 2095,
+        "No sabe / No responde": 26248
+      },
+      "publishedPercent": {
+        "Mestizo": 5.5,
+        "Quechua": 57.0,
+        "Blanco": 0.6,
+        "Afrodescendiente": 0.0,
+        "Aimara": 33.7
+      }
+    },
+    "San Martín": {
+      "population": 608404,
+      "nativeCounts": {
+        "Mestizo": 489623,
+        "Quechua": 30997,
+        "Blanco": 24516,
+        "Afrodescendiente": 28723,
+        "Aimara": 560,
+        "Nativo o indígena de la amazonía": 1798,
+        "Ashaninka": 22,
+        "Parte de otro pueblo indígena u originario": 2258,
+        "Awajún": 2123,
+        "Shipibo Konibo": 63,
+        "Nikkei": 58,
+        "Tusan": 64,
+        "Otro": 4399,
+        "No sabe / No responde": 23200
+      },
+      "publishedPercent": {
+        "Mestizo": 80.5,
+        "Quechua": 5.1,
+        "Blanco": 4.0,
+        "Afrodescendiente": 4.7,
+        "Aimara": 0.1
+      }
+    },
+    "Tacna": {
+      "population": 269027,
+      "nativeCounts": {
+        "Mestizo": 132669,
+        "Quechua": 19708,
+        "Blanco": 8678,
+        "Afrodescendiente": 4674,
+        "Aimara": 88398,
+        "Nativo o indígena de la amazonía": 156,
+        "Ashaninka": 24,
+        "Parte de otro pueblo indígena u originario": 207,
+        "Awajún": 7,
+        "Shipibo Konibo": 65,
+        "Nikkei": 30,
+        "Tusan": 53,
+        "Otro": 2677,
+        "No sabe / No responde": 11681
+      },
+      "publishedPercent": {
+        "Mestizo": 49.3,
+        "Quechua": 7.3,
+        "Blanco": 3.2,
+        "Afrodescendiente": 1.7,
+        "Aimara": 32.9
+      }
+    },
+    "Tumbes": {
+      "population": 171351,
+      "nativeCounts": {
+        "Mestizo": 125955,
+        "Quechua": 3321,
+        "Blanco": 15383,
+        "Afrodescendiente": 19696,
+        "Aimara": 150,
+        "Nativo o indígena de la amazonía": 42,
+        "Ashaninka": 9,
+        "Parte de otro pueblo indígena u originario": 81,
+        "Awajún": 28,
+        "Shipibo Konibo": 5,
+        "Nikkei": 15,
+        "Tusan": 27,
+        "Otro": 1491,
+        "No sabe / No responde": 5148
+      },
+      "publishedPercent": {
+        "Mestizo": 73.5,
+        "Quechua": 1.9,
+        "Blanco": 9.0,
+        "Afrodescendiente": 11.5,
+        "Aimara": 0.1
+      }
+    },
+    "Ucayali": {
+      "population": 356803,
+      "nativeCounts": {
+        "Mestizo": 268333,
+        "Quechua": 17914,
+        "Blanco": 8283,
+        "Afrodescendiente": 7511,
+        "Aimara": 565,
+        "Nativo o indígena de la amazonía": 6316,
+        "Ashaninka": 13668,
+        "Parte de otro pueblo indígena u originario": 386,
+        "Awajún": 134,
+        "Shipibo Konibo": 16526,
+        "Nikkei": 80,
+        "Tusan": 69,
+        "Otro": 1608,
+        "No sabe / No responde": 15410
+      },
+      "publishedPercent": {
+        "Mestizo": 75.2,
+        "Quechua": 5.0,
+        "Blanco": 2.3,
+        "Afrodescendiente": 2.1,
+        "Aimara": 0.2
+      }
+    },
+    "Provincia de Lima": {
+      "population": 7060760,
+      "nativeCounts": {
+        "Mestizo": 4773723,
+        "Quechua": 1147381,
+        "Blanco": 507039,
+        "Afrodescendiente": 194661,
+        "Aimara": 47888,
+        "Nativo o indígena de la amazonía": 9451,
+        "Ashaninka": 1595,
+        "Parte de otro pueblo indígena u originario": 6770,
+        "Awajún": 904,
+        "Shipibo Konibo": 2435,
+        "Nikkei": 18335,
+        "Tusan": 10117,
+        "Otro": 104156,
+        "No sabe / No responde": 236305
+      },
+      "publishedPercent": {
+        "Mestizo": 67.6,
+        "Quechua": 16.3,
+        "Blanco": 7.2,
+        "Afrodescendiente": 2.8,
+        "Aimara": 0.7
+      }
+    },
+    "Región Lima": {
+      "population": 721522,
+      "nativeCounts": {
+        "Mestizo": 495252,
+        "Quechua": 126025,
+        "Blanco": 43074,
+        "Afrodescendiente": 26112,
+        "Aimara": 1540,
+        "Nativo o indígena de la amazonía": 251,
+        "Ashaninka": 72,
+        "Parte de otro pueblo indígena u originario": 816,
+        "Awajún": 34,
+        "Shipibo Konibo": 137,
+        "Nikkei": 810,
+        "Tusan": 365,
+        "Otro": 6041,
+        "No sabe / No responde": 20993
+      },
+      "publishedPercent": {
+        "Mestizo": 68.6,
+        "Quechua": 17.5,
+        "Blanco": 6.0,
+        "Afrodescendiente": 3.6,
+        "Aimara": 0.2
+      }
+    }
+  },
+  "religion": {
+    "Amazonas": {
+      "population": 281605,
+      "nativeCounts": {
+        "Católica": 179874,
+        "Evangélica": 64696,
+        "Otra": 14376,
+        "Ninguna": 22659
+      }
+    },
+    "Áncash": {
+      "population": 850507,
+      "nativeCounts": {
+        "Católica": 652615,
+        "Evangélica": 132624,
+        "Otra": 25700,
+        "Ninguna": 39568
+      }
+    },
+    "Apurímac": {
+      "population": 315006,
+      "nativeCounts": {
+        "Católica": 245586,
+        "Evangélica": 55641,
+        "Otra": 7520,
+        "Ninguna": 6259
+      }
+    },
+    "Arequipa": {
+      "population": 1118223,
+      "nativeCounts": {
+        "Católica": 932142,
+        "Evangélica": 70419,
+        "Otra": 68454,
+        "Ninguna": 47208
+      }
+    },
+    "Ayacucho": {
+      "population": 479120,
+      "nativeCounts": {
+        "Católica": 362165,
+        "Evangélica": 98252,
+        "Otra": 6305,
+        "Ninguna": 12398
+      }
+    },
+    "Cajamarca": {
+      "population": 1026734,
+      "nativeCounts": {
+        "Católica": 774428,
+        "Evangélica": 182469,
+        "Otra": 35720,
+        "Ninguna": 34117
+      }
+    },
+    "Callao": {
+      "population": 799608,
+      "nativeCounts": {
+        "Católica": 607399,
+        "Evangélica": 94533,
+        "Otra": 54334,
+        "Ninguna": 43342
+      }
+    },
+    "Cusco": {
+      "population": 950323,
+      "nativeCounts": {
+        "Católica": 748407,
+        "Evangélica": 127394,
+        "Otra": 43047,
+        "Ninguna": 31475
+      }
+    },
+    "Huancavelica": {
+      "population": 266825,
+      "nativeCounts": {
+        "Católica": 194220,
+        "Evangélica": 67350,
+        "Otra": 1547,
+        "Ninguna": 3708
+      }
+    },
+    "Huánuco": {
+      "population": 551601,
+      "nativeCounts": {
+        "Católica": 375083,
+        "Evangélica": 145711,
+        "Otra": 10580,
+        "Ninguna": 20227
+      }
+    },
+    "Ica": {
+      "population": 662444,
+      "nativeCounts": {
+        "Católica": 539790,
+        "Evangélica": 67956,
+        "Otra": 29839,
+        "Ninguna": 24859
+      }
+    },
+    "Junín": {
+      "population": 969059,
+      "nativeCounts": {
+        "Católica": 718465,
+        "Evangélica": 180771,
+        "Otra": 24633,
+        "Ninguna": 45190
+      }
+    },
+    "La Libertad": {
+      "population": 1379613,
+      "nativeCounts": {
+        "Católica": 941814,
+        "Evangélica": 272271,
+        "Otra": 66093,
+        "Ninguna": 99435
+      }
+    },
+    "Lambayeque": {
+      "population": 935564,
+      "nativeCounts": {
+        "Católica": 744958,
+        "Evangélica": 128087,
+        "Otra": 32049,
+        "Ninguna": 30470
+      }
+    },
+    "Loreto": {
+      "population": 623029,
+      "nativeCounts": {
+        "Católica": 419438,
+        "Evangélica": 150604,
+        "Otra": 26831,
+        "Ninguna": 26156
+      }
+    },
+    "Madre de Dios": {
+      "population": 105503,
+      "nativeCounts": {
+        "Católica": 74443,
+        "Evangélica": 16664,
+        "Otra": 6529,
+        "Ninguna": 7867
+      }
+    },
+    "Moquegua": {
+      "population": 142211,
+      "nativeCounts": {
+        "Católica": 114676,
+        "Evangélica": 10389,
+        "Otra": 9841,
+        "Ninguna": 7305
+      }
+    },
+    "Pasco": {
+      "population": 196780,
+      "nativeCounts": {
+        "Católica": 131701,
+        "Evangélica": 46886,
+        "Otra": 7020,
+        "Ninguna": 11173
+      }
+    },
+    "Piura": {
+      "population": 1410686,
+      "nativeCounts": {
+        "Católica": 1196169,
+        "Evangélica": 150323,
+        "Otra": 38800,
+        "Ninguna": 25394
+      }
+    },
+    "Puno": {
+      "population": 944083,
+      "nativeCounts": {
+        "Católica": 774536,
+        "Evangélica": 75218,
+        "Otra": 65855,
+        "Ninguna": 28474
+      }
+    },
+    "San Martín": {
+      "population": 608404,
+      "nativeCounts": {
+        "Católica": 366581,
+        "Evangélica": 134509,
+        "Otra": 38756,
+        "Ninguna": 68558
+      }
+    },
+    "Tacna": {
+      "population": 269027,
+      "nativeCounts": {
+        "Católica": 203754,
+        "Evangélica": 24051,
+        "Otra": 23911,
+        "Ninguna": 17311
+      }
+    },
+    "Tumbes": {
+      "population": 171351,
+      "nativeCounts": {
+        "Católica": 134380,
+        "Evangélica": 25279,
+        "Otra": 5299,
+        "Ninguna": 6393
+      }
+    },
+    "Ucayali": {
+      "population": 356803,
+      "nativeCounts": {
+        "Católica": 207023,
+        "Evangélica": 98420,
+        "Otra": 18716,
+        "Ninguna": 32644
+      }
+    },
+    "Provincia de Lima": {
+      "population": 7060760,
+      "nativeCounts": {
+        "Católica": 5414514,
+        "Evangélica": 758961,
+        "Otra": 428981,
+        "Ninguna": 458304
+      }
+    },
+    "Región Lima": {
+      "population": 721522,
+      "nativeCounts": {
+        "Católica": 581178,
+        "Evangélica": 85341,
+        "Otra": 25136,
+        "Ninguna": 29867
+      }
+    }
+  },
+  "guatemala2018": {
+    "source": "INE Censo2018 Infografías, PDFp16",
+    "url": "https://censo2018.ine.gob.gt/archivos/Infografias.pdf",
+    "pdfSha256": "31bbc7e842fc3e2b77b13463c58a54b208e89ed7f671b041faa100fdae7e38cb",
+    "year": 2018,
+    "denominator": "Población censada por pueblo de pertenencia, department percentage",
+    "rows": [
+      {
+        "name": "Guatemala",
+        "Maya": 13.4,
+        "Xinka": 0.7,
+        "Ladino": 85.5
+      },
+      {
+        "name": "El Progreso",
+        "Maya": 1.5,
+        "Xinka": 0.1,
+        "Ladino": 98.2
+      },
+      {
+        "name": "Sacatepéquez",
+        "Maya": 40.2,
+        "Xinka": 0.5,
+        "Ladino": 59.0
+      },
+      {
+        "name": "Chimaltenango",
+        "Maya": 78.2,
+        "Xinka": 0.1,
+        "Ladino": 21.4
+      },
+      {
+        "name": "Escuintla",
+        "Maya": 5.1,
+        "Xinka": 0.2,
+        "Ladino": 94.4
+      },
+      {
+        "name": "Santa Rosa",
+        "Maya": 0.2,
+        "Xinka": 14.1,
+        "Ladino": 83.2
+      },
+      {
+        "name": "Sololá",
+        "Maya": 96.4,
+        "Xinka": 0.1,
+        "Ladino": 3.3
+      },
+      {
+        "name": "Totonicapán",
+        "Maya": 98.0,
+        "Xinka": 0.01,
+        "Ladino": 1.8
+      },
+      {
+        "name": "Quetzaltenango",
+        "Maya": 50.9,
+        "Xinka": 0.2,
+        "Ladino": 48.7
+      },
+      {
+        "name": "Suchitepéquez",
+        "Maya": 38.1,
+        "Xinka": 0.1,
+        "Ladino": 61.0
+      },
+      {
+        "name": "Retalhuleu",
+        "Maya": 15.0,
+        "Xinka": 0.1,
+        "Ladino": 84.6
+      },
+      {
+        "name": "San Marcos",
+        "Maya": 30.8,
+        "Xinka": 0.1,
+        "Ladino": 69.0
+      },
+      {
+        "name": "Huehuetenango",
+        "Maya": 65.0,
+        "Xinka": 0.1,
+        "Ladino": 34.8
+      },
+      {
+        "name": "Quiché",
+        "Maya": 89.2,
+        "Xinka": 0.03,
+        "Ladino": 10.6
+      },
+      {
+        "name": "Baja Verapaz",
+        "Maya": 60.0,
+        "Xinka": 0.1,
+        "Ladino": 39.6
+      },
+      {
+        "name": "Alta Verapaz",
+        "Maya": 93.0,
+        "Xinka": 0.1,
+        "Ladino": 6.8
+      },
+      {
+        "name": "Petén",
+        "Maya": 30.2,
+        "Xinka": 0.2,
+        "Ladino": 69.3
+      },
+      {
+        "name": "Izabal",
+        "Maya": 28.2,
+        "Xinka": 0.2,
+        "Ladino": 70.4
+      },
+      {
+        "name": "Zacapa",
+        "Maya": 1.9,
+        "Xinka": 0.2,
+        "Ladino": 97.4
+      },
+      {
+        "name": "Chiquimula",
+        "Maya": 26.8,
+        "Xinka": 0.1,
+        "Ladino": 72.6
+      },
+      {
+        "name": "Jalapa",
+        "Maya": 7.3,
+        "Xinka": 31.7,
+        "Ladino": 60.5
+      },
+      {
+        "name": "Jutiapa",
+        "Maya": 0.2,
+        "Xinka": 19.3,
+        "Ladino": 79.1
+      }
+    ]
+  },
+  "ecuador2022": {
+    "source": "SGDPN preliminary Census2022, PDFp13 and16",
+    "url": "https://www.secretariapueblosynacionalidades.gob.ec/wp-content/uploads/2023/12/Presentacion-CENSO-2022-Pueblos-y-Nacionalidades.pdf",
+    "year": 2022,
+    "denominator": "Provincial population in the source preliminary release",
+    "rows": [
+      {
+        "name": "Napo",
+        "Indígena": 65,
+        "Afro (ANM)": 1.26
+      },
+      {
+        "name": "Morona Santiago",
+        "Indígena": 58.6,
+        "Afro (ANM)": 0.55
+      },
+      {
+        "name": "Pastaza",
+        "Indígena": 50.8,
+        "Afro (ANM)": 1.03
+      },
+      {
+        "name": "Chimborazo",
+        "Indígena": 37.9,
+        "Afro (ANM)": 0.46
+      },
+      {
+        "name": "Orellana",
+        "Indígena": 37.3,
+        "Afro (ANM)": 3.08
+      },
+      {
+        "name": "Bolívar",
+        "Indígena": 29.5,
+        "Afro (ANM)": 0.44
+      },
+      {
+        "name": "Imbabura",
+        "Indígena": 28,
+        "Afro (ANM)": 5.77
+      },
+      {
+        "name": "Cotopaxi",
+        "Indígena": 23.7,
+        "Afro (ANM)": 0.98
+      },
+      {
+        "name": "Zamora Chinchipe",
+        "Indígena": 18.9,
+        "Afro (ANM)": 0.69
+      },
+      {
+        "name": "Sucumbios",
+        "Indígena": 16.3,
+        "Afro (ANM)": 4.59
+      },
+      {
+        "name": "Cañar",
+        "Indígena": 14.7,
+        "Afro (ANM)": 0.98
+      },
+      {
+        "name": "Tungurahua",
+        "Indígena": 13.5,
+        "Afro (ANM)": 0.8
+      },
+      {
+        "name": "Galápagos",
+        "Indígena": 9.3,
+        "Afro (ANM)": 4.57
+      },
+      {
+        "name": "Pichincha",
+        "Indígena": 6.2,
+        "Afro (ANM)": 2.75
+      },
+      {
+        "name": "Carchi",
+        "Indígena": 4.2,
+        "Afro (ANM)": 5.15
+      },
+      {
+        "name": "Loja",
+        "Indígena": 3.6,
+        "Afro (ANM)": 0.56
+      },
+      {
+        "name": "Esmeraldas",
+        "Indígena": 3.4,
+        "Afro (ANM)": 53.79
+      },
+      {
+        "name": "Azuay",
+        "Indígena": 2,
+        "Afro (ANM)": 0.88
+      },
+      {
+        "name": "Santo Domingo de los Tsáchilas",
+        "Indígena": 1.4,
+        "Afro (ANM)": 4.76
+      },
+      {
+        "name": "Guayas",
+        "Indígena": 1.3,
+        "Afro (ANM)": 5.44
+      },
+      {
+        "name": "Santa Elena",
+        "Indígena": 1.2,
+        "Afro (ANM)": 2.31
+      },
+      {
+        "name": "Los Ríos",
+        "Indígena": 0.7,
+        "Afro (ANM)": 2.32
+      },
+      {
+        "name": "El Oro",
+        "Indígena": 0.5,
+        "Afro (ANM)": 4.03
+      },
+      {
+        "name": "Manabí",
+        "Indígena": 0.2,
+        "Afro (ANM)": 1.86
+      }
+    ]
+  }
+}

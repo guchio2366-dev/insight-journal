@@ -44,6 +44,7 @@
 
 /* Nature-only adaptation of the approved US frame; shared Mexico navigation is untouched. */
 .mexico-workspace.mexico-nature .mexico-nature-class-label{cursor:pointer}
+.mexico-workspace.mexico-nature .mexico-nature-class-label[hidden]{display:none}
 .mexico-nature-class-label text{font:750 18px var(--sans);fill:#263b43;paint-order:stroke fill;stroke:#fffdf4;stroke-width:3px;pointer-events:all}
 .mexico-nature-landform-name text{font-size:17px}
 .mexico-nature-class-label[aria-pressed=true] text{text-decoration:underline;text-underline-offset:3px}

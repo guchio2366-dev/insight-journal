@@ -1,0 +1,174 @@
+{
+  "recordedOn": "2026-10-11",
+  "inheritedHead": "7e157e3155b11efca1785d378b95cfadd37a0ae9",
+  "inheritedDenials": [
+    {
+      "product": "BasinATLAS v1.0",
+      "recordedUrl": "https://figshare.com/ndownloader/files/20087237",
+      "recordedStatus": 403,
+      "responseHeadersRetained": false,
+      "exactErrorRetained": false,
+      "denialOrigin": "unknown: tunnel versus publisher cannot be determined",
+      "retried": false
+    },
+    {
+      "product": "RiverATLAS v1.0",
+      "recordedDownloadCandidate": "https://figshare.com/ndownloader/files/20087486",
+      "recordedApiUrl": "https://api.figshare.com/v2/articles/9890531",
+      "recordedStatus": 403,
+      "downloadCandidateVerified": false,
+      "responseHeadersRetained": false,
+      "exactErrorRetained": false,
+      "denialOrigin": "unknown: tunnel versus publisher cannot be determined",
+      "retried": false
+    },
+    {
+      "product": "CLC2018 official REST distribution",
+      "recordedUrl": null,
+      "recordedStatus": 403,
+      "responseHeadersRetained": false,
+      "exactErrorRetained": false,
+      "denialOrigin": "unknown: exact route and tunnel versus publisher cannot be determined",
+      "retried": false
+    }
+  ],
+  "newReadOnlyAttempts": [
+    {
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/agr_r_milkpr?lang=EN&time=2023",
+      "method": "GET",
+      "client": "Python urllib.request",
+      "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))",
+      "denialOrigin": "CONNECT tunnel",
+      "publisherHttpStatus": null,
+      "retried": false
+    },
+    {
+      "url": "https://www.pewresearch.org/religion/2018/05/29/religious-identity/",
+      "method": "GET",
+      "client": "Python urllib.request",
+      "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))",
+      "denialOrigin": "CONNECT tunnel",
+      "publisherHttpStatus": null,
+      "retried": false
+    },
+    {
+      "url": "https://www.pewresearch.org/religion/2017/05/10/religious-affiliation/",
+      "method": "GET",
+      "client": "Python urllib.request",
+      "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))",
+      "denialOrigin": "CONNECT tunnel",
+      "publisherHttpStatus": null,
+      "retried": false
+    },
+    {
+      "url": "https://www.pewresearch.org/religion/2017/08/31/five-centuries-after-reformation-catholic-protestant-divide-in-western-europe-has-faded/",
+      "method": "GET",
+      "client": "Python urllib.request",
+      "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))",
+      "denialOrigin": "CONNECT tunnel",
+      "publisherHttpStatus": null,
+      "retried": false
+    }
+  ],
+  "noBypass": true,
+  "sourceBoundary": "The Pew 2017/2018 article text was read successfully by the web reader BEFORE the direct GET attempts were denied. The text supports broad background, not a complete regional geometry or harmonized census. No denied URL was subsequently retried via another tool.",
+  "authorizedRetry": [
+    {
+      "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/agr_r_milkpr?lang=EN&time=2023",
+      "method": "GET",
+      "client": "Python urllib.request",
+      "retryCount": 1,
+      "authorizedBy": "Sentinel_6215035e70488191b2fe3a11499e3531 / latest delegated instruction",
+      "timestampUTC": "2026-10-11T03:25:00.019291+00:00",
+      "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))"
+    },
+    {
+      "url": "https://www.pewresearch.org/religion/2018/05/29/religious-identity/",
+      "method": "GET",
+      "client": "Python urllib.request",
+      "retryCount": 1,
+      "authorizedBy": "Sentinel_6215035e70488191b2fe3a11499e3531 / latest delegated instruction",
+      "timestampUTC": "2026-10-11T03:25:00.043555+00:00",
+      "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))"
+    },
+    {
+      "url": "https://www.pewresearch.org/religion/2017/05/10/religious-affiliation/",
+      "method": "GET",
+      "client": "Python urllib.request",
+      "retryCount": 1,
+      "authorizedBy": "Sentinel_6215035e70488191b2fe3a11499e3531 / latest delegated instruction",
+      "timestampUTC": "2026-10-11T03:25:00.048302+00:00",
+      "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))"
+    },
+    {
+      "url": "https://www.pewresearch.org/religion/2017/08/31/five-centuries-after-reformation-catholic-protestant-divide-in-western-europe-has-faded/",
+      "method": "GET",
+      "client": "Python urllib.request",
+      "retryCount": 1,
+      "authorizedBy": "Sentinel_6215035e70488191b2fe3a11499e3531 / latest delegated instruction",
+      "timestampUTC": "2026-10-11T03:25:00.051923+00:00",
+      "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))"
+    }
+  ],
+  "cultureFollowup": {
+    "available": {
+      "SMRE": {
+        "url": "https://www.smre-data.ch/en/content/download/159",
+        "retrievedVia": "web reader, primary working paper PDF",
+        "content": "SMRE own standardized estimates, 2010 period (2006–2015), Appendix A, PDF pages 57–63; all 45 atlas countries, 8 shares and quality code",
+        "licenseUrl": "https://www.smre-data.ch/en/content/privacy-policy-impressum",
+        "license": "ODbL 1.0 database / DBCL 1.0 SMRE contents, original sources retain own conditions",
+        "savedAs": "src/data/atlas/europe/smre-religion-2010.json"
+      },
+      "Serbia": {
+        "url": "https://stat.gov.rs/en-us/vesti/20230616-st/?a=0&s=1104",
+        "licenseUrl": "https://www.stat.gov.rs/en-us/copyright/",
+        "result": "National press release and reuse terms readable; no full municipality ethnic or religious table saved"
+      }
+    },
+    "denials": [
+      {
+        "url": "https://data.stat.gov.rs//Home/Result/3104020301?languageCode=sr-Cyrl",
+        "client": "Python urllib.request",
+        "method": "GET",
+        "purpose": "Save official Serbia municipality religion table after the web reader reported a 4.6MB content-size limit, not a publisher access denial.",
+        "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))"
+      },
+      {
+        "url": "https://podaci.dzs.hr/media/td3jvrbu/popis_2021-stanovnistvo_po_gradovima_opcinama.xlsx",
+        "operation": "normal urllib.request GET, first attempt",
+        "time": "2026-10-11T03:55:11.866625+00:00",
+        "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))"
+      },
+      {
+        "url": "https://www.zensus2022.de/DE/Ergebnisse-des-Zensus/_inhalt.html",
+        "client": "web reader",
+        "error": "HTTP 403 Forbidden",
+        "denialOrigin": "Not determined from tool response",
+        "retried": false
+      }
+    ],
+    "nonAccessFailures": [
+      {
+        "url": "https://data.stat.gov.rs//Home/Result/3104020301?languageCode=sr-Cyrl",
+        "client": "web reader",
+        "error": "HTTP 400: response content exceeded tool size limit (4,615,397 bytes)",
+        "note": "Capacity failure, not site access denial. One normal GET then failed at CONNECT tunnel and was stopped."
+      },
+      {
+        "url": "https://data.stat.gov.rs//Home/Result/3104020303?languageCode=sr-Cyrl",
+        "client": "web reader",
+        "error": "HTTP 400 Timeout; no table values returned"
+      },
+      {
+        "url": "https://stat.gov.rs/en-us/oblasti/popis/popis-2021/",
+        "client": "web reader",
+        "error": "Redirect to popis2022.stat.gov.rs/en-US was unsafe/non-retryable; no alternate route taken"
+      }
+    ],
+    "notAdopted": {
+      "GeoEPR": "Official codebook retrieved: politically relevant groups, incomplete for general ethnicity; state-wide polygons are national outline, dispersed/urban/migrant groups lack polygons. No explicit redistribution license verified. Not used as complete ethnicity map."
+    },
+    "noUniformGisRequirement": "Broad source-backed descriptions and actual regional tables may be combined with separate meanings. A single harmonized GIS dataset is not required. Available SMRE overview implemented independently."
+  }
+}

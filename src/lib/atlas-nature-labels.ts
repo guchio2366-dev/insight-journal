@@ -1,7 +1,8 @@
 export type Point = {x:number;y:number};
 export type Box = {left:number;top:number;right:number;bottom:number};
-export type LabelInput = {id:string;anchor:Point;width:number;height:number};
+export type LabelInput = {id:string;anchor:Point;width:number;height:number;minLeaderLength?:number};
 export type LabelPlacement = LabelInput & Box;
+export type ProtectedLine = readonly [Point,Point];
 export const natureFallbackBounds = [-128,22,-64,52] as const;
 const mercator = (latitude:number)=>Math.log(Math.tan(Math.PI/4+latitude*Math.PI/360));
 
@@ -27,8 +28,18 @@ export function unprojectNatureFallback(point:Point,box:Box):[number,number]|nul
 export const boxesOverlap = (a:Box,b:Box,gap=3)=>a.left<b.right+gap&&a.right>b.left-gap&&a.top<b.bottom+gap&&a.bottom>b.top-gap;
 const clamp=(value:number,low:number,high:number)=>Math.max(low,Math.min(high,value));
 
+/** Segment/rectangle intersection, including a small screen-space river corridor. */
+export function lineIntersectsBox([a,b]:ProtectedLine,box:Box,padding=4):boolean {
+  let low=0,high=1;
+  for(const [start,delta,min,max] of [[a.x,b.x-a.x,box.left-padding,box.right+padding],[a.y,b.y-a.y,box.top-padding,box.bottom+padding]]){
+    if(delta===0){if(start<min||start>max)return false;continue;}
+    const t1=(min-start)/delta,t2=(max-start)/delta;low=Math.max(low,Math.min(t1,t2));high=Math.min(high,Math.max(t1,t2));if(low>high)return false;
+  }
+  return true;
+}
+
 /** All in-view labels participate. Crowding changes positions, never membership. */
-export function layoutNatureLabels(items:LabelInput[],bounds:Box,obstacles:Box[]=[]):LabelPlacement[] {
+export function layoutNatureLabels(items:LabelInput[],bounds:Box,obstacles:Box[]=[],protectedLines:readonly ProtectedLine[]=[]):LabelPlacement[] {
   const visible=items.filter(item=>item.anchor.x>=bounds.left&&item.anchor.x<=bounds.right&&item.anchor.y>=bounds.top&&item.anchor.y<=bounds.bottom);
   const points=visible.map(({anchor})=>({left:anchor.x-7,right:anchor.x+7,top:anchor.y-7,bottom:anchor.y+7}));
   const candidates=new Map(visible.map(item=>{
@@ -41,7 +52,9 @@ export function layoutNatureLabels(items:LabelInput[],bounds:Box,obstacles:Box[]
     for(const x of xs)for(const y of ys){
       const left=clamp(x,bounds.left+3,bounds.right-width-3),top=clamp(y,bounds.top+3,bounds.bottom-height-3);
       const rect={...item,left,top,right:left+width,bottom:top+height};
-      if(!obstacles.some(other=>boxesOverlap(rect,other))&&!points.some(other=>boxesOverlap(rect,other,1)))result.push(rect);
+      const end=leaderEnd(anchor,rect);
+      if(Math.hypot(end.x-anchor.x,end.y-anchor.y)<(item.minLeaderLength??0))continue;
+      if(!obstacles.some(other=>boxesOverlap(rect,other))&&!points.some(other=>boxesOverlap(rect,other,1))&&!protectedLines.some(line=>lineIntersectsBox(line,rect)))result.push(rect);
     }
     const distance=(a:Box)=>(a.left+width/2-anchor.x)**2+(a.top+height/2-anchor.y)**2;
     return [item.id,result.sort((a,b)=>distance(a)-distance(b))] as const;
@@ -60,7 +73,9 @@ export function layoutNatureLabels(items:LabelInput[],bounds:Box,obstacles:Box[]
     for(let top=bounds.top+3;!found&&top+item.height<=bounds.bottom-3;top+=item.height+3){
       for(let left=bounds.left+3;left+item.width<=bounds.right-3;left+=3){
         const rect={...item,left,top,right:left+item.width,bottom:top+item.height};
-        if(![...obstacles,...placed].some(other=>boxesOverlap(rect,other,2))){found=rect;break;}
+        const end=leaderEnd(item.anchor,rect);
+        if(Math.hypot(end.x-item.anchor.x,end.y-item.anchor.y)<(item.minLeaderLength??0))continue;
+        if(![...obstacles,...placed].some(other=>boxesOverlap(rect,other,2))&&!protectedLines.some(line=>lineIntersectsBox(line,rect))){found=rect;break;}
       }
     }
     placed.push(found??{...item,left:bounds.left+3,top:bounds.top+3,right:bounds.left+3+item.width,bottom:bounds.top+3+item.height});

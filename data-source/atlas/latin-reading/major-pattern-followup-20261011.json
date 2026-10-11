@@ -1,0 +1,41 @@
+{
+  "checkedAt": "2026-10-11",
+  "religion": {
+    "source": "https://www.pewresearch.org/religion/2014/11/13/religion-in-latin-america/",
+    "methodology": "https://www.pewresearch.org/religion/2014/11/13/appendix-a-methodology-13/",
+    "nativeDefinition": "Protestant includes historical Protestant, Pentecostal and other Protestant churches. Unaffiliated includes atheist, agnostic and no particular religion; not unknown.",
+    "scope": "Four country-scale qualitative contexts; percent:null. National reference values stay in their table, not allocated to provinces or pattern intensity.",
+    "methods": {
+      "GTM": "2013年11月10日–12月16日調査、成人98%を代表。ゲート付き住宅地・多層住宅居住者を除外。",
+      "SLV": "2013年11月9日–12月17日調査、全国成人を代表。",
+      "HND": "2013年11月9日–12月19日調査、成人98%を代表。Islas de la Bahíaと5県の一部小都市、ゲート付き住宅地・多層住宅居住者を除外。島嶼県は概略面から外します。",
+      "URY": "2013-11-22 to2014-01-08, nationally representative adult18+ sample; +/-3.6pp"
+    }
+  },
+  "ecuador": {
+    "status": "Province Mestizo values not adopted; missing is stated in the reading panel and ledger",
+    "adoptedSource": "https://www.secretariapueblosynacionalidades.gob.ec/wp-content/uploads/2023/12/Presentacion-CENSO-2022-Pueblos-y-Nacionalidades.pdf",
+    "pages": [
+      13,
+      16
+    ],
+    "available": "24 province Indigenous and Afro rates; these remain unchanged.",
+    "geographicProseSource": "https://saylordotorg.github.io/text_world-regional-geography-people-places-and-globalization/s09-01-introducing-the-realm.html",
+    "proseGrain": "Rural Amerindian Region section describes Ecuador/Peru/Bolivia and Mestizo urban residence generally, without urban extent polygons or provincial Mestizo values.",
+    "additionalSourceAttempts": [
+      {
+        "url": "https://www.censoecuador.gob.ec/resultados-censo/",
+        "result": "normal web fetch403"
+      },
+      {
+        "url": "https://geo.cepal.org/censo-ecuador/",
+        "result": "normal executor tunnel403; indexed page has no retrievable table"
+      },
+      {
+        "url": "https://www.ecuadorencifras.gob.ec/institucional/ecuador-crecio-en-2-5-millones-de-personas-entre-2010-y-2022/",
+        "result": "indexed national statement only; full fetch timeout, no provincial table verified"
+      }
+    ],
+    "excludedInference": "Do not use a national percentage as province values, calculate Mestizo as the residual of Indigenous/Afro, or turn generic urban prose into province residence boundaries."
+  }
+}

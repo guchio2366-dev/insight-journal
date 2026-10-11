@@ -1,4 +1,5 @@
 import {forestRegion} from '../data/atlas/forestry';
+import {forestProcessingSites} from '../data/atlas/us-processing-sites';
 import {forestComparison,forestComparisonUrl,forestReturn} from '../lib/atlas-forestry-state';
 import {containedMapBox,projectNatureFallback,layoutNatureLabels} from '../lib/atlas-nature-labels';
 
@@ -7,10 +8,11 @@ const ns='http://www.w3.org/2000/svg';
 export function createForestry(root:HTMLElement,base:string,cb:Callbacks){
  const frame=root.querySelector<HTMLElement>('[data-map-frame]')!,asset=base.replace(/atlas\/north-america\/$/,'assets/atlas/forestry/v1/');
  const svg=document.createElementNS(ns,'svg');svg.classList.add('forest-overlay');svg.setAttribute('aria-hidden','true');svg.style.display='none';
- const cover=document.createElementNS(ns,'image'),outline=document.createElementNS(ns,'path'),names=document.createElementNS(ns,'g');
- cover.setAttribute('preserveAspectRatio','none');outline.classList.add('forest-region-outline');svg.append(cover,outline,names);frame.insertBefore(svg,root.querySelector('[data-map-labels]'));
+ const cover=document.createElementNS(ns,'image'),outline=document.createElementNS(ns,'path'),names=document.createElementNS(ns,'g'),sites=document.createElementNS(ns,'g');
+ sites.setAttribute('data-forest-processing-sites','');
+ cover.setAttribute('preserveAspectRatio','none');outline.classList.add('forest-region-outline');svg.append(cover,outline,names,sites);frame.insertBefore(svg,root.querySelector('[data-map-labels]'));
  const key=document.createElement('div');key.className='forest-map-key';key.hidden=true;
- const legend=document.createElement('span');legend.textContent='緑：森林3分類（NLCD 2021）／輪郭：解説対象の州。木材生産量の地図ではありません。';
+ const legend=document.createElement('span');legend.textContent='緑：森林3分類（NLCD 2021）／輪郭：解説対象州／製・パ：製材・パルプ加工施設の登録位置（例）。面・記号は生産量の尺度ではありません。';
  const error=document.createElement('span');error.setAttribute('role','status');const retry=document.createElement('button');retry.type='button';retry.textContent='森林を再読み込み';retry.hidden=true;key.append(legend,error,retry);frame.after(key);
  const note=document.createElement('section');note.className='forest-comparison';note.hidden=true;
  const heading=document.createElement('h2');heading.id='forest-comparison-heading';heading.tabIndex=-1;
@@ -51,6 +53,13 @@ export function createForestry(root:HTMLElement,base:string,cb:Callbacks){
   cover.setAttribute('opacity',cb.field()==='natural'?'.45':'1');
   outline.setAttribute('d',region?features.filter(f=>(region.codes as readonly string[]).includes(f.properties.code)).map(f=>path(f.geometry,p)).join(''):'');
   names.replaceChildren();
+  sites.replaceChildren();
+  for(const site of forestProcessingSites){
+   const point=p(site.coordinates),group=document.createElementNS(ns,'g'),rect=document.createElementNS(ns,'rect'),text=document.createElementNS(ns,'text'),title=document.createElementNS(ns,'title');
+   group.setAttribute('data-forest-site',site.id);title.textContent=`${site.name}：${site.kind}の登録施設位置`;
+   rect.setAttribute('x',String(point.x-10));rect.setAttribute('y',String(point.y-10));rect.setAttribute('width','20');rect.setAttribute('height','20');rect.setAttribute('rx','3');rect.setAttribute('fill',site.color);rect.setAttribute('stroke','#fff');
+   text.textContent=site.symbol;text.setAttribute('x',String(point.x));text.setAttribute('y',String(point.y+4));text.setAttribute('text-anchor','middle');text.setAttribute('fill','#fff');text.setAttribute('font-size','12');group.append(title,rect,text);sites.append(group);
+  }
   if(region){
    const anchors:Record<string,[number,number]>={NC:[-79.8,35.6],WA:[-120.8,47.4],OR:[-120.6,43.6],ME:[-69.0,46.1],NH:[-71.2,43.0],VT:[-72.7,44.0]};
    const selected=features.filter(f=>(region.codes as readonly string[]).includes(f.properties.code));

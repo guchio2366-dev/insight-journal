@@ -31,7 +31,7 @@
 .eu-workspace-root .eu-map-label { position:absolute; inset:0 auto auto 0; min-height:32px; padding:4px 7px; border:1px solid #748e94; border-radius:3px; background:#fffdf2ee; color:#173c48; font:600 13px/1.5 var(--sans); white-space:nowrap; pointer-events:auto; }
 .eu-workspace-root .eu-map-label[aria-pressed=true] { color:#173c48; background:#fff0ba; border:2px solid #234553; }
 .eu-workspace-root .eu-map-label:hover { background:#fff0ba; }
-.eu-workspace-root .eu-crop-label { border-left:4px solid var(--crop-color); font-weight:700; }
+.eu-workspace-root .eu-crop-label { min-height:22px; padding:1px 3px; border:0; border-bottom:2px solid var(--crop-color); background:#fffef4db; font:700 12px/1.35 var(--sans); }
 .eu-workspace-root .eu-label-leader { stroke:#3a5a64; stroke-width:1; }
 .eu-workspace-root .eu-label-dot { fill:#fffdf2; stroke:#234553; stroke-width:1.5; }
 .eu-workspace-root .eu-label-dot.is-active { fill:#234553; }
@@ -407,6 +407,23 @@
 }
 .eu-workspace-root .eu-selected-point { position:absolute; z-index:4; width:14px; height:14px; border:3px solid #841e37; border-radius:50%; background:#fffdf2; box-shadow:0 0 0 2px #fffdf2; transform:translate(-50%,-50%); pointer-events:none; }
 .eu-workspace-root .eu-selected-point[hidden] { display:none; }
+.eu-workspace-root .eu-map-affordance { position:absolute; z-index:5; top:8px; left:8px; max-width:55%; margin:0; padding:5px 9px; border:1px solid #7895a0; background:#fffef4ef; color:#173c48; font:700 13px/1.35 var(--sans); pointer-events:none; }
+.eu-workspace-root .eu-map-affordance[hidden] { display:none; }
+.eu-workspace-root .eu-pew-surface-key { display:grid; gap:5px; margin:8px 0; padding:8px; border:1px solid #afbab5; background:#fafaf5; font:13px/1.4 var(--sans); }
+.eu-workspace-root .eu-pew-surface-key[hidden] { display:none; }
+.eu-workspace-root .eu-pew-surface-key > div[role=group] { display:flex; flex-wrap:wrap; gap:4px; }
+.eu-workspace-root .eu-pew-surface-key button { padding:4px 7px; border:1px solid #8ba09d; background:#fff; color:#173c48; font:700 12px var(--sans); cursor:pointer; }
+.eu-workspace-root .eu-pew-surface-key button[aria-pressed=true] { background:#254b58; color:#fff; }
+.eu-workspace-root .eu-pew-surface-key p { margin:0; }
+.eu-workspace-root .eu-pew-surface-scale { display:flex; flex-wrap:wrap; gap:3px 9px; }
+.eu-workspace-root .eu-pew-surface-scale span { display:inline-flex; align-items:center; gap:3px; white-space:nowrap; }
+.eu-workspace-root .eu-pew-surface-scale i { width:14px; height:11px; border:1px solid #7c8c91; }
+@media(min-width:1200px) {
+ .eu-workspace-root[data-europe-detail].is-eu-culture-reading:has([data-eu-smre-key]:not([hidden])) .eu-map-stage { height:clamp(350px,calc(100dvh - 480px),640px); min-height:0; max-height:none; aspect-ratio:auto; }
+ .eu-workspace-root[data-eu-religion-overview="smre"] [data-eu-pew-surface-key]:not([hidden]) { display:flex; flex-wrap:wrap; align-items:center; gap:6px 12px; margin:4px 0; padding:6px; }
+ .eu-workspace-root[data-eu-religion-overview="smre"] [data-eu-pew-surface-key]>strong { display:none; }
+ .eu-workspace-root [data-eu-smre-key] { margin:4px 0; padding:6px; gap:3px; }
+}
 .eu-workspace-root :is(.eu-read-panel,.eu-drainage-choice) .eu-grid-value p { font:14px/1.6 var(--sans); color:#3b4848; }
 
 /* Quiet names keep the climate surface visible. Other stations stay focusable. */
@@ -415,7 +432,7 @@
 .eu-workspace-root .eu-map-label[data-eu-map-kind="city"]:is(:hover,:focus-visible) { background:#fffdf2; outline:2px solid #426b6b; outline-offset:2px; }
 .eu-workspace-root .eu-map-label[data-eu-map-kind="city"].is-point-only { width:16px; height:16px; min-height:16px; padding:0; color:transparent; text-shadow:none; font-size:0; }
 .eu-workspace-root .eu-map-label[data-eu-map-kind="city"].is-point-only:is(:hover,:focus) { width:auto; height:auto; padding:1px 3px; color:#203e49; font-size:12px; }
-.eu-workspace-root .eu-crop-label.is-muted { opacity:.22; }
+.eu-workspace-root .eu-crop-label.is-muted { opacity:.85; }
 .eu-workspace-root .eu-crop-label.is-muted:is(:hover,:focus-visible) { opacity:1; }
 /* Retain 13px place names; dots and focus reveal the less prominent places. */
 .eu-workspace-root .eu-map-label[data-eu-map-kind="feature"]:not([data-eu-composition]):not([data-eu-religion-evidence]) { min-height:22px; padding:1px 3px; border:0; border-radius:0; background:transparent; font:600 13px/1.5 var(--sans); text-shadow:0 1px 2px #fffdf2,1px 0 2px #fffdf2,-1px 0 2px #fffdf2; box-shadow:none; }
@@ -490,8 +507,6 @@
 .eu-workspace-root[data-europe-detail] .eu-reader-section-label { margin:8px 0 2px; font:700 14px/1.4 var(--sans); color:#244653; }
 .eu-workspace-root[data-europe-detail] .eu-precipitation-line-label { position:absolute; z-index:2; transform:translate(-50%,calc(-100% - 8px)); padding:2px 4px; border:1px solid #3d82b4; border-radius:2px; background:#fffef4f2; color:#153b6d; font:700 12px/1.2 var(--sans); pointer-events:none; white-space:nowrap; }
 .eu-workspace-root[data-europe-detail] .eu-precipitation-line-label::after { content:''; position:absolute; left:50%; top:100%; height:8px; border-left:2px solid #153b6d; }
-.eu-workspace-root[data-europe-detail] .eu-wheat-region-label { position:absolute; z-index:3; transform:translate(-50%,calc(-100% - 6px)); padding:2px 4px; border:1px solid #a6802f; border-left:3px solid #b89138; background:#fffef4f2; color:#42381e; font:700 11px/1.25 var(--sans); white-space:nowrap; cursor:pointer; }
-.eu-workspace-root[data-europe-detail] .eu-wheat-region-label::after { content:''; position:absolute; left:50%; top:100%; height:6px; border-left:2px solid #a6802f; }
 .eu-workspace-root[data-europe-detail] .eu-farming-regional-evidence { position:absolute; z-index:3; transform:translate(-50%,-50%); display:grid; place-items:center; width:22px; height:22px; border:2px solid #fffef4; border-radius:50%; background:#49636b; color:white; font:700 11px/1 var(--sans); pointer-events:none; box-shadow:0 0 0 1px #243d44,0 1px 3px #102b3466; }
 .eu-workspace-root[data-europe-detail] .eu-farming-regional-evidence[hidden] { display:none; }
 .eu-workspace-root[data-europe-detail] .eu-farming-regional-evidence[data-kind="dairy"] { background:#52789e; }
@@ -505,10 +520,18 @@
 .eu-workspace-root[data-europe-detail] .eu-farming-country-evidence[data-kind="vines-country"] { border-left-color:#935a86; }
 .eu-workspace-root[data-europe-detail] .eu-farming-country-evidence[data-kind="vines-olives-country"] { border-left-color:#765c7a; }
 .eu-workspace-root[data-europe-detail] .eu-farming-country-evidence[data-kind="olives-country"] { border-left-color:#6f7f3b; }
-.eu-workspace-root[data-europe-detail] .eu-terrain-place-label { position:absolute; z-index:2; transform:translate(-50%,-50%); padding:2px 4px; background:#fffef4df; color:#413e36; font:700 12px/1.25 var(--sans); text-shadow:0 1px #fff; pointer-events:none; white-space:nowrap; }
-.eu-workspace-root[data-europe-detail] .eu-terrain-name-options { display:flex; gap:6px; padding:7px 0; }
-.eu-workspace-root[data-europe-detail] .eu-terrain-name-options button { min-height:36px; padding:5px 12px; border:1px solid #9eaca3; background:#fffef5; color:#244653; font:700 14px/1.4 var(--sans); }
-.eu-workspace-root[data-europe-detail] .eu-terrain-name-options button[aria-pressed=true] { background:#35515d; color:#fff; }
+.eu-workspace-root[data-europe-detail] .eu-terrain-place-label { position:absolute; z-index:3; transform:translate(-50%,-50%); min-height:26px; padding:2px 4px; border:1px solid #d0d1c7; background:#fffef4e8; color:#413e36; font:700 12px/1.25 var(--sans); text-shadow:0 1px #fff; white-space:nowrap; cursor:pointer; }
+.eu-workspace-root[data-europe-detail] .eu-terrain-leaders { position:absolute; inset:0; z-index:2; width:100%; height:100%; overflow:hidden; pointer-events:none; }
+.eu-workspace-root[data-europe-detail] .eu-terrain-leaders line { stroke:#564f3d; stroke-width:1.2; stroke-dasharray:2 2; opacity:.8; }
+.eu-workspace-root[data-europe-detail] .eu-terrain-leaders [data-eu-river-leader] { stroke:#176783; }
+.eu-workspace-root[data-europe-detail] .eu-terrain-place-label[data-kind=sea],.eu-workspace-root[data-europe-detail] .eu-terrain-place-label[data-kind=strait] { color:#205d74; border-color:#a7c7d1; }
+.eu-workspace-root[data-europe-detail] .eu-terrain-place-label[data-kind=wind] { color:#74442c; border-style:dashed; }
+.eu-workspace-root[data-europe-detail] .eu-terrain-place-label:is(:hover,:focus-visible,[aria-pressed=true]) { outline:2px solid #284f5b; outline-offset:1px; background:#fff5cf; }
+.eu-workspace-root[data-europe-detail] .eu-river-label { position:absolute; z-index:4; transform:translate(-50%,-50%); border:1px solid #a8c8d1; border-radius:3px; padding:2px 4px; background:#f5fcffed; color:#135773; font:700 12px/1.25 var(--sans); cursor:pointer; white-space:nowrap; }
+.eu-workspace-root[data-europe-detail] .eu-river-label:is(:hover,:focus-visible,[aria-pressed=true]) { outline:2px solid #176783; outline-offset:1px; background:#fff; }
+@media(min-width:1600px) {
+ .eu-workspace-root[data-europe-detail].is-eu-water-reading .eu-map-stage { height:calc(var(--eu-reader-height,680px) - 44px); min-height:360px; max-height:none; aspect-ratio:auto; }
+}
 .eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry]:not(.is-point-only) { border-left:4px solid var(--eu-industry-color); background:#fffef4e8; }
 .eu-workspace-root[data-europe-detail] .eu-map-inline-key { position:absolute; z-index:4; left:6px; bottom:6px; display:flex; flex-wrap:wrap; align-items:center; gap:3px 8px; max-width:calc(100% - 12px); padding:4px 6px; border:1px solid #b5c4ba; background:#fffef4ec; color:#263e45; font:11px/1.3 var(--sans); pointer-events:none; }
 .eu-workspace-root[data-europe-detail] .eu-map-inline-key[hidden] { display:none; }
@@ -535,8 +558,31 @@
  .eu-workspace-root[data-europe-detail] .atlas-desktop-shell:not(.is-reading-news)>.eu-consolidated-sources { grid-column:2; grid-row:3; width:100%; margin:4px 0 18px; }
  .eu-workspace-root[data-europe-detail] .eu-layout { grid-template-columns:minmax(0,2.15fr) minmax(315px,1fr); gap:10px; }
  .eu-workspace-root[data-europe-detail] .eu-map-stage { aspect-ratio:1.32; }
+ .eu-workspace-root[data-europe-detail]:has([data-eu-topic="terrain"][aria-pressed="true"]) .eu-map-stage { aspect-ratio:1.4; }
 }
 @media (min-width:1200px) {
  .eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-layout { grid-template-columns:minmax(0,2.15fr) minmax(315px,1fr); }
  .eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-map-stage { aspect-ratio:1.32; }
 }
+
+.eu-workspace-root .eu-smre-markers { position:absolute; inset:0; z-index:6; pointer-events:none; }
+.eu-workspace-root .eu-smre-markers[hidden],.eu-smre-marker[hidden] { display:none; }
+.eu-workspace-root .eu-smre-markers svg { position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+.eu-workspace-root .eu-smre-markers line { stroke:#52616b; stroke-width:1; stroke-opacity:.65; }
+.eu-workspace-root .eu-smre-marker { position:absolute; transform:translate(-50%,-50%); width:124px; min-height:0; padding:3px; border:1px solid #687982; border-radius:3px; background:#fffefaee; color:#203943; text-align:left; font:12px/1.3 var(--sans); pointer-events:auto; cursor:pointer; }
+.eu-workspace-root .eu-smre-marker strong { display:block; font-size:12px; white-space:nowrap; }
+.eu-workspace-root .eu-smre-shares { display:grid; grid-template-columns:1fr 1fr; gap:1px 3px; }
+.eu-workspace-root .eu-smre-shares>span { white-space:nowrap; font-size:11px; font-variant-numeric:tabular-nums; }
+.eu-workspace-root .eu-smre-shares i { display:inline-block; width:7px; height:9px; margin-right:2px; border:1px solid #73808a; }
+.eu-workspace-root .eu-smre-marker:focus-visible { outline:3px solid #0e5367; outline-offset:2px; }
+.eu-workspace-root .eu-religion-supplement { margin-top:12px; padding:8px; border:1px solid #b4c2c7; }
+.eu-workspace-root .eu-religion-supplement[hidden] { display:none; }
+.eu-workspace-root .eu-religion-supplement summary { cursor:pointer; font:700 14px/1.5 var(--sans); }
+
+.eu-workspace-root .eu-smre-markers circle { fill:#52616b; }
+.eu-workspace-root .eu-smre-markers line.is-emphasized { stroke:#113f55; stroke-width:2.5; stroke-opacity:1; }
+
+/* The separately sourced national/local reading remains above overview bars. */
+.eu-workspace-root.is-eu-culture-reading[data-eu-religion-overview="pew"]:has([data-eu-pew-map-key]:not([hidden])) .eu-map-annotations { z-index:7; }
+/* The shared reduced-motion duration must not animate measured map positions. */
+.eu-workspace-root :is(.eu-smre-marker,.eu-pew-marker,[data-eu-religion-national],[data-eu-religion-evidence]) { transition-property:none; }

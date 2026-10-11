@@ -1,0 +1,12 @@
+---
+import {fields,type Field} from '../../data/atlas/africa-atlas';
+import {withBase} from '../../lib/urls';
+interface Props {field?:Field;interactive?:boolean}
+const {field='nature',interactive=true}=Astro.props;
+---
+<nav class="africa-fields" aria-label="分野を選ぶ">
+ <a data-africa-overview-link href={withBase('/atlas/africa/overview/')}>概要</a>
+ {(['agriculture','nature','industry','population'] as const).map(id=>interactive?
+  <button type="button" data-field={id} aria-pressed={String(id===field)}>{fields[id].label}</button>:
+  <a href={withBase(`/atlas/africa/?field=${id}`)} aria-current={id===field?'page':undefined}>{fields[id].label}</a>)}
+</nav>

@@ -151,7 +151,7 @@ function controllerFixture(url,field='agriculture'){
   root.innerHTML=`<select data-place>${options(['all',...api.oceaniaCountries.map(c=>c.code)])}</select><select data-layer>${options(api.oceaniaLayers.map(l=>l.id))}</select><select data-compare-layer>${options(api.oceaniaLayers.map(l=>l.id))}</select>`+
     api.oceaniaThemes.filter(t=>t.field===field).map(t=>`<button data-theme="${t.id}"></button>`).join('')+
     ['all','theme','country'].map(scope=>`<button data-scope="${scope}"></button>`).join('')+
-    '<button data-comparison></button><button data-return></button><div data-normal-view><div data-primary-map></div></div><div data-comparison-view><div data-original-map></div><div data-comparison-map></div></div>'+
+    '<button data-comparison></button><button data-return></button><button data-oceania-industry-return hidden></button><div data-normal-view><div data-primary-map></div></div><div data-comparison-view><div data-original-map></div><div data-comparison-map></div></div>'+
     ['primary','original','comparison'].flatMap(prefix=>['title','period','unit',...(prefix==='primary'?[]:['legend'])].map(suffix=>`<div data-${prefix}-${suffix}></div>`)).join('')+
     '<div data-primary-legend-spacer></div><section data-required-legend-layer><p data-primary-legend-unit></p><div data-primary-legend></div></section><details data-primary-legend-dictionary><div data-primary-legend-dictionary-content></div></details>'+
     ['geography-reading','theme-title','takeaway','explanation','coverage','comparison-explanation','social-context','source-list'].map(hook=>`<div data-${hook}></div>`).join('')+
@@ -161,6 +161,36 @@ function controllerFixture(url,field='agriculture'){
   controller.initOceaniaLearningAtlas(root);
   return {window,root};
 }
+
+test('industry representative places open sourced details while all marks remain and URL reload restores selection',()=>{
+  const sessions=[];
+  try{
+    const first=controllerFixture('https://example.test/insight-journal/atlas/oceania/industry/?utm_source=qa','industry');sessions.push(first);
+    const root=first.root;
+    assert.equal(root.querySelectorAll('[data-oceania-industry-location]').length,5);
+    assert.equal(root.querySelectorAll('[data-oceania-industry-location][aria-pressed="true"]').length,0);
+    root.querySelector('[data-oceania-industry-location="lae-port"]')?.dispatchEvent(new first.window.MouseEvent('click',{bubbles:true}));
+    assert.equal(root.querySelector('[data-theme-title]').textContent,'ラエ港');
+    assert.match(root.querySelector('[data-explanation]').textContent,/個々の鉱山の輸出港/);
+    assert.match(root.querySelector('[data-source-list]').textContent,/ラエ港の位置資料/);
+    assert.equal(root.querySelectorAll('[data-oceania-industry-location]').length,5);
+    assert.equal(root.querySelectorAll('circle[stroke="#fff"]').length,347);
+    assert.equal(root.querySelector('[data-oceania-industry-location="lae-port"]').getAttribute('aria-pressed'),'true');
+    const url=first.window.location.href;
+    assert.equal(new URL(url).searchParams.get('industryLocation'),'lae-port');
+    assert.equal(new URL(url).searchParams.get('utm_source'),'qa');
+    const reload=controllerFixture(url,'industry');sessions.push(reload);
+    assert.equal(reload.root.querySelector('[data-theme-title]').textContent,'ラエ港');
+    reload.root.querySelector('[data-oceania-industry-return]').click();
+    assert.equal(new URL(reload.window.location.href).searchParams.has('industryLocation'),false);
+    assert.equal(reload.root.querySelectorAll('[data-oceania-industry-location][aria-pressed="true"]').length,0);
+    reload.root.querySelector('[data-oceania-industry-location="noro-port"]').dispatchEvent(new reload.window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
+    assert.equal(reload.root.querySelector('[data-theme-title]').textContent,'ノロ港・水産加工地域');
+    assert.equal(new URL(reload.window.location.href).searchParams.get('industryLocation'),'noro-port');
+    assert.equal(api.createOceaniaState('?industryLocation=invalid','industry').industryLocation,undefined);
+    assert.equal(api.createOceaniaState('?industryLocation=lae-port&layer=mines','industry').industryLocation,undefined);
+  }finally{for(const session of sessions)session.window.happyDOM.abort();}
+});
 
 test('comparison reload and named return preserve original crop, country, legends, unrelated query and hash',()=>{
   const sessions=[];
@@ -227,7 +257,12 @@ test('New Zealand detail focuses on the main islands and port while whole-region
   assert.match(api.oceaniaCoverage(api.getOceaniaLayer('places',state),state),/離島を含む/);
   const whole=api.renderOceaniaScene(api.getOceaniaLayer('places'),{...state,scope:'all'});
   assert.ok(whole.includes(api.oceaniaCountries.find(c=>c.code==='NZL').path));
-  assert.deepEqual(api.oceaniaFrame({...state,scope:'all'}),[0,0,geometry.oceaniaWidth,geometry.oceaniaHeight]);
+  const wholeFrame=api.oceaniaFrame({...state,scope:'all'});
+  assert.deepEqual(wholeFrame,[0,35,1100,710]);
+  for(const country of api.oceaniaCountries){
+   assert.ok(country.extent[0]>=wholeFrame[0]&&country.extent[2]<=wholeFrame[0]+wholeFrame[2],country.code+' longitude remains visible');
+   assert.ok(country.extent[1]>=wholeFrame[1]&&country.extent[3]<=wholeFrame[1]+wholeFrame[3],country.code+' latitude remains visible');
+  }
 });
 
 test('selected population context occurs once in the expanded reading for Kiribati, Samoa, Australia and PNG',()=>{
@@ -254,6 +289,17 @@ test('saved Oceania farming products start together and direct product URLs choo
    assert.match(api.renderOceaniaLegend(api.getOceaniaLayer(product)),/ha／元5分セル/);assert.match(api.renderOceaniaLegend(api.getOceaniaLayer(product)),/頭／km²/);
   }finally{win.happyDOM.abort();}
  }
+});
+
+test('Oceania single-product URL hides other mapped products and keeps the selected distribution',()=>{
+ const state=api.createOceaniaState('?layer=coconut&single=1','agriculture');
+ assert.equal(state.single,true);
+ const win=new Window();try{
+  const holder=win.document.createElement('div');holder.innerHTML=api.renderOceaniaScene(api.getOceaniaLayer(state.layer),state);
+  assert.deepEqual([...new Set([...holder.querySelectorAll('[data-farming-product]')].map(el=>el.dataset.farmingProduct))],['coconut']);
+  assert.deepEqual([...holder.querySelectorAll('[data-farming-place]')].map(el=>el.dataset.placeProduct),['coconut']);
+  assert.equal(api.createOceaniaState('?layer=farming-all&single=1','agriculture').single,false);
+ }finally{win.happyDOM.abort();}
 });
 
 test('Oceania farming example names stay inside the saved country and on a positive source cell',()=>{

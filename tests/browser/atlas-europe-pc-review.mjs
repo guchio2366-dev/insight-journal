@@ -242,7 +242,7 @@ async function agricultureClimateRepairs(page,profile){
   assert.equal(await wheatStatistics.locator('.eu-verified-donut').count(),1);
   assert.doesNotMatch(await wheatStatistics.innerText(),/大豆の域外輸入相手|食品群の供給熱量構成/);
   const labels=await page.locator('[data-eu-map-kind="crop"]:visible').evaluateAll(nodes=>nodes.map(node=>({id:node.dataset.euMapPlace,opacity:Number(getComputedStyle(node).opacity)})));
-  for(const label of labels)assert.equal(label.opacity,label.id==='wheat'?1:.22);
+  for(const label of labels)assert.equal(label.opacity,label.id==='wheat'?1:.85);
   await snapshot(page,profile,'farming-selected');
   await captureEurope(page,profile,'agriculture-wheat');
   await openEurope(page,'atlas/europe/agriculture/?layer=dairy','normal');
@@ -350,9 +350,9 @@ async function completeAlpsCopy(page) {
   const copy = await page.evaluate(() => {
     const reading = JSON.parse(document.querySelector('[data-eu-config]').textContent).readings.find(item => item.id === 'alps');
     const card = document.querySelector('[data-eu-feature-card]');
-    return {body: reading.body, text: card.textContent, source: reading.source, links: [...card.querySelectorAll('a')].map(link => link.href)};
+    return {explanation: reading.explanation, text: card.textContent, source: reading.source, links: [...card.querySelectorAll('a')].map(link => link.href)};
   });
-  assert.ok(copy.text.includes(copy.body), 'Keep the complete registered Alps explanation');
+  assert.ok(copy.text.includes(copy.explanation), 'Keep the sourced Alps explanation beneath the overview');
   assert.ok(copy.links.includes(copy.source), 'Keep its registered source link');
 }
 
@@ -393,7 +393,7 @@ async function europeOperations(page, profile, render) {
   if(normal){await snapshot(page,profile,'terrain-overview');await captureEurope(page,profile,'terrain');}
   assert.equal(await page.locator('[data-eu-subject-grid]').isVisible(),false,'Named landforms do not show numeric elevation');
   assert.equal(await page.locator('[data-eu-feature-list]').isVisible(),false);
-  await page.locator('[data-eu-map-place="alps"][data-eu-map-kind="feature"]').click();
+  await page.locator('[data-eu-terrain-label="alps"]').click();
   assert.equal(new URL(page.url()).searchParams.get('feature'),'alps');
   assert.equal(await page.locator('[data-eu-subject-grid]').isVisible(),false);
   await completeAlpsCopy(page);
@@ -507,7 +507,7 @@ async function europeOperations(page, profile, render) {
 async function stageOneOperations(page, profile) {
   const quietFeatures=async(field)=>{
     const names=await page.locator('[data-eu-map-kind="feature"]:visible:not(.is-point-only)').evaluateAll(nodes=>nodes.map(node=>{const s=getComputedStyle(node),r=node.getBoundingClientRect();return {id:node.dataset.euMapPlace,font:parseFloat(s.fontSize),background:s.backgroundColor,border:parseFloat(s.borderWidth),left:r.left,right:r.right,top:r.top,bottom:r.bottom};}));
-    assert.ok(names.length>0&&names.length<=(field==='industry'?16:4),field+' initial representative names');
+    assert.ok(names.length>0&&names.length<=(field==='industry'?16:11),field+' initial representative names');
     for(const name of names){assert.ok(name.font>=13);if(field==='industry')assert.notEqual(name.background,'rgba(0, 0, 0, 0)');else {assert.equal(name.background,'rgba(0, 0, 0, 0)');assert.equal(name.border,0);}}
     for(let i=0;i<names.length;i++)for(let j=i+1;j<names.length;j++){const a=names[i],b=names[j];assert.ok(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,field+' names do not overlap');}
     const points=await page.locator('[data-eu-map-kind="feature"].is-point-only:visible').count();
@@ -619,10 +619,11 @@ async function stageOneOperations(page, profile) {
   await openEurope(page, 'atlas/europe/population/?layer=ethnicity', 'normal');
   const extent = () => page.locator('[data-eu-static]').getAttribute('viewBox');
   const fullExtent = await extent();
+  assert.equal(fullExtent, '0 0 1200 1001', 'The ethnicity overview retains Europe without an automatic case zoom');
   for (const name of ['case', 'category', 'area']) assert.equal(await page.locator(`[data-culture-${name}]`).inputValue(), '');
   assert.equal(await page.locator('[data-culture-value]').isVisible(), false);
   const compositionCheck=async()=>{
-    const buttons=page.locator('[data-eu-composition]:visible');assert.equal(await buttons.count(),3);
+    const buttons=page.locator('[data-eu-composition]:visible');assert.equal(await buttons.count(),3,'The Europe overview shows the three retained census profiles');
     const boxes=await buttons.evaluateAll(nodes=>nodes.map(node=>{const box=node.getBoundingClientRect();return {left:box.left,top:box.top,right:box.right,bottom:box.bottom,width:box.width,height:box.height,font:parseFloat(getComputedStyle(node).fontSize),svg:node.querySelector('svg').getAttribute('viewBox')};}));
     for(const box of boxes){assert.ok(box.font>=14);assert.equal(box.svg,'0 0 56 56');assert.ok(Math.abs(box.width-boxes[0].width)<.01);}
     for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){const a=boxes[i],b=boxes[j];assert.ok(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,'Composition labels do not overlap');}
@@ -654,12 +655,13 @@ async function stageOneOperations(page, profile) {
   await page.reload({waitUntil: 'networkidle'}); await ready(page);
   assert.equal(page.url(), selectedURL);
   assert.equal(await page.locator('[data-culture-value]').textContent(), selectedValue);
-  assert.equal(await extent(), fullExtent);
+  const restoredCaseExtent = await extent();
+  assert.notEqual(restoredCaseExtent, fullExtent, 'An explicit case URL restores its source extent');
   await followComparison(page, 'culture-hubs'); await page.waitForURL('**/industry/**'); await ready(page);
   assert.match(await page.locator('[data-eu-origin-caption]').textContent(), /Middlesbrough/);
   await page.locator('[data-eu-comparison-return]').click(); await page.waitForURL('**/population/**'); await ready(page);
   assert.equal(await page.locator('[data-culture-value]').textContent(), selectedValue);
-  assert.equal(await extent(), fullExtent);
+  assert.equal(await extent(), restoredCaseExtent);
   await page.locator('[data-culture-case]').selectOption(''); await ready(page);
   for (const name of ['case', 'category', 'area']) assert.equal(new URL(page.url()).searchParams.has(`culture${name[0].toUpperCase()}${name.slice(1)}`), false);
   assert.equal(await page.locator('[data-culture-value]').isVisible(), false);
@@ -670,6 +672,11 @@ async function stageOneOperations(page, profile) {
   await compositionCheck();
   await openEurope(page, 'atlas/europe/population/?layer=religion', 'normal');
   for (const name of ['case', 'category', 'area']) assert.equal(await page.locator(`[data-culture-${name}]`).inputValue(), '');
+  assert.equal(await page.locator('[data-eu-smre-key]').isVisible(),true);
+  assert.equal(await page.locator('[data-eu-religion-national]:visible').count(),0);
+  assert.equal(await page.locator('[data-eu-pew-marker]:visible').count(),0);
+  await page.locator('[data-eu-religion-supplement] > summary').click();
+  await page.locator('[data-eu-pew-surface-group=unaffiliated]').click();
   assert.equal(await page.locator('[data-eu-religion-national]:visible').count(),5);
   assert.equal(await page.locator('[data-eu-composition]:visible').count(),0);
   assert.equal(await page.locator('[data-eu-religion-color-key]').isVisible(),true);
@@ -679,6 +686,11 @@ async function stageOneOperations(page, profile) {
   assert.equal(await page.locator('[data-eu-pew-marker]:visible').count(),35);
   assert.equal(await page.locator('[data-eu-pew-marker="SRB"]').isVisible(),false,'The separate Serbian census profile occupies this country on the overview');
   assert.equal(await page.locator('[data-eu-pew-marker="CZE"] .eu-pew-marker-bar i').nth(2).evaluate(node=>node.style.width),'72.8%');
+  const pewLabelCollisions=await page.locator('[data-eu-pew-marker]:visible').evaluateAll(nodes=>{
+    const labels=[...document.querySelectorAll('[data-eu-religion-national]:not([hidden])')].map(node=>node.getBoundingClientRect());
+    return nodes.filter(node=>{const a=node.getBoundingClientRect();return labels.some(b=>a.right>b.left&&b.right>a.left&&a.bottom>b.top&&b.bottom>a.top);}).map(node=>node.dataset.euPewMarker);
+  });
+  assert.deepEqual(pewLabelCollisions,[],'supplementary Pew bars do not cover national labels');
   await page.locator('[data-eu-religion-national="religion-national-serbia"]').click();
   assert.match(await page.locator('[data-eu-religion-evidence-reading]').textContent(),/セルビア.*2020年推計.*キリスト教 91.5%.*正教会.*5,387,426人/s);
   assert.equal(await page.locator('[data-eu-pew-marker]:visible').count(),35,'Other country distributions stay visible after selecting Serbia');

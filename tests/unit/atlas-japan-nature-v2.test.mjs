@@ -25,7 +25,7 @@ test('地形・降水の線と段階色は500m/250mm原資料単位を保持し�
 test('Köppenの原0.1度を1kmに偽装せず国内六気候地域と別の資料として扱う',()=>{
  assert.equal(manifest.climate.sourceResolutionDegrees,.1);assert.equal(manifest.climate.noData,0);assert(manifest.climate.missingLandPixels>0);assert.equal(japanClimateRegions.length,6);assert.equal(japanNatureFeatureIds.climate.length,6);
  for(const id of japanNatureFeatureIds.climate){const r=getJapanNatureReading('climate',id);assert.match(r.overview,/同一の面分類ではありません/);assert(r.reason.length>25);}
- assert.equal(japanNatureCities.length,3);assert.match(getJapanNatureReading('climate','climate-region-seto-inland').overview,/月別平年値は未収録/);
+ assert.equal(japanNatureCities.length,6);assert.match(getJapanNatureReading('climate','climate-region-seto-inland').overview,/観測所平年値を別に選んで比較/);
  assert.equal(getJapanNatureReading('climate','unknown').title,getJapanNatureReading('climate').title);
 });
 test('河川は原典の3区間だけ、沿岸小流域群を単一河川の流域と扱わない',()=>{

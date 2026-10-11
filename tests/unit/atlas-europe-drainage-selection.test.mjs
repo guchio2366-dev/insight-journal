@@ -5,7 +5,7 @@ import zlib from 'node:zlib';
 import {
   europeDrainageBasins, readEuropeDrainageBasins, normaliseEuropeDrainageBasin,
   europeDrainageBasinByIndex, europeDrainageIndexForBasin, readEuropeDrainageValues,
-  europeDrainageCell, europeDrainageOutline, europeDrainagePositionLabel,
+  europeDrainageCell, europeDrainageOutline, europeDrainageMainBasinOutline, europeDrainagePositionLabel,
 } from '../../src/lib/atlas-europe-drainage.ts';
 
 const bytes = zlib.gunzipSync(fs.readFileSync(new URL('../../public/assets/atlas/europe/drainage-v1/values.bin.gz', import.meta.url)));
@@ -111,4 +111,18 @@ test('real selected boundary never paints another source index and every compact
   const visible = new Set(values); visible.delete(-1);
   assert.equal(visible.size, europeDrainageBasins.length, 'metadata retains the actual display-contributing units');
   for (const basin of europeDrainageBasins) assert.ok(visible.has(basin.index), `HYBAS_ID ${basin.HYBAS_ID} has a displayed pixel`);
+});
+
+test('Danube and Volga connected outlines include all nine level-04 sections without painting unrelated basins', () => {
+  for (const main of [2040008490, 2040068680]) {
+    const members=europeDrainageBasins.filter(basin=>basin.MAIN_BAS===main);
+    assert.equal(members.length,9);
+    const memberIndexes=new Set(members.map(basin=>basin.index));
+    const outline=europeDrainageMainBasinOutline(values,main);
+    assert.ok(outline.boundaryPixels>0);
+    let painted=0;
+    for(let i=0;i<values.length;i++)if(outline.rgba[i*4+3]){assert.ok(memberIndexes.has(values[i]));painted++;}
+    assert.equal(painted,outline.boundaryPixels);
+    assert.ok(outline.boundaryPixels<values.length);
+  }
 });

@@ -13,7 +13,7 @@ type Annotation = Place & { kind:'city'|'feature'|'crop'; button:HTMLButtonEleme
 type View = { climate:boolean; crops:boolean; detailed:boolean; city:string; feature?:string; places:Place[]; featureLabelIds?:string[]; farmingIds?:string[]; selectedFarming?:string; emphasizedFeatures?:string[] };
 
 /** One screen-space annotation layer is shared by MapLibre and the SVG fallback. */
-export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], features:Place[], getView:()=>View, project:(coordinate:number[])=>Point, select:(kind:'city'|'feature'|'crop', id:string)=>void, farmingItems:FarmingItem[] = [], decorateFeature?:(id:string,button:HTMLButtonElement)=>void) {
+export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], features:Place[], getView:()=>View, project:(coordinate:number[])=>Point, select:(kind:'city'|'feature'|'crop', id:string)=>void, farmingItems:FarmingItem[] = [], decorateFeature?:(id:string,button:HTMLButtonElement)=>void, afterLayout?:()=>void) {
   const overlay=stage.querySelector<HTMLElement>('[data-eu-annotations]')!;
   const svg=overlay.querySelector<SVGSVGElement>('svg')!;
   const ns='http://www.w3.org/2000/svg';
@@ -125,6 +125,7 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
       el.line.setAttribute('x2',String(center.x));el.line.setAttribute('y2',String(center.y));
     }
     stage.classList.add('has-annotations');
+    afterLayout?.();
   }
   function refresh(relayout=true){needsLayout ||= relayout;if(pending)return;pending=requestAnimationFrame(()=>{pending=0;const layout=needsLayout;needsLayout=false;draw(layout);});}
   new ResizeObserver(()=>refresh()).observe(stage);

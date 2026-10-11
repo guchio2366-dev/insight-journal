@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "region": "russia",
+  "gpcc": {
+    "publisher": "GPCC/DWD",
+    "sourceUrl": "https://opendata.dwd.de/climate_environment/GPCC/GPCC_Precipitation_Analysis_Climatology/Version_2025/gpcc_precipitation_analysis_climatology_1991_2020_v2025_025.nc.gz",
+    "sourceSha256": "3bd80d05df52572f6409b594ae26b43e9045147cb3c25254cddb5a934c16e5c5",
+    "period": "1991–2020",
+    "edition": 2025,
+    "unit": "mm/year",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://www.dwd.de/EN/service/legal_notice/legal_notice.html",
+    "citation": "Rustemeier et al. (2025), GPCC Precipitation Analysis Climatology v2025, DOI:10.5676/DWD_GPCC/CLIMAT_V2025_025",
+    "image": "public/assets/atlas/russia-physical-v1/precipitation.png",
+    "imageSha256": "387970dc965c2c9a1976d90be1a3fb217f26489beaa77141dd6d8fafbd7f3e9e",
+    "bounds": [
+      18,
+      40,
+      191,
+      83
+    ],
+    "size": [
+      2400,
+      1194
+    ],
+    "breaksMm": [
+      250,
+      500,
+      750,
+      1000,
+      1250,
+      1500,
+      1750,
+      2000,
+      2250,
+      2500,
+      2750,
+      3000,
+      3250,
+      3500,
+      3750,
+      4000
+    ],
+    "colors": [
+      "#f0f8fc",
+      "#e2f1fa",
+      "#d4eaf7",
+      "#c4e2f3",
+      "#b4d9ef",
+      "#a2d0e9",
+      "#90c5e2",
+      "#7dbad9",
+      "#6aadd0",
+      "#58a0c5",
+      "#498fb8",
+      "#3c7da9",
+      "#306c99",
+      "#285b88",
+      "#214b76",
+      "#1b3c65",
+      "#162e53"
+    ],
+    "validSamplePixels": 1838698,
+    "sampleRangeMm": [
+      19.670000076293945,
+      2360.949951171875
+    ],
+    "isohyetLineCounts": {
+      "250": 24,
+      "500": 38,
+      "750": 39,
+      "1000": 19,
+      "1250": 12,
+      "1500": 6,
+      "1750": 3,
+      "2000": 1,
+      "2250": 1,
+      "2500": 0,
+      "2750": 0,
+      "3000": 0,
+      "3250": 0,
+      "3500": 0,
+      "3750": 0,
+      "4000": 0
+    },
+    "sourceResolution": "0.25 degree",
+    "displayMethod": "Nearest original GPCC cell at display pixel centre; straight-line 250 mm isohyets interpolated between original 0.25-degree cell centres. Country clipping occurs in the SVG."
+  },
+  "etopo": {
+    "publisher": "NOAA NCEI",
+    "sourceUrl": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/60s/60s_surface_elev_gtif/ETOPO_2022_v1_60s_N90W180_surface.tif",
+    "sourceEdition": 2022,
+    "verticalDatum": "EGM2008",
+    "unit": "m",
+    "rights": "U.S. public domain; attribution requested",
+    "metadataUrl": "https://data.noaa.gov/metaview/page?header=none&view=getDataView&xml=NOAA/NESDIS/NGDC/MGG/DEM//iso/xml/etopo_2022.xml",
+    "citation": "NOAA NCEI (2022), ETOPO 2022 Global Relief Model, DOI:10.25921/fd45-gt74",
+    "image": "public/assets/atlas/russia-physical-v1/elevation.png",
+    "imageSha256": "fe67e253730354dd78c3c38322952ed21b0bbaccf9d3f8d71d930950bcd773a5",
+    "bounds": [
+      18,
+      40,
+      191,
+      83
+    ],
+    "size": [
+      2400,
+      1194
+    ],
+    "breaksM": [
+      0,
+      500,
+      1000,
+      1500,
+      2000,
+      2500,
+      3000,
+      3500,
+      4000,
+      4500,
+      5000,
+      5500,
+      6000
+    ],
+    "colors": [
+      "#bcccd1",
+      "#e2ebce",
+      "#c9dda9",
+      "#a9ce8b",
+      "#b9cf86",
+      "#d4c588",
+      "#d8b278",
+      "#cd9c6e",
+      "#be8564",
+      "#a96f5d",
+      "#925c59",
+      "#7b4b57",
+      "#624155",
+      "#483851"
+    ],
+    "validSamplePixels": 2865600,
+    "unclippedSourceWindowRangeM": [
+      -9588.8125,
+      6461.15478515625
+    ],
+    "contourLineCounts": {
+      "500": 8202,
+      "1000": 5443,
+      "1500": 2718,
+      "2000": 1321,
+      "2500": 751,
+      "3000": 545,
+      "3500": 341,
+      "4000": 174,
+      "4500": 32,
+      "5000": 10,
+      "5500": 5,
+      "6000": 2
+    },
+    "sourceResolution": "60 arc-seconds",
+    "contourInput": "Two-pixel-per-map-unit overview sample from original 60-second cell centres; linear 500 m contour interpolation. Small peaks and narrow valleys can be omitted.",
+    "sourceSubsets": [
+      {
+        "name": "russia-west.tif",
+        "sha256": "00818133710bd69fd56889612d3b9233247dab3fc7165b977216a7dca875a0b7",
+        "size": [
+          9720,
+          2580
+        ],
+        "origin": [
+          18.0,
+          83.0
+        ],
+        "pixelSize": [
+          0.016666666666666666,
+          -0.016666666666666666
+        ]
+      },
+      {
+        "name": "russia-east.tif",
+        "sha256": "6b59b31e946e94df1b1e1a7e2a69e64b7a34b1920ad6550e3945482ddf8213ff",
+        "size": [
+          660,
+          2580
+        ],
+        "origin": [
+          -180.0,
+          83.0
+        ],
+        "pixelSize": [
+          0.016666666666666666,
+          -0.016666666666666666
+        ]
+      }
+    ]
+  },
+  "limitations": [
+    "Map image is clipped by the existing target-country outline; no annual water availability, river discharge, exact mountain height or coastal survey value is inferred.",
+    "Raster pixels and contour lines are overview cartography, not source observation dates or administrative statistics."
+  ]
+}

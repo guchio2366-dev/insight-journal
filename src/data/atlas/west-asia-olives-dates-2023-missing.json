@@ -1,0 +1,50 @@
+{
+  "version": "compact-missing-2023-v1",
+  "year": 2023,
+  "derivedFrom": "FAOSTAT official CSV independently checked outside this executor: 157 FBS quantity cells and 1272 external TM rows. Raw CSV is not present here.",
+  "sourceFiles": {
+    "FBS1": {"path":"raw/FBS_SAU_ARE_TUR_2023_all_items_all_elements.csv","sha256":"de027f3e4b6aee8752bfa81c21976911bca520f5650b07eb00c1feb6bf8a589a","records":3954},
+    "FBS2": {"path":"raw/FBS_additional17_2023_all_items_all_elements.csv","sha256":"2340e3e01a56eb9e2a020172c70f94f8b0f6412075fecacf3731881828855a07","records":20273},
+    "TM1": {"path":"raw/TM_SAU_ARE_TUR_2023_wheat_dates_olives_products.csv","sha256":"6bd8ce174c1a884bcb41475c757fa0f9e4be75409cc5edd02433356206252f79","records":3376},
+    "TM2": {"path":"raw/TM_additional17_2023_wheat_dates_olives_products.csv","sha256":"efdee4a1f90cf040fa689637d67c76c18c22641580b8304f5d115b052597193c","records":4163}
+  },
+  "sourceRecordConvention": "1-based CSV data records excluding header. Inclusive candidate ranges contain unrelated rows; apply every sourceQuery filter.",
+  "scope20M49": ["031","048","051","196","268","275","364","368","376","400","414","422","512","634","682","760","784","792","818","887"],
+  "FBS": {
+    "itemCode": "S2563", "item": "Olives (including preserved)", "unit": "1000 t", "flag": "I: Value imputed by a receiving agency",
+    "coverageM49": ["031","048","051","196","268","364","368","376","400","414","422","512","634","682","760","784","792","818","887"],
+    "absentM49": ["275"],
+    "columns": ["elementCode","sumReturnedValues","returnedCountriesM49","unreturnedCountriesM49"],
+    "values": [
+      ["5511",4098,["031","196","364","368","376","400","414","422","682","760","792","818"],["048","051","268","512","634","784","887"]],
+      ["5611",144,["031","048","051","196","268","364","368","376","400","414","422","512","634","682","760","784","792","818","887"],[]],
+      ["5072",-21,["031","048","051","196","268","364","368","376","400","414","422","512","634","682","760","784","792","818","887"],[]],
+      ["5911",213,["031","048","051","196","268","364","368","376","400","414","422","512","682","760","784","792","818","887"],["634"]],
+      ["5301",4053,["031","048","051","196","268","364","368","376","400","414","422","512","634","682","760","784","792","818","887"],[]],
+      ["5521",0,["400"],["031","048","051","196","268","364","368","376","414","422","512","634","682","760","784","792","818","887"]],
+      ["5527",0,["400"],["031","048","051","196","268","364","368","376","414","422","512","634","682","760","784","792","818","887"]],
+      ["5123",298,["031","048","196","364","368","376","400","414","422","634","760","792","818"],["051","268","512","682","784","887"]],
+      ["5131",2195,["031","196","364","376","400","422","682","760","792","818"],["048","051","268","368","414","512","634","784","887"]],
+      ["5154",273,["048","376","634","818"],["031","051","196","268","364","368","400","414","422","512","682","760","784","792","887"]],
+      ["5170",139,["031","048","051","196","268","364","368","376","400","414","422","512","634","682","760","784","792","818","887"],[]],
+      ["5142",1139,["031","048","051","196","268","364","368","376","400","414","422","512","634","682","760","784","792","818","887"],[]],
+      ["5171",5,["196","784","818"],["031","048","051","268","364","368","376","400","414","422","512","634","682","760","792","887"]]
+    ],
+    "sourceQuery": {"candidateRecordRanges":[["FBS1",424,3031],["FBS2",388,19458]],"requiredFilter":{"Domain Code":"FBS","Item Code (FBS)":"S2563","Year":"2023","Unit":"1000 t","Element Code":"the row elementCode"},"expectedQuantityRows":157}
+  },
+  "TM": {
+    "columns": ["partnerM49OrNullForOther","partnerName","tonnes","reporterCount"],
+    "boundary": "Scope20 M49 partners are internal even when Iran, Iraq, Syria or Yemen have no reporter row. All other partners are external.",
+    "rows": [
+      {"itemCode":"01450","item":"Olives","direction":"imports","elementCode":"5610","externalTonnes":66.74,"externalReporterCountries":["048","051","196","414","682","784","792","818"],"partners":[["050","Bangladesh",31.93,4],["300","Greece",17.77,4],["356","India",5.09,1],["840","United States of America",3.1,3],["380","Italy",1.82,3],[null,"Other returned external partners",7.03,4]],"candidateRecordRanges":[["TM1",41,3328],["TM2",60,2850]],"expectedExternalRows":27},
+      {"itemCode":"01450","item":"Olives","direction":"exports","elementCode":"5910","externalTonnes":416.57,"externalReporterCountries":["051","196","422","784","792"],"partners":[["276","Germany",135.62,1],["724","Spain",67.16,1],["120","Cameroon",49.97,1],["528","Netherlands (Kingdom of the)",38.04,2],["231","Ethiopia",18.64,1],[null,"Other returned external partners",107.14,5]],"candidateRecordRanges":[["TM1",648,3313],["TM2",132,3495]],"expectedExternalRows":64},
+      {"itemCode":"F0262","item":"Olives preserved","direction":"imports","elementCode":"5610","externalTonnes":71637.16,"externalReporterCountries":["031","048","051","196","268","275","376","400","414","422","512","634","682","784","792","818"],"partners":[["724","Spain",44740.23,15],["300","Greece",14417.59,14],["504","Morocco",4675.5,10],["380","Italy",1388.58,15],["250","France",1283.25,10],[null,"Other returned external partners",5132.01,15]],"candidateRecordRanges":[["TM1",15,3349],["TM2",9,4113]],"expectedExternalRows":193},
+      {"itemCode":"F0262","item":"Olives preserved","direction":"exports","elementCode":"5910","externalTonnes":141198.64,"externalReporterCountries":["031","048","051","196","268","376","400","422","682","784","792","818"],"partners":[["642","Romania",20439.15,4],["724","Spain",17950.35,4],["076","Brazil",16879.83,3],["840","United States of America",15396.39,7],["276","Germany",12512.07,4],[null,"Other returned external partners",58020.85,12]],"candidateRecordRanges":[["TM1",192,3376],["TM2",10,3507]],"expectedExternalRows":325},
+      {"itemCode":"01314","item":"Dates","direction":"imports","elementCode":"5610","externalTonnes":22641.52,"externalReporterCountries":["031","048","051","196","268","400","414","422","512","634","682","784","792","818"],"partners":[["788","Tunisia",10055.87,13],["586","Pakistan",5711.57,8],["012","Algeria",2327.35,10],["516","Namibia",1524.39,6],["840","United States of America",1212.57,10],[null,"Other returned external partners",1809.77,13]],"candidateRecordRanges":[["TM1",39,3348],["TM2",1,4158]],"expectedExternalRows":159},
+      {"itemCode":"01314","item":"Dates","direction":"exports","elementCode":"5910","externalTonnes":302881.72,"externalReporterCountries":["048","051","196","268","376","400","414","422","512","682","784","792","818"],"partners":[["356","India",72759.02,8],["504","Morocco",60659.74,4],["360","Indonesia",25284.51,5],["050","Bangladesh",19661.83,5],["706","Somalia",15499.57,4],[null,"Other returned external partners",109017.05,13]],"candidateRecordRanges":[["TM1",1,3370],["TM2",129,3902]],"expectedExternalRows":504}
+    ],
+    "sourceQueryFilter": {"Domain Code":"TM","Item Code (CPC)":"the row itemCode","Element Code":"the row elementCode","Year":"2023","Unit":"t","Partner Country Code (M49)":"not in scope20M49, then match each partner code or exclude top five for Other"}
+  },
+  "validation": {"rawSourceSha256Checked":4,"FBSQuantityCellsChecked":157,"TMExternalRowsChecked":1272,"countrySetsAndRankingsMatchOriginals":true,"missingToZero":false},
+  "limits": ["FBS S2563 includes preserved olives and is in 1000 t; TM raw 01450 and preserved F0262 are distinct t series","FBS Food 5142 is food supply only; the whole olive item is not necessarily food","FBS elements have different country coverage; missing values are not zero and a full 100% flow is unavailable","TM covers returned external trade partners only and may include re-exports","Do not combine raw olives, preserved olives, dates or olive oil by weight or convert them to a calorie-based self-sufficiency ratio"]
+}

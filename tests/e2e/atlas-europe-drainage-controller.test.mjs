@@ -247,11 +247,27 @@ test('a drainage section names a representative river only when its retained MAI
   const app=await setup();
   try{
     for(const river of app.config.readings.filter(item=>item.field==='nature'&&item.layer==='water')){
-      const cell=europeDrainageCell(values,river.coordinates);assert.ok(cell);
+      const cell=europeDrainageCell(values,river.coordinates);
+      if(!cell){
+        // River names may extend outside the 45-country basin mask. Do not
+        // invent a section or a basin identity for the missing source cell.
+        app.clickPoint(river.coordinates);
+        await until(()=>app.q('[data-eu-basin-summary]').textContent.includes('有効な区画がありません'));
+        assert.equal(app.q('[data-eu-drainage-choice]').value,'');
+        assert.equal(app.q('[data-eu-basin-summary]').textContent.includes(river.name),false);
+        continue;
+      }
       app.choose(String(cell.basin.HYBAS_ID));
       await until(()=>app.q('[data-eu-basin-summary]').textContent.includes(river.name));
-      assert.match(app.q('[data-eu-basin-summary]').textContent,/同じMAIN_BAS.*モデル区画/);
-      assert.match(app.q('[data-eu-basin-summary]').textContent,/流域全体とは限りません/);
+      const summary=app.q('[data-eu-basin-summary]').textContent;
+      if([2040008490,2040068680].includes(cell.basin.MAIN_BAS)){
+        assert.match(summary,/同じ河口へつながるLevel 4の9区画/);
+        assert.match(summary,/対象国と地図枠で切れています/);
+        assert.match(summary,/源流から河口までの本流を示すものではありません/);
+      }else{
+        assert.match(summary,/同じMAIN_BAS.*モデル区画/);
+        assert.match(summary,/流域全体とは限りません/);
+      }
     }
   }finally{await app.w.happyDOM.abort();}
 });

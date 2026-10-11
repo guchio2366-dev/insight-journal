@@ -19,3 +19,4 @@
 [data-forest-active=true] [data-agri-layers],[data-forest-active=true] .atlas-overlap-key,[data-forest-active=true] [data-agri-layer-warning]{display:none!important}
 @media(max-width:700px){.forest-stat-grid{grid-template-columns:1fr}.forest-stat-grid>figure,.forest-stat-grid>section{padding:12px}}
 [data-forest-active=true] .atlas-context-reading{display:none!important}
+.forest-national-table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}.forest-national-table caption{text-align:left;font-weight:700;margin:6px 0}.forest-national-table th,.forest-national-table td{padding:5px 3px;border-bottom:1px solid #d4d8cf}.forest-national-table th{text-align:left}.forest-national-table td{text-align:right}

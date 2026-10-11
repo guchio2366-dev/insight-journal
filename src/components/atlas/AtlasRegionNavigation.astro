@@ -10,7 +10,7 @@ const links = group === 'asia' ? asiaMapIds.flatMap(id => id === 'south-central-
 ---
 <div class="regional-navigation">
   <nav class="regional-tabs" aria-label={group === 'asia' ? 'アジアの地域' : '南北アメリカの地域'}>
-    {links.map(link => <a href={withBase(link.href)} aria-current={link.id === current ? 'page' : undefined}>{link.label}</a>)}
+    {links.map(link => <a href={withBase(link.href)} data-focus-link={group === 'asia' && (link.id === 'south-asia' || link.id === 'central-asia') ? link.id : undefined} aria-current={link.id === current ? 'page' : undefined}>{link.label}</a>)}
   </nav>
   {country && <nav class="regional-countries" aria-label="北米の国">
     {northAmericaLinks.map(link => <a href={withBase(link.href)} aria-current={link.id === country ? 'page' : undefined}>{link.label}</a>)}

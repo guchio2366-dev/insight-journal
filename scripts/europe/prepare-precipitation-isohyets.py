@@ -75,7 +75,7 @@ def generate(repo):
     mask_bytes=mask_io.getvalue();(folder/'source-mask.png').write_bytes(mask_bytes)
     mask_url='data:image/png;base64,'+base64.b64encode(mask_bytes).decode()
     svg=('<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1502" viewBox="0 0 1800 1502">'
-        '<title>欧州の年降水量：250mm等雨量線と同境界の段階青色</title>'
+        '<title>欧州の年降水量：250mm等雨量線と同境界の段階色</title>'
         '<desc>GPCC v2025、1991–2020年平年値。12か月の完全な原格子を合計。原格子中心間の線形補間で、欠測を越えて補間しません。</desc>'
         f'<defs><mask id="source-mask" mask-type="alpha"><image width="1800" height="1502" href="{mask_url}"/></mask></defs>'
         '<g mask="url(#source-mask)"><g data-isobands="250mm">'+''.join(band_paths)+'</g>'
@@ -90,14 +90,14 @@ def generate(repo):
         'doi':old['doi'],'period':old['period'],'originalResolution':old['originalResolution'],'inputSha256':old['inputSha256'],'inputMd5':old['inputMd5'],
         'license':old['license'],'licenseUrl':old['licenseUrl'],'licenseEvidence':old['licenseEvidence'],
         'attribution':old['attribution'].replace('nearest-neighbour Web Mercator display and colour classes.',
-            'native-grid linear 250 mm contours and matching blue bands projected to Web Mercator. Original nearest native annual values retained for separate point lookup.'),
+            'native-grid linear 250 mm contours and matching colour bands projected to Web Mercator. Original nearest native annual values retained for separate point lookup.'),
         'bounds':old['bounds'],'width':width,'height':height,'projection':old['projection'],'unit':'mm/year','breaks':thresholds,'colors':old['colors'],
         'numericLookup':{'path':'../precipitation-v1/values.bin.gz','sha256':old['files']['values.bin.gz']['sha256'],'method':'Unchanged nearest native annual source-cell lookup; it is distinct from interpolated contour display.'},
         'monthlyWindow':window['monthlyWindow'],'files':files,
         'processing':{'algorithm':'ContourPy serial, Linear, corner_mask=False, quad_as_tri=False','version':contourpy.__version__,
             'reference':'https://contourpy.readthedocs.io/en/stable/user_guide/calculate/z_interp.html',
             'annualSum':'12 finite nonnegative native monthly normals required; float64 sum and a single float32 storage cast.',
-            'contours':'250 mm intervals between fully valid source centres, with exactly the same geometry boundaries for adjacent blue bands.',
+            'contours':'250 mm intervals between fully valid source centres, with exactly the same geometry boundaries for adjacent colour bands.',
             'missing':'No source value changed or filled. Quads touching missing annual nodes remain unpainted; original country/source-missing mask also clips lines and bands.',
             'smoothing':'No spline smoothing, resampling to invent observations, national averages, or extrapolation.',
             'sourceMutation':False,'displayDoesNotIncreaseSourceResolution':True},

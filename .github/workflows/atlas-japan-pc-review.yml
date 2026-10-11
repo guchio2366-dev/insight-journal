@@ -5,12 +5,16 @@ on:
     paths:
       - '.github/workflows/atlas-japan-pc-review.yml'
       - 'scripts/capture-japan-review.mjs'
+      - 'scripts/capture-japan-production-baseline.mjs'
       - 'scripts/export-japan-review.mjs'
       - 'src/**/*japan*'
       - 'src/components/atlas/JapanAtlasPage.astro'
       - 'src/scripts/atlas-asia-explorer.ts'
       - 'public/assets/atlas/japan-v1/**'
       - 'public/assets/atlas/japan-*-v2/**'
+      - 'public/assets/atlas/japan-*-v3/**'
+      - 'scripts/prepare-japan*.py'
+      - 'data-source/atlas/japan-second-pass/**'
 permissions:
   contents: read
 concurrency:
@@ -18,7 +22,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   review:
-    name: Japan 1440x900 and 1024x768 in sandboxed Chrome
+    name: Japan 1920x1080, 1440x900 and 1024x768 in sandboxed Chrome
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -45,6 +49,8 @@ jobs:
           node-version-file: .nvmrc
       - run: npm ci --no-audit --no-fund
       - run: npm run build
+      - name: Record the current public Japan atlas at 1920 CSS pixels
+        run: node scripts/capture-japan-production-baseline.mjs
       - name: Verify map, labels, live cameras and navigation
         run: node scripts/capture-japan-review.mjs
       - name: Save evidence including unverified launch failures

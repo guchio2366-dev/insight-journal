@@ -1,0 +1,131 @@
+{
+  "publisher": "PRRI",
+  "title": "2023 PRRI Census of American Religion",
+  "url": "https://prri.org/research/census-2023-american-religion/",
+  "published": "2024-08-29",
+  "readOn": "2026-10-11",
+  "dataYear": 2023,
+  "surveyYears": "2014–2023",
+  "denominator": "Adults aged 18 or older, self-identified religious affiliation",
+  "method": "County small-area estimates; survey estimates substitute where pooled county sample >=500. Rounded published percentages; county-level uncertainty varies.",
+  "selection": "Publisher top 10 counties per group among counties with population >10,000",
+  "retrieval": "Official public report text read through Web; manually transcribed numeric county observations; no national value distributed to counties",
+  "groups": [
+    {
+      "id": "jewish",
+      "label": "ユダヤ教",
+      "color": "#165e98",
+      "width": 4,
+      "rows": [
+        {
+          "fips": "36047",
+          "name": "Kings County, NY",
+          "share": 12
+        },
+        {
+          "fips": "36087",
+          "name": "Rockland County, NY",
+          "share": 12
+        },
+        {
+          "fips": "36059",
+          "name": "Nassau County, NY",
+          "share": 12
+        },
+        {
+          "fips": "24031",
+          "name": "Montgomery County, MD",
+          "share": 9
+        },
+        {
+          "fips": "12099",
+          "name": "Palm Beach County, FL",
+          "share": 9
+        },
+        {
+          "fips": "34003",
+          "name": "Bergen County, NJ",
+          "share": 8
+        },
+        {
+          "fips": "36119",
+          "name": "Westchester County, NY",
+          "share": 7
+        },
+        {
+          "fips": "36061",
+          "name": "New York County, NY",
+          "share": 7
+        },
+        {
+          "fips": "25017",
+          "name": "Middlesex County, MA",
+          "share": 7
+        },
+        {
+          "fips": "42091",
+          "name": "Montgomery County, PA",
+          "share": 6
+        }
+      ]
+    },
+    {
+      "id": "muslim",
+      "label": "イスラム教",
+      "color": "#c96b17",
+      "width": 1.8,
+      "rows": [
+        {
+          "fips": "36081",
+          "name": "Queens County, NY",
+          "share": 6
+        },
+        {
+          "fips": "42101",
+          "name": "Philadelphia County, PA",
+          "share": 5
+        },
+        {
+          "fips": "36047",
+          "name": "Kings County, NY",
+          "share": 4
+        },
+        {
+          "fips": "24031",
+          "name": "Montgomery County, MD",
+          "share": 3
+        },
+        {
+          "fips": "51059",
+          "name": "Fairfax County, VA",
+          "share": 3
+        },
+        {
+          "fips": "34023",
+          "name": "Middlesex County, NJ",
+          "share": 3
+        },
+        {
+          "fips": "11001",
+          "name": "Washington, DC",
+          "share": 3
+        },
+        {
+          "fips": "34017",
+          "name": "Hudson County, NJ",
+          "share": 3
+        },
+        {
+          "fips": "34013",
+          "name": "Essex County, NJ",
+          "share": 3
+        },
+        {
+          "fips": "36059",
+          "name": "Nassau County, NY",
+          "share": 2
+        }
+      ]
+    }
+  ]
+}

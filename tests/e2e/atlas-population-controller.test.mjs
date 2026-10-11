@@ -24,7 +24,8 @@ async function setup(query='',fail=false,field='population'){
  const window=new Window({url:'https://example.com/insight-journal/atlas/north-america/'+field+'/'+query,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true}});
  const html=await readFile('dist/atlas/north-america/'+field+'/index.html','utf8');
  window.document.body.innerHTML=html.replace(/<script(?![^>]*application\/json)[\s\S]*?<\/script>/g,'');
- window.ResizeObserver=class {observe(){}disconnect(){}};
+ window.__resizeObservers=[];
+ window.ResizeObserver=class {constructor(callback){this.callback=callback;window.__resizeObservers.push(this);}observe(target){this.target=target;}disconnect(){}};
  window.createImageBitmap=async()=>({width:1,height:1,close(){}});
  window.HTMLCanvasElement.prototype.getContext=()=>({drawImage(){},getImageData:()=>({width:1,height:1,data:new Uint8ClampedArray([9,0,0,255])})});
  window.__failMap=fail;
@@ -40,6 +41,37 @@ async function setup(query='',fail=false,field='population'){
 
 const pick=(window,id)=>{window.__map.queryRenderedFeatures=()=>[{properties:{id}}];window.__map.events.click[0]({point:{x:1,y:1}});};
 const change=(window,element,value)=>{element.value=value;element.dispatchEvent(new window.Event('change'));};
+
+test('遷移途中のDOM矩形を使わず、solverの都市確定boxで宗教札を避ける',async()=>{
+ const {window,q}=await setup('?popView=religion');
+ try{
+  const proto=window.HTMLElement.prototype;
+  Object.defineProperty(proto,'offsetWidth',{get(){return this.matches('.atlas-nature-label')?this.hasAttribute('data-pop-city')?this.textContent.length*11+14:32:0;}});
+  Object.defineProperty(proto,'offsetHeight',{get(){return this.matches('.atlas-nature-label')?32:0;}});
+  proto.getBoundingClientRect=function(){
+   if(this.hasAttribute('data-map-frame'))return {left:50,top:100,right:850,bottom:600,width:800,height:500};
+   // Reproduce the observable stale rectangle during a transform transition.
+   const xy=window.__intermediateRectangles&&this.matches('.atlas-nature-label')?null:this.style.transform.match(/translate\(([-\d.]+)px,([-\d.]+)px\)/),left=50+Number(xy?.[1]??0),top=100+Number(xy?.[2]??0),width=this.offsetWidth,height=this.offsetHeight;
+   return {left,top,right:left+width,bottom:top+height,width,height};
+  };
+  const observers=window.__resizeObservers.filter(o=>o.target===q('[data-map-frame]'));
+  // Queue the story observer before the city observer, as can happen on resize.
+  const collide=()=>{const ny=q('[data-pop-city="new-york"]').getBoundingClientRect();return [...q('[data-pop-religion-markers]').querySelectorAll('.atlas-nature-label:not([hidden])')].some(n=>{const b=n.getBoundingClientRect();return ny.left<b.right&&ny.right>b.left&&ny.top<b.bottom&&ny.bottom>b.top;});};
+  for(const offset of [0,60,-40]){
+   window.__map.project=p=>({x:(p[0]+128)*10+offset,y:(52-p[1])*10});
+   window.__intermediateRectangles=true;
+   for(const o of [...observers].reverse())o.callback();
+   await delay();await delay();await delay();
+   window.__intermediateRectangles=false;
+   const layout=JSON.parse(q('[data-pop-religion-markers]').dataset.layoutDiagnostics),ny=q('[data-pop-city="new-york"]').getBoundingClientRect();
+   assert.equal(layout.coordinateSpace,'map-frame-content-box');
+   const obstacle=layout.obstacles.find(b=>b.id==='new-york');assert.ok(obstacle,'final city rectangle is passed directly to the story layout');
+   assert.equal(obstacle.left+layout.origin.x,ny.left);assert.equal(obstacle.top+layout.origin.y,ny.top);
+   for(const story of layout.placed)assert.equal(story.left<obstacle.right&&story.right>obstacle.left&&story.top<obstacle.bottom&&story.bottom>obstacle.top,false);
+   assert.equal(collide(),false,'religion stories must follow the final city layout');
+  }
+ }finally{await window.happyDOM.close();}
+});
 
 for(const fail of [false,true])test(`population stories retain context, boundaries and source state (fallback=${fail})`,async()=>{
  const {window,q,root}=await setup('?popView=ethnicity&popCity=detroit&view=custom&lng=-83&lat=42&z=6',fail);
@@ -65,6 +97,18 @@ for(const fail of [false,true])test(`population stories retain context, boundari
    for(const key of ['popView','popCity','view','lng','lat','z'])assert.equal(new URL(window.location.href).searchParams.get(key),before.searchParams.get(key));
   }
   if(!fail)assert.equal(window.__mapCount,1);
+ }finally{await window.happyDOM.close();}
+});
+for(const fail of [false,true])test(`宗教の最大面にPRRIの独立した２輪郭を重ね、切替で除去する（fallback=${fail}）`,async()=>{
+ const {window,q}=await setup('?popView=religion',fail);
+ try{
+  assert.match(q('[data-pop-map-note]').textContent,/PRRI 2023/);assert.equal(q('[data-pop-religion-concentrations]').hidden,false);
+  assert.equal(q('[data-pop-religion-concentrations]').querySelectorAll('tbody tr').length,20);
+  if(fail){const svg=q('[data-pop-minority-outlines]');assert.notEqual(svg.style.display,'none');assert.equal(svg.querySelectorAll('path').length,2);for(const p of svg.querySelectorAll('path'))assert.ok(p.getAttribute('d').length>100);}
+  else{const map=window.__map;for(const id of ['jewish','muslim']){const layer=map.getLayer('population-minority-'+id);assert.equal(layer.type,'line');assert.equal(layer.filter[2][1].length,10);}const missing=JSON.parse(await readFile('data/atlas/population-religion-dominant-reviewed.json','utf8')).rows.filter(r=>r.category==='unreported');assert.equal(missing.length,3);for(const r of missing)assert.equal(map.getSource('population').data.features.find(f=>f.properties.id===r.id).properties.color,'#c8ccd0');}
+  q('[data-pop-view="distribution"]').click();await waitFor(()=>/3,144/.test(q('[data-pop-status]').textContent),'density restored');
+  assert.equal(q('[data-pop-religion-concentrations]').hidden,true);assert.equal(q('[data-pop-minority-outlines]').style.display,'none');
+  if(!fail)assert.equal(window.__map.getLayer('population-minority-jewish'),undefined);
  }finally{await window.happyDOM.close();}
 });
 

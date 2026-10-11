@@ -26,8 +26,8 @@ for(let index=0;index<width*height;index++){
 const image=encodePng(rgba);
 manifest.breaks=breaks;
 manifest.colors=colors;
-manifest.styleUpdatedAt='2026-10-07';
-manifest.processing.palette='250 mm/year blue classes from the retained float32 display grid; edges follow sampled source-cell values and are not surveyed isohyets.';
+manifest.styleUpdatedAt='2026-10-11';
+manifest.processing.palette='Sequential blue 250 mm/year classes with distinct lightness in the two lowest bands from the retained float32 display grid; edges follow sampled source-cell values and are not surveyed isohyets.';
 manifest.processing.reclassificationInputSha256=manifest.files['values.bin.gz'].sha256;
 manifest.files['precipitation.png']={sha256:hash(image),bytes:image.length};
 await fs.writeFile(path.join(folder,'precipitation.png'),image);

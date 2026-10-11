@@ -2,10 +2,13 @@ import {africaBeverageBelts,africaBeverageLabels,africaBeverageLinks,africaBever
 import {withBase} from '../lib/urls.ts';
 import {projectAfrica,africaWidth,africaHeight} from '../lib/atlas-africa-geometry.ts';
 import {africaAgriFocusedLayer,africaAgriVisibleLayers,countries,type State} from '../data/atlas/africa-atlas.ts';
-import {africaCultureGuides,africaCultureGuideReason} from '../data/atlas/africa-culture-guide.ts';
 import {africaRiverForFeature,africaRiverSelectedColor} from '../data/atlas/africa-river-reading.ts';
 import neighbours from '../data/atlas/africa-neighbours.json' with {type:'json'};
 import {africaClimateCities} from '../data/atlas/africa-climate-cities.ts';
+import {africaReligionRows,africaReligionGroups,africaReligionOverview} from '../data/atlas/africa-religion-overview.ts';
+import {africaLanguageAsset,africaLanguageFamilies,africaLanguageOverview} from '../data/atlas/africa-language-overview.ts';
+import {africaEthnicityEvidence} from '../data/atlas/africa-ethnicity-evidence.ts';
+import {africaTerrainLabels,africaRiverLabels,africaSeaLabels,africaCurrentLabels,africaWindLabels,africaTerrainRanges} from '../data/atlas/africa-natural-labels.ts';
 
 type Row=Record<string,any>;
 type Feature={type:string;id?:string;geometry:Row;properties:Row};
@@ -183,7 +186,9 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
    const position=local&&clear(local)?local:candidates.find(clear);
    if(!position)continue;occupied.push(position);
    const label=svg('g',{'data-africa-city':city.id,'data-africa-city-label':city.id,role:'button',tabindex:0,'aria-label':city.name+'の雨温図を読む','aria-pressed':String(selected),class:'africa-map-pick-label'});
-   label.append(svg('path',{d:`M${cx},${cy}L${Math.max(position.x,Math.min(position.x+w,cx))},${position.y-8*scale}`,fill:'none',stroke:'#315975','stroke-width':1,'vector-effect':'non-scaling-stroke','pointer-events':'none'}));
+   // A decorative leader must not enlarge the button's bounding box: its
+   // centre could otherwise fall over empty ocean instead of the label.
+   group.append(svg('path',{d:`M${cx},${cy}L${Math.max(position.x,Math.min(position.x+w,cx))},${position.y-8*scale}`,fill:'none',stroke:'#315975','stroke-width':1,'vector-effect':'non-scaling-stroke','pointer-events':'none','aria-hidden':'true','data-africa-city-leader':city.id}));
    label.append(svg('rect',{x:position.x,y:position.y-h+4*scale,width:w,height:h,rx:3*scale,fill:selected?'#fff0df':'#fffdf8',stroke:selected?'#a64e29':'#43677b','stroke-width':1,'vector-effect':'non-scaling-stroke'}));
    const title=svg('text',{x:position.x+6*scale,y:position.y-3*scale,'font-size':font,'font-weight':750,fill:'#214f70','text-decoration':'underline'});title.textContent=city.name;label.append(title);group.append(label);
   }
@@ -195,27 +200,51 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   const labels=svg('g',{'data-africa-population-labels':'','pointer-events':'none'});
   // Existing country locator coordinates provide context, not density values.
   for(const country of countries.filter(c=>['DZA','MAR','EGY','NGA','ETH','COD','ZAF','MDG','SDN','KEN','TZA','MLI','NER','AGO'].includes(c.code))){const [x,y]=projectAfrica(country.point);const text=svg('text',{x,y,'text-anchor':'middle','font-size':12*scale,fill:'#536264','fill-opacity':.7,stroke:'#fffdf8','stroke-width':2*scale,'paint-order':'stroke','data-africa-population-country':country.code});text.textContent=country.name;labels.append(text);}
-  const cities:[string,number,number,number,number][]=[['カイロ',31.24,30.04,6,-8],['ラゴス',3.38,6.52,-58,20],['アビジャン',-4.03,5.35,-68,-9],['アクラ',-.2,5.56,-16,35],['カノ',8.52,12,6,-8],['キンシャサ',15.32,-4.32,-80,16],['アディスアベバ',38.75,9.03,-110,-12],['ナイロビ',36.82,-1.29,8,4],['ダルエスサラーム',39.28,-6.82,7,20],['ヨハネスブルク',28.05,-26.2,8,6],['ケープタウン',18.42,-33.93,-65,20],['アンタナナリボ',47.51,-18.88,-116,16]];
+  const cities:[string,number,number,number,number][]=[['カイロ',31.24,30.04,6,-8],['ラゴス',3.38,6.52,-58,20],['アビジャン',-4.03,5.35,-68,-9],['アクラ',-.2,5.56,-16,35],['カノ',8.52,12,6,-8],['アブジャ',7.489505,9.05462,8,18],['キンシャサ',15.32,-4.32,-80,16],['アディスアベバ',38.75,9.03,-110,-12],['ナイロビ',36.82,-1.29,8,4],['ダルエスサラーム',39.28,-6.82,7,20],['ヨハネスブルク',28.05,-26.2,8,6],['ケープタウン',18.42,-33.93,-65,20],['アンタナナリボ',47.51,-18.88,-116,16]];
   for(const [name,lon,lat,dx,dy]of cities){const [x,y]=projectAfrica([lon,lat]);if(x<viewport[0]||x>viewport[0]+viewport[2]||y<viewport[1]||y>viewport[1]+viewport[3])continue;labels.append(svg('circle',{cx:x,cy:y,r:2.5*scale,fill:'#273f4b',stroke:'#fff','stroke-width':1,'vector-effect':'non-scaling-stroke'}));const text=svg('text',{x:x+dx*scale,y:y+dy*scale,'font-size':14*scale,'font-weight':750,fill:'#273f4b',stroke:'#fffdf8','stroke-width':3*scale,'paint-order':'stroke','data-africa-population-city':name});text.textContent=name;labels.append(text);}
   group.append(labels);
  }
  const setup=(key:string)=>{
-  if(['climate','terrain','elevation'].includes(key))return {base:withBase('/assets/atlas/africa-physical-v1/'),family:'physical',id:key};
+  if(key==='climate')return {base:withBase('/assets/atlas/africa-physical-v1/'),family:'physical',id:key};
+  if(['terrain','elevation'].includes(key)||key.startsWith('water-'))return {base:withBase('/assets/atlas/africa-natural-presentation-v2/'),family:'natural',id:key==='water-rain'?'rain':key==='water-basin'?'basins':key==='water-river'?'rivers':key};
   if(['ethnicity','religion'].includes(key))return {base:withBase('/assets/atlas/africa-settlements-v1/'),family:'social',id:key};
   if(key==='distribution')return {base:withBase('/assets/atlas/africa-population-v1/'),family:'population',id:'population'};
   if(key.startsWith('crop-'))return {base:withBase('/assets/atlas/africa-crops-v1/'),family:'crops',id:key.slice(5)};
   if(key.startsWith('livestock-'))return {base:withBase('/assets/atlas/africa-livestock-v1/'),family:'livestock',id:key.slice(10)};
-  if(key==='water-rain')return null;
-  if(key.startsWith('water-'))return {base:withBase('/assets/atlas/africa-water-v1/'),family:'water',id:key==='water-basin'?'basins':'rivers'};
   return null;
  };
  function renderOne(state:State,mode:'original'|'presence'|'positive'|'zero'='original',borders=true):AfricaLayerView|null {
   const key=africaActualLayerKey(state),config=setup(key);currentKey=key;
-  const outlineSelection=['climate','terrain','elevation','distribution'].includes(key);
-  if(key==='ethnicity'||key==='religion'){const guide=africaCultureGuides[key];group.replaceChildren();lastPaint='';return {key,guide:true,ready:true,loading:false,error:'',title:guide.title,period:'2021年公開版',unit:'資料案内（分布は未配信）',scope:guide.scope,method:africaCultureGuideReason,sourceUrl:guide.source.url,sourceLabel:guide.source.label,legend:[],takeaway:guide.description,description:africaCultureGuideReason};}
+  if(key==='religion'||key==='language'){
+   const religion=key==='religion',overview=religion?africaReligionOverview:africaLanguageOverview,language=religion?null:request(withBase(africaLanguageAsset));
+   const legend=(religion?africaReligionGroups:africaLanguageFamilies).map(item=>({...item}));
+   const paint=[key,state.place,state.layerClass,language?.value?'loaded':'',group.ownerSVGElement?.getAttribute('viewBox'),group.ownerSVGElement?.getBoundingClientRect().width].join('|');
+   if(paint!==lastPaint){group.replaceChildren();lastPaint=paint;
+    const box=group.ownerSVGElement?.getBoundingClientRect(),viewport=(group.ownerSVGElement?.getAttribute('viewBox')??`0 0 ${africaWidth} ${africaHeight}`).split(/[ ,]+/).map(Number),scale=Math.max(viewport[2]/(box?.width||700),viewport[3]/(box?.height||580));
+    if(religion){
+     if(!group.ownerSVGElement?.querySelector('#africa-religion-mixed')){const pattern=svg('pattern',{id:'africa-religion-mixed',width:8,height:8,patternUnits:'userSpaceOnUse'});pattern.append(svg('path',{d:'M0 8L8 0',stroke:'#fffdf8','stroke-width':2}));group.ownerSVGElement?.querySelector('defs')?.append(pattern);}
+     for(const original of root.querySelectorAll<SVGPathElement>('[data-country-path]')){const row=africaReligionRows.find(item=>item.countryCode===original.dataset.countryPath);if(!row)continue;const attrs={d:original.getAttribute('d')??'',fill:africaReligionGroups.find(item=>item.id===row.primary)!.color,'fill-opacity':.76,'fill-rule':'evenodd','data-africa-religion-country':row.countryCode,'pointer-events':'none'};group.append(svg('path',attrs));if(row.mixed)group.append(svg('path',{...attrs,fill:'url(#africa-religion-mixed)','data-africa-religion-mixed':row.countryCode}));}
+    }else for(const point of language?.value?.points??[]){const category=africaLanguageFamilies.find(item=>item.id===point.family)??africaLanguageFamilies.find(item=>item.id==='other')!,[cx,cy]=projectAfrica(point.coordinates);if(cx<viewport[0]||cy<viewport[1]||cx>viewport[0]+viewport[2]||cy>viewport[1]+viewport[3])continue;const node=svg('circle',{cx,cy,r:2.3*scale,fill:category.color,opacity:state.layerClass&&state.layerClass!==category.id?.25:.8,'data-africa-language-point':point.id,'pointer-events':'none'}),title=svg('title',{});title.textContent=`${point.name} · ${point.family}（言語資料の記録位置）`;node.append(title);group.append(node);}
+    paintBorders(state,group);
+   }
+   return {key,ready:religion||!!language?.value,loading:!!language?.promise,error:language?.error??'',title:overview.title,period:religion?'2020年（2025公表）':'Glottolog 5.3（2026）',unit:religion?'国別構成':'言語の記録位置',scope:overview.scope,method:overview.attribution,sourceUrl:overview.source.url,sourceLabel:overview.source.label,legend,takeaway:overview.reading,description:overview.reading};
+  }
+  const outlineSelection=['climate','terrain','elevation','distribution','water-rain'].includes(key);
+  if(key==='ethnicity'){
+   const evidence=africaEthnicityEvidence;group.replaceChildren();lastPaint='';
+   const original=root.querySelector<SVGPathElement>('[data-country-path="GHA"]');
+   if(original)group.append(svg('path',{d:original.getAttribute('d')??'',fill:'none',stroke:'#365b72','stroke-width':2,'stroke-dasharray':'5 3','vector-effect':'non-scaling-stroke','pointer-events':'none','data-africa-ethnicity-source-country':'GHA'}));
+   const map=group.ownerSVGElement,box=map?.getBoundingClientRect(),viewport=(map?.getAttribute('viewBox')??`0 0 ${africaWidth} ${africaHeight}`).split(/[ ,]+/).map(Number),scale=Math.max(viewport[2]/(box?.width||700),viewport[3]/(box?.height||580));
+   const country=countries.find(row=>row.code==='GHA')!,[x,y]=projectAfrica(country.point);
+   if(x>=viewport[0]&&x<=viewport[0]+viewport[2]&&y>=viewport[1]&&y<=viewport[1]+viewport[3]){
+    const node=svg('text',{x:x+12*scale,y:y-12*scale,'font-size':14*scale,'font-weight':750,fill:'#365b72',stroke:'#fffdf8','stroke-width':3*scale,'paint-order':'stroke','pointer-events':'none','data-africa-ethnicity-source-label':'GHA'});node.textContent='ガーナ：2021国勢調査';
+    const line=svg('tspan',{x:x+12*scale,dy:17*scale,'font-size':12*scale,'font-weight':500});line.textContent='16州の構成・9大分類';node.append(line);group.append(node);
+   }
+   return {key,guide:true,ready:true,loading:false,error:'',title:evidence.title,period:'2021年国勢調査',unit:'限定した州別の構成',scope:evidence.scope,method:evidence.method,sourceUrl:evidence.source.url,sourceLabel:evidence.source.label,legend:[],takeaway:evidence.reading,description:evidence.limits.join(' ')};
+  }
   if(!config||state.view==='statistics'){group.replaceChildren();lastPaint='';return null;}
   const manifestResult=request(config.base+'manifest.json');
-  const empty: AfricaLayerView={key,ready:false,loading:!!manifestResult.promise,error:manifestResult.error??'',title:({climate:'気候区分',terrain:'標高区分と等高線',elevation:'標高',ethnicity:'掲載集団の居住範囲',religion:'掲載集団の宗教的特徴',distribution:'人口の格子分布','water-rain':'降水量の分布','water-river':'河川・湖の中心線','water-basin':'河川の流域'} as Row)[key]??key,period:'',unit:'',scope:'分布データを読み込んでいます。国別統計は下の比較欄で確認できます。',method:'',sourceUrl:'',sourceLabel:'',legend:[],takeaway:'',description:''};
+  const empty: AfricaLayerView={key,ready:false,loading:!!manifestResult.promise,error:manifestResult.error??'',title:({climate:'気候区分',terrain:'地形の起伏',elevation:'標高',ethnicity:'掲載集団の居住範囲',religion:'掲載集団の宗教的特徴',distribution:'人口の格子分布','water-rain':'降水量の分布','water-river':'河川・湖の中心線','water-basin':'河川の流域'} as Row)[key]??key,period:'',unit:'',scope:'分布データを読み込んでいます。国別統計は下の比較欄で確認できます。',method:'',sourceUrl:'',sourceLabel:'',legend:[],takeaway:'',description:''};
   const manifest=manifestResult.value;if(!manifest){group.replaceChildren();lastPaint='';return empty;}
   const layer:Row=config.family==='social'?manifest.regions?.africa?.[config.id]:manifest.layers?.[config.id]??(config.family==='population'?manifest.population??manifest:{});
   if(!layer||!Object.keys(layer).length){group.replaceChildren();return {...empty,loading:false,error:'この分布は配信対象に含まれていません。'};}
@@ -229,16 +258,18 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   const scope=config.family==='social'?`GeoEPR掲載の政治的に関連する集団の事例です。全住民の分布・構成比ではありません。${note(layer.unlisted)}`:note(layer.scope??layer.limitations??manifest.scope??manifest.limitations,'国の平均ではなく、出典に基づく空間分布です。');
   const input=config.family==='livestock'?layer.countryInputs?.[state.place]:undefined;
   const inputMethod=config.family==='livestock'?` 選択国の入力統計年：${input?.censusYear??'未記載'}。${input?.averageSpatialResolutionKm!==null&&input?.averageSpatialResolutionKm!==undefined?`元統計の平均空間解像度：約${input.averageSpatialResolutionKm} km（表示格子の5分角とは別）。`:''}${input?.inputSource?`入力統計の機関：${input.inputSource}。`:''}`:'';
-  const view: AfricaLayerView={...empty,title:text(layer.title,empty.title),period,unit:key==='climate'?'気候区分':key==='terrain'?'m（標高区分・等高線）':text(layer.unit??source.unit),scope,method:note(layer.method??manifest.method)+inputMethod,sourceUrl:text(layer.sourceUrl??source.url??source.sourceUrl??manifest.sources?.[0]?.page??manifest.sources?.[0]?.url),sourceLabel:text(layer.sourceLabel??source.label??source.name??source.publisher??layer.publisher,'分布の原典・加工方法'),legend,loading:false,error:'',takeaway:text(layer.takeaway),description:text(layer.description??layer.definition)};
+  const view: AfricaLayerView={...empty,title:text(layer.title,empty.title),period,unit:key==='climate'?'気候区分':text(layer.unit??source.unit),scope,method:note(layer.method??manifest.method)+inputMethod,sourceUrl:text(layer.sourceUrl??source.url??source.sourceUrl??manifest.sources?.[0]?.page??manifest.sources?.[0]?.url),sourceLabel:text(layer.sourceLabel??source.label??source.name??source.publisher??layer.publisher,'分布の原典・加工方法'),legend,loading:false,error:'',takeaway:text(layer.takeaway),description:text(layer.description??layer.definition)};
   const file=layer.file??layer.contours??layer.geometry??(typeof layer.geojson==='string'?layer.geojson:undefined);
   const data=file?request(config.base+file):null;
+  const contourLabels=layer.labels?request(config.base+layer.labels):null;
+  const mainRivers=config.family==='natural'&&['water-basin','terrain','elevation'].includes(key)?request(config.base+manifest.layers.rivers.file):null;
   const grid=layer.grid?request(config.base+layer.grid,true):null;
   if(data?.error||grid?.error){const failed={...view,error:data?.error??grid?.error??'',ready:false};viewCache.set(key,{manifest,layer,base:config.base,view:failed});return failed;}
   const ready=!!layer.image||!!data?.value;
-  const output={...view,ready,loading:!!data?.promise||!!grid?.promise};
+  const output={...view,ready,loading:!!data?.promise||!!grid?.promise||!!mainRivers?.promise||!!contourLabels?.promise};
   viewCache.set(key,{manifest,layer,base:config.base,view:output,grid:grid?.value});
-  const climateMap=key==='climate'?baseGroup.ownerSVGElement:null;
-  const paint=[key,state.place,state.compare,state.layerClass,state.river,file,ready,data?.value?'loaded':'',grid?.value?'grid':'',layer.image,mode,borders,key==='climate'?state.city:'',climateMap?.getAttribute('viewBox')??'',['climate','distribution'].includes(key)?climateMap?.getBoundingClientRect().width??0:''].join('|');
+  const climateMap=baseGroup.ownerSVGElement;
+  const paint=[key,state.place,state.compare,state.layerClass,state.river,file,ready,data?.value?'loaded':'',grid?.value?'grid':'',mainRivers?.value?'rivers':'',contourLabels?.value?'labels':'',layer.image,mode,borders,key==='climate'?state.city:'',climateMap?.getAttribute('viewBox')??'',climateMap?.getBoundingClientRect().width??0].join('|');
   if(paint!==lastPaint){
    const focusedRiverFeature=group.contains(document.activeElement)?document.activeElement?.getAttribute('data-africa-river-hit-feature'):null;
    const focusedCity=group.contains(document.activeElement)?document.activeElement?.getAttribute('data-africa-city'):null;
@@ -250,20 +281,24 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
     if(mode==='original'||grid?.value)
     group.append(svg('image',{href,x,y,width:right-x,height:bottom-y,'preserveAspectRatio':'none','pointer-events':'none','data-africa-raster':key}));}
    const riverHits:SVGElement[]=[];
+   const mapBox=climateMap?.getBoundingClientRect(),viewport=(climateMap?.getAttribute('viewBox')??`0 0 ${africaWidth} ${africaHeight}`).split(/[ ,]+/).map(Number),labelScale=Math.max(viewport[2]/(mapBox?.width||700),viewport[3]/(mapBox?.height||580));
+   if(config.family==='natural'&&!group.ownerSVGElement?.querySelector('#africa-natural-land-clip')){const clip=svg('clipPath',{id:'africa-natural-land-clip'});for(const original of root.querySelectorAll('[data-country-path]'))clip.append(svg('path',{d:original.getAttribute('d')??''}));group.ownerSVGElement?.querySelector('defs')?.append(clip);}
    if(data?.value){
     const collection=data.value.features??[],ids=new Set(categories.map(row=>text(row.id)));
     for(const feature of collection as Feature[]){
      const props=feature.properties??{},id=text(props.categoryId??props.classId??props.id);
      if(config.family==='social'&&key==='ethnicity'&&!ids.has(id))continue;
-     if(state.layerClass&&key!=='terrain'&&categories.length!==1&&id!==state.layerClass&&props.id!==state.layerClass)continue;
+     if(state.layerClass&&config.family!=='natural'&&key!=='terrain'&&categories.length!==1&&id!==state.layerClass&&props.id!==state.layerClass)continue;
      let d=paths.get(feature);if(!d){d=africaLayerPath(feature.geometry);paths.set(feature,d);}if(!d)continue;
-     const line=/LineString/.test(feature.geometry.type),boundary=config.id==='basins';
-     const river=key==='water-river'?africaRiverForFeature(feature):undefined,selected=!!river&&river.id===state.river;
+     const line=/LineString/.test(feature.geometry.type),boundary=false;
+     const river=key==='water-river'||key==='water-basin'?africaRiverForFeature(feature):undefined,selected=!!river&&river.id===state.river;
      const color=selected?africaRiverSelectedColor:text(props.color,categories.find(row=>text(row.id)===id)?.color??(key==='terrain'?'#655449':categories.length===1?categories[0].color:'#447f9d'));
-     const path=svg('path',{d,fill:line||boundary?'none':color,'fill-opacity':1,stroke:line||boundary?color:'#ffffff','stroke-width':selected?3.2:line||boundary?1.3:.3,'vector-effect':'non-scaling-stroke','fill-rule':'evenodd','data-africa-layer-feature':text(props.id,id),'pointer-events':'none'});
+     const path=svg('path',{d,fill:line||boundary?'none':color,'fill-opacity':key==='water-basin'?selected?.8:.55:1,stroke:line||boundary?color:key==='water-basin'?selected?africaRiverSelectedColor:'#748d9d':'#ffffff','stroke-width':selected?3.2:key==='water-river'?2.3:line?.65:.6,'vector-effect':'non-scaling-stroke','fill-rule':'evenodd','data-africa-layer-feature':text(props.id,id),'pointer-events':key==='water-basin'?'all':'none'});
+     if(config.family==='natural'&&line&&key!=='water-river'){path.setAttribute('clip-path','url(#africa-natural-land-clip)');path.setAttribute('stroke',key==='water-rain'?'#3975a1':'#786c58');path.setAttribute('data-africa-contour',String(props.value));}
+     if(key==='water-basin'){path.setAttribute('data-africa-river',text(props.riverId));path.setAttribute('data-africa-basin',text(props.riverId));path.setAttribute('role','button');path.setAttribute('tabindex','0');path.setAttribute('aria-pressed',String(selected));path.setAttribute('aria-label',`${label(props)}を読む`);}
      if(river){path.setAttribute('data-africa-river-feature',river.id);path.setAttribute('class',`africa-river-path${selected?' is-selected':''}`);}
      const title=svg('title',{});title.textContent=river?.label??label(props);path.append(title);group.append(path);
-     if(river){
+     if(river&&line){
       // The hit target follows the same source segments, including every gap.
       // Its width is an interaction aid and does not encode river width or flow.
       const hit=svg('path',{d,fill:'none',stroke:'transparent','stroke-width':14,'vector-effect':'non-scaling-stroke','pointer-events':'stroke','data-africa-river':river.id,'data-africa-river-hit-feature':text(props.id,id),class:`africa-river-hit${selected?' is-selected':''}`,tabindex:0,role:'button','aria-label':`${river.label}を読む`,'aria-pressed':selected});
@@ -271,6 +306,37 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
      }
     }
    }
+   if(mainRivers?.value)for(const feature of mainRivers.value.features as Feature[]){const river=africaRiverForFeature(feature),selected=river?.id===state.river,d=africaLayerPath(feature.geometry),path=svg('path',{d,fill:'none',stroke:selected?africaRiverSelectedColor:'#326e92','stroke-width':selected?3.3:key==='water-basin'?2.1:1.4,'vector-effect':'non-scaling-stroke','data-africa-river-feature':river?.id??'','pointer-events':'none'});group.append(path);if(key==='water-basin'&&river)riverHits.push(svg('path',{d,fill:'none',stroke:'transparent','stroke-width':14,'vector-effect':'non-scaling-stroke','pointer-events':'stroke','data-africa-river':river.id,'data-africa-river-hit-feature':text(feature.properties.id),role:'button',tabindex:0,'aria-label':`${river.label}を読む`,'aria-pressed':String(selected)}));}
+   const labelBoxes:{x:number;y:number;w:number;h:number}[]=[];
+   const measuredTextBox=(node:SVGElement,fallback:{x:number;y:number;w:number;h:number})=>{
+    const box=(node as SVGGraphicsElement).getBBox?.();
+    return box&&box.width>0&&box.height>0?{x:box.x,y:box.y,w:box.width,h:box.height}:fallback;
+   };
+   if(config.family==='natural'){
+    if(key==='terrain')for(const feature of africaTerrainRanges.features){const path=svg('path',{d:africaLayerPath(feature.geometry),fill:'#7b8e61','fill-opacity':.08,stroke:'#62755a','stroke-opacity':.35,'stroke-width':.65,'stroke-dasharray':'5 4','vector-effect':'non-scaling-stroke','data-africa-terrain-range':feature.properties.id,'pointer-events':'none'});group.append(path);}
+    const labels=key==='terrain'?[...africaTerrainLabels,...africaRiverLabels,...africaSeaLabels,...africaCurrentLabels,...africaWindLabels]:key==='water-river'?[...africaTerrainLabels,...africaRiverLabels,...africaSeaLabels]:key==='elevation'?africaTerrainLabels:key==='water-basin'?africaSeaLabels:[];
+    for(const item of labels){let [x,y]=projectAfrica([...item.coordinates]);if(x<viewport[0]||x>viewport[0]+viewport[2]||y<viewport[1]||y>viewport[1]+viewport[3])continue;const color=item.kind==='current'?item.temperature==='cold'?'#176581':'#a43e2d':item.kind==='river'?'#235f81':item.kind==='sea'?'#587782':item.kind==='wind'?'#5b687a':'#56604e';
+     if(item.axis){const points=item.axis.map(p=>projectAfrica([...p]));group.append(svg('path',{d:points.map((p,i)=>(i?'L':'M')+p.join(',')).join(''),fill:'none',stroke:color,'stroke-opacity':.7,'stroke-width':item.kind==='terrain'?5:2,'stroke-dasharray':item.kind==='wind'?'6 4':'','vector-effect':'non-scaling-stroke','pointer-events':'none',[item.kind==='current'||item.kind==='wind'?'data-africa-natural-direction':'data-africa-terrain-axis']:item.id}));if(item.kind==='current'||item.kind==='wind'){const end=points.at(-1)!,before=points.at(-2)!,angle=Math.atan2(end[1]-before[1],end[0]-before[0]),back=8*labelScale,side=4*labelScale;group.append(svg('path',{d:`M${end[0]},${end[1]}L${end[0]-back*Math.cos(angle)+side*Math.sin(angle)},${end[1]-back*Math.sin(angle)-side*Math.cos(angle)}L${end[0]-back*Math.cos(angle)-side*Math.sin(angle)},${end[1]-back*Math.sin(angle)+side*Math.cos(angle)}Z`,fill:color,'pointer-events':'none'}));}}
+     const start=item.kind==='river',width=Array.from(item.label).reduce((n,c)=>n+(/[ -~]/.test(c)?6:12),0)*labelScale,height=(item.season?27:15)*labelScale;
+     const candidates=[[0,0],[0,-18],[0,18],[-18,0],[18,0],[0,-36],[0,36],[-28,-18],[28,18],[-28,18],[28,-18]].map(([dx,dy])=>({x:Math.max(viewport[0]+4*labelScale+(start?0:width/2),Math.min(viewport[0]+viewport[2]-4*labelScale-(start?width:width/2),x+dx*labelScale)),y:Math.max(viewport[1]+15*labelScale,Math.min(viewport[1]+viewport[3]-(item.season?17:4)*labelScale,y+dy*labelScale)),w:width,h:height}));
+     const box=candidates.find(b=>!labelBoxes.some(o=>(start?b.x:b.x-b.w/2)<o.x+o.w+3*labelScale&&(start?b.x+b.w:b.x+b.w/2)>o.x-3*labelScale&&b.y-13*labelScale<o.y+o.h&&b.y+b.h-13*labelScale>o.y))??candidates[0];x=box.x;y=box.y;labelBoxes.push({x:start?x:x-width/2,y:y-13*labelScale,w:width,h:height});
+     const node=svg('text',{x,y,'text-anchor':item.kind==='river'?'start':'middle','font-size':(item.kind==='terrain'?12:item.kind==='river'?12:11)*labelScale,'font-weight':item.kind==='river'?750:650,fill:color,'fill-opacity':key==='elevation'?.68:1,stroke:'#fffdf8','stroke-width':3*labelScale,'paint-order':'stroke','data-africa-natural-label':item.id,'data-africa-natural-kind':item.kind,'pointer-events':'none'});node.textContent=item.label;if(item.season){const season=svg('tspan',{x,dy:12*labelScale,'font-size':10*labelScale});season.textContent=item.season.includes('冬')?'北半球の冬・乾季':'北半球の夏・雨季';node.append(season);}const title=svg('title',{});title.textContent=item.note+' '+item.source.label;node.append(title);group.append(node);
+     if(key==='elevation')labelBoxes[labelBoxes.length-1]=measuredTextBox(node,labelBoxes.at(-1)!);
+    }
+   }
+   // Preserve wet coastal peaks when two nearby rainfall captions compete.
+   const contourCaptions=key==='water-rain'?[...(contourLabels?.value??[])].sort((a,b)=>b.value-a.value):contourLabels?.value??[];
+   for(const item of contourCaptions){
+    const [x,y]=projectAfrica(item.coordinates),caption=key==='water-rain'?`${item.label} mm`:item.label,node=svg('text',{x,y,'font-size':11*labelScale,'font-weight':650,fill:key==='water-rain'?'#234e75':'#5b513f',stroke:'#fffdf8','stroke-width':3*labelScale,'paint-order':'stroke','text-anchor':'middle','data-africa-contour-label':item.value,'pointer-events':'none'});node.textContent=caption;group.append(node);
+    if(key==='elevation'||key==='water-rain'){
+     // Keep the original contour anchor. Omit a redundant numeric annotation
+     // if its glyphs/halo collide with a higher-priority terrain name or number.
+     const width=Array.from(caption).length*7*labelScale,box=measuredTextBox(node,{x:x-width/2,y:y-12*labelScale,w:width,h:15*labelScale}),gap=4*labelScale;
+     const clipped=box.x<viewport[0]||box.x+box.w>viewport[0]+viewport[2]||box.y<viewport[1]||box.y+box.h>viewport[1]+viewport[3];
+     if(clipped||labelBoxes.some(other=>box.x<other.x+other.w+gap&&box.x+box.w>other.x-gap&&box.y<other.y+other.h+gap&&box.y+box.h>other.y-gap))node.remove();else labelBoxes.push(box);
+    }
+   }
+   if(key==='water-basin'&&data?.value)for(const feature of data.value.features as Feature[]){const p=feature.properties,[x,y]=projectAfrica(p.labelCoordinates);const labelNode=svg('text',{x,y,'font-size':12*labelScale,'font-weight':750,fill:'#284c61',stroke:'#fffdf8','stroke-width':3*labelScale,'paint-order':'stroke','text-anchor':'middle','data-africa-basin-label':p.riverId,'pointer-events':'none'});labelNode.textContent=africaRiverForFeature(feature)?.label??p.name??p.id;const outlet=svg('tspan',{x,dy:13*labelScale,'font-size':10*labelScale,'font-weight':500});outlet.textContent=p.outletName;labelNode.append(outlet);group.append(labelNode);}
    if(outlineSelection&&state.layerClass&&grid?.value){
     const outlineKey=[key,state.layerClass].join('|');let d=outlineCache.get(outlineKey);
     if(d===undefined){d=africaGridClassOutline(grid.value,{...manifest,...layer},state.layerClass);outlineCache.set(outlineKey,d);}
@@ -383,7 +449,7 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   const occupied:{x:number;y:number;w:number;h:number}[]=[];
   function paintLabels(jobs:typeof labelJobs){for(const job of jobs){
    const {key,anchor,index,livestock}=job,layer=summary.layers[key]??{label:africaCommodityLabels[key.split('-')[1]]},node=agriGroups.get(key)!,selectedNow=!state.overview&&key===focused;
-   const [ax,ay]=projectAfrica([anchor.lon,anchor.lat]),font=14*labelScale,iconScale=.55*labelScale,iconWidth=livestock?22*labelScale:0,width=layer.label.length*font+iconWidth+5*labelScale,height=19*labelScale,gap=5*labelScale;
+   const [ax,ay]=projectAfrica([anchor.lon,anchor.lat]),font=15*labelScale,iconScale=.55*labelScale,iconWidth=livestock?22*labelScale:0,width=layer.label.length*font+iconWidth+5*labelScale,height=19*labelScale,gap=5*labelScale;
    const candidates=[[gap,-12*labelScale],[gap,17*labelScale],[-width-gap,-12*labelScale],[-width-gap,17*labelScale],[gap,-35*labelScale],[-width-gap,40*labelScale],[gap,40*labelScale],[-width-gap,-35*labelScale],[gap,-58*labelScale],[-width-gap,63*labelScale]];
    if(isAfricaBeverage(key)){const nearby:number[][]=[];for(const dx of [28,-width/labelScale-28,56,-width/labelScale-56])for(const dy of [-12,17,-35,40])nearby.push([dx*labelScale,dy*labelScale]);candidates.splice(4,0,...nearby);}
    const visibleAnchor=ax>=viewport[0]&&ax<=viewport[0]+viewport[2]&&ay>=viewport[1]&&ay<=viewport[1]+viewport[3];
@@ -392,18 +458,19 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
    if(!position)continue;if(active.includes(key)&&visibleAnchor)occupied.push(position);
    const labelGroup=svg('g',{'data-africa-agri-label':key,'data-africa-agri-label-anchor':`${anchor.lon},${anchor.lat}`});agriPick(labelGroup,key,`${key}-label-${index}`,selectedNow,layer.label);
    if(!visibleAnchor)labelGroup.setAttribute('display','none');
-   labelGroup.append(svg('path',{d:`M${ax},${ay}L${Math.max(position.x,Math.min(position.x+width,ax))},${position.y-5*labelScale}`,fill:'none',stroke:africaCommodityColor(key),'stroke-width':1,'vector-effect':'non-scaling-stroke','pointer-events':'none'}));
-   labelGroup.append(svg('circle',{cx:ax,cy:ay,r:2*labelScale,fill:africaCommodityColor(key),stroke:'#fff','stroke-width':1,'vector-effect':'non-scaling-stroke','pointer-events':'none'}));
    if(livestock){const name=key.slice(10),icon=svg('g',{transform:`translate(${position.x},${position.y-12*labelScale}) scale(${iconScale})`,'data-africa-agri-glyph':name,fill:africaCommodityColor(key),stroke:africaCommodityColor(key),'stroke-width':1.6,'stroke-linecap':'round','stroke-linejoin':'round','aria-hidden':'true'});
     icon.append(svg('path',{d:name==='sheep'?'M5 15C0 12 3 5 8 7C9 1 15 2 17 6C22 2 28 5 27 11C33 12 29 19 25 19H8Z':name==='goats'?'M5 8H23L27 4L33 8L30 14H25L22 20H8Z':'M4 7H23L27 4L34 8L31 16H25L23 20H7Z'}));
     icon.append(svg('path',{d:'M8 18V27M21 18V27',fill:'none','stroke-width':2.5}));
     if(name==='goats')icon.append(svg('path',{d:'M28 5Q20 -5 29 -5M31 6Q27 -4 35 -4M31 13L29 19',fill:'none'}));
     if(name==='cattle')icon.append(svg('path',{d:'M27 5L23 0M31 6L35 1M4 8L0 3',fill:'none'}));labelGroup.append(icon);
    }
-   const title=svg('text',{x:position.x+iconWidth,y:position.y,'font-size':font,'font-weight':selectedNow?800:700,fill:africaCommodityColor(key),stroke:'#fffdf8','stroke-width':3*labelScale,'paint-order':'stroke','stroke-linejoin':'round','data-africa-agri-label-text':key});title.textContent=layer.label;labelGroup.append(title);node.append(labelGroup);
+   const title=svg('text',{x:position.x+iconWidth,y:position.y,'font-size':font,'font-weight':selectedNow?800:750,fill:livestock?'#283b40':'#534229',stroke:'#fffdf8','stroke-width':3*labelScale,'paint-order':'stroke','stroke-linejoin':'round','data-africa-agri-label-text':key});title.textContent=layer.label;labelGroup.append(title);node.append(labelGroup);
   }
   }
-  paintLabels(labelJobs);
+  const beverageJobs:typeof labelJobs=[];
+  for(const product of ['tea','coffee'] as const)for(const [index,point]of africaBeverageLabels[product].entries()){const [x,y]=projectAfrica(point);if(x>=viewport[0]&&x<=viewport[0]+viewport[2]&&y>=viewport[1]&&y<=viewport[1]+viewport[3])beverageJobs.push({key:`crop-${product}-harvested`,anchor:{lon:point[0],lat:point[1]},index,livestock:false});}
+  const jobs=[...labelJobs,...beverageJobs],firstKeys=new Set<string>(),primary=jobs.filter(job=>{if(firstKeys.has(job.key))return false;firstKeys.add(job.key);return true;});
+  paintLabels(primary);paintLabels(jobs.filter(job=>!primary.includes(job)));
   baseGroup.append(...agriGroups.values());
   const contextPlace=africaAgriContextPlace(state.overview,focused,active,viewport);
   if(contextPlace){
@@ -421,9 +488,6 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
     const name=svg('text',{x:position.x,y:position.y,'font-size':font,'font-weight':600,fill:'#53656a',stroke:'#fffdf8','stroke-width':3*labelScale,'paint-order':'stroke','stroke-linejoin':'round','data-africa-agri-place-text':contextPlace.code});name.textContent=contextPlace.name;place.append(name);baseGroup.append(place);
    }
   }
-  const beverageJobs:typeof labelJobs=[];
-  for(const product of ['tea','coffee'] as const)for(const [index,point]of africaBeverageLabels[product].entries()){const [x,y]=projectAfrica(point);if(x>=viewport[0]&&x<=viewport[0]+viewport[2]&&y>=viewport[1]&&y<=viewport[1]+viewport[3])beverageJobs.push({key:`crop-${product}-harvested`,anchor:{lon:point[0],lat:point[1]},index,livestock:false});}
-  paintLabels(beverageJobs);
   if(focusedElement)baseGroup.querySelector<SVGElement>(`[data-africa-agri-focus="${focusedElement}"]`)?.focus({preventScroll:true});
   return result;
  }

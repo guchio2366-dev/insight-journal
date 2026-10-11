@@ -87,20 +87,18 @@ async function populationNationalLayout(page) {
 async function religionOverviewLayout(page) {
   const layout = await page.locator('[data-population-overview-category="religion"]').evaluate(root => {
     const box = node => {const r = node.getBoundingClientRect(); return {x: r.x, y: r.y, width: r.width, height: r.height, right: r.right, bottom: r.bottom};};
-    const cards = [...root.querySelectorAll('.population-overview-card')].map(node => ({...box(node), title: node.querySelector('.population-overview-card-title')?.textContent, svg: box(node.querySelector('svg')), text: node.textContent, stateCount: node.querySelectorAll('use[data-overview-state]').length}));
+    const map = root.querySelector('.population-overview-combined');
+    const indicators=[...root.querySelectorAll('.population-overview-indicators li')].map(node=>({text:node.textContent,...box(node)}));
+    const groups=[...root.querySelectorAll('[data-overview-highlight-metric]')].map(node=>({metric:node.getAttribute('data-overview-highlight-metric'),states:[...node.querySelectorAll('[data-overview-highlight-state]')].map(mark=>mark.getAttribute('data-overview-highlight-state'))}));
     const denominators = [...root.querySelectorAll('[data-population-overview-denominator="religion"]')].map(node => ({text: node.textContent, ...box(node)}));
-    return {container: box(root), cards, denominators};
+    return {container: box(root),map:box(map),svg:box(map.querySelector('svg')),stateCount:map.querySelectorAll('use[data-overview-state]').length,indicators,groups,denominators};
   });
-  assert.equal(layout.cards.length, 3);
-  const ordered = [...layout.cards].sort((a, b) => a.x - b.x);
-  assert(Math.max(...ordered.map(card => card.y)) - Math.min(...ordered.map(card => card.y)) <= 2, 'PC religion maps must share one row');
-  assert(Math.max(...ordered.map(card => card.width)) - Math.min(...ordered.map(card => card.width)) <= 2, 'PC religion maps must have equal-width cards');
-  for (const [index, card] of ordered.entries()) {
-    assert.equal(card.stateCount, 32); assert(card.svg.width > 100 && card.svg.height > 60, 'Religion overview map must remain readable');
-    if (index) assert(ordered[index - 1].right <= card.x + .5, 'Religion overview cards must not overlap');
-    assert(card.right <= layout.container.right + 1, 'Religion overview must fit the PC map column');
-    assert(!card.text.includes('分母：'), 'The common religion denominator must not repeat in each card');
-  }
+  assert.equal(layout.stateCount,32);
+  assert(layout.svg.width>300&&layout.svg.height>180,'The single religion overview must remain readable');
+  assert(layout.map.right<=layout.container.right+1,'Religion overview must fit the PC map column');
+  assert.equal(layout.groups.length,3);
+  assert(layout.groups.every(group=>group.states.length===2));
+  assert.equal(layout.indicators.length,3);
   assert.equal(layout.denominators.length, 1, 'Religion overview must show the common denominator once');
   assert.match(layout.denominators[0].text, /全.*人口|全.*住民/);
   return layout;
@@ -134,6 +132,23 @@ async function cityClimateReadingLayout(page, requestedId) {
 export async function inspectMexicoInitialPresentation(page, field) {
   if (field === 'population') return {populationNationalLayout: await populationNationalLayout(page)};
   if (field === 'nature') return {cityClimateReadingLayout: await cityClimateReadingLayout(page)};
+  if (field === 'agriculture') {
+    const marks=await page.locator('[data-mexico-agriculture-atlas]').evaluate(root=>{
+      const selectors=['[data-crop-label]', '.atlas-livestock-marker'];
+      return selectors.flatMap(selector=>[...root.querySelectorAll(selector)].filter(node=>!node.closest('[hidden]')&&getComputedStyle(node).display!=='none').map(node=>{const box=node.getBoundingClientRect();return {name:node.getAttribute('aria-label')??node.textContent?.trim(),left:box.left,top:box.top,right:box.right,bottom:box.bottom};}));
+    });
+    const collisions=[];
+    for(const [index,a] of marks.entries())for(const b of marks.slice(index+1))if(Math.min(a.right,b.right)-Math.max(a.left,b.left)>2&&Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)>2)collisions.push(`${a.name} / ${b.name}`);
+    assert.equal(collisions.length,0,`Agriculture names and livestock badges overlap: ${collisions.join('; ')}`);
+    return {agricultureMarks:marks};
+  }
+  if (field === 'industry') {
+    const labels=await page.locator('[data-mi-map="primary"] [data-mi-reading-markers] [data-mi-region-label]').evaluateAll(nodes=>nodes.filter(node=>!node.closest('[hidden]')).map(node=>{const box=node.getBoundingClientRect();return {name:node.textContent?.trim(),left:box.left,top:box.top,right:box.right,bottom:box.bottom};}));
+    const collisions=[];
+    for(const [index,a] of labels.entries())for(const b of labels.slice(index+1))if(Math.min(a.right,b.right)-Math.max(a.left,b.left)>1&&Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)>1)collisions.push(`${a.name} / ${b.name}`);
+    assert.equal(collisions.length,0,`Industry reading labels overlap: ${collisions.join('; ')}`);
+    return {industryLabels:labels};
+  }
   return null;
 }
 
@@ -170,7 +185,7 @@ function steps(page, evidence) {
   return async (name, action) => {
     const record = {name, status: 'running', beforeUrl: page.url()}; evidence.steps.push(record);
     try {record.details = await action(); record.state = await snapshot(page); record.status = 'passed';}
-    catch (error) {record.status = 'failed'; record.failure = String(error); throw error;}
+    catch (error) {record.status = 'failed'; record.failure = String(error); error.message = `${name}: ${error.message}`; throw error;}
   };
 }
 async function zoom(page, field, inSelector, outSelector, resetSelector) {
@@ -187,9 +202,10 @@ async function agriculture({page, evidence}) {
     const layout=await page.evaluate(()=>({icons:[...document.querySelectorAll('.atlas-livestock-marker i')].map(node=>{const r=node.getBoundingClientRect();return {width:r.width,height:r.height};}),order:[...document.querySelectorAll('[data-crop-key] [data-crop-select]')].map(node=>node.getAttribute('data-crop-select')),groups:[...document.querySelectorAll('.atlas-receipt-group')].map(group=>[...group.querySelectorAll('.atlas-bar-row strong')].map(node=>parseFloat(node.textContent)))}));
     const desktop=await page.evaluate(()=>matchMedia('(min-width:960px)').matches),iconLimit=desktop?20:30;
     assert(layout.icons.length>0&&layout.icons.every(icon=>icon.width<=iconLimit&&icon.height<=iconLimit));
-    assert.equal(layout.order[0],'corn');assert(layout.order.indexOf('wheat')>layout.order.indexOf('vegetables'));assert(layout.order.indexOf('rice')>layout.order.indexOf('coffee'));
+    assert.equal(layout.order[0],'corn');assert(layout.order.indexOf('wheat')>layout.order.indexOf('vegetables'));assert.equal(layout.order.includes('rice'),false);
     assert(layout.groups.every(values=>values.every((value,index)=>index===0||value<=values[index-1])));
-    assert.equal(await page.locator('[data-mexico-state-selection],[data-mexico-forest-states]').count(),0);return layout;
+    assert.equal(await page.locator('[data-mexico-state-selection]').count(),0);
+    assert.equal(await page.locator('[data-mexico-forest-states]:visible').count(),0);return layout;
   });
   await step('All crop and livestock distributions remain after crop selection', async () => {
     await click(page, '[data-crop-select="corn"]');
@@ -201,6 +217,7 @@ async function agriculture({page, evidence}) {
       return {paths, labels, livestock: node.querySelectorAll('[data-livestock-markers] button').length,livestockOpacity:[...node.querySelectorAll('[data-livestock-markers] button')].map(button=>Number(getComputedStyle(button).opacity))};
     });
     assert(distribution.paths.length >= 10 && distribution.paths.every(path => !path.hidden && Number(path.opacity) > 0));
+    assert(distribution.paths.every(path=>path.id!=='rice'));
     assert(distribution.livestock > 0);assert(distribution.livestockOpacity.every(value=>value>0&&value<1));
     const corn = distribution.paths.find(path => path.id === 'corn'); assert(corn && corn.stroke !== 'none' && parseFloat(corn.strokeWidth) > 0);
     assert(distribution.labels.length > 0 && distribution.labels.every(label => label.fill === label.sourceFill), 'Labels must match their crop colors');
@@ -208,7 +225,7 @@ async function agriculture({page, evidence}) {
   });
   await step('Every crop keeps a visible selected map label after collision layout', async () => {
     const ids = await page.locator('[data-crop-select]').evaluateAll(nodes => [...new Set(nodes.map(node => node.getAttribute('data-crop-select')))]);
-    assert.equal(ids.length, 11);
+    assert.equal(ids.length, 10);
     for (const id of ids) {
       await click(page, `[data-crop-select="${id}"]`);
       assert(await page.locator(`[data-crop-label="${id}"]:visible`).count() > 0, `${id}: selected crop label must remain visible`);
@@ -247,7 +264,7 @@ async function agriculture({page, evidence}) {
 async function climate({page, evidence, captureStepImage}) {
   const step = steps(page, evidence);
   await step('Climate map labels select the full source code and Japanese explanation', async () => {
-    const label = page.locator('[data-mexico-nature-label-code^="BS"]').first();
+    const label = page.locator('[data-mexico-nature-label-code^="BS"]:visible').first();
     const code = await label.getAttribute('data-mexico-nature-label-code'); await label.click(); await settled(page);
     assert((await text(page, '[data-mexico-nature-feature-title]')).includes(code));
     assert((await text(page, '[data-mexico-nature-feature-body]')).length > 20);
@@ -545,34 +562,36 @@ async function population({page, evidence}) {
 
 }
 
-const commonReligionBins = [
-  {min: 0, max: 1, color: '#edf3df'}, {min: 1, max: 5, color: '#d1e6c6'}, {min: 5, max: 10, color: '#a1ceb1'},
-  {min: 10, max: 25, color: '#70b3a5'}, {min: 25, max: 50, color: '#41958e'}, {min: 50, max: 75, color: '#24756f'}, {min: 75, max: null, color: '#154d49'},
-];
 async function composition({page, evidence}) {
   const step = steps(page, evidence);
   const config = JSON.parse(await text(page, '[data-population-composition-config]'));
   await step('Ethnicity nationwide entrance, detail and count/share comparison return', async () => {
     await click(page, 'button[data-population-category="ethnicity"]'); assert(await page.locator('[data-population-overview-category="ethnicity"]').isVisible());
-    await click(page, '[data-population-overview-category="ethnicity"] [data-population-overview-metric]');
+    await click(page, '[data-population-overview-reading-category="ethnicity"] [data-population-overview-metric]');
+    assert(await page.locator('[data-population-overview-category="ethnicity"]').isVisible());
+    assert.equal(await page.locator('[data-population-overview-category="ethnicity"] [data-overview-highlight-metric]').count(),3);
+    await history(page,()=>click(page,'[data-population-composition-reading] [data-population-composition-map-mode]'));
+    assert(await page.locator('[data-population-map]').isVisible());
+    await click(page,'[data-population-composition-reading] [data-population-composition-map-mode]');
+    assert(await page.locator('[data-population-overview-category="ethnicity"]').isVisible());
     assert.equal(query(page, 'state'), null); assert.match(await text(page, '[data-population-composition-selected-name]'), /全国/);
     await select(page, '[data-population-state]', '20'); await select(page, '[data-population-view]', 'count');
     const before = await snapshot(page); await click(page, '[data-population-composition-compare]'); assert.equal(query(page, 'compositionCompare'), 'scale');
     await click(page, '[data-population-composition-return]'); await restored(page, before, 'Composition return must preserve source metric, state and measure');
   });
-  await step('Three nationwide religion maps use identical absolute-share bands', async () => {
+  await step('One nationwide religion map retains three simultaneous indicators', async () => {
     await click(page, 'button[data-population-category="religion"]');
-    const cards = page.locator('[data-population-overview-category="religion"] [data-population-overview-metric]'); assert.equal(await cards.count(), 3);
-    const colors = await cards.evaluateAll(nodes => nodes.map(node => ({id: node.getAttribute('data-population-overview-metric'), states: [...node.querySelectorAll('[data-overview-state]')].map(path => ({state: path.getAttribute('data-overview-state'), fill: path.getAttribute('fill')}))})));
-    for (const card of colors) {
-      assert.equal(card.states.length, 32); const metric = config.metrics.find(item => item.id === card.id);
-      for (const area of card.states) {const row = metric.states[area.state], share = row.count / row.denominator * 100; const bin = commonReligionBins.find(bin => share >= bin.min && (bin.max === null || share < bin.max)); assert.equal(area.fill, bin.color, `${card.id}/${area.state}: nationwide color must encode the common absolute-share band`);}
-    }
-    return {metricIds: colors.map(card => card.id), statesPerMap: 32, commonBins: commonReligionBins, layout: await religionOverviewLayout(page)};
+    const highlighted=await page.locator('[data-population-overview-category="religion"] [data-overview-highlight-metric]').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('data-overview-highlight-metric')));
+    assert.deepEqual(highlighted,['catholic','protestant_evangelical','no_religion']);
+    const cards = page.locator('[data-population-overview-reading-category="religion"] [data-population-overview-metric]'); assert.equal(await cards.count(), 8);
+    const metricIds=await cards.evaluateAll(nodes=>nodes.map(node=>node.getAttribute('data-population-overview-metric')));
+    assert.deepEqual(metricIds,config.metrics.filter(metric=>metric.category==='religion').map(metric=>metric.id));
+    for(const id of metricIds)assert(config.metrics.some(item=>item.id===id));
+    return {highlighted,metricIds,layout:await religionOverviewLayout(page)};
   });
   await step('All eight religion details retain their own bands, actual shares and denominators', async () => {
     const metrics = config.metrics.filter(metric => metric.category === 'religion'); assert.equal(metrics.length, 8);
-    await click(page, '[data-population-overview-category="religion"] [data-population-overview-metric="catholic"]');
+    await click(page, '[data-population-overview-reading-category="religion"] [data-population-overview-metric="catholic"]');
     const verified = [];
     for (const metric of metrics) {
       await select(page, '[data-population-composition-metric]', metric.id);

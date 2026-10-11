@@ -15,6 +15,8 @@ on:
       - 'public/assets/atlas/africa-*/**'
       - 'tests/unit/atlas-africa*.test.mjs'
       - 'tests/e2e/atlas-africa*.test.mjs'
+      - 'tests/e2e/atlas-africa-round2-review.spec.mjs'
+      - 'tests/e2e/atlas-africa-source-evidence.spec.mjs'
       - 'scripts/verify-africa-pc-review.mjs'
       - 'scripts/verify-africa-approved-review.mjs'
       - 'scripts/verify-africa-industry-review.mjs'
@@ -35,6 +37,8 @@ on:
       - 'public/assets/atlas/africa-*/**'
       - 'tests/unit/atlas-africa*.test.mjs'
       - 'tests/e2e/atlas-africa*.test.mjs'
+      - 'tests/e2e/atlas-africa-round2-review.spec.mjs'
+      - 'tests/e2e/atlas-africa-source-evidence.spec.mjs'
       - 'scripts/verify-africa-pc-review.mjs'
       - 'scripts/verify-africa-approved-review.mjs'
       - 'scripts/verify-africa-industry-review.mjs'
@@ -113,7 +117,12 @@ jobs:
           # An explicit trailer selects the reviewer-requested limited check.
           # Ordinary future commits continue to run the full Africa review.
           africa_review_scope="$(git log -1 --format='%(trailers:key=Africa-Review-Scope,valueonly)')"
-          if [[ "$africa_review_scope" == beverages ]]; then
+          africa_review_evidence="$(git log -1 --format='%(trailers:key=Africa-Review-Evidence,valueonly)')"
+          if [[ "$africa_review_scope" == round2 && "$africa_review_evidence" == sources ]]; then
+            AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node tests/e2e/atlas-africa-source-evidence.spec.mjs
+          elif [[ "$africa_review_scope" == round2 ]]; then
+            AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node tests/e2e/atlas-africa-round2-review.spec.mjs
+          elif [[ "$africa_review_scope" == beverages ]]; then
             AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node scripts/verify-africa-beverages-review.mjs
           else
             if [[ "$africa_review_scope" == madagascar ]]; then
@@ -121,7 +130,9 @@ jobs:
             fi
             AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node scripts/verify-africa-approved-review.mjs
           fi
-          node scripts/verify-africa-industry-review.mjs
+          if [[ "$africa_review_scope" != round2 ]]; then
+            node scripts/verify-africa-industry-review.mjs
+          fi
 
       - name: Upload Africa PC screenshots and validation metadata
         if: success()

@@ -120,7 +120,7 @@ if(workspace){
    returnLink.textContent=sourceTitle()+'へ戻る';
    q('[data-nature-map-title]').textContent=comparisonReading!.title;
    q('[data-nature-comparison-takeaway]').textContent=comparisonReading!.takeaway;
-  }else q('[data-nature-map-title]').textContent=`${natureCountryName(state.place)}の気候群と雨の季節`;
+  }else q('[data-nature-map-title]').textContent=`${natureCountryName(state.place)}の気候区分と雨の季節`;
   q('[data-nature-primary-caption]').textContent=`${natureCountryName(state.place)} · 気候群 · 1991–2020年`;
   const representative=state.place!=='all'&&selected.place!==state.place;
   q('[data-nature-reading-title]').textContent=comparisonReading?.title??(representative?`${selected.title}（${natureCountryName(selected.place)}の代表例）`:selected.title);
@@ -136,7 +136,7 @@ if(workspace){
   population.href=latinLearningUrl(base,latinComparisonState({...state,source:undefined},'population','density'));
   population.textContent=`${natureCountryName(state.place)}の気候と人口密度を比べる`;
   industry.hidden=state.place!=='PAN';industry.href=latinLearningUrl(base,latinComparisonState({...state,source:undefined},'industry','canal'));
-  q('[data-nature-map-description]').textContent=comparison?'同じ範囲で元の分布と比較。代表例を選ぶと自然の通常表示に戻ります。':'5気候群の中にも雨季・乾季の違いがあります。地図の都市・観測所の点を選び、右の月別平年値で確かめます。';
+  q('[data-nature-map-description]').textContent=comparison?'同じ範囲で元の分布と比較。代表例を選ぶと自然の通常表示に戻ります。':'熱帯雨林（Af）・モンスーン（Am）・サバナ（Aw）など21区分の分布です。地図の都市・観測所の点を選び、右の月別平年値で確かめます。';
   alignMapCaptions();measureReader();
   q('[data-nature-renderer]').textContent=state.fallback?'静的画像表示（地図と同じ分布・凡例）':'';
   workspace.dataset.natureReady='true';workspace.dataset.natureLayer=state.layer;workspace.dataset.naturePlace=state.place;workspace.dataset.natureScope=state.scope;workspace.dataset.natureRenderer=state.fallback?'fallback':'svg';

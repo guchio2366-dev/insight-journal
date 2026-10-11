@@ -83,6 +83,24 @@ test('fixed displayed assets match the source manifests and keep missing/zero se
  for(const id of ['wheat','cattle','density']){const legends=api.getRussiaLayer(id).legend;assert.ok(legends.some(l=>l.label==='0（有効値）'));assert.ok(legends.some(l=>l.label==='未収録・分類なし'));}
  const climate=json('public/assets/atlas/russia-climate-v1/manifest.json'),grid=gunzipSync(read('public/assets/atlas/russia-climate-v1/climate-grid.bin.gz'));assert.equal(grid.length,climate.width*climate.height);assert.ok(grid.includes(0));assert.ok(grid.includes(27));
 });
+test('cattle focus key uses the same quantity palette as the mapped cattle cells',()=>{
+ const layer=api.getRussiaLayer('cattle');
+ const key=api.renderRussiaFarmingKey(layer);
+ const palette=json('public/assets/atlas/russia-livestock-v1/manifest.json').layers[0].colors;
+ assert.match(key,/data-farming-key="cattle"/);
+ assert.ok(key.includes('--mark:#'+palette.at(-1)));
+ assert.match(key,/黄〜赤茶の数量色/);
+ const overview=api.renderRussiaFarmingKey(api.getRussiaLayer('farming-all'));
+ assert.match(overview,/russia-legend-mark circle" style="--mark:#376d91/);
+});
+test('Russia single-product URL keeps only the selected farming distribution',()=>{
+ const state=api.createRussiaState('?layer=cattle&single=1','agriculture');
+ assert.equal(state.single,true);
+ const scene=api.renderRussiaScene(api.getRussiaLayer(state.layer),state);
+ assert.match(scene,/data-farming-product="cattle" data-farming-mode="quantity"/);
+ assert.doesNotMatch(scene,/data-farming-product="wheat"/);
+ assert.equal(api.createRussiaState('?layer=farming-all&single=1','agriculture').single,false);
+});
 test('copyright attribution and original time periods are visible in the layers',()=>{
  const population=json('public/assets/atlas/russia-population-v1/manifest.json');for(const id of ['density','cities'])assert.ok(api.getRussiaLayer(id).sources.some(s=>s.url===population.referencePublicationDoi&&s.title===population.referencePublication));
  const wheat=api.getRussiaLayer('wheat');assert.equal(wheat.sources[0].note,json('public/assets/atlas/russia-crops-v1/attribution.json').requiredAdaptationText);assert.match(wheat.period,/2020/);assert.match(wheat.unit,/ha/);

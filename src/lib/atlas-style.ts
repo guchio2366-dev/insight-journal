@@ -42,6 +42,7 @@ export function createAtlasStyle(config:{assetBase:string;natureAssetBase?:strin
     {id:'state-lines',type:'line',source:'base',filter:kind('state'),paint:{'line-color':'#506f73','line-opacity':0.42,'line-width':0.65}},
     {id:'country-lines',type:'line',source:'base',filter:kind('land'),paint:{'line-color':'#4c7b8a','line-width':0.9,'line-opacity':0.75}},
     {id:'rivers',type:'line',source:'base',filter:kind('river'),paint:{'line-color':'#5799b5','line-width':['interpolate',['linear'],['zoom'],2,0.5,6,1.5],'line-opacity':0.86}},
+    {id:'water-main-rivers',type:'line',source:'base',filter:['all',kind('river'),['in',['get','name'],['literal',['Mississippi','Missouri','Ohio','Colorado','Columbia','Sacramento','San Joaquin']]]],layout:{visibility:'none'},paint:{'line-color':'#17658b','line-width':1.8,'line-opacity':1}},
     {id:'lakes',type:'fill',source:'base',filter:kind('lake'),paint:{'fill-color':'#a5d2e6'}},
     {id:'lakes-outline',type:'line',source:'base',filter:kind('lake'),paint:{'line-color':'#5799b5','line-width':0.65}},
     {id:'agriculture-relation-line',type:'line',source:'agriculture-relation-context',filter:['!=',['geometry-type'],'Point'],layout:{visibility:'none'},paint:{'line-color':'#263f4c','line-width':1.8,'line-dasharray':[4,3]}},

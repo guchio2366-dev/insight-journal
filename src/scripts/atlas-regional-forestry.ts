@@ -1,5 +1,13 @@
 type Example={id:string;title:string;label:string;point:number[];fact:string;explanation:string;use:string;sources:{title:string;url:string;period:string}[]};
 type Config={region:string;frame:{width:number;height:number};reading:{name:string;overview:string;distribution:string;reason:string;examples:Example[]}};
+type ViewportBudgetInput={region:string;viewportWidth:number;viewportHeight:number;scrollY:number;stageViewportTop:number;legendOuterHeight:number;readerViewportTop:number};
+export function regionalForestryViewportBudget(input:ViewportBudgetInput) {
+ if(input.region!=='africa'||input.viewportWidth<960)return null;
+ const stageDocumentTop=input.stageViewportTop+input.scrollY,readerDocumentTop=input.readerViewportTop+input.scrollY;
+ const availableMapHeight=Math.floor(input.viewportHeight-stageDocumentTop-input.legendOuterHeight-12);
+ const readerHeight=Math.max(0,Math.floor(input.viewportHeight-readerDocumentTop-12));
+ return {stageDocumentTop,readerDocumentTop,availableMapHeight,mapHeight:Math.max(320,Math.min(720,availableMapHeight)),readerHeight,insufficient:availableMapHeight<320||readerHeight<=0};
+}
 export function initRegionalForestry(root=document.querySelector<HTMLElement>('[data-regional-forestry]')) {
  if(!root||root.dataset.forestInitialized)return;
  root.dataset.forestInitialized='true';
@@ -9,6 +17,15 @@ export function initRegionalForestry(root=document.querySelector<HTMLElement>('[
  let camera=[...whole],selected='';
  const setText=(selector:string,text:string)=>{q(selector).textContent=text;};
  const reading=config.reading;
+ function fitAfricaViewport() {
+  if(config.region!=='africa')return;
+  const stage=q<HTMLElement>('.forest-map-stage'),legend=q<HTMLElement>('.forest-legend'),reader=q<HTMLElement>('.forest-reading'),legendStyle=getComputedStyle(legend);
+  const budget=regionalForestryViewportBudget({region:config.region,viewportWidth:innerWidth,viewportHeight:innerHeight,scrollY,stageViewportTop:stage.getBoundingClientRect().top,legendOuterHeight:legend.getBoundingClientRect().height+(parseFloat(legendStyle.marginTop)||0)+(parseFloat(legendStyle.marginBottom)||0),readerViewportTop:reader.getBoundingClientRect().top});
+  if(!budget){root!.style.removeProperty('--africa-forest-map-height');root!.style.removeProperty('--africa-forest-reader-height');delete root!.dataset.forestViewportBudget;return;}
+  for(const [property,value]of [['--africa-forest-map-height',budget.mapHeight],['--africa-forest-reader-height',budget.readerHeight]] as const){const next=`${value}px`;if(root!.style.getPropertyValue(property)!==next)root!.style.setProperty(property,next);}
+  const body=q<HTMLElement>('.forest-reading-scroll');
+  root!.dataset.forestViewportBudget=budget.insufficient||body.clientHeight<96?'insufficient':'ready';
+ }
  function save() {
   const url=new URL(location.href);
   if(selected)url.searchParams.set('example',selected);else url.searchParams.delete('example');
@@ -33,6 +50,7 @@ export function initRegionalForestry(root=document.querySelector<HTMLElement>('[
   root!.querySelectorAll('[data-forest-example]').forEach(element=>{const active=element.getAttribute('data-forest-example')===selected;element.classList.toggle('is-selected',active);if(element.tagName==='BUTTON')element.setAttribute('aria-pressed',String(active));else if(active)element.setAttribute('aria-current','true');else element.removeAttribute('aria-current');});
   q('[data-forest-overview]').setAttribute('aria-pressed',String(!example));
   sourceList(example?.sources??reading.examples.flatMap(example=>example.sources));
+  if(config.region==='africa'){fitAfricaViewport();draw(false);}
   if(persist)save();
  }
  function draw(persist=true) {
@@ -87,7 +105,13 @@ export function initRegionalForestry(root=document.querySelector<HTMLElement>('[
   reference.addEventListener('error',fail);
   const probe=new Image();probe.onerror=fail;probe.onload=()=>{if(finished)return;finished=true;if(--remaining===0&&root!.dataset.forestReferenceStatus!=='failed')root!.dataset.forestReferenceStatus='ready';};probe.src=reference.getAttribute('href')!;
  }
- new ResizeObserver(()=>draw(false)).observe(svg);
+ if(config.region==='africa'){
+  let frame:number|undefined;
+  const schedule=()=>{if(frame!==undefined)return;frame=requestAnimationFrame(()=>{frame=undefined;fitAfricaViewport();draw(false);});};
+  const observer=new ResizeObserver(schedule);
+  for(const selector of ['[data-forest-map]','.forest-legend','.forest-map-heading','.forest-reading-heading','.forest-example-choices','.africa-heading','.forest-subfields'])observer.observe(q(selector));
+  window.addEventListener('resize',schedule);void document.fonts?.ready.then(schedule);
+ }else new ResizeObserver(()=>draw(false)).observe(svg);
  window.addEventListener('popstate',restore);
  restore();
 }

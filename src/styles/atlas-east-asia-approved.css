@@ -49,3 +49,13 @@
 
 .east-rain-scale{height:14px;width:100%;margin:5px 0}.east-rain-ticks{display:flex;justify-content:space-between;font-size:10px;width:100%;font-variant-numeric:tabular-nums}
 .east-climate-relationship{border-top:1px solid var(--rule);margin-top:20px;padding:16px 0;font-size:13px;line-height:1.8}.east-climate-relationship h2{font-size:20px}
+
+[data-region="east-asia"] .asia-map-annotations .asia-farm-region-label{background:rgba(255,253,245,.85);border:0;padding:2px 5px;color:#4b574b;font:400 10px/1.4 var(--sans);pointer-events:none;border-radius:0;box-shadow:none}
+
+@media(min-width:1600px){
+ .east-industry-group{max-width:190px}
+ [data-region=east-asia] .atlas-desktop-shell .asia-atlas[data-field] .asia-map-frame{height:min(760px,var(--asia-map-available-height,760px),var(--east-map-content-height,760px))!important}
+}
+
+[data-region=east-asia] .asia-map-annotations .asia-culture-label{background:#fffdf5f2;color:#31504b;border:1px solid #c3d0bc;font:600 11px/22px var(--sans);padding:0 5px;white-space:nowrap;pointer-events:auto}
+.east-culture-examples{margin:16px 0}.east-culture-examples article{border-left:2px solid #b2c6b1;padding-left:12px;margin:18px 0}.east-culture-examples h4{margin:0 0 6px}

@@ -6,7 +6,9 @@ import {africaPath,projectAfrica,africaWidth,africaHeight} from '../../../lib/at
 import {countries,fields,metrics,regionNames,years,readState,valueAt,formatValue,fillFor,palette,rankedCountries} from '../../../data/atlas/africa-atlas';
 import {reading} from '../../../data/atlas/africa-reading';
 import {themes} from '../../../data/atlas/africa-themes';
-import AtlasNewsRail from '../../../components/atlas/AtlasNewsRail.astro';
+import AfricaWorkspaceFrame from '../../../components/atlas/AfricaWorkspaceFrame.astro';
+import AfricaFieldNavigation from '../../../components/atlas/AfricaFieldNavigation.astro';
+import AgricultureMapControls from '../../../components/atlas/AgricultureMapControls.astro';
 import AtlasClimatePlot from '../../../components/atlas/AtlasClimatePlot.astro';
 import {africaClimateCities,africaClimateCityCoverage} from '../../../data/atlas/africa-climate-cities';
 import '../../../styles/atlas-explorer.css';
@@ -36,8 +38,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
 ---
 <BaseLayout title="アフリカ地図" description="アフリカの自然環境・農林業・主要産業・人口を、重要な分布と国別統計から読む。" compactAtlas>
  <div class="africa-atlas shell" data-africa-atlas>
-  <div class="africa-desktop-shell" data-atlas-shell>
-  <AtlasNewsRail region="africa" mapActions={false} />
+  <AfricaWorkspaceFrame>
   <article class="africa-main">
   <header class="africa-heading">
    <div class="africa-compact-heading"><p class="africa-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / アフリカ</p><span>アフリカ地域</span></div>
@@ -47,17 +48,17 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
     <div class="africa-country-controls"><label>国・地域<select data-place><option value="" selected={!state.place}>国未選択</option>{ordered.map(c=><option value={c.code} selected={c.code===state.place}>{c.name}</option>)}</select></label><label>比較国<select data-compare disabled={!state.place}><option value="">比較なし</option>{ordered.map(c=><option value={c.code}>{c.name}</option>)}</select></label><label>統計年<select data-year disabled>{[...years].reverse().map(y=><option value={y} selected={y===state.year}>{y}年</option>)}</select></label></div>
    </div>
   </header>
-  <nav class="africa-fields" aria-label="分野を選ぶ"><a data-africa-overview-link href={withBase('/atlas/africa/overview/')}>概要</a>{(['agriculture','nature','industry','population'] as const).map(id=><button type="button" data-field={id} aria-pressed={id==='nature'?'true':'false'}>{fields[id].label}</button>)}</nav>
+  <AfricaFieldNavigation field="nature"/>
   <nav class="africa-subfields" data-africa-subfields aria-label="分野内の項目"></nav>
   <div class="africa-workspace" id="africa-map-panel">
    <section class="africa-map-card" aria-labelledby="africa-map-title">
     <div class="africa-map-frame">
-    <div class="africa-agri-map-controls" data-africa-agri-map-controls hidden><label>表示<select data-africa-agri-display aria-label="農産物と畜産物の表示"><option value="all">農産物＋畜産物</option><option value="crops">農産物</option><option value="livestock">畜産物</option></select></label></div>
+    <div class="africa-agri-map-controls" data-africa-agri-map-controls hidden><AgricultureMapControls countryLabel="アフリカ" toolsHidden={true}/><label hidden>表示<select data-africa-agri-display aria-label="農産物と畜産物の表示"><option value="all">農産物＋畜産物</option><option value="crops">農産物</option><option value="livestock">畜産物</option></select></label></div>
     <div class="africa-map-heading"><h2 id="africa-map-title" data-metric-title>{metric.label}</h2><span><span data-period>長期平均</span> · <span data-unit>{metric.unit}</span></span></div>
     <svg class="africa-map" viewBox={initialViewBox.join(' ')} data-theme={initialTheme.id} data-detail={state.zoom!=='all'?'true':'false'} role="img" aria-labelledby="africa-svg-title africa-svg-desc">
       <title id="africa-svg-title">{initialTheme.title}・国別の年降水量（長期平均）</title><desc id="africa-svg-desc">分布テーマと国別統計を重ねた地図。右の凡例と説明から、表示した分布を読み取れます。国は選択欄や一覧からも選べます。</desc>
      <defs><pattern id="africa-missing" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#eeeae1"/><path d="M0 7L7 0" stroke="#b5b0a3" stroke-width="1"/></pattern></defs>
-     <rect width={africaWidth} height={africaHeight} fill="#e9f0f0"/>
+     <rect width={africaWidth} height={africaHeight} fill="#e9f0f0" pointer-events="none" data-africa-map-background/>
      {[-20,0,20].map(lat=><line x1="0" x2={africaWidth} y1={projectAfrica([0,lat])[1]} y2={projectAfrica([0,lat])[1]} class="africa-graticule"/>)}
      {geography.features.map(f=>{const c=countries.find(c=>c.code===f.properties.code)!;const v=valueAt(metric.id,c.code,state.year);return <path d={africaPath(f.geometry)} data-country-path={c.code} fill={fillFor(v,metric)} fill-rule="evenodd" class:list={['africa-country',{'is-selected':c.code===state.place}]}><title>{c.name}：{formatValue(v,metric)} {v===null?'':metric.unit}</title></path>})}
      <g data-africa-actual-layer></g>
@@ -165,7 +166,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
   </div>
   <noscript><p class="africa-noscript">JavaScriptが無効のため、ナイルの分布テーマと長期平均降水量の地図を表示しています。分布の説明・出典と、国別の一覧は折畳みを開いて読めます。4分野すべての数値はCSVから確認できます。分野・選択・比較・年の切替にはJavaScriptが必要です。</p></noscript>
   </article>
-  </div>
+  </AfricaWorkspaceFrame>
  </div>
 </BaseLayout>
 <script>import {initializeAfricaAtlas} from '../../../scripts/atlas-africa'; initializeAfricaAtlas();</script>

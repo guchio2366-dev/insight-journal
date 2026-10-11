@@ -15,7 +15,7 @@ from shapely.ops import unary_union
 from shapely import make_valid,coverage_simplify
 ROOT=Path(__file__).resolve().parents[1]; SRC=Path(sys.argv[1]); OUT=ROOT/'public/assets/atlas/water-v1'; OUT.mkdir(parents=True,exist_ok=True)
 ids=['lt250','250-500','500-750','750-1000','1000-1500','1500-2000','gte2000']
-colors=['#f2dfb3','#e0e4be','#b9d8b8','#8bc8bf','#60afb8','#378eaa','#216782']
+colors=['#f0f7ff','#dceaf6','#bfd9ed','#91bfde','#629fc9','#3279ad','#12558a']
 thresholds=[250,500,750,1000,1500,2000]
 def dump(name,obj):
  s=json.dumps(obj,ensure_ascii=False,separators=(',',':'));(OUT/name).write_text(s);return len(s.encode())
