@@ -26,7 +26,8 @@ Chromium の production preview、1920×1080、MapLibre 読込後の画面を保
 - 地形26名称を1920×1080の初期画面内に配置し、密集部分は引出線で地図上の位置につないだ。局地風の固定矢印は描かない。河川名と収録線は選択できる。線はNatural Earthの収録区間だけを強調し、完全な本流とは呼ばない。
 - ドナウ川・ヴォルガ川はBasinATLASの `MAIN_BAS` で接続するレベル4の各9区画を一緒に輪郭表示した。公開格子は対象国と地図枠で切れているため、川の全流域とは呼ばない。
 - 民族はONS 2021のイングランド・ウェールズ331行政区で、宗教はPew 2020の国別推計とONSの同行政区で出典・分母を分けた。両者の欠測を0にしていない。Pewの分類から宗派を推測していない。
-- EEA ECRINSの公式データ取得口はこの環境からHTTP 403となり、河川の源流から河口までの連結と全流域を確定できていない。HydroRIVERSの技術文書 Appendix A 2.1.2–2.1.3 は再配布時のエンドユーザー契約と単独配布の条件を課しており、このサイトの公開アセットでは満たせると確認できないため収録していない。BasinATLASレベル4の単一区画を全流域とは扱わない。
+- EEA ECRINSの公式データ取得口はこの環境からHTTP 403となった。[HydroATLAS](https://www.hydrosheds.org/hydroatlas) の BasinATLAS と RiverATLAS は集合データベースとして CC BY 4.0 であり、全流域と本流の検証候補になる。元のレベル4区画のハッシュと `MAIN_BAS`・`NEXT_DOWN` は [selected-inputs.json](../../../data-source/atlas/europe/drainage/selected-inputs.json) に記録済みだが、元の形状ファイルはこの作業環境に残っていない。公式 Figshare のダウンロードと API への通常の接続も HTTP 403 となった。全流域には国境で切っていない同一 `MAIN_BAS` の全区画、本流には RiverATLAS の `MAIN_RIV`・`ORD_CLAS`・`NEXT_DOWN` と独立した河口・河川名の照合が必要。今の図はどちらも満たさず、全流域・源流から河口までの本流とは表示しない。取得先と検証手順は [connected-basin-review.json](../../../data-source/atlas/europe/drainage/connected-basin-review.json) に記録した。別製品の HydroRIVERS を RiverATLAS として扱わない。
+- [Copernicus CORINE Land Cover 2018](https://land.copernicus.eu/en/products/corine-land-cover/clc2018) は、ぶどう園（221）とオリーブ園（223）の別区分があり、公開図の候補になる。ただし土地被覆図であり生産量・収穫面積・品種分布ではない。25 ha の最小作図単位と2017–2018年の対象期間を明記する必要がある。公式 REST 配信先への通常の接続は HTTP 403 となり、元図形を確認・収録できていない。乳用・肉用の地域分布も現在の家畜総数格子から推定しない。
 - [MapSPAM 2020 v2.2](https://www.mapspam.info/data/) の独立したブドウ・オリーブ格子の有無は品目表で未確認で、[利用条件](https://www.mapspam.info/terms/) は CC BY-NC 3.0。既存の温帯果樹格子を品目別へ推測配分せず、新格子も収録していない。
 - 農畜産の食品群別自給率帯、林業の輸出入先、地下水図、欧州全域の宗教細地域と民族分布は、対応する原表・定義・利用条件が揃うまで未表示とした。既存の出典付き集計は維持した。
 
