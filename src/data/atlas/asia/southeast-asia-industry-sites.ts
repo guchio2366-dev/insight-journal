@@ -3,6 +3,8 @@ export type SoutheastIndustryKind='electronics'|'automotive'|'textiles'|'food'|'
 export type SoutheastIndustrySite={id:string;label:string;industryName:string;placeName:string;kind:SoutheastIndustryKind;stage:'raw'|'processing'|'service';point:[number,number];reading:string;sourceLabel:string;sourceUrl:string;sourceYear:string};
 export const southeastIndustryKinds:{id:'all'|SoutheastIndustryKind;label:string;reading:string}[]=[
  {id:'all',label:'全分布',reading:'13の産業群の立地事例を重ねます。丸は工場・港・都市、ひし形は広い原料産地を読む代表位置です。地点の数や大きさは生産規模を示しません。'},
+ {id:'rubber',label:'ゴム・タイヤ',reading:'タイ南部のゴム栽培地域とラヨーンのタイヤ製造を別工程として読みます。'},
+ {id:'wood',label:'木材・家具',reading:'ベトナム北中部の植林材とビンズオンの家具製造を区別します。加工には輸入木材も使われます。'},
  {id:'electronics',label:'電子・半導体',reading:'ペナンの電子産業、クリムの半導体前工程、バクニンの組立・検査を区別します。同じ電子産業でも工程は異なります。'},
  {id:'automotive',label:'自動車・部品',reading:'タイ東部臨海部とジャワ島西部の自動車・部品産業を比べます。EVはその一部です。'},
  {id:'textiles',label:'繊維・衣料',reading:'プノンペンとベトナム南部の縫製集積を読みます。繊維原料の産地ではありません。'},
@@ -14,8 +16,6 @@ export const southeastIndustryKinds:{id:'all'|SoutheastIndustryKind;label:string
  {id:'tourism',label:'観光',reading:'バリ、プーケット、シェムリアップは異なる自然・文化資源を生かす観光地です。'},
  {id:'finance',label:'金融',reading:'シンガポールの金融機関の集積を都市のサービス業として読みます。'},
  {id:'it-bpm',label:'IT-BPM',reading:'マニラ首都圏とセブの顧客対応・事務処理などのIT-BPM拠点を読みます。'},
- {id:'rubber',label:'ゴム・タイヤ',reading:'タイ南部のゴム栽培地域とラヨーンのタイヤ製造を別工程として読みます。'},
- {id:'wood',label:'木材・家具',reading:'ベトナム北中部の植林材とビンズオンの家具製造を区別します。加工には輸入木材も使われます。'},
 ];
 const source={
  penang:['マレーシア投資開発庁・電気電子産業','https://www.mida.gov.my/industries/manufacturing/electrical-electronics/','2026閲覧'],

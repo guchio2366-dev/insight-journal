@@ -32,7 +32,7 @@ const sources={cma:'https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=981000
 const natureTargets={climate:nature('?city=ottawa&compare=vancouver'),water:nature('?city=ottawa&view=water&water=Lake%20Ontario&only=1&frame=140,340,760,240'),landform:nature('?city=ottawa&view=landform')};
 import '../../styles/atlas-canada-country-parity.css';
 ---
-<BaseLayout title="カナダの人口｜都市圏・人口集団・宗教" description="41 CMAの人口・密度と、2021年の人口集団・宗教の割合と人数を比較し、都市圏への集中と構成の違いを読む。" compactAtlas>
+<BaseLayout title="カナダの人口｜都市圏・人口集団・宗教" description="2021年の自治体・同等統計区分の人口密度と、統計地域の人口集団・宗教の重なる分布を読む。" compactAtlas>
  <AtlasWorkspaceFrame region="north-america" mapActions={false}>
   <article class="canada-nature canada-population" data-canada-population data-population-selection="national">
    <div class="atlas-explorer atlas-workspace canada-country-primary" data-field="population">
@@ -41,7 +41,7 @@ import '../../styles/atlas-canada-country-parity.css';
    <h1 class="visually-hidden">カナダの都市圏人口・人口集団・宗教</h1>
    <NorthAmericaCountryFieldNavigation country="canada" field="population" />
    <nav class="country-topic-tabs" aria-label="人口の分野"><button type="button" data-population-topic="distribution" aria-pressed="true">人口分布</button><button type="button" data-population-topic="ethnicity" aria-pressed="false">人種・民族</button><button type="button" data-population-topic="religion" aria-pressed="false">宗教</button></nav>
-   <p class="population-coverage-brief" data-population-coverage-brief>2021年・293統計地域と41都市圏。地域未選択、南部を初期表示。</p>
+   <p class="population-coverage-brief" data-population-coverage-brief>人口密度グリッド（2020年推計）と293統計地域の人口集団・宗教（2021年）。地域未選択、南部を初期表示。</p>
 
    <div class="canada-workspace atlas-primary-grid population-workspace">
     <section class="canada-map-column atlas-map-column" aria-label="都市圏の地図と選択">
@@ -52,12 +52,13 @@ import '../../styles/atlas-canada-country-parity.css';
       {lakes.features.map(f=><g class="population-lake"><path class="canada-lake" d={geometryPath(f.geometry)} fill-rule="evenodd"><title>Ontario湖（オンタリオ湖）</title></path></g>)}
       {rivers.features.filter(f=>f.properties.name==='St. Lawrence').map(f=><path class="canada-river" d={geometryPath(f.geometry)}><title>セントローレンス川</title></path>)}
       <defs data-population-concentration-patterns></defs>
+      <g data-population-grid></g>
       <g data-population-regions></g>
       <g data-religion-region-symbols aria-hidden="true"></g>
       {geo.map(g=><g data-population-map-cma={g.id} role="button" tabindex="0" aria-label={`${g.name}都市圏を選ぶ`} aria-pressed="false"><title>{g.name}都市圏、2021年 {fmt(g.population.value)}人{g.population.symbol?' '+g.population.symbol:''}</title><path data-population-boundary style={`fill:${densityColor(g.density)}`} d={g.rings.map(r=>line(r)).join('')} fill-rule="evenodd" /><circle class="population-anchor" cx={canadaLegacyPoint(g.point)[0]} cy={canadaLegacyPoint(g.point)[1]} r="1.8"/><circle data-population-symbol cx={canadaLegacyPoint(g.point)[0]} cy={canadaLegacyPoint(g.point)[1]} r={g.population.value===null?0:Math.sqrt(g.population.value/max)*22} style="display:none"/><text data-population-label x={canadaLegacyPoint(g.point)[0]+7} y={canadaLegacyPoint(g.point)[1]-7} style={['535','462','933'].includes(g.id)?undefined:'display:none'}>{g.name.match(/（(.+)）/)?.[1]??g.name}</text></g>)}
       <g data-religion-map-callouts aria-hidden="true"></g>
 
-     </svg><div class="population-map-tools"><button data-population-reset>南部</button><button data-population-whole>全域</button><button data-population-scale="in" aria-label="地図を拡大">＋</button><button data-population-scale="out" aria-label="地図を縮小">−</button></div></div>
+     </svg></div>
      <div class="population-category-key" data-population-category-key></div>
      <div class="population-legend" data-population-population-legend hidden><svg viewBox="0 0 280 56" role="img" aria-label="人口総数の円、100万人と500万人。2016年と2021年で同じ尺度"><circle cx="25" cy="25" r={Math.sqrt(1000000/max)*22}/><circle cx="160" cy="25" r={Math.sqrt(5000000/max)*22}/><text x="45" y="31">100万人</text><text x="190" y="31">500万人</text></svg><span>円の面積が人口総数。両年は共通尺度。輪郭の広さは人口の多さではありません。</span></div>
      <ul class="population-density-legend" data-population-density-legend hidden aria-label="2021年人口密度の凡例">{['50未満','50–150未満','150–300未満','300–600未満','600以上'].map((label,i)=><li><i style={`background:${populationDensityColors[i]}`} aria-hidden="true"/>{label}</li>)}<li>人/km²・都市圏全体</li></ul>
@@ -71,6 +72,7 @@ import '../../styles/atlas-canada-country-parity.css';
      <details><summary>都市から解説を選ぶ</summary><div class="population-place-buttons">{data.cmas.map(r=><button data-population-locate={r.id}>{r.name.match(/（(.+)）/)?.[1]??r.name}</button>)}</div></details>
     </section>
     <aside class="canada-reading atlas-national population-reading" aria-label="人口比較と集中の理由">
+   <button class="population-clear-selection" data-population-clear-selection hidden>全国の解説へ</button>
    <div data-population-distribution-reading>
    <header class="canada-national-header"><p class="atlas-eyebrow">Canada · Population</p><h2>都市圏に集まる、カナダの人口</h2><p class="canada-lead" data-population-distribution-lead>人口は南部の都市圏に集中し、交通・仕事・住まいのつながりが、その集中と広がりを支えている。</p></header>
 
@@ -80,8 +82,8 @@ import '../../styles/atlas-canada-country-parity.css';
      <p class="population-change" data-population-change hidden></p>
      <p class="population-main-reading population-reading-links" data-population-comparison-links hidden><a href={withBase(`${path}industry/?year=2025&province=Ontario&metric=services`)} data-population-industry-link={withBase(`${path}industry/`)}>都市圏人口と、対応する州の産業構成を照合する</a><br/><a href={natureTargets.water} data-population-nature-link={natureTargets.water}>自然環境：Ontario湖を分離し、南部の水域位置を確かめる</a></p>
      <p class="population-summary">人口密度は人口を陸地面積で割った値です。広い郊外を含む都市圏平均と、州より細かい統計地域（CD）の平均を区別して読みます。CDと都市圏は重なり、人口を足し合わせません。</p>
-     <details class="population-background"><summary>場所 → 交通と仕事 → 人口集中</summary><p>地図のTorontoとMontréalは五大湖・セントローレンス側、Vancouverは太平洋側にあります。オンタリオ・ケベックの交通回廊や西岸の港は、産業と市場をつなぐ場所です。人の集中は気候だけでなく、仕事への移動や住宅にも関わります。</p><div class="population-place-buttons"><button data-population-locate="535">Torontoを拡大</button><button data-population-locate="462">Montréalを拡大</button><button data-population-locate="933">Vancouverを拡大</button></div></details>
-     <details class="population-more"><summary>都市の広がり・移動と、自然や農畜林業との関係</summary><p>2016–2019年に移住してきた人の9割超はCMAに居住しました。2016→2021年には中心部と郊外の両方で人口が増え、住宅供給・価格や通勤時間も居住場所に関わっています。人口が増えると交通・住宅・サービスの整備が必要になり、都市の拡大は農地などの利用へも影響します。これは当時の分析で、2026年現在の人口・移民動向を示す数値ではありません。</p><p><a href={sources.urban}>Statistics Canadaの2016→2021年分析</a> / <a href={sources.transport}>Transport Canada 2024年交通報告</a></p><p><button data-population-locate="505">Ottawa–Gatineauを拡大</button>は州をまたぐ1都市圏です。首都Ottawaの自治体だけの人口とは区別します。</p><p><a href={natureTargets.climate} data-population-nature-link={natureTargets.climate}>首都OttawaとVancouver：2地点の気温と雨の季節を比較</a>。観測所の気候と、都市圏全体の人口を同じ対象としません。<a href={natureTargets.landform} data-population-nature-link={natureTargets.landform}>地形：南部の低地・西部の山地の位置を確認</a>。</p><p><button data-population-locate="602">Winnipegの都市圏</button>と<button data-population-locate="705">Reginaの都市圏</button>を図で確かめ、<a href={withBase(`${path}agriculture/wheat/`)}>小麦の産地・輸送・需要</a>、<a href={withBase(`${path}agriculture/`)}>カノーラの生産と加工</a>へ。<a href={withBase(`${path}agriculture/beef/`)}>肉牛の草地・飼料・管理</a>、<a href={withBase(`${path}agriculture/forestry/`)}>森林と木材加工</a>も、自然条件と人の活動を分けて読みます。</p></details>
+     <details class="population-background"><summary>場所 → 交通と仕事 → 人口集中</summary><p>地図のTorontoとMontréalは五大湖・セントローレンス側、Vancouverは太平洋側にあります。オンタリオ・ケベックの交通回廊や西岸の港は、産業と市場をつなぐ場所です。人の集中は気候だけでなく、仕事への移動や住宅にも関わります。</p><div class="population-place-buttons"><button data-population-locate="535">Torontoの都市圏を読む</button><button data-population-locate="462">Montréalの都市圏を読む</button><button data-population-locate="933">Vancouverの都市圏を読む</button></div></details>
+     <details class="population-more"><summary>都市の広がり・移動と、自然や農畜林業との関係</summary><p>2016–2019年に移住してきた人の9割超はCMAに居住しました。2016→2021年には中心部と郊外の両方で人口が増え、住宅供給・価格や通勤時間も居住場所に関わっています。人口が増えると交通・住宅・サービスの整備が必要になり、都市の拡大は農地などの利用へも影響します。これは当時の分析で、2026年現在の人口・移民動向を示す数値ではありません。</p><p><a href={sources.urban}>Statistics Canadaの2016→2021年分析</a> / <a href={sources.transport}>Transport Canada 2024年交通報告</a></p><p><button data-population-locate="505">Ottawa–Gatineauの都市圏を読む</button>は州をまたぐ1都市圏です。首都Ottawaの自治体だけの人口とは区別します。</p><p><a href={natureTargets.climate} data-population-nature-link={natureTargets.climate}>首都OttawaとVancouver：2地点の気温と雨の季節を比較</a>。観測所の気候と、都市圏全体の人口を同じ対象としません。<a href={natureTargets.landform} data-population-nature-link={natureTargets.landform}>地形：南部の低地・西部の山地の位置を確認</a>。</p><p><button data-population-locate="602">Winnipegの都市圏</button>と<button data-population-locate="705">Reginaの都市圏</button>を図で確かめ、<a href={withBase(`${path}agriculture/wheat/`)}>小麦の産地・輸送・需要</a>、<a href={withBase(`${path}agriculture/`)}>カノーラの生産と加工</a>へ。<a href={withBase(`${path}agriculture/beef/`)}>肉牛の草地・飼料・管理</a>、<a href={withBase(`${path}agriculture/forestry/`)}>森林と木材加工</a>も、自然条件と人の活動を分けて読みます。</p></details>
    </div>
    <CanadaDemographicReading /><details data-population-composition hidden><summary data-population-composition-title></summary><p data-population-composition-note></p><table><thead><tr><th>区分</th><th>割合</th><th>人数</th></tr></thead><tbody data-population-composition-rows></tbody></table><details data-religion-source-detail hidden><summary>原表の23末端区分と人数</summary><table><thead><tr><th>原表の区分</th><th>割合</th><th>人数</th></tr></thead><tbody data-religion-source-rows></tbody></table></details></details>
     </aside>
@@ -96,6 +98,7 @@ import '../../styles/atlas-canada-country-parity.css';
     <p><a href={sources.cma}>都市圏原表と注記</a> / <a href={sources.national}>全国・州準州原表と注記</a> / <a href={withBase(`${asset}population-selected.csv`)}>抽出CSV</a></p>
    </details>
    <details class="canada-source-footer population-source-footer" id="canada-population-sources"><summary>出典・利用条件・境界の加工と検証</summary>
+    <p>分布図：<a href="https://human-settlement.emergency.copernicus.eu/ghs_pop2023.php">JRC GHSL GHS-POP R2023A</a>の2020年人口推計。公表された1 km等面積セルを5×5で集約し、有効な元セル面積で密度を計算。表示セル中心が属する集約値を、画像と選択読取で共用します。州・都市圏の人口を独自に配分しません。公表0と欠測を区別します。元の推計にも国勢調査等と建物分布を用いた空間モデルがあり、直接の世帯観測ではありません。表示画素は約9.9 kmのWeb Mercator間隔で、地上の縮尺は緯度により異なります。国境・水域にまたがる集約セルがあり、表示画素や密度を合計して全国・都市人口を算出しません。都市圏・全国の右側と下の統計は、別の2021年国勢調査です。<a href={withBase('/assets/atlas/canada-population-grid-v1/manifest.json')}>加工・原資料ハッシュ台帳</a> / <a href={withBase('/assets/atlas/canada-population-grid-v1/source-inputs.json')}>公式24タイルの出典</a>。© European Union / European Commission, Joint Research Centre. CC BY 4.0。</p>
     <p lang="en">Adapted from Statistics Canada, Table 98-10-0003-01, Population and dwelling counts: Census metropolitan areas, census agglomerations and census subdivisions (municipalities), and Table 98-10-0001-01, Population and dwelling counts: Canada, provinces and territories, 2021 Census of Population, reference years 2016 and 2021 (accessed September 30, 2026). This does not constitute an endorsement by Statistics Canada of this product.</p>
     <p>人口・密度・陸地面積：<a href={sources.cma}>98-10-0003-01</a>、<a href={sources.national}>98-10-0001-01</a>、2022年2月9日公表。<a href="https://www.statcan.gc.ca/en/terms-conditions/open-licence">Statistics Canada Open Licence</a>に基づく抽出・日本語化・表示。55地域×5指標の原値と直後のSymbols列、地理注記を保持。2026年9月30日取得。全国の2021年人口36,991,981人と41都市圏合計27,281,119人から73.7%を計算しています。</p>
     <p lang="en">Contains information licensed under the Open Government Licence – Canada.</p>
@@ -106,7 +109,7 @@ import '../../styles/atlas-canada-country-parity.css';
    </details>
    <CanadaDemographicSources />
    <noscript><p>南部41都市圏の2021年人口密度図、全国の分布概要、本文・全55地域の数値表・出典を読めます。人口集団と宗教は末尾の全国原人数と定義を確認できます。選択・分野の切替、拡大、履歴やURLからの復帰にはJavaScriptが必要です。</p></noscript>
-   <script type="application/json" data-population-config set:html={JSON.stringify({...data,regionsUrl:withBase('/assets/atlas/canada-demographics-v2/regions.geojson'),demographics:{ethnicity,religion},industryProvinces:industry.provinces.map(({id,code})=>({id,code})),geometry:geometry.features.map(({id,point,bounds,provinceCodes})=>({id,point,bounds,provinceCodes}))}).replace(/</g,String.fromCharCode(92)+'u003c')} />
+   <script type="application/json" data-population-config set:html={JSON.stringify({...data,regionsUrl:withBase('/assets/atlas/canada-demographics-v2/regions.geojson'),populationGridBase:withBase('/assets/atlas/canada-population-grid-v1'),demographics:{ethnicity,religion},industryProvinces:industry.provinces.map(({id,code})=>({id,code})),geometry:geometry.features.map(({id,point,bounds,provinceCodes})=>({id,point,bounds,provinceCodes}))}).replace(/</g,String.fromCharCode(92)+'u003c')} />
   </article>
  </AtlasWorkspaceFrame>
 </BaseLayout>

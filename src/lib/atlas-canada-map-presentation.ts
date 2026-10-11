@@ -1,6 +1,13 @@
 import {projectCanadaLandform} from './atlas-canada-landform-map.ts';
 /** Legacy URLs and archived affine geometry keep their original coordinate contract. */
 export const projectCanadaMap=projectCanadaLandform;
+/** Camera extent only: source projections and thematic coordinates stay unchanged. */
+export const canadaSouthernBounds:[[number,number],[number,number]]=[[-134,40.7],[-50,65.5]];
+export function canadaSouthernFrame(ratio=1.85):number[]{
+ const northwest=projectCanadaMap([canadaSouthernBounds[0][0],canadaSouthernBounds[1][1]]),southeast=projectCanadaMap([canadaSouthernBounds[1][0],canadaSouthernBounds[0][1]]);
+ const width=Math.max(southeast[0]-northwest[0]+20,(southeast[1]-northwest[1]+20)*ratio),height=width/ratio;
+ return [(northwest[0]+southeast[0]-width)/2,(northwest[1]+southeast[1]-height)/2,width,height];
+}
 export function canadaLegacyPoint([x,y]:readonly number[]){return projectCanadaMap([x/900*95-145,85-y/580*45]);}
 export function canadaLegacyFrame(frame:readonly number[]|null):number[]{
  if(!frame || Math.abs(frame[0])<.01&&Math.abs(frame[1]-180.444444)<.01&&Math.abs(frame[2]-900)<.01)return [0,0,900,580];

@@ -1,4 +1,4 @@
-import {canadaLegacyPoint} from '../../src/lib/atlas-canada-map-presentation.ts';
+import {canadaLegacyPoint,canadaSouthernFrame} from '../../src/lib/atlas-canada-map-presentation.ts';
 import {projectCanadaLandform} from '../../src/lib/atlas-canada-landform-map.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -64,7 +64,7 @@ test('Population water context retains the original 2016 CMA distribution, perio
  try{
   const q=s=>w.document.querySelector(s),context=q('[data-canada-population-context]'),layer=q('[data-canada-population-context-map]');
   assert.ok(context);assert.equal(context.hidden,false);assert.equal(layer.style.display,'');
-  assert.equal(q('[data-canada-map]').getAttribute('viewBox'),'0 0 900 580');
+  assert.equal(q('[data-canada-map]').getAttribute('viewBox'),canadaSouthernFrame().join(' '));
   assertSourceDistribution(layer);
   const text=q('[data-canada-population-context-text]').textContent;
   assert.match(text,/Toronto|トロント/);assert.match(text,/Montréal|モントリオール/);assert.match(text,/Ontario|オンタリオ/);
