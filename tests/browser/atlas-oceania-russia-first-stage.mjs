@@ -84,7 +84,7 @@ try{
   assert.equal(await map.locator('[data-oceania-industry-location][aria-pressed="true"]').count(),0);
   assert.match(await host.locator('[data-theme-title]').textContent(),/オセアニアの主要産業/);
   await capture('overview');
-  await map.locator('[data-oceania-industry-location="lae-port"]').click();await ready('oceania');
+  await map.locator('[data-oceania-industry-location="lae-port"] path').click();await ready('oceania');
   assert.equal(new URL(page.url()).searchParams.get('industryLocation'),'lae-port');
   assert.equal(await host.locator('[data-theme-title]').textContent(),'ラエ港');
   assert.match(await host.locator('[data-explanation]').textContent(),/個々の鉱山の輸出港や鉱山からの輸送経路は/);
