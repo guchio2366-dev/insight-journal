@@ -39,6 +39,7 @@ test('Mexico uses shared US agriculture hierarchy, truthful zones and a same-yea
   assert.match(ctx.q('[data-agriculture-reading="rice"] .mexico-agriculture-product-scope').textContent,/2025年.*0\.18%.*もみ米.*精米/s);
   assert.equal(ctx.q('[data-mexico-forest-states]').hasAttribute('hidden'),true);
   assert.equal(ctx.root.querySelectorAll('[data-mexico-forest-states] path').length,2);
+  assert.deepEqual([...ctx.root.querySelectorAll('[data-mexico-forest-states] text')].map(node=>node.textContent.trim()).sort(),['チワワ','ドゥランゴ'].sort());
   await access('dist/assets/atlas/mexico-agriculture-v2/manifest.json');
   await access('dist/assets/atlas/mexico-agriculture-v2/rivers.svg');
  }finally{await ctx.window.happyDOM.close();}

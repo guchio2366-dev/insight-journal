@@ -209,7 +209,10 @@ async function assertReady(page, country, scene) {
       const decoded = svgImages.find(image => image.url === sourceUrl);
       assert(decoded?.decoded && decoded.width > 0 && decoded.height > 0, 'Mexico tree-cover image did not decode');
       forestTreeCover = {...decoded, sourceUrl, visible: true, scope: 'Coarse 2021 WorldCover categorical tree-cover overview; not a 10 m display, legal-forest boundary, or pine-species map'};
-      assert.equal(await root.locator('[data-mexico-forest-states]').count(), 0, 'Forestry must not highlight state outlines');
+      const forestStates = root.locator('[data-mexico-forest-states]');
+      assert(await forestStates.isVisible(), 'Forestry must highlight the two leading states');
+      assert.equal(await forestStates.locator('path').count(), 2, 'Forestry must retain the Durango and Chihuahua outlines');
+      assert.deepEqual((await forestStates.locator('text').allTextContents()).map(name => name.trim()).sort(), ['チワワ', 'ドゥランゴ'].sort());
       assert((await root.locator('[data-agriculture-reading="pine"] .mexico-agriculture-forest-note').textContent()).includes('ドゥランゴ・チワワ'), 'Forestry must retain the top-state statistics explanation');
     } else {
       assert(await root.locator('path[data-crop-zone="corn"]').isVisible(), 'Mexico crop distribution missing');
