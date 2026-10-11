@@ -9,7 +9,10 @@ crop_source=json.loads((crop.parent/'qcl-source.json').read_text());livestock_so
 assert sha(crop)==crop_source['selectedSha256'];assert sha(livestock)==livestock_source['extractSha256']
 assert crop_source['zipSha256']==livestock_source['sha256']
 rows=list(csv.DictReader(crop.open()))+json.loads(livestock.read_text())
-region_codes={'all':'5100','north':'5103','west':'5104','east':'5101','central':'5102','south':'5105'}
+region_codes={'all':'5100','north':'5103','west':'5105','east':'5101','central':'5102','south':'5104'}
+region_names={'all':'Africa','north':'Northern Africa','west':'Western Africa','east':'Eastern Africa','central':'Middle Africa','south':'Southern Africa'}
+for region,code in region_codes.items():
+ assert {row['Area'] for row in rows if row['Area Code']==code}=={region_names[region]}, f'Publisher region name does not match {region}'
 items=[('maize','とうもろこし','56'),('rice','米（籾）','27'),('wheat','小麦','15'),('cassava','キャッサバ','125'),('coffee','コーヒー（生豆）','656'),('tea','茶','667'),('cattle-meat','牛肉（骨付き）','867'),('cattle-milk','牛の生乳','882'),('goats-meat','ヤギ肉','1017'),('sheep-meat','羊肉','977')]
 def observation(area,item):
  found=[x for x in rows if x['Area Code']==area and x['Item Code']==item and x['Element Code']=='5510' and x['Year']=='2024']

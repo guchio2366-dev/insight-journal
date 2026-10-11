@@ -6,6 +6,15 @@ import stats from '../../src/data/atlas/africa-regional-statistics.json' with {t
 import {readState,writeState,africaAgriVisibleLayers} from '../../src/data/atlas/africa-atlas.ts';
 import {africaProductionZonePath} from '../../src/scripts/atlas-africa-layers.ts';
 const root=new URL('../../',import.meta.url);
+test('display regions agree with publisher area names, including Western and Southern Africa',()=>{
+ const expected={all:['5100','Africa'],north:['5103','Northern Africa'],west:['5105','Western Africa'],east:['5101','Eastern Africa'],central:['5102','Middle Africa'],south:['5104','Southern Africa']};
+ for(const [region,[code,name]]of Object.entries(expected)){
+  assert.equal(stats.regionCodes[region],code,region);
+  const available=stats.regions[region].filter(row=>row.regional);
+  assert(available.length>0,'retained publisher observations for '+region);
+  for(const row of available)assert.equal(row.regional.area,name,region+' matches the raw publisher region');
+ }
+});
 test('regional shares use exact publisher regional and World rows, never model quantities or filled missing rows',()=>{
  const retained=JSON.parse(readFileSync(new URL('data-source/atlas/livestock/faostat-qcl-2024-extract.json',root),'utf8'));
  for(const source of stats.source.retainedFiles){const bytes=readFileSync(new URL(source.path,root));assert.equal(createHash('sha256').update(bytes).digest('hex'),source.sha256);}
