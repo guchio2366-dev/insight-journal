@@ -186,7 +186,9 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
    const position=local&&clear(local)?local:candidates.find(clear);
    if(!position)continue;occupied.push(position);
    const label=svg('g',{'data-africa-city':city.id,'data-africa-city-label':city.id,role:'button',tabindex:0,'aria-label':city.name+'の雨温図を読む','aria-pressed':String(selected),class:'africa-map-pick-label'});
-   label.append(svg('path',{d:`M${cx},${cy}L${Math.max(position.x,Math.min(position.x+w,cx))},${position.y-8*scale}`,fill:'none',stroke:'#315975','stroke-width':1,'vector-effect':'non-scaling-stroke','pointer-events':'none'}));
+   // A decorative leader must not enlarge the button's bounding box: its
+   // centre could otherwise fall over empty ocean instead of the label.
+   group.append(svg('path',{d:`M${cx},${cy}L${Math.max(position.x,Math.min(position.x+w,cx))},${position.y-8*scale}`,fill:'none',stroke:'#315975','stroke-width':1,'vector-effect':'non-scaling-stroke','pointer-events':'none','aria-hidden':'true','data-africa-city-leader':city.id}));
    label.append(svg('rect',{x:position.x,y:position.y-h+4*scale,width:w,height:h,rx:3*scale,fill:selected?'#fff0df':'#fffdf8',stroke:selected?'#a64e29':'#43677b','stroke-width':1,'vector-effect':'non-scaling-stroke'}));
    const title=svg('text',{x:position.x+6*scale,y:position.y-3*scale,'font-size':font,'font-weight':750,fill:'#214f70','text-decoration':'underline'});title.textContent=city.name;label.append(title);group.append(label);
   }

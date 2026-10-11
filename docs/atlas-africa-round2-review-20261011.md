@@ -52,3 +52,13 @@ ESA WorldCover2021 v200が正常取得できた場合の出典条件：CC BY4.0�
 静的に確認できた後続検証契約の修正：共通枠のAfricaナビは `.africa-fields` を使用するため、従来の `.forest-fields` だけのcapture selectorを両者対応へ修正。承認済みAfrica枠変更のbaseとの画素完全一致はround2で対象外とし、他地域の同一画素/レイアウト検証は維持、Africaは専用の可視性/操作検証を実行する。原失敗行未取得のため、これを後続CIの実失敗原因と断定しない。
 
 専用PC検証は最初の失敗を保持したまま、主1920の主要12画面と補助1440/1024の気候・農畜産をJPEGでcapture-onlyとして記録する。各captureの成否もmetadataに残す。未検証画像を合格の代わりにせず、原失敗とstatus=failedを保持する。head8d93024では失敗時artifact（1,465,527 bytes）のアップロード成功をAPIで確認したが、内容は配布拒否のため未実見。
+
+## 親が取得した原失敗と追加修正
+
+head308245eの原CIを親が正規接続GitHubで読取り、round2 specの都市選択line87でToamasinaの通常クリックが30秒timeoutになることを確認した。親の報告ではlabelはvisible/enabled/stableだが背景rect（1100×907、#e9f0f0）がクリック先になる。これはローカルSUID起動障害とは別の、実画面の当たり判定である。
+
+都市buttonのSVG groupに装飾の引出線が含まれていたため、groupのbounding boxが駅位置まで広がり、通常クリックの中心がラベル外の海へ落ち得た。線をbuttonの兄弟要素へ移し、pointer-events=none/aria-hiddenを保つ。buttonの範囲は背景rectと都市名だけになる。地図背景rect自体も装飾としてpointer-events=noneを明記した。色・座標・都市名・観測値・カメラ・選択処理は保持。PC検証ではbutton中心のelementFromPointがそのbutton内に当たること、forceなしのtrial/通常click、全12都市の選択・分類・欠測月数・カメラ不変を主1920/補助1440/1024で確認する。
+
+head308245eの最終CIはValidate site（PR/push）、林業PC、産業が成功、Africa PCは上記失敗。ローカル単体1148件中1145合格・既存3skip。全操作582件中574合格・7skip・農畜産初期9分布の10秒待機1失敗。同headの農畜産対象ファイルを独立再実行し10/10合格、該当ケース2.87秒。並列全体を全件合格とは扱わない。親からの原失敗の確認後に修正headのCIを再実行する。
+
+公開までの追加承認は反映済み。地域全体に未達があるためDraftを維持し、公開順は親と合わせる。追加承認後、同じ正規取得操作を一度再試行したが、gh run view --log-failed/gh run downloadはForbidden、ESA正規proxy/FAO GLC-SHARE/FAOSTAT QCL・FBS・TM/PourPointsは403、Library画像3枚はprepare成功後の同helper materializeがdownload failed、Chromiumは安全設定の同起動でSUID ownership FATAL。ESAの最初の再試行起動で環境proxy設定が付いていなかった点は訂正し、正規proxyで403を確認した。原データ取得なし。再拒否後の迂回や安全設定/権限変更は行わない。

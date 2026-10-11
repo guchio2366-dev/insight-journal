@@ -58,7 +58,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
     <svg class="africa-map" viewBox={initialViewBox.join(' ')} data-theme={initialTheme.id} data-detail={state.zoom!=='all'?'true':'false'} role="img" aria-labelledby="africa-svg-title africa-svg-desc">
       <title id="africa-svg-title">{initialTheme.title}・国別の年降水量（長期平均）</title><desc id="africa-svg-desc">分布テーマと国別統計を重ねた地図。右の凡例と説明から、表示した分布を読み取れます。国は選択欄や一覧からも選べます。</desc>
      <defs><pattern id="africa-missing" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#eeeae1"/><path d="M0 7L7 0" stroke="#b5b0a3" stroke-width="1"/></pattern></defs>
-     <rect width={africaWidth} height={africaHeight} fill="#e9f0f0"/>
+     <rect width={africaWidth} height={africaHeight} fill="#e9f0f0" pointer-events="none" data-africa-map-background/>
      {[-20,0,20].map(lat=><line x1="0" x2={africaWidth} y1={projectAfrica([0,lat])[1]} y2={projectAfrica([0,lat])[1]} class="africa-graticule"/>)}
      {geography.features.map(f=>{const c=countries.find(c=>c.code===f.properties.code)!;const v=valueAt(metric.id,c.code,state.year);return <path d={africaPath(f.geometry)} data-country-path={c.code} fill={fillFor(v,metric)} fill-rule="evenodd" class:list={['africa-country',{'is-selected':c.code===state.place}]}><title>{c.name}：{formatValue(v,metric)} {v===null?'':metric.unit}</title></path>})}
      <g data-africa-actual-layer></g>

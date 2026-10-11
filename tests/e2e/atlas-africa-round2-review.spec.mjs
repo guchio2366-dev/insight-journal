@@ -84,7 +84,9 @@ try {
   profile.climateLabels=await labels(page,'[data-africa-climate-map-label],[data-africa-city-label]');
   await capture(page,profile,'climate');const camera=await page.locator('.africa-map').getAttribute('viewBox');
   for(const id of ['mahajanga','toamasina','antananarivo','toliara']){
-   const button=page.locator(`[data-africa-city-label="${id}"]`);await visible(button,page.locator('.africa-map-frame'));await button.click({trial:true});await button.click();await settle(page);
+   const button=page.locator(`[data-africa-city-label="${id}"]`);await visible(button,page.locator('.africa-map-frame'));
+   assert(await button.evaluate(node=>{const box=node.getBoundingClientRect(),hit=document.elementFromPoint(box.x+box.width/2,box.y+box.height/2);return !!hit&&node.contains(hit);}),id+' normal click centre hits the visible city button');
+   await button.click({trial:true});await button.click();await settle(page);
    assert.equal(state(page).city,id);assert.equal(await page.locator('.africa-map').getAttribute('viewBox'),camera,'city changes no camera');
    const reading=page.locator(`[data-africa-city-reading="${id}"]`),plot=reading.locator('[data-climate-plot]');await visible(reading);const box=await visible(plot,page.locator('.africa-detail'));
    const drawing=await plot.evaluate(node=>({viewBox:node.viewBox.baseVal.width?{width:node.viewBox.baseVal.width,height:node.viewBox.baseVal.height}:null,min:Number(node.dataset.temperatureMin),max:Number(node.dataset.temperatureMax),rainMax:Number(node.dataset.rainMax),temperatureTicks:[...node.querySelectorAll('[data-temperature-tick]')].map(n=>Number(n.dataset.temperatureTick)),rainTicks:[...node.querySelectorAll('[data-rain-tick]')].map(n=>Number(n.dataset.rainTick)),bars:[...node.querySelectorAll('.atlas-climate-bar')].map(n=>({y:Number(n.getAttribute('y')),height:Number(n.getAttribute('height'))})),plotTop:Number(node.dataset.plotTop),plotBottom:Number(node.dataset.plotBottom),maxHeight:getComputedStyle(node).maxHeight}));
@@ -97,6 +99,17 @@ try {
    if(id==='toamasina')await capture(page,profile,'climate-toamasina');
   }
   const widths=profile.climate.map(city=>city.box.width);assert(Math.max(...widths)-Math.min(...widths)<2,'four Madagascar diagrams have equal drawing width');
+  profile.cityClickChecks=profile.climate.map(city=>city.id);
+  for(const city of africaClimateCities.filter(city=>!profile.cityClickChecks.includes(city.id))){
+   const button=page.locator(`[data-africa-city-label="${city.id}"]`);await visible(button,page.locator('.africa-map-frame'));
+   assert(await button.evaluate(node=>{const box=node.getBoundingClientRect(),hit=document.elementFromPoint(box.x+box.width/2,box.y+box.height/2);return !!hit&&node.contains(hit);}),city.id+' normal click centre hits the visible city button');
+   await button.click({trial:true});await button.click();await settle(page);
+   assert.equal(state(page).city,city.id);assert.equal(await page.locator('.africa-map').getAttribute('viewBox'),camera,'every city changes no camera');
+   const reading=page.locator(`[data-africa-city-reading="${city.id}"]`);await visible(reading);assert((await reading.innerText()).includes(city.classification.code),'selected station classification is actually in its visible reading');
+   assert.equal(await reading.locator('.atlas-climate-bar').count(),city.precipitationMm.filter(value=>value!==null).length,'missing rain months are not fabricated');
+   profile.cityClickChecks.push(city.id);
+  }
+  assert.equal(profile.cityClickChecks.length,12);
   await page.locator('[data-africa-city-return]').click();await settle(page);assert(!state(page).city);assert.equal(await page.locator('.africa-map').getAttribute('viewBox'),camera);
   const reader=await measure(page.locator('.africa-detail')),mapFrame=await measure(page.locator('.africa-map-frame'));
   const scroll=await page.locator('.africa-detail').evaluate(node=>({clientHeight:node.clientHeight,scrollHeight:node.scrollHeight,overflowY:getComputedStyle(node).overflowY}));
