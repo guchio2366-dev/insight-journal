@@ -50,7 +50,7 @@ const overviewColors=['#af4e25','#167c83','#7754a5'];
   <section class="population-overview-maps" data-population-overview-maps hidden aria-label="全国の分布を一覧で比較">
    {overviewGroups.map(category=><div data-population-overview-category={category} hidden>
     <h2>{category==='religion'?'宗教の特徴的な分布':'民族・自己認識の特徴的な分布'}</h2>
-    <p>各指標で公表された州内割合が高い8州を色付きの輪郭で同時に示し、そのうち上位2州に番号を置きます。色と番号は指標の区別で、多数派や人口の大きさを表しません。指標を選ぶとその輪郭を強調します。全32州の割合を面色で見る操作は右欄にあります。</p>
+    <p>各指標で公表された州内割合が高い8州を色付きの輪郭で同時に示し、そのうち上位2州に番号を置きます。色と番号は指標の区別で、多数派や人口の大きさを表しません。指標を選ぶとその輪郭を強調します。全32州の割合を面色で見る操作は右欄にあります。{category==='ethnicity'&&'先住民言語と先住民自己認識の上位8州は同じ集合ですが、別の指標です。重なる州では橙の外縁と紫の内線で両方を示します。'}</p>
     <figure class="population-overview-combined"><svg viewBox={mapViewBox} preserveAspectRatio="xMidYMid meet" role="img" aria-label={`${category==='religion'?'宗教':'民族・自己認識'}の3指標それぞれで州内割合が高い8州を輪郭で同時に示す地図`}>
      <g class="population-overview-land">{shapes.map(({row})=><use href={`#mexico-population-outline-${row.stateCode}`} data-overview-state={row.stateCode}><title>{row.nameJa}</title></use>)}</g>
      {mexicoCompositionOverviewMetrics(compositionData,category).map((metric,index)=><g class="population-overview-regions" data-overview-region-metric={metric.id} style={`--region-color:${overviewColors[index]}`}>{mexicoCompositionHighlights(metric,8).map(({code})=>{const row=population.states.find(item=>item.stateCode===code)!;return <use href={`#mexico-population-outline-${code}`} data-overview-region-state={code}><title>{metric.label}：{row.nameJa}、州内{formatMexicoCompositionShare(metric.states[code],metric)}。公表割合の高い8州の一つ</title></use>;})}</g>)}

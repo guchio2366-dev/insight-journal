@@ -137,6 +137,7 @@ test('National entry has no implicit capital selection; one overview map retains
     assert.equal(overview.querySelectorAll('.population-overview-combined svg').length,1);
     assert.equal(overview.querySelectorAll('[data-overview-state]').length,32);
     for(const id of metrics){const metric=compositionData.metrics.find(m=>m.id===id),highlights=overview.querySelector(`[data-overview-highlight-metric="${id}"]`),regions=overview.querySelector(`[data-overview-region-metric="${id}"]`);assert.equal(highlights.querySelectorAll('[data-overview-highlight-state]').length,2);assert.deepEqual([...highlights.querySelectorAll('[data-overview-highlight-state]')].map(mark=>mark.getAttribute('data-overview-highlight-state')),mexicoCompositionHighlights(metric).map(item=>item.code));assert.deepEqual([...regions.querySelectorAll('[data-overview-region-state]')].map(mark=>mark.getAttribute('data-overview-region-state')),mexicoCompositionHighlights(metric,8).map(item=>item.code));}
+    if(category==='ethnicity'){assert.deepEqual([...overview.querySelectorAll('[data-overview-region-metric]')].map(group=>group.getAttribute('data-overview-region-metric')),metrics);assert.deepEqual(mexicoCompositionHighlights(compositionData.metrics.find(item=>item.id===metrics[0]),8).map(item=>item.code).sort(),mexicoCompositionHighlights(compositionData.metrics.find(item=>item.id===metrics[2]),8).map(item=>item.code).sort());}
     const marks=[...overview.querySelectorAll('[data-overview-highlight-state]')].map(mark=>mark.getAttribute('transform').match(/translate\(([-.\d]+) ([-.\d]+)\)/).slice(1).map(Number));
     for(const [index,a] of marks.entries())for(const b of marks.slice(index+1))assert(Math.hypot(a[0]-b[0],a[1]-b[1])>=20,'Overview badges do not overlap');
     assert.equal(q('[data-population-display-settings]').hidden,true);
@@ -148,9 +149,14 @@ test('National entry has no implicit capital selection; one overview map retains
     assert.equal(overview.querySelectorAll('.population-overview-all-states tbody tr').length,32);
     q(`[data-population-overview-metric="${metrics[0]}"]`).click();assert.equal(q('[data-population-overview-maps]').hidden,false);assert.equal(q('[data-population-display-settings]').hidden,false);assert.equal(q('[data-population-composition-selected-name]').textContent,'メキシコ全国');assert.equal(q('[data-population-composition-share-label]').textContent,'全国の割合');
     assert.equal(overview.querySelectorAll('[data-overview-highlight-metric]').length,3);
-    assert.equal(overview.querySelector('.is-selected-overview-metric').getAttribute('data-overview-highlight-metric'),metrics[0]);
+    assert.equal(overview.querySelector('.population-overview-highlights.is-selected-overview-metric').getAttribute('data-overview-highlight-metric'),metrics[0]);
     assert.ok(q('[data-population-composition-map-mode]').closest('[data-population-composition-reading]'));
     assert.equal(overview.querySelector('[data-overview-state="20"]').style.fill,'');assert.equal(overview.querySelector('.population-overview-regions.is-selected-overview-metric').getAttribute('data-overview-region-metric'),metrics[0]);assert.equal(overview.querySelectorAll('[data-overview-region-metric] [data-overview-region-state]').length,24);assert.equal(q('[data-population-composition-share-key]').hidden,true);
+    if(category==='ethnicity'){
+     assert.deepEqual([...overview.querySelectorAll('[data-overview-region-metric]')].map(group=>group.getAttribute('data-overview-region-metric')),metrics);
+     change(w,'[data-population-composition-metric]',metrics[2]);assert.equal(overview.querySelector('.population-overview-regions.is-selected-overview-metric').getAttribute('data-overview-region-metric'),metrics[2]);
+     assert.deepEqual([...overview.querySelectorAll('[data-overview-region-metric]')].map(group=>group.getAttribute('data-overview-region-metric')),metrics);
+    }
     q('[data-population-composition-map-mode]').click();assert.equal(q('[data-population-overview-maps]').hidden,true);assert.equal(q('#mexico-population-distribution').hidden,false);assert.equal(new URL(w.location).searchParams.get('compositionMap'),'single');
     assert.equal(q('[data-population-composition-share-key]').hidden,false);
     q('[data-population-composition-map-mode]').click();assert.equal(q('[data-population-overview-maps]').hidden,false);assert.equal(new URL(w.location).searchParams.has('compositionMap'),false);

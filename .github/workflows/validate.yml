@@ -130,7 +130,7 @@ jobs:
           if-no-files-found: warn
           retention-days: 7
 
-      - name: Capture focused Mexico composition and rice review
+      - name: Capture overlapping Mexico ethnicity contours
         if: (github.head_ref || github.ref_name) == 'codex/mexico-second-wave-20261011'
         shell: bash
         timeout-minutes: 4
@@ -138,14 +138,14 @@ jobs:
           set -euo pipefail
           chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
           test -n "$chrome_path"
-          REVIEW_CHROME_PATH="$chrome_path" node scripts/capture-mexico-composition-focused.mjs
+          REVIEW_CHROME_PATH="$chrome_path" MEXICO_FOCUS_SCOPE=ethnicity-overlap node scripts/capture-mexico-composition-focused.mjs
 
-      - name: Upload focused Mexico review
+      - name: Upload overlapping Mexico ethnicity contours
         if: always() && (github.head_ref || github.ref_name) == 'codex/mexico-second-wave-20261011'
         uses: actions/upload-artifact@v4
         with:
-          name: mexico-composition-focused-${{ github.run_id }}
-          path: review-artifacts/mexico-composition-focused
+          name: mexico-ethnicity-overlap-${{ github.run_id }}
+          path: review-artifacts/mexico-ethnicity-overlap
           if-no-files-found: error
           retention-days: 7
 

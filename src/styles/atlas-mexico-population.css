@@ -71,6 +71,12 @@
 .mexico-population .population-overview-regions{fill:none;stroke:var(--region-color);stroke-width:2.7;stroke-opacity:.82;vector-effect:non-scaling-stroke;pointer-events:none}
 .mexico-population .population-overview-regions use{fill:var(--region-color);fill-opacity:.065;stroke:var(--region-color);stroke-width:2.7;stroke-opacity:.82;vector-effect:non-scaling-stroke}
 .mexico-population[data-population-composition=true][data-population-overview=false] .population-overview-regions.is-selected-overview-metric use{fill-opacity:.15;stroke-width:4.5;stroke-opacity:1}
+/* The language and self-identity top-eight sets coincide. Keep orange outside
+   and purple inside in both overview and selected states, regardless of focus. */
+.mexico-population [data-population-overview-category="ethnicity"] [data-overview-region-metric="indigenous_language"] use{stroke-width:7;stroke-opacity:1}
+.mexico-population [data-population-overview-category="ethnicity"] [data-overview-region-metric="indigenous_identity_estimate"] use{stroke-width:2.4;stroke-opacity:1}
+.mexico-population[data-population-composition=true][data-population-overview=false] [data-population-overview-category="ethnicity"] [data-overview-region-metric="indigenous_language"].is-selected-overview-metric use{stroke-width:9}
+.mexico-population[data-population-composition=true][data-population-overview=false] [data-population-overview-category="ethnicity"] [data-overview-region-metric="indigenous_identity_estimate"].is-selected-overview-metric use{stroke-width:3.8}
 .mexico-population .population-overview-highlights circle{stroke:#fffefa;stroke-width:2;vector-effect:non-scaling-stroke}
 .mexico-population[data-population-composition=true][data-population-overview=false] .population-overview-highlights{opacity:.65}
 .mexico-population[data-population-composition=true][data-population-overview=false] .population-overview-highlights.is-selected-overview-metric{opacity:1}

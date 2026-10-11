@@ -11,7 +11,8 @@ import {chromium} from 'playwright';
 
 const repo=fileURLToPath(new URL('../',import.meta.url));
 const dist=await realpath(path.join(repo,'dist'));
-const output=path.join(repo,'review-artifacts','mexico-composition-focused');
+const overlapOnly=process.env.MEXICO_FOCUS_SCOPE==='ethnicity-overlap';
+const output=path.join(repo,'review-artifacts',overlapOnly?'mexico-ethnicity-overlap':'mexico-composition-focused');
 const base='/insight-journal';
 const head=execFileSync('git',['rev-parse','HEAD'],{cwd:repo,encoding:'utf8'}).trim();
 assert(process.env.GITHUB_ACTIONS==='true'||process.env.REVIEW_LOCAL==='1','Run in CI or explicitly opt into local review');
@@ -47,12 +48,27 @@ async function capture(name,evidence){
 async function compositionEvidence(category,mode,selected){
  return page.evaluate(({category,mode,selected})=>{
   const root=document.querySelector(`[data-population-overview-category="${category}"]`);
-  const groups=[...root.querySelectorAll('[data-overview-region-metric]')].map(group=>({metric:group.dataset.overviewRegionMetric,states:[...group.querySelectorAll('[data-overview-region-state]')].map(mark=>mark.dataset.overviewRegionState),selected:group.classList.contains('is-selected-overview-metric')}));
+  const groups=[...root.querySelectorAll('[data-overview-region-metric]')].map(group=>({metric:group.dataset.overviewRegionMetric,states:[...group.querySelectorAll('[data-overview-region-state]')].map(mark=>mark.dataset.overviewRegionState),selected:group.classList.contains('is-selected-overview-metric'),strokeWidth:getComputedStyle(group.querySelector('use')).strokeWidth,stroke:getComputedStyle(group.querySelector('use')).stroke}));
   const map=document.querySelector('[data-population-overview-maps]'),solo=document.querySelector('#mexico-population-distribution');
   return {category,mode,selected,groups,combinedVisible:!map.hidden,soloVisible:!solo.hidden,shareKeyVisible:!document.querySelector('[data-population-composition-share-key]').hidden,baseFill:[...root.querySelectorAll('[data-overview-state]')].map(node=>node.style.fill),buttonInReading:!!document.querySelector('[data-population-composition-reading] [data-population-composition-map-mode]')};
  },{category,mode,selected});
 }
 try{
+ if(overlapOnly){
+  await page.goto(`${origin}${base}/atlas/north-america/mexico/population/?category=ethnicity`);await settled();
+  await page.waitForSelector('[data-mexico-field="population"][data-population-ready="1"]');
+  for(const [name,selectedMetric] of [['ethnicity-overlap-initial',null],['ethnicity-overlap-language','indigenous_language'],['ethnicity-overlap-self-identity','indigenous_identity_estimate']]){
+   if(selectedMetric){if(name==='ethnicity-overlap-language')await page.locator(`[data-population-overview-metric="${selectedMetric}"]`).click();else await page.locator('[data-population-composition-metric]').selectOption(selectedMetric);await settled();}
+   const evidence=await compositionEvidence('ethnicity','combined',!!selectedMetric),groups=evidence.groups;
+   assert(evidence.combinedVisible&&!evidence.soloVisible&&groups.length===3);
+   assert.deepEqual(groups.map(group=>group.metric),['indigenous_language','afro_identity','indigenous_identity_estimate'],'The outer and inner contours must keep their paint order');
+   assert.deepEqual([...groups[0].states].sort(),[...groups[2].states].sort(),'The overlapping official top-eight sets changed');
+   assert(Number.parseFloat(groups[0].strokeWidth)-Number.parseFloat(groups[2].strokeWidth)>=3,'Orange outer contour is not visibly wider than the purple inner contour');
+   assert.equal(groups.find(group=>group.selected)?.metric,selectedMetric??undefined);
+   assert(evidence.baseFill.every(fill=>fill===''));
+   await capture(name,evidence);
+  }
+ }else{
  await page.goto(`${origin}${base}/atlas/north-america/mexico/agriculture/`);await settled();
  await page.waitForSelector('[data-mexico-agriculture-atlas][data-agriculture-ready="true"]');
  const rice=await page.evaluate(()=>({mainKeyRice:document.querySelectorAll('[data-crop-select="rice"]').length,cropZonesRice:document.querySelectorAll('[data-crop-zone="rice"]').length,supplement:document.querySelector('[data-rice-supplement]')?.textContent?.trim()}));
@@ -90,9 +106,10 @@ try{
    await capture('religion-additional-selected',evidence);
   }
  }
+ }
  const bytes=results.reduce((sum,item)=>sum+item.bytes,0);
  assert(bytes<20*1024*1024,`Focused images exceed 20 MiB: ${bytes}`);
- const report={status:'passed',head,runId:process.env.GITHUB_RUN_ID??null,browser:browser.version(),scope:'Changed Mexico rice and ethnicity/religion initial, selected, solo only',totalImageBytes:bytes,limitBytes:20*1024*1024,images:results};
+ const report={status:'passed',head,runId:process.env.GITHUB_RUN_ID??null,browser:browser.version(),scope:overlapOnly?'Overlapping ethnicity contour initial, language selected, self-identity selected only':'Changed Mexico rice and ethnicity/religion initial, selected, solo only',totalImageBytes:bytes,limitBytes:20*1024*1024,images:results};
  await writeFile(path.join(output,'validation.json'),JSON.stringify(report,null,2)+'\n');
  console.log(JSON.stringify({status:report.status,head,imageCount:results.length,totalImageBytes:bytes}));
 }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
