@@ -36,6 +36,32 @@ async function layout(page,profile,scene){await page.evaluate(()=>scrollTo(0,0))
 async function capture(page,profile,scene){if(profile.width!==1920&&!['climate-toamasina','agriculture'].includes(scene))return;await page.evaluate(()=>scrollTo(0,0));const file=`${profile.width}-${scene}.jpg`;await page.screenshot({path:path.join(representative,file),type:'jpeg',quality:66,animations:'disabled'});const bytes=await readFile(path.join(representative,file));report.screenshots.push({file,viewport:{width:profile.width,height:profile.height,dpr:1},scene,bytes:bytes.length,sha256:sha(bytes),fullPage:false});}
 async function paintedBlue(page){const bytes=await page.locator('.africa-map').screenshot({type:'png'});return page.evaluate(async encoded=>{const image=new Image();image.src='data:image/png;base64,'+encoded;await image.decode();const canvas=document.createElement('canvas');canvas.width=image.width;canvas.height=image.height;const context=canvas.getContext('2d');context.drawImage(image,0,0);const pixels=context.getImageData(0,0,image.width,image.height).data;let painted=0;for(let i=0;i<pixels.length;i+=4)if(pixels[i+2]>pixels[i]+30&&pixels[i+2]>pixels[i+1]+8)painted++;return painted;},bytes.toString('base64'));}
 
+// Preserve the original failed assertion while still delivering the other
+// requested views for human review. These captures never count as passed tests.
+async function captureRemainingViews(){
+ if(!browser)return;
+ const context=await browser.newContext({viewport:{width:1920,height:1080},deviceScaleFactor:1,serviceWorkers:'block'});
+ await context.route('**/*',route=>new URL(route.request().url()).origin===site?route.continue():route.abort());
+ const page=await context.newPage(),profile={width:1920,height:1080};report.failureRepresentatives={status:'capture-only; acceptance failed',views:[]};
+ const scenes=[
+  ['climate-toamasina','field=nature&topic=climate&city=toamasina','[data-africa-city-reading=toamasina]'],
+  ['agriculture','field=agriculture','[data-africa-agri-distribution]'],
+  ['rain','field=nature&topic=water&water=rain','[data-africa-raster=water-rain]'],
+  ['basins','field=nature&topic=water&water=basin','[data-africa-basin]'],
+  ['rivers','field=nature&topic=water&water=river','[data-africa-river-feature]'],
+  ['terrain','field=nature&topic=terrain','[data-africa-natural-label]'],
+  ['elevation','field=nature&topic=elevation','[data-africa-contour]'],
+  ['population','field=population','[data-africa-raster=distribution]'],
+  ['religion','field=population&topic=religion','[data-africa-religion-country]'],
+  ['language','field=population&topic=language','[data-africa-language-point]'],
+  ['industry','field=industry','[data-africa-industry-location]'],
+ ];
+ try{
+  for(const [scene,query,selector]of scenes){const record={scene,acceptance:'not-passed'};report.failureRepresentatives.views.push(record);try{await page.goto(origin+'/atlas/africa/?'+query,{waitUntil:'networkidle',timeout:15000});await page.locator(selector).first().waitFor({timeout:15000});await settle(page);await capture(page,profile,'unverified-'+scene);record.capture='saved';record.actualLayer=await page.locator('[data-africa-atlas]').getAttribute('data-actual-layer');}catch(error){record.capture='failed';record.error=error.message;}}
+  const record={scene:'forestry-frame',acceptance:'not-passed'};report.failureRepresentatives.views.push(record);try{await page.goto(origin+'/atlas/africa/agriculture/forestry/',{waitUntil:'networkidle',timeout:15000});await page.locator('[data-forest-map]').waitFor({timeout:15000});await settle(page);await capture(page,profile,'unverified-forestry-frame');record.capture='saved';}catch(error){record.capture='failed';record.error=error.message;}
+ }finally{await context.close();}
+}
+
 try {
  const release=JSON.parse(await readFile(path.join(dist,'_release.json'),'utf8'));report.release=release;
  if(process.env.AFRICA_REVIEW_HEAD_SHA)assert.equal(head,process.env.AFRICA_REVIEW_HEAD_SHA,'reviewed checkout');
@@ -140,4 +166,4 @@ try {
   assert.deepEqual(profile.errors,[]);assert.deepEqual(profile.failedRequests,[]);assert.deepEqual(profile.externalRequests,[]);profile.status='passed';await context.close();await save();
  }
  report.status='passed-with-declared-data-blocker';report.completedAt=new Date().toISOString();await save();console.log(JSON.stringify({status:report.status,head,profiles:report.profiles.map(p=>({width:p.width,status:p.status})),images:report.screenshots.length,remaining:report.remaining}));
-} catch(error){report.status='failed';report.error=error.stack;report.completedAt=new Date().toISOString();if(currentPage&&!currentPage.isClosed()){report.failurePage={url:currentPage.url(),viewport:{width:currentProfile.width,height:currentProfile.height,dpr:1}};try{const file=`${currentProfile.width}-failure.jpg`;await currentPage.screenshot({path:path.join(representative,file),type:'jpeg',quality:66,animations:'disabled'});const bytes=await readFile(path.join(representative,file));report.screenshots.push({file,scene:'failure',bytes:bytes.length,sha256:sha(bytes),fullPage:false});}catch(captureError){report.failureCapture=captureError.message;}}await save();throw error;}finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}
+} catch(error){report.status='failed';report.error=error.stack;report.completedAt=new Date().toISOString();if(currentPage&&!currentPage.isClosed()){report.failurePage={url:currentPage.url(),viewport:{width:currentProfile.width,height:currentProfile.height,dpr:1}};try{const file=`${currentProfile.width}-failure.jpg`;await currentPage.screenshot({path:path.join(representative,file),type:'jpeg',quality:66,animations:'disabled'});const bytes=await readFile(path.join(representative,file));report.screenshots.push({file,scene:'failure',bytes:bytes.length,sha256:sha(bytes),fullPage:false});}catch(captureError){report.failureCapture=captureError.message;}}try{await captureRemainingViews();}catch(captureError){report.failureRepresentativesError=captureError.message;}await save();throw error;}finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}

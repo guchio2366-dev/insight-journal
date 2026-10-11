@@ -12,3 +12,9 @@
 .regional-forestry-page[data-region=africa] .forest-source-ledger{margin-top:12px}
 @media(max-width:1199px){.regional-forestry-page[data-region=africa] .forest-primary-grid{grid-template-columns:minmax(0,1.5fr) minmax(290px,1fr);gap:12px}.regional-forestry-page[data-region=africa] .forest-map-stage{height:clamp(450px,calc(100dvh - 370px),720px)}}
 @media(max-width:760px){.regional-forestry-page[data-region=africa] .forest-primary-grid{display:block}.regional-forestry-page[data-region=africa] .forest-reading{max-height:none}.regional-forestry-page[data-region=africa] .forest-map-stage{height:520px}}
+/* The desktop controller budgets from the actual header and wrapped legend. */
+@media(min-width:960px){
+ .regional-forestry-page[data-region=africa] .forest-map-stage{height:var(--africa-forest-map-height,clamp(320px,calc(100dvh - 370px),720px));min-height:320px;max-height:720px}
+ .regional-forestry-page[data-region=africa] .forest-reading{height:var(--africa-forest-reader-height,calc(100dvh - 300px));max-height:var(--africa-forest-reader-height,calc(100dvh - 300px));min-height:0}
+ .regional-forestry-page[data-region=africa] .forest-reading-scroll{flex:1;min-height:0;overflow-y:auto;max-height:none}
+}
