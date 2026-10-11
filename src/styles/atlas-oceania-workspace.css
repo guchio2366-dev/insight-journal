@@ -43,6 +43,10 @@
 .atlas-desktop-shell .oceania-learning-normal .oceania-learning-map-heading h2{font-size:14px;line-height:1.5}
 .atlas-desktop-shell .oceania-learning-normal .oceania-learning-map-heading p{font-size:13px;line-height:1.5}
 .atlas-desktop-shell .oceania-learning-normal .oceania-learning-layer{display:block;width:100%;max-width:none;margin-top:4px}
+.atlas-desktop-shell .oceania-learning[data-field=nature] .oceania-learning-normal .oceania-learning-map-heading{position:relative;inset:auto;z-index:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:none;min-height:58px;margin:0;border:1px solid #abbfc2;border-bottom:0;padding:7px 10px;background:#fffefa}
+.atlas-desktop-shell .oceania-learning[data-field=nature] .oceania-learning-normal .oceania-learning-map-heading>div{max-width:none;min-width:0}
+.atlas-desktop-shell .oceania-learning[data-field=nature] .oceania-learning-normal .oceania-learning-map-heading h2{font-size:16px;line-height:1.4}
+.atlas-desktop-shell .oceania-learning[data-field=nature] .oceania-learning-normal .oceania-learning-layer{flex:0 0 min(280px,42%);width:auto;max-width:none;margin:0}
 .atlas-desktop-shell .oceania-learning-scene,.atlas-desktop-shell .oceania-overview .overview-map-stage{height:auto;aspect-ratio:1.55;min-height:300px;max-height:640px;border:1px solid #abbfc2;background:#c1e1ed}
 .atlas-desktop-shell .oceania-learning-legend{padding:7px 0;background:transparent;border:0;font-size:13px;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px 8px}
 .atlas-desktop-shell .oceania-learning-toolbar{border:0;padding:6px 0;background:transparent;gap:7px}

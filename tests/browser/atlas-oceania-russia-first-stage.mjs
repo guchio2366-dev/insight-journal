@@ -68,11 +68,16 @@ try{
   return {clip,png:await page.screenshot({fullPage:true,clip})};
  };
  if(!farmingOnly||physicalReview){
-  for(const width of [1536,1024]){
-   await page.setViewportSize({width,height:864});
+  for(const width of [1920,1536,1024]){
+   await page.setViewportSize({width,height:width===1920?1080:864});
    for(const region of regions){
     await open(region,'nature');
     const host=root(region),map=host.locator('[data-primary-map]');
+    if(region==='oceania'){
+     const heading=await host.locator('.oceania-learning-map-heading').first().boundingBox();
+     const mapBounds=await map.boundingBox();
+     assert.ok(heading.y+heading.height<=mapBounds.y+1,'Nature title and selector stay outside the map image');
+    }
     const frame=await map.locator('svg').first().getAttribute('viewBox');
     for(const [id,unit,step] of [['precipitation','mm／年','250 mm'],['elevation','m（海抜）','500 m']]){
      await host.locator('[data-layer]').selectOption(id);await ready(region);
@@ -91,7 +96,7 @@ try{
     }
    }
   }
-  result.checks.push('GPCC annual precipitation and NOAA elevation layers retain the whole-region frame, readable keys, direct URL and reload state at 1536 and 1024px.');
+  result.checks.push('GPCC annual precipitation and NOAA elevation layers retain the whole-region frame, readable keys, direct URL and reload state at 1920, 1536 and 1024px; Oceania nature controls remain outside the map.');
  }
  for(const width of representativeOnly?[1920,1536,1024]:[1920,1536,1280,1024]){
   await page.setViewportSize({width,height:width===1920?1080:864});
