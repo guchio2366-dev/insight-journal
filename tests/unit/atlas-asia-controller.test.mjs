@@ -905,6 +905,7 @@ test('農畜産と林業の子項目は選択・比較復帰・履歴復元に�
  try{
   assert.equal(q('[data-farm-overview-legend]').hidden,false);
   q('[data-farming-topic]').value='forest';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));
+  await until(()=>q('[data-farming-value]').textContent.includes('地点の数値は計算せず'),'forest reading');
   assert.equal(q('[data-farm-overview-legend]').hidden,true);
   assert.equal(q('[data-farming-legend]').hidden,false);
   const forestUrl=window.location.href;
@@ -940,7 +941,7 @@ test('農林業は品目・単位・地点を切り替え、国別統計と比�
    assert.deepEqual(Object.keys(window.__map.sources).filter(id=>id.startsWith('asia-farming-')),['asia-farming-'+topic]);
   }
   assert.equal(requests.filter(r=>r.endsWith('wheat.gz')).length,4);
-  q('[data-farming-topic]').value='forest';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));assert.match(q('[data-farming-value]').textContent,/地点の数値は計算せず/);assert.equal(requests.some(r=>r.includes('forest.gz')),false);
+  q('[data-farming-topic]').value='forest';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));await until(()=>q('[data-farming-value]').textContent.includes('地点の数値は計算せず'),'forest reading');assert.equal(requests.some(r=>r.includes('forest.gz')),false);
   q('[data-farming-topic]').value='rice';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));assert.equal(q('[data-rice-reading]').hidden,false);await until(()=>q('[data-rice-value]').textContent.includes('123.4'),'rice restore');assert.equal(window.__maps.length,1);
  }finally{await window.happyDOM.close();}
 });
@@ -950,7 +951,7 @@ test('農林業の遅い応答は新しい主題を上書きせず、統計の�
   await until(()=>!q('[data-farming-statistics-retry]').hidden,'statistics error');q('[data-farming-statistics-retry]').click();
   await until(()=>q('[data-farming-statistics-tables]').textContent.includes('134,250,000'),'statistics retry');
   q('[data-farming-topic]').value='forest';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));resolveFarm();await delay();await delay();
-  assert.match(q('[data-farming-value]').textContent,/参考画像/);assert.equal(window.__map.layers['asia-farming-wheat'],undefined);assert.equal(q('[data-farming-statistics-retry]').hidden,true);
+  await until(()=>q('[data-farming-value]').textContent.includes('参考画像'),'forest reading after slow response');assert.equal(window.__map.layers['asia-farming-wheat'],undefined);assert.equal(q('[data-farming-statistics-retry]').hidden,true);
   q('[data-farming-topic]').value='wheat';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));
   await until(()=>requests.filter(r=>r.endsWith('wheat.gz')).length===2,'late grid was not retained');resolveFarm();
   await until(()=>q('[data-farming-value]').textContent.includes('123.4'),'new wheat request finished');

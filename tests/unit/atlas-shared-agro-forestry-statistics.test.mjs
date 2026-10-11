@@ -60,7 +60,7 @@ test('Oceania beef and raw cow milk match the retained 2024 source and separate 
 
 test('Asia forestry and livestock outputs keep product/element definitions separate',()=>{
  const forest=panel.farmSeries('forest',undefined,asia.countries.JPN.observations);
- assert.equal(forest.length,7);
+ assert.equal(forest.length,9);
  for(const series of forest){assert.ok(new Set(series.rows.map(r=>r.item)).size<=1);assert.ok(new Set(series.rows.map(r=>r.elementCode)).size<=1);}
  assert.ok(forest.some(s=>s.title==='製材の輸入量'&&s.rows.some(r=>r.year===2024)));
  const cattle=panel.farmSeries('cattle',{kind:'livestock',faoItem:866},asia.countries.JPN.observations);
@@ -73,8 +73,8 @@ test('existing country panel displays world denominators without treating absent
  window.document.body.innerHTML='<div data-farming-extra></div><div data-farming-map-method></div><h3 data-farming-statistics-title></h3><p data-farming-statistics-definition></p><div data-farming-statistics-tables></div><p data-farming-statistics-status></p><h2 data-farming-title></h2><p data-farming-takeaway></p><p data-farming-definition></p><p data-farming-coverage></p><p data-farming-method></p><p data-farming-map-source></p><div data-farming-reference></div>';
  panel.renderAsiaFarmingPanel(window.document.body,'south-central-asia','forest',undefined,{code:'IND',name:'インド'},asia);
  const history=window.document.querySelector('.asia-stat-history');assert.equal(history.open,false);
- const tables=[...history.querySelectorAll('table')];assert.equal(tables.length,7);
- assert.equal(window.document.querySelector('.asia-stat-current tbody').querySelectorAll('tr').length,7);
+ const tables=[...history.querySelectorAll('table')];assert.equal(tables.length,9);
+ assert.equal(window.document.querySelector('.asia-stat-current tbody').querySelectorAll('tr').length,9);
  assert.equal(window.document.querySelectorAll('.asia-stat-chart').length,1);
  const production=tables.find(t=>t.querySelector('caption').textContent.startsWith('製材の生産量'));
  assert.match(production.textContent,/世界値・区分/);assert.match(production.textContent,/世界生産比/);

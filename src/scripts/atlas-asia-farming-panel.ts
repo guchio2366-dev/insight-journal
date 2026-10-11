@@ -78,7 +78,7 @@ export function farmSeries(topic:string,layer:AsiaFarmingLayer|undefined,rows:As
  }
  return [{title:'生産量',rows:base.filter(r=>r.element==='Production')},{title:'収穫面積',rows:base.filter(r=>r.element==='Area harvested')}];
 }
-export function renderAsiaFarmingPanel(root:HTMLElement,region:AsiaRegionId,topic:string,layer:AsiaFarmingLayer|undefined,country:{code:string;name:string}|undefined,statistics:AsiaFarmStatistics|null,focusKindReading?:Record<'crop'|'livestock'|'forest',string>){
+export function renderAsiaFarmingPanel(root:HTMLElement,region:AsiaRegionId,topic:string,layer:AsiaFarmingLayer|undefined,country:{code:string;name:string}|undefined,statistics:AsiaFarmStatistics|null,focusKindReading?:Record<'crop'|'livestock'|'forest',string>,focusId?:string){
  const $=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const definition=asiaFarmDefinitions[topic];if(!definition)return;
  $('[data-farming-extra]').hidden=!layer;$('[data-farming-map-method]').hidden=!layer;
