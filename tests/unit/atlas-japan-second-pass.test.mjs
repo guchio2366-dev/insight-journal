@@ -1,3 +1,4 @@
+import {formatJapanQuantity} from '../../src/lib/atlas-japan-number.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -56,4 +57,17 @@ test('人口の真のゼロ・欠測・正値は別々の凡例と集計を持�
  const data=gunzipSync(bytes(base+'japan-v1/'+m.grid)),image=png(bytes(base+'japan-v1/'+m.image));assert.equal(image.width,m.width);assert.equal(image.height,m.height);
  let zeros=0,missing=0;for(let i=0;i<data.length;i+=4){const value=data.readFloatLE(i),rgba=[...image.pixels.subarray(i,i+4)];if(value===0){zeros++;assert.deepEqual(rgba,[250,248,231,255]);}else if(value<0){if(rgba[3]){missing++;assert.deepEqual(rgba,[158,159,161,255]);}else assert.deepEqual(rgba,[0,0,0,0]);}else assert.equal(rgba[3],255);}
  assert.equal(zeros,m.validation.zeroLandPixels);assert.equal(missing,m.validation.missingLandPixels);
+});
+
+
+test('original small positive model quantities never become a displayed zero',async()=>{
+ assert.equal(formatJapanQuantity(0),'0');
+ assert.equal(formatJapanQuantity(.1),'0.1');
+ for(const name of ['public/assets/atlas/japan-v1/population.density.gz','public/assets/atlas/japan-agriculture-v3/pig.float32.gz']){
+  const decoded=gunzipSync(bytes(name));
+  const view=new DataView(decoded.buffer,decoded.byteOffset,decoded.byteLength);
+  let small=0;
+  for(let i=0;i<view.byteLength;i+=4){const value=view.getFloat32(i,true);if(value>0&&value<.05){assert.equal(formatJapanQuantity(value),'0超〜0.1未満');small++;}}
+  assert(small>0,'fixture has real positive values below one-decimal rounding precision');
+ }
 });

@@ -1,4 +1,5 @@
 import type {Map} from 'maplibre-gl';
+import {formatJapanQuantity} from '../lib/atlas-japan-number';
 import reference from '../../public/assets/atlas/japan-agriculture-v3/manifest.json';
 import {decodeAsiaNumericGrid,readAsiaNumericCell,type AsiaNumericGrid} from '../lib/atlas-asia-numeric-grid';
 
@@ -22,7 +23,7 @@ export function mountJapanAgricultureLayers(map:Map,base:string){
    const layer=reference.layers.find(l=>l.id===id)!;
    if(!grids.has(id))grids.set(id,(async()=>{const response=await fetch(base+layer.grid,{signal:AbortSignal.timeout(20000)});if(!response.ok)throw Error('Japan agriculture grid '+response.status);return decodeAsiaNumericGrid(new Uint8Array(await response.arrayBuffer()),layer,'float32',layer.noData);})().catch(error=>{grids.delete(id);throw error;}));
    const value=readAsiaNumericCell(await grids.get(id)!,lng,lat);
-   return ({rice:'米',wheat:'小麦',pig:'豚'}[id as 'rice'|'wheat'|'pig'])+'：'+(value==null?'欠測・未収録（0ではない）':value.toLocaleString('ja-JP',{maximumFractionDigits:1})+' '+layer.unit);
+   return ({rice:'米',wheat:'小麦',pig:'豚'}[id as 'rice'|'wheat'|'pig'])+'：'+(value==null?'欠測・未収録（0ではない）':formatJapanQuantity(value)+' '+layer.unit);
   }));
   return `${lat.toFixed(3)}°N / ${lng.toFixed(3)}°E：${parts.join('、')}。2020年のモデル推計・原5分角（約7–9km）。園地・農場の境界ではありません。`;
  }};

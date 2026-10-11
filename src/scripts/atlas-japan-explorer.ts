@@ -1,3 +1,4 @@
+import {formatJapanQuantity} from '../lib/atlas-japan-number';
 import {japanFoundationPresentation} from './atlas-japan-foundation-presentations';
 import {mountJapanAgricultureLayers} from './atlas-japan-agriculture-layers';
 import {mountJapanNatureLayers,type JapanNatureLayers} from './atlas-japan-nature-layers';
@@ -33,7 +34,7 @@ async function start(root:HTMLElement){
  let ready=false,suppressCamera=false,generation=0,timer:ReturnType<typeof setTimeout>|undefined;
  const markers:import('maplibre-gl').Marker[]=[];
  let point:[number,number]|null=null;
- const number=(v:number)=>v.toLocaleString('ja-JP',{maximumFractionDigits:1});
+ const number=formatJapanQuantity;
  const camera=()=>{if(!map||!ready)return state.camera;const center=map.getCenter();return{lng:center.lng,lat:center.lat,zoom:map.getZoom()};};
  const quantity=()=>state.field==='industry'&&state.topic.startsWith('jp-');
  const status=(message:string,error=false)=>{$('[data-japan-map-status]').textContent=message;$('[data-japan-map-status]').hidden=!message;$('[data-japan-retry]').hidden=!error;root.dataset.mapError=String(error);};
