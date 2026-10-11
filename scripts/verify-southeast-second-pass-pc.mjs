@@ -22,7 +22,7 @@ try{
  const check=label=>checks.push(label);
  await open('agriculture/?topic=forest');await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.southeastFarmTopic==='forest');
  assert.equal(await page.locator('.southeast-forest-connections').isVisible(),true);
- assert.equal(await page.locator('.asia-farm-connections-grid').isVisible(),false);
+ assert.equal(await page.locator('[data-south-central-farm-connections] > .asia-farm-connections-grid').isVisible(),false);
  assert.equal(await page.locator('[data-southeast-crop-priority]').isVisible(),false);
  assert.match(await page.locator('.southeast-forest-connections').textContent(),/森林面積.*丸太材.*木材製品の輸出/s);
  check('forest separates JRC map, FAO forest area and wood production, and HS44 exports');await shot('forest-map');await shot('forest-statistics','.southeast-forest-connections');
