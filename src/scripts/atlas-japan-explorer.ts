@@ -61,6 +61,7 @@ async function start(root:HTMLElement){
   root.dataset.topic=state.topic;root.dataset.farmCrops=String(state.showCrops!==false);root.dataset.farmLivestock=String(state.showLivestock!==false);
   for(const input of all<HTMLInputElement>('[data-japan-farm-layer]'))input.checked=input.dataset.japanFarmLayer==='crops'?state.showCrops!==false:state.showLivestock!==false;
   $('[data-japan-farm-layers]').hidden=state.topic==='forest';root.dataset.prefecture=state.prefecture??'';root.dataset.city=state.city??'';root.dataset.site=state.site??'';root.dataset.feature=state.feature??'';
+  $('[data-japan-farm-value]').hidden=state.topic==='forest';
   for(const e of all('[data-japan-controls]'))e.hidden=e.dataset.japanControls!==state.field;
   for(const e of all('[data-japan-statistics]'))e.hidden=e.dataset.japanStatistics!==state.field;
   const isQuantity=quantity();
