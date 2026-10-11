@@ -1,6 +1,7 @@
 import {projectCanadaMap,canadaLegacyPoint} from '../lib/atlas-canada-map-presentation';
 import {canadaIndustryPilot as pilot,pilotIndustryLabel,readPilotState,writePilotState,zoomPilotFrame,type PilotState,type PilotCluster} from '../lib/atlas-canada-industry-pilot';
 import population from '../data/atlas/canada/population.json';
+import {groupPilotLabelPoints,placePilotLabel} from '../lib/atlas-canada-industry-labels';
 import {readCanadaPopulationState,writeCanadaPopulationState,copyCanadaPopulationMapState} from '../lib/atlas-canada-population';
 import {isCanadaDemographicTopic} from '../lib/atlas-canada-demographics';
 type Metric={id:string;label:string;gdp:number;employment:number|null;gdpCodes:string[];provinces:{id:string;name:string;gdp:number}[]};
@@ -15,8 +16,8 @@ export function initCanadaIndustryPilot(root:HTMLElement){
  const element=(tag:string,attrs:Record<string,string|number>)=>{const n=document.createElementNS(ns,tag);for(const [k,v]of Object.entries(attrs))n.setAttribute(k,String(v));return n;};
  function fit(){
   const points=pilot.clusters.map(c=>projectCanadaMap(c.coordinates)),xs=points.map(p=>p[0]),ys=points.map(p=>p[1]),bounds=[Math.min(...xs),Math.min(...ys),Math.max(...xs),Math.max(...ys)];
-  const ratio=(stage.clientWidth||940)/(stage.clientHeight||510),width=Math.max(bounds[2]-bounds[0]+120,(bounds[3]-bounds[1]+200)*ratio),height=width/ratio;
-  initialFrame=[(bounds[0]+bounds[2]-width)/2,(bounds[1]+bounds[3]-height)/2+20,width,height];
+  const ratio=(stage.clientWidth||940)/(stage.clientHeight||510),width=Math.max(bounds[2]-bounds[0]+90,(bounds[3]-bounds[1]+105)*ratio),height=width/ratio;
+  initialFrame=[(bounds[0]+bounds[2]-width)/2,(bounds[1]+bounds[3]-height)/2-12,width,height];
  }
  function clusters(){return pilot.clusters.filter(c=>c.sectors.includes(state.sector)&&(!state.only||c.industry===state.industry));}
  function chooseIndustry(id:string){state.industry=state.industry===id?null:id;state.site=null;state.only=false;save();}
@@ -27,51 +28,46 @@ export function initCanadaIndustryPilot(root:HTMLElement){
   const matrix=svg.getScreenCTM?.();if(!matrix)return;
   const rect=stage.getBoundingClientRect(),w=rect.width,h=rect.height,selectedFocus=(document.activeElement as HTMLElement)?.dataset?.caMarker;
   overlay.replaceChildren();
-  const lines=element('svg',{width:'100%',height:'100%','aria-hidden':'true'});lines.classList.add('ca-pilot-connectors');overlay.append(lines);
+  const lines=element('svg',{width:'100%',height:'100%','aria-label':'産業の集積位置とラベル対応'});lines.classList.add('ca-pilot-connectors');overlay.append(lines);
   const screen=(coordinates:number[])=>{const [x,y]=projectCanadaMap(coordinates);return [matrix.a*x+matrix.c*y+matrix.e-rect.x,matrix.b*x+matrix.d*y+matrix.f-rect.y];};
   const visible=clusters().map(c=>({c,point:screen(c.coordinates)})).filter(({point:[x,y]})=>x>=0&&x<=w&&y>=0&&y<=h);
-  const groups=new Map<string,typeof visible>();
-  for(const item of visible){const key=item.c.coordinates.join(',');groups.set(key,[...(groups.get(key)??[]),item]);}
-  const occupied:number[][]=[[0,0,w-85,q('.ca-pilot-map-key').getBoundingClientRect().height+8],[w-90,0,w,162],[0,h-28,w,h],...visible.map(({point:[x,y]})=>[x-12,y-12,x+12,y+12])];
-  const overlaps=(a:number[],b:number[])=>a[0]<b[2]+4&&a[2]>b[0]-4&&a[1]<b[3]+4&&a[3]>b[1]-4;
-  // A source-documented supply relation. Its curve is schematic, never a surveyed route.
+  const groups=groupPilotLabelPoints(visible),keyHeight=q('.ca-pilot-map-key').getBoundingClientRect().height;
+  const occupied:number[][]=[[0,0,w,keyHeight+14],[0,h-25,w,h],...visible.map(({point:[x,y]})=>[x-7,y-7,x+7,y+7])];
+  // The only arrow is the source-documented supply relation. Its sea route is schematic.
   for(const flow of pilot.flows.filter(f=>f.sector===state.sector&&(!state.only||state.industry===f.industry))){
    const from=visible.find(v=>v.c.id===flow.from),to=visible.find(v=>v.c.id===flow.to);if(!from||!to)continue;
    const [a,b]=from.point,[c,d]=to.point,color=pilot.industries.find(i=>i.id===flow.industry)!.color;
-   const path=element('path',{d:`M${a},${b} Q${Math.max(a,c)+45},${(b+d)/2} ${c},${d}`,fill:'none',stroke:color,'stroke-width':state.industry===flow.industry?2.5:1.4,'stroke-dasharray':'5 4','data-ca-flow':flow.id});
+   const path=element('path',{d:`M${a},${b} Q${Math.max(a,c)+35},${(b+d)/2} ${c},${d}`,fill:'none',stroke:color,'stroke-width':state.industry===flow.industry?2.5:1.4,'stroke-dasharray':'5 4','data-ca-flow':flow.id});
    const title=element('title',{});title.textContent=flow.label;path.append(title);lines.append(path);
-   const arrow=element('path',{d:`M${c-4},${d-10} L${c},${d} L${c+7},${d-8}`,fill:'none',stroke:color,'stroke-width':2});lines.append(arrow);
+   lines.append(element('path',{d:`M${c-4},${d-10} L${c},${d} L${c+7},${d-8}`,fill:'none',stroke:color,'stroke-width':2}));
   }
-  // Place the dense eastern clusters first so offshore labels stay beside the
-  // Atlantic anchors rather than being displaced across the whole country.
-  const ordered=[...groups.values()].sort((a,b)=>Number(b.some(v=>v.c.id===state.site))-Number(a.some(v=>v.c.id===state.site))||b[0].point[0]-a[0].point[0]);
+  // Keep every original guide position. City names are supplementary, never the grouping axis.
+  for(const {c,point:[x,y]}of visible){
+   const color=pilot.industries.find(i=>i.id===c.industry)!.color,processing=/精|製|構造体|部品|機体/.test(c.stage);
+   const peers=visible.filter(v=>v.c.coordinates.join(',')===c.coordinates.join(',')),index=peers.findIndex(v=>v.c.id===c.id),cx=x+(index-(peers.length-1)/2)*9;
+   const group=element('g',{'data-ca-marker':c.id,role:'button',tabindex:'0','aria-pressed':String(c.id===state.site),'aria-label':`${pilotIndustryLabel(c.industry,state.sector)} · ${c.place} · ${stageLabel(c)}`});
+   const attrs={'data-ca-cluster':c.id,'data-industry':c.industry,'data-coordinate':c.coordinates.join(','),fill:color,stroke:'#fff','stroke-width':1.2};
+   group.append(element('circle',{cx,cy:y,r:9,fill:'transparent'}));
+   group.append(processing?element('rect',{...attrs,x:cx-4,y:y-4,width:8,height:8}):element('circle',{...attrs,cx,cy:y,r:4.5}));
+   if(state.industry&&c.industry!==state.industry)group.setAttribute('opacity','.5');
+   if(c.industry===state.industry)group.append(element('circle',{cx,cy:y,r:7,fill:'none',stroke:color,'stroke-width':c.id===state.site?2.5:1.3}));
+   group.addEventListener('click',()=>chooseSite(c));group.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();chooseSite(c);}});lines.append(group);
+  }
+  const ordered=groups.sort((a,b)=>Number(b.some(v=>v.c.industry===state.industry))-Number(a.some(v=>v.c.industry===state.industry))||b.length-a.length);
   for(const group of ordered){
-   const [x,y]=group[0].point,card=document.createElement('div');card.className='ca-pilot-map-label';
-   if(state.industry&&!group.some(v=>v.c.industry===state.industry))card.classList.add('is-context');
-   lines.append(element('circle',{cx:x,cy:y,r:2.2,fill:'#304b45','data-ca-anchor':group[0].c.id}));
-   for(const [{c},index]of group.map((item,index)=>[item,index] as const)){
-    const color=pilot.industries.find(i=>i.id===c.industry)!.color,cx=x+(index-(group.length-1)/2)*10,processing=/精|製|構造体|部品|機体/.test(c.stage),attrs={'data-ca-cluster':c.id,'data-industry':c.industry,'data-coordinate':c.coordinates.join(','),'aria-hidden':'true',fill:color,stroke:'#fff','stroke-width':1.2};
-    const mark=processing?element('rect',{...attrs,x:cx-4,y:y-4,width:8,height:8}):element('circle',{...attrs,cx,cy:y,r:4.5});
-    if(state.industry&&c.industry!==state.industry)mark.setAttribute('opacity','.55');lines.append(mark);
-    if(c.industry===state.industry)lines.append(element('circle',{cx,cy:y,r:8,fill:'none',stroke:color,'stroke-width':1.6}));
-   }
-   const place=document.createElement('small');place.textContent=group[0].c.place;card.append(place);
-   for(const {c}of group){const item=pilot.industries.find(i=>i.id===c.industry)!,button=document.createElement('button');button.type='button';button.dataset.caMarker=c.id;button.setAttribute('aria-pressed',String(c.id===state.site));button.className=c.industry===state.industry?'is-highlighted':'';button.style.setProperty('--pilot-color',item.color);
-    const label=document.createElement('strong');label.textContent=pilotIndustryLabel(c.industry,state.sector);const icon=document.createElement('i');icon.className=/精|製|構造体|部品|機体/.test(c.stage)?'is-processing':'';icon.setAttribute('aria-hidden','true');label.prepend(icon);
-    button.append(label);button.setAttribute('aria-label',`${pilotIndustryLabel(c.industry,state.sector)} · ${c.place} · ${stageLabel(c)}`);button.addEventListener('click',()=>chooseSite(c));card.append(button);
-   }
-   overlay.append(card);const cw=card.offsetWidth||154,ch=card.offsetHeight||58;const offsets:number[][]=[];
-   for(let dy=-260;dy<=260;dy+=26)for(let dx=-310;dx<=310;dx+=32)offsets.push([dx,dy]);offsets.sort((a,b)=>a[0]**2+a[1]**2-b[0]**2-b[1]**2);
-   let box:number[]|undefined;
-   for(const [dx,dy]of offsets){const left=Math.max(5,Math.min(w-cw-5,x+dx-cw/2)),top=Math.max(5,Math.min(h-ch-32,y+dy-ch/2)),candidate=[left,top,left+cw,top+ch];if(!occupied.some(b=>overlaps(candidate,b))){box=candidate;break;}}
-   if(!box)for(let top=80;top<h-ch-32&&!box;top+=10)for(let left=5;left<w-cw-5;left+=10){const candidate=[left,top,left+cw,top+ch];if(!occupied.some(b=>overlaps(candidate,b))){box=candidate;break;}}
+   const industry=group[0].c.industry,item=pilot.industries.find(i=>i.id===industry)!,card=document.createElement('button');card.type='button';card.className='ca-pilot-map-label';card.dataset.caLabelGroup=industry;card.dataset.caLabelSites=group.map(v=>v.c.id).join(',');card.style.setProperty('--pilot-color',item.color);
+   if(state.industry&&industry!==state.industry)card.classList.add('is-context');if(industry===state.industry)card.classList.add('is-highlighted');
+   card.setAttribute('aria-pressed',String(industry===state.industry));card.setAttribute('aria-label',`${pilotIndustryLabel(industry,state.sector)}：${group.map(v=>v.c.place).join('、')}を強調`);
+   const label=document.createElement('strong');label.textContent=pilotIndustryLabel(industry,state.sector);const icon=document.createElement('i');icon.setAttribute('aria-hidden','true');label.prepend(icon);card.append(label);
+   const place=document.createElement('small');place.textContent=group.length===1?group[0].c.place.split(/[／〜]/)[0]:`${group.length}集積`;card.append(place);card.addEventListener('click',()=>chooseIndustry(industry));overlay.append(card);
+   const box=placePilotLabel(group.map(v=>v.point),[card.offsetWidth||110,card.offsetHeight||38],[w,h],occupied);
    if(!box){card.remove();root.dataset.labelsIncomplete='true';continue;}
    occupied.push(box);card.style.left=box[0]+'px';card.style.top=box[1]+'px';
-   const endX=Math.max(box[0],Math.min(box[2],x)),endY=Math.max(box[1],Math.min(box[3],y));
-   lines.append(element('line',{x1:x,y1:y,x2:endX,y2:endY,stroke:group.some(v=>v.c.industry===state.industry)?'#354c48':'#8a9c94','stroke-width':1}));
-
+   for(const {point:[x,y],c}of group){const endX=Math.max(box[0],Math.min(box[2],x)),endY=Math.max(box[1],Math.min(box[3],y));
+    lines.insertBefore(element('line',{x1:x,y1:y,x2:endX,y2:endY,stroke:item.color,'stroke-width':industry===state.industry?1.4:.9,'data-ca-correspondence':c.id}),lines.firstChild);
+   }
   }
-  if(selectedFocus)overlay.querySelector<HTMLButtonElement>(`[data-ca-marker="${selectedFocus}"]`)?.focus({preventScroll:true});
+  if(selectedFocus)overlay.querySelector<SVGElement>(`[data-ca-marker="${selectedFocus}"]`)?.focus({preventScroll:true});
  }
  function camera(){svg.setAttribute('viewBox',frame.join(' '));delete root.dataset.labelsIncomplete;labels();(root as any).canadaIndustryView={...state,frame:frame.slice(),initialFrame:initialFrame.slice(),province:state.province,subsector:state.industry??'all'};}
  function statistics(){

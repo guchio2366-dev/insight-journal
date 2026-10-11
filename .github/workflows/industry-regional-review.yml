@@ -38,6 +38,9 @@ jobs:
         with:
           node-version-file: .nvmrc
       - run: npm ci --no-audit --no-fund
+      - name: Retrieve Canada review sources with normal HTTPS
+        if: github.event_name == 'pull_request' && contains(github.head_ref, 'canada-map-revision')
+        run: python3 scripts/acquire-canada-review-sources.py
       - run: npm run build
         if: github.event_name == 'pull_request'
       - run: sudo apt-get update && sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
