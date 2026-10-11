@@ -30,7 +30,7 @@ checkout/mainと本番 `_release.json` は `755ec125daf9272e21328ff4c1ecab32756c
 
 追加単体検証は、河道/アンカー不変・名札との非交差、全産業地域の一度ずつの対応、州への座標移動なし、降水の色/実収録値/manifest hashと流域親子を確認。E2Eは旧「上位円を出す」契約を地域主図の契約へ更新し、補足値・欠測・州選択URL・履歴を保持する。
 
-専用CIはPR merge SHAではなくhead SHAをcheckoutし、同じSHAのunit/build/E2E/release検査後に通常MapLibreを撮影する。13主題×本番/checkoutの26画像に加え、都市切替、流域/親、降水帯、産業補足州/拠点、農業、民族/宗教の戻る・再読込みを実ブラウザで確認する。撮影で横溢れ・通常描画・DPR・runtime errorを検査し、画像/report.jsonを保存。最終結果はPR本文に記録する。
+専用CIはPR merge SHAではなくhead SHAをcheckoutし、同じSHAのunit/build/E2E/release検査後に通常MapLibreを撮影する。GitHub既定GITHUB_SHAを上書きせず、チェックアウト済みheadをgenerate-release/verify-releaseの明示引数へ渡して一致検査する。13主題×本番/checkoutの26画像に加え、都市切替、流域/親、降水帯、産業補足州/拠点、農業、民族/宗教の戻る・再読込みと390pxの全地点選択を実ブラウザで確認する。撮影で横溢れ・通常描画・DPR・runtime errorを検査し、画像/report.jsonを保存。最終結果はPR本文に記録する。
 
 ローカルChromeはSUID sandbox helper設定不良で起動できないため安全設定を変更せずCIの既存Chromeを使う。最終画面の視認性評価は親の画像実見と分担する。自動assertionと実見の合否を混同しない。
 
