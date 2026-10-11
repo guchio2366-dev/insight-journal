@@ -48,20 +48,32 @@ for name, url in sources:
 # Service-side 1 km boundary generalization; original CSD table values are joined.
 service = 'https://geo.statcan.gc.ca/geo_wa/rest/services/2021/Digital_boundary_files/MapServer/9/query'
 pages = []
+def retrieve_page(offset, count):
+    # Some tiny polygons make server-side generalization fail. Request their
+    # original geometry instead; never invent or drop a CSD to finish the map.
+    for generalized in [True, False]:
+        parameters = {'where':'1=1','outFields':'CSDUID,CSDNAME,PRUID','returnGeometry':'true','outSR':'3347','f':'json','orderByFields':'OBJECTID','resultOffset':str(offset),'resultRecordCount':str(count)}
+        if generalized: parameters['maxAllowableOffset']='250'
+        url = service + '?' + urllib.parse.urlencode(parameters)
+        try:
+            with urllib.request.urlopen(url, timeout=45) as response: data=response.read()
+            parsed=json.loads(data)
+            if parsed.get('error') or not parsed.get('features'): raise ValueError(str(parsed.get('error','Empty source page')))
+            if any(not f.get('geometry',{}).get('rings') for f in parsed['features']): raise ValueError('Source contains empty geometry')
+            target=output / f'population/csd-page-{offset:04}-{count}.json';target.write_bytes(data)
+            record={'file':str(target.relative_to(output)),'url':url,'status':'retrieved','bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'features':len(parsed['features']),'generalizationMetres':250 if generalized else 0}
+            pages.append(parsed)
+        except Exception as error:
+            record={'url':url,'status':'unavailable','error':f'{type(error).__name__}: {error}'}
+        records.append(record);print('CANADA_REVIEW_SOURCE_STATUS '+json.dumps(record),flush=True)
+        if record['status']=='retrieved': return True
+    if count > 1:
+        left=count//2
+        return retrieve_page(offset,left) and retrieve_page(offset+left,count-left)
+    return False
+
 for offset in range(0, 5161, 100):
-    parameters = {'where':'1=1','outFields':'CSDUID,CSDNAME,PRUID','returnGeometry':'true','outSR':'3347','maxAllowableOffset':'250','f':'json','orderByFields':'OBJECTID','resultOffset':str(offset),'resultRecordCount':'100'}
-    url = service + '?' + urllib.parse.urlencode(parameters)
-    try:
-        with urllib.request.urlopen(url, timeout=45) as response: data=response.read()
-        parsed=json.loads(data)
-        if parsed.get('error') or not parsed.get('features'): raise ValueError(str(parsed.get('error','Empty source page')))
-        target=output / f'population/csd-page-{offset:04}.json';target.write_bytes(data)
-        record={'file':str(target.relative_to(output)),'url':url,'status':'retrieved','bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'features':len(parsed['features'])}
-        pages.append(parsed)
-    except Exception as error:
-        record={'url':url,'status':'unavailable','error':f'{type(error).__name__}: {error}'}
-    records.append(record);print('CANADA_REVIEW_SOURCE_STATUS '+json.dumps(record),flush=True)
-    if record['status']!='retrieved': break
+    if not retrieve_page(offset,min(100,5161-offset)): break
 (output / 'acquisition.json').write_text(json.dumps(records, indent=2) + '\n')
 if sum(len(p['features']) for p in pages)==5161:
     target=output / 'population/subdivisions-official.json'
