@@ -169,7 +169,7 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    await capture(`${region}-basin-selected`);
    await page.goto(`${url}/atlas/asia/${region}/nature/?topic=groundwater`,{waitUntil:'domcontentloaded'});
    await page.locator('[data-hydrology-detail-label]').waitFor({state:'visible'});
-   await page.locator('[data-hydrology-detail] option:not([value=""])').first().waitFor();
+   await page.locator('[data-hydrology-detail] option:not([value=""])').first().waitFor({state:'attached'});
    await capture(`${region}-groundwater`);
    const groundwaterOption=await page.locator('[data-hydrology-detail] option:not([value=""])').first().getAttribute('value');
    await page.locator('[data-hydrology-detail]').selectOption(groundwaterOption);
