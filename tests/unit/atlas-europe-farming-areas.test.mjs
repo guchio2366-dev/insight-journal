@@ -136,3 +136,22 @@ test('all six crops retain distinct secondary contours when another fill occupie
       assert.ok(targetLandContains(polygon[0][0]),`${feature.properties.id}: contour is on European target land`);
   }
 });
+
+test('livestock and horticulture get source-supported overview colors without replacing their full selection areas',()=>{
+  const groups={livestock:['cattle','pig','chicken','sheep'],horticulture:['citrus','temperatefruit','vegetables']};
+  for(const [genre,ids] of Object.entries(groups)){
+    assert.deepEqual(manifest.dominantOverview[`${genre}Ids`],ids);
+    for(const id of ids){
+      const display=dominant.features.find(feature=>feature.properties.id===id);
+      const full=collection.features.find(feature=>feature.properties.id===id);
+      const record=manifest.dominantOverview.products.find(product=>product.id===id);
+      assert.ok(display&&full&&record,`${id}: both overview and full evidence remain`);
+      assert.ok(record.candidateCells>0&&record.approximateDisplayAreaKm2>0,`${id}: visible source-backed area`);
+      assert.ok(polygons(display.geometry).length>0,`${id}: display shape exists`);
+      assert.ok(polygons(display.geometry).some(polygon=>polygonContains(polygon,display.properties.labelCoordinate)),`${id}: label stays in visible belt`);
+      assert.ok(polygons(full.geometry).some(polygon=>polygonContains(polygon,display.properties.labelCoordinate)),`${id}: overview label stays within original concentration`);
+      assert.equal(display.properties.period,full.properties.period,`${id}: overview does not substitute a different year`);
+    }
+  }
+  assert.ok(manifest.dominantOverview.products.find(product=>product.id==='citrus').candidateCells>500,'source-backed citrus belt stays legible beside broad fruit/vegetable categories');
+});

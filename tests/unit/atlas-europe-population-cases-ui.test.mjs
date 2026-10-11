@@ -5,7 +5,7 @@ import { transform } from '@astrojs/compiler-rs';
 import { experimental_AstroContainer } from 'astro/container';
 import { Window } from 'happy-dom';
 import { project, viewPath } from '../../src/lib/atlas-europe-view.ts';
-import { europeCultureData, normaliseCultureState, readCultureSearch, writeCultureState, cultureSelection, cultureColor, cultureLegend, formatCultureShare, cultureGeometryPath, cultureBounds, cultureMapData, caseMapData, fetchCaseGeometry, createEuropePopulationCases } from '../../src/lib/atlas-europe-population-cases.ts';
+import { europeCultureData, normaliseCultureState, readCultureSearch, writeCultureState, cultureSelection, cultureColor, cultureLegend, formatCultureShare, cultureGeometryPath, cultureBounds, cultureMapData, cultureOverviewMapData, caseMapData, fetchCaseGeometry, createEuropePopulationCases } from '../../src/lib/atlas-europe-population-cases.ts';
 
 const componentURL = new URL('../../src/components/atlas/EuropePopulationCases.astro', import.meta.url);
 const compiled = transform(await fs.readFile(componentURL, 'utf8'), { filename: componentURL.href, internalURL: import.meta.resolve('astro/compiler-runtime'), resolvePath: specifier => specifier });
@@ -38,7 +38,7 @@ test('actual Astro SSR starts with an unselected overview and no invented area/c
   const setupData = await setup();
   try {
     const { root } = setupData;
-    assert.match(root.querySelector('[data-culture-note]').textContent, /自己申告.*英国全土や欧州全域/);
+    assert.match(root.querySelector('[data-culture-note]').textContent, /ONS 2021年.*331行政区.*未収録/);
     assert.equal(root.querySelector('[data-culture-case]').value, '');
     assert.equal(root.querySelector('[data-culture-value]').hidden, true);
     assert.equal(root.querySelector('[data-culture-case]').options.length, 3);
@@ -48,7 +48,8 @@ test('actual Astro SSR starts with an unselected overview and no invented area/c
     assert.equal(root.querySelectorAll('select[disabled]').length, 3);
     assert.equal(root.querySelector('[data-culture-denominator]').textContent, '分母は選択した地域の同じ公表表の総人口です。');
     assert.match(root.querySelector('[data-culture-attribution]').textContent, /Office for National Statistics/);
-    assert.match(root.querySelector('[data-culture-map-status]').textContent, /数値なし.*0%/);
+    assert.match(root.querySelector('[data-culture-map-status]').textContent, /331行政区.*0%/);
+    assert.match(root.querySelector('[data-culture-scale-title]').textContent, /白人以外の4大分類/);
     assert.equal(root.querySelectorAll('svg').length, 0, 'The reader must use the parent central map');
     assert.equal(root.querySelector('[role="status"]').getAttribute('aria-live'), 'polite');
   } finally { setupData.close(); }
@@ -97,6 +98,25 @@ test('map values/colors use exact topic denominators, and absent coverage is not
   assert.ok(project(bounds[0])[0] < project(bounds[1])[0]);
 });
 
+test('ONS overview sums four mutually exclusive ethnicity aggregates and keeps religion separate', () => {
+  const areaCode = 'E06000002';
+  for (const [kind, ids] of [['ethnicity', ['ts021-01', 'ts021-07', 'ts021-11', 'ts021-22']], ['religion', ['ts030-01']]]) {
+    const topic = europeCultureData.cases[0].topics.find(item => item.kind === kind);
+    const area = topic.areas.find(item => item.code === areaCode);
+    const expectedCount = ids.reduce((sum, id) => sum + area.counts[topic.categories.findIndex(category => category.id === id)], 0);
+    const overview = cultureOverviewMapData(geometries.ew, kind);
+    const feature = overview.features.find(item => item.properties.code === areaCode);
+    assert.equal(overview.features.length, 331);
+    assert.equal(feature.properties.count, expectedCount);
+    assert.equal(feature.properties.denominator, area.denominator);
+    assert.equal(feature.properties.value, expectedCount / area.denominator * 100);
+    assert.equal(feature.properties.year, 2021);
+    assert.equal(feature.properties.selected, false);
+    assert.notEqual(feature.properties.fill, cultureLegend.at(-1).color);
+  }
+  assert.equal(cultureOverviewMapData(geometries.hr, 'ethnicity').features[0].properties.value, null, 'Croatian national geometry cannot receive ONS values');
+});
+
 test('geometry lazy requests share a promise and reject a mismatched geographic code set', async () => {
   let calls = 0;
   const options = { base: '/unit-culture-cache/', fetch: async url => { calls++; return responseFor(url); } };
@@ -127,6 +147,7 @@ test('controller synchronises SVG, MapLibre payload, topic, selects, percentage/
     controller.setTopic('religion');
     await controller.ready();
     assert.equal(root.querySelector('[data-culture-category]').options.length, 10);
+    assert.equal(controller.readState().cultureCategory, 'ts030-01', 'Switching topics opens a meaningful published category');
     assert.equal(requests.length, 1, 'Changing category/topic must reuse the same official boundary');
     assert.equal(changes.length, 0, 'Parent-driven topic changes must not perform a second URL update');
     assert.equal(controller.selectArea('E06000002'), true);
@@ -145,7 +166,7 @@ test('controller synchronises SVG, MapLibre payload, topic, selects, percentage/
     assert.equal(mapLayer.querySelectorAll('path').length, 1);
     assert.equal(root.querySelector('[data-culture-area]').options.length, 2);
     assert.equal(root.querySelector('[data-culture-category]').options.length, 13);
-    assert.equal(controller.readState().cultureCategory, '');
+    assert.equal(controller.readState().cultureCategory, 'hr-religion-H');
     assert.equal(controller.readState().cultureArea, '');
     change(window, root.querySelector('[data-culture-category]'), 'hr-religion-H');
     change(window, root.querySelector('[data-culture-area]'), 'HRV');
@@ -204,7 +225,7 @@ test('late geometry from a previous case cannot overwrite a newly selected natio
     assert.equal(mapLayer.querySelectorAll('path').length, 1);
     assert.equal(published.at(-1).features[0].properties.code, 'HRV');
     assert.equal(root.querySelector('[data-culture-value]').hidden, true);
-    assert.equal(controller.readState().cultureCategory, '');
+    assert.equal(controller.readState().cultureCategory, 'hr-ethnicity-H');
     assert.equal(controller.readState().cultureArea, '');
     controller.destroy();
   } finally { setupData.close(); }
@@ -230,7 +251,7 @@ test('geometry failure keeps source values usable and supports an explicit bound
   } finally { setupData.close(); }
 });
 
-test('overview and explicit choices preserve the complete distribution without automatic fitting', async () => {
+test('overview paints ONS regional distribution immediately, while explicit choices retain every area', async () => {
   const setupData = await setup();
   try {
     const { root, mapLayer, window } = setupData;
@@ -238,14 +259,17 @@ test('overview and explicit choices preserve the complete distribution without a
     const maps = [];
     const controller = createEuropePopulationCases(root, { base: '/unit-culture-overview/', mapLayer, onMapData: data => maps.push(data), onFitBounds: () => fits++, fetch: async url => { requests++; return responseFor(url); } });
     await controller.ready();
-    assert.equal(requests, 0);
+    assert.equal(requests, 1);
     assert.deepEqual(controller.readState(), { cultureCase: '', cultureCategory: '', cultureArea: '' });
-    assert.equal(maps.at(-1).features.length, 0);
+    assert.equal(maps.at(-1).features.length, 331);
+    assert.ok(maps.at(-1).features.every(feature => feature.properties.value !== null && feature.properties.categoryId === 'ons-ts021-four-aggregates'));
+    assert.match(mapLayer.querySelector('path').getAttribute('aria-label'), /白人以外の4大分類/);
     change(window, root.querySelector('[data-culture-case]'), 'england-wales-2021');
     await controller.ready();
     assert.equal(requests, 1);
     assert.equal(maps.at(-1).features.length, 331);
-    assert.ok(maps.at(-1).features.every(feature => feature.properties.value === null && !feature.properties.selected));
+    assert.ok(maps.at(-1).features.every(feature => feature.properties.value !== null && !feature.properties.selected));
+    assert.equal(controller.readState().cultureCategory, 'ts021-16');
     assert.equal(root.querySelector('[data-culture-value]').hidden, true);
     change(window, root.querySelector('[data-culture-category]'), 'ts021-17');
     assert.equal(controller.readState().cultureArea, '');
@@ -256,9 +280,11 @@ test('overview and explicit choices preserve the complete distribution without a
     assert.equal(root.querySelector('[data-culture-value]').hidden, false);
     assert.equal(fits, 0);
     controller.applyState('');
-    assert.equal(maps.at(-1).features.length, 0);
+    assert.equal(maps.at(-1).features.length, 331);
     assert.equal(root.querySelector('[data-culture-value]').hidden, true);
     assert.equal(fits, 0);
+    mapLayer.querySelector('[data-culture-code="E06000002"]').dispatchEvent(new window.Event('click', { bubbles: true }));
+    assert.deepEqual(controller.readState(), { cultureCase: 'england-wales-2021', cultureCategory: 'ts021-16', cultureArea: 'E06000002' });
     controller.destroy();
   } finally { setupData.close(); }
 });

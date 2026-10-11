@@ -44,6 +44,8 @@ SIMPLIFY_DEGREES = .16
 BELT_CLOSE_DEGREES = .24
 RADIUS_KM = 6371.0088
 OVERVIEW_CROPS = ('wheat', 'barley', 'maize', 'potato', 'sugarbeet', 'rapeseed')
+OVERVIEW_LIVESTOCK = ('cattle', 'pig', 'chicken', 'sheep')
+OVERVIEW_HORTICULTURE = ('citrus', 'temperatefruit', 'vegetables')
 inputs = []
 
 
@@ -152,7 +154,7 @@ def main():
         smoothing_radius = SMOOTH_RADIUS_BY_PRODUCT.get(id, SMOOTH_RADIUS)
         neighborhood = box_mean(high, smoothing_radius)
         candidate = high & (neighborhood >= neighbor_fraction)
-        if id in OVERVIEW_CROPS:
+        if id in (*OVERVIEW_CROPS, *OVERVIEW_LIVESTOCK, *OVERVIEW_HORTICULTURE):
             overview_grids[id] = grid.copy()
             overview_masks[id] = candidate.copy()
         exact = grid_geometry(candidate).intersection(land)
@@ -255,7 +257,8 @@ def main():
         exact = grid_geometry(mask).intersection(land)
         supported = [part for part in polygons(exact) if area_km2(part) >= MIN_AREA_KM2]
         assert supported, f'No dominant display area for {id}'
-        geometry = make_valid(union_all(supported).simplify(.08, preserve_topology=True)).intersection(land)
+        belt = make_valid(union_all(supported).buffer(BELT_CLOSE_DEGREES, quad_segs=3).buffer(-BELT_CLOSE_DEGREES, quad_segs=3))
+        geometry = make_valid(belt.simplify(SIMPLIFY_DEGREES, preserve_topology=True)).intersection(land)
         geometry_json = mapping(geometry)
         geometry_json['coordinates'] = rounded_coordinates(geometry_json['coordinates'])
         retained_cells = mask & contains_xy(geometry, longitude_grid, latitude_grid)
@@ -268,8 +271,58 @@ def main():
         dominant_records.append(dict(id=id, retainedComponents=len(supported), candidateCells=int(mask.sum()),
                                      approximateDisplayAreaKm2=round(area_km2(geometry), 2)))
         print(id, 'dominant cells', int(mask.sum()), 'components', len(supported), flush=True)
+    # Each genre needs the same visual grammar. Livestock densities cannot be
+    # compared across species (chickens are birds/km², the others heads/km²),
+    # so assign overlap by within-product rank above its own cutoff. This is
+    # strictly a display tie-breaker, not a cross-species quantity comparison.
+    # Horticulture products share harvested-ha/cell units, but their category
+    # definitions remain distinct and are likewise shown as representative
+    # colors over their source-supported cells.
+    for genre, ids in [('livestock', OVERVIEW_LIVESTOCK),
+                       ('horticulture', OVERVIEW_HORTICULTURE)]:
+        normalized = []
+        for id in ids:
+            grid = overview_grids[id]
+            valid = overview_masks[id]
+            values = grid[valid]
+            low, high = float(np.quantile(values, .25)), float(np.quantile(values, .90))
+            spread = max(high - low, 1e-9)
+            score = box_mean(np.where(valid, np.clip((grid - low) / spread, 0, 2), 0), 3)
+            score[~valid] = -1
+            normalized.append(score)
+        scores = np.stack(normalized)
+        winner = np.argmax(scores, axis=0)
+        has_winner = np.max(scores, axis=0) >= 0
+        # Citrus is a geographically specific subset of horticulture. The
+        # broad vegetable/temperate-fruit classes otherwise cover nearly all
+        # of its candidate cells, making a real southern belt disappear. This
+        # priority applies only where citrus itself passed the source cutoff.
+        if genre == 'horticulture':
+            winner[overview_masks['citrus']] = ids.index('citrus')
+        for index, id in enumerate(ids):
+            mask = has_winner & (winner == index)
+            exact = grid_geometry(mask).intersection(land)
+            minimum_display_area = 35 if id == 'citrus' else 100 if genre == 'horticulture' else 350
+            supported = [part for part in polygons(exact) if area_km2(part) >= minimum_display_area]
+            assert supported, f'No {genre} display area for {id}'
+            joined = union_all(supported)
+            belt = make_valid(joined.buffer(BELT_CLOSE_DEGREES, quad_segs=3).buffer(-BELT_CLOSE_DEGREES, quad_segs=3))
+            geometry = make_valid(belt.simplify(SIMPLIFY_DEGREES, preserve_topology=True)).intersection(land)
+            geometry_json = mapping(geometry)
+            geometry_json['coordinates'] = rounded_coordinates(geometry_json['coordinates'])
+            retained_cells = mask & contains_xy(geometry, longitude_grid, latitude_grid)
+            assert retained_cells.any(), f'No label cell remains in {genre} display for {id}'
+            rows, cols = np.where(retained_cells)
+            best = int(np.argmax(overview_grids[id][retained_cells]))
+            properties = dict(next(feature['properties'] for feature in features if feature['properties']['id'] == id))
+            properties['labelCoordinate'] = [round(float(longitudes[cols[best]]), 6), round(float(latitudes[rows[best]]), 6)]
+            dominant_features.append(dict(type='Feature', properties=properties, geometry=geometry_json))
+            dominant_records.append(dict(id=id, genre=genre, retainedComponents=len(supported),
+                                         candidateCells=int(mask.sum()),
+                                         approximateDisplayAreaKm2=round(area_km2(geometry), 2)))
+            print(id, genre, 'display cells', int(mask.sum()), 'components', len(supported), flush=True)
     dominant_features.extend(feature for feature in features
-                             if feature['properties']['kind'] == 'crop' and feature['properties']['id'] not in OVERVIEW_CROPS)
+                             if feature['properties']['kind'] == 'crop' and feature['properties']['id'] not in (*OVERVIEW_CROPS, *OVERVIEW_HORTICULTURE))
     dominant_output = write(DOMINANT_OUTPUT, dict(type='FeatureCollection', features=dominant_features))
     # A one-color ground keeps the map legible, while each product's dashed
     # secondary contour restores every sizeable concentration that would be
@@ -298,8 +351,8 @@ def main():
         threshold=dict(quantile=QUANTILE, population='各品目の欧州対象国の陸域内にある正値の元格子',
                        meaning='品目ごとの収穫面積または飼養密度の第80百分位'),
         processing=dict(smoothing='閾値以上の格子の割合を原則7×7格子（トウモロコシは5×5）で平均し、原則55%以上の場所を選ぶ。米と柑橘類は45%以上。中心格子も第80百分位以上の値が必要。',
-                        dominantOverview='穀物・畑作の色面だけ、収録済み6作物の候補元格子を同じha/格子の7×7近傍平均で比べ、最大の作物に一色を割り当てる。色面に隠れる別品目の集中域はその品目色の点線輪郭で同時表示する。原則750km²未満の孤立面を省き、輪郭を0.08度で簡略化する。全品目の重複した集中域と選択時輪郭は元図に保持する。',
-                        secondaryContours='品目ごとの元集中域から同じ品目の色面を除いた残りのうち、350km²以上の面を点線輪郭にする。色面に隠れた別品目や周辺の集中域を見せる補助表示であり、栽培境界ではない。',
+                        dominantOverview='3ジャンルとも、元の品目別集中域を残しつつ、重なる元格子の代表色を一色に整理する。穀物・畑作は同じha/格子の近傍平均を比較する。畜産・果樹園芸は各品目内の高値を標準化した近傍値で重なりを整理し、異なる動物の頭羽数や作物の量を比較しない。柑橘類は自身が閾値を満たす格子に限り広い集合区分より優先し、南部の根拠ある帯が消えるのを防ぐ。各ジャンルの色面は0.24度未満の細い隙間を概略図の表示尺度で閉じ、縁を0.16度で簡略化する。元図の全分布と選択時の輪郭は保持する。',
+                        secondaryContours='穀物・畑作6品目では、元集中域から同じ品目の色面を除いた残りのうち、350km²以上の面を点線輪郭にする。色面に隠れた別品目や周辺の集中域を見せる補助表示であり、栽培境界ではない。',
                         smoothingRadiusCells=SMOOTH_RADIUS, minimumNeighborFraction=MIN_NEIGHBOR_FRACTION,
                         smoothingRadiusByProduct=SMOOTH_RADIUS_BY_PRODUCT,
                         smoothingRadiusReason='トウモロコシはポー平原の高値格子（8.708333°E, 45.291667°N）が7×7近傍では53.1%で切れるため、元の5×5近傍（64%）を保ち、同地点を根拠のある面として残す。',
@@ -314,7 +367,7 @@ def main():
                         precisionTopology='隣接する元面の狭い隙間を描画尺度で閉じ、6桁への丸め後にmake_validとunion_allで接触辺を修復。離れた集中域を任意の線で結ばない。',
                         finalEvidence='修復後の原則750km²未満（米・柑橘類は500km²未満）の面と、第80百分位以上の元格子中心を一つも含まない面は表示しない。',
                         clipping='europe-countries.jsonでkind=europeの国を結合し、表示範囲と陸域で切り抜く。周辺国は含めない。',
-                        overlaps='16品目をそれぞれ独立に処理し、分布が重なる部分も残す。最大品目だけに割り当てない。',
+                        overlaps='16品目をそれぞれ独立に処理して元分布と選択時輪郭を保持する。3ジャンルの概略色面のみ、重なる元格子の代表品目を色分けする。代表色は生産量の比較ではない。',
                         labelPlacement='分布面内の元格子の数量が最大の面を選び、その面の正値の第90百分位以上かつ全体閾値以上の元セル中心を使う。面の比較は作物で収穫面積、家畜で密度×球面格子面積を使う。数量集計は名称配置だけに用い、統計値として提示しない。',
                         sourceMutation=False),
         sources=dict(crops='https://doi.org/10.7910/DVN/SWPENT',
@@ -330,7 +383,7 @@ def main():
             'SPAMの収穫面積は複数作期を含む場合があり、耕地面積と一致しない。',
             '収録済みの12作物と牛・豚・鶏・羊のみ。ブドウ・オリーブ単独の格子は未収録。',
             'ロシアは表示枠内の対象国データを含む。統計・地理区分の境界や領有権を判断する図ではない。',
-        ], inputs=inputs, products=records, output=output, dominantOverview=dict(output=dominant_output,products=dominant_records,cropIds=OVERVIEW_CROPS),secondaryContours=dict(output=secondary_output,products=secondary_records)))
+        ], inputs=inputs, products=records, output=output, dominantOverview=dict(output=dominant_output,products=dominant_records,cropIds=OVERVIEW_CROPS,livestockIds=OVERVIEW_LIVESTOCK,horticultureIds=OVERVIEW_HORTICULTURE),secondaryContours=dict(output=secondary_output,products=secondary_records)))
     print('output', output['bytes'], 'bytes', flush=True)
 
 
