@@ -50,10 +50,10 @@ try{
   await tables.locator('.asia-stat-current').waitFor();
   assert.equal(await history.evaluate(el=>el.open),false,'raw years start closed');
   assert.equal(await tables.locator('.asia-stat-chart').count(),1,'one initial trend, selectable without extra scroll');
-  assert.equal(await tables.locator('.asia-stat-current tbody tr').count(),topic==='forest'?7:2);
-  assert.equal(await history.locator('tbody tr').count(),topic==='forest'?70:20,'available original years remain in the closed disclosure');
+  assert.equal(await tables.locator('.asia-stat-current tbody tr').count(),topic==='forest'?9:2);
+  assert.equal(await history.locator('tbody tr').count(),topic==='forest'?90:20,'available original years remain in the closed disclosure');
   assert.equal(await history.locator('tbody tr:visible').count(),0);
-  assert.equal(await tables.locator('.asia-stat-trend-picker option').count(),topic==='forest'?7:2);
+  assert.equal(await tables.locator('.asia-stat-trend-picker option').count(),topic==='forest'?9:2);
   if(topic==='forest'){
    assert.match(await tables.locator('.asia-stat-current').innerText(),/72,653 千ha/);
    assert.match(await tables.locator('.asia-stat-current').innerText(),/生産比の対象外/);
@@ -102,14 +102,16 @@ try{
    }
    assert.match(visibility[0].text,/国の統計はFAOSTAT/);assert.match(visibility[1].text,/出典：.*FAOSTAT.*森林生産・貿易/s);
   }
-  const select=tables.locator('.asia-stat-trend-picker select');await select.selectOption(topic==='forest'?'6':'1');
+  const select=tables.locator('.asia-stat-trend-picker select');
+  const trend=topic==='forest'?await select.locator('option',{hasText:'製材の輸出量'}).getAttribute('value'):'1';
+  await select.selectOption(trend);
   assert.match(await tables.locator('.asia-stat-chart').getAttribute('aria-label'),topic==='forest'?/製材の輸出量/:/牛の生乳/);
   if(topic==='cattle')assert.match(await tables.locator('.asia-stat-chart span').last().getAttribute('title'),/135,000,000 t/);
-  await history.locator('summary').click();assert.equal(await history.locator('tbody tr:visible').count(),topic==='forest'?70:20);
+  await history.locator('summary').click();assert.equal(await history.locator('tbody tr:visible').count(),topic==='forest'?90:20);
   assert.match(await history.innerText(),/世界値・区分/);assert.match(await history.innerText(),/自給率ではありません/);
   if(topic==='cattle')assert.match(await history.innerText(),/牛肉.*2015–2024年.*資料上の欠測（M）/s);
   await history.locator('summary').click();assert.equal(await history.locator('tbody tr:visible').count(),0,'disclosure closes without changing the source tables');
-  report.checks.push({case:'Asia compact national statistics',topic,place:'IND',width,metrics,retainedYearRows:topic==='forest'?70:20,trendSwitch:true,disclosureToggle:true});
+  report.checks.push({case:'Asia compact national statistics',topic,place:'IND',width,metrics,retainedYearRows:topic==='forest'?90:20,trendSwitch:true,disclosureToggle:true});
  }
  assert.deepEqual(report.errors,[]);report.status='passed';
 }catch(error){report.status='failed';report.failure=String(error);throw error;}

@@ -132,7 +132,7 @@ jobs:
 
       - name: Verify South and Central Asia regional journeys
         timeout-minutes: 4
-        run: ATLAS_ASIA_BROWSER=1 node --test tests/e2e/atlas-south-central-focus.test.mjs
+        run: ATLAS_ASIA_BROWSER=1 SC_FOCUSED_REVIEW=1 node --test tests/e2e/atlas-south-central-focus.test.mjs
 
       # East Asia map expansion supersedes the former exact US frame parity.
       # The former broad comparison script remains available for manual review.
@@ -146,6 +146,16 @@ jobs:
         with:
           name: east-asia-approved-${{ github.run_id }}-${{ github.run_attempt }}
           path: review-artifacts/east-asia-approved
+          if-no-files-found: warn
+          compression-level: 6
+          retention-days: 7
+
+      - name: Save South and Central Asia PC images
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: south-central-focus-${{ github.run_id }}-${{ github.run_attempt }}
+          path: review-artifacts/south-central-focus
           if-no-files-found: warn
           compression-level: 6
           retention-days: 7

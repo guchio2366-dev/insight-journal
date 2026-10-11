@@ -13,10 +13,10 @@ const percentage=(n:number)=>n<0.05?'0.05％未満':`${n.toLocaleString('ja-JP',
 const sourceFlag=(flag:string)=>asiaFarmFlagLabels[flag]??`原資料区分 ${flag}`;
 const svgNode=(tag:string,attrs:Record<string,string>)=>{const node=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [key,value] of Object.entries(attrs))node.setAttribute(key,value);return node;};
 /** Source-matched country/world ratios; never repurpose them as trade or domestic supply. */
-export function renderSouthCentralFarmConnections(root:HTMLElement,region:AsiaRegionId,active:boolean,topic:string|null,country:{code:string;name:string}|undefined,focusExample?:{country:string;product:string}){
+export function renderSouthCentralFarmConnections(root:HTMLElement,region:AsiaRegionId,active:boolean,topic:string|null,country:{code:string;name:string}|undefined,focusExample?:{country:string;product:string},focusId?:string){
  const section=root.querySelector<HTMLElement>('[data-south-central-farm-connections]');if(!section)return;
  section.hidden=!active||(region!=='south-central-asia'&&region!=='southeast-asia');if(section.hidden)return;
- renderSouthCentralRiceFlow(section,region,topic,country?.code??focusExample?.country);
+ renderSouthCentralRiceFlow(section,region,topic,country?.code??focusExample?.country,focusId);
  const host=section.querySelector<HTMLElement>('[data-south-central-world-share]')!;host.replaceChildren();
  const isSoutheast=region==='southeast-asia',worldSeries=(isSoutheast?southeastShares.series:southCentralShares.series) as ShareSeries[];
  const sharePercent=(value:number)=>isSoutheast?(value>0&&value<.01?'0.01％未満':`${value.toLocaleString('ja-JP',{maximumFractionDigits:2,minimumFractionDigits:2})}％`):percentage(value);
@@ -68,6 +68,7 @@ const definitions={
 export function farmSeries(topic:string,layer:AsiaFarmingLayer|undefined,rows:AsiaFarmObservation[]){
  if(topic==='forest')return [
   {title:'森林面積',rows:rows.filter(r=>r.domain==='Inputs_LandUse'&&r.item==='6646'&&r.element==='Area')},
+  ...([['1864','燃料材'],['1865','産業用丸太']] as const).map(([item,label])=>({title:label+'の生産量',rows:rows.filter(r=>r.domain==='Forestry'&&r.item===item&&r.elementCode==='5516')})),
   ...([['1861','丸太（燃料用を含む）'],['1872','製材']] as const).flatMap(([item,label])=>([['5516','生産量'],['5616','輸入量'],['5916','輸出量']] as const).map(([element,title])=>({title:label+'の'+title,rows:rows.filter(r=>r.domain==='Forestry'&&r.item===item&&r.elementCode===element)}))),
  ];
  const item=topic==='rice'?'27':String(layer?.faoItem),base=rows.filter(r=>r.domain==='Production_Crops_Livestock'&&r.item===item);
@@ -77,7 +78,7 @@ export function farmSeries(topic:string,layer:AsiaFarmingLayer|undefined,rows:As
  }
  return [{title:'生産量',rows:base.filter(r=>r.element==='Production')},{title:'収穫面積',rows:base.filter(r=>r.element==='Area harvested')}];
 }
-export function renderAsiaFarmingPanel(root:HTMLElement,region:AsiaRegionId,topic:string,layer:AsiaFarmingLayer|undefined,country:{code:string;name:string}|undefined,statistics:AsiaFarmStatistics|null,focusKindReading?:Record<'crop'|'livestock'|'forest',string>){
+export function renderAsiaFarmingPanel(root:HTMLElement,region:AsiaRegionId,topic:string,layer:AsiaFarmingLayer|undefined,country:{code:string;name:string}|undefined,statistics:AsiaFarmStatistics|null,focusKindReading?:Record<'crop'|'livestock'|'forest',string>,focusId?:string){
  const $=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const definition=asiaFarmDefinitions[topic];if(!definition)return;
  $('[data-farming-extra]').hidden=!layer;$('[data-farming-map-method]').hidden=!layer;
@@ -90,14 +91,14 @@ export function renderAsiaFarmingPanel(root:HTMLElement,region:AsiaRegionId,topi
   $('[data-farming-method]').textContent=definitions[layer.kind]+(layer.kind!=='forest'?' 元格子をWeb Mercatorへ最近傍で再標本化しています。品目別の原画像と地点の照会値には同じ配列を使い、0と欠測を区別します。地図上の見かけの格子面積は緯度によって変わります。' + (root.querySelector('[data-map-annotations]')?' 地図は各品目の概略分布を残して、選択作物の輪郭を強調します。概略の面から地点の値や生産量は計算しません。':''):'');
   const sources=$('[data-farming-map-source]');sources.replaceChildren();
   const link=document.createElement('a');link.textContent=layer.kind==='crop'?'IFPRI MapSPAM 2020 v2r2（CC BY 4.0）':layer.kind==='livestock'?'FAO GLW4 / CGIAR（CC BY 4.0）':'JRC Global Forest Cover 2020 v3';link.href=layer.kind==='crop'?'https://doi.org/10.7910/DVN/SWPENT':layer.kind==='livestock'?'https://cgiar-climate-data-hub.github.io/catalog/glw4-2020/':'https://forobs.jrc.ec.europa.eu/GFC/v3';sources.append(link,document.createTextNode((layer.kind==='forest'?'。European Union, Copernicus Land Monitoring Service / JRC。':'。')+'地域の抽出・表示：Insight Journal。'));
-  const reference=$('[data-farming-reference]');reference.replaceChildren();if(layer.kind==='forest')for(const source of asiaForestSources[region]){const p=document.createElement('p'),a=document.createElement('a');a.href=source.url;a.textContent=source.label;p.append(a);reference.append(p);}
+  const reference=$('[data-farming-reference]');reference.replaceChildren();if(layer.kind==='forest')for(const source of focusId==='central-asia'?[{label:'UNECE・中央アジアの森林と燃料材（2019年）',url:'https://unece.org/fileadmin/DAM/timber/meetings/2019/20191216/Forest_Landscape_Restoration_in_Central_Asia_and_the_Caucasus.pdf'}]:[...asiaForestSources[region],...(focusId==='south-asia'?[{label:'FAO・ネパールの住民林業事例',url:'https://www.fao.org/4/ai412e/AI412E09.htm'}]:[])]){const p=document.createElement('p'),a=document.createElement('a');a.href=source.url;a.textContent=source.label;p.append(a);reference.append(p);}
  }
  $('[data-farming-statistics-title]').textContent=country?`${country.name}の${definition.statName}`:'国・地域の統計を読む';$('[data-farming-statistics-definition]').textContent=definition.definition;
  const tables=$('[data-farming-statistics-tables]');tables.replaceChildren();
  const status=$('[data-farming-statistics-status]');
  if(!country){status.textContent=region==='southeast-asia'?'雨温図や地域事例から同じ場所を比較すると、その国全体の2015–2024年の統計を表示します。':'国・地域を選ぶと、2015–2024年の統計を表示します。';return;}
  if(!statistics){status.textContent='国・地域の統計を読み込んでいます。';return;}
- if(topic==='forest'){const note=document.createElement('p');note.className='farming-note';note.textContent='丸太と製材は別製品です。生産・輸入・輸出から国内消費を算出していません。';tables.append(note);}
+ if(topic==='forest'){const note=document.createElement('p');note.className='farming-note';note.textContent='丸太は燃料材と産業用丸太を含むため、内訳と合算しません。燃料材の生産量は家庭で使われた量ではありません。製材は加工後の別製品です。生産・輸入・輸出から国内消費を算出していません。';tables.append(note);}
  const record=statistics.countries[country.code];status.textContent=country.code==='CHN'?'この表はFAOの中国本土の統計です。香港・マカオ・台湾を含むChina集計とは区別しています。':country.code==='TWN'?'この表はFAOの台湾区分（M49:158）を使っています。':'';
  const seriesList=farmSeries(topic,layer,record?.observations??[]).flatMap(series=>{
   // Keep source unit changes in separate summaries, plots and original tables.

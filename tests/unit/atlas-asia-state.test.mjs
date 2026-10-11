@@ -39,6 +39,14 @@ test('都市単独のURLは所属国を補い、国と矛盾する都市は採�
   assert.equal(foreign.city, null);
 });
 
+test('南・中央の都市選択は再読込み後も国選択なしを保つ', () => {
+  const focus={...east,cityWithoutPlace:true};
+  const state=readAsiaAtlasState(url('?city=tokyo&lng=139.76&lat=35.68&z=5.125'),focus);
+  assert.equal(state.city,'tokyo');assert.equal(state.place,null);
+  assert.deepEqual(readAsiaAtlasState(writeAsiaAtlasState(url(''),state),focus),state);
+  assert.equal(readAsiaAtlasState(url('?place=CHN&city=tokyo'),focus).city,null);
+});
+
 test('地域を移ったときに前の国・都市・未提供分野を残さない', () => {
   const state = readAsiaAtlasState(url('?region=east-asia&place=JPN&city=tokyo&field=agriculture'), southeast);
   assert.equal(state.place, null);
