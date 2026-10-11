@@ -72,6 +72,7 @@ import '../../styles/atlas-canada-country-parity.css';
      <details><summary>都市から解説を選ぶ</summary><div class="population-place-buttons">{data.cmas.map(r=><button data-population-locate={r.id}>{r.name.match(/（(.+)）/)?.[1]??r.name}</button>)}</div></details>
     </section>
     <aside class="canada-reading atlas-national population-reading" aria-label="人口比較と集中の理由">
+   <button class="population-clear-selection" data-population-clear-selection hidden>全国の解説へ</button>
    <div data-population-distribution-reading>
    <header class="canada-national-header"><p class="atlas-eyebrow">Canada · Population</p><h2>都市圏に集まる、カナダの人口</h2><p class="canada-lead" data-population-distribution-lead>人口は南部の都市圏に集中し、交通・仕事・住まいのつながりが、その集中と広がりを支えている。</p></header>
 
