@@ -205,7 +205,7 @@ def main() -> None:
     geometries = {item["id"]: item for item in json.loads(geometry_path.read_bytes())["features"]}
     city_samples = []
     for city in cities:
-        lon, lat = geometries[city["id"]]["point"]
+        lon, lat = geometries[city["id"]]["anchor"]
         x, y = project(lon, lat)
         col = math.floor((x - xmin) / (xmax - xmin) * WIDTH)
         row = math.floor((ymax - y) / (ymax - ymin) * height)
