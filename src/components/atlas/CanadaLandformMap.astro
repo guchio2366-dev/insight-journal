@@ -1,8 +1,10 @@
 ---
+import {canadaSouthernFrame} from '../../lib/atlas-canada-map-presentation';
 import CanadaTerrainContext from './CanadaTerrainContext.astro';
 import rivers from '../../data/atlas/canada/rivers.json';
 import lakes from '../../data/atlas/canada/lakes.json';
 import physiography from '../../data/atlas/canada/physiography.json';
+import oceanContext from '../../data/atlas/canada/ocean-context.json';
 import geography from '../../data/atlas/regional-countries.json';
 import rawGeometry from '../../../public/assets/atlas/canada-physiography-v1/regions.geojson?raw';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
@@ -18,8 +20,8 @@ const { hidden = true, selected = null, only = false } = Astro.props;
 const regions = physiography.regions;
 const geometry = prepareCanadaLandforms(JSON.parse(rawGeometry) as CanadaLandformCollection, regions);
 const context = { type: 'FeatureCollection', features: geography.features.filter(feature => ['CAN', 'USA', 'GRL'].includes(feature.properties.code)) };
-const config = { ...physiography, context, rivers, lakes, workerUrl };
-const fullFrame = `0 0 ${canadaLandformSize.width} ${canadaLandformSize.height}`;
+const config = { ...physiography, context, rivers, lakes, oceanContext, workerUrl };
+const fullFrame = canadaSouthernFrame().join(' ');
 ---
 <section class="canada-landform" data-canada-landform hidden={hidden} aria-label="カナダの地形地域を調べる">
   <h2 class="visually-hidden">カナダの七つの地形地域</h2>
@@ -37,15 +39,18 @@ const fullFrame = `0 0 ${canadaLandformSize.width} ${canadaLandformSize.height}`
       <g class="canada-landform-fallback-labels" data-canada-landform-fallback-labels aria-hidden="true">{regions.map(region => { const [x, y] = projectCanadaLandform(region.labelAnchor); return <text x={x} y={y} text-anchor="middle">{region.name}</text>; })}</g>
     </svg>
     <div class="canada-landform-live" data-canada-landform-live aria-label="カナダの地形地域の操作できる地図" hidden></div>
+    <svg class="canada-landform-ocean-context" data-canada-landform-ocean-context viewBox={fullFrame} aria-label="海名と概略の海流方向" role="img">
+      <title>海名と海流の概略方向</title><desc>破線の矢印は寒流・暖流の概略方向です。実測した流路・流速や季節ごとの範囲は示しません。</desc>
+      <defs><marker id="canada-cold-current-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0L6,3L0,6Z" fill="#3c849f" /></marker><marker id="canada-warm-current-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0L6,3L0,6Z" fill="#b96847" /></marker></defs>
+      {oceanContext.seas.map(sea=>{const [x,y]=projectCanadaLandform(sea.coordinates);return <text class="canada-landform-sea-name" x={x} y={y} text-anchor="middle">{sea.name}</text>})}
+      {oceanContext.currents.map(current=>{const points=current.coordinates.map(projectCanadaLandform),[x,y]=projectCanadaLandform(current.labelAnchor);return <g data-canada-ocean-current={current.id}><path class={`canada-landform-current is-${current.kind}`} d={points.map(([px,py],i)=>`${i?'L':'M'}${px},${py}`).join('')} marker-end={`url(#canada-${current.kind}-current-arrow)`} vector-effect="non-scaling-stroke"/><text class={`canada-landform-current-name is-${current.kind}`} x={x} y={y} text-anchor="middle">{current.name}</text></g>})}
+    </svg>
     <div class="canada-landform-labels" data-canada-landform-labels>{regions.map(region => {
       const [x, y] = projectCanadaLandform(region.labelAnchor);
       return <button type="button" class:list={['canada-landform-label', {'is-selected': selected === region.id}]} data-canada-landform-label={region.id} style={`left:${x / canadaLandformSize.width * 100}%;top:${y / canadaLandformSize.height * 100}%`} aria-pressed={String(selected === region.id)} hidden>{region.name}</button>;
     })}</div>
     <div class="canada-landform-tools" aria-label="地形地図の操作">
-      <button type="button" data-canada-landform-reset aria-label="カナダ南部を中心に地形を表示">南部</button><button type="button" data-canada-landform-whole aria-label="北極圏を含むカナダの地形を表示">全域</button>
-      <button type="button" data-canada-landform-zoom="in" aria-label="地形地図を拡大">＋</button>
-      <button type="button" data-canada-landform-zoom="out" aria-label="地形地図を縮小">−</button>
-      <button type="button" data-canada-landform-focus aria-label="選んだ地形地域へ" disabled={!selected}>地域へ</button>
+      <button type="button" data-canada-landform-reset>選択を解除</button>
     </div>
   </div>
   <div class="canada-landform-key" aria-label="地形地域の凡例">
@@ -54,6 +59,7 @@ const fullFrame = `0 0 ${canadaLandformSize.width} ${canadaLandformSize.height}`
   <label class="canada-landform-only"><input type="checkbox" data-canada-landform-only checked={only && !!selected} disabled={!selected} /> 選んだ地形地域だけを表示</label>
   <p class="canada-landform-status" data-canada-landform-status role="status" aria-live="polite">地域を選ぶと地形の特徴を読めます。</p>
   <p class="canada-landform-caption">地形名を選ぶと該当地域の輪郭を強調します。輪郭はNRCanの広域地形区分で、ロッキー山脈など個別の山脈とは範囲が異なります。<a href={physiography.source.catalogueUrl}>原資料・利用条件</a></p>
+  <p class="canada-landform-caption">青の破線は寒流、茶の破線は暖流の概略方向です。海流の実測流路・流速や季節変化は示しません。<a href={oceanContext.sources[0].url}>海流の出典（NOAA）</a></p>
   <noscript><p class="canada-landform-caption">境界と名称はこの地図で確認できます。地域の選択・拡大にはJavaScriptを有効にしてください。<a href={physiography.source.descriptionUrl}>NRCanの原資料と説明</a></p></noscript>
   <details class="canada-landform-sources"><summary>地形地域の出典・境界データ</summary><p>{physiography.source.publisher}「{physiography.source.title}」。{physiography.source.brief}</p><p>配信座標系：{physiography.source.deliveryCrs}。原資料の七地域の境界を使用しています。<a href={physiography.geometryUrl}>境界データ（GeoJSON）</a> / <a href={physiography.source.licenceUrl}>{physiography.source.licence}</a></p><p lang="en">{physiography.source.attribution}</p></details>
   <script type="application/json" data-canada-landform-config set:html={JSON.stringify(config).replace(/</g, '\\u003c')} />

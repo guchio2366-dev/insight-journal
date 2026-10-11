@@ -22,20 +22,16 @@ export function initCanadaForestry(root:HTMLElement){
   $('[data-forestry-clear]').hidden=!state.region;
   for(const outline of root.querySelectorAll<SVGElement>('[data-forestry-province]'))outline.classList.toggle('is-selected',outline.dataset.forestryProvince===region?.province);
   for(const button of root.querySelectorAll<HTMLElement>('[data-forestry-cover-button]'))button.setAttribute('aria-pressed',String(button.dataset.forestryCoverButton===state.cover));
-  $<HTMLButtonElement>('[data-forestry-focus]').disabled=!state.region;
   const [x,y]=region?.point??[450,290];const frame=state.zoom&&region?[Math.max(0,Math.min(600,x-150)),Math.max(0,Math.min(360,y-110)),300,220]:[0,0,900,580];root.querySelector('[data-forestry-map]')!.setAttribute('viewBox',frame.join(' '));
-  $('[data-forestry-focus]').setAttribute('aria-pressed',String(state.zoom));$('[data-forestry-map-status]').textContent=`2020年固定：${cover}。${state.zoom&&region?region.name+'の位置を拡大':state.region?region.name+'を選択':'地域未選択'}。`;
+$('[data-forestry-map-status]').textContent=`2020年固定：${cover}。${state.zoom&&region?region.name+'の位置を拡大':state.region?region.name+'を選択':'地域未選択'}。`;
   map?.render(state);
   for(const a of root.querySelectorAll<HTMLAnchorElement>('[data-forestry-nature-link]'))a.href=canadaForestryComparisonUrl(new URL(location.href),new URL(a.dataset.forestryNatureLink!,location.href),state).href;
  }
  function update(patch:Partial<CanadaForestryState>,replace=false){state={...state,...patch};if(state.compare===state.province)state.compare=null;history[replace?'replaceState':'pushState'](null,'',writeCanadaForestryState(new URL(location.href),state));render();}
  for(const key of ['year','province','compare','metric','cover'])$<HTMLSelectElement>(`[data-forestry-${key}]`).addEventListener('change',e=>{const v=(e.target as HTMLSelectElement).value;update({[key]:key==='year'?Number(v):v||null});});
- function selectRegion(id:string|null){const region=config.regions.find((r:any)=>r.id===id);if(region)update({region:id as CanadaForestryState['region'],province:region.province});else if(!id)update({region:null,province:null,zoom:false});}
+ function selectRegion(id:string|null){const region=config.regions.find((r:any)=>r.id===id);if(region)update({region:id as CanadaForestryState['region'],province:region.province,zoom:false,camera:state.zoom?(root as any).canadaForestryMap?.camera?.slice()??state.camera:state.camera});else if(!id)update({region:null,province:null,zoom:false,camera:state.zoom?(root as any).canadaForestryMap?.camera?.slice()??state.camera:state.camera});}
  $<HTMLSelectElement>('[data-forestry-region]').addEventListener('change',e=>selectRegion((e.target as HTMLSelectElement).value));
  for(const marker of root.querySelectorAll<SVGElement>('[data-forestry-region-marker]')){marker.addEventListener('click',()=>selectRegion(marker.dataset.forestryRegionMarker!));marker.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectRegion(marker.dataset.forestryRegionMarker!);}});}
- $('[data-forestry-focus]').addEventListener('click',()=>{if(state.region)update({zoom:!state.zoom,camera:null});});
- $('[data-forestry-map-reset]').addEventListener('click',()=>update({cover:'all',zoom:false,region:null,province:null,camera:map?.wholeCamera??null}));
- $('[data-forestry-south]').addEventListener('click',()=>update({camera:null,zoom:false}));
  $('[data-forestry-clear]').addEventListener('click',()=>selectRegion(null));
  for(const button of root.querySelectorAll<HTMLElement>('[data-forestry-cover-button]'))button.addEventListener('click',()=>update({cover:button.dataset.forestryCoverButton as CanadaForestryState['cover']}));
  window.addEventListener('popstate',()=>{state=readCanadaForestryState(new URL(location.href),config.years,ids);render();});render();

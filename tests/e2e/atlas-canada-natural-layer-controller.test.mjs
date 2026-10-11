@@ -30,6 +30,7 @@ async function renderNaturalSSR(props) {
       ['../../data/atlas/regional-countries.json', dataModule(`export default ${await readFile('src/data/atlas/regional-countries.json', 'utf8')};`)],
       ['maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url', dataModule('export default "/worker.js";')],
       ['../../lib/atlas-canada-landform-map', dataModule(projectionCode)],
+      ['../../lib/atlas-canada-map-presentation',dataModule(await bundleCanadaSource('src/lib/atlas-canada-map-presentation.ts',{format:'esm',platform:'node'}))],
       ['../../lib/atlas-canada-natural-layer', dataModule(contourCode)],
       ['../../lib/atlas-canada-natural-presentation',dataModule(await bundleCanadaSource('src/lib/atlas-canada-natural-presentation.ts',{format:'esm',platform:'node'}))],
     ]);
@@ -141,7 +142,7 @@ test('Natural SSR keeps station coordinates and names while excluding repeated m
     const config=JSON.parse(w.document.querySelector('[data-canada-natural-config]').textContent);
     assert.deepEqual(config.stations,stations.map(({id,name,coordinates})=>({id,name,coordinates})));
     assert.ok(config.stations.every(station=>Object.keys(station).length===3));
-    assert.equal(w.document.querySelectorAll('[data-canada-natural-static-city]').length,5);
+    assert.equal(w.document.querySelectorAll('[data-canada-natural-static-city]').length,9);
     assert.ok(!('geometry' in config));assert.equal(w.document.querySelectorAll('.canada-natural-area').length,1);
     assert.equal(w.document.querySelectorAll('defs [data-canada-natural-geometry]').length,0,'polygon geometry is unchanged');
   } finally { await w.happyDOM.close(); }
@@ -172,7 +173,7 @@ test('Deferred climate startup preserves visible SSR without a request until the
     plugins: [{ name: 'natural-layer-webgl-boundary', setup(builder) {
       builder.onResolve({ filter: /^maplibre-gl$/ }, () => ({ path: 'maplibre', namespace: 'natural-map-stub' }));
       builder.onLoad({ filter: /.*/, namespace: 'natural-map-stub' }, () => ({ contents: mapStub, loader: 'js' }));
-      builder.onResolve({ filter: /^\./ }, args => ({ path: path.resolve(args.resolveDir, args.path + '.ts'), namespace: 'natural-local-source' }));
+      builder.onResolve({ filter: /^\./ }, args => ({ path: path.resolve(args.resolveDir, args.path.endsWith('.ts')?args.path:args.path + '.ts'), namespace: 'natural-local-source' }));
       builder.onLoad({ filter: /.*/, namespace: 'natural-local-source' }, async args => ({ contents: await readFile(args.path, 'utf8'), loader: 'ts', resolveDir: path.dirname(args.path) }));
     } }],
   });
@@ -285,7 +286,7 @@ test('Natural layer selection, isolation and city events stay host-owned and kee
     assert.equal(p.q('climate', '[data-canada-natural-legend="Dfb"]').getAttribute('aria-pressed'), 'true', 'city selection does not change classification');
     const activeFrame = frame(p.q('climate', '[data-canada-natural-fallback]'));
     const ratio = Math.min(width / activeFrame[2], height / activeFrame[3]), offsetX = (width - activeFrame[2] * ratio) / 2, offsetY = (height - activeFrame[3] * ratio) / 2;
-    assert.equal(stations.length, 5);
+    assert.equal(stations.length, 9);
     for (const station of stations) {
       const [x, y] = projection.projectCanadaLandform(station.coordinates), button = p.q('climate', `[data-canada-natural-city="${station.id}"]`);
       assert.ok(Math.abs(parseFloat(button.style.left) - ((x - activeFrame[0]) * ratio + offsetX)) < 1e-6, `${station.id} stays at its real longitude`);
@@ -308,6 +309,7 @@ test('Selected city names win collisions on every redraw while all real coordina
     const positions = new Map(buttons.map(button => [button.dataset.canadaNaturalCity, [button.style.left, button.style.top]]));
     for (const button of buttons) Object.defineProperty(button.querySelector('span'), 'offsetWidth', { configurable: true, value: 70 });
     p.controllers.climate.render({selected:null,only:false,city:'ottawa'});
+    assert.ok(buttons.every(button=>!button.hidden&&!button.querySelector('span').hidden),'The initial southern viewport names all nine observation points');
     // Southern viewport expands marker spacing; verify actual overlaps instead of assuming Vancouver must be hidden.
     for(const button of buttons){const text=button.querySelector('span');if(text.hidden)continue;const x=parseFloat(button.style.left),y=parseFloat(button.style.top),left=x-6+parseFloat(text.style.left),cy=y-12+parseFloat(text.style.top);for(const other of buttons.filter(b=>b!==button)){const mx=parseFloat(other.style.left),my=parseFloat(other.style.top);assert.ok(!(left<mx+6&&left+70>mx-6&&cy-11<my+12&&cy+11>my-12));}}
     for (const button of buttons) {
@@ -358,12 +360,12 @@ test('Static natural layer pan, wheel and zoom save ordered geographic bounds an
     p.q('climate', '[data-canada-natural-stage]').dispatchEvent(wheel);
     assert.equal(wheel.defaultPrevented, true, 'the map owns wheel behavior and prevents page scrolling'); assert.ok(frame(svg)[2] < beforeWheel[2], JSON.stringify({beforeWheel, afterWheel:frame(svg)}));
     await new Promise(resolve => setTimeout(resolve, 150)); validBounds(p.events.at(-1).detail.bounds);
-    p.q('climate', '[data-canada-natural-reset]').click(); assert.deepEqual(frame(svg), full);
+    const beforeClear=frame(svg); p.q('climate', '[data-canada-natural-reset]').click(); assert.deepEqual(frame(svg), beforeClear);
     assert.deepEqual(p.events.at(-1), { name: 'canada-natural-reset', detail: { layer: 'climate' } });
     assert.deepEqual(frame(p.q('elevation', '[data-canada-natural-fallback]')), elevationFull, 'climate camera operations do not move elevation');
     p.q('climate', '[data-canada-natural-stage]').dispatchEvent(wheelEvent(p.w, -40));
     p.q('climate', '[data-canada-natural-reset]').click(); const resetCount = p.events.length;
-    await new Promise(resolve => setTimeout(resolve, 150)); assert.equal(p.events.length, resetCount, 'reset cancels a pending wheel camera commit');
+    await new Promise(resolve => setTimeout(resolve, 150)); assert.equal(p.events.length, resetCount+1, 'selection clear preserves the pending wheel camera save');
     assert.equal(p.host('climate').dataset.canadaNaturalRender, 'svg');
   } finally { await p.close(); }
 });

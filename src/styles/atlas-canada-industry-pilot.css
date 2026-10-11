@@ -3,13 +3,16 @@
 .canada-industry-pilot .atlas-map-column{position:static}
 .canada-industry-pilot .ca-province{pointer-events:none}
 .canada-industry-pilot .atlas-map-frame{aspect-ratio:1.85}
-.ca-pilot-map-key{position:absolute;left:8px;right:90px;top:8px;padding:7px 9px;background:#fffef7ec;border:1px solid #c9d1c6;border-radius:5px;font-family:var(--sans)}
+.ca-pilot-map-key{position:absolute;left:8px;right:8px;top:8px;padding:7px 9px;background:#fffef7ec;border:1px solid #c9d1c6;border-radius:5px;font-family:var(--sans)}
 .ca-pilot-map-key>div{display:flex;flex-wrap:wrap;gap:3px 12px}
 .ca-pilot-map-key button{border:0;background:transparent;padding:2px;min-height:28px;display:flex;align-items:center;gap:5px;color:#2c443a;font:600 13px/1.4 var(--sans);cursor:pointer}
 .ca-pilot-map-key i,.ca-pilot-map-label i{display:inline-block;width:9px;height:9px;flex-shrink:0;background:var(--pilot-color);border-radius:50%}
 .ca-pilot-map-key button[aria-pressed=true]{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
 .ca-pilot-connectors{position:absolute;inset:0;overflow:visible;pointer-events:none}
-.ca-pilot-map-label{position:absolute;pointer-events:auto;width:154px;box-sizing:border-box;background:#fffef7f2;border:1px solid #b6c6bb;border-radius:4px;box-shadow:0 1px 3px #25473515;padding:4px 6px;font-family:var(--sans)}
+.ca-pilot-connectors [data-ca-marker]{pointer-events:auto;cursor:pointer}
+.ca-pilot-map-label{position:absolute;pointer-events:auto;width:max-content;max-width:136px;box-sizing:border-box;background:#fffef7ee;border:1px solid #b6c6bb;border-radius:3px;padding:3px 5px;color:#29453b;text-align:left;cursor:pointer;font-family:var(--sans)}
+.ca-pilot-map-label>strong{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:700;white-space:nowrap;line-height:1.4}
+.ca-pilot-map-label.is-highlighted{border-color:var(--pilot-color);box-shadow:inset 0 -2px var(--pilot-color)}
 .ca-pilot-map-label>small{display:block;color:#53655c;font-size:11px;line-height:1.35}
 .ca-pilot-map-label button{display:block;width:100%;padding:2px 0;border:0;background:transparent;color:#29453b;text-align:left;font-family:var(--sans);cursor:pointer;line-height:1.3;min-height:26px}
 .ca-pilot-map-label button strong{display:flex;align-items:center;gap:5px;font-size:13px;font-weight:700}
@@ -63,16 +66,17 @@
 }
 @media(min-width:1600px){
  .atlas-desktop-shell:has(.canada-industry-pilot){grid-template-columns:280px minmax(0,1fr)}
- .ca-pilot-map-label{width:162px}
+ .ca-pilot-map-label{max-width:136px}
  .ca-pilot-map-label button strong{font-size:14px}
  .ca-pilot-reading p{font-size:16px}
 }
 @media(min-width:1200px) and (max-width:1599px){
  .atlas-desktop-shell:not(.is-reading-news) .canada-industry-pilot[data-field] .atlas-primary-grid{grid-template-columns:minmax(0,1.9fr) minmax(320px,1fr)}
- .atlas-desktop-shell .canada-industry-pilot[data-field] .atlas-map-frame{min-height:760px}
- .ca-pilot-map-label{width:136px;padding:3px 5px}
+ .atlas-desktop-shell .canada-industry-pilot[data-field] .atlas-map-frame{min-height:470px}
+ .ca-pilot-map-label{max-width:126px;padding:3px 5px}
  .ca-pilot-map-label button strong{font-size:12px}
  .ca-pilot-map-label>small,.ca-pilot-map-label button span{font-size:10px}
+ .ca-pilot-map-label>small{display:none}
  .ca-pilot-map-key button{font-size:12px;min-height:25px}
 }
 

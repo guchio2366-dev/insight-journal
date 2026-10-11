@@ -1,3 +1,4 @@
+import {canadaSouthernFrame} from '../lib/atlas-canada-map-presentation';
 import {createCanadaElevationRaster,type CanadaElevationRasterConfig} from './atlas-canada-elevation-raster';
 import type { Map as LibreMap } from 'maplibre-gl';
 import {
@@ -29,10 +30,16 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
   const live = root.querySelector<HTMLElement>('[data-canada-natural-live]')!;
   const status = root.querySelector<HTMLElement>('[data-canada-natural-status]')!;
   const onlyControl = root.querySelector<HTMLInputElement>('[data-canada-natural-only]')!;
-  const focusButton = root.querySelector<HTMLButtonElement>('[data-canada-natural-focus]')!;
+  const focusButton = root.querySelector<HTMLButtonElement>('[data-canada-natural-focus]');
   const labels = [...root.querySelectorAll<HTMLButtonElement>('[data-canada-natural-city]')];
   const contourLabels = [...root.querySelectorAll<HTMLElement>('[data-canada-natural-contour-label]')];
-  const fullFrame: Frame = [0, 0, canadaNaturalSize.width, canadaNaturalSize.height];
+  let fullFrame = canadaSouthernFrame() as Frame;
+  const southernFrame = () => canadaSouthernFrame(stage.clientWidth && stage.clientHeight ? stage.clientWidth / stage.clientHeight : 1.85) as Frame;
+  function southernMapBounds(): [[number, number], [number, number]] {
+    const [west, north] = unprojectCanadaNatural([fullFrame[0], fullFrame[1]]);
+    const [east, south] = unprojectCanadaNatural([fullFrame[0]+fullFrame[2], fullFrame[1]+fullFrame[3]]);
+    return [[west, south], [east, north]];
+  }
   const national=(config.context as CanadaNaturalCollection).features.find(feature=>feature.properties.code==='CAN');
   const nationalPoints=national?canadaNaturalParts(national.geometry).flat():[canadaNaturalBounds[0],canadaNaturalBounds[1]];
   const wholeBounds:CanadaNaturalCameraBounds=[Math.min(...nationalPoints.map(p=>p[0])),Math.min(...nationalPoints.map(p=>p[1])),Math.max(...nationalPoints.map(p=>p[0])),Math.max(...nationalPoints.map(p=>p[1]))];
@@ -129,7 +136,7 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
     if (!width || !height) return;
     const ratio = Math.min(width / frame[2], height / frame[3]);
     const left = (width - frame[2] * ratio) / 2, top = (height - frame[3] * ratio) / 2;
-    const occupied: number[][] = [[width - 60, 0, width, 230]];
+    const occupied: number[][] = [];
     const positions = new Map(config.stations.map(station => {
       const projected = ready && map ? map.project(station.coordinates as [number, number]) : null, point = projectCanadaNatural(station.coordinates);
       return [station.id, [projected?.x ?? (point[0] - frame[0]) * ratio + left, projected?.y ?? (point[1] - frame[1]) * ratio + top]];
@@ -147,7 +154,7 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
       // The circle remains at the real observation coordinate at every scale.
       label.hidden = x < 3 || y < 3 || x > width - 3 || y > height - 3;
       const collisionBoxes = [...occupied, ...markerBoxes.filter(marker => marker.id !== station.id).map(marker => marker.box)];
-      const candidates = station.id===state.city ? [[x+8,y],[x+8,y-28],[x+8,y+28],[x+8,y-50],[x+8,y+50],[x-w-8,y-28],[x-w-8,y+28]] : [[x+8,y]];
+      const candidates = [[x+8,y],[x-w-8,y],[x+8,y-28],[x+8,y+28],[x+8,y-50],[x+8,y+50],[x-w-8,y-28],[x-w-8,y+28]];
       const available = ([left,centerY]:number[]) => {
         const box=[left,centerY-h/2,left+w,centerY+h/2];
         return box[0]>=3 && box[1]>=3 && box[2]<=width-3 && box[3]<=height-3 && !collisionBoxes.some(([x1,y1,x2,y2]) => box[0]<x2+3 && box[2]>x1-3 && box[1]<y2+3 && box[3]>y1-3);
@@ -211,7 +218,7 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
       element.classList.toggle('is-selected', id === state.city);
       element.setAttribute('aria-pressed', String(id === state.city));
     }
-    onlyControl.checked = state.only; onlyControl.disabled = !state.selected||!!config.lazyGeometry&&!geometry; focusButton.disabled = !state.selected||!!config.lazyGeometry&&!geometry;
+    onlyControl.checked = state.only; onlyControl.disabled = !state.selected||!!config.lazyGeometry&&!geometry; if(focusButton)focusButton.disabled = !state.selected||!!config.lazyGeometry&&!geometry;
     if (map && ready && !raster) {
       const selected = ['==', ['get', 'id'], state.selected ?? '__none__'] as any;
       const all = ['has', 'id'];
@@ -246,8 +253,8 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
 
   function fit() {
     clearTimeout(wheelTimer);
-    fitted = true; frame = clampFrame([...fullFrame]); cameraKey = 'fit'; cameraCommitPending = false;
-    if (ready && map) { programmaticCamera = true; map.fitBounds(canadaNaturalBounds, { padding: 0, duration: 0 }); syncMapFrame(); programmaticCamera = false; }
+    fullFrame = southernFrame(); fitted = true; frame = clampFrame([...fullFrame]); cameraKey = 'fit'; cameraCommitPending = false;
+    if (ready && map) { programmaticCamera = true; map.fitBounds(southernMapBounds(), { padding: 0, duration: 0 }); syncMapFrame(); programmaticCamera = false; }
     draw();
   }
   function zoom(direction: 'in' | 'out') {
@@ -321,7 +328,7 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
           { id: 'canada-natural-lines', type: 'line', source: 'canada-natural-groups', filter: ['==', ['geometry-type'], 'LineString'], paint: { 'line-color': ['get', 'color'], 'line-width': ['case',['==',['get','elevation_m'],500],.7,1.8], 'line-opacity': ['case',['==',['get','elevation_m'],500],.45,.9] } },
           { id: 'canada-natural-lines-hit', type: 'line', source: 'canada-natural-groups', filter: ['==', ['geometry-type'], 'LineString'], paint: { 'line-color': '#fff', 'line-width': 9, 'line-opacity': 0 } },
           { id: 'canada-natural-selected', type: 'line', source: 'canada-natural-groups', filter: config.lazyGeometry?['==',['geometry-type'],'Polygon']:['==', ['get', 'id'], '__none__'], paint: { 'line-color': ['case', ['==', ['geometry-type'], 'LineString'], ['get', 'color'], '#243f4c'], 'line-width': 3, 'line-opacity':config.lazyGeometry?['case',['boolean',['feature-state','selected'],false],1,0]:1 } }]),
-        ] } as any, bounds: canadaNaturalBounds, fitBoundsOptions: { padding: 0 },
+        ] } as any, bounds: southernMapBounds(), fitBoundsOptions: { padding: 0 },
         minZoom: .5, maxZoom: 9, attributionControl: false, renderWorldCopies: false, scrollZoom: false,
         cooperativeGestures: true, locale: { 'CooperativeGesturesHandler.MobileHelpText': '地図は2本指で動かせます' },
         dragRotate: false, pitchWithRotate: false, touchPitch: false, maxPitch: 0, fadeDuration: 0,
@@ -373,11 +380,11 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
     if (key === 'Enter' || key === ' ') { event.preventDefault(); emit('canada-natural-city', { id: city.dataset.canadaNaturalStaticCity }); }
   });
   listen(onlyControl, 'change', () => emit('canada-natural-only', { only: onlyControl.checked }));
-  listen(root.querySelector('[data-canada-natural-reset]')!, 'click', () => { fit(); emit('canada-natural-reset', {}); });
+  listen(root.querySelector('[data-canada-natural-reset]')!, 'click', () => { emit('canada-natural-reset', {}); });
   const wholeButton=root.querySelector('[data-canada-natural-whole]');if(wholeButton)listen(wholeButton,'click',()=>{restoreCamera(wholeBounds);commitCamera();});
   const retry=root.querySelector('[data-canada-natural-retry]');if(retry)listen(retry,'click',()=>{started=false;void start();});
   for (const button of root.querySelectorAll<HTMLButtonElement>('[data-canada-natural-zoom]')) listen(button, 'click', () => zoom(button.dataset.canadaNaturalZoom as 'in' | 'out'));
-  listen(focusButton, 'click', focusSelected);
+  if(focusButton)listen(focusButton, 'click', focusSelected);
   listen(stage, 'wheel', event => {
     const wheel = event as WheelEvent;
     event.preventDefault();
@@ -431,16 +438,16 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
   });
   const resize = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(() => {
     if (ready && map && stage.clientWidth && stage.clientHeight) { map.resize(); if (fitted) fit(); else drawLabels(); }
-    else { drawLabels(); void start(); }
+    else { if (fitted && !root.hidden) fit(); else drawLabels(); void start(); }
   });
   resize?.observe(stage);
-  const visibility = typeof MutationObserver === 'undefined' ? undefined : new MutationObserver(() => { if (!root.hidden) { map?.resize(); if (ready && fitted) fit(); else draw(); void start(); } });
+  const visibility = typeof MutationObserver === 'undefined' ? undefined : new MutationObserver(() => { if (!root.hidden) { map?.resize(); if (fitted) fit(); else draw(); void start(); } });
   visibility?.observe(root, { attributes: true, attributeFilter: ['hidden'] });
   root.querySelector('[data-canada-natural-static-stations]')?.setAttribute('hidden', '');
   root.querySelector('[data-canada-natural-static-contours]')?.setAttribute('hidden', '');
-  draw(); if (!options.deferStart) void start();
+  if (!root.hidden) fit(); else draw(); if (!options.deferStart) void start();
   return {
-    render(next) { const selected = config.groups.some(group => group.id === next.selected) ? next.selected : null; state = { selected, only: !!next.only && !!selected, city: next.city ?? state.city ?? null }; if ('bounds' in next) restoreCamera(next.bounds ?? null); draw(); if (!root.hidden) { if(!raster){map?.resize(); if (ready && fitted) fit();} void start(); } },
+    render(next) { const selected = config.groups.some(group => group.id === next.selected) ? next.selected : null; state = { selected, only: !!next.only && !!selected, city: next.city ?? state.city ?? null }; if ('bounds' in next) restoreCamera(next.bounds ?? null); draw(); if (!root.hidden) { if(!raster){map?.resize(); if (fitted) fit();} void start(); } },
     reset: fit, zoom, focusSelected,
     destroy() { destroyed = true; abort.abort();raster?.destroy(); clearTimeout(loadTimer); clearTimeout(wheelTimer); resize?.disconnect(); visibility?.disconnect(); map?.remove(); map = undefined; },
   };

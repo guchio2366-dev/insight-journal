@@ -1,6 +1,7 @@
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import sharp from 'sharp';
+import {writeCanadaStLawrenceDisplay} from './prepare-canada-st-lawrence.mjs';
 const input='data-source/atlas/canada',output='src/data/atlas/canada';
 await mkdir(output,{recursive:true});
 await mkdir('public/assets/atlas/canada-nature-v1',{recursive:true});
@@ -27,6 +28,7 @@ const image=await readFile(`${input}/physiographic-regions.jpg`);
 const thumbnail=await sharp(image).resize({width:1600,withoutEnlargement:true}).jpeg({quality:88}).toBuffer();
 await writeFile('public/assets/atlas/canada-nature-v1/physiographic-regions.jpg',thumbnail);
 await writeFile('public/assets/atlas/canada-nature-v1/physiographic-regions-full.jpg',image);
-const manifest={retrievedAt:'2026-09-30',climate:{publisher:source.publisher,period:'1991–2020',count:stations.length,sourceExtractSha256:sha(await readFile(`${input}/climate-source-extract.json`)),terms:'https://www.canada.ca/en/transparency/terms.html',method:'Extract published numeric facts. Missing or annotated cells stay null; no inferred replacement. 30-year composite values, not current weather or national averages.'},waters:assets,physiography:{publisher:'Natural Resources Canada',title:'Atlas of Canada 6th Edition: Physiographic Regions',edition:2009,baseGeologyYear:1967,source:'https://open.canada.ca/data/en/dataset/dcdd5e21-8893-11e0-8ea0-6cf049291510',download:'https://ftp.geogratis.gc.ca/pub/nrcan_rncan/raster/atlas_6_ed/eng/6422_physiographic_regions.zip',license:'Open Government Licence – Canada',licenseUrl:'https://open.canada.ca/en/open-government-licence-canada',inputSha256:sha(image),thumbnailSha256:sha(thumbnail),method:'Official historical map, unchanged layout; JPEG resized for display. Its Lambert projection is not overlaid onto the separate locator map.'}};
+const manifest={retrievedAt:source.stations.map(station=>station.retrievedAt).sort().at(-1),climate:{publisher:source.publisher,period:'1991–2020',count:stations.length,sourceExtractSha256:sha(await readFile(`${input}/climate-source-extract.json`)),terms:'https://www.canada.ca/en/transparency/terms.html',method:'Extract published numeric facts. Missing or annotated cells stay null; no inferred replacement. 30-year composite values, not current weather or national averages.'},waters:assets,physiography:{publisher:'Natural Resources Canada',title:'Atlas of Canada 6th Edition: Physiographic Regions',edition:2009,baseGeologyYear:1967,source:'https://open.canada.ca/data/en/dataset/dcdd5e21-8893-11e0-8ea0-6cf049291510',download:'https://ftp.geogratis.gc.ca/pub/nrcan_rncan/raster/atlas_6_ed/eng/6422_physiographic_regions.zip',license:'Open Government Licence – Canada',licenseUrl:'https://open.canada.ca/en/open-government-licence-canada',inputSha256:sha(image),thumbnailSha256:sha(thumbnail),method:'Official historical map, unchanged layout; JPEG resized for display. Its Lambert projection is not overlaid onto the separate locator map.'}};
 await writeFile('public/assets/atlas/canada-nature-v1/manifest.json',JSON.stringify(manifest,null,2)+'\n');
+await writeCanadaStLawrenceDisplay();
 console.log(`Canada: ${stations.length} climate composites; ${assets.map(a=>`${a.count} ${a.file}`).join(', ')}`);

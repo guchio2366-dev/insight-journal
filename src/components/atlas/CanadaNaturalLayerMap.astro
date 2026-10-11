@@ -1,4 +1,5 @@
 ---
+import {canadaSouthernFrame} from '../../lib/atlas-canada-map-presentation';
 import climateLabels from '../../data/atlas/canada/climate-labels.json';
 import {canadaElevationColors} from '../../lib/atlas-canada-natural-presentation';
 import {climateFamilies} from '../../data/atlas/natural-environment';
@@ -26,7 +27,7 @@ const staticContourLabels = [...contourLabels].sort((a,b) => Number(b.id===selec
   if (box[0]<3 || box[1]<3 || box[2]>canadaLandformSize.width-3 || box[3]>canadaLandformSize.height-3 || labelBoxes.some(([x1,y1,x2,y2]) => box[0]<x2+5 && box[2]>x1-5 && box[1]<y2+5 && box[3]>y1-5)) return false;
   labelBoxes.push(box); return true;
 });
-const fullFrame = `0 0 ${canadaLandformSize.width} ${canadaLandformSize.height}`;
+const fullFrame = canadaSouthernFrame().join(' ');
 const heading = layer === 'climate' ? 'カナダの気候区分' : 'カナダの標高';
 const titleId = `canada-natural-${layer}-title`, descId = `canada-natural-${layer}-desc`;
 const paths = groups.map(group => ({ group, fill: lazyGeometry?'':geometry.features.filter(feature => feature.properties.id === group.id && !canadaNaturalIsLine(feature.geometry)).map(feature => canadaNaturalPath(feature.geometry)).join(''), line: geometry.features.filter(feature => feature.properties.id === group.id && canadaNaturalIsLine(feature.geometry)).map(feature => canadaNaturalPath(feature.geometry)).join('') }));
@@ -37,7 +38,7 @@ const elevationBands=!!raster||layer==='elevation'&&geometry.features.some(featu
   <div class="atlas-map-frame canada-natural-frame" data-canada-natural-stage>
     <svg class="canada-natural-fallback" data-canada-natural-fallback viewBox={fullFrame} width={canadaLandformSize.width} height={canadaLandformSize.height} role="group" tabindex="0" aria-labelledby={`${titleId} ${descId}`}>
       <title id={titleId}>{heading}</title>
-      <desc id={descId}>{layer === 'climate' ? '気候区分を原データの境界で色分けします。丸印は別の気候平年値観測地点です。' : elevationBands?'元標高格子から作った500 m間隔の色面。高い場所ほど濃い緑で表示し、0 m未満は灰色で分けます。':'標高区分と原データから作成した等高線を表示します。線の凡例を選ぶとその標高を確認できます。'} 地図か凡例で区分を選択し、拡大ボタンと矢印キーで移動できます。</desc>
+      <desc id={descId}>{layer === 'climate' ? '気候区分を原データの境界で色分けします。丸印は別の気候平年値観測地点です。' : elevationBands?'元標高格子から作った500 m間隔の色面。高い場所ほど濃い緑で表示し、0 m未満は灰色で分けます。':'標高区分と原データから作成した等高線を表示します。線の凡例を選ぶとその標高を確認できます。'} 地図か凡例で区分を選択し、ホイールやドラッグ、矢印キーで表示範囲を変えられます。</desc>
       <rect x="-2000" y="-2000" width="5000" height="5000" fill="#e4eff0" />
       <defs data-canada-natural-definitions>{paths.filter(item => item.line).map(({group,line}) => <path id={`canada-natural-${layer}-line-${group.id}`} data-canada-natural-geometry={group.id} d={line} vector-effect="non-scaling-stroke" />)}</defs>
       <g aria-hidden="true">{context.features.map(feature => <path class="canada-natural-context" d={canadaNaturalPath(feature.geometry as CanadaNaturalGeometry)} fill-rule="evenodd" vector-effect="non-scaling-stroke" />)}</g>
@@ -55,11 +56,7 @@ const elevationBands=!!raster||layer==='elevation'&&geometry.features.some(featu
     {layer==='climate'&&<div class="canada-climate-codes">{climateLabels.map((label,i)=><button type="button" data-canada-climate-code={i} data-canada-natural-legend={label.id} aria-label={`${label.id}の気候区分を読む`} hidden>{label.id}</button>)}</div>}
     <div class="canada-natural-stations" data-canada-natural-stations>{stations.map(station => <button type="button" class:list={['canada-natural-station', {'is-selected':city===station.id}]} data-canada-natural-city={station.id} aria-label={`${station.name}の気候平年値を読む`} aria-pressed={String(city===station.id)} hidden><i aria-hidden="true"></i><span>{station.name}</span></button>)}</div>
     <div class="canada-natural-tools" aria-label="地図の操作">
-      <button type="button" data-canada-natural-reset aria-label="カナダ南部を中心に表示">南部</button>
-      <button type="button" data-canada-natural-whole aria-label="北極圏を含むカナダ全域を表示">全域</button>
-      <button type="button" data-canada-natural-zoom="in" aria-label="地図を拡大">＋</button>
-      <button type="button" data-canada-natural-zoom="out" aria-label="地図を縮小">−</button>
-      <button type="button" data-canada-natural-focus aria-label="選んだ区分へ移動" disabled={!selected}>選択へ</button>
+      <button type="button" data-canada-natural-reset>選択を解除</button>
     </div>
   </div>
   {layer==='climate'&&<div class="canada-climate-family-key">{climateFamilies.map(item=><span>{item.id} {item.label}</span>)}<span>⊙ 雨温図の都市</span></div>}

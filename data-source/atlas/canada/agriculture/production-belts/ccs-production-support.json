@@ -1,0 +1,2572 @@
+{
+  "accessedAt": "2026-10-11",
+  "method": "Audit support only: published original CCS cells whose display anchor is inside each editorial belt. No sum, new quantity, reassignment or implied farm coordinates. Source polygons and all original cells remain untouched.",
+  "sourceDataSha256": "2f08e84077fbb6505271f28958463b1f4b17626d75c1b5c172bbb067fd089bde",
+  "sourceGeometrySha256": "8af9e387fe7087e3692ce07942b9cff96bd8c229a6bb753f5d4cd20b7af447a9",
+  "editorialBeltsSha256": "8066217e504c634ced5866c589c8b22bf8f553935711120f2c0762521ec42d63",
+  "belts": [
+    {
+      "id": "canola-prairie",
+      "product": "canola",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 372,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05024810036",
+          "name": "Vermilion River County",
+          "sourceCell": {
+            "value": 118846,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "canola",
+                "variable": "Canola (rapeseed)",
+                "value": 118846,
+                "quality": "A",
+                "vector": "v1326145901",
+                "coordinate": "1887.15.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -110.44878545932777,
+            53.37638789681109
+          ]
+        },
+        {
+          "dguid": "2021S05024805012",
+          "name": "Wheatland County",
+          "sourceCell": {
+            "value": 105212,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "canola",
+                "variable": "Canola (rapeseed)",
+                "value": 105212,
+                "quality": "A",
+                "vector": "v1326142769",
+                "coordinate": "1858.15.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -112.97564143541342,
+            51.10717600814425
+          ]
+        },
+        {
+          "dguid": "2021S05024807031",
+          "name": "Flagstaff County",
+          "sourceCell": {
+            "value": 96037,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "canola",
+                "variable": "Canola (rapeseed)",
+                "value": 96037,
+                "quality": "A",
+                "vector": "v1326145145",
+                "coordinate": "1880.15.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -111.81808160904717,
+            52.68878369304918
+          ]
+        }
+      ]
+    },
+    {
+      "id": "canola-peace",
+      "product": "canola",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 7,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05024819049",
+          "name": "Birch Hills County",
+          "sourceCell": {
+            "value": 50767,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "canola",
+                "variable": "Canola (rapeseed)",
+                "value": 50767,
+                "quality": "A",
+                "vector": "v1326151193",
+                "coordinate": "1936.15.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -118.03937604215804,
+            55.755607290542805
+          ]
+        },
+        {
+          "dguid": "2021S05024819066",
+          "name": "Fairview No. 136",
+          "sourceCell": {
+            "value": 37702,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "canola",
+                "variable": "Canola (rapeseed)",
+                "value": 37702,
+                "quality": "A",
+                "vector": "v1326151517",
+                "coordinate": "1939.15.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -118.42047253809625,
+            56.03961114706585
+          ]
+        },
+        {
+          "dguid": "2021S05024819059",
+          "name": "Saddle Hills County",
+          "sourceCell": {
+            "value": 34181,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "canola",
+                "variable": "Canola (rapeseed)",
+                "value": 34181,
+                "quality": "A",
+                "vector": "v1326151409",
+                "coordinate": "1938.15.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -119.39081543312115,
+            55.848321028967085
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wheat-prairie",
+      "product": "wheat",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 405,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05024801008",
+          "name": "Forty Mile County No. 8",
+          "sourceCell": {
+            "value": 159650,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "wheat",
+                "variable": "Wheat, total",
+                "value": 159650,
+                "quality": "A",
+                "vector": "v1326141326",
+                "coordinate": "1845.2.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -111.16050714789897,
+            49.4824480616729
+          ]
+        },
+        {
+          "dguid": "2021S05024805001",
+          "name": "Vulcan County",
+          "sourceCell": {
+            "value": 136256,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "wheat",
+                "variable": "Wheat, total",
+                "value": 136256,
+                "quality": "A",
+                "vector": "v1326142622",
+                "coordinate": "1857.2.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -112.96705982284014,
+            50.478597304190394
+          ]
+        },
+        {
+          "dguid": "2021S05024805012",
+          "name": "Wheatland County",
+          "sourceCell": {
+            "value": 130863,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "wheat",
+                "variable": "Wheat, total",
+                "value": 130863,
+                "quality": "A",
+                "vector": "v1326142730",
+                "coordinate": "1858.2.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -112.97564143541342,
+            51.10717600814425
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wheat-ontario",
+      "product": "wheat",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 69,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05023536020",
+          "name": "Chatham-Kent",
+          "sourceCell": {
+            "value": 41087,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "wheat",
+                "variable": "Wheat, total",
+                "value": 41087,
+                "quality": "A",
+                "vector": "v1326059138",
+                "coordinate": "1084.2.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -82.13233297159772,
+            42.422425228858046
+          ]
+        },
+        {
+          "dguid": "2021S05023538003",
+          "name": "St. Clair",
+          "sourceCell": {
+            "value": 11489,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "wheat",
+                "variable": "Wheat, total",
+                "value": 11489,
+                "quality": "A",
+                "vector": "v1326060326",
+                "coordinate": "1095.2.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -82.39912565835303,
+            42.715149706197565
+          ]
+        },
+        {
+          "dguid": "2021S05023523033",
+          "name": "Mapleton",
+          "sourceCell": {
+            "value": 11213,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "wheat",
+                "variable": "Wheat, total",
+                "value": 11213,
+                "quality": "A",
+                "vector": "v1326063890",
+                "coordinate": "1128.2.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -80.66768192041162,
+            43.736309555735886
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lentils-saskatchewan",
+      "product": "lentils",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 124,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05024713006",
+          "name": "Kindersley No. 290",
+          "sourceCell": {
+            "value": 45532,
+            "quality": "B",
+            "status": "published",
+            "components": [
+              {
+                "id": "lentils",
+                "variable": "Lentils",
+                "value": 45532,
+                "quality": "B",
+                "vector": "v1326131012",
+                "coordinate": "1749.20.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -109.09832194985745,
+            51.48919640945583
+          ]
+        },
+        {
+          "dguid": "2021S05024708001",
+          "name": "Swift Current No. 137",
+          "sourceCell": {
+            "value": 32844,
+            "quality": "B",
+            "status": "published",
+            "components": [
+              {
+                "id": "lentils",
+                "variable": "Lentils",
+                "value": 32844,
+                "quality": "B",
+                "vector": "v1326124856",
+                "coordinate": "1692.20.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -107.8539983507967,
+            50.222789640326226
+          ]
+        },
+        {
+          "dguid": "2021S05024708074",
+          "name": "Snipe Lake No. 259",
+          "sourceCell": {
+            "value": 30515,
+            "quality": "B",
+            "status": "published",
+            "components": [
+              {
+                "id": "lentils",
+                "variable": "Lentils",
+                "value": 30515,
+                "quality": "B",
+                "vector": "v1326126584",
+                "coordinate": "1708.20.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -108.66754164942833,
+            51.17116003946898
+          ]
+        }
+      ]
+    },
+    {
+      "id": "corn-ontario",
+      "product": "corn",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 81,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05023536020",
+          "name": "Chatham-Kent",
+          "sourceCell": {
+            "value": 78787,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "corn",
+                "variable": "Corn, total",
+                "value": 78787,
+                "quality": "A",
+                "vector": "v1326059159",
+                "coordinate": "1084.9.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -82.13233297159772,
+            42.422425228858046
+          ]
+        },
+        {
+          "dguid": "2021S05023528052",
+          "name": "Norfolk County",
+          "sourceCell": {
+            "value": 20983,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "corn",
+                "variable": "Corn, total",
+                "value": 20983,
+                "quality": "A",
+                "vector": "v1326057323",
+                "coordinate": "1067.9.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -80.43464317759563,
+            42.79042611561057
+          ]
+        },
+        {
+          "dguid": "2021S05023539033",
+          "name": "Middlesex Centre",
+          "sourceCell": {
+            "value": 19584,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "corn",
+                "variable": "Corn, total",
+                "value": 19584,
+                "quality": "A",
+                "vector": "v1326061643",
+                "coordinate": "1107.9.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -81.38197242068175,
+            43.03991970551938
+          ]
+        }
+      ]
+    },
+    {
+      "id": "corn-st-lawrence",
+      "product": "corn",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 267,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05023501030",
+          "name": "North Dundas",
+          "sourceCell": {
+            "value": 15307,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "corn",
+                "variable": "Corn, total",
+                "value": 15307,
+                "quality": "A",
+                "vector": "v1326078491",
+                "coordinate": "1263.9.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -75.37470115343264,
+            45.08681426054646
+          ]
+        },
+        {
+          "dguid": "2021S05023502025",
+          "name": "The Nation / La Nation",
+          "sourceCell": {
+            "value": 13535,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "corn",
+                "variable": "Corn, total",
+                "value": 13535,
+                "quality": "A",
+                "vector": "v1326079247",
+                "coordinate": "1270.9.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -74.98779425401477,
+            45.385551893916336
+          ]
+        },
+        {
+          "dguid": "2021S05023501042",
+          "name": "North Stormont",
+          "sourceCell": {
+            "value": 11999,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "corn",
+                "variable": "Corn, total",
+                "value": 11999,
+                "quality": "A",
+                "vector": "v1326078599",
+                "coordinate": "1264.9.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -75.01359662060938,
+            45.20419559738867
+          ]
+        }
+      ]
+    },
+    {
+      "id": "corn-manitoba",
+      "product": "corn",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 29,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05024603041",
+          "name": "Rhineland",
+          "sourceCell": {
+            "value": 19120,
+            "quality": "B",
+            "status": "published",
+            "components": [
+              {
+                "id": "corn",
+                "variable": "Corn, total",
+                "value": 19120,
+                "quality": "B",
+                "vector": "v1326099011",
+                "coordinate": "1453.9.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -97.63520605887847,
+            49.124723645961154
+          ]
+        },
+        {
+          "dguid": "2021S05024603072",
+          "name": "Dufferin",
+          "sourceCell": {
+            "value": 14612,
+            "quality": "B",
+            "status": "published",
+            "components": [
+              {
+                "id": "corn",
+                "variable": "Corn, total",
+                "value": 14612,
+                "quality": "B",
+                "vector": "v1326099551",
+                "coordinate": "1458.9.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -98.05771633489496,
+            49.53579828556316
+          ]
+        },
+        {
+          "dguid": "2021S05024602041",
+          "name": "Hanover",
+          "sourceCell": {
+            "value": 13440,
+            "quality": "B",
+            "status": "published",
+            "components": [
+              {
+                "id": "corn",
+                "variable": "Corn, total",
+                "value": 13440,
+                "quality": "B",
+                "vector": "v1326100739",
+                "coordinate": "1469.9.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -96.79914551648221,
+            49.47722491110095
+          ]
+        }
+      ]
+    },
+    {
+      "id": "soybeans-ontario",
+      "product": "soybeans",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 77,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05023536020",
+          "name": "Chatham-Kent",
+          "sourceCell": {
+            "value": 102816,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "soybeans",
+                "variable": "Soybeans",
+                "value": 102816,
+                "quality": "A",
+                "vector": "v1326059180",
+                "coordinate": "1084.16.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -82.13233297159772,
+            42.422425228858046
+          ]
+        },
+        {
+          "dguid": "2021S05023537064",
+          "name": "Lakeshore",
+          "sourceCell": {
+            "value": 26444,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "soybeans",
+                "variable": "Soybeans",
+                "value": 26444,
+                "quality": "A",
+                "vector": "v1326060152",
+                "coordinate": "1093.16.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -82.653231591334,
+            42.24237255224726
+          ]
+        },
+        {
+          "dguid": "2021S05023528052",
+          "name": "Norfolk County",
+          "sourceCell": {
+            "value": 20845,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "soybeans",
+                "variable": "Soybeans",
+                "value": 20845,
+                "quality": "A",
+                "vector": "v1326057344",
+                "coordinate": "1067.16.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -80.43464317759563,
+            42.79042611561057
+          ]
+        }
+      ]
+    },
+    {
+      "id": "soybeans-st-lawrence",
+      "product": "soybeans",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 189,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05023506008",
+          "name": "Ottawa",
+          "sourceCell": {
+            "value": 28144,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "soybeans",
+                "variable": "Soybeans",
+                "value": 28144,
+                "quality": "A",
+                "vector": "v1326079700",
+                "coordinate": "1274.16.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -75.77609253572379,
+            45.293391811780594
+          ]
+        },
+        {
+          "dguid": "2021S05023501030",
+          "name": "North Dundas",
+          "sourceCell": {
+            "value": 14428,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "soybeans",
+                "variable": "Soybeans",
+                "value": 14428,
+                "quality": "A",
+                "vector": "v1326078512",
+                "coordinate": "1263.16.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -75.37470115343264,
+            45.08681426054646
+          ]
+        },
+        {
+          "dguid": "2021S05023502025",
+          "name": "The Nation / La Nation",
+          "sourceCell": {
+            "value": 13135,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "soybeans",
+                "variable": "Soybeans",
+                "value": 13135,
+                "quality": "A",
+                "vector": "v1326079268",
+                "coordinate": "1270.16.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -74.98779425401477,
+            45.385551893916336
+          ]
+        }
+      ]
+    },
+    {
+      "id": "soybeans-manitoba",
+      "product": "soybeans",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 39,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05024610035",
+          "name": "Macdonald",
+          "sourceCell": {
+            "value": 26381,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "soybeans",
+                "variable": "Soybeans",
+                "value": 26381,
+                "quality": "A",
+                "vector": "v1326098384",
+                "coordinate": "1447.16.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -97.46181541569132,
+            49.668385269138255
+          ]
+        },
+        {
+          "dguid": "2021S05024609024",
+          "name": "Portage la Prairie",
+          "sourceCell": {
+            "value": 23041,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "soybeans",
+                "variable": "Soybeans",
+                "value": 23041,
+                "quality": "A",
+                "vector": "v1326098168",
+                "coordinate": "1445.16.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -98.23161170873493,
+            49.99919263696144
+          ]
+        },
+        {
+          "dguid": "2021S05024603065",
+          "name": "Morris",
+          "sourceCell": {
+            "value": 16873,
+            "quality": "B",
+            "status": "published",
+            "components": [
+              {
+                "id": "soybeans",
+                "variable": "Soybeans",
+                "value": 16873,
+                "quality": "B",
+                "vector": "v1326099464",
+                "coordinate": "1457.16.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -97.47960462839401,
+            49.40994878899528
+          ]
+        }
+      ]
+    },
+    {
+      "id": "potatoes-alberta",
+      "product": "potatoes",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 4,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05024802021",
+          "name": "Taber",
+          "sourceCell": {
+            "value": 15932,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "potatoes",
+                "variable": "Potatoes",
+                "value": 15932,
+                "quality": "A",
+                "vector": "v1326142373",
+                "coordinate": "1854.27.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -112.06635702073048,
+            49.92521609471374
+          ]
+        },
+        {
+          "dguid": "2021S05024802011",
+          "name": "Lethbridge County",
+          "sourceCell": {
+            "value": 3754,
+            "quality": "E",
+            "status": "published",
+            "components": [
+              {
+                "id": "potatoes",
+                "variable": "Potatoes",
+                "value": 3754,
+                "quality": "E",
+                "vector": "v1326142265",
+                "coordinate": "1853.27.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -112.7687720409535,
+            49.844866997365266
+          ]
+        },
+        {
+          "dguid": "2021S05024801008",
+          "name": "Forty Mile County No. 8",
+          "sourceCell": {
+            "value": 3371,
+            "quality": "D",
+            "status": "published",
+            "components": [
+              {
+                "id": "potatoes",
+                "variable": "Potatoes",
+                "value": 3371,
+                "quality": "D",
+                "vector": "v1326141401",
+                "coordinate": "1845.27.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -111.16050714789897,
+            49.4824480616729
+          ]
+        }
+      ]
+    },
+    {
+      "id": "potatoes-manitoba",
+      "product": "potatoes",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 6,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05024607066",
+          "name": "North Cypress-Langford",
+          "sourceCell": {
+            "value": 11578,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "potatoes",
+                "variable": "Potatoes",
+                "value": 11578,
+                "quality": "A",
+                "vector": "v1326093017",
+                "coordinate": "1397.27.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -99.39867259795601,
+            49.99848004643556
+          ]
+        },
+        {
+          "dguid": "2021S05024608046",
+          "name": "North Norfolk",
+          "sourceCell": {
+            "value": 2860,
+            "quality": "D",
+            "status": "published",
+            "components": [
+              {
+                "id": "potatoes",
+                "variable": "Potatoes",
+                "value": 2860,
+                "quality": "D",
+                "vector": "v1326097661",
+                "coordinate": "1440.27.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -98.83170351196391,
+            49.93106759368039
+          ]
+        },
+        {
+          "dguid": "2021S05024607039",
+          "name": "Glenboro-South Cypress",
+          "sourceCell": {
+            "value": 1657,
+            "quality": "C",
+            "status": "published",
+            "components": [
+              {
+                "id": "potatoes",
+                "variable": "Potatoes",
+                "value": 1657,
+                "quality": "C",
+                "vector": "v1326092585",
+                "coordinate": "1393.27.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -99.37943378856411,
+            49.660619040382315
+          ]
+        }
+      ]
+    },
+    {
+      "id": "potatoes-new-brunswick",
+      "product": "potatoes",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 10,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05021313002",
+          "name": "Saint-André",
+          "sourceCell": {
+            "value": 2640,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "potatoes",
+                "variable": "Potatoes",
+                "value": 2640,
+                "quality": "A",
+                "vector": "v1325960609",
+                "coordinate": "171.27.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -67.74383256684716,
+            47.136733128147846
+          ]
+        },
+        {
+          "dguid": "2021S05021311024",
+          "name": "Peel",
+          "sourceCell": {
+            "value": 2625,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "potatoes",
+                "variable": "Potatoes",
+                "value": 2625,
+                "quality": "A",
+                "vector": "v1325959529",
+                "coordinate": "161.27.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -67.56043100939938,
+            46.393080266657094
+          ]
+        },
+        {
+          "dguid": "2021S05021312016",
+          "name": "Grand Falls",
+          "sourceCell": {
+            "value": 2524,
+            "quality": "B",
+            "status": "published",
+            "components": [
+              {
+                "id": "potatoes",
+                "variable": "Potatoes",
+                "value": 2524,
+                "quality": "B",
+                "vector": "v1325960285",
+                "coordinate": "168.27.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -67.74310617045401,
+            46.92540868404547
+          ]
+        }
+      ]
+    },
+    {
+      "id": "potatoes-pei",
+      "product": "potatoes",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 20,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05021103067",
+          "name": "Kensington, Part 1",
+          "sourceCell": {
+            "value": 4868,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "potatoes",
+                "variable": "Potatoes",
+                "value": 4868,
+                "quality": "A",
+                "vector": "v1325950457",
+                "coordinate": "77.27.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -63.647199615197174,
+            46.40858809023055
+          ]
+        },
+        {
+          "dguid": "2021S05021103065",
+          "name": "O'Leary",
+          "sourceCell": {
+            "value": 3753,
+            "quality": "B",
+            "status": "published",
+            "components": [
+              {
+                "id": "potatoes",
+                "variable": "Potatoes",
+                "value": 3753,
+                "quality": "B",
+                "vector": "v1325950349",
+                "coordinate": "76.27.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -64.24169077780076,
+            46.69176678899819
+          ]
+        },
+        {
+          "dguid": "2021S05021103003",
+          "name": "Kinkora",
+          "sourceCell": {
+            "value": 3552,
+            "quality": "B",
+            "status": "published",
+            "components": [
+              {
+                "id": "potatoes",
+                "variable": "Potatoes",
+                "value": 3552,
+                "quality": "B",
+                "vector": "v1325949377",
+                "coordinate": "67.27.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -63.64522513895626,
+            46.325723170761414
+          ]
+        }
+      ]
+    },
+    {
+      "id": "beef-prairie",
+      "product": "beef",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 392,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05024804004",
+          "name": "Special Area No. 2",
+          "sourceCell": {
+            "value": 58434,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "beef",
+                "variable": "Cows, beef",
+                "value": 58434,
+                "quality": "A",
+                "vector": "v1327024902",
+                "coordinate": "1847.9.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -111.49629994781645,
+            51.28351926251044
+          ]
+        },
+        {
+          "dguid": "2021S05024810036",
+          "name": "Vermilion River County",
+          "sourceCell": {
+            "value": 58217,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "beef",
+                "variable": "Cows, beef",
+                "value": 58217,
+                "quality": "A",
+                "vector": "v1327025782",
+                "coordinate": "1887.9.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -110.44878545932777,
+            53.37638789681109
+          ]
+        },
+        {
+          "dguid": "2021S05024802031",
+          "name": "Newell County",
+          "sourceCell": {
+            "value": 56518,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "beef",
+                "variable": "Cows, beef",
+                "value": 56518,
+                "quality": "A",
+                "vector": "v1327025078",
+                "coordinate": "1855.9.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -111.94411373885409,
+            50.61562743495057
+          ]
+        }
+      ]
+    },
+    {
+      "id": "beef-peace",
+      "product": "beef",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 8,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05024817062",
+          "name": "Clear Hills",
+          "sourceCell": {
+            "value": 17012,
+            "quality": "B",
+            "status": "published",
+            "components": [
+              {
+                "id": "beef",
+                "variable": "Cows, beef",
+                "value": 17012,
+                "quality": "B",
+                "vector": "v1327026684",
+                "coordinate": "1928.9.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -119.05723326894356,
+            56.77538761555043
+          ]
+        },
+        {
+          "dguid": "2021S05024819059",
+          "name": "Saddle Hills County",
+          "sourceCell": {
+            "value": 11502,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "beef",
+                "variable": "Cows, beef",
+                "value": 11502,
+                "quality": "A",
+                "vector": "v1327026904",
+                "coordinate": "1938.9.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -119.39081543312115,
+            55.848321028967085
+          ]
+        },
+        {
+          "dguid": "2021S05025955023",
+          "name": "Peace River E",
+          "sourceCell": {
+            "value": 10778,
+            "quality": "B",
+            "status": "published",
+            "components": [
+              {
+                "id": "beef",
+                "variable": "Cows, beef",
+                "value": 10778,
+                "quality": "B",
+                "vector": "v1327030600",
+                "coordinate": "2106.9.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -121.81330109888737,
+            55.57534278185336
+          ]
+        }
+      ]
+    },
+    {
+      "id": "beef-interior-bc",
+      "product": "beef",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 13,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05025941041",
+          "name": "Cariboo K",
+          "sourceCell": {
+            "value": 9080,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "beef",
+                "variable": "Cows, beef",
+                "value": 9080,
+                "quality": "A",
+                "vector": "v1327029940",
+                "coordinate": "2076.9.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -123.0630215755749,
+            51.87513536130853
+          ]
+        },
+        {
+          "dguid": "2021S05025933044",
+          "name": "Thompson-Nicola P (Rivers and the Peaks)",
+          "sourceCell": {
+            "value": 6541,
+            "quality": "B",
+            "status": "published",
+            "components": [
+              {
+                "id": "beef",
+                "variable": "Cows, beef",
+                "value": 6541,
+                "quality": "B",
+                "vector": "v1327028730",
+                "coordinate": "2021.9.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -120.1320229491367,
+            50.84253857881035
+          ]
+        },
+        {
+          "dguid": "2021S05025941014",
+          "name": "Cariboo F",
+          "sourceCell": {
+            "value": 6132,
+            "quality": "B",
+            "status": "published",
+            "components": [
+              {
+                "id": "beef",
+                "variable": "Cows, beef",
+                "value": 6132,
+                "quality": "B",
+                "vector": "v1327029742",
+                "coordinate": "2067.9.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -121.20046306524546,
+            52.479505921334884
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dairy-ontario",
+      "product": "dairy",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 76,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05023531040",
+          "name": "North Perth",
+          "sourceCell": {
+            "value": 14648,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "dairy",
+                "variable": "Cows, dairy",
+                "value": 14648,
+                "quality": "A",
+                "vector": "v1327009504",
+                "coordinate": "1147.10.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -80.9698189347728,
+            43.710287542527325
+          ]
+        },
+        {
+          "dguid": "2021S05023523033",
+          "name": "Mapleton",
+          "sourceCell": {
+            "value": 14249,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "dairy",
+                "variable": "Cows, dairy",
+                "value": 14249,
+                "quality": "A",
+                "vector": "v1327009086",
+                "coordinate": "1128.10.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -80.66768192041162,
+            43.736309555735886
+          ]
+        },
+        {
+          "dguid": "2021S05023532027",
+          "name": "Zorra",
+          "sourceCell": {
+            "value": 11177,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "dairy",
+                "variable": "Cows, dairy",
+                "value": 11177,
+                "quality": "A",
+                "vector": "v1327007876",
+                "coordinate": "1073.10.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -80.96361205596321,
+            43.15139442676313
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dairy-st-lawrence",
+      "product": "dairy",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 341,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05023506008",
+          "name": "Ottawa",
+          "sourceCell": {
+            "value": 9529,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "dairy",
+                "variable": "Cows, dairy",
+                "value": 9529,
+                "quality": "A",
+                "vector": "v1327012298",
+                "coordinate": "1274.10.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -75.77609253572379,
+            45.293391811780594
+          ]
+        },
+        {
+          "dguid": "2021S05023502025",
+          "name": "The Nation / La Nation",
+          "sourceCell": {
+            "value": 7727,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "dairy",
+                "variable": "Cows, dairy",
+                "value": 7727,
+                "quality": "A",
+                "vector": "v1327012210",
+                "coordinate": "1270.10.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -74.98779425401477,
+            45.385551893916336
+          ]
+        },
+        {
+          "dguid": "2021S05023501005",
+          "name": "South Glengarry",
+          "sourceCell": {
+            "value": 5467,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "dairy",
+                "variable": "Cows, dairy",
+                "value": 5467,
+                "quality": "A",
+                "vector": "v1327011990",
+                "coordinate": "1260.10.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -74.5767475471663,
+            45.190978144852515
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dairy-fraser",
+      "product": "dairy",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 9,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05025909036",
+          "name": "Fraser Valley E",
+          "sourceCell": {
+            "value": 24431,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "dairy",
+                "variable": "Cows, dairy",
+                "value": 24431,
+                "quality": "A",
+                "vector": "v1327027962",
+                "coordinate": "1986.10.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -121.72711108895945,
+            49.08885732985748
+          ]
+        },
+        {
+          "dguid": "2021S05025909052",
+          "name": "Abbotsford",
+          "sourceCell": {
+            "value": 14012,
+            "quality": "B",
+            "status": "published",
+            "components": [
+              {
+                "id": "dairy",
+                "variable": "Cows, dairy",
+                "value": 14012,
+                "quality": "B",
+                "vector": "v1327027984",
+                "coordinate": "1987.10.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -122.28914826172674,
+            49.06788406897255
+          ]
+        },
+        {
+          "dguid": "2021S05025909062",
+          "name": "Fraser Valley G",
+          "sourceCell": {
+            "value": 5618,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "dairy",
+                "variable": "Cows, dairy",
+                "value": 5618,
+                "quality": "A",
+                "vector": "v1327028028",
+                "coordinate": "1989.10.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -122.12980458727752,
+            49.15857525400904
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pork-manitoba",
+      "product": "pork",
+      "sourceGeography": "2021 official CD thematic distribution map",
+      "sourceUrl": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-047-eng.htm",
+      "ccsValuesAcquired": false,
+      "provinceValuesAllocated": false
+    },
+    {
+      "id": "pork-ontario",
+      "product": "pork",
+      "sourceGeography": "2021 official CD thematic distribution map",
+      "sourceUrl": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-047-eng.htm",
+      "ccsValuesAcquired": false,
+      "provinceValuesAllocated": false
+    },
+    {
+      "id": "pork-quebec",
+      "product": "pork",
+      "sourceGeography": "2021 official CD thematic distribution map",
+      "sourceUrl": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-047-eng.htm",
+      "ccsValuesAcquired": false,
+      "provinceValuesAllocated": false
+    },
+    {
+      "id": "chicken-fraser",
+      "product": "chicken",
+      "sourceGeography": "2021 official CD thematic distribution map",
+      "sourceUrl": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-049-eng.htm",
+      "ccsValuesAcquired": false,
+      "provinceValuesAllocated": false
+    },
+    {
+      "id": "chicken-ontario",
+      "product": "chicken",
+      "sourceGeography": "2021 official CD thematic distribution map",
+      "sourceUrl": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-049-eng.htm",
+      "ccsValuesAcquired": false,
+      "provinceValuesAllocated": false
+    },
+    {
+      "id": "chicken-quebec",
+      "product": "chicken",
+      "sourceGeography": "2021 official CD thematic distribution map",
+      "sourceUrl": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-049-eng.htm",
+      "ccsValuesAcquired": false,
+      "provinceValuesAllocated": false
+    },
+    {
+      "id": "chicken-annapolis",
+      "product": "chicken",
+      "sourceGeography": "2021 official CD thematic distribution map",
+      "sourceUrl": "https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/catm-ctra-049-eng.htm",
+      "ccsValuesAcquired": false,
+      "provinceValuesAllocated": false
+    },
+    {
+      "id": "potatoes-ontario",
+      "product": "potatoes",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 7,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05023543007",
+          "name": "New Tecumseth",
+          "sourceCell": {
+            "value": 5097,
+            "quality": "B",
+            "status": "published",
+            "components": [
+              {
+                "id": "potatoes",
+                "variable": "Potatoes",
+                "value": 5097,
+                "quality": "B",
+                "vector": "v1326069257",
+                "coordinate": "1177.27.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -79.77850374224245,
+            44.08455599503344
+          ]
+        },
+        {
+          "dguid": "2021S05023522019",
+          "name": "Melancthon",
+          "sourceCell": {
+            "value": 2024,
+            "quality": "C",
+            "status": "published",
+            "components": [
+              {
+                "id": "potatoes",
+                "variable": "Potatoes",
+                "value": 2024,
+                "quality": "C",
+                "vector": "v1326063317",
+                "coordinate": "1122.27.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -80.29052515724096,
+            44.148334509322616
+          ]
+        },
+        {
+          "dguid": "2021S05023522016",
+          "name": "Mulmur",
+          "sourceCell": {
+            "value": 673,
+            "quality": "D",
+            "status": "published",
+            "components": [
+              {
+                "id": "potatoes",
+                "variable": "Potatoes",
+                "value": 673,
+                "quality": "D",
+                "vector": "v1326063209",
+                "coordinate": "1121.27.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -80.10266082931206,
+            44.19004317790674
+          ]
+        }
+      ]
+    },
+    {
+      "id": "potatoes-quebec",
+      "product": "potatoes",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 10,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05022461027",
+          "name": "Saint-Thomas",
+          "sourceCell": {
+            "value": 1611,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "potatoes",
+                "variable": "Potatoes",
+                "value": 1611,
+                "quality": "A",
+                "vector": "v1326000461",
+                "coordinate": "540.27.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -73.33891613998048,
+            46.01857590025275
+          ]
+        },
+        {
+          "dguid": "2021S05022434090",
+          "name": "Saint-Ubalde",
+          "sourceCell": {
+            "value": 1489,
+            "quality": "B",
+            "status": "published",
+            "components": [
+              {
+                "id": "potatoes",
+                "variable": "Potatoes",
+                "value": 1489,
+                "quality": "B",
+                "vector": "v1325986097",
+                "coordinate": "407.27.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -72.27275133836365,
+            46.78417189134251
+          ]
+        },
+        {
+          "dguid": "2021S05022422005",
+          "name": "Sainte-Catherine-de-la-Jacques-Cartier",
+          "sourceCell": {
+            "value": 869,
+            "quality": "C",
+            "status": "published",
+            "components": [
+              {
+                "id": "potatoes",
+                "variable": "Potatoes",
+                "value": 869,
+                "quality": "C",
+                "vector": "v1325984585",
+                "coordinate": "393.27.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -71.61395785211445,
+            46.88028545565108
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dairy-alberta",
+      "product": "dairy",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 5,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05024808022",
+          "name": "Lacombe County",
+          "sourceCell": {
+            "value": 11708,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "dairy",
+                "variable": "Cows, dairy",
+                "value": 11708,
+                "quality": "A",
+                "vector": "v1327025916",
+                "coordinate": "1893.10.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -113.72470139930456,
+            52.43904221635128
+          ]
+        },
+        {
+          "dguid": "2021S05024808038",
+          "name": "Ponoka County",
+          "sourceCell": {
+            "value": 10034,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "dairy",
+                "variable": "Cows, dairy",
+                "value": 10034,
+                "quality": "A",
+                "vector": "v1327025938",
+                "coordinate": "1894.10.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -113.90619889722564,
+            52.710363768217825
+          ]
+        },
+        {
+          "dguid": "2021S05024808001",
+          "name": "Red Deer County",
+          "sourceCell": {
+            "value": 6183,
+            "quality": "B",
+            "status": "published",
+            "components": [
+              {
+                "id": "dairy",
+                "variable": "Cows, dairy",
+                "value": 6183,
+                "quality": "B",
+                "vector": "v1327025894",
+                "coordinate": "1892.10.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -113.79386837430813,
+            52.1124412054252
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dairy-saguenay",
+      "product": "dairy",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 14,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05022494068",
+          "name": "Saguenay",
+          "sourceCell": {
+            "value": 3665,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "dairy",
+                "variable": "Cows, dairy",
+                "value": 3665,
+                "quality": "A",
+                "vector": "v1326992036",
+                "coordinate": "353.10.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -71.13970857920536,
+            48.37394208848292
+          ]
+        },
+        {
+          "dguid": "2021S05022493020",
+          "name": "Hébertville",
+          "sourceCell": {
+            "value": 2155,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "dairy",
+                "variable": "Cows, dairy",
+                "value": 2155,
+                "quality": "A",
+                "vector": "v1326991794",
+                "coordinate": "342.10.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -71.67087543181152,
+            48.357955208733046
+          ]
+        },
+        {
+          "dguid": "2021S05022492040",
+          "name": "Normandin",
+          "sourceCell": {
+            "value": 1935,
+            "quality": "A",
+            "status": "published",
+            "components": [
+              {
+                "id": "dairy",
+                "variable": "Cows, dairy",
+                "value": 1935,
+                "quality": "A",
+                "vector": "v1326991640",
+                "coordinate": "335.10.2",
+                "unit": "Number of animals",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -72.55102278825932,
+            48.826895784388455
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hay-west",
+      "product": "hay",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 287,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05024806028",
+          "name": "Mountain View County",
+          "sourceCell": {
+            "value": 52214,
+            "quality": null,
+            "status": "published",
+            "components": [
+              {
+                "id": "alfalfa-hay",
+                "variable": "Alfalfa and alfalfa mixtures",
+                "value": 29010,
+                "quality": "B",
+                "vector": "v1326144092",
+                "coordinate": "1870.24.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              },
+              {
+                "id": "other-hay",
+                "variable": "All other tame hay and fodder crops",
+                "value": 23204,
+                "quality": "B",
+                "vector": "v1326144095",
+                "coordinate": "1870.25.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -114.26731752894776,
+            51.68897045660907
+          ]
+        },
+        {
+          "dguid": "2021S05024813001",
+          "name": "Lac Ste. Anne County",
+          "sourceCell": {
+            "value": 44761,
+            "quality": null,
+            "status": "published",
+            "components": [
+              {
+                "id": "alfalfa-hay",
+                "variable": "Alfalfa and alfalfa mixtures",
+                "value": 28459,
+                "quality": "B",
+                "vector": "v1326148628",
+                "coordinate": "1912.24.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              },
+              {
+                "id": "other-hay",
+                "variable": "All other tame hay and fodder crops",
+                "value": 16302,
+                "quality": "B",
+                "vector": "v1326148631",
+                "coordinate": "1912.25.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -114.70723511769572,
+            53.847766778504734
+          ]
+        },
+        {
+          "dguid": "2021S05024809002",
+          "name": "Clearwater County",
+          "sourceCell": {
+            "value": 43549,
+            "quality": null,
+            "status": "published",
+            "components": [
+              {
+                "id": "alfalfa-hay",
+                "variable": "Alfalfa and alfalfa mixtures",
+                "value": 21125,
+                "quality": "B",
+                "vector": "v1326146900",
+                "coordinate": "1896.24.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              },
+              {
+                "id": "other-hay",
+                "variable": "All other tame hay and fodder crops",
+                "value": 22424,
+                "quality": "B",
+                "vector": "v1326146903",
+                "coordinate": "1896.25.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -115.65967172621082,
+            52.31099174170639
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hay-east",
+      "product": "hay",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 362,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05023516010",
+          "name": "Kawartha Lakes",
+          "sourceCell": {
+            "value": 26894,
+            "quality": null,
+            "status": "published",
+            "components": [
+              {
+                "id": "alfalfa-hay",
+                "variable": "Alfalfa and alfalfa mixtures",
+                "value": 15330,
+                "quality": "A",
+                "vector": "v1326073676",
+                "coordinate": "1218.24.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              },
+              {
+                "id": "other-hay",
+                "variable": "All other tame hay and fodder crops",
+                "value": 11564,
+                "quality": "B",
+                "vector": "v1326073679",
+                "coordinate": "1218.25.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -78.81610983705897,
+            44.5174185643134
+          ]
+        },
+        {
+          "dguid": "2021S05023506008",
+          "name": "Ottawa",
+          "sourceCell": {
+            "value": 15683,
+            "quality": null,
+            "status": "published",
+            "components": [
+              {
+                "id": "alfalfa-hay",
+                "variable": "Alfalfa and alfalfa mixtures",
+                "value": 7021,
+                "quality": "B",
+                "vector": "v1326079724",
+                "coordinate": "1274.24.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              },
+              {
+                "id": "other-hay",
+                "variable": "All other tame hay and fodder crops",
+                "value": 8662,
+                "quality": "B",
+                "vector": "v1326079727",
+                "coordinate": "1274.25.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -75.77609253572379,
+            45.293391811780594
+          ]
+        },
+        {
+          "dguid": "2021S05023542015",
+          "name": "Grey Highlands",
+          "sourceCell": {
+            "value": 9200,
+            "quality": null,
+            "status": "published",
+            "components": [
+              {
+                "id": "alfalfa-hay",
+                "variable": "Alfalfa and alfalfa mixtures",
+                "value": 5890,
+                "quality": "A",
+                "vector": "v1326068384",
+                "coordinate": "1169.24.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              },
+              {
+                "id": "other-hay",
+                "variable": "All other tame hay and fodder crops",
+                "value": 3310,
+                "quality": "B",
+                "vector": "v1326068387",
+                "coordinate": "1169.25.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -80.49080396175619,
+            44.34158460031187
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pasture-west",
+      "product": "pasture",
+      "sourceGeography": "2021 CCS values",
+      "supportingPublishedRegionCount": 169,
+      "largestPublishedExamples": [
+        {
+          "dguid": "2021S05024804004",
+          "name": "Special Area No. 2",
+          "sourceCell": {
+            "value": 609534,
+            "quality": null,
+            "status": "published",
+            "components": [
+              {
+                "id": "tame-pasture",
+                "variable": "Tame or seeded pasture",
+                "value": 86879,
+                "quality": "B",
+                "vector": "v1326658137",
+                "coordinate": "1847.7.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              },
+              {
+                "id": "natural-pasture",
+                "variable": "Natural land for pasture",
+                "value": 522655,
+                "quality": "A",
+                "vector": "v1326658140",
+                "coordinate": "1847.8.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -111.49629994781645,
+            51.28351926251044
+          ]
+        },
+        {
+          "dguid": "2021S05024801003",
+          "name": "Cypress County",
+          "sourceCell": {
+            "value": 591065,
+            "quality": null,
+            "status": "published",
+            "components": [
+              {
+                "id": "tame-pasture",
+                "variable": "Tame or seeded pasture",
+                "value": 71780,
+                "quality": "B",
+                "vector": "v1326658038",
+                "coordinate": "1844.7.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              },
+              {
+                "id": "natural-pasture",
+                "variable": "Natural land for pasture",
+                "value": 519285,
+                "quality": "A",
+                "vector": "v1326658041",
+                "coordinate": "1844.8.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -110.58568453409484,
+            50.013989394555715
+          ]
+        },
+        {
+          "dguid": "2021S05024802031",
+          "name": "Newell County",
+          "sourceCell": {
+            "value": 384591,
+            "quality": null,
+            "status": "published",
+            "components": [
+              {
+                "id": "tame-pasture",
+                "variable": "Tame or seeded pasture",
+                "value": 55396,
+                "quality": "B",
+                "vector": "v1326658401",
+                "coordinate": "1855.7.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              },
+              {
+                "id": "natural-pasture",
+                "variable": "Natural land for pasture",
+                "value": 329195,
+                "quality": "B",
+                "vector": "v1326658404",
+                "coordinate": "1855.8.3",
+                "unit": "Hectares",
+                "symbol": "",
+                "decimals": 0
+              }
+            ]
+          },
+          "displayAnchor": [
+            -111.94411373885409,
+            50.61562743495057
+          ]
+        }
+      ]
+    }
+  ]
+}
