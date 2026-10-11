@@ -10,8 +10,8 @@ export function renderLatinLandformAreas(clipId:string){
  return `<g data-landform-areas clip-path="url(#${clipId})">${geography.regions.map(r=>`<path data-landform-area="${r.id}" d="${r.path}" fill="${r.color}" fill-rule="evenodd" stroke="#746b54" stroke-width=".55" vector-effect="non-scaling-stroke"/>`).join('')}</g>`;
 }
 /** All text stays in the screen frame; geography alone follows the map camera. */
-export function renderLatinFoundationAnnotations(section:string,scope:string,place:string,scale:number){
- const layout=latinMapLayout(scope,place),boxes:number[][]=[],maximumLabels=scope==='country'?24:18;
+export function renderLatinFoundationAnnotations(section:string,scope:string,place:string,scale:number,reservedBoxes:number[][]=[]){
+ const layout=latinMapLayout(scope,place),boxes:number[][]=reservedBoxes.map(box=>[...box]),maximumLabels=scope==='country'?24:18;
  const add=(coordinate:number[],label:string,kind:string,color='#243d43',priority=false)=>{
   if(boxes.length>=maximumLabels)return '';
   const [px,py]=projectLatin(coordinate),x=px*layout.k+layout.tx,y=py*layout.k+layout.ty;

@@ -22,6 +22,7 @@ try{
   const go=async(route)=>{await page.goto(base+route,{waitUntil:'networkidle'});await ready();};
   const measure=()=>page.evaluate(()=>{const box=s=>{const el=[...document.querySelectorAll(s)].find(n=>n.getBoundingClientRect().width&&!n.closest('[hidden]'));if(!el)return null;const r=el.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height};};return{url:location.pathname+location.search,cssViewport:{width:innerWidth,height:innerHeight},dpr:devicePixelRatio,visualViewportScale:visualViewport.scale,browserZoomPercent:100,documentZoom:getComputedStyle(document.documentElement).zoom,scroll:{x:scrollX,y:scrollY},map:box('.latin-nature-map,.latin-agriculture-map'),reader:box('.latin-reading'),news:box('.atlas-news'),fields:box('.latin-fields'),nav:[...document.querySelectorAll('.latin-fields>a')].map(el=>({text:el.textContent.trim(),active:el.getAttribute('aria-current'),width:el.getBoundingClientRect().width,color:getComputedStyle(el).color,background:getComputedStyle(el).backgroundColor})),overflow:document.documentElement.scrollWidth>innerWidth,activeSection:document.querySelector('[data-latin-workspace]')?.dataset.latinActiveSection};});
   const shot=async(name,scroll=0)=>{await page.mouse.move(0,0);await page.evaluate(y=>scrollTo(0,y),scroll);const meta=await measure();assert.deepEqual(meta.cssViewport,viewport);assert.equal(meta.dpr,1);assert.equal(meta.visualViewportScale,1);assert.equal(meta.overflow,false);assert.deepEqual(meta.scroll,{x:0,y:scroll});const file=`${baseline?'before':'after'}-${name}-${viewport.width}.png`,bytes=await page.screenshot({path:path.join(output,file),animations:'disabled'});report.shots.push({file,sha256:crypto.createHash('sha256').update(bytes).digest('hex'),primary:viewport.width===1920,...meta});};
+  const riverLabels=async()=>{if(baseline)return;const labels=await page.locator('[data-foundation-map=rivers] [data-foundation-river-label],[data-foundation-map=rivers] [data-foundation-annotation] text').evaluateAll(els=>els.map(el=>{const r=el.getBoundingClientRect();return{text:el.textContent,x:r.x,y:r.y,w:r.width,h:r.height};}).filter(r=>r.w&&r.h));for(let i=0;i<labels.length;i++)for(let j=i+1;j<labels.length;j++){const a=labels[i],b=labels[j];assert.ok(!(a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y),'River/place labels overlap: '+a.text+' / '+b.text);}report.checks.push({riverLabelCollisionCheck:true,url:page.url(),labels:labels.map(r=>r.text)});};
   for(const section of viewport.width===1920?['climate','rivers','rainfall','terrain','elevation','basins']:['climate','rainfall','terrain','elevation']){
    await go('nature/?section='+section+'&scope=all');
    if(!baseline&&section!=='basins'){
@@ -33,10 +34,11 @@ try{
     if(viewport.width===1920)assert.ok((await measure()).map.height>=500);
    }
    if(section==='basins')assert.ok(await page.locator('[data-latin-unavailable]').isVisible());
+   if(!baseline&&section==='rivers'){for(const id of ['river-7','river-3'])assert.equal(await page.locator(`[data-foundation-river-label="${id}"]`).count(),1);await riverLabels();}
    await shot(section+'-all');
    if(viewport.width===1920&&['rivers','rainfall','terrain','elevation'].includes(section)){
-    await page.selectOption('select[data-nature-scope]','central');await ready();await shot(section+'-central');
-    await page.selectOption('select[data-nature-scope]','south');await ready();await shot(section+'-south');
+    await page.selectOption('select[data-nature-scope]','central');await ready();if(section==='rivers')await riverLabels();await shot(section+'-central');
+    await page.selectOption('select[data-nature-scope]','south');await ready();if(section==='rivers')await riverLabels();await shot(section+'-south');
     await page.reload({waitUntil:'networkidle'});await ready();assert.equal(await page.locator('select[data-nature-scope]').inputValue(),'south');assert.equal((await measure()).activeSection,section);report.checks.push({section,viewport,reload:true});
    }
   }

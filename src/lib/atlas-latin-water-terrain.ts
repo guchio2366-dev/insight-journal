@@ -17,10 +17,17 @@ export function renderLatinFoundationMap(section:LatinFoundationSection,scope='a
  const asset=withBase(section==='rainfall'?latinRainfallReading.png:section==='elevation'?latinElevationReading.png:'/assets/atlas/latin-water-terrain-v1/'+section+'.png');
  const image=section==='terrain'?renderLatinLandformAreas(id+'-land'):section==='rivers'?'':`<image data-foundation-asset="${asset}" ${loadAsset?`href="${asset}"`:''} x="0" y="0" width="900" height="580"/>`;
  const riverLayer=section==='rivers'||section==='terrain'?`<g clip-path="url(#${id}-land)">${latinFoundationRivers.map(r=>`<path d="${r.path}" class="latin-foundation-river-line" data-river-line="${r.id}" stroke="${r.id===selectedRiver?'#bb5c2d':'#2d749c'}" stroke-width="${r.id===selectedRiver?2.6:['Amazonas','Paraná','Orinoco','Magdalena','São  Francisco'].includes(r.name)?1.7:.85}"/>`).join('')}${section==='rivers'?latinFoundationRivers.map(r=>`<path d="${r.path}" class="latin-foundation-river-hit" data-foundation-river="${r.id}" role="button" tabindex="0" aria-label="${escape(r.displayName)}の解説" aria-pressed="${r.id===selectedRiver}"/>`).join(''):''}</g>`:'';
+ const riverLabelBoxes:number[][]=[];
  const label=(r:typeof latinFoundationRivers[number],selected=false)=>{
   const offsets:Record<string,[number,number,string]>={'Magdalena':[-10,-12,'end'],'Orinoco':[10,-12,'start'],'Paraná':[-10,17,'end'],'São  Francisco':[10,12,'start']};
-  const [dx,dy,anchor]=offsets[r.name]??[8,selected?-14:-5,'start'],[x,y]=projectLatin(r.labelCoordinate),unit=labelScale/layout.k,lx=x+dx*unit,ly=y+dy*unit;
-  return `<g pointer-events="none"><path d="M${x},${y}L${lx},${ly}" class="latin-foundation-label-leader"/><text x="${lx}" y="${ly}" text-anchor="${anchor}" font-size="${12*unit}" class="latin-foundation-river-label${selected?' is-selected':''}">${escape(r.displayName)}</text></g>`;
+  const [dx,dy,anchor]=offsets[r.name]??[8,selected?-14:-5,'start'],[x,y]=projectLatin(r.labelCoordinate),unit=labelScale/layout.k;
+  const sx=x*layout.k+layout.tx,sy=y*layout.k+layout.ty,width=([...r.displayName].reduce((sum,c)=>sum+(c.charCodeAt(0)>255?12:6.8),4))*labelScale,height=14*labelScale;
+  const candidates=[dy,dy-20,dy+20,dy-40,dy+40].map(offset=>{const tx=sx+dx*labelScale,ty=sy+offset*labelScale;return {tx,ty,box:[anchor==='end'?tx-width:tx,ty-height,width,height]};});
+  const position=candidates.find(({box:b})=>b[0]>=8&&b[0]+b[2]<=892&&b[1]>=8&&b[1]+b[3]<=572&&!riverLabelBoxes.some(a=>b[0]<a[0]+a[2]+4&&b[0]+b[2]>a[0]-4&&b[1]<a[1]+a[3]+3&&b[1]+b[3]>a[1]-3));
+  if(!position)return '';
+  riverLabelBoxes.push(position.box);
+  const lx=(position.tx-layout.tx)/layout.k,ly=(position.ty-layout.ty)/layout.k;
+  return `<g pointer-events="none"><path d="M${x},${y}L${lx},${ly}" class="latin-foundation-label-leader"/><text data-foundation-river-label="${r.id}" x="${lx}" y="${ly}" text-anchor="${anchor}" font-size="${12*unit}" class="latin-foundation-river-label${selected?' is-selected':''}">${escape(r.displayName)}</text></g>`;
  };
  const labels=section==='rivers'?(scope==='central'?['Usumacinta','Motagua','Lempa','San Juan','Panama Canal']:scope==='south'?['Amazonas','Paraná','Orinoco','Magdalena','São  Francisco','Madeira','Negro','Tocantins','Uruguay']:['Amazonas','Paraná','Orinoco','Magdalena','São  Francisco','Usumacinta']).map(name=>{
   const r=latinFoundationRivers.find(r=>r.name===name);if(!r||r.id===selectedRiver)return '';
@@ -28,7 +35,7 @@ export function renderLatinFoundationMap(section:LatinFoundationSection,scope='a
  }).join(''):'';
  const selected=section==='rivers'?latinFoundationRivers.find(r=>r.id===selectedRiver):null;
  const selectedLabel=selected?label(selected,true):'';
- return `<svg class="latin-nature-map latin-foundation-map" viewBox="0 0 900 580" role="group" aria-label="${titles[section]}。${section==='rivers'?'河川線を選ぶと右に解説。':'国境は位置参照。数値と読み方は右の解説と下の凡例。'}"><title>${titles[section]}</title>${base}${image}${riverLayer}<g fill="none" stroke="#707e77" stroke-width="0.55" pointer-events="none">${outlines}</g>${labels}${selectedLabel}</g>${renderLatinFoundationAnnotations(section,scope,place,labelScale)}</svg>`;
+ return `<svg class="latin-nature-map latin-foundation-map" viewBox="0 0 900 580" role="group" aria-label="${titles[section]}。${section==='rivers'?'河川線を選ぶと右に解説。':'国境は位置参照。数値と読み方は右の解説と下の凡例。'}"><title>${titles[section]}</title>${base}${image}${riverLayer}<g fill="none" stroke="#707e77" stroke-width="0.55" pointer-events="none">${outlines}</g>${labels}${selectedLabel}</g>${renderLatinFoundationAnnotations(section,scope,place,labelScale,riverLabelBoxes)}</svg>`;
 }
 export function renderLatinFoundationLegend(section:LatinFoundationSection):string{
  if(section==='rainfall')return renderLatinRainfallReadingLegend();
