@@ -4,6 +4,7 @@ import { natureModes, type NatureMode } from '../../data/atlas/natural-environme
 interface Props { initialMode?:NatureMode; active?:boolean }
 const { initialMode='climate', active=false } = Astro.props;
 ---
+<div class="atlas-natural-view-controls">
 <div class="atlas-nature-controls" data-nature-controls hidden={!active}>
   <div class="atlas-nature-tabs" role="tablist" aria-label="自然環境の表示切替">
     {natureModes.map(mode=><button type="button" role="tab" id={`nature-tab-${mode.id}`} aria-controls="nature-map-panel" data-nature-mode={mode.id} aria-selected={String(mode.id===initialMode)} tabindex={mode.id===initialMode?0:-1}>{mode.label}</button>)}
@@ -11,3 +12,4 @@ const { initialMode='climate', active=false } = Astro.props;
 </div>
 
 <div class="atlas-water-tabs" data-water-tabs hidden role="tablist" aria-label="水資源の表示切替">{waterViews.map((id,i)=><button type="button" role="tab" data-water-view={id} aria-selected={String(i===0)} tabindex={i===0?0:-1} aria-controls="nature-map-panel">{waterViewNames[id]}</button>)}</div>
+</div>

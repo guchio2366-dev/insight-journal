@@ -114,7 +114,7 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
         <div data-agriculture-relations-host hidden={initialField!=='agriculture'}><AgricultureRelations /></div>
         <div class="industry-overview-list" data-industry-overview-list hidden aria-label="集積・活動地域の掲載産業"></div>
         <div class="industry-key" data-industry-key hidden={initialField!=='industry'}>
-          <p data-industry-size-note>業種名：出典で確認した集積・活動地域の例。点は都市・州・盆地の代表位置で、工場の正確位置や生産量・全米順位を表しません。</p>
+          <p data-industry-size-note>出典で確認した地域・施設の例。近接札は２分野までで、選択で全分野を開きます。油ガスは田内の登録坑井・工事地点、精製・石化は施設台帳の実位置。州・都市圏の補足は一覧へ。記号は生産量・全米順位を表しません。</p>
           <div class="industry-economic-legend" data-industry-economic-legend hidden></div>
           <p data-industry-empty hidden>この分野の地域例は未登録です。右欄の説明と下の全国推移を確認できます。</p>
           <details><summary>地域一覧から選ぶ</summary><div class="industry-region-list">{industryRegions.map(r=><button type="button" data-industry-region-option={r.id}>{r.name}<small>{subsectorLabel(r.sector,r.subsector)}</small></button>)}</div></details>

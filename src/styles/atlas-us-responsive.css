@@ -9,6 +9,19 @@
   [data-atlas-explorer][data-field=natural] .atlas-nature-controls { padding:3px; }
   [data-atlas-explorer][data-field=natural] .atlas-water-tabs { padding:3px; }
 }
+/* The primary 1920px PC gets a larger map, rather than just a higher frame. */
+@media(min-width:1600px) and (min-height:800px) {
+  .atlas-desktop-shell .atlas-explorer[data-atlas-explorer][data-field=natural] .atlas-primary-grid { grid-template-columns:minmax(0,1fr) 360px; gap:14px; }
+  .atlas-desktop-shell .atlas-explorer[data-atlas-explorer][data-field=natural] .atlas-map-frame { max-height:none; min-height:0; aspect-ratio:1.55; }
+  [data-atlas-explorer][data-field=natural] .regional-navigation { display:flex; align-items:center; gap:8px 16px; flex-wrap:wrap; }
+  [data-atlas-explorer][data-field=natural] .regional-countries { margin-top:0; }
+  [data-atlas-explorer][data-field=natural] .regional-navigation a { min-height:34px; padding:5px 11px; }
+  [data-atlas-explorer][data-field=natural] .atlas-tabs,
+  [data-atlas-explorer][data-field=natural] .atlas-tabs>a { min-height:34px; padding-block:5px; }
+  [data-atlas-explorer][data-field=natural] .atlas-natural-view-controls { display:flex; align-items:start; gap:8px; margin:4px 0; }
+  [data-atlas-explorer][data-field=natural] :is(.atlas-nature-controls,.atlas-water-tabs) { margin:0; padding:2px; width:auto; }
+  [data-atlas-explorer][data-field=natural] :is(.atlas-nature-tabs,.atlas-water-tabs) button { min-height:34px; padding:5px 10px; }
+}
 @media (min-width:960px) and (max-width:1199px) {
   .atlas-desktop-shell:not(.is-reading-news):has(> :is([data-atlas-explorer],[data-mexico-agriculture-atlas]):is([data-field=agriculture],[data-field=natural],[data-field=industry],[data-field=population])) {
     display:grid;

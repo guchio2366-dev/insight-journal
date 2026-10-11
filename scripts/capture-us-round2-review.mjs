@@ -31,6 +31,14 @@ try{
    assert.equal(await page.locator('[data-fallback]').isVisible(),false,`${target}/${name}: actual MapLibre`);
    const frame=await page.locator('[data-map-frame]').boundingBox();
    assert.ok(frame.width>600&&frame.height>300,`${target}/${name}: readable map frame`);
+   if(target==='build'&&['climate','river','precipitation','basins'].includes(name))assert.ok(frame.width>=1050&&frame.height>=680,`${name}: larger primary PC map area`);
+   if(target==='build'&&name==='forest'){assert.equal(await page.locator('[data-forest-site]').count(),2);assert.match(await page.locator('[data-forest-national]').textContent(),/2017/);}
+   if(target==='build'&&name==='industry')assert.equal(await page.evaluate(()=>{const boxes=[...document.querySelectorAll('[data-industry-markers] .industry-overview-label:not([hidden])')].map(n=>n.getBoundingClientRect());return boxes.some((a,i)=>boxes.slice(i+1).some(b=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top));}),false,'initial all-industry labels must not overlap');
+   if(target==='build'&&name==='religion'){
+    assert.match(await page.locator('[data-pop-map-note]').textContent(),/PRRI 2023/);
+    assert.equal(await page.locator('[data-pop-religion-concentrations] table').count(),2);
+    assert.equal(await page.evaluate(()=>{const ny=document.querySelector('[data-pop-city-markers] [data-pop-city=newyork]').getBoundingClientRect();return [...document.querySelectorAll('[data-pop-religion-markers] .atlas-nature-label:not([hidden])')].some(n=>{const b=n.getBoundingClientRect();return ny.left<b.right&&ny.right>b.left&&ny.top<b.bottom&&ny.bottom>b.top;});}),false,'religion reference labels must leave New York readable');
+   }
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
    await page.screenshot({path:resolve(out,`${target}-${name}.jpg`),type:'jpeg',quality:85});
    report.captures.push({target,name,url:page.url(),frame,dpr:await page.evaluate(()=>devicePixelRatio),render:await page.locator('[data-atlas-explorer]').getAttribute('data-render-state')});
@@ -66,13 +74,6 @@ try{
  await page.goto(origin+'agriculture/',{waitUntil:'networkidle'});await ready();assert.match(await page.locator('.atlas-quantity-note').textContent(),/生産量を表しません/);
  await page.locator('[data-crop-select="wheat"]').first().click();await page.reload({waitUntil:'networkidle'});await ready();assert.equal(new URL(page.url()).searchParams.get('crop'),'wheat');await snapshot('agriculture-reload');
  for(const view of ['ethnicity','religion']){await page.goto(origin+'population/?popView='+view,{waitUntil:'networkidle'});await ready();await page.waitForFunction(()=>/郡のデータ/.test(document.querySelector('[data-pop-status]')?.textContent??''));await page.reload({waitUntil:'networkidle'});await ready();assert.equal(await page.locator('[data-pop-view][aria-pressed=true]').getAttribute('data-pop-view'),view);await snapshot(view+'-reload');}
- await page.setViewportSize({width:390,height:844});await page.goto(origin+'industry/',{waitUntil:'networkidle'});await ready();
- const expectedPlaces=await page.locator('[data-explorer-config]').evaluate(node=>new Set(JSON.parse(node.textContent).industryRegions.map(r=>r.placeId)).size);
- assert.equal(await page.locator('[data-industry-overview-list] [data-industry-place]').count(),expectedPlaces);
- assert.equal(await page.locator('[data-industry-markers] .industry-overview-label:visible').count(),0);
- assert.equal(await page.locator('[data-industry-overview-list]').isVisible(),true);
- await page.locator('[data-map-frame]').scrollIntoViewIfNeeded();await snapshot('industry-390');
- await page.locator('[data-industry-overview-list] [data-industry-place="newyork"]').click();assert.equal(await page.locator('[data-selection-title]').textContent(),'ニューヨーク');await page.locator('[data-selection]').scrollIntoViewIfNeeded();await snapshot('industry-390-place');
  assert.deepEqual(report.errors,[]);report.status='passed';
 }catch(error){report.status='failed';report.error=String(error);throw error;}
 finally{await writeFile(resolve(out,'report.json'),JSON.stringify(report,null,2)+'\n');await browser?.close();server.close();}

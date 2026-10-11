@@ -28,6 +28,12 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
     const line=document.createElementNS(ns,'line');line.classList.add('atlas-climate-code-leader');line.style.display='none';svg.appendChild(line);return {entry,node,line};
   });
   function localBox(element:HTMLElement):Box {
+    // City and story labels are translated after layout. offsetLeft/Top do not
+    // include that translation, so collisions must use the displayed rectangle.
+    if(element.classList.contains('atlas-nature-label')){
+      const b=frame.getBoundingClientRect(),r=element.getBoundingClientRect();
+      return {left:r.left-b.left,top:r.top-b.top,right:r.right-b.left,bottom:r.bottom-b.top};
+    }
     // Layout coordinates stay relative to the map during iframe/page scrolling.
     if(element.clientWidth>0&&element.clientHeight>0){
       let left=0,top=0,node:HTMLElement|null=element;

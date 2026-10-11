@@ -41,3 +41,12 @@ test('主図は同一地点だけを束ね、異なる地域を州中央へ移�
  for(const id of ['reno','lasvegas','nevada','dallas','fortworth','houston','austin','texas-oil'])assert.ok(groups.some(g=>g.id===id),id);
  assert.equal(d.industryPlaceGroups(d.industryRegions.filter(r=>r.subsector==='auto')).length,4);
 });
+test('近接札を束ねても全地点・全分野・元の参照点を保持し、鎖状に遠方を統合しない',()=>{
+ const groups=d.industryPlaceGroups(d.industryRegions),before=JSON.stringify(groups);
+ const places=groups.slice(0,3).map((g,i)=>({...g,anchor:{x:i*60,y:20}}));
+ const clusters=d.industryLabelClusters(places,78);
+ assert.equal(clusters.length,2);assert.equal(clusters[0].members.length,2);
+ assert.deepEqual(clusters.flatMap(c=>c.regions.map(r=>r.id)),places.flatMap(g=>g.regions.map(r=>r.id)));
+ for(const c of clusters){assert.equal(c.anchor,c.members[0].anchor);assert.equal(c.id,c.members[0].id);}
+ assert.equal(JSON.stringify(groups),before);
+});

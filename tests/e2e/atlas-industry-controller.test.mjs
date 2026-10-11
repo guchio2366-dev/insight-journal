@@ -59,7 +59,7 @@ test('狭い全産業図は全地点の記号を保ち、重なる大量の札�
   const regions=JSON.parse(q('[data-explorer-config]').textContent).industryRegions;
   const ids=[...new Set(regions.map(r=>r.placeId))].sort();
   assert.deepEqual([...q('[data-industry-overview-list]').children].map(b=>b.dataset.industryPlace).sort(),ids);
-  assert.equal(q('[data-industry-markers]').querySelectorAll('[data-industry-place]').length,ids.length);
+  assert.equal(q('[data-industry-markers]').querySelectorAll('[data-industry-place]').length,new Set(regions.filter(r=>r.mapRole!=='context').map(r=>r.placeId)).size);
   assert.ok([...q('[data-industry-markers]').querySelectorAll('.industry-overview-label')].every(label=>label.hidden));
   q('[data-industry-overview-list] [data-industry-place="newyork"]').click();
   assert.equal(q('[data-selection-title]').textContent,'ニューヨーク');

@@ -67,6 +67,18 @@ for(const fail of [false,true])test(`population stories retain context, boundari
   if(!fail)assert.equal(window.__mapCount,1);
  }finally{await window.happyDOM.close();}
 });
+for(const fail of [false,true])test(`宗教の最大面にPRRIの独立した２輪郭を重ね、切替で除去する（fallback=${fail}）`,async()=>{
+ const {window,q}=await setup('?popView=religion',fail);
+ try{
+  assert.match(q('[data-pop-map-note]').textContent,/PRRI 2023/);assert.equal(q('[data-pop-religion-concentrations]').hidden,false);
+  assert.equal(q('[data-pop-religion-concentrations]').querySelectorAll('tbody tr').length,20);
+  if(fail){const svg=q('[data-pop-minority-outlines]');assert.notEqual(svg.style.display,'none');assert.equal(svg.querySelectorAll('path').length,2);for(const p of svg.querySelectorAll('path'))assert.ok(p.getAttribute('d').length>100);}
+  else{const map=window.__map;for(const id of ['jewish','muslim']){const layer=map.getLayer('population-minority-'+id);assert.equal(layer.type,'line');assert.equal(layer.filter[2][1].length,10);}const missing=JSON.parse(await readFile('data/atlas/population-religion-dominant-reviewed.json','utf8')).rows.filter(r=>r.category==='unreported');assert.equal(missing.length,3);for(const r of missing)assert.equal(map.getSource('population').data.features.find(f=>f.properties.id===r.id).properties.color,'#c8ccd0');}
+  q('[data-pop-view="distribution"]').click();await waitFor(()=>/3,144/.test(q('[data-pop-status]').textContent),'density restored');
+  assert.equal(q('[data-pop-religion-concentrations]').hidden,true);assert.equal(q('[data-pop-minority-outlines]').style.display,'none');
+  if(!fail)assert.equal(window.__map.getLayer('population-minority-jewish'),undefined);
+ }finally{await window.happyDOM.close();}
+});
 
 for(const fail of [false,true])test(`Vegas and Utah stories survive comparison, history and unrelated selections (fallback=${fail})`,async()=>{
  const {window,q,root}=await setup('',fail);

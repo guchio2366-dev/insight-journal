@@ -10,6 +10,7 @@ import {ethnicityReading,ethnicityTakeaways,populationVoteStates} from '../data/
 import {createNatureLabels} from './atlas-nature-labels';
 import {populationFallbackExtent,populationFallbackBox,projectPopulationFallback} from '../lib/atlas-population-projection';
 import {religionDominantColors} from '../lib/atlas-population-religion';
+import {religionConcentrations} from '../data/atlas/population-religion-concentrations';
 
 type City={id:string;nameJa:string;longitude:number;latitude:number};
 export function createPopulationController(root:HTMLElement,base:string,options:{cities:City[];active:()=>boolean;map:()=>any;changed:(push?:boolean)=>void;fit:(bounds:any)=>void}){
@@ -18,12 +19,14 @@ export function createPopulationController(root:HTMLElement,base:string,options:
  let state=readPopulationState(new URL(location.href)),generation=0,appliedMap:any,dataFailed=false,countyData:any,rows:any[]=[],values=new Map<string,any>();
  let readingTrail:Array<{city:string;ethnicity:string;religion:string;story:string}>=[];
  let ethnicityNational:unknown;
+ let religionGeometry:any;
+ const outline=document.createElementNS('http://www.w3.org/2000/svg','svg');outline.classList.add('population-minority-outlines');outline.dataset.popMinorityOutlines='';outline.setAttribute('aria-hidden','true');outline.style.display='none';el('[data-map-frame]').append(outline);
  const number=(n:number)=>n.toLocaleString('ja-JP',{maximumFractionDigits:1});
  const focusState=()=>populationVoteStates.find(s=>s.id===state.voteState);
  const extent=()=>populationFallbackExtent(state.view==='vote'&&focusState()?.bounds?focusState()!.bounds!.map(b=>[...b]):undefined,state.view==='religion' ? .1 : 0);
  function release(){
   if(appliedMap&&appliedMap===options.map()){
-   for(const id of ['population-selected','population-lines','population-fill'])if(appliedMap.getLayer(id))appliedMap.removeLayer(id);
+   for(const id of [...religionConcentrations.groups.map(g=>'population-minority-'+g.id),'population-selected','population-lines','population-fill'])if(appliedMap.getLayer(id))appliedMap.removeLayer(id);
    if(appliedMap.getSource('population'))appliedMap.removeSource('population');
   }
   appliedMap=undefined;
@@ -42,7 +45,18 @@ export function createPopulationController(root:HTMLElement,base:string,options:
   obstacleSelector:'.population-city-markers .atlas-nature-label:not([hidden]),.atlas-fallback:not([hidden]) > p',select:entry=>choose('story',entry.id),placed:()=>{},
  });
  for(const story of religionStories)root.querySelector('[data-pop-religion-marker="'+story.id+'"]')?.setAttribute('aria-label',story.number+' '+story.title+'の解説を開く');
- function schedule(){cityLabels.schedule();storyLabels.schedule();}
+ function drawMinorities(){
+  const fallback=!el('[data-fallback]').hidden,show=options.active()&&state.view==='religion'&&religionGeometry&&fallback;outline.style.display=show?'':'none';
+  if(!show)return;
+  const frame=el('[data-map-frame]'),box=cityLabels.fallbackBox();outline.setAttribute('viewBox',`0 0 ${frame.clientWidth} ${frame.clientHeight}`);outline.replaceChildren();
+  for(const group of religionConcentrations.groups){
+   const ids=new Set(group.rows.map(r=>'county:'+r.fips));
+   const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.dataset.popMinorityGroup=group.id;path.setAttribute('fill','none');path.setAttribute('stroke',group.color);path.setAttribute('stroke-width',String(group.width));
+   path.setAttribute('d',religionGeometry.features.filter((f:any)=>ids.has(f.properties.id)).flatMap((f:any)=>f.geometry.type==='Polygon'?[f.geometry.coordinates]:f.geometry.coordinates).flatMap((polygon:any)=>polygon.map((ring:any)=>ring.map((p:any,i:number)=>{const q=projectPopulationFallback(p,box,extent());return `${i?'L':'M'}${q.x.toFixed(2)},${q.y.toFixed(2)}`;}).join(' ')+'Z')).join(' '));outline.append(path);
+  }
+ }
+ function schedule(){cityLabels.schedule();storyLabels.schedule();drawMinorities();}
+ el('[data-fallback-image]').addEventListener('load',drawMinorities);
  function cityDots(){
   root.querySelectorAll<HTMLElement>('[data-pop-city]').forEach(button=>{
    button.querySelector('.population-ethnicity-dots')?.remove();button.removeAttribute('aria-label');
@@ -204,7 +218,8 @@ export function createPopulationController(root:HTMLElement,base:string,options:
     const b=document.createElement('button');b.type='button';b.dataset.popReligionGroup=id;b.setAttribute('aria-controls','population-city-reading');b.setAttribute('aria-pressed',String(state.religion===id));
     if(i){const icon=document.createElement('i');icon.style.background=religionDominantColors[id];b.append(icon);}b.append(document.createTextNode(label));host.append(b);
    }
-   const note=document.createElement('span');const icon=document.createElement('i');icon.style.background=religionDominantColors.unreported;note.append(icon,document.createTextNode('報告なし（無宗教を意味しません）'));host.append(note);return;
+   const note=document.createElement('span');const icon=document.createElement('i');icon.style.background=religionDominantColors.unreported;note.append(icon,document.createTextNode('報告なし（無宗教を意味しません）'));host.append(note);
+   for(const group of religionConcentrations.groups){const item=document.createElement('span'),sample=document.createElement('i');sample.style.background='transparent';sample.style.border=`2px solid ${group.color}`;item.append(sample,document.createTextNode(group.label+'の高濃集郡（輪郭）'));host.append(item);}return;
   }
   const labels=state.view==='distribution'?['0','>0–1','>1–<10','10–<100','100–<1,000','1,000–<10,000','10,000以上']:['民主党 +15以上','民主党 +5〜<15','差5未満','共和党 +5〜<15','共和党 +15以上'];
   const colors=state.view==='distribution'?densityColors:voteColors;
@@ -246,6 +261,7 @@ export function createPopulationController(root:HTMLElement,base:string,options:
   root.querySelectorAll<HTMLElement>('[data-pop-filter]').forEach(n=>n.hidden=n.dataset.popFilter!==state.view);
   el<HTMLSelectElement>('[data-pop-vote-state]').value=state.voteState;
   el('[data-pop-ethnicity-method]').hidden=state.view!=='ethnicity';
+  el('[data-pop-religion-concentrations]').hidden=state.view!=='religion';religionGeometry=undefined;
   release();dataFailed=false;rows=[];values.clear();ethnicityNational=undefined;cityDots();selected();legend();reading();fallback();
   el('[data-pop-status]').textContent='データを読み込んでいます…';el('[data-pop-retry]').hidden=true;
   const current=()=>ticket===generation&&options.active()&&root.isConnected;
@@ -253,10 +269,11 @@ export function createPopulationController(root:HTMLElement,base:string,options:
    const religion=state.view==='religion';
    const [counties,data]=religion?await Promise.all([loader.get('religion-counties-2020.geo'),loader.get('religion-dominant')]):await Promise.all([loader.get('counties'),state.view==='ethnicity'?loader.get('ethnicity'):state.view==='vote'?loader.get('votes'):loader.get('counties')]);
    if(!current())return;countyData=religion?undefined:counties;rows=religion?data.rows:counties.rows;values=new Map(data.rows.map((r:any)=>[r.id,r]));
+   if(religion)religionGeometry=counties;
    if(state.view==='ethnicity')ethnicityNational=data.national;cityDots();
    const unit=state.view==='distribution'?'人口密度（人／km²）':state.view==='ethnicity'?'人種・民族の特徴的な集積（郡別）':religion?'郡内で最大の宗教グループ（adherents、過半数とは限りません）':'共和党 − 民主党（ポイント）';
    el('[data-layer-caption]').textContent=unit;
-   el('[data-pop-map-note]').textContent=religion?'2020年：宗教団体が把握したadherentsの最大団体群。住民全体の割合や過半数ではなく、未報告は無宗教を意味しません。番号は地域解説の参照点です。':state.view==='ethnicity'?'ACS 2020–2024・全住民が分母。非ヒスパニック白人以外が20%以上、または5%以上かつ全米割合の1.5倍以上の郡を着色。面は該当区分のうち割合最大、都市の複数色点は対応郡集計で該当する全区分。市域の構成比・点の大きさは人数を表しません。':state.view==='distribution'?'ACS 2020–2024の郡人口 ÷ 郡の陸地面積（人／km²）。郡内の平均密度で、市域・都市圏人口とは別の指標です。都市の点は位置の目印で、面積・点の大きさは人口を表しません。':unit+'。面積の大きさは人数・票数の大きさを意味しません。';
+   el('[data-pop-map-note]').textContent=religion?'2020年：宗教団体が把握したadherentsの最大団体群。住民全体の割合や過半数ではなく、未報告は無宗教を意味しません。輪郭はPRRI 2023の成人自己認識の郡別推計：人口1万人超の公表高濃集上位10郡／宗教（青＝ユダヤ教、橙＝イスラム教）。面とは年・分母が異なり、推計誤差があります。番号は地域解説です。':state.view==='ethnicity'?'ACS 2020–2024・全住民が分母。非ヒスパニック白人以外が20%以上、または5%以上かつ全米割合の1.5倍以上の郡を着色。面は該当区分のうち割合最大、都市の複数色点は対応郡集計で該当する全区分。市域の構成比・点の大きさは人数を表しません。':state.view==='distribution'?'ACS 2020–2024の郡人口 ÷ 郡の陸地面積（人／km²）。郡内の平均密度で、市域・都市圏人口とは別の指標です。都市の点は位置の目印で、面積・点の大きさは人口を表しません。':unit+'。面積の大きさは人数・票数の大きさを意味しません。';
    el('[data-pop-status]').textContent=rows.length.toLocaleString()+' 郡のデータ。'+(state.view==='ethnicity'?'ACS 2020–2024。地図は米国本土。':religion?'2020 U.S. Religion Census。報告なし3郡。':'');
    selected();reading();
    const map=options.map();if(!map){fallback();return true;}
@@ -271,6 +288,7 @@ export function createPopulationController(root:HTMLElement,base:string,options:
    map.addLayer({id:'population-fill',type:'fill',source:'population',paint:{'fill-color':['get','color'],'fill-opacity':.95}},'state-lines');
    map.addLayer({id:'population-lines',type:'line',source:'population',paint:{'line-color':'#637c7c','line-width':.3,'line-opacity':.4}},'state-lines');
    map.addLayer({id:'population-selected',type:'line',source:'population',filter:['==',['get','id'],['vote','ethnicity'].includes(state.view)?state.geo:''],paint:{'line-color':'#162e40','line-width':2}});
+   if(religion)for(const group of religionConcentrations.groups)map.addLayer({id:'population-minority-'+group.id,type:'line',source:'population',filter:['in',['get','id'],['literal',group.rows.map(r=>'county:'+r.fips)]],paint:{'line-color':group.color,'line-width':group.width,'line-opacity':.95}});
    el('[data-fallback]').hidden=true;el('[data-map-surface]').hidden=false;el('.atlas-map-tools').hidden=false;root.dataset.renderState='ready';if(state.view==='vote'&&focusState()?.bounds&&!new URL(location.href).searchParams.has('z'))options.fit(focusState()!.bounds);schedule();return true;
   }catch(error){
    if(!current())return;release();dataFailed=true;el('[data-fallback]').hidden=false;el('[data-map-surface]').hidden=true;el('.atlas-map-tools').hidden=true;root.dataset.renderState='fallback';fallback();

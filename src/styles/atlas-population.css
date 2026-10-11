@@ -27,3 +27,8 @@
 .population-reading-action:hover{background:#e8f2f0}.population-reading-action:focus-visible,.population-reading-detail summary:focus-visible{outline:3px solid #9c7420;outline-offset:3px}
 .population-reading-detail{border-top:1px solid #d6e0dd;margin-top:18px;padding-top:8px}.population-reading-detail summary{font-size:12px;min-height:44px;display:flex;align-items:center;cursor:pointer;color:#425f65}.population-reading-detail summary::before{content:'＋';margin-right:8px}.population-reading-detail[open] summary::before{content:'−'}.population-reading-detail p{font-size:12px;color:#526467}
 @media(max-width:700px){.population-reading-action{width:100%;margin-right:0}.population-national .population-key{font-size:14px}}
+.population-minority-outlines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3;overflow:hidden}
+[data-pop-religion-concentrations] table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+[data-pop-religion-concentrations] caption{text-align:left;font-weight:700}
+[data-pop-religion-concentrations] th,[data-pop-religion-concentrations] td{padding:3px 4px;border-bottom:1px solid #d6ddd0;text-align:left}
+[data-pop-religion-concentrations] td{text-align:right}

@@ -1,0 +1,19 @@
+{
+  "publisher": "USDA Forest Service, Forest Products Laboratory",
+  "title": "U.S. Timber Production, Trade, Consumption, and Price Statistics, 1965–2017",
+  "report": "FPL-RP-701 (2019)",
+  "url": "https://research.fs.usda.gov/treesearch/58506",
+  "tableUrl": "https://research.fs.usda.gov/download/treesearch/58506.pdf#page=38",
+  "table": "5b, printed page 28, 2017 row",
+  "readOn": "2026-10-11",
+  "retrieval": "Manually transcribed from the official public document text in the Web connector, read before an execution-environment PDF request returned 403. Original PDF bytes and SHA256 are unavailable. No denied download was repeated.",
+  "scope": "United States, national totals; not allocated to states, regions or facilities",
+  "year": 2017,
+  "unit": "thousand m3, roundwood equivalent",
+  "definition": "Wood volume converted to equivalent input roundwood, not finished-product volume. Reported consumption is apparent consumption; rounded entries may not add exactly. Pulpwood-based products include pulpwood and roundwood equivalents of wood pulp, paper and board; not wood pulp alone.",
+  "rows": [
+    {"id":"lumber","label":"製材","production":179468,"imports":65919,"exports":16426,"consumption":228961},
+    {"id":"plywood-veneer","label":"合板・単板","production":20653,"imports":8072,"exports":1339,"consumption":27386},
+    {"id":"pulpwood-based","label":"パルプ材・パルプ・紙等","production":143869,"imports":24783,"exports":28696,"consumption":139957}
+  ]
+}
