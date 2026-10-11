@@ -99,6 +99,26 @@ try{
   }else{await page.reload({waitUntil:'networkidle'});if(scene.ready)await page.locator(scene.ready).waitFor();assert(await page.locator(scene.map).first().isVisible());}
   report.scenes.push({region:scene.id,url:base+'/atlas/'+scene.path,map:box,metrics});
  }
+ // Preserve the existing Asia context-review assertions without duplicating its
+ // screenshots: selecting a crop keeps all other sourced livestock points.
+ for(const region of ['east-asia','south-asia','central-asia','southeast-asia']){
+  await page.goto(base+'/atlas/asia/'+region+'/agriculture/',{waitUntil:'networkidle'});
+  await page.locator('[data-asia-atlas][data-farm-context-status="ready"]').waitFor();await settle();
+  const product=await page.locator('[data-asia-config]').evaluate(node=>JSON.parse(node.textContent).presentation.farming.products.find(p=>p.kind==='crop'&&p.id!=='rice').id);
+  const points=page.locator('.asia-livestock-point:visible');
+  const anchors=()=>points.evaluateAll(nodes=>nodes.map(node=>({name:node.getAttribute('aria-label'),x:parseFloat(node.style.left),y:parseFloat(node.style.top),opacity:parseFloat(getComputedStyle(node).opacity)})));
+  const before=await anchors();assert(before.length>0,region+' sourced livestock is visible');
+  const beforeCamera=await camera({cameraRoot:'[data-asia-atlas]'});
+  await page.locator(`[data-farm-choice="${product}"]`).first().click();
+  await page.locator(`[data-asia-atlas][data-farm-context-status="ready"][data-farm-selected="${product}"]`).waitFor();await settle();
+  const selected=await anchors();assert.equal(selected.length,before.length,region+' retains other livestock points');
+  for(let i=0;i<before.length;i++){assert.equal(selected[i].name,before[i].name);assert.equal(selected[i].opacity,.2);for(const axis of ['x','y'])assert(Math.abs(selected[i][axis]-before[i][axis])<=1,region+' retains source anchors within 1 CSS pixel');}
+  sameCamera(await camera({cameraRoot:'[data-asia-atlas]'}),beforeCamera);assert.equal(await page.locator('[data-farming-legend]').isVisible(),false);
+  await page.reload({waitUntil:'networkidle'});await page.locator(`[data-asia-atlas][data-farm-context-status="ready"][data-farm-selected="${product}"]`).waitFor();await settle();
+  assert.equal((await anchors()).length,before.length);sameCamera(await camera({cameraRoot:'[data-asia-atlas]'}),beforeCamera,.001);
+  await page.locator('[data-farm-choice="overview"]').first().click();await page.locator('[data-asia-atlas][data-farm-context-status="ready"][data-farm-selected=""]').waitFor();await settle();
+  assert.equal((await anchors()).length,before.length);report.operations.push({region,crop:product,livestockPoints:before.length,otherDistributionsRetained:true,sourceAnchorsRetained:true,reload:true,clear:true,cameraPreserved:true});
+ }
  // The two agriculture-key changes must survive their shared-component merge.
  await page.goto(base+'/atlas/north-america/agriculture/',{waitUntil:'networkidle'});await page.locator('[data-atlas-explorer][data-render-state="ready"]').waitFor();assert.match(await page.locator('.atlas-quantity-note').textContent(),/生産量を表しません/);
  await page.locator('[data-forestry-select]').first().click();await page.locator('[data-atlas-explorer][data-forest-active="true"]').waitFor();await shot('us-forestry-navigation');
