@@ -157,7 +157,7 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    assert.equal(await page.locator('[data-basin-shortcuts]').isVisible(),true);
    await page.locator('[data-hydrology-detail-label]').waitFor({state:'visible'});
    await capture(`${region}-basins`);
-   const basinOption=await page.locator('[data-hydrology-detail] option[value!=""]').first().getAttribute('value');
+   const basinOption=await page.locator('[data-hydrology-detail] option:not([value=""])').first().getAttribute('value');
    await page.locator('[data-hydrology-detail]').selectOption(basinOption);
    assert.equal(new URL(page.url()).searchParams.get('detail'),basinOption);
    await page.goBack();
@@ -169,9 +169,9 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    await capture(`${region}-basin-selected`);
    await page.goto(`${url}/atlas/asia/${region}/nature/?topic=groundwater`,{waitUntil:'domcontentloaded'});
    await page.locator('[data-hydrology-detail-label]').waitFor({state:'visible'});
-   await page.locator('[data-hydrology-detail] option[value!=""]').first().waitFor();
+   await page.locator('[data-hydrology-detail] option:not([value=""])').first().waitFor();
    await capture(`${region}-groundwater`);
-   const groundwaterOption=await page.locator('[data-hydrology-detail] option[value!=""]').first().getAttribute('value');
+   const groundwaterOption=await page.locator('[data-hydrology-detail] option:not([value=""])').first().getAttribute('value');
    await page.locator('[data-hydrology-detail]').selectOption(groundwaterOption);
    assert.equal(new URL(page.url()).searchParams.get('detail'),groundwaterOption);
    await capture(`${region}-groundwater-selected`);
