@@ -16,7 +16,7 @@ import {renderEastAsiaFarmFoundations} from './atlas-east-asia-farm-foundations'
 import {createAsiaIndustry} from './atlas-asia-industry';
 import {createSoutheastIndustryLocations} from './atlas-asia-southeast-industry';
 import {hasIndustryCountryScope,industryCountryChoices,normalizeScopedIndustryState} from '../data/atlas/asia-industry';
-import {southCentralReligionCensuses,southCentralReligionReports} from '../data/atlas/asia-south-central-religion';
+import {southCentralReligionCensuses,southCentralReligionReports,southCentralReligionLocalCases} from '../data/atlas/asia-south-central-religion';
 import {southCentralLandformOverview,southCentralLandformCases,southCentralFocusPhysicalReading} from '../data/atlas/asia-south-central-landform-reading';
 import {asiaWaterFocus} from '../data/atlas/asia-water-focus';
 import {createAsiaWater} from './atlas-asia-water';
@@ -73,6 +73,7 @@ function start(root:HTMLElement) {
   let social:ReturnType<typeof createAsiaSocial>|null=null;
   let trade:ReturnType<typeof createAsiaTrade>|null=null;
   context.stories=Object.fromEntries(context.fields.map(field=>[field,asiaPlaceReadings.filter(s=>s.region===config.regionId&&s.field===field).map(s=>s.id)]));
+  if(config.regionId==='south-central-asia')context.stories.population=[...(context.stories.population??[]),...southCentralReligionLocalCases.filter(c=>context.countries.includes(c.code)).map(c=>c.id)];
   function readState():AsiaState {return normalizePlaceReading(config.regionId,readBaseState());}
   function readBaseState():AsiaState {
     let restored=normalizeScopedIndustryState(config.industry,readAsiaAtlasState(new URL(location.href),context));
@@ -145,7 +146,7 @@ function start(root:HTMLElement) {
    if(id&&!config.presentation?.settlements?.[state.topic??'']?.categories.some(c=>c.id===id))return;
    navigate({...state,detail:id,city:null,place:null,point:null,story:null,camera:camera()},false);
   }
-  function createPresentation(){presentation?.destroy();presentation=config.presentation&&$('[data-map-annotations]')?createAsiaPresentation(root,{presentation:config.presentation,regionId:config.regionId,focusId:config.focusId,allowSingleItem:config.regionId==='southeast-asia',presentationBase:config.presentationBase!,religionCountries:context.countries,selectSettlement,selectReligionCountry:code=>{if(context.countries.includes(code))navigate({...state,place:code,detail:null,point:null,story:null,camera:camera()},false)},selectFarmKinds:farms=>navigate({...state,farms,single:false,camera:camera()},false),cities:config.cities,population:config.population,riverFile:config.physical&&config.physicalBase!+config.physical.water.split('/').at(-1),riverIds:config.farmInsight?.rivers,landforms:config.physicalFocus,waterFocus:asiaWaterFocus[config.regionId].filter(item=>!config.focusWaterRivers||config.focusWaterRivers.includes(item.river)),selectBasin:id=>hydrology?.select(id),selectLandform:id=>{const f=config.physicalFocus?.find(f=>f.id===id);if(f)navigate({...state,topic:'landform',detail:id,point:f.coordinates,city:null,place:f.country,camera:camera()},false);}},()=>state,selectCity,selectUrban,point=>navigate({...state,point,place:countryAtPoint(point),city:null,detail:null,story:null,camera:camera()},false),chooseFarm,message=>{presentationError=message;renderMapStatus();}):null;}
+  function createPresentation(){presentation?.destroy();presentation=config.presentation&&$('[data-map-annotations]')?createAsiaPresentation(root,{presentation:config.presentation,regionId:config.regionId,focusId:config.focusId,allowSingleItem:config.regionId==='southeast-asia',presentationBase:config.presentationBase!,religionCountries:context.countries,selectSettlement,selectReligionCountry:(code,localId)=>{if(context.countries.includes(code))navigate({...state,place:code,detail:null,point:null,story:localId??null,camera:camera()},false)},selectFarmKinds:farms=>navigate({...state,farms,single:false,camera:camera()},false),cities:config.cities,population:config.population,riverFile:config.physical&&config.physicalBase!+config.physical.water.split('/').at(-1),riverIds:config.farmInsight?.rivers,landforms:config.physicalFocus,waterFocus:asiaWaterFocus[config.regionId].filter(item=>!config.focusWaterRivers||config.focusWaterRivers.includes(item.river)),selectBasin:id=>hydrology?.select(id),selectLandform:id=>{const f=config.physicalFocus?.find(f=>f.id===id);if(f)navigate({...state,topic:'landform',detail:id,point:f.coordinates,city:null,place:f.country,camera:camera()},false);}},()=>state,selectCity,selectUrban,point=>navigate({...state,point,place:countryAtPoint(point),city:null,detail:null,story:null,camera:camera()},false),chooseFarm,message=>{presentationError=message;renderMapStatus();}):null;}
   createPresentation();
 
   async function fetchAsset<T>(url:string,read:(response:Response)=>Promise<T>):Promise<T> {
@@ -383,6 +384,8 @@ function start(root:HTMLElement) {
     for(const e of $$<HTMLElement>('[data-settlement-overview]'))e.hidden=!!state.detail||!!scReligion;
     for(const e of $$<HTMLElement>('[data-sc-religion-census]'))e.hidden=!scReligion||!!state.detail;
     for(const e of $$<HTMLElement>('[data-sc-religion-country]'))e.hidden=!scReligion||!!state.detail||e.dataset.scReligionCountry!==state.place;
+    const localCase=scReligion?southCentralReligionLocalCases.find(item=>item.code===state.place&&item.id===state.story):null,localPanel=root.querySelector<HTMLElement>('[data-sc-religion-local-panel]');
+    if(localPanel){localPanel.hidden=!localCase;if(localCase){localPanel.querySelector<HTMLElement>('[data-sc-religion-local-title]')!.textContent=localCase.name+'・'+localCase.year+'年';localPanel.querySelector<HTMLElement>('[data-sc-religion-local-reading]')!.textContent=localCase.reading;localPanel.querySelector<HTMLElement>('[data-sc-religion-local-scope]')!.textContent=localCase.scope;const link=localPanel.querySelector<HTMLAnchorElement>('[data-sc-religion-local-source]')!;link.textContent=localCase.source.label;link.href=localCase.source.url;}}
     for(const e of $$<HTMLElement>('[data-epr-method="religion"]'))e.hidden=!!scReligion&&!state.detail;
     for(const e of $$<HTMLButtonElement>('[data-sc-religion-select]'))e.setAttribute('aria-pressed',String(scReligion&&e.dataset.scReligionSelect===state.place));
     for(const e of $$<HTMLElement>('[data-settlement-detail]'))e.hidden=!settlement||e.dataset.settlementTopic!==state.topic||e.dataset.settlementDetail!==state.detail;

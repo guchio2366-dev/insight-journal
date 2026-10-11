@@ -42,9 +42,9 @@ export function renderSouthCentralRiceFlow(section:HTMLElement,region:string,top
  const legend=make('p','sc-flow-legend');for(const [name,value,color] of [['バスマティ米',basmati,'#285c50'],['その他の米',otherRice,'#a7a66c']] as const){const key=make('i');key.style.background=color;legend.append(key,document.createTextNode(`${name} ${formatMillions(value)}　`));}supply.append(legend);
  supply.append(make('p','sc-flow-detail','輸出の内訳です。国内消費・飼料・在庫変動は含まず、国内仕向けの量は示せません。右の世界生産比に使うFAOSTATの籾米とは定義と年が違うため、両者を差し引きしません。'));
  supply.append(source());
- const top=riceFlow.basmatiDestinations.slice(0,5),known=riceFlow.basmatiDestinations.reduce((sum,row)=>sum+row.quantity,0),other=basmati-known;
+ const top=riceFlow.basmatiDestinations.slice(0,10),known=riceFlow.basmatiDestinations.reduce((sum,row)=>sum+row.quantity,0),other=basmati-known;
  const slices=[...top,{name:'その他の相手国',quantity:basmati-top.reduce((sum,row)=>sum+row.quantity,0)}];
- const colors=['#285c50','#648f6d','#a7a66c','#d3a05e','#967a88','#ddd8c8'];let percent=0;
+ const colors=['#285c50','#648f6d','#a7a66c','#d3a05e','#967a88','#527d8a','#886da1','#b76d57','#858f51','#6c84a5','#ddd8c8'];let percent=0;
  const stops=slices.map((row,i)=>{const end=percent+row.quantity/basmati*100,stop=`${colors[i]} ${percent.toFixed(3)}% ${end.toFixed(3)}%`;percent=end;return stop;});
  const pie=make('div','sc-flow-pie');pie.style.background=`conic-gradient(${stops.join(',')})`;pie.setAttribute('role','img');pie.setAttribute('aria-label',`インドのバスマティ米輸出先の割合。${slices.map(row=>`${row.name}${(row.quantity/basmati*100).toFixed(1)}％`).join('、')}。`);destinations.append(pie);
  const list=make('ul','sc-flow-destinations');slices.forEach((row,i)=>{const li=make('li');const key=make('i');key.style.background=colors[i];li.append(key,make('span',undefined,row.name),make('strong',undefined,`${(row.quantity/basmati*100).toFixed(1)}％`));list.append(li);});destinations.append(list);

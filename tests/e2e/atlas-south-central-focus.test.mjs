@@ -70,7 +70,13 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    const industry=JSON.parse(await page.locator('[data-asia-config]').textContent());
    assert.ok(industry.industrySites.every(site=>expected.includes(site.country)));
    assert.equal(await page.locator('[data-sc-industry-topic] option[value="sc-hydro"]').count(),1);
+   await page.locator('.asia-industry-regional-label').first().waitFor({state:'visible'});
+   assert.equal(await page.locator('.asia-industry-regional-label').count(),industry.industrySites.length);
+   assert.match(await page.locator('.asia-industry-regional-label').first().textContent(),/衣料|石油|ウラン/);
    await capture(`${region}-industry`);
+   await page.locator('.asia-industry-regional-label').first().click();
+   assert.ok(new URL(page.url()).searchParams.get('detail'));
+   await capture(`${region}-industry-selected`);
    await page.goBack();
    await page.waitForURL(`**/atlas/asia/${region}/nature/**`);
    assert.equal(await page.locator('[data-country-select]').inputValue(),'');
@@ -98,9 +104,17 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    await capture(`${region}-terrain`);
    const terrainText=await page.locator('[data-physical-reading]').textContent();
    if(region==='central-asia')assert.doesNotMatch(terrainText,/ネパール|デカン|インド半島|ベンガル/);
+   await page.goto(`${url}/atlas/asia/${region}/nature/?topic=landform`,{waitUntil:'domcontentloaded'});
+   await page.locator('.asia-landform-label').first().waitFor({state:'visible'});
+   await capture(`${region}-landform`);
+   await page.locator('.asia-landform-label').first().click();
+   assert.ok(new URL(page.url()).searchParams.get('detail'));
+   assert.equal(await page.locator('[data-physical-reading]').isVisible(),true);
+   await capture(`${region}-landform-selected`);
    await page.goto(`${url}/atlas/asia/${region}/population/?topic=religion`,{waitUntil:'domcontentloaded'});
    await page.waitForFunction(count=>document.querySelectorAll('.sc-religion-marker').length===count,region==='central-asia'?1:5);
    await page.waitForFunction(count=>document.querySelectorAll('.sc-religion-report-marker:not(.local)').length===count,region==='central-asia'?4:0);
+   if(region==='south-asia')await page.waitForFunction(()=>document.querySelectorAll('.sc-religion-local-marker').length===8);
    await capture(`${region}-religion`);
    const markers=await page.locator('.sc-religion-marker').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('aria-label')));
    assert.equal(markers.some(label=>label.includes('カザフスタン')),region==='central-asia');
@@ -109,6 +123,14 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    await page.goBack();
    await page.waitForFunction(()=>new URL(location.href).searchParams.get('place')===null);
    assert.equal(await page.locator('.sc-religion-marker').count(),region==='central-asia'?1:5);
+   if(region==='south-asia'){
+    await page.locator('[data-religion-local="pk-sindh-religion"]').click();
+    assert.equal(new URL(page.url()).searchParams.get('story'),'pk-sindh-religion');
+    assert.match(await page.locator('[data-sc-religion-local-reading]').textContent(),/6.43%/);
+    await capture('south-asia-sindh-religion');
+    await page.goBack();
+    await page.waitForFunction(()=>new URL(location.href).searchParams.get('place')===null);
+   }
    if(region==='central-asia'){
     await page.locator('.sc-religion-report-marker[aria-label^="タジキスタン"]').click();
     assert.equal(new URL(page.url()).searchParams.get('place'),'TJK');
@@ -125,12 +147,17 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    await page.goto(`${url}/atlas/asia/${region}/nature/?topic=basins`,{waitUntil:'domcontentloaded'});
    await page.locator('[data-basin-shortcuts] button:enabled').first().waitFor();
    assert.equal(await page.locator('[data-basin-shortcuts]').isVisible(),true);
+   await page.locator('[data-hydrology-detail-label]').waitFor({state:'visible'});
    await capture(`${region}-basins`);
    await page.locator('[data-basin-shortcuts] button:enabled').first().click();
    assert.ok(new URL(page.url()).searchParams.get('detail'));
    await page.reload({waitUntil:'domcontentloaded'});
    await page.locator('[data-basin-shortcuts] button[aria-pressed="true"]').first().waitFor();
    await capture(`${region}-basin-selected`);
+   await page.goto(`${url}/atlas/asia/${region}/nature/?topic=groundwater`,{waitUntil:'domcontentloaded'});
+   await page.locator('[data-hydrology-detail-label]').waitFor({state:'visible'});
+   await page.locator('[data-hydrology-detail] option[value!=""]').first().waitFor();
+   await capture(`${region}-groundwater`);
    await page.goto(`${url}/atlas/asia/${region}/nature/?topic=water`,{waitUntil:'domcontentloaded'});
    await page.locator('[data-water-picker]').waitFor({state:'visible'});
    await page.locator('[data-water-select]').selectOption(region==='south-asia'?'rivers-194':'rivers-112');

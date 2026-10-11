@@ -4,7 +4,7 @@ import type {AsiaState} from '../lib/atlas-asia-state';
 import {majorClimateCities,indiaPopulationLabels} from '../data/atlas/asia-focus';
 import {contourBandFiles,type AsiaContourBands} from '../data/atlas/asia-contour-bands';
 import {centralRainfallColor} from '../data/atlas/asia-south-central-rainfall-legend';
-import {southCentralReligionCensuses,southCentralReligionReports} from '../data/atlas/asia-south-central-religion';
+import {southCentralReligionCensuses,southCentralReligionReports,southCentralReligionLocalCases} from '../data/atlas/asia-south-central-religion';
 import {Marker} from 'maplibre-gl';
 import {eastAsiaReligionCountries,eastAsiaReligionColors} from '../data/atlas/east-asia-religion';
 type Coordinate=[number,number];
@@ -40,7 +40,7 @@ function layoutSoutheastRiverNames(items:CodeInput[],bounds:Box,obstacles:Box[])
  }
  return placed;
 }
-export function createAsiaPresentation(root:HTMLElement,config:{presentation:AsiaPresentation;regionId?:string;focusId?:string;allowSingleItem?:boolean;presentationBase:string;religionCountries?:string[];cities:City[];population?:{cities:City[]};riverFile?:string;riverIds?:string[];landforms?:{id:string;name:string;coordinates:Coordinate}[];selectSettlement?:(id:string|null)=>void;selectReligionCountry?:(code:string)=>void;selectBasin?:(id:string)=>void;selectFarmKinds?:(farms:AsiaState['farms'])=>void;waterFocus?:{id:string;name:string;displayName?:string;river:string}[];selectLandform?:(id:string)=>void},getState:()=>AsiaState,chooseCity:(id:string)=>void,chooseUrban:(id:string)=>void,choosePoint:(point:Coordinate)=>void,chooseFarm:(id:string)=>void,onStatus:(message:string)=>void){
+export function createAsiaPresentation(root:HTMLElement,config:{presentation:AsiaPresentation;regionId?:string;focusId?:string;allowSingleItem?:boolean;presentationBase:string;religionCountries?:string[];cities:City[];population?:{cities:City[]};riverFile?:string;riverIds?:string[];landforms?:{id:string;name:string;coordinates:Coordinate}[];selectSettlement?:(id:string|null)=>void;selectReligionCountry?:(code:string,localId?:string)=>void;selectBasin?:(id:string)=>void;selectFarmKinds?:(farms:AsiaState['farms'])=>void;waterFocus?:{id:string;name:string;displayName?:string;river:string}[];selectLandform?:(id:string)=>void},getState:()=>AsiaState,chooseCity:(id:string)=>void,chooseUrban:(id:string)=>void,choosePoint:(point:Coordinate)=>void,chooseFarm:(id:string)=>void,onStatus:(message:string)=>void){
  const metadata=config.presentation,overlay=root.querySelector<HTMLElement>('[data-map-annotations]')!;
  let map:import('maplibre-gl').Map|null=null,revision=0,scheduled=0,disposed=false;
  let errorMode:string|null=null;
@@ -216,6 +216,9 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
    const marker=document.createElement('button');marker.type='button';marker.className='sc-religion-report-marker';marker.setAttribute('aria-label',`${report.name}の${report.year}年宗教報告を読む`);marker.setAttribute('aria-pressed',String(getState().place===report.code));marker.textContent=report.name;
    marker.addEventListener('click',event=>{event.stopPropagation();config.selectReligionCountry?.(report.code);});religionMarkers.push(new Marker({element:marker,anchor:'center'}).setLngLat(report.point).addTo(currentMap));
    if('local' in report){const note=document.createElement('button');note.type='button';note.className='sc-religion-report-marker local';note.textContent='GBAO';note.setAttribute('aria-label',report.local.label);note.addEventListener('click',event=>{event.stopPropagation();config.selectReligionCountry?.(report.code);});religionMarkers.push(new Marker({element:note,anchor:'center'}).setLngLat(report.local.point).addTo(currentMap));}
+  }
+  if(censusReligion)for(const local of southCentralReligionLocalCases.filter(c=>!config.religionCountries||config.religionCountries.includes(c.code))){
+   const marker=document.createElement('button');marker.type='button';marker.className='sc-religion-local-marker';marker.dataset.religionLocal=local.id;marker.textContent=local.name.replace(/州$|地区$/,'');marker.setAttribute('aria-label',local.name+'の'+local.year+'年宗教統計を読む');marker.setAttribute('aria-pressed',String(getState().story===local.id));marker.addEventListener('click',event=>{event.stopPropagation();config.selectReligionCountry?.(local.code,local.id);});religionMarkers.push(new Marker({element:marker,anchor:'center'}).setLngLat(local.point).addTo(currentMap));
   }
   const eastReligion=config.regionId==='east-asia'&&current==='religion'&&!getState().detail;
   const settlement=censusReligion||eastReligion?undefined:current?metadata.settlements?.[current]:undefined;

@@ -59,7 +59,7 @@ export function createAsiaWater(root:HTMLElement,config:Config,getState:()=>Asia
   const shown=primary.slice(0,100),selected=detail();if(selected&&!shown.some(r=>r.id===selected.id))shown.unshift(selected);
   for(const r of shown)input.append(option(('name' in r?basinName(r):groundwaterClasses[r.class].type+'・涵養'+groundwaterClasses[r.class].recharge+' mm/年')+' · '+names(r.countries)+' · '+r.sourceId,r.id));
   input.value=selected?.id??'';
-  $('[data-hydrology-detail-label]').hidden=t!=='basins';
+  $('[data-hydrology-detail-label]').hidden=t==='precipitation';
   $('[data-hydrology-picker-note]').hidden=true;
   $('[data-hydrology-picker-note]').textContent=t==='precipitation'||!datasets.has(t)?'':`選んだ国・地域に交わる${records.length}区域を収録しています。一覧には${Math.min(100,records.length)}区域${shown.length>100?'と現在の選択':''}を示し、地図では全区域を選べます。${t==='basins'?'一覧は流域面積の大きい順です。':''}`;
  }
@@ -100,6 +100,7 @@ export function createAsiaWater(root:HTMLElement,config:Config,getState:()=>Asia
   const content=$('[data-hydrology-content]');content.replaceChildren();let message=status;
   const waterPicker=root.querySelector<HTMLElement>('[data-water-picker]');
   if(waterPicker){waterPicker.hidden=getState().topic!=='water';if(!waterPicker.hidden){$('[data-hydrology-lead]').after(waterPicker);const input=waterPicker.querySelector<HTMLSelectElement>('select')!;input.value=river()?.id??'';for(const o of input.options){const allowed=!o.value||!state.place||config.waterFeatures?.find(f=>f.id===o.value)?.countries.includes(state.place);o.hidden=!allowed;o.disabled=!allowed;}}}
+  if(config.focusId&&t!=='precipitation')$('[data-basin-shortcuts]').after($('[data-hydrology-detail-label]'));
   if(river()&&!riverCase){const r=river()!;content.append(el('h3',r.label??r.name),el('p',r.kind==='rivers'?'青い線は川の概略の流路です。背景の淡い青の面は、地下水を蓄える主要な地層の広がりを示します。河川の流域を調べるときは、上の「河川の流域」を選んでください。':'青い面は資料に収録された湖の概略形状です。現在の湖面や貯水量を示すものではありません。周辺の淡い青の面は主要な地下水盆地です。'));}
 
   if(t==='precipitation'){
