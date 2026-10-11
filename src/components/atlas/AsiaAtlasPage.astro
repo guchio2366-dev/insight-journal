@@ -165,7 +165,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
       </section>
       <aside class="atlas-field-national asia-reading-panel" data-field-national={initialField} aria-label="地図の解説">
        <div class="asia-city-reading-host" data-city-reading-host hidden>
-        {cities.map(city=><article class="asia-city-card" data-city-panel={city.id} id={`city-${city.id}`} hidden><h2 class="visually-hidden">{regionId==='east-asia'?`${city.name}―${japaneseNames[city.countryCode]}の雨温図`:`${city.name}の雨温図`}</h2><AsiaClimateDiagram {city} countryName={japaneseNames[city.countryCode]} /></article>)}
+        {cities.map(city=><article class="asia-city-card" data-city-panel={city.id} id={`city-${city.id}`} hidden><h2 class="visually-hidden">{regionId==='east-asia'?`${city.name}―${japaneseNames[city.countryCode]}の雨温図`:`${city.name}の雨温図`}</h2><AsiaClimateDiagram {city} countryName={japaneseNames[city.countryCode]} eastAsiaReview={regionId==='east-asia'} /></article>)}
        </div>
        <section class="asia-reading-dock" data-reading-dock aria-label="この地図の要点と比較">
         <p class="eyebrow">この地図の要点</p><h2 data-reading-dock-title>{reading.title}</h2><p data-reading-dock-summary>{reading.summary}</p>
