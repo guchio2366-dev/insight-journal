@@ -49,3 +49,9 @@
 
 .east-rain-scale{height:14px;width:100%;margin:5px 0}.east-rain-ticks{display:flex;justify-content:space-between;font-size:10px;width:100%;font-variant-numeric:tabular-nums}
 .east-climate-relationship{border-top:1px solid var(--rule);margin-top:20px;padding:16px 0;font-size:13px;line-height:1.8}.east-climate-relationship h2{font-size:20px}
+
+[data-region="east-asia"] .asia-map-annotations .asia-farm-region-label{background:rgba(255,253,245,.85);border:0;padding:2px 5px;color:#4b574b;font:400 10px/1.4 var(--sans);pointer-events:none;border-radius:0;box-shadow:none}
+
+@media(min-width:1600px){
+ [data-region=east-asia] .atlas-desktop-shell .asia-atlas[data-field] .asia-map-frame{height:min(760px,var(--asia-map-available-height,760px),var(--east-map-content-height,760px))!important}
+}

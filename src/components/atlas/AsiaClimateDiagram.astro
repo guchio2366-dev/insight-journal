@@ -26,7 +26,7 @@ const farmingReading=asiaFarmInsights[city.regionId];
 const localReading=city.regionId==='south-central-asia'?southCentralCityReadings[city.id]:undefined;
 ---
 <div class="asia-climate-diagram"><figure data-city-statistics>
-  <figcaption><strong data-climate-place>{bangkok?'バンコク－タイの雨温図':`${city.name}${countryName?` — ${countryName}`:''}`}</strong></figcaption>
+  <figcaption><strong data-climate-place>{city.regionId==='east-asia'?`${city.name}―${countryName}の雨温図`:bangkok?'バンコク－タイの雨温図':`${city.name}${countryName?` — ${countryName}`:''}`}</strong></figcaption>
   <svg viewBox={`0 0 320 ${axes.peakLabel?228:207}`} data-climate-plot data-temperature-min={axes.temperatureMin} data-temperature-max={axes.temperatureMax} data-rain-max={axes.rainMax} data-plot-top={top} data-plot-bottom={bottom} role="img" aria-labelledby={`chart-title-${city.id} chart-desc-${city.id}`}>
     <title id={`chart-title-${city.id}`}>{city.name}の月別の気温と降水量</title>
     <desc id={`chart-desc-${city.id}`}>{validRain.length?'青い棒が降水量、赤い線が平均気温。':'赤い線が平均気温。降水量平年値は12か月とも未収録で、0mmではありません。'}月別の数値表が下にあります。{city.normalPeriod}の観測所平年値。</desc>
@@ -48,6 +48,11 @@ const localReading=city.regionId==='south-central-asia'?southCentralCityReadings
     {bangkok&&<p class="city-takeaway"><strong>年較差が小さく、雨の季節差が大きい。</strong></p>}
     <h3 data-city-climate-class title="観測地点を含む広域格子の気候区分"><b data-city-class-code></b><span data-city-class-name>気候区分：未取得</span></h3>
     <p class="city-class-description" data-city-class-description></p>
+    {city.regionId==='east-asia'&&<>
+      <p data-city-grid-state role="status">雨温図の観測所平年値は掲載済みです。地図格子の気候区分は都市選択時に読み込みます。</p>
+      <button type="button" data-city-grid-retry hidden>気候区分を再取得</button>
+      <details data-city-class-rules hidden><summary>判定条件と採用分類法</summary><p data-city-class-rule-text></p><a href="https://www.nature.com/articles/s41597-023-02549-6">Beckほか（2023）の分類定義</a></details>
+    </>}
     {bangkok?<>
       <p>赤道に近く一年を通じて高温です。南西季節風が湿った空気を運ぶ時期に雨が増え、北東季節風が卓越する時期は雨が少なくなります。観測所の雨温図は、バンコク周辺の乾季と雨季を比べる手掛かりです。</p>
       <section class="city-farming"><h4>周辺の農業と水利用</h4><p>バンコクのあるチャオプラヤ川下流の平野では稲作が行われます。乾季の作付けには貯水池や水路からの灌漑が関わり、雨温図の降水だけで農地へ届く水を決められません。</p><p>出典：<a href="https://www.data.jma.go.jp/cpd/monitor/nrmlist/NrmMonth.php?stn=48455">気象庁・バンコク観測所の平年値</a> · <a href="https://tmd.go.th/media/pdf-eng/climate-0215.pdf">タイ気象局・季節風の説明</a> · <a href="https://documents1.worldbank.org/curated/en/246261468311385750/pdf/multi-page.pdf">世界銀行・チャオプラヤ平野の灌漑</a>。</p><button type="button" data-compare="agriculture">周辺の米の分布を見る →</button></section>

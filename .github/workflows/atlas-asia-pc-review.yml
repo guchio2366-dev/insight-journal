@@ -27,6 +27,7 @@ on:
       - 'src/styles/atlas-asia*.css'
       - 'src/pages/atlas/asia/**'
       - 'public/assets/atlas/asia*/**'
+      - 'public/assets/atlas/east-asia-v1/**'
       - 'tests/e2e/atlas-asia-*.test.mjs'
       - 'tests/e2e/atlas-south-central-focus.test.mjs'
       - 'tests/unit/atlas-asia-*.test.mjs'
@@ -56,6 +57,7 @@ on:
       - 'src/styles/atlas-asia*.css'
       - 'src/pages/atlas/asia/**'
       - 'public/assets/atlas/asia*/**'
+      - 'public/assets/atlas/east-asia-v1/**'
       - 'tests/e2e/atlas-asia-*.test.mjs'
       - 'tests/e2e/atlas-south-central-focus.test.mjs'
       - 'tests/unit/atlas-asia-*.test.mjs'
@@ -75,6 +77,7 @@ jobs:
     timeout-minutes: 15
     env:
       ASTRO_TELEMETRY_DISABLED: '1'
+      REVIEW_PRODUCTION_BASE_URL: 'https://guchio2366-dev.github.io/insight-journal'
       REVIEW_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
       REVIEW_BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
       REVIEW_BEFORE_SHA: ${{ github.event.before || '' }}

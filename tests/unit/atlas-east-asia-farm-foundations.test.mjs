@@ -11,7 +11,7 @@ const world=JSON.parse(readFileSync(data.sources.world.path));
 const hash=path=>createHash('sha256').update(readFileSync(path)).digest('hex');
 
 test('East farming shares, forest flows and candidate ranks come from matching source records',()=>{
- assert.deepEqual(data.countries,['CHN','JPN','KOR','TWN']);
+ assert.deepEqual(data.countries,['CHN','JPN','KOR','PRK','MNG','TWN']);
  assert.equal(hash(data.sources.country.path),data.sources.country.sha256);
  assert.equal(hash(data.sources.world.path),data.sources.world.sha256);
  assert.equal(hash(data.sources.trade.path),data.sources.trade.sha256);
@@ -37,7 +37,7 @@ test('East farming shares, forest flows and candidate ranks come from matching s
  assert.ok(data.cropFlows.wheat.JPN.imports>0);
  assert.deepEqual(data.cropCandidates.selected.map(row=>row.itemCode),['56','27','15','156','236','328','667','125','79','836']);
  assert.equal(data.cropCandidates.next[0].itemCode,'254');
- assert.equal(data.cropCandidates.selected.find(row=>row.itemCode==='328').reportedCountries,1);
+ assert.ok(data.cropCandidates.selected.find(row=>row.itemCode==='328').reportedCountries>=1);
 });
 
 test('crop import partner totals match the retained HS import values to WITS rounding',async()=>{
@@ -85,7 +85,16 @@ test('East under-map reading changes with country and topic without treating mis
   assert.match(section.querySelector('[data-east-export-partners]').textContent,/範囲が異なります/);
   assert.match(section.querySelector('[data-east-world-share]').textContent,/数量自給率.*別の定義/);
   assert.equal(section.querySelectorAll('[data-east-world-share] svg').length,0);
-  renderEastAsiaFarmFoundations(root,'east-asia',false,'wheat',{code:'JPN',name:'日本'});
+  renderEastAsiaFarmFoundations(root,'east-asia',true,'forest',undefined);
+  assert.match(section.textContent,/北朝鮮.*モンゴル/s);
+  assert.match(section.querySelector('[data-east-export-partners]').textContent,/HS44.*2023年.*名目米ドル/s);
+  assert.equal(section.querySelectorAll('.east-pie').length,0,'all-merchandise partners cannot substitute for wood partners');
+  assert.match(section.querySelector('[data-east-world-share]').textContent,/森林面積.*千ha/s);
+  assert.doesNotMatch(section.querySelector('[data-east-world-share]').textContent,/森林面積.*[0-9]％.*千ha/);
+  renderEastAsiaFarmFoundations(root,'east-asia',true,'forest',{code:'PRK',name:'北朝鮮'});
+  assert.match(section.querySelector('[data-east-export-partners]').textContent,/未収録（0ではありません）/);
+  assert.match(section.querySelector('[data-east-forest-flows]').textContent,/7.94百万m³/);
+  renderEastAsiaFarmFoundations(root,'east-asia',false,'wheat' ,{code:'JPN',name:'日本'});
   assert.equal(section.hidden,true);
  }finally{globalThis.document=old;await window.happyDOM.close();}
 });

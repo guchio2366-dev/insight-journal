@@ -19,7 +19,7 @@ const results={head:execFileSync('git',['rev-parse','HEAD'],{cwd:repo,encoding:'
 await mkdir(output,{recursive:true});
 const save=async()=>{
  await writeFile(path.join(output,'results.json'),JSON.stringify(results,null,2)+'\n');
- const html='<!doctype html><html lang="ja"><meta charset="utf-8"><title>東アジア・承認済み添削の実画面</title><style>body{font:14px/1.7 sans-serif;margin:24px;background:#f6f7f1}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:20px}figure{margin:0;background:white;padding:12px}img{width:100%;height:auto}code{overflow-wrap:anywhere}</style><h1>東アジア・承認済み添削の実画面</h1><p>head: <code>'+results.head+'</code> · '+results.status+' · sandbox有効のChrome · PC 1440×1000 / 1024×768</p><p>初期／選択／戻る／タブ往復の検証記録は results.json。画像は実ブラウザーのキャプチャです。</p><main>'+results.images.map(i=>'<figure><figcaption>'+i.name+'</figcaption><a href="'+i.name+'"><img loading="lazy" src="'+i.name+'" alt="'+i.name+'"></a></figure>').join('')+'</main></html>';
+ const html='<!doctype html><html lang="ja"><meta charset="utf-8"><title>東アジア・承認済み添削の実画面</title><style>body{font:14px/1.7 sans-serif;margin:24px;background:#f6f7f1}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:20px}figure{margin:0;background:white;padding:12px}img{width:100%;height:auto}code{overflow-wrap:anywhere}</style><h1>東アジア・承認済み添削の実画面</h1><p>head: <code>'+results.head+'</code> · '+results.status+' · sandbox有効のChrome · PC 1920×1080・100%・DPR1</p><p>本番比較元: <code>'+(results.production?.commitSha??'未取得')+'</code></p><p>初期／選択／戻る／タブ往復の検証記録は results.json。画像は実ブラウザーのキャプチャです。</p><main>'+results.images.map(i=>'<figure><figcaption>'+i.name+'</figcaption><a href="'+i.name+'"><img loading="lazy" src="'+i.name+'" alt="'+i.name+'"></a></figure>').join('')+'</main></html>';
  await writeFile(path.join(output,'index.html'),html);
 };
 async function serveBuild(){
@@ -47,7 +47,22 @@ try{
  assert(process.env.REVIEW_CHROME_PATH,'An already-installed Chrome is required');
  browser=await chromium.launch({executablePath:process.env.REVIEW_CHROME_PATH,headless:true,chromiumSandbox:true});
  results.browser=browser.version();
- for(const profile of [{name:'desktop',width:1440,height:1000},{name:'laptop',width:1024,height:768}]){
+ if(process.env.REVIEW_PRODUCTION_BASE_URL){
+  const base=process.env.REVIEW_PRODUCTION_BASE_URL.replace(/\/$/,'');const origin=new URL(base).origin;
+  const response=await fetch(base+'/_release.json');assert(response.ok,'production release metadata must be readable');results.production=await response.json();
+  const baseline=await browser.newContext({viewport:{width:1920,height:1080},deviceScaleFactor:1,serviceWorkers:'block'});
+  await baseline.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort('blockedbyclient'));
+  const page=await baseline.newPage();
+  for(const [id,field,query] of [['climate','nature',''],['population','population',''],['industry','industry',''],['agriculture','agriculture',''],['forestry','agriculture','?topic=forest'],['rainfall','nature','?topic=precipitation'],['basins','nature','?topic=basins'],['landforms','nature','?topic=landform']]){
+   await page.goto(base+'/atlas/asia/east-asia/'+field+'/'+query,{waitUntil:'domcontentloaded'});
+   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true');await page.evaluate(()=>document.fonts.ready);await page.waitForLoadState('networkidle');
+   const name='production-'+id+'.jpg';await page.screenshot({path:path.join(output,name),type:'jpeg',quality:70,animations:'disabled'});
+   const bytes=await readFile(path.join(output,name));results.images.push({name,sha256:createHash('sha256').update(bytes).digest('hex'),bytes:bytes.length,url:page.url(),role:'production-before'});
+  }
+  await baseline.close();await save();
+ }
+
+ for(const profile of [{name:'desktop',width:1920,height:1080},...(process.env.REVIEW_SMALL_PC==='1'?[{name:'laptop',width:1024,height:768}]:[])]){
   const context=await browser.newContext({viewport:{width:profile.width,height:profile.height},deviceScaleFactor:1,serviceWorkers:'block'});
   await context.route('**/*',async route=>{const url=new URL(route.request().url());if(url.origin!==host.origin){results.externalAttempts.push(url.origin+url.pathname);await route.abort('blockedbyclient');}else await route.continue();});
   await context.routeWebSocket('**/*',socket=>{results.externalAttempts.push(socket.url());socket.close();});
@@ -154,7 +169,7 @@ try{
    const after=await stations(page);assert.deepEqual(after.map(x=>x.id),expected,message);
    for(const row of after){const old=before.find(x=>x.id===row.id);assert(Math.abs(parseFloat(row.x)-parseFloat(old.x))<=.5&&Math.abs(parseFloat(row.y)-parseFloat(old.y))<=.5,message+': '+JSON.stringify({id:row.id,before:old,after:row}));}
   }
-  async function run(name,action){const record={profile:profile.name,name,passed:false,errors:[],failedRequests:[]};results.cases.push(record);const page=await context.newPage();page.setDefaultTimeout(20000);page.on('pageerror',e=>record.errors.push(e.message));page.on('response',r=>{if(r.status()>=400)record.failedRequests.push({url:new URL(r.url()).pathname,status:r.status()});});try{record.evidence=await action(page);assert.deepEqual(record.errors,[]);assert.deepEqual(record.failedRequests,[]);record.passed=true;}catch(e){record.failure=e.stack??String(e);record.url=page.url();record.geometry=await geometry(page).catch(()=>null);console.log(JSON.stringify(record));await shot(page,name+'-failure').catch(()=>{});}finally{await page.close();await save();}console.log(`${record.passed?'PASS':'FAIL'} ${profile.name} ${name}${record.failure?': '+record.failure.split('\n')[0]:''}`);}
+  async function run(name,action){const record={profile:profile.name,name,passed:false,errors:[],failedRequests:[]};results.cases.push(record);const page=await context.newPage();page.setDefaultTimeout(20000);page.on('pageerror',e=>record.errors.push(e.message));page.on('response',r=>{if(r.status()>=400)record.failedRequests.push({url:new URL(r.url()).pathname,status:r.status()});});try{record.evidence=await action(page);assert.deepEqual(record.errors,[]);assert.deepEqual(record.failedRequests.filter(r=>!(record.expectedFailedPaths??[]).includes(r.url)),[]);record.passed=true;}catch(e){record.failure=e.stack??String(e);record.url=page.url();record.geometry=await geometry(page).catch(()=>null);console.log(JSON.stringify(record));await shot(page,name+'-failure').catch(()=>{});}finally{await page.close();await save();}console.log(`${record.passed?'PASS':'FAIL'} ${profile.name} ${name}${record.failure?': '+record.failure.split('\n')[0]:''}`);}
   await run('religion',async page=>{
    await open(page,'population');await page.locator('[data-population-group="religion"]').click();await ready(page);const initial=await layout(page),cards=await religionCards(page),reading=page.locator('[data-settlement-reading="religion"]');assert(await reading.isVisible());
    const text=await reading.innerText();assert.match(text,/2023年.*18歳以上/s);assert.match(text,/15歳以上.*59.4％.*40.6％.*分母.*換算/s);assert.match(text,/28\/31省級地域.*新疆・チベット・海南/s);
@@ -168,11 +183,26 @@ try{
   });
   await run('climate',async page=>{
    await open(page,'nature');const initial=await layout(page),before=await stations(page);assert(before.length>0);await shot(page,'climate-initial');
-   await page.locator('[data-station="tokyo"]').click();await ready(page);const selected=page.locator('[data-city-panel="tokyo"]');assert.equal(await selected.isVisible(),true);assert.match(await selected.locator('h2').textContent(),/東京の雨温図/);assert.match(await selected.locator('[data-city-class-description]').textContent(),/0℃超.*22℃以上.*40mm未満/);const text=await selected.textContent();assert.match(text,/秋雨前線.*台風/);assert.match(text,/西高東低.*山地/);assert.match(text,/関東平野/);assert.doesNotMatch(text,/長江|黄河|二期作/);await sameStations(page,before,'Tokyo must preserve all geographic station positions');await shot(page,'climate-tokyo');
+   await page.locator('[data-station="tokyo"]').click();await ready(page);const selected=page.locator('[data-city-panel="tokyo"]');assert.equal(await selected.isVisible(),true);assert.match(await selected.locator('h2').textContent(),/東京―日本の雨温図/);assert.match(await selected.locator('[data-city-class-description]').textContent(),/0℃超.*22℃以上.*乾燥帯B/);const text=await selected.textContent();assert.match(text,/秋雨前線.*台風/);assert.match(text,/西高東低.*山地/);assert.match(text,/関東平野/);assert.doesNotMatch(text,/長江|黄河|二期作/);await sameStations(page,before,'Tokyo must preserve all geographic station positions');await shot(page,'climate-tokyo');
+   assert.equal(new URL(page.url()).searchParams.get('place'),null);
+   assert.match(await selected.locator('[data-climate-place]').textContent(),/東京―日本の雨温図/);
+   for(const city of ['beijing','tokyo']){await page.locator('[data-city-select]').selectOption(city);await ready(page);assert.equal(new URL(page.url()).searchParams.get('place'),null);await sameStations(page,before,'Foreign city switches preserve geographic station positions');}
    await page.reload();await ready(page);await sameStations(page,before,'Reload selected Tokyo retains whole-region camera');
    await page.locator('[data-field="population"]').first().click();await ready(page);assert.equal(await selected.isVisible(),false);await page.locator('[data-field="natural"]').first().click();await ready(page);await sameStations(page,before,'Tab round trip retains camera');
    await page.goBack();await ready(page);assert.equal(await selected.isVisible(),false);
    return {initial,stationPositionsBefore:before,selectedCamera:'same projected positions before, after selection, reload and tab round trip'};
+  });
+  await run('climate-data-failure',async page=>{
+   await open(page,'nature');const before=await stations(page),loaded=await page.locator('[data-asia-atlas]').getAttribute('data-map-load-ms');
+   const record=results.cases.at(-1);record.expectedFailedPaths=[basePath+'/assets/atlas/asia-climate-v2/east-asia.uint8.gz'];
+   await page.route('**/east-asia.uint8.gz',route=>route.fulfill({status:503,body:'intentional grid failure'}));
+   await page.locator('[data-station="tokyo"]').click();await page.locator('[data-city-panel="tokyo"] [data-city-grid-retry]').waitFor({state:'visible'});
+   assert.match(await page.locator('[data-city-panel="tokyo"] [data-city-grid-state]').innerText(),/雨温図.*掲載済み.*気候区分を取得できません/);
+   assert.equal(await page.locator('[data-map-fallback]').isVisible(),false);assert.equal(await page.locator('[data-map-retry]').isVisible(),false);
+   assert(await page.locator('[data-city-panel="tokyo"] [data-climate-plot]').isVisible());await sameStations(page,before,'classification failure preserves the rendered map');await shot(page,'climate-grid-failure');
+   await page.unroute('**/east-asia.uint8.gz');await page.locator('[data-city-panel="tokyo"] [data-city-grid-retry]').click();
+   await page.waitForFunction(()=>document.querySelector('[data-city-panel="tokyo"] [data-city-class-code]').textContent==='Cfa');
+   assert.equal(await page.locator('[data-asia-atlas]').getAttribute('data-map-load-ms'),loaded);return {fault:'intentional HTTP503 for the classification grid only',retry:'restored Cfa without re-creating map'};
   });
   await run('population',async page=>{
    await open(page,'population');const initial=await layout(page);const reading=await visibleReading(page,'[data-population-title]','[data-population-takeaway]','[data-population-detail]');assert.match(await page.locator('[data-population-takeaway]').textContent(),/四川盆地.*成都.*重慶.*武漢.*西安/);assert.match(await page.locator('[data-population-detail]').textContent(),/灌漑農業.*工業化/);const helper=page.locator('.population-picker');assert.equal(await helper.isVisible(),true);assert(await helper.evaluate(n=>Boolean(n.closest('[data-asia-map-items]'))));await shot(page,'population-initial');
@@ -205,6 +235,20 @@ try{
   });
   await run('basins',async page=>{
    await open(page,'nature','?topic=basins');const names=['長江','黄河','タリム川','アムール川'];for(const name of names)await page.locator('.asia-river-label').filter({hasText:name}).waitFor({state:'visible'});const initial=await layout(page);assert.equal(await page.locator('[data-basin-shortcuts]').isVisible(),false);assert.match(await page.locator('[data-hydrology-lead]').textContent(),/長江.*黄河.*アムール.*タリム/s);await shot(page,'basins-initial');await page.locator('.asia-river-label').filter({hasText:'黄河'}).click();await ready(page);assert.equal(new URL(page.url()).searchParams.get('detail'),'b-4060007850');assert.match(await page.locator('[data-hydrology-scene-reading]').textContent(),/青海.*渤海.*灌漑/s);await shot(page,'basins-yellow');await page.goBack();await ready(page);assert.equal(new URL(page.url()).searchParams.has('detail'),false);await page.locator('[data-field="agriculture"]').first().click();await ready(page);await page.locator('[data-field="natural"]').first().click();await ready(page);assert.equal(await page.locator('.asia-river-label').filter({hasText:'黄河'}).isVisible(),false);await page.locator('[data-natural-group="water"]').click();await ready(page);await page.locator('[data-water-view="basins"]').click();await ready(page);for(const name of names)assert.equal(await page.locator('.asia-river-label:visible').filter({hasText:name}).count(),1);return {initial,riverNames:names};
+  });
+  await run('forestry',async page=>{
+   await open(page,'agriculture');await page.locator('[data-farm-group="forestry"]').click();await ready(page);await page.locator('[data-east-forest-flows] .east-bar').first().waitFor();
+   await shot(page,'forest-map');const section=page.locator('[data-east-farm-foundations]');await section.scrollIntoViewIfNeeded();await shot(page,'forest-statistics');
+   assert.match(await section.innerText(),/北朝鮮.*モンゴル/s);assert.match(await page.locator('[data-east-export-partners]').innerText(),/HS44.*2023年/s);
+   assert.match(await page.locator('[data-east-world-share]').innerText(),/森林面積.*千ha/s);assert.equal(await section.locator('.east-pie').count(),0);
+   await page.goBack();await ready(page);return {reporters:6,woodPartners:'missing; all-goods pie removed'};
+  });
+  await run('landform-extents',async page=>{
+   await open(page,'nature','?topic=landform');await page.locator('.asia-landform-label:visible').filter({hasText:'四川盆地'}).waitFor();
+   await shot(page,'landforms-initial');const before=await stations(page);
+   await page.locator('.asia-landform-label:visible').filter({hasText:'四川盆地'}).click();await ready(page);assert.equal(new URL(page.url()).searchParams.get('detail'),'sichuan-basin');await shot(page,'landforms-sichuan');
+   await page.reload();await ready(page);assert.equal(new URL(page.url()).searchParams.get('detail'),'sichuan-basin');
+   await page.locator('[data-field="population"]').first().click();await ready(page);await page.locator('[data-field="natural"]').first().click();await ready(page);return {extents:9,geometry:'unmodified Natural Earth geographic region polygons'};
   });
   await context.close();
  }

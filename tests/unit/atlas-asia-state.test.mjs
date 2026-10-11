@@ -191,3 +191,12 @@ test('南・中央アジアの個別ページでも分野のURLと選択が往�
   assert.equal(next.pathname,`/atlas/asia/${region}/agriculture/`);assert.equal(readAsiaAtlasState(next,context).field,'agriculture');
  }
 });
+
+
+test('independent city context preserves explicit country scope without inferring a city country',()=>{
+ const context={...east,independentCities:true};
+ assert.equal(readAsiaAtlasState(url('?city=tokyo'),context).place,null);
+ const state=readAsiaAtlasState(url('?place=CHN&city=tokyo'),context);
+ assert.equal(state.place,'CHN');assert.equal(state.city,'tokyo');
+ assert.deepEqual(readAsiaAtlasState(writeAsiaAtlasState(url(''),state),context),state);
+});

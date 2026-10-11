@@ -92,7 +92,7 @@ function fixture() {
     <div class="asia-map-frame"><div data-map-surface></div></div><div data-map-fallback><svg><path data-map-country="JPN"></path></svg></div>
     <div data-map-state></div><button data-map-retry hidden></button>
     <section data-overview><div class="asia-next"><p></p><div class="asia-city-links"></div></div></section>
-    <details data-reading-details><summary>詳しい解説</summary>${['tokyo','beijing'].map(id=>`<article data-city-panel="${id}" hidden><h3><b data-city-class-code></b><span data-city-class-name></span></h3><p data-city-class-description></p></article>`).join('')}</details>
+    <details data-reading-details><summary>詳しい解説</summary>${['tokyo','beijing'].map(id=>`<article data-city-panel="${id}" hidden><h3><b data-city-class-code></b><span data-city-class-name></span></h3><p data-city-class-description></p><p data-city-grid-state></p><button data-city-grid-retry hidden></button><details data-city-class-rules><p data-city-class-rule-text></p></details></article>`).join('')}</details>
     <section class="asia-rice-reading" data-rice-reading hidden><p class="asia-takeaway"></p></section>
     <section data-class-reading hidden></section><section data-climate-legend></section><section data-agriculture-legend hidden></section>
     <button data-climate-class="14"></button><button data-climate-class="21"></button>
@@ -613,7 +613,7 @@ test('都市一覧の実選択から都市主題・詳細格子・人口履歴�
   assert.equal(q('[data-population-city-facts]').hidden,true);
   assert.equal(q('[data-reading-details]').open,false);
   const frame={...window.__map.center,zoom:window.__map.zoom};q('[data-population-city]').value='uc-tokyo';q('[data-population-city]').dispatchEvent(new window.Event('change'));
-  const p=new URL(window.location.href).searchParams;assert.equal(p.get('topic'),'urban');assert.equal(p.get('detail'),'uc-tokyo');assert.equal(p.get('place'),'JPN');
+  const p=new URL(window.location.href).searchParams;assert.equal(p.get('topic'),'urban');assert.equal(p.get('detail'),'uc-tokyo');assert.equal(p.get('place'),null);
   assert.deepEqual({...window.__map.center,zoom:window.__map.zoom},frame);
   await until(()=>q('[data-population-value]').textContent.includes('15,000'),'selected city numerical grid');
   assert.equal(q('[data-population-city-facts]').hidden,false);assert.match(q('[data-urban-history]').textContent,/2000年.*30,000,000.*2020年.*33,447,551/);
@@ -776,7 +776,7 @@ test('描画を使えない場合も都市図表を選択でき、再試行で�
     q('[data-city-select]').value = 'tokyo';
     q('[data-city-select]').dispatchEvent(new window.Event('change'));
     assert.equal(q('[data-city-panel="tokyo"]').hidden, false);
-    assert.equal(new URL(window.location.href).searchParams.get('place'), 'JPN');
+    assert.equal(new URL(window.location.href).searchParams.get('place'), null);
     window.__forceMapFail = false; q('[data-map-retry]').click();
     await until(() => root.dataset.mapReady === 'true', 'retry map ready');
     assert.equal(q('[data-map-fallback]').hidden, true);
@@ -1317,4 +1317,34 @@ test('宗教・民族の表示範囲から産業へ戻るリンクとクリッ�
    assert.equal(app.window.__map.lastFit.options.padding,5);
   }finally{await app.window.happyDOM.close();}
  }
+});
+
+
+test('東アジアは他国の都市へ直接切替でき、国の自動選択やカメラ変更を復元しない',async()=>{
+ const {window,q}=await setup('?place=CHN&lng=118&lat=32&z=3.2');
+ try{
+  const camera={...window.__map.getCenter(),zoom:window.__map.getZoom()};
+  assert.equal(q('option[value="tokyo"]').disabled,false);
+  for(const id of ['tokyo','beijing','tokyo']){
+   q('[data-city-select]').value=id;q('[data-city-select]').dispatchEvent(new window.Event('change'));
+   await until(()=>!q('[data-city-panel="'+id+'"]').hidden,'city switched');
+   assert.equal(new URL(window.location.href).searchParams.get('place'),null);
+   assert.deepEqual({...window.__map.getCenter(),zoom:window.__map.getZoom()},camera);
+  }
+  window.dispatchEvent(new window.Event('popstate'));await delay();
+  assert.equal(q('[data-country-select]').value,'');
+  assert.equal(q('[data-city-select]').value,'tokyo');
+ }finally{await window.happyDOM.close();}
+});
+
+test('都市の気候区分の取得失敗は描画エラー・雨温図の欠測と分けて表示する',async()=>{
+ const {window,q,rejectClimate}=await setup('?city=tokyo',{delayedClimateFailure:true});
+ try{
+  rejectClimate();await until(()=>!q('[data-city-grid-retry]').hidden,'classification failure');
+  assert.match(q('[data-city-grid-state]').textContent,/雨温図.*掲載済み.*気候区分を取得できません/);
+  assert.equal(q('[data-map-fallback]').hidden,true);
+  assert.equal(q('[data-map-state]').hidden,true);
+  assert.equal(q('[data-map-retry]').hidden,true);
+  assert.equal(q('[data-city-panel="tokyo"]').hidden,false);
+ }finally{rejectClimate();await window.happyDOM.close();}
 });

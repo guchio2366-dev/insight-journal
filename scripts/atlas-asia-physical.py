@@ -20,7 +20,7 @@ OUT = ROOT / 'public/assets/atlas/asia-physical-v1'
 BREAKS = [0, 200, 500, 1000, 2000, 3000, 4500]
 COLORS = ['b4cfbf', 'd8e2b5', 'e0d5a0', 'cdbc88', 'b09a78', '987d6b', 'b9aaa0', 'eee9e1']
 NODATA = -32768
-RIVER_NAMES = {'Chang Jiang': '長江', 'Yangtze': '長江', 'Huang He': '黄河', 'Yellow': '黄河', 'Mekong': 'メコン川', 'Ganges': 'ガンジス川', 'Brahmaputra': 'ブラマプトラ川', 'Indus': 'インダス川', 'Irrawaddy': 'エーヤワディー川', 'Salween': 'サルウィン川', 'Amu Darya': 'アムダリヤ川', 'Syr Darya': 'シルダリヤ川', 'Amur': 'アムール川', 'Hong': '紅河', 'Chao Phraya': 'チャオプラヤー川', 'Tarim': 'タリム川'}
+RIVER_NAMES = {'Chang Jiang': '長江', 'Yangtze': '長江', 'Huang He': '黄河', 'Yellow': '黄河', 'Huang': '黄河', 'Mekong': 'メコン川', 'Ganges': 'ガンジス川', 'Brahmaputra': 'ブラマプトラ川', 'Indus': 'インダス川', 'Irrawaddy': 'エーヤワディー川', 'Salween': 'サルウィン川', 'Amu Darya': 'アムダリヤ川', 'Syr Darya': 'シルダリヤ川', 'Amur': 'アムール川', 'Hong': '紅河', 'Chao Phraya': 'チャオプラヤー川', 'Tarim': 'タリム川'}
 RIVER_NAMES.update({'Ayeyarwady':'エーヤワディー川','Irrawaddy Delta':'エーヤワディー川デルタの水路'})
 
 def write(path, value):
@@ -67,7 +67,7 @@ def hydrography(cache, region, record, countries):
         groups.setdefault(key, []).append(f)
     features = []
     for sections in groups.values():
-        f = sections[0]
+        f = next((s for s in sections if s['properties']['id'] == 'rivers-213'), sections[0])
         if len(sections) > 1:
             merged = unary_union([shape(s['geometry']) for s in sections])
             f['geometry'] = mapping(merged)
