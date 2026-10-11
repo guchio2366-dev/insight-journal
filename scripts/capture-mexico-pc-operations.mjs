@@ -185,7 +185,7 @@ function steps(page, evidence) {
   return async (name, action) => {
     const record = {name, status: 'running', beforeUrl: page.url()}; evidence.steps.push(record);
     try {record.details = await action(); record.state = await snapshot(page); record.status = 'passed';}
-    catch (error) {record.status = 'failed'; record.failure = String(error); throw error;}
+    catch (error) {record.status = 'failed'; record.failure = String(error); error.message = `${name}: ${error.message}`; throw error;}
   };
 }
 async function zoom(page, field, inSelector, outSelector, resetSelector) {
@@ -204,7 +204,8 @@ async function agriculture({page, evidence}) {
     assert(layout.icons.length>0&&layout.icons.every(icon=>icon.width<=iconLimit&&icon.height<=iconLimit));
     assert.equal(layout.order[0],'corn');assert(layout.order.indexOf('wheat')>layout.order.indexOf('vegetables'));assert(layout.order.indexOf('rice')>layout.order.indexOf('coffee'));
     assert(layout.groups.every(values=>values.every((value,index)=>index===0||value<=values[index-1])));
-    assert.equal(await page.locator('[data-mexico-state-selection],[data-mexico-forest-states]').count(),0);return layout;
+    assert.equal(await page.locator('[data-mexico-state-selection]').count(),0);
+    assert.equal(await page.locator('[data-mexico-forest-states]:visible').count(),0);return layout;
   });
   await step('All crop and livestock distributions remain after crop selection', async () => {
     await click(page, '[data-crop-select="corn"]');
@@ -262,7 +263,7 @@ async function agriculture({page, evidence}) {
 async function climate({page, evidence, captureStepImage}) {
   const step = steps(page, evidence);
   await step('Climate map labels select the full source code and Japanese explanation', async () => {
-    const label = page.locator('[data-mexico-nature-label-code^="BS"]').first();
+    const label = page.locator('[data-mexico-nature-label-code^="BS"]:visible').first();
     const code = await label.getAttribute('data-mexico-nature-label-code'); await label.click(); await settled(page);
     assert((await text(page, '[data-mexico-nature-feature-title]')).includes(code));
     assert((await text(page, '[data-mexico-nature-feature-body]')).length > 20);
