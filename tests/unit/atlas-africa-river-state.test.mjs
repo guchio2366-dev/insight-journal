@@ -16,9 +16,9 @@ test('named river URLs round trip with their existing country, year and viewport
  assert.equal(readState('?field=nature&topic=water&metric=ER.H2O.INTR.PC&river=congo').river,'congo');
 });
 
-test('only the two named river choices are accepted, without making a selection for legacy URLs',()=>{
+test('only the eleven source-backed river choices are accepted, without making a selection for legacy URLs',()=>{
  const active={field:'nature',topic:'water',water:'river'};
- for(const invalid of [null,undefined,false,{},[],'','Nile','nile,congo',' nile ','niger','constructor','__proto__','ne50-river-0047']){
+ for(const invalid of [null,undefined,false,{},[],'','Nile','nile,congo',' nile ','amazon','constructor','__proto__','ne50-river-0047']){
   assert.equal(canonicalRiver(active,invalid),'');
   if(typeof invalid==='string')assert.equal(riverState(invalid).river,'');
  }
@@ -35,7 +35,7 @@ test('unrelated fields, topics and water subtypes clear stale selections on both
  for(const changes of [
   {field:'agriculture'}, {field:'industry'}, {field:'population'},
   {topic:'climate'}, {topic:'terrain'}, {topic:'elevation'},
-  {water:'basin'}, {water:'rain',metric:'AG.LND.PRCP.MM'}
+  {water:'rain',metric:'AG.LND.PRCP.MM'}
  ]){
   const stale={...riverState('nile'),...changes};
   const raw='?'+new URLSearchParams(Object.entries(stale).filter(([,value])=>typeof value==='string'||typeof value==='number'));
@@ -67,4 +67,8 @@ test('separate URL history entries keep selection, comparison return and reset i
  // Visit entries out of order as popstate does; no read depends on the previous selection.
  for(const index of [3,2,1,0,1,2,3])assert.deepEqual(readState(history[index]),states[index]);
  assert.deepEqual(readState('?'+readState(history[2]).sourceState),congo);
+});
+
+test('all eleven basin IDs persist across basin selection without creating a default river',()=>{
+ for(const river of ['nile','congo','niger','zambezi','orange','limpopo','senegal','volta','ogooue','okavango','chad']){const state=readState('?field=nature&topic=water&water=basin&river='+river);assert.equal(state.river,river);assert.deepEqual(readState(writeState({...state},url()).search),state);}assert.equal(readState('?field=nature&topic=water&water=basin').river,'');
 });

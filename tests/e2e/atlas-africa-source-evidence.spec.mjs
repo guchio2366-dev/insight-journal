@@ -1,0 +1,135 @@
+#!/usr/bin/env node
+/** Real PC acceptance for the approved Africa second review; no browser protection is disabled. */
+import assert from 'node:assert/strict';
+import {createServer} from 'node:http';
+import {readFile,mkdir,writeFile} from 'node:fs/promises';
+import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import path from 'node:path';
+import {chromium} from 'playwright';
+import config from '../../astro.config.mjs';
+import census from '../../src/data/atlas/africa-ethnicity-evidence.json' with {type:'json'};
+
+const root=path.resolve(import.meta.dirname,'../..'),dist=path.join(root,'dist');
+const output=path.resolve(process.env.AFRICA_REVIEW_OUTPUT??path.join(root,'review-artifacts/africa-pc-review'));
+const representative=path.join(output,'representative'),base=String(config.base??'').replace(/\/$/,'');
+const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+const head=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
+const report={status:'running',reviewScope:'round2-source-evidence',head,startedAt:new Date().toISOString(),browserLaunch:{headless:true,chromiumSandbox:true,additionalFlags:[]},profiles:[],screenshots:[],acceptedPriorHead:'4916ef813d28a9fb6760d2960d9b9ce02218ca21',remaining:[{item:'Africa-wide forest distribution',status:'input-required',reason:'Only retained JRC northeast/Horn reference pixels are available; Congo/west/south coverage remains unacquired.'},{item:'Broader ethnicity distribution',status:'input-required',reason:'Ghana 2021 census is a limited regional statistical example; no continent-wide residence geometry is asserted.'}],source:{ethnicity:census.source,forestAvailability:JSON.parse(await readFile(path.join(root,'public/assets/atlas/regional-forestry-v1/availability.json'),'utf8'))},ci:{repository:process.env.AFRICA_REVIEW_REPOSITORY,runId:process.env.AFRICA_REVIEW_RUN_ID,attempt:process.env.AFRICA_REVIEW_RUN_ATTEMPT},fonts:{families:process.env.AFRICA_REVIEW_JAPANESE_FONTS,match:process.env.AFRICA_REVIEW_JAPANESE_FONT_MATCH,setup:process.env.AFRICA_REVIEW_JAPANESE_FONT_SETUP}};
+await mkdir(representative,{recursive:true});
+const save=async()=>{const bytes=JSON.stringify(report,null,2)+'\n';if(report.status==='passed')assert(report.screenshots.reduce((sum,image)=>sum+image.bytes,0)+Buffer.byteLength(bytes)<20*1024*1024,'representative images and JSON must stay below 20 MiB');await writeFile(path.join(output,'review-metadata.json'),bytes);await writeFile(path.join(representative,'review-metadata.json'),bytes);};
+const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.gz':'application/gzip','.png':'image/png','.woff2':'font/woff2','.svg':'image/svg+xml'};
+const server=createServer(async(req,res)=>{try{let url=decodeURIComponent(new URL(req.url,'http://localhost').pathname);if(base&&url.startsWith(base+'/'))url=url.slice(base.length);if(url.endsWith('/'))url+='index.html';const file=path.resolve(dist,'.'+url);assert(file.startsWith(dist+path.sep));res.writeHead(200,{'content-type':mime[path.extname(file)]??'application/octet-stream'}).end(await readFile(file));}catch{res.writeHead(404).end('missing');}});
+await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+const site=`http://127.0.0.1:${server.address().port}`,origin=site+base;
+let browser,currentPage,currentProfile;
+const state=page=>Object.fromEntries(new URL(page.url()).searchParams);
+async function settle(page){await page.waitForLoadState('networkidle');await page.evaluate(async()=>{await document.fonts.ready;await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});}
+async function view(page,query,ready){await page.goto(origin+'/atlas/africa/?'+query,{waitUntil:'networkidle'});if(ready)await page.locator(ready).first().waitFor();await settle(page);}
+async function measure(locator){return locator.evaluate(node=>{const r=node.getBoundingClientRect(),s=getComputedStyle(node),matrix=node instanceof SVGGraphicsElement?node.getScreenCTM():null;return {x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom,display:s.display,visibility:s.visibility,opacity:s.opacity,fontPx:parseFloat(s.fontSize)*(matrix?Math.hypot(matrix.a,matrix.b):1),maxHeight:s.maxHeight};});}
+async function visible(locator,within){assert(await locator.isVisible(),'visible node: '+locator);const box=await measure(locator);assert(box.width>0&&box.height>0,'painted dimensions required');if(within){const frame=await measure(within);assert(box.x>=frame.x-2&&box.y>=frame.y-2&&box.right<=frame.right+2&&box.bottom<=frame.bottom+2,'node must fit its map or reader frame');}return box;}
+async function layout(page,profile,scene){await page.evaluate(()=>scrollTo(0,0));const result=await page.evaluate(()=>({viewport:{width:innerWidth,height:innerHeight,dpr:devicePixelRatio},pageOverflow:document.documentElement.scrollWidth>innerWidth+1,zoom:getComputedStyle(document.documentElement).zoom}));assert.equal(result.viewport.dpr,1);assert(result.zoom==='normal'||Number(result.zoom)===1,'CSS zoom is 100 percent');assert.equal(result.viewport.width,profile.width);assert.equal(result.viewport.height,profile.height);assert.equal(result.pageOverflow,false,scene+' horizontal overflow');const map=await visible(page.locator('.africa-map-frame,.forest-map-stage').first()),reader=await visible(page.locator('.africa-detail,.forest-reading').first());assert(reader.x>=map.right-2,scene+' map and reader overlap');if(profile.width===1920){assert(map.bottom<=profile.height+2,scene+' main map clipped by viewport');assert(reader.bottom<=profile.height+2,scene+' reader clipped by viewport');}profile.layouts.push({scene,...result,map,reader});}
+async function capture(page,profile,scene){await page.evaluate(()=>scrollTo(0,0));const file=`${profile.width}-${scene}.jpg`;await page.screenshot({path:path.join(representative,file),type:'jpeg',quality:66,animations:'disabled'});const bytes=await readFile(path.join(representative,file));report.screenshots.push({file,viewport:{width:profile.width,height:profile.height,dpr:1},scene,bytes:bytes.length,sha256:sha(bytes),fullPage:false});}
+
+
+async function readerRow(page,selector){const row=page.locator(selector);await row.scrollIntoViewIfNeeded();const box=await visible(row,page.locator('.africa-detail'));assert(box.fontPx>=12,'reader table font readable');const clipping=await row.evaluate(node=>{const section=node.closest('.africa-detail');return {overflow:section.scrollWidth>section.clientWidth+1,text:node.textContent};});assert.equal(clipping.overflow,false,'census table no horizontal clipping');return {box,...clipping};}
+function assertPaintedForest(result){
+ assert(result.expectedAlphaPixels>0,'retained source has forest coverage within the visible African land clip');
+ assert(result.paintedAlphaPixels>=result.expectedAlphaPixels*.5,
+  'retained forest actually paints at least half the source-derived green coverage after scaling/interpolation');
+}
+async function paintedForest(page,profile){
+ await page.evaluate(()=>scrollTo(0,0));await settle(page);
+ const visible=await page.screenshot({type:'png',animations:'disabled'});
+ const references=page.locator('[data-forest-reference]');
+ const styles=await references.evaluateAll(nodes=>nodes.map(node=>node.getAttribute('style')));
+ let hidden;
+ try{
+  await references.evaluateAll(nodes=>nodes.forEach(node=>node.style.setProperty('visibility','hidden','important')));
+  await settle(page);hidden=await page.screenshot({type:'png',animations:'disabled'});
+  // This is an actual rendered negative control, with the same map, clip, and viewport.
+  const file=`${profile.width}-forest-hidden-control.jpg`;
+  await page.screenshot({path:path.join(representative,file),type:'jpeg',quality:66,animations:'disabled'});
+  const bytes=await readFile(path.join(representative,file));
+  report.screenshots.push({file,viewport:{width:profile.width,height:profile.height,dpr:1},scene:'forest-hidden-control',bytes:bytes.length,sha256:sha(bytes),fullPage:false});
+ }finally{
+  await references.evaluateAll((nodes,saved)=>nodes.forEach((node,i)=>saved[i]===null?node.removeAttribute('style'):node.setAttribute('style',saved[i])),styles);
+  await settle(page);
+ }
+ const result=await page.evaluate(async({visible,hidden})=>{
+  const decode=async encoded=>{const image=new Image();image.src='data:image/png;base64,'+encoded;await image.decode();return image;};
+  const [painted,control]=await Promise.all([decode(visible),decode(hidden)]);
+  const canvas=document.createElement('canvas');canvas.width=painted.width;canvas.height=painted.height;
+  const ctx=canvas.getContext('2d',{willReadFrequently:true});
+  ctx.drawImage(painted,0,0);const actual=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+  ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(control,0,0);
+  const baseline=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const svg=document.querySelector('[data-forest-map]'),matrix=svg.getScreenCTM(),box=svg.getBoundingClientRect();
+  // Reproject the original transparent PNGs at the current CSS size, including land clipping.
+  // Their alpha, rather than a fixed count of nearly exact RGB values, supplies the expected ink area.
+  ctx.save();ctx.beginPath();ctx.rect(box.x,box.y,box.width,box.height);ctx.clip();ctx.setTransform(matrix);
+  const land=new Path2D();for(const node of svg.querySelectorAll('#forest-land-africa path'))land.addPath(new Path2D(node.getAttribute('d')));
+  ctx.clip(land,'evenodd');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+  const inputs=[];
+  for(const node of svg.querySelectorAll('[data-forest-reference]')){
+   const image=new Image();image.src=node.href.baseVal;await image.decode();
+   ctx.setTransform(node.getScreenCTM());
+   ctx.drawImage(image,node.x.baseVal.value,node.y.baseVal.value,node.width.baseVal.value,node.height.baseVal.value);
+   inputs.push({id:node.dataset.forestReference,sourceWidth:image.naturalWidth,sourceHeight:image.naturalHeight,cssScaleX:Math.hypot(matrix.a,matrix.b)*node.width.baseVal.value/image.naturalWidth,cssScaleY:Math.hypot(matrix.c,matrix.d)*node.height.baseVal.value/image.naturalHeight});
+  }
+  ctx.restore();const expected=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+  let expectedAlphaPixels=0;for(let i=3;i<expected.length;i+=4)expectedAlphaPixels+=expected[i]/255;
+  const green=[77,146,33];
+  const measure=candidate=>{
+   let paintedAlphaPixels=0,changedPixels=0,exactGreenPixels=0;
+   for(let i=0;i<expected.length;i+=4){
+    if(!expected[i+3])continue;
+    // Alpha-composited forest pixels lie between the hidden map color and the source green.
+    // Project onto that segment so sparse, downsampled pixels count in proportion to their ink.
+    const direction=green.map((c,k)=>c-baseline[i+k]),delta=green.map((_,k)=>candidate[i+k]-baseline[i+k]);
+    const squared=direction.reduce((sum,c)=>sum+c*c,0);
+    const alpha=squared?delta.reduce((sum,c,k)=>sum+c*direction[k],0)/squared:0;
+    const residual=Math.max(...delta.map((c,k)=>Math.abs(c-alpha*direction[k])));
+    if(alpha>0&&residual<=12){paintedAlphaPixels+=Math.min(1,alpha);changedPixels++;}
+    if(green.every((c,k)=>Math.abs(candidate[i+k]-c)<=5))exactGreenPixels++;
+   }
+   return {expectedAlphaPixels,paintedAlphaPixels,coverageRatio:paintedAlphaPixels/expectedAlphaPixels,changedPixels,exactGreenPixels};
+  };
+  return {method:'source-alpha-and-visible-hidden-green-difference',viewport:{width:canvas.width,height:canvas.height,dpr:devicePixelRatio},map: {x:box.x,y:box.y,width:box.width,height:box.height},inputs,...measure(actual),minimumCoverageRatio:.5,negativeControl:measure(baseline)};
+ },{visible:visible.toString('base64'),hidden:hidden.toString('base64')});
+ // The hidden screenshot is both candidate and baseline in the control: its measured delta is zero.
+ // Use the identical acceptance predicate, without changing expectations or the required ratio.
+ assert.throws(()=>assertPaintedForest(result.negativeControl),/retained forest actually paints/);
+ result.negativeControl.rejected=true;
+ return result;
+}
+try{
+ report.release=JSON.parse(await readFile(path.join(dist,'_release.json'),'utf8'));if(process.env.AFRICA_REVIEW_HEAD_SHA)assert.equal(head,process.env.AFRICA_REVIEW_HEAD_SHA);if(process.env.GITHUB_ACTIONS==='true')assert.equal(report.release.commitSha,head);
+ browser=await chromium.launch({executablePath:process.env.AFRICA_REVIEW_CHROME_PATH||'/usr/bin/chromium',headless:true,chromiumSandbox:true});report.browserVersion=browser.version();
+ for(const [width,height]of [[1920,1080],[1440,1000],[1024,768]]){
+  const profile={width,height,dpr:1,status:'running',layouts:[],errors:[],failedRequests:[],externalRequests:[]};report.profiles.push(profile);
+  const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:1,serviceWorkers:'block'});await context.route('**/*',route=>{const url=route.request().url();if(/^https?:/.test(url)&&new URL(url).origin!==site){profile.externalRequests.push(url);return route.abort();}return route.continue();});
+  const page=await context.newPage();currentPage=page;currentProfile=profile;page.on('pageerror',error=>profile.errors.push(error.message));page.on('response',response=>{if(response.status()>=400)profile.failedRequests.push({status:response.status(),url:response.url()});});
+  await view(page,'field=population&topic=ethnicity','[data-africa-ethnicity-evidence-reading]');
+  const map=page.locator('.africa-map'),camera=await map.getAttribute('viewBox'),outline=page.locator('[data-africa-ethnicity-source-country=GHA]');await visible(outline,page.locator('.africa-map-frame'));assert.equal(await outline.getAttribute('fill'),'none');assert.equal(await outline.getAttribute('d'),await page.locator('[data-country-path=GHA]').getAttribute('d'));
+  profile.sourceLabel=await visible(page.locator('[data-africa-ethnicity-source-label]'),page.locator('.africa-map-frame'));assert(profile.sourceLabel.fontPx>=12);assert.equal(await page.locator('[data-africa-religion-country],[data-africa-language-point],[data-africa-raster]').count(),0);
+  assert.equal(await page.locator('[data-africa-ethnicity-group]').count(),9);assert.equal(await page.locator('[data-africa-ethnicity-region]').count(),16);assert.equal(await page.locator('[data-africa-ethnicity-regional-group]').count(),144);
+  const section=page.locator('[data-africa-ethnicity-evidence-reading]');assert.match(await section.textContent(),/30,484,536/);assert.match(await section.textContent(),/30,832,019/);assert.match(await section.textContent(),/対象が異なります/);
+  for(const group of census.groups){const text=await page.locator(`[data-africa-ethnicity-group="${group.id}"]`).textContent();assert(text.includes(group.national.toLocaleString('ja-JP')));assert(text.includes(group.publishedPercent.toFixed(1)+'%'));}
+  profile.firstNational=await readerRow(page,'[data-africa-ethnicity-group="Akan"]');profile.lastRegional=await readerRow(page,'[data-africa-ethnicity-region="Upper West"]');
+  await section.locator('details summary').click();profile.fullDetailLast=await readerRow(page,'[data-africa-ethnicity-regional-group="Upper West:Others"]');assert.equal(await map.getAttribute('viewBox'),camera);
+  await section.locator('details summary').click();await readerRow(page,'[data-africa-ethnicity-region="Western"]');await layout(page,profile,'ghana-census');await capture(page,profile,'ghana-census');
+  await page.locator('[data-africa-topic=religion]').click();await settle(page);assert.equal(await section.count(),0,'no stale census table after tab switch');await page.locator('[data-africa-topic=ethnicity]').click();await settle(page);assert.equal(await section.count(),1);assert.equal(await map.getAttribute('viewBox'),camera);
+  await view(page,'field=population&topic=ethnicity&place=EGY','[data-africa-ethnicity-evidence-reading]');assert.match(await section.textContent(),/エジプトの民族構成は未取得/);assert.equal(await page.locator('[data-africa-ethnicity-group]').count(),9);
+  await page.goto(origin+'/atlas/africa/agriculture/forestry/',{waitUntil:'networkidle'});await settle(page);const forest=page.locator('[data-forest-map]'),forestCamera=await forest.getAttribute('viewBox');assert.equal(await page.locator('[data-forest-reference]').count(),2);
+  profile.references=await page.locator('[data-forest-reference]').evaluateAll(async nodes=>Promise.all(nodes.map(async node=>{const image=new Image();image.src=node.href.baseVal;await image.decode();return {id:node.dataset.forestReference,href:node.href.baseVal,width:image.naturalWidth,height:image.naturalHeight,clip:node.getAttribute('clip-path')};})));
+  assert.deepEqual(profile.references.map(x=>x.id),['west-asia','south-central-asia']);assert(profile.references.every(x=>x.width>0&&x.height>0&&x.clip==='url(#forest-land-africa)'));assert.equal(await page.locator('[data-forest-raster]').count(),0);assert.equal(await page.locator('[data-forest-land]').getAttribute('data-forest-base'),'partial-coverage');
+  assert.match(await page.locator('[data-forest-map-note]').textContent(),/全域の被覆面は未取得.*森林不在を意味しません/);assert.match(await page.locator('.forest-source-ledger').textContent(),/\[23,10,64,45\].*\[44,-2,100,57\]/);
+  profile.forestPaint=await paintedForest(page,profile);assertPaintedForest(profile.forestPaint);await visible(page.locator('.forest-legend'));await layout(page,profile,'forest-partial');await capture(page,profile,'forest-partial');
+  for(const button of await page.locator('button[data-forest-example]').all()){await button.click();await settle(page);assert.equal(await forest.getAttribute('viewBox'),forestCamera);assert.equal(await page.locator('[data-forest-reference]').count(),2);}
+  await page.locator('[data-forest-clear]').click();await settle(page);assert.equal(await forest.getAttribute('viewBox'),forestCamera);assert.deepEqual(profile.errors,[]);assert.deepEqual(profile.failedRequests,[]);assert.deepEqual(profile.externalRequests,[]);profile.status='passed';await context.close();
+ }
+ report.status='passed';report.finishedAt=new Date().toISOString();await save();console.log(JSON.stringify({status:report.status,head,scope:report.reviewScope,screenshots:report.screenshots.length,profiles:report.profiles.map(p=>({width:p.width,status:p.status,forestPaint:p.forestPaint}))}));
+}catch(error){report.status='failed';report.error={name:error.name,message:error.message,stack:error.stack};if(currentPage&&!currentPage.isClosed()){try{await currentPage.screenshot({path:path.join(output,'source-evidence-failure.jpg'),type:'jpeg',quality:66});}catch{}}await save();throw error;
+}finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}

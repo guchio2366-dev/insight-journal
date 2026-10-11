@@ -9,7 +9,7 @@ const hasCoverage=!!raster||references.length>0;
 const countries=forestryGeography(region);
 const forestClip=`forest-land-${region}`,missing=`forest-missing-${region}`,disputed=`forest-disputed-${region}`;
 ---
-      <div class="forest-map-heading"><h2>{raster?'樹木被覆と森林参考図':references.length?'森林参考図と林業の地域':'林業を読む地域の位置'}</h2><span>{raster?'2021年：西部／2020年参考図：南部の一部':references.length?'2020年参考図：PNG西部などの一部':'全域の森林被覆面：未取得'}</span></div>
+      <div class="forest-map-heading"><h2>{raster?'樹木被覆と森林参考図':references.length?'森林参考図と林業の地域':'林業を読む地域の位置'}</h2><span>{region==='africa'&&references.length?'2020年参考図：北東部・アフリカの角の一部':raster?'2021年：西部／2020年参考図：南部の一部':references.length?'2020年参考図：PNG西部などの一部':'全域の森林被覆面：未取得'}</span></div>
       <div class="forest-map-stage">
        <svg data-forest-map viewBox={`0 0 ${frame.width} ${frame.height}`} tabindex="0" role="group" aria-label={`${reading.name}の林業地図。番号は解説の代表位置。${hasCoverage?'斜線は未取得・欠測・分類未判定。':'中立色の基図は森林の有無を示しません。'}矢印キーで移動、＋・−で拡大縮小。`}>
         <title>{reading.name}の林業を読む地域</title><desc>{reading.distribution}</desc>
@@ -30,4 +30,4 @@ const forestClip=`forest-land-${region}`,missing=`forest-missing-${region}`,disp
        <div class="forest-map-tools" aria-label="地図の操作"><button type="button" data-forest-zoom="in" aria-label="地図を拡大">＋</button><button type="button" data-forest-zoom="out" aria-label="地図を縮小">−</button><button type="button" data-forest-reset>全体</button></div>
       </div>
       <div class="forest-legend" aria-label="凡例">{raster&&<><span><i class="tree"/>樹木被覆（ESA・2021年）</span><span><i class="other"/>その他の有効な被覆</span></>}{references.length>0&&<span><i class="reference"/>森林参考表示（JRC・2020年）</span>}<span><i class={hasCoverage?'missing':'neutral'}/>{hasCoverage?'未取得・欠測・分類未判定':'基図（全域の被覆未取得）'}</span><span><i class="locator"/>番号：解説の代表位置</span>{region==='russia'&&<span><i class="disputed"/>資料上の係争区分</span>}</div>
-      <p class="forest-map-note" data-forest-map-note>{raster?'西部の樹木被覆と南部の一部の森林参考図。両者は分類・年が異なります。緑は商業伐採地・樹種を表しません。':references.length?'PNG西部などの保存済み森林参考図だけを表示。斜線は未取得、または画像だけでは分類できない場所です。':'全域の森林被覆面は未取得です。基図の中立色は森林の有無を示しません。番号は説明の代表位置です。'}</p>
+      <p class="forest-map-note" data-forest-map-note>{region==='africa'&&references.length?'保存済みのJRC原画像が覆う北東部・アフリカの角の一部だけの参考表示です。全域の被覆面は未取得。斜線は未収録・分類未判定で、森林不在を意味しません。緑から樹種・天然林/人工林・面積を判定しません。':raster?'西部の樹木被覆と南部の一部の森林参考図。両者は分類・年が異なります。緑は商業伐採地・樹種を表しません。':references.length?'PNG西部などの保存済み森林参考図だけを表示。斜線は未取得、または画像だけでは分類できない場所です。':'全域の森林被覆面は未取得です。基図の中立色は森林の有無を示しません。番号は説明の代表位置です。'}</p>
