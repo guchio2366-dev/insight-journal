@@ -1,4 +1,4 @@
-import {canadaLegacyPath,canadaLegacyPoint,canadaMapPath,projectCanadaMap} from '../lib/atlas-canada-map-presentation';
+import {canadaLegacyPath,canadaLegacyPoint,canadaMapPath,projectCanadaMap,canadaSouthernFrame} from '../lib/atlas-canada-map-presentation';
 import {unprojectCanadaLandform} from '../lib/atlas-canada-landform-map';
 import type {CanadaForestryState} from '../lib/atlas-canada-forestry';
 
@@ -9,16 +9,18 @@ export function initCanadaForestryMap(root:HTMLElement,config:any,onSelect:(id:s
  try{context=canvas.getContext('2d');}catch{return;}
  if(!context||typeof Path2D==='undefined')return;
  const ctx=context,frame=root.querySelector<HTMLElement>('[data-forestry-stage]')!,labels=root.querySelector<HTMLElement>('[data-forestry-labels]')!,fallback=root.querySelector<SVGElement>('[data-forestry-fallback]')!;
- const southCamera=[450,290,1],project=projectCanadaMap;
+ const project=projectCanadaMap,initialSouthFrame=canadaSouthernFrame();
+ const southCamera=[initialSouthFrame[0]+initialSouthFrame[2]/2,initialSouthFrame[1]+initialSouthFrame[3]/2,900/initialSouthFrame[2]];
  const contexts=config.context.map((f:any)=>({id:f.properties.code,path:new Path2D(canadaMapPath(f.geometry))}));
  const provinces=config.provinceGeometry.map((f:any)=>({id:f.id,path:new Path2D(canadaLegacyPath(f.path)),bounds:[canadaLegacyPoint(f.bounds.slice(0,2)),canadaLegacyPoint(f.bounds.slice(2,4))]}));
  const allPoints=config.context.filter((f:any)=>f.properties.code==='CAN').flatMap((f:any)=>(f.geometry.type==='Polygon'?f.geometry.coordinates:f.geometry.coordinates.flat()).flat().map(project));
  const bounds=allPoints.reduce((b:number[],p:number[])=>[Math.min(b[0],p[0]),Math.min(b[1],p[1]),Math.max(b[2],p[0]),Math.max(b[3],p[1])],[Infinity,Infinity,-Infinity,-Infinity]);
- const fit=(b:number[],padding=.92)=>[(b[0]+b[2])/2,(b[1]+b[3])/2,Math.min(12,padding*Math.min(900/(b[2]-b[0]),580/(b[3]-b[1])))];
+ let width=0,height=0;
+ const fit=(b:number[],padding=.92)=>[(b[0]+b[2])/2,(b[1]+b[3])/2,Math.min(12,padding*Math.min((width||900)/(b[2]-b[0]),(height||580)/(b[3]-b[1]))/Math.min((width||900)/900,(height||580)/580))];
  const wholeCamera=fit(bounds);
  const rivers=config.rivers.map((f:any)=>({path:new Path2D(canadaMapPath(f.geometry)),feature:f}));
- const images=new Map<string,HTMLImageElement>();
- let ready=false,state:CanadaForestryState, camera=southCamera.slice(),width=0,height=0,scale=1,raf=0;
+ const images=new Map<string,HTMLCanvasElement>();
+ let ready=false,state:CanadaForestryState, camera=southCamera.slice(),scale=1,raf=0;
  const items:any[]=[];
  function addLabel(text:string,point:number[],kind:string,id?:string){
   const element=document.createElement(id?'button':'span');element.className='forestry-map-label '+kind;element.textContent=text;element.hidden=true;
@@ -27,7 +29,7 @@ export function initCanadaForestryMap(root:HTMLElement,config:any,onSelect:(id:s
  }
  for(const r of config.regions)addLabel(r.id==='bc'?'BC':r.name,canadaLegacyPoint(r.point),'region',r.id);
  for(const p of config.places)addLabel(p.id==='ottawa'?'Ottawa（首都）':'Vancouver',project(p.coordinates),'city');
- for(const r of config.rivers){const lines=r.geometry.type==='LineString'?[r.geometry.coordinates]:r.geometry.coordinates,line=lines.reduce((a:number[][],b:number[][])=>a.length>b.length?a:b);addLabel(r.properties.name==='Fraser'?'Fraser川':'セントローレンス川',project(line[Math.floor(line.length*.55)]),'river');}
+ for(const r of config.rivers){const lines=r.geometry.type==='MultiPolygon'?r.geometry.coordinates.flat():r.geometry.type==='LineString'?[r.geometry.coordinates]:r.geometry.coordinates,line=lines.reduce((a:number[][],b:number[][])=>a.length>b.length?a:b);addLabel(r.properties.name==='Fraser'?'Fraser川':'セントローレンス川',project(line[Math.floor(line.length*.55)]),'river');}
  for(const [name,point] of [['太平洋',[-135,48]],['大西洋',[-57,48]],['ハドソン湾',[-85,59]]] as const)addLabel(name,project(point),'ocean');
  const screen=([x,y]:number[])=>[(x-camera[0])*scale+width/2,(y-camera[1])*scale+height/2];
  const world=([x,y]:number[])=>[(x-width/2)/scale+camera[0],(y-height/2)/scale+camera[1]];
@@ -61,9 +63,9 @@ export function initCanadaForestryMap(root:HTMLElement,config:any,onSelect:(id:s
   // discrete class colors without interpolating or inventing forest cover.
   for(let row=0;row<canvas.height;row++){
    const latitude=unprojectCanadaLandform(world([0,(row+.5)/dpr]))[1];
-   const sourceRow=Math.floor((north-latitude)/(north-south)*image.naturalHeight);
-   if(sourceRow<0||sourceRow>=image.naturalHeight)continue;
-   ctx.drawImage(image,0,sourceRow,image.naturalWidth,1,x,row/dpr,w,1/dpr);
+   const sourceRow=Math.floor((north-latitude)/(north-south)*image.height);
+   if(sourceRow<0||sourceRow>=image.height)continue;
+   ctx.drawImage(image,0,sourceRow,image.width,1,x,row/dpr,w,1/dpr);
   }
   ctx.restore();
  }
@@ -71,7 +73,9 @@ export function initCanadaForestryMap(root:HTMLElement,config:any,onSelect:(id:s
   raf=0;if(!ready||!state)return;
   const box=frame.getBoundingClientRect();width=box.width;height=box.height;if(!width||!height)return;
   const dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);
-  camera=state.camera?.slice()??southCamera.slice();
+  const southFrame=canadaSouthernFrame(width/height);
+  camera=state.camera?.slice()??[southFrame[0]+southFrame[2]/2,southFrame[1]+southFrame[3]/2,width/(southFrame[2]*Math.min(width/900,height/580))];
+  if(!state.camera)southCamera.splice(0,3,...camera);
   const region=config.regions.find((r:any)=>r.id===state.region),province=provinces.find((p:any)=>p.id===region?.province);
   if(state.zoom&&province)camera=fit([...province.bounds[0],...province.bounds[1]],.8);
   scale=Math.min(width/900,height/580)*camera[2];ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle='#e4eff0';ctx.fillRect(0,0,width,height);
@@ -84,7 +88,7 @@ export function initCanadaForestryMap(root:HTMLElement,config:any,onSelect:(id:s
   ctx.restore();const placements=drawLabels();
   const cover=state.cover==='all'?'森林4分類すべて':config.classes.find((c:any)=>c.id===state.cover).name+'を強調（他分類も保持）';
   root.querySelector<HTMLElement>('[data-forestry-map-status]')!.textContent='2020年固定：'+cover+'。'+(region?region.name+'を選択':'地域未選択')+'。';
-  (root as any).canadaForestryMap={ready:true,camera:camera.slice(),wholeCamera:wholeCamera.slice(),sourceYear:2020,sourceClasses:config.classes.map((c:any)=>c.id),visibleLayers:state.cover==='all'?['all']:['all',state.cover],selectedProvince:province?.id??null,labels:placements,sourceSize:[images.get('all')!.naturalWidth,images.get('all')!.naturalHeight],screen:(p:number[])=>screen(p),project};
+  (root as any).canadaForestryMap={ready:true,camera:camera.slice(),wholeCamera:wholeCamera.slice(),sourceYear:2020,sourceClasses:config.classes.map((c:any)=>c.id),visibleLayers:state.cover==='all'?['all']:['all',state.cover],selectedProvince:province?.id??null,labels:placements,displayPalette:config.displayPalette,southCamera:southCamera.slice(),sourceSize:[images.get('all')!.width,images.get('all')!.height],screen:(p:number[])=>screen(p),project};
  }
  const schedule=()=>{if(!raf)raf=requestAnimationFrame(renderNow);};
  function move(next:number[],replace=false){onCamera([Math.max(-500,Math.min(1500,next[0])),Math.max(-2000,Math.min(2000,next[1])),Math.max(.2,Math.min(12,next[2]))],replace);}
@@ -97,6 +101,8 @@ export function initCanadaForestryMap(root:HTMLElement,config:any,onSelect:(id:s
  canvas.addEventListener('pointercancel',()=>{drag=null;});
  canvas.addEventListener('keydown',e=>{if(['+','=','-','ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){e.preventDefault();if(['+','='].includes(e.key))zoom(1.4);else if(e.key==='-')zoom(1/1.4);else move([camera[0]+(e.key==='ArrowLeft'?-50:e.key==='ArrowRight'?50:0)/scale,camera[1]+(e.key==='ArrowUp'?-50:e.key==='ArrowDown'?50:0)/scale,camera[2]]);}});
  const observer=new ResizeObserver(schedule);observer.observe(frame);
- Promise.all(Object.entries(config.forestAssets).map(([id,url])=>new Promise<void>((resolve,reject)=>{const image=new Image();image.onload=()=>{images.set(id,image);resolve();};image.onerror=reject;image.src=String(url);}))).then(()=>{ready=true;fallback.setAttribute('hidden','');fallback.setAttribute('aria-hidden','true');canvas.hidden=false;labels.hidden=false;schedule();}).catch(()=>{root.dataset.forestryMapFallback='true';root.querySelector<HTMLElement>('[data-forestry-map-status]')!.textContent='森林画像を操作地図へ読み込めませんでした。元の等緯度経度図と地域一覧で確認できます。';});
+ Promise.all(config.classes.map((classification:any)=>new Promise<void>((resolve,reject)=>{
+  const image=new Image();image.onload=()=>{const styled=document.createElement('canvas');styled.width=image.naturalWidth;styled.height=image.naturalHeight;const colorContext=styled.getContext('2d');if(!colorContext){reject(new Error('Forest class canvas unavailable'));return;}colorContext.drawImage(image,0,0);colorContext.globalCompositeOperation='source-in';colorContext.fillStyle=config.displayPalette[classification.id];colorContext.fillRect(0,0,styled.width,styled.height);images.set(classification.id,styled);resolve();};image.onerror=reject;image.src=String(config.forestAssets[classification.id]);
+ }))).then(()=>{const sample=images.get(config.classes[0].id)!,all=document.createElement('canvas');all.width=sample.width;all.height=sample.height;const combined=all.getContext('2d');if(!combined)throw new Error('Forest all-class canvas unavailable');for(const classification of config.classes)combined.drawImage(images.get(classification.id)!,0,0);images.set('all',all);ready=true;fallback.setAttribute('hidden','');fallback.setAttribute('aria-hidden','true');canvas.hidden=false;labels.hidden=false;schedule();}).catch(()=>{root.dataset.forestryMapFallback='true';root.querySelector<HTMLElement>('[data-forestry-map-status]')!.textContent='森林画像を操作地図へ読み込めませんでした。元の等緯度経度図と地域一覧で確認できます。';});
  return {wholeCamera,render(next:CanadaForestryState){state=next;schedule();}};
 }

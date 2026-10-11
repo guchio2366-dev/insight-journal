@@ -408,7 +408,7 @@ function start(root:HTMLElement) {
     $('[data-population-detail]').textContent=city?(asiaUrbanReading[city.sourceName]??`${city.name}の輪郭の内側と外側で、人口が集中する場所を比べてください。広域図は5km格子を使うため、細かい街区の比較には適しません。人口の表は地図の色から合計した値ではなく、資料がこの都市範囲に対して公表した推計値です。`):reading.reading;
     const cityNote=$('[data-population-city-note]');if(cityNote){cityNote.hidden=!selectedCity||!indiaPopulationLabels[selectedCity.id];cityNote.textContent=selectedCity?indiaPopulationLabels[selectedCity.id]??'':'';}
     const select=$<HTMLSelectElement>('[data-population-city]');select.value=city?.id??'';
-    for(const option of select.options){const allowed=!state.place||!option.value||option.dataset.country===state.place;option.hidden=!allowed;option.disabled=!allowed;}
+    for(const option of select.options){const allowed=config.regionId==='southeast-asia'||!state.place||!option.value||option.dataset.country===state.place;option.hidden=!allowed;option.disabled=!allowed;}
     const coverage=state.place?config.population.countryCoverage[state.place]:null;
     $('[data-population-coverage]').textContent=coverage?`${country?.name}について、資料中の${coverage.sourceUrbanCentres.toLocaleString('ja-JP')}都市のうち${coverage.listedUrbanCentres}都市を一覧に掲載しています。全国の合計人口を示すものではありません。`:`この地域では${config.population.cities.length}都市を一覧に掲載しています。全都市の一覧ではありません。`;
     $('[data-population-resolution]').textContent=city?.detail?'この都市の詳細図は1kmの元格子を使っています。詳細図の外側には広域図を表示しています。':'広域図は5×5個の1km格子をまとめています。拡大しても、元の1km格子の細かさに戻るわけではありません。';
@@ -436,6 +436,7 @@ function start(root:HTMLElement) {
   }
   function renderFarming(){
     const active=state.field==='agriculture',layer=farmingLayer(),topic=farmingTopic();
+    if(config.regionId==='southeast-asia')root.dataset.southeastFarmTopic=active?topic??'overview':'';
     renderSouthCentralFarmConnections(root,config.regionId,active,topic,config.countries.find(c=>c.code===state.place),config.focusShareExample,config.focusId);
     renderEastAsiaFarmFoundations(root,config.regionId,active,topic,config.countries.find(c=>c.code===state.place));
     for(const key of farmingGrids.keys())if(key!==layer?.grid)farmingGrids.delete(key);
@@ -458,10 +459,10 @@ function start(root:HTMLElement) {
     if(!layer)return;
     $('[data-map-title]').textContent=layer.title;$('[data-map-eyebrow]').textContent='Agriculture & Forestry · 2020';$('[data-map-period]').textContent=layer.unit??'森林の参考図';
     $('[data-map-gesture]').textContent=config.regionId==='southeast-asia'?(layer.kind==='forest'?'林業の分布と資料の説明を右で読めます。地図は2本指で移動・拡大できます。':'品目名・畜産の点から分布を選びます。背景のクリックでは選択を変えません。地図は2本指で移動・拡大できます。'):layer.kind==='forest'?'国の選択欄から森林面積と木材の統計を読めます。地図は2本指で移動・拡大できます。':'品目名・畜産の点から分布を選び、国の選択欄から公表統計を読めます。背景のクリックでは選択を変えません。地図は2本指で移動・拡大できます。';
-    $('[data-farming-legend-title]').textContent=layer.kind==='forest'?'森林の分布（2020年・参考画像）':`${layer.title}（${layer.unit}・2020年）`;
+    $('[data-farming-legend-title]').textContent=layer.kind==='forest'?'JRCの森林分類（2020年・参考画像）':`${layer.title}（${layer.unit}・2020年）`;
     const scale=$('[data-farming-scale]');scale.replaceChildren();
-    for(const [i,color] of (layer.colors??['4d9221']).entries()){const item=document.createElement('span'),swatch=document.createElement('i');swatch.style.backgroundColor='#'+color;const breaks=layer.breaks??[],label=layer.kind==='forest'?'資料で森林と分類された場所':i===0?`0より大きく${breaks[0]}未満`:i===breaks.length?`${breaks[i-1].toLocaleString('ja-JP')}以上`:`${breaks[i-1].toLocaleString('ja-JP')}以上${breaks[i].toLocaleString('ja-JP')}未満`;item.append(swatch,document.createTextNode(label));scale.append(item);}
-    $('[data-farming-legend-note]').textContent=layer.kind==='forest'?'提供元が描いた画像を表示しています。元資料の10m分類をこの広域図で読み分けられるわけではありません。色から森林面積は計算しません。':'色がない場所は、推計0・欠測・海を含みます。同じ場所の比較で示す地点値は0と欠測を区別します。元資料は5分角（南北で約9km）で、拡大しても畑や農場を特定できません。';
+    for(const [i,color] of (layer.colors??['4d9221']).entries()){const item=document.createElement('span'),swatch=document.createElement('i');swatch.style.backgroundColor='#'+color;const breaks=layer.breaks??[],label=layer.kind==='forest'?'JRC資料で森林に分類された場所':i===0?`0より大きく${breaks[0]}未満`:i===breaks.length?`${breaks[i-1].toLocaleString('ja-JP')}以上`:`${breaks[i-1].toLocaleString('ja-JP')}以上${breaks[i].toLocaleString('ja-JP')}未満`;item.append(swatch,document.createTextNode(label));scale.append(item);}
+    $('[data-farming-legend-note]').textContent=layer.kind==='forest'?'JRCの衛星画像による分類で、FAOの森林面積統計とは定義と作成方法が異なります。東カリマンタンでは一部の樹木作物を森林と誤分類する既知の問題があります。色から森林面積や木材生産量は計算しません。':'色がない場所は、推計0・欠測・海を含みます。同じ場所の比較で示す地点値は0と欠測を区別します。元資料は5分角（南北で約9km）で、拡大しても畑や農場を特定できません。';
     if((selectedPoint||state.city)&&layer.grid&&!farmingGrids.has(layer.grid))void loadFarmingGrid(layer).then(()=>{if(farmingLayer()?.id===layer.id)renderGridReading();}).catch(()=>{if(farmingLayer()?.id===layer.id){const message='選択した主題の数値を取得できませんでした。再読み込みをお試しください。';$('[data-farming-value]').textContent=message;status(message,true);}});
   }
   function renderPhysical() {

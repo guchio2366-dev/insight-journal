@@ -1,5 +1,6 @@
-import {canadaLegacyFrame,canadaMapPath} from '../lib/atlas-canada-map-presentation';
-import {canadaWaterDatasets, canadaWaterFit, canadaWaterFullFrame, canadaWaterPath, validCanadaWaterFrame, validateCanadaWaterCollection, type CanadaWaterArea, type CanadaWaterCollection, type CanadaWaterConfig, type CanadaWaterDataset, type CanadaWaterFeature, type CanadaWaterFrame, type CanadaWaterState, type WaterDatasetTopic, type WaterTopic} from '../lib/atlas-canada-water-state';
+import {unprojectCanadaLandform} from '../lib/atlas-canada-landform-map';
+import {canadaSouthernFrame,canadaLegacyFrame,canadaMapPath} from '../lib/atlas-canada-map-presentation';
+import {projectCanadaWater,canadaWaterDatasets, canadaWaterFit, canadaWaterFullFrame, canadaWaterPath, validCanadaWaterFrame, validateCanadaWaterCollection, type CanadaWaterArea, type CanadaWaterCollection, type CanadaWaterConfig, type CanadaWaterDataset, type CanadaWaterFeature, type CanadaWaterFrame, type CanadaWaterState, type WaterDatasetTopic, type WaterTopic} from '../lib/atlas-canada-water-state';
 
 const svgNamespace = 'http://www.w3.org/2000/svg';
 export function initCanadaWaterResources(root: HTMLElement) {
@@ -35,11 +36,16 @@ export function initCanadaWaterResources(root: HTMLElement) {
   root.dataset.canadaWaterReady = message ? failed ? 'error' : 'loading' : 'ready';
  }
  function safeFrame(next: CanadaWaterFrame): CanadaWaterFrame {
-  const width = Math.min(900,Math.max(3,next[2])), height = Math.min(580,Math.max(3,next[3]));
-  return [Math.max(0,Math.min(900-width,next[0])),Math.max(0,Math.min(580-height,next[1])),width,height];
+  const width = Math.min(1000,Math.max(3,next[2])), height = Math.min(700,Math.max(3,next[3]));
+  return [Math.max(0,Math.min(1000-width,next[0])),Math.max(0,Math.min(700-height,next[1])),width,height];
  }
  function defaultFrame(topic: WaterDatasetTopic): CanadaWaterFrame {
   const dataset = datasets[topic];
+  if(topic==='precipitation'||topic==='drainage'){
+   const box=map.getBoundingClientRect(),[x,y,width,height]=canadaSouthernFrame(box.width && box.height ? box.width/box.height : 1.85);
+   const a=projectCanadaWater(unprojectCanadaLandform([x,y])),b=projectCanadaWater(unprojectCanadaLandform([x+width,y+height]));
+   return [a[0],a[1],b[0]-a[0],b[1]-a[1]];
+  }
   if (validCanadaWaterFrame(dataset.defaultFrame)) return dataset.defaultFrame;
   return topic === 'aquifers' && geometry.has(topic) ? canadaWaterFit(geometry.get(topic)!.features) ?? full : full;
  }
@@ -76,7 +82,9 @@ export function initCanadaWaterResources(root: HTMLElement) {
   const dataset = datasets[topic]; select.replaceChildren();
   const add = (parent: HTMLOptGroupElement | HTMLSelectElement, id: string, name: string) => {const option=document.createElement('option');option.value=id;option.textContent=name;parent.append(option);};
   add(select,'','すべての区分');
-  for (const group of dataset.groups) add(select,group.id,group.name);
+  for (const group of dataset.groups.filter(item=>!(item as any).parent)) add(select,group.id,group.name);
+  const children=dataset.groups.filter(item=>(item as any).parent);
+  if(children.length){const parent=document.createElement('optgroup');parent.label='ネルソン川水系の支流域';for(const child of children)add(parent,child.id,child.name);select.append(parent);}
   if (dataset.areas?.length) {
    const parent = document.createElement('optgroup'); parent.label = '個別の帯水層（原資料の番号）';
    for (const area of dataset.areas) add(parent,area.id,area.name);
@@ -101,14 +109,22 @@ export function initCanadaWaterResources(root: HTMLElement) {
   if (topic==='aquifers') {
    for (const feature of collection.features) {const group=dataset.groups.find(item => item.id===featureGroup(feature,dataset))!;makeShape(featureId(feature),group.id,String(feature.properties.name ?? feature.properties.LOCATION ?? `帯水層 ${featureId(feature)}`),group.color,[feature]);}
   } else {
-   for (const group of dataset.groups) makeShape(group.id,group.id,group.name,group.color,collection.features.filter(feature => featureGroup(feature,dataset)===group.id));
+   for (const group of dataset.groups){
+    // The held HydroBASINS manifest verifies childWithinParent. The parent's
+    // complete source polygon already contains the child; appending it with
+    // even-odd fill would incorrectly cut a hole in the Nelson basin.
+    const shape=makeShape(group.id,group.id,group.name,group.color,collection.features.filter(feature => featureGroup(feature,dataset)===group.id));
+    if((group as any).parent){shape.dataset.canadaWaterParent=(group as any).parent;for(const path of shape.querySelectorAll('path'))path.setAttribute('fill','none');}
+   }
   }
  }
  function drawVectors() {
   const collection=geometry.get(state.topic as WaterDatasetTopic);if (!collection) return;
   for (const shape of vectors.querySelectorAll<SVGGElement>('[data-canada-water-resource-shape]')) {
-   const selected=shape.dataset.canadaWaterResourceShape===state.area || state.topic==='drainage'&&state.area==='nelson'&&shape.dataset.canadaWaterResourceShape==='saskatchewan' || state.topic==='aquifers' && shape.dataset.canadaWaterResourceGroup===state.area;
-   const hidden=state.only && !!state.area && !selected;
+   const selected=shape.dataset.canadaWaterResourceShape===state.area || state.topic==='aquifers' && shape.dataset.canadaWaterResourceGroup===state.area;
+   const childOfSelected=state.topic==='drainage'&&shape.dataset.canadaWaterParent===state.area;
+   const hidden=state.only && !!state.area && !selected&&!childOfSelected;
+   if(shape.dataset.canadaWaterParent)for(const path of shape.querySelectorAll('path'))path.setAttribute('fill',selected?datasets.drainage.groups.find(group=>group.id===shape.dataset.canadaWaterParent)?.color??'none':'none');
    shape.style.display=hidden?'none':'';shape.classList.toggle('is-selected',selected);shape.setAttribute('aria-pressed',String(selected));shape.setAttribute('tabindex',hidden||state.topic==='aquifers'?'-1':'0');
   }
  }
@@ -155,7 +171,7 @@ export function initCanadaWaterResources(root: HTMLElement) {
    const link=reading.querySelector<HTMLAnchorElement>('[data-canada-water-selected-link]')!,url=feature?.properties.AQUIFER_DETAILS_URL;
    link.hidden=typeof url!=='string'||!url.startsWith('https://');if(!link.hidden)link.href=String(url);
   }
-  $('[data-canada-water-resource-status]').textContent=(area?`${area.name}${state.only?'だけ表示中。':'を選択中。'}${topic==='aquifers'?' 地図は選定範囲に重なる、原資料の帯水層全体を表示します。':''}`:'すべての区分を表示。地図・凡例・選択欄から区分を選べます。')+' 丸は観測点の位置の目印です。';
+  $('[data-canada-water-resource-status]').textContent=(area?`${area.name}${state.only?'だけ表示中。':'を選択中。'}${topic==='aquifers'?' 地図は選定範囲に重なる、原資料の帯水層全体を表示します。':''}`:'すべての区分を表示。地図・凡例・選択欄から区分を選べます。')+(topic==='precipitation'?' 色は年降水量の区分です。':' 色面は主流域、破線は支流域の境界です。');
  }
  function render(next: CanadaWaterState) {
   state={...next};if(state.topic==='surface')return;
@@ -163,10 +179,10 @@ export function initCanadaWaterResources(root: HTMLElement) {
   const topicChanged=renderedTopic!==topic;
   if(topicChanged){renderedTopic=topic;populateSelect(topic);raster.replaceChildren();vectors.replaceChildren();delete vectors.dataset.canadaWaterVectorTopic;rasterKey='';if(geometry.has(topic))buildVectors(topic);}
   frame=validCanadaWaterFrame(state.frame)?state.frame:defaultFrame(topic);drawCamera();
-  select.value=state.area??'';only.checked=!!state.area&&state.only;only.disabled=!state.area;$<HTMLButtonElement>('[data-canada-water-focus]').disabled=!state.area||topic==='precipitation';
+  select.value=state.area??'';only.checked=!!state.area&&state.only;only.disabled=!state.area;const focusButton=root.querySelector<HTMLButtonElement>('[data-canada-water-focus]');if(focusButton)focusButton.disabled=!state.area||topic==='precipitation';
   $('[data-canada-water-map-title]').textContent=dataset.title;
   map.querySelector('title')!.textContent=dataset.title;
-  map.querySelector('desc')!.textContent=`${dataset.reading} ${dataset.scope} ${topic==='precipitation'?'各色帯の年降水量を地図内にmm/年で表示します。':'地図と同じ区分は凡例と選択欄で確認できます。丸は既存のECCC観測点の位置の目印で、帯水層の測定点ではありません。'}`;
+  map.querySelector('desc')!.textContent=`${dataset.reading} ${dataset.scope} ${topic==='precipitation'?'各色帯の年降水量を地図内にmm/年で表示します。':'主流域と支流域の階層は凡例と選択欄で確認できます。'}`;
   map.querySelector<SVGElement>('[data-canada-rain-map-labels]')?.toggleAttribute('hidden',topic!=='precipitation');
   root.querySelector<HTMLElement>('[data-canada-rain-map-unit]')?.toggleAttribute('hidden',topic!=='precipitation');
   map.querySelector<SVGElement>('.canada-water-references')?.toggleAttribute('hidden',topic==='precipitation');
@@ -191,11 +207,11 @@ export function initCanadaWaterResources(root: HTMLElement) {
  for(const button of root.querySelectorAll<HTMLElement>('[data-canada-water-topic]'))button.addEventListener('click',()=>emit({topic:button.dataset.canadaWaterTopic as WaterTopic,area:null,only:false,frame:null}));
  vectors.addEventListener('click',event=>{if(ignoreClick){ignoreClick=false;return;}const target=(event.target as Element).closest<SVGGElement>('[data-canada-water-resource-shape]');if(target)emit({area:target.dataset.canadaWaterResourceShape!,only:false});});
  vectors.addEventListener('keydown',event=>{if(event.key!=='Enter'&&event.key!==' ')return;const target=(event.target as Element).closest<SVGGElement>('[data-canada-water-resource-shape]');if(target){event.preventDefault();emit({area:target.dataset.canadaWaterResourceShape!,only:false});}});
- $('[data-canada-water-resource-reset]').addEventListener('click',()=>emit({area:null,only:false,frame:null}));
+ $('[data-canada-water-resource-reset]').addEventListener('click',()=>emit({area:null,only:false}));
  for(const label of root.querySelectorAll<SVGElement>('[data-canada-basin-label]')){const choose=()=>emit({area:label.dataset.canadaBasinLabel!,only:false});label.addEventListener('click',choose);label.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose();}});}
- $('[data-canada-water-full]').addEventListener('click',()=>camera(full));
+ root.querySelector('[data-canada-water-full]')?.addEventListener('click',()=>camera(full));
  root.querySelector('[data-canada-water-whole]')?.addEventListener('click',()=>camera([0,0,900,580]));
- $('[data-canada-water-focus]').addEventListener('click',()=>{if(state.topic==='surface'||state.topic==='precipitation')return;const dataset=datasets[state.topic],features=geometry.get(state.topic)?.features.filter(feature=>isMatch(feature,dataset));if(features?.length)camera(canadaWaterFit(features));});
+ root.querySelector('[data-canada-water-focus]')?.addEventListener('click',()=>{if(state.topic==='surface'||state.topic==='precipitation')return;const dataset=datasets[state.topic],features=geometry.get(state.topic)?.features.filter(feature=>isMatch(feature,dataset));if(features?.length)camera(canadaWaterFit(features));});
  for(const button of root.querySelectorAll<HTMLElement>('[data-canada-water-zoom]'))button.addEventListener('click',()=>{const factor=button.dataset.canadaWaterZoom==='in'?.7:1/.7;const width=Math.min(900,Math.max(3,frame[2]*factor)),height=Math.min(580,Math.max(3,frame[3]*factor));camera([frame[0]+(frame[2]-width)/2,frame[1]+(frame[3]-height)/2,width,height]);});
  retry.addEventListener('click',()=>{if(state.topic==='surface')return;errors.delete(state.topic);if(state.topic==='precipitation')failedImages.clear();rasterKey='';render(state);});
  map.addEventListener('keydown',event=>{if(event.target!==map)return;const movement:Record<string,[number,number]>={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};const direction=movement[event.key];if(direction){event.preventDefault();camera([frame[0]+direction[0]*frame[2]*.15,frame[1]+direction[1]*frame[3]*.15,frame[2],frame[3]]);}});
@@ -203,6 +219,6 @@ export function initCanadaWaterResources(root: HTMLElement) {
  map.addEventListener('pointermove',event=>{if(!drag)return;const bounds=map.getBoundingClientRect(),dx=event.clientX-drag.x,dy=event.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)<5&&!drag.moved)return;drag.moved=true;map.setPointerCapture?.(event.pointerId);const scale=Math.min(bounds.width/drag.frame[2],bounds.height/drag.frame[3]);if(scale>0){frame=safeFrame([drag.frame[0]-dx/scale,drag.frame[1]-dy/scale,drag.frame[2],drag.frame[3]]);drawCamera();}});
  map.addEventListener('pointerup',()=>{if(drag?.moved){ignoreClick=true;camera(frame);}drag=null;});
  map.addEventListener('pointercancel',()=>{drag=null;render(state);});
- const resize=typeof ResizeObserver==='undefined'?undefined:new ResizeObserver(()=>{if(isVisible())drawCamera();});resize?.observe(map);
+ const resize=typeof ResizeObserver==='undefined'?undefined:new ResizeObserver(()=>{if(isVisible()){if(!state.frame)frame=defaultFrame(state.topic as WaterDatasetTopic);drawCamera();}});resize?.observe(map);
  return {render};
 }

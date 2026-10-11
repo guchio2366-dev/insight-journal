@@ -1,4 +1,4 @@
-import {canadaLegacyFrame,projectCanadaComparison} from '../lib/atlas-canada-map-presentation';
+import {canadaSouthernFrame,canadaLegacyFrame,projectCanadaComparison} from '../lib/atlas-canada-map-presentation';
 import {renderPopulationNatureComparison} from './atlas-canada-population-comparison';
 import {hydrateCanadaPopulationGeometry} from './atlas-canada-population-geometry-loader';
 import {renderIndustryNatureComparison} from './atlas-canada-industry-comparison';
@@ -17,6 +17,17 @@ export function initCanadaNature(root:HTMLElement){
  const ids=config.cities.map((c:any)=>c.id),waters=config.waters;
  const $=<T extends Element=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const map=$<SVGSVGElement>('[data-canada-map]');
+ function drawLocatorCamera(){const box=map.getBoundingClientRect();map.setAttribute('viewBox',(state.frame ? canadaLegacyFrame(state.frame) : canadaSouthernFrame(box.width && box.height ? box.width/box.height : 1.85)).join(' '));layoutRiverLabels();}
+ function layoutRiverLabels(){
+  const scale=map.getScreenCTM?.()?.a;if(!scale||!Number.isFinite(scale))return;
+  const [left,top,width,height]=map.getAttribute('viewBox')!.split(' ').map(Number),gap=8/scale;
+  for(const label of root.querySelectorAll<SVGGElement>('[data-canada-river-label]')){
+   const text=label.querySelector('text')!,anchor=label.getAttribute('transform')?.match(/translate\(([-\d.]+)[ ,]+([-\d.]+)\)/);if(!anchor)continue;
+   const [x,y]=anchor.slice(1).map(Number);text.style.fontSize=`${13/scale}px`;text.setAttribute('text-anchor','start');text.setAttribute('x',String(gap));text.setAttribute('y',String(-gap));
+   if(x<left||x>left+width||y<top||y>top+height)continue;
+   const length=text.getComputedTextLength?.()??0;if(x+gap+length>left+width-gap){text.setAttribute('text-anchor','end');text.setAttribute('x',String(-gap));}
+  }
+ }
  let state=readCanadaNatureState(new URL(location.href),ids,waters);
  const waterHost=root.querySelector<HTMLElement>('[data-canada-water-resources]');
  const waterConfig=waterHost?JSON.parse(waterHost.querySelector('[data-canada-water-resource-config]')!.textContent!):null;
@@ -48,7 +59,6 @@ export function initCanadaNature(root:HTMLElement){
   root.classList.toggle('is-water-resource',waterResource);
   const waterFamily=['precipitation','drainage'].includes(waterState.topic)?waterState.topic:'surface';
   root.classList.toggle('is-water-river-family',state.view==='water'&&waterFamily==='surface');
-  const waterSubtopics=root.querySelector<HTMLElement>('[data-canada-water-subtopics]');if(waterSubtopics){waterSubtopics.hidden=state.view!=='water'||waterFamily!=='surface';const reading=waterResource?waterHost?.querySelector('.canada-water-reading'):root.querySelector('[data-canada-reading=water]');if(reading&&waterSubtopics.parentElement!==reading)reading.prepend(waterSubtopics);}
   for(const button of root.querySelectorAll<HTMLElement>('[data-canada-water-family]'))button.setAttribute('aria-pressed',String(button.dataset.canadaWaterFamily===waterFamily));
   if(waterHost)waterHost.hidden=!waterResource;
   const originalMap=root.querySelector<HTMLElement>('[data-canada-original-map-column]'),originalReading=root.querySelector<HTMLElement>('[data-canada-original-reading]');
@@ -123,30 +133,31 @@ export function initCanadaNature(root:HTMLElement){
   if(landformText)landformText.textContent=landform?.description??'西部の山地、中央の平原、東部の盾状地を比較します。地図か凡例で地域を選ぶと、その範囲と説明が対応します。';
   const cityList=root.querySelector<HTMLElement>('.canada-city-list');if(cityList)cityList.hidden=classifiedClimate||state.view==='water'||state.view==='landform'||state.view==='elevation';
   $('[data-canada-water-controls]').hidden=state.view!=='water';
+  const waterSelection=root.querySelector<HTMLElement>('[data-canada-water-selection]');if(waterSelection)waterSelection.hidden=state.view!=='water'||!state.water;
   const group=$<SVGGElement>('[data-canada-water-layers]');group.setAttribute('display',state.view==='water'?'':'none');group.removeAttribute('hidden');
   $<HTMLSelectElement>('[data-canada-water]').value=state.water??'';
   $<HTMLInputElement>('[data-canada-only]').checked=state.only;
   $<HTMLInputElement>('[data-canada-only]').disabled=!state.water;
   const waterGroup=root.dataset.canadaIndustryWaterGroup==='great-lakes',comparisonWaters=['St. Lawrence','Lake Superior','Lake Ontario','Lake Huron','Lake Erie','Lake Michigan'];
-  const onlyLabel=root.querySelector<HTMLElement>('[data-canada-only-label]');if(onlyLabel)onlyLabel.textContent=waterGroup?'比較する五大湖5湖・St. Lawrence上流だけを表示':'選んだ川・湖だけを表示';
+  const onlyLabel=root.querySelector<HTMLElement>('[data-canada-only-label]');if(onlyLabel)onlyLabel.textContent=waterGroup?'比較する五大湖5湖・セントローレンス川だけを表示':'選んだ川・湖だけを表示';
   const selectedWater=state.water?selectedWaterReading[state.water]:null;
   const waterTitle=root.querySelector<HTMLElement>('[data-canada-water-reading-title]'),waterText=root.querySelector<HTMLElement>('[data-canada-water-reading-text]'),waterScope=root.querySelector<HTMLElement>('[data-canada-water-reading-scope]');
-  if(waterTitle)waterTitle.textContent=waterGroup?'五大湖・セントローレンス上流と大西洋側':selectedWater?selectedWater.name:'湖と川を、海までつないで読む';
-  if(waterText)waterText.textContent=waterGroup?'五大湖とセントローレンス上流の位置を、産業の州別構成と比べます。この図は航路や輸送量を示しません。':selectedWater?.body??'マッケンジー川は北極海、フレーザー川は太平洋、ネルソン川はハドソン湾、セントローレンス川は大西洋側へ向かいます。地図の川名から選ぶと、その川の説明が出ます。';
-  if(waterScope)waterScope.textContent=state.only&&state.water?'選択水域だけを表示中です。つながる他の湖・川は「すべての水系へ戻す」で照合できます。線の太さは流量、湖の色は水質ではありません。':'線は川、面は湖の概略形状です。流量・水質・地下水・流域境界の地図ではありません。';
+  if(waterTitle)waterTitle.textContent=waterGroup?'五大湖・セントローレンス川と大西洋側':selectedWater?selectedWater.name:'湖と川を、海までつないで読む';
+  if(waterText)waterText.textContent=waterGroup?'五大湖からセントローレンス川の河口域までの位置を、産業の州別構成と比べます。この図は航路や輸送量を示しません。':selectedWater?.body??'マッケンジー川は北極海、フレーザー川は太平洋、ネルソン川はハドソン湾、セントローレンス川は大西洋側へ向かいます。地図の川名から選ぶと、その川の説明が出ます。';
+  if(waterScope)waterScope.textContent=state.only&&state.water?'選択水域だけを表示中です。つながる他の湖・川は「すべての水系へ戻す」で照合できます。線の太さは流量、湖の色は水質ではありません。':'線は川の概略形状、面は湖です。セントローレンス川は公式地名データの範囲の輪郭です。流量・水質・航路・流域境界は示しません。';
   const waterLabels=root.querySelector<SVGElement>('[data-canada-industry-water-labels]');if(waterLabels)waterLabels.style.display=waterGroup?'':'none';
   const riverLabels=root.querySelector<SVGElement>('[data-canada-river-labels]');if(riverLabels)riverLabels.toggleAttribute('hidden',state.view!=='water'||waterState.topic!=='surface'||waterGroup);
   for(const label of root.querySelectorAll<SVGElement>('[data-canada-river-label]'))label.setAttribute('aria-pressed',String(label.getAttribute('data-canada-river-label')===state.water));
   for(const ocean of root.querySelectorAll<SVGElement>('.canada-ocean'))ocean.style.display=waterGroup?'none':'';
-  const mapHeading=root.querySelector<HTMLElement>('.canada-map-title h2');if(mapHeading){mapHeading.dataset.original??=mapHeading.textContent!;mapHeading.textContent=waterGroup?'五大湖・川上流・大西洋側':mapHeading.dataset.original;}
+  const mapHeading=root.querySelector<HTMLElement>('.canada-map-title h2');if(mapHeading){mapHeading.dataset.original??=mapHeading.textContent!;mapHeading.textContent=waterGroup?'五大湖・セントローレンス川・大西洋側':mapHeading.dataset.original;}
   for(const point of root.querySelectorAll<SVGElement>('[data-canada-map-city]'))point.style.display=state.view==='water'?'none':'';
-  if(waterGroup)$('[data-canada-position-caption]').textContent='五大湖5湖・St. Lawrence上流・大西洋側の位置を比較します。気候観測点はこの表示では非表示です。「都市の気候」で観測点を確認できます。面積や航路の図ではありません。';
-  const mapDesc=map.querySelector<SVGDescElement>('desc');if(mapDesc){mapDesc.dataset.original??=mapDesc.textContent!;mapDesc.textContent=waterGroup?'五大湖5湖とセントローレンス川上流を赤い縁・線で強調。大西洋側も表示しますが、下流の河道・航路は描いていません。観測地点はこの比較では非表示。':mapDesc.dataset.original;}
+  if(waterGroup)$('[data-canada-position-caption]').textContent='五大湖5湖・セントローレンス川・大西洋側の位置を比較します。気候観測点はこの表示では非表示です。「都市の気候」で観測点を確認できます。面積や航路の図ではありません。';
+  const mapDesc=map.querySelector<SVGDescElement>('desc');if(mapDesc){mapDesc.dataset.original??=mapDesc.textContent!;mapDesc.textContent=waterGroup?'五大湖5湖とセントローレンス川を赤い縁・線で強調。川は上流から河口域までの公式地名範囲の輪郭で、航路ではありません。観測地点はこの比較では非表示。':mapDesc.dataset.original;}
   for(const shape of root.querySelectorAll<SVGPathElement>('[data-canada-water-shape]')){
    const selected=waterGroup?comparisonWaters.includes(shape.dataset.canadaWaterShape!):shape.dataset.canadaWaterShape===state.water;
    shape.style.display=state.only&&state.water&&!selected?'none':'';shape.classList.toggle('is-selected',selected);
   }
-  map.setAttribute('viewBox',canadaLegacyFrame(state.frame).join(' '));
+  drawLocatorCamera();
   for(const selector of ['[data-canada-industry-context-map]','[data-canada-population-context-map]']){const group=root.querySelector<SVGElement>(selector);if(group)projectCanadaComparison(group);}
   const name=config.cities.find((c:any)=>c.id===state.city).name;
   $('[data-canada-announcement]').textContent=state.view==='landform'?`${landform?.name??'七つの地形地域'}${state.landformOnly?'だけ':''}を表示。`:state.view==='elevation'?`${elevation?.name??'500 m間隔の標高区分'}を表示。`:`${name}${state.compare?'と比較':''}。${({climate:'都市の気候',landform:'地形地域',water:'湖と河川'})[state.view]}を表示。`;
@@ -154,21 +165,20 @@ export function initCanadaNature(root:HTMLElement){
  function update(patch:Partial<CanadaNatureState>){state={...state,...patch};if(state.compare===state.city)state.compare=null;history.pushState(null,'',writeCanadaNatureState(new URL(location.href),state));render();}
  function updateWater(patch:Partial<CanadaWaterState>){waterState={...waterState,...patch};state={...state,view:'water'};history.pushState(null,'',writeCanadaWaterState(writeCanadaNatureState(new URL(location.href),state),waterState));render();}
  waterHost?.addEventListener('canada-water-update',event=>updateWater((event as CustomEvent<Partial<CanadaWaterState>>).detail));
- for(const button of root.querySelectorAll<HTMLElement>('[data-canada-water-family]'))button.addEventListener('click',()=>{const family=button.dataset.canadaWaterFamily!,currentFamily=['precipitation','drainage'].includes(waterState.topic)?waterState.topic:'surface';if(state.view==='water'&&family===currentFamily)return;const topic=family==='surface'&&['surface','groundwater','aquifers'].includes(waterState.topic)?waterState.topic:family as CanadaWaterState['topic'];updateWater({topic,area:null,only:false,frame:null});});
- for(const button of root.querySelectorAll<HTMLElement>('.country-water-subtopics [data-canada-water-topic]'))button.addEventListener('click',()=>{const topic=button.dataset.canadaWaterTopic as CanadaWaterState['topic'];if(state.view==='water'&&topic===waterState.topic)return;updateWater({topic,area:null,only:false,frame:null});});
+ for(const button of root.querySelectorAll<HTMLElement>('[data-canada-water-family]'))button.addEventListener('click',()=>{const family=button.dataset.canadaWaterFamily!,currentFamily=['precipitation','drainage'].includes(waterState.topic)?waterState.topic:'surface';if(state.view==='water'&&family===currentFamily)return;updateWater({topic:family as CanadaWaterState['topic'],area:null,only:false,frame:null});});
  const select=(city:string)=>update({city});
  function updateNatural(layer:NaturalLayer,patch:Partial<NaturalLayerState>){naturalStates[layer]={...naturalStates[layer],...patch};history.pushState(null,'',writeCanadaNaturalLayerState(new URL(location.href),layer,naturalStates[layer]));render();}
  for(const layer of naturalLayers){const host=naturalHosts[layer];if(!host)continue;
   host.addEventListener('canada-natural-select',event=>updateNatural(layer,{selected:(event as CustomEvent).detail.id}));
   host.addEventListener('canada-natural-only',event=>updateNatural(layer,{only:(event as CustomEvent).detail.only}));
   host.addEventListener('canada-natural-camera',event=>updateNatural(layer,{bounds:(event as CustomEvent).detail.bounds}));
-  host.addEventListener('canada-natural-reset',()=>updateNatural(layer,{selected:null,only:false,bounds:null}));
+  host.addEventListener('canada-natural-reset',()=>updateNatural(layer,{selected:null,only:false}));
   host.addEventListener('canada-natural-city',event=>select((event as CustomEvent).detail.id));
  }
  landformHost?.addEventListener('canada-landform-select',event=>update({landform:(event as CustomEvent<{id:string}>).detail.id}));
  landformHost?.addEventListener('canada-landform-only',event=>update({landformOnly:(event as CustomEvent<{only:boolean}>).detail.only}));
  landformHost?.addEventListener('canada-landform-camera',event=>update({landformBounds:(event as CustomEvent<{bounds:[number,number,number,number]|null}>).detail.bounds}));
- landformHost?.addEventListener('canada-landform-reset',()=>update({landform:null,landformOnly:false,landformBounds:null}));
+ landformHost?.addEventListener('canada-landform-reset',()=>update({landform:null,landformOnly:false}));
  $<HTMLSelectElement>('[data-canada-city]').addEventListener('change',e=>select((e.target as HTMLSelectElement).value));
  $<HTMLSelectElement>('[data-canada-compare]').addEventListener('change',e=>update({compare:(e.target as HTMLSelectElement).value||null}));
  for(const button of root.querySelectorAll<HTMLElement>('[data-canada-city-button],[data-canada-map-city]')){
@@ -182,15 +192,17 @@ export function initCanadaNature(root:HTMLElement){
  root.querySelector('[data-canada-water-layers]')?.addEventListener('click',event=>{const name=(event.target as Element).getAttribute('data-canada-water-shape');if(name&&waters.includes(name))update({water:state.water===name?null:name,only:false});});
  $<HTMLInputElement>('[data-canada-only]').addEventListener('change',e=>update({only:(e.target as HTMLInputElement).checked}));
  $('[data-canada-all-water]').addEventListener('click',()=>update({water:null,only:false}));
- $('[data-canada-reset]').addEventListener('click',()=>update({frame:null}));
+ root.querySelector('[data-canada-reset]')?.addEventListener('click',()=>update({frame:null}));
  root.querySelector('[data-canada-whole]')?.addEventListener('click',()=>update({frame:[0,0,900,580]}));
- $('[data-canada-focus]').addEventListener('click',()=>{const p=config.cities.find((c:any)=>c.id===state.city).point;update({frame:[p[0]-150,p[1]-100,300,200]});});
+ root.querySelector('[data-canada-focus]')?.addEventListener('click',()=>{const p=config.cities.find((c:any)=>c.id===state.city).point;update({frame:[p[0]-150,p[1]-100,300,200]});});
  for(const button of root.querySelectorAll<HTMLElement>('[data-canada-zoom]'))button.addEventListener('click',()=>{
   const [x,y,w,h]=state.frame??full,factor=button.dataset.canadaZoom==='in'?.75:1/.75;
   const nw=Math.min(config.width,Math.max(30,w*factor)),nh=Math.min(config.height,Math.max(20,h*factor));
   update({frame:nw===config.width?null:[Math.max(0,Math.min(config.width-nw,x+(w-nw)/2)),Math.max(0,Math.min(config.height-nh,y+(h-nh)/2)),nw,nh]});
  });
  window.addEventListener('popstate',()=>{state=readCanadaNatureState(new URL(location.href),ids,waters);waterState=readCanadaWaterState(new URL(location.href),waterGroups);naturalStates=Object.fromEntries(naturalLayers.map(layer=>[layer,readCanadaNaturalLayerState(new URL(location.href),layer,(config.layers?.[layer]?.groups??[]).map((g:any)=>g.id))])) as Record<NaturalLayer,NaturalLayerState>;render();void hydrateCanadaPopulationGeometry(root,'[data-canada-config]',{config,onReady:render,onError:render});});
+ const locatorResize=typeof ResizeObserver==='undefined'?undefined:new ResizeObserver(()=>{if(!state.frame)drawLocatorCamera();});locatorResize?.observe(map);
+ document.fonts?.ready.then(()=>layoutRiverLabels());
  render();
  void hydrateCanadaPopulationGeometry(root,'[data-canada-config]',{config,onReady:render,onError:render});
 }

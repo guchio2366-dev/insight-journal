@@ -8,6 +8,10 @@ const sample=(manifest as any).stationSamples.find((s:any)=>s.id===city);
 const code=sample?.class??sample?.code;
 const zone=canadaClimateGroups((manifest as any).classes).find(s=>s.id===code);
 const crop:Record<string,{potential:string;actual:string;source:string}>= {
+ toronto:{potential:'暖かい夏を利用するトウモロコシ・大豆、牧草。氷点下の冬と生育期を分けて読みます。',actual:'トロントが位置するオンタリオ州では、トウモロコシ・大豆の栽培、酪農・養豚が行われています。2021年の州別確認で、都市内の生産量ではありません。',source:'https://www150.statcan.gc.ca/n1/daily-quotidien/220615/dq220615a-eng.htm'},
+ montreal:{potential:'暖かい夏を利用する飼料作物・牧草。家畜の越冬と冬季の飼料確保を合わせて考えます。',actual:'モントリオールが位置するケベック州では、酪農・養豚、メープル樹液の採取などが行われています。2021年の州別確認で、都市の気候だけから生産地を決めるものではありません。',source:'https://www150.statcan.gc.ca/n1/daily-quotidien/220615/dq220615a-eng.htm'},
+ calgary:{potential:'短い夏に収穫する春小麦・大麦・カノーラ、牧草。夏の降水と越冬用飼料の確保が重要です。',actual:'カルガリーが位置するアルバータ州を含むプレーリー3州では、春小麦・カノーラ・大麦の栽培と牛の飼育が行われています。2021年の地域別確認で、空港周辺の生産量ではありません。',source:'https://www150.statcan.gc.ca/n1/daily-quotidien/220615/dq220615a-eng.htm'},
+ halifax:{potential:'比較的涼しい夏を利用する牧草・ベリー類・リンゴ。降水量に加えて、排水と土壌の条件を確認します。',actual:'ハリファクスが位置するノバスコシア州では、ローブッシュ・ブルーベリー、リンゴ、酪農、養鶏などが行われています。2021年の州別確認で、市内の生産量ではありません。',source:'https://www150.statcan.gc.ca/n1/pub/96-325-x/2021001/article/00003-eng.htm'},
  ottawa:{potential:'暖かい夏に育つトウモロコシ・大豆、牧草。冬は生育が止まるため、栽培期間と越冬・飼料の確保が重要です。',actual:'オタワが位置するオンタリオ州と隣接するケベック州では、トウモロコシ・大豆の栽培、酪農・養豚が行われています。下記は2021年の州別確認で、市内の生産統計ではありません。',source:'https://www150.statcan.gc.ca/n1/daily-quotidien/220615/dq220615a-eng.htm'},
  vancouver:{potential:'冬の寒さが比較的弱く、牧草・ベリー類・野菜の栽培を考えやすい気候です。夏の雨の少なさには灌漑、冬の多雨には排水への対応が必要です。',actual:'バンクーバーが位置するBC州では、ハイブッシュ・ブルーベリー、施設園芸、酪農などが行われています。2021年の州別統計であり、内陸を含むBC州全体をこの都市の気候と同一視しません。',source:'https://www150.statcan.gc.ca/n1/pub/96-325-x/2021001/article/00010-eng.htm'},
  regina:{potential:'短い夏に収穫する春小麦・大麦・カノーラ、牧草。生育期の降水量と干ばつへの対応が収量を左右します。草地と飼料を利用する肉牛生産も関係します。',actual:'レジャイナが位置するサスカチュワン州では、小麦・カノーラ・豆類が栽培されています。プレーリー3州では穀物栽培と肉牛生産が行われています。2021年の州・地域別統計です。',source:'https://www150.statcan.gc.ca/n1/pub/96-325-x/2021001/article/00008-eng.htm'},
@@ -22,6 +26,7 @@ const item=crop[city];
 <h3>この気候でつくられやすい農畜産物</h3><p>{item.potential}</p>
 <h3>実際につくられている農畜産物</h3><p>{item.actual}</p>
 {item.source&&<p class="canada-caption"><a href={item.source}>2021年農業センサスの地域別解説</a></p>}
+<p class="canada-caption">気候区分は0.1度格子の分類、雨温図は観測点の平年値です。同じ期間でも格子と観測点の値は一致するとは限りません。</p>
 <p class="canada-caption">栽培適性の説明は気温・降水の季節性からの整理です。実際の生産は土壌・水・品種・飼料・市場にも左右されます。</p>
 <p><a href={withBase('/atlas/north-america/canada/agriculture/')}>農畜産の分布を地図で読む →</a></p>
 </section>

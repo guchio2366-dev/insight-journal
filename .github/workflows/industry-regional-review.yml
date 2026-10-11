@@ -48,9 +48,13 @@ jobs:
           set -euo pipefail
           test -n "$(fc-list ':lang=ja' family)"
           export INDUSTRY_REVIEW_CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)"
+          if [[ "${GITHUB_HEAD_REF:-}" == "codex/canada-map-revision-20261011" ]]; then export CANADA_REVIEW_LOG_IMAGES=1; fi
           for review in scripts/verify-latin-industry-locations-review.mjs scripts/verify-russia-industry-review.mjs scripts/verify-industry-existing-country-review.mjs scripts/capture-canada-industry-pilot-review.mjs; do
             if [[ -f "$review" ]]; then node "$review"; fi
           done
+          if [[ "${GITHUB_HEAD_REF:-}" == "codex/canada-map-revision-20261011" ]]; then
+            CANADA_REVIEW_LOG_IMAGES=0 ATLAS_CHROMIUM_PATH="$INDUSTRY_REVIEW_CHROME_PATH" ATLAS_QA_OUTPUT="review-artifacts/canada-maps" node scripts/verify-canada-us-parity.mjs
+          fi
       - name: Verify the deployed approved Pages release
         if: github.event_name == 'workflow_dispatch'
         shell: bash

@@ -4,13 +4,13 @@ export function layoutCanadaPopulationLabels(root:HTMLElement){
  const frame=map.closest('.atlas-map-frame')!.getBoundingClientRect(),scale=matrix.a;
  const screen=(x:number,y:number)=>[x*matrix.a+matrix.e-frame.left,y*matrix.d+matrix.f-frame.top];
  const world=([x,y]:number[])=>[(x+frame.left-matrix.e)/matrix.a,(y+frame.top-matrix.f)/matrix.d];
- const tools=root.querySelector('.population-map-tools')!.getBoundingClientRect(),boxes:number[][]=[[tools.left-frame.left-4,tools.top-frame.top-4,tools.right-frame.left+4,tools.bottom-frame.top+4]];
+ const boxes:number[][]=[];
  const priority=['933','535','462','825','835','602','505','705'],markers=[...root.querySelectorAll<SVGElement>('[data-population-map-cma]')].sort((a,b)=>Number(b.getAttribute('aria-pressed')==='true')-Number(a.getAttribute('aria-pressed')==='true')||Number(priority.includes(b.dataset.populationMapCma!))-Number(priority.includes(a.dataset.populationMapCma!)));
  const anchors=markers.map(m=>{const p=m.querySelector('.population-anchor')!;return screen(Number(p.getAttribute('cx')),Number(p.getAttribute('cy')));}).filter(p=>p[0]>=0&&p[0]<frame.width&&p[1]>=0&&p[1]<frame.height).map(p=>[p[0]-5,p[1]-5,p[0]+5,p[1]+5]);
  const placements=[],symbols=[];
  for(const marker of markers){
   const anchor=marker.querySelector<SVGCircleElement>('.population-anchor')!,label=marker.querySelector<SVGTextElement>('[data-population-label]')!,dots=marker.querySelector<SVGElement>('[data-population-category-dots]'),id=marker.dataset.populationMapCma!,x=Number(anchor.getAttribute('cx')),y=Number(anchor.getAttribute('cy')),point=screen(x,y);
-  anchor.style.r=3/scale+'px';anchor.style.strokeWidth=1/scale+'px';anchor.style.pointerEvents='auto';anchor.style.cursor='pointer';label.style.fontSize=14/scale+'px';label.style.pointerEvents='auto';label.style.cursor='pointer';
+  anchor.style.display=priority.includes(id)||marker.getAttribute('aria-pressed')==='true'?'':'none';anchor.style.r=3/scale+'px';anchor.style.strokeWidth=1/scale+'px';anchor.style.pointerEvents='auto';anchor.style.cursor='pointer';label.style.fontSize=14/scale+'px';label.style.pointerEvents='auto';label.style.cursor='pointer';
   marker.querySelector('[data-population-label-leader]')?.remove();
   const inFrame=point[0]>=4&&point[0]<frame.width-4&&point[1]>=4&&point[1]<frame.height-4;
   if(dots){

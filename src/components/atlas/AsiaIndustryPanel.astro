@@ -15,6 +15,7 @@ const {active,regionId}=Astro.props;
  <p class="east-industry-journey-gap" data-east-industry-journey-gap></p>
  <p class="east-industry-journey-sources">出典：<a href="https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NV.IND.MANF.ZS">World Bank WDI</a> · <a href="https://globalenergymonitor.org/projects/global-iron-steel-tracker/">GEM Global Iron and Steel Tracker</a></p>
 </section>}
+{regionId==='southeast-asia'&&<SoutheastAsiaIndustryReading />}
 <section data-industry-panel hidden={!active}>
  <p class="eyebrow">Industry · Economy &amp; Energy</p><h2 data-industry-title>産業の分布を読む</h2>
  <p class="asia-takeaway" data-industry-lead></p><div class="industry-value" data-industry-value aria-live="polite"></div>
@@ -30,7 +31,7 @@ const {active,regionId}=Astro.props;
  <details><summary>出典・年・単位と収録範囲</summary><div data-industry-method></div><p>国・地域の統計と施設データは別の母集団です。発電施設を足して国全体の設備容量とはしません。国内の行政区域別統計は日本・中国・マレーシア・インドを収録し、ほかの国に隣国の値を補っていません。</p><p>行政界はNatural Earth v5.1.2（縮尺1:1000万）を表示用に簡略化しています。境界は政治的な主張を示すものではなく、色の面積を経済の規模と読むことはできません。</p></details>
 </section>
 <section data-industry-country-reading hidden aria-label="国別産業の収録範囲"><h3 data-industry-country-reading-title></h3><p data-industry-country-reading-text></p><p data-industry-country-reading-source hidden><a></a></p></section>
-{regionId==='southeast-asia'?<SoutheastAsiaIndustryReading />:<section data-industry-region-reading hidden aria-label="東アジアの産業と供給網を読む">
+{regionId!=='southeast-asia'&&<section data-industry-region-reading hidden aria-label="東アジアの産業と供給網を読む">
  <h3>地域の産業と、供給網の役割を分けて読む</h3>
  <p>製造業、素材・エネルギー、サービスを切り替え、各国の経済の構成と国内の分布を確かめます。地域の特徴にはモンゴルも含みます。この国別産業入口では中国・日本・韓国・台湾の4対象を比較し、周辺国の値を代用しません。</p>
  <p>供給網では、素材を得ること、部品や製品を加工・組立すること、輸送して市場へ届けることが関わります。収録した鉄鋼の設備能力、日本の業種別出荷額、商品貿易を順に読むと、それぞれの役割を考える手掛かりになります。能力・出荷額・貿易額は異なる量で、足し合わせられません。</p>
