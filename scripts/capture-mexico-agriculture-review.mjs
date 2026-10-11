@@ -546,6 +546,7 @@ async function main() {
       metadata.captures.push(result);
       await writeFile(path.join(output, 'metadata.json'), `${JSON.stringify(metadata, null, 2)}\n`);
       console.log(`${result.status.toUpperCase()}: ${result.name}${result.failure ? `: ${result.failure.split('\n')[0]}` : ''}`);
+      if(result.failure)console.log(`::error title=${result.name}::${result.failure.slice(0,2000).replaceAll('%','%25').replaceAll('\r','%0D').replaceAll('\n','%0A')}`);
     }
     if(!focused)metadata.pcReview = await captureMexicoPCReview({browser, origin: hosted.origin, basePath, output: path.join(output, 'pc-review')});
     if(!focused)assert.equal(metadata.pcReview.status, 'passed', 'PC comparison capture failed. Inspect mexico-agriculture/pc-review metadata and PNGs.');
@@ -566,4 +567,4 @@ async function main() {
   }
 }
 
-main().catch(error => {console.error(error); process.exitCode = 1;});
+main().catch(error => {console.error(error);console.log(`::error title=Mexico agriculture review::${String(error.stack??error).slice(0,2000).replaceAll('%','%25').replaceAll('\r','%0D').replaceAll('\n','%0A')}`); process.exitCode = 1;});
