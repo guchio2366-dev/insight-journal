@@ -256,6 +256,17 @@ test('saved Oceania farming products start together and direct product URLs choo
  }
 });
 
+test('Oceania single-product URL hides other mapped products and keeps the selected distribution',()=>{
+ const state=api.createOceaniaState('?layer=coconut&single=1','agriculture');
+ assert.equal(state.single,true);
+ const win=new Window();try{
+  const holder=win.document.createElement('div');holder.innerHTML=api.renderOceaniaScene(api.getOceaniaLayer(state.layer),state);
+  assert.deepEqual([...new Set([...holder.querySelectorAll('[data-farming-product]')].map(el=>el.dataset.farmingProduct))],['coconut']);
+  assert.deepEqual([...holder.querySelectorAll('[data-farming-place]')].map(el=>el.dataset.placeProduct),['coconut']);
+  assert.equal(api.createOceaniaState('?layer=farming-all&single=1','agriculture').single,false);
+ }finally{win.happyDOM.abort();}
+});
+
 test('Oceania farming example names stay inside the saved country and on a positive source cell',()=>{
  const ring=(point,vertices)=>{let inside=false;const [x,y]=point;for(let i=0,j=vertices.length-1;i<vertices.length;j=i++){const [ax,ay]=vertices[i],[bx,by]=vertices[j];if((ay>y)!==(by>y)&&x<(bx-ax)*(y-ay)/(by-ay)+ax)inside=!inside;}return inside;};
  const inGeometry=(point,geometry)=>(geometry.type==='Polygon'?[geometry.coordinates]:geometry.coordinates).some(poly=>ring(point,poly[0])&&!poly.slice(1).some(r=>ring(point,r)));

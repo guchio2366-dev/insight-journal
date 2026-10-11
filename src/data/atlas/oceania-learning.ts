@@ -19,7 +19,7 @@ export {oceaniaPopulationReading};
 
 export type OceaniaField='nature'|'agriculture'|'industry'|'population';
 export type OceaniaScope='all'|'theme'|'country';
-export type OceaniaState={field:OceaniaField;theme:string;layer:string;place:string;scope:OceaniaScope;comparison:boolean;compareLayer:string};
+export type OceaniaState={field:OceaniaField;theme:string;layer:string;place:string;scope:OceaniaScope;comparison:boolean;compareLayer:string;single?:boolean};
 export type OceaniaSource={title:string;url:string;note?:string};
 export type OceaniaLegend={label:string;color:string;shape?:'square'|'circle'|'diamond'|'missing'};
 export type OceaniaLayer={id:string;field:OceaniaField;title:string;period:string;unit:string;kind:'raster'|'mines'|'places'|'cities'|'industry'|'farming';image?:string;bounds?:number[];legend:OceaniaLegend[];sources:OceaniaSource[];coverage:string;resolution?:string};
@@ -83,7 +83,8 @@ export function createOceaniaState(search:string,field:OceaniaField='nature'):Oc
  const candidate=oceaniaLayers.find(l=>l.id===q.get('layer')&&l.field===validField);
  const scope=['all','theme','country'].includes(q.get('scope')??'')?q.get('scope') as OceaniaScope:'all';
  const compare=oceaniaLayers.some(l=>l.id===q.get('compare'))?q.get('compare')!:theme.comparisonLayer;
- return {field:validField,theme:theme.id,layer:candidate?.id??(validField==='industry'?'industry-all':validField==='agriculture'?'farming-all':theme.defaultLayer),place,scope:scope==='country'&&place==='all'?'all':scope,comparison:q.get('view')==='comparison',compareLayer:compare};
+ const layer=candidate?.id??(validField==='industry'?'industry-all':validField==='agriculture'?'farming-all':theme.defaultLayer);
+ return {field:validField,theme:theme.id,layer,place,scope:scope==='country'&&place==='all'?'all':scope,comparison:q.get('view')==='comparison',compareLayer:compare,single:validField==='agriculture'&&layer!=='farming-all'&&q.get('single')==='1'};
 }
 function rasterDetail(layer:OceaniaLayer,state?:OceaniaState):OceaniaLayer{
  if(!state||state.scope!=='country'||state.place==='all')return layer;
@@ -154,6 +155,7 @@ function renderOceaniaFarmingMarks(layer:OceaniaLayer,state:OceaniaState,sceneId
  const quantity=farmingManifest.layers.find(item=>item.id===focused)!;
  let marks=image(quantity.quantityImage!,focused,'quantity',1),defs='';
  for(const item of farmingManifest.layers){
+  if(state.single&&item.id!==focused)continue;
   if(item.kind==='crop'){marks+=image(item.image,item.id,'outline',item.id===layer.id?1:.75);continue;}
   if(item.id===focused)continue;
   const opacity=cropFocus?.22:.85,mask=`oceania-${item.id}-missing-${sceneId}`,pattern=mask+'-pattern';
@@ -163,6 +165,7 @@ function renderOceaniaFarmingMarks(layer:OceaniaLayer,state:OceaniaState,sceneId
  }
  const boxes:number[][]=[];
  for(const place of oceaniaFarmingPlaces){
+  if(state.single&&place.product!==focused)continue;
   const [px,py]=projectOceania([...place.coordinates]);if(px<frame[0]||px>frame[0]+frame[2]||py<frame[1]||py>frame[1]+frame[3])continue;
   const color=farmingColors[place.product],label=farmingTitles[place.product]+'｜'+place.name,w=(label.length*14+18)*scale,h=26*scale;
   const left=Math.max(frame[0]+4*scale,Math.min(px+place.offset[0]*scale-w/2,frame[0]+frame[2]-w-4*scale));

@@ -340,6 +340,8 @@
 .russia-workspace .russia-learning[data-field=agriculture] .russia-learning-layer { display: flex; align-items: center; gap: 6px; width: auto; flex: 1; max-width: 240px; font-size: 14px; }
 .russia-workspace .russia-learning[data-field=agriculture] .russia-learning-layer select { font-size: 14px; min-height: 44px; }
 .russia-workspace .russia-learning[data-field=agriculture] .russia-learning-layer > span { white-space: nowrap; flex: none; }
+.russia-farming-single{min-height:44px;padding:7px 10px;border:1px solid #6f928b;border-radius:4px;background:#fffefa;color:#22444c;font:inherit;font-size:14px;cursor:pointer}
+.russia-farming-single[aria-pressed=true]{background:#224c4b;color:#fff}
 .russia-farming-view-options { flex: 0 0 auto; min-width: 0; }
 .russia-farming-view-options > summary { min-height: 44px; padding: 10px 4px; font-weight: 500; }
 .russia-farming-view-options[open] { flex: 1 0 100%; }
@@ -389,6 +391,9 @@
 .russia-workspace .russia-learning[data-field=agriculture] .russia-farming-legend-details [data-primary-legend-definitions] { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; font-size: 14px; }
 .russia-farming-legend-details .russia-farming-legend-group { grid-column: auto; }
 .russia-farming-geography { font-size: 15px; line-height: 1.8; padding: 4px 0 14px; }
+.russia-workspace .russia-learning[data-field=agriculture] .russia-region-controls .russia-learning-place{font-size:15px;font-weight:700}
+.russia-workspace .russia-learning[data-field=agriculture] .russia-region-controls .russia-learning-place select{width:260px;height:46px;min-height:46px;font-size:15px;font-weight:700;border-color:#587d7d;background:#fffefa}
+@media(max-width:760px){.russia-workspace .russia-learning[data-field=agriculture] .russia-region-controls .russia-learning-place{width:100%}.russia-workspace .russia-learning[data-field=agriculture] .russia-region-controls .russia-learning-place select{width:min(70%,360px)}}
 .russia-learning-scene .russia-farming-place text { fill: currentColor; stroke: none; font-family: var(--sans); font-weight: 600; }
 .russia-learning-scene .russia-farming-geography-label { fill: #58716f; font-family: var(--sans); font-weight: 400; stroke-width: 2px; }
 

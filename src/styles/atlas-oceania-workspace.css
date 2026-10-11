@@ -199,6 +199,8 @@
 .atlas-desktop-shell .oceania-learning[data-field=agriculture] .oceania-learning-normal .oceania-learning-layer{display:flex;align-items:center;gap:6px;width:auto;flex:1;max-width:250px;margin:0;font-size:14px}
 .atlas-desktop-shell .oceania-learning[data-field=agriculture] .oceania-learning-layer>span{white-space:nowrap;flex:none}
 .atlas-desktop-shell .oceania-learning[data-field=agriculture] .oceania-learning-layer select{height:44px;min-height:44px;font-size:14px}
+.oceania-farming-single{min-height:44px;padding:7px 10px;border:1px solid #6f928b;border-radius:4px;background:#fffefa;color:#22444c;font:inherit;font-size:14px;cursor:pointer}
+.oceania-farming-single[aria-pressed=true]{background:#224c4b;color:#fff}
 .oceania-farming-view-options{flex:0 0 auto;min-width:0}
 .oceania-farming-view-options>summary{min-height:44px;padding:10px 4px;font-weight:500}
 .oceania-farming-view-options[open]{flex:1 0 100%}

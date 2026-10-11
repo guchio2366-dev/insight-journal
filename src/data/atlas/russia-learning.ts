@@ -14,7 +14,7 @@ import {russiaPath,projectRussia,russiaWidth,russiaHeight,russiaFrameForBounds} 
 import {withBase} from '../../lib/urls';
 
 export type RussiaField='nature'|'agriculture'|'industry'|'population';
-export type RussiaState={field:RussiaField;theme:string;layer:string;place:string;scope:'all'|'theme'|'region';comparison:boolean;compareLayer:string;industryLocation?:string};
+export type RussiaState={field:RussiaField;theme:string;layer:string;place:string;scope:'all'|'theme'|'region';comparison:boolean;compareLayer:string;single?:boolean;industryLocation?:string};
 export type RussiaSource={title:string;url:string;note?:string};
 export type RussiaLegend={label:string;color:string;shape?:'square'|'circle'|'diamond'|'missing'|'disputed';sizePopulation?:number};
 export type RussiaLayer={id:string;field:RussiaField;title:string;period:string;unit:string;kind:'raster'|'places'|'cities'|'farming';image?:string;bounds?:number[];legend:RussiaLegend[];sources:RussiaSource[];coverage:string;resolution?:string};
@@ -93,7 +93,7 @@ export function createRussiaState(search:string,field:RussiaField='nature'):Russ
  const theme=russiaThemes.find(t=>t.field===validField&&t.id===query.get('theme'))??russiaThemes.find(t=>t.field===validField&&t.defaultLayer===query.get('layer')&&(place==='all'||t.regionCodes.includes(place)))??russiaThemes.find(t=>t.field===validField&&t.regionCodes.includes(place))??getRussiaTheme({field:validField,theme:''});
  const layer=russiaLayers.find(l=>l.field===validField&&l.id===query.get('layer'))?.id??(validField==='agriculture'?'farming-all':theme.defaultLayer),compareLayer=russiaLayers.some(l=>l.id===query.get('compare'))?query.get('compare')!:theme.comparisonLayer;
  const candidate=query.get('scope'),scope=['all','theme','region'].includes(candidate??'')?candidate as RussiaState['scope']:place==='all'?'all':'region';
- return {field:validField,place,theme:theme.id,layer,compareLayer,scope:scope==='region'&&place==='all'?'all':scope,comparison:query.get('view')==='comparison',...(validField==='industry'&&layer==='places'&&russiaIndustryMarks.some(m=>m.id===query.get('industryLocation'))?{industryLocation:query.get('industryLocation')!}:{})};
+ return {field:validField,place,theme:theme.id,layer,compareLayer,scope:scope==='region'&&place==='all'?'all':scope,comparison:query.get('view')==='comparison',single:validField==='agriculture'&&layer!=='farming-all'&&query.get('single')==='1',...(validField==='industry'&&layer==='places'&&russiaIndustryMarks.some(m=>m.id===query.get('industryLocation'))?{industryLocation:query.get('industryLocation')!}:{})};
 }
 export function russiaFrame(state:RussiaState):number[]{
  if(state.scope==='region')return russiaRegions.find(r=>r.code===state.place)?.extent??[0,0,russiaWidth,russiaHeight];
@@ -113,7 +113,8 @@ export function renderRussiaLegend(layer:RussiaLayer):string{
  return layer.legend.map(l=>`<span>${l.sizePopulation?`<svg width="36" height="36" viewBox="-18 -18 36 36" aria-hidden="true"><circle r="${Math.sqrt(l.sizePopulation/15000000)*18}" fill="${l.color}" fill-opacity=".65" stroke="#fff" stroke-width=".5"/></svg>`:`<i class="russia-legend-mark ${l.shape??'square'}" style="--mark:${escape(l.color)}"></i>`}${escape(l.label)}</span>`).join('');
 }
 export function renderRussiaFarmingKey(layer:RussiaLayer):string{
- return `<span data-farming-key="wheat"><i class="russia-legend-mark ${layer.id==='cattle'?'farming-outline':'square'}" style="--mark:#4f7e3d"></i><strong>小麦</strong> · ${layer.id==='cattle'?'緑の輪郭':'緑の面'}</span><span data-farming-key="cattle"><i class="russia-legend-mark square" style="--mark:#376d91"></i><strong>牛</strong> · ${layer.id==='cattle'?'数量色':'青い点'}<small>名称は代表位置の例</small></span>`;
+ const cattleFocus=layer.id==='cattle';
+ return `<span data-farming-key="wheat"><i class="russia-legend-mark ${cattleFocus?'farming-outline':'square'}" style="--mark:#4f7e3d"></i><strong>小麦</strong> · ${cattleFocus?'緑の輪郭':'緑の面'}</span><span data-farming-key="cattle"><i class="russia-legend-mark ${cattleFocus?'square':'circle'}" style="--mark:${cattleFocus?'#873c31':'#376d91'}"></i><strong>牛</strong> · ${cattleFocus?'黄〜赤茶の数量色':'青い点'}<small>名称は代表位置の例</small></span>`;
 }
 function renderRussiaFarmingLegend(layer:RussiaLayer):string{
  const focusedCattle=layer.id==='cattle';
@@ -135,13 +136,13 @@ export function renderRussiaScene(layer:RussiaLayer,state:RussiaState,sceneId='p
   const cattleFocus=layer.id==='cattle',quantity=getRussiaLayer(cattleFocus?'cattle':'wheat');
   const image=(path:string,product:string,mode:string,opacity:number)=>{const [x,y]=projectRussia([18,83]),[x2,y2]=projectRussia([191,40]);return `<image data-farming-product="${product}" data-farming-mode="${mode}" href="${escape(withBase(path))}" x="${x}" y="${y}" width="${x2-x}" height="${y2-y}" opacity="${opacity}" preserveAspectRatio="none" clip-path="url(#${clip})"/>`;};
   marks+=image(quantity.image!,cattleFocus?'cattle':'wheat','quantity',1);
-  if(!cattleFocus){
+  if(!cattleFocus&&!state.single){
    const [x,y]=projectRussia([18,83]),[x2,y2]=projectRussia([191,40]),maskId=`russia-cattle-missing-${sceneId}`,patternId=maskId+'-pattern',opacity=layer.id==='wheat'?.22:.85,missingOpacity=layer.id==='farming-all'?.18:opacity;
    farmingDefs=`<mask id="${maskId}" maskUnits="userSpaceOnUse" x="${x}" y="${y}" width="${x2-x}" height="${y2-y}"><image href="${escape(withBase('/assets/atlas/russia-farming-overlay-v1/cattle-missing.png'))}" x="${x}" y="${y}" width="${x2-x}" height="${y2-y}" preserveAspectRatio="none"/></mask><pattern id="${patternId}" width="${9*scale}" height="${9*scale}" patternUnits="userSpaceOnUse"><path d="M0 0L${9*scale} ${9*scale}" stroke="#999d92" stroke-opacity=".45" stroke-width=".45" vector-effect="non-scaling-stroke"/></pattern>`;
    marks+=`<g data-farming-product="cattle" data-farming-mode="missing" opacity="${missingOpacity}" clip-path="url(#${clip})"><rect x="${x}" y="${y}" width="${x2-x}" height="${y2-y}" fill="url(#${patternId})" mask="url(#${maskId})"/></g>`;
    marks+=image('/assets/atlas/russia-farming-overlay-v1/cattle-texture.png','cattle','texture',opacity);
   }
-  marks+=image('/assets/atlas/russia-farming-overlay-v1/wheat-outline.png','wheat','outline',cattleFocus?.8:layer.id==='wheat'?1:.65);
+  if(!state.single)marks+=image('/assets/atlas/russia-farming-overlay-v1/wheat-outline.png','wheat','outline',cattleFocus?.8:layer.id==='wheat'?1:.65);
  }
  const inFrame=(p:number[])=>p[0]>=frame[0]&&p[0]<=frame[0]+frame[2]&&p[1]>=frame[1]&&p[1]<=frame[1]+frame[3];
  const safeStart=(x:number,label:string)=>Math.max(frame[0]+4*scale,Math.min(x,frame[0]+frame[2]-(label.length*14+8)*scale));
@@ -159,6 +160,7 @@ export function renderRussiaScene(layer:RussiaLayer,state:RussiaState,sceneId='p
  if(layer.id==='density'||layer.kind==='cities')for(const c of centres.centres){const [x,y]=projectRussia(c.coordinates);if(!inFrame([x,y]))continue;const radius=layer.kind==='cities'?Math.sqrt(c.population/15000000)*18:2.3;marks+=`<circle cx="${x}" cy="${y}" r="${radius*scale}" fill="#653e82" fill-opacity=".65" stroke="#fff" stroke-width=".5" vector-effect="non-scaling-stroke"><title>${escape((cityNames[c.name]??c.name)+'：'+Math.round(c.population).toLocaleString()+'人、2020年・2025年都市範囲')}</title></circle>`;if(cityNames[c.name]){annotations.push([safeStart(x+5*scale,cityNames[c.name]),y-23*scale,(cityNames[c.name].length*14+8)*scale,24*scale]);marks+=`<text x="${safeStart(x+5*scale,cityNames[c.name])}" y="${y-6*scale}" font-size="${14*scale}">${escape(cityNames[c.name])}</text>`;}}
  if(layer.field==='agriculture'){
   for(const place of russiaFarmingPlaces){
+   if(state.single&&place.product!==layer.id)continue;
    const [x,y]=projectRussia([...place.coordinates]);if(!inFrame([x,y]))continue;
    const crop=place.product==='wheat',color=crop?'#4f7e3d':'#376d91',label=(crop?'小麦':'牛')+'｜'+place.name,width=(label.length*14+18)*scale,height=26*scale;
    const left=Math.max(frame[0]+4*scale,Math.min(x-width/2,frame[0]+frame[2]-width-4*scale));
