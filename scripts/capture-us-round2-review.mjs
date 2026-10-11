@@ -14,12 +14,19 @@ try{
  browser=await chromium.launch({headless:true,chromiumSandbox:true,executablePath:process.env.REVIEW_CHROME_PATH,ignoreDefaultArgs:['--unsafely-disable-devtools-self-xss-warnings']});
  const context=await browser.newContext({viewport:report.viewport,deviceScaleFactor:1,locale:'ja-JP',reducedMotion:'reduce'}),page=await context.newPage();
  page.on('pageerror',e=>report.errors.push(String(e)));
- const cases=[['climate','nature/'],['river','nature/?env=water'],['precipitation','nature/?env=water&waterView=precipitation'],['basins','nature/?env=water&waterView=basins'],['agriculture','agriculture/'],['forest','agriculture/?crop=timber'],['industry','industry/'],['auto','industry/?sector=manufacturing&subsector=auto'],['electronics','industry/?sector=manufacturing&subsector=electronics'],['oil','industry/?sector=resources&subsector=oil-gas'],['density','population/'],['ethnicity','population/?popView=ethnicity'],['religion','population/?popView=religion']];
+ const cases=[['climate','nature/'],['river','nature/?env=water'],['precipitation','nature/?env=water&waterView=precipitation'],['basins','nature/?env=water&waterView=basins'],['agriculture','agriculture/'],['forest','agriculture/?agriReading=forestry:timber'],['industry','industry/'],['auto','industry/?sector=manufacturing&subsector=auto'],['electronics','industry/?sector=manufacturing&subsector=electronics'],['oil','industry/?sector=resources&subsector=oil-gas'],['density','population/'],['ethnicity','population/?popView=ethnicity'],['religion','population/?popView=religion']];
  for(const [target,origin] of [['build',`http://127.0.0.1:${server.address().port}`],['production','https://guchio2366-dev.github.io']]){
   for(const [name,path] of cases){
    await page.goto(`${origin}/insight-journal/atlas/north-america/${path}`,{waitUntil:'networkidle'});
    await page.locator('[data-atlas-explorer][data-render-state=ready]').waitFor({timeout:30000});
    await page.evaluate(()=>document.fonts.ready);await page.waitForTimeout(800);
+   if(name==='forest')await page.locator('[data-atlas-explorer][data-forest-active=true]').waitFor();
+   if(['precipitation','basins'].includes(name))assert.equal(await page.locator('[data-water-view][aria-selected=true]').getAttribute('data-water-view'),name);
+   if(['auto','electronics','oil'].includes(name))assert.equal(await page.locator('[data-atlas-explorer]').getAttribute('data-industry-subsector'),name==='oil'?'oil-gas':name);
+   if(['density','ethnicity','religion'].includes(name)){
+    await page.waitForFunction(()=>/郡のデータ/.test(document.querySelector('[data-pop-status]')?.textContent??''));
+    assert.equal(await page.locator('[data-pop-view][aria-pressed=true]').getAttribute('data-pop-view'),name==='density'?'distribution':name);
+   }
    assert.equal(await page.locator('[data-fallback]').isVisible(),false,`${target}/${name}: actual MapLibre`);
    const frame=await page.locator('[data-map-frame]').boundingBox();
    assert.ok(frame.width>600&&frame.height>300,`${target}/${name}: readable map frame`);
