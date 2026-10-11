@@ -78,6 +78,8 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    assert.ok(new URL(page.url()).searchParams.get('detail'));
    await capture(`${region}-industry-selected`);
    await page.goBack();
+   await page.waitForFunction(()=>new URL(location.href).searchParams.get('detail')===null);
+   await page.goBack();
    await page.waitForURL(`**/atlas/asia/${region}/nature/**`);
    assert.equal(await page.locator('[data-country-select]').inputValue(),'');
    await page.locator(`.atlas-tabs [data-field="population"]`).click();
