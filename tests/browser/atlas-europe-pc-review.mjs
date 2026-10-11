@@ -675,6 +675,7 @@ async function stageOneOperations(page, profile) {
   assert.equal(await page.locator('[data-eu-smre-key]').isVisible(),true);
   assert.equal(await page.locator('[data-eu-religion-national]:visible').count(),0);
   assert.equal(await page.locator('[data-eu-pew-marker]:visible').count(),0);
+  await page.locator('[data-eu-religion-supplement] > summary').click();
   await page.locator('[data-eu-pew-surface-group=unaffiliated]').click();
   assert.equal(await page.locator('[data-eu-religion-national]:visible').count(),5);
   assert.equal(await page.locator('[data-eu-composition]:visible').count(),0);

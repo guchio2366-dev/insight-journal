@@ -51,7 +51,7 @@ export function createEuropeCultureOverview(root:HTMLElement,onSelectLocal:(id:s
       const colorKey=root.querySelector<HTMLElement>('[data-eu-religion-color-key]');if(colorKey)colorKey.hidden=!active||kind!=='religion'||!!caseId||mode!=='pew';
       if(!key)return;key.hidden=!active||!!caseId;if(key.hidden||rendered===kind+mode)return;
       key.querySelector('[data-eu-culture-key-intro]')!.textContent=kind==='religion'
-        ?mode==='smre'?'SMREの標準化推計（45か国・8分類）で広域の宗派と宗教を比較します。色は各国の最大分類で、国を選ぶと構成全体を読めます。':'Pew Research Centerの2020年推計（40か国・7分類）は小帯、国勢調査などで宗派まで判明する対象は名前付きの構成帯で示します。帯の幅は各資料が定める分母に対する割合です。'
+        ?mode==='smre'?'SMREの標準化推計（45か国・8分類）で広域の宗派と宗教を比較します。色面は最大分類、名前付き記号は10%以上の分類が複数ある国の全国割合です。主要な併存を初期図に示します。':'Pew Research Centerの2020年推計（40か国・7分類）は小帯、国勢調査などで宗派まで判明する対象は名前付きの構成帯で示します。帯の幅は各資料が定める分母に対する割合です。'
         :'2021年の公表総計 · 円は同じ大きさです。角度は各対象の総人口に占める回答割合で、円の位置は対象を示す目印です。人口規模・個人の位置・細地域の分布を表しません。';
       key.querySelector('[data-eu-culture-key-coverage]')!.textContent=kind==='religion'
         ?mode==='smre'?'2010期は2006–2015年の資料を統合した推計です。国内差を全国値から作っていません。国選択後の国勢調査と地方統計は、それぞれの年代・質問・年齢条件で別掲します。':'名前付きの構成帯は英・ウェールズ、チェコ、クロアチア、セルビア、エストニアの公式原表です。これら５対象ではPewの小帯を重ねず、国選択後にPew推計も別掲します。最多・過半数塗りではありません。宗派、無宗教、未回答、年齢条件は原表どおりで、対象外は0%ではありません。'

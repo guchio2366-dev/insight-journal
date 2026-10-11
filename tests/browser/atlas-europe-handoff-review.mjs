@@ -92,6 +92,20 @@ try{
     assert.equal(fills.POL,fills.ITA);assert.equal(fills.SWE,fills.NOR);assert.equal(fills.RUS,fills.GRC);
     assert.notEqual(fills.POL,fills.SWE);assert.notEqual(fills.DEU,fills.CZE);
     const box=await page.locator('[data-eu-static]').getAttribute('viewBox');
+    assert.equal(await page.locator('[data-eu-religion-supplement]').getAttribute('open'),null);
+    assert.equal(await page.locator('[data-eu-pew-surface-group=unaffiliated]').isVisible(),false);
+    for(const [code,values] of [['FRA',['40%','50.5%']],['CHE',['38%','27.1%','22%']],['DEU',['30.2%','29.2%','33.1%']]]){
+      assert.equal(await page.locator(`[data-eu-smre-marker=${code}]`).isVisible(),true);
+      const text=await page.locator(`[data-eu-smre-marker=${code}]`).textContent();
+      for(const value of values)assert.ok(text.includes(value),`${code} ${value} is present without selection`);
+    }
+    const markerBoxes=await page.locator('[data-eu-smre-marker]:visible').evaluateAll(nodes=>nodes.map(node=>{const r=node.getBoundingClientRect();return {code:node.dataset.euSmreMarker,left:r.left,right:r.right,top:r.top,bottom:r.bottom};}));
+    assert.equal(markerBoxes.length,31,'all countries with multiple major categories are visible');
+    for(let i=0;i<markerBoxes.length;i++)for(let j=i+1;j<markerBoxes.length;j++){
+      const a=markerBoxes[i],b=markerBoxes[j];assert.ok(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,`${a.code}/${b.code} do not overlap`);
+    }
+    if(render==='auto')await page.screenshot({path:`${output}/religion-coexistence-1920x1080.png`});
+    await page.locator('[data-eu-religion-supplement] > summary').click();
     await page.locator('[data-eu-religion-country]').selectOption('DEU');
     assert.match(await page.locator('[data-eu-smre-reading=DEU]').textContent(),/ドイツ.*SMRE 2010期/);
     assert.match(await page.locator('[data-eu-religion-evidence-reading]').textContent(),/カトリック 30.2%.*プロテスタント 29.2%.*宗教的帰属なし 33.1%/s);
@@ -116,7 +130,7 @@ try{
     assert.equal(await page.locator('[data-eu-smre-key]').isVisible(),true);
     assert.equal(await page.locator('[data-eu-pew-marker]:visible').count(),0);
     assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'),box);
-    checks.push({topic:'religion',render,smreCountries:45,denominations:true,originalEightCategories:true,regionalEvidenceRetained:true,pewRetained:true,noAutomaticZoom:true});
+    checks.push({topic:'religion',render,smreCountries:45,denominations:true,majorCoexistenceVisible:true,visibleNationalSummaries:markerBoxes.length,supplementCollapsedByDefault:true,originalEightCategories:true,regionalEvidenceRetained:true,pewRetained:true,noAutomaticZoom:true});
   }
   assert.deepEqual(errors,[]);
   await writeFile(`${output}/checks.json`,JSON.stringify({gitHead,expectedHead,gitStatus:execFileSync('git',['status','--porcelain'],{encoding:'utf8'}),scriptSha256:createHash('sha256').update(await readFile(new URL(import.meta.url))).digest('hex'),browserVersion:browser.version(),viewport:{width:1920,height:1080},deviceScaleFactor:1,zoom:1,checks,errors},null,2)+'\n');

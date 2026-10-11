@@ -363,6 +363,13 @@ test('religion starts with 45-country confessions and retains optional Pew and c
     assert.equal(colorKey.parentElement,app.q('[data-eu-map-legend]'));
     assert.equal(colorKey.hidden,true);
     assert.equal(app.q('[data-eu-smre-key]').hidden,false);
+    assert.equal(app.q('[data-eu-religion-supplement]').open,false);
+    assert.equal(app.q('[data-eu-pew-surface-key]').parentElement,app.q('[data-eu-religion-supplement-controls]'));
+    assert.equal(app.q('.eu-culture-controls').parentElement,app.q('[data-eu-religion-supplement-controls]'));
+    assert.equal(app.w.document.querySelectorAll('[data-eu-smre-marker]').length,31);
+    assert.match(app.q('[data-eu-smre-marker=FRA]').textContent,/40%/);
+    assert.match(app.q('[data-eu-smre-marker=CHE]').textContent,/27.1%/);
+    assert.match(app.q('[data-eu-smre-marker=DEU]').textContent,/30.2%.*29.2%.*33.1%/s);
     assert.equal(app.q('[data-eu-pew-map-key]').hidden,true);
     assert.equal(app.w.document.querySelectorAll('[data-culture-code]').length,0);
     assert.equal(app.q('[data-eu-shape=POL]').style.fill,app.q('[data-eu-shape=ITA]').style.fill);

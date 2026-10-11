@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import countries from '../../src/data/atlas/europe/countries.json' with {type:'json'};
-import {smreSource,smreRow,smreLargestGroup,smreSurfaceColor} from '../../src/lib/atlas-europe-smre-surface.ts';
+import {smreSource,smreRow,smreLargestGroup,smreSurfaceColor,smreMajorGroups} from '../../src/lib/atlas-europe-smre-surface.ts';
 
 test('SMRE overview covers precisely the atlas countries with original eight rounded categories',()=>{
   assert.deepEqual(smreSource.rows.map(row=>row.code).sort(),countries.map(country=>country.code).sort());
@@ -25,4 +25,13 @@ test('broad confessional colours compare countries without creating internal reg
   assert.equal(smreLargestGroup('CZE').id,'unaffiliated');
   assert.equal(smreLargestGroup('DEU').id,'mixed');
   assert.equal(smreSurfaceColor('UNKNOWN'),undefined);
+});
+
+test('major coexistence preserves published national percentages and a uniform threshold',()=>{
+  assert.equal(smreSource.rows.filter(row=>smreMajorGroups(row.code).length>1).length,31);
+  assert.deepEqual(smreMajorGroups('FRA').map(group=>group.share),[40,50.5]);
+  assert.deepEqual(smreMajorGroups('CHE').map(group=>group.share),[38,27.1,22]);
+  assert.deepEqual(smreMajorGroups('DEU').map(group=>group.share),[30.2,29.2,33.1]);
+  assert.deepEqual(smreMajorGroups('MKD').map(group=>group.share),[58.9,39.3]);
+  assert.deepEqual(smreMajorGroups('UNKNOWN'),[]);
 });

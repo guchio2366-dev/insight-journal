@@ -8,6 +8,7 @@ import type { EuropeReading } from '../data/atlas/europe/readings';
 import type { Geometry } from './atlas-europe-geometry';
 import type { Map as LibreMap } from 'maplibre-gl';
 import { createEuropeAnnotations } from './atlas-europe-annotations';
+import {createEuropeSmreMarkers} from './atlas-europe-smre-markers';
 import {smreSurfaceColor,smreRow} from './atlas-europe-smre-surface';
 import {pewSurfaceColor,pewSurfaceColors,pewSurfaceGroups,type PewSurfaceGroup} from './atlas-europe-pew-surface';
 import { europeReaderCopy, europeReaderSources } from './atlas-europe-reader';
@@ -122,7 +123,12 @@ export function initEuropeAtlas() {
     onMapData:data=>{cultureData=data;paintCulture();},onFitBounds:fitCulture,overviewMap:()=>state.layer!=='religion',
     onChange:choice=>{const cleared=!!state.cultureCase&&!choice.cultureCase;Object.assign(state,choice);commit(cleared);},
   });
-  query<HTMLElement>('[data-eu-culture-controls-host]').append(cultureReader.querySelector('.eu-culture-controls')!);
+  const cultureControlsHost=query<HTMLElement>('[data-eu-culture-controls-host]');
+  const religionSupplement=query<HTMLDetailsElement>('[data-eu-religion-supplement]');
+  const supplementControls=query<HTMLElement>('[data-eu-religion-supplement-controls]');
+  const cultureControls=cultureReader.querySelector<HTMLElement>('.eu-culture-controls')!;
+  cultureControlsHost.append(cultureControls);
+  supplementControls.append(query('[data-eu-pew-surface-key]'));
   const drainageChoice=query<HTMLSelectElement>('[data-eu-drainage-choice]');
   for(const basin of europeDrainageBasins.filter(basin=>drainageManifest.colorAssignments.some(item=>item.index===basin.index&&item.displayPixelCenters>0))){
     const option=document.createElement('option');option.value=String(basin.HYBAS_ID);option.textContent=`${basin.HYBAS_ID}（Pfaf ${basin.PFAF_ID}）`;drainageChoice.append(option);
@@ -212,6 +218,11 @@ export function initEuropeAtlas() {
     return {x:point.x-rect.left,y:point.y-rect.top};
   };
   const pewMarkers=createEuropePewMarkers(stage,selectCountry);
+  const smreMarkers=createEuropeSmreMarkers(stage,selectCountry);
+  function updateReligionMarkers(){
+    pewMarkers.update(state.layer==='religion'&&!state.cultureCase&&religionOverviewMode==='pew',overlayProject);
+    smreMarkers.update(state.layer==='religion'&&!state.cultureCase&&religionOverviewMode==='smre',overlayProject);
+  }
   const regionalEvidence=[...europeFarmingRegionalEvidence.filter(item=>item.genre!=='horticulture'),...europeFarmingCountryEvidence].map(item=>{
     const node=document.createElement('span');
     const country='value' in item;
@@ -249,7 +260,7 @@ export function initEuropeAtlas() {
   }
   const annotations=createEuropeAnnotations(stage,cities,features,
     ()=>({climate:climateReader(),crops:farmingView().active,farmingIds:farmingView().visible.map(item=>item.id),selectedFarming:farmingView().item?.id,city:state.city,feature:state.feature,featureLabelIds:subject().field==='industry'?(state.industryGroup?industryEmphasized():[...europeIndustryOverviewLabels]):subject().field==='population'&&!cultureActive()?config.populationCities.filter(city=>['ロンドン','パリ','モスクワ','ローマ','ベルリン','マドリード','キーウ','ストックホルム','ウィーン','アテネ','ヘルシンキ'].includes(city.name)).map(city=>city.id):undefined,detailed:map&&liveMap.classList.contains('is-ready')?map.getBounds().getEast()-map.getBounds().getWest()<60:box[2]<frame.width*.65,emphasizedFeatures:industryEmphasized(),places:['terrain','water'].includes(state.layer)?[]:cultureActive()&&!state.cultureCase?(state.layer==='religion'?[...(religionOverviewMode==='pew'?europeReligionNationalProfiles:[]),...europeReligionRegionalEvidence.filter(item=>item.id===state.feature)]:europeCultureOverviewPlaces.filter(item=>item.id.startsWith('ethnicity-'))):visibleFeatures().filter(p=>featureVisible(p.id))}),
-    coordinate=>overlayProject(coordinate as [number,number]),(kind,id)=>kind==='city'?selectCity(id):kind==='crop'?setLayer(id):selectFeature(id),farmingItems,cultureOverview.decorate,()=>pewMarkers.update(state.layer==='religion'&&!state.cultureCase&&religionOverviewMode==='pew',overlayProject));
+    coordinate=>overlayProject(coordinate as [number,number]),(kind,id)=>kind==='city'?selectCity(id):kind==='crop'?setLayer(id):selectFeature(id),farmingItems,cultureOverview.decorate,()=>updateReligionMarkers());
   const precipitationLabels=precipitationLineLabels.map(label=>{
     const node=document.createElement('span');node.className='eu-precipitation-line-label';
     node.textContent=label.mm.toLocaleString('ja-JP')+' mm';
@@ -802,7 +813,10 @@ export function initEuropeAtlas() {
     query<HTMLElement>('[data-eu-terrain-guide-note]').hidden=topic!=='terrain';
     query<HTMLElement>('[data-eu-city-hint]').hidden=!climateReader();
     query<HTMLElement>('[data-eu-culture-host]').hidden=!cultureActive();
-    query<HTMLElement>('[data-eu-culture-controls-host]').hidden=!cultureActive();
+    cultureControlsHost.hidden=!cultureActive()||topic==='religion';
+    religionSupplement.hidden=topic!=='religion';
+    (topic==='religion'?supplementControls:cultureControlsHost).append(cultureControls);
+    if(topic==='religion'&&state.cultureCase)religionSupplement.open=true;
     root!.classList.toggle('is-eu-culture-reading',cultureActive());
     if(cultureActive()){
       if(cultureReader.dataset.cultureTopic!==topic)culture.setTopic(topic as 'ethnicity'|'religion');
@@ -816,7 +830,7 @@ export function initEuropeAtlas() {
     cultureOverview.render(cultureActive(),topic==='religion'?'religion':'ethnicity',state.cultureCase??'',religionOverviewMode);
     if(topic==='religion'&&!state.cultureCase&&religionOverviewMode==='smre'){
       query('[data-culture-kicker]').textContent='欧州45か国の宗派・宗教の広域比較';
-      query('[data-culture-takeaway]').textContent='北欧のプロテスタント、南西欧のカトリック、東欧の正教会、南東欧のイスラム教など、国別の構成を1枚で比較します。色は各国の最大分類で、少数派も国を選ぶと確認できます。';
+      query('[data-culture-takeaway]').textContent='北欧のプロテスタント、南西欧のカトリック、東欧の正教会、南東欧のイスラム教など、国別の構成を1枚で比較します。色は各国の最大分類、名前付きの記号は10%以上の分類が複数ある国の全国割合です。主要な併存も初期図で読めます。';
       query('[data-culture-overview]').textContent='解説：宗教構成には歴史的な教会圏、宗教改革、南東欧の歴史、社会変化と移住が関わります。色面はSMREの過去の国別推計で、現在の個人の信仰や宗派の領土を示すものではありません。';
       query('[data-culture-year]').textContent='SMRE 2010期（原観測2006–2015年）・01/2018版';
       query('[data-culture-grain]').textContent='国別比較 · 45か国';
@@ -894,7 +908,7 @@ export function initEuropeAtlas() {
     status.textContent=(failed?'簡易地図で表示中。':'')+guidance;
     query<HTMLElement>('[data-eu-statistics]').hidden=all<HTMLElement>('[data-eu-statistics] > *').every(section=>section.hidden);
     all<HTMLElement>('[data-eu-extra-field]').forEach(el=>{el.hidden=el.dataset.euExtraField!==currentField.id;});
-    requestAnimationFrame(() => { sizeReader(); map?.resize(); if (refit) fit(); annotations.refresh(); pewMarkers.update(state.layer==='religion'&&!state.cultureCase&&religionOverviewMode==='pew',overlayProject); positionRegionalEvidence(); positionPrecipitationLabels();  positionTerrainLabels(); positionRiverLabels(); updatePointMarker(); });
+    requestAnimationFrame(() => { sizeReader(); map?.resize(); if (refit) fit(); annotations.refresh(); updateReligionMarkers(); positionRegionalEvidence(); positionPrecipitationLabels();  positionTerrainLabels(); positionRiverLabels(); updatePointMarker(); });
   }
   function invalidateGridReading() {
     gridRequest++;
@@ -983,8 +997,8 @@ export function initEuropeAtlas() {
       loadTimer = setTimeout(() => { if (token === generation) fallback(); }, 15000);
       if (matchMedia('(pointer: coarse)').matches) map.dragPan.disable();
       // The map footer and source sections provide attribution for the local datasets.
-      map.on('move',()=>{annotations.refresh(false);pewMarkers.update(state.layer==='religion'&&!state.cultureCase&&religionOverviewMode==='pew',overlayProject);positionRegionalEvidence();positionPrecipitationLabels();positionTerrainLabels();positionRiverLabels();updateFocusMarker();});
-      map.on('moveend',()=>{annotations.refresh();pewMarkers.update(state.layer==='religion'&&!state.cultureCase&&religionOverviewMode==='pew',overlayProject);positionRegionalEvidence();positionPrecipitationLabels();positionTerrainLabels();positionRiverLabels();updateFocusMarker();});
+      map.on('move',()=>{annotations.refresh(false);updateReligionMarkers();positionRegionalEvidence();positionPrecipitationLabels();positionTerrainLabels();positionRiverLabels();updateFocusMarker();});
+      map.on('moveend',()=>{annotations.refresh();updateReligionMarkers();positionRegionalEvidence();positionPrecipitationLabels();positionTerrainLabels();positionRiverLabels();updateFocusMarker();});
       map.on('error', () => { if (!failed && token === generation) fallback(); });
       map.getCanvas().addEventListener('webglcontextlost', fallback, { once: true });
       map.on('load', () => {
@@ -1079,7 +1093,7 @@ export function initEuropeAtlas() {
     const factor = button.dataset.euZoom === 'in' ? .7 : 1 / .7;
     if (map) { factor < 1 ? map.zoomIn() : map.zoomOut(); return; }
     const w = Math.min(frame.width * 2, Math.max(24, box[2] * factor));
-    const h = w / box[2] * box[3]; box = [box[0] + (box[2] - w) / 2, box[1] + (box[3] - h) / 2, w, h]; staticMap.setAttribute('viewBox', box.join(' '));staticSymbols();annotations.refresh();pewMarkers.update(state.layer==='religion'&&!state.cultureCase&&religionOverviewMode==='pew',overlayProject);positionRegionalEvidence();updateFocusMarker();
+    const h = w / box[2] * box[3]; box = [box[0] + (box[2] - w) / 2, box[1] + (box[3] - h) / 2, w, h]; staticMap.setAttribute('viewBox', box.join(' '));staticSymbols();annotations.refresh();updateReligionMarkers();positionRegionalEvidence();updateFocusMarker();
   }));
   query('[data-eu-render]').addEventListener('click', () => { state.render = failed || state.render === 'static' ? 'auto' : 'static'; disposeMap(); commit(true,true); void startMap(); });
   window.addEventListener('popstate', () => { invalidateGridReading();const previousRender = state.render; state = readEuropeState(location.search, countries, ids, config.initialLayer); state.compare=[]; render(true); if (previousRender !== state.render) { disposeMap(); void startMap(); } });

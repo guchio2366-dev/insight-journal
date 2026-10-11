@@ -2,6 +2,16 @@
 
 基準：`origin/main` `755ec125daf9272e21328ff4c1ecab32756ce917`。欧州内の修正だけを Draft PR にまとめ、公開・マージは行わない。
 
+## 宗教の主要な併存表示（今回の仕上げ）
+
+45か国の色面を維持し、SMREの保存値で10%以上の分類が複数ある31か国に、同じ幅の名前付き記号を追加した。FranceのCatholic 40%、SwitzerlandのProtestant 27.1%、GermanyのCatholic 30.2%・Protestant 29.2%・宗教的帰属なし33.1%を、個別の国選択なしで初期図に示す。各国で同じ10%基準を適用し、公表値の合計不一致を正規化したり残差へ置き換えたりしていない。記号は全国割合で、引出線は既存の国代表位置（Monacoのみ既存Natural Earth輪郭のextent中央）へ結ぶ。国内の居住境界・宗派の領土は作らない。
+
+Pew分類切替、国の構成一覧、従来の事例・分類・地域の操作は、右の閉じた「補足資料・国の詳細・地域事例」へ移した。年代・分母の異なる元資料、8分類の国別詳細、下部の統計は保持した。民族の操作位置は変更していない。補足操作が空けた高さを地図へ戻し、1920×1080では地図と全凡例を画面内に収めた。
+
+今回の[初期図](religion-coexistence/initial-1920x1080.png)を目視し、[1920操作記録](religion-coexistence/checks.json)に通常・簡易の31記号、重なりなし、主要併存の常時表示、初期補足欄の閉状態、既存地方値とPewの往復、自動ズームなしを保存した。これは98c14ac上の未コミット差分を検証した記録で、同headのCI画像とは称さない。最終headのクリーンな証跡はPRのEurope PC review artifactを参照する。単体全体1129成功・3スキップ、追加したSMRE3検査と宗教統合1検査も成功。production build・release検査は成功。
+
+旧 `culture-followup/religion-confessions-45-1920x1080.png` はfooter修正前の作業画像で、98c14acの最新CI画像ではない。旧証跡は保存し、この新版と区別する。98c14acで修正済みのSMRE footerは今回変更していない。今回の宗教仕上げは完了済みSMRE資料で実装でき、全流域・酪農／ブドウ／オリーブ生産帯・全欧州民族分布の外部入力待ちとは別の変更である。
+
 ## 宗派の広域図の追加（引継ぎ継続）
 
 Pewの直接取得失敗を宗派全体の停止条件にせず、独立して取得できた[SMRE自身の標準化推計](https://www.smre-data.ch/en/content/download/159)（01/2018版・Appendix A、PDF57–63ページ）を使用した。[45か国・8分類の保存値](../../../src/data/atlas/europe/smre-religion-2010.json)は2010期＝原観測2006–2015年で、現在の分布図とは表示しない。SMREデータベースはODbL 1.0、SMRE内容はDBCL 1.0で、個別の元資料の条件は別に残る。[SMRE利用条件](https://www.smre-data.ch/en/content/privacy-policy-impressum)を凡例・国別詳細へ付けた。

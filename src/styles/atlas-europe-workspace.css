@@ -419,7 +419,7 @@
 .eu-workspace-root .eu-pew-surface-scale span { display:inline-flex; align-items:center; gap:3px; white-space:nowrap; }
 .eu-workspace-root .eu-pew-surface-scale i { width:14px; height:11px; border:1px solid #7c8c91; }
 @media(min-width:1200px) {
- .eu-workspace-root[data-europe-detail].is-eu-culture-reading:has([data-eu-smre-key]:not([hidden])) .eu-map-stage { height:clamp(350px,calc(100dvh - 560px),640px); min-height:0; max-height:none; aspect-ratio:auto; }
+ .eu-workspace-root[data-europe-detail].is-eu-culture-reading:has([data-eu-smre-key]:not([hidden])) .eu-map-stage { height:clamp(350px,calc(100dvh - 480px),640px); min-height:0; max-height:none; aspect-ratio:auto; }
  .eu-workspace-root[data-eu-religion-overview="smre"] [data-eu-pew-surface-key]:not([hidden]) { display:flex; flex-wrap:wrap; align-items:center; gap:6px 12px; margin:4px 0; padding:6px; }
  .eu-workspace-root[data-eu-religion-overview="smre"] [data-eu-pew-surface-key]>strong { display:none; }
  .eu-workspace-root [data-eu-smre-key] { margin:4px 0; padding:6px; gap:3px; }
@@ -564,3 +564,20 @@
  .eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-layout { grid-template-columns:minmax(0,2.15fr) minmax(315px,1fr); }
  .eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-map-stage { aspect-ratio:1.32; }
 }
+
+.eu-workspace-root .eu-smre-markers { position:absolute; inset:0; z-index:6; pointer-events:none; }
+.eu-workspace-root .eu-smre-markers[hidden],.eu-smre-marker[hidden] { display:none; }
+.eu-workspace-root .eu-smre-markers svg { position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+.eu-workspace-root .eu-smre-markers line { stroke:#52616b; stroke-width:1; stroke-opacity:.65; }
+.eu-workspace-root .eu-smre-marker { position:absolute; transform:translate(-50%,-50%); width:124px; min-height:0; padding:3px; border:1px solid #687982; border-radius:3px; background:#fffefaee; color:#203943; text-align:left; font:12px/1.3 var(--sans); pointer-events:auto; cursor:pointer; }
+.eu-workspace-root .eu-smre-marker strong { display:block; font-size:12px; white-space:nowrap; }
+.eu-workspace-root .eu-smre-shares { display:grid; grid-template-columns:1fr 1fr; gap:1px 3px; }
+.eu-workspace-root .eu-smre-shares>span { white-space:nowrap; font-size:11px; font-variant-numeric:tabular-nums; }
+.eu-workspace-root .eu-smre-shares i { display:inline-block; width:7px; height:9px; margin-right:2px; border:1px solid #73808a; }
+.eu-workspace-root .eu-smre-marker:focus-visible { outline:3px solid #0e5367; outline-offset:2px; }
+.eu-workspace-root .eu-religion-supplement { margin-top:12px; padding:8px; border:1px solid #b4c2c7; }
+.eu-workspace-root .eu-religion-supplement[hidden] { display:none; }
+.eu-workspace-root .eu-religion-supplement summary { cursor:pointer; font:700 14px/1.5 var(--sans); }
+
+.eu-workspace-root .eu-smre-markers circle { fill:#52616b; }
+.eu-workspace-root .eu-smre-markers line.is-emphasized { stroke:#113f55; stroke-width:2.5; stroke-opacity:1; }
