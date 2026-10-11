@@ -1,11 +1,11 @@
 /** GPCC precipitation reading kept distinct from river/lake location and water supply. */
 export const europePrecipitationLayer = {
   id: 'precipitation', field: 'nature' as const, title: '年降水量・250mm等雨量線', period: '1991–2020', unit: 'mm/年',
-  note: 'GPCC/DWDの1991–2020年の月別平年値を12か月合計し、原格子中心間を線形補間して250mm等雨量線と同じ境界の段階色を表示します。0–250mmを茶、250–500mmを緑、500mm以上を青系に分けています。原資料は0.25度格子の雨量計に基づく補間値です。四隅に完全な年値が揃う範囲だけ描き、沿岸部などで補間できない箇所や原格子の欠測を塗り足していません。地点照会は最も近い原格子の年値で、補間した色の値とは異なることがあります。細かな山地や小国の局地的な降水量、河川流量・地下水量・利用できる水の量は表しません。',
+  note: 'GPCC/DWDの1991–2020年の月別平年値を12か月合計し、原格子中心間を線形補間して250mm等雨量線と同じ境界の段階色を表示します。全階級を青系に保ち、0–250mmと250–500mmは明度差と250mm線で区別します。原資料は0.25度格子の雨量計に基づく補間値です。四隅に完全な年値が揃う範囲だけ描き、沿岸部などで補間できない箇所や原格子の欠測を塗り足していません。地点照会は最も近い原格子の年値で、補間した色の値とは異なることがあります。細かな山地や小国の局地的な降水量、河川流量・地下水量・利用できる水の量は表しません。',
   source: 'https://doi.org/10.5676/DWD_GPCC/CLIMAT_V2025_025',
   image: '/assets/atlas/europe/precipitation-contours-v1/precipitation.png', manifest: '/assets/atlas/europe/precipitation-contours-v1/manifest.json',
   grid: '/assets/atlas/europe/precipitation-v1/values.bin.gz', gridType: 'display' as const, nodata: -1,
-  breaks: Array.from({length:12},(_,i)=>(i+1)*250), colors: ['#dbaa71','#b9d7bb','#a3d1df','#84c3db','#66b0d1','#4e9bc4','#397fb1','#2f6da4','#275d96','#1e4e86','#183e70','#12325e','#0c274d'],
+  breaks: Array.from({length:12},(_,i)=>(i+1)*250), colors: ['#e6f2fa','#b7d9ea','#9fcddd','#84c3db','#66b0d1','#4e9bc4','#397fb1','#2f6da4','#275d96','#1e4e86','#183e70','#12325e','#0c274d'],
   labels: [...Array.from({length:12},(_,i)=>i===0?'250未満':`${(i*250).toLocaleString('ja-JP')}–${((i+1)*250).toLocaleString('ja-JP')}未満`),'3,000以上'],
 };
 

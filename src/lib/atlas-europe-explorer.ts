@@ -14,7 +14,8 @@ import { europeComparisonLinks, readEuropeReturn, europeComparisonUrl, europeNam
 import { renderEuropeOrigin } from './atlas-europe-comparison-renderer';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import { createEuropePopulationCases, cultureSelection, cultureColor, type CultureMapData, type CultureBounds } from './atlas-europe-population-cases';
-import { europeDrainageBasins, europeDrainageBasinByIndex, europeDrainageIndexForBasin, normaliseEuropeDrainageBasin, europeDrainageOutline } from './atlas-europe-drainage';
+import { europeDrainageBasins, europeDrainageBasinByIndex, europeDrainageIndexForBasin, normaliseEuropeDrainageBasin, europeDrainageOutline, europeDrainageMainBasinOutline } from './atlas-europe-drainage';
+import connectedBasinReview from '../../data-source/atlas/europe/drainage/connected-basin-review.json' with {type:'json'};
 import drainageManifest from '../../public/assets/atlas/europe/drainage-v1/manifest.json' with {type:'json'};
 import { readEuropeFarmingFocus, writeEuropeFarmingFocus } from '../data/atlas/europe/farming-water-comparisons';
 import { europeIndustryGroupCopy, europeIndustryMatches, europeIndustryOverviewLabels, isEuropeIndustryCountry, normaliseEuropeIndustryGroup } from './atlas-europe-industry';
@@ -103,20 +104,21 @@ export function initEuropeAtlas() {
   function fitCulture(bounds:CultureBounds) {
     if(!cultureActive())return;
     const points=bounds.map(project),x=Math.min(...points.map(point=>point[0])),y=Math.min(...points.map(point=>point[1]));
-    const width=Math.max(2,Math.abs(points[1][0]-points[0][0])),height=Math.max(2,Math.abs(points[1][1]-points[0][1]));
+    const sourceWidth=Math.abs(points[1][0]-points[0][0]),sourceHeight=Math.abs(points[1][1]-points[0][1]);
+    const width=Math.max(220,sourceWidth),height=Math.max(220,sourceHeight);
     // Reserve the SVG footer's screen space as well as the normal edge padding.
     const footerHeight=(query<HTMLElement>('.eu-map-footer')?.getBoundingClientRect().height??42)+6;
     const safeFraction=Math.min(.3,footerHeight/Math.max(160,staticMap.clientHeight));
-    box=[x-width*.04,y-height*.04,width*1.08,height*1.08/(1-safeFraction)];
+    box=[x+sourceWidth/2-width*.54,y+sourceHeight/2-height*.54,width*1.08,height*1.08/(1-safeFraction)];
     staticMap.setAttribute('viewBox',box.join(' '));
-    map?.fitBounds(bounds,{padding:{top:18,bottom:45,left:15,right:15},maxZoom:7,duration:0});
+    map?.fitBounds(bounds,{padding:{top:18,bottom:45,left:15,right:15},maxZoom:5.5,duration:0});
     annotations.refresh();
   }
   const culture=createEuropePopulationCases(cultureReader,{
     legend:query<HTMLElement>('.eu-culture-legend'),
     active:false,base:location.pathname.split('/atlas/europe/')[0]+'/',mapLayer:query<SVGGElement>('[data-eu-culture-layer]'),
     onMapData:data=>{cultureData=data;paintCulture();},onFitBounds:fitCulture,
-    onChange:choice=>{Object.assign(state,choice);commit(false);},
+    onChange:choice=>{const cleared=!!state.cultureCase&&!choice.cultureCase;Object.assign(state,choice);commit(cleared);},
   });
   query<HTMLElement>('[data-eu-culture-controls-host]').append(cultureReader.querySelector('.eu-culture-controls')!);
   const drainageChoice=query<HTMLSelectElement>('[data-eu-drainage-choice]');
@@ -152,7 +154,10 @@ export function initEuropeAtlas() {
       return;
     }
     const index=europeDrainageIndexForBasin(selected)!,basin=europeDrainageBasinByIndex(index)!;
-    query('[data-eu-basin-summary]').textContent=`選択：HYBAS_ID ${selected} · Pfafstetter ${basin.PFAF_ID}。濃い輪郭は表示格子上の区画で、その河川の流域全体とは限りません。`;
+    const system=connectedBasinReview.reviews.find(item=>item.mainBasin===basin.MAIN_BAS&&item.sourceNetworkClosed&&item.sourceLevelFourSiblingSetComplete);
+    query('[data-eu-basin-summary]').textContent=system
+      ? `${system.ja}水系：同じ河口へつながるLevel 4の${system.unitCount}区画をまとめて強調。表示は対象国と地図枠で切れています。青い線はNatural Earth収録区間で、源流から河口までの本流を示すものではありません。選択区画ID ${selected}。`
+      : `選択区画：HYBAS_ID ${selected} · Pfafstetter ${basin.PFAF_ID}。濃い輪郭は表示格子上の区画で、その河川の流域全体とは限りません。`;
     const token=++drainageRequest;
     try {
       const values=await gridValues(config.layers.find(layer=>layer.id==='drainage')!);
@@ -161,9 +166,9 @@ export function initEuropeAtlas() {
         const cell=displayCell(values,item.coordinates,-1),record=cell?.value==null?undefined:europeDrainageBasinByIndex(cell.value);
         return record?.MAIN_BAS===basin.MAIN_BAS;
       });
-      if(representatives.length)query('[data-eu-basin-summary]').textContent+=` ${representatives.map(item=>item.name).join('、')}の代表地点と同じMAIN_BASのモデル区画です。代表地点の区画と上流・下流の区画は別に分かれることがあります。`;
+      if(!system&&representatives.length)query('[data-eu-basin-summary]').textContent+=` ${representatives.map(item=>item.name).join('、')}の代表地点と同じMAIN_BASのモデル区画です。代表地点の区画と上流・下流の区画は別に分かれることがあります。`;
       if(drainageDrawn!==selected){
-        const outline=europeDrainageOutline(values,index),canvas=document.createElement('canvas');canvas.width=1800;canvas.height=1502;
+        const outline=system?europeDrainageMainBasinOutline(values,basin.MAIN_BAS):europeDrainageOutline(values,index),canvas=document.createElement('canvas');canvas.width=1800;canvas.height=1502;
         canvas.getContext('2d')!.putImageData(new ImageData(outline.rgba,1800,1502),0,0);
         drainageImage=canvas.toDataURL('image/png');drainageDrawn=selected;
         if(outline.transparent)query('[data-eu-basin-summary]').textContent+= ' この区画は表示範囲内に有効な画素がありません。';
@@ -249,13 +254,19 @@ export function initEuropeAtlas() {
     node.setAttribute('aria-label',`${label.mm} mm等雨量線`);
     query<HTMLElement>('.eu-map-stage').append(node);return {node,label};
   });
+  const terrainLeader=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  terrainLeader.classList.add('eu-terrain-leaders');terrainLeader.setAttribute('aria-hidden','true');stage.append(terrainLeader);
   const terrainLabels=[...europeTerrainGuides,...europeTerrainPlaceNames,...europeTerrainWinds].sort((left,right)=>Number(right.id==='alps')-Number(left.id==='alps')).map(label=>{
     const node=document.createElement('button');node.type='button';node.className='eu-terrain-place-label';
     node.dataset.euTerrainLabel=label.id;node.dataset.kind=label.kind;
     node.textContent=label.name;node.setAttribute('aria-label',`${label.name}の位置と解説`);
     node.addEventListener('click',event=>{event.stopPropagation();selectFeature(label.id);});
-    query<HTMLElement>('.eu-map-stage').append(node);return {node,label};
+    const leader=document.createElementNS('http://www.w3.org/2000/svg','line');leader.dataset.euTerrainLeader=label.id;terrainLeader.append(leader);
+    query<HTMLElement>('.eu-map-stage').append(node);return {node,label,leader};
   });
+  const terrainLabelOffsets:Array<[number,number]>=[];
+  for(let dy=-260;dy<=260;dy+=26)for(let dx=-264;dx<=264;dx+=24)terrainLabelOffsets.push([dx,dy]);
+  terrainLabelOffsets.sort((a,b)=>Math.hypot(...a)-Math.hypot(...b)||a[1]-b[1]);
   const riverLabels=config.readings.filter(reading=>reading.layer==='water').map(label=>{
     const node=document.createElement('button');node.type='button';node.className='eu-river-label';node.textContent=label.name;node.dataset.euRiverLabel=label.id;
     node.addEventListener('click',event=>{event.stopPropagation();selectFeature(label.id);});stage.append(node);return {node,label};
@@ -263,7 +274,7 @@ export function initEuropeAtlas() {
   function positionRiverLabels(){
     const rect=stage.getBoundingClientRect();
     for(const {node,label} of riverLabels){
-      node.hidden=state.layer!=='water';node.setAttribute('aria-pressed',String(state.feature===label.id));if(node.hidden)continue;
+      node.hidden=!['water','drainage'].includes(state.layer);node.setAttribute('aria-pressed',String(state.feature===label.id));if(node.hidden)continue;
       const point=overlayProject(label.coordinates);node.style.left=point.x+'px';node.style.top=point.y+'px';
       node.hidden=point.x<44||point.x>rect.width-44||point.y<50||point.y>rect.height-48;
     }
@@ -283,26 +294,37 @@ export function initEuropeAtlas() {
   }
   function positionTerrainLabels(){
     const stage=query<HTMLElement>('.eu-map-stage').getBoundingClientRect();
+    terrainLeader.setAttribute('viewBox',`0 0 ${stage.width} ${stage.height}`);
     const placed:DOMRect[]=[];
-    const offsets:[[number,number],...Array<[number,number]>]=[[0,0],[0,-24],[0,24],[42,0],[-42,0],[42,-24],[-42,-24],[42,24],[-42,24],[0,-48],[0,48],[76,0],[-76,0],[76,-30],[-76,-30]];
-    for(const {node,label} of terrainLabels){
-      node.hidden=state.layer!=='terrain';node.setAttribute('aria-pressed',String(state.feature===label.id));if(node.hidden)continue;
+    // Keep every named feature available in the initial view. Move crowded labels
+    // to nearby clear space and connect displaced names back to their anchors.
+    const ordered=[...terrainLabels].sort((a,b)=>Number(b.label.id===state.feature)-Number(a.label.id===state.feature));
+    for(const {node,label,leader} of ordered){
+      node.hidden=state.layer!=='terrain';leader.style.display='none';node.setAttribute('aria-pressed',String(state.feature===label.id));if(node.hidden)continue;
       const point=map&&liveMap.classList.contains('is-ready')?map.project(label.coordinates as [number,number]):(()=>{
         const [x,y]=project(label.coordinates),matrix=staticMap.getScreenCTM();
         const screen=matrix?new DOMPoint(x,y).matrixTransform(matrix):new DOMPoint();
         return {x:screen.x-stage.left,y:screen.y-stage.top};
       })();
-      node.hidden=point.x<50||point.x>stage.width-50||point.y<38||point.y>stage.height-42;
+      node.hidden=point.x<20||point.x>stage.width-20||point.y<20||point.y>stage.height-20;
       if(node.hidden)continue;
-      let chosen:DOMRect|undefined;
-      for(const [dx,dy] of offsets){
-        node.style.left=point.x+dx+'px';node.style.top=point.y+dy+'px';
-        const rect=node.getBoundingClientRect();
+      node.style.left=point.x+'px';node.style.top=point.y+'px';
+      const {width,height}=node.getBoundingClientRect();
+      let chosen:DOMRect|undefined,chosenOffset:[number,number]=[0,0];
+      for(const [dx,dy] of terrainLabelOffsets){
+        const rect=new DOMRect(stage.left+point.x+dx-width/2,stage.top+point.y+dy-height/2,width,height);
         if(rect.left<stage.left+4||rect.right>stage.right-4||rect.top<stage.top+4||rect.bottom>stage.bottom-4)continue;
         if(placed.some(other=>rect.left<other.right+3&&rect.right>other.left-3&&rect.top<other.bottom+3&&rect.bottom>other.top-3))continue;
-        chosen=rect;break;
+        chosen=rect;chosenOffset=[dx,dy];break;
       }
-      if(chosen)placed.push(chosen);
+      if(chosen){
+        node.style.left=point.x+chosenOffset[0]+'px';node.style.top=point.y+chosenOffset[1]+'px';
+        placed.push(chosen);
+        if(Math.hypot(...chosenOffset)>40){
+          leader.setAttribute('x1',String(point.x));leader.setAttribute('y1',String(point.y));
+          leader.setAttribute('x2',String(point.x+chosenOffset[0]));leader.setAttribute('y2',String(point.y+chosenOffset[1]));leader.style.display='';
+        }
+      }
       else node.hidden=true;
     }
   }
@@ -554,7 +576,7 @@ export function initEuropeAtlas() {
     const guideVisible=layer.id==='terrain';
     query<SVGGElement>('[data-eu-terrain-guides]').style.display=guideVisible?'':'none';
     if(map?.getLayer('eu-terrain-guides'))map.setLayoutProperty('eu-terrain-guides','visibility',guideVisible?'visible':'none');
-    const riverVisible=layer.id==='water';
+    const riverVisible=['water','drainage'].includes(layer.id);
     query<SVGGElement>('[data-eu-major-rivers]').style.display=riverVisible?'':'none';
     for(const id of ['eu-major-rivers','eu-major-river-hit'])if(map?.getLayer(id))map.setLayoutProperty(id,'visibility',riverVisible?'visible':'none');
     if(map?.getLayer('eu-major-rivers'))map.setPaintProperty('eu-major-rivers','line-width',['case',['==',['get','id'],state.feature??''],4,2.5]);
@@ -928,7 +950,7 @@ export function initEuropeAtlas() {
         map.addSource('eu-major-rivers',{type:'geojson',data:config.majorRivers as any});
         map.addLayer({id:'eu-major-rivers',type:'line',source:'eu-major-rivers',paint:{'line-color':'#176783','line-width':['case',['==',['get','id'],state.feature??''],4,2.5]}},'borders');
         map.addLayer({id:'eu-major-river-hit',type:'line',source:'eu-major-rivers',paint:{'line-color':'#176783','line-opacity':0,'line-width':16}},'borders');
-        map.on('click','eu-major-river-hit',event=>{if(state.layer==='water'){const id=event.features?.[0]?.properties?.id;if(typeof id==='string')selectFeature(id);}});
+        map.on('click','eu-major-river-hit',event=>{if(['water','drainage'].includes(state.layer)){const id=event.features?.[0]?.properties?.id;if(typeof id==='string')selectFeature(id);}});
         map.addSource('climate-water',{type:'geojson',data:config.climateWater as any});
         map.addLayer({id:'climate-water',type:'fill',source:'climate-water',paint:{'fill-color':'#e7eff1'}});
         map.addLayer({id:'climate-water-outline',type:'line',source:'climate-water',paint:{'line-color':'#8ca6aa','line-width':.7}});
@@ -942,7 +964,7 @@ export function initEuropeAtlas() {
     } catch { if (token === generation) fallback(); }
   }
   all<SVGImageElement>('image').forEach(img=>img.addEventListener('error',()=>{if(img.style.display!=='none')status.textContent='地図画像を取得できませんでした。出典・解説・国別の数値は確認できます。主題を選び直すか、通常地図への再試行を使ってください。';}));
-  all<SVGPathElement>('[data-eu-major-river]').forEach(path=>path.addEventListener('click',event=>{if(state.layer==='water'){event.stopPropagation();selectFeature(path.dataset.euMajorRiver!);}}));
+  all<SVGPathElement>('[data-eu-major-river]').forEach(path=>path.addEventListener('click',event=>{if(['water','drainage'].includes(state.layer)){event.stopPropagation();selectFeature(path.dataset.euMajorRiver!);}}));
   query<HTMLSelectElement>('[data-eu-industry-scope]').addEventListener('change',event=>{
     const [kind,id]=(event.target as HTMLSelectElement).value.split(':');
     if(kind==='country'&&isEuropeIndustryCountry(id)){selectCountry(id);return;}

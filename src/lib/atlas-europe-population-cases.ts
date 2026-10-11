@@ -286,7 +286,10 @@ export function createEuropePopulationCases(root: HTMLElement, options: CultureO
     });
   }
   function apply(next: CultureState, emit: boolean) {
-    fitNext = false;
+    // The ethnicity overview already fits the ONS districts. Refit when the
+    // source footprint changes (Croatia or a religion overview → a census case).
+    fitNext = !!next.cultureCase && next.cultureCase !== state.cultureCase
+      && (kind === 'religion' || next.cultureCase === 'croatia-national-2021' || state.cultureCase === 'croatia-national-2021');
     state = next; renderReader(); updateMap();
     if (emit) options.onChange?.({ ...state });
   }

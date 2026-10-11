@@ -47,9 +47,9 @@
     3000
   ],
   "colors": [
-    "#dbaa71",
-    "#b9d7bb",
-    "#a3d1df",
+    "#e6f2fa",
+    "#b7d9ea",
+    "#9fcddd",
     "#84c3db",
     "#66b0d1",
     "#4e9bc4",
@@ -85,16 +85,16 @@
       "bytes": 28314
     },
     "precipitation.svg": {
-      "sha256": "df1e1f3ce73789b7d4f7f87861cb6e99ec788c20e8f99c350f4863ba0d80020f",
+      "sha256": "63948e3ddcbc5f0d0fffa9be1eaf1e416fa377e34dbaecfa638be8af34689628",
       "bytes": 533985
     },
     "geometry.json.gz": {
-      "sha256": "49cf87b525233851c26f63a07a13934518f9d2cec676db2c1286e07df1540d3e",
-      "bytes": 219138
+      "sha256": "244bf01b80295eb243fcd43ace5980831cb69754f8bf333568df4e6763cdfa83",
+      "bytes": 219135
     },
     "precipitation.png": {
-      "sha256": "273b4d9ec10dbb2ab11ed930383828bf61778ae07e32fd65f4aeda3a49b096fd",
-      "bytes": 388412
+      "sha256": "c677a602ca61daa2506be4545750c8e133a519bad6b40a3ef888e78cfd104270",
+      "bytes": 388820
     }
   },
   "processing": {

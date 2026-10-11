@@ -294,18 +294,17 @@ test('a click outside the published extent clears the old point instead of leavi
   }finally{await app.w.happyDOM.close();}
 });
 
-for(const topic of ['ethnicity'])test(`${topic} keeps the unselected legend and the explicit source scale beneath the map`,async()=>{
+for(const topic of ['ethnicity'])test(`${topic} keeps the overview scale and the explicit source scale beneath the map`,async()=>{
   const app=await setup(`https://example.com/insight-journal/atlas/europe/population/?layer=${topic}&render=static`);
   try{
     const legend=app.q('.eu-culture-legend');
     assert.equal(legend.parentElement,app.q('[data-eu-map-legend]'));
     assert.equal(legend.hidden,false);assert.equal(app.q('[data-eu-subject-legend]').hidden,true);
     assert.equal(app.w.document.querySelectorAll('.eu-culture-legend').length,1);
-    assert.equal(legend.children.length,7);
-    assert.ok([...legend.querySelectorAll('[data-culture-scale-key]')].every(key=>key.hidden));
-    assert.equal(legend.lastElementChild.hidden,false);
-    assert.match(legend.lastElementChild.textContent,topic==='religion'?/未掲載・資料未取得.*0%ではありません/:/未掲載・3対象以外.*0%ではありません/);
-    assert.match(legend.lastElementChild.querySelector('i').getAttribute('style'),/#b8bec7/);
+    assert.equal(legend.children.length,8);
+    assert.match(legend.querySelector('[data-culture-scale-title]').textContent,/白人以外の4大分類の合計/);
+    assert.equal(legend.querySelectorAll('[data-culture-scale-key]:not([hidden])').length,6);
+    assert.equal(legend.lastElementChild.hidden,true);
     assert.match(app.q('[data-culture-denominator]').textContent,/分母/);
     const select=(selector,value)=>{const node=app.q(selector);node.value=value;node.dispatchEvent(new app.w.Event('change',{bubbles:true}));};
     select('[data-culture-case]','england-wales-2021');
@@ -322,7 +321,7 @@ for(const topic of ['ethnicity'])test(`${topic} shows all three published respon
   const app=await setup(`/insight-journal/atlas/europe/population/?layer=${topic}&render=static`,{animationFrameDelay:40});
   try{
     const visibleCompositions=()=>app.w.document.querySelectorAll('[data-eu-composition]:not([hidden])').length;
-    const initial=app.w.location.href,full=app.q('[data-eu-static]').getAttribute('viewBox');
+    const initial=app.w.location.href;
     const key=app.q('[data-eu-culture-composition-key]');assert.equal(key.hidden,false);
     await until(()=>app.w.document.querySelectorAll('[data-eu-composition]').length===3,'The annotation frame renders all three compositions');
     assert.equal(key.querySelectorAll('[data-eu-composition-table]').length,3);
@@ -334,12 +333,14 @@ for(const topic of ['ethnicity'])test(`${topic} shows all three published respon
       assert.equal(button.querySelector('svg').getAttribute('viewBox'),'0 0 56 56');
       assert.equal(key.querySelector(`[data-eu-composition-table="${code}"]`).querySelectorAll('tbody tr').length,expected[index]);
     }
-    assert.match(app.q('[data-culture-overview]').textContent,topic==='religion'?/Czechia.*Estonia.*欧州全域の完成分布ではありません/: /自己認識.*言語分布.*実践/);
+    assert.match(app.q('[data-culture-overview]').textContent,/解説：都市部.*移動.*雇用・交通.*欧州全体の民族分布ではありません/);
     app.q(`[data-eu-composition="${topic}-HRV"]`).click();
     await until(()=>visibleCompositions()===0,'Selecting a census case hides every overview composition');
     assert.equal(app.q('[data-culture-case]').value,'croatia-national-2021');assert.equal(key.hidden,true);
     assert.equal(app.q('[data-culture-category]').value,'');assert.equal(app.q('[data-culture-area]').value,'');
-    assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);assert.equal(app.w.document.querySelectorAll('[data-eu-composition]:not([hidden])').length,0);
+    const [hrX,hrY]=project([16,45]);
+    await until(()=>{const [x,y,w,h]=app.q('[data-eu-static]').getAttribute('viewBox').split(' ').map(Number);return hrX>=x&&hrX<=x+w&&hrY>=y&&hrY<=y+h&&w<500;},'The selected Croatia source view fits its own published coverage');
+    assert.equal(app.w.document.querySelectorAll('[data-eu-composition]:not([hidden])').length,0);
     assert.equal(new URL(app.w.location.href).searchParams.has('feature'),false);
     app.restore(initial);assert.equal(key.hidden,false);assert.equal(app.q('[data-culture-case]').value,'');
     await until(()=>app.w.document.querySelectorAll('[data-eu-composition]:not([hidden])').length===3);
@@ -348,7 +349,9 @@ for(const topic of ['ethnicity'])test(`${topic} shows all three published respon
     select.value='';select.dispatchEvent(new app.w.Event('change'));
     await until(()=>visibleCompositions()===3,'Clearing the case restores all three overview compositions');
     assert.equal(key.hidden,false);
-    assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
+    const [left,top,width,height]=app.q('[data-eu-static]').getAttribute('viewBox').split(' ').map(Number);
+    const [onsX,onsY]=project([-3,53]);
+    assert.ok(onsX>=left&&onsX<=left+width&&onsY>=top&&onsY<=top+height,'Clearing the case keeps the ONS overview in view');
   }finally{await app.w.happyDOM.close();}
 });
 
@@ -361,13 +364,13 @@ test('religion shows the 2020 country compositions and keeps national census det
     assert.equal(colorKey.hidden,false);
     assert.equal(app.q('[data-eu-pew-map-key]').hidden,false);
     assert.equal(app.w.document.querySelectorAll('[data-eu-pew-marker]').length,40);
-    assert.equal(app.q('[data-eu-shape="CZE"]').style.fill,app.q('[data-eu-shape="DEU"]').style.fill);
+    assert.notEqual(app.q('[data-eu-shape="CZE"]').style.fill,app.q('[data-eu-shape="DEU"]').style.fill);
     assert.equal(app.q('[data-eu-pew-marker="CZE"] .eu-pew-marker-bar').children[2].style.width,'72.8%');
     assert.equal(app.q('[data-eu-pew-marker="ALB"] .eu-pew-marker-bar').children[1].style.width,'74.5%');
-    assert.match(app.q('[data-eu-shape="VAT"]').style.fill,/(#f2eee5|rgb\(242, 238, 229\))/);
+    assert.match(app.q('[data-eu-shape="VAT"]').style.fill,/(#d9dcda|rgb\(217, 220, 218\))/);
     assert.equal(app.w.document.querySelectorAll('[data-eu-religion-evidence]:not([hidden])').length,0);
-    assert.match(app.q('[data-culture-takeaway]').textContent,/概説.*67.1%.*25.3%.*6.0%/);
-    assert.match(app.q('[data-culture-overview]').textContent,/解説.*オスマン帝国/);
+    assert.match(app.q('[data-culture-takeaway]').textContent,/概説.*国別の2020年推計.*キリスト教.*無宗教/);
+    assert.match(app.q('[data-culture-overview]').textContent,/解説.*宗教改革.*南東欧の歴史/);
     app.q('[data-eu-pew-marker="SRB"]').click();
     await until(()=>!app.q('[data-eu-religion-evidence-reading]').hidden);
     assert.equal(app.q('[data-eu-religion-evidence-reading]').previousElementSibling,null);

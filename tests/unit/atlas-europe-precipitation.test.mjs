@@ -46,9 +46,8 @@ test('pinned source baseline, provenance hashes and display frame are consistent
   assert.equal(manifest.processing.reclassificationInputSha256, sha(bytes(base + 'values.bin.gz')));
   assert.deepEqual(breaks, Array.from({length:12},(_,i)=>(i+1)*250));
   assert.deepEqual(colors, manifest.colors);
-  assert.ok(Number.parseInt(colors[0].slice(1,3),16)>Number.parseInt(colors[0].slice(5,7),16),'driest band is tan');
-  assert.ok(Number.parseInt(colors[1].slice(3,5),16)>Number.parseInt(colors[1].slice(1,3),16),'next band is green');
-  assert.ok(colors.slice(2).every(color=>Number.parseInt(color.slice(5,7),16)>Number.parseInt(color.slice(1,3),16)),'wetter bands are blue');
+  assert.ok(colors.every(color=>Number.parseInt(color.slice(5,7),16)>Number.parseInt(color.slice(1,3),16)),'all bands are blue');
+  assert.notEqual(colors[0],colors[1],'two lowest bands have distinct blue lightness');
   for (const [name, record] of Object.entries(manifest.files)) assert.equal(sha(bytes(base + name)), record.sha256, name);
   for (const input of manifest.inputs) assert.equal(sha(bytes(input.path)), input.sha256, input.path);
   assert.deepEqual(manifest.licenseEvidence.dataCiteRightsList, []);

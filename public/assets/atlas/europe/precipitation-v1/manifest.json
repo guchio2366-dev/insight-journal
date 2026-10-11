@@ -64,9 +64,9 @@
     3000
   ],
   "colors": [
-    "#dbaa71",
-    "#b9d7bb",
-    "#a3d1df",
+    "#e6f2fa",
+    "#b7d9ea",
+    "#9fcddd",
     "#84c3db",
     "#66b0d1",
     "#4e9bc4",
@@ -103,7 +103,7 @@
     "sourceMutation": false,
     "numericStorage": "Monthly source float32 values summed in float64, then rounded once with Math.fround; PNG colour classification and the float32 display lookup use that same rounded value.",
     "colorClassificationBasis": "Stored float32 display lookup value",
-    "palette": "Distinct dry and transitional colours below 500 mm/year, then blue 250 mm/year classes from the retained float32 display grid; edges follow sampled source-cell values and are not surveyed isohyets.",
+    "palette": "Sequential blue 250 mm/year classes with distinct lightness in the two lowest bands from the retained float32 display grid; edges follow sampled source-cell values and are not surveyed isohyets.",
     "reclassificationInputSha256": "84b2d7e502b3e529e57f6e3e3331ec7980518d144ed7574ee49d4ffc3f9875cc"
   },
   "limitations": [
@@ -424,8 +424,8 @@
   ],
   "files": {
     "precipitation.png": {
-      "sha256": "79d0fc4639ca4df55b804b45b93481edef90c7eb90bef57c67b7cabbb0170272",
-      "bytes": 41538
+      "sha256": "a345168926f381ca259772671f6783a79ccefc7721f3ae8e0f174a6cce3b89a2",
+      "bytes": 41547
     },
     "values.bin.gz": {
       "sha256": "84b2d7e502b3e529e57f6e3e3331ec7980518d144ed7574ee49d4ffc3f9875cc",
