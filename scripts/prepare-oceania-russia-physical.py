@@ -22,6 +22,12 @@ ROOT = Path(__file__).resolve().parents[1]
 GPCC_SHA = "3bd80d05df52572f6409b594ae26b43e9045147cb3c25254cddb5a934c16e5c5"
 GPCC_URL = "https://opendata.dwd.de/climate_environment/GPCC/GPCC_Precipitation_Analysis_Climatology/Version_2025/gpcc_precipitation_analysis_climatology_1991_2020_v2025_025.nc.gz"
 ETOPO_URL = "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/60s/60s_surface_elev_gtif/ETOPO_2022_v1_60s_N90W180_surface.tif"
+ETOPO_SUBSET_SHA = {
+    "russia-west.tif": "00818133710bd69fd56889612d3b9233247dab3fc7165b977216a7dca875a0b7",
+    "russia-east.tif": "6b59b31e946e94df1b1e1a7e2a69e64b7a34b1920ad6550e3945482ddf8213ff",
+    "oceania-west.tif": "01920160762a36ad749da9efcd5d53a134fc0751dc5eb0a7fa0dd1e209041f72",
+    "oceania-east.tif": "67d4825d7e9755725972b2db7be5377162603db8f2c327e2a245139ec32aedc3",
+}
 REGIONS = {
     "russia": {"bounds": [18, 40, 191, 83], "size": [1200, 597], "etopo": ["russia-west.tif", "russia-east.tif"]},
     "oceania": {"bounds": [110, -58, 250, 25], "size": [1200, 757], "etopo": ["oceania-west.tif", "oceania-east.tif"]},
@@ -134,6 +140,8 @@ def elevation(region: str, meta: dict, source_dir: Path):
     source_files = []
     for filename in meta["etopo"]:
         path = source_dir / filename
+        if sha(path) != ETOPO_SUBSET_SHA[filename]:
+            raise ValueError("The ETOPO subset differs from the verified source: " + filename)
         dataset = gdal.Open(str(path))
         if dataset is None or dataset.RasterCount != 1 or dataset.GetRasterBand(1).GetNoDataValue() != -99999:
             raise ValueError("Unexpected ETOPO subset: " + filename)
