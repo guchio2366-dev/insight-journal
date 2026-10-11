@@ -83,7 +83,10 @@ test('direct field routes start with the full regional frame and overview, inclu
    assert.equal(root.querySelector('[data-place]').value,'all');
    assert.ok(root.querySelector('[data-theme-title]').textContent.startsWith('オセアニアの'));
    assert.equal(root.querySelectorAll('[data-theme][aria-pressed="true"]').length,0);
-   assert.equal(root.querySelector('[data-primary-map] svg').getAttribute('viewBox'),'0 0 1200 757');
+   const map=root.querySelector('[data-primary-map] svg');
+   assert.equal(map.getAttribute('viewBox'),'0 35 1100 710');
+   assert.equal(map.querySelectorAll('.oceania-country').length,25,'All mapped country outlines remain in the full-region scene');
+   if(field!=='agriculture')for(const code of ['MNP','PCN'])assert.ok(map.querySelector(`.oceania-country[data-map-place="${code}"]`),`${code} remains in the regional frame`);
    if(field==='industry'){
     assert.equal(root.querySelector('[data-layer]').value,'industry-all');
     assert.equal(root.querySelectorAll('[data-primary-map] circle[fill][stroke="#fff"]').length,347);

@@ -11,11 +11,15 @@ type RussiaField=keyof typeof russiaFields;
 type RussiaState=ReturnType<typeof createRussiaState>;
 type RussiaSource={title:string;url:string;note?:string};
 const htmlEscape=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
-const ownKeys=['theme','layer','place','scope','view','compare','reading','industryLocation'];
+const ownKeys=['theme','layer','place','scope','view','compare','reading','industryLocation','single'];
 
 const climateShortNames:Record<string,string>={BWk:'低温砂漠',BSk:'低温半乾燥',Cfa:'温暖湿潤',Cfb:'西岸海洋性',Dsc:'冷帯夏乾冷夏',Dsd:'冷帯夏乾厳冬',Dwa:'冷帯冬乾暑夏',Dwb:'冷帯冬乾暖夏',Dwc:'冷帯冬乾冷夏',Dwd:'冷帯冬乾厳冬',Dfa:'冷帯湿潤暑夏',Dfb:'冷帯湿潤暖夏',Dfc:'冷帯湿潤冷夏',Dfd:'冷帯湿潤厳冬',ET:'ツンドラ',EF:'氷雪'};
 export function renderRussiaWorkspaceLegend(layer:ReturnType<typeof getRussiaLayer>):string {
  if(layer.field==='agriculture')return renderRussiaFarmingKey(layer);
+ if(layer.id==='precipitation'||layer.id==='elevation'){
+  const indices=layer.id==='precipitation'?[0,2,4,8,16]:[0,1,3,5,9,13];
+  return renderRussiaLegend({...layer,legend:indices.map(i=>layer.legend[i])})+`<span>${layer.id==='precipitation'?'等雨量線 250 mm間隔':'等高線 500 m間隔'}</span>`;
+ }
  return renderRussiaLegend(layer.id==='climate'?{...layer,legend:layer.legend.map(item=>{const code=item.label.split(' ')[0];return {...item,label:climateShortNames[code]?code+climateShortNames[code]:item.label};})}:layer);
 }
 
@@ -41,6 +45,7 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
   url.searchParams.set('theme',s.theme);url.searchParams.set('layer',s.layer);
   url.searchParams.set('place',s.place);url.searchParams.set('scope',s.scope);
   if(s.comparison)url.searchParams.set('view','comparison');
+  if(s.field==='agriculture'&&s.layer!=='farming-all'&&s.single)url.searchParams.set('single','1');
   url.searchParams.set('compare',s.compareLayer);
   if(selected)url.searchParams.set('reading','selection');
   if(s.field==='industry'&&s.layer==='places'&&s.industryLocation)url.searchParams.set('industryLocation',s.industryLocation);
@@ -75,6 +80,7 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
   const contextualReading=selected&&layer.id!=='farming-all'&&(layer.field!=='agriculture'||theme.defaultLayer===layer.id)&&(state.place==='all'||theme.regionCodes.includes(state.place));
   one<HTMLSelectElement>('place').value=state.place;
   one<HTMLSelectElement>('layer').value=state.layer;
+  const single=root.querySelector<HTMLButtonElement>('[data-farming-single]');if(single){single.hidden=layer.id==='farming-all';single.setAttribute('aria-pressed',String(!!state.single));single.textContent=state.single?'全品目を表示':'この品目だけ表示';}
   const distribution=root.querySelector<HTMLSelectElement>('[data-distribution-layer]');if(distribution)distribution.value=state.layer;
   root.querySelectorAll<HTMLButtonElement>('[data-region-option]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.regionOption===state.place)));
   one<HTMLSelectElement>('compare-layer').value=state.compareLayer;
@@ -96,12 +102,14 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
    text('current-legend-unit',layer.period+'・'+layer.unit);
    text('legend-resolution',layer.resolution??'');one('legend-resolution').hidden=!layer.resolution;
    one('key-legend').dataset.climateLegend=String(layer.id==='climate');
-   one('climate-dictionary').hidden=layer.id!=='climate'&&layer.field!=='agriculture';
-   one('primary-legend-definitions').innerHTML=renderRussiaLegend(layer);
+   one('climate-dictionary').hidden=layer.field!=='nature'&&layer.field!=='agriculture';
+   one('primary-legend-definitions').innerHTML=renderRussiaLegend(layer);const summary=root.querySelector<HTMLElement>('[data-legend-dictionary-summary]');if(summary)summary.textContent=layer.id==='climate'?'気候区分のコードと名前':'全ての数量階級と線の凡例';
   }
+  if(field==='agriculture')root.querySelectorAll<HTMLElement>('[data-farming-key],[data-farming-legend]').forEach(item=>{const product=item.dataset.farmingKey??item.dataset.farmingLegend;item.hidden=!!state.single&&product!==layer.id;});
   text('reading-status',selected?'選んだ場所・分布の説明':'ロシアの概要');
   text('theme-title',!selected?(overview?'広い国土を、都市と分野の分布から読む':fieldOverview.title):contextualReading?theme.title:selectedName()+'の'+layer.title);text('takeaway',!selected?(overview?'欧州側・シベリア・極東を同じ表示枠で確かめ、自然条件に設備・交通・市場・社会を重ねて読む。都市中心の円は行政人口ではなく、固定された都市範囲の人口です。':fieldOverview.takeaway):contextualReading?theme.takeaway:fieldOverview.takeaway);
   text('explanation',contextualReading?theme.explanation:selected?selectedName()+'を選択しています。 '+layer.coverage:fieldOverview.explanation);text('social-context',theme.social);
+  if(field==='nature'&&layer.id!=='climate'){text('theme-title',layer.title);text('takeaway',layer.id==='precipitation'?'1991–2020年の年降水量と250 mm間隔の線で、地域ごとの違いを読みます。':layer.id==='rivers'?'名称付きの代表河川の位置を確認します。線の順序から流向や河口は判断しません。':'海抜500 mごとの段階色と等高線で、広い国土の標高を読みます。');text('explanation',layer.coverage);}
   const industryPoint=field==='industry'&&state.layer==='places'?russiaIndustryMarks.find(m=>m.id===state.industryLocation):undefined;
   const industryReturn=root.querySelector<HTMLElement>('[data-russia-industry-return]');if(industryReturn)industryReturn.hidden=!industryPoint;
   if(industryPoint){text('theme-title',industryPoint.name);text('takeaway',industryPoint.reading??industryPoint.note);text('explanation',industryPoint.note);}
@@ -135,16 +143,17 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
   if(state.place==='all')state.scope='all';selected=state.place!=='all'||(field==='agriculture'&&state.layer!=='farming-all');chooseRegionTheme();
  }));
  const chooseLayer=(event:Event)=>update(()=>{
-  state.layer=(event.target as HTMLSelectElement).value;selected=state.layer!=='farming-all'||state.place!=='all';
+  state.layer=(event.target as HTMLSelectElement).value;state.single=false;selected=state.layer!=='farming-all'||state.place!=='all';
   const theme=russiaThemes.find(item=>item.field===field&&item.defaultLayer===state.layer);
   if(theme)state.theme=theme.id;
  });
  one<HTMLSelectElement>('layer').addEventListener('change',chooseLayer);
+ root.querySelector<HTMLButtonElement>('[data-farming-single]')?.addEventListener('click',()=>update(()=>{state.single=!state.single;}));
  root.querySelector<HTMLSelectElement>('[data-distribution-layer]')?.addEventListener('change',chooseLayer);
  one<HTMLSelectElement>('compare-layer').addEventListener('change',event=>update(()=>{state.compareLayer=(event.target as HTMLSelectElement).value;}));
  root.querySelectorAll<HTMLButtonElement>('[data-theme]').forEach(button=>button.addEventListener('click',()=>update(()=>{
   const theme=getRussiaTheme({...state,field,theme:button.dataset.theme!});
-  delete state.industryLocation;state.theme=theme.id;state.layer=theme.defaultLayer;selected=true;
+  delete state.industryLocation;state.theme=theme.id;state.layer=theme.defaultLayer;state.single=false;selected=true;
  })));
  root.querySelectorAll<HTMLButtonElement>('[data-scope]').forEach(button=>button.addEventListener('click',()=>update(()=>{
   state.scope=button.dataset.scope as RussiaState['scope'];selected=state.scope!=='all'||state.place!=='all'||(field==='agriculture'&&state.layer!=='farming-all');

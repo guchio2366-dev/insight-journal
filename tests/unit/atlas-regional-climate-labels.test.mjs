@@ -13,7 +13,7 @@ test('crowded lower-edge Perth name stays near its fixed observation point inste
   const g=svg.querySelector('[data-regional-climate-city="perth"]'),point=g.querySelector('circle'),label=g.querySelector('text');
   const [x,y]=['cx','cy'].map(k=>Number(point.getAttribute(k))),[lx,ly]=['x','y'].map(k=>Number(label.getAttribute(k)));
   assert.ok(Math.hypot(lx-x,ly-4*scale-y)/scale<=80,`Perth leader too long at ${width}px`);
-  assert.deepEqual(frame,[0,0,1200,757]);assert.ok(ly>frame[1]+22*scale,'Name must not wrap to the map top');
+  assert.deepEqual(frame,[0,35,1100,710]);assert.ok(ly>frame[1]+22*scale,'Name must not wrap to the map top');
   const boxes=[...svg.querySelectorAll('[data-regional-climate-city]>rect')].map(r=>['x','y','width','height'].map(k=>Number(r.getAttribute(k))));
   for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){const [ax,ay,aw,ah]=boxes[i],[bx,by,bw,bh]=boxes[j];assert.ok(!(ax<bx+bw&&ax+aw>bx&&ay<by+bh&&ay+ah>by),`City label boxes overlap at ${width}px`);}
  }}finally{win.happyDOM.abort();}
