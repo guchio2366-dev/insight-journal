@@ -9,6 +9,7 @@ on:
       - 'scripts/verify-latin-reading-pc.mjs'
       - 'scripts/verify-latin-culture-pc.mjs'
       - 'scripts/verify-latin-nature-reading-pc.mjs'
+      - 'scripts/print-latin-nature-review-previews.py'
       - 'public/assets/atlas/latin-nature-reading-v2/**'
       - 'scripts/latin-america/*reading*'
       - 'data-source/atlas/latin-america/nature-reading/**'
@@ -46,6 +47,30 @@ jobs:
           path: ${{ runner.temp }}/latin-culture-source-originals
           retention-days: 7
           if-no-files-found: error
+  preview:
+    name: PC image preview (${{ matrix.topic }})
+    needs: review
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    strategy:
+      fail-fast: false
+      matrix:
+        topic: [climate-basins, rivers, rainfall, terrain, elevation, agriculture]
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: latin-reading-pc-review-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/latin-reading-preview
+      - name: Print unchanged artifact bytes with their PC measurements and hashes
+        run: python3 scripts/print-latin-nature-review-previews.py "$REVIEW_ARTIFACT_DIRECTORY" "$REVIEW_TOPIC"
+        env:
+          REVIEW_ARTIFACT_DIRECTORY: ${{ runner.temp }}/latin-reading-preview
+          REVIEW_TOPIC: ${{ matrix.topic }}
+          LATIN_READING_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
   review:
     runs-on: ubuntu-latest
     timeout-minutes: 15

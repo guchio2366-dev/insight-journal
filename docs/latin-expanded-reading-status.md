@@ -19,3 +19,5 @@
 新しい単体チェックは21配色と原画像、観測所を含む元セル、地形名称面と標高の分離、旧河川ID、250mm／500mの全階級、色・PNG・原格子・加工scriptのSHAを確認します。DOM E2Eは実際のbuild出力の直接URL、scope、選択・履歴・共通ナビを確認。PCは `scripts/verify-latin-nature-reading-pc.mjs` で、Chrome sandbox有効、1920×1080 CSS viewport／DPR1／100%／scroll(0,0)を主条件に、mainと同位置で比較します。統計確認のscroll600と390×844は別条件として記録します。画像を実見するまでは目視合格にしません。
 
 Draftで実装・検証のみ。マージ・公開は親threadとの順序調整前に行いません。資料不足の対象を完成として報告しません。
+
+独立候補のFAOSTAT Food Balances APIとCopernicus land-cover registryも通常HTTPSがproxy403で停止しました。再試行していません。PC成果物ZIPはFileServiceへの取得には成功しましたが、このexecutorへのLibrary正規転送はconsumer-local宛先への1回の再試行も失敗。ローカルChromiumのsandboxも起動条件を満たしません。CIで撮影した既存のPNG/WebPを変換せず、同じSHAと寸法のまま項目別ログで読み取れる確認経路を追加しました。これも撮影の成功と人による目視の合格を区別します。
