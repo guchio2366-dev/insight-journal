@@ -1,0 +1,56 @@
+name: Review integrated maps on PC
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'scripts/verify-integrated-maps-pc.mjs'
+      - '.github/workflows/integrated-maps-pc-review.yml'
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Verify the build or existing GitHub Pages
+        type: choice
+        options: [build, production]
+        default: production
+
+permissions:
+  contents: read
+
+concurrency:
+  group: integrated-maps-pc-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: Verify integrated PC maps and operations
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      INTEGRATION_TARGET: ${{ inputs.target || 'build' }}
+      INTEGRATION_EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      ASTRO_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci --no-audit --no-fund
+      - name: Build the exact checkout
+        run: |
+          npm run build
+          node scripts/generate-release.mjs --commit "$INTEGRATION_EXPECTED_SHA"
+          node scripts/verify-release.mjs --commit "$INTEGRATION_EXPECTED_SHA"
+      - name: Verify with the normal runner Chrome
+        run: |
+          sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+          REVIEW_CHROME_PATH="$(command -v google-chrome)" node scripts/verify-integrated-maps-pc.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: integrated-maps-${{ inputs.target || 'build' }}-${{ github.run_id }}
+          path: review-artifacts/integrated-maps
+          retention-days: 7
