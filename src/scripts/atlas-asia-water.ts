@@ -5,9 +5,9 @@ import type {AsiaState,AsiaCamera,AsiaRegionId} from '../lib/atlas-asia-state';
 import {eastRainfall,eastBasinOverview,eastBasinReading} from '../data/atlas/east-asia-approved-reading';
 import {asiaWaterFocus} from '../data/atlas/asia-water-focus';
 import {southCentralWaterSystems,southCentralWaterOverview,southCentralGroundwaterOverview} from '../data/atlas/asia-south-central-water-reading';
-import {southCentralRainfallLegend} from '../data/atlas/asia-south-central-rainfall-legend';
+import {southCentralRainfallLegend,centralRainfallLegend} from '../data/atlas/asia-south-central-rainfall-legend';
 
-type Config={regionId:AsiaRegionId;water:WaterRegion;waterBase:string;countries:{code:string;name:string}[];waterFeatures?:{id:string;name:string;label?:string;kind:string;countries:string[]}[];contourBands?:AsiaContourBands;focusWaterRivers?:string[];focusWaterOverview?:string};
+type Config={regionId:AsiaRegionId;focusId?:string;water:WaterRegion;waterBase:string;countries:{code:string;name:string}[];waterFeatures?:{id:string;name:string;label?:string;kind:string;countries:string[]}[];contourBands?:AsiaContourBands;focusWaterRivers?:string[];focusWaterOverview?:string};
 const el=<K extends keyof HTMLElementTagNameMap>(tag:K,text?:string)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
 const option=(label:string,value:string)=>{const o=el('option',label);o.value=value;return o;};
 const link=(label:string,url:string)=>{const a=el('a',label);a.href=url;return a;};
@@ -66,7 +66,7 @@ export function createAsiaWater(root:HTMLElement,config:Config,getState:()=>Asia
  function legend(t:WaterTopic){
   const content=$('[data-hydrology-scale]');content.replaceChildren();$('[data-hydrology-legend-title]').textContent=waterTopics[t].title;
   const swatch=(color:string,label:string)=>{const s=el('span'),i=el('i');i.style.backgroundColor=color;s.append(i,document.createTextNode(label));content.append(s);};
-  if(t==='precipitation'){if(config.contourBands)for(const band of config.regionId==='south-central-asia'?southCentralRainfallLegend(config.contourBands):contourBandLabels(config.contourBands))swatch(band.color,band.label);swatch('#347d9c','等雨量線：250mm/年間隔（数字は500mmごと）');$('[data-hydrology-legend-note]').textContent='1981–2010年の推計平年値。同じ年間降水量の地点を青い線で結びます。'+(config.regionId==='east-asia'?'薄い背景色は降水量の広がりを補助的に示します。':'')+'海・欠測の範囲は線をつなぎません。'+(config.contourBands?(config.regionId==='south-central-asia'?' 色は0～3,000mmの違いを細かく示し、それより多い範囲は色をまとめています。線と面の区切りは250mm間隔、地点の数値は平滑化前の原格子値で、上限に切り詰めていません。':' 色帯も250mmごとで、線と同じ平滑化した表示値から作っています。地点の数値は平滑化前の原格子値です。'):'');}
+  if(t==='precipitation'){if(config.contourBands)for(const band of config.focusId==='central-asia'?centralRainfallLegend():config.regionId==='south-central-asia'?southCentralRainfallLegend(config.contourBands):contourBandLabels(config.contourBands))swatch(band.color,band.label);swatch('#347d9c','等雨量線：250mm/年間隔（数字は500mmごと）');$('[data-hydrology-legend-note]').textContent='1981–2010年の推計平年値。同じ年間降水量の地点を青い線で結びます。'+(config.regionId==='east-asia'?'薄い背景色は降水量の広がりを補助的に示します。':'')+'海・欠測の範囲は線をつなぎません。'+(config.contourBands?(config.focusId==='central-asia'?' 中央アジアの段階色は0～2,000mmを細かく示し、2,000mm以上を一色にまとめています。2,000mmは表示色の区切りで、実測・平滑値の上限ではありません。250mm間隔の等雨量線と地点の原格子値は保持しています。':config.regionId==='south-central-asia'?' 色は0～3,000mmの違いを細かく示し、それより多い範囲は色をまとめています。線と面の区切りは250mm間隔、地点の数値は平滑化前の原格子値で、上限に切り詰めていません。':' 色帯も250mmごとで、線と同じ平滑化した表示値から作っています。地点の数値は平滑化前の原格子値です。'):'');}
   else if(t==='basins'){if(config.regionId==='east-asia')for(const f of asiaWaterFocus[config.regionId])swatch(basinColor(f.id),f.name);swatch('#176c94','青い線・面：河川・湖');swatch('#b5ced9','主な河川の流域');swatch('#ac432f','赤い輪郭：選択した流域');$('[data-hydrology-legend-note]').textContent='色は水量や面積の大小を表しません。主要な水系を表示し、小さな沿岸区分は省いています。国境を越える流域は輪郭でつなぎ、対象国の範囲を塗っています。地図の河川名・範囲を選ぶと、その出口へ集まる水系を読めます。デルタで出口が異なる枝流などは別の区域です。';}
   else{swatch('#a9d2da','主要な地下水盆地');swatch('#176c94','河川');$('[data-hydrology-legend-note]').textContent='主要な地下水盆地の広がりを示します。白地にも局地的な帯水層は存在し得ます。色は地下水の量や安全に取水できる量を表しません。';}
   if(t==='precipitation'&&config.regionId==='east-asia'&&config.contourBands){

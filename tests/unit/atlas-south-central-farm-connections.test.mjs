@@ -6,7 +6,7 @@ import {Window} from 'happy-dom';
 const output=await build({entryPoints:['src/scripts/atlas-asia-farming-panel.ts'],bundle:true,platform:'node',format:'esm',write:false});
 const {renderSouthCentralFarmConnections}=await import('data:text/javascript;base64,'+Buffer.from(output.outputFiles[0].text).toString('base64'));
 const window=new Window();globalThis.document=window.document;
-const root=window.document.createElement('main');root.innerHTML='<section data-south-central-farm-connections hidden><div data-south-central-world-share></div></section>';
+const root=window.document.createElement('main');root.innerHTML='<section data-south-central-farm-connections hidden><h3 data-south-central-supply-title></h3><div data-south-central-supply></div><h3 data-south-central-destinations-title></h3><div data-south-central-destinations></div><div data-south-central-world-share></div></section>';
 const section=root.querySelector('[data-south-central-farm-connections]');
 const content=()=>root.querySelector('[data-south-central-world-share]');
 
@@ -29,4 +29,12 @@ test('country and item selection update the series, while unsupported items show
  assert.equal(content().querySelectorAll('svg').length,0);
  renderSouthCentralFarmConnections(root,'east-asia',true,'wheat',{code:'KAZ',name:'カザフスタン'});
  assert.equal(section.hidden,true);
+});
+
+test('Central Asia gives a sourced cotton processing path without inventing trade destinations',()=>{
+ renderSouthCentralFarmConnections(root,'south-central-asia',true,'overview',undefined,{country:'KAZ',product:'wheat-production'},'central-asia');
+ assert.match(root.querySelector('[data-south-central-supply]').textContent,/ウズベキスタン.*灌漑地.*紡績.*縫製/);
+ assert.match(root.querySelector('[data-south-central-destinations]').textContent,/未収録/);
+ assert.equal(root.querySelector('[data-south-central-destinations] .sc-flow-pie'),null);
+ assert.match(content().textContent,/カザフスタンの小麦/);
 });

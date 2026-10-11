@@ -5,7 +5,7 @@ const make=(tag:string,className?:string,text?:string)=>{const element=document.
 const source=()=>{const link=make('a') as HTMLAnchorElement;link.href=riceFlow.source;link.textContent='DGCIS原資料（表1～3）';link.target='_blank';link.rel='noopener noreferrer';return link;};
 
 /** The fiscal-year rice export series and the FAOSTAT paddy series have different definitions. */
-export function renderSouthCentralRiceFlow(section:HTMLElement,region:string,topic:string|null,countryCode:string|undefined){
+export function renderSouthCentralRiceFlow(section:HTMLElement,region:string,topic:string|null,countryCode:string|undefined,focusId?:string){
  const supply=section.querySelector<HTMLElement>('[data-south-central-supply]');
  const destinations=section.querySelector<HTMLElement>('[data-south-central-destinations]');
  if(!supply||!destinations)return;
@@ -17,6 +17,15 @@ export function renderSouthCentralRiceFlow(section:HTMLElement,region:string,top
  if(region!=='south-central-asia'){
   supply.append(make('p',undefined,'供給と仕向け先の内訳は未掲載です。'));
   destinations.append(make('p',undefined,'品目別の輸出先は未掲載です。'));
+  return;
+ }
+ if(focusId==='central-asia'&&(!countryCode||countryCode==='KAZ'||countryCode==='UZB')&&(topic==='overview'||topic==='cotton')){
+  if(supplyTitle)supplyTitle.textContent='綿花の供給と加工の経路';
+  if(destinationTitle)destinationTitle.textContent='輸出先の資料状況';
+  supply.append(make('p','sc-flow-lead','ウズベキスタンの例：灌漑地の綿花 → 国内の紡績・織布 → 縫製。'));
+  supply.append(make('p','sc-flow-detail','工程の位置関係を示します。各工程に入る量や国内販売・輸出への配分は、この資料から計算していません。'));
+  const link=make('a') as HTMLAnchorElement;link.href='https://www.worldbank.org/en/news/feature/2025/05/27/weaving-a-new-future-in-uzbekistan-s-cotton-sector';link.textContent='世界銀行・ウズベキスタンの綿繊維産業';link.target='_blank';link.rel='noopener noreferrer';supply.append(link);
+  destinations.append(make('p',undefined,'同じ品目・期間・単位による相手国別輸出量は未収録です。円グラフは作成していません。'));
   return;
  }
  if(countryCode&&countryCode!=='IND'||topic!=='overview'&&topic!=='rice'){

@@ -1,6 +1,6 @@
 ---
 import AsiaFieldNavigation from './AsiaFieldNavigation.astro';
-import {asiaFocusViews,asiaFocusFieldReadings,asiaFocusCountries,asiaFocusIndustry,asiaFocusWaterRivers,asiaFocusWaterOverview,asiaFocusShareExample,asiaFocusFarmKindReading,type AsiaFocusId} from '../../data/atlas/asia-focus';
+import {asiaFocusViews,asiaFocusFieldReadings,asiaFocusCountries,asiaFocusFarmProducts,asiaFocusIndustry,asiaFocusWaterRivers,asiaFocusWaterOverview,asiaFocusShareExample,asiaFocusFarmKindReading,type AsiaFocusId} from '../../data/atlas/asia-focus';
 import {southCentralFieldReadings} from '../../data/atlas/asia-south-central-reading';
 import eastContentGeography from '../../../public/assets/atlas/asia-population-v1/east-asia.geography.json';
 import southeastContentGeography from '../../../public/assets/atlas/asia-population-v1/southeast-asia.geography.json';
@@ -82,13 +82,16 @@ const nearby=features.filter(f=>!countryCodes.has(f.properties.code)&&rings(f).s
 const physical={...physicalManifest.regions[regionId],waterFeatures:physicalManifest.regions[regionId].waterFeatures.filter(f=>!focusId||f.countries.some(code=>asiaFocusCountries[focusId].includes(code)))}, physicalFocus=asiaPhysicalFocus.filter(f=>f.region===regionId&&(!focusId||asiaFocusCountries[focusId].includes(f.country)));
 const population={...populationManifest.regions[regionId],cities:populationManifest.regions[regionId].cities.filter(c=>!focusId||asiaFocusCountries[focusId].includes(c.country))} as unknown as AsiaPopulationRegion;
 const config={regionId,focusId,label:region.label,bounds,contentExtent,dataBounds:focusId?bounds:asiaRegionReading[regionId].bounds,countries,cities,classes:asiaClimateClasses,climate:climateManifest.regions[regionId],physical,physicalFocus,geographyUrl:withBase('/assets/atlas/asia-geography-v1.json'),climateBase:withBase('/assets/atlas/asia-climate-v2/'),agricultureBase:withBase('/assets/atlas/asia-agriculture-v1/'),physicalBase:withBase('/assets/atlas/asia-physical-v1/')};
-const farming=farmingManifest.regions[regionId] as unknown as AsiaFarmingRegion;
+const farmProducts=focusId?new Set(asiaFocusFarmProducts[focusId]):null;
+const sourceFarming=farmingManifest.regions[regionId] as unknown as AsiaFarmingRegion;
+const farming=farmProducts?{...sourceFarming,layers:sourceFarming.layers.filter(layer=>layer.kind==='forest'||farmProducts.has(layer.id))}:sourceFarming;
 Object.assign(config,{farming,farmingBase:withBase('/assets/atlas/asia-farming-v1/')});
 const pointInRing=([x,y]:number[],ring:number[][])=>{let inside=false;for(let i=0,j=ring.length-1;i<ring.length;j=i++)if((ring[i][1]>y)!==(ring[j][1]>y)&&x<(ring[j][0]-ring[i][0])*(y-ring[i][1])/(ring[j][1]-ring[i][1])+ring[i][0])inside=!inside;return inside;};
 const focusShapes=contentGeography.features.filter(feature=>visibleCountries.has(feature.properties.code));
 const inFocus=(point:number[])=>!focusId||focusShapes.some(feature=>{const polygons=feature.geometry.type==='Polygon'?[feature.geometry.coordinates]:feature.geometry.coordinates;return polygons.some((rings:number[][][])=>pointInRing(point,rings[0])&&!rings.slice(1).some(ring=>pointInRing(point,ring)));});
 const originalPresentation=presentationManifest.regions[regionId];
 const presentation={...originalPresentation,farming:{...originalPresentation.farming,labels:originalPresentation.farming.labels.filter(label=>inFocus(label.coordinate))},settlements:Object.fromEntries(Object.entries(settlementManifest.regions[regionId]).map(([key,value])=>[key,{...value,categories:value.categories.map(category=>({...category,anchors:category.anchors.filter(inFocus)})).filter(category=>category.anchors.length)}]))};
+if(farmProducts)presentation.farming={...presentation.farming,products:presentation.farming.products.filter(product=>farmProducts.has(product.id)),labels:presentation.farming.labels.filter(label=>!label.product||farmProducts.has(label.product))};
 const visibleSettlementCategoryIds=Object.fromEntries(Object.entries(presentation.settlements).map(([topic,value])=>[topic,new Set(value.categories.map(category=>category.id))]));
 Object.assign(config,{presentation,presentationBase:withBase('/assets/atlas/asia-presentation-v1/')});
 const familyNames=['熱帯','乾燥帯','温帯','冷帯','寒帯'];
@@ -109,7 +112,7 @@ Object.assign(config,{trade:{...tradeManifest.regions[regionId],...(focusId?{cou
 const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林業'},{id:'natural',label:'自然環境'},{id:'industry',label:'主要産業'},{id:'population',label:'人口'}];
 ---
 <BaseLayout title={`${region.label}地図｜自然環境・農林業・主要産業・人口`} description={reading.summary} compactAtlas canonicalPath={`/atlas/asia/${pageId}/${asiaFieldPaths[initialField]}/`}>
-  <div class="asia-atlas-root" data-asia-atlas data-region={regionId}>
+  <div class="asia-atlas-root" data-asia-atlas data-region={regionId} data-focus={focusId}>
    <AtlasWorkspaceFrame region={regionId}>
     <article class="atlas-explorer asia-atlas" data-asia-explorer data-field={initialField}>
      <section class="atlas-workspace" aria-label={`${region.label}の分野別地図`}>
@@ -117,7 +120,6 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
       <h1 class="visually-hidden">{region.label}の地図から自然環境・農林業・主要産業・人口を読む</h1>
       <div class="atlas-region-controls asia-region-shell">
        <AtlasRegionNavigation group="asia" current={pageId} />
-       {regionId==='south-central-asia'&&<nav class="asia-focus-navigation" aria-label="南・中央アジアの地域">{Object.entries(asiaFocusViews).map(([id,v])=><a href={withBase(`/atlas/asia/${id}/${asiaFieldPaths[initialField]}/`)} data-focus-link={id} aria-current={pageId===id?'page':undefined}>{v.label}</a>)}</nav>}
        <div class="asia-toolbar"><label data-country-picker>国・地域<select data-country-select aria-label="国・地域を選ぶ"><option value="">{region.label}全体</option>{countries.map(c=><option value={c.code}>{c.name}</option>)}</select></label><button class="asia-reset" type="button" data-reset>全体に戻す</button>{regionId==='east-asia'&&<a data-japan-entry href={withBase(`/atlas/japan/${asiaFieldPaths[initialField]}/`)}>日本の全国図 →</a>}</div>
       </div>
       <nav class="atlas-tabs atlas-tabs-with-overview asia-field-tabs" aria-label="地図の分野"><a data-atlas-overview-link href={withBase(`/atlas/asia/${pageId}/overview/`)}>概要</a>{fieldTabs.map(f=><a href={withBase(`/atlas/asia/${pageId}/${asiaFieldPaths[f.id]}/`)} data-field={f.id} aria-current={initialField===f.id?'page':undefined}>{f.label}</a>)}</nav>

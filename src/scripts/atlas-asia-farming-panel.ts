@@ -13,10 +13,10 @@ const percentage=(n:number)=>n<0.05?'0.05％未満':`${n.toLocaleString('ja-JP',
 const sourceFlag=(flag:string)=>asiaFarmFlagLabels[flag]??`原資料区分 ${flag}`;
 const svgNode=(tag:string,attrs:Record<string,string>)=>{const node=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [key,value] of Object.entries(attrs))node.setAttribute(key,value);return node;};
 /** Source-matched country/world ratios; never repurpose them as trade or domestic supply. */
-export function renderSouthCentralFarmConnections(root:HTMLElement,region:AsiaRegionId,active:boolean,topic:string|null,country:{code:string;name:string}|undefined,focusExample?:{country:string;product:string}){
+export function renderSouthCentralFarmConnections(root:HTMLElement,region:AsiaRegionId,active:boolean,topic:string|null,country:{code:string;name:string}|undefined,focusExample?:{country:string;product:string},focusId?:string){
  const section=root.querySelector<HTMLElement>('[data-south-central-farm-connections]');if(!section)return;
  section.hidden=!active||(region!=='south-central-asia'&&region!=='southeast-asia');if(section.hidden)return;
- renderSouthCentralRiceFlow(section,region,topic,country?.code??focusExample?.country);
+ renderSouthCentralRiceFlow(section,region,topic,country?.code??focusExample?.country,focusId);
  const host=section.querySelector<HTMLElement>('[data-south-central-world-share]')!;host.replaceChildren();
  const isSoutheast=region==='southeast-asia',worldSeries=(isSoutheast?southeastShares.series:southCentralShares.series) as ShareSeries[];
  const sharePercent=(value:number)=>isSoutheast?(value>0&&value<.01?'0.01％未満':`${value.toLocaleString('ja-JP',{maximumFractionDigits:2,minimumFractionDigits:2})}％`):percentage(value);

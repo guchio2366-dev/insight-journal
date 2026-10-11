@@ -23,6 +23,13 @@ export const asiaFocusCountries:Record<AsiaFocusId,readonly string[]>={
  'south-asia':['AFG','BGD','BTN','IND','LKA','MDV','NPL','PAK'],
  'central-asia':['KAZ','KGZ','TJK','TKM','UZB'],
 };
+// The combined MapSPAM/GLW image is a source inventory, not an editorial list
+// for both regions. Keep the characteristic products visible in each focus;
+// individual source grids remain available for their own named topic.
+export const asiaFocusFarmProducts:Record<AsiaFocusId,readonly string[]>={
+ 'south-asia':['rice','wheat','cotton','chickpea','tea','sugarcane','cattle','buffalo','goat','chicken'],
+ 'central-asia':['wheat','cotton','maize','cattle','sheep','goat'],
+};
 // The underlying rasters cover both regions. These lists define what a
 // regional entrance may offer as a named example, without changing the source
 // grid or presenting a combined-region statistic as a regional total.

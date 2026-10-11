@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
-import {readFile} from 'node:fs/promises';
+import {mkdir,readFile} from 'node:fs/promises';
 import path from 'node:path';
 
 const enabled=process.env.ATLAS_ASIA_BROWSER==='1';
@@ -23,7 +23,8 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
  const {chromium}=await import('playwright'),{server,url}=await serve();let browser;
  try{
   browser=await chromium.launch({headless:true,chromiumSandbox:true,...(process.env.REVIEW_CHROME_PATH?{executablePath:process.env.REVIEW_CHROME_PATH}:{})});
-  const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];
+  const page=await browser.newPage({viewport:{width:1920,height:1080},deviceScaleFactor:1}),errors=[];
+  const capture=async name=>{const folder=path.resolve('review-artifacts/south-central-focus');await mkdir(folder,{recursive:true});await page.screenshot({path:path.join(folder,`${name}.png`),animations:'disabled'});};
   page.on('pageerror',error=>errors.push(error.message));
   for(const [region,expected,selected,city,foreign] of [
    ['south-asia',['AFG','BGD','BTN','IND','LKA','MDV','NPL','PAK'],'IND','new-delhi','KAZ'],
@@ -37,9 +38,15 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    assert.equal(config.cities.some(c=>c.id===city),true);
    assert.equal(await page.locator(`[data-country-select] option[value="${foreign}"]`).count(),0);
    assert.equal(await page.locator(`.regional-tabs a[href$="/${region}/"]`).getAttribute('aria-current'),'page');
+   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
    await page.locator('[data-city-select]').selectOption(city);
    assert.equal(new URL(page.url()).searchParams.get('city'),city);
+   assert.equal(new URL(page.url()).searchParams.get('place'),null);
    await page.locator(`[data-city-panel="${city}"]`).waitFor({state:'visible'});
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true');
+   assert.equal(new URL(page.url()).searchParams.get('city'),city);
+   await capture(`${region}-climate`);
    await page.locator('[data-reset]').click();
    assert.equal(new URL(page.url()).searchParams.get('city'),null);
    await page.locator('[data-country-select]').selectOption(selected);
@@ -60,7 +67,7 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    const population=JSON.parse(await page.locator('[data-asia-config]').textContent());
    assert.ok(population.population.cities.every(item=>expected.includes(item.country)));
    const censusCodes=await page.locator('[data-sc-religion-select]').evaluateAll(buttons=>buttons.map(button=>button.dataset.scReligionSelect));
-   assert.deepEqual(censusCodes,region==='central-asia'?['KAZ']:['IND','PAK','BGD','NPL','LKA']);
+   assert.deepEqual(censusCodes,region==='central-asia'?['KAZ','KGZ','TJK','TKM','UZB']:['IND','PAK','BGD','NPL','LKA']);
    for(const topic of ['ethnicity','religion']){
     const visibleIds=population.presentation.settlements[topic].categories.map(category=>category.id);
     const legendIds=await page.locator(`[data-settlement-legend="${topic}"] [data-settlement-choice]`).evaluateAll(buttons=>buttons.map(button=>button.dataset.settlementChoice));
@@ -69,12 +76,17 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    await page.goto(`${url}/atlas/asia/${region}/agriculture/`,{waitUntil:'domcontentloaded'});
    await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.focusMaskStatus==='ready');
    await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmContextStatus==='ready');
+   const farmChoices=await page.locator('[data-farm-choice]').evaluateAll(nodes=>nodes.map(n=>n.dataset.farmChoice));
+   assert.equal(farmChoices.includes(region==='central-asia'?'rice':'tea'),region==='south-asia');
+   await capture(`${region}-agriculture`);
    await page.goto(`${url}/atlas/asia/${region}/nature/?topic=terrain`,{waitUntil:'domcontentloaded'});
    await page.waitForFunction(()=>document.querySelector('[data-physical-takeaway]')?.textContent.includes('等高線')||document.querySelector('[data-physical-takeaway]')?.textContent.includes('ヒマラヤ'));
    const terrainText=await page.locator('[data-physical-reading]').textContent();
    if(region==='central-asia')assert.doesNotMatch(terrainText,/ネパール|デカン|インド半島|ベンガル/);
    await page.goto(`${url}/atlas/asia/${region}/population/?topic=religion`,{waitUntil:'domcontentloaded'});
    await page.waitForFunction(count=>document.querySelectorAll('.sc-religion-marker').length===count,region==='central-asia'?1:5);
+   await page.waitForFunction(count=>document.querySelectorAll('.sc-religion-report-marker:not(.local)').length===count,region==='central-asia'?4:0);
+   await capture(`${region}-religion`);
    const markers=await page.locator('.sc-religion-marker').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('aria-label')));
    assert.equal(markers.some(label=>label.includes('カザフスタン')),region==='central-asia');
    await page.locator('.sc-religion-marker').first().click();
@@ -82,6 +94,17 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    await page.goBack();
    await page.waitForFunction(()=>new URL(location.href).searchParams.get('place')===null);
    assert.equal(await page.locator('.sc-religion-marker').count(),region==='central-asia'?1:5);
+   if(region==='central-asia'){
+    await page.locator('.sc-religion-report-marker[aria-label^="タジキスタン"]').click();
+    assert.equal(new URL(page.url()).searchParams.get('place'),'TJK');
+    assert.match(await page.locator('[data-sc-religion-country="TJK"]').textContent(),/GBAO/);
+    await page.goBack();
+    await page.waitForFunction(()=>new URL(location.href).searchParams.get('place')===null);
+    await page.goto(`${url}/atlas/asia/${region}/nature/?topic=precipitation`,{waitUntil:'domcontentloaded'});
+    await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true');
+    assert.match(await page.locator('[data-hydrology-legend]').textContent(),/250.*500/s);
+    await capture('central-asia-precipitation');
+   }
   }
   assert.deepEqual(errors,[]);
  }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
