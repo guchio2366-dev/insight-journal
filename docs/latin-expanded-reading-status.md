@@ -16,7 +16,7 @@
 
 原典・加工・座標・ライセンス・SHAは `public/assets/atlas/latin-nature-reading-v2/manifest.json` と `data-source/atlas/latin-america/nature-reading/source.json`。取得拒否の正確な操作・URL・結果・不足は同フォルダの `blockers.json` に保存しています。403はこのexecutorの通常HTTPSのproxy接続結果で、発行元の利用許諾拒否や自動承認拒否と断定しません。
 
-新しい単体チェックは21配色と原画像、観測所を含む元セル、地形名称面と標高の分離、旧河川ID、250mm／500mの全階級、色・PNG・原格子・加工scriptのSHAを確認します。DOM E2Eは実際のbuild出力の直接URL、scope、選択・履歴・共通ナビを確認。PCは `scripts/verify-latin-nature-reading-pc.mjs` で、Chrome sandbox有効、1920×1080 CSS viewport／DPR1／100%／scroll(0,0)を主条件に、mainと同位置で比較します。統計確認のscroll600と390×844は別条件として記録します。画像を実見するまでは目視合格にしません。
+新しい単体チェックは21配色と原画像、観測所を含む元セル、地形名称面と標高の分離、旧河川ID、250mm／500mの全階級、色・PNG・原格子・加工scriptのSHAを確認します。DOM E2Eは実際のbuild出力の直接URL、scope、選択・履歴・共通ナビを確認。PCは `scripts/verify-latin-nature-reading-pc.mjs` で、Chrome sandbox有効、1920×1080 CSS viewport／DPR1／100%／scroll(0,0)を主条件に、mainと同位置で比較します。統計確認のscroll1400と390×844は別条件として記録し、国別表の見出しが画面内にあることも確認します。画像を実見するまでは目視合格にしません。
 
 Draftで実装・検証のみ。マージ・公開は親threadとの順序調整前に行いません。資料不足の対象を完成として報告しません。
 

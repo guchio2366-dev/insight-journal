@@ -49,7 +49,8 @@ try{
    await go('nature/');await page.locator('[data-latin-section=terrain]').click();await ready();assert.equal((await measure()).activeSection,'terrain');await page.goBack({waitUntil:'networkidle'});await ready();assert.equal((await measure()).activeSection,'climate');report.checks.push({normalTransitionAndBack:true});
    await go('agriculture/?layer=coff');await page.locator('.latin-statistics details').last().evaluate(el=>el.open=true);
    if(!baseline)assert.match(await page.locator('[data-latin-agriculture-stat-rows]').evaluate(el=>el.closest('table').querySelector('thead').textContent),/地図：アラビカ.*統計：生豆・全品種/);
-   await shot('agriculture-coffee-statistics',600);
+   await shot('agriculture-coffee-statistics',1400);
+   const header=await page.locator('[data-latin-agriculture-stat-rows]').evaluate(el=>{const r=el.closest('table').querySelector('thead').getBoundingClientRect();return {top:r.top,bottom:r.bottom};});assert.ok(header.top>=0&&header.bottom<=viewport.height,'Country statistics header must be visible in its separate fixed-scroll evidence');
   }
   await context.close();
  }
