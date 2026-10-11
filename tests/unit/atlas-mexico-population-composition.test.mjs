@@ -29,6 +29,7 @@ test('Bare categories open a national overview; explicit metric links and nation
   const m=official.metrics.find(m=>m.category===category);
   const source=new URL(`https://example.test/?category=${category}&compositionMetric=${m.id}&compositionMeasure=share&reading=item&frame=120,80,600,400`);
   const detail=lib.readMexicoCompositionSelection(source,official,category);assert.equal(detail.overview,false);
+  assert.equal(detail.mapMode,'combined');const single=lib.writeMexicoCompositionSelection(source,{...detail,mapMode:'single'},category);assert.equal(single.searchParams.get('compositionMap'),'single');assert.equal(lib.readMexicoCompositionSelection(single,official,category).mapMode,'single');
   const compared=lib.mexicoCompositionComparisonUrl(source),selection=lib.readMexicoCompositionSelection(compared,official,category);
   assert.equal(selection.compare,true);compared.searchParams.set('state','09');assert.equal(lib.mexicoCompositionReturnUrl(compared,selection).href,source.href);
  }

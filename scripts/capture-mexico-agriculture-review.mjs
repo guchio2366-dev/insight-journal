@@ -209,7 +209,10 @@ async function assertReady(page, country, scene) {
       const decoded = svgImages.find(image => image.url === sourceUrl);
       assert(decoded?.decoded && decoded.width > 0 && decoded.height > 0, 'Mexico tree-cover image did not decode');
       forestTreeCover = {...decoded, sourceUrl, visible: true, scope: 'Coarse 2021 WorldCover categorical tree-cover overview; not a 10 m display, legal-forest boundary, or pine-species map'};
-      assert.equal(await root.locator('[data-mexico-forest-states]').count(), 0, 'Forestry must not highlight state outlines');
+      const forestStates = root.locator('[data-mexico-forest-states]');
+      assert(await forestStates.isVisible(), 'Forestry must highlight the two leading states');
+      assert.equal(await forestStates.locator('path').count(), 2, 'Forestry must retain the Durango and Chihuahua outlines');
+      assert.deepEqual((await forestStates.locator('text').allTextContents()).map(name => name.trim()).sort(), ['チワワ', 'ドゥランゴ'].sort());
       assert((await root.locator('[data-agriculture-reading="pine"] .mexico-agriculture-forest-note').textContent()).includes('ドゥランゴ・チワワ'), 'Forestry must retain the top-state statistics explanation');
     } else {
       assert(await root.locator('path[data-crop-zone="corn"]').isVisible(), 'Mexico crop distribution missing');
@@ -546,9 +549,12 @@ async function main() {
       metadata.captures.push(result);
       await writeFile(path.join(output, 'metadata.json'), `${JSON.stringify(metadata, null, 2)}\n`);
       console.log(`${result.status.toUpperCase()}: ${result.name}${result.failure ? `: ${result.failure.split('\n')[0]}` : ''}`);
+      if(result.failure)console.log(`::error title=${result.name}::${result.failure.slice(0,2000).replaceAll('%','%25').replaceAll('\r','%0D').replaceAll('\n','%0A')}`);
     }
     if(!focused)metadata.pcReview = await captureMexicoPCReview({browser, origin: hosted.origin, basePath, output: path.join(output, 'pc-review')});
     if(!focused)assert.equal(metadata.pcReview.status, 'passed', 'PC comparison capture failed. Inspect mexico-agriculture/pc-review metadata and PNGs.');
+    metadata.pcReview1920 = await captureMexicoPCReview({browser, origin: hosted.origin, basePath, output: path.join(output, 'pc-review-1920'), profile:{viewport:{width:1920,height:1080},deviceScaleFactor:1,isMobile:false,hasTouch:false}, initialCountries:['mexico'], initialFields:['agriculture','nature','industry','population'], additionalCases:[]});
+    assert.equal(metadata.pcReview1920.status, 'passed', '1920×1080 Mexico capture failed. Inspect mexico-agriculture/pc-review-1920 metadata and PNGs.');
     const failures = metadata.captures.filter(item => item.status !== 'passed');
     assert.equal(failures.length, 0, `${failures.length} browser capture(s) failed. Inspect review-artifacts/mexico-agriculture metadata and failure PNGs.`);
     metadata.status = 'passed';
@@ -564,4 +570,4 @@ async function main() {
   }
 }
 
-main().catch(error => {console.error(error); process.exitCode = 1;});
+main().catch(error => {console.error(error);console.log(`::error title=Mexico agriculture review::${String(error.stack??error).slice(0,2000).replaceAll('%','%25').replaceAll('\r','%0D').replaceAll('\n','%0A')}`); process.exitCode = 1;});

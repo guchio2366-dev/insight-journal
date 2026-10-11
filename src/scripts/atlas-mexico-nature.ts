@@ -53,7 +53,9 @@ export function initMexicoNature(root: HTMLElement): void {
       const id = label.dataset.mexicoNatureClassLabel;
       const active = !state.category && !!config.items?.[state.view].some(item => item.id === id);
       const pressed = active && id === state.item && (state.view === 'relief' || !state.feature || !label.dataset.mexicoNatureLabelFeature || label.dataset.mexicoNatureLabelFeature === state.feature);
-      label.setAttribute('aria-pressed', String(pressed)); label.setAttribute('aria-disabled', String(!active)); label.setAttribute('tabindex', active ? '0' : '-1');
+      const condensed = active && state.view === 'climate' && !state.frame && !state.item && label.dataset.mexicoClimateCodePriority === 'detail';
+      label.toggleAttribute('hidden',condensed);
+      label.setAttribute('aria-pressed', String(pressed)); label.setAttribute('aria-disabled', String(!active)); label.setAttribute('tabindex', active && !condensed ? '0' : '-1');
       if (label instanceof HTMLButtonElement) label.disabled = !active;
     }
     const categoryNames: Record<string, string> = {'rivers-groundwater': '河川・地下水', precipitation: '降水量', basins: '河川の流域', elevation: '標高'};

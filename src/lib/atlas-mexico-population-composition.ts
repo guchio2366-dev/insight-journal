@@ -14,8 +14,8 @@ export interface MexicoCompositionMetric {
   sharePrecision?:number;isEstimate?:boolean;nationalShareConfidenceInterval90?:MexicoCompositionInterval;nationalConfidenceInterval90?:MexicoCompositionInterval;nationalCountConfidenceInterval90?:MexicoCompositionInterval;nationalUnknownCount?:number;comparabilityNote?:string;distributionSummary?:string;
 }
 export interface MexicoCompositionData {referenceYear:number;metrics:MexicoCompositionMetric[]}
-export interface MexicoCompositionSelection {metric:string;measure:MexicoCompositionMeasure;compare:boolean;sourceQuery:string|null;overview:boolean}
-export const mexicoCompositionKeys=['compositionMetric','compositionMeasure','compositionCompare','compositionFrom','compositionView'] as const;
+export interface MexicoCompositionSelection {metric:string;measure:MexicoCompositionMeasure;compare:boolean;sourceQuery:string|null;overview:boolean;mapMode:'combined'|'single'}
+export const mexicoCompositionKeys=['compositionMetric','compositionMeasure','compositionCompare','compositionFrom','compositionView','compositionMap'] as const;
 export const mexicoReligionOverviewMetricIds=['catholic','protestant_evangelical','no_religion'] as const;
 export const mexicoCompositionShareBins:MexicoCompositionBin[]=[
   {min:0,max:1,color:'#edf3df',label:'1%未満'},
@@ -38,6 +38,12 @@ export function mexicoCompositionColor(record:MexicoCompositionRecord,metric:Mex
 /** Overview uses absolute shares on one fixed scale; detail keeps source-specific bins. */
 export function mexicoCompositionOverviewColor(record:MexicoCompositionRecord,metric:MexicoCompositionMetric):string {
   return mexicoCompositionColor(record,metric.category==='religion'?{...metric,shareBins:mexicoCompositionShareBins}:metric);
+}
+/** Select only published state shares. These are locators, not mutually exclusive areas. */
+export function mexicoCompositionHighlights(metric:MexicoCompositionMetric,limit=2):{code:string;share:number}[] {
+  return Object.entries(metric.states).map(([code,record])=>({code,share:mexicoCompositionShare(record)}))
+    .filter((item):item is {code:string;share:number}=>item.share!==null)
+    .sort((a,b)=>b.share-a.share||a.code.localeCompare(b.code)).slice(0,limit);
 }
 export function mexicoCompositionOverviewMetrics(data:MexicoCompositionData,category:MexicoPopulationCategory):MexicoCompositionMetric[] {
   if(category==='religion')return mexicoReligionOverviewMetricIds.flatMap(id=>data.metrics.filter(metric=>metric.category===category&&metric.id===id));
@@ -72,13 +78,14 @@ export function readMexicoCompositionSelection(url:URL,data:MexicoCompositionDat
   const sourceMetric=sourceURL?data.metrics.find(metric=>metric.category===sourceURL.searchParams.get('category')&&metric.id===sourceURL.searchParams.get('compositionMetric')):undefined;
   const sourceState=sourceURL?.searchParams.get('state')??'';
   const validSource=!!sourceURL&&!sourceURL.searchParams.has('compositionCompare')&&!sourceURL.searchParams.has('compositionFrom')&&sourceURL.searchParams.get('compositionView')!=='overview'&&!!sourceMetric&&sourceMetric.id===metric?.id&&(!sourceState||!!sourceMetric.states[sourceState])&&(!sourceURL.searchParams.has('only')||!!sourceState)&&['share','count'].includes(sourceURL.searchParams.get('compositionMeasure')??'');
-  return {metric:metric?.id??'',measure:p.get('compositionMeasure')==='count'?'count':'share',compare:!overview&&p.get('compositionCompare')==='scale'&&validSource,sourceQuery:!overview&&validSource?source:null,overview};
+  return {metric:metric?.id??'',measure:p.get('compositionMeasure')==='count'?'count':'share',compare:!overview&&p.get('compositionCompare')==='scale'&&validSource,sourceQuery:!overview&&validSource?source:null,overview,mapMode:p.get('compositionMap')==='single'?'single':'combined'};
 }
 export function writeMexicoCompositionSelection(url:URL,selection:MexicoCompositionSelection,category:MexicoPopulationCategory):URL {
   const next=new URL(url);for(const key of mexicoCompositionKeys)next.searchParams.delete(key);
   if(category==='distribution'||!selection.metric)return next;
   if(selection.overview){next.searchParams.set('compositionView','overview');return next;}
   next.searchParams.set('compositionMetric',selection.metric);next.searchParams.set('compositionMeasure',selection.measure);
+  if(selection.mapMode==='single')next.searchParams.set('compositionMap','single');
   if(selection.compare&&selection.sourceQuery?.startsWith('?')){next.searchParams.set('compositionCompare','scale');next.searchParams.set('compositionFrom',selection.sourceQuery);}
   return next;
 }

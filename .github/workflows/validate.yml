@@ -109,6 +109,7 @@ jobs:
       # Real screenshots of this exact build, using Chrome already installed on
       # the runner. No browser downloads, deployment, or additional permissions.
       - name: Capture US and Mexico agriculture review
+        if: (github.head_ref || github.ref_name) != 'codex/mexico-second-wave-20261011'
         shell: bash
         timeout-minutes: 6
         run: |
@@ -121,12 +122,31 @@ jobs:
           REVIEW_CHROME_PATH="$chrome_path" npm run test:review:agriculture
 
       - name: Upload agriculture screenshots and validation metadata
-        if: always()
+        if: always() && (github.head_ref || github.ref_name) != 'codex/mexico-second-wave-20261011'
         uses: actions/upload-artifact@v4
         with:
           name: mexico-agriculture-review-${{ github.run_id }}
           path: review-artifacts/mexico-agriculture
           if-no-files-found: warn
+          retention-days: 7
+
+      - name: Capture overlapping Mexico ethnicity contours
+        if: (github.head_ref || github.ref_name) == 'codex/mexico-second-wave-20261011'
+        shell: bash
+        timeout-minutes: 4
+        run: |
+          set -euo pipefail
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          test -n "$chrome_path"
+          REVIEW_CHROME_PATH="$chrome_path" MEXICO_FOCUS_SCOPE=ethnicity-overlap node scripts/capture-mexico-composition-focused.mjs
+
+      - name: Upload overlapping Mexico ethnicity contours
+        if: always() && (github.head_ref || github.ref_name) == 'codex/mexico-second-wave-20261011'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mexico-ethnicity-overlap-${{ github.run_id }}
+          path: review-artifacts/mexico-ethnicity-overlap
+          if-no-files-found: error
           retention-days: 7
 
       - name: Capture shared agriculture and Russia forestry statistics
