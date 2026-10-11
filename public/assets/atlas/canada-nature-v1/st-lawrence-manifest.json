@@ -3,11 +3,9 @@
   "publisher": "Natural Resources Canada / Geographical Names Board of Canada",
   "title": "CGNDB St. Lawrence River official geographical feature",
   "catalogueUrl": "https://geonames.nrcan.gc.ca/search-place-names/unique?id=EFGFK",
-  "featureUrl": "https://geogratis.gc.ca/services/geoname/en/features/4d00fe4cba2011d892e2080020a0f4c9.json",
   "expandedUrl": "https://geogratis.gc.ca/services/geoname/en/geonames/EFGFK.geojson?expand=feature",
   "termsUrl": "https://www.canada.ca/en/transparency/terms.html",
   "retrievedAt": "2026-10-11",
-  "featureId": "4d00fe4cba2011d892e2080020a0f4c9",
   "geonameId": "EFGFK",
   "status": "official",
   "sourceRelevance": 5000000,
@@ -41,5 +39,6 @@
   },
   "otherRiverCount": 83,
   "otherRiverFeaturesSha256": "f484615fd0a99032dd4e83ff61498625ab86c4562058cb7688458ea1eb0e7d32",
-  "displaySha256": "d53cbf632b25711d7333b1ff05494948dead4c7fee43f2126bd9da073dbfb28b"
+  "displaySha256": "d53cbf632b25711d7333b1ff05494948dead4c7fee43f2126bd9da073dbfb28b",
+  "sourceArchive": "data-source/atlas/canada/st-lawrence/provenance.json"
 }
