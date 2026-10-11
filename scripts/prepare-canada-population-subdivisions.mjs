@@ -1,7 +1,7 @@
 /** Prepare source-joined CSD densities; counts are never spatially allocated. */
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {gzipSync} from 'node:zlib';
+import {gzipSync,brotliCompressSync,constants} from 'node:zlib';
 import path from 'node:path';
 import {readZipEntries,inverseCanadaLambert,signedRingArea,pointInRings,simplifyPolygonTopology,validatePolygonTopology} from './lib/canada-geography.mjs';
 const source=path.resolve(process.argv[2]??'data-source/atlas/canada/population-subdivisions');
@@ -56,9 +56,14 @@ const files={'subdivisions.json':JSON.stringify({year:2021,geography:'Census sub
 const acquisition=JSON.parse(await readFile(path.join(source,'../acquisition.json'),'utf8'));
 const manifest={year:2021,retrievedAt:new Date().toISOString().slice(0,10),geography:'2021 Census subdivision (CSD)',sourceCount:5161,sourceTable:'98-10-0002-01',sourceUrls:['https://www150.statcan.gc.ca/n1/tbl/csv/98100002-eng.zip','https://geo.statcan.gc.ca/geo_wa/rest/services/2021/Digital_boundary_files/MapServer/9'],sourceSha256:{tableZip:hash(csvZip),combinedBoundaryResponse:hash(boundaryBytes)},boundaryPages:acquisition.filter(r=>r.features),licence:'https://www.statcan.gc.ca/en/terms-conditions/open-licence',method:'Exact DGUID/CSDUID join. Population and density are original 2021 CSD values. No geographic allocation or interpolation. Display geometry is the official StatCan 2021 digital boundary (including administrative water extent); published density uses original land area, never polygon-derived area. Display borders are generalized with topology-aware source-vertex selection and original fallback. Generalization affects borders only; original table density is unchanged.',topology,outputs:Object.fromEntries(Object.entries(files).map(([name,text])=>[name,{bytes:Buffer.byteLength(text),sha256:hash(text)}]))};
 files['subdivisions-manifest.json']=JSON.stringify(manifest,null,2)+'\n';await mkdir(path.join(source,'prepared'),{recursive:true});
-const logSources=new Set((process.env.CANADA_REVIEW_LOG_SOURCES??'population/prepared/subdivisions.json,population/prepared/subdivisions.geojson,population/prepared/subdivisions-manifest.json').split(','));
+const logSources=new Set((process.env.CANADA_REVIEW_LOG_SOURCES??'population/prepared/subdivisions.json,population/prepared/subdivisions-manifest.json').split(','));
 for(const [file,text]of Object.entries(files)){
  await writeFile(path.join(source,'prepared',file),text);const encoded=gzipSync(text,{mtime:0}).toString('base64');
  console.log('CANADA_REVIEW_PREPARED_STATUS '+JSON.stringify({file,bytes:Buffer.byteLength(text),gzipBase64Bytes:encoded.length,sha256:hash(text)}));
  if(logSources.has('population/prepared/'+file))for(let offset=0;offset<encoded.length;offset+=120000)console.log('CANADA_REVIEW_SOURCE '+JSON.stringify({file:'population/prepared/'+file,part:offset/120000,parts:Math.ceil(encoded.length/120000),gzipBase64:encoded.slice(offset,offset+120000)}));
+ if(file==='subdivisions.geojson'){
+  const compact=brotliCompressSync(Buffer.from(text),{params:{[constants.BROTLI_PARAM_QUALITY]:11}}).toString('base64');
+  console.log('CANADA_REVIEW_BROTLI_STATUS '+JSON.stringify({file,bytes:Buffer.byteLength(text),brotliBase64Bytes:compact.length,sha256:hash(text)}));
+  for(let offset=0;offset<compact.length;offset+=120000)console.log('CANADA_REVIEW_BROTLI '+JSON.stringify({file:'population/prepared/'+file,part:offset/120000,parts:Math.ceil(compact.length/120000),brotliBase64:compact.slice(offset,offset+120000)}));
+ }
 }
