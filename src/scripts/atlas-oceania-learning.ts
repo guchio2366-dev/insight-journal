@@ -2,16 +2,17 @@ import {withBase} from '../lib/urls';
 import {createRegionalClimateSelection} from './atlas-regional-climate-selection';
 import {renderOceaniaRequiredLegend} from './atlas-oceania-legend';
 import {getOceaniaComparisonReading} from '../data/atlas/oceania-comparison-reading';
+import {oceaniaIndustryReadingThemes,oceaniaIndustryRepresentativeMarks} from '../data/atlas/oceania-industry-reading';
 import {oceaniaFields,oceaniaCountries,oceaniaLayers,oceaniaThemes,oceaniaPopulationReading,oceaniaOverviewReadings,getOceaniaFarmingGeography,createOceaniaState,getOceaniaTheme,getOceaniaLayer,renderOceaniaScene,renderOceaniaLegend,oceaniaCoverage,oceaniaFocusName,type OceaniaField,type OceaniaState,type OceaniaSource} from '../data/atlas/oceania-learning';
 
 const htmlEscape=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
-const ownKeys=['theme','layer','place','scope','view','compare','reading','single'];
+const ownKeys=['theme','layer','place','scope','view','compare','reading','single','industryLocation'];
 export function initOceaniaLearningAtlas(root:HTMLElement):void{
  if(root.dataset.oceaniaReady==='true')return;
  const field=root.dataset.field as OceaniaField;
  let state=createOceaniaState(location.search,field);
  const climateSelection=createRegionalClimateSelection(root,'oceania',()=>field==='nature'&&state.layer==='climate'&&!state.comparison,mutate=>update(mutate));
- const isSelectedReading=()=>new URLSearchParams(location.search).get('reading')==='selection'||state.place!=='all'||state.scope!=='all'||(field==='agriculture'&&state.layer!=='farming-all');
+ const isSelectedReading=()=>new URLSearchParams(location.search).get('reading')==='selection'||state.place!=='all'||state.scope!=='all'||!!state.industryLocation||(field==='agriculture'&&state.layer!=='farming-all');
  let selectedReading=isSelectedReading();
  const overview=oceaniaOverviewReadings[field];
  const one=<T extends HTMLElement=HTMLElement>(hook:string)=>root.querySelector<T>(`[data-${hook}]`)!;
@@ -21,7 +22,7 @@ export function initOceaniaLearningAtlas(root:HTMLElement):void{
   const url=new URL(href,location.href);for(const key of ownKeys)url.searchParams.delete(key);
   climateSelection.serialize(url,s.field==='nature'&&s.layer==='climate'&&!s.comparison&&url.pathname.includes('/nature/'));
   url.searchParams.set('theme',s.theme);url.searchParams.set('layer',s.layer);url.searchParams.set('place',s.place);url.searchParams.set('scope',s.scope);
-  if(s.comparison)url.searchParams.set('view','comparison');url.searchParams.set('compare',s.compareLayer);if(s.field==='agriculture'&&s.layer!=='farming-all'&&s.single)url.searchParams.set('single','1');if(selectedReading)url.searchParams.set('reading','selection');const params=new URLSearchParams(location.search);for(const flag of ['only','fallback']){const value=params.get(flag);if(value==='0'||value==='1')url.searchParams.set(flag,value);else url.searchParams.delete(flag);}return url;
+  if(s.comparison)url.searchParams.set('view','comparison');url.searchParams.set('compare',s.compareLayer);if(s.field==='agriculture'&&s.layer!=='farming-all'&&s.single)url.searchParams.set('single','1');if(s.field==='industry'&&['industry-all','places'].includes(s.layer)&&s.industryLocation)url.searchParams.set('industryLocation',s.industryLocation);if(selectedReading)url.searchParams.set('reading','selection');const params=new URLSearchParams(location.search);for(const flag of ['only','fallback']){const value=params.get(flag);if(value==='0'||value==='1')url.searchParams.set(flag,value);else url.searchParams.delete(flag);}return url;
  };
  const chooseCountryTheme=()=>{
   if(state.place==='all')return;
@@ -59,12 +60,16 @@ export function initOceaniaLearningAtlas(root:HTMLElement):void{
   text('theme-title',contextualReading?theme.title:selectedName?selectedName+'の'+layer.title:overview.title);text('takeaway',contextualReading?theme.takeaway:overview.takeaway);text('explanation',contextualReading?theme.explanation:selectedName?selectedName+'を選択しています。 '+layer.coverage:overview.explanation);
   if(field==='nature'&&layer.id!=='climate'){text('theme-title',layer.title);text('takeaway',layer.id==='precipitation'?'長期の年降水量は地域ごとに違います。地図の青い階級と250 mm間隔の線を照らし合わせて読みます。':layer.id==='rivers'?'名称付きの代表河川の位置を確認します。線の順序から流向や河口は判断しません。':'海抜500 mごとの段階色と等高線から、大陸・島々の高さの違いを読みます。');text('explanation',layer.coverage);}
   if(field==='agriculture'){one('geography-reading').textContent=getOceaniaFarmingGeography(layer.id,state.place);text('explanation',overview.explanation);}
+  const industryMark=field==='industry'?oceaniaIndustryRepresentativeMarks.find(mark=>mark.id===state.industryLocation):undefined;
+  const industryTheme=industryMark?oceaniaIndustryReadingThemes.find(item=>item.marks.some(mark=>mark.id===industryMark.id)):undefined;
+  const industryReturn=root.querySelector<HTMLButtonElement>('[data-oceania-industry-return]');if(industryReturn)industryReturn.hidden=!industryMark;
+  if(industryMark){text('theme-title',industryMark.name);text('takeaway',industryTheme?.takeaway??oceaniaOverviewReadings.industry.takeaway);text('explanation',industryMark.note);}
   text('coverage',oceaniaCoverage(layer,state));text('comparison',compare.title+'と比べる →');text('return','← '+layer.title+'へ戻る：'+targetName()+(state.scope!=='country'&&state.place!=='all'?'／選択：'+oceaniaCountries.find(c=>c.code===state.place)?.name:''));text('comparison-explanation',comparisonText());
   const shorter=one(layer.legend.length<=compare.legend.length?'original-map':'comparison-map').closest('.oceania-learning-map-panel');shorter?.append(one('comparison-explanation'));
   const keys:Record<string,keyof typeof oceaniaPopulationReading.contexts>={AUS:'australia',NZL:'new-zealand',PNG:'papua-new-guinea',FJI:'fiji',KIR:'tarawa',PYF:'tahiti',WSM:'samoa'};
   if(field==='population'&&selectedReading){const context=oceaniaPopulationReading.contexts[keys[state.place]??'overview'];text('explanation',[context,theme.explanation.replace(context,'').trim()].filter(Boolean).join(' '));}
-  text('social-context',field==='agriculture'?getOceaniaFarmingGeography(layer.id):oceaniaPopulationReading.socialConnections.map(c=>c.title+'：'+c.text).join('\n\n'));
-  sources([...layer.sources,...theme.sources,...(field==='agriculture'?[...getOceaniaLayer('farming-all').sources,...oceaniaThemes.filter(t=>t.field==='agriculture').flatMap(t=>t.sources)]:[]),...(state.comparison?[...compare.sources,...getOceaniaComparisonReading(state).sources]:[]),...oceaniaPopulationReading.sources.filter(s=>s.id.startsWith('world-bank')||s.id.startsWith('abs')).map(s=>({title:s.title,url:s.url}))]);
+  text('social-context',field==='agriculture'?getOceaniaFarmingGeography(layer.id):field==='population'?oceaniaPopulationReading.socialConnections.map(c=>c.title+'：'+c.text).join('\n\n'):industryTheme?.explanation??theme.explanation);
+  sources([...layer.sources,...theme.sources,...(industryMark?[{title:industryMark.name+'の位置資料',url:industryMark.sourceUrl},...(industryTheme?.sources??[])]:[]),...(field==='agriculture'?[...getOceaniaLayer('farming-all').sources,...oceaniaThemes.filter(t=>t.field==='agriculture').flatMap(t=>t.sources)]:[]),...(state.comparison?[...compare.sources,...getOceaniaComparisonReading(state).sources]:[]),...oceaniaPopulationReading.sources.filter(s=>s.id.startsWith('world-bank')||s.id.startsWith('abs')).map(s=>({title:s.title,url:s.url}))]);
   root.querySelectorAll<HTMLAnchorElement>('[data-field-link]').forEach(a=>{
    const nextField=a.dataset.fieldLink as OceaniaField,available=oceaniaThemes.filter(t=>t.field===nextField),nextTheme=available.find(t=>t.countryCodes.includes(state.place))??available[0];
    a.href=serialized({...state,field:nextField,theme:nextTheme.id,layer:nextField==='industry'?'industry-all':nextField==='agriculture'?'farming-all':nextTheme.defaultLayer,compareLayer:nextTheme.comparisonLayer,comparison:false},withBase(`/atlas/oceania/${nextField}/`)).href;
@@ -76,15 +81,18 @@ export function initOceaniaLearningAtlas(root:HTMLElement):void{
  const update=(mutate:()=>void,focus?:string)=>{
   mutate();history.pushState({},'',serialized(state));render();if(focus)one(focus).focus();
  };
- one<HTMLSelectElement>('place').addEventListener('change',e=>update(()=>{state.place=(e.target as HTMLSelectElement).value;if(state.place==='all')state.scope='all';selectedReading=state.place!=='all'||(field==='agriculture'&&state.layer!=='farming-all');chooseCountryTheme();}));
- one<HTMLSelectElement>('layer').addEventListener('change',e=>update(()=>{state.layer=(e.target as HTMLSelectElement).value;state.single=false;selectedReading=state.layer!=='farming-all'||state.place!=='all'||state.scope!=='all';const matching=oceaniaThemes.find(t=>t.field===field&&t.defaultLayer===state.layer)||oceaniaThemes.find(t=>t.field===field&&t.id===(['sheep','cattle'].includes(state.layer)?'livestock':['coconut','cacao'].includes(state.layer)?'tropical-crops':state.theme));if(matching)state.theme=matching.id;}));
+ one<HTMLSelectElement>('place').addEventListener('change',e=>update(()=>{state.place=(e.target as HTMLSelectElement).value;state.industryLocation=undefined;if(state.place==='all')state.scope='all';selectedReading=state.place!=='all'||(field==='agriculture'&&state.layer!=='farming-all');chooseCountryTheme();}));
+ one<HTMLSelectElement>('layer').addEventListener('change',e=>update(()=>{state.layer=(e.target as HTMLSelectElement).value;state.single=false;state.industryLocation=undefined;selectedReading=state.layer!=='farming-all'||state.place!=='all'||state.scope!=='all';const matching=oceaniaThemes.find(t=>t.field===field&&t.defaultLayer===state.layer)||oceaniaThemes.find(t=>t.field===field&&t.id===(['sheep','cattle'].includes(state.layer)?'livestock':['coconut','cacao'].includes(state.layer)?'tropical-crops':state.theme));if(matching)state.theme=matching.id;}));
  root.querySelector<HTMLButtonElement>('[data-farming-single]')?.addEventListener('click',()=>update(()=>{state.single=!state.single;}));
  one<HTMLSelectElement>('compare-layer').addEventListener('change',e=>update(()=>{state.compareLayer=(e.target as HTMLSelectElement).value;}));
- root.querySelectorAll<HTMLButtonElement>('[data-theme]').forEach(b=>b.addEventListener('click',()=>update(()=>{const t=getOceaniaTheme({field,theme:b.dataset.theme!});selectedReading=true;state.theme=t.id;if(field!=='industry'){state.layer=t.defaultLayer;state.single=false;}})));
+ root.querySelectorAll<HTMLButtonElement>('[data-theme]').forEach(b=>b.addEventListener('click',()=>update(()=>{const t=getOceaniaTheme({field,theme:b.dataset.theme!});selectedReading=true;state.theme=t.id;state.industryLocation=undefined;if(field!=='industry'){state.layer=t.defaultLayer;state.single=false;}})));
  root.querySelectorAll<HTMLButtonElement>('[data-scope]').forEach(b=>b.addEventListener('click',()=>update(()=>{state.scope=b.dataset.scope as OceaniaState['scope'];selectedReading=state.scope!=='all'||state.place!=='all'||(field==='agriculture'&&state.layer!=='farming-all');if(state.scope==='country')chooseCountryTheme();})));
  one('comparison').addEventListener('click',()=>update(()=>{state.comparison=true;},'return'));
  one('return').addEventListener('click',()=>update(()=>{state.comparison=false;},'comparison'));
- root.addEventListener('click',e=>{const selected=(e.target as Element).closest<SVGElement>('[data-map-place]');if(selected)update(()=>{selectedReading=true;state.place=selected.dataset.mapPlace!;chooseCountryTheme();});});
+ root.querySelector<HTMLButtonElement>('[data-oceania-industry-return]')?.addEventListener('click',()=>update(()=>{state.industryLocation=undefined;selectedReading=state.place!=='all'||state.scope!=='all';}));
+ const chooseIndustryMark=(id:string)=>{const mark=oceaniaIndustryRepresentativeMarks.find(item=>item.id===id);if(!mark||field!=='industry')return;update(()=>{state.industryLocation=id;state.place='all';state.scope='all';state.theme=oceaniaIndustryReadingThemes.find(item=>item.marks.some(itemMark=>itemMark.id===id))?.id??state.theme;selectedReading=true;});root.querySelector<SVGElement>(`[data-oceania-industry-location="${id}"]`)?.focus();};
+ root.addEventListener('click',e=>{const target=e.target as Element;const industry=target.closest<SVGElement>('[data-oceania-industry-location]');if(industry){chooseIndustryMark(industry.dataset.oceaniaIndustryLocation!);return;}const selected=target.closest<SVGElement>('[data-map-place]');if(selected)update(()=>{selectedReading=true;state.industryLocation=undefined;state.place=selected.dataset.mapPlace!;chooseCountryTheme();});});
+ root.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const industry=(e.target as Element).closest<SVGElement>('[data-oceania-industry-location]');if(industry){e.preventDefault();chooseIndustryMark(industry.dataset.oceaniaIndustryLocation!);}});
  window.addEventListener('popstate',()=>{state=createOceaniaState(location.search,field);selectedReading=isSelectedReading();climateSelection.read();render();});
  history.replaceState({},'',serialized(state));render();
  let resizing=false;new ResizeObserver(()=>{if(resizing)return;resizing=true;requestAnimationFrame(()=>{render();resizing=false;});}).observe(root);
