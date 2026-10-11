@@ -313,12 +313,14 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
      if(key==='elevation')labelBoxes[labelBoxes.length-1]=measuredTextBox(node,labelBoxes.at(-1)!);
     }
    }
-   if(contourLabels?.value)for(const item of contourLabels.value){
-    const [x,y]=projectAfrica(item.coordinates),node=svg('text',{x,y,'font-size':11*labelScale,'font-weight':650,fill:key==='water-rain'?'#234e75':'#5b513f',stroke:'#fffdf8','stroke-width':3*labelScale,'paint-order':'stroke','text-anchor':'middle','data-africa-contour-label':item.value,'pointer-events':'none'});node.textContent=item.label;group.append(node);
-    if(key==='elevation'){
+   // Preserve wet coastal peaks when two nearby rainfall captions compete.
+   const contourCaptions=key==='water-rain'?[...(contourLabels?.value??[])].sort((a,b)=>b.value-a.value):contourLabels?.value??[];
+   for(const item of contourCaptions){
+    const [x,y]=projectAfrica(item.coordinates),caption=key==='water-rain'?`${item.label} mm`:item.label,node=svg('text',{x,y,'font-size':11*labelScale,'font-weight':650,fill:key==='water-rain'?'#234e75':'#5b513f',stroke:'#fffdf8','stroke-width':3*labelScale,'paint-order':'stroke','text-anchor':'middle','data-africa-contour-label':item.value,'pointer-events':'none'});node.textContent=caption;group.append(node);
+    if(key==='elevation'||key==='water-rain'){
      // Keep the original contour anchor. Omit a redundant numeric annotation
      // if its glyphs/halo collide with a higher-priority terrain name or number.
-     const width=Array.from(item.label).length*7*labelScale,box=measuredTextBox(node,{x:x-width/2,y:y-12*labelScale,w:width,h:15*labelScale}),gap=4*labelScale;
+     const width=Array.from(caption).length*7*labelScale,box=measuredTextBox(node,{x:x-width/2,y:y-12*labelScale,w:width,h:15*labelScale}),gap=4*labelScale;
      const clipped=box.x<viewport[0]||box.x+box.w>viewport[0]+viewport[2]||box.y<viewport[1]||box.y+box.h>viewport[1]+viewport[3];
      if(clipped||labelBoxes.some(other=>box.x<other.x+other.w+gap&&box.x+box.w>other.x-gap&&box.y<other.y+other.h+gap&&box.y+box.h>other.y-gap))node.remove();else labelBoxes.push(box);
     }

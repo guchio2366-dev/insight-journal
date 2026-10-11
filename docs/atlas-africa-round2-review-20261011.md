@@ -64,3 +64,5 @@ head308245eの最終CIはValidate site（PR/push）、林業PC、産業が成功
 公開までの追加承認は反映済み。地域全体に未達があるためDraftを維持し、公開順は親と合わせる。追加承認後、同じ正規取得操作を一度再試行したが、gh run view --log-failed/gh run downloadはForbidden、ESA正規proxy/FAO GLC-SHARE/FAOSTAT QCL・FBS・TM/PourPointsは403、Library画像3枚はprepare成功後の同helper materializeがdownload failed、Chromiumは安全設定の同起動でSUID ownership FATAL。ESAの最初の再試行起動で環境proxy設定が付いていなかった点は訂正し、正規proxyで403を確認した。原データ取得なし。再拒否後の迂回や安全設定/権限変更は行わない。
 
 親の実画像QAで、標高のエチオピア高地/ドラケンスバーグ付近に数値と地形名の重複を確認。標高は地形名を先に描き、実際のSVG文字bboxを共有して、4px相当の余白も含めて衝突する数値を省く。数値の座標は原等高線上の固定anchorを保持し、架空の移動や原等高線/数値格子の変更は行わない。PC specは3幅すべてで地形名と残存数値の実bbox重複がないこと、元anchorの数値注記が残ることを確認する。気候/自然の関連16単体は合格。
+
+親のhead2f3acf3正規CI読取では、1920のマダガスカル4都市の通常クリック、農畜産両toggle、森林URL復帰は合格した後、rain-labelsの数値だけの表示がmm単位のassertionに失敗（spec139:98）。親の画像QAでも標高名の重複改善を確認済み。降水の表示captionにmmを追加し、長くなる文字を実bbox＋4px余白で衝突検査する。近い2500/2250mmが競合するギニア湾では高雨量の注記を優先し、重なる反復数値を省く。残す文字は固定の元等雨量線anchorに置き、20原anchor・線・青色帯・照会原値のデータは変更しない。PC specのmm要求は保持し、3幅で数値＋mmの実bbox重複0を追加検証する。原分布操作テストもmm実描画と元anchor一致を検証する。
