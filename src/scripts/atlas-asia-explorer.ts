@@ -74,7 +74,11 @@ function start(root:HTMLElement) {
   let trade:ReturnType<typeof createAsiaTrade>|null=null;
   context.stories=Object.fromEntries(context.fields.map(field=>[field,asiaPlaceReadings.filter(s=>s.region===config.regionId&&s.field===field).map(s=>s.id)]));
   if(config.regionId==='south-central-asia')context.stories.population=[...(context.stories.population??[]),...southCentralReligionLocalCases.filter(c=>context.countries.includes(c.code)).map(c=>c.id)];
-  function readState():AsiaState {return normalizePlaceReading(config.regionId,readBaseState());}
+  function normalizeReading(next:AsiaState):AsiaState {
+    if(config.regionId==='south-central-asia'&&next.field==='population'&&next.topic==='religion'&&southCentralReligionLocalCases.some(item=>item.id===next.story&&item.code===next.place))return next;
+    return normalizePlaceReading(config.regionId,next);
+  }
+  function readState():AsiaState {return normalizeReading(readBaseState());}
   function readBaseState():AsiaState {
     let restored=normalizeScopedIndustryState(config.industry,readAsiaAtlasState(new URL(location.href),context));
     if(restored.field==='industry'&&config.industry&&hasIndustryCountryScope(config.industry)&&restored.place&&!industryCountryChoices(config.industry).some(c=>c.code===restored.place))restored={...restored,place:null,detail:null,point:null,story:null};
@@ -187,7 +191,7 @@ function start(root:HTMLElement) {
     if(next.field==='population'&&['ethnicity','religion'].includes(next.topic??''))next={...next,point:null,place:config.regionId==='south-central-asia'&&next.topic==='religion'&&context.countries.includes(next.place??'')&&[...southCentralReligionCensuses,...southCentralReligionReports].some(c=>c.code===next.place)?next.place:null,city:null};
     if(next.field==='population')next={...next,point:next.point??config.cities.find(c=>c.id===next.city)?.coordinates??null,city:null};
     if(social)next=social.normalize(next);
-    state=normalizePlaceReading(config.regionId,next);selectedClass=null;selectedPoint=state.point??null;persist(true);render();const reading=$('.asia-reading-scroll');if(reading)reading.scrollTop=0;if(fit)fitSelection();
+    state=normalizeReading(next);selectedClass=null;selectedPoint=state.point??null;persist(true);render();const reading=$('.asia-reading-scroll');if(reading)reading.scrollTop=0;if(fit)fitSelection();
   }
   function camera():AsiaCamera|null {if(!mapReady||!map)return state.camera;const c=map.getCenter();return{lng:c.lng,lat:c.lat,zoom:map.getZoom()};}
   function recordMapCamera(){if(!map)return;const center=map.getCenter();root.dataset.mapCamera=JSON.stringify({lng:center.lng,lat:center.lat,zoom:map.getZoom()});}
