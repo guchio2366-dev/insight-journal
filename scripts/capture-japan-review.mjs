@@ -10,6 +10,9 @@ import {readFile,mkdir,stat,writeFile} from 'node:fs/promises';
 import {execFileSync} from 'node:child_process';
 import path from 'node:path';
 import {chromium} from 'playwright';
+import {gunzipSync} from 'node:zlib';
+const densityMeta=JSON.parse(await readFile('public/assets/atlas/japan-v1/population.json','utf8'));const densityBytes=gunzipSync(await readFile('public/assets/atlas/japan-v1/population.density.gz'));const densityView=new DataView(densityBytes.buffer,densityBytes.byteOffset,densityBytes.byteLength);const [dw,ds,de,dn]=densityMeta.bounds3857,R=6378137;const sourceSmallCells=[];for(let row=0;row<densityMeta.height;row++)for(let col=0;col<densityMeta.width;col++){const value=densityView.getFloat32((row*densityMeta.width+col)*4,true);if(value>0&&value<.05){const x=dw+(col+.5)*(de-dw)/densityMeta.width,y=dn-(row+.5)*(dn-ds)/densityMeta.height;sourceSmallCells.push({lng:x/R*180/Math.PI,lat:(2*Math.atan(Math.exp(y/R))-Math.PI/2)*180/Math.PI});}}
+const densityAt=(lng,lat)=>{const x=lng*Math.PI/180*R,y=Math.log(Math.tan(Math.PI/4+lat*Math.PI/360))*R;const col=Math.floor((x-dw)/(de-dw)*densityMeta.width),row=Math.floor((dn-y)/(dn-ds)*densityMeta.height);return col>=0&&col<densityMeta.width&&row>=0&&row<densityMeta.height?densityView.getFloat32((row*densityMeta.width+col)*4,true):null;};
 const output=path.resolve(process.env.JAPAN_REVIEW_OUTPUT??'review-artifacts/japan');await mkdir(output,{recursive:true});
 const mime={'.html':'text/html;charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.png':'image/png','.jpg':'image/jpeg','.svg':'image/svg+xml','.gz':'application/gzip','.woff2':'font/woff2'};
 const root=path.resolve('dist'),base='/insight-journal';
@@ -55,8 +58,19 @@ try{
     await page.mouse.click(frame.x+frame.width/2+(139.75-before.lng)*world/360,frame.y+frame.height/2+(mercator(before.lat)-mercator(35.69))*world/360);
     await page.waitForFunction(()=>document.querySelector('[data-japan-grid-value]')?.textContent.includes('人/km²（2020年・5km集約推計）'));
     report.cases.push({width,name:'population numeric lookup',value:await page.locator('[data-japan-grid-value]').textContent()});
-    // A retained cluster has density below 0.05; integer screen pixels must not turn it into zero.
-    const tinyPoint={x:frame.x+frame.width/2+(142.08399209486166-before.lng)*world/360,y:frame.y+frame.height/2+(mercator(before.lat)-mercator(44.408962586621456))*world/360};const tinyHit=await page.evaluate(p=>document.elementFromPoint(p.x,p.y)?.outerHTML.slice(0,600),tinyPoint);assert(tinyHit?.includes('maplibregl-canvas'),'small positive query reaches the actual canvas: '+JSON.stringify({tinyPoint,tinyHit}));await page.mouse.click(Math.round(tinyPoint.x),Math.round(tinyPoint.y));try{await page.waitForFunction(()=>document.querySelector('[data-japan-grid-value]').textContent.includes('0超〜0.1未満 人/km²'));}catch(error){throw Error('Small positive query result: '+JSON.stringify({value:await page.locator('[data-japan-grid-value]').textContent(),tinyPoint,frame,before,actual:await camera(),currentFrame:await page.locator('.japan-map-frame').boundingBox()}),{cause:error});}sameCamera(await camera(),before);report.cases.push({width,name:'real small positive density remains distinct from zero',value:await page.locator('[data-japan-grid-value]').textContent()});
+    // Select an original small positive cell whose integer screen pixel is unobscured.
+    // Search the retained source before clicking; never condition the assertion on UI output.
+    let tinyPoint,tinyExpected,tinyHit;
+    for(const cell of sourceSmallCells){
+     const x=Math.round(frame.x+frame.width/2+(cell.lng-before.lng)*world/360),y=Math.round(frame.y+frame.height/2+(mercator(before.lat)-mercator(cell.lat))*world/360);
+     if(x<frame.x+2||x>frame.x+frame.width-2||y<frame.y+2||y>frame.y+frame.height-2)continue;
+     const lng=before.lng+(x-frame.x-frame.width/2)*360/world,mp=mercator(before.lat)-(y-frame.y-frame.height/2)*360/world,lat=(2*Math.atan(Math.exp(mp*Math.PI/180))-Math.PI/2)*180/Math.PI;
+     const expected=densityAt(lng,lat);if(!(expected>0&&expected<.05))continue;
+     const hit=await page.evaluate(p=>document.elementFromPoint(p.x,p.y)?.outerHTML.slice(0,600),{x,y});if(!hit?.includes('maplibregl-canvas'))continue;
+     tinyPoint={x,y,lng,lat};tinyExpected=expected;tinyHit=hit;break;
+    }
+    assert(tinyPoint,'original small positive cell has an unobscured integer canvas pixel');await page.mouse.click(tinyPoint.x,tinyPoint.y);
+    try{await page.waitForFunction(()=>document.querySelector('[data-japan-grid-value]').textContent.includes('0超〜0.1未満 人/km²'));}catch(error){throw Error('Small positive query result: '+JSON.stringify({value:await page.locator('[data-japan-grid-value]').textContent(),tinyPoint,tinyExpected,tinyHit,frame,before,actual:await camera(),currentFrame:await page.locator('.japan-map-surface canvas').boundingBox()}),{cause:error});}sameCamera(await camera(),before);report.cases.push({width,name:'real small positive density remains distinct from zero',sourceExpected:tinyExpected,point:tinyPoint,value:await page.locator('[data-japan-grid-value]').textContent()});
     await page.locator('[data-japan-topic="urban"]').click();await page.locator('[data-japan-urban-city]').selectOption('uc-5929');assert.deepEqual(await camera(),before);await shot('population-city');await page.locator('[data-japan-urban-city]').selectOption('jp-pop-niigata');sameCamera(await camera(),before);assert.match(await page.locator('[data-japan-reading-title]').textContent(),/越後/);await shot('population-niigata');await page.locator('[data-japan-urban-city]').selectOption('uc-5929');assert.equal(await page.locator('[data-japan-population-row]').count(),47);report.cases.push({width,name:'eight city and plain readings with exact 47-prefecture census table'});await page.locator('[data-japan-statistics="population"]').scrollIntoViewIfNeeded();await shot('population-statistics');await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));
    }
   }
