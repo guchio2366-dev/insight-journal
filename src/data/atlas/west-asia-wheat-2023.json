@@ -1,0 +1,34 @@
+{
+  "packetVersion": "2023-wheat-private-handoff-v1",
+  "year": 2023,
+  "derivedFrom": "FAOSTAT official UI extracts analysed outside this executor; original ZIP is not present here",
+  "attribution": "FAO. 2025. FAOSTAT Food Balances (2010-) and Detailed trade matrix. Accessed 11 October 2026. CC BY 4.0; derived sums by analyst.",
+  "sourceFiles": {
+    "FBS1": {"name":"FBS_SAU_ARE_TUR_2023_all_items_all_elements.csv","sha256":"de027f3e4b6aee8752bfa81c21976911bca520f5650b07eb00c1feb6bf8a589a","records":3954},
+    "FBS2": {"name":"FBS_additional17_2023_all_items_all_elements.csv","sha256":"2340e3e01a56eb9e2a020172c70f94f8b0f6412075fecacf3731881828855a07","records":20273},
+    "TM1": {"name":"TM_SAU_ARE_TUR_2023_wheat_dates_olives_products.csv","sha256":"6bd8ce174c1a884bcb41475c757fa0f9e4be75409cc5edd02433356206252f79","records":3376},
+    "TM2": {"name":"TM_additional17_2023_wheat_dates_olives_products.csv","sha256":"efdee4a1f90cf040fa689637d67c76c18c22641580b8304f5d115b052597193c","records":4163}
+  },
+  "recordConvention": "1-based data record excluding CSV header; not necessarily a physical text line",
+  "FBS": {
+    "itemCode": "S2511", "item": "Wheat and products", "unit": "1000 t", "flag": "I: value imputed by a receiving agency",
+    "coverageM49": ["031","048","051","196","268","364","368","376","400","414","422","512","634","682","760","784","792","818","887"],
+    "absentM49": ["275"],
+    "elements": {"5072":"Stock Variation","5123":"Losses","5131":"Processing","5142":"Food","5154":"Other uses (non-food)","5170":"Residuals","5171":"Tourist consumption","5301":"Domestic supply quantity","5511":"Production","5521":"Feed","5527":"Seed","5611":"Import quantity","5911":"Export quantity"},
+    "examples": [
+      {"m49":"051","country":"Armenia","file":"FBS2","records":[2,13],"values":{"5072":68,"5123":46,"5131":7,"5142":449,"5154":4,"5170":-91,"5301":603,"5511":178,"5521":167,"5527":21,"5611":496,"5911":3}},
+      {"m49":"512","country":"Oman","file":"FBS2","records":[15249,15260],"values":{"5072":-73,"5123":0,"5131":10,"5142":279,"5154":0,"5170":-5,"5301":1463,"5511":8,"5521":1178,"5527":0,"5611":1721,"5911":339}},
+      {"m49":"792","country":"Türkiye","file":"FBS1","records":[1269,1280],"values":{"5072":4188,"5123":2912,"5131":16,"5142":14275,"5154":557,"5170":-10,"5301":33402,"5511":22000,"5521":14456,"5527":1196,"5611":25764,"5911":10175}}
+    ],
+    "exampleSum": {"5072":4183,"5123":2958,"5131":33,"5142":15003,"5154":561,"5170":-106,"5301":35468,"5511":22186,"5521":15801,"5527":1217,"5611":27981,"5911":10517},
+    "exampleValidation": {"sourceCells":36,"supplyLessExportAndStock":35467,"reportedDomesticSupply":35468,"returnedUsesIncludingSignedResidual":35467,"roundingGap1000t":-1,"unreturnedElement":"5171 Tourist consumption; not zero"},
+    "returnedCoverage": {"5072":19,"5123":19,"5131":6,"5142":19,"5154":16,"5170":19,"5171":3,"5301":19,"5511":18,"5521":19,"5527":16,"5611":19,"5911":19},
+    "returnedSums": {"5072":5651,"5123":6811,"5131":168,"5142":67742,"5154":945,"5170":-82,"5171":186,"5301":101860,"5511":56946,"5521":22646,"5527":3442,"5611":63930,"5911":13367}
+  },
+  "TM": {
+    "itemCode": "0111", "item": "Wheat (raw grain)", "unit": "t", "boundary": "M49 in editorial 20-country scope is internal; all others external",
+    "imports": {"element":"5610","reporters":16,"allReturned":30696387.54,"internal":191512.77,"external":30504874.77,"rows":178,"externalRows":141,"partners":[["643","Russian Federation",20184036.66],["804","Ukraine",4311396.77],["642","Romania",2290017.99],["036","Australia",1046043.88],["124","Canada",536904.7],[null,"Other returned external partners",2136474.77]]},
+    "exports": {"element":"5910","reportersAll":12,"reportersExternal":9,"allReturned":1982855.92,"internal":515196.6,"external":1467659.32,"rows":131,"externalRows":90,"partners":[["380","Italy",642242.1],["012","Algeria",271575.8],["788","Tunisia",145588.75],["724","Spain",75045.01],["056","Belgium",72831.38],[null,"Other returned external partners",260376.28]]}
+  },
+  "limits": ["FBS and TM cover different wheat definitions; never join the quantities into one account","Missing cells and missing reporters are not zero","Tourist consumption is not returned for the three complete examples","FBS values are rounded to 1000 t and 1-unit imbalance must not be forced closed","TM exports include re-exports and partners need not be final consumers or production origins","Calories of domestic origin and calorie-based self-sufficiency are unavailable"]
+}

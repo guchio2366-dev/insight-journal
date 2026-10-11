@@ -7,6 +7,7 @@ import {westFieldIntroductions,westIndustryCountries,westIndustryCountry,westInd
 import {westIndustrySites,westIndustryKind,westIndustryRole,westIndustryRoles} from '../data/atlas/west-asia-industry.mjs';
 import {westPlaceExamples} from '../data/atlas/west-asia-places.mjs';
 import westWorldShares from '../data/atlas/west-asia-world-shares.json';
+import westWheat2023 from '../data/atlas/west-asia-wheat-2023.json';
 import {westSawnwoodRow,westSawnwoodSeries} from '../data/atlas/west-asia-forestry.mjs';
 import {westNaturalAssets,westRiverGroundwater,westRepresentativeBasins,westNaturalKind,validateWestNaturalManifest,decodeWestNaturalCollection,assembleWestNaturalChunks,westGroundwaterReading,westWaterFeatureReading,westGeometryVisible} from '../lib/atlas-west-asia-natural.mjs';
 
@@ -355,6 +356,24 @@ async function init(root:HTMLElement){
   }catch{if(version===renderVersion){const heading=root.querySelector('[data-west-climate-class]');if(heading)heading.textContent='観測地点の気候区分を読み込めませんでした。';}}
  }
  function sourceLink(t:any){return t.indicator?'https://data.worldbank.org/indicator/'+t.indicator:'https://www.fao.org/faostat/en/#data/'+(t.faoDomain==='Inputs_LandUse'?'RL':'QCL');}
+ function wheatSupplyPanel(){
+  const fbs=westWheat2023.FBS;
+  const examples=fbs.examples.map(row=>{
+   const v=row.values as Record<string,number>,entry=v['5511']+v['5611'],production=entry?v['5511']/entry*100:0;
+   return `<li><strong>${esc(row.country)}</strong><span class="west-wheat-source-bar" role="img" aria-label="${esc(row.country)}の生産${format(v['5511'],0)}、輸入${format(v['5611'],0)}、千トン"><i style="width:${production.toFixed(2)}%"></i></span><small>生産 ${format(v['5511'],0)} ／ 輸入 ${format(v['5611'],0)}</small><small>国内供給 ${format(v['5301'],0)} · 食用 ${format(v['5142'],0)} · 飼料 ${format(v['5521'],0)}</small></li>`;
+  }).join('');
+  const totals=fbs.exampleSum;
+  return `<section class="west-wheat-supply" data-west-wheat-fbs><h3>小麦製品群｜供給と仕向け</h3><p>2023年、アルメニア・オマーン・トルコの収録がそろう3例。単位は千t。棒は各国の生産＋輸入の内訳で、国内消費の割合ではありません。</p><ul>${examples}</ul><p>3例合計：輸出 ${format(totals['5911'],0)}、在庫増減 ${format(totals['5072'],0)}、国内供給 ${format(totals['5301'],0)} 千t。在庫の正値は積増しです。</p><details><summary>用途・欠測と資料の範囲</summary><p>国内供給の内訳として、食用 ${format(totals['5142'],0)}、飼料 ${format(totals['5521'],0)}、種子 ${format(totals['5527'],0)}、損失 ${format(totals['5123'],0)}、加工 ${format(totals['5131'],0)}、その他 ${format(totals['5154'],0)}、符号付き残差 ${format(totals['5170'],0)} 千tを掲載。観光客消費は3例とも未掲載で、0とはしません。供給式と用途合計は各 ${format(westWheat2023.FBS.exampleValidation.roundingGap1000t,0)} 千tの丸め差があるため、完全均衡した流れ図ではありません。</p><p>FAOSTAT FBS「Wheat and products」（S2511）。対象20中19に国内供給があり、パレスチナは未掲載。生産は18、加工は6、観光客消費は3対象だけの収録です。3例は欠測が少ないため選んだ比較で、地域総量ではありません。<a href="https://www.fao.org/faostat/en/#data/FBS">原資料の定義</a></p></details></section>`;
+ }
+ function wheatTradePanel(){
+  const tm=westWheat2023.TM,trade=tm.exports,colors=['#376a87','#ae7140','#75995f','#8c6f9a','#c49a56','#b8c8c6'];
+  const partnerNames:Record<string,string>={'380':'イタリア','012':'アルジェリア','788':'チュニジア','724':'スペイン','056':'ベルギー','643':'ロシア','804':'ウクライナ','642':'ルーマニア','036':'オーストラリア','124':'カナダ'};
+  const partnerName=(entry:(string|number|null)[])=>entry[0]===null?'その他の返却された域外相手':partnerNames[String(entry[0])]??String(entry[1]);
+  let start=0;const sectors=trade.partners.map((entry,i)=>{const end=start+Number(entry[2])/trade.external*100,segment=`${colors[i]} ${start.toFixed(5)}% ${end.toFixed(5)}%`;start=end;return segment;}).join(',');
+  const destinations=trade.partners.map((entry,i)=>`<li><i style="background:${colors[i]}"></i><span>${esc(partnerName(entry))}</span><strong>${(Number(entry[2])/trade.external*100).toFixed(1)}%</strong></li>`).join('');
+  const origins=tm.imports.partners.slice(0,5).map(entry=>`<li>${esc(partnerName(entry))}：${(Number(entry[2])/tm.imports.external*100).toFixed(1)}%</li>`).join('');
+  return `<section class="west-wheat-trade" data-west-wheat-trade><h3>原穀小麦｜域外の相手国</h3><p>2023年・FAOSTAT詳細貿易行列。原穀小麦（CPC 0111）を報告した国だけの相手国別数量で、小麦製品群の需給とは合算しません。</p><div class="west-wheat-destinations"><span class="west-wheat-pie" role="img" aria-label="域外輸出先の上位5相手国とその他の割合" style="background:conic-gradient(${sectors})"></span><ol>${destinations}</ol></div><p>円の分母：域外輸出 ${format(trade.external,0)} t、9報告国の返却行。再輸出を含み、最終消費地を示しません。</p><details><summary>域外輸入元と集計範囲</summary><p>域外輸入は16報告国の返却行 ${format(tm.imports.external,0)} t。上位の相手国は次のとおりです。</p><ol>${origins}</ol><p>輸入・輸出とも域内取引は除外。未報告国は0としません。輸入16報告国、域外輸出9報告国で対象が異なります。<a href="https://www.fao.org/faostat/en/#data/TM">貿易行列の定義</a></p></details></section>`;
+ }
  function farmSupply(t:any){
   const box=root.querySelector<HTMLElement>('[data-west-farm-supply]');if(!box)return;
   const id=t.id==='farming-overview'?'wheat':t.id.replace(/-(irrigated|rainfed)$/,'');
@@ -362,7 +381,7 @@ async function init(root:HTMLElement){
   if(!subject||!Object.hasOwn(westWorldShares.rows,id)){box.hidden=true;box.innerHTML='';return;}
   box.hidden=false;
   const latest=rows?.at(-1),trend=rows?.map((r,i)=>`${8+i*16},${45-r.percent/Math.max(1,...rows.map(x=>x.percent))*37}`).join(' ');
-  box.innerHTML=`<section><h3>供給元 → 国内仕向け・輸出</h3><p>国別生産量は収録済みです。2024年・同じ品目と単位の輸入、輸出、在庫変化、国内仕向けは保存していません。<a href="https://www.fao.org/4/x9892e/x9892e02.htm">FAOの需給定義</a>に合わせた帯グラフにはこれらが必要です。生産量を輸出量や消費量には換算しません。</p></section><section><h3>輸出先の構成</h3><p><a href="https://data.fao.org/catalog/iso/955a7b61-ce56-4a04-adf5-61a3012eec84">FAOSTAT詳細貿易マトリックス</a>に相手国別数量の資料がありますが、今回の20対象・品目・2024年の原表を取得・照合できていません。分母を確認できるまで円グラフは保留です。</p></section><section><h3>${esc(subject.label.replace('・国別生産量','').replace('の収穫面積',''))}の世界生産比</h3>${latest?`<strong>${format(latest.percent,2)}%（2024年）</strong><svg viewBox="0 0 165 52" role="img" aria-label="2015～2024年の世界生産比の推移"><polyline fill="none" stroke="#326b76" stroke-width="2" points="${trend}"/></svg><p>2015～2024年。20対象の収録値合計／FAOSTAT世界生産量。2024年は${latest.reported}／20対象の値です。欠測国は0として加えていません。</p>`:'<p>今回保存したFAOSTAT QCL世界合計に、この品目の行がありません。同じ原表・定義・2015～2024年の世界行を再取得・照合するまで未算出です。資料が存在しないという意味ではありません。</p>'}<p><a href="https://www.fao.org/faostat/en/#data/QCL">FAOSTAT QCL・生産量（t）</a></p></section>`;
+  box.innerHTML=`${id==='wheat'?wheatSupplyPanel():'<section><h3>供給元 → 国内仕向け・輸出</h3><p>国別生産量は収録済みです。2024年・同じ品目と単位の輸入、輸出、在庫変化、国内仕向けは保存していません。<a href="https://www.fao.org/4/x9892e/x9892e02.htm">FAOの需給定義</a>に合わせた帯グラフにはこれらが必要です。生産量を輸出量や消費量には換算しません。</p></section>'}${id==='wheat'?wheatTradePanel():'<section><h3>輸出先の構成</h3><p><a href="https://data.fao.org/catalog/iso/955a7b61-ce56-4a04-adf5-61a3012eec84">FAOSTAT詳細貿易マトリックス</a>に相手国別数量の資料がありますが、今回の20対象・品目・2024年の原表を取得・照合できていません。分母を確認できるまで円グラフは保留です。</p></section>'}<section><h3>${esc(subject.label.replace('・国別生産量','').replace('の収穫面積',''))}の世界生産比</h3>${latest?`<strong>${format(latest.percent,2)}%（2024年）</strong><svg viewBox="0 0 165 52" role="img" aria-label="2015～2024年の世界生産比の推移"><polyline fill="none" stroke="#326b76" stroke-width="2" points="${trend}"/></svg><p>2015～2024年。20対象の収録値合計／FAOSTAT世界生産量。2024年は${latest.reported}／20対象の値です。欠測国は0として加えていません。</p>`:'<p>今回保存したFAOSTAT QCL世界合計に、この品目の行がありません。同じ原表・定義・2015～2024年の世界行を再取得・照合するまで未算出です。資料が存在しないという意味ではありません。</p>'}<p><a href="https://www.fao.org/faostat/en/#data/QCL">FAOSTAT QCL・生産量（t）</a></p></section>`;
  }
  function sawnwoodHtml(selectedCode:string){
   const codes=[...new Set([selectedCode,'TUR','EGY','SAU','ARE','IRN'].filter(Boolean))];

@@ -115,6 +115,25 @@ test('デーツとオリーブの短い凡例は初期分布と国別生産量�
  }finally{await w.happyDOM.close();}
 });
 
+test('小麦の需給例と原穀貿易は別対象・別単位と欠測を明示する',async()=>{
+ const {w,q}=await setup('agriculture');
+ try{
+  const fbs=q('[data-west-wheat-fbs]'),tm=q('[data-west-wheat-trade]');
+  assert(fbs&&tm);
+  assert.match(fbs.textContent,/小麦製品群.*アルメニア.*オマーン.*トルコ/);
+  assert.match(fbs.textContent,/国内供給.*食用.*飼料/);
+  assert.match(fbs.textContent,/観光客消費は3例とも未掲載/);
+  assert.match(tm.textContent,/原穀小麦.*16報告国.*9報告国/);
+  assert.match(tm.textContent,/再輸出を含み/);
+  assert(q('.west-wheat-pie'));
+  assert.doesNotMatch(fbs.textContent+tm.textContent,/カロリーベース自給率.*\d+%/);
+  q('[data-west-topic-button="dates"]').click();
+  await until(()=>q('[data-west-atlas]').dataset.topic==='dates'&&q('[data-west-atlas]').dataset.ready==='true');
+  assert.equal(q('[data-west-wheat-fbs]'),null);
+  assert.equal(q('[data-west-wheat-trade]'),null);
+ }finally{await w.happyDOM.close();}
+});
+
 test('中東の初期気候は地域全体、選んだ都市の雨温図と説明は右に同居し国名hoverを出さない',async()=>{
  const {w,q,select}=await setup('nature');
  try{
