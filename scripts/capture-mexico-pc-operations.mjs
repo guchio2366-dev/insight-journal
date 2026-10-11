@@ -566,7 +566,7 @@ async function composition({page, evidence}) {
   const config = JSON.parse(await text(page, '[data-population-composition-config]'));
   await step('Ethnicity nationwide entrance, detail and count/share comparison return', async () => {
     await click(page, 'button[data-population-category="ethnicity"]'); assert(await page.locator('[data-population-overview-category="ethnicity"]').isVisible());
-    await click(page, '[data-population-overview-category="ethnicity"] [data-population-overview-metric]');
+    await click(page, '[data-population-overview-reading-category="ethnicity"] [data-population-overview-metric]');
     assert.equal(query(page, 'state'), null); assert.match(await text(page, '[data-population-composition-selected-name]'), /全国/);
     await select(page, '[data-population-state]', '20'); await select(page, '[data-population-view]', 'count');
     const before = await snapshot(page); await click(page, '[data-population-composition-compare]'); assert.equal(query(page, 'compositionCompare'), 'scale');
@@ -574,15 +574,17 @@ async function composition({page, evidence}) {
   });
   await step('One nationwide religion map retains three simultaneous indicators', async () => {
     await click(page, 'button[data-population-category="religion"]');
-    const cards = page.locator('[data-population-overview-category="religion"] [data-population-overview-metric]'); assert.equal(await cards.count(), 3);
+    const highlighted=await page.locator('[data-population-overview-category="religion"] [data-overview-highlight-metric]').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('data-overview-highlight-metric')));
+    assert.deepEqual(highlighted,['catholic','protestant_evangelical','no_religion']);
+    const cards = page.locator('[data-population-overview-reading-category="religion"] [data-population-overview-metric]'); assert.equal(await cards.count(), 8);
     const metricIds=await cards.evaluateAll(nodes=>nodes.map(node=>node.getAttribute('data-population-overview-metric')));
-    assert.deepEqual(metricIds,['catholic','protestant_evangelical','no_religion']);
+    assert.deepEqual(metricIds,config.metrics.filter(metric=>metric.category==='religion').map(metric=>metric.id));
     for(const id of metricIds)assert(config.metrics.some(item=>item.id===id));
-    return {metricIds,layout:await religionOverviewLayout(page)};
+    return {highlighted,metricIds,layout:await religionOverviewLayout(page)};
   });
   await step('All eight religion details retain their own bands, actual shares and denominators', async () => {
     const metrics = config.metrics.filter(metric => metric.category === 'religion'); assert.equal(metrics.length, 8);
-    await click(page, '[data-population-overview-category="religion"] [data-population-overview-metric="catholic"]');
+    await click(page, '[data-population-overview-reading-category="religion"] [data-population-overview-metric="catholic"]');
     const verified = [];
     for (const metric of metrics) {
       await select(page, '[data-population-composition-metric]', metric.id);
