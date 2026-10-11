@@ -39,6 +39,12 @@ export function mexicoCompositionColor(record:MexicoCompositionRecord,metric:Mex
 export function mexicoCompositionOverviewColor(record:MexicoCompositionRecord,metric:MexicoCompositionMetric):string {
   return mexicoCompositionColor(record,metric.category==='religion'?{...metric,shareBins:mexicoCompositionShareBins}:metric);
 }
+/** Select only published state shares. These are locators, not mutually exclusive areas. */
+export function mexicoCompositionHighlights(metric:MexicoCompositionMetric,limit=2):{code:string;share:number}[] {
+  return Object.entries(metric.states).map(([code,record])=>({code,share:mexicoCompositionShare(record)}))
+    .filter((item):item is {code:string;share:number}=>item.share!==null)
+    .sort((a,b)=>b.share-a.share||a.code.localeCompare(b.code)).slice(0,limit);
+}
 export function mexicoCompositionOverviewMetrics(data:MexicoCompositionData,category:MexicoPopulationCategory):MexicoCompositionMetric[] {
   if(category==='religion')return mexicoReligionOverviewMetricIds.flatMap(id=>data.metrics.filter(metric=>metric.category===category&&metric.id===id));
   return data.metrics.filter(metric=>metric.category===category);

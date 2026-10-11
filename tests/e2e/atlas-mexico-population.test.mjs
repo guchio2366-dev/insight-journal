@@ -5,7 +5,7 @@ import path from 'node:path';
 import {build} from 'esbuild';
 import {Window} from 'happy-dom';
 import {mexicoDensityColor,mexicoPopulationRadius,mexicoPopulationLegendValues} from '../../src/lib/atlas-mexico-population.ts';
-import {mexicoCompositionColor,mexicoCompositionOverviewColor,mexicoCompositionRadius,formatMexicoCompositionShare} from '../../src/lib/atlas-mexico-population-composition.ts';
+import {mexicoCompositionColor,mexicoCompositionHighlights,mexicoCompositionRadius,formatMexicoCompositionShare} from '../../src/lib/atlas-mexico-population-composition.ts';
 
 const folder='atlas/north-america/mexico/population';
 const population=JSON.parse(await readFile('src/data/atlas/mexico/population.json','utf8'));
@@ -126,7 +126,7 @@ test('Category overviews lead into detail comparisons while unrelated source fla
  const bare=await page('?category=ethnicity');try{bare.document.querySelector('[data-population-overview-metric="indigenous_language"]').click();bare.document.querySelector('[data-population-composition-compare]').click();assert.equal(bare.document.querySelector('[data-population-composition-return]').hidden,false);}finally{await bare.happyDOM.close();}
 });
 
-test('National entry has no implicit capital selection; three religion overview maps share bins and every detail stays reachable',async()=>{
+test('National entry has no implicit capital selection; one overview map retains all three distributions and detail controls',async()=>{
  for(const category of ['distribution','ethnicity','religion']){
   const w=await page(category==='distribution'?'':`?category=${category}`);try{const d=w.document,q=s=>d.querySelector(s);
    assert.equal(q('[data-population-state]').value,'');assert.equal(new URL(w.location).searchParams.has('state'),false);assert.equal(new URL(w.location).searchParams.get('reading'),'overview');
@@ -134,12 +134,14 @@ test('National entry has no implicit capital selection; three religion overview 
    if(category!=='distribution'){
     assert.equal(q('[data-population-overview-maps]').hidden,false);const overview=q(`[data-population-overview-category="${category}"]`);assert.equal(overview.hidden,false);
     const metrics=category==='religion'?['catholic','protestant_evangelical','no_religion']:['indigenous_language','afro_identity','indigenous_identity_estimate'];
-    for(const id of metrics){const metric=compositionData.metrics.find(m=>m.id===id),card=overview.querySelector(`[data-population-overview-metric="${id}"]`);assert.equal(card.querySelectorAll('[data-overview-state]').length,32);for(const row of population.states){const mark=card.querySelector(`[data-overview-state="${row.stateCode}"]`);assert.equal(mark.getAttribute('fill'),mexicoCompositionOverviewColor(metric.states[row.stateCode],metric));assert.ok(q(mark.getAttribute('href'))?.getAttribute('d').length>50);}}
+    assert.equal(overview.querySelectorAll('.population-overview-combined svg').length,1);
+    assert.equal(overview.querySelectorAll('[data-overview-state]').length,32);
+    for(const id of metrics){const metric=compositionData.metrics.find(m=>m.id===id),highlights=overview.querySelector(`[data-overview-highlight-metric="${id}"]`);assert.equal(highlights.querySelectorAll('[data-overview-highlight-state]').length,2);assert.deepEqual([...highlights.querySelectorAll('[data-overview-highlight-state]')].map(mark=>mark.getAttribute('data-overview-highlight-state')),mexicoCompositionHighlights(metric).map(item=>item.code));}
     assert.equal(q('[data-population-display-settings]').hidden,true);
     if(category==='religion'){
      assert.equal(q('[data-population-overview-reading-category="religion"]').querySelectorAll('[data-population-overview-metric]').length,8);
      const denominators=overview.querySelectorAll('[data-population-overview-denominator="religion"]');assert.equal(denominators.length,1);assert.match(denominators[0].textContent,/全年齢の通常居住人口（不詳を含む）/);assert.ok(denominators[0].textContent.includes(population.nationalPopulation.toLocaleString('ja-JP')));
-     for(const card of overview.querySelectorAll('.population-overview-card'))assert.doesNotMatch(card.textContent,/分母：/);
+     assert.match(overview.textContent,/右欄には8区分/);
     }
     q(`[data-population-overview-metric="${metrics[0]}"]`).click();assert.equal(q('[data-population-overview-maps]').hidden,true);assert.equal(q('[data-population-display-settings]').hidden,false);assert.equal(q('[data-population-composition-selected-name]').textContent,'メキシコ全国');assert.equal(q('[data-population-composition-share-label]').textContent,'全国の割合');
    }

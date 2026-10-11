@@ -6,7 +6,7 @@ import composition from '../../data/atlas/mexico/population-composition.json';
 import {mexicoPopulationReading, mexicoPopulationRegionReading, mexicoPopulationReadingSources} from '../../data/atlas/mexico/population-reading';
 import {geometryPath, stateFeatures, stateLabelPoint, mapViewBox} from '../../lib/atlas-mexico-geometry';
 import {mexicoDensityColor, mexicoDensityBins, mexicoPopulationRadius, mexicoPopulationLegendValues, formatMexicoPopulation, formatMexicoDensity} from '../../lib/atlas-mexico-population';
-import {mexicoCompositionOverviewMetrics, mexicoCompositionOverviewColor, mexicoCompositionNationalRecord, formatMexicoCompositionShare, mexicoCompositionShareBins, type MexicoCompositionData} from '../../lib/atlas-mexico-population-composition';
+import {mexicoCompositionOverviewMetrics, mexicoCompositionHighlights, mexicoCompositionNationalRecord, formatMexicoCompositionShare, type MexicoCompositionData} from '../../lib/atlas-mexico-population-composition';
 import {withBase} from '../../lib/urls';
 import '../../styles/atlas-mexico-population.css';
 
@@ -34,6 +34,7 @@ const symbolShapes = [...shapes].sort((a,b) => b.row.population-a.row.population
 const [selectedX, selectedY] = stateLabelPoint('09');
 const compositionData=composition as MexicoCompositionData;
 const overviewGroups=['ethnicity','religion'] as const;
+const overviewColors=['#af4e25','#167c83','#7754a5'];
 ---
 <MexicoWorkspace field="population" title="人口分布から読むメキシコ" lead="集落ごとの人数から、都市への人口集中と全国に広がる集落を読みます。" description="INEGIの2020年国勢調査による189,432集落の人口を表示。集落代表位置の人数円と、既存の州人口・公表人口密度を切り替えて確認できます。">
  <Fragment slot="controls">
@@ -48,22 +49,14 @@ const overviewGroups=['ethnicity','religion'] as const;
   <svg class="population-shape-definitions" width="0" height="0" aria-hidden="true" focusable="false"><defs>{shapes.map(({row,path})=><path id={`mexico-population-outline-${row.stateCode}`} d={path} fill-rule="evenodd"/>)}</defs></svg>
   <section class="population-overview-maps" data-population-overview-maps hidden aria-label="全国の分布を一覧で比較">
    {overviewGroups.map(category=><div data-population-overview-category={category} hidden>
-    <h2>{category==='religion'?'宗教の全国一覧｜同じ割合の階級で3図を比べる':'民族・自己認識の全国一覧'}</h2>
-    <p>{category==='religion'?'色は各州の全人口に占める割合です。3図とも同じ色は同じ割合階級を表します。':'言語・自己認識は別の指標です。分母と割合の階級を、それぞれの図で確認します。'}</p>
-    <div class="population-overview-grid">{mexicoCompositionOverviewMetrics(compositionData,category).map(metric=><article class="population-overview-card">
-     <button type="button" data-population-overview-metric={metric.id} aria-label={`${metric.label}の全国分布を大きく表示し、必要に応じて州別の値を見る`}>
-      <span class="population-overview-card-title">{metric.label}</span>
-      <svg viewBox={mapViewBox} preserveAspectRatio="xMidYMid meet" role="img" aria-label={`${metric.label}・2020年の州内割合。全国${formatMexicoCompositionShare(mexicoCompositionNationalRecord(metric),metric)}`}>
-       <defs><pattern id={`mexico-population-overview-missing-${metric.id}`} width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" fill="#eef0e7"/><path d="M0,9L9,0" stroke="#798c83" stroke-width="2"/></pattern></defs>
-       {shapes.map(({row})=><use href={`#mexico-population-outline-${row.stateCode}`} data-overview-state={row.stateCode} fill={mexicoCompositionOverviewColor(metric.states[row.stateCode],metric).replace('mexico-population-missing',`mexico-population-overview-missing-${metric.id}`)}><title>{row.nameJa}：{formatMexicoCompositionShare(metric.states[row.stateCode],metric)}、{formatMexicoPopulation(metric.states[row.stateCode].count,metric.states[row.stateCode].status)}人</title></use>)}
-      </svg>
-      <span class="population-overview-national">全国 {formatMexicoCompositionShare(mexicoCompositionNationalRecord(metric),metric)}<small>{formatMexicoPopulation(metric.nationalCount,metric.nationalStatus)}人</small></span>
-      <span class="population-overview-action">大きい地図・州別の値へ →</span>
-     </button>
-     {category==='ethnicity'&&<p>分母：{metric.countDenominatorLabel}</p>}
-     {category==='ethnicity'&&<details><summary>この図の割合階級</summary><ul class="population-overview-key">{(metric.shareBins??mexicoCompositionShareBins).map(bin=><li><i style={`background:${bin.color}`} aria-hidden="true"/>{bin.label}</li>)}</ul></details>}
-    </article>)}</div>
-    {category==='religion'&&<p class="population-overview-denominator" data-population-overview-denominator="religion">3図共通の分母：全年齢の通常居住人口（不詳を含む）。州の色は各州の人口、全国の割合は全国人口{formatMexicoPopulation(population.nationalPopulation)}人を分母にしています。</p>}
+    <h2>{category==='religion'?'宗教の特徴的な分布':'民族・自己認識の特徴的な分布'}</h2>
+    <p>各指標で州内割合が高い2州を、同じ地図に色付き番号で示します。複数の番号がある州では指標が共存します。色や番号は多数派・人口の大きさを表さず、州全体の割合と細かな分布は右の項目から確認できます。</p>
+    <figure class="population-overview-combined"><svg viewBox={mapViewBox} preserveAspectRatio="xMidYMid meet" role="img" aria-label={`${category==='religion'?'宗教':'民族・自己認識'}の3指標それぞれで州内割合が高い2州を同時に示す地図`}>
+     <g class="population-overview-land">{shapes.map(({row})=><use href={`#mexico-population-outline-${row.stateCode}`} data-overview-state={row.stateCode}><title>{row.nameJa}</title></use>)}</g>
+     {mexicoCompositionOverviewMetrics(compositionData,category).map((metric,index)=><g class="population-overview-highlights" data-overview-highlight-metric={metric.id}>{mexicoCompositionHighlights(metric).map(({code})=>{const point=stateLabelPoint(code),row=population.states.find(item=>item.stateCode===code)!;return <g data-overview-highlight-state={code} transform={`translate(${point[0]+(index-1)*16} ${point[1]-13})`}><circle r="10" fill={overviewColors[index]}/><text text-anchor="middle" dominant-baseline="central">{index+1}</text><title>{metric.label}：{row.nameJa}、州内{formatMexicoCompositionShare(metric.states[code],metric)}。この指標で割合が高い州の一つ</title></g>;})}</g>)}
+    </svg><figcaption>2020年・INEGI。各番号は各指標の上位2州を指す位置案内です。番号のない州にも該当者はいます。</figcaption></figure>
+    <ol class="population-overview-indicators">{mexicoCompositionOverviewMetrics(compositionData,category).map((metric,index)=><li style={`--overview-color:${overviewColors[index]}`}><strong>{index+1}　{metric.label}</strong><span>上位州：{mexicoCompositionHighlights(metric).map(({code})=>{const row=population.states.find(item=>item.stateCode===code)!;return `${row.nameJa} ${formatMexicoCompositionShare(metric.states[code],metric)}`;}).join('／')}</span><small>分母：{metric.countDenominatorLabel}</small></li>)}</ol>
+    {category==='religion'&&<p class="population-overview-denominator" data-population-overview-denominator="religion">3指標の分母は全年齢の通常居住人口（不詳を含む）。全国割合の分母は全国人口{formatMexicoPopulation(population.nationalPopulation)}人です。州内割合を指標間で足し合わせません。右欄には8区分の全国値と個別詳細も残しています。</p>}
    </div>)}
   </section>
    <MexicoLocalityPopulation />
@@ -93,9 +86,9 @@ const overviewGroups=['ethnicity','religion'] as const;
  <Fragment slot="legend">
   <section class="population-overview-reading" data-population-overview-reading hidden>
    {overviewGroups.map(category=><div data-population-overview-reading-category={category} hidden>
-    <h2>{category==='religion'?'申告した宗教の割合を、同じ尺度で読む':'言語と自己認識を分けて読む'}</h2>
-    <p>{category==='religion'?'カトリック、プロテスタント・福音系、無宗教を、2020年の各州の全人口に対する実割合で示します。濃い色は高い割合で、宗教ごとの相対的な集中度ではありません。':'先住民言語を話す人、アフロ系と自己認識する人、先住民と自己認識する人を別々に示します。同じ人が複数の指標に含まれるため、3つの人数や割合は足し合わせません。'}</p>
-    {category==='religion'&&<><p class="population-key-title">3図共通：州内の割合（%）</p><ul class="population-overview-key">{mexicoCompositionShareBins.map(bin=><li><i style={`background:${bin.color}`} aria-hidden="true"/>{bin.label}</li>)}</ul><p>個別詳細の8区分では、少数の区分の差も読める宗教別の階級を使います。濃い色が過半数を示すとは限らないため、実割合と凡例を確認してください。</p></>}
+    <h2>{category==='religion'?'申告した宗教を、州内割合で読む':'言語と自己認識を分けて読む'}</h2>
+    <p>{category==='religion'?'地図上の3色はカトリック、プロテスタント・福音系、無宗教それぞれの割合が高い州の位置を示します。色の濃さや面積で割合を表していません。':'先住民言語を話す人、アフロ系と自己認識する人、先住民と自己認識する人を別々に示します。同じ人が複数の指標に含まれるため、3つの人数や割合は足し合わせません。'}</p>
+    {category==='religion'&&<p>8区分の個別詳細では、実割合と宗教別の階級を確認できます。相対的に割合が高い州と、人口の多数派であることは区別します。</p>}
     <h3>{category==='religion'?'8区分の全国値・個別詳細':'3指標の全国値・個別詳細'}</h3>
     <ul class="population-overview-values">{compositionData.metrics.filter(metric=>metric.category===category).map(metric=><li><button type="button" data-population-overview-metric={metric.id}>{metric.label}<span>{formatMexicoCompositionShare(mexicoCompositionNationalRecord(metric),metric)} · {formatMexicoPopulation(metric.nationalCount,metric.nationalStatus)}人</span></button></li>)}</ul>
     <p class="mexico-caption">統計：2020年。州境：2025年。公式定義・対象人口・推計の精度・出典は個別詳細で保持しています。</p>
