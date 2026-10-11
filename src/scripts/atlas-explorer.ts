@@ -1,5 +1,6 @@
 import {renderAgricultureMarkers} from '../lib/atlas-agriculture-markers';
 import {createForestry} from './atlas-forestry';
+import {protectedRiverLines} from '../lib/atlas-us-water-labels';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import {normalizeForestNavigation} from '../lib/atlas-forestry-state';
 import {loadAgricultureGeometry} from '../lib/atlas-agriculture-geometry';
@@ -80,6 +81,7 @@ export async function startAtlas() {
     project:()=>ready&&map&&!failed&&fallback.hidden?coordinate=>map!.project(coordinate):null,
     select:(entry,trigger)=>entry.mode==='climate'?selectCity(entry.id.slice(5),true,trigger):showNatureFeature(entry.id,undefined,undefined,true,trigger),
     placed:()=>{if(!mapMoving)placeSelectionCard();},
+    protectedLines:project=>natureMode==='water'?protectedRiverLines(baseFeatures,project):[],
   },config.climateCodeLabels);
 
   function cityAt(point:{x:number;y:number},project:(p:[number,number])=>{x:number;y:number}){
@@ -105,7 +107,7 @@ export async function startAtlas() {
 
   const population=createPopulationController(root,config.populationAssetBase??config.assetBase.replace(/v3\/$/,'population/v1/'),{cities:config.climateCities,active:()=>field==='population',map:()=>ready&&!failed?map:undefined,changed:push=>save(push),fit:bounds=>{if(map&&bounds){view='custom';map.fitBounds(bounds,{padding:30,duration:0,maxZoom:10});}}});
 
-  const water=createWaterController(root,config.base,{dragged:()=>mapDragged,active:()=>field==='natural'&&natureMode==='water',map:()=>ready&&!failed?map:undefined,project:()=>ready&&map&&!failed&&fallback.hidden?p=>map!.project(p):null,changed:()=>save(true),viewChanged:()=>{natureGeneration++;pendingNatureKey='';setNatureMode(natureMode,true);}});
+  const water=createWaterController(root,config.base,{dragged:()=>mapDragged,active:()=>field==='natural'&&natureMode==='water',map:()=>ready&&!failed?map:undefined,project:()=>ready&&map&&!failed&&fallback.hidden?p=>map!.project(p):null,changed:()=>save(true),viewChanged:()=>{natureGeneration++;pendingNatureKey='';setNatureMode(natureMode,true);},protectedLines:project=>protectedRiverLines(baseFeatures,project)});
 
   insights=createAgricultureInsights(root,config,{
     state:()=>{const reading=agricultureDetails.state().reading.view;return {field,mode:natureMode,waterView:water.view(),feature:natureFeature,product:reading.kind==='product'?reading.id:null,layers:agriLayers,ready,failed};},
@@ -197,7 +199,7 @@ export async function startAtlas() {
         if(points.length)protectedRects.push({left:Math.min(...points.map(p=>p.x))-8,right:Math.max(...points.map(p=>p.x))+8,top:Math.min(...points.map(p=>p.y))-8,bottom:Math.max(...points.map(p=>p.y))+8});
       }
     }
-    for(const node of root.querySelectorAll<HTMLElement>('.atlas-map-tools,[data-layer-caption],.atlas-geolabel:not([hidden]),.atlas-nature-label:not([hidden]),.industry-marker,.atlas-livestock-marker,.atlas-agri-layers'))protectedRects.push(localRect(node));
+    for(const node of root.querySelectorAll<HTMLElement>('.atlas-map-tools,[data-layer-caption],.atlas-geolabel:not([hidden]),.atlas-nature-label:not([hidden]),.industry-marker,.industry-overview-label:not([hidden]),.industry-overview-pin>i,.atlas-livestock-marker,.atlas-agri-layers'))protectedRects.push(localRect(node));
     const result=chooseCardPlacement({width:frame.clientWidth,height:frame.clientHeight},{width:selection.offsetWidth,height:selection.offsetHeight},protectedRects,frame.clientWidth<650?6:9);
     if(!result){moveSelectionBelow();return;}
     selection.dataset.placement=result.id;selection.style.left=`${result.left}px`;selection.style.top=`${result.top}px`;selection.style.visibility='visible';
@@ -289,6 +291,7 @@ export async function startAtlas() {
     if(field==='natural'&&!natureFeature?.startsWith('climate:')&&(!selectedCity||!allCities.has(selectedCity)))selectedCity='los-angeles';
     const city=selectedCity?allCities.get(selectedCity):null,active=field==='natural'&&natureMode==='climate'&&!natureFeature?.startsWith('climate:');
     root.dataset.selectedCity=city?.id??'';
+    el('#city-climate-heading').textContent=active&&city?city.nameJa+'の雨温図':'都市の雨温図';
     el('[data-climate-chart]').hidden=!active||!city;
     root.querySelectorAll<HTMLElement>('[data-city-panel]').forEach(panel=>panel.hidden=!active||panel.dataset.cityPanel!==city?.id);
     const jump=el('[data-city-jump]');jump.hidden=!active||!city;jump.textContent=city?city.nameJa+'の雨温図へ':'都市の雨温図へ';

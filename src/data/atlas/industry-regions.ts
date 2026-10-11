@@ -1,5 +1,10 @@
 import type {IndustrySector} from './industry-catalog';
+import {energyProcessingSites} from './us-processing-sites.ts';
 export const industrySources={
+  'kern-river-well':{title:'CA CalGEM／CEQAnet：カーンリバー既存坑井工事（2025年）',url:energyProcessingSites[0].url},
+  'hugoton-well':{title:'Kansas Geological Survey：Hugoton Gas Area内の登録坑井',url:energyProcessingSites[1].url},
+  'puget-refinery':{title:'WA Ecology：製油所の施設登録位置',url:energyProcessingSites[2].url},
+  'baytown-chemical':{title:'TCEQ：ベイタウン化学工場の施設台帳（2021年）',url:energyProcessingSites[3].url},
   waAerospace:{title:'ワシントン州商務省：航空宇宙の供給網・人材・地域拠点',url:'https://choosewashingtonstate.com/why-washington/our-key-sectors/aerospace/'},
   shipbuilding:{title:'VEDP：ニューポートニューズの造船',url:'https://www.vedp.org/success-story/huntington-ingalls-industries-builds-virginia'},
   railway:{title:'ニューヨーク州：ホーネルの鉄道車両工場拡張（2025年）',url:'https://www.governor.ny.gov/news/governor-hochul-marks-completion-75-million-expansion-alstoms-car-body-shell-manufacturing'},
@@ -29,6 +34,7 @@ export interface IndustryRegion{
   id:string;placeId:string;name:string;sector:IndustrySector;subsector:string;coordinates:[number,number];
   function:string;description:string;source:keyof typeof industrySources;scope:string;year:string;
   selectionReason:string;employment:null;lq:null;nationalShare:null;overview:boolean;
+  mapRole?:'context';
 }
 const regions: Array<[string,string,string,IndustrySector,string,[number,number],string,string,keyof typeof industrySources,string,string,boolean?]>=[
   ['newportnews-shipbuilding','newportnews','ニューポートニューズ','manufacturing','shipbuilding',[-76.43,36.98],'船舶の建造・整備','大型船の建造と専門技能の訓練が結びつく地域です。船舶・ボート製造全体の全国値と、この地域の主な製品の違いを分けて読みます。','shipbuilding','市・造船所周辺','2026',true],
@@ -76,4 +82,7 @@ const regions: Array<[string,string,string,IndustrySector,string,[number,number]
   ['dallas-realestate','dallas','ダラス','construction-real-estate','real-estate',[-96.8,32.78],'不動産・開発','企業立地と人口移動を背景に不動産活動が広がる例です。住宅価格や売買総額を、全国欄の不動産付加価値とは区別します。','dallas','都市圏内の地域','2023中心'],
   ['austin-realestate','austin','オースティン','construction-real-estate','real-estate',[-97.74,30.27],'不動産・開発','居住・就業の場所が変わると住宅や業務用建物の需要も変わります。建設のフローと、既存住宅が提供するサービスの価値は別の指標です。','austin','都市圏','2016–2023'],
 ];
-export const industryRegions:IndustryRegion[]=regions.map(([id,placeId,name,sector,subsector,coordinates,fn,description,source,scope,year,overview])=>({id,placeId,name,sector,subsector,coordinates,function:fn,description,source,scope,year,overview:!!overview,selectionReason:'公的資料で地域の活動・機能を確認した代表例。統一順位による抽出ではない。',employment:null,lq:null,nationalShare:null}));
+export const industryRegions:IndustryRegion[]=[
+ ...regions.map(([id,placeId,name,sector,subsector,coordinates,fn,description,source,scope,year,overview]):IndustryRegion=>({id,placeId,name,sector,subsector,coordinates,function:fn,description,source,scope,year,overview:!!overview,mapRole:['texas-oil','nd-oil','penn-gas','houston-chemicals'].includes(id)?'context':undefined,selectionReason:'公的資料で地域の活動・機能を確認した代表例。統一順位による抽出ではない。',employment:null,lq:null,nationalShare:null})),
+ ...energyProcessingSites.map((site):IndustryRegion=>({id:site.id,placeId:site.id,name:site.name,sector:site.sector as IndustrySector,subsector:site.subsector,coordinates:site.coordinates as [number,number],function:site.kind,description:site.description,source:site.id as keyof typeof industrySources,scope:'施設・坑井の公表参照位置',year:site.year,selectionReason:'公的な施設・坑井記録で実位置を確認した事例。全施設の網羅・全国順位ではない。',employment:null,lq:null,nationalShare:null,overview:true}))
+];

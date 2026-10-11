@@ -1,6 +1,8 @@
 ---
 import {forestRegions,timberExample as timber} from '../../data/atlas/forestry';
 import {withBase} from '../../lib/urls';
+import national from '../../../data-source/atlas/us-review/forest-national-2017.json';
+import {forestProcessingSites} from '../../data/atlas/us-processing-sites';
 const {statistics=false}=Astro.props;
 ---
 {statistics ? <section class="forest-statistics" data-forest-statistics hidden aria-labelledby="forest-stat-title">
@@ -17,6 +19,7 @@ const {statistics=false}=Astro.props;
  </div>
 </section> : <article id="forestry-timber" data-agri-extra-copy="timber" class="atlas-crop-copy forest-reading">
  <h3>森林資源と木材生産</h3>
+ <p class="forest-subtitle">緑＝森林の面／製・パ＝製材・パルプ加工施設の登録位置。施設例は全米を網羅せず、記号の大きさは生産量を表しません。</p>
  <p class="forest-subtitle">森林の成立条件 × 育成・管理 × 木材の用途</p>
  <p class="forest-takeaway"><strong>木が育つ場所と、木材を生産する場所を分けて考える。</strong>自然条件に加え、育て方と加工・輸送へのつながりが林業の地域差を生みます。</p>
  <section><h4>まず、森林が広がる場所を見る</h4><p>地図の緑は<strong>落葉樹林・常緑樹林・混交林</strong>です。混交林は、異なる種類の樹木が混ざった森林。水分と気温は木の生育を左右し、山地では斜面の向きや標高も生育条件を変えます。</p>
@@ -34,5 +37,9 @@ const {statistics=false}=Astro.props;
  <p><strong>建築材：</strong>伐採した幹を切った「丸太」を、柱や板にひいたものが<strong>製材</strong>です。薄くむいた板（単板）を貼り合わせた<strong>合板</strong>も、建築などに使われます。</p>
  <p><strong>紙などの原料：</strong>木材から取り出した繊維が<strong>パルプ</strong>です。丸太は製材工場やパルプ工場へ運ばれ、加工を経て製品になります。育林・伐採と、その先の製造業がここでつながります。</p>
  <a class="forest-link" href="#forest-stat-title">ノースカロライナ州の用途構成を見る ↓</a></section>
- <details class="forest-source"><summary>地図の出典と読み方</summary><p>USGS／MRLC NLCD 2021の森林3分類を表示用に間引き。湿地の樹木は別分類のため含めません。生産量・所有区分・伐採可能区域を示す図ではありません。</p><a href="https://www.mrlc.gov/">NLCD（公式）</a> · <a href={withBase('/assets/atlas/forestry/v1/manifest.json')}>対象範囲・加工記録</a></details>
+ <details class="forest-source"><summary>加工施設の例・位置の出典</summary><p>州施設台帳を2026年10月確認。登録位置と業種の例で、現在の操業・工場別生産量の統計ではありません。</p>{forestProcessingSites.map(site=><p><strong>{site.symbol} {site.name}（{site.kind}）</strong> · <a href={site.url}>WA Ecology施設台帳</a></p>)}</details>
+ <section data-forest-national><h4>全米の生産・需要・貿易（2017年の資料例）</h4><p>米国全体・USFS FPL-RP-701表5b。下のNC州2022年の用途構成とは年・地域・指標が異なります。数値は<strong>千m³の丸太換算</strong>で、製品そのものの体積ではありません。</p>
+ <table class="forest-national-table"><caption>全米2017年・丸太換算（千m³）</caption><thead><tr><th scope="col">用途群</th><th scope="col">生産</th><th scope="col">輸入</th><th scope="col">輸出</th><th scope="col">見かけ消費</th></tr></thead><tbody>{national.rows.map(row=><tr><th scope="row">{row.label}</th>{['production','imports','exports','consumption'].map(key=><td>{row[key].toLocaleString('ja-JP')}</td>)}</tr>)}</tbody></table>
+ <p>製材・合板は建築、補修などの用途へ。パルプ材・パルプ・紙等は繊維・紙製品に関わる広い群で、パルプ単品ではありません。見かけ消費は需給を示す統計で、世帯の実使用量や州別配分ではありません。丸めで生産＋輸入−輸出と完全には一致しません。</p><a href={national.tableUrl}>USFS：全国需給・貿易表（2019年公表）</a></section>
+ <details class="forest-source"><summary>森林面の出典と読み方</summary><p>USGS／MRLC NLCD 2021の森林3分類を表示用に間引き。湿地の樹木は別分類のため含めません。生産量・所有区分・伐採可能区域を示す図ではありません。</p><a href="https://www.mrlc.gov/">NLCD（公式）</a> · <a href={withBase('/assets/atlas/forestry/v1/manifest.json')}>対象範囲・加工記録</a></details>
 </article>}
