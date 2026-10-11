@@ -37,7 +37,7 @@ export function initLatinReadingPopulation(root:HTMLElement){
    overview.textContent=supplement?supplement.overview:valid?`${region?.name??'パナマ全国'}の公表人数は${(region?(kind==='ethnicity'?region.identity:region.religion)[index]:latinCultureNational.ethnicity[1].values[index]).toLocaleString('ja-JP')}人です。${region?'チリ2024年・州全体の集計':'パナマ2023年・全国の別設問指標'}。`:reading.overview;
    const selection=supplement?latinCultureSupplementSelection(choice):null;
    body.innerHTML=selection?`<h3>解説：資料の設問と範囲を確かめる</h3><p>${escape(selection.data.definition)}</p><p>${escape(selection.data.denominator)}</p><p>全国・行政区分の値から、民族の居住域を描いていません。</p><p><a href="#latin-culture-statistics">詳しい統計は地図下へ</a> · <a href="${selection.data.termsUrl}">${escape(selection.data.terms)}</a></p>`:valid?`<h3>解説：以前の統計選択を読む</h3><p>${escape(latinCultureOverview[kind].explanation)}</p><p><a href="#latin-culture-statistics">原表と利用条件は地図下へ</a></p>`:reading.body;
-   legend.innerHTML=renderCulturePatternLegend(kind,choice,scope);
+   legend.innerHTML=renderCulturePatternLegend(kind,choice,scope,cultureOnly);
    q('status').textContent=kind==='ethnicity'?'19国の全国構成。2011年調査＋2012–22年の国勢調査。年・設問が異なり、2026年の現在値ではありません。':'20国・地域の全国構成。Pew2013–14年成人調査＋ガイアナ・スリナム2012年国勢調査。現在値ではありません。';
    for(const table of root.querySelectorAll<HTMLElement>('[data-lc-supplement-source]')){
     const country=table.dataset.lcSupplementSource!;const detail=table.querySelector<HTMLElement>('[data-lc-supplement-detail]');if(detail)detail.innerHTML=latinCultureSupplementReading(choice.startsWith(country+':')?choice:country+':national')!.body;
