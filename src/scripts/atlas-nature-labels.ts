@@ -71,10 +71,11 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
     // anchored to the correctly projected county map, including on small phones.
     const layoutBounds=['water','population'].includes(callbacks.mode())?{left:0,top:0,right:frame.clientWidth,bottom:frame.clientHeight-40}:bounds;
     const protectedLines=callbacks.protectedLines?.(project??(p=>projectNatureFallback(p,bounds)))??[];
-    // CSS transform translations use float precision. This final solver box is
-    // both the rendered placement and the obstacle passed to subsequent labels.
+    const frameRect=frame.getBoundingClientRect(),origin={x:frameRect.left+frame.clientLeft,y:frameRect.top+frame.clientTop};
+    // Browser rectangles use float precision in viewport coordinates. Round the
+    // final placement there, then share the same box in map-local coordinates.
     const placed=layoutNatureLabels(inputs,layoutBounds,[...obstacles,...reserved],protectedLines).map(box=>{
-      const left=Math.fround(box.left),top=Math.fround(box.top);
+      const left=Math.fround(origin.x+box.left)-origin.x,top=Math.fround(origin.y+box.top)-origin.y;
       return {...box,left,top,right:left+box.width,bottom:top+box.height};
     });
     for(const {entry,button,line,dot} of nodes){
@@ -86,7 +87,6 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
     }
     // Publish the solver's committed boxes. DOM reads immediately after a
     // transform assignment can return an old/intermediate transition position.
-    const frameRect=frame.getBoundingClientRect(),origin={x:frameRect.left+frame.clientLeft,y:frameRect.top+frame.clientTop};
     committed=placed.map(box=>({...box}));
     callbacks.diagnostics?.({coordinateSpace:'map-frame-content-box',origin,bounds:layoutBounds,inputs,obstacles,placed:committed});
     if(codeNodes.length){
