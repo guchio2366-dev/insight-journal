@@ -51,7 +51,7 @@ try{
   }
   if(viewport.width===1920)for(const region of ['africa','oceania','russia']){
    await page.goto(base+`/atlas/${region}/agriculture/forestry/`,{waitUntil:'networkidle'});await page.waitForFunction(()=>document.querySelector('[data-regional-forestry]')?.dataset.forestInitialized==='true');await page.evaluate(()=>document.fonts.ready);await page.evaluate(()=>scrollTo(0,0));
-   const layout=await page.evaluate(()=>{const b=s=>{const el=document.querySelector(s),r=el.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};};return {news:b('.atlas-news'),fields:b('.forest-fields'),map:b('.forest-map-stage'),reading:b('.forest-reading')};});
+   const layout=await page.evaluate(()=>{const b=s=>{const el=document.querySelector(s),r=el.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};};return {news:b('.atlas-news'),fields:b('.forest-fields,.africa-fields'),map:b('.forest-map-stage'),reading:b('.forest-reading')};});
    report.otherRegions.push({region,layout,image:await shot(region+'-forestry')});
   }
   await context.close();await save();
