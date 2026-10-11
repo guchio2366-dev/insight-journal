@@ -242,7 +242,7 @@ async function agricultureClimateRepairs(page,profile){
   assert.equal(await wheatStatistics.locator('.eu-verified-donut').count(),1);
   assert.doesNotMatch(await wheatStatistics.innerText(),/大豆の域外輸入相手|食品群の供給熱量構成/);
   const labels=await page.locator('[data-eu-map-kind="crop"]:visible').evaluateAll(nodes=>nodes.map(node=>({id:node.dataset.euMapPlace,opacity:Number(getComputedStyle(node).opacity)})));
-  for(const label of labels)assert.equal(label.opacity,label.id==='wheat'?1:.22);
+  for(const label of labels)assert.equal(label.opacity,label.id==='wheat'?1:.85);
   await snapshot(page,profile,'farming-selected');
   await captureEurope(page,profile,'agriculture-wheat');
   await openEurope(page,'atlas/europe/agriculture/?layer=dairy','normal');
