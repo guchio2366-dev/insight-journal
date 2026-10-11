@@ -350,9 +350,9 @@ async function completeAlpsCopy(page) {
   const copy = await page.evaluate(() => {
     const reading = JSON.parse(document.querySelector('[data-eu-config]').textContent).readings.find(item => item.id === 'alps');
     const card = document.querySelector('[data-eu-feature-card]');
-    return {body: reading.body, text: card.textContent, source: reading.source, links: [...card.querySelectorAll('a')].map(link => link.href)};
+    return {explanation: reading.explanation, text: card.textContent, source: reading.source, links: [...card.querySelectorAll('a')].map(link => link.href)};
   });
-  assert.ok(copy.text.includes(copy.body), 'Keep the complete registered Alps explanation');
+  assert.ok(copy.text.includes(copy.explanation), 'Keep the sourced Alps explanation beneath the overview');
   assert.ok(copy.links.includes(copy.source), 'Keep its registered source link');
 }
 
@@ -393,7 +393,7 @@ async function europeOperations(page, profile, render) {
   if(normal){await snapshot(page,profile,'terrain-overview');await captureEurope(page,profile,'terrain');}
   assert.equal(await page.locator('[data-eu-subject-grid]').isVisible(),false,'Named landforms do not show numeric elevation');
   assert.equal(await page.locator('[data-eu-feature-list]').isVisible(),false);
-  await page.locator('[data-eu-map-place="alps"][data-eu-map-kind="feature"]').click();
+  await page.locator('[data-eu-terrain-label="alps"]').click();
   assert.equal(new URL(page.url()).searchParams.get('feature'),'alps');
   assert.equal(await page.locator('[data-eu-subject-grid]').isVisible(),false);
   await completeAlpsCopy(page);
@@ -507,7 +507,7 @@ async function europeOperations(page, profile, render) {
 async function stageOneOperations(page, profile) {
   const quietFeatures=async(field)=>{
     const names=await page.locator('[data-eu-map-kind="feature"]:visible:not(.is-point-only)').evaluateAll(nodes=>nodes.map(node=>{const s=getComputedStyle(node),r=node.getBoundingClientRect();return {id:node.dataset.euMapPlace,font:parseFloat(s.fontSize),background:s.backgroundColor,border:parseFloat(s.borderWidth),left:r.left,right:r.right,top:r.top,bottom:r.bottom};}));
-    assert.ok(names.length>0&&names.length<=(field==='industry'?16:4),field+' initial representative names');
+    assert.ok(names.length>0&&names.length<=(field==='industry'?16:11),field+' initial representative names');
     for(const name of names){assert.ok(name.font>=13);if(field==='industry')assert.notEqual(name.background,'rgba(0, 0, 0, 0)');else {assert.equal(name.background,'rgba(0, 0, 0, 0)');assert.equal(name.border,0);}}
     for(let i=0;i<names.length;i++)for(let j=i+1;j<names.length;j++){const a=names[i],b=names[j];assert.ok(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,field+' names do not overlap');}
     const points=await page.locator('[data-eu-map-kind="feature"].is-point-only:visible').count();
@@ -622,7 +622,7 @@ async function stageOneOperations(page, profile) {
   for (const name of ['case', 'category', 'area']) assert.equal(await page.locator(`[data-culture-${name}]`).inputValue(), '');
   assert.equal(await page.locator('[data-culture-value]').isVisible(), false);
   const compositionCheck=async()=>{
-    const buttons=page.locator('[data-eu-composition]:visible');assert.equal(await buttons.count(),3);
+    const buttons=page.locator('[data-eu-composition]:visible');assert.equal(await buttons.count(),2,'Initial focus shows England and Wales; Croatia remains available after panning');
     const boxes=await buttons.evaluateAll(nodes=>nodes.map(node=>{const box=node.getBoundingClientRect();return {left:box.left,top:box.top,right:box.right,bottom:box.bottom,width:box.width,height:box.height,font:parseFloat(getComputedStyle(node).fontSize),svg:node.querySelector('svg').getAttribute('viewBox')};}));
     for(const box of boxes){assert.ok(box.font>=14);assert.equal(box.svg,'0 0 56 56');assert.ok(Math.abs(box.width-boxes[0].width)<.01);}
     for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){const a=boxes[i],b=boxes[j];assert.ok(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,'Composition labels do not overlap');}

@@ -249,7 +249,7 @@ export function initEuropeAtlas() {
     node.setAttribute('aria-label',`${label.mm} mm等雨量線`);
     query<HTMLElement>('.eu-map-stage').append(node);return {node,label};
   });
-  const terrainLabels=[...europeTerrainGuides,...europeTerrainPlaceNames,...europeTerrainWinds].map(label=>{
+  const terrainLabels=[...europeTerrainGuides,...europeTerrainPlaceNames,...europeTerrainWinds].sort((left,right)=>Number(right.id==='alps')-Number(left.id==='alps')).map(label=>{
     const node=document.createElement('button');node.type='button';node.className='eu-terrain-place-label';
     node.dataset.euTerrainLabel=label.id;node.dataset.kind=label.kind;
     node.textContent=label.name;node.setAttribute('aria-label',`${label.name}の位置と解説`);
@@ -303,6 +303,7 @@ export function initEuropeAtlas() {
         chosen=rect;break;
       }
       if(chosen)placed.push(chosen);
+      else node.hidden=true;
     }
   }
   function setLayer(id:string, save = true) {
@@ -716,13 +717,13 @@ export function initEuropeAtlas() {
     all<SVGGElement>('[data-eu-point],[data-eu-feature-point]').forEach(g=>{const id=g.dataset.euPoint??g.dataset.euFeaturePoint;const p=[...cities,...features].find(p=>p.id===id);if(!p)return;const [x,y]=project(p.coordinates);g.querySelector('circle')?.setAttribute('r',String(5/scale));const label=g.querySelector('text');label?.setAttribute('x',String(x+9/scale));label?.setAttribute('y',String(y-9/scale));if(label)label.style.fontSize=12/scale+'px';});
   }
   function fit() {
-    const initialEthnicity=state.layer==='ethnicity'&&!state.cultureCase;
-    const bounds = initialEthnicity ? [[-6.5,49.8],[2.2,55.9]] as [[number,number],[number,number]] : cultureActive() ? [[frame.west, frame.south], [frame.east, frame.north]] as [[number,number],[number,number]] : selectionBounds();
+    const onsCulture=cultureActive()&&(state.cultureCase==='england-wales-2021'||state.layer==='ethnicity'&&!state.cultureCase);
+    const bounds = onsCulture ? [[-6.5,49.8],[2.2,55.9]] as [[number,number],[number,number]] : cultureActive() ? [[frame.west, frame.south], [frame.east, frame.north]] as [[number,number],[number,number]] : selectionBounds();
     const [left, bottom] = project(bounds[0]);
     const [right, top] = project(bounds[1]);
     const width = Math.max(right - left, 24), height = Math.max(bottom - top, 24);
     box = [(left + right - width) / 2 - width * .12, (top + bottom - height) / 2 - height * .12, width * 1.24, height * 1.24];
-    if (cultureActive()&&!initialEthnicity || subject().field!=='agriculture'&&state.region === 'all' && !state.place&&!comparisonFocus()&&!['industry','population'].includes(subject().field)&&!['climate','water','drainage','precipitation','terrain','contours'].includes(subject().id) || subject().field==='agriculture'&&!comparisonFocus()&&(state.farmExtent==='full'||!farmingView().active)) box = [0, 0, frame.width, frame.height];
+    if (cultureActive()&&!onsCulture || subject().field!=='agriculture'&&state.region === 'all' && !state.place&&!comparisonFocus()&&!['industry','population'].includes(subject().field)&&!['climate','water','drainage','precipitation','terrain','contours'].includes(subject().id) || subject().field==='agriculture'&&!comparisonFocus()&&(state.farmExtent==='full'||!farmingView().active)) box = [0, 0, frame.width, frame.height];
     else if(subject().field==='agriculture'&&!comparisonFocus()) box = [left-width*.04,top-height*.04,width*1.08,height*1.08];
     staticMap.setAttribute('viewBox', box.join(' '));
     staticSymbols();

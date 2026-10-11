@@ -25,4 +25,4 @@ Chromium の production preview、1920×1080、MapLibre 読込後の画面を保
 - EEA ECRINSの公式データ取得口はこの環境からHTTP 403となり、河川の源流から河口までの連結と全流域を確定できていない。BasinATLASレベル4の単一区画を全流域とは扱わない。
 - 農畜産の食品群別自給率帯、林業の輸出入先、地下水図、欧州全域の宗教細地域と民族分布は、対応する原表・定義・利用条件が揃うまで未表示とした。既存の出典付き集計は維持した。
 
-検証：`npm test`（1124件成功、3件スキップ）、`npm run build`、`node --test tests/e2e/atlas-europe.test.mjs`。ビルド時はAstro telemetryの設定先を書けるよう `ASTRO_TELEMETRY_DISABLED=1 XDG_CONFIG_HOME=/tmp/insight-journal-config` を指定した。
+検証：`npm test`（1124件成功、3件スキップ）、`npm run build`、`node --test tests/e2e/atlas-europe.test.mjs`、`tests/browser/atlas-europe-pc-review.mjs`（1440×1000・1024×800の操作地図、および1024×800の簡易地図）が成功。ビルド時はAstro telemetryの設定先を書けるよう `ASTRO_TELEMETRY_DISABLED=1 XDG_CONFIG_HOME=/tmp/insight-journal-config` を指定した。
