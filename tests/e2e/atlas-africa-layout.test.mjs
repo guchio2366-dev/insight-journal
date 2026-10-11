@@ -58,10 +58,10 @@ test('water subtabs keep their own keyboard selection independent of the nature 
  });
 });
 
-test('population tabs retain roving focus when changing between density and the two source guides',async()=>{
+test('population tabs retain roving focus when changing between density, ethnicity source guide, religion and language',async()=>{
  await withAfricaPage('?field=population&topic=distribution&zoom=all',context=>{
   assertTabs(context,'[data-africa-topic]','distribution',{focused:false});
-  navigateTabs(context,'data-africa-topic',[['ArrowRight','ethnicity'],['End','religion'],['ArrowRight','distribution'],['ArrowLeft','religion'],['ArrowLeft','ethnicity'],['Home','distribution']]);
+  navigateTabs(context,'data-africa-topic',[['ArrowRight','ethnicity'],['End','language'],['ArrowRight','distribution'],['ArrowLeft','language'],['ArrowLeft','religion'],['ArrowLeft','ethnicity'],['Home','distribution']]);
 });
 });
 
@@ -75,8 +75,8 @@ test('population data status follows the tabs and distinguishes density estimate
   assert.equal(root.querySelectorAll('[data-africa-layer-class]').length,7,'all original density classes remain available');
   navigateTabs(context,'data-africa-topic',[['ArrowRight','ethnicity']]);
   assert.match(status.textContent,/2021版.*この画面に分布図はありません/);assert.equal(status.previousElementSibling,nav);
-  navigateTabs(context,'data-africa-topic',[['End','religion']]);
-  assert.match(status.textContent,/2020年の局所観測ではなく、この画面に分布図はありません/);
+  navigateTabs(context,'data-africa-topic',[['ArrowRight','religion']]);
+  assert.match(status.textContent,/Pew.*国別/);assert.equal(root.querySelectorAll('[data-africa-religion-country]:not([data-africa-religion-mixed])').length,55);
   navigateTabs(context,'data-africa-topic',[['Home','distribution']]);
   assert.equal(status.textContent,'色は人口密度の推計区分。国の平均とは異なります。');
   q('.africa-fields [data-field="nature"]').click();

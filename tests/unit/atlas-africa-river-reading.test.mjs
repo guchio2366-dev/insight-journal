@@ -14,7 +14,7 @@ const manifest=JSON.parse(readFileSync(new URL('manifest.json',assets),'utf8'));
 
 test('named readings use only the verified native Nile and Congo features and original approved prose',()=>{
  const expected={nile:['ne50-river-0047','ne50-river-0298'],congo:['ne50-river-0157','ne50-river-0263']};
- for(const river of africaRivers){
+ for(const river of africaRivers.filter(row=>row.id==='nile'||row.id==='congo')){
   assert.strictEqual(africaRiverById(river.id),river);
   assert.deepEqual(river.featureIds,expected[river.id]);
   assert.deepEqual(rivers.features.filter(feature=>africaRiverForFeature(feature)===river).map(feature=>feature.id),expected[river.id]);
@@ -23,7 +23,7 @@ test('named readings use only the verified native Nile and Congo features and or
  assert.strictEqual(africaRiverById('nile').reading,reading.nature[0]);
  assert.strictEqual(africaRiverById('congo').reading,reading.nature[1]);
  assert.strictEqual(africaRiverById('nile').theme,themeById('nile-water'));
- assert.equal(africaRiverById('niger'),undefined);
+ assert.equal(africaRivers.length,11);assert.equal(africaRiverById('niger').label,'ニジェール川');assert.equal(africaRiverForFeature({properties:{riverId:'niger'}}).id,'niger');
  assert.equal(africaRiverForFeature({properties:{name:'Nile',sourceName:'Nile',id:'unnamed-basin'}}),undefined);
  assert.equal(africaRiverForFeature({properties:{sourceName:'Congo',id:'ne50-river-0298'}}),undefined);
  for(const feature of rivers.features.filter(row=>/Nile/.test(row.properties.name)&&row.properties.name!=='Nile'))assert.equal(africaRiverForFeature(feature),undefined);

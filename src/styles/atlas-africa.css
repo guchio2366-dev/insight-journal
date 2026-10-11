@@ -582,7 +582,7 @@
 .africa-atlas [data-africa-city-reading] h3{font-size:18px;line-height:1.5;margin:6px 0}
 .africa-atlas [data-africa-city-reading] p{font-size:15px;line-height:1.7;margin:6px 0}
 .africa-atlas [data-africa-city-reading] figure{margin:0 0 9px}
-.africa-atlas [data-africa-city-reading] svg{display:block;width:100%;height:auto;overflow:visible}
+.africa-atlas [data-africa-city-reading] svg{display:block;width:100%;height:auto;max-height:none;overflow:visible}
 .africa-atlas [data-africa-city-reading] figcaption{font-size:14px;line-height:1.6}
 .africa-atlas .africa-city-climate-key{display:flex;flex-wrap:wrap;align-items:center;gap:2px 12px}
 .africa-atlas .africa-city-climate-key>span{white-space:nowrap}
@@ -636,3 +636,19 @@
 .africa-map-pick-label:hover rect,.africa-map-pick-label:focus-visible rect{fill:#fff0df;stroke:#a64e29;stroke-width:2px}
 .africa-map-pick-label:focus-visible{outline:none}
 .africa-map-pick-label:focus-visible circle:last-child{stroke:#a64e29;stroke-width:3px}
+
+/* Africa round2: one PC map height and a reading column spanning that frame. */
+@media(min-width:960px){
+ .africa-atlas[data-field=nature][data-topic] .africa-map-frame{height:clamp(480px,calc(100dvh - 285px),720px);min-height:480px;aspect-ratio:auto}
+ .africa-atlas[data-field=nature] .africa-map-frame>.africa-map{height:100%;min-height:0;max-height:none}
+ .africa-atlas[data-field=nature][data-topic] .africa-detail{height:var(--africa-map-height,660px);max-height:var(--africa-map-height,660px);overflow-y:auto;scrollbar-gutter:stable}
+ .africa-atlas[data-field=nature] .africa-detail-scroll{height:auto;max-height:none;overflow:visible}
+ .africa-atlas[data-field=nature] .africa-country-controls>label:nth-child(n+2),.africa-atlas[data-field=population] .africa-country-controls>label:nth-child(n+2),.africa-atlas[data-field=industry] .africa-country-controls>label:nth-child(n+2){display:none}
+ .africa-atlas[data-field=nature] .africa-map-tools>button:not([data-zoom=all]),.africa-atlas[data-field=population] .africa-map-tools>button:not([data-zoom=all]),.africa-atlas[data-field=industry] .africa-map-tools>button:not([data-zoom=all]){display:none}
+ .africa-atlas[data-field=agriculture] .africa-map-subfields{display:none}
+ .africa-atlas[data-field=agriculture] .africa-agri-map-controls{inset:0 auto auto 0;height:auto}
+ .africa-atlas[data-field=agriculture] .africa-agri-map-controls .atlas-agri-layers{position:relative;left:10px;top:10px;margin:0;display:flex}
+ .africa-atlas[data-field=agriculture] .africa-agri-map-controls>label[hidden]{display:none}
+}
+
+.africa-atlas[data-field=nature]:not([data-topic=climate]) .africa-ocean{display:none}
