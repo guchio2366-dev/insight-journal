@@ -64,6 +64,9 @@ jobs:
           set -euo pipefail
           git fetch --no-tags --depth=1 origin "$BASE_SHA"
           region_files="$(git diff --name-only "$BASE_SHA" HEAD -- src public/assets/atlas tests/browser/atlas-oceania-russia-climate-cities.mjs)"
+          if [[ "$region_files" == *OceaniaLearningPage.astro* || "$region_files" == *atlas-oceania-learning.ts* || "$region_files" == *oceania-industry-reading.ts* ]]; then
+            echo 'REGION_REVIEW_INDUSTRY=1' >> "$GITHUB_ENV"
+          fi
           if [[ "$region_files" == *physical-v1* || "$region_files" == *rivers-v1* || "$region_files" == *oceania-russia-physical.ts* ]]; then
             echo 'REGION_REVIEW_PHYSICAL=1' >> "$GITHUB_ENV"
           fi

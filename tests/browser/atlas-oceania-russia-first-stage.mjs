@@ -10,6 +10,7 @@ import {chromium} from 'playwright';
 
 const output=resolve(process.env.REGION_REVIEW_OUTPUT??'/tmp/oceania-russia-first-stage');
 const farmingOnly=process.env.REGION_REVIEW_FARMING_ONLY==='1';
+const industryReview=process.env.REGION_REVIEW_INDUSTRY==='1';
 const physicalReview=process.env.REGION_REVIEW_PHYSICAL==='1';
 const representativeOnly=process.env.REGION_REVIEW_REPRESENTATIVE_ONLY==='1';
 const focusDeltaOnly=process.env.REGION_REVIEW_FOCUS_DELTA_ONLY==='1';
@@ -67,6 +68,48 @@ try{
   assert.ok(clip.width>0&&clip.height>0);
   return {clip,png:await page.screenshot({fullPage:true,clip})};
  };
+ if(industryReview&&regions.includes('oceania')){
+  await page.setViewportSize({width:1920,height:1080});
+  assert.equal(await page.evaluate(()=>devicePixelRatio),1,'PC capture uses DPR 1');
+  await open('oceania','industry');
+  const host=root('oceania'),map=host.locator('[data-primary-map]');
+  const capture=async name=>{const file=`oceania-industry-1920-${name}.png`;await page.screenshot({path:resolve(output,file),fullPage:true});result.screenshots.push(file);};
+  const marks=()=>map.locator('[data-oceania-industry-location]');
+  const mines=()=>map.locator('circle[stroke="#fff"][fill]');
+  const frame=await map.locator('svg').first().getAttribute('viewBox');
+  assert.equal(await host.locator('[data-place]').inputValue(),'all');
+  assert.equal(await host.locator('[data-layer]').inputValue(),'industry-all');
+  assert.equal(await marks().count(),5);
+  assert.equal(await mines().count(),347);
+  assert.equal(await map.locator('[data-oceania-industry-location][aria-pressed="true"]').count(),0);
+  assert.match(await host.locator('[data-theme-title]').textContent(),/オセアニアの主要産業/);
+  await capture('overview');
+  await map.locator('[data-oceania-industry-location="lae-port"]').click();await ready('oceania');
+  assert.equal(new URL(page.url()).searchParams.get('industryLocation'),'lae-port');
+  assert.equal(await host.locator('[data-theme-title]').textContent(),'ラエ港');
+  assert.match(await host.locator('[data-explanation]').textContent(),/個々の鉱山の輸出港や鉱山からの輸送経路は/);
+  assert.match(await host.locator('[data-source-list]').textContent(),/ラエ港の位置資料/);
+  assert.equal(await host.locator('[data-oceania-industry-return]').isVisible(),true);
+  assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
+  assert.equal(await marks().count(),5);assert.equal(await mines().count(),347);
+  assert.equal(await map.locator('[data-oceania-industry-location="lae-port"]').getAttribute('aria-pressed'),'true');
+  await capture('lae-selected');
+  await page.reload({waitUntil:'networkidle'});await ready('oceania');
+  assert.equal(await host.locator('[data-theme-title]').textContent(),'ラエ港');
+  assert.equal(await marks().count(),5);assert.equal(await mines().count(),347);
+  await capture('lae-reloaded');
+  await host.locator('[data-oceania-industry-return]').click();await ready('oceania');
+  assert.equal(new URL(page.url()).searchParams.has('industryLocation'),false);
+  assert.equal(await host.locator('[data-oceania-industry-return]').isVisible(),false);
+  assert.equal(await marks().count(),5);assert.equal(await mines().count(),347);
+  assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
+  await capture('reset');
+  await page.reload({waitUntil:'networkidle'});await ready('oceania');
+  assert.equal(new URL(page.url()).searchParams.has('industryLocation'),false);
+  assert.equal(await host.locator('[data-oceania-industry-return]').isVisible(),false);
+  assert.equal(await marks().count(),5);assert.equal(await mines().count(),347);
+  result.checks.push('Oceania industry at 1920×1080 CSS pixels and DPR 1: overview, Lae representative selection, reload and reset retain all five named places, 347 Australian mine marks, source reading and the full regional frame.');
+ }
  if(!farmingOnly||physicalReview){
   for(const width of [1920,1536,1024]){
    await page.setViewportSize({width,height:width===1920?1080:864});
