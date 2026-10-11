@@ -11,10 +11,10 @@ const levels = ['aggregate', 'detail'] as const;
 <section class="eu-culture" data-eu-culture-reader data-culture-topic={topic} data-culture-initial-case={state.cultureCase} data-culture-initial-category={state.cultureCategory} data-culture-initial-area={state.cultureArea} aria-labelledby={`${id}-title`}>
   <section class="eu-religion-evidence-reading" data-eu-religion-evidence-reading hidden aria-live="polite"></section>
   <header class="eu-culture-head">
-    <p class="eu-culture-kicker" data-culture-kicker>{topic === 'religion' ? '国別の回答構成' : '国勢調査の地域事例'}</p>
+    <p class="eu-culture-kicker" data-culture-kicker>{topic === 'religion' ? '国別推計と地域分布' : '国勢調査の地域分布'}</p>
     <h3 id={`${id}-title`} data-culture-title>{hasCase ? selected.topic.titleJa : topic === 'religion' ? '欧州の宗教の分布' : '民族的帰属の地域事例'}</h3>
-    <p class="eu-culture-takeaway" data-culture-takeaway>{topic === 'religion' ? '概説：2020年の国別推計では欧州全体のキリスト教67.1%、宗教的無所属25.3%、イスラム教6.0%。地図の国別構成帯ではチェコ・オランダで無所属が多く、アルバニア・ボスニア・コソボではイスラム教の割合が高い。' : '2021年の自己申告分類を、同じ公表表の総人口に占める割合で読みます。'}</p>
-    <p data-culture-overview>{topic === 'religion' ? '解説：カトリック・正教会・プロテスタントの歴史的な教会圏、オスマン帝国期の南東欧、宗教改革以後の制度、20世紀以後の社会変化と移住が国別構成に重なります。国境の濃淡は国内の地区差や宗派を示しません。Pewの広域推計と各国国勢調査は対象・分類・方法が異なります。' : '欧州全体を表示しています。事例と元の回答分類を選ぶと、その分類の分布を表示します。'}</p>
+    <p class="eu-culture-takeaway" data-culture-takeaway>{topic === 'religion' ? '概説：国別の2020年推計ではキリスト教・イスラム教・宗教的無所属などの構成が国ごとに異なります。イングランド・ウェールズの色面だけは別資料の2021年国勢調査で「無宗教」と答えた割合です。' : '概説：イングランド・ウェールズの色面は、2021年国勢調査で「白人」以外の4つの大分類を選んだ人の割合です。行政区ごとの広がりを示し、欧州の他地域は未収録です。'}</p>
+    <p data-culture-overview>{topic === 'religion' ? '解説：国別の宗教構成には歴史的な教会圏、宗教改革、南東欧の歴史、近年の社会変化と移住が関わります。ただしPewの7分類は宗派を区別せず、国勢調査の無宗教・未回答とも定義が異なります。' : '解説：都市部とその周辺の多様性には国内外からの移動と雇用・交通の集積が関わります。色面は居住者が申告した分類の割合であり、各人の位置や欧州全体の民族分布ではありません。クロアチア全国値は別の分類・粒度で示します。'}</p>
     {topic === 'religion' && <p class="eu-culture-source-inline">国別推計：<a href="https://www.pewresearch.org/religion/feature/religious-composition-by-country-2010-2020/">Pew Research Center（2025）</a>。宗派・地方の補足は各国統計機関。</p>}
   </header>
   <div class="eu-culture-controls">
@@ -39,7 +39,8 @@ const levels = ['aggregate', 'detail'] as const;
       {hasCase && selected.topic.areas.slice().sort((left, right) => left.name.localeCompare(right.name, 'en')).map(area => <option value={area.code} selected={area.code === state.cultureArea}>{area.name}</option>)}
     </select>
   </div>
-  <div class="eu-culture-context"><span data-culture-grain>{!hasCase ? '行政区と全国値の2事例' : selected.censusCase.grain === 'national' ? '全国値 · 1地域' : '行政区（LAD2021）· 331地域'}</span><span data-culture-year>{hasCase ? `${selected.topic.year}年国勢調査 · ${selected.topic.censusDate}` : '2021年国勢調査'}</span></div>
+  <div class="eu-culture-context"><span data-culture-grain>{!hasCase ? 'ONS 2021年 · 行政区（LAD）331地域' : selected.censusCase.grain === 'national' ? '全国値 · 1地域' : '行政区（LAD2021）· 331地域'}</span><span data-culture-year>{hasCase ? `${selected.topic.year}年国勢調査 · ${selected.topic.censusDate}` : topic === 'religion' ? 'ONS 2021年地域面／Pew 2020年国別推計' : 'ONS 2021年国勢調査'}</span></div>
+  <button type="button" class="eu-culture-fit" data-culture-fit>{hasCase ? '事例の範囲を表示' : '色面の対象地域を拡大'}</button>
   <div class="eu-culture-value" data-culture-value hidden={!selected.category || !selected.area} role="status" aria-live="polite" aria-atomic="true">
     <p class="eu-culture-area-name" data-culture-area-name>{selected.area?.name ?? '地域未選択'}</p>
     <p class="eu-culture-category-name" data-culture-category-name>{selected.category?.label ?? '回答分類未選択'}</p>
@@ -47,14 +48,14 @@ const levels = ['aggregate', 'detail'] as const;
     <p class="eu-culture-denominator" data-culture-denominator>{selected.area ? `分母：この表の総人口 ${formatCultureCount(selected.area.denominator)}` : '分母は選択した地域の同じ公表表の総人口です。'}</p>
   </div>
   <div class="eu-culture-legend" aria-label="同じ表の総人口を分母とする割合の凡例">
-    {cultureLegend.map(item => <span data-culture-scale-key hidden={!selected.category}><i style={`background:${item.color}`} aria-hidden="true"></i>{item.label}</span>)}
-    <span data-culture-unselected-key hidden={!!selected.category}><i style={`background:${cultureLegend.at(-1)!.color}`} aria-hidden="true"></i>回答分類未選択・未掲載（0%ではありません）</span>
+    <strong class="eu-culture-scale-title" data-culture-scale-title>{!hasCase ? topic === 'ethnicity' ? 'ONS 2021：白人以外の4大分類の合計／行政区総人口' : 'ONS 2021：無宗教の回答／行政区総人口' : selected.category ? `${selected.category.label}／同じ表の地域総人口` : '分類未選択'}</strong>
+    {cultureLegend.map(item => <span data-culture-scale-key hidden={hasCase && !selected.category}><i style={`background:${item.color}`} aria-hidden="true"></i>{item.label}</span>)}
+    <span data-culture-unselected-key hidden={!hasCase || !!selected.category}><i style={`background:${cultureLegend.at(-1)!.color}`} aria-hidden="true"></i>回答分類未選択・未掲載（0%ではありません）</span>
   </div>
   <details class="eu-culture-details"><summary>分類の意味・対象範囲・出典</summary>
-  <p class="eu-culture-note" data-culture-note>{cultureCaseNote(selected.censusCase, topic)}</p>
+  <p class="eu-culture-note" data-culture-note>{hasCase ? cultureCaseNote(selected.censusCase, topic) : '色面はONS 2021年国勢調査のイングランド・ウェールズ331行政区のみ。クロアチアは全国値の別資料。残る欧州域は未収録で、0%や無居住ではありません。'}</p>
   <p class="eu-culture-small" data-culture-classification-note>{selected.category?.level === 'aggregate' ? '元表の大分類です。細分類と足し合わせません。' : selected.censusCase.grain === 'national' ? 'クロアチアの元分類です。他国の分類と同一化しません。' : '元表の回答分類です。大分類に含まれる人数を重ねて合計しません。'}</p>
-  <button type="button" class="eu-culture-fit" data-culture-fit disabled>事例の範囲を表示</button>
-  <p class="eu-culture-small" data-culture-map-status>未掲載地域は数値なしです。白い地域を0%と読まないでください。</p>
+  <p class="eu-culture-small" data-culture-map-status>ONS 2021年の331行政区のみ色面表示。残る欧州は未収録で、0%ではありません。</p>
   <p class="eu-culture-small" data-culture-outline-note>{selected.censusCase.grain === 'national' ? '国の輪郭は位置を示すための概略です。2021年の県境ではありません。' : 'ONSの2021年行政区境界です。海岸線を500mで概略化しています。'}</p>
   <p class="eu-culture-small" data-culture-disclosure>{selected.censusCase.grain === 'LAD' ? '秘匿処理により、民族表と宗教表の総人口がわずかに異なる場合があります。各表の公表値をそのまま使います。' : '全国の公表行を使います。無宗教・不可知論・未申告・不明を区別し、宗教団体への所属で回答を組み替えません。'}</p>
   <footer class="eu-culture-sources">

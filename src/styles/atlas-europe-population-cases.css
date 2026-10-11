@@ -74,6 +74,7 @@
 .eu-culture .eu-culture-denominator { font-size:12px; margin-bottom:0; }
 .eu-culture-small { font-size:11px; color:#425b66; overflow-wrap:anywhere; }
 .eu-culture-legend { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:4px 8px; margin:11px 0; font-size:11px; }
+.eu-culture-scale-title { grid-column:1/-1; font-size:12px; line-height:1.4; }
 .eu-culture-legend>span { display:flex; align-items:center; gap:6px; }
 .eu-culture-legend i { flex:none; width:18px; height:12px; border:1px solid #5e7782; }
 .eu-culture-fit { min-height:44px; margin-bottom:8px; padding:7px 12px; border:1px solid #7a929b; border-radius:2px; background:#f7f5eb; color:#223c47; font:700 12px/1.4 var(--sans,sans-serif); cursor:pointer; }

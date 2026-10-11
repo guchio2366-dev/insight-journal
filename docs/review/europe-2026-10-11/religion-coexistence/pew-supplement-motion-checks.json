@@ -1,0 +1,114 @@
+{
+  "gitHead": "c0d96c786ed752991ef20988e0d77e23afb7e982",
+  "gitStatus": " M src/styles/atlas-europe-workspace.css\n",
+  "results": [
+    {
+      "width": 1920,
+      "render": "auto",
+      "motion": "no-preference",
+      "nationalLabels": 5,
+      "collisions": [],
+      "serbiaDirectClick": true,
+      "errors": []
+    },
+    {
+      "width": 1920,
+      "render": "static",
+      "motion": "no-preference",
+      "nationalLabels": 5,
+      "collisions": [],
+      "serbiaDirectClick": true,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "render": "auto",
+      "motion": "no-preference",
+      "nationalLabels": 5,
+      "collisions": [],
+      "serbiaDirectClick": true,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "render": "static",
+      "motion": "no-preference",
+      "nationalLabels": 5,
+      "collisions": [],
+      "serbiaDirectClick": true,
+      "errors": []
+    },
+    {
+      "width": 1024,
+      "render": "auto",
+      "motion": "no-preference",
+      "nationalLabels": 5,
+      "collisions": [],
+      "serbiaDirectClick": true,
+      "errors": []
+    },
+    {
+      "width": 1024,
+      "render": "static",
+      "motion": "no-preference",
+      "nationalLabels": 5,
+      "collisions": [],
+      "serbiaDirectClick": true,
+      "errors": []
+    },
+    {
+      "width": 1920,
+      "render": "auto",
+      "motion": "reduce",
+      "nationalLabels": 5,
+      "collisions": [],
+      "serbiaDirectClick": true,
+      "errors": []
+    },
+    {
+      "width": 1920,
+      "render": "static",
+      "motion": "reduce",
+      "nationalLabels": 5,
+      "collisions": [],
+      "serbiaDirectClick": true,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "render": "auto",
+      "motion": "reduce",
+      "nationalLabels": 5,
+      "collisions": [],
+      "serbiaDirectClick": true,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "render": "static",
+      "motion": "reduce",
+      "nationalLabels": 5,
+      "collisions": [],
+      "serbiaDirectClick": true,
+      "errors": []
+    },
+    {
+      "width": 1024,
+      "render": "auto",
+      "motion": "reduce",
+      "nationalLabels": 5,
+      "collisions": [],
+      "serbiaDirectClick": true,
+      "errors": []
+    },
+    {
+      "width": 1024,
+      "render": "static",
+      "motion": "reduce",
+      "nationalLabels": 5,
+      "collisions": [],
+      "serbiaDirectClick": true,
+      "errors": []
+    }
+  ]
+}

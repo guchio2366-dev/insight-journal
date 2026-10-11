@@ -42,11 +42,12 @@ test('pinned source baseline, provenance hashes and display frame are consistent
   assert.equal(manifest.processing.displayGridIsOriginalResolution, false);
   assert.equal(manifest.processing.colorClassificationBasis, 'Stored float32 display lookup value');
   assert.equal(manifest.processing.rawSourceIncludedInRepository, false);
-  assert.equal(manifest.styleUpdatedAt, '2026-10-07');
+  assert.equal(manifest.styleUpdatedAt, '2026-10-11');
   assert.equal(manifest.processing.reclassificationInputSha256, sha(bytes(base + 'values.bin.gz')));
   assert.deepEqual(breaks, Array.from({length:12},(_,i)=>(i+1)*250));
   assert.deepEqual(colors, manifest.colors);
-  assert.ok(colors.every(color=>Number.parseInt(color.slice(5,7),16)>Number.parseInt(color.slice(1,3),16)));
+  assert.ok(colors.every(color=>Number.parseInt(color.slice(5,7),16)>Number.parseInt(color.slice(1,3),16)),'all bands are blue');
+  assert.notEqual(colors[0],colors[1],'two lowest bands have distinct blue lightness');
   for (const [name, record] of Object.entries(manifest.files)) assert.equal(sha(bytes(base + name)), record.sha256, name);
   for (const input of manifest.inputs) assert.equal(sha(bytes(input.path)), input.sha256, input.path);
   assert.deepEqual(manifest.licenseEvidence.dataCiteRightsList, []);

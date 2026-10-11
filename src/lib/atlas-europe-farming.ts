@@ -48,18 +48,18 @@ export function updateFarmingMap(root:HTMLElement,map:LibreMap|undefined,data:Fa
     path.style.display=ids.includes(path.dataset.euFarmArea!)?'':'none';
     if(!item)return;
     const weight=farmingVisualWeight(item,view.selectedVisible?view.item?.id:undefined,view.single);
-    const categorical=view.genre==='crops'&&dominant.features.some(feature=>feature.properties.id===item.id);
-    path.style.fillOpacity=String(categorical?1:weight.fill);
-    path.style.strokeOpacity=String(categorical?.35:weight.line);
+    const categorical=!!view.genre&&dominant.features.some(feature=>feature.properties.id===item.id);
+    path.style.fillOpacity=String(categorical?.82:weight.fill);
+    path.style.strokeOpacity=String(categorical?.22:weight.line);
     path.style.strokeWidth=String(weight.width);
   });
   root.querySelectorAll<SVGElement>('[data-eu-farm-outline]').forEach(path=>{
     path.style.display=view.selectedVisible&&path.dataset.euFarmOutline===view.item?.id?'':'none';
   });
   const secondaryLayer=root.querySelectorAll<SVGGElement>('[data-eu-farming-secondary]')[0];
-  if(secondaryLayer)secondaryLayer.style.display=view.genre==='crops'?'':'none';
+  if(secondaryLayer)secondaryLayer.style.display=view.active&&!view.single?'':'none';
   root.querySelectorAll<SVGElement>('[data-eu-farm-secondary]').forEach(path=>{
-    path.style.display=view.genre==='crops'&&ids.includes(path.getAttribute('data-eu-farm-secondary')??'')?'':'none';
+    path.style.display=view.active&&!view.single&&ids.includes(path.getAttribute('data-eu-farm-secondary')??'')?'':'none';
   });
   if(map?.getLayer('land')) {
     if(!map.getSource('eu-farming')) {
@@ -67,11 +67,11 @@ export function updateFarmingMap(root:HTMLElement,map:LibreMap|undefined,data:Fa
       map.addSource('eu-farming-dominant',{type:'geojson',data:dominant as any});
       map.addSource('eu-farming-secondary',{type:'geojson',data:secondary as any});
       for(const kind of ['crop','livestock'] as const) {
-        const source=kind==='crop'?'eu-farming-dominant':'eu-farming';
+        const source='eu-farming-dominant';
         map.addLayer({id:'eu-farm-'+kind+'-fill',type:'fill',source,filter:['==',['get','kind'],kind],paint:{'fill-color':['get','color'],'fill-opacity':0}});
-        map.addLayer({id:'eu-farm-'+kind+'-line',type:'line',source,filter:['==',['get','kind'],kind],paint:{'line-color':['get','color'],'line-width':.7,...(kind==='livestock'?{'line-dasharray':[4,2]}:{}),'line-opacity':0}});
+        map.addLayer({id:'eu-farm-'+kind+'-line',type:'line',source,filter:['==',['get','kind'],kind],paint:{'line-color':['get','color'],'line-width':.7,'line-opacity':0}});
       }
-      map.addLayer({id:'eu-farm-secondary-line',type:'line',source:'eu-farming-secondary',paint:{'line-color':['get','color'],'line-width':1.4,'line-opacity':.78,'line-dasharray':[3,2]}});
+      map.addLayer({id:'eu-farm-secondary-line',type:'line',source:'eu-farming-secondary',paint:{'line-color':['get','color'],'line-width':.9,'line-opacity':.46,'line-dasharray':[3,2]}});
       map.addLayer({id:'eu-farm-selection-halo',type:'line',source:'eu-farming',paint:{'line-color':'#fffdf2','line-width':5}});
       map.addLayer({id:'eu-farm-selection',type:'line',source:'eu-farming',paint:{'line-color':'#173c48','line-width':2.5}});
     }
@@ -79,12 +79,12 @@ export function updateFarmingMap(root:HTMLElement,map:LibreMap|undefined,data:Fa
       const filter:any=['all',['==',['get','kind'],kind],['in',['get','id'],['literal',ids]]];
       for(const suffix of ['fill','line'])map.setFilter('eu-farm-'+kind+'-'+suffix,filter);
       const weights=data.features.filter(feature=>feature.properties.kind===kind).map(feature=>[feature.properties.id,farmingVisualWeight(feature.properties,view.selectedVisible?view.item?.id:undefined,view.single)] as const);
-      const property=(key:'fill'|'line'|'width')=>['match',['get','id'],...weights.flatMap(([id,weight])=>[id,kind==='crop'&&view.genre==='crops'&&key==='fill'?1:kind==='crop'&&view.genre==='crops'&&key==='line'?.35:weight[key]]),0] as any;
+      const property=(key:'fill'|'line'|'width')=>['match',['get','id'],...weights.flatMap(([id,weight])=>[id,view.genre&&key==='fill'?.82:view.genre&&key==='line'?.22:weight[key]]),0] as any;
       map.setPaintProperty('eu-farm-'+kind+'-fill','fill-opacity',property('fill'));
       map.setPaintProperty('eu-farm-'+kind+'-line','line-opacity',property('line'));
       map.setPaintProperty('eu-farm-'+kind+'-line','line-width',property('width'));
     }
-    map.setFilter('eu-farm-secondary-line',['in',['get','id'],['literal',view.genre==='crops'?ids:[]]]);
+    map.setFilter('eu-farm-secondary-line',['in',['get','id'],['literal',view.active&&!view.single?ids:[]]]);
     for(const id of ['eu-farm-selection-halo','eu-farm-selection']) {
       map.setFilter(id,['==',['get','id'],view.selectedVisible?view.item!.id:'']);
       map.moveLayer(id);

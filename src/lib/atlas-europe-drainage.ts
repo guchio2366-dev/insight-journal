@@ -106,19 +106,30 @@ export function europeDrainageCell(values: Float32Array, point: readonly number[
  * GIS boundary of a whole river catchment. No dilation, area or volume estimate.
  */
 export function europeDrainageOutline(values: Float32Array, selectedIndex: unknown, options: EuropeDrainageGridSpec & { color?: readonly [number, number, number, number] } = europeDrainageGrid, basins = europeDrainageBasins): EuropeDrainageOutline {
+  const selected = europeDrainageBasinByIndex(selectedIndex, basins);
+  return outlineForIndexes(values, selected ? new Set([selected.index]) : new Set(), options);
+}
+
+/** Connected level-04 sections with the same source MAIN_BAS. The published
+ * mask remains clipped to the Europe display countries and frame. */
+export function europeDrainageMainBasinOutline(values: Float32Array, mainBasin: number, options: EuropeDrainageGridSpec & { color?: readonly [number, number, number, number] } = europeDrainageGrid, basins = europeDrainageBasins): EuropeDrainageOutline {
+  const indexes = new Set(basins.filter(basin => basin.MAIN_BAS === mainBasin).map(basin => basin.index));
+  return outlineForIndexes(values, indexes, options);
+}
+
+function outlineForIndexes(values: Float32Array, indexes: Set<number>, options: EuropeDrainageGridSpec & { color?: readonly [number, number, number, number] }): EuropeDrainageOutline {
   if (!validGrid(options) || values.length !== options.width * options.height) throw new RangeError('Invalid Europe drainage outline mask');
   const { width, height } = options, rgba = new Uint8ClampedArray(width * height * 4);
-  const selected = europeDrainageBasinByIndex(selectedIndex, basins);
-  if (!selected) return { rgba, transparent: true, boundaryPixels: 0 };
+  if (!indexes.size) return { rgba, transparent: true, boundaryPixels: 0 };
   const color = options.color ?? [23, 60, 72, 255];
   if (color.length !== 4 || color.some(channel => !Number.isInteger(channel) || channel < 0 || channel > 255)) throw new TypeError('Invalid Europe drainage outline colour');
   let boundaryPixels = 0;
   for (let row = 0; row < height; row++) for (let column = 0; column < width; column++) {
     const at = row * width + column;
-    if (values[at] !== selected.index) continue;
+    if (!indexes.has(values[at])) continue;
     if (column === 0 || column === width - 1 || row === 0 || row === height - 1
-      || values[at - 1] !== selected.index || values[at + 1] !== selected.index
-      || values[at - width] !== selected.index || values[at + width] !== selected.index) {
+      || !indexes.has(values[at - 1]) || !indexes.has(values[at + 1])
+      || !indexes.has(values[at - width]) || !indexes.has(values[at + width])) {
       rgba.set(color, at * 4); boundaryPixels++;
     }
   }

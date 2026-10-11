@@ -1,0 +1,203 @@
+[
+  {
+    "id": "volga",
+    "name": "ヴォルガ川",
+    "sourceNames": [
+      "Volga"
+    ],
+    "coordinates": [
+      46.350484,
+      47.842972
+    ]
+  },
+  {
+    "id": "don",
+    "name": "ドン川",
+    "sourceNames": [
+      "Don"
+    ],
+    "coordinates": [
+      40.385887,
+      50.082886
+    ]
+  },
+  {
+    "id": "dnieper",
+    "name": "ドニプロ川",
+    "sourceNames": [
+      "Dnipro",
+      "Dnepre"
+    ],
+    "coordinates": [
+      30.284178,
+      53.147635
+    ]
+  },
+  {
+    "id": "dniester",
+    "name": "ドニエストル川",
+    "sourceNames": [
+      "Dniester"
+    ],
+    "coordinates": [
+      28.080126,
+      48.295812
+    ]
+  },
+  {
+    "id": "vistula",
+    "name": "ヴィスワ川",
+    "sourceNames": [
+      "Vistula"
+    ],
+    "coordinates": [
+      21.276459,
+      51.877247
+    ]
+  },
+  {
+    "id": "oder",
+    "name": "オーデル川",
+    "sourceNames": [
+      "Oder"
+    ],
+    "coordinates": [
+      16.40766,
+      51.595042
+    ]
+  },
+  {
+    "id": "elbe",
+    "name": "エルベ川",
+    "sourceNames": [
+      "Elbe"
+    ],
+    "coordinates": [
+      14.178081,
+      50.520069
+    ]
+  },
+  {
+    "id": "loire",
+    "name": "ロワール川",
+    "sourceNames": [
+      "Loire"
+    ],
+    "coordinates": [
+      0.989738,
+      47.425013
+    ]
+  },
+  {
+    "id": "rhone",
+    "name": "ローヌ川",
+    "sourceNames": [
+      "Rhône"
+    ],
+    "coordinates": [
+      4.858236,
+      45.062676
+    ]
+  },
+  {
+    "id": "po",
+    "name": "ポー川",
+    "sourceNames": [
+      "Po"
+    ],
+    "coordinates": [
+      9.908677,
+      45.132646
+    ]
+  },
+  {
+    "id": "ebro",
+    "name": "エブロ川",
+    "sourceNames": [
+      "Ebro"
+    ],
+    "coordinates": [
+      -1.405206,
+      41.978265
+    ]
+  },
+  {
+    "id": "duero",
+    "name": "ドゥエロ川",
+    "sourceNames": [
+      "Duero"
+    ],
+    "coordinates": [
+      -5.378271,
+      41.515993
+    ]
+  },
+  {
+    "id": "tagus",
+    "name": "タホ川（テージョ川）",
+    "sourceNames": [
+      "Tajo",
+      "Tejo"
+    ],
+    "coordinates": [
+      -4.059049,
+      39.88108
+    ]
+  },
+  {
+    "id": "garonne",
+    "name": "ガロンヌ川",
+    "sourceNames": [
+      "Garonne"
+    ],
+    "coordinates": [
+      0.25508,
+      44.422121
+    ]
+  },
+  {
+    "id": "tisza",
+    "name": "ティサ川",
+    "sourceNames": [
+      "Tisza",
+      "Tisa"
+    ],
+    "coordinates": [
+      22.54496,
+      48.078022
+    ]
+  },
+  {
+    "id": "kama",
+    "name": "カマ川",
+    "sourceNames": [
+      "Kama"
+    ],
+    "coordinates": [
+      56.200781,
+      58.027899
+    ]
+  },
+  {
+    "id": "daugava",
+    "name": "ダウガヴァ川",
+    "sourceNames": [
+      "Daugava"
+    ],
+    "coordinates": [
+      29.288218,
+      55.199732
+    ]
+  },
+  {
+    "id": "ural",
+    "name": "ウラル川",
+    "sourceNames": [
+      "Ural"
+    ],
+    "coordinates": [
+      51.121459,
+      50.460331
+    ]
+  }
+]

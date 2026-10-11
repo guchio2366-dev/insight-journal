@@ -12,7 +12,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 export const bounds = [-25, 32, 65, 73];
 export const width = 1800, height = 1502, lookupNoData = -1;
 export const breaks = Array.from({length:12},(_,i)=>(i+1)*250);
-export const colors = ['#eef7fb','#dceef7','#c7e3f2','#add5eb','#8fc4df','#6fb1d3','#529ac5','#3d82b4','#2f6da4','#245b94','#1c4b82','#153b6d','#0c2d57'];
+export const colors = ['#e6f2fa','#b7d9ea','#9fcddd','#84c3db','#66b0d1','#4e9bc4','#397fb1','#2f6da4','#275d96','#1e4e86','#183e70','#12325e','#0c274d'];
 const sourceHash = '3bd80d05df52572f6409b594ae26b43e9045147cb3c25254cddb5a934c16e5c5';
 const sourceMd5 = 'd701c717e08ce6ad457c9f4004984d65';
 const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');

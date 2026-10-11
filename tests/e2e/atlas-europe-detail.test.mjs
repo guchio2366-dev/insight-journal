@@ -47,7 +47,8 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       assert.ok(areas.every(path=>{const href=path.getAttribute('href');return href?.startsWith('#eu-farm-')&&doc.querySelector(href)?.getAttribute('d')?.startsWith('M');}));
       const cropIds=['wheat','barley','maize','potato','sugarbeet','rapeseed'];
       assert.ok(areas.filter(path=>cropIds.includes(path.dataset.euFarmArea)).every(path=>path.getAttribute('href')===`#eu-farm-dominant-${path.dataset.euFarmArea}`));
-      assert.deepEqual([...doc.querySelectorAll('[data-eu-farm-secondary]')].map(path=>path.dataset.euFarmSecondary).sort(),cropIds.sort());
+      assert.equal(doc.querySelectorAll('[data-eu-farm-secondary]').length,13);
+      assert.deepEqual([...doc.querySelectorAll('[data-eu-farm-secondary]')].filter(path=>path.style.display!=='none').map(path=>path.dataset.euFarmSecondary).sort(),cropIds.sort());
       assert.notEqual(doc.querySelector('[data-eu-farming-shapes]').style.display,'none');
       assert.ok([...doc.querySelectorAll('[data-eu-farm-outline]')].every(path=>path.style.display==='none'));
       const choices=[...doc.querySelectorAll('[data-eu-farming-children="crops"] button,[data-eu-farming-children="livestock"] button,[data-eu-farming-children="horticulture"] button')];

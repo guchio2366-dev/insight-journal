@@ -58,17 +58,32 @@ const reviews = named.map(target => {
 if (reviews[0].unitCount !== 9 || !reviews[0].sourceNetworkClosed || reviews[0].lineEndBasin !== reviews[0].mainBasin) throw new Error('Danube network/mouth evidence changed');
 const output = {
   checkedOn: '2026-10-08',
+  sourceReviewOn: '2026-10-11',
   basinSource: 'BasinATLAS v1.0 level 04; CC BY 4.0; published Europe display mask and identifiers',
   riverSource: 'Natural Earth v5.1.2 50m rivers, selected lines; see context-v1/manifest.json',
   method: 'Group only identical MAIN_BAS identifiers, follow NEXT_DOWN to the same outlet; do not merge adjacent polygons. Compare the existing river line endpoints with the published basin grid.',
   limitations: ['The Europe grid is a clipped display mask, not original basin geometry.', 'The stored river lines may start downstream of the source.', 'A complete source river and uncut whole-basin polygon need independent verification before the screen can say 全流域・本流・河口.'],
-  proposedFullMainstemSource: {
-    product: 'HydroRIVERS v1, Europe and Middle East shapefile (68 MB)',
-    productUrl: 'https://www.hydrosheds.org/products/hydrorivers',
-    downloadLink: 'Europe and Middle East Shapefile (68 MB), official product page link 32; binary URL not acquired',
-    licenseUrl: 'https://data.hydrosheds.org/file/technical-documentation/HydroSHEDS_TechDoc_v1_4.pdf',
-    decision: 'Not downloaded or published: Appendix A sections 2.1.2–2.1.3 require an end-user license at least as protective as the source agreement, prohibit standalone distribution, and add restrictions that this site’s public asset download has not met. Review a compatible alternative or distribution route before use.',
+  proposedWholeBasinSource: {
+    product: 'HydroATLAS BasinATLAS v1.0, global level-04 shapefile',
+    productUrl: 'https://www.hydrosheds.org/hydroatlas',
+    existingProof: 'data-source/atlas/europe/drainage/selected-inputs.json pins original level-04 SHP/DBF/PRJ/SHX hashes and the archive entry ranges; the raw files are not retained in this workspace.',
+    officialDownloadLink: 'https://figshare.com/ndownloader/files/20087237',
+    technicalDocument: 'https://data.hydrosheds.org/file/technical-documentation/HydroATLAS_TechDoc_v10_1.pdf',
+    nextValidation: 'Reacquire the same pinned source entries through an authorized normal download, dissolve every polygon with the verified MAIN_BAS, check that the complete geometry lies inside the map frame, and publish an uncut basin view with its modification and scale recorded.',
+    status: 'The existing published 45-country raster cannot recover polygon parts removed by the country mask. Normal access to the official Figshare download and API returned HTTP 403 in this environment.',
   },
+  proposedFullMainstemSource: {
+    product: 'HydroATLAS RiverATLAS v1.0, global shapefile with regional tiles',
+    productUrl: 'https://www.hydrosheds.org/hydroatlas',
+    officialDownloadLink: 'https://figshare.com/ndownloader/files/20087486',
+    technicalDocument: 'https://data.hydrosheds.org/file/technical-documentation/HydroATLAS_TechDoc_v10_1.pdf',
+    databaseLicense: 'CC BY 4.0 for the HydroATLAS collective database; check the RiverATLAS catalog for the exact licenses of the topology columns before distributing derived attributes.',
+    neededColumns: ['HYRIV_ID', 'NEXT_DOWN', 'MAIN_RIV', 'ORD_CLAS', 'HYBAS_L12'],
+    namedAnchorCandidate: 'Natural Earth 1:10m rivers and lake centerlines: https://www.naturalearthdata.com/downloads/10m-physical-vectors/10m-rivers-lake-centerlines/ . Its named segments must be checked against the RiverATLAS outlet and course; a label match alone does not verify a complete mainstem.',
+    method: 'Identify the outlet from the verified named river and mouth, select its MAIN_RIV network, verify every NEXT_DOWN path reaches the outlet, then trace contiguous ORD_CLAS=1 backbone reaches from source to mouth. Check the displayed reach endpoints and junctions against the source geometry; do not label an unverified longest path as the named mainstem.',
+    status: 'Official shapefile is not present; a normal request to the official Figshare API returned HTTP 403 in this environment. No RiverATLAS geometry or topology is published yet.',
+  },
+  separateHydroRiversBoundary: 'The HydroRIVERS standalone product has different redistribution terms; this review does not relicense or republish it as RiverATLAS.',
   reviews,
 };
 await writeFile(outputPath, JSON.stringify(output, null, 2) + '\n');

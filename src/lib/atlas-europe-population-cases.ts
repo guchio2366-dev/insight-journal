@@ -83,6 +83,33 @@ export function cultureMapData(geometry: CultureGeometry, state: CultureState, k
     }),
   };
 }
+/** The initial regional reading uses only ONS 2021 LAD rows. The four
+ * non-White TS021 aggregates are disjoint; they are summed from their
+ * published counts, never inferred as 100% minus White. This is a measure
+ * of these responses in England and Wales, not a European ethnic typology. */
+export function cultureOverviewMapData(geometry: CultureGeometry, kind: CultureTopicKind, data = europeCultureData): CultureMapData {
+  const censusCase = data.cases.find(item => item.id === 'england-wales-2021');
+  const topic = censusCase?.topics.find(item => item.kind === kind);
+  if (!censusCase || !topic) return { type: 'FeatureCollection', features: [] };
+  const categoryIds = kind === 'ethnicity'
+    ? ['ts021-01', 'ts021-07', 'ts021-11', 'ts021-22']
+    : ['ts030-01'];
+  const indexes = categoryIds.map(id => topic.categories.findIndex(category => category.id === id));
+  const areas = new Map(topic.areas.map(area => [area.code, area]));
+  return { type: 'FeatureCollection', features: geometry.features.map(feature => {
+    const area = areas.get(feature.properties.code);
+    const counts = area && indexes.every(index => index >= 0) ? indexes.map(index => area.counts[index]) : [];
+    const valid = !!area && area.denominator > 0 && counts.length === indexes.length && counts.every(count => Number.isSafeInteger(count) && count >= 0);
+    const count = valid ? counts.reduce((sum, value) => sum + value, 0) : null;
+    const value = count !== null ? count / area!.denominator * 100 : null;
+    return { type: 'Feature', id: feature.properties.code, geometry: feature.geometry, properties: {
+      code: feature.properties.code, name: area?.name ?? feature.properties.name ?? feature.properties.code,
+      value, fill: cultureColor(value), count, denominator: area?.denominator ?? null,
+      grain: 'LAD' as const, year: topic.year,
+      categoryId: kind === 'ethnicity' ? 'ons-ts021-four-aggregates' : 'ts030-01', selected: false,
+    } };
+  }) };
+}
 /** Shared by the main culture layer and the retained source-map comparison. */
 export const caseMapData = (data: PopulationCensusCasePackage, geometry: CultureGeometry, kind: CultureTopicKind, state: CultureState) => cultureMapData(geometry, state, kind, data);
 export function cultureCaseNote(censusCase: PopulationCensusCase, kind: CultureTopicKind): string {
@@ -114,7 +141,7 @@ export function fetchCaseGeometry(caseId: string, options: { base?: string; fetc
   }
   return sharedGeometry.get(url)!;
 }
-type MapAttachment = { mapLayer?: SVGGElement; project?: (point: number[]) => [number, number]; onFitBounds?: (bounds: CultureBounds) => void; onMapData?: (data: CultureMapData) => void };
+type MapAttachment = { mapLayer?: SVGGElement; project?: (point: number[]) => [number, number]; onFitBounds?: (bounds: CultureBounds) => void; onMapData?: (data: CultureMapData) => void; overviewMap?:()=>boolean };
 export type CultureOptions = MapAttachment & {
   legend?: HTMLElement;
   base?: string;
@@ -171,13 +198,19 @@ export function createEuropePopulationCases(root: HTMLElement, options: CultureO
     areaSelect!.replaceChildren(option('', '地域未選択・全体概要'), ...(hasCase ? selected.topic.areas.slice().sort((left, right) => left.name.localeCompare(right.name, 'en')).map(area => option(area.code, area.name)) : []));
     areaSelect!.value = state.cultureArea;
     caseSelect!.disabled = false; categorySelect!.disabled = !hasCase; areaSelect!.disabled = !hasCase;
-    setText('[data-culture-kicker]',kind==='religion'&&!hasCase?'国別の回答構成':'国勢調査の地域事例');
+    setText('[data-culture-kicker]',kind==='religion'&&!hasCase?'国別推計とイングランド・ウェールズの地域分布':'国勢調査の地域分布');
     setText('[data-culture-title]', hasCase ? selected.topic.titleJa : kind === 'religion' ? '欧州の宗教の分布' : '民族的帰属の地域事例');
-    setText('[data-culture-takeaway]', kind==='religion'&&!hasCase?'概説：2020年の国別推計では欧州全体のキリスト教67.1%、宗教的無所属25.3%、イスラム教6.0%。地図の国別構成帯ではチェコ・オランダで無所属が多く、アルバニア・ボスニア・コソボではイスラム教の割合が高い。':'イングランド・ウェールズの行政区とクロアチアの全国値の事例です。欧州全域の分布ではありません。自己申告の元分類と表ごとの分母を使い、無宗教・未回答・不明を区別します。');
-    setText('[data-culture-overview]', !hasCase ? kind==='religion'?'解説：カトリック・正教会・プロテスタントの歴史的な教会圏、オスマン帝国期の南東欧、宗教改革以後の制度、20世紀以後の社会変化と移住が国別構成に重なります。国境の濃淡は国内の地区差や宗派を示しません。Pewの広域推計と各国国勢調査は対象・分類・方法が異なります。':'イングランド・ウェールズ・クロアチアの2021年公表総計から、回答構成を同時に示します。民族は自己認識、宗教は申告した帰属です。言語分布・信仰の実践・欧州全域の細分布を示すものではありません。円の名前から事例を開くと、元の回答分類の分布を選べます。' : !hasCategory ? '元の回答分類を選ぶと、その事例の各地域の割合を表示します。' : '選択した分類の分布全体を表示しています。地域を選ぶと、同じ表の総人口に対する割合と人数を確認できます。');
-    setText('[data-culture-note]', hasCase ? cultureCaseNote(selected.censusCase, kind) : '民族・宗教は各国の自己申告分類を使います。イングランド・ウェールズの行政区とクロアチアの全国値は粒度が異なり、欧州全域の分布ではありません。');
-    setText('[data-culture-grain]', !hasCase ? kind==='religion'?'Pew 2020年 · 40か国の国別推計':'3対象の公表総計 · 詳細は2事例' : selected.censusCase.grain === 'national' ? '全国値 · 1地域' : '行政区（LAD2021）· 331地域');
-    setText('[data-culture-year]', hasCase ? `${selected.topic.year}年国勢調査 · ${selected.topic.censusDate}` : kind==='religion'?'2020年推計 · 全人口・7分類':'2021年国勢調査');
+    setText('[data-culture-takeaway]', !hasCase ? kind==='religion'
+      ? '概説：国別の2020年推計ではキリスト教・イスラム教・宗教的無所属などの構成が国ごとに異なります。イングランド・ウェールズの色面だけは別資料の2021年国勢調査で「無宗教」と答えた割合です。'
+      : '概説：イングランド・ウェールズの色面は、2021年国勢調査で「白人」以外の4つの大分類を選んだ人の割合です。行政区ごとの広がりを示し、欧州の他地域は未収録です。'
+      : `${selected.censusCase.coverageJa}の${selected.topic.year}年国勢調査です。元の自己申告分類と地域ごとの分母を使い、未回答を0%にしません。`);
+    setText('[data-culture-overview]', !hasCase ? kind==='religion'
+      ? '解説：国別の宗教構成には歴史的な教会圏、宗教改革、南東欧の歴史、近年の社会変化と移住が関わります。ただしPewの7分類は宗派を区別せず、国勢調査の無宗教・未回答とも定義が異なります。'
+      : '解説：都市部とその周辺の多様性には国内外からの移動と雇用・交通の集積が関わります。色面は居住者が申告した分類の割合であり、各人の位置や欧州全体の民族分布ではありません。クロアチア全国値は別の分類・粒度で示します。'
+      : !hasCategory ? '元の回答分類を選ぶと、その事例の各地域の割合を表示します。' : '選択した分類の分布全体を表示しています。地域を選ぶと、同じ表の総人口に対する割合と人数を確認できます。');
+    setText('[data-culture-note]', hasCase ? cultureCaseNote(selected.censusCase, kind) : '色面はONS 2021年国勢調査のイングランド・ウェールズ331行政区のみ。クロアチアは全国値の別資料。残る欧州域は未収録で、0%や無居住ではありません。');
+    setText('[data-culture-grain]', !hasCase ? 'ONS 2021年 · 行政区（LAD）331地域' : selected.censusCase.grain === 'national' ? '全国値 · 1地域' : '行政区（LAD2021）· 331地域');
+    setText('[data-culture-year]', hasCase ? `${selected.topic.year}年国勢調査 · ${selected.topic.censusDate}` : kind==='religion'?'ONS 2021年地域面／Pew 2020年国別推計':'ONS 2021年国勢調査');
     query<HTMLElement>('[data-culture-value]')!.hidden = !selected.area || !hasCategory;
     setText('[data-culture-area-name]', selected.area?.name ?? '地域未選択');
     setText('[data-culture-category-name]', selected.category?.label ?? '回答分類未選択');
@@ -185,14 +218,17 @@ export function createEuropePopulationCases(root: HTMLElement, options: CultureO
     setText('[data-culture-count]', formatCultureCount(selected.count));
     setText('[data-culture-denominator]', selected.area ? `分母：この表の総人口 ${formatCultureCount(selected.area.denominator)}` : '分母は選択した地域の同じ公表表の総人口です。');
     setText('[data-culture-classification-note]', selected.category?.level === 'aggregate' ? '元表の大分類です。細分類と足し合わせません。' : selected.censusCase.grain === 'national' ? 'クロアチアの元分類です。他国の分類と同一化しません。' : '元表の回答分類です。大分類に含まれる人数を重ねて合計しません。');
-    for (const key of legendRoot.querySelectorAll<HTMLElement>('[data-culture-scale-key]')) key.hidden = !hasCategory;
+    const scaleTitle = legendRoot.querySelector<HTMLElement>('[data-culture-scale-title]');
+    if (scaleTitle) scaleTitle.textContent = !hasCase ? kind === 'ethnicity' ? 'ONS 2021：白人以外の4大分類の合計／行政区総人口' : 'ONS 2021：無宗教の回答／行政区総人口' : selected.category ? `${selected.category.label}／同じ表の地域総人口` : '分類未選択';
+    for (const key of legendRoot.querySelectorAll<HTMLElement>('[data-culture-scale-key]')) key.hidden = hasCase && !hasCategory;
     const unselectedKey = legendRoot.querySelector<HTMLElement>('[data-culture-unselected-key]'); if (unselectedKey) {
-      unselectedKey.hidden = hasCategory;
+      unselectedKey.hidden = !hasCase || hasCategory;
       const text=hasCase?'回答分類未選択・未掲載（0%ではありません）':kind==='religion'?'未掲載・資料未取得（0%ではありません）':'未掲載・3対象以外（0%ではありません）';
       unselectedKey.replaceChildren(unselectedKey.querySelector('i')!,document.createTextNode(text));
     }
-    query<HTMLButtonElement>('[data-culture-fit]')!.disabled = !hasCase;
-    setText('[data-culture-disclosure]', selected.censusCase.grain === 'LAD' ? '秘匿処理により、民族表と宗教表の総人口がわずかに異なる場合があります。各表の公表値をそのまま使います。' : '全国の公表行を使います。無宗教・不可知論・未申告・不明を区別し、宗教団体への所属で回答を組み替えません。');
+    query<HTMLButtonElement>('[data-culture-fit]')!.disabled = false;
+    setText('[data-culture-fit]', hasCase ? '事例の範囲を表示' : '色面の対象地域を拡大');
+    setText('[data-culture-disclosure]', selected.censusCase.grain === 'LAD' ? '秘匿処理により、民族表と宗教表の総人口がわずかに異なる場合があります。4大分類は元表人数を合計し、100%から白人割合を差し引いていません。' : '全国の公表行を使います。無宗教・不可知論・未申告・不明を区別し、宗教団体への所属で回答を組み替えません。');
     setText('[data-culture-attribution]', selected.censusCase.attribution.join('\n'));
     setText('[data-culture-licence-name]', selected.censusCase.licence.name);
     setLink('[data-culture-source]', selected.topic.documentationURL);
@@ -207,13 +243,14 @@ export function createEuropePopulationCases(root: HTMLElement, options: CultureO
     return geometry;
   }
   function publishMap(geometry: CultureGeometry) {
-    const data = cultureMapData(geometry, state, kind);
+    const overview = !state.cultureCase;
+    const data = overview ? cultureOverviewMapData(geometry, kind) : cultureMapData(geometry, state, kind);
     attachment.onMapData?.(data);
     const layer = attachment.mapLayer;
     if (layer) {
       layer.setAttribute('data-eu-culture-layer', '');
       layer.setAttribute('role', 'group');
-      layer.setAttribute('aria-label', `${cultureSelection(state, kind).topic.titleJa}：選択した地域事例`);
+      layer.setAttribute('aria-label', overview ? `${kind === 'ethnicity' ? '民族的帰属' : '宗教的帰属'}：ONS 2021年イングランド・ウェールズ行政区` : `${cultureSelection(state, kind).topic.titleJa}：選択した地域事例`);
       layer.replaceChildren(...data.features.map((feature, index) => {
         const node = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         node.setAttribute('d', cultureGeometryPath(feature.geometry, attachment.project ?? europeProject));
@@ -227,20 +264,23 @@ export function createEuropePopulationCases(root: HTMLElement, options: CultureO
         node.setAttribute('role', 'button');
         node.setAttribute('tabindex', feature.properties.selected || !state.cultureArea && index === 0 ? '0' : '-1');
         node.setAttribute('aria-pressed', String(feature.properties.selected));
-        node.setAttribute('aria-label', `${feature.properties.name}：${formatCultureShare(feature.properties.value)}、${feature.properties.count === null ? '人数なし' : formatCultureCount(feature.properties.count)}`);
+        node.setAttribute('aria-label', `${feature.properties.name}：${overview ? kind === 'ethnicity' ? '白人以外の4大分類の合計' : '無宗教' : cultureSelection(state, kind).category?.label ?? '回答分類未選択'} ${formatCultureShare(feature.properties.value)}、${feature.properties.count === null ? '人数なし' : formatCultureCount(feature.properties.count)}、分母 ${formatCultureCount(feature.properties.denominator)}${overview ? '。選ぶとこの地域の回答分類別詳細へ' : ''}`);
         const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
         title.textContent = node.getAttribute('aria-label'); node.append(title);
         return node;
       }));
     }
-    setText('[data-culture-map-status]', state.cultureCategory ? '選択した分類の割合を地図に表示しています。未掲載地域は0%ではありません。' : '回答分類は未選択です。灰色を0%や特定の集団と読まないでください。');
+    setText('[data-culture-map-status]', overview ? 'ONS 2021年の331行政区のみ色面表示。残る欧州は未収録で、0%ではありません。' : state.cultureCategory ? '選択した分類の割合を地図に表示しています。未掲載地域は0%ではありません。' : '回答分類は未選択です。灰色を0%や特定の集団と読まないでください。');
     if (fitNext) { fitNext = false; attachment.onFitBounds?.(cultureBounds(geometry)); }
   }
   function updateMap() {
     const request = ++generation;
     if (!active || destroyed || (!attachment.mapLayer && !attachment.onMapData && !attachment.onFitBounds)) return;
-    if (!state.cultureCase) { fitNext = false; attachment.mapLayer?.replaceChildren(); attachment.onMapData?.(emptyMap); setText('[data-culture-map-status]', '事例・回答分類は未選択です。未掲載地域は数値なしで、0%ではありません。'); currentReady = Promise.resolve(); return; }
-    const censusCase = cultureSelection(state, kind).censusCase;
+    if(!state.cultureCase&&attachment.overviewMap?.()===false){
+      attachment.mapLayer?.replaceChildren();attachment.onMapData?.(emptyMap);
+      currentReady=Promise.resolve();return;
+    }
+    const censusCase = !state.cultureCase ? europeCultureData.cases.find(item => item.id === 'england-wales-2021')! : cultureSelection(state, kind).censusCase;
     const existing = loaded.get(censusCase.id);
     if (existing) { publishMap(existing); currentReady = Promise.resolve(); return; }
     attachment.mapLayer?.replaceChildren(); attachment.onMapData?.(emptyMap);
@@ -250,18 +290,33 @@ export function createEuropePopulationCases(root: HTMLElement, options: CultureO
     });
   }
   function apply(next: CultureState, emit: boolean) {
-    fitNext = false;
+    // The ethnicity overview already fits the ONS districts. Refit when the
+    // source footprint changes (Croatia or a religion overview → a census case).
+    fitNext = !!next.cultureCase && next.cultureCase !== state.cultureCase
+      && (kind === 'religion' || next.cultureCase === 'croatia-national-2021' || state.cultureCase === 'croatia-national-2021');
     state = next; renderReader(); updateMap();
     if (emit) options.onChange?.({ ...state });
   }
   function selectArea(code: string) {
     if (!code) { apply({ ...state, cultureArea: '' }, true); return true; }
-    if (!state.cultureCase) return false;
+    if (!state.cultureCase) {
+      const topic = europeCultureData.cases.find(item => item.id === 'england-wales-2021')?.topics.find(item => item.kind === kind);
+      if (!topic?.areas.some(area => area.code === code)) return false;
+      apply(normaliseCultureState({ cultureCase: 'england-wales-2021', cultureCategory: kind === 'ethnicity' ? 'ts021-16' : 'ts030-01', cultureArea: code }, kind), true);
+      return true;
+    }
     if (!cultureSelection(state, kind).topic.areas.some(area => area.code === code)) return false;
     if (state.cultureArea === code) return true;
     apply({ ...state, cultureArea: code }, true); return true;
   }
-  listen(caseSelect, 'change', () => apply(normaliseCultureState({ cultureCase: caseSelect.value }, kind), true));
+  listen(caseSelect, 'change', () => {
+    const category = caseSelect.value === 'england-wales-2021'
+      ? kind === 'ethnicity' ? 'ts021-16' : 'ts030-01'
+      : caseSelect.value === 'croatia-national-2021'
+        ? kind === 'ethnicity' ? 'hr-ethnicity-H' : 'hr-religion-H'
+        : '';
+    apply(normaliseCultureState({ cultureCase: caseSelect.value, cultureCategory: category }, kind), true);
+  });
   listen(categorySelect, 'change', () => apply(normaliseCultureState({ ...state, cultureCategory: categorySelect.value }, kind), true));
   listen(areaSelect, 'change', () => selectArea(areaSelect.value));
   const fitButton = query<HTMLButtonElement>('[data-culture-fit]');
@@ -292,7 +347,16 @@ export function createEuropePopulationCases(root: HTMLElement, options: CultureO
   renderReader();
   attachMap(attachment);
   return {
-    setTopic(topic: CultureTopicKind) { kind = topic; apply(normaliseCultureState(state, kind), false); },
+    setTopic(topic: CultureTopicKind) {
+      kind = topic;
+      const next = normaliseCultureState(state, kind);
+      if (next.cultureCase && !next.cultureCategory) {
+        next.cultureCategory = next.cultureCase === 'england-wales-2021'
+          ? kind === 'ethnicity' ? 'ts021-16' : 'ts030-01'
+          : kind === 'ethnicity' ? 'hr-ethnicity-H' : 'hr-religion-H';
+      }
+      apply(next, false);
+    },
     readState: () => ({ ...state }),
     readSearch: (search: string) => readCultureSearch(search, kind),
     applyState(input: Partial<CultureState> | string, settings: { emit?: boolean } = {}) { apply(typeof input === 'string' ? readCultureSearch(input, kind) : normaliseCultureState({ ...state, ...input }, kind), settings.emit ?? false); },
