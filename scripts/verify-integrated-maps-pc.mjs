@@ -29,7 +29,7 @@ const report={head,expected,target:production?'production':'build',base,startedA
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 async function shot(name){
  await page.evaluate(async()=>{await document.fonts.ready;scrollTo({top:0,left:0,behavior:'instant'});await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});
- const file=name+'.jpg',bytes=await page.screenshot({path:resolve(out,file),type:'jpeg',quality:76,animations:'disabled'});
+ const file=name+'.jpg',bytes=await page.screenshot({path:resolve(out,file),type:'jpeg',quality:55,animations:'disabled'});
  report.images.push({file,sha256:hash(bytes),url:page.url()});
 }
 async function settle(){await page.waitForLoadState('networkidle');await page.evaluate(async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});}
@@ -58,7 +58,7 @@ const scenes=[
  {id:'japan',path:'japan/nature/',map:'.japan-map-frame',ready:'[data-japan-atlas][data-map-ready="true"][data-nature-ready="true"]',cameraRoot:'[data-japan-atlas]',selectControl:'[data-japan-climate-city]'},
  ...['east-asia','south-asia','central-asia','southeast-asia'].map(id=>({id,path:'asia/'+id+'/nature/',map:'.asia-map-frame',ready:'[data-asia-atlas][data-map-ready="true"]',cameraRoot:'[data-asia-atlas]',selectControl:'[data-city-select]'})),
  {id:'west-asia',path:'west-asia/nature/',map:'[data-west-map]',ready:'[data-west-atlas][data-ready="true"]',svg:'[data-west-map]'},
- ...['russia','oceania'].map(id=>({id,path:id+'/nature/',map:'[data-original-map]',ready:`[data-${id}-learning][data-${id}-ready="true"]`})),
+ ...['russia','oceania'].map(id=>({id,path:id+'/nature/',map:'[data-primary-map]',ready:`[data-${id}-learning][data-${id}-ready="true"]`})),
 ];
 try{
  browser=await chromium.launch({executablePath:process.env.REVIEW_CHROME_PATH,headless:true,chromiumSandbox:true,ignoreDefaultArgs:['--unsafely-disable-devtools-self-xss-warnings']});
@@ -127,7 +127,7 @@ finally{
  report.finishedAt=new Date().toISOString();await writeFile(resolve(out,'report.json'),JSON.stringify(report,null,2)+'\n');
  await browser?.close();if(server)await new Promise(r=>server.close(r));
  console.log('INTEGRATED_MAP_REPORT '+JSON.stringify(report));
- if(process.env.INTEGRATION_REVIEW_LOG_IMAGES==='1')for(const item of report.images){
+ if(process.env.INTEGRATION_REVIEW_LOG_IMAGES==='1')for(const item of [...report.images].reverse()){
   const encoded=(await readFile(resolve(out,item.file))).toString('base64'),parts=Math.ceil(encoded.length/8192);
   console.log('INTEGRATED_MAP_IMAGE '+JSON.stringify({...item,parts}));
   for(let index=0;index<parts;index++)console.log('INTEGRATED_MAP_IMAGE_PART '+JSON.stringify({file:item.file,index,parts,data:encoded.slice(index*8192,(index+1)*8192)}));
