@@ -103,8 +103,10 @@ try{
  await page.goto(base+'/atlas/north-america/agriculture/',{waitUntil:'networkidle'});await page.locator('[data-atlas-explorer][data-render-state="ready"]').waitFor();assert.match(await page.locator('.atlas-quantity-note').textContent(),/生産量を表しません/);
  await page.locator('[data-forestry-select]').first().click();await page.locator('[data-atlas-explorer][data-forest-active="true"]').waitFor();await shot('us-forestry-navigation');
  await page.goto(base+'/atlas/north-america/mexico/agriculture/',{waitUntil:'networkidle'});await page.locator('[data-mexico-agriculture-atlas][data-agriculture-ready="true"]').waitFor();
- const forestry=page.locator('a[data-mexico-forest-entry]');
- const forestLink=await forestry.count()?forestry:page.getByRole('link',{name:/林業/}).first();assert(await forestLink.isVisible(),'Mexico forestry remains in the large-category navigation');await forestLink.click();await settle();await shot('mexico-forestry-navigation');
+ const forestLink=page.locator('.mexico-agriculture-subtopics [data-forestry-select]');
+ assert(await forestLink.isVisible(),'Mexico forestry remains in the large-category navigation');await forestLink.click();
+ await page.locator('[data-mexico-agriculture-atlas][data-agri-reading="forestry"][data-agriculture-current-item="pine"]').waitFor();await settle();
+ assert.equal(new URL(page.url()).searchParams.get('agriItem'),'pine');assert(await page.locator('[data-mexico-tree-cover]').isVisible());await shot('mexico-forestry-navigation');
  report.operations.push({region:'us,mexico',forestryNavigation:true});
  // Check the final US solver output against painted boxes, including reduced-motion CSS.
  await page.goto(base+'/atlas/north-america/population/?popView=religion',{waitUntil:'networkidle'});await page.locator('[data-atlas-explorer][data-render-state="ready"]').waitFor();await page.waitForFunction(()=>/郡のデータ/.test(document.querySelector('[data-pop-status]')?.textContent??''));await settle();
