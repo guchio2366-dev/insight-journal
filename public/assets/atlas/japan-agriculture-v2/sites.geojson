@@ -3,6 +3,56 @@
   "features": [
     {
       "type": "Feature",
+      "id": "shonai-rice",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          139.76,
+          38.65
+        ]
+      },
+      "properties": {
+        "id": "shonai-rice",
+        "name": "米｜庄内・鶴岡水沢",
+        "products": [
+          "rice"
+        ],
+        "geometryKind": "representative-point",
+        "coordinateMethod": "資料に記載された地域の概略位置を編集して設定（WGS84経緯度）。農場・園地の測量位置ではない。",
+        "extent": null,
+        "quantity": null,
+        "sourceIds": [
+          "shonai"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "kochi-tomato",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          133.52,
+          33.56
+        ]
+      },
+      "properties": {
+        "id": "kochi-tomato",
+        "name": "トマト｜高知・徳谷",
+        "products": [
+          "tomato"
+        ],
+        "geometryKind": "representative-point",
+        "coordinateMethod": "資料に記載された地域の概略位置を編集して設定（WGS84経緯度）。農場・園地の測量位置ではない。",
+        "extent": null,
+        "quantity": null,
+        "sourceIds": [
+          "tomato-season"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
       "id": "agano-rice",
       "geometry": {
         "type": "Point",
@@ -38,7 +88,7 @@
       },
       "properties": {
         "id": "tokachi-farming",
-        "name": "畑作・畜産｜十勝",
+        "name": "小麦・ばれいしょ・生乳・肉用牛｜十勝",
         "products": [
           "wheat",
           "potato",

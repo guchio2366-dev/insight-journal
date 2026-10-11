@@ -56,7 +56,9 @@ mask = contains_xy(land, lon[None,:], lat[:,None])
 cropped[~mask] = -200
 colors = np.array([list(bytes.fromhex(c))+[255] for c in population['colors']],dtype=np.uint8)
 rgba = colors[np.searchsorted(population['breaks'],cropped,side='right')]
-rgba[cropped<=0] = 0
+rgba[cropped == 0] = [250, 248, 231, 255]
+rgba[mask & (cropped < 0)] = [158, 159, 161, 255]
+rgba[~mask] = 0
 Image.fromarray(rgba).save(OUT/'population.png',optimize=True)
 (OUT/'population.density.gz').write_bytes(gzip.compress(cropped.astype('<f4').tobytes(),mtime=0))
 assert np.array_equal(cropped[mask],values[r0:r1,c0:c1][mask])
@@ -67,9 +69,10 @@ write('population.json', {
     'imageCoordinates': [nw,[se[0],nw[1]],se,[nw[0],se[1]]],
     'image': 'population.png', 'grid': 'population.density.gz', 'sourceCellKm': 5,
     'year': 2020, 'breaks': population['breaks'], 'colors': population['colors'],
+    'zeroColor': 'faf8e7', 'missingColor': '9e9fa1',
     'cities': [c for c in record['cities'] if c['country']=='JPN'],
     'method': 'Existing GHSL 2020 5 km source aggregation. Cropped at original Web Mercator pixel edges, no resampling. Detailed Japan coast mask at pixel centres. Inland values are unchanged, offshore cells -200.',
-    'validation': {'inlandValuesUnchanged': True, 'landPixels': int(mask.sum()), 'missingLandPixels': int((mask & (cropped<0)).sum()), 'positiveLandPixels':int((mask & (cropped>0)).sum())},
+    'validation': {'inlandValuesUnchanged': True, 'landPixels': int(mask.sum()), 'missingLandPixels': int((mask & (cropped<0)).sum()), 'zeroLandPixels':int((mask & (cropped==0)).sum()), 'positiveLandPixels':int((mask & (cropped>0)).sum())},
 })
 write('manifest.json', {
     'schemaVersion': 1, 'scope': 'Japan preview', 'bounds': [122.5, 23.8, 146.3, 46],

@@ -9,6 +9,7 @@ export type JapanAgricultureSite={id:string;name:string;coordinates:[number,numb
 
 const maffTerms='PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）';
 export const japanAgricultureSources:JapanAgricultureSource[]=[
+ {id:'shonai',title:'農林水産省：庄内平野・鶴岡市水沢の米づくり',href:'https://www.maff.go.jp/j/nousin/sekkei/museum/m_siki/13_shounai/index.html',period:'地域事例・最新数量ではない',accessed:'2026-10-11',license:maffTerms,status:'verified-html'},
  {id:'municipal-2024',title:'農林水産省：2024年市町村別農業産出額（推計）詳細品目',href:'https://www.maff.go.jp/j/tokei/kouhyou/sityoson_sansyutu/attach/xls/index-25.xlsx',period:'2024年・2026年8月3日更新',accessed:'2026-10-10',license:maffTerms,status:'download-blocked',note:'この実装環境の取得はHTTPプロキシ403。原表の数値・順位は未収録。市町村別の価格・単収差を反映しない按分推計で、xは秘匿。'},
  {id:'municipal-method',title:'農林水産省：市町村別農業産出額の作成方法・利用上の注意',href:'https://www.maff.go.jp/j/tokei/kouhyou/sityoson_sansyutu/gaiyou/',period:'2024年推計の説明',accessed:'2026-10-10',license:maffTerms,status:'verified-html'},
  {id:'tokachi',title:'北海道農政事務所：十勝地域の農業の概要',href:'https://www.maff.go.jp/hokkaido/obihiro/kannnaigaiyou/zenntai.html',period:'2020年センサス・2023年産出額を参照する地域説明',accessed:'2026-10-10',license:maffTerms,status:'verified-html'},
@@ -43,8 +44,10 @@ export const japanAgricultureProducts:JapanAgricultureProduct[]=[
 const coordinateMethod='資料に記載された地域の概略位置を編集して設定（WGS84経緯度）。農場・園地の測量位置ではない。';
 const point=(site:Omit<JapanAgricultureSite,'geometryKind'|'coordinateMethod'|'extent'|'quantity'>):JapanAgricultureSite=>({...site,geometryKind:'representative-point',coordinateMethod,extent:null,quantity:null});
 export const japanAgricultureSites:JapanAgricultureSite[]=[
+ point({id:'shonai-rice',name:'米｜庄内・鶴岡水沢',coordinates:[139.76,38.65],products:['rice'],overview:'農林水産省が紹介する、庄内平野南端の鶴岡市水沢地区の米づくり。',reason:'平坦な地形と区画整理された水田を、米づくりの基盤として考えます。',sourceIds:['shonai']}),
+ point({id:'kochi-tomato',name:'トマト｜高知・徳谷',coordinates:[133.52,33.56],products:['tomato'],overview:'農林水産省が紹介する徳谷トマトの産地事例。高知市周辺の概略位置で、園地の測量位置ではありません。',reason:'水や土壌の条件と栽培管理が品質に関わる事例。生産量・順位や産地境界は未収録です。',sourceIds:['tomato-season']}),
  point({id:'agano-rice',name:'米｜阿賀野',coordinates:[139.225,37.835],products:['rice'],overview:'阿賀野市の米づくりと食品企業が連携する事例。',reason:'農地の管理・生産から加工までの関係を、平野の水田農業と合わせて読みます。',sourceIds:['agano']}),
- point({id:'tokachi-farming',name:'畑作・畜産｜十勝',coordinates:[143.0,42.93],products:['wheat','potato','milk','beef'],overview:'十勝の畑作と酪農・肉用牛の地域事例。代表点は十勝平野の概略位置です。',reason:'小麦・ばれいしょ・てんさい・豆類の輪作と大型機械を使う広い耕地が特徴です。家畜の用途は乳用と肉用を区別します。',sourceIds:['tokachi']}),
+ point({id:'tokachi-farming',name:'小麦・ばれいしょ・生乳・肉用牛｜十勝',coordinates:[143.0,42.93],products:['wheat','potato','milk','beef'],overview:'十勝の畑作と酪農・肉用牛の地域事例。代表点は十勝平野の概略位置です。',reason:'小麦・ばれいしょ・てんさい・豆類の輪作と大型機械を使う広い耕地が特徴です。家畜の用途は乳用と肉用を区別します。',sourceIds:['tokachi']}),
  point({id:'nakasatsunai-wheat',name:'小麦｜中札内',coordinates:[143.13,42.697],products:['wheat'],overview:'小麦と豆類を組み合わせる農協の生産事例。',reason:'えだまめなどを組み込む輪作と共同の収穫・乾燥調製が安定生産を支えます。資料では日本めん向け品種を扱います。',sourceIds:['nakasatsunai']}),
  point({id:'tsumagoi-cabbage',name:'キャベツ｜嬬恋',coordinates:[138.47,36.48],products:['cabbage'],overview:'浅間山北麓の高原で夏秋キャベツを作る事例。',reason:'冷涼な夏と農地開発の基盤、全国への出荷を合わせて考えます。',sourceIds:['tsumagoi']}),
  point({id:'yatsushiro-tomato',name:'トマト｜八代周辺',coordinates:[130.55,32.5],products:['tomato'],overview:'八代・氷川・宇城の干拓地で栽培される塩トマトのGI事例。',reason:'塩分のある土壌の条件と栽培管理が品質に関わります。登録区域全部の輪郭や一般トマトの数量分布は表していません。',sourceIds:['yatsushiro','tomato-season']}),
@@ -70,9 +73,9 @@ export const japanAgricultureSelectionCandidates={
 
 export const japanAgricultureReading={
  all:{title:'日本の農畜産業を、産地の事例から読む',overview:'北海道の畑作・酪農、津軽のりんご、日本海側の米、高原のキャベツ、暖地の施設野菜とみかん、南九州の畜産を並べます。点は資料で確認した地域の位置で、数量の多寡や農地の輪郭を表しません。',reason:'地形・気候・水とともに、輪作、施設、飼料、加工、都市への輸送が農業を支えます。農畜産物ごとに、その自然条件をどう使い、食卓まで何をつなぐのかを考えます。'},
- forest:{title:'森林の存在と、木材を使う仕組みを分ける',overview:'この便では全国の詳細な森林被覆図を収録していません。地図の緑や県境を森林域として読み替えず、林野庁の森林資源資料と木材需給を別々に読みます。',reason:'森林には水源涵養などの働きがあり、すべてが伐採して木材を出す場所とは限りません。木材利用は樹種・林齢、管理、搬出路、製材・加工、需要に左右され、森林の広さだけでは決まりません。'},
- gap:'国内の細地域数量図は未収録。2024年の市町村別詳細原表は取得403のため、この便の代表点に数量・順位・園地範囲を付けていません。県の総量から県内を一様に塗りません。',
- method:'点は公的資料で確認した産地・地域の概略位置。大きさは生産量を表さず、農場・園地の範囲も表しません。選択しても他の産地事例は残ります。',
+ forest:{title:'森林の存在と、木材を使う仕組みを分ける',overview:'2020年のJRC森林参考画像では山地に森林が広がり、主要な平野に切れ目があります。これは約4–6kmの表示画素の参考図で、細かい林地境界や伐採地の調査ではありません。林野庁の森林資源と木材需給は別資料です。',reason:'森林には水源涵養などの働きがあり、すべてが伐採して木材を出す場所とは限りません。木材利用は樹種・林齢、管理、搬出路、製材・加工、需要に左右され、森林の広さだけでは決まりません。'},
+ gap:'米・小麦のMapSPAM2020収穫面積とGLW4の豚密度は原5分角（約7–9km）のモデル推計。細かい農地・農場の境界ではありません。2024年の市町村別詳細原表は取得403のため、この便の代表点に数量・順位・園地範囲を付けていません。県の総量から県内を一様に塗りません。',
+ method:'面は2020年の粗い推計分布（米・小麦・豚）。濃淡は品目内の6段階で、異なる単位を合計しません。点は公的資料で確認した産地・地域の概略位置。大きさは生産量を表さず、農場・園地の範囲も表しません。選択しても他の産地事例は残ります。',
 };
 
 /** Forestry Agency table p. 5; all amounts are thousand m³ roundwood equivalent. */

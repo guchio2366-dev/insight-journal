@@ -12,6 +12,9 @@ on:
       - 'src/scripts/atlas-asia-explorer.ts'
       - 'public/assets/atlas/japan-v1/**'
       - 'public/assets/atlas/japan-*-v2/**'
+      - 'public/assets/atlas/japan-*-v3/**'
+      - 'scripts/prepare-japan*.py'
+      - 'data-source/atlas/japan-second-pass/**'
 permissions:
   contents: read
 concurrency:

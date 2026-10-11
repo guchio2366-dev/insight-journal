@@ -1,5 +1,14 @@
 [
   {
+    "id": "shonai",
+    "title": "農林水産省：庄内平野・鶴岡市水沢の米づくり",
+    "href": "https://www.maff.go.jp/j/nousin/sekkei/museum/m_siki/13_shounai/index.html",
+    "period": "地域事例・最新数量ではない",
+    "accessed": "2026-10-11",
+    "license": "PDL1.0（出典表示・加工表示。第三者の写真・動画・ロゴは使用しない）",
+    "status": "verified-html"
+  },
+  {
     "id": "municipal-2024",
     "title": "農林水産省：2024年市町村別農業産出額（推計）詳細品目",
     "href": "https://www.maff.go.jp/j/tokei/kouhyou/sityoson_sansyutu/attach/xls/index-25.xlsx",

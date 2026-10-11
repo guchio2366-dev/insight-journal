@@ -2,7 +2,7 @@ import {asiaFieldPaths,type AsiaField,type AsiaCamera,type AsiaState,writeAsiaAt
 
 export type JapanState={field:AsiaField;topic:string;prefecture:string|null;city:string|null;site:string|null;feature:string|null;camera:AsiaCamera|null;returnTo:string|null};
 export const japanDefaults:Record<AsiaField,string>={industry:'clusters',natural:'climate',agriculture:'all',population:'density'};
-export const japanTopics:Record<AsiaField,readonly string[]>={industry:['clusters','auto','chips','steel','batteries','ships','chemicals',...['00',...Array.from({length:24},(_,i)=>String(i+9).padStart(2,'0'))].map(id=>'jp-'+id)],natural:['stations','climate','precipitation','water','groundwater','elevation'],agriculture:['all','wheat','rice','potato','cabbage','tomato','apple','mandarin','milk','beef','pork','forest'],population:['density','urban']};
+export const japanTopics:Record<AsiaField,readonly string[]>={industry:['clusters','auto','chips','steel','batteries','ships','chemicals','services','energy',...['00',...Array.from({length:24},(_,i)=>String(i+9).padStart(2,'0'))].map(id=>'jp-'+id)],natural:['stations','climate','precipitation','water','groundwater','elevation'],agriculture:['all','wheat','rice','potato','cabbage','tomato','apple','mandarin','milk','beef','pork','forest'],population:['density','urban']};
 
 // Only a same-site East Asia field URL can become a return target. Never trust
 // an arbitrary redirect, or infer entry intent from place=JPN (cities set it too).

@@ -1,4 +1,5 @@
 import {japanFoundationPresentation} from './atlas-japan-foundation-presentations';
+import {mountJapanAgricultureLayers} from './atlas-japan-agriculture-layers';
 import {mountJapanNatureLayers,type JapanNatureLayers} from './atlas-japan-nature-layers';
 import {japanAgricultureSites} from '../data/atlas/japan-agriculture-v2';
 import {japanNatureFeatureIds} from '../data/atlas/japan-nature-v2';
@@ -9,13 +10,13 @@ import {industryScale,industryValueLabel,type IndustryAdmin,type IndustryTopic} 
 import {decodeAsiaNumericGrid,readAsiaNumericCell,type AsiaNumericGrid} from '../lib/atlas-asia-numeric-grid';
 import type {AsiaField} from '../lib/atlas-asia-state';
 import type {AsiaClimateCity} from '../data/atlas/asia-climate-cities';
-import type {EastCluster} from '../data/atlas/east-asia-industry-clusters';
+import type {JapanIndustryCluster} from '../data/atlas/japan-industry-clusters';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 
 type PopulationCity={id:string;name:string;coordinates:[number,number];population:number;areaKm2:number;density:number;history:Record<string,number>};
-type Config={bounds:number[];assetBase:string;cities:AsiaClimateCity[];sites:EastCluster[];industries:{id:string;label:string;color:string}[];populationCities:PopulationCity[];populationPlaces:{id:string;name:string;coordinates:[number,number];plain:string}[];natureAssetBase:string};
+type Config={bounds:number[];assetBase:string;cities:AsiaClimateCity[];sites:JapanIndustryCluster[];industries:{id:string;label:string;color:string}[];populationCities:PopulationCity[];populationPlaces:{id:string;name:string;coordinates:[number,number];plain:string}[];natureAssetBase:string};
 type Industry={admin:IndustryAdmin[];topics:IndustryTopic[];geometry:any};
-type Population={width:number;height:number;bounds3857:number[];imageCoordinates:[number,number][];image:string;grid:string;breaks:number[];colors:string[]};
+type Population={width:number;height:number;bounds3857:number[];imageCoordinates:[number,number][];image:string;grid:string;breaks:number[];colors:string[];zeroColor:string;missingColor:string};
 const root=document.querySelector<HTMLElement>('[data-japan-atlas]');
 if(root)void start(root);
 
@@ -28,6 +29,7 @@ async function start(root:HTMLElement){
  let map:import('maplibre-gl').Map|null=null,lib:typeof import('maplibre-gl')|null=null;
  let industry:Industry|null=null,population:Population|null=null,grid:AsiaNumericGrid|null=null,gridPromise:Promise<AsiaNumericGrid>|null=null;
  let nature:JapanNatureLayers|null=null,natureSample=0,renderRevision=0;
+ let farming:ReturnType<typeof mountJapanAgricultureLayers>|null=null;
  let ready=false,suppressCamera=false,generation=0,timer:ReturnType<typeof setTimeout>|undefined;
  const markers:import('maplibre-gl').Marker[]=[];
  let point:[number,number]|null=null;
@@ -51,7 +53,7 @@ async function start(root:HTMLElement){
  function topic(id:string){navigate({...state,topic:id,prefecture:null,city:null,site:null,feature:null,camera:camera()});}
  function city(id:string,field:AsiaField){navigate({...state,field,topic:field==='natural'?state.field==='natural'?state.topic:'climate':state.topic,city:id===state.city?null:id||null,prefecture:null,site:null,feature:null,camera:camera()});}
  function feature(id:string){navigate({...state,feature:state.feature===id?null:id,city:null,site:null,camera:camera()});}
- function site(id:string){if(state.field==='agriculture'){navigate({...state,site:state.site===id?null:id,city:null,prefecture:null,feature:null,camera:camera()});return;}const s=config.sites.find(s=>s.id===id);if(!s)return;navigate({...state,site:id,city:null,prefecture:null,camera:camera()});}
+ function site(id:string){if(state.field==='agriculture'){navigate({...state,site:state.site===id?null:id,city:null,prefecture:null,feature:null,camera:camera()});return;}const s=config.sites.find(s=>s.id===id);if(!s)return;navigate({...state,topic:state.topic==='clusters'||s.industries.includes(state.topic)?state.topic:s.industries[0],site:id,city:null,prefecture:null,camera:camera()});}
  function prefecture(id:string){navigate({...state,prefecture:id||null,site:null,city:null,camera:camera()});}
  function render(){
   $('.japan-atlas').dataset.field=state.field;root.dataset.field=state.field;
@@ -90,14 +92,15 @@ async function start(root:HTMLElement){
   if(state.field==='industry'){
    if(isQuantity&&industry){
     const t=industry.topics.find(t=>t.id===state.topic)!;
-    title=t.title.replace('日本：','')+'｜県別出荷額等';period='2024年・百万円';
+    title=t.title.replace('日本：','')+'｜県別出荷額等';period='2024年・兆円';
     const values=industry.admin.map(a=>({id:a.id,...(a.series[t.id]?.find(v=>v.year===t.year)??{value:null})}));
     const scale=industryScale(t,values);
-    ['0以上〜'+number(scale.breaks[0])+'未満',...scale.breaks.map((v,i)=>number(v)+(i===3?'以上':'〜'+number(scale.breaks[i+1])+'未満'))].forEach((label,i)=>key(label,scale.colors[i]));
+    const trillion=(v:number)=>(v/1e6).toLocaleString('ja-JP',{maximumFractionDigits:3});
+    ['0〜'+trillion(scale.breaks[0])+'未満',...scale.breaks.map((v,i)=>trillion(v)+(i===3?'以上':'〜'+trillion(scale.breaks[i+1])+'未満'))].forEach((label,i)=>key(label+' 兆円',scale.colors[i]));
     key('秘匿・該当なし・未掲載','#d2ceca');
     method='県全体の数量を色で比較。実際の工場位置や産業集積の範囲は表しません。沿岸の未割当部分は基図色です。';
     const valid=values.filter(v=>v.value!==null),sum=valid.reduce((n,v)=>n+v.value!,0);
-    $('[data-japan-total]').textContent=number(sum)+' 百万円';$('[data-japan-observed]').textContent=valid.length+' / 47県';
+    $('[data-japan-total]').textContent=trillion(sum)+' 兆円';$('[data-japan-observed]').textContent=valid.length+' / 47県';
     $('[data-japan-quantity-title]').textContent=t.title.replace('日本：','')+'の県別出荷額等';
     const ranked=industry.admin.slice().sort((a,b)=>(b.series[t.id]?.[0]?.value??-1)-(a.series[t.id]?.[0]?.value??-1));
     const body=$('[data-japan-industry-table]');body.replaceChildren();
@@ -112,7 +115,7 @@ async function start(root:HTMLElement){
     for(const i of config.industries.filter(i=>state.topic==='clusters'||i.id===state.topic))key(i.label,i.color);
     method='産業の種類と代表的な立地を示す概略図。記号の大きさは生産量を表しません。';
     const local=japanIndustryReadings[state.topic as keyof typeof japanIndustryReadings];if(local){$('[data-japan-overview]').textContent=local.overview;$('[data-japan-reason]').textContent=local.reason;}
-    const selected=config.sites.find(s=>s.id===state.site);if(selected)selection(selected.industries.map(id=>config.industries.find(i=>i.id===id)?.label).join('・')+'｜'+selected.name,'代表的な都市・工業地域の概略位置です。県別の数量や工場の敷地を示すものではありません。',selected.source);
+    const selected=config.sites.find(s=>s.id===state.site);if(selected)selection(selected.industries.map(id=>config.industries.find(i=>i.id===id)?.label).join('・')+'｜'+selected.name,(selected.note??'')+' 都市・地域の概略位置。県別数量や施設の敷地境界ではありません。',selected.source);
    }
   }else{
    const presentation=japanFoundationPresentation(state,nature)!;
@@ -122,16 +125,16 @@ async function start(root:HTMLElement){
    $('[data-japan-reason]').textContent=presentation.reading.reason;
    $('[data-japan-gap]').textContent=presentation.reading.gap;
    for(const item of presentation.legend)key(item.label,item.color);
-   if(state.field==='population'&&population)population.colors.forEach((color,i)=>key(i===0?'1未満':i===population!.breaks.length?'10,000以上':number(population!.breaks[i-1])+'〜'+number(population!.breaks[i])+'未満','#'+color));
+   if(state.field==='population'&&population){key('0（推計値）','#'+population.zeroColor);key('陸域の欠測・未収録','#'+population.missingColor);}if(state.field==='population'&&population)population.colors.forEach((color,i)=>key(i===0?'0超〜1未満':i===population!.breaks.length?'10,000以上':number(population!.breaks[i-1])+'〜'+number(population!.breaks[i])+'未満','#'+color));
    if(presentation.selection){const selected=presentation.selection;selection(selected.title,selected.body,selected.source);}
   }
   $('[data-japan-map-title]').textContent=title;$('[data-japan-map-period]').textContent=period;$('[data-japan-method]').textContent=method;
-  if(ready&&map){map.setLayoutProperty('japan-prefecture-fill','visibility',isQuantity?'visible':'none');map.setLayoutProperty('japan-population','visibility',state.field==='population'?'visible':'none');map.setFilter('japan-prefecture-selected',['==',['get','id'],state.prefecture??'']);if(map.getLayer('japan-urban'))map.setLayoutProperty('japan-urban','visibility',state.field==='population'&&state.topic==='urban'?'visible':'none');nature?.show(state.field==='natural'?state.topic:'',state.feature);root.dataset.natureTopic=state.field==='natural'?state.topic:'';renderMarkers();const revision=++renderRevision;root.dataset.renderedTopic='';const rendered=state.field+':'+state.topic;map.once('idle',()=>{if(revision===renderRevision)root.dataset.renderedTopic=rendered;});map.triggerRepaint();}
+  if(ready&&map){map.setLayoutProperty('japan-prefecture-fill','visibility',isQuantity?'visible':'none');map.setLayoutProperty('japan-population','visibility',state.field==='population'?'visible':'none');map.setFilter('japan-prefecture-selected',['==',['get','id'],state.prefecture??'']);if(map.getLayer('japan-urban'))map.setLayoutProperty('japan-urban','visibility',state.field==='population'&&state.topic==='urban'?'visible':'none');nature?.show(state.field==='natural'?state.topic:'',state.feature);farming?.show(state.field,state.topic);root.dataset.natureTopic=state.field==='natural'?state.topic:'';renderMarkers();const revision=++renderRevision;root.dataset.renderedTopic='';const rendered=state.field+':'+state.topic;map.once('idle',()=>{if(revision===renderRevision)root.dataset.renderedTopic=rendered;});map.triggerRepaint();}
   syncLinks();
  }
  function selection(title:string,body:string,source:string){$('[data-japan-selection]').hidden=false;$('[data-japan-selection-title]').textContent=title;$('[data-japan-selection-body]').textContent=body;$<HTMLAnchorElement>('[data-japan-selection-source]').href=source;}
- type Label={id:string;title:string;subtitle:string;point:[number,number];color:string;offset:[number,number];select:()=>void;selected:boolean;muted?:boolean};
- let labels:{data:Label;button:HTMLButtonElement;line:SVGLineElement}[]=[];
+ type Label={id:string;title:string;subtitle:string;point:[number,number];color:string;offset:[number,number];select:()=>void;selected:boolean;muted?:boolean;reference?:boolean};
+ let labels:{data:Label;button:HTMLElement;line:SVGLineElement}[]=[];
  let placementKey='',placement:ReturnType<typeof layoutJapanLabels>|null=null;
  function renderMarkers(){
   if(!map||!lib)return;markers.splice(0).forEach(m=>m.remove());const overlay=$('[data-japan-labels]');overlay.replaceChildren();labels=[];
@@ -139,11 +142,11 @@ async function start(root:HTMLElement){
   const items:Label[]=[];
   if(state.field==='industry'&&!quantity()){
    const offsets:Record<string,[number,number]>={toyota:[34,-39],yokkaichi:[-125,-62],osaka:[-132,-26],imabari:[-108,20],kitakyushu:[-145,-40],kumamoto:[28,30],nagasaki:[-98,42]};
-   for(const s of config.sites.filter(s=>state.topic==='clusters'||s.industries.includes(state.topic as any))){const i=config.industries.find(i=>i.id===s.industries[0])!;items.push({id:s.id,title:s.industries.map(id=>config.industries.find(i=>i.id===id)?.label).join('・'),subtitle:s.name,point:s.point,color:i.color,offset:offsets[s.id]??[10,10],select:()=>site(s.id),selected:state.site===s.id});}
+   for(const s of config.sites){const i=config.industries.find(i=>i.id===s.industries[0])!;items.push({id:s.id,title:s.industries.map(id=>config.industries.find(i=>i.id===id)?.label).join('・'),subtitle:s.name,point:s.point,color:i.color,offset:offsets[s.id]??[10,10],select:()=>site(s.id),selected:state.site===s.id,muted:state.topic!=='clusters'&&!s.industries.includes(state.topic)});}
   }else if(state.field!=='industry'){
-   for(const label of japanFoundationPresentation(state,nature)!.labels)items.push({...label,offset:[12,-25],select:()=>label.kind==='site'?site(label.id):label.kind==='feature'?feature(label.id):city(label.id,state.field)});
+   for(const label of japanFoundationPresentation(state,nature)!.labels)items.push({...label,reference:label.kind==='reference',offset:[12,-25],select:()=>label.kind==='site'?site(label.id):label.kind==='feature'?feature(label.id):city(label.id,state.field)});
   }
-  for(const data of items){const dot=document.createElement('button');dot.type='button';dot.className='japan-point';dot.classList.toggle('is-muted',!!data.muted);dot.classList.toggle('is-selected',data.selected);dot.style.setProperty('--point-color',data.color);dot.setAttribute('aria-pressed',String(data.selected));dot.setAttribute('aria-label',data.title+'（'+data.subtitle+'）');dot.addEventListener('click',data.select);markers.push(new lib.Marker({element:dot}).setLngLat(data.point).addTo(map));const button=document.createElement('button');button.type='button';button.dataset.japanMapLabel=data.id;button.classList.toggle('is-muted',!!data.muted);button.style.setProperty('--point-color',data.color);button.append(document.createTextNode(data.title));const small=document.createElement('small');small.textContent=data.subtitle;button.append(small);button.setAttribute('aria-pressed',String(data.selected));button.addEventListener('click',data.select);overlay.append(button);const line=document.createElementNS('http://www.w3.org/2000/svg','line');svg.append(line);labels.push({data,button,line});}
+  for(const data of items){const dot=document.createElement(data.reference?'span':'button');if(dot instanceof HTMLButtonElement)dot.type='button';dot.className='japan-point';dot.classList.toggle('is-muted',!!data.muted);dot.classList.toggle('is-selected',data.selected);dot.style.setProperty('--point-color',data.color);if(data.reference)dot.setAttribute('aria-hidden','true');else dot.setAttribute('aria-pressed',String(data.selected));dot.setAttribute('aria-label',data.title+'（'+data.subtitle+'）');if(!data.reference)dot.addEventListener('click',data.select);markers.push(new lib.Marker({element:dot}).setLngLat(data.point).addTo(map));const button=document.createElement(data.reference?'span':'button');if(button instanceof HTMLButtonElement)button.type='button';else button.className='japan-reference-label';button.dataset.japanMapLabel=data.id;button.classList.toggle('is-muted',!!data.muted);button.style.setProperty('--point-color',data.color);button.append(document.createTextNode(data.title));const small=document.createElement('small');small.textContent=data.subtitle;if(!data.reference)button.append(small);button.title=data.title+'（'+data.subtitle+'）';if(!data.reference){button.setAttribute('aria-pressed',String(data.selected));button.addEventListener('click',data.select);}overlay.append(button);const line=document.createElementNS('http://www.w3.org/2000/svg','line');svg.append(line);labels.push({data,button,line});}
   for(const lat of [25,30,35,40,45]){const text=document.createElementNS('http://www.w3.org/2000/svg','text');text.dataset.latitude=String(lat);text.textContent=lat+'°N';text.setAttribute('text-anchor','end');svg.append(text);}
   positionLabels();
  }
@@ -168,14 +171,14 @@ async function start(root:HTMLElement){
   grid=await gridPromise;return grid;
  }
  async function initialise(){
-  const revision=++generation;ready=false;nature=null;root.dataset.natureReady='false';root.dataset.mapReady='false';status('全国図を読み込んでいます');map?.remove();map=null;markers.splice(0).forEach(m=>m.remove());$('[data-japan-labels]').replaceChildren();$('[data-japan-fallback]').hidden=false;
+  const revision=++generation;ready=false;nature=null;farming=null;root.dataset.natureReady='false';root.dataset.mapReady='false';status('全国図を読み込んでいます');map?.remove();map=null;markers.splice(0).forEach(m=>m.remove());$('[data-japan-labels]').replaceChildren();$('[data-japan-fallback]').hidden=false;
   try{
    const loaded=await Promise.all([import('maplibre-gl'),fetchJson<any>('geography.json'),fetchJson<Industry>('industry.json'),fetchJson<Population>('population.json')]);
    if(revision!==generation)return;[lib,,industry,population]=loaded;const geography=loaded[1];lib.setWorkerUrl(workerUrl);
    const japan={type:'FeatureCollection',features:geography.features.filter((f:any)=>f.properties.code==='JPN')};
    const parallels={type:'FeatureCollection',features:[25,30,35,40,45].map(lat=>({type:'Feature',properties:{lat},geometry:{type:'LineString',coordinates:[[122.5,lat],[146.3,lat]]}}))};
    map=new lib.Map({container:$('[data-map-surface]'),attributionControl:false,renderWorldCopies:false,dragRotate:false,touchPitch:false,maxPitch:0,minZoom:2,maxZoom:10,trackResize:false,maxBounds:[[110,15],[160,55]],cooperativeGestures:true,pixelRatio:Math.min(devicePixelRatio,2),locale:{'CooperativeGesturesHandler.MobileHelpText':'地図は2本指で動かせます'},style:{version:8,sources:{'japan-land':{type:'geojson',data:japan as any},'japan-prefectures':{type:'geojson',data:industry.geometry},'japan-population':{type:'image',url:config.assetBase+population.image,coordinates:population.imageCoordinates as any},'japan-parallels':{type:'geojson',data:parallels as any}},layers:[{id:'japan-ocean',type:'background',paint:{'background-color':'#e6eef0'}},{id:'japan-land',type:'fill',source:'japan-land',paint:{'fill-color':'#e2e8d8'}},{id:'japan-parallels',type:'line',source:'japan-parallels',paint:{'line-color':'#9dafab','line-opacity':.45,'line-width':.6,'line-dasharray':[4,5]}},{id:'japan-prefecture-fill',type:'fill',source:'japan-prefectures',layout:{visibility:'none'},paint:{'fill-color':'#d2ceca'}},{id:'japan-population',type:'raster',source:'japan-population',layout:{visibility:'none'},paint:{'raster-resampling':'nearest','raster-fade-duration':0}},{id:'japan-prefecture-border',type:'line',source:'japan-prefectures',paint:{'line-color':'#779087','line-width':.55,'line-opacity':.55}},{id:'japan-coast',type:'line',source:'japan-land',paint:{'line-color':'#547568','line-width':.9}},{id:'japan-prefecture-selected',type:'line',source:'japan-prefectures',filter:['==',['get','id'],''],paint:{'line-color':'#a74830','line-width':2}}]}});
-   map.on('load',async()=>{if(revision!==generation)return;ready=true;root.dataset.mapReady='true';$('[data-japan-fallback]').hidden=true;status('');fit();render();const currentMap=map!;try{const mounted=await mountJapanNatureLayers(currentMap,config.natureAssetBase);if(revision!==generation)return;nature=mounted;root.dataset.natureReady='true';render();}catch{if(revision===generation){root.dataset.natureReady='false';if(state.field==='natural')status('自然環境の主題を取得できませんでした。全国基図と統計は利用できます。',true);}}try{const response=await fetch(config.assetBase.replace('japan-v1/','japan-population-v2/')+'urban.geojson');if(!response.ok)throw Error();const geometry=await response.json();if(revision!==generation)return;currentMap.addSource('japan-urban',{type:'geojson',data:geometry});currentMap.addLayer({id:'japan-urban',type:'line',source:'japan-urban',paint:{'line-color':'#a74830','line-width':1.5}},'japan-coast');render();}catch{}});
+   map.on('load',async()=>{if(revision!==generation)return;ready=true;root.dataset.mapReady='true';$('[data-japan-fallback]').hidden=true;status('');fit();render();const currentMap=map!;farming=mountJapanAgricultureLayers(currentMap,config.assetBase.replace('japan-v1/','japan-agriculture-v3/'));render();try{const mounted=await mountJapanNatureLayers(currentMap,config.natureAssetBase);if(revision!==generation)return;nature=mounted;root.dataset.natureReady='true';render();}catch{if(revision===generation){root.dataset.natureReady='false';if(state.field==='natural')status('自然環境の主題を取得できませんでした。全国基図と統計は利用できます。',true);}}try{const response=await fetch(config.assetBase.replace('japan-v1/','japan-population-v2/')+'urban.geojson');if(!response.ok)throw Error();const geometry=await response.json();if(revision!==generation)return;currentMap.addSource('japan-urban',{type:'geojson',data:geometry});currentMap.addLayer({id:'japan-urban',type:'line',source:'japan-urban',paint:{'line-color':'#a74830','line-width':1.5}},'japan-coast');render();}catch{}});
    map.on('error',()=>status('地図の一部を取得できませんでした。地図下の統計と出典を確認できます。',true));
    map.on('move',()=>{positionLabels();recordCamera();});
    map.on('moveend',event=>{if(!ready||suppressCamera||event.japanResize)return;clearTimeout(timer);timer=setTimeout(()=>{state={...state,camera:camera()};persist(false);},120);});
