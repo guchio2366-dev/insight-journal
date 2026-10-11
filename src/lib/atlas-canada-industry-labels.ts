@@ -15,7 +15,7 @@ export function groupPilotLabelPoints(points:PilotLabelPoint[],maximumDiameter=1
 export function placePilotLabel(points:number[][],size:number[],frame:number[],occupied:number[][],maximumLeader=95){
  const [width,height]=size,[mapWidth,mapHeight]=frame,x=points.reduce((n,p)=>n+p[0],0)/points.length,y=points.reduce((n,p)=>n+p[1],0)/points.length;
  const offsets:number[][]=[];
- for(let dy=-100;dy<=100;dy+=10)for(let dx=-100;dx<=100;dx+=10)offsets.push([dx,dy]);
+ for(let dy=-110;dy<=110;dy+=5)for(let dx=-110;dx<=110;dx+=5)offsets.push([dx,dy]);
  offsets.sort((a,b)=>a[0]**2+a[1]**2-b[0]**2-b[1]**2);
  for(const [dx,dy]of offsets){
   const left=Math.max(5,Math.min(mapWidth-width-5,x+dx-width/2)),top=Math.max(5,Math.min(mapHeight-height-28,y+dy-height/2)),box=[left,top,left+width,top+height];

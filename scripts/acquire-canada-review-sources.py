@@ -49,11 +49,11 @@ for name, url in sources:
 
 (output / 'acquisition.json').write_text(json.dumps(records, indent=2) + '\n')
 # Paginated requests avoid the single all-Canada query's HTTP 500 response.
-# Service-side 100 m boundary generalization; original CSD table values are joined.
+# Service-side 1 km boundary generalization; original CSD table values are joined.
 service = 'https://geo.statcan.gc.ca/geo_wa/rest/services/2021/Cartographic_boundary_files/MapServer/9/query'
 pages = []
 for offset in range(0, 5161, 250):
-    parameters = {'where':'1=1','outFields':'CSDUID,CSDNAME,PRUID','returnGeometry':'true','outSR':'3347','maxAllowableOffset':'100','geometryPrecision':'3','f':'json','orderByFields':'OBJECTID','resultOffset':str(offset),'resultRecordCount':'250'}
+    parameters = {'where':'1=1','outFields':'CSDUID,CSDNAME,PRUID','returnGeometry':'true','outSR':'3347','maxAllowableOffset':'1000','geometryPrecision':'0','f':'json','orderByFields':'OBJECTID','resultOffset':str(offset),'resultRecordCount':'250'}
     url = service + '?' + urllib.parse.urlencode(parameters)
     try:
         with urllib.request.urlopen(url, timeout=45) as response: data=response.read()

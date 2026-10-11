@@ -76,6 +76,7 @@
  .ca-pilot-map-label{max-width:126px;padding:3px 5px}
  .ca-pilot-map-label button strong{font-size:12px}
  .ca-pilot-map-label>small,.ca-pilot-map-label button span{font-size:10px}
+ .ca-pilot-map-label>small{display:none}
  .ca-pilot-map-key button{font-size:12px;min-height:25px}
 }
 
