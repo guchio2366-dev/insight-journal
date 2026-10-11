@@ -17,7 +17,7 @@ const merc=lat=>Math.log(Math.tan(Math.PI/4+lat*Math.PI/360));
 for(const width of [494,820])test(`initial ${width}px map fits every group with short geographic connections`,()=>{
  const [west,south,east,north]=extent,scale=(width-10)/(east-west),height=Math.ceil(scale*(merc(north)-merc(south))*180/Math.PI+10);
  const sites=eastClusters.map(c=>({id:c.id,country:c.country,anchor:{x:5+(c.point[0]-west)*scale,y:5+(merc(north)-merc(c.point[1]))*scale*180/Math.PI}}));
- const dimensions={toyota:[152,22],kitakyushu:[156,40],shanghai:[156,40],guangzhou:[54,22],wuhan:[54,22],tangshan:[42,22],ningde:[42,22],pyeongtaek:[156,58],hsinchu:[127,22]};
+ const dimensions={toyota:[152,22],kitakyushu:[156,40],shanghai:[156,40],guangzhou:[54,22],wuhan:[54,22],tangshan:[42,22],ningde:[42,22],pyeongtaek:width<800?[156,58]:[190,40],hsinchu:[127,22]};
  const groups=groupIndustrySites(sites,width).map(group=>{const [w,h]=dimensions[group.members.find(m=>dimensions[m.id]).id];return {...group,width:w,height:h};});
  assert.equal(groups.length,9);assert.equal(groups.flatMap(g=>g.members).length,23);
  const placed=layoutIndustryGroups(groups,{left:0,top:0,right:width,bottom:height},[{left:width-65,top:0,right:width,bottom:150}]);

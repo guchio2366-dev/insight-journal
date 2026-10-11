@@ -1,4 +1,5 @@
 ---
+import {eastCultureExamples} from '../../data/atlas/east-asia-cultural-geography';
 import {settlementReading,settlementCountries} from '../../data/atlas/asia-settlement-reading';
 import manifest from '../../../public/assets/atlas/asia-settlements-v1/manifest.json';
 import {eastAsiaReligionCountries,eastAsiaReligionColors,eastAsiaReligionSources,eastAsiaChinaReligionMeasures} from '../../data/atlas/east-asia-religion';
@@ -7,7 +8,7 @@ const {regionId,pageId,visibleSettlementCategoryIds}=Astro.props as {regionId:ke
 const visibleCategory=(topic:'ethnicity'|'religion',id:string)=>!visibleSettlementCategoryIds||visibleSettlementCategoryIds[topic].has(id);
 const visibleCensuses=southCentralReligionCensuses.filter(c=>pageId==='south-asia'?c.code!=='KAZ':pageId==='central-asia'?c.code==='KAZ':true);
 const readings={
- 'east-asia':{ethnicity:'チベット系は中国西部、ウイグル系は新疆、台湾先住民族は台湾に、資料に掲載された居住域があります。色面は全住民の分類や人口密度ではありません。',religion:'2023年の同じ成人調査では、日本は仏教46％、韓国は「宗教なし」52％、台湾は仏教28％・道教24％と回答が分かれます。モンゴルは2020年国勢調査を別に読みます。'},
+ 'east-asia':{ethnicity:'チベット系は中国西部、ウイグル系は新疆、台湾先住民族は台湾に、資料に掲載された居住域があります。色面は全住民の分類や人口密度ではありません。',religion:'中国西部にはチベット仏教の伝統、日本各地には神社と寺院の蓄積、台湾には道教・仏教の文化拠点があります。国内の特徴を場所で読む資料と、国全体の宗教回答を分けて示します。'},
  'southeast-asia':{ethnicity:'大陸の河川平野と島しょ部では、特徴的な居住域のまとまりが異なります。マレー系の分布は国境を越えて続きます。',religion:'掲載範囲では、大陸部に仏教と結びついた居住域が広がり、マレー半島からインドネシアにはイスラム教と結びついた居住域が続きます。'},
  'south-central-asia':{ethnicity:'パシュトゥーンはアフガニスタンとパキスタン、ベンガルの集団はインド東部とバングラデシュ、タミルの集団はインド南部とスリランカの両側に掲載されています。',religion:'掲載した集団に結びつく宗教の事例です。'}
 };
@@ -15,8 +16,16 @@ const readings={
 {(['ethnicity','religion'] as const).map(topic=><section data-settlement-reading={topic} hidden>
  <div data-settlement-overview>
  <p class="eyebrow">{regionId==='east-asia'&&topic==='religion'?'Population · Census and survey sources':'Population · Settlement areas · 2020'}</p>
- <h2>{topic==='ethnicity'?'民族の特徴的な居住域':regionId==='east-asia'?'宗教調査から見る東アジア':'宗教と結びついた居住域'}</h2>
+ <h2>{topic==='ethnicity'?'民族の特徴的な居住域':regionId==='east-asia'?'宗教の地域的特徴':'宗教と結びついた居住域'}</h2>
  <p class="asia-takeaway">{pageId==='central-asia'?(topic==='religion'?'中央アジアでは、イスラム教と結びつく集団の居住域と、複数の宗教的帰属を含む集団の居住域を区別しています。色面を選ぶと、集団の定義と対象国を確認できます。':'カザフ、ウズベク、キルギス、タジク、トルクメンなどの居住域は、国境と同じ形にはなりません。周辺の国へ続く広がりも確かめられます。'):readings[regionId][topic]}</p>
+ {regionId==='east-asia'&&<section class="east-culture-examples" data-east-culture-examples={topic}>
+  <h3>{topic==='religion'?'伝来・寺院と地域の歴史':'山地・平野と居住地のまとまり'}</h3>
+  <p>{topic==='religion'?'宗教文化の広がりには伝来・教団の活動・施設の蓄積が関わります。施設数、公的な歴史概説、住民への調査は分母と年が異なり、一つの信者割合の塗分けへ合成しません。':'中国西部の高原や新疆、モンゴル、広西、北海道・沖縄にも資料に記す集団の居住域があります。台湾では公的な民族別の地理概説を補い、北中部の山地・東部の平野・南部山地という国内の違いを読みます。移住・集落形成と集団の自己認識も関わり、地形や使用言語だけから民族を決めません。'}</p>
+  <p class="asia-small">地図の細い引出線付き札は公的資料による地域・施設の参照位置です。居住域の色面、国全体の宗教回答帯とは別の情報です。地域全体の全住民を網羅する資料ではありません。</p>
+  {eastCultureExamples.filter(example=>example.topic===topic).map(example=><article id={`culture-${example.id}`} data-east-culture-example={example.id}>
+   <h4>{example.label}</h4><p class="asia-takeaway">{example.fact}</p><p>{example.context}</p><p class="asia-small">{example.scope}</p><p class="asia-small">出典：<a href={example.source.url}>{example.source.label}</a></p>
+  </article>)}
+ </section>}
  {regionId==='east-asia'&&topic==='religion'&&<div class="asia-religion-census">
   <h3>住民への宗教質問から読む</h3>
   <div class="asia-religion-census-grid">

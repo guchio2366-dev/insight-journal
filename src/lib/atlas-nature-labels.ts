@@ -1,6 +1,6 @@
 export type Point = {x:number;y:number};
 export type Box = {left:number;top:number;right:number;bottom:number};
-export type LabelInput = {id:string;anchor:Point;width:number;height:number};
+export type LabelInput = {id:string;anchor:Point;width:number;height:number;minLeaderLength?:number};
 export type LabelPlacement = LabelInput & Box;
 export const natureFallbackBounds = [-128,22,-64,52] as const;
 const mercator = (latitude:number)=>Math.log(Math.tan(Math.PI/4+latitude*Math.PI/360));
@@ -41,6 +41,8 @@ export function layoutNatureLabels(items:LabelInput[],bounds:Box,obstacles:Box[]
     for(const x of xs)for(const y of ys){
       const left=clamp(x,bounds.left+3,bounds.right-width-3),top=clamp(y,bounds.top+3,bounds.bottom-height-3);
       const rect={...item,left,top,right:left+width,bottom:top+height};
+      const end=leaderEnd(anchor,rect);
+      if(Math.hypot(end.x-anchor.x,end.y-anchor.y)<(item.minLeaderLength??0))continue;
       if(!obstacles.some(other=>boxesOverlap(rect,other))&&!points.some(other=>boxesOverlap(rect,other,1)))result.push(rect);
     }
     const distance=(a:Box)=>(a.left+width/2-anchor.x)**2+(a.top+height/2-anchor.y)**2;
@@ -60,6 +62,8 @@ export function layoutNatureLabels(items:LabelInput[],bounds:Box,obstacles:Box[]
     for(let top=bounds.top+3;!found&&top+item.height<=bounds.bottom-3;top+=item.height+3){
       for(let left=bounds.left+3;left+item.width<=bounds.right-3;left+=3){
         const rect={...item,left,top,right:left+item.width,bottom:top+item.height};
+        const end=leaderEnd(item.anchor,rect);
+        if(Math.hypot(end.x-item.anchor.x,end.y-item.anchor.y)<(item.minLeaderLength??0))continue;
         if(![...obstacles,...placed].some(other=>boxesOverlap(rect,other,2))){found=rect;break;}
       }
     }
