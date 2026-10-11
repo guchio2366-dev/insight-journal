@@ -21,7 +21,7 @@ const validRain=city.precipitationMm.filter(v=>v!==null) as number[];
 const annualRain=validRain.length===12?validRain.reduce((a,b)=>a+b,0):null;
 const temperatures=city.temperatureC.filter(v=>v!==null) as number[];
 const format=(v:number|null,unit:string)=>v===null?'欠測':`${v.toLocaleString('ja-JP',{minimumFractionDigits:1,maximumFractionDigits:1})} ${unit}`;
-const sourceLabel=city.regionId==='southeast-asia'?city.sourceName:city.countryCode==='TWN'?'台湾・中央気象署':'気象庁';
+const sourceLabel=city.countryCode==='TWN'?'台湾・中央気象署':'気象庁';
 const farmingReading=asiaFarmInsights[city.regionId];
 const localReading=city.regionId==='south-central-asia'?southCentralCityReadings[city.id]:undefined;
 ---

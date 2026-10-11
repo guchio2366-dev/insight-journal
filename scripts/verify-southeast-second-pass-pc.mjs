@@ -37,6 +37,7 @@ try{
  await open('nature/?topic=water');await page.waitForFunction(()=>document.querySelector('[data-hydrology-status]')?.textContent==='');
  assert.match(await page.locator('[data-hydrology-legend-note]').textContent(),/5水系/);
  assert.equal(await page.locator('.asia-river-label:visible').count()>=5,true);
+ await page.locator('[data-hydrology-panel] > details:first-of-type > summary').click();
  await page.locator('[data-water-select]').selectOption('rivers-254');assert.match(await page.locator('[data-hydrology-content]').textContent(),/中国南西部.*南シナ海/s);
  // The visible legend and the map image are authoritative if internals stay private.
  check('river, groundwater and five basin outlines share a regional map; Mekong reading names flow and mouth');await shot('water-mekong');
