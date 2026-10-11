@@ -51,6 +51,7 @@ jobs:
           set -euo pipefail
           test -n "$(fc-list ':lang=ja' family)"
           export INDUSTRY_REVIEW_CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)"
+          export CANADA_REVIEW_LOG_IMAGES=1
           for review in scripts/verify-latin-industry-locations-review.mjs scripts/verify-russia-industry-review.mjs scripts/verify-industry-existing-country-review.mjs scripts/capture-canada-industry-pilot-review.mjs; do
             if [[ -f "$review" ]]; then node "$review"; fi
           done

@@ -12,6 +12,7 @@ export async function verifyCanadaIndustryPilot({page,url,output,result}){
   assert.equal(info.incomplete,null,'All source-supported labels fit this PC frame');assert.deepEqual(info.marks.map(m=>m.id).sort(),expected.map(c=>c.id).sort(),'Every selected-category distribution remains visible');
   for(const mark of info.marks)assert.equal(mark.coordinate,expected.find(c=>c.id===mark.id).coordinates.join(','),'Source location stays attached to its mark');
   for(const [i,a]of info.boxes.entries()){assert(a.x>=info.stage.x&&a.y>=info.stage.y&&a.right<=info.stage.right&&a.bottom<=info.stage.bottom,'Labels stay within the map');for(const b of info.boxes.slice(i+1))assert(!(a.x<b.right&&a.right>b.x&&a.y<b.bottom&&a.bottom>b.y),'Industry labels do not overlap');}
+  const titles=await page.locator('.ca-pilot-map-label').evaluateAll(nodes=>nodes.map(n=>{const range=document.createRange();range.selectNodeContents(n.querySelector('strong'));const text=range.getBoundingClientRect(),box=n.getBoundingClientRect();return {left:text.left,right:text.right,boxLeft:box.left,boxRight:box.right};}));assert(titles.every(t=>t.left>=t.boxLeft&&t.right<=t.boxRight+1),'Actual industry text fits its card');
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'No horizontal page overflow');
   const leaders=await page.locator('[data-ca-correspondence]').evaluateAll(nodes=>nodes.map(n=>Math.hypot(Number(n.getAttribute('x2'))-Number(n.getAttribute('x1')),Number(n.getAttribute('y2'))-Number(n.getAttribute('y1')))));assert(leaders.every(length=>length<=95.1),'Label correspondences stay local and short');
   return info.marks.length;
@@ -42,5 +43,6 @@ export async function verifyCanadaIndustryPilot({page,url,output,result}){
  await page.locator('[data-ca-sector=manufacturing]').click();assert.equal(await page.locator('[data-ca-flow]').count(),0);
  assert.match(await page.locator('[data-ca-international-indicator=exports]').textContent(),/420/);assert.match(await page.locator('[data-ca-international-indicator=us-share]').textContent(),/93/);assert.match(await page.locator('[data-ca-international-indicator=alberta-share]').textContent(),/91/);
  const columns=await page.locator('.ca-pilot-stat-card').evaluateAll(nodes=>nodes.map(n=>({x:n.getBoundingClientRect().x,y:n.getBoundingClientRect().y,w:n.getBoundingClientRect().width})));assert(columns.every(c=>Math.abs(c.y-columns[0].y)<1));assert(columns[0].x<columns[1].x&&columns[1].x<columns[2].x);
+ await page.locator('.ca-pilot-statistics').scrollIntoViewIfNeeded();await capture('1920-statistics-three-columns');
  result.checks.push('1920×1080 CSS viewport at 100% and DPR1 is primary; 1440×900 is auxiliary. All 3 categories verified for initial/selection/only/clear/switch/history/reload; 3 overlapping processors; source-documented supply only; southern default and no camera buttons; 3 statistics columns and preserved CER figures.');
 }

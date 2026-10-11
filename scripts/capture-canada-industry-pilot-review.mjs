@@ -21,7 +21,7 @@ finally{
  console.log('CANADA_PILOT_VERIFICATION '+JSON.stringify(result));
  // Keep review images readable through the authorized GitHub logs API as well as
  // the artifact ZIP, whose temporary download host may be unavailable to reviewers.
- const evidence=['1920-resources-initial.png','1920-manufacturing-initial.png','1920-services-initial.png','1920-resources-overlap-sudbury.png','1920-manufacturing-overlap-sudbury.png','failure.png'];
+ const evidence=['1920-resources-initial.png','1920-manufacturing-initial.png','1920-services-initial.png','1920-resources-overlap-sudbury.png','1920-manufacturing-overlap-sudbury.png','1920-statistics-three-columns.png','failure.png'];
  if(process.env.CANADA_REVIEW_LOG_IMAGES==='1')for(const file of evidence){try{console.log('CANADA_PILOT_IMAGE '+JSON.stringify({file,base64:(await readFile(path.join(output,file))).toString('base64')}));}catch{}}
  await browser?.close();await new Promise(resolve=>server.close(resolve));console.log(JSON.stringify({head:result.head,status:result.status,output}));
 }

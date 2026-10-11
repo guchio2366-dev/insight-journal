@@ -59,7 +59,7 @@ export function initCanadaIndustryPilot(root:HTMLElement){
    const industry=group[0].c.industry,item=pilot.industries.find(i=>i.id===industry)!,card=document.createElement('button');card.type='button';card.className='ca-pilot-map-label';card.dataset.caLabelGroup=industry;card.dataset.caLabelSites=group.map(v=>v.c.id).join(',');card.style.setProperty('--pilot-color',item.color);
    if(state.industry&&industry!==state.industry)card.classList.add('is-context');if(industry===state.industry)card.classList.add('is-highlighted');
    card.setAttribute('aria-pressed',String(industry===state.industry));card.setAttribute('aria-label',`${pilotIndustryLabel(industry,state.sector)}：${group.map(v=>v.c.place).join('、')}を強調`);
-   const label=document.createElement('strong');label.textContent=pilotIndustryLabel(industry,state.sector);const icon=document.createElement('i');icon.setAttribute('aria-hidden','true');label.prepend(icon);card.append(label);
+   const label=document.createElement('strong');label.textContent=industry==='digital'?'情報技術':industry==='nickel'&&state.sector==='resources'?'ニッケル':pilotIndustryLabel(industry,state.sector);const icon=document.createElement('i');icon.setAttribute('aria-hidden','true');label.prepend(icon);card.append(label);
    const place=document.createElement('small');place.textContent=group.length===1?group[0].c.place.split(/[／〜]/)[0]:`${group.length}集積`;card.append(place);card.addEventListener('click',()=>chooseIndustry(industry));overlay.append(card);
    const box=placePilotLabel(group.map(v=>v.point),[card.offsetWidth||110,card.offsetHeight||38],[w,h],occupied);
    if(!box){card.remove();root.dataset.labelsIncomplete='true';continue;}
