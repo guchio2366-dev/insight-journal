@@ -136,7 +136,7 @@ async function start(root:HTMLElement){
   syncLinks();
  }
  function selection(title:string,body:string,source:string){$('[data-japan-selection]').hidden=false;$('[data-japan-selection-title]').textContent=title;$('[data-japan-selection-body]').textContent=body;$<HTMLAnchorElement>('[data-japan-selection-source]').href=source;}
- type Label={id:string;title:string;fullTitle?:string;subtitle:string;point:[number,number];color:string;offset:[number,number];select:()=>void;selected:boolean;muted?:boolean;reference?:boolean};
+ type Label={id:string;title:string;fullTitle?:string;subtitle:string;point:[number,number];color:string;offset:[number,number];select:()=>void;selected:boolean;muted?:boolean;reference?:boolean;priority?:number};
  let labels:{data:Label;button:HTMLElement;line:SVGLineElement}[]=[];
  let placementKey='',placement:ReturnType<typeof layoutJapanLabels>|null=null;
  function renderMarkers(){
@@ -145,7 +145,8 @@ async function start(root:HTMLElement){
   const items:Label[]=[];
   if(state.field==='industry'&&!quantity()){
    const offsets:Record<string,[number,number]>={toyota:[34,-39],yokkaichi:[-125,-62],osaka:[-132,-26],imabari:[-108,20],kitakyushu:[-145,-40],kumamoto:[28,30],nagasaki:[-98,42]};
-   for(const s of config.sites){const i=config.industries.find(i=>i.id===(s.industries.includes(state.topic)?state.topic:s.industries[0]))!;items.push({id:s.id,title:s.label??s.industries.map(id=>config.industries.find(i=>i.id===id)?.label).join('・'),subtitle:s.name,point:s.point,color:i.color,offset:offsets[s.id]??[10,10],select:()=>site(s.id),selected:state.site===s.id,muted:state.topic!=='clusters'&&!s.industries.includes(state.topic)});}
+   const representatives=new Set(config.industries.map(i=>config.sites.find(s=>s.industries.includes(i.id))?.id));
+   for(const s of config.sites){const i=config.industries.find(i=>i.id===(s.industries.includes(state.topic)?state.topic:s.industries[0]))!;items.push({id:s.id,title:s.label??s.industries.map(id=>config.industries.find(i=>i.id===id)?.label).join('・'),subtitle:s.name,point:s.point,color:i.color,offset:offsets[s.id]??[10,10],select:()=>site(s.id),selected:state.site===s.id,muted:state.topic!=='clusters'&&!s.industries.includes(state.topic),priority:(state.topic==='clusters'?representatives.has(s.id):s.industries.includes(state.topic))?20:0});}
   }else if(state.field!=='industry'){
    for(const label of japanFoundationPresentation(state,nature)!.labels)items.push({...label,reference:label.kind==='reference',offset:[12,-25],select:()=>label.kind==='site'?site(label.id):label.kind==='feature'?feature(label.id):city(label.id,state.field)});
   }
@@ -156,7 +157,7 @@ async function start(root:HTMLElement){
  function positionLabels(){
   if(!map)return;const frame=$('.japan-map-frame');
   for(const text of all<SVGTextElement & HTMLElement>('[data-latitude]')){const y=map.project([146.3,Number(text.dataset.latitude)]).y;text.setAttribute('x',String(frame.clientWidth-8));text.setAttribute('y',String(y-4));text.style.display=y>12&&y<frame.clientHeight-35?'':'none';}
-  const anchors=labels.map(({data,button})=>{button.hidden=false;const p=map!.project(data.point);return {id:data.id,x:p.x,y:p.y,width:button.offsetWidth,height:button.offsetHeight,offset:data.offset};});
+  const anchors=labels.map(({data,button})=>{button.hidden=false;const p=map!.project(data.point);return {id:data.id,x:p.x,y:p.y,width:button.offsetWidth,height:button.offsetHeight,offset:data.offset,priority:data.selected?100:data.priority??(!data.muted&&!data.reference?10:0)};});
   const key=JSON.stringify([frame.clientWidth,frame.clientHeight,anchors]);
   if(key!==placementKey||!placement){placement=layoutJapanLabels(anchors,frame.clientWidth,frame.clientHeight);placementKey=key;}
   const placed=placement;

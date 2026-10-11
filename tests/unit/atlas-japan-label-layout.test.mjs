@@ -15,3 +15,16 @@ test('画面外の地点にラベルを置かず、狭すぎる枠で長い引�
 });
 
 for(const [width,height] of [[500,568],[383,435]])test(`北海道〜九州 ${width}×${height} も7産業を短い線で表示する`,()=>{const points=anchors(width,height,true),rects=layoutJapanLabels(points,width,height);assert.equal(rects.size,7);for(const r of rects.values())assert(r.leaderLength<=64);});
+
+ test('全国24拠点の混雑時も主要産業と選択地点を近距離に残す',async()=>{
+  const {japanIndustryClusters:all,japanIndustries:industries}=await import('../../src/data/atlas/japan-industry-clusters.ts');
+  const representatives=new Set(industries.map(i=>all.find(s=>s.industries.includes(i.id))?.id));
+  for(const [width,height] of [[836,700],[500,568],[383,435]]){
+   const west=129.35,east=145.9,north=mercator(45.6),south=mercator(30.75),scale=Math.min((width-16)/(east-west),(height-16)/(north-south)*Math.PI/180);
+   const points=all.map(s=>({id:s.id,x:width/2+(s.point[0]-(west+east)/2)*scale,y:height/2+((north+south)/2-mercator(s.point[1]))*scale*180/Math.PI,width:Math.max(s.name.length*8,(s.label??s.industries.map(id=>industries.find(i=>i.id===id).label).join('・')).length*12)+12,height:36,offset:[10,-25],priority:representatives.has(s.id)?20:0}));
+   const placed=layoutJapanLabels(points,width,height);assert(placed.has('toyota'));assert(Array.from(representatives).filter(id=>placed.has(id)).length>=7);
+   for(const selected of ['toyota','ichihara-chemicals','narita-logistics','mihama-nuclear']){
+    const result=layoutJapanLabels(points.map(p=>({...p,priority:p.id===selected?100:0})),width,height);assert(result.has(selected),selected);assert(result.get(selected).leaderLength<=japanLabelMaxLeader);for(const r of result.values())assert(r.leaderLength<=japanLabelMaxLeader);
+   }
+  }
+ });
