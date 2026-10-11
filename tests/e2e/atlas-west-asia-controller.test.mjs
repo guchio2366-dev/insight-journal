@@ -94,6 +94,27 @@ test('中東の採用10品目は既存分布を保ち、明示操作だけ国別
  }finally{await w.happyDOM.close();}
 });
 
+test('デーツとオリーブの短い凡例は初期分布と国別生産量の切替に一致する',async()=>{
+ const {w,q}=await setup('agriculture');
+ try{
+  for(const id of ['dates','olives']){
+   q(`[data-west-topic-button="${id}"]`).click();
+   await until(()=>q('[data-west-atlas]').dataset.topic===id&&q('[data-west-atlas]').dataset.ready==='true');
+   assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-farm-context]').length,5);
+   assert.match(q('[data-west-short-key]').textContent,/面＝既存5品目の推計分布/);
+   assert.doesNotMatch(q('[data-west-short-key]').textContent,/面＝国別生産量/);
+   q('[data-west-production-map]').click();
+   await until(()=>q('[data-west-atlas]').dataset.ready==='true'&&q('[data-west-scene]').querySelectorAll('[data-west-farm-context]').length===0);
+   assert.equal(new URL(w.location.href).searchParams.get('productionMap'),'country');
+   assert.match(q('[data-west-short-key]').textContent,/面＝国別生産量/);
+   assert.doesNotMatch(q('[data-west-short-key]').textContent,/面＝既存5品目の推計分布/);
+   q('[data-west-production-map]').click();
+   await until(()=>q('[data-west-atlas]').dataset.ready==='true'&&q('[data-west-scene]').querySelectorAll('[data-west-farm-context]').length===5);
+   assert.match(q('[data-west-short-key]').textContent,/面＝既存5品目の推計分布/);
+  }
+ }finally{await w.happyDOM.close();}
+});
+
 test('中東の初期気候は地域全体、選んだ都市の雨温図と説明は右に同居し国名hoverを出さない',async()=>{
  const {w,q,select}=await setup('nature');
  try{

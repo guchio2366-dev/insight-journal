@@ -519,7 +519,7 @@ async function init(root:HTMLElement){
   else if(t.id==='religion')short=chip(westReligionDisplayColors['religion-islam'],'イスラム教')+chip(westReligionDisplayColors['religion-christianity'],'キリスト教')+chip(westReligionDisplayColors['religion-multiple'],'複数区分');
   else if(t.id==='ethnicity')short=chip('#b59052','アラブ系')+chip('#64959b','ペルシア系')+chip('#ab749b','トルコ系')+chip('#91a95a','クルド系');
   else if(t.id in westIndustryRoles)short=chip('#ad6729','採掘')+chip('#ad4541','精製')+chip('#853474','石油化学')+chip('#3f7696','自動車')+chip('#467f69','港・通過');
-  else if(['dates','olives'].includes(t.id))short=chip('#a16f36','点＝根拠のある主要産地','point')+'<span>面＝国別生産量</span>';
+  else if(['dates','olives'].includes(t.id))short=chip('#a16f36','点＝根拠のある主要産地','point')+`<span>${showFarmingContext(t)?'面＝既存5品目の推計分布':'面＝国別生産量'}</span>`;
   else if(t.id==='desalination')short=chip('#a16f36','点＝確認できた施設・系統','point')+chip('#4c91b0','川・湖','line');
   shortKeyBox.innerHTML=short?short+'<a href="#west-full-key">全凡例 ↓</a>':'';shortKeyBox.hidden=!short;
   legendBox.innerHTML=source?`<section class="west-legend-subject ${source.id==='climate'?'west-legend-climate':''}"><h3>左｜${esc(source.label)}</h3>${legendHtml(source,comparisonSource.year,desktopComparison.matches,comparisonSource.group,false)}</section><section class="west-legend-subject ${t.id==='climate'?'west-legend-climate':''}"><h3>右｜${esc(t.label)}</h3>${legendHtml(t,state.year,desktopComparison.matches)}</section>`:legendHtml(t,state.year,t.id==='climate');

@@ -42,7 +42,26 @@ try{
   if(width===1920){await page.locator('[data-west-standard-group="地形"]').click();await ready();assert.equal(await page.locator('.west-terrain-place').count(),5);await capture('terrain-landforms');await page.locator('[data-west-standard-group="標高（等高線）"]').click();await ready();assert(await page.locator('[data-west-aligned-line="elevation"]').count()>0);await capture('elevation-contours');}
   await open('agriculture');assert.equal(await page.locator('[data-west-farm-context]').count(),5);assert(await page.locator('[data-west-farm-supply]').textContent().then(x=>x.includes('世界生産比')));assert.equal(await page.locator('[data-west-farm-strong="sheep"]').first().evaluate(el=>el.tagName.toLowerCase()),'rect');assert.equal(await page.locator('[data-west-farm-strong="goat"]').first().evaluate(el=>el.tagName.toLowerCase()),'path');await capture('farming-all');await capture('farming-map','[data-west-map]');await capture('farming-statistics','[data-west-farm-supply]');
   if(width===1920){
-   await page.locator('[data-west-topic-button="dates"]').first().click();await ready();assert.equal(await page.locator('[data-west-place]').count(),4);await capture('dates-all');await page.locator('[data-west-place="al-ahsa-dates"]').click();await ready();assert.equal(new URL(page.url()).searchParams.get('place'),'al-ahsa-dates');await capture('dates-al-ahsa');await page.reload({waitUntil:'domcontentloaded'});await ready();assert.equal(await page.locator('[data-west-place="al-ahsa-dates"]').getAttribute('aria-pressed'),'true');await page.locator('[data-west-topic-button="olives"]').first().click();await ready();assert.equal(await page.locator('[data-west-place]').count(),4);await capture('olives-all');await page.locator('[data-west-place="edremit-olives"]').click();await ready();assert.equal(new URL(page.url()).searchParams.get('place'),'edremit-olives');await capture('olives-edremit');await page.goBack({waitUntil:'domcontentloaded'});await ready();assert.equal(new URL(page.url()).searchParams.get('place'),null);
+   for(const [topic,place] of [['dates','al-ahsa-dates'],['olives','edremit-olives']]){
+    await page.locator(`[data-west-topic-button="${topic}"]`).first().click();await ready();
+    assert.equal(await page.locator('[data-west-place]').count(),4);
+    assert.match(await page.locator('[data-west-short-key]').textContent(),/面＝既存5品目の推計分布/);
+    assert.doesNotMatch(await page.locator('[data-west-short-key]').textContent(),/面＝国別生産量/);
+    await capture(`${topic}-all`);
+    await page.locator('[data-west-production-map]').click();await ready();
+    assert.equal(new URL(page.url()).searchParams.get('productionMap'),'country');
+    assert.match(await page.locator('[data-west-short-key]').textContent(),/面＝国別生産量/);
+    assert.doesNotMatch(await page.locator('[data-west-short-key]').textContent(),/面＝既存5品目の推計分布/);
+    await capture(`${topic}-country-production`);
+    await page.locator('[data-west-production-map]').click();await ready();
+    assert.equal(new URL(page.url()).searchParams.get('productionMap'),null);
+    assert.match(await page.locator('[data-west-short-key]').textContent(),/面＝既存5品目の推計分布/);
+    await page.locator(`[data-west-place="${place}"]`).click();await ready();
+    assert.equal(new URL(page.url()).searchParams.get('place'),place);
+    await capture(topic==='dates'?'dates-al-ahsa':'olives-edremit');
+    if(topic==='dates'){await page.reload({waitUntil:'domcontentloaded'});await ready();assert.equal(await page.locator(`[data-west-place="${place}"]`).getAttribute('aria-pressed'),'true');}
+   }
+   await page.goBack({waitUntil:'domcontentloaded'});await ready();assert.equal(new URL(page.url()).searchParams.get('place'),null);
    await open('nature');await page.locator('[data-west-standard-group="水資源"]').click();await ready();await page.locator('[data-west-topic-button="desalination"]').first().click();await ready();assert.equal(await page.locator('[data-west-place]').count(),2);await page.locator('[data-west-place="jebel-ali-desal"]').click();await ready();assert.match(await page.locator('.west-place-reading').textContent(),/ドバイ/);await capture('desal-jebel-ali');
    await open('population');assert.equal(await page.locator('[data-urban]').count(),4);await capture('population-major-cities');await page.locator('[data-west-standard-group="人種・民族"]').click();await ready();assert.equal(await page.locator('.west-ethnicity-map-label').count(),5);await capture('ethnicity-groups');await page.locator('[data-west-standard-group="宗教"]').click();await ready();assert(await page.locator('[data-settlement]').count()>0);assert.equal(await page.locator('[data-west-short-key] span').count(),3);await capture('religion-groups');
   }
