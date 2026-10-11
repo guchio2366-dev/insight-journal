@@ -27,7 +27,16 @@ export async function verifyCanadaDemographicsReading({page,url,output,result}){
    assert.match(await page.locator('[data-population-coverage-brief]').textContent(),/2020年推計/);
    assert.deepEqual(await page.locator('[data-canada-population]').evaluate(n=>({size:[n.canadaPopulationGrid.manifest.width,n.canadaPopulationGrid.manifest.height],period:n.canadaPopulationGrid.manifest.populationYear})),{size:[1000,1293],period:2020});
    assert.equal(await page.locator('[data-population-regions]').evaluate(n=>getComputedStyle(n).display),'none');
-   const point=projectCanadaMap([-79.95,43.95]),target=await page.locator('[data-population-map]').evaluate((n,p)=>{const v=new DOMPoint(...p).matrixTransform(n.getScreenCTM());return{x:v.x,y:v.y};},point);
+   const imageBox=await page.locator('[data-population-grid-image]').boundingBox();let target=null;
+   // Reference-city labels are separate controls. Click an uncovered positive
+   // source cell through the real mouse, at either measured PC viewport.
+   for(const coordinates of [[-79.95,43.95],[-79.9,44.1],[-80.3,44],[-80.5,43.5],[-81.5,42.9],[-73.8,45.7],[-114.2,51.1]]){
+    const candidate=await page.locator('[data-population-map]').evaluate((n,p)=>{const v=new DOMPoint(...p).matrixTransform(n.getScreenCTM());return{x:Math.round(v.x),y:Math.round(v.y)};},projectCanadaMap(coordinates));
+    const col=Math.floor((candidate.x-imageBox.x)/imageBox.width*manifest.width),row=Math.floor((candidate.y-imageBox.y)/imageBox.height*manifest.height);
+    if(col<0||row<0||col>=manifest.width||row>=manifest.height||!(grid[row*manifest.width+col]>0))continue;
+    if(await page.evaluate(p=>document.elementFromPoint(p.x,p.y)?.hasAttribute('data-population-grid-image'),candidate)){target=candidate;break;}
+   }
+   assert(target,'A positive source-grid cell is visible and unobscured by the city controls');
    await page.locator('[data-population-grid-image]').evaluate(n=>n.addEventListener('click',e=>{n.qaLastClick={x:e.clientX,y:e.clientY};},{once:true}));await page.mouse.click(target.x,target.y);await wait(topic);
    const id=new URL(page.url()).searchParams.get('grid');assert(id,'Actual density image is selectable');
    const expectedId=await page.locator('[data-population-grid-image]').evaluate((n,m)=>{const r=n.getBoundingClientRect(),p=n.qaLastClick;return Math.floor((p.x-r.x)/r.width*m.width)+','+Math.floor((p.y-r.y)/r.height*m.height);},manifest);assert.equal(id,expectedId,'Mouse coordinates correspond to the actual source-image cell');
