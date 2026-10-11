@@ -66,7 +66,9 @@ try {
   }
   const widths=profile.climate.map(city=>city.box.width);assert(Math.max(...widths)-Math.min(...widths)<2,'four Madagascar diagrams have equal drawing width');
   await page.locator('[data-africa-city-return]').click();await settle(page);assert(!state(page).city);assert.equal(await page.locator('.africa-map').getAttribute('viewBox'),camera);
-  const scroll=await measure(page.locator('.africa-detail-scroll')),reader=await measure(page.locator('.africa-detail'));assert(scroll.height>=reader.height*.45,'reader scroll uses a substantial part of map-height panel');
+  const reader=await measure(page.locator('.africa-detail')),mapFrame=await measure(page.locator('.africa-map-frame'));
+  const scroll=await page.locator('.africa-detail').evaluate(node=>({clientHeight:node.clientHeight,scrollHeight:node.scrollHeight,overflowY:getComputedStyle(node).overflowY}));
+  assert(Math.abs(reader.height-mapFrame.height)<3,'reader uses the complete map-height panel');assert.equal(scroll.overflowY,'auto');assert(scroll.clientHeight>0&&scroll.scrollHeight>=scroll.clientHeight,'the actual reader scroll container has usable dimensions');
   profile.checks.push('12 drawn selectable cities; four Madagascar plots preserve width, aspect ratio, monthly bars and agreed axes; city return and camera stability');
 
   await page.locator('[data-field=agriculture]').click();await settle(page);await page.locator('[data-africa-agri-distribution]').first().waitFor();

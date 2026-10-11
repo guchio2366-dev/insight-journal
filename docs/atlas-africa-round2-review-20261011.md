@@ -22,12 +22,15 @@
 |対象|状況・原因|代替として必要なもの|
 |---|---|---|
 |入力画像3枚|Library prepare後、現在の配布helperでmaterializeを1回＋新prepare後の同helper1回再試行。全て `library file transfer failed: download failed`。consumer-localにファイルなし。HTTP statusはhelper未表示なので403と断定しない。実見なし。|正規取得が成功するconsumer-localファイル。現実装の画像で元画像比較の代用をしない。|
-|森林被覆面|ESA/JRC、独立FAO GLC-SHAREの正規環境proxy取得が403で停止。GLC-SHAREの教育/非営利許可を確認したが原図未取得。天然/人工の区分は根拠なし。|原分類と権利を確認できる森林被覆原表の正常な取得。枠修正/2事例/注記だけで面を完了扱いしない。|
+|森林被覆面|公式ESA S3 `https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_{tile}_Map.tif` を既存準備scriptでRange取得した際、正規proxyのHTTP tunnelingが403で停止。親から共有されたものと同じ経路。個別tile名はログに残らず断定できない。独立FAO GLC-SHAREの原資料もproxy403。原図未取得で、天然/人工の区分は根拠なし。|正常な取得。採用できる場合は2021年class10の樹木被覆として一般化を明示し、森林面積・天然林面と扱わない。枠修正/2事例/注記だけで面を完了扱いしない。|
 |民族居住域|GeoEPR/GREGの公開派生配布条件が未確認、利用条件の確認できる広域geometry未取得。|公開派生配布が許される原資料、または権利者の明示許諾。言語の記録点で民族面の代用をしない。|
 |精密河口点|HydroBASINS PourPoints正規ZIPがHTTP403、独自利用条件もBasinATLASのCC BYと区別して未採用。|正常な取得と配布条件の確認、または独立の権利確認済み河口資料。原河道の架空延長は行わない。|
 |ローカル実ブラウザ|`/usr/bin/chromium`、headless=true、chromiumSandbox=true、追加引数なしでSUID helper ownership FATAL。権限/安全設定を変更しない。|既存GitHubの安全Google Chromeで同headを描画検証し、代表JPEG/metadataを配布。|
+|CI失敗内容・artifactの実見|初回head `fb90de7` のAfrica PC/共通林業CIは描画stepで失敗。正規 `gh run view --log-failed` の `results-receiver.actions.githubusercontent.com` と正規 `gh run download` の公式blob配布先がForbiddenで停止。APIのcheck/job状態とartifactサイズは読めるが、失敗Assertion/画像は未実見。|原CIの失敗行と画像を正常に読める環境で確認。別host/app/proxyへの転送やlog中への画像再掲載による迂回は行わない。|
 
 入力Library IDs: `libfile_e6e132d2519881918c11f5484034915d`, `libfile_3a6c0985c278819181955d84fea67de7`, `libfile_3fc75e7f5c0c8191b40ee1ca1084e8f2`。signed URLは台帳に保存しない。転送の拒否を別ホスト/プロキシ/runnerへ移して迂回しない。
+
+ESA WorldCover2021 v200が正常取得できた場合の出典条件：CC BY4.0、2021年、原10m分類、表示用overview/一般化の加工を記録。指定creditは `© ESA WorldCover project 2021 / Contains modified Copernicus Sentinel data (2021) processed by ESA WorldCover consortium`。原DOIも取得資料に照合して記載し、previewの画素を森林面積として集計しない。
 
 ## 検証
 
@@ -36,3 +39,7 @@
 専用PCspecは単なる文字列有無に加え、SVG/図のbounding box、地図内の実クリック対象、青画素、面と河道の保持、主1920で重要地名衝突、12都市と4図の描画幅/軸、欠測の保持、初期/戻る/タブ往復を検証する。100%/DPR1条件をmetadataに記録。森林/民族/入力画像/精密河口点はmetadataでも未達扱いを維持する。
 
 全サイトテストと再ビルドを重ねた初回結果は生成ファイル欠落のため無効。再ビルドを完了してから検証を順番に行う。最終head・CI・代表画像と結果はDraft PRへ記録し、公開/mergeは行わない。
+
+ローカル最終単体：1143件中1140合格・既存3スキップ、失敗/取消0（concurrency4）。アフリカ単体82/82、河川操作7/7、農畜産12/12、産業/文化/分布23/23、レイアウト10件も再確認した農業2件を含め合格。最終ビルドと配信検証は成功。PC描画CIと全サイト操作テストの確定結果はPRに記録する。
+
+既知の静的な検証契約修正：右の実スクロール対象は子 `.africa-detail-scroll` ではなく親 `.africa-detail`。親の高さ/overflow/scrollHeightと地図高の一致を検証する。共通林業のAfricaについては旧枠の固定幅/上位3分の1条件より共通ナビ順序と実grid幅への一致を検証し、地図/解説/凡例/全ラベルの初期viewport内可視性は保持する。これらが初回CIの実失敗原因だったとは、原失敗行未取得のため断定しない。
