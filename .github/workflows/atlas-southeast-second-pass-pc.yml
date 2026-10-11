@@ -5,12 +5,20 @@ on:
     paths:
       - '.github/workflows/atlas-southeast-second-pass-pc.yml'
       - 'scripts/verify-southeast-second-pass-pc.mjs'
+      - 'scripts/prepare-southeast-landform-extents.py'
       - 'src/components/atlas/asia/SoutheastAsiaFarmView.astro'
       - 'src/components/atlas/AsiaClimateDiagram.astro'
       - 'src/data/atlas/asia-southeast-water-reading.ts'
       - 'src/scripts/atlas-asia-water.ts'
       - 'src/scripts/atlas-asia-explorer.ts'
       - 'src/scripts/atlas-asia-southeast-industry.ts'
+      - 'src/scripts/atlas-asia-presentation.ts'
+      - 'src/components/atlas/AsiaIndustryPanel.astro'
+      - 'src/components/atlas/AsiaAtlasPage.astro'
+      - 'src/components/atlas/AsiaSettlementPanel.astro'
+      - 'src/components/atlas/asia/SoutheastAsiaIndustryReading.astro'
+      - 'src/data/atlas/asia/southeast-landform-extents.json'
+      - 'src/data/atlas/asia/southeast-census-complements.ts'
 permissions:
   contents: read
 concurrency:
