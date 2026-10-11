@@ -274,7 +274,7 @@ export function initEuropeAtlas() {
   function positionRiverLabels(){
     const rect=stage.getBoundingClientRect();
     for(const {node,label} of riverLabels){
-      node.hidden=!['water','drainage'].includes(state.layer);node.setAttribute('aria-pressed',String(state.feature===label.id));if(node.hidden)continue;
+      node.hidden=state.layer!=='water';node.setAttribute('aria-pressed',String(state.feature===label.id));if(node.hidden)continue;
       const point=overlayProject(label.coordinates);node.style.left=point.x+'px';node.style.top=point.y+'px';
       node.hidden=point.x<44||point.x>rect.width-44||point.y<50||point.y>rect.height-48;
     }

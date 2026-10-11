@@ -34,7 +34,7 @@ try{
   assert.match(await page.locator('[data-eu-subject-reader]').innerText(),/セーヌ川はフランス北部のパリを通り/);
 
   await open('drainage');
-  await page.locator('[data-eu-river-label=danube]').click();
+  await page.locator('[data-eu-map-place=danube][data-eu-map-kind=feature]').click();
   await page.waitForFunction(()=>document.querySelector('[data-eu-basin-summary]')?.textContent.includes('ドナウ川水系'));
   const basin=await page.locator('[data-eu-basin-summary]').innerText();
   assert.match(basin,/9区画をまとめて強調/);
