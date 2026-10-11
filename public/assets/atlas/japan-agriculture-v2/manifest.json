@@ -15,8 +15,8 @@
     },
     {
       "name": "wood-sites.geojson",
-      "bytes": 3236,
-      "sha256": "53bef2c7273be935700f069afe19c199ad7fce97ed6ee85c742f47cd2973bd35"
+      "bytes": 3245,
+      "sha256": "93e77d67f4c6a2b22990942c9f47009c1e3ecb137f24a1cf6aa061a0ee08ff91"
     },
     {
       "name": "selection.json",
@@ -31,7 +31,7 @@
   ],
   "sourceInput": {
     "path": "src/data/atlas/japan-agriculture-v2.ts",
-    "sha256": "1964743ce234ea7e8bd471d3f0feb32d2d6dfad6ec2abb4269b2250856249b3e"
+    "sha256": "4126fcdab472d7d9db9e43b64bcae68b3a378442979a0935531fd743a255b849"
   },
   "products": [
     {

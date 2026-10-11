@@ -73,10 +73,11 @@ export const japanAgricultureSites:JapanAgricultureSite[]=[
 ];
 
 /** Forest raster and wood-use localities are different observations, never an inferred supply link. */
+const forestryCoordinateMethod='資料に記載された地域の概略位置を編集して設定（WGS84経緯度）。施設・敷地の正確な位置ではない。';
 export const japanForestrySites=[
- {id:'wood-asahikawa',name:'シラカバ材利用｜旭川',coordinates:[142.36,43.77] as [number,number],title:'家具・内装材',overview:'2024年度林野庁白書が紹介する、旭川の白樺プロジェクトによる道産シラカバ材の利用。',reason:'樹種の性質と製品づくり、近隣事業者との連携を読みます。点の周囲が採材林という意味ではありません。',sourceIds:['wood-asahikawa'],coordinateMethod,geometryKind:'wood-use-reference-point',quantity:null,extent:null},
- {id:'wood-nagai',name:'木質熱利用｜長井・置賜',coordinates:[140.04,38.11] as [number,number],title:'木質熱供給',overview:'2024年度林野庁白書が紹介する、長井市の企業が先導する置賜地域の木質バイオマス熱供給。',reason:'地域材の燃料化と、豪雪地の公共・民間施設の熱需要を結び付けます。森林参考画像から燃料の産地や供給経路を推定しません。',sourceIds:['wood-nagai'],coordinateMethod,geometryKind:'wood-use-reference-point',quantity:null,extent:null},
- {id:'wood-nichinan',name:'JAS製材｜日南',coordinates:[131.38,31.60] as [number,number],title:'スギの製材',overview:'2024年度林野庁白書が紹介する、日南・都城・高原で製材を行う高嶺木材の事例。点は日南側の概略位置です。',reason:'大径材の木取り、乾燥と強度の管理が建築用製材を支えます。3工場の敷地や原木調達林の境界は未収録です。',sourceIds:['wood-nichinan'],coordinateMethod,geometryKind:'wood-use-reference-point',quantity:null,extent:null},
+ {id:'wood-asahikawa',name:'シラカバ材利用｜旭川',coordinates:[142.36,43.77] as [number,number],title:'家具・内装材',overview:'2024年度林野庁白書が紹介する、旭川の白樺プロジェクトによる道産シラカバ材の利用。',reason:'樹種の性質と製品づくり、近隣事業者との連携を読みます。点の周囲が採材林という意味ではありません。',sourceIds:['wood-asahikawa'],coordinateMethod:forestryCoordinateMethod,geometryKind:'wood-use-reference-point',quantity:null,extent:null},
+ {id:'wood-nagai',name:'木質熱利用｜長井・置賜',coordinates:[140.04,38.11] as [number,number],title:'木質熱供給',overview:'2024年度林野庁白書が紹介する、長井市の企業が先導する置賜地域の木質バイオマス熱供給。',reason:'地域材の燃料化と、豪雪地の公共・民間施設の熱需要を結び付けます。森林参考画像から燃料の産地や供給経路を推定しません。',sourceIds:['wood-nagai'],coordinateMethod:forestryCoordinateMethod,geometryKind:'wood-use-reference-point',quantity:null,extent:null},
+ {id:'wood-nichinan',name:'JAS製材｜日南',coordinates:[131.38,31.60] as [number,number],title:'スギの製材',overview:'2024年度林野庁白書が紹介する、日南・都城・高原で製材を行う高嶺木材の事例。点は日南側の概略位置です。',reason:'大径材の木取り、乾燥と強度の管理が建築用製材を支えます。3工場の敷地や原木調達林の境界は未収録です。',sourceIds:['wood-nichinan'],coordinateMethod:forestryCoordinateMethod,geometryKind:'wood-use-reference-point',quantity:null,extent:null},
 ];
 
 export const japanAgricultureSelectionCandidates={

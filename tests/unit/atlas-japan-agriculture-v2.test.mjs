@@ -45,3 +45,15 @@ test('生成した公開資料は元の代表点・出典と一致し、hashを�
   assert.equal(woodSites.length,3);assert.equal(geo.features.length,woodSites.length);
   for(const s of woodSites){assert.equal(s.geometryKind,'wood-use-reference-point');assert.equal(s.quantity,null);assert.equal(s.extent,null);assert(!sites.some(p=>p.id===s.id));for(const id of s.sourceIds){const source=sources.find(p=>p.id===id);assert(source);assert.match(source.period,/2024年度白書/);}assert.equal(getJapanAgricultureReading('forest',s.id).title,s.name);assert.notEqual(getJapanAgricultureReading('rice',s.id).title,s.name);assert.deepEqual(geo.features.find(f=>f.id===s.id).geometry.coordinates,s.coordinates);}
  });
+
+test('森林3施設の実表示の詳細には農場・園地向けの位置説明を出さない',async()=>{
+ const {build}=await import('esbuild');
+ const bundle=await build({entryPoints:['src/scripts/atlas-japan-foundation-presentations.ts'],bundle:true,write:false,format:'esm',platform:'node',tsconfigRaw:{},define:{'import.meta.env.BASE_URL':JSON.stringify('/insight-journal/')}});
+ const {japanFoundationPresentation}=await import('data:text/javascript;base64,'+Buffer.from(bundle.outputFiles[0].text).toString('base64'));
+ for(const site of woodSites){
+  const view=japanFoundationPresentation({field:'agriculture',topic:'forest',site:site.id,prefecture:null,city:null,feature:null,camera:null,returnTo:null});
+  assert.equal(view.selection.title,site.name);
+  assert.match(view.selection.body,/施設・敷地の正確な位置ではない/);
+  assert.doesNotMatch([view.selection.title,view.selection.body,...Object.values(view.reading)].join(' '),/農場|園地|農業/);
+ }
+});
