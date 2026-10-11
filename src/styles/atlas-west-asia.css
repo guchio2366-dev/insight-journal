@@ -365,6 +365,13 @@
 .west-industry-marker[data-kind="transit"] circle{fill:#467f69}
 .west-industry-marker.is-selected :is(circle,rect,.west-industry-symbol),.west-industry-marker:focus :is(circle,rect,.west-industry-symbol){stroke:#252e33;stroke-width:3px}
 .west-industry-marker text{font-size:11px;font-weight:750;fill:#24343a;paint-order:stroke;stroke:#fffdf3;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+.west-industry-marker .west-industry-label-hit,.west-place-marker .west-place-label-hit{fill:transparent;stroke:none;pointer-events:all}
+.west-place-marker{cursor:pointer}
+.west-place-marker circle{fill:#a16f36;stroke:#fffdf3;stroke-width:2px}
+.west-place-marker.is-selected circle,.west-place-marker:focus circle{stroke:#24343a;stroke-width:3px}
+.west-place-marker line{stroke:#526c70;stroke-width:1px}
+.west-place-marker text{font-size:11px;font-weight:750;fill:#304b3c;paint-order:stroke;stroke:#fffdf3;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+.west-place-reading{border-left:3px solid #a16f36;padding:6px 10px;margin:8px 0;background:#fcf8ed}
 .west-industry-marker line{stroke:#526c70;stroke-width:1px}
 .west-industry-marker.is-context{opacity:.48}
 .west-atlas[data-field=natural] .west-station[data-city] [data-marker-label] text{font-size:11px;font-weight:700;fill:#244958;paint-order:stroke;stroke:#fffdf3;stroke-width:3px;stroke-linejoin:round}

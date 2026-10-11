@@ -5,6 +5,7 @@ import {westAnnualPrecipitationId,westPrecipitationManifestPath,westPrecipitatio
 import {westFarmingProducts,westFarmingProduct,isWestFarmingOverview,westFarmingGeometry,westFarmingOverlap} from '../lib/atlas-west-asia-farming.mjs';
 import {westFieldIntroductions,westIndustryCountries,westIndustryCountry,westIndustryTakeaway,westRegionalReading,westReadingSources,westCityReadings,westFarmingSelection,westWaterIntroductions} from '../data/atlas/west-asia-readings.mjs';
 import {westIndustrySites,westIndustryKind,westIndustryRole,westIndustryRoles} from '../data/atlas/west-asia-industry.mjs';
+import {westPlaceExamples} from '../data/atlas/west-asia-places.mjs';
 import westWorldShares from '../data/atlas/west-asia-world-shares.json';
 import {westSawnwoodRow,westSawnwoodSeries} from '../data/atlas/west-asia-forestry.mjs';
 import {westNaturalAssets,westRiverGroundwater,westRepresentativeBasins,westNaturalKind,validateWestNaturalManifest,decodeWestNaturalCollection,assembleWestNaturalChunks,westGroundwaterReading,westWaterFeatureReading,westGeometryVisible} from '../lib/atlas-west-asia-natural.mjs';
@@ -63,7 +64,7 @@ async function init(root:HTMLElement){
  }
  let data:any,geography:any,state:any,comparisonSource:any=null,cityExplicit=false,pointSide='target',split=50,renderVersion=0,pointVersion=0;
  let unavailable='',openWaterGroup=false,groundwaterSelection='',readingOverview=!new URLSearchParams(location.search).has('topic')&&!new URLSearchParams(location.search).has('country')&&!new URLSearchParams(location.search).has('city');
- let naturalManifest:any=null,naturalFeature='',naturalSelection:any=null,industrySite='';
+ let naturalManifest:any=null,naturalFeature='',naturalSelection:any=null,industrySite='',placeId=new URLSearchParams(location.search).get('place')??'';
  const naturalCollections=new Map<string,any>();
  const fieldIntroductions:Record<string,string>=westFieldIntroductions;
  const statisticalCountries=(t:any)=>t.field==='industry'?westIndustryCountries.map(code=>data.countries.find((c:any)=>c.code===code)).filter(Boolean):data.countries;
@@ -149,7 +150,7 @@ async function init(root:HTMLElement){
   let html='';
   html+='<g data-west-water-groundwater clip-path="url(#west-target-land)">'+ground.features.map((f:any,i:number)=>`<path d="${path(f.geometry)}" fill="${({'1':'#b6d0d4','2':'#c4d4b2','3':'#e3d7b8'} as any)[String(f.properties.HYGEO2)[0]]??'#d9dcce'}" fill-opacity=".65" fill-rule="evenodd" stroke="${interactive&&naturalFeature==='ground:'+i?'#a23f2d':'#a8b8b0'}" stroke-width="${interactive&&naturalFeature==='ground:'+i?2.2:.3}" vector-effect="non-scaling-stroke" ${interactive?`data-natural-feature="ground:${i}" role="button" tabindex="${waterTab(f,groundTabs,String(f.properties.HYGEO2)[0])}" aria-label="${esc(westGroundwaterReading(f.properties).title)}を選択"`:'pointer-events="none"'}/>`).join('')+'</g>';
   html+='<g data-west-water-rivers>'+lakes.features.map((f:any,i:number)=>`<path d="${path(f.geometry)}" fill="#9ac6d5" stroke="#629cad" stroke-width=".6" vector-effect="non-scaling-stroke" ${interactive?`data-natural-feature="lake:${i}" role="button" tabindex="-1" aria-label="${esc(westWaterFeatureReading(f.properties.name,true).title)}を選択"`:'pointer-events="none"'}/>`).join('');
-  html+=rivers.features.map((f:any,i:number)=>`<path d="${path(f.geometry)}" fill="none" stroke="${interactive&&naturalFeature==='river:'+i?'#a23f2d':'#307aa3'}" stroke-width="${interactive&&naturalFeature==='river:'+i?2.7:1.2}" vector-effect="non-scaling-stroke" pointer-events="none"/><path d="${path(f.geometry)}" fill="none" stroke="transparent" stroke-width="9" vector-effect="non-scaling-stroke" ${interactive?`data-natural-feature="river:${i}" role="button" tabindex="${waterTab(f,riverTabs,f.properties.name)}" aria-label="${esc(westWaterFeatureReading(f.properties.name).title)}を選択"`:'pointer-events="none"'}/>`).join('')+'</g>';
+  html+=rivers.features.map((f:any,i:number)=>{const major=['Nile','Firat','Al Furat','Dicle','Tigris','Euphrates'].includes(f.properties.name);return `<path d="${path(f.geometry)}" fill="none" stroke="${interactive&&naturalFeature==='river:'+i?'#a23f2d':'#307aa3'}" stroke-width="${interactive&&naturalFeature==='river:'+i?2.7:major?1.7:.85}" vector-effect="non-scaling-stroke" pointer-events="none"/><path d="${path(f.geometry)}" fill="none" stroke="transparent" stroke-width="9" vector-effect="non-scaling-stroke" ${interactive?`data-natural-feature="river:${i}" role="button" tabindex="${waterTab(f,riverTabs,f.properties.name)}" aria-label="${esc(westWaterFeatureReading(f.properties.name).title)}を選択"`:'pointer-events="none"'}/>`;}).join('')+'</g>';
   if(interactive)html+=[['ナイル川',[31.3,27.7]],['チグリス川',[44.1,33.3]],['ユーフラテス川',[39.2,37.0]]].map(([name,coords]:any)=>{const p=project(coords);return `<text class="west-map-label west-river-label" x="${p[0]}" y="${p[1]}" text-anchor="middle" pointer-events="none">${name}</text>`;}).join('');
   return html;
  }
@@ -163,6 +164,7 @@ async function init(root:HTMLElement){
  }
  function currentSearch(){
   const p=new URLSearchParams(westSearch(state));
+  if(placeId)p.set('place',placeId);
   if(productionCountryMap&&nationalOnlyFarm(topic()))p.set('productionMap','country');
   if(naturalFeature)p.set('feature',naturalFeature);
   if(comparisonSource)p.set('from',westSearch(comparisonSource));
@@ -252,7 +254,7 @@ async function init(root:HTMLElement){
   readingOverview=false;
   state.urban=id;state.point=null;
   const city=data.urban.cities.find((c:any)=>c.id===id);
-  if(city){state.country=city.countryCode;state.view=fit(city.bounds,.65);}
+  if(city)state.country=city.countryCode;
   commit();void render();
  }
  async function selectBasin(id:string){
@@ -269,7 +271,7 @@ async function init(root:HTMLElement){
  function changeTopic(id:string){
   const source=sourceTopic(),keepComparison=!!source&&westReading(source).comparisons.some((c:any)=>c.topic===id);
   unavailable='';state.category='';openWaterGroup=false;readingOverview=false;groundwaterSelection='';naturalFeature='';naturalSelection=null;
-  farmingOnlySelected=false;industrySite='';$('.west-reading').scrollTop=0;
+  farmingOnlySelected=false;industrySite='';placeId='';$('.west-reading').scrollTop=0;
   productionCountryMap=false;
   if(!keepComparison){comparisonSource=null;state.point=null;state.basin='';}
   state.topic=id;
@@ -391,6 +393,8 @@ async function init(root:HTMLElement){
    html+='<p class="west-stat-note">記号は油田海域・産業集積・港・通過点の概略位置です。施設の敷地や貨物の実際の流れ・量は表しません。</p>';
    html+='<details><summary>主要産業の候補と採用理由</summary><p>採用：サウジアラビアの採掘・精製・石油化学、UAEの沖合採掘・精製・港湾物流、トルコの自動車製造。原料、加工、物流、市場への接続という異なる地理的役割を、公的機関と事業者の資料で場所とともに説明できます。</p><p>次点：トルコの機械・繊維産業、各国の観光・金融、建設、再生可能エネルギー。これらも重要ですが、今回は地域全体の資源から製造・港湾までの接続を読める役割を優先しました。統計年の不一致だけを除外理由にはしていません。</p></details>';
   }
+  const selectedPlace=westPlaceExamples.find(place=>place.id===placeId&&place.topic===t.id);
+  if(selectedPlace)html+=`<section class="west-place-reading"><h3>${esc(selectedPlace.name)} · 所在地の例</h3><p>${esc(selectedPlace.description)}</p><p><a href="${esc(selectedPlace.source)}">立地と活動の根拠</a></p></section>`;
   if(field==='industry')html+=`<nav class="atlas-water-tabs west-water-items" aria-label="産業の説明対象" data-west-industry-scope><button type="button" data-west-country-button="" aria-pressed="${!c}">地域全体の供給網</button>${westIndustryCountries.map(code=>`<button type="button" data-west-country-button="${code}" aria-pressed="${c?.code===code}">${esc(data.countries.find((row:any)=>row.code===code)?.name)}</button>`).join('')}</nav><p class="west-stat-note">国別産業の比較は3か国です。地域全体の供給網には、他国の資源・通過点も含めます。下の国別統計は供給網の流量ではありません。</p>`;
   const regional=westRegionalReading(t,{country:state.country,basin:state.basin});
   if(regional){html+=`<section data-west-regional-reading><h3>${esc(regional.heading)}</h3>${regional.paragraphs.map((paragraph:string)=>`<p>${esc(paragraph)}</p>`).join('')}<details><summary>この地域説明の根拠・対象時点</summary>${regional.sources.map((id:string)=>{const source=westReadingSources[id];return `<p><a href="${esc(source.url)}">${esc(source.label)}</a> · ${esc(source.period)}</p>`;}).join('')}</details></section>`;}
@@ -418,9 +422,9 @@ async function init(root:HTMLElement){
    if(c&&!subject?.coverage?.find((row:any)=>row.code===c.code)?.hasExamples)html+=`<p class="west-coverage-note">${esc(c.name)}に対応する掲載域の例はこの初回版にありません。集団・信仰の不在ではなく、国単位の所属情報を局所の面へ代用していません。</p>`;
    html+=`<section data-west-settlement-reading><h3>${esc(group?.label??'掲載域全体')}</h3><p>${esc(t.description)}</p>${group?`<p>原資料の掲載集団：${esc((group.sourceGroups??[]).map((g:any)=>typeof g==='string'?g:g.label??g.name??g.group??g.id).join('、'))}。分類の色は人数や割合ではありません。</p>`:''}<p>居住域は2020年に有効なGeoEPR 2021の掲載範囲。宗教情報はEPR-ED 2021の集団情報で、2020年の局所観測値ではありません。</p><p>原典で地域を描ける掲載集団の域を抽出しています。域を重ねた部分は共有域として示し、各集団の元の掲載範囲も保持します。集団を選ぶとその全掲載域を前面に表示します。薄い灰色の背景は未掲載・対象外、濃い灰色は掲載域の重なりです。未掲載は集団や信仰の不在を意味しません。</p><p><a href="${esc(settlementAssets+'manifest.json')}">掲載対象・原典・加工方法・利用条件</a></p></section>`;
   }
-  if(t.id==='cities'){
+  if(['cities','density'].includes(t.id)){
    if(urban){
-    html+=`<h3>${esc(urban.name)}</h3><p>2025年の都市中心部の範囲を固定して、過去年の人口を比べます。行政市の人口とは範囲が異なります。</p><p class="west-stat-note">都市の境界は金色の線で示します。人口の変化はこの固定した範囲の変化で、当時の都市の広がりの変化とは異なります。</p><p><a href="#west-statistics">${esc(urban.name)}の人口推計・面積・出典を下段で読む</a></p>`;
+    html+=`<h3>${esc(urban.name)}</h3><p>2025年の都市中心部の範囲を固定して、過去年の人口を比べます。行政市の人口とは範囲が異なります。</p><p class="west-stat-note">${t.id==='cities'?'都市の境界は金色の線で示します。':'人口分布図の点は都市中心部の代表位置です。'}人口の変化は固定した範囲の変化で、当時の都市の広がりの変化とは異なります。</p><p><a href="#west-statistics">${esc(urban.name)}の人口推計・面積・出典を下段で読む</a></p>`;
     statistics.hidden=false;statisticsContent.innerHTML=`<h2>${esc(urban.name)}の都市中心部人口</h2><p>都市中心部の2025年の範囲：${format(urban.areaKm2)} km²。以下の人口は同じ範囲を使った推計です。</p><table data-west-urban-statistics><caption>行政市の人口ではありません。JRC UCDB R2024A</caption><thead><tr><th>年</th><th>推計人口</th></tr></thead><tbody>${Object.entries(urban.history).map(([y,v])=>`<tr><th>${y}年</th><td>${format(v as number,0)}人</td></tr>`).join('')}</tbody></table><p><a href="https://human-settlement.emergency.copernicus.eu/ucdb2024.php">JRC UCDB R2024Aの出典・対象範囲</a></p>`;
    }else html+='<p>各国・地域で原資料に収録された都市中心部のうち、2020年の推計人口が多い上位2件を選んでいます。地図の円、または都市の一覧から選択してください。</p>';
   }
@@ -446,7 +450,7 @@ async function init(root:HTMLElement){
   if(t.id==='groundwater')html+='<p>涵養は雨などが地下へ浸透して補給されることです。個々の井戸の深さ・水質・持続可能な取水量は未収録です。</p>';
   if(t.id===westAnnualPrecipitationId){const coverage=layer()?.countryCoverage?.find((row:any)=>row.code===c?.code);html+='<p>GPCC v2025は雨量計観測に基づく0.25°格子の補間平年値です。1991–2020年の月別平年値が12か月揃う原格子だけ合計します。250mm色帯と境界線は同じ広域の平滑化格子から作り、元の欠測を残します。地点照会は保存済みfloat32格子の最近傍原格子の年合計です。色帯と地点の値に差が生じても、原資料の解像度を増やしたものではありません。</p><p>年降水量は雨・雪などの水当量です。河川流量・地下水涵養・取水量・現在の渇水や利用可能な水量とは異なります。観測所の降水量は別の主題で確認できます。</p>';if(coverage?.missingDisplayPixelCenters)html+=`<p class="west-coverage-note">${esc(c.name)}の一部の海岸・小島は原格子が未収録です。近隣国や海の値で補わず、灰色で表示します。</p>`;html+=`<p><a href="${esc(assets+westPrecipitationManifestPath)}">GPCCの取得・加工・利用条件・配信ハッシュ</a></p>`;}
   if(westNaturalKind(t))html+=`<p><a href="${esc(assets+westNaturalAssets+'manifest.json')}">等値線・色帯の生成方法と保存格子の記録</a>。色帯と境界は同じ格子を使い、境界線だけを別に簡略化していません。</p>`;
-  if(t.id==='desalination')html+='<p>20か国・地域で同じ年・定義の淡水化施設一覧と供給量は未収録です。</p><p><a href="https://www.fao.org/aquastat/en/overview/methodology/">FAO AQUASTATの定義と方法</a></p>';
+  if(t.id==='desalination')html+='<p>地図の点は一次資料で確認できた施設・系統の例です。20か国・地域で同じ年・定義の施設一覧と実供給量は未収録です。供給先は右の説明に記し、送水管の経路は描いていません。</p><p><a href="https://www.fao.org/aquastat/en/overview/methodology/">FAO AQUASTATの定義と方法</a></p>';
   html+='</details></div>';
   $('[data-west-detail]').innerHTML=html;
   if(city&&(selectedClimate||t.id==='precipitation')){
@@ -652,13 +656,15 @@ async function init(root:HTMLElement){
   const nationalSelection=!l&&!context&&!t.vector&&!!(t.indicator||t.faoItem);
   html+=paths.filter(f=>f.target).map(f=>`<path class="west-country-line ${state.country===f.code?'is-selected':''}" ${nationalSelection&&(t.field!=='industry'||westIndustryCountry(f.code))?`data-country="${f.code}"`:'style="pointer-events:none"'} d="${f.d}" fill-rule="evenodd"></path>`).join('');
   if(t.id!=='climate'&&!(t.id in westIndustryRoles))html+=data.countries.filter((c:any)=>c.code===state.country||(t.id in westIndustryRoles?['TUR','SAU','ARE'].includes(c.code):['TUR','IRN','SAU','EGY','IRQ','YEM','OMN'].includes(c.code))).map((c:any)=>{const p=project(c.center);return `<text class="west-map-label" x="${p[0]}" y="${p[1]}" text-anchor="middle">${esc(c.name)}</text>`;}).join('');
+  if(t.id==='terrain')html+=[['アナトリア高原',[33.5,39]],['ザグロス山脈',[47.8,34.5]],['メソポタミア低地',[43,32]],['イラン高原',[54,33]],['アラビア高原',[44,24]]].map(([name,coordinates]:any)=>{const p=project(coordinates),width=[...name].length*12+8;return `<g class="west-terrain-place" data-marker data-x="${p[0]}" data-y="${p[1]}"><line x1="0" y1="0" x2="0" y2="0"/><circle r="2"/><g data-marker-label data-width="${width}" data-height="20"><text x="2" y="15">${esc(name)}</text></g></g>`;}).join('');
   if(t.id==='basins')html+=[
    ['ナイルデルタ・地中海',[31.25,31.35]],['アスワン・ハイダム',[32.88,23.97]],
    ['アタテュルク・ダム',[38.33,37.48]],['シャット・アル＝アラブ河口',[48.5,29.95]],
   ].map(([name,coordinate]:any)=>{const p=project(coordinate),width=[...name].length*12+8;return `<g class="west-basin-place" data-marker data-x="${p[0]}" data-y="${p[1]}"><title>${esc(name)}付近・概略位置</title><line x1="0" y1="0" x2="0" y2="0"/><circle r="3"/><g data-marker-label data-width="${width}" data-height="20"><text x="2" y="15">${esc(name)}</text></g></g>`;}).join('');
+  if(['dates','olives','desalination'].includes(t.id))html+=westPlaceExamples.filter(place=>place.topic===t.id).map(place=>{const p=project(place.coordinates),selected=placeId===place.id,width=Math.max(70,[...place.name].length*12+8);return `<g class="west-place-marker ${selected?'is-selected':''}" data-marker data-x="${p[0]}" data-y="${p[1]}" data-west-place="${place.id}" role="button" tabindex="0" aria-label="${esc(place.name)}を選択" aria-pressed="${selected}"><title>${esc(place.name)}・所在地の例</title><line x1="0" y1="0" x2="0" y2="0"/><circle r="6"/><g data-marker-label data-width="${width}" data-height="20"><rect class="west-place-label-hit" x="0" y="0" width="${width}" height="20"/><text x="3" y="15">${esc(place.name)}</text></g></g>`;}).join('');
   if(t.id in westIndustryRoles){
    const sites=westIndustrySites.filter(s=>{const roles=westIndustryRoles[t.id as keyof typeof westIndustryRoles];return !roles||(roles.includes(s.kind)&&(!['industry-refining','industry-petrochemical'].includes(t.id)||s.activity===t.id.replace('industry-','')));});
-   html+=sites.map(s=>{const p=project(s.coordinates),selected=industrySite===s.id,label=selected||['eastern-oil','upper-zakum','jubail','jebel-ali','bursa','hormuz','suez'].includes(s.id),width=Math.max(70,[...s.name].length*13+12),role=westIndustryRole(s),symbol=role==='refining'?'<rect x="-5" y="-5" width="10" height="10"/>':role==='petrochemical'?'<path class="west-industry-symbol" d="M0 -6 L6 0 L0 6 L-6 0 Z"/>':'<circle r="5"/>';return `<g class="west-industry-marker ${selected?'is-selected':''} ${state.country&&s.country!==state.country?'is-context':''}" data-marker data-x="${p[0]}" data-y="${p[1]}" data-industry-site="${s.id}" data-kind="${s.kind}" data-industry-role="${role}" role="button" tabindex="0" aria-label="${esc(s.name)}を選択" aria-pressed="${selected}"><title>${esc(s.name)} · ${esc((westIndustryKind as any)[role])}</title><line x1="0" y1="0" x2="0" y2="0"/>${symbol}${label?`<g data-marker-label data-width="${width}" data-height="20"><text x="2" y="15">${esc(s.name)}</text></g>`:''}</g>`;}).join('');
+   html+=sites.map(s=>{const p=project(s.coordinates),selected=industrySite===s.id,label=selected||['eastern-oil','upper-zakum','jubail','jebel-ali','bursa','hormuz','suez'].includes(s.id),width=Math.max(70,[...s.name].length*13+12),role=westIndustryRole(s),symbol=role==='refining'?'<rect x="-5" y="-5" width="10" height="10"/>':role==='petrochemical'?'<path class="west-industry-symbol" d="M0 -6 L6 0 L0 6 L-6 0 Z"/>':'<circle r="5"/>';return `<g class="west-industry-marker ${selected?'is-selected':''} ${state.country&&s.country!==state.country?'is-context':''}" data-marker data-x="${p[0]}" data-y="${p[1]}" data-industry-site="${s.id}" data-kind="${s.kind}" data-industry-role="${role}" role="button" tabindex="0" aria-label="${esc(s.name)}を選択" aria-pressed="${selected}"><title>${esc(s.name)} · ${esc((westIndustryKind as any)[role])}</title><line x1="0" y1="0" x2="0" y2="0"/>${symbol}${label?`<g data-marker-label data-width="${width}" data-height="20"><rect class="west-industry-label-hit" x="0" y="0" width="${width}" height="20"/><text x="2" y="15">${esc(s.name)}</text></g>`:''}</g>`;}).join('');
   }
   if(t.id==='climate'){
    const grid=await getGrid(l);if(version!==renderVersion)return;
@@ -669,10 +675,10 @@ async function init(root:HTMLElement){
    }
   }
   if(t.id==='precipitation')html+=`<g ${comparisonSource?'clip-path="url(#west-target-half)"':''}>${rainMarkers(state,'target')}</g>`;
-  const points=t.id==='climate'?data.cities:t.id==='cities'?data.urban.cities:[];
+  const points=t.id==='climate'?data.cities:t.id==='cities'?data.urban.cities:t.id==='density'?data.urban.cities.filter((city:any)=>['uc-2637','uc-4605','uc-5174','uc-3026'].includes(city.id)):[];
   html+=`<g ${comparisonSource?'clip-path="url(#west-target-half)"':''}>`+points.map((c:any)=>{
    const p=project(c.coordinates),selected=state.city===c.id||state.urban===c.id,name=c.name.replace(/（.*?）/g,''),width=Math.max(52,[...name].reduce((n:number,s:string)=>n+(s.charCodeAt(0)>255?12:7),0)+14);
-   return `<g class="west-station ${selected?'is-selected':''}" data-marker data-marker-side="target" data-x="${p[0]}" data-y="${p[1]}" data-${t.id==='climate'?'city':'urban'}="${c.id}" role="button" tabindex="0" aria-label="${esc(c.name)}を選択" aria-pressed="${selected}"><title>${esc(c.name)}</title><line x1="0" y1="0" x2="0" y2="0"/><circle r="4"/>${t.id==='climate'?(selected||['riyadh','ankara','rize','tehran','helwan'].includes(c.id)?`<g data-marker-label data-width="${width}" data-height="20"><text x="2" y="15">${esc(name)}</text></g>`:''):`<g data-marker-label data-width="${width}"><rect width="${width}" height="44" rx="2"/><text x="${width/2}" y="27" text-anchor="middle">${esc(name)}</text></g>`}</g>`;
+   return `<g class="west-station ${selected?'is-selected':''}" data-marker data-marker-side="target" data-x="${p[0]}" data-y="${p[1]}" data-${t.id==='climate'?'city':'urban'}="${c.id}" role="button" tabindex="0" aria-label="${esc(c.name)}を選択" aria-pressed="${selected}"><title>${esc(c.name)}</title><line x1="0" y1="0" x2="0" y2="0"/><circle r="4"/>${t.id==='climate'||t.id==='density'?(selected||t.id==='density'||['riyadh','ankara','rize','tehran','helwan'].includes(c.id)?`<g data-marker-label data-width="${width}" data-height="20"><text x="2" y="15">${esc(name)}</text></g>`:''):`<g data-marker-label data-width="${width}"><rect width="${width}" height="44" rx="2"/><text x="${width/2}" y="27" text-anchor="middle">${esc(name)}</text></g>`}</g>`;
   }).join('')+'</g>';
   scene.innerHTML=html;applyView();
   scene.querySelectorAll<SVGImageElement>('[data-west-raster]').forEach(raster=>raster.addEventListener('error',()=>{if(version===renderVersion)fail('分布画像を読み込めませんでした。国の選択と統計は利用できます。');}));
@@ -784,6 +790,7 @@ async function init(root:HTMLElement){
   const p=svgPoint(e),onSource=!!comparisonSource&&p.x<view()[0]+view()[2]*split/100;
   const city=target.closest<SVGElement>('[data-city]');if(city&&!onSource){selectCity(city.dataset.city!);return;}
   const industry=target.closest<SVGElement>('[data-industry-site]');if(industry&&!onSource){industrySite=industry.dataset.industrySite!;readingOverview=false;$('.west-reading').scrollTop=0;void render();return;}
+  const place=target.closest<SVGElement>('[data-west-place]');if(place&&!onSource){placeId=place.dataset.westPlace!;readingOverview=false;$('.west-reading').scrollTop=0;commit();void render();return;}
   const farm=target.closest<SVGElement>('[data-west-farm]');if(farm&&!onSource){readingOverview=false;changeTopic(farm.dataset.westFarm!);return;}
   const settlement=target.closest<SVGElement>('[data-settlement]');if(settlement&&!onSource){selectSettlement(settlement.dataset.settlement!);return;}
   const urban=target.closest<SVGElement>('[data-urban]');if(urban&&!onSource){selectUrban(urban.dataset.urban!);return;}
@@ -799,6 +806,7 @@ async function init(root:HTMLElement){
   if(!data)return;const target=e.target as Element;
   if(['Enter',' '].includes(e.key)){
    const industry=target.closest<SVGElement>('[data-industry-site]');if(industry){e.preventDefault();industrySite=industry.dataset.industrySite!;readingOverview=false;void render();return;}
+   const place=target.closest<SVGElement>('[data-west-place]');if(place){e.preventDefault();placeId=place.dataset.westPlace!;readingOverview=false;commit();void render();return;}
    const natural=target.closest<SVGElement>('[data-natural-feature]'),ground=target.closest<SVGElement>('[data-ground]'),basin=target.closest<SVGElement>('[data-basin]');
    if(natural||ground||basin){e.preventDefault();if(basin)void selectBasin(basin.dataset.basin!);else selectNatural(natural?natural.dataset.naturalFeature!:'ground:'+ground!.dataset.ground!);return;}
    const farm=target.closest<SVGElement>('[data-west-farm]');if(farm){e.preventDefault();readingOverview=false;changeTopic(farm.dataset.westFarm!);return;}
@@ -813,7 +821,7 @@ async function init(root:HTMLElement){
    applyView();commit();
   }
  });
- window.addEventListener('popstate',async()=>{if(data){root.dataset.ready='false';loading.hidden=false;groundwaterSelection='';farmingOnlySelected=false;state=readWestState(location.search,field,data);productionCountryMap=new URLSearchParams(location.search).get('productionMap')==='country'&&nationalOnlyFarm(topic());openWaterGroup=false;restoreComparison(location.search);restoreNaturalSearch();const p=new URLSearchParams(location.search);readingOverview=!p.has('topic')&&!p.has('country')&&!p.has('city')&&!p.has('category');if(p.has('lng')&&p.has('lat')){const lng=Number(p.get('lng')),lat=Number(p.get('lat'));if(Number.isFinite(lng)&&Number.isFinite(lat)&&lng>=23&&lng<=64&&lat>=10&&lat<=45)state.view=fit([lng-3,lat-2,lng+3,lat+2]);}try{await render();}catch{fail('流域を読み込めませんでした。');}}});
+ window.addEventListener('popstate',async()=>{if(data){root.dataset.ready='false';loading.hidden=false;groundwaterSelection='';farmingOnlySelected=false;state=readWestState(location.search,field,data);productionCountryMap=new URLSearchParams(location.search).get('productionMap')==='country'&&nationalOnlyFarm(topic());openWaterGroup=false;restoreComparison(location.search);restoreNaturalSearch();const p=new URLSearchParams(location.search);placeId=p.get('place')??'';readingOverview=!p.has('topic')&&!p.has('country')&&!p.has('city')&&!p.has('category');if(p.has('lng')&&p.has('lat')){const lng=Number(p.get('lng')),lat=Number(p.get('lat'));if(Number.isFinite(lng)&&Number.isFinite(lat)&&lng>=23&&lng<=64&&lat>=10&&lat<=45)state.view=fit([lng-3,lat-2,lng+3,lat+2]);}try{await render();}catch{fail('流域を読み込めませんでした。');}}});
  new ResizeObserver(()=>{if(data&&state)applyView();}).observe(svg);
  new ResizeObserver(()=>{if(data&&state){sizeComparisonMap();syncReadingHeight();}}).observe($('.atlas-primary-grid'));
  let readingScrollFrame=0;
