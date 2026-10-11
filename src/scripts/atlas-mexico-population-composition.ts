@@ -1,6 +1,6 @@
 import type {MexicoPopulationState, MexicoPopulationRow} from '../lib/atlas-mexico-population';
 import {formatMexicoPopulation} from '../lib/atlas-mexico-population';
-import {mexicoCompositionMetric,mexicoCompositionNationalRecord,formatMexicoCompositionShare,formatMexicoCompositionCountKey,mexicoCompositionColor,mexicoCompositionRadius,mexicoCompositionShareBins,mexicoCompositionComparisonUrl,mexicoCompositionReturnUrl,type MexicoCompositionData,type MexicoCompositionSelection,type MexicoCompositionRecord,type MexicoCompositionInterval} from '../lib/atlas-mexico-population-composition';
+import {mexicoCompositionMetric,mexicoCompositionNationalRecord,mexicoCompositionHighlights,formatMexicoCompositionShare,formatMexicoCompositionCountKey,mexicoCompositionColor,mexicoCompositionRadius,mexicoCompositionShareBins,mexicoCompositionComparisonUrl,mexicoCompositionReturnUrl,type MexicoCompositionData,type MexicoCompositionSelection,type MexicoCompositionRecord,type MexicoCompositionInterval} from '../lib/atlas-mexico-population-composition';
 
 const nativeMarkup=new WeakMap<HTMLElement,{viewOptions:Node[];symbolKeys:Node[];mapDescription:string;attributes:{element:Element;attributes:Record<string,string|null>;title:string|null}[]}>();
 export function copyMexicoPopulationDefinitions(root:HTMLElement,svg:SVGSVGElement):void {
@@ -40,11 +40,20 @@ export function renderMexicoPopulationComposition(root:HTMLElement,data:MexicoCo
  const onlyControl=q('[data-population-only]')?.closest<HTMLElement>('label');if(onlyControl)onlyControl.hidden=overview||combined;
  show('[data-population-reset]',!overview);
  if(!metric)return false;
+ const combinedSvg=q<SVGSVGElement>(`[data-population-overview-category="${state.category}"] svg`);
+ combinedSvg?.querySelector('[data-overview-extra-metric]')?.remove();
+ const extra=q<HTMLElement>(`[data-population-overview-category="${state.category}"] [data-population-overview-extra]`);
+ const hasExistingRegion=!!combinedSvg?.querySelector(`[data-overview-region-metric="${metric.id}"]`);
+ if(extra){extra.hidden=overview||!combined||hasExistingRegion;extra.textContent=extra.hidden?'':`${metric.label}の公表州内割合が高い8州を濃い紅色の輪郭で追加表示。元の3指標の輪郭は残しています。上位8州以外にも該当者はいます。`;}
+ if(!overview&&combined&&!hasExistingRegion&&combinedSvg){
+  const ns='http://www.w3.org/2000/svg',group=document.createElementNS(ns,'g');group.setAttribute('class','population-overview-regions');group.setAttribute('data-overview-extra-metric',metric.id);group.setAttribute('data-overview-region-metric',metric.id);group.style.setProperty('--region-color','#a33175');
+  for(const {code} of mexicoCompositionHighlights(metric,8)){const use=document.createElementNS(ns,'use'),title=document.createElementNS(ns,'title'),name=rows.find(row=>row.stateCode===code)?.nameJa??code;use.setAttribute('href',`#mexico-population-outline-${code}`);use.setAttribute('data-overview-region-state',code);title.textContent=`${metric.label}：${name}、州内${formatMexicoCompositionShare(metric.states[code],metric)}。公表割合の高い8州の一つ`;use.append(title);group.append(use);}
+  combinedSvg.append(group);
+ }
  for(const group of root.querySelectorAll<SVGGElement>('[data-overview-highlight-metric]'))group.classList.toggle('is-selected-overview-metric',!overview&&combined&&group.dataset.overviewHighlightMetric===metric.id);
  for(const group of root.querySelectorAll<SVGGElement>('[data-overview-region-metric]'))group.classList.toggle('is-selected-overview-metric',!overview&&combined&&group.dataset.overviewRegionMetric===metric.id);
  if(!overview&&combined){const selectedRegions=q<SVGGElement>(`[data-overview-region-metric="${metric.id}"]`);selectedRegions?.parentNode?.appendChild(selectedRegions);}
- const combinedSvg=q<SVGSVGElement>(`[data-population-overview-category="${state.category}"] svg`);
- if(combinedSvg)combinedSvg.setAttribute('aria-label',`${state.category==='religion'?'宗教':'民族・自己認識'}の3指標それぞれで公表州内割合が高い8州を輪郭で同時に示す地図。${overview?'':metric.label+'の輪郭を強調。'}全32州の割合は右欄の単独表示で確認できます。`);
+ if(combinedSvg)combinedSvg.setAttribute('aria-label',`${state.category==='religion'?'宗教':'民族・自己認識'}の3指標それぞれで公表州内割合が高い8州を輪郭で同時に示す地図。${overview?'':metric.label+'の輪郭を強調。'}${!overview&&!hasExistingRegion?metric.label+'の上位8州も追加。':''}全32州の割合は右欄の単独表示で確認できます。`);
  const mapModeButton=q<HTMLButtonElement>('[data-population-composition-map-mode]');if(mapModeButton){mapModeButton.hidden=overview||selection.compare;mapModeButton.textContent=combined?'この指標だけを州別の面で見る':'3指標の地図に戻す';mapModeButton.setAttribute('aria-pressed',String(!combined));}
  const metricSelect=q<HTMLSelectElement>('[data-population-composition-metric]');
  if(metricSelect){const first=document.createElement('option');first.value='';first.textContent='全国一覧';metricSelect.replaceChildren(first,...data.metrics.filter(item=>item.category===state.category).map(item=>{const option=document.createElement('option');option.value=item.id;option.textContent=item.label;return option;}));metricSelect.value=overview?'':metric.id;metricSelect.disabled=selection.compare;metricSelect.title=selection.compare?'元の指標を保って比較します。戻ると別の指標を選べます。':'';}

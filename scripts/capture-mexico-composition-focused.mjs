@@ -79,6 +79,16 @@ try{
   assert(!evidence.combinedVisible&&evidence.soloVisible&&evidence.shareKeyVisible);
   assert.equal(new URL(page.url()).searchParams.get('compositionMap'),'single');
   await capture(`${category}-solo`,evidence);
+  if(category==='religion'){
+   await page.locator('[data-population-composition-reading] [data-population-composition-map-mode]').click();
+   await page.locator('[data-population-composition-metric]').selectOption('islamic');await settled();
+   evidence=await compositionEvidence(category,'combined',true);
+   assert(evidence.combinedVisible&&!evidence.soloVisible&&evidence.groups.length===4);
+   assert(evidence.groups.every(group=>group.states.length===8));
+   assert.equal(evidence.groups.find(group=>group.selected)?.metric,'islamic');
+   assert(evidence.baseFill.every(fill=>fill===''));
+   await capture('religion-additional-selected',evidence);
+  }
  }
  const bytes=results.reduce((sum,item)=>sum+item.bytes,0);
  assert(bytes<20*1024*1024,`Focused images exceed 20 MiB: ${bytes}`);

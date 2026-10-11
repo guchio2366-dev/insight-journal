@@ -154,6 +154,16 @@ test('National entry has no implicit capital selection; one overview map retains
     q('[data-population-composition-map-mode]').click();assert.equal(q('[data-population-overview-maps]').hidden,true);assert.equal(q('#mexico-population-distribution').hidden,false);assert.equal(new URL(w.location).searchParams.get('compositionMap'),'single');
     assert.equal(q('[data-population-composition-share-key]').hidden,false);
     q('[data-population-composition-map-mode]').click();assert.equal(q('[data-population-overview-maps]').hidden,false);assert.equal(new URL(w.location).searchParams.has('compositionMap'),false);
+    if(category==='religion'){
+     change(w,'[data-population-composition-metric]','islamic');
+     assert.equal(overview.querySelectorAll('[data-overview-region-metric]').length,4);
+     assert.equal(overview.querySelector('[data-overview-extra-metric="islamic"] [data-overview-region-state]')!==null,true);
+     assert.deepEqual([...overview.querySelector('[data-overview-extra-metric="islamic"]').querySelectorAll('[data-overview-region-state]')].map(node=>node.getAttribute('data-overview-region-state')),mexicoCompositionHighlights(compositionData.metrics.find(item=>item.id==='islamic'),8).map(item=>item.code));
+     assert.equal(overview.querySelector('[data-population-overview-extra]').hidden,false);
+     assert.equal(overview.querySelector('.population-overview-regions.is-selected-overview-metric').getAttribute('data-overview-region-metric'),'islamic');
+     assert.equal(q('#mexico-population-distribution').hidden,true);
+     change(w,'[data-population-composition-metric]','catholic');assert.equal(overview.querySelectorAll('[data-overview-region-metric]').length,3);
+    }
    }
    change(w,'[data-population-state]','20');assert.equal(q('[data-population-only]').disabled,false);q('[data-population-national]').click();assert.equal(q('[data-population-state]').value,'');assert.equal(new URL(w.location).searchParams.get('reading'),'overview');
   }finally{await w.happyDOM.close();}
