@@ -7,6 +7,7 @@ import base64
 import gzip
 import hashlib
 import json
+import os
 from pathlib import Path
 import subprocess
 import urllib.request
@@ -23,6 +24,7 @@ for name, number in [('corn', '029'), ('soybeans', '031'), ('potatoes', '035'), 
     sources.append((f'agriculture/{name}-map-2021.jpg', f'https://www150.statcan.gc.ca/n1/pub/95-634-x/2021001/article/00001/m-c/m-c-{number}-eng.jpg'))
 
 records = []
+log_sources = set(os.environ.get('CANADA_REVIEW_LOG_SOURCES', 'agriculture/pork-map-2021.jpg,agriculture/chicken-map-2021.jpg,population/prepared/subdivisions.json,population/prepared/subdivisions-manifest.json').split(','))
 for name, url in sources:
     record = {'file': name, 'url': url}
     try:
@@ -34,7 +36,7 @@ for name, url in sources:
         record.update(status='retrieved', bytes=len(data), sha256=hashlib.sha256(data).hexdigest())
         # Compact evidence transport through the same authorized GitHub logs API.
         # Large boundary ZIP remains an artifact; derived display data is logged below.
-        if len(data) < 12_000_000:
+        if name in log_sources and len(data) < 12_000_000:
             encoded = base64.b64encode(gzip.compress(data, mtime=0)).decode()
             for index in range(0, len(encoded), 120000):
                 print('CANADA_REVIEW_SOURCE ' + json.dumps({'file': name, 'part': index // 120000, 'parts': (len(encoded) + 119999) // 120000, 'gzipBase64': encoded[index:index + 120000]}), flush=True)

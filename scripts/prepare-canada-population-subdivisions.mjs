@@ -3,7 +3,7 @@ import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {gzipSync} from 'node:zlib';
 import path from 'node:path';
-import {readZipEntries,parseDbf,readShapeRecords,inverseCanadaLambert,shapefilePolygonGroups,simplifyPolygonTopology} from './lib/canada-geography.mjs';
+import {readZipEntries} from './lib/canada-geography.mjs';
 const source=path.resolve(process.argv[2]??'data-source/atlas/canada/population-subdivisions');
 const csvZip=await readFile(path.join(source,'98100002-eng.zip')),boundaryBytes=await readFile(path.join(source,'subdivisions-official.geojson'));
 const officialGeometry=JSON.parse(boundaryBytes);
@@ -25,4 +25,9 @@ const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const files={'subdivisions.json':JSON.stringify({year:2021,geography:'Census subdivision',records})+'\n','subdivisions.geojson':JSON.stringify({type:'FeatureCollection',features})+'\n'};
 const manifest={year:2021,retrievedAt:new Date().toISOString().slice(0,10),geography:'2021 Census subdivision (CSD)',sourceCount:5161,sourceTable:'98-10-0002-01',sourceUrls:['https://www150.statcan.gc.ca/n1/tbl/csv/98100002-eng.zip','https://geo.statcan.gc.ca/geo_wa/rest/services/2021/Cartographic_boundary_files/MapServer/9'],sourceSha256:{tableZip:hash(csvZip),boundaryResponse:hash(boundaryBytes)},licence:'https://www.statcan.gc.ca/en/terms-conditions/open-licence',method:'Exact DGUID/CSDUID join. Population and density are original 2021 CSD values. No geographic allocation or interpolation. Display geometry is the official StatCan 2021 cartographic-boundary REST response in EPSG:4326 with 0.001 degree maxAllowableOffset and 7 decimal coordinates. No client interpolation, polygon reconstruction or allocation. Geometry generalization affects displayed borders only; original table density is unchanged.',topology,outputs:Object.fromEntries(Object.entries(files).map(([name,text])=>[name,{bytes:Buffer.byteLength(text),sha256:hash(text)}]))};
 files['subdivisions-manifest.json']=JSON.stringify(manifest,null,2)+'\n';await mkdir(path.join(source,'prepared'),{recursive:true});
-for(const [file,text]of Object.entries(files)){await writeFile(path.join(source,'prepared',file),text);const encoded=gzipSync(text,{mtime:0}).toString('base64');for(let offset=0;offset<encoded.length;offset+=120000)console.log('CANADA_REVIEW_SOURCE '+JSON.stringify({file:'population/prepared/'+file,part:offset/120000,parts:Math.ceil(encoded.length/120000),gzipBase64:encoded.slice(offset,offset+120000)}));}
+const logSources=new Set((process.env.CANADA_REVIEW_LOG_SOURCES??'population/prepared/subdivisions.json,population/prepared/subdivisions-manifest.json').split(','));
+for(const [file,text]of Object.entries(files)){
+ await writeFile(path.join(source,'prepared',file),text);const encoded=gzipSync(text,{mtime:0}).toString('base64');
+ console.log('CANADA_REVIEW_PREPARED_STATUS '+JSON.stringify({file,bytes:Buffer.byteLength(text),gzipBase64Bytes:encoded.length,sha256:hash(text)}));
+ if(logSources.has('population/prepared/'+file))for(let offset=0;offset<encoded.length;offset+=120000)console.log('CANADA_REVIEW_SOURCE '+JSON.stringify({file:'population/prepared/'+file,part:offset/120000,parts:Math.ceil(encoded.length/120000),gzipBase64:encoded.slice(offset,offset+120000)}));
+}
