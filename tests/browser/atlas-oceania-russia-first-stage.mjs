@@ -55,7 +55,7 @@ try{
   });
  };
  const open=async(region,field,search='')=>{await page.goto(`${base}atlas/${region}/${field}/${search}`,{waitUntil:'networkidle'});await ready(region);};
- const shot=async name=>{if(focusDeltaOnly&&!/^(?:oceania|russia)-agriculture-1536-(overview|crop-focus|selected-with-other-distributions)$/.test(name))return;if(representativeOnly&&!/^(?:oceania|russia)-agriculture-(1536|1024)-(overview|crop-focus|selected-with-other-distributions)$/.test(name))return;await page.screenshot({path:resolve(output,name+'.png'),fullPage:true});result.screenshots.push(name+'.png');};
+ const shot=async name=>{if(focusDeltaOnly&&!/^(?:oceania|russia)-agriculture-(1536|1920)-(overview|crop-focus|single-product|selected-with-other-distributions)$/.test(name))return;if(representativeOnly&&!/^(?:oceania|russia)-agriculture-(1536|1024|1920)-(overview|crop-focus|single-product|selected-with-other-distributions)$/.test(name))return;await page.screenshot({path:resolve(output,name+'.png'),fullPage:true});result.screenshots.push(name+'.png');};
  const annotationShot=async(map,product)=>{
   // Capture document pixels without element scrolling or a retained SVG handle.
   // Closing the details can resize the root and replace its SVG in the next frame.
@@ -66,8 +66,8 @@ try{
   assert.ok(clip.width>0&&clip.height>0);
   return {clip,png:await page.screenshot({fullPage:true,clip})};
  };
- for(const width of representativeOnly?[1536,1024]:[1536,1280,1024]){
-  await page.setViewportSize({width,height:864});
+ for(const width of representativeOnly?[1920,1536,1024]:[1920,1536,1280,1024]){
+  await page.setViewportSize({width,height:width===1920?1080:864});
   for(const region of regions){
    const dimensions=[];
    for(const field of farmingOnly?['agriculture']:['agriculture','nature','industry','population']){
@@ -247,6 +247,19 @@ try{
      if(region==='russia')assert.ok(await map.locator('[data-farming-place][data-place-product="wheat"][opacity="0.32"]').count()>0);
      assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
      assert.match(await host.locator('[data-primary-legend-definitions] [data-farming-legend="cattle"] h3').textContent(),/頭／km²/);
+     const single=host.locator('[data-farming-single]');assert.ok(await single.isVisible());
+     await single.click();await ready(region);
+     assert.equal(new URL(page.url()).searchParams.get('single'),'1');
+     assert.equal(await single.getAttribute('aria-pressed'),'true');
+     assert.deepEqual(await shown(),['cattle']);
+     assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
+     assert.equal(await host.locator('[data-primary-legend] [data-farming-key]:visible').count(),1);
+     await shot(`${region}-agriculture-${width}-single-product`);
+     await page.reload({waitUntil:'networkidle'});await ready(region);
+     assert.deepEqual(await shown(),['cattle']);
+     await single.click();await ready(region);
+     assert.equal(new URL(page.url()).searchParams.has('single'),false);
+     assert.deepEqual(await shown(),products);
      if(width===1536)await shot(`${region}-agriculture-${width}-livestock-focus`);
      if(region==='oceania')for(const product of ['coconut','cacao','sheep']){await host.locator('[data-layer]').selectOption(product);await ready(region);assert.deepEqual(await shown(),products);assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);assert.equal(await map.locator(`[data-farming-product="${product}"][data-farming-mode="quantity"]`).count(),1);}
      await host.locator('[data-layer]').selectOption('farming-all');await ready(region);
@@ -289,7 +302,7 @@ try{
   }
  }
  result.checks.push(farmingOnly?'Changed farming pages start with all saved crop/livestock products, full extent and overview. Product focus, country/native keyboard region selection, reload and reset retain other distributions.':'All eight direct field routes start at full extent and overview without a selected country/region/theme.');
- result.checks.push(farmingOnly?'At the requested PC widths, crop focus keeps the full frame, strengthens its outline and makes livestock thinner. Both units and missing/zero keys remain visible.':'All four field map dimensions agree per region at 1536, 1280 and 1024px; hidden legend duplicates reserve no height.');
+ result.checks.push(farmingOnly?'At the requested PC widths including 1920×1080, crop focus keeps the full frame, and the explicit single-product mode survives reload and restores all saved products.':'All four field map dimensions agree per region at 1920, 1536, 1280 and 1024px; hidden legend duplicates reserve no height.');
  if(farmingOnly&&regions.includes('russia'))result.checks.push('Russia has source-backed crop/cattle names in the map, one left region control, a compact two-product key below the map, visible geographical reading and folded full technical/quantity information. Native keyboard focus and product retention pass.');
  await page.setViewportSize({width:1536,height:864});
  for(const region of regions){
