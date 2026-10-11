@@ -80,7 +80,7 @@ def retrieve_page(offset, count):
         return retrieve_page(offset,left) and retrieve_page(offset+left,count-left)
     return False
 
-for offset in range(0, 5161, 100):
+for offset in (range(0, 5161, 100) if os.environ.get('CANADA_REVIEW_SOURCE_MODE')!='grid' else []):
     if not retrieve_page(offset,min(100,5161-offset)): break
 (output / 'acquisition.json').write_text(json.dumps(records, indent=2) + '\n')
 fine_prepared = False
