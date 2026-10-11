@@ -365,7 +365,7 @@
 .west-industry-marker[data-kind="transit"] circle{fill:#467f69}
 .west-industry-marker.is-selected :is(circle,rect,.west-industry-symbol),.west-industry-marker:focus :is(circle,rect,.west-industry-symbol){stroke:#252e33;stroke-width:3px}
 .west-industry-marker text{font-size:11px;font-weight:750;fill:#24343a;paint-order:stroke;stroke:#fffdf3;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
-.west-industry-marker .west-industry-label-hit,.west-place-marker .west-place-label-hit{fill:transparent;stroke:none;pointer-events:all}
+.west-industry-marker rect.west-industry-label-hit,.west-place-marker rect.west-place-label-hit{fill:transparent;stroke:none;pointer-events:all}
 .west-place-marker{cursor:pointer}
 .west-place-marker circle{fill:#a16f36;stroke:#fffdf3;stroke-width:2px}
 .west-place-marker.is-selected circle,.west-place-marker:focus circle{stroke:#24343a;stroke-width:3px}
