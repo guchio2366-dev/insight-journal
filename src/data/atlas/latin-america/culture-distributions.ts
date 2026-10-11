@@ -1,18 +1,7 @@
-/** Descriptive geography and national survey values are intentionally separate. */
-export type CultureSection = 'ethnicity' | 'religion';
-export type CulturePosition = [number, number];
+/** Published national religion survey; percentages are not normalised. */
 export interface CultureSource {
  id:string; title:string; url:string; period:string; terms:string; termsUrl:string;
  evidence:string; restriction:string;
-}
-export interface CulturePattern {
- id:string; label:string; color:string; scope:'all'|'central'|'south';
- kind:'macro-description'|'regional-description'|'cultural-place'|'historical-context';
- macro?:{headings:string[];lines:string[];x?:{all:number;central:number;south:number};y:{all:number;central:number;south:number}};
- mapLabel?:string;
- title:string; overview:string; explanation:string; definition:string;
- sources:string[]; paths:CulturePosition[][]; anchor:CulturePosition;
- offset:CulturePosition; width?:number;
 }
 export const pewReligionSource:CultureSource={
  id:'pew-2014',title:'Pew Research Center, Religion in Latin America (2014), p.14 / QCURREL',
@@ -21,79 +10,9 @@ export const pewReligionSource:CultureSource={
  terms:'Pew Research Center利用条件 §1–2。CCライセンスではありません。',
  termsUrl:'https://www.pewresearch.org/about/terms-and-conditions/',
  evidence:'18歳以上の全国面接調査。施設入居者等と一部到達困難地域は対象外。宗教の自己申告による回答割合。',
- restriction:'原図・本文の転載ではなく、原表の少量の事実値を地図下の補助統計へ抜粋。100%へ正規化しない。現在の宗教構成や国内の居住域を表さない。'
+ restriction:'原図・本文の転載ではなく、原表の公表集計値を独自地図・地図下の原表へ表示。100%へ正規化しない。現在の宗教構成や国内の居住域を表さない。'
 };
 export const pewTranslationNotice='Pew Research Center has published the original content in English but has not reviewed or approved this translation.';
-export const cultureSources:CultureSource[]=[pewReligionSource,{
- id:'pew-regional',title:'Pew Research Center, Religion in Latin America: Overview',
- url:'https://www.pewresearch.org/religion/2014/11/13/religion-in-latin-america/',period:'2014年11月13日、2013–14年調査を背景とする地域説明',
- terms:'Pew Research Center利用条件 §1–2。CCライセンスではありません。',termsUrl:'https://www.pewresearch.org/about/terms-and-conditions/',
- evidence:'中南米の歴史的カトリック基盤と、ブラジル・コロンビアなど南米を含むプロテスタントへの転向。中米3国の併存例。Protestantは歴史的教会・ペンテコステ系・その他を含む分類。',
- restriction:'2014年概説と2013–14年調査の短い独自要約。大きな広域注記は地域全体の背景で、居住境界・密度帯ではない。Protestantの集計値を福音派だけの値へ置き換えず、2026年の現在の構成とは扱わない。'
-},{
- id:'mavcor-andes',title:'Raúl Montero Quispe, Qoyllur rit’i: The Lord of the Snow Star, MAVCOR Journal 5(2)',
- url:'https://mavcor.yale.edu/mavcor-journal/qoyllur-rit-i-lord-snow-star',period:'2021年。2001–2018年の現地訪問・観察を含む',
- terms:'© Raúl Montero Quispe。公開ライセンス未確認。写真・原文を転載しない。',termsUrl:'https://mavcor.yale.edu/mavcor-journal/qoyllur-rit-i-lord-snow-star',
- evidence:'南ペルーのアンデス、クスコ諸谷・ティティカカ湖流域からの巡礼。キリストへの祈りと山の霊Apusへの供物が重なる。',
- restriction:'地理的事実を短く独自に記述。巡礼文化の地域例をアンデス全域の宗教居住境界や同一民族の信仰へ拡張しない。'
-},{
- id:'folkways-santeria',title:'Smithsonian Folkways, Sacred Rhythms of Cuban Santería',
- url:'https://folkways.si.edu/sacred-rhythms-of-cuban-santeria/caribbean-latin-world/music/album/smithsonian',period:'1983–84年の現地録音、1995年刊',
- terms:'© Smithsonian Institution。当該資料のCC0指定なし。音声・写真・原文を転載しない。',termsUrl:'https://folkways.si.edu/sacred-rhythms-of-cuban-santeria/caribbean-latin-world/music/album/smithsonian',
- evidence:'MatanzasとHavana Cityで四つのサンテリア集団の儀礼を記録。ヨルバ宗教由来の太鼓と歌を説明。',
- restriction:'記録のあるキューバ西部の地域案内。現在の人数・割合・島全域の信仰・排他的領域は示さない。'
-},{
- id:'smithsonian-vodou',title:'Jonathan M. Katz, Explore the Timeless World of Vodou, Deep Within the Caves of Haiti, Smithsonian Magazine',
- url:'https://www.smithsonianmag.com/arts-culture/explore-timeless-world-vodou-haiti-180963673/',period:'2017年7月、前年の現地観察を紹介',
- terms:'© Smithsonian Magazine。公開ライセンス未確認。撮影者の写真・原文を転載しない。',termsUrl:'https://www.smithsonianmag.com/arts-culture/explore-timeless-world-vodou-haiti-180963673/',
- evidence:'中央高原北端Saint-Michel de l’Attalaye郊外とSouvenanceなどの巡礼地。西・中央アフリカの宗教伝統とカトリックという成立背景。',
- restriction:'宗教文化の地域例のみ。記事中の全国過半数推計は使わず、ハイチを一宗教の領域として塗らない。'
-},{
- id:'odeere-cachoeira',title:'Sandro dos Santos Correia, A importância das nações de Candomblé…, ODEERE 4(8), pp.312–337',
- url:'https://periodicos2.uesb.br/odeere/article/view/5793',period:'2019年12月30日。Cachoeiraの参与調査・宗教指導者への聞き取り',
- terms:'CC BY 4.0。Insight Journalによる独自の日本語要約・地域案内。',termsUrl:'https://creativecommons.org/licenses/by/4.0/',
- evidence:'Cachoeiraの複数terreirosとカンドンブレの宗教文化を、原著の現地研究が記述。',
- restriction:'寺院数から住民の信仰割合や密度を生成しない。原図・写真を使わず、サルバドール／レコンカヴォの地域例として示す。'
-},{
- id:'ucu-uruguay',title:'Néstor Da Costa, Religion and public space in the Uruguayan laïcité, Social Compass 65(4), pp.503–515',
- url:'https://investigadores.ucu.edu.uy/es/publications/religion-and-public-space-in-the-uruguayan-la%C3%AFcit%C3%A9/',period:'2018年。19世紀末〜20世紀初めとその後の歴史的過程',
- terms:'© Author(s) 2018。大学の公開書誌・要旨、公開ライセンス未確認。',termsUrl:'https://investigadores.ucu.edu.uy/es/publications/religion-and-public-space-in-the-uruguayan-la%C3%AFcit%C3%A9/',
- evidence:'1919年の政教分離と宗教の私事化、現在まで続く世俗的モデルと公共空間での宗教の議論。',
- restriction:'独自の短い事実注記。全国の歴史的背景を案内する点で、全住民の無神論や国内の無宗教居住域ではない。'
-},{
- id:'palmares-salvador',title:'Fundação Cultural Palmares: Terreiro da Casa Branca celebra 40 anos de tombamento',
- url:'https://www.gov.br/palmares/pt-br/assuntos/terreiro-da-casa-branca-celebra-40-anos-de-tombamento',period:'2024年6月7日',
- terms:'CC BY-ND 3.0。原文・画像の改変転載や翻訳転載は行わない。',termsUrl:'https://creativecommons.org/licenses/by-nd/3.0/',
- evidence:'Salvador、Itaparica、Cachoeiraのカンドンブレ宗教施設を記述。',
- restriction:'事実・地名に基づく独自の地域案内。寺院の正確座標、信者の連続居住域、住民割合を示さない。'
-},{
- id:'unicef-atlas',title:'UNICEF / FUNPROEIB Andes, Atlas sociolingüístico de pueblos indígenas en América Latina, tomo 2',
- url:'https://red.minedu.gob.bo/repositorio/fuente/6660.pdf',period:'2009年刊。本文581・837・863–864・877・1043頁',
- terms:'© UNICEF / FUNPROEIB Andes。明示的なオープンライセンスなし。',termsUrl:'https://www.unicef.org/legal',
- evidence:'マヤ諸民族・言語共同体、ペルーのQuechua/Aimara言語変種、Belizeのガリフナ、Palenqueの地域記述。',
- restriction:'本文の短い事実を独自に要約。原図・画像・表・長文は複製しない。2009年の地域記述を現在の民族自己認識の居住境界へ転用しない。'
-},{
- id:'memoria-mapuche',title:'Biblioteca Nacional de Chile, Memoria Chilena: El pueblo mapuche',
- url:'https://www.memoriachilena.gob.cl/602/w3-article-781.html',period:'歴史的地域の解説。現在の精密分布ではない。',
- terms:'minisitio本文はCC BY-SA 3.0。独自の日本語要約も同ライセンス、画像などのデジタル資料は別条件。',
- termsUrl:'https://www.memoriachilena.gob.cl/602/w3-article-123838.html',
- evidence:'チリ中南部、Itata川〜Toltén川の歴史的地域と都市への移住を記述。',
- restriction:'歴史的地域への案内帯のみ。現在の民族居住域を画定せず、写真・原図を使わない。'
-},{
- id:'unesco-garifuna',title:'UNESCO Archives: Garifuna culture',url:'https://www.unesco.org/archives/multimedia/document-1',period:'ベリーズ・グアテマラ・ホンジュラス・ニカラグアの海岸コミュニティの記述',
- terms:'映像・静止画の転載許諾は未取得。短い独自の事実注記とリンクのみ。',termsUrl:'https://www.unesco.org/archives/multimedia/subject/53/Help%2BFAQ',
- evidence:'中米4国のカリブ海岸、言語・舞踊・音楽の文化的つながり。',restriction:'映像・音声・写真・原図を複製しない。連続した専有領域や言語話者の人数にしない。'
-},{
- id:'unesco-marimba',title:'UNESCO: Marimba music, traditional chants and dances from Colombia and Ecuador',
- url:'https://www.unesco.org/tich4sd/en/colombiaecuador/marimba',period:'コロンビア南太平洋岸・エクアドルEsmeraldasの文化コミュニティの記述',
- terms:'本文のオープンライセンス未確認。短い独自の事実注記とリンクのみ。',termsUrl:'https://www.unesco.org/en/legal-affairs',
- evidence:'Tumaco・Esmeraldasのアフロ系コミュニティに伝わるマリンバ文化。',restriction:'文化を伝える場所の模式表示。民族自己認識の割合・居住境界や原図の複製には使わない。'
-},{
- id:'unesco-bahia',title:'UNESCO Archives: Samba de Roda of the Recôncavo of Bahia',
- url:'https://www.unesco.org/archives/multimedia/document-615',period:'BahiaのRecôncavo地域の文化記述',
- terms:'映像・静止画の転載許諾は未取得。短い独自の事実注記とリンクのみ。',termsUrl:'https://www.unesco.org/archives/multimedia/subject/53/Help%2BFAQ',
- evidence:'Samba de Rodaの地域とアフリカ由来・ポルトガル由来の文化要素。',restriction:'アフロ・ブラジル文化の地域例。現代の民族自己認識の居住域・人数・割合にしない。原映像・画像は使わない。'
-}];
 export const religionSurvey=[
  ['PRY',89,7,1,2],['COL',79,13,6,2],['ECU',79,13,5,3],['BOL',77,16,4,3],
  ['PER',76,17,4,3],['VEN',73,17,7,4],['ARG',71,15,11,3],['PAN',70,19,7,4],
@@ -101,29 +20,3 @@ export const religionSurvey=[
  ['PRI',56,33,8,2],['SLV',50,36,12,3],['GTM',50,41,6,3],['NIC',50,40,7,4],
  ['HND',46,41,10,2],['URY',42,15,37,6]
 ].map(([code,catholic,protestant,unaffiliated,other])=>({code:String(code),values:[Number(catholic),Number(protestant),Number(unaffiliated),Number(other)]}));
-export const religionPatterns:CulturePattern[]=[
- {id:'catholic-foundation',label:'カトリックの基盤',color:'#a35b29',scope:'all',kind:'macro-description',title:'中南米全体：歴史的に広いカトリックの基盤',overview:'中南米には、20世紀を通じて広いカトリックの基盤がありました。Pewの2013–14年調査でも、南米を含む多くの国でカトリックが多数を占めています。',explanation:'まず宗教構成の大きな背景を読みます。Pewの2014年概説は、カトリックの歴史的な広がりと、所属割合の低下を並べて説明しています。大きな注記は地域全体への説明で、カトリックだけが暮らす領域や、現在の信者割合ではありません。全国の原表は地図下へ分けています。',definition:'Pew2014概説・2013–14年の全国調査に基づく広域の背景。地図内の注記位置・枠の面積は居住域・人数・密度を表しません。',sources:['pew-regional'],paths:[],anchor:[-65,-15],offset:[0,0],macro:{headings:['中南米に広い','歴史的なカトリック基盤'],lines:['20世紀を通じた宗教の背景。','2013–14年調査でも、','南米を含む多くの国で多数。'],y:{all:200,central:20,south:20}}},
- {id:'protestant-change',label:'プロテスタント',color:'#397780',scope:'all',kind:'macro-description',title:'中南米全体：プロテスタントの広がりと教会構成の変化',overview:'中米だけでなく、ブラジル・コロンビアなど南米でもプロテスタント教会が存在し、カトリックからの転向による構成の変化がPewの2014年概説に記されています。福音派教会への転向も報告されています。',explanation:'PewのProtestantは、歴史的プロテスタント教会、ペンテコステ系、その他のプロテスタント教会を含む集計分類です。福音派という名称は地域で広く使われますが、ここではProtestant全体の集計を福音派だけの値とは扱いません。宗教構成が同じ地域の中で変化していることを読み、国別値から居住境界や密度帯を作りません。',definition:'2013–14年調査を背景とする2014年概説。広がりと転向は当時の記述で、2026年の現在値・国全体の教派領域ではありません。',sources:['pew-regional'],paths:[],anchor:[-65,-15],offset:[0,0],macro:{headings:['プロテスタントの広がり','福音派への転向も報告'],lines:['中米・ブラジルなど南米にも。','改宗による増加を2014年に報告。','Protestant全体と福音派の','分類範囲は区別します。'],x:{all:20,central:520,south:20},y:{all:435,central:20,south:435}}},
- {id:'protestant',label:'中米の教会',mapLabel:'中米：カトリックと福音派',color:'#397780',scope:'central',kind:'regional-description',title:'中米：カトリックと福音派などの教会が併存',overview:'グアテマラ・エルサルバドル・ニカラグアは、歴史的なカトリックの伝統に加え、福音派・ペンテコステ系を含むプロテスタントの存在が目立つ地域例です。',explanation:'Pewの2014年の地域説明を手がかりに、複数の教派が同じ地域に暮らすことを読みます。福音派はプロテスタント全部と同じ意味ではありません。短い案内帯は国の位置を示し、国境の内外を一つの教派の領域には分けません。',definition:'3国の教会構成を述べる地域記述。国内の信者居住域・密度・現在の割合ではありません。全国割合は地図下の補助統計です。',sources:['pew-regional'],paths:[[[-90.5,15],[-89,13.8]],[[-86,13.5],[-85.8,12]]],anchor:[-89,14],offset:[-25,32],width:18},
- {id:'andean',label:'アンデスの巡礼',mapLabel:'南ペルー：キリスト教と山の信仰',color:'#91723d',scope:'south',kind:'regional-description',title:'南ペルーのアンデス：キリスト教と山・大地の信仰',overview:'クスコ地方のQoyllur rit’i巡礼には、南ペルーのアンデスやティティカカ湖流域から人々が集まり、キリストへの祈りと山の霊Apusへの供物が重なります。',explanation:'現地観察が述べるクスコ諸谷とティティカカ湖流域を、離れた案内帯で位置づけます。カトリックと土地の信仰が重なる巡礼文化の例で、全住民が同じ儀礼を行うことや、アンデス全域の宗教領域を表していません。民族や言語から信仰を割り当てていません。',definition:'2021年公表の現地記述。南ペルーの巡礼文化の地域例、信者割合や正確な巡礼経路ではありません。',sources:['mavcor-andes'],paths:[[[-72.5,-13.2],[-71.5,-14.2]],[[-70,-15.5],[-69.6,-16]]],anchor:[-72,-13.8],offset:[-35,40],width:20},
- {id:'santeria',label:'サンテリア',mapLabel:'キューバ西部：サンテリア',color:'#5877a6',scope:'central',kind:'regional-description',title:'キューバ西部：ヨルバ系サンテリアの儀礼伝統',overview:'ハバナとマタンサスでは、アフリカのヨルバ宗教に由来するサンテリアの太鼓と歌の儀礼が記録されています。',explanation:'公的な現地記録にあるキューバ西部の地域を案内します。ハイチのヴードゥーやブラジルのカンドンブレとは別の宗教です。記録は1983–84年で、現在の信者割合やキューバ全域の分布を示すものではありません。',definition:'ハバナ／マタンサスの宗教文化への模式案内。帯の幅は信者数・密度・宗教の境界を表しません。',sources:['folkways-santeria'],paths:[[[-82.4,23.1],[-81.5,23]]],anchor:[-82,23],offset:[-20,-30],width:18},
- {id:'vodou',label:'ヴードゥー',mapLabel:'ハイチ：ヴードゥーの巡礼',color:'#976580',scope:'central',kind:'regional-description',title:'ハイチ：アフリカ由来のヴードゥーの巡礼文化',overview:'中央高原北端のサン・ミシェル郊外やスヴナンスなどには、ヴードゥーの巡礼文化が記述されています。',explanation:'ヴードゥーは西・中央アフリカの宗教伝統とカトリックなどが関わって成立した、ハイチの宗教文化です。巡礼地の地域例を示し、全国の住民を一宗教に分類していません。サンテリアと同じ宗教名ではなく、どちらもアフリカ由来の伝統を持つ別の文化として読みます。',definition:'2017年記事の現地観察に基づく中央高原北部の案内。記事の全国過半数推計は採用していません。',sources:['smithsonian-vodou'],paths:[[[-72.3,19.4],[-72.7,19.5]]],anchor:[-72.5,19.4],offset:[35,8],width:18},
- {id:'candomble',label:'カンドンブレ',mapLabel:'バイーア：カンドンブレ',color:'#a84b68',scope:'south',kind:'regional-description',title:'バイーア：サルバドールとレコンカヴォのカンドンブレ',overview:'サルバドールと周辺のレコンカヴォでは、イタパリカ、カショエイラなどにカンドンブレの宗教施設と文化が記述されています。',explanation:'アフリカ由来の伝統を受け継ぐブラジルの宗教文化です。サルバドールの寺院群と、カショエイラの現地研究を地域のつながりとして読みます。ウンバンダとは別の宗教です。湾周辺が連続した信者居住域であることや、ブラジル全体の所属を示していません。',definition:'2019年の現地研究（CC BY 4.0、独自日本語要約）と2024年の公的記事。3都市の模式案内で、寺院の正確な位置や信者割合ではありません。',sources:['odeere-cachoeira','palmares-salvador'],paths:[[[-38.5,-13],[-38.7,-12.9]],[[-39,-12.6]]],anchor:[-38.7,-12.8],offset:[20,-16],width:18},
- {id:'unaffiliated',label:'ウルグアイの世俗化',mapLabel:'ウルグアイ：世俗化の歴史',color:'#706397',scope:'south',kind:'historical-context',title:'ウルグアイ：政教分離と世俗化の歴史',overview:'ウルグアイでは19世紀末から世俗化が進み、1919年の政教分離へつながりました。宗教を私的な領域と捉える歴史が、中南米の中で特徴的です。',explanation:'全国の歴史的背景を案内する注記です。信仰を持つ人々も暮らしており、全住民が無神論という意味ではありません。公共空間での宗教の位置をめぐる議論も続いています。国を無宗教の居住域として塗らず、所属なしの全国割合は地図下で別に確認できます。',definition:'2018年研究の大学公開要旨に基づく歴史的背景。点は国への案内位置で、信仰の所在地や割合を表しません。',sources:['ucu-uruguay','pew-regional'],paths:[],anchor:[-55.5,-33],offset:[70,15]}
-];
-/** Named-place guides, independently drawn; not digitized residence boundaries. */
-export const ethnicityPatterns:CulturePattern[]=[
- {id:'maya',label:'マヤ諸民族・言語',color:'#91723d',scope:'central',kind:'regional-description',title:'マヤ：グアテマラ高地とベリーズ南部の地域例',overview:'グアテマラの西部・中央高地では、NebajやAtitlán周辺などにマヤ諸民族・言語共同体が記述されています。ベリーズ南部ToledoにもQ’eqchi’・Mopanの地域例があります。',explanation:'マヤは一つの言語・均一な集団ではありません。民族の自己認識と、言語話者の所在地の記述は別です。離れた二つの案内帯で、高地と中米東側の地域例を位置づけています。',definition:'2009年の民族・言語共同体の地域例。本文837・863–864・877頁。言語の自治体表から民族居住境界を作っていません。',sources:['unicef-atlas'],paths:[[[-91.5,15.5],[-91,14.7],[-90.6,15.3]],[[-88.8,16.1],[-88.7,16.5]]],anchor:[-91,15],offset:[-45,-25],width:18},
- {id:'quechua',label:'ケチュア語の地域',color:'#4c8b72',scope:'south',kind:'regional-description',title:'ケチュア：ペルー中央・南部アンデスの言語地域',overview:'Áncash・Junínの中央アンデスから、Ayacucho・Apurímac・Cusco周辺の南部アンデスに、ケチュア語の地域例が記述されています。',explanation:'ケチュア語には複数の地域変種があります。地図は文献に記された言語地域の例を示し、同じ場所の全住民をケチュア民族と分類していません。ボリビアなど他国の範囲は、このペルーの説明から延長していません。',definition:'2009年の言語変種の地域説明、本文581頁・表VII.21。民族自己認識や正確な言語境界ではありません。',sources:['unicef-atlas'],paths:[[[-77.5,-9.5],[-75.4,-11.5]],[[-74.3,-13.2],[-72.9,-13.7]]],anchor:[-75,-12],offset:[-35,-15],width:22},
- {id:'aymara',label:'アイマラ語の地域',color:'#5877a6',scope:'south',kind:'regional-description',title:'アイマラ：ペルー南東部高原の地域例',overview:'ペルー南東部のPuno、Huancané・Moho・El Collao・Yunguyo・Chucuito周辺に、アイマラ語の地域例が記述されています。',explanation:'アンデス高原の言語地域を、ケチュア語の案内帯と区別して示します。言語を話すことと民族への自己認識は同じ設問ではありません。隣国ボリビア全体まで、この資料の範囲を拡張して塗っていません。',definition:'2009年のペルーの言語地域説明、本文581頁・表VII.21。湖の周囲の案内帯は居住境界や民族領域ではありません。',sources:['unicef-atlas'],paths:[[[-69.6,-15.3],[-69.7,-16.4]]],anchor:[-69.7,-16],offset:[25,5],width:18},
- {id:'mapuche',label:'マプチェの歴史的地域',color:'#976580',scope:'south',kind:'regional-description',title:'マプチェ：チリ中南部の歴史的地域',overview:'チリ中南部のItata川からToltén川にかけて、マプチェの歴史的地域が記述されています。',explanation:'歴史的な地域と現在の居住分布は区別します。都市への移住もあるため、この帯の外にマプチェの人々がいないとは読みません。Mapudungunは言語名で、民族自己認識とは別の属性です。',definition:'Memoria Chilenaの歴史的地域の独自日本語要約（CC BY-SA 3.0）。現在の民族居住域の境界ではありません。',sources:['memoria-mapuche'],paths:[[[-72.7,-36.4],[-72.7,-39.1]]],anchor:[-72.7,-38],offset:[-28,0],width:22},
- {id:'garifuna',label:'ガリフナの海岸文化',color:'#a9693d',scope:'central',kind:'regional-description',title:'ガリフナ：中米カリブ海岸のコミュニティ',overview:'ベリーズ、グアテマラ、ホンジュラス、ニカラグアのカリブ海岸に、ガリフナのコミュニティと文化のつながりが記述されています。',explanation:'アフリカと先住民の歴史を持つ文化と、Arawak系のガリフナ語を区別して読みます。海岸の短い帯は、資料の述べる地域への案内です。連続した専有領域や海岸の全住民の民族分類を示しません。',definition:'UNESCOの4国の海岸コミュニティ記述とAtlas本文877頁。海岸の地域例を離れた短線で模式化。',sources:['unesco-garifuna','unicef-atlas'],paths:[[[-88.3,16.7],[-88.6,15.8]],[[-86.5,15.9],[-84.8,15.5]],[[-83.3,14],[-83.5,12.5]]],anchor:[-85.6,15.7],offset:[20,22],width:14},
- {id:'afro-pacific',label:'アフロ系の沿岸文化',color:'#3f8590',scope:'south',kind:'regional-description',title:'アフロ系コミュニティ：太平洋岸とPalenqueの文化',overview:'コロンビアのTumacoとエクアドルのEsmeraldasには、マリンバ文化を受け継ぐアフロ系コミュニティが記述されています。カリブ側のSan Basilio de Palenqueは、離れた地域例です。',explanation:'太平洋岸の文化と、カリブ側のPalenqueの言語・歴史は同じ場所ではありません。地域を分けて示し、アフリカ系自己認識の人数や、一様な民族領域にまとめていません。',definition:'UNESCOの文化コミュニティ記述とAtlas本文1043頁。文化の地域例で、自己認識統計の居住域ではありません。',sources:['unesco-marimba','unicef-atlas'],paths:[[[-78.8,1.8],[-79.7,1]],[[-75.2,10.1]]],anchor:[-79.1,1.4],offset:[-22,22],width:20},
- {id:'afro-bahia',label:'アフロ・ブラジル文化',color:'#ab684b',scope:'south',kind:'cultural-place',title:'バイーア：Recôncavoのアフロ・ブラジル文化',overview:'ブラジル北東部、サルバドール周辺のRecôncavoには、Samba de Rodaを受け継ぐ文化地域が記述されています。',explanation:'アフリカ由来とポルトガル由来の要素がつながる、音楽・舞踊文化の地域例です。民族への自己認識や宗教の分類ではなく、ブラジル全域を同じ集団の居住域として塗っていません。',definition:'UNESCOのRecôncavo地域の文化記述。地域代表位置で、民族人口や現在の居住境界は示しません。',sources:['unesco-bahia'],paths:[],anchor:[-38.5,-12.97],offset:[20,0]}
-];
-export const culturePatterns=(section:CultureSection)=>section==='ethnicity'?ethnicityPatterns:religionPatterns;
-export const culturePattern=(section:CultureSection,selection:string)=>culturePatterns(section).find(p=>'pattern:'+p.id===selection);
-export const cultureOverview={
- ethnicity:{title:'民族・文化の地域的なつながり',overview:'中米のマヤ・ガリフナ、ペルーのケチュア語・アイマラ語地域、チリ中南部のマプチェの歴史的地域、沿岸のアフロ系文化を、資料の地域記述から読みます。',explanation:'国境と民族・言語・文化の広がりは一致しません。ここでは文献の地域例を区別して示します。都市への移住や地域内の多様性があるため、淡い帯の内部を一つの集団だけが占めるとは読みません。未掲載の集団・地域もあります。'},
- religion:{title:'カトリックの基盤と宗教構成の変化',overview:'中南米には歴史的に広いカトリックの基盤があります。Pewの2014年概説では、多くの国でカトリックが多数を占める一方、中米に加えブラジルなど南米でもプロテスタント教会への転向による変化を報告しています。',explanation:'2013–14年調査に基づく当時の記述です。Protestantには歴史的教会・ペンテコステ系・その他の教会が含まれ、福音派だけの分類とは区別します。2つの大きな注記で広域の背景を読み、その後に6地域の補助例を確かめます。国全体を一宗教の領域にせず、注記や帯の面積から信者割合・密度を読まない図です。'}
-};

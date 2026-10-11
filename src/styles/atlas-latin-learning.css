@@ -263,6 +263,8 @@
 
 .latin-workspace[data-latin-reading-population=true]:is([data-latin-active-section=ethnicity],[data-latin-active-section=religion]) [data-lp-status]{margin:3px 0;line-height:1.45!important}
 .latin-culture-pattern-map [data-lc-pattern]{cursor:pointer}
+.latin-major-map [data-lc-area][role=button]{cursor:pointer}
+.latin-major-map [data-lc-area][role=button]:focus-visible{outline:3px solid #a64e2a}
 .latin-culture-pattern-map [data-lc-pattern]:focus-visible{outline:3px solid #a64e2a}
 .latin-culture-pattern-map [data-latin-culture-label-text]{font-size:15px;font-weight:600;fill:#29434b;paint-order:stroke;stroke:#fffefa;stroke-width:4px;stroke-linejoin:round}
 .latin-culture-pattern-map [data-lc-survey-label] text{font-size:12px;fill:#3c565b;paint-order:stroke;stroke:#fffefa;stroke-width:3px}

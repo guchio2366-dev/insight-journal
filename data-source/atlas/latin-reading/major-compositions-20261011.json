@@ -1,0 +1,1744 @@
+{
+  "generatedAt": "2026-10-11",
+  "status": "Original aggregate facts; one-map multivariate composition; not inferred residence territories.",
+  "ethnicity": [
+    {
+      "code": "ECU",
+      "year": 2011,
+      "source": "lb2011",
+      "denominator": "全国サンプルの回答者（約1,000–1,200例／国）。国勢調査や2026年現在の構成ではありません。",
+      "note": "S27の元7分類。掲載値を100%に正規化せず、掲載率の合計外から新しい民族を作りません。",
+      "values": [
+        {
+          "group": "mestizo",
+          "native": "Mestizo",
+          "percent": 81
+        },
+        {
+          "group": "white",
+          "native": "Blanco",
+          "percent": 4
+        },
+        {
+          "group": "indigenous",
+          "native": "Indígena",
+          "percent": 7
+        },
+        {
+          "group": "mixed",
+          "native": "Mulato",
+          "percent": 3
+        },
+        {
+          "group": "afro",
+          "native": "Negro",
+          "percent": 3
+        },
+        {
+          "group": "other",
+          "native": "Otra",
+          "percent": 0
+        },
+        {
+          "group": "asian",
+          "native": "Asiático",
+          "percent": 1
+        }
+      ]
+    },
+    {
+      "code": "PER",
+      "year": 2017,
+      "source": "per-inei-2017",
+      "denominator": "国勢調査の12歳以上・民族自己認識回答。全年齢ではありません。",
+      "note": "確認済みの原分類抜粋。先住民関連の色はQuechua＋Aimara。未掲載の分類や無回答をメスチソへ足しません。",
+      "values": [
+        {
+          "group": "mestizo",
+          "native": "Mestizo",
+          "percent": 60.2
+        },
+        {
+          "group": "white",
+          "native": "Blanco",
+          "percent": 5.9
+        },
+        {
+          "group": "afro",
+          "native": "Afrodescendant native combined option",
+          "percent": 3.6
+        },
+        {
+          "group": "indigenous",
+          "native": "Quechua",
+          "percent": 22.3
+        },
+        {
+          "group": "indigenous",
+          "native": "Aimara",
+          "percent": 2.4
+        },
+        {
+          "group": "unknown",
+          "native": "No especificado",
+          "percent": 3.3
+        }
+      ]
+    },
+    {
+      "code": "SLV",
+      "year": 2011,
+      "source": "lb2011",
+      "denominator": "全国サンプルの回答者（約1,000–1,200例／国）。国勢調査や2026年現在の構成ではありません。",
+      "note": "S27の元7分類。掲載値を100%に正規化せず、掲載率の合計外から新しい民族を作りません。",
+      "values": [
+        {
+          "group": "mestizo",
+          "native": "Mestizo",
+          "percent": 68
+        },
+        {
+          "group": "white",
+          "native": "Blanco",
+          "percent": 10
+        },
+        {
+          "group": "indigenous",
+          "native": "Indígena",
+          "percent": 5
+        },
+        {
+          "group": "mixed",
+          "native": "Mulato",
+          "percent": 4
+        },
+        {
+          "group": "afro",
+          "native": "Negro",
+          "percent": 4
+        },
+        {
+          "group": "other",
+          "native": "Otra",
+          "percent": 0
+        },
+        {
+          "group": "asian",
+          "native": "Asiático",
+          "percent": 2
+        }
+      ]
+    },
+    {
+      "code": "NIC",
+      "year": 2011,
+      "source": "lb2011",
+      "denominator": "全国サンプルの回答者（約1,000–1,200例／国）。国勢調査や2026年現在の構成ではありません。",
+      "note": "S27の元7分類。掲載値を100%に正規化せず、掲載率の合計外から新しい民族を作りません。",
+      "values": [
+        {
+          "group": "mestizo",
+          "native": "Mestizo",
+          "percent": 67
+        },
+        {
+          "group": "white",
+          "native": "Blanco",
+          "percent": 6
+        },
+        {
+          "group": "indigenous",
+          "native": "Indígena",
+          "percent": 8
+        },
+        {
+          "group": "mixed",
+          "native": "Mulato",
+          "percent": 2
+        },
+        {
+          "group": "afro",
+          "native": "Negro",
+          "percent": 3
+        },
+        {
+          "group": "other",
+          "native": "Otra",
+          "percent": 0
+        },
+        {
+          "group": "asian",
+          "native": "Asiático",
+          "percent": 1
+        }
+      ]
+    },
+    {
+      "code": "HND",
+      "year": 2011,
+      "source": "lb2011",
+      "denominator": "全国サンプルの回答者（約1,000–1,200例／国）。国勢調査や2026年現在の構成ではありません。",
+      "note": "S27の元7分類。掲載値を100%に正規化せず、掲載率の合計外から新しい民族を作りません。",
+      "values": [
+        {
+          "group": "mestizo",
+          "native": "Mestizo",
+          "percent": 62
+        },
+        {
+          "group": "white",
+          "native": "Blanco",
+          "percent": 9
+        },
+        {
+          "group": "indigenous",
+          "native": "Indígena",
+          "percent": 13
+        },
+        {
+          "group": "mixed",
+          "native": "Mulato",
+          "percent": 5
+        },
+        {
+          "group": "afro",
+          "native": "Negro",
+          "percent": 2
+        },
+        {
+          "group": "other",
+          "native": "Otra",
+          "percent": 1
+        },
+        {
+          "group": "asian",
+          "native": "Asiático",
+          "percent": 1
+        }
+      ]
+    },
+    {
+      "code": "BOL",
+      "year": 2011,
+      "source": "lb2011",
+      "denominator": "全国サンプルの回答者（約1,000–1,200例／国）。国勢調査や2026年現在の構成ではありません。",
+      "note": "S27の元7分類。掲載値を100%に正規化せず、掲載率の合計外から新しい民族を作りません。",
+      "values": [
+        {
+          "group": "mestizo",
+          "native": "Mestizo",
+          "percent": 57
+        },
+        {
+          "group": "white",
+          "native": "Blanco",
+          "percent": 4
+        },
+        {
+          "group": "indigenous",
+          "native": "Indígena",
+          "percent": 27
+        },
+        {
+          "group": "mixed",
+          "native": "Mulato",
+          "percent": 1
+        },
+        {
+          "group": "afro",
+          "native": "Negro",
+          "percent": 1
+        },
+        {
+          "group": "other",
+          "native": "Otra",
+          "percent": 1
+        },
+        {
+          "group": "asian",
+          "native": "Asiático",
+          "percent": 0
+        }
+      ]
+    },
+    {
+      "code": "PRY",
+      "year": 2011,
+      "source": "lb2011",
+      "denominator": "全国サンプルの回答者（約1,000–1,200例／国）。国勢調査や2026年現在の構成ではありません。",
+      "note": "S27の元7分類。掲載値を100%に正規化せず、掲載率の合計外から新しい民族を作りません。",
+      "values": [
+        {
+          "group": "mestizo",
+          "native": "Mestizo",
+          "percent": 55
+        },
+        {
+          "group": "white",
+          "native": "Blanco",
+          "percent": 29
+        },
+        {
+          "group": "indigenous",
+          "native": "Indígena",
+          "percent": 3
+        },
+        {
+          "group": "mixed",
+          "native": "Mulato",
+          "percent": 1
+        },
+        {
+          "group": "afro",
+          "native": "Negro",
+          "percent": 1
+        },
+        {
+          "group": "other",
+          "native": "Otra",
+          "percent": 2
+        },
+        {
+          "group": "asian",
+          "native": "Asiático",
+          "percent": 0
+        }
+      ]
+    },
+    {
+      "code": "PAN",
+      "year": 2011,
+      "source": "lb2011",
+      "denominator": "全国サンプルの回答者（約1,000–1,200例／国）。国勢調査や2026年現在の構成ではありません。",
+      "note": "S27の元7分類。掲載値を100%に正規化せず、掲載率の合計外から新しい民族を作りません。",
+      "values": [
+        {
+          "group": "mestizo",
+          "native": "Mestizo",
+          "percent": 53
+        },
+        {
+          "group": "white",
+          "native": "Blanco",
+          "percent": 16
+        },
+        {
+          "group": "indigenous",
+          "native": "Indígena",
+          "percent": 7
+        },
+        {
+          "group": "mixed",
+          "native": "Mulato",
+          "percent": 5
+        },
+        {
+          "group": "afro",
+          "native": "Negro",
+          "percent": 10
+        },
+        {
+          "group": "other",
+          "native": "Otra",
+          "percent": 1
+        },
+        {
+          "group": "asian",
+          "native": "Asiático",
+          "percent": 1
+        }
+      ]
+    },
+    {
+      "code": "COL",
+      "year": 2011,
+      "source": "lb2011",
+      "denominator": "全国サンプルの回答者（約1,000–1,200例／国）。国勢調査や2026年現在の構成ではありません。",
+      "note": "S27の元7分類。掲載値を100%に正規化せず、掲載率の合計外から新しい民族を作りません。",
+      "values": [
+        {
+          "group": "mestizo",
+          "native": "Mestizo",
+          "percent": 47
+        },
+        {
+          "group": "white",
+          "native": "Blanco",
+          "percent": 26
+        },
+        {
+          "group": "indigenous",
+          "native": "Indígena",
+          "percent": 5
+        },
+        {
+          "group": "mixed",
+          "native": "Mulato",
+          "percent": 5
+        },
+        {
+          "group": "afro",
+          "native": "Negro",
+          "percent": 6
+        },
+        {
+          "group": "other",
+          "native": "Otra",
+          "percent": 2
+        },
+        {
+          "group": "asian",
+          "native": "Asiático",
+          "percent": 0
+        }
+      ]
+    },
+    {
+      "code": "VEN",
+      "year": 2011,
+      "source": "lb2011",
+      "denominator": "全国サンプルの回答者（約1,000–1,200例／国）。国勢調査や2026年現在の構成ではありません。",
+      "note": "S27の元7分類。掲載値を100%に正規化せず、掲載率の合計外から新しい民族を作りません。",
+      "values": [
+        {
+          "group": "mestizo",
+          "native": "Mestizo",
+          "percent": 33
+        },
+        {
+          "group": "white",
+          "native": "Blanco",
+          "percent": 32
+        },
+        {
+          "group": "indigenous",
+          "native": "Indígena",
+          "percent": 4
+        },
+        {
+          "group": "mixed",
+          "native": "Mulato",
+          "percent": 21
+        },
+        {
+          "group": "afro",
+          "native": "Negro",
+          "percent": 8
+        },
+        {
+          "group": "other",
+          "native": "Otra",
+          "percent": 0
+        },
+        {
+          "group": "asian",
+          "native": "Asiático",
+          "percent": 0
+        }
+      ]
+    },
+    {
+      "code": "CRI",
+      "year": 2011,
+      "source": "lb2011",
+      "denominator": "全国サンプルの回答者（約1,000–1,200例／国）。国勢調査や2026年現在の構成ではありません。",
+      "note": "S27の元7分類。掲載値を100%に正規化せず、掲載率の合計外から新しい民族を作りません。",
+      "values": [
+        {
+          "group": "mestizo",
+          "native": "Mestizo",
+          "percent": 31
+        },
+        {
+          "group": "white",
+          "native": "Blanco",
+          "percent": 40
+        },
+        {
+          "group": "indigenous",
+          "native": "Indígena",
+          "percent": 4
+        },
+        {
+          "group": "mixed",
+          "native": "Mulato",
+          "percent": 17
+        },
+        {
+          "group": "afro",
+          "native": "Negro",
+          "percent": 3
+        },
+        {
+          "group": "other",
+          "native": "Otra",
+          "percent": 1
+        },
+        {
+          "group": "asian",
+          "native": "Asiático",
+          "percent": 1
+        }
+      ]
+    },
+    {
+      "code": "DOM",
+      "year": 2011,
+      "source": "lb2011",
+      "denominator": "全国サンプルの回答者（約1,000–1,200例／国）。国勢調査や2026年現在の構成ではありません。",
+      "note": "S27の元7分類。掲載値を100%に正規化せず、掲載率の合計外から新しい民族を作りません。",
+      "values": [
+        {
+          "group": "mestizo",
+          "native": "Mestizo",
+          "percent": 29
+        },
+        {
+          "group": "white",
+          "native": "Blanco",
+          "percent": 11
+        },
+        {
+          "group": "indigenous",
+          "native": "Indígena",
+          "percent": 4
+        },
+        {
+          "group": "mixed",
+          "native": "Mulato",
+          "percent": 24
+        },
+        {
+          "group": "afro",
+          "native": "Negro",
+          "percent": 26
+        },
+        {
+          "group": "other",
+          "native": "Otra",
+          "percent": 0
+        },
+        {
+          "group": "asian",
+          "native": "Asiático",
+          "percent": 3
+        }
+      ]
+    },
+    {
+      "code": "ARG",
+      "year": 2011,
+      "source": "lb2011",
+      "denominator": "全国サンプルの回答者（約1,000–1,200例／国）。国勢調査や2026年現在の構成ではありません。",
+      "note": "S27の元7分類。掲載値を100%に正規化せず、掲載率の合計外から新しい民族を作りません。",
+      "values": [
+        {
+          "group": "mestizo",
+          "native": "Mestizo",
+          "percent": 26
+        },
+        {
+          "group": "white",
+          "native": "Blanco",
+          "percent": 61
+        },
+        {
+          "group": "indigenous",
+          "native": "Indígena",
+          "percent": 1
+        },
+        {
+          "group": "mixed",
+          "native": "Mulato",
+          "percent": 1
+        },
+        {
+          "group": "afro",
+          "native": "Negro",
+          "percent": 1
+        },
+        {
+          "group": "other",
+          "native": "Otra",
+          "percent": 3
+        },
+        {
+          "group": "asian",
+          "native": "Asiático",
+          "percent": 0
+        }
+      ]
+    },
+    {
+      "code": "CHL",
+      "year": 2011,
+      "source": "lb2011",
+      "denominator": "全国サンプルの回答者（約1,000–1,200例／国）。国勢調査や2026年現在の構成ではありません。",
+      "note": "S27の元7分類。掲載値を100%に正規化せず、掲載率の合計外から新しい民族を作りません。",
+      "values": [
+        {
+          "group": "mestizo",
+          "native": "Mestizo",
+          "percent": 25
+        },
+        {
+          "group": "white",
+          "native": "Blanco",
+          "percent": 59
+        },
+        {
+          "group": "indigenous",
+          "native": "Indígena",
+          "percent": 8
+        },
+        {
+          "group": "mixed",
+          "native": "Mulato",
+          "percent": 1
+        },
+        {
+          "group": "afro",
+          "native": "Negro",
+          "percent": 0
+        },
+        {
+          "group": "other",
+          "native": "Otra",
+          "percent": 2
+        },
+        {
+          "group": "asian",
+          "native": "Asiático",
+          "percent": 0
+        }
+      ]
+    },
+    {
+      "code": "BRA",
+      "year": 2022,
+      "source": "bra-ibge-2022",
+      "denominator": "cor/raça回答者203,069,637人。未回答11,119人を除く。",
+      "note": "cor/raçaの排他的5分類。pardaはMestizoと別の社会的・歴史的な自己認識。拡張先住民設問の0.8%は加えません。",
+      "values": [
+        {
+          "group": "pardo",
+          "native": "parda",
+          "percent": 45.3,
+          "count": 92083286
+        },
+        {
+          "group": "white",
+          "native": "branca",
+          "percent": 43.5,
+          "count": 88252121
+        },
+        {
+          "group": "afro",
+          "native": "preta",
+          "percent": 10.2,
+          "count": 20656458
+        },
+        {
+          "group": "asian",
+          "native": "amarela",
+          "percent": 0.4,
+          "count": 850130
+        },
+        {
+          "group": "indigenous",
+          "native": "indígena",
+          "percent": 0.6,
+          "count": 1227642
+        }
+      ]
+    },
+    {
+      "code": "GTM",
+      "year": 2018,
+      "source": "gtm-ine-2018",
+      "denominator": "出典の表記は全国の総人口。政府概要に設問対象年齢・未回答処理の詳細は明記されていません。公表割合だけを使い、掲載された2023年推計人口を掛けて人数を作りません。",
+      "note": "puebloの元6分類。LadinoをMestizoの数値へ置換せず独立表示。先住民関連の色はMaya＋Xinca、アフリカ系関連の色はGarífuna＋Afrodescendienteを元値から集計。",
+      "values": [
+        {
+          "group": "ladino",
+          "native": "Ladino",
+          "percent": 56
+        },
+        {
+          "group": "indigenous",
+          "native": "Maya",
+          "percent": 41.7
+        },
+        {
+          "group": "indigenous",
+          "native": "Xinca",
+          "percent": 1.8
+        },
+        {
+          "group": "afro",
+          "native": "Afrodescendiente/creole/afromestizo",
+          "percent": 0.2
+        },
+        {
+          "group": "afro",
+          "native": "Garífuna",
+          "percent": 0.1
+        },
+        {
+          "group": "other",
+          "native": "Extranjero",
+          "percent": 0.2
+        }
+      ]
+    },
+    {
+      "code": "URY",
+      "year": 2011,
+      "source": "lb2011",
+      "denominator": "全国サンプルの回答者（約1,000–1,200例／国）。国勢調査や2026年現在の構成ではありません。",
+      "note": "S27の元7分類。掲載値を100%に正規化せず、掲載率の合計外から新しい民族を作りません。",
+      "values": [
+        {
+          "group": "mestizo",
+          "native": "Mestizo",
+          "percent": 7
+        },
+        {
+          "group": "white",
+          "native": "Blanco",
+          "percent": 74
+        },
+        {
+          "group": "indigenous",
+          "native": "Indígena",
+          "percent": 1
+        },
+        {
+          "group": "mixed",
+          "native": "Mulato",
+          "percent": 4
+        },
+        {
+          "group": "afro",
+          "native": "Negro",
+          "percent": 3
+        },
+        {
+          "group": "other",
+          "native": "Otra",
+          "percent": 3
+        },
+        {
+          "group": "asian",
+          "native": "Asiático",
+          "percent": 0
+        }
+      ]
+    },
+    {
+      "code": "GUY",
+      "year": 2012,
+      "source": "guy-bos-2012",
+      "denominator": "通常居住人口・全年齢の全国民族分類。",
+      "note": "原表の主要4分類。MixedはMestizoやpardoと別の元分類。残りから新しい民族を作りません。",
+      "values": [
+        {
+          "group": "afro",
+          "native": "African/Black",
+          "percent": 29.25
+        },
+        {
+          "group": "asian",
+          "native": "East Indian",
+          "percent": 39.83
+        },
+        {
+          "group": "mixed",
+          "native": "Mixed",
+          "percent": 19.88
+        },
+        {
+          "group": "indigenous",
+          "native": "Amerindian",
+          "percent": 10.51
+        }
+      ]
+    },
+    {
+      "code": "SUR",
+      "year": 2012,
+      "source": "sur-abs-2012",
+      "denominator": "通常居住人口・全年齢541,638人。出生県ではなく居住県の全国合計。",
+      "note": "Afroの色＝Marron＋Creool＋Afrosurinamer、Indian/Asianの色＝Hindostaan＋Javaan＋Chineesの原人数集計。各元分類と不明を保持。",
+      "values": [
+        {
+          "group": "indigenous",
+          "native": "inheems_indiaan",
+          "count": 20344,
+          "percent": 3.7560141644419334
+        },
+        {
+          "group": "afro",
+          "native": "marron_boslcreool",
+          "count": 117567,
+          "percent": 21.70582566215812
+        },
+        {
+          "group": "afro",
+          "native": "creool",
+          "count": 84933,
+          "percent": 15.680768336047324
+        },
+        {
+          "group": "afro",
+          "native": "afrosurinamer",
+          "count": 3923,
+          "percent": 0.7242844852096788
+        },
+        {
+          "group": "asian",
+          "native": "hindostaan",
+          "count": 148443,
+          "percent": 27.40631196481783
+        },
+        {
+          "group": "asian",
+          "native": "javaan",
+          "count": 73975,
+          "percent": 13.657645881566655
+        },
+        {
+          "group": "asian",
+          "native": "chinees",
+          "count": 7885,
+          "percent": 1.4557693514856787
+        },
+        {
+          "group": "white",
+          "native": "kaukasisch_blank",
+          "count": 1667,
+          "percent": 0.30777013429633815
+        },
+        {
+          "group": "mixed",
+          "native": "gemengd",
+          "count": 72340,
+          "percent": 13.35578375224781
+        },
+        {
+          "group": "other",
+          "native": "overige",
+          "count": 7166,
+          "percent": 1.323023864647606
+        },
+        {
+          "group": "unknown",
+          "native": "weet_niet",
+          "count": 1805,
+          "percent": 0.3332484057617819
+        },
+        {
+          "group": "unknown",
+          "native": "geen_antwoord",
+          "count": 1590,
+          "percent": 0.29355399731924275
+        }
+      ]
+    }
+  ],
+  "religion": [
+    {
+      "code": "PRY",
+      "year": 2014,
+      "source": "pew2014",
+      "denominator": "2013年10月–2014年2月・18歳以上の全国調査回答者。対象外地域は原方法資料で確認。",
+      "note": "Protestantは歴史的教会・ペンテコステ系等を含む元分類。公表丸め値を100%へ正規化しません。所属なしは無神論・不可知論・特定の宗教なしを含みます。",
+      "values": [
+        {
+          "group": "catholic",
+          "native": "Catholic",
+          "percent": 89
+        },
+        {
+          "group": "protestant",
+          "native": "Protestant",
+          "percent": 7
+        },
+        {
+          "group": "none",
+          "native": "Unaffiliated",
+          "percent": 1
+        },
+        {
+          "group": "otherReligion",
+          "native": "Other",
+          "percent": 2
+        }
+      ]
+    },
+    {
+      "code": "COL",
+      "year": 2014,
+      "source": "pew2014",
+      "denominator": "2013年10月–2014年2月・18歳以上の全国調査回答者。対象外地域は原方法資料で確認。",
+      "note": "Protestantは歴史的教会・ペンテコステ系等を含む元分類。公表丸め値を100%へ正規化しません。所属なしは無神論・不可知論・特定の宗教なしを含みます。",
+      "values": [
+        {
+          "group": "catholic",
+          "native": "Catholic",
+          "percent": 79
+        },
+        {
+          "group": "protestant",
+          "native": "Protestant",
+          "percent": 13
+        },
+        {
+          "group": "none",
+          "native": "Unaffiliated",
+          "percent": 6
+        },
+        {
+          "group": "otherReligion",
+          "native": "Other",
+          "percent": 2
+        }
+      ]
+    },
+    {
+      "code": "ECU",
+      "year": 2014,
+      "source": "pew2014",
+      "denominator": "2013年10月–2014年2月・18歳以上の全国調査回答者。対象外地域は原方法資料で確認。",
+      "note": "Protestantは歴史的教会・ペンテコステ系等を含む元分類。公表丸め値を100%へ正規化しません。所属なしは無神論・不可知論・特定の宗教なしを含みます。",
+      "values": [
+        {
+          "group": "catholic",
+          "native": "Catholic",
+          "percent": 79
+        },
+        {
+          "group": "protestant",
+          "native": "Protestant",
+          "percent": 13
+        },
+        {
+          "group": "none",
+          "native": "Unaffiliated",
+          "percent": 5
+        },
+        {
+          "group": "otherReligion",
+          "native": "Other",
+          "percent": 3
+        }
+      ]
+    },
+    {
+      "code": "BOL",
+      "year": 2014,
+      "source": "pew2014",
+      "denominator": "2013年10月–2014年2月・18歳以上の全国調査回答者。対象外地域は原方法資料で確認。",
+      "note": "Protestantは歴史的教会・ペンテコステ系等を含む元分類。公表丸め値を100%へ正規化しません。所属なしは無神論・不可知論・特定の宗教なしを含みます。",
+      "values": [
+        {
+          "group": "catholic",
+          "native": "Catholic",
+          "percent": 77
+        },
+        {
+          "group": "protestant",
+          "native": "Protestant",
+          "percent": 16
+        },
+        {
+          "group": "none",
+          "native": "Unaffiliated",
+          "percent": 4
+        },
+        {
+          "group": "otherReligion",
+          "native": "Other",
+          "percent": 3
+        }
+      ]
+    },
+    {
+      "code": "PER",
+      "year": 2014,
+      "source": "pew2014",
+      "denominator": "2013年10月–2014年2月・18歳以上の全国調査回答者。対象外地域は原方法資料で確認。",
+      "note": "Protestantは歴史的教会・ペンテコステ系等を含む元分類。公表丸め値を100%へ正規化しません。所属なしは無神論・不可知論・特定の宗教なしを含みます。",
+      "values": [
+        {
+          "group": "catholic",
+          "native": "Catholic",
+          "percent": 76
+        },
+        {
+          "group": "protestant",
+          "native": "Protestant",
+          "percent": 17
+        },
+        {
+          "group": "none",
+          "native": "Unaffiliated",
+          "percent": 4
+        },
+        {
+          "group": "otherReligion",
+          "native": "Other",
+          "percent": 3
+        }
+      ]
+    },
+    {
+      "code": "VEN",
+      "year": 2014,
+      "source": "pew2014",
+      "denominator": "2013年10月–2014年2月・18歳以上の全国調査回答者。対象外地域は原方法資料で確認。",
+      "note": "Protestantは歴史的教会・ペンテコステ系等を含む元分類。公表丸め値を100%へ正規化しません。所属なしは無神論・不可知論・特定の宗教なしを含みます。",
+      "values": [
+        {
+          "group": "catholic",
+          "native": "Catholic",
+          "percent": 73
+        },
+        {
+          "group": "protestant",
+          "native": "Protestant",
+          "percent": 17
+        },
+        {
+          "group": "none",
+          "native": "Unaffiliated",
+          "percent": 7
+        },
+        {
+          "group": "otherReligion",
+          "native": "Other",
+          "percent": 4
+        }
+      ]
+    },
+    {
+      "code": "ARG",
+      "year": 2014,
+      "source": "pew2014",
+      "denominator": "2013年10月–2014年2月・18歳以上の全国調査回答者。対象外地域は原方法資料で確認。",
+      "note": "Protestantは歴史的教会・ペンテコステ系等を含む元分類。公表丸め値を100%へ正規化しません。所属なしは無神論・不可知論・特定の宗教なしを含みます。",
+      "values": [
+        {
+          "group": "catholic",
+          "native": "Catholic",
+          "percent": 71
+        },
+        {
+          "group": "protestant",
+          "native": "Protestant",
+          "percent": 15
+        },
+        {
+          "group": "none",
+          "native": "Unaffiliated",
+          "percent": 11
+        },
+        {
+          "group": "otherReligion",
+          "native": "Other",
+          "percent": 3
+        }
+      ]
+    },
+    {
+      "code": "PAN",
+      "year": 2014,
+      "source": "pew2014",
+      "denominator": "2013年10月–2014年2月・18歳以上の全国調査回答者。対象外地域は原方法資料で確認。",
+      "note": "Protestantは歴史的教会・ペンテコステ系等を含む元分類。公表丸め値を100%へ正規化しません。所属なしは無神論・不可知論・特定の宗教なしを含みます。",
+      "values": [
+        {
+          "group": "catholic",
+          "native": "Catholic",
+          "percent": 70
+        },
+        {
+          "group": "protestant",
+          "native": "Protestant",
+          "percent": 19
+        },
+        {
+          "group": "none",
+          "native": "Unaffiliated",
+          "percent": 7
+        },
+        {
+          "group": "otherReligion",
+          "native": "Other",
+          "percent": 4
+        }
+      ]
+    },
+    {
+      "code": "CHL",
+      "year": 2014,
+      "source": "pew2014",
+      "denominator": "2013年10月–2014年2月・18歳以上の全国調査回答者。対象外地域は原方法資料で確認。",
+      "note": "Protestantは歴史的教会・ペンテコステ系等を含む元分類。公表丸め値を100%へ正規化しません。所属なしは無神論・不可知論・特定の宗教なしを含みます。",
+      "values": [
+        {
+          "group": "catholic",
+          "native": "Catholic",
+          "percent": 64
+        },
+        {
+          "group": "protestant",
+          "native": "Protestant",
+          "percent": 17
+        },
+        {
+          "group": "none",
+          "native": "Unaffiliated",
+          "percent": 16
+        },
+        {
+          "group": "otherReligion",
+          "native": "Other",
+          "percent": 3
+        }
+      ]
+    },
+    {
+      "code": "CRI",
+      "year": 2014,
+      "source": "pew2014",
+      "denominator": "2013年10月–2014年2月・18歳以上の全国調査回答者。対象外地域は原方法資料で確認。",
+      "note": "Protestantは歴史的教会・ペンテコステ系等を含む元分類。公表丸め値を100%へ正規化しません。所属なしは無神論・不可知論・特定の宗教なしを含みます。",
+      "values": [
+        {
+          "group": "catholic",
+          "native": "Catholic",
+          "percent": 62
+        },
+        {
+          "group": "protestant",
+          "native": "Protestant",
+          "percent": 25
+        },
+        {
+          "group": "none",
+          "native": "Unaffiliated",
+          "percent": 9
+        },
+        {
+          "group": "otherReligion",
+          "native": "Other",
+          "percent": 4
+        }
+      ]
+    },
+    {
+      "code": "BRA",
+      "year": 2014,
+      "source": "pew2014",
+      "denominator": "2013年10月–2014年2月・18歳以上の全国調査回答者。対象外地域は原方法資料で確認。",
+      "note": "Protestantは歴史的教会・ペンテコステ系等を含む元分類。公表丸め値を100%へ正規化しません。所属なしは無神論・不可知論・特定の宗教なしを含みます。",
+      "values": [
+        {
+          "group": "catholic",
+          "native": "Catholic",
+          "percent": 61
+        },
+        {
+          "group": "protestant",
+          "native": "Protestant",
+          "percent": 26
+        },
+        {
+          "group": "none",
+          "native": "Unaffiliated",
+          "percent": 8
+        },
+        {
+          "group": "otherReligion",
+          "native": "Other",
+          "percent": 5
+        }
+      ]
+    },
+    {
+      "code": "DOM",
+      "year": 2014,
+      "source": "pew2014",
+      "denominator": "2013年10月–2014年2月・18歳以上の全国調査回答者。対象外地域は原方法資料で確認。",
+      "note": "Protestantは歴史的教会・ペンテコステ系等を含む元分類。公表丸め値を100%へ正規化しません。所属なしは無神論・不可知論・特定の宗教なしを含みます。",
+      "values": [
+        {
+          "group": "catholic",
+          "native": "Catholic",
+          "percent": 57
+        },
+        {
+          "group": "protestant",
+          "native": "Protestant",
+          "percent": 23
+        },
+        {
+          "group": "none",
+          "native": "Unaffiliated",
+          "percent": 18
+        },
+        {
+          "group": "otherReligion",
+          "native": "Other",
+          "percent": 2
+        }
+      ]
+    },
+    {
+      "code": "PRI",
+      "year": 2014,
+      "source": "pew2014",
+      "denominator": "2013年10月–2014年2月・18歳以上の全国調査回答者。対象外地域は原方法資料で確認。",
+      "note": "Protestantは歴史的教会・ペンテコステ系等を含む元分類。公表丸め値を100%へ正規化しません。所属なしは無神論・不可知論・特定の宗教なしを含みます。",
+      "values": [
+        {
+          "group": "catholic",
+          "native": "Catholic",
+          "percent": 56
+        },
+        {
+          "group": "protestant",
+          "native": "Protestant",
+          "percent": 33
+        },
+        {
+          "group": "none",
+          "native": "Unaffiliated",
+          "percent": 8
+        },
+        {
+          "group": "otherReligion",
+          "native": "Other",
+          "percent": 2
+        }
+      ]
+    },
+    {
+      "code": "SLV",
+      "year": 2014,
+      "source": "pew2014",
+      "denominator": "2013年10月–2014年2月・18歳以上の全国調査回答者。対象外地域は原方法資料で確認。",
+      "note": "Protestantは歴史的教会・ペンテコステ系等を含む元分類。公表丸め値を100%へ正規化しません。所属なしは無神論・不可知論・特定の宗教なしを含みます。",
+      "values": [
+        {
+          "group": "catholic",
+          "native": "Catholic",
+          "percent": 50
+        },
+        {
+          "group": "protestant",
+          "native": "Protestant",
+          "percent": 36
+        },
+        {
+          "group": "none",
+          "native": "Unaffiliated",
+          "percent": 12
+        },
+        {
+          "group": "otherReligion",
+          "native": "Other",
+          "percent": 3
+        }
+      ]
+    },
+    {
+      "code": "GTM",
+      "year": 2014,
+      "source": "pew2014",
+      "denominator": "2013年10月–2014年2月・18歳以上の全国調査回答者。対象外地域は原方法資料で確認。",
+      "note": "Protestantは歴史的教会・ペンテコステ系等を含む元分類。公表丸め値を100%へ正規化しません。所属なしは無神論・不可知論・特定の宗教なしを含みます。",
+      "values": [
+        {
+          "group": "catholic",
+          "native": "Catholic",
+          "percent": 50
+        },
+        {
+          "group": "protestant",
+          "native": "Protestant",
+          "percent": 41
+        },
+        {
+          "group": "none",
+          "native": "Unaffiliated",
+          "percent": 6
+        },
+        {
+          "group": "otherReligion",
+          "native": "Other",
+          "percent": 3
+        }
+      ]
+    },
+    {
+      "code": "NIC",
+      "year": 2014,
+      "source": "pew2014",
+      "denominator": "2013年10月–2014年2月・18歳以上の全国調査回答者。対象外地域は原方法資料で確認。",
+      "note": "Protestantは歴史的教会・ペンテコステ系等を含む元分類。公表丸め値を100%へ正規化しません。所属なしは無神論・不可知論・特定の宗教なしを含みます。",
+      "values": [
+        {
+          "group": "catholic",
+          "native": "Catholic",
+          "percent": 50
+        },
+        {
+          "group": "protestant",
+          "native": "Protestant",
+          "percent": 40
+        },
+        {
+          "group": "none",
+          "native": "Unaffiliated",
+          "percent": 7
+        },
+        {
+          "group": "otherReligion",
+          "native": "Other",
+          "percent": 4
+        }
+      ]
+    },
+    {
+      "code": "HND",
+      "year": 2014,
+      "source": "pew2014",
+      "denominator": "2013年10月–2014年2月・18歳以上の全国調査回答者。対象外地域は原方法資料で確認。",
+      "note": "Protestantは歴史的教会・ペンテコステ系等を含む元分類。公表丸め値を100%へ正規化しません。所属なしは無神論・不可知論・特定の宗教なしを含みます。",
+      "values": [
+        {
+          "group": "catholic",
+          "native": "Catholic",
+          "percent": 46
+        },
+        {
+          "group": "protestant",
+          "native": "Protestant",
+          "percent": 41
+        },
+        {
+          "group": "none",
+          "native": "Unaffiliated",
+          "percent": 10
+        },
+        {
+          "group": "otherReligion",
+          "native": "Other",
+          "percent": 2
+        }
+      ]
+    },
+    {
+      "code": "URY",
+      "year": 2014,
+      "source": "pew2014",
+      "denominator": "2013年10月–2014年2月・18歳以上の全国調査回答者。対象外地域は原方法資料で確認。",
+      "note": "Protestantは歴史的教会・ペンテコステ系等を含む元分類。公表丸め値を100%へ正規化しません。所属なしは無神論・不可知論・特定の宗教なしを含みます。",
+      "values": [
+        {
+          "group": "catholic",
+          "native": "Catholic",
+          "percent": 42
+        },
+        {
+          "group": "protestant",
+          "native": "Protestant",
+          "percent": 15
+        },
+        {
+          "group": "none",
+          "native": "Unaffiliated",
+          "percent": 37
+        },
+        {
+          "group": "otherReligion",
+          "native": "Other",
+          "percent": 6
+        }
+      ]
+    },
+    {
+      "code": "GUY",
+      "year": 2012,
+      "source": "guy-religion2012",
+      "denominator": "通常居住人口・全年齢746,955人。",
+      "note": "プロテスタント系は分類確認済みの所属だけの合計。教派未指定のその他キリスト教は別枠。原資料では未回答・未接触・施設人口を按分済み。",
+      "values": [
+        {
+          "group": "catholic",
+          "native": "カトリック",
+          "sourceCategoryKeys": [
+            "catholic"
+          ],
+          "count": 52901,
+          "percent": 7.082220481822868
+        },
+        {
+          "group": "protestant",
+          "native": "プロテスタント系（分類確認済み所属）",
+          "sourceCategoryKeys": [
+            "anglican",
+            "methodist",
+            "pentecostal",
+            "seventhDayAdventist"
+          ],
+          "count": 259731,
+          "percent": 34.77197421531418
+        },
+        {
+          "group": "otherChristian",
+          "native": "その他のキリスト教（教派未指定）",
+          "sourceCategoryKeys": [
+            "otherChristian"
+          ],
+          "count": 155050,
+          "percent": 20.75760922679412
+        },
+        {
+          "group": "otherReligion",
+          "native": "エホバの証人",
+          "sourceCategoryKeys": [
+            "jehovahsWitness"
+          ],
+          "count": 9602,
+          "percent": 1.285485738766057
+        },
+        {
+          "group": "hindu",
+          "native": "ヒンドゥー教",
+          "sourceCategoryKeys": [
+            "hindu"
+          ],
+          "count": 185439,
+          "percent": 24.825993533747013
+        },
+        {
+          "group": "muslim",
+          "native": "イスラム教",
+          "sourceCategoryKeys": [
+            "muslim"
+          ],
+          "count": 50572,
+          "percent": 6.770421243582278
+        },
+        {
+          "group": "none",
+          "native": "宗教なし",
+          "sourceCategoryKeys": [
+            "none"
+          ],
+          "count": 23419,
+          "percent": 3.1352624990795963
+        },
+        {
+          "group": "otherReligion",
+          "native": "その他の宗教",
+          "sourceCategoryKeys": [
+            "bahai",
+            "rastafarian",
+            "other"
+          ],
+          "count": 10241,
+          "percent": 1.3710330608938959
+        }
+      ],
+      "rawCounts": {
+        "anglican": 38962,
+        "methodist": 10106,
+        "pentecostal": 170289,
+        "catholic": 52901,
+        "jehovahsWitness": 9602,
+        "seventhDayAdventist": 40374,
+        "bahai": 421,
+        "muslim": 50572,
+        "hindu": 185439,
+        "rastafarian": 3496,
+        "otherChristian": 155050,
+        "none": 23419,
+        "other": 6324
+      },
+      "rawLabels": {
+        "anglican": "Anglican",
+        "methodist": "Methodist",
+        "pentecostal": "Pentecostal",
+        "catholic": "Roman Catholic",
+        "jehovahsWitness": "Jehovah Witness",
+        "seventhDayAdventist": "Seventh-Day Adventist",
+        "bahai": "Bahai",
+        "muslim": "Muslim",
+        "hindu": "Hindu",
+        "rastafarian": "Rastafarian",
+        "otherChristian": "Other Christians",
+        "none": "None",
+        "other": "Other"
+      }
+    },
+    {
+      "code": "SUR",
+      "year": 2012,
+      "source": "sur-religion2012",
+      "denominator": "通常居住人口・全年齢541,638人。",
+      "note": "プロテスタント系は分類確認済みの所属だけの合計。教派未指定のその他キリスト教は別枠。不明・無回答は所属なしへ加えません。",
+      "values": [
+        {
+          "group": "catholic",
+          "native": "カトリック",
+          "sourceCategoryKeys": [
+            "catholic"
+          ],
+          "count": 117261,
+          "percent": 21.649330364560832
+        },
+        {
+          "group": "protestant",
+          "native": "プロテスタント系（分類確認済み所属）",
+          "sourceCategoryKeys": [
+            "lutheran",
+            "fullGospel",
+            "moravianEBG",
+            "reformed"
+          ],
+          "count": 127779,
+          "percent": 23.591217750600954
+        },
+        {
+          "group": "otherChristian",
+          "native": "その他のキリスト教（教派未指定）",
+          "sourceCategoryKeys": [
+            "otherChristian"
+          ],
+          "count": 17280,
+          "percent": 3.1903226878468645
+        },
+        {
+          "group": "otherReligion",
+          "native": "エホバの証人",
+          "sourceCategoryKeys": [
+            "jehovahsWitness"
+          ],
+          "count": 6622,
+          "percent": 1.2225877800302047
+        },
+        {
+          "group": "hindu",
+          "native": "ヒンドゥー教",
+          "sourceCategoryKeys": [
+            "hinduSanatan",
+            "hinduArya",
+            "otherHindu"
+          ],
+          "count": 120623,
+          "percent": 22.270040137508815
+        },
+        {
+          "group": "muslim",
+          "native": "イスラム教",
+          "sourceCategoryKeys": [
+            "muslimSunni",
+            "muslimAhmadiyya",
+            "otherMuslim"
+          ],
+          "count": 75053,
+          "percent": 13.85667179924599
+        },
+        {
+          "group": "none",
+          "native": "宗教なし",
+          "sourceCategoryKeys": [
+            "none"
+          ],
+          "count": 40718,
+          "percent": 7.517567083550268
+        },
+        {
+          "group": "otherReligion",
+          "native": "その他の宗教",
+          "sourceCategoryKeys": [
+            "javanism",
+            "jewish",
+            "winti",
+            "otherReligion"
+          ],
+          "count": 19220,
+          "percent": 3.5484954896074496
+        },
+        {
+          "group": "unknown",
+          "native": "不明・無回答",
+          "sourceCategoryKeys": [
+            "unknown"
+          ],
+          "count": 17082,
+          "percent": 3.153766907048619
+        }
+      ],
+      "rawCounts": {
+        "catholic": 117261,
+        "lutheran": 2811,
+        "fullGospel": 60530,
+        "moravianEBG": 60420,
+        "reformed": 4018,
+        "otherChristian": 17280,
+        "hinduSanatan": 97311,
+        "hinduArya": 16661,
+        "otherHindu": 6651,
+        "muslimSunni": 21159,
+        "muslimAhmadiyya": 14161,
+        "otherMuslim": 39733,
+        "jehovahsWitness": 6622,
+        "javanism": 4460,
+        "jewish": 181,
+        "winti": 9949,
+        "otherReligion": 4630,
+        "none": 40718,
+        "unknown": 17082
+      },
+      "rawLabels": {
+        "catholic": "Rooms Katholiek",
+        "lutheran": "Luthers",
+        "fullGospel": "Volle Evangelie",
+        "moravianEBG": "E.B.G.",
+        "reformed": "Hervormd",
+        "otherChristian": "Overig Christen",
+        "hinduSanatan": "Hindoe Sanatan",
+        "hinduArya": "Hindoe Arya",
+        "otherHindu": "Overig Hindoe",
+        "muslimSunni": "Islam Soenniet",
+        "muslimAhmadiyya": "Islam Ahmadyah",
+        "otherMuslim": "Overig Islam",
+        "jehovahsWitness": "Jehovas Getuigen",
+        "javanism": "Javanisme",
+        "jewish": "Jodendom",
+        "winti": "Winti",
+        "otherReligion": "Andere Godsdienst",
+        "none": "Geen Godsdienst",
+        "unknown": "Onbekend (H4); Weet niet + Geen antwoord (7.3)"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "id": "lb2011",
+      "title": "Latinobarómetro2011・Table16",
+      "url": "https://www.latinobarometro.org/documents/LAT-2011/informe-latinobarometro-2011.pdf",
+      "period": "2011年全国調査",
+      "rights": "Official ODA FAQ permits free own charts/tables with the recommended Latinobarómetro citation. No CC licence claimed.",
+      "termsUrl": "https://www.latinobarometro.org/oda-faq"
+    },
+    {
+      "id": "bra-ibge-2022",
+      "title": "Censo Demográfico 2022: Identificação étnico-racial da população, por sexo e idade: Resultados do universo",
+      "url": "https://static.poder360.com.br/2023/12/dados%E2%80%93censo%E2%80%932022%E2%80%93cor%E2%80%93de%E2%80%93pele.pdf",
+      "period": "2022年国勢調査",
+      "rights": {
+        "status": "explicit_reuse_licence_unverified",
+        "allowed_claim": "Public original aggregate facts read; no claim of CC licence or permission to reproduce source graphics."
+      },
+      "termsUrl": "https://static.poder360.com.br/2023/12/dados%E2%80%93censo%E2%80%932022%E2%80%93cor%E2%80%93de%E2%80%93pele.pdf"
+    },
+    {
+      "id": "guy-bos-2012",
+      "title": "Population and Housing Census 2012, Compendium 2: Population Composition",
+      "url": "https://statisticsguyana.gov.gy/wp-content/uploads/2019/10/Final_2012_Census_Compendium2.pdf",
+      "period": "2012年国勢調査",
+      "rights": {
+        "status": "open_licence_verified",
+        "url": "https://statisticsguyana.gov.gy/open-licence-agreement/",
+        "commercial": true,
+        "derivatives": true,
+        "conditions": [
+          "Maintain source acknowledgement and link to licence where possible.",
+          "Derived tables must state that they were adapted from Bureau of Statistics Guyana data.",
+          "Third-party data are excluded from this licence."
+        ]
+      },
+      "termsUrl": "https://statisticsguyana.gov.gy/open-licence-agreement/"
+    },
+    {
+      "id": "sur-abs-2012",
+      "title": "Census 8, Volume 1: Demografische en Sociale Karakteristieken en Migratie; current district/ressort ethnic table",
+      "url": "https://www.statistics-suriname.org/wp-content/uploads/2019/03/census8etn.pdf",
+      "period": "2012年国勢調査",
+      "rights": {
+        "status": "attribution_reproduction_permission_verified",
+        "locator": "Volume1 front matter",
+        "conditions": [
+          "Reproduction of data allowed with source acknowledgement; report remains copyright ABS."
+        ]
+      },
+      "termsUrl": "https://www.statistics-suriname.org/wp-content/uploads/2019/03/census8etn.pdf"
+    },
+    {
+      "id": "gtm-ine-2018",
+      "title": "Censo2018 Infografías",
+      "url": "https://censo2018.ine.gob.gt/archivos/Infografias.pdf",
+      "period": "2018年国勢調査",
+      "rights": {
+        "status": "explicit_reuse_licence_unverified"
+      },
+      "termsUrl": "https://censo2018.ine.gob.gt/archivos/Infografias.pdf"
+    },
+    {
+      "id": "per-inei-2017",
+      "title": "INEI 2017 census national release and La autoidentificación étnica: Población indígena y afroperuana",
+      "url": "https://www.gob.pe/institucion/inei/noticias/535452-inei-difunde-base-de-datos-de-los-censos-nacionales-2017-y-el-perfil-sociodemografico-del-peru",
+      "period": "2017年国勢調査",
+      "rights": {
+        "status": "explicit_reuse_licence_unverified"
+      },
+      "termsUrl": "https://www.gob.pe/institucion/inei/noticias/535452-inei-difunde-base-de-datos-de-los-censos-nacionales-2017-y-el-perfil-sociodemografico-del-peru"
+    },
+    {
+      "id": "pew2014",
+      "title": "Pew Research Center・Religion in Latin America",
+      "url": "https://www.pewresearch.org/religion/2014/11/13/religion-in-latin-america/",
+      "period": "2013–14年全国成人調査",
+      "rights": "Copyright ©2014 Pew Research Center. 独自図表・日本語表示。公表値を保持し、Pewの承認を示唆しない。",
+      "termsUrl": "https://www.pewresearch.org/about/terms-and-conditions/"
+    },
+    {
+      "id": "guy-religion2012",
+      "title": "Guyana BOS Census2012・Table2.19",
+      "url": "https://statisticsguyana.gov.gy/wp-content/uploads/2019/10/Final_2012_Census_Compendium2.pdf",
+      "period": "2012年全国・全年齢",
+      "rights": "BOS Open Licence permits commercial/noncommercial copying and derivatives, with prescribed source/derived-table notice and no endorsement.",
+      "termsUrl": "https://statisticsguyana.gov.gy/open-licence-agreement/"
+    },
+    {
+      "id": "sur-religion2012",
+      "title": "Suriname ABS Census2012・H3/H4",
+      "url": "https://statistics-suriname.org/wp-content/uploads/2019/05/Publicatie-Census-8-Volume-1-Demografische-en-Sociale-Karakteristieken-en-Migratie.pdf",
+      "period": "2012年全国・全年齢",
+      "rights": "PDF page2 explicitly permits reproducing data with source acknowledgement; no CC claim.",
+      "termsUrl": "https://statistics-suriname.org/wp-content/uploads/2019/05/Publicatie-Census-8-Volume-1-Demografische-en-Sociale-Karakteristieken-en-Migratie.pdf"
+    }
+  ],
+  "method": {
+    "sameMap": true,
+    "threshold": {
+      "ethnicity": 10,
+      "religion": 5
+    },
+    "shareBins": [
+      10,
+      25,
+      50
+    ],
+    "geometry": "Existing34 NaturalEarth national polygons; public domain; no new country boundaries.",
+    "nativeGroups": "Mestizo,pardo,Ladino,mixed remain independent. No LatinAmerica aggregate.",
+    "missing": "Uncollected national data use gray crosshatch; absence of a minor color is not0% or absence of residents.",
+    "rights": "Own numeric tables and SVG; no reproduced source pictures/figures; original publisher rights maintained."
+  }
+}
