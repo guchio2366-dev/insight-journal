@@ -156,6 +156,11 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    assert.equal(await page.locator('[data-basin-shortcuts]').isVisible(),true);
    await page.locator('[data-hydrology-detail-label]').waitFor({state:'visible'});
    await capture(`${region}-basins`);
+   const basinOption=await page.locator('[data-hydrology-detail] option[value!=""]').first().getAttribute('value');
+   await page.locator('[data-hydrology-detail]').selectOption(basinOption);
+   assert.equal(new URL(page.url()).searchParams.get('detail'),basinOption);
+   await page.goBack();
+   await page.waitForFunction(()=>new URL(location.href).searchParams.get('detail')===null);
    await page.locator('[data-basin-shortcuts] button:enabled').first().click();
    assert.ok(new URL(page.url()).searchParams.get('detail'));
    await page.reload({waitUntil:'domcontentloaded'});
@@ -165,6 +170,10 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    await page.locator('[data-hydrology-detail-label]').waitFor({state:'visible'});
    await page.locator('[data-hydrology-detail] option[value!=""]').first().waitFor();
    await capture(`${region}-groundwater`);
+   const groundwaterOption=await page.locator('[data-hydrology-detail] option[value!=""]').first().getAttribute('value');
+   await page.locator('[data-hydrology-detail]').selectOption(groundwaterOption);
+   assert.equal(new URL(page.url()).searchParams.get('detail'),groundwaterOption);
+   await capture(`${region}-groundwater-selected`);
    await page.goto(`${url}/atlas/asia/${region}/nature/?topic=water`,{waitUntil:'domcontentloaded'});
    await page.locator('[data-water-picker]').waitFor({state:'visible'});
    await page.locator('[data-water-select]').selectOption(region==='south-asia'?'rivers-194':'rivers-112');
