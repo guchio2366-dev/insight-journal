@@ -46,3 +46,15 @@ test('Regional differences remain readable, qualitative shapes never acquire inv
  assert.match(lib.renderCulturePatternLegend('ethnicity'),/実線＝行政区.*点線＝概略.*割合なし.*50%.*35%以上/);
  const b=parse(lib.renderLatinCulturePatterns('religion'));try{const acre=b.document.querySelector('[data-lc-region=BRA-acre] [data-lc-layer=protestant]'),piaui=b.document.querySelector('[data-lc-region=BRA-piaui] [data-lc-layer=protestant]');assert.equal(acre.getAttribute('opacity'),'1');assert.equal(piaui.getAttribute('opacity'),'0.35');assert.notEqual(acre.getAttribute('d'),piaui.getAttribute('d'));}finally{b.happyDOM.close();}
 });
+test('Central American and Uruguay country contexts preserve coexistence without assigning national percentages to provinces',()=>{
+ const ids=['qual-catholic-GTM','qual-catholic-SLV','qual-catholic-HND','qual-URY-affiliations'];
+ for(const id of ids){const r=lib.geographicRegion('religion',id);assert.equal(r.kind,'qualitative');assert.equal(r.source,'pew2014-country-context');assert.equal(r.year,2014);assert.deepEqual(r.values.map(v=>v.group).sort(),['catholic','none','protestant']);assert.ok(r.values.every(v=>v.percent===null));assert.match(r.note,/全国割合を県へ配分せず/);assert.match(lib.culturePatternReading('religion','region:'+id).body,/県.*割合|県.*測定値/);}
+ const hnd=lib.geographicRegion('religion','qual-catholic-HND');assert.equal(hnd.units.includes('HND-641'),false);assert.match(hnd.note,/98%.*Islas de la Bahía/);
+ const ury=lib.geographicRegion('religion','qual-URY-affiliations');assert.equal(ury.units.length,19);assert.match(ury.note,/2013年11月22日–2014年1月8日/);
+ for(const choice of ['', 'distribution:protestant','region:qual-URY-affiliations']){const w=parse(lib.renderLatinCulturePatterns('religion','all',choice,true));try{for(const id of ids)for(const group of ['catholic','protestant','none']){const el=w.document.querySelector(`[data-lc-region="${id}"] [data-lc-layer="${group}"]`);assert.ok(el);assert.equal(el.dataset.lcShare,'qualitative');assert.equal(el.dataset.lcGrain,'qualitative');}assert.ok(w.document.querySelector('[data-lc-region="qual-URY-affiliations"] [data-lc-layer="none"]').getAttribute('fill').startsWith('#'));}finally{w.happyDOM.close();}}
+});
+test('Ecuador keeps its verified Indigenous and Afro province values and explicitly reports unacquired Mestizo geography',()=>{
+ const regions=lib.geographicRegions.ethnicity.filter(r=>r.country==='ECU');assert.equal(regions.length,24);assert.ok(regions.every(r=>r.kind!=='qualitative'));assert.ok(regions.every(r=>r.values.every(v=>['indigenous','afro'].includes(v.group))));
+ for(const selection of ['','distribution:mestizo'])assert.match(lib.culturePatternReading('ethnicity',selection).overview,/エクアドルのメスチソ県別分布は未取得/);
+ assert.match(lib.culturePatternReading('ethnicity','area:ECU').overview,/メスチソ/);
+});
