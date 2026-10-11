@@ -493,9 +493,14 @@
           "Protestant全体と福音派の",
           "分類範囲は区別します。"
         ],
+        "x": {
+          "all": 20,
+          "central": 520,
+          "south": 20
+        },
         "y": {
           "all": 435,
-          "central": 260,
+          "central": 20,
           "south": 435
         }
       }
