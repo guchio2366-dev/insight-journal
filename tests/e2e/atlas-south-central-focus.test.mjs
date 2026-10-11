@@ -73,7 +73,7 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    assert.equal(await page.locator('[data-sc-industry-topic] option[value="sc-hydro"]').count(),1);
    await page.locator('.asia-industry-regional-label').first().waitFor({state:'visible'});
    assert.equal(await page.locator('.asia-industry-regional-label').count(),industry.industrySites.length);
-   assert.match(await page.locator('.asia-industry-regional-label').first().textContent(),/衣料|石油|ウラン/);
+   assert.match(await page.locator('.asia-industry-regional-label').first().textContent(),region==='south-asia'?/医薬品/: /石油|ウラン/);
    if(region==='south-asia'){
     assert.ok(await page.locator('.asia-industry-regional-label.is-compact').count()>0);
     assert.equal(await page.locator('.asia-industry-regional-label[data-industry-site="sc-dhaka-garments"] span').textContent(),'ダッカ・チッタゴン');
@@ -84,7 +84,7 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
     }
    }
    await capture(`${region}-industry`);
-   await page.locator('.asia-industry-regional-label').first().click();
+   await page.locator(region==='south-asia'?'.asia-industry-regional-label[data-industry-site="sc-dhaka-garments"]':'.asia-industry-regional-label').first().click();
    assert.ok(new URL(page.url()).searchParams.get('detail'));
    assert.equal(await page.locator('.asia-industry-regional-label[aria-pressed="true"].is-compact').count(),0);
    await capture(`${region}-industry-selected`);
