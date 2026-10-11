@@ -227,7 +227,12 @@ test('New Zealand detail focuses on the main islands and port while whole-region
   assert.match(api.oceaniaCoverage(api.getOceaniaLayer('places',state),state),/離島を含む/);
   const whole=api.renderOceaniaScene(api.getOceaniaLayer('places'),{...state,scope:'all'});
   assert.ok(whole.includes(api.oceaniaCountries.find(c=>c.code==='NZL').path));
-  assert.deepEqual(api.oceaniaFrame({...state,scope:'all'}),[0,0,geometry.oceaniaWidth,geometry.oceaniaHeight]);
+  const wholeFrame=api.oceaniaFrame({...state,scope:'all'});
+  assert.deepEqual(wholeFrame,[0,35,1100,710]);
+  for(const country of api.oceaniaCountries){
+   assert.ok(country.extent[0]>=wholeFrame[0]&&country.extent[2]<=wholeFrame[0]+wholeFrame[2],country.code+' longitude remains visible');
+   assert.ok(country.extent[1]>=wholeFrame[1]&&country.extent[3]<=wholeFrame[1]+wholeFrame[3],country.code+' latitude remains visible');
+  }
 });
 
 test('selected population context occurs once in the expanded reading for Kiribati, Samoa, Australia and PNG',()=>{

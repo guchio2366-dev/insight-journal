@@ -243,6 +243,7 @@
 .russia-key-legend>p{font-size:13px;line-height:18px;margin:0 0 2px}
 .russia-workspace:not([data-russia-overview=true]) .russia-key-legend [data-primary-legend]{grid-template-columns:repeat(2,minmax(0,1fr));font-size:13px;line-height:18px;column-gap:10px;row-gap:1px;padding:0;order:0;flex:none}
 .russia-workspace:not([data-russia-overview=true]) .russia-key-legend[data-climate-legend=true] [data-primary-legend]{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:6px;row-gap:1px}
+.russia-workspace:not([data-russia-overview=true]) .russia-learning[data-field=nature] .russia-key-legend [data-primary-legend]{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:6px;row-gap:1px}
 .russia-key-legend[data-climate-legend=true] [data-primary-legend]>span{min-height:0;gap:3px}
 .russia-key-legend[data-climate-legend=true] .russia-legend-mark{width:10px}
 .russia-key-legend .russia-legend-mark{margin-top:2px}

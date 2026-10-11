@@ -142,6 +142,8 @@
 .oceania-workspace-required-legend>p{font-size:13px;line-height:1.5;margin:0 0 5px!important}
 .atlas-desktop-shell .oceania-workspace-required-legend>.oceania-learning-legend{padding:0;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px 8px;font-size:13px;line-height:1.5}
 .atlas-desktop-shell .oceania-workspace-required-legend[data-required-legend-layer=climate]>.oceania-learning-legend{grid-template-columns:repeat(3,minmax(0,1fr))}
+.atlas-desktop-shell .oceania-workspace-required-legend[data-required-legend-layer=precipitation]>.oceania-learning-legend,
+.atlas-desktop-shell .oceania-workspace-required-legend[data-required-legend-layer=elevation]>.oceania-learning-legend{grid-template-columns:repeat(3,minmax(0,1fr))}
 .oceania-workspace-required-legend .oceania-legend-mark{margin-top:3px}
 .oceania-learning-legend-dictionary>.oceania-learning-legend{grid-template-columns:1fr}
 

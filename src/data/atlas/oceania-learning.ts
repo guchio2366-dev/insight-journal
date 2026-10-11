@@ -15,6 +15,7 @@ import {oceaniaNatureReadings} from './oceania-nature-reading';
 import {oceaniaFarmingReadings,oceaniaMapspamAttribution} from './oceania-farming-reading';
 import {oceaniaIndustryReadingThemes,oceaniaIndustryRepresentativeMarks} from './oceania-industry-reading';
 import {oceaniaPopulationReading} from './oceania-population-reading';
+import {physicalLayer} from './oceania-russia-physical';
 export {oceaniaPopulationReading};
 
 export type OceaniaField='nature'|'agriculture'|'industry'|'population';
@@ -57,6 +58,8 @@ const mineralGroups=[
 ];
 export const oceaniaLayers:OceaniaLayer[]=[
  {id:'climate',field:'nature',title:'ケッペン＝ガイガー気候区分',period:'1991–2020年',unit:'気候の分類',kind:'raster',image:'/assets/atlas/oceania-climate-v1/climate.png',bounds:[110,-58,250,25],legend:climateLegend(broadClimateIds),sources:[climateSource],coverage:'全体は0.1°原本。国の拡大は1km原本の詳細へ切替。一部の小島は原本にも分類がなく、気候を推定して埋めていません。',resolution:'全体0.1°／国の詳細1km'},
+ physicalLayer('oceania','precipitation'),
+ physicalLayer('oceania','elevation'),
  ...cropManifest.layers.map(l=>({id:l.id,field:'agriculture' as const,title:`${l.title}の収穫面積`,period:'2020年',unit:'ha／元5分セル',kind:'raster' as const,image:`/assets/atlas/oceania-crops-v1/${l.image}`,bounds:[110,-58,250,25],legend:[...intervalLegend(l.breaks,l.colors,'ha'),zeroLegend,missingLegend],sources:[cropSource],coverage:'モデル化した収穫面積。作付面積や生産量とは異なります。斜線は未収録、白は有効な0。粗い格子では小島が未収録になる場合があります。'})),
  ...livestockManifest.layers.map(l=>({id:l.id,field:'agriculture' as const,title:`${l.title}の密度`,period:'2020年',unit:'頭／km²',kind:'raster' as const,image:`/assets/atlas/oceania-livestock-v1/${l.image}`,bounds:[110,-58,250,25],legend:[...intervalLegend(l.breaks,l.colors,'頭/km²'),zeroLegend,missingLegend],sources:[livestockSource,livestockDistribution],coverage:'モデル化した家畜密度。斜線は未収録、白は有効な0。太平洋島嶼には欠測が残ります。密度を足して頭数にはしていません。'})),
  {id:'mines',field:'industry',title:'豪州の稼働鉱山と主要鉱種',period:'2025年資料',unit:'地点（生産量ではない）',kind:'mines',legend:mineralGroups.map(g=>({label:g.name,color:g.color,shape:'circle'})),sources:[{title:'Geoscience Australia, Australian Operating Mines Map 2025. CC BY 4.0',url:'https://doi.org/10.26186/150821'}],coverage:'347地点は豪州のみ。鉱種を6群で表示し、元の18区分を保持。点の大きさは生産量・埋蔵量を表しません。'},
@@ -111,7 +114,9 @@ export function oceaniaFrame(state:OceaniaState):number[]{
   const w=Math.max(x2-x,(y2-y)*oceaniaWidth/oceaniaHeight)*1.12,h=w*oceaniaHeight/oceaniaWidth;return [(x+x2-w)/2,(y+y2-h)/2,w,h];
  }
  let selected=state.scope==='country'?oceaniaCountries.filter(c=>c.code===state.place):state.scope==='theme'?oceaniaCountries.filter(c=>getOceaniaTheme(state).countryCodes.includes(c.code)):[];
- if(!selected.length)return [0,0,oceaniaWidth,oceaniaHeight];
+ // Keep every mapped country, including Pitcairn and the northern Mariana Islands,
+ // while removing unused ocean margins from the all-region learning map.
+ if(!selected.length)return [0,35,1100,710];
  const x=Math.min(...selected.map(c=>c.extent[0])),y=Math.min(...selected.map(c=>c.extent[1])),x2=Math.max(...selected.map(c=>c.extent[2])),y2=Math.max(...selected.map(c=>c.extent[3]));
  let w=Math.max(x2-x,18),h=Math.max(y2-y,18);w=Math.max(w,h*oceaniaWidth/oceaniaHeight);h=w*oceaniaHeight/oceaniaWidth;return [(x+x2-w*1.12)/2,(y+y2-h*1.12)/2,w*1.12,h*1.12];
 }
@@ -213,7 +218,7 @@ export function oceaniaCoverage(layer:OceaniaLayer,state:OceaniaState):string{
 }
 
 export const oceaniaOverviewReadings={
-  nature:{title:'オセアニアの自然環境を読む',takeaway:'高圧帯と海からの距離による内陸の乾燥、北部の季節風、沿岸・島の海洋の影響を比べます。都市名を選ぶと、雨温図と農業・森林につながる理由を読めます。',explanation:'名称付きの観測所を選ぶと、地図の表示範囲を保ったまま雨温図と気候の理由を読めます。北部の雨季、内陸の乾燥、沿岸・島の海洋の影響を比べます。 気候区分の分布を共通の土台にします。地図直下の地域・項目を選ぶと、その場所の自然条件と農業・交通・制度をつなぐ説明に切り替わります。水資源・地形・標高の詳しい分布資料は未整備です。'},
+  nature:{title:'オセアニアの自然環境を読む',takeaway:'高圧帯と海からの距離による内陸の乾燥、北部の季節風、沿岸・島の海洋の影響を比べます。都市名を選ぶと、雨温図と農業・森林につながる理由を読めます。',explanation:'名称付きの観測所を選ぶと、地図の表示範囲を保ったまま雨温図と気候の理由を読めます。北部の雨季、内陸の乾燥、沿岸・島の海洋の影響を比べます。 気候区分の分布を共通の土台にします。地図直下の地域・項目を選ぶと、その場所の自然条件と農業・交通・制度をつなぐ説明に切り替わります。降水量と標高は地図の分布で選べます。河川・地下水・流域の資料は未整備です。'},
   agriculture:{title:'オセアニアの農林業を読む',takeaway:'小麦、羊・牛、メラネシアの熱帯作物を、自然条件と技術・加工・市場へのつながりから比べます。',explanation:'保存済みの2020年3作物・2畜産を同時表示します。作物はha／元5分セルのモデル収穫面積、家畜は頭／km²のモデル密度です。品目選択ではその数量色を表示し、ほかの作物の正値輪郭と家畜の点を残します。作物選択では家畜を薄くします。輪郭や点は農場境界・個体ではありません。代表名称は保存格子の正値かつ陸域内の例示位置です。白い数量面は有効0、灰色斜線は未収録です。元の数量・年・単位・解像度とCC BY 4.0の帰属を保持し、補間・国計・量の足し合わせは行いません。保存5品目は全国の上位10品目・順位を意味しません。林業、国別生産・貿易・世界シェアと推移は未整備です。'},
   industry:{title:'オセアニアの主要産業を読む',takeaway:'鉱物資源と、加工・港・サービスの代表地点を、交通や市場・協議とのつながりから読みます。',explanation:'豪州の稼働鉱山と島々の加工・港・サービスの代表例を同時に表示します。丸は鉱種別の鉱山、ひし形は港・加工・サービスの代表地点です。地図直下の項目を選ぶと地域の説明に切り替わります。地点の数や記号の大きさは生産量を表しません。'},
   population:{title:'オセアニアの人口分布を読む',takeaway:'沿岸と内陸、大陸と小さな島の居住を、交通・公共サービス・制度と合わせて比べます。',explanation:'人口密度と都市中心を切り替え、地図直下の項目や国・地域を選んで暮らしの背景を読みます。未収録は無人を意味せず、都市中心は国全体の人口の代用ではありません。人種・民族と宗教の地域分布資料は未整備です。'},

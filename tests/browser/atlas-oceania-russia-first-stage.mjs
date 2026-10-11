@@ -10,6 +10,7 @@ import {chromium} from 'playwright';
 
 const output=resolve(process.env.REGION_REVIEW_OUTPUT??'/tmp/oceania-russia-first-stage');
 const farmingOnly=process.env.REGION_REVIEW_FARMING_ONLY==='1';
+const physicalReview=process.env.REGION_REVIEW_PHYSICAL==='1';
 const representativeOnly=process.env.REGION_REVIEW_REPRESENTATIVE_ONLY==='1';
 const focusDeltaOnly=process.env.REGION_REVIEW_FOCUS_DELTA_ONLY==='1';
 const regions=(process.env.REGION_REVIEW_REGIONS??'oceania,russia').split(',');
@@ -55,7 +56,7 @@ try{
   });
  };
  const open=async(region,field,search='')=>{await page.goto(`${base}atlas/${region}/${field}/${search}`,{waitUntil:'networkidle'});await ready(region);};
- const shot=async name=>{if(focusDeltaOnly&&!/^(?:oceania|russia)-agriculture-(1536|1920)-(overview|crop-focus|single-product|selected-with-other-distributions)$/.test(name))return;if(representativeOnly&&!/^(?:oceania|russia)-agriculture-(1536|1024|1920)-(overview|crop-focus|single-product|selected-with-other-distributions)$/.test(name))return;await page.screenshot({path:resolve(output,name+'.png'),fullPage:true});result.screenshots.push(name+'.png');};
+ const shot=async name=>{if(!name.includes('-nature-')){if(focusDeltaOnly&&!/^(?:oceania|russia)-agriculture-(1536|1920)-(overview|crop-focus|single-product|selected-with-other-distributions)$/.test(name))return;if(representativeOnly&&!/^(?:oceania|russia)-agriculture-(1536|1024|1920)-(overview|crop-focus|single-product|selected-with-other-distributions)$/.test(name))return;}await page.screenshot({path:resolve(output,name+'.png'),fullPage:true});result.screenshots.push(name+'.png');};
  const annotationShot=async(map,product)=>{
   // Capture document pixels without element scrolling or a retained SVG handle.
   // Closing the details can resize the root and replace its SVG in the next frame.
@@ -66,6 +67,32 @@ try{
   assert.ok(clip.width>0&&clip.height>0);
   return {clip,png:await page.screenshot({fullPage:true,clip})};
  };
+ if(!farmingOnly||physicalReview){
+  for(const width of [1536,1024]){
+   await page.setViewportSize({width,height:864});
+   for(const region of regions){
+    await open(region,'nature');
+    const host=root(region),map=host.locator('[data-primary-map]');
+    const frame=await map.locator('svg').first().getAttribute('viewBox');
+    for(const [id,unit,step] of [['precipitation','mm／年','250 mm'],['elevation','m（海抜）','500 m']]){
+     await host.locator('[data-layer]').selectOption(id);await ready(region);
+     assert.equal(new URL(page.url()).searchParams.get('layer'),id);
+     assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
+     assert.equal(await host.locator('[data-place]').inputValue(),'all');
+     assert.ok(await map.locator(`image[href*="${id}.png"]`).count()>0);
+     assert.match(await host.locator('[data-primary-unit]').textContent(),new RegExp(unit.replace(/[()]/g,'\\$&')));
+     assert.match(await host.locator('[data-primary-legend]').textContent(),new RegExp(step));
+     assert.match(await host.locator('[data-coverage]').textContent(),id==='precipitation'?/河川|水量/:/標高/);
+     assert.ok((await host.locator('[data-primary-legend]').boundingBox()).height<190);
+     await shot(`${region}-nature-${width}-${id}`);
+     await page.reload({waitUntil:'networkidle'});await ready(region);
+     assert.equal(await host.locator('[data-layer]').inputValue(),id);
+     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+    }
+   }
+  }
+  result.checks.push('GPCC annual precipitation and NOAA elevation layers retain the whole-region frame, readable keys, direct URL and reload state at 1536 and 1024px.');
+ }
  for(const width of representativeOnly?[1920,1536,1024]:[1920,1536,1280,1024]){
   await page.setViewportSize({width,height:width===1920?1080:864});
   for(const region of regions){

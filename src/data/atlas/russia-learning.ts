@@ -12,6 +12,7 @@ import centres from '../../../public/assets/atlas/russia-population-v1/centres.j
 import {russiaIndustryMarks,russiaIndustryReadings} from './russia-industry-reading';
 import {russiaPath,projectRussia,russiaWidth,russiaHeight,russiaFrameForBounds} from '../../lib/atlas-russia-geometry';
 import {withBase} from '../../lib/urls';
+import {physicalLayer} from './oceania-russia-physical';
 
 export type RussiaField='nature'|'agriculture'|'industry'|'population';
 export type RussiaState={field:RussiaField;theme:string;layer:string;place:string;scope:'all'|'theme'|'region';comparison:boolean;compareLayer:string;single?:boolean;industryLocation?:string};
@@ -21,7 +22,7 @@ export type RussiaLayer={id:string;field:RussiaField;title:string;period:string;
 export type RussiaTheme={id:string;field:RussiaField;title:string;takeaway:string;explanation:string;social:string;regionCodes:string[];defaultLayer:string;comparisonLayer:string;sources:RussiaSource[]};
 export const russiaFields:Record<RussiaField,{label:string;title:string}>={nature:{label:'自然環境',title:'寒さと生育期、広い国土の違いを読む'},agriculture:{label:'農林畜産業',title:'小麦と牛の分布を、気候・市場とつなぐ'},industry:{label:'主要産業',title:'資源の場所と、加工・港・市場をつなぐ'},population:{label:'人口・社会',title:'西の集積と、シベリア・極東の都市を読む'}};
 export const russiaOverviewReadings:Record<RussiaField,{title:string;takeaway:string;explanation:string}>={
- nature:{title:'ロシアの自然環境を読む',takeaway:'高緯度の寒さ、シベリア内陸の大きな年較差、極東の雨の季節差を比べます。都市名を選ぶと、生育期・水利用・暮らしにつながる雨温図と理由を読めます。',explanation:'1991–2020年の気候区分を全域で表示します。場所やテーマを選ぶと理由の説明に切り替わり、全域の分布は残ります。気候分類は年降水量や現在の天候ではありません。名称付きの観測所を選ぶと、同じ表示範囲のまま雨温図と気候の理由を読めます。高緯度・内陸性・極東の季節風による違いを比べます。水資源、地形・標高の分布資料は未整備です。'},
+ nature:{title:'ロシアの自然環境を読む',takeaway:'高緯度の寒さ、シベリア内陸の大きな年較差、極東の雨の季節差を比べます。都市名を選ぶと、生育期・水利用・暮らしにつながる雨温図と理由を読めます。',explanation:'1991–2020年の気候区分を全域で表示します。場所やテーマを選ぶと理由の説明に切り替わり、全域の分布は残ります。気候分類は年降水量や現在の天候ではありません。名称付きの観測所を選ぶと、同じ表示範囲のまま雨温図と気候の理由を読めます。高緯度・内陸性・極東の季節風による違いを比べます。年降水量と標高は地図の分布で選べます。河川・地下水・流域の資料は未整備です。'},
  agriculture:{title:'ロシアの農林業を読む',takeaway:'小麦の正の収穫面積は南西部のロストフ付近と西シベリア南部のオムスク付近で確認できます。牛も両地域に分布し、東部のヤクーツク付近には低密度の正値があります。',explanation:'南西部のロストフ周辺は冬小麦の栽培地帯です。秋に播いて冬を越し、翌夏に収穫します。一方、寒さの厳しい西シベリア南部では春小麦が主で、春に播いて夏に育てます。USDA FASの地域別報告は、南部の冬小麦とシベリアの春小麦を区別しています。牛は飼料と冬の飼育設備を必要とし、肉・乳に利用されます。2020年のモデル分布で、緑の面は小麦の収穫面積（ha／元5分セル）、青い点の濃さは牛の密度（頭／km²）です。点は個体数ではなく、互いに足せる量でもありません。品目を選ぶとその数量色を強調し、他の分布と表示範囲を残します。輪郭は正の値がある元セルの外周で、実際の農場境界ではありません。保存済みの全域分布は小麦・牛の2品目で、他の品目の全国分布格子は未収録です。未収録を栽培・飼育ゼロとは扱いません。林業の分布資料は未整備です。'},
  industry:{title:'石油・ガス・石炭、金属と加工・物流を読む',takeaway:'西シベリアの石油、ヤマロ・ネネツの天然ガス、クズバスの石炭とノリリスクの金属産地に、オムスクの石油精製、欧州側の管理・港湾、極東の港湾が重なります。',explanation:'地下資源の位置に採掘・加工設備が立地し、パイプライン、河川、鉄道、港が市場へつなぎます。点は8件の代表位置で、鉱床境界や量の比例記号ではありません。数量の年・単位・全国/施設の範囲は各地点の本文で確認します。主要な製造業の地域分布は引き続き補完が必要です。'},
  population:{title:'ロシアの人口分布を読む',takeaway:'欧州側の集積とシベリア・極東の居住を、都市・交通・公共サービスとのつながりから比べます。',explanation:'全域の2020年モデル人口密度と都市中心の位置を表示します。密度と都市中心の人口は単位・範囲が異なり、市の行政人口や現在の人口とは一致しません。地域を選んでも他地域の分布は残ります。人種・民族・宗教の分布資料は未整備です。'},
@@ -69,6 +70,8 @@ const industryColors:Record<string,string>={resource:'#a17436',processing:'#9655
 const industryNames:Record<string,string>={resource:'資源・加工地域の代表位置',processing:'加工の代表位置',port:'港湾の代表位置',city:'都市・物流の代表位置'};
 export const russiaLayers:RussiaLayer[]=[
  {id:'climate',field:'nature',title:'ケッペン＝ガイガー気候区分',period:'1991–2020年',unit:'気候の分類',kind:'raster',image:'/assets/atlas/russia-climate-v1/climate.png',bounds:[18,40,191,83],legend:[...climateClasses.filter(c=>climateDisplayClasses.ids.includes(c.id)).map(c=>({label:`${c.code} ${c.name}`,color:c.color})),missing,disputeLegend],sources:[climateSource],coverage:'0.1°原セルの広域区分。拡大しても情報は細かくなりません。長期気候の分類で、今の天候や年降水量ではありません。',resolution:'元0.1°・補間なし'},
+ physicalLayer('russia','precipitation'),
+ physicalLayer('russia','elevation'),
  {id:'farming-all',field:'agriculture',title:'小麦と牛の分布',period:'2020年',unit:'小麦 ha／元5分セル ・ 牛 頭／km²',kind:'farming',legend:[{label:'小麦の収穫面積（緑の面）',color:'#4f7e3d'},{label:'牛の密度（青い点）',color:'#376d91'},agricultureZero,missing,disputeLegend],sources:[cropSource,livestockSource,livestockDistribution,usdaWheatRegions,usdaWheat],coverage:'保存済みの小麦・牛の2品目を同時表示。他の品目の全国分布格子は未収録です。面と点は別々の単位・数量階級を示し、合計や優劣を表しません。品目を選んでも他の分布を残します。有効な0と未収録はそれぞれの凡例で区別します。'},
  ...cropManifest.layers.map(l=>({id:l.id,field:'agriculture' as const,title:`${l.title}の収穫面積`,period:'2020年',unit:'ha／元5分セル',kind:'raster' as const,image:`/assets/atlas/russia-crops-v1/${l.image}`,bounds:l.boundsUnwrapped,legend:[...intervals(l.breaks,l.colors),agricultureZero,missing,disputeLegend],sources:[cropSource],coverage:'モデル化した収穫面積で、生産量や現在の農場ではありません。斜線の未収録を栽培ゼロと読み替えません。'})),
  ...livestockManifest.layers.map(l=>({id:l.id,field:'agriculture' as const,title:`${l.title}の推計密度`,period:'2020年',unit:'頭/km²',kind:'raster' as const,image:`/assets/atlas/russia-livestock-v1/${l.image}`,bounds:l.boundsUnwrapped,legend:[...intervals(l.breaks,l.colors),agricultureZero,missing,disputeLegend],sources:[livestockSource,livestockDistribution],coverage:'5分格子のモデル密度。表示範囲の頭数や今の飼育数ではありません。未収録と有効な0を区別します。'})),
