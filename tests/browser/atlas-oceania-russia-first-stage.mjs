@@ -260,6 +260,10 @@ try{
      await single.click();await ready(region);
      assert.equal(new URL(page.url()).searchParams.has('single'),false);
      assert.deepEqual(await shown(),products);
+     await page.goBack({waitUntil:'networkidle'});await ready(region);
+     assert.deepEqual(await shown(),['cattle']);
+     await page.goForward({waitUntil:'networkidle'});await ready(region);
+     assert.deepEqual(await shown(),products);
      if(width===1536)await shot(`${region}-agriculture-${width}-livestock-focus`);
      if(region==='oceania')for(const product of ['coconut','cacao','sheep']){await host.locator('[data-layer]').selectOption(product);await ready(region);assert.deepEqual(await shown(),products);assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);assert.equal(await map.locator(`[data-farming-product="${product}"][data-farming-mode="quantity"]`).count(),1);}
      await host.locator('[data-layer]').selectOption('farming-all');await ready(region);
