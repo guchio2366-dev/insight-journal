@@ -41,6 +41,10 @@ jobs:
             sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
           fi
           test -n "$(fc-list ':lang=ja' family)"
+          if ! command -v pdftotext >/dev/null || ! command -v pdftoppm >/dev/null; then
+            sudo apt-get update -o APT::Update::Error-Mode=any
+            sudo apt-get install --yes --no-install-recommends poppler-utils
+          fi
       - name: Read original culture sources for review
         run: python3 scripts/verify-latin-culture-sources.py
         env:
