@@ -1,6 +1,8 @@
 /** Prepare source-joined CSD densities; counts are never spatially allocated. */
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
+import {execFile} from 'node:child_process';
+import {promisify} from 'node:util';
 import {gzipSync,brotliCompressSync,constants} from 'node:zlib';
 import path from 'node:path';
 import {readZipEntries,inverseCanadaLambert,signedRingArea,pointInRings,simplifyPolygonTopology,validatePolygonTopology} from './lib/canada-geography.mjs';
@@ -35,8 +37,9 @@ function polygonGroups(rings){
 const transform=p=>inverseCanadaLambert(p).map(v=>Math.round(v*1e7)/1e7);
 async function originalFeature(id,index){
  const url='https://geo.statcan.gc.ca/geo_wa/rest/services/2021/Digital_boundary_files/MapServer/9/query?'+new URLSearchParams({where:'1=1',outFields:'CSDUID,CSDNAME,PRUID',returnGeometry:'true',outSR:'3347',f:'json',orderByFields:'OBJECTID',resultOffset:String(index),resultRecordCount:'1'});
- const response=await fetch(url,{signal:AbortSignal.timeout(45000)});if(!response.ok)throw Error('Original CSD '+id+' HTTP '+response.status);
- const bytes=Buffer.from(await response.arrayBuffer()),parsed=JSON.parse(bytes);if(parsed.features?.length!==1||parsed.features[0].attributes.CSDUID!==id)throw Error('Original CSD mismatch '+id);
+ const target=path.join(source,'csd-original-'+id+'.json');
+ await promisify(execFile)('python3',['-c','import sys,urllib.request; response=urllib.request.urlopen(sys.argv[1],timeout=45); data=response.read(); open(sys.argv[2],"wb").write(data)',url,target]);
+ const bytes=await readFile(target),parsed=JSON.parse(bytes);if(parsed.features?.length!==1||parsed.features[0].attributes.CSDUID!==id)throw Error('Original CSD mismatch '+id);
  await writeFile(path.join(source,'csd-original-'+id+'.json'),bytes);sourceCorrections.push({id,url,sha256:hash(bytes),bytes:bytes.length});return parsed.features[0];
 }
 const features=[];
@@ -45,7 +48,7 @@ for(const [sourceIndex,sourceFeature]of officialGeometry.features.entries()){
  const id=String(f.attributes.CSDUID),rings=f.geometry?.rings;
  if(!counts.has(id)||!Array.isArray(rings)||!rings.length)throw Error('Unjoined/invalid official CSD '+id);
  let groups;try{groups=polygonGroups(rings);if(groups.some(g=>{const report=validatePolygonTopology(g.map(i=>rings[i]));return Object.keys(report.counts).some(k=>k!=='self-touch');}))throw Error('Generalized source topology');}
- catch{f=await originalFeature(id,sourceIndex);groups=polygonGroups(f.geometry.rings);}
+ catch(error){console.log('CANADA_REVIEW_TOPOLOGY_SOURCE '+JSON.stringify({id,index:sourceIndex,error:error.message,rings:rings.length,vertices:rings.reduce((n,r)=>n+r.length,0),areas:rings.slice(0,6).map(signedRingArea)}));f=await originalFeature(id,sourceIndex);groups=polygonGroups(f.geometry.rings);}
  const chosen=groups.map(indices=>simplifyPolygonTopology(indices.map(index=>f.geometry.rings[index]),250,{retryTolerances:[100,25],transform,transformOriginal:p=>inverseCanadaLambert(p)}));
  const coordinates=chosen.map(choice=>choice.outputRings);diagnostics.push({id,polygons:chosen.length,sourceVertices:f.geometry.rings.reduce((n,r)=>n+r.length,0),displayVertices:coordinates.flat().reduce((n,r)=>n+r.length,0),nativeFallbackPolygons:chosen.filter(c=>c.fallback).length,sourceIssues:chosen.flatMap(c=>Object.keys(c.source.counts)),displayIssues:chosen.flatMap(c=>Object.keys(c.output.counts))});
  features.push({type:'Feature',id,properties:{name:counts.get(id).name},geometry:coordinates.length===1?{type:'Polygon',coordinates:coordinates[0]}:{type:'MultiPolygon',coordinates}});
