@@ -54,6 +54,18 @@ async function originalFeature(id,index){
    sourceCorrections.push({id,url:page.url,sha256:page.sha256,bytes:page.bytes});return feature;
   }catch(error){console.log('CANADA_REVIEW_ORIGINAL_PAGE '+JSON.stringify({id,offset,count,status:'unavailable',error:error.message.split('\n')[0]}));}
  }
+ for(const generalizationMetres of [0,25,1]){
+  const parameters={where:"CSDUID='"+id+"'",outFields:'CSDUID,CSDNAME,PRUID',returnGeometry:'true',outSR:'3347',f:'json'};
+  if(generalizationMetres)parameters.maxAllowableOffset=String(generalizationMetres);
+  const url='https://geo.statcan.gc.ca/geo_wa/rest/services/2021/Digital_boundary_files/MapServer/9/query?'+new URLSearchParams(parameters),target=path.join(source,'csd-exact-'+id+'-'+generalizationMetres+'.json');
+  try{
+   await promisify(execFile)('python3',['-c','import sys,urllib.request; response=urllib.request.urlopen(sys.argv[1],timeout=45); open(sys.argv[2],"wb").write(response.read())',url,target]);
+   const bytes=await readFile(target),parsed=JSON.parse(bytes),feature=parsed.features?.find(f=>String(f.attributes.CSDUID)===id);
+   if(!feature?.geometry?.rings?.length)throw Error('Exact CSD source mismatch');
+   polygonGroups(feature.geometry.rings);
+   sourceCorrections.push({id,url,sha256:hash(bytes),bytes:bytes.length,generalizationMetres});return feature;
+  }catch(error){console.log('CANADA_REVIEW_EXACT_SOURCE '+JSON.stringify({id,generalizationMetres,status:'unavailable',error:error.message.split('\n')[0]}));}
+ }
  throw Error('Original official CSD unavailable '+id);
 }
 const features=[];
@@ -61,7 +73,7 @@ for(const [sourceIndex,sourceFeature]of officialGeometry.features.entries()){
  let f=sourceFeature;
  const id=String(f.attributes.CSDUID),rings=f.geometry?.rings;
  if(!counts.has(id)||!Array.isArray(rings)||!rings.length)throw Error('Unjoined/invalid official CSD '+id);
- let groups;try{groups=polygonGroups(rings);if(groups.some(g=>{const report=validatePolygonTopology(g.map(i=>rings[i]));return Object.keys(report.counts).some(k=>k!=='self-touch');}))throw Error('Generalized source topology');}
+ let groups;try{groups=polygonGroups(rings);if(groups.some(g=>{const report=validatePolygonTopology(g.map(i=>rings[i]));return Object.keys(report.counts).some(k=>!['self-touch','outer-hole-touch','hole-hole-touch'].includes(k));}))throw Error('Generalized source topology');}
  catch(error){console.log('CANADA_REVIEW_TOPOLOGY_SOURCE '+JSON.stringify({id,index:sourceIndex,error:error.message,rings:rings.length,vertices:rings.reduce((n,r)=>n+r.length,0),areas:rings.slice(0,6).map(signedRingArea)}));f=await originalFeature(id,sourceIndex);groups=polygonGroups(f.geometry.rings);}
  const chosen=groups.map(indices=>simplifyPolygonTopology(indices.map(index=>f.geometry.rings[index]),250,{retryTolerances:[100,25],transform,transformOriginal:p=>inverseCanadaLambert(p)}));
  const coordinates=chosen.map(choice=>choice.outputRings);diagnostics.push({id,polygons:chosen.length,sourceVertices:f.geometry.rings.reduce((n,r)=>n+r.length,0),displayVertices:coordinates.flat().reduce((n,r)=>n+r.length,0),nativeFallbackPolygons:chosen.filter(c=>c.fallback).length,sourceIssues:chosen.flatMap(c=>Object.keys(c.source.counts)),displayIssues:chosen.flatMap(c=>Object.keys(c.output.counts))});
