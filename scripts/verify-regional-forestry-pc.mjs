@@ -32,7 +32,7 @@ try{
    if(region==='russia')await page.waitForFunction(()=>document.querySelector('[data-regional-forestry]')?.dataset.forestRasterStatus==='ready');
    assert.equal(await page.locator('[data-forest-raster]').count(),region==='russia'?1:0);
    assert.equal(await page.locator('select').count(),0);
-   const references=region==='russia'?2:region==='oceania'?1:0;assert.equal(await page.locator('[data-forest-reference]').count(),references);
+   const references=['africa','russia'].includes(region)?2:region==='oceania'?1:0;assert.equal(await page.locator('[data-forest-reference]').count(),references);
    const config=await page.locator('[data-forest-config]').evaluate(element=>JSON.parse(element.textContent));
    const map=page.locator('[data-forest-map]'),camera=await map.getAttribute('viewBox'),locators=await page.locator('svg [data-forest-example]').count();
    const measureLayout=()=>page.evaluate(region=>{
@@ -70,7 +70,7 @@ try{
    const assertFirstViewport=measure=>{assertLayout(measure);assert.deepEqual(measure.scroll,{x:0,y:0});assert.ok(measure.news.x+measure.news.width<=measure.map.x, 'news remains left of map');if(region!=='africa')assert.ok(measure.map.y<viewport.height/3,'map starts in upper third');for(const box of [measure.news,measure.map,measure.reading,measure.legend,...measure.markers]){assert.ok(box.y>=0);assert.ok(box.y+box.height<=viewport.height+2,'initial map, explanation, legend and all region labels are visible without page scroll');}};
    const measure=await measureLayout();report.currentViewport={region,phase:'overview',measure};assertFirstViewport(measure);
    const shot=async(suffix,fullPage=true)=>{const name=`${region}-${viewport.width}-${suffix}.png`,bytes=await page.screenshot({path:path.join(output,name),animations:'disabled',fullPage});return {file:name,fullPage,scroll:await page.evaluate(()=>({x:scrollX,y:scrollY})),imagePixels:{width:bytes.readUInt32BE(16),height:bytes.readUInt32BE(20)},sha256:crypto.createHash('sha256').update(bytes).digest('hex')};};
-   const wholeMissing=['africa','latin-america'].includes(region),landFills=await page.locator('[data-forest-land] path').evaluateAll(paths=>paths.map(path=>path.getAttribute('fill')));assert.ok(landFills.length>0);assert.ok(landFills.every(fill=>wholeMissing?fill==='#f1eee5':fill===`url(#forest-missing-${region})`));if(wholeMissing){assert.match(await page.locator('.forest-map-heading').innerText(),/全域の森林被覆面：未取得/);assert.match(await page.locator('[data-forest-map-note]').innerText(),/中立色は森林の有無を示しません/);}
+   const wholeMissing=region==='latin-america',landFills=await page.locator('[data-forest-land] path').evaluateAll(paths=>paths.map(path=>path.getAttribute('fill')));assert.ok(landFills.length>0);assert.ok(landFills.every(fill=>wholeMissing?fill==='#f1eee5':fill===`url(#forest-missing-${region})`));if(wholeMissing){assert.match(await page.locator('.forest-map-heading').innerText(),/全域の森林被覆面：未取得/);assert.match(await page.locator('[data-forest-map-note]').innerText(),/中立色は森林の有無を示しません/);}
    const initialViewport=await shot('overview-viewport',false),initial=await shot('overview');
    if(region==='africa')for(const example of config.reading.examples)await page.locator(`svg [data-forest-example="${example.id}"] circle`).click({trial:true});
    // Select an already visible map marker, so the selected viewport also needs

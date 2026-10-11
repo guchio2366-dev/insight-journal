@@ -6,7 +6,6 @@ import {withBase} from '../lib/urls.ts';
 import {africaForestryReading} from '../data/atlas/africa-forestry-reading.ts';
 import {agricultureContextOverview,agricultureProductContext,agricultureContextPeriodNote} from '../data/atlas/africa-agriculture-context.ts';
 import {africaAgricultureReading} from '../data/atlas/africa-agriculture-reading.ts';
-import {africaCultureGuideSources} from '../data/atlas/africa-culture-guide.ts';
 import {africaRivers,africaRiverById,africaRiverSelectedColor} from '../data/atlas/africa-river-reading.ts';
 import {canonicalRiver} from '../data/atlas/africa-atlas.ts';
 import {createAfricaLayerRenderer,africaActualLayerKey,africaCommodityColor,type AfricaLayerView} from './atlas-africa-layers.ts';
@@ -14,6 +13,7 @@ import regionalStatistics from '../data/atlas/africa-regional-statistics.json' w
 import {africaBasinReadings,africaNaturalSources,africaNaturalRangeNote} from '../data/atlas/africa-natural-labels.ts';
 import {africaReligionOverview} from '../data/atlas/africa-religion-overview.ts';
 import {africaLanguageOverview} from '../data/atlas/africa-language-overview.ts';
+import {africaEthnicityEvidence,ethnicityRegionComposition,ethnicityRegionNames} from '../data/atlas/africa-ethnicity-evidence.ts';
 import {africaClimateCityById,africaClimateCityCoverage} from '../data/atlas/africa-climate-cities.ts';
 
 export function initializeAfricaAtlas() {
@@ -212,6 +212,7 @@ export function initializeAfricaAtlas() {
  }
  function renderActualReading(){
   root!.querySelector('[data-africa-culture-source]')?.remove();
+  root!.querySelector('[data-africa-ethnicity-evidence-reading]')?.remove();
   query<HTMLElement>('[data-africa-layer-scope]').hidden=state.field==='population'&&actual?.key==='distribution';
   const keys=query<HTMLElement>('[data-africa-actual-key]'),selection=query<HTMLElement>('[data-africa-layer-selection]');
   keys.hidden=!actual?.ready||!!actual.guide;selection.hidden=!actual||!!actual.guide;query<HTMLElement>('[data-africa-statistics-key]').hidden=!!actual&&!state.context;
@@ -237,7 +238,20 @@ export function initializeAfricaAtlas() {
    if(!actual.sourceUrl){source.hidden=false;source.href=agriculture.source;source.textContent=agriculture.sourceLabel;}
    query<HTMLElement>('[data-theme-details]').append(make('p',agriculture.scope),make('p',state.context?agriculture.reading:agriculture.compareText));
   }
-  if(actual.guide){query<HTMLElement>('.africa-kicker').textContent=state.place?`選択国：${countries.find(c=>c.code===state.place)?.name} · 資料案内（分布は未配信）`:'資料案内（分布は未配信）';const additional=africaCultureGuideSources.find(row=>row.url!==actual.sourceUrl)!;const link=make('a',additional.label) as HTMLAnchorElement;link.href=additional.url;link.className='africa-theme-source';link.dataset.africaCultureSource='';source.after(link);const compare=query<HTMLButtonElement>('[data-theme-comparison]');compare.hidden=true;compare.disabled=true;query<HTMLElement>('[data-theme-return]').hidden=true;text('[data-metric-title]',actual.title);text('[data-period]',actual.period);text('[data-unit]',actual.unit);text('#africa-svg-title',`${actual.title}・国境の参照図`);return;}
+  if(actual.guide){
+   query<HTMLElement>('.africa-kicker').textContent='ガーナの限定事例 · 全域の民族資料は未取得';
+   const compare=query<HTMLButtonElement>('[data-theme-comparison]');compare.hidden=true;compare.disabled=true;query<HTMLElement>('[data-theme-return]').hidden=true;text('[data-metric-title]',actual.title);text('[data-period]',actual.period);text('[data-unit]',actual.unit);text('#africa-svg-title',`${actual.title}・資料の対象国を示す枠`);
+   const evidence=africaEthnicityEvidence,section=make('section');section.className='africa-ethnicity-evidence';section.dataset.africaEthnicityEvidenceReading='GHA';section.setAttribute('aria-label','ガーナ2021年国勢調査の民族構成');
+   if(state.place&&state.place!=='GHA')section.append(make('p',`${countries.find(row=>row.code===state.place)?.name}の民族構成は未取得です。以下の数値はガーナだけの公表事例です。`));
+   section.append(make('p',`${evidence.denominatorLabel}。全住民${evidence.wholeResidentPopulation.toLocaleString('ja-JP')}人とは対象が異なります。`));
+   const national=make('table');national.dataset.africaEthnicityNational='';national.append(make('caption','9大分類の構成（原表対象に対する割合）'));const nationalHead=make('thead'),headRow=make('tr');headRow.append(make('th','分類'),make('th','構成比'),make('th','人数'));nationalHead.append(headRow);const nationalBody=make('tbody');
+   for(const group of evidence.groups){const row=make('tr');row.dataset.africaEthnicityGroup=group.id;const name=make('th',group.label);name.setAttribute('scope','row');row.append(name,make('td',`${group.publishedPercent.toFixed(1)}%`),make('td',group.national.toLocaleString('ja-JP')));nationalBody.append(row);}national.append(nationalHead,nationalBody);section.append(national);
+   const regional=make('table');regional.dataset.africaEthnicityRegions='';regional.append(make('caption','16州ごとの構成の違い'));const regionalHead=make('thead'),regionalHeadRow=make('tr');regionalHeadRow.append(make('th','州'),make('th','最多の分類'),make('th','州内比'));regionalHead.append(regionalHeadRow);const regionalBody=make('tbody');
+   for(const region of evidence.regions){const largest=ethnicityRegionComposition(region)[0],row=make('tr');row.dataset.africaEthnicityRegion=region.name;const name=make('th',ethnicityRegionNames[region.name]);name.setAttribute('scope','row');row.append(name,make('td',largest.label),make('td',`${largest.share.toFixed(1)}%`));regionalBody.append(row);}regional.append(regionalHead,regionalBody);section.append(regional,make('p','「最多」は過半数とは限りません。同じ州にも複数の集団が暮らし、州の枠を民族の居住境界とみなすことはできません。'));
+   const full=make('details');full.append(make('summary','各州の9分類すべてを見る'));
+   for(const region of evidence.regions){const table=make('table');table.append(make('caption',`${ethnicityRegionNames[region.name]}（${region.name}）：原表対象${region.total.toLocaleString('ja-JP')}人`));const body=make('tbody');for(const group of ethnicityRegionComposition(region)){const row=make('tr');row.dataset.africaEthnicityRegionalGroup=`${region.name}:${group.id}`;const name=make('th',group.label);name.setAttribute('scope','row');row.append(name,make('td',`${group.share.toFixed(1)}%`),make('td',group.count.toLocaleString('ja-JP')));body.append(row);}table.append(body);full.append(table);}section.append(full);
+   query<HTMLElement>('[data-theme-takeaway-detail]').before(section);return;
+  }
   if(actual.key==='water-rain'){
    text('[data-theme-takeaway]','サハラ・ナミブは少雨、ギニア湾岸・コンゴ盆地とマダガスカル東岸は多雨です。青色は年間降水量で、250mmごとの線が雨の増減を示します。');
    text('[data-theme-takeaway-detail]','赤道付近では湿った空気の上昇が雨をもたらし、亜熱帯の下降気流と西岸の寒流は乾燥に関わります。高地の風上側では雨が増え、風下側では減ります。南北で雨季の季節も異なります。1991–2020年の月別平年値12か月の合計です。');

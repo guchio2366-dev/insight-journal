@@ -18,7 +18,7 @@ test('region coverage is existing geography; blocked datasets have no substitute
   assert.ok(reading.examples.length>=2&&reading.examples.length<=4);
   const ids=new Set();
   for(const example of reading.examples){assert.ok(!ids.has(example.id));ids.add(example.id);assert.equal(example.point.length,2);assert.ok(example.sources.every(source=>source.url.startsWith('https://')&&source.period));const [x,y]=library.projectForestry(region,example.point),frame=library.forestryFrame(region);assert.ok(x>=0&&x<=frame.width&&y>=0&&y<=frame.height);}
-  if(region!=='russia'){assert.equal(library.forestryRaster(region),null);assert.equal(availability.regions[region].coverage,region==='oceania'?'partial-JRC-2020-reference-only':'not-acquired');assert.equal(availability.regions[region].treeClass,null);assert.equal(availability.regions[region].year,null);}
+  if(region!=='russia'){assert.equal(library.forestryRaster(region),null);assert.equal(availability.regions[region].coverage,['africa','oceania'].includes(region)?'partial-JRC-2020-reference-only':'not-acquired');assert.equal(availability.regions[region].treeClass,null);assert.equal(availability.regions[region].year,null);}
  }
  assert.match(availability.accessFailure,/CONNECT proxy returned 403/);
 });
@@ -48,9 +48,9 @@ test('date-line normalization is consistent for Russia and Oceania',()=>{
 
 test('saved JRC WMS references retain their source coordinates and do not fill unclassified pixels',async()=>{
  const manifest=JSON.parse(fs.readFileSync('public/assets/atlas/asia-farming-v1/manifest.json'));
- assert.equal(library.forestryReferences('africa').length,0);assert.equal(library.forestryReferences('latin-america').length,0);
- for(const region of ['oceania','russia'])for(const reference of library.forestryReferences(region)){
-  const source=manifest.regions[reference.id].layers.find(layer=>layer.id==='forest');
+ assert.equal(library.forestryReferences('africa').length,2);assert.equal(library.forestryReferences('latin-america').length,0);
+ for(const region of ['africa','oceania','russia'])for(const reference of library.forestryReferences(region)){
+  const source=reference.id==='west-asia'?{year:2020,query:null,method:'Unmodified publisher-rendered',imageCoordinates:[[23,45],[64,45],[64,10],[23,10]]}:manifest.regions[reference.id].layers.find(layer=>layer.id==='forest');
   assert.equal(source.year,2020);assert.equal(source.query,null);assert.match(source.method,/Unmodified publisher-rendered/);
   const [left,top]=library.projectForestry(region,source.imageCoordinates[0]),[right,bottom]=library.projectForestry(region,source.imageCoordinates[2]);
   assert.deepEqual([reference.x,reference.y,reference.width,reference.height],[left,top,right-left,bottom-top]);

@@ -34,3 +34,12 @@ test('production-zone outlines keep disjoint source components and holes without
  const disconnected=Array.from({length:100},(_,i)=>[i*2,0]);const d=africaProductionZonePath(disconnected,[-27,-200,64,39]);assert.equal((d.match(/M/g)||[]).length,100);assert.equal((d.match(/Z/g)||[]).length,100);
  const ring=[];for(let row=0;row<3;row++)for(let col=0;col<3;col++)if(row!==1||col!==1)ring.push([row,col]);assert.equal((africaProductionZonePath(ring,[-27,-36,64,39]).match(/M/g)||[]).length,2);
 });
+
+test('additional World rows retain the identical QCL archive and do not manufacture regional shares',()=>{
+ const europe=JSON.parse(readFileSync(new URL('public/assets/atlas/europe/farming-statistics-v1/statistics.json',root),'utf8'));
+ assert.equal(europe.sources.find(x=>x.id==='QCL').archive.sha256,stats.source.archiveSha256);
+ for(const [id,metric]of [['maize','maize-production'],['wheat','wheat-production'],['rice','rice-production'],['sheep-meat','sheep-meat']])for(const rows of Object.values(stats.regions)){
+  const row=rows.find(x=>x.id===id),source=europe.world.observations.find(x=>x[0]===metric&&x[1]===2024);
+  assert.equal(row.world.rawValue,source[2]);assert.equal(row.world.unit,source[3]);assert.equal(row.world.flag,source[4]);assert.equal(row.world.areaCode,'5000');assert.equal(row.regional,null);assert.equal(row.share,null);
+ }
+});

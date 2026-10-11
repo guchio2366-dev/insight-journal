@@ -2,12 +2,12 @@ import {africaBeverageBelts,africaBeverageLabels,africaBeverageLinks,africaBever
 import {withBase} from '../lib/urls.ts';
 import {projectAfrica,africaWidth,africaHeight} from '../lib/atlas-africa-geometry.ts';
 import {africaAgriFocusedLayer,africaAgriVisibleLayers,countries,type State} from '../data/atlas/africa-atlas.ts';
-import {africaCultureGuides,africaCultureGuideReason} from '../data/atlas/africa-culture-guide.ts';
 import {africaRiverForFeature,africaRiverSelectedColor} from '../data/atlas/africa-river-reading.ts';
 import neighbours from '../data/atlas/africa-neighbours.json' with {type:'json'};
 import {africaClimateCities} from '../data/atlas/africa-climate-cities.ts';
 import {africaReligionRows,africaReligionGroups,africaReligionOverview} from '../data/atlas/africa-religion-overview.ts';
 import {africaLanguageAsset,africaLanguageFamilies,africaLanguageOverview} from '../data/atlas/africa-language-overview.ts';
+import {africaEthnicityEvidence} from '../data/atlas/africa-ethnicity-evidence.ts';
 import {africaTerrainLabels,africaRiverLabels,africaSeaLabels,africaCurrentLabels,africaWindLabels,africaTerrainRanges} from '../data/atlas/africa-natural-labels.ts';
 
 type Row=Record<string,any>;
@@ -230,7 +230,18 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
    return {key,ready:religion||!!language?.value,loading:!!language?.promise,error:language?.error??'',title:overview.title,period:religion?'2020年（2025公表）':'Glottolog 5.3（2026）',unit:religion?'国別構成':'言語の記録位置',scope:overview.scope,method:overview.attribution,sourceUrl:overview.source.url,sourceLabel:overview.source.label,legend,takeaway:overview.reading,description:overview.reading};
   }
   const outlineSelection=['climate','terrain','elevation','distribution','water-rain'].includes(key);
-  if(key==='ethnicity'){const guide=africaCultureGuides[key];group.replaceChildren();lastPaint='';return {key,guide:true,ready:true,loading:false,error:'',title:guide.title,period:'2021年公開版',unit:'資料案内（分布は未配信）',scope:guide.scope,method:africaCultureGuideReason,sourceUrl:guide.source.url,sourceLabel:guide.source.label,legend:[],takeaway:guide.description,description:africaCultureGuideReason};}
+  if(key==='ethnicity'){
+   const evidence=africaEthnicityEvidence;group.replaceChildren();lastPaint='';
+   const original=root.querySelector<SVGPathElement>('[data-country-path="GHA"]');
+   if(original)group.append(svg('path',{d:original.getAttribute('d')??'',fill:'none',stroke:'#365b72','stroke-width':2,'stroke-dasharray':'5 3','vector-effect':'non-scaling-stroke','pointer-events':'none','data-africa-ethnicity-source-country':'GHA'}));
+   const map=group.ownerSVGElement,box=map?.getBoundingClientRect(),viewport=(map?.getAttribute('viewBox')??`0 0 ${africaWidth} ${africaHeight}`).split(/[ ,]+/).map(Number),scale=Math.max(viewport[2]/(box?.width||700),viewport[3]/(box?.height||580));
+   const country=countries.find(row=>row.code==='GHA')!,[x,y]=projectAfrica(country.point);
+   if(x>=viewport[0]&&x<=viewport[0]+viewport[2]&&y>=viewport[1]&&y<=viewport[1]+viewport[3]){
+    const node=svg('text',{x:x+12*scale,y:y-12*scale,'font-size':14*scale,'font-weight':750,fill:'#365b72',stroke:'#fffdf8','stroke-width':3*scale,'paint-order':'stroke','pointer-events':'none','data-africa-ethnicity-source-label':'GHA'});node.textContent='ガーナ：2021国勢調査';
+    const line=svg('tspan',{x:x+12*scale,dy:17*scale,'font-size':12*scale,'font-weight':500});line.textContent='16州の構成・9大分類';node.append(line);group.append(node);
+   }
+   return {key,guide:true,ready:true,loading:false,error:'',title:evidence.title,period:'2021年国勢調査',unit:'限定した州別の構成',scope:evidence.scope,method:evidence.method,sourceUrl:evidence.source.url,sourceLabel:evidence.source.label,legend:[],takeaway:evidence.reading,description:evidence.limits.join(' ')};
+  }
   if(!config||state.view==='statistics'){group.replaceChildren();lastPaint='';return null;}
   const manifestResult=request(config.base+'manifest.json');
   const empty: AfricaLayerView={key,ready:false,loading:!!manifestResult.promise,error:manifestResult.error??'',title:({climate:'気候区分',terrain:'地形の起伏',elevation:'標高',ethnicity:'掲載集団の居住範囲',religion:'掲載集団の宗教的特徴',distribution:'人口の格子分布','water-rain':'降水量の分布','water-river':'河川・湖の中心線','water-basin':'河川の流域'} as Row)[key]??key,period:'',unit:'',scope:'分布データを読み込んでいます。国別統計は下の比較欄で確認できます。',method:'',sourceUrl:'',sourceLabel:'',legend:[],takeaway:'',description:''};

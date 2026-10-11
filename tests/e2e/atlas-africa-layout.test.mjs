@@ -74,7 +74,7 @@ test('population data status follows the tabs and distinguishes density estimate
   assert.equal(q('[data-africa-layer-scope]').hidden,true,'the same explanation must not repeat below the legend');
   assert.equal(root.querySelectorAll('[data-africa-layer-class]').length,7,'all original density classes remain available');
   navigateTabs(context,'data-africa-topic',[['ArrowRight','ethnicity']]);
-  assert.match(status.textContent,/2021版.*この画面に分布図はありません/);assert.equal(status.previousElementSibling,nav);
+  assert.match(status.textContent,/2021年.*ガーナ.*全域は未取得/);assert.equal(status.previousElementSibling,nav);
   navigateTabs(context,'data-africa-topic',[['ArrowRight','religion']]);
   assert.match(status.textContent,/Pew.*国別/);assert.equal(root.querySelectorAll('[data-africa-religion-country]:not([data-africa-religion-mixed])').length,55);
   navigateTabs(context,'data-africa-topic',[['Home','distribution']]);

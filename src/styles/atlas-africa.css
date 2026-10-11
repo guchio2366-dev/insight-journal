@@ -652,3 +652,10 @@
 }
 
 .africa-atlas[data-field=nature]:not([data-topic=climate]) .africa-ocean{display:none}
+.africa-ethnicity-evidence{margin:.7rem 0;font-size:.84rem}
+.africa-ethnicity-evidence table{width:100%;border-collapse:collapse;margin:.8rem 0;table-layout:auto}
+.africa-ethnicity-evidence caption{text-align:left;font-weight:750;padding:.4rem 0}
+.africa-ethnicity-evidence th,.africa-ethnicity-evidence td{padding:.35rem .25rem;border-bottom:1px solid #d9dfd7;text-align:left;overflow-wrap:anywhere}
+.africa-ethnicity-evidence td:last-child{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+@media(min-width:960px){.africa-atlas[data-field=population][data-topic=ethnicity] .africa-detail{height:var(--africa-map-height,660px);max-height:var(--africa-map-height,660px);overflow-y:auto;scrollbar-gutter:stable}}
