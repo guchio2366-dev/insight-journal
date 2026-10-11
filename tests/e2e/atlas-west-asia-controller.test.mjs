@@ -94,6 +94,56 @@ test('中東の採用10品目は既存分布を保ち、明示操作だけ国別
  }finally{await w.happyDOM.close();}
 });
 
+test('デーツとオリーブの短い凡例は初期分布と国別生産量の切替に一致する',async()=>{
+ const {w,q}=await setup('agriculture');
+ try{
+  for(const id of ['dates','olives']){
+   q(`[data-west-topic-button="${id}"]`).click();
+   await until(()=>q('[data-west-atlas]').dataset.topic===id&&q('[data-west-atlas]').dataset.ready==='true');
+   assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-farm-context]').length,5);
+   assert.match(q('[data-west-short-key]').textContent,/面＝既存5品目の推計分布/);
+   assert.doesNotMatch(q('[data-west-short-key]').textContent,/面＝国別生産量/);
+   q('[data-west-production-map]').click();
+   await until(()=>q('[data-west-atlas]').dataset.ready==='true'&&q('[data-west-scene]').querySelectorAll('[data-west-farm-context]').length===0);
+   assert.equal(new URL(w.location.href).searchParams.get('productionMap'),'country');
+   assert.match(q('[data-west-short-key]').textContent,/面＝国別生産量/);
+   assert.doesNotMatch(q('[data-west-short-key]').textContent,/面＝既存5品目の推計分布/);
+   q('[data-west-production-map]').click();
+   await until(()=>q('[data-west-atlas]').dataset.ready==='true'&&q('[data-west-scene]').querySelectorAll('[data-west-farm-context]').length===5);
+   assert.match(q('[data-west-short-key]').textContent,/面＝既存5品目の推計分布/);
+  }
+ }finally{await w.happyDOM.close();}
+});
+
+test('小麦の需給例と原穀貿易は別対象・別単位と欠測を明示する',async()=>{
+ const {w,q}=await setup('agriculture');
+ try{
+  const fbs=q('[data-west-wheat-fbs]'),tm=q('[data-west-wheat-trade]');
+  assert(fbs&&tm);
+  assert.match(fbs.textContent,/小麦製品群｜19対象.*101,860.*67,742.*22,646.*アルメニア.*オマーン.*トルコ/);
+  assert.match(fbs.textContent,/国内供給.*食用.*飼料/);
+  assert.match(fbs.textContent,/観光客消費は3例とも未掲載/);
+  assert.match(tm.textContent,/原穀小麦.*16報告国.*9報告国/);
+  assert.match(tm.textContent,/再輸出を含み/);
+  assert.match(tm.textContent,/域外輸出先.*その他.*上位5以外/);
+  assert(q('.west-wheat-pie'));
+  assert.doesNotMatch(fbs.textContent+tm.textContent,/カロリーベース自給率.*\d+%/);
+  q('[data-west-topic-button="dates"]').click();
+  await until(()=>q('[data-west-atlas]').dataset.topic==='dates'&&q('[data-west-atlas]').dataset.ready==='true');
+  assert.equal(q('[data-west-wheat-fbs]'),null);
+  assert.equal(q('[data-west-wheat-trade]'),null);
+  assert.match(q('[data-west-food-fbs="dates"]').textContent,/ナツメヤシの実.*5,992.*5,117.*パレスチナは未掲載/);
+  assert.match(q('[data-west-food-trade="dates"]').textContent,/ナツメヤシ｜域外輸出先.*インド.*モロッコ.*302,881.72 t.*13報告国.*22,641.52 t.*14報告国/);
+  q('[data-west-topic-button="olives"]').click();
+  await until(()=>q('[data-west-atlas]').dataset.topic==='olives'&&q('[data-west-atlas]').dataset.ready==='true');
+  assert.match(q('[data-west-food-fbs="olives"]').textContent,/オリーブ（保存品込み）.*4,053.*1,139.*加工（10対象）.*2,195.*オリーブ油.*428.*384/);
+  assert.match(q('[data-west-food-fbs="olives"]').textContent,/飼料・種子の0はヨルダンだけ/);
+  assert.match(q('[data-west-food-trade="olivePreserved"]').textContent,/保存オリーブ｜域外輸出先.*ルーマニア.*スペイン.*141,198.64 t.*12報告国/);
+  assert.match(q('[data-west-food-trade="oliveRaw"]').textContent,/原料オリーブ.*416.57 t.*5報告国/);
+  assert.match(q('[data-west-food-trade="oliveOil"]').textContent,/域外輸出先.*スペイン.*米国.*その他.*14報告国/);
+ }finally{await w.happyDOM.close();}
+});
+
 test('中東の初期気候は地域全体、選んだ都市の雨温図と説明は右に同居し国名hoverを出さない',async()=>{
  const {w,q,select}=await setup('nature');
  try{

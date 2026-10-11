@@ -16,6 +16,8 @@ export const westReadingSources = {
   adnoc: {label:'ADNOC：上部ザクム油田の沖合位置',url:'https://adnoc.ae/en/news-and-media/press-releases/2025/adnoc-deepens-energy-partnerships-with-us-companies',period:'2025年の事業者説明。アブダビの北西約84km。地図の記号は概略位置です。'},
   jubail: {label:'Chevron Phillips Chemical：ジュバイルの石油化学',url:'https://www.cpchem.com/locations/middle-east/al-jubail-saudi-arabia-s-chem',period:'事業者の施設説明。国全体の生産規模や施設の網羅性を表しません。'},
   port: {label:'DP World：ジュベル・アリ港',url:'https://www.dpworld.com/en/ports-terminals/uae/jebel-ali-port',period:'港湾事業者の立地・機能説明。国別TEUをこの港の値には置き換えません。'},
+  borouge: {label:'ADNOC：Borougeルワイス生産拠点',url:'https://www.adnoc.ae/en/our-projects/chemicals-growth-strategy/borouge',period:'事業者の石油化学拠点説明。製油量と樹脂生産能力は別指標です。'},
+  petkim: {label:'Petkim：アリアガの石油化学拠点',url:'https://www.petkim.com.tr/?lang=en',period:'事業者の石油化学拠点説明。国別の製造業生産額ではありません。'},
   auto: {label:'トルコ投資庁：自動車産業',url:'https://www.invest.gov.tr/en/sectors/pages/automotive.aspx',period:'2025年の産業実績・2026年の研究開発の説明を含みます。製造業GDP比は別の指標です。'},
   transit: {label:'EIA：世界の石油輸送の要衝',url:'https://www.eia.gov/international/analysis/special-topics/World_Oil_Transit_Chokepoints',period:'2026年3月3日版・主に2025年前半までの輸送。現在の通航状況は示しません。'},
   suez: {label:'スエズ運河庁：運河の地理',url:'https://www.suezcanal.gov.eg/English/About/SuezCanal/Pages/AboutSuezCanal.aspx',period:'運河庁の地理説明。現在の通航量ではありません。'},
