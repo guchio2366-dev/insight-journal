@@ -14,16 +14,20 @@ permissions:
 jobs:
   review:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
       - run: npm ci --no-audit --no-fund
-      - run: npm run build
+      - name: Check the exact reviewed head
+        env:
+          GITHUB_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: npm run check
       - name: Capture normal US maps
         run: |
           sudo apt-get install -y fonts-noto-cjk

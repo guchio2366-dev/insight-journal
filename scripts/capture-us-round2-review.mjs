@@ -8,12 +8,13 @@ const dir=resolve('dist'),out=resolve('review-artifacts/us-round2');await mkdir(
 const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml'};
 const server=createServer(async(req,res)=>{try{let p=resolve(dir,decodeURIComponent(new URL(req.url,'http://localhost').pathname).replace(/^\/insight-journal\//,''));if(!p.startsWith(dir+sep))throw Error('outside build');if((await stat(p)).isDirectory())p=resolve(p,'index.html');res.writeHead(200,{'Content-Type':mime[extname(p)]??'application/octet-stream'});res.end(await readFile(p));}catch{res.writeHead(404);res.end();}});
 await new Promise(r=>server.listen(0,'127.0.0.1',r));
-const report={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),viewport:{width:1920,height:1080},dpr:1,sandbox:true,captures:[],errors:[],status:'running'};
+const report={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),viewport:{width:1920,height:1080},dpr:1,sandbox:true,captures:[],operations:[],errors:[],status:'running'};
 let browser;
 try{
  browser=await chromium.launch({headless:true,chromiumSandbox:true,executablePath:process.env.REVIEW_CHROME_PATH,ignoreDefaultArgs:['--unsafely-disable-devtools-self-xss-warnings']});
  const context=await browser.newContext({viewport:report.viewport,deviceScaleFactor:1,locale:'ja-JP',reducedMotion:'reduce'}),page=await context.newPage();
  page.on('pageerror',e=>report.errors.push(String(e)));
+ assert.equal(JSON.parse(await readFile(resolve(dir,'_release.json'),'utf8')).commitSha,report.head,'release must identify the reviewed head');
  const cases=[['climate','nature/'],['river','nature/?env=water'],['precipitation','nature/?env=water&waterView=precipitation'],['basins','nature/?env=water&waterView=basins'],['agriculture','agriculture/'],['forest','agriculture/?agriReading=forestry:timber'],['industry','industry/'],['auto','industry/?sector=manufacturing&subsector=auto'],['electronics','industry/?sector=manufacturing&subsector=electronics'],['oil','industry/?sector=resources&subsector=oil-gas'],['density','population/'],['ethnicity','population/?popView=ethnicity'],['religion','population/?popView=religion']];
  for(const [target,origin] of [['build',`http://127.0.0.1:${server.address().port}`],['production','https://guchio2366-dev.github.io']]){
   for(const [name,path] of cases){
@@ -35,6 +36,35 @@ try{
    report.captures.push({target,name,url:page.url(),frame,dpr:await page.evaluate(()=>devicePixelRatio),render:await page.locator('[data-atlas-explorer]').getAttribute('data-render-state')});
   }
  }
+ const origin=`http://127.0.0.1:${server.address().port}/insight-journal/atlas/north-america/`;
+ async function ready(){await page.locator('[data-atlas-explorer][data-render-state=ready]').waitFor();await page.evaluate(()=>document.fonts.ready);}
+ async function snapshot(name){await page.screenshot({path:resolve(out,`operation-${name}.jpg`),type:'jpeg',quality:85});report.operations.push({name,url:page.url()});}
+ await page.goto(origin+'nature/',{waitUntil:'networkidle'});await ready();
+ await page.locator('[data-nature-label="city:miami"]').click();
+ assert.equal(await page.locator('#city-climate-heading').textContent(),'マイアミの雨温図');
+ await page.reload({waitUntil:'networkidle'});await ready();assert.equal(await page.locator('#city-climate-heading').textContent(),'マイアミの雨温図');
+ await page.goBack({waitUntil:'networkidle'});await ready();assert.equal(await page.locator('#city-climate-heading').textContent(),'ロサンゼルスの雨温図');await snapshot('city-back-reload');
+ await page.locator('[data-nature-mode="water"]').click();await page.locator('[data-water-view="basins"]').click();
+ await page.locator('[data-water-label="missouri"]').click();assert.match(await page.locator('[data-water-title]').textContent(),/ミズーリ/);
+ assert.equal(await page.locator('[data-water-parent]').isVisible(),true);await page.locator('[data-water-parent]').click();
+ assert.equal(new URL(page.url()).searchParams.get('basin'),'mississippi');
+ await page.goBack({waitUntil:'networkidle'});assert.equal(new URL(page.url()).searchParams.get('basin'),'missouri');
+ await page.reload({waitUntil:'networkidle'});await ready();assert.match(await page.locator('[data-water-title]').textContent(),/ミズーリ/);await snapshot('basin-parent-back-reload');
+ await page.locator('[data-water-view="precipitation"]').click();await page.locator('[data-water-label="1000-1500"]').click();
+ assert.match(await page.locator('[data-water-title]').textContent(),/1,000/);await snapshot('rain-band');
+ await page.goto(origin+'industry/?sector=manufacturing&subsector=auto',{waitUntil:'networkidle'});await ready();
+ assert.equal(await page.locator('[data-industry-markers] [data-industry-place]').count(),4);
+ assert.equal(await page.locator('[data-industry-state-marker]').count(),0);assert.match(await page.locator('[data-industry-economic-legend]').textContent(),/9\/51/);
+ await page.locator('[data-industry-economic-legend] summary').click();assert.equal(await page.locator('[data-industry-state-option]').count(),51);
+ await page.locator('[data-industry-state-option="06"]').click();assert.equal(new URL(page.url()).searchParams.get('industryState'),'06');
+ assert.match(await page.locator('[data-selection-title]').textContent(),/カリフォルニア/);
+ await page.reload({waitUntil:'networkidle'});await ready();assert.match(await page.locator('[data-selection-title]').textContent(),/カリフォルニア/);
+ await page.goBack({waitUntil:'networkidle'});assert.equal(new URL(page.url()).searchParams.get('industryState'),null);await snapshot('auto-state-back-reload');
+ await page.locator('[data-industry-subsector="electronics"]').click();assert.match(await page.locator('[data-industry-economic-legend]').textContent(),/半導体単品ではありません/);
+ await page.locator('[data-industry-region-option="austin-electronics"]').first().click();assert.match(await page.locator('[data-selection-title]').textContent(),/オースティン/);await snapshot('electronics-place');
+ await page.goto(origin+'agriculture/',{waitUntil:'networkidle'});await ready();assert.match(await page.locator('.atlas-quantity-note').textContent(),/生産量を表しません/);
+ await page.locator('[data-crop-select="wheat"]').first().click();await page.reload({waitUntil:'networkidle'});await ready();assert.equal(new URL(page.url()).searchParams.get('crop'),'wheat');await snapshot('agriculture-reload');
+ for(const view of ['ethnicity','religion']){await page.goto(origin+'population/?popView='+view,{waitUntil:'networkidle'});await ready();await page.waitForFunction(()=>/郡のデータ/.test(document.querySelector('[data-pop-status]')?.textContent??''));await page.reload({waitUntil:'networkidle'});await ready();assert.equal(await page.locator('[data-pop-view][aria-pressed=true]').getAttribute('data-pop-view'),view);await snapshot(view+'-reload');}
  assert.deepEqual(report.errors,[]);report.status='passed';
 }catch(error){report.status='failed';report.error=String(error);throw error;}
 finally{await writeFile(resolve(out,'report.json'),JSON.stringify(report,null,2)+'\n');await browser?.close();server.close();}

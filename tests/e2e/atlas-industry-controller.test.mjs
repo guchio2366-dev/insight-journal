@@ -73,7 +73,7 @@ test('重なる地域候補は全件選べ、WebGL失敗でも産業記号と地
  try{
   assert.equal(root.dataset.renderState,'fallback');assert.equal(q('[data-fallback]').hidden,false);
   assert.ok(q('[data-industry-markers]').children.length>0);
-  const cluster=q('[data-industry-markers] [data-industry-overview-state="48"]');assert.ok(cluster);cluster.click();
+  const cluster=q('[data-industry-markers] [data-industry-place="dallas"]');assert.ok(cluster);cluster.click();
   assert.ok(q('[data-selection-candidates]').querySelectorAll('button').length>1);
   q('[data-selection-candidates] button').click();assert.equal(q('[data-selection]').hidden,false);assert.ok(q('[data-selection]').classList.contains('atlas-selection--below'));
   q('[data-industry-sector="services"]').click();q('[data-industry-subsector="finance"]').click();q('[data-industry-region-option="newyork-finance"]').click();
@@ -113,16 +113,16 @@ test('全産業を12行の対比図にまとめ、付加価値・雇用と全区
  }finally{await window.happyDOM.close();}
 });
 
-test('金融の経済規模・欠測・凡例と全産業の固定記号を切り替える',async()=>{
+test('金融の全登録拠点を主図に残し、都市圏規模・欠測は補足で区別する',async()=>{
  const {window,q}=await setup('?sector=services&subsector=finance');
  try{
-  const dots=[...q('[data-industry-markers]').querySelectorAll('.is-economic')];assert.equal(dots.length,2);
+  const dots=[...q('[data-industry-markers]').querySelectorAll('[data-industry-place]')];assert.equal(dots.length,3);
+  assert.deepEqual(dots.map(b=>b.dataset.industryPlace).sort(),['dallas','newyork','sanantonio']);
+  assert.equal(q('[data-industry-markers] .is-economic'),null);
   assert.equal(q('[data-industry-economic-legend]').hidden,false);assert.ok(dots.every(b=>b.querySelector('i').textContent==='金'));
-  const large=dots.find(b=>b.dataset.economicRank==='1'),small=dots.find(b=>b.dataset.economicRank==='2');
-  const ratio=parseFloat(small.querySelector('em').style.width)**2/parseFloat(large.querySelector('em').style.width)**2;
-  // CSSOM serialization rounds subpixel dimensions; the pure function is tested without rounding.
-  assert.ok(Math.abs(ratio-Number(small.dataset.economicValue)/Number(large.dataset.economicValue))<1e-6,`area ratio ${ratio}`);
-  large.click();assert.match(q('.industry-economic-value').textContent,/2都市圏中1位/);
+  assert.equal(q('[data-industry-economic-legend] details').open,false);
+  assert.match(q('[data-industry-economic-legend]').textContent,/全米順位ではありません/);
+  q('[data-industry-markers] [data-industry-place="dallas"]').click();assert.match(q('.industry-economic-value').textContent,/2都市圏中1位/);
   q('[data-industry-region-option="newyork-finance"]').click();assert.match(q('.industry-economic-value').textContent,/比較から除いて/);
   q('[data-industry-sector="all"]').click();assert.equal(q('[data-industry-economic-legend]').hidden,true);assert.equal(q('[data-industry-markers] .is-economic'),null);
   assert.ok([...q('[data-industry-markers]').querySelectorAll('i')].every(i=>i.textContent!=='サ'));
@@ -191,7 +191,8 @@ test('業態総論と構成比を右欄にまとめ、地図直下のインサ�
 test('州の出荷額・秘匿値・選択URLを描画し、都市圏と全分野へ戻れる',async()=>{
  const {window,q}=await setup('?sector=manufacturing&subsector=auto&industryState=26');
  try{
-  assert.ok(q('[data-industry-state-layer]'));
+  assert.equal(q('[data-industry-state-layer]'),null);
+  assert.equal(q('[data-industry-markers]').querySelectorAll('[data-industry-place]').length,4);
   assert.equal(window.document.querySelectorAll('[data-industry-state-option]').length,51);
   assert.match(q('[data-selection-title]').textContent,/ミシガン/);
   assert.match(q('[data-industry-economic-legend]').textContent,/9\/51/);
@@ -231,12 +232,15 @@ test('本文の地名から拠点を選べ、分野変更で選択を解除す�
  }finally{await window.happyDOM.close();}
 });
 
-test('州別の全産業名・上位5円・構成の昇順を保持する',async()=>{
+test('産業名を実資料の各地域に対応させ、上位5に間引かず補足統計を保持する',async()=>{
  const {window,root,q}=await setup();
  try{
-  const nv=q('[data-industry-markers] [data-industry-overview-state="32"]');
-  assert.match(nv.textContent,/ネバダ州/);assert.match(nv.textContent,/金などの鉱物採掘/);assert.match(nv.textContent,/商業・物流/);assert.match(nv.textContent,/観光・娯楽/);
-  assert.ok([...q('[data-industry-markers]').querySelectorAll('i')].every(i=>i.textContent===''));
+  const nv=q('[data-industry-markers] [data-industry-place="nevada"]');
+  assert.match(nv.textContent,/ネバダ州北部/);assert.match(nv.textContent,/金などの鉱物採掘/);
+  assert.match(q('[data-industry-markers] [data-industry-place="reno"]').textContent,/商業・物流/);
+  assert.match(q('[data-industry-markers] [data-industry-place="lasvegas"]').textContent,/観光・娯楽/);
+  assert.equal(q('[data-industry-overview-state]'),null);
+  assert.ok([...q('[data-industry-markers]').querySelectorAll('i')].every(i=>i.textContent.length>0));
   const panels=root.querySelectorAll('[data-industry-national-panel]');
   for(const panel of panels){
    const rows=[...panel.querySelectorAll('li[data-industry-stat-row]')];
@@ -246,11 +250,13 @@ test('州別の全産業名・上位5円・構成の昇順を保持する',async
    if(rows.some(r=>r.dataset.industryStatRow.startsWith('other-')))assert.ok(rows.at(-1).dataset.industryStatRow.startsWith('other-'));
   }
   q('[data-industry-sector="manufacturing"]').click();q('[data-industry-subsector="aerospace"]').click();
-  const circles=()=>[...root.querySelectorAll('[data-industry-state-marker]')];
-  assert.equal(circles().length,5);assert.ok(circles().every(c=>Number(c.dataset.economicRank)<=5));assert.ok(circles().every(c=>c.querySelector('em').textContent==='航'));
+  const places=()=>[...q('[data-industry-markers]').querySelectorAll('[data-industry-place]')];
+  assert.equal(root.querySelectorAll('[data-industry-state-marker]').length,0);
+  assert.deepEqual(places().map(b=>b.dataset.industryPlace).sort(),['fortworth','moseslake','washington']);
+  assert.ok(places().every(c=>c.querySelector('i').textContent==='航'));
   assert.equal(root.querySelectorAll('[data-industry-state-option]').length,51);
-  const other=[...root.querySelectorAll('[data-industry-state-option]')].find(b=>!circles().some(c=>c.dataset.industryStateMarker===b.dataset.industryStateOption));other.click();assert.equal(circles().length,5);
+  q('[data-industry-state-option="06"]').click();assert.equal(places().length,3);
   assert.equal(q('[data-industry-description-panel="manufacturing:aerospace"] .industry-geographic-reading').querySelectorAll('section').length,3);
-  q('[data-industry-sector="all"]').click();assert.equal(q('[data-industry-state-layer]'),null);assert.ok(q('[data-industry-overview-state="32"]'));
+  q('[data-industry-sector="all"]').click();assert.equal(q('[data-industry-state-layer]'),null);assert.ok(q('[data-industry-markers] [data-industry-place="nevada"]'));
  }finally{await window.happyDOM.close();}
 });

@@ -13,7 +13,7 @@ test('fallback picking excludes polygon holes and outside areas',()=>{
 });
 
 import {readFileSync} from 'node:fs';import {gunzipSync,gzipSync} from 'node:zlib';import {createHash} from 'node:crypto';
-import {precipitationBands,riverBasins} from '../../src/data/atlas/water-resources.ts';
+import {usPrecipitationBands as precipitationBands,riverBasins} from '../../src/data/atlas/water-resources.ts';
 const dir='public/assets/atlas/water-v1/';
 const load=name=>JSON.parse(gunzipSync(readFileSync(dir+name+'.geojson.gz')));
 test('water assets preserve selected labels, source probes, closed basins and US scope',()=>{
@@ -29,4 +29,15 @@ test('water assets preserve selected labels, source probes, closed basins and US
  assert.ok(!m.basins.units.colorado.some(x=>x.huc8==='14040200'),'Great Divide excluded');
  for(const [file,record] of Object.entries(m.files))assert.equal(createHash('sha256').update(readFileSync(dir+file)).digest('hex'),record.sha256,file);
  for(const mode of ['precipitation','basins'])assert.ok(readFileSync(dir+mode+'.geojson.gz').length+readFileSync(dir+mode+'-fallback.webp').length<1_000_000,'per-view transfer budget');
+});
+test('青の降水帯と実収録等雨量線の値が一致し、未取得の追加線を捏造しない',()=>{
+ const data=load('precipitation'),m=JSON.parse(readFileSync(dir+'manifest.json'));
+ for(const band of precipitationBands){
+  assert.equal(data.features.find(f=>f.properties.kind==='band'&&f.properties.id===band.id).properties.color,band.color);
+  const n=parseInt(band.color.slice(1),16),r=n>>16,g=(n>>8)&255,b=n&255;assert.ok(b>=g&&g>=r,band.id+' must be blue');
+ }
+ assert.deepEqual([...new Set(data.features.filter(f=>f.properties.kind==='isohyet').map(f=>f.properties.value))].sort((a,b)=>a-b),[250,500,750,1000,1500,2000]);
+ assert.deepEqual(m.processing.displayRevision.unacquiredIsohyetsMm,[1250,1750]);
+ const basins=load('basins');
+ for(const id of ['missouri','ohio']){assert.equal(riverBasins.find(b=>b.id===id).parent,'mississippi');assert.ok(basins.features.some(f=>f.properties.id===id&&f.properties.kind==='basin'));}
 });

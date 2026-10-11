@@ -48,6 +48,7 @@ test('12都市は地図から切り替え、モード・分野を往復しても
   const config=JSON.parse(q('[data-explorer-config]').textContent);
   for(const city of config.climateCities){
    q('[data-nature-label="city:'+city.id+'"]').click();
+   assert.equal(q('#city-climate-heading').textContent,city.nameJa+'の雨温図');
    const panel=q('[data-city-panel="'+city.id+'"]');assert.equal(panel.hidden,false);
    assert.equal(panel.dataset.cityCode,city.koppenCode??'');
    assert.equal(panel.querySelectorAll('.atlas-climate-bar').length,12);

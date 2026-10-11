@@ -10,6 +10,9 @@ export const precipitationBands=[
  {id:'1500-2000',title:'1,500〜2,000mm未満',color:'#378eaa',anchor:[-88.8,30.7],body:'メキシコ湾岸や太平洋側の多雨地域などで見られます。湾岸には暖かい海から湿気が届きます。西岸では湿った空気が山の斜面を上昇して冷え、雨や雪を降らせます。'},
  {id:'gte2000',title:'2,000mm以上',color:'#216782',anchor:[-123.7,47.5],body:'太平洋側の山地など、雨や雪が多く降る地域に見られます。山地に蓄えられた雪は、融雪期に下流へ水を供給します。地元の雨が少ない地域の水源になる場合もあります。'},
 ] as const;
+// Other regions keep their delivered palette; the round-two revision is US only.
+const usBlueColors=['#f0f7ff','#dceaf6','#bfd9ed','#91bfde','#629fc9','#3279ad','#12558a'];
+export const usPrecipitationBands=precipitationBands.map((band,i)=>({...band,color:usBlueColors[i]}));
 export const riverBasins=[
  {id:'mississippi',title:'ミシシッピ川',color:'#c5d6bf',anchor:[-90.5,33.8],body:'ミズーリ川・オハイオ川などの支流を集め、中央部の広い範囲からメキシコ湾へ流れます。地図の外枠は本支流を合わせた範囲で、内側の色の違いは支流域です。',note:'レッド川・アチャファラヤ川の流域は今回の面に含めていません。両水系は下流の分流によってつながっています。',product:'corn'},
  {id:'missouri',title:'ミズーリ川',color:'#b8cbe3',anchor:[-101.5,44.3],parent:'mississippi',body:'ロッキー山脈側からグレートプレーンズを通り、ミシシッピ川へ合流します。ミシシッピ川水系の一部です。上流の積雪・降水と、平原での水利用を結び付けて読めます。',product:'wheat'},

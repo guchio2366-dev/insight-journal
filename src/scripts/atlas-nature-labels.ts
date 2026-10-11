@@ -1,8 +1,8 @@
-import {containedMapBox,layoutNatureLabels,leaderEnd,projectNatureFallback,type Box,type Point} from '../lib/atlas-nature-labels';
+import {containedMapBox,layoutNatureLabels,leaderEnd,projectNatureFallback,type Box,type Point,type ProtectedLine} from '../lib/atlas-nature-labels';
 import {layoutClimateCodes,type ClimateCodeLabel} from '../lib/atlas-climate-code-labels';
 
 type Entry={id:string;name:string;coordinate:[number,number];mode:'climate'|'landform'|'water'|'population'|'precipitation'|'basins'};
-type Callbacks={active:()=>boolean;mode:()=>string;zoom?:()=>number;project:()=>((p:[number,number])=>Point)|null;select:(entry:Entry,trigger:HTMLButtonElement)=>void;placed:()=>void;holder?:HTMLElement;attribute?:string;controls?:string;obstacleSelector?:string;fallbackBox?:(imageBox:Box)=>Box;fallbackProject?:(coordinate:readonly number[],box:Box)=>Point};
+type Callbacks={active:()=>boolean;mode:()=>string;zoom?:()=>number;project:()=>((p:[number,number])=>Point)|null;select:(entry:Entry,trigger:HTMLButtonElement)=>void;placed:()=>void;holder?:HTMLElement;attribute?:string;controls?:string;obstacleSelector?:string;fallbackBox?:(imageBox:Box)=>Box;fallbackProject?:(coordinate:readonly number[],box:Box)=>Point;protectedLines?:(project:(p:[number,number])=>Point)=>ProtectedLine[]};
 
 /** Creates a fixed set of buttons once; only placement and state change. */
 export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Callbacks,codeEntries:ClimateCodeLabel[]=[]){
@@ -63,7 +63,8 @@ export function createNatureLabels(root:HTMLElement,entries:Entry[],callbacks:Ca
     // Population labels can use the letterbox margins while leaders remain
     // anchored to the correctly projected county map, including on small phones.
     const layoutBounds=['water','population'].includes(callbacks.mode())?{left:0,top:0,right:frame.clientWidth,bottom:frame.clientHeight-40}:bounds;
-    const placed=layoutNatureLabels(inputs,layoutBounds,[...obstacles,...reserved]);
+    const protectedLines=callbacks.protectedLines?.(project??(p=>projectNatureFallback(p,bounds)))??[];
+    const placed=layoutNatureLabels(inputs,layoutBounds,[...obstacles,...reserved],protectedLines);
     for(const {entry,button,line,dot} of nodes){
       const box=placed.find(item=>item.id===entry.id);button.hidden=!box;line.style.display=dot.style.display=box?'':'none';
       if(!box)continue;

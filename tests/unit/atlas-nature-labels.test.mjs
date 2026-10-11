@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {containedMapBox,projectNatureFallback,unprojectNatureFallback,layoutNatureLabels,boxesOverlap,leaderEnd} from '../../src/lib/atlas-nature-labels.ts';
+import {containedMapBox,projectNatureFallback,unprojectNatureFallback,layoutNatureLabels,boxesOverlap,leaderEnd,lineIntersectsBox} from '../../src/lib/atlas-nature-labels.ts';
+import {protectedRiverLines} from '../../src/lib/atlas-us-water-labels.ts';
 import {populationFallbackBox,populationFallbackExtent,projectPopulationFallback} from '../../src/lib/atlas-population-projection.ts';
 const cities=JSON.parse(readFileSync('public/assets/atlas/nature-v1/climate-cities.json'));
 const landforms=[['ロッキー山脈',[-109,42]],['アパラチア山脈',[-81,37]],['カスケード山脈',[-121,45.5]],['シエラネバダ山脈',[-119,37]],['コロラド高原',[-110.5,36]],['グレートベースン',[-116.4,39]],['グレートプレーンズ',[-101,40]],['中央低地',[-91,42]],['大西洋岸平野',[-79,34]]];
@@ -49,4 +50,16 @@ test('代替図の余白を除いて座標を往復し、海岸の分類位置�
  }
  assert.equal(unprojectNatureFallback({x:20,y:20},bounds),null);
  assert.equal(unprojectNatureFallback({x:0,y:0},{left:0,right:0,top:0,bottom:0}),null);
+});
+test('主要本支流の元河道を動かさず、名札が本流を覆わない位置へ移る',()=>{
+ const base=JSON.parse(readFileSync('public/assets/atlas/v3/base.geojson')),before=JSON.stringify(base);
+ const bounds={left:0,top:0,right:941,bottom:567};
+ const project=p=>projectNatureFallback(p,bounds),lines=protectedRiverLines(base.features,project);
+ assert.ok(lines.length>100);assert.equal(JSON.stringify(base),before);
+ const inputs=[['ミシシッピ川',[-91,35]],['ミズーリ川',[-97,43]],['オハイオ川',[-83,38]],['中央谷',[-120.2,37.5]],['ハイプレーンズ帯水層',[-101,39]]].map(([id,p])=>({id,anchor:project(p),width:126,height:28}));
+ const placements=layoutNatureLabels(inputs,bounds,[],lines);
+ verify(inputs,placements,bounds,[]);
+ for(const label of placements)assert.ok(!lines.some(line=>lineIntersectsBox(line,label)),label.id+' hides a river');
+ assert.equal(lineIntersectsBox([{x:0,y:0},{x:100,y:100}],{left:40,top:45,right:60,bottom:65}),true);
+ assert.equal(lineIntersectsBox([{x:0,y:0},{x:100,y:0}],{left:40,top:45,right:60,bottom:65}),false);
 });

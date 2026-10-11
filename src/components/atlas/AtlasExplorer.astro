@@ -95,7 +95,7 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
             <button class="atlas-focus-selection" type="button" data-focus-selection hidden>選択地点へ</button><a href="#crop-details" data-selection-link>↓ 作物の詳説へ</a>
           </div>
         </div>
-        <AgricultureCommodityKey crops={cropExplanations} livestock={livestockKinds} active={initialField==='agriculture'} />
+        <AgricultureCommodityKey crops={cropExplanations} livestock={livestockKinds} active={initialField==='agriculture'} scopeNote="面：概略栽培域／畜産の点：集積地域の代表位置。面積・点の大きさは生産量を表しません。" />
         <p class="atlas-context-key" data-land-key hidden={initialField!=='overview'}>地形陰影・河川・湖・州境。自然環境では気候・水・地形・標高を切り替えられます。</p>
         <div class="atlas-water-key" data-water-key hidden></div>
         <div class="atlas-nature-key" data-nature-key hidden={initialField!=='natural'}>
@@ -114,7 +114,7 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
         <div data-agriculture-relations-host hidden={initialField!=='agriculture'}><AgricultureRelations /></div>
         <div class="industry-overview-list" data-industry-overview-list hidden aria-label="州ごとの掲載産業"></div>
         <div class="industry-key" data-industry-key hidden={initialField!=='industry'}>
-          <p data-industry-size-note>点は州の代表位置。州名の下は、公的資料で確認した掲載産業です（州内の全産業・順位ではありません）。</p>
+          <p data-industry-size-note>業種名：出典で確認した集積・活動地域の例。点は都市・州・盆地の代表位置で、工場の正確位置や生産量・全米順位を表しません。</p>
           <div class="industry-economic-legend" data-industry-economic-legend hidden></div>
           <p data-industry-empty hidden>この分野の地域例は未登録です。右欄の説明と下の全国推移を確認できます。</p>
           <details><summary>地域一覧から選ぶ</summary><div class="industry-region-list">{industryRegions.map(r=><button type="button" data-industry-region-option={r.id}>{r.name}<small>{subsectorLabel(r.sector,r.subsector)}</small></button>)}</div></details>

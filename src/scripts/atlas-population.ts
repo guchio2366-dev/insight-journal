@@ -256,7 +256,7 @@ export function createPopulationController(root:HTMLElement,base:string,options:
    if(state.view==='ethnicity')ethnicityNational=data.national;cityDots();
    const unit=state.view==='distribution'?'人口密度（人／km²）':state.view==='ethnicity'?'人種・民族の特徴的な集積（郡別）':religion?'郡内で最大の宗教グループ（adherents、過半数とは限りません）':'共和党 − 民主党（ポイント）';
    el('[data-layer-caption]').textContent=unit;
-   el('[data-pop-map-note]').textContent=religion?'宗教団体が把握したadherentsの最大グループ。過半数や住民全体の構成ではありません。番号は地域解説の参照点です。':state.view==='ethnicity'?'白人以外の区分が20%以上、または5%以上かつ全米割合の1.5倍以上の郡を着色。都市の色点は該当する全区分です。都市名を押すと構成比を確認できます。面積や点の大きさは人数を表しません。':unit+'。面積の大きさは人数・票数の大きさを意味しません。';
+   el('[data-pop-map-note]').textContent=religion?'2020年：宗教団体が把握したadherentsの最大団体群。住民全体の割合や過半数ではなく、未報告は無宗教を意味しません。番号は地域解説の参照点です。':state.view==='ethnicity'?'ACS 2020–2024・全住民が分母。非ヒスパニック白人以外が20%以上、または5%以上かつ全米割合の1.5倍以上の郡を着色。面は該当区分のうち割合最大、都市の複数色点は対応郡集計で該当する全区分。市域の構成比・点の大きさは人数を表しません。':state.view==='distribution'?'ACS 2020–2024の郡人口 ÷ 郡の陸地面積（人／km²）。郡内の平均密度で、市域・都市圏人口とは別の指標です。都市の点は位置の目印で、面積・点の大きさは人口を表しません。':unit+'。面積の大きさは人数・票数の大きさを意味しません。';
    el('[data-pop-status]').textContent=rows.length.toLocaleString()+' 郡のデータ。'+(state.view==='ethnicity'?'ACS 2020–2024。地図は米国本土。':religion?'2020 U.S. Religion Census。報告なし3郡。':'');
    selected();reading();
    const map=options.map();if(!map){fallback();return true;}

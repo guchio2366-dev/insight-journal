@@ -1,4 +1,14 @@
 /* Shared small-laptop frame for the U.S. fields and Mexico agriculture. */
+[data-atlas-explorer] .atlas-quantity-note { flex-basis:100%; font-size:12px; line-height:1.55; color:#425b50; }
+[data-atlas-explorer] .atlas-nature-label[data-label-mode=water] { max-width:126px; min-height:24px; padding:2px 4px; font-size:11px; line-height:14px; background:#fffef4e6; }
+[data-atlas-explorer] [data-water-labels] .atlas-nature-label { min-height:24px; padding:2px 4px; font-size:11px; line-height:14px; }
+@media(min-width:960px) {
+  [data-atlas-explorer][data-field=natural] .atlas-workspace { padding-top:2px; }
+  [data-atlas-explorer][data-field=natural] .atlas-compact-heading { margin-bottom:3px; }
+  [data-atlas-explorer][data-field=natural] .atlas-region-controls { margin-bottom:5px; }
+  [data-atlas-explorer][data-field=natural] .atlas-nature-controls { padding:3px; }
+  [data-atlas-explorer][data-field=natural] .atlas-water-tabs { padding:3px; }
+}
 @media (min-width:960px) and (max-width:1199px) {
   .atlas-desktop-shell:not(.is-reading-news):has(> :is([data-atlas-explorer],[data-mexico-agriculture-atlas]):is([data-field=agriculture],[data-field=natural],[data-field=industry],[data-field=population])) {
     display:grid;

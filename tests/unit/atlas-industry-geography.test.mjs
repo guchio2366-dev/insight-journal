@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {build} from 'esbuild';
-const bundle=await build({stdin:{contents:"export * from './src/data/atlas/industry-geography.ts';export * from './src/data/atlas/industry-regions.ts';export * from './src/data/atlas/industry-reading-sections.ts';export * from './src/data/atlas/industry-catalog.ts';export * from './src/lib/atlas-industry-markers.ts';",resolveDir:process.cwd()},bundle:true,write:false,platform:'node',format:'esm'});
+const bundle=await build({stdin:{contents:"export * from './src/data/atlas/industry-geography.ts';export * from './src/data/atlas/industry-regions.ts';export * from './src/data/atlas/industry-reading-sections.ts';export * from './src/data/atlas/industry-catalog.ts';export * from './src/lib/atlas-industry-markers.ts';export * from './src/scripts/atlas-industry-overview.ts';",resolveDir:process.cwd()},bundle:true,write:false,platform:'node',format:'esm'});
 const d=await import('data:text/javascript;base64,'+Buffer.from(bundle.outputFiles[0].text).toString('base64'));
 test('州一覧に全拠点を一度ずつ含め、採掘・製造と州を混同しない',()=>{
  const groups=d.industryStateGroups(d.industryRegions);
@@ -33,4 +33,11 @@ test('全産業の州ラベルはPC図で重ならず、座標は変更しない
  for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){
   const a=boxes[i],b=boxes[j];assert.ok(a.left+a.width<=b.left||b.left+b.width<=a.left||a.top+a.height<=b.top||b.top+b.height<=a.top,`${a.id}/${b.id} overlap`);
  }
+});
+test('主図は同一地点だけを束ね、異なる地域を州中央へ移さない',()=>{
+ const groups=d.industryPlaceGroups(d.industryRegions);
+ assert.deepEqual(groups.flatMap(g=>g.regions.map(r=>r.id)).sort(),d.industryRegions.map(r=>r.id).sort());
+ for(const g of groups)for(const r of g.regions){assert.equal(g.id,r.placeId);assert.deepEqual(g.coordinates,r.coordinates);}
+ for(const id of ['reno','lasvegas','nevada','dallas','fortworth','houston','austin','texas-oil'])assert.ok(groups.some(g=>g.id===id),id);
+ assert.equal(d.industryPlaceGroups(d.industryRegions.filter(r=>r.subsector==='auto')).length,4);
 });
