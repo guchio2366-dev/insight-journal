@@ -172,7 +172,9 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
     'sc-nepal-hydro':{label:'ネパール・ブータン',members:['sc-nepal-hydro','sc-bhutan-hydro']},
    }:{};
    const clustered=new Set(Object.values(southClusters).flatMap(cluster=>cluster.members.slice(1)));
-   const ordered=state.detail?[...visibleSites.filter(site=>site.id===state.detail),...visibleSites.filter(site=>site.id!==state.detail)]:visibleSites;
+   // Keep one readable label for both industries in the crowded south Indian belt.
+   const priority=config.focusId==='south-asia'&&topic.id==='sc-overview'&&!state.place?['sc-ahmedabad-pharma','sc-bengaluru-it']:[];
+   const ordered=state.detail?[...visibleSites.filter(site=>site.id===state.detail),...visibleSites.filter(site=>site.id!==state.detail)]:[...priority.flatMap(id=>visibleSites.filter(site=>site.id===id)),...visibleSites.filter(site=>!priority.includes(site.id))];
    const occupied:{left:number;top:number;right:number;bottom:number}[]=[];
    const canvas=currentMap.getCanvas().getBoundingClientRect();
    const placements=[{anchor:'left',offset:[12,0],dx:12,dy:-21},{anchor:'right',offset:[-12,0],dx:-162,dy:-21},{anchor:'bottom',offset:[0,-12],dx:-75,dy:-54},{anchor:'top',offset:[0,12],dx:-75,dy:12},{anchor:'top-left',offset:[12,12],dx:12,dy:12},{anchor:'bottom-right',offset:[-12,-12],dx:-162,dy:-54}] as const;

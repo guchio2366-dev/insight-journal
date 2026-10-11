@@ -24,7 +24,7 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
  try{
   browser=await chromium.launch({headless:true,chromiumSandbox:true,...(process.env.REVIEW_CHROME_PATH?{executablePath:process.env.REVIEW_CHROME_PATH}:{})});
   const page=await browser.newPage({viewport:{width:1920,height:1080},deviceScaleFactor:1}),errors=[];
-  const focusedCaptures=new Set(['south-asia-industry','south-asia-industry-selected','south-asia-religion','south-asia-sindh-religion','south-asia-nepal-religion','south-asia-sri-lanka-religion','south-asia-groundwater','south-asia-groundwater-selected','central-asia-groundwater','central-asia-groundwater-selected','central-asia-forest-use']);
+  const focusedCaptures=new Set(['south-asia-industry','south-asia-industry-selected','south-asia-religion','south-asia-nepal-religion','south-asia-sri-lanka-religion']);
   const capture=async name=>{if(process.env.SC_FOCUSED_REVIEW==='1'&&!focusedCaptures.has(name))return;const folder=path.resolve('review-artifacts/south-central-focus');await mkdir(folder,{recursive:true});await page.waitForLoadState('networkidle');await page.evaluate(async()=>{await document.fonts.ready;scrollTo(0,0);await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});await page.screenshot({path:path.join(folder,`${name}.png`),animations:'disabled'});};
   page.on('pageerror',error=>errors.push(error.message));
   for(const [region,expected,selected,city,foreign] of [
@@ -77,6 +77,11 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    if(region==='south-asia'){
     assert.ok(await page.locator('.asia-industry-regional-label.is-compact').count()>0);
     assert.equal(await page.locator('.asia-industry-regional-label[data-industry-site="sc-dhaka-garments"] span').textContent(),'ダッカ・チッタゴン');
+    for(const [id,industryName] of [['sc-ahmedabad-pharma','医薬品'],['sc-bengaluru-it','ITサービス']]){
+     const label=page.locator(`.asia-industry-regional-label[data-industry-site="${id}"]`);
+     assert.equal(await label.evaluate(node=>node.classList.contains('is-compact')),false);
+     assert.match(await label.textContent(),new RegExp(industryName));
+    }
    }
    await capture(`${region}-industry`);
    await page.locator('.asia-industry-regional-label').first().click();
@@ -130,6 +135,10 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    await page.waitForFunction(count=>document.querySelectorAll('.sc-religion-marker').length===count,region==='central-asia'?1:5);
    await page.waitForFunction(count=>document.querySelectorAll('.sc-religion-report-marker:not(.local)').length===count,region==='central-asia'?4:0);
    if(region==='south-asia')await page.waitForFunction(()=>document.querySelectorAll('.sc-religion-local-marker').length===8);
+   if(region==='south-asia'){
+    const collisions=await page.evaluate(()=>['NPL','LKA'].flatMap(code=>{const label=document.querySelector(`.sc-religion-marker[data-religion-country="${code}"] span`)?.getBoundingClientRect();if(!label)return [code+' national label missing'];return [...document.querySelectorAll('.sc-religion-local-marker.is-compact')].filter(dot=>{const box=dot.getBoundingClientRect();return box.left<label.right+2&&box.right>label.left-2&&box.top<label.bottom+2&&box.bottom>label.top-2;}).map(dot=>code+':'+dot.dataset.religionLocal); }));
+    assert.deepEqual(collisions,[]);
+   }
    await capture(`${region}-religion`);
    const markers=await page.locator('.sc-religion-marker').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('aria-label')));
    assert.equal(markers.some(label=>label.includes('カザフスタン')),region==='central-asia');
