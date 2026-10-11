@@ -127,6 +127,10 @@ finally{
  report.finishedAt=new Date().toISOString();await writeFile(resolve(out,'report.json'),JSON.stringify(report,null,2)+'\n');
  await browser?.close();if(server)await new Promise(r=>server.close(r));
  console.log('INTEGRATED_MAP_REPORT '+JSON.stringify(report));
- if(process.env.INTEGRATION_REVIEW_LOG_IMAGES==='1')for(const item of report.images)console.log('INTEGRATED_MAP_IMAGE '+JSON.stringify({...item,base64:(await readFile(resolve(out,item.file))).toString('base64')}));
+ if(process.env.INTEGRATION_REVIEW_LOG_IMAGES==='1')for(const item of report.images){
+  const encoded=(await readFile(resolve(out,item.file))).toString('base64'),parts=Math.ceil(encoded.length/8192);
+  console.log('INTEGRATED_MAP_IMAGE '+JSON.stringify({...item,parts}));
+  for(let index=0;index<parts;index++)console.log('INTEGRATED_MAP_IMAGE_PART '+JSON.stringify({file:item.file,index,parts,data:encoded.slice(index*8192,(index+1)*8192)}));
+ }
  console.log(JSON.stringify({status:report.status,head:report.head,target:report.target,scenes:report.scenes.length,operations:report.operations.length,images:report.images.length,assets:report.assets.length}));
 }
