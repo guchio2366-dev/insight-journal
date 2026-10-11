@@ -74,7 +74,7 @@ test('Canada landform SSR and SVG controls support host-owned selection, isolati
     assert.equal(q(`[data-canada-landform-shape="${selected}"]`).getAttribute('aria-pressed'), 'true');
     assert.equal(root.querySelectorAll('[data-canada-landform-shape]:not([hidden])').length, 1);
     assert.equal(q('[data-canada-landform-only]').checked, true);
-    assert.equal(q('[data-canada-landform-focus]').disabled, false);
+    assert.equal(q('[data-canada-landform-focus]'),null);
     q(`[data-canada-landform-shape="${selected}"]`).dispatchEvent(new w.KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
     assert.equal(events.at(-1).detail.id, selected);
     q('[data-canada-landform-only]').checked = false;
@@ -82,14 +82,14 @@ test('Canada landform SSR and SVG controls support host-owned selection, isolati
     assert.equal(events.at(-1).name, 'canada-landform-only');
     assert.equal(events.at(-1).detail.only, false);
     const full = q('[data-canada-landform-fallback]').getAttribute('viewBox');
-    q('[data-canada-landform-zoom="in"]').click();
+    controller.zoom('in');
     assert.notEqual(q('[data-canada-landform-fallback]').getAttribute('viewBox'), full);
     const zoomed = q('[data-canada-landform-fallback]').getAttribute('viewBox'), savedBounds = [...events.at(-1).detail.bounds];
     assert.equal(events.at(-1).name, 'canada-landform-camera');
     assert.equal(savedBounds.length, 4); assert.ok(savedBounds.every(Number.isFinite));
     assert.ok(savedBounds[0] < savedBounds[2] && savedBounds[1] < savedBounds[3]);
     q('[data-canada-landform-reset]').click();
-    assert.equal(q('[data-canada-landform-fallback]').getAttribute('viewBox'), full);
+    assert.equal(q('[data-canada-landform-fallback]').getAttribute('viewBox'), zoomed);
     assert.equal(events.at(-1).name, 'canada-landform-reset');
     const eventCount = events.length;
     controller.render({ selected, only: false, bounds: savedBounds });
@@ -108,17 +108,30 @@ test('Canada landform SSR and SVG controls support host-owned selection, isolati
   } finally { await w.happyDOM.close(); }
 });
 
-async function fallbackCameraPage() {
+async function fallbackCameraPage(width=900,height=580) {
   const w = new Window({ url: 'https://example.com/insight-journal/atlas/north-america/canada/nature/?view=landform&render=static', settings: { disableCSSFileLoading: true, disableJavaScriptFileLoading: true, enableJavaScriptEvaluation: true, suppressInsecureJavaScriptEnvironmentWarning: true } });
   const html = await readFile('dist/atlas/north-america/canada/nature/index.html', 'utf8');
   w.document.write(html.replace(/<script(?![^>]*type="application\/json")[^>]*>[\s\S]*?<\/script>/g, ''));
   const root = w.document.querySelector('[data-canada-landform]'), stage = root.querySelector('[data-canada-landform-stage]');root.hidden = false;
-  Object.defineProperty(stage, 'clientWidth', { value: 900 });Object.defineProperty(stage, 'clientHeight', { value: 580 });
+  Object.defineProperty(stage, 'clientWidth', { value: width });Object.defineProperty(stage, 'clientHeight', { value: height });
   const events = [];root.addEventListener('canada-landform-camera', event => events.push([...event.detail.bounds]));
   w.eval(native);
   return { w, root, controller: w.landformController, svg: root.querySelector('[data-canada-landform-fallback]'), events };
 }
 const readFrame = svg => svg.getAttribute('viewBox').split(/\s+/).map(Number);
+
+test('Southern landform camera keeps all six on-screen geographic names visible through selection and clear',async()=>{
+ for(const [width,height]of [[900,486],[700,452],[600,387]]){
+  const page=await fallbackCameraPage(width,height);
+  try{
+   const visible=()=>[...page.root.querySelectorAll('[data-canada-landform-label]:not([hidden])')].map(node=>node.dataset.canadaLandformLabel).sort();
+   const expected=config.regions.filter(region=>region.id!=='arctic-lands').map(region=>region.id).sort();
+   assert.deepEqual(visible(),expected,`All mapped anchors labelled at ${width}×${height}`);
+   const original=readFrame(page.svg);page.controller.render({selected:'hudson-bay-lowland',only:false});assert.deepEqual(visible(),expected);assert.deepEqual(readFrame(page.svg),original);
+   page.controller.render({selected:null,only:false});assert.deepEqual(visible(),expected);assert.deepEqual(readFrame(page.svg),original);
+  }finally{await page.w.happyDOM.close();}
+ }
+});
 const worldNW = helper.projectCanadaLandform([-180, 85.051]), worldSE = helper.projectCanadaLandform([180, -85.051]);
 function assertWorldFrame(frame) {
   assert.equal(frame.length, 4);assert.ok(frame.every(Number.isFinite));assert.ok(frame[2] > 0 && frame[3] > 0);

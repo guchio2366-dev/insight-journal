@@ -1,24 +1,13 @@
-import {canadaReligionColor,canadaReligionComposition} from '../lib/atlas-canada-religion-view';
+import {canadaReligionColor} from '../lib/atlas-canada-religion-view';
 
 const svg='http://www.w3.org/2000/svg';
 const element=<K extends keyof SVGElementTagNameMap>(name:K)=>document.createElementNS(svg,name);
 
-/** A CD's strongest qualifying concentration colors its area; these marks preserve coexisting groups. */
+/** Source-backed examples annotate the simultaneous area distributions; no category dots. */
 export function renderCanadaReligionMap(root:HTMLElement,data:any,focus:string|null,showCallouts:boolean){
  const map=root.querySelector<SVGSVGElement>('[data-population-map]')!,regions=root.querySelector<SVGGElement>('[data-religion-region-symbols]')!,callouts=root.querySelector<SVGGElement>('[data-religion-map-callouts]')!;
  regions.replaceChildren();callouts.replaceChildren();
- const frame=map.getBoundingClientRect(),viewBox=map.viewBox.baseVal,scale=Math.min(frame.width/viewBox.width,frame.height/viewBox.height)||1,radius=4/scale,step=9/scale,records=new Map(data.regions.map((record:any)=>[record.id,record]));
- for(const path of root.querySelectorAll<SVGPathElement>('[data-population-region]')){
-  const record:any=records.get(path.dataset.populationRegion);if(!record)continue;
-  const composed=canadaReligionComposition(record,data),dots=composed.qualified.filter((row:any)=>row.id!==composed.primary?.id).sort((a:any,b:any)=>b.ratio-a.ratio);
-  if(!dots.length)continue;
-  const box=path.getBBox(),anchor=record.id==='6204'?[733,177]:null,cx=anchor?.[0]??box.x+box.width/2,cy=anchor?.[1]??box.y+box.height/2;
-  const group=element('g');group.dataset.religionRegionDots=record.id;
-  for(const [index,row] of dots.slice(0,2).entries()){
-   const dot=element('circle');dot.setAttribute('cx',String(cx+(index-(Math.min(dots.length,2)-1)/2)*step));dot.setAttribute('cy',String(cy));dot.setAttribute('r',String(radius));dot.setAttribute('fill',canadaReligionColor[row.id]);dot.setAttribute('stroke','#fffdf5');dot.setAttribute('stroke-width',String(1/scale));dot.setAttribute('opacity',focus&&row.id!==focus?'.35':'1');dot.dataset.religionDot=row.id;group.append(dot);
-  }
-  regions.append(group);
- }
+ const frame=map.getBoundingClientRect(),viewBox=map.viewBox.baseVal,scale=Math.min(frame.width/viewBox.width,frame.height/viewBox.height)||1;
  if(!showCallouts)return;
  const examples=[
   {id:'6001',group:'25',text:'Yukon CD 無宗教 60%',dx:-94,dy:-28},
@@ -30,6 +19,7 @@ export function renderCanadaReligionMap(root:HTMLElement,data:any,focus:string|n
  for(const item of examples){
   const path=root.querySelector<SVGPathElement>(`[data-population-region="${item.id}"]`);if(!path)continue;
   const box=path.getBBox(),anchor=item.id==='6204'?[733,177]:null,x=anchor?.[0]??box.x+box.width/2,y=anchor?.[1]??box.y+box.height/2,group=element('g');
+  if(x<viewBox.x||x>viewBox.x+viewBox.width||y<viewBox.y||y>viewBox.y+viewBox.height)continue;
   group.classList.add('religion-map-callout');group.dataset.religionCallout=item.id;
   const text=element('text');text.style.fontSize=`${12/scale}px`;text.setAttribute('font-weight','700');text.setAttribute('fill','#263f48');text.textContent=item.text;group.append(text);callouts.append(group);
   const width=text.getBBox().width+12/scale,height=21/scale,view=map.viewBox.baseVal,rightInset=item.id==='6204'?66/scale:4/scale,tx=Math.max(view.x+4/scale,Math.min(view.x+view.width-width-rightInset,x+item.dx/scale)),ty=Math.max(view.y+4/scale,Math.min(view.y+view.height-height-4/scale,y+item.dy/scale));

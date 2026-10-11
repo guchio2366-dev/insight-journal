@@ -40,14 +40,15 @@ test('actual manufacturing renderer retains exact selected province distribution
   renderSource(w,'industry');
   const original=q(root,'[data-canada-industry-context-map]'),signature=mapSignature(original),sourceLegend=q(root,'[data-canada-industry-context-legend]'),sourceReturn=q(root,'[data-canada-industry-return]');
   const sourceLabel=sourceLegend.firstChild.textContent.split('境界2021年。')[0]+'境界2021年。';
-  assert.match(sourceLegend.textContent,/湖は青.*縁・線を赤で強調/s);
+  assert.match(sourceLegend.textContent,/湖は青.*輪郭を赤で強調/s);
+  assert.match(sourceLegend.textContent,/NRCan \/ CGNDB.*公式地名範囲の輪郭/);
   assert.equal(signature.length,2);
   for(const topic of ['precipitation','drainage','groundwater','aquifers']){
    const before=w.location.href,length=w.history.length;
    assert.equal(renderCanadaWaterOrigin(root,water(topic)),true);
    assert.deepEqual(mapSignature(q(root,'[data-water-origin-source="industry"]')),signature);
    assert.ok(q(root,'[data-water-origin-legend]').textContent.includes(sourceLabel));
-   assert.doesNotMatch(q(root,'[data-water-origin-legend]').textContent,/湖は青|縁・線を赤で強調/);
+   assert.doesNotMatch(q(root,'[data-water-origin-legend]').textContent,/湖は青|輪郭を赤で強調/);
    assert.match(q(root,'[data-water-origin-legend]').textContent,/水資源の新しい図とは別図で照合/);
    assert.equal(q(root,'[data-water-origin-legend]').querySelectorAll('i').length,6);
    assert.match(q(root,'[data-water-origin-text]').textContent,/五大湖・St\. Lawrence.*ON・QC/);

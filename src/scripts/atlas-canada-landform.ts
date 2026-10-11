@@ -1,3 +1,4 @@
+import {canadaSouthernFrame} from '../lib/atlas-canada-map-presentation';
 import type { Map as LibreMap } from 'maplibre-gl';
 import {
   canadaLandformBounds, canadaLandformFeatureBounds, canadaLandformSize, prepareCanadaLandforms, projectCanadaLandform, unprojectCanadaLandform,
@@ -24,9 +25,15 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
   const live = root.querySelector<HTMLElement>('[data-canada-landform-live]')!;
   const status = root.querySelector<HTMLElement>('[data-canada-landform-status]')!;
   const onlyControl = root.querySelector<HTMLInputElement>('[data-canada-landform-only]')!;
-  const focusButton = root.querySelector<HTMLButtonElement>('[data-canada-landform-focus]')!;
+  const focusButton = root.querySelector<HTMLButtonElement>('[data-canada-landform-focus]');
   const labels = [...root.querySelectorAll<HTMLButtonElement>('[data-canada-landform-label]')];
-  const fullFrame: Frame = [0, 0, canadaLandformSize.width, canadaLandformSize.height];
+  let fullFrame = canadaSouthernFrame() as Frame;
+  const southernFrame = () => canadaSouthernFrame(stage.clientWidth && stage.clientHeight ? stage.clientWidth / stage.clientHeight : 1.85) as Frame;
+  function southernMapBounds(): [[number, number], [number, number]] {
+    const [west, north] = unprojectCanadaLandform([fullFrame[0], fullFrame[1]]);
+    const [east, south] = unprojectCanadaLandform([fullFrame[0]+fullFrame[2], fullFrame[1]+fullFrame[3]]);
+    return [[west, south], [east, north]];
+  }
   const national=(config.context as any).features.find((feature:any)=>feature.properties.code==='CAN')?.geometry;
   const points:number[][]=national?national.coordinates.flat(national.type==='MultiPolygon'?2:1):[canadaLandformBounds[0],canadaLandformBounds[1]];
   const wholeBounds:CanadaLandformCameraBounds=[Math.min(...points.map(p=>p[0])),Math.min(...points.map(p=>p[1])),Math.max(...points.map(p=>p[0])),Math.max(...points.map(p=>p[1]))];
@@ -103,11 +110,12 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
   }
 
   function drawLabels() {
+    root.querySelector('[data-canada-landform-ocean-context]')?.setAttribute('viewBox',frame.join(' '));
     const width = stage.clientWidth, height = stage.clientHeight;
     if (!width || !height) return;
     const ratio = Math.min(width / frame[2], height / frame[3]);
     const left = (width - frame[2] * ratio) / 2, top = (height - frame[3] * ratio) / 2;
-    const occupied: number[][] = [[width - 60, 0, width, 245]];
+    const occupied: number[][] = [];
     for (const label of [...labels].sort((a, b) => Number(b.dataset.canadaLandformLabel === state.selected) - Number(a.dataset.canadaLandformLabel === state.selected))) {
       const region = config.regions.find(item => item.id === label.dataset.canadaLandformLabel)!;
       if (state.only && state.selected && region.id !== state.selected) { label.hidden = true; continue; }
@@ -117,11 +125,20 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
       const y = projected?.y ?? (point[1] - frame[1]) * ratio + top;
       label.hidden = false;
       const w = label.offsetWidth || Math.min(185, (label.textContent?.length ?? 0) * 12 + 14), h = label.offsetHeight || 30;
-      const box = [x - w / 2, y - h / 2, x + w / 2, y + h / 2];
-      // Keep labels at their checked in-polygon anchors; the legend covers omitted collisions.
-      label.hidden = box[0] < 3 || box[1] < 3 || box[2] > width - 3 || box[3] > height - 3 || occupied.some(([x1, y1, x2, y2]) => box[0] < x2 + 3 && box[2] > x1 - 3 && box[1] < y2 + 3 && box[3] > y1 - 3);
-      label.style.left = `${x}px`; label.style.top = `${y}px`;
-      if (!label.hidden) occupied.push(box);
+      // Prefer the checked in-region anchor. Small text offsets keep neighbouring
+      // Shield/lowland names legible without moving a label across the map.
+      const onMap=x>=0&&x<=width&&y>=0&&y<=height;
+      const boundedX=Math.max(w/2+3,Math.min(width-w/2-3,x));
+      // Keep the name of every on-screen anchor visible, including the western
+      // edge and neighbouring Shield/lowland anchors. Only text moves; the
+      // checked geographic anchor and official region geometry stay unchanged.
+      const labelX=Math.abs(boundedX-x)<=28?boundedX:x;
+      const candidates=onMap?[[x,y],[labelX,y],[labelX,y-24],[labelX,y+24],[labelX,y-40],[labelX,y+40]]:[];
+      const placement=candidates.find(([cx,cy])=>{const box=[cx-w/2,cy-h/2,cx+w/2,cy+h/2];return box[0]>=3&&box[1]>=3&&box[2]<=width-3&&box[3]<=height-3&&!occupied.some(([x1,y1,x2,y2])=>box[0]<x2+3&&box[2]>x1-3&&box[1]<y2+3&&box[3]>y1-3);});
+      label.hidden=!placement;
+      const [placedX,placedY]=placement??[x,y];
+      label.style.left = `${placedX}px`; label.style.top = `${placedY}px`;
+      if (!label.hidden) occupied.push([placedX-w/2,placedY-h/2,placedX+w/2,placedY+h/2]);
     }
   }
 
@@ -138,7 +155,7 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
         element.setAttribute('tabindex', hidden || ready ? '-1' : '0');
       }
     }
-    onlyControl.checked = state.only; onlyControl.disabled = !state.selected; focusButton.disabled = !state.selected;
+    onlyControl.checked = state.only; onlyControl.disabled = !state.selected; if(focusButton)focusButton.disabled = !state.selected;
     if (map && ready) {
       const selected = ['==', ['get', 'id'], state.selected ?? '__none__'] as any;
       const filter = state.only && state.selected ? selected : null;
@@ -153,8 +170,8 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
   }
 
   function fit() {
-    fitted = true; frame = clampFrame([...fullFrame]); cameraKey = 'fit'; cameraCommitPending = false;
-    if (ready && map) { programmaticCamera = true; map.fitBounds(canadaLandformBounds, { padding: { top: 18, right: 18, bottom: 18, left: 18 }, duration: 0 }); syncMapFrame(); programmaticCamera = false; }
+    fullFrame = southernFrame(); fitted = true; frame = clampFrame([...fullFrame]); cameraKey = 'fit'; cameraCommitPending = false;
+    if (ready && map) { programmaticCamera = true; map.fitBounds(southernMapBounds(), { padding: 0, duration: 0 }); syncMapFrame(); programmaticCamera = false; }
     draw();
   }
   function zoom(direction: 'in' | 'out') {
@@ -218,7 +235,7 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
           { id: 'canada-landform-fill', type: 'fill', source: 'canada-landform-regions', paint: { 'fill-color': '#d4c8a6', 'fill-opacity': ['case',['==',['get','id'],state.selected ?? '__none__'],.24,0] } },
           { id: 'canada-landform-boundaries', type: 'line', source: 'canada-landform-regions', paint: { 'line-color': '#69796e', 'line-opacity': 0, 'line-width': .7 } },
           { id: 'canada-landform-selected', type: 'line', source: 'canada-landform-regions', filter: ['==', ['get', 'id'], '__none__'], paint: { 'line-color': '#243f4c', 'line-width': 3 } },
-        ] }, bounds: canadaLandformBounds, fitBoundsOptions: { padding: 18 },
+        ] }, bounds: southernMapBounds(), fitBoundsOptions: { padding: 0 },
         minZoom: .5, maxZoom: 9, attributionControl: false, renderWorldCopies: false, scrollZoom: false,
         cooperativeGestures: true, locale: { 'CooperativeGesturesHandler.MobileHelpText': '地図は２本指で動かせます' },
         dragRotate: false, pitchWithRotate: false, touchPitch: false, maxPitch: 0, fadeDuration: 0,
@@ -257,10 +274,10 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
     if (key === 'Enter' || key === ' ') { event.preventDefault(); select(shape.dataset.canadaLandformShape!); }
   });
   listen(onlyControl, 'change', () => emit('canada-landform-only', { only: onlyControl.checked }));
-  listen(root.querySelector('[data-canada-landform-reset]')!, 'click', () => { fit(); emit('canada-landform-reset', {}); });
+  listen(root.querySelector('[data-canada-landform-reset]')!, 'click', () => { emit('canada-landform-reset', {}); });
   const wholeButton=root.querySelector('[data-canada-landform-whole]');if(wholeButton)listen(wholeButton,'click',()=>{restoreCamera(wholeBounds);commitCamera();});
   for (const button of root.querySelectorAll<HTMLButtonElement>('[data-canada-landform-zoom]')) listen(button, 'click', () => zoom(button.dataset.canadaLandformZoom as 'in' | 'out'));
-  listen(focusButton, 'click', focusSelected);
+  if(focusButton)listen(focusButton, 'click', focusSelected);
 
   let drag: { x: number; y: number; frame: Frame; pointerId: number } | undefined;
   listen(fallback, 'pointerdown', event => {
@@ -291,15 +308,15 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
   });
   const resize = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(() => {
     if (ready && map && stage.clientWidth && stage.clientHeight) { map.resize(); if (fitted) fit(); else drawLabels(); }
-    else { drawLabels(); void start(); }
+    else { if (fitted && !root.hidden) fit(); else drawLabels(); void start(); }
   });
   resize?.observe(stage);
-  const visibility = typeof MutationObserver === 'undefined' ? undefined : new MutationObserver(() => { if (!root.hidden) { map?.resize(); if (ready && fitted) fit(); else draw(); void start(); } });
+  const visibility = typeof MutationObserver === 'undefined' ? undefined : new MutationObserver(() => { if (!root.hidden) { map?.resize(); if (fitted) fit(); else draw(); void start(); } });
   visibility?.observe(root, { attributes: true, attributeFilter: ['hidden'] });
   root.querySelector('[data-canada-landform-fallback-labels]')?.setAttribute('hidden', '');
-  draw(); void start();
+  if (!root.hidden) fit(); else draw(); void start();
   return {
-    render(next) { const selected = config.regions.some(region => region.id === next.selected) ? next.selected : null; state = { selected, only: !!next.only && !!selected }; if ('bounds' in next) restoreCamera(next.bounds ?? null); draw(); if (!root.hidden) { map?.resize(); if (ready && fitted) fit(); void start(); } },
+    render(next) { const selected = config.regions.some(region => region.id === next.selected) ? next.selected : null; state = { selected, only: !!next.only && !!selected }; if ('bounds' in next) restoreCamera(next.bounds ?? null); draw(); if (!root.hidden) { map?.resize(); if (fitted) fit(); void start(); } },
     reset: fit, zoom, focusSelected,
     destroy() { destroyed = true; abort.abort(); clearTimeout(loadTimer); resize?.disconnect(); visibility?.disconnect(); map?.remove(); map = undefined; },
   };
