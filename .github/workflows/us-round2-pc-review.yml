@@ -8,6 +8,7 @@ on:
       - 'src/scripts/atlas-*.ts'
       - 'src/data/atlas/water-resources.ts'
       - 'scripts/capture-us-round2-review.mjs'
+      - 'scripts/verify-us-religion-paint.mjs'
       - '.github/workflows/us-round2-pc-review.yml'
 permissions:
   contents: read

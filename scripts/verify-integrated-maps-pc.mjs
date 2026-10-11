@@ -6,10 +6,13 @@ import {resolve,extname,sep} from 'node:path';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {chromium} from 'playwright';
+import {waitForUsReligionPaint} from './verify-us-religion-paint.mjs';
 
 const head=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
 const expected=process.env.INTEGRATION_EXPECTED_SHA??head;
 assert.equal(head,expected,'checkout must match the requested release');
+const publishedExpected=process.env.INTEGRATION_PUBLISHED_SHA||expected;
+assert.match(publishedExpected,/^[a-f0-9]{40}$/,'published release must be a complete pinned SHA');
 const dist=resolve('dist'),out=resolve('review-artifacts/integrated-maps');
 await mkdir(out,{recursive:true});
 const production=process.env.INTEGRATION_TARGET==='production';
@@ -25,7 +28,7 @@ if(!production){
 }
 const base=production?'https://guchio2366-dev.github.io/insight-journal':`http://127.0.0.1:${server.address().port}/insight-journal`;
 const origin=new URL(base).origin;
-const report={head,expected,target:production?'production':'build',base,startedAt:new Date().toISOString(),viewport:{width:1920,height:1080},dpr:1,sandbox:true,status:'running',scenes:[],operations:[],assets:[],images:[],errors:[],failedRequests:[],externalRequests:[]};
+const report={head,expected,publishedExpected:production?publishedExpected:expected,target:production?'production':'build',base,startedAt:new Date().toISOString(),viewport:{width:1920,height:1080},dpr:1,sandbox:true,status:'running',scenes:[],operations:[],assets:[],images:[],errors:[],failedRequests:[],externalRequests:[]};
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 async function shot(name){
  await page.evaluate(async()=>{await document.fonts.ready;scrollTo({top:0,left:0,behavior:'instant'});await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});
@@ -68,7 +71,7 @@ try{
  page=await context.newPage();page.setDefaultTimeout(30000);
  page.on('pageerror',error=>report.errors.push(error.message));
  page.on('response',response=>{if(response.status()>=400)report.failedRequests.push({url:response.url(),status:response.status()});});
- const release=await page.request.get(base+'/_release.json');assert.equal(release.status(),200);report.release=await release.json();assert.equal(report.release.commitSha,expected);await release.dispose();
+ const release=await page.request.get(base+'/_release.json');assert.equal(release.status(),200);report.release=await release.json();assert.equal(report.release.commitSha,report.publishedExpected);await release.dispose();
  for(const scene of scenes){
   const response=await page.goto(base+'/atlas/'+scene.path,{waitUntil:'networkidle'});assert.equal(response.status(),200,scene.id);
   if(scene.ready)await page.locator(scene.ready).waitFor();await settle();
@@ -130,6 +133,7 @@ try{
  report.operations.push({region:'us,mexico',forestryNavigation:true});
  // Check the final US solver output against painted boxes, including reduced-motion CSS.
  await page.goto(base+'/atlas/north-america/population/?popView=religion',{waitUntil:'networkidle'});await page.locator('[data-atlas-explorer][data-render-state="ready"]').waitFor();await page.waitForFunction(()=>/郡のデータ/.test(document.querySelector('[data-pop-status]')?.textContent??''));await settle();
+ const religionPaint=await waitForUsReligionPaint(page);
  const rectangles=await page.evaluate(()=>{
   const box=n=>{const b=n.getBoundingClientRect();return{id:n.getAttribute('data-pop-city')??n.getAttribute('data-pop-religion-marker'),left:b.left,top:b.top,right:b.right,bottom:b.bottom,transition:getComputedStyle(n).transitionProperty};};
   const ny=box(document.querySelector('[data-pop-city-markers] [data-pop-city="new-york"]')),stories=[...document.querySelectorAll('[data-pop-religion-markers] .atlas-nature-label:not([hidden])')].map(box);
@@ -141,8 +145,18 @@ try{
   for(const [edge,axis] of [['left','x'],['right','x'],['top','y'],['bottom','y']])assert(Math.abs(solved[edge]+rectangles.origin[axis]-painted[edge])<1e-6,painted.id+' painted '+edge+' matches solver');
  }
  for(const b of rectangles.stories){const a=rectangles.ny;assert(!(a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top),'NY/religion collision');}
- report.operations.push({region:'us',solverMatchesPaint:true,newYorkReligionNoCollision:true,rectangles});await shot('us-religion-boxes');
- for(const asset of ['water-v1/precipitation-fallback.webp','latin-nature-reading-v2/geography.json','europe/precipitation-v1/manifest.json','africa-natural-presentation-v2/manifest.json','japan-agriculture-v3/forest.png','asia-presentation-v1/manifest.json','russia-physical-v1/manifest.json','oceania-physical-v1/manifest.json'])await checkAsset('assets/atlas/'+asset);
+ report.operations.push({region:'us',solverMatchesPaint:true,newYorkReligionNoCollision:true,countyColorsPainted:religionPaint,rectangles});await shot('us-religion-boxes');
+ // A real county hit also proves that population-fill has rendered features.
+ const religionFrame=await page.locator('[data-map-frame]').boundingBox();
+ await page.mouse.click(religionFrame.x+religionFrame.width*.5,religionFrame.y+religionFrame.height*.5);
+ await page.waitForFunction(()=>!!new URL(location.href).searchParams.get('popReligion'));
+ const selectedReligion=new URL(page.url()).searchParams.get('popReligion');
+ await page.reload({waitUntil:'networkidle'});await page.waitForFunction(()=>/郡のデータ/.test(document.querySelector('[data-pop-status]')?.textContent??''));
+ const reloadedReligionPaint=await waitForUsReligionPaint(page);
+ assert.equal(new URL(page.url()).searchParams.get('popReligion'),selectedReligion);
+ await page.goBack({waitUntil:'networkidle'});await settle();assert.equal(new URL(page.url()).searchParams.get('popReligion'),null);
+ report.operations.push({region:'us',renderedCountyClick:true,selectedReligion,reload:true,back:true,countyColorsPainted:reloadedReligionPaint});
+ for(const asset of ['water-v1/precipitation-fallback.webp','latin-nature-reading-v2/geography.json','europe/precipitation-v1/manifest.json','africa-natural-presentation-v2/manifest.json','japan-agriculture-v3/forest.png','asia-presentation-v1/manifest.json','russia-physical-v1/manifest.json','oceania-physical-v1/manifest.json','population/v1/religion-counties-2020.geo.json.gz','population/v1/religion-dominant.json.gz'])await checkAsset('assets/atlas/'+asset);
  assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedRequests,[]);assert.deepEqual(report.externalRequests,[]);report.status='passed';
 }catch(error){report.status='failed';report.failure=String(error.stack);if(page&&!page.isClosed())await shot('failure').catch(()=>{});throw error;}
 finally{
