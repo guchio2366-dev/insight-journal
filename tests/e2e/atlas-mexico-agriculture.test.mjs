@@ -28,7 +28,7 @@ test('Mexico uses shared US agriculture hierarchy, truthful zones and a same-yea
   assert.equal(ctx.root.querySelectorAll('[data-agri-layer]').length,2);
   assert.equal(ctx.root.querySelectorAll('[data-map-action]').length,3);
   assert.equal(ctx.root.querySelectorAll('path[data-agriculture-state-code]').length,32);
-  assert.equal(ctx.root.querySelectorAll('.mexico-crop-zone').length,11);
+  assert.equal(ctx.root.querySelectorAll('.mexico-crop-zone').length,10);
   assert.equal(ctx.root.querySelectorAll('[data-agriculture-symbol],[data-agriculture-cattle-symbol]').length,0);
   assert.equal(ctx.root.querySelectorAll('[data-crop-key] [data-livestock-select]').length,5);
   assert.ok(ctx.q('.mexico-agriculture-subtopics [data-forestry-select]'));
@@ -36,7 +36,10 @@ test('Mexico uses shared US agriculture hierarchy, truthful zones and a same-yea
   assert.match(ctx.q('.atlas-receipts-chart').textContent,/生産額.*2025年.*49%.*51%.*生体/s);
   assert.match(ctx.q('#mexico-agriculture-sources').textContent,/推計.*5分格子.*市町村.*2025.*2022/s);
   assert.match(ctx.q('[data-agriculture-reading="pine"]').textContent,/ドゥランゴ.*チワワ.*山地.*加工.*市場/s);
-  assert.match(ctx.q('[data-agriculture-reading="rice"] .mexico-agriculture-product-scope').textContent,/2025年.*0\.18%.*もみ米.*精米/s);
+  assert.match(ctx.q('[data-agriculture-reading="rice"] .mexico-agriculture-product-scope').textContent,/2025年.*0\.18%.*主図には表示せず補足.*もみ米.*精米/s);
+  assert.equal(ctx.q('[data-crop-select="rice"]'),null);
+  assert.equal(ctx.q('[data-crop-zone="rice"]'),null);
+  assert.match(ctx.q('[data-rice-supplement]').textContent,/0\.18%.*主図.*補足/s);
   assert.equal(ctx.q('[data-mexico-forest-states]').hasAttribute('hidden'),true);
   assert.equal(ctx.root.querySelectorAll('[data-mexico-forest-states] path').length,2);
   assert.deepEqual([...ctx.root.querySelectorAll('[data-mexico-forest-states] text')].map(node=>node.textContent.trim()).sort(),['チワワ','ドゥランゴ'].sort());
@@ -55,6 +58,7 @@ test('Overview, all crop/animal/forest entries and related statistics are reacha
    assert.equal(ctx.q('[data-mexico-agriculture-statistics]').hidden,false);
    assert.equal(ctx.q('[data-agriculture-state]').value,'');
   }
+  ctx.q('[data-mexico-agriculture-item="rice"]').click();selected(ctx,'rice');assert.equal(ctx.q('[data-mexico-crop-zones]').hasAttribute('hidden'),true);assert.equal(ctx.q('[data-mexico-stat-panel="rice"]').hidden,false);
   ctx.q('[data-agri-overview-button]').click();selected(ctx,null);
   assert.equal(ctx.q('[data-mexico-agriculture-statistics]').hidden,true);
  }finally{await ctx.window.happyDOM.close();}
@@ -182,7 +186,7 @@ test('Selecting a crop keeps every crop area and animal kind available with sour
   const config=JSON.parse(ctx.q('[data-mexico-agriculture-config]').textContent);
   assert.equal(config.cropLabelPoints.length,22);
   const zones=Array.from(ctx.root.querySelectorAll('path[data-crop-zone]'));
-  assert.equal(zones.length,11);
+  assert.equal(zones.length,10);
   assert.ok(zones.every(node=>!node.hasAttribute('hidden')));
   assert.equal(zones.filter(node=>node.classList.contains('is-selected')).length,1);
   assert.equal(ctx.q('[data-livestock-markers]').hidden,false);

@@ -113,3 +113,4 @@
 /* Keep all livestock controls available while the selected crop remains prominent. */
 .mexico-agriculture-atlas[data-agriculture-crop-selected="true"] [data-livestock-markers] button{opacity:.35}
 .mexico-agriculture-atlas[data-agriculture-crop-selected="true"] [data-livestock-markers] button:is(:hover,:focus-visible){opacity:1}
+.mexico-agriculture-rice-supplement{margin:8px 0;padding:6px 10px;border:1px solid #c8d8d5;border-radius:5px;background:#f7f9f5;font-size:14px;line-height:1.6}.mexico-agriculture-rice-supplement summary{min-height:42px;cursor:pointer;color:#285b68;font-weight:650}.mexico-agriculture-rice-supplement p{margin:4px 0 8px}.mexico-agriculture-rice-supplement button{min-height:40px;padding:6px 10px;border:1px solid #799c9e;border-radius:4px;background:#fff;color:#235966;font:inherit;cursor:pointer}

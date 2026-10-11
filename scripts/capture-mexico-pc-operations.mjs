@@ -202,7 +202,7 @@ async function agriculture({page, evidence}) {
     const layout=await page.evaluate(()=>({icons:[...document.querySelectorAll('.atlas-livestock-marker i')].map(node=>{const r=node.getBoundingClientRect();return {width:r.width,height:r.height};}),order:[...document.querySelectorAll('[data-crop-key] [data-crop-select]')].map(node=>node.getAttribute('data-crop-select')),groups:[...document.querySelectorAll('.atlas-receipt-group')].map(group=>[...group.querySelectorAll('.atlas-bar-row strong')].map(node=>parseFloat(node.textContent)))}));
     const desktop=await page.evaluate(()=>matchMedia('(min-width:960px)').matches),iconLimit=desktop?20:30;
     assert(layout.icons.length>0&&layout.icons.every(icon=>icon.width<=iconLimit&&icon.height<=iconLimit));
-    assert.equal(layout.order[0],'corn');assert(layout.order.indexOf('wheat')>layout.order.indexOf('vegetables'));assert(layout.order.indexOf('rice')>layout.order.indexOf('coffee'));
+    assert.equal(layout.order[0],'corn');assert(layout.order.indexOf('wheat')>layout.order.indexOf('vegetables'));assert.equal(layout.order.includes('rice'),false);
     assert(layout.groups.every(values=>values.every((value,index)=>index===0||value<=values[index-1])));
     assert.equal(await page.locator('[data-mexico-state-selection]').count(),0);
     assert.equal(await page.locator('[data-mexico-forest-states]:visible').count(),0);return layout;
@@ -217,6 +217,7 @@ async function agriculture({page, evidence}) {
       return {paths, labels, livestock: node.querySelectorAll('[data-livestock-markers] button').length,livestockOpacity:[...node.querySelectorAll('[data-livestock-markers] button')].map(button=>Number(getComputedStyle(button).opacity))};
     });
     assert(distribution.paths.length >= 10 && distribution.paths.every(path => !path.hidden && Number(path.opacity) > 0));
+    assert(distribution.paths.every(path=>path.id!=='rice'));
     assert(distribution.livestock > 0);assert(distribution.livestockOpacity.every(value=>value>0&&value<1));
     const corn = distribution.paths.find(path => path.id === 'corn'); assert(corn && corn.stroke !== 'none' && parseFloat(corn.strokeWidth) > 0);
     assert(distribution.labels.length > 0 && distribution.labels.every(label => label.fill === label.sourceFill), 'Labels must match their crop colors');
@@ -224,7 +225,7 @@ async function agriculture({page, evidence}) {
   });
   await step('Every crop keeps a visible selected map label after collision layout', async () => {
     const ids = await page.locator('[data-crop-select]').evaluateAll(nodes => [...new Set(nodes.map(node => node.getAttribute('data-crop-select')))]);
-    assert.equal(ids.length, 11);
+    assert.equal(ids.length, 10);
     for (const id of ids) {
       await click(page, `[data-crop-select="${id}"]`);
       assert(await page.locator(`[data-crop-label="${id}"]:visible`).count() > 0, `${id}: selected crop label must remain visible`);
@@ -567,6 +568,12 @@ async function composition({page, evidence}) {
   await step('Ethnicity nationwide entrance, detail and count/share comparison return', async () => {
     await click(page, 'button[data-population-category="ethnicity"]'); assert(await page.locator('[data-population-overview-category="ethnicity"]').isVisible());
     await click(page, '[data-population-overview-reading-category="ethnicity"] [data-population-overview-metric]');
+    assert(await page.locator('[data-population-overview-category="ethnicity"]').isVisible());
+    assert.equal(await page.locator('[data-population-overview-category="ethnicity"] [data-overview-highlight-metric]').count(),3);
+    await history(page,()=>click(page,'[data-population-composition-reading] [data-population-composition-map-mode]'));
+    assert(await page.locator('[data-population-map]').isVisible());
+    await click(page,'[data-population-composition-reading] [data-population-composition-map-mode]');
+    assert(await page.locator('[data-population-overview-category="ethnicity"]').isVisible());
     assert.equal(query(page, 'state'), null); assert.match(await text(page, '[data-population-composition-selected-name]'), /全国/);
     await select(page, '[data-population-state]', '20'); await select(page, '[data-population-view]', 'count');
     const before = await snapshot(page); await click(page, '[data-population-composition-compare]'); assert.equal(query(page, 'compositionCompare'), 'scale');

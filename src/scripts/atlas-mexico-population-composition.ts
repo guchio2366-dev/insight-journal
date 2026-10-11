@@ -26,18 +26,29 @@ export function renderMexicoPopulationComposition(root:HTMLElement,data:MexicoCo
  const show=(selector:string,visible:boolean)=>{const node=q<HTMLElement>(selector);if(node)node.hidden=!visible;};
  const metric=mexicoCompositionMetric(data,state.category,selection.metric),active=!!metric;
  const overview=active&&selection.overview;
+ const combined=active&&(overview||!selection.compare&&selection.mapMode==='combined');
  root.dataset.populationComposition=String(active);
  root.dataset.populationOverview=String(overview);
- show('#mexico-population-distribution',!overview);
- show('[data-population-overview-maps]',overview);show('[data-population-overview-reading]',overview);
+ root.dataset.populationCompositionMap=combined?'combined':'single';
+ show('#mexico-population-distribution',!combined);
+ show('[data-population-overview-maps]',combined);show('[data-population-overview-reading]',overview);
  show('[data-population-display-settings]',!overview);
- for(const node of root.querySelectorAll<HTMLElement>('[data-population-overview-category]'))node.hidden=!overview||node.dataset.populationOverviewCategory!==state.category;
+ for(const node of root.querySelectorAll<HTMLElement>('[data-population-overview-category]'))node.hidden=!combined||node.dataset.populationOverviewCategory!==state.category;
  for(const node of root.querySelectorAll<HTMLElement>('[data-population-overview-reading-category]'))node.hidden=!overview||node.dataset.populationOverviewReadingCategory!==state.category;
  for(const selector of ['[data-population-composition-hero]','[data-population-composition-reading]','[data-population-composition-key]','[data-population-composition-table]'])show(selector,active&&!overview);
  show('[data-population-composition-selector]',active);
- const onlyControl=q('[data-population-only]')?.closest<HTMLElement>('label');if(onlyControl)onlyControl.hidden=overview;
+ const onlyControl=q('[data-population-only]')?.closest<HTMLElement>('label');if(onlyControl)onlyControl.hidden=overview||combined;
  show('[data-population-reset]',!overview);
  if(!metric)return false;
+ for(const group of root.querySelectorAll<SVGGElement>('[data-overview-highlight-metric]'))group.classList.toggle('is-selected-overview-metric',!overview&&combined&&group.dataset.overviewHighlightMetric===metric.id);
+ for(const shape of root.querySelectorAll<SVGUseElement>('[data-overview-state]')){
+  const selectedMetric=!overview&&combined?metric:null,record=selectedMetric?.states[shape.dataset.overviewState!];
+  if(record&&selectedMetric){shape.style.fill=mexicoCompositionColor(record,selectedMetric);shape.querySelector('title')!.textContent=`${shape.querySelector('title')!.textContent?.split('：')[0]}：${selectedMetric.label} ${formatMexicoCompositionShare(record,selectedMetric)}`;}
+  else shape.style.removeProperty('fill');
+ }
+ const combinedSvg=q<SVGSVGElement>(`[data-population-overview-category="${state.category}"] svg`);
+ if(combinedSvg)combinedSvg.setAttribute('aria-label',overview?`${state.category==='religion'?'宗教':'民族・自己認識'}の3指標それぞれで州内割合が高い2州を同時に示す地図`:`${metric.label}の全32州の割合を面色で表示。他の指標の上位州番号も残す地図`);
+ const mapModeButton=q<HTMLButtonElement>('[data-population-composition-map-mode]');if(mapModeButton){mapModeButton.hidden=overview||selection.compare;mapModeButton.textContent=combined?'この指標だけを州別の面で見る':'3指標の地図に戻す';mapModeButton.setAttribute('aria-pressed',String(!combined));}
  const metricSelect=q<HTMLSelectElement>('[data-population-composition-metric]');
  if(metricSelect){const first=document.createElement('option');first.value='';first.textContent='全国一覧';metricSelect.replaceChildren(first,...data.metrics.filter(item=>item.category===state.category).map(item=>{const option=document.createElement('option');option.value=item.id;option.textContent=item.label;return option;}));metricSelect.value=overview?'':metric.id;metricSelect.disabled=selection.compare;metricSelect.title=selection.compare?'元の指標を保って比較します。戻ると別の指標を選べます。':'';}
  if(overview){

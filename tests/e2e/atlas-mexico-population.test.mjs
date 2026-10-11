@@ -145,7 +145,14 @@ test('National entry has no implicit capital selection; one overview map retains
      const denominators=overview.querySelectorAll('[data-population-overview-denominator="religion"]');assert.equal(denominators.length,1);assert.match(denominators[0].textContent,/全年齢の通常居住人口（不詳を含む）/);assert.ok(denominators[0].textContent.includes(population.nationalPopulation.toLocaleString('ja-JP')));
      assert.match(overview.textContent,/右欄には8区分/);
     }
-    q(`[data-population-overview-metric="${metrics[0]}"]`).click();assert.equal(q('[data-population-overview-maps]').hidden,true);assert.equal(q('[data-population-display-settings]').hidden,false);assert.equal(q('[data-population-composition-selected-name]').textContent,'メキシコ全国');assert.equal(q('[data-population-composition-share-label]').textContent,'全国の割合');
+    assert.equal(overview.querySelectorAll('.population-overview-all-states tbody tr').length,32);
+    q(`[data-population-overview-metric="${metrics[0]}"]`).click();assert.equal(q('[data-population-overview-maps]').hidden,false);assert.equal(q('[data-population-display-settings]').hidden,false);assert.equal(q('[data-population-composition-selected-name]').textContent,'メキシコ全国');assert.equal(q('[data-population-composition-share-label]').textContent,'全国の割合');
+    assert.equal(overview.querySelectorAll('[data-overview-highlight-metric]').length,3);
+    assert.equal(overview.querySelector('.is-selected-overview-metric').getAttribute('data-overview-highlight-metric'),metrics[0]);
+    assert.ok(q('[data-population-composition-map-mode]').closest('[data-population-composition-reading]'));
+    const selectedMetric=compositionData.metrics.find(item=>item.id===metrics[0]);assert.equal(overview.querySelector('[data-overview-state="20"]').style.fill,mexicoCompositionColor(selectedMetric.states['20'],selectedMetric));
+    q('[data-population-composition-map-mode]').click();assert.equal(q('[data-population-overview-maps]').hidden,true);assert.equal(q('#mexico-population-distribution').hidden,false);assert.equal(new URL(w.location).searchParams.get('compositionMap'),'single');
+    q('[data-population-composition-map-mode]').click();assert.equal(q('[data-population-overview-maps]').hidden,false);assert.equal(new URL(w.location).searchParams.has('compositionMap'),false);
    }
    change(w,'[data-population-state]','20');assert.equal(q('[data-population-only]').disabled,false);q('[data-population-national]').click();assert.equal(q('[data-population-state]').value,'');assert.equal(new URL(w.location).searchParams.get('reading'),'overview');
   }finally{await w.happyDOM.close();}

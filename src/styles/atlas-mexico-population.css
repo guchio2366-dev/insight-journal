@@ -69,6 +69,11 @@
 .mexico-population .population-overview-combined svg{display:block;width:100%;height:auto;aspect-ratio:900/580;background:#eaf1ee;border:1px solid #c5d5cf;border-radius:5px}
 .mexico-population .population-overview-land use{fill:#e2e9df;stroke:#8ba99a;stroke-width:1;vector-effect:non-scaling-stroke}
 .mexico-population .population-overview-highlights circle{stroke:#fffefa;stroke-width:2;vector-effect:non-scaling-stroke}
+.mexico-population[data-population-composition=true][data-population-overview=false] .population-overview-highlights{opacity:.65}
+.mexico-population[data-population-composition=true][data-population-overview=false] .population-overview-highlights.is-selected-overview-metric{opacity:1}
+.mexico-population .population-overview-highlights.is-selected-overview-metric circle{stroke:#183e42;stroke-width:3}
+.mexico-population .population-composition-map-mode{min-height:44px;margin:0 0 8px;padding:7px 10px;border:1px solid #6d8e83;border-radius:4px;background:#fffefa;color:#20566a;font:600 14px var(--sans);cursor:pointer}
+.mexico-population .population-overview-all-states{margin:10px 0}.mexico-population .population-overview-all-states summary{cursor:pointer;min-height:44px;padding:8px 0;color:#20566a;font-weight:600}.mexico-population .population-overview-all-states-scroll{max-height:320px;overflow:auto}.mexico-population .population-overview-all-states table{width:100%;border-collapse:collapse;font-size:13px}.mexico-population .population-overview-all-states :is(th,td){padding:5px 7px;border-bottom:1px solid #d6dfd7;text-align:left}.mexico-population .population-overview-all-states td{font-variant-numeric:tabular-nums}
 .mexico-population .population-overview-highlights text{fill:#fff;font:700 13px var(--sans);pointer-events:none}
 .mexico-population .population-overview-combined figcaption{font-size:13px;line-height:1.55;margin:5px 0}
 .mexico-population .population-overview-indicators{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;list-style:none;margin:8px 0;padding:0}
