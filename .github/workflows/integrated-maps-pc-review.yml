@@ -49,6 +49,9 @@ jobs:
         run: |
           sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
           REVIEW_CHROME_PATH="$(command -v google-chrome)" node scripts/verify-integrated-maps-pc.mjs
+      - name: Retain the reviewed Africa source and painted-forest checks
+        run: |
+          AFRICA_REVIEW_CHROME_PATH="$(command -v google-chrome)" AFRICA_REVIEW_HEAD_SHA="$INTEGRATION_EXPECTED_SHA" AFRICA_REVIEW_OUTPUT=review-artifacts/integrated-maps/africa-source-evidence node tests/e2e/atlas-africa-source-evidence.spec.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

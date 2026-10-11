@@ -27,6 +27,8 @@
 
 `data-source/atlas/africa/statistics/qcl-2024-missing-required-rows.csv` のCRLFは元PR由来の資料バイトとして維持。通常のdiff whitespace検査がこのCRを報告するため、ソース資料を改変して見かけだけ整えない。
 
+アフリカPRの既存 `Africa-Review-Scope: round2` trailerを統合コミット・公開merge commitに引き継ぐ。旧検査の12人口都市・表示select・旧林業枠ではなく、元PRで確認済みのround2全PC検査（1920/1440/1024）を実行する。元PRの `Africa-Review-Evidence: sources` だけへの限定は使わず、全PCに加えてsource-evidenceの原典・実森林paint検査も新PC workflowから実行。元テストは改変しない。地域林業CIが元々定義したアフリカの承認済み枠変更の例外を用い、ロシア・オセアニアは引き続きmainとの矩形・画像SHAの完全一致を要求する。
+
 ## 最終版の検証
 
 元PRの合格は各headに対する部分修正の確認であり、今回の最終統合版の合格へ転用しません。統合PRのValidate site・関連地域PC CIの結果を公開前に照合します。ローカルのsandbox有効Chromeは実行環境のsandbox設定不足で起動不可で、目視済みとは記録しません。

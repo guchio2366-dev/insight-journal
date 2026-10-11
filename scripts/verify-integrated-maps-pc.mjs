@@ -41,6 +41,7 @@ async function checkAsset(relative){
 }
 async function camera(scene){
  if(scene.cameraRoot)return JSON.parse(await page.locator(scene.cameraRoot).getAttribute('data-map-camera'));
+ if(scene.urlCamera){const q=new URL(page.url()).searchParams;return{lng:Number(q.get('lng')),lat:Number(q.get('lat')),zoom:Number(q.get('z'))};}
  return scene.svg?await page.locator(scene.svg).first().getAttribute('viewBox'):null;
 }
 function sameCamera(actual,before,tolerance=1e-6){
@@ -48,11 +49,11 @@ function sameCamera(actual,before,tolerance=1e-6){
  else if(before){for(const key of ['lng','lat','zoom'])assert(Math.abs(actual[key]-before[key])<=tolerance,'selection preserves '+key);}
 }
 const scenes=[
- {id:'us',path:'north-america/nature/',map:'[data-map-frame]',ready:'[data-atlas-explorer][data-render-state="ready"][data-nature-load="ready"]',select:'[data-nature-label="city:miami"]'},
+ {id:'us',path:'north-america/nature/',map:'[data-map-frame]',ready:'[data-atlas-explorer][data-render-state="ready"][data-nature-load="ready"]',urlCamera:true,select:'[data-nature-label="city:miami"]'},
  {id:'canada',path:'north-america/canada/nature/?view=climate',map:'[data-canada-natural-layer="climate"] .atlas-map-frame',svg:'[data-canada-natural-layer="climate"] [data-canada-natural-fallback]',select:'[data-canada-natural-city="toronto"]'},
- {id:'mexico',path:'north-america/mexico/nature/',map:'[data-mexico-nature-main-map]',ready:'[data-mexico-workspace][data-mexico-nature-ready="true"]',svg:'[data-mexico-nature-main-map]',select:'[data-mexico-climate-city="mexico-city-tacubaya"]'},
+ {id:'mexico',path:'north-america/mexico/nature/',map:'[data-mexico-nature-main-map]',ready:'[data-mexico-workspace][data-mexico-nature-ready="true"]',svg:'[data-mexico-nature-main-map]',select:'svg [data-mexico-climate-city="mexico-city-tacubaya"]'},
  {id:'latin',path:'latin-america/nature/',map:'.latin-nature-map',ready:'[data-latin-workspace][data-layout-ready="true"]'},
- {id:'europe',path:'europe/nature/',map:'.eu-map-frame',selectControl:'[data-eu-city-choice]'},
+ {id:'europe',path:'europe/nature/',map:'.eu-map-stage',selectControl:'[data-eu-city-choice]'},
  {id:'africa',path:'africa/?field=nature&topic=climate',map:'.africa-map-frame',svg:'.africa-map',select:'[data-africa-city-label="antananarivo"]',keyboard:true},
  {id:'japan',path:'japan/nature/',map:'.japan-map-frame',ready:'[data-japan-atlas][data-map-ready="true"][data-nature-ready="true"]',cameraRoot:'[data-japan-atlas]',selectControl:'[data-japan-climate-city]'},
  ...['east-asia','south-asia','central-asia','southeast-asia'].map(id=>({id,path:'asia/'+id+'/nature/',map:'.asia-map-frame',ready:'[data-asia-atlas][data-map-ready="true"]',cameraRoot:'[data-asia-atlas]',selectControl:'[data-city-select]'})),
@@ -94,7 +95,7 @@ try{
    if(scene.selectControl)assert.equal(await page.locator(scene.selectControl).inputValue(),selected);
    if(['east-asia','south-asia','central-asia','mexico','japan'].includes(scene.id))await shot(scene.id+'-selected-reloaded');
    await page.goBack({waitUntil:'networkidle'});await settle();assert.equal(new URL(page.url()).searchParams.get('city'),initialCity,scene.id+' restores preceding selection');
-   report.operations.push({region:scene.id,selection:selected,reload:true,back:true,cameraPreserved:Boolean(scene.svg||scene.cameraRoot)});
+   report.operations.push({region:scene.id,selection:selected,reload:true,back:true,cameraPreserved:Boolean(scene.svg||scene.cameraRoot||scene.urlCamera)});
   }else{await page.reload({waitUntil:'networkidle'});if(scene.ready)await page.locator(scene.ready).waitFor();assert(await page.locator(scene.map).first().isVisible());}
   report.scenes.push({region:scene.id,url:base+'/atlas/'+scene.path,map:box,metrics});
  }
