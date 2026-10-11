@@ -2,7 +2,7 @@ import {formatJapanQuantity} from '../lib/atlas-japan-number';
 import {japanFoundationPresentation} from './atlas-japan-foundation-presentations';
 import {mountJapanAgricultureLayers} from './atlas-japan-agriculture-layers';
 import {mountJapanNatureLayers,type JapanNatureLayers} from './atlas-japan-nature-layers';
-import {japanAgricultureSites} from '../data/atlas/japan-agriculture-v2';
+import {japanAgricultureSites,japanForestrySites} from '../data/atlas/japan-agriculture-v2';
 import {japanNatureFeatureIds} from '../data/atlas/japan-nature-v2';
 import {layoutJapanLabels} from '../lib/atlas-japan-label-layout';
 import {readJapanState,writeJapanState,japanReturnURL,japanDefaults,type JapanState} from '../lib/atlas-japan-state';
@@ -25,7 +25,7 @@ async function start(root:HTMLElement){
  const $=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const all=<T extends HTMLElement=HTMLElement>(s:string)=>[...root.querySelectorAll<T>(s)];
  const config:Config=JSON.parse($('[data-japan-config]').textContent!);
- const context={prefectures:Array.from({length:47},(_,i)=>'JP-'+String(i+1).padStart(2,'0')),cities:[...config.cities,...config.populationCities].map(c=>c.id),climateCities:config.cities.map(c=>c.id),urbanCities:config.populationPlaces.map(c=>c.id),agricultureSites:japanAgricultureSites.map(s=>s.id),naturalFeatures:[...Object.values(japanNatureFeatureIds).flat(),...Array.from({length:7},(_,i)=>'elevation-'+i*500),...Array.from({length:17},(_,i)=>'precipitation-'+(i+1)*250)],sites:config.sites.map(s=>s.id),siteIndustries:Object.fromEntries(config.sites.map(s=>[s.id,s.industries]))};
+ const context={prefectures:Array.from({length:47},(_,i)=>'JP-'+String(i+1).padStart(2,'0')),cities:[...config.cities,...config.populationCities].map(c=>c.id),climateCities:config.cities.map(c=>c.id),urbanCities:config.populationPlaces.map(c=>c.id),agricultureSites:japanAgricultureSites.map(s=>s.id),forestrySites:japanForestrySites.map(s=>s.id),naturalFeatures:[...Object.values(japanNatureFeatureIds).flat(),...Array.from({length:7},(_,i)=>'elevation-'+i*500),...Array.from({length:17},(_,i)=>'precipitation-'+(i+1)*250)],sites:config.sites.map(s=>s.id),siteIndustries:Object.fromEntries(config.sites.map(s=>[s.id,s.industries]))};
  let state=readJapanState(new URL(location.href),context);
  let map:import('maplibre-gl').Map|null=null,lib:typeof import('maplibre-gl')|null=null;
  let industry:Industry|null=null,population:Population|null=null,grid:AsiaNumericGrid|null=null,gridPromise:Promise<AsiaNumericGrid>|null=null;
@@ -145,7 +145,7 @@ async function start(root:HTMLElement){
   const items:Label[]=[];
   if(state.field==='industry'&&!quantity()){
    const offsets:Record<string,[number,number]>={toyota:[34,-39],yokkaichi:[-125,-62],osaka:[-132,-26],imabari:[-108,20],kitakyushu:[-145,-40],kumamoto:[28,30],nagasaki:[-98,42]};
-   for(const s of config.sites){const i=config.industries.find(i=>i.id===(s.industries.includes(state.topic)?state.topic:s.industries[0]))!;items.push({id:s.id,title:s.industries.map(id=>config.industries.find(i=>i.id===id)?.label).join('・'),subtitle:s.name,point:s.point,color:i.color,offset:offsets[s.id]??[10,10],select:()=>site(s.id),selected:state.site===s.id,muted:state.topic!=='clusters'&&!s.industries.includes(state.topic)});}
+   for(const s of config.sites){const i=config.industries.find(i=>i.id===(s.industries.includes(state.topic)?state.topic:s.industries[0]))!;items.push({id:s.id,title:s.label??s.industries.map(id=>config.industries.find(i=>i.id===id)?.label).join('・'),subtitle:s.name,point:s.point,color:i.color,offset:offsets[s.id]??[10,10],select:()=>site(s.id),selected:state.site===s.id,muted:state.topic!=='clusters'&&!s.industries.includes(state.topic)});}
   }else if(state.field!=='industry'){
    for(const label of japanFoundationPresentation(state,nature)!.labels)items.push({...label,reference:label.kind==='reference',offset:[12,-25],select:()=>label.kind==='site'?site(label.id):label.kind==='feature'?feature(label.id):city(label.id,state.field)});
   }

@@ -2,10 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import crypto from 'node:crypto';
-import {japanAgricultureProducts as products,japanAgricultureSites as sites,japanAgricultureSources as sources,japanAgricultureTopics,getJapanAgricultureReading,japanAgriculturePointCollection,japanAgricultureWheat as wheat,japanForestrySupply as wood} from '../../src/data/atlas/japan-agriculture-v2.ts';
+import {japanAgricultureProducts as products,japanAgricultureSites as sites,japanAgricultureSources as sources,japanAgricultureTopics,getJapanAgricultureReading,japanAgriculturePointCollection,japanAgricultureWheat as wheat,japanForestrySupply as wood,japanForestrySites as woodSites} from '../../src/data/atlas/japan-agriculture-v2.ts';
 test('日本の10品目は別用途の畜産を分け、公的産地資料へ到達できる',()=>{
  assert.equal(products.length,10);assert.equal(new Set(products.map(p=>p.id)).size,10);
- for(const product of products){assert(sites.some(s=>s.products.includes(product.id)),product.id);assert(product.selectionReason);for(const id of product.sourceIds)assert(sources.some(s=>s.id===id),id);}
+ for(const product of products){assert(sites.filter(s=>s.products.includes(product.id)).length>=2,product.id);assert(product.selectionReason);for(const id of product.sourceIds)assert(sources.some(s=>s.id===id),id);}
  assert(products.some(p=>p.id==='milk'));assert(products.some(p=>p.id==='beef'));assert(products.some(p=>p.id==='pork'));
  assert.deepEqual(new Set(japanAgricultureTopics),new Set(['all','forest',...products.map(p=>p.id)]));
 });
@@ -38,3 +38,10 @@ test('生成した公開資料は元の代表点・出典と一致し、hashを�
  for(const file of manifest.files){const bytes=fs.readFileSync(new URL(file.name,base));assert.equal(bytes.length,file.bytes);assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),file.sha256);}
  assert.deepEqual(JSON.parse(fs.readFileSync(new URL('sites.geojson',base),'utf8')),japanAgriculturePointCollection());
 });
+
+ test('木材利用の点は森林面・伐採量を表さず、森林の解説と公開資料に独立して接続する',()=>{
+  const base=new URL('../../public/assets/atlas/japan-agriculture-v2/',import.meta.url);
+  const geo=JSON.parse(fs.readFileSync(new URL('wood-sites.geojson',base),'utf8'));
+  assert.equal(woodSites.length,3);assert.equal(geo.features.length,woodSites.length);
+  for(const s of woodSites){assert.equal(s.geometryKind,'wood-use-reference-point');assert.equal(s.quantity,null);assert.equal(s.extent,null);assert(!sites.some(p=>p.id===s.id));for(const id of s.sourceIds){const source=sources.find(p=>p.id===id);assert(source);assert.match(source.period,/2024年度白書/);}assert.equal(getJapanAgricultureReading('forest',s.id).title,s.name);assert.notEqual(getJapanAgricultureReading('rice',s.id).title,s.name);assert.deepEqual(geo.features.find(f=>f.id===s.id).geometry.coordinates,s.coordinates);}
+ });

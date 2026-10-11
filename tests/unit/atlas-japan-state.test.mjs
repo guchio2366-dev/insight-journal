@@ -71,3 +71,12 @@ test('作物と畜産は品目・産地・カメラと独立してURLと分野�
  const one=readJapanState(url('japan/agriculture/?livestock=off&crops=garbage'),scoped);assert.equal(one.showCrops,true);assert.equal(one.showLivestock,false);
  assert.equal(writeJapanState(url('japan/agriculture/?crops=off'),{...one,showLivestock:true}).searchParams.has('crops'),false);
 });
+
+ test('木材利用のURL選択は森林内だけで受け付け、非表示の作物・畜産と独立する',()=>{
+  const scoped={...context,agricultureSites:['tokachi-farming'],forestrySites:['wood-nagai']};
+  const selected=readJapanState(url('japan/agriculture/?topic=forest&site=wood-nagai&crops=off&livestock=off'),scoped);
+  assert.equal(selected.site,'wood-nagai');assert.equal(selected.showCrops,false);assert.equal(selected.showLivestock,false);
+  assert.deepEqual(readJapanState(writeJapanState(url('japan/agriculture/'),selected),scoped),selected);
+  assert.equal(readJapanState(url('japan/agriculture/?topic=rice&site=wood-nagai'),scoped).site,null);
+  assert.equal(readJapanState(url('japan/agriculture/?topic=forest&site=tokachi-farming'),scoped).site,null);
+ });

@@ -1,5 +1,5 @@
 ---
-import {japanAgricultureProducts as products,japanAgricultureSites as sites,japanAgricultureSources as sources,japanAgricultureSelectionCandidates as candidates,japanAgricultureWheat as wheat,japanForestrySupply as wood} from '../../data/atlas/japan-agriculture-v2';
+import {japanAgricultureProducts as products,japanAgricultureSites as sites,japanAgricultureSources as sources,japanAgricultureSelectionCandidates as candidates,japanAgricultureWheat as wheat,japanForestrySupply as wood,japanForestrySites as woodSites} from '../../data/atlas/japan-agriculture-v2';
 interface Props {initialTopic?:string}
 const {initialTopic='all'}=Astro.props;
 const n=(value:number)=>value.toLocaleString('ja-JP');
@@ -36,7 +36,8 @@ const woodSource=source('wood-balance');
  </section>
  {products.filter(p=>p.id!=='wheat').map(p=><section data-japan-agriculture-panel={p.id} hidden={initialTopic!==p.id}><h3>{p.title}の産地資料</h3><p>確認した地域事例です。各地域の生産量順位・市町村内の園地境界は表していません。</p><div class="japan-table-scroll"><table><thead><tr><th scope="col">地域</th><th scope="col">資料から確認したこと</th><th scope="col">出典・対象時点</th></tr></thead><tbody>{sites.filter(s=>s.products.includes(p.id)).map(s=><tr><th scope="row"><button type="button" data-japan-farm-site={s.id}>{s.name}</button></th><td>{s.overview}</td><td>{s.sourceIds.map(id=><p><a href={source(id).href}>{source(id).title}</a><br/><small>{source(id).period}</small></p>)}</td></tr>)}</tbody></table></div><p>供給・用途・輸出入先・自給率の同一品目原表は、まだ接続できていません。この項目には数量グラフを表示しません。</p></section>)}
  <section data-japan-agriculture-panel="forest" hidden={initialTopic!=='forest'}>
-  <h3>森林の面積と、木材の供給・利用は別の指標</h3><p>詳細な森林被覆図は未収録。以下は全国の木材需給であり、地図の各場所の伐採量ではありません。</p>
+  <h3>森林の面積と、木材の供給・利用は別の指標</h3><p>地図の緑は2020年の粗い森林参考画像、茶色の点は2024年度白書の木材利用事例です。詳細な樹種・林齢の分布は未収録。以下は全国の木材需給であり、地図の各場所の伐採量ではありません。</p>
+  <h4>木材利用の地域事例</h4><p>森林の面や原木の調達範囲とは別の点です。点の数・大きさで木材生産量を表しません。</p><div class="japan-table-scroll"><table><thead><tr><th scope="col">利用と地域</th><th scope="col">確認した事実</th><th scope="col">出典・時点</th></tr></thead><tbody>{woodSites.map(s=><tr><th scope="row"><button type="button" data-japan-farm-site={s.id}>{s.name}</button></th><td>{s.overview}</td><td>{s.sourceIds.map(id=><p><a href={source(id).href}>{source(id).title}</a><br/><small>{source(id).period}</small></p>)}</td></tr>)}</tbody></table></div>
   <div class="japan-farm-three-columns">
    <section><h4>供給と行先</h4><p class="farm-period">{wood.period}・{wood.unit}</p><dl><div><dt>国内生産</dt><dd>{n(wood.domesticProduction)}</dd></div><div><dt>輸入</dt><dd>{n(wood.imports)}</dd></div><div class="farm-total"><dt>総供給・総需要</dt><dd>{n(wood.totalSupply)}</dd></div><div><dt>国内消費</dt><dd>{n(wood.domesticConsumption)}</dd></div><div><dt>輸出</dt><dd>{n(wood.exports)}</dd></div></dl><p>製材・合板だけでなく、パルプ・チップや燃料も含みます。丸太に換算した体積です。</p></section>
    <section><h4>用途と輸出入</h4><p class="farm-period">国内消費・{wood.unit}</p><dl>{wood.domesticUses.map(r=><div><dt>{r.title}</dt><dd>{n(r.value)}</dd></div>)}</dl><p>輸出入相手別の数量は未収録。全商品の輸出相手を木材の相手先として代用しません。</p></section>

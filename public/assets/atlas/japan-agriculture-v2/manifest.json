@@ -1,17 +1,22 @@
 {
   "schemaVersion": 1,
-  "prepared": "2026-10-10",
+  "prepared": "2026-10-11",
   "region": "Japan",
   "files": [
     {
       "name": "sites.geojson",
-      "bytes": 7540,
-      "sha256": "dfc0fceb1f01032b39e07070455585957b43c61046695cb7d58f7b79aaf662e0"
+      "bytes": 11631,
+      "sha256": "6f963dc56429f59bd49fbf6b58a61e4e2754bd0b1f3b33c567171b4a9cbe8c40"
     },
     {
       "name": "sources.json",
-      "bytes": 7758,
-      "sha256": "e4f9dd26b19e6c0ff7fab2d00bb32ea7012aa177b9048ab5385ea1bc0f27b3e7"
+      "bytes": 11534,
+      "sha256": "7728f5a192ea456faf8de3be03fffc523b2fb6680082984fc54fcb53b1acac0c"
+    },
+    {
+      "name": "wood-sites.geojson",
+      "bytes": 3236,
+      "sha256": "53bef2c7273be935700f069afe19c199ad7fce97ed6ee85c742f47cd2973bd35"
     },
     {
       "name": "selection.json",
@@ -26,7 +31,7 @@
   ],
   "sourceInput": {
     "path": "src/data/atlas/japan-agriculture-v2.ts",
-    "sha256": "485e1306f9b93a88350a2ef7524f4feebb8c21264489a819884b0f5bab728f4e"
+    "sha256": "1964743ce234ea7e8bd471d3f0feb32d2d6dfad6ec2abb4269b2250856249b3e"
   },
   "products": [
     {
