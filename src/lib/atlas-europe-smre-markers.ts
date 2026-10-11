@@ -2,7 +2,7 @@ import anchors from '../data/atlas/europe/pew-religion-anchors.json' with {type:
 import countries from '../data/atlas/europe/countries.json' with {type:'json'};
 import {smreMajorGroups,smreSource} from './atlas-europe-smre-surface';
 
-/** Equal-size national summaries; leaders locate countries, never residential boundaries. */
+/** Equal-width national summaries; leaders locate countries, never residential boundaries. */
 export function createEuropeSmreMarkers(stage:HTMLElement,onSelect:(code:string)=>void){
   const layer=document.createElement('div');layer.className='eu-smre-markers';layer.dataset.euSmreMarkers='';layer.hidden=true;
   const guides=document.createElementNS('http://www.w3.org/2000/svg','svg');guides.setAttribute('aria-hidden','true');layer.append(guides);stage.append(layer);
