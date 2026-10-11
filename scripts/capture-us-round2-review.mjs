@@ -72,7 +72,7 @@ try{
  assert.equal(await page.locator('[data-industry-markers] .industry-overview-label:visible').count(),0);
  assert.equal(await page.locator('[data-industry-overview-list]').isVisible(),true);
  await page.locator('[data-map-frame]').scrollIntoViewIfNeeded();await snapshot('industry-390');
- await page.locator('[data-industry-overview-list] [data-industry-place="newyork"]').click();assert.equal(await page.locator('[data-selection-title]').textContent(),'ニューヨーク');await snapshot('industry-390-place');
+ await page.locator('[data-industry-overview-list] [data-industry-place="newyork"]').click();assert.equal(await page.locator('[data-selection-title]').textContent(),'ニューヨーク');await page.locator('[data-selection]').scrollIntoViewIfNeeded();await snapshot('industry-390-place');
  assert.deepEqual(report.errors,[]);report.status='passed';
 }catch(error){report.status='failed';report.error=String(error);throw error;}
 finally{await writeFile(resolve(out,'report.json'),JSON.stringify(report,null,2)+'\n');await browser?.close();server.close();}

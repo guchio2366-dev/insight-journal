@@ -112,7 +112,7 @@ const payload = JSON.stringify({ initialField, initialMode, populationAssetBase,
         <a class="atlas-city-jump" data-city-jump href="#city-climate-heading" hidden>都市の雨温図へ</a>
         <p class="visually-hidden" id="atlas-map-description">地図の内容は下の解説でも読めます。タッチ操作は２本指で地図を動かします。</p><p class="visually-hidden" data-atlas-live aria-live="polite" aria-atomic="true"></p>
         <div data-agriculture-relations-host hidden={initialField!=='agriculture'}><AgricultureRelations /></div>
-        <div class="industry-overview-list" data-industry-overview-list hidden aria-label="州ごとの掲載産業"></div>
+        <div class="industry-overview-list" data-industry-overview-list hidden aria-label="集積・活動地域の掲載産業"></div>
         <div class="industry-key" data-industry-key hidden={initialField!=='industry'}>
           <p data-industry-size-note>業種名：出典で確認した集積・活動地域の例。点は都市・州・盆地の代表位置で、工場の正確位置や生産量・全米順位を表しません。</p>
           <div class="industry-economic-legend" data-industry-economic-legend hidden></div>
