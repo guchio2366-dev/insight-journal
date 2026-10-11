@@ -8,6 +8,8 @@ on:
       - 'public/assets/atlas/latin-reading*/**'
       - 'scripts/verify-latin-reading-pc.mjs'
       - 'scripts/verify-latin-culture-pc.mjs'
+      - 'scripts/verify-latin-culture-sources.py'
+      - 'data-source/atlas/latin-reading/**'
       - '.github/workflows/latin-reading-pc-review.yml'
 permissions:
   contents: read
@@ -39,6 +41,10 @@ jobs:
             sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
           fi
           test -n "$(fc-list ':lang=ja' family)"
+      - name: Read original culture sources for review
+        run: python3 scripts/verify-latin-culture-sources.py
+        env:
+          LATIN_CULTURE_SOURCE_OUTPUT: ${{ runner.temp }}/latin-reading-review/source-originals
       - run: npm ci --no-audit --no-fund
       - run: node --test tests/unit/atlas-latin-reading.test.mjs tests/unit/atlas-latin-culture-patterns.test.mjs tests/unit/atlas-latin-agriculture.test.mjs
       - run: npm run build
