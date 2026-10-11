@@ -133,10 +133,13 @@ test('小麦の需給例と原穀貿易は別対象・別単位と欠測を明�
   assert.equal(q('[data-west-wheat-fbs]'),null);
   assert.equal(q('[data-west-wheat-trade]'),null);
   assert.match(q('[data-west-food-fbs="dates"]').textContent,/ナツメヤシの実.*5,992.*5,117.*パレスチナは未掲載/);
-  assert.match(q('[data-west-farm-supply]').textContent,/ナツメヤシ｜域外輸出先.*円は未掲載/);
+  assert.match(q('[data-west-food-trade="dates"]').textContent,/ナツメヤシ｜域外輸出先.*インド.*モロッコ.*302,881.72 t.*13報告国.*22,641.52 t.*14報告国/);
   q('[data-west-topic-button="olives"]').click();
   await until(()=>q('[data-west-atlas]').dataset.topic==='olives'&&q('[data-west-atlas]').dataset.ready==='true');
-  assert.match(q('[data-west-food-fbs="oliveOil"]').textContent,/オリーブ油.*428.*384.*果実のオリーブ/);
+  assert.match(q('[data-west-food-fbs="olives"]').textContent,/オリーブ（保存品込み）.*4,053.*1,139.*加工（10対象）.*2,195.*オリーブ油.*428.*384/);
+  assert.match(q('[data-west-food-fbs="olives"]').textContent,/飼料・種子の0はヨルダンだけ/);
+  assert.match(q('[data-west-food-trade="olivePreserved"]').textContent,/保存オリーブ｜域外輸出先.*ルーマニア.*スペイン.*141,198.64 t.*12報告国/);
+  assert.match(q('[data-west-food-trade="oliveRaw"]').textContent,/原料オリーブ.*416.57 t.*5報告国/);
   assert.match(q('[data-west-food-trade="oliveOil"]').textContent,/域外輸出先.*スペイン.*米国.*その他.*14報告国/);
  }finally{await w.happyDOM.close();}
 });

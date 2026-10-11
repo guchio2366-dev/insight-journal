@@ -404,6 +404,7 @@
 .west-wheat-regional li{display:grid;grid-template-columns:60px minmax(0,1fr) 84px;gap:5px;align-items:center;margin:7px 0}
 .west-wheat-regional li span:first-child{font-size:12px}
 .west-wheat-regional li strong{font-size:12px;text-align:right}
+.west-fbs-partial li{grid-template-columns:108px minmax(0,1fr) 84px}
 .west-wheat-source-bar{display:block;height:10px;margin:3px 0;background:#d5e2dc;border-radius:5px;overflow:hidden}
 .west-wheat-source-bar i{display:block;height:100%;background:#967247}
 .west-wheat-destinations{display:grid;grid-template-columns:86px minmax(0,1fr);gap:8px;align-items:start}
