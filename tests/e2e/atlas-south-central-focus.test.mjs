@@ -24,7 +24,8 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
  try{
   browser=await chromium.launch({headless:true,chromiumSandbox:true,...(process.env.REVIEW_CHROME_PATH?{executablePath:process.env.REVIEW_CHROME_PATH}:{})});
   const page=await browser.newPage({viewport:{width:1920,height:1080},deviceScaleFactor:1}),errors=[];
-  const capture=async name=>{const folder=path.resolve('review-artifacts/south-central-focus');await mkdir(folder,{recursive:true});await page.waitForLoadState('networkidle');await page.evaluate(async()=>{await document.fonts.ready;scrollTo(0,0);await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});await page.screenshot({path:path.join(folder,`${name}.png`),animations:'disabled'});};
+  const focusedCaptures=new Set(['south-asia-industry','south-asia-industry-selected','south-asia-religion','south-asia-sindh-religion','south-asia-nepal-religion','south-asia-sri-lanka-religion','south-asia-groundwater','south-asia-groundwater-selected','central-asia-groundwater','central-asia-groundwater-selected','central-asia-forest-use']);
+  const capture=async name=>{if(process.env.SC_FOCUSED_REVIEW==='1'&&!focusedCaptures.has(name))return;const folder=path.resolve('review-artifacts/south-central-focus');await mkdir(folder,{recursive:true});await page.waitForLoadState('networkidle');await page.evaluate(async()=>{await document.fonts.ready;scrollTo(0,0);await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});await page.screenshot({path:path.join(folder,`${name}.png`),animations:'disabled'});};
   page.on('pageerror',error=>errors.push(error.message));
   for(const [region,expected,selected,city,foreign] of [
    ['south-asia',['AFG','BGD','BTN','IND','LKA','MDV','NPL','PAK'],'IND','new-delhi','KAZ'],
@@ -73,9 +74,14 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    await page.locator('.asia-industry-regional-label').first().waitFor({state:'visible'});
    assert.equal(await page.locator('.asia-industry-regional-label').count(),industry.industrySites.length);
    assert.match(await page.locator('.asia-industry-regional-label').first().textContent(),/衣料|石油|ウラン/);
+   if(region==='south-asia'){
+    assert.ok(await page.locator('.asia-industry-regional-label.is-compact').count()>0);
+    assert.equal(await page.locator('.asia-industry-regional-label[data-industry-site="sc-dhaka-garments"] span').textContent(),'ダッカ・チッタゴン');
+   }
    await capture(`${region}-industry`);
    await page.locator('.asia-industry-regional-label').first().click();
    assert.ok(new URL(page.url()).searchParams.get('detail'));
+   assert.equal(await page.locator('.asia-industry-regional-label[aria-pressed="true"].is-compact').count(),0);
    await capture(`${region}-industry-selected`);
    await page.goBack();
    await page.waitForFunction(()=>new URL(location.href).searchParams.get('detail')===null);
@@ -106,6 +112,7 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    await page.waitForFunction(()=>document.querySelector('[data-farming-statistics-tables]')?.textContent?.includes('燃料材の生産量'));
    assert.match(await page.locator('[data-farming-statistics-tables]').textContent(),/産業用丸太の生産量/);
    assert.match(await page.locator('[data-farming-reference]').textContent(),region==='south-asia'?/FAO・ネパール/: /UNECE・中央アジア/);
+   if(region==='central-asia')assert.doesNotMatch(await page.locator('[data-farming-reference]').textContent(),/インド|India|India State/i);
    await capture(`${region}-forest-use`);
    await page.goto(`${url}/atlas/asia/${region}/nature/?topic=terrain`,{waitUntil:'domcontentloaded'});
    await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.contourBandStatus==='ready');
@@ -135,9 +142,20 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
     await page.locator('[data-religion-local="pk-sindh-religion"]').click();
     assert.equal(new URL(page.url()).searchParams.get('story'),'pk-sindh-religion');
     assert.match(await page.locator('[data-sc-religion-local-reading]').textContent(),/6.43%/);
+    assert.equal(await page.locator('[data-sc-religion-country="PAK"]').isVisible(),false);
+    assert.equal(await page.locator('[data-sc-religion-local-panel]').evaluate(node=>node.previousElementSibling?.tagName),'H2');
     await capture('south-asia-sindh-religion');
     await page.goBack();
     await page.waitForFunction(()=>new URL(location.href).searchParams.get('place')===null);
+    for(const [id,name] of [['np-koshi-kirat','south-asia-nepal-religion'],['lk-jaffna-hindu','south-asia-sri-lanka-religion']]){
+     await page.locator(`[data-religion-local="${id}"]`).click();
+     assert.equal(new URL(page.url()).searchParams.get('story'),id);
+     assert.equal(await page.locator(`[data-religion-local="${id}"].is-compact`).count(),0);
+     assert.equal(await page.locator('[data-sc-religion-local-panel]').isVisible(),true);
+     await capture(name);
+     await page.goBack();
+     await page.waitForFunction(()=>new URL(location.href).searchParams.get('story')===null);
+    }
    }
    if(region==='central-asia'){
     await page.locator('.sc-religion-report-marker[aria-label^="タジキスタン"]').click();

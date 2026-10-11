@@ -132,7 +132,7 @@ jobs:
 
       - name: Verify South and Central Asia regional journeys
         timeout-minutes: 4
-        run: ATLAS_ASIA_BROWSER=1 node --test tests/e2e/atlas-south-central-focus.test.mjs
+        run: ATLAS_ASIA_BROWSER=1 SC_FOCUSED_REVIEW=1 node --test tests/e2e/atlas-south-central-focus.test.mjs
 
       # East Asia map expansion supersedes the former exact US frame parity.
       # The former broad comparison script remains available for manual review.

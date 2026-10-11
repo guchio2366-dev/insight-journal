@@ -312,6 +312,7 @@
 .asia-atlas-root[data-region=south-central-asia] .sc-religion-report-marker.local{min-width:44px;border-style:dashed;background:#eaf2f1}
 .asia-atlas-root[data-region=south-central-asia] .sc-religion-report-marker[aria-pressed=true]{outline:3px solid #aa553a;outline-offset:2px}
 .asia-atlas-root[data-region=south-central-asia] .sc-religion-local-marker{min-height:24px;padding:2px 5px;border:1px solid #44796d;border-left-width:3px;border-radius:2px;background:#f4fff4ed;color:#284f43;font:700 10px/1.2 var(--sans);box-shadow:0 1px 3px #203d4860;cursor:pointer;white-space:nowrap}
+.asia-atlas-root[data-region=south-central-asia] .sc-religion-local-marker.is-compact{width:15px;height:15px;min-height:15px;padding:0;overflow:hidden;border:3px solid #44796d;border-radius:50%;background:#fff;color:transparent;font-size:0}
 .asia-atlas-root[data-region=south-central-asia] .sc-religion-local-marker[aria-pressed=true],.asia-atlas-root[data-region=south-central-asia] .sc-religion-local-marker:focus-visible{outline:3px solid #aa553a;outline-offset:2px}
 @media(min-width:960px){.atlas-desktop-shell .asia-atlas-root[data-region=southeast-asia] .asia-atlas[data-field=industry] .asia-layout{grid-template-columns:minmax(0,1.8fr) minmax(320px,1fr);gap:12px}.atlas-desktop-shell .asia-atlas-root[data-region=southeast-asia] .asia-atlas[data-field=industry] .asia-map-frame{aspect-ratio:1.35!important;min-height:380px!important;max-height:620px!important}}
 @media(min-width:960px) and (max-width:1199px){

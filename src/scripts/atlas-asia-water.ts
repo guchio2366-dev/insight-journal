@@ -146,7 +146,8 @@ export function createAsiaWater(root:HTMLElement,config:Config,getState:()=>Asia
    map.addLayer({id:id+'-selected',type:'line',source:t==='basins'?'asia-hydrology-basin-outlines':id,paint:{'line-color':'#ac432f','line-width':2.5}},before);
   }
   map.setPaintProperty(id,'fill-opacity',.46);
-  map.setLayoutProperty(id,'visibility','visible');map.setLayoutProperty(id+'-selected','visibility',t==='basins'?'visible':'none');map.setFilter(id+'-selected',['==',['get','id'],detail()?.id??'']);if(t==='basins'){const ids=asiaWaterFocus[config.regionId].map(f=>f.id);if(detail())ids.push(detail()!.id);map.setFilter(id,['in',['get','id'],['literal',ids]]);map.setLayoutProperty('asia-hydrology-basin-outlines','visibility','none');}else{map.setFilter(id,['<',['get','category'],20]);map.setPaintProperty(id,'fill-color','#a9d2da');}
+  const selected=detail(),showSelected=t==='basins'||t==='groundwater'&&!!config.focusId&&getState().detail===selected?.id;
+  map.setLayoutProperty(id,'visibility','visible');map.setLayoutProperty(id+'-selected','visibility',showSelected?'visible':'none');map.setFilter(id+'-selected',['==',['get','id'],selected?.id??'']);if(t==='basins'){const ids=asiaWaterFocus[config.regionId].map(f=>f.id);if(selected)ids.push(selected.id);map.setFilter(id,['in',['get','id'],['literal',ids]]);map.setLayoutProperty('asia-hydrology-basin-outlines','visibility','none');}else{map.setFilter(id,['<',['get','category'],20]);map.setPaintProperty(id,'fill-color','#a9d2da');}
   if(config.regionId==='southeast-asia'&&getState().topic==='water'){
    try{await load('basins');}catch{return;}
    if(seq!==revision||getState().topic!=='water'||map!==currentMap)return;
