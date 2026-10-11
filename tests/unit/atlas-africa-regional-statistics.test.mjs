@@ -42,4 +42,10 @@ test('additional World rows retain the identical QCL archive and do not manufact
   const row=rows.find(x=>x.id===id),source=europe.world.observations.find(x=>x[0]===metric&&x[1]===2024);
   assert.equal(row.world.rawValue,source[2]);assert.equal(row.world.unit,source[3]);assert.equal(row.world.flag,source[4]);assert.equal(row.world.areaCode,'5000');assert.equal(row.regional,null);assert.equal(row.share,null);
  }
+ const lines=readFileSync(new URL('data-source/atlas/africa/statistics/qcl-2024-missing-required-rows.csv',root),'utf8').trim().split(/\r?\n/),headers=lines.shift().split(','),required=lines.map(line=>Object.fromEntries(line.split(',').map((value,index)=>[headers[index],value]))),expected=new Set();
+ const items={maize:'56',rice:'27',wheat:'15',cassava:'125',coffee:'656',tea:'667','cattle-meat':'867','cattle-milk':'882','goats-meat':'1017','sheep-meat':'977'};
+ for(const [region,rows]of Object.entries(stats.regions))for(const row of rows){if(!row.regional)expected.add(stats.regionCodes[region]+':'+items[row.id]);if(!row.world)expected.add('5000:'+items[row.id]);}
+ assert.equal(required.length,47);assert.deepEqual(new Set(required.map(row=>row['Area Code']+':'+row['Item Code'])),expected);
+ for(const row of required){assert.equal(row['Element Code'],'5510');assert.equal(row.Year,'2024');assert.equal(row.Unit,'t');for(const field of ['Value','Flag','Note'])assert.equal(row[field],'');}
+
 });

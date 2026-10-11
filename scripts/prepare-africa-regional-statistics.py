@@ -46,3 +46,17 @@ for region,code in region_codes.items():
 payload={'schemaVersion':1,'year':2024,'domain':'QCL','elementCode':'5510','unit':'t','regionCodes':region_codes,'regions':regions,'method':'FAOSTATの公表済み地域行を同一品目・要素5510・2024年・tのWorld（5000）行で割る。地域集計と国別値を重ねて合算しない。空欄・欠測を0にしない。米は籾、コーヒーは生豆、牛肉は骨付き、生乳は未加工乳。地図のSPAM/GLW 2020年格子から数量を作らない。','source':{'publisher':'FAO','url':'https://www.fao.org/faostat/en/#data/QCL','releaseDate':'2025-12-31','archiveSha256':crop_source['zipSha256'],'license':'CC BY 4.0','licenseUrl':'https://www.fao.org/contact-us/terms/db-terms-of-use/','retainedFiles':[{'path':str(p.relative_to(ROOT)),'sha256':sha(p)} for p in (crop,livestock,europe_path)]},'unavailable':[{'id':'trade','label':'域外の輸出・輸入相手','reason':'詳細貿易マトリクス原表未取得。域内相手を除外する同年・同品目・数量の比較は未実施。'},{'id':'calories','label':'カロリー構成と自給率','reason':'食料需給表原表未取得。食用供給のkcal/人/日構成と、生産／国内供給量の自給率は算出していない。'}],'retrievalBlocker':{'date':'2026-10-09','reason':'SPAM distribution and FAOSTAT QCL/FBS/detailed-trade ZIP requests from execution environment returned Tunnel connection failed: 403 Forbidden. No alternate download host or proxy was used.'}}
 p=ROOT/'src/data/atlas/africa-regional-statistics.json';p.write_text(json.dumps(payload,ensure_ascii=False,separators=(',',':'))+'\n')
 print({key:sum(x['share'] is not None for x in series) for key,series in regions.items()})
+
+# Consumer input checklist: exact missing publisher observations, without invented values.
+missing={}
+for region,series in regions.items():
+ for row in series:
+  item=next(x[2] for x in items if x[0]==row['id'])
+  if row['regional'] is None:missing[(region_codes[region],item)]=(region_codes[region],region,row['id'],row['label'],item)
+  if row['world'] is None:missing[('5000',item)]=('5000','World',row['id'],row['label'],item)
+checklist=ROOT/'data-source/atlas/africa/statistics/qcl-2024-missing-required-rows.csv'
+checklist.parent.mkdir(parents=True,exist_ok=True)
+with checklist.open('w') as stream:
+ writer=csv.writer(stream);writer.writerow(['Area Code','displayRegion','id','label','Item Code','Element Code','Year','Unit','Value','Flag','Note'])
+ for row in sorted(missing.values()):writer.writerow([*row,'5510','2024','t','','',''])
+print({'requiredMissingPublisherRows':len(missing)})

@@ -50,8 +50,9 @@ test('saved JRC WMS references retain their source coordinates and do not fill u
  const manifest=JSON.parse(fs.readFileSync('public/assets/atlas/asia-farming-v1/manifest.json'));
  assert.equal(library.forestryReferences('africa').length,2);assert.equal(library.forestryReferences('latin-america').length,0);
  for(const region of ['africa','oceania','russia'])for(const reference of library.forestryReferences(region)){
-  const source=reference.id==='west-asia'?{year:2020,query:null,method:'Unmodified publisher-rendered',imageCoordinates:[[23,45],[64,45],[64,10],[23,10]]}:manifest.regions[reference.id].layers.find(layer=>layer.id==='forest');
-  assert.equal(source.year,2020);assert.equal(source.query,null);assert.match(source.method,/Unmodified publisher-rendered/);
+  const western=reference.id==='west-asia',source=western?JSON.parse(fs.readFileSync('public/assets/atlas/west-asia-v1/raster-manifest.json')).layers.find(layer=>layer.id==='forest'):manifest.regions[reference.id].layers.find(layer=>layer.id==='forest');
+  assert.equal(Number(source.year),2020);assert.equal(western?source.grid:source.query,null);assert.match(source.method,western?/提供元が描画したWMS画像/:/Unmodified publisher-rendered/);
+  if(western){const [west,south,east,north]=source.bounds;source.imageCoordinates=[[west,north],[east,north],[east,south],[west,south]];assert.deepEqual(reference.bounds,source.bounds);assert.equal(reference.href,'/assets/atlas/west-asia-v1/'+source.image);}
   const [left,top]=library.projectForestry(region,source.imageCoordinates[0]),[right,bottom]=library.projectForestry(region,source.imageCoordinates[2]);
   assert.deepEqual([reference.x,reference.y,reference.width,reference.height],[left,top,right-left,bottom-top]);
   const {default:sharp}=await import('sharp'),{data}=await sharp('public'+reference.href).ensureAlpha().raw().toBuffer({resolveWithObject:true});let painted=0,transparent=0;
