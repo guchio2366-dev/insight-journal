@@ -19,6 +19,8 @@ on:
       - 'src/components/atlas/asia/SoutheastAsiaIndustryReading.astro'
       - 'src/data/atlas/asia/southeast-landform-extents.json'
       - 'src/data/atlas/asia/southeast-census-complements.ts'
+      - 'src/data/atlas/asia/southeast-asia-industry-sites.ts'
+      - 'src/data/atlas/asia-physical-reading.ts'
 permissions:
   contents: read
 concurrency:
