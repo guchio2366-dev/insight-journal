@@ -134,6 +134,16 @@ async function cityClimateReadingLayout(page, requestedId) {
 export async function inspectMexicoInitialPresentation(page, field) {
   if (field === 'population') return {populationNationalLayout: await populationNationalLayout(page)};
   if (field === 'nature') return {cityClimateReadingLayout: await cityClimateReadingLayout(page)};
+  if (field === 'agriculture') {
+    const marks=await page.locator('[data-mexico-agriculture-atlas]').evaluate(root=>{
+      const selectors=['[data-crop-label]', '.atlas-livestock-marker'];
+      return selectors.flatMap(selector=>[...root.querySelectorAll(selector)].filter(node=>!node.closest('[hidden]')&&getComputedStyle(node).display!=='none').map(node=>{const box=node.getBoundingClientRect();return {name:node.getAttribute('aria-label')??node.textContent?.trim(),left:box.left,top:box.top,right:box.right,bottom:box.bottom};}));
+    });
+    const collisions=[];
+    for(const [index,a] of marks.entries())for(const b of marks.slice(index+1))if(Math.min(a.right,b.right)-Math.max(a.left,b.left)>2&&Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)>2)collisions.push(`${a.name} / ${b.name}`);
+    assert.equal(collisions.length,0,`Agriculture names and livestock badges overlap: ${collisions.join('; ')}`);
+    return {agricultureMarks:marks};
+  }
   if (field === 'industry') {
     const labels=await page.locator('[data-mi-map="primary"] [data-mi-reading-markers] [data-mi-region-label]').evaluateAll(nodes=>nodes.filter(node=>!node.closest('[hidden]')).map(node=>{const box=node.getBoundingClientRect();return {name:node.textContent?.trim(),left:box.left,top:box.top,right:box.right,bottom:box.bottom};}));
     const collisions=[];
