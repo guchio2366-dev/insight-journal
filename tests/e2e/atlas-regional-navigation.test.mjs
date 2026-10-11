@@ -101,7 +101,9 @@ test('北米の国を切り替えられ、中南米とメキシコの選択対�
   const usa = await page('atlas/north-america');
   assert.ok(usa.querySelector('[data-atlas-explorer]'));
   assert.deepEqual([...usa.querySelectorAll('.regional-countries a')].map(a => a.textContent), ['カナダ','米国','メキシコ']);
-  assert.deepEqual(selections(await page('atlas/north-america/canada')), ['CAN']);
+  const canada = await page('atlas/north-america/canada');
+  assert.ok(canada.querySelector('[data-canada-nature]'));
+  assert.equal(canada.querySelector('.regional-countries [aria-current="page"]')?.getAttribute('href'), '/insight-journal/atlas/north-america/canada/');
   const mexico = await page('atlas/north-america/mexico');
   assert.equal(mexico.querySelector('[data-mexico-field]')?.dataset.mexicoField, 'nature');
   assert.equal(mexico.querySelector('.regional-countries [aria-current="page"]')?.getAttribute('href'), '/insight-journal/atlas/north-america/mexico/');

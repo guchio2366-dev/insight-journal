@@ -28,7 +28,7 @@
 .canada-natural-static-station.is-selected circle { fill: #fff; stroke: #263f48; stroke-width: 3; }
 .canada-natural-static-station text { fill: #263f48; stroke: #fffdf6; stroke-width: 3; paint-order: stroke; font: 700 13px var(--sans, sans-serif); }
 .canada-natural-tools { position: absolute; z-index: 3; top: 8px; right: 8px; display: grid; gap: 3px; }
-.canada-natural-tools button { width: 44px; height: 40px; min-height: 40px; padding: 0; border: 1px solid #a4b8b9; border-radius: 4px; background: #fff; color: #253e42; font: 700 12px/1.2 var(--sans, sans-serif); cursor: pointer; box-shadow: 0 1px 3px rgb(34 58 56 / 14%); }
+.canada-natural-tools button { width: auto; height: 34px; min-height: 34px; padding: 4px 8px; border: 1px solid #a4b8b9; border-radius: 4px; background: #fff; color: #253e42; font: 500 12px/1.2 var(--sans, sans-serif); cursor: pointer; }
 .canada-natural-tools button[data-canada-natural-zoom] { font-size: 22px; }
 .canada-natural-tools button:disabled { opacity: .45; cursor: default; }
 .canada-natural-key { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0; }

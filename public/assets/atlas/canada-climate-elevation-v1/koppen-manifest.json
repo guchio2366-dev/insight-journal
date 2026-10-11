@@ -281,8 +281,8 @@
       "overlayMatchesRawCell": true,
       "coordinateSourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=1108447&dispBack=0",
       "boundaryCandidates": [
-        "Csb",
-        "Cfb"
+        "Cfb",
+        "Csb"
       ],
       "interiorProbe": [
         -123.17999999000001,
@@ -365,6 +365,110 @@
       "interiorProbe": [
         -104.66999999000001,
         50.42999999
+      ],
+      "interiorProbeMatchesRawCell": true,
+      "class": "Dfb",
+      "classCode": 26
+    },
+    {
+      "stationId": "toronto",
+      "name": "トロント",
+      "station": "TORONTO CITY",
+      "climateId": "6158355",
+      "coordinates": [
+        -79.4,
+        43.67
+      ],
+      "sourceRow": 463,
+      "sourceColumn": 1006,
+      "code": "Dfa",
+      "id": "toronto",
+      "overlayMatchesRawCell": true,
+      "coordinateSourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=6158355&dispBack=0",
+      "boundaryCandidates": [
+        "Dfa"
+      ],
+      "interiorProbe": [
+        -79.39999999000001,
+        43.66999999
+      ],
+      "interiorProbeMatchesRawCell": true,
+      "class": "Dfa",
+      "classCode": 25
+    },
+    {
+      "stationId": "montreal",
+      "name": "モントリオール",
+      "station": "MONTREAL/PIERRE ELLIOTT TRUDEAU INTL A",
+      "climateId": "7025250",
+      "coordinates": [
+        -73.75,
+        45.47
+      ],
+      "sourceRow": 445,
+      "sourceColumn": 1062,
+      "code": "Dfa",
+      "id": "montreal",
+      "overlayMatchesRawCell": true,
+      "coordinateSourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=7025250&dispBack=0",
+      "boundaryCandidates": [
+        "Dfa"
+      ],
+      "interiorProbe": [
+        -73.74999999,
+        45.46999999
+      ],
+      "interiorProbeMatchesRawCell": true,
+      "class": "Dfa",
+      "classCode": 25
+    },
+    {
+      "stationId": "calgary",
+      "name": "カルガリー",
+      "station": "CALGARY INTL A",
+      "climateId": "3031092",
+      "coordinates": [
+        -114.01,
+        51.12
+      ],
+      "sourceRow": 388,
+      "sourceColumn": 659,
+      "code": "Dfb",
+      "id": "calgary",
+      "overlayMatchesRawCell": true,
+      "coordinateSourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=3031092&dispBack=0",
+      "boundaryCandidates": [
+        "Dfb"
+      ],
+      "interiorProbe": [
+        -114.00999999000001,
+        51.11999999
+      ],
+      "interiorProbeMatchesRawCell": true,
+      "class": "Dfb",
+      "classCode": 26
+    },
+    {
+      "stationId": "halifax",
+      "name": "ハリファクス",
+      "station": "HALIFAX STANFIELD INT'L A",
+      "climateId": "8202250",
+      "coordinates": [
+        -63.5,
+        44.88
+      ],
+      "sourceRow": 451,
+      "sourceColumn": 1165,
+      "code": "Dfb",
+      "id": "halifax",
+      "overlayMatchesRawCell": true,
+      "coordinateSourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=8202250&dispBack=0",
+      "boundaryCandidates": [
+        "Dfb"
+      ],
+      "interiorProbe": [
+        -63.49999999,
+        44.87999999
       ],
       "interiorProbeMatchesRawCell": true,
       "class": "Dfb",
@@ -610,8 +714,8 @@
         "overlayMatchesRawCell": true,
         "coordinateSourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=1108447&dispBack=0",
         "boundaryCandidates": [
-          "Csb",
-          "Cfb"
+          "Cfb",
+          "Csb"
         ],
         "interiorProbe": [
           -123.17999999000001,
@@ -690,6 +794,102 @@
           50.42999999
         ],
         "interiorProbeMatchesRawCell": true
+      },
+      {
+        "stationId": "toronto",
+        "name": "トロント",
+        "station": "TORONTO CITY",
+        "climateId": "6158355",
+        "coordinates": [
+          -79.4,
+          43.67
+        ],
+        "sourceRow": 463,
+        "sourceColumn": 1006,
+        "code": 25,
+        "id": "Dfa",
+        "overlayMatchesRawCell": true,
+        "coordinateSourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=6158355&dispBack=0",
+        "boundaryCandidates": [
+          "Dfa"
+        ],
+        "interiorProbe": [
+          -79.39999999000001,
+          43.66999999
+        ],
+        "interiorProbeMatchesRawCell": true
+      },
+      {
+        "stationId": "montreal",
+        "name": "モントリオール",
+        "station": "MONTREAL/PIERRE ELLIOTT TRUDEAU INTL A",
+        "climateId": "7025250",
+        "coordinates": [
+          -73.75,
+          45.47
+        ],
+        "sourceRow": 445,
+        "sourceColumn": 1062,
+        "code": 25,
+        "id": "Dfa",
+        "overlayMatchesRawCell": true,
+        "coordinateSourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=7025250&dispBack=0",
+        "boundaryCandidates": [
+          "Dfa"
+        ],
+        "interiorProbe": [
+          -73.74999999,
+          45.46999999
+        ],
+        "interiorProbeMatchesRawCell": true
+      },
+      {
+        "stationId": "calgary",
+        "name": "カルガリー",
+        "station": "CALGARY INTL A",
+        "climateId": "3031092",
+        "coordinates": [
+          -114.01,
+          51.12
+        ],
+        "sourceRow": 388,
+        "sourceColumn": 659,
+        "code": 26,
+        "id": "Dfb",
+        "overlayMatchesRawCell": true,
+        "coordinateSourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=3031092&dispBack=0",
+        "boundaryCandidates": [
+          "Dfb"
+        ],
+        "interiorProbe": [
+          -114.00999999000001,
+          51.11999999
+        ],
+        "interiorProbeMatchesRawCell": true
+      },
+      {
+        "stationId": "halifax",
+        "name": "ハリファクス",
+        "station": "HALIFAX STANFIELD INT'L A",
+        "climateId": "8202250",
+        "coordinates": [
+          -63.5,
+          44.88
+        ],
+        "sourceRow": 451,
+        "sourceColumn": 1165,
+        "code": 26,
+        "id": "Dfb",
+        "overlayMatchesRawCell": true,
+        "coordinateSourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=8202250&dispBack=0",
+        "boundaryCandidates": [
+          "Dfb"
+        ],
+        "interiorProbe": [
+          -63.49999999,
+          44.87999999
+        ],
+        "interiorProbeMatchesRawCell": true
       }
     ]
   },
@@ -703,5 +903,11 @@
     "Canada boundaries are 2021 cartographic statistical boundaries; small lakes not represented by Natural Earth 1:50m remain unresolved.",
     "Grid class at an ECCC station coordinate is independent of the station monthly normal. It is not a classification recalculated from that station's temperatures or precipitation.",
     "Classes describe the 1991–2020 reference climate, not current weather, rainfall totals, temperatures, crop suitability or national averages."
-  ]
+  ],
+  "stationSampleUpdate": {
+    "date": "2026-10-11",
+    "script": "scripts/update-canada-climate-stations.mjs",
+    "scriptSha256": "3439252100f26a8c0c1c54d1360ad49c475b27f3316687acb2e90ba8eb4fb620",
+    "method": "Official ECCC inventory coordinates; direct source raster cell lookup; published Canada geometry interior-probe comparison. Climate geometries and class areas unchanged."
+  }
 }

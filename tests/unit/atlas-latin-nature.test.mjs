@@ -54,7 +54,7 @@ test('Natural raster uses the same Mercator frame as boundaries; only keeps ever
  assert.match(html,/data-nature-context/);assert.match(html,/clip-path="url\(#test-climate-only\)"/);
  assert.match(html,/viewBox="0 0 900 580"/);assert.match(html,/opacity="0.16"/);assert.match(html,/opacity="1"/);
  const w=new Window();w.document.body.innerHTML=html;assert.equal(w.document.querySelectorAll('[data-nature-country][aria-pressed=true]').length,1);void w.happyDOM.close();
- assert.match(html,/viewBox="[^\"]+"/);assert.match(html,/\/insight-journal\/assets\/atlas\/latin-nature-v1/);
+ assert.match(html,/viewBox="[^\"]+"/);assert.match(html,/\/insight-journal\/assets\/atlas\/latin-america-climate-v1/);
  for(const [scope,place] of [['all','all'],['central','CRI'],['south','BRA'],['country','CUB']]){
   const layout=geometry.latinMapLayout(scope,place),rendered=nature.renderLatinNatureMap({layer:'climate',scope,place,only:false});assert.ok(rendered.includes(`transform="${layout.transform}"`));assert.ok(rendered.includes(`data-nature-frame="${layout.frame.join(' ')}"`));
   const [x,y,w,h]=layout.frame;assert.ok(layout.k>0);assert.ok(Math.abs((x+w/2)*layout.k+layout.tx-450)<1e-9);assert.ok(Math.abs((y+h/2)*layout.k+layout.ty-290)<1e-9);

@@ -22,3 +22,5 @@
  .latin-workspace.latin-nature:not(.is-comparison) .latin-reading{height:calc(100dvh - var(--latin-nature-reader-top,298px) - 8px);max-height:none;overflow:hidden}
  .latin-workspace.latin-nature:not(.is-comparison) .latin-reading-scroll{flex:1;min-height:0;max-height:none;overflow-y:auto}
 }
+
+.latin-nature-detail-legend{gap:3px 12px;font-size:12px}.latin-nature-detail-legend>span{min-height:18px}.latin-nature-detail-legend strong{font-variant-numeric:tabular-nums}

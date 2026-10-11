@@ -15,7 +15,7 @@ const fixtureData={drainage:collection([polygon('d1','01'),polygon('d2','02')]),
 
 test('water URL state preserves all native surface and comparison keys, hash, selection and SVG camera',()=>{
  const url=new URL('https://example.test/nature/?city=regina&view=water&water=Fraser&only=1&frame=1,2,300,200&forestryReturn=forest&industryReturn=gdp&populationReturn=cma&cropReturn=wheat#reading');
- const state={topic:'aquifers',area:'550',only:true,frame:[197.749,451.777,29.876,19.857]};
+ const state={topic:'drainage',area:'01',only:true,frame:[197.749,451.777,29.876,19.857]};
  const next=writeCanadaWaterState(url,state);
  for(const [key,value] of url.searchParams)assert.equal(next.searchParams.get(key),value);
  assert.equal(next.hash,'#reading');assert.deepEqual(readCanadaWaterState(next,canadaWaterIds(config)),state);
@@ -23,12 +23,12 @@ test('water URL state preserves all native surface and comparison keys, hash, se
  assert.equal(surface.searchParams.get('water'),'Fraser');assert.equal(surface.searchParams.get('only'),'1');assert.equal(surface.searchParams.get('frame'),'1,2,300,200');assert.equal(surface.searchParams.has('waterTopic'),false);
 });
 test('unknown selections, orphan isolation and malformed or out-of-map cameras are rejected',()=>{
- for(const frame of ['',',0,300,200','0, ,300,200','NaN,0,300,200','-1,0,300,200','700,0,300,200','0,0,0,20','0,0,900,581']){
+ for(const frame of ['',',0,300,200','0, ,300,200','NaN,0,300,200','-1,0,300,200','800,0,300,200','0,0,0,20','0,0,1000,701']){
   const url=new URL('https://example.test/?waterTopic=groundwater&waterArea=made-up&waterOnly=1');url.searchParams.set('waterFrame',frame);
-  assert.deepEqual(readCanadaWaterState(url,canadaWaterIds(config)),{topic:'groundwater',area:null,only:false,frame:null});
+  assert.deepEqual(readCanadaWaterState(url,canadaWaterIds(config)),{topic:'surface',area:null,only:false,frame:null});
  }
  assert.equal(readCanadaWaterState(new URL('https://example.test/?waterTopic=volume'),canadaWaterIds(config)).topic,'surface');
- assert.equal(readCanadaWaterState(new URL('https://example.test/?waterTopic=aquifers&waterArea=bedrock&waterOnly=1'),canadaWaterIds(config)).only,true);
+ assert.deepEqual(readCanadaWaterState(new URL('https://example.test/?waterTopic=aquifers&waterArea=bedrock&waterOnly=1'),canadaWaterIds(config)),{topic:'surface',area:null,only:false,frame:null});
 });
 test('the approved affine frame preserves polygon holes and fits a real selected source footprint',()=>{
  assert.deepEqual(projectCanadaWater([-145,85]),[0,0]);assert.deepEqual(projectCanadaWater([-50,40]),[900,580]);
@@ -62,7 +62,7 @@ test('hidden and surface views make no theme requests; visible drainage loads on
  assert.equal(new URL(page.window.location.href).searchParams.get('cropReturn'),'wheat');assert.equal(new URL(page.window.location.href).searchParams.get('water'),'Fraser');
  page.window.history.replaceState(null,'','?city=regina&water=Fraser&waterTopic=drainage&waterArea=02&waterOnly=1&waterFrame=100,200,300,200#read');page.window.dispatchEvent(new page.window.PopStateEvent('popstate'));
  assert.equal(page.root.querySelector('[data-canada-water-area]').value,'02');assert.equal(page.root.querySelector('[data-canada-water-resource-map]').getAttribute('viewBox'),canadaLegacyFrame([100,200,300,200]).join(' '));assert.equal(page.requests.length,1);
- page.root.querySelector('[data-canada-water-resource-reset]').click();assert.deepEqual(page.state,{topic:'drainage',area:null,only:false,frame:null});
+ page.root.querySelector('[data-canada-water-resource-reset]').click();assert.deepEqual(page.state,{topic:'drainage',area:null,only:false,frame:[100,200,300,200]});
 });
 test('groundwater source-invalid geometry stays an unfilled original outline; aquifers isolate a class or individual source ID',async()=>{
  const page=setup();page.show({topic:'groundwater'});await waitFor(()=>page.root.dataset.canadaWaterReady==='ready');

@@ -8,6 +8,10 @@ on:
       - 'public/assets/atlas/latin-reading*/**'
       - 'scripts/verify-latin-reading-pc.mjs'
       - 'scripts/verify-latin-culture-pc.mjs'
+      - 'scripts/verify-latin-nature-reading-pc.mjs'
+      - 'public/assets/atlas/latin-nature-reading-v2/**'
+      - 'scripts/latin-america/*reading*'
+      - 'data-source/atlas/latin-america/nature-reading/**'
       - 'scripts/verify-latin-culture-sources.py'
       - 'data-source/atlas/latin-reading/**'
       - '.github/workflows/latin-reading-pc-review.yml'
@@ -67,14 +71,19 @@ jobs:
           fi
           test -n "$(fc-list ':lang=ja' family)"
       - run: npm ci --no-audit --no-fund
-      - run: node --test tests/unit/atlas-latin-reading.test.mjs tests/unit/atlas-latin-culture-patterns.test.mjs tests/unit/atlas-latin-agriculture.test.mjs
+      - run: node --test tests/unit/atlas-latin-reading.test.mjs tests/unit/atlas-latin-culture-patterns.test.mjs tests/unit/atlas-latin-agriculture.test.mjs tests/unit/atlas-latin-nature.test.mjs tests/unit/atlas-latin-water-terrain.test.mjs tests/unit/atlas-latin-nature-reading.test.mjs
       - run: npm run build
-      - run: node --test tests/e2e/atlas-latin-population.test.mjs tests/e2e/atlas-latin-essential-legends.test.mjs tests/e2e/atlas-latin-workspace-navigation.test.mjs tests/e2e/atlas-regional-workspace-navigation.test.mjs tests/e2e/atlas-latin-forestry-workspace.test.mjs
+      - run: node --test tests/e2e/atlas-latin-population.test.mjs tests/e2e/atlas-latin-essential-legends.test.mjs tests/e2e/atlas-latin-workspace-navigation.test.mjs tests/e2e/atlas-regional-workspace-navigation.test.mjs tests/e2e/atlas-latin-forestry-workspace.test.mjs tests/e2e/atlas-latin-nature-reading.test.mjs
       - name: Capture and check exact head
         run: node scripts/verify-latin-culture-pc.mjs
         env:
           LATIN_READING_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
           LATIN_READING_OUTPUT: ${{ runner.temp }}/latin-reading-review/after
+      - name: Capture natural-environment readings at the exact head
+        run: node scripts/verify-latin-nature-reading-pc.mjs
+        env:
+          LATIN_READING_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+          LATIN_READING_OUTPUT: ${{ runner.temp }}/latin-reading-review/nature-after
       - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.base.sha }}
@@ -89,6 +98,12 @@ jobs:
         env:
           LATIN_READING_BASELINE: '1'
           LATIN_READING_OUTPUT: ${{ runner.temp }}/latin-reading-review/before
+      - name: Capture current main natural-environment readings at matching viewport and scroll
+        working-directory: .review-baseline
+        run: node "$GITHUB_WORKSPACE/scripts/verify-latin-nature-reading-pc.mjs"
+        env:
+          LATIN_READING_BASELINE: '1'
+          LATIN_READING_OUTPUT: ${{ runner.temp }}/latin-reading-review/nature-before
       - name: Confirm published farming and forestry geometry stay unchanged
         run: |
           node --input-type=module <<'JS'

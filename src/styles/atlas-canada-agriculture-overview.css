@@ -20,7 +20,12 @@
 .canada-agri-overview .map-story span{white-space:nowrap}
 .canada-agri-overview .map-story i{margin-right:4px}
 .canada-agri-overview .map-crop-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2}
-.canada-agri-overview .map-crop-label{position:absolute;transform:translate(-50%,-50%);padding:2px 5px;color:#263f46;background:#fffdf4d9;border:1px solid #879d99;font:700 13px/1.35 var(--sans);white-space:nowrap}
+.canada-agri-overview .map-crop-label{position:absolute;transform:none;pointer-events:auto;min-height:22px;padding:2px 4px;color:var(--belt-color);background:#fffdf4eb;border:1px solid var(--belt-color);font:600 12px/1.35 var(--sans);white-space:nowrap}
+.canada-agri-overview .map-crop-label[aria-pressed=true]{color:#203f49;background:#fffef5;outline:2px solid var(--belt-color)}
+.canada-agri-overview .agri-layer-controls{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;background:#f6f5ec;border:1px solid #c8cfc4;border-top:0;padding:8px 10px;font-size:14px}
+.canada-agri-overview .agri-layer-controls label{display:flex;gap:6px;align-items:center;font-weight:600}
+.canada-agri-overview .agri-layer-controls input{accent-color:#244653;width:16px;height:16px;margin:0}
+.canada-agri-overview .agri-layer-controls span{font-size:13px;color:#56716d}
 .canada-agri-overview .map-year{position:absolute;bottom:8px;left:8px;padding:2px 6px;background:#fffef5ee;color:#36535b;font-size:14px;pointer-events:none;z-index:4}
 .canada-agri-overview .key{background:#f6f5ec;border:1px solid #c8cfc4;border-top:0;padding:7px 9px;display:flex;flex-wrap:wrap;gap:4px 10px;font-size:14px}
 .canada-agri-overview .key :is(span,button){display:inline-flex;gap:5px;align-items:center}
@@ -88,8 +93,8 @@
 .canada-agri-overview :is(.page-source,.overview-scope){font-size:14px;line-height:1.7;margin:14px 0;padding-top:10px;border-top:1px solid #d1d8cc}
 .canada-nature.canada-agriculture .canada-agri-annual-statistics>summary{font-size:16px;cursor:pointer}
 @media(min-width:960px){
- .atlas-desktop-shell .canada-agriculture .canada-country-primary .canada-agri-overview .map-frame{aspect-ratio:1.55;min-height:300px;max-height:640px}
- .canada-agriculture .canada-country-primary .canada-agri-overview .canada-workspace{grid-template-columns:minmax(0,1.65fr) minmax(360px,1fr);gap:14px}
+ .atlas-desktop-shell .canada-agriculture .canada-country-primary .canada-agri-overview .map-frame{aspect-ratio:1.85;min-height:350px;max-height:640px}
+ .canada-agriculture .canada-country-primary .canada-agri-overview .canada-workspace{grid-template-columns:minmax(0,2.25fr) minmax(340px,1fr);gap:14px}
 }
 @media(min-width:960px) and (max-width:1199px){
  .atlas-desktop-shell .canada-agriculture .canada-country-primary .canada-agri-overview .map-frame{aspect-ratio:1.65;min-height:190px}
