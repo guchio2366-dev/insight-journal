@@ -190,6 +190,10 @@ async function setup(query = '', options = {}) {
     root.insertAdjacentHTML('beforeend','<div data-farm-switches><button data-farm-toggle="crop" aria-pressed="true"><span></span></button><button data-farm-toggle="livestock" aria-pressed="true"><span></span></button></div><button data-farm-water></button><div data-map-annotations></div><section data-farm-overview-reading></section><section data-farm-overview-legend></section><input type="checkbox" data-farm-kind="crop" checked><input type="checkbox" data-farm-kind="livestock" checked><button data-farm-choice="overview"></button><button data-farm-choice="wheat"></button>');
     q('[data-farming-topic]').insertAdjacentHTML('afterbegin','<option value="overview"></option>');
   }
+  if(options.eastRiverName){
+   const conf=JSON.parse(q('[data-asia-config]').textContent);conf.physical.waterFeatures=[{id:'rivers-213',name:'Yellow',label:'黄河',kind:'rivers',countries:['CHN'],bounds:[95,32,119,41]}];conf.farmInsight={rivers:['rivers-213']};q('[data-asia-config]').textContent=JSON.stringify(conf);
+   Object.defineProperties(q('[data-map-annotations]'),{clientWidth:{value:600},clientHeight:{value:400}});
+  }
   if(options.indiaLabels){Object.defineProperties(q('[data-map-annotations]'),{clientWidth:{value:600},clientHeight:{value:400}});const conf=JSON.parse(q('[data-asia-config]').textContent);const base=conf.population.cities[0];conf.population.cities=[{...base,id:'uc-7963',name:'ニューデリー',country:'IND',coordinates:[105,35]},{...base,id:'uc-small',name:'地方都市',country:'IND',coordinates:[125,35]}];q('[data-asia-config]').textContent=JSON.stringify(conf);}
   if(options.settlements){
    Object.defineProperties(q('[data-map-annotations]'),{clientWidth:{value:600},clientHeight:{value:400}});
@@ -259,7 +263,7 @@ async function setup(query = '', options = {}) {
     if(name==='/assets/population/urban.json'){const response=()=>new Response(JSON.stringify({type:'FeatureCollection',features:[]}));if(options.delayedUrban)return new Promise(resolve=>{resolveUrban=()=>resolve(response());});return response();}
     if(name.startsWith('/assets/population/')){if(options.delayedPopulationFailure)return new Promise((_,reject)=>{rejectPopulation=reject;});if(options.populationFailure)throw Error('population 503');const data=new Uint8Array(4);new DataView(data.buffer).setFloat32(0,options.populationZero?0:name.endsWith('tokyo.gz')?15000:1200,true);return new Response(data);}
     if(name==='/assets/physical/elevation.gz'){const data=new Uint8Array(2);new DataView(data.buffer).setInt16(0,-75,true);return new Response(data);}
-    if(name==='/assets/physical/water.json'){const response=()=>new Response(JSON.stringify({type:'FeatureCollection',features:[]}));if(options.delayedWater)return new Promise(resolve=>{resolveWater=()=>resolve(response());});return response();}
+    if(name==='/assets/physical/water.json'){const response=()=>new Response(JSON.stringify({type:'FeatureCollection',features:options.eastRiverName?[{type:'Feature',properties:{id:'rivers-213',label:'黄河',kind:'rivers'},geometry:{type:'LineString',coordinates:[[100,35],[105,36],[115,38]]}}]:[]}));if(options.delayedWater)return new Promise(resolve=>{resolveWater=()=>resolve(response());});return response();}
     throw Error('Unexpected fetch: ' + name);
   };
   if(options.pendingContourSources)window.__pendingContourSources=new Set(['asia-rainfall-bands','asia-rainfall-aligned-lines']);
@@ -1347,4 +1351,19 @@ test('都市の気候区分の取得失敗は描画エラー・雨温図の欠�
   assert.equal(q('[data-map-retry]').hidden,true);
   assert.equal(q('[data-city-panel="tokyo"]').hidden,false);
  }finally{rejectClimate();await window.happyDOM.close();}
+});
+
+
+test('東アジアの河川名は地点選択にせず、本流と水源・終着先の説明をカメラ固定で選ぶ',async()=>{
+ const {window,q}=await setup('?topic=water&lng=116&lat=35&z=4',{hydrology:true,presentation:true,eastRiverName:true});
+ try{
+  await until(()=>[...window.document.querySelectorAll('.asia-river-label')].some(b=>b.textContent==='黄河'&&!b.hidden),'Yellow River name visible');
+  const before={...window.__map.getCenter(),zoom:window.__map.getZoom()};
+  [...window.document.querySelectorAll('.asia-river-label')].find(b=>b.textContent==='黄河').click();
+  assert.equal(new URL(window.location.href).searchParams.get('detail'),'rivers-213');
+  assert.equal(new URL(window.location.href).searchParams.has('at'),false);
+  assert.match(q('[data-hydrology-scene-reading]').textContent,/青海.*渤海.*灌漑/s);
+  assert.deepEqual({...window.__map.getCenter(),zoom:window.__map.getZoom()},before);
+  assert.equal(q('[data-hydrology-content]').textContent.includes('上の「河川の流域」を選んで'),false);
+ }finally{await window.happyDOM.close();}
 });

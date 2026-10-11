@@ -53,7 +53,7 @@ try{
   await page.locator('[data-japan-clear-selection]').click();await page.goBack();await page.waitForURL('**/atlas/japan/population/**');assert.equal(await page.locator('[data-japan-atlas]').getAttribute('data-city'),'uc-5929');await page.goForward();assert.equal(await page.locator('[data-japan-atlas]').getAttribute('data-city'),'');
   // Direct entry, no return target, same-field fallback to East Asia.
   await open('agriculture');await page.locator('[data-japan-return]').click();await ready(false);assert.match(page.url(),/east-asia\/agriculture\/$/);
-  // A city can set place=JPN but must never trigger the national-page entry.
+  // City choice is independent of country choice; explicit Japan entry is retained.
   const original=origin+base+'/atlas/asia/east-asia/nature/?place=CHN&lng=128&lat=35&z=4.2';await page.goto(original);await ready(false);
   await page.locator('[data-city-select]').selectOption('beijing');await page.waitForLoadState('networkidle');assert.match(page.url(),/east-asia\/nature/);
   // Capture exact state just before explicit Japan selection, including city.
@@ -63,7 +63,7 @@ try{
   report.cases.push({width,name:'URL reload history explicit country return',restored:from});
   // Tokyo selected while already on the East Asia climate map stays there.
   await page.goto(origin+base+'/atlas/asia/east-asia/nature/?lng=128&lat=35&z=4.2');await ready(false);
-  const before=await liveCamera('[data-asia-atlas]');await page.locator('[data-city-select]').selectOption('tokyo');await page.waitForLoadState('networkidle');const after=await liveCamera('[data-asia-atlas]');assert.deepEqual(after,before,'Tokyo leaves actual MapLibre camera unchanged');assert.match(page.url(),/east-asia\/nature/);assert.equal(new URL(page.url()).searchParams.get('place'),'JPN');assert.equal(new URL(page.url()).searchParams.get('z'),'4.200');
+  const before=await liveCamera('[data-asia-atlas]');await page.locator('[data-city-select]').selectOption('tokyo');await page.waitForLoadState('networkidle');const after=await liveCamera('[data-asia-atlas]');assert.deepEqual(after,before,'Tokyo leaves actual MapLibre camera unchanged');assert.match(page.url(),/east-asia\/nature/);assert.equal(new URL(page.url()).searchParams.get('place'),null,'East Asia city choice is independent of country choice');assert.equal(new URL(page.url()).searchParams.get('z'),'4.200');
   report.cases.push({width,name:'Tokyo remains on East Asia with unchanged camera',before,after,url:page.url()});
   await page.goto(origin+base+'/atlas/asia/east-asia/industry/?lng=128&lat=35&z=4.2');await ready(false);await page.locator('[data-country-select]').selectOption('JPN');await ready(true);assert.match(page.url(),/japan\/industry/);report.cases.push({width,name:'industry country uses same explicit entry'});
   for(const [route,field] of [['industry','industry'],['nature','natural'],['agriculture','agriculture'],['population','population']]){await open(route);assert.equal(await page.locator(`[data-japan-statistics="${field}"]`).isVisible(),true);assert.equal(await page.locator('[data-japan-atlas]').getAttribute('data-prefecture'),'');await page.reload();await ready(true);assert.equal(await page.locator(`[data-japan-controls="${field}"]`).isVisible(),true);report.cases.push({width,name:'direct URL and reload '+route});}
