@@ -62,3 +62,5 @@ head308245eの原CIを親が正規接続GitHubで読取り、round2 specの都�
 head308245eの最終CIはValidate site（PR/push）、林業PC、産業が成功、Africa PCは上記失敗。ローカル単体1148件中1145合格・既存3skip。全操作582件中574合格・7skip・農畜産初期9分布の10秒待機1失敗。同headの農畜産対象ファイルを独立再実行し10/10合格、該当ケース2.87秒。並列全体を全件合格とは扱わない。親からの原失敗の確認後に修正headのCIを再実行する。
 
 公開までの追加承認は反映済み。地域全体に未達があるためDraftを維持し、公開順は親と合わせる。追加承認後、同じ正規取得操作を一度再試行したが、gh run view --log-failed/gh run downloadはForbidden、ESA正規proxy/FAO GLC-SHARE/FAOSTAT QCL・FBS・TM/PourPointsは403、Library画像3枚はprepare成功後の同helper materializeがdownload failed、Chromiumは安全設定の同起動でSUID ownership FATAL。ESAの最初の再試行起動で環境proxy設定が付いていなかった点は訂正し、正規proxyで403を確認した。原データ取得なし。再拒否後の迂回や安全設定/権限変更は行わない。
+
+親の実画像QAで、標高のエチオピア高地/ドラケンスバーグ付近に数値と地形名の重複を確認。標高は地形名を先に描き、実際のSVG文字bboxを共有して、4px相当の余白も含めて衝突する数値を省く。数値の座標は原等高線上の固定anchorを保持し、架空の移動や原等高線/数値格子の変更は行わない。PC specは3幅すべてで地形名と残存数値の実bbox重複がないこと、元anchorの数値注記が残ることを確認する。気候/自然の関連16単体は合格。
