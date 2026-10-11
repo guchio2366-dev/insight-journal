@@ -42,15 +42,16 @@ export function initCanadaIndustryPilot(root:HTMLElement){
    lines.append(element('path',{d:`M${c-4},${d-10} L${c},${d} L${c+7},${d-8}`,fill:'none',stroke:color,'stroke-width':2}));
   }
   // Keep every original guide position. City names are supplementary, never the grouping axis.
-  for(const {c,point:[x,y]}of visible){
+  const markOrder=[...visible].sort((a,b)=>Number(a.c.industry===state.industry)-Number(b.c.industry===state.industry)||Number(a.c.id===state.site)-Number(b.c.id===state.site));
+  for(const {c,point:[x,y]}of markOrder){
    const color=pilot.industries.find(i=>i.id===c.industry)!.color,processing=/精|製|構造体|部品|機体/.test(c.stage);
-   const peers=visible.filter(v=>v.c.coordinates.join(',')===c.coordinates.join(',')),index=peers.findIndex(v=>v.c.id===c.id),cx=x+(index-(peers.length-1)/2)*9;
+   const peers=visible.filter(v=>v.c.coordinates.join(',')===c.coordinates.join(',')),index=peers.findIndex(v=>v.c.id===c.id),cx=x+(index-(peers.length-1)/2)*14;
    const group=element('g',{'data-ca-marker':c.id,role:'button',tabindex:'0','aria-pressed':String(c.id===state.site),'aria-label':`${pilotIndustryLabel(c.industry,state.sector)} · ${c.place} · ${stageLabel(c)}`});
    const attrs={'data-ca-cluster':c.id,'data-industry':c.industry,'data-coordinate':c.coordinates.join(','),fill:color,stroke:'#fff','stroke-width':1.2};
-   group.append(element('circle',{cx,cy:y,r:9,fill:'transparent'}));
+   group.append(element('circle',{cx,cy:y,r:6,fill:'transparent'}));
    group.append(processing?element('rect',{...attrs,x:cx-4,y:y-4,width:8,height:8}):element('circle',{...attrs,cx,cy:y,r:4.5}));
    if(state.industry&&c.industry!==state.industry)group.setAttribute('opacity','.5');
-   if(c.industry===state.industry)group.append(element('circle',{cx,cy:y,r:7,fill:'none',stroke:color,'stroke-width':c.id===state.site?2.5:1.3}));
+   if(c.industry===state.industry)group.append(element('circle',{cx,cy:y,r:7,fill:'none',stroke:color,'stroke-width':c.id===state.site?2.5:1.3,'pointer-events':'none'}));
    group.addEventListener('click',()=>chooseSite(c));group.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();chooseSite(c);}});lines.append(group);
   }
   const ordered=groups.sort((a,b)=>Number(b.some(v=>v.c.industry===state.industry))-Number(a.some(v=>v.c.industry===state.industry))||b.length-a.length);
