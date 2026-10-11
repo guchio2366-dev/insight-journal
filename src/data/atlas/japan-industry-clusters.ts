@@ -14,7 +14,7 @@ export const japanIndustryClusters:JapanIndustryCluster[]=[
  {id:'wakayama-batteries',name:'紀の川・和歌山',country:'JPN',point:[135.37,34.27],industries:['batteries'],source:'https://www.panasonic.com/global/energy/company/global-network.html',note:'車載用円筒形リチウムイオン電池。企業本社所在地とは別。'},
  {id:'tokyo-finance',name:'東京・兜町',country:'JPN',point:[139.77,35.68],industries:['services'],source:'https://www.jpx.co.jp/corporate/about-jpx/access/index.html',note:'東京証券取引所の所在。サービス業全体の網羅図ではない。'},
  {id:'osaka-finance',name:'大阪・北浜',country:'JPN',point:[135.51,34.69],industries:['services'],source:'https://www.jpx.co.jp/corporate/about-jpx/access/01.html',note:'大阪取引所の所在。取引額は地図に符号化しない。'},
- {id:'yokohama-energy',name:'横浜・東京湾',country:'JPN',point:[139.67,35.45],industries:['energy'],source:'https://www.jera.co.jp/corporate/business/thermal-power/list/',note:'横浜の火力発電を市の概略位置で示す。全国の全電源図ではない。'},
+ {id:'yokohama-energy',name:'横浜・東京湾',country:'JPN',point:[139.63,35.45],industries:['energy'],source:'https://www.jera.co.jp/corporate/business/thermal-power/list/',note:'横浜の火力発電を市の概略位置で示す。全国の全電源図ではない。'},
  {id:'chita-energy',name:'知多・伊勢湾',country:'JPN',point:[136.86,35.0],industries:['energy'],source:'https://www.jera.co.jp/corporate/business/thermal-power/list/',note:'知多の火力発電を市の概略位置で示す。電源の実際の容量・稼働は未収録。'},
 ];
 export const japanIndustryDefinition={
