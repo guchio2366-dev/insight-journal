@@ -232,6 +232,15 @@ async function init(root:HTMLElement){
    label.setAttribute('transform',`translate(${best[0]-x},${best[1]-y})`);
    const line=marker.querySelector('line')!;line.setAttribute('x2',String(best[0]-x+w/2));line.setAttribute('y2',String(best[1]-y+h/2));
   }
+  const contourLabels=[...scene.querySelectorAll<SVGTextElement>('.west-contour-label')];
+  const mapBounds=svg.getBoundingClientRect();
+  const occupied=[...scene.querySelectorAll<SVGElement>('.west-map-label:not(.west-contour-label),[data-marker-label]')].filter(el=>getComputedStyle(el).display!=='none').map(el=>el.getBoundingClientRect());
+  for(const label of contourLabels){
+   label.style.display='';const box=label.getBoundingClientRect();
+   const inside=box.left>=mapBounds.left+3&&box.right<=mapBounds.right-3&&box.top>=mapBounds.top+3&&box.bottom<=mapBounds.bottom-3;
+   const collision=occupied.some(other=>Math.min(box.right+3,other.right)-Math.max(box.left-3,other.left)>2&&Math.min(box.bottom+3,other.bottom)-Math.max(box.top-3,other.top)>2);
+   if(!inside||collision)label.style.display='none';else occupied.push(box);
+  }
  }
  function changeCountry(code:string){
   if(field==='industry'&&code&&!westIndustryCountry(code))return;
