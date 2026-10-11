@@ -75,6 +75,11 @@ export function createAsiaWater(root:HTMLElement,config:Config,getState:()=>Asia
    content.replaceChildren();const scale=el('div');scale.className='east-rain-scale';scale.setAttribute('role','img');scale.setAttribute('aria-label','年間降水量。0から6000mmまで250mm刻みの青の段階色。');scale.style.background='linear-gradient(to right,'+config.contourBands.colors.flatMap((color,i)=>[`${color} ${i/config.contourBands!.colors.length*100}%`,`${color} ${(i+1)/config.contourBands!.colors.length*100}%`]).join(',')+')';content.append(scale);const ticks=el('div');ticks.className='east-rain-ticks';for(const n of [0,1000,2000,3000,4000,5000,6000])ticks.append(el('span',n.toLocaleString('ja-JP')));content.append(ticks);
    $('[data-hydrology-legend-note]').textContent='mm/年 · 線と段階色は250mm刻み。数字と引出線の先端は同じ等雨量線を示します。1981–2010年の推計平年値で、東京の雨温図（1991–2020年）とは期間が異なります。地点選択値は平滑化前の原格子値です。';
   }
+  if(t==='precipitation'&&config.regionId==='southeast-asia'&&config.contourBands){
+   const bands=config.contourBands;content.replaceChildren();const scale=el('div');scale.setAttribute('role','img');scale.setAttribute('aria-label',`年降水量の段階色。0から${fmt(bands.breaks.at(-1)!)}mmまで250mm刻み。`);scale.style.cssText='height:14px;width:100%;margin:5px 0';scale.style.background='linear-gradient(to right,'+bands.colors.flatMap((color,i)=>[`${color} ${i/bands.colors.length*100}%`,`${color} ${(i+1)/bands.colors.length*100}%`]).join(',')+')';content.append(scale);
+   const ticks=el('div');ticks.style.cssText='position:relative;height:18px;width:100%;font-size:10px;font-variant-numeric:tabular-nums';const max=bands.breaks.at(-1)!;for(const n of [0,3000,6000,9000,max]){const tick=el('span',n.toLocaleString('ja-JP'));tick.style.cssText=`position:absolute;left:${n/max*100}%;transform:translateX(${n===0?'0':n===max?'-100%':'-50%'})`;ticks.append(tick);}content.append(ticks);
+   $('[data-hydrology-legend-note]').textContent='mm/年 · 青い等雨量線と段階色は同じ表示値から250mm刻みで作成。1981–2010年の推計平年値です。海・欠測地では線と色をつなぎません。地点の数値は平滑化前の原格子値です。';
+  }
  }
  function method(t:WaterTopic){
   const c=$('[data-hydrology-method]');c.replaceChildren(el('p',waterTopics[t].period+'。'+waterTopics[t].definition),link('地図データの提供元を開く',waterTopics[t].source));
