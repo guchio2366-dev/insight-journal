@@ -87,20 +87,18 @@ async function populationNationalLayout(page) {
 async function religionOverviewLayout(page) {
   const layout = await page.locator('[data-population-overview-category="religion"]').evaluate(root => {
     const box = node => {const r = node.getBoundingClientRect(); return {x: r.x, y: r.y, width: r.width, height: r.height, right: r.right, bottom: r.bottom};};
-    const cards = [...root.querySelectorAll('.population-overview-card')].map(node => ({...box(node), title: node.querySelector('.population-overview-card-title')?.textContent, svg: box(node.querySelector('svg')), text: node.textContent, stateCount: node.querySelectorAll('use[data-overview-state]').length}));
+    const map = root.querySelector('.population-overview-combined');
+    const indicators=[...root.querySelectorAll('.population-overview-indicators li')].map(node=>({text:node.textContent,...box(node)}));
+    const groups=[...root.querySelectorAll('[data-overview-highlight-metric]')].map(node=>({metric:node.getAttribute('data-overview-highlight-metric'),states:[...node.querySelectorAll('[data-overview-highlight-state]')].map(mark=>mark.getAttribute('data-overview-highlight-state'))}));
     const denominators = [...root.querySelectorAll('[data-population-overview-denominator="religion"]')].map(node => ({text: node.textContent, ...box(node)}));
-    return {container: box(root), cards, denominators};
+    return {container: box(root),map:box(map),svg:box(map.querySelector('svg')),stateCount:map.querySelectorAll('use[data-overview-state]').length,indicators,groups,denominators};
   });
-  assert.equal(layout.cards.length, 3);
-  const ordered = [...layout.cards].sort((a, b) => a.x - b.x);
-  assert(Math.max(...ordered.map(card => card.y)) - Math.min(...ordered.map(card => card.y)) <= 2, 'PC religion maps must share one row');
-  assert(Math.max(...ordered.map(card => card.width)) - Math.min(...ordered.map(card => card.width)) <= 2, 'PC religion maps must have equal-width cards');
-  for (const [index, card] of ordered.entries()) {
-    assert.equal(card.stateCount, 32); assert(card.svg.width > 100 && card.svg.height > 60, 'Religion overview map must remain readable');
-    if (index) assert(ordered[index - 1].right <= card.x + .5, 'Religion overview cards must not overlap');
-    assert(card.right <= layout.container.right + 1, 'Religion overview must fit the PC map column');
-    assert(!card.text.includes('分母：'), 'The common religion denominator must not repeat in each card');
-  }
+  assert.equal(layout.stateCount,32);
+  assert(layout.svg.width>300&&layout.svg.height>180,'The single religion overview must remain readable');
+  assert(layout.map.right<=layout.container.right+1,'Religion overview must fit the PC map column');
+  assert.equal(layout.groups.length,3);
+  assert(layout.groups.every(group=>group.states.length===2));
+  assert.equal(layout.indicators.length,3);
   assert.equal(layout.denominators.length, 1, 'Religion overview must show the common denominator once');
   assert.match(layout.denominators[0].text, /全.*人口|全.*住民/);
   return layout;
@@ -562,10 +560,6 @@ async function population({page, evidence}) {
 
 }
 
-const commonReligionBins = [
-  {min: 0, max: 1, color: '#edf3df'}, {min: 1, max: 5, color: '#d1e6c6'}, {min: 5, max: 10, color: '#a1ceb1'},
-  {min: 10, max: 25, color: '#70b3a5'}, {min: 25, max: 50, color: '#41958e'}, {min: 50, max: 75, color: '#24756f'}, {min: 75, max: null, color: '#154d49'},
-];
 async function composition({page, evidence}) {
   const step = steps(page, evidence);
   const config = JSON.parse(await text(page, '[data-population-composition-config]'));
@@ -577,15 +571,13 @@ async function composition({page, evidence}) {
     const before = await snapshot(page); await click(page, '[data-population-composition-compare]'); assert.equal(query(page, 'compositionCompare'), 'scale');
     await click(page, '[data-population-composition-return]'); await restored(page, before, 'Composition return must preserve source metric, state and measure');
   });
-  await step('Three nationwide religion maps use identical absolute-share bands', async () => {
+  await step('One nationwide religion map retains three simultaneous indicators', async () => {
     await click(page, 'button[data-population-category="religion"]');
     const cards = page.locator('[data-population-overview-category="religion"] [data-population-overview-metric]'); assert.equal(await cards.count(), 3);
-    const colors = await cards.evaluateAll(nodes => nodes.map(node => ({id: node.getAttribute('data-population-overview-metric'), states: [...node.querySelectorAll('[data-overview-state]')].map(path => ({state: path.getAttribute('data-overview-state'), fill: path.getAttribute('fill')}))})));
-    for (const card of colors) {
-      assert.equal(card.states.length, 32); const metric = config.metrics.find(item => item.id === card.id);
-      for (const area of card.states) {const row = metric.states[area.state], share = row.count / row.denominator * 100; const bin = commonReligionBins.find(bin => share >= bin.min && (bin.max === null || share < bin.max)); assert.equal(area.fill, bin.color, `${card.id}/${area.state}: nationwide color must encode the common absolute-share band`);}
-    }
-    return {metricIds: colors.map(card => card.id), statesPerMap: 32, commonBins: commonReligionBins, layout: await religionOverviewLayout(page)};
+    const metricIds=await cards.evaluateAll(nodes=>nodes.map(node=>node.getAttribute('data-population-overview-metric')));
+    assert.deepEqual(metricIds,['catholic','protestant_evangelical','no_religion']);
+    for(const id of metricIds)assert(config.metrics.some(item=>item.id===id));
+    return {metricIds,layout:await religionOverviewLayout(page)};
   });
   await step('All eight religion details retain their own bands, actual shares and denominators', async () => {
     const metrics = config.metrics.filter(metric => metric.category === 'religion'); assert.equal(metrics.length, 8);
