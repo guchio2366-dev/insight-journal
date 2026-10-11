@@ -3,7 +3,7 @@ export type AsiaRegionId = 'east-asia' | 'southeast-asia' | 'south-central-asia'
 export type AsiaField = 'natural' | 'agriculture' | 'industry' | 'population';
 export type AsiaCamera = { lng: number; lat: number; zoom: number };
 export type AsiaState = { field: AsiaField; place: string | null; city: string | null; camera: AsiaCamera | null; back: string | null; point?: [number, number] | null; topic?: string | null; detail?: string | null; compare?: string | null; story?:string|null; sector?:string|null; subsector?:string|null; overlay?:'water'|null; farms?:'crop'|'livestock'|'none'|null; single?:boolean };
-export type AsiaStateContext = { countries: readonly string[]; cities: readonly { id: string; countryCode: string }[]; bounds: readonly number[]; fields: readonly AsiaField[]; cityWithoutPlace?:boolean; topics?: Partial<Record<AsiaField, readonly string[]>>; details?: Partial<Record<AsiaField, readonly string[] | ((id:string)=>boolean)>>; stories?:Partial<Record<AsiaField,readonly string[]>> };
+export type AsiaStateContext = { countries: readonly string[]; cities: readonly { id: string; countryCode: string }[]; bounds: readonly number[]; fields: readonly AsiaField[]; cityWithoutPlace?:boolean; independentCities?:boolean; topics?: Partial<Record<AsiaField, readonly string[]>>; details?: Partial<Record<AsiaField, readonly string[] | ((id:string)=>boolean)>>; stories?:Partial<Record<AsiaField,readonly string[]>> };
 const ownedKeys = ['field', 'place', 'city', 'lng', 'lat', 'z', 'back', 'region', 'at', 'topic', 'detail', 'compare','story','sector','subsector','overlay','farms','farmview'];
 export const asiaFieldPaths: Record<AsiaField, string> = { natural: 'nature', agriculture: 'agriculture', industry: 'industry', population: 'population' };
 const routeField = (url: URL): AsiaField | undefined => Object.entries(asiaFieldPaths).find(([, path]) => url.pathname.replace(/\/$/, '').endsWith(`/${path}`))?.[0] as AsiaField | undefined;
@@ -14,9 +14,9 @@ export function readAsiaAtlasState(url: URL, context: AsiaStateContext): AsiaSta
   const field = context.fields.includes(requested as AsiaField) ? requested as AsiaField : 'natural';
   const rawPlace = q.get('place');
   let place = rawPlace && context.countries.includes(rawPlace) ? rawPlace : null;
-  const cityRecord = context.cities.find(c => c.id === q.get('city') && (!place || c.countryCode === place));
+  const cityRecord = context.cities.find(c => c.id === q.get('city') && (context.independentCities || !place || c.countryCode === place));
   const city = cityRecord?.id ?? null;
-  if (cityRecord && !context.cityWithoutPlace) place = cityRecord.countryCode;
+  if (cityRecord && !context.cityWithoutPlace && !context.independentCities) place = cityRecord.countryCode;
   const n = (key: string, min: number, max: number) => {
     const raw = q.get(key); if (!raw?.trim()) return null;
     const value = Number(raw); return Number.isFinite(value) && value >= min && value <= max ? value : null;

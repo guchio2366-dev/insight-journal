@@ -8,7 +8,7 @@ const worldPath='public/assets/atlas/europe/farming-statistics-v1/statistics.jso
 const output='public/assets/atlas/east-asia-v1/farm-foundations.json';
 const countryBytes=readFileSync(countryPath),worldBytes=readFileSync(worldPath);
 const countryData=JSON.parse(countryBytes),worldData=JSON.parse(worldBytes);
-const countries=['CHN','JPN','KOR','TWN'];
+const countries=['CHN','JPN','KOR','PRK','MNG','TWN'];
 const tradePath='public/assets/atlas/asia-trade-v1/east-asia.json.gz';
 const tradeBytes=readFileSync(tradePath),tradeData=JSON.parse(gunzipSync(tradeBytes));
 const sha256=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -38,8 +38,8 @@ const series=wanted.map(id=>{
 const cropItems=[27,15,56,236,328,667,125,156,254,836,656,191,201,79];
 const candidates=cropItems.map(item=>{
  const code=String(item),rows=countries.map(country=>countryData.countries[country].observations.find(row=>row.domain==='Production_Crops_Livestock'&&row.item===code&&row.elementCode==='5510'&&row.year===2020&&row.unit==='t'));
- return {itemCode:code,label:countryData.items['Production_Crops_Livestock:'+code],tonnes:rows.reduce((sum,row)=>sum+(row?.value??0),0),reportedCountries:rows.filter(row=>row?.value!=null).length,flags:[...new Set(rows.flatMap(row=>row?.value!=null?[row.flag]:[]))]};
-}).sort((a,b)=>b.tonnes-a.tonnes);
+ return {itemCode:code,label:countryData.items['Production_Crops_Livestock:'+code],tonnes:rows.some(row=>row?.value!=null)?rows.reduce((sum,row)=>sum+(row?.value??0),0):null,reportedCountries:rows.filter(row=>row?.value!=null).length,flags:[...new Set(rows.flatMap(row=>row?.value!=null?[row.flag]:[]))]};
+}).sort((a,b)=>(b.tonnes??-1)-(a.tonnes??-1));
 const forestFlows=Object.fromEntries(countries.map(code=>[code,Object.fromEntries([['roundwood','1861'],['sawnwood','1872']].map(([name,item])=>[name,Object.fromEntries([['production','5516'],['imports','5616'],['exports','5916']].map(([flow,element])=>{
  const rows=countryData.countries[code].observations.filter(row=>row.domain==='Forestry'&&row.item===item&&row.elementCode===element&&row.year===2024&&row.unit==='m3');
  if(rows.length>1)throw Error(`Duplicate forest flow: ${code} ${item} ${element}`);
@@ -52,12 +52,12 @@ const cropFlows=Object.fromEntries(Object.entries(cropFlowItems).map(([topic,[it
  const trade=tradeData.countries[code]?.products?.[hs];
  return [code,{production:rows[0]?.value==null?null:{value:rows[0].value,flag:rows[0].flag},exports:trade?.X??null,imports:trade?.M??null}];
 }))]));
-const exportDestinations=Object.fromEntries(countries.map(code=>{
- const record=tradeData.countries[code],partners=record?.partners?.TOTAL;
- if(!partners)return [code,null];
- if(Math.abs(partners.values.reduce((sum,[,value])=>sum+value,0)-partners.world)>Math.max(1,partners.world*1e-6))throw Error(`Partner sum differs: ${code}`);
- return [code,{world:partners.world,top:partners.values.slice(0,3).map(([partnerCode,value])=>({partnerCode,value,sourceName:tradeData.partners[String(partnerCode)]?.name??String(partnerCode)})),other:partners.world-partners.values.slice(0,3).reduce((sum,[,value])=>sum+value,0)}];
+// HS44 is wood, articles of wood and wood charcoal, not all merchandise.
+// Retain reporter totals only; this extract has no HS44 partner matrix.
+const woodTrade=Object.fromEntries(countries.map(code=>{
+ const row=tradeData.countries[code]?.products?.['44'];
+ return [code,{imports:row?.M??null,exports:row?.X??null}];
 }));
-const payload={schemaVersion:1,region:'east-asia',countries,method:'Matched country and published World FAOSTAT rows by archive, item, element, year and unit. Missing values are omitted, never zero. Crop candidates are only the 14 distinct items retained in the Asia country dataset; ranking is their reported 2020 production weight, not economic value or a complete crop ranking. Forest production, imports and exports are separately reported 2024 cubic metres; they are not domestic disposition. Selected crop production is 2024 tonnes and trade is 2023 current USD for an HS category; these cannot be compared as one quantity. Export partners are 2023 ALL GOODS current USD, not timber or crop destinations.',series,cropCandidates:{selected:candidates.slice(0,10),next:candidates.slice(10)},forestFlows,cropFlows,exportDestinations,sources:{country:{path:countryPath,sha256:sha256(countryBytes)},world:{path:worldPath,sha256:sha256(worldBytes)},trade:{path:tradePath,sha256:sha256(tradeBytes),source:'https://comtradeplus.un.org/',terms:'https://uncomtrade.org/docs/policy-on-use-and-re-dissemination/'},archive:worldData.sources.map(({id,archive,license,licenseUrl,landingUrl,releaseDate})=>({id,file:archive.file,sha256:archive.sha256,license,licenseUrl,landingUrl,releaseDate}))}};
+const payload={schemaVersion:1,region:'east-asia',countries,method:'Matched country and published World FAOSTAT rows by archive, item, element, year and unit. Missing values are omitted, never zero. Crop candidates are only the 14 distinct items retained in the Asia country dataset; ranking is their reported 2020 production weight, not economic value or a complete crop ranking. Forest production, imports and exports are separately reported 2024 cubic metres; they are not domestic disposition. Selected crop production is 2024 tonnes and trade is 2023 current USD for an HS category; these cannot be compared as one quantity. Wood trade is 2023 HS44 current USD; partner-level wood trade is not retained.',series,cropCandidates:{selected:candidates.slice(0,10),next:candidates.slice(10)},forestFlows,cropFlows,woodTrade,sources:{country:{path:countryPath,sha256:sha256(countryBytes)},world:{path:worldPath,sha256:sha256(worldBytes)},trade:{path:tradePath,sha256:sha256(tradeBytes),source:'https://comtradeplus.un.org/',terms:'https://uncomtrade.org/docs/policy-on-use-and-re-dissemination/'},archive:worldData.sources.map(({id,archive,license,licenseUrl,landingUrl,releaseDate})=>({id,file:archive.file,sha256:archive.sha256,license,licenseUrl,landingUrl,releaseDate}))}};
 mkdirSync('public/assets/atlas/east-asia-v1',{recursive:true});writeFileSync(output,JSON.stringify(payload)+'\n');
 console.log(`${output}: ${series.length} series, ${candidates.length} crop candidates`);

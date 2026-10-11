@@ -63,3 +63,20 @@ test('主要本支流の元河道を動かさず、名札が本流を覆わな�
  assert.equal(lineIntersectsBox([{x:0,y:0},{x:100,y:100}],{left:40,top:45,right:60,bottom:65}),true);
  assert.equal(lineIntersectsBox([{x:0,y:0},{x:100,y:0}],{left:40,top:45,right:60,bottom:65}),false);
 });
+
+
+test('fractional contour anchors retain their coordinates while callout boxes leave enough leader clearance',()=>{
+ const bounds={left:0,top:0,right:1180,bottom:740};
+ // A nearest compact row previously left only 9.044px for this fractional point.
+ const inputs=[
+  {id:'500',anchor:{x:406.334,y:260.044},width:40,height:24,minLeaderLength:12},
+  {id:'4500',anchor:{x:800.4,y:420.6},width:48,height:24,minLeaderLength:16},
+  {id:'5500',anchor:{x:817.2,y:424.9},width:48,height:24,minLeaderLength:16},
+ ];
+ const placed=layoutNatureLabels(inputs,bounds);verify(inputs,placed,bounds,[]);
+ for(const p of placed){
+  const end=leaderEnd(p.anchor,p);
+  assert.ok(Math.hypot(end.x-p.anchor.x,end.y-p.anchor.y)>=p.minLeaderLength,p.id);
+  assert.equal(p.anchor.x>=p.left&&p.anchor.x<=p.right&&p.anchor.y>=p.top&&p.anchor.y<=p.bottom,false);
+ }
+});
