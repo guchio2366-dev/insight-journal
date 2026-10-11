@@ -72,12 +72,17 @@
  .atlas-desktop-shell .west-atlas[data-field]:not([data-comparing=true]) .atlas-primary-grid{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px}
 }
 @media(min-width:960px){
+ .west-regional-navigation{display:flex!important;align-items:center;justify-content:space-between;gap:10px}
+ .west-region-links{flex-wrap:nowrap;gap:4px;min-width:0}
+ .west-region-links a{min-height:34px;padding:5px 9px;font-size:12px;white-space:nowrap}
+ .west-region-country{flex:none;margin-top:0;font-size:12px}
+ .west-region-country select{min-height:34px;padding:4px 8px;font-size:12px}
  .west-agri-controls,.west-atlas .industry-controls{padding:6px;border:1px solid #c7ccbf;border-bottom:0;background:#fbfaf3;margin:0 0 6px}
  .west-agri-controls .atlas-water-tabs,.west-atlas .industry-controls .industry-tab-row{min-height:40px;margin:0;padding:0;gap:6px}
  .west-agri-controls .atlas-water-tabs button,.west-atlas .industry-controls button,.west-subtabs button{font-size:14px;line-height:20px;min-height:40px;padding:9px 12px}
- .west-regional-navigation{display:block!important;margin:0 0 10px!important}
+ .west-regional-navigation{margin:0 0 6px!important}
  .west-atlas:not([data-comparing=true]) .atlas-primary-grid{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px;align-items:start}
- .atlas-desktop-shell .west-atlas[data-field]:not([data-comparing=true]) .atlas-map-frame{height:auto!important;aspect-ratio:1.32;min-height:300px!important;max-height:680px}
+ .atlas-desktop-shell .west-atlas[data-field]:not([data-comparing=true]) .atlas-map-frame{height:auto!important;aspect-ratio:1.42;min-height:300px!important;max-height:610px}
  .west-atlas:not([data-comparing=true]) .west-reading{display:flex;flex-direction:column;height:clamp(420px,calc(100dvh - 305px),580px)!important;overflow:hidden;padding:14px 16px}
  .west-atlas:not([data-comparing=true]) .west-reading-header:has([data-west-reading-overview]){display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:8px;align-items:center}
  .west-atlas:not([data-comparing=true]) .west-reading-header:has([data-west-reading-overview]) .atlas-eyebrow{grid-column:1/-1;grid-row:1}
@@ -133,6 +138,14 @@
 }
 .west-subtabs{padding:6px;margin:0;border:1px solid #c7ccbf;border-bottom:0;background:#fbfaf3}
 .west-atlas .atlas-map-frame{background:#e3eff0}
+.west-map-short-key{position:absolute;z-index:4;left:8px;bottom:37px;display:flex;align-items:center;flex-wrap:wrap;gap:3px 10px;max-width:calc(100% - 95px);padding:5px 8px;border:1px solid #aebeb9;border-radius:4px;background:#fffef4f2;color:#203c45;font:600 11px/1.4 var(--sans);box-shadow:0 1px 3px #203b4833}
+.west-map-short-key[hidden]{display:none}
+.west-map-short-key span{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.west-map-short-key i{display:inline-block;width:11px;height:11px;flex:none;background:var(--short-color);border:1px solid #62757b}
+.west-map-short-key i.west-short-line{height:2px;border:0}
+.west-map-short-key i.west-short-point{width:8px;height:8px;border-radius:50%;border:1px solid #31515b}
+.west-map-short-key a{color:#255d75;white-space:nowrap}
+.west-place-dot-key{display:inline-block;width:8px;height:8px;margin-right:5px;border-radius:50%;background:#a16f36;border:1px solid #31515b}
 .west-farm-map-key{position:absolute;z-index:3;top:8px;left:8px;display:grid;grid-template-columns:repeat(2,max-content);gap:3px 10px;max-width:180px;padding:6px 8px;border:1px solid #b7c5b9;border-radius:4px;background:#fffef0ee;box-shadow:0 1px 3px #243b4822;color:#233d42;font:600 11px/1.35 var(--sans);pointer-events:none}
 .west-farm-map-key[hidden]{display:none}
 .west-farm-map-key strong{grid-column:1/-1;font-size:10px;font-weight:700}
@@ -361,6 +374,7 @@
 .west-industry-marker[data-kind="resource"] circle{fill:#ad6729}
 .west-industry-marker[data-industry-role="refining"] rect{fill:#ad4541}
 .west-industry-marker[data-industry-role="petrochemical"] .west-industry-symbol{fill:#853474}
+.west-industry-marker[data-industry-role="refining"] .west-industry-secondary{fill:#853474}
 .west-industry-marker[data-kind="manufacturing"] circle{fill:#3f7696}
 .west-industry-marker[data-kind="transit"] circle{fill:#467f69}
 .west-industry-marker.is-selected :is(circle,rect,.west-industry-symbol),.west-industry-marker:focus :is(circle,rect,.west-industry-symbol){stroke:#252e33;stroke-width:3px}
@@ -391,4 +405,7 @@
 .west-industry-key i[data-industry-kind="manufacturing"]{background:#3f7696}
 .west-industry-key i[data-industry-kind="transit"]{background:#467f69}
 .west-industry-site-reading{border-left:3px solid #3f7696;padding-left:10px;margin:10px 0}
+.west-industry-only-button{min-height:34px;padding:5px 10px;margin:5px 0;border:1px solid #718b92;border-radius:3px;background:#fffef8;color:#214651;font:600 12px var(--sans);cursor:pointer}
+.west-industry-only-button[aria-pressed=true]{background:#e1edf0;border-color:#315f71}
+.west-ethnicity-map-label{font-size:12px;font-weight:800;fill:#1d363d;stroke:#fffef4;stroke-width:4px}
 [data-natural-feature]:focus,[data-basin]:focus,[data-ground]:focus { outline:none; stroke:#a23f2d; stroke-width:3px; }

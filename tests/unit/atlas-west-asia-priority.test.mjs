@@ -3,14 +3,20 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {westIndustrySites,westIndustryRoles} from '../../src/data/atlas/west-asia-industry.mjs';
 import {westProductionAdopted} from '../../src/data/atlas/west-asia-topics.mjs';
+import {westPlaceExamples} from '../../src/data/atlas/west-asia-places.mjs';
 import shares from '../../src/data/atlas/west-asia-world-shares.json' with {type:'json'};
 
 test('industry roles preserve the region network and keep the offshore oil field away from Abu Dhabi city',()=>{
- assert.equal(westIndustrySites.length,12);
+ assert.equal(westIndustrySites.length,13);
  assert.deepEqual(westIndustryRoles['industry-extraction'],['resource']);
  assert.deepEqual(westIndustrySites.filter(s=>s.kind==='resource').map(s=>s.id),['eastern-oil','upper-zakum']);
  assert(!westIndustrySites.some(s=>s.id==='abudhabi'));
  assert(westIndustrySites.some(s=>s.id==='suez'&&s.country==='network'));
+ assert(westIndustrySites.some(s=>s.id==='ruwais'&&s.activity==='refining'&&s.otherActivity==='petrochemical'&&s.secondarySource==='borouge'));
+ assert(westIndustrySites.some(s=>s.id==='aliaga-petkim'&&s.country==='TUR'&&s.activity==='petrochemical'));
+});
+test('dated production examples cover several source-named areas without invented farm boundaries',()=>{
+ for(const topic of ['dates','olives']){const places=westPlaceExamples.filter(place=>place.topic===topic);assert.equal(places.length,4);assert(places.every(place=>place.source.startsWith('https://')&&place.description.includes('。')));}
 });
 test('world production shares use the same retained FAOSTAT archive and preserve missing world totals',()=>{
  const west=JSON.parse(readFileSync('public/assets/atlas/west-asia-v1/statistics.json','utf8'));

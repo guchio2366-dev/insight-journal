@@ -4,11 +4,15 @@
 
 | 主題 | 採用した一次資料 | 図にできること | 図にできないこと |
 | --- | --- | --- | --- |
-| アルアハサのデーツ | [UNESCO 世界遺産](https://whc.unesco.org/en/list/1563/) | オアシスの泉・井戸・水路とナツメヤシの結び付き | サウジ全域の栽培地と2024年生産量の内訳 |
-| エドレミト湾のオリーブ | [欧州委員会の地理的表示資料](https://ec.europa.eu/geographical-indications-register/eambrosia-public-api/api/v1/attachments/84372) | トルコ北西部の栽培地域の一例 | トルコ全域の畑と2024年生産量の内訳 |
+| サウジのデーツ主要地方 | [サウジ農業省（2026年）](https://www.mewa.gov.sa/en/MediaCenter/News/Pages/saudi-dates-harvest-production-growth.aspx)、[UNESCO アルアハサ](https://whc.unesco.org/en/list/1563/) | リヤド・マディーナ・アルアハサ・カスィームの代表位置、オアシスの水路と栽培の関係 | 地方内の全農園・2024年生産量の細地域内訳 |
+| トルコのオリーブ主要県 | [ナズィッリ商工会議所（2021年）](https://www.naztic.org.tr/wp-content/uploads/2021/07/olive-and-olive-oil-report-2021.pdf)、[欧州委員会のエドレミト地理的表示資料](https://ec.europa.eu/geographical-indications-register/eambrosia-public-api/api/v1/attachments/84372) | アイドゥン・イズミル・ガズィアンテプとエドレミト湾の代表位置 | トルコ全域の畑と2024年生産量の内訳 |
 | アルホバルの淡水化系統 | [サウジ水当局の発表](https://spa.gov.sa/en/N2506177) | 東部都市とホフーフへの供給先の説明 | 送水管の経路、施設別の年間実供給量 |
 | ジュベル・アリの淡水化 | [ドバイ電力水道局](https://www.dewa.gov.ae/en/about-us/media-publications/latest-news/2021/07/jebel-ali-power-and-desalination-complex) | ドバイへの供給拠点の位置 | 20対象の施設比較、実供給量 |
+| ルワイスの精製・石油化学 | [ADNOC Refining](https://www.adnoc.ae/en/adnoc-refining/about-us/locations)、[ADNOC Borouge](https://www.adnoc.ae/en/our-projects/chemicals-growth-strategy/borouge) | 近接した製油と樹脂製造を一つの集積地で二役として説明 | 同じ生産量の重複計上、工場敷地 |
+| アリアガの石油化学 | [Petkim](https://www.petkim.com.tr/?lang=en) | イズミル県アリアガの化学製品生産拠点 | 国内の全石油化学工場、製品別生産量 |
 
 農産品の生産値と製材品の生産・輸入・輸出は現行 main の保存済み FAOSTAT 資料を維持。製材品の統計は食料自給率には転用しない。農産品の輸入相手国・輸出先・国内仕向け、カロリー基準食料自給率は、対応する同年・同品目の貿易行列と食品需給表が保存されていないため、数値・円グラフを作らない。FAOSTAT の QCL bulk 配布先は 2026-10-09 と 2026-10-11 に接続拒否を確認済みで、同じ経路の再試行はしない。既存の世界生産比の出典と欠測の扱いは維持する。
+
+2026-10-11 に代替の公的経路も調査。FAO は [新API開発者ポータル](https://www.fao.org/statistics/highlights-archive/highlights-detail/faostat-launches-a-new-api-developer-portal-to-make-data-access-easier/en) を案内するが、API利用には登録とキーが必要で、本実行環境にその認証はない。[FAO詳細貿易行列のカタログ](https://data.fao.org/catalog/dataset/955a7b61-ce56-4a04-adf5-61a3012eec84) と [食料需給表のカタログ](https://data.fao.org/catalog/iso/2f264bb6-1238-459a-bf8b-0e2d0a16804a) は資料の存在を確認できる一方、個別データ行はこの環境から取得できなかった。別の集計・時点やHS品目をFAOSTAT QCLの品目と接ぎ合わせて需給・カロリー自給率を算出しない。取得可能な公式行が揃えば、品目・国・年・単位・再輸出と欠測を照合して追加する。
 
 水資源面は地下水を含む地層の広域分類であり、補給速度・年間利用可能量・現存貯留量を直接表さない。水の点は自然水源面と異なる供給工程の事例として重ねる。地形名称と主要都市は位置を読む補助であり、地形の法的境界や都市行政界ではない。民族・宗教の既存掲載域は GeoEPR/EPR-ED の抽出例で、最多属性の地図でも全住民の網羅分布でもないため、資料の範囲を保つ。
