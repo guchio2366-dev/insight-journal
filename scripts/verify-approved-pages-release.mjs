@@ -15,15 +15,31 @@ import {verifyCanadaElevationBands,verifyCanadaElevationRasterInteraction} from 
 const site='https://guchio2366-dev.github.io/insight-journal/',expected=process.env.EXPECTED_RELEASE_SHA;
 assert.match(expected??'',/^[a-f0-9]{40}$/,'Require the exact deployed main SHA');
 const output='review-artifacts/approved-pages-release';await mkdir(output,{recursive:true});
-const report={expectedReleaseSha:expected,site,status:'running',browserLocation:'GitHub Actions ubuntu-latest runner; installed Google Chrome',chromiumSandbox:true,checks:[],screenshots:[],viewports:[],nativeScreenshots:[],previews:[],errors:[],failedResponses:[]};let browser,page;
-const nativeFiles=new Set();
+const report={expectedReleaseSha:expected,site,status:'running',browserLocation:'GitHub Actions ubuntu-latest runner; installed Google Chrome',chromiumSandbox:true,checks:[],screenshots:[],viewports:[],nativeScreenshots:[],previews:[],errors:[],failedResponses:[],expectedInjectedResponses:[]};let browser,page;
+const nativeFiles=new Set(),injectedResponseRequests=new WeakMap();
 const settled=async()=>{await page.evaluate(()=>document.fonts.ready);await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));await page.evaluate(()=>scrollTo(0,0));};
 const go=async(route)=>{await page.goto(site+route,{waitUntil:'networkidle'});await settled();};
 const measure=()=>page.evaluate(()=>{const rect=s=>{const el=[...document.querySelectorAll(s)].find(n=>n.getBoundingClientRect().width);if(!el)return null;const r=el.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height};};return{url:location.href,cssViewport:{width:innerWidth,height:innerHeight},dpr:devicePixelRatio,visualViewportScale:visualViewport.scale,browserZoomPercent:100,documentZoom:getComputedStyle(document.documentElement).zoom,scroll:{x:scrollX,y:scrollY},map:rect('[data-ca-map-frame],.latin-agriculture-map,.forest-map-stage,.lp-map'),reader:rect('.ca-pilot-reading,.latin-reading'),news:rect('.atlas-news'),fields:rect('.latin-fields'),nav:[...document.querySelectorAll('.latin-fields>a')].map(el=>{const s=getComputedStyle(el);return{text:el.textContent.trim(),active:el.getAttribute('aria-current'),background:s.backgroundColor,color:s.color};}),overflow:document.documentElement.scrollWidth>innerWidth};});
 const shot=async(name)=>{await page.mouse.move(0,0);const meta=await measure();assert.deepEqual(meta.cssViewport,{width:1920,height:1080});assert.equal(meta.dpr,1);assert.equal(meta.visualViewportScale,1);assert.deepEqual(meta.scroll,{x:0,y:0});assert.equal(meta.overflow,false);const bytes=await page.screenshot({path:path.join(output,name+'.png'),animations:'disabled'});report.screenshots.push({file:name+'.png',sha256:crypto.createHash('sha256').update(bytes).digest('hex'),...meta});};
 try{
  browser=await chromium.launch({executablePath:process.env.INDUSTRY_REVIEW_CHROME_PATH,headless:true,chromiumSandbox:true,ignoreDefaultArgs:['--unsafely-disable-devtools-self-xss-warnings']});report.browserVersion=browser.version();
- const context=await browser.newContext({viewport:{width:1920,height:1080},deviceScaleFactor:1,serviceWorkers:'block'});page=await context.newPage();const capture=page.screenshot.bind(page);page.screenshot=async options=>{if(options.path)nativeFiles.add(path.basename(options.path));return capture(options);};page.on('pageerror',e=>report.errors.push(e.message));page.on('response',r=>{if(r.status()>=400)report.failedResponses.push({url:r.url(),status:r.status()});});
+ const context=await browser.newContext({viewport:{width:1920,height:1080},deviceScaleFactor:1,serviceWorkers:'block'});page=await context.newPage();const capture=page.screenshot.bind(page);page.screenshot=async options=>{if(options.path)nativeFiles.add(path.basename(options.path));return capture(options);};page.on('pageerror',e=>report.errors.push(e.message));page.on('response',r=>{
+  if(r.status()<400)return;
+  const actual={url:r.url(),status:r.status()},injected=injectedResponseRequests.get(r.request());
+  if(injected&&injected.url===actual.url&&injected.status===actual.status)report.expectedInjectedResponses.push({...actual,origin:'Explicit test route.fulfill'});
+  else report.failedResponses.push(actual);
+ });
+ // Register the exact synthetic request, rather than exempting an asset URL.
+ // A real server error at the same URL must still fail public acceptance.
+ const registerRoute=page.route.bind(page);
+ page.route=async(pattern,handler,options)=>registerRoute(pattern,async(route,request)=>{
+  const fulfill=route.fulfill.bind(route);
+  route.fulfill=async config=>{
+   if(Number(config.status)>=400)injectedResponseRequests.set(route.request(),{url:route.request().url(),status:Number(config.status)});
+   return fulfill(config);
+  };
+  return handler(route,request);
+ },options);
  const releaseResponse=await context.request.get(site+'_release.json',{failOnStatusCode:true});report.release=await releaseResponse.json();assert.equal(report.release.commitSha,expected,'Public release must be the approved integrated main commit');
 
  report.verifierHead=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
@@ -63,7 +79,9 @@ try{
  for(const [country,id,count,value,name] of [['GTM','maya',6,'41.7%','guatemala'],['COL','la-guajira',33,'394,683人','colombia']]){await page.locator(`[data-lc-map=ethnicity] [data-lc-source=${country}]`).click();assert.equal(await page.locator(`[data-lc-supplement-table=${country}] tbody tr`).count(),count);await page.locator(`[data-lc-supplement-table=${country}] [data-lc-select="${country}:${id}"]`).click();assert.ok((await page.locator('[data-lp-overview]').textContent()).includes(value));assert.equal(await page.locator('[data-lc-map=ethnicity] [data-lc-select]').count(),16);await page.evaluate(()=>document.querySelector('.latin-reading-scroll').scrollTop=0);await shot('latin-'+name);await page.reload({waitUntil:'networkidle'});await settled();assert.ok((await page.locator('[data-lp-overview]').textContent()).includes(value));await page.goBack();await settled();assert.equal(new URL(page.url()).searchParams.get('group'),country+':national');}
  await page.locator('[data-lc-supplement-table=COL] [data-lc-select="COL:san-andres-providencia-y-santa-catalina"]').click();assert.match(await page.locator('[data-lp-overview]').textContent(),/20人/);await page.locator('[data-latin-section=religion]').click();await settled();assert.equal(await page.locator('[data-lc-map=religion] [data-lc-select]').count(),18);assert.match(await page.locator('[data-lp-status]').textContent(),/全域の整備完了を意味しません/);await page.evaluate(()=>document.querySelector('.latin-reading-scroll').scrollTop=0);await shot('latin-religion-partial');report.checks.push('Culture: Guatemala 6 native percentages and Colombia 33 indigenous counts; all 16 marks retained; row selection/reload/back; Colombia last 20-person row; Chile-only religion and incomplete whole-region coverage retained');
  const finalRelease=await (await context.request.get(site+'_release.json',{failOnStatusCode:true})).json();assert.equal(finalRelease.commitSha,expected,'Release remained unchanged during public acceptance');
- assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedResponses,[]);report.status='passed';
+ assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedResponses,[]);
+ assert.deepEqual(report.expectedInjectedResponses.map(x=>({path:new URL(x.url).pathname.split('/').at(-1),status:x.status})),[{path:'elevation-classes.png',status:503},{path:'elevation-outline-0.geojson',status:503}],'Only the two explicitly injected error-test responses are separated');
+ report.status='passed';
 }catch(e){report.status='failed';report.failure=String(e);process.exitCode=1;console.error(e);if(page)await shot('failure').catch(()=>{});}
 
 finally{
