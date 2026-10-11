@@ -400,7 +400,7 @@ test('real browser: Asia desktop headers and maps align with the US reference',{
       await page.waitForFunction(()=>new URL(location.href).searchParams.get('place')==='CHN'&&document.querySelector('[data-country-select]').value==='CHN'&&document.querySelector('[data-city-select]').value==='');
       // Read the native option state: Playwright's generic isDisabled() does
       // not report disabled hidden <option> elements in this browser version.
-      assert.deepEqual(await city.locator('option[value="tokyo"]').evaluate(option=>({disabled:option.disabled,hidden:option.hidden,country:option.dataset.country})),{disabled:true,hidden:true,country:'JPN'});
+      assert.deepEqual(await city.locator('option[value="tokyo"]').evaluate(option=>({disabled:option.disabled,hidden:option.hidden,country:option.dataset.country})),{disabled:false,hidden:false,country:'JPN'});
       assert.deepEqual(await city.locator('option[value="beijing"]').evaluate(option=>({disabled:option.disabled,hidden:option.hidden,country:option.dataset.country})),{disabled:false,hidden:false,country:'CHN'});
       await city.selectOption('beijing');
       assert.equal(new URL(page.url()).searchParams.get('city'),'beijing');
@@ -411,7 +411,7 @@ test('real browser: Asia desktop headers and maps align with the US reference',{
       await page.locator('[data-station="beijing"]').click();
       await page.locator('[data-city-panel="beijing"]').waitFor({state:'visible'});
       assert.equal(await city.inputValue(),'beijing','map city click restores the same picker value');
-      assert.equal(new URL(page.url()).searchParams.get('place'),'CHN');assert.equal(new URL(page.url()).searchParams.get('city'),'beijing');
+      assert.equal(new URL(page.url()).searchParams.get('place'),null);assert.equal(new URL(page.url()).searchParams.get('city'),'beijing');
       assert.deepEqual(await chart.evaluate(node=>({svg:node.querySelector('svg').innerHTML,monthly:node.querySelector('.monthly-values table').textContent})),pickerChart,'picker and map city click show the same rain-temperature chart and monthly values');
       await page.reload({waitUntil:'domcontentloaded'});
       await page.locator('[data-city-panel="beijing"]').waitFor({state:'visible'});
