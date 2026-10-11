@@ -43,10 +43,10 @@ const total=data.metrics[0];
     </svg>
     <div class="ca-industry-labels" data-ca-labels></div>
     <nav class="ca-pilot-map-key" aria-label="地図の産業と色">{pilot.sectors.map(s=><div data-ca-subtabs={s.id} hidden={s.id!=='resources'}>{pilot.industries.filter(i=>i.sectors.includes(s.id)).map(i=><button type="button" data-ca-subsector={i.id} data-owner-sector={s.id} aria-pressed="false" style={`--pilot-color:${i.color}`}><i aria-hidden="true"/>{pilotIndustryLabel(i.id,s.id)}</button>)}</div>)}</nav>
-    <div class="atlas-map-tools" aria-label="地図操作"><button type="button" data-ca-camera="reset">集積全体</button><button type="button" data-ca-camera="whole">国土全域</button><button type="button" data-ca-camera="in" aria-label="地図を拡大">＋</button><button type="button" data-ca-camera="out" aria-label="地図を縮小">−</button></div>
+
     <p class="atlas-layer-caption" data-ca-map-caption>産業の色＋工程の記号 · 位置を示し、数量は表しません</p>
    </div>
-   <p class="ca-pilot-map-note"><span>● 採取・発電・サービス　■ 加工・精製・精錬</span><span>点と引出線は集積地域の案内位置。正確な境界や密度ではありません。</span></p>
+   <p class="ca-pilot-map-note"><span>● 採取・発電・サービス　■ 加工・精製・精錬</span><span>点は集積地域の案内位置。短い実線は同じ産業名との対応で、取引・輸送を表しません。</span></p>
   </div>
   <aside class="ca-pilot-reading" aria-label="産業分布の概説と理由">
    <h2 data-ca-title>資源・エネルギー</h2>

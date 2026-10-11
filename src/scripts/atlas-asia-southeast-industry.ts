@@ -9,7 +9,9 @@ export function createSoutheastIndustryLocations(root:HTMLElement,getState:()=>A
  const list=[...root.querySelectorAll<HTMLButtonElement>('[data-southeast-industry-site]')];
  const summary=root.querySelector<HTMLElement>('[data-southeast-industry-summary]')!;
  const selected=root.querySelector<HTMLElement>('[data-southeast-industry-selected]')!;
- let kind:'all'|SoutheastIndustryKind='all',selectedId:string|null=null,map:import('maplibre-gl').Map|null=null;
+ const requestedKind=new URL(location.href).searchParams.get('industryKind');
+ let kind:'all'|SoutheastIndustryKind=southeastIndustryKinds.some(group=>group.id===requestedKind)?requestedKind as SoutheastIndustryKind:'all',selectedId:string|null=null,map:import('maplibre-gl').Map|null=null;
+ const saveKind=()=>{const url=new URL(location.href);if(kind==='all')url.searchParams.delete('industryKind');else url.searchParams.set('industryKind',kind);history.replaceState(history.state,'',url);};
  const points=new Map<string,HTMLButtonElement>();
  const labels=new Map<string,HTMLElement>();
  const leaders=document.createElementNS('http://www.w3.org/2000/svg','svg');leaders.classList.add('southeast-industry-leaders');leaders.setAttribute('aria-hidden','true');overlay.append(leaders);
@@ -75,8 +77,8 @@ export function createSoutheastIndustryLocations(root:HTMLElement,getState:()=>A
   if(site){selected.querySelector<HTMLElement>('[data-southeast-industry-selected-title]')!.textContent=site.label;selected.querySelector<HTMLElement>('[data-southeast-industry-selected-reading]')!.textContent=site.reading;selected.querySelector<HTMLElement>('[data-southeast-industry-selected-year]')!.textContent=site.sourceYear;const a=selected.querySelector<HTMLAnchorElement>('[data-southeast-industry-selected-source]')!;a.textContent=site.sourceLabel;a.href=site.sourceUrl;}
   position();
  }
- function chooseSite(id:string){const site=southeastIndustrySites.find(s=>s.id===id);if(!site)return;selectedId=selectedId===id?null:id;kind=site.kind;render();}
- for(const b of categories)b.addEventListener('click',()=>{kind=b.dataset.southeastIndustryKind as typeof kind;selectedId=null;render();});
+ function chooseSite(id:string){const site=southeastIndustrySites.find(s=>s.id===id);if(!site)return;selectedId=selectedId===id?null:id;kind=site.kind;saveKind();render();}
+ for(const b of categories)b.addEventListener('click',()=>{kind=b.dataset.southeastIndustryKind as typeof kind;selectedId=null;saveKind();render();});
  for(const b of list)b.addEventListener('click',()=>chooseSite(b.dataset.southeastIndustrySite!));
  return {render,show(next:import('maplibre-gl').Map|null){if(next&&next!==map){map=next;map.on('move',position);map.on('resize',position);}render();}};
 }

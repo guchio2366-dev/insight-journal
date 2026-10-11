@@ -101,6 +101,86 @@
       "temperatureRow": "<tr><th>Daily Average (&deg;C)</th><td>-14.7</td><td>-12.7</td><td>-5.5</td><td>3.9</td><td>11.0</td><td>15.9</td><td>18.6</td><td>17.9</td><td>12.4</td><td>4.2</td><td>-5.0</td><td>-12.1</td><td>2.8</td><td><a href=\"#legendA\">A</a></td></tr>",
       "precipitationRow": "<tr><th>Precipitation (mm)</th><td>12.8</td><td>8.6</td><td>15.4</td><td>27.1</td><td>46.5</td><td>84.6</td><td>60.0</td><td>50.1</td><td>31.6</td><td>25.0</td><td>14.7</td><td>13.7</td><td>390.1</td><td><a href=\"#legendC\">C</a></td></tr>",
       "inventoryRow": "\"REGINA (AIRPORT)\",\"C\",\"REGINA INT'L A\",\"4016560\",\"71863\",\"YQR\",\"SASKATCHEWAN\",\"50.43\",\"-104.67\",\"577.6\""
+    },
+    {
+      "id": "toronto",
+      "name": "トロント",
+      "climateId": "6158355",
+      "station": "TORONTO CITY",
+      "composite": "TORONTO (CITY)",
+      "quality": "C",
+      "coordinates": [
+        -79.4,
+        43.67
+      ],
+      "elevationM": 112.5,
+      "period": "1991–2020",
+      "sourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=6158355&dispBack=0",
+      "retrievedAt": "2026-10-11",
+      "sourceSha256": "8088e3e8921485f948ec0310d0743384e53665129e462d8d13f01c6c362b6a3a",
+      "temperatureRow": "<tr><th>Daily Average (&deg;C)</th><td>-3.5</td><td>-2.7</td><td>1.7</td><td>7.8</td><td>14.5</td><td>19.8</td><td>22.5</td><td>21.9</td><td>17.9</td><td>11.2</td><td>5.2</td><td>-0.1</td><td>9.7</td><td><a href=\"#legendA\">A</a></td></tr>",
+      "precipitationRow": "<tr><th>Precipitation (mm)</th><td>64.6</td><td>53.9</td><td>52.8</td><td>78.0</td><td>76.4</td><td>81.6</td><td>76.5</td><td>71.9</td><td>69.4</td><td>69.1</td><td>70.8</td><td>57.8</td><td>822.7</td><td><a href=\"#legendC\">C</a></td></tr>",
+      "inventoryRow": "\"TORONTO (CITY)\",\"C\",\"TORONTO CITY\",\"6158355\",\"71508\",\"XTO\",\"ONTARIO\",\"43.67\",\"-79.40\",\"112.5\""
+    },
+    {
+      "id": "montreal",
+      "name": "モントリオール",
+      "climateId": "7025250",
+      "station": "MONTREAL/PIERRE ELLIOTT TRUDEAU INTL A",
+      "composite": "MONTREAL TRUDEAU (AIRPORT)",
+      "quality": "C",
+      "coordinates": [
+        -73.75,
+        45.47
+      ],
+      "elevationM": 36,
+      "period": "1991–2020",
+      "sourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=7025250&dispBack=0",
+      "retrievedAt": "2026-10-11",
+      "sourceSha256": "9d98d1463a3942b0fe9d7c0f5878cb07b70ccd40b4ab5b5c08c869bd96664473",
+      "temperatureRow": "<tr><th>Daily Average (&deg;C)</th><td>-9.2</td><td>-8.0</td><td>-2.0</td><td>6.2</td><td>13.9</td><td>19.0</td><td>21.7</td><td>20.6</td><td>16.0</td><td>8.9</td><td>2.3</td><td>-5.0</td><td>7.0</td><td><a href=\"#legendA\">A</a></td></tr>",
+      "precipitationRow": "<tr><th>Precipitation (mm)</th><td>85.8</td><td>65.5</td><td>77.2</td><td>90.0</td><td>85.6</td><td>83.6</td><td>91.1</td><td>93.6</td><td>89.2</td><td>103.1</td><td>84.2</td><td>91.9</td><td>1,040.9</td><td><a href=\"#legendC\">C</a></td></tr>",
+      "inventoryRow": "\"MONTREAL TRUDEAU (AIRPORT)\",\"C\",\"MONTREAL/PIERRE ELLIOTT TRUDEAU INTL A\",\"7025250\",\"71627\",\"YUL\",\"QUEBEC\",\"45.47\",\"-73.75\",\"36.0\""
+    },
+    {
+      "id": "calgary",
+      "name": "カルガリー",
+      "climateId": "3031092",
+      "station": "CALGARY INTL A",
+      "composite": "CALGARY (AIRPORT)",
+      "quality": "C",
+      "coordinates": [
+        -114.01,
+        51.12
+      ],
+      "elevationM": 1099.1,
+      "period": "1991–2020",
+      "sourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=3031092&dispBack=0",
+      "retrievedAt": "2026-10-11",
+      "sourceSha256": "62ff281e17bb5f3e5cda7bc72f480f201b340fe9b1ed65e649083801eabb00a0",
+      "temperatureRow": "<tr><th>Daily Average (&deg;C)</th><td>-7.6</td><td>-5.9</td><td>-2.2</td><td>4.5</td><td>9.9</td><td>13.7</td><td>16.9</td><td>16.2</td><td>11.5</td><td>4.9</td><td>-1.7</td><td>-6.3</td><td>4.5</td><td><a href=\"#legendC\">C</a></td></tr>",
+      "precipitationRow": "<tr><th>Precipitation (mm)</th><td>10.0</td><td>11.8</td><td>17.7</td><td>29.6</td><td>61.1</td><td>112.7</td><td>65.7</td><td>53.8</td><td>37.1</td><td>17.1</td><td>16.3</td><td>12.5</td><td>445.4</td><td><a href=\"#legendC\">C</a></td></tr>",
+      "inventoryRow": "\"CALGARY (AIRPORT)\",\"C\",\"CALGARY INTL A\",\"3031092\",\"71877\",\"YYC\",\"ALBERTA\",\"51.12\",\"-114.01\",\"1099.1\""
+    },
+    {
+      "id": "halifax",
+      "name": "ハリファクス",
+      "climateId": "8202250",
+      "station": "HALIFAX STANFIELD INT'L A",
+      "composite": "HALIFAX STANFIELD (AIRPORT)",
+      "quality": "C",
+      "coordinates": [
+        -63.5,
+        44.88
+      ],
+      "elevationM": 145.4,
+      "period": "1991–2020",
+      "sourceUrl": "https://climate.weather.gc.ca/climate_normals/results_1991_2020_e.html?climate_id=8202250&dispBack=0",
+      "retrievedAt": "2026-10-11",
+      "sourceSha256": "161837f0566452a22cec95f70a2517c87f8340ba8ab533bda9e19c8ad8ca289c",
+      "temperatureRow": "<tr><th>Daily Average (&deg;C)</th><td>-5.7</td><td>-5.2</td><td>-0.9</td><td>4.5</td><td>10.1</td><td>15.2</td><td>19.2</td><td>19.2</td><td>15.2</td><td>9.2</td><td>3.8</td><td>-1.9</td><td>6.9</td><td><a href=\"#legendB\">B</a></td></tr>",
+      "precipitationRow": "<tr><th>Precipitation (mm)</th><td>125.9</td><td>111.0</td><td>120.2</td><td>106.4</td><td>109.7</td><td>89.8</td><td>86.7</td><td>90.5</td><td>107.3</td><td>139.8</td><td>159.1</td><td>146.9</td><td>1,393.3</td><td><a href=\"#legendC\">C</a></td></tr>",
+      "inventoryRow": "\"HALIFAX STANFIELD (AIRPORT)\",\"C\",\"HALIFAX STANFIELD INT'L A\",\"8202250\",\"71395\",\"YHZ\",\"NOVA SCOTIA\",\"44.88\",\"-63.50\",\"145.4\""
     }
   ]
 }

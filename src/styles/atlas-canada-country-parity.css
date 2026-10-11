@@ -253,3 +253,12 @@
  .canada-nature[data-canada-nature] .canada-natural-layer[data-canada-natural-layer=elevation] .canada-natural-key i{height:2px;border:0;border-radius:0}
  .canada-nature[data-canada-nature] .canada-natural-layer[data-canada-natural-layer=elevation] .canada-natural-key [data-canada-natural-legend="500"] i{height:1px}
 }
+/* Below-map content stays in the country column, clear of the sticky news rail. */
+@media(min-width:960px){
+ .atlas-desktop-shell:has(.canada-country-primary)>.canada-nature>:is(.canada-statistics,.population-tables,.canada-source-footer,.industry-table-details){grid-column:2;min-width:0}
+}
+@media(min-width:1600px){
+ .atlas-desktop-shell:has(.canada-country-primary){grid-template-columns:280px minmax(0,1fr)}
+ .atlas-desktop-shell .canada-nature .canada-country-primary .canada-workspace{grid-template-columns:minmax(0,2.35fr) minmax(340px,1fr);gap:18px}
+ .atlas-desktop-shell .canada-nature .canada-country-primary .canada-map-frame{aspect-ratio:1.85;max-height:none;min-height:420px}
+}

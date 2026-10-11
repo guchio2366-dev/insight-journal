@@ -1,9 +1,12 @@
 export const canadaWaterTopics = ['surface', 'precipitation', 'drainage', 'groundwater', 'aquifers'] as const;
+/** Only these learning layers are offered by the Canada page. Other source
+ * datasets are retained as acquisition evidence, without a page route. */
+export const canadaWaterPageTopics = ['surface', 'precipitation', 'drainage'] as const;
 export type WaterTopic = typeof canadaWaterTopics[number];
 export type WaterDatasetTopic = Exclude<WaterTopic, 'surface'>;
 export type CanadaWaterFrame = [number, number, number, number];
 export interface CanadaWaterState { topic: WaterTopic; area: string | null; only: boolean; frame: CanadaWaterFrame | null; }
-export interface CanadaWaterGroup { id: string; name: string; color: string; description?: string; }
+export interface CanadaWaterGroup { id: string; name: string; color: string; description?: string; parent?: string; }
 export interface CanadaWaterArea { id: string; name: string; group?: string; description?: string; }
 export interface CanadaWaterSource { title: string; url: string; publisher?: string; year?: string | number; licence?: string; licenceUrl?: string; attribution?: string; note?: string; }
 export interface CanadaWaterDataset {
@@ -24,12 +27,14 @@ export const canadaWaterFullFrame: CanadaWaterFrame = [0, 180.444444, 900, 399.5
 export function projectCanadaWater([longitude, latitude]: readonly number[]): [number, number] {
  return [(longitude + 145) / 95 * 900, (85 - latitude) / 45 * 580];
 }
+// Camera margins can extend into the adjacent ocean/United States. The original
+// 900 × 580 source registration remains unchanged.
 export function validCanadaWaterFrame(value: unknown): value is CanadaWaterFrame {
- return Array.isArray(value) && value.length === 4 && value.every(Number.isFinite) && value[0] >= 0 && value[1] >= 0 && value[2] >= 2 && value[3] >= 2 && value[0] + value[2] <= 900.001 && value[1] + value[3] <= 580.001;
+ return Array.isArray(value) && value.length === 4 && value.every(Number.isFinite) && value[0] >= 0 && value[1] >= 0 && value[2] >= 2 && value[3] >= 2 && value[0] + value[2] <= 1000.001 && value[1] + value[3] <= 700.001;
 }
 export function readCanadaWaterState(url: URL, ids: CanadaWaterIds = {}): CanadaWaterState {
  const rawTopic = url.searchParams.get('waterTopic') ?? 'surface';
- const topic: WaterTopic = canadaWaterTopics.includes(rawTopic as WaterTopic) ? rawTopic as WaterTopic : 'surface';
+ const topic: WaterTopic = (canadaWaterPageTopics as readonly string[]).includes(rawTopic) ? rawTopic as WaterTopic : 'surface';
  const rawArea = url.searchParams.get('waterArea');
  const area = rawArea && (ids[topic] ?? []).some(item => (typeof item === 'string' ? item : item.id) === rawArea) ? rawArea : null;
  const rawFrame = (url.searchParams.get('waterFrame') ?? '').split(',');

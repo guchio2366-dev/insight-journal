@@ -45,9 +45,12 @@ test('Manufacturing comparison shows all five Great Lakes plus St. Lawrence and 
  try{
   assert.equal(root(w).dataset.canadaIndustryWaterGroup,'great-lakes');assert.equal(q(w,'[data-canada-only]').checked,true);
   assertWaterSet(w,groupNames);assert.ok(waterShapes(w).some(shape=>shape.dataset.canadaWaterShape===''));
-  assert.match(q(w,'[data-canada-only-label]').textContent,/五大湖/);assert.match(q(w,'[data-canada-only-label]').textContent,/St\. Lawrence/);assert.match(q(w,'[data-canada-only-label]').textContent,/比較|グループ/);
+  assert.match(q(w,'[data-canada-only-label]').textContent,/五大湖5湖・セントローレンス川/);assert.match(q(w,'[data-canada-only-label]').textContent,/比較|グループ/);
   const text=q(w,'[data-canada-industry-context-text]').textContent;
   assert.match(text,/現在は[^。]*(五大湖[^。]*St\. Lawrence|St\. Lawrence[^。]*五大湖)/);assert.doesNotMatch(text,/現在はSt\. Lawrenceだけ/);assert.match(text,/ON・QC.*中央輸送回廊/s);
+  assert.match(text,/上流から河口域/);
+  const legend=q(w,'[data-canada-industry-context-legend]').textContent;assert.match(legend,/NRCan \/ CGNDB.*公式地名範囲の輪郭/);assert.match(legend,/航路・河道中心線・輸送量の線ではありません/);assert.doesNotMatch(legend,/下流から大西洋までの連続線は本資料にありません/);
+  const river=q(w,'[data-canada-water-shape="St. Lawrence"]');assert.equal(river.dataset.canadaWaterSource,'nrcan-cgndb-st-lawrence');assert.equal((river.getAttribute('d').match(/[ML]/g)??[]).length,3135);assert.equal((river.getAttribute('d').match(/Z/g)??[]).length,1);
   const provinces=[...q(w,'[data-canada-industry-context-map]').querySelectorAll('[data-canada-industry-context-province]')];assert.deepEqual(new Set(provinces.map(p=>p.dataset.canadaIndustryContextProvince)),new Set(['Ontario','Quebec']));
   assertReturn(w);assertGeneralReading(w,false);
  }finally{await w.happyDOM.close();}
