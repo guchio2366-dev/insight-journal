@@ -68,3 +68,12 @@ run 38110621418 / job 114385233071 の親によるログ・実画像確認では
 4. 木材の相手国：HS44国別総額と丸太・製材の体積は掲載済みですが、上記Comtrade全相手行GET403。HS44全体とHS4403/4407の相手を同一視していません。
 5. 国内文化：上記8民族札・台湾3民族概説・日本2施設集計・中国1歴史概説・台湾2施設で部分補完。漢族等の全域と朝鮮半島国内の同一定義統計は未収録。全国調査の色帯だけで国内分布完了とはしません。
 6. 山地の範囲：日本中部は国土地理院の検討URL `https://www.gsi.go.jp/kihonjohochousa/kihonjohochousa41140.html` がトップへリダイレクトし、対応範囲の形状を検証できません。朝鮮半島東部は国土情報院候補 `http://nationalatlas.ngii.go.kr/pages/page_111.php` のWeb取得が `Failed to fetch https://nationalatlas.ngii.go.kr/pages/page_111.php: (400) Bad Request`。台湾は上記原住民族委員会の概説に中央山脈の記述を確認できますが、民族の居住記述は山脈の境界データではありません。3範囲を点・長方形から手描きしていません。既に取得済みのNatural Earthの9地形域は独立して実装・検証します。
+
+
+### 公的参照札の初回CIで判明したanchor選択
+
+head22e70edの全単体テストは、最初の居住域anchorが画面外でも別の元anchorが画面内にある既存ケースで、民族札が出ないと再現しました。配置は元anchor集合から画面内の位置を選ぶよう修正し、元座標の移動・境界の捏造はしていません。既存の「民族・宗教は人口密度や行政区の塗りを重ねず、切り替えと遅い応答を処理する」テストが修正後に成功しています。
+
+head22e70edのPC artifact11691889367（run38113106141、約5.9MB）の通常ダウンロードは `gh run download 38113106141 -n east-asia-approved-38113106141-1` が `productionresultssa12.blob.core.windows.net: Forbidden`。Validate push run38113102855の通常ログ取得も `results-receiver.actions.githubusercontent.com: Forbidden` でした。いずれも別エンドポイント・ログへの画像搬出では迂回していません。PCの詳細は親側の許可された閲覧で確認を依頼しています。
+
+文化参照点の独立投影検査は、MapLibreが使うmap containerのclientWidth/clientHeightで計算します。CSS枠のgetBoundingClientRectには小数が含まれるため、枠の小数幅を地図の内部ピクセル寸法へ流用しません。元座標の投影誤差0.1pxの条件は維持します。
