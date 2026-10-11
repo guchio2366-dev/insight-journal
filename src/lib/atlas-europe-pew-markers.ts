@@ -28,7 +28,7 @@ export function createEuropePewMarkers(stage:HTMLElement,onSelect:(code:string)=
   note.textContent='中欧：チェコ 無所属72.8%／南東欧：コソボ イスラム教94.3%／東欧：ルーマニア キリスト教98.5%';
   layer.append(note);
   stage.append(layer);
-  const offsets=Array.from({length:25},(_,index)=>(index-12)*8);
+  const offsets=Array.from({length:49},(_,index)=>(index-24)*8);
   const candidates=offsets.flatMap(x=>offsets.map(y=>[x,y] as [number,number]))
     .sort((a,b)=>Math.hypot(...a)-Math.hypot(...b)||Math.abs(a[1])-Math.abs(b[1]));
   function update(active:boolean,project:Project){
@@ -42,7 +42,7 @@ export function createEuropePewMarkers(stage:HTMLElement,onSelect:(code:string)=
       return {left:rect.left-stageRect.left-3,top:rect.top-stageRect.top-3,right:rect.right-stageRect.left+3,bottom:rect.bottom-stageRect.top+3};
     });
     // Keep the independently sourced national/local labels clickable. Small
-    // compositions may move within 96 px, with a leader back to the country.
+    // compositions may move within 192 px, with a leader back to the country.
     const priority=['FRA','DEU','GBR','ITA','ESP','POL','ROU','UKR','SWE','NOR','FIN','RUS','CZE','NLD','ALB','BIH','KOS'];
     const rank=(code:string)=>{const index=priority.indexOf(code);return index<0?100:index;};
     const ordered=[...nodes].sort((a,b)=>rank(a.anchor.code)-rank(b.anchor.code)||a.anchor.code.localeCompare(b.anchor.code));

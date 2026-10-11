@@ -686,6 +686,11 @@ async function stageOneOperations(page, profile) {
   assert.equal(await page.locator('[data-eu-pew-marker]:visible').count(),35);
   assert.equal(await page.locator('[data-eu-pew-marker="SRB"]').isVisible(),false,'The separate Serbian census profile occupies this country on the overview');
   assert.equal(await page.locator('[data-eu-pew-marker="CZE"] .eu-pew-marker-bar i').nth(2).evaluate(node=>node.style.width),'72.8%');
+  const pewLabelCollisions=await page.locator('[data-eu-pew-marker]:visible').evaluateAll(nodes=>{
+    const labels=[...document.querySelectorAll('[data-eu-religion-national]:not([hidden])')].map(node=>node.getBoundingClientRect());
+    return nodes.filter(node=>{const a=node.getBoundingClientRect();return labels.some(b=>a.right>b.left&&b.right>a.left&&a.bottom>b.top&&b.bottom>a.top);}).map(node=>node.dataset.euPewMarker);
+  });
+  assert.deepEqual(pewLabelCollisions,[],'supplementary Pew bars do not cover national labels');
   await page.locator('[data-eu-religion-national="religion-national-serbia"]').click();
   assert.match(await page.locator('[data-eu-religion-evidence-reading]').textContent(),/セルビア.*2020年推計.*キリスト教 91.5%.*正教会.*5,387,426人/s);
   assert.equal(await page.locator('[data-eu-pew-marker]:visible').count(),35,'Other country distributions stay visible after selecting Serbia');

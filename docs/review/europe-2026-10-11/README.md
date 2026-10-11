@@ -10,6 +10,8 @@ Pew分類切替、国の構成一覧、従来の事例・分類・地域の操�
 
 今回の[初期図](religion-coexistence/initial-1920x1080.png)を目視し、[1920操作記録](religion-coexistence/checks.json)に通常・簡易の31記号、重なりなし、主要併存の常時表示、初期補足欄の閉状態、既存地方値とPewの往復、自動ズームなしを保存した。これは98c14ac上の未コミット差分を検証した記録で、同headのCI画像とは称さない。最終headのクリーンな証跡はPRのEurope PC review artifactを参照する。単体全体1129成功・3スキップ、追加したSMRE3検査と宗教統合1検査も成功。production build・release検査は成功。
 
+最初のe046afafの最終PC検査では、補足Pew図の1024px表示で小帯がセルビアのラベルを遮った。小帯の退避候補を192pxへ広げ、国・地域ラベルを前面に保持した。1920／1440／1024の通常・簡易6表示で、5対象のラベルとの重なり0・セルビア実クリック成功を確認し、PC検査にも重なり0の条件を追加した。記録は[補足Pew再検査](religion-coexistence/pew-supplement-checks.json)。最終headの全CIを別途実行する。
+
 旧 `culture-followup/religion-confessions-45-1920x1080.png` はfooter修正前の作業画像で、98c14acの最新CI画像ではない。旧証跡は保存し、この新版と区別する。98c14acで修正済みのSMRE footerは今回変更していない。今回の宗教仕上げは完了済みSMRE資料で実装でき、全流域・酪農／ブドウ／オリーブ生産帯・全欧州民族分布の外部入力待ちとは別の変更である。
 
 ## 宗派の広域図の追加（引継ぎ継続）

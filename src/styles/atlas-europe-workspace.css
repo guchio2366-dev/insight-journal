@@ -581,3 +581,6 @@
 
 .eu-workspace-root .eu-smre-markers circle { fill:#52616b; }
 .eu-workspace-root .eu-smre-markers line.is-emphasized { stroke:#113f55; stroke-width:2.5; stroke-opacity:1; }
+
+/* The separately sourced national/local reading remains above overview bars. */
+.eu-workspace-root.is-eu-culture-reading[data-eu-religion-overview="pew"]:has([data-eu-pew-map-key]:not([hidden])) .eu-map-annotations { z-index:7; }

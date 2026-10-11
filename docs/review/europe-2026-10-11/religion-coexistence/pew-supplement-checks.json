@@ -1,0 +1,54 @@
+{
+  "gitHead": "e046afafd39e251be2d7b230383740847dafd963",
+  "gitStatus": " M src/lib/atlas-europe-pew-markers.ts\n M src/styles/atlas-europe-workspace.css\n M tests/browser/atlas-europe-pc-review.mjs\n",
+  "results": [
+    {
+      "width": 1920,
+      "render": "auto",
+      "nationalLabels": 5,
+      "collisions": [],
+      "serbiaDirectClick": true,
+      "errors": []
+    },
+    {
+      "width": 1920,
+      "render": "static",
+      "nationalLabels": 5,
+      "collisions": [],
+      "serbiaDirectClick": true,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "render": "auto",
+      "nationalLabels": 5,
+      "collisions": [],
+      "serbiaDirectClick": true,
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "render": "static",
+      "nationalLabels": 5,
+      "collisions": [],
+      "serbiaDirectClick": true,
+      "errors": []
+    },
+    {
+      "width": 1024,
+      "render": "auto",
+      "nationalLabels": 5,
+      "collisions": [],
+      "serbiaDirectClick": true,
+      "errors": []
+    },
+    {
+      "width": 1024,
+      "render": "static",
+      "nationalLabels": 5,
+      "collisions": [],
+      "serbiaDirectClick": true,
+      "errors": []
+    }
+  ]
+}
