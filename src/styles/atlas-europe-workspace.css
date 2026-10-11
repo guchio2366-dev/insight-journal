@@ -584,3 +584,5 @@
 
 /* The separately sourced national/local reading remains above overview bars. */
 .eu-workspace-root.is-eu-culture-reading[data-eu-religion-overview="pew"]:has([data-eu-pew-map-key]:not([hidden])) .eu-map-annotations { z-index:7; }
+/* The shared reduced-motion duration must not animate measured map positions. */
+.eu-workspace-root :is(.eu-smre-marker,.eu-pew-marker,[data-eu-religion-national],[data-eu-religion-evidence]) { transition-property:none; }
