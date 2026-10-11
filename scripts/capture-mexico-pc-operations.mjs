@@ -134,6 +134,13 @@ async function cityClimateReadingLayout(page, requestedId) {
 export async function inspectMexicoInitialPresentation(page, field) {
   if (field === 'population') return {populationNationalLayout: await populationNationalLayout(page)};
   if (field === 'nature') return {cityClimateReadingLayout: await cityClimateReadingLayout(page)};
+  if (field === 'industry') {
+    const labels=await page.locator('[data-mi-map="primary"] [data-mi-reading-markers] [data-mi-region-label]').evaluateAll(nodes=>nodes.filter(node=>!node.closest('[hidden]')).map(node=>{const box=node.getBoundingClientRect();return {name:node.textContent?.trim(),left:box.left,top:box.top,right:box.right,bottom:box.bottom};}));
+    const collisions=[];
+    for(const [index,a] of labels.entries())for(const b of labels.slice(index+1))if(Math.min(a.right,b.right)-Math.max(a.left,b.left)>1&&Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)>1)collisions.push(`${a.name} / ${b.name}`);
+    assert.equal(collisions.length,0,`Industry reading labels overlap: ${collisions.join('; ')}`);
+    return {industryLabels:labels};
+  }
   return null;
 }
 

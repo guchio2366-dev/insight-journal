@@ -309,3 +309,15 @@ test('Native map code, dropdown and terrain label selections retain their own na
     assert.equal(query(window).get('compare'), 'irrigation'); assert.equal(sourceReturn(window), originalReturn);
   } finally { await window.happyDOM.close(); }
 });
+
+test('National climate map reduces crowded codes while zoom and the source list keep all 21', async () => {
+  const window = await page();
+  try {
+    const labels=[...root(window).querySelectorAll('[data-mexico-nature-layer="climate"] [data-mexico-nature-class-label]')];
+    assert.equal(labels.length,21);
+    assert.equal(labels.filter(label=>!label.hasAttribute('hidden')).length,14);
+    assert.equal(root(window).querySelector('[data-mexico-nature-item-select]').options.length,22);
+    root(window).querySelector('[data-mexico-nature-zoom="in"]').click();
+    assert.equal(labels.filter(label=>!label.hasAttribute('hidden')).length,21);
+  } finally {await window.happyDOM.close();}
+});

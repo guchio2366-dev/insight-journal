@@ -200,6 +200,7 @@ export async function captureMexicoPCReview({browser, origin, basePath = '', out
     metadata.captures.push(record);
     await writeFile(path.join(output, 'metadata.json'), `${JSON.stringify(metadata, null, 2)}\n`);
     console.log(`${record.status.toUpperCase()}: ${record.name}${record.failure ? `: ${record.failure.split('\n')[0]}` : ''}`);
+    if(record.failure)console.log(`::error title=${record.name}::${record.failure.split('\n')[0].replaceAll('%','%25').replaceAll('\r','%0D').replaceAll('\n','%0A')}`);
   }
   metadata.comparisons = initialFields.filter(field=>initialCountries.includes('us')&&initialCountries.includes('mexico')).map(field => {
     const us = metadata.captures.find(item => item.field === field && item.country === 'us' && item.scene === 'initial');
