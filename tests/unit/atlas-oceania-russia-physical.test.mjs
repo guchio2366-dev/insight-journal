@@ -29,6 +29,19 @@ test('new nature layers have verified generated images, source metadata and hone
   assert.deepEqual(manifest.etopo.breaksM.slice(0,3),[0,500,1000]);
   assert.ok(manifest.gpcc.validSamplePixels>0);
   assert.ok(manifest.etopo.validSamplePixels>0);
+  const rivers=JSON.parse(readFileSync(new URL(`public/assets/atlas/${region}-rivers-v1.json`,root)));
+  const riverLayer=layers.find(item=>item.id==='rivers');
+  assert.equal(rivers.sourceSha256,'f286e0ce978fde999ca2d7a78c764be08542e19b63cded52b05c12d5173ccc51');
+  assert.equal(riverLayer.kind,'rivers');assert.match(riverLayer.coverage,/流向・河口/);
+  assert.equal(rivers.rivers.length,region==='russia'?5:3);
+  for(const river of rivers.rivers){
+   assert.ok(river.lines.some(line=>line.some(point=>point[0]===river.labelPosition[0]&&point[1]===river.labelPosition[1])));
+   assert.ok(river.lines.every(line=>line.length>=2));
+  }
+  const state=region==='oceania'?api.createOceaniaState('?layer=rivers','nature'):api.createRussiaState('?layer=rivers','nature');
+  const scene=region==='oceania'?api.renderOceaniaScene(riverLayer,state):api.renderRussiaScene(riverLayer,state);
+  assert.equal((scene.match(/data-river-name=/g)??[]).length,rivers.rivers.length);
+  assert.doesNotMatch(scene,/marker-end=|flow-direction=/);
  }
  stop();
 });

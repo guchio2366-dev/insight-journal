@@ -94,9 +94,17 @@ try{
      assert.equal(await host.locator('[data-layer]').inputValue(),id);
      assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
     }
+    await host.locator('[data-layer]').selectOption('rivers');await ready(region);
+    assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
+    assert.equal(await map.locator('[data-river-name]').count(),region==='russia'?5:3);
+    assert.match(await host.locator('[data-primary-unit]').textContent(),/流向は示さない/);
+    assert.match(await host.locator('[data-coverage]').textContent(),/流向・河口/);
+    await shot(`${region}-nature-${width}-rivers`);
+    await page.reload({waitUntil:'networkidle'});await ready(region);
+    assert.equal(await host.locator('[data-layer]').inputValue(),'rivers');
    }
   }
-  result.checks.push('GPCC annual precipitation and NOAA elevation layers retain the whole-region frame, readable keys, direct URL and reload state at 1920, 1536 and 1024px; Oceania nature controls remain outside the map.');
+  result.checks.push('Annual precipitation, selected named rivers, and elevation retain the whole-region frame, source distinctions, direct URL and reload state at 1920, 1536 and 1024px; Oceania nature controls remain outside the map.');
  }
  for(const width of representativeOnly?[1920,1536,1024]:[1920,1536,1280,1024]){
   await page.setViewportSize({width,height:width===1920?1080:864});

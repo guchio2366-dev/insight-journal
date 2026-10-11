@@ -109,7 +109,7 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
   text('reading-status',selected?'選んだ場所・分布の説明':'ロシアの概要');
   text('theme-title',!selected?(overview?'広い国土を、都市と分野の分布から読む':fieldOverview.title):contextualReading?theme.title:selectedName()+'の'+layer.title);text('takeaway',!selected?(overview?'欧州側・シベリア・極東を同じ表示枠で確かめ、自然条件に設備・交通・市場・社会を重ねて読む。都市中心の円は行政人口ではなく、固定された都市範囲の人口です。':fieldOverview.takeaway):contextualReading?theme.takeaway:fieldOverview.takeaway);
   text('explanation',contextualReading?theme.explanation:selected?selectedName()+'を選択しています。 '+layer.coverage:fieldOverview.explanation);text('social-context',theme.social);
-  if(field==='nature'&&layer.id!=='climate'){text('theme-title',layer.title);text('takeaway',layer.id==='precipitation'?'1991–2020年の年降水量と250 mm間隔の線で、地域ごとの違いを読みます。':'海抜500 mごとの段階色と等高線で、広い国土の標高を読みます。');text('explanation',layer.coverage);}
+  if(field==='nature'&&layer.id!=='climate'){text('theme-title',layer.title);text('takeaway',layer.id==='precipitation'?'1991–2020年の年降水量と250 mm間隔の線で、地域ごとの違いを読みます。':layer.id==='rivers'?'名称付きの代表河川の位置を確認します。線の順序から流向や河口は判断しません。':'海抜500 mごとの段階色と等高線で、広い国土の標高を読みます。');text('explanation',layer.coverage);}
   const industryPoint=field==='industry'&&state.layer==='places'?russiaIndustryMarks.find(m=>m.id===state.industryLocation):undefined;
   const industryReturn=root.querySelector<HTMLElement>('[data-russia-industry-return]');if(industryReturn)industryReturn.hidden=!industryPoint;
   if(industryPoint){text('theme-title',industryPoint.name);text('takeaway',industryPoint.reading??industryPoint.note);text('explanation',industryPoint.note);}

@@ -1,8 +1,34 @@
 import oceania from '../../../public/assets/atlas/oceania-physical-v1/manifest.json';
 import russia from '../../../public/assets/atlas/russia-physical-v1/manifest.json';
+import oceaniaRivers from '../../../public/assets/atlas/oceania-rivers-v1.json';
+import russiaRivers from '../../../public/assets/atlas/russia-rivers-v1.json';
 
 type Region = 'oceania' | 'russia';
 const manifests = {oceania, russia};
+const riverSources = {oceania: oceaniaRivers, russia: russiaRivers};
+const riverNamesJa: Record<string, string> = {Volga:'ボルガ川',Ob:'オビ川',Yenisey:'エニセイ川',Lena:'レナ川',Amur:'アムール川',Murray:'マレー川',Darling:'ダーリング川',Waikato:'ワイカト川'};
+
+export function regionalRiverLayer(region: Region) {
+ const data = riverSources[region];
+ return {
+  id: 'rivers', field: 'nature' as const, title: '主要河川の位置', period: 'Natural Earth 1:50m v5.1.2',
+  unit: '河川線・流向は示さない', kind: 'rivers' as const,
+  legend: [{label: '収録した名称付き河川線', color: '#24658c'}],
+  sources: [{title: 'Natural Earth, Rivers and Lake Centerlines 1:50m v5.1.2（Public domain）', url: data.sourceUrl,
+   note: '原本の River 線のうち名称を確認した代表河川のみを表示。線の座標順から流向や河口を推定しません。'}],
+  coverage: `${data.rivers.map(r => riverNamesJa[r.name]).join('、')}の原本河川線を国・地域の輪郭内に表示。主要河川の代表例で、全河川、流向・河口、流量、流域境界、地下水や利用可能水量は示しません。国境付近は輪郭で切り抜いています。`,
+  resolution: 'Natural Earth 1:50m の線・代表例'
+ };
+}
+
+const escapeRiver = (s: string) => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
+export function renderRegionalRivers(region: Region, project: (position: number[]) => number[], clip: string, scale: number): string {
+ return riverSources[region].rivers.map(river => {
+  const paths = river.lines.map(line => line.map((point, i) => {const [x, y] = project(point);return `${i?'L':'M'}${x.toFixed(2)},${y.toFixed(2)}`;}).join('')).join('');
+  const [x, y] = project(river.labelPosition);
+  return `<g data-river-name="${escapeRiver(river.name)}"><path d="${paths}" clip-path="url(#${clip})" fill="none" stroke="#24658c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"><title>${escapeRiver(riverNamesJa[river.name])}（${escapeRiver(river.name)}）：原本の河川中心線。流向は示しません。</title></path><text x="${x.toFixed(2)}" y="${(y-5*scale).toFixed(2)}" text-anchor="middle" font-size="${(13*scale).toFixed(2)}" fill="#164d6f" stroke="#fffefa" stroke-width="${(2.5*scale).toFixed(2)}" paint-order="stroke">${escapeRiver(riverNamesJa[river.name])}</text></g>`;
+ }).join('');
+}
 
 export function physicalLayer(region: Region, type: 'precipitation' | 'elevation') {
  const manifest = manifests[region];

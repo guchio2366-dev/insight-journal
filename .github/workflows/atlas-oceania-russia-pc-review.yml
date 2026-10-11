@@ -25,8 +25,11 @@ on:
       - 'public/assets/atlas/oceania-farming-overlay-v1/**'
       - 'public/assets/atlas/oceania-physical-v1/**'
       - 'public/assets/atlas/russia-physical-v1/**'
+      - 'public/assets/atlas/oceania-rivers-v1.json'
+      - 'public/assets/atlas/russia-rivers-v1.json'
       - 'scripts/prepare-oceania-russia-farming-overlay.py'
       - 'scripts/prepare-oceania-russia-physical.py'
+      - 'scripts/prepare-oceania-russia-rivers.py'
 
 permissions:
   contents: read
@@ -61,7 +64,7 @@ jobs:
           set -euo pipefail
           git fetch --no-tags --depth=1 origin "$BASE_SHA"
           region_files="$(git diff --name-only "$BASE_SHA" HEAD -- src public/assets/atlas tests/browser/atlas-oceania-russia-climate-cities.mjs)"
-          if [[ "$region_files" == *physical-v1* || "$region_files" == *oceania-russia-physical.ts* ]]; then
+          if [[ "$region_files" == *physical-v1* || "$region_files" == *rivers-v1* || "$region_files" == *oceania-russia-physical.ts* ]]; then
             echo 'REGION_REVIEW_PHYSICAL=1' >> "$GITHUB_ENV"
           fi
           regions=()
