@@ -400,15 +400,19 @@
 .west-wheat-supply li{margin:8px 0}
 .west-wheat-supply li strong,.west-wheat-supply li small{display:block}
 .west-wheat-supply li small{font-size:11px;line-height:1.45}
+.west-wheat-regional{list-style:none;padding:0!important}
+.west-wheat-regional li{display:grid;grid-template-columns:60px minmax(0,1fr) 84px;gap:5px;align-items:center;margin:7px 0}
+.west-wheat-regional li span:first-child{font-size:12px}
+.west-wheat-regional li strong{font-size:12px;text-align:right}
 .west-wheat-source-bar{display:block;height:10px;margin:3px 0;background:#d5e2dc;border-radius:5px;overflow:hidden}
 .west-wheat-source-bar i{display:block;height:100%;background:#967247}
 .west-wheat-destinations{display:grid;grid-template-columns:86px minmax(0,1fr);gap:8px;align-items:start}
 .west-wheat-pie{display:block;width:82px;height:82px;border-radius:50%;border:1px solid #d0d7cf}
 .west-wheat-destinations ol{list-style:none;padding:0;margin:0}
-.west-wheat-destinations li{display:flex;gap:4px;align-items:center;font-size:11px;line-height:1.35;margin:2px 0}
+.west-wheat-destinations li{display:flex;gap:4px;align-items:center;font-size:12px;line-height:1.35;margin:3px 0}
 .west-wheat-destinations li i{width:9px;height:9px;flex:none}
 .west-wheat-destinations li span{min-width:0;flex:1}
-.west-wheat-destinations li strong{font-size:11px}
+.west-wheat-destinations li strong{font-size:12px}
 .west-industry-key{display:flex;flex-wrap:wrap;gap:7px 15px}
 .west-industry-key span{display:inline-flex;align-items:center;gap:5px;font-size:.8rem}
 .west-industry-key i{display:inline-block;width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #8f9a99}

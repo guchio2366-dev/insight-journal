@@ -120,17 +120,24 @@ test('小麦の需給例と原穀貿易は別対象・別単位と欠測を明�
  try{
   const fbs=q('[data-west-wheat-fbs]'),tm=q('[data-west-wheat-trade]');
   assert(fbs&&tm);
-  assert.match(fbs.textContent,/小麦製品群.*アルメニア.*オマーン.*トルコ/);
+  assert.match(fbs.textContent,/小麦製品群｜19対象.*101,860.*67,742.*22,646.*アルメニア.*オマーン.*トルコ/);
   assert.match(fbs.textContent,/国内供給.*食用.*飼料/);
   assert.match(fbs.textContent,/観光客消費は3例とも未掲載/);
   assert.match(tm.textContent,/原穀小麦.*16報告国.*9報告国/);
   assert.match(tm.textContent,/再輸出を含み/);
+  assert.match(tm.textContent,/域外輸出先.*その他.*上位5以外/);
   assert(q('.west-wheat-pie'));
   assert.doesNotMatch(fbs.textContent+tm.textContent,/カロリーベース自給率.*\d+%/);
   q('[data-west-topic-button="dates"]').click();
   await until(()=>q('[data-west-atlas]').dataset.topic==='dates'&&q('[data-west-atlas]').dataset.ready==='true');
   assert.equal(q('[data-west-wheat-fbs]'),null);
   assert.equal(q('[data-west-wheat-trade]'),null);
+  assert.match(q('[data-west-food-fbs="dates"]').textContent,/ナツメヤシの実.*5,992.*5,117.*パレスチナは未掲載/);
+  assert.match(q('[data-west-farm-supply]').textContent,/ナツメヤシ｜域外輸出先.*円は未掲載/);
+  q('[data-west-topic-button="olives"]').click();
+  await until(()=>q('[data-west-atlas]').dataset.topic==='olives'&&q('[data-west-atlas]').dataset.ready==='true');
+  assert.match(q('[data-west-food-fbs="oliveOil"]').textContent,/オリーブ油.*428.*384.*果実のオリーブ/);
+  assert.match(q('[data-west-food-trade="oliveOil"]').textContent,/域外輸出先.*スペイン.*米国.*その他.*14報告国/);
  }finally{await w.happyDOM.close();}
 });
 

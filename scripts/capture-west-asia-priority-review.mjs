@@ -41,7 +41,7 @@ try{
   await page.locator('[data-west-standard-group="水資源"]').click();await ready();await capture('water-initial');if(width===1920){await page.locator('[data-west-topic-button="annual-precipitation"]').first().click();await ready();assert(await page.locator('[data-west-aligned-line="rainfall"]').count()>0);await capture('annual-precipitation');}await page.locator('[data-west-topic-button="basins"]').first().click();await ready();assert.equal(await page.locator('.west-basin-place').count(),4);const before=await page.locator('[data-west-map]').getAttribute('viewBox');await capture('basin-initial');await clickBasin('1060034260');await ready();assert.equal(await page.locator('[data-west-map]').getAttribute('viewBox'),before);assert.match(await page.locator('[data-west-regional-reading]').textContent(),/ナイル川：上流から地中海へ/);assert.equal(await page.locator('[data-west-representative-basin="1060034260"]').getAttribute('stroke'),'#9d3c2e');await capture('basin-nile');
   if(width===1920){await page.locator('[data-west-standard-group="地形"]').click();await ready();assert.equal(await page.locator('.west-terrain-place').count(),5);await capture('terrain-landforms');await page.locator('[data-west-standard-group="標高（等高線）"]').click();await ready();assert(await page.locator('[data-west-aligned-line="elevation"]').count()>0);await capture('elevation-contours');}
   await open('agriculture');assert.equal(await page.locator('[data-west-farm-context]').count(),5);assert(await page.locator('[data-west-farm-supply]').textContent().then(x=>x.includes('世界生産比')));assert.equal(await page.locator('[data-west-farm-strong="sheep"]').first().evaluate(el=>el.tagName.toLowerCase()),'rect');assert.equal(await page.locator('[data-west-farm-strong="goat"]').first().evaluate(el=>el.tagName.toLowerCase()),'path');await capture('farming-all');await capture('farming-map','[data-west-map]');await capture('farming-statistics','[data-west-farm-supply]');
-  if(width===1920){assert.match(await page.locator('[data-west-wheat-fbs]').textContent(),/3例.*パレスチナは未掲載/);assert.match(await page.locator('[data-west-wheat-trade]').textContent(),/9報告国.*16報告国/);await capture('wheat-2023-evidence','[data-west-farm-supply]');}
+  if(width===1920){assert.match(await page.locator('[data-west-wheat-fbs]').textContent(),/19対象.*パレスチナの行は未掲載.*3か国/);assert.match(await page.locator('[data-west-wheat-trade]').textContent(),/域外輸出先.*9報告国.*16報告国/);await capture('wheat-2023-evidence','[data-west-farm-supply]');}
   if(width===1920){
    for(const [topic,place] of [['dates','al-ahsa-dates'],['olives','edremit-olives']]){
     await page.locator(`[data-west-topic-button="${topic}"]`).first().click();await ready();
@@ -49,6 +49,8 @@ try{
     assert.match(await page.locator('[data-west-short-key]').textContent(),/面＝既存5品目の推計分布/);
     assert.doesNotMatch(await page.locator('[data-west-short-key]').textContent(),/面＝国別生産量/);
     await capture(`${topic}-all`);
+    if(topic==='dates'){assert.match(await page.locator('[data-west-food-fbs="dates"]').textContent(),/5,992.*5,117/);await capture('dates-2023-evidence','[data-west-farm-supply]');}
+    if(topic==='olives'){assert.match(await page.locator('[data-west-food-trade="oliveOil"]').textContent(),/オリーブ油.*域外輸出先/);await capture('olive-oil-2023-evidence','[data-west-farm-supply]');}
     await page.locator('[data-west-production-map]').click();await ready();
     assert.equal(new URL(page.url()).searchParams.get('productionMap'),'country');
     assert.match(await page.locator('[data-west-short-key]').textContent(),/面＝国別生産量/);

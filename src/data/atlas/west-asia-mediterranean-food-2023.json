@@ -1,0 +1,45 @@
+{
+  "packetVersion": "2023-dates-olive-oil-private-handoff-v1",
+  "year": 2023,
+  "derivedFrom": "FAOSTAT official UI extracts analysed and independently checked outside this executor; original CSV is not present here",
+  "attribution": "FAO. FAOSTAT Food Balances (2010-), Supply Utilization Accounts, and Detailed trade matrix. Accessed 11 October 2026. CC BY 4.0; derived sums by analyst.",
+  "sourceFiles": {
+    "FBS1": {"name":"FBS_SAU_ARE_TUR_2023_all_items_all_elements.csv","sha256":"de027f3e4b6aee8752bfa81c21976911bca520f5650b07eb00c1feb6bf8a589a"},
+    "FBS2": {"name":"FBS_additional17_2023_all_items_all_elements.csv","sha256":"2340e3e01a56eb9e2a020172c70f94f8b0f6412075fecacf3731881828855a07"},
+    "TM1": {"name":"TM_SAU_ARE_TUR_2023_wheat_dates_olives_products.csv","sha256":"6bd8ce174c1a884bcb41475c757fa0f9e4be75409cc5edd02433356206252f79"},
+    "TM2": {"name":"TM_additional17_2023_wheat_dates_olives_products.csv","sha256":"efdee4a1f90cf040fa689637d67c76c18c22641580b8304f5d115b052597193c"},
+    "SCL1": {"name":"SCL_SAU_ARE_TUR_2023_all_items_all_elements.csv","sha256":"4faa2a61e0383de2ae1a4c2e42bfee3ca8e88de986f0786e50ccff0ff8880160"},
+    "SCL2": {"name":"SCL_additional_part1_2023.csv","sha256":"8b35db3def8c21493cbf0509ce7fee0a04b2b5dc3207d8fade6d0f12ae818601"},
+    "SCL3": {"name":"SCL_additional_part2_2023.csv","sha256":"7f1f9e6deb4d3234b6a6e81bcd507cf2ead093aba32d9679b974c2e8cfd6c7e1"},
+    "SCL4": {"name":"SCL_additional_part3_2023.csv","sha256":"a073c9a7a6739c3b8cf6751b2e0c8863395cd139cae6c6b3460400b180f99f7e"},
+    "SCL5": {"name":"SCL_additional_part4_2023.csv","sha256":"99c2c36ef7e284a76e8abc597b4b6eb613366d57d501539331123cb587625500"},
+    "SCL6": {"name":"SCL_additional_part5_2023.csv","sha256":"8c2f9644a546e183cbf31728e652ace52cc74f6172b0cf6e56f14ca2295b4755"},
+    "SCL7": {"name":"SCL_additional_part6_2023.csv","sha256":"585d9210dfc5e0094790731baf2942865bb9445127cd162be230a486d8f34d2c"}
+  },
+  "coverageM49": ["031","048","051","196","268","364","368","376","400","414","422","512","634","682","760","784","792","818","887"],
+  "absentM49": ["275"],
+  "dates": {
+    "FBS": {
+      "itemCode": "S2619", "item": "Dates", "unit": "1000 t",
+      "returnedCoverage": {"5511":14,"5611":19,"5911":18,"5301":19,"5142":19,"5123":14,"5521":3,"5527":1,"5131":3,"5171":3,"5170":19},
+      "returnedSums": {"5511":6655,"5611":345,"5911":1005,"5301":5992,"5142":5117,"5123":550,"5521":184,"5527":0,"5131":84,"5171":59,"5170":0},
+      "missingElements": ["5072 Stock variation","5154 Other non-food"]
+    },
+    "SCL": {"itemCode":"01314","unit":"t","returnedSums":{"5510":6654109.77,"5610":346601.01,"5910":1006848.11,"5141":5116896.89,"5016":550321.52,"5023":83750.1,"5520":183407.15,"5164":59478.54},"missingElements":["5071 Stock variation","5165 Other uses"]}
+  },
+  "oliveOil": {
+    "FBS": {
+      "itemCode": "S2580", "item": "Olive oil", "unit": "1000 t",
+      "returnedCoverage": {"5511":11,"5611":19,"5911":17,"5301":19,"5142":19,"5072":19,"5154":14,"5171":3,"5521":2,"5123":1,"5170":19},
+      "returnedSums": {"5511":479,"5611":131,"5911":267,"5301":428,"5142":384,"5072":-86,"5154":41,"5171":4,"5521":0,"5123":0,"5170":0},
+      "missingElements": ["5527 Seed","5131 Processing"]
+    },
+    "SCL": {"itemCode":"2167","unit":"t","returnedSums":{"5510":439328.49,"5141":377761.27,"5113":399602.38,"5610":109618.93,"5071":-85075.51,"5910":253685.96,"5165":11.52,"5164":2564.18}},
+    "TM": {
+      "itemCode":"2167", "item":"Olive oil", "unit":"t", "boundary":"M49 in editorial 20-country scope is internal; all others external",
+      "imports":{"allReturned":113298.63,"internal":90737.29,"external":22561.34,"reportersExternal":15,"partners":[["724","Spain",10832.19],["788","Tunisia",4857.35],["380","Italy",3834.12],["300","Greece",1658.53],["250","France",325.01],[null,"Other returned external partners",1054.14]]},
+      "exports":{"allReturned":170705.33,"internal":25528.75,"external":145176.58,"reportersExternal":14,"partners":[["724","Spain",73541.12],["840","United States of America",35157.13],["380","Italy",13648.22],["392","Japan",4776.98],["124","Canada",2643.26],[null,"Other returned external partners",15409.87]]}
+    }
+  },
+  "limits": ["FBS, SCL and TM item definitions and reporting scopes differ; never join into a single balance","Dates, table olives and olive oil must not be added by weight","Missing cells and missing reporters are not zero","TM exports may include re-exports; partner is not necessarily final consumer","Food supply is not actual intake or calorie-based self-sufficiency"]
+}
