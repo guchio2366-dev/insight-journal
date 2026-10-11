@@ -49,7 +49,8 @@ try{
  assert.equal(await page.locator('[data-basin-shortcut]').count(),5);
  await page.locator('[data-basin-shortcut="b-4060017020"]').click();
  await page.waitForFunction(()=>new URL(location.href).searchParams.get('detail')==='b-4060017020');
- assert.match(await page.locator('[data-hydrology-content]').textContent(),/メコン川/);
+ assert.match(await page.locator('[data-hydrology-content]').textContent(),/中国南西部.*南シナ海/s);
+ assert.equal(await page.locator('[data-basin-shortcut="b-4060017020"]').getAttribute('aria-pressed'),'true');
  const otherRivers=await page.locator('.asia-river-label:visible').allTextContents();assert.equal(otherRivers.length>=5,true,otherRivers.join('、'));
  assert.equal(await page.locator('[data-basin-shortcut]:not([disabled])').count(),5);
  check('Mekong basin is selected in the basin topic and the other four basin shortcuts and river labels remain');await shot('basins-mekong-selected');
