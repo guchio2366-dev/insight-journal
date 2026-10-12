@@ -23,11 +23,14 @@ export function regionalRiverLayer(region: Region) {
 
 const escapeRiver = (s: string) => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 export function renderRegionalRivers(region: Region, project: (position: number[]) => number[], clip: string, scale: number): string {
- return riverSources[region].rivers.map(river => {
+ const items=riverSources[region].rivers.map(river => {
   const paths = river.lines.map(line => line.map((point, i) => {const [x, y] = project(point);return `${i?'L':'M'}${x.toFixed(2)},${y.toFixed(2)}`;}).join('')).join('');
   const [x, y] = project(river.labelPosition);
-  return `<g data-river-name="${escapeRiver(river.name)}" role="button" tabindex="0" aria-label="${escapeRiver(riverNamesJa[river.name])}を読む" aria-pressed="false"><path d="${paths}" clip-path="url(#${clip})" fill="none" stroke="#24658c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"><title>${escapeRiver(riverNamesJa[river.name])}（${escapeRiver(river.name)}）：原本の河川中心線。流向は示しません。</title></path><path d="${paths}" clip-path="url(#${clip})" fill="none" stroke="transparent" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><text x="${x.toFixed(2)}" y="${(y-5*scale).toFixed(2)}" text-anchor="middle" font-size="${(13*scale).toFixed(2)}" fill="#164d6f" stroke="#fffefa" stroke-width="${(2.5*scale).toFixed(2)}" paint-order="stroke">${escapeRiver(riverNamesJa[river.name])}</text></g>`;
- }).join('');
+  return {id:escapeRiver(river.name),name:escapeRiver(riverNamesJa[river.name]),paths,x,y};
+ });
+ const lines=items.map(item=>`<g data-river-name="${item.id}"><path d="${item.paths}" clip-path="url(#${clip})" fill="none" stroke="#24658c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"><title>${item.name}：原本の河川中心線。流向は示しません。</title></path><path d="${item.paths}" clip-path="url(#${clip})" fill="none" stroke="transparent" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></g>`).join('');
+ const labels=items.map(item=>`<text data-river-label="${item.id}" role="button" tabindex="0" aria-label="${item.name}を読む" aria-pressed="false" x="${item.x.toFixed(2)}" y="${(item.y-5*scale).toFixed(2)}" text-anchor="middle" font-size="${(13*scale).toFixed(2)}" fill="#164d6f" stroke="#fffefa" stroke-width="${(2.5*scale).toFixed(2)}" paint-order="stroke">${item.name}</text>`).join('');
+ return lines+labels;
 }
 
 export function physicalLayer(region: Region, type: 'precipitation' | 'elevation') {

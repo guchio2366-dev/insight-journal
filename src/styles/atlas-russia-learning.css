@@ -409,9 +409,10 @@
 .russia-workspace.farming-crop-hidden :is([data-farming-product=wheat],[data-place-product=wheat],[data-farming-key=wheat],[data-farming-legend=wheat]){display:none}
 .russia-workspace.farming-livestock-hidden :is([data-farming-product=cattle],[data-place-product=cattle],[data-farming-key=cattle],[data-farming-legend=cattle]){display:none}
 .russia-workspace .russia-region-countries [data-region-option],.russia-learning-scene .russia-region-marker,.russia-learning-scene .russia-region-marker-note{display:none}
-.russia-learning-scene [data-river-name]{cursor:pointer}
+.russia-learning-scene :is([data-river-name],[data-river-label]){cursor:pointer}
 .russia-learning[data-field=nature] .russia-learning-scene:has([data-river-name]) .russia-region{pointer-events:none}
-.russia-learning-scene [data-river-name][aria-pressed=true] path:first-child,.russia-learning-scene [data-river-name]:focus-visible path:first-child{stroke:#123d62;stroke-width:4}
+.russia-learning-scene [data-river-name][data-selected=true] path:first-child{stroke:#123d62;stroke-width:4}
+.russia-learning-scene [data-river-label]:is([aria-pressed=true],:focus-visible){font-weight:700;stroke-width:4}
 .russia-learning-normal .russia-learning-scope,.russia-learning .russia-learning-comparison-button,.russia-learning .russia-learning-compare-layer,.russia-learning .russia-learning-return,.russia-learning .russia-farming-view-options{display:none}
 .russia-learning[data-field=industry] .russia-learning-toolbar .russia-learning-themes{display:none}
 .russia-learning[data-field=industry] .russia-learning-toolbar{display:none}

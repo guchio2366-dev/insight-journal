@@ -63,7 +63,7 @@ test('Oceania farming group switches preserve the map and river names select sou
   assert.ok(river);river.dispatchEvent(new nature.win.MouseEvent('click',{bubbles:true}));
   assert.equal(nature.root.querySelector('[data-theme-title]').textContent,'マレー川');
   assert.match(nature.root.querySelector('[data-takeaway]').textContent,/流向・河口・流域境界/);
-  assert.equal(nature.root.querySelector('[data-primary-map] [data-river-name=Murray]').getAttribute('aria-pressed'),'true');
+  assert.equal(nature.root.querySelector('[data-primary-map] [data-river-label=Murray]').getAttribute('aria-pressed'),'true');
  }finally{nature.win.happyDOM.abort();}
 });
 test('built PNG comparison preserves the original climate, crop choice, country, all legends and named return',()=>{

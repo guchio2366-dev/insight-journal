@@ -257,9 +257,10 @@
 .oceania-farming-visibility button[aria-pressed=true]{background:#284f55;color:#fff}
 .oceania-workspace-root.farming-crop-hidden :is([data-farming-product=wheat],[data-farming-product=coconut],[data-farming-product=cacao],[data-place-product=wheat],[data-place-product=coconut],[data-place-product=cacao],[data-farming-key=wheat],[data-farming-key=coconut],[data-farming-key=cacao],[data-farming-legend=wheat],[data-farming-legend=coconut],[data-farming-legend=cacao]){display:none}
 .oceania-workspace-root.farming-livestock-hidden :is([data-farming-product=sheep],[data-farming-product=cattle],[data-place-product=sheep],[data-place-product=cattle],[data-farming-key=sheep],[data-farming-key=cattle],[data-farming-legend=sheep],[data-farming-legend=cattle]){display:none}
-.oceania-learning-scene [data-river-name]{cursor:pointer}
+.oceania-learning-scene :is([data-river-name],[data-river-label]){cursor:pointer}
 .oceania-learning[data-field=nature] .oceania-learning-scene:has([data-river-name]) .oceania-country{pointer-events:none}
-.oceania-learning-scene [data-river-name][aria-pressed=true] path:first-child,.oceania-learning-scene [data-river-name]:focus-visible path:first-child{stroke:#123d62;stroke-width:4}
+.oceania-learning-scene [data-river-name][data-selected=true] path:first-child{stroke:#123d62;stroke-width:4}
+.oceania-learning-scene [data-river-label]:is([aria-pressed=true],:focus-visible){font-weight:700;stroke-width:4}
 .oceania-learning-normal .oceania-learning-scope,.oceania-learning .oceania-learning-comparison-button,.oceania-learning .oceania-learning-compare-layer,.oceania-learning .oceania-learning-return,.oceania-learning .oceania-farming-view-options{display:none}
 .oceania-learning[data-field=industry] .oceania-learning-toolbar .oceania-learning-themes{display:none}
 .oceania-learning[data-field=industry] .oceania-learning-toolbar{display:none}

@@ -57,7 +57,7 @@ test('Russia farming groups toggle separately and named rivers update the readin
   assert.ok(river);river.dispatchEvent(new nature.win.MouseEvent('click',{bubbles:true}));
   assert.equal(nature.one('theme-title').textContent,'ボルガ川');
   assert.match(nature.one('takeaway').textContent,/流向・河口・流域境界/);
-  assert.equal(nature.one('primary-map').querySelector('[data-river-name=Volga]').getAttribute('aria-pressed'),'true');
+  assert.equal(nature.one('primary-map').querySelector('[data-river-label=Volga]').getAttribute('aria-pressed'),'true');
  }finally{nature.win.happyDOM.abort();}
 });
 function assertLegend(element,layer){

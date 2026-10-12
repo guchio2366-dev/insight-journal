@@ -59,8 +59,8 @@ try{
    if(field==='nature'){
     await root.locator('[data-layer]').selectOption('rivers');
     const river=region==='oceania'?'Murray':'Volga',name=region==='oceania'?'マレー川':'ボルガ川';
-    const mark=root.locator(`[data-primary-map] [data-river-name=${river}]`);
-    await mark.locator('text').click();
+    const mark=root.locator(`[data-primary-map] [data-river-label=${river}]`);
+    await mark.click();
     assert.equal(await root.locator('[data-theme-title]').textContent(),name);
     assert.equal(await mark.getAttribute('aria-pressed'),'true');
     assert.equal(await map.getAttribute('viewBox'),frame);

@@ -137,7 +137,8 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
     text('theme-title',riverNames[selectedRiver]);
     text('takeaway',`${riverNames[selectedRiver]}の原本河川中心線を示します。流向・河口・流域境界はこの資料から判断しません。`);
     text('explanation',layer.coverage);
-    root.querySelectorAll<SVGElement>('[data-primary-map] [data-river-name]').forEach(item=>item.setAttribute('aria-pressed',String(item.dataset.riverName===selectedRiver)));
+    root.querySelectorAll<SVGElement>('[data-primary-map] [data-river-name]').forEach(item=>item.dataset.selected=String(item.dataset.riverName===selectedRiver));
+    root.querySelectorAll<SVGElement>('[data-primary-map] [data-river-label]').forEach(item=>item.setAttribute('aria-pressed',String(item.dataset.riverLabel===selectedRiver)));
    }
    if(focusedIndustry)root.querySelector<SVGElement>(`[data-russia-industry-location="${focusedIndustry}"]`)?.focus({preventScroll:true});
    if(focusedHook&&focusedPlace)one(focusedHook).querySelector<SVGElement>(`[data-region-marker][data-map-place="${focusedPlace}"]`)?.focus({preventScroll:true});
@@ -185,14 +186,14 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
    if(hook)one(hook).querySelector<SVGElement>(`[data-region-marker][data-map-place="${place}"]`)?.focus({preventScroll:true});
   };
   root.addEventListener('click',event=>{
-   const river=(event.target as Element).closest<SVGElement>('[data-primary-map] [data-river-name]');if(river&&field==='nature'&&state.layer==='rivers'&&riverNames[river.dataset.riverName!]){selectedRiver=river.dataset.riverName;render();root.querySelector<SVGElement>(`[data-primary-map] [data-river-name="${selectedRiver}"]`)?.focus({preventScroll:true});return;}
+   const river=(event.target as Element).closest<SVGElement>('[data-primary-map] [data-river-name],[data-primary-map] [data-river-label]');const riverId=river?.dataset.riverName??river?.dataset.riverLabel;if(riverId&&field==='nature'&&state.layer==='rivers'&&riverNames[riverId]){selectedRiver=riverId;render();root.querySelector<SVGElement>(`[data-primary-map] [data-river-label="${selectedRiver}"]`)?.focus({preventScroll:true});return;}
    if((event.target as Element).closest('[data-russia-industry-return]')){update(()=>{delete state.industryLocation;state.place='all';state.scope='all';selected=false;});return;}
    const point=(event.target as Element).closest<SVGElement>('[data-russia-industry-location]');if(point){const id=point.dataset.russiaIndustryLocation;if(state.industryLocation===id)return;update(()=>{state.industryLocation=id;selected=true;});root.querySelector<SVGElement>(`[data-russia-industry-location="${id}"]`)?.focus({preventScroll:true});return;}
    const regionSelected=(event.target as Element).closest<HTMLElement|SVGElement>('[data-map-place]');
    if(regionSelected)selectMapRegion(regionSelected);
   });
   root.addEventListener('keydown',event=>{
-   const river=(event.target as Element).closest<SVGElement>('[data-primary-map] [data-river-name]');if(river&&(event.key==='Enter'||event.key===' ')){event.preventDefault();if(!event.repeat)river.dispatchEvent(new MouseEvent('click',{bubbles:true}));return;}
+   const river=(event.target as Element).closest<SVGElement>('[data-primary-map] [data-river-label]');if(river&&(event.key==='Enter'||event.key===' ')){event.preventDefault();if(!event.repeat)river.dispatchEvent(new MouseEvent('click',{bubbles:true}));return;}
    const point=(event.target as Element).closest<SVGElement>('[data-russia-industry-location]');if(point&&(event.key==='Enter'||event.key===' ')){event.preventDefault();if(!event.repeat)point.dispatchEvent(new MouseEvent('click',{bubbles:true}));return;}
    const selected=(event.target as Element).closest<SVGElement>('[data-region-marker]');
    if(!selected||(event.key!=='Enter'&&event.key!==' '))return;
