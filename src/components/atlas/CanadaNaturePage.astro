@@ -45,7 +45,7 @@ function geometryPath(g:any):string{
 const japaneseWater:Record<string,string>={'Mackenzie':'マッケンジー川','Fraser':'フレーザー川','Nelson':'ネルソン川','St. Lawrence':'セントローレンス川','Great Slave Lake':'グレートスレーブ湖','Great Bear Lake':'グレートベア湖','Lake Superior':'スペリオル湖','Lake Ontario':'オンタリオ湖','Lake Winnipeg':'ウィニペグ湖'};
 const waterNames=Object.keys(japaneseWater).filter(name=>[...rivers.features,...lakes.features].some(f=>f.properties.name===name));
 const featuredRivers=[{id:'Mackenzie',name:'マッケンジー川',point:[-120,62]},{id:'Fraser',name:'フレーザー川',point:[-123,53]},{id:'Nelson',name:'ネルソン川',point:[-96,55.2]},{id:'St. Lawrence',name:'セントローレンス川',point:[-71.2070465,46.7996407]}];
-const featuredLakes=[{name:'スペリオル湖',point:[-88.2,47.5],offset:[-30,-26]},{name:'ミシガン湖',point:[-87,44.1],offset:[-65,18]},{name:'ヒューロン湖',point:[-82.4,45],offset:[15,-28]},{name:'エリー湖',point:[-81.2,42.2],offset:[30,25]},{name:'オンタリオ湖',point:[-77.9,43.9],offset:[64,5]},{name:'ウィニペグ湖',point:[-97.24,52.5],offset:[-20,-24]},{name:'グレートスレーブ湖',point:[-114.2,61.8],offset:[10,-18]},{name:'グレートベア湖',point:[-121.3,65.95],offset:[10,-18]}];
+const featuredLakes=[{name:'スペリオル湖',point:[-88.2,47.5],offset:[-30,-26]},{name:'ミシガン湖',point:[-87,44.1],offset:[-65,18]},{name:'ヒューロン湖',point:[-82.4,45],offset:[15,-28]},{name:'エリー湖',point:[-81.2,42.2],offset:[30,25]},{name:'オンタリオ湖',point:[-77.9,43.9],offset:[64,5]},{name:'ウィニペグ湖',point:[-97.24,52.5],offset:[-20,-24]},{name:'グレートスレーブ湖',point:[-114.2,61.8],offset:[10,-42]},{name:'グレートベア湖',point:[-121.3,65.95],offset:[10,-18]}];
 const fmt=(v:number|null)=>v===null?'未収録':v.toLocaleString('ja-JP',{minimumFractionDigits:1,maximumFractionDigits:1});
 const climateGroups=canadaClimateGroups((koppenManifest as any).classes);
 const elevationGroups=(elevationManifest as any).levels;
