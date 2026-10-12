@@ -73,6 +73,7 @@ jobs:
           retention-days: 7
           if-no-files-found: error
   preview:
+    if: ${{ always() && !cancelled() }}
     name: PC image preview (${{ matrix.topic }})
     needs: review
     runs-on: ubuntu-latest

@@ -28,3 +28,7 @@
 Chromeサンドボックスを緩めずGitHub Actionsの標準Chromeで撮影する。ローカル起動は環境要件で失敗。PC画像取得・実見・最終CIの結果はPR本文に追記する。ここに記した実装は検証合格を意味しない。
 
 変更の共通CSSは中南米・産業以外の通常表示に限定。地理座標のnative高さ580とWeb Mercator投影を変更せず、描画キャンバス・uniform fitだけを拡大する。従来農畜産比較rendererの固定hashテストを維持。林業の共有コンポーネントの記号分岐は中南米だけ。他地域の独自UI改修は追加しない。
+
+## 現行mainの他地域点検
+
+`RegionalForestryPage.astro` は現行mainではアフリカ専用の `AfricaFieldNavigation` と同位置の農畜産／林業切替を使う。中南米の今回CSSは作用しない。オセアニアとロシアは、農畜産が `OceaniaLearningPage` / `RussiaLearningPage` の大分類・サブ分類を使う一方、林業は独立 `forest-fields` と地図下 `forest-subfields` に移る不整合が残る。今回それらの独自外枠は改修しない。共有林業CIでアフリカ／オセアニア／ロシアのbefore/afterのlayout・PNG SHA一致を確認する。2026-10-10の旧点検記録からアフリカの実装が変わっているため、旧所見を現況とは扱わない。
