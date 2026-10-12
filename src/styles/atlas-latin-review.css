@@ -53,3 +53,6 @@
  .latin-workspace:not(.is-comparison) [data-latin-agriculture-legend-container] .latin-agriculture-legend>strong{position:static!important;width:auto!important;max-width:none!important;white-space:normal!important;background:none!important;padding:0!important}
  .latin-workspace:not(.is-comparison) [data-latin-agriculture-legend-container] .latin-agriculture-legend>div{display:flex;flex-direction:column;gap:3px}
 }
+@media(min-width:1600px){
+ .latin-workspace:not(.latin-industry):not(.is-comparison) .latin-map-column :is([data-latin-agriculture-legend-container],[data-nature-legend-host],[data-lp-target-legend],.latin-foundation-legend,.forest-legend){bottom:auto;top:calc(100dvh - var(--latin-review-top,298px) - 66px);transform:translateY(-100%);max-height:calc(100dvh - var(--latin-review-top,298px) - 100px)}
+}

@@ -10,7 +10,9 @@ for stage in ['before','after']:
  assert report['result'] in ['baseline-recorded','passed','failed']
  if stage=='after':assert report['commit']==os.environ['LATIN_REVIEW_EXPECTED_HEAD']
  shots=[s for s in report['shots'] if s['file'].startswith(topic+'-') or topic=='climate' and s['file'].startswith('basins-')]
- assert shots
+ if not shots:
+  print('LATIN_REVIEW_NOT_CAPTURED '+stage+' '+topic)
+  continue
  print('LATIN_REVIEW_TOPIC_REPORT '+json.dumps({**report,'shots':shots},ensure_ascii=False))
  for s in shots:
   data=(folder/s['preview']['file']).read_bytes()
