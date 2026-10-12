@@ -11,7 +11,7 @@ const visibleCensuses=southCentralReligionCensuses.filter(c=>pageId==='south-asi
 const visibleReports=southCentralReligionReports.filter(c=>pageId!=='south-asia');
 const readings={
  'east-asia':{ethnicity:'チベット系は中国西部、ウイグル系は新疆、台湾先住民族は台湾に、資料に掲載された居住域があります。色面は全住民の分類や人口密度ではありません。',religion:'中国西部にはチベット仏教の伝統、日本各地には神社と寺院の蓄積、台湾には道教・仏教の文化拠点があります。国内の特徴を場所で読む資料と、国全体の宗教回答を分けて示します。'},
- 'southeast-asia':{ethnicity:'GeoEPRの居住域に、フィリピン国勢調査の地方別民族回答を別の丸数字で重ねます。色面と地方別ラベルは資料も分母も異なります。',religion:'GeoEPRの集団に結びつく居住域と、ベトナム・フィリピン・東ティモールの住民の国勢調査回答を別々に読みます。'},
+ 'southeast-asia':{ethnicity:'GeoEPRの居住域に、フィリピン国勢調査の地方別民族回答を別の丸数字で重ねます。色面と地方別ラベルは資料も分母も異なります。',religion:'フィリピンでは2020年のカトリック回答は全国78.8％でも、ビコール93.5％・中ビサヤ90.5％・バンサモロ5.3％と地方差があります。地図の地方別値と国全体の構成を分けて読みます。'},
  'south-central-asia':{ethnicity:'パシュトゥーンはアフガニスタンとパキスタン、ベンガルの集団はインド東部とバングラデシュ、タミルの集団はインド南部とスリランカの両側に掲載されています。',religion:'掲載した集団に結びつく宗教の事例です。'}
 };
 ---
@@ -29,7 +29,7 @@ const readings={
   </article>)}
  </section>}
  {regionId==='southeast-asia'&&topic==='ethnicity'&&<section data-southeast-ethnicity-census><h3>フィリピンの地域別民族調査を重ねて読む</h3><p>地図の4つのラベルと右の7件の一覧はフィリピン統計庁の2020年国勢調査による各地方の世帯人口に占める割合です。位置は地方を探すための目印で、点の周囲がその民族だけの居住域という意味ではありません。GeoEPRの政治的集団の面とは資料も分類も異なり、最多集団だけで地方全体を塗っていません。</p><div class="southeast-census-list">{southeastPhilippineEthnicity.map(item=><p><strong>{item.region}</strong>：{item.group} {item.share}％</p>)}</div><p>民族は国勢調査の回答で、宗教・母語と同じ分類ではありません。バンサモロにはマギンダナオのほかタウスグ23.3％、マラナオ22.7％も記録されています。<a href={southeastPhilippineEthnicitySource}>PSA・2020年国勢調査</a></p></section>}
- {regionId==='southeast-asia'&&topic==='religion'&&<section data-southeast-religion-census><h3>国勢調査で住民の宗教回答を読む</h3><p>フィリピンでは地方別のカトリック回答を地図のラベルで読みます。ベトナム・東ティモールの円は国全体の構成を代表位置に置いたもので、その地点の信仰割合ではありません。GeoEPR/EPR-EDの居住域と数値を合算しません。</p><div data-southeast-religion-regions><h4>フィリピン・2020年地方別</h4>{southeastPhilippineReligionRegions.map(r=><p>{r.region}：{r.religion} {r.share}％</p>)}<p class="asia-small">各地方の世帯人口が分母です。バンサモロの5.3％はカトリックの割合で、残り94.7％を単一の宗教とみなせません。<a href={southeastPhilippineReligionSource}>PSA地方別公表</a></p></div>{southeastReligionCensuses.map(c=><article><h4>{c.name}・{c.year}年</h4><p>{c.shares.map(([name,share])=>`${name} ${share}％`).join(' · ')}</p><p class="asia-small">{c.scope} <a href={c.source}>国勢調査の公表結果</a></p></article>)}<p>ベトナムの「宗教なし」を民間信仰の不在と解釈できません。国ごとに調査年・対象年齢・分類が異なります。ここにない国を0％として塗りません。</p></section>}
+ {regionId==='southeast-asia'&&topic==='religion'&&<section data-southeast-religion-census><h3>国勢調査で住民の宗教回答を読む</h3><p>この地図で読むのは、フィリピンの全国値だけでは見えないカトリック回答の地方差です。地図の短い札は地方名と地方内の割合を結び、丸はその地方を探す代表位置を示します。ベトナム・東ティモールの円は国全体の構成を代表位置に置いたもので、地方値ではありません。GeoEPR/EPR-EDの居住域と数値を合算しません。</p><div data-southeast-religion-regions><h4>フィリピン・2020年地方別</h4>{southeastPhilippineReligionRegions.map(r=><p>{r.region}：{r.religion} {r.share}％</p>)}<p class="asia-small">各地方の世帯人口が分母です。バンサモロの5.3％はカトリックの割合で、残り94.7％を単一の宗教とみなせません。<a href={southeastPhilippineReligionSource}>PSA地方別公表</a></p></div>{southeastReligionCensuses.map(c=><article><h4>{c.name}・{c.year}年</h4><p>{c.shares.map(([name,share])=>`${name} ${share}％`).join(' · ')}</p><p class="asia-small">{c.scope} <a href={c.source}>国勢調査の公表結果</a></p></article>)}<p>ベトナムの「宗教なし」を民間信仰の不在と解釈できません。国ごとに調査年・対象年齢・分類が異なります。ここにない国を0％として塗りません。</p></section>}
  {regionId==='east-asia'&&topic==='religion'&&<div class="asia-religion-census">
   <h3>住民への宗教質問から読む</h3>
   <div class="asia-religion-census-grid">

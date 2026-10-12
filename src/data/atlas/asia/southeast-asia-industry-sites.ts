@@ -1,6 +1,19 @@
 /** Official-source teaching examples, not an inventory of sites or output. */
 export type SoutheastIndustryKind='electronics'|'automotive'|'textiles'|'food'|'metals'|'energy'|'petrochemicals'|'logistics'|'tourism'|'finance'|'it-bpm'|'rubber'|'wood';
 export type SoutheastIndustrySite={id:string;label:string;industryName:string;placeName:string;kind:SoutheastIndustryKind;stage:'raw'|'processing'|'service';point:[number,number];reading:string;sourceLabel:string;sourceUrl:string;sourceYear:string};
+export type SoutheastIndustrySector='resource'|'manufacturing'|'services';
+export const southeastIndustrySectors:{id:'all'|SoutheastIndustrySector;label:string;reading:string}[]=[
+ {id:'all',label:'全体',reading:'資源・エネルギー、製造業、サービス業の根拠付き立地を重ねます。地点数は生産規模ではありません。'},
+ {id:'resource',label:'資源・エネルギー',reading:'ゴム・木材・ニッケル・石炭の原料地域と、製錬・精製・発電など利用可能な状態にする拠点を分けて読みます。'},
+ {id:'manufacturing',label:'製造業',reading:'電子、自動車、衣料、食品、金属、石化、タイヤ、家具の製造・加工がどこへ集まるかを読みます。原料の代表位置は必要な工程だけ残します。'},
+ {id:'services',label:'サービス業',reading:'港湾、観光、金融、IT-BPMがどこへ集まるかを読みます。港は産地でも工場でもありません。'},
+];
+export function southeastSiteSectors(site:SoutheastIndustrySite):SoutheastIndustrySector[]{
+ if(site.stage==='service'||site.kind==='logistics')return ['services'];
+ if(site.stage==='raw'||site.kind==='energy')return ['resource'];
+ if(site.kind==='metals'||site.kind==='petrochemicals')return ['resource','manufacturing'];
+ return ['manufacturing'];
+}
 export const southeastIndustryKinds:{id:'all'|SoutheastIndustryKind;label:string;reading:string}[]=[
  {id:'all',label:'全分布',reading:'13の産業群の立地事例を重ねます。丸は工場・港・都市、ひし形は広い原料産地を読む代表位置です。地点の数や大きさは生産規模を示しません。'},
  {id:'rubber',label:'ゴム・タイヤ',reading:'タイ南部のゴム栽培地域とラヨーンのタイヤ製造を別工程として読みます。'},

@@ -122,6 +122,14 @@ const pieStyle=`conic-gradient(${[...topPartners.map((row,index)=>({share:row.sh
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mountRegionalStatistics,{once:true});else mountRegionalStatistics();
 </script>
 <style>
+ :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-climate-key){position:absolute;left:3%;top:57%;z-index:4;display:grid;gap:2px;width:max-content;max-width:145px;padding:5px 7px;background:#eaf4f4e8;border:1px solid #7da5ad;color:#234c58;font:11px/1.35 var(--sans);pointer-events:none}
+ :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-climate-key strong){font-size:11px}
+ :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-climate-key[hidden]){display:none!important}
+ :global(.asia-atlas-root[data-region="southeast-asia"] .asia-marine-label){border:0;background:#e8f2f3b8;color:#386778;font:italic 11px var(--serif);box-shadow:none;padding:1px 3px;pointer-events:none}
+ :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-region-views){display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
+ :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-region-views button){min-height:34px;padding:5px 12px;border:1px solid #8da6a7;background:#f4f8f6;color:#254b51;font:700 12px var(--sans);cursor:pointer}
+ :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-region-views button[aria-pressed="true"]){background:#245c67;color:#fff}
+ :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-region-views span){font:11px var(--sans);color:var(--ink-soft)}
  [data-southeast-farm-single]{width:100%;min-height:48px;padding:12px;margin:12px 0;border:1px solid #315b61;background:#edf3f1;color:#264c52;font:inherit;font-size:13px;text-align:left;cursor:pointer}
  :global([data-field-national]:not([data-field-national="agriculture"])) .southeast-crop-priority,:global([data-field-national]:not([data-field-national="agriculture"])) .southeast-world-share{display:none}
  :global(.asia-atlas-root[data-southeast-farm-topic="forest"] [data-field-national]) :is(.southeast-crop-priority,.southeast-world-share,[data-southeast-trade-reading]){display:none}
@@ -137,7 +145,8 @@ const pieStyle=`conic-gradient(${[...topPartners.map((row,index)=>({share:row.sh
  :global(.southeast-forest-connections h2){font-size:20px;margin:0 0 10px}.southeast-forest-connections ul{padding-left:18px}.southeast-forest-connections li{margin:5px 0}.southeast-forest-connections table{width:100%;border-collapse:collapse;font-size:13px}.southeast-forest-connections th,.southeast-forest-connections td{padding:6px 4px;text-align:right;border-bottom:1px solid #d4d8cb}.southeast-forest-connections th:first-child{text-align:left}
  @media(min-width:960px){
   :global(.asia-atlas-root[data-region="southeast-asia"] .asia-layout:has(>.southeast-map-and-reading)){display:block}
-  :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-map-and-reading){display:grid;grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px;align-items:start}
+  :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-map-and-reading){display:grid;grid-template-columns:minmax(0,1fr) clamp(300px,24vw,345px);gap:12px;align-items:start}
+  :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-map-and-reading .asia-map-frame){height:min(730px,var(--asia-map-available-height,730px))!important;min-height:460px!important;max-height:none!important;aspect-ratio:auto!important}
   :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-map-and-reading>.atlas-map-column){grid-column:1;min-width:0}
   :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-map-and-reading>.asia-reading-panel){grid-column:2;position:sticky;top:12px;align-self:start;height:var(--asia-reading-height,460px);max-height:calc(100dvh - 24px);min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;scrollbar-gutter:stable}
   :global(.asia-atlas-root[data-region="southeast-asia"] .asia-layout>.asia-farm-connections){width:100%;margin:14px 0 8px}

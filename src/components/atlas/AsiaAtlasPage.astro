@@ -122,6 +122,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
        <AtlasRegionNavigation group="asia" current={pageId} />
        <div class="asia-toolbar"><label data-country-picker>国・地域<select data-country-select aria-label="国・地域を選ぶ"><option value="">{region.label}全体</option>{countries.map(c=><option value={c.code}>{c.name}</option>)}</select></label><button class="asia-reset" type="button" data-reset>全体に戻す</button>{regionId==='east-asia'&&<a data-japan-entry href={withBase(`/atlas/japan/${asiaFieldPaths[initialField]}/`)}>日本の全国図 →</a>}</div>
       </div>
+      {regionId==='southeast-asia'&&<nav class="southeast-region-views" aria-label="東南アジアの表示範囲"><button type="button" data-southeast-part="all" aria-pressed="true">全体</button><button type="button" data-southeast-part="mainland" aria-pressed="false">大陸部</button><button type="button" data-southeast-part="islands" aria-pressed="false">島嶼部</button><span>表示範囲を切り替えます。分布データは共通です。</span></nav>}
       <nav class="atlas-tabs atlas-tabs-with-overview asia-field-tabs" aria-label="地図の分野"><a data-atlas-overview-link href={withBase(`/atlas/asia/${pageId}/overview/`)}>概要</a>{fieldTabs.map(f=><a href={withBase(`/atlas/asia/${pageId}/${asiaFieldPaths[f.id]}/`)} data-field={f.id} aria-current={initialField===f.id?'page':undefined}>{f.label}</a>)}</nav>
       <AsiaFieldNavigation {initialField} {social} {regionId} {industry} forestTopic={farming.layers.find(t=>t.kind==='forest')?.id} />
 
@@ -135,6 +136,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
           </div>
           <div class="asia-map-state" data-map-state role="status">地図を読み込んでいます</div>
           <div class="asia-map-annotations" data-map-annotations hidden></div>
+          {regionId==='southeast-asia'&&<div class="southeast-climate-key" data-southeast-climate-key hidden aria-label="熱帯の気候区分の違い"><strong>熱帯の雨の違い</strong><span>Af：乾季なし</span><span>Am：短い乾季</span><span>Aw：明瞭な乾季</span></div>}
           {regionId==='southeast-asia'&&<div class="southeast-industry-map-sites" data-southeast-industry-map hidden aria-label="東南アジアの産業立地事例"></div>}
           <div class="asia-farm-switches" data-farm-switches hidden={initialField!=='agriculture'} role="group" aria-label="農業地図の表示"><button type="button" data-farm-toggle="crop" aria-pressed="true">作物 <span>表示</span></button><button type="button" data-farm-toggle="livestock" aria-pressed="true">畜産 <span>表示</span></button></div>
           <div class="asia-map-tools"><button type="button" data-zoom-in aria-label="地図を拡大">＋</button><button type="button" data-zoom-out aria-label="地図を縮小">−</button><button type="button" data-map-fit aria-label="選択範囲に地図を合わせる">全景</button></div>
