@@ -32,7 +32,7 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
     assert.equal(doc.querySelector('[data-eu-climate-legend]').hidden,field!=='nature');
     assert.equal(doc.querySelector('[data-eu-wheat-legend]').hidden,true);
     assert.equal(doc.querySelector('.eu-read-panel').getAttribute('aria-labelledby'),climateReader?'eu-city-heading':'eu-subject-title');
-    assert.equal(doc.querySelectorAll('[data-eu-point]:not([hidden])').length,climateReader?8:0);
+    assert.equal(doc.querySelectorAll('[data-eu-point]:not([hidden])').length,climateReader?9:0);
     if(field==='agriculture'){
       assert.match(doc.querySelector('[data-eu-map-title]').textContent,/穀物・畑作/);
       assert.equal(doc.querySelector('[data-eu-subject-image]').getAttribute('href'),null);
@@ -52,8 +52,8 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       assert.notEqual(doc.querySelector('[data-eu-farming-shapes]').style.display,'none');
       assert.ok([...doc.querySelectorAll('[data-eu-farm-outline]')].every(path=>path.style.display==='none'));
       const choices=[...doc.querySelectorAll('[data-eu-farming-children="crops"] button,[data-eu-farming-children="livestock"] button,[data-eu-farming-children="horticulture"] button')];
-      assert.deepEqual(choices.map(button=>button.dataset.euLayer).sort(),['wheat','barley','maize','potato','sugarbeet','rapeseed','cattle','pig','chicken','sheep','citrus','temperatefruit','vegetables'].sort());
-      assert.ok(choices.every(button=>button.getAttribute('aria-pressed')==='false'&&button.querySelector('.eu-item-swatch')));
+      assert.deepEqual(choices.map(button=>button.dataset.euLayer).sort(),['wheat','barley','maize','potato','sugarbeet','rapeseed','cattle','pig','chicken','sheep','dairy','citrus','temperatefruit','vegetables'].sort());
+      assert.ok(choices.every(button=>button.getAttribute('aria-pressed')==='false'&&(button.dataset.euLayer==='dairy'||button.querySelector('.eu-item-swatch'))));
       assert.equal(doc.querySelector('[data-eu-farming-legend]').hidden,false);
       assert.match(doc.querySelector('[data-eu-farming-legend]').textContent,/6作物の集中域を同時に示します.*色面に隠れる別品目の集中域を品目色の点線で残します/);
       assert.match(doc.querySelector('[data-eu-farming-children="horticulture"] .eu-farm-missing').textContent,/ブドウ.*オリーブ.*未収録/);

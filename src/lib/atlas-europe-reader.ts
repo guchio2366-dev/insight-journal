@@ -33,7 +33,7 @@ const factualSources: Record<string, ReaderSource[]> = {
   sheep:[...climateFarming.Cfb.sources,...cityFarming.reykjavik.sources,cityFarming.athens.sources[1]],
   livestock:[
     {url:'https://sustainbeef.hub.inrae.fr/project/wp2.1-description-of-beef-production-systems/wp2.1.1-beef-production-national-statistics',label:'INRAE：2016年の乳牛・肉用繁殖母牛の主要国'},
-    {url:'https://www.cso.ie/en/releasesandpublications/ep/p-coa/censusofagriculture2020-preliminaryresults/livestock/',label:'アイルランドCSO：2020年農業センサスの乳牛・非乳牛（地域別）'},
+    {url:'https://www.cso.ie/en/releasesandpublications/ep/p-coa/censusofagriculture2020-preliminaryresults/livestock/',label:'アイルランドCSO：2020年農業センサスの乳牛・乳牛以外の牛（地域別）'},
     {url:'https://www.bmluk.gv.at/en/topics/agriculture/agriculture-in-austria/animal-production-in-austria/dairy-farming-in-austria.html',label:'オーストリア農業省：山間地の酪農'},
   ],
   horticulture:[
@@ -192,7 +192,7 @@ export function europeReaderCopy(layer:EuropeLayer) {
   if(layer.id==='livestock')return {
     title:'欧州の酪農・畜産',takeaway:'牛・豚・鶏の飼養集中域は西欧から中東欧の低地に重なり、羊の集中域は英国・アイルランドや地中海側にも広がります。',
     body:'低地の飼料作物、牧草地、加工・市場への近さは飼養の立地に関わります。英国では湿潤な西部の草地が牛・羊の飼養と結びつきます。牛の面は乳用と肉用を分けず、鶏の面も肉用と採卵用を分けません。別資料のINRAEが示す2016年のEUの主要乳牛国はドイツ・フランス・ポーランド・イタリア・英国・オランダ、肉用繁殖母牛国はフランス・スペイン・英国・アイルランドです。',
-    note:'色面はFAO GLW4 2020の家畜密度モデルから抽出した集中域です。2016年のEU加盟国別の乳牛・肉用繁殖母牛統計は別の分母・年・指標であり、地図の牛の面の内訳には使えません。色面の輪郭は農場の境界ではなく、無色の場所を飼養ゼロとみなしません。',
+    note:'色面はFAO GLW4 2020の家畜密度モデルから抽出した集中域です。2016年のEU加盟国別の乳牛・肉用繁殖母牛統計は別の分母・年・指標であり、地図の牛の面の内訳には使えません。アイルランドの2020年調査では南部の乳牛1,124,842頭、北部・西部の乳牛以外の牛395,751頭を別集計しています。色面の輪郭は農場の境界ではなく、無色の場所を飼養ゼロとみなしません。',
   };
   if(layer.id==='horticulture')return {
     title:'欧州の果樹・園芸',takeaway:'柑橘類の集中域は地中海側の南部に限られ、温帯果樹とVEGE区分の野菜はそれより広く西欧・中欧から地中海沿岸まで異なる場所に分布します。',

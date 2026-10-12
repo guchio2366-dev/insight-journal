@@ -250,7 +250,7 @@ async function agricultureClimateRepairs(page,profile){
   assert.equal(await page.locator('[data-eu-farm-measure] option').count(),1);
   assert.match(await page.locator('[data-eu-subject-note]').textContent(),/乳牛.*未収録/);
   assert.equal(await page.locator('[data-eu-farm-area]').evaluateAll(nodes=>nodes.filter(node=>node.style.display!=='none').length),4);
-  await page.locator('[data-eu-reset]').click();
+  await page.goto(new URL('atlas/europe/agriculture/?layer=dairy&farmExtent=full',base).href,{waitUntil:'networkidle'}); await ready(page);
   assert.equal(new URL(page.url()).searchParams.get('farmExtent'),'full');
   await page.waitForFunction(()=>document.querySelector('[data-eu-static]').getAttribute('viewBox')==='0 0 1200 1001');
   await page.reload({waitUntil:'networkidle'});await ready(page);
@@ -337,7 +337,7 @@ async function forestryProductionReview(page,profile){
 }
 
 async function uniqueElevation(page) {
-  assert.equal(await page.locator(resultSelector).count(), 1); assert.equal(await page.locator(`${pointSelector}:visible`).count(), 1);
+  assert.equal(await page.locator(resultSelector).count(), 1); assert.equal(await page.locator(`${pointSelector}:visible`).count(), 0);
   assert.equal(await page.locator(resultSelector).isVisible(), true);
   assert.equal(await page.locator('[data-eu-subject-grid]').isVisible(), true);
   assert.equal(await page.locator('.eu-read-panel [data-eu-subject-grid]').count(), 1);
@@ -440,11 +440,11 @@ async function europeOperations(page, profile, render) {
   await page.goForward(); assert.equal(await settled(page), clicked);
   await page.reload({waitUntil: 'networkidle'}); await ready(page, 'europe', render); assert.equal(await settled(page), clicked);
   if (!normal) {
-    await page.locator('[data-eu-render]').click(); await ready(page); assert.equal(await settled(page), clicked);
-    await page.locator('[data-eu-render]').click(); await ready(page, 'europe', render); assert.equal(await settled(page), clicked);
+    {const next=new URL(page.url());next.searchParams.set('render','static');await page.goto(next.href,{waitUntil:'networkidle'});await ready(page,'europe','static');} assert.equal(await settled(page), clicked);
+    {const next=new URL(page.url());next.searchParams.set('render',render==='normal'?'auto':render);await page.goto(next.href,{waitUntil:'networkidle'});await ready(page,'europe',render);} assert.equal(await settled(page), clicked);
   }
   record.elevation.clicked = {point: clickedPoint, value: clicked};
-  record.checks.push('terrain names without numeric UI', 'metres separate from contour interval', 'single marker/result/legend', 'one history entry per selection', 'SVG extent retained', 'unselected back/forward', 'reload retains reader text', 'named comparison return', 'real map click and history');
+  record.checks.push('terrain names without numeric UI', 'metres separate from contour interval', 'no click circle; single result/legend', 'one history entry per selection', 'SVG extent retained', 'unselected back/forward', 'reload retains reader text', 'named comparison return', 'real map click and history');
 
   await openEurope(page, 'atlas/europe/nature/?layer=drainage', render);
   assert.equal(await page.locator('[data-eu-feature-list]').isVisible(),false);

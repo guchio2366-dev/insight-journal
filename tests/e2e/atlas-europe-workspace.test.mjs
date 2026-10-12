@@ -35,8 +35,9 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.equal(doc.querySelector('[data-eu-country]'),null);
       assert.equal(doc.querySelector('[data-eu-subject]'),null);
       assert.ok(doc.querySelector('.eu-map-stage [data-eu-annotations]'));
-      assert.ok(doc.querySelector('.eu-map-stage [data-eu-zoom="in"]'));
-      assert.deepEqual([...doc.querySelectorAll('.eu-map-buttons button')].map(button=>button.hasAttribute('data-eu-reset')?'overview':button.dataset.euZoom??'renderer'),['overview','in','out','renderer']);
+      assert.equal(doc.querySelector('.eu-map-stage [data-eu-zoom]'),null);
+      assert.equal(doc.querySelector('.eu-map-buttons'),null);
+      assert.equal(doc.querySelector('[data-eu-reset],[data-eu-render]'),null);
       assert.ok(doc.querySelector('.eu-map-stage').compareDocumentPosition(doc.querySelector('[data-eu-map-legend]'))&4);
       assert.match(doc.querySelector('[data-eu-map-legend] .eu-water-note').textContent,/地下水.*利用条件を確認済み.*位置合わせできていないため未収録/);
       const waterMask=doc.querySelector('[data-eu-water-mask="caspian-sea"]');
@@ -125,7 +126,7 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.ok(doc.querySelector('.eu-reader-body').open);
       const planned=[...doc.querySelectorAll('[data-eu-topic-field="population"] button:disabled')];
       assert.equal(planned.length,0);
-      assert.deepEqual([...doc.querySelectorAll('[data-eu-topic-field="population"] button')].map(b=>b.textContent),['人口分布','人種・民族（事例）','宗教']);
+      assert.deepEqual([...doc.querySelectorAll('[data-eu-topic-field="population"] button')].map(b=>b.textContent),['人口分布','民族（地域事例）','使用言語','宗教']);
       assert.match(doc.querySelector('.eu-culture-kicker').textContent,/国勢調査の地域分布/);
       assert.deepEqual([...doc.querySelector('[data-culture-case]').options].map(option=>option.textContent),['欧州全体・事例未選択','イングランド・ウェールズ・行政区','クロアチア・全国値']);
       assert.ok(!doc.querySelector('[data-eu-topic-field="population"]').textContent.includes('投票'));

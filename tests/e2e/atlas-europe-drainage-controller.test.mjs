@@ -260,13 +260,13 @@ test('a drainage section names a representative river only when its retained MAI
       app.choose(String(cell.basin.HYBAS_ID));
       await until(()=>app.q('[data-eu-basin-summary]').textContent.includes(river.name));
       const summary=app.q('[data-eu-basin-summary]').textContent;
-      if([2040008490,2040068680].includes(cell.basin.MAIN_BAS)){
+      if([2040008490,2040068680,2040006590].includes(cell.basin.MAIN_BAS)){
         assert.match(summary,/同じ河口へつながるLevel 4の9区画/);
         assert.match(summary,/対象国と地図枠で切れています/);
         assert.match(summary,/源流から河口までの本流を示すものではありません/);
       }else{
         assert.match(summary,/同じMAIN_BAS.*モデル区画/);
-        assert.match(summary,/流域全体とは限りません/);
+        assert.match(summary,/流域全体とは限りません|全流域ではありません/);
       }
     }
   }finally{await app.w.happyDOM.abort();}

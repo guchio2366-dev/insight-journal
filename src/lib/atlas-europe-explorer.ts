@@ -8,7 +8,6 @@ import type { EuropeReading } from '../data/atlas/europe/readings';
 import type { Geometry } from './atlas-europe-geometry';
 import type { Map as LibreMap } from 'maplibre-gl';
 import { createEuropeAnnotations } from './atlas-europe-annotations';
-import {createEuropeSmreMarkers} from './atlas-europe-smre-markers';
 import {smreSurfaceColor,smreRow} from './atlas-europe-smre-surface';
 import {pewSurfaceColor,pewSurfaceColors,pewSurfaceGroups,type PewSurfaceGroup} from './atlas-europe-pew-surface';
 import { europeReaderCopy, europeReaderSources } from './atlas-europe-reader';
@@ -17,7 +16,7 @@ import { renderEuropeOrigin } from './atlas-europe-comparison-renderer';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import { createEuropePopulationCases, cultureSelection, cultureColor, type CultureMapData, type CultureBounds } from './atlas-europe-population-cases';
 import { europeDrainageBasins, europeDrainageBasinByIndex, europeDrainageIndexForBasin, normaliseEuropeDrainageBasin, europeDrainageOutline, europeDrainageMainBasinOutline } from './atlas-europe-drainage';
-import connectedBasinReview from '../../data-source/atlas/europe/drainage/connected-basin-review.json' with {type:'json'};
+import mainBasinOverview from '../../public/assets/atlas/europe/drainage-v1/main-basin-overview-manifest.json' with {type:'json'};
 import drainageManifest from '../../public/assets/atlas/europe/drainage-v1/manifest.json' with {type:'json'};
 import { readEuropeFarmingFocus, writeEuropeFarmingFocus } from '../data/atlas/europe/farming-water-comparisons';
 import { europeIndustryGroupCopy, europeIndustryMatches, europeIndustryOverviewLabels, isEuropeIndustryCountry, normaliseEuropeIndustryGroup } from './atlas-europe-industry';
@@ -40,11 +39,18 @@ const berlinDensityReading={
   source:'https://www.statistik-berlin-brandenburg.de/news/2025/zensus-umland',
 };
 
-export function initEuropeAtlas() {
+export async function initEuropeAtlas() {
   const root = document.querySelector<HTMLElement>('[data-europe-detail]');
   if (!root || root.dataset.initialized) return;
-  root.dataset.initialized = 'true';
-  const config = JSON.parse(root.querySelector('[data-eu-config]')!.textContent!) as { industryOverviews:Record<string,{takeaway:string;body:string;evidenceNote?:string;sources:{label:string;url:string;period:string;definitionUrl?:string}[]}>; farmingAreas:FarmingAreas; farmingDominantAreas:FarmingAreas; farmingSecondaryAreas:FarmingAreas; majorRivers:{type:'FeatureCollection';features:{type:'Feature';properties:{id:string;name:string};geometry:Geometry}[]}; countries: Country[]; cities: City[]; geography: { type: 'FeatureCollection'; features: Feature[] }; climateWater: { type:'FeatureCollection';features:{type:'Feature';properties:{id:string;name:string};geometry:Geometry}[] }; climate: string; wheat: string; wheatValues: string; initialLayer: string; layers:EuropeLayer[];populationCities:Place[];readings:EuropeReading[];statistics:{indicators:Indicator[]} };
+  root.dataset.initialized = 'loading';
+  const config = JSON.parse(root.querySelector('[data-eu-config]')!.textContent!) as { geographyURL:string; industryOverviews:Record<string,{takeaway:string;body:string;evidenceNote?:string;sources:{label:string;url:string;period:string;definitionUrl?:string}[]}>; farmingAreas:FarmingAreas; farmingDominantAreas:FarmingAreas; farmingSecondaryAreas:FarmingAreas; majorRivers:{type:'FeatureCollection';features:{type:'Feature';properties:{id:string;name:string};geometry:Geometry}[]}; countries: Country[]; cities: City[]; geography: { type: 'FeatureCollection'; features: Feature[] }; climateWater: { type:'FeatureCollection';features:{type:'Feature';properties:{id:string;name:string};geometry:Geometry}[] }; climate: string; wheat: string; wheatValues: string; initialLayer: string; layers:EuropeLayer[];populationCities:Place[];readings:EuropeReading[];statistics:{indicators:Indicator[]} };
+  try {
+    const response=await fetch(config.geographyURL);
+    if(!response.ok||!response.body)throw new Error('Detailed Europe geography unavailable');
+    const data=await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).json();
+    if(data.type!=='FeatureCollection'||!Array.isArray(data.features)||data.features.length!==config.geography.features.length)throw new Error('Invalid detailed Europe geography');
+    config.geography=data;
+  }catch(error){console.warn('Detailed Europe geographic input unavailable; retain the legacy source for country fitting',error);}
   const { countries, cities, geography } = config;
   const query = <T extends Element>(selector: string) => root.querySelector<T>(selector)!;
   const all = <T extends Element>(selector: string) => Array.from(root.querySelectorAll<T>(selector));
@@ -162,9 +168,10 @@ export function initEuropeAtlas() {
       return;
     }
     const index=europeDrainageIndexForBasin(selected)!,basin=europeDrainageBasinByIndex(index)!;
-    const system=connectedBasinReview.reviews.find(item=>item.mainBasin===basin.MAIN_BAS&&item.sourceNetworkClosed&&item.sourceLevelFourSiblingSetComplete);
+    const group=mainBasinOverview.groups.find(item=>item.mainBasin===basin.MAIN_BAS);
+    const system=group?{mainBasin:group.mainBasin,ja:group.name,unitCount:group.unitIds.length}:undefined;
     query('[data-eu-basin-summary]').textContent=system
-      ? `${system.ja}水系：同じ河口へつながるLevel 4の${system.unitCount}区画をまとめて強調。表示は対象国と地図枠で切れています。青い線はNatural Earth収録区間で、源流から河口までの本流を示すものではありません。選択区画ID ${selected}。`
+      ? `${system.ja}水系：同じ河口へつながるLevel 4の${system.unitCount}区画をまとめて強調。同じMAIN_BASのモデル区画です。表示は対象国と地図枠で切れています。全流域ではありません。青い線はNatural Earth収録区間で、源流から河口までの本流を示すものではありません。選択区画ID ${selected}。`
       : `選択区画：HYBAS_ID ${selected} · Pfafstetter ${basin.PFAF_ID}。濃い輪郭は表示格子上の区画で、その河川の流域全体とは限りません。`;
     const token=++drainageRequest;
     try {
@@ -218,33 +225,13 @@ export function initEuropeAtlas() {
     return {x:point.x-rect.left,y:point.y-rect.top};
   };
   const pewMarkers=createEuropePewMarkers(stage,selectCountry);
-  const smreMarkers=createEuropeSmreMarkers(stage,selectCountry);
   function updateReligionMarkers(){
     pewMarkers.update(state.layer==='religion'&&!state.cultureCase&&religionOverviewMode==='pew',overlayProject);
-    smreMarkers.update(state.layer==='religion'&&!state.cultureCase&&religionOverviewMode==='smre',overlayProject);
   }
-  const regionalEvidence=[...europeFarmingRegionalEvidence.filter(item=>item.genre!=='horticulture'),...europeFarmingCountryEvidence].map(item=>{
-    const node=document.createElement('span');
-    const country='value' in item;
-    node.className=country?'eu-farming-country-evidence':'eu-farming-regional-evidence';node.dataset.euFarmingEvidence=item.id;node.dataset.kind=item.kind;
-    if(country){const name=document.createElement('span'),value=document.createElement('strong');name.textContent=item.name;value.textContent=item.value;node.append(name,value);}
-    else node.textContent=({'dairy':'乳','other-cows':'非','vines':'葡'} as Record<string,string>)[item.kind];
-    node.setAttribute('role','img');node.setAttribute('aria-label',`${item.name}：${item.detail}${country?'':`（${item.period}）`}`);
-    node.hidden=true;stage.append(node);return {item,node};
-  });
-  function positionRegionalEvidence(){
-    const genre=farmingView().genre,rect=stage.getBoundingClientRect();
-    for(const {item,node} of regionalEvidence){
-      node.hidden=genre!==item.genre;
-      if(node.hidden)continue;
-      const point=overlayProject(item.coordinates as [number,number]);
-      node.style.left=point.x+'px';node.style.top=point.y+'px';
-      const edge='value' in item?36:22;
-      node.hidden=point.x<edge||point.x>rect.width-edge||point.y<42||point.y>rect.height-44;
-    }
-  }
+  // Regional and national examples remain in the reader; they are not map distributions.
+  function positionRegionalEvidence() {}
   const features = [...config.populationCities,...config.readings,...europeCultureOverviewPlaces];
-  const visibleFeatures = () => subject().field==='population'&&!cultureActive() ? config.populationCities : subject().field==='industry' ? config.readings.filter(r=>r.field==='industry') : subject().field==='nature'&&['water','drainage','terrain'].includes(state.layer) ? config.readings.filter(r=>r.field==='nature'&&r.layer===(['water','drainage'].includes(state.layer)?'water':'terrain')) : [];
+  const visibleFeatures = () => subject().field==='population'&&!cultureActive()&&state.layer!=='language' ? config.populationCities : ['treecover','forest'].includes(state.layer)?config.readings.filter(r=>r.id==='kaukas'||r.field==='agriculture'):subject().field==='industry' ? config.readings.filter(r=>r.field==='industry') : subject().field==='nature'&&['water','drainage','terrain'].includes(state.layer) ? config.readings.filter(r=>r.field==='nature'&&r.layer===(['water','drainage'].includes(state.layer)?'water':'terrain')) : [];
   const featureVisible = (id:string) => {
     const p=visibleFeatures().find(p=>p.id===id); if(!p)return false;
     if(subject().field==='industry')return true;
@@ -253,7 +240,7 @@ export function initEuropeAtlas() {
     if(state.region!=='all' && countries.find(c=>c.code===p.country)?.region!==state.region)return false;
     return !('rank' in p) || (p.rank??0)<=(state.region==='all'?1:3) || p.id===state.feature;
   };
-  const industryEmphasized = () => subject().field==='industry' ? config.readings.filter(p=>p.field==='industry'&&europeIndustryMatches(p.id,state.industryGroup)&&(state.place?p.country===state.place:state.region==='all'||countries.find(c=>c.code===p.country)?.region===state.region)).map(p=>p.id) : [];
+  const industryEmphasized = () => ['treecover','forest'].includes(state.layer)?config.readings.filter(r=>r.id==='kaukas'||r.field==='agriculture'):subject().field==='industry' ? config.readings.filter(p=>p.field==='industry'&&europeIndustryMatches(p.id,state.industryGroup)&&(state.place?p.country===state.place:state.region==='all'||countries.find(c=>c.code===p.country)?.region===state.region)).map(p=>p.id) : [];
   function sizeReader() {
     const top=query<HTMLElement>('.eu-map-stage').getBoundingClientRect().top+window.scrollY;
     root!.style.setProperty('--eu-reader-height',`${Math.max(220,window.innerHeight-top-12)}px`);
@@ -280,7 +267,7 @@ export function initEuropeAtlas() {
   const terrainLabelOffsets:Array<[number,number]>=[];
   for(let dy=-260;dy<=260;dy+=26)for(let dx=-264;dx<=264;dx+=24)terrainLabelOffsets.push([dx,dy]);
   terrainLabelOffsets.sort((a,b)=>Math.hypot(...a)-Math.hypot(...b)||a[1]-b[1]);
-  const riverLabels=config.readings.filter(reading=>reading.layer==='water').map(label=>{
+  const riverLabels=config.readings.filter(reading=>reading.layer==='water'&&['rhine','danube','seine','thames','don','volga','ural'].includes(reading.id)).map(label=>{
     const node=document.createElement('button');node.type='button';node.className='eu-river-label';node.textContent=label.name;node.dataset.euRiverLabel=label.id;
     const leader=document.createElementNS('http://www.w3.org/2000/svg','line');leader.dataset.euRiverLeader=label.id;terrainLeader.append(leader);
     node.addEventListener('click',event=>{event.stopPropagation();selectFeature(label.id);});stage.append(node);return {node,label,leader};
@@ -290,12 +277,11 @@ export function initEuropeAtlas() {
     terrainLeader.setAttribute('viewBox',`0 0 ${rect.width} ${rect.height}`);
     const placed:DOMRect[]=[];
     const heading=query<HTMLElement>('.eu-map-heading').getBoundingClientRect();
-    const buttons=query<HTMLElement>('.eu-map-buttons').getBoundingClientRect();
-    const reserved=[heading,buttons];
+    const reserved=[heading];
     const overlaps=(a:DOMRect,b:DOMRect)=>a.left<b.right+3&&a.right>b.left-3&&a.top<b.bottom+3&&a.bottom>b.top-3;
-    for(const {node,label,leader} of [...riverLabels].sort((a,b)=>Number(b.label.id===state.feature)-Number(a.label.id===state.feature))){
+    for(const {node,label,leader} of riverLabels){
       node.hidden=state.layer!=='water';leader.style.display='none';node.setAttribute('aria-pressed',String(state.feature===label.id));if(node.hidden)continue;
-      const point=overlayProject(label.coordinates);node.style.left=point.x+'px';node.style.top=point.y+'px';
+      const point=overlayProject(label.coordinates);node.dataset.euAnchorX=String(point.x);node.dataset.euAnchorY=String(point.y);node.style.left=point.x+'px';node.style.top=point.y+'px';
       node.hidden=point.x<5||point.x>rect.width-5||point.y<5||point.y>rect.height-44;
       if(node.hidden)continue;
       const {width,height}=node.getBoundingClientRect();
@@ -328,9 +314,9 @@ export function initEuropeAtlas() {
     const placed:DOMRect[]=[];
     // Keep every named feature available in the initial view. Move crowded labels
     // to nearby clear space and connect displaced names back to their anchors.
-    const ordered=[...terrainLabels].sort((a,b)=>Number(b.label.id===state.feature)-Number(a.label.id===state.feature));
+    const ordered=terrainLabels;
     for(const {node,label,leader} of ordered){
-      node.hidden=state.layer!=='terrain';leader.style.display='none';node.setAttribute('aria-pressed',String(state.feature===label.id));if(node.hidden)continue;
+      node.hidden=state.layer!=='terrain'&&!(state.layer==='contours'&&['mountain','plain','upland'].includes(label.kind));leader.style.display='none';node.setAttribute('aria-pressed',String(state.feature===label.id));if(node.hidden)continue;
       const point=map&&liveMap.classList.contains('is-ready')?map.project(label.coordinates as [number,number]):(()=>{
         const [x,y]=project(label.coordinates),matrix=staticMap.getScreenCTM();
         const screen=matrix?new DOMPoint(x,y).matrixTransform(matrix):new DOMPoint();
@@ -341,7 +327,7 @@ export function initEuropeAtlas() {
       node.style.left=point.x+'px';node.style.top=point.y+'px';
       const {width,height}=node.getBoundingClientRect();
       let chosen:DOMRect|undefined,chosenOffset:[number,number]=[0,0];
-      for(const [dx,dy] of terrainLabelOffsets){
+      for(const [dx,dy] of terrainLabelOffsets.filter(([dx,dy])=>Math.hypot(dx,dy)<=52)){
         const rect=new DOMRect(stage.left+point.x+dx-width/2,stage.top+point.y+dy-height/2,width,height);
         if(rect.left<stage.left+4||rect.right>stage.right-4||rect.top<stage.top+4||rect.bottom>stage.bottom-4)continue;
         if(placed.some(other=>rect.left<other.right+3&&rect.right>other.left-3&&rect.top<other.bottom+3&&rect.bottom>other.top-3))continue;
@@ -355,7 +341,8 @@ export function initEuropeAtlas() {
           leader.setAttribute('x2',String(point.x+chosenOffset[0]));leader.setAttribute('y2',String(point.y+chosenOffset[1]));leader.style.display='';
         }
       }
-      else node.hidden=true;
+      // Retain a geographically anchored name when no nearby clear slot is available.
+      else {node.style.left=point.x+'px';node.style.top=point.y+'px';}
     }
   }
   function setLayer(id:string, save = true) {
@@ -392,7 +379,8 @@ export function initEuropeAtlas() {
     else if(layer.id==='drainage')query('[data-eu-drainage-controls]').append(gridReading);
     else gridReadingHome.after(gridReading);
     query<HTMLElement>('[data-eu-climate-reader]').hidden=!climateReader();
-    query<HTMLElement>('[data-eu-subject-reader]').hidden=cultureActive();
+    query<HTMLElement>('[data-eu-subject-reader]').hidden=cultureActive()||state.layer==='language';
+    query<HTMLElement>('[data-eu-language-reader]').hidden=state.layer!=='language';
     root!.classList.toggle('is-eu-climate-reading',climateReader());
     query('[data-eu-subject-title]').textContent=copy.title;
     query('[data-eu-subject-takeaway]').textContent=copy.takeaway;
@@ -585,20 +573,7 @@ export function initEuropeAtlas() {
   }
 
   function updatePointMarker(){
-    const marker=query<HTMLElement>('[data-eu-selected-point]'),point=state.point,layer=subject(),farm=farmingView();
-    marker.hidden=!point||!layer.grid||layer.field==='population'||layer.id==='terrain'||farm.active&&!farm.selectedVisible;
-    if(marker.hidden||!point)return;
-    const stage=query<HTMLElement>('.eu-map-stage').getBoundingClientRect();
-    let position:{x:number;y:number};
-    if(map&&liveMap.classList.contains('is-ready'))position=map.project(point);
-    else {
-      const matrix=staticMap.getScreenCTM();if(!matrix){marker.hidden=true;return;}
-      const [x,y]=project(point),screen=new DOMPoint(x,y).matrixTransform(matrix);
-      position={x:screen.x-stage.left,y:screen.y-stage.top};
-    }
-    marker.hidden=position.x<0||position.y<0||position.x>stage.width||position.y>stage.height;
-    marker.style.left=`${position.x}px`;marker.style.top=`${position.y}px`;
-    marker.setAttribute('aria-label',`選択地点 ${point[1].toFixed(3)}°N, ${point[0].toFixed(3)}°E`);
+    query<HTMLElement>('[data-eu-selected-point]').hidden=true;
   }
 
   function layers() {
@@ -613,8 +588,8 @@ export function initEuropeAtlas() {
     all<SVGPathElement>('[data-eu-major-river]').forEach(path=>{path.style.strokeWidth=state.feature===path.dataset.euMajorRiver?'4':'2.5';});
     query<HTMLElement>('[data-eu-river-note]').hidden=!riverVisible;
     const climateVisible = state.layer === 'climate'||state.layer==='overlay', wheatVisible = layer.id==='wheat'&&!farm.active;
-    query<SVGGElement>('[data-eu-climate-water]').style.display=climateVisible?'':'none';
-    for(const id of ['climate-water','climate-water-outline'])if(map?.getLayer(id))map.setLayoutProperty(id,'visibility',climateVisible?'visible':'none');
+    query<SVGGElement>('[data-eu-climate-water]').style.display=climateVisible||state.layer==='water'?'':'none';
+    for(const id of ['climate-water','climate-water-outline'])if(map?.getLayer(id))map.setLayoutProperty(id,'visibility',climateVisible||state.layer==='water'?'visible':'none');
     for (const [name, visible, url] of [['climate', climateVisible, config.climate], ['wheat', wheatVisible, config.wheat]] as const) {
       const svgImage = query<SVGImageElement>(`[data-eu-${name}-image]`);
       svgImage.style.display = visible ? '' : 'none';
@@ -717,7 +692,7 @@ export function initEuropeAtlas() {
     all<HTMLElement>('[data-eu-layer]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.euLayer === state.layer)));
     query('[data-eu-map-title]').textContent = farm.active?(farm.single?farm.item!.name+'のみの分布':europeFarmingGenres[farm.genre!].title+'の主な分布'):layer.title+(state.layer==='overlay'?'と気候を重ねる':'');
     query('#eu-map-label').textContent=layer.title+'。地図の名前から地点を選べます。';
-    query<SVGGElement>('[data-eu-static-codes]').style.display=climateVisible?'':'none';
+    query<SVGGElement>('[data-eu-static-codes]').style.display=climateVisible||state.layer==='water'?'':'none';
     query<SVGGElement>('[data-eu-static-codes]').removeAttribute('hidden');
     query<SVGGElement>('[data-eu-static-crops]').style.display='none';
     query<SVGGElement>('[data-eu-static-crops]').removeAttribute('hidden');
@@ -773,7 +748,7 @@ export function initEuropeAtlas() {
     if(focus)return [[focus.focusBounds[0],focus.focusBounds[1]],[focus.focusBounds[2],focus.focusBounds[3]]] as [[number,number],[number,number]];
     if(subject().field==='agriculture')return state.farmExtent==='full'||!farmingView().active ? [[frame.west,frame.south],[frame.east,frame.north]] as [[number,number],[number,number]] : europeFarmingInitialBounds;
     const codes = countries.filter(c => state.place ? c.code === state.place : state.region === 'all' || c.region === state.region).map(c => c.code);
-    if (state.region === 'all' && !state.place) return subject().field==='population' ? [[-13,35],[48,61]] as [[number,number],[number,number]] : subject().id==='climate' ? [[-13,35],[50,65]] as [[number,number],[number,number]] : ['terrain','contours'].includes(subject().id) ? [[-13,35],[50,68]] as [[number,number],[number,number]] : subject().id==='water' ? [[-13,35],[62,66]] as [[number,number],[number,number]] : ['drainage','precipitation'].includes(subject().id) ? [[-13,37],[48,63]] as [[number,number],[number,number]] : [[-25,32],[65,73]] as [[number,number],[number,number]];
+    if (state.region === 'all' && !state.place) return subject().field==='population' ? [[-13,35],[48,61]] as [[number,number],[number,number]] : subject().id==='climate' ? [[-13,35],[50,63]] as [[number,number],[number,number]] : ['terrain','contours'].includes(subject().id) ? [[-13,35],[50,65]] as [[number,number],[number,number]] : subject().id==='water' ? [[-13,35],[62,66]] as [[number,number],[number,number]] : ['drainage','precipitation'].includes(subject().id) ? [[-13,37],[48,63]] as [[number,number],[number,number]] : [[-25,32],[65,73]] as [[number,number],[number,number]];
     return visibleBounds(geography.features.filter(f => codes.includes(f.properties.code)).map(f => f.geometry));
   }
   function staticSymbols() {
@@ -786,7 +761,8 @@ export function initEuropeAtlas() {
     const [left, bottom] = project(bounds[0]);
     const [right, top] = project(bounds[1]);
     const width = Math.max(right - left, 24), height = Math.max(bottom - top, 24);
-    box = [(left + right - width) / 2 - width * .12, (top + bottom - height) / 2 - height * .12, width * 1.24, height * 1.24];
+    const margin=['climate','water','terrain','contours'].includes(subject().id)?.035:.12;
+    box = [left-width*margin,top-height*margin,width*(1+2*margin),height*(1+2*margin)];
     if (cultureActive()&&!onsCulture || subject().field!=='agriculture'&&state.region === 'all' && !state.place&&!comparisonFocus()&&!['industry','population'].includes(subject().field)&&!['climate','water','drainage','precipitation','terrain','contours'].includes(subject().id) || subject().field==='agriculture'&&!comparisonFocus()&&(state.farmExtent==='full'||!farmingView().active)) box = [0, 0, frame.width, frame.height];
     else if(subject().field==='agriculture'&&!comparisonFocus()) box = [left-width*.04,top-height*.04,width*1.08,height*1.08];
     staticMap.setAttribute('viewBox', box.join(' '));
@@ -802,7 +778,6 @@ export function initEuropeAtlas() {
   function render(refit = false, restorePoint = true) {
     query<HTMLElement>('[data-eu-farm-candidates]').hidden=true;
     const currentField=fields.find(field=>field.id===subject().field)!;
-    query('[data-eu-reset]').textContent=currentField.id==='agriculture'?'欧州全域へ':'全体へ';
     query('[data-eu-field-label]').textContent=currentField.label;
     query('[data-eu-field-kicker]').textContent='EUROPE · '+currentField.id.toUpperCase();
     query('[data-eu-field-heading]').textContent=europeFieldHeadings[currentField.id];
@@ -811,7 +786,6 @@ export function initEuropeAtlas() {
     const topic=subject().id;
     root!.classList.toggle('is-eu-water-reading',topic==='water');
     query<HTMLElement>('[data-eu-terrain-guide-note]').hidden=topic!=='terrain';
-    query<HTMLElement>('[data-eu-city-hint]').hidden=!climateReader();
     query<HTMLElement>('[data-eu-culture-host]').hidden=!cultureActive();
     cultureControlsHost.hidden=!cultureActive()||topic==='religion';
     religionSupplement.hidden=topic!=='religion';
@@ -830,7 +804,7 @@ export function initEuropeAtlas() {
     cultureOverview.render(cultureActive(),topic==='religion'?'religion':'ethnicity',state.cultureCase??'',religionOverviewMode);
     if(topic==='religion'&&!state.cultureCase&&religionOverviewMode==='smre'){
       query('[data-culture-kicker]').textContent='欧州45か国の宗派・宗教の広域比較';
-      query('[data-culture-takeaway]').textContent='北欧のプロテスタント、南西欧のカトリック、東欧の正教会、南東欧のイスラム教など、国別の構成を1枚で比較します。色は各国の最大分類、名前付きの記号は10%以上の分類が複数ある国の全国割合です。主要な併存も初期図で読めます。';
+      query('[data-culture-takeaway]').textContent='北欧のプロテスタント、南西欧のカトリック、東欧の正教会、南東欧のイスラム教など、国別の構成を1枚で比較します。色は各国の最大分類、全国構成は右の説明に保持します。全国値は右の説明で確認します。国内の宗派・無所属の実分布は未収録です。';
       query('[data-culture-overview]').textContent='解説：宗教構成には歴史的な教会圏、宗教改革、南東欧の歴史、社会変化と移住が関わります。色面はSMREの過去の国別推計で、現在の個人の信仰や宗派の領土を示すものではありません。';
       query('[data-culture-year]').textContent='SMRE 2010期（原観測2006–2015年）・01/2018版';
       query('[data-culture-grain]').textContent='国別比較 · 45か国';
@@ -893,8 +867,6 @@ export function initEuropeAtlas() {
     if (map?.getLayer('selected')) map.setFilter('selected', ['==', ['get', 'code'], state.place]);
     all<HTMLAnchorElement>('[data-base-map]').forEach(a => { a.href = writeEuropeState(new URL(a.href), state).href; });
     all<HTMLAnchorElement>('[data-eu-field]').forEach(a => { a.href = writeEuropeState(new URL(a.href), { ...state, layer: a.dataset.euField! }).href;if(a.dataset.euField===currentField.initial)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current'); });
-    query<HTMLButtonElement>('[data-eu-render]').textContent = failed || state.render === 'static' ? '操作地図' : '簡易表示';
-    query<HTMLButtonElement>('[data-eu-render]').setAttribute('aria-label',failed||state.render==='static'?'操作できる地図に戻す':'簡易表示にする');
     layers();
     updateReader();
     updateComparison();
@@ -904,7 +876,7 @@ export function initEuropeAtlas() {
     }else if(restorePoint)void showGrid(state.point,false);
     query<HTMLElement>('.eu-read-panel').setAttribute('aria-labelledby',cultureActive()?'eu-culture-reader-title':climateReader()?'eu-city-heading':'eu-subject-title');
     const farm=farmingView();
-    const guidance=climateReader()?'都市名を押すと、右の説明・雨温図と、下の月別数値が切り替わります。':state.layer==='religion'&&!state.cultureCase?religionOverviewMode==='smre'?'SMREの45か国の最大分類を比較します。国を押すと8分類の割合と原資料を右に示します。':'Pewの2020年国別推計を地図上の小さな構成帯で示します。国を押すと7分類の値を右に示します。':cultureActive()?'地図下で事例・分類・行政区を選び、同じ表の総人口に対する割合を読みます。':farm.active?farm.single?`${farm.item!.name}だけを表示中です。元の表示には右側のボタンで戻れます。`:'品目名を選ぶと、その分布全体の輪郭を強調します。重なる場所では候補を選べます。':visibleFeatures().length?'地図の名前を押すと、その場所の説明を表示します。':subject().id==='precipitation'?'地図を押すと、その地点の年降水量を右側に表示します。':subject().id==='terrain'?'地図の山脈・平原・半島・海域の名前と右側の説明を読みます。':subject().grid?'地図を押すと、その位置の値を右側に表示します。':subject().indicator?'国を押すと、画面下部に国全体の数値を表示します。':'地図の凡例と右側の説明を読み比べます。';
+    const guidance=climateReader()?'観測所の平年値 · 1991–2020年':state.layer==='language'?'実使用分布の原図形は未収録です。右に母語の定義と収録済みの原統計を示します。':state.layer==='religion'&&!state.cultureCase?religionOverviewMode==='smre'?'SMREの45か国の最大分類を比較します。国を押すと8分類の割合と原資料を右に示します。':'Pewの2020年国別推計を地図上の小さな構成帯で示します。国を押すと7分類の値を右に示します。':cultureActive()?'地図下で事例・分類・行政区を選び、同じ表の総人口に対する割合を読みます。':farm.active?farm.single?`${farm.item!.name}だけを表示中です。元の表示には右側のボタンで戻れます。`:'品目名を選ぶと、その分布全体の輪郭を強調します。重なる場所では候補を選べます。':visibleFeatures().length?'地図の名前を押すと、その場所の説明を表示します。':subject().id==='precipitation'?'地図を押すと、その地点の年降水量を右側に表示します。':subject().id==='terrain'?'地図の山脈・平原・半島・海域の名前と右側の説明を読みます。':subject().grid?'地図を押すと、その位置の値を右側に表示します。':subject().indicator?'国を押すと、画面下部に国全体の数値を表示します。':'地図の凡例と右側の説明を読み比べます。';
     status.textContent=(failed?'簡易地図で表示中。':'')+guidance;
     query<HTMLElement>('[data-eu-statistics]').hidden=all<HTMLElement>('[data-eu-statistics] > *').every(section=>section.hidden);
     all<HTMLElement>('[data-eu-extra-field]').forEach(el=>{el.hidden=el.dataset.euExtraField!==currentField.id;});
@@ -1086,17 +1058,9 @@ export function initEuropeAtlas() {
     query<HTMLElement>('[data-eu-farm-candidates]').hidden=true;
     query<HTMLElement>('.eu-map-stage').focus({preventScroll:true});
   }});
-  query('[data-eu-reset]').addEventListener('click', () => { state.region = 'all'; state.place = ''; state.city='';state.compare=[];delete state.feature;delete state.industryGroup;if(subject().field==='agriculture')state.farmExtent='full';commit(true); });
   drainageChoice.addEventListener('change',()=>{state.basin=normaliseEuropeDrainageBasin(drainageChoice.value);delete state.point;delete state.feature;commit(false);});
   query('[data-eu-drainage-clear]').addEventListener('click',()=>{delete state.basin;delete state.point;delete state.feature;commit(false);query('[data-eu-basin-summary]').textContent='色は区画を見分けるための識別色です。量の大小ではありません。';});
-  all<HTMLElement>('[data-eu-zoom]').forEach(button => button.addEventListener('click', () => {
-    const factor = button.dataset.euZoom === 'in' ? .7 : 1 / .7;
-    if (map) { factor < 1 ? map.zoomIn() : map.zoomOut(); return; }
-    const w = Math.min(frame.width * 2, Math.max(24, box[2] * factor));
-    const h = w / box[2] * box[3]; box = [box[0] + (box[2] - w) / 2, box[1] + (box[3] - h) / 2, w, h]; staticMap.setAttribute('viewBox', box.join(' '));staticSymbols();annotations.refresh();updateReligionMarkers();positionRegionalEvidence();updateFocusMarker();
-  }));
-  query('[data-eu-render]').addEventListener('click', () => { state.render = failed || state.render === 'static' ? 'auto' : 'static'; disposeMap(); commit(true,true); void startMap(); });
   window.addEventListener('popstate', () => { invalidateGridReading();const previousRender = state.render; state = readEuropeState(location.search, countries, ids, config.initialLayer); state.compare=[]; render(true); if (previousRender !== state.render) { disposeMap(); void startMap(); } });
   new ResizeObserver(()=>{staticSymbols();sizeReader();updateFocusMarker();}).observe(staticMap);
-  render(true); void startMap();
+  render(true); root.dataset.initialized='true'; void startMap();
 }

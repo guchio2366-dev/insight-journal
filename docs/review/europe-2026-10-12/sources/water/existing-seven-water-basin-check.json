@@ -1,0 +1,414 @@
+{
+  "checkedOn": "2026-10-12",
+  "method": "Sample existing published name anchors in the published display grid, follow MAIN_BAS/NEXT_DOWN records only; does not independently name or certify natural basins. No geometry synthesized.",
+  "inputs": {
+    "public/assets/atlas/europe/drainage-v1/basins.json": "50cd4c300b8519f64cd154332afcfac1a2273a581d82534bc293466bdf4ef233",
+    "public/assets/atlas/europe/drainage-v1/values.bin.gz": "6c1afeb901ccb1b264aca2883ffecbca2cbb1dc8dceb2cc8eea9bde80bfa5567",
+    "src/data/atlas/europe/river-names.json": "52b06077242438360d3ef96c88ef74aa6b131ed1786dc7898b136b8dc280c42e"
+  },
+  "records": [
+    {
+      "id": "volga",
+      "name": "ヴォルガ川",
+      "sourceNames": [
+        "Volga"
+      ],
+      "nameAnchor": [
+        46.350484,
+        47.842972
+      ],
+      "anchorBasin": {
+        "index": 87,
+        "HYBAS_ID": 2040068680,
+        "PFAF_ID": 2831,
+        "NEXT_DOWN": 0,
+        "MAIN_BAS": 2040068680
+      },
+      "publishedSameMainBasinUnits": 9,
+      "sourceIds": [
+        2040068680,
+        2040288980,
+        2040289120,
+        2040292580,
+        2040292690,
+        2040309560,
+        2040309610,
+        2040315940,
+        2040315950
+      ],
+      "outletPaths": [
+        [
+          2040068680
+        ],
+        [
+          2040288980,
+          2040292580,
+          2040309560,
+          2040068680
+        ],
+        [
+          2040289120,
+          2040292580,
+          2040309560,
+          2040068680
+        ],
+        [
+          2040292580,
+          2040309560,
+          2040068680
+        ],
+        [
+          2040292690,
+          2040309560,
+          2040068680
+        ],
+        [
+          2040309560,
+          2040068680
+        ],
+        [
+          2040309610,
+          2040068680
+        ],
+        [
+          2040315940,
+          2040289120,
+          2040292580,
+          2040309560,
+          2040068680
+        ],
+        [
+          2040315950,
+          2040289120,
+          2040292580,
+          2040309560,
+          2040068680
+        ]
+      ],
+      "displayNetworkClosed": true,
+      "wholeBasinVerified": false,
+      "originalPolygonPresent": false,
+      "countryMaskClipped": true,
+      "sampledAnchorUnitPublishedExtent": [
+        44.25,
+        45.63814991016513,
+        54.900000000000006,
+        55.327835749562986
+      ],
+      "sampledAnchorUnitPixels": 19105
+    },
+    {
+      "id": "don",
+      "name": "ドン川",
+      "sourceNames": [
+        "Don"
+      ],
+      "nameAnchor": [
+        40.385887,
+        50.082886
+      ],
+      "anchorBasin": {
+        "index": 111,
+        "HYBAS_ID": 2040439160,
+        "PFAF_ID": 2239,
+        "NEXT_DOWN": 2040439790,
+        "MAIN_BAS": 2040006590
+      },
+      "publishedSameMainBasinUnits": 9,
+      "sourceIds": [
+        2040006590,
+        2040439100,
+        2040439160,
+        2040439790,
+        2040439800,
+        2040491970,
+        2040491980,
+        2040501810,
+        2040501940
+      ],
+      "outletPaths": [
+        [
+          2040006590
+        ],
+        [
+          2040439100,
+          2040439790,
+          2040491980,
+          2040501810,
+          2040006590
+        ],
+        [
+          2040439160,
+          2040439790,
+          2040491980,
+          2040501810,
+          2040006590
+        ],
+        [
+          2040439790,
+          2040491980,
+          2040501810,
+          2040006590
+        ],
+        [
+          2040439800,
+          2040491980,
+          2040501810,
+          2040006590
+        ],
+        [
+          2040491970,
+          2040501810,
+          2040006590
+        ],
+        [
+          2040491980,
+          2040501810,
+          2040006590
+        ],
+        [
+          2040501810,
+          2040006590
+        ],
+        [
+          2040501940,
+          2040006590
+        ]
+      ],
+      "displayNetworkClosed": true,
+      "wholeBasinVerified": false,
+      "originalPolygonPresent": false,
+      "countryMaskClipped": true,
+      "sampledAnchorUnitPublishedExtent": [
+        36.4,
+        49.384633794549714,
+        42.3,
+        54.027061208362085
+      ],
+      "sampledAnchorUnitPixels": 9048
+    },
+    {
+      "id": "ural",
+      "name": "ウラル川",
+      "sourceNames": [
+        "Ural"
+      ],
+      "nameAnchor": [
+        51.121459,
+        50.460331
+      ],
+      "anchorBasin": null,
+      "publishedSameMainBasinUnits": 0,
+      "sourceIds": [],
+      "outletPaths": [],
+      "displayNetworkClosed": false,
+      "wholeBasinVerified": false,
+      "originalPolygonPresent": false,
+      "countryMaskClipped": true
+    },
+    {
+      "id": "rhine",
+      "name": "ライン川",
+      "sourceNames": [
+        "Rhine"
+      ],
+      "nameAnchor": [
+        7.59,
+        50.36
+      ],
+      "anchorBasin": {
+        "index": 27,
+        "HYBAS_ID": 2040023010,
+        "PFAF_ID": 2326,
+        "NEXT_DOWN": 0,
+        "MAIN_BAS": 2040023010
+      },
+      "publishedSameMainBasinUnits": 1,
+      "sourceIds": [
+        2040023010
+      ],
+      "outletPaths": [
+        [
+          2040023010
+        ]
+      ],
+      "displayNetworkClosed": true,
+      "wholeBasinVerified": false,
+      "originalPolygonPresent": false,
+      "countryMaskClipped": true,
+      "sampledAnchorUnitPublishedExtent": [
+        4.149999999999999,
+        46.332982205481294,
+        11.850000000000001,
+        52.13528374096674
+      ],
+      "sampledAnchorUnitPixels": 12387
+    },
+    {
+      "id": "danube",
+      "name": "ドナウ川",
+      "sourceNames": [
+        "Danube"
+      ],
+      "nameAnchor": [
+        19.04,
+        47.5
+      ],
+      "anchorBasin": {
+        "index": 118,
+        "HYBAS_ID": 2040539930,
+        "PFAF_ID": 2279,
+        "NEXT_DOWN": 2040548700,
+        "MAIN_BAS": 2040008490
+      },
+      "publishedSameMainBasinUnits": 9,
+      "sourceIds": [
+        2040008490,
+        2040539930,
+        2040540100,
+        2040543090,
+        2040543160,
+        2040548500,
+        2040548700,
+        2040555600,
+        2040555780
+      ],
+      "outletPaths": [
+        [
+          2040008490
+        ],
+        [
+          2040539930,
+          2040548700,
+          2040555600,
+          2040543160,
+          2040008490
+        ],
+        [
+          2040540100,
+          2040548700,
+          2040555600,
+          2040543160,
+          2040008490
+        ],
+        [
+          2040543090,
+          2040008490
+        ],
+        [
+          2040543160,
+          2040008490
+        ],
+        [
+          2040548500,
+          2040555600,
+          2040543160,
+          2040008490
+        ],
+        [
+          2040548700,
+          2040555600,
+          2040543160,
+          2040008490
+        ],
+        [
+          2040555600,
+          2040543160,
+          2040008490
+        ],
+        [
+          2040555780,
+          2040543160,
+          2040008490
+        ]
+      ],
+      "displayNetworkClosed": true,
+      "wholeBasinVerified": false,
+      "originalPolygonPresent": false,
+      "countryMaskClipped": true,
+      "sampledAnchorUnitPublishedExtent": [
+        8.149999999999999,
+        45.53317271403004,
+        20.25,
+        50.2556152006779
+      ],
+      "sampledAnchorUnitPixels": 15330
+    },
+    {
+      "id": "seine",
+      "name": "セーヌ川",
+      "sourceNames": [
+        "Seine"
+      ],
+      "nameAnchor": [
+        2.35,
+        48.86
+      ],
+      "anchorBasin": {
+        "index": 25,
+        "HYBAS_ID": 2040022150,
+        "PFAF_ID": 2324,
+        "NEXT_DOWN": 0,
+        "MAIN_BAS": 2040022150
+      },
+      "publishedSameMainBasinUnits": 1,
+      "sourceIds": [
+        2040022150
+      ],
+      "outletPaths": [
+        [
+          2040022150
+        ]
+      ],
+      "displayNetworkClosed": true,
+      "wholeBasinVerified": false,
+      "originalPolygonPresent": false,
+      "countryMaskClipped": true,
+      "sampledAnchorUnitPublishedExtent": [
+        0.29999999999999716,
+        46.98499864882827,
+        5.600000000000001,
+        50.031310156737796
+      ],
+      "sampledAnchorUnitPixels": 5437
+    },
+    {
+      "id": "thames",
+      "name": "テムズ川",
+      "sourceNames": [
+        "Thames"
+      ],
+      "nameAnchor": [
+        -0.12,
+        51.5
+      ],
+      "anchorBasin": {
+        "index": 81,
+        "HYBAS_ID": 2040048790,
+        "PFAF_ID": 2330,
+        "NEXT_DOWN": 0,
+        "MAIN_BAS": 2040048790
+      },
+      "publishedSameMainBasinUnits": 1,
+      "sourceIds": [
+        2040048790
+      ],
+      "outletPaths": [
+        [
+          2040048790
+        ]
+      ],
+      "displayNetworkClosed": true,
+      "wholeBasinVerified": false,
+      "originalPolygonPresent": false,
+      "countryMaskClipped": true,
+      "sampledAnchorUnitPublishedExtent": [
+        -6.150000000000002,
+        49.96702973356596,
+        1.7000000000000028,
+        58.62252227936195
+      ],
+      "sampledAnchorUnitPixels": 20292
+    }
+  ]
+}

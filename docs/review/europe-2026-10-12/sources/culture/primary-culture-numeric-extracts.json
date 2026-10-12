@@ -1,0 +1,304 @@
+{
+  "recordedOn": "2026-10-12",
+  "retrieval": "manual extraction of numeric observations from primary web-reader text; no guessed geometry",
+  "datasets": [
+    {
+      "id": "cze-mother-tongue-national-2021",
+      "source": "https://scitani.gov.cz/matersky-jazyk",
+      "licenseUrl": "https://scitani.gov.cz/podminky-uzivani-dat",
+      "license": "CZSO: copying, distribution, commercial reuse with attribution and preservation of meaning",
+      "year": 2021,
+      "geographicUnit": "Czechia, national aggregate",
+      "universe": "usual resident population, all ages",
+      "question": "first language learnt in childhood; one or two mother tongues may be reported",
+      "denominator": 10524167,
+      "values": [
+        {
+          "language": "Czech",
+          "exclusive": 8996475,
+          "includingSecond": 9213987
+        },
+        {
+          "language": "Moravian",
+          "exclusive": 16523,
+          "includingSecond": 28647
+        },
+        {
+          "language": "Slovak",
+          "exclusive": 150738,
+          "includingSecond": 225246
+        },
+        {
+          "language": "Polish",
+          "exclusive": 30183,
+          "includingSecond": 49669
+        },
+        {
+          "language": "German",
+          "exclusive": 10151,
+          "includingSecond": 31756
+        },
+        {
+          "language": "Romany",
+          "exclusive": 4280,
+          "includingSecond": 28102
+        },
+        {
+          "language": "Russian",
+          "exclusive": 59560,
+          "includingSecond": 96361
+        },
+        {
+          "language": "Ukrainian",
+          "exclusive": 88873,
+          "includingSecond": 123738
+        },
+        {
+          "language": "Vietnamese",
+          "exclusive": 43822,
+          "includingSecond": 57408
+        },
+        {
+          "language": "Hungarian",
+          "exclusive": 8533,
+          "includingSecond": 14664
+        }
+      ],
+      "notStated": 759394,
+      "limitations": [
+        "National values cannot be transformed into internal residential areas.",
+        "Including-second counts overlap and cannot be stacked to 100%.",
+        "Exclusive-language headline percentages use a different denominator than total population; calculate only from explicit counts."
+      ]
+    },
+    {
+      "id": "cze-mother-tongue-regional-source-statements-2021",
+      "source": "https://scitani.gov.cz/matersky-jazyk",
+      "licenseUrl": "https://scitani.gov.cz/podminky-uzivani-dat",
+      "year": 2021,
+      "geographicUnit": "named actual regions; geometry not acquired",
+      "measure": "exclusive mother tongue; source-reported rounded percentage",
+      "denominator": "source population with stated mother tongue; exclude multi-language responses from exclusive categories; do not substitute total residents",
+      "values": [
+        {
+          "region": "Hlavní město Praha",
+          "language": "Czech",
+          "share": 82.5
+        },
+        {
+          "region": "Kraj Vysočina",
+          "language": "Czech",
+          "share": 96.7
+        },
+        {
+          "region": "Jihomoravský kraj",
+          "language": "Moravian",
+          "share": 0.8
+        },
+        {
+          "region": "Zlínský kraj",
+          "language": "Moravian",
+          "share": 0.6
+        },
+        {
+          "region": "Olomoucký kraj",
+          "language": "Moravian",
+          "share": 0.5
+        },
+        {
+          "region": "Hlavní město Praha",
+          "language": "Russian",
+          "share": 2.8
+        },
+        {
+          "region": "Hlavní město Praha",
+          "language": "Ukrainian",
+          "share": 2.6
+        },
+        {
+          "region": "Hlavní město Praha",
+          "language": "Slovak",
+          "share": 2.5
+        }
+      ],
+      "limitations": [
+        "Statements are selected real region observations, not a complete regional distribution.",
+        "Obtain full regional counts and geometries before any area rendering."
+      ]
+    },
+    {
+      "id": "cze-ethnicity-national-2021",
+      "source": "https://scitani.gov.cz/narodnost",
+      "licenseUrl": "https://scitani.gov.cz/podminky-uzivani-dat",
+      "year": 2021,
+      "geographicUnit": "Czechia national aggregate",
+      "universe": "usual resident population, all ages; optional ethnicity self-identification",
+      "denominator": 10524167,
+      "values": [
+        {
+          "ethnicNationality": "Czech",
+          "exclusive": 6033014,
+          "includingSecond": 6415104
+        },
+        {
+          "ethnicNationality": "Moravian",
+          "exclusive": 359621,
+          "includingSecond": 556641
+        },
+        {
+          "ethnicNationality": "German",
+          "exclusive": 9128,
+          "includingSecond": 24632
+        },
+        {
+          "ethnicNationality": "Polish",
+          "exclusive": 26802,
+          "includingSecond": 38218
+        },
+        {
+          "ethnicNationality": "Romany",
+          "exclusive": 4458,
+          "includingSecond": 21691
+        },
+        {
+          "ethnicNationality": "Russian",
+          "exclusive": 25296,
+          "includingSecond": 34506
+        },
+        {
+          "ethnicNationality": "Silesian",
+          "exclusive": 12451,
+          "includingSecond": 31301
+        },
+        {
+          "ethnicNationality": "Slovak",
+          "exclusive": 96041,
+          "includingSecond": 162578
+        },
+        {
+          "ethnicNationality": "Ukrainian",
+          "exclusive": 78068,
+          "includingSecond": 92892
+        },
+        {
+          "ethnicNationality": "Vietnamese",
+          "exclusive": 31469,
+          "includingSecond": 38723
+        }
+      ],
+      "notStated": 3321058,
+      "limitations": [
+        "Ethnicity is self-identification, distinct from citizenship and mother tongue.",
+        "Including-second counts overlap.",
+        "National counts cannot locate minorities within Czechia."
+      ]
+    },
+    {
+      "id": "ireland-daily-irish-towns-2022",
+      "source": "https://www.cso.ie/en/releasesandpublications/ep/p-cpp8/censusofpopulation2022profile8-theirishlanguageandeducation/irishlanguageandthegaeltacht/",
+      "table": "1.6",
+      "license": "CC BY 4.0, CSO statistical information",
+      "licenseUrl": "https://www.cso.ie/en/aboutus/whoweare/copyrightpolicy/",
+      "year": 2022,
+      "geographicUnit": "census towns; geometry and exact official anchors not acquired",
+      "universe": "Irish speakers aged three and over in each town",
+      "measure": "daily use of Irish, excluding education-only use; includes daily within-and-outside education",
+      "values": [
+        {
+          "town": "An Bun Beag",
+          "irishSpeakers": 570,
+          "dailyUsers": 396,
+          "sourceRoundedShare": 69
+        },
+        {
+          "town": "An Cheathrú Rua",
+          "irishSpeakers": 520,
+          "dailyUsers": 358,
+          "sourceRoundedShare": 69
+        },
+        {
+          "town": "Mín Lárach",
+          "irishSpeakers": 385,
+          "dailyUsers": 261,
+          "sourceRoundedShare": 68
+        },
+        {
+          "town": "Doirí Beaga",
+          "irishSpeakers": 611,
+          "dailyUsers": 403,
+          "sourceRoundedShare": 66
+        },
+        {
+          "town": "Rann Na Feirste",
+          "irishSpeakers": 342,
+          "dailyUsers": 208,
+          "sourceRoundedShare": 61
+        },
+        {
+          "town": "Bun Na Leaca",
+          "irishSpeakers": 452,
+          "dailyUsers": 270,
+          "sourceRoundedShare": 60
+        },
+        {
+          "town": "Cill Rónáin",
+          "irishSpeakers": 149,
+          "dailyUsers": 86,
+          "sourceRoundedShare": 58
+        },
+        {
+          "town": "Gort An Choirce",
+          "irishSpeakers": 252,
+          "dailyUsers": 140,
+          "sourceRoundedShare": 56
+        },
+        {
+          "town": "An Spidéal",
+          "irishSpeakers": 182,
+          "dailyUsers": 87,
+          "sourceRoundedShare": 48
+        },
+        {
+          "town": "Loch An Iúir",
+          "irishSpeakers": 259,
+          "dailyUsers": 114,
+          "sourceRoundedShare": 44
+        }
+      ],
+      "limitations": [
+        "These percentages have Irish speakers as denominator, not all residents.",
+        "Top ten selected towns; not a complete Irish language map.",
+        "Gaeltacht legal boundaries do not automatically describe daily users."
+      ]
+    },
+    {
+      "id": "aland-language-census2020-un",
+      "source": "https://data.un.org/Data.aspx?d=POP&f=tableCode:27",
+      "license": "UNdata free copying and redistribution with attribution",
+      "licenseUrl": "https://data.un.org/Host.aspx?Content=UNdataUse",
+      "year": 2020,
+      "sourceYear": 2024,
+      "geographicUnit": "Åland Islands",
+      "universe": "Total area, both sexes, de jure complete census table",
+      "denominator": 30129,
+      "values": [
+        {
+          "language": "Finnish",
+          "count": 1405
+        },
+        {
+          "language": "Swedish",
+          "count": 25986
+        },
+        {
+          "language": "Other",
+          "count": 2738
+        }
+      ],
+      "limitations": [
+        "UN table label is language, detailed definition needs original national metadata before mixing with mother tongue.",
+        "Real whole Åland counts; not domestic residential boundaries."
+      ]
+    }
+  ]
+}

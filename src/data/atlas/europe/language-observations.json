@@ -1,0 +1,69 @@
+{
+  "id": "cze-mother-tongue-national-2021",
+  "source": "https://scitani.gov.cz/matersky-jazyk",
+  "licenseUrl": "https://scitani.gov.cz/podminky-uzivani-dat",
+  "license": "CZSO: copying, distribution, commercial reuse with attribution and preservation of meaning",
+  "year": 2021,
+  "geographicUnit": "Czechia, national aggregate",
+  "universe": "usual resident population, all ages",
+  "question": "first language learnt in childhood; one or two mother tongues may be reported",
+  "denominator": 10524167,
+  "values": [
+    {
+      "language": "Czech",
+      "exclusive": 8996475,
+      "includingSecond": 9213987
+    },
+    {
+      "language": "Moravian",
+      "exclusive": 16523,
+      "includingSecond": 28647
+    },
+    {
+      "language": "Slovak",
+      "exclusive": 150738,
+      "includingSecond": 225246
+    },
+    {
+      "language": "Polish",
+      "exclusive": 30183,
+      "includingSecond": 49669
+    },
+    {
+      "language": "German",
+      "exclusive": 10151,
+      "includingSecond": 31756
+    },
+    {
+      "language": "Romany",
+      "exclusive": 4280,
+      "includingSecond": 28102
+    },
+    {
+      "language": "Russian",
+      "exclusive": 59560,
+      "includingSecond": 96361
+    },
+    {
+      "language": "Ukrainian",
+      "exclusive": 88873,
+      "includingSecond": 123738
+    },
+    {
+      "language": "Vietnamese",
+      "exclusive": 43822,
+      "includingSecond": 57408
+    },
+    {
+      "language": "Hungarian",
+      "exclusive": 8533,
+      "includingSecond": 14664
+    }
+  ],
+  "notStated": 759394,
+  "limitations": [
+    "National values cannot be transformed into internal residential areas.",
+    "Including-second counts overlap and cannot be stacked to 100%.",
+    "Exclusive-language headline percentages use a different denominator than total population; calculate only from explicit counts."
+  ]
+}

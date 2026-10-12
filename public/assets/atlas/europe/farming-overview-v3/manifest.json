@@ -1,0 +1,481 @@
+{
+  "detailedCoastSha256": "810fb62cfca4ca4345eeb4698e09030e637ad5ea4576eb6f642dd18aff1feeb3",
+  "method": "Select existing source-backed display components at least approximately 4000 km² (retain largest if none pass). Clip original geometry to the detailed 1:10m European land mask; no smoothing, enlargement or bridging. This is an overview omission rule, not production extent. All original 16 products, numeric grids, full overlapping concentration polygons and selected outlines remain.",
+  "records": [
+    {
+      "kind": "dominant",
+      "id": "wheat",
+      "inputComponents": 29,
+      "overviewComponents": 20,
+      "sourceGridSha256": "67ac23f7ef34a8c909d7fb5c929db7d93a9dc1f377049d8bac04e0b35f6081d2",
+      "sourceAnchor": [
+        38.958333,
+        46.291667
+      ],
+      "anchorCellValue": 1596.699951171875,
+      "regionalAnchorWindow": [
+        23,
+        44,
+        39,
+        51
+      ],
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 12527
+    },
+    {
+      "kind": "dominant",
+      "id": "barley",
+      "inputComponents": 23,
+      "overviewComponents": 12,
+      "sourceGridSha256": "2e7087d0a06923e8a6b052b9f74ac8a54e4f9b625874f77c8c8e6f57e37b16ff",
+      "sourceAnchor": [
+        -2.541667,
+        40.041667
+      ],
+      "anchorCellValue": 894.9000244140625,
+      "regionalAnchorWindow": null,
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 9465
+    },
+    {
+      "kind": "dominant",
+      "id": "maize",
+      "inputComponents": 19,
+      "overviewComponents": 10,
+      "sourceGridSha256": "41da89f0a973f7ec27f38eb17b101195ba9aef0b7ab2074ae39ecc2f180100a8",
+      "sourceAnchor": [
+        20.041667,
+        45.458333
+      ],
+      "anchorCellValue": 2825.300048828125,
+      "regionalAnchorWindow": [
+        19,
+        43,
+        29,
+        48
+      ],
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 12197
+    },
+    {
+      "kind": "dominant",
+      "id": "potato",
+      "inputComponents": 19,
+      "overviewComponents": 8,
+      "sourceGridSha256": "354beaca8ad0f12a74891b14c9e601bdeac7742165b1e204d0c2660020c21151",
+      "sourceAnchor": [
+        24.375,
+        49.208333
+      ],
+      "anchorCellValue": 193.60000610351562,
+      "regionalAnchorWindow": [
+        14,
+        49,
+        25,
+        55
+      ],
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 6044
+    },
+    {
+      "kind": "dominant",
+      "id": "sugarbeet",
+      "inputComponents": 17,
+      "overviewComponents": 9,
+      "sourceGridSha256": "da252e5549d8c2dd5f6cf06c332d7cf84dced5e5613709719c5c4f342cc78577",
+      "sourceAnchor": [
+        3.375,
+        49.375
+      ],
+      "anchorCellValue": 240.1999969482422,
+      "regionalAnchorWindow": [
+        0,
+        46,
+        10,
+        52
+      ],
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 1491
+    },
+    {
+      "kind": "dominant",
+      "id": "rapeseed",
+      "inputComponents": 13,
+      "overviewComponents": 7,
+      "sourceGridSha256": "1fb8890a5344c610e633d5905549f8288df7e2cf46fa9a212805fc6469e9469a",
+      "sourceAnchor": [
+        16.958333,
+        50.708333
+      ],
+      "anchorCellValue": 694.0,
+      "regionalAnchorWindow": null,
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 6666
+    },
+    {
+      "kind": "dominant",
+      "id": "cattle",
+      "inputComponents": 39,
+      "overviewComponents": 20,
+      "sourceGridSha256": "e58b6cb8d2651646e3f3b3c8a41b6333891d5846ff94a199a9a9cf2b425bb2b2",
+      "sourceAnchor": [
+        10.125,
+        45.291667
+      ],
+      "anchorCellValue": 199.62222290039062,
+      "regionalAnchorWindow": null,
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 18618
+    },
+    {
+      "kind": "dominant",
+      "id": "pig",
+      "inputComponents": 41,
+      "overviewComponents": 20,
+      "sourceGridSha256": "dd21c7fe1ff4d542f05ff9e1102b211eab24d55200146297026a82cce1634494",
+      "sourceAnchor": [
+        5.708333,
+        51.541667
+      ],
+      "anchorCellValue": 2920.361572265625,
+      "regionalAnchorWindow": null,
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 13344
+    },
+    {
+      "kind": "dominant",
+      "id": "chicken",
+      "inputComponents": 64,
+      "overviewComponents": 32,
+      "sourceGridSha256": "71dd7a577cf7b7ceaf127cabaf043ca035cd71b3c7fc9dd42d9bab90f1414032",
+      "sourceAnchor": [
+        11.041667,
+        45.375
+      ],
+      "anchorCellValue": 16665.18359375,
+      "regionalAnchorWindow": null,
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 16784
+    },
+    {
+      "kind": "dominant",
+      "id": "sheep",
+      "inputComponents": 31,
+      "overviewComponents": 16,
+      "sourceGridSha256": "866b2394321c668c09bf6ea1b62c8dea1de931af7089d820ffbd0acc3cc3937f",
+      "sourceAnchor": [
+        -3.375,
+        52.375
+      ],
+      "anchorCellValue": 764.1158447265625,
+      "regionalAnchorWindow": null,
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 27664
+    },
+    {
+      "kind": "dominant",
+      "id": "citrus",
+      "inputComponents": 12,
+      "overviewComponents": 5,
+      "sourceGridSha256": "05494ba8e7dad20a773b6b6d0e2b06448c302721c497dcde974e7227b92bc2fe",
+      "sourceAnchor": [
+        0.291667,
+        41.791667
+      ],
+      "anchorCellValue": 576.0999755859375,
+      "regionalAnchorWindow": null,
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 512
+    },
+    {
+      "kind": "dominant",
+      "id": "temperatefruit",
+      "inputComponents": 40,
+      "overviewComponents": 17,
+      "sourceGridSha256": "d27267ed951d93f6520b0792084a4a4cce19f97f60510bbd7063bc6f2cb598a3",
+      "sourceAnchor": [
+        15.291667,
+        41.458333
+      ],
+      "anchorCellValue": 539.4000244140625,
+      "regionalAnchorWindow": null,
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 13413
+    },
+    {
+      "kind": "dominant",
+      "id": "vegetables",
+      "inputComponents": 50,
+      "overviewComponents": 13,
+      "sourceGridSha256": "b60d9b97f48ddf28f5635ecc9315df0b41f862cc5106ceba9afd5ac97470bbcd",
+      "sourceAnchor": [
+        18.625,
+        44.958333
+      ],
+      "anchorCellValue": 1097.5,
+      "regionalAnchorWindow": null,
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 8686
+    },
+    {
+      "kind": "dominant",
+      "id": "sunflower",
+      "inputComponents": 9,
+      "overviewComponents": 3,
+      "sourceGridSha256": "4abed4ec38aa74edc7232889fd72d0b15797fca4e3d8ecf8b11a58690d7abd04",
+      "sourceAnchor": [
+        31.791667,
+        48.541667
+      ],
+      "anchorCellValue": 1447.5,
+      "regionalAnchorWindow": null,
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 15068
+    },
+    {
+      "kind": "dominant",
+      "id": "rice",
+      "inputComponents": 16,
+      "overviewComponents": 5,
+      "sourceGridSha256": "6e5fbd8651ffd32b0bc0592656d6fe1f892bdaafe7c7ca0694d0791ea87cce4d",
+      "sourceAnchor": [
+        7.625,
+        44.708333
+      ],
+      "anchorCellValue": 2496.0,
+      "regionalAnchorWindow": null,
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 2503
+    },
+    {
+      "kind": "dominant",
+      "id": "soybean",
+      "inputComponents": 12,
+      "overviewComponents": 7,
+      "sourceGridSha256": "8f93a4b766d1b4dc73654685dba1b452968e8f69879e4f4e52232425da91b771",
+      "sourceAnchor": [
+        11.875,
+        45.291667
+      ],
+      "anchorCellValue": 947.4000244140625,
+      "regionalAnchorWindow": null,
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 13123
+    },
+    {
+      "kind": "secondary",
+      "id": "wheat",
+      "inputComponents": 27,
+      "overviewComponents": 8,
+      "sourceGridSha256": "67ac23f7ef34a8c909d7fb5c929db7d93a9dc1f377049d8bac04e0b35f6081d2",
+      "sourceAnchor": [
+        26.958333,
+        44.958333
+      ],
+      "anchorCellValue": 1178.4000244140625,
+      "regionalAnchorWindow": [
+        23,
+        44,
+        39,
+        51
+      ],
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 2128
+    },
+    {
+      "kind": "secondary",
+      "id": "barley",
+      "inputComponents": 33,
+      "overviewComponents": 18,
+      "sourceGridSha256": "2e7087d0a06923e8a6b052b9f74ac8a54e4f9b625874f77c8c8e6f57e37b16ff",
+      "sourceAnchor": [
+        4.291667,
+        49.041667
+      ],
+      "anchorCellValue": 1084.5999755859375,
+      "regionalAnchorWindow": null,
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 6090
+    },
+    {
+      "kind": "secondary",
+      "id": "maize",
+      "inputComponents": 16,
+      "overviewComponents": 6,
+      "sourceGridSha256": "41da89f0a973f7ec27f38eb17b101195ba9aef0b7ab2074ae39ecc2f180100a8",
+      "sourceAnchor": [
+        27.041667,
+        44.208333
+      ],
+      "anchorCellValue": 1012.7999877929688,
+      "regionalAnchorWindow": [
+        19,
+        43,
+        29,
+        48
+      ],
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 1541
+    },
+    {
+      "kind": "secondary",
+      "id": "potato",
+      "inputComponents": 33,
+      "overviewComponents": 14,
+      "sourceGridSha256": "354beaca8ad0f12a74891b14c9e601bdeac7742165b1e204d0c2660020c21151",
+      "sourceAnchor": [
+        24.958333,
+        50.541667
+      ],
+      "anchorCellValue": 429.20001220703125,
+      "regionalAnchorWindow": [
+        14,
+        49,
+        25,
+        55
+      ],
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 7516
+    },
+    {
+      "kind": "secondary",
+      "id": "sugarbeet",
+      "inputComponents": 26,
+      "overviewComponents": 12,
+      "sourceGridSha256": "da252e5549d8c2dd5f6cf06c332d7cf84dced5e5613709719c5c4f342cc78577",
+      "sourceAnchor": [
+        2.041667,
+        49.958333
+      ],
+      "anchorCellValue": 476.70001220703125,
+      "regionalAnchorWindow": [
+        0,
+        46,
+        10,
+        52
+      ],
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 9698
+    },
+    {
+      "kind": "secondary",
+      "id": "rapeseed",
+      "inputComponents": 32,
+      "overviewComponents": 11,
+      "sourceGridSha256": "1fb8890a5344c610e633d5905549f8288df7e2cf46fa9a212805fc6469e9469a",
+      "sourceAnchor": [
+        17.875,
+        48.041667
+      ],
+      "anchorCellValue": 348.1000061035156,
+      "regionalAnchorWindow": null,
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 8301
+    },
+    {
+      "kind": "secondary",
+      "id": "cattle",
+      "inputComponents": 61,
+      "overviewComponents": 30,
+      "sourceGridSha256": "e58b6cb8d2651646e3f3b3c8a41b6333891d5846ff94a199a9a9cf2b425bb2b2",
+      "sourceAnchor": [
+        5.708333,
+        51.541667
+      ],
+      "anchorCellValue": 182.32424926757812,
+      "regionalAnchorWindow": null,
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 15135
+    },
+    {
+      "kind": "secondary",
+      "id": "pig",
+      "inputComponents": 67,
+      "overviewComponents": 30,
+      "sourceGridSha256": "dd21c7fe1ff4d542f05ff9e1102b211eab24d55200146297026a82cce1634494",
+      "sourceAnchor": [
+        10.041667,
+        45.291667
+      ],
+      "anchorCellValue": 1002.8225708007812,
+      "regionalAnchorWindow": null,
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 15817
+    },
+    {
+      "kind": "secondary",
+      "id": "chicken",
+      "inputComponents": 75,
+      "overviewComponents": 28,
+      "sourceGridSha256": "71dd7a577cf7b7ceaf127cabaf043ca035cd71b3c7fc9dd42d9bab90f1414032",
+      "sourceAnchor": [
+        5.791667,
+        51.458333
+      ],
+      "anchorCellValue": 9546.44921875,
+      "regionalAnchorWindow": null,
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 11720
+    },
+    {
+      "kind": "secondary",
+      "id": "sheep",
+      "inputComponents": 39,
+      "overviewComponents": 20,
+      "sourceGridSha256": "866b2394321c668c09bf6ea1b62c8dea1de931af7089d820ffbd0acc3cc3937f",
+      "sourceAnchor": [
+        -8.291667,
+        53.458333
+      ],
+      "anchorCellValue": 74.84781646728516,
+      "regionalAnchorWindow": null,
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 7774
+    },
+    {
+      "kind": "secondary",
+      "id": "citrus",
+      "inputComponents": 3,
+      "overviewComponents": 1,
+      "sourceGridSha256": "05494ba8e7dad20a773b6b6d0e2b06448c302721c497dcde974e7227b92bc2fe",
+      "sourceAnchor": [
+        13.375,
+        37.875
+      ],
+      "anchorCellValue": 42.0,
+      "regionalAnchorWindow": null,
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 10
+    },
+    {
+      "kind": "secondary",
+      "id": "temperatefruit",
+      "inputComponents": 32,
+      "overviewComponents": 6,
+      "sourceGridSha256": "d27267ed951d93f6520b0792084a4a4cce19f97f60510bbd7063bc6f2cb598a3",
+      "sourceAnchor": [
+        10.041667,
+        45.208333
+      ],
+      "anchorCellValue": 257.29998779296875,
+      "regionalAnchorWindow": null,
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 597
+    },
+    {
+      "kind": "secondary",
+      "id": "vegetables",
+      "inputComponents": 33,
+      "overviewComponents": 13,
+      "sourceGridSha256": "b60d9b97f48ddf28f5635ecc9315df0b41f862cc5106ceba9afd5ac97470bbcd",
+      "sourceAnchor": [
+        19.291667,
+        44.875
+      ],
+      "anchorCellValue": 842.5999755859375,
+      "regionalAnchorWindow": null,
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "retainedGridCells": 2423
+    }
+  ]
+}

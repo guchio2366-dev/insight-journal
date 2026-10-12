@@ -1,7 +1,7 @@
 import { europeTerrainGuides, europeTerrainPlaceNames, europeTerrainWinds } from './terrain-geography.ts';
 import riverNames from './river-names.json' with { type: 'json' };
 
-export type EuropeReading = {id:string;name:string;field:'nature'|'industry';country:string;coordinates:[number,number];group:string;body:string;question:string;source:string;sourceLabel:string;period:string;layer:string;overview?:string;explanation?:string;bounds?:readonly [readonly [number,number],readonly [number,number]];explanationSource?:string};
+export type EuropeReading = {id:string;name:string;field:'nature'|'industry'|'agriculture';country:string;coordinates:[number,number];group:string;body:string;question:string;source:string;sourceLabel:string;period:string;layer:string;overview?:string;explanation?:string;bounds?:readonly [readonly [number,number],readonly [number,number]];explanationSource?:string};
 
 const terrainReadings: EuropeReading[] = [
   ...europeTerrainGuides,

@@ -22,7 +22,7 @@ export function viewPath(geometry: Geometry): string {
 export function visibleBounds(geometries: Geometry[]): [[number, number], [number, number]] {
   const points = geometries.flatMap(g => europeRings(g).flat());
   if (!points.length) return [[-25, 32], [65, 73]];
-  return [[Math.min(...points.map(p => p[0])), Math.min(...points.map(p => p[1]))], [Math.max(...points.map(p => p[0])), Math.max(...points.map(p => p[1]))]];
+  return points.reduce<[[number,number],[number,number]]>((bounds,[x,y])=>[[Math.min(bounds[0][0],x),Math.min(bounds[0][1],y)],[Math.max(bounds[1][0],x),Math.max(bounds[1][1],y)]],[[Infinity,Infinity],[-Infinity,-Infinity]]);
 }
 export type EuropeState = { region: string; place: string; city: string; compare: string[]; render: string; layer: string; returnLayer: string; industryGroup?: EuropeIndustryGroup; feature?: string; point?: [number, number]; showCrops?: boolean; showLivestock?: boolean; single?: boolean; farmYear?:number; farmMeasure?:string; farmCompare?:string[]; farmExtent?:'full' } & Partial<PopulationCaseChoiceState> & EuropeDrainageState;
 /** Keep the original precision so restoring a click cannot select a neighbouring cell. */

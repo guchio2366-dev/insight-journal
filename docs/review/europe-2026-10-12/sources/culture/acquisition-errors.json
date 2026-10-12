@@ -1,0 +1,51 @@
+{
+  "recordedOn": "2026-10-12",
+  "noBypass": true,
+  "attempts": [
+    {
+      "url": "https://andmed.stat.ee/api/v1/en/stat/rahvaloendus/rel2021/rahvastiku-demograafilised-ja-etno-kultuurilised-naitajad/rahvus-emakeel/RL21434.px",
+      "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))",
+      "retried": false,
+      "method": "GET",
+      "client": "Python urllib.request",
+      "denialOrigin": "CONNECT tunnel; publisher response not reached",
+      "publisherHttpStatus": null,
+      "automaticApprovalRejection": false
+    },
+    {
+      "url": "https://www.bfs.admin.ch/bfsstatic/dam/assets/36347568/master",
+      "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))",
+      "retried": false,
+      "method": "GET",
+      "client": "Python urllib.request",
+      "denialOrigin": "CONNECT tunnel; publisher response not reached",
+      "publisherHttpStatus": null,
+      "automaticApprovalRejection": false
+    },
+    {
+      "url": "https://geodata.csu.gov.cz/server/rest/services/Hosted/sldb2021_obyvatelstvo/FeatureServer/10100/query?where=1%3D1&outFields=*&outSR=4326&f=geojson",
+      "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))",
+      "retried": false,
+      "method": "GET",
+      "client": "Python urllib.request",
+      "denialOrigin": "CONNECT tunnel; publisher response not reached",
+      "publisherHttpStatus": null,
+      "automaticApprovalRejection": false
+    },
+    {
+      "url": "https://op.europa.eu/lastedition/f551bd64-8615-4781-9be1-c592217dad83",
+      "client": "web reader",
+      "error": "HTTP 429 Too Many Requests",
+      "retried": false,
+      "denialOrigin": "tool HTTP result; origin not resolved",
+      "automaticApprovalRejection": false
+    },
+    {
+      "url": "https://ec.europa.eu/public_opinion/archives/ebs/ebs_386_en.pdf",
+      "client": "web reader",
+      "error": "HTTP 404 Not Found",
+      "retried": false,
+      "note": "legacy 2012 source route not usable; no alternate route attempted"
+    }
+  ]
+}

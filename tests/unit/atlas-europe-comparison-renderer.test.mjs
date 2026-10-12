@@ -266,7 +266,7 @@ test('unavailable culture source geometry preserves the honest caption and compl
   }finally{window.happyDOM.abort();delete globalThis.document;}
 });
 
-test('the original drainage map adds only the selected source-index outline while keeping all eight categorical colors and missing data',async()=>{
+test('the original drainage map adds only the selected source-index outline while keeping all five named main-system colors and missing data',async()=>{
   const {window,root}=setup();try {
     const draws=drainageCanvas(window),basin=visibleBasins[0],source={...state('drainage'),basin:String(basin.HYBAS_ID)};
     const layer=europeLayers.find(item=>item.id==='drainage'),calls=[];let requested;
@@ -276,7 +276,7 @@ test('the original drainage map adds only the selected source-index outline whil
     assert.equal(requested,layer.grid);assert.equal(images.length,2);assert.equal(images[0].getAttribute('href'),layer.image,'Source color pixels use the unchanged registered image');
     assert.equal(outline,mini.lastElementChild);assert.equal(outline.getAttribute('data-eu-origin-drainage-outline'),String(basin.HYBAS_ID));assert.equal(outline.getAttribute('width'),'1200');assert.equal(outline.getAttribute('height'),'1001');
     assert.equal(mini.dataset.euOriginBasin,String(basin.HYBAS_ID));assert.equal(mini.getAttribute('viewBox'),'0 0 1200 1001');
-    const rows=[...root.querySelectorAll('[data-eu-origin-legend]>div')];assert.equal(rows.length,9);assert.deepEqual(rows.slice(0,8).map(row=>row.querySelector('.eu-swatch').style.background),layer.colors.map(color=>{const node=document.createElement('span');node.style.background=color;return node.style.background;}));assert.equal(rows[8].textContent,'データなし');
+    const rows=[...root.querySelectorAll('[data-eu-origin-legend]>div')];assert.equal(rows.length,layer.colors.length+1);assert.deepEqual(rows.slice(0,layer.colors.length).map(row=>row.querySelector('.eu-swatch').style.background),layer.colors.map(color=>{const node=document.createElement('span');node.style.background=color;return node.style.background;}));assert.equal(rows[layer.colors.length].textContent,'データなし');
     assert.deepEqual(draws[0],europeDrainageOutline(drainageValues,basin.index).rgba,'Only exact four-neighbour selected display-cell boundary pixels are encoded');
     assert.match(root.querySelector('[data-eu-origin-caption]').textContent,new RegExp('2019年公開.*量の大小なし.*'+basin.HYBAS_ID));assert.match(outline.getAttribute('aria-label'),/表示格子.*流域全体とは限りません/);
     assert.equal(root.querySelector('[data-eu-origin-status]'),null);assert.equal(calls.length,0,'No source colors are blended into the target WebGL map');
@@ -317,6 +317,6 @@ test('invalid or unavailable source basin lookups leave honest source colors, id
     await renderEuropeOrigin(root,{...state('drainage'),basin:'not-a-source-id'},target,config,undefined,{fetchDrainageValues:async()=>{requested=true;return drainageValues;}});
     assert.equal(requested,false);assert.equal(root.querySelectorAll('[data-eu-origin-map] image').length,1);
     await renderEuropeOrigin(root,{...state('drainage'),basin:String(visibleBasins[0].HYBAS_ID)},target,config,undefined,{fetchDrainageValues:async()=>{throw new Error('offline');}});
-    assert.equal(root.querySelector('[data-eu-origin-drainage-outline]'),null);assert.match(root.querySelector('[data-eu-origin-status]').textContent,/輪郭を表示できません/);assert.equal(root.querySelectorAll('[data-eu-origin-legend]>div').length,9);assert.ok(root.querySelector('[data-eu-origin-caption]').textContent.includes(String(visibleBasins[0].HYBAS_ID)));
+    assert.equal(root.querySelector('[data-eu-origin-drainage-outline]'),null);assert.match(root.querySelector('[data-eu-origin-status]').textContent,/輪郭を表示できません/);assert.equal(root.querySelectorAll('[data-eu-origin-legend]>div').length,europeLayers.find(item=>item.id==='drainage').colors.length+1);assert.ok(root.querySelector('[data-eu-origin-caption]').textContent.includes(String(visibleBasins[0].HYBAS_ID)));
   }finally{window.happyDOM.abort();delete globalThis.document;}
 });

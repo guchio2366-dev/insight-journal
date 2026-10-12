@@ -1,0 +1,20 @@
+{
+  "source": "https://doi.org/10.25921/fd45-gt74",
+  "sourceDownload": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/60s/60s_surface_elev_gtif/ETOPO_2022_v1_60s_N90W180_surface.tif",
+  "rawDemSha256": "9d27d4b8ea8e76977e2988bca667d7c8fa68b927355feffcddd6b4875a7fd08e",
+  "retainedGridSha256": "a41d65b5215f7577ad57915d9226f087b53e2d815e9287693a2789ab0d6b0ecf",
+  "width": 1800,
+  "height": 1502,
+  "bounds": [
+    -25,
+    32,
+    65,
+    73
+  ],
+  "projection": "EPSG:3857",
+  "verticalExaggeration": 3,
+  "azimuth": 315,
+  "sunAltitude": 45,
+  "method": "Continuous hillshade from retained ETOPO display elevation using metric cell spacing. Missing-neighbour slopes are zero. No aerial imagery, interpolation or invented higher-resolution elevations. Existing country mask remains, so newly detailed coastal land may lack DEM coverage.",
+  "imageSha256": "f1d4d8d2d992f021285770d27fca1624f88da577b8372db0622c96efba40a94f"
+}

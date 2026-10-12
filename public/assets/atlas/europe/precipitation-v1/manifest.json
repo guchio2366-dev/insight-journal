@@ -402,7 +402,7 @@
   ],
   "inputs": [
     {
-      "path": "src/data/atlas/europe-countries.json",
+      "path": "data-source/atlas/europe/legacy-country-mask-110m-v1.json",
       "sha256": "74188768119719459793e99eebdc29a90abe85881bdfc15d76ab144ec6320237",
       "role": "Existing 45 target-country display mask"
     },

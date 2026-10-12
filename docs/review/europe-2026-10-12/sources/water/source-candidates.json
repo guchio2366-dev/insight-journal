@@ -1,0 +1,54 @@
+{
+  "checkedOn": "2026-10-12",
+  "rawGeometryRetrieved": false,
+  "deniedUrlsWereNotRetried": true,
+  "candidateProducts": [
+    {
+      "name": "GRDC Major River Basins of the World",
+      "edition": "2nd revised edition 2020",
+      "publisher": "Global Runoff Data Centre / Federal Institute of Hydrology (BfG)",
+      "catalogueUrl": "https://grdc.bafg.de/products/basin_layers/major_rivers/",
+      "applicationUrl": "https://mrb.grdc.bafg.de/",
+      "method": "Publisher dissolves HydroBASINS highest-level polygons (level 12), checks against coarser levels; named major rivers and HydroRIVERS-derived networks are separate publisher layers. This is a distinct derived product, not a Figshare mirror.",
+      "licenseEvidence": "Publisher permits public use with full GRDC citation and acknowledgement of incorporated HydroSHEDS data. No CC BY label is claimed for GRDC. Underpinning HydroBASINS/HydroRIVERS have HydroSHEDS custom terms, not HydroATLAS CC BY.",
+      "subsetDownload": "GeoJSON or Shapefile for selected basins including basin polygons, major rivers and networks with upland area >1575 km2. Small headwaters therefore may be omitted.",
+      "globalBytes": "Publisher rounded sizes: 130 MB GeoJSON /117 MB Shapefile; exact bytes and selected-subset size unknown.",
+      "verifiedSelectedGeometryCount": 0,
+      "CRS": "not confirmed from downloaded geometry; must inspect actual data before use",
+      "status": "First normal application GET denied at CONNECT tunnel; no download route or alternative access attempted afterwards."
+    },
+    {
+      "name": "EEA ECRINS natural sub-basins of Europe",
+      "edition": "v0, created 2011-12-31; source period1990–2006",
+      "catalogueUrl": "https://sdi.eea.europa.eu/catalogue/srv/api/records/48545018-0505-494c-9ee1-d9ae792d4cf8",
+      "downloadUrl": "https://sdi.eea.europa.eu/datashare/s/ns7PXfNCETwTJZH/download",
+      "publisher": "European Environment Agency",
+      "license": "CC BY 4.0, EEA copyright",
+      "CRS": "EPSG:3035",
+      "scaleDenominator": 250000,
+      "size": "90.7 MB as displayed by official folder; exact bytes unverified",
+      "scope": "Natural basins >40000 km2 subdivided into 10000–40000 km2 tributary or main-course sub-basins; documented Danube and Volga nesting. This layer alone is not sufficient proof of Rhine/Seine/Thames/Don/Ural whole named basins. Would require FEC + topology + gazetteer for smaller basins and checks.",
+      "status": "Web ZIP response unsupported application/zip capacity error; subsequent first normal GET denied at CONNECT tunnel; stopped."
+    }
+  ],
+  "notAdopted": [
+    {
+      "name": "EEA ECRINS FunctionalRiverBasinDistricts",
+      "url": "https://water.discomap.eea.europa.eu/arcgis/rest/services/Ecrins/ECRINS_EuropeanDrainageNetwork/MapServer/0",
+      "reason": "Functional adjustment of Water Framework Directive river basin districts, which are not natural hydrological entities. Must not be named as the 7 river basins without FEC topology/gazetteer verification."
+    },
+    {
+      "name": "Standalone HydroBASINS/HydroRIVERS",
+      "productUrls": [
+        "https://www.hydrosheds.org/products/hydrobasins",
+        "https://www.hydrosheds.org/products/hydrorivers"
+      ],
+      "reason": "Primary pages confirm HydroATLAS includes the same geometry. Not used as an alternate route to reacquire denied BasinATLAS/RiverATLAS geometry. License is HydroSHEDS custom license with redistribution and attribution terms, not CC BY4.0."
+    }
+  ],
+  "officialLicenseDocument": "https://data.hydrosheds.org/file/technical-documentation/HydroSHEDS_TechDoc_v1_4.pdf",
+  "minimalExternalInput": {
+    "preferred": "GRDC official selected-basin GeoJSON archive: Rhine, Danube, Seine, Thames, Don, Volga, Ural; preserve basin, major-river, network layers, technical documentation and download metadata. Verify all 7 are present; actual filenames, CRS and subset bytes still unknown.",
+    "fallback": "The 4 previously pinned BasinATLAS level04 files sum77323443 bytes, but level04 remains too coarse for Thames. Need a finer original basin subset and genuine topology covering all 7, including Kazakhstan Ural outside current 45country mask. Do not ask for L4 alone as if sufficient."
+  }
+}

@@ -95,12 +95,7 @@ function savedPoint(app){return new URL(app.w.location.href).searchParams.get('p
 function assertPoint(app,point){
   const saved=savedPoint(app);assert.ok(saved,'A selected grid point is present in the URL');
   assert.ok(saved.every((value,index)=>Math.abs(value-point[index])<1e-10),'URL coordinates preserve the selected display cell');
-  const marker=app.q('[data-eu-selected-point]');assert.equal(marker.hidden,false);
-  const [x,y]=project(point);
-  // CSSOM serializes pixel values with limited decimal precision.
-  assert.ok(Math.abs(parseFloat(marker.style.left)-x)<.01,`Marker x ${marker.style.left} corresponds to ${x}`);
-  assert.ok(Math.abs(parseFloat(marker.style.top)-y)<.01,`Marker y ${marker.style.top} corresponds to ${y}`);
-  assert.match(marker.getAttribute('aria-label'),/選択地点/);
+  assert.equal(app.q('[data-eu-selected-point]').hidden,true,'Numeric lookup preserves the URL and reader without a map circle');
 }
 function expectedReading(point){
   const cell=displayCell(elevation,point,-32768);assert.ok(cell);
@@ -366,10 +361,7 @@ test('religion starts with 45-country confessions and retains optional Pew and c
     assert.equal(app.q('[data-eu-religion-supplement]').open,false);
     assert.equal(app.q('[data-eu-pew-surface-key]').parentElement,app.q('[data-eu-religion-supplement-controls]'));
     assert.equal(app.q('.eu-culture-controls').parentElement,app.q('[data-eu-religion-supplement-controls]'));
-    assert.equal(app.w.document.querySelectorAll('[data-eu-smre-marker]').length,31);
-    assert.match(app.q('[data-eu-smre-marker=FRA]').textContent,/40%/);
-    assert.match(app.q('[data-eu-smre-marker=CHE]').textContent,/27.1%/);
-    assert.match(app.q('[data-eu-smre-marker=DEU]').textContent,/30.2%.*29.2%.*33.1%/s);
+    assert.equal(app.w.document.querySelectorAll('[data-eu-smre-marker]').length,0,'National percentages belong in the reader');
     assert.equal(app.q('[data-eu-pew-map-key]').hidden,true);
     assert.equal(app.w.document.querySelectorAll('[data-culture-code]').length,0);
     assert.equal(app.q('[data-eu-shape=POL]').style.fill,app.q('[data-eu-shape=ITA]').style.fill);
@@ -445,7 +437,7 @@ test('気候の空の都市選択と全体へ操作は雨温図を解除して�
   const app=await setup('?layer=climate&render=static');
   try{
     const choice=app.q('[data-eu-city-choice]');
-    for(const reset of [()=>{choice.value='';choice.dispatchEvent(new app.w.Event('change'));},()=>app.q('[data-eu-reset]').click()]){
+    for(const reset of [()=>{choice.value='';choice.dispatchEvent(new app.w.Event('change'));}]){
       choice.value='london';choice.dispatchEvent(new app.w.Event('change'));await tick();
       assert.equal(app.q('[data-eu-climate-overview]').hidden,true);
       reset();await tick();

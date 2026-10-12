@@ -1,0 +1,81 @@
+{
+  "id": "helsinki",
+  "name": "ヘルシンキ",
+  "country": "FIN",
+  "stationId": "2978",
+  "stationName": "HELSINKI KAISANIEMI -FINLAND",
+  "coordinates": [
+    24.95,
+    60.18
+  ],
+  "elevationM": 4.0,
+  "period": "1991–2020",
+  "months": [
+    {
+      "month": 1,
+      "temperature": -3.5,
+      "precipitation": null
+    },
+    {
+      "month": 2,
+      "temperature": -3.5,
+      "precipitation": null
+    },
+    {
+      "month": 3,
+      "temperature": -0.5,
+      "precipitation": null
+    },
+    {
+      "month": 4,
+      "temperature": 5.0,
+      "precipitation": null
+    },
+    {
+      "month": 5,
+      "temperature": 11.1,
+      "precipitation": null
+    },
+    {
+      "month": 6,
+      "temperature": 15.3,
+      "precipitation": null
+    },
+    {
+      "month": 7,
+      "temperature": 18.4,
+      "precipitation": null
+    },
+    {
+      "month": 8,
+      "temperature": 17.2,
+      "precipitation": null
+    },
+    {
+      "month": 9,
+      "temperature": 12.9,
+      "precipitation": null
+    },
+    {
+      "month": 10,
+      "temperature": 7.1,
+      "precipitation": null
+    },
+    {
+      "month": 11,
+      "temperature": 3.3,
+      "precipitation": null
+    },
+    {
+      "month": 12,
+      "temperature": 0.1,
+      "precipitation": null
+    }
+  ],
+  "sourceUrl": "https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/graph_mkhtml_nrm.php?n=2978&m=1",
+  "input": {
+    "url": "https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/graph_mkhtml_nrm.php?n=2978&m=1",
+    "sha256": "1104d40f740bc2664c33f5f7219fa09f4010a2f758cde1e815c7b6b1662f850e",
+    "bytes": 5405
+  }
+}

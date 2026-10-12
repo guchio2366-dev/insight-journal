@@ -201,7 +201,7 @@ test('Croatia is an explicit national source row with distinct original response
   assert.match(sourceAttribution, /Adapted: explicit national rows and original count columns selected/);
   assert.match(sourceAttribution, /Japanese explanatory headings added/);
   assert.match(sourceAttribution, /outline selected for display only, with coordinates unchanged/);
-  const originalBasemap = await readJson(path.join(root, 'src/data/atlas/europe-countries.json'));
+  const originalBasemap = await readJson(path.join(root, 'data-source/atlas/europe/legacy-country-mask-110m-v1.json'));
   const outline = await readJson(path.join(assetPath, 'croatia-national-outline.geojson'));
   assert.equal(outline.features.length, 1);
   assert.equal(outline.features[0].properties.displayOnly, true);

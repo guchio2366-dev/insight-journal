@@ -13,7 +13,7 @@ const collection = json('src/data/atlas/europe/farming-areas.json');
 const dominant = json('src/data/atlas/europe/farming-dominant-areas.json');
 const secondary = json('src/data/atlas/europe/farming-secondary-areas.json');
 const cropConfig = json('src/data/atlas/europe/crop-overview.json').crops;
-const countries = json('src/data/atlas/europe-countries.json').features.filter(feature => feature.properties.kind === 'europe');
+const countries = json('data-source/atlas/europe/legacy-country-mask-110m-v1.json').features.filter(feature => feature.properties.kind === 'europe');
 const polygons = geometry => geometry.type === 'Polygon' ? [geometry.coordinates] : geometry.coordinates;
 const box = ring => ring.reduce((b, [x, y]) => [Math.min(b[0], x), Math.min(b[1], y), Math.max(b[2], x), Math.max(b[3], y)], [Infinity, Infinity, -Infinity, -Infinity]);
 

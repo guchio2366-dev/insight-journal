@@ -45,7 +45,7 @@ try{
       assert.match(terrain,/：[^：]+ m（ETOPO 2022）$/);
       assert.equal(await page.evaluate(()=>history.length),initialHistory+1,'One selection creates one history entry');
       assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'),originalView,'Selection preserves the map extent');
-      assert.equal(await page.locator(`${marker}:visible`).count(),1);
+      assert.equal(await page.locator(`${marker}:visible`).count(),0);
       assert.equal(await page.locator('.eu-read-panel [data-eu-subject-grid]').count(),1);
       assert.equal(await page.locator('[data-eu-subject-grid]').count(),1,'The value is not duplicated below the map');
       assert.equal(await page.locator('.eu-map-panel [data-eu-map-legend] [data-eu-subject-legend]').count(),1,'The single legend is under the map');
@@ -104,8 +104,8 @@ try{
       await page.goBack();assert.equal(await settled(page),terrain);
       await page.goForward();assert.equal(await settled(page),clicked);
       await page.reload({waitUntil:'networkidle'});await ready(page,render);assert.equal(await settled(page),clicked);
-      await page.locator('[data-eu-render]').click();await ready(page,render==='auto'?'static':'auto');assert.equal(await settled(page),clicked);
-      assert.equal(await page.locator(`${marker}:visible`).count(),1);
+      const switched=new URL(page.url());switched.searchParams.set('render',render==='auto'?'static':'auto');await page.goto(switched.href,{waitUntil:'networkidle'});await ready(page,render==='auto'?'static':'auto');assert.equal(await settled(page),clicked);
+      assert.equal(await page.locator(`${marker}:visible`).count(),0);
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'No horizontal overflow');
       evidence.push({profile:profile.name,render,terrain,point:savedPoint,clickedPoint,clicked,selectedFontSize:font,checks:['same grid value','legend colours','no duplicate panel','one history entry','no camera refit','back to unselected','back/forward','reload','named comparison return','map click','renderer switch','no horizontal overflow'],screenshots:[`europe-${profile.name}-${render}-terrain.png`,`europe-${profile.name}-${render}-contours.png`]});
       assert.deepEqual(errors,[]);

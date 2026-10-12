@@ -1,0 +1,12 @@
+[
+  {
+    "url": "https://mrb.grdc.bafg.de/",
+    "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))",
+    "retried": false
+  },
+  {
+    "url": "https://sdi.eea.europa.eu/datashare/s/ns7PXfNCETwTJZH/download",
+    "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))",
+    "retried": false
+  }
+]

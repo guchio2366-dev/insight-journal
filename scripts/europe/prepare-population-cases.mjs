@@ -244,7 +244,7 @@ const croatiaTopics = croatiaExtract.sheets.map((sheet, index) => {
     notes: croatiaExtract.notes,
   };
 });
-const europeCountriesPath = path.join(root, 'src/data/atlas/europe-countries.json');
+const europeCountriesPath = path.join(root, 'data-source/atlas/europe/legacy-country-mask-110m-v1.json');
 const europeCountriesBytes = await fs.readFile(europeCountriesPath);
 const croatiaOutline = JSON.parse(europeCountriesBytes).features.filter(feature => feature.properties.code === 'HRV');
 if (croatiaOutline.length !== 1) throw new Error('Existing Natural Earth HRV national outline unavailable');
@@ -277,7 +277,7 @@ for (const file of selectedFiles) {
 }
 const manifest = {
   schemaVersion: 1, preparedAt: '2026-10-02', scope: packageData.scope, caseIds: packageData.cases.map(item => item.id),
-  sources: { ...Object.fromEntries(Object.entries(sourceLedger).map(([id, value]) => [id, { ...value, url: id === 'boundary' ? boundaryURL : id === 'croatia' ? croatiaExtract.sourceURL : `https://www.nomisweb.co.uk/output/census/2021/${value.file}` }])), croatiaOutline: { file: 'src/data/atlas/europe-countries.json', bytes: europeCountriesBytes.length, sha256: sha(europeCountriesBytes), publisher: 'Natural Earth', licence: 'Public domain', method: 'Existing HRV national outline, unchanged coordinates; display only' } },
+  sources: { ...Object.fromEntries(Object.entries(sourceLedger).map(([id, value]) => [id, { ...value, url: id === 'boundary' ? boundaryURL : id === 'croatia' ? croatiaExtract.sourceURL : `https://www.nomisweb.co.uk/output/census/2021/${value.file}` }])), croatiaOutline: { file: 'data-source/atlas/europe/legacy-country-mask-110m-v1.json', bytes: europeCountriesBytes.length, sha256: sha(europeCountriesBytes), publisher: 'Natural Earth', licence: 'Public domain', method: 'Existing HRV national outline, unchanged coordinates; display only' } },
   selectedExtracts: extracts,
   assets: [
     { file: 'cases.json', bytes: Buffer.byteLength(dataText), sha256: sha(dataText) },
