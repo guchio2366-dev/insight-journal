@@ -289,12 +289,12 @@ export function createAsiaPresentation(root:HTMLElement,config:{presentation:Asi
    }
    if(farm){
     const id='asia-farm-overview';
+    const opacity:any=['case',['==',['get','distribution'],'spread'],.36,.76];
     if(!map.getSource(id)){
      map.addSource(id,{type:'geojson',data:datasets.get(metadata.farming.file)});
      if(config.focusId==='south-asia'&&metadata.farming.livestockFile)map.addSource(id+'-livestock',{type:'geojson',data:datasets.get(metadata.farming.livestockFile)});
      if(config.focusId==='south-asia'&&metadata.farming.cropFile)map.addSource(id+'-full-crop',{type:'geojson',data:datasets.get(metadata.farming.cropFile)});
      const livestockSource=config.focusId==='south-asia'&&metadata.farming.livestockFile?id+'-livestock':id;
-     const opacity:any=['case',['==',['get','distribution'],'spread'],.36,.76];
      map.addLayer({id:id+'-fill',type:'fill',source:id,paint:{'fill-color':['get','color'],'fill-opacity':opacity}},'asia-country-border');
      map.addLayer({id:id+'-livestock-fill',type:'fill',source:livestockSource,paint:{'fill-color':['get','color'],'fill-opacity':opacity}},'asia-country-border');
      map.addLayer({id:id+'-crop',type:'line',source:id,paint:{'line-color':['get','color'],'line-opacity':.7,'line-width':.85}},'asia-country-border');
