@@ -56,7 +56,7 @@ export function initialiseLatinAgriculture():void {
   query<HTMLElement>('crops').closest<HTMLElement>('.latin-agriculture-visibility')!.hidden=isComparison;
   query('legend-container').innerHTML=isComparison?renderLatinAgricultureLegend(state.layer):single&&state.layer!=='all'?renderLatinAgricultureSingleLegend(state.layer):renderLatinAgricultureOverviewLegend(state.layer,showCrops,showLivestock);
   initLatinMapCamera(query('map-container'));
-  const singleButton=query<HTMLButtonElement>('single');singleButton.disabled=isComparison||state.layer==='all';singleButton.setAttribute('aria-pressed',String(single));singleButton.textContent=single?'ほかの品目も表示する':'この品目だけを見る';
+  const singleButton=query<HTMLButtonElement>('single');singleButton.disabled=isComparison||state.layer==='all';singleButton.hidden=singleButton.disabled;singleButton.setAttribute('aria-pressed',String(single));singleButton.textContent=single?'ほかの品目も表示する':'この品目だけを見る';
   const extent=query<HTMLInputElement>('extent');extent.checked=fullExtent;extent.disabled=isComparison;
   query<HTMLElement>('normal-container').hidden=state.fallback&&!isComparison;
   query<HTMLElement>('map-container').hidden=state.fallback;
