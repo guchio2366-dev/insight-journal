@@ -40,6 +40,11 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    assert.equal(await page.locator(`[data-country-select] option[value="${foreign}"]`).count(),0);
    assert.equal(await page.locator(`.regional-tabs a[href$="/${region}/"]`).getAttribute('aria-current'),'page');
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+   if(region==='central-asia'){
+    await page.locator('#reference-central-westerlies').waitFor({state:'visible'});
+    assert.match(await page.locator('#reference-central-westerlies').textContent(),/偏西風/);
+    assert.match(await page.locator('#asia-sources').textContent(),/地図の偏西風は/);
+   }
    await page.locator('[data-city-select]').selectOption(city);
    assert.equal(new URL(page.url()).searchParams.get('city'),city);
    assert.equal(new URL(page.url()).searchParams.get('place'),null);
@@ -127,6 +132,11 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    await capture(`${region}-forest-use`);
    await page.goto(`${url}/atlas/asia/${region}/nature/?topic=terrain`,{waitUntil:'domcontentloaded'});
    await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.contourBandStatus==='ready');
+   if(region==='central-asia'){
+    await page.locator('#reference-central-turan-lowland').waitFor({state:'visible'});
+    assert.match(await page.locator('#reference-central-turan-lowland').textContent(),/トゥランの乾燥低地/);
+    assert.match(await page.locator('[data-sc-landform-sources]').textContent(),/トゥランの冬季寒冷砂漠/);
+   }
    await capture(`${region}-terrain`);
    const terrainText=await page.locator('[data-physical-reading]').textContent();
    if(region==='central-asia')assert.doesNotMatch(terrainText,/ネパール|デカン|インド半島|ベンガル/);
