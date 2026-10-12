@@ -67,12 +67,12 @@ test('River clipping uses direct SVG paths, all actual source lines stay present
  const w=new Window();try{
   w.document.body.innerHTML=lib.renderLatinFoundationMap('rivers','all','all',river.id);
   const clip=w.document.querySelector('clipPath');assert.equal(clip.children.length,34);assert.ok([...clip.children].every(n=>n.localName==='path'));
-  assert.equal(w.document.querySelectorAll('[data-foundation-river]').length,138);assert.equal(w.document.querySelectorAll('[data-river-line]').length,138);
-  assert.equal(w.document.querySelectorAll('[data-foundation-river][aria-pressed=true]').length,1);
+  assert.equal(w.document.querySelectorAll('[data-foundation-river]').length,lib.latinReviewRivers.filter(r=>r.defaultVisible).length);assert.equal(w.document.querySelectorAll('[data-river-line]').length,lib.latinReviewRivers.filter(r=>r.defaultVisible).length);
+  assert.equal(w.document.querySelectorAll('[data-foundation-river][aria-pressed=true]').length,lib.resolveLatinRiver(river.id).length);
   const names=[...w.document.querySelectorAll('.latin-foundation-river-label')].map(n=>n.textContent);assert.equal(names.filter(n=>n==='アマゾン川').length,1);
   assert.equal(w.document.querySelectorAll('title').length,1);assert.equal(w.document.querySelectorAll('[data-nature-country]').length,0);
  }finally{await w.happyDOM.close();}
- for(const section of ['rainfall','terrain','elevation']){const html=lib.renderLatinFoundationMap(section,'country','CRI');assert.ok(html.includes(`transform="${geometry.latinMapLayout('country','CRI').transform}"`));assert.equal(/role="button"|tabindex=/.test(html),false);assert.match(html,/viewBox="0 0 900 580"/);}
+ for(const section of ['rainfall','terrain','elevation']){const html=lib.renderLatinFoundationMap(section,'country','CRI');assert.ok(html.includes(`transform="${geometry.latinMapLayout('country','CRI',850).transform}"`));assert.equal(/role="button"|tabindex=/.test(html),false);assert.match(html,/viewBox="0 0 900 850"/);}
 });
 test('Unavailable basins and groundwater never become invented quantities or river-derived basin polygons',()=>{
  const blocker=json(folder+'blockers.json');assert.equal(blocker.length,1);assert.match(blocker[0].reason,/Tunnel connection failed: 403 Forbidden/);assert.equal(blocker[0].retried,false);assert.equal(blocker[0].bypassAttempted,false);

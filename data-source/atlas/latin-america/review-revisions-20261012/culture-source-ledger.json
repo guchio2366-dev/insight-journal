@@ -1,0 +1,100 @@
+{
+  "checkedAt": "2026-10-12",
+  "status": "No new true spatial distribution geometry acquired. All raw403 destinations stopped; no retries, mirror guesses or security changes.",
+  "sources": [
+    {
+      "id": "bdpi-pueblos-prose",
+      "urls": [
+        "https://bdpi.cultura.gob.pe/pueblos/quechuas",
+        "https://bdpi.cultura.gob.pe/pueblos/aimara"
+      ],
+      "producer": "Ministerio de Cultura, Peru",
+      "date": "Undated dynamically updated descriptions; referenced census2017 counts",
+      "grain": "Description of traditional presence and migration; not boundary geometry or grid",
+      "read": "Official web text read",
+      "licence": "Explicit reusable source-data licence not verified",
+      "allowedEvidenceUse": "Definition/caveat only; no Andes/Altiplano terrain-as-ethnicity polygon",
+      "limitation": "A language is not sufficient or compulsory to identify a pueblo; indigenous locality population, self-identification count and language speaker count differ."
+    },
+    {
+      "id": "bdpi-localities",
+      "url": "https://bdpi.cultura.gob.pe/buscador-de-localidades-de-pueblos-indigenas",
+      "producer": "Ministerio de Cultura, Peru",
+      "date": "Undated continuously updated",
+      "grain": "Localities of habitation and/or collective rights; may be settlement/community/neighbourhood etc.",
+      "read": "Official landing and published Excel links read; original Excel downloads unavailable (2 executor403)",
+      "licence": "Not verified for the unavailable original files",
+      "geometry": "No point or polygon obtained",
+      "limitation": "Legal/collective-rights domain is distinct from all indigenous residents and census self-identification."
+    },
+    {
+      "id": "funai-spatial",
+      "url": "https://www.gov.br/funai/pt-br/atuacao/terras-indigenas/geoprocessamento-e-mapas",
+      "producer": "FUNAI, Brazil",
+      "date": "Landing updated2026-07-29; monthly datasets",
+      "grain": "Original Terras Indígenas polygons and aldeias points",
+      "read": "Official landing/links/rights read; original downloads unavailable (web502, executor2x403)",
+      "licence": "Page specifically permits geoprocessing/map-file reproduction with source citation, except listed exceptions and third-party content. Do not use the general site CC BY-ND footer as blanket derivative dataset licence. Need retain per-feature status/date/source restrictions.",
+      "geometry": "Zero features acquired",
+      "limitation": "TI boundaries are legal/recognition/administration domains, not a census population density or complete ethnic settlement footprint; in-study points are separate from delimited polygons."
+    },
+    {
+      "id": "geoepr-2021",
+      "url": "https://icr.ethz.ch/data/epr/geoepr/",
+      "codebook": "https://icr.ethz.ch/data/epr/geoepr/EPR_2021_Codebook_GeoEPR.pdf",
+      "producer": "ETH ICR / GeoEPR researchers",
+      "date": "2021-06-08 release; group history1946–2021",
+      "grain": "Researcher-coded broad settlement polygons for politically relevant groups; overlapping allowed",
+      "read": "Official landing and codebook read; original GeoJSON unavailable (executor403)",
+      "licence": "Citation requirements read; production reuse licence not confirmed",
+      "geometry": "Zero features acquired",
+      "limitation": "Not an exhaustive population/census map. Dispersed/urban categories may have no polygon. Some original bases derive from historical GREG or other ethnographic maps. Countrywide patterns use country polygons. Never substitute for pardo/Mestizo/current racial self-identification or religion without a valid category/time crosswalk."
+    },
+    {
+      "id": "sidra-municipality-candidate",
+      "url": "https://sidra.ibge.gov.br/tabela/9605",
+      "metadataUrl": "https://servicodados.ibge.gov.br/api/v3/agregados/9605/metadados",
+      "producer": "IBGE",
+      "date": "2022 candidate census table",
+      "grain": "Municipality candidate",
+      "read": "Official table403; metadata inaccessible via web and executor403. Official generic API docs readable. Specific variables/classification/category codes NOT verified.",
+      "licence": "Not independently confirmed for downloaded data; no data downloaded",
+      "geometry": "none",
+      "limitation": "No calls based on guessed variable/classification/category IDs; cannot claim a valid full municipal five-category dataset."
+    },
+    {
+      "id": "geoboundaries-bra-adm2",
+      "url": "https://www.geoboundaries.org/api/current/gbOpen/BRA/ADM2/",
+      "producer": "geoBoundaries (IBGE/OCHA-derived)",
+      "date": "Represented2020, built2023; fixedcommit9469f09",
+      "grain": "5570 original municipal units in published geometry product",
+      "read": "Official metadata readable via web; original GeoJSON normal executor403",
+      "licence": "Creative Commons Attribution 3.0 Intergovernmental Organisations (CC BY 3.0 IGO)",
+      "geometry": "Zero features acquired",
+      "limitation": "No read of source properties/official municipal ID join; no 2020-to-2022 harmonization verified."
+    },
+    {
+      "id": "ibge-existing-original-report",
+      "url": "https://static.poder360.com.br/2023/12/dados%E2%80%93censo%E2%80%932022%E2%80%93cor%E2%80%93de%E2%80%93pele.pdf",
+      "producer": "IBGE",
+      "date": "Census2022, published2023",
+      "grain": "5-region composition already accepted; 20 municipality parda ranked facts newly extracted as candidate",
+      "read": "Original report text read via normal web; local binary attempt403",
+      "licence": "Explicit blanket source graphic redistribution licence not confirmed; source fact reorganization only",
+      "geometry": "Original municipal cartograms not traced/copied",
+      "limitation": "No complete municipal rows/codes or original contours. Table8 expanded indigenous metric differs from five cor/raça classes."
+    },
+    {
+      "id": "religion-existing-pew",
+      "url": "https://www.pewresearch.org/religion/2014/11/13/religion-in-latin-america/",
+      "methodology": "https://www.pewresearch.org/religion/2014/11/13/appendix-a-methodology-13/",
+      "producer": "Pew Research Center",
+      "date": "Adult surveys2013–14, published2014",
+      "grain": "National; Guatemala/ElSalvador/Honduras coexistence and Uruguay unaffiliated context",
+      "read": "Official report/method read; existing numeric baseline held",
+      "licence": "Original source terms/copyright retained in existing data. No original graphic/translation copied.",
+      "geometry": "No finer residence geometry or density",
+      "limitation": "Protestant differs from evangelical-only; unaffiliated differs from unknown; Honduras exclusions retained. No new finer religion layer and no church-location proxy."
+    }
+  ]
+}

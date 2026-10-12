@@ -3,7 +3,7 @@ import LatinAmericaWorkspace from './LatinAmericaWorkspace.astro';
 import population from '../../data/atlas/latin-america/population.json';
 import {latinPopulationOriginalTopics} from '../../data/atlas/latin-america/population-reading';
 import {latinPopulationValue} from '../../lib/atlas-latin-america-population';
-import {renderLatinUrbanMap} from '../../lib/atlas-latin-reading-population';
+import {renderLatinUrbanMap,renderLatinPopulationDotLegend} from '../../lib/atlas-latin-reading-population';
 import {renderLatinCulturePatterns as renderLatinCultureMap} from '../../lib/atlas-latin-culture-patterns';
 import {religionSurvey,pewReligionSource,pewTranslationNotice} from '../../data/atlas/latin-america/culture-distributions';
 import {geographicRegions,geographicSources,geographicLedger} from '../../data/atlas/latin-america/culture-geographic-distributions';
@@ -20,13 +20,13 @@ const spatialAssets=withBase('/assets/atlas/latin-america-population-v1');
 ---
 <LatinAmericaWorkspace field="population" title="人口の分布から読む中南米" lead="都市集積域の人数と、仕事・交通による人口集中を読む。">
  <Fragment slot="map">
-  <div class="latin-reading-controls"><label>地図の範囲<select data-lp-scope-select><option value="all">中南米全体</option><option value="central">中米・カリブ</option><option value="south">南米</option></select></label><label data-lp-layer-label>人口の表示<select data-lp-layer-select><option value="urban">都市集積域の人数・2018</option><option value="spatial">居住人口密度・2020</option></select></label></div>
-  <h2 class="latin-map-reading-heading" data-lp-map-heading>都市集積域の人数・2018年</h2>
+  <div class="latin-reading-controls"><label>地図の範囲<select data-lp-scope-select><option value="all">中南米全体</option><option value="central">中米・カリブ</option><option value="south">南米</option></select></label><label data-lp-layer-label>人口の表示<select data-lp-layer-select><option value="urban">人口集中の点表示・2020</option><option value="spatial">居住人口密度・2020</option></select></label></div>
+  <h2 class="latin-map-reading-heading" data-lp-map-heading>人口集中の点表示・2020年</h2>
   <div data-latin-section-panel="population"><div data-lp-target-map set:html={renderLatinUrbanMap()} /></div>
   <div data-latin-section-panel="ethnicity" hidden><div data-lc-map="ethnicity" set:html={renderLatinCultureMap('ethnicity')} /></div>
   <div data-latin-section-panel="religion" hidden><div data-lc-map="religion" set:html={renderLatinCultureMap('religion')} /></div>
-  <div class="lp-legend" data-lp-target-legend><p>円の面積＝都市集積域の人口・2018年。7都市を収録。国の人数や密度格子の人数ではありません。</p></div>
-  <p class="latin-caption" data-lp-status aria-live="polite">国連WUP2018。都市域の定義は国ごとに異なります。2026年の現在人口ではありません。</p>
+  <div class="lp-legend" data-lp-target-legend set:html={renderLatinPopulationDotLegend()}/>
+  <p class="latin-caption" data-lp-status aria-live="polite">地図はGHSL2020の推計密度。都市選択の人数は国連WUP2018の別資料で、2026年の現在人口ではありません。</p>
  </Fragment>
  <Fragment slot="reading">
   <h2 data-lp-reading-title>沿岸・河川・高地の都市への人口集中</h2>

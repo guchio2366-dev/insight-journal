@@ -22,7 +22,7 @@ const productionPercent=(tonnes:number|null,worldT:number)=>tonnes===null?'原�
   <details class="latin-map-options"><summary>地域・表示を選ぶ</summary><div class="latin-map-options-body">  <div class="latin-controls">
    <label>地域 <select data-latin-agriculture-scope aria-label="地図の地域"><option value="central">中米・カリブ</option><option value="south">南米</option><option value="all" selected>中南米全体</option><option value="country">選択国を拡大</option></select></label>
    <label>統計の国 <select data-latin-agriculture-place aria-label="読む国"><option value="all" selected>中南米全体</option>{latinCountries34.map(c=><option value={c.code}>{c.name}</option>)}</select></label>
-   <label><input type="checkbox" data-latin-agriculture-only /> 選択国を強調</label><button type="button" data-latin-agriculture-fallback aria-pressed="false">数値一覧で読む</button>
+   <label><input type="checkbox" data-latin-agriculture-extent /> 南端を含む全域</label><label><input type="checkbox" data-latin-agriculture-only /> 選択国を強調</label><button type="button" data-latin-agriculture-fallback aria-pressed="false">数値一覧で読む</button>
   </div>
 </div></details>
   <div class="latin-agriculture-comparison-message" data-latin-agriculture-comparison-message hidden><p class="latin-takeaway" data-latin-agriculture-comparison-explanation></p><a class="latin-return" data-latin-agriculture-return hidden href={withBase('/atlas/latin-america/nature/')}>比較元に戻る</a></div>
@@ -43,6 +43,7 @@ const productionPercent=(tonnes:number|null,worldT:number)=>tonnes===null?'原�
  </Fragment>
  <Fragment slot="reading">
   <h2 data-latin-agriculture-reading-title>{reading.title}</h2>
+  <button type="button" data-latin-agriculture-single aria-pressed="false" disabled>この品目だけを見る</button>
   <p class="latin-takeaway" data-latin-agriculture-takeaway>{reading.takeaway}</p>
   <div class="latin-agriculture-selected"><strong data-latin-agriculture-selected-name>中南米全体</strong><span data-latin-agriculture-selected-spatial>2020年の推計分布。産地の条件を概説と解説で読む</span><small data-latin-agriculture-selected-unit>収穫面積・家畜密度と生産量は別の量です</small></div>
   <a class="latin-comparison-link" data-latin-agriculture-compare href={withBase('/atlas/latin-america/nature/?layer=climate&place=all&scope=all&from=agriculture&sourceLayer=all&sourcePlace=all&sourceScope=all&sourceFallback=0')}>{reading.compare} →</a>

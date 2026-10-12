@@ -1,0 +1,7 @@
+{
+  "operation": "Normal HTTPS read of distinct product landing page only; no data download or acceptance performed",
+  "url": "https://www.hydrosheds.org/products/hydrorivers",
+  "time": "2026-10-12T09:00:21.169087+00:00",
+  "retried": false,
+  "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+}

@@ -1,0 +1,2243 @@
+{
+  "classes": [
+    {
+      "id": 1,
+      "code": "Af",
+      "name": "熱帯雨林気候",
+      "color": "#529ca5",
+      "description": "明瞭な乾季がない熱帯の区分。",
+      "group": "熱帯",
+      "sourceLabel": "Tropical, rainforest",
+      "sourceColor": "#0000ff"
+    },
+    {
+      "id": 2,
+      "code": "Am",
+      "name": "熱帯モンスーン気候",
+      "color": "#78b6ba",
+      "description": "短い乾季を持つ、降水量の多い熱帯の区分。",
+      "group": "熱帯",
+      "sourceLabel": "Tropical, monsoon",
+      "sourceColor": "#0078ff"
+    },
+    {
+      "id": 3,
+      "code": "Aw",
+      "name": "サバナ気候",
+      "color": "#a1cdd0",
+      "description": "乾季を持つ熱帯の区分。",
+      "group": "熱帯",
+      "sourceLabel": "Tropical, savannah",
+      "sourceColor": "#46aafa"
+    },
+    {
+      "id": 4,
+      "code": "BWh",
+      "name": "高温の砂漠気候",
+      "color": "#e6ad7b",
+      "description": "乾燥帯のうち、高温の砂漠気候に当たる区分。",
+      "group": "乾燥帯",
+      "sourceLabel": "Arid, desert, hot",
+      "sourceColor": "#ff0000"
+    },
+    {
+      "id": 5,
+      "code": "BWk",
+      "name": "低温の砂漠気候",
+      "color": "#d4bc92",
+      "description": "乾燥帯のうち、低温の砂漠気候に当たる区分。",
+      "group": "乾燥帯",
+      "sourceLabel": "Arid, desert, cold",
+      "sourceColor": "#ff9696"
+    },
+    {
+      "id": 6,
+      "code": "BSh",
+      "name": "高温のステップ気候",
+      "color": "#ebc38e",
+      "description": "乾燥帯のうち、高温の半乾燥気候に当たる区分。",
+      "group": "乾燥帯",
+      "sourceLabel": "Arid, steppe, hot",
+      "sourceColor": "#f5a500"
+    },
+    {
+      "id": 7,
+      "code": "BSk",
+      "name": "低温のステップ気候",
+      "color": "#e5d3ad",
+      "description": "乾燥帯のうち、低温の半乾燥気候に当たる区分。",
+      "group": "乾燥帯",
+      "sourceLabel": "Arid, steppe, cold",
+      "sourceColor": "#ffdc64"
+    },
+    {
+      "id": 8,
+      "code": "Csa",
+      "name": "夏に乾燥する高温夏の温帯",
+      "color": "#d9ce8d",
+      "description": "夏に乾燥し、夏の気温が高い温帯の区分。",
+      "group": "温帯",
+      "sourceLabel": "Temperate, dry summer, hot summer",
+      "sourceColor": "#ffff00"
+    },
+    {
+      "id": 9,
+      "code": "Csb",
+      "name": "夏に乾燥する温暖夏の温帯",
+      "color": "#bbc898",
+      "description": "夏に乾燥し、夏が温暖な温帯の区分。",
+      "group": "温帯",
+      "sourceLabel": "Temperate, dry summer, warm summer",
+      "sourceColor": "#c8c800"
+    },
+    {
+      "id": 10,
+      "code": "Csc",
+      "name": "夏に乾燥する冷夏の温帯",
+      "color": "#a4b98b",
+      "description": "夏に乾燥し、夏が短く涼しい温帯の区分。",
+      "group": "温帯",
+      "sourceLabel": "Temperate, dry summer, cold summer",
+      "sourceColor": "#969600"
+    },
+    {
+      "id": 11,
+      "code": "Cwa",
+      "name": "冬に乾燥する高温夏の温帯",
+      "color": "#c5d49b",
+      "description": "冬に乾燥し、夏の気温が高い温帯の区分。",
+      "group": "温帯",
+      "sourceLabel": "Temperate, dry winter, hot summer",
+      "sourceColor": "#96ff96"
+    },
+    {
+      "id": 12,
+      "code": "Cwb",
+      "name": "冬に乾燥する温暖夏の温帯",
+      "color": "#a7c59f",
+      "description": "冬に乾燥し、夏が温暖な温帯の区分。",
+      "group": "温帯",
+      "sourceLabel": "Temperate, dry winter, warm summer",
+      "sourceColor": "#64c864"
+    },
+    {
+      "id": 13,
+      "code": "Cwc",
+      "name": "冬に乾燥する冷夏の温帯",
+      "color": "#8eae90",
+      "description": "冬に乾燥し、夏が短く涼しい温帯の区分。",
+      "group": "温帯",
+      "sourceLabel": "Temperate, dry winter, cold summer",
+      "sourceColor": "#329632"
+    },
+    {
+      "id": 14,
+      "code": "Cfa",
+      "name": "温暖湿潤気候",
+      "color": "#98bba0",
+      "description": "明瞭な乾季がなく、夏の気温が高い温帯の区分。",
+      "group": "温帯",
+      "sourceLabel": "Temperate, no dry season, hot summer",
+      "sourceColor": "#c8ff50"
+    },
+    {
+      "id": 15,
+      "code": "Cfb",
+      "name": "西岸海洋性気候",
+      "color": "#7caaa1",
+      "description": "明瞭な乾季がなく、夏が温暖な温帯の区分。名称は海岸からの距離を示すものではない。",
+      "group": "温帯",
+      "sourceLabel": "Temperate, no dry season, warm summer",
+      "sourceColor": "#64ff50"
+    },
+    {
+      "id": 16,
+      "code": "Cfc",
+      "name": "乾季のない冷夏の温帯",
+      "color": "#689b95",
+      "description": "明瞭な乾季がなく、夏が短く涼しい温帯の区分。",
+      "group": "温帯",
+      "sourceLabel": "Temperate, no dry season, cold summer",
+      "sourceColor": "#32c800"
+    },
+    {
+      "id": 18,
+      "code": "Dsb",
+      "name": "夏に乾燥する温暖夏の冷帯",
+      "color": "#b49aba",
+      "description": "寒い冬と温暖な夏を持ち、夏に乾燥する冷帯の区分。",
+      "group": "冷帯",
+      "sourceLabel": "Cold, dry summer, warm summer",
+      "sourceColor": "#c800c8"
+    },
+    {
+      "id": 19,
+      "code": "Dsc",
+      "name": "夏に乾燥する冷夏の冷帯",
+      "color": "#a387ac",
+      "description": "寒い冬と短く涼しい夏を持ち、夏に乾燥する冷帯の区分。",
+      "group": "冷帯",
+      "sourceLabel": "Cold, dry summer, cold summer",
+      "sourceColor": "#963296"
+    },
+    {
+      "id": 27,
+      "code": "Dfc",
+      "name": "乾季のない冷夏の冷帯",
+      "color": "#819db8",
+      "description": "明瞭な乾季がなく、寒い冬と短く涼しい夏を持つ冷帯の区分。",
+      "group": "冷帯",
+      "sourceLabel": "Cold, no dry season, cold summer",
+      "sourceColor": "#007d7d"
+    },
+    {
+      "id": 29,
+      "code": "ET",
+      "name": "ツンドラ気候",
+      "color": "#c4c9cc",
+      "description": "短い夏に気温が上がるが、樹木の生育に適した暖かさに達しない寒帯の区分。",
+      "group": "寒帯",
+      "sourceLabel": "Polar, tundra",
+      "sourceColor": "#b2b2b2"
+    },
+    {
+      "id": 30,
+      "code": "EF",
+      "name": "氷雪気候",
+      "color": "#a8aeb3",
+      "description": "最も暖かい月も平均気温が0℃未満となる寒帯の区分。",
+      "group": "寒帯",
+      "sourceLabel": "Polar, frost",
+      "sourceColor": "#666666"
+    }
+  ],
+  "annotations": [
+    {
+      "code": "Af",
+      "id": 1,
+      "coordinate": [
+        -69.95,
+        -2.0585183118939874
+      ],
+      "sourceCell": [
+        230,
+        312
+      ],
+      "componentCells": 23180
+    },
+    {
+      "code": "Af",
+      "id": 1,
+      "coordinate": [
+        -74.35000000000001,
+        6.624832792319304
+      ],
+      "sourceCell": [
+        186,
+        225
+      ],
+      "componentCells": 1514
+    },
+    {
+      "code": "Af",
+      "id": 1,
+      "coordinate": [
+        -39.35000000000001,
+        -14.015129684128286
+      ],
+      "sourceCell": [
+        536,
+        433
+      ],
+      "componentCells": 429
+    },
+    {
+      "code": "Af",
+      "id": 1,
+      "coordinate": [
+        -70.45,
+        -12.653125435460014
+      ],
+      "sourceCell": [
+        225,
+        419
+      ],
+      "componentCells": 384
+    },
+    {
+      "code": "Af",
+      "id": 1,
+      "coordinate": [
+        -84.05000000000003,
+        10.676655786927256
+      ],
+      "sourceCell": [
+        89,
+        184
+      ],
+      "componentCells": 368
+    },
+    {
+      "code": "Af",
+      "id": 1,
+      "coordinate": [
+        -65.14999999999999,
+        -16.522718556176102
+      ],
+      "sourceCell": [
+        278,
+        459
+      ],
+      "componentCells": 331
+    },
+    {
+      "code": "Af",
+      "id": 1,
+      "coordinate": [
+        -89.45,
+        15.92887330988466
+      ],
+      "sourceCell": [
+        35,
+        130
+      ],
+      "componentCells": 235
+    },
+    {
+      "code": "Af",
+      "id": 1,
+      "coordinate": [
+        -84.45000000000002,
+        15.254745209793727
+      ],
+      "sourceCell": [
+        85,
+        137
+      ],
+      "componentCells": 223
+    },
+    {
+      "code": "Af",
+      "id": 1,
+      "coordinate": [
+        -72.45,
+        8.507899768282455
+      ],
+      "sourceCell": [
+        205,
+        206
+      ],
+      "componentCells": 174
+    },
+    {
+      "code": "Af",
+      "id": 1,
+      "coordinate": [
+        -50.45,
+        -1.159026565313667
+      ],
+      "sourceCell": [
+        425,
+        303
+      ],
+      "componentCells": 172
+    },
+    {
+      "code": "Af",
+      "id": 1,
+      "coordinate": [
+        -70.05000000000001,
+        19.075125960879124
+      ],
+      "sourceCell": [
+        229,
+        97
+      ],
+      "componentCells": 165
+    },
+    {
+      "code": "Af",
+      "id": 1,
+      "coordinate": [
+        -48.25000000000001,
+        -1.6587936735336577
+      ],
+      "sourceCell": [
+        447,
+        308
+      ],
+      "componentCells": 149
+    },
+    {
+      "code": "Am",
+      "id": 2,
+      "coordinate": [
+        -52.25000000000001,
+        -3.05734904112381
+      ],
+      "sourceCell": [
+        407,
+        322
+      ],
+      "componentCells": 15569
+    },
+    {
+      "code": "Am",
+      "id": 2,
+      "coordinate": [
+        -71.05000000000001,
+        5.033413488936101
+      ],
+      "sourceCell": [
+        219,
+        241
+      ],
+      "componentCells": 3091
+    },
+    {
+      "code": "Am",
+      "id": 2,
+      "coordinate": [
+        -74.35000000000001,
+        8.606770645889513
+      ],
+      "sourceCell": [
+        186,
+        205
+      ],
+      "componentCells": 931
+    },
+    {
+      "code": "Am",
+      "id": 2,
+      "coordinate": [
+        -53.85,
+        -22.826561906921437
+      ],
+      "sourceCell": [
+        391,
+        526
+      ],
+      "componentCells": 821
+    },
+    {
+      "code": "Am",
+      "id": 2,
+      "coordinate": [
+        -84.64999999999999,
+        13.024945975433962
+      ],
+      "sourceCell": [
+        83,
+        160
+      ],
+      "componentCells": 709
+    },
+    {
+      "code": "Am",
+      "id": 2,
+      "coordinate": [
+        -60.24999999999999,
+        2.0399501774988624
+      ],
+      "sourceCell": [
+        327,
+        271
+      ],
+      "componentCells": 597
+    },
+    {
+      "code": "Am",
+      "id": 2,
+      "coordinate": [
+        -90.25000000000001,
+        17.07922570822057
+      ],
+      "sourceCell": [
+        27,
+        118
+      ],
+      "componentCells": 336
+    },
+    {
+      "code": "Am",
+      "id": 2,
+      "coordinate": [
+        -85.85000000000001,
+        15.640232541592187
+      ],
+      "sourceCell": [
+        71,
+        133
+      ],
+      "componentCells": 150
+    },
+    {
+      "code": "Am",
+      "id": 2,
+      "coordinate": [
+        -79.35000000000002,
+        -0.359231536686342
+      ],
+      "sourceCell": [
+        136,
+        295
+      ],
+      "componentCells": 107
+    },
+    {
+      "code": "Am",
+      "id": 2,
+      "coordinate": [
+        -75.05,
+        3.737455379216959
+      ],
+      "sourceCell": [
+        179,
+        254
+      ],
+      "componentCells": 93
+    },
+    {
+      "code": "Am",
+      "id": 2,
+      "coordinate": [
+        -91.34999999999998,
+        14.384832644818065
+      ],
+      "sourceCell": [
+        16,
+        146
+      ],
+      "componentCells": 76
+    },
+    {
+      "code": "Am",
+      "id": 2,
+      "coordinate": [
+        -61.75,
+        9.59401221286959
+      ],
+      "sourceCell": [
+        312,
+        195
+      ],
+      "componentCells": 65
+    },
+    {
+      "code": "Aw",
+      "id": 3,
+      "coordinate": [
+        -51.949999999999996,
+        -14.983112881234531
+      ],
+      "sourceCell": [
+        410,
+        443
+      ],
+      "componentCells": 37900
+    },
+    {
+      "code": "Aw",
+      "id": 3,
+      "coordinate": [
+        -67.85,
+        8.606770645889513
+      ],
+      "sourceCell": [
+        251,
+        205
+      ],
+      "componentCells": 3565
+    },
+    {
+      "code": "Aw",
+      "id": 3,
+      "coordinate": [
+        -85.95,
+        12.244450199677605
+      ],
+      "sourceCell": [
+        70,
+        168
+      ],
+      "componentCells": 1262
+    },
+    {
+      "code": "Aw",
+      "id": 3,
+      "coordinate": [
+        -80.55000000000001,
+        22.532660793212596
+      ],
+      "sourceCell": [
+        124,
+        60
+      ],
+      "componentCells": 807
+    },
+    {
+      "code": "Aw",
+      "id": 3,
+      "coordinate": [
+        -74.65,
+        9.988121958170153
+      ],
+      "sourceCell": [
+        183,
+        191
+      ],
+      "componentCells": 790
+    },
+    {
+      "code": "Aw",
+      "id": 3,
+      "coordinate": [
+        -42.05000000000001,
+        -21.3442555182515
+      ],
+      "sourceCell": [
+        509,
+        510
+      ],
+      "componentCells": 448
+    },
+    {
+      "code": "Aw",
+      "id": 3,
+      "coordinate": [
+        -79.95,
+        -1.6587936735336577
+      ],
+      "sourceCell": [
+        130,
+        308
+      ],
+      "componentCells": 399
+    },
+    {
+      "code": "Aw",
+      "id": 3,
+      "coordinate": [
+        -39.25000000000001,
+        -7.04037542482846
+      ],
+      "sourceCell": [
+        537,
+        362
+      ],
+      "componentCells": 356
+    },
+    {
+      "code": "Aw",
+      "id": 3,
+      "coordinate": [
+        -60.050000000000004,
+        3.936974924067839
+      ],
+      "sourceCell": [
+        329,
+        252
+      ],
+      "componentCells": 252
+    },
+    {
+      "code": "Aw",
+      "id": 3,
+      "coordinate": [
+        -72.35000000000001,
+        19.075125960879124
+      ],
+      "sourceCell": [
+        206,
+        97
+      ],
+      "componentCells": 208
+    },
+    {
+      "code": "Aw",
+      "id": 3,
+      "coordinate": [
+        -40.65,
+        -11.871509036087552
+      ],
+      "sourceCell": [
+        523,
+        411
+      ],
+      "componentCells": 158
+    },
+    {
+      "code": "Aw",
+      "id": 3,
+      "coordinate": [
+        -74.25000000000001,
+        -11.577815853436919
+      ],
+      "sourceCell": [
+        187,
+        408
+      ],
+      "componentCells": 104
+    },
+    {
+      "code": "BWh",
+      "id": 4,
+      "coordinate": [
+        -80.25000000000001,
+        -5.947625581781246
+      ],
+      "sourceCell": [
+        127,
+        351
+      ],
+      "componentCells": 862
+    },
+    {
+      "code": "BWh",
+      "id": 4,
+      "coordinate": [
+        -67.75,
+        -32.29415466180674
+      ],
+      "sourceCell": [
+        252,
+        633
+      ],
+      "componentCells": 591
+    },
+    {
+      "code": "BWh",
+      "id": 4,
+      "coordinate": [
+        -70.95,
+        -17.66948750332015
+      ],
+      "sourceCell": [
+        220,
+        471
+      ],
+      "componentCells": 205
+    },
+    {
+      "code": "BWh",
+      "id": 4,
+      "coordinate": [
+        -69.45,
+        -21.437352012416543
+      ],
+      "sourceCell": [
+        235,
+        511
+      ],
+      "componentCells": 124
+    },
+    {
+      "code": "BWh",
+      "id": 4,
+      "coordinate": [
+        -71.75,
+        11.95116020262743
+      ],
+      "sourceCell": [
+        212,
+        171
+      ],
+      "componentCells": 57
+    },
+    {
+      "code": "BWh",
+      "id": 4,
+      "coordinate": [
+        -69.75,
+        -23.927857037703845
+      ],
+      "sourceCell": [
+        232,
+        538
+      ],
+      "componentCells": 46
+    },
+    {
+      "code": "BWh",
+      "id": 4,
+      "coordinate": [
+        -70.05000000000001,
+        -26.371242689189394
+      ],
+      "sourceCell": [
+        229,
+        565
+      ],
+      "componentCells": 19
+    },
+    {
+      "code": "BWh",
+      "id": 4,
+      "coordinate": [
+        -38.95,
+        -9.217784276537376
+      ],
+      "sourceCell": [
+        540,
+        384
+      ],
+      "componentCells": 14
+    },
+    {
+      "code": "BWh",
+      "id": 4,
+      "coordinate": [
+        -70.15,
+        11.853325813441968
+      ],
+      "sourceCell": [
+        228,
+        172
+      ],
+      "componentCells": 14
+    },
+    {
+      "code": "BWk",
+      "id": 5,
+      "coordinate": [
+        -67.15,
+        -43.38879168311178
+      ],
+      "sourceCell": [
+        258,
+        774
+      ],
+      "componentCells": 8318
+    },
+    {
+      "code": "BWk",
+      "id": 5,
+      "coordinate": [
+        -68.05,
+        -23.56177744479416
+      ],
+      "sourceCell": [
+        249,
+        534
+      ],
+      "componentCells": 5332
+    },
+    {
+      "code": "BWk",
+      "id": 5,
+      "coordinate": [
+        -73.64999999999999,
+        -15.850579778706914
+      ],
+      "sourceCell": [
+        193,
+        452
+      ],
+      "componentCells": 107
+    },
+    {
+      "code": "BWk",
+      "id": 5,
+      "coordinate": [
+        -75.55,
+        -13.723923500982783
+      ],
+      "sourceCell": [
+        174,
+        430
+      ],
+      "componentCells": 40
+    },
+    {
+      "code": "BWk",
+      "id": 5,
+      "coordinate": [
+        -67.95,
+        -31.274296730629242
+      ],
+      "sourceCell": [
+        250,
+        621
+      ],
+      "componentCells": 34
+    },
+    {
+      "code": "BWk",
+      "id": 5,
+      "coordinate": [
+        -74.65,
+        -15.07967576954302
+      ],
+      "sourceCell": [
+        183,
+        444
+      ],
+      "componentCells": 19
+    },
+    {
+      "code": "BWk",
+      "id": 5,
+      "coordinate": [
+        -76.85000000000001,
+        -11.381848418756814
+      ],
+      "sourceCell": [
+        161,
+        406
+      ],
+      "componentCells": 16
+    },
+    {
+      "code": "BWk",
+      "id": 5,
+      "coordinate": [
+        -67.85,
+        -49.119380039648306
+      ],
+      "sourceCell": [
+        251,
+        857
+      ],
+      "componentCells": 13
+    },
+    {
+      "code": "BSh",
+      "id": 6,
+      "coordinate": [
+        -41.65,
+        -8.32846621666616
+      ],
+      "sourceCell": [
+        513,
+        375
+      ],
+      "componentCells": 4560
+    },
+    {
+      "code": "BSh",
+      "id": 6,
+      "coordinate": [
+        -61.65000000000001,
+        -21.15788529265387
+      ],
+      "sourceCell": [
+        313,
+        508
+      ],
+      "componentCells": 3866
+    },
+    {
+      "code": "BSh",
+      "id": 6,
+      "coordinate": [
+        -43.45000000000001,
+        -14.015129684128286
+      ],
+      "sourceCell": [
+        495,
+        433
+      ],
+      "componentCells": 175
+    },
+    {
+      "code": "BSh",
+      "id": 6,
+      "coordinate": [
+        -69.75,
+        10.381754859594167
+      ],
+      "sourceCell": [
+        232,
+        187
+      ],
+      "componentCells": 154
+    },
+    {
+      "code": "BSh",
+      "id": 6,
+      "coordinate": [
+        -80.45,
+        -2.3582470903217434
+      ],
+      "sourceCell": [
+        125,
+        315
+      ],
+      "componentCells": 63
+    },
+    {
+      "code": "BSh",
+      "id": 6,
+      "coordinate": [
+        -72.45,
+        11.657552084524236
+      ],
+      "sourceCell": [
+        205,
+        174
+      ],
+      "componentCells": 61
+    },
+    {
+      "code": "BSh",
+      "id": 6,
+      "coordinate": [
+        -80.15,
+        -3.4566380936586105
+      ],
+      "sourceCell": [
+        128,
+        326
+      ],
+      "componentCells": 58
+    },
+    {
+      "code": "BSh",
+      "id": 6,
+      "coordinate": [
+        -64.75,
+        -24.201738216969922
+      ],
+      "sourceCell": [
+        282,
+        541
+      ],
+      "componentCells": 41
+    },
+    {
+      "code": "BSh",
+      "id": 6,
+      "coordinate": [
+        -64.35000000000001,
+        -18.619595839149405
+      ],
+      "sourceCell": [
+        286,
+        481
+      ],
+      "componentCells": 22
+    },
+    {
+      "code": "BSh",
+      "id": 6,
+      "coordinate": [
+        -41.95,
+        -16.714333752720936
+      ],
+      "sourceCell": [
+        510,
+        461
+      ],
+      "componentCells": 19
+    },
+    {
+      "code": "BSh",
+      "id": 6,
+      "coordinate": [
+        -65.25,
+        -26.102193628611467
+      ],
+      "sourceCell": [
+        277,
+        562
+      ],
+      "componentCells": 18
+    },
+    {
+      "code": "BSh",
+      "id": 6,
+      "coordinate": [
+        -71.25000000000001,
+        18.317469452822934
+      ],
+      "sourceCell": [
+        217,
+        105
+      ],
+      "componentCells": 14
+    },
+    {
+      "code": "BSk",
+      "id": 7,
+      "coordinate": [
+        -65.14999999999999,
+        -38.24777316020003
+      ],
+      "sourceCell": [
+        278,
+        706
+      ],
+      "componentCells": 3419
+    },
+    {
+      "code": "BSk",
+      "id": 7,
+      "coordinate": [
+        -67.55,
+        -18.42998909801054
+      ],
+      "sourceCell": [
+        254,
+        479
+      ],
+      "componentCells": 947
+    },
+    {
+      "code": "BSk",
+      "id": 7,
+      "coordinate": [
+        -70.45,
+        -51.97717474812899
+      ],
+      "sourceCell": [
+        225,
+        902
+      ],
+      "componentCells": 840
+    },
+    {
+      "code": "BSk",
+      "id": 7,
+      "coordinate": [
+        -69.05000000000001,
+        -53.072082422192175
+      ],
+      "sourceCell": [
+        239,
+        920
+      ],
+      "componentCells": 449
+    },
+    {
+      "code": "BSk",
+      "id": 7,
+      "coordinate": [
+        -69.65,
+        -41.7692375164329
+      ],
+      "sourceCell": [
+        233,
+        752
+      ],
+      "componentCells": 278
+    },
+    {
+      "code": "BSk",
+      "id": 7,
+      "coordinate": [
+        -71.25000000000001,
+        -31.359713479315236
+      ],
+      "sourceCell": [
+        217,
+        622
+      ],
+      "componentCells": 189
+    },
+    {
+      "code": "BSk",
+      "id": 7,
+      "coordinate": [
+        -70.75,
+        -45.036897830420536
+      ],
+      "sourceCell": [
+        222,
+        797
+      ],
+      "componentCells": 164
+    },
+    {
+      "code": "BSk",
+      "id": 7,
+      "coordinate": [
+        -68.15,
+        -48.8569369649515
+      ],
+      "sourceCell": [
+        248,
+        853
+      ],
+      "componentCells": 68
+    },
+    {
+      "code": "BSk",
+      "id": 7,
+      "coordinate": [
+        -74.15,
+        -15.07967576954302
+      ],
+      "sourceCell": [
+        188,
+        444
+      ],
+      "componentCells": 61
+    },
+    {
+      "code": "BSk",
+      "id": 7,
+      "coordinate": [
+        -65.05,
+        -18.33510711564004
+      ],
+      "sourceCell": [
+        279,
+        478
+      ],
+      "componentCells": 58
+    },
+    {
+      "code": "BSk",
+      "id": 7,
+      "coordinate": [
+        -65.85000000000002,
+        -28.148723191756538
+      ],
+      "sourceCell": [
+        271,
+        585
+      ],
+      "componentCells": 54
+    },
+    {
+      "code": "BSk",
+      "id": 7,
+      "coordinate": [
+        -71.95,
+        -48.327899622194046
+      ],
+      "sourceCell": [
+        210,
+        845
+      ],
+      "componentCells": 42
+    },
+    {
+      "code": "Csa",
+      "id": 8,
+      "coordinate": [
+        -71.25000000000001,
+        -33.719488028750945
+      ],
+      "sourceCell": [
+        217,
+        650
+      ],
+      "componentCells": 125
+    },
+    {
+      "code": "Csb",
+      "id": 9,
+      "coordinate": [
+        -72.45,
+        -37.69604762285221
+      ],
+      "sourceCell": [
+        205,
+        699
+      ],
+      "componentCells": 2200
+    },
+    {
+      "code": "Csb",
+      "id": 9,
+      "coordinate": [
+        -73.55,
+        5.133004212893552
+      ],
+      "sourceCell": [
+        194,
+        240
+      ],
+      "componentCells": 114
+    },
+    {
+      "code": "Csb",
+      "id": 9,
+      "coordinate": [
+        -73.05000000000001,
+        -40.260510545704975
+      ],
+      "sourceCell": [
+        199,
+        732
+      ],
+      "componentCells": 62
+    },
+    {
+      "code": "Csb",
+      "id": 9,
+      "coordinate": [
+        -71.55,
+        -46.3635765830763
+      ],
+      "sourceCell": [
+        214,
+        816
+      ],
+      "componentCells": 54
+    },
+    {
+      "code": "Csb",
+      "id": 9,
+      "coordinate": [
+        -78.15,
+        0.5406137839057512
+      ],
+      "sourceCell": [
+        148,
+        286
+      ],
+      "componentCells": 52
+    },
+    {
+      "code": "Csb",
+      "id": 9,
+      "coordinate": [
+        -70.45,
+        -33.30266704946553
+      ],
+      "sourceCell": [
+        225,
+        645
+      ],
+      "componentCells": 27
+    },
+    {
+      "code": "Csb",
+      "id": 9,
+      "coordinate": [
+        -71.45000000000002,
+        -45.3188151169493
+      ],
+      "sourceCell": [
+        215,
+        801
+      ],
+      "componentCells": 25
+    },
+    {
+      "code": "Csb",
+      "id": 9,
+      "coordinate": [
+        -70.75,
+        -45.73907413850512
+      ],
+      "sourceCell": [
+        222,
+        807
+      ],
+      "componentCells": 21
+    },
+    {
+      "code": "Csb",
+      "id": 9,
+      "coordinate": [
+        -71.65,
+        -45.878462754520704
+      ],
+      "sourceCell": [
+        213,
+        809
+      ],
+      "componentCells": 15
+    },
+    {
+      "code": "Csb",
+      "id": 9,
+      "coordinate": [
+        -79.85000000000001,
+        -4.852700262814633
+      ],
+      "sourceCell": [
+        131,
+        340
+      ],
+      "componentCells": 13
+    },
+    {
+      "code": "Csb",
+      "id": 9,
+      "coordinate": [
+        -78.75000000000001,
+        -7.139594853606284
+      ],
+      "sourceCell": [
+        142,
+        363
+      ],
+      "componentCells": 12
+    },
+    {
+      "code": "Cwa",
+      "id": 11,
+      "coordinate": [
+        -62.25,
+        -29.723676928202853
+      ],
+      "sourceCell": [
+        307,
+        603
+      ],
+      "componentCells": 1931
+    },
+    {
+      "code": "Cwa",
+      "id": 11,
+      "coordinate": [
+        -63.95,
+        -22.734377184359275
+      ],
+      "sourceCell": [
+        290,
+        525
+      ],
+      "componentCells": 866
+    },
+    {
+      "code": "Cwa",
+      "id": 11,
+      "coordinate": [
+        -44.650000000000006,
+        -21.15788529265387
+      ],
+      "sourceCell": [
+        483,
+        508
+      ],
+      "componentCells": 559
+    },
+    {
+      "code": "Cwa",
+      "id": 11,
+      "coordinate": [
+        -65.25,
+        -32.54735381890518
+      ],
+      "sourceCell": [
+        277,
+        636
+      ],
+      "componentCells": 66
+    },
+    {
+      "code": "Cwa",
+      "id": 11,
+      "coordinate": [
+        -47.850000000000016,
+        -21.994677255900267
+      ],
+      "sourceCell": [
+        451,
+        517
+      ],
+      "componentCells": 27
+    },
+    {
+      "code": "Cwa",
+      "id": 11,
+      "coordinate": [
+        -41.95,
+        -20.690935642801406
+      ],
+      "sourceCell": [
+        510,
+        503
+      ],
+      "componentCells": 24
+    },
+    {
+      "code": "Cwa",
+      "id": 11,
+      "coordinate": [
+        -58.85,
+        -24.656899610321826
+      ],
+      "sourceCell": [
+        341,
+        546
+      ],
+      "componentCells": 22
+    },
+    {
+      "code": "Cwa",
+      "id": 11,
+      "coordinate": [
+        -42.25,
+        -17.66948750332015
+      ],
+      "sourceCell": [
+        507,
+        471
+      ],
+      "componentCells": 15
+    },
+    {
+      "code": "Cwa",
+      "id": 11,
+      "coordinate": [
+        -65.25,
+        -31.274296730629242
+      ],
+      "sourceCell": [
+        277,
+        621
+      ],
+      "componentCells": 15
+    },
+    {
+      "code": "Cwa",
+      "id": 11,
+      "coordinate": [
+        -42.85,
+        -17.955060516444497
+      ],
+      "sourceCell": [
+        501,
+        474
+      ],
+      "componentCells": 13
+    },
+    {
+      "code": "Cwb",
+      "id": 12,
+      "coordinate": [
+        -65.85000000000002,
+        -17.955060516444497
+      ],
+      "sourceCell": [
+        271,
+        474
+      ],
+      "componentCells": 1106
+    },
+    {
+      "code": "Cwb",
+      "id": 12,
+      "coordinate": [
+        -65.85000000000002,
+        -32.799840849574146
+      ],
+      "sourceCell": [
+        271,
+        639
+      ],
+      "componentCells": 183
+    },
+    {
+      "code": "Cwb",
+      "id": 12,
+      "coordinate": [
+        -73.25000000000001,
+        -13.432355415536456
+      ],
+      "sourceCell": [
+        197,
+        427
+      ],
+      "componentCells": 163
+    },
+    {
+      "code": "Cwb",
+      "id": 12,
+      "coordinate": [
+        -69.85000000000001,
+        -15.561827705549911
+      ],
+      "sourceCell": [
+        231,
+        449
+      ],
+      "componentCells": 157
+    },
+    {
+      "code": "Cwb",
+      "id": 12,
+      "coordinate": [
+        -91.45,
+        15.1582620225284
+      ],
+      "sourceCell": [
+        15,
+        138
+      ],
+      "componentCells": 148
+    },
+    {
+      "code": "Cwb",
+      "id": 12,
+      "coordinate": [
+        -77.75,
+        -7.635363393816045
+      ],
+      "sourceCell": [
+        152,
+        368
+      ],
+      "componentCells": 130
+    },
+    {
+      "code": "Cwb",
+      "id": 12,
+      "coordinate": [
+        -44.55000000000001,
+        -22.087353925755163
+      ],
+      "sourceCell": [
+        484,
+        518
+      ],
+      "componentCells": 113
+    },
+    {
+      "code": "Cwb",
+      "id": 12,
+      "coordinate": [
+        -74.65,
+        -12.06712932083761
+      ],
+      "sourceCell": [
+        183,
+        413
+      ],
+      "componentCells": 57
+    },
+    {
+      "code": "Cwb",
+      "id": 12,
+      "coordinate": [
+        -43.75000000000001,
+        -18.145187084614324
+      ],
+      "sourceCell": [
+        492,
+        476
+      ],
+      "componentCells": 49
+    },
+    {
+      "code": "Cwb",
+      "id": 12,
+      "coordinate": [
+        -46.15,
+        -21.90193999682919
+      ],
+      "sourceCell": [
+        468,
+        516
+      ],
+      "componentCells": 39
+    },
+    {
+      "code": "Cwb",
+      "id": 12,
+      "coordinate": [
+        -46.85000000000001,
+        -19.846811182057746
+      ],
+      "sourceCell": [
+        461,
+        494
+      ],
+      "componentCells": 33
+    },
+    {
+      "code": "Cwb",
+      "id": 12,
+      "coordinate": [
+        -64.45,
+        -24.201738216969922
+      ],
+      "sourceCell": [
+        285,
+        541
+      ],
+      "componentCells": 28
+    },
+    {
+      "code": "Cwc",
+      "id": 13,
+      "coordinate": [
+        -68.95000000000002,
+        -16.905756711993682
+      ],
+      "sourceCell": [
+        240,
+        463
+      ],
+      "componentCells": 12
+    },
+    {
+      "code": "Cfa",
+      "id": 14,
+      "coordinate": [
+        -56.65000000000001,
+        -30.32962994447816
+      ],
+      "sourceCell": [
+        363,
+        610
+      ],
+      "componentCells": 16111
+    },
+    {
+      "code": "Cfa",
+      "id": 14,
+      "coordinate": [
+        -50.55,
+        -25.83252414932164
+      ],
+      "sourceCell": [
+        424,
+        559
+      ],
+      "componentCells": 21
+    },
+    {
+      "code": "Cfa",
+      "id": 14,
+      "coordinate": [
+        -40.75000000000001,
+        -20.316336583743762
+      ],
+      "sourceCell": [
+        522,
+        499
+      ],
+      "componentCells": 20
+    },
+    {
+      "code": "Cfb",
+      "id": 15,
+      "coordinate": [
+        -73.25000000000001,
+        -41.320249648690826
+      ],
+      "sourceCell": [
+        197,
+        746
+      ],
+      "componentCells": 1655
+    },
+    {
+      "code": "Cfb",
+      "id": 15,
+      "coordinate": [
+        -50.35000000000001,
+        -28.060528465087742
+      ],
+      "sourceCell": [
+        426,
+        584
+      ],
+      "componentCells": 1290
+    },
+    {
+      "code": "Cfb",
+      "id": 15,
+      "coordinate": [
+        -59.55,
+        -37.69604762285221
+      ],
+      "sourceCell": [
+        334,
+        699
+      ],
+      "componentCells": 1146
+    },
+    {
+      "code": "Cfb",
+      "id": 15,
+      "coordinate": [
+        -77.05000000000001,
+        1.1404502891330597
+      ],
+      "sourceCell": [
+        159,
+        280
+      ],
+      "componentCells": 681
+    },
+    {
+      "code": "Cfb",
+      "id": 15,
+      "coordinate": [
+        -77.55,
+        -6.4446234197548655
+      ],
+      "sourceCell": [
+        154,
+        356
+      ],
+      "componentCells": 340
+    },
+    {
+      "code": "Cfb",
+      "id": 15,
+      "coordinate": [
+        -73.64999999999999,
+        5.7302116281157796
+      ],
+      "sourceCell": [
+        193,
+        234
+      ],
+      "componentCells": 208
+    },
+    {
+      "code": "Cfb",
+      "id": 15,
+      "coordinate": [
+        -67.45,
+        -16.04285236373336
+      ],
+      "sourceCell": [
+        255,
+        454
+      ],
+      "componentCells": 153
+    },
+    {
+      "code": "Cfb",
+      "id": 15,
+      "coordinate": [
+        -68.35000000000001,
+        -14.693163789459348
+      ],
+      "sourceCell": [
+        246,
+        440
+      ],
+      "componentCells": 105
+    },
+    {
+      "code": "Cfb",
+      "id": 15,
+      "coordinate": [
+        -72.55000000000001,
+        7.319540638944954
+      ],
+      "sourceCell": [
+        204,
+        218
+      ],
+      "componentCells": 73
+    },
+    {
+      "code": "Cfb",
+      "id": 15,
+      "coordinate": [
+        -91.05,
+        15.543928025514015
+      ],
+      "sourceCell": [
+        19,
+        134
+      ],
+      "componentCells": 64
+    },
+    {
+      "code": "Cfb",
+      "id": 15,
+      "coordinate": [
+        -71.95,
+        -12.360291547891446
+      ],
+      "sourceCell": [
+        210,
+        416
+      ],
+      "componentCells": 62
+    },
+    {
+      "code": "Cfb",
+      "id": 15,
+      "coordinate": [
+        -76.05000000000001,
+        6.525506485118293
+      ],
+      "sourceCell": [
+        169,
+        226
+      ],
+      "componentCells": 60
+    },
+    {
+      "code": "Cfc",
+      "id": 16,
+      "coordinate": [
+        -60.35,
+        -51.66817722221764
+      ],
+      "sourceCell": [
+        326,
+        897
+      ],
+      "componentCells": 233
+    },
+    {
+      "code": "Cfc",
+      "id": 16,
+      "coordinate": [
+        -75.25,
+        -48.327899622194046
+      ],
+      "sourceCell": [
+        177,
+        845
+      ],
+      "componentCells": 144
+    },
+    {
+      "code": "Cfc",
+      "id": 16,
+      "coordinate": [
+        -72.45,
+        -51.85383004286394
+      ],
+      "sourceCell": [
+        205,
+        900
+      ],
+      "componentCells": 63
+    },
+    {
+      "code": "Cfc",
+      "id": 16,
+      "coordinate": [
+        -71.95,
+        -52.58882581265489
+      ],
+      "sourceCell": [
+        210,
+        912
+      ],
+      "componentCells": 22
+    },
+    {
+      "code": "Cfc",
+      "id": 16,
+      "coordinate": [
+        -72.75,
+        -50.98090526809027
+      ],
+      "sourceCell": [
+        202,
+        886
+      ],
+      "componentCells": 20
+    },
+    {
+      "code": "Cfc",
+      "id": 16,
+      "coordinate": [
+        -74.75000000000001,
+        -47.927483029129306
+      ],
+      "sourceCell": [
+        182,
+        839
+      ],
+      "componentCells": 17
+    },
+    {
+      "code": "Cfc",
+      "id": 16,
+      "coordinate": [
+        -74.85000000000001,
+        -46.294536099514715
+      ],
+      "sourceCell": [
+        181,
+        815
+      ],
+      "componentCells": 16
+    },
+    {
+      "code": "Cfc",
+      "id": 16,
+      "coordinate": [
+        -74.45000000000002,
+        -48.52693783319755
+      ],
+      "sourceCell": [
+        185,
+        848
+      ],
+      "componentCells": 15
+    },
+    {
+      "code": "Cfc",
+      "id": 16,
+      "coordinate": [
+        -72.75,
+        -51.29457850632428
+      ],
+      "sourceCell": [
+        202,
+        891
+      ],
+      "componentCells": 15
+    },
+    {
+      "code": "Cfc",
+      "id": 16,
+      "coordinate": [
+        -74.25000000000001,
+        -45.94802626326561
+      ],
+      "sourceCell": [
+        187,
+        810
+      ],
+      "componentCells": 14
+    },
+    {
+      "code": "Cfc",
+      "id": 16,
+      "coordinate": [
+        -70.25,
+        -53.19205758789186
+      ],
+      "sourceCell": [
+        227,
+        922
+      ],
+      "componentCells": 13
+    },
+    {
+      "code": "Cfc",
+      "id": 16,
+      "coordinate": [
+        -71.45000000000002,
+        -52.77067715689258
+      ],
+      "sourceCell": [
+        215,
+        915
+      ],
+      "componentCells": 12
+    },
+    {
+      "code": "Dsb",
+      "id": 18,
+      "coordinate": [
+        -70.05000000000001,
+        -35.854231155113894
+      ],
+      "sourceCell": [
+        229,
+        676
+      ],
+      "componentCells": 27
+    },
+    {
+      "code": "Dsc",
+      "id": 19,
+      "coordinate": [
+        -70.65,
+        -36.09697202118067
+      ],
+      "sourceCell": [
+        223,
+        679
+      ],
+      "componentCells": 237
+    },
+    {
+      "code": "Dsc",
+      "id": 19,
+      "coordinate": [
+        -71.05000000000001,
+        -41.61992134777284
+      ],
+      "sourceCell": [
+        219,
+        750
+      ],
+      "componentCells": 23
+    },
+    {
+      "code": "Dsc",
+      "id": 19,
+      "coordinate": [
+        -71.35,
+        -40.79249436527306
+      ],
+      "sourceCell": [
+        216,
+        739
+      ],
+      "componentCells": 12
+    },
+    {
+      "code": "ET",
+      "id": 29,
+      "coordinate": [
+        -73.95,
+        -50.91791474868852
+      ],
+      "sourceCell": [
+        190,
+        885
+      ],
+      "componentCells": 2985
+    },
+    {
+      "code": "ET",
+      "id": 29,
+      "coordinate": [
+        -71.25000000000001,
+        -14.886506418279176
+      ],
+      "sourceCell": [
+        217,
+        442
+      ],
+      "componentCells": 2229
+    },
+    {
+      "code": "ET",
+      "id": 29,
+      "coordinate": [
+        -69.45,
+        -54.663637579135695
+      ],
+      "sourceCell": [
+        235,
+        947
+      ],
+      "componentCells": 1451
+    },
+    {
+      "code": "ET",
+      "id": 29,
+      "coordinate": [
+        -70.25,
+        -31.274296730629242
+      ],
+      "sourceCell": [
+        227,
+        621
+      ],
+      "componentCells": 569
+    },
+    {
+      "code": "ET",
+      "id": 29,
+      "coordinate": [
+        -78.25,
+        -0.5591929450622466
+      ],
+      "sourceCell": [
+        147,
+        297
+      ],
+      "componentCells": 131
+    },
+    {
+      "code": "ET",
+      "id": 29,
+      "coordinate": [
+        -66.35000000000001,
+        -24.747734158178165
+      ],
+      "sourceCell": [
+        266,
+        547
+      ],
+      "componentCells": 116
+    },
+    {
+      "code": "ET",
+      "id": 29,
+      "coordinate": [
+        -68.85000000000001,
+        -18.998173990324734
+      ],
+      "sourceCell": [
+        241,
+        485
+      ],
+      "componentCells": 76
+    },
+    {
+      "code": "ET",
+      "id": 29,
+      "coordinate": [
+        -67.35,
+        -17.288018162767703
+      ],
+      "sourceCell": [
+        256,
+        467
+      ],
+      "componentCells": 72
+    },
+    {
+      "code": "ET",
+      "id": 29,
+      "coordinate": [
+        -72.05000000000001,
+        -42.58427341040486
+      ],
+      "sourceCell": [
+        209,
+        763
+      ],
+      "componentCells": 56
+    },
+    {
+      "code": "ET",
+      "id": 29,
+      "coordinate": [
+        -72.35000000000001,
+        6.525506485118293
+      ],
+      "sourceCell": [
+        206,
+        226
+      ],
+      "componentCells": 39
+    },
+    {
+      "code": "ET",
+      "id": 29,
+      "coordinate": [
+        -66.35000000000001,
+        -17.096985492349017
+      ],
+      "sourceCell": [
+        266,
+        465
+      ],
+      "componentCells": 33
+    },
+    {
+      "code": "ET",
+      "id": 29,
+      "coordinate": [
+        -60.85000000000001,
+        -51.97717474812899
+      ],
+      "sourceCell": [
+        321,
+        902
+      ],
+      "componentCells": 26
+    }
+  ],
+  "image": "/assets/atlas/latin-review-v3/climate-display.png",
+  "source": {
+    "gridSHA256": "e0efa44e94a0a65b7a0ffd302ef8a25fb630f7e9be2c62d6c3245b5e6d01b2e9",
+    "originalImageSHA256": "591863ab65e29941b148c6adcb61e2db04123122cfeab3603dc3de3ae7206ce0",
+    "usPaletteSHA256": "a2be6f64e858736ef8095e607402ff580789df76973059b6773b70eb6f1a8fad",
+    "additionalPaletteSHA256": "3ee68118256f524e1ece06e93a360d57d35663bb18efe5d9a137431a0f3aa532",
+    "displayImageSHA256": "dc144af9d5f6f0eb44bce03a957122be5827915c89876a9ef2ba78cf99b32c9a",
+    "method": "Same classified source IDs and alpha mask; US palette for shared codes. Cwa/Cwb/Cwc absent in US use the matching Asia/West Asia palette. Label anchors are existing cells inside connected class components; no reclassification.",
+    "period": "1991–2020",
+    "resolution": "source 0.1 degree",
+    "license": "CC BY 4.0"
+  }
+}

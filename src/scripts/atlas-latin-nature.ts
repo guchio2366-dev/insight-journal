@@ -1,3 +1,4 @@
+import {initLatinMapCamera} from './atlas-latin-reading-map';
 import {latinCountries} from '../lib/atlas-latin-america-geometry';
 import {latinNatureCases,latinNatureLayers,renderLatinNatureMap,renderLatinNatureLegend,renderLatinNatureNormals,natureCaseForPlace,natureCityCase,natureCountryName,natureScopeForPlace,natureComparisonReading,escapeNatureHtml} from '../lib/atlas-latin-nature';
 import {renderLatinAgricultureMap,renderLatinAgricultureLegend,agricultureLayerTitle} from '../lib/atlas-latin-agriculture';
@@ -59,7 +60,8 @@ if(workspace){
   workspace.style.setProperty('--latin-nature-reader-top',`${Math.round(reader.getBoundingClientRect().top+window.scrollY)}px`);
  }
  function resizeMap(){
-  q('[data-nature-map-host]').innerHTML=renderLatinNatureMap({...state,cityScale:cityScale(),interactiveCities:!state.source},'nature-main');
+  q('[data-nature-map-host]').innerHTML=renderLatinNatureMap({...state,cityScale:cityScale(),interactiveCities:!state.source,review:true,canvasHeight:state.source?580:850},'nature-main');
+  if(!state.source)initLatinMapCamera(q<HTMLElement>('[data-nature-map-host]'));
   if(state.fallback)void fallbackMap(q('[data-nature-map-host]'),renderVersion);
   if(state.source&&state.source.field==='nature'&&!(state.source.fallback??state.fallback))q('[data-nature-source-map]').innerHTML=sourceMap();
   alignMapCaptions();measureReader();
@@ -101,8 +103,9 @@ if(workspace){
   workspace.classList.toggle('is-comparison',comparison);
   q('[data-nature-panes]').classList.toggle('is-comparison',comparison);
   q<HTMLElement>('[data-nature-source-pane]').hidden=!comparison;
-  q<HTMLElement>('[data-nature-map-host]').innerHTML=renderLatinNatureMap({...state,cityScale:cityScale(),interactiveCities:!comparison},'nature-main');
-  q<HTMLElement>('[data-nature-legend-host]').innerHTML=renderLatinNatureLegend(state.layer);
+  q<HTMLElement>('[data-nature-map-host]').innerHTML=renderLatinNatureMap({...state,cityScale:cityScale(),interactiveCities:!comparison,review:true,canvasHeight:comparison?580:850},'nature-main');
+  if(!comparison)initLatinMapCamera(q<HTMLElement>('[data-nature-map-host]'));
+  q<HTMLElement>('[data-nature-legend-host]').innerHTML=renderLatinNatureLegend(state.layer,true);
   q<HTMLSelectElement>('[data-nature-place]').value=state.place;
   q<HTMLSelectElement>('[data-nature-scope]').value=state.scope;
   q<HTMLSelectElement>('[data-nature-place]').disabled=comparison;
@@ -149,7 +152,7 @@ if(workspace){
  q<HTMLInputElement>('[data-nature-only]').addEventListener('change',event=>{state={...state,only:(event.target as HTMLInputElement).checked};render(true);});
  workspace.addEventListener('click',event=>{
   const target=(event.target as Element).closest<HTMLElement>('[data-nature-case],[data-nature-country],[data-nature-city-point]');if(!target)return;
-  if(!state.source&&target.dataset.natureCityPoint){const city=natureCityCase(target.dataset.natureCityPoint);if(!city)return;const keepFocus=document.activeElement===target;state={...state,place:city.place,scope:natureScopeForPlace(city.place,state.scope),only:false,source:undefined};currentCaseId=city.id;render(true);q<HTMLElement>('.latin-reading-scroll').scrollTop=0;if(keepFocus)q<SVGElement>(`[data-nature-map-host] [data-nature-city-point="${city.city}"]`).focus({preventScroll:true});}
+  if(!state.source&&target.dataset.natureCityPoint){const city=natureCityCase(target.dataset.natureCityPoint);if(!city)return;const keepFocus=document.activeElement===target;state={...state,place:city.place,scope:state.scope,only:false,source:undefined};currentCaseId=city.id;render(true);q<HTMLElement>('.latin-reading-scroll').scrollTop=0;if(keepFocus)q<SVGElement>(`[data-nature-map-host] [data-nature-city-point="${city.city}"]`).focus({preventScroll:true});}
   else if(target.dataset.natureCase){const selected=latinNatureCases.find(c=>c.id===target.dataset.natureCase)!;state={...state,place:selected.place,scope:selected.place==='all'?'all':state.scope==='all'?'all':selected.scope as LatinLearningState['scope'],only:false,source:undefined};currentCaseId=selected.id;render(true);}
   else if(!state.source&&target.dataset.natureCountry){state={...state,place:target.dataset.natureCountry};currentCaseId=natureCaseForPlace(state.place).id;render(true);}
  });

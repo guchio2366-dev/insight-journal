@@ -1,0 +1,186 @@
+{
+  "checkedAt": "2026-10-12",
+  "task": "Forest surface, major hydrological basin/mainstem/tributary source review, groundwater purpose and DEM context for Latin America",
+  "normalHTTPSAttempts": [
+    {
+      "operation": "Normal HTTPS read of independent publisher landing page",
+      "url": "https://mrb.grdc.bafg.de/",
+      "time": "2026-10-12T08:47:09.062418+00:00",
+      "retried": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "operation": "Normal HTTPS read of independent publisher landing page",
+      "url": "https://glad.umd.edu/dataset/global-forest-change",
+      "time": "2026-10-12T08:47:09.079313+00:00",
+      "retried": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "operation": "Normal HTTPS read of source-linked independent publisher product directory/page",
+      "url": "https://geoftp.ibge.gov.br/informacoes_ambientais/estudos_ambientais/bacias_e_divisoes_hidrograficas_do_brasil/2021/Bacias_Hidrograficas_do_Brasil_BHB250/vetores/",
+      "time": "2026-10-12T08:52:20.163248+00:00",
+      "retried": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "operation": "Normal HTTPS read of distinct product landing page only; no data download or acceptance performed",
+      "url": "https://www.hydrosheds.org/products/hydrorivers",
+      "time": "2026-10-12T09:00:21.169087+00:00",
+      "retried": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "operation": "Normal HTTPS read of source-linked independent publisher product directory/page",
+      "url": "https://www.suzano.com.br/en/sustainability/people/neighboring-communities/mato-grosso-do-sul",
+      "time": "2026-10-12T08:52:20.174195+00:00",
+      "retried": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "operation": "Normal HTTPS read of source-linked independent publisher product directory/page",
+      "url": "https://www.fao.org/4/i1025e/i1025e06.htm",
+      "time": "2026-10-12T08:52:20.176430+00:00",
+      "retried": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    }
+  ],
+  "priorRefusalsNotRetried": [
+    "HydroBASINS publisher page",
+    "BasinATLAS figshare archive",
+    "ArcGIS cfcb7609de5f478eb7666240902d4d3d item",
+    "IGRAC/UNESCO 2025 aquifers",
+    "NASA GIBS capabilities",
+    "FAOSTAT FBS",
+    "Copernicus AWS registry",
+    "ESA WorldCover/JRC GFC2020"
+  ],
+  "independentSourceAssessments": [
+    {
+      "dataset": "GRDC Major River Basins 2020 second revised edition",
+      "sourceUrl": "https://mrb.grdc.bafg.de/",
+      "year": 2020,
+      "crs": "Source geodata unacquired; do not assume embedded CRS from browser page alone",
+      "units": "Basin approximate drainage area km²; stream display classes by upstream catchment area",
+      "license": "Publisher public-use condition of full GRDC/HydroSHEDS citation; standalone license file unacquired",
+      "sourceMethod": "Publisher dissolves HydroBASINS original level12 polygons and HydroRIVERS original reaches; 520 major basins, major network deciles and983 named rivers. This independent BfG publication is appropriate in principle and is not a guessed HydroBASINS storage mirror.",
+      "geometryAcquired": false,
+      "originalSHA256": null,
+      "missing": "Actual polygon/line data and route attributes; normal publisher landing GET proxy403. No alternate host, binary click, archive or CI request attempted."
+    },
+    {
+      "dataset": "IBGE/ANA Bacias Hidrograficas do Brasil BHB250 version2021.09.24",
+      "sourceUrl": "https://geoftp.ibge.gov.br/informacoes_ambientais/estudos_ambientais/bacias_e_divisoes_hidrograficas_do_brasil/2021/Bacias_Hidrograficas_do_Brasil_BHB250/vetores/Documentacao_Tecnica_BHB250.pdf",
+      "publisher": "IBGE/ANA",
+      "year": 2021,
+      "scope": "Brazilian product; transboundary basin total area vs domestic area must be distinguished, not substituted as full Latin34 coverage",
+      "crs": "SIRGAS2000 EPSG:4674 per technical document; actual files uninspected",
+      "units": "area_total/area_terri km²; primary course lengths km; available/discharge attributes have their own periods and are excluded",
+      "fieldsOfInterest": [
+        "cod_otto",
+        "niv_otto",
+        "nome_bacia",
+        "curso_prin",
+        "princ_aflu",
+        "sub_bacias",
+        "suprabacia",
+        "ordem_hstr",
+        "ordem_grav"
+      ],
+      "license": "Not verified from actual archive; do not assume permission beyond factual source documentation",
+      "geometryAcquired": false,
+      "originalSHA256": null,
+      "missing": "Published product directory normal HTTPS proxy403; no source filename guessing or national-border basin fallback."
+    },
+    {
+      "dataset": "HydroRIVERS v1",
+      "sourceUrl": "https://www.hydrosheds.org/products/hydrorivers",
+      "documentationUrl": "https://data.hydrosheds.org/file/technical-documentation/HydroRIVERS_TechDoc_v10.pdf",
+      "editionYear": 2019,
+      "crs": "Geographic WGS84 per technical document",
+      "units": "Reach km, upstream catchment km², long-term1971–2000 modeled discharge m³/s (not current observations)",
+      "sourceResolution": "15 arc-second HydroSHEDS original derivation",
+      "sourceFields": [
+        "HYRIV_ID",
+        "NEXT_DOWN",
+        "MAIN_RIV",
+        "ORD_CLAS",
+        "UPLAND_SKM",
+        "HYBAS_L12"
+      ],
+      "license": "Same HydroSHEDS licence agreement; scientific/educational/commercial reuse is described, but downloading/using states agreement to terms; no new contract accepted",
+      "geometryAcquired": false,
+      "originalSHA256": null,
+      "missing": "New distinct product landing normal HTTPSproxy403; data download/contract acceptance not done. No retry/mirror/CI transfer."
+    },
+    {
+      "dataset": "UMD GLAD Global Forest Change",
+      "sourceUrl": "https://glad.umd.edu/dataset/global-forest-change",
+      "geometryAcquired": false,
+      "originalSHA256": null,
+      "license": "Not adopted/verified after landing failed",
+      "missing": "Normal official landing GET proxy403. No forest pixels, year/unit/class/extent verified and no guessed storage links."
+    },
+    {
+      "dataset": "EarthEnv Global1-km Consensus Land Cover v1",
+      "sourceUrl": "https://www.earthenv.org/landcover",
+      "publicationYear": 2014,
+      "inputPeriods": "Mixed source years; full version includes1992–1993DISCover,2005–2006GlobCover,MODIS/GLC2000. Not a current-year observed forest mask.",
+      "resolution": "30 arc-seconds",
+      "units": "0–100 consensus prevalence per class, not logging volume or FAO forest area",
+      "license": "CC BY-NC4.0; commercial publication suitability not established; no new licensing arrangement accepted",
+      "geometryAcquired": false,
+      "originalSHA256": null,
+      "decision": "Not adopted. Requires publisher permission for uses outside NC and careful mixed-period label. No contract or paid acquisition."
+    },
+    {
+      "dataset": "WHYMAP Groundwater Resources of the World",
+      "sourceUrl": "https://www.whymap.org/whymap/EN/Maps_Data/Gwr/gwr_node_en.html",
+      "scale": "1:25,000,000 regional hydrogeological environments, not individual well-level stock",
+      "purpose": "If normally obtainable and licensed, depict broad aquifer environments and recharge, distinguish extent/recharge/abstraction from remaining stock. No unsupported groundwater quantity or deficiency inferred.",
+      "geometryAcquired": false,
+      "originalSHA256": null,
+      "missing": "Official publisher page returned403 via web tool; stopped without executor retry or BGR alternate-service request."
+    },
+    {
+      "dataset": "USGS Global Land Cover Characterization",
+      "sourceUrl": "https://www.usgs.gov/centers/eros/science/usgs-eros-archive-land-cover-products-global-land-cover-characterization-glcc",
+      "inputPeriod": "April1992–March1993 AVHRR",
+      "resolution": "1km",
+      "crs": "Available geographic/GoodeHomolosine/LambertEqualArea forms; actual bytes not acquired",
+      "license": "USGS public-domain classification data",
+      "geometryAcquired": false,
+      "originalSHA256": null,
+      "decision": "Historical product with normal access through EarthExplorer; not pursued as a contemporary forest surface or new account/token setup."
+    }
+  ],
+  "readyOutputs": [
+    "dem/hillshade.png",
+    "dem/hillshade.source.json",
+    "prepare_hillshade.py",
+    "rivers/major-rivers.geojson",
+    "rivers/major-rivers.source.json",
+    "extract_major_rivers.py",
+    "forestry-region-evidence.json",
+    "terrain/central-caribbean-label-regions.geojson",
+    "terrain/retained-south-america-regions.geojson",
+    "terrain/candidates.json",
+    "terrain/source.json",
+    "terrain/extract_label_regions.py"
+  ],
+  "remaining": [
+    "Verified actual forest/tree-cover surfaces with dated classes and valid reuse conditions",
+    "Basin polygons and source-defined routing for Latin34 countries",
+    "Groundwater geometries/quantities with appropriate meaning and period",
+    "Exact current mill geolocation and reuseable original shapes; broad named city references only"
+  ],
+  "restrictionsApplied": [
+    "No refusal retry",
+    "No proxy/TLS/certificate/sandbox/permission changes",
+    "No alternative storage guesses/mirrors",
+    "No CI acquisitions",
+    "No new tokens/accounts/contracts/payments",
+    "No repo/GitHub/UI changes",
+    "No merging/publication"
+  ]
+}

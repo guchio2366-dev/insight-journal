@@ -1,0 +1,113 @@
+{
+  "base": "a07ab7277b2c7eb89e51ef1be0d72dccfbec497d",
+  "date": "2026-10-12",
+  "newAssetDirectory": "public/assets/atlas/latin-review-v3",
+  "files": [
+    {
+      "path": "public/assets/atlas/latin-review-v3/agriculture/cattle-hatch.png",
+      "bytes": 61140,
+      "sha256": "97a986de10b8074ea4f4b2bbd6e717c901f018b5972cb47f15e5020ad801ee8e"
+    },
+    {
+      "path": "public/assets/atlas/latin-review-v3/agriculture/cattle-hit-index.png",
+      "bytes": 21761,
+      "sha256": "172f34dbbdd4ef8748072f7dde867da66cba5a78619bbc2be6f364f5ecba1cb6"
+    },
+    {
+      "path": "public/assets/atlas/latin-review-v3/agriculture/crop-bands.png",
+      "bytes": 103036,
+      "sha256": "e49dc8b510d348301a8de9c21fd9f5c2871ba9c90f52ba62d5c12cb149b2fa25"
+    },
+    {
+      "path": "public/assets/atlas/latin-review-v3/agriculture/crop-hit-index.png",
+      "bytes": 52456,
+      "sha256": "feee5cb2b1e18fef4c243d60f193993b865ff6ad48a980ec302d2ce839dac63f"
+    },
+    {
+      "path": "public/assets/atlas/latin-review-v3/agriculture/manifest.json",
+      "bytes": 8321,
+      "sha256": "59ee7eea91c6f38ef43043d0baef8b384f484e36282cd19eef6b5280b6352e86"
+    },
+    {
+      "path": "public/assets/atlas/latin-review-v3/central-terrain-display.json",
+      "bytes": 13317,
+      "sha256": "58ed90c6b624b9a284d86555804fe72d721d4d55a6f0136f5c56647a4c00aef5"
+    },
+    {
+      "path": "public/assets/atlas/latin-review-v3/central-terrain.geojson",
+      "bytes": 7578,
+      "sha256": "7f8335f874071af4cf0068d503c2d14a235a4b2fdbd0362c34a4dd723fc30176"
+    },
+    {
+      "path": "public/assets/atlas/latin-review-v3/central-terrain.source.json",
+      "bytes": 11576,
+      "sha256": "5ce11e665c0904674b9fbba5bbeb518b758bbbd760a40ff216e03ed98cd3d03a"
+    },
+    {
+      "path": "public/assets/atlas/latin-review-v3/climate-display.json",
+      "bytes": 40596,
+      "sha256": "c6ccd8444d1e4e96d05cfad56bb3f919092ce51f04b9f05b992ebae41f697bdc"
+    },
+    {
+      "path": "public/assets/atlas/latin-review-v3/climate-display.png",
+      "bytes": 37263,
+      "sha256": "dc144af9d5f6f0eb44bce03a957122be5827915c89876a9ef2ba78cf99b32c9a"
+    },
+    {
+      "path": "public/assets/atlas/latin-review-v3/culture/brazil-municipal-parda-locators.json",
+      "bytes": 13434,
+      "sha256": "10af2f78a0bafa46008964a4ede42d82b1850eced431d9c6d98fe1ba715f7091"
+    },
+    {
+      "path": "public/assets/atlas/latin-review-v3/major-rivers.json",
+      "bytes": 499978,
+      "sha256": "5f8b04a975820c4b8b25d0cfcc81f37e3a84a1f13d95271afe423eb03298af17"
+    },
+    {
+      "path": "public/assets/atlas/latin-review-v3/major-rivers.source.json",
+      "bytes": 3855,
+      "sha256": "e586902833f7a39689f892411048cc2722b0679a819b78714127e90bdae0a5d6"
+    },
+    {
+      "path": "public/assets/atlas/latin-review-v3/population/central-caribbean-locators.json",
+      "bytes": 5095,
+      "sha256": "1adb79a8a525f6f3894671259b8d6bb04c0753c30b060545fa2668077846817d"
+    },
+    {
+      "path": "public/assets/atlas/latin-review-v3/population/density-dots.svg",
+      "bytes": 5213069,
+      "sha256": "32b4b55af85ac373772eaa05bfcefdb0aaadf244e245a6ef3ee3b8741f4ad22b"
+    },
+    {
+      "path": "public/assets/atlas/latin-review-v3/population/manifest.json",
+      "bytes": 4028,
+      "sha256": "64709fd6d5116ff630d7f9d214b69033b6dc2dfc133c5d6edc97d8672964c336"
+    },
+    {
+      "path": "public/assets/atlas/latin-review-v3/river-hillshade.png",
+      "bytes": 192834,
+      "sha256": "1e9d0f58ebfd03e77e94753ae068107d28cdfe2d37dd654cc55160f2a68fa9c3"
+    },
+    {
+      "path": "public/assets/atlas/latin-review-v3/river-hillshade.source.json",
+      "bytes": 2692,
+      "sha256": "b05765677560a881b729eaacfaf72109fad0f9d70b6b4705d51e8f91c1b0004d"
+    }
+  ],
+  "scope": "Latin normal readers only. Legacy comparison renderer defaults and source grids retained. Industry, Canada and Mexico implementation unchanged.",
+  "unimplemented": [
+    "Actual full Latin forest-cover surface",
+    "Source-coordinate verified wood-processing factories",
+    "Authentic hydrological basin polygons",
+    "Groundwater availability/renewal/storage",
+    "Finer actual ethnic/religious residence distribution beyond existing real aggregates and 3 municipal statistic locators",
+    "Central volcanic belt / Caribbean mountain-region source polygons"
+  ],
+  "noInvention": [
+    "No administrative blur, inferred residential dots or population allocation",
+    "No basin/flow/quantity inferred from river lines",
+    "No counts recovered from rounded density",
+    "No forest-cover inferred from representative forestry locators"
+  ],
+  "newNetworkBlocks": "Only normal source acquisitions, proxy403 recorded by researchers. No bypass/retry mirrors or CI source redownload."
+}

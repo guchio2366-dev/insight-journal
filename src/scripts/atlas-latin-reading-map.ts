@@ -3,9 +3,9 @@ const cameras=new WeakMap<HTMLElement,{frame:string,box:number[]}>();
 /** Local SVG camera. Dragging changes only the view; geographic data stay complete. */
 export function initLatinMapCamera(host:HTMLElement){
  const svg=host.querySelector<SVGSVGElement>('svg');if(!svg)return;
- const initial=svg.getAttribute('viewBox')!.split(' ').map(Number),frame=svg.getAttribute('data-agriculture-frame')??svg.getAttribute('data-reading-frame')??initial.join(' ');
+ const initial=svg.getAttribute('viewBox')!.split(' ').map(Number),frame=svg.getAttribute('data-agriculture-frame')??svg.getAttribute('data-reading-frame')??svg.getAttribute('data-nature-frame')??initial.join(' ');
  const previous=cameras.get(host),camera=previous?.frame===frame?previous:{frame,box:[...initial]};cameras.set(host,camera);
- const draw=()=>svg.setAttribute('viewBox',camera.box.join(' '));draw();
+ const draw=()=>{svg.setAttribute('viewBox',camera.box.join(' '));host.dispatchEvent(new window.CustomEvent('latin-map-camera-change',{bubbles:true}));};draw();
  const tools=document.createElement('div');tools.className='latin-camera-controls';tools.setAttribute('aria-label','地図の拡大と全体表示');
  for(const [label,factor] of [['拡大',.8],['縮小',1.25],['全体に戻す',0]] as const){const button=document.createElement('button');button.type='button';button.textContent=label;button.addEventListener('click',()=>{if(factor===0)camera.box=[...initial];else{const [x,y,w,h]=camera.box,newW=Math.min(initial[2]*3,Math.max(initial[2]/8,w*factor)),newH=newW*initial[3]/initial[2];camera.box=[x+(w-newW)/2,y+(h-newH)/2,newW,newH];}draw();});tools.append(button);}host.append(tools);
  let drag:{x:number,y:number,box:number[]}|undefined,suppress=false;

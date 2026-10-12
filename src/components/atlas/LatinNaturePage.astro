@@ -2,11 +2,11 @@
 import LatinAmericaWorkspace from './LatinAmericaWorkspace.astro';
 import LatinNatureFoundation from './LatinNatureFoundation.astro';
 import {latinCountries} from '../../lib/atlas-latin-america-geometry';
-import {latinNatureData,latinNatureCases,renderLatinNatureMap,renderLatinNatureLegend,renderLatinNatureNormals} from '../../lib/atlas-latin-nature';
+import {latinNatureData,latinNatureDisplayClasses,latinNatureCases,renderLatinNatureMap,renderLatinNatureLegend,renderLatinNatureNormals} from '../../lib/atlas-latin-nature';
 import {withBase} from '../../lib/urls';
 import '../../styles/atlas-latin-nature.css';
 const selected=latinNatureCases[0];
-const state={layer:'climate',place:selected.place,scope:selected.scope,only:false,interactiveCities:true};
+const state={layer:'climate',place:selected.place,scope:selected.scope,only:false,interactiveCities:true,canvasHeight:850,review:true};
 ---
 <LatinAmericaWorkspace field="nature" title="中南米の自然環境" lead="気候と雨の季節が、作物の産地・河川交通・運河の物流にどうつながるかを読みます。">
  <div slot="map"><section class="latin-nature-main" data-latin-nature data-latin-section-panel="climate">
@@ -18,7 +18,7 @@ const state={layer:'climate',place:selected.place,scope:selected.scope,only:fals
   <h2 data-nature-map-title>気候区分の分布と雨の季節</h2>
   <div class="latin-nature-comparison-header" data-nature-comparison-header hidden><a class="latin-return" data-nature-return href={withBase('/atlas/latin-america/agriculture/')}></a><p class="latin-takeaway" data-nature-comparison-takeaway></p></div>
   <div class="latin-nature-map-panes" data-nature-panes>
-   <figure class="latin-nature-pane"><figcaption data-nature-primary-caption>気候群 · 1991–2020年</figcaption><div data-nature-map-host set:html={renderLatinNatureMap(state,'nature-main')} /><div data-nature-legend-host set:html={renderLatinNatureLegend('climate')} /></figure>
+   <figure class="latin-nature-pane"><figcaption data-nature-primary-caption>気候群 · 1991–2020年</figcaption><div data-nature-map-host set:html={renderLatinNatureMap(state,'nature-main')} /><div data-nature-legend-host set:html={renderLatinNatureLegend('climate',true)} /></figure>
    <figure class="latin-nature-source-pane" data-nature-source-pane hidden><figcaption data-nature-source-caption></figcaption><div data-nature-source-map></div><div data-nature-source-legend></div></figure>
   </div>
   <p class="latin-caption" data-nature-map-description data-latin-section-panel="climate">熱帯雨林（Af）・モンスーン（Am）・サバナ（Aw）など21区分の分布です。地図の都市・観測所の点を選び、右の月別平年値で確かめます。</p>
@@ -36,8 +36,8 @@ const state={layer:'climate',place:selected.place,scope:selected.scope,only:fals
  <div slot="statistics"><div data-latin-section-panel="climate">
   <details open><summary>この比較で分かること・地域の背景</summary><p data-nature-comparison-explanation>{selected.compare}</p><ul data-nature-case-sources>{selected.sources.map(s=><li><a href={s.url} target="_blank" rel="noopener">{s.name}</a></li>)}</ul></details>
   <details><summary>元の21気候区分と観測所の一覧</summary>
-   <p>地図は元資料の21区分と同じ配色です。熱帯雨林・モンスーン・サバナなどの区分と観測所の気候を対応させて読みます。</p>
-   <div class="latin-table-scroll"><table><thead><tr><th>群</th><th>原配色・コード</th><th>区分</th><th>読み方</th></tr></thead><tbody>{latinNatureData.originalClasses.map(c=><tr><th>{c.group}</th><td><span style={`display:inline-block;width:16px;height:12px;margin-right:5px;border:1px solid #809082;background:${c.color}`} aria-hidden="true"></span>{c.code}</td><td>{c.name}</td><td>{c.description}</td></tr>)}</tbody></table></div>
+   <p>地図は元資料の21区分を保持し、同じ気候コードを米国と同じ表示色にしています。熱帯雨林・モンスーン・サバナなどの区分と観測所の気候を対応させて読みます。</p>
+   <div class="latin-table-scroll"><table><thead><tr><th>群</th><th>表示色・コード</th><th>区分</th><th>読み方</th></tr></thead><tbody>{latinNatureDisplayClasses.map(c=><tr><th>{c.group}</th><td><span style={`display:inline-block;width:16px;height:12px;margin-right:5px;border:1px solid #809082;background:${c.color}`} aria-hidden="true"></span>{c.code}</td><td>{c.name}</td><td>{c.description}</td></tr>)}</tbody></table></div>
    <p><a href={withBase(latinNatureData.originalImage)} target="_blank">原21区分の配色を持つ地図画像</a> · <a href={withBase('/atlas/latin-america/base-map/?field=nature&view=climate')}>既存の詳細地図で観測所・原分類を読む</a></p>
    <table><thead><tr><th>観測所</th><th>国</th><th>標高 m</th><th>平年値</th></tr></thead><tbody>{latinNatureData.cities.map(c=><tr><th>{c.name}</th><td>{c.countryCode}</td><td>{c.elevationM}</td><td><a href={c.sourceUrl} target="_blank" rel="noopener">気象庁の原表</a></td></tr>)}</tbody></table>
   </details>
