@@ -1,7 +1,7 @@
 """Derive presentation geometry from the checked-in Asia grids, without downloads.
 
-Crop/livestock areas allocate each eligible common cell to the highest within-product
-spatial percentile. Broad distributions and concentrations share a product color.
+Overview crops allocate each eligible common cell to the highest within-product
+spatial percentile. South Asia selected crops retain nonexclusive supported areas.
 Rainfall lines interpolate the existing CHELSA grid, masking missing cells.
 Every climate label anchor is checked against the original classification grid.
 """
@@ -58,7 +58,7 @@ def box_mean(a, radius):
         out=(summed[tuple(hi)]-summed[tuple(lo)])/(2*radius+1)
     return out
 
-def farming(region, layers, rice):
+def farming(region, layers, rice, crop_only=False):
     # Compare within-product spatial ranks, never heads against harvested hectares.
     geography=js(ASSETS/'asia-population-v1'/(region+'.geography.json'))
     targets=[f['geometry'] for f in geography['features'] if f['properties'].get('target')]
@@ -107,6 +107,7 @@ def farming(region, layers, rice):
                 geometry=shape(transform_geom('EPSG:3857','EPSG:4326',mapping(unary_union(polygons)),precision=5)).buffer(0).intersection(south_geo)
                 if not geometry.is_empty:crop_features.append(feature(mapping(geometry),dict(id=m['id'],name=m['title'],kind='crop',color=m['color'],distribution=level)))
         crop_file='south-asia.crop-areas.json.gz';write(crop_file,fc(crop_features))
+        if crop_only:return crop_file
         livestock_features=[]
         for m,score in zip(meta,scores):
             if m['kind']!='livestock' or m['id']=='sheep':continue
@@ -220,6 +221,13 @@ def climate_labels(record, classes):
 def main():
     OUT.mkdir(exist_ok=True)
     import sys
+    if '--south-crop-only' in sys.argv:
+        manifest=json.loads((OUT/'manifest.json').read_text(encoding='utf8'))
+        farms=js(ASSETS/'asia-farming-v1/manifest.json');rice=js(ASSETS/'asia-agriculture-v1/manifest.json')
+        region='south-central-asia'
+        manifest['regions'][region]['farming']['cropFile']=farming(region,farms['regions'][region]['layers'],next(r for r in rice['regions'] if r['regionId']==region),crop_only=True)
+        manifest['regions'][region]['farming']['method']+=' South Asia crop selection uses independent, nonexclusive >=45th percentile supported areas for each crop, with >=85th percentile concentration cores; crop overlap is preserved.'
+        write('manifest.json',manifest);return
     if '--farming-only' in sys.argv:
         if CACHE_DIR:
             previous=json.loads((OUT/'manifest.json').read_text(encoding='utf8'))
