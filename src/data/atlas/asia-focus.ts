@@ -42,7 +42,7 @@ export const asiaFocusIndustryOverview:Record<AsiaFocusId,string>={
  'central-asia':'カザフスタン西部の油田と北東部の銅、トルクメニスタンのガス、ウズベキスタンの綿繊維、天山・パミールの水力を確認できる地点で示します。鉱床、加工、送電や輸送を分けて読みます。',
 };
 export const asiaFocusWaterRivers:Record<AsiaFocusId,readonly string[]>={
- 'south-asia':['rivers-194','rivers-29'],
+ 'south-asia':['rivers-194','rivers-134','rivers-29'],
  'central-asia':['rivers-112','rivers-79'],
 };
 export const asiaFocusWaterOverview:Record<AsiaFocusId,string>={
@@ -111,5 +111,5 @@ export const indiaPopulationLabels:Record<string,string>={
 export const majorClimateCities = new Set([
  'tokyo','beijing','shanghai','seoul','taipei','ulaanbaatar',
  'bangkok','yangon','singapore','jakarta','quezon-city',
- 'new-delhi','mumbai','karachi','dhaka','colombo','astana','tashkent','almaty',
+ 'new-delhi','mumbai','chennai','kolkata','karachi','dhaka','colombo','astana','tashkent','almaty',
 ]);
