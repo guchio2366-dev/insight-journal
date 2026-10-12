@@ -52,7 +52,8 @@ export function initialiseLatinAgriculture():void {
   query<HTMLButtonElement>('fallback').setAttribute('aria-pressed',String(state.fallback));
   text('title',state.layer==='all'?'作物と牛の分布':latinReadingProducts.find(p=>p.id===state.layer)!.name+'の分布');
   query('map-container').innerHTML=isComparison?renderLatinAgricultureMap(state,'latin-agriculture-main'):renderLatinAgricultureWorkspaceMap({...state,showCrops,showLivestock,single,fullExtent},'latin-agriculture-main');
-  query<HTMLInputElement>('crops').checked=showCrops;query<HTMLInputElement>('livestock').checked=showLivestock;
+  query<HTMLInputElement>('crops').checked=single?state.layer!=='cattle':showCrops;query<HTMLInputElement>('livestock').checked=single?state.layer==='cattle':showLivestock;
+  query<HTMLInputElement>('crops').disabled=single;query<HTMLInputElement>('livestock').disabled=single;
   query<HTMLElement>('crops').closest<HTMLElement>('.latin-agriculture-visibility')!.hidden=isComparison;
   query('legend-container').innerHTML=isComparison?renderLatinAgricultureLegend(state.layer):single&&state.layer!=='all'?renderLatinAgricultureSingleLegend(state.layer):renderLatinAgricultureOverviewLegend(state.layer,showCrops,showLivestock);
   initLatinMapCamera(query('map-container'));
