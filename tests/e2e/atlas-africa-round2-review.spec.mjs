@@ -221,17 +221,14 @@ try {
   profile.checks.push('55 actually drawn religious country faces and mixed hatching; separate religion/language tabs; 2222 distinct visible language record points, explanatory summaries and tab return; ethnicity guide remains an unresolved distribution blocker');
 
   if(!thirdReview){
-  await page.locator('[data-field=industry]').click();await settle(page);const selector=page.locator('[data-africa-industry-commodity]');await visible(selector);
-  const commodities=await selector.locator('option').evaluateAll(nodes=>nodes.filter(n=>n.value&&!['all','overview'].includes(n.value)).map(n=>({id:n.value,label:n.textContent.trim()})));assert.equal(commodities.length,18);
-  const initialCount=await page.locator('[data-africa-industry-location]').count();assert(initialCount>=18,'map has broad evidence-based coverage beyond seven examples');profile.industry={commodities,locationCount:initialCount,selections:[]};
-  for(const commodity of commodities){await selector.selectOption(commodity.id);await settle(page);assert.equal(await page.locator('[data-africa-industry-location]').count(),initialCount,'selection retains other industries');assert((await page.locator('.africa-detail').innerText()).includes(commodity.label),'selected industry is explained');profile.industry.selections.push({id:commodity.id,active:await page.locator('[data-africa-industry-location][aria-pressed=true]').count()});}
-  const copper=commodities.find(item=>/銅/.test(item.label));assert(copper,'copper commodity');await selector.selectOption(copper.id);await settle(page);assert(await page.locator('[data-africa-industry-location][aria-pressed=true]').count()>=2,'copper has multiple active producing regions');
-  await page.locator('[data-place]').selectOption('ZMB');await settle(page);
-  const zambianPoint=page.locator('[data-africa-industry-location][aria-pressed=true]').first();await visible(zambianPoint,page.locator('.africa-map-frame'));await zambianPoint.locator('circle').last().click();await settle(page);assert(state(page).industryLocation,'real marker selection sets location');
-  const before=await page.locator('.africa-detail').innerText();await page.locator('[data-place]').selectOption('MAR');await settle(page);assert.equal(state(page).place,'MAR');assert(!state(page).industryLocation);assert.equal(state(page).industryCommodity,copper.id);const after=await page.locator('.africa-detail').innerText();assert.notEqual(after,before,'country change updates explanation');assert(/モロッコの銅・コバルト地点は未収録/.test(after));assert.equal(await page.locator('[data-africa-industry-location]').count(),initialCount);
-  await layout(page,profile,'industry');await capture(page,profile,'industry');
-  await page.locator('[data-field=nature]').click();await settle(page);await page.locator('[data-africa-topic=climate]').click();await settle(page);assert.equal(state(page).field,'nature');assert.equal(state(page).topic,'climate');assert(!state(page).industryLocation);
-  profile.checks.push('18 selectable industries, broad map coverage, other locations retained, multiple copper places, country update clears stale facility selection, nature/climate tab return');
+   await page.locator('[data-field=industry]').click();await settle(page);profile.industry={sectors:[]};
+   for(const sector of ['resources','manufacturing','services']){
+    await page.locator(`[data-africa-industry-sector="${sector}"]`).click();await settle(page);const selector=page.locator('[data-africa-industry-commodity]'),initialCount=await page.locator('[data-theme-marks] [data-africa-industry-location]').count();
+    const industries=await selector.locator('option').evaluateAll(nodes=>nodes.filter(n=>n.value).map(n=>({id:n.value,label:n.textContent.trim()})));assert(industries.length>=4);assert(initialCount>=4);const sectorResult={id:sector,industries,initialCount};profile.industry.sectors.push(sectorResult);
+    for(const industry of industries){await selector.selectOption(industry.id);await settle(page);assert.equal(await page.locator('[data-theme-marks] [data-africa-industry-location]:visible').count(),initialCount);assert((await page.locator('.africa-detail').innerText()).includes(industry.label));}
+   }
+   await layout(page,profile,'industry');await capture(page,profile,'industry');await page.locator('[data-field=nature]').click();await settle(page);assert(!state(page).industryLocation&&!state(page).industrySector);
+   profile.checks.push('three sectors and 27 sourced roles, selection retains other locations, nature return; dedicated industry review measures fixed layouts, only control and every source reading');
   }
   assert.deepEqual(profile.errors,[]);assert.deepEqual(profile.failedRequests,[]);assert.deepEqual(profile.externalRequests,[]);profile.status='passed';await context.close();await save();
  }

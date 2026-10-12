@@ -118,7 +118,10 @@ jobs:
           # Ordinary future commits continue to run the full Africa review.
           africa_review_scope="$(git log -1 --format='%(trailers:key=Africa-Review-Scope,valueonly)')"
           africa_review_evidence="$(git log -1 --format='%(trailers:key=Africa-Review-Evidence,valueonly)')"
-          if [[ "$africa_review_scope" == third ]]; then
+          if [[ "$africa_review_scope" == industry-sectors ]]; then
+            AFRICA_REVIEW_SCOPE=third AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node tests/e2e/atlas-africa-round2-review.spec.mjs
+            node scripts/verify-africa-industry-review.mjs
+          elif [[ "$africa_review_scope" == third ]]; then
             AFRICA_REVIEW_SCOPE=third AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node tests/e2e/atlas-africa-round2-review.spec.mjs
           elif [[ "$africa_review_scope" == round2 && "$africa_review_evidence" == sources ]]; then
             AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node tests/e2e/atlas-africa-source-evidence.spec.mjs
@@ -132,7 +135,7 @@ jobs:
             fi
             AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node scripts/verify-africa-approved-review.mjs
           fi
-          if [[ "$africa_review_scope" != round2 && "$africa_review_scope" != third ]]; then
+          if [[ "$africa_review_scope" != round2 && "$africa_review_scope" != third && "$africa_review_scope" != industry-sectors ]]; then
             node scripts/verify-africa-industry-review.mjs
           fi
 
@@ -152,6 +155,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: africa-pc-failed-${{ github.run_id }}
-          path: review-artifacts/africa-pc-review
+          path: |
+            review-artifacts/africa-pc-review
+            review-artifacts/africa-industry-review
           if-no-files-found: warn
           retention-days: 7

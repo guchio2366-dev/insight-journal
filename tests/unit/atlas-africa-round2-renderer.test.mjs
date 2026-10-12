@@ -53,6 +53,6 @@ test('population locators are distinct from quantities and Cape Town keeps botto
  assert.ok(Number(root.querySelector('[data-africa-population-city="ケープタウン"]').getAttribute('y'))<897,'name baseline stays away from the 907-unit bottom');
 }));
 test('industry commodity URL round trips all eighteen categories and clears it outside industry',()=>{
- for(const commodity of africaIndustryCommodities){const state=readState('?field=industry&industryCommodity='+commodity.id);assert.equal(state.industryCommodity,commodity.id);assert.deepEqual(readState(writeState({...state},new URL('https://example.com/')).search),state);const next={...state,field:'nature'};writeState(next,new URL('https://example.com/'));assert.equal(next.industryCommodity,'');}
+ for(const commodity of africaIndustryCommodities){const state=readState('?field=industry&industryCommodity='+commodity.id);assert.equal(state.industryCommodity,commodity.id==='automotive-aerospace'?'automotive':commodity.id==='urban-services'?'finance':commodity.id);assert.deepEqual(readState(writeState({...state},new URL('https://example.com/')).search),state);const next={...state,field:'nature'};writeState(next,new URL('https://example.com/'));assert.equal(next.industryCommodity,'');}
  assert.equal(readState('?field=industry&industryCommodity=__proto__').industryCommodity,'');
 });

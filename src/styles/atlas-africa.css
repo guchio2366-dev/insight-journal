@@ -672,3 +672,12 @@
 [data-africa-ethnicity-composition]{display:block;margin-top:5px;max-width:100%;overflow:visible}
 
 @media(min-width:960px){.africa-atlas[data-field=population][data-topic=ethnicity] .africa-detail{height:var(--africa-map-height,660px);max-height:var(--africa-map-height,660px);overflow-y:auto;scrollbar-gutter:stable}}
+.africa-industry-reading{padding:10px 12px;border-bottom:1px solid #d8ddd5;font-size:14px;line-height:1.65}
+.africa-industry-reading h3{margin:4px 0 6px;font-size:15px}
+.africa-industry-reading p{margin:6px 0 12px}
+.africa-industry-reading [data-africa-industry-sites]{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.africa-industry-reading button,.africa-atlas[data-field=industry] [data-africa-layer-legend] button{border:1px solid #becbc5;border-radius:4px;padding:6px 8px;background:#fffdf8;color:#263e45;font:inherit;cursor:pointer}
+.africa-atlas[data-field=industry] [data-africa-layer-legend] button[aria-pressed=true],.africa-industry-reading button[aria-pressed=true]{border-color:#224c59;box-shadow:inset 0 0 0 1px #224c59}
+.africa-atlas[data-field=industry] [data-africa-layer-legend] button i{display:inline-block;width:10px;height:10px;margin-right:5px}
+.africa-industry-hit:focus-visible rect,.africa-industry-hit:focus-visible text{stroke:#bc5c35;stroke-width:3px}
+@media(min-width:960px){.africa-atlas[data-field=industry] .africa-country-controls{display:none}.africa-atlas[data-field=industry] .africa-main>.africa-subfields{height:auto;min-height:74px}.africa-atlas[data-field=industry] .africa-map-tools{display:none}}
