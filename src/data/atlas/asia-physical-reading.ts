@@ -2,7 +2,7 @@ import type { AsiaRegionId } from '../../lib/atlas-asia-state';
 export const asiaNaturalTopics=[{id:'landform',label:'地形'},{id:'climate',label:'気候と雨温図'},{id:'terrain',label:'標高と地形'},{id:'water',label:'河川と湖'},{id:'precipitation',label:'年降水量'},{id:'seasonal-precipitation',label:'月別の降水量'},{id:'basins',label:'流域'},{id:'groundwater',label:'地下水と涵養'}];
 export const asiaPhysicalReading:Record<AsiaRegionId,{terrain:string;water:string;terrainDetail:string;waterDetail:string}>= {
  'east-asia':{
-  terrain:'西の高原・盆地から東の平野と島弧へ、高低差をたどる。',
+  terrain:'中国西部にはチベット高原と山地、東部には華北平原・東北平原があり、日本列島・台湾では山地と沿岸低地が近接します。',
   water:'長江・黄河の流路を、高原から低地への標高の変化と重ねる。',
   terrainDetail:'チベット高原と崑崙山脈・天山山脈の高地、タリム盆地、四川盆地、華北平原・満州平原の低地が並びます。日本列島や台湾では山地と沿岸低地が近接します。大陸西部の高地にはプレートの衝突と隆起、日本列島・台湾の山地にはプレート境界の変動が関わります。色と線は同じ表示値から作った500m刻みで、個々の山頂の公式標高ではありません。',
   waterDetail:'河川・湖は資料にある線と面で示します。河川の下流と平野、米の分布を比較できますが、河川に近いことだけで灌漑の利用や水量は判断できません。内陸の流域と海へ向かう流路を区別して読んでください。'

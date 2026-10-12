@@ -80,4 +80,4 @@
 .east-industry-site-point:is(:hover,:focus-visible)>span{display:block}.east-industry-map-labels .east-industry-site-point[aria-pressed=true]{background:transparent;outline:2px solid #315746;outline-offset:2px}
 .east-industry-reading-actions{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}[data-east-industry-site-list]{display:grid;gap:6px}[data-east-industry-site-list] button{font:12px/1.6 var(--sans);padding:5px;text-align:left;border:1px solid #c6d1c0;background:#fafcf5;color:#315746;cursor:pointer}
 .east-industry-statistics{margin-top:20px;border-top:1px solid var(--rule);padding-top:16px;font-size:13px;line-height:1.8}.east-industry-statistics-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.east-industry-statistics table{width:100%;border-collapse:collapse}.east-industry-statistics th,.east-industry-statistics td{padding:5px;border-bottom:1px solid #c8d2c3}.east-industry-statistics td{text-align:right;font-variant-numeric:tabular-nums}
-[data-region=east-asia] .asia-atlas[data-industry-clusters=true] .asia-industry-guide{display:none}
+[data-region=east-asia][data-industry-clusters=true] .asia-industry-guide{display:none}

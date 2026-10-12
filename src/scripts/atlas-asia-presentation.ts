@@ -9,7 +9,7 @@ import {Marker} from 'maplibre-gl';
 import {eastCultureExamples} from '../data/atlas/east-asia-cultural-geography';
 import southeastLandformExtents from '../data/atlas/asia/southeast-landform-extents.json';
 import {southeastPhilippineEthnicity,southeastPhilippineReligionRegions,southeastReligionCensuses} from '../data/atlas/asia/southeast-census-complements';
-import {eastForestSites,eastOceanNames} from '../data/atlas/east-asia-review-geography';
+import {eastForestSites,eastOceanNames} from '../data/atlas/east-asia-review-geography.ts';
 import eastSeas from '../../public/assets/atlas/east-asia-v2/seas.json';
 type Coordinate=[number,number];
 type Annotation={id:string;text:string;coordinate:Coordinate;anchors?:Coordinate[];product?:string;kind?:string;color?:string;value?:number};

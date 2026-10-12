@@ -16,7 +16,7 @@ import {contourBandFiles,contourBandLabels} from '../data/atlas/asia-contour-ban
 import {southCentralRainfallLegend,centralRainfallLegend,centralRainfallColor} from '../data/atlas/asia-south-central-rainfall-legend';
 import {southCentralReligionCensuses,southCentralReligionReports} from '../data/atlas/asia-south-central-religion';
 import {southCentralIndustryGroups,southCentralIndustrySites} from '../data/atlas/asia-south-central-industry';
-import {eastSectorIndustries,eastSectorSites,eastIndustrySector} from '../data/atlas/east-asia-industry-sectors';
+import {eastSectorIndustries,eastSectorSites,eastIndustrySector} from '../data/atlas/east-asia-industry-sectors.ts';
 import {eastAsiaReligionCountries,eastAsiaReligionColors} from '../data/atlas/east-asia-religion';
 
 type Key={label:string;color:string;shortLabel?:string};

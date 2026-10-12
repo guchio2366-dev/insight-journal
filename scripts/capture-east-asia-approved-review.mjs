@@ -23,8 +23,8 @@ const save=async()=>{
  const html='<!doctype html><html lang="ja"><meta charset="utf-8"><title>東アジア・承認済み添削の実画面</title><style>body{font:14px/1.7 sans-serif;margin:24px;background:#f6f7f1}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:20px}figure{margin:0;background:white;padding:12px}img{width:100%;height:auto}code{overflow-wrap:anywhere}</style><h1>東アジア・承認済み添削の実画面</h1><p>head: <code>'+results.head+'</code> · '+results.status+' · sandbox有効のChrome · PC 1920×1080・100%・DPR1</p><p>本番比較元: <code>'+(results.production?.commitSha??'未取得')+'</code></p><p>初期／選択／戻る／タブ往復の検証記録は results.json。画像は実ブラウザーのキャプチャです。</p><main>'+results.images.map(i=>'<figure><figcaption>'+i.name+'</figcaption><a href="'+i.name+'"><img loading="lazy" src="'+i.name+'" alt="'+i.name+'"></a></figure>').join('')+'</main></html>';
  await writeFile(path.join(output,'index.html'),html);
 };
-async function serveBuild(){
- const root=await realpath(path.join(repo,'dist'));
+async function serveBuild(directory='dist'){
+ const root=await realpath(path.resolve(repo,directory));
  const server=createServer(async(req,res)=>{
   try{
    assert(['GET','HEAD'].includes(req.method));
@@ -41,9 +41,9 @@ async function serveBuild(){
  return {server,origin:`http://127.0.0.1:${server.address().port}`};
 }
 
-let browser,host;
+let browser,host,baselineHost;
 try{
- host=await serveBuild();
+ host=await serveBuild();if(process.env.REVIEW_BASELINE_DIST){baselineHost=await serveBuild(process.env.REVIEW_BASELINE_DIST);const r=await fetch(baselineHost.origin+basePath+'/_release.json');assert(r.ok);results.baseline=await r.json();}
  assert(results.fonts.trim(),'Japanese fonts are required');
  assert(process.env.REVIEW_CHROME_PATH,'An already-installed Chrome is required');
  browser=await chromium.launch({executablePath:process.env.REVIEW_CHROME_PATH,headless:true,chromiumSandbox:true});
@@ -144,6 +144,14 @@ try{
    for(const example of expected)assert.equal(await page.locator(`[data-east-culture-example="${example.id}"] a`).getAttribute('href'),example.source.url);
    return refs;
   }
+  if(baselineHost)await run('application-startup-and-selection',async()=>{
+   const samples=[];
+   for(const [variant,trialHost] of [['main-before',baselineHost],['candidate-after',host]])for(let sample=0;sample<3;sample++){
+    const cold=await browser.newContext({viewport:{width:profile.width,height:profile.height},deviceScaleFactor:1,serviceWorkers:'block'});await cold.route('**/*',route=>new URL(route.request().url()).origin===trialHost.origin?route.continue():route.abort('blockedbyclient'));const page=await cold.newPage();
+    try{const started=performance.now();await page.goto(`${trialHost.origin}${basePath}/atlas/asia/east-asia/nature/`,{waitUntil:'domcontentloaded'});await ready(page);const startup=performance.now()-started,camera=JSON.parse(await page.locator('[data-map-camera]').getAttribute('data-map-camera')),selectStarted=performance.now();await page.locator('[data-station="tokyo"]').click();await page.locator('[data-city-panel="tokyo"]').waitFor({state:'visible'});await ready(page);const selection=performance.now()-selectStarted;assert.deepEqual(JSON.parse(await page.locator('[data-map-camera]').getAttribute('data-map-camera')),camera);samples.push({variant,sample,startupMs:startup,selectionMs:selection,mapLoadMs:Number(await page.locator('[data-map-load-ms]').getAttribute('data-map-load-ms'))});}finally{await cold.close();}
+   }
+   return {baseline:results.baseline.commitSha,head:results.head,method:'Two actual production builds from PR base and current head; same runner, sandboxed browser, viewport and local server implementation. Fresh browser context for every sample; three cold navigations per build. Startup and selection include the same readiness/font/network-idle waits.',samples};
+  });
   await run('coast-startup-and-selection',async page=>{
    const samples=[];
    const old=await readFile(path.join(repo,'public/assets/atlas/asia-geography-v1.json'));
@@ -269,4 +277,4 @@ try{
   await context.close();
  }
  results.status=results.cases.every(c=>c.passed)&&results.externalAttempts.length===0?'passed':'failed';await save();assert.equal(results.status,'passed','See results.json and failure images');
-}finally{await save();await browser?.close();await new Promise(resolve=>host?.server.close(resolve)??resolve());}
+}finally{await save();await browser?.close();await Promise.all([host,baselineHost].filter(Boolean).map(h=>new Promise(resolve=>h.server.close(resolve))));}

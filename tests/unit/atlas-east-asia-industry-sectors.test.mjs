@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
+import {gunzipSync} from 'node:zlib';
 import {eastSectors,eastSectorIndustries,eastSectorSites,eastSectorRows,eastSectorTopics,eastIndustrySector} from '../../src/data/atlas/east-asia-industry-sectors.ts';
 import {normalizeIndustryState} from '../../src/data/atlas/asia-industry.ts';
 import {readAsiaAtlasState,writeAsiaAtlasState} from '../../src/lib/atlas-asia-state.ts';
@@ -29,4 +30,10 @@ test('selection URL keeps context, camera and single display but rejects another
  const context={countries:region.countries,cities:[],fields:['natural','industry'],bounds:[70,12,152,60],topics:{industry:eastSectorTopics.map(t=>t.id)},details:{industry:eastSectorSites.map(s=>s.id)}};
  const url=writeAsiaAtlasState(new URL('https://example.com/atlas/asia/east-asia/industry/'),state);assert.equal(url.searchParams.get('industryview'),'single');const restored=readAsiaAtlasState(url,context);assert.equal(restored.only,true);assert.equal(restored.sector,'manufacturing');assert.deepEqual(restored.camera,camera);assert.equal(restored.detail,'toyo-copper');
  const other=writeAsiaAtlasState(url,{...state,field:'natural',topic:null});assert.equal(other.searchParams.get('industryview'),null);
+});
+test('national reference tables preserve twelve same-year observations and explicit missingness',()=>{
+ const bytes=readFileSync(new URL('../../public/assets/atlas/asia-industry-v1/national.json.gz',import.meta.url)),original=JSON.parse(gunzipSync(bytes));
+ const selected=JSON.parse(readFileSync(new URL('../../public/assets/atlas/east-asia-v2/economic-statistics.json',import.meta.url)));
+ assert.equal(selected.sourceSha256,createHash('sha256').update(bytes).digest('hex'));assert.equal(selected.year,2024);assert.equal(selected.series.length,2);assert.equal(selected.countries.length,6);
+ for(const item of selected.series){const source=original.indicators.find(i=>i.id===item.id);assert.equal(item.metadataUrl,source.metadataUrl);assert.equal(item.unit,'GDP比 %');for(const country of selected.countries){const row=source.observations.find(o=>o.countryCode===country.code&&o.year===2024);assert.equal(item.values[country.code],row?.value??null);}assert.equal(item.values.TWN,null);assert.equal(item.values.PRK,null);}
 });

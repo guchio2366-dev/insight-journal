@@ -1,4 +1,4 @@
-import {eastIndustrySector} from '../data/atlas/east-asia-industry-sectors';
+import {eastIndustrySector} from '../data/atlas/east-asia-industry-sectors.ts';
 import {industryTopicGroup,industrySectors,industrySubsectors,naturalGroup,populationGroup} from '../data/atlas/asia-navigation.ts';
 import {industryCountryChoices,hasIndustryCountryScope,industryTopicsForPlace,type IndustryRegion} from '../data/atlas/asia-industry.ts';
 import type {AsiaState} from '../lib/atlas-asia-state';

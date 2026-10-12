@@ -1,4 +1,4 @@
-import {eastForestSites} from '../data/atlas/east-asia-review-geography';
+import {eastForestSites} from '../data/atlas/east-asia-review-geography.ts';
 import {asiaFarmDefinitions,asiaFarmRegionReading,asiaForestSources,asiaFarmFlagLabels,asiaFarmUnit,type AsiaFarmingLayer,type AsiaFarmStatistics,type AsiaFarmObservation} from '../data/atlas/asia-farming';
 import type {AsiaRegionId} from '../lib/atlas-asia-state';
 import southCentralShares from '../../public/assets/atlas/south-central-asia-v1/world-shares.json';

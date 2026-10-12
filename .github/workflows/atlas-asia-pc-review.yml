@@ -84,7 +84,7 @@ jobs:
   review:
     name: Verify approved East Asia PC views
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     env:
       ASTRO_TELEMETRY_DISABLED: '1'
       REVIEW_PRODUCTION_BASE_URL: 'https://guchio2366-dev.github.io/insight-journal'
@@ -139,6 +139,22 @@ jobs:
 
       - name: Install existing dependencies
         run: npm ci --no-audit --no-fund
+
+      - name: Check out the exact main baseline for timing
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: .review-baseline
+          persist-credentials: false
+
+      - name: Build the same-host baseline
+        if: github.event_name == 'pull_request'
+        working-directory: .review-baseline
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+          printf 'REVIEW_BASELINE_DIST=%s/.review-baseline/dist\n' "$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
 
       - name: Build local production site
         run: npm run build
