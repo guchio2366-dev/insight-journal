@@ -441,8 +441,8 @@ async function europeOperations(page, profile, render) {
   await page.goForward(); assert.equal(await settled(page), clicked);
   await page.reload({waitUntil: 'networkidle'}); await ready(page, 'europe', render); assert.equal(await settled(page), clicked);
   if (!normal) {
-    {const next=new URL(page.url());next.searchParams.set('render','static');await page.goto(next.href,{waitUntil:'networkidle'});await ready(page,'europe','static');} assert.equal(await settled(page), clicked);
-    {const next=new URL(page.url());next.searchParams.set('render',render==='normal'?'auto':render);await page.goto(next.href,{waitUntil:'networkidle'});await ready(page,'europe',render);} assert.equal(await settled(page), clicked);
+    {const next=new URL(page.url());next.searchParams.set('render','auto');await page.goto(next.href,{waitUntil:'networkidle'});await ready(page,'europe','normal');} assert.equal(await settled(page), clicked);
+    {const next=new URL(page.url());next.searchParams.set('render',render==='normal'?'auto':'static');await page.goto(next.href,{waitUntil:'networkidle'});await ready(page,'europe',render);} assert.equal(await settled(page), clicked);
   }
   record.elevation.clicked = {point: clickedPoint, value: clicked};
   record.checks.push('terrain names without numeric UI', 'metres separate from contour interval', 'no click circle; single result/legend', 'one history entry per selection', 'SVG extent retained', 'unselected back/forward', 'reload retains reader text', 'named comparison return', 'real map click and history');
