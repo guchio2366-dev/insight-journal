@@ -1,6 +1,9 @@
 import {industrySectors,type IndustrySector} from '../data/atlas/industry-catalog.ts';
 import catalog from '../data/atlas/mexico/industry-catalog.json' with {type:'json'};
 export const mexicoIndustrySectors=industrySectors;
+// The three learning views. Keep the legacy sectors readable in saved URLs and
+// comparisons, but do not present them as primary industry categories.
+export const mexicoIndustryPrimarySectors=['resources','manufacturing','services'].map(id=>industrySectors.find(sector=>sector.id===id)!);
 export const mexicoIndustryMetricChoices=[{id:'transport',sector:'manufacturing',subsector:'transport',name:'輸送機器'},{id:'electronics',sector:'manufacturing',subsector:'electronics',name:'半導体・電子機器'},...catalog.metrics];
 export const mexicoIndustrySubsectorsFor=(sector:IndustrySector)=>[{id:'all',label:'全分野'},...mexicoIndustryMetricChoices.filter(m=>m.sector===sector).map(m=>({id:m.id,label:m.name}))];
 export const mexicoIndustrySubsectors=mexicoIndustrySubsectorsFor('manufacturing');
@@ -47,6 +50,7 @@ export function industryPopulationSourceQuery(raw:string|null|undefined):string|
  return view==='density'||view==='population'?`?${params.toString()}`:null;
 }
 const keys=['state','sourceState','sourceOnly','sourcePopulationQuery','industryFrame','metric','compare','sourceView','from','only','zoom','fallback','sector','subsector'] as const;
+const serviceSubsectors=['finance','tourism'] as const;
 export function readMexicoIndustryState(url:URL,stateIds:readonly string[]):MexicoIndustryState {
  const p=url.searchParams,code=p.get('state')??'',compare=p.get('compare'),sourceView=p.get('sourceView');
  const state=stateIds.includes(code)?code:'',sourceCode=p.get('sourceState')??'';
@@ -54,7 +58,7 @@ export function readMexicoIndustryState(url:URL,stateIds:readonly string[]):Mexi
  if(result.compare==='population'&&result.from==='population'&&p.has('sourceOnly'))result.sourceOnly=p.get('sourceOnly')==='1';
  const sourceQuery=industryPopulationSourceQuery(p.get('sourcePopulationQuery'));if(result.compare==='population'&&result.from==='population'&&sourceQuery)result.sourcePopulationQuery=sourceQuery;
  const frame=p.get('industryFrame')?.split(',').map(Number);if(frame?.length===4&&frame.every(Number.isFinite)&&frame[2]>0&&frame[3]>0)result.frame=industryCameraFrame(frame as MexicoIndustryFrame);
- const sector=p.get('sector');if(industrySectors.some(s=>s.id===sector)){result.sector=sector as IndustrySector;result.subsector=mexicoIndustryMetricChoices.some(m=>m.sector===sector&&m.id===p.get('subsector'))?p.get('subsector')!:'all';if(result.subsector!=='all')result.metric=result.subsector;}
+ const sector=p.get('sector');if(industrySectors.some(s=>s.id===sector)){result.sector=sector as IndustrySector;result.subsector=mexicoIndustryMetricChoices.some(m=>m.sector===sector&&m.id===p.get('subsector'))||sector==='services'&&serviceSubsectors.includes(p.get('subsector') as typeof serviceSubsectors[number])?p.get('subsector')!:'all';if(result.subsector!=='all'&&sector!=='services')result.metric=result.subsector;}
  if(result.compare==='electronics'&&!isMexicoIndustryPairMetric(result.metric))result.compare=null;
  return result;
 }
@@ -65,7 +69,7 @@ export function writeMexicoIndustryState(url:URL,state:MexicoIndustryState):URL 
  if(state.compare==='population'){target.searchParams.set('sourceView',state.sourceView);target.searchParams.set('from',state.from);if(state.from==='population'){target.searchParams.set('sourceState',state.sourceState);if(state.sourceOnly!==undefined)target.searchParams.set('sourceOnly',state.sourceOnly?'1':'0');const query=industryPopulationSourceQuery(state.sourcePopulationQuery);if(query)target.searchParams.set('sourcePopulationQuery',query);}}
  if(state.state&&state.only)target.searchParams.set('only','1');if(state.state&&state.zoom)target.searchParams.set('zoom','1');if(state.fallback)target.searchParams.set('fallback','1');
  if(state.frame&&state.frame[2]<900)target.searchParams.set('industryFrame',industryCameraFrame(state.frame).join(','));
- if(state.sector&&industrySectors.some(s=>s.id===state.sector)){target.searchParams.set('sector',state.sector);target.searchParams.set('subsector',mexicoIndustryMetricChoices.some(m=>m.sector===state.sector&&m.id===state.subsector)?state.subsector!:'all');}
+ if(state.sector&&industrySectors.some(s=>s.id===state.sector)){target.searchParams.set('sector',state.sector);target.searchParams.set('subsector',mexicoIndustryMetricChoices.some(m=>m.sector===state.sector&&m.id===state.subsector)||state.sector==='services'&&serviceSubsectors.includes(state.subsector as typeof serviceSubsectors[number])?state.subsector!:'all');}
  return target;
 }
 export function industryPopulationReturnUrl(populationHref:string,current:URL,state:MexicoIndustryState):URL {

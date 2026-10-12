@@ -26,6 +26,17 @@
 .mexico-workspace.mexico-industry [data-mi-region-name]{font-weight:700}
 .mexico-workspace.mexico-industry [data-mi-region-leader]{fill:none;stroke:var(--mi-region-color,#344951);stroke-width:1.2;vector-effect:non-scaling-stroke;pointer-events:none}
 .mexico-workspace.mexico-industry [data-mi-reading-markers] .is-selected circle{stroke:#a94d32;stroke-width:4px}
+.mexico-workspace.mexico-industry [data-mi-facility-city] circle{fill:#fffefa;stroke:var(--mi-region-color);stroke-width:3px}
+.mexico-workspace.mexico-industry [data-mi-selected-state-pin] circle{fill:#fff7e4;stroke:#a94d32;stroke-width:3px}
+.mexico-workspace.mexico-industry [data-mi-reading-markers] .is-muted{opacity:.65}
+.mexico-workspace.mexico-industry[data-mi-metric-distribution="true"] :is(.mi-state,.mi-country-context path){fill-opacity:.87}
+.mexico-workspace.mexico-industry .mi-industry-only{display:flex;align-items:center;gap:7px;min-height:42px;font-size:14px;font-weight:700}
+.mexico-workspace.mexico-industry .mi-industry-summary{margin:10px 0 13px;padding:11px 14px;border:1px solid #c7d5c8;border-radius:6px;background:#f5f7ee}
+.mexico-workspace.mexico-industry .mi-industry-summary h2{font-size:18px;margin:0 0 4px}
+.mexico-workspace.mexico-industry .mi-industry-summary p{font-size:13px;line-height:1.5;margin:3px 0 7px}
+.mexico-workspace.mexico-industry .mi-industry-summary ol{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:5px 14px;margin:7px 0;padding-left:20px}
+.mexico-workspace.mexico-industry .mi-industry-summary li{font-size:14px;line-height:1.45;padding:2px 0}
+.mexico-workspace.mexico-industry .mi-industry-summary li strong{display:block;font-size:15px}
 .mexico-workspace.mexico-industry:not(.is-comparison) :is(.mi-state,.mi-country-context path){fill-opacity:.12}
 .mexico-workspace.mexico-industry [data-mi-reading-markers] [data-mi-region-option]:focus{outline:none}
 .mexico-workspace.mexico-industry [data-mi-reading-markers] [data-mi-region-option]:focus-visible circle{stroke:#223e47;stroke-width:4px}
@@ -71,3 +82,4 @@
  .atlas-desktop-shell .atlas-explorer.mexico-workspace.mexico-industry[data-field=industry] .mexico-primary-grid{grid-template-columns:minmax(0,1.8fr) minmax(280px,1fr);gap:16px}
 }
 @media(max-width:959px){.mexico-workspace.mexico-industry .industry-guide{flex-wrap:wrap}.mexico-workspace.mexico-industry .industry-guide span{flex-basis:100%}}
+.mexico-workspace.mexico-industry[data-mi-metric-distribution="true"]:not(.is-comparison) .mi-state{fill-opacity:1}

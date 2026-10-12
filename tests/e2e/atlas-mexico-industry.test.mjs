@@ -4,7 +4,7 @@ import {readFile,access} from 'node:fs/promises';
 import path from 'node:path';
 import {build} from 'esbuild';
 import {Window} from 'happy-dom';
-import {industryExportColor,industryValueText,mexicoIndustrySectors,mexicoIndustryMetricChoices} from '../../src/lib/atlas-mexico-industry.ts';
+import {industryExportColor,industryValueText,mexicoIndustryPrimarySectors,mexicoIndustryMetricChoices} from '../../src/lib/atlas-mexico-industry.ts';
 import catalog from '../../src/data/atlas/mexico/industry-catalog.json' with {type:'json'};
 import {formatMexicoDensity,mexicoDensityColor,mexicoPopulationRadius,mexicoPopulationSymbolColor,mexicoPopulationSymbolOpacity,mexicoPopulationSelectedSymbolOpacity} from '../../src/lib/atlas-mexico-population.ts';
 
@@ -56,9 +56,9 @@ test('US sector and supported-field navigation opens visible geographic readings
  try{
   const d=w.document,q=s=>d.querySelector(s),map=q('[data-mi-map=primary]');map.setAttribute('viewBox','60 50 790 500');
   assert.equal(q('[data-mi-legend-slot=secondary]').hidden,true);
-  assert.equal(visible(d,'primary','[data-mi-reading-markers] [data-mi-region-option]').length,10);
-  assert.equal(new Set(visible(d,'primary','[data-mi-reading-markers] [data-mi-region-option]').map(point=>point.dataset.miRegionOption)).size,9);
-  for(const sector of mexicoIndustrySectors){
+  assert.equal(visible(d,'primary','[data-mi-reading-markers] [data-mi-region-option]').length,4);
+  assert.equal(new Set(visible(d,'primary','[data-mi-reading-markers] [data-mi-region-option]').map(point=>point.dataset.miRegionOption)).size,4);
+  for(const sector of mexicoIndustryPrimarySectors){
    q(`[role=tab][data-industry-sector="${sector.id}"]`).click();assert.equal(q('[data-industry-sector][aria-selected=true]').dataset.industrySector,sector.id);
    assert.equal(q('[data-mi-industry-panel]:not([hidden])').dataset.miIndustryPanel,`${sector.id}:all`);assert.equal(map.getAttribute('viewBox'),'60 50 790 500');
    if(catalog.sectorReadings[sector.id])assert.equal(q('[data-mi-selected-place-text]').textContent,catalog.sectorReadings[sector.id].text);
@@ -87,9 +87,9 @@ test('US sector and supported-field navigation opens visible geographic readings
 
 test('Industry SSR preserves 32 geography keys, both source columns, accessible state selection and closed long detail',async()=>{
  const w=await page('',false);try{const d=w.document;assert.equal(d.querySelectorAll('[data-mi-map]').length,2);assert.equal(d.querySelectorAll('[data-mi-shape]').length,64);assert.equal(d.querySelectorAll('[data-mi-context-state]').length,64);assert.equal(d.querySelectorAll('[data-mi-data-row]').length,32);assert.equal(d.querySelector('[data-mi-figure=secondary]').hidden,true);assert.equal(d.querySelector('[data-mi-reading-comparison]').hidden,true);assert.equal(d.querySelector('.mi-all-data').open,false);assert.equal(d.querySelector('.mexico-sources details').open,false);
-  assert.deepEqual([...d.querySelectorAll('[data-industry-sector]')].map(button=>({id:button.dataset.industrySector,label:button.textContent})),mexicoIndustrySectors.map(sector=>({id:sector.id,label:sector.label})));
+ assert.deepEqual([...d.querySelectorAll('[data-industry-sector]')].map(button=>({id:button.dataset.industrySector,label:button.textContent})),mexicoIndustryPrimarySectors.map(sector=>({id:sector.id,label:sector.label})));
  assert.deepEqual(new Set([...d.querySelectorAll('[data-mi-metric-button]')].map(button=>button.dataset.miMetricButton)),new Set(mexicoIndustryMetricChoices.map(metric=>metric.id)));
- assert.equal(d.querySelector('[data-industry-sector][aria-selected=true]').dataset.industrySector,'all');assert.equal(d.querySelectorAll('[data-mi-industry-panel]:not([hidden])').length,1);assert.equal(d.querySelector('[data-mi-industry-panel]:not([hidden])').dataset.miIndustryPanel,'all:all');
+ assert.equal(d.querySelector('[data-industry-sector][aria-selected=true]').dataset.industrySector,'resources');assert.equal(d.querySelectorAll('[data-mi-industry-panel]:not([hidden])').length,1);assert.equal(d.querySelector('[data-mi-industry-panel]:not([hidden])').dataset.miIndustryPanel,'resources:all');
  assert.equal(d.querySelector('[data-mi-metric]').hidden,true);
  assert.equal(d.querySelector('[data-mi-state-select]').closest('details').id,'mi-statistics');
  assert.equal(d.querySelector('[data-mi-source-view]').closest('details').id,'mi-statistics');
@@ -102,7 +102,7 @@ test('Industry SSR preserves 32 geography keys, both source columns, accessible 
 });
 
 test('All 32 states and both industries show the original absolute amount, separate state geography, original status and selected source table',async()=>{
- const w=await page();try{const d=w.document;for(const metric of ['transport','electronics']){d.querySelector(`[data-mi-metric-button=${metric}]`).click();assert.equal(d.querySelector('[data-mi-metric]').value,metric);assert.equal(d.querySelector(`[data-mi-metric-button=${metric}]`).getAttribute('aria-selected'),'true');for(const row of data.rows){change(w,'[data-mi-state-select]',row.id);const v=row.values[metric],shape=d.querySelector(`[data-mi-map=primary] [data-mi-shape="${row.id}"]`);assert.equal(shape.getAttribute('fill'),'#edf1df');assert.equal(shape.dataset.miStatus,v.status);assert.equal(shape.getAttribute('aria-pressed'),'true');assert.equal(shape.classList.contains('is-selected'),true);assert.equal(shape.getAttribute('aria-label'),shape.querySelector('title').textContent);assert.equal(d.querySelector(`[data-mi-value="${metric}"]`).textContent,industryValueText(v));assert.equal(d.querySelector(`[data-mi-stats-status="${metric}"]`).textContent,v.sourceStatus);assert.equal(new URL(w.location).searchParams.get('state'),row.id);assert.equal(d.querySelectorAll('.mi-all-data tr.is-selected').length,1);assert.equal(visible(d,'primary').length,32);}}
+ const w=await page();try{const d=w.document;for(const metric of ['transport','electronics']){d.querySelector(`[data-mi-metric-button=${metric}]`).click();assert.equal(d.querySelector('[data-mi-metric]').value,metric);assert.equal(d.querySelector(`[data-mi-metric-button=${metric}]`).getAttribute('aria-selected'),'true');for(const row of data.rows){change(w,'[data-mi-state-select]',row.id);const v=row.values[metric],shape=d.querySelector(`[data-mi-map=primary] [data-mi-shape="${row.id}"]`);assert.equal(shape.getAttribute('fill'),industryExportColor(v.value,v.status,'mi-primary'));assert.equal(shape.dataset.miStatus,v.status);assert.equal(shape.getAttribute('aria-pressed'),'true');assert.equal(shape.classList.contains('is-selected'),true);assert.equal(shape.getAttribute('aria-label'),shape.querySelector('title').textContent);assert.equal(d.querySelector(`[data-mi-value="${metric}"]`).textContent,industryValueText(v));assert.equal(d.querySelector(`[data-mi-stats-status="${metric}"]`).textContent,v.sourceStatus);assert.equal(new URL(w.location).searchParams.get('state'),row.id);assert.equal(d.querySelectorAll('.mi-all-data tr.is-selected').length,1);assert.equal(visible(d,'primary').length,32);}}
  assert.equal(d.querySelector('[data-mexico-field=industry]').dataset.miRenderer,'svg');assert.equal(d.querySelector('[data-mi-fallback-note]').hidden,true);
  }finally{await w.happyDOM.close();}
 });
@@ -119,7 +119,7 @@ test('Category buttons keep keyboard, native selection, URL, reload and actual h
    assert.match(q('[data-mi-industry-panel]:not([hidden])').textContent,new RegExp(name));
    assert.match(q('[data-mi-selected-place-name]').textContent,new RegExp(name));
    assert.match(q('[data-mi-topic-heading]').textContent,new RegExp(name));
-   assert.equal(q('[data-mi-export-legend=primary]').hidden,true);
+   assert.equal(q('[data-mi-export-legend=primary]').hidden,false);
    for(const item of data.metrics){assert.equal(button(item.id).getAttribute('aria-selected'),String(item.id===metric));assert.equal(button(item.id).tabIndex,item.id===metric?0:-1);}
   };
   assertMetric('electronics');
@@ -291,12 +291,12 @@ test('Industry geographic labels retain all topics without duplicate state abbre
  const w=await page();
  try{
   const q=s=>w.document.querySelector(s),points=visible(w.document,'primary','[data-mi-reading-markers] [data-mi-region-option]');
-  assert.equal(points.length,10);assert.equal(visible(w.document,'primary','[data-mi-label]').length,0);
+  assert.equal(points.length,4);assert.equal(visible(w.document,'primary','[data-mi-label]').length,0);
   assert.equal(q('[data-mi-map=primary]').querySelectorAll('.is-selected').length,0,'The initial overview must not invent a Coahuila selection');
   for(const point of points){assert.ok(point.querySelector('[data-mi-region-name]').textContent);assert.ok(point.querySelector('[data-mi-region-topic]').textContent);assert.ok(point.querySelector('[data-mi-region-leader]'));}
-  const construction=points.filter(point=>point.dataset.miRegionSector==='construction-real-estate');
-  assert.equal(construction.length,2);
-  for(const point of construction){assert.equal(point.querySelector('[data-mi-region-topic]').textContent,'建設・不動産');assert.match(point.getAttribute('aria-label'),/建設・不動産／需要の背景/);}
+  assert.ok(points.every(point=>point.dataset.miRegionSector==='resources'));
+  q('[data-industry-sector=services]').click();
+  assert.equal(visible(w.document,'primary','[data-mi-reading-markers] [data-mi-region-option]').length,2);
   q('[data-mi-reading-markers] [data-mi-region-option="09"][data-mi-region-sector=services]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
   assert.equal(q('[data-mi-map=primary] [data-mi-shape="09"]').classList.contains('is-selected'),true);
   q('[data-mi-only]').checked=true;q('[data-mi-only]').dispatchEvent(new w.Event('change'));
@@ -304,6 +304,33 @@ test('Industry geographic labels retain all topics without duplicate state abbre
   assert.ok(visible(w.document,'primary','[data-mi-reading-markers] [data-mi-region-option]').every(point=>point.dataset.miRegionOption==='09'));
   q('[data-mi-all]').click();assert.equal(visible(w.document,'primary').length,32);
  }finally{await w.happyDOM.close();}
+});
+
+test('Three industry sectors keep their context markers in place while an item gains its measured state distribution',async()=>{
+ const w=await page();let reload;
+ try{
+  const d=w.document,q=s=>d.querySelector(s),markers=()=>visible(d,'primary','[data-mi-reading-markers] [data-mi-region-option]');
+  assert.deepEqual([...d.querySelectorAll('[role=tab][data-industry-sector]')].map(el=>el.dataset.industrySector),['resources','manufacturing','services']);
+  assert.equal(q('[data-mi-summary-list]').querySelectorAll('li').length,2);
+  const before=markers().map(el=>[el.dataset.miRegionMetric,el.getAttribute('transform')]);
+  q('[data-mi-metric-button=oil-gas]').click();
+  assert.deepEqual(markers().map(el=>[el.dataset.miRegionMetric,el.getAttribute('transform')]),before);
+  assert.equal(q('[data-mi-map=primary] [data-mi-shape="04"]').getAttribute('fill'),industryExportColor(catalog.rows.find(row=>row.id==='04').values['oil-gas'].value,catalog.rows.find(row=>row.id==='04').values['oil-gas'].status,'mi-primary'));
+  assert.equal(q('[data-mi-export-legend=primary]').hidden,false);
+  assert.equal(q('[data-mi-summary-list]').querySelectorAll('li').length,3);
+  assert.ok(markers().some(el=>el.dataset.miRegionMetric==='mining'&&el.classList.contains('is-muted')));
+  q('[data-mi-item-only]').checked=true;q('[data-mi-item-only]').dispatchEvent(new w.Event('change'));
+  assert.ok(markers().every(el=>el.dataset.miRegionMetric==='oil-gas'));
+  q('[data-mi-item-only]').checked=false;q('[data-mi-item-only]').dispatchEvent(new w.Event('change'));
+  assert.deepEqual(markers().map(el=>[el.dataset.miRegionMetric,el.getAttribute('transform')]),before);
+  q('[data-industry-sector=services]').click();q('[data-industry-subsector=tourism]').click();
+  assert.equal(q('[data-mi-industry-panel]:not([hidden])').dataset.miIndustryPanel,'services:tourism');
+  assert.match(q('[data-mi-summary-list]').textContent,/14万3,793人/);
+  assert.equal(q('[data-mi-export-legend=primary]').hidden,true);
+  assert.equal(new URL(w.location).searchParams.get('subsector'),'tourism');
+  reload=await page(w.location.search);
+  assert.equal(reload.document.querySelector('[data-mi-industry-panel]:not([hidden])').dataset.miIndustryPanel,'services:tourism');
+ }finally{await w.happyDOM.close();await reload?.happyDOM.close();}
 });
 
 test('Visible industry map controls preserve zoom across selection, reload and history with an independent population camera',async()=>{
