@@ -31,10 +31,8 @@
 .mexico-agriculture-atlas[data-agriculture-crop-selected=true] .atlas-livestock-marker{opacity:.46}
 .mexico-agriculture-atlas[data-agriculture-crop-selected=true] .atlas-livestock-marker:focus-visible,.mexico-agriculture-atlas[data-agriculture-crop-selected=true] .atlas-livestock-marker:hover{opacity:1}
 .mexico-agriculture-atlas .atlas-livestock-marker:focus-visible{outline:3px solid #176f89;outline-offset:3px}
-.mexico-agriculture-state-selection,.mexico-agriculture-forest-states{pointer-events:none}
+.mexico-agriculture-state-selection{pointer-events:none}
 .mexico-agriculture-state-selection path{fill:none;stroke:#203f4b;stroke-width:2.5;vector-effect:non-scaling-stroke}
-.mexico-agriculture-forest-states path{fill:none;stroke:#2e6850;stroke-width:2.5;vector-effect:non-scaling-stroke}
-.mexico-agriculture-forest-states text{font:700 21px var(--sans);text-anchor:middle;fill:#274f42;paint-order:stroke;stroke:#fffef0;stroke-width:4}
 .mexico-agriculture-forest-key{display:flex;align-items:flex-start;gap:8px;margin:8px 0;font-size:12px;line-height:1.65;color:#315341}
 .mexico-agriculture-forest-key i{flex:none;width:17px;height:17px;margin-top:2px;background:#4f8562;border:2px solid #2e6850}
 .mexico-agriculture-map-note{font-size:11px;line-height:1.6;margin:5px 0;color:#5d6d66}

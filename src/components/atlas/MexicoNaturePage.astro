@@ -24,7 +24,7 @@ const routes = {nature: withBase('/atlas/north-america/mexico/nature/'), agricul
 const items = {climate: nature.climate.classes.map(item => ({...item, ...mexicoNatureItemReading('climate', item)})), relief: nature.relief.classes.map(item => ({...item, ...mexicoNatureItemReading('relief', item)}))};
 const climateMapLabel = (code: string) => /^(BS1|BS0|BS|BW|A\(C\)|\(A\)C|C\(E\)|E\(T\)H|Af|Am|Aw|C)/.exec(code)?.[0] ?? code;
 const overviewClimateCodeIds = new Set(['11','12','21','22','31','32','42','52','54','57','59','62','64','70']);
-const overviewLandformIds = new Set(['I','II','III','V','IX','X','XI','XII','XIV','XV']);
+const overviewLandformIds = new Set(['I','II','III','V','IX','X','XI','XII']);
 const climateColor = (code: string) => (parityPalette.climate.bySourceCode as Record<string,{color:string}>)[code]?.color;
 const climateKeys = [
  {label:'A・A(C) 熱帯・移行型',ids:['a-f','a-m','a-w','a-c-humid','a-c-subhumid']},

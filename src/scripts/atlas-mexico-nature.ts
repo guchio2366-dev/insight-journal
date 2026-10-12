@@ -95,7 +95,7 @@ export function initMexicoNature(root: HTMLElement): void {
     visible('[data-mexico-nature-overview]', state.compare === null && !item && !state.category); visible('[data-mexico-nature-comparison]', state.compare !== null); visible('[data-mexico-nature-only-control]', state.compare !== null);
     text('[data-mexico-nature-reading-title]', state.view === 'climate' ? '気候の違いが水管理を変える' : '山系・高原・沿岸の位置を読む');
     text('[data-mexico-nature-reading-lead]', state.view === 'climate' ? '北部・北西部に乾燥系、中央部に温帯系、南東部に高温・湿潤系が広がる。' : '西・東シエラマドレ、中央高原、火山帯、沿岸平原を全国で位置付ける。');
-    text('[data-mexico-nature-reading-body]', state.view === 'climate' ? '乾燥する地域では、農地へ水を配る灌漑が作期を支える。山地と高原の気温条件、沿岸平原の位置を合わせると、農業や都市が成立する場所を読める。' : '地質と地形の成り立ちによる15の自然地理地域。中央部の都市集積と、沿岸・北部の交通や市場をつなぐ場所を人口分布と見比べる。');
+    text('[data-mexico-nature-reading-body]', state.view === 'climate' ? '乾燥する地域では、農地へ水を配る灌漑が作期を支える。山地と高原の気温条件、沿岸平原の位置を合わせると、農業や都市が成立する場所を読める。' : '地質と地形の成り立ちによる15の自然地理地域。南東部のチアパス・グアテマラ山地と中米山脈は、拡大して位置を確認できます。中央部の都市集積や沿岸との関係も人口分布と見比べます。');
     for (const link of all<HTMLAnchorElement>('[data-mexico-nature-compare-link]')) {const comparison = link.dataset.mexicoNatureCompareLink as 'irrigation' | 'population'; link.href = makeComparisonURL(comparison); const mode=mexicoNatureIndicator(readMexicoNatureState(new URL(link.href),codes)),metric={density:'人口密度',population:'人口規模',irrigation:'灌漑農地率',maize:'白粒トウモロコシ生産量',cattle:'牛頭数',pine:'松材取得量'}[mode];link.textContent = state.category && hydrology ? `${metric}と比較` : `${naturalLabel()}と${metric}を比べる`;link.setAttribute('aria-label',`${naturalLabel()}と${metric}を比べる`);}
     const sourceReturn = query<HTMLAnchorElement>('[data-mexico-nature-source-return]');
     if (sourceReturn) {

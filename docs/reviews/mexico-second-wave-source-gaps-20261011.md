@@ -11,3 +11,10 @@
 | 世界比の推移 | 保全済みFAOSTAT QCL抽出のメキシコ行は2024年だけ。牛肉・牛生乳などの単年比較は可能だが、メキシコの2015–2024連続値はない。2024年の作物6行も推移には不足。 | [FAOSTAT Production](https://www.fao.org/faostat/)の同一定義のメキシコ・世界の複数年値。保全済み取得メタデータは `bulks-faostat.fao.org/production/Production_Crops_Livestock_E_All_Data_(Normalized).zip` を示す。 | 単年値を時系列に引き延ばさない。世界比は年・品目・単位を揃えてから生成。 |
 
 追加取得を行う前に通信先と資料範囲をまとめて確認する。取得できた原表はサイズ、ハッシュ、辞書、期間、座標、単位、利用条件を検証する。
+
+## 2026-10-12 時点の追加確認
+
+- GPCC 1991–2020 年の年降水量面と NOAA ETOPO 2022 の標高面は、現行 main に数値由来の公開画像・数値凡例・生成検証記録がある。未取得扱いに戻さない。追加の原本ダウンロードを今回の表示改善の前提にしない。
+- 北部乾燥域と南東部湿潤域の雨温図には、既存の Tacubaya と Culiacán 以外の **同期間の気温・降水量の観測所別平年値** が必要。正規の確認先は `smn.conagua.gob.mx` の [1991–2020 年平年値カタログ](https://smn.conagua.gob.mx/es/climatologia/informacion-climatologica/normales-climatologicas-por-estado)。GPCC 格子の雨量を都市観測所の気温・雨温図に転用しない。
+- 加工拠点と港の地図には、施設名・用途・座標・時点を確認できる公表原資料が必要。保全済み INEGI for15/for18 は松材取得量と用途区分を示すが、個別工場や搬出港の所在地は示さない。「製材向け」を特定工場・港の存在証拠にしない。候補資料と配信ホストが確認できるまで点を置かない。
+- 今回の環境で追加の公式ホスト `www.inegi.org.mx`、`antares.inegi.org.mx`、`datos.conagua.gob.mx`、`smn.conagua.gob.mx` の有効な許可は確認できない。これらへの接続・ミラー経由の代替取得を行わず、名称・下流接続・河口、帯水層別年間利用可能量、追加観測所は未取得と区別する。

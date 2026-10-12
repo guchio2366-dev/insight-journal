@@ -57,7 +57,9 @@
 .mexico-workspace.mexico-nature .mexico-nature-outline-key{height:3px!important;background:#59696a;margin-top:7px}
 .mexico-workspace.mexico-nature .mexico-nature-relief-shade-key{background:linear-gradient(100deg,#d5d4c5,#f5f1dc,#bebfaf)}
 [data-mexico-nature-relief-background]{pointer-events:none}
-[data-mexico-nature-relief-background] image{filter:contrast(1.17) brightness(.97)}
+[data-mexico-nature-relief-background] image{filter:contrast(1.12) brightness(.91)}
+.mexico-nature[data-mexico-nature-category=elevation] .mexico-nature-map{background:#d5e8ee}
+[data-mexico-precipitation-values] text{font:600 17px sans-serif;text-anchor:middle;dominant-baseline:central;fill:#173d5e;stroke:#fff;stroke-width:4px;stroke-linejoin:round;paint-order:stroke fill}
 .mexico-water-basin-label{cursor:pointer;font:700 16px var(--sans);fill:#203d3f;paint-order:stroke fill;stroke:#fffdf7;stroke-width:3px;stroke-linejoin:round}
 .mexico-water-basin-label[aria-pressed=true]{text-decoration:underline}
 .mexico-water-basin-label:focus-visible{outline:2px solid #173f42}

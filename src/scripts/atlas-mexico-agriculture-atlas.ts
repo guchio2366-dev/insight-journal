@@ -66,7 +66,7 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
    const rect=node.getBoundingClientRect();
    return rect.width&&rect.height?{left:rect.left-frameRect.left,top:rect.top-frameRect.top,right:rect.right-frameRect.left,bottom:rect.bottom-frameRect.top}:null;
   };
-  const obstacles=Array.from(root.querySelectorAll('[data-agri-layers],.atlas-map-tools,.atlas-layer-caption,.atlas-livestock-marker,.mexico-agriculture-forest-states text')).filter(node=>!node.closest('[hidden]')).map(box).filter((value):value is AgricultureLabelBox=>!!value);
+  const obstacles=Array.from(root.querySelectorAll('[data-agri-layers],.atlas-map-tools,.atlas-layer-caption,.atlas-livestock-marker')).filter(node=>!node.closest('[hidden]')).map(box).filter((value):value is AgricultureLabelBox=>!!value);
   const visible=state.crops&&state.item!=='pine'&&state.item!=='rice';
   const items=cropLabels.filter(node=>visible&&(!state.onlyItem||!state.item||node.dataset.cropLabel===state.item)).map(node=>{
    const selected=node.dataset.cropLabel===state.item,fontSize=selected?17:width<560?13.5:15;
