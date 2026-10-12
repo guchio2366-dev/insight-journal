@@ -136,6 +136,7 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    await capture(`${region}-landform`);
    await page.locator('.asia-landform-label').first().click();
    assert.ok(new URL(page.url()).searchParams.get('detail'));
+   if(region==='central-asia')assert.equal(new URL(page.url()).searchParams.get('place'),null);
    assert.equal(await page.locator('[data-physical-reading]').isVisible(),true);
    await capture(`${region}-landform-selected`);
    await page.goto(`${url}/atlas/asia/${region}/population/?topic=religion`,{waitUntil:'domcontentloaded'});
