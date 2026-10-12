@@ -175,7 +175,7 @@ async function snapshot(page, profile, topic, region = 'europe') {
   const measured = await measurements(page, region); assert.equal(measured.horizontalOverflow, false);
   if(!['terrain-overview','population-to-alps'].includes(topic))assert.ok(measured.legend?.height > 0 && measured.legend.y >= measured.map.y + measured.map.height - 1, 'Visible legend belongs below the map');
   assert.ok(measured.reader?.width >= 280 && measured.reader.x >= measured.map.x + measured.map.width, 'Reader belongs to the right of the map on PC');
-  assert.deepEqual(measured.controls.map(item => item.action), ['fit', 'in', 'out']);
+  assert.deepEqual(measured.controls.map(item => item.action), region==='us'?['fit','in','out']:[]);
   for (const [index, control] of measured.controls.entries()) {
     // The unchanged US fit button uses 11px text in a 44px control. Keep the
     // Europe minimum at 12px while measuring that existing US reference as-is.
@@ -257,9 +257,10 @@ async function agricultureClimateRepairs(page,profile){
   assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'),'0 0 1200 1001');
   await openEurope(page,'atlas/europe/nature/','normal');
   const cityLabels=await page.locator('[data-eu-map-kind="city"]:visible').evaluateAll(nodes=>nodes.filter(node=>!node.classList.contains('is-point-only')).map(node=>{const style=getComputedStyle(node);return {name:node.textContent,background:style.backgroundColor,font:Number.parseFloat(style.fontSize)};}));
-  assert.ok(cityLabels.length<=8);
+  assert.ok(cityLabels.length>=8&&cityLabels.length<=24);
+  assert.ok(cityLabels.some(label=>label.name==='リスボン'));
   for(const label of cityLabels){assert.equal(label.background,'rgba(0, 0, 0, 0)');assert.ok(label.font>=12&&label.font<=13);}
-  const stationId=await page.locator('[data-eu-map-kind="city"].is-point-only:visible').first().getAttribute('data-eu-map-place');
+  const stationId=await page.locator('[data-eu-map-kind="city"][data-eu-map-place=lisbon]:visible').getAttribute('data-eu-map-place');
   assert.ok(stationId);
   const point=page.locator(`[data-eu-map-kind="city"][data-eu-map-place="${stationId}"]`);
   await page.bringToFront();await point.focus();
