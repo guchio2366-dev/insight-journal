@@ -126,6 +126,7 @@ async function setup(query = '', options = {}) {
     physicalBase:'/assets/physical/',physical:{width:1,height:1,bounds3857:[west,south,east,north],grid:'elevation.gz',image:'terrain.png',contours:'contours.png',water:'water.json',imageCoordinates:[[72,56],[155,56],[155,17],[72,17]],waterFeatures:[{id:'rivers-1',name:'試験河川',kind:'rivers',countries:['CHN'],bounds:[90,30,120,40]}]},
     physicalFocus:[{id:'basin',region:'east-asia',country:'CHN',name:'盆地',coordinates:[100,35],reading:'周囲の山地と比較します。'}],
   });
+  if(options.climateReference){const conf=JSON.parse(q('[data-asia-config]').textContent);conf.physicalFocus.push({id:'tibetan-plateau',region:'east-asia',country:'CHN',name:'チベット高原',coordinates:[100,35],reading:'参照位置'});q('[data-asia-config]').textContent=JSON.stringify(conf);}
   if(options.population){
     const conf=JSON.parse(q('[data-asia-config]').textContent);
     const raster={width:1,height:1,bounds4326:[72,17,155,56],bounds3857:[west,south,east,north],imageCoordinates:[[72,56],[155,56],[155,17],[72,17]],image:'density.png',grid:'density.gz',sourceCellKm:5};
@@ -1353,4 +1354,10 @@ test('東アジアの河川名は地点選択にせず、本流と水源・終�
   assert.deepEqual({...window.__map.getCenter(),zoom:window.__map.getZoom()},before);
   assert.equal(q('[data-hydrology-content]').textContent.includes('上の「河川の流域」を選んで'),false);
  }finally{await window.happyDOM.close();}
+});
+
+// A geographic name shares the active climate prefix but is not a class code.
+test('気候の固有地名を分類コードのアンカーとして処理しない',async()=>{
+ const app=await setup('',{presentation:true,climateReference:true});
+ try{await until(()=>app.q('.asia-geographic-name')&&!app.q('.asia-geographic-name').hidden,'major physical name');assert.equal(app.q('.asia-geographic-name').textContent,'チベット高原');app.q('[data-city-select]').value='tokyo';app.q('[data-city-select]').dispatchEvent(new app.window.Event('change'));await delay();assert.equal(app.q('.asia-geographic-name').hidden,false);}finally{await app.window.happyDOM.close();}
 });
