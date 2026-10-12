@@ -22,6 +22,9 @@ export const westReadingSources = {
   transit: {label:'EIA：世界の石油輸送の要衝',url:'https://www.eia.gov/international/analysis/special-topics/World_Oil_Transit_Chokepoints',period:'2026年3月3日版・主に2025年前半までの輸送。現在の通航状況は示しません。'},
   suez: {label:'スエズ運河庁：運河の地理',url:'https://www.suezcanal.gov.eg/English/About/SuezCanal/Pages/AboutSuezCanal.aspx',period:'運河庁の地理説明。現在の通航量ではありません。'},
   qatar: {label:'QatarEnergy：ラス・ラファン港',url:'https://www.qatarenergy.qa/en/MarketingAndTrading/Pages/PortsInformation.aspx',period:'事業者の港湾説明。LNGの輸出先構成は示しません。'},
+  kafd: {label:'PIF：リヤドの金融・業務地区',url:'https://www.pif.gov.sa/en/our-investments/our-portfolio/king-abdullah-financial-district/',period:'地区の立地と事業内容。国全体のサービス業規模ではありません。'},
+  difc: {label:'DIFC：ドバイの金融機関の集積',url:'https://landing.difc.ae/bankingcapitalmarkets',period:'運営主体の金融拠点説明。港の貨物量ではありません。'},
+  ifm: {label:'İstanbul Finans Merkezi：金融地区',url:'https://portal.ifm.gov.tr/',period:'運営主体の地区説明。国内の金融業付加価値ではありません。'},
   nileDam: {label:'NASA：アスワン・ハイダムとナセル湖',url:'https://ntrs.nasa.gov/api/citations/19700017671/downloads/19700017671.pdf',period:'ナイル川沿いの貯水池の位置。現在の貯水量や配水量は示しません。'},
   euphratesDam: {label:'UNESCO：ユーフラテス川のアタテュルク・ダム',url:'https://unesdoc.unesco.org/ark:/48223/pf0000143430',period:'上流のダムの位置を示す資料。現在の放流量は示しません。'},
 };
@@ -75,7 +78,7 @@ export const westTopicReasons = {
   'buffalo-milk':'2024年の保存済み国別値ではエジプトの水牛の生乳が大きく、収録があるのは20対象中6か国・地域です。ナイル川とデルタの農業・人口を比べる手掛かりになりますが、この国別値から水牛の飼養地点は分かりません。',
   forest:'トルコの黒海側やイランのカスピ海側の森林の参考分布を、乾燥した内陸と比べます。海に面した斜面と山地では水と気温の条件が変わります。森林面積率は木材生産量ではなく、森林の分布から伐採量や樹種を推計しません。',
   ethnicity:'クルド系の掲載集団はトルコ・イラン・イラク・シリアに、アラブ系は複数の国にまたがる例があります。ペルシア系・トルコ系やコーカサスの掲載域も比べ、国境と居住域が一致しないことを読みます。これは掲載集団の概略で、各地点の最多民族を決める地図ではありません。',
-  religion:'イスラム教に結びつく掲載域と、コプトやアルメニア系などに結びつくキリスト教の帰属例を比べます。同じ民族区分でも宗教は一様とは限りません。この初回資料は大区分の帰属例で、スンナ派・シーア派の細分布や各地点の信者割合を表しません。',
+  religion:'イスラム教に結びつく掲載域と、コプトやアルメニア系などに結びつくキリスト教の帰属例を比べます。同じ民族区分でも宗教は一様とは限りません。スンナ派・シーア派は原資料の集団名にはありますが、この図ではイスラム教にまとめています。ユダヤ系の原記録は国全体を単位とし、国内の居住位置を示さないため面に置いていません。',
   density:'エジプトではナイル川とデルタに沿う集中、トルコ・イランでは都市ごとの集中を比べます。アラビア半島には川から離れたリヤドや沿岸の都市があり、送水・地下水・淡水化と仕事・交通の組合せが生活を支えます。人口格子だけで水源や移動の理由は特定できません。',
 };
 export function westRegionalReading(topic,selection={}) {

@@ -15,11 +15,17 @@ export const westIndustrySites = [
   {id:'hormuz',name:'ホルムズ海峡',country:'network',kind:'transit',coordinates:[56.48,26.58],source:'transit',description:'ペルシャ湾から外洋への通過点です。ここを通る貨物をイランやオマーンの生産量には数えません。'},
   {id:'suez',name:'スエズ運河',country:'network',kind:'transit',coordinates:[32.34,30.14],source:'suez',description:'紅海と地中海を結ぶ通過点です。運河の位置は貨物の輸出先や通航量を表しません。'},
   {id:'ras-laffan',name:'ラス・ラファン',country:'network',kind:'transit',coordinates:[51.53,25.92],source:'qatar',description:'カタールのLNG輸出港です。地域供給網の例であり、国別産業比較の対象には含めません。'},
+  {id:'kafd',name:'リヤド金融地区',country:'SAU',kind:'service',coordinates:[46.64,24.77],source:'kafd',description:'リヤドのキング・アブドゥッラー金融地区は業務・商業の集積地です。石油の産出地点や国全体のサービス業比率を示す点ではありません。'},
+  {id:'difc',name:'ドバイ金融センター',country:'ARE',kind:'service',coordinates:[55.28,25.21],source:'difc',description:'ドバイ国際金融センターは金融機関・企業の集積地です。港湾物流と同じ都市圏にありますが、金融サービスと貨物の取扱いは別の活動です。'},
+  {id:'istanbul-finance',name:'イスタンブール金融センター',country:'TUR',kind:'service',coordinates:[29.13,40.99],source:'ifm',description:'イスタンブールの金融機関向け地区です。ブルサ・コジャエリの自動車製造と、都市に集まる金融サービスを分けて読みます。'},
 ];
-export const westIndustryKind = {resource:'採掘・資源',refining:'精製',petrochemical:'石油化学',manufacturing:'自動車製造',transit:'港・通過点'};
+export const westIndustryKind = {resource:'採掘・資源',refining:'精製',petrochemical:'石油化学',manufacturing:'自動車製造',transit:'港・通過点',service:'金融・業務'};
 export const westIndustryRole = site => site.kind === 'processing' ? site.activity : site.kind;
 export const westIndustryRoles = {
   'industry-network':null,
+  'industry-resources':['resource'],
+  'industry-manufacturing':['processing','manufacturing'],
+  'industry-services':['transit','service'],
   'industry-extraction':['resource'],
   'industry-refining':['processing'],
   'industry-petrochemical':['processing'],
