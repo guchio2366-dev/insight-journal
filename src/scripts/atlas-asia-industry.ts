@@ -3,6 +3,7 @@ import {industryTopic,normalizeIndustryState,industryValues,industryValueLabel,i
 import type {AsiaState,AsiaCamera} from '../lib/atlas-asia-state';
 import {eastIndustrySites} from '../data/atlas/asia-east-industry-sites';
 import {southCentralIndustryGroups,southCentralIndustrySites,southCentralIndustryOverview} from '../data/atlas/asia-south-central-industry';
+import {southIndustryGroups} from '../data/atlas/south-asia-industry-sectors';
 import {choosePlaceReading} from '../data/atlas/asia-place-readings';
 import {Marker} from 'maplibre-gl';
 type Config={industry:IndustryRegion;industryBase:string;countries:{code:string;name:string}[];focusId?:string;industrySites?:typeof southCentralIndustrySites;industryGroups?:typeof southCentralIndustryGroups;industryOverview?:string};
@@ -22,6 +23,8 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
  const current=()=>industryTopic(region,getState());
  const east=hasIndustryCountryScope(region);
  const southCentral=region.topics.some(t=>t.id==='sc-overview');
+ const matchingRegionalGroup=(topic:string,group:string)=>topic==='sc-overview'||topic===group||!!southIndustryGroups(topic)?.includes(group as never);
+ const topicGroups=(topic:string)=>southIndustryGroups(topic)??(topic==='sc-overview'?null:[topic]);
  const keepEastDistribution=(t:ReturnType<typeof current>)=>isEastIndustryRegion(region)&&(t.kind==='national'||t.kind==='steel');
  const mapValues=(t:ReturnType<typeof current>)=>keepEastDistribution(t)?industryValues(t,data!,national!,industryScopeCountries(region,null)):scopedValues(t);
  const eastJourney=root.querySelector<HTMLElement>('[data-east-industry-journey]');
@@ -64,28 +67,28 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
  }
  function select(id:string){
   const state=getState(),t=current(),record=t.kind==='admin'?data?.admin.find(a=>a.id===id):data?.power.find(p=>p.id===id);
-  if(t.kind==='regional'){const site=regionalSites.find(s=>s.id===id&&(t.id==='sc-overview'||s.group===t.id));navigate({...state,detail:site?.id??null,point:site?.point??null,place:state.place,story:null,camera:camera()},false);return;}
+  if(t.kind==='regional'){const site=regionalSites.find(s=>s.id===id&&matchingRegionalGroup(t.id,s.group));navigate({...state,detail:site?.id??null,point:site?.point??null,place:state.place,story:null,camera:camera()},false);return;}
   if(!record){navigate({...state,detail:null,point:null,camera:camera()},false);return;}
   navigate(normalizeIndustryState(region,{...state,detail:record.id,place:record.country,point:record.point??null,city:null,camera:null},data));
  }
- function detail(){const state=getState();return current().kind==='regional'?regionalSites.find(s=>s.id===state.detail&&(state.topic==='sc-overview'||s.group===state.topic)):current().kind==='admin'?data?.admin.find(a=>a.id===state.detail):data?.power.find(p=>p.id===state.detail);}
+ function detail(){const state=getState();return current().kind==='regional'?regionalSites.find(s=>s.id===state.detail&&matchingRegionalGroup(state.topic??'',s.group)):current().kind==='admin'?data?.admin.find(a=>a.id===state.detail):data?.power.find(p=>p.id===state.detail);}
  function renderRegional(){
-  const state=getState(),topic=current(),group=regionalGroups.find(g=>g.id===topic.id),sites=regionalSites.filter(s=>(!group||s.group===group.id)&&(!state.place||s.country===state.place)),selected=sites.find(s=>s.id===state.detail),content=$('[data-industry-content]'),legend=$('[data-industry-scale]');
-  $('[data-industry-title]').textContent=state.place?`${countryName(state.place)}の産業立地例`:group?.title??'地域の産業分布';
-  $('[data-industry-lead]').textContent=selected?selected.fact:state.place?`${countryName(state.place)}で出典を確認できた${sites.length}地点を示します。地点の説明で、立地とその理由を読んでください。`:(group?.fact??regionalOverview);
+  const state=getState(),topic=current(),group=regionalGroups.find(g=>g.id===topic.id),sites=regionalSites.filter(s=>matchingRegionalGroup(topic.id,s.group)&&(!state.place||s.country===state.place)),selected=sites.find(s=>s.id===state.detail),content=$('[data-industry-content]'),legend=$('[data-industry-scale]');
+  $('[data-industry-title]').textContent=state.place?`${countryName(state.place)}の産業立地例`:group?.title??(southIndustryGroups(topic.id)?topic.title:'地域の産業分布');
+  $('[data-industry-lead]').textContent=selected?selected.fact:state.place?`${countryName(state.place)}で出典を確認できた${sites.length}地点を示します。地点の説明で、立地とその理由を読んでください。`:(group?.fact??(southIndustryGroups(topic.id)?`${topic.title}の立地例を示します。地点を選ぶと、その場所で何が盛んで、なぜそこに立地するかを読めます。`:regionalOverview));
   $('[data-industry-value]').textContent=selected?selected.name:group?'地図の点から地域を選ぶと、立地の事実と理由を読めます。':'業種を選ぶと、代表的な地域の立地を比べられます。';
   $('[data-grid-reading]').textContent=selected?selected.name:'地図の点または一覧から地域を選べます。';
   $('[data-industry-definition]').textContent=selected?selected.reason:group?.reason??'点は出典で確認した地域の案内位置です。施設の境界や全国の網羅分布を表しません。';
   $('[data-industry-coverage]').textContent=`${sites.length}地点の立地例を表示しています。数や丸の大きさは、生産額・雇用者数・施設総数を表しません。`;
   $('[data-industry-status]').textContent='';$('[data-industry-retry]').hidden=true;
   $('[data-industry-search-label]').hidden=true;$('[data-industry-detail-label]').hidden=true;
-  $('[data-map-title]').textContent=group?.title??'地域の産業分布';$('[data-map-eyebrow]').textContent='Industry · regional locations';$('[data-map-period]').textContent='代表的な立地例';$('[data-map-gesture]').textContent='地図の点を選ぶと、産業の場所と立地の理由を読めます。';
-  $('[data-industry-legend-title]').textContent=group?.title??'地域の産業';legend.replaceChildren();
-  for(const g of regionalGroups.filter(g=>!group||g.id===group.id)){const item=el('span'),swatch=el('i');swatch.style.backgroundColor=g.color;swatch.style.borderRadius='50%';item.append(swatch,document.createTextNode(g.title));legend.append(item);}
+  $('[data-map-title]').textContent=group?.title??(southIndustryGroups(topic.id)?topic.title:'地域の産業分布');$('[data-map-eyebrow]').textContent='Industry · regional locations';$('[data-map-period]').textContent='代表的な立地例';$('[data-map-gesture]').textContent='地図の点を選ぶと、産業の場所と立地の理由を読めます。';
+  $('[data-industry-legend-title]').textContent=group?.title??(southIndustryGroups(topic.id)?topic.title:'地域の産業');legend.replaceChildren();
+  for(const g of regionalGroups.filter(g=>matchingRegionalGroup(topic.id,g.id))){const item=el('span'),swatch=el('i');swatch.style.backgroundColor=g.color;swatch.style.borderRadius='50%';item.append(swatch,document.createTextNode(g.title));legend.append(item);}
   $('[data-industry-legend-note]').textContent='色は産業の種類です。点は代表的な地域の案内位置で、工場敷地・採掘区画・生産規模を示しません。';
   const method=$('[data-industry-method]');method.replaceChildren(el('p','出典で位置と役割を確認できる立地例です。産業統計は別の資料・単位です。'),link('この主題の資料',selected?.source.url??group?.source.url??'https://www.ilo.org/media/438656/download'));
   content.replaceChildren();if(selected){content.append(el('h3',selected.name),el('p',selected.fact),el('p','立地を読む：'+selected.reason),link(selected.source.label,selected.source.url));}
-  else{content.append(el('h3',group?'この業種の地域':'業種と地域を選ぶ'),el('p',group?.fact??regionalOverview));if(group)content.append(el('p','立地を読む：'+group.reason));}
+  else{content.append(el('h3',group||southIndustryGroups(topic.id)?'この分野の地域':'業種と地域を選ぶ'),el('p',group?.fact??(southIndustryGroups(topic.id)?`${topic.title}の立地例を示します。地点を選ぶと、その場所で何が盛んで、なぜそこに立地するかを読めます。`:regionalOverview)));if(group)content.append(el('p','立地を読む：'+group.reason));}
   const list=el('div');list.className='sc-industry-site-list';for(const site of sites){const button=el('button',site.name);button.type='button';button.setAttribute('aria-pressed',String(selected?.id===site.id));button.addEventListener('click',()=>select(site.id));list.append(button);}content.append(el('h3','地図に示した地域'),list);
  }
  function table(caption:string,rows:{name:string;value:number|null;status?:string;click?:()=>void}[],unit:string){
@@ -164,8 +167,8 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
   if(getState().field!=='industry'||current().kind==='trade')return;
   if(current().kind==='regional'){
    if(!map.getSource('asia-industry-regional')){map.addSource('asia-industry-regional',{type:'geojson',data:{type:'FeatureCollection',features:regionalSites.map(site=>({type:'Feature',properties:{id:site.id,group:site.group,country:site.country,color:regionalGroups.find(g=>g.id===site.group)?.color??'#648075'},geometry:{type:'Point',coordinates:site.point}}))}});map.addLayer({id:'asia-industry-regional',type:'circle',source:'asia-industry-regional',paint:{'circle-radius':8,'circle-color':['get','color'],'circle-opacity':.9,'circle-stroke-color':'#fff','circle-stroke-width':1.5}});map.addLayer({id:'asia-industry-regional-hit',type:'circle',source:'asia-industry-regional',paint:{'circle-radius':16,'circle-opacity':0}});map.addLayer({id:'asia-industry-regional-selected',type:'circle',source:'asia-industry-regional',paint:{'circle-radius':12,'circle-opacity':0,'circle-stroke-color':'#852d24','circle-stroke-width':3}});}
-   const topic=current(),state=getState(),filter:any=['all',...(topic.id==='sc-overview'?[]:[['==',['get','group'],topic.id]]),...(state.place?[['==',['get','country'],state.place]]:[])];for(const id of ['asia-industry-regional','asia-industry-regional-hit']){map.setFilter(id,filter);map.setLayoutProperty(id,'visibility','visible');}map.setFilter('asia-industry-regional-selected',['all',filter,['==',['get','id'],state.detail??'']]);map.setLayoutProperty('asia-industry-regional-selected','visibility','visible');
-   const visibleSites=regionalSites.filter(site=>(topic.id==='sc-overview'||site.group===topic.id)&&(!state.place||site.country===state.place));
+   const topic=current(),state=getState(),filter:any=['all',...(topicGroups(topic.id)?[['in',['get','group'],['literal',topicGroups(topic.id)]]]:[]),...(state.place?[['==',['get','country'],state.place]]:[])];for(const id of ['asia-industry-regional','asia-industry-regional-hit']){map.setFilter(id,filter);map.setLayoutProperty(id,'visibility','visible');}map.setFilter('asia-industry-regional-selected',['all',filter,['==',['get','id'],state.detail??'']]);map.setLayoutProperty('asia-industry-regional-selected','visibility','visible');
+   const visibleSites=regionalSites.filter(site=>matchingRegionalGroup(topic.id,site.group)&&(!state.place||site.country===state.place));
    const southClusters:Record<string,{label:string;members:string[]}>=config.focusId==='south-asia'?{
     'sc-dhaka-garments':{label:'ダッカ・チッタゴン',members:['sc-dhaka-garments','sc-chattogram-garments']},
     'sc-odisha-steel':{label:'オディシャ・ジャムシェドプル',members:['sc-odisha-steel','sc-jharkhand-steel']},

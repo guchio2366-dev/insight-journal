@@ -8,6 +8,9 @@ export const majorAsiaIndustries:Record<string,{id:string;label:string}[]>={
 };
 export function industryTopicGroup(t:Pick<IndustryTopic,'id'>):{sector:IndustrySector;subsector:string} {
  const id=t.id;
+ if(id==='sc-south-resources')return {sector:'resources',subsector:'all'};
+ if(id==='sc-south-manufacturing')return {sector:'manufacturing',subsector:'all'};
+ if(id==='sc-south-services')return {sector:'services',subsector:'all'};
  if(id.startsWith('power-'))return {sector:'resources',subsector:'utilities'};
  if(id==='resource-rents'||id==='my-p2')return {sector:'resources',subsector:id==='my-p2'?'mining':'all'};
  if(['services','service-employment','in-services','my-p5'].includes(id))return {sector:'services',subsector:'all'};

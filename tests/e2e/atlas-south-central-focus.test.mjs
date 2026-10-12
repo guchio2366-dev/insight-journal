@@ -239,3 +239,25 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
   assert.deepEqual(errors,[]);
  }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
 });
+
+test('南アジアの三産業入口と作物重複域を表示する',{skip:enabled?false:'ATLAS_ASIA_BROWSER=1 with a production build',timeout:120000},async()=>{
+ const {chromium}=await import('playwright'),{server,url}=await serve();let browser;
+ try{
+  browser=await chromium.launch({headless:true,chromiumSandbox:true,...(process.env.REVIEW_CHROME_PATH?{executablePath:process.env.REVIEW_CHROME_PATH}:{})});
+  const page=await browser.newPage({viewport:{width:1920,height:1080}});
+  await page.goto(`${url}/atlas/asia/south-asia/industry/`);
+  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true');
+  assert.deepEqual(await page.locator('.asia-industry-sectors button').allTextContents(),['資源・エネルギー','製造業','サービス業']);
+  for(const [topic,expected] of [['sc-south-resources','水力'],['sc-south-manufacturing','医薬品'],['sc-south-services','ITサービス']]){
+   await page.locator(`[data-industry-feature="${topic}"]`).click();
+   await page.waitForFunction(id=>new URL(location.href).searchParams.get('topic')===id,topic);
+   assert.match(await page.locator('[data-industry-title]').textContent(),new RegExp(topic==='sc-south-resources'?'資源・エネルギー':topic==='sc-south-manufacturing'?'製造業':'サービス業'));
+   assert.match((await page.locator('.asia-industry-regional-label').allTextContents()).join(' '),new RegExp(expected));
+  }
+  await page.goto(`${url}/atlas/asia/south-asia/agriculture/?topic=tea`);
+  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmContextStatus==='ready');
+  const manifest=JSON.parse(await page.locator('[data-asia-config]').textContent());
+  assert.equal(manifest.presentation.farming.cropFile,'south-asia.crop-areas.json.gz');
+  assert.match(await page.locator('[data-grid-reading]').textContent(),/他作物と重なる/);
+ }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
+});
