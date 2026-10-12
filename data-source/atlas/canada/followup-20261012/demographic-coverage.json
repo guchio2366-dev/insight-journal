@@ -12,5 +12,26 @@
   "limitations": [
     "CD and CMA statistics describe their complete source geographies. Within-region ethnic/religious residential distribution is unknown.",
     "No administrative smoothing or general population allocation is used."
+  ],
+  "fineSourceCandidates": [
+    {
+      "publisher": "Region of Peel",
+      "title": "Census 2021 - Census Tract - Ethnic Diversity and Religion",
+      "url": "https://data.peelregion.ca/datasets/RegionofPeel::census-2021-census-tract-ethnic-diversity-and-religion/about",
+      "availability": "Primary catalogue confirms census-tract data; original data not acquired",
+      "retrievalError": "URLError: Tunnel connection failed: 403 Forbidden"
+    },
+    {
+      "publisher": "City of Brampton",
+      "title": "2021 Religion by Census Tract",
+      "url": "https://geohub.brampton.ca/datasets/brampton::2021-religion-by-census-tract-1/about",
+      "availability": "Primary catalogue confirms data joined to census-tract boundaries; not imported"
+    },
+    {
+      "publisher": "City of Toronto",
+      "title": "Neighbourhood Profiles",
+      "url": "https://open.toronto.ca/dataset/neighbourhood-profiles/",
+      "availability": "Primary catalogue documents 158 current neighbourhoods; source fields, denominators and boundaries not yet verified for import"
+    }
   ]
 }
