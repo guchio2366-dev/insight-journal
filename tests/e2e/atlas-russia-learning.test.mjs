@@ -41,6 +41,25 @@ function page(field,query='',interactive=true){
  return {win,root,one:hook=>root.querySelector(`[data-${hook}]`)};
 }
 const legendLabels=element=>[...element.children].map(item=>item.textContent.trim());
+test('Russia farming groups toggle separately and named rivers update the reading',()=>{
+ const farming=page('agriculture');
+ try{
+  const crop=farming.root.querySelector('[data-farming-group=crop]');
+  const livestock=farming.root.querySelector('[data-farming-group=livestock]');
+  crop.click();assert.equal(crop.getAttribute('aria-pressed'),'false');assert.ok(farming.root.classList.contains('farming-crop-hidden'));
+  livestock.click();assert.equal(livestock.getAttribute('aria-pressed'),'false');assert.ok(farming.root.classList.contains('farming-livestock-hidden'));
+  livestock.click();assert.equal(livestock.getAttribute('aria-pressed'),'true');
+  assert.ok(farming.one('primary-map').querySelector('[data-farming-product=cattle]'));
+ }finally{farming.win.happyDOM.abort();}
+ const nature=page('nature','?layer=rivers');
+ try{
+  const river=nature.one('primary-map').querySelector('[data-river-name=Volga]');
+  assert.ok(river);river.dispatchEvent(new nature.win.MouseEvent('click',{bubbles:true}));
+  assert.equal(nature.one('theme-title').textContent,'ボルガ川');
+  assert.match(nature.one('takeaway').textContent,/流向・河口・流域境界/);
+  assert.equal(nature.one('primary-map').querySelector('[data-river-name=Volga]').getAttribute('aria-pressed'),'true');
+ }finally{nature.win.happyDOM.abort();}
+});
 function assertLegend(element,layer){
  if(layer.field==='agriculture'){
   assert.equal(element.querySelectorAll('[data-farming-legend]').length,2);

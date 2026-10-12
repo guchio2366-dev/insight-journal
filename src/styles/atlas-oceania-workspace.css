@@ -252,4 +252,22 @@
 .oceania-learning[data-field=agriculture] .oceania-country{cursor:default;pointer-events:none}
 .oceania-learning[data-field=agriculture] .oceania-country:hover{stroke:#637d7b;stroke-width:.7}
 .oceania-learning[data-field=agriculture] .oceania-country.is-selected{stroke:#133741;stroke-width:2.1}
+.oceania-farming-visibility{position:absolute;z-index:6;left:12px;top:62px;display:flex;gap:6px;padding:5px;background:#fffefaeF;border:1px solid #9aada8;border-radius:6px;box-shadow:0 2px 6px #183c4422}
+.oceania-farming-visibility button{min-height:38px;padding:6px 12px;border:1px solid #51746f;border-radius:4px;background:#fff;color:#23454c;font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.oceania-farming-visibility button[aria-pressed=true]{background:#284f55;color:#fff}
+.oceania-workspace-root.farming-crop-hidden :is([data-farming-product=wheat],[data-farming-product=coconut],[data-farming-product=cacao],[data-place-product=wheat],[data-place-product=coconut],[data-place-product=cacao],[data-farming-key=wheat],[data-farming-key=coconut],[data-farming-key=cacao],[data-farming-legend=wheat],[data-farming-legend=coconut],[data-farming-legend=cacao]){display:none}
+.oceania-workspace-root.farming-livestock-hidden :is([data-farming-product=sheep],[data-farming-product=cattle],[data-place-product=sheep],[data-place-product=cattle],[data-farming-key=sheep],[data-farming-key=cattle],[data-farming-legend=sheep],[data-farming-legend=cattle]){display:none}
+.oceania-learning-scene [data-river-name]{cursor:pointer}
+.oceania-learning[data-field=nature] .oceania-learning-scene:has([data-river-name]) .oceania-country{pointer-events:none}
+.oceania-learning-scene [data-river-name][aria-pressed=true] path:first-child,.oceania-learning-scene [data-river-name]:focus-visible path:first-child{stroke:#123d62;stroke-width:4}
+.oceania-learning-normal .oceania-learning-scope,.oceania-learning .oceania-learning-comparison-button,.oceania-learning .oceania-learning-compare-layer,.oceania-learning .oceania-learning-return,.oceania-learning .oceania-farming-view-options{display:none}
+.oceania-learning[data-field=industry] .oceania-learning-toolbar .oceania-learning-themes{display:none}
+@media(min-width:900px){
+ .atlas-desktop-shell .oceania-learning .oceania-workspace-subviews{position:static;width:auto;max-width:none;height:auto;min-height:44px;margin:7px 0 6px;padding:0;align-items:stretch}
+ .atlas-desktop-shell .oceania-learning .oceania-learning-normal .oceania-learning-map-heading{position:static;inset:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:none;min-height:54px;height:auto;margin:0;padding:7px 10px;border:1px solid #abbfc2;border-bottom:0;background:#fffefa}
+ .atlas-desktop-shell .oceania-learning .oceania-learning-normal .oceania-learning-map-heading>div{position:static;display:block;width:auto;max-width:none;clip-path:none;overflow:visible}
+ .atlas-desktop-shell .oceania-learning .oceania-learning-normal .oceania-learning-layer{display:flex;align-items:center;gap:6px;width:auto;max-width:260px;flex:0 1 260px;margin:0}
+ .atlas-desktop-shell .oceania-learning .oceania-learning-normal .oceania-learning-scene{height:auto;min-height:300px;max-height:640px;aspect-ratio:1.55}
+ .atlas-desktop-shell .oceania-learning:not([data-field=agriculture]) .oceania-learning-reading{max-height:calc(100dvh - 220px);min-height:380px}
+}
 @media(max-width:600px){.atlas-desktop-shell .oceania-learning[data-field=agriculture] [data-primary-legend-dictionary-content]{grid-template-columns:1fr}.oceania-farming-legend-group>div{grid-template-columns:1fr}}
