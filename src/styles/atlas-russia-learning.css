@@ -414,6 +414,7 @@
 .russia-learning-scene [data-river-name][aria-pressed=true] path:first-child,.russia-learning-scene [data-river-name]:focus-visible path:first-child{stroke:#123d62;stroke-width:4}
 .russia-learning-normal .russia-learning-scope,.russia-learning .russia-learning-comparison-button,.russia-learning .russia-learning-compare-layer,.russia-learning .russia-learning-return,.russia-learning .russia-farming-view-options{display:none}
 .russia-learning[data-field=industry] .russia-learning-toolbar .russia-learning-themes{display:none}
+.russia-learning[data-field=industry] .russia-learning-toolbar{display:none}
 @media(min-width:960px){
  .russia-workspace .russia-learning-normal .russia-learning-scene{height:auto;min-height:300px;max-height:640px;aspect-ratio:1.55}
  .russia-workspace .russia-learning[data-field=regional-overview] .russia-learning-scene{height:auto;min-height:300px;max-height:640px;aspect-ratio:1.55}
