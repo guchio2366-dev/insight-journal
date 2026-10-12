@@ -108,7 +108,8 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    }
    await page.goto(`${url}/atlas/asia/${region}/agriculture/`,{waitUntil:'domcontentloaded'});
    await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.focusMaskStatus==='ready');
-   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmContextStatus==='ready');
+   await page.waitForFunction(()=>['ready','error'].includes(document.querySelector('[data-asia-atlas]')?.dataset.farmContextStatus));
+   assert.equal(await page.locator('[data-asia-atlas]').getAttribute('data-farm-context-status'),'ready',await page.locator('[data-asia-atlas]').getAttribute('data-presentation-last-error'));
    if(region==='south-asia')assert.equal(await page.locator('[data-asia-atlas]').getAttribute('data-farm-livestock-features'),'8');
    await capture(`${region}-agriculture`);
    if(region==='south-asia'){
