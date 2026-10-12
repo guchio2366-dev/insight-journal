@@ -3,6 +3,9 @@ export const japanIndustries=[...eastIndustries.map(i=>({...i,label:i.id==='chip
  {id:'services',label:'金融サービス',color:'#3e6d9a',lead:'東京・大阪に証券市場の拠点があります。',reason:'企業の資金調達と投資を結ぶ金融サービスは、人材や情報が集まる都市で成り立ちます。製造品出荷額には含まれません。',source:'https://www.jpx.co.jp/corporate/about-jpx/access/index.html'},
  {id:'energy',label:'エネルギー供給',color:'#9c7048',lead:'火力・水力・地熱・風力・太陽光・原子力の立地例を示します。',reason:'燃料や自然条件、電力需要と送電網が立地に関わります。記号は現在の運転状況、発電量・稼働率や排出量を示しません。',source:'https://www.jpower.co.jp/bs/renewable_energy/'},
  {id:'logistics',label:'航空物流',color:'#697196',lead:'成田と中部国際空港に航空貨物の取扱拠点があります。',reason:'国際航空路と倉庫、通関、製造業への接続が航空物流を支えます。貨物量や全物流施設の分布を示す点ではありません。',source:'https://www.narita-airport.jp/en/company/business/cargo/'},
+ {id:'mining',label:'金鉱石採掘',color:'#9f862d',lead:'鹿児島県北部の菱刈では金鉱石が採掘されています。国内の採掘全体を示す図ではありません。',reason:'熱水が岩石の割れ目を通り、鉱脈を形成しました。鉱石は選別後、東予の製錬工程へ運ばれます。資源の所在地と金属を取り出す場所は別です。',source:'https://www.smm.co.jp/corp_info/location/domestic/hishikari/'},
+ {id:'smelting',label:'非鉄金属製錬',color:'#a86243',lead:'愛媛県の東予工場は銅の製錬と金などの回収を行う立地例です。',reason:'船で届く銅精鉱と菱刈の金鉱石を処理し、電解などの工程を経て金属を取り出します。採掘地と港に接続する製錬拠点の違いを読みます。',source:'https://www.smm.co.jp/corp_info/location/domestic/toyo/'},
+ {id:'refining',label:'石油精製',color:'#7b6753',lead:'川崎の臨海部に石油精製と化学品製造の設備があります。',reason:'蒸留・脱硫・分解などで原油を利用できる製品に変えます。同じ拠点を資源の加工と製造工程の両方から読みます。ここは原油の採掘地ではありません。',source:'https://www.eneos.co.jp/company/branch/kawasaki/refinery/'},
 ];
 export type JapanIndustryId=typeof japanIndustries[number]['id'];
 export type JapanIndustryCluster={id:string;name:string;country:'JPN';point:[number,number];industries:JapanIndustryId[];source:string;label?:string;note?:string};
@@ -26,9 +29,12 @@ export const japanIndustryClusters:JapanIndustryCluster[]=[
  {id:'setana-wind',name:'瀬棚・北海道',country:'JPN',point:[139.86,42.45],industries:['energy'],label:'風力発電',source:'https://www.jpower.co.jp/bs/renewable_energy/wind/setana.html',note:'瀬棚臨海風力発電所の立地例。2005年12月営業運転開始の公表説明を参照。風況や現在の発電量は未収録。'},
  {id:'himeji-solar',name:'姫路・大塩',country:'JPN',point:[134.78,34.77],industries:['energy'],label:'太陽光発電',source:'https://www.jpower.co.jp/bs/renewable_energy/solar/',note:'J-POWER姫路大塩太陽光発電所の事例。公表一覧では2024年11月運転開始。敷地境界や現在の発電量は未収録。'},
  {id:'mihama-nuclear',name:'美浜・若狭湾',country:'JPN',point:[135.96,35.72],industries:['energy'],label:'原子力発電',source:'https://www.kepco.co.jp/corporate/profile/community/mihama/about.html',note:'美浜発電所の立地例。1・2号機は2015年運転終了、3号機は1976年運転開始という公表概要を参照。現在の運転状態や発電量は表さない。'},
+ {id:'hishikari-mining',name:'菱刈・鹿児島北部',country:'JPN',point:[130.69,32.03],industries:['mining'],source:'https://www.smm.co.jp/corp_info/location/domestic/hishikari/',note:'金鉱石の地下採掘と選別の例。鉱石は東予工場へ海上輸送される。菱刈地域の編集座標で、坑道・鉱床・埋蔵量を表さない。一次資料を2026年10月12日に確認。'},
+ {id:'toyo-smelting',name:'東予・西条／新居浜',country:'JPN',point:[133.20,33.92],industries:['smelting'],source:'https://www.smm.co.jp/corp_info/location/domestic/toyo/',note:'銅精鉱と菱刈の金鉱石を用いる金属製錬の例。西条・新居浜にかけての地域を概略位置で示す。資源を利用可能な金属にする役割と製造工程の両分類に同じ点を表示する。一次資料を2026年10月12日に確認。'},
+ {id:'kawasaki-refining',name:'川崎・東京湾',country:'JPN',point:[139.72,35.52],industries:['refining'],source:'https://www.eneos.co.jp/company/branch/kawasaki/refinery/',note:'川崎製油所の蒸留・脱硫・分解と化学品製造の例。臨海部の編集座標で、浮島北・南・川崎地区の敷地や設備配置を表さない。資源の加工と製造工程の両分類に同じ点を表示する。一次資料を2026年10月12日に確認。'},
 ];
 export const japanIndustryDefinition={
- retrievedAt:'2026-10-11',license:'公表された立地・業種の事実を独自に要約。原文・写真・図・ロゴを再配布しない。',
+ retrievedAt:'2026-10-11',additionalResourceSourcesRetrievedAt:'2026-10-12',license:'公表された立地・業種の事実を独自に要約。原文・写真・図・ロゴを再配布しない。',
  coordinateMethod:'出典の都市・地域をWGS84の概略位置で示す編集座標。測量した工場位置、敷地境界、産業集積の面積ではない。',
  semiconductor:'半導体製造の代表点と、県別の「電子部品・デバイス・電子回路製造業」の出荷額等は定義が異なる。後者には半導体以外も含み、半導体の県別数量に読み替えない。',
 };

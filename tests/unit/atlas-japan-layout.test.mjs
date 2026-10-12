@@ -33,6 +33,10 @@ test('産業三分類は既存拠点を業種で整理し、無関係な分類�
  const services=readJapanState(url('industry/?sector=services&topic=services&site=tokyo-finance&area=kanto'),context);assert.equal(services.site,'tokyo-finance');assert.equal(services.sector,'services');
  assert.equal(readJapanState(url('industry/?sector=resources&topic=services&site=tokyo-finance'),context).site,null);
  assert.equal(readJapanState(url('industry/?sector=resources&topic=jp-31&prefecture=JP-23'),context).prefecture,null);
+ for(const [topic,id] of [['smelting','toyo-smelting'],['refining','kawasaki-refining']])for(const sector of ['resources','manufacturing']){
+  const state=readJapanState(url(`industry/?sector=${sector}&topic=${topic}&site=${id}&area=chugoku`),context);assert.equal(state.site,id);assert.equal(state.topic,topic);assert.equal(state.area,'chugoku');assert.deepEqual(readJapanState(writeJapanState(url('industry/'),state),context),state);
+ }
+ assert.equal(readJapanState(url('industry/?topic=mining&site=hishikari-mining'),context).sector,'resources');
 });
 test('旧水資源・人口URLを保全し、流域と地下水の説明を混同しない',()=>{
  const basin=japanNatureFeatureIds.basins.find(id=>id.startsWith('b-')),ground=japanNatureFeatureIds.groundwater[0];

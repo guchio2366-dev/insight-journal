@@ -137,7 +137,7 @@ async function start(root:HTMLElement){
     const selected=industry.admin.find(a=>a.id===state.prefecture);if(selected){const o=selected.series[t.id]?.find(v=>v.year===t.year);selection(selected.name,`${t.title.replace('日本：','')}：${industryValueLabel(o)}${o?.value==null?'':' 百万円'}（2024年）。原表の状態：${o?.status??'未掲載'}。製造業計の従業者は${selected.employment2025==null?'未掲載':number(selected.employment2025)+'人'}（2025年6月1日）。`,t.source);}
     if(ready&&map){const expression=['match',['get','id'],...values.flatMap(v=>[v.id,scale.color(v.value)]),'#d2ceca'];map.setPaintProperty('japan-prefecture-fill','fill-color',expression as any);inset?.setQuantityPaint(expression);}
    }else{
-    title=state.topic==='clusters'?japanSector(state.sector).name+'の集積':config.industries.find(i=>i.id===state.topic)?.label+'の代表例';period='出典別・概略位置';
+    title=state.topic==='clusters'?japanSector(state.sector).name+'の立地例':config.industries.find(i=>i.id===state.topic)?.label+'の代表例';period='出典別・概略位置';
     for(const i of config.industries.filter(i=>japanSiteInSector([i.id],state.sector)&&(state.topic==='clusters'||i.id===state.topic)))key(i.label,i.color);
     method='産業の種類と代表的な立地を示す概略図。記号の大きさは生産量を表しません。';
     if(state.topic==='clusters'){$('[data-japan-overview]').textContent=japanSector(state.sector).overview;$('[data-japan-reason]').textContent=japanSector(state.sector).reason;}
@@ -227,7 +227,7 @@ async function start(root:HTMLElement){
     }
    }
    map.on('click',event=>void handleMapClick(event,map!,nature,farming));
-   void mountJapanInset(root,lib,geography,industry.geometry,population,config.assetBase,config.natureAssetBase,(event,targetMap,targetNature,targetFarm)=>void handleMapClick(event,targetMap,targetNature,targetFarm)).then(mounted=>{if(revision!==generation){mounted.remove();return;}inset=mounted;render();}).catch(()=>{root.dataset.insetError='true';$('[data-japan-inset-status]').textContent='挿入図の主題を取得できませんでした';});
+   void mountJapanInset(root,lib,geography,industry.geometry,population,config.assetBase,config.natureAssetBase,(event,targetMap,targetNature,targetFarm)=>void handleMapClick(event,targetMap,targetNature,targetFarm)).then(mounted=>{if(revision!==generation){mounted.remove();return;}inset=mounted;render();if(root.dataset.insetError==='true')status('挿入図の一部を取得できませんでした。再試行できます。',true);}).catch(()=>{if(revision!==generation)return;root.dataset.insetError='true';$('[data-japan-inset-status]').hidden=false;$('[data-japan-inset-status]').textContent='挿入図の主題を取得できませんでした';status('挿入図を取得できませんでした。再試行できます。',true);});
   }catch{if(revision===generation)status('全国図を表示できませんでした。基図のみを表示しています。地図下の統計と出典は利用できます。',true);}
   render();
  }

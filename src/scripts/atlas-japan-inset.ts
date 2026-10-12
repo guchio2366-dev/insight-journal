@@ -7,6 +7,7 @@ import {mountJapanNatureLayers,type JapanNatureLayers} from './atlas-japan-natur
 export type InsetLabel={id:string;title:string;subtitle:string;point:[number,number];color:string;select:()=>void;selected:boolean;muted?:boolean;reference?:boolean};
 export async function mountJapanInset(root:HTMLElement,lib:typeof import('maplibre-gl'),geography:any,prefectures:any,population:any,assetBase:string,natureBase:string,onClick:(event:MapMouseEvent,map:Map,nature:JapanNatureLayers|null,farm:ReturnType<typeof mountJapanAgricultureLayers>|null)=>void){
  const holder=root.querySelector<HTMLElement>('[data-japan-inset]')!,surface=holder.querySelector<HTMLElement>('[data-japan-inset-surface]')!,overlay=holder.querySelector<HTMLElement>('[data-japan-inset-labels]')!;
+ root.dataset.insetError='false';root.dataset.insetReady='false';const insetStatus=holder.querySelector<HTMLElement>('[data-japan-inset-status]')!;insetStatus.hidden=false;insetStatus.textContent='挿入図を読み込んでいます';
  const map=new lib.Map({container:surface,attributionControl:false,interactive:false,renderWorldCopies:false,dragRotate:false,touchPitch:false,maxPitch:0,minZoom:1,maxZoom:10,trackResize:false,pixelRatio:Math.min(devicePixelRatio,2),style:japanBaseStyle(geography,prefectures,population,assetBase) as any});
  map.addControl(new lib.ScaleControl({maxWidth:70,unit:'metric'}),'bottom-right');
  let nature:JapanNatureLayers|null=null,farm:ReturnType<typeof mountJapanAgricultureLayers>|null=null,loaded=false,lastState:JapanState|null=null,lastLabels:InsetLabel[]=[];
@@ -23,9 +24,9 @@ export async function mountJapanInset(root:HTMLElement,lib:typeof import('maplib
   root.dataset.insetTopic=state.field+':'+state.topic;map.triggerRepaint();
  }
  map.on('click',event=>onClick(event,map,nature,farm));
- map.on('error',()=>{root.dataset.insetError='true';holder.querySelector<HTMLElement>('[data-japan-inset-status]')!.textContent='挿入図の一部を取得できませんでした';});
- await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('Japan inset load timeout')),20000);map.once('load',()=>{clearTimeout(timer);resolve();});});
- loaded=true;farm=mountJapanAgricultureLayers(map,assetBase.replace('japan-v1/','japan-agriculture-v3/'));try{nature=await mountJapanNatureLayers(map,natureBase);}catch{root.dataset.insetError='true';}
- root.dataset.insetReady='true';holder.querySelector<HTMLElement>('[data-japan-inset-status]')!.hidden=true;if(lastState)render(lastState,lastLabels);
+ map.on('error',()=>{root.dataset.insetError='true';insetStatus.hidden=false;insetStatus.textContent='挿入図の一部を取得できませんでした';});
+ await new Promise<void>((resolve,reject)=>{const timer=setTimeout(()=>{map.remove();reject(new Error('Japan inset load timeout'));},20000);map.once('load',()=>{clearTimeout(timer);resolve();});});
+ loaded=true;farm=mountJapanAgricultureLayers(map,assetBase.replace('japan-v1/','japan-agriculture-v3/'));try{nature=await mountJapanNatureLayers(map,natureBase);}catch{root.dataset.insetError='true';insetStatus.textContent='挿入図の自然環境を取得できませんでした';}
+ root.dataset.insetReady='true';insetStatus.hidden=root.dataset.insetError!=='true';if(lastState)render(lastState,lastLabels);
  return {render,setQuantityPaint(expression:any){map.setPaintProperty('japan-prefecture-fill','fill-color',expression);},resize(){if(lastState)render(lastState,lastLabels);},remove(){markers.forEach(m=>m.remove());map.remove();}};
 }

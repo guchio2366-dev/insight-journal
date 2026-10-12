@@ -4,7 +4,7 @@ import {asiaFieldPaths,type AsiaField,type AsiaCamera,type AsiaState,writeAsiaAt
 
 export type JapanState={field:AsiaField;topic:string;prefecture:string|null;city:string|null;site:string|null;feature:string|null;camera:AsiaCamera|null;returnTo:string|null;area?:JapanAreaId;sector?:JapanSector;showCrops?:boolean;showLivestock?:boolean};
 export const japanDefaults:Record<AsiaField,string>={industry:'clusters',natural:'climate',agriculture:'all',population:'density'};
-export const japanTopics:Record<AsiaField,readonly string[]>={industry:['clusters','auto','chips','steel','batteries','ships','chemicals','services','energy','logistics',...['00',...Array.from({length:24},(_,i)=>String(i+9).padStart(2,'0'))].map(id=>'jp-'+id)],natural:['stations','climate','precipitation','water','groundwater','basins','terrain','elevation'],agriculture:['all','wheat','rice','potato','cabbage','tomato','apple','mandarin','milk','beef','pork','forest'],population:['density']};
+export const japanTopics:Record<AsiaField,readonly string[]>={industry:['clusters','auto','chips','steel','batteries','ships','chemicals','services','energy','logistics','mining','smelting','refining',...['00',...Array.from({length:24},(_,i)=>String(i+9).padStart(2,'0'))].map(id=>'jp-'+id)],natural:['stations','climate','precipitation','water','groundwater','basins','terrain','elevation'],agriculture:['all','wheat','rice','potato','cabbage','tomato','apple','mandarin','milk','beef','pork','forest'],population:['density']};
 
 // Only a same-site East Asia field URL can become a return target. Never trust
 // an arbitrary redirect, or infer entry intent from place=JPN (cities set it too).
@@ -28,7 +28,7 @@ export function readJapanState(url:URL,context:{prefectures:readonly string[];ci
  const current=field??'industry',q=url.searchParams;
  const area=japanAreas.find(a=>a.id===q.get('area'))?.id??'japan';
  const rawTopic=q.get('topic')??'';
- const sector=japanIndustrySectors.find(s=>s.id===q.get('sector'))?.id??(['energy'].includes(rawTopic)?'resources':['services','logistics'].includes(rawTopic)?'services':'manufacturing');
+ const sector=japanIndustrySectors.find(s=>s.id===q.get('sector'))?.id??(['energy','mining','smelting','refining'].includes(rawTopic)?'resources':['services','logistics'].includes(rawTopic)?'services':'manufacturing');
  const compatible=current!=='industry'||rawTopic==='clusters'||(rawTopic.startsWith('jp-')&&sector==='manufacturing')||japanSiteInSector([rawTopic],sector);
  const requestedTopic=current==='natural'?(rawTopic==='water'&&q.get('feature')?.startsWith('b-')?'basins':['groundwater'].includes(rawTopic)?'water':rawTopic==='stations'?'climate':rawTopic):rawTopic;
  const topic=japanTopics[current].includes(requestedTopic)&&compatible?requestedTopic:japanDefaults[current];
