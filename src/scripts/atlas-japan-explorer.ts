@@ -20,7 +20,7 @@ import type {JapanIndustryCluster} from '../data/atlas/japan-industry-clusters';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 
 type PopulationCity={id:string;name:string;coordinates:[number,number];population:number;areaKm2:number;density:number;history:Record<string,number>};
-type Config={bounds:number[];assetBase:string;cities:AsiaClimateCity[];sites:JapanIndustryCluster[];industries:{id:string;label:string;color:string}[];populationCities:PopulationCity[];populationPlaces:{id:string;name:string;coordinates:[number,number];plain:string}[];natureAssetBase:string};
+type Config={bounds:number[];assetBase:string;cities:AsiaClimateCity[];sites:JapanIndustryCluster[];industries:{id:string;label:string;color:string;lead:string;reason:string}[];populationCities:PopulationCity[];populationPlaces:{id:string;name:string;coordinates:[number,number];plain:string}[];natureAssetBase:string};
 type Industry={admin:IndustryAdmin[];topics:IndustryTopic[];geometry:any};
 type Population={width:number;height:number;bounds3857:number[];imageCoordinates:[number,number][];image:string;grid:string;breaks:number[];colors:string[];zeroColor:string;missingColor:string};
 const root=document.querySelector<HTMLElement>('[data-japan-atlas]');
@@ -141,7 +141,7 @@ async function start(root:HTMLElement){
     for(const i of config.industries.filter(i=>japanSiteInSector([i.id],state.sector)&&(state.topic==='clusters'||i.id===state.topic)))key(i.label,i.color);
     method='産業の種類と代表的な立地を示す概略図。記号の大きさは生産量を表しません。';
     if(state.topic==='clusters'){$('[data-japan-overview]').textContent=japanSector(state.sector).overview;$('[data-japan-reason]').textContent=japanSector(state.sector).reason;}
-    const local=japanIndustryReadings[state.topic as keyof typeof japanIndustryReadings];if(local){$('[data-japan-overview]').textContent=local.overview;$('[data-japan-reason]').textContent=local.reason;}
+    const local=japanIndustryReadings[state.topic as keyof typeof japanIndustryReadings],definition=config.industries.find(i=>i.id===state.topic);if(local){$('[data-japan-overview]').textContent=local.overview;$('[data-japan-reason]').textContent=local.reason;}else if(definition){$('[data-japan-overview]').textContent=definition.lead;$('[data-japan-reason]').textContent=definition.reason;}
     const selected=config.sites.find(s=>s.id===state.site);if(selected)selection(selected.industries.map(id=>config.industries.find(i=>i.id===id)?.label).join('・')+'｜'+selected.name,(selected.note??'')+' 都市・地域の概略位置。県別数量や施設の敷地境界ではありません。',selected.source);
    }
   }else{
