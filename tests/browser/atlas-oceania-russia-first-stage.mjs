@@ -241,11 +241,10 @@ try{
       await legendDetails.locator('summary').click();
       const readingDetails=host.locator('.russia-learning-explanation');await readingDetails.locator('summary').click();
       assert.ok(await host.locator('[data-explanation]').isVisible());assert.ok(await host.locator('[data-coverage]').isVisible());
-      for(const selector of ['.russia-learning-reading','.russia-reading-scroll','.russia-learning-coverage']){
-       const geometry=await host.locator(selector).evaluate(el=>({maxHeight:getComputedStyle(el).maxHeight,overflow:getComputedStyle(el).overflowY,client:el.clientHeight,scroll:el.scrollHeight}));
-       assert.equal(geometry.maxHeight,'none',`${selector} has no height cap`);assert.equal(geometry.overflow,'visible');
-       assert.ok(geometry.scroll<=geometry.client+1,`${selector} retains the full text`);
-      }
+      const reader=await host.locator('.russia-learning-reading').evaluate(el=>({maxHeight:getComputedStyle(el).maxHeight,overflow:getComputedStyle(el).overflowY,client:el.clientHeight}));
+      const scroll=await host.locator('.russia-reading-scroll').evaluate(el=>({overflow:getComputedStyle(el).overflowY,client:el.clientHeight}));
+      assert.match(reader.maxHeight,/px$/);assert.equal(reader.overflow,'hidden');assert.ok(reader.client>0);
+      assert.equal(scroll.overflow,'auto');assert.ok(scroll.client>0);
       await readingDetails.locator('summary').click();
       assert.equal(await map.locator('[data-farming-product="cattle"][data-farming-mode="missing"] rect[mask]').count(),1);
      }
@@ -283,10 +282,10 @@ try{
       await legendDetails.locator('summary').click();
       const readingDetails=host.locator('.oceania-learning-explanation');await readingDetails.locator('summary').click();
       assert.ok(await host.locator('[data-explanation]').isVisible());assert.ok(await host.locator('[data-coverage]').isVisible());
-      for(const selector of ['.oceania-learning-reading','.oceania-workspace-reading-scroll','.oceania-learning-coverage']){
-       const geometry=await host.locator(selector).evaluate(el=>({maxHeight:getComputedStyle(el).maxHeight,overflow:getComputedStyle(el).overflowY,client:el.clientHeight,scroll:el.scrollHeight}));
-       assert.equal(geometry.maxHeight,'none');assert.equal(geometry.overflow,'visible');assert.ok(geometry.scroll<=geometry.client+1);
-      }
+      const reader=await host.locator('.oceania-learning-reading').evaluate(el=>({maxHeight:getComputedStyle(el).maxHeight,overflow:getComputedStyle(el).overflowY,client:el.clientHeight}));
+      const scroll=await host.locator('.oceania-workspace-reading-scroll').evaluate(el=>({overflow:getComputedStyle(el).overflowY,client:el.clientHeight}));
+      assert.match(reader.maxHeight,/px$/);assert.equal(reader.overflow,'hidden');assert.ok(reader.client>0);
+      assert.equal(scroll.overflow,'auto');assert.ok(scroll.client>0);
       await readingDetails.locator('summary').click();
       await host.locator('[data-place]').selectOption('NZL');await ready(region);
       assert.match(await host.locator('[data-geography-reading]').textContent(),/乳牛と肉牛、羊毛と食肉/);
