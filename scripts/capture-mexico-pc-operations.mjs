@@ -131,7 +131,18 @@ async function cityClimateReadingLayout(page, requestedId) {
 
 export async function inspectMexicoInitialPresentation(page, field) {
   if (field === 'population') return {populationNationalLayout: await populationNationalLayout(page)};
-  if (field === 'nature') return {cityClimateReadingLayout: await cityClimateReadingLayout(page)};
+  if (field === 'nature') {
+    const national = await page.locator('[data-mexico-climate-diagrams]').evaluate(root => ({
+      heading: root.querySelector('[data-mexico-climate-heading]')?.textContent.trim(),
+      overviewVisible: !root.querySelector('[data-mexico-climate-overview]')?.hidden,
+      visiblePlots: [...root.querySelectorAll('[data-mexico-climate-plot]')].filter(plot => !plot.hidden).length,
+    }));
+    assert.equal(national.heading, 'メキシコ全国の気候を読む');
+    assert.equal(national.overviewVisible, true);
+    assert.equal(national.visiblePlots, 0);
+    assert.equal(await page.locator('svg [data-mexico-climate-city]').count(), 2);
+    return {climateNationalLayout: national};
+  }
   if (field === 'agriculture') {
     const marks=await page.locator('[data-mexico-agriculture-atlas]').evaluate(root=>{
       const selectors=['[data-crop-label]', '.atlas-livestock-marker'];
@@ -216,7 +227,8 @@ async function agriculture({page, evidence}) {
       const labels = [...node.querySelectorAll('[data-crop-label]')].filter(label => !label.closest('[hidden]')).map(label => ({id: label.getAttribute('data-crop-label'), fill: getComputedStyle(label).fill, sourceFill: getComputedStyle(node.querySelector(`[data-mexico-crop-zones] [data-crop-zone="${label.getAttribute('data-crop-label')}"]`)).fill}));
       return {paths, labels, livestock: node.querySelectorAll('[data-livestock-markers] button').length,livestockOpacity:[...node.querySelectorAll('[data-livestock-markers] button')].map(button=>Number(getComputedStyle(button).opacity))};
     });
-    assert(distribution.paths.length >= 10 && distribution.paths.every(path => !path.hidden && Number(path.opacity) > 0));
+    assert.equal(distribution.paths.length,9,'The nine named crop zones remain; the aggregate other class is not painted');
+    assert(distribution.paths.every(path => path.id !== 'other' && !path.hidden && Number(path.opacity) > 0));
     assert(distribution.paths.every(path=>path.id!=='rice'));
     assert(distribution.livestock > 0);assert(distribution.livestockOpacity.every(value=>value>0&&value<1));
     const corn = distribution.paths.find(path => path.id === 'corn'); assert(corn && corn.stroke !== 'none' && parseFloat(corn.strokeWidth) > 0);
