@@ -7,7 +7,11 @@ import {westPlaceExamples} from '../../src/data/atlas/west-asia-places.mjs';
 import shares from '../../src/data/atlas/west-asia-world-shares.json' with {type:'json'};
 
 test('industry roles preserve the region network and keep the offshore oil field away from Abu Dhabi city',()=>{
- assert.equal(westIndustrySites.length,13);
+ assert.equal(westIndustrySites.length,16);
+ assert.deepEqual(westIndustryRoles['industry-resources'],['resource']);
+ assert.deepEqual(westIndustryRoles['industry-manufacturing'],['processing','manufacturing']);
+ assert.deepEqual(westIndustryRoles['industry-services'],['transit','service']);
+ assert.deepEqual(westIndustrySites.filter(s=>s.kind==='service').map(s=>s.country),['SAU','ARE','TUR']);
  assert.deepEqual(westIndustryRoles['industry-extraction'],['resource']);
  assert.deepEqual(westIndustrySites.filter(s=>s.kind==='resource').map(s=>s.id),['eastern-oil','upper-zakum']);
  assert(!westIndustrySites.some(s=>s.id==='abudhabi'));

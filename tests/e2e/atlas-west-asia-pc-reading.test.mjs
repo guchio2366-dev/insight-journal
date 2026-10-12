@@ -42,7 +42,7 @@ test('西アジアのPC実画面で地域説明・3か国・欠測年・選択�
    };
    await open('industry/');
    await assert.doesNotReject(()=>page.locator('[data-west-regional-reading]').filter({hasText:'地域全体の供給網'}).waitFor());
-   assert.equal(await page.locator('[data-industry-site]').count(),13);
+   assert.equal(await page.locator('[data-industry-site]').count(),16);
    await shot('supply-network');
    await page.locator('[data-industry-site="jubail"]').press('Enter');
    await page.waitForFunction(()=>document.querySelector('.west-industry-site-reading')?.textContent.includes('石油化学'));
