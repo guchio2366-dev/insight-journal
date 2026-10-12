@@ -38,7 +38,7 @@ export function renderLatinFoundationAnnotations(section:string,scope:string,pla
 export function renderLatinRainfallReadingLegend(){
  const data=manifest.rainfall;
  const bar=(start:number,end:number,ticks:number[])=>`<div class="latin-foundation-scale"><div class="latin-foundation-colorbar" aria-hidden="true">${data.colors.slice(start/250,end/250).map(c=>`<span style="flex:1;background:${c}"></span>`).join('')}</div><div class="latin-foundation-ticks">${ticks.map(t=>`<span style="left:${100*(t-start)/(end-start)}%;transform:translateX(${t===start?'0':t===end?'-100':'-50'}%)">${t.toLocaleString('ja-JP')}</span>`).join('')}</div></div>`;
- return `<div data-rainfall-piecewise-legend aria-label="年降水量の凡例。通常域と極端な多雨域は別の目盛"><strong>通常域：少雨 → 中雨 → 多雨</strong>${bar(0,4000,[0,1000,2000,3000,4000])}<strong>極端な多雨域</strong>${bar(4000,10500,[4000,7000,10500])}<p>mm/年 · 1991–2020年。青帯・線は全域250mm間隔。2本の帯は別の目盛です。線上の数値：等雨量線。灰地：欠測・未解像。</p></div>`;
+ return `<div data-rainfall-piecewise-legend aria-label="年降水量の凡例。通常域と極端な多雨域は別の目盛"><strong>通常域：少雨 → 中雨 → 多雨</strong>${bar(0,4000,[0,2000,4000])}<strong>極端な多雨域</strong>${bar(4000,10500,[4000,7000,10500])}<p>mm/年 · 1991–2020年。青帯・線は全域250mm間隔。2本の帯は別の目盛です。線上の数値：等雨量線。灰地：欠測・未解像。</p></div>`;
 }
 export function renderLatinLandformLegend(){
  return `<div class="latin-foundation-extra-key">${[...geography.regions,...central.regions].map(r=>`<span><i style="background:${r.color}"></i>${r.name}</span>`).join('')}</div><p>色面：Natural Earthの地形地域名の概略範囲。標高・地質の階級ではありません。ラプラタ平原はグランチャコ・パンパ等の地域として読みます。青線：河川。</p>`;

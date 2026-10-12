@@ -33,7 +33,7 @@ export function renderLatinCulturePatterns(section:MajorSection,scope='all',sele
  return `<svg class="latin-map lp-map latin-culture-pattern-map latin-major-map" data-latin-map data-reading-frame="${frame.join(' ')}" viewBox="0 0 900 850" role="group" aria-label="${section==='ethnicity'?'民族・人種の地域別分布':'宗教の地域別分布'}：実地域に複数の分布を重ねた一枚"><defs>${defs}</defs><rect width="900" height="850" fill="#e8f0f3"/><g transform="${transform}">${countries}${regions}</g><g pointer-events="none">${texts}</g>${municipalLocators}</svg>`;
 }
 export function renderCulturePatternLegend(section:MajorSection,selected='',_scope='all',emphasize=false){
- return `<div class="latin-culture-pattern-key" aria-label="地域に重なる主要分布">${mapGroups(section).map(g=>`<button type="button" data-lc-select="distribution:${g.id}" aria-pressed="${selected==='distribution:'+g.id}"><i style="background:${g.color}"></i>${escape(g.label)}</button>`).join('')}</div><p>範囲：実線＝公表統計の行政区（境界は原資料どおり）。小さな色記号＝地域記述の参照、局所分布不明。橙の四角＝ブラジル3市の2022年parda集計の表示位置。灰色＝表示値なし。程度：面の淡・濃＝50%未満・以上／重なる斜線・点の薄・中・濃＝20%未満・20–34%・35%以上。${emphasize?'枠線＝選択分布のある地域。':''}</p>`;
+ return `<div class="latin-culture-pattern-key" aria-label="地域に重なる主要分布">${mapGroups(section).map(g=>`<button type="button" data-lc-select="distribution:${g.id}" aria-pressed="${selected==='distribution:'+g.id}"><i style="background:${g.color}"></i>${escape(g.label)}</button>`).join('')}</div><p>範囲：実線＝公表統計の行政区（境界は原資料どおり）。小さな色記号＝地域記述の参照、局所分布不明。${section==='ethnicity'?'橙の四角＝ブラジル3市の2022年parda集計の表示位置。':''}灰色＝表示値なし。程度：面の淡・濃＝50%未満・以上／重なる斜線・点の薄・中・濃＝20%未満・20–34%・35%以上。${emphasize?'枠線＝選択分布のある地域。':''}</p>`;
 }
 function geographicReading(r:GeographicRegion){
  const source=geographicSources.find(s=>s.id===r.source)!;

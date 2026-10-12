@@ -52,7 +52,7 @@ export function renderLatinFoundationLegend(section:LatinFoundationSection):stri
  if(section==='terrain')return renderLatinLandformLegend();
  if(section==='rivers')return '<p>青線：Natural Earth 1:1,000万の主要河川・湖内中心線。薄い灰の起伏：ETOPO2022 DEMの陰影（航空写真ではありません）。細い灰線：国境。橙線：選択した線。他の河川も残ります。</p>';
  const data=section==='rainfall'?manifest.rainfall:manifest.elevation,colors=section==='terrain'?manifest.elevation.terrainColors.slice(1):section==='elevation'?data.colors.slice(1):data.colors;
- const ticks=section==='rainfall'?[0,2500,5000,7500]:[0,1500,3000,4500,6000];
+ const ticks=section==='rainfall'?[0,2500,5000,7500]:[0,2000,4000];
  const colorBar=colors.map(c=>`<span style="flex:1;background:${c}"></span>`).join('');
  const maximum=data.levels.at(-1)!;
  const below=section==='terrain'?manifest.elevation.terrainColors[0]:manifest.elevation.colors[0];
