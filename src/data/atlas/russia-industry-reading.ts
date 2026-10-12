@@ -1,4 +1,11 @@
 export type RussiaIndustrySource = {title: string; url: string};
+export type RussiaIndustrySector = 'resources' | 'manufacturing' | 'services';
+export const russiaIndustrySectors:Record<RussiaIndustrySector,{title:string;takeaway:string;explanation:string}>={
+ resources:{title:'資源・エネルギー',takeaway:'石油・ガス・石炭と銅・ニッケルの産地、精製拠点を読む。',explanation:'西シベリア・ヤマロ・ネネツ・クズバス・ノリリスクは産地の代表都市です。オムスクでは採掘後の原油を使える製品に精製します。点は資源量や生産量の比例記号ではありません。'},
+ manufacturing:{title:'製造業',takeaway:'チェレポヴェツの鋼材とナーベレジヌイェ・チェルヌイのトラック製造を読む。',explanation:'Severstalの資料は製鋼と板材・長材の製造、KAMAZの資料は鋳造・鍛造・エンジン・車両組立を示します。印はGHSL都市中心で工場の敷地ではありません。資源の採掘・精製地点と製品製造を区別して読みます。'},
+ services:{title:'サービス業',takeaway:'モスクワの管理・物流と、北西・極東の港湾を読む。',explanation:'企業管理と倉庫・貨物取扱いには人・情報・設備が集まります。モスクワ、ムルマンスク、ウラジオストクの印は各機能の代表で、輸送経路や地域の産業割合を表しません。'},
+};
+export const russiaIndustryMarkSectors:Record<string,RussiaIndustrySector[]>={'norilsk-resource-region':['resources'],'moscow-management-logistics':['services'],'murmansk-port':['services'],'vladivostok-port':['services'],'west-siberia-oil':['resources'],'yamal-nenets-gas':['resources'],'kuzbass-coal':['resources'],'omsk-refining':['resources'],'cherepovets-steel':['manufacturing'],'naberezhnye-chelny-trucks':['manufacturing']};
 
 export type RussiaIndustryMark = {
   id: string;
@@ -95,6 +102,8 @@ export const russiaIndustryMarks: RussiaIndustryMark[] = [
   {id:'yamal-nenets-gas',name:'天然ガス：ヤマロ・ネネツ',coordinates:[76.633245,66.083316],kind:'resource',note:'ヤマロ・ネネツのガス産地を読むノヴィ・ウレンゴイの都市代表位置（Natural Earth 10m v5.1.2）。ガス田・州の境界ではありません。',reading:'ヤマロ・ネネツは天然ガスの主要産地です。ウレンゴイなどのガス田と輸送設備が寒冷な北部の資源を市場につなぎます。2024年の全国乾性天然ガス生産は23.2兆立方フィート（速報値）で、都市量や特定ガス田の量ではありません。',sources:[gasCityPosition,eiaEnergy]},
   {id:'kuzbass-coal',name:'石炭：クズバス',coordinates:[86.08998,55.339967],kind:'resource',note:'クズネツク炭田を読むケメロヴォの都市代表位置（Natural Earth 50m v5.1.2）。炭田境界や採掘地点ではありません。',reading:'クズネツク炭田（クズバス）は主要な石炭産地です。炭層の位置と鉄道輸送が立地を支えます。2023年のロシア全国石炭生産は5億2900万ショートトン。メートルトンやクズバス単独の生産量に置き換えていません。',sources:[cityPositions,eiaEnergy]},
   {id:'omsk-refining',name:'石油精製：オムスク',coordinates:[73.398008,54.991934],kind:'processing',note:'オムスクの都市代表位置（Natural Earth 50m v5.1.2）。製油所の敷地ではありません。',reading:'オムスクは西シベリアの主要な石油精製拠点です。採取した原油を製品に加工する設備と輸送が結び付きます。EIA Table 4の2025年推定精製能力は日量44万バレルで、実際の処理量・製品生産量や市全体の量ではありません。',sources:[cityPositions,eiaEnergy]},
+  {id:'cherepovets-steel',name:'鋼材製造：チェレポヴェツ',coordinates:[37.895435280503406,59.128856499971405],kind:'processing',note:'GHSL 2025年境界のチェレポヴェツ都市中心代表座標です。製鉄所の敷地や生産量は示しません。Severstalの企業資料は製鋼、板材・長材の製造を説明します。資料公開年は不明、2026年10月12日確認。',sources:[{title:'Severstal：Cherepovets Steel Millの工程（2026年10月確認）',url:'https://severstal.com/eng/about/structure/businesses/cherepovetskiy-metallurgicheskiy-kombinat/'},{title:'GHSL：都市中心の代表座標（2020年人口・2025年境界）',url:'https://doi.org/10.2905/1a338be6-7eaf-480c-9664-3a8ade88cbcd'}]},
+  {id:'naberezhnye-chelny-trucks',name:'トラック製造：チェルヌイ',coordinates:[52.383848224859086,55.722010443569204],kind:'processing',note:'GHSL 2025年境界のナーベレジヌイェ・チェルヌイ都市中心代表座標です。工場の敷地や生産量は示しません。KAMAZの企業概要（2026年3月以降の記載）は当地の鋳造・鍛造、エンジン、車両組立などの拠点を挙げています。',sources:[{title:'KAMAZ：製造工程とNaberezhnye Chelnyの各工場（2026年10月確認）',url:'https://kamaz.ru/en/about/general-information/'},{title:'GHSL：都市中心の代表座標（2020年人口・2025年境界）',url:'https://doi.org/10.2905/1a338be6-7eaf-480c-9664-3a8ade88cbcd'}]},
 ];
 
 export const russiaIndustryReadings: RussiaIndustryReading[] = [

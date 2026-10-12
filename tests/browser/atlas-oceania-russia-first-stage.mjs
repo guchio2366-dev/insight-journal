@@ -79,7 +79,7 @@ try{
   const frame=await map.locator('svg').first().getAttribute('viewBox');
   assert.equal(await host.locator('[data-place]').inputValue(),'all');
   assert.equal(await host.locator('[data-layer]').inputValue(),'industry-all');
-  assert.equal(await marks().count(),5);
+  assert.equal(await marks().count(),6);
   assert.equal(await mines().count(),347);
   assert.equal(await map.locator('[data-oceania-industry-location][aria-pressed="true"]').count(),0);
   assert.match(await host.locator('[data-theme-title]').textContent(),/オセアニアの主要産業/);
@@ -91,24 +91,24 @@ try{
   assert.match(await host.locator('[data-source-list]').textContent(),/ラエ港の位置資料/);
   assert.equal(await host.locator('[data-oceania-industry-return]').isVisible(),true);
   assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
-  assert.equal(await marks().count(),5);assert.equal(await mines().count(),347);
+  assert.equal(await marks().count(),6);assert.equal(await mines().count(),347);
   assert.equal(await map.locator('[data-oceania-industry-location="lae-port"]').getAttribute('aria-pressed'),'true');
   await capture('lae-selected');
   await page.reload({waitUntil:'networkidle'});await ready('oceania');
   assert.equal(await host.locator('[data-theme-title]').textContent(),'ラエ港');
-  assert.equal(await marks().count(),5);assert.equal(await mines().count(),347);
+  assert.equal(await marks().count(),6);assert.equal(await mines().count(),347);
   await capture('lae-reloaded');
   await host.locator('[data-oceania-industry-return]').click();await ready('oceania');
   assert.equal(new URL(page.url()).searchParams.has('industryLocation'),false);
   assert.equal(await host.locator('[data-oceania-industry-return]').isVisible(),false);
-  assert.equal(await marks().count(),5);assert.equal(await mines().count(),347);
+  assert.equal(await marks().count(),6);assert.equal(await mines().count(),347);
   assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
   await capture('reset');
   await page.reload({waitUntil:'networkidle'});await ready('oceania');
   assert.equal(new URL(page.url()).searchParams.has('industryLocation'),false);
   assert.equal(await host.locator('[data-oceania-industry-return]').isVisible(),false);
-  assert.equal(await marks().count(),5);assert.equal(await mines().count(),347);
-  result.checks.push('Oceania industry at 1920×1080 CSS pixels and DPR 1: overview, Lae representative selection, reload and reset retain all five named places, 347 Australian mine marks, source reading and the full regional frame.');
+  assert.equal(await marks().count(),6);assert.equal(await mines().count(),347);
+  result.checks.push('Oceania industry at 1920×1080 CSS pixels and DPR 1: overview, Lae representative selection, reload and reset retain all six named places, 347 Australian mine marks, source reading and the full regional frame.');
  }
  if(!farmingOnly||physicalReview){
   for(const width of [1920,1536,1024]){
@@ -162,7 +162,7 @@ try{
     const host=root(region),map=host.locator('[data-primary-map]'),frame=await map.locator('svg').first().getAttribute('viewBox');
     assert.equal(await host.locator('[data-place]').inputValue(),'all');
     assert.equal(new URL(page.url()).searchParams.get('scope'),'all');
-    if(region==='russia'&&field==='industry'){assert.equal(await map.locator('[data-russia-industry-location]').count(),8);assert.equal(await host.locator('[data-reading-status]').textContent(),'ロシアの概要');}
+    if(region==='russia'&&field==='industry'){assert.equal(await map.locator('[data-russia-industry-location]').count(),10);assert.equal(await host.locator('[data-reading-status]').textContent(),'ロシアの概要');}
     else assert.ok((await host.locator('[data-theme-title]').textContent()).startsWith(region==='oceania'?'オセアニアの':'ロシアの'));
     assert.equal(await host.locator('[data-theme][aria-pressed=true]').count(),0);
     assert.equal(await host.locator('[data-primary-legend-spacer]').evaluate(el=>el.getBoundingClientRect().height),0);
@@ -371,7 +371,7 @@ try{
       assert.match(await host.locator('[data-geography-reading]').textContent(),/ヤクーツク付近.*低密度の正値/);
       assert.equal(await host.locator('[data-place]').evaluate(el=>document.activeElement===el),true,'Native keyboard region focus survives redraw');
      }else if(field==='industry'){
-      assert.equal(await host.locator('[data-place]').inputValue(),'far-east');assert.equal(await map.locator('[data-region-marker]').count(),0);assert.equal(await map.locator('[data-russia-industry-location]').count(),8);assert.equal(await host.locator('[data-region-option=far-east]').evaluate(el=>document.activeElement===el),true);
+      assert.equal(await host.locator('[data-place]').inputValue(),'far-east');assert.equal(await map.locator('[data-region-marker]').count(),0);assert.equal(await map.locator('[data-russia-industry-location]').count(),10);assert.equal(await host.locator('[data-region-option=far-east]').evaluate(el=>document.activeElement===el),true);
      }else{
       assert.equal(await map.locator('[data-region-marker]').count(),3);
       assert.equal(await map.locator('[data-region-marker][data-map-place=far-east]').evaluate(el=>document.activeElement===el),true,'Keyboard focus survives redraw');
@@ -386,7 +386,7 @@ try{
     assert.equal(await host.locator('[data-layer]').inputValue(),layer);
     assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
     await host.locator('[data-place]').selectOption('all');await ready(region);
-    if(region==='russia'&&field==='industry'){assert.equal(await map.locator('[data-russia-industry-location]').count(),8);assert.equal(await host.locator('[data-reading-status]').textContent(),'ロシアの概要');}
+    if(region==='russia'&&field==='industry'){assert.equal(await map.locator('[data-russia-industry-location]').count(),10);assert.equal(await host.locator('[data-reading-status]').textContent(),'ロシアの概要');}
     else assert.ok((await host.locator('[data-theme-title]').textContent()).startsWith(region==='oceania'?'オセアニアの':'ロシアの'));
    }
    for(const dimension of dimensions){assert.ok(Math.abs(dimension.width-dimensions[0].width)<2,`${region} field map widths agree`);assert.ok(Math.abs(dimension.height-dimensions[0].height)<2,`${region} field map heights agree`);}

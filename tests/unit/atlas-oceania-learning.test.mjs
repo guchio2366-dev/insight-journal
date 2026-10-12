@@ -167,13 +167,13 @@ test('industry representative places open sourced details while all marks remain
   try{
     const first=controllerFixture('https://example.test/insight-journal/atlas/oceania/industry/?utm_source=qa','industry');sessions.push(first);
     const root=first.root;
-    assert.equal(root.querySelectorAll('[data-oceania-industry-location]').length,5);
+    assert.equal(root.querySelectorAll('[data-oceania-industry-location]').length,6);
     assert.equal(root.querySelectorAll('[data-oceania-industry-location][aria-pressed="true"]').length,0);
     root.querySelector('[data-oceania-industry-location="lae-port"]')?.dispatchEvent(new first.window.MouseEvent('click',{bubbles:true}));
     assert.equal(root.querySelector('[data-theme-title]').textContent,'ラエ港');
     assert.match(root.querySelector('[data-explanation]').textContent,/個々の鉱山の輸出港/);
     assert.match(root.querySelector('[data-source-list]').textContent,/ラエ港の位置資料/);
-    assert.equal(root.querySelectorAll('[data-oceania-industry-location]').length,5);
+    assert.equal(root.querySelectorAll('[data-oceania-industry-location]').length,6);
     assert.equal(root.querySelectorAll('circle[stroke="#fff"]').length,347);
     assert.equal(root.querySelector('[data-oceania-industry-location="lae-port"]').getAttribute('aria-pressed'),'true');
     const url=first.window.location.href;

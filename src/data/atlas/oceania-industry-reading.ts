@@ -9,6 +9,15 @@ export type OceaniaIndustryMark = {
   note: string;
   sourceUrl: string;
 };
+export type OceaniaIndustrySector = 'resources' | 'manufacturing' | 'services';
+export const oceaniaIndustrySectors: Record<OceaniaIndustrySector, {title:string; takeaway:string; explanation:string}> = {
+  resources: {title:'資源・エネルギー',takeaway:'豪州の鉱種分布とPNGの金鉱石処理を読む。',explanation:'鉱山347点は2025版の稼働地点で、量や埋蔵量を示しません。PNGのリヒールは2023年末の採掘・鉱石処理地区です。採掘から利用可能な状態への処理までをこの分野に含めます。'},
+  manufacturing: {title:'製造業',takeaway:'鋼材・水産缶詰など、原料を製品にする場所を読む。',explanation:'豪州ポートケンブラの鋼材生産とソロモン諸島ノロの水産缶詰製造を代表例にします。NZの木材・乳製品の加工は一次資料で国の工程を確認できますが、工場地点を示す資料は未収録です。港の点を工場位置には置き換えません。'},
+  services: {title:'サービス業',takeaway:'港の輸送と都市の管理・市場の機能を読む。',explanation:'NZのタウランガ、PNGのラエ、ソロモン諸島のノロ、フィジーのスバは港や都市の代表地点です。物流・情報・観光などの機能を見ます。線で結ぶ輸送経路や都市別産業割合は資料から推定しません。'},
+};
+export const oceaniaIndustryMarkSectors: Record<string,OceaniaIndustrySector[]> = {
+  'tauranga-port':['services'],'lihir-project':['resources'],'lae-port':['services'],'noro-port':['manufacturing','services'],'suva-city':['services'],'port-kembla-steel':['manufacturing'],
+};
 
 export type OceaniaIndustryReadingTheme = {
   id: string;
@@ -27,7 +36,7 @@ export const oceaniaIndustryMapReading = {
   takeaway: '資源の分布に、加工技術・港・市場・地域の合意を重ねて産業を読む。',
   mineLegend: '豪州の稼働鉱山：2025版・347地点。鉱種を示し、生産量・埋蔵量は示しません。',
   representativeLegend: '代表地点：港・加工地区・都市の位置。固定サイズの印で、件数・生産量・産業割合の比較には使いません。',
-  coverage: '豪州の鉱山一覧と、NZ・PNG・ソロモン諸島・フィジーの5代表地点を掲載。印がない国・島にも産業があり、未収録をゼロとは読めません。',
+  coverage: '豪州の鉱山一覧と、豪州・NZ・PNG・ソロモン諸島・フィジーの6代表地点を掲載。印がない国・島にも産業があり、未収録をゼロとは読めません。',
   comparison: '鉱山の鉱種分布と代表地点を残し、作物・家畜の分布や人口集中を重ねて、原料・加工・市場の関係を比べます。港へ向かう線や航路は、この地図では推定しません。',
   kinds: [
     {kind: 'port', label: '港の代表位置'},
@@ -46,8 +55,10 @@ export const oceaniaIndustryReadingThemes: OceaniaIndustryReadingTheme[] = [
     sources: [
       {title: 'Geoscience Australia：Australian Operating Mines Map 2025', url: 'https://doi.org/10.26186/150821'},
       {title: 'Geoscience Australia：鉄鉱石の採掘と加工（2025年更新）', url: 'https://www.ga.gov.au/education/minerals-energy/australian-mineral-facts/iron'},
+      {title: 'BlueScope：ポートケンブラの鋼材生産（2026年10月確認）',url:'https://www.bluescope.com/illawarra'},
+      {title:'GHSL：ウォロンゴン都市中心の代表座標（2020年人口・2025年境界）',url:'https://doi.org/10.2905/1a338be6-7eaf-480c-9664-3a8ade88cbcd'},
     ],
-    marks: [],
+    marks: marks('port-kembla-steel'),
   },
   {
     id: 'new-zealand-processing',

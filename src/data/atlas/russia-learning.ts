@@ -9,13 +9,13 @@ import livestockManifest from '../../../public/assets/atlas/russia-livestock-v1/
 import farmingManifest from '../../../public/assets/atlas/russia-farming-overlay-v1/manifest.json';
 import populationManifest from '../../../public/assets/atlas/russia-population-v1/manifest.json';
 import centres from '../../../public/assets/atlas/russia-population-v1/centres.json';
-import {russiaIndustryMarks,russiaIndustryReadings} from './russia-industry-reading';
+import {russiaIndustryMarks,russiaIndustryReadings,russiaIndustryMarkSectors,russiaIndustrySectors,type RussiaIndustrySector} from './russia-industry-reading';
 import {russiaPath,projectRussia,russiaWidth,russiaHeight,russiaFrameForBounds} from '../../lib/atlas-russia-geometry';
 import {withBase} from '../../lib/urls';
 import {physicalLayer,regionalRiverLayer,renderRegionalRivers} from './oceania-russia-physical';
 
 export type RussiaField='nature'|'agriculture'|'industry'|'population';
-export type RussiaState={field:RussiaField;theme:string;layer:string;place:string;scope:'all'|'theme'|'region';comparison:boolean;compareLayer:string;single?:boolean;industryLocation?:string};
+export type RussiaState={field:RussiaField;theme:string;layer:string;place:string;scope:'all'|'theme'|'region';comparison:boolean;compareLayer:string;single?:boolean;industryLocation?:string;sector?:RussiaIndustrySector;sectorOnly?:boolean};
 export type RussiaSource={title:string;url:string;note?:string};
 export type RussiaLegend={label:string;color:string;shape?:'square'|'circle'|'diamond'|'missing'|'disputed';sizePopulation?:number};
 export type RussiaLayer={id:string;field:RussiaField;title:string;period:string;unit:string;kind:'raster'|'rivers'|'places'|'cities'|'farming';image?:string;bounds?:number[];legend:RussiaLegend[];sources:RussiaSource[];coverage:string;resolution?:string};
@@ -24,7 +24,7 @@ export const russiaFields:Record<RussiaField,{label:string;title:string}>={natur
 export const russiaOverviewReadings:Record<RussiaField,{title:string;takeaway:string;explanation:string}>={
  nature:{title:'ロシアの自然環境を読む',takeaway:'高緯度の寒さ、シベリア内陸の大きな年較差、極東の雨の季節差を比べます。都市名を選ぶと、生育期・水利用・暮らしにつながる雨温図と理由を読めます。',explanation:'1991–2020年の気候区分を全域で表示します。場所やテーマを選ぶと理由の説明に切り替わり、全域の分布は残ります。気候分類は年降水量や現在の天候ではありません。名称付きの観測所を選ぶと、同じ表示範囲のまま雨温図と気候の理由を読めます。高緯度・内陸性・極東の季節風による違いを比べます。年降水量と標高は地図の分布で選べます。主要河川の位置は地図で選べます。流向・河口、流域・地下水の資料は未整備です。'},
  agriculture:{title:'ロシアの農林業を読む',takeaway:'小麦の正の収穫面積は南西部のロストフ付近と西シベリア南部のオムスク付近で確認できます。牛も両地域に分布し、東部のヤクーツク付近には低密度の正値があります。',explanation:'南西部のロストフ周辺は冬小麦の栽培地帯です。秋に播いて冬を越し、翌夏に収穫します。一方、寒さの厳しい西シベリア南部では春小麦が主で、春に播いて夏に育てます。USDA FASの地域別報告は、南部の冬小麦とシベリアの春小麦を区別しています。牛は飼料と冬の飼育設備を必要とし、肉・乳に利用されます。2020年のモデル分布で、緑の面は小麦の収穫面積（ha／元5分セル）、青い点の濃さは牛の密度（頭／km²）です。点は個体数ではなく、互いに足せる量でもありません。品目を選ぶとその数量色を強調し、他の分布と表示範囲を残します。輪郭は正の値がある元セルの外周で、実際の農場境界ではありません。保存済みの全域分布は小麦・牛の2品目で、他の品目の全国分布格子は未収録です。未収録を栽培・飼育ゼロとは扱いません。林業は別ページに西部の2021年樹木被覆と南部の2020年森林参考図があります。全域の森林分布は未整備です。'},
- industry:{title:'石油・ガス・石炭、金属と加工・物流を読む',takeaway:'西シベリアの石油、ヤマロ・ネネツの天然ガス、クズバスの石炭とノリリスクの金属産地に、オムスクの石油精製、欧州側の管理・港湾、極東の港湾が重なります。',explanation:'地下資源の位置に採掘・加工設備が立地し、パイプライン、河川、鉄道、港が市場へつなぎます。点は8件の代表位置で、鉱床境界や量の比例記号ではありません。数量の年・単位・全国/施設の範囲は各地点の本文で確認します。主要な製造業の地域分布は引き続き補完が必要です。'},
+ industry:{title:'資源・製造・サービスの産業を読む',takeaway:'西シベリアの石油、ヤマロのガス、クズバスの石炭とノリリスクの金属に、チェレポヴェツの鋼材、チェルヌイのトラック製造、欧州側の管理と北西・極東の港を重ねます。',explanation:'採掘・利用可能な状態への精製、鋼材の製造、管理・物流を分けて読みます。点は10件の代表位置で、鉱床境界や量の比例記号ではありません。数量の年・単位・全国/施設の範囲は各地点の本文で確認します。印のない産業や都市はゼロではありません。'},
  population:{title:'ロシアの人口分布を読む',takeaway:'欧州側の集積とシベリア・極東の居住を、都市・交通・公共サービスとのつながりから比べます。',explanation:'全域の2020年モデル人口密度と都市中心の位置を表示します。密度と都市中心の人口は単位・範囲が異なり、市の行政人口や現在の人口とは一致しません。地域を選んでも他地域の分布は残ります。人種・民族・宗教の分布資料は未整備です。'},
 };
 const allPath=russiaPath(geography.features.find(f=>f.properties.kind==='russia')!.geometry);
@@ -97,7 +97,8 @@ export function createRussiaState(search:string,field:RussiaField='nature'):Russ
  const theme=russiaThemes.find(t=>t.field===validField&&t.id===query.get('theme'))??russiaThemes.find(t=>t.field===validField&&t.defaultLayer===query.get('layer')&&(place==='all'||t.regionCodes.includes(place)))??russiaThemes.find(t=>t.field===validField&&t.regionCodes.includes(place))??getRussiaTheme({field:validField,theme:''});
  const layer=russiaLayers.find(l=>l.field===validField&&l.id===query.get('layer'))?.id??(validField==='agriculture'?'farming-all':theme.defaultLayer),compareLayer=russiaLayers.some(l=>l.id===query.get('compare'))?query.get('compare')!:theme.comparisonLayer;
  const candidate=query.get('scope'),scope=['all','theme','region'].includes(candidate??'')?candidate as RussiaState['scope']:place==='all'?'all':'region';
- return {field:validField,place,theme:theme.id,layer,compareLayer,scope:scope==='region'&&place==='all'?'all':scope,comparison:query.get('view')==='comparison',single:validField==='agriculture'&&layer!=='farming-all'&&query.get('single')==='1',...(validField==='industry'&&layer==='places'&&russiaIndustryMarks.some(m=>m.id===query.get('industryLocation'))?{industryLocation:query.get('industryLocation')!}:{})};
+ const sector=query.get('sector');
+ return {field:validField,place,theme:theme.id,layer,compareLayer,scope:scope==='region'&&place==='all'?'all':scope,comparison:query.get('view')==='comparison',single:validField==='agriculture'&&layer!=='farming-all'&&query.get('single')==='1',...(validField==='industry'&&sector&&Object.hasOwn(russiaIndustrySectors,sector)?{sector:sector as RussiaIndustrySector,sectorOnly:query.get('sectorOnly')==='1'}:{}),...(validField==='industry'&&layer==='places'&&russiaIndustryMarks.some(m=>m.id===query.get('industryLocation'))?{industryLocation:query.get('industryLocation')!}:{})};
 }
 export function russiaFrame(state:RussiaState):number[]{
  if(state.scope==='region')return russiaRegions.find(r=>r.code===state.place)?.extent??[0,0,russiaWidth,russiaHeight];
@@ -154,11 +155,11 @@ export function renderRussiaScene(layer:RussiaLayer,state:RussiaState,sceneId='p
  const annotations:number[][]=[];
  if(layer.kind==='places'){
   const visible=russiaIndustryMarks.filter(m=>inFrame(projectRussia(m.coordinates))),font=screen.width<480?12:14;
-  for(const m of visible){const [x,y]=projectRussia(m.coordinates),label=screen.width<480?m.name.split('：')[0]+(m.kind==='port'?(m.id==='murmansk-port'?'：北西':'：極東'):''):m.name,w=(label.length*font+10)*scale,h=22*scale;
-   const candidates=[[12,4],[-w/scale-12,4],[12,-28],[-w/scale-12,-28],[12,36],[-w/scale-12,36],[12,-60],[-w/scale-12,-60],[12,68],[-w/scale-12,68]].map(([dx,dy])=>[Math.max(frame[0]+4*scale,Math.min(x+dx*scale,frame[0]+frame[2]-w-4*scale)),Math.max(frame[1]+h,Math.min(y+dy*scale,frame[1]+frame[3]-5*scale))]);
+  for(const m of visible){const [x,y]=projectRussia(m.coordinates),label=m.id==='murmansk-port'?'北西港湾':m.id==='vladivostok-port'?'極東港湾':m.name.split('：')[0],w=(label.length*font+10)*scale,h=22*scale;
+   const candidates=[[12,4],[-w/scale-12,4],[12,-24],[-w/scale-12,-24],[12,30],[-w/scale-12,30],[12,-38],[-w/scale-12,-38]].map(([dx,dy])=>[Math.max(frame[0]+4*scale,Math.min(x+dx*scale,frame[0]+frame[2]-w-4*scale)),Math.max(frame[1]+h,Math.min(y+dy*scale,frame[1]+frame[3]-5*scale))]);
    const fits=([lx,ly]:number[])=>!annotations.some(([bx,by,bw,bh])=>lx<bx+bw+4*scale&&lx+w+4*scale>bx&&ly-h<by+bh+4*scale&&ly+4*scale>by)&&![...visible.map(other=>other.coordinates),...russiaRegions.map(region=>region.label)].some(coordinates=>{const [px,py]=projectRussia(coordinates);return px>lx-8*scale&&px<lx+w+8*scale&&py>ly-h-8*scale&&py<ly+8*scale;});
    const [lx,ly]=candidates.find(fits)??candidates[0],active=state.industryLocation===m.id,color=industryColors[m.kind];annotations.push([lx,ly-h,w,h]);
-   marks+=`<g data-russia-industry-location="${m.id}" tabindex="0" role="button" aria-pressed="${active}" aria-label="${escape(m.name+'を読む')}" style="cursor:pointer"><title>${escape(m.note)}</title><path d="M${x} ${y}L${Math.max(lx,Math.min(x,lx+w))} ${Math.max(ly-h,Math.min(y,ly))}" stroke="${color}" stroke-width=".8" vector-effect="non-scaling-stroke"/><circle cx="${x}" cy="${y}" r="${(active?7:5)*scale}" fill="${color}" stroke="${active?'#193c3f':'#fff'}" stroke-width="1.5" vector-effect="non-scaling-stroke"/><rect x="${lx-2*scale}" y="${ly-h}" width="${w+4*scale}" height="${h+4*scale}" fill="transparent"/><text x="${lx}" y="${ly}" font-size="${font*scale}">${escape(label)}</text></g>`;
+   marks+=`<g data-russia-industry-location="${m.id}" data-industry-sectors="${russiaIndustryMarkSectors[m.id].join(' ')}" tabindex="0" role="button" aria-pressed="${active}" aria-label="${escape(m.name+'を読む')}" style="cursor:pointer"><title>${escape(m.note)}</title><path d="M${x} ${y}L${Math.max(lx,Math.min(x,lx+w))} ${Math.max(ly-h,Math.min(y,ly))}" stroke="${color}" stroke-width=".8" vector-effect="non-scaling-stroke"/><circle cx="${x}" cy="${y}" r="${(active?7:5)*scale}" fill="${color}" stroke="${active?'#193c3f':'#fff'}" stroke-width="1.5" vector-effect="non-scaling-stroke"/><rect x="${lx-2*scale}" y="${ly-h}" width="${w+4*scale}" height="${h+4*scale}" fill="transparent"/><text x="${lx}" y="${ly}" font-size="${font*scale}">${escape(label)}</text></g>`;
   }
  }
 

@@ -105,7 +105,7 @@ export const oceaniaComparisonReadings = {
   placesDensity: {
     message: 'ラエ・タウランガ・スバなど港の代表点を人口分布と照合し、沿岸の集住と海運が接する場所を探そう。内陸や別の島の集住も確かめると、港へつなぐ交通の役割が見える。',
     sources: [laePort, tauranga, islandTransport],
-    supportNotes: ['5代表点と2020年人口分布の位置を照合する読み方。港・加工施設の全件分布や個別航路、人口への効果を表す図ではない。'],
+    supportNotes: ['6代表点と2020年人口分布の位置を照合する読み方。港・加工施設の全件分布や個別航路、人口への効果を表す図ではない。'],
   },
   islandPlacesDensity: {
     message: '港の代表点がある島と、ほかの島の集住を比べよう。人が暮らす島々が海で隔てられる分布から、物資を運び、学校・医療へつなぐ船便や交通施設の役割を読む。',

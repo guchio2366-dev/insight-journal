@@ -41,6 +41,29 @@ try{
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true,`${region}/${field}/${width}: horizontal overflow`);
    if(region==='russia')assert.equal(await root.locator('[data-region-marker]').first().isVisible().catch(()=>false),false);
    await capture(`${width}-${region}-${field}-overview`);
+   if(field==='industry'){
+    const buttons=root.locator('[data-industry-sector]');
+    assert.equal(await buttons.count(),3);
+    for(const sector of ['resources','manufacturing','services']){
+     await root.locator(`[data-industry-sector="${sector}"]`).click();
+     assert.equal(new URL(page.url()).searchParams.get('sector'),sector);
+     assert.equal(await map.getAttribute('viewBox'),frame);
+     assert.ok(await map.locator(`[data-industry-sectors][data-sector-match="true"]`).count()>0);
+     assert.ok(await map.locator(`[data-industry-sectors][data-sector-match="false"]`).count()>0);
+     assert.equal(await root.locator('[data-industry-only]').isVisible(),true);
+     await capture(`${width}-${region}-industry-${sector}`);
+    }
+    await root.locator('[data-industry-only]').click();
+    assert.equal(await map.locator('[data-industry-sectors][data-sector-match="false"]').first().isVisible(),false);
+    assert.equal(await map.getAttribute('viewBox'),frame);
+    await capture(`${width}-${region}-industry-services-only`);
+    await page.reload({waitUntil:'networkidle'});
+    await page.waitForFunction(r=>document.querySelector(`[data-${r}-learning]`)?.dataset[r+'Ready']==='true',region);
+    assert.equal(await root.locator('[data-industry-only]').getAttribute('aria-pressed'),'true');
+    await root.locator('[data-industry-sector="services"]').click();
+    assert.equal(new URL(page.url()).searchParams.has('sector'),false);
+    assert.equal(await map.getAttribute('viewBox'),frame);
+   }
    if(field==='agriculture'){
     const crop=root.locator('[data-farming-group=crop]'),livestock=root.locator('[data-farming-group=livestock]');
     const switchBox=await root.locator(`.${region}-farming-visibility`).boundingBox();

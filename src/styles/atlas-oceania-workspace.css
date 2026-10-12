@@ -62,6 +62,11 @@
 .oceania-learning-scene [data-oceania-industry-location]:focus-visible path{stroke:#102f3e;stroke-width:3.5}
 .oceania-industry-return{display:block;margin:0 0 10px;padding:5px 8px;border:1px solid #597678;border-radius:4px;background:#fff;color:#173f4d;font-size:14px}
 .oceania-industry-return[hidden]{display:none}
+[data-field=industry] [data-industry-sectors][data-sector-match=false]{opacity:.36}
+[data-field=industry] [data-industry-sectors][data-sector-match=false][data-sector-only=true]{display:none}
+.oceania-workspace-subviews [data-industry-sector][aria-pressed=true]{background:#35515d;color:#fff}
+.oceania-learning-message [data-industry-only]{margin:0 0 10px;padding:5px 8px;border:1px solid #597678;border-radius:4px;background:#fff;color:#173f4d;font-size:14px}
+.oceania-learning-message [data-industry-only][hidden]{display:none}
 .atlas-desktop-shell .oceania-learning-takeaway,.atlas-desktop-shell .oceania-overview .overview-region-intro{font-size:14px;line-height:1.8;margin:0 0 10px}
 .oceania-workspace-reading-scroll{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding:13px 16px;font-size:14px;line-height:1.85}
 .oceania-workspace-reading-scroll>p{margin:0 0 12px}

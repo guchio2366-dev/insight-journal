@@ -48,6 +48,15 @@
       "kind": "city",
       "note": "Fiji Portsが示すスバ市の代表位置。港の埠頭や観光施設の位置ではありません。金融・保険・観光などの説明はフィジー全国についてのDFAT資料によるもので、スバ市の産業割合を表しません。公開年は不明、2026年10月1日確認。",
       "sourceUrl": "https://fijiports.com.fj/our-story/our-facilities/"
+    },
+    {
+      "id": "port-kembla-steel",
+      "country": "AUS",
+      "name": "鋼板製造：ポートケンブラ",
+      "coordinates": [150.8818992790324, -34.415740515474816],
+      "kind": "processing",
+      "note": "BlueScopeが示すポートケンブラ製鉄所の鋼材生産を読む。印は近隣ウォロンゴンのGHSL都市中心（2025年境界・2020年人口モデル）の代表座標で、製鉄所の敷地や生産量を示しません。企業資料の公開年は不明、2026年10月12日確認。",
+      "sourceUrl": "https://www.bluescope.com/illawarra"
     }
   ]
 }
