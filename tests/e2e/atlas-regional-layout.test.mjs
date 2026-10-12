@@ -121,7 +121,8 @@ test('regional desktop CSS keeps extent-sized East Asia maps and keyboard-access
         assert.equal(readingStyle.overflow,'auto','the explanation scrolls independently beside the map');
       }else{
         const southCentral=region==='asia/south-central-asia'||region==='asia/south-asia'||region==='asia/central-asia';
-        assert.equal(Number.parseFloat(w.getComputedStyle(d.querySelector(c.frame)).aspectRatio),region==='europe'||region==='west-asia'?1.32:southCentral?1.35:compactAspect?1.65:1.55,`${region} ${width}: regional map aspect`);
+        const [numerator,denominator=1]=w.getComputedStyle(d.querySelector(c.frame)).aspectRatio.split('/').map(Number);
+        assert.ok(Math.abs(numerator/denominator-(region==='west-asia'?1000/987:region==='europe'?1.32:southCentral?1.35:compactAspect?1.65:1.55))<.001,`${region} ${width}: regional map aspect`);
         assert.equal((w.getComputedStyle(d.querySelector(c.grid)).gridTemplateColumns.match(/minmax\(/g)??[]).length,2,`${region} ${width}: map and reading retain two desktop tracks`);
       }
       assert.ok(!['none','hidden'].includes(w.getComputedStyle(d.querySelector(c.reading)).display));

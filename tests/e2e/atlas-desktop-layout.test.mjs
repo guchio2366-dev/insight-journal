@@ -84,7 +84,7 @@ test('West Asia adopts the regional normal-map frame while retaining US navigati
       for(const [selector,property] of [['.atlas-primary-grid','grid-template-columns'],['.atlas-map-frame','aspect-ratio'],['.atlas-map-frame','min-height'],['.atlas-tabs','grid-template-columns']]) {
         // West Asia gives its near-square regional extent more vertical room.
         if(width>=960 && selector==='.atlas-map-frame') {
-          if(property==='aspect-ratio')assert.equal(Number.parseFloat(west.css(selector,property)),1.32,`${field} ${width}px regional map aspect`);
+          if(property==='aspect-ratio'){const [numerator,denominator=1]=west.css(selector,property).split('/').map(Number);assert.ok(Math.abs(numerator/denominator-1000/987)<.001,`${field} ${width}px regional map aspect`);}
           else assert.equal(west.css(selector,property),'300px',`${field} ${width}px regional map minimum`);
         } else if(width===1024 && selector==='.atlas-primary-grid') {
           assert.equal(west.css(selector,property),'minmax(0,1.65fr)minmax(320px,1fr)',`${field} ${width}px regional reading column`);
