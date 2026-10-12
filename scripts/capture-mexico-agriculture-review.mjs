@@ -226,7 +226,7 @@ async function assertReady(page, country, scene) {
   assert(labels.length > 0, 'No rendered map labels');
   for (const selector of ['[data-agri-layer][value="crops"]', '[data-agri-layer][value="livestock"]', '[data-map-action="fit"]', '[data-crop-select]', '[data-livestock-select]', '[data-forestry-select]']) {
     const control = root.locator(selector).first();
-    if(scene.id==='forestry'&&(selector.startsWith('[data-agri-layer]')||selector==='[data-crop-select]'||selector==='[data-livestock-select]')){assert(await control.isHidden(),'Crop/livestock controls must yield to forestry');continue;}
+    if(scene.id==='forestry'&&(selector.startsWith('[data-agri-layer]')||(country.id==='mexico'&&(selector==='[data-crop-select]'||selector==='[data-livestock-select]')))){assert(await control.isHidden(),'Crop/livestock controls must yield to forestry');continue;}
     assert(await control.isVisible() && await control.isEnabled(), `Control unavailable: ${selector}`);
   }
   const busy = root.locator('[aria-busy="true"]');
