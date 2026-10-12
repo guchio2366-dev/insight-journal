@@ -8,7 +8,7 @@ const state={sector:'resources' as const,industry:null,site:null,single:false,sc
  <div class="latin-sector-grid">
   <div class="latin-sector-map-column">
    <div data-lis-map set:html={renderIndustrySectorMap(state)}/>
-   <div class="latin-sector-map-key" aria-label="記号の読み方">○ 採取　■ 加工・発電　◇ サービス<br/>数量を表さない案内点。都市位置を使う例を含みます。</div>
+   <div class="latin-sector-map-key" aria-label="記号の読み方">○ 採取　■ 加工・発電　◇ サービス<br/>数量を表さない案内点。都市位置を使う例を含みます。<br/>近接記号は短い対応線で原位置からずらしています。</div>
    <p class="latin-sector-note">丸：採取地域　四角：加工・発電　ひし形：サービス。資料に対応する案内位置で、数量・施設境界・産業区域は表しません。</p>
    <div data-lis-legend aria-label="産業の色と選択">{data.industries.filter(i=>i.sectors.includes('resources')).map(i=><button type="button" data-lis-industry={i.id} aria-pressed="false"><i style={`background:${i.color}`}/>{i.label}</button>)}</div>
   </div>
