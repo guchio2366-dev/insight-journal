@@ -119,7 +119,14 @@ async function cityClimateReadingLayout(page, requestedId) {
   assert(layout.directlyAfterChart, 'The city classification and explanation must directly follow its diagram');
   assert(layout.reading.top >= layout.chart.bottom - 1.5 && layout.reading.top - layout.chart.bottom <= 32, 'The city reading must sit immediately below the plot');
   assert(layout.heading.bottom <= layout.panel.bottom + 1.5 && layout.explanation.top < layout.panel.bottom, 'The city classification and start of its explanation must be visible in the reading panel');
-  const expected = layout.id === 'mexico-city-tacubaya' ? ['温帯', '亜湿潤', 'C(w1)(w)'] : ['半乾燥', '高温', "BS1(h')hw"];
+  const expectedByStation = {
+    'mexico-city-tacubaya': ['温帯', '亜湿潤', 'C(w1)(w)'],
+    'culiacan-dge': ['半乾燥', '高温', "BS1(h')hw"],
+    'chihuahua-obs': ['乾燥', 'やや高温', 'BS0hw(w)'],
+    'villahermosa-dge': ['高温', '湿潤', 'Am(f)'],
+  };
+  const expected = expectedByStation[layout.id];
+  assert(expected, `Unknown station ${layout.id}`);
   for (const word of expected) assert(layout.classification?.includes(word), `Missing city classification: ${word}`);
   assert((layout.explanationText?.length ?? 0) > 30 && /[ぁ-んァ-ヶ一-龯]/u.test(layout.explanationText), 'City classification needs a Japanese explanation');
   assert(layout.observations && !layout.observations.open && layout.observations.afterReading, 'Observed values and source notes must be in the following closed disclosure');
@@ -140,7 +147,7 @@ export async function inspectMexicoInitialPresentation(page, field) {
     assert.equal(national.heading, 'メキシコ全国の気候を読む');
     assert.equal(national.overviewVisible, true);
     assert.equal(national.visiblePlots, 0);
-    assert.equal(await page.locator('svg [data-mexico-climate-city]').count(), 2);
+    assert.deepEqual(await page.locator('svg [data-mexico-climate-city]').evaluateAll(nodes => nodes.map(node => node.getAttribute('data-mexico-climate-city'))), ['mexico-city-tacubaya','culiacan-dge','chihuahua-obs','villahermosa-dge']);
     return {climateNationalLayout: national};
   }
   if (field === 'agriculture') {
@@ -285,9 +292,9 @@ async function climate({page, evidence, captureStepImage}) {
     assert(await page.locator('[data-mexico-climate-class-reading]').textContent().then(text=>text.includes('21の原分類')));
     return {sourceCode: code, title: await text(page, '[data-mexico-nature-feature-title]')};
   });
-  await step('Both city plots and Japanese reading follow selection, reload and history', async () => {
+  await step('Four station plots and Japanese reading follow selection, reload and history', async () => {
     const ids = await page.locator('svg [data-mexico-climate-city]').evaluateAll(nodes => nodes.map(node => node.getAttribute('data-mexico-climate-city')));
-    assert.equal(ids.length, 2);
+    assert.deepEqual(ids, ['mexico-city-tacubaya','culiacan-dge','chihuahua-obs','villahermosa-dge']);
     const layouts = [];
     for (const id of ids) {
       await click(page, `svg [data-mexico-climate-city="${id}"]`);

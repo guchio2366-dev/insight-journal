@@ -34,8 +34,11 @@ export function renderAgricultureMarkers<R extends AgricultureMarkerRegion>(opti
    button.setAttribute('aria-pressed',String(selectedRegion?selectedRegion===region.id:selectedKind===region.kindId));
    button.addEventListener('click',event=>{event.stopPropagation();options.select(region);});
   }else{
-   button.classList.add('is-cluster');icon.textContent=String(group.regions.length);label.textContent=options.clusterLabel?.(group.regions)??'畜産';
-   button.setAttribute('aria-label',`${label.textContent}の${group.regions.length}産地を選ぶ`);
+   button.classList.add('is-cluster');icon.textContent=String(group.regions.length);
+   const clusterName=options.clusterLabel?.(group.regions)??'畜産',parts=options.clusterLabel?clusterName.split('・'):[];
+   if(parts.length>1)parts.forEach((part,index)=>{if(index)label.append(document.createElement('br'));label.append(document.createTextNode(index<parts.length-1?`${part}・`:part));});
+   else label.textContent=clusterName;
+   button.setAttribute('aria-label',`${clusterName}の${group.regions.length}産地を選ぶ`);
    button.addEventListener('click',event=>{event.stopPropagation();options.candidates(group.regions,point);});
   }
   const emphasized=group.regions.some(region=>options.related?options.related(region):selectedKind===region.kindId);
