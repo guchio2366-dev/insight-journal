@@ -101,9 +101,11 @@ export function initMexicoNatureSurfaces(
       label.classList.add('mexico-basin-system-label');label.dataset.mexicoBasinLabel=plan.id;
       label.dataset.sourceLonlat=JSON.stringify(point);label.setAttribute('x',String(x));label.setAttribute('y',String(y));
       label.setAttribute('font-size',String(fontSize));label.setAttribute('text-anchor','middle');
-      const words=plan.label.split('―');
-      const rows=words.length===3?[words[0]+'―',words.slice(1).join('―')]:words.length===2?[words[0]+'―',words[1]]:[plan.label];
+      const displayLabel=plan.id==='lerma-chapala-santiago'?'レルマ水系':plan.label;
+      const words=displayLabel.split('―');
+      const rows=words.length===2?[words[0]+'―',words[1]]:[displayLabel];
       rows.forEach((row:string,index:number)=>{const span=document.createElementNS(ns,'tspan');span.setAttribute('x',String(x));span.setAttribute('dy',index?'1.2em':'0');span.textContent=row;label.append(span);});
+      const title=document.createElementNS(ns,'title');title.textContent=plan.label;label.append(title);
       labels.push(label);
     }
     return labels;

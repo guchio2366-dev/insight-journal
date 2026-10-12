@@ -95,7 +95,9 @@ for (const { view, comparison } of [{ view: 'climate', comparison: 'irrigation' 
       };
       try {
         const initial = await load(`?view=${view}&state=25&frame=120,40,600,400&reading=overview`, nativeFirst);
-        pressedCity(initial, 'mexico-city-tacubaya');
+        assert.deepEqual(visiblePlots(initial), []);
+        assert.deepEqual(selectedCity(initial), []);
+        assert.equal(root(initial).querySelector('[data-mexico-climate-overview]').hidden, false);
         readingMode(initial, false);
         assert.equal(query(initial).get('compare'), null);
         const originalFrame = query(initial).get('frame'), originalCamera = camera(initial);
@@ -148,15 +150,14 @@ for (const { view, comparison } of [{ view: 'climate', comparison: 'irrigation' 
   }
 }
 
-test('Built SSR includes both SMN plots, twelve source values each, and the default capital graph', async () => {
+test('Built SSR includes both SMN plots and twelve source values each, with national overview first', async () => {
   const window = await page('', false, false);
   try {
     const plots = [...root(window).querySelectorAll('[data-mexico-climate-plot]')];
     assert.deepEqual(plots.map(plot => plot.dataset.mexicoClimatePlot), normals.stations.map(station => station.id));
-    pressedCity(window, 'mexico-city-tacubaya');
-    for (let parent = plots.find(plot => plot.dataset.mexicoClimatePlot === 'mexico-city-tacubaya'); parent !== root(window); parent = parent.parentElement) {
-      assert.ok(parent && !parent.hidden, 'The default capital graph has no hidden ancestor in the reading panel');
-    }
+    assert.deepEqual(visiblePlots(window), []);
+    assert.deepEqual(selectedCity(window), []);
+    assert.equal(root(window).querySelector('[data-mexico-climate-overview]').hidden, false);
     for (const station of normals.stations) {
       const plot = plots.find(plot => plot.dataset.mexicoClimatePlot === station.id);
       const svg = plot.querySelector('svg[role="img"]');

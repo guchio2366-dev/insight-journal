@@ -6,7 +6,7 @@ import composition from '../../data/atlas/mexico/population-composition.json';
 import {mexicoPopulationReading, mexicoPopulationRegionReading, mexicoPopulationReadingSources} from '../../data/atlas/mexico/population-reading';
 import {geometryPath, stateFeatures, stateLabelPoint, mapViewBox} from '../../lib/atlas-mexico-geometry';
 import {mexicoDensityColor, mexicoDensityBins, mexicoPopulationRadius, mexicoPopulationLegendValues, formatMexicoPopulation, formatMexicoDensity} from '../../lib/atlas-mexico-population';
-import {mexicoCompositionOverviewMetrics, mexicoCompositionHighlights, mexicoCompositionNationalRecord, formatMexicoCompositionShare, type MexicoCompositionData} from '../../lib/atlas-mexico-population-composition';
+import {mexicoCompositionOverviewMetrics, mexicoCompositionHighlights, mexicoCompositionNationalRecord, mexicoCompositionShare, formatMexicoCompositionShare, type MexicoCompositionData} from '../../lib/atlas-mexico-population-composition';
 import {withBase} from '../../lib/urls';
 import '../../styles/atlas-mexico-population.css';
 
@@ -23,7 +23,7 @@ const routes = {
 };
 const mapLabels = [
  {stateCode:'08',label:'チワワ州',point:stateLabelPoint('08'),anchor:'middle',leader:false},
- {stateCode:'09',label:'メキシコ市',point:[560,520],anchor:'start',leader:true},
+ {stateCode:'09',label:'メキシコシティ',point:[560,520],anchor:'start',leader:true},
  {stateCode:'31',label:'ユカタン州',point:stateLabelPoint('31'),anchor:'middle',leader:false},
 ];
 const shapes = stateFeatures.map(feature => {
@@ -35,6 +35,12 @@ const [selectedX, selectedY] = stateLabelPoint('09');
 const compositionData=composition as MexicoCompositionData;
 const overviewGroups=['ethnicity','religion'] as const;
 const overviewColors=['#af4e25','#167c83','#7754a5'];
+const religionOverviewMetrics=mexicoCompositionOverviewMetrics(composition as MexicoCompositionData,'religion');
+const metropolitanAreas2020=[
+ {name:'メキシコシティ都市圏',population:21_436_911},
+ {name:'モンテレイ都市圏',population:5_322_117},
+ {name:'グアダラハラ都市圏',population:5_110_617},
+];
 ---
 <MexicoWorkspace field="population" title="人口分布から読むメキシコ" lead="集落ごとの人数から、都市への人口集中と全国に広がる集落を読みます。" description="INEGIの2020年国勢調査による189,432集落の人口を表示。集落代表位置の人数円と、既存の州人口・公表人口密度を切り替えて確認できます。">
  <Fragment slot="controls">
@@ -50,12 +56,13 @@ const overviewColors=['#af4e25','#167c83','#7754a5'];
   <section class="population-overview-maps" data-population-overview-maps hidden aria-label="全国の分布を一覧で比較">
    {overviewGroups.map(category=><div data-population-overview-category={category} hidden>
     <h2>{category==='religion'?'宗教の特徴的な分布':'民族・自己認識の特徴的な分布'}</h2>
-    <p>各指標で公表された州内割合が高い8州を色付きの輪郭で同時に示し、そのうち上位2州に番号を置きます。色と番号は指標の区別で、多数派や人口の大きさを表しません。指標を選ぶとその輪郭を強調します。全32州の割合を面色で見る操作は右欄にあります。{category==='ethnicity'&&'先住民言語と先住民自己認識の上位8州は同じ集合ですが、別の指標です。重なる州では橙の外縁と紫の内線で両方を示します。'}</p>
+    <p>{category==='religion'?'淡い緑の地は、全32州で州内人口の過半数を占めるカトリックを示します。州内割合に比例する緑と紫の小円で、プロテスタント・福音系と無宗教も全州に示します。色付きの輪郭は各指標で割合が高い8州、番号は上位2州です。多数派と相対的な集中は区別して読みます。':'各指標で公表された州内割合が高い8州を色付きの輪郭で同時に示し、そのうち上位2州に番号を置きます。色と番号は指標の区別で、多数派や人口の大きさを表しません。指標を選ぶとその輪郭を強調します。全32州の割合を面色で見る操作は右欄にあります。先住民言語と先住民自己認識の上位8州は同じ集合ですが、別の指標です。重なる州では橙の外縁と紫の内線で両方を示します。'}</p>
     <figure class="population-overview-combined"><svg viewBox={mapViewBox} preserveAspectRatio="xMidYMid meet" role="img" aria-label={`${category==='religion'?'宗教':'民族・自己認識'}の3指標それぞれで州内割合が高い8州を輪郭で同時に示す地図`}>
-     <g class="population-overview-land">{shapes.map(({row})=><use href={`#mexico-population-outline-${row.stateCode}`} data-overview-state={row.stateCode}><title>{row.nameJa}</title></use>)}</g>
+     <g class="population-overview-land">{shapes.map(({row})=><use href={`#mexico-population-outline-${row.stateCode}`} data-overview-state={row.stateCode} class={category==='religion'?'is-catholic-majority':undefined}><title>{row.nameJa}{category==='religion'?`：カトリック州内${formatMexicoCompositionShare(religionOverviewMetrics[0].states[row.stateCode],religionOverviewMetrics[0])}`:''}</title></use>)}</g>
+     {category==='religion'&&<g class="population-overview-religion-dots" aria-label="全32州のプロテスタント・福音系と無宗教の州内割合">{shapes.map(({row,point})=><g data-overview-religion-state={row.stateCode}>{religionOverviewMetrics.slice(1).map((metric,index)=>{const share=mexicoCompositionShare(metric.states[row.stateCode]);return share===null?null:<circle cx={point[0]+(index===0?-11:11)} cy={point[1]+12} r={11*Math.sqrt(share/25)} fill={overviewColors[index+1]} data-overview-religion-metric={metric.id}><title>{row.nameJa}：{metric.label}、州内{formatMexicoCompositionShare(metric.states[row.stateCode],metric)}。円面積は州内割合に比例</title></circle>;})}</g>)}</g>}
      {mexicoCompositionOverviewMetrics(compositionData,category).map((metric,index)=><g class="population-overview-regions" data-overview-region-metric={metric.id} style={`--region-color:${overviewColors[index]}`}>{mexicoCompositionHighlights(metric,8).map(({code})=>{const row=population.states.find(item=>item.stateCode===code)!;return <use href={`#mexico-population-outline-${code}`} data-overview-region-state={code}><title>{metric.label}：{row.nameJa}、州内{formatMexicoCompositionShare(metric.states[code],metric)}。公表割合の高い8州の一つ</title></use>;})}</g>)}
      {mexicoCompositionOverviewMetrics(compositionData,category).map((metric,index)=><g class="population-overview-highlights" data-overview-highlight-metric={metric.id}>{mexicoCompositionHighlights(metric).map(({code})=>{const point=stateLabelPoint(code),row=population.states.find(item=>item.stateCode===code)!;return <g data-overview-highlight-state={code} transform={`translate(${point[0]+(index-1)*24} ${point[1]-13})`}><circle r="10" fill={overviewColors[index]}/><text text-anchor="middle" dominant-baseline="central">{index+1}</text><title>{metric.label}：{row.nameJa}、州内{formatMexicoCompositionShare(metric.states[code],metric)}。この指標で割合が高い州の一つ</title></g>;})}</g>)}
-    </svg><figcaption>2020年・INEGI。各色の輪郭はその指標の公表割合が高い8州、番号は上位2州です。8州以外にも該当者はいます。複数の輪郭が重なる州もあります。</figcaption></figure>
+    </svg><figcaption>2020年・INEGI。{category==='religion'?'淡緑はカトリックが過半数の州。緑と紫の円は各州内割合を共通の面積尺度で示し、半径11の円が25%です。輪郭は各指標の上位8州、番号は上位2州。円の重なりは人口の重複を意味しません。':'各色の輪郭はその指標の公表割合が高い8州、番号は上位2州です。8州以外にも該当者はいます。複数の輪郭が重なる州もあります。'}</figcaption></figure>
     <p class="population-overview-extra" data-population-overview-extra hidden></p>
     <ol class="population-overview-indicators">{mexicoCompositionOverviewMetrics(compositionData,category).map((metric,index)=><li style={`--overview-color:${overviewColors[index]}`}><strong>{index+1}　{metric.label}</strong><span>上位州：{mexicoCompositionHighlights(metric).map(({code})=>{const row=population.states.find(item=>item.stateCode===code)!;return `${row.nameJa} ${formatMexicoCompositionShare(metric.states[code],metric)}`;}).join('／')}</span><small>分母：{metric.countDenominatorLabel}</small></li>)}</ol>
     <details class="population-overview-all-states"><summary>3指標の全32州の割合を確認する</summary><div class="population-overview-all-states-scroll"><table><caption>2020年・INEGI。輪郭は各指標の上位8州、番号は上位2州の位置案内、表は全32州の公表値です。</caption><thead><tr><th scope="col">州</th>{mexicoCompositionOverviewMetrics(compositionData,category).map(metric=><th scope="col">{metric.label}</th>)}</tr></thead><tbody>{population.states.map(row=><tr><th scope="row">{row.nameJa}</th>{mexicoCompositionOverviewMetrics(compositionData,category).map(metric=><td>{formatMexicoCompositionShare(metric.states[row.stateCode],metric)}</td>)}</tr>)}</tbody></table></div></details>
@@ -144,6 +151,7 @@ const overviewColors=['#af4e25','#167c83','#7754a5'];
      <p>中央部の高地・メキシコシティ周辺に人口が集中し、グアダラハラやモンテレイにも大きな集積が見えます。</p>
      <p>北部は集落が広く点在し、ティフアナやシウダーフアレスなど、国境の拠点に人口が集まります。</p>
     </div>
+    <figure class="mexico-metropolitan-comparison"><figcaption>主要3都市圏の人口規模（2020年・同一定義）</figcaption><div>{metropolitanAreas2020.map(area=><div class="mexico-metropolitan-row"><span>{area.name}</span><i aria-hidden="true"><b style={`width:${area.population/metropolitanAreas2020[0].population*100}%`}></b></i><strong>{area.population.toLocaleString('ja-JP')}人</strong></div>)}</div><p>棒の長さは都市圏人口に比例。地図の集落点や州人口の円とは集計範囲が異なります。<a href="https://www.gob.mx/cms/uploads/attachment/file/866951/Parte5.pdf">都市圏の公式資料</a></p></figure>
     <div data-locality-totals>
     <h2 data-locality-total-label>メキシコ全国の人口</h2>
     <p class="locality-population-total"><strong data-locality-total>126,014,024</strong> 人</p>
@@ -197,7 +205,7 @@ const overviewColors=['#af4e25','#167c83','#7754a5'];
   </div>
    <div data-population-distribution-reading>
    <p class="mexico-takeaway" data-population-region-heading>{mexicoPopulationReading.takeaway}</p>
-  <p data-population-short-reading>メキシコ州は人口が最多、メキシコ市は密度が最高。人口規模と密度を重ねて読みます。</p>
+  <p data-population-short-reading>メキシコ州は人口が最多、メキシコシティは密度が最高。人口規模と密度を重ねて読みます。</p>
   <a class="mexico-comparison-link" data-population-nature-link href={`${routes.nature}?view=relief&compare=population&sourceState=&sourceOnly=0&from=population&sourceView=density`}><strong data-population-nature-link-label>地形区分 × 人口密度</strong><br/><span data-population-nature-link-hint>中央部の高地・盆地と、人口が集まる州の位置を比べる</span></a>
   <a class="mexico-comparison-link" data-population-industry-link href={`${routes.industry}?compare=population&sourceState=&sourceOnly=0&from=population&sourceView=density`}><strong data-population-industry-link-label>州人口密度2020 × 州輸出額2025</strong><br/><span>人口の集積と、輸送機器・電子の輸出拠点が重なるかを比べる</span></a>
   <details class="population-reading-detail"><summary>地形 → 仕事・交通 → 人口の集積を読む</summary><p class="mexico-takeaway">{mexicoPopulationReading.mechanism}</p><p data-population-region-text>{initialReading.text}</p><p data-population-region-cause>{initialReading.cause}</p><p><a href={mexicoPopulationReadingSources.manufacturing}>米国商務省ITA：製造業の地域的な集積（2026年2月）</a><br/><a href={mexicoPopulationReadingSources.transport}>ITA：工業中心地・港・米国国境を結ぶ貨物鉄道（2026年2月）</a></p><p><a href={routes.agriculture}>農林業の生産分布と、暮らしを支える生産地へ</a></p></details>

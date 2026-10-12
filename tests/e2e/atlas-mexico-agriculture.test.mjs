@@ -24,11 +24,12 @@ test('Mexico uses shared US agriculture hierarchy, truthful zones and a same-yea
   assert.ok(source.length<1500000,'The agriculture HTML must not repeat full-resolution national clip geometry');
   assert.equal(ctx.q('#mexico-agriculture-country-clip'),null,'Crop source zones are already geographically clipped');
   assert.ok(ctx.q('[data-agriculture-map] image[href$="rivers.png"]'));
-  assert.equal(ctx.q('.atlas-key').previousElementSibling.className,'atlas-map-frame');
+  assert.equal(ctx.q('[data-mexico-product-key]').previousElementSibling.className,'atlas-map-frame');
   assert.equal(ctx.root.querySelectorAll('[data-agri-layer]').length,2);
   assert.equal(ctx.root.querySelectorAll('[data-map-action]').length,3);
   assert.equal(ctx.root.querySelectorAll('path[data-agriculture-state-code]').length,32);
-  assert.equal(ctx.root.querySelectorAll('.mexico-crop-zone').length,10);
+  assert.equal(ctx.root.querySelectorAll('.mexico-crop-zone').length,9);
+  assert.equal(ctx.q('[data-crop-zone="other"]'),null);
   assert.equal(ctx.root.querySelectorAll('[data-agriculture-symbol],[data-agriculture-cattle-symbol]').length,0);
   assert.equal(ctx.root.querySelectorAll('[data-crop-key] [data-livestock-select]').length,5);
   assert.ok(ctx.q('.mexico-agriculture-subtopics [data-forestry-select]'));
@@ -40,9 +41,8 @@ test('Mexico uses shared US agriculture hierarchy, truthful zones and a same-yea
   assert.equal(ctx.q('[data-crop-select="rice"]'),null);
   assert.equal(ctx.q('[data-crop-zone="rice"]'),null);
   assert.match(ctx.q('[data-rice-supplement]').textContent,/0\.18%.*主図.*補足/s);
-  assert.equal(ctx.q('[data-mexico-forest-states]').hasAttribute('hidden'),true);
-  assert.equal(ctx.root.querySelectorAll('[data-mexico-forest-states] path').length,2);
-  assert.deepEqual([...ctx.root.querySelectorAll('[data-mexico-forest-states] text')].map(node=>node.textContent.trim()).sort(),['チワワ','ドゥランゴ'].sort());
+  assert.equal(ctx.q('[data-mexico-forest-states]'),null);
+  assert.ok(ctx.q('[data-mexico-agriculture-overview-statistics]').contains(ctx.q('.atlas-receipts-chart')));
   await access('dist/assets/atlas/mexico-agriculture-v2/manifest.json');
   await access('dist/assets/atlas/mexico-agriculture-v2/rivers.svg');
  }finally{await ctx.window.happyDOM.close();}
@@ -102,16 +102,18 @@ test('Real municipal livestock badges use shared grouping, separate meat/乳/卵
  }finally{await ctx.window.happyDOM.close();}
 });
 
-test('Forestry separates navigation and shows forest cover, production-state outlines and source scope',async()=>{
+test('Forestry separates navigation and shows forest cover without implying state production boundaries',async()=>{
  const ctx=await page();try{
   ctx.q('[data-agri-layer][value="livestock"]').click();ctx.q('[data-forestry-select]').click();selected(ctx,'pine');
-  assert.equal(ctx.root.dataset.agriReading,'forestry');assert.equal(ctx.q('[data-mexico-tree-cover]').hasAttribute('hidden'),false);assert.equal(ctx.q('[data-mexico-forest-states]').hasAttribute('hidden'),false);
-  assert.match(ctx.q('[data-mexico-forest-key]').textContent,/2021年.*ドゥランゴ.*チワワ.*州別統計/s);
+  assert.equal(ctx.root.dataset.agriReading,'forestry');assert.equal(ctx.q('[data-mexico-tree-cover]').hasAttribute('hidden'),false);assert.equal(ctx.q('[data-mexico-forest-states]'),null);
+  assert.match(ctx.q('[data-mexico-forest-key]').textContent,/2021年.*樹木被覆.*松林.*州別数量/s);
+  assert.equal(ctx.q('[data-mexico-product-key]').hasAttribute('hidden'),true);
+  assert.equal(ctx.q('[data-rice-supplement]').hasAttribute('hidden'),true);
   assert.equal(ctx.q('[data-forestry-select]').getAttribute('aria-current'),'page');
   assert.ok(ctx.q('[data-mexico-crop-zones]').hasAttribute('hidden'));assert.equal(ctx.q('[data-livestock-markers]').hidden,true);
   assert.match(ctx.q('[data-layer-caption]').textContent,/州別松材統計2022/);
   ctx.q('[data-mexico-agriculture-overview]').click();selected(ctx,null);assert.equal(ctx.q('[data-mexico-crop-zones]').hasAttribute('hidden'),false);
-  assert.equal(ctx.q('[data-mexico-forest-states]').hasAttribute('hidden'),true);
+  assert.equal(ctx.q('[data-mexico-product-key]').hasAttribute('hidden'),false);
   assert.equal(ctx.q('[data-agri-layer][value="livestock"]').checked,false);
  }finally{await ctx.window.happyDOM.close();}
 });
@@ -186,7 +188,7 @@ test('Selecting a crop keeps every crop area and animal kind available with sour
   const config=JSON.parse(ctx.q('[data-mexico-agriculture-config]').textContent);
   assert.equal(config.cropLabelPoints.length,22);
   const zones=Array.from(ctx.root.querySelectorAll('path[data-crop-zone]'));
-  assert.equal(zones.length,10);
+  assert.equal(zones.length,9);
   assert.ok(zones.every(node=>!node.hasAttribute('hidden')));
   assert.equal(zones.filter(node=>node.classList.contains('is-selected')).length,1);
   assert.equal(ctx.q('[data-livestock-markers]').hidden,false);

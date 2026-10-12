@@ -53,7 +53,7 @@ export function initMexicoNature(root: HTMLElement): void {
       const id = label.dataset.mexicoNatureClassLabel;
       const active = !state.category && !!config.items?.[state.view].some(item => item.id === id);
       const pressed = active && id === state.item && (state.view === 'relief' || !state.feature || !label.dataset.mexicoNatureLabelFeature || label.dataset.mexicoNatureLabelFeature === state.feature);
-      const condensed = active && state.view === 'climate' && !state.frame && !state.item && label.dataset.mexicoClimateCodePriority === 'detail';
+      const condensed = active && !state.frame && !state.item && (state.view === 'climate' ? label.dataset.mexicoClimateCodePriority === 'detail' : label.dataset.mexicoLandformPriority === 'detail');
       label.toggleAttribute('hidden',condensed);
       label.setAttribute('aria-pressed', String(pressed)); label.setAttribute('aria-disabled', String(!active)); label.setAttribute('tabindex', active && !condensed ? '0' : '-1');
       if (label instanceof HTMLButtonElement) label.disabled = !active;

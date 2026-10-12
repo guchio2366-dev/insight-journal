@@ -92,13 +92,14 @@ test('city selection and history restore the matching classification without cha
  const window = await setup('?view=climate&state=25&frame=10,20,450,290');
  try {
   const active = () => [...window.document.querySelectorAll('[data-mexico-climate-plot]')].filter(plot => !plot.hidden);
-  assert.equal(active().length, 1);
-  assert.equal(active()[0].querySelector('[data-mexico-climate-city-class]').textContent, '温帯・亜湿潤｜C(w1)(w)');
+  assert.equal(active().length, 0);
+  assert.equal(window.document.querySelector('[data-mexico-climate-overview]').hidden, false);
   window.document.querySelector('[data-mexico-climate-city="culiacan-dge"]').dispatchEvent(new window.MouseEvent('click', {bubbles:true}));
   assert.equal(active().length, 1);
   assert.equal(active()[0].querySelector('[data-mexico-climate-city-class]').textContent, "半乾燥・高温｜BS1(h')hw");
   assert.equal(new URL(window.location).searchParams.get('frame'), '10,20,450,290');
   window.history.back(); await window.happyDOM.waitUntilComplete();
-  assert.equal(active()[0].querySelector('[data-mexico-climate-city-class]').textContent, '温帯・亜湿潤｜C(w1)(w)');
+  assert.equal(active().length, 0);
+  assert.equal(window.document.querySelector('[data-mexico-climate-overview]').hidden, false);
  } finally { await window.happyDOM.close(); }
 });
