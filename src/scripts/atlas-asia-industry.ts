@@ -173,13 +173,13 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
    }:{};
    const clustered=new Set(Object.values(southClusters).flatMap(cluster=>cluster.members.slice(1)));
    // Keep one readable label for both industries in the crowded south Indian belt.
-   const priority=config.focusId==='south-asia'&&topic.id==='sc-overview'&&!state.place?['sc-ahmedabad-pharma','sc-bengaluru-it']:[];
+   const priority=topic.id==='sc-overview'&&!state.place?config.focusId==='south-asia'?['sc-ahmedabad-pharma','sc-bengaluru-it']:config.focusId==='central-asia'?['sc-inkai-uranium','sc-bozshakol-copper','sc-muruntau-gold']:[]:[];
    const ordered=state.detail?[...visibleSites.filter(site=>site.id===state.detail),...visibleSites.filter(site=>site.id!==state.detail)]:[...priority.flatMap(id=>visibleSites.filter(site=>site.id===id)),...visibleSites.filter(site=>!priority.includes(site.id))];
    const occupied:{left:number;top:number;right:number;bottom:number}[]=[];
    const canvas=currentMap.getCanvas().getBoundingClientRect();
    const placements=[{anchor:'left',offset:[12,0],dx:12,dy:-21},{anchor:'right',offset:[-12,0],dx:-162,dy:-21},{anchor:'bottom',offset:[0,-12],dx:-75,dy:-54},{anchor:'top',offset:[0,12],dx:-75,dy:12},{anchor:'top-left',offset:[12,12],dx:12,dy:12},{anchor:'bottom-right',offset:[-12,-12],dx:-162,dy:-54}] as const;
    for(const site of ordered){
-    const group=regionalGroups.find(item=>item.id===site.group),label=el('button');label.type='button';label.className='asia-industry-regional-label';label.dataset.industrySite=site.id;label.setAttribute('aria-label',site.name+'の説明を開く');label.setAttribute('aria-pressed',String(state.detail===site.id));label.style.setProperty('--site-color',group?.color??'#648075');label.append(el('strong',group?.title??'産業'),el('span',site.name.split('：')[0]));label.addEventListener('click',event=>{event.stopPropagation();select(site.id);});
+    const group=regionalGroups.find(item=>item.id===site.group),label=el('button');label.type='button';label.className='asia-industry-regional-label';label.dataset.industrySite=site.id;label.setAttribute('aria-label',site.name+'の説明を開く');label.setAttribute('aria-pressed',String(state.detail===site.id));label.style.setProperty('--site-color',group?.color??'#648075');const namedMineral=config.focusId==='central-asia'&&site.group==='sc-minerals';label.append(el('strong',namedMineral?site.name.split('：')[1]:group?.title??'産業'),el('span',site.name.split('：')[0]));label.addEventListener('click',event=>{event.stopPropagation();select(site.id);});
     const cluster=southClusters[site.id];if(cluster&&state.detail!==site.id)label.querySelector('span')!.textContent=cluster.label;
     const p=currentMap.project(site.point),selected=state.detail===site.id;
     let placement:typeof placements[number]|undefined;
