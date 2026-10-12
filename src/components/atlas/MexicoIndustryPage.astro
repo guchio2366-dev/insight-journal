@@ -81,7 +81,7 @@ const value=(v:unknown)=>industryValueText(v as MexicoIndustryValue);
     </svg>
     {i===0&&<div class="mi-map-navigation" role="group" aria-label="産業地図の拡大と縮小"><button type="button" data-mi-map-action="fit">全体</button><button type="button" data-mi-map-action="in" aria-label="地図を拡大">＋</button><button type="button" data-mi-map-action="out" aria-label="地図を縮小">−</button></div>}
     </div>
-    <h3 class="mi-map-heading" data-mi-map-heading={slot}>{i===0?'資源・エネルギーを読む地域':'電子機器の輸出額'} <span>{i===0?'州の位置案内':'2025年速報・10億米ドル'}</span></h3>
+    <h3 class="mi-map-heading" data-mi-map-heading={slot}>{i===0?'資源・エネルギーを読む地域':'電子機器の輸出額'} <span>{i===0?'州と市街の位置案内':'2025年速報・10億米ドル'}</span></h3>
     <figcaption data-mi-map-caption={slot}>2025年速報。太枠は読む州。略号は州の位置案内。</figcaption>
    </figure>)}
   </div>

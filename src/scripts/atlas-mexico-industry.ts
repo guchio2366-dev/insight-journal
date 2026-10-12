@@ -87,7 +87,7 @@ export function initMexicoIndustry(root:HTMLElement):void {
   const title=geographic?`${state.sector==='services'&&state.subsector!=='all'?(state.subsector==='finance'?'金融・専門サービス':'宿泊・飲食'):mexicoIndustrySectors.find(s=>s.id===state.sector)!.label}を読む地域`:isPopulation?`${state.sourceView==='density'?'人口密度':'人口'}・2020年`:`${metricName(metric!)}の輸出額・2025年速報`;
   const heading=one(`[data-mi-map-heading="${slot}"]`)!;
   const category=isPopulation?null:config.data.metrics.find(m=>m.id===metric)!;
-  const sub=document.createElement('span');sub.textContent=geographic?'州の位置案内・点の大きさは数量ではない':isPopulation?(state.sourceView==='density'?'州平均・人/km²':'円の面積が人口に比例・人'):`SCIAN ${category!.sourceCodes?.join('＋')??category!.code}：${category!.longName??category!.name}${metric==='electronics'?'（半導体単独ではない）':''}｜FOB・10億米ドル`;
+  const sub=document.createElement('span');sub.textContent=geographic?'州と市街の案内位置・点の大きさは数量ではない':isPopulation?(state.sourceView==='density'?'州平均・人/km²':'円の面積が人口に比例・人'):`SCIAN ${category!.sourceCodes?.join('＋')??category!.code}：${category!.longName??category!.name}${metric==='electronics'?'（半導体単独ではない）':''}｜FOB・10億米ドル`;
   const comparisonRole=state.compare?(state.compare==='population'?(slot===(state.from==='population'?'secondary':'primary')?'比較元':'比較先'):(slot==='primary'?'比較元':'比較先')):'';
   heading.replaceChildren(document.createTextNode((comparisonRole?`${comparisonRole}：`:'')+title),sub);
   text(`#mi-${slot}-title`,title);
