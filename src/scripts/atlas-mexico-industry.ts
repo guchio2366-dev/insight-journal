@@ -133,6 +133,9 @@ export function initMexicoIndustry(root:HTMLElement):void {
   one<HTMLElement>('[data-mi-figure="secondary"]')!.style.order=populationFirst?'0':'1';one<HTMLElement>('[data-mi-figure="primary"]')!.style.order=populationFirst?'1':'0';
   show('[data-mi-source-view-control]',popComparison);show('[data-mi-comparison-heading]',comparison);show('[data-mi-reading-comparison]',comparison);show('[data-mi-reading-normal]',!comparison);
   const sector=mexicoIndustrySectors.find(s=>s.id===state.sector)!,scope=`${state.sector}:${state.subsector}`;
+  const legacySector=new URL(window.location.href).searchParams.get('sector');
+  const legacyNote=legacySector==='construction-real-estate'?'旧「建設・不動産」リンクから開きました。不動産を含むサービス業を表示しています。建設工事の分布・額はこの地図には含みません。':legacySector==='all'?'旧「全産業」リンクから開きました。資源・製造業・サービス業のタブで各地域を確認できます。':'';
+  text('[data-mi-legacy-sector-note]',legacyNote);show('[data-mi-legacy-sector-note]',!comparison&&!!legacyNote);
   root.dataset.industrySector=state.sector;root.dataset.industrySubsector=state.subsector;
   for(const button of all<HTMLButtonElement>('[data-industry-sector]')){const active=button.dataset.industrySector===state.sector;button.setAttribute('aria-selected',String(active));button.tabIndex=active?0:-1;}
   for(const row of all('[data-industry-subtabs]'))row.hidden=row.dataset.industrySubtabs!==state.sector;

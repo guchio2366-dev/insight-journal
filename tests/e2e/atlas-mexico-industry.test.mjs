@@ -345,6 +345,7 @@ test('Legacy all and construction links open valid sectors through reload and hi
    const q=s=>w.document.querySelector(s),svg=q('[data-mi-map=primary]');
    assert.equal(q('[data-industry-sector][aria-selected=true]').dataset.industrySector,expected);
    assert.equal(q('[data-mi-industry-panel]:not([hidden])').dataset.miIndustryPanel,`${expected}:all`);
+   assert.equal(q('[data-mi-legacy-sector-note]').hidden,false);
    for(const id of svg.getAttribute('aria-labelledby').split(' '))assert.ok(w.document.getElementById(id),`Missing ${id}`);
    assert.ok(visible(w.document,'primary','[data-mi-reading-markers] [data-mi-region-option]').length>0);
    q('[data-industry-sector=manufacturing]').click();
