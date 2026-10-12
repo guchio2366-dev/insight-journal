@@ -18,6 +18,7 @@ const productionPercent=(tonnes:number|null,worldT:number)=>tonnes===null?'原�
 ---
 <LatinAmericaWorkspace field="agriculture" title="中南米の農畜産" lead="熱帯のバナナ・高地のコーヒー・内陸の大豆・牛の飼育を、自然条件と市場へのつながりから読む。">
  <Fragment slot="map">
+  <div class="latin-agriculture-visibility" aria-label="農産物と畜産物の表示"><label><input type="checkbox" data-latin-agriculture-crops checked/> 農産物</label><label><input type="checkbox" data-latin-agriculture-livestock checked/> 畜産物</label></div>
   <div class="latin-agriculture-heading"><h2 data-latin-agriculture-title>{agricultureLayerTitle('all')}</h2><span>分布推計・2020年</span></div>
   <details class="latin-map-options"><summary>地域・表示を選ぶ</summary><div class="latin-map-options-body">  <div class="latin-controls">
    <label>地域 <select data-latin-agriculture-scope aria-label="地図の地域"><option value="central">中米・カリブ</option><option value="south">南米</option><option value="all" selected>中南米全体</option><option value="country">選択国を拡大</option></select></label>

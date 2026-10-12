@@ -31,3 +31,25 @@
 .latin-workspace.latin-nature:not(.is-comparison) .latin-nature-normals>svg{max-height:230px;width:100%;height:auto}
 
 .latin-population-dot-legend{display:flex;flex-wrap:wrap;gap:3px 12px;list-style:none;padding:0;font-size:12px}.latin-population-dot-legend li{display:flex;align-items:center;gap:5px}.latin-population-dot-legend i{width:8px;height:8px;border-radius:50%;display:inline-block}.latin-workspace [data-city-locator]{cursor:pointer}.latin-workspace [data-city-locator][aria-pressed=true] text{fill:#9a4726}
+
+/* Keep the decoder inside unused ocean space at large PC widths. */
+@media(min-width:1600px){
+ .latin-workspace:not(.latin-industry):not(.is-comparison) .latin-map-column :is([data-latin-agriculture-legend-container],[data-nature-legend-host],[data-lp-target-legend],.latin-foundation-legend,.forest-legend){position:absolute;right:9px;bottom:54px;z-index:3;width:180px;max-height:calc(100% - 100px);overflow:auto;padding:8px;background:#fffefaeb;border:1px solid #c7cdc0;border-radius:4px;font-size:12px;line-height:1.45;margin:0}
+ .latin-workspace:not(.is-comparison) .latin-map-column :is([data-latin-agriculture-legend-container],[data-nature-legend-host],[data-lp-target-legend],.latin-foundation-legend,.forest-legend) :is(p,button,span,strong,legend){font-size:12px!important;line-height:1.45!important}
+ .latin-workspace:not(.is-comparison) [data-latin-agriculture-legend-container] .latin-agriculture-overview-legend{display:block!important}
+ .latin-workspace:not(.is-comparison) [data-latin-agriculture-legend-container] .latin-agriculture-overview-legend>strong{position:static!important;width:auto!important;max-width:none!important;white-space:normal!important;background:none!important;padding:0!important}
+ .latin-workspace:not(.is-comparison) [data-latin-agriculture-legend-container] fieldset>div{display:flex;flex-direction:column;gap:3px}
+ .latin-workspace:not(.is-comparison) .latin-nature-detail-legend{display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+ .latin-workspace:not(.is-comparison) .latin-foundation-extra-key{display:flex;flex-direction:column}
+ .latin-workspace:not(.is-comparison) .latin-foundation-ticks{font-size:9px}
+}
+@media(min-width:960px){.latin-workspace:not(.is-comparison) .latin-agriculture-visibility{position:absolute;left:172px;top:10px;z-index:5;gap:12px;background:#fffefaeb;border-radius:3px;padding:4px 8px;margin:0;font-size:13px}}
+.latin-workspace .latin-agriculture-visibility[hidden]{display:none}
+.latin-workspace [data-forest-example=amazon] [data-forest-symbol]>circle{fill:#466d56;stroke:#fff}
+.latin-workspace [data-forest-example=amazon] .forest-marker-number{fill:#fff}
+@media(min-width:960px){.latin-workspace.latin-population .latin-subfield-band{display:flex;align-items:center;gap:12px}.latin-workspace.latin-population .latin-field-status{margin:0;line-height:1.35;flex:1}}
+@media(min-width:1600px){
+ .latin-workspace:not(.is-comparison) [data-latin-agriculture-legend-container] .latin-agriculture-legend{display:block!important}
+ .latin-workspace:not(.is-comparison) [data-latin-agriculture-legend-container] .latin-agriculture-legend>strong{position:static!important;width:auto!important;max-width:none!important;white-space:normal!important;background:none!important;padding:0!important}
+ .latin-workspace:not(.is-comparison) [data-latin-agriculture-legend-container] .latin-agriculture-legend>div{display:flex;flex-direction:column;gap:3px}
+}
