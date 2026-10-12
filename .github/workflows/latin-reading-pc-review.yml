@@ -75,6 +75,8 @@ jobs:
           npm ci --no-audit --no-fund
           npm run build
           node "$GITHUB_WORKSPACE/scripts/verify-latin-review-revisions-pc.mjs"
+          LATIN_INDUSTRY_BASELINE=1 LATIN_INDUSTRY_OUTPUT="$RUNNER_TEMP/latin-review/industry/before" node "$GITHUB_WORKSPACE/scripts/verify-latin-industry-sectors-pc.mjs"
+          python3 "$GITHUB_WORKSPACE/scripts/print-latin-industry-previews.py" "$RUNNER_TEMP/latin-review/industry/before"
         env:
           LATIN_REVIEW_BASELINE: '1'
           LATIN_REVIEW_EXPECTED_HEAD: a07ab7277b2c7eb89e51ef1be0d72dccfbec497d
