@@ -33,7 +33,7 @@ async function open(field,layer,render='auto'){
 try{
   for(const render of ['auto','static']){
     await open('nature','water',render);
-    const labels=await page.locator('[data-eu-river-label]').evaluateAll(nodes=>nodes.map(node=>({id:node.dataset.euRiverLabel,hidden:node.hidden,rect:node.getBoundingClientRect().toJSON()})));
+    const labels=await page.locator('[data-eu-river-label]:visible').evaluateAll(nodes=>nodes.map(node=>({id:node.dataset.euRiverLabel,hidden:node.hidden,rect:node.getBoundingClientRect().toJSON()})));
     assert.equal(labels.length,7);
     assert.deepEqual(labels.filter(item=>item.hidden).map(item=>item.id),[]);
     assert.ok(labels.every(item=>item.rect.bottom<=1080),'every river name fits the PC viewport');

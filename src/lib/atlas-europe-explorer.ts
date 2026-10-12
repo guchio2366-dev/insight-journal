@@ -43,7 +43,7 @@ export async function initEuropeAtlas() {
   const root = document.querySelector<HTMLElement>('[data-europe-detail]');
   if (!root || root.dataset.initialized) return;
   root.dataset.initialized = 'loading';
-  const config = JSON.parse(root.querySelector('[data-eu-config]')!.textContent!) as { geographyURL:string; industryOverviews:Record<string,{takeaway:string;body:string;evidenceNote?:string;sources:{label:string;url:string;period:string;definitionUrl?:string}[]}>; farmingAreas:FarmingAreas; farmingDominantAreas:FarmingAreas; farmingSecondaryAreas:FarmingAreas; majorRivers:{type:'FeatureCollection';features:{type:'Feature';properties:{id:string;name:string};geometry:Geometry}[]}; countries: Country[]; cities: City[]; geography: { type: 'FeatureCollection'; features: Feature[] }; climateWater: { type:'FeatureCollection';features:{type:'Feature';properties:{id:string;name:string};geometry:Geometry}[] }; climate: string; wheat: string; wheatValues: string; initialLayer: string; layers:EuropeLayer[];populationCities:Place[];readings:EuropeReading[];statistics:{indicators:Indicator[]} };
+  const config = JSON.parse(root.querySelector('[data-eu-config]')!.textContent!) as { geographyURL:string; waterLakes:{type:'FeatureCollection';features:any[]}; industryOverviews:Record<string,{takeaway:string;body:string;evidenceNote?:string;sources:{label:string;url:string;period:string;definitionUrl?:string}[]}>; farmingAreas:FarmingAreas; farmingDominantAreas:FarmingAreas; farmingSecondaryAreas:FarmingAreas; majorRivers:{type:'FeatureCollection';features:{type:'Feature';properties:{id:string;name:string};geometry:Geometry}[]}; countries: Country[]; cities: City[]; geography: { type: 'FeatureCollection'; features: Feature[] }; climateWater: { type:'FeatureCollection';features:{type:'Feature';properties:{id:string;name:string};geometry:Geometry}[] }; climate: string; wheat: string; wheatValues: string; initialLayer: string; layers:EuropeLayer[];populationCities:Place[];readings:EuropeReading[];statistics:{indicators:Indicator[]} };
   try {
     const response=await fetch(config.geographyURL);
     if(!response.ok||!response.body)throw new Error('Detailed Europe geography unavailable');
@@ -270,7 +270,7 @@ export async function initEuropeAtlas() {
   const terrainLabelOffsets:Array<[number,number]>=[];
   for(let dy=-260;dy<=260;dy+=26)for(let dx=-264;dx<=264;dx+=24)terrainLabelOffsets.push([dx,dy]);
   terrainLabelOffsets.sort((a,b)=>Math.hypot(...a)-Math.hypot(...b)||a[1]-b[1]);
-  const riverLabels=config.readings.filter(reading=>reading.layer==='water'&&['rhine','danube','seine','thames','don','volga','ural'].includes(reading.id)).map(label=>{
+  const riverLabels=config.readings.filter(reading=>reading.layer==='water').map(label=>{
     const node=document.createElement('button');node.type='button';node.className='eu-river-label';node.textContent=label.name;node.dataset.euRiverLabel=label.id;
     const leader=document.createElementNS('http://www.w3.org/2000/svg','line');leader.dataset.euRiverLeader=label.id;terrainLeader.append(leader);
     node.addEventListener('click',event=>{event.stopPropagation();selectFeature(label.id);});stage.append(node);return {node,label,leader};
@@ -283,7 +283,7 @@ export async function initEuropeAtlas() {
     const reserved=[heading];
     const overlaps=(a:DOMRect,b:DOMRect)=>a.left<b.right+3&&a.right>b.left-3&&a.top<b.bottom+3&&a.bottom>b.top-3;
     for(const {node,label,leader} of riverLabels){
-      node.hidden=state.layer!=='water';leader.style.display='none';node.setAttribute('aria-pressed',String(state.feature===label.id));if(node.hidden)continue;
+      node.hidden=state.layer!=='water'||!['rhine','danube','seine','thames','don','volga','ural',state.feature].includes(label.id);leader.style.display='none';node.setAttribute('aria-pressed',String(state.feature===label.id));if(node.hidden)continue;
       const point=overlayProject(label.coordinates);node.dataset.euAnchorX=String(point.x);node.dataset.euAnchorY=String(point.y);node.style.left=point.x+'px';node.style.top=point.y+'px';
       node.hidden=point.x<5||point.x>rect.width-5||point.y<5||point.y>rect.height-44;
       if(node.hidden)continue;
@@ -317,7 +317,8 @@ export async function initEuropeAtlas() {
     const placed:DOMRect[]=[];
     // Keep every named feature available in the initial view. Move crowded labels
     // to nearby clear space and connect displaced names back to their anchors.
-    const ordered=terrainLabels;
+    const priority=(id:string)=>id==='alps'?0:id==='foehn'?1:2;
+    const ordered=[...terrainLabels].sort((a,b)=>priority(a.label.id)-priority(b.label.id));
     for(const {node,label,leader} of ordered){
       node.hidden=state.layer!=='terrain'&&!(state.layer==='contours'&&['mountain','plain','upland'].includes(label.kind));leader.style.display='none';node.setAttribute('aria-pressed',String(state.feature===label.id));if(node.hidden)continue;
       const point=map&&liveMap.classList.contains('is-ready')?map.project(label.coordinates as [number,number]):(()=>{
@@ -586,6 +587,11 @@ export async function initEuropeAtlas() {
     if(map?.getLayer('eu-terrain-guides'))map.setLayoutProperty('eu-terrain-guides','visibility',guideVisible?'visible':'none');
     const riverVisible=['water','drainage'].includes(layer.id);
     query<SVGGElement>('[data-eu-major-rivers]').style.display=riverVisible?'':'none';
+    const displayedRiverIds=['rhine','danube','seine','thames','don','volga','ural',state.feature??''];
+    all<SVGPathElement>('[data-eu-major-river],[data-eu-major-river-hit]').forEach(path=>{path.style.display=displayedRiverIds.includes((path.dataset.euMajorRiver??path.dataset.euMajorRiverHit)! )?'':'none';});
+    for(const id of ['eu-major-rivers','eu-major-river-hit'])if(map?.getLayer(id))map.setFilter(id,['in',['get','id'],['literal',displayedRiverIds]]);
+    query<SVGGElement>('[data-eu-water-lakes]').style.display=state.layer==='water'?'':'none';
+    for(const id of ['eu-water-lakes','eu-water-lakes-outline'])if(map?.getLayer(id))map.setLayoutProperty(id,'visibility',state.layer==='water'?'visible':'none');
     for(const id of ['eu-major-rivers','eu-major-river-hit'])if(map?.getLayer(id))map.setLayoutProperty(id,'visibility',riverVisible?'visible':'none');
     if(map?.getLayer('eu-major-rivers'))map.setPaintProperty('eu-major-rivers','line-width',['case',['==',['get','id'],state.feature??''],4,2.5]);
     all<SVGPathElement>('[data-eu-major-river]').forEach(path=>{path.style.strokeWidth=state.feature===path.dataset.euMajorRiver?'4':'2.5';});
@@ -985,6 +991,9 @@ export async function initEuropeAtlas() {
         map.addLayer({ id: 'borders', type: 'line', source: 'countries', paint: { 'line-color': '#536a6f', 'line-width': .7 } });
         map.addSource('eu-terrain-guides',{type:'geojson',data:{type:'FeatureCollection',features:europeTerrainGuides.map(guide=>({type:'Feature',properties:{name:guide.name},geometry:{type:'LineString',coordinates:guide.line}}))} as any});
         map.addLayer({id:'eu-terrain-guides',type:'line',source:'eu-terrain-guides',paint:{'line-color':'#574b3c','line-width':1.8,'line-dasharray':[3,2]}},'borders');
+        map.addSource('eu-water-lakes',{type:'geojson',data:config.waterLakes as any});
+        map.addLayer({id:'eu-water-lakes',type:'fill',source:'eu-water-lakes',paint:{'fill-color':'#91bdd0','fill-opacity':.85}},'borders');
+        map.addLayer({id:'eu-water-lakes-outline',type:'line',source:'eu-water-lakes',paint:{'line-color':'#749daa','line-width':.6}},'borders');
         map.addSource('eu-major-rivers',{type:'geojson',data:config.majorRivers as any});
         map.addLayer({id:'eu-major-rivers',type:'line',source:'eu-major-rivers',paint:{'line-color':'#176783','line-width':['case',['==',['get','id'],state.feature??''],4,2.5]}},'borders');
         map.addLayer({id:'eu-major-river-hit',type:'line',source:'eu-major-rivers',paint:{'line-color':'#176783','line-opacity':0,'line-width':16}},'borders');
