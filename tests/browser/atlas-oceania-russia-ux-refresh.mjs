@@ -59,7 +59,7 @@ try{
     await capture(`${width}-${region}-industry-services-only`);
     if(region==='oceania'){
      const noro=root.locator('[data-primary-map] [data-oceania-industry-location="noro-port"]');
-     await noro.click();
+     await noro.locator('circle').click();
      let query=new URL(page.url()).searchParams;
      assert.equal(query.get('sector'),'services');
      assert.equal(query.get('sectorOnly'),'1');
@@ -79,12 +79,12 @@ try{
      for(const key of ['sector','sectorOnly','industryLocation'])assert.equal(query.has(key),false);
      await root.locator('[data-industry-sector="services"]').click();
      await root.locator('[data-industry-only]').click();
-     await root.locator('[data-primary-map] [data-oceania-industry-location="noro-port"]').click();
+     await root.locator('[data-primary-map] [data-oceania-industry-location="noro-port"] circle').click();
      query=new URL(page.url()).searchParams;
      assert.equal(query.get('sector'),'services');
      assert.equal(query.get('sectorOnly'),'1');
      await root.locator('[data-industry-only]').click();
-     await root.locator('[data-primary-map] [data-oceania-industry-location="lihir-project"]').click();
+     await root.locator('[data-primary-map] [data-oceania-industry-location="lihir-project"] circle').click();
      query=new URL(page.url()).searchParams;
      assert.equal(query.get('sector'),'resources');
      assert.equal(query.has('sectorOnly'),false);
