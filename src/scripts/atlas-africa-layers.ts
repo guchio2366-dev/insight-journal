@@ -201,7 +201,12 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   // Existing country locator coordinates provide context, not density values.
   for(const country of countries.filter(c=>['DZA','MAR','EGY','NGA','ETH','COD','ZAF','MDG','SDN','KEN','TZA','MLI','NER','AGO'].includes(c.code))){const [x,y]=projectAfrica(country.point);const text=svg('text',{x,y,'text-anchor':'middle','font-size':12*scale,fill:'#536264','fill-opacity':.7,stroke:'#fffdf8','stroke-width':2*scale,'paint-order':'stroke','data-africa-population-country':country.code});text.textContent=country.name;labels.append(text);}
   const cities:[string,number,number,number,number][]=[['カイロ',31.24,30.04,6,-8],['ラゴス',3.38,6.52,-58,20],['アビジャン',-4.03,5.35,-68,-9],['アクラ',-.2,5.56,-16,35],['カノ',8.52,12,6,-8],['アブジャ',7.489505,9.05462,8,18],['キンシャサ',15.32,-4.32,-80,16],['アディスアベバ',38.75,9.03,-110,-12],['ナイロビ',36.82,-1.29,8,4],['ダルエスサラーム',39.28,-6.82,7,20],['ヨハネスブルク',28.05,-26.2,8,6],['ケープタウン',18.42,-33.93,-65,20],['アンタナナリボ',47.51,-18.88,-116,16]];
-  for(const [name,lon,lat,dx,dy]of cities){const [x,y]=projectAfrica([lon,lat]);if(x<viewport[0]||x>viewport[0]+viewport[2]||y<viewport[1]||y>viewport[1]+viewport[3])continue;labels.append(svg('circle',{cx:x,cy:y,r:2.5*scale,fill:'#273f4b',stroke:'#fff','stroke-width':1,'vector-effect':'non-scaling-stroke'}));const text=svg('text',{x:x+dx*scale,y:y+dy*scale,'font-size':14*scale,'font-weight':750,fill:'#273f4b',stroke:'#fffdf8','stroke-width':3*scale,'paint-order':'stroke','data-africa-population-city':name});text.textContent=name;labels.append(text);}
+  for(const item of africaTerrainLabels.filter(item=>['sahara','namib','kalahari'].includes(item.id))){const [x,y]=projectAfrica([...item.coordinates]);const label=svg('text',{x,y,'text-anchor':'middle','font-size':13*scale,fill:'#7a6b4e',stroke:'#fffdf8','stroke-width':4*scale,'paint-order':'stroke','data-africa-population-desert':item.id});label.textContent=item.label;labels.append(label);}
+  for(const [name,lon,lat,dx,dy]of cities){const [x,y]=projectAfrica([lon,lat]);if(x<viewport[0]||x>viewport[0]+viewport[2]||y<viewport[1]||y>viewport[1]+viewport[3])continue;
+   // A small hollow locator identifies a city, never a population quantity.
+   labels.append(svg('circle',{cx:x,cy:y,r:1.8*scale,fill:'#fffdf8','fill-opacity':.7,stroke:'#59747d','stroke-width':1,'vector-effect':'non-scaling-stroke','data-africa-population-locator':name}));
+   const width=Array.from(name).length*14*scale,tx=Math.max(viewport[0]+6*scale,Math.min(viewport[0]+viewport[2]-width-6*scale,x+dx*scale)),ty=Math.max(viewport[1]+18*scale,Math.min(viewport[1]+viewport[3]-10*scale,y+dy*scale));
+   const text=svg('text',{x:tx,y:ty,'font-size':14*scale,'font-weight':750,fill:'#35515c',stroke:'#fffdf8','stroke-width':4*scale,'paint-order':'stroke','data-africa-population-city':name});text.textContent=name;labels.append(text);}
   group.append(labels);
  }
  const setup=(key:string)=>{
@@ -280,6 +285,11 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
     // A positive-only layer must wait for its native grid; the source PNG has opaque zero cells.
     if(mode==='original'||grid?.value)
     group.append(svg('image',{href,x,y,width:right-x,height:bottom-y,'preserveAspectRatio':'none','pointer-events':'none','data-africa-raster':key}));}
+   if(['terrain','elevation'].includes(key)){
+    const context=svg('g',{'data-africa-arabian-context':'','pointer-events':'none','aria-hidden':'true'});
+    for(const feature of neighbours.features)context.append(svg('path',{d:africaLayerPath(feature.geometry),fill:'#e4e2d3','fill-opacity':.62,stroke:'#b8c2b7','stroke-width':.6,'vector-effect':'non-scaling-stroke','data-africa-context-neighbour':feature.properties.code}));
+    const [x,y]=projectAfrica([46,24]),name=svg('text',{x,y,'text-anchor':'middle','font-size':13,fill:'#78867c',stroke:'#fffdf8','stroke-width':3,'paint-order':'stroke'});name.textContent='アラビア半島';context.append(name);group.append(context);
+   }
    const riverHits:SVGElement[]=[];
    const mapBox=climateMap?.getBoundingClientRect(),viewport=(climateMap?.getAttribute('viewBox')??`0 0 ${africaWidth} ${africaHeight}`).split(/[ ,]+/).map(Number),labelScale=Math.max(viewport[2]/(mapBox?.width||700),viewport[3]/(mapBox?.height||580));
    if(config.family==='natural'&&!group.ownerSVGElement?.querySelector('#africa-natural-land-clip')){const clip=svg('clipPath',{id:'africa-natural-land-clip'});for(const original of root.querySelectorAll('[data-country-path]'))clip.append(svg('path',{d:original.getAttribute('d')??''}));group.ownerSVGElement?.querySelector('defs')?.append(clip);}
@@ -307,6 +317,7 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
     }
    }
    if(mainRivers?.value)for(const feature of mainRivers.value.features as Feature[]){const river=africaRiverForFeature(feature),selected=river?.id===state.river,d=africaLayerPath(feature.geometry),path=svg('path',{d,fill:'none',stroke:selected?africaRiverSelectedColor:'#326e92','stroke-width':selected?3.3:key==='water-basin'?2.1:1.4,'vector-effect':'non-scaling-stroke','data-africa-river-feature':river?.id??'','pointer-events':'none'});group.append(path);if(key==='water-basin'&&river)riverHits.push(svg('path',{d,fill:'none',stroke:'transparent','stroke-width':14,'vector-effect':'non-scaling-stroke','pointer-events':'stroke','data-africa-river':river.id,'data-africa-river-hit-feature':text(feature.properties.id),role:'button',tabindex:0,'aria-label':`${river.label}を読む`,'aria-pressed':String(selected)}));}
+   if(ready&&borders&&config.family==='natural')paintBorders(state,group);
    const labelBoxes:{x:number;y:number;w:number;h:number}[]=[];
    const measuredTextBox=(node:SVGElement,fallback:{x:number;y:number;w:number;h:number})=>{
     const box=(node as SVGGraphicsElement).getBBox?.();
@@ -314,14 +325,15 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
    };
    if(config.family==='natural'){
     if(key==='terrain')for(const feature of africaTerrainRanges.features){const path=svg('path',{d:africaLayerPath(feature.geometry),fill:'#7b8e61','fill-opacity':.08,stroke:'#62755a','stroke-opacity':.35,'stroke-width':.65,'stroke-dasharray':'5 4','vector-effect':'non-scaling-stroke','data-africa-terrain-range':feature.properties.id,'pointer-events':'none'});group.append(path);}
-    const labels=key==='terrain'?[...africaTerrainLabels,...africaRiverLabels,...africaSeaLabels,...africaCurrentLabels,...africaWindLabels]:key==='water-river'?[...africaTerrainLabels,...africaRiverLabels,...africaSeaLabels]:key==='elevation'?africaTerrainLabels:key==='water-basin'?africaSeaLabels:[];
+    const labels=key==='terrain'?[...africaTerrainLabels,...africaRiverLabels,...africaSeaLabels,...africaCurrentLabels,...africaWindLabels]:key==='water-river'?[...africaTerrainLabels,...africaRiverLabels,...africaSeaLabels]:key==='elevation'||key==='water-rain'?africaTerrainLabels:key==='water-basin'?africaSeaLabels:[];
     for(const item of labels){let [x,y]=projectAfrica([...item.coordinates]);if(x<viewport[0]||x>viewport[0]+viewport[2]||y<viewport[1]||y>viewport[1]+viewport[3])continue;const color=item.kind==='current'?item.temperature==='cold'?'#176581':'#a43e2d':item.kind==='river'?'#235f81':item.kind==='sea'?'#587782':item.kind==='wind'?'#5b687a':'#56604e';
      if(item.axis){const points=item.axis.map(p=>projectAfrica([...p]));group.append(svg('path',{d:points.map((p,i)=>(i?'L':'M')+p.join(',')).join(''),fill:'none',stroke:color,'stroke-opacity':.7,'stroke-width':item.kind==='terrain'?5:2,'stroke-dasharray':item.kind==='wind'?'6 4':'','vector-effect':'non-scaling-stroke','pointer-events':'none',[item.kind==='current'||item.kind==='wind'?'data-africa-natural-direction':'data-africa-terrain-axis']:item.id}));if(item.kind==='current'||item.kind==='wind'){const end=points.at(-1)!,before=points.at(-2)!,angle=Math.atan2(end[1]-before[1],end[0]-before[0]),back=8*labelScale,side=4*labelScale;group.append(svg('path',{d:`M${end[0]},${end[1]}L${end[0]-back*Math.cos(angle)+side*Math.sin(angle)},${end[1]-back*Math.sin(angle)-side*Math.cos(angle)}L${end[0]-back*Math.cos(angle)-side*Math.sin(angle)},${end[1]-back*Math.sin(angle)+side*Math.cos(angle)}Z`,fill:color,'pointer-events':'none'}));}}
-     const start=item.kind==='river',width=Array.from(item.label).reduce((n,c)=>n+(/[ -~]/.test(c)?6:12),0)*labelScale,height=(item.season?27:15)*labelScale;
+     const caption=item.kind==='wind'?`風：${item.label}`:item.label;
+     const start=item.kind==='river',width=Array.from(caption).reduce((n,c)=>n+(/[ -~]/.test(c)?6:12),0)*labelScale,height=(item.season?27:15)*labelScale;
      const candidates=[[0,0],[0,-18],[0,18],[-18,0],[18,0],[0,-36],[0,36],[-28,-18],[28,18],[-28,18],[28,-18]].map(([dx,dy])=>({x:Math.max(viewport[0]+4*labelScale+(start?0:width/2),Math.min(viewport[0]+viewport[2]-4*labelScale-(start?width:width/2),x+dx*labelScale)),y:Math.max(viewport[1]+15*labelScale,Math.min(viewport[1]+viewport[3]-(item.season?17:4)*labelScale,y+dy*labelScale)),w:width,h:height}));
      const box=candidates.find(b=>!labelBoxes.some(o=>(start?b.x:b.x-b.w/2)<o.x+o.w+3*labelScale&&(start?b.x+b.w:b.x+b.w/2)>o.x-3*labelScale&&b.y-13*labelScale<o.y+o.h&&b.y+b.h-13*labelScale>o.y))??candidates[0];x=box.x;y=box.y;labelBoxes.push({x:start?x:x-width/2,y:y-13*labelScale,w:width,h:height});
-     const node=svg('text',{x,y,'text-anchor':item.kind==='river'?'start':'middle','font-size':(item.kind==='terrain'?12:item.kind==='river'?12:11)*labelScale,'font-weight':item.kind==='river'?750:650,fill:color,'fill-opacity':key==='elevation'?.68:1,stroke:'#fffdf8','stroke-width':3*labelScale,'paint-order':'stroke','data-africa-natural-label':item.id,'data-africa-natural-kind':item.kind,'pointer-events':'none'});node.textContent=item.label;if(item.season){const season=svg('tspan',{x,dy:12*labelScale,'font-size':10*labelScale});season.textContent=item.season.includes('冬')?'北半球の冬・乾季':'北半球の夏・雨季';node.append(season);}const title=svg('title',{});title.textContent=item.note+' '+item.source.label;node.append(title);group.append(node);
-     if(key==='elevation')labelBoxes[labelBoxes.length-1]=measuredTextBox(node,labelBoxes.at(-1)!);
+     const node=svg('text',{x,y,'text-anchor':item.kind==='river'?'start':'middle','font-size':(item.kind==='terrain'?12:item.kind==='river'?12:11)*labelScale,'font-weight':item.kind==='river'?750:650,fill:color,'fill-opacity':key==='elevation'?.72:1,stroke:'#fffdf8','stroke-width':5*labelScale,'paint-order':'stroke','stroke-linejoin':'round','data-africa-natural-label':item.id,'data-africa-natural-kind':item.kind,'pointer-events':'none'});node.textContent=caption;if(item.season){const season=svg('tspan',{x,dy:12*labelScale,'font-size':10*labelScale});season.textContent=item.season.includes('冬')?'北半球の冬・乾季':'北半球の夏・雨季';node.append(season);}const title=svg('title',{});title.textContent=item.note+' '+item.source.label;node.append(title);group.append(node);
+     if(key==='elevation'||key==='water-rain')labelBoxes[labelBoxes.length-1]=measuredTextBox(node,labelBoxes.at(-1)!);
     }
    }
    // Preserve wet coastal peaks when two nearby rainfall captions compete.
@@ -345,7 +357,7 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
      group.append(outline);
     }
    }
-   if(ready&&borders)paintBorders(state,group);
+   if(ready&&borders&&config.family!=='natural')paintBorders(state,group);
    group.append(...riverHits);
    if(key==='climate')paintClimateLabels(state,{...manifest,...layer},grid?.value);
    if(key==='distribution')paintPopulationLabels();
@@ -354,7 +366,7 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   }
   return output;
  }
- function paintBorders(state:State,target:SVGGElement){for(const original of root.querySelectorAll<SVGPathElement>('[data-country-path]'))target.append(svg('path',{d:original.getAttribute('d')??'',fill:'none',stroke:original.dataset.countryPath===state.place?'#b13e30':original.dataset.countryPath===state.compare?'#364c91':'#708e91','stroke-width':original.dataset.countryPath===state.place||original.dataset.countryPath===state.compare?2:.65,'stroke-dasharray':original.dataset.countryPath===state.compare?'5 3':'','vector-effect':'non-scaling-stroke','pointer-events':'none'}));}
+ function paintBorders(state:State,target:SVGGElement){for(const original of root.querySelectorAll<SVGPathElement>('[data-country-path]'))target.append(svg('path',{d:original.getAttribute('d')??'',fill:'none',stroke:original.dataset.countryPath===state.place?'#b13e30':original.dataset.countryPath===state.compare?'#364c91':'#708e91','stroke-width':original.dataset.countryPath===state.place||original.dataset.countryPath===state.compare?2:.65,'stroke-dasharray':original.dataset.countryPath===state.compare?'5 3':'','vector-effect':'non-scaling-stroke','pointer-events':'none','data-africa-country-border':original.dataset.countryPath??''}));}
  function commodityState(state:State,key:string):State {if(key.startsWith('crop-')){const [,crop,cropMeasure]=key.split('-');return {...state,topic:'farming',crop:crop as State['crop'],cropMeasure:cropMeasure as State['cropMeasure']};}return {...state,topic:'livestock',livestock:key.slice(10) as State['livestock']};}
  function commodityView(state:State,key:string,summary:Row|undefined):AfricaLayerView {
   if(isAfricaBeverage(key)){const product=key.split('-')[1] as 'coffee'|'tea',source=africaBeverageLinks(product)[0];return {key,ready:true,loading:false,error:'',title:africaCommodityLabels[product]+'（概略帯）',period:'資料別年',unit:'産地の概略',scope:africaBeverageNote,method:'産地記述の地名から独自に概略帯を作成。線の幅と座標は表示上の概略で、栽培境界・数量・密度を推定しません。原図は転載していません。',sourceUrl:source.url,sourceLabel:source.label,legend:[],takeaway:'資料で確認できる特徴的な生産地帯を読む',description:africaBeverageNote};}
@@ -414,7 +426,7 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   for(const key of keys){
    const layer=summary.layers[key];if(!layer)continue;const selectedNow=!state.overview&&key===focused,livestock=key.startsWith('livestock-');
    const node=svg('g',{'data-africa-commodity-layer':key,'data-africa-summary-threshold':layer.threshold}) as SVGGElement;node.style.display=active.includes(key)?'':'none';node.style.opacity=!state.overview&&key!==focused?'.55':'1';agriGroups.set(key,node);
-   const path=svg('image',{href:withBase('/assets/atlas/africa-agriculture-overview-v1/'+layer.displayImage),x:0,y:0,width:africaWidth,height:africaHeight,preserveAspectRatio:'none',opacity:livestock?.16:selectedNow?.95:.65,'clip-path':'url(#africa-agri-land-clip)','data-africa-agri-distribution':key});
+   const path=svg('image',{href:withBase('/assets/atlas/africa-agriculture-overview-v1/'+layer.displayImage),x:0,y:0,width:africaWidth,height:africaHeight,preserveAspectRatio:'none',opacity:selectedNow?.98:livestock?.72:.9,'clip-path':'url(#africa-agri-land-clip)','data-africa-agri-distribution':key});
    // The quiet distribution raster is geographic evidence; text and glyphs
    // are the hit targets, avoiding clicks on transparent ocean rectangles.
    path.setAttribute('pointer-events','none');node.append(path);
@@ -449,7 +461,7 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   const occupied:{x:number;y:number;w:number;h:number}[]=[];
   function paintLabels(jobs:typeof labelJobs){for(const job of jobs){
    const {key,anchor,index,livestock}=job,layer=summary.layers[key]??{label:africaCommodityLabels[key.split('-')[1]]},node=agriGroups.get(key)!,selectedNow=!state.overview&&key===focused;
-   const [ax,ay]=projectAfrica([anchor.lon,anchor.lat]),font=15*labelScale,iconScale=.55*labelScale,iconWidth=livestock?22*labelScale:0,width=layer.label.length*font+iconWidth+5*labelScale,height=19*labelScale,gap=5*labelScale;
+   const [ax,ay]=projectAfrica([anchor.lon,anchor.lat]),font=15*labelScale,iconWidth=0,width=layer.label.length*font+5*labelScale,height=19*labelScale,gap=5*labelScale;
    const candidates=[[gap,-12*labelScale],[gap,17*labelScale],[-width-gap,-12*labelScale],[-width-gap,17*labelScale],[gap,-35*labelScale],[-width-gap,40*labelScale],[gap,40*labelScale],[-width-gap,-35*labelScale],[gap,-58*labelScale],[-width-gap,63*labelScale]];
    if(isAfricaBeverage(key)){const nearby:number[][]=[];for(const dx of [28,-width/labelScale-28,56,-width/labelScale-56])for(const dy of [-12,17,-35,40])nearby.push([dx*labelScale,dy*labelScale]);candidates.splice(4,0,...nearby);}
    const visibleAnchor=ax>=viewport[0]&&ax<=viewport[0]+viewport[2]&&ay>=viewport[1]&&ay<=viewport[1]+viewport[3];
@@ -458,13 +470,7 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
    if(!position)continue;if(active.includes(key)&&visibleAnchor)occupied.push(position);
    const labelGroup=svg('g',{'data-africa-agri-label':key,'data-africa-agri-label-anchor':`${anchor.lon},${anchor.lat}`});agriPick(labelGroup,key,`${key}-label-${index}`,selectedNow,layer.label);
    if(!visibleAnchor)labelGroup.setAttribute('display','none');
-   if(livestock){const name=key.slice(10),icon=svg('g',{transform:`translate(${position.x},${position.y-12*labelScale}) scale(${iconScale})`,'data-africa-agri-glyph':name,fill:africaCommodityColor(key),stroke:africaCommodityColor(key),'stroke-width':1.6,'stroke-linecap':'round','stroke-linejoin':'round','aria-hidden':'true'});
-    icon.append(svg('path',{d:name==='sheep'?'M5 15C0 12 3 5 8 7C9 1 15 2 17 6C22 2 28 5 27 11C33 12 29 19 25 19H8Z':name==='goats'?'M5 8H23L27 4L33 8L30 14H25L22 20H8Z':'M4 7H23L27 4L34 8L31 16H25L23 20H7Z'}));
-    icon.append(svg('path',{d:'M8 18V27M21 18V27',fill:'none','stroke-width':2.5}));
-    if(name==='goats')icon.append(svg('path',{d:'M28 5Q20 -5 29 -5M31 6Q27 -4 35 -4M31 13L29 19',fill:'none'}));
-    if(name==='cattle')icon.append(svg('path',{d:'M27 5L23 0M31 6L35 1M4 8L0 3',fill:'none'}));labelGroup.append(icon);
-   }
-   const title=svg('text',{x:position.x+iconWidth,y:position.y,'font-size':font,'font-weight':selectedNow?800:750,fill:livestock?'#283b40':'#534229',stroke:'#fffdf8','stroke-width':3*labelScale,'paint-order':'stroke','stroke-linejoin':'round','data-africa-agri-label-text':key});title.textContent=layer.label;labelGroup.append(title);node.append(labelGroup);
+   const title=svg('text',{x:position.x+iconWidth,y:position.y,'font-size':font,'font-weight':750,fill:africaCommodityColor(key),stroke:'#fffdf8','stroke-width':4*labelScale,'paint-order':'stroke','stroke-linejoin':'round','data-africa-agri-label-text':key});title.textContent=layer.label;labelGroup.append(title);node.append(labelGroup);
   }
   }
   const beverageJobs:typeof labelJobs=[];

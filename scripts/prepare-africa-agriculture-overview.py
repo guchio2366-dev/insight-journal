@@ -148,7 +148,7 @@ def main():
             'note': '位置を理解するため、既存のETOPO 2022標高画像を彩度0・不透明度22%で背景表示する。2022はモデルの版で観測年は複数。背景は農畜産の抽出・数値・順位には使わない。',
         },
         'method': '元の5分角セルを緯度・経度1°の表示セルに集約。作物は収穫面積haの合計を有効セルの球面面積km²の合計で割り、家畜は頭/km²を有効セル面積で加重平均する。品目ごとに、陸地面積の50%以上に有効値がある正値の集約セルを対象とし、75%分位以上を抽出する。分位は対象の集約セル数に基づく（面積加重の分位ではない）。0は有効値、欠測は分子・分母から除く。色は品目を表し、色の濃さや面積は生産量の順位を表さない。',
-        'display': '抽出域の表示アルファを0.8度相当のGaussianBlurで柔らかい帯にする。正値かつ50%以上の有効陸地面積を持つ表示セルでクリップし、0・欠測へは延ばさない。表示色の濃さは数量ではない。全ての抽出域を残し、件数上限で分布を捨てない。ラベル間隔は文字の整理だけに使う。マダガスカルは本土と独立に名前を残す。家畜は薄い分布色と種別記号。選択しても他分布を残す。',
+        'display': '抽出域の表示アルファを0.8度相当のGaussianBlurで柔らかい帯にする。正値かつ50%以上の有効陸地面積を持つ表示セルでクリップし、0・欠測へは延ばさない。表示色の濃さは数量ではない。全ての抽出域を残し、件数上限で分布を捨てない。ラベル間隔は文字の整理だけに使う。マダガスカルは本土と独立に名前を残す。家畜も品目色の分布と名称で示し、動物のイラストは使わない。作物の通常不透明度90%・家畜72%・選択98%。選択しても他分布を残す。',
         'limitations': ['1°は一覧のための集約単位で、農地や牧場の境界ではない。集約セル内には元格子の0や欠測を含む場合がある。地点照会では元格子の値・0・欠測を保持する。', '収穫面積には同じ土地での複数回の収穫を含む。ha/km²は作物被覆率ではない。', '品目別の相対的な集中を示す閾値で、他品目との優劣、国別順位、全生産量・公式統計・所得・栄養価・地表の被覆率を表さない。', '抽出されない場所を生産なしとは扱わない。原データの国境セルはセル全体の元値を保持しており、国別合計には使わない。'],
         'processing': {'generator': 'scripts/prepare-africa-agriculture-overview.py', 'generatorSha256': sha(Path(__file__)), 'python': platform.python_version(), 'numpy': np.__version__, 'earthRadiusKm': RADIUS_KM, 'minimumValidLandAreaFraction': MIN_COVERAGE, 'quantileMethod': 'numpy linear; unweighted eligible positive summary cells', 'inputResampling': 'none', 'sourceAssetsModified': False, 'labelPlacement': 'Uncapped, >=22-degree spacing of exact selected-cell anchors, with Madagascar independent of mainland. This affects text only; every selected component remains in the display alpha field. Regional zoom can add an in-view source-cell label.'},
     }

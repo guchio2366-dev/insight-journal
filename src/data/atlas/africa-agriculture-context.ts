@@ -48,6 +48,15 @@ export const agricultureContextOverview: AfricaAgricultureContext & {statisticNo
   statisticNote: '地図下の世界シェアは保持済みの2024年FAOSTAT地域・世界行から求めます。未取得の品目、域外貿易相手、カロリー構成、自給率は補作しません。国別の農林水産業GDP比とは別の指標です。',
 };
 
+/** Regional reading of the retained 2020 distributions, not a production ranking. */
+export const agricultureRegionalContext:Record<string,{takeaway:string;paragraph:string}>={
+ north:{takeaway:'地中海側の小麦・牧畜と、ナイル沿いの灌漑作物を、広い乾燥域から分けて読みます。',paragraph:'北西部とナイル沿いの小麦、ナイル下流の稲、羊・ヤギの集中域を比べます。色が描かれない砂漠を生産0と断定せず、表示は品目内の相対的な集中域として読みます。'},
+ west:{takeaway:'湿潤なギニア湾岸の作物と、内陸・サヘル側の農牧業の組合せを読みます。',paragraph:'湾岸側のキャッサバ・とうもろこし、西部の稲、内陸側の牛・ヤギ・羊を比べます。コーヒーは資料に記載された産地の概略帯です。カカオを含む全品目を網羅した地図ではありません。'},
+ central:{takeaway:'コンゴ盆地周辺のキャッサバなどと、北側の家畜の集中域を対比します。',paragraph:'湿潤域の食用作物と、北側の乾湿の移り変わる地域の農牧業を読みます。中央部の森林内部を農地として一括着色せず、元の作物・家畜格子で確認できる分布だけを残します。'},
+ east:{takeaway:'東部高地の穀物・家畜・コーヒー・茶と、マダガスカルの稲作を読みます。',paragraph:'エチオピアから東部高地の穀物と家畜、コーヒー・茶の産地、マダガスカルの稲を比べます。高地と低地、雨の季節、水・飼料と市場への接続を一緒に読みます。'},
+ south:{takeaway:'南部内陸のとうもろこし・牛と、乾燥する西側の羊・ヤギを読みます。',paragraph:'南部の穀物と家畜の分布を、乾燥する西側と内陸の条件の違いから比べます。南部区分はボツワナ・レソト・ナミビア・エスワティニ・南アフリカで、広義の「南部」と混同しません。'},
+};
+
 export const agricultureProductContext: Record<AfricaAgricultureProduct, AfricaAgricultureContext> = {
   maize: {
     title: 'トウモロコシ：西部・東部・南部の栽培を読む',

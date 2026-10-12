@@ -4,7 +4,7 @@ import {themes,type AfricaTheme} from '../data/atlas/africa-themes.ts';
 import {africaIndustryLocations,africaIndustryLocationById,africaIndustryLocationOverview,africaIndustryCommodities,africaIndustryCommodityById} from '../data/atlas/africa-industry-locations.ts';
 import {withBase} from '../lib/urls.ts';
 import {africaForestryReading} from '../data/atlas/africa-forestry-reading.ts';
-import {agricultureContextOverview,agricultureProductContext,agricultureContextPeriodNote} from '../data/atlas/africa-agriculture-context.ts';
+import {agricultureContextOverview,agricultureProductContext,agricultureContextPeriodNote,agricultureRegionalContext} from '../data/atlas/africa-agriculture-context.ts';
 import {africaAgricultureReading} from '../data/atlas/africa-agriculture-reading.ts';
 import {africaRivers,africaRiverById,africaRiverSelectedColor} from '../data/atlas/africa-river-reading.ts';
 import {canonicalRiver} from '../data/atlas/africa-atlas.ts';
@@ -24,7 +24,7 @@ export function initializeAfricaAtlas() {
  const text=(s:string,t:string)=>{query<HTMLElement>(s).textContent=t;};
  const make=(tag:string,t?:string)=>{const n=document.createElement(tag);if(t!==undefined)n.textContent=t;return n;};
  const svgNS='http://www.w3.org/2000/svg';
- const populationDensityScope='色は人口密度の推計区分。国の平均とは異なります。';
+ const populationDensityScope='色は人口密度の推計区分。国の平均とは異なります。小さな淡い輪は都市の位置で、人口量を表しません。';
  const svgEl=(tag:string,attrs:Record<string,string|number>,t?:string)=>{const n=document.createElementNS(svgNS,tag);for(const [k,v]of Object.entries(attrs))n.setAttribute(k,String(v));if(t!==undefined)n.textContent=t;return n;};
  let state=readState(location.search);
  let actual: AfricaLayerView|null=null;
@@ -175,16 +175,18 @@ export function initializeAfricaAtlas() {
   if(!actual)return;
   const overview=state.overview,product=state.topic==='livestock'?state.livestock:state.crop;
   const context=overview?agricultureContextOverview:agricultureProductContext[product];
+  const regional=overview?agricultureRegionalContext[state.region]:undefined;
   const focused=state.topic==='livestock'?`livestock-${state.livestock}`:`crop-${state.crop}-harvested`;
   const only=state.agriLayers===focused;
   text('.africa-kicker',overview?`${regionNames[state.region]} · 農畜産の概況`:'分布から、生産と利用を読む');
-  text('[data-theme-title]',overview?'アフリカの農畜産業':context.title);
-  text('[data-theme-takeaway]',context.takeaway);
+  text('[data-theme-title]',overview?regional?`${regionNames[state.region]}の農畜産業`:'アフリカの農畜産業':context.title);
+  text('[data-theme-takeaway]',regional?.takeaway??context.takeaway);
   text('[data-metric-title]',overview?'作物と家畜の特徴的な分布':`${context.title.split('：')[0]}${only?'だけを表示':'を強調'}`);
   text('[data-period]','既存7品目2020年・コーヒー茶は資料別年');text('[data-unit]','収穫面積・飼養密度の集中域と産地の概略帯');
   text('#africa-svg-title',`${overview?'作物と家畜':context.title.split('：')[0]}の特徴的な分布・既存7品目2020年／コーヒー茶は資料別年`);
-  text('#africa-svg-desc','品目内で比較的集中する範囲を、作物は独立した色、家畜は種別の小型記号で示します。地図内の品目名・分布、または色付きの凡例から選べます。選択しても他品目の分布を残します。');
+  text('#africa-svg-desc','作物と家畜の品目内で比較的集中する範囲を、品目ごとの色と名称で示します。地図内の品目名、または色付きの凡例から選べます。色の濃さは品目間の生産量を表しません。選択しても他品目の分布を残します。');
   const host=query<HTMLElement>('[data-africa-agri-context]');host.replaceChildren();
+  if(regional)host.append(make('p',regional.paragraph));
   for(const paragraph of context.paragraphs)host.append(make('p',paragraph));
   query<HTMLElement>('[data-africa-agri-only]').hidden=overview||only;query<HTMLElement>('[data-africa-agri-all]').hidden=overview||!only;
   query<HTMLElement>('[data-theme-comparison]').hidden=true;query<HTMLElement>('[data-theme-return]').hidden=true;
@@ -245,9 +247,9 @@ export function initializeAfricaAtlas() {
    if(state.place&&state.place!=='GHA')section.append(make('p',`${countries.find(row=>row.code===state.place)?.name}の民族構成は未取得です。以下の数値はガーナだけの公表事例です。`));
    section.append(make('p',`${evidence.denominatorLabel}。全住民${evidence.wholeResidentPopulation.toLocaleString('ja-JP')}人とは対象が異なります。`));
    const national=make('table');national.dataset.africaEthnicityNational='';national.append(make('caption','9大分類の構成（原表対象に対する割合）'));const nationalHead=make('thead'),headRow=make('tr');headRow.append(make('th','分類'),make('th','構成比'),make('th','人数'));nationalHead.append(headRow);const nationalBody=make('tbody');
-   for(const group of evidence.groups){const row=make('tr');row.dataset.africaEthnicityGroup=group.id;const name=make('th',group.label);name.setAttribute('scope','row');row.append(name,make('td',`${group.publishedPercent.toFixed(1)}%`),make('td',group.national.toLocaleString('ja-JP')));nationalBody.append(row);}national.append(nationalHead,nationalBody);section.append(national);
+   for(const group of evidence.groups){const row=make('tr');row.dataset.africaEthnicityGroup=group.id;const name=make('th',group.label);name.setAttribute('scope','row');const swatch=make('i');swatch.className='africa-ethnicity-swatch';swatch.style.background=group.color;swatch.setAttribute('aria-hidden','true');name.prepend(swatch);row.append(name,make('td',`${group.publishedPercent.toFixed(1)}%`),make('td',group.national.toLocaleString('ja-JP')));nationalBody.append(row);}national.append(nationalHead,nationalBody);section.append(national);
    const regional=make('table');regional.dataset.africaEthnicityRegions='';regional.append(make('caption','16州ごとの構成の違い'));const regionalHead=make('thead'),regionalHeadRow=make('tr');regionalHeadRow.append(make('th','州'),make('th','最多の分類'),make('th','州内比'));regionalHead.append(regionalHeadRow);const regionalBody=make('tbody');
-   for(const region of evidence.regions){const largest=ethnicityRegionComposition(region)[0],row=make('tr');row.dataset.africaEthnicityRegion=region.name;const name=make('th',ethnicityRegionNames[region.name]);name.setAttribute('scope','row');row.append(name,make('td',largest.label),make('td',`${largest.share.toFixed(1)}%`));regionalBody.append(row);}regional.append(regionalHead,regionalBody);section.append(regional,make('p','「最多」は過半数とは限りません。同じ州にも複数の集団が暮らし、州の枠を民族の居住境界とみなすことはできません。'));
+   for(const region of evidence.regions){const composition=ethnicityRegionComposition(region),largest=composition[0],row=make('tr');row.dataset.africaEthnicityRegion=region.name;const name=make('th',ethnicityRegionNames[region.name]);name.setAttribute('scope','row');const cell=make('td',largest.label),bar=svgEl('svg',{viewBox:'0 0 100 8',width:96,height:8,role:'img','data-africa-ethnicity-composition':region.name});bar.setAttribute('aria-label',composition.map(g=>`${g.label} ${g.share.toFixed(1)}%`).join('、'));let x=0;for(const group of evidence.groups){const share=region.counts[group.id as keyof typeof region.counts]/region.total*100;const segment=svgEl('rect',{x,y:0,width:share,height:8,fill:group.color,'data-africa-ethnicity-composition-group':group.id});segment.append(svgEl('title',{},`${group.label}：${share.toFixed(1)}%（${region.counts[group.id as keyof typeof region.counts].toLocaleString('ja-JP')}人）`));bar.append(segment);x+=share;}cell.append(bar);row.append(name,cell,make('td',`${largest.share.toFixed(1)}%`));regionalBody.append(row);}regional.append(regionalHead,regionalBody);section.append(regional,make('p','各州の小さな横帯は9分類すべての州内構成比です。「最多」は過半数とは限りません。同じ州にも複数の集団が暮らし、州の枠を民族の居住境界とみなすことはできません。州別地図には対応する16州の原形状が必要で、現段階は統計の比較です。'));
    const full=make('details');full.append(make('summary','各州の9分類すべてを見る'));
    for(const region of evidence.regions){const table=make('table');table.append(make('caption',`${ethnicityRegionNames[region.name]}（${region.name}）：原表対象${region.total.toLocaleString('ja-JP')}人`));const body=make('tbody');for(const group of ethnicityRegionComposition(region)){const row=make('tr');row.dataset.africaEthnicityRegionalGroup=`${region.name}:${group.id}`;const name=make('th',group.label);name.setAttribute('scope','row');row.append(name,make('td',`${group.share.toFixed(1)}%`),make('td',group.count.toLocaleString('ja-JP')));body.append(row);}table.append(body);full.append(table);}section.append(full);
    query<HTMLElement>('[data-theme-takeaway-detail]').before(section);return;
@@ -257,6 +259,7 @@ export function initializeAfricaAtlas() {
    text('[data-theme-takeaway-detail]','赤道付近では湿った空気の上昇が雨をもたらし、亜熱帯の下降気流と西岸の寒流は乾燥に関わります。高地の風上側では雨が増え、風下側では減ります。南北で雨季の季節も異なります。1991–2020年の月別平年値12か月の合計です。');
   }
   if(actual.key==='terrain'||actual.key==='elevation'){
+   text('[data-theme-caveat]',actual.scope+' アラビア半島の淡色は位置を読むための参照地物で、アフリカの標高・地形資料を域外へ延長したものではありません。');
    const details=query<HTMLElement>('[data-theme-details]');details.append(make('p',africaNaturalRangeNote));for(const item of Object.values(africaNaturalSources)){if(actual.key==='elevation'&&item!==africaNaturalSources.terrain)continue;const p=make('p'),a=make('a',item.label) as HTMLAnchorElement;a.href=item.url;p.append(a);details.append(p);}
   }
   if(actual.key==='water-basin'){
@@ -264,7 +267,7 @@ export function initializeAfricaAtlas() {
   }
   if(actual.key==='religion'||actual.key==='language'){
    const religion=actual.key==='religion',overview=religion?africaReligionOverview:africaLanguageOverview;
-   text('[data-theme-title]',overview.title);text('[data-theme-takeaway]',overview.reading);text('[data-theme-takeaway-detail]',religion?africaReligionOverview.history:africaLanguageOverview.scope);query<HTMLElement>('[data-theme-takeaway-detail]').hidden=false;
+   text('[data-theme-title]',overview.title);text('[data-theme-takeaway]',overview.reading);text('[data-theme-takeaway-detail]',religion?africaReligionOverview.history:africaLanguageOverview.explanation+' '+africaLanguageOverview.scope);query<HTMLElement>('[data-theme-takeaway-detail]').hidden=false;
    query<HTMLElement>('[data-theme-comparison]').hidden=true;query<HTMLElement>('[data-theme-return]').hidden=true;
    text('[data-africa-layer-scope]',religion?africaReligionOverview.legend:africaLanguageOverview.scope);
    text('[data-africa-point-reading]',religion?'斜線：主要2集団が混在、または最大集団が50%未満。':'言語の記録位置です。民族・話者数の地図ではありません。');
