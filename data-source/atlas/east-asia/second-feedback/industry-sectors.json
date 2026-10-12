@@ -1,0 +1,994 @@
+{
+  "checkedAt": "2026-10-12",
+  "baseline": "a07ab7277b2c7eb89e51ef1be0d72dccfbec497d",
+  "canadaReference": {
+    "pr": 332,
+    "head": "7767a889f503f34079107039bdd97bbe2a9478fc",
+    "scope": "Read the accepted three-sector pattern; do not merge that draft."
+  },
+  "sourceKind": "Operator/public agency geographic descriptions and pinned original facility/port records. No new thematic extent, volume or route inferred.",
+  "powerOriginal": {
+    "file": "public/assets/atlas/asia-industry-v1/east-asia.json",
+    "sha256": "17a369b83075bdcf3607ba169b558f6b4011199cf6b7871472a7fd5508df6658",
+    "edition": "WRI v1.3.0, 2021"
+  },
+  "portOriginal": {
+    "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_ports.geojson",
+    "sha256": "c5a5028f5187a5e1b9fe7f0fab99804a8be7482099a2365d404fb7e9dd6b5457"
+  },
+  "sectors": [
+    {
+      "id": "resources",
+      "label": "資源・エネルギー",
+      "kinds": [
+        "coal",
+        "gas",
+        "copper",
+        "refining",
+        "power"
+      ]
+    },
+    {
+      "id": "manufacturing",
+      "label": "製造業",
+      "kinds": [
+        "auto",
+        "chips",
+        "steel",
+        "batteries",
+        "ships",
+        "chemicals",
+        "copper",
+        "refining",
+        "food",
+        "paper"
+      ]
+    },
+    {
+      "id": "services",
+      "label": "サービス業",
+      "kinds": [
+        "finance",
+        "digital",
+        "logistics",
+        "research"
+      ]
+    }
+  ],
+  "sites": [
+    {
+      "id": "toyota",
+      "name": "豊田・中京",
+      "country": "JPN",
+      "point": [
+        137.15,
+        35.08
+      ],
+      "industries": [
+        "auto"
+      ],
+      "source": "https://global.toyota/en/company/profile/facilities/manufacturing-worldwide/japan.html",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "kitakyushu",
+      "name": "北九州",
+      "country": "JPN",
+      "point": [
+        130.85,
+        33.88
+      ],
+      "industries": [
+        "steel"
+      ],
+      "source": "https://www.nipponsteel.com/works/kyushu/",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "kumamoto",
+      "name": "熊本",
+      "country": "JPN",
+      "point": [
+        130.83,
+        32.87
+      ],
+      "industries": [
+        "chips"
+      ],
+      "source": "https://www.tsmc.com/english/aboutTSMC/TSMC_Fabs",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "osaka",
+      "name": "大阪・関西",
+      "country": "JPN",
+      "point": [
+        135.5,
+        34.69
+      ],
+      "industries": [
+        "batteries"
+      ],
+      "source": "https://www.panasonic.com/global/energy/company/global-network.html",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "imabari",
+      "name": "今治・瀬戸内",
+      "country": "JPN",
+      "point": [
+        133,
+        34.07
+      ],
+      "industries": [
+        "ships"
+      ],
+      "source": "https://www.imazo.co.jp/",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "nagasaki",
+      "name": "長崎",
+      "country": "JPN",
+      "point": [
+        129.87,
+        32.75
+      ],
+      "industries": [
+        "ships"
+      ],
+      "source": "https://www.mhi.com/company/location/nagasakiw",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "yokkaichi",
+      "name": "四日市",
+      "country": "JPN",
+      "point": [
+        136.62,
+        34.97
+      ],
+      "industries": [
+        "chemicals"
+      ],
+      "source": "https://www.chemiway.co.jp/en/company/yokkaichi.html",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "shanghai",
+      "name": "上海",
+      "country": "CHN",
+      "point": [
+        121.47,
+        31.23
+      ],
+      "industries": [
+        "auto",
+        "chips",
+        "chemicals"
+      ],
+      "sources": [
+        "https://www.lingang.gov.cn/html/website/lg/English/Investment/Companies/c1795283222837358594.html",
+        "https://www.tsmc.com/english/aboutTSMC/TSMC_Fabs"
+      ],
+      "source": "https://www.basf.com/cn/en/who-we-are/organization/key-production-sites",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "guangzhou",
+      "name": "広州",
+      "country": "CHN",
+      "point": [
+        113.27,
+        23.13
+      ],
+      "industries": [
+        "auto"
+      ],
+      "source": "https://global.toyota/en/company/profile/facilities/manufacturing-worldwide/asia.html",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "wuhan",
+      "name": "武漢",
+      "country": "CHN",
+      "point": [
+        114.3,
+        30.59
+      ],
+      "industries": [
+        "auto"
+      ],
+      "source": "https://global.honda/en/newsroom/news/2024/c241011eng.html",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "tangshan",
+      "name": "唐山・河北",
+      "country": "CHN",
+      "point": [
+        118.18,
+        39.63
+      ],
+      "industries": [
+        "steel"
+      ],
+      "source": "https://globalenergymonitor.org/projects/global-iron-steel-tracker/",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "ningde",
+      "name": "寧徳",
+      "country": "CHN",
+      "point": [
+        119.55,
+        26.67
+      ],
+      "industries": [
+        "batteries"
+      ],
+      "source": "https://www.catl.com/en/about/profile/",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "changzhou",
+      "name": "溧陽・常州",
+      "country": "CHN",
+      "point": [
+        119.48,
+        31.42
+      ],
+      "industries": [
+        "batteries"
+      ],
+      "source": "https://www.catl.com/en/about/profile/",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "zhoushan",
+      "name": "舟山",
+      "country": "CHN",
+      "point": [
+        122.21,
+        29.99
+      ],
+      "industries": [
+        "ships"
+      ],
+      "source": "https://www.lr.org/en/shipyards/china/cosco-zhoushan-shipyard-co-ltd/",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "nanjing",
+      "name": "南京",
+      "country": "CHN",
+      "point": [
+        118.8,
+        32.06
+      ],
+      "industries": [
+        "chemicals"
+      ],
+      "source": "https://www.basf.com/cn/en/who-we-are/organization/key-production-sites/jiangsu",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "pyeongtaek",
+      "name": "平沢",
+      "country": "KOR",
+      "point": [
+        127.05,
+        37.04
+      ],
+      "industries": [
+        "chips"
+      ],
+      "source": "https://semiconductor.samsung.com/foundry/manufacturing/manufacturing-sites/",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "cheongju",
+      "name": "清州",
+      "country": "KOR",
+      "point": [
+        127.49,
+        36.64
+      ],
+      "industries": [
+        "chips",
+        "batteries"
+      ],
+      "sources": [
+        "https://news.lgensol.com/company-news/supplementary-stories/1741/"
+      ],
+      "source": "https://news.skhynix.com/en/sk-hynix-to-produce-dram-from-m15x-in-cheongju/",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "ulsan",
+      "name": "蔚山",
+      "country": "KOR",
+      "point": [
+        129.31,
+        35.54
+      ],
+      "industries": [
+        "auto",
+        "ships",
+        "chemicals"
+      ],
+      "sources": [
+        "https://hd-hhi.com/en/business/shipbuilding",
+        "https://english.motir.go.kr/eng/article/EATCLffca659a6/2678/view"
+      ],
+      "source": "https://www.hyundai.com/worldwide/en/onepage/country",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "pohang",
+      "name": "浦項",
+      "country": "KOR",
+      "point": [
+        129.34,
+        36.02
+      ],
+      "industries": [
+        "steel"
+      ],
+      "source": "https://www.posco.co.kr/homepage/docs/eng7/jsp/common/posco/s91a1000012c.jsp",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "geoje",
+      "name": "巨済",
+      "country": "KOR",
+      "point": [
+        128.62,
+        34.88
+      ],
+      "industries": [
+        "ships"
+      ],
+      "source": "https://www.hanwhaocean.com/en/whoweare/ig/ship/",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "hsinchu",
+      "name": "新竹",
+      "country": "TWN",
+      "point": [
+        121.01,
+        24.78
+      ],
+      "industries": [
+        "chips"
+      ],
+      "source": "https://www.tsmc.com/english/aboutTSMC/TSMC_Fabs",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "tainan",
+      "name": "台南",
+      "country": "TWN",
+      "point": [
+        120.27,
+        23.1
+      ],
+      "industries": [
+        "chips"
+      ],
+      "source": "https://www.tsmc.com/english/aboutTSMC/TSMC_Fabs",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "kaohsiung",
+      "name": "高雄",
+      "country": "TWN",
+      "point": [
+        120.3,
+        22.63
+      ],
+      "industries": [
+        "steel"
+      ],
+      "source": "https://www.csc.com.tw/csc_e/wb/contact.html",
+      "stage": "製品・素材の製造",
+      "scope": "既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。"
+    },
+    {
+      "id": "ukhaa-khudag",
+      "name": "ウハー・ホダグ",
+      "country": "MNG",
+      "point": [
+        105.5,
+        43.8
+      ],
+      "industries": [
+        "coal"
+      ],
+      "stage": "採炭・選炭",
+      "source": "https://www.mmc.mn/operations/ukhaa-khudag-mine/en",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "oyu-tolgoi",
+      "name": "オユ・トルゴイ",
+      "country": "MNG",
+      "point": [
+        106.9,
+        43
+      ],
+      "industries": [
+        "copper"
+      ],
+      "stage": "採掘・選鉱",
+      "source": "https://www.riotinto.com/en/operations/asia/oyu-tolgoi",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "toyo-copper",
+      "name": "東予",
+      "country": "JPN",
+      "point": [
+        133.3,
+        34
+      ],
+      "industries": [
+        "copper"
+      ],
+      "stage": "銅製錬・電解精製",
+      "source": "https://www.smm.co.jp/en/corp_info/location/domestic/toyo/",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "minami-nagaoka",
+      "name": "南長岡",
+      "country": "JPN",
+      "point": [
+        138.8,
+        37.4
+      ],
+      "industries": [
+        "gas"
+      ],
+      "stage": "天然ガス採取・処理",
+      "source": "https://www.inpex.com/english/business/project/minami-nagaoka.html",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "naoetsu-lng",
+      "name": "直江津",
+      "country": "JPN",
+      "point": [
+        138.25,
+        37.18
+      ],
+      "industries": [
+        "gas"
+      ],
+      "stage": "輸入LNG受入・気化",
+      "source": "https://www.inpex.com/english/business/project/naoetsu.html",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "yufutsu-gas",
+      "name": "勇払",
+      "country": "JPN",
+      "point": [
+        141.7,
+        42.6
+      ],
+      "industries": [
+        "gas"
+      ],
+      "stage": "油ガス採取・LNG供給",
+      "source": "https://www.japex.co.jp/en/business/",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "negishi",
+      "name": "根岸",
+      "country": "JPN",
+      "point": [
+        139.62,
+        35.4
+      ],
+      "industries": [
+        "refining"
+      ],
+      "stage": "原油から燃料・原料へ加工",
+      "source": "https://www.eneos.co.jp/company/branch/",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "mizushima",
+      "name": "水島",
+      "country": "JPN",
+      "point": [
+        133.75,
+        34.51
+      ],
+      "industries": [
+        "refining"
+      ],
+      "stage": "原油から燃料・原料へ加工",
+      "source": "https://www.eneos.co.jp/company/branch/",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "sendai-refinery",
+      "name": "仙台港",
+      "country": "JPN",
+      "point": [
+        141.01,
+        38.27
+      ],
+      "industries": [
+        "refining"
+      ],
+      "stage": "原油から燃料・原料へ加工",
+      "source": "https://www.eneos.co.jp/company/branch/",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "power-WRI1000452",
+      "name": "三峡ダム",
+      "country": "CHN",
+      "point": [
+        111.0032,
+        30.8235
+      ],
+      "industries": [
+        "power"
+      ],
+      "stage": "水力",
+      "source": "https://datasets.wri.org/dataset/globalpowerplantdatabase",
+      "scope": "WRI v1.3.0（2021年）の原座標。現在の稼働状態・発電量・供給先ではありません。"
+    },
+    {
+      "id": "power-WRI1000710",
+      "name": "奥多々良木",
+      "country": "JPN",
+      "point": [
+        134.8617,
+        35.2406
+      ],
+      "industries": [
+        "power"
+      ],
+      "stage": "水力",
+      "source": "https://datasets.wri.org/dataset/globalpowerplantdatabase",
+      "scope": "WRI v1.3.0（2021年）の原座標。現在の稼働状態・発電量・供給先ではありません。"
+    },
+    {
+      "id": "power-WRI1000217",
+      "name": "ハンビッ",
+      "country": "KOR",
+      "point": [
+        126.4175,
+        35.4105
+      ],
+      "industries": [
+        "power"
+      ],
+      "stage": "原子力",
+      "source": "https://datasets.wri.org/dataset/globalpowerplantdatabase",
+      "scope": "WRI v1.3.0（2021年）の原座標。現在の稼働状態・発電量・供給先ではありません。"
+    },
+    {
+      "id": "power-WRI1000364",
+      "name": "台中",
+      "country": "TWN",
+      "point": [
+        120.485,
+        24.2131
+      ],
+      "industries": [
+        "power"
+      ],
+      "stage": "石炭火力",
+      "source": "https://datasets.wri.org/dataset/globalpowerplantdatabase",
+      "scope": "WRI v1.3.0（2021年）の原座標。現在の稼働状態・発電量・供給先ではありません。"
+    },
+    {
+      "id": "power-WRI1019840",
+      "name": "水豊",
+      "country": "PRK",
+      "point": [
+        124.9627,
+        40.4615
+      ],
+      "industries": [
+        "power"
+      ],
+      "stage": "水力",
+      "source": "https://datasets.wri.org/dataset/globalpowerplantdatabase",
+      "scope": "WRI v1.3.0（2021年）の原座標。現在の稼働状態・発電量・供給先ではありません。"
+    },
+    {
+      "id": "power-WRI1000181",
+      "name": "ウランバートル第4",
+      "country": "MNG",
+      "point": [
+        106.8036,
+        47.8938
+      ],
+      "industries": [
+        "power"
+      ],
+      "stage": "石炭火力",
+      "source": "https://datasets.wri.org/dataset/globalpowerplantdatabase",
+      "scope": "WRI v1.3.0（2021年）の原座標。現在の稼働状態・発電量・供給先ではありません。"
+    },
+    {
+      "id": "eniwa-food",
+      "name": "恵庭",
+      "country": "JPN",
+      "point": [
+        141.6,
+        42.9
+      ],
+      "industries": [
+        "food"
+      ],
+      "stage": "飲料製造",
+      "source": "https://www.sapporobeer.jp/english/brewery/hokkaido/",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "paper-asahikawa",
+      "name": "旭川工場",
+      "country": "JPN",
+      "point": [
+        142.393581,
+        43.777044
+      ],
+      "industries": [
+        "paper"
+      ],
+      "stage": "製紙",
+      "source": "https://www.nipponpapergroup.com/about/sales/asahikawa/",
+      "scope": "公式所在地図の中心による案内点。工場敷地の外形ではありません。"
+    },
+    {
+      "id": "paper-ishinomaki",
+      "name": "石巻工場",
+      "country": "JPN",
+      "point": [
+        141.293617,
+        38.422427
+      ],
+      "industries": [
+        "paper"
+      ],
+      "stage": "製紙",
+      "source": "https://www.nipponpapergroup.com/about/sales/ishinomaki/",
+      "scope": "公式所在地図の中心による案内点。工場敷地の外形ではありません。"
+    },
+    {
+      "id": "paper-yatsushiro",
+      "name": "八代工場",
+      "country": "JPN",
+      "point": [
+        130.621911,
+        32.504777
+      ],
+      "industries": [
+        "paper"
+      ],
+      "stage": "製紙",
+      "source": "https://www.nipponpapergroup.com/about/sales/yatsushiro/",
+      "scope": "公式所在地図の中心による案内点。工場敷地の外形ではありません。"
+    },
+    {
+      "id": "paper-changshu",
+      "name": "常熟・製紙",
+      "country": "CHN",
+      "point": [
+        120.8,
+        31.7
+      ],
+      "industries": [
+        "paper"
+      ],
+      "stage": "製紙",
+      "source": "https://www.upmspecialtymaterials.com/about-upm-specialty-materials/",
+      "scope": "UPMの製紙工場は長江沿いの常熟港近くと公式に案内されています。小数1桁の地域参照点で、厳密な工場座標・敷地外形ではありません。"
+    },
+    {
+      "id": "tokyo-finance",
+      "name": "東京",
+      "country": "JPN",
+      "point": [
+        139.77,
+        35.68
+      ],
+      "industries": [
+        "finance"
+      ],
+      "stage": "証券取引所",
+      "source": "https://www.jpx.co.jp/english/corporate/about-jpx/access/index.html",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "shanghai-finance",
+      "name": "上海",
+      "country": "CHN",
+      "point": [
+        121.47,
+        31.23
+      ],
+      "industries": [
+        "finance"
+      ],
+      "stage": "証券取引所",
+      "source": "https://english.sse.com.cn/",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "hongkong-finance",
+      "name": "香港",
+      "country": "CHN",
+      "point": [
+        114.17,
+        22.28
+      ],
+      "industries": [
+        "finance"
+      ],
+      "stage": "証券取引所",
+      "source": "https://www.hkex.com.hk/?sc_lang=en",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "taipei-finance",
+      "name": "台北",
+      "country": "TWN",
+      "point": [
+        121.56,
+        25.03
+      ],
+      "industries": [
+        "finance"
+      ],
+      "stage": "証券取引所",
+      "source": "https://www.twse.com.tw/en/",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "hangzhou-digital",
+      "name": "杭州",
+      "country": "CHN",
+      "point": [
+        120,
+        30.3
+      ],
+      "industries": [
+        "digital"
+      ],
+      "stage": "クラウド・商取引サービスのオフィス",
+      "source": "https://www.alibabagroup.com/en-US/global-location",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "tokyo-digital",
+      "name": "東京・渋谷",
+      "country": "JPN",
+      "point": [
+        139.7,
+        35.66
+      ],
+      "industries": [
+        "digital"
+      ],
+      "stage": "オンラインサービス開発・運用",
+      "source": "https://dena.com/intl/company/overview.html",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "seongnam-digital",
+      "name": "城南",
+      "country": "KOR",
+      "point": [
+        127.1,
+        37.36
+      ],
+      "industries": [
+        "digital"
+      ],
+      "stage": "情報サービス・開発拠点",
+      "source": "https://www.navercorp.com/en/company/contact",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "taipei-digital",
+      "name": "台北",
+      "country": "TWN",
+      "point": [
+        121.56,
+        25.05
+      ],
+      "industries": [
+        "digital"
+      ],
+      "stage": "情報サービスのオフィス",
+      "source": "https://www.alibabagroup.com/en-US/global-location",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "shanghai-port",
+      "name": "上海港",
+      "country": "CHN",
+      "point": [
+        121.48722,
+        31.221944
+      ],
+      "industries": [
+        "logistics"
+      ],
+      "stage": "港湾物流",
+      "source": "https://www.naturalearthdata.com/downloads/10m-cultural-vectors/ports/",
+      "scope": "Natural Earth v5.1.2港湾原図ne_id 1730089389の位置。取扱量・現在の全埠頭ではありません。"
+    },
+    {
+      "id": "busan-port",
+      "name": "釜山港",
+      "country": "KOR",
+      "point": [
+        129.04,
+        35.1
+      ],
+      "industries": [
+        "logistics"
+      ],
+      "stage": "港湾・積替え物流",
+      "source": "https://www.busanpa.com/eng/index.bpa?menuCd=DOM_000000202001000000",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "kaohsiung-port",
+      "name": "高雄港",
+      "country": "TWN",
+      "point": [
+        120.307067,
+        22.565278
+      ],
+      "industries": [
+        "logistics"
+      ],
+      "stage": "港湾物流",
+      "source": "https://www.twport.com.tw/en/business/PortInfo?a=512",
+      "scope": "港の機能は台湾港務公司。位置はNatural Earth v5.1.2 ne_id 1730089303の港湾原座標。"
+    },
+    {
+      "id": "shimizu-port",
+      "name": "清水港",
+      "country": "JPN",
+      "point": [
+        138.509894,
+        35.014444
+      ],
+      "industries": [
+        "logistics"
+      ],
+      "stage": "港湾・原料荷役",
+      "source": "https://www.portofshimizu.com/overview/%E5%9F%A0%E9%A0%AD/%E5%AF%8C%E5%A3%AB%E8%A6%8B%E5%9F%A0%E9%A0%AD/",
+      "scope": "港の機能は静岡県港湾管理局。位置はNatural Earth v5.1.2 ne_id 1730087585の港湾原座標。"
+    },
+    {
+      "id": "tsinghua-research",
+      "name": "北京・清華大学",
+      "country": "CHN",
+      "point": [
+        116.33,
+        40
+      ],
+      "industries": [
+        "research"
+      ],
+      "stage": "大学・研究",
+      "source": "https://www.tsinghua.edu.cn/en/Contact.htm",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "hongo-research",
+      "name": "東京・本郷",
+      "country": "JPN",
+      "point": [
+        139.76,
+        35.71
+      ],
+      "industries": [
+        "research"
+      ],
+      "stage": "大学・研究",
+      "source": "https://www.u-tokyo.ac.jp/en/about/access.html",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "seoul-research",
+      "name": "ソウル・冠岳",
+      "country": "KOR",
+      "point": [
+        126.95,
+        37.46
+      ],
+      "industries": [
+        "research"
+      ],
+      "stage": "大学・研究",
+      "source": "https://en.snu.ac.kr/",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    },
+    {
+      "id": "taipei-research",
+      "name": "台北・台湾大学",
+      "country": "TWN",
+      "point": [
+        121.54,
+        25.02
+      ],
+      "industries": [
+        "research"
+      ],
+      "stage": "大学・研究",
+      "source": "https://www.ntu.edu.tw/english/about/map.html",
+      "scope": "公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。"
+    }
+  ],
+  "unmet": [
+    "China coal mines, oilfields and rare-earth supply-chain coverage",
+    "Same-definition volume/employment for every displayed kind",
+    "Food processing in China/Korea/Taiwan; machinery/textiles/pharmaceutical examples",
+    "Service examples in Mongolia/North Korea; tourism/health/retail comparable location data",
+    "Current operation status for every WRI 2021 power facility"
+  ],
+  "retrievalFailures": [
+    {
+      "action": "web.open",
+      "target": "https://www.cnpc.com.cn/en/",
+      "error": "412 Precondition Failed",
+      "adopted": false
+    },
+    {
+      "action": "web.open",
+      "target": "https://unctad.org/system/files/official-document/rmt2025ch3_en.pdf",
+      "error": "403 Forbidden",
+      "adopted": false
+    },
+    {
+      "action": "web.open",
+      "target": "https://www.portshanghai.com.cn/",
+      "error": "521 Unknown Status Code",
+      "adopted": false
+    },
+    {
+      "action": "gh run view 38307511587 --log-failed",
+      "target": "results-receiver.actions.githubusercontent.com signed log archive",
+      "error": "Forbidden",
+      "retry": "same command once, Forbidden; stopped"
+    }
+  ]
+}

@@ -2,9 +2,9 @@ import {industrySectors,industrySubsectors,type IndustrySector} from '../data/at
 export type AsiaRegionId = 'east-asia' | 'southeast-asia' | 'south-central-asia';
 export type AsiaField = 'natural' | 'agriculture' | 'industry' | 'population';
 export type AsiaCamera = { lng: number; lat: number; zoom: number };
-export type AsiaState = { field: AsiaField; place: string | null; city: string | null; camera: AsiaCamera | null; back: string | null; point?: [number, number] | null; topic?: string | null; detail?: string | null; compare?: string | null; story?:string|null; sector?:string|null; subsector?:string|null; overlay?:'water'|null; farms?:'crop'|'livestock'|'none'|null; single?:boolean };
+export type AsiaState = { field: AsiaField; place: string | null; city: string | null; camera: AsiaCamera | null; back: string | null; point?: [number, number] | null; topic?: string | null; detail?: string | null; compare?: string | null; story?:string|null; sector?:string|null; subsector?:string|null; overlay?:'water'|null; farms?:'crop'|'livestock'|'none'|null; single?:boolean; only?:boolean };
 export type AsiaStateContext = { countries: readonly string[]; cities: readonly { id: string; countryCode: string }[]; bounds: readonly number[]; fields: readonly AsiaField[]; cityWithoutPlace?:boolean; independentCities?:boolean; topics?: Partial<Record<AsiaField, readonly string[]>>; details?: Partial<Record<AsiaField, readonly string[] | ((id:string)=>boolean)>>; stories?:Partial<Record<AsiaField,readonly string[]>> };
-const ownedKeys = ['field', 'place', 'city', 'lng', 'lat', 'z', 'back', 'region', 'at', 'topic', 'detail', 'compare','story','sector','subsector','overlay','farms','farmview'];
+const ownedKeys = ['field', 'place', 'city', 'lng', 'lat', 'z', 'back', 'region', 'at', 'topic', 'detail', 'compare','story','sector','subsector','overlay','farms','farmview','industryview'];
 export const asiaFieldPaths: Record<AsiaField, string> = { natural: 'nature', agriculture: 'agriculture', industry: 'industry', population: 'population' };
 const routeField = (url: URL): AsiaField | undefined => Object.entries(asiaFieldPaths).find(([, path]) => url.pathname.replace(/\/$/, '').endsWith(`/${path}`))?.[0] as AsiaField | undefined;
 
@@ -41,6 +41,7 @@ export function readAsiaAtlasState(url: URL, context: AsiaStateContext): AsiaSta
     ...(field==='agriculture'&&(!topic||topic==='overview')&&q.get('overlay')==='water'?{overlay:'water' as const}:{}),
     ...(field==='agriculture'&&['crop','livestock','none'].includes(q.get('farms')??'')?{farms:q.get('farms') as 'crop'|'livestock'|'none'}:{}),
     ...(field==='agriculture'&&q.get('farmview')==='single'&&topic&&topic!=='overview'&&context.topics?.agriculture?.includes(topic)?{single:true}:{}),
+    ...(field==='industry'&&q.get('industryview')==='single'&&topic?.startsWith('east-')&&context.topics?.industry?.includes(topic)?{only:true}:{}),
     ...(validDetail ? {detail:detail!} : {}),
     ...(story&&context.stories?.[field]?.includes(story)?{story}:{}),
     ...(compare && compare !== place && context.countries.includes(compare) ? {compare} : {}) };
@@ -57,6 +58,7 @@ export function writeAsiaAtlasState(url: URL, state: AsiaState): URL {
   if(state.field==='agriculture'&&state.farms)next.searchParams.set('farms',state.farms);
   if(state.field==='agriculture'&&state.single&&state.topic&&state.topic!=='overview')next.searchParams.set('farmview','single');
   if(state.field==='agriculture'&&(!state.topic||state.topic==='overview')&&state.overlay==='water')next.searchParams.set('overlay','water');
+  if(state.field==='industry'&&state.only&&state.topic?.startsWith('east-'))next.searchParams.set('industryview','single');
   if (state.detail) next.searchParams.set('detail', state.detail);
   if (state.story) next.searchParams.set('story', state.story);
   if (state.compare) next.searchParams.set('compare', state.compare);

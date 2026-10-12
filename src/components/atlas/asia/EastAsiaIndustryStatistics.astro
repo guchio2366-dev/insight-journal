@@ -1,0 +1,13 @@
+---
+import {readFileSync} from 'node:fs';
+import {gunzipSync} from 'node:zlib';
+const data=JSON.parse(gunzipSync(readFileSync(new URL('../../../../public/assets/atlas/asia-industry-v1/national.json.gz',import.meta.url))).toString());
+const countries=[['CHN','中国'],['JPN','日本'],['KOR','韓国'],['TWN','台湾'],['MNG','モンゴル'],['PRK','北朝鮮']];
+const indicators=data.indicators.filter((i:any)=>['manufacturing','services'].includes(i.id));
+---
+<section class="east-industry-statistics" data-east-industry-statistics hidden>
+ <h2>国・地域全体の補助統計</h2><p>2024年の付加価値／GDP（％）。産業別の案内点の数量ではなく、国全体の経済構成です。製造業とサービス業だけでGDP全体を分割した表でもありません。資源・エネルギーの5分類に一致する地域合計は未収録です。</p>
+ <div class="east-industry-statistics-grid">{indicators.map((item:any)=><section><h3>{item.label}</h3><table><thead><tr><th>国・地域</th><th>GDP比（％）</th></tr></thead><tbody>{countries.map(([code,name])=>{const value=item.observations.find((o:any)=>o.countryCode===code&&o.year===2024)?.value;return <tr><th>{name}</th><td>{typeof value==='number'?value.toLocaleString('ja-JP',{maximumFractionDigits:1}):'未収録'}</td></tr>})}</tbody></table><p><a href={item.metadataUrl}>World Bank WDI・指標の定義</a></p></section>)}</div>
+ <p>同じ2024年だけを掲載し、欠測に別年・他国の値を入れません。台湾は採用WDIに系列がなく、0ではありません。2026-09-25取得の固定資料で、世界銀行の出典・元系列のSHAを元のデータに保持しています。</p>
+ <details><summary>国内の立地統計を別資料で読む</summary><p>日本の都道府県別出荷額と中国の省別鉄鋼設備能力は対象、年、単位が異なります。今回の三分野を行政区へ塗った分布として扱いません。</p><div class="asia-industry-reading-links"><button type="button" data-industry-reading-topic="jp-31">日本・輸送用機械の県別出荷額</button><button type="button" data-industry-reading-topic="jp-28">日本・電子部品の県別出荷額</button><button type="button" data-industry-reading-topic="cn-steel">中国・省別鉄鋼設備能力</button><button type="button" data-industry-reading-topic="steel-capacity">地域・鉄鋼設備能力</button></div></details>
+</section>

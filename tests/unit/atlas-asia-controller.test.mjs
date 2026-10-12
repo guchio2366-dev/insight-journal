@@ -126,7 +126,7 @@ async function setup(query = '', options = {}) {
     physicalBase:'/assets/physical/',physical:{width:1,height:1,bounds3857:[west,south,east,north],grid:'elevation.gz',image:'terrain.png',contours:'contours.png',water:'water.json',imageCoordinates:[[72,56],[155,56],[155,17],[72,17]],waterFeatures:[{id:'rivers-1',name:'試験河川',kind:'rivers',countries:['CHN'],bounds:[90,30,120,40]}]},
     physicalFocus:[{id:'basin',region:'east-asia',country:'CHN',name:'盆地',coordinates:[100,35],reading:'周囲の山地と比較します。'}],
   });
-  if(options.climateReference){const conf=JSON.parse(q('[data-asia-config]').textContent);conf.physicalFocus.push({id:'tibetan-plateau',region:'east-asia',country:'CHN',name:'チベット高原',coordinates:[100,35],reading:'参照位置'});q('[data-asia-config]').textContent=JSON.stringify(conf);}
+  if(options.climateReference){const conf=JSON.parse(q('[data-asia-config]').textContent);conf.physicalFocus.push({id:'tibetan-plateau',region:'east-asia',country:'CHN',name:'チベット高原',coordinates:[130,45],reading:'参照位置'});q('[data-asia-config]').textContent=JSON.stringify(conf);}
   if(options.population){
     const conf=JSON.parse(q('[data-asia-config]').textContent);
     const raster={width:1,height:1,bounds4326:[72,17,155,56],bounds3857:[west,south,east,north],imageCoordinates:[[72,56],[155,56],[155,17],[72,17]],image:'density.png',grid:'density.gz',sourceCellKm:5};
@@ -191,6 +191,7 @@ async function setup(query = '', options = {}) {
     root.insertAdjacentHTML('beforeend','<div data-farm-switches><button data-farm-toggle="crop" aria-pressed="true"><span></span></button><button data-farm-toggle="livestock" aria-pressed="true"><span></span></button></div><button data-farm-water></button><div data-map-annotations></div><section data-farm-overview-reading></section><section data-farm-overview-legend></section><input type="checkbox" data-farm-kind="crop" checked><input type="checkbox" data-farm-kind="livestock" checked><button data-farm-choice="overview"></button><button data-farm-choice="wheat"></button>');
     q('[data-farming-topic]').insertAdjacentHTML('afterbegin','<option value="overview"></option>');
   }
+  if(options.climateReference)Object.defineProperties(q('[data-map-annotations]'),{clientWidth:{value:600},clientHeight:{value:400}});
   if(options.eastRiverName){
    const conf=JSON.parse(q('[data-asia-config]').textContent);conf.physical.waterFeatures=[{id:'rivers-213',name:'Yellow',label:'黄河',kind:'rivers',countries:['CHN'],bounds:[95,32,119,41]}];conf.farmInsight={rivers:['rivers-213']};q('[data-asia-config]').textContent=JSON.stringify(conf);
    Object.defineProperties(q('[data-map-annotations]'),{clientWidth:{value:600},clientHeight:{value:400}});
@@ -1298,15 +1299,14 @@ test('自動全景は実extentと小余白を使い、resizeのmoveend後も全�
  try{assert.equal(saved.window.__map.getCenter().lng,120);assert.equal(saved.window.__map.getZoom(),6);}finally{await saved.window.happyDOM.close();}
 });
 
-test('宗教・民族の表示範囲から産業へ戻るリンクとクリックは東アジア全景を復帰する',async()=>{
+test('宗教・民族から産業へのタブ往復は利用者のカメラを保持する',async()=>{
  const extent=[73.602256,15.776109,145.824962,53.567791];
  for(const topic of ['religion','ethnicity']){
   const app=await setup(`?field=population&topic=${topic}&lng=112.5&lat=37.05777&z=2.848`,{population:true,presentation:true,settlements:true,industry:true,contentExtent:extent});
   try{
-   const link=app.q('.atlas-tabs [data-field=industry]');assert.equal(new URL(link.href).searchParams.has('lng'),false,'opening the industry link must not inherit the settlement crop');
+   const link=app.q('.atlas-tabs [data-field=industry]');assert.equal(new URL(link.href).searchParams.get('lng'),'112.50000');const before={...app.window.__map.getCenter(),zoom:app.window.__map.getZoom()};
    link.click();await delay();
-   assert.deepEqual(JSON.parse(JSON.stringify(app.window.__map.lastFit.bounds)),[[extent[0],extent[1]],[extent[2],extent[3]]]);
-   assert.equal(app.window.__map.lastFit.options.padding,5);
+   assert.deepEqual({...app.window.__map.getCenter(),zoom:app.window.__map.getZoom()},before);app.q('.atlas-tabs [data-field=population]').click();await delay();assert.deepEqual({...app.window.__map.getCenter(),zoom:app.window.__map.getZoom()},before);
   }finally{await app.window.happyDOM.close();}
  }
 });

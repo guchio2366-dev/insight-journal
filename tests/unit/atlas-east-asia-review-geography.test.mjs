@@ -28,7 +28,7 @@ test('every crop name locates the actual concentration core, including Japan and
  assert.deepEqual(labels.labels.filter(l=>l.anchorCountry).map(l=>l.anchorCountry).sort(),['JPN','KOR']);
 });
 test('forestry and current names preserve distinct source meanings and source coordinates',()=>{
- assert.equal(eastForestSites.length,4);assert.equal(eastForestSites.filter(s=>s.kind==='port').length,1);
+ assert.equal(eastForestSites.length,5);assert.equal(eastForestSites.filter(s=>s.kind==='port').length,1);
  assert.deepEqual(eastForestSites.find(s=>s.id==='ishinomaki').point,[141.293617,38.422427]);
  assert.deepEqual(eastForestSites.find(s=>s.id==='shimizu').point,[138.509894,35.014444]);
  for(const site of eastForestSites){assert(site.source.startsWith('https://'));assert.equal('volume' in site,false);}

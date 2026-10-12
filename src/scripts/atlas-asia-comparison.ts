@@ -16,7 +16,7 @@ import {contourBandFiles,contourBandLabels} from '../data/atlas/asia-contour-ban
 import {southCentralRainfallLegend,centralRainfallLegend,centralRainfallColor} from '../data/atlas/asia-south-central-rainfall-legend';
 import {southCentralReligionCensuses,southCentralReligionReports} from '../data/atlas/asia-south-central-religion';
 import {southCentralIndustryGroups,southCentralIndustrySites} from '../data/atlas/asia-south-central-industry';
-import {eastIndustries,eastClusters} from '../data/atlas/east-asia-industry-clusters';
+import {eastSectorIndustries,eastSectorSites,eastIndustrySector} from '../data/atlas/east-asia-industry-sectors';
 import {eastAsiaReligionCountries,eastAsiaReligionColors} from '../data/atlas/east-asia-religion';
 
 type Key={label:string;color:string;shortLabel?:string};
@@ -172,8 +172,8 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
     }
     if(s.field==='industry'&&config.industry){
       if(config.regionId==='east-asia'&&s.topic?.startsWith('east-')){
-        const industry=eastIndustries.find(i=>'east-'+i.id===s.topic);
-        return {...base,subject:eastClusters.find(c=>c.id===s.detail)?.name,period:'代表的な立地',unit:'産業の種類',keys:(industry?[industry]:eastIndustries).map(i=>({label:i.label,color:i.color})),compactNote:'● 一定サイズの代表点。複数産業の都市は等分の複数色。大きさは数量を表しません。未掲載の地域にも産業があります。',note:'色は産業の種類。記号は一定サイズで数量を表しません。複数産業の都市は等分の複数色を表示します。未掲載は産業がないという意味ではありません。'};
+        const industry=eastSectorIndustries.find(i=>'east-'+i.id===s.topic),sector=eastIndustrySector(s.topic,s.sector),items=s.only&&industry?[industry]:eastSectorIndustries.filter(i=>i.sectors.includes(sector));
+        return {...base,subject:eastSectorSites.find(c=>c.id===s.detail)?.name,period:'代表的な立地',unit:'産業の種類',keys:items.map(i=>({label:i.label,color:i.color})),compactNote:'● 一定サイズの代表点。複数産業の都市は等分の複数色。大きさは数量を表しません。未掲載の地域にも産業があります。',note:'色は産業の種類。記号は一定サイズで数量を表しません。複数産業の都市は等分の複数色を表示します。未掲載は産業がないという意味ではありません。'};
       }
       if(config.trade&&isTradeTopic(s.topic)){const data=await json(config.tradeBase!+config.trade.file) as TradeData,values=config.trade.countries.map(code=>({code,value:tradeValue(data.countries[code],tradeChapter(s),tradeFlow(s))})),scale=tradeScale(values.map(v=>v.value));return {...base,period:'2023年',unit:'百万米ドル',keys:[...bins(tradeColors,scale.breaks.map(v=>v/1e6)),missing],note:'国・区分全体の商品貿易額です。生産地や個別の港の取扱量ではありません。',geometry:await countryGeometry(Object.fromEntries(values.map(v=>[v.code,scale.color(v.value)])))};}
       const t=industryTopic(config.industry,s);

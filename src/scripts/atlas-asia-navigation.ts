@@ -1,3 +1,4 @@
+import {eastIndustrySector} from '../data/atlas/east-asia-industry-sectors';
 import {industryTopicGroup,industrySectors,industrySubsectors,naturalGroup,populationGroup} from '../data/atlas/asia-navigation.ts';
 import {industryCountryChoices,hasIndustryCountryScope,industryTopicsForPlace,type IndustryRegion} from '../data/atlas/asia-industry.ts';
 import type {AsiaState} from '../lib/atlas-asia-state';
@@ -33,7 +34,7 @@ export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|un
  for(const b of all('[data-industry-subsector]'))b.addEventListener('click',()=>selectIndustry(b.dataset.sector as IndustrySector,b.dataset.industrySubsector!));
  for(const b of all('[data-industry-feature]'))b.addEventListener('click',()=>{
   const t=industry?.topics.find(t=>t.id===b.dataset.industryFeature);if(!t)return;
-  const s=getState();if(east&&s.place&&t.country&&t.country!==s.place)return;
+  const s=getState();if(root.dataset.region==='east-asia'&&t.kind==='clusters'){const scope=b.closest<HTMLElement>('[data-east-industry-kinds]')?.dataset.eastIndustryKinds??eastIndustrySector(t.id,s.sector);navigate({...s,topic:t.id,sector:scope,subsector:null,place:null,detail:null,point:null,city:null,story:null,only:false,camera:root.dataset.mapCamera?JSON.parse(root.dataset.mapCamera):s.camera},false);return;}if(east&&s.place&&t.country&&t.country!==s.place)return;
   const place=t.country??(east?s.place:null),fit=!!place&&place!==s.place;navigate({...s,topic:t.id,sector:null,subsector:null,detail:null,city:null,point:null,place,camera:fit?null:s.camera},fit);
  });
  function render(){
@@ -58,6 +59,7 @@ export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|un
   const advanced=$('[data-industry-all]');if(advanced)advanced.hidden=state.field!=='industry';
   if(!industry||state.field!=='industry')return;
   const topics=industryTopicsForPlace(industry,state.place);
+  const newEastMap=root.dataset.region==='east-asia'&&industry.topics.find(t=>t.id===state.topic)?.kind==='clusters';if(newEastMap){const scope=$('[data-industry-country-scope]');if(scope)scope.hidden=true;}else{const scope=$('[data-industry-country-scope]');if(scope)scope.hidden=false;}
   for(const b of all('[data-industry-country]'))b.setAttribute('aria-pressed',String(b.dataset.industryCountry===(state.place??'all')));
   const scope=$('[data-industry-country-scope]');if(scope)scope.textContent=state.place?`${countries.find(c=>c.code===state.place)?.name??state.place}の産業。主題と施設はこの国に絞っています。「${regionLabel}全体」で地域の比較へ戻れます。`:`${regionLabel}全体の産業を比較しています。${countries.map(c=>c.name).join('・')}を選ぶと、その国の収録主題へ進めます。${industry.countryScope?.regionalTrade?'国別産業は3か国、地域全体の商品貿易は収録11か国・地域を扱います。':''}`;
   for(const b of all('[data-industry-feature]:not([data-industry-current-feature])'))b.hidden=!topics.some(t=>t.id===b.dataset.industryFeature);
