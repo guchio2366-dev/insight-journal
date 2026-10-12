@@ -164,6 +164,7 @@
 .west-atlas[data-topic=annual-precipitation] .west-country-line{stroke:#96a9ab;stroke-width:.55}
 .west-atlas[data-topic=climate] .west-station.is-selected circle{stroke-width:1}
 .west-map-label{font:11px var(--sans);fill:#243e48;paint-order:stroke;stroke:#fffef4;stroke-width:3;stroke-linejoin:round;pointer-events:none}
+.west-climate-code{font-weight:700}
 .west-station{cursor:pointer}
 .west-station circle{fill:#fffdf2;stroke:#284652;stroke-width:1.4;vector-effect:non-scaling-stroke}
 .west-station line{stroke:#526e75;stroke-width:1;vector-effect:non-scaling-stroke;pointer-events:none}

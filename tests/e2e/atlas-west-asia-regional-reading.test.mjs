@@ -45,6 +45,33 @@ test('産業は未選択の地域供給網から始まり、国別の比較・�
   assert.equal(q('[data-west-map]').getAttribute('viewBox'),frame);
  }finally{await w.happyDOM.close();}
 });
+test('サービス業の地点選択と解除で同じ部門の他地点名は移動・出現・消失しない',async()=>{
+ const {w,q}=await setup('industry','?topic=industry-services');
+ try{
+  const svg=q('[data-west-map]');
+  Object.defineProperties(svg,{clientWidth:{value:900,configurable:true},clientHeight:{value:650,configurable:true}});
+  q('[data-west-reset]').click();
+  const labels=()=>Object.fromEntries([...q('[data-west-scene]').querySelectorAll('[data-industry-site]')].map(marker=>{
+   const label=marker.querySelector('[data-marker-label]');
+   return [marker.dataset.industrySite,label?{position:label.getAttribute('transform'),display:label.style.display,line:marker.querySelector('line').style.display}:null];
+  }));
+  const base=w.location.href,expected=labels();
+  for(const id of ['kafd','difc','istanbul-finance'])assert(expected[id],'採用した金融地区の名を未選択時から用意する');
+  assert(Object.values(expected).some(label=>label&&label.display!=='none'),'PC幅で地点名を表示する');
+  for(const id of ['kafd','difc','istanbul-finance','jebel-ali']){
+   q(`[data-industry-site="${id}"]`).dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
+   await until(()=>q('[data-west-atlas]').dataset.ready==='true'&&q(`[data-industry-site="${id}"]`)?.getAttribute('aria-pressed')==='true');
+   assert.deepEqual(labels(),expected,`${id}選択時`);
+   w.history.replaceState({},'',base);w.dispatchEvent(new w.PopStateEvent('popstate'));
+   await until(()=>q('[data-west-atlas]').dataset.ready==='true'&&!q('[data-west-scene] .west-industry-marker.is-selected'));
+   assert.deepEqual(labels(),expected,`${id}選択解除時`);
+  }
+  const rationale=q('[data-west-detail] details')?.textContent??'';
+  assert.match(rationale,/採用：.*リヤドの金融地区.*ドバイの金融センター.*イスタンブールの金融センター/s);
+  assert.match(rationale,/次点：.*観光/);
+  assert.doesNotMatch(rationale,/次点：[^。]*金融/);
+ }finally{await w.happyDOM.close();}
+});
 test('対象外の旧産業URLは地域供給網へ復元し、明示した未収録年を他年で埋めない',async()=>{
  const {w,q,select}=await setup('industry','?topic=oil&country=IRQ&year=2024&map=10,20,400,300');
  try{
@@ -77,6 +104,21 @@ test('地域水説明・元流域・雨温図の具体的理由を既存資料�
   q('[data-city="helwan"]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
   await until(()=>q('[data-west-climate-class]')?.textContent.includes('BWh'));
   assert.equal(q('[data-west-detail]').children[1].className,'atlas-city-climate');
+ }finally{await w.happyDOM.close();}
+});
+test('気候区分の大小文字を保ち、地図上の略号を控えめに拡大する',async()=>{
+ const {w,q}=await setup('nature','?topic=climate');
+ try{
+  const svg=q('[data-west-map]');
+  Object.defineProperties(svg,{clientWidth:{value:900,configurable:true},clientHeight:{value:650,configurable:true}});
+  q('[data-west-reset]').click();
+  const labels=[...q('[data-west-scene]').querySelectorAll('.west-climate-code')];
+  assert(labels.length>0);
+  const [, ,width,height]=svg.getAttribute('viewBox').split(' ').map(Number),scale=Math.max(width/900,height/650);
+  for(const label of labels){
+   assert.match(label.textContent,/^[A-E][a-zA-Z]{1,2}$/);
+   assert(Math.abs(Number.parseFloat(label.style.fontSize)-12*scale)<0.00001);
+  }
  }finally{await w.happyDOM.close();}
 });
 test('背景国が必要な地図選択を遮らず、国選択は都市も地図範囲も自動変更しない',async()=>{

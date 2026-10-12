@@ -44,6 +44,19 @@ test('西アジアのPC実画面で地域説明・3か国・欠測年・選択�
    await assert.doesNotReject(()=>page.locator('[data-west-regional-reading]').filter({hasText:'地域全体の供給網'}).waitFor());
    assert.equal(await page.locator('[data-industry-site]').count(),16);
    await shot('supply-network');
+   await page.locator('[data-west-topic-button="industry-services"]').click();
+   await page.waitForFunction(()=>document.querySelector('[data-west-atlas]')?.dataset.topic==='industry-services'&&document.querySelector('[data-west-atlas]')?.dataset.ready==='true');
+   const serviceLabels=()=>page.locator('[data-industry-site]').evaluateAll(markers=>Object.fromEntries(markers.map(marker=>{const label=marker.querySelector('[data-marker-label]');return [marker.getAttribute('data-industry-site'),label?{position:label.getAttribute('transform'),display:label.style.display,line:marker.querySelector('line')?.style.display}:null];})));
+   const stableLabels=await serviceLabels();
+   for(const id of ['kafd','difc','istanbul-finance'])assert(stableLabels[id],`${id} has a label before selection`);
+   for(const id of ['kafd','difc','istanbul-finance']){
+    await page.locator(`[data-industry-site="${id}"]`).press('Enter');
+    await page.waitForFunction(id=>document.querySelector(`[data-industry-site="${id}"]`)?.getAttribute('aria-pressed')==='true'&&document.querySelector('[data-west-atlas]')?.dataset.ready==='true',id);
+    assert.deepEqual(await serviceLabels(),stableLabels,`${id} does not reflow other labels`);
+   }
+   await open('industry/?topic=industry-services');
+   assert.deepEqual(await serviceLabels(),stableLabels,'clearing selection restores the same labels');
+   await open('industry/');
    await page.locator('[data-industry-site="jubail"]').press('Enter');
    await page.waitForFunction(()=>document.querySelector('.west-industry-site-reading')?.textContent.includes('石油化学'));
    assert((await page.locator('.west-industry-site-reading a').getAttribute('href')).includes('cpchem.com'));
@@ -70,6 +83,7 @@ test('西アジアのPC実画面で地域説明・3か国・欠測年・選択�
    await page.waitForFunction(()=>document.querySelector('[data-west-ground-reading]')?.textContent.includes('涵養区分'));
    await shot('groundwater');
    await open('nature/?topic=climate');
+   assert(await page.evaluate(()=>{const svg=document.querySelector('[data-west-map]'),label=svg.querySelector('.west-climate-code'),[, ,width,height]=svg.getAttribute('viewBox').split(' ').map(Number),scale=Math.max(width/svg.clientWidth,height/svg.clientHeight),style=getComputedStyle(label);return /^[A-E][a-zA-Z]{1,2}$/.test(label.textContent)&&Math.abs(parseFloat(style.fontSize)/scale-12)<.01&&Number(style.fontWeight)>=700;}),'climate codes keep their case and render at the adjusted size and weight');
    const climateFrame=await page.locator('[data-west-map]').getAttribute('viewBox');
    await page.locator('[data-west-country]').selectOption('SAU');
    assert.equal(await page.locator('[data-west-city]').inputValue(),'');assert.equal(await page.locator('[data-west-active-chart]').count(),0);
