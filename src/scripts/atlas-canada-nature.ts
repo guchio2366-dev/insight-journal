@@ -17,7 +17,7 @@ export function initCanadaNature(root:HTMLElement){
  const ids=config.cities.map((c:any)=>c.id),waters=config.waters;
  const $=<T extends Element=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const map=$<SVGSVGElement>('[data-canada-map]');
- function drawLocatorCamera(){const box=map.getBoundingClientRect();map.setAttribute('viewBox',(state.frame ? canadaLegacyFrame(state.frame) : canadaSouthernFrame(box.width && box.height ? box.width/box.height : 1.85)).join(' '));layoutRiverLabels();layoutLakeLabels();}
+ function drawLocatorCamera(){const box=map.getBoundingClientRect();map.setAttribute('viewBox',(state.frame ? canadaLegacyFrame(state.frame) : canadaSouthernFrame(box.width && box.height ? box.width/box.height : 1.85)).join(' '));layoutRiverLabels();layoutLakeLabels();layoutPacificLabel();}
  function layoutRiverLabels(){
   const scale=map.getScreenCTM?.()?.a;if(!scale||!Number.isFinite(scale))return;
   const [left,top,width,height]=map.getAttribute('viewBox')!.split(' ').map(Number),gap=8/scale;
@@ -28,6 +28,7 @@ export function initCanadaNature(root:HTMLElement){
    const length=text.getComputedTextLength?.()??0;if(x+gap+length>left+width-gap){text.setAttribute('text-anchor','end');text.setAttribute('x',String(-gap));}
   }
  }
+ function layoutPacificLabel(){const label=root.querySelector<SVGTextElement>('[data-canada-ocean-name="pacific"]'),scale=map.getScreenCTM?.()?.a;if(label&&scale&&Number.isFinite(scale))label.style.fontSize=`${18/scale}px`;}
  function layoutLakeLabels(){const scale=map.getScreenCTM?.()?.a;if(!scale||!Number.isFinite(scale))return;const [left,top,width,height]=map.getAttribute('viewBox')!.split(' ').map(Number);for(const label of root.querySelectorAll<SVGGElement>('[data-canada-lake-name]')){const x=Number(label.dataset.lakeX),y=Number(label.dataset.lakeY);label.style.display=x<left||x>left+width||y<top||y>top+height?'none':'';label.querySelector('[data-lake-label-glyph]')?.setAttribute('transform',`scale(${1/scale})`);}}
  let state=readCanadaNatureState(new URL(location.href),ids,waters);
  const waterHost=root.querySelector<HTMLElement>('[data-canada-water-resources]');

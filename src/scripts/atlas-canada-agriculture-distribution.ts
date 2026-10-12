@@ -64,6 +64,18 @@ export async function initCanadaAgricultureDistribution(root:HTMLElement){
   }
   return placements;
  }
+ function placeReferenceLabels(productLabels:any[]){
+  ctx!.font='500 13px sans-serif';ctx!.textAlign='center';
+  const occupied=productLabels.map(p=>p.box),references:any[]=[];
+  for(const [name,coord]of [['プレーリー',[-107,56.6]],['オンタリオ南部',[-81.8,41.7]]] as [string,number[]][]){
+   const point=screen(project(coord));if(point[0]<0||point[0]>size.width||point[1]<0||point[1]>size.height)continue;
+   const metrics=ctx!.measureText?.(name),w=metrics?.width??name.length*13,left=metrics?.actualBoundingBoxLeft??w/2,right=metrics?.actualBoundingBoxRight??w/2,ascent=metrics?.actualBoundingBoxAscent??12,descent=metrics?.actualBoundingBoxDescent??3;
+   const candidates=[];for(const dy of [0,-28,28,-56,56])for(const dx of [0,-90,90,-150,150])candidates.push([point[0]+dx,point[1]+dy]);
+   const placed=candidates.map(([x,y])=>({x,y,box:[x-left-3,y-ascent-3,x+right+3,y+descent+3]})).find(p=>p.box[0]>=5&&p.box[2]<=size.width-5&&p.box[1]>=5&&p.box[3]<=size.height-35&&!occupied.some((b:number[])=>overlaps([p.box[0]-5,p.box[1]-5,p.box[2]+5,p.box[3]+5],b)));
+   if(!placed)continue;occupied.push(placed.box);references.push({name,point,box:placed.box,x:placed.x,y:placed.y});
+  }
+  return references;
+ }
  function draw(){
   const started=performance.now(),{width:w,height:h,dpr,scale}=size;ctx!.setTransform(dpr,0,0,dpr,0,0);ctx!.clearRect(0,0,w,h);ctx!.fillStyle='#e4eff0';ctx!.fillRect(0,0,w,h);
   ctx!.save();ctx!.translate(w/2,h/2);ctx!.scale(scale*state.camera[2],scale*state.camera[2]);ctx!.translate(-state.camera[0],-state.camera[1]);
@@ -80,10 +92,10 @@ export async function initCanadaAgricultureDistribution(root:HTMLElement){
   if(state.ccs){const feature=featureById.get(state.ccs);ctx!.strokeStyle='#fffef5';ctx!.lineWidth=4/(scale*state.camera[2]);ctx!.stroke(feature.path);ctx!.strokeStyle='#183e58';ctx!.lineWidth=1.8/(scale*state.camera[2]);ctx!.stroke(feature.path);}
   ctx!.restore();const placements=placeLabels(visible);
   for(const placement of placements){const [x,y]=placement.point,box=placement.box;ctx!.strokeStyle=colors[placement.product];ctx!.lineWidth=.8;ctx!.globalAlpha=.8;ctx!.beginPath();ctx!.moveTo(x,y);ctx!.lineTo(Math.max(box[0],Math.min(box[2],x)),Math.max(box[1],Math.min(box[3],y)));ctx!.stroke();}
-  ctx!.globalAlpha=1;ctx!.font='500 13px sans-serif';ctx!.fillStyle='#4d6264';ctx!.textAlign='center';for(const [name,coord]of [['プレーリー',[-107,56.6]],['オンタリオ南部',[-81.8,41.7]]] as [string,number[]][]){const [x,y]=screen(project(coord));ctx!.fillText(name,x,y);}
+  ctx!.globalAlpha=1;const referenceLabels=placeReferenceLabels(placements);ctx!.fillStyle='#4d6264';for(const label of referenceLabels)ctx!.fillText(label.name,label.x,label.y);
   $('display-meaning').textContent='色面＝作物、破線＝畜産の主要生産帯（2021年の公式分布を汎化）。色の濃さや帯の面積は数量を表しません。養鶏は肉用・採卵用を含みます。';
   canvas.setAttribute('aria-label',state.metric?names[state.metric]+'を強調し、他の生産帯を保持した地図':'作物と畜産の特徴的な生産帯を重ねた地図');
-  lastStats={granularity:'editorial-production-belts',productionBelts:visible.map((belt:any)=>({id:belt.id,product:belt.product,sourceIds:belt.sourceIds})),labels:placements,visibleLayers:state.layers.slice(),visibleSymbols:0,coloredCcs:0,specialtyDots:0,livestockBadges:0,retainedCcs:features.length,retainedValues:features.length*ids.length,sourceCcsCells:features.length*ccsIds.length,provinceOnlyMetrics:provinceOnlyIds.slice(),metrics:ids.slice(),opacities:Object.fromEntries(ids.map((id:CanadaAgricultureIndicatorId)=>[id,opacity(id)])),selected:state.ccs,view:'south-or-detail',drawMs:performance.now()-started,backingStore:{width:canvas.width,height:canvas.height,dpr}};
+  lastStats={granularity:'editorial-production-belts',productionBelts:visible.map((belt:any)=>({id:belt.id,product:belt.product,sourceIds:belt.sourceIds})),labels:placements,referenceLabels,visibleLayers:state.layers.slice(),visibleSymbols:0,coloredCcs:0,specialtyDots:0,livestockBadges:0,retainedCcs:features.length,retainedValues:features.length*ids.length,sourceCcsCells:features.length*ccsIds.length,provinceOnlyMetrics:provinceOnlyIds.slice(),metrics:ids.slice(),opacities:Object.fromEntries(ids.map((id:CanadaAgricultureIndicatorId)=>[id,opacity(id)])),selected:state.ccs,view:'south-or-detail',drawMs:performance.now()-started,backingStore:{width:canvas.width,height:canvas.height,dpr}};
   canvas.dataset.ready='true';root.querySelector<HTMLElement>('[data-overview-fallback]')!.hidden=true;
  }
  function schedule(){if(size.width>0&&!raf)raf=requestAnimationFrame(()=>{raf=0;draw();});}

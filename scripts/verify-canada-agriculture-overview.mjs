@@ -14,6 +14,7 @@ export async function verifyCanadaAgricultureOverview({page,url,output,result}){
   assert.equal(await page.locator('#canada-agri-zoom-in,#canada-agri-zoom-out,#canada-agri-reset,#canada-agri-south').count(),0);
   assert.ok(map.width>(width===1920?850:550));assert.ok(map.height>=300);assert.ok(map.y+map.height<height);
   const products=new Set(stats.labels.map(label=>label.product));for(const product of ['canola','wheat','beef','lentils','potatoes'])assert.ok(products.has(product),`${width}: map names ${product}`);
+  assert.deepEqual(stats.referenceLabels.map(r=>r.name),['プレーリー','オンタリオ南部']);for(const ref of stats.referenceLabels)for(const label of stats.labels)assert.ok(!overlaps(ref.box,label.box),`${width}: ${ref.name} stays clear of ${label.product}`);
   for(let i=0;i<stats.labels.length;i++)for(const other of stats.labels.slice(i+1))assert.ok(!overlaps(stats.labels[i].box,other.box),`${width}: product labels remain separate`);
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);assert.equal(await page.locator('#canada-agri-statistics-detail').getAttribute('open'),null);
   const environment=await page.evaluate(()=>({cssViewport:[innerWidth,innerHeight],dpr:devicePixelRatio,visualScale:visualViewport.scale}));
