@@ -330,7 +330,7 @@ export async function initEuropeAtlas() {
       node.style.left=point.x+'px';node.style.top=point.y+'px';
       const {width,height}=node.getBoundingClientRect();
       let chosen:DOMRect|undefined,chosenOffset:[number,number]=[0,0];
-      for(const [dx,dy] of terrainLabelOffsets.filter(([dx,dy])=>Math.hypot(dx,dy)<=52)){
+      for(const [dx,dy] of terrainLabelOffsets.filter(([dx,dy])=>Math.hypot(dx,dy)<=(stage.width<650?96:52))){
         const rect=new DOMRect(stage.left+point.x+dx-width/2,stage.top+point.y+dy-height/2,width,height);
         if(rect.left<stage.left+4||rect.right>stage.right-4||rect.top<stage.top+4||rect.bottom>stage.bottom-4)continue;
         if(placed.some(other=>rect.left<other.right+3&&rect.right>other.left-3&&rect.top<other.bottom+3&&rect.bottom>other.top-3))continue;
