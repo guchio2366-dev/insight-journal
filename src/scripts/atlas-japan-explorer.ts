@@ -52,6 +52,7 @@ async function start(root:HTMLElement){
    a.href=writeJapanState(new URL(a.href),{...state,field,topic:field===state.field?state.topic:japanDefaults[field],prefecture:field===state.field?state.prefecture:null,city:field===state.field?state.city:null,site:field===state.field?state.site:null,feature:field===state.field?state.feature:null}).href;
    if(field===state.field)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
   }
+  for(const a of all<HTMLAnchorElement>('.japan-region .regional-tabs a')){const u=new URL(a.href);u.pathname=u.pathname.replace(/\/(nature|agriculture|industry|population)\/$/,'/').replace(/\/$/,'/'+({natural:'nature',agriculture:'agriculture',industry:'industry',population:'population'}[state.field])+'/');a.href=u.href;}
   for(const a of all<HTMLAnchorElement>('[data-japan-area]')){const area=a.dataset.japanArea!;a.href=writeJapanState(new URL(a.href),{...state,area:area as any,camera:null}).href;if(area===state.area)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');}
   const title=`${japanArea(state.area).name}・${{industry:'主要産業',agriculture:'農林業',natural:'自然環境',population:'人口'}[state.field]}｜Insight Journal`;
   document.title=title;
