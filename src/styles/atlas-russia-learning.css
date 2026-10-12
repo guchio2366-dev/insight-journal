@@ -421,7 +421,7 @@
  .russia-workspace .russia-learning-normal .russia-learning-scene{height:auto;min-height:300px;max-height:640px;aspect-ratio:1.55}
  .russia-workspace .russia-learning[data-field=regional-overview] .russia-learning-scene{height:auto;min-height:300px;max-height:640px;aspect-ratio:1.55}
  .russia-workspace .russia-learning[data-field=agriculture] .russia-learning-map-heading{box-sizing:border-box;height:100px;min-height:100px}
- .russia-farming-visibility{top:108px}
+ .russia-farming-visibility{top:160px}
  .russia-workspace .russia-learning-reading{max-height:calc(100dvh - 220px);min-height:380px}
  .russia-workspace .russia-learning[data-field=agriculture] .russia-learning-reading{max-height:calc(100dvh - 220px);min-height:380px;overflow:hidden}
  .russia-workspace .russia-learning[data-field=agriculture] .russia-reading-scroll{min-height:0;overflow-y:auto}
