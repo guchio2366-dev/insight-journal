@@ -410,6 +410,7 @@
 .russia-workspace.farming-livestock-hidden :is([data-farming-product=cattle],[data-place-product=cattle],[data-farming-key=cattle],[data-farming-legend=cattle]){display:none}
 .russia-workspace .russia-region-countries [data-region-option],.russia-learning-scene .russia-region-marker,.russia-learning-scene .russia-region-marker-note{display:none}
 .russia-learning-scene :is([data-river-name],[data-river-label]){cursor:pointer}
+.russia-learning-scene text[data-river-label]{pointer-events:visiblePainted}
 .russia-learning[data-field=nature] .russia-learning-scene:has([data-river-name]) .russia-region{pointer-events:none}
 .russia-learning-scene [data-river-name][data-selected=true] path:first-child{stroke:#123d62;stroke-width:4}
 .russia-learning-scene [data-river-label]:is([aria-pressed=true],:focus-visible){font-weight:700;stroke-width:4}
