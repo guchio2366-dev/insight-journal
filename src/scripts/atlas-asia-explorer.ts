@@ -686,7 +686,8 @@ function start(root:HTMLElement) {
         // selection. A click on the unrelated background cannot select a country.
         if(state.field==='agriculture'){
           if(config.focusId==='south-asia'&&map.getLayer('asia-farm-overview-fill')){
-            const hit=map.queryRenderedFeatures(event.point,{layers:['asia-farm-overview-fill']})[0];
+            const layers=['asia-farm-overview-fill','asia-farm-overview-livestock-fill'].filter(id=>map!.getLayer(id));
+            const hit=map.queryRenderedFeatures(event.point,{layers}).find(feature=>feature.properties.kind==='crop')??map.queryRenderedFeatures(event.point,{layers})[0];
             const product=hit?.properties?.id;
             if(typeof product==='string'&&config.presentation?.farming.products.some(p=>p.id===product))chooseFarm(product);
           }

@@ -4,6 +4,8 @@ import {asiaFocusCountries,asiaFocusIndustry,asiaFocusWaterRivers,asiaFocusShare
 import {asiaWaterFocus} from '../../src/data/atlas/asia-water-focus.ts';
 import shares from '../../public/assets/atlas/south-central-asia-v1/world-shares.json' with {type:'json'};
 import water from '../../public/assets/atlas/asia-physical-v1/south-central-asia.water.json' with {type:'json'};
+import {readFileSync} from 'node:fs';
+import {gunzipSync} from 'node:zlib';
 
 test('南・中央アジアの入口は重ならない国と、その地域で出典のある事例を使う',()=>{
  const south=new Set(asiaFocusCountries['south-asia']),central=new Set(asiaFocusCountries['central-asia']);
@@ -21,4 +23,12 @@ test('南・中央アジアの入口は重ならない国と、その地域で�
  }
  assert.ok(asiaFocusIndustry('south-asia').sites.some(site=>site.country==='IND'));
  assert.ok(asiaFocusIndustry('central-asia').sites.every(site=>site.country!=='IND'));
+});
+
+test('南アジアの家畜は4品目の実格子から広がりと集中域を持つ',()=>{
+ const data=JSON.parse(gunzipSync(readFileSync('public/assets/atlas/asia-presentation-v1/south-asia.livestock-areas.json.gz')));
+ assert.equal(data.features.length,8);
+ assert.deepEqual(new Set(data.features.map(f=>f.properties.id)),new Set(['cattle','buffalo','goat','chicken']));
+ for(const id of ['cattle','buffalo','goat','chicken'])assert.deepEqual(new Set(data.features.filter(f=>f.properties.id===id).map(f=>f.properties.distribution)),new Set(['spread','core']));
+ assert(data.features.every(f=>f.geometry.coordinates.length>0&&f.properties.kind==='livestock'));
 });
