@@ -473,7 +473,7 @@ async function industry({page, evidence}) {
       const box = node.getBoundingClientRect(), matrix = node.getScreenCTM();
       return {name: node.textContent, x: box.x, y: box.y, width: box.width, height: box.height, screenFontSize: parseFloat(getComputedStyle(node).fontSize) * Math.hypot(matrix.a, matrix.b), leader: node.parentElement.querySelector('[data-mi-region-leader]')?.getAttribute('d')};
     }));
-    assert.equal(labels.length,4,'Resource overview must show two oil-and-gas and two mining regions');
+    assert.equal(labels.length,6,'Resource overview must include extraction and refinery city examples');
     const controls=await page.locator('[data-mi-map="primary"]').evaluate(svg=>[...svg.closest('.mexico-map-frame').querySelectorAll('[data-mi-map-action]')].map(button=>{const box=button.getBoundingClientRect();return{x:box.x,y:box.y,width:box.width,height:box.height};}));
     for (const [index, a] of labels.entries()) {
       assert.match(a.leader, /^M0,0L/); assert(Math.abs(a.screenFontSize - 14) < .5);

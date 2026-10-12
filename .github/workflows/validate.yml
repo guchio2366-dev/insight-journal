@@ -130,6 +130,27 @@ jobs:
           if-no-files-found: warn
           retention-days: 7
 
+      - name: Review Mexico industry sectors in sandboxed Chrome
+        shell: bash
+        timeout-minutes: 6
+        run: |
+          set -euo pipefail
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          if [[ -z "$chrome_path" ]]; then
+            echo "::error::The GitHub runner does not have Google Chrome installed."
+            exit 1
+          fi
+          REVIEW_CHROME_PATH="$chrome_path" npm run test:review:industry
+
+      - name: Upload Mexico industry review images
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mexico-industry-review-${{ github.run_id }}
+          path: review-artifacts/mexico-industry-three-sectors
+          if-no-files-found: warn
+          retention-days: 7
+
       - name: Capture overlapping Mexico ethnicity contours
         if: (github.head_ref || github.ref_name) == 'codex/mexico-second-wave-20261011'
         shell: bash

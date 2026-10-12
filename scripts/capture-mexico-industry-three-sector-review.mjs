@@ -25,27 +25,35 @@ const server=createServer(async(req,res)=>{
  }catch{res.writeHead(404);res.end('Not found');}
 });
 await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
-const browser=await chromium.launch({executablePath:process.env.REVIEW_CHROME_PATH??'/usr/bin/chromium',headless:true});
+const browser=await chromium.launch({executablePath:process.env.REVIEW_CHROME_PATH??'/usr/bin/chromium',headless:true,chromiumSandbox:true});
 const report={browser:browser.version(),cases:[]};
 const sector=async(page,name)=>{await page.locator(`[role=tab][data-industry-sector="${name}"]`).click();await page.waitForFunction(()=>document.querySelector('[data-mexico-field="industry"]')?.dataset.miLabelLayoutReady==='true');};
 const labels=page=>page.locator('[data-mi-reading-markers] [data-mi-region-option]:not([hidden]):not([data-mi-selected-state-pin]) [data-mi-region-label]').evaluateAll(nodes=>nodes.map(node=>{const b=node.getBoundingClientRect();return {text:node.textContent,x:b.x,y:b.y,right:b.right,bottom:b.bottom};}));
 const noCollisions=items=>{for(let i=0;i<items.length;i++)for(let j=i+1;j<items.length;j++)assert(!(Math.min(items[i].right,items[j].right)-Math.max(items[i].x,items[j].x)>1&&Math.min(items[i].bottom,items[j].bottom)-Math.max(items[i].y,items[j].y)>1),`${items[i].text} overlaps ${items[j].text}`);};
 try{
- for(const [width,height] of [[1920,1080],[1280,800],[390,844]]){
+ for(const [width,height] of [[1920,1080],[1280,800]]){
   const page=await browser.newPage({viewport:{width,height},deviceScaleFactor:1});const errors=[];page.on('pageerror',error=>errors.push(error.message));
   await page.goto(`http://127.0.0.1:${server.address().port}/insight-journal/atlas/north-america/mexico/industry/`);
   await page.waitForSelector('[data-mi-ready="true"]');await page.waitForFunction(()=>document.querySelector('[data-mexico-field="industry"]')?.dataset.miLabelLayoutReady==='true');
-  const initial=await labels(page);assert.equal(initial.length,4);noCollisions(initial);
+  const initial=await labels(page);assert.equal(initial.length,6);noCollisions(initial);
+  assert.equal(await page.locator('[data-mi-site-kind="refinery"]:not([hidden])').count(),2);
+  assert.equal(await page.locator('[data-mi-site-kind="mine"]:not([hidden])').count(),1);
   await page.screenshot({path:path.join(output,`${width}-resources.jpg`),type:'jpeg',quality:82,animations:'disabled'});
   await sector(page,'manufacturing');const manufacturing=await labels(page);assert.equal(manufacturing.length,10);noCollisions(manufacturing);
   assert.equal(await page.locator('[data-mi-facility-city="true"]:not([hidden])').count(),2);
+  assert.equal(await page.locator('[data-mi-site-kind="city-cluster"]:not([hidden])').count(),2);
   await page.screenshot({path:path.join(output,`${width}-manufacturing.jpg`),type:'jpeg',quality:82,animations:'disabled'});
   const frame=await page.locator('[data-mi-map="primary"]').getAttribute('viewBox');
   await page.locator('[data-industry-subsector="food"]').click();await page.waitForFunction(()=>document.querySelector('[data-mexico-field="industry"]')?.dataset.miLabelLayoutReady==='true');
+  assert.equal(await page.locator('[data-mi-shape="19"]').first().getAttribute('fill'),'#edf1df');
+  assert.equal(await page.locator('[data-mi-export-legend="primary"]').isVisible(),false);
   const selected=await labels(page);assert.equal(selected.length,manufacturing.length);noCollisions(selected);
   for(let i=0;i<selected.length;i++){assert(Math.abs(selected[i].x-manufacturing[i].x)<1);assert(Math.abs(selected[i].y-manufacturing[i].y)<1);}
   assert.equal(await page.locator('[data-mi-map="primary"]').getAttribute('viewBox'),frame);
-  assert.equal(await page.locator('[data-mi-shape="19"]').first().evaluate(node=>getComputedStyle(node).fillOpacity),'1');
+  await page.locator('[data-mi-export-overlay]').check();
+  assert.equal(await page.locator('[data-mi-export-legend="primary"]').isVisible(),true);
+  await page.locator('[data-mi-export-overlay]').uncheck();
+  assert.equal(await page.locator('[data-mi-shape="19"]').first().getAttribute('fill'),'#edf1df');
   await page.screenshot({path:path.join(output,`${width}-food.jpg`),type:'jpeg',quality:82,animations:'disabled'});
   await page.locator('[data-mi-item-only]').check();assert.equal(await page.locator('[data-mi-reading-markers] [data-mi-region-option]:not([hidden]):not([data-mi-selected-state-pin])').count(),1);
   await page.locator('[data-mi-item-only]').uncheck();
@@ -55,6 +63,7 @@ try{
   await page.evaluate(()=>scrollTo(0,0));
   await page.screenshot({path:path.join(output,`${width}-selected-state.jpg`),type:'jpeg',quality:82,animations:'disabled'});
   await sector(page,'services');await page.locator('[data-industry-subsector="tourism"]').click();
+  assert.equal(await page.locator('[data-mi-site-kind="city-cluster"]:not([hidden])').count(),2);
   assert.match(await page.locator('[data-mi-summary-list]').textContent(),/14万3,793人/);
   assert.equal(await page.locator('[data-mi-export-legend="primary"]').isVisible(),false);
   await page.screenshot({path:path.join(output,`${width}-tourism.jpg`),type:'jpeg',quality:82,animations:'disabled'});

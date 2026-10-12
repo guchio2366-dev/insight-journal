@@ -16,7 +16,7 @@ export function initMexicoIndustry(root:HTMLElement):void {
  const selection=(url:URL)=>{const value=readMexicoIndustryState(url,stateIds),choice=mexicoIndustryMetricChoices.find(m=>m.id===value.metric)!;if(!value.sector){value.sector=url.searchParams.has('metric')||value.compare?choice.sector as MexicoIndustryState['sector']:'resources';value.subsector=url.searchParams.has('metric')?value.metric:'all';}if(value.compare){value.sector=choice.sector as MexicoIndustryState['sector'];value.subsector=value.metric;}return value;};
  let state=selection(new URL(window.location.href));
  let itemOnly=false;
- const selectedPlaceVisible=()=>{const query=new URL(window.location.href).searchParams;return query.get('reading')!=='overview'&&(state.sector!=='all'||query.has('state')||query.get('reading')==='item');};
+ const selectedPlaceVisible=()=>{const query=new URL(window.location.href).searchParams;return query.get('reading')!=='overview'&&(!!state.sector||query.has('state')||query.get('reading')==='item');};
  const cameraViews=new WeakMap<SVGSVGElement,string>();
  const one=<T extends Element=HTMLElement>(selector:string)=>root.querySelector<T>(selector);
  const all=<T extends Element=HTMLElement>(selector:string)=>Array.from(root.querySelectorAll<T>(selector));
@@ -81,7 +81,7 @@ export function initMexicoIndustry(root:HTMLElement):void {
  }
 
  function map(slot:'primary'|'secondary',metric:MexicoIndustryMetric|null):void {
-  const isPopulation=metric===null,svg=one<SVGSVGElement>(`[data-mi-map="${slot}"]`)!,geographic=slot==='primary'&&!state.compare&&(state.subsector==='all'||state.sector==='services');
+  const isPopulation=metric===null,svg=one<SVGSVGElement>(`[data-mi-map="${slot}"]`)!,geographic=slot==='primary'&&!state.compare&&(!state.exportOverlay||state.subsector==='all'||state.sector==='services');
   const originalPopulation=isPopulation&&state.from==='population',selectedCode=originalPopulation?state.sourceState:state.state,only=originalPopulation?(state.sourceOnly??state.only):state.only;
   svg.dataset.miKind=isPopulation?state.sourceView:metric!;
   const title=geographic?`${state.sector==='services'&&state.subsector!=='all'?(state.subsector==='finance'?'金融・専門サービス':'宿泊・飲食'):mexicoIndustrySectors.find(s=>s.id===state.sector)!.label}を読む地域`:isPopulation?`${state.sourceView==='density'?'人口密度':'人口'}・2020年`:`${metricName(metric!)}の輸出額・2025年速報`;
@@ -91,7 +91,7 @@ export function initMexicoIndustry(root:HTMLElement):void {
   const comparisonRole=state.compare?(state.compare==='population'?(slot===(state.from==='population'?'secondary':'primary')?'比較元':'比較先'):(slot==='primary'?'比較元':'比較先')):'';
   heading.replaceChildren(document.createTextNode((comparisonRole?`${comparisonRole}：`:'')+title),sub);
   text(`#mi-${slot}-title`,title);
-  text(`#mi-${slot}-desc`,geographic?'州境は位置の参照。点は公式資料にある州の産業を読む案内位置で、施設の所在地や数量を表しません。サービス業の全国分布は収録していません。':isPopulation?(state.sourceView==='density'?'元の2020年人口密度分布。色は州平均の人/km²。':'元の2020年人口分布。円の面積は人口に比例。'):'色は州の生産地に配分されたFOB輸出額。8業種は共通階級。秘匿は斜線、未把握は点模様。');
+  text(`#mi-${slot}-desc`,geographic?'州境は位置の参照。点は原典で確認した活動のある都市または州を読む案内位置で、施設敷地や数量を表しません。サービス業の全国分布は収録していません。':isPopulation?(state.sourceView==='density'?'元の2020年人口密度分布。色は州平均の人/km²。':'元の2020年人口分布。円の面積は人口に比例。'):'色は州の生産地に配分されたFOB輸出額。8業種は共通階級。秘匿は斜線、未把握は点模様。');
   const top=isPopulation?[]:config.data.metrics.find(item=>item.id===metric)?.topStates??[];
   for(const shape of Array.from(svg.querySelectorAll<SVGPathElement>('[data-mi-shape]'))) {
    const code=shape.dataset.miShape!,selected=code===selectedCode;
@@ -119,14 +119,14 @@ export function initMexicoIndustry(root:HTMLElement):void {
    show('[data-mi-population-size-legend]',isPopulation&&state.sourceView==='population');show('[data-mi-population-circles]',isPopulation&&state.sourceView==='population');
   }
   const originLabel=originalPopulation?`${selectedCode?places.get(selectedCode)!.name:'全国'}の元図を保持。` : '';
-  text(`[data-mi-map-caption="${slot}"]`,originLabel+(geographic?(state.sector==='services'?'州単位の2023年就業資料に基づく地域例。全国のサービス分布や個別施設を示しません。':'州境と点は位置の参照。業種を選ぶと州別輸出額の分布を表示します。'):only?(isPopulation?'2020年。灰色は位置の参照。':'全世界向け。灰色は位置の参照。'):(isPopulation?(state.sourceView==='density'?'2020年。元の人口密度の階級。':'2020年。元の人口の面積比例円。'):`全世界向け・2025年速報。公開値 ${config.data.rows.filter(r=>['available','zero'].includes(r.values[metric!].status)).length}/32州。`)));
+  text(`[data-mi-map-caption="${slot}"]`,originLabel+(geographic?(state.sector==='services'?'州単位の2023年就業資料と市街位置による地域例。全国のサービス分布ではありません。':'州境と点は産業地域を読む位置の参照。FOB輸出額は下の補助統計で確認できます。'):only?(isPopulation?'2020年。灰色は位置の参照。':'全世界向け。灰色は位置の参照。'):(isPopulation?(state.sourceView==='density'?'2020年。元の人口密度の階級。':'2020年。元の人口の面積比例円。'):`全世界向け・2025年速報。公開値 ${config.data.rows.filter(r=>['available','zero'].includes(r.values[metric!].status)).length}/32州。`)));
  }
 
  function render():void {
   applyCamera();
   const selected=places.get(state.state),selectedName=selected?.name??'全国',comparison=state.compare!==null,popComparison=state.compare==='population';
   root.classList.toggle('is-comparison',comparison);root.dataset.miRenderer=state.fallback?'static-fallback':'svg';root.dataset.miCompare=state.compare??'none';root.dataset.miSelected=state.state;root.dataset.miSourceState=state.sourceState;
-  root.dataset.miMetricDistribution=String(!comparison&&state.subsector!=='all'&&state.sector!=='services');
+  root.dataset.miMetricDistribution=String(!comparison&&state.exportOverlay&&state.subsector!=='all'&&state.sector!=='services');
   one('[data-mi-map-grid]')!.classList.toggle('mi-comparison-grid',comparison);
   show('[data-mi-figure="secondary"]',comparison);
   const populationFirst=popComparison&&state.from==='population';
@@ -152,6 +152,7 @@ export function initMexicoIndustry(root:HTMLElement):void {
   text('[data-mi-selected-place-text]',state.sector==='services'?broad:state.subsector==='all'?broad:fine);
   show('[data-mi-selected-place-reading]',!comparison&&!!selected&&state.sector!=='all');
   show('[data-mi-item-only-wrap]',!comparison&&state.subsector!=='all');one<HTMLInputElement>('[data-mi-item-only]')!.checked=itemOnly;
+  show('[data-mi-export-overlay-wrap]',!comparison&&state.subsector!=='all'&&state.sector!=='services');one<HTMLInputElement>('[data-mi-export-overlay]')!.checked=!!state.exportOverlay;
   show('[data-mi-sector-legend]',!comparison);show('[data-mi-geography-scope]',!comparison&&(state.sector==='all'||state.subsector==='all'));
   show('.mi-items',comparison||state.subsector!=='all'&&state.sector!=='services');show('[data-mi-electronics-link]',isMexicoIndustryPairMetric(state.metric)&&(comparison||(state.sector==='manufacturing'&&state.subsector!=='all')));
   show('[data-mi-legend-slot="secondary"]',comparison);
@@ -190,14 +191,14 @@ export function initMexicoIndustry(root:HTMLElement):void {
   }
   map('primary',state.metric);if(comparison)map('secondary',popComparison?null:otherMetric(state.metric));
   const mode=popComparison&&state.from==='population'?`比較元は${state.sourceState?places.get(state.sourceState)!.name:'全国'}の人口図、比較先は${selectedName}の産業を選択。`:state.only?`${selectedName}と比較相手の同州を表示`:'全32州を表示';
-  const period=comparison?(popComparison?`人口2020年 × ${metricName(state.metric)}輸出2025年速報。`:`${metricName(state.metric)} × ${metricName(otherMetric(state.metric))}・2025年速報。`):state.sector==='services'?'2023年経済センサスの地域例。':state.subsector==='all'?'州の生産地に配分された2025年速報輸出額の業種を選択。':'2025年速報・州の生産地に配分された輸出額。';
+  const period=comparison?(popComparison?`人口2020年 × ${metricName(state.metric)}輸出2025年速報。`:`${metricName(state.metric)} × ${metricName(otherMetric(state.metric))}・2025年速報。`):state.sector==='services'?'2023年経済センサスの地域例。':state.exportOverlay&&state.subsector!=='all'?'補助表示：2025年速報・州別FOB輸出額。':'採掘・加工・製造の位置案内。FOB輸出額は下の補助統計。';
   text('[data-mi-map-status]',`${period}${mode}。${state.fallback?'簡易表示。':''}`);
   const summary=one<HTMLOListElement>('[data-mi-summary-list]')!;
   const entries:{label:string;value:string}[]=[];
   if(state.sector==='services'&&!comparison){
    text('[data-mi-summary-title]','都市サービスと観光サービスの仕事');
    text('[data-mi-summary-scope]','2023年経済センサス・州の就業者数。施設地点や州別輸出額ではありません。');
-   entries.push({label:'メキシコシティ｜金融・保険',value:'41万1,249人'},{label:'メキシコシティ｜専門・科学・技術',value:'18万590人'},{label:'キンタナ・ロー｜ホテル・飲食店',value:'14万3,793人'});
+   entries.push({label:'メキシコシティ｜金融・保険',value:'41万1,249人'},{label:'メキシコシティ｜専門・科学・技術',value:'18万590人'},{label:'ヌエボ・レオン州｜金融・保険',value:'6万6,686人'},{label:'ヌエボ・レオン州｜専門・科学・技術',value:'5万9,565人'},{label:'キンタナ・ロー州｜ホテル・飲食店',value:'14万3,793人'});
    text('[data-mi-summary-source]','出典：INEGI Censos Económicos 2024 の各州結果（対象年2023年）。');
   }else{
    text('[data-mi-summary-title]',state.subsector==='all'?`${sector.label}の州別輸出額`:`${metricName(state.metric)}の上位州`);
@@ -237,9 +238,10 @@ export function initMexicoIndustry(root:HTMLElement):void {
  for(const button of all<HTMLButtonElement>('[data-industry-sector]'))button.addEventListener('click',()=>{const sector=button.dataset.industrySector as MexicoIndustryState['sector'];change({sector,subsector:'all',compare:null,state:'',only:false,zoom:false});});
  for(const button of all<HTMLButtonElement>('[data-industry-subsector]'))button.addEventListener('click',()=>button.dataset.industrySubsector==='all'?change({sector:button.dataset.ownerSector as MexicoIndustryState['sector'],subsector:'all',compare:null}):button.dataset.ownerSector==='services'?change({sector:'services',subsector:button.dataset.industrySubsector,compare:null}):chooseMetric(button.dataset.industrySubsector as MexicoIndustryMetric));
  for(const button of all<HTMLButtonElement>('[data-mi-jump-metric]'))button.addEventListener('click',()=>chooseMetric(button.dataset.miJumpMetric as MexicoIndustryMetric));
- for(const item of all<HTMLElement|SVGElement>('[data-mi-region-option]:not([data-mi-selected-state-pin])')){const choose=()=>{if(!suppressMapClick){const sector=item.dataset.miRegionSector as MexicoIndustryState['sector'],subsector=item.dataset.miRegionMetric||'all';change({state:item.dataset.miRegionOption!,sector,subsector,...(subsector!=='all'&&sector!=='services'?{metric:subsector}:{})});}};item.addEventListener('click',choose);if(item.tagName.toLowerCase()!=='button')item.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose();}});}
+ for(const item of all<HTMLElement|SVGElement>('[data-mi-region-option]:not([data-mi-selected-state-pin])')){const choose=()=>{if(!suppressMapClick){const sector=item.dataset.miRegionSector as MexicoIndustryState['sector'],requested=item.dataset.miRegionMetric||'all',subsector=mexicoIndustryMetricChoices.some(m=>m.sector===sector&&m.id===requested)||sector==='services'&&['finance','tourism'].includes(requested)?requested:'all';change({state:item.dataset.miRegionOption!,sector,subsector,...(subsector!=='all'&&sector!=='services'?{metric:subsector}:{})});}};item.addEventListener('click',choose);if(item.tagName.toLowerCase()!=='button')item.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose();}});}
  const statePin=one<SVGGElement>('[data-mi-selected-state-pin]')!,clearPin=()=>change({state:'',only:false,zoom:false});statePin.addEventListener('click',clearPin);statePin.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();clearPin();}});
  one<HTMLInputElement>('[data-mi-item-only]')!.addEventListener('change',event=>{itemOnly=(event.target as HTMLInputElement).checked;render();});
+ one<HTMLInputElement>('[data-mi-export-overlay]')!.addEventListener('change',event=>change({exportOverlay:(event.target as HTMLInputElement).checked}));
  const overview=()=>{change({state:'',only:false,zoom:false,subsector:'all',compare:null});one<HTMLButtonElement>(`[data-industry-sector="${state.sector}"]`)?.focus();};
  for(const button of all('[data-industry-overview]'))button.addEventListener('click',overview);
  one('#mi-description')?.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();overview();}});

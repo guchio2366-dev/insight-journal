@@ -27,6 +27,9 @@
 .mexico-workspace.mexico-industry [data-mi-region-leader]{fill:none;stroke:var(--mi-region-color,#344951);stroke-width:1.2;vector-effect:non-scaling-stroke;pointer-events:none}
 .mexico-workspace.mexico-industry [data-mi-reading-markers] .is-selected circle{stroke:#a94d32;stroke-width:4px}
 .mexico-workspace.mexico-industry [data-mi-facility-city] circle{fill:#fffefa;stroke:var(--mi-region-color);stroke-width:3px}
+.mexico-workspace.mexico-industry [data-mi-site-kind]:not([data-mi-site-kind="state-guide"]) circle{fill:#fffefa;stroke:var(--mi-region-color);stroke-width:3px}
+.mexico-workspace.mexico-industry .mi-export-overlay-control{display:flex;align-items:center;gap:7px;font-size:13px;line-height:1.5;margin:3px 0 8px;color:#294c4d}
+.mexico-workspace.mexico-industry .mi-export-overlay-control[hidden]{display:none}
 .mexico-workspace.mexico-industry [data-mi-selected-state-pin] circle{fill:#fff7e4;stroke:#a94d32;stroke-width:3px}
 .mexico-workspace.mexico-industry [data-mi-reading-markers] .is-muted{opacity:.65}
 .mexico-workspace.mexico-industry[data-mi-metric-distribution="true"] :is(.mi-state,.mi-country-context path){fill-opacity:.87}
