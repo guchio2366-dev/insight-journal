@@ -30,7 +30,7 @@ test('Köppenの原0.1度を1kmに偽装せず国内六気候地域と別の資�
 });
 test('河川は原典の3区間だけ、沿岸小流域群を単一河川の流域と扱わない',()=>{
  assert.deepEqual(riverLabels.map(r=>r.name).sort(),['利根川','最上川','石狩川'].sort());
- const coastal=japanNatureRecords.basins.find(record=>record.coastal);assert(coastal);assert.match(getJapanNatureReading('water',coastal.id).overview,/単独の大河川の流域ではありません/);
+ const coastal=japanNatureRecords.basins.find(record=>record.coastal);assert(coastal);assert.match(getJapanNatureReading('basins',coastal.id).overview,/単独の大河川の流域ではありません/);
  for(const river of riverLabels){assert(japanNatureFeatureIds.water.includes(river.id));assert.equal(getJapanNatureReading('water',river.id).title,river.name);}
  const aquifer=japanNatureFeatureIds.groundwater[0];assert.match(getJapanNatureReading('groundwater',aquifer).overview,/安全な取水量を示す値ではありません/);
 });

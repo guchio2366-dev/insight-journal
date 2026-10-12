@@ -1,0 +1,8 @@
+---
+import {japanAreas} from '../../data/atlas/japan-areas';
+import {withBase} from '../../lib/urls';
+import {asiaFieldPaths,type AsiaField} from '../../lib/atlas-asia-state';
+interface Props {field:AsiaField}
+const {field}=Astro.props;
+---
+<nav class="japan-area-navigation" aria-label="日本の国・地方を選ぶ"><span>国・地方</span>{japanAreas.map(area=><a data-japan-area={area.id} href={withBase(`/atlas/japan/${asiaFieldPaths[field]}/${area.id==='japan'?'':'?area='+area.id}`)} aria-current={area.id==='japan'?'page':undefined}>{area.name}</a>)}</nav>

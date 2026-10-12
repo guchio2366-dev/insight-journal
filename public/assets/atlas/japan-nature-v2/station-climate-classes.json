@@ -1,0 +1,110 @@
+[
+  {
+    "city": "tokyo",
+    "coordinates": [
+      139.75,
+      35.69
+    ],
+    "pixel": [
+      988,
+      761
+    ],
+    "classId": 14,
+    "code": "Cfa",
+    "name": "温暖湿潤気候",
+    "period": "1991–2020",
+    "sourceResolutionDegrees": 0.1,
+    "gridSha256": "831518994a4d36fe4ca3f2b785180ddf45d12c89d4ee1c84922cb02711989352",
+    "method": "Station editorial locator sampled at its actual map-display pixel; original Beck0.1° is nearest-sampled for display. Not a classification recalculated from station monthly normals."
+  },
+  {
+    "city": "sapporo",
+    "coordinates": [
+      141.32,
+      43.05
+    ],
+    "pixel": [
+      1075,
+      230
+    ],
+    "classId": 26,
+    "code": "Dfb",
+    "name": "乾季のない温暖夏の冷帯",
+    "period": "1991–2020",
+    "sourceResolutionDegrees": 0.1,
+    "gridSha256": "831518994a4d36fe4ca3f2b785180ddf45d12c89d4ee1c84922cb02711989352",
+    "method": "Station editorial locator sampled at its actual map-display pixel; original Beck0.1° is nearest-sampled for display. Not a classification recalculated from station monthly normals."
+  },
+  {
+    "city": "naha",
+    "coordinates": [
+      127.68,
+      26.2
+    ],
+    "pixel": [
+      316,
+      1378
+    ],
+    "classId": 14,
+    "code": "Cfa",
+    "name": "温暖湿潤気候",
+    "period": "1991–2020",
+    "sourceResolutionDegrees": 0.1,
+    "gridSha256": "831518994a4d36fe4ca3f2b785180ddf45d12c89d4ee1c84922cb02711989352",
+    "method": "Station editorial locator sampled at its actual map-display pixel; original Beck0.1° is nearest-sampled for display. Not a classification recalculated from station monthly normals."
+  },
+  {
+    "city": "kanazawa",
+    "coordinates": [
+      136.63,
+      36.59
+    ],
+    "pixel": [
+      814,
+      699
+    ],
+    "classId": 14,
+    "code": "Cfa",
+    "name": "温暖湿潤気候",
+    "period": "1991–2020",
+    "sourceResolutionDegrees": 0.1,
+    "gridSha256": "831518994a4d36fe4ca3f2b785180ddf45d12c89d4ee1c84922cb02711989352",
+    "method": "Station editorial locator sampled at its actual map-display pixel; original Beck0.1° is nearest-sampled for display. Not a classification recalculated from station monthly normals."
+  },
+  {
+    "city": "matsumoto",
+    "coordinates": [
+      137.97,
+      36.24
+    ],
+    "pixel": [
+      889,
+      723
+    ],
+    "classId": 25,
+    "code": "Dfa",
+    "name": "乾季のない高温夏の冷帯",
+    "period": "1991–2020",
+    "sourceResolutionDegrees": 0.1,
+    "gridSha256": "831518994a4d36fe4ca3f2b785180ddf45d12c89d4ee1c84922cb02711989352",
+    "method": "Station editorial locator sampled at its actual map-display pixel; original Beck0.1° is nearest-sampled for display. Not a classification recalculated from station monthly normals."
+  },
+  {
+    "city": "takamatsu",
+    "coordinates": [
+      134.05,
+      34.32
+    ],
+    "pixel": [
+      670,
+      854
+    ],
+    "classId": 14,
+    "code": "Cfa",
+    "name": "温暖湿潤気候",
+    "period": "1991–2020",
+    "sourceResolutionDegrees": 0.1,
+    "gridSha256": "831518994a4d36fe4ca3f2b785180ddf45d12c89d4ee1c84922cb02711989352",
+    "method": "Station editorial locator sampled at its actual map-display pixel; original Beck0.1° is nearest-sampled for display. Not a classification recalculated from station monthly normals."
+  }
+]
