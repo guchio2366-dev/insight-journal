@@ -32,5 +32,6 @@ export const southCentralFocusLandformSources={
   {label:'NASA・天山の隆起と地形',url:'https://science.nasa.gov/earth/earth-observatory/central-tien-shan-china-49857/'},
   {label:'NASA・中央アジアの天山と水源',url:'https://science.nasa.gov/earth/earth-observatory/central-asias-water-tower-79419/'},
   {label:'Natural Earth・地形と水域の位置',url:'https://www.naturalearthdata.com/downloads/10m-physical-vectors/'},
+  {label:'UNESCO・トゥランの冬季寒冷砂漠',url:'https://whc.unesco.org/en/list/1693/'},
  ],
 } as const;

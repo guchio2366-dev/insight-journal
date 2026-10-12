@@ -234,3 +234,23 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
   assert.deepEqual(errors,[]);
  }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
 });
+
+test('中央アジアの地形操作は国選択を作らず宗教色面の透過度を復元する',{skip:enabled?false:'ATLAS_ASIA_BROWSER=1 with a production build',timeout:120000},async()=>{
+ const {chromium}=await import('playwright'),{server,url}=await serve();let browser;
+ try{
+  browser=await chromium.launch({headless:true,chromiumSandbox:true,...(process.env.REVIEW_CHROME_PATH?{executablePath:process.env.REVIEW_CHROME_PATH}:{})});
+  const page=await browser.newPage({viewport:{width:1920,height:1080}});
+  await page.goto(`${url}/atlas/asia/central-asia/nature/?topic=terrain`);
+  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.contourBandStatus==='ready');
+  const focus=await page.locator('[data-physical-focus] option[value]:not([value=""])').first().getAttribute('value');
+  await page.locator('[data-physical-focus]').selectOption(focus);
+  assert.equal(new URL(page.url()).searchParams.get('place'),null);
+  assert.equal(await page.locator('[data-current-place]').textContent().then(t=>t.includes('中央アジア')),true);
+  await page.goto(`${url}/atlas/asia/central-asia/population/?topic=ethnicity`);
+  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.settlementPaintOpacity==='0.8');
+  await page.locator('[data-population-group="religion"]').click();
+  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.settlementPaintOpacity==='0.43');
+  await page.locator('[data-population-group="identity"]').click();
+  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.settlementPaintOpacity==='0.8');
+ }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
+});
