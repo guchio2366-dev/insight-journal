@@ -48,7 +48,10 @@ export async function initEuropeAtlas() {
     const response=await fetch(config.geographyURL);
     if(!response.ok||!response.body)throw new Error('Detailed Europe geography unavailable');
     const data=await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).json();
-    if(data.type!=='FeatureCollection'||!Array.isArray(data.features)||data.features.length!==config.geography.features.length)throw new Error('Invalid detailed Europe geography');
+    const expected=new Map(config.geography.features.map(feature=>[feature.properties.code,feature.properties.kind]));
+    if(data.type!=='FeatureCollection'||!Array.isArray(data.features)||data.features.length!==expected.size
+      ||new Set(data.features.map((feature:Feature)=>feature.properties?.code)).size!==expected.size
+      ||data.features.some((feature:Feature)=>expected.get(feature.properties?.code)!==feature.properties?.kind||!['Polygon','MultiPolygon'].includes(feature.geometry?.type)))throw new Error('Invalid detailed Europe geography');
     config.geography=data;
   }catch(error){console.warn('Detailed Europe geographic input unavailable; retain the legacy source for country fitting',error);}
   const { countries, cities, geography } = config;
@@ -874,7 +877,7 @@ export async function initEuropeAtlas() {
       query('[data-eu-subject-result]').textContent='地図を押すと、その位置に対応する格子の数値を表示します。';
       query('[data-eu-grid-result]').textContent='地図を押すと、その格子に割り当てられた収穫面積（ha）を表示します。';
     }else if(restorePoint)void showGrid(state.point,false);
-    query<HTMLElement>('.eu-read-panel').setAttribute('aria-labelledby',cultureActive()?'eu-culture-reader-title':climateReader()?'eu-city-heading':'eu-subject-title');
+    query<HTMLElement>('.eu-read-panel').setAttribute('aria-labelledby',state.layer==='language'?'eu-language-heading':cultureActive()?'eu-culture-reader-title':climateReader()?'eu-city-heading':'eu-subject-title');
     const farm=farmingView();
     const guidance=climateReader()?'観測所の平年値 · 1991–2020年':state.layer==='language'?'実使用分布の原図形は未収録です。右に母語の定義と収録済みの原統計を示します。':state.layer==='religion'&&!state.cultureCase?religionOverviewMode==='smre'?'SMREの45か国の最大分類を比較します。国を押すと8分類の割合と原資料を右に示します。':'Pewの2020年国別推計を地図上の小さな構成帯で示します。国を押すと7分類の値を右に示します。':cultureActive()?'地図下で事例・分類・行政区を選び、同じ表の総人口に対する割合を読みます。':farm.active?farm.single?`${farm.item!.name}だけを表示中です。元の表示には右側のボタンで戻れます。`:'品目名を選ぶと、その分布全体の輪郭を強調します。重なる場所では候補を選べます。':visibleFeatures().length?'地図の名前を押すと、その場所の説明を表示します。':subject().id==='precipitation'?'地図を押すと、その地点の年降水量を右側に表示します。':subject().id==='terrain'?'地図の山脈・平原・半島・海域の名前と右側の説明を読みます。':subject().grid?'地図を押すと、その位置の値を右側に表示します。':subject().indicator?'国を押すと、画面下部に国全体の数値を表示します。':'地図の凡例と右側の説明を読み比べます。';
     status.textContent=(failed?'簡易地図で表示中。':'')+guidance;
