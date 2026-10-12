@@ -43,7 +43,7 @@ jobs:
   review:
     name: Oceania and Russia desktop maps
     runs-on: ubuntu-latest
-    timeout-minutes: 18
+    timeout-minutes: 12
     env:
       ASTRO_TELEMETRY_DISABLED: '1'
       REGION_REVIEW_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
