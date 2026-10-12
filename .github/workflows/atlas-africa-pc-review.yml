@@ -138,6 +138,24 @@ jobs:
           if [[ "$africa_review_scope" != round2 && "$africa_review_scope" != third && "$africa_review_scope" != industry-sectors ]]; then
             node scripts/verify-africa-industry-review.mjs
           fi
+          if [[ "$africa_review_scope" == industry-sectors ]]; then
+            node --input-type=module <<'JS'
+          import {readdir,stat,readFile,writeFile} from 'node:fs/promises';
+          import {createHash} from 'node:crypto';
+          import assert from 'node:assert/strict';
+          const roots=['review-artifacts/africa-pc-review/representative','review-artifacts/africa-industry-review'];
+          const files=[];
+          for(const root of roots)for(const name of await readdir(root)){
+            const path=root+'/'+name,info=await stat(path);
+            if(info.isFile()){const bytes=await readFile(path);files.push({path,bytes:info.size,sha256:createHash('sha256').update(bytes).digest('hex')});}
+          }
+          const payload=JSON.stringify({head:process.env.AFRICA_REVIEW_HEAD_SHA,runId:process.env.AFRICA_REVIEW_RUN_ID,scope:'third-and-industry-sectors',files,independentImageInspection:'not-established-by-CI'},null,2)+'\n';
+          const total=files.reduce((sum,file)=>sum+file.bytes,0)+Buffer.byteLength(payload);
+          assert(total<20*1024*1024,'combined target images and JSON below 20 MiB');
+          await writeFile(roots[1]+'/combined-manifest.json',payload);
+          console.log(JSON.stringify({head:process.env.AFRICA_REVIEW_HEAD_SHA,combinedTargetBytes:total,limitBytes:20*1024*1024}));
+          JS
+          fi
 
       - name: Upload Africa PC screenshots and validation metadata
         if: success()
