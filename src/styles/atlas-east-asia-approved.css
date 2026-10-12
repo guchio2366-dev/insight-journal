@@ -59,3 +59,15 @@
 
 [data-region=east-asia] .asia-map-annotations .asia-culture-label{background:#fffdf5f2;color:#31504b;border:1px solid #c3d0bc;font:600 11px/22px var(--sans);padding:0 5px;white-space:nowrap;pointer-events:auto}
 .east-culture-examples{margin:16px 0}.east-culture-examples article{border-left:2px solid #b2c6b1;padding-left:12px;margin:18px 0}.east-culture-examples h4{margin:0 0 6px}
+
+@media(min-width:960px){
+ [data-region=east-asia] .atlas-desktop-shell .asia-atlas[data-field]:not([data-field=industry]) .asia-map-frame{height:min(var(--asia-map-available-height,760px),var(--east-map-content-height,760px))!important}
+}
+[data-region=east-asia] .asia-geographic-name{background:#fffdf5de;border:0;color:#40545b;font:500 11px/24px var(--sans);padding:0 5px;white-space:nowrap;pointer-events:none}
+[data-region=east-asia] .east-water-city-point{position:absolute;width:20px;height:20px;transform:translate(-50%,-50%);pointer-events:auto;outline-offset:2px}
+[data-region=east-asia] .east-water-city-point::before{content:'';position:absolute;left:7px;top:7px;width:6px;height:6px;border-radius:50%;background:#435f68;box-shadow:0 0 0 1px #fff}
+[data-region=east-asia] .east-water-city-point>span{display:none;position:absolute;left:14px;top:12px;background:#fffdf5f5;padding:2px 5px;white-space:nowrap;color:#253f49;font:600 11px/18px var(--sans);z-index:10}
+[data-region=east-asia] .east-water-city-point:is(:hover,:focus-visible)>span{display:block}
+[data-region=east-asia] .asia-population-station::before{width:7px;height:7px;background:#214e69;box-shadow:0 0 0 1.5px #fff,0 0 0 2px #214e6980}
+[data-region=east-asia] .asia-population-station[aria-pressed=true]::before{background:#a33827;outline:2px solid #a33827;outline-offset:2px}
+[data-region=east-asia] .east-forest-site{background:#fffdf5ed;border:1px solid #55765c;color:#31513a;padding:0 5px;font:600 11px/24px var(--sans);white-space:nowrap;pointer-events:auto}
