@@ -205,7 +205,8 @@
       "coordinates": [
         -68.93,
         -22.32
-      ]
+      ],
+      "country": "Chile"
     },
     {
       "id": "cerro-verde",
@@ -229,7 +230,8 @@
       "coordinates": [
         -71.531957,
         -16.418048
-      ]
+      ],
+      "country": "Peru"
     },
     {
       "id": "atacama",
@@ -250,7 +252,8 @@
       "coordinates": [
         -68.3,
         -23.3
-      ]
+      ],
+      "country": "Chile"
     },
     {
       "id": "salar-carmen",
@@ -275,7 +278,8 @@
       "coordinates": [
         -70.400003,
         -23.649992
-      ]
+      ],
+      "country": "Chile"
     },
     {
       "id": "carajas",
@@ -295,7 +299,8 @@
       "coordinates": [
         -50.1,
         -6.07
-      ]
+      ],
+      "country": "Brazil"
     },
     {
       "id": "minas-iron",
@@ -318,7 +323,8 @@
       "coordinates": [
         -43.91695,
         -19.91308
-      ]
+      ],
+      "country": "Brazil"
     },
     {
       "id": "paragominas",
@@ -341,7 +347,8 @@
       "coordinates": [
         -47.490006,
         -2.959575
-      ]
+      ],
+      "country": "Brazil"
     },
     {
       "id": "albras",
@@ -365,7 +372,8 @@
       "coordinates": [
         -48.481969,
         -1.448057
-      ]
+      ],
+      "country": "Brazil"
     },
     {
       "id": "santos-basin",
@@ -385,7 +393,8 @@
       "coordinates": [
         -42.7,
         -25.3
-      ]
+      ],
+      "country": "Brazil"
     },
     {
       "id": "replan",
@@ -409,7 +418,8 @@
       "coordinates": [
         -47.055885,
         -22.907898
-      ]
+      ],
+      "country": "Brazil"
     },
     {
       "id": "reduc",
@@ -433,7 +443,8 @@
       "coordinates": [
         -43.305602,
         -22.796378
-      ]
+      ],
+      "country": "Brazil"
     },
     {
       "id": "revap",
@@ -457,7 +468,8 @@
       "coordinates": [
         -45.879949,
         -23.199994
-      ]
+      ],
+      "country": "Brazil"
     },
     {
       "id": "itaipu",
@@ -477,7 +489,8 @@
       "coordinates": [
         -54.59,
         -25.41
-      ]
+      ],
+      "country": "Brazil"
     },
     {
       "id": "tubarao",
@@ -501,7 +514,8 @@
       "coordinates": [
         -40.353943,
         -20.332042
-      ]
+      ],
+      "country": "Brazil"
     },
     {
       "id": "contagem",
@@ -525,7 +539,8 @@
       "coordinates": [
         -43.91695,
         -19.91308
-      ]
+      ],
+      "country": "Brazil"
     },
     {
       "id": "zarate",
@@ -549,7 +564,8 @@
       "coordinates": [
         -59.040025,
         -34.089561
-      ]
+      ],
+      "country": "Argentina"
     },
     {
       "id": "gaviao",
@@ -571,7 +587,8 @@
       "coordinates": [
         -48.40472222222222,
         -21.764444444444443
-      ]
+      ],
+      "country": "Brazil"
     },
     {
       "id": "paso",
@@ -594,7 +611,8 @@
       "coordinates": [
         -56.51005,
         -32.810001
-      ]
+      ],
+      "country": "Uruguay"
     },
     {
       "id": "fray",
@@ -617,7 +635,8 @@
       "coordinates": [
         -58.303998,
         -33.138999
-      ]
+      ],
+      "country": "Uruguay"
     },
     {
       "id": "heredia",
@@ -640,7 +659,8 @@
       "coordinates": [
         -84.120002,
         9.991998
-      ]
+      ],
+      "country": "Costa Rica"
     },
     {
       "id": "coyol",
@@ -663,7 +683,8 @@
       "coordinates": [
         -84.230037,
         10.02002
-      ]
+      ],
+      "country": "Costa Rica"
     },
     {
       "id": "cartago",
@@ -686,7 +707,8 @@
       "coordinates": [
         -83.929978,
         9.869978
-      ]
+      ],
+      "country": "Costa Rica"
     },
     {
       "id": "b3",
@@ -709,7 +731,8 @@
       "coordinates": [
         -46.626966,
         -23.556734
-      ]
+      ],
+      "country": "Brazil"
     },
     {
       "id": "byma",
@@ -732,7 +755,8 @@
       "coordinates": [
         -58.432513,
         -34.610715
-      ]
+      ],
+      "country": "Argentina"
     },
     {
       "id": "recife",
@@ -755,7 +779,8 @@
       "coordinates": [
         -34.908766,
         -8.060532
-      ]
+      ],
+      "country": "Brazil"
     },
     {
       "id": "caruaru",
@@ -778,7 +803,8 @@
       "coordinates": [
         -35.980011,
         -8.280026
-      ]
+      ],
+      "country": "Brazil"
     },
     {
       "id": "panama-canal",
@@ -798,7 +824,8 @@
       "coordinates": [
         -79.68,
         9.08
-      ]
+      ],
+      "country": "Panama"
     },
     {
       "id": "montevideo-pulp",
@@ -821,7 +848,8 @@
       "coordinates": [
         -56.186823,
         -34.905376
-      ]
+      ],
+      "country": "Uruguay"
     },
     {
       "id": "montego",
@@ -844,7 +872,8 @@
       "coordinates": [
         -77.916676,
         18.466688
-      ]
+      ],
+      "country": "Jamaica"
     },
     {
       "id": "la-romana",
@@ -867,7 +896,8 @@
       "coordinates": [
         -68.966602,
         18.417001
-      ]
+      ],
+      "country": "Dominican Republic"
     },
     {
       "id": "vgg",
@@ -890,7 +920,8 @@
       "coordinates": [
         -60.668253,
         -32.949184
-      ]
+      ],
+      "country": "Argentina"
     },
     {
       "id": "san-martin-food",
@@ -913,7 +944,8 @@
       "coordinates": [
         -60.668253,
         -32.949184
-      ]
+      ],
+      "country": "Argentina"
     },
     {
       "id": "bahia-logistics",
@@ -936,7 +968,8 @@
       "coordinates": [
         -62.265021,
         -38.740027
-      ]
+      ],
+      "country": "Argentina"
     },
     {
       "id": "madeira-logistics",
@@ -959,7 +992,8 @@
       "coordinates": [
         -44.267937,
         -2.514039
-      ]
+      ],
+      "country": "Brazil"
     }
   ],
   "nextCandidates": [

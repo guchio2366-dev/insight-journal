@@ -14,6 +14,7 @@ const state={sector:'resources' as const,industry:null,site:null,single:false,sc
   </div>
   <aside class="latin-sector-reader" data-lis-reader aria-label="全体の概説と産業・拠点の解説">
    <h2 data-lis-title>資源・エネルギー</h2>
+   <p data-lis-range-note hidden/>
    <p data-lis-overview>{data.sectors[0].overview}</p>
    <h3>なぜ、その場所にあるか</h3><p data-lis-why>{data.sectors[0].why}</p>
    <div><button type="button" data-lis-single hidden>この産業だけを見る</button> <button type="button" data-lis-clear hidden>全体の概説へ戻る</button></div>

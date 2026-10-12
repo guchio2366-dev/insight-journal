@@ -378,6 +378,7 @@
       "id": "chuquicamata",
       "industry": "copper",
       "place": "チュキカマタ周辺",
+      "country": "Chile",
       "coordinates": [
         -68.93,
         -22.32
@@ -402,6 +403,7 @@
       "id": "cerro-verde",
       "industry": "copper",
       "place": "アレキパ周辺・セロ・ベルデ",
+      "country": "Peru",
       "coordinates": [
         -71.531957,
         -16.418048
@@ -430,6 +432,7 @@
       "id": "atacama",
       "industry": "lithium",
       "place": "アタカマ塩湖",
+      "country": "Chile",
       "coordinates": [
         -68.3,
         -23.3
@@ -455,6 +458,7 @@
       "id": "salar-carmen",
       "industry": "lithium",
       "place": "アントファガスタ近郊・サラール・デル・カルメン",
+      "country": "Chile",
       "coordinates": [
         -70.400003,
         -23.649992
@@ -484,6 +488,7 @@
       "id": "carajas",
       "industry": "iron",
       "place": "カラジャス",
+      "country": "Brazil",
       "coordinates": [
         -50.1,
         -6.07
@@ -508,6 +513,7 @@
       "id": "minas-iron",
       "industry": "iron",
       "place": "ミナスジェライスの鉱山地域",
+      "country": "Brazil",
       "coordinates": [
         -43.91695,
         -19.91308
@@ -535,6 +541,7 @@
       "id": "paragominas",
       "industry": "bauxite",
       "place": "パラゴミナス周辺",
+      "country": "Brazil",
       "coordinates": [
         -47.490006,
         -2.959575
@@ -562,6 +569,7 @@
       "id": "albras",
       "industry": "aluminum",
       "place": "ベレン南方・バルカレナ",
+      "country": "Brazil",
       "coordinates": [
         -48.481969,
         -1.448057
@@ -590,6 +598,7 @@
       "id": "santos-basin",
       "industry": "oil-gas",
       "place": "ブラジル大西洋沖",
+      "country": "Brazil",
       "coordinates": [
         -42.7,
         -25.3
@@ -614,6 +623,7 @@
       "id": "replan",
       "industry": "refining",
       "place": "パウリニア（カンピーナス周辺）",
+      "country": "Brazil",
       "coordinates": [
         -47.055885,
         -22.907898
@@ -642,6 +652,7 @@
       "id": "reduc",
       "industry": "refining",
       "place": "ドゥケ・デ・カシアス",
+      "country": "Brazil",
       "coordinates": [
         -43.305602,
         -22.796378
@@ -670,6 +681,7 @@
       "id": "revap",
       "industry": "refining",
       "place": "サンジョゼ・ドス・カンポス",
+      "country": "Brazil",
       "coordinates": [
         -45.879949,
         -23.199994
@@ -698,6 +710,7 @@
       "id": "itaipu",
       "industry": "hydro",
       "place": "イタイプ（ブラジル・パラグアイ国境）",
+      "country": "Brazil",
       "coordinates": [
         -54.59,
         -25.41
@@ -722,6 +735,7 @@
       "id": "tubarao",
       "industry": "steel",
       "place": "ヴィトーリア圏・ツバロン",
+      "country": "Brazil",
       "coordinates": [
         -40.353943,
         -20.332042
@@ -750,6 +764,7 @@
       "id": "contagem",
       "industry": "steel",
       "place": "ベロオリゾンテ圏・コンタジェン",
+      "country": "Brazil",
       "coordinates": [
         -43.91695,
         -19.91308
@@ -778,6 +793,7 @@
       "id": "zarate",
       "industry": "auto",
       "place": "サラテ",
+      "country": "Argentina",
       "coordinates": [
         -59.040025,
         -34.089561
@@ -806,6 +822,7 @@
       "id": "gaviao",
       "industry": "aviation",
       "place": "ガビアン・ペイショト",
+      "country": "Brazil",
       "coordinates": [
         -48.40472222222222,
         -21.764444444444443
@@ -832,6 +849,7 @@
       "id": "paso",
       "industry": "pulp",
       "place": "パソ・デ・ロス・トロス",
+      "country": "Uruguay",
       "coordinates": [
         -56.51005,
         -32.810001
@@ -859,6 +877,7 @@
       "id": "fray",
       "industry": "pulp",
       "place": "フライ・ベントス",
+      "country": "Uruguay",
       "coordinates": [
         -58.303998,
         -33.138999
@@ -886,6 +905,7 @@
       "id": "heredia",
       "industry": "medical",
       "place": "エレディア",
+      "country": "Costa Rica",
       "coordinates": [
         -84.120002,
         9.991998
@@ -913,6 +933,7 @@
       "id": "coyol",
       "industry": "medical",
       "place": "コヨル／アラフエラ",
+      "country": "Costa Rica",
       "coordinates": [
         -84.230037,
         10.02002
@@ -940,6 +961,7 @@
       "id": "cartago",
       "industry": "medical",
       "place": "カルタゴ",
+      "country": "Costa Rica",
       "coordinates": [
         -83.929978,
         9.869978
@@ -967,6 +989,7 @@
       "id": "b3",
       "industry": "finance",
       "place": "サンパウロ",
+      "country": "Brazil",
       "coordinates": [
         -46.626966,
         -23.556734
@@ -994,6 +1017,7 @@
       "id": "byma",
       "industry": "finance",
       "place": "ブエノスアイレス",
+      "country": "Argentina",
       "coordinates": [
         -58.432513,
         -34.610715
@@ -1021,6 +1045,7 @@
       "id": "recife",
       "industry": "digital",
       "place": "レシフェ",
+      "country": "Brazil",
       "coordinates": [
         -34.908766,
         -8.060532
@@ -1048,6 +1073,7 @@
       "id": "caruaru",
       "industry": "digital",
       "place": "カルアル",
+      "country": "Brazil",
       "coordinates": [
         -35.980011,
         -8.280026
@@ -1075,6 +1101,7 @@
       "id": "panama-canal",
       "industry": "logistics",
       "place": "パナマ運河",
+      "country": "Panama",
       "coordinates": [
         -79.68,
         9.08
@@ -1099,6 +1126,7 @@
       "id": "montevideo-pulp",
       "industry": "logistics",
       "place": "モンテビデオ",
+      "country": "Uruguay",
       "coordinates": [
         -56.186823,
         -34.905376
@@ -1126,6 +1154,7 @@
       "id": "montego",
       "industry": "tourism",
       "place": "モンテゴベイ",
+      "country": "Jamaica",
       "coordinates": [
         -77.916676,
         18.466688
@@ -1153,6 +1182,7 @@
       "id": "la-romana",
       "industry": "tourism",
       "place": "ラ・ロマーナ",
+      "country": "Dominican Republic",
       "coordinates": [
         -68.966602,
         18.417001
@@ -1180,6 +1210,7 @@
       "id": "vgg",
       "industry": "food",
       "place": "ロサリオ圏・ビジャ・ゴベルナドル・ガルベス",
+      "country": "Argentina",
       "coordinates": [
         -60.668253,
         -32.949184
@@ -1207,6 +1238,7 @@
       "id": "san-martin-food",
       "industry": "food",
       "place": "ロサリオ圏・サンマルティン",
+      "country": "Argentina",
       "coordinates": [
         -60.668253,
         -32.949184
@@ -1234,6 +1266,7 @@
       "id": "bahia-logistics",
       "industry": "logistics",
       "place": "バイアブランカ",
+      "country": "Argentina",
       "coordinates": [
         -62.265021,
         -38.740027
@@ -1261,6 +1294,7 @@
       "id": "madeira-logistics",
       "industry": "logistics",
       "place": "サンルイス圏・ポンタダマデイラ",
+      "country": "Brazil",
       "coordinates": [
         -44.267937,
         -2.514039

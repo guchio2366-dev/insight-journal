@@ -66,7 +66,7 @@ def city(name,country):
  return f['geometry']['coordinates'],{'publisher':'Natural Earth','version':'5.1.2','neId':f['properties']['NE_ID'],'sourceName':name,'sourceCountry':country,'type':'locality-guide'}
 def add(id,industry,place,cityname,country,stage,kind,sectors,refs,note,coords=None,provenance=None,meaning=None):
  if coords is None:coords,provenance=city(cityname,country)
- sites.append(dict(id=id,industry=industry,place=place,coordinates=coords,coordinateSource=provenance,coordinateMeaning=meaning or f'Natural Earthの{cityname}を地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。',stage=stage,stageKind=kind,sectors=sectors,sources=refs,note=note))
+ sites.append(dict(id=id,industry=industry,place=place,country=country,coordinates=coords,coordinateSource=provenance,coordinateMeaning=meaning or f'Natural Earthの{cityname}を地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。',stage=stage,stageKind=kind,sectors=sectors,sources=refs,note=note))
 legacy=repo/'src/data/atlas/latin-america-economy.ts'
 text=legacy.read_text()
 def old(id):return [float(x) for x in re.search(r'location: \[([^]]+)\]',text[text.index("id: '"+id+"'"):]).group(1).split(',')],{'type':'retained-region-guide','path':'src/data/atlas/latin-america-economy.ts','id':id}

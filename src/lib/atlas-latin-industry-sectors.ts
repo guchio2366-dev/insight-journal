@@ -5,6 +5,8 @@ export type IndustrySectorState={sector:IndustrySector;industry:string|null;site
 export const latinIndustrySectors=raw;
 export const sectorIndustries=(sector:string)=>raw.industries.filter(i=>i.sectors.includes(sector));
 export const sectorSites=(sector:string)=>raw.sites.filter(s=>s.sectors.includes(sector));
+const southernCountries=new Set(['Argentina','Bolivia','Brazil','Chile','Colombia','Ecuador','Guyana','Paraguay','Peru','Suriname','Uruguay','Venezuela','French Guiana']);
+export const sectorSitesForScope=(sector:string,scope:string)=>sectorSites(sector).filter(s=>scope==='all'||(scope==='south'?southernCountries.has(s.country):!southernCountries.has(s.country)));
 export const industryById=(id:string|null)=>raw.industries.find(i=>i.id===id);
 export function readIndustrySectorState(url:URL):IndustrySectorState {
  const p=url.searchParams,sector=(['resources','manufacturing','services'].includes(p.get('sector')??'')?p.get('sector'):'resources') as IndustrySector;
@@ -26,7 +28,7 @@ export function industrySectorScene(state:IndustrySectorState,width=960,height=7
  const frame=[original[0]+original[2]/2-width/k/2,original[1]+original[3]/2-height/k/2,width/k,height/k];
  const point=(coords:number[])=>{const p=projectLatin(coords);return [(p[0]-frame[0])*k,(p[1]-frame[1])*k];};
  const placed:number[][]=[];
- const visible=sectorSites(state.sector).map(s=>({...s,point:point(s.coordinates)})).filter(s=>s.point[0]>10&&s.point[0]<width-10&&s.point[1]>10&&s.point[1]<height-10).map(s=>{
+ const visible=sectorSitesForScope(state.sector,state.scope).map(s=>({...s,point:point(s.coordinates)})).filter(s=>s.point[0]>10&&s.point[0]<width-10&&s.point[1]>10&&s.point[1]<height-10).map(s=>{
   const offsets=[[0,0],[18,0],[-18,0],[0,-18],[0,18],[18,-18],[-18,-18],[18,18],[-18,18],[36,0],[-36,0]];
   const displayPoint=offsets.map(([dx,dy])=>[s.point[0]+dx,s.point[1]+dy]).find(p=>p[0]>7&&p[0]<width-7&&p[1]>7&&p[1]<height-7&&placed.every(q=>Math.hypot(p[0]-q[0],p[1]-q[1])>=16))??s.point;
   placed.push(displayPoint);return {...s,displayPoint};

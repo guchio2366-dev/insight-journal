@@ -40,3 +40,10 @@ test('Whole-region primary labels remain readable without pair overlaps and with
 test('Nearby marks are separated using bounded offsets without changing original coordinates',()=>{
  for(const sector of data.sectors){const scene=lib.industrySectorScene({...initial,sector:sector.id},960,770);for(let i=0;i<scene.visible.length;i++){const a=scene.visible[i];assert.ok(Math.hypot(a.point[0]-a.displayPoint[0],a.point[1]-a.displayPoint[1])<=36);assert.deepEqual(a.coordinates,data.sites.find(s=>s.id===a.id).coordinates);for(let j=i+1;j<scene.visible.length;j++){const b=scene.visible[j];assert.ok(Math.hypot(a.displayPoint[0]-b.displayPoint[0],a.displayPoint[1]-b.displayPoint[1])>=16,a.id+'/'+b.id);}}}
 });
+test('South/Central scope uses source country membership rather than the rectangular camera extent',()=>{
+ assert.ok(lib.sectorSitesForScope('services','central').some(s=>s.id==='panama-canal'));
+ assert.ok(!lib.sectorSitesForScope('services','south').some(s=>s.id==='panama-canal'));
+ assert.equal(lib.sectorSitesForScope('manufacturing','central').length,3);assert.equal(lib.sectorSitesForScope('resources','central').length,0);
+ for(const site of data.sites){assert.ok(site.country);if(site.coordinateSource.type==='locality-guide')assert.equal(site.country,site.coordinateSource.sourceCountry);}
+ assert.ok(!lib.industrySectorScene({...initial,sector:'services',scope:'south'},960,770).visible.some(s=>s.id==='panama-canal'));
+});
