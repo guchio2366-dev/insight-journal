@@ -47,13 +47,15 @@ export async function initEuropeAtlas() {
   try {
     const response=await fetch(config.geographyURL);
     if(!response.ok||!response.body)throw new Error('Detailed Europe geography unavailable');
-    const data=await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).json();
+    const bytes=new Uint8Array(await response.arrayBuffer());
+    const body=bytes[0]===0x1f&&bytes[1]===0x8b?new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip')):bytes;
+    const data=await new Response(body).json();
     const expected=new Map(config.geography.features.map(feature=>[feature.properties.code,feature.properties.kind]));
     if(data.type!=='FeatureCollection'||!Array.isArray(data.features)||data.features.length!==expected.size
       ||new Set(data.features.map((feature:Feature)=>feature.properties?.code)).size!==expected.size
       ||data.features.some((feature:Feature)=>expected.get(feature.properties?.code)!==feature.properties?.kind||!['Polygon','MultiPolygon'].includes(feature.geometry?.type)))throw new Error('Invalid detailed Europe geography');
-    config.geography=data;
-  }catch(error){console.warn('Detailed Europe geographic input unavailable; retain the legacy source for country fitting',error);}
+    config.geography=data;root.dataset.euGeography='detailed';
+  }catch(error){root.dataset.euGeography='legacy';console.warn('Detailed Europe geographic input unavailable; retain the legacy source for country fitting',error);}
   const { countries, cities, geography } = config;
   const query = <T extends Element>(selector: string) => root.querySelector<T>(selector)!;
   const all = <T extends Element>(selector: string) => Array.from(root.querySelectorAll<T>(selector));

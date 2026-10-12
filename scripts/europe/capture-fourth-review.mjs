@@ -19,6 +19,7 @@ try {
   records.push({field,layer,viewport:await page.evaluate(()=>({width:innerWidth,height:innerHeight,dpr:devicePixelRatio,scale:visualViewport.scale,map:{width:document.querySelector('.eu-map-stage').clientWidth,height:document.querySelector('.eu-map-stage').clientHeight}})),labels:await page.locator('.eu-map-label:visible,.eu-terrain-place-label:visible,.eu-river-label:visible').allTextContents()});
   if(mode==='after'){
    assert.equal(await page.locator('.eu-map-buttons,[data-eu-city-hint]').count(),0);
+   assert.equal(await page.locator('[data-europe-detail]').getAttribute('data-eu-geography'),'detailed');
    if(layer==='climate'){
     const positions=()=>page.locator('[data-eu-map-kind=city]:visible').evaluateAll(nodes=>nodes.map(n=>[n.dataset.euMapPlace,n.style.transform]));
     const original=await positions(),extent=await page.locator('[data-eu-static]').getAttribute('viewBox');

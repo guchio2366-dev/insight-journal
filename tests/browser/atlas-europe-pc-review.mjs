@@ -107,6 +107,7 @@ async function ready(page, region = 'europe', render = 'normal') {
     });
   } else {
     await page.waitForFunction(() => document.querySelector('[data-europe-detail]')?.dataset.initialized === 'true');
+    assert.equal(await page.locator('[data-europe-detail]').getAttribute('data-eu-geography'),'detailed','Both HTTP-expanded and raw gzip deliveries load the true 1:10m geometry');
     if (render === 'normal') await page.locator('[data-eu-live].is-ready').waitFor();
     else await page.waitForFunction(() => getComputedStyle(document.querySelector('[data-eu-static]')).visibility === 'visible');
   }

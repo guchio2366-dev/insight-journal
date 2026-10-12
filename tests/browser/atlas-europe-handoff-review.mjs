@@ -25,6 +25,7 @@ async function open(field,layer,render='auto'){
   await page.goto(new URL(`atlas/europe/${field}/?layer=${layer}${render==='static'?'&render=static':''}`,base).href,{waitUntil:'networkidle'});
   await page.waitForFunction(()=>document.querySelector('[data-europe-detail]')?.dataset.initialized==='true');
   if(render==='auto')await page.locator('[data-eu-live].is-ready').waitFor();
+  assert.equal(await page.locator('[data-europe-detail]').getAttribute('data-eu-geography'),'detailed');
   await page.evaluate(async()=>{await document.fonts.ready;await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
   assert.equal(await page.evaluate(()=>devicePixelRatio),1);
   assert.equal(await page.evaluate(()=>visualViewport.scale),1);
