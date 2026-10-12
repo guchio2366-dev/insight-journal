@@ -108,8 +108,9 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
     }
     if (field==='industry/') {
       const topics=doc.querySelector('[data-eu-topic-field="industry"]');
-      assert.deepEqual([...topics.querySelectorAll('[data-eu-industry-group]')].map(button=>button.textContent),['エネルギー','鉱業・素材','自動車・機械','化学・医薬品','航空機','港湾物流','観光','金融','繊維・衣服','食品加工']);
-      assert.deepEqual([...topics.querySelectorAll('button:not([data-eu-industry-group])')].map(button=>button.dataset.euTopic),['hubs']);
+      assert.deepEqual([...topics.querySelectorAll('[data-eu-industry-sector]')].map(button=>button.textContent),['資源・エネルギー','製造業','サービス業']);
+      assert.equal(doc.querySelectorAll('[data-eu-industry-group]').length,13);
+      assert.equal(topics.querySelectorAll('button').length,3);
       const scope=doc.querySelector('[data-eu-industry-scope]');
       assert.deepEqual([...scope.options].map(option=>option.value),['region:all','region:north','region:west','region:south','region:east','country:DEU','country:GBR','country:FRA','country:ITA']);
       assert.equal(scope.closest('[data-eu-industry-scope-host]').hidden,true);

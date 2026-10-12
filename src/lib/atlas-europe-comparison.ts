@@ -1,3 +1,4 @@
+import {europeIndustrySectorForSite} from './atlas-europe-industry.ts';
 import { europeLayers, type EuropeField } from '../data/atlas/europe/layers.ts';
 import { europeReadings } from '../data/atlas/europe/readings.ts';
 import countries from '../data/atlas/europe/countries.json' with { type:'json' };
@@ -25,7 +26,7 @@ export type EuropeComparisonLink = {
   sources?: readonly { label: string; url: string }[];
 };
 
-const returnKeys = new Set(['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'point', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin','farmYear','farmMeasure','farmCompare','farmExtent']);
+const returnKeys = new Set(['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'point', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin','farmYear','farmMeasure','farmCompare','farmExtent','industrySector','industryGroup','industryOnly']);
 const returnLimit = 2048;
 const knownLayer = (id: string) => europeLayers.some(layer => layer.id === id);
 const sourceLayer = (state: EuropeState) => state.layer === 'overlay' ? (state.returnLayer === 'climate' ? 'wheat' : state.returnLayer) : state.layer;
@@ -168,6 +169,7 @@ export function europeComparisonUrl(base: URL, source: EuropeState, comparison: 
   if (comparison.city) target.city = comparison.city;
   if (comparison.feature) {
     target.feature = comparison.feature;
+    if(target.layer==='hubs'){target.industrySector=europeIndustrySectorForSite(comparison.feature);delete target.industryGroup;delete target.industryOnly;}
     const feature=europeReadings.find(item=>item.id===comparison.feature);
     target.point=!focus&&['terrain','contours','drainage'].includes(target.layer)
       ? normaliseEuropePoint(feature?.coordinates) : undefined;

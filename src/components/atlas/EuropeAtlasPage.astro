@@ -39,7 +39,7 @@ import {smreMapGroups} from '../../lib/atlas-europe-smre-surface';
 import { pewSurfaceGroups, pewSurfaceColors } from '../../lib/atlas-europe-pew-surface';
 
 import { majorClimateCities } from '../../lib/atlas-europe-annotations';
-import { europeIndustryCountries, europeIndustryGroups, europeIndustryColors } from '../../lib/atlas-europe-industry';
+import { europeIndustryCountries, europeIndustryGroups, europeIndustryColors, europeIndustryInSector, europeIndustrySectorCopy } from '../../lib/atlas-europe-industry';
 import { countryOverview, countryOverviewSource } from '../../data/atlas/europe/country-overviews';
 import { europeReaderCopy } from '../../lib/atlas-europe-reader';
 import '../../styles/atlas-europe.css';
@@ -55,7 +55,7 @@ const layers = europeLayers.map(l=>({...l,image:l.image?withBase(l.image):undefi
 const initialLayer = layers.find(l=>l.id===currentField.initial)!;
 const initialClimateReader = field==='nature';
 const climateOverview = europeReaderCopy(layers.find(l=>l.id==='climate')!);
-const initialFeatures = field==='population'?populationCities:field==='industry'?europeReadings.filter(r=>r.field==='industry'):[];
+const initialFeatures = field==='population'?populationCities:field==='industry'?europeReadings.filter(r=>r.field==='industry'&&europeIndustryInSector(r.id,'resources')):[];
 const initialPointVisible = (p:{id:string;rank?:number}) => initialFeatures.some(f=>f.id===p.id)&&(p.rank??0)<=1;
 const renderPriority=(feature:(typeof farmingAreas.features)[number])=>{const index=europeFarmingGenres.crops.ids.indexOf(feature.properties.id as typeof europeFarmingGenres.crops.ids[number]);return index<0?europeFarmingGenres.crops.ids.length:index;};
 const displayFarmingAreas={...farmingAreas,features:[...farmingAreas.features].sort((a,b)=>renderPriority(a)-renderPriority(b))};
@@ -85,7 +85,7 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, farmingDom
       <section class="eu-map-panel" aria-labelledby="eu-map-title">
         <div class="eu-map-stage" data-map-surface tabindex="0" role="region" aria-label="欧州の地図">
           <EuropeLayoutControls position="map" {field} />
-          <div class="eu-map-heading"><div><h2 id="eu-map-title" data-eu-map-title>{initialLayer.title}</h2><p data-eu-map-status>{initialClimateReader?'観測所の平年値・1991–2020年。':agriculture?'穀物・畑作の品目を同時表示しています。品目名を選ぶと輪郭を強調します。':'地図の分布と右側の説明を読み比べます。'}</p></div><p data-eu-focus aria-live="polite">欧州全体</p></div>
+          <div class="eu-map-heading"><div><h2 id="eu-map-title" data-eu-map-title>{field==='industry'?'資源・エネルギーの集積':initialLayer.title}</h2><p data-eu-map-status>{initialClimateReader?'観測所の平年値・1991–2020年。':agriculture?'穀物・畑作の品目を同時表示しています。品目名を選ぶと輪郭を強調します。':'地図の分布と右側の説明を読み比べます。'}</p></div><p data-eu-focus aria-live="polite">欧州全体</p></div>
           <svg class="eu-static-map" data-eu-static viewBox={`0 0 ${frame.width} ${frame.height}`} role="img" aria-labelledby="eu-map-label">
             <title id="eu-map-label">欧州の{initialLayer.title}。{initialLayer.unit}。地図の名前から地点や品目を選べます。</title>
             <rect width={frame.width} height={frame.height} fill="#e7eff1" />
@@ -122,7 +122,7 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, farmingDom
           </svg>
           <div class="eu-live-map" data-eu-live aria-label="操作できる欧州地図"></div>
           <div class="eu-map-inline-key" data-eu-inline-farm-key hidden={!agriculture} aria-label="農畜産分布の品目色"><strong data-eu-farm-key-title>穀物・畑作</strong>{farmingAreas.features.map(f=><span data-eu-farm-key-item={f.properties.id} hidden={!europeFarmingGenres.crops.ids.some(id=>id===f.properties.id)}><i style={`background:${f.properties.color}`}></i>{f.properties.name}</span>)}<small data-eu-farm-key-note>点線＝同じ品目の色面外に続く集中域</small></div>
-          <div class="eu-map-inline-key eu-map-industry-key" data-eu-inline-industry-key hidden={field!=='industry'} aria-label="産業拠点の色と分野">{europeIndustryGroups.map(group=><span><i style={`background:${europeIndustryColors[group]}`}></i>{group}</span>)}</div>
+          <div class="eu-map-inline-key eu-map-industry-key" data-eu-inline-industry-key hidden={field!=='industry'} aria-label="産業拠点の色と分野">{europeIndustryGroups.map(group=><span data-eu-industry-key-item={group} hidden={!europeIndustrySectorCopy.resources.groups.includes(group)}><i style={`background:${europeIndustryColors[group]}`}></i>{group}</span>)}</div>
           <div class="eu-map-annotations" data-eu-annotations aria-label="地図の都市と地点"><svg aria-hidden="true"></svg></div>
           <div class="eu-farming-focus-marker" data-eu-farming-focus-marker hidden><span aria-hidden="true"></span><strong data-eu-farming-focus-point-label></strong></div>
           <span class="eu-selected-point" data-eu-selected-point role="img" aria-label="選択地点" hidden></span>

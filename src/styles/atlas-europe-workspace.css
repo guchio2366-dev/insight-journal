@@ -618,3 +618,16 @@
 .eu-workspace-root.is-eu-culture-reading[data-eu-religion-overview="pew"]:has([data-eu-pew-map-key]:not([hidden])) .eu-map-annotations { z-index:7; }
 /* The shared reduced-motion duration must not animate measured map positions. */
 .eu-workspace-root :is(.eu-smre-marker,.eu-pew-marker,[data-eu-religion-national],[data-eu-religion-evidence]) { transition-property:none; }
+
+/* Three sectors retain one frame; industry choices and labels change emphasis only. */
+.eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="industry"] { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); }
+.eu-workspace-root[data-europe-detail] .eu-industry-choices { display:flex; flex-wrap:wrap; gap:3px 8px; margin-top:4px; }
+.eu-workspace-root[data-europe-detail] .eu-industry-choices[hidden],.eu-workspace-root [data-eu-industry-key-item][hidden] { display:none; }
+.eu-workspace-root .eu-industry-choices button { min-height:32px; padding:3px 7px; border:0; border-bottom:2px solid transparent; background:transparent; color:#294753; font:600 13px/1.4 var(--sans); }
+.eu-workspace-root .eu-industry-choices button[aria-pressed=true] { border-bottom-color:#294753; background:#e8eee7; }
+.eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry]:not(.is-point-only) { border-width:0; border-left:3px solid var(--eu-industry-color); padding:2px 4px; font-weight:700; box-shadow:none; }
+.eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry][aria-pressed=true] { border-width:0; border-left-width:3px; outline:2px solid #234553; outline-offset:1px; }
+.eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry].is-muted { opacity:.55; }
+.eu-workspace-root[data-europe-detail] .eu-label-industry { font:700 13px/1.25 var(--sans); }
+.eu-workspace-root[data-europe-detail] .eu-label-location { font-size:11px; }
+.eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry].is-emphasized { box-shadow:none; }

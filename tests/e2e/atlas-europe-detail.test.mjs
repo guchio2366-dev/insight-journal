@@ -134,15 +134,15 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       assert.equal(doc.querySelector('[data-eu-water-options] [data-eu-topic="precipitation"]').disabled,false);
     }
     if(field==='industry'||field==='population'){
-      const title=field==='industry'?'産業別の集積':'人口密度';
+      const title=field==='industry'?'資源・エネルギーの集積':'人口密度';
       assert.equal(doc.querySelector('[data-eu-map-title]').textContent,title);
-      assert.equal(doc.querySelector('[data-eu-subject-title]').textContent,field==='population'?'人口分布':'欧州の産業集積');
-      assert.ok(doc.querySelector('[data-eu-legend-title]').textContent.includes(title));
+      assert.equal(doc.querySelector('[data-eu-subject-title]').textContent,field==='population'?'人口分布':'欧州の資源・エネルギー');
+      assert.ok(doc.querySelector('[data-eu-legend-title]').textContent.includes(field==='industry'?'産業別の集積':title));
       assert.ok(doc.querySelector('[data-eu-subject-takeaway]').textContent.length>15);
       assert.equal(doc.querySelector('[data-eu-climate-image]').getAttribute('href'),null);
       assert.ok(doc.querySelectorAll('[data-eu-feature-point]:not([hidden])').length>0);
       if(field==='industry'){
-        assert.equal(doc.querySelectorAll('[data-eu-feature-point]:not([hidden])').length,22);
+        assert.equal(doc.querySelectorAll('[data-eu-feature-point]:not([hidden])').length,10);
         assert.equal(doc.querySelector('[data-eu-feature]'),null);
         assert.match(doc.querySelector('[data-eu-subject-note]').textContent,/生産量・雇用の大小を表しません/);
       }else{

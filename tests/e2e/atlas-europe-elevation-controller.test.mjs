@@ -1,3 +1,4 @@
+import {europeIndustryInSector} from '../../src/lib/atlas-europe-industry.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, access } from 'node:fs/promises';
@@ -400,16 +401,17 @@ test('産業分野は国を自動選択せず、全拠点を保ったまま強�
   const app=await setup('/insight-journal/atlas/europe/industry/?layer=hubs&render=static');
   try{
     const full=app.q('[data-eu-static]').getAttribute('viewBox');
+    app.q('[data-eu-industry-sector="manufacturing"]').click();await tick();
     app.q('[data-eu-industry-group="自動車・機械"]').click();await tick();
     const params=new URL(app.w.location.href).searchParams;
     assert.equal(params.get('industryGroup'),'自動車・機械');assert.equal(params.has('place'),false);assert.equal(params.has('feature'),false);
     assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
     const config=app.config.readings.filter(item=>item.field==='industry');
-    assert.equal(config.filter(item=>app.q(`[data-eu-feature-point="${item.id}"]`).style.display!=='none').length,22);
+    assert.equal(config.filter(item=>app.q(`[data-eu-feature-point="${item.id}"]`).style.display!=='none').length,17);
     assert.match(app.q('[data-eu-subject-takeaway]').textContent,/ドイツ南部.*チェコ/);
     const country=app.q('[data-eu-country-navigation]');country.value='DEU';country.dispatchEvent(new app.w.Event('change'));
     assert.match(app.q('[data-eu-country-overview]').href,/\/atlas\/europe\/overview\/\?country=DEU$/);
-    app.choose('hubs');await tick();
+    app.q('[data-eu-industry-all]').click();await tick();
     assert.equal(app.q('[data-eu-country-reader]').hidden,true);
     assert.equal(new URL(app.w.location.href).searchParams.has('industryGroup'),false);
     assert.equal(new URL(app.w.location.href).searchParams.has('place'),false);
@@ -429,7 +431,7 @@ test('産業は10分野の復元でも他分野の拠点と欧州全体の表示
     app.restore('?layer=hubs&industryGroup=食品加工&render=static');await tick();
     assert.match(app.q('[data-eu-subject-title]').textContent,/食品加工/);
     assert.equal(app.q('[data-eu-topic="hubs"][data-eu-industry-group="食品加工"]').getAttribute('aria-pressed'),'true');
-    const points=app.config.readings.filter(item=>item.field==='industry');assert.ok(points.every(item=>app.q(`[data-eu-feature-point="${item.id}"]`).style.display!=='none'));
+    const points=app.config.readings.filter(item=>item.field==='industry'&&europeIndustryInSector(item.id,'manufacturing'));assert.ok(points.every(item=>app.q(`[data-eu-feature-point="${item.id}"]`).style.display!=='none'));
   }finally{await app.w.happyDOM.close();}
 });
 

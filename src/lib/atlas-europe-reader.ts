@@ -1,3 +1,4 @@
+import {europeIndustrySectorCopy} from './atlas-europe-industry.ts';
 import type { EuropeLayer } from '../data/atlas/europe/layers';
 import { climateFarming, cityFarming } from '../data/atlas/europe/climate-farming.ts';
 import { europeReadings } from '../data/atlas/europe/readings.ts';
@@ -43,7 +44,7 @@ const factualSources: Record<string, ReaderSource[]> = {
   water:readingSources('danube','rhine','rotterdam','ludwigshafen'),
   terrain:[...readingSources('alps'),{url:'https://www.eea.europa.eu/en/analysis/maps-and-charts/mountain-massifs',label:'EEA：欧州の山塊図'},{url:'https://www.nationalgeographic.org/encyclopedia/europe-physical-geography/',label:'National Geographic：欧州の半島・平原・山地'}],
   contours:readingSources('alps'),
-  hubs:readingSources('rotterdam','ludwigshafen','toulouse'),
+  hubs:readingSources(...europeIndustrySectorCopy.resources.labels),
   density:[],
   forest:readingSources('kaukas'),
   manufacturing:readingSources('munich','mlada'),
@@ -215,8 +216,7 @@ export function europeReaderCopy(layer:EuropeLayer) {
     note:'表示用に平均化した標高から作った概略図です。等高線の間隔は標高精度を意味しません。',
   };
   if(layer.id==='hubs')return {
-    title:'欧州の産業集積',takeaway:'北海側はエネルギー・港湾物流、北欧は鉱業・素材、ライン川沿いは化学、ドイツ南部からチェコは自動車・機械が目立ちます。航空機は国境を越えた複数拠点、観光は地中海とアルプス、金融・繊維衣服・食品加工は都市や産業地区に集まります。',
-    body:'資源産業は鉱床・海底資源・森林の位置に、港湾物流と化学は海港から内陸へつながる交通と原料搬入に結びつきます。自動車・航空機は技能と国境を越えた部品生産、医薬・食品は研究開発と加工設備の集積を使います。観光は海岸・山地の景観と季節の需要、金融は専門人材と企業・行政機能への近さが関わります。',
+    title:'欧州の資源・エネルギー',takeaway:europeIndustrySectorCopy.resources.overview,body:europeIndustrySectorCopy.resources.reason,
     note:'点の数や大きさは、生産量・雇用の大小を表しません。工場群や施設全体の境界は描いていません。',
   };
   if(layer.id==='density')return {

@@ -3,7 +3,7 @@ import { europeLayers } from '../data/atlas/europe/layers.ts';
 import censusCases from '../../public/assets/atlas/europe/population-cases-v1/cases.json' with { type:'json' };
 import { normalisePopulationCaseChoice, type PopulationCensusCasePackage, type PopulationCaseChoiceState } from '../data/atlas/europe/population-cases.ts';
 import { normaliseEuropeDrainageBasin, type EuropeDrainageState } from './atlas-europe-drainage.ts';
-import { isEuropeIndustryCountry, normaliseEuropeIndustryGroup, type EuropeIndustryGroup } from './atlas-europe-industry.ts';
+import { isEuropeIndustryCountry, normaliseEuropeIndustryGroup, type EuropeIndustryGroup, normaliseEuropeIndustrySector, europeIndustrySectorForGroup, europeIndustrySectorForSite, europeIndustrySectorCopy, type EuropeIndustrySector } from './atlas-europe-industry.ts';
 import { europeFarmMetric, europeFarmValidYear } from '../data/atlas/europe/farming-statistics.ts';
 
 export const frame = { width: 1200, height: 1001, west: -25, east: 65, south: 32, north: 73 };
@@ -24,7 +24,7 @@ export function visibleBounds(geometries: Geometry[]): [[number, number], [numbe
   if (!points.length) return [[-25, 32], [65, 73]];
   return points.reduce<[[number,number],[number,number]]>((bounds,[x,y])=>[[Math.min(bounds[0][0],x),Math.min(bounds[0][1],y)],[Math.max(bounds[1][0],x),Math.max(bounds[1][1],y)]],[[Infinity,Infinity],[-Infinity,-Infinity]]);
 }
-export type EuropeState = { region: string; place: string; city: string; compare: string[]; render: string; layer: string; returnLayer: string; industryGroup?: EuropeIndustryGroup; feature?: string; point?: [number, number]; showCrops?: boolean; showLivestock?: boolean; single?: boolean; farmYear?:number; farmMeasure?:string; farmCompare?:string[]; farmExtent?:'full' } & Partial<PopulationCaseChoiceState> & EuropeDrainageState;
+export type EuropeState = { region: string; place: string; city: string; compare: string[]; render: string; layer: string; returnLayer: string; industryGroup?: EuropeIndustryGroup; industrySector?:EuropeIndustrySector; industryOnly?:boolean; feature?: string; point?: [number, number]; showCrops?: boolean; showLivestock?: boolean; single?: boolean; farmYear?:number; farmMeasure?:string; farmCompare?:string[]; farmExtent?:'full' } & Partial<PopulationCaseChoiceState> & EuropeDrainageState;
 /** Keep the original precision so restoring a click cannot select a neighbouring cell. */
 export function normaliseEuropePoint(value: unknown): [number, number] | undefined {
   if (!Array.isArray(value) || value.length !== 2 || !value.every(Number.isFinite)) return undefined;
@@ -57,7 +57,11 @@ export function readEuropeState(search: string, countries: { code: string; regio
     if(state.place&&!isEuropeIndustryCountry(state.place))state.place='';
   }
   const industryGroup = normaliseEuropeIndustryGroup(p.get('industryGroup'));
-  if (industryGroup && layer === 'hubs') state.industryGroup = industryGroup;
+  if(layer==='hubs'){
+    state.industrySector=normaliseEuropeIndustrySector(p.get('industrySector'))??europeIndustrySectorForGroup(industryGroup);
+    if(industryGroup&&europeIndustrySectorCopy[state.industrySector].groups.includes(industryGroup))state.industryGroup=industryGroup;
+    if(state.industryGroup&&p.get('industryOnly')==='1')state.industryOnly=true;
+  }
   const coordinates = p.get('point')?.split(',');
   const point = p.getAll('point').length === 1 && coordinates?.every(value => value.trim() !== '') ? normaliseEuropePoint(coordinates.map(Number)) : undefined;
   if (point) state.point = point;
@@ -72,7 +76,8 @@ export function readEuropeState(search: string, countries: { code: string; regio
       if(censusCase.topics.some(topic=>topic.areas.some(area=>area.code===p.get('cultureArea'))))state.cultureArea=p.get('cultureArea')!;
     }
   }
-  if (layer!=='contours'&&/^[a-z0-9-]{1,60}$/.test(p.get('feature') ?? '')) state.feature = p.get('feature')!;
+  if (layer!=='contours'&&/^[a-z0-9_-]{1,60}$/.test(p.get('feature') ?? '')) state.feature = p.get('feature')!;
+  if(layer==='hubs'&&!p.has('industrySector')&&!industryGroup&&state.feature)state.industrySector=europeIndustrySectorForSite(state.feature);
   if (p.get('crops') === 'off') state.showCrops = false;
   if (p.get('livestock') === 'off') state.showLivestock = false;
   if (p.get('farmExtent') === 'full') state.farmExtent = 'full';
@@ -89,7 +94,7 @@ export function writeEuropeState(url: URL, state: EuropeState): URL {
   const displayedLayer=state.layer==='overlay'?(state.returnLayer==='climate'?'wheat':state.returnLayer):state.layer;
   const field=europeLayers.find(layer=>layer.id===displayedLayer)?.field;
   if(field)next.pathname=next.pathname.replace(/(\/atlas\/europe\/)(nature|agriculture|industry|population)\/?$/,`$1${field}/`);
-  for (const key of ['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'point', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin','farmYear','farmMeasure','farmCompare','farmExtent','industryGroup']) next.searchParams.delete(key);
+  for (const key of ['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'point', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin','farmYear','farmMeasure','farmCompare','farmExtent','industryGroup','industrySector','industryOnly']) next.searchParams.delete(key);
   if (state.region !== 'all') next.searchParams.set('region', state.region);
   if (state.place) next.searchParams.set('place', state.place);
   if (state.city) next.searchParams.set('city', state.city);
@@ -99,7 +104,11 @@ export function writeEuropeState(url: URL, state: EuropeState): URL {
   if (state.layer === 'overlay') next.searchParams.set('returnLayer', state.returnLayer);
   if (state.feature&&state.layer!=='contours') next.searchParams.set('feature', state.feature);
   const industryGroup = normaliseEuropeIndustryGroup(state.industryGroup);
-  if (industryGroup && state.layer === 'hubs') next.searchParams.set('industryGroup', industryGroup);
+  if(state.layer==='hubs'){
+    const sector=normaliseEuropeIndustrySector(state.industrySector)??(industryGroup?europeIndustrySectorForGroup(industryGroup):europeIndustrySectorForSite(state.feature));
+    next.searchParams.set('industrySector',sector);
+    if(industryGroup&&europeIndustrySectorCopy[sector].groups.includes(industryGroup)){next.searchParams.set('industryGroup',industryGroup);if(state.industryOnly)next.searchParams.set('industryOnly','1');}
+  }
   const point = normaliseEuropePoint(state.point);
   if (point) next.searchParams.set('point', point.join(','));
   const basin = normaliseEuropeDrainageBasin(state.basin);

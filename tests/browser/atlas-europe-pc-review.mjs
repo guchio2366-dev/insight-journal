@@ -580,7 +580,7 @@ async function stageOneOperations(page, profile) {
   await snapshot(page, profile, 'drainage-river-reading');
   await openEurope(page, 'atlas/europe/industry/?layer=hubs', 'normal');
   assert.equal(new URL(page.url()).searchParams.has('feature'), false);
-  assert.equal(await page.locator('[data-eu-industry-group]').count(),10);
+  assert.equal(await page.locator('[data-eu-industry-group]').count(),13);
   const industryOverview = await snapshot(page, profile, 'industry-overview');
   await captureEurope(page,profile,'industry');
   const usIndustry = await page.context().newPage();
@@ -593,6 +593,7 @@ async function stageOneOperations(page, profile) {
   } finally { await usIndustry.close(); }
   const industryExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
   await quietFeatures('industry');
+  await page.locator('[data-eu-industry-sector="manufacturing"]').click();
   await page.locator('[data-eu-industry-group="自動車・機械"]').click();
   assert.equal(new URL(page.url()).searchParams.has('place'), false);
   assert.equal(new URL(page.url()).searchParams.has('feature'), false);
@@ -601,7 +602,7 @@ async function stageOneOperations(page, profile) {
   await page.locator('[data-eu-country-navigation]').selectOption('DEU');
   assert.match(await page.locator('[data-eu-country-overview]').getAttribute('href'),/\/atlas\/europe\/overview\/\?country=DEU$/);
   await snapshot(page, profile, 'industry-sector-reading');
-  await page.locator('[data-eu-topic-field="industry"] [data-eu-topic="hubs"]:not([data-eu-industry-group])').click();
+  await page.locator('[data-eu-industry-all]').click();
   assert.equal(new URL(page.url()).searchParams.has('place'), false);
   assert.equal(new URL(page.url()).searchParams.has('industryGroup'), false);
   assert.equal(await page.locator('[data-eu-country-reader]').isVisible(), false);

@@ -1,3 +1,4 @@
+import {europeIndustryInSector,europeIndustryMatches,europeIndustrySectorForSite} from './atlas-europe-industry.ts';
 import { project, viewPath, frame } from './atlas-europe-view.ts';
 import type { EuropeState } from './atlas-europe-view';
 import { layerColor, type EuropeLayer } from '../data/atlas/europe/layers.ts';
@@ -143,7 +144,7 @@ export function renderEuropeOrigin(root:HTMLElement, source:EuropeState|null, ta
   }
   const farm=farmingPresentation(source,config.farmingAreas.features.map(f=>f.properties));
   const sourceVisible=(f:{country:string})=>source.place?f.country===source.place:source.region==='all'||config.countries.find(c=>c.code===f.country)?.region===source.region;
-  const feature=config.readings.find(f=>f.id===source.feature&&f.field==='industry'&&sourceVisible(f));
+  const feature=config.readings.find(f=>f.id===source.feature&&f.field==='industry'&&sourceVisible(f)&&europeIndustryInSector(f.id,source.industrySector??europeIndustrySectorForSite(source.feature))&&(!source.industryOnly||europeIndustryMatches(f.id,source.industryGroup)));
   const marks:any[]=[];
   if(farm.active) {
     positionOrigin(root,key,false);
@@ -159,7 +160,7 @@ export function renderEuropeOrigin(root:HTMLElement, source:EuropeState|null, ta
     if(!selected.length)addKey('#e3e4df','元の選択では対象の分布は非表示です');
   } else if(layer.id==='hubs') {
     positionOrigin(root,key,false);
-    const originalPoints=feature?[feature]:config.readings.filter(f=>f.field==='industry'&&sourceVisible(f));
+    const originalPoints=feature?[feature]:config.readings.filter(f=>f.field==='industry'&&sourceVisible(f)&&europeIndustryInSector(f.id,source.industrySector??europeIndustrySectorForSite(source.feature))&&(!source.industryOnly||europeIndustryMatches(f.id,source.industryGroup)));
     const matrix=root.querySelector<SVGSVGElement>('[data-eu-static]')?.getScreenCTM?.();
     const scale=matrix?Math.max(.01,Math.hypot(matrix.a,matrix.b)):.4;
     for(const point of originalPoints) {

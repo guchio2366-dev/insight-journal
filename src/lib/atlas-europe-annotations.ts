@@ -2,14 +2,14 @@ import { layoutNatureLabels, leaderEnd, type Box, type Point, type LabelPlacemen
 import { layoutClimateCodes, type CodePlacement } from './atlas-climate-code-labels';
 import type { FarmingItem } from './atlas-europe-farming';
 import climateLabels from '../data/atlas/europe/map-labels.json';
-import { europeIndustryMembership, europeIndustryColors, type EuropeIndustryGroup } from './atlas-europe-industry';
+import { europeIndustryMembership, europeIndustryColors, type EuropeIndustryGroup, europeIndustryGroupsForSite, europeIndustrySiteLabels, type EuropeIndustrySector } from './atlas-europe-industry';
 
 export const majorClimateCities = ['london','paris','moscow','madrid','rome','athens','lisbon','reykjavik','helsinki'];
 /** Names sample distinct crop/livestock concentrations; this is not a value rank. */
 export const overviewFarmingLabels = ['wheat','barley','maize','potato','sugarbeet','rapeseed','cattle','pig','sheep','chicken','citrus','temperatefruit','vegetables'];
 type Place = { id:string; name:string; coordinates:number[] };
 type Annotation = Place & { kind:'city'|'feature'|'crop'; button:HTMLButtonElement; line:SVGLineElement; dot:SVGCircleElement|SVGPathElement };
-type View = { climate:boolean; crops:boolean; detailed:boolean; city:string; feature?:string; places:Place[]; featureLabelIds?:string[]; farmingIds?:string[]; selectedFarming?:string; emphasizedFeatures?:string[] };
+type View = { climate:boolean; crops:boolean; detailed:boolean; city:string; feature?:string; places:Place[]; featureLabelIds?:string[]; farmingIds?:string[]; selectedFarming?:string; emphasizedFeatures?:string[];industrySector?:EuropeIndustrySector;hiddenFeatureIds?:string[] };
 
 /** One screen-space annotation layer is shared by MapLibre and the SVG fallback. */
 export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], features:Place[], getView:()=>View, project:(coordinate:number[])=>Point, select:(kind:'city'|'feature'|'crop', id:string)=>void, farmingItems:FarmingItem[] = [], decorateFeature?:(id:string,button:HTMLButtonElement)=>void, afterLayout?:()=>void) {
@@ -24,7 +24,7 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
     const industries=kind==='feature'?europeIndustryMembership[place.id]:undefined;
     const industry=industries?.[0];
     const shortIndustry:Partial<Record<EuropeIndustryGroup,string>>={'自動車・機械':'機械','化学・医薬品':'化学','鉱業・素材':'素材','港湾物流':'港湾','繊維・衣服':'繊維'};
-    const sectorName=industry?industries!.map(group=>shortIndustry[group]??group).join('・'):'';
+    const sectorName=industry?europeIndustrySiteLabels[place.id]??industries!.map(group=>shortIndustry[group]??group).join('・'):'';
     const name=kind==='feature'?(mapNames[place.id]??(industry?`${sectorName}｜${place.name}`:place.name)):place.name;
     const button=document.createElement('button');button.type='button';button.className='eu-map-label';
     if(industry){
@@ -66,17 +66,19 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
     const selected=(item:Annotation)=>item.kind==='city'?item.id===view.city:item.kind==='crop'?farmingIds.has(item.id)&&item.id===view.selectedFarming:item.id===view.feature;
     const inputs=visible.map(item=>{
       item.button.hidden=false;
+      if(view.industrySector&&europeIndustryMembership[item.id]){const groups=europeIndustryGroupsForSite(item.id,view.industrySector),group=groups[0];item.button.querySelector('strong')!.textContent=item.id==='kaukas'&&view.industrySector==='resources'?'木質燃料':europeIndustrySiteLabels[item.id]??groups.join('・');if(group){item.button.style.setProperty('--eu-industry-color',europeIndustryColors[group]);item.dot.style.setProperty('--eu-industry-color',europeIndustryColors[group]);}}
+
       const pointOnly=(item.kind==='feature'&&!!view.featureLabelIds&&!view.featureLabelIds.includes(item.id)
           &&(!!europeIndustryMembership[item.id]||!view.detailed));
       item.button.classList.toggle('is-point-only',pointOnly);
-      item.button.classList.toggle('is-muted',item.kind==='crop'&&!!view.selectedFarming&&item.id!==view.selectedFarming);
+      item.button.classList.toggle('is-muted',item.kind==='crop'&&!!view.selectedFarming&&item.id!==view.selectedFarming||!!view.industrySector&&!(view.emphasizedFeatures??[]).includes(item.id));
       item.button.title=item.name;
       if(item.kind==='feature')decorateFeature?.(item.id,item.button);
-      return {id:item.kind+'-'+item.id,anchor:project(item.coordinates),width:item.button.offsetWidth,height:item.button.offsetHeight};
+      return {id:item.kind+'-'+item.id,anchor:project(item.coordinates),width:pointOnly?16:item.button.offsetWidth,height:pointOnly?16:item.button.offsetHeight};
     }).filter(p=>p.anchor.x>=bounds.left&&p.anchor.x<=bounds.right&&p.anchor.y>=bounds.top&&p.anchor.y<=bounds.bottom);
     const inputIds=new Set(inputs.map(p=>p.id));
     for(const item of items) {
-      const isVisible=inputIds.has(item.kind+'-'+item.id);
+      const isVisible=inputIds.has(item.kind+'-'+item.id)&&!(view.hiddenFeatureIds??[]).includes(item.id);
       item.button.hidden=!isVisible;item.line.style.display=isVisible&&item.kind!=='crop'&&!item.button.classList.contains('is-point-only')?'':'none';item.dot.style.display=isVisible&&item.kind!=='crop'?'':'none';
       const muted=item.kind==='crop'&&!!view.selectedFarming&&item.id!==view.selectedFarming;
       item.line.style.opacity=item.dot.style.opacity=muted?'.22':'1';
@@ -99,7 +101,7 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
     }
     for(const item of visible) {
       const p=placements.find(p=>p.id===item.kind+'-'+item.id), input=inputs.find(p=>p.id===item.kind+'-'+item.id);
-      if(!p||!input){item.button.hidden=true;item.line.style.display=item.dot.style.display='none';continue;}
+      if(!p||!input||(view.hiddenFeatureIds??[]).includes(item.id)){item.button.hidden=true;item.line.style.display=item.dot.style.display='none';continue;}
       const dx=input.anchor.x-p.anchor.x,dy=input.anchor.y-p.anchor.y;
       const box={left:p.left+dx,top:p.top+dy,right:p.right+dx,bottom:p.bottom+dy};
       item.button.style.transform=`translate(${box.left}px,${box.top}px)`;
