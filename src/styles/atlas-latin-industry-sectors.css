@@ -1,0 +1,17 @@
+.latin-sector-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(420px,36%);gap:14px;align-items:start}
+.latin-sector-map-column{position:relative;min-width:0;border:1px solid #cbd6cc;background:#eaf1ee}
+[data-lis-map]{height:calc(100dvh - var(--lis-top,298px) - 12px);min-height:440px;width:100%;overflow:hidden}
+.latin-sector-map{display:block;width:100%;height:100%;max-height:none!important;border:0!important}
+.latin-sector-map-key{position:absolute;top:9px;left:10px;max-width:330px;padding:6px 8px;background:#fffefaeb;border:1px solid #ccd6ce;color:#42574b;font-size:13px;line-height:1.55;pointer-events:none}
+.latin-sector-reader{height:calc(100dvh - var(--lis-top,298px) - 12px);min-height:440px;overflow:auto;scrollbar-gutter:stable;border:1px solid #dde1d4;background:#fbfaf1;padding:12px;box-sizing:border-box;font-size:16px;line-height:1.7}
+.latin-sector-reader p{font-size:16px!important;line-height:1.7!important}.latin-sector-reader [data-lis-overview]{font-weight:700}.latin-sector-reader h2{font-size:22px!important}.latin-sector-reader h3{font-size:18px!important}
+.latin-sector-reader [data-lis-site-reading]{border-left:3px solid #947148;padding-left:10px;margin:15px 0}.latin-sector-reader [data-lis-coordinate-note]{font-size:14px!important;color:#58675f}
+[data-lis-legend]{display:flex;flex-wrap:wrap;gap:5px;margin:0;padding:9px 10px;border-top:1px solid #cbd6cc;background:#fffefa}
+[data-lis-legend] button{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:4px 7px;font-size:14px}[data-lis-legend] i{display:inline-block;width:12px;height:12px;border:1px solid #738278}
+[data-lis-site],[data-lis-industry]{cursor:pointer}.latin-sector-map [role=button]:focus-visible{outline:none}.latin-sector-map [role=button]:focus-visible text{stroke:#e4c59e;stroke-width:5}.latin-sector-map [data-lis-site]:focus-visible>circle:first-child{fill:#dfb989;opacity:.5}
+[data-lis-sites]{display:flex;flex-direction:column;gap:5px}[data-lis-sites] button{text-align:left;min-height:36px}
+[data-lis-scope]{max-width:180px}[data-industry-sector-nav]{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))!important}[data-industry-legacy-nav][hidden]{display:none!important}
+.latin-workspace[data-industry-sector-mode=true] .latin-subfield-band{height:58px;padding-top:5px}.latin-workspace[data-industry-sector-mode=true] .latin-field-status{display:none}.latin-sector-scope{margin:0 0 10px}
+.latin-sector-note{font-size:13px!important;line-height:1.5!important;margin:7px 10px!important}
+@media(max-width:1279px){.latin-sector-grid{grid-template-columns:minmax(0,1fr) minmax(330px,36%)}}
+@media(max-width:959px){.latin-sector-grid{grid-template-columns:minmax(0,1fr)}[data-lis-map]{height:600px}.latin-sector-reader{height:620px}}

@@ -6,7 +6,7 @@ import {initLatinWorkspaceLayout} from '../../src/scripts/atlas-latin-workspace-
 import {initLatinOverviewLinks} from '../../src/scripts/atlas-latin-overview-layout.ts';
 
 async function withPage(field,run){
- const w=new Window({url:`https://example.com/insight-journal/atlas/latin-america/${field}/?place=CRI&country=CRI&scope=country&only=1&fallback=1`,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true}});
+ const w=new Window({url:`https://example.com/insight-journal/atlas/latin-america/${field}/?place=CRI&country=CRI&scope=country&only=1&fallback=1${field==='industry'?'&layer=locations':''}`,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true}});
  const previous=Object.fromEntries(['window','document','location','requestAnimationFrame'].map(key=>[key,globalThis[key]]));
  try{
   globalThis.window=w;globalThis.document=w.document;globalThis.location=w.location;globalThis.requestAnimationFrame=callback=>{callback(0);return 0;};

@@ -1,0 +1,1477 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-12",
+  "geographicScope": "既存中南米34国・地域。メキシコは別地域で含めない。主要例の選定であり全施設・全産業の網羅図ではない。",
+  "coordinateSource": {
+    "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_populated_places.geojson",
+    "publisher": "Natural Earth",
+    "version": "5.1.2",
+    "crs": "EPSG:4326",
+    "license": "Public domain",
+    "inputSha256": "9b8e3de09048ef00dfc70357dbb9fa324493f214b5e0ae4daf1aa79a8d10116b"
+  },
+  "sectors": [
+    {
+      "id": "resources",
+      "label": "資源・エネルギー",
+      "overview": "アンデスの銅・リチウム、ブラジル北部の鉄鉱石・ボーキサイト、大西洋沖の石油・ガスを、処理・精製・製錬・発電の場所とともに読みます。",
+      "why": "鉱床・塩湖・河川は採取や発電の立地を制約します。資源を利用できる状態にする加工設備は別の場所にも立地し、原料と製品の段階を分ける必要があります。"
+    },
+    {
+      "id": "manufacturing",
+      "label": "製造業",
+      "overview": "ブラジルの素材・燃料・航空機、アルゼンチンの車両、ウルグアイのパルプ、コスタリカの医療機器など、何をどこで作るかを読みます。",
+      "why": "原料だけでなく、専門技能・設備・電力・水・物流と市場が製造を支えます。資源側にも登場する精製・製錬は、ここでは作る製品と工程に注目します。"
+    },
+    {
+      "id": "services",
+      "label": "サービス業",
+      "overview": "金融・証券、IT・デジタル、港湾・運河物流、カリブ海の観光の集積例を、同じ産業の複数の場所として読みます。",
+      "why": "人材・情報・企業間の接点や、地峡・海港・観光地へのアクセスがサービスを支えます。都市を一つの産業に固定せず、機能ごとの立地を重ねて考えます。"
+    }
+  ],
+  "industries": [
+    {
+      "id": "copper",
+      "label": "銅",
+      "color": "#97543b",
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "labels": {
+        "resources": "銅",
+        "manufacturing": "銅の選鉱・電解採取",
+        "services": "銅"
+      },
+      "overview": "チリ北部のチュキカマタ、ペルーのアレキパ南西のセロ・ベルデを区別します。セロ・ベルデには採掘・選鉱に加え、浸出と電解採取の設備があります。",
+      "why": "鉱床の場所と、含有金属を取り出す工程を分けて読みます。銅は電線・電気機器等の材料になりますが、この図は個別需要家への納入を示しません。",
+      "sources": [
+        "codelco",
+        "fcx"
+      ]
+    },
+    {
+      "id": "lithium",
+      "label": "リチウム",
+      "color": "#84639c",
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "labels": {
+        "resources": "リチウム",
+        "manufacturing": "リチウム化学",
+        "services": "リチウム"
+      },
+      "overview": "チリのアタカマ塩湖のかん水から原料を取り出し、アントファガスタ近郊のサラール・デル・カルメンで炭酸リチウム・水酸化リチウムに加工します。",
+      "why": "塩湖の資源と化学処理設備は別の立地です。電池材料等になる化合物であり、塩湖そのものが電池工場ではありません。",
+      "sources": [
+        "sqm",
+        "sqm-chem"
+      ]
+    },
+    {
+      "id": "iron",
+      "label": "鉄鉱石",
+      "color": "#906d36",
+      "sectors": [
+        "resources"
+      ],
+      "labels": {
+        "resources": "鉄鉱石",
+        "manufacturing": "鉄鉱石",
+        "services": "鉄鉱石"
+      },
+      "overview": "ブラジル北部のカラジャスが代表的な採取地域です。南東部ミナスジェライスにも別の鉱山地域があります。",
+      "why": "鉱石を掘る地域、鋼材を作る工場、物流の拠点を区別します。地図上の近さだけで特定の製鉄所への供給を確定していません。",
+      "sources": [
+        "brazil"
+      ]
+    },
+    {
+      "id": "bauxite",
+      "label": "ボーキサイト",
+      "color": "#ae7546",
+      "sectors": [
+        "resources"
+      ],
+      "labels": {
+        "resources": "ボーキサイト",
+        "manufacturing": "ボーキサイト",
+        "services": "ボーキサイト"
+      },
+      "overview": "ブラジル北部パラゴミナスではボーキサイトを採掘します。Hydroはバルカレナでのアルミナ処理との関係を説明しています。",
+      "why": "アルミニウムの原料鉱石、アルミナ、電解製錬後の金属は別の段階です。採取地域と加工地域を分けて読みます。",
+      "sources": [
+        "hydro-mine"
+      ]
+    },
+    {
+      "id": "aluminum",
+      "label": "アルミ製錬",
+      "color": "#667b87",
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "labels": {
+        "resources": "アルミ製錬",
+        "manufacturing": "アルミ製錬",
+        "services": "アルミ製錬"
+      },
+      "overview": "ベレン南方のバルカレナにAlbrasの一次アルミ製錬があります。国内外向けの金属インゴットを製造します。",
+      "why": "アルミナを金属にする電解製錬は大量の電力を必要とします。資源側では利用可能な金属になる場所、製造側では素材の生産を読みます。",
+      "sources": [
+        "albras",
+        "hydro-mine"
+      ]
+    },
+    {
+      "id": "oil-gas",
+      "label": "石油・ガス",
+      "color": "#776343",
+      "sectors": [
+        "resources"
+      ],
+      "labels": {
+        "resources": "石油・ガス",
+        "manufacturing": "石油・ガス",
+        "services": "石油・ガス"
+      },
+      "overview": "ブラジル大西洋沖のサントス盆地等と、沿岸・内陸の処理設備を区別します。沖合の点は既存資料の地域案内位置です。",
+      "why": "海底の資源を取り出す場所と、燃料に加工する製油所の場所は異なります。個々の油田境界・採取量・パイプラインは未収録です。",
+      "sources": [
+        "eia"
+      ]
+    },
+    {
+      "id": "refining",
+      "label": "石油精製",
+      "color": "#ae7a30",
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "labels": {
+        "resources": "石油精製",
+        "manufacturing": "石油精製",
+        "services": "石油精製"
+      },
+      "overview": "パウリニアのREPLAN、ドゥケ・デ・カシアスのREDUC、サンジョゼ・ドス・カンポスのREVAPなどに精製設備があります。",
+      "why": "資源側では原油が利用できる燃料になる場所、製造側では軽油・ガソリン・潤滑油等を作る工程を読みます。表示拠点間の輸送線は描いていません。",
+      "sources": [
+        "petrobras"
+      ]
+    },
+    {
+      "id": "hydro",
+      "label": "水力発電",
+      "color": "#367c9a",
+      "sectors": [
+        "resources"
+      ],
+      "labels": {
+        "resources": "水力発電",
+        "manufacturing": "水力発電",
+        "services": "水力発電"
+      },
+      "overview": "パラナ川のブラジル・パラグアイ国境にイタイプ発電所があります。両国の共同事業として電気を供給します。",
+      "why": "河川の水と高低差を電力へ変える立地です。発電所の位置記号は発電量の円ではなく、供給網や流域境界も表していません。",
+      "sources": [
+        "itaipu"
+      ]
+    },
+    {
+      "id": "steel",
+      "label": "製鉄・鋼材",
+      "color": "#617069",
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "labels": {
+        "resources": "製鉄・鋼材",
+        "manufacturing": "製鉄・鋼材",
+        "services": "製鉄・鋼材"
+      },
+      "overview": "ブラジルのツバロン等では鋼材を製造します。ArcelorMittalの平鋼拠点一覧にはツバロン、コンタジェン等を確認できます。",
+      "why": "鉄鉱石の採取と鋼材の製造は別の段階です。自動車・建設等の用途につながりますが、特定鉱山との売買をこの図から確定しません。",
+      "sources": [
+        "steel"
+      ]
+    },
+    {
+      "id": "auto",
+      "label": "自動車",
+      "color": "#467661",
+      "sectors": [
+        "manufacturing"
+      ],
+      "labels": {
+        "resources": "自動車",
+        "manufacturing": "自動車",
+        "services": "自動車"
+      },
+      "overview": "アルゼンチンのサラテにToyotaの車両製造拠点があります。現行の中南米製造会社一覧でHilux、Fortuner/SW4、Hiaceを確認します。",
+      "why": "部品・技能・組立設備と販売市場が必要な産業です。国内向けと輸出向けを扱う拠点で、点の大きさから生産台数は読みません。",
+      "sources": [
+        "toyota-current",
+        "toyota-zarate"
+      ]
+    },
+    {
+      "id": "aviation",
+      "label": "航空機",
+      "color": "#496b91",
+      "sectors": [
+        "manufacturing"
+      ],
+      "labels": {
+        "resources": "航空機",
+        "manufacturing": "航空機",
+        "services": "航空機"
+      },
+      "overview": "ブラジルのガビアン・ペイショトでSaabとEmbraerが機体を製造・試験します。2026年10月の操業者発表で現地の製造を確認しています。",
+      "why": "機体・部品・設計と試験の専門技術が集まる立地です。座標はDECEAの飛行場基準位置で、個々の製造棟や供給圏ではありません。",
+      "sources": [
+        "saab",
+        "decea"
+      ]
+    },
+    {
+      "id": "pulp",
+      "label": "パルプ",
+      "color": "#79853b",
+      "sectors": [
+        "manufacturing"
+      ],
+      "labels": {
+        "resources": "パルプ",
+        "manufacturing": "パルプ",
+        "services": "パルプ"
+      },
+      "overview": "ウルグアイのパソ・デ・ロス・トロスとフライ・ベントスにUPMのパルプ製造拠点があります。植林地と加工工場を区別して読みます。",
+      "why": "木材を繊維材料へ加工する工程で、水・エネルギー・原料調達と物流が関わります。植林・伐採区域や特定の供給圏を推定して塗っていません。",
+      "sources": [
+        "upm",
+        "upm-paso",
+        "upm-fray"
+      ]
+    },
+    {
+      "id": "medical",
+      "label": "医療機器",
+      "color": "#518879",
+      "sectors": [
+        "manufacturing"
+      ],
+      "labels": {
+        "resources": "医療機器",
+        "manufacturing": "医療機器",
+        "services": "医療機器"
+      },
+      "overview": "コスタリカのエレディア、コヨル／アラフエラ、カルタゴでBoston Scientificの主要製造拠点を確認できます。",
+      "why": "自由貿易区や専門技能の集積と製造設備を読む例です。医療機器は治療・診断等に使う製品で、各点は全国輸出額や工場の数量ではありません。",
+      "sources": [
+        "medical"
+      ]
+    },
+    {
+      "id": "finance",
+      "label": "金融・証券",
+      "color": "#665593",
+      "sectors": [
+        "services"
+      ],
+      "labels": {
+        "resources": "金融・証券",
+        "manufacturing": "金融・証券",
+        "services": "金融・証券"
+      },
+      "overview": "サンパウロのB3、ブエノスアイレスのBYMAは資本市場を担う例です。サービスの専門機能を同じ産業色で読みます。",
+      "why": "資金を必要とする企業と投資家をつなぐ市場・人材・情報が集まります。都市人口や取引量を点の大きさへ置き換えていません。",
+      "sources": [
+        "b3",
+        "byma"
+      ]
+    },
+    {
+      "id": "digital",
+      "label": "IT・デジタル",
+      "color": "#387f83",
+      "sectors": [
+        "services"
+      ],
+      "labels": {
+        "resources": "IT・デジタル",
+        "manufacturing": "IT・デジタル",
+        "services": "IT・デジタル"
+      },
+      "overview": "ブラジル北東部レシフェのPorto Digitalと、内陸カルアルの関連拠点を表示します。都市ごとの札ではなくデジタル産業の集積を読みます。",
+      "why": "人材、創業支援、既存市街地の再利用と企業間の接点を作る取り組みです。表示範囲外の国に同様の産業がないという意味ではありません。",
+      "sources": [
+        "digital"
+      ]
+    },
+    {
+      "id": "logistics",
+      "label": "港湾・物流",
+      "color": "#776647",
+      "sectors": [
+        "services"
+      ],
+      "labels": {
+        "resources": "港湾・物流",
+        "manufacturing": "港湾・物流",
+        "services": "港湾・物流"
+      },
+      "overview": "パナマ運河、ブラジルのサンルイス圏、アルゼンチンのバイアブランカ、ウルグアイのモンテビデオのパルプターミナルを立地例として読みます。",
+      "why": "地峡や海港で人・貨物・輸送サービスが集まります。UPMの資料で確認できるパルプターミナルを含めますが、未確認の海上ルート・物流量は追加しません。",
+      "sources": [
+        "panama",
+        "upm-paso",
+        "vale",
+        "cargill"
+      ]
+    },
+    {
+      "id": "tourism",
+      "label": "観光",
+      "color": "#a16263",
+      "sectors": [
+        "services"
+      ],
+      "labels": {
+        "resources": "観光",
+        "manufacturing": "観光",
+        "services": "観光"
+      },
+      "overview": "ジャマイカのモンテゴベイ、ドミニカ共和国のラ・ロマーナは観光当局が案内する拠点です。カリブ海の観光を複数の場所で読みます。",
+      "why": "海岸の自然環境と宿泊・空港・観光サービスが結び付きます。海岸全体を観光業の分布面にせず、資料に対応する地域案内位置を示します。",
+      "sources": [
+        "jamaica",
+        "dominican"
+      ]
+    },
+    {
+      "id": "food",
+      "label": "食品・油糧種子加工",
+      "color": "#96814a",
+      "sectors": [
+        "manufacturing"
+      ],
+      "labels": {
+        "resources": "食品・油糧種子加工",
+        "manufacturing": "食品・油糧種子加工",
+        "services": "食品・油糧種子加工"
+      },
+      "overview": "アルゼンチンのロサリオ圏にCargillのビジャ・ゴベルナドル・ガルベスとサンマルティンの加工拠点があります。企業の国内事業は穀物・油糧種子、植物油・たんぱく原料等を扱います。",
+      "why": "農業の原料を製品・食品原料へ加工する場所です。会社全体の製品一覧を各工場の全製品や数量と同一視せず、資料の加工拠点一覧と対応させます。",
+      "sources": [
+        "cargill"
+      ]
+    }
+  ],
+  "sites": [
+    {
+      "id": "chuquicamata",
+      "industry": "copper",
+      "place": "チュキカマタ周辺",
+      "coordinates": [
+        -68.93,
+        -22.32
+      ],
+      "coordinateSource": {
+        "type": "retained-region-guide",
+        "path": "src/data/atlas/latin-america-economy.ts",
+        "id": "andean-copper"
+      },
+      "coordinateMeaning": "既存のチュキカマタ周辺の地域案内位置を保持。鉱山境界ではありません。",
+      "stage": "採掘",
+      "stageKind": "extraction",
+      "sectors": [
+        "resources"
+      ],
+      "sources": [
+        "codelco"
+      ],
+      "note": "チリ北部の鉱山の例。Codelcoの操業案内と既存の鉱山地域案内位置を対応付けます。"
+    },
+    {
+      "id": "cerro-verde",
+      "industry": "copper",
+      "place": "アレキパ周辺・セロ・ベルデ",
+      "coordinates": [
+        -71.531957,
+        -16.418048
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159149417,
+        "sourceName": "Arequipa",
+        "sourceCountry": "Peru",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのArequipaを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "採掘・選鉱・電解採取",
+      "stageKind": "processing",
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "sources": [
+        "fcx"
+      ],
+      "note": "操業者はアレキパの南西約20mileに鉱山・選鉱とSX/EW設備があると説明。案内点はアレキパで、鉱山そのものの正確な点ではありません。"
+    },
+    {
+      "id": "atacama",
+      "industry": "lithium",
+      "place": "アタカマ塩湖",
+      "coordinates": [
+        -68.3,
+        -23.3
+      ],
+      "coordinateSource": {
+        "type": "retained-region-guide",
+        "path": "src/data/atlas/latin-america-economy.ts",
+        "id": "lithium-salars"
+      },
+      "coordinateMeaning": "既存のアタカマ塩湖の地域案内位置。採取区域や井戸位置ではありません。",
+      "stage": "かん水採取",
+      "stageKind": "extraction",
+      "sectors": [
+        "resources"
+      ],
+      "sources": [
+        "sqm",
+        "chile"
+      ],
+      "note": "資源を含むかん水を回収する地域。塩湖を電池工場として描いていません。"
+    },
+    {
+      "id": "salar-carmen",
+      "industry": "lithium",
+      "place": "アントファガスタ近郊・サラール・デル・カルメン",
+      "coordinates": [
+        -70.400003,
+        -23.649992
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159150929,
+        "sourceName": "Antofagasta",
+        "sourceCountry": "Chile",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのAntofagastaを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "リチウム化合物の製造",
+      "stageKind": "processing",
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "sources": [
+        "sqm",
+        "sqm-chem"
+      ],
+      "note": "SQMはアントファガスタ近郊の化学工場で炭酸リチウム等を製造。案内点は市の位置で、工場はその東方です。"
+    },
+    {
+      "id": "carajas",
+      "industry": "iron",
+      "place": "カラジャス",
+      "coordinates": [
+        -50.1,
+        -6.07
+      ],
+      "coordinateSource": {
+        "type": "retained-region-guide",
+        "path": "src/data/atlas/latin-america-economy.ts",
+        "id": "brazil-iron"
+      },
+      "coordinateMeaning": "既存のカラジャスの地域案内位置。採掘区画や鉱山設備の正確な点ではありません。",
+      "stage": "鉄鉱石の採取",
+      "stageKind": "extraction",
+      "sectors": [
+        "resources"
+      ],
+      "sources": [
+        "brazil"
+      ],
+      "note": "ブラジル北部パラー州の鉱山地域。既存資料の地域案内位置を保持します。"
+    },
+    {
+      "id": "minas-iron",
+      "industry": "iron",
+      "place": "ミナスジェライスの鉱山地域",
+      "coordinates": [
+        -43.91695,
+        -19.91308
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159150193,
+        "sourceName": "Belo Horizonte",
+        "sourceCountry": "Brazil",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのBelo Horizonteを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "鉄鉱石の採取地域",
+      "stageKind": "extraction",
+      "sectors": [
+        "resources"
+      ],
+      "sources": [
+        "brazil"
+      ],
+      "note": "州内の鉱山地域を読むための案内です。州都の点を個別鉱山とは扱いません。"
+    },
+    {
+      "id": "paragominas",
+      "industry": "bauxite",
+      "place": "パラゴミナス周辺",
+      "coordinates": [
+        -47.490006,
+        -2.959575
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159143281,
+        "sourceName": "Paragominas",
+        "sourceCountry": "Brazil",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのParagominasを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "ボーキサイト採取",
+      "stageKind": "extraction",
+      "sectors": [
+        "resources"
+      ],
+      "sources": [
+        "hydro-mine"
+      ],
+      "note": "Hydroの採掘事業。鉱山は市域中心から離れ、地域案内点であることを区別します。"
+    },
+    {
+      "id": "albras",
+      "industry": "aluminum",
+      "place": "ベレン南方・バルカレナ",
+      "coordinates": [
+        -48.481969,
+        -1.448057
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159151441,
+        "sourceName": "Belém",
+        "sourceCountry": "Brazil",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのBelémを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "一次アルミ製錬",
+      "stageKind": "processing",
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "sources": [
+        "albras"
+      ],
+      "note": "Albrasの操業資料はバルカレナの金属インゴット製造を記載。ベレンを広域の案内位置に用い、ベレン市の工場点とは扱いません。"
+    },
+    {
+      "id": "santos-basin",
+      "industry": "oil-gas",
+      "place": "ブラジル大西洋沖",
+      "coordinates": [
+        -42.7,
+        -25.3
+      ],
+      "coordinateSource": {
+        "type": "retained-region-guide",
+        "path": "src/data/atlas/latin-america-economy.ts",
+        "id": "atlantic-oil"
+      },
+      "coordinateMeaning": "既存の大西洋沖の地域案内位置を保持。油田・井戸の正確な点ではありません。",
+      "stage": "石油・ガスの採取地域",
+      "stageKind": "extraction",
+      "sectors": [
+        "resources"
+      ],
+      "sources": [
+        "eia"
+      ],
+      "note": "サントス盆地等の沖合資源を読む既存の代表位置。油田・井戸・採掘量の資料ではありません。"
+    },
+    {
+      "id": "replan",
+      "industry": "refining",
+      "place": "パウリニア（カンピーナス周辺）",
+      "coordinates": [
+        -47.055885,
+        -22.907898
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159150305,
+        "sourceName": "Campinas",
+        "sourceCountry": "Brazil",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのCampinasを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "原油を燃料へ精製",
+      "stageKind": "processing",
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "sources": [
+        "petrobras"
+      ],
+      "note": "Petrobrasの製油所一覧と対応。案内点は所在市または周辺都市で、製油所敷地ではありません。"
+    },
+    {
+      "id": "reduc",
+      "industry": "refining",
+      "place": "ドゥケ・デ・カシアス",
+      "coordinates": [
+        -43.305602,
+        -22.796378
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159131305,
+        "sourceName": "Duque de Caxias",
+        "sourceCountry": "Brazil",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのDuque de Caxiasを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "燃料・潤滑油等の精製",
+      "stageKind": "processing",
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "sources": [
+        "petrobras"
+      ],
+      "note": "Petrobrasの製油所一覧と対応。案内点は所在市または周辺都市で、製油所敷地ではありません。"
+    },
+    {
+      "id": "revap",
+      "industry": "refining",
+      "place": "サンジョゼ・ドス・カンポス",
+      "coordinates": [
+        -45.879949,
+        -23.199994
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159132019,
+        "sourceName": "São José dos Campos",
+        "sourceCountry": "Brazil",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのSão José dos Camposを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "原油を燃料へ精製",
+      "stageKind": "processing",
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "sources": [
+        "petrobras"
+      ],
+      "note": "Petrobrasの製油所一覧と対応。案内点は所在市または周辺都市で、製油所敷地ではありません。"
+    },
+    {
+      "id": "itaipu",
+      "industry": "hydro",
+      "place": "イタイプ（ブラジル・パラグアイ国境）",
+      "coordinates": [
+        -54.59,
+        -25.41
+      ],
+      "coordinateSource": {
+        "type": "retained-region-guide",
+        "path": "src/data/atlas/latin-america-economy.ts",
+        "id": "hydropower"
+      },
+      "coordinateMeaning": "既存のイタイプ周辺の地域案内位置。ダムの外形・流域ではありません。",
+      "stage": "水力発電",
+      "stageKind": "processing",
+      "sectors": [
+        "resources"
+      ],
+      "sources": [
+        "itaipu"
+      ],
+      "note": "パラナ川の共同発電事業。点は発電量を表しません。"
+    },
+    {
+      "id": "tubarao",
+      "industry": "steel",
+      "place": "ヴィトーリア圏・ツバロン",
+      "coordinates": [
+        -40.353943,
+        -20.332042
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159147621,
+        "sourceName": "Vitória",
+        "sourceCountry": "Brazil",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのVitóriaを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "鋼材の製造",
+      "stageKind": "processing",
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "sources": [
+        "steel"
+      ],
+      "note": "ArcelorMittalの平鋼操業拠点一覧に掲載。案内点はヴィトーリアで、工場敷地ではありません。"
+    },
+    {
+      "id": "contagem",
+      "industry": "steel",
+      "place": "ベロオリゾンテ圏・コンタジェン",
+      "coordinates": [
+        -43.91695,
+        -19.91308
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159150193,
+        "sourceName": "Belo Horizonte",
+        "sourceCountry": "Brazil",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのBelo Horizonteを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "鋼材の加工",
+      "stageKind": "processing",
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "sources": [
+        "steel"
+      ],
+      "note": "操業拠点一覧のコンタジェンを近隣ベロオリゾンテから読む案内。施設座標は未収録です。"
+    },
+    {
+      "id": "zarate",
+      "industry": "auto",
+      "place": "サラテ",
+      "coordinates": [
+        -59.040025,
+        -34.089561
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159144189,
+        "sourceName": "Zárate",
+        "sourceCountry": "Argentina",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのZárateを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "車両の組立・製造",
+      "stageKind": "processing",
+      "sectors": [
+        "manufacturing"
+      ],
+      "sources": [
+        "toyota-current",
+        "toyota-zarate"
+      ],
+      "note": "Toyotaの工場立地資料と現行の中南米製造会社一覧を照合。生産台数をこの点に割り当てません。"
+    },
+    {
+      "id": "gaviao",
+      "industry": "aviation",
+      "place": "ガビアン・ペイショト",
+      "coordinates": [
+        -48.40472222222222,
+        -21.764444444444443
+      ],
+      "coordinateSource": {
+        "type": "aerodrome-reference-point",
+        "publisher": "DECEA AISWEB",
+        "id": "SBGP",
+        "sourceDms": "21 45 52S/048 24 17W"
+      },
+      "coordinateMeaning": "DECEAのSBGP飛行場基準位置。工場建物の座標・境界ではありません。",
+      "stage": "機体の製造・試験",
+      "stageKind": "processing",
+      "sectors": [
+        "manufacturing"
+      ],
+      "sources": [
+        "saab",
+        "decea"
+      ],
+      "note": "Saabの2026年10月発表は現地の製造・試験を説明。飛行場基準位置を使用し、工場建物を推定していません。"
+    },
+    {
+      "id": "paso",
+      "industry": "pulp",
+      "place": "パソ・デ・ロス・トロス",
+      "coordinates": [
+        -56.51005,
+        -32.810001
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159122949,
+        "sourceName": "Paso de los Toros",
+        "sourceCountry": "Uruguay",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのPaso de los Torosを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "パルプ製造",
+      "stageKind": "processing",
+      "sectors": [
+        "manufacturing"
+      ],
+      "sources": [
+        "upm-paso"
+      ],
+      "note": "UPMの操業案内に対応する地域。原料を繊維へ加工する拠点で、植林区域の点ではありません。"
+    },
+    {
+      "id": "fray",
+      "industry": "pulp",
+      "place": "フライ・ベントス",
+      "coordinates": [
+        -58.303998,
+        -33.138999
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159112663,
+        "sourceName": "Fray Bentos",
+        "sourceCountry": "Uruguay",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのFray Bentosを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "パルプ製造",
+      "stageKind": "processing",
+      "sectors": [
+        "manufacturing"
+      ],
+      "sources": [
+        "upm-fray"
+      ],
+      "note": "UPMの操業案内に対応する地域。原料を繊維へ加工する拠点で、植林区域の点ではありません。"
+    },
+    {
+      "id": "heredia",
+      "industry": "medical",
+      "place": "エレディア",
+      "coordinates": [
+        -84.120002,
+        9.991998
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159122371,
+        "sourceName": "Heredia",
+        "sourceCountry": "Costa Rica",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのHerediaを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "医療機器の製造",
+      "stageKind": "processing",
+      "sectors": [
+        "manufacturing"
+      ],
+      "sources": [
+        "medical"
+      ],
+      "note": "Boston ScientificのPrincipal Manufacturing Facilities一覧に対応。都市の案内点と工場の正確な敷地を区別します。"
+    },
+    {
+      "id": "coyol",
+      "industry": "medical",
+      "place": "コヨル／アラフエラ",
+      "coordinates": [
+        -84.230037,
+        10.02002
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159129873,
+        "sourceName": "Alajuela",
+        "sourceCountry": "Costa Rica",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのAlajuelaを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "医療機器の製造",
+      "stageKind": "processing",
+      "sectors": [
+        "manufacturing"
+      ],
+      "sources": [
+        "medical"
+      ],
+      "note": "Boston ScientificのPrincipal Manufacturing Facilities一覧に対応。都市の案内点と工場の正確な敷地を区別します。"
+    },
+    {
+      "id": "cartago",
+      "industry": "medical",
+      "place": "カルタゴ",
+      "coordinates": [
+        -83.929978,
+        9.869978
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159129861,
+        "sourceName": "Cartago",
+        "sourceCountry": "Costa Rica",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのCartagoを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "医療機器の製造",
+      "stageKind": "processing",
+      "sectors": [
+        "manufacturing"
+      ],
+      "sources": [
+        "medical"
+      ],
+      "note": "Boston ScientificのPrincipal Manufacturing Facilities一覧に対応。都市の案内点と工場の正確な敷地を区別します。"
+    },
+    {
+      "id": "b3",
+      "industry": "finance",
+      "place": "サンパウロ",
+      "coordinates": [
+        -46.626966,
+        -23.556734
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159151621,
+        "sourceName": "São Paulo",
+        "sourceCountry": "Brazil",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのSão Pauloを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "証券市場・金融情報",
+      "stageKind": "service",
+      "sectors": [
+        "services"
+      ],
+      "sources": [
+        "b3"
+      ],
+      "note": "B3の証券市場を読む案内位置。サンパウロの産業を金融だけに分類するものではありません。"
+    },
+    {
+      "id": "byma",
+      "industry": "finance",
+      "place": "ブエノスアイレス",
+      "coordinates": [
+        -58.432513,
+        -34.610715
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159151559,
+        "sourceName": "Buenos Aires",
+        "sourceCountry": "Argentina",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのBuenos Airesを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "証券市場・金融情報",
+      "stageKind": "service",
+      "sectors": [
+        "services"
+      ],
+      "sources": [
+        "byma"
+      ],
+      "note": "BYMAの市場機能を読む都市案内位置。人口・金融取引額の比例記号ではありません。"
+    },
+    {
+      "id": "recife",
+      "industry": "digital",
+      "place": "レシフェ",
+      "coordinates": [
+        -34.908766,
+        -8.060532
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159151461,
+        "sourceName": "Recife",
+        "sourceCountry": "Brazil",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのRecifeを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "デジタル産業の集積",
+      "stageKind": "service",
+      "sectors": [
+        "services"
+      ],
+      "sources": [
+        "digital"
+      ],
+      "note": "Porto Digitalの現行拠点案内に対応。複数企業・人材の集積例で、全域の雇用密度ではありません。"
+    },
+    {
+      "id": "caruaru",
+      "industry": "digital",
+      "place": "カルアル",
+      "coordinates": [
+        -35.980011,
+        -8.280026
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159148987,
+        "sourceName": "Caruaru",
+        "sourceCountry": "Brazil",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのCaruaruを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "デジタル産業の集積",
+      "stageKind": "service",
+      "sectors": [
+        "services"
+      ],
+      "sources": [
+        "digital"
+      ],
+      "note": "Porto Digitalの現行拠点案内に対応。複数企業・人材の集積例で、全域の雇用密度ではありません。"
+    },
+    {
+      "id": "panama-canal",
+      "industry": "logistics",
+      "place": "パナマ運河",
+      "coordinates": [
+        -79.68,
+        9.08
+      ],
+      "coordinateSource": {
+        "type": "retained-region-guide",
+        "path": "src/data/atlas/latin-america-economy.ts",
+        "id": "panama-logistics"
+      },
+      "coordinateMeaning": "既存の運河の代表位置。港・閘門の正確な点ではありません。",
+      "stage": "運河・海上物流",
+      "stageKind": "service",
+      "sectors": [
+        "services"
+      ],
+      "sources": [
+        "panama"
+      ],
+      "note": "大洋を結ぶ運河の既存地域案内位置。未確認の港間航路や貨物量を描きません。"
+    },
+    {
+      "id": "montevideo-pulp",
+      "industry": "logistics",
+      "place": "モンテビデオ",
+      "coordinates": [
+        -56.186823,
+        -34.905376
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159150469,
+        "sourceName": "Montevideo",
+        "sourceCountry": "Uruguay",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのMontevideoを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "パルプターミナル・港湾物流",
+      "stageKind": "service",
+      "sectors": [
+        "services"
+      ],
+      "sources": [
+        "upm-paso"
+      ],
+      "note": "UPMの工場資料は港のパルプターミナルを併記します。地図には輸送線・貨物量を加えていません。"
+    },
+    {
+      "id": "montego",
+      "industry": "tourism",
+      "place": "モンテゴベイ",
+      "coordinates": [
+        -77.916676,
+        18.466688
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159146929,
+        "sourceName": "Montego Bay",
+        "sourceCountry": "Jamaica",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのMontego Bayを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "観光サービス",
+      "stageKind": "service",
+      "sectors": [
+        "services"
+      ],
+      "sources": [
+        "jamaica"
+      ],
+      "note": "ジャマイカ観光局が案内する地域。宿泊施設の全位置や海岸全体の産業区域ではありません。"
+    },
+    {
+      "id": "la-romana",
+      "industry": "tourism",
+      "place": "ラ・ロマーナ",
+      "coordinates": [
+        -68.966602,
+        18.417001
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159146069,
+        "sourceName": "La Romana",
+        "sourceCountry": "Dominican Republic",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのLa Romanaを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "観光サービス",
+      "stageKind": "service",
+      "sectors": [
+        "services"
+      ],
+      "sources": [
+        "dominican"
+      ],
+      "note": "ドミニカ共和国観光当局が案内する地域。点は観光客数ではありません。"
+    },
+    {
+      "id": "vgg",
+      "industry": "food",
+      "place": "ロサリオ圏・ビジャ・ゴベルナドル・ガルベス",
+      "coordinates": [
+        -60.668253,
+        -32.949184
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159150303,
+        "sourceName": "Rosario",
+        "sourceCountry": "Argentina",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのRosarioを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "農業原料の加工",
+      "stageKind": "processing",
+      "sectors": [
+        "manufacturing"
+      ],
+      "sources": [
+        "cargill"
+      ],
+      "note": "Cargill ArgentinaのProcessing Plant一覧に掲載。案内点はロサリオで、加工工場の正確な座標ではありません。企業全体の製品一覧をこの工場の全製品・数量と読み替えません。"
+    },
+    {
+      "id": "san-martin-food",
+      "industry": "food",
+      "place": "ロサリオ圏・サンマルティン",
+      "coordinates": [
+        -60.668253,
+        -32.949184
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159150303,
+        "sourceName": "Rosario",
+        "sourceCountry": "Argentina",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのRosarioを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "農業原料の加工",
+      "stageKind": "processing",
+      "sectors": [
+        "manufacturing"
+      ],
+      "sources": [
+        "cargill"
+      ],
+      "note": "Cargill ArgentinaのProcessing Plant一覧に掲載。案内点はロサリオで、加工工場の正確な座標ではありません。企業全体の製品一覧をこの工場の全製品・数量と読み替えません。"
+    },
+    {
+      "id": "bahia-logistics",
+      "industry": "logistics",
+      "place": "バイアブランカ",
+      "coordinates": [
+        -62.265021,
+        -38.740027
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159151099,
+        "sourceName": "Bahía Blanca",
+        "sourceCountry": "Argentina",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのBahía Blancaを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "穀物・油糧種子の港湾物流",
+      "stageKind": "service",
+      "sectors": [
+        "services"
+      ],
+      "sources": [
+        "cargill"
+      ],
+      "note": "Cargill ArgentinaのBahía Blanca Portに対応する都市案内位置。個別の埠頭・貨物量・航路は表示しません。"
+    },
+    {
+      "id": "madeira-logistics",
+      "industry": "logistics",
+      "place": "サンルイス圏・ポンタダマデイラ",
+      "coordinates": [
+        -44.267937,
+        -2.514039
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159150183,
+        "sourceName": "São Luís",
+        "sourceCountry": "Brazil",
+        "type": "locality-guide"
+      },
+      "coordinateMeaning": "Natural EarthのSão Luísを地域案内位置として使用。施設の正確な座標・外形や産業区域ではありません。",
+      "stage": "鉄鉱石の港湾物流",
+      "stageKind": "service",
+      "sectors": [
+        "services"
+      ],
+      "sources": [
+        "vale"
+      ],
+      "note": "Valeの操業者資料で確認したカラジャス鉄道の港を読む都市案内位置。図の点を埠頭の正確な座標としては扱いません。"
+    }
+  ],
+  "sources": [
+    {
+      "id": "codelco",
+      "title": "Codelco：チュキカマタ",
+      "url": "https://www.codelco.com/division-chuquicamata",
+      "period": "2025年の操業情報、2026年閲覧"
+    },
+    {
+      "id": "fcx",
+      "title": "Freeport-McMoRan：南米の操業",
+      "url": "https://www.fcx.com/operations/south-america",
+      "period": "立地・操業案内、2026年10月12日閲覧"
+    },
+    {
+      "id": "sqm",
+      "title": "SQM：チリの操業",
+      "url": "https://sqm.com/en/acerca-de-sqm/informacion-corporativa/nuestras-faenas/",
+      "period": "立地・操業案内、2026年10月12日閲覧"
+    },
+    {
+      "id": "sqm-chem",
+      "title": "SQM：リチウム化合物",
+      "url": "https://sqm.com/en/productos/litio-y-derivados/",
+      "period": "立地・操業案内、2026年10月12日閲覧"
+    },
+    {
+      "id": "chile",
+      "title": "USGS：チリ鉱業2024",
+      "url": "https://www.usgs.gov/centers/national-minerals-information-center/chile",
+      "period": "既存採用の2024年鉱業資料"
+    },
+    {
+      "id": "brazil",
+      "title": "USGS：ブラジル鉱業2024",
+      "url": "https://www.usgs.gov/centers/national-minerals-information-center/brazil",
+      "period": "既存採用の2024年鉱業資料"
+    },
+    {
+      "id": "hydro-mine",
+      "title": "Hydro：パラゴミナス",
+      "url": "https://www.hydro.com/en/global/about-hydro/hydro-worldwide/americas/brazil/paragominas/",
+      "period": "立地・操業案内、2026年10月12日閲覧"
+    },
+    {
+      "id": "albras",
+      "title": "Hydro：Albrasのアルミ製錬",
+      "url": "https://www.hydro.com/en/global/about-hydro/hydro-worldwide/americas/brazil/barcarena/albras/",
+      "period": "立地・操業案内、2026年10月12日閲覧"
+    },
+    {
+      "id": "eia",
+      "title": "EIA：ブラジルの石油・天然ガス地域",
+      "url": "https://www.eia.gov/international/content/analysis/countries_long/Brazil/",
+      "period": "2023年12月4日、資源立地の説明。現年の数量には使用しない"
+    },
+    {
+      "id": "vale",
+      "title": "Vale：カラジャスとポンタダマデイラの物流",
+      "url": "https://www.vale.com/pt/logistica",
+      "period": "立地・操業案内、2026年10月12日閲覧"
+    },
+    {
+      "id": "petrobras",
+      "title": "Petrobras：石油精製と各製油所",
+      "url": "https://petrobras.com.br/en/quem-somos/refino",
+      "period": "立地・操業案内、2026年10月12日閲覧"
+    },
+    {
+      "id": "itaipu",
+      "title": "Itaipu Binacional：発電所",
+      "url": "https://www.itaipu.gov.br/en",
+      "period": "立地・操業案内、2026年10月12日閲覧"
+    },
+    {
+      "id": "steel",
+      "title": "ArcelorMittal Brasil：操業拠点",
+      "url": "https://brasil.arcelormittal.com/arcelormittal-brasil/quem-somos/operacoes",
+      "period": "立地・操業案内、2026年10月12日閲覧"
+    },
+    {
+      "id": "toyota-current",
+      "title": "Toyota：中南米の製造会社と製品",
+      "url": "https://global.toyota/en/company/profile/facilities/manufacturing-worldwide/latin_america.html",
+      "period": "立地・操業案内、2026年10月12日閲覧"
+    },
+    {
+      "id": "toyota-zarate",
+      "title": "Toyota：サラテ工場の立地",
+      "url": "https://global.toyota/en/detail/7887493",
+      "period": "1997年の開所・立地資料。最新の製品は現行一覧で別確認"
+    },
+    {
+      "id": "saab",
+      "title": "Saab：ブラジル製機の製造と試験",
+      "url": "https://www.saab.com/newsroom/press-releases/2026/first-gripen-e-produced-in-brazil-makes-maiden-flight",
+      "period": "2026年10月7日"
+    },
+    {
+      "id": "decea",
+      "title": "DECEA AISWEB：SBGP飛行場基準位置",
+      "url": "https://aisweb.decea.mil.br/?i=aerodromos&codigo=SBGP",
+      "period": "21°45′52″S / 48°24′17″W。施設境界ではない"
+    },
+    {
+      "id": "upm-paso",
+      "title": "UPM：パソ・デ・ロス・トロス",
+      "url": "https://www.upmpulp.com/pulp-production/paso-de-los-toros/",
+      "period": "2023年稼働開始、現行操業案内"
+    },
+    {
+      "id": "upm-fray",
+      "title": "UPM：フライ・ベントスの製造",
+      "url": "https://www.upmpulp.com/pulp-production/fray-bentos/",
+      "period": "立地・操業案内、2026年10月12日閲覧"
+    },
+    {
+      "id": "upm",
+      "title": "UPM：パルプ製造拠点",
+      "url": "https://www.upmpulp.com/pulp-production/",
+      "period": "立地・操業案内、2026年10月12日閲覧"
+    },
+    {
+      "id": "medical",
+      "title": "Boston Scientific：主要製造拠点",
+      "url": "https://www.bostonscientific.com/en-US/about-us/locations.html",
+      "period": "立地・操業案内、2026年10月12日閲覧"
+    },
+    {
+      "id": "b3",
+      "title": "B3：証券市場とサンパウロ",
+      "url": "https://borainvestir.b3.com.br/glossario/mercado/",
+      "period": "2025年2月17日、B3公式の市場解説"
+    },
+    {
+      "id": "byma",
+      "title": "BYMA：アルゼンチンの資本市場",
+      "url": "https://www.byma.com.ar/",
+      "period": "立地・操業案内、2026年10月12日閲覧"
+    },
+    {
+      "id": "digital",
+      "title": "Porto Digital：レシフェとカルアル",
+      "url": "https://portodigital.org/",
+      "period": "現行拠点案内。カルアルは2025年の移転を記載"
+    },
+    {
+      "id": "panama",
+      "title": "パナマ運河庁：運河と運営",
+      "url": "https://pancanal.com/en/the-canals-fy-2024-financial-results-reaffirm-its-focus-on-sustainability-and-vision-for-the-future/",
+      "period": "既存採用の2024会計年度資料"
+    },
+    {
+      "id": "jamaica",
+      "title": "ジャマイカ観光局：モンテゴベイ",
+      "url": "https://www.visitjamaica.com/resort-areas/montego-bay/",
+      "period": "立地・操業案内、2026年10月12日閲覧"
+    },
+    {
+      "id": "cargill",
+      "title": "Cargill Argentina：製品と加工・港湾拠点",
+      "url": "https://www.cargillargentina.com.ar/",
+      "period": "立地・操業案内、2026年10月12日閲覧"
+    },
+    {
+      "id": "dominican",
+      "title": "ドミニカ共和国観光当局：ラ・ロマーナ",
+      "url": "https://www.godominicanrepublic.com/destinations/la-romana",
+      "period": "立地・操業案内、2026年10月12日閲覧"
+    }
+  ],
+  "flows": [],
+  "nextCandidates": [
+    {
+      "industry": "食品加工の追加工場・加工品内訳",
+      "reason": "全国輸出統計や会社全体の製品一覧を各工場の製品・数量へ読み替えず、原資料照合が必要。"
+    },
+    {
+      "industry": "石炭・金・ガイアナの石油・トリニダードのLNG",
+      "reason": "追加候補。今回の少数例を資源全体の網羅としない。"
+    },
+    {
+      "industry": "自動車の追加拠点・電子機器・繊維",
+      "reason": "製品と稼働状況・立地の追加照合が必要。"
+    },
+    {
+      "industry": "ITの他国拠点・教育研究・行政",
+      "reason": "人口・国のサービス比率から局所の集積を推定しない。"
+    }
+  ]
+}

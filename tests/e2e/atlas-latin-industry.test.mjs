@@ -66,7 +66,7 @@ test('Industry SSR exposes 34 country values, a meaningful map and full common l
 });
 
 test('Every country and both themes keep their original source value/status/color and canonical URL',async()=>{
- const w=await page();try{
+ const w=await page('?layer=ores');try{
   for(const layer of ['ores','manufactures']){change(w,'[data-industry-layer]',layer);for(const row of data.rows){
    change(w,'[data-industry-place]',row.country);const value=row.values[layer],shape=q(w,`[data-industry-primary-map] [data-industry-country=${row.country}]`);
    assert.equal(shape.dataset.status,value.status);assert.equal(shape.getAttribute('fill'),lib.latinIndustryColor(value.value,value.status));assert.equal(shape.getAttribute('aria-pressed'),'true');
@@ -145,8 +145,8 @@ test('Explicit image fallback is made from the current selected distributions an
 });
 
 
-test('location default connects all eight existing explanations, quantities and sources with reversible selection',async()=>{
- const w=await page();let reload;try{
+test('legacy location URL connects all eight existing explanations, quantities and sources with reversible selection',async()=>{
+ const w=await page('?layer=locations');let reload;try{
   assert.equal(q(w,'[data-latin-industry]').dataset.layer,'locations');
   assert.equal(q(w,'[data-industry-primary-map]').querySelectorAll('[data-industry-location]').length,8);
   for(const row of lib.latinIndustryLocations){

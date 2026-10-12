@@ -1,0 +1,28 @@
+---
+import {latinIndustrySectors as data,renderIndustrySectorMap} from '../../lib/atlas-latin-industry-sectors';
+import '../../styles/atlas-latin-industry-sectors.css';
+const state={sector:'resources' as const,industry:null,site:null,single:false,scope:'all' as const,place:'all'};
+---
+<section data-latin-industry-sectors aria-label="産業を軸に読む中南米">
+ <label class="latin-sector-scope">地域<select data-lis-scope><option value="all">中南米全体</option><option value="central">中米・カリブ</option><option value="south">南米</option></select></label>
+ <div class="latin-sector-grid">
+  <div class="latin-sector-map-column">
+   <div data-lis-map set:html={renderIndustrySectorMap(state)}/>
+   <div class="latin-sector-map-key" aria-label="記号の読み方">○ 採取　■ 加工・発電　◇ サービス<br/>数量を表さない案内点。都市位置を使う例を含みます。</div>
+   <p class="latin-sector-note">丸：採取地域　四角：加工・発電　ひし形：サービス。資料に対応する案内位置で、数量・施設境界・産業区域は表しません。</p>
+   <div data-lis-legend aria-label="産業の色と選択">{data.industries.filter(i=>i.sectors.includes('resources')).map(i=><button type="button" data-lis-industry={i.id} aria-pressed="false"><i style={`background:${i.color}`}/>{i.label}</button>)}</div>
+  </div>
+  <aside class="latin-sector-reader" data-lis-reader aria-label="全体の概説と産業・拠点の解説">
+   <h2 data-lis-title>資源・エネルギー</h2>
+   <p data-lis-overview>{data.sectors[0].overview}</p>
+   <h3>なぜ、その場所にあるか</h3><p data-lis-why>{data.sectors[0].why}</p>
+   <div><button type="button" data-lis-single hidden>この産業だけを見る</button> <button type="button" data-lis-clear hidden>全体の概説へ戻る</button></div>
+   <section data-lis-site-reading hidden><h3 data-lis-site-title/><p data-lis-site-note/><p data-lis-coordinate-note/><button type="button" data-lis-overlap hidden/></section>
+   <details><summary>この分野の拠点を読む</summary><div data-lis-sites/></details>
+   <details><summary>出典と対象時期</summary><ul data-lis-sources/>
+    <p>{data.geographicScope}</p><p>都市・近隣都市を用いる地域案内点と、原資料の施設基準点を区別します。選択すると個別の位置の根拠を読めます。空白は産業の不存在ではありません。</p>
+   </details>
+   <p>補助統計と原資料は地図の下へ。</p>
+  </aside>
+ </div>
+</section>
