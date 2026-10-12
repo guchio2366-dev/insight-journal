@@ -85,7 +85,7 @@
   ],
   "processing": {
     "script": "data-source/atlas/mexico/climate-normals/prepare.mjs",
-    "scriptSha256": "83c854861f1bbeefaece90888c6817c3df7bc7ce258d763f155d37019bff84bb",
+    "scriptSha256": "77648626750dfd4d7f6659bf5308bcd3465ac7bfa5aeb6d98fc2b117e92ff2f5",
     "selection": "Station metadata, TEMPERATURA MEDIA NORMAL, PRECIPITACION NORMAL, and their AÑOS CON DATOS; monthly columns January to December unchanged, official annual fields unchanged.",
     "transformations": [
       "Parsed numeric text to JSON numbers.",

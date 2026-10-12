@@ -60,6 +60,9 @@
 .mexico-agriculture-causal p{font-size:14px;line-height:1.75;margin:8px 0}
 .mexico-agriculture-atlas .atlas-inline-sources{font-size:11px!important;line-height:1.6}
 .mexico-agriculture-comparison-link{display:block;border:1px solid #b6c7c1;background:#f1f5ef;color:#254e53;border-radius:4px;padding:9px;text-decoration:none;min-height:44px;font-size:13px}
+.mexico-agriculture-only-control{display:flex;align-items:center;gap:8px;min-height:44px;padding:5px 9px;margin:3px 0 7px;border:1px solid #c3d0c5;background:#f5f8f0;color:#294b39;font-size:13px;line-height:1.4;cursor:pointer}
+.mexico-agriculture-only-control input{width:18px;height:18px;flex:none;accent-color:#345e50}
+.mexico-agriculture-atlas .atlas-livestock-marker.is-cluster span{white-space:nowrap}
 .mexico-agriculture-atlas [data-mexico-region-reading]{padding:10px;border:1px solid #bbcabe;background:#f4f5e9;margin:12px 0}
 .mexico-agriculture-atlas [data-mexico-region-reading] h3{font-size:14px;margin:0}
 .mexico-agriculture-atlas [data-agri-candidates] button{width:100%;padding:8px;text-align:left;border:1px solid #b6c7c1;background:#f1f5ef;border-radius:4px}

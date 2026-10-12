@@ -18,3 +18,11 @@
 - 北部乾燥域と南東部湿潤域の雨温図には、既存の Tacubaya と Culiacán 以外の **同期間の気温・降水量の観測所別平年値** が必要。正規の確認先は `smn.conagua.gob.mx` の [1991–2020 年平年値カタログ](https://smn.conagua.gob.mx/es/climatologia/informacion-climatologica/normales-climatologicas-por-estado)。GPCC 格子の雨量を都市観測所の気温・雨温図に転用しない。
 - 加工拠点と港の地図には、施設名・用途・座標・時点を確認できる公表原資料が必要。保全済み INEGI for15/for18 は松材取得量と用途区分を示すが、個別工場や搬出港の所在地は示さない。「製材向け」を特定工場・港の存在証拠にしない。候補資料と配信ホストが確認できるまで点を置かない。
 - 今回の環境で追加の公式ホスト `www.inegi.org.mx`、`antares.inegi.org.mx`、`datos.conagua.gob.mx`、`smn.conagua.gob.mx` の有効な許可は確認できない。これらへの接続・ミラー経由の代替取得を行わず、名称・下流接続・河口、帯水層別年間利用可能量、追加観測所は未取得と区別する。
+
+## 2026-10-12 追加資料と取得結果
+
+- SMN のチワワ OBS 08040 とビジャエルモサ DGE 27054 は、親側の公式 TXT 閲覧で1991–2020年の月値・有効年数・年値・座標を確認した。記録は `data-source/atlas/mexico/climate-normals/parent-reviewed-additions.json`。この実行環境の直接取得は両 TXT とも `curl: (56) CONNECT tunnel failed, response 403`、HTTP `000`、保存0バイト。原本バイト数・ハッシュの確認済みとは記さない。気候区分は保全済み INEGI 原 SHP/DBF と観測所座標の交差から導いた。
+- CONAGUA の [2023年11月9日公表の帯水層別利用可能量](https://sigagis.conagua.gob.mx/gas1/sections/pdf/DMA_DOF_09112023.pdf) は653帯水層、基準日2022年12月30日、単位 hm³/年。境界ZIPと辞書CSVを合わせ、4桁 `CLAVE`、`R`、`DNC`、`VEAS`、`DMA`、正負の意味を確認する必要がある。PDF、境界ZIP、辞書CSVの直接取得はいずれも同じ CONNECT 403・HTTP 000・0バイトだったため、帯水層面と数値は生成していない。これらは貯留量や2026年の実測値ではない。
+- [ARAUCO のメキシコ拠点案内](https://arauco.com/uk/puntos_mapa/maderas_y_paneles_mexico/)と[FSC 製品資料](https://mx.arauco.com/clientes/resources/download/FSC_General_Productos2025)は親側で確認済み。ドゥランゴとシタクアロの拠点住所は確認できたが、施設の厳密な点座標や搬出港は未確認。この環境での直接取得は両URLとも CONNECT 403・HTTP 000・0バイト。正確な工場点や港点を推測して置かない。
+- [CEAJ のチャパラ湖説明](https://www.ceajalisco.gob.mx/contenido/chapala/)、[CONAGUA のレルマ―サンティアゴ資料](https://files.conagua.gob.mx/conagua/riosprioritarios/Diagn%C3%B3stico_R%C3%ADo_Lerma-Santiago_2012-2024.pdf)、[NPS のブラボー川資料](https://www.nps.gov/articles/000/the-unique-challenges-of-the-rio-grande-wsr.htm)、[CESOP のグリハルバ―ウスマシンタ資料](https://www5.diputados.gob.mx/index.php/esl/content/download/181049/892273/file/CESOP-IL-72-14-ReporteCesop137-220221.pdf)で文章上の流路・合流・河口は親側で確認済み。INEGI SIATL の名称・接続・流向を備えた線形データは未取得で、案内ページの直接取得は CONNECT 403・HTTP 000・0バイト。地図上に推測の本流・矢印・河口点を作らない。
+- `oaisdmntprwestus.blob.core.windows.net` は許可先に追加されたと伝えられているが、Library ファイル取得で CONNECT 403。許可リストの変更だけで接続トンネルが通るとは確認できない。同一操作の再試行や別URL経由の転送は行わない。

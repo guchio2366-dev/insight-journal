@@ -8,6 +8,7 @@ export function renderAgricultureMarkers<R extends AgricultureMarkerRegion>(opti
  selectedKind?:string|null; selectedRegion?:string|null;
  select:(region:R)=>void; candidates:(regions:R[],point:{x:number;y:number})=>void;
  related?:(region:R)=>boolean;
+ clusterLabel?:(regions:R[])=>string;
 }) {
  const {holder,width,height,kinds,selectedKind,selectedRegion}=options;
  holder.replaceChildren();
@@ -33,8 +34,8 @@ export function renderAgricultureMarkers<R extends AgricultureMarkerRegion>(opti
    button.setAttribute('aria-pressed',String(selectedRegion?selectedRegion===region.id:selectedKind===region.kindId));
    button.addEventListener('click',event=>{event.stopPropagation();options.select(region);});
   }else{
-   button.classList.add('is-cluster');icon.textContent=String(group.regions.length);label.textContent='畜産';
-   button.setAttribute('aria-label',`${group.regions.length}件の畜産地域を選ぶ`);
+   button.classList.add('is-cluster');icon.textContent=String(group.regions.length);label.textContent=options.clusterLabel?.(group.regions)??'畜産';
+   button.setAttribute('aria-label',`${label.textContent}の${group.regions.length}産地を選ぶ`);
    button.addEventListener('click',event=>{event.stopPropagation();options.candidates(group.regions,point);});
   }
   const emphasized=group.regions.some(region=>options.related?options.related(region):selectedKind===region.kindId);

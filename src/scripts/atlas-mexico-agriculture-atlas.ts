@@ -54,6 +54,7 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
   renderAgricultureMarkers({holder,width:frame.clientWidth,height:frame.clientHeight,
    items:visible?config.markers.filter(marker=>marker.kindId===state.item||overviewMarkerIds.has(marker.id)).filter(marker=>!state.onlyItem||!state.item||marker.kindId===state.item).map(region=>({region,point:project(region.point)})):[],
    kinds,selectedKind:state.item,selectedRegion:state.region,
+   clusterLabel:regions=>[...new Set(regions.map(region=>kinds.get(region.kindId)?.label??region.kindId))].join('・'),
    select:region=>choose(region.kindId,region),candidates:regions=>{candidates=regions;renderCandidates();},
   });
   renderMapLabels();
@@ -72,7 +73,7 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
    const selected=node.dataset.cropLabel===state.item,fontSize=selected?17:width<560?13.5:15;
    hidden(node,false);node.style.fontSize=`${fontSize/scale}px`;
    const measured=node.getComputedTextLength?.();
-   return {id:node.dataset.cropLabel!,selected,width:(measured&&Number.isFinite(measured)?measured*scale:Array.from(node.textContent??'').length*fontSize)+6,height:fontSize+8,anchors:labelAnchors.get(node.dataset.cropLabel!)!.map(project)};
+   return {id:node.dataset.cropLabel!,selected:selected||node.dataset.cropLabel==='sugarcane'||node.dataset.cropLabel==='wheat',width:(measured&&Number.isFinite(measured)?measured*scale:Array.from(node.textContent??'').length*fontSize)+6,height:fontSize+8,anchors:labelAnchors.get(node.dataset.cropLabel!)!.map(project)};
   });
   const placements=placeMexicoAgricultureLabels(items,width,height,obstacles),byId=new Map(placements.map(item=>[item.id,item]));
   const [vx,vy]=agricultureCameraViewBox(state),left=(width-viewWidth*scale)/2,top=(height-viewHeight*scale)/2;
@@ -115,6 +116,7 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
   root.dataset.agricultureCropSelected=String(cropSelected);root.dataset.agricultureCurrentItem=state.item??'';root.dataset.agricultureCurrentState=state.state??'';
   root.dataset.agricultureCrops=String(state.crops);root.dataset.agricultureLivestock=String(state.livestock);
   hidden(overview,selected);hidden(panel,!selected);heading.textContent=state.item?mexicoAgricultureLabel(state.item):'';
+  hidden(q('[data-agriculture-only-item-label]'),!(cropSelected||animalSelected));
   for(const copy of root.querySelectorAll<HTMLElement>('[data-agriculture-reading]'))hidden(copy,copy.dataset.agricultureReading!==state.item);
   for(const input of root.querySelectorAll<HTMLInputElement>('[data-agri-layer]'))input.checked=input.value==='crops'?state.crops:state.livestock;
   const cropVisible=state.crops&&!forestry&&state.item!=='rice'&&(!state.onlyItem||!state.item||cropSelected);

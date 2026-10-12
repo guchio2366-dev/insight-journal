@@ -101,6 +101,14 @@ const source = {
     fullDatabaseRedistribution: false,
   },
 };
+// The reviewed additions have their own evidence status. Keep them when
+// reproducing the two earlier byte-verified station extracts.
+const reviewedAdditions = JSON.parse(await readFile(resolve(sourceDir, 'parent-reviewed-additions.json'), 'utf8'));
+if (reviewedAdditions.schemaVersion !== 1 || !Array.isArray(reviewedAdditions.stations)) throw new Error('Invalid reviewed station additions');
+for (const station of reviewedAdditions.stations) {
+  if (stations.some(existing => existing.id === station.id) || station.reviewedEvidenceFile !== 'data-source/atlas/mexico/climate-normals/parent-reviewed-additions.json') throw new Error('Invalid reviewed station identity');
+  stations.push(station);
+}
 await writeFile(resolve(root, 'src/data/atlas/mexico/climate-normals.json'), JSON.stringify({ schemaVersion: 1, period: '1991–2020', months: Array.from({ length: 12 }, (_, i) => i + 1), units: { temperatureC: '°C', precipitationMm: 'mm' }, source, stations }, null, 2) + '\n');
 await writeFile(resolve(sourceDir, 'provenance.json'), JSON.stringify({ schemaVersion: 1, source, sourceFiles, processing: { script: 'data-source/atlas/mexico/climate-normals/prepare.mjs', scriptSha256: hash(await readFile(fileURLToPath(import.meta.url))), selection: 'Station metadata, TEMPERATURA MEDIA NORMAL, PRECIPITACION NORMAL, and their AÑOS CON DATOS; monthly columns January to December unchanged, official annual fields unchanged.', transformations: ['Parsed numeric text to JSON numbers.', 'Padded SMN station 9048 to the five-digit key 09048.', 'Changed the period separator to an en dash for display.', 'Added Japanese station labels and scope notes.'], calculatedAnnualValues: false, spatialInterpolation: false } }, null, 2) + '\n');
 console.log(`Verified and extracted ${stations.length} SMN station records.`);

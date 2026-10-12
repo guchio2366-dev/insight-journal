@@ -23,6 +23,7 @@ const format = (value: number, places = 1) => value.toLocaleString('ja-JP', {min
 const routes = {nature: withBase('/atlas/north-america/mexico/nature/'), agriculture: withBase('/atlas/north-america/mexico/agriculture/'), population: withBase('/atlas/north-america/mexico/population/')};
 const items = {climate: nature.climate.classes.map(item => ({...item, ...mexicoNatureItemReading('climate', item)})), relief: nature.relief.classes.map(item => ({...item, ...mexicoNatureItemReading('relief', item)}))};
 const climateMapLabel = (code: string) => /^(BS1|BS0|BS|BW|A\(C\)|\(A\)C|C\(E\)|E\(T\)H|Af|Am|Aw|C)/.exec(code)?.[0] ?? code;
+const stationMapLabels: Record<string,string> = {'mexico-city-tacubaya':'メキシコシティ','culiacan-dge':'クリアカン','chihuahua-obs':'チワワ','villahermosa-dge':'ビジャエルモサ'};
 const overviewClimateCodeIds = new Set(['11','12','21','22','31','32','42','52','54','57','59','62','64','70']);
 const overviewLandformIds = new Set(['I','II','III','V','IX','X','XI','XII']);
 const climateColor = (code: string) => (parityPalette.climate.bySourceCode as Record<string,{color:string}>)[code]?.color;
@@ -63,7 +64,7 @@ const config = {routes, defaultViewBox: mapViewBox, states: statePaths.map(item 
    <g data-mexico-hydrology-overlay style="display:none" />
    <g class="mexico-nature-state-outlines">{statePaths.map(item => <path class="mexico-nature-state" d={item.path} fill-rule="evenodd" pointer-events="stroke" data-mexico-nature-state={item.code} role="button" tabindex="0" aria-pressed="false" aria-label={`${item.name}を選ぶ`}><title>{item.name}</title></path>)}</g>
    <g class="mexico-nature-target" data-mexico-nature-target style="display:none" transform={`translate(${stateLabelPoint('25').join(' ')})`} aria-hidden="true"><circle r="7"/><circle r="3"/></g>
-   <g class="mexico-climate-stations" data-mexico-climate-stations>{climateNormals.stations.map(station=>{const [x,y]=projectLonLat(station.coordinates);return <g data-mexico-climate-city={station.id} transform={`translate(${x} ${y})`} role="button" tabindex="0" aria-pressed="false" aria-label={`${station.name}の雨温図を読む`}><circle r="8" vector-effect="non-scaling-stroke"/><text x="13" y="-9">{station.id==='mexico-city-tacubaya'?'メキシコシティ':'クリアカン'}</text></g>;})}</g>
+   <g class="mexico-climate-stations" data-mexico-climate-stations>{climateNormals.stations.map(station=>{const [x,y]=projectLonLat(station.coordinates);return <g data-mexico-climate-city={station.id} transform={`translate(${x} ${y})`} role="button" tabindex="0" aria-pressed="false" aria-label={`${station.name}の雨温図を読む`}><circle r="8" vector-effect="non-scaling-stroke"/><text x="13" y="-9">{stationMapLabels[station.id]??station.name}</text></g>;})}</g>
   </svg>
   <div class="atlas-map-tools mexico-nature-map-tools" aria-label="自然環境地図の操作"><button type="button" data-mexico-nature-reset>全体</button><button type="button" data-mexico-nature-zoom="in" aria-label="地図を拡大">＋</button><button type="button" data-mexico-nature-zoom="out" aria-label="地図を縮小">−</button></div>
   </div>
