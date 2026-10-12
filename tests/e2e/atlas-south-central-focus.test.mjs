@@ -41,8 +41,9 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    assert.equal(await page.locator(`.regional-tabs a[href$="/${region}/"]`).getAttribute('aria-current'),'page');
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
    if(region==='central-asia'){
-    await page.locator('#reference-central-westerlies').waitFor({state:'visible'});
-    assert.match(await page.locator('#reference-central-westerlies').textContent(),/偏西風/);
+    const wind=page.locator('.asia-farm-region-label').filter({hasText:'中緯度の偏西風'});
+    await wind.waitFor({state:'visible'});
+    assert.match(await wind.textContent(),/偏西風/);
     assert.match(await page.locator('#asia-sources').textContent(),/地図の偏西風は/);
    }
    await page.locator('[data-city-select]').selectOption(city);
@@ -133,8 +134,9 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    await page.goto(`${url}/atlas/asia/${region}/nature/?topic=terrain`,{waitUntil:'domcontentloaded'});
    await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.contourBandStatus==='ready');
    if(region==='central-asia'){
-    await page.locator('#reference-central-turan-lowland').waitFor({state:'visible'});
-    assert.match(await page.locator('#reference-central-turan-lowland').textContent(),/トゥランの乾燥低地/);
+    const turan=page.locator('.asia-farm-region-label').filter({hasText:'トゥランの乾燥低地'});
+    await turan.waitFor({state:'visible'});
+    assert.match(await turan.textContent(),/トゥランの乾燥低地/);
     assert.match(await page.locator('[data-sc-landform-sources]').textContent(),/トゥランの冬季寒冷砂漠/);
    }
    await capture(`${region}-terrain`);
