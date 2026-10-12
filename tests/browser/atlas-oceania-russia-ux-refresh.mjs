@@ -58,7 +58,7 @@ try{
     assert.equal(await map.getAttribute('viewBox'),frame);
     await capture(`${width}-${region}-industry-services-only`);
     if(region==='oceania'){
-     const noro=root.locator('[data-oceania-industry-location="noro-port"]');
+     const noro=root.locator('[data-primary-map] [data-oceania-industry-location="noro-port"]');
      await noro.click();
      let query=new URL(page.url()).searchParams;
      assert.equal(query.get('sector'),'services');
@@ -73,18 +73,18 @@ try{
     await page.waitForFunction(r=>document.querySelector(`[data-${r}-learning]`)?.dataset[r+'Ready']==='true',region);
     assert.equal(await root.locator('[data-industry-only]').getAttribute('aria-pressed'),'true');
     if(region==='oceania'){
-     assert.equal(await root.locator('[data-oceania-industry-location="noro-port"]').getAttribute('aria-pressed'),'true');
+     assert.equal(await root.locator('[data-primary-map] [data-oceania-industry-location="noro-port"]').getAttribute('aria-pressed'),'true');
      await root.locator('[data-oceania-industry-return]').click();
      let query=new URL(page.url()).searchParams;
      for(const key of ['sector','sectorOnly','industryLocation'])assert.equal(query.has(key),false);
      await root.locator('[data-industry-sector="services"]').click();
      await root.locator('[data-industry-only]').click();
-     await root.locator('[data-oceania-industry-location="noro-port"]').click();
+     await root.locator('[data-primary-map] [data-oceania-industry-location="noro-port"]').click();
      query=new URL(page.url()).searchParams;
      assert.equal(query.get('sector'),'services');
      assert.equal(query.get('sectorOnly'),'1');
      await root.locator('[data-industry-only]').click();
-     await root.locator('[data-oceania-industry-location="lihir-project"]').click();
+     await root.locator('[data-primary-map] [data-oceania-industry-location="lihir-project"]').click();
      query=new URL(page.url()).searchParams;
      assert.equal(query.get('sector'),'resources');
      assert.equal(query.has('sectorOnly'),false);
