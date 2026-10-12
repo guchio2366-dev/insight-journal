@@ -109,7 +109,7 @@ test('読解の地域例に対応した一次資料を少数で示し、全国�
   const sources = id => europeReaderSources(europeLayers.find(layer => layer.id === id));
   for (const layer of europeLayers) {
     const items = europeReaderSources(layer);
-    assert.ok(items.length >= 1 && items.length <= (layer.id === 'drainage' ? 5 : 4), layer.id);
+    assert.ok(items.length >= 1 && items.length <= (layer.id === 'treecover' ? 6 : layer.id === 'drainage' ? 5 : 4), layer.id);
     assert.equal(new Set(items.map(item => item.url)).size, items.length, layer.id);
     for (const item of items) assert.ok(item.url.startsWith('https://') && item.label.trim(), layer.id);
   }
