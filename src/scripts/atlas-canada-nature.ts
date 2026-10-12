@@ -168,7 +168,7 @@ export function initCanadaNature(root:HTMLElement){
  function updateWater(patch:Partial<CanadaWaterState>){waterState={...waterState,...patch};state={...state,view:'water'};history.pushState(null,'',writeCanadaWaterState(writeCanadaNatureState(new URL(location.href),state),waterState));render();}
  waterHost?.addEventListener('canada-water-update',event=>updateWater((event as CustomEvent<Partial<CanadaWaterState>>).detail));
  for(const button of root.querySelectorAll<HTMLElement>('[data-canada-water-family]'))button.addEventListener('click',()=>{const family=button.dataset.canadaWaterFamily!,currentFamily=['precipitation','drainage'].includes(waterState.topic)?waterState.topic:'surface';if(state.view==='water'&&family===currentFamily)return;updateWater({topic:family as CanadaWaterState['topic'],area:null,only:false,frame:null});});
- const select=(city:string)=>update({city});
+ const select=(city:string)=>{if(city!==state.city)update({city});};
  function updateNatural(layer:NaturalLayer,patch:Partial<NaturalLayerState>){naturalStates[layer]={...naturalStates[layer],...patch};history.pushState(null,'',writeCanadaNaturalLayerState(new URL(location.href),layer,naturalStates[layer]));render();}
  for(const layer of naturalLayers){const host=naturalHosts[layer];if(!host)continue;
   host.addEventListener('canada-natural-select',event=>updateNatural(layer,{selected:(event as CustomEvent).detail.id}));
