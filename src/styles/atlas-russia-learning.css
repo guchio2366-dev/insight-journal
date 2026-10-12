@@ -419,6 +419,8 @@
  .russia-workspace .russia-learning-normal .russia-learning-scene{height:auto;min-height:300px;max-height:640px;aspect-ratio:1.55}
  .russia-workspace .russia-learning[data-field=regional-overview] .russia-learning-scene{height:auto;min-height:300px;max-height:640px;aspect-ratio:1.55}
  .russia-workspace .russia-learning-reading{max-height:calc(100dvh - 220px);min-height:380px}
+ .russia-workspace .russia-learning[data-field=agriculture] .russia-learning-reading{max-height:calc(100dvh - 220px);min-height:380px;overflow:hidden}
+ .russia-workspace .russia-learning[data-field=agriculture] .russia-reading-scroll{min-height:0;overflow-y:auto}
 }
 
 @media(max-width:600px){.russia-learning[data-field=industry] .russia-region-marker{display:none}.russia-workspace .russia-learning[data-field=industry] .russia-learning-scene{height:400px;min-height:400px;max-height:none;aspect-ratio:auto}}
