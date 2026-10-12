@@ -43,6 +43,12 @@ try{
    await capture(`${width}-${region}-${field}-overview`);
    if(field==='agriculture'){
     const crop=root.locator('[data-farming-group=crop]'),livestock=root.locator('[data-farming-group=livestock]');
+    const switchBox=await root.locator(`.${region}-farming-visibility`).boundingBox();
+    for(const selector of ['[data-layer]','[data-farming-single]']){
+     const control=root.locator(selector);if(!await control.isVisible())continue;
+     const box=await control.boundingBox();
+     assert.ok(box.y+box.height<=switchBox.y||switchBox.y+switchBox.height<=box.y||box.x+box.width<=switchBox.x||switchBox.x+switchBox.width<=box.x,`${region}/${width}: farming controls overlap ${selector}`);
+    }
     assert.equal(await crop.getAttribute('aria-pressed'),'true');assert.equal(await livestock.getAttribute('aria-pressed'),'true');
     await crop.click();assert.equal(await crop.getAttribute('aria-pressed'),'false');assert.equal(await livestock.getAttribute('aria-pressed'),'true');
     assert.equal(await root.locator('[data-primary-map] [data-farming-product=wheat]').first().isVisible(),false);

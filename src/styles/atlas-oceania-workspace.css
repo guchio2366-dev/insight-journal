@@ -269,8 +269,8 @@
  .atlas-desktop-shell .oceania-learning[data-field] .oceania-learning-normal .oceania-learning-map-heading>div{position:static;display:block;width:auto;max-width:none;clip-path:none;overflow:visible}
  .atlas-desktop-shell .oceania-learning[data-field] .oceania-learning-normal .oceania-learning-layer{display:flex;align-items:center;gap:6px;width:auto;max-width:260px;flex:0 1 260px;margin:0}
  .atlas-desktop-shell .oceania-learning[data-field] .oceania-learning-normal .oceania-learning-scene{height:auto;min-height:300px;max-height:640px;aspect-ratio:1.55}
- .atlas-desktop-shell .oceania-learning[data-field=agriculture] .oceania-learning-normal .oceania-learning-map-heading{box-sizing:border-box;height:72px;min-height:72px}
- .oceania-farming-visibility{top:80px}
+ .atlas-desktop-shell .oceania-learning[data-field=agriculture] .oceania-learning-normal .oceania-learning-map-heading{box-sizing:border-box;height:100px;min-height:100px}
+ .oceania-farming-visibility{top:108px}
  .atlas-desktop-shell .oceania-learning:not([data-field=agriculture]) .oceania-learning-reading{max-height:calc(100dvh - 220px);min-height:380px}
  .atlas-desktop-shell .oceania-learning[data-field=agriculture] .oceania-learning-reading{max-height:calc(100dvh - 220px);min-height:380px;overflow:hidden}
  .atlas-desktop-shell .oceania-learning[data-field=agriculture] .oceania-workspace-reading-scroll{min-height:0;overflow-y:auto}
