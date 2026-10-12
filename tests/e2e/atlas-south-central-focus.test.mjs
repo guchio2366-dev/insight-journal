@@ -247,6 +247,11 @@ test('中央アジアの地形操作は国選択を作らず宗教色面の透�
   await page.locator('[data-physical-focus]').selectOption(focus);
   assert.equal(new URL(page.url()).searchParams.get('place'),null);
   assert.equal(await page.locator('[data-current-place]').textContent().then(t=>t.includes('中央アジア')),true);
+  const contour=page.locator('.asia-rain-label[aria-label$="mの等高線"]:visible').first();
+  await contour.waitFor({state:'visible'});
+  await contour.click();
+  assert.equal(new URL(page.url()).searchParams.get('place'),null);
+  assert.match(await page.locator('.asia-point-marker').textContent(),/選択した地点/);
   await page.goto(`${url}/atlas/asia/central-asia/population/?topic=ethnicity`);
   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.settlementPaintOpacity==='0.8');
   await page.locator('[data-population-group="religion"]').click();
