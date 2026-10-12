@@ -16,6 +16,7 @@ export function initCanadaWaterResources(root: HTMLElement) {
  const retry = $<HTMLButtonElement>('[data-canada-water-retry]');
  const full = [...canadaWaterFullFrame] as CanadaWaterFrame;
  const geometry = new Map<WaterDatasetTopic, CanadaWaterCollection>();
+ const contours=new Map<WaterDatasetTopic,any>();
  const pending = new Map<WaterDatasetTopic, Promise<void>>();
  const errors = new Set<WaterDatasetTopic>();
  const readyImages = new Set<string>();
@@ -53,9 +54,13 @@ export function initCanadaWaterResources(root: HTMLElement) {
   const projectedFrame=canadaLegacyFrame(frame);map.setAttribute('viewBox',projectedFrame.join(' '));
   const matrix=map.getScreenCTM?.();
   const referenceScale=matrix?.a?1/matrix.a:frame[2]/900;
+  const occupiedRain:number[][]=[];
   for(const label of map.querySelectorAll<SVGGElement>('[data-canada-rain-map-label]')){
    const x=Number(label.dataset.rainX),y=Number(label.dataset.rainY);
-   label.style.display=x<projectedFrame[0]||x>projectedFrame[0]+projectedFrame[2]||y<projectedFrame[1]||y>projectedFrame[1]+projectedFrame[3]?'none':'';
+   const px=(x-projectedFrame[0])/referenceScale,py=(y-projectedFrame[1])/referenceScale,box=[px-22,py-11,px+22,py+11];
+   const selected=datasets.precipitation.groups.find(g=>g.id===state.area) as any,mm=Number(label.dataset.rainMm);
+   const hidden=x<projectedFrame[0]+25*referenceScale||x>projectedFrame[0]+projectedFrame[2]-25*referenceScale||y<projectedFrame[1]+15*referenceScale||y>projectedFrame[1]+projectedFrame[3]-20*referenceScale||state.only&&selected&&mm!==selected.lowerBoundMm&&mm!==selected.upperBoundExclusiveMm||occupiedRain.some(b=>box[0]<b[2]+25&&box[2]>b[0]-25&&box[1]<b[3]+20&&box[3]>b[1]-20);
+   label.style.display=hidden?'none':'';if(!hidden)occupiedRain.push(box);
    label.querySelector('[data-canada-rain-label-glyph]')?.setAttribute('transform',`scale(${referenceScale})`);
   }
   for(const reference of map.querySelectorAll<SVGGElement>('[data-canada-water-reference]')) {
@@ -117,6 +122,7 @@ export function initCanadaWaterResources(root: HTMLElement) {
     if((group as any).parent){shape.dataset.canadaWaterParent=(group as any).parent;for(const path of shape.querySelectorAll('path'))path.setAttribute('fill','none');}
    }
   }
+  if(topic==='precipitation')for(const feature of contours.get(topic)?.features??[]){const path=document.createElementNS(svgNamespace,'path');path.dataset.canadaIsohyet=String(feature.properties.mm);path.setAttribute('d',canadaMapPath(feature.geometry));path.setAttribute('class','canada-isohyet');path.setAttribute('vector-effect','non-scaling-stroke');vectors.append(path);}
  }
  function drawVectors() {
   const collection=geometry.get(state.topic as WaterDatasetTopic);if (!collection) return;
@@ -127,6 +133,7 @@ export function initCanadaWaterResources(root: HTMLElement) {
    if(shape.dataset.canadaWaterParent)for(const path of shape.querySelectorAll('path'))path.setAttribute('fill',selected?datasets.drainage.groups.find(group=>group.id===shape.dataset.canadaWaterParent)?.color??'none':'none');
    shape.style.display=hidden?'none':'';shape.classList.toggle('is-selected',selected);shape.setAttribute('aria-pressed',String(selected));shape.setAttribute('tabindex',hidden||state.topic==='aquifers'?'-1':'0');
   }
+  const selected=datasets.precipitation.groups.find(g=>g.id===state.area) as any;for(const line of vectors.querySelectorAll<SVGElement>('[data-canada-isohyet]')){const mm=Number(line.dataset.canadaIsohyet);line.style.display=state.only&&selected&&mm!==selected.lowerBoundMm&&mm!==selected.upperBoundExclusiveMm?'none':'';}
  }
  function drawRaster() {
   const dataset=datasets.precipitation, images=dataset.images ?? dataset.classImages?.map(image=>({id:image.group,url:image.url})) ?? [];
@@ -155,7 +162,7 @@ export function initCanadaWaterResources(root: HTMLElement) {
   const dataset=datasets[topic];if (!dataset.geometryUrl) {errors.add(topic);if(state.topic===topic)setLoading('この資料の分布図がありません。出典と区分一覧を参照してください。',true);return;}
   if(state.topic===topic)setLoading('原資料の分布図を読み込み中…');
   const request=(async()=>{
-   try {const response=await fetch(dataset.geometryUrl!);if(!response.ok)throw new Error('Geometry request failed.');geometry.set(topic,validateCanadaWaterCollection(await response.json(),dataset));errors.delete(topic);if(state.topic===topic&&isVisible()){buildVectors(topic);frame=state.frame??defaultFrame(topic);drawCamera();drawVectors();setLoading(null);renderReading(topic);}}
+   try {const response=await fetch(dataset.geometryUrl!);if(!response.ok)throw new Error('Geometry request failed.');const collection=validateCanadaWaterCollection(await response.json(),dataset);if(dataset.contoursUrl){const r=await fetch(dataset.contoursUrl);if(!r.ok)throw new Error('Contour request failed.');const data=await r.json();if(data.type!=='FeatureCollection'||!Array.isArray(data.features)||data.features.some((f:any)=>f.geometry?.type!=='LineString'||!Number.isFinite(f.properties?.mm)||f.properties.mm%250!==0||f.geometry.coordinates.some((p:number[])=>p.length!==2||!p.every(Number.isFinite))))throw new Error('Invalid isohyet source.');contours.set(topic,data);}geometry.set(topic,collection);errors.delete(topic);if(state.topic===topic&&isVisible()){buildVectors(topic);frame=state.frame??defaultFrame(topic);drawCamera();drawVectors();setLoading(null);renderReading(topic);}}
    catch {errors.add(topic);if(state.topic===topic&&isVisible())setLoading('分布図を読み込めませんでした。区分一覧と出典は確認できます。',true);}
    finally {pending.delete(topic);}
   })();pending.set(topic,request);return request;
@@ -175,7 +182,7 @@ export function initCanadaWaterResources(root: HTMLElement) {
  }
  function render(next: CanadaWaterState) {
   state={...next};if(state.topic==='surface')return;
-  const topic=state.topic,dataset=datasets[topic];if(!dataset)return;
+  const topic=state.topic,dataset=datasets[topic];if(!dataset)return;vectors.setAttribute('clip-path',topic==='precipitation'?'url(#canada-water-national-clip)':'none');
   const topicChanged=renderedTopic!==topic;
   if(topicChanged){renderedTopic=topic;populateSelect(topic);raster.replaceChildren();vectors.replaceChildren();delete vectors.dataset.canadaWaterVectorTopic;rasterKey='';if(geometry.has(topic))buildVectors(topic);}
   frame=validCanadaWaterFrame(state.frame)?state.frame:defaultFrame(topic);drawCamera();
@@ -196,7 +203,7 @@ export function initCanadaWaterResources(root: HTMLElement) {
   renderReading(topic);
   if(!isVisible())return;
   root.querySelector<HTMLElement>('[data-canada-water-precipitation-key]')?.toggleAttribute('hidden',topic!=='precipitation');
-  if(topic==='precipitation')drawRaster();
+  if(topic==='precipitation'&&!dataset.geometryUrl)drawRaster();
   else if(geometry.has(topic)){if(vectors.dataset.canadaWaterVectorTopic!==topic)buildVectors(topic);drawVectors();setLoading(null);}
   else if(errors.has(topic))setLoading('分布図を読み込めませんでした。区分一覧と出典は確認できます。',true);
   else void loadGeometry(topic);

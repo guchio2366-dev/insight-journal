@@ -34,3 +34,5 @@
 [data-canada-forestry] .forestry-statistics>summary{font-size:16px;cursor:pointer;padding:8px 0}
 [data-canada-forestry] .forestry-definitions{font-size:14px}
 [data-canada-forestry] [data-forestry-province].is-selected{stroke:#ac482b;stroke-width:2.5}
+
+.forestry-map-label:is(.harvest,.management,.wood,.paper){color:#6a4936;font-weight:700;font-size:12px;max-width:230px;white-space:nowrap;text-shadow:0 0 3px #fffdf4,0 0 3px #fffdf4;background:#fffdf4bc;padding:2px 3px;border:0;cursor:pointer}.forestry-activity-reading{border-bottom:1px solid #c9cdbf;padding-bottom:10px;margin-bottom:12px}.forestry-activity-reading a{font-size:13px}.forestry-activity-reading button{display:block;margin-top:5px}

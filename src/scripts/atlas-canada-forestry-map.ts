@@ -22,11 +22,13 @@ export function initCanadaForestryMap(root:HTMLElement,config:any,onSelect:(id:s
  const images=new Map<string,HTMLCanvasElement>();
  let ready=false,state:CanadaForestryState, camera=southCamera.slice(),scale=1,raf=0;
  const items:any[]=[];
- function addLabel(text:string,point:number[],kind:string,id?:string){
-  const element=document.createElement(id?'button':'span');element.className='forestry-map-label '+kind;element.textContent=text;element.hidden=true;
+ function addLabel(text:string,point:number[],kind:string,id?:string,activity?:any){
+  const element=document.createElement(id||activity?'button':'span');element.className='forestry-map-label '+kind;element.textContent=text;element.hidden=true;
   if(id){element.setAttribute('type','button');element.dataset.forestRegion=id;element.setAttribute('aria-label',config.regions.find((r:any)=>r.id===id).name+'の説明を読む');element.addEventListener('click',()=>onSelect(id));}
-  labels.append(element);items.push({text,point,kind,id,element});
+  if(activity){element.dataset.forestActivity=activity.id;element.setAttribute('type','button');element.addEventListener('click',()=>root.dispatchEvent(new CustomEvent('canada-forestry-activity',{detail:{id:activity.id}})));}
+  labels.append(element);items.push({text,point,kind,id,activity,element});
  }
+ for(const reference of config.activity?.references??[])addLabel(reference.label,project(reference.coordinates),reference.kind,undefined,reference);
  for(const r of config.regions)addLabel(r.id==='bc'?'BC':r.name,canadaLegacyPoint(r.point),'region',r.id);
  for(const p of config.places)addLabel(p.id==='ottawa'?'Ottawa（首都）':'Vancouver',project(p.coordinates),'city');
  for(const r of config.rivers){const lines=r.geometry.type==='MultiPolygon'?r.geometry.coordinates.flat():r.geometry.type==='LineString'?[r.geometry.coordinates]:r.geometry.coordinates,line=lines.reduce((a:number[][],b:number[][])=>a.length>b.length?a:b);addLabel(r.properties.name==='Fraser'?'Fraser川':'セントローレンス川',project(line[Math.floor(line.length*.55)]),'river');}
@@ -48,8 +50,8 @@ export function initCanadaForestryMap(root:HTMLElement,config:any,onSelect:(id:s
    const selected=choices.find(([x,y])=>x>=5&&y>=5&&x+w<=width-5&&y+h<=height-5&&!boxes.some(b=>overlaps([x-3,y-3,x+w+3,y+h+3],b)));
    if(!selected){el.hidden=true;continue;}
    const [x,y]=selected;el.style.left=x+'px';el.style.top=y+'px';boxes.push([x-2,y-2,x+w+2,y+h+2]);
-   if(item.kind!=='ocean'){ctx.strokeStyle=item.kind==='river'?'#467e9e':'#617b71';ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(...p as [number,number]);ctx.lineTo(Math.max(x,Math.min(x+w,p[0])),Math.max(y,Math.min(y+h,p[1])));ctx.stroke();ctx.beginPath();ctx.arc(p[0],p[1],item.kind==='region'?3.5:2.5,0,Math.PI*2);ctx.fillStyle=item.kind==='city'?'#254c68':'#fffef5';ctx.fill();ctx.stroke();}
-   placements.push({id:item.id??item.text,box:[x,y,x+w,y+h],point:p});
+   if(item.kind!=='ocean'){ctx.strokeStyle=item.kind==='river'?'#467e9e':item.activity?'#7a5941':'#617b71';ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(...p as [number,number]);ctx.lineTo(Math.max(x,Math.min(x+w,p[0])),Math.max(y,Math.min(y+h,p[1])));ctx.stroke();ctx.beginPath();if(item.activity){if(['harvest','management'].includes(item.kind)){ctx.moveTo(p[0],p[1]-4);ctx.lineTo(p[0]+4,p[1]);ctx.lineTo(p[0],p[1]+4);ctx.lineTo(p[0]-4,p[1]);ctx.closePath();}else ctx.rect(p[0]-3,p[1]-3,6,6);}else ctx.arc(p[0],p[1],item.kind==='region'?3.5:2.5,0,Math.PI*2);ctx.fillStyle=item.kind==='city'?'#254c68':'#fffef5';ctx.fill();ctx.stroke();}
+   placements.push({id:item.activity?.id??item.id??item.text,box:[x,y,x+w,y+h],point:p});
   }
   return placements;
  }

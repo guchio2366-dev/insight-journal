@@ -6,6 +6,8 @@ export function initCanadaForestry(root:HTMLElement){
  const $=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const map=initCanadaForestryMap(root,config,id=>selectRegion(id),(camera,replace)=>update({camera,zoom:false},replace));
  function render(){
+  const reference=config.activity?.references.find((r:any)=>r.id===new URL(location.href).searchParams.get('forestActivity'));const activityPanel=root.querySelector<HTMLElement>('[data-forestry-activity-reading]');if(activityPanel){activityPanel.hidden=!reference;if(reference){$('[data-forestry-activity-title]').textContent=reference.label;$('[data-forestry-activity-note]').textContent=reference.note;$<HTMLAnchorElement>('[data-forestry-activity-source]').href=reference.source;}}
+
   for(const key of ['year','province','compare','metric','cover','region'])$<HTMLSelectElement>(`[data-forestry-${key}]`).value=String(state[key as keyof CanadaForestryState]??'');
   for(const option of $<HTMLSelectElement>('[data-forestry-compare]').options)option.disabled=option.value===state.province;
   const data=config.data.filter((r:any)=>r.year===state.year),metric=config.metrics.find((m:any)=>m.id===state.metric),max=Math.max(1,...data.filter((r:any)=>r.id!=='Canada').map((r:any)=>r.values[state.metric].value??0));
@@ -27,6 +29,7 @@ $('[data-forestry-map-status]').textContent=`2020年固定：${cover}。${state.
   map?.render(state);
   for(const a of root.querySelectorAll<HTMLAnchorElement>('[data-forestry-nature-link]'))a.href=canadaForestryComparisonUrl(new URL(location.href),new URL(a.dataset.forestryNatureLink!,location.href),state).href;
  }
+ root.addEventListener('canada-forestry-activity',event=>{const id=(event as CustomEvent).detail.id;if(!config.activity?.references.some((r:any)=>r.id===id))return;const url=new URL(location.href);url.searchParams.set('forestActivity',id);history.pushState(null,'',url);render();});root.querySelector('[data-forestry-activity-clear]')?.addEventListener('click',()=>{const url=new URL(location.href);url.searchParams.delete('forestActivity');history.pushState(null,'',url);render();});
  function update(patch:Partial<CanadaForestryState>,replace=false){state={...state,...patch};if(state.compare===state.province)state.compare=null;history[replace?'replaceState':'pushState'](null,'',writeCanadaForestryState(new URL(location.href),state));render();}
  for(const key of ['year','province','compare','metric','cover'])$<HTMLSelectElement>(`[data-forestry-${key}]`).addEventListener('change',e=>{const v=(e.target as HTMLSelectElement).value;update({[key]:key==='year'?Number(v):v||null});});
  function selectRegion(id:string|null){const region=config.regions.find((r:any)=>r.id===id);if(region)update({region:id as CanadaForestryState['region'],province:region.province,zoom:false,camera:state.zoom?(root as any).canadaForestryMap?.camera?.slice()??state.camera:state.camera});else if(!id)update({region:null,province:null,zoom:false,camera:state.zoom?(root as any).canadaForestryMap?.camera?.slice()??state.camera:state.camera});}

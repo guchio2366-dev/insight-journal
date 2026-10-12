@@ -28,13 +28,13 @@ const fullFrame = canadaSouthernFrame().join(' ');
   <div class="atlas-map-frame canada-landform-frame" data-canada-landform-stage>
     <svg class="canada-landform-fallback" data-canada-landform-fallback viewBox={fullFrame} width={canadaLandformSize.width} height={canadaLandformSize.height} role="group" tabindex="0" aria-labelledby="canada-landform-map-title canada-landform-map-desc">
       <title id="canada-landform-map-title">カナダの地形地域</title>
-      <desc id="canada-landform-map-desc">地形名を選ぶと、その地形地域の輪郭を強調し、右側に説明を表示します。背景の国土全体を地形の色で塗り分ける図ではありません。</desc>
+      <desc id="canada-landform-map-desc">主要な地形地域を淡い色面で表示。選択時も色面を保ち、その地域の輪郭だけを強調します。</desc>
       <rect width={canadaLandformSize.width} height={canadaLandformSize.height} fill="#e4eff0" />
       <g aria-hidden="true">{context.features.map(feature => <path class="canada-landform-context" d={canadaLandformPath(feature.geometry as CanadaLandformGeometry)} fill-rule="evenodd" vector-effect="non-scaling-stroke" />)}</g>
       <CanadaTerrainContext/>
       <g>{geometry.features.map(feature => {
         const region = regions.find(item => item.id === feature.properties.id)!;
-        return <path class:list={['canada-landform-region', {'is-selected': selected === region.id}]} data-canada-landform-shape={region.id} d={canadaLandformPath(feature.geometry)} fill="transparent" fill-rule="evenodd" vector-effect="non-scaling-stroke" role="button" tabindex="0" aria-label={`${region.name}を読む`} aria-pressed={String(selected === region.id)} hidden={only && !!selected && selected !== region.id}><title>{region.name}：{region.description}</title></path>;
+        return <path class:list={['canada-landform-region', {'is-selected': selected === region.id}]} data-canada-landform-shape={region.id} d={canadaLandformPath(feature.geometry)} fill={region.color} fill-opacity=".24" fill-rule="evenodd" vector-effect="non-scaling-stroke" role="button" tabindex="0" aria-label={`${region.name}を読む`} aria-pressed={String(selected === region.id)} hidden={only && !!selected && selected !== region.id}><title>{region.name}：{region.description}</title></path>;
       })}</g>
       <g class="canada-landform-fallback-labels" data-canada-landform-fallback-labels aria-hidden="true">{regions.map(region => { const [x, y] = projectCanadaLandform(region.labelAnchor); return <text x={x} y={y} text-anchor="middle">{region.name}</text>; })}</g>
     </svg>

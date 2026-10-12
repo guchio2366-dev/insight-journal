@@ -26,7 +26,7 @@ source_rows=np.floor((84-centre_lat)*60).astype(int)
 expected=ids[source_rows,:]
 if np.any(dest[land!=0]!=expected[land!=0]):raise ValueError('Nearest registration changed a class')
 del expected
-colors=['#000000','#e6e5e1','#edf4de','#dbe8c4','#c7d6a7','#b3c18d','#9cab74','#87955f','#73814d','#606d3d','#4e5b30','#3e4a25','#303c1b','#243010']
+colors=['#000000', '#e6e5e1', '#f6eedf', '#e9d6b6', '#d9b987', '#c79b65', '#b3804d', '#9e683b', '#87532f', '#72402b', '#603027', '#4e2522', '#3e1b1c', '#2d1419']
 palette=[n for c in colors for n in bytes.fromhex(c[1:])]+[0]*(768-len(colors)*3)
 im=Image.fromarray(dest,mode='P');im.putpalette(palette);im.save(out/'elevation-classes.png',transparency=0,optimize=True)
 meta={'width':width,'height':height,'coordinates':[[-142,84],[-51,84],[-51,40],[-142,40]],'crs':'EPSG:3857','resampling':'nearest','bytes':(out/'elevation-classes.png').stat().st_size,'seconds':time.time()-start,'spots':[]}

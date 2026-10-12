@@ -6,7 +6,7 @@ export async function verifyCanadaAgricultureOverview({page,url,output,result}){
  const wait=async()=>{await page.locator('#canada-agri-map[data-ready=true]').waitFor();await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));};
  const get=method=>page.locator(root).evaluate((r,method)=>r.canadaAgriculture[method](),method);
  const overlaps=(a,b)=>a[0]<b[2]&&a[2]>b[0]&&a[1]<b[3]&&a[3]>b[1];
- for(const [width,height] of [[1920,1080],[1440,900]]){
+ for(const [width,height] of [[1920,1080],[1896,996]]){
   await page.setViewportSize({width,height});await page.goto(entry,{waitUntil:'networkidle'});await page.evaluate(()=>document.fonts.ready);await wait();
   const stats=await get('getRenderStats'),map=await page.locator('#canada-agri-map-frame').boundingBox();
   assert.equal(stats.granularity,'editorial-production-belts');assert.equal(stats.retainedCcs,1757);assert.equal(stats.retainedValues,21084);assert.equal(stats.sourceCcsCells,17570);assert.equal(stats.selected,null);
@@ -20,12 +20,12 @@ export async function verifyCanadaAgricultureOverview({page,url,output,result}){
   result.viewports.push({width,height,primary:width===1920,topic:'agriculture-overview',map,...environment,sourceRegions:stats.retainedCcs,indicatorCells:stats.retainedValues,productionBelts:stats.productionBelts.length,visibleLabelProducts:[...products]});
   await page.screenshot({path:path.join(output,`canada-agriculture-${width}.png`)});
  }
- result.checks.push('1920 CSS px primary and 1440 secondary: independent production belts replace administrative maximum-crop fills; source values remain unchanged');
+ result.checks.push('1920 CSS px primary and 1896 auxiliary: independent production belts replace administrative maximum-crop fills; source values remain unchanged');
  await page.setViewportSize({width:1920,height:1080});await page.goto(entry,{waitUntil:'networkidle'});await wait();const camera=(await get('getState')).camera;
  for(const product of ['canola','wheat','beef','dairy','pork','chicken','soybeans','corn','lentils','potatoes']){
   await page.locator(`${root} [data-metric=${product}]`).click();await wait();const stats=await get('getRenderStats');assert.equal(stats.productionBelts.length,32);assert.ok(stats.productionBelts.some(b=>b.product===product));assert.deepEqual((await get('getState')).camera,camera);assert.equal(stats.opacities[product],1);assert.ok(await page.locator('#canada-agri-distribution-overview .reading-source-links a').count());
  }
- await page.locator(`${root} [data-metric=canola]`).click();await wait();assert.equal((await get('getRenderStats')).opacities.beef,.45);await page.screenshot({path:path.join(output,'canada-agriculture-selected-canola.png')});
+ await page.locator(`${root} [data-metric=canola]`).click();await wait();await page.locator('[data-agri-layer=crop]').uncheck();await wait();assert.equal((await get('getState')).metric,null,'Hiding crops clears the selected canola');assert.equal(new URL(page.url()).searchParams.has('agriFocus'),false);assert.equal((await get('getRenderStats')).opacities.beef,1,'Livestock no longer fades after hidden crop selection');await page.reload({waitUntil:'networkidle'});await wait();assert.equal((await get('getState')).metric,null);await page.goBack();await wait();await page.locator('[data-agri-layer=crop]').check();await page.locator(`${root} [data-metric=canola]`).click();await wait();assert.equal((await get('getRenderStats')).opacities.beef,.45);await page.screenshot({path:path.join(output,'canada-agriculture-selected-canola.png')});
  await page.locator('[data-agri-layer=livestock]').uncheck();await wait();let stats=await get('getRenderStats');assert.deepEqual(stats.visibleLayers,['crop']);assert.ok(stats.productionBelts.every(b=>!['beef','dairy','pork','chicken'].includes(b.product)));await page.screenshot({path:path.join(output,'canada-agriculture-crops-only.png')});
  await page.locator('[data-agri-layer=crop]').uncheck();await wait();assert.equal((await get('getRenderStats')).productionBelts.length,0);
  await page.locator('[data-agri-layer=livestock]').check();await wait();assert.deepEqual((await get('getRenderStats')).visibleLayers,['livestock']);await page.screenshot({path:path.join(output,'canada-agriculture-livestock-only.png')});await page.reload({waitUntil:'networkidle'});await wait();assert.deepEqual((await get('getRenderStats')).visibleLayers,['livestock']);await page.goBack();await wait();assert.deepEqual((await get('getRenderStats')).visibleLayers,[]);

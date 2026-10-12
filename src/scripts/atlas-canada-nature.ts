@@ -17,7 +17,7 @@ export function initCanadaNature(root:HTMLElement){
  const ids=config.cities.map((c:any)=>c.id),waters=config.waters;
  const $=<T extends Element=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const map=$<SVGSVGElement>('[data-canada-map]');
- function drawLocatorCamera(){const box=map.getBoundingClientRect();map.setAttribute('viewBox',(state.frame ? canadaLegacyFrame(state.frame) : canadaSouthernFrame(box.width && box.height ? box.width/box.height : 1.85)).join(' '));layoutRiverLabels();}
+ function drawLocatorCamera(){const box=map.getBoundingClientRect();map.setAttribute('viewBox',(state.frame ? canadaLegacyFrame(state.frame) : canadaSouthernFrame(box.width && box.height ? box.width/box.height : 1.85)).join(' '));layoutRiverLabels();layoutLakeLabels();}
  function layoutRiverLabels(){
   const scale=map.getScreenCTM?.()?.a;if(!scale||!Number.isFinite(scale))return;
   const [left,top,width,height]=map.getAttribute('viewBox')!.split(' ').map(Number),gap=8/scale;
@@ -28,6 +28,7 @@ export function initCanadaNature(root:HTMLElement){
    const length=text.getComputedTextLength?.()??0;if(x+gap+length>left+width-gap){text.setAttribute('text-anchor','end');text.setAttribute('x',String(-gap));}
   }
  }
+ function layoutLakeLabels(){const scale=map.getScreenCTM?.()?.a;if(!scale||!Number.isFinite(scale))return;const [left,top,width,height]=map.getAttribute('viewBox')!.split(' ').map(Number);for(const label of root.querySelectorAll<SVGGElement>('[data-canada-lake-name]')){const x=Number(label.dataset.lakeX),y=Number(label.dataset.lakeY);label.style.display=x<left||x>left+width||y<top||y>top+height?'none':'';label.querySelector('[data-lake-label-glyph]')?.setAttribute('transform',`scale(${1/scale})`);}}
  let state=readCanadaNatureState(new URL(location.href),ids,waters);
  const waterHost=root.querySelector<HTMLElement>('[data-canada-water-resources]');
  const waterConfig=waterHost?JSON.parse(waterHost.querySelector('[data-canada-water-resource-config]')!.textContent!):null;
@@ -146,6 +147,7 @@ export function initCanadaNature(root:HTMLElement){
   if(waterText)waterText.textContent=waterGroup?'五大湖からセントローレンス川の河口域までの位置を、産業の州別構成と比べます。この図は航路や輸送量を示しません。':selectedWater?.body??'マッケンジー川は北極海、フレーザー川は太平洋、ネルソン川はハドソン湾、セントローレンス川は大西洋側へ向かいます。地図の川名から選ぶと、その川の説明が出ます。';
   if(waterScope)waterScope.textContent=state.only&&state.water?'選択水域だけを表示中です。つながる他の湖・川は「すべての水系へ戻す」で照合できます。線の太さは流量、湖の色は水質ではありません。':'線は川の概略形状、面は湖です。セントローレンス川は公式地名データの範囲の輪郭です。流量・水質・航路・流域境界は示しません。';
   const waterLabels=root.querySelector<SVGElement>('[data-canada-industry-water-labels]');if(waterLabels)waterLabels.style.display=waterGroup?'':'none';
+  root.querySelector<SVGElement>('[data-canada-lake-names]')?.toggleAttribute('hidden',state.view!=='water'||waterState.topic!=='surface'||waterGroup);layoutLakeLabels();
   const riverLabels=root.querySelector<SVGElement>('[data-canada-river-labels]');if(riverLabels)riverLabels.toggleAttribute('hidden',state.view!=='water'||waterState.topic!=='surface'||waterGroup);
   for(const label of root.querySelectorAll<SVGElement>('[data-canada-river-label]'))label.setAttribute('aria-pressed',String(label.getAttribute('data-canada-river-label')===state.water));
   for(const ocean of root.querySelectorAll<SVGElement>('.canada-ocean'))ocean.style.display=waterGroup?'none':'';

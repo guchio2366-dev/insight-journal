@@ -1,0 +1,16 @@
+{
+  "status": "local-distribution-not-acquired",
+  "method": "source regional labels only; no demographic density or inhabited-area mask inferred",
+  "sourceRequest": {
+    "url": "https://www12-2021.statcan.gc.ca/census-recensement/2021/dp-pd/prof/details/download-telecharger.cfm?DGUIDlist=2021A00033521005&Lang=E",
+    "error": "URLError: Tunnel connection failed: 403 Forbidden"
+  },
+  "retainedGeographies": {
+    "CD": 293,
+    "CMA": 41
+  },
+  "limitations": [
+    "CD and CMA statistics describe their complete source geographies. Within-region ethnic/religious residential distribution is unknown.",
+    "No administrative smoothing or general population allocation is used."
+  ]
+}

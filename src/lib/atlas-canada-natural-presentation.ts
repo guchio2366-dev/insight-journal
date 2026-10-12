@@ -1,4 +1,4 @@
-/** Display palettes; rainfall retains original bands, elevation uses native-grid 500 m bands. */
-export const canadaAnnualRainColors=['#edf5fa','#d1e7f1','#a6cfe2','#75afce','#4389b5','#226493','#113e64'];
+/** Canada display palettes: 250 mm continuous-source isohyets and brown 500 m elevation classes. */
+export const canadaAnnualRainColors=["#eff7fb", "#d7eaf5", "#b9d9ed", "#98c7e1", "#77b4d7", "#559ecb", "#3888bd", "#2173ac", "#126197", "#0b5082", "#08406e", "#07365e", "#062d50", "#052545", "#041e3b", "#031930"];
 export const canadaAnnualRainColor=(id:string)=>canadaAnnualRainColors[Number(id.replace(/^p/,''))];
-export const canadaElevationColors:Record<string,string>={'0':'#edf4de','500':'#dbe8c4','1000':'#c7d6a7','1500':'#b3c18d','2000':'#9cab74','2500':'#87955f','3000':'#73814d','3500':'#606d3d','4000':'#4e5b30','4500':'#3e4a25','5000':'#303c1b','5500':'#243010'};
+export const canadaElevationColors:Record<string,string>={"0": "#f6eedf", "500": "#e9d6b6", "1000": "#d9b987", "1500": "#c79b65", "2000": "#b3804d", "2500": "#9e683b", "3000": "#87532f", "3500": "#72402b", "4000": "#603027", "4500": "#4e2522", "5000": "#3e1b1c", "5500": "#2d1419"};

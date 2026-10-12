@@ -1,4 +1,7 @@
 /* Canada keeps the news / map / reading arrangement on laptop screens. */
+@media(min-width:1200px){
+ .atlas-desktop-shell :is(.canada-nature .canada-reading,.canada-nature .canada-water-reading,.canada-industry-pilot .ca-pilot-reading){height:var(--canada-reading-height,calc(100dvh - 360px));max-height:none!important;min-height:180px;align-self:start;overflow-y:auto;scrollbar-gutter:stable;overscroll-behavior:contain;box-sizing:border-box}
+}
 @media(min-width:900px){
  .atlas-desktop-shell:has(.canada-nature){display:grid;grid-template-columns:clamp(200px,19vw,340px) minmax(0,1fr);gap:14px;padding:10px 16px 28px}
  .atlas-desktop-shell:has(.canada-nature) .atlas-news{position:sticky;top:10px;width:auto;height:calc(100dvh - 82px);min-height:320px}

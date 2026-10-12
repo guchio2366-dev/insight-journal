@@ -142,7 +142,12 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
       return [station.id, [projected?.x ?? (point[0] - frame[0]) * ratio + left, projected?.y ?? (point[1] - frame[1]) * ratio + top]];
     }));
     const markerBoxes = [...positions].map(([id, [x,y]]) => ({ id, box: [x-6,y-12,x+6,y+12] }));
-    for (const label of [...labels].sort((a, b) => Number(b.dataset.canadaNaturalCity === state.city) - Number(a.dataset.canadaNaturalCity === state.city))) {
+    const labelOrder=['ottawa','montreal','toronto','halifax'];
+    const priority=(id:string)=>{const i=labelOrder.indexOf(id);return i<0?labelOrder.length:i;};
+    let leaders=root.querySelector<SVGSVGElement>('[data-canada-city-leaders]');
+    if(!leaders&&labels[0]?.parentElement){leaders=document.createElementNS('http://www.w3.org/2000/svg','svg');leaders.dataset.canadaCityLeaders='';leaders.classList.add('canada-city-leaders');leaders.setAttribute('aria-hidden','true');labels[0].parentElement.prepend(leaders);}
+    leaders?.replaceChildren();
+    for (const label of [...labels].sort((a,b)=>priority(a.dataset.canadaNaturalCity!)-priority(b.dataset.canadaNaturalCity!))) {
       const station = config.stations.find(item => item.id === label.dataset.canadaNaturalCity)!;
       const [x,y] = positions.get(station.id)!;
       label.hidden = false;
@@ -154,7 +159,8 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
       // The circle remains at the real observation coordinate at every scale.
       label.hidden = x < 3 || y < 3 || x > width - 3 || y > height - 3;
       const collisionBoxes = [...occupied, ...markerBoxes.filter(marker => marker.id !== station.id).map(marker => marker.box)];
-      const candidates = [[x+8,y],[x-w-8,y],[x+8,y-28],[x+8,y+28],[x+8,y-50],[x+8,y+50],[x-w-8,y-28],[x-w-8,y+28]];
+      const candidates:number[][]=[];
+      for(const dy of [0,-28,28,-52,52,-76,76,-100,100,-124,124])for(const dx of [8,-w-8])candidates.push([x+dx,y+dy]);
       const available = ([left,centerY]:number[]) => {
         const box=[left,centerY-h/2,left+w,centerY+h/2];
         return box[0]>=3 && box[1]>=3 && box[2]<=width-3 && box[3]<=height-3 && !collisionBoxes.some(([x1,y1,x2,y2]) => box[0]<x2+3 && box[2]>x1-3 && box[1]<y2+3 && box[3]>y1-3);
@@ -162,12 +168,13 @@ export function initCanadaNaturalLayer(root: HTMLElement, options: { deferStart?
       const placement = candidates.find(available);
       const [textLeft,textY] = placement ?? [Math.max(3,Math.min(width-w-3,x+8)),Math.max(h/2+3,Math.min(height-h/2-3,y-28))];
       if (text) {
-        text.hidden = !placement && station.id!==state.city;
+        text.hidden = label.hidden;
         text.style.left = `${textLeft-x+6}px`;
         text.style.top = `${12+textY-y}px`;
       }
       label.style.zIndex = station.id === state.city ? '2' : '1';
       label.style.left = `${x}px`; label.style.top = `${y}px`;
+      if(!label.hidden&&leaders){const line=document.createElementNS('http://www.w3.org/2000/svg','line');for(const [key,value]of Object.entries({x1:x,y1:y,x2:Math.max(textLeft,Math.min(textLeft+w,x)),y2:textY}))line.setAttribute(key,String(value));line.dataset.canadaCityLeader=station.id;leaders.append(line);}
       if (!label.hidden) {
         occupied.push([x-6,y-12,x+6,y+12]);
         if (text && !text.hidden) occupied.push([textLeft,textY-h/2,textLeft+w,textY+h/2]);

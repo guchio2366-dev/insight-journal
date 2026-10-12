@@ -9,7 +9,11 @@ export function canadaAgricultureProductLayer(id:CanadaAgricultureIndicatorId):C
 }
 /** These are deliberately approximate editorial outlines, never statistical regions. */
 export function canadaAgricultureBeltPath(outline:readonly number[][]){
- return outline.map((point,index)=>(index?'L':'M')+projectCanadaMap(point).map(v=>v.toFixed(3)).join(',')).join('')+'Z';
+ if(outline.length<4)return outline.map((point,index)=>(index?'L':'M')+projectCanadaMap(point).map(v=>v.toFixed(3)).join(',')).join('')+'Z';
+ const points=outline.slice(0,-1).map(projectCanadaMap),mix=(a:number[],b:number[])=>a.map((v,i)=>v*.82+b[i]*.18),fmt=(p:number[])=>p.map(v=>v.toFixed(3)).join(',');
+ // Round corners of the existing evidence-reviewed generalization.
+ // This does not add farms, quantitative density, or precision to the outline.
+ return points.map((p,i)=>{const before=mix(p,points[(i+points.length-1)%points.length]),after=mix(p,points[(i+1)%points.length]);return (i?'L':'M')+fmt(before)+'Q'+fmt(p)+' '+fmt(after);}).join('')+'Z';
 }
 export function canadaAgricultureVisibleBelts(metric:string|null,layers:readonly CanadaAgricultureLayer[]){
  return reading.belts.filter(belt=>layers.includes(canadaAgricultureProductLayer(belt.product as CanadaAgricultureIndicatorId))&&(!(belt as any).auxiliary||metric===belt.product));
