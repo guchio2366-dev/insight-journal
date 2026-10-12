@@ -24,6 +24,6 @@ export async function latinProductAtPointer(image:SVGImageElement,event:MouseEve
  const point=new DOMPoint(event.clientX,event.clientY).matrixTransform(matrix.inverse()),x=(point.x-image.x.baseVal.value)/image.width.baseVal.value,y=(point.y-image.y.baseVal.value)/image.height.baseVal.value;
  if(x<0||x>=1||y<0||y>=1)return null;
  const url=image.dataset.hitImage!;if(!hitImages.has(url))hitImages.set(url,new Promise(resolve=>{const bitmap=new Image();bitmap.onload=()=>{const canvas=document.createElement('canvas');canvas.width=bitmap.naturalWidth;canvas.height=bitmap.naturalHeight;const context=canvas.getContext('2d',{willReadFrequently:true});context?.drawImage(bitmap,0,0);resolve(context);};bitmap.onerror=()=>resolve(null);bitmap.src=url;}));
- const context=await hitImages.get(url);if(!context)return null;
+ const context=await hitImages.get(url);if(!context||image.isConnected===false)return null;
  const index=context.getImageData(Math.floor(x*context.canvas.width),Math.floor(y*context.canvas.height),1,1).data[0];return manifest.ids[index-1]??null;
 }
