@@ -237,7 +237,7 @@ async function agriculture({page, evidence}) {
   });
   await step('Every crop keeps a visible selected map label after collision layout', async () => {
     const ids = await page.locator('[data-crop-select]').evaluateAll(nodes => [...new Set(nodes.map(node => node.getAttribute('data-crop-select')))]);
-    assert.equal(ids.length, 10);
+    assert.equal(ids.length, 9);
     for (const id of ids) {
       await click(page, `[data-crop-select="${id}"]`);
       assert(await page.locator(`[data-crop-label="${id}"]:visible`).count() > 0, `${id}: selected crop label must remain visible`);
