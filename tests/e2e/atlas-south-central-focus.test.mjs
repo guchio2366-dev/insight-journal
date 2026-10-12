@@ -240,8 +240,9 @@ test('中央アジアの地形操作は国選択を作らず宗教色面の透�
  try{
   browser=await chromium.launch({headless:true,chromiumSandbox:true,...(process.env.REVIEW_CHROME_PATH?{executablePath:process.env.REVIEW_CHROME_PATH}:{})});
   const page=await browser.newPage({viewport:{width:1920,height:1080}});
-  await page.goto(`${url}/atlas/asia/central-asia/nature/?topic=terrain`);
+  await page.goto(`${url}/atlas/asia/central-asia/nature/?topic=terrain&place=KAZ`);
   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.contourBandStatus==='ready');
+  assert.equal(new URL(page.url()).searchParams.get('place'),null);
   const focus=await page.locator('[data-physical-focus] option[value]:not([value=""])').first().getAttribute('value');
   await page.locator('[data-physical-focus]').selectOption(focus);
   assert.equal(new URL(page.url()).searchParams.get('place'),null);
