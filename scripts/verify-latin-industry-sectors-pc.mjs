@@ -36,7 +36,7 @@ try{
    if(!view.primary)continue;
    for(const industry of data.industries.filter(i=>i.sectors.includes(sector.id))){
     // Actual map labels are clicked; the below-map legend remains supplementary.
-    const label=page.locator(`[data-lis-label][data-lis-industry=${industry.id}]`).first();assert.ok(await label.count(),industry.id+' missing initial map name');await label.click();assert.deepEqual(await layout(),initial,'Selection moved camera, labels or peers: '+industry.id);assert.match(await page.locator('[data-lis-overview]').textContent(),new RegExp(industry.overview.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')));
+    const label=page.locator(`[data-lis-label][data-lis-industry=${industry.id}]`).first();assert.ok(await label.count(),industry.id+' missing initial map name');await label.locator('text').click();assert.deepEqual(await layout(),initial,'Selection moved camera, labels or peers: '+industry.id);assert.match(await page.locator('[data-lis-overview]').textContent(),new RegExp(industry.overview.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')));
     if(['refining','medical','tourism','food'].includes(industry.id))await shot(sector.id+'-'+industry.id+'-selected');
     await page.locator('[data-lis-single]').click();const single=await layout();assert.equal(single.geography,initial.geography);assert.equal(single.viewBox,initial.viewBox);assert.ok(single.marks.every(m=>data.sites.find(s=>s.id===m[0]).industry===industry.id));for(const l of single.labels)assert.ok(initial.labels.some(x=>JSON.stringify(x)===JSON.stringify(l)));await page.locator('[data-lis-single]').click();assert.deepEqual(await layout(),initial);
    }
