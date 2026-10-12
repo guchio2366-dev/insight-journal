@@ -24,7 +24,7 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
  try{
   browser=await chromium.launch({headless:true,chromiumSandbox:true,...(process.env.REVIEW_CHROME_PATH?{executablePath:process.env.REVIEW_CHROME_PATH}:{})});
   const page=await browser.newPage({viewport:{width:1920,height:1080},deviceScaleFactor:1}),errors=[];
-  const focusedCaptures=new Set(['south-asia-climate','south-asia-agriculture','south-asia-forest-use','south-asia-terrain','south-asia-landform','south-asia-industry','south-asia-industry-selected','south-asia-population','south-asia-ethnicity','south-asia-religion','south-asia-nepal-religion','south-asia-sri-lanka-religion','south-asia-precipitation','south-asia-basins','south-asia-basin-selected','south-asia-groundwater']);
+  const focusedCaptures=new Set(['south-asia-climate','south-asia-agriculture','south-asia-agriculture-tea','south-asia-forest-use','south-asia-terrain','south-asia-landform','south-asia-industry','south-asia-industry-selected','south-asia-population','south-asia-ethnicity','south-asia-religion','south-asia-nepal-religion','south-asia-sri-lanka-religion','south-asia-precipitation','south-asia-basins','south-asia-basin-selected','south-asia-groundwater']);
   const capture=async name=>{if(process.env.SC_FOCUSED_REVIEW==='1'&&!focusedCaptures.has(name))return;const folder=path.resolve('review-artifacts/south-central-focus');await mkdir(folder,{recursive:true});await page.waitForLoadState('networkidle');await page.evaluate(async()=>{await document.fonts.ready;scrollTo(0,0);await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});await page.screenshot({path:path.join(folder,`${name}.png`),animations:'disabled'});};
   page.on('pageerror',error=>errors.push(error.message));
   for(const [region,expected,selected,city,foreign] of [
@@ -117,6 +117,7 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
     assert.equal(new URL(page.url()).searchParams.get('topic'),'tea');
     assert.equal(await page.locator('[data-asia-atlas]').getAttribute('data-map-camera'),camera,'Selecting a crop keeps the regional view');
     assert.equal(await page.locator('.asia-farm-label[data-product="tea"]').getAttribute('aria-pressed'),'true');
+    await capture('south-asia-agriculture-tea');
    }
    const farmChoices=await page.locator('[data-farm-choice]').evaluateAll(nodes=>nodes.map(n=>n.dataset.farmChoice));
    assert.equal(farmChoices.includes(region==='central-asia'?'rice':'tea'),region==='south-asia');
