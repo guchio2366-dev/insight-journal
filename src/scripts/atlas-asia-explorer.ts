@@ -832,13 +832,16 @@ function start(root:HTMLElement) {
   let lastMapSize='';
   function syncLayout(){
     const frame=$('.asia-map-frame'),key=$('[data-farm-overview-legend]');
+    // A bottom-legend click can scroll the document before ResizeObserver
+    // measures it. Keep the farm viewport independent of that scroll.
+    const frameTop=frame?(frame.getBoundingClientRect().top+(state.field==='agriculture'?window.scrollY:0)):0;
     if(frame&&config.regionId==='east-asia'&&window.innerWidth>=960&&config.contentExtent){
       const [west,south,east,north]=config.contentExtent,merc=(lat:number)=>Math.log(Math.tan(Math.PI/4+lat*Math.PI/360));
       const ratio=(merc(north)-merc(south))/((east-west)*Math.PI/180);
       root.style.setProperty('--east-map-content-height',`${Math.ceil(Math.max(320,(frame.clientWidth-10)*ratio+10))}px`);
     }
-    if(frame&&window.innerWidth>=(config.regionId==='east-asia'?960:1200))root.style.setProperty('--asia-map-available-height',`${Math.max(0,Math.floor(window.innerHeight-frame.getBoundingClientRect().top-12))}px`);
-    if(frame&&key&&state.field==='agriculture'&&window.innerWidth>=1200){const height=Math.max(200,Math.min(640,window.innerHeight-frame.getBoundingClientRect().top-key.getBoundingClientRect().height-20));root.style.setProperty('--asia-farm-map-height',`${Math.floor(height)}px`);}
+    if(frame&&window.innerWidth>=(config.regionId==='east-asia'?960:1200))root.style.setProperty('--asia-map-available-height',`${Math.max(0,Math.floor(window.innerHeight-frameTop-12))}px`);
+    if(frame&&key&&state.field==='agriculture'&&window.innerWidth>=1200){const height=Math.max(200,Math.min(640,window.innerHeight-frameTop-key.getBoundingClientRect().height-20));root.style.setProperty('--asia-farm-map-height',`${Math.floor(height)}px`);}
     if(frame){const size=`${frame.clientWidth}:${frame.clientHeight}`;if(size!==lastMapSize){lastMapSize=size;map?.resize({asiaLayoutResize:true});if(mapReady&&!state.camera)fitSelection();}}syncReadingLayout();
   }
   const layoutObserver=new ResizeObserver(syncLayout);layoutObserver.observe($('[data-map-surface]'));

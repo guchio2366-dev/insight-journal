@@ -126,6 +126,7 @@ async function setup(query = '', options = {}) {
     physicalBase:'/assets/physical/',physical:{width:1,height:1,bounds3857:[west,south,east,north],grid:'elevation.gz',image:'terrain.png',contours:'contours.png',water:'water.json',imageCoordinates:[[72,56],[155,56],[155,17],[72,17]],waterFeatures:[{id:'rivers-1',name:'試験河川',kind:'rivers',countries:['CHN'],bounds:[90,30,120,40]}]},
     physicalFocus:[{id:'basin',region:'east-asia',country:'CHN',name:'盆地',coordinates:[100,35],reading:'周囲の山地と比較します。'}],
   });
+  if(options.layoutRegion){const conf=JSON.parse(q('[data-asia-config]').textContent);conf.regionId=options.layoutRegion;q('[data-asia-config]').textContent=JSON.stringify(conf);}
   if(options.climateReference){const conf=JSON.parse(q('[data-asia-config]').textContent);conf.physicalFocus.push({id:'tibetan-plateau',region:'east-asia',country:'CHN',name:'チベット高原',coordinates:[130,45],reading:'参照位置'});q('[data-asia-config]').textContent=JSON.stringify(conf);}
   if(options.population){
     const conf=JSON.parse(q('[data-asia-config]').textContent);
@@ -1275,6 +1276,33 @@ test('不要な農林業・流域背景クリックは無反応で、流域と�
   await river.window.__map.fire('click',{point:{x:80,y:80},lngLat:{lng:105,lat:35}});
   assert.equal(new URL(river.window.location.href).searchParams.get('detail'),'rivers-1');assert.equal(river.window.__map.getLayer('asia-rivers').layout.visibility,'visible');
  }finally{await river.window.happyDOM.close();}
+});
+
+test('アジア農業の品目選択中の文書スクロールで地図高さを増やさず、表示位置へ戻ってもcameraと高さを保つ',async()=>{
+ for(const region of ['east-asia','south-central-asia','southeast-asia']){
+ const {window,root,q}=await setup('?field=agriculture&topic=wheat&lng=116&lat=35&z=4',{farming:true,layoutRegion:region});
+ try{
+  window.happyDOM.setViewport({width:1920,height:1080});let scroll=0;
+  Object.defineProperty(window,'scrollY',{get:()=>scroll});
+  const frame=q('.asia-map-frame');Object.defineProperties(frame,{clientWidth:{value:1274},clientHeight:{value:767}});
+  frame.getBoundingClientRect=()=>new window.DOMRect(298,301-scroll,1274,767);
+  const legend=window.document.createElement('section');legend.dataset.farmOverviewLegend='';legend.getBoundingClientRect=()=>new window.DOMRect(298,1068-scroll,1274,40);root.append(legend);
+  window.dispatchEvent(new window.Event('resize'));
+  assert.equal(root.style.getPropertyValue('--asia-map-available-height'),'767px');
+  const camera={...window.__map.getCenter(),zoom:window.__map.getZoom()};
+  // The native click scrolls the bottom legend 14px into view before its
+  // selection causes ResizeObserver to measure the map container again.
+  scroll=14;q('[data-farming-topic]').value='chicken';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));
+  window.dispatchEvent(new window.Event('resize'));
+  assert.equal(new URL(window.location.href).searchParams.get('topic'),'chicken');
+  assert.equal(root.style.getPropertyValue('--asia-map-available-height'),'767px');
+  scroll=0;window.dispatchEvent(new window.Event('scroll'));await delay();
+  assert.equal(root.style.getPropertyValue('--asia-map-available-height'),'767px');
+  assert.deepEqual({...window.__map.getCenter(),zoom:window.__map.getZoom()},camera);
+  window.happyDOM.setViewport({width:1440,height:900});
+  assert.equal(root.style.getPropertyValue('--asia-map-available-height'),'587px','an actual viewport resize still updates the height');
+ }finally{await window.happyDOM.close();}
+ }
 });
 
 test('自動全景は実extentと小余白を使い、resizeのmoveend後も全景を保ち、明示した保存cameraは優先する',async()=>{
