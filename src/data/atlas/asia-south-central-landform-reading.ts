@@ -26,7 +26,7 @@ export const southCentralFocusPhysicalReading={
  },
 } as const;
 export const southCentralFocusLandformSources={
- 'south-asia':southCentralLandformSources,
+ 'south-asia': [...southCentralLandformSources,{label:'NASA・ポーク海峡の衛星画像',url:'https://modis.gsfc.nasa.gov/gallery/individual.php?db_date=2018-07-27'},{label:'インド気象局・南西季節風',url:'https://www.imdpune.gov.in/'}],
  'central-asia':[
   {label:'Tectonics・パミールと天山の地殻変形（2016年）',url:'https://agupubs.onlinelibrary.wiley.com/doi/full/10.1002/2015TC004055'},
   {label:'NASA・天山の隆起と地形',url:'https://science.nasa.gov/earth/earth-observatory/central-tien-shan-china-49857/'},

@@ -1,7 +1,7 @@
 """Derive presentation geometry from the checked-in Asia grids, without downloads.
 
-Crop/livestock areas allocate each eligible common cell to the highest within-product
-spatial percentile. Broad distributions and concentrations share a product color.
+Overview crops allocate each eligible common cell to the highest within-product
+spatial percentile. South Asia selected crops retain nonexclusive supported areas.
 Rainfall lines interpolate the existing CHELSA grid, masking missing cells.
 Every climate label anchor is checked against the original classification grid.
 """
@@ -58,7 +58,7 @@ def box_mean(a, radius):
         out=(summed[tuple(hi)]-summed[tuple(lo)])/(2*radius+1)
     return out
 
-def farming(region, layers, rice):
+def farming(region, layers, rice, crop_only=False):
     # Compare within-product spatial ranks, never heads against harvested hectares.
     geography=js(ASSETS/'asia-population-v1'/(region+'.geography.json'))
     targets=[f['geometry'] for f in geography['features'] if f['properties'].get('target')]
@@ -90,6 +90,34 @@ def farming(region, layers, rice):
         # values alone must not extend a product into an unsupported cell.
         score[~land|(target<1)|(smoothed<=0)|(score<.45)]=0
         scores.append(score);meta.append(dict(id=layer['id'],title=layer['title'],kind=layer['kind'],color=COLORS[layer['id']],threshold=.45,coreThreshold=.85,minimumSourceValue=1,unit=layer['unit']))
+    livestock_file=None
+    crop_file=None
+    if region=='south-central-asia':
+        south_codes={'AFG','BGD','BTN','IND','LKA','MDV','NPL','PAK'}
+        south_shapes=[f['geometry'] for f in geography['features'] if f['properties'].get('target') and f['properties'].get('code') in south_codes]
+        south_geo=unary_union([shape(g) for g in south_shapes])
+        south_mask=geometry_mask([transform_geom('EPSG:4326','EPSG:3857',g) for g in south_shapes],out_shape=(height,width),transform=grid_transform,invert=True)
+        crop_features=[]
+        for m,score in zip(meta,scores):
+            if m['kind']!='crop':continue
+            for level,eligible in [('spread',(score>0)&(score<.85)),('core',score>=.85)]:
+                eligible=(eligible&south_mask).astype('uint8')
+                polygons=[shape(g) for g,value in shapes(eligible,mask=eligible==1,transform=grid_transform) if value==1]
+                if not polygons:continue
+                geometry=shape(transform_geom('EPSG:3857','EPSG:4326',mapping(unary_union(polygons)),precision=5)).buffer(0).intersection(south_geo)
+                if not geometry.is_empty:crop_features.append(feature(mapping(geometry),dict(id=m['id'],name=m['title'],kind='crop',color=m['color'],distribution=level)))
+        crop_file='south-asia.crop-areas.json.gz';write(crop_file,fc(crop_features))
+        if crop_only:return crop_file
+        livestock_features=[]
+        for m,score in zip(meta,scores):
+            if m['kind']!='livestock' or m['id']=='sheep':continue
+            for level,eligible in [('spread',(score>0)&(score<.85)),('core',score>=.85)]:
+                eligible=(eligible&south_mask).astype('uint8')
+                polygons=[shape(g) for g,value in shapes(eligible,mask=eligible==1,transform=grid_transform) if value==1]
+                if not polygons:continue
+                geometry=shape(transform_geom('EPSG:3857','EPSG:4326',mapping(unary_union(polygons)),precision=5)).buffer(0).intersection(south_geo)
+                if not geometry.is_empty:livestock_features.append(feature(mapping(geometry),dict(id=m['id'],name=m['title'],kind='livestock',color=m['color'],distribution=level)))
+        livestock_file='south-asia.livestock-areas.json.gz';write(livestock_file,fc(livestock_features))
     ranked=np.stack([score if m['kind']=='crop' else np.zeros_like(score) for score,m in zip(scores,meta)]);winner=np.argmax(ranked,axis=0)+1;winner[np.max(ranked,axis=0)==0]=0
     # Suppress isolated specks without extending a product outside its candidate area.
     counts=[]
@@ -145,7 +173,7 @@ def farming(region, layers, rice):
         regional_coverage[f['properties']['code']]=dict(landCells=int(np.sum(mask)),displayCells=int(np.sum(mask&(winner>0))),coreCells=int(np.sum(mask&core)))
     name=region+'.farming-areas.json.gz';write(name,fc(features))
     if CACHE_DIR:projection_caches[region+'.npz']=hashlib.sha256((CACHE_DIR/(region+'.npz')).read_bytes()).hexdigest()
-    return dict(file=name,products=meta,labels=labels,coverage=coverage,countryCoverage=regional_coverage,method='Crop-only exclusive highest within-product spatial percentile; livestock uses up to three representative points inside large concentration components (not area or quantity symbols); >=45th percentile for broad distribution, >=85th for concentration cores; source value >=1 in the original unit after average reprojection to approximately 12 projected km; land-weighted 5x5-cell smoothing; conditional 3x3-cell majority only among eligible products; all supported components retained, sixteen large components for alternative label anchors only; no polygon simplification; clipped to land. Relative concentration, not quantity, farmland coverage, or exclusive land use.')
+    return dict(file=name,cropFile=crop_file,livestockFile=livestock_file,products=meta,labels=labels,coverage=coverage,countryCoverage=regional_coverage,method='Overview crops show the exclusive highest within-product spatial percentile for legibility; South Asia selected crop also has a nonexclusive full supported broad/core area clipped to its eight countries. Livestock uses up to three representative points inside large concentration components; South Asia also has nonexclusive cattle, buffalo, goat and chicken broad/core percentile areas. >=45th percentile for broad distribution, >=85th for concentration cores; source value >=1 in the original unit after average reprojection to approximately 12 projected km; land-weighted 5x5-cell smoothing; conditional 3x3-cell majority only among eligible overview crops; all supported components retained; no polygon simplification; clipped to land. Relative concentration, not quantity, farmland coverage, or exclusive land use.')
 
 def isolines(region, record, kind):
     directory='asia-water-v1' if kind=='rainfall' else 'asia-physical-v1'
@@ -193,6 +221,13 @@ def climate_labels(record, classes):
 def main():
     OUT.mkdir(exist_ok=True)
     import sys
+    if '--south-crop-only' in sys.argv:
+        manifest=json.loads((OUT/'manifest.json').read_text(encoding='utf8'))
+        farms=js(ASSETS/'asia-farming-v1/manifest.json');rice=js(ASSETS/'asia-agriculture-v1/manifest.json')
+        region='south-central-asia'
+        manifest['regions'][region]['farming']['cropFile']=farming(region,farms['regions'][region]['layers'],next(r for r in rice['regions'] if r['regionId']==region),crop_only=True)
+        manifest['regions'][region]['farming']['method']+=' South Asia crop selection uses independent, nonexclusive >=45th percentile supported areas for each crop, with >=85th percentile concentration cores; crop overlap is preserved.'
+        write('manifest.json',manifest);return
     if '--farming-only' in sys.argv:
         if CACHE_DIR:
             previous=json.loads((OUT/'manifest.json').read_text(encoding='utf8'))

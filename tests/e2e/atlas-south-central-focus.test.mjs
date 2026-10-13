@@ -24,7 +24,7 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
  try{
   browser=await chromium.launch({headless:true,chromiumSandbox:true,...(process.env.REVIEW_CHROME_PATH?{executablePath:process.env.REVIEW_CHROME_PATH}:{})});
   const page=await browser.newPage({viewport:{width:1920,height:1080},deviceScaleFactor:1}),errors=[];
-  const focusedCaptures=new Set(['south-asia-industry','south-asia-industry-selected','south-asia-religion','south-asia-nepal-religion','south-asia-sri-lanka-religion']);
+  const focusedCaptures=new Set(['south-asia-climate','south-asia-agriculture','south-asia-agriculture-tea','south-asia-forest-use','south-asia-terrain','south-asia-landform','south-asia-industry','south-asia-industry-selected','south-asia-population','south-asia-ethnicity','south-asia-religion','south-asia-nepal-religion','south-asia-sri-lanka-religion','south-asia-precipitation','south-asia-basins','south-asia-basin-selected','south-asia-groundwater']);
   const capture=async name=>{if(process.env.SC_FOCUSED_REVIEW==='1'&&!focusedCaptures.has(name))return;const folder=path.resolve('review-artifacts/south-central-focus');await mkdir(folder,{recursive:true});await page.waitForLoadState('networkidle');await page.evaluate(async()=>{await document.fonts.ready;scrollTo(0,0);await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});await page.screenshot({path:path.join(folder,`${name}.png`),animations:'disabled'});};
   page.on('pageerror',error=>errors.push(error.message));
   for(const [region,expected,selected,city,foreign] of [
@@ -108,10 +108,21 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    }
    await page.goto(`${url}/atlas/asia/${region}/agriculture/`,{waitUntil:'domcontentloaded'});
    await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.focusMaskStatus==='ready');
-   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmContextStatus==='ready');
+   await page.waitForFunction(()=>['ready','error'].includes(document.querySelector('[data-asia-atlas]')?.dataset.farmContextStatus));
+   assert.equal(await page.locator('[data-asia-atlas]').getAttribute('data-farm-context-status'),'ready',await page.locator('[data-asia-atlas]').getAttribute('data-presentation-last-error'));
+   if(region==='south-asia')assert.equal(await page.locator('[data-asia-atlas]').getAttribute('data-farm-livestock-features'),'8');
+   await capture(`${region}-agriculture`);
+   if(region==='south-asia'){
+    for(const product of ['rice','wheat','cotton','chickpea','tea','sugarcane'])assert.equal(await page.locator(`.asia-farm-label[data-product="${product}"]`).count(),1);
+    const camera=await page.locator('[data-asia-atlas]').getAttribute('data-map-camera');
+    await page.locator('.asia-farm-label[data-product="tea"]').click();
+    assert.equal(new URL(page.url()).searchParams.get('topic'),'tea');
+    assert.equal(await page.locator('[data-asia-atlas]').getAttribute('data-map-camera'),camera,'Selecting a crop keeps the regional view');
+    assert.equal(await page.locator('.asia-farm-label[data-product="tea"]').getAttribute('aria-pressed'),'true');
+    await capture('south-asia-agriculture-tea');
+   }
    const farmChoices=await page.locator('[data-farm-choice]').evaluateAll(nodes=>nodes.map(n=>n.dataset.farmChoice));
    assert.equal(farmChoices.includes(region==='central-asia'?'rice':'tea'),region==='south-asia');
-   await capture(`${region}-agriculture`);
    await page.locator('[data-farming-topic]').selectOption('forest');
    await page.locator('[data-country-select]').selectOption(region==='south-asia'?'IND':'KAZ');
    await page.waitForFunction(()=>document.querySelector('[data-farming-statistics-tables]')?.textContent?.includes('燃料材の生産量'));
@@ -135,6 +146,7 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    await page.waitForFunction(count=>document.querySelectorAll('.sc-religion-marker').length===count,region==='central-asia'?1:5);
    await page.waitForFunction(count=>document.querySelectorAll('.sc-religion-report-marker:not(.local)').length===count,region==='central-asia'?4:0);
    if(region==='south-asia')await page.waitForFunction(()=>document.querySelectorAll('.sc-religion-local-marker').length===8);
+   if(region==='south-asia')await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.southReligionStates==='34');
    if(region==='south-asia'){
     const collisions=await page.evaluate(()=>['NPL','LKA'].flatMap(code=>{const label=document.querySelector(`.sc-religion-marker[data-religion-country="${code}"] span`)?.getBoundingClientRect();if(!label)return [code+' national label missing'];return [...document.querySelectorAll('.sc-religion-local-marker.is-compact')].filter(dot=>{const box=dot.getBoundingClientRect();return box.left<label.right+2&&box.right>label.left-2&&box.top<label.bottom+2&&box.bottom>label.top-2;}).map(dot=>code+':'+dot.dataset.religionLocal); }));
     assert.deepEqual(collisions,[]);
@@ -178,11 +190,13 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    assert.ok(Number(await page.locator('[data-asia-atlas]').getAttribute('data-contour-band-features'))>0);
    assert.ok(Number(await page.locator('[data-asia-atlas]').getAttribute('data-contour-line-features'))>0);
    assert.match(await page.locator('[data-hydrology-legend]').textContent(),/250.*500/s);
+   if(region==='south-asia')assert.match(await page.locator('[data-hydrology-legend]').textContent(),/3,000以上/);
    await capture(`${region}-precipitation`);
    await page.goto(`${url}/atlas/asia/${region}/nature/?topic=basins`,{waitUntil:'domcontentloaded'});
    await page.locator('[data-basin-shortcuts] button:enabled').first().waitFor();
    assert.equal(await page.locator('[data-basin-shortcuts]').isVisible(),true);
    await page.locator('[data-hydrology-detail-label]').waitFor({state:'visible'});
+   if(region==='south-asia')await page.locator('.asia-river-label').filter({hasText:'ブラマプトラ川'}).waitFor({state:'visible'});
    await capture(`${region}-basins`);
    const basinOption=await page.locator('[data-hydrology-detail] option:not([value=""])').first().getAttribute('value');
    await page.locator('[data-hydrology-detail]').selectOption(basinOption);
@@ -206,6 +220,10 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    await page.locator('[data-water-picker]').waitFor({state:'visible'});
    await page.locator('[data-water-select]').selectOption(region==='south-asia'?'rivers-194':'rivers-112');
    assert.match(await page.locator('[data-south-central-river-reading]').textContent(),region==='south-asia'?/ガンジス/:/アムダリヤ/);
+   if(region==='south-asia'){
+    await page.locator('[data-water-select]').selectOption('rivers-134');
+    assert.match(await page.locator('[data-south-central-river-reading]').textContent(),/ブラマプトラ/);
+   }
    await capture(`${region}-water-selected`);
    await page.goto(`${url}/atlas/asia/${region}/population/?topic=ethnicity`,{waitUntil:'domcontentloaded'});
    await capture(`${region}-ethnicity`);
@@ -214,11 +232,33 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
     await page.waitForURL('**topic=in-language-overview**');
     await capture('south-asia-mother-tongue');
     await page.goto(`${url}/atlas/asia/${region}/population/?topic=religion`,{waitUntil:'domcontentloaded'});
-    await page.locator('[data-sc-domestic-topic="in-religion-overview"]').click();
-    await page.waitForURL('**topic=in-religion-overview**');
+    await page.locator('[data-sc-domestic-topic="in-religion-muslim"]').click();
+    await page.waitForURL('**topic=in-religion-muslim**');
     await capture('south-asia-state-religion');
    }
   }
   assert.deepEqual(errors,[]);
+ }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
+});
+
+test('南アジアの三産業入口と作物重複域を表示する',{skip:enabled?false:'ATLAS_ASIA_BROWSER=1 with a production build',timeout:120000},async()=>{
+ const {chromium}=await import('playwright'),{server,url}=await serve();let browser;
+ try{
+  browser=await chromium.launch({headless:true,chromiumSandbox:true,...(process.env.REVIEW_CHROME_PATH?{executablePath:process.env.REVIEW_CHROME_PATH}:{})});
+  const page=await browser.newPage({viewport:{width:1920,height:1080}});
+  await page.goto(`${url}/atlas/asia/south-asia/industry/`);
+  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true');
+  assert.deepEqual(await page.locator('.asia-industry-sectors button').allTextContents(),['資源・エネルギー','製造業','サービス業']);
+  for(const [topic,expected] of [['sc-south-resources','水力'],['sc-south-manufacturing','医薬品'],['sc-south-services','ITサービス']]){
+   await page.locator(`[data-industry-feature="${topic}"]`).click();
+   await page.waitForFunction(id=>new URL(location.href).searchParams.get('topic')===id,topic);
+   assert.match(await page.locator('[data-industry-title]').textContent(),new RegExp(topic==='sc-south-resources'?'資源・エネルギー':topic==='sc-south-manufacturing'?'製造業':'サービス業'));
+   assert.match((await page.locator('.asia-industry-regional-label').allTextContents()).join(' '),new RegExp(expected));
+  }
+  await page.goto(`${url}/atlas/asia/south-asia/agriculture/?topic=tea`);
+  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmContextStatus==='ready');
+  const manifest=JSON.parse(await page.locator('[data-asia-config]').textContent());
+  assert.equal(manifest.presentation.farming.cropFile,'south-asia.crop-areas.json.gz');
+  assert.match(await page.locator('[data-grid-reading]').textContent(),/他作物と重なる/);
  }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
 });
