@@ -35,12 +35,12 @@ try{
  assert.deepEqual(await labels(),baselineLabels);assert.equal(await page.locator('[data-latin-agriculture-map]').getAttribute('data-agriculture-frame'),farmFrame);
  await shot('latin-soy-selected');
  await page.locator('[data-latin-agriculture-link]').filter({hasText:'林業'}).click();await settled();const forest=await measure();
- for(const k of ['news','fields','nav'])assert.deepEqual(forest[k],farming[k],k+' changes across farming/forestry');
+ for(const k of ['map','reader','news','fields','nav'])assert.deepEqual(forest[k],farming[k],k+' changes across farming/forestry');
  for(const m of [farming,forest])for(const k of ['map','reader'])assert.ok(m[k]?.height>=440,k+' retains the accepted minimum reading/map height');
  await shot('latin-forestry');await page.reload({waitUntil:'networkidle'});await settled();assert.deepEqual((await measure()).map,forest.map);
  await page.goBack({waitUntil:'networkidle'});await settled();assert.match(await page.locator('[data-latin-agriculture-reading-title]').textContent(),/大豆/);
  assert.equal(await layers(),2);assert.deepEqual(await labels(),baselineLabels);
- report.checks.push('Latin: accepted separate crop/cattle rasters, real soy pixel selection, 11 sourced products and all baseline labels retained, fixed agriculture camera; forestry shared navigation/news/fields and minimum frame sizes; reload and back');
+ report.checks.push('Latin: accepted separate crop/cattle rasters, real soy pixel selection, 11 sourced products and all baseline labels retained, fixed agriculture camera; farming/forestry map and reader dimensions exactly match with shared navigation/news/fields and minimum frame sizes; reload and back');
  await go('atlas/latin-america/population/');assert.equal(await page.locator('[data-lp-target-map] [data-city-locator]').count(),20);assert.equal(await page.locator('[data-lp-target-map] [data-population-status=UN-2018-agglomeration]').count(),7);await page.locator('[data-lp-target-map] [data-lp-city=lima]').click();assert.match(await page.locator('[data-lp-overview]').textContent(),/10,391,000人/);assert.equal(await page.locator('[data-lp-target-map] [data-population-status=UN-2018-agglomeration]').count(),7);await shot('latin-lima');await page.reload({waitUntil:'networkidle'});await settled();assert.match(await page.locator('[data-lp-reading-title]').textContent(),/リマ/);await page.locator('[data-lp-layer-select]').selectOption('spatial');assert.equal(await page.locator('[data-lp-target-legend] li').count(),5);assert.match(await page.locator('[data-lp-target-legend]').textContent(),/人\/km²/);await shot('latin-density');report.checks.push('Latin population: accepted 20 visible city locators with 7 sourced WUP2018 counts; Lima selection retains peers/reloads; separate 2020 density with 5 bins');
  for(const [section,group] of [['ethnicity','mestizo'],['religion','protestant']]){
   await go('atlas/latin-america/population/?section='+section);
