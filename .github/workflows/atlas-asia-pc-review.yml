@@ -2,7 +2,7 @@ name: Review approved East Asia on PC
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, codex/regional-integration-validation-20261013]
     paths:
       - '.github/workflows/atlas-asia-pc-review.yml'
       - 'scripts/capture-east-asia-approved-review.mjs'
@@ -165,6 +165,9 @@ jobs:
         run: npm run build
 
       - name: Verify South and Central Asia regional journeys
+        # The stacked East-only follow-up leaves the integrated owner's South/
+        # Central review to its main-targeted PR and captures East independently.
+        if: github.base_ref != 'codex/regional-integration-validation-20261013'
         timeout-minutes: 4
         run: ATLAS_ASIA_BROWSER=1 SC_FOCUSED_REVIEW=1 node --test tests/e2e/atlas-south-central-focus.test.mjs
 

@@ -74,7 +74,7 @@
 .east-industry-sectors{display:flex;gap:6px;margin:6px 0}.east-industry-sectors button,.east-industry-reading-actions button{min-height:36px;padding:6px 10px;border:1px solid #b2c3b5;background:#fafcf5;color:#315746;font:600 13px/1.5 var(--sans);cursor:pointer}.east-industry-sectors button[aria-pressed=true]{background:#315746;color:#fff}
 .east-industry-map-labels .east-sector-map-label{border:0;background:#fffdf5ed;color:#25473e;padding:2px 5px;font:700 11px/20px var(--sans);white-space:nowrap;cursor:pointer;box-sizing:border-box;height:24px}
 .east-industry-map-labels .east-sector-map-label::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;background:var(--industry-color)}
-.east-industry-map-labels .east-sector-map-label[aria-pressed=true]{outline:2px solid #315746;outline-offset:1px;background:#eef6e5}
+.east-industry-map-labels .east-sector-map-label[aria-pressed=true]{outline:2px solid #315746;outline-offset:1px;background:#eef6e5;color:#25473e}
 .east-industry-map-labels .east-industry-site-point{width:16px;height:16px;border:0;border-radius:50%;background:transparent;transform:translate(-50%,-50%);padding:0;cursor:pointer}
 .east-industry-site-point>span{display:none;position:absolute;left:12px;top:12px;padding:2px 5px;background:#fffef7;color:#25473e;white-space:nowrap;font:500 11px/18px var(--sans);box-shadow:0 1px 3px #0003}
 .east-industry-site-point:is(:hover,:focus-visible)>span{display:block}.east-industry-map-labels .east-industry-site-point[aria-pressed=true]{background:transparent;outline:2px solid #315746;outline-offset:2px}
