@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "audited": "2026-10-13",
+  "inheritedCommit": "8988f86e4d4e9ea7a0ee4825297bea70f74e23e8",
+  "transcription": {
+    "path": "data-source/atlas/japan-farm-regional/inherited-transcription.json",
+    "sha256": "e281d14c61506bcea2599dabd43f1aebfa448be95c8139f3b6fff10662931c88",
+    "kind": "inherited-manual-transcription-not-publisher-original"
+  },
+  "sources": [
+    {
+      "url": "https://www.maff.go.jp/j/seisan/tokusan/imo/attach/pdf/r7shiryo-16.pdf",
+      "status": "blocked-proxy-403",
+      "attempts": 1,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "rawFile": null,
+      "rawSha256": null,
+      "verification": "Previously readable official text; scope and selected values checked. No byte-original preservation."
+    },
+    {
+      "url": "https://www.maff.go.jp/j/seisan/ryutu/yasai/attach/pdf/index-118.pdf",
+      "status": "blocked-proxy-403",
+      "attempts": 1,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "rawFile": null,
+      "rawSha256": null,
+      "verification": "Previously readable official text; scope and selected values checked. No byte-original preservation."
+    },
+    {
+      "url": "https://www.pref.hokkaido.lg.jp/fs/5/2/6/4/2/7/8/_/syuyouyasaityousa20220131.pdf",
+      "status": "blocked-proxy-403",
+      "attempts": 1,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "rawFile": null,
+      "rawSha256": null,
+      "verification": "Previously readable official text; scope and selected values checked. No byte-original preservation."
+    },
+    {
+      "url": "https://www.pref.aomori.lg.jp/soshiki/nourin/ringo/R8aomoriringo.pdf",
+      "status": "blocked-proxy-403",
+      "attempts": 1,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "rawFile": null,
+      "rawSha256": null,
+      "verification": "Previously readable official text; scope and selected values checked. No byte-original preservation."
+    },
+    {
+      "url": "https://www.town.hokkaido-ikeda.lg.jp/sangyo/nouchikusangyo/ikeda-nouchiku/521.html",
+      "status": "blocked-proxy-403",
+      "attempts": 1,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "rawFile": null,
+      "rawSha256": null,
+      "verification": "Previously readable official text; scope and selected values checked. No byte-original preservation."
+    }
+  ],
+  "unreconfirmed": [
+    {
+      "url": "https://www.machimura.maff.go.jp/machi/contents/30/304/details.html",
+      "error": "Web open: Internal Error",
+      "attempts": 1,
+      "rawFile": null,
+      "rawSha256": null,
+      "status": "inherited-value-not-reconfirmed"
+    }
+  ],
+  "gaps": [
+    "Hokkaido cabbage table is located in the already adopted PDF; row/column correspondence and all regional values are not yet verified. Do not populate guessed values.",
+    "e-Stat seasonal designated-production-area municipality tables remain unacquired; no national municipality quantity layer.",
+    "No re-fetch or alternate route for the known blocked GSI sample, municipal agricultural-output workbook, e-Stat list, Hokkaido 2025 workbook, Toyohashi workbook or blocked municipality detail pages."
+  ]
+}
