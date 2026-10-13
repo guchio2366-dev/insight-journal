@@ -20,8 +20,8 @@ export const southCentralFocusPhysicalReading={
  },
  'central-asia':{
   terrain:'南東のパミールと天山では500m等高線が密になり、カザフスタン北部と西側の低地には広い低標高域が続きます。山地の隆起にはインド側とユーラシア側の衝突の影響が及びます。低地の色から降水量や取水量は分かりません。',
-  landform:'タジキスタンのパミールとキルギスの天山を、カザフスタンの内陸の広がりと比較します。パミール・天山の高い山地はインド側とユーラシア側の衝突に伴う地殻変形で生じ、山地の間には谷や盆地もあります。',
-  detail:'パミールの高地、天山山脈、カザフスタンの内陸を選び、500m等高線の密度と山地・低地の位置を比較します。',
+  landform:'パミール・天山の高地、フェルガナ盆地、北のカザフ草原、西のカスピ海を位置と標高で比較します。高い山地にはインド側とユーラシア側の衝突に伴う地殻変形が関わります。',
+  detail:'パミール、天山、フェルガナ盆地、カザフ草原、カスピ海を選び、500m等高線の密度と高地・低地の位置を比較します。案内点は地形の正確な境界ではありません。',
   water:'パミール・天山側からアムダリヤ川・シルダリヤ川が乾燥した低地へ続きます。山地の標高と下流で使える水の量は別の情報です。',
  },
 } as const;
@@ -31,5 +31,7 @@ export const southCentralFocusLandformSources={
   {label:'Tectonics・パミールと天山の地殻変形（2016年）',url:'https://agupubs.onlinelibrary.wiley.com/doi/full/10.1002/2015TC004055'},
   {label:'NASA・天山の隆起と地形',url:'https://science.nasa.gov/earth/earth-observatory/central-tien-shan-china-49857/'},
   {label:'NASA・中央アジアの天山と水源',url:'https://science.nasa.gov/earth/earth-observatory/central-asias-water-tower-79419/'},
+  {label:'Natural Earth・地形と水域の位置',url:'https://www.naturalearthdata.com/downloads/10m-physical-vectors/'},
+  {label:'UNESCO・トゥランの冬季寒冷砂漠',url:'https://whc.unesco.org/en/list/1693/'},
  ],
 } as const;

@@ -47,6 +47,8 @@ export const asiaPhysicalFocus:AsiaPhysicalFocus[]=[
  {id:'deccan-plateau',region:'south-central-asia',country:'IND',name:'デカン高原',coordinates:[77,17],reading:'半島の内陸と沿岸を比べ、標高と雨の季節差が異なる情報であることを確認します。'},
  {id:'pamir',region:'south-central-asia',country:'TJK',name:'パミールの高地',coordinates:[73,38],reading:'中央アジアの高地から西側の盆地へ移動し、地形と水系の位置関係を読みます。'},
  {id:'tian-shan',region:'south-central-asia',country:'KGZ',name:'天山山脈',coordinates:[76,42],reading:'山地の高さと、山地の間の湖・盆地を比べます。等高線は加工した広域格子から計算しています。'},
- {id:'kazakh-steppe',region:'south-central-asia',country:'KAZ',name:'カザフスタンの内陸',coordinates:[68,50],reading:'広い内陸の起伏を、南東側の山地と同じ色尺度で比較します。土地利用は標高だけからは決まりません。'},
+ {id:'kazakh-steppe',region:'south-central-asia',country:'KAZ',name:'カザフ草原',coordinates:[68,50],reading:'北部の広い平坦地を、南東の天山の高地と同じ色尺度で比較します。土地利用は標高だけからは決まりません。'},
+ {id:'caspian-sea-central',region:'south-central-asia',country:'KAZ',name:'カスピ海',coordinates:[51.8,43.1],reading:'西の閉じた水域を位置の目安として示します。海面の変化や水利用を標高格子からは推定できません。'},
+ {id:'fergana-valley',region:'south-central-asia',country:'UZB',name:'フェルガナ盆地',coordinates:[71.1,40.5],reading:'天山とアライ山脈の間の低地を示します。シルダリヤ川との位置関係を農業図で比べます。'},
  {id:'sri-lanka-highland',region:'south-central-asia',country:'LKA',name:'スリランカの中央高地',coordinates:[80.7,7],reading:'島の中央の高地から沿岸へ移動し、気候図と米の分布を見比べます。'}
 ];

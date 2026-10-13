@@ -35,13 +35,13 @@ export function southRainfallLegend(){
 // regional color key. A 9,750 mm combined-region legend conceals the dry
 // lowlands and mountain margins that this focused map is meant to compare.
 export const centralRainfallStops=[
- {lower:0,color:'#f7f4e6'},
- {lower:250,color:'#e1e4b9'},
- {lower:500,color:'#bad8a8'},
- {lower:750,color:'#8acdae'},
- {lower:1000,color:'#5dbdb2'},
- {lower:1500,color:'#359ba9'},
- {lower:2000,color:'#286b95'},
+ {lower:0,color:'#f1f8fa'},
+ {lower:250,color:'#d9edf4'},
+ {lower:500,color:'#b9dcea'},
+ {lower:750,color:'#8fc6dd'},
+ {lower:1000,color:'#63a9cb'},
+ {lower:1500,color:'#397fae'},
+ {lower:2000,color:'#245584'},
 ] as const;
 export function centralRainfallColor(lower:number){
  return [...centralRainfallStops].reverse().find(stop=>lower>=stop.lower)!.color;
