@@ -1,4 +1,5 @@
 import {visibleJapanFarmProducts} from '../lib/atlas-japan-agriculture-visibility';
+import {japanFarmRegionalSeriesById,formatFarmRegionalValue} from '../data/atlas/japan-farm-regional-statistics';
 import {japanSurfaceAnnotations,japanPlainLabels,japanMountainLabels} from '../data/atlas/japan-reference-labels';
 import type {JapanState} from '../lib/atlas-japan-state';
 import {japanAgricultureProducts,japanAgricultureSites,japanAgricultureSources,japanAgricultureReading,japanForestrySites,getJapanAgricultureReading} from '../data/atlas/japan-agriculture-v2';
@@ -7,9 +8,21 @@ import {japanNatureCities,riverLabels,getJapanNatureReading} from '../data/atlas
 import type {JapanNatureLayers} from './atlas-japan-nature-layers';
 export type FoundationLabel={id:string;title:string;fullTitle?:string;subtitle:string;point:[number,number];color:string;kind:'city'|'site'|'feature'|'reference';selected:boolean;muted?:boolean};
 type Presentation={title:string;period:string;method:string;reading:{title:string;overview:string;reason:string;gap:string};legend:{label:string;color:string}[];labels:FoundationLabel[];selection?:{title:string;body:string;source:string}};
-export function japanFoundationPresentation(state:JapanState,nature?:JapanNatureLayers|null):Presentation|null{
+export function japanFoundationPresentation(state:JapanState,nature?:JapanNatureLayers|null,prefPoints:Record<string,[number,number]>={}):Presentation|null{
  if(state.field==='industry')return null;
  if(state.field==='agriculture'){
+  const series=japanFarmRegionalSeriesById(state.farmData);
+  if(series&&series.product===state.topic){
+   const product=japanAgricultureProducts.find(p=>p.id===series.product)!;
+   const visible=visibleJapanFarmProducts([product.id],state).length>0;
+   const chosen=series.rows.find(r=>r.id===state.farmRegion);
+   const areaPoints=series.rows.filter(r=>r.point||r.prefecture&&prefPoints[r.prefecture]);
+   return {title:series.title,period:series.year+'・'+series.grain,method:series.method+' '+series.coverage,
+    reading:{title:series.title,overview:`${series.grain}ごとに公表された${series.measure}。${series.coverage}`,reason:`点は集計地域を示す参照位置です。${series.method} 地域内の産地や農場の位置・密度は示しません。`,gap:`${series.year}、単位${series.unit}。米・小麦・豚の2020年モデル面とは指標・粒度が異なるため、この表示ではモデル面を重ねません。`},
+    legend:[{label:`集計地域の${series.measure}（${series.unit}・${series.year}）`,color:product.color},{label:visible?'円の面積は公表値に比例。小さい値は視認用7px、丸めた0は白抜き':'この品目は表示OFF',color:visible?product.color:'#b5bda1'}],
+    labels:visible?areaPoints.map(r=>({id:'farm-'+r.id,title:product.title,fullTitle:r.name+' '+formatFarmRegionalValue(r,series.unit),subtitle:r.name+'・'+formatFarmRegionalValue(r,series.unit),point:r.point??prefPoints[r.prefecture!]!,color:product.color,kind:'feature',selected:state.farmRegion===r.id})):[],
+    selection:chosen?{title:chosen.name+'｜'+formatFarmRegionalValue(chosen,series.unit),body:`${series.year}・${series.grain}の${series.measure}。${series.coverage} ${series.method}`,source:series.source}:undefined};
+  }
   const reading=getJapanAgricultureReading(state.topic,state.site),selected=(state.topic==='forest'?japanForestrySites:japanAgricultureSites).find(s=>s.id===state.site);
   const selectedVisible=visibleJapanFarmProducts(japanAgricultureProducts.filter(p=>p.id===state.topic).map(p=>p.id),state).length>0;
   const cropLegend=selectedVisible&&['rice','wheat','pork'].includes(state.topic)?(state.topic==='pork'?[1,10,50,200,1000]:[1,10,100,1000,5000]).map((n,i,a)=>({label:(i===0?'0超〜'+n+'未満':a[i-1]+'〜'+n+'未満')+(state.topic==='pork'?' 頭/km²':' ha/原格子'),color:('rgba('+({rice:'89,125,54',wheat:'176,128,40',pork:'174,112,114'}[state.topic as 'rice'|'wheat'|'pork'])+','+[45,70,95,125,155][i]/255+')')})):[];if(cropLegend.length)cropLegend.push({label:(state.topic==='pork'?'1,000以上 頭/km²':'5,000以上 ha/原格子'),color:'rgba('+({rice:'89,125,54',wheat:'176,128,40',pork:'174,112,114'}[state.topic as 'rice'|'wheat'|'pork'])+',0.72549)'});

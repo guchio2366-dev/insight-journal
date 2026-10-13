@@ -27,6 +27,8 @@
 .japan-map-labels button:before{content:'';display:inline-block;width:7px;height:7px;background:var(--point-color,#4d756d);border-radius:50%;margin-right:5px}.japan-map-labels small{display:block;font-weight:400;font-size:10px;color:#5d716a;margin-left:12px}
 .japan-map-labels button[aria-pressed=true]{outline:2px solid #314c47;background:#eaf1dfdd}
 .japan-point{width:16px;height:16px;padding:0;border:0;background:transparent;cursor:pointer}.japan-point:before{content:'';display:block;width:7px;height:7px;margin:4px;border:1px solid #fff;background:var(--point-color,#446e65);border-radius:50%;box-shadow:0 0 0 1px #52716a}
+.japan-point.farm-quantity{width:38px;height:38px;display:grid;place-items:center}.japan-point.farm-quantity:before{width:var(--farm-marker-diameter);height:var(--farm-marker-diameter);margin:0;box-shadow:0 0 0 1px #36534d,0 1px 5px #24342d66;opacity:.85}.japan-point.farm-quantity:focus-visible{outline:3px solid #a74830;outline-offset:2px}
+.japan-point.farm-quantity.is-rounded-zero:before{width:10px;height:10px;background:#fff8eb;border:2px dashed var(--point-color);box-shadow:none}
 .japan-legend{display:flex;flex-wrap:wrap;gap:6px 12px;margin:8px 0;font-size:11px;line-height:1.5}.japan-legend>span{display:flex;align-items:center;gap:5px}.japan-legend i{display:inline-block;width:15px;height:10px;border:1px solid #71817966}
 .japan-map-method{font-size:11px;line-height:1.65;margin:5px 0;color:#536b63}
 .japan-reading{background:var(--japan-paper);border:1px solid #c7ccbf;padding:16px;box-sizing:border-box;max-height:650px;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable}

@@ -10,12 +10,13 @@ const wheatSource=source('wheat-supply');
 const woodSource=source('wood-balance');
 ---
 <div class="japan-farm-statistics">
+ <section data-japan-farm-regional hidden aria-live="polite"><h3 data-japan-farm-regional-title></h3><p data-japan-farm-regional-description></p><div class="japan-table-scroll"><table><thead><tr><th scope="col">集計地域</th><th scope="col">公表値</th></tr></thead><tbody data-japan-farm-regional-rows></tbody></table></div><p data-japan-farm-regional-method></p><p class="farm-source"><a data-japan-farm-regional-source target="_blank" rel="noopener noreferrer">公表資料</a></p></section>
  <section data-japan-agriculture-panel="all" hidden={initialTopic!=='all'}>
   <h3>採用した10品目と産地の事例</h3>
   <p>{candidates.basis}</p>
   <div class="japan-table-scroll"><table><thead><tr><th scope="col">品目</th><th scope="col">地域の事例</th><th scope="col">採用理由</th></tr></thead><tbody>{products.map(p=><tr><th scope="row"><button type="button" data-japan-farm-topic={p.id}>{p.title}</button></th><td>{sites.filter(s=>s.products.includes(p.id)).map((s,i)=><Fragment>{i?'・':''}<button type="button" data-japan-farm-site={s.id}>{s.name.split('｜')[1]}</button></Fragment>)}</td><td>{p.selectionReason}</td></tr>)}</tbody></table></div>
   <details><summary>次点の品目と、今回採用を見送った理由</summary><ul>{candidates.next.map(p=><li><strong>{p.title}</strong>：{p.reason}</li>)}</ul><p>{candidates.forestry}</p></details>
-  <p>国内細地域の数量は未収録です。点の大きさや数は生産量を表しません。<a href={source('municipal-2024').href}>市町村別詳細原表</a>は取得障害のため値を未掲載とし、秘匿や欠測を0に変換していません。</p>
+  <p>産地事例の点の大きさや数は生産量を表しません。品目別に確認できた一部の公表数量は「地域の公表数量」から切り替えられます。<a href={source('municipal-2024').href}>市町村別詳細原表</a>は取得障害のため値を未掲載とし、秘匿や欠測を0に変換していません。</p>
  </section>
  <section data-japan-agriculture-panel="wheat" hidden={initialTopic!=='wheat'}>
   <h3>小麦を、供給・用途・輸入先から読む</h3>
@@ -34,7 +35,7 @@ const woodSource=source('wood-balance');
    <section aria-labelledby="jp-wheat-self"><h4 id="jp-wheat-self">日本の自給率</h4><p class="farm-period">重量ベース・公表系列</p><p class="farm-key-number">{wheat.selfSufficiency.at(-1)!.rate}<span>%</span></p><p>2023年度</p><table><caption>直近5年度</caption><thead><tr><th scope="col">年度</th><th scope="col">自給率</th></tr></thead><tbody>{wheat.selfSufficiency.map(r=><tr><th scope="row">{r.year}</th><td>{r.rate}%</td></tr>)}</tbody></table><p>公表自給率と、左の供給数量から計算した割合は定義が異なります。世界シェアで穴埋めせず、日本の需給を示します。</p></section>
   </div><p class="farm-source"><a href={wheatSource.href}>{wheatSource.title}（28・34頁）</a>。既存の確認済み値を再利用。</p>
  </section>
- {products.filter(p=>p.id!=='wheat').map(p=><section data-japan-agriculture-panel={p.id} hidden={initialTopic!==p.id}><h3>{p.title}の産地資料</h3><p>確認した地域事例です。各地域の生産量順位・市町村内の園地境界は表していません。</p><div class="japan-table-scroll"><table><thead><tr><th scope="col">地域</th><th scope="col">資料から確認したこと</th><th scope="col">出典・対象時点</th></tr></thead><tbody>{sites.filter(s=>s.products.includes(p.id)).map(s=><tr><th scope="row"><button type="button" data-japan-farm-site={s.id}>{s.name}</button></th><td>{s.overview}</td><td>{s.sourceIds.map(id=><p><a href={source(id).href}>{source(id).title}</a><br/><small>{source(id).period}</small></p>)}</td></tr>)}</tbody></table></div><p>供給・用途・輸出入先・自給率の同一品目原表は、まだ接続できていません。この項目には数量グラフを表示しません。</p></section>)}
+ {products.filter(p=>p.id!=='wheat').map(p=><section data-japan-agriculture-panel={p.id} hidden={initialTopic!==p.id}><h3>{p.title}の産地資料</h3><p>確認した地域事例です。各地域の生産量順位・市町村内の園地境界は表していません。</p><div class="japan-table-scroll"><table><thead><tr><th scope="col">地域</th><th scope="col">資料から確認したこと</th><th scope="col">出典・対象時点</th></tr></thead><tbody>{sites.filter(s=>s.products.includes(p.id)).map(s=><tr><th scope="row"><button type="button" data-japan-farm-site={s.id}>{s.name}</button></th><td>{s.overview}</td><td>{s.sourceIds.map(id=><p><a href={source(id).href}>{source(id).title}</a><br/><small>{source(id).period}</small></p>)}</td></tr>)}</tbody></table></div><p>供給・用途・輸出入先・自給率の同一品目原表は、まだ接続できていません。確認済みの地域数量は上の資料切替で範囲を明示して表示します。</p></section>)}
  <section data-japan-agriculture-panel="forest" hidden={initialTopic!=='forest'}>
   <h3>森林の面積と、木材の供給・利用は別の指標</h3><p>地図の緑は2020年の粗い森林参考画像、茶色の点は2024年度白書の木材利用事例です。詳細な樹種・林齢の分布は未収録。以下は全国の木材需給であり、地図の各場所の伐採量ではありません。</p>
   <h4>木材利用の地域事例</h4><p>森林の面や原木の調達範囲とは別の点です。点の数・大きさで木材生産量を表しません。</p><div class="japan-table-scroll"><table><thead><tr><th scope="col">利用と地域</th><th scope="col">確認した事実</th><th scope="col">出典・時点</th></tr></thead><tbody>{woodSites.map(s=><tr><th scope="row"><button type="button" data-japan-farm-site={s.id}>{s.name}</button></th><td>{s.overview}</td><td>{s.sourceIds.map(id=><p><a href={source(id).href}>{source(id).title}</a><br/><small>{source(id).period}</small></p>)}</td></tr>)}</tbody></table></div>

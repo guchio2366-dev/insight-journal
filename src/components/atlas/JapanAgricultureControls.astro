@@ -1,5 +1,6 @@
 ---
 import {japanAgricultureProducts} from '../../data/atlas/japan-agriculture-v2';
+import {japanFarmRegionalSeries} from '../../data/atlas/japan-farm-regional-statistics';
 interface Props {initialTopic?:string;navigationOnly?:boolean;productsOnly?:boolean}
 const {initialTopic='all',navigationOnly=false,productsOnly=false}=Astro.props;
 ---
@@ -17,9 +18,11 @@ const {initialTopic='all',navigationOnly=false,productsOnly=false}=Astro.props;
  {!navigationOnly&&<><p>主要な農産物</p>
  <div class="japan-control-row" role="group" aria-label="農畜産物の選択">
   {japanAgricultureProducts.filter(p=>p.category!=='livestock').map(product=><button type="button" data-japan-farm-topic={product.id} aria-pressed={initialTopic===product.id} style={`--farm-color:${product.color}`}><i aria-hidden="true"></i>{product.title}</button>)}
- </div><p>主要な畜産物</p><div class="japan-control-row" role="group" aria-label="畜産物の選択">{japanAgricultureProducts.filter(p=>p.category==='livestock').map(product=><button type="button" data-japan-farm-topic={product.id} style={`--farm-color:${product.color}`}><i aria-hidden="true"></i>{product.title}</button>)}</div></>}
+ </div><p>主要な畜産物</p><div class="japan-control-row" role="group" aria-label="畜産物の選択">{japanAgricultureProducts.filter(p=>p.category==='livestock').map(product=><button type="button" data-japan-farm-topic={product.id} style={`--farm-color:${product.color}`}><i aria-hidden="true"></i>{product.title}</button>)}</div>
+ <div class="japan-farm-stat-controls" data-japan-farm-stat-controls><p>地域の公表数量</p><div class="japan-control-row" role="group" aria-label="農畜産物の表示資料"><button type="button" data-japan-farm-series="" aria-pressed="true">産地事例・推計面</button>{japanFarmRegionalSeries.map(series=><button type="button" data-japan-farm-series={series.id} data-japan-farm-series-product={series.product} hidden>{series.title}（{series.grain}）</button>)}</div><small>資料ごとに年・単位・地域の範囲が異なります。掲載外は0ではありません。</small></div></>}
 </div>
 <style>
  .japan-farm-controls button{min-height:32px;line-height:1.4;white-space:normal}
  .japan-farm-controls i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--farm-color);margin-right:5px}
+ .japan-farm-stat-controls{margin-top:10px;border-top:1px solid #d7ddd7;padding-top:6px}.japan-farm-stat-controls small{display:block;color:#59635d;line-height:1.5}
 </style>

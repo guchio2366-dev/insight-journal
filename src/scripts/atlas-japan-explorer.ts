@@ -8,6 +8,7 @@ import {japanFoundationPresentation} from './atlas-japan-foundation-presentation
 import {mountJapanAgricultureLayers} from './atlas-japan-agriculture-layers';
 import {mountJapanNatureLayers,type JapanNatureLayers} from './atlas-japan-nature-layers';
 import {japanAgricultureProducts,japanAgricultureSites,japanForestrySites} from '../data/atlas/japan-agriculture-v2';
+import {japanFarmRegionalSeriesById,formatFarmRegionalValue} from '../data/atlas/japan-farm-regional-statistics';
 import {japanNatureFeatureIds} from '../data/atlas/japan-nature-v2';
 import {layoutJapanLabels} from '../lib/atlas-japan-label-layout';
 import {readJapanState,writeJapanState,japanReturnURL,japanDefaults,type JapanState} from '../lib/atlas-japan-state';
@@ -43,6 +44,8 @@ async function start(root:HTMLElement){
  const number=formatJapanQuantity;
  const camera=()=>{if(!map||!ready)return state.camera;const center=map.getCenter();return{lng:center.lng,lat:center.lat,zoom:map.getZoom()};};
  const quantity=()=>state.field==='industry'&&state.topic.startsWith('jp-');
+ const farmSeries=()=>state.field==='agriculture'?japanFarmRegionalSeriesById(state.farmData):undefined;
+ const farmPrefPoints=():Record<string,[number,number]>=>Object.fromEntries((industry?.admin??[]).map(a=>[a.id,a.point as [number,number]]));
  const status=(message:string,error=false)=>{$('[data-japan-map-status]').textContent=message;$('[data-japan-map-status]').hidden=!message;$('[data-japan-retry]').hidden=!error;root.dataset.mapError=String(error);};
  function persist(push:boolean){const url=writeJapanState(new URL(location.href),state);if(url.href!==location.href)history[push?'pushState':'replaceState']({},'',url);syncLinks();}
  function syncLinks(){
@@ -58,14 +61,16 @@ async function start(root:HTMLElement){
   document.title=title;
   document.querySelector<HTMLLinkElement>('link[rel=canonical]')?.setAttribute('href',location.origin+location.pathname);
  }
- function navigate(next:JapanState){natureSample++;state=readJapanState(writeJapanState(new URL(location.href),next),context);point=null;$('[data-japan-farm-value]').textContent='地図上の陸地を選ぶと米・小麦の推計収穫面積と豚の推計密度を確認できます。2020年・原5分角（約7–9km）。';persist(true);render();}
+ function navigate(next:JapanState){natureSample++;state=readJapanState(writeJapanState(new URL(location.href),next),context);point=null;$('[data-japan-farm-value]').textContent=state.farmData?'公表数量は集計地域ごとの値です。地図の円か下の表を選ぶと出典と対象範囲を確認できます。':'地図上の陸地を選ぶと米・小麦の推計収穫面積と豚の推計密度を確認できます。2020年・原5分角（約7–9km）。';persist(true);render();}
  function topic(id:string){navigate({...state,topic:id,prefecture:null,city:null,site:null,feature:null,camera:camera()});}
  function city(id:string,field:AsiaField){const region=japanClimateRegions.find(r=>'climate-region-'+r.id===state.feature);const keepRegion=region?.representative===config.cities.find(c=>c.id===id)?.name;navigate({...state,field,topic:field==='natural'?state.field==='natural'?state.topic:'climate':state.topic,city:id===state.city?null:id||null,prefecture:null,site:null,feature:keepRegion?state.feature:null,camera:camera()});}
  function feature(id:string){navigate({...state,feature:state.feature===id?null:id,city:null,site:null,camera:camera()});}
  function site(id:string){if(state.field==='agriculture'){navigate({...state,site:state.site===id?null:id,city:null,prefecture:null,feature:null,camera:camera()});return;}const s=config.sites.find(s=>s.id===id);if(!s)return;navigate({...state,topic:state.topic==='clusters'||s.industries.includes(state.topic)?state.topic:s.industries[0],site:id,city:null,prefecture:null,camera:camera()});}
+ function farmRegion(id:string){navigate({...state,farmRegion:state.farmRegion===id?null:id,site:null,camera:camera()});}
  function prefecture(id:string){navigate({...state,prefecture:id||null,site:null,city:null,camera:camera()});}
  function render(){
   $('.japan-atlas').dataset.field=state.field;root.dataset.field=state.field;root.dataset.area=state.area??'japan';root.dataset.sector=state.sector??'manufacturing';
+  const farmInstructionMode=state.farmData?'official':'model';if(root.dataset.farmInstructionMode!==farmInstructionMode){$('[data-japan-farm-value]').textContent=farmInstructionMode==='official'?'公表数量は集計地域ごとの値です。地図の円か下の表を選ぶと出典と対象範囲を確認できます。':'地図上の陸地を選ぶと米・小麦の推計収穫面積と豚の推計密度を確認できます。2020年・原5分角（約7–9km）。';root.dataset.farmInstructionMode=farmInstructionMode;}
   const waterTopics=['water','groundwater','precipitation','basins'];for(const b of all('[data-japan-nature-category]'))b.setAttribute('aria-pressed',String(b.dataset.japanNatureCategory===(waterTopics.includes(state.topic)?'water':state.topic)));
   $('[data-japan-water-controls]').hidden=state.field!=='natural'||!waterTopics.includes(state.topic);
   for(const b of all('[data-japan-sector]'))b.setAttribute('aria-pressed',String(b.dataset.japanSector===state.sector));
@@ -83,6 +88,16 @@ async function start(root:HTMLElement){
   for(const input of all<HTMLInputElement>('[data-japan-farm-layer]'))input.checked=input.dataset.japanFarmLayer==='crops'?state.showCrops!==false:state.showLivestock!==false;
   $('[data-japan-farm-layers]').hidden=state.topic==='forest';root.dataset.prefecture=state.prefecture??'';root.dataset.city=state.city??'';root.dataset.site=state.site??'';root.dataset.feature=state.feature??'';
   $('[data-japan-farm-value]').hidden=state.topic==='forest';
+  const regional=farmSeries();root.dataset.farmData=regional?.id??'';root.dataset.farmRegion=state.farmRegion??'';
+  $('[data-japan-farm-stat-controls]').hidden=state.field!=='agriculture'||state.topic==='all'||state.topic==='forest';
+  for(const b of all<HTMLButtonElement>('[data-japan-farm-series]')){b.hidden=!!b.dataset.japanFarmSeries&&b.dataset.japanFarmSeriesProduct!==state.topic;b.setAttribute('aria-pressed',String((b.dataset.japanFarmSeries??'')===(regional?.id??'')));}
+  const regionalPanel=$('[data-japan-farm-regional]');regionalPanel.hidden=!regional;
+  if(regional){$('[data-japan-farm-regional-title]').textContent=regional.title+'｜'+regional.year;$('[data-japan-farm-regional-description]').textContent=regional.grain+'・'+regional.measure+'。'+regional.coverage;
+   $('[data-japan-farm-regional-method]').textContent=regional.method;
+   const rows=$('[data-japan-farm-regional-rows]');rows.replaceChildren();
+   for(const row of regional.rows){const tr=document.createElement('tr'),th=document.createElement('th'),button=document.createElement('button'),td=document.createElement('td');th.scope='row';button.type='button';button.dataset.japanFarmRegion=row.id;button.textContent=row.name;button.setAttribute('aria-pressed',String(state.farmRegion===row.id));th.append(button);td.textContent=formatFarmRegionalValue(row,regional.unit);tr.append(th,td);rows.append(tr);}
+   const source=$<HTMLAnchorElement>('[data-japan-farm-regional-source]');source.href=regional.source;source.textContent='原資料・'+regional.sourcePage;
+  }
   for(const e of all('[data-japan-controls]'))e.hidden=e.dataset.japanControls!==state.field;
   for(const e of all('[data-japan-statistics]'))e.hidden=e.dataset.japanStatistics!==state.field;
   const isQuantity=quantity();
@@ -145,7 +160,7 @@ async function start(root:HTMLElement){
     const selected=config.sites.find(s=>s.id===state.site);if(selected)selection(selected.industries.map(id=>config.industries.find(i=>i.id===id)?.label).join('・')+'｜'+selected.name,(selected.note??'')+' 都市・地域の概略位置。県別数量や施設の敷地境界ではありません。',selected.source);
    }
   }else{
-   const presentation=japanFoundationPresentation(state,nature)!;
+   const presentation=japanFoundationPresentation(state,nature,farmPrefPoints())!;
    title=presentation.title;period=presentation.period;method=presentation.method;
    $('[data-japan-reading-title]').textContent=presentation.reading.title;
    $('[data-japan-overview]').textContent=presentation.reading.overview;
@@ -160,7 +175,8 @@ async function start(root:HTMLElement){
   syncLinks();
  }
  function selection(title:string,body:string,source:string){
- const place=state.field==='industry'?config.sites.find(s=>s.id===state.site)?.point:state.field==='agriculture'?[...japanAgricultureSites,...japanForestrySites].find(s=>s.id===state.site)?.coordinates:[...config.cities,...config.populationPlaces].find(c=>c.id===state.city)?.coordinates;
+ const chosenRegion=farmSeries()?.rows.find(r=>r.id===state.farmRegion);
+ const place=state.field==='industry'?config.sites.find(s=>s.id===state.site)?.point:state.field==='agriculture'?chosenRegion?.point??(chosenRegion?.prefecture?farmPrefPoints()[chosenRegion.prefecture]:undefined)??[...japanAgricultureSites,...japanForestrySites].find(s=>s.id===state.site)?.coordinates:[...config.cities,...config.populationPlaces].find(c=>c.id===state.city)?.coordinates;
  if(state.area!=='japan'&&place){const b=japanArea(state.area).bounds;if(place[0]<b[0]||place[0]>b[2]||place[1]<b[1]||place[1]>b[3])body+=' この地点は現在の地方表示の範囲外です。全国資料の選択を保持しています。';}
  $('[data-japan-selection]').hidden=false;$('[data-japan-selection-title]').textContent=title;$('[data-japan-selection-body]').textContent=body;$<HTMLAnchorElement>('[data-japan-selection-source]').href=source;}
  type Label={id:string;title:string;fullTitle?:string;subtitle:string;point:[number,number];color:string;offset:[number,number];select:()=>void;selected:boolean;muted?:boolean;reference?:boolean;priority?:number};
@@ -168,6 +184,7 @@ async function start(root:HTMLElement){
  let placementKey='',placement:ReturnType<typeof layoutJapanLabels>|null=null;
  function renderMarkers(){
   if(!map||!lib)return;markers.splice(0).forEach(m=>m.remove());const overlay=$('[data-japan-labels]');overlay.replaceChildren();labels=[];
+  const regional=farmSeries();
   const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('aria-hidden','true');overlay.append(svg);
   const items:Label[]=[];
   if(state.field==='industry'&&!quantity()){
@@ -175,10 +192,10 @@ async function start(root:HTMLElement){
    const representatives=new Set(config.industries.map(i=>config.sites.find(s=>s.industries.includes(i.id))?.id));
    for(const s of config.sites.filter(s=>japanSiteInSector(s.industries,state.sector))){const i=config.industries.find(i=>i.id===(s.industries.includes(state.topic)?state.topic:s.industries[0]))!;items.push({id:s.id,title:s.label??s.industries.map(id=>config.industries.find(i=>i.id===id)?.label).join('・'),subtitle:s.name,point:s.point,color:i.color,offset:offsets[s.id]??[10,10],select:()=>site(s.id),selected:state.site===s.id,muted:state.topic!=='clusters'&&!s.industries.includes(state.topic),priority:representatives.has(s.id)?20:0});}
   }else if(state.field!=='industry'){
-   for(const label of japanFoundationPresentation(state,nature)!.labels)items.push({...label,reference:label.kind==='reference',offset:[12,-25],select:()=>label.kind==='site'?site(label.id):label.kind==='feature'?feature(label.id):city(label.id,state.field)});
+   for(const label of japanFoundationPresentation(state,nature,farmPrefPoints())!.labels)items.push({...label,reference:label.kind==='reference',offset:regional?[18,-42]:[12,-25],select:()=>state.field==='agriculture'&&regional?farmRegion(label.id.replace(/^farm-/,'')):label.kind==='site'?site(label.id):label.kind==='feature'?feature(label.id):city(label.id,state.field)});
   }
   inset?.render(state,items);
-  for(const data of items){const dot=document.createElement(data.reference?'span':'button');if(dot instanceof HTMLButtonElement)dot.type='button';dot.className='japan-point';dot.classList.toggle('is-muted',!!data.muted);dot.classList.toggle('is-selected',data.selected);dot.style.setProperty('--point-color',data.color);if(data.reference)dot.setAttribute('aria-hidden','true');else dot.setAttribute('aria-pressed',String(data.selected));dot.setAttribute('aria-label',(data.fullTitle??data.title)+'（'+data.subtitle+'）');if(!data.reference)dot.addEventListener('click',data.select);markers.push(new lib.Marker({element:dot}).setLngLat(data.point).addTo(map));const button=document.createElement(data.reference?'span':'button');if(button instanceof HTMLButtonElement)button.type='button';else button.className='japan-reference-label';button.dataset.japanMapLabel=data.id;button.classList.toggle('is-muted',!!data.muted);button.style.setProperty('--point-color',data.color);button.append(document.createTextNode(data.title));const small=document.createElement('small');small.textContent=data.subtitle;if(!data.reference)button.append(small);button.title=(data.fullTitle??data.title)+'（'+data.subtitle+'）';button.setAttribute('aria-label',button.title);if(!data.reference){button.setAttribute('aria-pressed',String(data.selected));button.addEventListener('click',data.select);}overlay.append(button);if(state.field==='agriculture'&&state.topic!=='forest'){
+  for(const data of items){const dot=document.createElement(data.reference?'span':'button');if(dot instanceof HTMLButtonElement)dot.type='button';dot.className='japan-point';dot.classList.toggle('is-muted',!!data.muted);dot.classList.toggle('is-selected',data.selected);dot.style.setProperty('--point-color',data.color);const row=regional?.rows.find(r=>'farm-'+r.id===data.id);if(row&&regional){const max=Math.max(...regional.rows.map(r=>r.value));dot.classList.add('farm-quantity');dot.classList.toggle('is-rounded-zero',row.status==='rounded-zero');dot.style.setProperty('--farm-marker-diameter',Math.max(7,Math.round(30*Math.sqrt(row.value/max)))+'px');}if(data.reference)dot.setAttribute('aria-hidden','true');else dot.setAttribute('aria-pressed',String(data.selected));dot.setAttribute('aria-label',(data.fullTitle??data.title)+'（'+data.subtitle+'）');if(!data.reference)dot.addEventListener('click',data.select);markers.push(new lib.Marker({element:dot}).setLngLat(data.point).addTo(map));const button=document.createElement(data.reference?'span':'button');if(button instanceof HTMLButtonElement)button.type='button';else button.className='japan-reference-label';button.dataset.japanMapLabel=data.id;button.classList.toggle('is-muted',!!data.muted);button.style.setProperty('--point-color',data.color);button.append(document.createTextNode(data.title));const small=document.createElement('small');small.textContent=data.subtitle;if(!data.reference)button.append(small);button.title=(data.fullTitle??data.title)+'（'+data.subtitle+'）';button.setAttribute('aria-label',button.title);if(!data.reference){button.setAttribute('aria-pressed',String(data.selected));button.addEventListener('click',data.select);}overlay.append(button);if(state.field==='agriculture'&&state.topic!=='forest'&&!regional){
  const site=japanAgricultureSites.find(s=>s.id===data.id),titles=site?.products.map(id=>japanAgricultureProducts.find(p=>p.id===id)!.title)??[];
  const defaultTitle=titles.slice(0,2).join('・')+(titles.length>2?' ほか'+(titles.length-2)+'品目':'');
  const canvas=document.createElement('canvas'),measure=canvas.getContext('2d')!;measure.font=getComputedStyle(button).font;
@@ -192,7 +209,7 @@ async function start(root:HTMLElement){
   if(!map)return;const frame=$('.japan-map-frame');
   for(const text of all<SVGTextElement & HTMLElement>('[data-latitude]')){const y=map.project([146.3,Number(text.dataset.latitude)]).y;text.setAttribute('x',String(frame.clientWidth-8));text.setAttribute('y',String(y-4));text.style.display=y>12&&y<frame.clientHeight-35?'':'none';}
   const anchors=labels.map(({data,button})=>{button.hidden=false;const p=map!.project(data.point);return {id:data.id,x:p.x,y:p.y,width:button.offsetWidth,height:button.offsetHeight,offset:data.offset,priority:data.priority??(!data.reference?10:0)};});
-  const key=JSON.stringify([state.field,state.field==='industry'?state.sector:state.field==='agriculture'?(state.topic==='forest'?'forest':'farm'):['climate','stations'].includes(state.topic)?'climate':state.topic,state.showCrops,state.showLivestock,frame.clientWidth,frame.clientHeight,anchors.map(({id,x,y})=>({id,x,y}))]);
+  const key=JSON.stringify([state.field,state.field==='industry'?state.sector:state.field==='agriculture'?(state.farmData??(state.topic==='forest'?'forest':'farm')):['climate','stations'].includes(state.topic)?'climate':state.topic,state.showCrops,state.showLivestock,frame.clientWidth,frame.clientHeight,anchors.map(({id,x,y})=>({id,x,y}))]);
   if(key!==placementKey||!placement){placement=layoutJapanLabels(anchors,frame.clientWidth,frame.clientHeight);placementKey=key;}
   const placed=placement;
   for(const {data,button,line} of labels){const rect=placed.get(data.id),p=map.project(data.point);button.hidden=!rect;line.style.display=rect?'':'none';if(!rect)continue;
@@ -220,7 +237,7 @@ async function start(root:HTMLElement){
    map.on('moveend',event=>{if(!ready||suppressCamera||event.japanResize)return;clearTimeout(timer);timer=setTimeout(()=>{state={...state,camera:camera()};persist(false);},120);});
    async function handleMapClick(event:import('maplibre-gl').MapMouseEvent,targetMap:import('maplibre-gl').Map,targetNature:JapanNatureLayers|null,targetFarm:ReturnType<typeof mountJapanAgricultureLayers>|null){
     if(state.field==='natural'&&targetNature){const id=targetNature.hit(event,state.topic);if(id)feature(id);const sampleRevision=++natureSample;const requested=state.topic,selected:[number,number]=[event.lngLat.lng,event.lngLat.lat];try{const text=await targetNature.sample(requested,...selected);if(sampleRevision===natureSample&&state.field==='natural'&&state.topic===requested&&text){$('[data-japan-nature-value]').textContent=text;$('[data-japan-selection]').hidden=false;$('[data-japan-selection-body]').textContent=text;}}catch{$('[data-japan-nature-value]').textContent='数値を取得できませんでした。再度選択してお試しください。';}}
-    else if(state.field==='agriculture'&&targetFarm&&targetMap.queryRenderedFeatures(event.point,{layers:['japan-land']}).length){const revision=++natureSample,requested=state.topic;try{const text=await targetFarm.sample(requested,event.lngLat.lng,event.lngLat.lat,state);if(revision===natureSample&&state.field==='agriculture'&&state.topic===requested)$('[data-japan-farm-value]').textContent=text;}catch{$('[data-japan-farm-value]').textContent='選択地点の数値を取得できませんでした。再度選択してお試しください。';}}
+    else if(state.field==='agriculture'&&targetFarm&&targetMap.queryRenderedFeatures(event.point,{layers:['japan-land']}).length){if(state.farmData){$('[data-japan-farm-value]').textContent='公表数量は地域全体の値です。地図の円か下の表を選んでください。この地点だけの数量は推計しません。';return;}const revision=++natureSample,requested=state.topic;try{const text=await targetFarm.sample(requested,event.lngLat.lng,event.lngLat.lat,state);if(revision===natureSample&&state.field==='agriculture'&&state.topic===requested)$('[data-japan-farm-value]').textContent=text;}catch{$('[data-japan-farm-value]').textContent='選択地点の数値を取得できませんでした。再度選択してお試しください。';}}
     else if(quantity()){const hit=targetMap.queryRenderedFeatures(event.point,{layers:['japan-prefecture-fill']})[0];if(hit?.properties.id)prefecture(hit.properties.id);}
     else if(state.field==='population'&&targetMap.queryRenderedFeatures(event.point,{layers:['japan-land']}).length){
      point=[event.lngLat.lng,event.lngLat.lat];const selected=point;const revision=generation;try{const g=await loadGrid();if(generation!==revision||state.field!=='population'||point!==selected)return;const v=readAsiaNumericCell(g,selected[0],selected[1]);$('[data-japan-grid-value]').textContent=`選択地点 ${selected[1].toFixed(3)}°N / ${selected[0].toFixed(3)}°E：`+(v==null?'欠測・未収録（0ではありません）':number(v)+' 人/km²（2020年・5km集約推計）');}catch{$('[data-japan-grid-value]').textContent='選択地点の数値を取得できませんでした。再度選択してお試しください。';}
@@ -240,6 +257,8 @@ async function start(root:HTMLElement){
  for(const b of all('[data-japan-topic]'))b.addEventListener('click',()=>topic(b.dataset.japanTopic!));
  for(const b of all('[data-japan-farm-site]'))b.addEventListener('click',()=>site(b.dataset.japanFarmSite!));
  for(const b of all('[data-japan-farm-topic]'))b.addEventListener('click',()=>topic(b.dataset.japanFarmTopic!));
+ for(const b of all('[data-japan-farm-series]'))b.addEventListener('click',()=>{const selected=japanFarmRegionalSeriesById(b.dataset.japanFarmSeries);navigate({...state,field:'agriculture',topic:selected?.product??state.topic,farmData:selected?.id??null,farmRegion:null,site:null,camera:camera()});});
+ $('[data-japan-farm-regional-rows]').addEventListener('click',event=>{const button=(event.target as HTMLElement).closest<HTMLButtonElement>('[data-japan-farm-region]');if(button)farmRegion(button.dataset.japanFarmRegion!);});
  for(const input of all<HTMLInputElement>('[data-japan-farm-layer]'))input.addEventListener('change',()=>navigate({...state,[input.dataset.japanFarmLayer==='crops'?'showCrops':'showLivestock']:input.checked,camera:camera()}));
  $('[data-japan-clear-selection]').addEventListener('click',()=>navigate({...state,prefecture:null,city:null,site:null,feature:null,camera:camera()}));
  for(const b of all('[data-japan-feature]'))b.addEventListener('click',()=>feature(b.dataset.japanFeature!));
