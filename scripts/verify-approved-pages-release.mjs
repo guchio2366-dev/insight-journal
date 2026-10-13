@@ -62,14 +62,14 @@ try{
  await go('atlas/latin-america/population/?section=ethnicity');
  const ethnicityIds=await page.locator('[data-lc-map=ethnicity] [data-lc-select]').evaluateAll(nodes=>nodes.map(n=>n.dataset.lcSelect));
  for(const [country,id,count,value,name] of [['GTM','maya',6,'41.7%','guatemala'],['COL','la-guajira',33,'394,683人','colombia']]){
-  const source=page.locator(`[data-lc-supplement-source=${country}]`);await source.locator('summary').click();
+  const source=page.locator(`[data-lc-supplement-source=${country}]`);await source.locator(':scope > summary').click();
   const table=source.locator(`[data-lc-supplement-table=${country}]`);assert.equal(await table.locator('tbody tr').count(),count);
   const previousGroup=new URL(page.url()).searchParams.get('group');await table.locator(`[data-lc-select="${country}:${id}"]`).click();await settled();
   assert.ok((await page.locator('[data-lp-overview]').textContent()).includes(value));assert.deepEqual(await page.locator('[data-lc-map=ethnicity] [data-lc-select]').evaluateAll(nodes=>nodes.map(n=>n.dataset.lcSelect)),ethnicityIds);
   assert.equal(await page.locator('.latin-reading table').count(),0);await shot('latin-'+name);
   await page.reload({waitUntil:'networkidle'});await settled();assert.ok((await page.locator('[data-lp-overview]').textContent()).includes(value));await page.goBack({waitUntil:'networkidle'});await settled();assert.equal(new URL(page.url()).searchParams.get('group'),previousGroup);
  }
- const colombia=page.locator('[data-lc-supplement-source=COL]');if(!await colombia.evaluate(el=>el.open))await colombia.locator('summary').click();
+ const colombia=page.locator('[data-lc-supplement-source=COL]');if(!await colombia.evaluate(el=>el.open))await colombia.locator(':scope > summary').click();
  await colombia.locator('[data-lc-select="COL:san-andres-providencia-y-santa-catalina"]').click();await settled();assert.match(await page.locator('[data-lp-overview]').textContent(),/20人/);
  report.checks.push('Native supplementary statistics: Guatemala six categories retain 41.7% and Colombia 33 rows retain 394,683 persons and the last 20-person row; direct row click/reload/back; all accepted geographic selections retained and detailed tables stay below the map');
  assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedResponses,[]);report.status='passed';
