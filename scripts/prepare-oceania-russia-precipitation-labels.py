@@ -16,7 +16,7 @@ TARGETS = {
         ("australia-north", 500, [387, 812], [0, 0]),
         ("australia-east", 750, [684, 1005], [24, 0]),
         ("australia-tropical-coast", 1000, [605, 792], [22, -8]),
-        ("papua-new-guinea", 2500, [578, 555], [0, -30]),
+        ("papua-new-guinea", 2500, [578, 555], [0, -44]),
         ("new-zealand", 1000, [1085, 1228], [34, 12]),
     ],
     "russia": [

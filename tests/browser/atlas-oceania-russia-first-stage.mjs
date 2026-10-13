@@ -137,15 +137,15 @@ try{
       const labels=map.locator('[data-isohyet-label]');
       assert.equal(await labels.count(),region==='oceania'?6:7);
       assert.equal(await map.locator('[data-precipitation-map-unit]').isVisible(),true);
-      const boxes=await map.locator('[data-isohyet-label-box]').evaluateAll(nodes=>nodes.map(node=>{const b=node.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};}));
-      const names=await map.locator('svg > text').evaluateAll(nodes=>nodes.map(node=>{const b=node.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};}));
+      const boxes=await map.locator('[data-isohyet-label-box]').evaluateAll(nodes=>nodes.map(node=>{const b=node.getBoundingClientRect();return {id:node.parentElement.dataset.isohyetLabel,x:b.x,y:b.y,width:b.width,height:b.height};}));
+      const names=await map.locator('svg > text').evaluateAll(nodes=>nodes.map(node=>{const b=node.getBoundingClientRect();return {name:node.textContent,x:b.x,y:b.y,width:b.width,height:b.height};}));
       const overlap=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
       const bounds=await map.boundingBox();
       for(const [index,box] of boxes.entries()){
        assert.ok(box.height>=20,`${region}/${width}: rainfall number is readable`);
        assert.ok(box.x>=bounds.x&&box.y>=bounds.y&&box.x+box.width<=bounds.x+bounds.width&&box.y+box.height<=bounds.y+bounds.height,`${region}/${width}: rainfall label stays inside map`);
        for(const other of boxes.slice(index+1))assert.equal(overlap(box,other),false,`${region}/${width}: rainfall numbers do not overlap`);
-       for(const name of names)assert.equal(overlap(box,name),false,`${region}/${width}: rainfall numbers avoid country names`);
+       for(const name of names)assert.equal(overlap(box,name),false,`${region}/${width}: rainfall number ${box.id} avoids ${name.name}; ${JSON.stringify({box,name})}`);
       }
      }
      await shot(`${region}-nature-${width}-${id}`);
