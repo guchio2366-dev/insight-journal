@@ -7,7 +7,10 @@
     {
       "id": "mexico-city-tacubaya",
       "stationId": "09048",
-      "coordinates": [-99.19611111, 19.40361111],
+      "coordinates": [
+        -99.19611111,
+        19.40361111
+      ],
       "sourceFeatureId": "climate-1124",
       "sourceObjectId": 1124,
       "classId": "32",
@@ -21,7 +24,10 @@
     {
       "id": "culiacan-dge",
       "stationId": "25015",
-      "coordinates": [-107.407188, 24.806146],
+      "coordinates": [
+        -107.407188,
+        24.806146
+      ],
       "sourceFeatureId": "climate-287",
       "sourceObjectId": 287,
       "classId": "52",
@@ -31,6 +37,40 @@
       "explanationJa": "暑い夏に雨が集中し、春は雨の少ない地域です。冬も暖かく、高原のタクバヤより一年を通して気温が高いことが雨温図から読めます。",
       "observationReadingJa": "標高60 mのクリアカンでは、月平均気温が6月に30.9℃となり、1月も20.4℃です。3〜5月の降水量は計5.1 mmですが、7〜9月には計554.9 mmとなり、年間の80.7%が集中します。",
       "locationCautionJa": "観測所は原分類図の境界から約10 kmです。原図は縮尺1:100万で、観測所所在地の区分を示します。市域全体が同じ分類とは限りません。"
+    },
+    {
+      "id": "chihuahua-obs",
+      "stationId": "08040",
+      "coordinates": [
+        -106.031002,
+        28.670819
+      ],
+      "sourceFeatureId": "climate-200",
+      "sourceObjectId": 200,
+      "classId": "58",
+      "sourceCode": "BS0hw(w)",
+      "sourceLabel": "Seco semicálido",
+      "labelJa": "乾燥・やや高温",
+      "explanationJa": "北部内陸の乾燥域にある観測所です。春の雨は少なく、降水は夏の7〜9月に集中します。高原のメキシコシティより冬の平均気温が低く、季節差が大きいことを雨温図で確かめます。",
+      "observationReadingJa": "標高1,509 mのチワワでは、月平均気温は1月10.6℃から6月27.3℃まで変化します。7〜9月の降水量は計281.2 mmで、年413.4 mmの約68.0%です。",
+      "locationCautionJa": "観測所は原分類図の境界から約1.2 kmです。原図は縮尺1:100万で、観測所所在地の区分を示します。都市全体が同じ分類とは限りません。"
+    },
+    {
+      "id": "villahermosa-dge",
+      "stationId": "27054",
+      "coordinates": [
+        -92.92833333,
+        17.99666667
+      ],
+      "sourceFeatureId": "climate-1345",
+      "sourceObjectId": 1345,
+      "classId": "11",
+      "sourceCode": "Am(f)",
+      "sourceLabel": "Cálido húmedo",
+      "labelJa": "高温・湿潤",
+      "explanationJa": "南東部の湿潤域にある観測所です。年を通して月平均気温が高く、9〜11月の雨が多い一方、3〜4月は相対的に少なくなります。北部のチワワとの降水量の差を読みます。",
+      "observationReadingJa": "標高24 mのビジャエルモサでは、月平均気温は1月23.9℃から5月30.1℃まで変化します。9〜11月の降水量は計845.7 mmで、年1,953.7 mmの約43.3%です。",
+      "locationCautionJa": "観測所は原分類図の境界から約17.2 kmです。原図は縮尺1:100万で、観測所所在地の区分を示します。都市全体が同じ分類とは限りません。"
     }
   ]
 }

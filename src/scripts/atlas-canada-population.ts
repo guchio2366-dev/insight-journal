@@ -5,7 +5,7 @@ import {renderCanadaPopulationOverview} from './atlas-canada-population-overview
 import {readCanadaPopulationState,writeCanadaPopulationState,canadaPopulationMapCamera,copyCanadaPopulationMapState,formatCanadaPopulationValue,canadaPopulationDensityColor,canadaPopulationNatureUrl,canadaPopulationIndustryUrl,canadaPopulationFrame,populationStorageKey,type CanadaPopulationState} from '../lib/atlas-canada-population';
 import {readCanadaDemographicsState,writeCanadaDemographicsState,canadaDemographicShare,canadaDemographicShareColor,canadaDemographicShareColors,canadaDemographicShareScale,type CanadaDemographicsState,type CanadaDemographicCell,type CanadaDemographicTopic} from '../lib/atlas-canada-demographics';
 import {buildCanadaReligionView} from '../lib/atlas-canada-religion-view';
-import {renderCanadaReligionMap} from './atlas-canada-religion-map';
+import {renderCanadaDemographicReferences} from './atlas-canada-demographic-references';
 
 export function initCanadaPopulation(root:HTMLElement){
  const config=JSON.parse(root.querySelector('[data-population-config]')!.textContent!),ids=config.cmas.map((r:any)=>r.id);
@@ -105,6 +105,8 @@ export function initCanadaPopulation(root:HTMLElement){
   renderCanadaPopulationGrid(root,config,isDistribution);
   renderCanadaPopulationOverview(root,config,state,demographic,group=>{if(group)demographic={...demographic,group};const url=combinedUrl(new URL(location.href));if(group)url.searchParams.set('mapGroup','1');else url.searchParams.delete('mapGroup');commitUrl(url);},(id,level)=>{const url=combinedUrl(new URL(location.href));url.searchParams.delete(level==='cd'?'cma':'cd');url.searchParams.delete('grid');url.searchParams.delete('csd');url.searchParams.set(level,id);root.dataset.populationReadingFocus=level==='cd'?'region':'city';commitUrl(url);});
   layoutCanadaPopulationLabels(root);alignQuantityLegend();
+  renderCanadaDemographicReferences(root,config,demographic,state,(id,level)=>{const url=combinedUrl(new URL(location.href));url.searchParams.delete(level==='cd'?'cma':'cd');url.searchParams.set(level,id);commitUrl(url);});
+
   if(isDistribution&&!finePopulationRequested&&typeof fetch==='function'){
    finePopulationRequested=true;
    loadCanadaPopulationGrid(root,config,id=>{const url=combinedUrl(new URL(location.href));for(const key of ['cd','cma','compare','csd'])url.searchParams.delete(key);url.searchParams.set('grid',id);commitUrl(url);},render);
@@ -120,7 +122,7 @@ export function initCanadaPopulation(root:HTMLElement){
  $('[data-population-whole]')?.addEventListener('click',()=>{const u=new URL(location.href);for(const key of ['mapFrame','cd','cma','compare','only','demographicsReturn'])u.searchParams.delete(key);u.searchParams.set('zoom','country');root.dataset.populationReadingFocus='overview';commitUrl(u);});
  $('[data-population-clear-selection]').addEventListener('click',()=>{const u=new URL(location.href);for(const key of ['cd','csd','grid','cma','compare','only'])u.searchParams.delete(key);root.dataset.populationReadingFocus='overview';commitUrl(u);});
  const map=root.querySelector<SVGSVGElement>('[data-population-map]')!;
- const refreshReligionMap=()=>{if(demographic.topic!=='religion'||root.dataset.regionsReady!=='true')return;const params=new URL(location.href).searchParams,filtered=params.get('mapGroup')==='1';renderCanadaReligionMap(root,config.demographics.religion,filtered?demographic.group:null,!filtered&&!params.has('cd')&&!state.cma&&!params.has('zoom')&&!params.has('mapFrame'));};
+ const refreshReligionMap=()=>renderCanadaDemographicReferences(root,config,demographic,state,(id,level)=>{const url=combinedUrl(new URL(location.href));url.searchParams.delete(level==='cd'?'cma':'cd');url.searchParams.set(level,id);commitUrl(url);});
  const camera=(frame:number[],commit=true)=>{mapCamera=frame;map.setAttribute('viewBox',frame.join(' '));layoutCanadaPopulationLabels(root);if(commit){const url=new URL(location.href);url.searchParams.set('mapFrame',frame.map(n=>Number(n.toFixed(3))).join(','));history.pushState(null,'',url);}refreshReligionMap();};
  for(const button of root.querySelectorAll<HTMLElement>('[data-population-scale]'))button.addEventListener('click',()=>{const [x,y,w,h]=map.getAttribute('viewBox')!.split(' ').map(Number),factor=button.dataset.populationScale==='in'?.7:1/.7;if(w*factor<30||w*factor>1800)return;camera([x+w*(1-factor)/2,y+h*(1-factor)/2,w*factor,h*factor]);});
  let drag:{x:number;y:number;frame:number[];moved:boolean}|null=null,ignoreClick=false;

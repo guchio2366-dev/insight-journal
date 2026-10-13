@@ -1,5 +1,6 @@
 ---
 import LatinAmericaWorkspace from './LatinAmericaWorkspace.astro';
+import LatinIndustrySectors from './LatinIndustrySectors.astro';
 import {withBase} from '../../lib/urls';
 import {latinCountries} from '../../lib/atlas-latin-america-geometry';
 import {latinIndustryData,latinIndustryLayers,latinIndustryReadings,renderLatinIndustryMap,renderLatinIndustryLegend,formatLatinIndustryValue,industryCountryName} from '../../lib/atlas-latin-industry';
@@ -11,7 +12,8 @@ const base=withBase('/atlas/latin-america/');
 const sources=latinIndustryReadings.flatMap(r=>r.sources).filter((s,i,a)=>a.findIndex(v=>v.url===s.url)===i);
 ---
 <LatinAmericaWorkspace field="industry" title="産地・工業・物流から読む、中南米の主要産業" lead="主要産業の代表位置を見渡し、資源・地形・交通・市場が立地にどう関わるかを読みます。国別の輸出構成は別の図で比べられます。">
- <div class="latin-industry">
+ <LatinIndustrySectors/>
+ <div class="latin-industry" data-industry-legacy hidden>
   <a class="latin-industry-return" data-industry-return hidden href={`${base}industry/`}>元の分布へ戻る</a>
   <details class="latin-map-options"><summary>地域・表示を選ぶ</summary><div class="latin-map-options-body">  <div class="latin-industry-toolbar" aria-label="地図の分布と範囲">
    <label>分布<select data-industry-layer>{latinIndustryLayers.map(l=><option value={l.id}>{l.name}</option>)}</select></label>

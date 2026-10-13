@@ -9,10 +9,10 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
     const window=new Window();const doc=window.document;
     doc.write(readFileSync(new URL(`../../dist/atlas/europe/${field}/index.html`,import.meta.url),'utf8'));
     assert.ok(doc.querySelector('[data-eu-static]'));
-    assert.equal(doc.querySelectorAll('.eu-read-panel select').length,4);
-    assert.equal(doc.querySelector('[data-eu-drainage-choice]').closest('label').hidden,true);
+    assert.equal(doc.querySelectorAll('.eu-read-panel select').length,7);
+    assert.equal(doc.querySelector('[data-eu-drainage-choice]').closest('[data-eu-drainage-controls]').hidden,true);
     assert.equal(doc.querySelector('[data-eu-culture-host]').hidden,true,'The bounded census case does not replace the default whole-Europe map');
-    assert.ok([...doc.querySelectorAll('.eu-read-panel select:not([data-eu-drainage-choice])')].every(select=>select.disabled));
+    assert.ok([...doc.querySelectorAll('.eu-read-panel select:not([data-eu-drainage-choice]):not([data-eu-main-river-choice])')].every(select=>select.disabled));
     assert.equal(doc.querySelectorAll('[data-city-card]').length,24);
     assert.equal(doc.querySelectorAll('[data-city-card="kyiv"] tbody tr').length,12);
     assert.ok(doc.querySelector('[data-city-card="rome"]').textContent.includes('欠測'));
@@ -32,7 +32,7 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
     assert.equal(doc.querySelector('[data-eu-climate-legend]').hidden,field!=='nature');
     assert.equal(doc.querySelector('[data-eu-wheat-legend]').hidden,true);
     assert.equal(doc.querySelector('.eu-read-panel').getAttribute('aria-labelledby'),climateReader?'eu-city-heading':'eu-subject-title');
-    assert.equal(doc.querySelectorAll('[data-eu-point]:not([hidden])').length,climateReader?8:0);
+    assert.equal(doc.querySelectorAll('[data-eu-point]:not([hidden])').length,climateReader?9:0);
     if(field==='agriculture'){
       assert.match(doc.querySelector('[data-eu-map-title]').textContent,/穀物・畑作/);
       assert.equal(doc.querySelector('[data-eu-subject-image]').getAttribute('href'),null);
@@ -52,8 +52,8 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       assert.notEqual(doc.querySelector('[data-eu-farming-shapes]').style.display,'none');
       assert.ok([...doc.querySelectorAll('[data-eu-farm-outline]')].every(path=>path.style.display==='none'));
       const choices=[...doc.querySelectorAll('[data-eu-farming-children="crops"] button,[data-eu-farming-children="livestock"] button,[data-eu-farming-children="horticulture"] button')];
-      assert.deepEqual(choices.map(button=>button.dataset.euLayer).sort(),['wheat','barley','maize','potato','sugarbeet','rapeseed','cattle','pig','chicken','sheep','citrus','temperatefruit','vegetables'].sort());
-      assert.ok(choices.every(button=>button.getAttribute('aria-pressed')==='false'&&button.querySelector('.eu-item-swatch')));
+      assert.deepEqual(choices.map(button=>button.dataset.euLayer).sort(),['wheat','barley','maize','potato','sugarbeet','rapeseed','cattle','pig','chicken','sheep','dairy','citrus','temperatefruit','vegetables'].sort());
+      assert.ok(choices.every(button=>button.getAttribute('aria-pressed')==='false'&&(button.dataset.euLayer==='dairy'||button.querySelector('.eu-item-swatch'))));
       assert.equal(doc.querySelector('[data-eu-farming-legend]').hidden,false);
       assert.match(doc.querySelector('[data-eu-farming-legend]').textContent,/6作物の集中域を同時に示します.*色面に隠れる別品目の集中域を品目色の点線で残します/);
       assert.match(doc.querySelector('[data-eu-farming-children="horticulture"] .eu-farm-missing').textContent,/ブドウ.*オリーブ.*未収録/);
@@ -134,15 +134,15 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
       assert.equal(doc.querySelector('[data-eu-water-options] [data-eu-topic="precipitation"]').disabled,false);
     }
     if(field==='industry'||field==='population'){
-      const title=field==='industry'?'産業別の集積':'人口密度';
+      const title=field==='industry'?'資源・エネルギーの集積':'人口密度';
       assert.equal(doc.querySelector('[data-eu-map-title]').textContent,title);
-      assert.equal(doc.querySelector('[data-eu-subject-title]').textContent,field==='population'?'人口分布':'欧州の産業集積');
-      assert.ok(doc.querySelector('[data-eu-legend-title]').textContent.includes(title));
+      assert.equal(doc.querySelector('[data-eu-subject-title]').textContent,field==='population'?'人口分布':'欧州の資源・エネルギー');
+      assert.ok(doc.querySelector('[data-eu-legend-title]').textContent.includes(field==='industry'?'産業別の集積':title));
       assert.ok(doc.querySelector('[data-eu-subject-takeaway]').textContent.length>15);
       assert.equal(doc.querySelector('[data-eu-climate-image]').getAttribute('href'),null);
       assert.ok(doc.querySelectorAll('[data-eu-feature-point]:not([hidden])').length>0);
       if(field==='industry'){
-        assert.equal(doc.querySelectorAll('[data-eu-feature-point]:not([hidden])').length,22);
+        assert.equal(doc.querySelectorAll('[data-eu-feature-point]:not([hidden])').length,10);
         assert.equal(doc.querySelector('[data-eu-feature]'),null);
         assert.match(doc.querySelector('[data-eu-subject-note]').textContent,/生産量・雇用の大小を表しません/);
       }else{

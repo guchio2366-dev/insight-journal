@@ -2,10 +2,15 @@ name: Review approved East Asia on PC
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, codex/regional-integration-validation-20261013]
     paths:
       - '.github/workflows/atlas-asia-pc-review.yml'
       - 'scripts/capture-east-asia-approved-review.mjs'
+      - 'scripts/east-asia/prepare-food-wood-statistics.py'
+      - 'src/scripts/atlas-east-agri-statistics.ts'
+      - 'src/lib/atlas-east-food-model.ts'
+      - 'tests/unit/atlas-east-food*.test.mjs'
+      - 'data-source/atlas/east-asia/statistics-2023/**'
       - 'src/data/atlas/east-asia-*'
       - 'src/scripts/atlas-east-asia-*'
       - 'src/lib/atlas-east-industry-labels.ts'
@@ -28,6 +33,11 @@ on:
       - 'src/pages/atlas/asia/**'
       - 'public/assets/atlas/asia*/**'
       - 'public/assets/atlas/east-asia-v1/**'
+      - 'public/assets/atlas/east-asia-v2/**'
+      - 'src/lib/atlas-east-sector-names.ts'
+      - 'tests/unit/atlas-east-sector-names.test.mjs'
+      - 'tests/unit/atlas-east-asia-industry-sectors.test.mjs'
+      - 'tests/unit/atlas-east-asia-review-geography.test.mjs'
       - 'tests/e2e/atlas-asia-*.test.mjs'
       - 'tests/e2e/atlas-south-central-focus.test.mjs'
       - 'tests/unit/atlas-asia-*.test.mjs'
@@ -58,6 +68,11 @@ on:
       - 'src/pages/atlas/asia/**'
       - 'public/assets/atlas/asia*/**'
       - 'public/assets/atlas/east-asia-v1/**'
+      - 'public/assets/atlas/east-asia-v2/**'
+      - 'src/lib/atlas-east-sector-names.ts'
+      - 'tests/unit/atlas-east-sector-names.test.mjs'
+      - 'tests/unit/atlas-east-asia-industry-sectors.test.mjs'
+      - 'tests/unit/atlas-east-asia-review-geography.test.mjs'
       - 'tests/e2e/atlas-asia-*.test.mjs'
       - 'tests/e2e/atlas-south-central-focus.test.mjs'
       - 'tests/unit/atlas-asia-*.test.mjs'
@@ -74,7 +89,7 @@ jobs:
   review:
     name: Verify approved East Asia PC views
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     env:
       ASTRO_TELEMETRY_DISABLED: '1'
       REVIEW_PRODUCTION_BASE_URL: 'https://guchio2366-dev.github.io/insight-journal'
@@ -130,10 +145,29 @@ jobs:
       - name: Install existing dependencies
         run: npm ci --no-audit --no-fund
 
+      - name: Check out the exact main baseline for timing
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: .review-baseline
+          persist-credentials: false
+
+      - name: Build the same-host baseline
+        if: github.event_name == 'pull_request'
+        working-directory: .review-baseline
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+          printf 'REVIEW_BASELINE_DIST=%s/.review-baseline/dist\n' "$GITHUB_WORKSPACE" >> "$GITHUB_ENV"
+
       - name: Build local production site
         run: npm run build
 
       - name: Verify South and Central Asia regional journeys
+        # The stacked East-only follow-up leaves the integrated owner's South/
+        # Central review to its main-targeted PR and captures East independently.
+        if: github.base_ref != 'codex/regional-integration-validation-20261013'
         timeout-minutes: 4
         run: ATLAS_ASIA_BROWSER=1 SC_FOCUSED_REVIEW=1 node --test tests/e2e/atlas-south-central-focus.test.mjs
 

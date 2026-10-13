@@ -3,7 +3,7 @@ import {initLatinMapCamera,latinProductAtPointer} from './atlas-latin-reading-ma
 import cropManifest from '../../public/assets/atlas/latin-america-agriculture-v1/manifest.json';
 import data from '../data/atlas/latin-america/agriculture.json';
 import {latinCountries34,latinCountryName} from '../lib/atlas-latin-america-geometry';
-import {agricultureLayer,agricultureLayerTitle,latinAgricultureReading,renderLatinAgricultureMap,renderLatinAgricultureLegend,renderLatinAgricultureWorkspaceMap,renderLatinAgricultureOverviewLegend,latinAgricultureOverviewReading,formatLatinAgricultureValue,faoFlagLabel,type LatinAgricultureLayer} from '../lib/atlas-latin-agriculture';
+import {agricultureLayer,agricultureLayerTitle,latinAgricultureReading,renderLatinAgricultureMap,renderLatinAgricultureLegend,renderLatinAgricultureWorkspaceMap,renderLatinAgricultureOverviewLegend,renderLatinAgricultureSingleLegend,latinAgricultureOverviewReading,formatLatinAgricultureValue,faoFlagLabel,type LatinAgricultureLayer} from '../lib/atlas-latin-agriculture';
 import {readLatinLearningState,writeLatinLearningState,latinComparisonState,latinLearningUrl,latinSourceReturnUrl,type LatinLearningState} from '../lib/atlas-latin-learning-state';
 import {withBase} from '../lib/urls';
 import {renderLatinNatureMap,renderLatinNatureLegend,natureScopeForPlace} from '../lib/atlas-latin-nature';
@@ -17,10 +17,13 @@ export function initialiseLatinAgriculture():void {
  const query=<T extends Element=HTMLElement>(name:string)=>workspace.querySelector<T>(`[data-latin-agriculture-${name}]`)!;
  const text=(name:string,value:string)=>{query(name).textContent=value;};
  let state=readLatinLearningState(window.location.search,'agriculture',layers,'all');
+ let showCrops=true,showLivestock=true,single=false,fullExtent=false;
+ const readDisplay=()=>{const p=new URLSearchParams(window.location.search);showCrops=p.get('crops')!=='0';showLivestock=p.get('livestock')!=='0';single=p.get('single')==='1'&&state.layer!=='all';fullExtent=p.get('agriExtent')==='full';};readDisplay();
  const push=(replace=false)=>{
   const params=new URLSearchParams(window.location.search);
   for(const name of ['layer','place','scope','only','fallback','from','sourceLayer','sourcePlace','sourceScope','sourceOnly','sourceFallback','sourceCase','renderer'])params.delete(name);
   for(const [name,value] of new URLSearchParams(writeLatinLearningState(state)))params.set(name,value);
+  for(const [key,value]of [['crops',showCrops?'1':'0'],['livestock',showLivestock?'1':'0'],['single',single?'1':'0'],['agriExtent',fullExtent?'full':'main']] as const){if(value==='0'&&key!=='single'||key==='single'&&single||key==='agriExtent'&&fullExtent)params.set(key,value);else params.delete(key);}
   const url=`${window.location.pathname}?${params}${window.location.hash}`;
   if(replace)window.history.replaceState({},'',url);else window.history.pushState({},'',url);
  };
@@ -48,9 +51,14 @@ export function initialiseLatinAgriculture():void {
   query<HTMLInputElement>('only').disabled=state.place==='all';
   query<HTMLButtonElement>('fallback').setAttribute('aria-pressed',String(state.fallback));
   text('title',state.layer==='all'?'作物と牛の分布':latinReadingProducts.find(p=>p.id===state.layer)!.name+'の分布');
-  query('map-container').innerHTML=isComparison?renderLatinAgricultureMap(state,'latin-agriculture-main'):renderLatinAgricultureWorkspaceMap(state,'latin-agriculture-main');
-  query('legend-container').innerHTML=isComparison?renderLatinAgricultureLegend(state.layer):renderLatinAgricultureOverviewLegend(state.layer);
+  query('map-container').innerHTML=isComparison?renderLatinAgricultureMap(state,'latin-agriculture-main'):renderLatinAgricultureWorkspaceMap({...state,showCrops,showLivestock,single,fullExtent},'latin-agriculture-main');
+  query<HTMLInputElement>('crops').checked=single?state.layer!=='cattle':showCrops;query<HTMLInputElement>('livestock').checked=single?state.layer==='cattle':showLivestock;
+  query<HTMLInputElement>('crops').disabled=single;query<HTMLInputElement>('livestock').disabled=single;
+  query<HTMLElement>('crops').closest<HTMLElement>('.latin-agriculture-visibility')!.hidden=isComparison;
+  query('legend-container').innerHTML=isComparison?renderLatinAgricultureLegend(state.layer):single&&state.layer!=='all'?renderLatinAgricultureSingleLegend(state.layer):renderLatinAgricultureOverviewLegend(state.layer,showCrops,showLivestock);
   initLatinMapCamera(query('map-container'));
+  const singleButton=query<HTMLButtonElement>('single');singleButton.disabled=isComparison||state.layer==='all';singleButton.hidden=singleButton.disabled;singleButton.setAttribute('aria-pressed',String(single));singleButton.textContent=single?'ほかの品目も表示する':'この品目だけを見る';
+  const extent=query<HTMLInputElement>('extent');extent.checked=fullExtent;extent.disabled=isComparison;
   query<HTMLElement>('normal-container').hidden=state.fallback&&!isComparison;
   query<HTMLElement>('map-container').hidden=state.fallback;
   query<HTMLElement>('legend-container').hidden=state.fallback&&!isComparison;
@@ -105,6 +113,9 @@ export function initialiseLatinAgriculture():void {
    if(state.scope==='central'&&latinCountries34.find(c=>c.code===state.place)?.subregion==='South America')state.place='all';
    if(state.scope==='south'&&state.place!=='all'&&latinCountries34.find(c=>c.code===state.place)?.subregion!=='South America')state.place='all';
   }
+  else if(target.matches('[data-latin-agriculture-crops]'))showCrops=(target as HTMLInputElement).checked;
+  else if(target.matches('[data-latin-agriculture-livestock]'))showLivestock=(target as HTMLInputElement).checked;
+  else if(target.matches('[data-latin-agriculture-extent]'))fullExtent=(target as HTMLInputElement).checked;
   else if(target.matches('[data-latin-agriculture-only]'))state.only=(target as HTMLInputElement).checked;
   else return;
   render();push();
@@ -112,15 +123,16 @@ export function initialiseLatinAgriculture():void {
  const choose=(target:Element)=>{
   const country=target.closest<HTMLElement>('[data-latin-agriculture-country],[data-latin-agriculture-example],[data-nature-country]');
   if(country){state.place=country.dataset.latinAgricultureCountry??country.dataset.latinAgricultureExample??country.dataset.natureCountry!;state.scope=natureScopeForPlace(state.place,state.scope);render();push();return;}
+  if(target.closest('[data-latin-agriculture-single]')){single=!single;render();push();return;}
   const button=target.closest<HTMLElement>('[data-latin-agriculture-layer]');
-  if(button){state.layer=button.dataset.latinAgricultureLayer!;render();push();return;}
+  if(button){state.layer=button.dataset.latinAgricultureLayer!;single=false;render();push();return;}
   if(target.closest('[data-latin-agriculture-fallback]')){state.fallback=!state.fallback;render();push();}
  };
- workspace.addEventListener('click',async event=>{if(!(event.target instanceof Element)||event.defaultPrevented)return;const image=event.target.closest<SVGImageElement>('[data-latin-product-distribution]');if(image){const product=await latinProductAtPointer(image,event as MouseEvent);if(product){state.layer=product;render();push();}return;}choose(event.target);});
+ workspace.addEventListener('click',async event=>{if(!(event.target instanceof Element)||event.defaultPrevented)return;const image=event.target.closest<SVGImageElement>('[data-latin-product-distribution]');if(image){let product=await latinProductAtPointer(image,event as MouseEvent);if(!product){const crop=workspace.querySelector<SVGImageElement>('[data-agriculture-crops] [data-latin-product-distribution]');if(crop&&crop!==image)product=await latinProductAtPointer(crop,event as MouseEvent);}if(product){state.layer=product;single=false;render();push();}return;}choose(event.target);});
  workspace.addEventListener('keydown',event=>{
   if((event.key==='Enter'||event.key===' ')&&event.target instanceof SVGElement&&(event.target.hasAttribute('data-latin-agriculture-layer')||event.target.hasAttribute('data-latin-agriculture-country')||event.target.hasAttribute('data-nature-country'))){event.preventDefault();choose(event.target);}
  });
- const restore=()=>{state=readLatinLearningState(window.location.search,'agriculture',layers,'all');render();};
+ const restore=()=>{state=readLatinLearningState(window.location.search,'agriculture',layers,'all');readDisplay();render();};
  window.addEventListener('popstate',restore);window.addEventListener('latin-section-change',restore);
  render();push(true);workspace.dataset.latinAgricultureReady='true';
 }

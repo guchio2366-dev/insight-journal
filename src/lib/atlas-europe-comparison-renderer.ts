@@ -1,3 +1,4 @@
+import {europeIndustryInSector,europeIndustryMatches,europeIndustrySectorForSite} from './atlas-europe-industry.ts';
 import { project, viewPath, frame } from './atlas-europe-view.ts';
 import type { EuropeState } from './atlas-europe-view';
 import { layerColor, type EuropeLayer } from '../data/atlas/europe/layers.ts';
@@ -7,10 +8,14 @@ import type { Map as LibreMap } from 'maplibre-gl';
 import type { Geometry } from './atlas-europe-geometry';
 import climateLegend from '../data/atlas/europe/climate-legend.json' with { type:'json' };
 import { europeCultureData, fetchCaseGeometry, cultureSelection, caseMapData, cultureGeometryPath, cultureBounds, cultureLegend, cultureColor, formatCultureShare, type CultureGeometry } from './atlas-europe-population-cases.ts';
-import { europeDrainageGrid, europeDrainageIndexForBasin, europeDrainageOutline, readEuropeDrainageValues } from './atlas-europe-drainage.ts';
+import { europeDrainageGrid, europeDrainageIndexForBasin, europeDrainageOutline, europeDrainageBasinByIndex, europeDrainageMainBasinOutline, readEuropeDrainageValues } from './atlas-europe-drainage.ts';
+
+import mainBasinOverview from '../../public/assets/atlas/europe/drainage-v1/main-basin-overview-manifest.json' with {type:'json'};
 
 type Config = {
   layers: EuropeLayer[]; farmingAreas:FarmingAreas;
+  waterLakes?:{features:{geometry:Geometry}[]};
+  majorRivers?:{features:{properties:{id:string};geometry:{type:string;coordinates:number[][]|number[][][]}}[]};
   geography:{features:{properties:{code:string;kind:string};geometry:Geometry}[]};
   readings:{id:string;name:string;coordinates:number[];period:string;field:string;country:string}[];
   countries:{code:string;region:string}[];
@@ -139,7 +144,7 @@ export function renderEuropeOrigin(root:HTMLElement, source:EuropeState|null, ta
   }
   const farm=farmingPresentation(source,config.farmingAreas.features.map(f=>f.properties));
   const sourceVisible=(f:{country:string})=>source.place?f.country===source.place:source.region==='all'||config.countries.find(c=>c.code===f.country)?.region===source.region;
-  const feature=config.readings.find(f=>f.id===source.feature&&f.field==='industry'&&sourceVisible(f));
+  const feature=config.readings.find(f=>f.id===source.feature&&f.field==='industry'&&sourceVisible(f)&&europeIndustryInSector(f.id,source.industrySector??europeIndustrySectorForSite(source.feature))&&(!source.industryOnly||europeIndustryMatches(f.id,source.industryGroup)));
   const marks:any[]=[];
   if(farm.active) {
     positionOrigin(root,key,false);
@@ -155,7 +160,7 @@ export function renderEuropeOrigin(root:HTMLElement, source:EuropeState|null, ta
     if(!selected.length)addKey('#e3e4df','元の選択では対象の分布は非表示です');
   } else if(layer.id==='hubs') {
     positionOrigin(root,key,false);
-    const originalPoints=feature?[feature]:config.readings.filter(f=>f.field==='industry'&&sourceVisible(f));
+    const originalPoints=feature?[feature]:config.readings.filter(f=>f.field==='industry'&&sourceVisible(f)&&europeIndustryInSector(f.id,source.industrySector??europeIndustrySectorForSite(source.feature))&&(!source.industryOnly||europeIndustryMatches(f.id,source.industryGroup)));
     const matrix=root.querySelector<SVGSVGElement>('[data-eu-static]')?.getScreenCTM?.();
     const scale=matrix?Math.max(.01,Math.hypot(matrix.a,matrix.b)):.4;
     for(const point of originalPoints) {
@@ -183,6 +188,15 @@ export function renderEuropeOrigin(root:HTMLElement, source:EuropeState|null, ta
     const ind=config.statistics.indicators.find(i=>i.id===layer.indicator);
     for(const f of config.geography.features)mini.append(svg('path',{d:viewPath(f.geometry),fill:ind?layerColor(layer,ind.values[f.properties.code]?.['2023']??null):'#edece5',stroke:'#536a6f','stroke-width':'.7','fill-rule':'evenodd'}));
     if(layer.image)mini.append(svg('image',{href:layer.image,x:'0',y:'0',width:String(frame.width),height:String(frame.height),preserveAspectRatio:'none'}));
+    if(layer.id==='water'){
+      for(const f of [...(config.waterLakes?.features??[]),...config.climateWater.features])mini.append(svg('path',{d:viewPath(f.geometry),fill:'#91bdd0',stroke:'#749daa','stroke-width':'.6','fill-rule':'evenodd','data-eu-origin-water-lake':''}));
+    }
+    if(layer.id==='water'||layer.id==='drainage')for(const f of config.majorRivers?.features??[]){
+      if(!['rhine','danube','seine','thames','don','volga','ural',source.feature].includes(f.properties.id))continue;
+      const lines=f.geometry.type==='MultiLineString'?f.geometry.coordinates as number[][][]:[f.geometry.coordinates as number[][]];
+      const d=lines.map(line=>line.map((point,index)=>`${index?'L':'M'}${project(point).join(',')}`).join(' ')).join(' ');
+      mini.append(svg('path',{d,fill:'none',stroke:'#176783','stroke-width':f.properties.id===source.feature?'3':'1.5','vector-effect':'non-scaling-stroke','data-eu-origin-river':f.properties.id}));
+    }
     if(layer.id==='climate')for(const f of config.climateWater.features)mini.append(svg('path',{d:viewPath(f.geometry),fill:'#e7eff1',stroke:'#8ca6aa','stroke-width':'.7','fill-rule':'evenodd'}));
     for(const f of config.geography.features)mini.append(svg('path',{d:viewPath(f.geometry),fill:'none',stroke:'#536a6f','stroke-width':'.7','fill-rule':'evenodd'}));
     const originalMap=densityBehindHubs?overlay:mini;
@@ -201,7 +215,7 @@ export function renderEuropeOrigin(root:HTMLElement, source:EuropeState|null, ta
       addKey('#fff0ba',`${point.name}：元の選択地点（位置）`);
     }
     const labels=layer.labels??(layer.breaks?[...layer.breaks.map((value,i)=>i===0?`${value}未満`:`${layer.breaks![i-1]}〜${value}未満`),`${layer.breaks.at(-1)}以上`]:[]);
-    labels.forEach((label,i)=>addKey(layer.colors![i],layer.id==='drainage'?`識別色 ${String.fromCharCode(65+i)}`:label));
+    labels.forEach((label,i)=>addKey(layer.colors![i],label));
     if(layer.id==='climate')climateLegend.forEach(item=>addKey(item.color,`${item.code} ${item.name}`));
     if(layer.grid||layer.indicator)addKey('#d9dcda','データなし');
     if(layer.id==='hubs')addKey('#173c48','産業拠点の代表位置（数量ではない）');
@@ -222,7 +236,9 @@ export function renderEuropeOrigin(root:HTMLElement, source:EuropeState|null, ta
     const status=root.ownerDocument.createElement('p');status.dataset.euOriginStatus='';status.setAttribute('role','status');status.textContent='元の選択区画の輪郭を読み込んでいます。';mini.after(status);
     return (options.fetchDrainageValues??drainageValues)(layer.grid).then(values=>{
       if(originGenerations.get(root)!==generation||!root.isConnected)return;
-      const outline=europeDrainageOutline(values,selectedIndex),canvas=root.ownerDocument.createElement('canvas');
+      const basin=europeDrainageBasinByIndex(selectedIndex)!;
+      const named=mainBasinOverview.groups.some(group=>group.mainBasin===basin.MAIN_BAS);
+      const outline=named?europeDrainageMainBasinOutline(values,basin.MAIN_BAS):europeDrainageOutline(values,selectedIndex),canvas=root.ownerDocument.createElement('canvas');
       canvas.width=europeDrainageGrid.width;canvas.height=europeDrainageGrid.height;
       const context=canvas.getContext('2d');if(!context)throw new Error('Original drainage outline unavailable');
       const pixels=context.createImageData(canvas.width,canvas.height);pixels.data.set(outline.rgba);context.putImageData(pixels,0,0);

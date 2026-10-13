@@ -1,0 +1,513 @@
+{
+  "schemaVersion": 1,
+  "countryCode": "ZAF",
+  "year": 2022,
+  "unit": "% of population aged 1 or older; language most often spoken at home",
+  "provinces": [
+    "Western Cape",
+    "Eastern Cape",
+    "Northern Cape",
+    "Free State",
+    "KwaZulu-Natal",
+    "North West",
+    "Gauteng",
+    "Mpumalanga",
+    "Limpopo"
+  ],
+  "languages": [
+    {
+      "id": "Afrikaans",
+      "label": "アフリカーンス語",
+      "national": 10.6,
+      "publishedNational": "10.6",
+      "provinces": {
+        "Western Cape": 41.2,
+        "Eastern Cape": 9.6,
+        "Northern Cape": 54.6,
+        "Free State": 10.3,
+        "KwaZulu-Natal": 1.0,
+        "North West": 5.2,
+        "Gauteng": 7.7,
+        "Mpumalanga": 3.2,
+        "Limpopo": 2.3
+      },
+      "publishedProvince": {
+        "Western Cape": "41.2",
+        "Eastern Cape": "9.6",
+        "Northern Cape": "54.6",
+        "Free State": "10.3",
+        "KwaZulu-Natal": "1.0",
+        "North West": "5.2",
+        "Gauteng": "7.7",
+        "Mpumalanga": "3.2",
+        "Limpopo": "2.3"
+      }
+    },
+    {
+      "id": "English",
+      "label": "英語",
+      "national": 8.7,
+      "publishedNational": "8.7",
+      "provinces": {
+        "Western Cape": 22.0,
+        "Eastern Cape": 4.8,
+        "Northern Cape": 2.4,
+        "Free State": 1.5,
+        "KwaZulu-Natal": 14.4,
+        "North West": 1.0,
+        "Gauteng": 9.2,
+        "Mpumalanga": 1.5,
+        "Limpopo": 1.0
+      },
+      "publishedProvince": {
+        "Western Cape": "22.0",
+        "Eastern Cape": "4.8",
+        "Northern Cape": "2.4",
+        "Free State": "1.5",
+        "KwaZulu-Natal": "14.4",
+        "North West": "1.0",
+        "Gauteng": "9.2",
+        "Mpumalanga": "1.5",
+        "Limpopo": "1.0"
+      }
+    },
+    {
+      "id": "IsiNdebele",
+      "label": "ンデベレ語",
+      "national": 1.7,
+      "publishedNational": "1.7",
+      "provinces": {
+        "Western Cape": 0.2,
+        "Eastern Cape": 0.1,
+        "Northern Cape": 0.0,
+        "Free State": 0.1,
+        "KwaZulu-Natal": 0.0,
+        "North West": 0.4,
+        "Gauteng": 3.1,
+        "Mpumalanga": 9.9,
+        "Limpopo": 1.1
+      },
+      "publishedProvince": {
+        "Western Cape": "0.2",
+        "Eastern Cape": "0.1",
+        "Northern Cape": "0.0",
+        "Free State": "0.1",
+        "KwaZulu-Natal": "0.0",
+        "North West": "0.4",
+        "Gauteng": "3.1",
+        "Mpumalanga": "9.9",
+        "Limpopo": "1.1"
+      }
+    },
+    {
+      "id": "IsiXhosa",
+      "label": "コサ語",
+      "national": 16.3,
+      "publishedNational": "16.3",
+      "provinces": {
+        "Western Cape": 31.4,
+        "Eastern Cape": 81.8,
+        "Northern Cape": 4.5,
+        "Free State": 5.5,
+        "KwaZulu-Natal": 3.1,
+        "North West": 4.8,
+        "Gauteng": 6.7,
+        "Mpumalanga": 1.0,
+        "Limpopo": 0.2
+      },
+      "publishedProvince": {
+        "Western Cape": "31.4",
+        "Eastern Cape": "81.8",
+        "Northern Cape": "4.5",
+        "Free State": "5.5",
+        "KwaZulu-Natal": "3.1",
+        "North West": "4.8",
+        "Gauteng": "6.7",
+        "Mpumalanga": "1.0",
+        "Limpopo": "0.2"
+      }
+    },
+    {
+      "id": "IsiZulu",
+      "label": "ズールー語",
+      "national": 24.4,
+      "publishedNational": "24.4",
+      "provinces": {
+        "Western Cape": 0.4,
+        "Eastern Cape": 0.3,
+        "Northern Cape": 0.3,
+        "Free State": 3.7,
+        "KwaZulu-Natal": 80.0,
+        "North West": 1.6,
+        "Gauteng": 23.1,
+        "Mpumalanga": 27.8,
+        "Limpopo": 0.6
+      },
+      "publishedProvince": {
+        "Western Cape": "0.4",
+        "Eastern Cape": "0.3",
+        "Northern Cape": "0.3",
+        "Free State": "3.7",
+        "KwaZulu-Natal": "80.0",
+        "North West": "1.6",
+        "Gauteng": "23.1",
+        "Mpumalanga": "27.8",
+        "Limpopo": "0.6"
+      }
+    },
+    {
+      "id": "Sepedi",
+      "label": "北ソト語（セペディ）",
+      "national": 10.0,
+      "publishedNational": "10.0",
+      "provinces": {
+        "Western Cape": 0.1,
+        "Eastern Cape": 0.0,
+        "Northern Cape": 0.1,
+        "Free State": 0.2,
+        "KwaZulu-Natal": 0.1,
+        "North West": 2.1,
+        "Gauteng": 12.6,
+        "Mpumalanga": 10.3,
+        "Limpopo": 55.5
+      },
+      "publishedProvince": {
+        "Western Cape": "0.1",
+        "Eastern Cape": "0.0",
+        "Northern Cape": "0.1",
+        "Free State": "0.2",
+        "KwaZulu-Natal": "0.1",
+        "North West": "2.1",
+        "Gauteng": "12.6",
+        "Mpumalanga": "10.3",
+        "Limpopo": "55.5"
+      }
+    },
+    {
+      "id": "Sesotho",
+      "label": "ソト語",
+      "national": 7.8,
+      "publishedNational": "7.8",
+      "provinces": {
+        "Western Cape": 1.0,
+        "Eastern Cape": 2.4,
+        "Northern Cape": 1.2,
+        "Free State": 72.3,
+        "KwaZulu-Natal": 0.6,
+        "North West": 5.9,
+        "Gauteng": 13.1,
+        "Mpumalanga": 2.3,
+        "Limpopo": 0.8
+      },
+      "publishedProvince": {
+        "Western Cape": "1.0",
+        "Eastern Cape": "2.4",
+        "Northern Cape": "1.2",
+        "Free State": "72.3",
+        "KwaZulu-Natal": "0.6",
+        "North West": "5.9",
+        "Gauteng": "13.1",
+        "Mpumalanga": "2.3",
+        "Limpopo": "0.8"
+      }
+    },
+    {
+      "id": "Setswana",
+      "label": "ツワナ語",
+      "national": 8.3,
+      "publishedNational": "8.3",
+      "provinces": {
+        "Western Cape": 0.1,
+        "Eastern Cape": 0.0,
+        "Northern Cape": 35.7,
+        "Free State": 5.3,
+        "KwaZulu-Natal": 0.0,
+        "North West": 72.8,
+        "Gauteng": 10.4,
+        "Mpumalanga": 1.6,
+        "Limpopo": 1.4
+      },
+      "publishedProvince": {
+        "Western Cape": "0.1",
+        "Eastern Cape": "0.0",
+        "Northern Cape": "35.7",
+        "Free State": "5.3",
+        "KwaZulu-Natal": "0.0",
+        "North West": "72.8",
+        "Gauteng": "10.4",
+        "Mpumalanga": "1.6",
+        "Limpopo": "1.4"
+      }
+    },
+    {
+      "id": "Sign language",
+      "label": "手話（原分類）",
+      "national": 0.02,
+      "publishedNational": "0.02",
+      "provinces": {
+        "Western Cape": 0.01,
+        "Eastern Cape": 0.01,
+        "Northern Cape": 0.02,
+        "Free State": 0.01,
+        "KwaZulu-Natal": 0.01,
+        "North West": 0.03,
+        "Gauteng": 0.02,
+        "Mpumalanga": 0.02,
+        "Limpopo": 0.02
+      },
+      "publishedProvince": {
+        "Western Cape": "0.01",
+        "Eastern Cape": "0.01",
+        "Northern Cape": "0.02",
+        "Free State": "0.01",
+        "KwaZulu-Natal": "0.01",
+        "North West": "0.03",
+        "Gauteng": "0.02",
+        "Mpumalanga": "0.02",
+        "Limpopo": "0.02"
+      }
+    },
+    {
+      "id": "SiSwati",
+      "label": "スワティ語",
+      "national": 2.8,
+      "publishedNational": "2.8",
+      "provinces": {
+        "Western Cape": 0.0,
+        "Eastern Cape": 0.0,
+        "Northern Cape": 0.0,
+        "Free State": 0.1,
+        "KwaZulu-Natal": 0.0,
+        "North West": 0.2,
+        "Gauteng": 0.9,
+        "Mpumalanga": 30.5,
+        "Limpopo": 0.3
+      },
+      "publishedProvince": {
+        "Western Cape": "0.0",
+        "Eastern Cape": "0.0",
+        "Northern Cape": "0.0",
+        "Free State": "0.1",
+        "KwaZulu-Natal": "0.0",
+        "North West": "0.2",
+        "Gauteng": "0.9",
+        "Mpumalanga": "30.5",
+        "Limpopo": "0.3"
+      }
+    },
+    {
+      "id": "Tshivenda",
+      "label": "ヴェンダ語",
+      "national": 2.5,
+      "publishedNational": "2.5",
+      "provinces": {
+        "Western Cape": 0.1,
+        "Eastern Cape": 0.0,
+        "Northern Cape": 0.1,
+        "Free State": 0.1,
+        "KwaZulu-Natal": 0.0,
+        "North West": 0.4,
+        "Gauteng": 2.4,
+        "Mpumalanga": 0.2,
+        "Limpopo": 17.4
+      },
+      "publishedProvince": {
+        "Western Cape": "0.1",
+        "Eastern Cape": "0.0",
+        "Northern Cape": "0.1",
+        "Free State": "0.1",
+        "KwaZulu-Natal": "0.0",
+        "North West": "0.4",
+        "Gauteng": "2.4",
+        "Mpumalanga": "0.2",
+        "Limpopo": "17.4"
+      }
+    },
+    {
+      "id": "Xitsonga",
+      "label": "ツォンガ語",
+      "national": 4.7,
+      "publishedNational": "4.7",
+      "provinces": {
+        "Western Cape": 0.2,
+        "Eastern Cape": 0.1,
+        "Northern Cape": 0.1,
+        "Free State": 0.2,
+        "KwaZulu-Natal": 0.0,
+        "North West": 3.1,
+        "Gauteng": 7.0,
+        "Mpumalanga": 10.6,
+        "Limpopo": 17.3
+      },
+      "publishedProvince": {
+        "Western Cape": "0.2",
+        "Eastern Cape": "0.1",
+        "Northern Cape": "0.1",
+        "Free State": "0.2",
+        "KwaZulu-Natal": "0.0",
+        "North West": "3.1",
+        "Gauteng": "7.0",
+        "Mpumalanga": "10.6",
+        "Limpopo": "17.3"
+      }
+    },
+    {
+      "id": "Khoi, Nama & San languages",
+      "label": "コイ・ナマ・サンの諸言語（原分類）",
+      "national": 0.01,
+      "publishedNational": "0.01",
+      "provinces": {
+        "Western Cape": 0.0,
+        "Eastern Cape": 0.01,
+        "Northern Cape": 0.17,
+        "Free State": 0.01,
+        "KwaZulu-Natal": 0.0,
+        "North West": 0.01,
+        "Gauteng": 0.01,
+        "Mpumalanga": 0.01,
+        "Limpopo": 0.01
+      },
+      "publishedProvince": {
+        "Western Cape": "0.00",
+        "Eastern Cape": "0.01",
+        "Northern Cape": "0.17",
+        "Free State": "0.01",
+        "KwaZulu-Natal": "0.00",
+        "North West": "0.01",
+        "Gauteng": "0.01",
+        "Mpumalanga": "0.01",
+        "Limpopo": "0.01"
+      }
+    },
+    {
+      "id": "Shona",
+      "label": "ショナ語",
+      "national": 1.2,
+      "publishedNational": "1.2",
+      "provinces": {
+        "Western Cape": 2.0,
+        "Eastern Cape": 0.5,
+        "Northern Cape": 0.4,
+        "Free State": 0.3,
+        "KwaZulu-Natal": 0.3,
+        "North West": 1.6,
+        "Gauteng": 2.1,
+        "Mpumalanga": 0.6,
+        "Limpopo": 1.6
+      },
+      "publishedProvince": {
+        "Western Cape": "2.0",
+        "Eastern Cape": "0.5",
+        "Northern Cape": "0.4",
+        "Free State": "0.3",
+        "KwaZulu-Natal": "0.3",
+        "North West": "1.6",
+        "Gauteng": "2.1",
+        "Mpumalanga": "0.6",
+        "Limpopo": "1.6"
+      }
+    },
+    {
+      "id": "Chichewa/Chewa, Nyanja/Chinyanja",
+      "label": "チェワ・ニャンジャ（原分類）",
+      "national": 0.3,
+      "publishedNational": "0.3",
+      "provinces": {
+        "Western Cape": 0.5,
+        "Eastern Cape": 0.1,
+        "Northern Cape": 0.1,
+        "Free State": 0.0,
+        "KwaZulu-Natal": 0.2,
+        "North West": 0.2,
+        "Gauteng": 0.6,
+        "Mpumalanga": 0.1,
+        "Limpopo": 0.0
+      },
+      "publishedProvince": {
+        "Western Cape": "0.5",
+        "Eastern Cape": "0.1",
+        "Northern Cape": "0.1",
+        "Free State": "0.0",
+        "KwaZulu-Natal": "0.2",
+        "North West": "0.2",
+        "Gauteng": "0.6",
+        "Mpumalanga": "0.1",
+        "Limpopo": "0.0"
+      }
+    },
+    {
+      "id": "Portuguese",
+      "label": "ポルトガル語",
+      "national": 0.2,
+      "publishedNational": "0.2",
+      "provinces": {
+        "Western Cape": 0.1,
+        "Eastern Cape": 0.0,
+        "Northern Cape": 0.1,
+        "Free State": 0.0,
+        "KwaZulu-Natal": 0.1,
+        "North West": 0.2,
+        "Gauteng": 0.3,
+        "Mpumalanga": 0.3,
+        "Limpopo": 0.0
+      },
+      "publishedProvince": {
+        "Western Cape": "0.1",
+        "Eastern Cape": "0.0",
+        "Northern Cape": "0.1",
+        "Free State": "0.0",
+        "KwaZulu-Natal": "0.1",
+        "North West": "0.2",
+        "Gauteng": "0.3",
+        "Mpumalanga": "0.3",
+        "Limpopo": "0.0"
+      }
+    },
+    {
+      "id": "Other",
+      "label": "その他",
+      "national": 0.4,
+      "publishedNational": "0.4",
+      "provinces": {
+        "Western Cape": 0.7,
+        "Eastern Cape": 0.4,
+        "Northern Cape": 0.3,
+        "Free State": 0.3,
+        "KwaZulu-Natal": 0.2,
+        "North West": 0.3,
+        "Gauteng": 0.7,
+        "Mpumalanga": 0.3,
+        "Limpopo": 0.4
+      },
+      "publishedProvince": {
+        "Western Cape": "0.7",
+        "Eastern Cape": "0.4",
+        "Northern Cape": "0.3",
+        "Free State": "0.3",
+        "KwaZulu-Natal": "0.2",
+        "North West": "0.3",
+        "Gauteng": "0.7",
+        "Mpumalanga": "0.3",
+        "Limpopo": "0.4"
+      }
+    }
+  ],
+  "source": {
+    "publisher": "Statistics South Africa",
+    "url": "https://census.statssa.gov.za/assets/documents/2022/P03014_Census_2022_Statistical_Release.pdf",
+    "table": "2.9",
+    "printedPage": 23,
+    "pdfPage": 35,
+    "retrievedAt": "2026-10-13",
+    "access": "Public publisher table read with web.open; factual numerical excerpt manually transcribed",
+    "originalPdfSha256": null,
+    "excerptSha256": "2cdeb8ca8225c020b2233afdc33ddb10e67e27f73feb8116c698f11525138a16",
+    "reuse": "Numerical factual excerpt with attribution. Original report prose, maps and administrative geometry are not redistributed; no GIS/report licence asserted"
+  },
+  "limits": [
+    "1歳未満を除く人口。母語、理解できる言語、全員の共通語や言語別民族の人数ではない。",
+    "17分類・9州の公表百分率。丸めた値を100%へ再正規化せず、小さい値と0を保持。",
+    "原表の手話/複数言語まとめ分類を保持。Glottologの口頭言語レコードや語族と1対1対応を仮定しない。",
+    "州内均一の話者面や全大陸の言語居住域は作らない。"
+  ]
+}

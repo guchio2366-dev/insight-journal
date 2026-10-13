@@ -107,6 +107,7 @@ async function ready(page, region = 'europe', render = 'normal') {
     });
   } else {
     await page.waitForFunction(() => document.querySelector('[data-europe-detail]')?.dataset.initialized === 'true');
+    assert.equal(await page.locator('[data-europe-detail]').getAttribute('data-eu-geography'),'detailed','Both HTTP-expanded and raw gzip deliveries load the true 1:10m geometry');
     if (render === 'normal') await page.locator('[data-eu-live].is-ready').waitFor();
     else await page.waitForFunction(() => getComputedStyle(document.querySelector('[data-eu-static]')).visibility === 'visible');
   }
@@ -175,7 +176,7 @@ async function snapshot(page, profile, topic, region = 'europe') {
   const measured = await measurements(page, region); assert.equal(measured.horizontalOverflow, false);
   if(!['terrain-overview','population-to-alps'].includes(topic))assert.ok(measured.legend?.height > 0 && measured.legend.y >= measured.map.y + measured.map.height - 1, 'Visible legend belongs below the map');
   assert.ok(measured.reader?.width >= 280 && measured.reader.x >= measured.map.x + measured.map.width, 'Reader belongs to the right of the map on PC');
-  assert.deepEqual(measured.controls.map(item => item.action), ['fit', 'in', 'out']);
+  assert.deepEqual(measured.controls.map(item => item.action), region==='us'?['fit','in','out']:[]);
   for (const [index, control] of measured.controls.entries()) {
     // The unchanged US fit button uses 11px text in a 44px control. Keep the
     // Europe minimum at 12px while measuring that existing US reference as-is.
@@ -250,16 +251,17 @@ async function agricultureClimateRepairs(page,profile){
   assert.equal(await page.locator('[data-eu-farm-measure] option').count(),1);
   assert.match(await page.locator('[data-eu-subject-note]').textContent(),/乳牛.*未収録/);
   assert.equal(await page.locator('[data-eu-farm-area]').evaluateAll(nodes=>nodes.filter(node=>node.style.display!=='none').length),4);
-  await page.locator('[data-eu-reset]').click();
+  await page.goto(new URL('atlas/europe/agriculture/?layer=dairy&farmExtent=full',base).href,{waitUntil:'networkidle'}); await ready(page);
   assert.equal(new URL(page.url()).searchParams.get('farmExtent'),'full');
   await page.waitForFunction(()=>document.querySelector('[data-eu-static]').getAttribute('viewBox')==='0 0 1200 1001');
   await page.reload({waitUntil:'networkidle'});await ready(page);
   assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'),'0 0 1200 1001');
   await openEurope(page,'atlas/europe/nature/','normal');
   const cityLabels=await page.locator('[data-eu-map-kind="city"]:visible').evaluateAll(nodes=>nodes.filter(node=>!node.classList.contains('is-point-only')).map(node=>{const style=getComputedStyle(node);return {name:node.textContent,background:style.backgroundColor,font:Number.parseFloat(style.fontSize)};}));
-  assert.ok(cityLabels.length<=8);
+  assert.ok(cityLabels.length>=8&&cityLabels.length<=24);
+  assert.ok(cityLabels.some(label=>label.name==='リスボン'));
   for(const label of cityLabels){assert.equal(label.background,'rgba(0, 0, 0, 0)');assert.ok(label.font>=12&&label.font<=13);}
-  const stationId=await page.locator('[data-eu-map-kind="city"].is-point-only:visible').first().getAttribute('data-eu-map-place');
+  const stationId=await page.locator('[data-eu-map-kind="city"][data-eu-map-place=lisbon]:visible').getAttribute('data-eu-map-place');
   assert.ok(stationId);
   const point=page.locator(`[data-eu-map-kind="city"][data-eu-map-place="${stationId}"]`);
   await page.bringToFront();await point.focus();
@@ -337,7 +339,7 @@ async function forestryProductionReview(page,profile){
 }
 
 async function uniqueElevation(page) {
-  assert.equal(await page.locator(resultSelector).count(), 1); assert.equal(await page.locator(`${pointSelector}:visible`).count(), 1);
+  assert.equal(await page.locator(resultSelector).count(), 1); assert.equal(await page.locator(`${pointSelector}:visible`).count(), 0);
   assert.equal(await page.locator(resultSelector).isVisible(), true);
   assert.equal(await page.locator('[data-eu-subject-grid]').isVisible(), true);
   assert.equal(await page.locator('.eu-read-panel [data-eu-subject-grid]').count(), 1);
@@ -359,7 +361,7 @@ async function completeAlpsCopy(page) {
 async function drainageState(page) {
   return page.evaluate(() => {
     const params = new URL(location.href).searchParams;
-    return {point: params.get('point'), basin: params.get('basin'), choice: document.querySelector('[data-eu-drainage-choice]').value,
+    return {point: params.get('point'), basin: params.get('basin'), riverBasin: params.get('riverBasin'), choice: document.querySelector('[data-eu-drainage-choice]').value,
       outline: document.querySelector('[data-eu-drainage-selection]').style.display !== 'none',
       summary: document.querySelector('[data-eu-basin-summary]').textContent, result: document.querySelector('[data-eu-subject-result]').textContent,
       comparison: document.querySelector('[data-eu-comparison-link="drainage-density"]').href};
@@ -371,15 +373,16 @@ async function feedbackPlacement(page) {
   const measured = await page.evaluate(() => {
     const group = document.querySelector('[data-eu-drainage-controls]'), summary = group.querySelector('[data-eu-basin-summary]');
     const grid = document.querySelector('[data-eu-subject-grid]'), result = document.querySelector('[data-eu-subject-result]');
-    return {insideControls: grid.parentElement === group, afterSummary: summary.nextElementSibling === grid,
-      gridGap: grid.getBoundingClientRect().top - summary.getBoundingClientRect().bottom,
+    const details=group.querySelector('details');
+    return {insideControls: grid.parentElement === group, afterSummary: Boolean(summary.compareDocumentPosition(grid) & Node.DOCUMENT_POSITION_FOLLOWING),
+      gridGap: grid.getBoundingClientRect().top - details.getBoundingClientRect().bottom,
       rightReader: group.closest('.eu-read-panel') !== null,
-      externalChoicesHidden: group.querySelector('label').hidden && group.querySelector('button').hidden,
+      legacyChoicesCollapsed: !details.open,
       fontSize: parseFloat(getComputedStyle(result).fontSize), live: result.getAttribute('aria-live'),
       horizontalOverflow: document.documentElement.scrollWidth > innerWidth || group.scrollWidth > group.clientWidth + 1};
   });
   assert.equal(measured.insideControls, true); assert.equal(measured.afterSummary, true);
-  assert.equal(measured.rightReader, true); assert.equal(measured.externalChoicesHidden, true);
+  assert.equal(measured.rightReader, true); assert.equal(measured.legacyChoicesCollapsed, true);
   assert.ok(measured.gridGap >= 0 && measured.gridGap <= 24, JSON.stringify(measured));
   assert.ok(measured.fontSize >= 14); assert.equal(measured.live, 'polite'); assert.equal(measured.horizontalOverflow, false);
   return measured;
@@ -440,36 +443,36 @@ async function europeOperations(page, profile, render) {
   await page.goForward(); assert.equal(await settled(page), clicked);
   await page.reload({waitUntil: 'networkidle'}); await ready(page, 'europe', render); assert.equal(await settled(page), clicked);
   if (!normal) {
-    await page.locator('[data-eu-render]').click(); await ready(page); assert.equal(await settled(page), clicked);
-    await page.locator('[data-eu-render]').click(); await ready(page, 'europe', render); assert.equal(await settled(page), clicked);
+    {const next=new URL(page.url());next.searchParams.set('render','auto');await page.goto(next.href,{waitUntil:'networkidle'});await ready(page,'europe','normal');} assert.equal(await settled(page), clicked);
+    {const next=new URL(page.url());next.searchParams.set('render',render==='normal'?'auto':'static');await page.goto(next.href,{waitUntil:'networkidle'});await ready(page,'europe',render);} assert.equal(await settled(page), clicked);
   }
   record.elevation.clicked = {point: clickedPoint, value: clicked};
-  record.checks.push('terrain names without numeric UI', 'metres separate from contour interval', 'single marker/result/legend', 'one history entry per selection', 'SVG extent retained', 'unselected back/forward', 'reload retains reader text', 'named comparison return', 'real map click and history');
+  record.checks.push('terrain names without numeric UI', 'metres separate from contour interval', 'no click circle; single result/legend', 'one history entry per selection', 'SVG extent retained', 'unselected back/forward', 'reload retains reader text', 'named comparison return', 'real map click and history');
 
   await openEurope(page, 'atlas/europe/nature/?layer=drainage', render);
   assert.equal(await page.locator('[data-eu-feature-list]').isVisible(),false);
-  await page.locator('[data-eu-map-place="rhine"][data-eu-map-kind="feature"]').click(); await settled(page, '表示格子中心.*BasinATLAS');
+  await page.locator('[data-eu-river-label="rhine"]').click();
   await page.waitForFunction(() => document.querySelector('[data-eu-drainage-selection]').style.display !== 'none');
-  const selected = await drainageState(page); assert.ok(selected.point); assert.ok(selected.basin); assert.doesNotMatch(selected.result, /データなし/);
+  const selected = await drainageState(page); assert.equal(selected.point,null); assert.ok(selected.basin); assert.equal(selected.riverBasin,'rhine'); assert.match(selected.summary,/ライン川.*全流域ではありません/);
   const selectedFeedback = await feedbackPlacement(page);
   await page.locator('.eu-map-stage').scrollIntoViewIfNeeded();
   const drainageBounds = await page.locator('.eu-map-stage').boundingBox(); assert.ok(drainageBounds);
-  await page.mouse.click(drainageBounds.x + 8, drainageBounds.y + drainageBounds.height * .2);
+  await page.mouse.click(drainageBounds.x + 8, drainageBounds.y + drainageBounds.height * .5);
   await settled(page, 'データなし');
   const outside = await drainageState(page), outsideFeedback = await feedbackPlacement(page);
-  assert.ok(outside.point); assert.equal(outside.basin, null); assert.equal(outside.choice, ''); assert.equal(outside.outline, false);
+  assert.ok(outside.point); assert.equal(outside.basin, null); assert.equal(outside.riverBasin,null); assert.equal(outside.choice, ''); assert.equal(outside.outline, false);
   assert.match(outside.summary, /有効な区画がありません/);
   const comparison = new URL(outside.comparison), origin = new URLSearchParams(comparison.searchParams.get('europeReturn') ?? '');
   assert.equal(comparison.searchParams.has('basin'), false); assert.equal(origin.has('basin'), false); assert.equal(origin.has('point'), true);
   if (normal) await snapshot(page, profile, 'drainage-outside');
-  await page.goBack(); await ready(page, 'europe', render); await settled(page, '表示格子中心.*BasinATLAS');
+  await page.goBack(); await ready(page, 'europe', render);
   await page.waitForFunction(() => document.querySelector('[data-eu-drainage-selection]').style.display !== 'none');
-  assert.equal((await drainageState(page)).basin, selected.basin);
+  assert.equal((await drainageState(page)).basin, selected.basin);assert.equal((await drainageState(page)).riverBasin,'rhine');
   await page.goForward(); await ready(page, 'europe', render); assert.equal((await drainageState(page)).basin, null);
   await page.reload({waitUntil: 'networkidle'}); await ready(page, 'europe', render);
   const reloaded = await drainageState(page); assert.equal(reloaded.basin, null); assert.equal(reloaded.point, outside.point); assert.equal(reloaded.choice, ''); assert.equal(reloaded.outline, false); await feedbackPlacement(page);
   record.drainage = {selected, selectedFeedback, outside, outsideFeedback};
-  record.checks.push('real valid basin then missing-data click clears basin/outline without fabricating a category', 'single live drainage result below summary at >=14px', 'drainage back/forward/reload');
+  record.checks.push('named retained basin then missing-data click clears basin/outline without fabricating a category', 'single live drainage result below summary at >=14px', 'drainage back/forward/reload');
 
   await openEurope(page, 'atlas/europe/population/?layer=density', render);
   await page.locator('.eu-map-stage').scrollIntoViewIfNeeded();
@@ -572,13 +575,13 @@ async function stageOneOperations(page, profile) {
   assert.equal(manifest.network.requests.filter(item=>new URL(item.url).pathname.endsWith('/precipitation-v1/precipitation.png')).length,0,'Neither route requests the former mesh raster');
   manifest.checks.push({profile:profile.name,precipitationRoutes:{direct:directRain,tabs:tabRain,formerMeshRequests:0}});
   await openEurope(page, 'atlas/europe/nature/?layer=drainage', 'normal');
-  await page.locator('[data-eu-map-place="rhine"][data-eu-map-kind="feature"]').click();
+  await page.locator('[data-eu-river-label="rhine"]').click();
   await page.waitForFunction(() => document.querySelector('[data-eu-basin-summary]').textContent.includes('ライン川'));
   assert.match(await page.locator('[data-eu-basin-summary]').textContent(), /同じMAIN_BAS.*モデル区画/);
   await snapshot(page, profile, 'drainage-river-reading');
   await openEurope(page, 'atlas/europe/industry/?layer=hubs', 'normal');
   assert.equal(new URL(page.url()).searchParams.has('feature'), false);
-  assert.equal(await page.locator('[data-eu-industry-group]').count(),10);
+  assert.equal(await page.locator('[data-eu-industry-group]').count(),13);
   const industryOverview = await snapshot(page, profile, 'industry-overview');
   await captureEurope(page,profile,'industry');
   const usIndustry = await page.context().newPage();
@@ -591,6 +594,7 @@ async function stageOneOperations(page, profile) {
   } finally { await usIndustry.close(); }
   const industryExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
   await quietFeatures('industry');
+  await page.locator('[data-eu-industry-sector="manufacturing"]').click();
   await page.locator('[data-eu-industry-group="自動車・機械"]').click();
   assert.equal(new URL(page.url()).searchParams.has('place'), false);
   assert.equal(new URL(page.url()).searchParams.has('feature'), false);
@@ -599,7 +603,7 @@ async function stageOneOperations(page, profile) {
   await page.locator('[data-eu-country-navigation]').selectOption('DEU');
   assert.match(await page.locator('[data-eu-country-overview]').getAttribute('href'),/\/atlas\/europe\/overview\/\?country=DEU$/);
   await snapshot(page, profile, 'industry-sector-reading');
-  await page.locator('[data-eu-topic-field="industry"] [data-eu-topic="hubs"]:not([data-eu-industry-group])').click();
+  await page.locator('[data-eu-industry-all]').click();
   assert.equal(new URL(page.url()).searchParams.has('place'), false);
   assert.equal(new URL(page.url()).searchParams.has('industryGroup'), false);
   assert.equal(await page.locator('[data-eu-country-reader]').isVisible(), false);

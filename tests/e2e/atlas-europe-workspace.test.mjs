@@ -29,14 +29,16 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
     assert.ok(doc.querySelector('.eu-read-panel,.europe-side'));
     if (!field) assert.equal(doc.querySelectorAll('[data-europe-country-select] option').length,46);
     if (field) {
-      assert.equal(doc.querySelectorAll('.eu-read-panel select:not([data-eu-drainage-choice])').length, 3,'Case controls move to the map only when the runtime activates the census case');
-      assert.equal(doc.querySelector('[data-eu-drainage-choice]').closest('label').hidden,true);
+      assert.equal(doc.querySelectorAll('.eu-read-panel select:not([data-eu-drainage-choice]):not([data-eu-main-river-choice])').length, 5,'The two extra TS024 controls stay disabled inside the initially hidden language reader');
+      assert.equal(doc.querySelector('[data-eu-drainage-choice]').closest('[data-eu-drainage-controls]').hidden,true);
+      assert.equal(doc.querySelector('[data-eu-main-river-choice]').closest('[data-eu-drainage-controls]').hidden,true);
       assert.equal(doc.querySelector('[data-eu-culture-host]').hidden,true);
       assert.equal(doc.querySelector('[data-eu-country]'),null);
       assert.equal(doc.querySelector('[data-eu-subject]'),null);
       assert.ok(doc.querySelector('.eu-map-stage [data-eu-annotations]'));
-      assert.ok(doc.querySelector('.eu-map-stage [data-eu-zoom="in"]'));
-      assert.deepEqual([...doc.querySelectorAll('.eu-map-buttons button')].map(button=>button.hasAttribute('data-eu-reset')?'overview':button.dataset.euZoom??'renderer'),['overview','in','out','renderer']);
+      assert.equal(doc.querySelector('.eu-map-stage [data-eu-zoom]'),null);
+      assert.equal(doc.querySelector('.eu-map-buttons'),null);
+      assert.equal(doc.querySelector('[data-eu-reset],[data-eu-render]'),null);
       assert.ok(doc.querySelector('.eu-map-stage').compareDocumentPosition(doc.querySelector('[data-eu-map-legend]'))&4);
       assert.match(doc.querySelector('[data-eu-map-legend] .eu-water-note').textContent,/地下水.*利用条件を確認済み.*位置合わせできていないため未収録/);
       const waterMask=doc.querySelector('[data-eu-water-mask="caspian-sea"]');
@@ -107,8 +109,9 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
     }
     if (field==='industry/') {
       const topics=doc.querySelector('[data-eu-topic-field="industry"]');
-      assert.deepEqual([...topics.querySelectorAll('[data-eu-industry-group]')].map(button=>button.textContent),['エネルギー','鉱業・素材','自動車・機械','化学・医薬品','航空機','港湾物流','観光','金融','繊維・衣服','食品加工']);
-      assert.deepEqual([...topics.querySelectorAll('button:not([data-eu-industry-group])')].map(button=>button.dataset.euTopic),['hubs']);
+      assert.deepEqual([...topics.querySelectorAll('[data-eu-industry-sector]')].map(button=>button.textContent),['資源・エネルギー','製造業','サービス業']);
+      assert.equal(doc.querySelectorAll('[data-eu-industry-group]').length,13);
+      assert.equal(topics.querySelectorAll('button').length,3);
       const scope=doc.querySelector('[data-eu-industry-scope]');
       assert.deepEqual([...scope.options].map(option=>option.value),['region:all','region:north','region:west','region:south','region:east','country:DEU','country:GBR','country:FRA','country:ITA']);
       assert.equal(scope.closest('[data-eu-industry-scope-host]').hidden,true);
@@ -125,7 +128,7 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
       assert.ok(doc.querySelector('.eu-reader-body').open);
       const planned=[...doc.querySelectorAll('[data-eu-topic-field="population"] button:disabled')];
       assert.equal(planned.length,0);
-      assert.deepEqual([...doc.querySelectorAll('[data-eu-topic-field="population"] button')].map(b=>b.textContent),['人口分布','人種・民族（事例）','宗教']);
+      assert.deepEqual([...doc.querySelectorAll('[data-eu-topic-field="population"] button')].map(b=>b.textContent),['人口分布','民族（地域事例）','使用言語','宗教']);
       assert.match(doc.querySelector('.eu-culture-kicker').textContent,/国勢調査の地域分布/);
       assert.deepEqual([...doc.querySelector('[data-culture-case]').options].map(option=>option.textContent),['欧州全体・事例未選択','イングランド・ウェールズ・行政区','クロアチア・全国値']);
       assert.ok(!doc.querySelector('[data-eu-topic-field="population"]').textContent.includes('投票'));

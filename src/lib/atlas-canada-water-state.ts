@@ -12,6 +12,7 @@ export interface CanadaWaterSource { title: string; url: string; publisher?: str
 export interface CanadaWaterDataset {
  title: string; groups: CanadaWaterGroup[]; legendGroups?: CanadaWaterGroup[]; areas?: CanadaWaterArea[]; groupProperty?: string;
  geometryUrl?: string; imageUrl?: string; images?: {id: string; url: string}[]; classImages?: {group: string; url: string}[];
+ contoursUrl?:string;contourLabels?:{mm:number;coordinates:number[]}[];
  scope: string; reading: string; method?: string; note?: string; excludedFillNotice?: string; invalidGeometryCount?: number; sources: CanadaWaterSource[]; defaultFrame?: CanadaWaterFrame;
 }
 export interface CanadaWaterConfig {

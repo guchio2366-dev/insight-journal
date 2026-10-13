@@ -160,7 +160,7 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
       const selected = ['==', ['get', 'id'], state.selected ?? '__none__'] as any;
       const filter = state.only && state.selected ? selected : null;
       map.setFilter('canada-landform-fill', filter);
-      map.setPaintProperty('canada-landform-fill','fill-opacity',['case',selected,.24,0]);
+      map.setPaintProperty('canada-landform-fill','fill-opacity',.24);
       map.setFilter('canada-landform-boundaries', filter);
       map.setFilter('canada-landform-selected', selected);
     }
@@ -232,7 +232,7 @@ export function initCanadaLandform(root: HTMLElement): CanadaLandformController 
           {id:'ca-contours',type:'line',source:'ca-contours',filter:['<=',['get','elevation_m'],2000],paint:{'line-color':'#b2a886','line-width':.55,'line-opacity':.4}},
           {id:'ca-lakes',type:'fill',source:'ca-lakes',paint:{'fill-color':'#c6dfe4'}},
           {id:'ca-rivers',type:'line',source:'ca-rivers',paint:{'line-color':'#92b5c4','line-width':.7}},
-          { id: 'canada-landform-fill', type: 'fill', source: 'canada-landform-regions', paint: { 'fill-color': '#d4c8a6', 'fill-opacity': ['case',['==',['get','id'],state.selected ?? '__none__'],.24,0] } },
+          { id: 'canada-landform-fill', type: 'fill', source: 'canada-landform-regions', paint: { 'fill-color': ['get','color'], 'fill-opacity': .24 } },
           { id: 'canada-landform-boundaries', type: 'line', source: 'canada-landform-regions', paint: { 'line-color': '#69796e', 'line-opacity': 0, 'line-width': .7 } },
           { id: 'canada-landform-selected', type: 'line', source: 'canada-landform-regions', filter: ['==', ['get', 'id'], '__none__'], paint: { 'line-color': '#243f4c', 'line-width': 3 } },
         ] }, bounds: southernMapBounds(), fitBoundsOptions: { padding: 0 },

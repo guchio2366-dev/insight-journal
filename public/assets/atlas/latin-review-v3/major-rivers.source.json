@@ -1,0 +1,97 @@
+{
+  "dataset": "Natural Earth 1:10m rivers and lake centerlines",
+  "sourceUrl": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_rivers_lake_centerlines.geojson",
+  "license": "Public domain",
+  "sourceCRS": "EPSG:4326",
+  "sourceSHA256": "bb854a900ecbd3b408df46d5e16e3e0f974ba55993f9d8b5c26e855273c0905a",
+  "sourceAcquisition": "Reused retained original, SHA verified, no network request",
+  "sourceResolution": "Cartographic scale 1:10,000,000",
+  "yearMeaning": "Natural Earth original file pinned by SHA, not an annual hydrological observation",
+  "candidateBounds": [
+    -93,
+    -56,
+    -33,
+    28
+  ],
+  "scopeNote": "Candidate source geometries include portions outside target countries, including Mexico; renderer must use the existing Latin34-country land clip. Whole source geographic features are retained unchanged.",
+  "selection": "Named source features with scalerank <=6; all Negro features and named Caroni, Apure and Cauca also retained; overview defaults rank<=4 plus documented named Amazon tributaries. Display ranks are not hydrological order.",
+  "noDissolveByName": true,
+  "sameNameSeparated": [
+    {
+      "id": "ne10m-139-river-213",
+      "region": "argentina-patagonia",
+      "class": "River",
+      "bounds": [
+        -68.014027,
+        -41.041681,
+        -62.801625,
+        -38.974786
+      ]
+    },
+    {
+      "id": "ne10m-389-lake-564",
+      "region": "uruguay",
+      "class": "Lake Centerline",
+      "bounds": [
+        -56.815745,
+        -32.910821,
+        -55.445221,
+        -32.42726
+      ]
+    },
+    {
+      "id": "ne10m-389-river-565",
+      "region": "uruguay",
+      "class": "River",
+      "bounds": [
+        -58.392242,
+        -33.424737,
+        -54.061106,
+        -31.378757
+      ]
+    },
+    {
+      "id": "ne10m-78-river-1133",
+      "region": "amazon",
+      "class": "River",
+      "bounds": [
+        -70.336171,
+        -3.170099,
+        -59.905426,
+        2.842231
+      ]
+    }
+  ],
+  "originalNamedFeatureCountInBounds": 172,
+  "retainedFeatureCount": 66,
+  "overviewDefaultFeatureCount": 32,
+  "file": {
+    "name": "major-rivers.json",
+    "bytes": 499978,
+    "sha256": "5f8b04a975820c4b8b25d0cfcc81f37e3a84a1f13d95271afe423eb03298af17"
+  },
+  "scriptSHA256": "52da45a0066e9c74f7b2eda220c41747c3ce1b6991e99aef3205d1d07d4d5784",
+  "validation": {
+    "allCoordinatesUnchanged": true,
+    "allIDsUnique": true,
+    "negroThreeGeographicSystemsSeparated": true,
+    "flowDirectionGenerated": false,
+    "connectingSegmentsAdded": false,
+    "basinPolygonsGenerated": false
+  },
+  "relationshipSources": [
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6813176/",
+      "citation": "Beltrao, Zuanon & Ferreira (2019), ZooKeys 881:53-89, doi:10.3897/zookeys.881.32055",
+      "license": "CC BY 4.0",
+      "use": "Negro drains into the Amazonas/Solimoes; Branco is a Negro tributary. Documentary named relation only; no routing vertices or basin polygons extracted."
+    },
+    {
+      "url": "https://agris.fao.org/search/en/providers/122535/records/65dff92d4c5aef494fe73a10",
+      "citation": "Sawakuchi et al. (2014), Methane emissions from Amazonian Rivers and their contribution to the global methane budget",
+      "use": "Primary study abstract names Negro, Madeira, Tapajos and Xingu as Amazon tributaries; no numeric flux or new geographic coordinates adopted."
+    }
+  ],
+  "missing": "Full routing topology, scientifically defined mainstem and authenticated basin boundaries remain unacquired. Tocantins is not assigned to Amazon. Same-name separation is geographic identity disambiguation, not inferred routing.",
+  "additionalSelection": "Usumacinta, Lempa original river/lake sections and Motagua retained for Central-American context, unchanged source geometry; San Juan original pair visible at overview."
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "name": "bdpi-localidades.xlsx",
+    "url": "https://bdpi.cultura.gob.pe/sites/default/files/archivos/paginas_internas/descargas/BDPI%20-%20Localidades%20ind%C3%ADgenas%20u%20originarios_5.xlsx",
+    "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "saved": false
+  },
+  {
+    "name": "bdpi-centros-poblados.xlsx",
+    "url": "https://bdpi.cultura.gob.pe/sites/default/files/archivos/paginas_internas/descargas/BDPI%20-%20Centros%20Poblados%20ind%C3%ADgenas%20u%20originarios_6.xlsx",
+    "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "saved": false
+  }
+]

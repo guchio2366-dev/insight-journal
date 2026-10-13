@@ -35,5 +35,5 @@ test('Actual industry layer changes keep the real legend and replace export note
 
 test('Population decoding remains with the new reading map and no comparison controls are injected',async()=>{
  const code=await populationBundle("import {initLatinReadingPopulation} from './src/scripts/atlas-latin-reading-population.ts';initLatinReadingPopulation(document.querySelector('[data-latin-field=population]'));"+layout,'iife','browser',true);
- const {w,legend}=await page('population','',code);try{assert.equal(w.document.querySelector('.latin-comparison-link'),null);assert.equal(w.document.querySelector('.latin-essential-legend'),null);assert.match(legend.textContent,/都市集積域.*2018/);await change(w,'[data-lp-layer-select]','spatial');assert.equal(legend.querySelectorAll('li').length,5);assert.match(legend.textContent,/人\/km²/);}finally{await w.happyDOM.close();}
+ const {w,legend}=await page('population','',code);try{assert.equal(w.document.querySelector('.latin-comparison-link'),null);assert.equal(w.document.querySelector('.latin-essential-legend'),null);assert.match(legend.textContent,/推計密度.*2020|2020.*推計密度/);await change(w,'[data-lp-layer-select]','spatial');assert.equal(legend.querySelectorAll('li').length,5);assert.match(legend.textContent,/人\/km²/);}finally{await w.happyDOM.close();}
 });

@@ -1,0 +1,331 @@
+{
+  "baseHead": "b448293230c56b1987cdf4fff0f1e7d330cdbe1f",
+  "workingTree": " M docs/review/europe-2026-10-12/after/climate-1920.png\n M docs/review/europe-2026-10-12/after/contours-1920.png\n M docs/review/europe-2026-10-12/after/crops-1920.png\n M docs/review/europe-2026-10-12/after/density-1920.png\n M docs/review/europe-2026-10-12/after/drainage-1920.png\n M docs/review/europe-2026-10-12/after/horticulture-1920.png\n M docs/review/europe-2026-10-12/after/livestock-1920.png\n M docs/review/europe-2026-10-12/after/religion-1920.png\n M docs/review/europe-2026-10-12/after/terrain-1920.png\n M docs/review/europe-2026-10-12/after/treecover-1920.png\n M docs/review/europe-2026-10-12/after/water-1920.png\n M scripts/europe/capture-fourth-review.mjs\n M src/lib/atlas-europe-explorer.ts\n M tests/browser/atlas-europe-handoff-review.mjs\n M tests/browser/atlas-europe-pc-review.mjs\n",
+  "records": [
+    {
+      "field": "nature",
+      "layer": "climate",
+      "viewport": {
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "scale": 1,
+        "map": {
+          "width": 1031,
+          "height": 798
+        }
+      },
+      "labels": [
+        "ロンドン",
+        "パリ",
+        "ベルリン",
+        "ワルシャワ",
+        "キーウ",
+        "ミンスク",
+        "キシナウ",
+        "モスクワ",
+        "ベオグラード",
+        "ブカレスト",
+        "ソフィア",
+        "ブダペスト",
+        "ウィーン",
+        "チューリヒ",
+        "マドリード",
+        "リスボン",
+        "ローマ",
+        "アテネ",
+        "ベルゲン",
+        "オスロ",
+        "ヴィスビュー",
+        "ヘルシンキ",
+        "タリン"
+      ]
+    },
+    {
+      "field": "agriculture",
+      "layer": "crops",
+      "viewport": {
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "scale": 1,
+        "map": {
+          "width": 1031,
+          "height": 736
+        }
+      },
+      "labels": [
+        "小麦",
+        "大麦",
+        "トウモロコシ",
+        "ジャガイモ",
+        "テンサイ",
+        "菜種"
+      ]
+    },
+    {
+      "field": "agriculture",
+      "layer": "livestock",
+      "viewport": {
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "scale": 1,
+        "map": {
+          "width": 1031,
+          "height": 736
+        }
+      },
+      "labels": [
+        "牛",
+        "豚",
+        "鶏",
+        "羊"
+      ]
+    },
+    {
+      "field": "agriculture",
+      "layer": "horticulture",
+      "viewport": {
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "scale": 1,
+        "map": {
+          "width": 1031,
+          "height": 736
+        }
+      },
+      "labels": [
+        "その他の野菜",
+        "温帯果樹",
+        "柑橘類"
+      ]
+    },
+    {
+      "field": "agriculture",
+      "layer": "treecover",
+      "viewport": {
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "scale": 1,
+        "map": {
+          "width": 1031,
+          "height": 736
+        }
+      },
+      "labels": [
+        "素材・エネルギーラッペーンランタ",
+        "コトカ・木材製品の港",
+        "ラウマ・パルプ加工"
+      ]
+    },
+    {
+      "field": "nature",
+      "layer": "water",
+      "viewport": {
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "scale": 1,
+        "map": {
+          "width": 1031,
+          "height": 680
+        }
+      },
+      "labels": [
+        "ドナウ川",
+        "ライン川",
+        "セーヌ川",
+        "テムズ川",
+        "ヴォルガ川",
+        "ドン川",
+        "ウラル川"
+      ]
+    },
+    {
+      "field": "nature",
+      "layer": "drainage",
+      "viewport": {
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "scale": 1,
+        "map": {
+          "width": 1031,
+          "height": 781
+        }
+      },
+      "labels": [
+        "ドナウ川",
+        "ライン川",
+        "セーヌ川",
+        "テムズ川",
+        "ヴォルガ川",
+        "ドン川",
+        "ドニプロ川",
+        "ドニエストル川",
+        "ヴィスワ川",
+        "オーデル川",
+        "エルベ川",
+        "ロワール川",
+        "ローヌ川",
+        "ポー川",
+        "エブロ川",
+        "ドゥエロ川",
+        "タホ川（テージョ川）",
+        "ガロンヌ川",
+        "ティサ川",
+        "ダウガヴァ川"
+      ]
+    },
+    {
+      "field": "nature",
+      "layer": "terrain",
+      "viewport": {
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "scale": 1,
+        "map": {
+          "width": 1031,
+          "height": 736
+        }
+      },
+      "labels": [
+        "アルプス山脈",
+        "スカンディナヴィア山脈",
+        "北ヨーロッパ平原",
+        "カンタブリア山脈",
+        "ピレネー山脈",
+        "中央山塊",
+        "カルパチア山脈",
+        "ディナル・アルプス",
+        "アペニン山脈",
+        "バルカン山脈",
+        "イベリア半島",
+        "イタリア半島",
+        "バルカン半島",
+        "シチリア島",
+        "北海",
+        "バルト海",
+        "英仏海峡",
+        "アドリア海",
+        "地中海",
+        "黒海",
+        "カスピ海",
+        "ジブラルタル海峡",
+        "ドーヴァー海峡",
+        "ミストラル",
+        "シロッコ",
+        "フェーン"
+      ]
+    },
+    {
+      "field": "nature",
+      "layer": "contours",
+      "viewport": {
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "scale": 1,
+        "map": {
+          "width": 1031,
+          "height": 781
+        }
+      },
+      "labels": [
+        "アルプス山脈",
+        "スカンディナヴィア山脈",
+        "北ヨーロッパ平原",
+        "カンタブリア山脈",
+        "ピレネー山脈",
+        "中央山塊",
+        "カルパチア山脈",
+        "ディナル・アルプス",
+        "アペニン山脈",
+        "バルカン山脈"
+      ]
+    },
+    {
+      "field": "population",
+      "layer": "density",
+      "viewport": {
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "scale": 1,
+        "map": {
+          "width": 1031,
+          "height": 781
+        }
+      },
+      "labels": [
+        "ロンドン",
+        "モスクワ",
+        "ローマ",
+        "パリ",
+        "キーウ",
+        "マドリード",
+        "ストックホルム",
+        "アムステルダム",
+        "ベルリン",
+        "アテネ",
+        "ウィーン",
+        "ジュネーヴ"
+      ]
+    },
+    {
+      "field": "population",
+      "layer": "religion",
+      "viewport": {
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "scale": 1,
+        "map": {
+          "width": 1031,
+          "height": 598
+        }
+      },
+      "labels": []
+    }
+  ],
+  "operations": [
+    {
+      "topic": "climate",
+      "selectRepeatClearHistoryReload": true,
+      "stableLabels": true,
+      "stableSvgExtent": true,
+      "lisbon": true
+    },
+    {
+      "topic": "crops",
+      "fixedProductLabels": true,
+      "selectClearOtherItemsRetained": true,
+      "noNationalTags": true
+    },
+    {
+      "topic": "livestock",
+      "fixedProductLabels": true,
+      "selectClearOtherItemsRetained": true,
+      "noNationalTags": true
+    },
+    {
+      "topic": "horticulture",
+      "fixedProductLabels": true,
+      "selectClearOtherItemsRetained": true,
+      "noNationalTags": true
+    },
+    {
+      "topic": "treecover",
+      "noClickCircle": true
+    },
+    {
+      "topic": "contours",
+      "noClickCircle": true
+    }
+  ],
+  "errors": []
+}

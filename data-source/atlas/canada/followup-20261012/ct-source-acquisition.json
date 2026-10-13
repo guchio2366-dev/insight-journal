@@ -1,0 +1,84 @@
+{
+  "url": "https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/details/download-telecharger/comp/getFile.cfm?LANG=E&GEONO=007&FILETYPE=CSV",
+  "requestedAtUtc": "2026-10-12T10:44:19Z",
+  "purpose": "Official 2021 Census Profile CMA/CA and CT CSV; ordinary HTTPS only",
+  "status": "unavailable",
+  "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>",
+  "originResponseReceived": false,
+  "retryOrAlternateAcquisitionUsed": false,
+  "ctValuesAcquired": false,
+  "ctBoundaryAcquired": false,
+  "heldSourceCoverage": {
+    "file": "data-source/atlas/canada-demographics-v2/profile-selected.csv.gz",
+    "sha256": "f79bee012604679b2ebec3abbb894848a4734dd825f89074ca341dbe06c1af3f",
+    "rows": 14740,
+    "geographies": 335,
+    "ctGeographies": 0,
+    "religionTopLevelCellsIncludingDenominators": 3350,
+    "religionDenominator": {
+      "characteristicId": "1949",
+      "name": "Total - Religion for the population in private households - 25% sample data"
+    },
+    "religionCharacteristicIdsResolvedFromActualNames": [
+      {
+        "characteristicId": "1950",
+        "name": "Buddhist"
+      },
+      {
+        "characteristicId": "1951",
+        "name": "Christian"
+      },
+      {
+        "characteristicId": "1967",
+        "name": "Hindu"
+      },
+      {
+        "characteristicId": "1968",
+        "name": "Jewish"
+      },
+      {
+        "characteristicId": "1969",
+        "name": "Muslim"
+      },
+      {
+        "characteristicId": "1970",
+        "name": "Sikh"
+      },
+      {
+        "characteristicId": "1971",
+        "name": "Traditional (North American Indigenous) spirituality"
+      },
+      {
+        "characteristicId": "1972",
+        "name": "Other religions and spiritual traditions"
+      },
+      {
+        "characteristicId": "1973",
+        "name": "No religion and secular perspectives"
+      }
+    ],
+    "ethnicCulturalOriginRows": 0,
+    "ethnicCulturalOriginDenominator": null,
+    "existingEthnicityVariable": "Visible minority, with Indigenous identity retained separately; not ethnic or cultural origin."
+  },
+  "missingForRequestedMap": [
+    "Official GEONO007 ZIP bytes, header/dictionary and filtered CT counts with flags",
+    "2021 CT boundary geometry joined by exact DGUID; CTUID retained as text",
+    "Ethnic/cultural-origin actual response rows and their own denominator for CT and coarse geographies"
+  ],
+  "supportedPartialDisplay": "Existing CD/CMA-wide composition labels and coarse source comparisons only. Within-region settlement distribution remains unknown. No administrative smoothing, individual locations, population-grid allocation, or exclusive ancestry composition is inferred.",
+  "sourceReferences": [
+    {
+      "url": "https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/details/download-telecharger.cfm?Lang=E",
+      "role": "Official profile download index provided for acquisition"
+    },
+    {
+      "url": "https://open.canada.ca/data/en/dataset/750e6035-adf8-4426-966f-4c25b12a999e?res_page=2",
+      "role": "Official catalogue confirms GEONO007 CT/CMA/CA product in parent source review; current reader returned 403"
+    },
+    {
+      "url": "https://www.statcan.gc.ca/en/developers",
+      "role": "Official page confirms Profile extraction API; detailed API syntax was unavailable and was not guessed"
+    }
+  ]
+}

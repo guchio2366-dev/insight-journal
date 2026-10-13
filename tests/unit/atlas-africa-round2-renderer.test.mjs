@@ -34,7 +34,25 @@ test('religion is a complete country excerpt and language points stay separate f
  paint({topic:'language'});await ready();assert.equal(root.querySelectorAll('[data-africa-language-point]').length,2222);assert.equal(root.querySelectorAll('[data-africa-religion-country]').length,0);
  paint({topic:'ethnicity'});assert.equal(root.querySelectorAll('[data-africa-language-point]').length,0);
 }));
+test('third review keeps borders behind natural names, adds rain relief context and separates wind captions',async()=>fixture(async({root,paint,ready})=>{
+ paint({field:'nature',topic:'water',water:'river'});await ready();
+ const nodes=[...root.querySelector('[data-africa-actual-layer]').children],lastBorder=Math.max(...nodes.map((node,i)=>node.hasAttribute('data-africa-country-border')?i:-1));
+ assert.equal(root.querySelectorAll('[data-africa-country-border]').length,55);
+ for(const label of root.querySelectorAll('[data-africa-natural-label]'))assert.ok(nodes.indexOf(label)>lastBorder,'the glyph halo paints over country lines');
+ const anchors=[...root.querySelectorAll('[data-africa-natural-label]')].map(n=>[n.dataset.africaNaturalLabel,n.getAttribute('x'),n.getAttribute('y')]);
+ paint({river:'nile'});assert.deepEqual([...root.querySelectorAll('[data-africa-natural-label]')].map(n=>[n.dataset.africaNaturalLabel,n.getAttribute('x'),n.getAttribute('y')]),anchors,'selection does not move names');
+ paint({water:'rain'});await ready();assert.equal(root.querySelectorAll('[data-africa-natural-kind=terrain]').length,12);
+ for(const topic of ['terrain','elevation']){paint({topic});await ready();assert.equal(root.querySelectorAll('[data-africa-context-neighbour]').length,6);assert(root.querySelector('[data-africa-arabian-context]').textContent.includes('アラビア半島'));}
+ paint({topic:'terrain'});await ready();for(const label of root.querySelectorAll('[data-africa-natural-kind=wind]'))assert.match(label.textContent,/^風：/);
+}));
+test('population locators are distinct from quantities and Cape Town keeps bottom padding with desert context',async()=>fixture(async({root,paint,ready})=>{
+ paint({field:'population',topic:'distribution'});await ready();
+ assert.equal(root.querySelectorAll('[data-africa-population-desert]').length,3);
+ assert.equal(root.querySelectorAll('[data-africa-population-locator]').length,13);
+ for(const locator of root.querySelectorAll('[data-africa-population-locator]'))assert.equal(locator.getAttribute('fill'),'#fffdf8');
+ assert.ok(Number(root.querySelector('[data-africa-population-city="ケープタウン"]').getAttribute('y'))<897,'name baseline stays away from the 907-unit bottom');
+}));
 test('industry commodity URL round trips all eighteen categories and clears it outside industry',()=>{
- for(const commodity of africaIndustryCommodities){const state=readState('?field=industry&industryCommodity='+commodity.id);assert.equal(state.industryCommodity,commodity.id);assert.deepEqual(readState(writeState({...state},new URL('https://example.com/')).search),state);const next={...state,field:'nature'};writeState(next,new URL('https://example.com/'));assert.equal(next.industryCommodity,'');}
+ for(const commodity of africaIndustryCommodities){const state=readState('?field=industry&industryCommodity='+commodity.id);assert.equal(state.industryCommodity,commodity.id==='automotive-aerospace'?'automotive':commodity.id==='urban-services'?'finance':commodity.id);assert.deepEqual(readState(writeState({...state},new URL('https://example.com/')).search),state);const next={...state,field:'nature'};writeState(next,new URL('https://example.com/'));assert.equal(next.industryCommodity,'');}
  assert.equal(readState('?field=industry&industryCommodity=__proto__').industryCommodity,'');
 });

@@ -26,6 +26,8 @@ const forestItems=[['1861','丸太材'],['1872','製材']] as const;
 const forestRows=forestItems.flatMap(([item,label])=>studyCountries.map(([code,name])=>({item:label,name,value:faoValue(code,item),flag:statistics.countries[code]?.observations.find((o:{domain:string;item:string;element:string;year:number;flag:string})=>o.domain==='Forestry'&&o.item===item&&o.element==='Production'&&o.year===2024)?.flag,share:shares.series.find(s=>s.id===(item==='1861'?'roundwood-production':'sawnwood-production'))?.years.find(y=>y.year===2024)?.countries[code]?.share})));
 const tradeItems=southeastExportExamples;
 const exportRows=tradeItems.map(([code,hs,label])=>({name:countryNames[code],hs,label,value:trade.countries[code].products[hs]?.X as number|undefined}));
+const riceTradeRows=Object.entries(countryNames).map(([code,name])=>({code,name,imports:trade.countries[code]?.products['1006']?.M as number|undefined,exports:trade.countries[code]?.products['1006']?.X as number|undefined}));
+const riceTradeAmount=(value:number|undefined)=>value===undefined?'欠測':value===0?'0':value<100000?'<0.1':(value/1e6).toLocaleString('ja-JP',{maximumFractionDigits:1});
 const woodExportRows=studyCountries.map(([code,name])=>({name,value:trade.countries[code].products['44']?.X as number|undefined}));
 const riceProducers=Object.keys(countryNames).map(code=>({code,name:countryNames[code],value:faoValue(code,'27')})).filter((r):r is {code:string;name:string;value:number}=>r.value!==undefined).sort((a,b)=>b.value-a.value).slice(0,5);
 const riceMax=riceProducers[0]?.value??1;
@@ -65,6 +67,9 @@ const pieStyle=`conic-gradient(${[...topPartners.map((row,index)=>({share:row.sh
  <summary>3か国の主要な農林産品の輸出額を比べる</summary>
  <p>インドネシアのパーム油、ベトナムのコーヒーと木材製品、タイの米と天然ゴムについて、2023年の商品輸出額を同じ米ドル単位で比べます。収穫物と加工品、国際商品分類の4桁と2桁が混在するため、合計した順位ではありません。</p>
  <table><caption>UN Comtrade、2023年、輸出額（億米ドル）。HS44は木材・木材製品・木炭の2桁章</caption><thead><tr><th scope="col">国</th><th scope="col">商品</th><th scope="col">HS</th><th scope="col">億米ドル</th></tr></thead><tbody>{exportRows.map(row=><tr><th scope="row">{row.name}</th><td>{row.label}</td><td>{row.hs}</td><td>{dollars(row.value)}</td></tr>)}</tbody></table>
+ <h3>米の国別輸出・輸入報告額</h3><p>同じ2023年のHS1006「米」。輸出と輸入は別の方向で、各国の対世界報告額です。国内で消費された量や、どの輸出国からどの輸入国へ届いたかは分かりません。</p>
+ <table data-southeast-rice-trade><caption>UN Comtrade、2023年、HS1006、百万米ドル。輸出10/11か国、輸入11/11か国に値</caption><thead><tr><th scope="col">報告国</th><th scope="col">輸出</th><th scope="col">輸入</th></tr></thead><tbody>{riceTradeRows.map(row=><tr><th scope="row">{row.name}</th><td>{riceTradeAmount(row.exports)}</td><td>{riceTradeAmount(row.imports)}</td></tr>)}</tbody></table>
+ <p>タイ・ベトナムは輸出報告額が大きく、インドネシア・フィリピンは輸入報告額が大きい一方、ベトナム自身にも輸入があります。11か国分を足すと域内の越境と再輸出を含むため、地域の純供給量にはなりません。東ティモールの輸出欄は欠測で、0ではありません。</p>
  <p>生産量から輸出額を差し引いて国内向け数量を求めることはできません。品目ごとの輸出相手は保持した原資料にないため、この表は輸出先の内訳を表しません。</p>
  <p class="source">出典：<a href="https://comtradeplus.un.org/">UN Comtrade</a>、2023年、各国報告の輸出額（current USD）。<a href="https://uncomtrade.org/docs/policy-on-use-and-re-dissemination/">利用・再配布方針</a>。FAOSTATの2024年生産量とは年・単位が異なります。</p>
 </details>
@@ -122,6 +127,15 @@ const pieStyle=`conic-gradient(${[...topPartners.map((row,index)=>({share:row.sh
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mountRegionalStatistics,{once:true});else mountRegionalStatistics();
 </script>
 <style>
+ :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-climate-key){position:absolute;left:3%;top:57%;z-index:4;display:grid;gap:2px;width:max-content;max-width:145px;padding:5px 7px;background:#eaf4f4e8;border:1px solid #7da5ad;color:#234c58;font:11px/1.35 var(--sans);pointer-events:none}
+ :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-climate-key strong){font-size:11px}
+ :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-climate-key[hidden]){display:none!important}
+ :global(.asia-atlas-root[data-region="southeast-asia"] .asia-marine-label){border:0;background:#e8f2f3b8;color:#386778;font:italic 11px var(--serif);box-shadow:none;padding:1px 3px;pointer-events:none}
+ :global(.asia-atlas-root[data-region="southeast-asia"] .asia-marine-process-label){border:1px solid #769aa0;background:#eff7f6df;color:#245867;font:600 10px/1.25 var(--sans);white-space:pre-line;box-shadow:none;padding:2px 4px;pointer-events:none}
+ :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-region-views){display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:6px 0 10px}
+ :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-region-views button){min-height:34px;padding:5px 12px;border:1px solid #8da6a7;background:#f4f8f6;color:#254b51;font:700 12px var(--sans);cursor:pointer}
+ :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-region-views button[aria-pressed="true"]){background:#245c67;color:#fff}
+ :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-region-views span){font:11px var(--sans);color:var(--ink-soft)}
  [data-southeast-farm-single]{width:100%;min-height:48px;padding:12px;margin:12px 0;border:1px solid #315b61;background:#edf3f1;color:#264c52;font:inherit;font-size:13px;text-align:left;cursor:pointer}
  :global([data-field-national]:not([data-field-national="agriculture"])) .southeast-crop-priority,:global([data-field-national]:not([data-field-national="agriculture"])) .southeast-world-share{display:none}
  :global(.asia-atlas-root[data-southeast-farm-topic="forest"] [data-field-national]) :is(.southeast-crop-priority,.southeast-world-share,[data-southeast-trade-reading]){display:none}
@@ -137,7 +151,8 @@ const pieStyle=`conic-gradient(${[...topPartners.map((row,index)=>({share:row.sh
  :global(.southeast-forest-connections h2){font-size:20px;margin:0 0 10px}.southeast-forest-connections ul{padding-left:18px}.southeast-forest-connections li{margin:5px 0}.southeast-forest-connections table{width:100%;border-collapse:collapse;font-size:13px}.southeast-forest-connections th,.southeast-forest-connections td{padding:6px 4px;text-align:right;border-bottom:1px solid #d4d8cb}.southeast-forest-connections th:first-child{text-align:left}
  @media(min-width:960px){
   :global(.asia-atlas-root[data-region="southeast-asia"] .asia-layout:has(>.southeast-map-and-reading)){display:block}
-  :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-map-and-reading){display:grid;grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px;align-items:start}
+  :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-map-and-reading){display:grid;grid-template-columns:minmax(0,1fr) clamp(300px,24vw,345px);gap:12px;align-items:start}
+  :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-map-and-reading .asia-map-frame){height:min(730px,var(--asia-map-available-height,730px))!important;min-height:460px!important;max-height:none!important;aspect-ratio:auto!important}
   :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-map-and-reading>.atlas-map-column){grid-column:1;min-width:0}
   :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-map-and-reading>.asia-reading-panel){grid-column:2;position:sticky;top:12px;align-self:start;height:var(--asia-reading-height,460px);max-height:calc(100dvh - 24px);min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;scrollbar-gutter:stable}
   :global(.asia-atlas-root[data-region="southeast-asia"] .asia-layout>.asia-farm-connections){width:100%;margin:14px 0 8px}

@@ -81,3 +81,5 @@
 }
 
 @media(min-width:960px) and (max-width:1199px){.atlas-desktop-shell .canada-industry-pilot[data-field] .atlas-primary-grid{grid-template-columns:minmax(0,1fr)}.ca-pilot-reading{padding-left:0}.ca-pilot-statistics{gap:10px}}
+
+.ca-pilot-map-label[data-sector=services]{max-width:168px}

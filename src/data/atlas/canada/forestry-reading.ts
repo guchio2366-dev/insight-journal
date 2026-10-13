@@ -3,7 +3,7 @@ export const forestrySources={cover:'https://open.canada.ca/data/en/dataset/ee15
 export const canadaForestRegions=[
  {id:'bc',name:'BC（ブリティッシュコロンビア州）',province:'British Columbia',point:[-124,54],takeaway:'海側と山地の生育条件を分け、木材を運べる条件まで読む。',body:'太平洋側のBCには沿岸・山地など異なる森林地域があります。Vancouverの気候を入口に、冬の気温と降水の季節配分を確認し、山地の向こうまで同じ条件と考えないことが大切です。州の生態分類も、気候だけでなく土壌・地形・植生と場所の履歴を組み合わせます。針葉樹林の色が続いていても、樹種、成長速度、伐採のしやすさが同じとは限りません。',source:forestrySources.ecology},
  {id:'quebec',name:'ケベック州',province:'Quebec',point:[-73.5,51.5],takeaway:'北方の針葉樹林と、南の混交林を一つの州の中で追う。',body:'ケベック州では北方の森林と、南の五大湖・セントローレンス地域の森林を位置で分けて読みます。広い森林被覆が、そのまま同じ樹種や加工品を意味するわけではありません。州別表では木材製品と紙製品の製造品収入を切り替え、森林という自然の分布と加工活動の規模を区別しましょう。',source:forestrySources.forestTypes},
- {id:'ontario',name:'オンタリオ州',province:'Ontario',point:[-85,51],takeaway:'針葉樹林・混交林・落葉広葉樹林の場所と、加工品の分類を分ける。',body:'オンタリオ州の北方と五大湖周辺では森林の構成が変わり、南西部には落葉広葉樹を中心とする森林地域もあります。分類を一つずつ表示すると、州を一色で塗る地図では見えない位置の違いを追えます。ただしこの図は樹種ごとの分布図ではなく、加工場の所在地も示していません。',source:forestrySources.forestTypes}
+ {id:'ontario',name:'オンタリオ州',province:'Ontario',point:[-85,51],takeaway:'針葉樹林・混交林・落葉広葉樹林の場所と、加工品の分類を分ける。',body:'オンタリオ州の北方と五大湖周辺では森林の構成が変わり、南西部には落葉広葉樹を中心とする森林地域もあります。分類を強調すると、他の森林分類も残したまま位置の違いを追えます。ON北西部の製材案内と合わせ、森林被覆と加工の場所を区別します。森林色面は樹種ごとの分布や伐採区画ではなく、加工の案内点も全施設の所在地を網羅するものではありません。',source:forestrySources.forestTypes}
 ] as const;
 export const canadaForestryReading=[
  {title:'木が育つ条件と、木材を生産できる条件は違う',body:'樹木は気温や水、土壌、地形に応じて育ちます。BCの生態分類では、こうした条件と植生、場所の履歴を合わせて森林を捉えています。森林の分布を自然環境で確かめたら、次に管理、作業道、機械、安全、伐採後の更新を考えます。木があるだけで、安価に伐って運べるとは決まりません。',source:forestrySources.ecology},

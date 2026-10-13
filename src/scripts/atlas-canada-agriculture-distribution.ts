@@ -29,9 +29,9 @@ export async function initCanadaAgricultureDistribution(root:HTMLElement){
  function readState(){
   const q=new URL(location.href).searchParams,metric=q.get('agriFocus'),ccs=q.get('agriCcs'),parts=(q.get('agriCamera')??'').split(','),c=parts.map(Number);
   const layers:CanadaAgricultureLayer[]=q.get('agriLayers')==='none'?[]:q.get('agriLayers')==='crop'?['crop']:q.get('agriLayers')==='livestock'?['livestock']:['crop','livestock'];
-  return {metric:ids.includes(metric)?metric:null,ccs:featureById.has(ccs??'')?ccs:null,layers,camera:parts.length===3&&parts.every(p=>p.trim()!=='')&&c.every(Number.isFinite)&&c[0]>=-300&&c[0]<=1200&&c[1]>=-2000&&c[1]<=2000&&c[2]>=.2&&c[2]<=40?c:southCamera.slice()};
+  return {metric:ids.includes(metric)&&layers.includes(canadaAgricultureProductLayer(metric as CanadaAgricultureIndicatorId))?metric:null,ccs:featureById.has(ccs??'')?ccs:null,layers,camera:parts.length===3&&parts.every(p=>p.trim()!=='')&&c.every(Number.isFinite)&&c[0]>=-300&&c[0]<=1200&&c[1]>=-2000&&c[1]<=2000&&c[2]>=.2&&c[2]<=40?c:southCamera.slice()};
  }
- let state=readState();
+ let state=readState();if(new URL(location.href).searchParams.has('agriFocus')&&!state.metric){const normalized=new URL(location.href);normalized.searchParams.delete('agriFocus');history.replaceState(null,'',normalized);}
  function persist(replace=false){
   const u=new URL(location.href);u.searchParams.set('item','overview');for(const key of ['agriFocus','agriCcs','agriCamera','agriLayers'])u.searchParams.delete(key);
   if(state.metric)u.searchParams.set('agriFocus',state.metric);if(state.ccs)u.searchParams.set('agriCcs',state.ccs);
@@ -50,18 +50,31 @@ export async function initCanadaAgricultureDistribution(root:HTMLElement){
  const overlaps=(a:number[],b:number[])=>a[0]<b[2]&&a[2]>b[0]&&a[1]<b[3]&&a[3]>b[1];
  function placeLabels(visible:any[]){
   const boxes:number[][]=[],placements:any[]=[],first=new Set<string>();
-  const ordered=[...visible].sort((a,b)=>Number(b.product===state.metric)-Number(a.product===state.metric));
+  const ordered=[...visible];
   const representatives=ordered.filter(belt=>{if(first.has(belt.product))return false;first.add(belt.product);return true;});
   for(const item of beltItems)item.element.hidden=true;
-  for(const item of [...representatives,...ordered.filter(belt=>!representatives.includes(belt))]){
+  const chosen=[...representatives];for(const item of ordered.filter(belt=>!representatives.includes(belt))){if(chosen.filter(b=>b.product===item.product).length<2&&chosen.filter(b=>b.product===item.product).every(b=>Math.hypot(screen(b.point)[0]-screen(item.point)[0],screen(b.point)[1]-screen(item.point)[1])>200))chosen.push(item);}
+  for(const item of chosen){
    const p=screen(item.point),el=item.element;if(p[0]<4||p[0]>size.width-4||p[1]<4||p[1]>size.height-4)continue;
    el.hidden=false;el.setAttribute('aria-pressed',String(item.product===state.metric));el.style.opacity=String(opacity(item.product));
    const w=el.offsetWidth,h=el.offsetHeight;
-   const offsets=[[0,0],[0,-h-4],[0,h+4],[-w*.55,-h*.55],[w*.55,h*.55],[-w*.55,h*.55],[w*.55,-h*.55],[0,-2*h-7],[0,2*h+7]];
+   const offsets=[[0,0],[0,-h-4],[0,h+4],[-w*.55,-h*.55],[w*.55,h*.55],[-w*.55,h*.55],[w*.55,-h*.55],[0,-2*h-7],[0,2*h+7],[0,-3*h-10],[0,3*h+10],[-w,0],[w,0]];
    const found=offsets.map(([dx,dy])=>[Math.max(5,Math.min(size.width-w-5,p[0]+dx-w/2)),Math.max(5,Math.min(size.height-h-32,p[1]+dy-h/2))]).find(([x,y])=>!boxes.some(b=>overlaps([x-3,y-2,x+w+3,y+h+2],b)));
    if(!found){el.hidden=true;continue;}const [x,y]=found;el.style.left=x+'px';el.style.top=y+'px';boxes.push([x,y,x+w,y+h]);placements.push({id:item.id,product:item.product,box:[x,y,x+w,y+h],point:p});
   }
   return placements;
+ }
+ function placeReferenceLabels(productLabels:any[]){
+  ctx!.font='500 13px sans-serif';ctx!.textAlign='center';
+  const occupied=productLabels.map(p=>p.box),references:any[]=[];
+  for(const [name,coord]of [['プレーリー',[-107,56.6]],['オンタリオ南部',[-81.8,41.7]]] as [string,number[]][]){
+   const point=screen(project(coord));if(point[0]<0||point[0]>size.width||point[1]<0||point[1]>size.height)continue;
+   const metrics=ctx!.measureText?.(name),w=metrics?.width??name.length*13,left=metrics?.actualBoundingBoxLeft??w/2,right=metrics?.actualBoundingBoxRight??w/2,ascent=metrics?.actualBoundingBoxAscent??12,descent=metrics?.actualBoundingBoxDescent??3;
+   const candidates=[];for(const dy of [0,-28,28,-56,56])for(const dx of [0,-90,90,-150,150])candidates.push([point[0]+dx,point[1]+dy]);
+   const placed=candidates.map(([x,y])=>({x,y,box:[x-left-3,y-ascent-3,x+right+3,y+descent+3]})).find(p=>p.box[0]>=5&&p.box[2]<=size.width-5&&p.box[1]>=5&&p.box[3]<=size.height-35&&!occupied.some((b:number[])=>overlaps([p.box[0]-5,p.box[1]-5,p.box[2]+5,p.box[3]+5],b)));
+   if(!placed)continue;occupied.push(placed.box);references.push({name,point,box:placed.box,x:placed.x,y:placed.y});
+  }
+  return references;
  }
  function draw(){
   const started=performance.now(),{width:w,height:h,dpr,scale}=size;ctx!.setTransform(dpr,0,0,dpr,0,0);ctx!.clearRect(0,0,w,h);ctx!.fillStyle='#e4eff0';ctx!.fillRect(0,0,w,h);
@@ -72,15 +85,17 @@ export async function initCanadaAgricultureDistribution(root:HTMLElement){
   const ordered=[...visible].sort((a,b)=>Number(a.product===state.metric)-Number(b.product===state.metric));
   for(const belt of ordered){
    const livestock=canadaAgricultureProductLayer(belt.product)==='livestock',selected=belt.product===state.metric;
-   ctx!.fillStyle=colors[belt.product];ctx!.globalAlpha=(selected?.38:livestock?.10:.24)*opacity(belt.product);ctx!.fill(belt.path,'evenodd');
+   ctx!.fillStyle=colors[belt.product];ctx!.globalAlpha=(selected?.24:livestock?.025:.09)*opacity(belt.product);ctx!.fill(belt.path,'evenodd');
    ctx!.globalAlpha=selected?1:state.metric?.58:.85;ctx!.strokeStyle=colors[belt.product];ctx!.lineWidth=(selected?2.7:livestock?1.6:1)/(scale*state.camera[2]);ctx!.setLineDash(livestock?[5/(scale*state.camera[2]),3/(scale*state.camera[2])]:[]);ctx!.stroke(belt.path);
   }
   ctx!.restore();ctx!.globalAlpha=1;ctx!.setLineDash([]);
   if(state.ccs){const feature=featureById.get(state.ccs);ctx!.strokeStyle='#fffef5';ctx!.lineWidth=4/(scale*state.camera[2]);ctx!.stroke(feature.path);ctx!.strokeStyle='#183e58';ctx!.lineWidth=1.8/(scale*state.camera[2]);ctx!.stroke(feature.path);}
   ctx!.restore();const placements=placeLabels(visible);
+  for(const placement of placements){const [x,y]=placement.point,box=placement.box;ctx!.strokeStyle=colors[placement.product];ctx!.lineWidth=.8;ctx!.globalAlpha=.8;ctx!.beginPath();ctx!.moveTo(x,y);ctx!.lineTo(Math.max(box[0],Math.min(box[2],x)),Math.max(box[1],Math.min(box[3],y)));ctx!.stroke();}
+  ctx!.globalAlpha=1;const referenceLabels=placeReferenceLabels(placements);ctx!.fillStyle='#4d6264';for(const label of referenceLabels)ctx!.fillText(label.name,label.x,label.y);
   $('display-meaning').textContent='色面＝作物、破線＝畜産の主要生産帯（2021年の公式分布を汎化）。色の濃さや帯の面積は数量を表しません。養鶏は肉用・採卵用を含みます。';
   canvas.setAttribute('aria-label',state.metric?names[state.metric]+'を強調し、他の生産帯を保持した地図':'作物と畜産の特徴的な生産帯を重ねた地図');
-  lastStats={granularity:'editorial-production-belts',productionBelts:visible.map((belt:any)=>({id:belt.id,product:belt.product,sourceIds:belt.sourceIds})),labels:placements,visibleLayers:state.layers.slice(),visibleSymbols:0,coloredCcs:0,specialtyDots:0,livestockBadges:0,retainedCcs:features.length,retainedValues:features.length*ids.length,sourceCcsCells:features.length*ccsIds.length,provinceOnlyMetrics:provinceOnlyIds.slice(),metrics:ids.slice(),opacities:Object.fromEntries(ids.map((id:CanadaAgricultureIndicatorId)=>[id,opacity(id)])),selected:state.ccs,view:'south-or-detail',drawMs:performance.now()-started,backingStore:{width:canvas.width,height:canvas.height,dpr}};
+  lastStats={granularity:'editorial-production-belts',productionBelts:visible.map((belt:any)=>({id:belt.id,product:belt.product,sourceIds:belt.sourceIds})),labels:placements,referenceLabels,visibleLayers:state.layers.slice(),visibleSymbols:0,coloredCcs:0,specialtyDots:0,livestockBadges:0,retainedCcs:features.length,retainedValues:features.length*ids.length,sourceCcsCells:features.length*ccsIds.length,provinceOnlyMetrics:provinceOnlyIds.slice(),metrics:ids.slice(),opacities:Object.fromEntries(ids.map((id:CanadaAgricultureIndicatorId)=>[id,opacity(id)])),selected:state.ccs,view:'south-or-detail',drawMs:performance.now()-started,backingStore:{width:canvas.width,height:canvas.height,dpr}};
   canvas.dataset.ready='true';root.querySelector<HTMLElement>('[data-overview-fallback]')!.hidden=true;
  }
  function schedule(){if(size.width>0&&!raf)raf=requestAnimationFrame(()=>{raf=0;draw();});}
@@ -148,7 +163,7 @@ function renderList() {
   $<HTMLButtonElement>("next").disabled = (pageIndex + 1) * 12 >= matches.length;
 }
 function update(patch:any,{replace=false,cameraOnly=false}={}){
- state={...state,...patch};persist(replace);if(!cameraOnly){renderReading();renderList();for(const input of root.querySelectorAll<HTMLInputElement>('[data-agri-layer]'))input.checked=state.layers.includes(input.dataset.agriLayer as CanadaAgricultureLayer);}schedule();
+ state={...state,...patch};if(state.metric&&!state.layers.includes(canadaAgricultureProductLayer(state.metric as CanadaAgricultureIndicatorId)))state.metric=null;persist(replace);if(!cameraOnly){renderReading();renderList();for(const input of root.querySelectorAll<HTMLInputElement>('[data-agri-layer]'))input.checked=state.layers.includes(input.dataset.agriLayer as CanadaAgricultureLayer);}schedule();
 }
 function selectMetric(metric:string|null){
  const layer=metric?canadaAgricultureProductLayer(metric as CanadaAgricultureIndicatorId):null;

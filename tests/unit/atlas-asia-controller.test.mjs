@@ -126,6 +126,7 @@ async function setup(query = '', options = {}) {
     physicalBase:'/assets/physical/',physical:{width:1,height:1,bounds3857:[west,south,east,north],grid:'elevation.gz',image:'terrain.png',contours:'contours.png',water:'water.json',imageCoordinates:[[72,56],[155,56],[155,17],[72,17]],waterFeatures:[{id:'rivers-1',name:'試験河川',kind:'rivers',countries:['CHN'],bounds:[90,30,120,40]}]},
     physicalFocus:[{id:'basin',region:'east-asia',country:'CHN',name:'盆地',coordinates:[100,35],reading:'周囲の山地と比較します。'}],
   });
+  if(options.climateReference){const conf=JSON.parse(q('[data-asia-config]').textContent);conf.physicalFocus.push({id:'tibetan-plateau',region:'east-asia',country:'CHN',name:'チベット高原',coordinates:[130,45],reading:'参照位置'});q('[data-asia-config]').textContent=JSON.stringify(conf);}
   if(options.population){
     const conf=JSON.parse(q('[data-asia-config]').textContent);
     const raster={width:1,height:1,bounds4326:[72,17,155,56],bounds3857:[west,south,east,north],imageCoordinates:[[72,56],[155,56],[155,17],[72,17]],image:'density.png',grid:'density.gz',sourceCellKm:5};
@@ -190,6 +191,7 @@ async function setup(query = '', options = {}) {
     root.insertAdjacentHTML('beforeend','<div data-farm-switches><button data-farm-toggle="crop" aria-pressed="true"><span></span></button><button data-farm-toggle="livestock" aria-pressed="true"><span></span></button></div><button data-farm-water></button><div data-map-annotations></div><section data-farm-overview-reading></section><section data-farm-overview-legend></section><input type="checkbox" data-farm-kind="crop" checked><input type="checkbox" data-farm-kind="livestock" checked><button data-farm-choice="overview"></button><button data-farm-choice="wheat"></button>');
     q('[data-farming-topic]').insertAdjacentHTML('afterbegin','<option value="overview"></option>');
   }
+  if(options.climateReference)Object.defineProperties(q('[data-map-annotations]'),{clientWidth:{value:600},clientHeight:{value:400}});
   if(options.eastRiverName){
    const conf=JSON.parse(q('[data-asia-config]').textContent);conf.physical.waterFeatures=[{id:'rivers-213',name:'Yellow',label:'黄河',kind:'rivers',countries:['CHN'],bounds:[95,32,119,41]}];conf.farmInsight={rivers:['rivers-213']};q('[data-asia-config]').textContent=JSON.stringify(conf);
    Object.defineProperties(q('[data-map-annotations]'),{clientWidth:{value:600},clientHeight:{value:400}});
@@ -648,29 +650,15 @@ test('都市形状の取得中に分野を変えても古い人口図を重ね�
  }finally{await window.happyDOM.close();}
 });
 
-test('地形は必要時だけ読み、負の標高と主題・地点・カメラを比較復帰で保持する',async()=>{
-  const {window,q,requests}=await setup();
-  try{
-    assert.equal(window.__map.layers['asia-climate'].paint['raster-opacity'],1,'display colors match the legend without blending');
-    assert.equal(q('[data-natural-topic="climate"]').getAttribute('aria-pressed'),'true');
-    assert.equal(requests.some(r=>r.includes('/physical/')),false);
-    q('[data-natural-topic="terrain"]').click();
-    assert.equal(q('[data-natural-topic="terrain"]').getAttribute('aria-pressed'),'true');
-    assert.equal(q('[data-natural-topic="climate"]').getAttribute('aria-pressed'),'false');
-    q('[data-physical-focus]').value='basin';q('[data-physical-focus]').dispatchEvent(new window.Event('change'));
-    await until(()=>q('[data-physical-value]').textContent.includes('-75'),'negative elevation');
-    assert.equal(q('[data-climate-legend]').hidden,true);assert.equal(q('[data-physical-reading]').hidden,false);
-    assert.equal(q('[data-map-city="tokyo"]').hidden,true);
-    assert.equal(window.__map.layers['asia-terrain'].layout.visibility,'visible');
-    q('[data-compare="agriculture"]').click();
-    await until(()=>q('[data-rice-value]').textContent.includes('123.4'),'comparison rice value');
-    assert.equal(window.__map.layers['asia-terrain'].layout.visibility,'none');
-    q('[data-comparison-back]').click();
-    assert.equal(new URL(window.location.href).searchParams.get('topic'),'terrain');
-    assert.equal(new URL(window.location.href).searchParams.get('detail'),'basin');
-    assert.equal(window.__map.center.lng,100);assert.equal(window.__map.zoom,5);
-    assert.match(q('[data-physical-value]').textContent,/-75/);assert.equal(window.__maps.length,1);
-  }finally{await window.happyDOM.close();}
+test('東アジアの標高図は地点・国・旧着目点を解除し、背景選択を行わない',async()=>{
+ const {window,q,requests}=await setup('?topic=terrain&detail=basin&place=CHN&at=100,35&lng=118&lat=32&z=3.2');
+ try{
+  await until(()=>window.__map.layers['asia-terrain'].layout.visibility==='visible','elevation background');
+  const url=new URL(window.location.href);for(const key of ['place','detail','at','city'])assert.equal(url.searchParams.get(key),null);
+  assert.equal(q('[data-physical-value]').hidden,true);assert.equal(q('[data-physical-focus]').parentElement.hidden,true);
+  const before=window.location.href;await window.__map.fire('click',{point:{x:10,y:10},lngLat:{lng:100,lat:35}});assert.equal(window.location.href,before);
+  assert.equal(requests.some(r=>r.endsWith('elevation.gz')),false,'static elevation needs no point grid');
+ }finally{await window.happyDOM.close();}
 });
 
 test('遅い河川の取得中に気候へ戻っても水系を重ねず、再選択でキャッシュを利用する',async()=>{
@@ -688,15 +676,15 @@ test('遅い河川の取得中に気候へ戻っても水系を重ねず、再�
  }finally{resolveWater();await window.happyDOM.close();}
 });
 
-test('着目点だけのURLでも所属国・数値を復元し、異なる国の説明を混ぜない',async()=>{
- const first=await setup('?topic=terrain&detail=basin');
- try{await until(()=>first.q('[data-physical-value]').textContent.includes('-75'),'deep-link elevation');assert.equal(new URL(first.window.location.href).searchParams.get('place'),'CHN');assert.equal(new URL(first.window.location.href).searchParams.get('at'),'100.00000,35.00000');}finally{await first.window.happyDOM.close();}
- const second=await setup('?topic=terrain&detail=basin&place=JPN');
+test('東アジアの地形着目点は国の輪郭を重ねず、別の国の旧URLを解除する',async()=>{
+ const first=await setup('?topic=landform&detail=basin');
+ try{await until(()=>first.q('[data-physical-value]').textContent.includes('-75'),'deep-link elevation');assert.equal(new URL(first.window.location.href).searchParams.get('place'),null);assert.equal(new URL(first.window.location.href).searchParams.get('at'),'100.00000,35.00000');}finally{await first.window.happyDOM.close();}
+ const second=await setup('?topic=landform&detail=basin&place=JPN');
  try{assert.equal(new URL(second.window.location.href).searchParams.get('detail'),null);assert.notEqual(second.q('[data-physical-detail-title]').textContent,'盆地');}finally{await second.window.happyDOM.close();}
 });
 
 test('地形・河川の未選択項目は説明・地点・マーカーを解除し、地図の位置を保つ',async()=>{
- const {window,q}=await setup('?topic=terrain&detail=basin');
+ const {window,q}=await setup('?topic=landform&detail=basin');
  try{
   await until(()=>q('[data-physical-value]').textContent.includes('-75'),'terrain ready');
   q('[data-physical-focus]').value='';q('[data-physical-focus]').dispatchEvent(new window.Event('change'));
@@ -1212,9 +1200,9 @@ test('民族・宗教は人口密度や行政区の塗りを重ねず、切り�
   assert.equal(app.q('[data-settlement-reading=ethnicity]').hidden,false);assert.equal(app.q('[data-population-reading]').hidden,true);
   assert.equal(app.window.__map.getLayer('asia-population'),undefined);
   await until(()=>app.q('.asia-settlement-label')&&!app.q('.asia-settlement-label').hidden,'settlement label positioned');const settlementCamera={...app.window.__map.getCenter(),zoom:app.window.__map.getZoom()};app.q('.asia-settlement-label').click();await delay();assert.deepEqual({...app.window.__map.getCenter(),zoom:app.window.__map.getZoom()},settlementCamera,'choosing a settlement only changes its reading and outline');assert.equal(new URL(app.window.location.href).searchParams.get('detail'),'a');assert.equal(new URL(app.window.location.href).searchParams.has('at'),false);assert.equal(new URL(app.window.location.href).searchParams.has('place'),false);await until(()=>app.window.__map.layers['asia-settlement-selected'].filter[2]==='a','outline matches selection');
-  app.q('[data-population-group=religion]').click();await until(()=>app.q('.asia-religion-marker[data-country=JPN]'),'religion composition markers ready');await delay();
+  app.q('[data-population-group=religion]').click();await until(()=>app.requests.some(r=>r.endsWith('religion.json.gz')),'religion cultural area source requested');await delay();
   assert.equal(app.window.__map.getLayer('asia-religion-survey-coverage'),undefined,'the religion map does not paint one coverage color');
-  assert.equal(app.requests.some(r=>r.endsWith('religion.json.gz')),false,'East Asia census overview does not request the EPR case geometry');
+  assert.equal(app.requests.some(r=>r.endsWith('religion.json.gz')),true,'East Asia initially loads source cultural areas');assert.equal(app.q('.asia-religion-marker[data-country=JPN]'),null,'national composition stays in the reading');
   assert.equal(app.q('[data-settlement-reading=religion]').hidden,false);assert.equal(app.q('[data-settlement-reading=ethnicity]').hidden,true);
   app.q('[data-field=natural]').click();await delay();assert.equal(app.window.__map.layers['asia-settlement-fill'].layout.visibility,'none');
  }finally{await app.window.happyDOM.close();}
@@ -1311,15 +1299,14 @@ test('自動全景は実extentと小余白を使い、resizeのmoveend後も全�
  try{assert.equal(saved.window.__map.getCenter().lng,120);assert.equal(saved.window.__map.getZoom(),6);}finally{await saved.window.happyDOM.close();}
 });
 
-test('宗教・民族の表示範囲から産業へ戻るリンクとクリックは東アジア全景を復帰する',async()=>{
+test('宗教・民族から産業へのタブ往復は利用者のカメラを保持する',async()=>{
  const extent=[73.602256,15.776109,145.824962,53.567791];
  for(const topic of ['religion','ethnicity']){
   const app=await setup(`?field=population&topic=${topic}&lng=112.5&lat=37.05777&z=2.848`,{population:true,presentation:true,settlements:true,industry:true,contentExtent:extent});
   try{
-   const link=app.q('.atlas-tabs [data-field=industry]');assert.equal(new URL(link.href).searchParams.has('lng'),false,'opening the industry link must not inherit the settlement crop');
+   const link=app.q('.atlas-tabs [data-field=industry]');assert.equal(new URL(link.href).searchParams.get('lng'),'112.50000');const before={...app.window.__map.getCenter(),zoom:app.window.__map.getZoom()};
    link.click();await delay();
-   assert.deepEqual(JSON.parse(JSON.stringify(app.window.__map.lastFit.bounds)),[[extent[0],extent[1]],[extent[2],extent[3]]]);
-   assert.equal(app.window.__map.lastFit.options.padding,5);
+   assert.deepEqual({...app.window.__map.getCenter(),zoom:app.window.__map.getZoom()},before);app.q('.atlas-tabs [data-field=population]').click();await delay();assert.deepEqual({...app.window.__map.getCenter(),zoom:app.window.__map.getZoom()},before);
   }finally{await app.window.happyDOM.close();}
  }
 });
@@ -1367,4 +1354,10 @@ test('東アジアの河川名は地点選択にせず、本流と水源・終�
   assert.deepEqual({...window.__map.getCenter(),zoom:window.__map.getZoom()},before);
   assert.equal(q('[data-hydrology-content]').textContent.includes('上の「河川の流域」を選んで'),false);
  }finally{await window.happyDOM.close();}
+});
+
+// A geographic name shares the active climate prefix but is not a class code.
+test('気候の固有地名を分類コードのアンカーとして処理しない',async()=>{
+ const app=await setup('',{presentation:true,climateReference:true});
+ try{await until(()=>app.q('.asia-geographic-name')&&!app.q('.asia-geographic-name').hidden,'major physical name');assert.equal(app.q('.asia-geographic-name').textContent,'チベット高原');app.q('[data-city-select]').value='tokyo';app.q('[data-city-select]').dispatchEvent(new app.window.Event('change'));await delay();assert.equal(app.q('.asia-geographic-name').hidden,false);}finally{await app.window.happyDOM.close();}
 });

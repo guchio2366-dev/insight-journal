@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "investigated": "2026-10-13",
+  "baseCommit": "ec189b9a614b84811fc9c77c9e4f4460d0317169",
+  "kind": "source-discovery-not-quantity-data",
+  "nationalCensus": {
+    "url": "https://www.maff.go.jp/j/tokei/census/afc/2025/080807.html",
+    "statusOnInvestigationDate": "第1 市町村別統計編は2026年10月頃掲載予定との表示。公開ファイル未同定。",
+    "tableCatalog": "https://www.maff.go.jp/j/tokei/census/afc/2025/attach/pdf/index-6.pdf",
+    "tableHeadingNumbers": [
+      "152",
+      "153",
+      "155",
+      "156",
+      "181",
+      "182",
+      "184",
+      "187",
+      "190",
+      "193"
+    ],
+    "identifierNote": "公表事項一覧の表頭番号。e-StatファイルIDではない。",
+    "rawFile": null,
+    "rawSha256": null
+  },
+  "sources": [
+    {
+      "id": "tokushima-grain",
+      "url": "https://www.pref.tokushima.lg.jp/file/attachment/1048672.xlsx",
+      "label": "2(8) 販売目的の稲・麦・雑穀",
+      "indexUrl": "https://www.pref.tokushima.lg.jp/statistics/year/afc/7240681/",
+      "candidateProducts": [
+        "rice",
+        "wheat"
+      ],
+      "scope": "徳島県内市町村",
+      "censusYear": 2025,
+      "observedUnit": null,
+      "status": "blocked-proxy-403",
+      "webRead": "400 Unsupported content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "originalGetAttempts": 1,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "rawFile": null,
+      "rawSha256": null,
+      "valuesVerified": false,
+      "implementationEligible": false
+    },
+    {
+      "id": "tokushima-potato",
+      "url": "https://www.pref.tokushima.lg.jp/file/attachment/1048670.xlsx",
+      "label": "2(9) 販売目的のいも類・豆類",
+      "indexUrl": "https://www.pref.tokushima.lg.jp/statistics/year/afc/7240681/",
+      "candidateProducts": [
+        "potato"
+      ],
+      "scope": "徳島県内市町村",
+      "censusYear": 2025,
+      "observedUnit": null,
+      "status": "blocked-proxy-403",
+      "webRead": "400 Unsupported content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "originalGetAttempts": 1,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "rawFile": null,
+      "rawSha256": null,
+      "valuesVerified": false,
+      "implementationEligible": false
+    },
+    {
+      "id": "tokushima-vegetables",
+      "url": "https://www.pref.tokushima.lg.jp/file/attachment/1048674.xlsx",
+      "label": "2(11) 販売目的の野菜類",
+      "indexUrl": "https://www.pref.tokushima.lg.jp/statistics/year/afc/7240681/",
+      "candidateProducts": [
+        "cabbage",
+        "tomato"
+      ],
+      "scope": "徳島県内市町村",
+      "censusYear": 2025,
+      "observedUnit": null,
+      "status": "blocked-proxy-403",
+      "webRead": "400 Unsupported content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "originalGetAttempts": 1,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "rawFile": null,
+      "rawSha256": null,
+      "valuesVerified": false,
+      "implementationEligible": false,
+      "supplement": {
+        "status": "supplied-library-extraction-verified",
+        "auditFile": "tokushima-2025-audit.json",
+        "implementation": "cabbage/tomato: 24市町村の数表と県計のみの地図参照点。市町村位置は未確認。",
+        "observedUnit": "a",
+        "rawFile": null,
+        "rawSha256": null,
+        "independentRawVerification": "tokushima-2025-audit.json#independentRawVerification",
+        "rawVerificationStatus": "parent-verified-100-cells-and-sha256; local-download-failure-retained"
+      }
+    },
+    {
+      "id": "tokushima-fruit",
+      "url": "https://www.pref.tokushima.lg.jp/file/attachment/1048675.xlsx",
+      "label": "2(12) 販売目的の果樹類",
+      "indexUrl": "https://www.pref.tokushima.lg.jp/statistics/year/afc/7240681/",
+      "candidateProducts": [
+        "apple",
+        "mandarin"
+      ],
+      "scope": "徳島県内市町村",
+      "censusYear": 2025,
+      "observedUnit": null,
+      "status": "blocked-proxy-403",
+      "webRead": "400 Unsupported content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "originalGetAttempts": 1,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "rawFile": null,
+      "rawSha256": null,
+      "valuesVerified": false,
+      "implementationEligible": false
+    },
+    {
+      "id": "tokushima-livestock",
+      "url": "https://www.pref.tokushima.lg.jp/file/attachment/1048676.xlsx",
+      "label": "2(14) 販売目的の家畜等",
+      "indexUrl": "https://www.pref.tokushima.lg.jp/statistics/year/afc/7240681/",
+      "candidateProducts": [
+        "milk",
+        "beef",
+        "pork"
+      ],
+      "scope": "徳島県内市町村",
+      "censusYear": 2025,
+      "observedUnit": null,
+      "status": "blocked-proxy-403",
+      "webRead": "400 Unsupported content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "originalGetAttempts": 1,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "rawFile": null,
+      "rawSha256": null,
+      "valuesVerified": false,
+      "implementationEligible": false
+    },
+    {
+      "id": "miyazaki-agriculture",
+      "url": "https://www.city.miyazaki.miyazaki.jp/fs/8/8/3/1/2/6/_/04-1.__.xlsx",
+      "label": "04-1.農林（143KB）",
+      "indexUrl": "https://www.city.miyazaki.miyazaki.jp/city/statistics/publications/410945.html",
+      "candidateProducts": [],
+      "scope": "宮崎市（各表の地理的集計範囲は未照合）",
+      "censusYear": null,
+      "observedUnit": null,
+      "status": "blocked-proxy-403",
+      "webRead": "400 Unsupported content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "originalGetAttempts": 1,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "rawFile": null,
+      "rawSha256": null,
+      "valuesVerified": false,
+      "implementationEligible": false
+    },
+    {
+      "id": "yamagata-first",
+      "url": null,
+      "label": "市町村別統計表1(1)~2(11)（683KB）",
+      "indexUrl": "https://www.pref.yamagata.jp/020052/nourin/2025census_kakutei.html",
+      "scope": "山形県内市町村",
+      "censusYear": 2025,
+      "observedUnit": null,
+      "status": "web-read-failed",
+      "webReadAttempts": 1,
+      "error": "Internal Error",
+      "rawFile": null,
+      "rawSha256": null,
+      "valuesVerified": false,
+      "implementationEligible": false
+    },
+    {
+      "id": "yamagata-second",
+      "url": null,
+      "label": "市町村別統計表2(12)~4(1)（995KB）",
+      "indexUrl": "https://www.pref.yamagata.jp/020052/nourin/2025census_kakutei.html",
+      "scope": "山形県内市町村",
+      "censusYear": 2025,
+      "observedUnit": null,
+      "status": "web-read-failed",
+      "webReadAttempts": 1,
+      "error": "Internal Error",
+      "rawFile": null,
+      "rawSha256": null,
+      "valuesVerified": false,
+      "implementationEligible": false
+    }
+  ],
+  "notes": [
+    "候補品目と表題だけの同定は、値・原単位・利用条件の確認完了を意味しない。",
+    "rawFile/rawSha256は公式バイト列を保存していないためnull。",
+    "既知の拒否資料は再試行せず、新たに403となった6ファイルも各1回で停止。",
+    "山形の読込失敗は403と断定しない。直ファイルURLも未取得。",
+    "今回追加の数量は0件。既存8系列47数値・UIは変更しない。",
+    "上記0件・未確認は元の調査時点。徳島野菜のみ、本人提供Library全行抽出による追補をtokushima-2025-audit.jsonへ記録。公式GETの403履歴は保持。"
+  ]
+}

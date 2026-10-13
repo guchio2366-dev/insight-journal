@@ -80,7 +80,7 @@ export function leaderIntersectsBox(a, b, box) {
 export function layoutParityLabels(labels, transform, stations) {
   const stationObstacles = stations.flatMap(station => {
     const [x, y] = transform.project(lambertForward(station.coordinates));
-    const text = station.id === 'mexico-city-tacubaya' ? 'メキシコシティ' : 'Culiacan';
+    const text = ({'mexico-city-tacubaya':'メキシコシティ','culiacan-dge':'クリアカン','chihuahua-obs':'チワワ','villahermosa-dge':'ビジャエルモサ'})[station.id] ?? station.name;
     return [{left: x - 10, right: x + 10, top: y - 10, bottom: y + 10},
       {left: x + 8, right: x + 12 + estimatedLabelWidth(text, 18), top: y - 30, bottom: y + 1}];
   });

@@ -1,5 +1,16 @@
 # Third-party notices
 
+## East Asia 2023 food and wood partner statistics
+
+UN Comtrade © United Nations, displayed through World Bank WITS public numerical
+tables. The retained source subset is 53 tables / 1,270 records, with source URLs,
+classification, reference year, original monetary precision, hashes and coverage.
+The derived figures exclude regional inside partners before aggregation and
+calculate outside-partner market shares; missing reporters are never imputed.
+See [UN Comtrade re-dissemination terms](https://uncomtrade.org/docs/re-dissemination-of-data/).
+Original quantities from the retained FAOSTAT country extract remain separately
+attributed to FAO and are not converted from trade money or World Bank GDP.
+
 The sample map uses geographic data from [Natural Earth](https://www.naturalearthdata.com/).
 Natural Earth data is in the public domain under its
 [terms of use](https://www.naturalearthdata.com/about/terms-of-use/).

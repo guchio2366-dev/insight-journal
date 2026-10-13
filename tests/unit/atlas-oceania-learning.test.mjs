@@ -2,6 +2,7 @@ import test, {after} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
+import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {build,stop} from 'esbuild';
 import {Window} from 'happy-dom';
@@ -151,7 +152,7 @@ function controllerFixture(url,field='agriculture'){
   root.innerHTML=`<select data-place>${options(['all',...api.oceaniaCountries.map(c=>c.code)])}</select><select data-layer>${options(api.oceaniaLayers.map(l=>l.id))}</select><select data-compare-layer>${options(api.oceaniaLayers.map(l=>l.id))}</select>`+
     api.oceaniaThemes.filter(t=>t.field===field).map(t=>`<button data-theme="${t.id}"></button>`).join('')+
     ['all','theme','country'].map(scope=>`<button data-scope="${scope}"></button>`).join('')+
-    '<button data-comparison></button><button data-return></button><button data-oceania-industry-return hidden></button><div data-normal-view><div data-primary-map></div></div><div data-comparison-view><div data-original-map></div><div data-comparison-map></div></div>'+
+    '<button data-comparison></button><button data-return></button><button data-oceania-industry-return hidden></button>'+['resources','manufacturing','services'].map(sector=>`<button data-industry-sector="${sector}"></button>`).join('')+'<button data-industry-only></button><div data-normal-view><div data-primary-map></div></div><div data-comparison-view><div data-original-map></div><div data-comparison-map></div></div>'+
     ['primary','original','comparison'].flatMap(prefix=>['title','period','unit',...(prefix==='primary'?[]:['legend'])].map(suffix=>`<div data-${prefix}-${suffix}></div>`)).join('')+
     '<div data-primary-legend-spacer></div><section data-required-legend-layer><p data-primary-legend-unit></p><div data-primary-legend></div></section><details data-primary-legend-dictionary><div data-primary-legend-dictionary-content></div></details>'+
     ['geography-reading','theme-title','takeaway','explanation','coverage','comparison-explanation','social-context','source-list'].map(hook=>`<div data-${hook}></div>`).join('')+
@@ -167,13 +168,13 @@ test('industry representative places open sourced details while all marks remain
   try{
     const first=controllerFixture('https://example.test/insight-journal/atlas/oceania/industry/?utm_source=qa','industry');sessions.push(first);
     const root=first.root;
-    assert.equal(root.querySelectorAll('[data-oceania-industry-location]').length,5);
+    assert.equal(root.querySelectorAll('[data-oceania-industry-location]').length,8);
     assert.equal(root.querySelectorAll('[data-oceania-industry-location][aria-pressed="true"]').length,0);
     root.querySelector('[data-oceania-industry-location="lae-port"]')?.dispatchEvent(new first.window.MouseEvent('click',{bubbles:true}));
     assert.equal(root.querySelector('[data-theme-title]').textContent,'ラエ港');
     assert.match(root.querySelector('[data-explanation]').textContent,/個々の鉱山の輸出港/);
     assert.match(root.querySelector('[data-source-list]').textContent,/ラエ港の位置資料/);
-    assert.equal(root.querySelectorAll('[data-oceania-industry-location]').length,5);
+    assert.equal(root.querySelectorAll('[data-oceania-industry-location]').length,8);
     assert.equal(root.querySelectorAll('circle[stroke="#fff"]').length,347);
     assert.equal(root.querySelector('[data-oceania-industry-location="lae-port"]').getAttribute('aria-pressed'),'true');
     const url=first.window.location.href;
@@ -190,6 +191,51 @@ test('industry representative places open sourced details while all marks remain
     assert.equal(api.createOceaniaState('?industryLocation=invalid','industry').industryLocation,undefined);
     assert.equal(api.createOceaniaState('?industryLocation=lae-port&layer=mines','industry').industryLocation,undefined);
   }finally{for(const session of sessions)session.window.happyDOM.abort();}
+});
+
+test('overlapping industry mark keeps the current sector and isolation through reload and reselection',()=>{
+  const sessions=[];
+  try{
+    const first=controllerFixture('https://example.test/insight-journal/atlas/oceania/industry/','industry');sessions.push(first);
+    const clickMark=(session,id)=>session.root.querySelector(`[data-oceania-industry-location="${id}"]`).dispatchEvent(new session.window.MouseEvent('click',{bubbles:true}));
+    first.root.querySelector('[data-industry-sector="services"]').click();
+    first.root.querySelector('[data-industry-only]').click();
+    clickMark(first,'noro-port');
+    let query=new URL(first.window.location.href).searchParams;
+    assert.equal(query.get('sector'),'services');
+    assert.equal(query.get('sectorOnly'),'1');
+    assert.equal(query.get('industryLocation'),'noro-port');
+    assert.equal(first.root.querySelector('[data-industry-only]').getAttribute('aria-pressed'),'true');
+    const reload=controllerFixture(first.window.location.href,'industry');sessions.push(reload);
+    assert.equal(reload.root.querySelector('[data-industry-sector="services"]').getAttribute('aria-pressed'),'true');
+    assert.equal(reload.root.querySelector('[data-oceania-industry-location="noro-port"]').getAttribute('aria-pressed'),'true');
+    reload.root.querySelector('[data-oceania-industry-return]').click();
+    query=new URL(reload.window.location.href).searchParams;
+    for(const key of ['sector','sectorOnly','industryLocation'])assert.equal(query.has(key),false);
+    reload.root.querySelector('[data-industry-sector="services"]').click();
+    reload.root.querySelector('[data-industry-only]').click();
+    clickMark(reload,'noro-port');
+    assert.equal(new URL(reload.window.location.href).searchParams.get('sector'),'services');
+    assert.equal(new URL(reload.window.location.href).searchParams.get('sectorOnly'),'1');
+    reload.root.querySelector('[data-industry-only]').click();
+    clickMark(reload,'lihir-project');
+    query=new URL(reload.window.location.href).searchParams;
+    assert.equal(query.get('sector'),'resources');
+    assert.equal(query.has('sectorOnly'),false);
+  }finally{for(const session of sessions)session.window.happyDOM.abort();}
+});
+
+test('NZ processing guide positions reuse the saved city coordinates and explicitly distinguish factory addresses',()=>{
+ const marks=JSON.parse(readFileSync(new URL('../../public/assets/atlas/oceania-industry-v2/places.json',import.meta.url),'utf8')).places;
+ for(const id of ['nz-dairy-guide','nz-wood-guide']){
+  const mark=marks.find(item=>item.id===id),city=cities.find(item=>item.id===mark.coordinateSource.urbanCentreId);
+  assert.deepEqual(mark.coordinates,city.coordinates);
+  assert.equal(mark.coordinateMeaning,'urban-centre-guide-not-factory');
+  assert.match(mark.note,/都市中心の案内位置.*入口・敷地ではありません/);
+  assert.match(mark.note,/生産量は示しません/);
+  const state=api.createOceaniaState('?industryLocation='+id,'industry');
+  assert.equal(state.industryLocation,id);
+ }
 });
 
 test('comparison reload and named return preserve original crop, country, legends, unrelated query and hash',()=>{
@@ -281,7 +327,7 @@ test('saved Oceania farming products start together and direct product URLs choo
    const holder=win.document.createElement('div');holder.innerHTML=api.renderOceaniaScene(api.getOceaniaLayer(product),focus);
    assert.deepEqual([...new Set([...holder.querySelectorAll('[data-farming-product]')].map(el=>el.dataset.farmingProduct))].sort(),['cacao','cattle','coconut','sheep','wheat']);
    assert.equal(holder.querySelectorAll('[data-map-place]').length,0,'Agriculture country selection uses the native control');
-   assert.equal(holder.querySelectorAll('[data-farming-place]').length,5);
+   assert.equal(holder.querySelectorAll('[data-farming-place]').length,9);
    for(const annotation of holder.querySelectorAll('[data-farming-place]'))assert.equal(Number(annotation.getAttribute('opacity')),['wheat','coconut','cacao'].includes(product)&&annotation.dataset.placeProduct!==product?0.32:1);
    assert.equal(holder.querySelectorAll(`[data-farming-product="${product}"][data-farming-mode="quantity"]`).length,1);
    assert.equal(holder.querySelector('[data-farming-product="wheat"][data-farming-mode="outline"]').getAttribute('opacity'),product==='wheat'?'1':'0.75');
@@ -297,7 +343,7 @@ test('Oceania single-product URL hides other mapped products and keeps the selec
  const win=new Window();try{
   const holder=win.document.createElement('div');holder.innerHTML=api.renderOceaniaScene(api.getOceaniaLayer(state.layer),state);
   assert.deepEqual([...new Set([...holder.querySelectorAll('[data-farming-product]')].map(el=>el.dataset.farmingProduct))],['coconut']);
-  assert.deepEqual([...holder.querySelectorAll('[data-farming-place]')].map(el=>el.dataset.placeProduct),['coconut']);
+  assert.deepEqual([...new Set([...holder.querySelectorAll('[data-farming-place]')].map(el=>el.dataset.placeProduct))],['coconut']);
   assert.equal(api.createOceaniaState('?layer=farming-all&single=1','agriculture').single,false);
  }finally{win.happyDOM.abort();}
 });
@@ -313,5 +359,41 @@ test('Oceania farming example names stay inside the saved country and on a posit
   const [lon,lat]=place.coordinates,column=Math.floor((lon-west)/(east-west)*layer.width),row=Math.floor((north-lat)/(north-south)*layer.height);
   const values=gunzipSync(readFileSync(new URL(base+layer.grid,import.meta.url)));
   assert.ok(values.readFloatLE((row*layer.width+column)*4)>0,place.id+' must use a source positive');
+  if(place.displayCell){
+   assert.deepEqual([column,row],place.displayCell);
+   assert.equal(values.readFloatLE((row*layer.width+column)*4),place.sourceCellHa);
+   assert.equal(createHash('sha256').update(readFileSync(new URL('../../'+place.sourceGrid,import.meta.url))).digest('hex'),place.sourceGridSha256);
+  }
+ }
+});
+
+test('added belt anchors represent the largest connected regional quantity group and its densest neighbourhood',()=>{
+ const report=JSON.parse(readFileSync(new URL('../../docs/oceania-crop-belt-selection-20261013.json',import.meta.url),'utf8'));
+ const runsToSet=runs=>new Set(runs.flatMap(([row,start,end])=>Array.from({length:end-start},(_,i)=>row*1680+start+i)));
+ const close=(actual,expected)=>assert.ok(Math.abs(actual-expected)<.001,`${actual} differs from ${expected}`);
+ for(const selection of report.selections){
+  const values=gunzipSync(readFileSync(new URL('../../'+selection.sourceGrid,import.meta.url)));
+  const value=key=>values.readFloatLE(key*4),region=runsToSet(selection.regionPositiveCellRuns),primary=runsToSet(selection.primaryComponentCellRuns);
+  let regionHa=0;for(const key of region){assert.ok(value(key)>0);regionHa+=value(key);}
+  close(regionHa,selection.regionHarvestedHa);assert.equal(region.size,selection.regionPositiveCells);
+  const unvisited=new Set(region),groups=[];
+  while(unvisited.size){
+   const first=unvisited.values().next().value,queue=[first],group=new Set([first]);unvisited.delete(first);let ha=0;
+   for(let i=0;i<queue.length;i++){
+    const key=queue[i];ha+=value(key);
+    for(const next of [key-1680,key+1680,...(key%1680?[key-1]:[]),...(key%1680<1679?[key+1]:[])])if(unvisited.delete(next)){group.add(next);queue.push(next);}
+   }
+   groups.push({group,ha});
+  }
+  groups.sort((a,b)=>b.ha-a.ha);assert.deepEqual([...primary].sort((a,b)=>a-b),[...groups[0].group].sort((a,b)=>a-b));
+  close(groups[0].ha,selection.topComponentsByHarvestedHa[0].harvestedHa);
+  const local=key=>{const row=Math.floor(key/1680),col=key%1680;let ha=0;for(let dy=-6;dy<=6;dy++)for(let dx=-6;dx<=6;dx++){const target=(row+dy)*1680+col+dx;if(col+dx>=0&&col+dx<1680&&primary.has(target))ha+=value(target);}return ha;};
+  const selected=selection.selectedCell[1]*1680+selection.selectedCell[0];assert.ok(primary.has(selected));
+  const scores=[...primary].map(key=>({key,ha:local(key)})),peak=Math.max(...scores.map(item=>item.ha));
+  close(local(selected),peak);close(peak,selection.maximumPrimaryNeighbourhoodHa);close(local(selected),selection.selectedNeighbourhood.primaryComponentHarvestedHa);
+  const cx=[...primary].reduce((sum,key)=>sum+(key%1680)*value(key),0)/groups[0].ha,cy=[...primary].reduce((sum,key)=>sum+Math.floor(key/1680)*value(key),0)/groups[0].ha;
+  const distance=key=>(key%1680-cx)**2+(Math.floor(key/1680)-cy)**2;
+  const bestDistance=Math.min(...scores.filter(item=>Math.abs(item.ha-peak)<.000001).map(item=>distance(item.key)));
+  close(distance(selected),bestDistance);
  }
 });

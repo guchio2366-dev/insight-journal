@@ -2,9 +2,9 @@ import type { AsiaRegionId } from '../../lib/atlas-asia-state';
 export const asiaNaturalTopics=[{id:'landform',label:'地形'},{id:'climate',label:'気候と雨温図'},{id:'terrain',label:'標高と地形'},{id:'water',label:'河川と湖'},{id:'precipitation',label:'年降水量'},{id:'seasonal-precipitation',label:'月別の降水量'},{id:'basins',label:'流域'},{id:'groundwater',label:'地下水と涵養'}];
 export const asiaPhysicalReading:Record<AsiaRegionId,{terrain:string;water:string;terrainDetail:string;waterDetail:string}>= {
  'east-asia':{
-  terrain:'西の高原・盆地から東の平野と島弧へ、高低差をたどる。',
+  terrain:'中国西部にはチベット高原と山地、東部には華北平原・東北平原があり、日本列島・台湾では山地と沿岸低地が近接します。',
   water:'長江・黄河の流路を、高原から低地への標高の変化と重ねる。',
-  terrainDetail:'チベット高原、四川盆地、華北の低地を順に選ぶと、一つの国の中でも地形が大きく異なることを読めます。日本列島や台湾では山地と沿岸の低地の距離にも注目してください。色は標高、細線は500mごとの等高線です。山の高さの公式記録ではなく、広域の格子の値を表示しています。',
+  terrainDetail:'チベット高原と崑崙山脈・天山山脈の高地、タリム盆地、四川盆地、華北平原・満州平原の低地が並びます。日本列島や台湾では山地と沿岸低地が近接します。大陸西部の高地にはプレートの衝突と隆起、日本列島・台湾の山地にはプレート境界の変動が関わります。色と線は同じ表示値から作った500m刻みで、個々の山頂の公式標高ではありません。',
   waterDetail:'河川・湖は資料にある線と面で示します。河川の下流と平野、米の分布を比較できますが、河川に近いことだけで灌漑の利用や水量は判断できません。内陸の流域と海へ向かう流路を区別して読んでください。'
  },
  'southeast-asia':{
@@ -24,22 +24,22 @@ export type AsiaPhysicalFocus={id:string;region:AsiaRegionId;country:string;name
 export const asiaPhysicalFocus:AsiaPhysicalFocus[]=[
  {id:'tibetan-plateau',region:'east-asia',country:'CHN',name:'チベット高原',coordinates:[89,33],reading:'高原の格子の標高と、同じ場所の気候区分を比べます。高地の寒さと海からの距離を分けて考える入口になります。'},
  {id:'sichuan-basin',region:'east-asia',country:'CHN',name:'四川盆地',coordinates:[104.1,30.5],reading:'周囲の高地から盆地へ移動し、標高の変化と米の分布を比べます。盆地全体を一つの値で表しているわけではありません。'},
- {id:'north-china-plain',region:'east-asia',country:'CHN',name:'華北の平野',coordinates:[116,36],reading:'東部の低地の広がりを、黄河の流路と合わせて読みます。低地であることと、十分な水があることは別の条件です。'},
+ {id:'north-china-plain',region:'east-asia',country:'CHN',name:'華北平原',coordinates:[116,36],reading:'東部の低地の広がりを、黄河の流路と合わせて読みます。低地であることと、十分な水があることは別の条件です。'},
  {id:'tarim-basin',region:'east-asia',country:'CHN',name:'タリム盆地',coordinates:[83,40],reading:'盆地と周囲の山地の標高差を見てから気候図へ戻り、内陸の乾燥域を確認します。'},
- {id:'mongolian-plateau',region:'east-asia',country:'MNG',name:'モンゴルの高原',coordinates:[104,47],reading:'内陸の標高と、気候図が示す乾燥・冬の寒さを別々の情報として読み比べます。'},
- {id:'japan-alps',region:'east-asia',country:'JPN',name:'日本の中部山地',coordinates:[137.7,36.2],reading:'山地と周囲の盆地・沿岸の低地を拡大して比べます。広域格子では個々の山頂や谷底の高さは再現できません。'},
- {id:'korean-mountains',region:'east-asia',country:'KOR',name:'朝鮮半島の東部山地',coordinates:[128.4,37.4],reading:'東部の山地と西側の低地の距離を見ます。国境線と地形の境界が一致するとは限りません。'},
- {id:'taiwan-mountains',region:'east-asia',country:'TWN',name:'台湾の山地',coordinates:[121,23.7],reading:'島内の山地と西側の低地を同じ尺度で比べます。海岸の格子には陸地と海が混じる場合があります。'},
+ {id:'mongolian-plateau',region:'east-asia',country:'MNG',name:'モンゴル高原',coordinates:[104,47],reading:'内陸の標高と、気候図が示す乾燥・冬の寒さを別々の情報として読み比べます。'},
+ {id:'japan-alps',region:'east-asia',country:'JPN',name:'北アルプス',coordinates:[137.7,36.2],reading:'山地と周囲の盆地・沿岸の低地を拡大して比べます。広域格子では個々の山頂や谷底の高さは再現できません。'},
+ {id:'korean-mountains',region:'east-asia',country:'KOR',name:'朝鮮半島',coordinates:[128.4,37.4],reading:'東部の山地と西側の低地の距離を見ます。国境線と地形の境界が一致するとは限りません。'},
+ {id:'taiwan-mountains',region:'east-asia',country:'TWN',name:'中央山脈',coordinates:[121,23.7],reading:'島内の山地と西側の低地を同じ尺度で比べます。海岸の格子には陸地と海が混じる場合があります。'},
  {id:'manchurian-plain',region:'east-asia',country:'CHN',name:'東北平原',coordinates:[124.5,45.5],reading:'山地に囲まれた広い平野で、大豆・トウモロコシなどの耕地と河川沿いの低地が広がります。破線はNatural Earthの概略地形域で、行政区域や流域界ではありません。'},
  {id:'east-tian-shan',region:'east-asia',country:'CHN',name:'天山山脈',coordinates:[84,43],reading:'タリム盆地の北に連なる山地です。山地の雪氷からの水が盆地のオアシスへ届きます。破線の概略地形域は流域界ではありません。'},
  {id:'east-kunlun',region:'east-asia',country:'CHN',name:'崑崙山脈',coordinates:[88,36],reading:'チベット高原の北縁とタリム盆地の南側に連なる山地です。谷を通る水系と、地形域の輪郭は別の情報です。'},
  {id:'east-gobi',region:'east-asia',country:'MNG',name:'ゴビ砂漠',coordinates:[104,43],reading:'モンゴル南部から中国北部へ広がる乾燥した地域です。概略地形域は国境を越えて示しますが、砂漠の境界が明瞭な一線になることを意味しません。'},
- {id:'mekong-delta',region:'southeast-asia',country:'VNM',name:'メコン川下流の低地',coordinates:[105.9,10.3],reading:'河川・低地・米の分布の重なりを確認します。地図上の近接は、洪水リスクや個々の圃場の取水量を示すものではありません。'},
- {id:'irrawaddy-delta',region:'southeast-asia',country:'MMR',name:'エーヤワディー川下流',coordinates:[95,17],reading:'下流の低地から上流側へ動かし、山地に囲まれた流路の位置を見ます。'},
+ {id:'mekong-delta',region:'southeast-asia',country:'VNM',name:'メコンデルタ',coordinates:[105.9,10.3],reading:'河川・低地・米の分布の重なりを確認します。地図上の近接は、洪水リスクや個々の圃場の取水量を示すものではありません。'},
+ {id:'irrawaddy-delta',region:'southeast-asia',country:'MMR',name:'エーヤワディー・デルタ',coordinates:[95,17],reading:'下流の低地から上流側へ動かし、山地に囲まれた流路の位置を見ます。'},
  {id:'khorat-plateau',region:'southeast-asia',country:'THA',name:'コラート高原',coordinates:[103,16],reading:'大陸部の高原を、周囲の低地と比べます。標高と雨の季節性はそれぞれ別の地図で確認できます。'},
- {id:'sumatra-mountains',region:'southeast-asia',country:'IDN',name:'スマトラ島のバリサン山脈',coordinates:[100.5,-.5],reading:'島の山地と低地を拡大して比べ、海岸から内陸への高低差を確かめます。'},
+ {id:'sumatra-mountains',region:'southeast-asia',country:'IDN',name:'バリサン山脈',coordinates:[100.5,-.5],reading:'島の山地と低地を拡大して比べ、海岸から内陸への高低差を確かめます。'},
  {id:'java-island',region:'southeast-asia',country:'IDN',name:'ジャワ島',coordinates:[110.4,-7.4],reading:'狭い島の中の高低差を見ます。地形の色は地質や火山の活動状況を表しません。'},
- {id:'borneo-interior',region:'southeast-asia',country:'MYS',name:'ボルネオ島と北部の内陸',coordinates:[116.5,5.3],reading:'内陸の山地と沿岸の低地の配置を比べます。森林の有無は地形色からは判断できません。'},
+ {id:'borneo-interior',region:'southeast-asia',country:'MYS',name:'ボルネオ島',coordinates:[116.5,5.3],reading:'内陸の山地と沿岸の低地の配置を比べます。森林の有無は地形色からは判断できません。'},
  {id:'luzon-island',region:'southeast-asia',country:'PHL',name:'ルソン島',coordinates:[121,15.9],reading:'山地と谷・平野の位置を見ます。島々の間は海であり、データの空白を陸続きの地形として結ばないでください。'},
  {id:'himalaya-nepal',region:'south-central-asia',country:'NPL',name:'ネパールのヒマラヤ',coordinates:[86.7,27.8],reading:'北の高地から南の低地へ移動し、500mごとの等高線の密度を比較します。選択値は山頂の公称標高ではありません。'},
  {id:'bengal-lowland',region:'south-central-asia',country:'BGD',name:'ベンガルの低地',coordinates:[89.9,23.5],reading:'河川と広い低地、米の分布を比べます。標高の小さな違いを読むには、この格子より詳しい現地資料が必要です。'},
@@ -47,6 +47,8 @@ export const asiaPhysicalFocus:AsiaPhysicalFocus[]=[
  {id:'deccan-plateau',region:'south-central-asia',country:'IND',name:'デカン高原',coordinates:[77,17],reading:'半島の内陸と沿岸を比べ、標高と雨の季節差が異なる情報であることを確認します。'},
  {id:'pamir',region:'south-central-asia',country:'TJK',name:'パミールの高地',coordinates:[73,38],reading:'中央アジアの高地から西側の盆地へ移動し、地形と水系の位置関係を読みます。'},
  {id:'tian-shan',region:'south-central-asia',country:'KGZ',name:'天山山脈',coordinates:[76,42],reading:'山地の高さと、山地の間の湖・盆地を比べます。等高線は加工した広域格子から計算しています。'},
- {id:'kazakh-steppe',region:'south-central-asia',country:'KAZ',name:'カザフスタンの内陸',coordinates:[68,50],reading:'広い内陸の起伏を、南東側の山地と同じ色尺度で比較します。土地利用は標高だけからは決まりません。'},
+ {id:'kazakh-steppe',region:'south-central-asia',country:'KAZ',name:'カザフ草原',coordinates:[68,50],reading:'北部の広い平坦地を、南東の天山の高地と同じ色尺度で比較します。土地利用は標高だけからは決まりません。'},
+ {id:'caspian-sea-central',region:'south-central-asia',country:'KAZ',name:'カスピ海',coordinates:[51.8,43.1],reading:'西の閉じた水域を位置の目安として示します。海面の変化や水利用を標高格子からは推定できません。'},
+ {id:'fergana-valley',region:'south-central-asia',country:'UZB',name:'フェルガナ盆地',coordinates:[71.1,40.5],reading:'天山とアライ山脈の間の低地を示します。シルダリヤ川との位置関係を農業図で比べます。'},
  {id:'sri-lanka-highland',region:'south-central-asia',country:'LKA',name:'スリランカの中央高地',coordinates:[80.7,7],reading:'島の中央の高地から沿岸へ移動し、気候図と米の分布を見比べます。'}
 ];

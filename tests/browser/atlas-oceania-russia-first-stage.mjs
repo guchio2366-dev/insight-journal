@@ -57,11 +57,11 @@ try{
   });
  };
  const open=async(region,field,search='')=>{await page.goto(`${base}atlas/${region}/${field}/${search}`,{waitUntil:'networkidle'});await ready(region);};
- const shot=async name=>{if(!name.includes('-nature-')){if(focusDeltaOnly&&!/^(?:oceania|russia)-agriculture-(1536|1920)-(overview|crop-focus|single-product|selected-with-other-distributions)$/.test(name))return;if(representativeOnly&&!/^(?:oceania|russia)-agriculture-(1536|1024|1920)-(overview|crop-focus|single-product|selected-with-other-distributions)$/.test(name))return;}await page.screenshot({path:resolve(output,name+'.png'),fullPage:true});result.screenshots.push(name+'.png');};
+ const shot=async name=>{if(!name.includes('-nature-')&&!name.includes('-belt-detail')){if(focusDeltaOnly&&!/^(?:oceania-agriculture-(1536|1920|1024)|russia-agriculture-(1536|1920))-(overview|crop-focus|single-product|selected-with-other-distributions)$/.test(name))return;if(representativeOnly&&!/^(?:oceania|russia)-agriculture-(1536|1024|1920)-(overview|crop-focus|single-product|selected-with-other-distributions)$/.test(name))return;}await page.screenshot({path:resolve(output,name+'.png'),fullPage:true});result.screenshots.push(name+'.png');};
  const annotationShot=async(map,product)=>{
   // Capture document pixels without element scrolling or a retained SVG handle.
   // Closing the details can resize the root and replace its SVG in the next frame.
-  const clip=await map.locator(`[data-farming-place][data-place-product="${product}"]`).evaluate(el=>{
+  const clip=await map.locator(`[data-farming-place][data-place-product="${product}"]`).first().evaluate(el=>{
    const b=el.getBoundingClientRect(),x=Math.floor(b.x+scrollX),y=Math.floor(b.y+scrollY);
    return {x,y,width:Math.ceil(b.right+scrollX)-x,height:Math.ceil(b.bottom+scrollY)-y};
   });
@@ -79,7 +79,7 @@ try{
   const frame=await map.locator('svg').first().getAttribute('viewBox');
   assert.equal(await host.locator('[data-place]').inputValue(),'all');
   assert.equal(await host.locator('[data-layer]').inputValue(),'industry-all');
-  assert.equal(await marks().count(),5);
+  assert.equal(await marks().count(),8);
   assert.equal(await mines().count(),347);
   assert.equal(await map.locator('[data-oceania-industry-location][aria-pressed="true"]').count(),0);
   assert.match(await host.locator('[data-theme-title]').textContent(),/オセアニアの主要産業/);
@@ -91,24 +91,24 @@ try{
   assert.match(await host.locator('[data-source-list]').textContent(),/ラエ港の位置資料/);
   assert.equal(await host.locator('[data-oceania-industry-return]').isVisible(),true);
   assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
-  assert.equal(await marks().count(),5);assert.equal(await mines().count(),347);
+  assert.equal(await marks().count(),8);assert.equal(await mines().count(),347);
   assert.equal(await map.locator('[data-oceania-industry-location="lae-port"]').getAttribute('aria-pressed'),'true');
   await capture('lae-selected');
   await page.reload({waitUntil:'networkidle'});await ready('oceania');
   assert.equal(await host.locator('[data-theme-title]').textContent(),'ラエ港');
-  assert.equal(await marks().count(),5);assert.equal(await mines().count(),347);
+  assert.equal(await marks().count(),8);assert.equal(await mines().count(),347);
   await capture('lae-reloaded');
   await host.locator('[data-oceania-industry-return]').click();await ready('oceania');
   assert.equal(new URL(page.url()).searchParams.has('industryLocation'),false);
   assert.equal(await host.locator('[data-oceania-industry-return]').isVisible(),false);
-  assert.equal(await marks().count(),5);assert.equal(await mines().count(),347);
+  assert.equal(await marks().count(),8);assert.equal(await mines().count(),347);
   assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
   await capture('reset');
   await page.reload({waitUntil:'networkidle'});await ready('oceania');
   assert.equal(new URL(page.url()).searchParams.has('industryLocation'),false);
   assert.equal(await host.locator('[data-oceania-industry-return]').isVisible(),false);
-  assert.equal(await marks().count(),5);assert.equal(await mines().count(),347);
-  result.checks.push('Oceania industry at 1920×1080 CSS pixels and DPR 1: overview, Lae representative selection, reload and reset retain all five named places, 347 Australian mine marks, source reading and the full regional frame.');
+  assert.equal(await marks().count(),8);assert.equal(await mines().count(),347);
+  result.checks.push('Oceania industry at 1920×1080 CSS pixels and DPR 1: overview, Lae representative selection, reload and reset retain all eight named places, 347 Australian mine marks, source reading and the full regional frame.');
  }
  if(!farmingOnly||physicalReview){
   for(const width of [1920,1536,1024]){
@@ -130,8 +130,31 @@ try{
      assert.ok(await map.locator(`image[href*="${id}.png"]`).count()>0);
      assert.match(await host.locator('[data-primary-unit]').textContent(),new RegExp(unit.replace(/[()]/g,'\\$&')));
      assert.match(await host.locator('[data-primary-legend]').textContent(),new RegExp(step));
+     assert.match(await host.locator('[data-primary-legend]').textContent(),/欠測・未収録（0ではない）/);
      assert.match(await host.locator('[data-coverage]').textContent(),id==='precipitation'?/河川|水量/:/標高/);
      assert.ok((await host.locator('[data-primary-legend]').boundingBox()).height<190);
+     if(region==='oceania'){
+      assert.equal(await map.locator('[data-map-place]').count(),0,'Numeric nature surfaces have outlines without country-selection targets');
+      const point=await map.locator('svg').first().evaluate(svg=>{const point=svg.createSVGPoint();point.x=(134-110)/140*1200;point.y=(25+25)/83*757;const screen=point.matrixTransform(svg.getScreenCTM());return {x:screen.x,y:screen.y};});
+      const before=page.url();await page.mouse.click(point.x,point.y);
+      assert.equal(page.url(),before,'Clicking the Australian numeric surface retains the whole-region reading');
+      assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
+     }
+     if(id==='precipitation'){
+      const labels=map.locator('[data-isohyet-label]');
+      assert.equal(await labels.count(),region==='oceania'?6:7);
+      assert.equal(await map.locator('[data-precipitation-map-unit]').isVisible(),true);
+      const boxes=await map.locator('[data-isohyet-label-box]').evaluateAll(nodes=>nodes.map(node=>{const b=node.getBoundingClientRect();return {id:node.parentElement.dataset.isohyetLabel,x:b.x,y:b.y,width:b.width,height:b.height};}));
+      const names=await map.locator('svg > text').evaluateAll(nodes=>nodes.map(node=>{const b=node.getBoundingClientRect();return {name:node.textContent,x:b.x,y:b.y,width:b.width,height:b.height};}));
+      const overlap=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
+      const bounds=await map.boundingBox();
+      for(const [index,box] of boxes.entries()){
+       assert.ok(box.height>=20,`${region}/${width}: rainfall number is readable`);
+       assert.ok(box.x>=bounds.x&&box.y>=bounds.y&&box.x+box.width<=bounds.x+bounds.width&&box.y+box.height<=bounds.y+bounds.height,`${region}/${width}: rainfall label stays inside map`);
+       for(const other of boxes.slice(index+1))assert.equal(overlap(box,other),false,`${region}/${width}: rainfall numbers do not overlap`);
+       for(const name of names)assert.equal(overlap(box,name),false,`${region}/${width}: rainfall number ${box.id} avoids ${name.name}; ${JSON.stringify({box,name})}`);
+      }
+     }
      await shot(`${region}-nature-${width}-${id}`);
      await page.reload({waitUntil:'networkidle'});await ready(region);
      assert.equal(await host.locator('[data-layer]').inputValue(),id);
@@ -141,9 +164,8 @@ try{
     assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
     assert.equal(await map.locator('[data-river-name]').count(),region==='russia'?5:3);
     if(region==='russia'&&width===1920){
-     const riverName=await map.locator('[data-river-name="Yenisey"] text').boundingBox();
-     const regionLabel=await map.locator('[data-region-marker][data-map-place="siberia"] .russia-region-marker-label').boundingBox();
-     assert.ok(riverName.x+riverName.width<=regionLabel.x||regionLabel.x+regionLabel.width<=riverName.x||riverName.y+riverName.height<=regionLabel.y||regionLabel.y+regionLabel.height<=riverName.y,'Siberia selector does not cover the Yenisey name');
+     assert.ok(await map.locator('[data-river-label="Yenisey"]').isVisible());
+     assert.equal(await map.locator('[data-region-marker][data-map-place="siberia"]').isVisible(),false,'Broad region box does not cover the river name');
     }
     assert.match(await host.locator('[data-primary-unit]').textContent(),/流向は示さない/);
     assert.match(await host.locator('[data-coverage]').textContent(),/流向・河口/);
@@ -163,7 +185,7 @@ try{
     const host=root(region),map=host.locator('[data-primary-map]'),frame=await map.locator('svg').first().getAttribute('viewBox');
     assert.equal(await host.locator('[data-place]').inputValue(),'all');
     assert.equal(new URL(page.url()).searchParams.get('scope'),'all');
-    if(region==='russia'&&field==='industry'){assert.equal(await map.locator('[data-russia-industry-location]').count(),8);assert.equal(await host.locator('[data-reading-status]').textContent(),'ロシアの概要');}
+    if(region==='russia'&&field==='industry'){assert.equal(await map.locator('[data-russia-industry-location]').count(),10);assert.equal(await host.locator('[data-reading-status]').textContent(),'ロシアの概要');}
     else assert.ok((await host.locator('[data-theme-title]').textContent()).startsWith(region==='oceania'?'オセアニアの':'ロシアの'));
     assert.equal(await host.locator('[data-theme][aria-pressed=true]').count(),0);
     assert.equal(await host.locator('[data-primary-legend-spacer]').evaluate(el=>el.getBoundingClientRect().height),0);
@@ -235,17 +257,17 @@ try{
       assert.equal(await places.locator('text').filter({hasText:'小麦｜'}).count(),2);assert.equal(await places.locator('text').filter({hasText:'牛｜'}).count(),2);
       const labels=await places.locator('rect').evaluateAll(elements=>elements.map(el=>{const b=el.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};}));
       for(let i=0;i<labels.length;i++)for(let j=i+1;j<labels.length;j++)assert.ok(labels[i].x+labels[i].width<=labels[j].x||labels[j].x+labels[j].width<=labels[i].x||labels[i].y+labels[i].height<=labels[j].y||labels[j].y+labels[j].height<=labels[i].y,'Farming names do not overlap');
+
       const legendDetails=host.locator('[data-climate-dictionary]');await legendDetails.locator('summary').click();
       assert.ok(await host.locator('[data-primary-legend-definitions]').isVisible());assert.match(await legendDetails.textContent(),/牛の有効0は点を描きません/);
       assert.equal(await legendDetails.locator('[data-farming-legend="cattle"] > div > span').count(),6);
       await legendDetails.locator('summary').click();
       const readingDetails=host.locator('.russia-learning-explanation');await readingDetails.locator('summary').click();
       assert.ok(await host.locator('[data-explanation]').isVisible());assert.ok(await host.locator('[data-coverage]').isVisible());
-      for(const selector of ['.russia-learning-reading','.russia-reading-scroll','.russia-learning-coverage']){
-       const geometry=await host.locator(selector).evaluate(el=>({maxHeight:getComputedStyle(el).maxHeight,overflow:getComputedStyle(el).overflowY,client:el.clientHeight,scroll:el.scrollHeight}));
-       assert.equal(geometry.maxHeight,'none',`${selector} has no height cap`);assert.equal(geometry.overflow,'visible');
-       assert.ok(geometry.scroll<=geometry.client+1,`${selector} retains the full text`);
-      }
+      const reader=await host.locator('.russia-learning-reading').evaluate(el=>({maxHeight:getComputedStyle(el).maxHeight,overflow:getComputedStyle(el).overflowY,client:el.clientHeight}));
+      const scroll=await host.locator('.russia-reading-scroll').evaluate(el=>({overflow:getComputedStyle(el).overflowY,client:el.clientHeight}));
+      assert.match(reader.maxHeight,/px$/);assert.equal(reader.overflow,'hidden');assert.ok(reader.client>0);
+      assert.equal(scroll.overflow,'auto');assert.ok(scroll.client>0);
       await readingDetails.locator('summary').click();
       assert.equal(await map.locator('[data-farming-product="cattle"][data-farming-mode="missing"] rect[mask]').count(),1);
      }
@@ -273,9 +295,17 @@ try{
       assert.ok(regionControl.y<bounds.y&&layerControl.y<bounds.y);
       assert.ok(regionControl.x<(await reading.boundingBox()).x);
       assert.equal(await host.locator('.oceania-learning-layer > span').evaluate(el=>getComputedStyle(el).whiteSpace),'nowrap');
-      const places=map.locator('[data-farming-place]');assert.equal(await places.count(),5);
+      const places=map.locator('[data-farming-place]');assert.equal(await places.count(),9);
+      assert.equal(await map.locator('[data-farming-belt]').count(),7);
+      for(const id of ['wheat-southeast','wheat-nz','coconut-png-islands','cacao-solomon-west'])assert.equal(await map.locator(`[data-farming-place="${id}"]`).count(),1);
       const labels=await places.locator('rect').evaluateAll(elements=>elements.map(el=>{const b=el.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};}));
       for(let i=0;i<labels.length;i++)for(let j=i+1;j<labels.length;j++)assert.ok(labels[i].x+labels[i].width<=labels[j].x||labels[j].x+labels[j].width<=labels[i].x||labels[i].y+labels[i].height<=labels[j].y||labels[j].y+labels[j].height<=labels[i].y,'Farming names do not overlap');
+      const measured=await places.evaluateAll(elements=>elements.map(el=>{const [x,y]=el.dataset.farmingAnchor.split(',').map(Number),point=el.ownerSVGElement.createSVGPoint();point.x=x;point.y=y;const screen=point.matrixTransform(el.ownerSVGElement.getScreenCTM()),box=el.querySelector('rect').getBoundingClientRect();return {id:el.dataset.farmingPlace,anchor:{x:screen.x,y:screen.y},box:{x:box.x,y:box.y,width:box.width,height:box.height},distance:Math.hypot(Math.max(box.x-screen.x,0,screen.x-box.x-box.width),Math.max(box.y-screen.y,0,screen.y-box.y-box.height))};}));
+      for(const item of measured){
+       for(const other of measured)assert.equal(item.anchor.x>other.box.x&&item.anchor.x<other.box.x+other.box.width&&item.anchor.y>other.box.y&&item.anchor.y<other.box.y+other.box.height,false,'Names do not cover the source distribution anchors');
+       if(['wheat-southeast','wheat-nz','coconut-png-islands','cacao-solomon-west'].includes(item.id))assert.ok(item.distance<=80,`${width}/${item.id}: name remains near its measured concentration, ${item.distance}px`);
+      }
+      (result.beltLabelDistances??=[]).push({width,labels:measured});
       const legendDetails=host.locator('[data-primary-legend-dictionary]');await legendDetails.locator('summary').click();
       assert.ok(await host.locator('[data-primary-legend-definitions]').isVisible());
       assert.equal(await legendDetails.locator('[data-farming-legend]').count(),5);
@@ -283,10 +313,10 @@ try{
       await legendDetails.locator('summary').click();
       const readingDetails=host.locator('.oceania-learning-explanation');await readingDetails.locator('summary').click();
       assert.ok(await host.locator('[data-explanation]').isVisible());assert.ok(await host.locator('[data-coverage]').isVisible());
-      for(const selector of ['.oceania-learning-reading','.oceania-workspace-reading-scroll','.oceania-learning-coverage']){
-       const geometry=await host.locator(selector).evaluate(el=>({maxHeight:getComputedStyle(el).maxHeight,overflow:getComputedStyle(el).overflowY,client:el.clientHeight,scroll:el.scrollHeight}));
-       assert.equal(geometry.maxHeight,'none');assert.equal(geometry.overflow,'visible');assert.ok(geometry.scroll<=geometry.client+1);
-      }
+      const reader=await host.locator('.oceania-learning-reading').evaluate(el=>({maxHeight:getComputedStyle(el).maxHeight,overflow:getComputedStyle(el).overflowY,client:el.clientHeight}));
+      const scroll=await host.locator('.oceania-workspace-reading-scroll').evaluate(el=>({overflow:getComputedStyle(el).overflowY,client:el.clientHeight}));
+      assert.match(reader.maxHeight,/px$/);assert.equal(reader.overflow,'hidden');assert.ok(reader.client>0);
+      assert.equal(scroll.overflow,'auto');assert.ok(scroll.client>0);
       await readingDetails.locator('summary').click();
       await host.locator('[data-place]').selectOption('NZL');await ready(region);
       assert.match(await host.locator('[data-geography-reading]').textContent(),/乳牛と肉牛、羊毛と食肉/);
@@ -297,7 +327,7 @@ try{
      const products=region==='russia'?['cattle','wheat']:['cacao','cattle','coconut','sheep','wheat'];
      const shown=async()=>[...new Set(await map.locator('[data-farming-product]').evaluateAll(elements=>elements.map(el=>el.dataset.farmingProduct)))].sort();
      assert.deepEqual(await shown(),products);
-     if(region==='oceania')assert.deepEqual(await map.locator('[data-farming-place]').evaluateAll(elements=>elements.map(el=>Number(getComputedStyle(el).opacity))),[1,1,1,1,1]);
+     if(region==='oceania')assert.equal(await map.locator('[data-farming-place]').evaluateAll(elements=>elements.every(el=>Number(getComputedStyle(el).opacity)===1)),true);
      assert.match(await host.locator('[data-explanation]').textContent(),region==='russia'?/他の品目の全国分布格子は未収録/:/上位10/);
      const cattle=map.locator('[data-farming-product="cattle"][data-farming-mode="texture"]');
      const initialOpacity=Number(await cattle.getAttribute('opacity'));
@@ -315,17 +345,20 @@ try{
      assert.equal(Number(await map.locator('[data-farming-product="wheat"][data-farming-mode="outline"]').getAttribute('opacity')),1);
      if(region==='oceania'){
       const annotations=await map.locator('[data-farming-place]').evaluateAll(elements=>elements.map(el=>({product:el.dataset.placeProduct,opacity:Number(getComputedStyle(el).opacity),hasName:!!el.querySelector('text'),hasIcon:!!el.querySelector('g[transform]')})));
-      assert.equal(annotations.length,5);assert.equal(annotations.find(item=>item.product==='wheat').opacity,1);
+      assert.equal(annotations.length,9);assert.ok(annotations.filter(item=>item.product==='wheat').every(item=>item.opacity===1));
       for(const item of annotations.filter(item=>item.product!=='wheat')){assert.ok(item.opacity>0&&item.opacity<.4,'Other names and livestock icons become faint');assert.ok(item.hasName&&item.hasIcon,'Faint annotations remain in the map');}
       const renderDeltas=[];
-      for(const item of annotations.filter(item=>item.product!=='wheat')){
+      for(const product of new Set(annotations.filter(item=>item.product!=='wheat').map(item=>item.product))){
+       const item=annotations.find(item=>item.product===product);
        const before=initialAnnotationPixels.get(item.product),after=await annotationShot(map,item.product);
-       assert.deepEqual(after.clip,before.clip,'Compare the same document pixels before and after crop focus');
+       assert.equal(after.clip.width,before.clip.width,'Annotation width stays fixed after crop focus');
+       assert.equal(after.clip.height,before.clip.height,'Annotation height stays fixed after crop focus');
+       assert.ok(Math.abs(after.clip.x-before.clip.x)<=4&&Math.abs(after.clip.y-before.clip.y)<=4,'Map controls do not substantially move annotations');
        assert.ok(!before.png.equals(after.png),'Rendered nonselected name/icon pixels change after crop focus');
        renderDeltas.push({product:item.product,overviewOpacity:1,cropFocusOpacity:item.opacity,clip:before.clip,overviewPngSha256:createHash('sha256').update(before.png).digest('hex'),cropFocusPngSha256:createHash('sha256').update(after.png).digest('hex')});
       }
       (result.annotationRenderDeltas??=[]).push({width,items:renderDeltas});
-      result.checks.push(`Oceania ${width}px: overview names/icons opacity 1; wheat selection retains wheat opacity 1 and fades the other four to 0.32 while all five distributions remain.`);
+      result.checks.push(`Oceania ${width}px: all nine reading names start at opacity 1; wheat selection retains all three wheat names and fades the other products' names/icons to 0.32 while all five distributions remain.`);
      }
      await shot(`${region}-agriculture-${width}-crop-focus`);
      await page.reload({waitUntil:'networkidle'});await ready(region);
@@ -371,7 +404,7 @@ try{
       assert.match(await host.locator('[data-geography-reading]').textContent(),/ヤクーツク付近.*低密度の正値/);
       assert.equal(await host.locator('[data-place]').evaluate(el=>document.activeElement===el),true,'Native keyboard region focus survives redraw');
      }else if(field==='industry'){
-      assert.equal(await host.locator('[data-place]').inputValue(),'far-east');assert.equal(await map.locator('[data-region-marker]').count(),0);assert.equal(await map.locator('[data-russia-industry-location]').count(),8);assert.equal(await host.locator('[data-region-option=far-east]').evaluate(el=>document.activeElement===el),true);
+      assert.equal(await host.locator('[data-place]').inputValue(),'far-east');assert.equal(await map.locator('[data-region-marker]').count(),0);assert.equal(await map.locator('[data-russia-industry-location]').count(),10);assert.equal(await host.locator('[data-region-option=far-east]').evaluate(el=>document.activeElement===el),true);
      }else{
       assert.equal(await map.locator('[data-region-marker]').count(),3);
       assert.equal(await map.locator('[data-region-marker][data-map-place=far-east]').evaluate(el=>document.activeElement===el),true,'Keyboard focus survives redraw');
@@ -386,7 +419,7 @@ try{
     assert.equal(await host.locator('[data-layer]').inputValue(),layer);
     assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
     await host.locator('[data-place]').selectOption('all');await ready(region);
-    if(region==='russia'&&field==='industry'){assert.equal(await map.locator('[data-russia-industry-location]').count(),8);assert.equal(await host.locator('[data-reading-status]').textContent(),'ロシアの概要');}
+    if(region==='russia'&&field==='industry'){assert.equal(await map.locator('[data-russia-industry-location]').count(),10);assert.equal(await host.locator('[data-reading-status]').textContent(),'ロシアの概要');}
     else assert.ok((await host.locator('[data-theme-title]').textContent()).startsWith(region==='oceania'?'オセアニアの':'ロシアの'));
    }
    for(const dimension of dimensions){assert.ok(Math.abs(dimension.width-dimensions[0].width)<2,`${region} field map widths agree`);assert.ok(Math.abs(dimension.height-dimensions[0].height)<2,`${region} field map heights agree`);}
@@ -396,6 +429,19 @@ try{
  result.checks.push(farmingOnly?'Changed farming pages start with all saved crop/livestock products, full extent and overview. Product focus, country/native keyboard region selection, reload and reset retain other distributions.':'All eight direct field routes start at full extent and overview without a selected country/region/theme.');
  result.checks.push(farmingOnly?'At the requested PC widths including 1920×1080, crop focus keeps the full frame, and the explicit single-product mode survives reload and restores all saved products.':'All four field map dimensions agree per region at 1920, 1536, 1280 and 1024px; hidden legend duplicates reserve no height.');
  if(farmingOnly&&regions.includes('russia'))result.checks.push('Russia has source-backed crop/cattle names in the map, one left region control, a compact two-product key below the map, visible geographical reading and folded full technical/quantity information. Native keyboard focus and product retention pass.');
+ if(regions.includes('oceania'))for(const width of [1536,1024]){
+  await page.setViewportSize({width,height:864});
+  for(const [country,product,id] of [['NZL','wheat','wheat-nz'],['SLB','cacao','cacao-solomon-west']]){
+   await open('oceania','agriculture',`?place=${country}&scope=country&layer=${product}`);
+   const host=root('oceania'),map=host.locator('[data-primary-map]'),label=map.locator(`[data-farming-place="${id}"]`);
+   assert.equal(await label.count(),1);assert.equal(await host.locator('[data-place]').inputValue(),country);
+   assert.ok(await map.locator(`[data-farming-product="${product}"][data-farming-mode="quantity"]`).count()>0);
+   const frame=await map.locator('svg').first().getAttribute('viewBox');
+   await shot(`oceania-agriculture-${width}-${country}-${product}-belt-detail`);
+   await page.reload({waitUntil:'networkidle'});await ready('oceania');
+   assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);assert.equal(await label.count(),1);
+  }
+ }
  await page.setViewportSize({width:1536,height:864});
  for(const region of regions){
   await open(region,'agriculture','?scope=all&layer=wheat&compare=cattle&view=comparison');

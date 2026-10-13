@@ -118,7 +118,14 @@ jobs:
           # Ordinary future commits continue to run the full Africa review.
           africa_review_scope="$(git log -1 --format='%(trailers:key=Africa-Review-Scope,valueonly)')"
           africa_review_evidence="$(git log -1 --format='%(trailers:key=Africa-Review-Evidence,valueonly)')"
-          if [[ "$africa_review_scope" == round2 && "$africa_review_evidence" == sources ]]; then
+          if [[ "$africa_review_scope" == industry-sectors || "$africa_review_scope" == remaining ]]; then
+            africa_culture_scope=third
+            if [[ "$africa_review_scope" == remaining ]]; then africa_culture_scope=remaining; fi
+            AFRICA_REVIEW_SCOPE="$africa_culture_scope" AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node tests/e2e/atlas-africa-round2-review.spec.mjs
+            node scripts/verify-africa-industry-review.mjs
+          elif [[ "$africa_review_scope" == third ]]; then
+            AFRICA_REVIEW_SCOPE=third AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node tests/e2e/atlas-africa-round2-review.spec.mjs
+          elif [[ "$africa_review_scope" == round2 && "$africa_review_evidence" == sources ]]; then
             AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node tests/e2e/atlas-africa-source-evidence.spec.mjs
           elif [[ "$africa_review_scope" == round2 ]]; then
             AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node tests/e2e/atlas-africa-round2-review.spec.mjs
@@ -130,8 +137,26 @@ jobs:
             fi
             AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node scripts/verify-africa-approved-review.mjs
           fi
-          if [[ "$africa_review_scope" != round2 ]]; then
+          if [[ "$africa_review_scope" != round2 && "$africa_review_scope" != third && "$africa_review_scope" != industry-sectors && "$africa_review_scope" != remaining ]]; then
             node scripts/verify-africa-industry-review.mjs
+          fi
+          if [[ "$africa_review_scope" == industry-sectors || "$africa_review_scope" == remaining ]]; then
+            node --input-type=module <<'JS'
+          import {readdir,stat,readFile,writeFile} from 'node:fs/promises';
+          import {createHash} from 'node:crypto';
+          import assert from 'node:assert/strict';
+          const roots=['review-artifacts/africa-pc-review/representative','review-artifacts/africa-industry-review'];
+          const files=[];
+          for(const root of roots)for(const name of await readdir(root)){
+            const path=root+'/'+name,info=await stat(path);
+            if(info.isFile()){const bytes=await readFile(path);files.push({path,bytes:info.size,sha256:createHash('sha256').update(bytes).digest('hex')});}
+          }
+          const payload=JSON.stringify({head:process.env.AFRICA_REVIEW_HEAD_SHA,runId:process.env.AFRICA_REVIEW_RUN_ID,scope:'third-industry-and-culture-evidence',files,independentImageInspection:'not-established-by-CI'},null,2)+'\n';
+          const total=files.reduce((sum,file)=>sum+file.bytes,0)+Buffer.byteLength(payload);
+          assert(total<20*1024*1024,'combined target images and JSON below 20 MiB');
+          await writeFile(roots[1]+'/combined-manifest.json',payload);
+          console.log(JSON.stringify({head:process.env.AFRICA_REVIEW_HEAD_SHA,combinedTargetBytes:total,limitBytes:20*1024*1024}));
+          JS
           fi
 
       - name: Upload Africa PC screenshots and validation metadata
@@ -150,6 +175,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: africa-pc-failed-${{ github.run_id }}
-          path: review-artifacts/africa-pc-review
+          path: |
+            review-artifacts/africa-pc-review
+            review-artifacts/africa-industry-review
           if-no-files-found: warn
           retention-days: 7

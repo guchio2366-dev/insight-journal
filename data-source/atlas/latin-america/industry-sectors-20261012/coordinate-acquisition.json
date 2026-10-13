@@ -1,0 +1,9 @@
+{
+  "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_populated_places.geojson",
+  "attempts": 1,
+  "retry": false,
+  "result": "acquired",
+  "bytes": 19359003,
+  "sha256": "9b8e3de09048ef00dfc70357dbb9fa324493f214b5e0ae4daf1aa79a8d10116b",
+  "features": 7342
+}

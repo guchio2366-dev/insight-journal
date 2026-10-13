@@ -11,6 +11,19 @@ export function createRegionalClimateSelection(root:HTMLElement,region:string,en
   if(!enabled()||!climateCity(region,cityId))return;
   commit(()=>{id=cityId;});focus(cityId);
  };
+ const sizePane=()=>{
+  const panel=root.querySelector<HTMLElement>('[data-regional-climate-reading]');
+  const parent=panel?.parentElement;
+  if(!parent)return;
+  if(panel.hidden||window.innerWidth<(region==='oceania'?900:960)){
+   parent.style.removeProperty('--regional-climate-pane-height');return;
+  }
+  // The approved tabs place the reader lower than the former fixed 210px offset.
+  // Size the selected reader from its actual top; map geometry stays unchanged.
+  const top=Math.max(0,parent.getBoundingClientRect().top);
+  parent.style.setProperty('--regional-climate-pane-height',Math.max(0,window.innerHeight-top-14)+'px');
+ };
+ window.addEventListener('resize',sizePane);
  root.addEventListener('click',event=>{
   const target=event.target as Element;
   const marker=target.closest<SVGElement>('[data-regional-climate-city]');
@@ -33,6 +46,7 @@ export function createRegionalClimateSelection(root:HTMLElement,region:string,en
     const template=root.querySelector<HTMLTemplateElement>(`[data-regional-climate-template="${id}"]`)!;
     panel.replaceChildren(template.content.cloneNode(true));panel.dataset.city=id;
    }
+   sizePane();
    root.querySelectorAll<SVGElement>('[data-regional-climate-city]').forEach(marker=>marker.setAttribute('aria-pressed',String(show&&marker.dataset.regionalClimateCity===id)));
    if(enabled())focus(focusedId);
   },

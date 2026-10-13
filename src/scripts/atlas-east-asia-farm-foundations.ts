@@ -1,4 +1,6 @@
 import data from '../../public/assets/atlas/east-asia-v1/farm-foundations.json';
+import statistics from '../../public/assets/atlas/east-asia-v2/food-wood-statistics-2023.json';
+import {renderEastTrade,renderEastFoodInputAudit} from './atlas-east-agri-statistics.ts';
 import {japanWheatSupply as wheat} from '../data/atlas/japan-wheat-supply';
 import type {AsiaRegionId} from '../lib/atlas-asia-state';
 
@@ -53,17 +55,13 @@ export function renderEastAsiaFarmFoundations(root:HTMLElement,region:AsiaRegion
  // Agricultural views must never inherit forestry or all-goods indicators.
  if(topic!=='forest'){
   if(heading)heading.textContent='農畜産の供給・域外貿易・食料自給';
-  if(lead)lead.textContent='地域全体は中国・日本・朝鮮半島・モンゴル・台湾を対象とします。対応する需給・相手国別・カロリー系列を照合できていないため、数値と円の面積は表示していません。未収録は0ではありません。';
+  if(lead)lead.textContent='中国本土・日本・韓国・北朝鮮・モンゴル・台湾に対応する6区分を統計の対象とします。2023年の確認済み相手国表から範囲内取引を除きます。未収録の報告区分を含む地域全体の額は算出せず、供給用途とカロリーの不足も分けて示します。';
   section.querySelector<HTMLElement>('[data-east-supply-title]')!.textContent='主要品目の供給と用途';
   section.querySelector<HTMLElement>('[data-east-partner-title]')!.textContent='主要品目の域外輸出入相手';
   section.querySelector<HTMLElement>('[data-east-share-title]')!.textContent='品目群のカロリー構成と自給状況';
-  p(forest,'未収録：同一年・同一品目・重量単位の食料需給表。生産＋輸入＋在庫取崩しを、食用・飼料・加工・種子・損失・輸出・在庫積増し等へ対応させます。食用は摂取量ではなく供給量です。');
-  p(destinations,'未収録：全相手国を含む品目別貿易行列。中国・日本・朝鮮半島・モンゴル・台湾との域内取引を除き、域外輸出と域外輸入を別々の分母で示す必要があります。保存済みの上位3相手＋その他では域内分を除去できません。');
-  p(share,'未収録：同一年・同一対象の食料供給カロリーと品目別国内生産。重量比や世界生産比をカロリー自給率に読み替えません。');
-
-  p(forest,'出典候補：FAOSTAT Food Balances（2010–2023年公開）。取得先が403を返したため、地域合計・対象年・数量は未確定です。');
-  destinations.append(el('a','FAOSTAT 品目別貿易行列'));
-  destinations.querySelector('a')!.href='https://www.fao.org/faostat/en/#data/TM';
+  renderEastFoodInputAudit(forest,share,topic??'overview',code);
+  for(const product of topic==='overview'||!topic?['rice','wheat','maize','soybean']:[topic])renderEastTrade(destinations,product,code);
+  p(destinations,'相手国の円はHS商品の貿易額です。食料需給表の原料換算量・食用量へ合算しません。');
   forest.append(el('a','FAOSTAT 食料需給表'));forest.querySelector('a')!.href='https://www.fao.org/faostat/en/#data/FBS';
   if(otherSources)otherSources.hidden=true;
   return;
@@ -71,34 +69,35 @@ export function renderEastAsiaFarmFoundations(root:HTMLElement,region:AsiaRegion
  if(heading)heading.textContent='森林面積と木材の生産・貿易';
  if(lead)lead.textContent='中国・日本・韓国・北朝鮮・モンゴル・台湾の公表値を示します。森林の分布・面積と、丸太・製材の体積、木材・木製品の貿易額は別の指標です。未収録は0ではありません。';
  section.querySelector<HTMLElement>('[data-east-supply-title]')!.textContent='丸太・製材の生産と輸出入';
- section.querySelector<HTMLElement>('[data-east-partner-title]')!.textContent='木材・木製品の輸出入';
+ section.querySelector<HTMLElement>('[data-east-partner-title]')!.textContent='原木・製材の域外輸出入相手';
  section.querySelector<HTMLElement>('[data-east-share-title]')!.textContent='森林面積と世界比';
  const selected=code?data.countries.filter(key=>key===code):data.countries;
  for(const key of selected){
-  const flows=data.forestFlows[key as keyof typeof data.forestFlows];
-  p(forest,`${names[key]} · 2024年 · m³`);
+  const flows=statistics.forestFlows[key as keyof typeof statistics.forestFlows];
+  p(forest,`${names[key]} · 2023年 · m³`);
   for(const [kind,label] of [['roundwood','丸太'],['sawnwood','製材']] as const){
    const values=flows[kind],max=Math.max(1,...Object.values(values).map(value=>value?.value??0));
    p(forest,label);
    for(const [field,name] of [['production','生産'],['imports','輸入'],['exports','輸出']] as const){const record=values[field];if(record)addBar(forest,name,record.value,max,'m3');else p(forest,`${name}：未掲載`);}
   }
-  const trade=data.woodTrade[key as keyof typeof data.woodTrade],max=Math.max(1,trade.imports??0,trade.exports??0);
-  p(destinations,`${key==='TWN'?'その他のアジア（台湾等）':names[key]} · HS44 · 2023年 · 名目米ドル`);
-  for(const [field,name] of [['imports','輸入'],['exports','輸出']] as const){const value=trade[field];if(value!==null)addBar(destinations,name,value,max,'USD');else p(destinations,`${name}：未収録（0ではありません）`);}
  }
+ renderEastTrade(destinations,'sawnwood',code);
+ renderEastTrade(destinations,'coniferous-roundwood',code);
  p(forest,'FAOの中国は中国本土（area 41）、台湾は台湾区分（area 214）です。中国合計区分と台湾を重複させていません。');
  p(forest,'FAOSTAT Forestry。生産・輸入・輸出は別の量で、在庫変動を含む国内需給ではありません。資料区分Aは公表値、Eは推計、Xは国際機関等の資料です。国別の値・区分は出典データで確認できます。');
- p(destinations,'HS44は木材・木製品・木炭。丸太・製材以外も含み、上の体積とは合計しません。台湾の貿易は「Other Asia, nes」（台湾等）報告区分です。');
- p(destinations,'木材の相手国別内訳は未収録です。全商品の相手国構成は木材の相手国に代用できないため、円グラフを表示していません。域内・域外を分けた貿易量でもありません。');
- const area=data.series.find(row=>row.id==='forest-area')!.years.at(-1)!;
- p(share,'森林面積 · 2024年 · 千ha');
+ p(destinations,'製材HS4407の額を、FAOの丸太・製材の体積へ足しません。丸太HS4403およびHS44全体の全相手表は未収録です。');
+ const retained=el('details');retained.append(el('summary','参考：保存済みHS44の国別輸出入総額（2023年）'));
+ for(const key of selected){const trade=data.woodTrade[key as keyof typeof data.woodTrade],max=Math.max(1,trade.imports??0,trade.exports??0);p(retained,`${names[key]} · HS44 · 名目米ドル`);for(const [field,name] of [['imports','輸入'],['exports','輸出']] as const){const value=trade[field];if(value!==null)addBar(retained,name,value,max,'USD');else p(retained,`${name}：未収録（0ではありません）`);}}
+ p(retained,'HS44は木材・木製品・木炭を含む対世界の総額で、域外相手の製材円の分母に使いません。');destinations.append(retained);
+ const area=data.series.find(row=>row.id==='forest-area')!.years.find(row=>row.year===2023)!;
+ p(share,'森林面積 · 2023年 · 千ha');
  const maxArea=Math.max(1,...selected.map(key=>area.countries[key as keyof typeof area.countries]?.value??0));
  for(const key of selected){const row=area.countries[key as keyof typeof area.countries];if(row)addBar(share,names[key],row.value,maxArea,'1000 ha');else p(share,`${names[key]}：未掲載（0ではありません）`);}
  p(share,'FAOSTAT Land Use。面積の値は国別公表区分で、地図の森林画像から集計した値ではありません。以下の比率の分母は同年・同定義のWorld森林面積です。');
  const id=topics[topic??''];if(!id){p(share,'選んだ品目と同じ定義のWorld分母を照合した系列は、今回の7指標に含まれません。');return;}const series=data.series.find(row=>row.id===id);
  if(!series)return;
  if(!code){
-  p(share,`2024年の${labels[id]} · 世界比`);const latest=series.years.at(-1)!,rows=data.countries.map(key=>({key,value:latest.countries[key as keyof typeof latest.countries]?.share})),max=Math.max(1,...rows.map(row=>row.value??0));
+  p(share,`2023年の${labels[id]} · 世界比`);const latest=series.years.find(row=>row.year===2023)!,rows=data.countries.map(key=>({key,value:latest.countries[key as keyof typeof latest.countries]?.share})),max=Math.max(1,...rows.map(row=>row.value??0));
   for(const row of rows)if(row.value!==undefined)addBar(share,names[row.key],row.value,max,'%');else p(share,`${names[row.key]}：未掲載（0ではありません）`);
   p(share,'各国・地域の値 ÷ 同じFAOSTAT品目・年・単位のWorld値。国の比率を足して地域全体とは扱いません。');return;
  }

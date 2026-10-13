@@ -1,0 +1,1 @@
+{"url": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/DRLL/EuroCropsV2/gpqtv201/iti1_2023.parquet", "method": "GET", "requestHeader": {"Range": "bytes=-65536"}, "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))"}

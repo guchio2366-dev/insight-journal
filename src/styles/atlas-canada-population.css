@@ -65,3 +65,12 @@
 
 [data-population-subdivision]{stroke:#a1b0a7;stroke-width:.15;vector-effect:non-scaling-stroke;cursor:pointer}
 [data-population-subdivision]:hover,[data-population-subdivision]:focus,[data-population-subdivision].is-selected-subdivision{stroke:#203e4a;stroke-width:1.5;outline:none}
+.demographic-reference-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2}
+.demographic-reference-label{position:absolute;pointer-events:auto;border:0;background:#fbfaf3e8;padding:3px 5px;text-align:left;color:#2c4654;font:600 12px/1.4 var(--sans);cursor:pointer;max-width:205px}
+.demographic-reference-label small{display:block;font-weight:500;color:#516873;font-size:11px}
+.demographic-reference-label span{display:block;white-space:nowrap}
+.demographic-reference-label i{display:inline-block;width:7px;height:7px;margin-right:4px;vertical-align:middle}
+.demographic-reference-label.is-context{opacity:.55}
+.demographic-reference-label:focus-visible{outline:2px solid #274f66}
+[data-demographic-reference-outlines]{pointer-events:none}
+.demographic-reference-leaders{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.demographic-reference-leaders line{stroke:#5a7786;stroke-width:.8;opacity:.6}

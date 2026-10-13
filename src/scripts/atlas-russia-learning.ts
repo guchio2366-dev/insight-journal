@@ -1,4 +1,4 @@
-import {russiaIndustryMarks} from '../data/atlas/russia-industry-reading';
+import {russiaIndustryMarks,russiaIndustrySectors,russiaIndustryMarkSectors,type RussiaIndustrySector} from '../data/atlas/russia-industry-reading';
 import {withBase} from '../lib/urls';
 import {createRegionalClimateSelection} from './atlas-regional-climate-selection';
 import {
@@ -11,14 +11,14 @@ type RussiaField=keyof typeof russiaFields;
 type RussiaState=ReturnType<typeof createRussiaState>;
 type RussiaSource={title:string;url:string;note?:string};
 const htmlEscape=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
-const ownKeys=['theme','layer','place','scope','view','compare','reading','industryLocation','single'];
+const ownKeys=['theme','layer','place','scope','view','compare','reading','industryLocation','single','sector','sectorOnly'];
 
 const climateShortNames:Record<string,string>={BWk:'低温砂漠',BSk:'低温半乾燥',Cfa:'温暖湿潤',Cfb:'西岸海洋性',Dsc:'冷帯夏乾冷夏',Dsd:'冷帯夏乾厳冬',Dwa:'冷帯冬乾暑夏',Dwb:'冷帯冬乾暖夏',Dwc:'冷帯冬乾冷夏',Dwd:'冷帯冬乾厳冬',Dfa:'冷帯湿潤暑夏',Dfb:'冷帯湿潤暖夏',Dfc:'冷帯湿潤冷夏',Dfd:'冷帯湿潤厳冬',ET:'ツンドラ',EF:'氷雪'};
 export function renderRussiaWorkspaceLegend(layer:ReturnType<typeof getRussiaLayer>):string {
  if(layer.field==='agriculture')return renderRussiaFarmingKey(layer);
  if(layer.id==='precipitation'||layer.id==='elevation'){
   const indices=layer.id==='precipitation'?[0,2,4,8,16]:[0,1,3,5,9,13];
-  return renderRussiaLegend({...layer,legend:indices.map(i=>layer.legend[i])})+`<span>${layer.id==='precipitation'?'等雨量線 250 mm間隔':'等高線 500 m間隔'}</span>`;
+  return renderRussiaLegend({...layer,legend:[...indices.map(i=>layer.legend[i]),...layer.legend.filter(item=>item.shape==='missing')]})+`<span>${layer.id==='precipitation'?'等雨量線 250 mm間隔':'等高線 500 m間隔'}</span>`;
  }
  return renderRussiaLegend(layer.id==='climate'?{...layer,legend:layer.legend.map(item=>{const code=item.label.split(' ')[0];return {...item,label:climateShortNames[code]?code+climateShortNames[code]:item.label};})}:layer);
 }
@@ -30,8 +30,10 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
  const overview=root.dataset.russiaOverview==='true';
  const climateSelection=createRegionalClimateSelection(root,'russia',()=>!overview&&field==='nature'&&state.layer==='climate'&&!state.comparison,mutate=>update(mutate));
  if(overview){state.layer='cities';if(!new URLSearchParams(location.search).has('compare'))state.compareLayer='density';}
- const isSelectedReading=()=>!!state.industryLocation||new URLSearchParams(location.search).get('reading')==='selection'||state.place!=='all'||state.scope!=='all'||(field==='agriculture'&&state.layer!=='farming-all');
+ const isSelectedReading=()=>!!state.industryLocation||!!state.sector||new URLSearchParams(location.search).get('reading')==='selection'||state.place!=='all'||state.scope!=='all'||(field==='agriculture'&&state.layer!=='farming-all');
  let selected=isSelectedReading();
+ let selectedRiver:string|undefined;
+ const riverNames:Record<string,string>={Volga:'ボルガ川',Ob:'オビ川',Yenisey:'エニセイ川',Lena:'レナ川',Amur:'アムール川'};
  const fieldOverview=russiaOverviewReadings[field];
  if(field==='industry'&&!overview){const readings=root.querySelector('.russia-learning-detailed-readings');if(readings)root.querySelector('.russia-reading-scroll')?.prepend(readings);}
  const one=<T extends HTMLElement=HTMLElement>(hook:string)=>root.querySelector<T>(`[data-${hook}]`)!;
@@ -47,6 +49,7 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
   if(s.comparison)url.searchParams.set('view','comparison');
   if(s.field==='agriculture'&&s.layer!=='farming-all'&&s.single)url.searchParams.set('single','1');
   url.searchParams.set('compare',s.compareLayer);
+  if(s.field==='industry'&&s.sector){url.searchParams.set('sector',s.sector);if(s.sectorOnly)url.searchParams.set('sectorOnly','1');}
   if(selected)url.searchParams.set('reading','selection');
   if(s.field==='industry'&&s.layer==='places'&&s.industryLocation)url.searchParams.set('industryLocation',s.industryLocation);
   const params=new URLSearchParams(location.search);for(const flag of ['only','fallback']){const value=params.get(flag);if(value==='0'||value==='1')url.searchParams.set(flag,value);else url.searchParams.delete(flag);}
@@ -108,10 +111,13 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
   if(field==='agriculture')root.querySelectorAll<HTMLElement>('[data-farming-key],[data-farming-legend]').forEach(item=>{const product=item.dataset.farmingKey??item.dataset.farmingLegend;item.hidden=!!state.single&&product!==layer.id;});
   text('reading-status',selected?'選んだ場所・分布の説明':'ロシアの概要');
   text('theme-title',!selected?(overview?'広い国土を、都市と分野の分布から読む':fieldOverview.title):contextualReading?theme.title:selectedName()+'の'+layer.title);text('takeaway',!selected?(overview?'欧州側・シベリア・極東を同じ表示枠で確かめ、自然条件に設備・交通・市場・社会を重ねて読む。都市中心の円は行政人口ではなく、固定された都市範囲の人口です。':fieldOverview.takeaway):contextualReading?theme.takeaway:fieldOverview.takeaway);
-  text('explanation',contextualReading?theme.explanation:selected?selectedName()+'を選択しています。 '+layer.coverage:fieldOverview.explanation);text('social-context',theme.social);
+  text('explanation',contextualReading?theme.explanation:selected?selectedName()+'を選択しています。 '+layer.coverage:fieldOverview.explanation);text('social-context',field==='industry'&&state.sector&&!state.industryLocation?russiaIndustrySectors[state.sector].explanation:theme.social);
   if(field==='nature'&&layer.id!=='climate'){text('theme-title',layer.title);text('takeaway',layer.id==='precipitation'?'1991–2020年の年降水量と250 mm間隔の線で、地域ごとの違いを読みます。':layer.id==='rivers'?'名称付きの代表河川の位置を確認します。線の順序から流向や河口は判断しません。':'海抜500 mごとの段階色と等高線で、広い国土の標高を読みます。');text('explanation',layer.coverage);}
   const industryPoint=field==='industry'&&state.layer==='places'?russiaIndustryMarks.find(m=>m.id===state.industryLocation):undefined;
   const industryReturn=root.querySelector<HTMLElement>('[data-russia-industry-return]');if(industryReturn)industryReturn.hidden=!industryPoint;
+  if(field==='industry'&&state.sector&&!industryPoint){const sector=russiaIndustrySectors[state.sector];text('theme-title',sector.title);text('takeaway',sector.takeaway);text('explanation',sector.explanation);}
+  const only=root.querySelector<HTMLButtonElement>('[data-industry-only]');if(only){only.hidden=!state.sector;only.setAttribute('aria-pressed',String(!!state.sectorOnly));only.textContent=state.sectorOnly?'他の分野も表示':'この分野だけ表示';}
+  root.querySelectorAll<HTMLButtonElement>('[data-industry-sector]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.industrySector===state.sector)));
   if(industryPoint){text('theme-title',industryPoint.name);text('takeaway',industryPoint.reading??industryPoint.note);text('explanation',industryPoint.note);}
   if(field==='agriculture'&&!overview)text('geography-reading',getRussiaFarmingGeography(layer.id,state.place));
   text('coverage',russiaCoverage(layer,state));
@@ -130,7 +136,15 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
   root.querySelectorAll<HTMLAnchorElement>('[data-russia-overview-link]').forEach(link=>{link.href=serialized({...state,comparison:false},link.href).href;});
    if(state.comparison){scene('original-map',state.layer);scene('comparison-map',state.compareLayer);}
    else scene('primary-map',state.layer);
+   if(field==='industry')root.querySelectorAll<SVGElement>('[data-industry-sectors]').forEach(item=>{const match=!state.sector||item.dataset.industrySectors?.split(' ').includes(state.sector);item.dataset.sectorMatch=String(!!match);item.dataset.sectorOnly=String(!!state.sectorOnly);});
    climateSelection.render();
+   if(field==='nature'&&state.layer==='rivers'&&selectedRiver&&riverNames[selectedRiver]){
+    text('theme-title',riverNames[selectedRiver]);
+    text('takeaway',`${riverNames[selectedRiver]}の原本河川中心線を示します。流向・河口・流域境界はこの資料から判断しません。`);
+    text('explanation',layer.coverage);
+    root.querySelectorAll<SVGElement>('[data-primary-map] [data-river-name]').forEach(item=>item.dataset.selected=String(item.dataset.riverName===selectedRiver));
+    root.querySelectorAll<SVGElement>('[data-primary-map] [data-river-label]').forEach(item=>item.setAttribute('aria-pressed',String(item.dataset.riverLabel===selectedRiver)));
+   }
    if(focusedIndustry)root.querySelector<SVGElement>(`[data-russia-industry-location="${focusedIndustry}"]`)?.focus({preventScroll:true});
    if(focusedHook&&focusedPlace)one(focusedHook).querySelector<SVGElement>(`[data-region-marker][data-map-place="${focusedPlace}"]`)?.focus({preventScroll:true});
  };
@@ -143,14 +157,23 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
   if(state.place==='all')state.scope='all';selected=state.place!=='all'||(field==='agriculture'&&state.layer!=='farming-all');chooseRegionTheme();
  }));
  const chooseLayer=(event:Event)=>update(()=>{
-  state.layer=(event.target as HTMLSelectElement).value;state.single=false;selected=state.layer!=='farming-all'||state.place!=='all';
+  state.layer=(event.target as HTMLSelectElement).value;selectedRiver=undefined;state.single=false;selected=state.layer!=='farming-all'||state.place!=='all';
   const theme=russiaThemes.find(item=>item.field===field&&item.defaultLayer===state.layer);
   if(theme)state.theme=theme.id;
  });
  one<HTMLSelectElement>('layer').addEventListener('change',chooseLayer);
  root.querySelector<HTMLButtonElement>('[data-farming-single]')?.addEventListener('click',()=>update(()=>{state.single=!state.single;}));
+ root.querySelectorAll<HTMLButtonElement>('[data-farming-group]').forEach(button=>button.addEventListener('click',()=>{
+  const group=button.dataset.farmingGroup;
+  if(group!=='crop'&&group!=='livestock')return;
+  const visible=button.getAttribute('aria-pressed')!=='true';
+  button.setAttribute('aria-pressed',String(visible));
+  root.classList.toggle(`farming-${group}-hidden`,!visible);
+ }));
  root.querySelector<HTMLSelectElement>('[data-distribution-layer]')?.addEventListener('change',chooseLayer);
  one<HTMLSelectElement>('compare-layer').addEventListener('change',event=>update(()=>{state.compareLayer=(event.target as HTMLSelectElement).value;}));
+ root.querySelectorAll<HTMLButtonElement>('[data-industry-sector]').forEach(button=>button.addEventListener('click',()=>update(()=>{const sector=button.dataset.industrySector as RussiaIndustrySector;state.sector=state.sector===sector?undefined:sector;state.sectorOnly=false;delete state.industryLocation;state.place='all';state.scope='all';selected=!!state.sector;})));
+ root.querySelector<HTMLButtonElement>('[data-industry-only]')?.addEventListener('click',()=>update(()=>{state.sectorOnly=!state.sectorOnly;}));
  root.querySelectorAll<HTMLButtonElement>('[data-theme]').forEach(button=>button.addEventListener('click',()=>update(()=>{
   const theme=getRussiaTheme({...state,field,theme:button.dataset.theme!});
   delete state.industryLocation;state.theme=theme.id;state.layer=theme.defaultLayer;state.single=false;selected=true;
@@ -170,12 +193,14 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
    if(hook)one(hook).querySelector<SVGElement>(`[data-region-marker][data-map-place="${place}"]`)?.focus({preventScroll:true});
   };
   root.addEventListener('click',event=>{
-   if((event.target as Element).closest('[data-russia-industry-return]')){update(()=>{delete state.industryLocation;state.place='all';state.scope='all';selected=false;});return;}
-   const point=(event.target as Element).closest<SVGElement>('[data-russia-industry-location]');if(point){const id=point.dataset.russiaIndustryLocation;if(state.industryLocation===id)return;update(()=>{state.industryLocation=id;selected=true;});root.querySelector<SVGElement>(`[data-russia-industry-location="${id}"]`)?.focus({preventScroll:true});return;}
+   const river=(event.target as Element).closest<SVGElement>('[data-primary-map] [data-river-name],[data-primary-map] [data-river-label]');const riverId=river?.dataset.riverName??river?.dataset.riverLabel;if(riverId&&field==='nature'&&state.layer==='rivers'&&riverNames[riverId]){selectedRiver=riverId;render();root.querySelector<SVGElement>(`[data-primary-map] [data-river-label="${selectedRiver}"]`)?.focus({preventScroll:true});return;}
+   if((event.target as Element).closest('[data-russia-industry-return]')){update(()=>{delete state.industryLocation;state.sector=undefined;state.sectorOnly=false;state.place='all';state.scope='all';selected=false;});return;}
+   const point=(event.target as Element).closest<SVGElement>('[data-russia-industry-location]');if(point){const id=point.dataset.russiaIndustryLocation;if(state.industryLocation===id)return;update(()=>{state.industryLocation=id;state.sector=russiaIndustryMarkSectors[id!][0];state.sectorOnly=false;selected=true;});root.querySelector<SVGElement>(`[data-russia-industry-location="${id}"]`)?.focus({preventScroll:true});return;}
    const regionSelected=(event.target as Element).closest<HTMLElement|SVGElement>('[data-map-place]');
    if(regionSelected)selectMapRegion(regionSelected);
   });
   root.addEventListener('keydown',event=>{
+   const river=(event.target as Element).closest<SVGElement>('[data-primary-map] [data-river-label]');if(river&&(event.key==='Enter'||event.key===' ')){event.preventDefault();if(!event.repeat)river.dispatchEvent(new MouseEvent('click',{bubbles:true}));return;}
    const point=(event.target as Element).closest<SVGElement>('[data-russia-industry-location]');if(point&&(event.key==='Enter'||event.key===' ')){event.preventDefault();if(!event.repeat)point.dispatchEvent(new MouseEvent('click',{bubbles:true}));return;}
    const selected=(event.target as Element).closest<SVGElement>('[data-region-marker]');
    if(!selected||(event.key!=='Enter'&&event.key!==' '))return;

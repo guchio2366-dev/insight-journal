@@ -50,9 +50,10 @@ for (const station of stations.stations) {
     const found = locate(native, feature.geometry.coordinates);
     return found.strictlyInside ? [{featureId: feature.id, classId: feature.classId, sourceCode: feature.sourceCode, sourceLabel: feature.sourceLabel, ...found}] : [];
   });
-  const sourceText = await readFile(resolve(repo, station.selectedSourceFile), 'utf8');
-  if (digest(Buffer.from(sourceText)) !== station.selectedSourceSha256) throw new Error('Selected station source hash mismatch');
-  const coordinateStrings = ['LONGITUD', 'LATITUD'].map(key => sourceText.match(new RegExp(key + '\\s*:\\s*([-\\d.]+)'))[1]);
+  const sourceText = station.selectedSourceFile ? await readFile(resolve(repo, station.selectedSourceFile), 'utf8') : null;
+  if (sourceText && digest(Buffer.from(sourceText)) !== station.selectedSourceSha256) throw new Error('Selected station source hash mismatch');
+  if (!sourceText && (!station.reviewedEvidenceFile || station.sourceSha256 !== null || station.selectedSourceSha256 !== null || !station.sourceUrl.startsWith('https://smn.conagua.gob.mx/'))) throw new Error('Unmaterialized station source must be explicitly identified');
+  const coordinateStrings = sourceText ? ['LONGITUD', 'LATITUD'].map(key => sourceText.match(new RegExp(key + '\\s*:\\s*([-\\d.]+)'))[1]) : station.coordinates.map(String);
   if (coordinateStrings.some((value, i) => Number(value) !== station.coordinates[i])) throw new Error('Station coordinate differs from original selected text');
   const halfLastDigits = coordinateStrings.map(value => 0.5 * 10 ** -(value.split('.')[1]?.length ?? 0));
   const roundingCorners = [-1, 1].flatMap(x => [-1, 1].map(y => {
@@ -67,7 +68,8 @@ for (const station of stations.stations) {
   results.push({
     stationId: station.id, officialStationId: station.stationId, nameJa: station.name,
     coordinatesLonLat: station.coordinates, coordinatesSourceStrings: coordinateStrings,
-    coordinateSourceFile: station.selectedSourceFile, coordinateSourceSha256: digest(Buffer.from(sourceText)),
+    coordinateSourceFile: station.selectedSourceFile, coordinateSourceSha256: sourceText ? digest(Buffer.from(sourceText)) : null,
+    coordinateSourceMethod: sourceText ? 'retained selected official TXT rows' : 'parent-reviewed official SMN TXT body; raw bytes unavailable in this environment',
     pointNativeM: native, pointDisplaySvg: projectNative(native), original,
     labelJa: category.labelJa, sourceClassLabel: category.labelSource,
     displayGeometryMatches: rendered,
@@ -92,6 +94,7 @@ const audit = {
     'SHPはITRF92/GRS80のLambert投影です。保存されたSMN座標資料には測地基準・座標時点・位置精度の明示がなく、時点付き測地変換は適用していません。',
     '1:1,000,000の原図はアナログ資料を数値化した分類です。表示小数桁と計算距離は測量精度を意味しません。原資料に定量的位置誤差がないため、その影響量は断定しません。',
     '原コードの細分類記号を分解した閾値の説明や、BS1と米国BShの同値変換は行いません。',
+    'チワワ・ビジャエルモサのSMN本文は親環境で閲覧確認した転記値です。この環境では原TXTへのCONNECT tunnelが403となり、バイト数・ハッシュや原文の行番号は検証していません。',
   ],
 };
 const out = pathToFileURL(resolve(process.argv[3] ?? resolve(repo, 'data-source/atlas/mexico/climate-normals/classification-audit.json')));

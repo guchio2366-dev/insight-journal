@@ -133,7 +133,7 @@ export async function preparePrecipitation(sourcePath) {
     return { name, sampleCoordinate: [longitude, latitude], sourceCellCenter: cell.center, monthlyNormals: Array.from({ length: 12 }, (_, month) => bytes.readFloatBE(variable.offset + month * recordBytes + cell.index * 4)), annualNormal: sourceAnnual[cell.index], flippedLatitudeAnnual: sourceAnnual[(719 - cell.row) * 1440 + cell.column] };
   });
   if (orientationSamples.some(sample => sample.annualNormal < 0 || sample.flippedLatitudeAnnual !== lookupNoData)) throw new Error('Known-place orientation/source-mask validation failed');
-  const geographyPath = 'src/data/atlas/europe-countries.json', geographyBytes = await fs.readFile(path.join(root, geographyPath));
+  const geographyPath = 'data-source/atlas/europe/legacy-country-mask-110m-v1.json', geographyBytes = await fs.readFile(path.join(root, geographyPath));
   const countries = JSON.parse(geographyBytes).features.filter(feature => feature.properties.kind === 'europe');
   if (countries.length !== 45) throw new Error('Expected existing 45 target-country display mask');
   const mask = new Uint8Array(width * height);

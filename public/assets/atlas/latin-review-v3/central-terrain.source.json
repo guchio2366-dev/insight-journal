@@ -1,0 +1,331 @@
+{
+  "publisher": "Natural Earth",
+  "dataset": "Natural Earth 1:10m Physical Labels / geography_regions_polys",
+  "sourceUrl": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_geography_regions_polys.geojson",
+  "documentationUrl": "https://www.naturalearthdata.com/downloads/10m-physical-vectors/10m-physical-labels/",
+  "license": "Public domain",
+  "sourceSHA256": "b7b26e50ea917d3696aec87f932def2bf5f890f5770e441d59c162c6f4c92a77",
+  "sourceBytes": 5583870,
+  "sourceFeatures": 1047,
+  "sourceCRS": "EPSG:4326",
+  "units": "Longitude/latitude degrees; no measured altitude, area, population or annual observation adopted",
+  "sourceVersionMeaning": "Original file pinned by SHA; not a dated survey of terrain boundaries",
+  "acquisition": "Reuse retained original cache. No network request, mirror, token, contract or new data acquisition.",
+  "centralThematicFeatures": [
+    {
+      "sourceFeatureIndex": 198,
+      "sourceId": 1159102981,
+      "sourceName": "Maya Mts.",
+      "sourceClass": "Range/mtn",
+      "sourceRegion": "North America",
+      "sourceSubregion": "Central America",
+      "sourceScalerank": 5,
+      "sourceNameEN": "Maya Mountains",
+      "sourceNameES": "Montes Maya",
+      "sourceNameJA": "マヤ山脈",
+      "geometryType": "Polygon",
+      "sourceBounds": [
+        -89.664723,
+        16.111457,
+        -88.30724,
+        17.252997
+      ]
+    },
+    {
+      "sourceFeatureIndex": 413,
+      "sourceId": 1159103533,
+      "sourceName": "Sierra Chiapas",
+      "sourceClass": "Range/mtn",
+      "sourceRegion": "North America",
+      "sourceSubregion": "Central America",
+      "sourceScalerank": 4,
+      "sourceNameEN": "Sierra Madre de Chiapas",
+      "sourceNameES": "Sierra Madre de Chiapas",
+      "sourceNameJA": "シエラマドレ",
+      "geometryType": "Polygon",
+      "sourceBounds": [
+        -94.756703,
+        14.962287,
+        -90.919179,
+        17.7508
+      ]
+    },
+    {
+      "sourceFeatureIndex": 468,
+      "sourceId": 1730072851,
+      "sourceName": "Costa de los Mosquitos",
+      "sourceClass": "Coast",
+      "sourceRegion": "North America",
+      "sourceSubregion": "Central America",
+      "sourceScalerank": 4,
+      "sourceNameEN": "Mosquito Coast",
+      "sourceNameES": "Costa de los Mosquitos",
+      "sourceNameJA": "コスタ・デ・ロス・モスキート",
+      "geometryType": "Polygon",
+      "sourceBounds": [
+        -84.968068,
+        11.82099,
+        -83.178334,
+        15.886603
+      ]
+    }
+  ],
+  "retainedSouthAmericaFeatures": [
+    {
+      "sourceFeatureIndex": 614,
+      "sourceId": 1159104045,
+      "sourceName": "ALTIPLANO",
+      "sourceClass": "Plateau",
+      "sourceRegion": "South America",
+      "sourceSubregion": null,
+      "sourceScalerank": 3,
+      "sourceNameEN": "Altiplano",
+      "sourceNameES": "Altiplano",
+      "sourceNameJA": "アルティプラーノ",
+      "geometryType": "Polygon",
+      "sourceBounds": [
+        -71.504323,
+        -27.039117,
+        -65.405751,
+        -13.968805
+      ]
+    },
+    {
+      "sourceFeatureIndex": 686,
+      "sourceId": 1159104217,
+      "sourceName": "GRAN CHACO",
+      "sourceClass": "Plain",
+      "sourceRegion": "South America",
+      "sourceSubregion": null,
+      "sourceScalerank": 2,
+      "sourceNameEN": "Gran Chaco",
+      "sourceNameES": "Gran Chaco",
+      "sourceNameJA": "グランチャコ",
+      "geometryType": "Polygon",
+      "sourceBounds": [
+        -64.529591,
+        -31.81524,
+        -57.065663,
+        -17.459771
+      ]
+    },
+    {
+      "sourceFeatureIndex": 687,
+      "sourceId": 1159104219,
+      "sourceName": "LLANOS",
+      "sourceClass": "Plain",
+      "sourceRegion": "South America",
+      "sourceSubregion": null,
+      "sourceScalerank": 2,
+      "sourceNameEN": "Llanos",
+      "sourceNameES": "Llanos",
+      "sourceNameJA": "リャノ",
+      "geometryType": "Polygon",
+      "sourceBounds": [
+        -73.715993,
+        2.629401,
+        -61.974416,
+        10.002509
+      ]
+    },
+    {
+      "sourceFeatureIndex": 688,
+      "sourceId": 1159104221,
+      "sourceName": "PAMPAS",
+      "sourceClass": "Plain",
+      "sourceRegion": "South America",
+      "sourceSubregion": null,
+      "sourceScalerank": 2,
+      "sourceNameEN": "Pampas",
+      "sourceNameES": "Región pampeana",
+      "sourceNameJA": "パンパ",
+      "geometryType": "MultiPolygon",
+      "sourceBounds": [
+        -68.033376,
+        -39.873589,
+        -56.668262,
+        -25.46087
+      ]
+    },
+    {
+      "sourceFeatureIndex": 690,
+      "sourceId": 1159104225,
+      "sourceName": "BRAZILIAN HIGHLANDS",
+      "sourceClass": "Plateau",
+      "sourceRegion": "South America",
+      "sourceSubregion": null,
+      "sourceScalerank": 2,
+      "sourceNameEN": "Brazilian Highlands",
+      "sourceNameES": "Meseta Brasileña",
+      "sourceNameJA": "ブラジル高原",
+      "geometryType": "MultiPolygon",
+      "sourceBounds": [
+        -57.741078,
+        -29.98242,
+        -34.887318,
+        -1.162896
+      ]
+    },
+    {
+      "sourceFeatureIndex": 706,
+      "sourceId": 1159104261,
+      "sourceName": "PATAGONIA",
+      "sourceClass": "Geoarea",
+      "sourceRegion": "South America",
+      "sourceSubregion": null,
+      "sourceScalerank": 2,
+      "sourceNameEN": "Patagonia",
+      "sourceNameES": "Patagonia",
+      "sourceNameJA": "パタゴニア",
+      "geometryType": "MultiPolygon",
+      "sourceBounds": [
+        -75.708105,
+        -55.784766,
+        -62.246338,
+        -32.036798
+      ]
+    },
+    {
+      "sourceFeatureIndex": 717,
+      "sourceId": 1159104309,
+      "sourceName": "ANDES",
+      "sourceClass": "Range/mtn",
+      "sourceRegion": "South America",
+      "sourceSubregion": null,
+      "sourceScalerank": 1,
+      "sourceNameEN": "Andes",
+      "sourceNameES": "Cordillera de Los Andes",
+      "sourceNameJA": "アンデス山脈",
+      "geometryType": "MultiPolygon",
+      "sourceBounds": [
+        -80.601064,
+        -55.292578,
+        -63.085683,
+        11.413581
+      ]
+    },
+    {
+      "sourceFeatureIndex": 724,
+      "sourceId": 1159104325,
+      "sourceName": "AMAZON BASIN",
+      "sourceClass": "Basin",
+      "sourceRegion": "South America",
+      "sourceSubregion": null,
+      "sourceScalerank": 1,
+      "sourceNameEN": "Amazon basin",
+      "sourceNameES": "Cuenca del Amazonas",
+      "sourceNameJA": "アマゾン盆地",
+      "geometryType": "MultiPolygon",
+      "sourceBounds": [
+        -78.766652,
+        -20.124688,
+        -46.170033,
+        4.816657
+      ]
+    }
+  ],
+  "polygonMeaning": "Approximate physical/geographic-name extents from a label-region product. Mountain class records name a mountain region; they are not measured foot-of-slope boundaries, geological units, strict elevation masks, river basins or forest cover.",
+  "mosquitoCoastMeaning": "FEATURECLA is Coast. The source polygon may name a coastal region but does not delimit a measured coastal lowland. Keep the Coast class and coast wording.",
+  "amazonMeaning": "Retained Amazon source FEATURECLA is Basin, a PhysicalLabels name-region classification. It does not provide the hydrologically routed basin polygons/topology required by the water-resource view.",
+  "mexicoCrossing": {
+    "Sierra Chiapas": "Original bounds extend into Mexico. Preserve original shape and apply existing Latin34 target-country clip in display.",
+    "PEN. DE YUCATÁN": "Pen/cape contextual region, not a lowland boundary; majority Mexico, not proposed as new thematic terrain area."
+  },
+  "rendering": "Use original EPSG:4326 geometry with unchanged source projection function. Apply existing target-country land clip. Label anchors, if added by renderer, must be identified as editorial labels, not peaks or field measurements.",
+  "absentFeatures": [
+    {
+      "requestedName": "Talamanca Range",
+      "sourceFeatureIndex": null,
+      "geometry": null,
+      "coordinate": null,
+      "state": "No matching Central America/West Indies physical-name polygon in the pinned corpus; no new area or locator coordinate created"
+    },
+    {
+      "requestedName": "Caribbean/Hispaniola Cordillera Central",
+      "sourceFeatureIndex": null,
+      "geometry": null,
+      "coordinate": null,
+      "state": "No matching Central America/West Indies physical-name polygon in the pinned corpus; no new area or locator coordinate created"
+    },
+    {
+      "requestedName": "Sierra Maestra",
+      "sourceFeatureIndex": null,
+      "geometry": null,
+      "coordinate": null,
+      "state": "No matching Central America/West Indies physical-name polygon in the pinned corpus; no new area or locator coordinate created"
+    },
+    {
+      "requestedName": "Sierra de Guaniguanico",
+      "sourceFeatureIndex": null,
+      "geometry": null,
+      "coordinate": null,
+      "state": "No matching Central America/West Indies physical-name polygon in the pinned corpus; no new area or locator coordinate created"
+    },
+    {
+      "requestedName": "Cibao lowland",
+      "sourceFeatureIndex": null,
+      "geometry": null,
+      "coordinate": null,
+      "state": "No matching Central America/West Indies physical-name polygon in the pinned corpus; no new area or locator coordinate created"
+    },
+    {
+      "requestedName": "Cordillera Septentrional",
+      "sourceFeatureIndex": null,
+      "geometry": null,
+      "coordinate": null,
+      "state": "No matching Central America/West Indies physical-name polygon in the pinned corpus; no new area or locator coordinate created"
+    },
+    {
+      "requestedName": "Sierra de Bahoruco",
+      "sourceFeatureIndex": null,
+      "geometry": null,
+      "coordinate": null,
+      "state": "No matching Central America/West Indies physical-name polygon in the pinned corpus; no new area or locator coordinate created"
+    },
+    {
+      "requestedName": "Sierra de Luquillo",
+      "sourceFeatureIndex": null,
+      "geometry": null,
+      "coordinate": null,
+      "state": "No matching Central America/West Indies physical-name polygon in the pinned corpus; no new area or locator coordinate created"
+    },
+    {
+      "requestedName": "Jamaica Blue Mountains",
+      "sourceFeatureIndex": null,
+      "geometry": null,
+      "coordinate": null,
+      "state": "No matching Central America/West Indies physical-name polygon in the pinned corpus; no new area or locator coordinate created"
+    },
+    {
+      "requestedName": "Central American volcanic belt",
+      "sourceFeatureIndex": null,
+      "geometry": null,
+      "coordinate": null,
+      "state": "No matching Central America/West Indies physical-name polygon in the pinned corpus; no new area or locator coordinate created"
+    }
+  ],
+  "validation": {
+    "sourceSHA256Matches": true,
+    "allSelectedGeometryUnchanged": true,
+    "southEightRegionsRetained": true,
+    "centralThreeDistinctIDs": true,
+    "newPolygonsDrawn": false,
+    "newLocatorCoordinatesDrawn": false,
+    "sameNameOtherRegionSubstituted": false
+  },
+  "preparationScriptSHA256": "fc2061c509b1d59ebaab748710160397ec5175b8a771d94af51889ca98aa7a4b",
+  "files": {
+    "central-caribbean-label-regions.geojson": {
+      "bytes": 7578,
+      "sha256": "7f8335f874071af4cf0068d503c2d14a235a4b2fdbd0362c34a4dd723fc30176"
+    },
+    "retained-south-america-regions.geojson": {
+      "bytes": 93841,
+      "sha256": "93f139b790f41d0623e274b3fe2305349b7c0b4852d25025fe26e18cc7f3f09e"
+    },
+    "candidates.json": {
+      "bytes": 25438,
+      "sha256": "67236e38927f69b93006922f0ed2919b9a2df821fe8f652eefb5db9fdbaeb36a"
+    }
+  }
+}

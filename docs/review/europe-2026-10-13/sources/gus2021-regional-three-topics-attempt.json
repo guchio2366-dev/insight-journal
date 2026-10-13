@@ -1,0 +1,7 @@
+{
+  "url": "https://publikacje.new.stat.gov.pl/sites/default/files/2025-10/wyniki_ostateczne_nsp2021_narodowsc_jezyk_wyznanie_2023_11_29.xlsx",
+  "purpose": "Independent Polish 2021 census: 16 voivodeship ethnicity, home languages and religion; CC BY4.0 publisher",
+  "method": "GET",
+  "retried": false,
+  "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))"
+}

@@ -38,10 +38,10 @@ test('水資源の3区分は河川・地下水、年降水量、代表流域を�
  }finally{await w.happyDOM.close();}
 });
 
-test('標高500mは同じ色帯と線を描き、地形は輪郭だけで海面下・地点欠測も区別する',async()=>{
+test('標高500mは同じ色帯と線を描き、地形は標高色面で海面下・地点欠測も区別する',async()=>{
  const {w,q}=await setup('nature','?topic=contours&feature=elevation:-500&at=35.5,31.5');
  try{assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-raster]').length,0);assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-band="elevation"]').length,1198);assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-aligned-line="elevation"]').length,1155);assert.match(q('[data-west-legend]').textContent,/-500〜0未満/);assert.match(q('[data-west-natural-selection]').textContent,/-500〜0未満/);await until(()=>q('[data-west-natural-value]').textContent.includes('ETOPO 2022'));
-  q('[data-west-standard-group="地形"]').click();await until(()=>q('[data-west-atlas]').dataset.ready==='true');assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-band]').length,0);assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-raster]').length,0);assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-aligned-line]').length,1155);q('[data-natural-feature="line:500"]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));await until(()=>q('[data-west-natural-selection]')?.textContent.includes('500mの等高線'));
+  q('[data-west-standard-group="地形"]').click();await until(()=>q('[data-west-atlas]').dataset.ready==='true');assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-band]').length,0);assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-raster]').length,1);assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-aligned-line]').length,0);assert.match(q('[data-west-legend]').textContent,/標高の色面/);
  }finally{await w.happyDOM.close();}
  const missing=await setup('nature','?topic=annual-precipitation&at=55,15');try{await until(()=>missing.q('[data-west-natural-value]')?.textContent.includes('未収録'));assert.doesNotMatch(missing.q('[data-west-natural-value]').textContent,/：0/);}finally{await missing.w.happyDOM.close();}
 });

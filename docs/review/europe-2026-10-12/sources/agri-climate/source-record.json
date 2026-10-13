@@ -1,0 +1,166 @@
+{
+  "date": "2026-10-12",
+  "scope": "read-only source investigation; no repository code modifications",
+  "noBypass": true,
+  "originalTablesRetrieved": false,
+  "helsinki": {
+    "existing": {
+      "stationId": "2978",
+      "wmoCodeCandidate": "02978",
+      "stationName": "HELSINKI KAISANIEMI -FINLAND",
+      "coordinates": [
+        24.95,
+        60.18
+      ],
+      "elevationM": 4.0,
+      "period": "1991–2020",
+      "precipitationMissingMonths": 12,
+      "input": {
+        "url": "https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/graph_mkhtml_nrm.php?n=2978&m=1",
+        "sha256": "1104d40f740bc2664c33f5f7219fa09f4010a2f758cde1e815c7b6b1662f850e",
+        "bytes": 5405
+      }
+    },
+    "fmiCandidate": {
+      "precipitationTable": "https://www.ilmatieteenlaitos.fi/1991-2020-sadetilastot",
+      "temperatureTable": "https://www.ilmatieteenlaitos.fi/1991-2020-lampotilatilastot",
+      "period": "1991–2020",
+      "stationSearch": "Helsinki Kaisaniemi",
+      "stationIdCandidate": "100971",
+      "stationIdPrimaryVerified": false,
+      "requiredPrecipitationColumns": [
+        "ID",
+        "Havaintoasema",
+        "Kk",
+        "Sadem."
+      ],
+      "monthDefinition": "Kk1–12 = months, Kk13 = annual; Sadem. = precipitation mean in mm; do not use Max or Min",
+      "htmlRowsReadable": "Only initial Parainen Utö rows, not Helsinki",
+      "license": {
+        "openService": "CC BY 4.0",
+        "openServiceTerms": "https://en.ilmatieteenlaitos.fi/open-data-licence",
+        "websiteTerms": "https://en.ilmatieteenlaitos.fi/site-information",
+        "normalsWebTableOpenServiceLicenseConfirmed": false,
+        "note": "Ordinary website and machine-readable open-data service have distinct terms; do not assume all web-export tables are CC BY4.0."
+      }
+    },
+    "wmoClino": {
+      "product": "https://www.ncei.noaa.gov/products/wmo-climate-normals",
+      "period": "1991–2020",
+      "files": "https://www.ncei.noaa.gov/archive/accession/0253808/data/0-data/Region-6-WMO-Normals-9120/",
+      "filenameSizeUnknown": true
+    },
+    "fmiReport": {
+      "title": "Climatological and oceanographic statistics of Finland 1991–2020",
+      "doi": "https://doi.org/10.35614/isbn.9789523361485",
+      "publication": "FMI Reports 2021:8",
+      "repository": "https://helda.helsinki.fi/handle/10138/336063",
+      "result": "Access Denied: error code b3728715388cb593. Protected by Anubis. Stopped."
+    }
+  },
+  "agriculture": {
+    "milk": {
+      "target": "Eurostat agr_r_milkpr 2023, NUTS2 observed regional milk statistics",
+      "priorDenialRetried": false,
+      "required": [
+        "geo code",
+        "milk product",
+        "unit",
+        "time",
+        "value",
+        "status/flags",
+        "actual NUTS vintage",
+        "boundaries/CRS under distinct GISCO terms"
+      ],
+      "cowTotalNotDairy": true
+    },
+    "corine2018": {
+      "priorDenialRetried": false,
+      "classes": {
+        "221": "vineyards",
+        "223": "olive groves"
+      },
+      "productYear": 2018,
+      "observationYears": "2017–2018",
+      "interpretation": "land cover, not harvest or production volume",
+      "required": "official 221/223 polygon subset + metadata, CRS, original class, release/version, license"
+    }
+  },
+  "independentAlternatives": [
+    {
+      "id": "EuroCropsV2.01",
+      "primary": "https://data.jrc.ec.europa.eu/dataset/b9fb9e67-78a9-4327-9d59-39a928d812d3",
+      "directory": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/DRLL/EuroCropsV2/gpqtv201/",
+      "definition": "GSA crop declarations, actual parcel geometry, not harvest yield",
+      "license": "CC BY 4.0, source credit and modifications",
+      "copyright": "https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/DRLL/EuroCropsV2/gpqtv201/copyright.txt",
+      "crs": "EPSG:3035 (publisher README; not locally verified parquet)",
+      "coverage": "12 EU states, often partial-state coverage; no full Europe coverage",
+      "timeCoverage": "2008–2023; country/year varies",
+      "columns": [
+        "geom",
+        "cropfield",
+        "original_code",
+        "off_area",
+        "area_ha"
+      ],
+      "mapping": "HCAT4 through Eurocrops.csv: nuts, original_code, translated_name, hcat4_code/hcat4_name, usage_code/usage_name",
+      "code": "https://github.com/Martincccc/EuroCropsV2",
+      "files": {
+        "iti1_2023.parquet": "182M directory-rounded",
+        "es_2023.parquet": "12G directory-rounded",
+        "fr_2023.parquet": "3.5G directory-rounded",
+        "pt_2023.parquet": "1.3G directory-rounded"
+      },
+      "crsRetainedSubsetRequirement": true,
+      "retrieved": false,
+      "cropCodeForVinesOlivesVerified": false,
+      "caution": "Do not mark unreported parcels zero; no exact crop codes guessed."
+    },
+    {
+      "id": "CAPRI disaggregated",
+      "primary": "https://www.nature.com/articles/s41597-026-06919-8",
+      "doi": "https://doi.org/10.5281/zenodo.13992301",
+      "published": "2026-03-05",
+      "period": "2000–2018",
+      "base2017": "2016–2018 average",
+      "license": "CC BY4.0 per primary Data Records",
+      "interpretation": "model disaggregation, not observation or farm boundary",
+      "coverage": "EU including UK excluding Croatia, 231 model regions",
+      "resolution": "1km output; effective FSU1–100km²",
+      "categories": "18 livestock activities, including distinct dairy/non-dairy; 35 crop area activities; exact file category codes unavailable",
+      "requestedPackages": [
+        "fsulucategory_luperha.zip",
+        "readme_fsulucategory_luperha.txt",
+        "fsucroparea_ha.zip",
+        "readme_fsu_croparea_ha.txt"
+      ],
+      "fileSizesUnknown": true,
+      "crsNotVerified": true,
+      "retrieved": false
+    },
+    {
+      "id": "2020 agricultural census statistical atlas",
+      "primary": "https://essd.copernicus.org/articles/17/3893/2025/",
+      "doi": "https://doi.org/10.5281/zenodo.14852709",
+      "published": "2025-08-11",
+      "period": 2020,
+      "interpretation": "actual census aggregates on variable resolution grid; confidentiality protected; not artificial uniform NUTS downscaling",
+      "resolution": "1–40km variable; preserve original cell extents and flags",
+      "limitation": "Germany not released in paper; dairy-specific availability not established, broad livestock density alone cannot be relabeled dairy",
+      "dataLicenseNotVerified": true,
+      "retrieved": false
+    },
+    {
+      "id": "JRC harmonized crop statistics",
+      "primary": "https://data.jrc.ec.europa.eu/dataset/685949ff-56de-4646-a8df-844b5bb5f835",
+      "definition": "Regional observed area/production/yield collected from NSIs and Eurostat",
+      "access": "Anonymous/no limitations per catalog",
+      "license": "European Commission reuse notice, individual/third-party exceptions separate",
+      "format": "XLSX",
+      "data": "https://agri4cast.jrc.ec.europa.eu/DataPortal",
+      "vineOliveCoverageNotVerified": true,
+      "retrieved": false
+    }
+  ]
+}

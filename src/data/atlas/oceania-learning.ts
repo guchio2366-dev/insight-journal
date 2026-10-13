@@ -8,19 +8,20 @@ import climateDetail from '../../../public/assets/atlas/oceania-climate-v2/manif
 import cropManifest from '../../../public/assets/atlas/oceania-crops-v1/manifest.json';
 import livestockManifest from '../../../public/assets/atlas/oceania-livestock-v1/manifest.json';
 import farmingManifest from '../../../public/assets/atlas/oceania-farming-overlay-v1/manifest.json';
+import cropBeltLabels from './oceania-crop-belt-labels.json';
 import populationManifest from '../../../public/assets/atlas/oceania-population-v2/manifest.json';
 import cityData from '../../../public/assets/atlas/oceania-population-v1/centres.json';
 import mineData from '../../../public/assets/atlas/oceania-industry-v1/mines.json';
 import {oceaniaNatureReadings} from './oceania-nature-reading';
 import {oceaniaFarmingReadings,oceaniaMapspamAttribution} from './oceania-farming-reading';
-import {oceaniaIndustryReadingThemes,oceaniaIndustryRepresentativeMarks} from './oceania-industry-reading';
+import {oceaniaIndustryReadingThemes,oceaniaIndustryRepresentativeMarks,oceaniaIndustryMarkSectors,oceaniaIndustrySectors,type OceaniaIndustrySector} from './oceania-industry-reading';
 import {oceaniaPopulationReading} from './oceania-population-reading';
-import {physicalLayer,regionalRiverLayer,renderRegionalRivers} from './oceania-russia-physical';
+import {physicalLayer,regionalRiverLayer,renderRegionalRivers,renderRegionalPrecipitationLabels} from './oceania-russia-physical';
 export {oceaniaPopulationReading};
 
 export type OceaniaField='nature'|'agriculture'|'industry'|'population';
 export type OceaniaScope='all'|'theme'|'country';
-export type OceaniaState={field:OceaniaField;theme:string;layer:string;place:string;scope:OceaniaScope;comparison:boolean;compareLayer:string;single?:boolean;industryLocation?:string};
+export type OceaniaState={field:OceaniaField;theme:string;layer:string;place:string;scope:OceaniaScope;comparison:boolean;compareLayer:string;single?:boolean;industryLocation?:string;sector?:OceaniaIndustrySector;sectorOnly?:boolean};
 export type OceaniaSource={title:string;url:string;note?:string};
 export type OceaniaLegend={label:string;color:string;shape?:'square'|'circle'|'diamond'|'missing'};
 export type OceaniaLayer={id:string;field:OceaniaField;title:string;period:string;unit:string;kind:'raster'|'rivers'|'mines'|'places'|'cities'|'industry'|'farming';image?:string;bounds?:number[];legend:OceaniaLegend[];sources:OceaniaSource[];coverage:string;resolution?:string};
@@ -88,7 +89,8 @@ export function createOceaniaState(search:string,field:OceaniaField='nature'):Oc
  const scope=['all','theme','country'].includes(q.get('scope')??'')?q.get('scope') as OceaniaScope:'all';
  const compare=oceaniaLayers.some(l=>l.id===q.get('compare'))?q.get('compare')!:theme.comparisonLayer;
  const layer=candidate?.id??(validField==='industry'?'industry-all':validField==='agriculture'?'farming-all':theme.defaultLayer);
- return {field:validField,theme:theme.id,layer,place,scope:scope==='country'&&place==='all'?'all':scope,comparison:q.get('view')==='comparison',compareLayer:compare,single:validField==='agriculture'&&layer!=='farming-all'&&q.get('single')==='1',...(validField==='industry'&&['industry-all','places'].includes(layer)&&oceaniaIndustryRepresentativeMarks.some(m=>m.id===q.get('industryLocation'))?{industryLocation:q.get('industryLocation')!}:{})};
+ const sector=q.get('sector');
+ return {field:validField,theme:theme.id,layer,place,scope:scope==='country'&&place==='all'?'all':scope,comparison:q.get('view')==='comparison',compareLayer:compare,single:validField==='agriculture'&&layer!=='farming-all'&&q.get('single')==='1',...(validField==='industry'&&sector&&Object.hasOwn(oceaniaIndustrySectors,sector)?{sector:sector as OceaniaIndustrySector,sectorOnly:q.get('sectorOnly')==='1'}:{}),...(validField==='industry'&&['industry-all','places'].includes(layer)&&oceaniaIndustryRepresentativeMarks.some(m=>m.id===q.get('industryLocation'))?{industryLocation:q.get('industryLocation')!}:{})};
 }
 function rasterDetail(layer:OceaniaLayer,state?:OceaniaState):OceaniaLayer{
  if(!state||state.scope!=='country'||state.place==='all')return layer;
@@ -126,13 +128,14 @@ export const oceaniaFarmingPlaces=[
  {id:'wheat-southwest',product:'wheat',country:'AUS',name:'豪州南西部',coordinates:[117,-32],offset:[0,32]},
  {id:'cattle-east',product:'cattle',country:'AUS',name:'豪州東部',coordinates:[149,-25],offset:[0,32]},
  {id:'sheep-nz',product:'sheep',country:'NZL',name:'NZ南島',coordinates:[172,-43.5],offset:[30,30]},
- {id:'cacao-png',product:'cacao',country:'PNG',name:'PNG',coordinates:[145,-5.2],offset:[-58,-36]},
+ {id:'cacao-png',product:'cacao',country:'PNG',name:'PNG本島',coordinates:[145,-5.2],offset:[-58,-36]},
  {id:'coconut-solomon',product:'coconut',country:'SLB',name:'ソロモン',coordinates:[160,-9.5],offset:[62,14]},
+ ...cropBeltLabels.places,
 ] as const;
 const farmingTitles:Record<string,string>={wheat:'小麦',coconut:'ココナツ',cacao:'カカオ',sheep:'羊',cattle:'牛'};
 const farmingColors:Record<string,string>={wheat:'#4f7e3d',coconut:'#80528e',cacao:'#93542f',sheep:'#a3702e',cattle:'#376d91'};
 export function getOceaniaFarmingGeography(layerId:string,place='all'):string{
- const wheat='豪州南西部・南東部の小麦の帯は、雨と水利用、土壌を手がかりに読みます。半乾燥域も含み、気候だけで産地は決まりません。栽培技術と経営に、収穫後の貯蔵・集荷・市場への輸送をつなげて考えます。';
+ const wheat='豪州南西部・南東部とNZ南島の小麦の正値分布を、地図の名前と引出線で確かめます。小麦の帯は、雨と水利用、土壌を手がかりに読みます。半乾燥域も含み、気候だけで産地は決まりません。栽培技術と経営に、収穫後の貯蔵・集荷・市場への輸送をつなげて考えます。';
  const livestock='豪州の内陸と周縁部、NZの羊・牛を見比べ、牧草と水、干ばつへの備え、飼料・飼養管理の違いを読みます。加工・流通・販売価格も経営に関わります。羊毛と食肉、牛の乳と肉の用途は、この密度図だけでは分けられません。';
  const tropical='PNG・ソロモン諸島などメラネシアのココナツとカカオを、暖かさや雨、島内の集荷と加工、市場への接続から読みます。カカオは収穫後の発酵・乾燥が品質に関わります。道路・港への実際の輸送経路は描いていません。';
  const newZealand='NZの羊・牛は、豪州の小麦帯とは異なる牧畜のまとまりとして読めます。保存した2020年の家畜密度からは、乳牛と肉牛、羊毛と食肉の内訳も、乳製品・食肉の加工地や輸出先も分かりません。生産から加工・流通へのつながりを考える際は、その違いを別の資料で確かめる必要があります。';
@@ -152,7 +155,7 @@ function renderOceaniaFarmingLegend(layer:OceaniaLayer):string{
   const alphas='alphas' in item?item.alphas:[];
   return `<section class="oceania-farming-legend-group" data-farming-legend="${item.id}"><h3>${farmingTitles[item.id]} · ${crop?'ha／元5分セル':'頭／km²'}（${quantity?'数量色':crop?'輪郭':'点の濃さ'}）</h3><div>${entries.map((entry,index)=>`<span><i class="oceania-legend-mark ${shape}" style="--mark:${escape(entry.color)};--mark-opacity:${quantity||crop?1:(alphas[index]??255)/255}"></i>${escape(entry.label.replace('0より大','0超'))}</span>`).join('')}</div></section>`;
  });
- return groups.join('')+`<p class="oceania-farming-status-key">${farmingTitles[focused]}の白い面＝有効0、灰色斜線＝未収録。ほかの作物の輪郭は正値の範囲で、外側を生産ゼロとは判断しません。家畜の有効0は点を描きません。薄い逆向き斜線は家畜の未収録です。点は個体数ではなく、元の密度階級を示します。名称は保存格子で正の値がある代表位置の例です。</p>`;
+ return groups.join('')+`<p class="oceania-farming-status-key">${farmingTitles[focused]}の白い面＝有効0、灰色斜線＝未収録。ほかの作物の輪郭は正値の範囲で、外側を生産ゼロとは判断しません。家畜の有効0は点を描きません。薄い逆向き斜線は家畜の未収録です。点は個体数ではなく、元の密度階級を示します。作物名と引出線は正の収穫面積を持つ分布帯の読取り位置、家畜名は密度が正の代表位置です。農場境界や全国順位は示しません。</p>`;
 }
 function renderOceaniaFarmingMarks(layer:OceaniaLayer,state:OceaniaState,sceneId:string,clip:string,scale:number):{marks:string;defs:string}{
  const frame=oceaniaFrame(state),focused=layer.id==='farming-all'?'wheat':layer.id,cropFocus=['wheat','coconut','cacao'].includes(layer.id);
@@ -169,15 +172,33 @@ function renderOceaniaFarmingMarks(layer:OceaniaLayer,state:OceaniaState,sceneId
   marks+=`<g data-farming-product="${item.id}" data-farming-mode="missing" opacity="${opacity}" clip-path="url(#${clip})"><rect x="${x}" y="${y}" width="${x2-x}" height="${y2-y}" fill="url(#${pattern})" mask="url(#${mask})"/></g>`;
   marks+=image(item.image,item.id,'texture',opacity);
  }
- const boxes:number[][]=[];
+ const visiblePlaces=oceaniaFarmingPlaces.filter(place=>{if(state.single&&place.product!==focused)return false;const [px,py]=projectOceania([...place.coordinates]);return px>=frame[0]&&px<=frame[0]+frame[2]&&py>=frame[1]&&py<=frame[1]+frame[3];});
+ const anchors=visiblePlaces.map(place=>projectOceania([...place.coordinates]));
+ const boxes:number[][]=[],labelBoxes=new Map<string,number[]>();
+ // Give the measured concentration labels first choice, then keep every other
+ // reading name. Layout is independent of product focus, so only opacity changes.
+ const ordered=[...visiblePlaces.filter(place=>'selection' in place),...visiblePlaces.filter(place=>!('selection' in place))];
+ for(const place of ordered){
+  const [px,py]=projectOceania([...place.coordinates]),crop=['wheat','coconut','cacao'].includes(place.product);
+  const label=farmingTitles[place.product]+'｜'+place.name,w=(label.length*14+18+(crop?22:0))*scale,h=26*scale;
+  const candidates:number[][]=[];
+  for(let top=frame[1]+8*scale;top+h<=frame[1]+frame[3]-8*scale;top+=8*scale)for(let left=frame[0]+4*scale;left+w<=frame[0]+frame[2]-4*scale;left+=8*scale){
+   if(boxes.some(([x,y,bw,bh])=>left<x+bw+5*scale&&left+w+5*scale>x&&top<y+bh+5*scale&&top+h+5*scale>y))continue;
+   if(anchors.some(([x,y])=>x>left-9*scale&&x<left+w+9*scale&&y>top-9*scale&&y<top+h+9*scale))continue;
+   const cx=left+w/2,cy=top+h/2,score=(cx-px)**2+(cy-py)**2+.02*((cx-px-place.offset[0]*scale)**2+(cy-py-place.offset[1]*scale)**2);
+   candidates.push([score,left,top,w,h]);
+  }
+  candidates.sort((a,b)=>a[0]-b[0]);
+  const best=candidates[0];
+  if(best){const box=best.slice(1);boxes.push(box);labelBoxes.set(place.id,box);}
+ }
  for(const place of oceaniaFarmingPlaces){
   if(state.single&&place.product!==focused)continue;
   const [px,py]=projectOceania([...place.coordinates]);if(px<frame[0]||px>frame[0]+frame[2]||py<frame[1]||py>frame[1]+frame[3])continue;
-  const color=farmingColors[place.product],label=farmingTitles[place.product]+'｜'+place.name,w=(label.length*14+18)*scale,h=26*scale;
-  const left=Math.max(frame[0]+4*scale,Math.min(px+place.offset[0]*scale-w/2,frame[0]+frame[2]-w-4*scale));
-  let top=Math.max(frame[1]+8*scale,Math.min(py+place.offset[1]*scale-h/2,frame[1]+frame[3]-h-8*scale));
-  for(let attempt=0;attempt<=boxes.length;attempt++){const obstacle=boxes.find(([bx,by,bw,bh])=>left<bx+bw+4*scale&&left+w+4*scale>bx&&top<by+bh+4*scale&&top+h+4*scale>by);if(!obstacle)break;top=Math.max(frame[1]+8*scale,obstacle[1]-h-6*scale);}
-  boxes.push([left,top,w,h]);
+  const crop=['wheat','coconut','cacao'].includes(place.product),color=farmingColors[place.product],label=farmingTitles[place.product]+'｜'+place.name,w=(label.length*14+18+(crop?22:0))*scale,h=26*scale;
+  const placed=labelBoxes.get(place.id);
+  const left=placed?.[0]??Math.max(frame[0]+4*scale,Math.min(px-w/2,frame[0]+frame[2]-w-4*scale));
+  const top=placed?.[1]??Math.max(frame[1]+8*scale,Math.min(py-h/2-16*scale,frame[1]+frame[3]-h-8*scale));
   const icons:Record<string,string>={
    wheat:'<path d="M0 7V-7M0-4L-4-7M0 0L-4-3M0 4L-4 1M0-2L4-5M0 2L4-1" fill="none" stroke="currentColor" stroke-width="1.7"/>',
    coconut:'<path d="M0 7L1-4M1-4Q-6-9-7-3M1-4Q7-9 8-3M1-4Q-2-11 2-9" fill="none" stroke="currentColor" stroke-width="1.6"/>',
@@ -186,26 +207,27 @@ function renderOceaniaFarmingMarks(layer:OceaniaLayer,state:OceaniaState,sceneId
    cattle:'<path d="M-5-3L-8-6M5-3L8-6M-5-3Q0-5 5-3L4 5Q0 8-4 5Z" fill="#eef5f8" stroke="currentColor" stroke-width="1.4"/><circle cx="-2" cy="1" r=".8" fill="currentColor"/><circle cx="2" cy="1" r=".8" fill="currentColor"/>'
   };
   const annotationOpacity=cropFocus&&place.product!==layer.id?0.32:1;
-  marks+=`<g class="oceania-farming-place" data-farming-place="${place.id}" data-place-product="${place.product}" opacity="${annotationOpacity}" style="color:${color}"><title>${escape(label+'：2020年の保存格子で正の値がある代表位置。実際の農場境界・全国順位ではありません。')}</title><path d="M${px} ${py}L${left+w/2} ${top+h/2}" stroke="${color}" stroke-width=".8" vector-effect="non-scaling-stroke"/><g transform="translate(${px},${py}) scale(${scale})">${icons[place.product]}</g><rect x="${left}" y="${top}" width="${w}" height="${h}" rx="${3*scale}" fill="#fffef7" fill-opacity=".92" stroke="${color}" stroke-opacity=".5" stroke-width=".6" vector-effect="non-scaling-stroke"/><text x="${left+w/2}" y="${top+h/2}" text-anchor="middle" dominant-baseline="central" font-size="${14*scale}" fill="${color}">${escape(label)}</text></g>`;
+  marks+=`<g class="oceania-farming-place" data-farming-place="${place.id}" data-place-product="${place.product}" data-farming-anchor="${px},${py}" ${crop?'data-farming-belt="true"':''} opacity="${annotationOpacity}" style="color:${color}"><title>${escape(label+(crop?'：2020年の正の収穫面積を持つ分布帯の読取り位置。':'：2020年の保存格子で正の値がある代表位置。')+'実際の農場境界・全国順位ではありません。')}</title><path d="M${px} ${py}L${left+w/2} ${top+h/2}" stroke="${color}" stroke-width=".8" vector-effect="non-scaling-stroke"/>${crop?'':`<g transform="translate(${px},${py}) scale(${scale})">${icons[place.product]}</g>`}<rect data-farming-label-box="true" x="${left}" y="${top}" width="${w}" height="${h}" rx="${3*scale}" fill="#fffef7" fill-opacity=".92" stroke="${color}" stroke-opacity=".5" stroke-width=".6" vector-effect="non-scaling-stroke"/>${crop?`<g transform="translate(${left+12*scale},${top+h/2}) scale(${scale})">${icons[place.product]}</g>`:''}<text x="${left+w/2+(crop?10*scale:0)}" y="${top+h/2}" text-anchor="middle" dominant-baseline="central" font-size="${14*scale}" fill="${color}">${escape(label)}</text></g>`;
  }
  return {marks,defs};
 }
 
 export function renderOceaniaScene(layer:OceaniaLayer,state:OceaniaState,sceneId='primary',screen={width:640,height:350}):string{
  const frame=oceaniaFrame(state),scale=1/Math.min(Math.max(screen.width,1)/frame[2],Math.max(screen.height,1)/frame[3]),clip='oceania-clip-'+sceneId,missing='oceania-missing-'+sceneId;
+ const outlineOnly=['precipitation','elevation'].includes(layer.id);
  const paths=oceaniaCountries.map(c=>`<path d="${c.path}" fill-rule="evenodd" clip-rule="evenodd"/>`).join('');
  let marks='',farmingDefs='';
  if(layer.kind==='raster'&&layer.image){const b=layer.bounds??[110,-58,250,25];const [x,y]=projectOceania([b[0],b[3]]),[x2,y2]=projectOceania([b[2],b[1]]);marks+=`<image href="${escape(withBase(layer.image))}" x="${x}" y="${y}" width="${x2-x}" height="${y2-y}" clip-path="url(#${clip})" preserveAspectRatio="none"/>`;}
  if(layer.kind==='rivers')marks+=renderRegionalRivers('oceania',projectOceania,clip,scale);
  if(layer.field==='agriculture'){const farming=renderOceaniaFarmingMarks(layer,state,sceneId,clip,scale);marks=farming.marks;farmingDefs=farming.defs;}
- if(layer.kind==='mines'||layer.kind==='industry')for(const m of mineData.records){const g=mineralGroups.find(g=>g.match(m.commodity_group))!;const [x,y]=projectOceania([m.longitude,m.latitude]);marks+=`<circle cx="${x}" cy="${y}" r="${3*scale}" fill="${g.color}" stroke="#fff" stroke-width=".6" vector-effect="non-scaling-stroke"><title>${escape(m.name+'：'+m.commodity_group)}</title></circle>`;}
- if(layer.kind==='places'||layer.kind==='industry')for(const m of oceaniaIndustryRepresentativeMarks){const [x,y]=projectOceania(m.coordinates);const color=m.kind==='port'?'#255c83':m.kind==='processing'?'#94563c':'#66528d';marks+=`<g data-oceania-industry-location="${escape(m.id)}" role="button" tabindex="0" aria-pressed="${state.industryLocation===m.id}" aria-label="${escape(m.name+'を読む')}"><title>${escape(m.name+'：'+m.note)}</title><circle cx="${x}" cy="${y}" r="${12*scale}" fill="transparent"/><path d="M${x} ${y-7*scale}l${7*scale} ${7*scale}l${-7*scale} ${7*scale}l${-7*scale} ${-7*scale}Z" fill="${color}" stroke="${state.industryLocation===m.id?'#173f4d':'#fff'}" stroke-width="${state.industryLocation===m.id?2.5:1.5}" vector-effect="non-scaling-stroke"/><text x="${x+10*scale}" y="${y+4*scale}" font-size="${14*scale}">${escape(m.name)}</text></g>`;}
+ if(layer.kind==='mines'||layer.kind==='industry')for(const m of mineData.records){const g=mineralGroups.find(g=>g.match(m.commodity_group))!;const [x,y]=projectOceania([m.longitude,m.latitude]);marks+=`<circle data-industry-sectors="resources" cx="${x}" cy="${y}" r="${3*scale}" fill="${g.color}" stroke="#fff" stroke-width=".6" vector-effect="non-scaling-stroke"><title>${escape(m.name+'：'+m.commodity_group)}</title></circle>`;}
+ if(layer.kind==='places'||layer.kind==='industry')for(const m of oceaniaIndustryRepresentativeMarks){const [x,y]=projectOceania(m.coordinates);const color=m.kind==='port'?'#255c83':m.kind==='processing'?'#94563c':'#66528d';const short:Record<string,string>={'tauranga-port':'港湾：タウランガ','lihir-project':'金鉱：リヒール','lae-port':'港湾：ラエ','noro-port':'水産缶詰：ノロ','suva-city':'サービス：スバ','port-kembla-steel':'鋼材：ポートケンブラ','nz-dairy-guide':'乳加工の案内','nz-wood-guide':'パルプの案内'};const [dx,dy]=m.labelOffsetPx??[10,4],lx=x+dx*scale,ly=y+dy*scale,leader=m.labelOffsetPx?`<path d="M${x} ${y}L${lx-4*scale} ${ly-4*scale}" fill="none" stroke="${color}" stroke-width=".8" vector-effect="non-scaling-stroke"/>`:'';marks+=`<g data-oceania-industry-location="${escape(m.id)}" data-industry-sectors="${oceaniaIndustryMarkSectors[m.id].join(' ')}" role="button" tabindex="0" aria-pressed="${state.industryLocation===m.id}" aria-label="${escape(m.name+'を読む')}"><title>${escape(m.name+'：'+m.note)}</title>${leader}<circle cx="${x}" cy="${y}" r="${(m.labelOffsetPx?6:12)*scale}" fill="transparent"/><path d="M${x} ${y-7*scale}l${7*scale} ${7*scale}l${-7*scale} ${7*scale}l${-7*scale} ${-7*scale}Z" fill="${color}" stroke="${state.industryLocation===m.id?'#173f4d':'#fff'}" stroke-width="${state.industryLocation===m.id?2.5:1.5}" vector-effect="non-scaling-stroke"/><text x="${lx}" y="${ly}" font-size="${14*scale}">${escape(short[m.id]??m.name)}</text></g>`;}
  if(layer.id==='density'||layer.kind==='cities')for(const c of cityData.centres){const [x,y]=projectOceania(c.coordinates);const r=layer.kind==='cities'?Math.sqrt(c.population/5000000)*16:3;marks+=`<circle cx="${x}" cy="${y}" r="${r*scale}" fill="#653e82" fill-opacity=".7" stroke="#fff" stroke-width=".6" vector-effect="non-scaling-stroke"><title>${escape(c.name+'：'+Math.round(c.population).toLocaleString()+'人、2020年・2025年都市範囲')}</title></circle>`;}
- const locators=(layer.field==='agriculture'?[]:oceaniaCountries).filter(c=>c.extent[2]-c.extent[0]<12&&c.extent[3]-c.extent[1]<12).map(c=>`<circle data-map-place="${c.code}" class="oceania-island-locator" cx="${(c.extent[0]+c.extent[2])/2}" cy="${(c.extent[1]+c.extent[3])/2}" r="${4*scale}" aria-label="${escape(c.name+'の位置の目印')}"/>`).join('');
+ const locators=(layer.field==='agriculture'||outlineOnly?[]:oceaniaCountries).filter(c=>c.extent[2]-c.extent[0]<12&&c.extent[3]-c.extent[1]<12).map(c=>`<circle data-map-place="${c.code}" class="oceania-island-locator" cx="${(c.extent[0]+c.extent[2])/2}" cy="${(c.extent[1]+c.extent[3])/2}" r="${4*scale}" aria-label="${escape(c.name+'の位置の目印')}"/>`).join('');
  const inset=state.scope==='country'?`<div class="oceania-context-inset"><svg viewBox="0 0 ${oceaniaWidth} ${oceaniaHeight}" aria-label="オセアニア全体の中の表示範囲">${oceaniaCountries.map(c=>`<path d="${c.path}" fill="${c.code===state.place?'#a15a35':'#d3dfda'}"/>`).join('')}<rect x="${frame[0]}" y="${frame[1]}" width="${frame[2]}" height="${frame[3]}" fill="none" stroke="#9c3d23" stroke-width="8"/></svg><span>全体の中の表示範囲</span></div>`:'';
- const labels=layer.field==='agriculture'?'':state.scope==='country'&&['KIR','PYF'].includes(state.place)?'':oceaniaCountries.filter(c=>state.scope==='country'?c.code===state.place:state.scope==='all'?['AUS','NZL','PNG','FJI','WSM','KIR','PYF'].includes(c.code):getOceaniaTheme(state).countryCodes.includes(c.code)).map(c=>{const [x,y]=labelCoordinates[c.code]?projectOceania(labelCoordinates[c.code]):[(c.extent[0]+c.extent[2])/2,(c.extent[1]+c.extent[3])/2];return x>=frame[0]&&x<=frame[0]+frame[2]&&y>=frame[1]&&y<=frame[1]+frame[3]?`<text x="${x}" y="${y-8*scale}" text-anchor="middle" font-size="${14*scale}">${escape(c.name)}</text>`:'';}).join('');
+ const labels=layer.field==='agriculture'?'':state.scope==='country'&&['KIR','PYF'].includes(state.place)?'':oceaniaCountries.filter(c=>state.scope==='country'?c.code===state.place:state.scope==='all'?['AUS','NZL','PNG','FJI','WSM','KIR','PYF'].includes(c.code):getOceaniaTheme(state).countryCodes.includes(c.code)).map(c=>{const [x,y]=labelCoordinates[c.code]?projectOceania(labelCoordinates[c.code]):[(c.extent[0]+c.extent[2])/2,(c.extent[1]+c.extent[3])/2];return x>=frame[0]&&x<=frame[0]+frame[2]&&y>=frame[1]&&y<=frame[1]+frame[3]?`<text aria-label="${escape(c.name)}" x="${x}" y="${y-8*scale}" text-anchor="middle" font-size="${14*scale}">${escape(layer.field==='industry'&&c.code==='NZL'?'NZ':c.name)}</text>`:'';}).join('');
  const climateCities=state.field==='nature'&&!state.comparison&&layer.id==='climate'?renderRegionalClimateCities('oceania',projectOceania,frame,scale,labels):'';
- return `<svg viewBox="${frame.join(' ')}" role="${climateCities||layer.field==='industry'&&['industry-all','places'].includes(layer.id)?'group':'img'}" aria-label="${escape(layer.title+'・'+(state.scope==='country'?(oceaniaNames[state.place]??'オセアニア全体'):state.scope==='theme'?getOceaniaTheme(state).title:'オセアニア全体'))}" data-scene="${sceneId}"><defs><clipPath id="${clip}">${paths}</clipPath><pattern id="${missing}" width="${7*scale}" height="${7*scale}" patternUnits="userSpaceOnUse"><rect width="100%" height="100%" fill="#e6e3d6"/><path d="M0 ${7*scale}L${7*scale} 0" stroke="#b3b0a3" stroke-width="${scale}"/></pattern>${farmingDefs}</defs>${context.map(p=>`<path d="${p}" class="oceania-context"/>`).join('')}<g fill="${layer.kind==='raster'||layer.kind==='farming'?`url(#${missing})`:'#f0eee3'}">${paths}</g>${layer.field==='industry'?oceaniaCountries.map(c=>`<path data-map-place="${c.code}" class="oceania-country${c.code===state.place?' is-selected':''}" d="${c.path}" fill-rule="evenodd" aria-label="${escape(c.name+'を選ぶ')}"/>`).join(''):''}${layer.field==='industry'?locators:''}${marks}${layer.field==='industry'?'':oceaniaCountries.map(c=>`<path ${layer.field==='agriculture'?'':`data-map-place="${c.code}"`} class="oceania-country${c.code===state.place?' is-selected':''}" d="${c.path}" fill-rule="evenodd" aria-label="${escape(c.name+(layer.field==='agriculture'?'の輪郭':'を選ぶ'))}"/>`).join('')}${layer.field==='industry'?'':locators}${labels}${climateCities}</svg>${inset}`;
+ return `<svg viewBox="${frame.join(' ')}" role="${climateCities||layer.kind==='rivers'||layer.field==='industry'&&['industry-all','places'].includes(layer.id)?'group':'img'}" aria-label="${escape(layer.title+'・'+(state.scope==='country'?(oceaniaNames[state.place]??'オセアニア全体'):state.scope==='theme'?getOceaniaTheme(state).title:'オセアニア全体'))}" data-scene="${sceneId}"><defs><clipPath id="${clip}">${paths}</clipPath><pattern id="${missing}" width="${7*scale}" height="${7*scale}" patternUnits="userSpaceOnUse"><rect width="100%" height="100%" fill="#e6e3d6"/><path d="M0 ${7*scale}L${7*scale} 0" stroke="#b3b0a3" stroke-width="${scale}"/></pattern>${farmingDefs}</defs>${context.map(p=>`<path d="${p}" class="oceania-context"/>`).join('')}<g fill="${layer.kind==='raster'||layer.kind==='farming'?`url(#${missing})`:'#f0eee3'}">${paths}</g>${layer.field==='industry'?oceaniaCountries.map(c=>`<path data-map-place="${c.code}" class="oceania-country${outlineOnly?' is-outline-only':''}${c.code===state.place?' is-selected':''}" d="${c.path}" fill-rule="evenodd" aria-label="${escape(c.name+'を選ぶ')}"/>`).join(''):''}${layer.field==='industry'?locators:''}${marks}${layer.field==='industry'?'':oceaniaCountries.map(c=>`<path ${layer.field==='agriculture'||outlineOnly?'':`data-map-place="${c.code}"`} class="oceania-country${outlineOnly?' is-outline-only':''}${c.code===state.place?' is-selected':''}" d="${c.path}" fill-rule="evenodd" aria-label="${escape(c.name+(layer.field==='agriculture'||outlineOnly?'の輪郭':'を選ぶ'))}"/>`).join('')}${layer.field==='industry'?'':locators}${labels}${layer.id==='precipitation'?renderRegionalPrecipitationLabels('oceania',projectOceania,frame,scale):''}${climateCities}</svg>${inset}`;
 }
 export function oceaniaCoverage(layer:OceaniaLayer,state:OceaniaState):string{
  let text=layer.coverage;const country=oceaniaNames[state.place];

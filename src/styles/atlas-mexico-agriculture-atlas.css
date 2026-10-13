@@ -20,7 +20,7 @@
 .mexico-agriculture-geography text{font:600 16px var(--sans);text-anchor:middle;fill:#63716b;paint-order:stroke;stroke:#ffffefbf;stroke-width:3}
 .mexico-agriculture-geography .is-country{font-size:17px;letter-spacing:2px;font-weight:400}
 .mexico-agriculture-geography .is-water{font-size:20px;fill:#246584}
-.mexico-agriculture-crop-labels text{font:800 19px var(--sans);fill:var(--crop-color);text-anchor:middle;dominant-baseline:central;paint-order:stroke;stroke:#4a493b;stroke-width:.8;stroke-linejoin:round;filter:drop-shadow(0 1px 1px #fffdf1) drop-shadow(0 -1px 1px #fffdf1);cursor:pointer;vector-effect:non-scaling-stroke}
+.mexico-agriculture-crop-labels text{font:850 19px var(--sans);fill:var(--crop-color);text-anchor:middle;dominant-baseline:central;paint-order:stroke;stroke:#fffdf1;stroke-width:3;stroke-linejoin:round;filter:drop-shadow(0 1px 1px #263a32) drop-shadow(0 -1px 1px #263a32);cursor:pointer;vector-effect:non-scaling-stroke}
 .mexico-agriculture-crop-labels text.is-selected{font-weight:900;stroke-width:1}
 .mexico-agriculture-atlas .mexico-agriculture-crop-labels text:focus{outline:none}
 .mexico-agriculture-atlas .mexico-agriculture-crop-labels text:focus-visible{stroke:#143e4e;stroke-width:1.5;text-decoration:underline;text-decoration-thickness:2px}
@@ -28,14 +28,16 @@
 .mexico-agriculture-label-leaders line{stroke:var(--crop-color);stroke-width:1.5;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 1px #fffdf1)}
 .mexico-agriculture-label-leaders circle{fill:var(--crop-color);stroke:#4a493b;stroke-width:1;vector-effect:non-scaling-stroke}
 .mexico-agriculture-atlas .atlas-livestock-marker{color:var(--livestock-color,#43524d)}
+.mexico-agriculture-atlas[data-agriculture-crop-selected=true] .atlas-livestock-marker{opacity:.46}
+.mexico-agriculture-atlas[data-agriculture-crop-selected=true] .atlas-livestock-marker:focus-visible,.mexico-agriculture-atlas[data-agriculture-crop-selected=true] .atlas-livestock-marker:hover{opacity:1}
 .mexico-agriculture-atlas .atlas-livestock-marker:focus-visible{outline:3px solid #176f89;outline-offset:3px}
-.mexico-agriculture-state-selection,.mexico-agriculture-forest-states{pointer-events:none}
+.mexico-agriculture-state-selection{pointer-events:none}
 .mexico-agriculture-state-selection path{fill:none;stroke:#203f4b;stroke-width:2.5;vector-effect:non-scaling-stroke}
-.mexico-agriculture-forest-states path{fill:none;stroke:#2e6850;stroke-width:2.5;vector-effect:non-scaling-stroke}
-.mexico-agriculture-forest-states text{font:700 21px var(--sans);text-anchor:middle;fill:#274f42;paint-order:stroke;stroke:#fffef0;stroke-width:4}
 .mexico-agriculture-forest-key{display:flex;align-items:flex-start;gap:8px;margin:8px 0;font-size:12px;line-height:1.65;color:#315341}
 .mexico-agriculture-forest-key i{flex:none;width:17px;height:17px;margin-top:2px;background:#4f8562;border:2px solid #2e6850}
 .mexico-agriculture-map-note{font-size:11px;line-height:1.6;margin:5px 0;color:#5d6d66}
+.mexico-agriculture-overview-statistics{margin:14px 0;padding:12px;border:1px solid #c4d0c1;background:#f8f9f2}
+.mexico-agriculture-overview-statistics[hidden]{display:none}
 .mexico-agriculture-relations{margin-top:10px;padding:12px;border:1px solid #c4d0c1;border-top:3px solid #3d6152;background:#f2f5eb}
 .mexico-agriculture-relations h2{font-family:var(--serif);font-size:18px;margin:0 0 7px}
 .mexico-agriculture-relations>div{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -58,6 +60,12 @@
 .mexico-agriculture-causal p{font-size:14px;line-height:1.75;margin:8px 0}
 .mexico-agriculture-atlas .atlas-inline-sources{font-size:11px!important;line-height:1.6}
 .mexico-agriculture-comparison-link{display:block;border:1px solid #b6c7c1;background:#f1f5ef;color:#254e53;border-radius:4px;padding:9px;text-decoration:none;min-height:44px;font-size:13px}
+.mexico-agriculture-only-control{display:flex;align-items:center;gap:8px;min-height:44px;padding:5px 9px;margin:3px 0 7px;border:1px solid #c3d0c5;background:#f5f8f0;color:#294b39;font-size:13px;line-height:1.4;cursor:pointer}
+.mexico-agriculture-only-control input{width:18px;height:18px;flex:none;accent-color:#345e50}
+.mexico-agriculture-atlas .atlas-livestock-marker.is-cluster span{white-space:nowrap;line-height:1.05}
+.mexico-agriculture-atlas .atlas-livestock-marker.is-cluster{flex-direction:column;gap:0;min-width:40px;padding:2px 3px}
+.mexico-agriculture-atlas .atlas-livestock-marker.is-cluster i{flex:none}
+.mexico-agriculture-atlas .atlas-livestock-marker.is-cluster span{text-align:center}
 .mexico-agriculture-atlas [data-mexico-region-reading]{padding:10px;border:1px solid #bbcabe;background:#f4f5e9;margin:12px 0}
 .mexico-agriculture-atlas [data-mexico-region-reading] h3{font-size:14px;margin:0}
 .mexico-agriculture-atlas [data-agri-candidates] button{width:100%;padding:8px;text-align:left;border:1px solid #b6c7c1;background:#f1f5ef;border-radius:4px}
@@ -66,6 +74,15 @@
 .mexico-agriculture-stat-tools select{font:inherit;min-height:44px;max-width:220px}
 .mexico-agriculture-stat-tools input{width:18px;height:18px;accent-color:#345e50}
 .mexico-agriculture-stat-totals{display:flex;flex-wrap:wrap;gap:24px;margin:12px 0}
+.mexico-agriculture-three-columns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:18px 0}
+.mexico-agriculture-three-columns>section{min-width:0;border:1px solid #d2d9cf;border-radius:6px;background:#fafbf7;padding:16px;line-height:1.6}
+.mexico-agriculture-three-columns h3{font-size:17px;margin:0 0 6px;color:#264d3c}
+.mexico-agriculture-three-columns p{margin:8px 0;font-size:14px}
+.mexico-agriculture-three-columns a{font-size:13px}
+.mexico-agriculture-three-columns .mexico-agriculture-column-period{color:#53695d;font-size:13px}
+.mexico-agriculture-three-columns .mexico-agriculture-share{font:700 32px var(--serif);color:#264d3c;line-height:1.2}
+.mexico-agriculture-share span{font-size:20px}
+@media(max-width:850px){.mexico-agriculture-three-columns{grid-template-columns:1fr}}
 .mexico-agriculture-stat-totals p{font-size:12px;margin:0}.mexico-agriculture-stat-totals strong,.mexico-agriculture-stat-totals small{display:block}
 .mexico-agriculture-stat-totals strong{font-family:var(--serif);font-size:23px}.mexico-agriculture-stat-totals small{color:#647568}
 .mexico-agriculture-atlas .mexico-agriculture-state-bar{width:100%;min-height:36px;border:0;background:transparent;padding:3px 0;text-align:left;cursor:pointer;color:inherit;grid-template-columns:130px minmax(0,1fr) 170px}

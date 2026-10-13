@@ -1,0 +1,85 @@
+import { chromium } from 'playwright';
+import assert from 'node:assert/strict';
+import { mkdir, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+
+const base = process.env.EUROPE_REVIEW_BASE_URL ?? 'http://127.0.0.1:4173/insight-journal/';
+const output = process.env.EUROPE_LANGUAGE_OUTPUT ?? 'docs/review/europe-2026-10-13/images';
+await mkdir(output, { recursive: true });
+const browser = await chromium.launch({ executablePath: process.env.EUROPE_REVIEW_CHROMIUM_PATH ?? '/usr/bin/chromium', args: ['--no-sandbox', '--enable-unsafe-swiftshader'] });
+const records = [];
+try {
+  for (const renderer of ['auto', 'static']) {
+    const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1, reducedMotion: 'reduce' });
+    const errors = []; page.on('pageerror', error => errors.push(error.message));
+    const release = await (await page.request.get(new URL('_release.json', base).href)).json();
+    if (process.env.EUROPE_REVIEW_EXPECTED_HEAD) assert.equal(release.commitSha, process.env.EUROPE_REVIEW_EXPECTED_HEAD);
+    const url = new URL(`atlas/europe/population/?layer=language${renderer === 'static' ? '&render=static' : ''}`, base);
+    await page.goto(url.href, { waitUntil: 'networkidle' });
+    await page.waitForFunction(() => document.querySelector('[data-europe-detail]')?.dataset.initialized === 'true');
+    if (renderer === 'auto') await page.locator('.eu-live-map.is-ready').waitFor();
+    await page.waitForFunction(() => document.querySelectorAll('[data-eu-language-layer] path').length === 331);
+    assert.equal(await page.locator('[data-eu-topic="language"]').getAttribute('aria-pressed'), 'true');
+    assert.match(await page.locator('[data-eu-focus]').innerText(), /欧州全体.*England\/Walesのみ/);
+    assert.equal(await page.locator('[data-eu-region="all"]').getAttribute('aria-pressed'), 'true');
+    assert.equal(await page.locator('[data-eu-region="west"]').isEnabled(), true);
+    assert.equal(await page.locator('[data-eu-country-navigation]').isEnabled(), true);
+    assert.equal(await page.locator('[data-eu-language-area] option').count(), 332);
+    assert.equal(await page.locator('[data-eu-language-category] option').count(), 11);
+    assert.match(await page.locator('[data-eu-language-reader]').innerText(), /欧州全域の実使用分布は未収録/);
+    assert.match(await page.locator('[data-eu-language-reader]').innerText(), /無着色は0%ではなく未収録/);
+    assert.match(await page.locator('[data-eu-language-reader]').innerText(), /ウェールズ語のみの人数・割合はこの表では分離できません/);
+    assert.equal(await page.locator('[data-eu-language-regional] tbody tr').count(), 8);
+    assert.equal(await page.locator('[data-eu-language-daily] tbody tr').count(), 10);
+    const defaultFills = await page.locator('[data-eu-language-layer] path').evaluateAll(nodes => new Set(nodes.map(node => node.style.fill)).size);
+    assert(defaultFills >= 4, 'Default LAD map needs readable regional variation');
+    const extent = await page.locator('[data-eu-static]').getAttribute('viewBox');
+    assert(Number(extent.split(' ')[2]) > 500, 'The Europe language tab must open in its Europe-wide map extent');
+    await page.locator('[data-eu-language-area]').selectOption('E09000025');
+    assert.match(await page.locator('[data-eu-language-reading]').innerText(), /Newham：.*34\./);
+    assert.equal(new URL(page.url()).searchParams.get('languageArea'), 'E09000025');
+    assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'), extent, 'Selecting an LAD must not auto-zoom');
+    await page.locator('[data-eu-language-category]').selectOption('english-welsh');
+    assert.match(await page.locator('[data-eu-language-reading]').innerText(), /英語（ウェールズでは英語またはウェールズ語） 65\./);
+    assert.equal(new URL(page.url()).searchParams.get('languageCategory'), 'english-welsh');
+    assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'), extent, 'Changing the category must not auto-zoom');
+    const selected = page.locator('[data-eu-language-layer] [data-eu-language-shape="E09000025"]');
+    assert.equal(await selected.evaluate(node => node.style.stroke), 'rgb(132, 30, 55)');
+    await page.screenshot({ path: path.join(output, `language-${renderer}-1920.png`), animations: 'disabled' });
+    await page.locator('[data-eu-language-fit]').click();
+    const localExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
+    assert(Number(localExtent.split(' ')[2]) < 200, 'England/Wales enlargement requires the explicit button');
+    await page.screenshot({ path: path.join(output, `language-${renderer}-local-english-1920.png`), animations: 'disabled' });
+    await page.locator('[data-eu-language-reset]').click();
+    assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'), extent);
+    await page.locator('[data-eu-region="west"]').click();
+    assert.equal(new URL(page.url()).searchParams.get('region'), 'west');
+    assert.equal(new URL(page.url()).searchParams.has('languageArea'), false);
+    await page.locator('[data-eu-region="all"]').click();
+    assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'), extent);
+    await page.locator('[data-eu-shape="FRA"]').evaluate(node => node.dispatchEvent(new MouseEvent('click', { bubbles: true })));
+    assert.equal(new URL(page.url()).searchParams.get('place'), 'FRA');
+    await page.locator('[data-eu-region="all"]').click();
+    await page.locator('[data-eu-country-navigation]').selectOption('FRA');
+    assert.match(await page.locator('[data-eu-country-overview]').getAttribute('href'), /country=FRA/);
+    await page.locator('[data-eu-language-category]').selectOption('polish');
+    assert.match(await page.locator('[data-eu-language-reading]').innerText(), /地方自治体を選ぶと/);
+    await page.locator('[data-eu-language-category]').selectOption('english-welsh');
+    await page.locator('[data-eu-language-area]').selectOption('E09000025');
+    if (renderer === 'static') {
+      await page.locator('[data-eu-language-area]').selectOption('');
+      await selected.focus(); await selected.press('Enter');
+      assert.equal(new URL(page.url()).searchParams.get('languageArea'), 'E09000025');
+    }
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.waitForFunction(() => document.querySelectorAll('[data-eu-language-layer] path').length === 331);
+    assert.equal(await page.locator('[data-eu-language-category]').inputValue(), 'english-welsh');
+    assert.equal(await page.locator('[data-eu-language-area]').inputValue(), 'E09000025');
+    assert(Number((await page.locator('[data-eu-static]').getAttribute('viewBox')).split(' ')[2]) > 500, 'Reload must return to Europe without a hidden local-zoom state');
+    assert.deepEqual(errors, []);
+    records.push({ renderer, releaseCommit: release.commitSha, width: 1920, height: 1080, deviceScaleFactor: 1, areas: 331, categories: 11, defaultFillCount: defaultFills, selected: 'Newham', majorityCategory: 'english-welsh', europeExtent: extent, explicitLocalExtent: localExtent, regionAndCountrySelection: true, reloadReturnsToEurope: true, errors });
+    await page.close();
+  }
+  await writeFile(path.join(output, 'language-checks.json'), JSON.stringify(records, null, 2) + '\n');
+  console.log(JSON.stringify(records));
+} finally { await browser.close(); }

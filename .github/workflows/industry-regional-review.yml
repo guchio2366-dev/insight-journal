@@ -49,6 +49,12 @@ jobs:
           test -n "$(fc-list ':lang=ja' family)"
           export INDUSTRY_REVIEW_CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)"
           if [[ "${GITHUB_HEAD_REF:-}" == "codex/canada-map-revision-20261011" ]]; then export CANADA_REVIEW_LOG_IMAGES=1; fi
+          if [[ "${GITHUB_HEAD_REF:-}" == "codex/canada-map-followup-20261012" ]]; then
+            canada_followup_status=0
+            node scripts/verify-canada-industry-followup-review.mjs || canada_followup_status=$?
+            CANADA_REVIEW_LOG_IMAGES=0 ATLAS_CHROMIUM_PATH="$INDUSTRY_REVIEW_CHROME_PATH" ATLAS_QA_OUTPUT="review-artifacts/canada-maps" node scripts/verify-canada-us-parity.mjs || canada_followup_status=$?
+            if [[ "$canada_followup_status" != 0 ]]; then exit "$canada_followup_status"; fi
+          fi
           for review in scripts/verify-latin-industry-locations-review.mjs scripts/verify-russia-industry-review.mjs scripts/verify-industry-existing-country-review.mjs scripts/capture-canada-industry-pilot-review.mjs; do
             if [[ -f "$review" ]]; then node "$review"; fi
           done

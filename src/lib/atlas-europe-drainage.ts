@@ -8,7 +8,7 @@ export type EuropeDrainageBasin = Readonly<{
   NEXT_DOWN: number;
   MAIN_BAS: number;
 }>;
-export type EuropeDrainageState = { basin?: string };
+export type EuropeDrainageState = { basin?: string; riverBasin?:EuropeMainRiverId };
 export type EuropeDrainageGridSpec = { width: number; height: number };
 export type EuropeDrainageCell = {
   index: number;
@@ -139,4 +139,24 @@ function outlineForIndexes(values: Float32Array, indexes: Set<number>, options: 
 /** A representative river position selects only its containing display section. */
 export function europeDrainagePositionLabel(basin: EuropeDrainageBasin): string {
   return `その表示位置を含む区画（HYBAS_ID ${basin.HYBAS_ID}）`;
+}
+
+/** Named teaching units use verified retained MAIN_BAS records only. Missing
+ * Thames/Ural polygons are not replaced by a coastal aggregate or guessed area. */
+export const europeMainRivers = [
+ {id:'rhine',name:'ライン川',mainBasin:2040023010},
+ {id:'danube',name:'ドナウ川',mainBasin:2040008490},
+ {id:'seine',name:'セーヌ川',mainBasin:2040022150},
+ {id:'thames',name:'テムズ川',mainBasin:null},
+ {id:'don',name:'ドン川',mainBasin:2040006590},
+ {id:'volga',name:'ヴォルガ川',mainBasin:2040068680},
+ {id:'ural',name:'ウラル川',mainBasin:null},
+] as const;
+export type EuropeMainRiverId = typeof europeMainRivers[number]['id'];
+export function normaliseEuropeMainRiver(value:unknown):EuropeMainRiverId|undefined{return europeMainRivers.find(river=>river.id===value)?.id;}
+export function europeMainRiverForBasin(value:unknown){const id=normaliseEuropeDrainageBasin(value);const basin=europeDrainageBasins.find(item=>String(item.HYBAS_ID)===id);return basin?europeMainRivers.find(river=>river.mainBasin===basin.MAIN_BAS):undefined;}
+export function europeMainRiverSelection(value:unknown):EuropeDrainageState|undefined{
+ const id=normaliseEuropeMainRiver(value);if(!id)return undefined;
+ const river=europeMainRivers.find(river=>river.id===id)!;
+ return {riverBasin:id,...(river.mainBasin?{basin:String(river.mainBasin)}:{})};
 }

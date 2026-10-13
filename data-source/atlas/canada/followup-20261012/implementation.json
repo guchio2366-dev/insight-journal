@@ -1,0 +1,25 @@
+{
+  "phase": "after",
+  "status": "implemented-awaiting-final-browser-verification",
+  "baseMain": "a07ab7277b2c7eb89e51ef1be0d72dccfbec497d",
+  "items": [
+    "fixed nine-city climate names",
+    "viewport-height reading columns",
+    "brown elevation palette with unchanged 500m source classes",
+    "15 industries and 71 source locality guides with fixed selection placement",
+    "stronger unchanged-source population grid colors and line-only city references",
+    "aggregate ethnic/religious labels without inferred local distribution",
+    "ten-product agriculture and clear hidden selection",
+    "four forest classes and seven distinct activity guides",
+    "eight major lake names",
+    "250 mm native-continuous-source isohyets",
+    "pale initial landform regions and outline-only selection"
+  ],
+  "remainingSourceGaps": [
+    "within-CD/CMA ethnic/religious residential distributions unavailable; official selected CSD download blocked at proxy with 403",
+    "new raw CanGridP NetCDF request blocked with 403; retained annual continuous CSV precision 0.1 mm used",
+    "current annual logging cutblock geometry not acquired; only past logging/replanting and distinct forest-management references",
+    "attached Library reference image transfer failed; visual conditions measured independently"
+  ],
+  "mergeOrPublicationAuthorized": false
+}

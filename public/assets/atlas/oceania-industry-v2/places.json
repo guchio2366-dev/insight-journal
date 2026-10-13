@@ -8,7 +8,10 @@
       "id": "tauranga-port",
       "country": "NZL",
       "name": "タウランガ港",
-      "coordinates": [176.18333333333334, -37.65],
+      "coordinates": [
+        176.18333333333334,
+        -37.65
+      ],
       "kind": "port",
       "note": "港湾管理者の2011年資料にある港の代表位置。木材・紙製品・乳製品との関係は、2018年を扱う2019年の運輸省報告による。加工工場の位置や現在の輸出量を表す印ではありません。",
       "sourceUrl": "https://www.port-tauranga.co.nz/wp-content/uploads/Location-and-Transport-Links.pdf"
@@ -17,7 +20,10 @@
       "id": "lihir-project",
       "country": "PNG",
       "name": "リヒール：金の採掘・処理地区",
-      "coordinates": [152.64083333333332, -3.115],
+      "coordinates": [
+        152.64083333333332,
+        -3.115
+      ],
       "kind": "processing",
       "note": "Newmontの2024年技術報告に記載された事業地区の概略位置。情報時点は2023年12月31日。採掘と鉱石処理を含む地区の代表印で、工場単体の位置、現在の稼働確認、生産量を表しません。",
       "sourceUrl": "https://www.sec.gov/Archives/edgar/data/1164727/000116472724000016/exhibit967-lihiroperatio.htm"
@@ -26,7 +32,10 @@
       "id": "lae-port",
       "country": "PNG",
       "name": "ラエ港",
-      "coordinates": [146.98333333333332, -6.733333333333333],
+      "coordinates": [
+        146.98333333333332,
+        -6.733333333333333
+      ],
       "kind": "port",
       "note": "PNG Portsが示す港の代表位置。一般貨物・コンテナを扱う港です。個々の鉱山の輸出港や鉱山からの輸送経路は、この印からは分かりません。ページの公開年は不明、2026年10月1日確認。",
       "sourceUrl": "https://www.pngports.com.pg/index.php/port-information/ports-of-png/lae-port"
@@ -35,7 +44,10 @@
       "id": "noro-port",
       "country": "SLB",
       "name": "ノロ港・水産加工地域",
-      "coordinates": [157.19533333333334, -8.228333333333333],
+      "coordinates": [
+        157.19533333333334,
+        -8.228333333333333
+      ],
       "kind": "port",
       "note": "SIPA factsheetの主埠頭位置を、水揚げと加工がつながる港湾地域の代表に使用。水先案内の乗降位置や加工工場の入口ではありません。水産加工の説明はFFAの2025年11月25日記事による。港資料の公開年は不明、2026年10月1日確認。",
       "sourceUrl": "https://www.sipa.com.sb/media/1404/fact-sheet-noro.pdf"
@@ -44,10 +56,81 @@
       "id": "suva-city",
       "country": "FJI",
       "name": "スバ：港湾都市とサービス",
-      "coordinates": [178.4501, -18.1248],
+      "coordinates": [
+        178.4501,
+        -18.1248
+      ],
       "kind": "city",
       "note": "Fiji Portsが示すスバ市の代表位置。港の埠頭や観光施設の位置ではありません。金融・保険・観光などの説明はフィジー全国についてのDFAT資料によるもので、スバ市の産業割合を表しません。公開年は不明、2026年10月1日確認。",
       "sourceUrl": "https://fijiports.com.fj/our-story/our-facilities/"
+    },
+    {
+      "id": "port-kembla-steel",
+      "country": "AUS",
+      "name": "鋼板製造：ポートケンブラ",
+      "coordinates": [
+        150.8818992790324,
+        -34.415740515474816
+      ],
+      "kind": "processing",
+      "note": "BlueScopeが示すポートケンブラ製鉄所の鋼材生産を読む。印は近隣ウォロンゴンのGHSL都市中心（2025年境界・2020年人口モデル）の代表座標で、製鉄所の敷地や生産量を示しません。企業資料の公開年は不明、2026年10月12日確認。",
+      "sourceUrl": "https://www.bluescope.com/illawarra"
+    },
+    {
+      "id": "nz-dairy-guide",
+      "country": "NZL",
+      "name": "クライストチャーチ：乳加工の案内",
+      "coordinates": [
+        172.61681633101844,
+        -43.525662225822266
+      ],
+      "kind": "processing",
+      "note": "Synlaitは公式沿革でDunsandelの乳加工開始（2008年）と乳児用粉乳施設（2011年）を説明しています。公式所在地は1028 Heslerton Road, Rakaiaです。この印は保存済みGHSLクライストチャーチ都市中心の案内位置で、Dunsandel工場の入口・敷地ではありません。乳牛の分布や牛密度との施設別供給関係、現在の生産量は示しません。",
+      "sourceUrl": "https://www.synlait.com/history/",
+      "checkedAt": "2026-10-13",
+      "coordinateMeaning": "urban-centre-guide-not-factory",
+      "coordinateSource": {
+        "file": "public/assets/atlas/oceania-population-v1/centres.json",
+        "urbanCentreId": "uc-353",
+        "name": "Christchurch",
+        "dataset": "GHS-UCDB R2024A V1.2",
+        "populationYear": 2020,
+        "boundaryYear": 2025,
+        "license": "CC BY 4.0",
+        "doi": "https://doi.org/10.2905/1a338be6-7eaf-480c-9664-3a8ade88cbcd"
+      },
+      "labelOffsetPx": [
+        18,
+        34
+      ]
+    },
+    {
+      "id": "nz-wood-guide",
+      "country": "NZL",
+      "name": "ナピア：木材・パルプ加工の案内",
+      "coordinates": [
+        176.88505965146314,
+        -39.511145733597466
+      ],
+      "kind": "processing",
+      "note": "Pan Pacの公式資料はホークスベイのパルプ加工を説明し、本社住所を1161 State Highway 2, Wairoa Road, Napierと案内しています。この印は保存済みGHSLナピア都市中心の案内位置で、本社や製材・パルプ工場の入口・敷地ではありません。森林面の全域分布、原料林からの施設別輸送経路、生産量は示しません。",
+      "sourceUrl": "https://www.panpac.co.nz/pulp/",
+      "checkedAt": "2026-10-13",
+      "coordinateMeaning": "urban-centre-guide-not-factory",
+      "coordinateSource": {
+        "file": "public/assets/atlas/oceania-population-v1/centres.json",
+        "urbanCentreId": "uc-911",
+        "name": "Napier",
+        "dataset": "GHS-UCDB R2024A V1.2",
+        "populationYear": 2020,
+        "boundaryYear": 2025,
+        "license": "CC BY 4.0",
+        "doi": "https://doi.org/10.2905/1a338be6-7eaf-480c-9664-3a8ade88cbcd"
+      },
+      "labelOffsetPx": [
+        40,
+        24
+      ]
     }
   ]
 }

@@ -1,0 +1,465 @@
+{
+  "checkedAt": "2026-10-12",
+  "basisHead": "a07ab7277b2c7eb89e51ef1be0d72dccfbec497d",
+  "geometryClaim": "Existing geographic shapes are administrative aggregation units. No non-administrative residence geometry newly acquired.",
+  "counts": {
+    "ethnicity": {
+      "measured": 122,
+      "qualitative": 10
+    },
+    "religion": {
+      "measured": 102,
+      "qualitative": 14
+    }
+  },
+  "countries": {
+    "ethnicity": {
+      "ARG": {
+        "regions": 1,
+        "years": [
+          2012
+        ],
+        "kinds": {
+          "qualitative": 1
+        },
+        "sources": [
+          "berglee-andes2012"
+        ]
+      },
+      "BLZ": {
+        "regions": 6,
+        "years": [
+          2022
+        ],
+        "kinds": {
+          "measured": 6
+        },
+        "sources": [
+          "blz2022"
+        ]
+      },
+      "BOL": {
+        "regions": 1,
+        "years": [
+          2012
+        ],
+        "kinds": {
+          "qualitative": 1
+        },
+        "sources": [
+          "berglee-andes2012"
+        ]
+      },
+      "BRA": {
+        "regions": 5,
+        "years": [
+          2022
+        ],
+        "kinds": {
+          "measured": 5
+        },
+        "sources": [
+          "bra-ibge-2022"
+        ]
+      },
+      "COL": {
+        "regions": 1,
+        "years": [
+          2012
+        ],
+        "kinds": {
+          "qualitative": 1
+        },
+        "sources": [
+          "berglee2012"
+        ]
+      },
+      "CRI": {
+        "regions": 1,
+        "years": [
+          2012
+        ],
+        "kinds": {
+          "qualitative": 1
+        },
+        "sources": [
+          "berglee2012"
+        ]
+      },
+      "ECU": {
+        "regions": 24,
+        "years": [
+          2022
+        ],
+        "kinds": {
+          "measured": 24
+        },
+        "sources": [
+          "ecu-sgdpn-2022-preliminary"
+        ]
+      },
+      "GTM": {
+        "regions": 22,
+        "years": [
+          2018
+        ],
+        "kinds": {
+          "measured": 22
+        },
+        "sources": [
+          "gtm2018"
+        ]
+      },
+      "GUY": {
+        "regions": 10,
+        "years": [
+          2012
+        ],
+        "kinds": {
+          "measured": 10
+        },
+        "sources": [
+          "guy-bos-2012"
+        ]
+      },
+      "HND": {
+        "regions": 1,
+        "years": [
+          2012
+        ],
+        "kinds": {
+          "qualitative": 1
+        },
+        "sources": [
+          "berglee2012"
+        ]
+      },
+      "NIC": {
+        "regions": 1,
+        "years": [
+          2012
+        ],
+        "kinds": {
+          "qualitative": 1
+        },
+        "sources": [
+          "berglee2012"
+        ]
+      },
+      "PAN": {
+        "regions": 1,
+        "years": [
+          2012
+        ],
+        "kinds": {
+          "qualitative": 1
+        },
+        "sources": [
+          "berglee2012"
+        ]
+      },
+      "PER": {
+        "regions": 26,
+        "years": [
+          2017
+        ],
+        "kinds": {
+          "measured": 26
+        },
+        "sources": [
+          "per-profile2017"
+        ]
+      },
+      "PRY": {
+        "regions": 1,
+        "years": [
+          2012
+        ],
+        "kinds": {
+          "qualitative": 1
+        },
+        "sources": [
+          "berglee2012"
+        ]
+      },
+      "SLV": {
+        "regions": 1,
+        "years": [
+          2012
+        ],
+        "kinds": {
+          "qualitative": 1
+        },
+        "sources": [
+          "berglee2012"
+        ]
+      },
+      "SUR": {
+        "regions": 10,
+        "years": [
+          2012
+        ],
+        "kinds": {
+          "measured": 10
+        },
+        "sources": [
+          "sur-abs-2012"
+        ]
+      },
+      "URY": {
+        "regions": 19,
+        "years": [
+          2023
+        ],
+        "kinds": {
+          "measured": 19
+        },
+        "sources": [
+          "ury-ine-2023"
+        ]
+      },
+      "VEN": {
+        "regions": 1,
+        "years": [
+          2012
+        ],
+        "kinds": {
+          "qualitative": 1
+        },
+        "sources": [
+          "berglee2012"
+        ]
+      }
+    },
+    "religion": {
+      "ARG": {
+        "regions": 3,
+        "years": [
+          2019
+        ],
+        "kinds": {
+          "qualitative": 3
+        },
+        "sources": [
+          "arg-conicet2019"
+        ]
+      },
+      "BLZ": {
+        "regions": 6,
+        "years": [
+          2022
+        ],
+        "kinds": {
+          "measured": 6
+        },
+        "sources": [
+          "blz2022"
+        ]
+      },
+      "BOL": {
+        "regions": 1,
+        "years": [
+          2012
+        ],
+        "kinds": {
+          "qualitative": 1
+        },
+        "sources": [
+          "berglee-catholic2012"
+        ]
+      },
+      "BRA": {
+        "regions": 27,
+        "years": [
+          2022
+        ],
+        "kinds": {
+          "measured": 27
+        },
+        "sources": [
+          "bra2022"
+        ]
+      },
+      "CHL": {
+        "regions": 16,
+        "years": [
+          2024
+        ],
+        "kinds": {
+          "measured": 16
+        },
+        "sources": [
+          "chl2024"
+        ]
+      },
+      "COL": {
+        "regions": 1,
+        "years": [
+          2012
+        ],
+        "kinds": {
+          "qualitative": 1
+        },
+        "sources": [
+          "berglee-catholic2012"
+        ]
+      },
+      "CRI": {
+        "regions": 1,
+        "years": [
+          2012
+        ],
+        "kinds": {
+          "qualitative": 1
+        },
+        "sources": [
+          "berglee-catholic2012"
+        ]
+      },
+      "ECU": {
+        "regions": 1,
+        "years": [
+          2012
+        ],
+        "kinds": {
+          "qualitative": 1
+        },
+        "sources": [
+          "berglee-catholic2012"
+        ]
+      },
+      "GTM": {
+        "regions": 1,
+        "years": [
+          2014
+        ],
+        "kinds": {
+          "qualitative": 1
+        },
+        "sources": [
+          "pew2014-country-context"
+        ]
+      },
+      "GUY": {
+        "regions": 10,
+        "years": [
+          2012
+        ],
+        "kinds": {
+          "measured": 10
+        },
+        "sources": [
+          "guy2012"
+        ]
+      },
+      "HND": {
+        "regions": 1,
+        "years": [
+          2014
+        ],
+        "kinds": {
+          "qualitative": 1
+        },
+        "sources": [
+          "pew2014-country-context"
+        ]
+      },
+      "NIC": {
+        "regions": 17,
+        "years": [
+          2005
+        ],
+        "kinds": {
+          "measured": 17
+        },
+        "sources": [
+          "nic2005"
+        ]
+      },
+      "PAN": {
+        "regions": 1,
+        "years": [
+          2012
+        ],
+        "kinds": {
+          "qualitative": 1
+        },
+        "sources": [
+          "berglee-catholic2012"
+        ]
+      },
+      "PER": {
+        "regions": 26,
+        "years": [
+          2017
+        ],
+        "kinds": {
+          "measured": 26
+        },
+        "sources": [
+          "per-profile2017"
+        ]
+      },
+      "PRY": {
+        "regions": 1,
+        "years": [
+          2012
+        ],
+        "kinds": {
+          "qualitative": 1
+        },
+        "sources": [
+          "berglee-catholic2012"
+        ]
+      },
+      "SLV": {
+        "regions": 1,
+        "years": [
+          2014
+        ],
+        "kinds": {
+          "qualitative": 1
+        },
+        "sources": [
+          "pew2014-country-context"
+        ]
+      },
+      "URY": {
+        "regions": 1,
+        "years": [
+          2014
+        ],
+        "kinds": {
+          "qualitative": 1
+        },
+        "sources": [
+          "pew2014-country-context"
+        ]
+      },
+      "VEN": {
+        "regions": 1,
+        "years": [
+          2012
+        ],
+        "kinds": {
+          "qualitative": 1
+        },
+        "sources": [
+          "berglee-catholic2012"
+        ]
+      }
+    }
+  },
+  "doNotInfer": [
+    "No smoothing of administrative boundaries",
+    "No allocation of ethnicity/religion shares to generic population grid",
+    "No invented minority territories",
+    "No language-to-ethnicity or ethnicity-to-religion inference",
+    "No contemporary uniform year claim"
+  ],
+  "originalDataSha256": {
+    "data-source/atlas/latin-reading/geographic-distributions-20261011.json": "4fcf0b6f92af88907cf102708e4078549eccea9f8c671942ca6d135387a2d052",
+    "data-source/atlas/latin-reading/major-compositions-20261011.json": "deab57a8e953a6a2beb39f73c1d688d2d232ee68804e187bdc61a20caaae81ab",
+    "src/data/atlas/latin-america/countries.json": "b9a343e2541469c3c790500e61a734d7b78e9a18d640c428260c973bad3dfb91"
+  }
+}

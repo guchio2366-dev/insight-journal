@@ -1,0 +1,82 @@
+[
+  {
+    "renderer": "auto",
+    "release": {
+      "articles": [
+        {
+          "payloadHash": "2c6ef0cd92ddb67af00ab81f04d553ca7d072d929e0bf1f277221867ad5bf646",
+          "publicId": "a-11111111-1111-4111-8111-111111111111",
+          "revision": 1
+        }
+      ],
+      "builtAt": "2026-10-13T08:16:37.569Z",
+      "commitSha": "local"
+    },
+    "rivers": {
+      "names": [
+        "danube",
+        "rhine",
+        "seine",
+        "thames",
+        "volga",
+        "don",
+        "ural"
+      ],
+      "stableSelectionCameraAndLabels": true,
+      "missingThamesUralNotPainted": true,
+      "reloadHistory": true
+    },
+    "cattleChickenNoCollision": true,
+    "farmingPeersAndLabelsRetained": true,
+    "regionalAndDailyLanguageRows": [
+      8,
+      10
+    ],
+    "viewport": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "errors": []
+  },
+  {
+    "renderer": "static",
+    "release": {
+      "articles": [
+        {
+          "payloadHash": "2c6ef0cd92ddb67af00ab81f04d553ca7d072d929e0bf1f277221867ad5bf646",
+          "publicId": "a-11111111-1111-4111-8111-111111111111",
+          "revision": 1
+        }
+      ],
+      "builtAt": "2026-10-13T08:16:37.569Z",
+      "commitSha": "local"
+    },
+    "rivers": {
+      "names": [
+        "danube",
+        "rhine",
+        "seine",
+        "thames",
+        "volga",
+        "don",
+        "ural"
+      ],
+      "stableSelectionCameraAndLabels": true,
+      "missingThamesUralNotPainted": true,
+      "reloadHistory": true
+    },
+    "cattleChickenNoCollision": true,
+    "farmingPeersAndLabelsRetained": true,
+    "regionalAndDailyLanguageRows": [
+      8,
+      10
+    ],
+    "viewport": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "errors": []
+  }
+]

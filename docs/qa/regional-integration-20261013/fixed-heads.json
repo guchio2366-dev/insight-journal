@@ -1,0 +1,141 @@
+{
+  "repository": "guchio2366-dev/insight-journal",
+  "base": "a07ab7277b2c7eb89e51ef1be0d72dccfbec497d",
+  "branch": "codex/regional-integration-validation-20261013",
+  "publication_authorized": false,
+  "original_pr_modification_authorized": false,
+  "head_snapshot_date_utc": "2026-10-13",
+  "integration_order": [
+    332,
+    333,
+    334,
+    335,
+    337,
+    338,
+    339,
+    340,
+    341,
+    342,
+    343,
+    336
+  ],
+  "implementation_head": "51043c14a2d9216c19ea058997dd77db11590a58",
+  "fixed_heads": [
+    {
+      "pr": 332,
+      "branch": "codex/canada-map-followup-20261012",
+      "sha": "ec603cebfdf7df59026b4fc93c1dcc515529b4d3",
+      "base": "a07ab7277b2c7eb89e51ef1be0d72dccfbec497d"
+    },
+    {
+      "pr": 333,
+      "branch": "codex/mexico-review-20261012",
+      "sha": "45db8625d7540cd5de553f7a9752be4706e98015",
+      "base": "a07ab7277b2c7eb89e51ef1be0d72dccfbec497d"
+    },
+    {
+      "pr": 334,
+      "branch": "codex/latin-review-revisions-20261012",
+      "sha": "8daa7d644f08a96aa2f714dbb4386f0ddb6598a7",
+      "base": "a07ab7277b2c7eb89e51ef1be0d72dccfbec497d"
+    },
+    {
+      "pr": 335,
+      "branch": "codex/europe-fourth-review-20261012",
+      "sha": "319bcc7292279bd12d4ee237c6c4f4d4d8192884",
+      "base": "a07ab7277b2c7eb89e51ef1be0d72dccfbec497d"
+    },
+    {
+      "pr": 337,
+      "branch": "fix/africa-third-review-20261012",
+      "sha": "441dd136c5d22c300832f601037710d34ad5bb4e",
+      "base": "a07ab7277b2c7eb89e51ef1be0d72dccfbec497d"
+    },
+    {
+      "pr": 338,
+      "branch": "codex/southeast-third-pass-20261012",
+      "sha": "2c77f87ee3a9598aad4bf071915e61b05d62f8ae",
+      "base": "a07ab7277b2c7eb89e51ef1be0d72dccfbec497d"
+    },
+    {
+      "pr": 339,
+      "branch": "codex/south-asia-second-pass-20261012",
+      "sha": "8285dfff79c95445e7dbfea57881968f99d8e5e2",
+      "base": "a07ab7277b2c7eb89e51ef1be0d72dccfbec497d"
+    },
+    {
+      "pr": 340,
+      "branch": "codex/central-asia-second-pass-20261012",
+      "sha": "23cebe6822e1d9611dc773bb12b7f64c1cab40e7",
+      "base": "a07ab7277b2c7eb89e51ef1be0d72dccfbec497d"
+    },
+    {
+      "pr": 341,
+      "branch": "codex/east-asia-second-feedback-20261012",
+      "sha": "780ee82aa577217ac404306a5fccc470835b5fac",
+      "base": "a07ab7277b2c7eb89e51ef1be0d72dccfbec497d"
+    },
+    {
+      "pr": 342,
+      "branch": "codex/japan-layout-review",
+      "sha": "4f89febf0b35657f169a58223de6d5e5270862dd",
+      "base": "a07ab7277b2c7eb89e51ef1be0d72dccfbec497d"
+    },
+    {
+      "pr": 343,
+      "branch": "codex/west-asia-review-20261012",
+      "sha": "0960013fd15c3aa8b79e8c2b0db09042219f120c",
+      "base": "a07ab7277b2c7eb89e51ef1be0d72dccfbec497d"
+    },
+    {
+      "pr": 336,
+      "branch": "codex/oceania-russia-ux-refresh-20261012",
+      "sha": "49ebae11372a08e17750ed05c6f57111c360089e",
+      "base": "a07ab7277b2c7eb89e51ef1be0d72dccfbec497d",
+      "confirmation": "Parent/user selected the final head documented in PR #336 after the initial 11-head integration."
+    }
+  ],
+  "shared_conflicts": {
+    "339": [
+      "src/scripts/atlas-asia-presentation.ts"
+    ],
+    "340": [
+      "src/components/atlas/AsiaAtlasPage.astro",
+      "src/components/atlas/AsiaSettlementPanel.astro",
+      "src/scripts/atlas-asia-explorer.ts",
+      "src/scripts/atlas-asia-presentation.ts",
+      "tests/e2e/atlas-south-central-focus.test.mjs"
+    ],
+    "341": [
+      "src/components/atlas/AsiaAtlasPage.astro",
+      "src/components/atlas/AsiaFieldNavigation.astro",
+      "src/components/atlas/AsiaSettlementPanel.astro",
+      "src/scripts/atlas-asia-explorer.ts",
+      "src/scripts/atlas-asia-presentation.ts"
+    ]
+  },
+  "local_browser": {
+    "status": "blocked",
+    "chromiumSandbox": true,
+    "executable": "/usr/bin/chromium",
+    "reason": "SUID helper /usr/lib/chromium/chrome-sandbox is owned by nobody, mode 4755. Standard sandboxed launch aborts at setuid_sandbox_host.cc:166.",
+    "bypass_attempted": false
+  },
+  "remaining_scope": "Integration validation only. Regional source/data incompleteness and unreviewed screenshots remain separate. No deployment, Ready, main update, or merge of remote PRs.",
+  "pr336_parent_followup": {
+    "fixed_head_still_authorized": "49ebae11372a08e17750ed05c6f57111c360089e",
+    "initial_residual": "Positive native cells alone did not establish that the four new crop labels represented the major concentration belts.",
+    "followup_authorized_head": "662018adad9428a0096acae9126e6bb0771d75f1",
+    "parent_confirmation": "Remote head agreement, all five CI runs successful, limited acceptance without a new defect; explicit instruction to integrate the already-approved correction delta.",
+    "integrated_delta": "Use maximum native harvested-area 4-neighbour connected components and 13x13 local concentration windows for four crop labels. Retain original quantities, distributions and processing guides.",
+    "remaining": "Full forestry, basins, groundwater, other crop/livestock coverage, exact facilities, supply chains and ethnoreligious coverage remain separate. No later remote head is automatically included."
+  },
+  "additional_fixed_deltas": [
+    {
+      "pr": 336,
+      "base": "49ebae11372a08e17750ed05c6f57111c360089e",
+      "head": "662018adad9428a0096acae9126e6bb0771d75f1",
+      "authorized_by": "Explicit parent follow-up after independent remote/CI and limited acceptance review"
+    }
+  ]
+}

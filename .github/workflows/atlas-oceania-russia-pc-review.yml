@@ -7,6 +7,7 @@ on:
     paths:
       - '.github/workflows/atlas-oceania-russia-pc-review.yml'
       - 'tests/browser/atlas-oceania-russia-first-stage.mjs'
+      - 'tests/browser/atlas-oceania-russia-ux-refresh.mjs'
       - 'tests/browser/atlas-oceania-russia-climate-cities.mjs'
       - 'src/components/atlas/RegionalClimateCityReading.astro'
       - 'src/data/atlas/oceania-russia-climate-cities.json'
@@ -121,6 +122,10 @@ jobs:
         env:
           REGION_REVIEW_OUTPUT: ${{ runner.temp }}/oceania-russia-pc-review
         run: node tests/browser/atlas-oceania-russia-first-stage.mjs
+      - name: Review Oceania and Russia field layout and operations
+        env:
+          REGION_REVIEW_OUTPUT: ${{ runner.temp }}/oceania-russia-pc-review/ux-refresh
+        run: node tests/browser/atlas-oceania-russia-ux-refresh.mjs
       - name: Review Oceania and Russia climate cities at both PC sizes
         if: env.REGION_REVIEW_CLIMATE_CITIES == '1'
         env:

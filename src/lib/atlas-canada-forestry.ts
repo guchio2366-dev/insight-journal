@@ -1,5 +1,7 @@
 export type CanadaForestryState={year:number;province:string|null;compare:string|null;metric:'wood'|'paper';cover:'all'|'needleleaf'|'taiga'|'broadleaf'|'mixed';region:'bc'|'quebec'|'ontario'|null;zoom:boolean;camera:number[]|null};
 export const forestryStateKeys=['year','province','compare','metric','cover','region','zoom','forestCamera'] as const;
+export const canadaForestryActivityIds=['prince-george-harvest','windsor-managed-forest','grande-prairie-wood','northwest-ontario-wood','lac-saint-jean-processing','skookumchuck-pulp','windsor-paper'] as const;
+export function isCanadaForestryActivity(value:string|null):value is string{return canadaForestryActivityIds.some(id=>id===value);}
 export function readCanadaForestryState(url:URL,years:number[],provinces:string[]):CanadaForestryState{
  const p=url.searchParams,y=Number(p.get('year')),province=provinces.includes(p.get('province')??'')?p.get('province')!:null,compare=p.get('compare');
  const region=['bc','quebec','ontario'].includes(p.get('region')??'')?p.get('region') as CanadaForestryState['region']:null;
@@ -8,4 +10,4 @@ export function readCanadaForestryState(url:URL,years:number[],provinces:string[
 }
 export function writeCanadaForestryState(url:URL,state:CanadaForestryState){const u=new URL(url);for(const key of forestryStateKeys)u.searchParams.delete(key);for(const key of ['year','province','metric','cover','region'] as const)if(state[key]!==null)u.searchParams.set(key,String(state[key]));if(state.compare)u.searchParams.set('compare',state.compare);if(state.zoom&&state.region)u.searchParams.set('zoom','1');if(state.camera)u.searchParams.set('forestCamera',state.camera.map(v=>Number(v.toFixed(5))).join(','));return u;}
 export function formatCanadaForestryValue(v:number|null){return v===null?'欠測':v.toLocaleString('ja-JP',{maximumFractionDigits:0});}
-export function canadaForestryComparisonUrl(source:URL,target:URL,state:CanadaForestryState){const params=writeCanadaForestryState(new URL(source.pathname,source),state).searchParams;target.searchParams.set('forestryReturn',params.toString());return target;}
+export function canadaForestryComparisonUrl(source:URL,target:URL,state:CanadaForestryState){const params=writeCanadaForestryState(new URL(source.pathname,source),state).searchParams,activity=source.searchParams.get('forestActivity');if(isCanadaForestryActivity(activity))params.set('forestActivity',activity);target.searchParams.set('forestryReturn',params.toString());return target;}

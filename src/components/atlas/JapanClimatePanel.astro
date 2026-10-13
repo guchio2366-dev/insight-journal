@@ -1,0 +1,10 @@
+---
+import AsiaClimateDiagram from './AsiaClimateDiagram.astro';
+import type {AsiaClimateCity} from '../../data/atlas/asia-climate-cities';
+import records from '../../../public/assets/atlas/japan-nature-v2/station-climate-classes.json';
+import {japanClimateDefinition,japanClimateDryRules,japanStationClassCaveat} from '../../lib/atlas-japan-climate-definition';
+interface Props {city:AsiaClimateCity}
+const {city}=Astro.props;
+const classification=records.find(r=>r.city===city.id)!;
+---
+<div data-japan-climate-chart={city.id} hidden><h3>{city.name}の雨温図</h3><AsiaClimateDiagram {city} countryName="日本" /><section class="japan-station-reading"><h3 data-japan-station-class>地図格子：{classification.code??'未分類'}{classification.name?'｜'+classification.name:''}</h3><p>{japanClimateDefinition(classification.code)}</p><p>{japanStationClassCaveat(classification.code,city.temperatureC)}</p><details><summary>採用分類の定量的な判定条件</summary><p>{japanClimateDryRules}</p><a href="https://www.nature.com/articles/s41597-023-02549-6">Beckほか（2023）の分類法</a></details><h3>季節の違いを考える</h3><p>{city.reading}</p></section></div>

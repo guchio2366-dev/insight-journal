@@ -1,0 +1,16 @@
+{
+  "fullCoordinates": {
+    "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_populated_places.geojson",
+    "publisher": "Natural Earth",
+    "version": "5.1.2",
+    "crs": "EPSG:4326",
+    "license": "Public domain",
+    "inputSha256": "9b8e3de09048ef00dfc70357dbb9fa324493f214b5e0ae4daf1aa79a8d10116b"
+  },
+  "retainedEconomySourceSha256": "1d5c0b3504d3a3312b6f199c89bef9bebe136a745ad4e6435a5d6ece73731356",
+  "files": {
+    "src/data/atlas/latin-america/industry-sectors.json": "0bb925a2ea76027a1eae82713e86f3b6d82bda22633ff3e73747500c2cd75056",
+    "data-source/atlas/latin-america/industry-sectors-20261012/coordinate-original-subset.geojson": "90f121a52e86c521a2932ed82e9d0046e851fbcf1d4778a5f94c8f8bd9b54e52",
+    "data-source/atlas/latin-america/industry-sectors-20261012/source-ledger.json": "194cb8a6ffc322935a8e1259da6ed28ac8de9d74b8ba98dd470040e7196ae63f"
+  }
+}

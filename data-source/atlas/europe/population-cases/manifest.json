@@ -37,7 +37,7 @@
       "url": "https://podaci.dzs.hr/media/td3jvrbu/popis_2021-stanovnistvo_po_gradovima_opcinama.xlsx"
     },
     "croatiaOutline": {
-      "file": "src/data/atlas/europe-countries.json",
+      "file": "data-source/atlas/europe/legacy-country-mask-110m-v1.json",
       "bytes": 78871,
       "sha256": "74188768119719459793e99eebdc29a90abe85881bdfc15d76ab144ec6320237",
       "publisher": "Natural Earth",

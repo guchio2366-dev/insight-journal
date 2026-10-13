@@ -1,0 +1,67 @@
+{
+  "reviewed": "2026-10-13",
+  "examples": [
+    {
+      "id": "suzano-tres-lagoas",
+      "kind": "processing-locality",
+      "title": "ブラジル：Suzano トレス・ラゴアスのパルプ加工",
+      "label": "トレス・ラゴアス",
+      "point": [-51.720006, -20.790011],
+      "labelOffset": [-16, 5],
+      "coordinateSource": {"publisher": "Natural Earth", "version": "5.1.2", "neId": 1159130939, "sourceName": "Três Lagoas", "sourceCountry": "Brazil", "type": "locality-guide"},
+      "coordinateMeaning": "Natural Earthのトレス・ラゴアス市の案内位置です。工場敷地の緯度経度・外形は未確認で、この点は工場の位置ではありません。",
+      "facilityCoordinates": null,
+      "fact": "Suzanoはトレス・ラゴアスでパルプを生産しています。天然林の広がりや植林地とは別に、木材を繊維へ加工する拠点を読みます。",
+      "explanation": "公式の地域案内は2009年の操業開始と2017年の第2生産ラインを確認できます。ユーカリの供給、加工工場、保全区域は異なる土地利用です。市の案内位置から植林範囲・伐採地・工場敷地を推定しません。",
+      "use": "パルプ原料への加工。生産能力、実際の輸送経路、森林面積や加工施設の境界は表示していません。",
+      "sources": [
+        {"title": "Suzano：Mato Grosso do Sul の操業案内", "url": "https://www.suzano.com.br/en/sustainability/people/neighboring-communities/mato-grosso-do-sul", "period": "2026年10月12日の既存確認資料。2009年・2017年の操業説明"},
+        {"title": "Suzano：Sustainability Report 2022", "url": "https://centraldesustentabilidade.suzano.com.br/relatorios/Suzano%20Sustainability%20Report%202022.pdf", "period": "2022年、本文p.17（PDF p.17）：Três Lagoas Unit。敷地座標は未確認"},
+        {"title": "Natural Earth：Populated places", "url": "https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-populated-places/", "period": "v5.1.2、public domain。市の案内座標のみ"}
+      ]
+    },
+    {
+      "id": "upm-paso-de-los-toros",
+      "kind": "processing-locality",
+      "title": "ウルグアイ：UPM パソ・デ・ロス・トロスのパルプ加工",
+      "label": "UPMパソ",
+      "point": [-56.51005, -32.810001],
+      "markerOffset": [-30, 24],
+      "labelOffset": [-16, 5],
+      "coordinateSource": {"publisher": "Natural Earth", "version": "5.1.2", "neId": 1159122949, "sourceName": "Paso de los Toros", "sourceCountry": "Uruguay", "type": "locality-guide"},
+      "coordinateMeaning": "Natural Earthのパソ・デ・ロス・トロス市の案内位置です。工場は市の点と別の敷地です。公式資料の住所は確認できていますが、敷地の緯度経度・外形は未確認です。",
+      "facilityAddress": "Camino El Tala 1, Ruta 5 KM 245.9, Padrón 834, Centenario, Durazno, Uruguay",
+      "facilityCoordinates": null,
+      "fact": "UPMのパソ・デ・ロス・トロス工場は2023年に操業を開始し、ユーカリ由来の晒広葉樹パルプを製造しています。植林による原料供給と、加工の段階を区別します。",
+      "explanation": "2018年の予備環境・社会影響評価は工場計画地をリオ・ネグロ左岸、パソ・デ・ロス・トロス／センテナリオから下流約5kmと記載しています。市の座標にその距離を足して敷地位置を作らず、2025年の製品資料で住所と製品を別に確認しています。",
+      "use": "製紙などの原料となるパルプの製造。植林範囲・工場敷地・輸送量は未収録。計画時の予測値を現在の実績として使用していません。",
+      "sources": [
+        {"title": "UPM：Paso de los Toros mill", "url": "https://www.upmpulp.com/pulp-production/paso-de-los-toros/", "period": "2026年10月13日の本文確認。2023年操業開始"},
+        {"title": "UPM：工場の予備環境・社会影響評価", "url": "https://www.upm.uy/siteassets/documents/growth/upm-pulp-mill-esia-study-report-2018-en.pdf", "period": "2018年、PDF p.1。相対位置の説明、数値座標は未確認"},
+        {"title": "UPM：Paso de los Toros 製品資料", "url": "https://www.upm.com/siteassets/certificate-finder/environmental-product-declaration/carbon-footprint---euca-pulp---upm-paso-de-los-toros-mill.pdf", "period": "2025年版、PDF p.1。住所・製品だけを使用"},
+        {"title": "Natural Earth：Populated places", "url": "https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-populated-places/", "period": "v5.1.2、public domain。市の案内座標のみ"}
+      ]
+    },
+    {
+      "id": "upm-fray-bentos",
+      "kind": "processing-locality",
+      "title": "ウルグアイ：UPM フライ・ベントスのパルプ加工",
+      "label": "UPMフライ",
+      "point": [-58.303998, -33.138999],
+      "markerOffset": [-52, -28],
+      "labelOffset": [-16, 5],
+      "coordinateSource": {"publisher": "Natural Earth", "version": "5.1.2", "neId": 1159112663, "sourceName": "Fray Bentos", "sourceCountry": "Uruguay", "type": "locality-guide"},
+      "coordinateMeaning": "Natural Earthのフライ・ベントス市の案内位置です。公式資料の工場住所は別に確認しています。敷地の緯度経度・外形は未確認で、市の点を工場敷地として使用していません。",
+      "facilityAddress": "Ruta Vladimir Roslik Km. 307, 65000 Fray Bentos, Uruguay",
+      "facilityCoordinates": null,
+      "fact": "UPMのフライ・ベントス工場は2007年から操業し、ユーカリ由来の晒広葉樹パルプを製造しています。森林被覆ではなく、原料を加工する拠点の事例です。",
+      "explanation": "2025年の工場別EMAS環境報告と操業案内で、製品・操業拠点・住所を確認しています。植林の供給地域と工場は同じ範囲ではありません。市の案内点から工場の外形や原料供給範囲、輸送経路を作図しません。",
+      "use": "紙などに利用されるパルプの製造。供給区域、工場境界、輸送量の分布は未収録。",
+      "sources": [
+        {"title": "UPM：Fray Bentos mill", "url": "https://www.upmpulp.com/pulp-production/fray-bentos/", "period": "2026年10月13日の本文確認。2007年操業開始"},
+        {"title": "UPM：Fray Bentos EMAS Environmental Performance 2025", "url": "https://www.upm.com/siteassets/reporting-hub/emas-reports/emas-report-2025-upm-fray-bentos-mill-english.pdf", "period": "2025年、製品・拠点・住所の説明。敷地の数値座標は未確認"},
+        {"title": "Natural Earth：Populated places", "url": "https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-populated-places/", "period": "v5.1.2、public domain。市の案内座標のみ"}
+      ]
+    }
+  ]
+}

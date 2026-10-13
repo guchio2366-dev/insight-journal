@@ -1,0 +1,774 @@
+{
+  "base": "a07ab7277b2c7eb89e51ef1be0d72dccfbec497d",
+  "states": [
+    {
+      "state": {
+        "layer": "climate",
+        "place": "CUB",
+        "scope": "all",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-havana",
+        "cityScale": 1.4
+      },
+      "mapSha256": "10b246ec89171c9fd30752af2a1877c5dc7c1229c653d26f68fa8f5fc0831967"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "CUB",
+        "scope": "central",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-havana",
+        "cityScale": 1.4
+      },
+      "mapSha256": "c366afb4445089916a09512ee0efbc1b838d31fea96e7d63191caab026b3c658"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "CUB",
+        "scope": "south",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-havana",
+        "cityScale": 1.4
+      },
+      "mapSha256": "38970ddb21dc1034d0e02330abe5454adf8fb829bddaccc189639212a2b1212c"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "CUB",
+        "scope": "country",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-havana",
+        "cityScale": 1.4
+      },
+      "mapSha256": "a37631547583bc5e809e5dc8a89d5f78672b7d6433fac0d6ba65022fbd5b8902"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "JAM",
+        "scope": "all",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-kingston",
+        "cityScale": 1.4
+      },
+      "mapSha256": "d6bb0f9705cb7bcc497846128dd888c36f4b8299ced7eccc850696f0ff194e24"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "JAM",
+        "scope": "central",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-kingston",
+        "cityScale": 1.4
+      },
+      "mapSha256": "7bb82ba9c8c699c647dc5365cc44ee065fc78a8ac21e3349a351f932e991f5f9"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "JAM",
+        "scope": "south",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-kingston",
+        "cityScale": 1.4
+      },
+      "mapSha256": "a1aa6c8d9121a8fa6d29c5383e169ea32f871572026910f6f57d8925f3400ae0"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "JAM",
+        "scope": "country",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-kingston",
+        "cityScale": 1.4
+      },
+      "mapSha256": "0eba4155596c7541ac3ad00da73b8e6502ac6ae254409831115c9538ddb8c41b"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BLZ",
+        "scope": "all",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-belize",
+        "cityScale": 1.4
+      },
+      "mapSha256": "1154960c840112d17d9c4746da9d33d18c624ba3e4b23995a85c943e14367907"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BLZ",
+        "scope": "central",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-belize",
+        "cityScale": 1.4
+      },
+      "mapSha256": "f44882bab34d5c0aa7f612bcf43bda9eecff9fbb245d9d5ed0511553fd2e390c"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BLZ",
+        "scope": "south",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-belize",
+        "cityScale": 1.4
+      },
+      "mapSha256": "b4f4010b84f6cfaba2d6971298a9cead6b3a71b2770f0b7aad500a3cd7603126"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BLZ",
+        "scope": "country",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-belize",
+        "cityScale": 1.4
+      },
+      "mapSha256": "fb6a703f4d2a26af313d5ee9814eec81505e5f498b23b505fafe3664036a1769"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "CRI",
+        "scope": "all",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-san-jose",
+        "cityScale": 1.4
+      },
+      "mapSha256": "d32fb50a9c515e88022fd996b66576fcd4648aeb6420fd8cd0a034b2fed9ba08"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "CRI",
+        "scope": "central",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-san-jose",
+        "cityScale": 1.4
+      },
+      "mapSha256": "ff659460be4a20d8ddac90f86725da7b22c2dbd4267a33a2c0d38c6b9c5579d8"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "CRI",
+        "scope": "south",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-san-jose",
+        "cityScale": 1.4
+      },
+      "mapSha256": "b9ad57fe31d6c054dcd50720f112abc6665fb5088d7d23a210bb8cbbf85ed0f8"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "CRI",
+        "scope": "country",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-san-jose",
+        "cityScale": 1.4
+      },
+      "mapSha256": "28ab0df3173b9470f982aea515be2ddfe6ba60e8ad3a286adac326c592f1fd26"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BRA",
+        "scope": "all",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-manaus",
+        "cityScale": 1.4
+      },
+      "mapSha256": "3d1ae7398529002906a4b52c1bddada63dca924b3c9294ebd58f924d041335ae"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BRA",
+        "scope": "central",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-manaus",
+        "cityScale": 1.4
+      },
+      "mapSha256": "81d6b100dccaa4736c463a37db8e617ecb8ccd7c1c026f686e400414f9bda082"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BRA",
+        "scope": "south",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-manaus",
+        "cityScale": 1.4
+      },
+      "mapSha256": "9722c65c61f206851849f3ac7ae4d33ff4deede494745c575de1dc7bdf44148e"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BRA",
+        "scope": "country",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-manaus",
+        "cityScale": 1.4
+      },
+      "mapSha256": "cf4741dadcab406d87e0d64f59042c8a540c14d5f4f91021f3d9200e7ec352de"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BRA",
+        "scope": "all",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-brasilia",
+        "cityScale": 1.4
+      },
+      "mapSha256": "a1cf9b98440c5fe918eee3b27dbebb9b2174f3da6970f988fc23944365d5973b"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BRA",
+        "scope": "central",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-brasilia",
+        "cityScale": 1.4
+      },
+      "mapSha256": "81d6b100dccaa4736c463a37db8e617ecb8ccd7c1c026f686e400414f9bda082"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BRA",
+        "scope": "south",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-brasilia",
+        "cityScale": 1.4
+      },
+      "mapSha256": "29474a714b6eb107f23509bb1e8a36dea96b84ca94a8f8645c85509d9cd965f8"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BRA",
+        "scope": "country",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-brasilia",
+        "cityScale": 1.4
+      },
+      "mapSha256": "89d9a0416ce34baed7be30dbb9dc3d22b22b7f4165c77a34e83b6998bd8a4d73"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BRA",
+        "scope": "all",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-sao-paulo",
+        "cityScale": 1.4
+      },
+      "mapSha256": "e2c8ef551de3b348d1d181ead0344fb45e1a6172849cfaa76c1b95d86c01975a"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BRA",
+        "scope": "central",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-sao-paulo",
+        "cityScale": 1.4
+      },
+      "mapSha256": "81d6b100dccaa4736c463a37db8e617ecb8ccd7c1c026f686e400414f9bda082"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BRA",
+        "scope": "south",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-sao-paulo",
+        "cityScale": 1.4
+      },
+      "mapSha256": "f218c45c33067b7de8270f2d19a2124f49dd574f00ab5039c85d2654bfc378c5"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BRA",
+        "scope": "country",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-sao-paulo",
+        "cityScale": 1.4
+      },
+      "mapSha256": "791ed7fadaed40fef89828cce97856bad0f92092002f6c37b8d6d500bd5f5637"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BRA",
+        "scope": "all",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-recife",
+        "cityScale": 1.4
+      },
+      "mapSha256": "f48164ebb584529a9fe571e1c8f0e1616d74e98286e91992e58807c43d69d838"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BRA",
+        "scope": "central",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-recife",
+        "cityScale": 1.4
+      },
+      "mapSha256": "81d6b100dccaa4736c463a37db8e617ecb8ccd7c1c026f686e400414f9bda082"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BRA",
+        "scope": "south",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-recife",
+        "cityScale": 1.4
+      },
+      "mapSha256": "535bb0fd887c75c065e4ef580f90e8ed76c95e1874b8ffa8e2547f6c359b2e9f"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BRA",
+        "scope": "country",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-recife",
+        "cityScale": 1.4
+      },
+      "mapSha256": "697d6a0b06f147ffb0c469d7d4a7a37b370683c094e10867d84cf1e9f0886101"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "PER",
+        "scope": "all",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-lima",
+        "cityScale": 1.4
+      },
+      "mapSha256": "2b73368eaa016e8817d84a9319262c686733e46df4a9f37c98ff7650030a02dd"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "PER",
+        "scope": "central",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-lima",
+        "cityScale": 1.4
+      },
+      "mapSha256": "e348c77b5c18746956acafeff7b811062ede18a16707b5a96c17b96d5d3d4401"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "PER",
+        "scope": "south",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-lima",
+        "cityScale": 1.4
+      },
+      "mapSha256": "37bfbb79e93a28b9a47695240ff93fc247a0505a1561c5f1b264ecf83d9ad15e"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "PER",
+        "scope": "country",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-lima",
+        "cityScale": 1.4
+      },
+      "mapSha256": "b78264defdf6d2e388bc134728aa85c6e4f5af390e432a7ec98f7ff68480a3dd"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "COL",
+        "scope": "all",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-bogota",
+        "cityScale": 1.4
+      },
+      "mapSha256": "8bda8fa35ed19078e1f536187b00622e9c116e74542692ebde12e931757fe802"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "COL",
+        "scope": "central",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-bogota",
+        "cityScale": 1.4
+      },
+      "mapSha256": "c0953c2d1e8706dc8a8583d1c0be83b9dee76cda07635549664d8f0fed4aa706"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "COL",
+        "scope": "south",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-bogota",
+        "cityScale": 1.4
+      },
+      "mapSha256": "c748528ec82602586ca34814f29ba8d51ecabc3ad728411b733b0139e465255f"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "COL",
+        "scope": "country",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-bogota",
+        "cityScale": 1.4
+      },
+      "mapSha256": "38232b6f889e4efc71453f8d56d1bcc3967e8987a5bebc9f77df38f6f2f2a6f1"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "ARG",
+        "scope": "all",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-buenos-aires",
+        "cityScale": 1.4
+      },
+      "mapSha256": "6782688286fd695027720d76577fa910afce20e9d3c6821e30e41d8000cfcdb0"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "ARG",
+        "scope": "central",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-buenos-aires",
+        "cityScale": 1.4
+      },
+      "mapSha256": "e8b9d05402d0cbdda483eeaaefba4d2edc628b239c42442b1da74763e64cb0a1"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "ARG",
+        "scope": "south",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-buenos-aires",
+        "cityScale": 1.4
+      },
+      "mapSha256": "9712e7b28f9b46f028e2069201b461b9079e9260f2c7a4c84d9d34c921730209"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "ARG",
+        "scope": "country",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-buenos-aires",
+        "cityScale": 1.4
+      },
+      "mapSha256": "036626380e7d3efc4ad053f07365ec6f92b60b9facfb2d173fcec47b901168fc"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "CHL",
+        "scope": "all",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-santiago",
+        "cityScale": 1.4
+      },
+      "mapSha256": "b7abce40e8b17adc84709fa0fde6b2159094d0571d77985f2a7eb8f53d87a1eb"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "CHL",
+        "scope": "central",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-santiago",
+        "cityScale": 1.4
+      },
+      "mapSha256": "bc8e7e9f059e74b995d12b0534351ca2a423f4eaabfc155b4b7eff49ec863e12"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "CHL",
+        "scope": "south",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-santiago",
+        "cityScale": 1.4
+      },
+      "mapSha256": "bb3b152271ce2af0d8db6a41ac296f839b4396f6fedd107c59fd009cb639b5e2"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "CHL",
+        "scope": "country",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-santiago",
+        "cityScale": 1.4
+      },
+      "mapSha256": "a203b1ebde503ea144b0fda965c51e17aab48fbf1d06ecca02a4300b608c49d5"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BOL",
+        "scope": "all",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-la-paz",
+        "cityScale": 1.4
+      },
+      "mapSha256": "3332a16bc4ee2d269a7dce7ce94361f7cd319d5799f02447f66994f1dd1ab6aa"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BOL",
+        "scope": "central",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-la-paz",
+        "cityScale": 1.4
+      },
+      "mapSha256": "125f2981363ff4b7575fec0b4244381757232447e97c7887be3d4ffbd6cdde6f"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BOL",
+        "scope": "south",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-la-paz",
+        "cityScale": 1.4
+      },
+      "mapSha256": "66df6d57ad4423ef62efcc523b60e286db5ec88b654d2ebde97bc514e3dab2e4"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "BOL",
+        "scope": "country",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-la-paz",
+        "cityScale": 1.4
+      },
+      "mapSha256": "868dbe6903fd6977eb8680f33ea60be2b192b339b59dd4927a7964e26ca24d80"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "ECU",
+        "scope": "all",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-quito-izobamba",
+        "cityScale": 1.4
+      },
+      "mapSha256": "7ae8fcf30f7f76d007f8b1d26af76a0de137ffff7ffcb3c2b8dc9680c6431f61"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "ECU",
+        "scope": "central",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-quito-izobamba",
+        "cityScale": 1.4
+      },
+      "mapSha256": "275c99d062756273f5738fd870b9ccb8d54bdce4902f156b23614c86d20a5a69"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "ECU",
+        "scope": "south",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-quito-izobamba",
+        "cityScale": 1.4
+      },
+      "mapSha256": "bdde2cc2da4a13e707915cde6d2a9cb1f9ce345c54d0322de918af4563727c81"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "ECU",
+        "scope": "country",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-quito-izobamba",
+        "cityScale": 1.4
+      },
+      "mapSha256": "224114bb3dbead47ceb1299964d3ad294ec443401b7fae82fa29ff1462c1e62b"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "CHL",
+        "scope": "all",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-punta-arenas",
+        "cityScale": 1.4
+      },
+      "mapSha256": "ac3ac7d94cca2bc80a45450b007311dec636d1a30d3c142391891e0448372205"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "CHL",
+        "scope": "central",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-punta-arenas",
+        "cityScale": 1.4
+      },
+      "mapSha256": "bc8e7e9f059e74b995d12b0534351ca2a423f4eaabfc155b4b7eff49ec863e12"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "CHL",
+        "scope": "south",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-punta-arenas",
+        "cityScale": 1.4
+      },
+      "mapSha256": "b1cee06894043f1ae8ab3b0d92fb0cac1d05467d795f408591a47241905c18d9"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "CHL",
+        "scope": "country",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-punta-arenas",
+        "cityScale": 1.4
+      },
+      "mapSha256": "53b867eab7a4eddfa865efe56d9a9e9db2393ecd709532f3dfae3388c547b470"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "URY",
+        "scope": "all",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-montevideo",
+        "cityScale": 1.4
+      },
+      "mapSha256": "1df48b39d1bbf5fb849bfab445b7db3d5134ccd64316dbce0c27ed02d2388d85"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "URY",
+        "scope": "central",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-montevideo",
+        "cityScale": 1.4
+      },
+      "mapSha256": "fe77e73d4d0d7bb9b10b18eae6b55d11bcd7a15664e430a4a7317f11d4898a37"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "URY",
+        "scope": "south",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-montevideo",
+        "cityScale": 1.4
+      },
+      "mapSha256": "6a70250a77d7f328ff0832cb81ea5609cfbcd23c4c6e0820a954873323f809e4"
+    },
+    {
+      "state": {
+        "layer": "climate",
+        "place": "URY",
+        "scope": "country",
+        "only": false,
+        "interactiveCities": false,
+        "case": "station-montevideo",
+        "cityScale": 1.4
+      },
+      "mapSha256": "34155a0c015a892e879efb6804a9db8efc120871529a878951768f3ac0235e9a"
+    }
+  ],
+  "legendSha256": "11d49f4bdc16e791b0028edc2d5ea1a9a2beb6d2d329dae1f54cdeb8dca1d831"
+}

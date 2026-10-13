@@ -1,0 +1,127 @@
+{
+  "oldPalette": [
+    "#000000",
+    "#e6e5e1",
+    "#edf4de",
+    "#dbe8c4",
+    "#c7d6a7",
+    "#b3c18d",
+    "#9cab74",
+    "#87955f",
+    "#73814d",
+    "#606d3d",
+    "#4e5b30",
+    "#3e4a25",
+    "#303c1b",
+    "#243010"
+  ],
+  "newPalette": [
+    "#000000",
+    "#e6e5e1",
+    "#f6eedf",
+    "#e9d6b6",
+    "#d9b987",
+    "#c79b65",
+    "#b3804d",
+    "#9e683b",
+    "#87532f",
+    "#72402b",
+    "#603027",
+    "#4e2522",
+    "#3e1b1c",
+    "#2d1419"
+  ],
+  "records": [
+    {
+      "file": "elevation-classes.png",
+      "sha256": "c0828ffe683a2b745dd6fb0d1cbc0232ea94a2e550e9d2aa019c61e5cffcb434",
+      "bytes": 565752,
+      "classificationIndicesPreserved": true
+    },
+    {
+      "file": "elevation-native-classes.png",
+      "sha256": "c66e6f97f269d9c6b71d3db32a7cd1c0a2f4911429bad0398ed529d673339915",
+      "bytes": 342695,
+      "classificationIndicesPreserved": true
+    },
+    {
+      "file": "elevation-only-below-sea.png",
+      "sha256": "5eafb7ccd2ee77cf51710b87a5302992706ac9c241cc944be2664e3b0446ad00",
+      "bytes": 92755,
+      "classificationIndicesPreserved": true
+    },
+    {
+      "file": "elevation-only-0.png",
+      "sha256": "d5c716afa297cab7e43da5900a0da5fb026d159b811b36ecd60ff0420e4b3522",
+      "bytes": 393805,
+      "classificationIndicesPreserved": true
+    },
+    {
+      "file": "elevation-only-500.png",
+      "sha256": "e18d96d107b13c836d08a04d91c0a09796d31d50cc5d3a8da61e22bd8e431119",
+      "bytes": 281951,
+      "classificationIndicesPreserved": true
+    },
+    {
+      "file": "elevation-only-1000.png",
+      "sha256": "a0b46ccb06263a4b3304cd0bbbe436849eb75c7979083bfa8dbda511c8d3bfd8",
+      "bytes": 186611,
+      "classificationIndicesPreserved": true
+    },
+    {
+      "file": "elevation-only-1500.png",
+      "sha256": "09290f878999136b9d119e2fa06008eede2e2f324ba4a2a079fb391bf9218a14",
+      "bytes": 124597,
+      "classificationIndicesPreserved": true
+    },
+    {
+      "file": "elevation-only-2000.png",
+      "sha256": "c889d865a3a3e06be5ad1fb670e09c91caa2de306df2dbbe25ca77c0c69b1ec7",
+      "bytes": 64990,
+      "classificationIndicesPreserved": true
+    },
+    {
+      "file": "elevation-only-2500.png",
+      "sha256": "efe2db4785a5ad55206a18ce4b88d74b0b933bcb7ccb559fd4512afe32dbd41f",
+      "bytes": 45846,
+      "classificationIndicesPreserved": true
+    },
+    {
+      "file": "elevation-only-3000.png",
+      "sha256": "fe11b713a37581c60ed594865da1ca4e470b13a6189b5835925481c1a7977f00",
+      "bytes": 41555,
+      "classificationIndicesPreserved": true
+    },
+    {
+      "file": "elevation-only-3500.png",
+      "sha256": "f7364c015452ab45de885c41f938106920fd09c06e710a159d1a2baa173874ce",
+      "bytes": 41018,
+      "classificationIndicesPreserved": true
+    },
+    {
+      "file": "elevation-only-4000.png",
+      "sha256": "059092400fe284fe2284fdaabdac74503c981ddd6f206c5100b77cd8bff763e3",
+      "bytes": 40876,
+      "classificationIndicesPreserved": true
+    },
+    {
+      "file": "elevation-only-4500.png",
+      "sha256": "9f379349922ede3468976a0a72ba25c5c529a757155705fbd566cb3252e7e411",
+      "bytes": 40784,
+      "classificationIndicesPreserved": true
+    },
+    {
+      "file": "elevation-only-5000.png",
+      "sha256": "4b6b23c14e96665e407853eda71d09fdc130eff08c91bf51a2a738e61eff23a9",
+      "bytes": 40733,
+      "classificationIndicesPreserved": true
+    },
+    {
+      "file": "elevation-only-5500.png",
+      "sha256": "c179059cda8067cb4274402c0a6c5eeacde5fdbcd47809005e1dc6de3f4308c9",
+      "bytes": 40705,
+      "classificationIndicesPreserved": true
+    }
+  ],
+  "sourceElevationsAndMasksChanged": false
+}

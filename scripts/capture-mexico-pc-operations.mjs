@@ -119,7 +119,14 @@ async function cityClimateReadingLayout(page, requestedId) {
   assert(layout.directlyAfterChart, 'The city classification and explanation must directly follow its diagram');
   assert(layout.reading.top >= layout.chart.bottom - 1.5 && layout.reading.top - layout.chart.bottom <= 32, 'The city reading must sit immediately below the plot');
   assert(layout.heading.bottom <= layout.panel.bottom + 1.5 && layout.explanation.top < layout.panel.bottom, 'The city classification and start of its explanation must be visible in the reading panel');
-  const expected = layout.id === 'mexico-city-tacubaya' ? ['温帯', '亜湿潤', 'C(w1)(w)'] : ['半乾燥', '高温', "BS1(h')hw"];
+  const expectedByStation = {
+    'mexico-city-tacubaya': ['温帯', '亜湿潤', 'C(w1)(w)'],
+    'culiacan-dge': ['半乾燥', '高温', "BS1(h')hw"],
+    'chihuahua-obs': ['乾燥', 'やや高温', 'BS0hw(w)'],
+    'villahermosa-dge': ['高温', '湿潤', 'Am(f)'],
+  };
+  const expected = expectedByStation[layout.id];
+  assert(expected, `Unknown station ${layout.id}`);
   for (const word of expected) assert(layout.classification?.includes(word), `Missing city classification: ${word}`);
   assert((layout.explanationText?.length ?? 0) > 30 && /[ぁ-んァ-ヶ一-龯]/u.test(layout.explanationText), 'City classification needs a Japanese explanation');
   assert(layout.observations && !layout.observations.open && layout.observations.afterReading, 'Observed values and source notes must be in the following closed disclosure');
@@ -131,7 +138,18 @@ async function cityClimateReadingLayout(page, requestedId) {
 
 export async function inspectMexicoInitialPresentation(page, field) {
   if (field === 'population') return {populationNationalLayout: await populationNationalLayout(page)};
-  if (field === 'nature') return {cityClimateReadingLayout: await cityClimateReadingLayout(page)};
+  if (field === 'nature') {
+    const national = await page.locator('[data-mexico-climate-diagrams]').evaluate(root => ({
+      heading: root.querySelector('[data-mexico-climate-heading]')?.textContent.trim(),
+      overviewVisible: !root.querySelector('[data-mexico-climate-overview]')?.hidden,
+      visiblePlots: [...root.querySelectorAll('[data-mexico-climate-plot]')].filter(plot => !plot.hidden).length,
+    }));
+    assert.equal(national.heading, 'メキシコ全国の気候を読む');
+    assert.equal(national.overviewVisible, true);
+    assert.equal(national.visiblePlots, 0);
+    assert.deepEqual(await page.locator('svg [data-mexico-climate-city]').evaluateAll(nodes => nodes.map(node => node.getAttribute('data-mexico-climate-city'))), ['mexico-city-tacubaya','culiacan-dge','chihuahua-obs','villahermosa-dge']);
+    return {climateNationalLayout: national};
+  }
   if (field === 'agriculture') {
     const marks=await page.locator('[data-mexico-agriculture-atlas]').evaluate(root=>{
       const selectors=['[data-crop-label]', '.atlas-livestock-marker'];
@@ -216,7 +234,8 @@ async function agriculture({page, evidence}) {
       const labels = [...node.querySelectorAll('[data-crop-label]')].filter(label => !label.closest('[hidden]')).map(label => ({id: label.getAttribute('data-crop-label'), fill: getComputedStyle(label).fill, sourceFill: getComputedStyle(node.querySelector(`[data-mexico-crop-zones] [data-crop-zone="${label.getAttribute('data-crop-label')}"]`)).fill}));
       return {paths, labels, livestock: node.querySelectorAll('[data-livestock-markers] button').length,livestockOpacity:[...node.querySelectorAll('[data-livestock-markers] button')].map(button=>Number(getComputedStyle(button).opacity))};
     });
-    assert(distribution.paths.length >= 10 && distribution.paths.every(path => !path.hidden && Number(path.opacity) > 0));
+    assert.equal(distribution.paths.length,9,'The nine named crop zones remain; the aggregate other class is not painted');
+    assert(distribution.paths.every(path => path.id !== 'other' && !path.hidden && Number(path.opacity) > 0));
     assert(distribution.paths.every(path=>path.id!=='rice'));
     assert(distribution.livestock > 0);assert(distribution.livestockOpacity.every(value=>value>0&&value<1));
     const corn = distribution.paths.find(path => path.id === 'corn'); assert(corn && corn.stroke !== 'none' && parseFloat(corn.strokeWidth) > 0);
@@ -225,7 +244,7 @@ async function agriculture({page, evidence}) {
   });
   await step('Every crop keeps a visible selected map label after collision layout', async () => {
     const ids = await page.locator('[data-crop-select]').evaluateAll(nodes => [...new Set(nodes.map(node => node.getAttribute('data-crop-select')))]);
-    assert.equal(ids.length, 10);
+    assert.equal(ids.length, 9);
     for (const id of ids) {
       await click(page, `[data-crop-select="${id}"]`);
       assert(await page.locator(`[data-crop-label="${id}"]:visible`).count() > 0, `${id}: selected crop label must remain visible`);
@@ -273,9 +292,9 @@ async function climate({page, evidence, captureStepImage}) {
     assert(await page.locator('[data-mexico-climate-class-reading]').textContent().then(text=>text.includes('21の原分類')));
     return {sourceCode: code, title: await text(page, '[data-mexico-nature-feature-title]')};
   });
-  await step('Both city plots and Japanese reading follow selection, reload and history', async () => {
+  await step('Four station plots and Japanese reading follow selection, reload and history', async () => {
     const ids = await page.locator('svg [data-mexico-climate-city]').evaluateAll(nodes => nodes.map(node => node.getAttribute('data-mexico-climate-city')));
-    assert.equal(ids.length, 2);
+    assert.deepEqual(ids, ['mexico-city-tacubaya','culiacan-dge','chihuahua-obs','villahermosa-dge']);
     const layouts = [];
     for (const id of ids) {
       await click(page, `svg [data-mexico-climate-city="${id}"]`);
@@ -454,7 +473,7 @@ async function industry({page, evidence}) {
       const box = node.getBoundingClientRect(), matrix = node.getScreenCTM();
       return {name: node.textContent, x: box.x, y: box.y, width: box.width, height: box.height, screenFontSize: parseFloat(getComputedStyle(node).fontSize) * Math.hypot(matrix.a, matrix.b), leader: node.parentElement.querySelector('[data-mi-region-leader]')?.getAttribute('d')};
     }));
-    assert(labels.length >= 8, 'All-sector overview is missing state labels');
+    assert.equal(labels.length,6,'Resource overview must include extraction and refinery city examples');
     const controls=await page.locator('[data-mi-map="primary"]').evaluate(svg=>[...svg.closest('.mexico-map-frame').querySelectorAll('[data-mi-map-action]')].map(button=>{const box=button.getBoundingClientRect();return{x:box.x,y:box.y,width:box.width,height:box.height};}));
     for (const [index, a] of labels.entries()) {
       assert.match(a.leader, /^M0,0L/); assert(Math.abs(a.screenFontSize - 14) < .5);

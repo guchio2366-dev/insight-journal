@@ -174,6 +174,7 @@ test('標準階層から掲載民族・宗教域へ進み、通常統計と概�
   assert.equal([...q('[data-west-scene]').querySelectorAll('[data-settlement]')].at(-1)?.dataset.settlement,'ethnicity-copts');assert.match(q('[data-west-settlement-reading] h3').textContent,/コプト/);
   const saved=w.location.href;q('[data-west-standard-group="宗教"]').click();await until(()=>q('[data-west-atlas]').dataset.ready==='true');
   assert.equal(new URL(w.location.href).searchParams.get('topic'),'religion');assert.equal(q('[data-west-scene]').querySelectorAll('[data-settlement]').length,4);assert.match(q('[data-west-detail]').textContent,/信者割合|住民全員の宗教/);
+  assert.match(q('[data-west-detail]').textContent,/イスラエルのユダヤ系記録は全国単位、イランのユダヤ系記録は位置を描けない都市型/);
   q('[data-west-standard-group="人口分布"]').click();await until(()=>q('[data-west-loading]').hidden);assert.equal(statistics.hidden,false);assert.equal(q('[data-west-map]').getAttribute('viewBox'),frame);
   select('[data-west-country]','TUR');await until(()=>q('[data-west-loading]').hidden);assert.match(q('[data-west-detail]').textContent,/トルコ/);
   q('[data-west-reading-overview]').click();assert.match(q('#west-detail-title').textContent,/人口の概論/);

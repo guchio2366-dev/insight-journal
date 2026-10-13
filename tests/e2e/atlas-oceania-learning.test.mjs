@@ -47,6 +47,25 @@ test('Oceania export reading keeps the Australian production denominator separat
   assert.equal(panel.querySelectorAll('li').length,4,'NZ selection does not create country statistics');
  }finally{win.happyDOM.abort();}
 });
+test('Oceania farming group switches preserve the map and river names select sourced reading',()=>{
+ const farming=page('agriculture');
+ try{
+  const crop=farming.root.querySelector('[data-farming-group=crop]');
+  const livestock=farming.root.querySelector('[data-farming-group=livestock]');
+  crop.click();assert.equal(crop.getAttribute('aria-pressed'),'false');assert.ok(farming.root.classList.contains('farming-crop-hidden'));
+  livestock.click();assert.equal(livestock.getAttribute('aria-pressed'),'false');assert.ok(farming.root.classList.contains('farming-livestock-hidden'));
+  crop.click();assert.equal(crop.getAttribute('aria-pressed'),'true');
+  assert.ok(farming.root.querySelector('[data-primary-map] [data-farming-product=wheat]'));
+ }finally{farming.win.happyDOM.abort();}
+ const nature=page('nature','?layer=rivers');
+ try{
+  const river=nature.root.querySelector('[data-primary-map] [data-river-name=Murray]');
+  assert.ok(river);river.dispatchEvent(new nature.win.MouseEvent('click',{bubbles:true}));
+  assert.equal(nature.root.querySelector('[data-theme-title]').textContent,'マレー川');
+  assert.match(nature.root.querySelector('[data-takeaway]').textContent,/流向・河口・流域境界/);
+  assert.equal(nature.root.querySelector('[data-primary-map] [data-river-label=Murray]').getAttribute('aria-pressed'),'true');
+ }finally{nature.win.happyDOM.abort();}
+});
 test('built PNG comparison preserves the original climate, crop choice, country, all legends and named return',()=>{
  const {win,root}=page('nature','?place=PNG&scope=country&theme=altitude&layer=climate&compare=coconut&view=comparison&keep=source#reference');
  assert.equal(root.querySelector('[data-comparison-view]').hidden,false);

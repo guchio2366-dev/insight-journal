@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import {Window} from 'happy-dom';
 import {initializeAfricaAtlas} from '../../src/scripts/atlas-africa.ts';
 import {latestValueAt,formatValue,metricById} from '../../src/data/atlas/africa-atlas.ts';
-import {africaIndustryLocations,africaIndustryCommodities} from '../../src/data/atlas/africa-industry-locations.ts';
+import {africaIndustrySectors,africaSectorIndustries,africaIndustrySectorSites,africaSectorSites} from '../../src/data/atlas/africa-industry-sectors.ts';
 const html=()=>readFileSync(new URL('../../dist/atlas/africa/index.html',import.meta.url),'utf8').replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,'');
 async function withAfricaPage(url,run){
  const w=new Window({url,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true}});
@@ -23,20 +23,61 @@ async function withAfricaPage(url,run){
 }
 const change=(w,node,value)=>{node.value=value;node.dispatchEvent(new w.Event('change',{bubbles:true}));};
 
-test('industry commodity selection retains all 49 locations, emphasizes matching marks and restores history',async()=>{
- await withAfricaPage('https://example.com/insight-journal/atlas/africa/?field=industry&place=EGY&compare=GHA&year=2023&only=1&fallback=1',(w,q)=>{
-  const select=q('[data-africa-industry-commodity]');assert.deepEqual([...select.options].slice(1).map(o=>o.value),africaIndustryCommodities.map(item=>item.id));assert.equal(select.options.length,19);
-  assert.equal(q('button[data-theme]'),null);assert.equal(w.document.querySelectorAll('[data-africa-industry-location]').length,49);assert.equal(q('[data-africa-layer-legend]').children.length,18);
-  const camera=q('.africa-map').getAttribute('viewBox');change(w,select,'copper-cobalt');change(w,q('[data-africa-industry-commodity]'),'automotive-aerospace');
-  assert.equal(q('[data-theme-title]').textContent,'自動車・航空機製造の分布');assert.equal(q('[data-africa-layer-legend]').children.length,1);assert.equal(q('.africa-map').getAttribute('viewBox'),camera);
-  assert.equal(w.document.querySelectorAll('[data-africa-industry-location]').length,49);assert.equal(q('[data-africa-industry-location="jwaneng-diamonds"] circle:nth-child(2)').getAttribute('opacity'),'0.35');
-  for(const [key,value] of Object.entries({place:'EGY',compare:'GHA',year:'2023',only:'1',fallback:'1'}))assert.equal(new URL(w.location.href).searchParams.get(key),value);
-  w.history.back();assert.equal(q('[data-africa-industry-commodity]').value,'copper-cobalt');assert.equal(q('[data-theme-title]').textContent,'銅・コバルトの分布');
+test('country supplements follow the whole-Africa explanation and open only by matching country or explicit disclosure',async()=>{
+ for(const [topic,country,other]of [['language','ZAF','EGY'],['religion','GHA','ZAF']])await withAfricaPage(`https://example.com/atlas/africa/?field=population&topic=${topic}`,async(w,q,settle)=>{
+  const supplement=()=>q('[data-africa-culture-supplement]'),reader=q('[data-africa-culture-evidence]'),explanation=q('[data-theme-takeaway-detail]'),source=q('[data-theme-source]');
+  assert(explanation.compareDocumentPosition(reader)&w.Node.DOCUMENT_POSITION_FOLLOWING);assert.equal(source.nextElementSibling,reader);assert.equal(supplement().open,false);assert.equal(supplement().dataset.africaCultureSupplement,country);
+  supplement().open=true;change(w,q('[data-africa-layer-category]'),'');assert.equal(supplement().open,true,'explicit expansion survives same-context renders');
+  change(w,q('[data-place]'),other);await settle();assert.equal(supplement().open,false,'another country does not automatically show the example');
+  change(w,q('[data-place]'),country);await settle();assert.equal(supplement().open,true,'matching country exposes its limited source');
+  supplement().open=false;change(w,q('[data-africa-layer-category]'),'');assert.equal(supplement().open,false,'explicit collapse is respected');
+  change(w,q('[data-place]'),'');await settle();assert.equal(supplement().open,false,'whole-Africa return closes country details');
+  if(topic==='language')assert.equal(q('[data-africa-language-record]').options.length,2223);
+ });
+});
+
+test('individual language selection retains every source point and camera through clicks, keyboard, URL and history',async()=>{
+ let saved;
+ await withAfricaPage('https://example.com/atlas/africa/?field=population&topic=language&unknown=keep',async(w,q,settle)=>{
+  const records=JSON.parse(readFileSync(new URL('../../public/assets/atlas/africa-culture-v2/language-points.json',import.meta.url))).points;
+  const choices=records.filter(row=>/Swahili|Zulu/.test(row.name)).slice(0,2);assert.equal(choices.length,2);
+  const positions=()=>[...q('[data-africa-actual-layer]').querySelectorAll('[data-africa-language-point]')].map(n=>[n.dataset.africaLanguagePoint,n.getAttribute('cx'),n.getAttribute('cy'),n.getAttribute('r')]);
+  const before=positions(),camera=q('.africa-map').getAttribute('viewBox');assert.equal(q('[data-africa-language-record]').options.length,2223);assert.equal(q('.africa-map').getAttribute('role'),'group');assert(q('#africa-svg-desc').textContent.includes('話者数や居住域ではありません'));
+  change(w,q('[data-africa-language-record]'),choices[0].id);assert.equal(q('[data-africa-language-reading]').dataset.africaLanguageReading,choices[0].id);assert.deepEqual(positions(),before);assert.equal(q('.africa-map').getAttribute('viewBox'),camera);assert.equal(new URL(w.location.href).searchParams.get('layerClass'),'language:'+choices[0].id);
+  q(`[data-africa-language-point="${choices[1].id}"]`).dispatchEvent(new w.MouseEvent('click',{bubbles:true}));assert.equal(q('[data-africa-language-reading]').dataset.africaLanguageReading,choices[1].id);assert.deepEqual(positions(),before);assert.equal(q(`[data-africa-language-point="${choices[1].id}"]`).getAttribute('aria-pressed'),'true');saved=w.location.href;
+  q(`[data-africa-language-point="${choices[0].id}"]`).dispatchEvent(new w.KeyboardEvent('keydown',{key:' ',bubbles:true}));assert.equal(q('[data-africa-language-reading]').dataset.africaLanguageReading,choices[0].id);w.history.back();await settle();assert.equal(q('[data-africa-language-reading]').dataset.africaLanguageReading,choices[1].id);assert.equal(new URL(w.location.href).searchParams.get('unknown'),'keep');
+  const table=q('[data-africa-culture-evidence] table');assert.equal(table.querySelectorAll('tbody tr').length,17);assert.equal(table.querySelectorAll('thead th').length,10);assert(q('[data-africa-culture-evidence]').textContent.includes('1歳未満を除く'));
+  q('[data-field="nature"]').click();await settle();assert.equal(q('[data-africa-culture-evidence]').hidden,true);assert(!new URL(w.location.href).searchParams.has('layerClass'));
+ });
+ await withAfricaPage(saved,(_w,q)=>assert(q('[data-africa-language-reading]')));
+});
+
+test('Ghana denomination table supplements the original Pew map and keeps all source counts separate from shapes',async()=>{
+ await withAfricaPage('https://example.com/atlas/africa/?field=population&topic=religion',(w,q)=>{
+  assert.equal(w.document.querySelectorAll('[data-africa-religion-country]:not([data-africa-religion-mixed])').length,55);
+  assert.equal(w.document.querySelectorAll('[data-africa-religion-region]').length,0);assert.equal(q('[data-africa-culture-evidence]').querySelectorAll('[data-africa-religion-evidence-group]').length,8);
+  const table=q('[data-africa-culture-evidence] table');assert.equal(table.querySelectorAll('tbody tr').length,16);assert.equal(table.querySelectorAll('thead th').length,9);assert.match(q('[data-africa-culture-evidence]').textContent,/30,753,327/);assert.match(q('[data-theme-source]').href,/pewresearch/);
+  q('[data-africa-topic="ethnicity"]').click();assert.equal(q('[data-africa-culture-evidence]').hidden,true);assert.equal(q('[data-africa-atlas]').dataset.layerMode,'guide');assert.equal(w.document.querySelectorAll('[data-africa-ethnicity-composition-group]').length,144);
+ });
+});
+
+test('three industry sectors keep all sector points, fixed labels, right-only filtering and history',async()=>{
+ await withAfricaPage('https://example.com/insight-journal/atlas/africa/?field=industry&place=EGY&compare=GHA&year=2023&unknown=preserve',(w,q)=>{
+  const marks=()=>[...q('[data-theme-marks]').querySelectorAll('[data-africa-industry-location]')];
+  const layout=()=>[...q('[data-theme-marks]').querySelectorAll('[data-africa-industry-label]')].map(n=>[n.dataset.africaIndustryLabel,n.dataset.layoutBox]);
+  const camera=q('.africa-map').getAttribute('viewBox');
+  for(const sector of africaIndustrySectors){q(`[data-africa-industry-sector="${sector.id}"]`).click();const expected=africaIndustrySectorSites(sector.id),baseline=layout();assert.equal(marks().length,expected.length);assert.equal(q('[data-africa-layer-legend]').children.length,africaSectorIndustries.filter(row=>row.sector===sector.id).length);
+   for(const industry of africaSectorIndustries.filter(row=>row.sector===sector.id)){change(w,q('[data-africa-industry-commodity]'),industry.id);assert.equal(q('[data-theme-title]').textContent,industry.label);assert.equal(marks().length,expected.length);assert.deepEqual(layout(),baseline);assert.equal(q('.africa-map').getAttribute('viewBox'),camera);const other=marks().filter(n=>n.dataset.industry!==industry.id);assert(other.every(n=>n.style.display!=='none'));assert(q('[data-africa-industry-why]').textContent.includes(sector.why));
+    const checkbox=q('[data-africa-industry-only]');checkbox.checked=true;checkbox.dispatchEvent(new w.Event('change',{bubbles:true}));assert.deepEqual(layout(),baseline);assert.equal(new URL(w.location.href).searchParams.get('industryOnly'),'1');assert(marks().filter(n=>n.dataset.industry!==industry.id).every(n=>n.style.display==='none'));w.history.back();assert.equal(q('[data-africa-industry-only]').checked,false);
+   }
+   q('[data-africa-industry-return]').click();assert.deepEqual(layout(),baseline);assert.equal(q('[data-africa-industry-only]'),null);
+  }
+  assert.equal(q('[data-theme-marks] [data-geographic-scope="country"]'),null);q('[data-field="nature"]').click();assert.equal(q('[data-africa-industry-reading]').hidden,true);assert(!new URL(w.location.href).searchParams.has('industrySector'));assert(!new URL(w.location.href).searchParams.has('industryOnly'));assert.equal(new URL(w.location.href).searchParams.get('unknown'),'preserve');
  });
 });
 
 test('legacy industry theme URLs resolve to commodity distributions',async()=>{
- for(const [theme,commodity] of [['copperbelt-connections','copper-cobalt'],['casablanca-manufacturing','automotive-aerospace']])await withAfricaPage(`https://example.com/atlas/africa/?field=industry&theme=${theme}`,(_w,q)=>{assert.equal(q('[data-africa-industry-commodity]').value,commodity);assert.equal(q('.africa-map').getAttribute('viewBox'),'0 0 1100 907');});
+ for(const [theme,commodity] of [['copperbelt-connections','copper-cobalt'],['casablanca-manufacturing','aerospace']])await withAfricaPage(`https://example.com/atlas/africa/?field=industry&theme=${theme}`,(_w,q)=>{assert.equal(q('[data-africa-industry-commodity]').value,commodity);assert.equal(q('.africa-map').getAttribute('viewBox'),'0 0 1100 907');});
 });
 
 test('legacy agriculture metric URLs retain history, reload and navigation above the map frame',async()=>{
@@ -99,20 +140,20 @@ test('population comparison preserves the actual source map and returns to its e
  });
 });
 
-test('all sourced industry locations retain focus, other marks, source links and overview history',async()=>{
- let saved;const last=africaIndustryLocations.at(-1);
- await withAfricaPage('https://example.com/atlas/africa/?field=industry&place=EGY&year=2023&unknown=keep',(w,q)=>{
-  for(const item of africaIndustryLocations){q(`[data-africa-industry-location="${item.id}"]`).dispatchEvent(new w.KeyboardEvent('keydown',{key:' ',bubbles:true}));assert.equal(new URL(w.location.href).searchParams.get('industryLocation'),item.id);assert.equal(q('[data-theme-details] h3').textContent,item.label);assert.ok(q('[data-theme-details]').textContent.includes(item.reading));assert.equal(w.document.querySelectorAll('[data-africa-industry-location]').length,49);assert.equal(w.document.activeElement.getAttribute('data-africa-industry-location'),item.id);assert.equal(q(`[data-africa-industry-location="${item.id}"]`).getAttribute('data-label-visible'),'true');for(const source of item.sources)assert.ok([...q('[data-theme-details]').querySelectorAll('a')].some(a=>a.href===source.url));}
-  saved=w.location.href;q('[data-africa-industry-return]').click();assert.equal(new URL(w.location.href).searchParams.has('industryLocation'),false);assert.equal(q('[data-africa-industry-commodity]').value,'');assert.equal(q('[data-africa-industry-overview]').getAttribute('aria-pressed'),'true');assert.equal(q('[data-africa-layer-legend]').children.length,18);w.history.back();assert.equal(q(`[data-africa-industry-location="${last.id}"]`).getAttribute('aria-pressed'),'true');assert.equal(new URL(w.location.href).searchParams.get('unknown'),'keep');
+test('every mapped sector site has source readings, focus, fixed point positions and reload',async()=>{
+ let saved;
+ await withAfricaPage('https://example.com/atlas/africa/?field=industry&unknown=keep',(w,q)=>{
+  for(const sector of africaIndustrySectors){q(`[data-africa-industry-sector="${sector.id}"]`).click();const sites=africaIndustrySectorSites(sector.id);for(const site of sites){const selector=`[data-theme-marks] [data-africa-industry-location="${site.id}"]`;q(selector).dispatchEvent(new w.KeyboardEvent('keydown',{key:' ',bubbles:true}));assert.equal(new URL(w.location.href).searchParams.get('industryLocation'),site.id);assert.equal(q('[data-africa-industry-site-reading] h3').textContent,site.label);assert(q('[data-africa-industry-site-reading]').textContent.includes(site.reading));assert.equal(q('[data-theme-marks]').querySelectorAll('[data-africa-industry-location]').length,sites.length);assert.equal(w.document.activeElement.getAttribute('data-africa-industry-location'),site.id);for(const source of site.sources)assert([...q('[data-africa-industry-site-reading]').querySelectorAll('a')].some(a=>a.href===source.url));assert.equal(q('.africa-map').getAttribute('viewBox'),'0 0 1100 907');saved=w.location.href;}}
+  q('[data-africa-industry-return]').click();assert(!new URL(w.location.href).searchParams.has('industryLocation'));w.history.back();assert(new URL(w.location.href).searchParams.has('industryLocation'));assert.equal(new URL(w.location.href).searchParams.get('unknown'),'keep');
  });
- await withAfricaPage(saved,(_w,q)=>assert.equal(q(`[data-africa-industry-location="${last.id}"]`).getAttribute('aria-pressed'),'true'));
+ await withAfricaPage(saved,(_w,q)=>assert.equal(q('[data-africa-industry-site-reading]').dataset.africaIndustrySiteReading,'johannesburg-digital'));
 });
 
-test('industry selection keeps commodity context and separates Nigeria oil and Jwaneng diamonds',async()=>{
+test('industry map clicks select the actual industry and country-only references never become sites',async()=>{
  await withAfricaPage('https://example.com/atlas/africa/?field=industry',(w,q)=>{
-  const pick=id=>q(`[data-africa-industry-location="${id}"]`).dispatchEvent(new w.MouseEvent('click',{bubbles:true}));
-  change(w,q('[data-africa-industry-commodity]'),'copper-cobalt');pick('jwaneng-diamonds');assert.equal(q('[data-africa-industry-commodity]').value,'copper-cobalt');assert.equal(q('[data-theme-details] h3').textContent,'ダイヤ：ジュワネン');assert.equal(q('[data-africa-industry-location="jwaneng-diamonds"]').getAttribute('aria-pressed'),'true');
-  q('[data-africa-industry-return]').click();pick('niger-delta-oil');assert.equal(q('[data-africa-industry-commodity]').value,'oil');assert.match(q('[data-theme-details] h3').textContent,/ナイジェリア/);assert.match(q('[data-africa-industry-location="niger-delta-oil"] text').textContent,/ナイジェリア/);assert.equal(q('[data-africa-industry-location="jwaneng-diamonds"]').getAttribute('aria-pressed'),'false');assert.equal(q('.africa-map').getAttribute('viewBox'),'0 0 1100 907');
-  change(w,q('[data-place]'),'BWA');assert.equal(new URL(w.location.href).searchParams.has('industryLocation'),false);assert.equal(q('[data-theme-details] h3'),null);
+  const select=id=>q(`[data-theme-marks] [data-africa-industry-location="${id}"]`).dispatchEvent(new w.MouseEvent('click',{bubbles:true}));
+  change(w,q('[data-africa-industry-commodity]'),'copper-cobalt');select('jwaneng-diamonds');assert.equal(q('[data-africa-industry-commodity]').value,'diamonds');assert.equal(q('[data-africa-industry-site-reading] h3').textContent,'ダイヤ：ジュワネン');
+  q('[data-africa-industry-return]').click();select('niger-delta-oil');assert.equal(q('[data-africa-industry-commodity]').value,'oil');assert.equal(q('[data-theme-marks] [data-africa-industry-location="jwaneng-diamonds"]').getAttribute('aria-pressed'),'false');assert.equal(q('.africa-map').getAttribute('viewBox'),'0 0 1100 907');
+  for(const site of africaSectorSites.filter(row=>!row.roles.length)){assert.equal(q(`[data-theme-marks] [data-africa-industry-location="${site.id}"]`),null);assert(q('[data-theme-details]').textContent.includes(site.label));}
  });
 });

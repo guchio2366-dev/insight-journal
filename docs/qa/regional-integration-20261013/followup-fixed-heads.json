@@ -1,0 +1,45 @@
+{
+  "parentTask": "01a10cfd-e445-7142-8092-433c3143e0d0",
+  "publishedMain": "a07ab7277b2c7eb89e51ef1be0d72dccfbec497d",
+  "southCaptureCheckpoint": "0cb0985a3332dd623e66f16bb923ff3e8a599d46",
+  "followups": [
+    {
+      "pr": 347,
+      "base": "c528febc2900ec03a5f9c41154f9b72d116c2c11",
+      "fixedHead": "6d7b47ea46a2c9f86a8717db37d5632fbf940509",
+      "changedFiles": [
+        ".github/workflows/atlas-asia-pc-review.yml",
+        "scripts/capture-east-asia-approved-review.mjs",
+        "src/scripts/atlas-asia-navigation.ts",
+        "src/scripts/atlas-east-asia-industry-clusters.ts",
+        "src/styles/atlas-east-asia-approved.css",
+        "tests/unit/atlas-east-industry-navigation.test.mjs"
+      ],
+      "changedFileCount": 6,
+      "headIsAncestor": true,
+      "allDeltaFileBlobsPreserved": true
+    },
+    {
+      "pr": 346,
+      "base": "831bba225b372dd63c7e7d663b38305dd10feb62",
+      "fixedHead": "8867c97c939d2cb4f753408db83b2af583ef0afa",
+      "changedFiles": [
+        ".github/workflows/atlas-japan-pc-review.yml",
+        "data-source/atlas/japan-farm-regional/next-source-audit.json",
+        "data-source/atlas/japan-farm-regional/tokushima-2025-audit.json",
+        "data-source/atlas/japan-farm-regional/tokushima-2025-vegetables.library.txt",
+        "docs/japan-agriculture-regional-2026-10-13.md",
+        "scripts/capture-japan-review.mjs",
+        "scripts/prepare-japan-tokushima-2025.py",
+        "src/data/atlas/japan-farm-regional-statistics.ts",
+        "src/data/atlas/japan-farm-tokushima-2025.json",
+        "src/scripts/atlas-japan-foundation-presentations.ts",
+        "tests/unit/atlas-japan-farm-regional.test.mjs"
+      ],
+      "changedFileCount": 11,
+      "headIsAncestor": true,
+      "allDeltaFileBlobsPreserved": true
+    }
+  ],
+  "scope": "Only unique changes after the shared ancestors; original PR heads and main unchanged; publication deferred to parent acceptance."
+}

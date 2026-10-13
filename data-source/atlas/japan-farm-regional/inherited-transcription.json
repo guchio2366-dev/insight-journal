@@ -1,0 +1,324 @@
+{
+  "schemaVersion": 1,
+  "kind": "inherited-manual-transcription-not-publisher-original",
+  "commit": "8988f86e4d4e9ea7a0ee4825297bea70f74e23e8",
+  "note": "Frozen transfer values. This snapshot is not independent proof of publisher values, and its hash is not an original-file hash.",
+  "series": [
+    {
+      "id": "potato-spring-2025",
+      "source": "https://www.maff.go.jp/j/seisan/tokusan/imo/attach/pdf/r7shiryo-16.pdf",
+      "year": "2025年産（概算）",
+      "unit": "t",
+      "measure": "春植えばれいしょ収穫量",
+      "grain": "都道府県",
+      "rows": [
+        {
+          "id": "JP-01",
+          "name": "北海道",
+          "value": 1692000
+        },
+        {
+          "id": "JP-02",
+          "name": "青森県",
+          "value": 11700
+        },
+        {
+          "id": "JP-07",
+          "name": "福島県",
+          "value": 10300
+        },
+        {
+          "id": "JP-08",
+          "name": "茨城県",
+          "value": 46800
+        },
+        {
+          "id": "JP-12",
+          "name": "千葉県",
+          "value": 25000
+        },
+        {
+          "id": "JP-20",
+          "name": "長野県",
+          "value": 12900
+        },
+        {
+          "id": "JP-22",
+          "name": "静岡県",
+          "value": 11600
+        },
+        {
+          "id": "JP-24",
+          "name": "三重県",
+          "value": 1420
+        },
+        {
+          "id": "JP-33",
+          "name": "岡山県",
+          "value": 1050
+        },
+        {
+          "id": "JP-34",
+          "name": "広島県",
+          "value": 4450
+        },
+        {
+          "id": "JP-41",
+          "name": "佐賀県",
+          "value": 3030
+        },
+        {
+          "id": "JP-42",
+          "name": "長崎県",
+          "value": 64400
+        },
+        {
+          "id": "JP-43",
+          "name": "熊本県",
+          "value": 15800
+        },
+        {
+          "id": "JP-45",
+          "name": "宮崎県",
+          "value": 8200
+        },
+        {
+          "id": "JP-46",
+          "name": "鹿児島県",
+          "value": 77800
+        }
+      ]
+    },
+    {
+      "id": "cabbage-pref-2024",
+      "source": "https://www.maff.go.jp/j/seisan/ryutu/yasai/attach/pdf/index-118.pdf",
+      "year": "2024年産",
+      "unit": "ha",
+      "measure": "キャベツ作付面積",
+      "grain": "都道府県",
+      "rows": [
+        {
+          "id": "JP-23",
+          "name": "愛知県",
+          "value": 5570
+        },
+        {
+          "id": "JP-10",
+          "name": "群馬県",
+          "value": 4090
+        },
+        {
+          "id": "JP-12",
+          "name": "千葉県",
+          "value": 2640
+        },
+        {
+          "id": "JP-08",
+          "name": "茨城県",
+          "value": 2380
+        },
+        {
+          "id": "JP-46",
+          "name": "鹿児島県",
+          "value": 1670
+        }
+      ]
+    },
+    {
+      "id": "tomato-pref-2024",
+      "source": "https://www.maff.go.jp/j/seisan/ryutu/yasai/attach/pdf/index-118.pdf",
+      "year": "2024年産",
+      "unit": "ha",
+      "measure": "トマト作付面積",
+      "grain": "都道府県",
+      "rows": [
+        {
+          "id": "JP-43",
+          "name": "熊本県",
+          "value": 1210
+        },
+        {
+          "id": "JP-01",
+          "name": "北海道",
+          "value": 781
+        },
+        {
+          "id": "JP-23",
+          "name": "愛知県",
+          "value": 477
+        },
+        {
+          "id": "JP-08",
+          "name": "茨城県",
+          "value": 894
+        },
+        {
+          "id": "JP-07",
+          "name": "福島県",
+          "value": 318
+        }
+      ]
+    },
+    {
+      "id": "tomato-hokkaido-2020",
+      "source": "https://www.pref.hokkaido.lg.jp/fs/5/2/6/4/2/7/8/_/syuyouyasaityousa20220131.pdf",
+      "year": "2020年産",
+      "unit": "t",
+      "measure": "トマト収穫量（ミニトマトを含む）",
+      "grain": "北海道の振興局",
+      "rows": [
+        {
+          "id": "sorachi",
+          "name": "空知",
+          "value": 5332.2
+        },
+        {
+          "id": "ishikari",
+          "name": "石狩",
+          "value": 2647
+        },
+        {
+          "id": "shiribeshi",
+          "name": "後志",
+          "value": 6959
+        },
+        {
+          "id": "iburi",
+          "name": "胆振",
+          "value": 4262.8
+        },
+        {
+          "id": "hidaka",
+          "name": "日高",
+          "value": 13734
+        },
+        {
+          "id": "oshima",
+          "name": "渡島",
+          "value": 5542.8
+        },
+        {
+          "id": "hiyama",
+          "name": "檜山",
+          "value": 1735
+        },
+        {
+          "id": "kamikawa",
+          "name": "上川",
+          "value": 10773.1
+        },
+        {
+          "id": "rumoi",
+          "name": "留萌",
+          "value": 277.7
+        },
+        {
+          "id": "soya",
+          "name": "宗谷",
+          "value": 10
+        },
+        {
+          "id": "okhotsk",
+          "name": "オホーツク",
+          "value": 184.6
+        },
+        {
+          "id": "tokachi",
+          "name": "十勝",
+          "value": 127.8
+        },
+        {
+          "id": "kushiro",
+          "name": "釧路",
+          "value": 6
+        }
+      ]
+    },
+    {
+      "id": "apple-aomori-2025",
+      "source": "https://www.pref.aomori.lg.jp/soshiki/nourin/ringo/R8aomoriringo.pdf",
+      "year": "2025年",
+      "unit": "ha",
+      "measure": "りんご栽培面積",
+      "grain": "青森県内6地域",
+      "rows": [
+        {
+          "id": "tosei",
+          "name": "東青地域",
+          "value": 1696
+        },
+        {
+          "id": "shimokita",
+          "name": "下北地域",
+          "value": 0,
+          "status": "rounded-zero"
+        },
+        {
+          "id": "kamikita",
+          "name": "上北地域",
+          "value": 15
+        },
+        {
+          "id": "seihoku",
+          "name": "西北地域",
+          "value": 3784
+        },
+        {
+          "id": "chunan",
+          "name": "中南地域",
+          "value": 13189
+        },
+        {
+          "id": "sannohe",
+          "name": "三八地域",
+          "value": 1277
+        }
+      ]
+    },
+    {
+      "id": "mandarin-kimino-2020",
+      "source": "https://www.machimura.maff.go.jp/machi/contents/30/304/details.html",
+      "year": "2020年",
+      "unit": "ha",
+      "measure": "販売目的の温州みかん栽培面積",
+      "grain": "市町村",
+      "rows": [
+        {
+          "id": "kimino",
+          "name": "紀美野町",
+          "value": 80
+        }
+      ]
+    },
+    {
+      "id": "milk-ikeda-2020",
+      "source": "https://www.town.hokkaido-ikeda.lg.jp/sangyo/nouchikusangyo/ikeda-nouchiku/521.html",
+      "year": "2020年",
+      "unit": "頭",
+      "measure": "乳用牛飼養頭数",
+      "grain": "市町村",
+      "rows": [
+        {
+          "id": "ikeda",
+          "name": "北海道池田町",
+          "value": 2931
+        }
+      ]
+    },
+    {
+      "id": "beef-ikeda-2020",
+      "source": "https://www.town.hokkaido-ikeda.lg.jp/sangyo/nouchikusangyo/ikeda-nouchiku/521.html",
+      "year": "2020年",
+      "unit": "頭",
+      "measure": "肉用牛飼養頭数",
+      "grain": "市町村",
+      "rows": [
+        {
+          "id": "ikeda",
+          "name": "北海道池田町",
+          "value": 6151
+        }
+      ]
+    }
+  ]
+}

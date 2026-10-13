@@ -16,6 +16,8 @@
 .canada-natural-static-contours text { fill: #493b30; stroke: #fffdf6; stroke-width: 4; paint-order: stroke; font: 700 13px var(--sans, sans-serif); }
 .canada-natural-shape:focus-visible { outline: none; }
 .canada-natural-stations { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.canada-city-leaders{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.canada-city-leaders line{stroke:#304c58;stroke-width:1;opacity:.85}
 .canada-natural-station { position: absolute; display: inline-flex; align-items: center; gap: 5px; transform: translate(-6px, -50%); pointer-events: auto; min-height: 30px; padding: 3px 5px 3px 0; border: 1px solid transparent; border-radius: 4px; background: rgb(255 253 246 / 89%); color: #263f48; font: 700 12px/1.35 var(--sans, sans-serif); cursor: pointer; white-space: nowrap; }
 .canada-natural-station i { width: 10px; height: 10px; border: 2px solid #fff; outline: 1px solid #263f48; border-radius: 50%; background: #263f48; }
 .canada-natural-station.is-selected { border-color: #263f48; background: #fffdf4; }

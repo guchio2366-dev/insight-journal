@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-13",
+  "blocked": [
+    {
+      "action": "curl --fail --location --max-time 35",
+      "target": "https://www.fao.org/faostat/en/",
+      "error": "curl (22): HTTP 403",
+      "stopped": true
+    },
+    {
+      "action": "curl --fail --location --max-time 30",
+      "target": "https://openknowledge.fao.org/handle/20.500.14283/cd4313en",
+      "error": "curl (22): HTTP 403",
+      "stopped": true
+    },
+    {
+      "action": "curl --fail --location --max-time 35",
+      "target": "https://fenixservices.fao.org/faostat/api/v1/en/data/FBS?area=41,110,117,116,154,214&year=2023&output_type=objects&show_codes=true&show_flags=true&null_values=true&page_size=100000",
+      "error": "curl (22): HTTP 403",
+      "stopped": true
+    }
+  ],
+  "unacquiredWebTables": [
+    {
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MNG/year/2023/tradeflow/Exports/partner/ALL/product/1001",
+      "error": "Web tool: URL is not accessible"
+    },
+    {
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MNG/year/2023/tradeflow/Exports/partner/ALL/product/1006",
+      "error": "Web tool: URL is not accessible"
+    },
+    {
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MNG/year/2023/tradeflow/Exports/partner/ALL/product/1005",
+      "error": "Web tool: URL is not accessible"
+    },
+    {
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MNG/year/2023/tradeflow/Exports/partner/ALL/product/120100",
+      "error": "Web tool: URL is not accessible"
+    },
+    {
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/CHN/year/2023/tradeflow/Exports/partner/ALL/product/440320",
+      "error": "Web tool: URL is not accessible"
+    },
+    {
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MNG/year/2023/tradeflow/Imports/partner/ALL/product/440320",
+      "error": "Web tool: URL is not accessible"
+    },
+    {
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MNG/year/2023/tradeflow/Exports/partner/ALL/product/440320",
+      "error": "Web tool: URL is not accessible"
+    }
+  ],
+  "notRetried": [
+    "GeoEPR-2021.geojson",
+    "tuv.nso.mn Khun_am_toollogo.pdf",
+    "UNdata POP"
+  ],
+  "limits": [
+    "Inaccessible or empty web response is not evidence of zero trade.",
+    "WITS H0 gross monetary trade is not interchangeable with FAO FBS primary-equivalent quantities.",
+    "WDI contains no food-use or food-calorie or wood partner matrix in the retained release."
+  ],
+  "success": {
+    "publisher": "World Bank WITS; UN Comtrade",
+    "completeTables": 53,
+    "numericRows": 1270,
+    "year": 2023,
+    "classification": "HS 1988/92 (H0)",
+    "sourceScope": "Six retained reporter targets; geographic inside partners additionally include Hong Kong and Macao; no complete geographic regional total claimed"
+  }
+}

@@ -5,18 +5,20 @@ import {Window} from 'happy-dom';
 const bundle=(await build({entryPoints:['src/scripts/atlas-mexico-climate.ts'],bundle:true,format:'iife',globalName:'Climate',write:false})).outputFiles[0].text;
 function page(search=''){
  const window=new Window({url:'https://example.test/nature/'+search,settings:{enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
- window.document.body.innerHTML='<main><h2 data-mexico-climate-heading></h2><svg><g data-mexico-climate-city="mexico-city-tacubaya" role="button" tabindex="0"></g><g data-mexico-climate-city="culiacan-dge" role="button" tabindex="0"></g></svg><section data-mexico-climate-plot="mexico-city-tacubaya" data-climate-city-name="メキシコシティ（タクバヤ）"></section><section data-mexico-climate-plot="culiacan-dge" data-climate-city-name="クリアカン"></section><p data-mexico-climate-notice hidden></p></main>';
+ window.document.body.innerHTML='<main><h2 data-mexico-climate-heading></h2><section data-mexico-climate-overview>全国の概説</section><svg><g data-mexico-climate-city="mexico-city-tacubaya" role="button" tabindex="0"></g><g data-mexico-climate-city="culiacan-dge" role="button" tabindex="0"></g></svg><section data-mexico-climate-plot="mexico-city-tacubaya" data-climate-city-name="メキシコシティ（タクバヤ）"></section><section data-mexico-climate-plot="culiacan-dge" data-climate-city-name="クリアカン"></section><button data-mexico-climate-overview-button>全国へ戻る</button><p data-mexico-climate-notice hidden></p></main>';
  window.eval(bundle+';Climate.initMexicoClimate(document.querySelector("main"));');return window;
 }
-test('capital defaults to the actual Tacubaya record; keyboard selection preserves crop context and viewport',async()=>{
+test('national overview is the default; keyboard selection preserves crop context and viewport',async()=>{
  const w=page('?state=25&view=climate&compare=maize&source=agriculture&frame=10,20,450,290');
  try{
-  const q=s=>w.document.querySelector(s);assert.equal(q('[data-mexico-climate-heading]').textContent,'メキシコシティ（タクバヤ）の雨温図');assert.equal(q('[data-mexico-climate-plot="mexico-city-tacubaya"]').hidden,false);
+  const q=s=>w.document.querySelector(s);assert.equal(q('[data-mexico-climate-heading]').textContent,'メキシコ全国の気候を読む');assert.equal(q('[data-mexico-climate-plot="mexico-city-tacubaya"]').hidden,true);assert.equal(q('[data-mexico-climate-overview]').hidden,false);
   q('[data-mexico-climate-city="culiacan-dge"]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
   assert.equal(q('[data-mexico-climate-plot="culiacan-dge"]').hidden,false);assert.equal(q('[data-mexico-climate-heading]').textContent,'クリアカンの雨温図');
   assert.equal(q('[data-mexico-climate-plot="mexico-city-tacubaya"]').hidden,true);
+  assert.equal(q('[data-mexico-climate-overview]').hidden,true);
   const url=new URL(w.location);assert.equal(url.searchParams.get('city'),'culiacan-dge');
   for(const [key,value] of Object.entries({state:'25',view:'climate',compare:'maize',source:'agriculture',frame:'10,20,450,290'}))assert.equal(url.searchParams.get(key),value);
+  q('[data-mexico-climate-overview-button]').click();assert.equal(new URL(w.location).searchParams.has('city'),false);assert.equal(q('[data-mexico-climate-overview]').hidden,false);
  }finally{await w.happyDOM.close();}
 });
 test('unknown station never silently substitutes the capital; selection and history restore exact records',async()=>{

@@ -1,0 +1,14 @@
+[
+  {
+    "name": "sidra-9605-metadata.json",
+    "url": "https://servicodados.ibge.gov.br/api/v3/agregados/9605/metadados",
+    "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "saved": false
+  },
+  {
+    "name": "ibge-malhas-v3-documentation.html",
+    "url": "https://servicodados.ibge.gov.br/api/docs/malhas?versao=3",
+    "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "saved": false
+  }
+]

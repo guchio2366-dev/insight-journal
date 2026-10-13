@@ -20,7 +20,7 @@
 .canada-agri-overview .map-story span{white-space:nowrap}
 .canada-agri-overview .map-story i{margin-right:4px}
 .canada-agri-overview .map-crop-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2}
-.canada-agri-overview .map-crop-label{position:absolute;transform:none;pointer-events:auto;min-height:22px;padding:2px 4px;color:var(--belt-color);background:#fffdf4eb;border:1px solid var(--belt-color);font:600 12px/1.35 var(--sans);white-space:nowrap}
+.canada-agri-overview .map-crop-label{position:absolute;transform:none;pointer-events:auto;min-height:22px;padding:2px 3px;color:var(--belt-color);background:transparent;border:1px solid transparent;font:700 13px/1.35 var(--sans);white-space:nowrap;text-shadow:0 0 3px #fffdf4,0 0 3px #fffdf4}
 .canada-agri-overview .map-crop-label[aria-pressed=true]{color:#203f49;background:#fffef5;outline:2px solid var(--belt-color)}
 .canada-agri-overview .agri-layer-controls{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;background:#f6f5ec;border:1px solid #c8cfc4;border-top:0;padding:8px 10px;font-size:14px}
 .canada-agri-overview .agri-layer-controls label{display:flex;gap:6px;align-items:center;font-weight:600}

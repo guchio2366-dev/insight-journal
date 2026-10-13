@@ -63,7 +63,7 @@ test('BC public licence URLs use the verified readable canonical page while orig
   }
 });
 
-test('Precipitation derives from all 360 source months, keeps the land mask, and exposes seven US-aligned categorical rasters', async () => {
+test('Precipitation keeps the 360-month source ledger and uses continuous native cells for 250 mm contours', async () => {
   const ranges = JSON.parse(await readFile(directory + 'precipitation-range-manifest.json', 'utf8'));
   assert.deepEqual(ranges.map(range => range.year), Array.from({length: 30}, (_, index) => 1991 + index));
   assert.equal(ranges.reduce((sum, range) => sum + range.bytes, 0), 840587040);
@@ -75,7 +75,7 @@ test('Precipitation derives from all 360 source months, keeps the land mask, and
   assert.equal(manifest.precipitation.summary.annualValidLandCells, 100945);
   assert.equal(manifest.precipitation.summary.annualMissingLandCells, 0);
   assert.equal(manifest.precipitation.summary.allNonLandCellsMasked, true);
-  assert.equal(data.datasets.precipitation.groups.reduce((s,g)=>s+g.sourceCellCount,0),100945);assert.equal(data.datasets.precipitation.groups.length,7);
+  assert.equal(data.datasets.precipitation.groups.reduce((s,g)=>s+g.sourceCellCount,0),100945);assert.equal(data.datasets.precipitation.groups.length,16);
   const rows = gunzipSync(await readFile(directory + 'annual-valid-grid-points.csv.gz')).toString('utf8').trim().split(/\r?\n/);
   assert.equal(rows.shift(), 'grid_index_xmajor,longitude,latitude,annual_precipitation_mm,grid_area_km2');
   assert.equal(rows.length, 100945);
@@ -87,23 +87,12 @@ test('Precipitation derives from all 360 source months, keeps the land mask, and
     ids.add(index);
   }
   assert.equal(ids.size, 100945);
-  const union = new Uint8Array(1900 * 900);
-  for (const image of data.datasets.precipitation.images) {
-    const group = data.datasets.precipitation.groups.find(group => group.id === image.id);
-    const color = group.color.slice(1).match(/../g).map(hex => Number.parseInt(hex, 16));
-    const {data: pixels, info} = await sharp('public' + image.url.replace('-mercator.png','.png')).ensureAlpha().raw().toBuffer({resolveWithObject: true});
-    assert.equal(info.width, 1900); assert.equal(info.height, 900);
-    let opaque = 0;
-    for (let index = 0; index < pixels.length; index += 4) {
-      assert.ok(pixels[index + 3] === 0 || pixels[index + 3] === 255);
-      if (!pixels[index + 3]) continue;
-      assert.equal(pixels[index], color[0]); assert.equal(pixels[index + 1], color[1]); assert.equal(pixels[index + 2], color[2]);
-      union[index / 4] = 1; opaque++;
-    }
-    assert.ok(opaque > 0 && opaque < union.length);
-  }
-  const all = await sharp('public' + data.datasets.precipitation.imageUrl.replace('-mercator.png','.png')).ensureAlpha().raw().toBuffer();
-  for (let index = 0; index < union.length; index++) assert.equal(all[index * 4 + 3] > 0, Boolean(union[index]));
+  const contourDir='public/assets/atlas/canada-precipitation-contours-v1/';
+  const audit=JSON.parse(await readFile(contourDir+'manifest.json','utf8'));
+  assert.equal(audit.validCells,100945);assert.deepEqual(audit.nativeShapeXMajor,[621,470]);assert.equal(audit.cornerMask,false);assert.equal(audit.sourcePrecision.annualMm,.1);
+  const bytes=gunzipSync(await readFile(contourDir+'native-annual.float32.gz'));const values=new Float32Array(bytes.buffer,bytes.byteOffset,bytes.length/4);assert.equal(values.length,291870);
+  let valid=0;for(const value of values)if(Number.isFinite(value)){assert.ok(value>=136.89&&value<=3986.41);valid++;}assert.equal(valid,100945);
+  const lines=JSON.parse(await readFile(contourDir+'isohyets.geojson','utf8'));assert.ok(lines.features.length>100);for(const f of lines.features){assert.equal(f.geometry.type,'LineString');assert.equal(f.properties.mm%250,0);assert.ok(f.geometry.coordinates.every(p=>p.every(Number.isFinite)));}
   assert.ok(manifest.precipitation.rendering.resampling.includes('no interpolated or fabricated'));
 });
 
@@ -175,11 +164,10 @@ test('BC example retains 149 individually addressable mapped aquifers, source na
   assert.equal(manifest.aquifers.topology.unchanged_geometry_wkb_count, 149);
 });
 
-test('Mercator presentation keeps categorical colors and a reproducible source/output hash ledger',async()=>{
- const crypto=await import('node:crypto');
- const ledger=JSON.parse(await readFile('public/assets/atlas/canada-water-v1/mercator-manifest.json','utf8'));
- for(const item of ledger.files){for(const [file,hash]of [[item.source,item.sourceSha256],[item.output,item.sha256]])assert.equal(crypto.createHash('sha256').update(await readFile(file)).digest('hex'),hash);}
- const palette=new Set(data.datasets.precipitation.groups.map(g=>g.color.toLowerCase()));
- const {data:pixels,info}=await sharp('public'+data.datasets.precipitation.imageUrl).ensureAlpha().raw().toBuffer({resolveWithObject:true});assert.equal(info.width,1800);assert.equal(info.height,1160);
- for(let i=0;i<pixels.length;i+=4){assert.ok(pixels[i+3]===0||pixels[i+3]===255);if(pixels[i+3])assert.ok(palette.has('#'+[...pixels.subarray(i,i+3)].map(n=>n.toString(16).padStart(2,'0')).join('')));}
+test('Continuous contour assets retain source/output hashes and closed 250 mm polygon intervals',async()=>{
+ const directory='public/assets/atlas/canada-precipitation-contours-v1/';const audit=JSON.parse(await readFile(directory+'manifest.json','utf8'));
+ for(const [file,row]of Object.entries(audit.files)){const bytes=await readFile(directory+file);assert.equal(bytes.length,row.bytes);assert.equal(sha(bytes),row.sha256);}
+ assert.equal(audit.sourceExportSha256,sha(await readFile('public/assets/atlas/canada-water-v1/annual-valid-grid-points.csv.gz')));
+ const bands=JSON.parse(await readFile(directory+'bands.geojson','utf8'));assert.equal(bands.features.length,16);const ids=new Set(data.datasets.precipitation.groups.map(g=>g.id));for(const f of bands.features){assert.ok(ids.has(f.properties.group));assert.equal(f.properties.upperMm-f.properties.lowerMm,250);for(const rings of f.geometry.coordinates)for(const ring of rings){assert.deepEqual(ring[0],ring.at(-1));assert.ok(ring.every(p=>p.length===2&&p.every(Number.isFinite)));}}
+ assert.match(audit.limitations.join(' '),/Raw current land\/monthly arrays were not independently rechecked/);
 });

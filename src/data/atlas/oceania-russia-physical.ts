@@ -2,10 +2,13 @@ import oceania from '../../../public/assets/atlas/oceania-physical-v1/manifest.j
 import russia from '../../../public/assets/atlas/russia-physical-v1/manifest.json';
 import oceaniaRivers from '../../../public/assets/atlas/oceania-rivers-v1.json';
 import russiaRivers from '../../../public/assets/atlas/russia-rivers-v1.json';
+import oceaniaPrecipitationLabels from './oceania-precipitation-labels.json';
+import russiaPrecipitationLabels from './russia-precipitation-labels.json';
 
 type Region = 'oceania' | 'russia';
 const manifests = {oceania, russia};
 const riverSources = {oceania: oceaniaRivers, russia: russiaRivers};
+const precipitationLabels = {oceania: oceaniaPrecipitationLabels, russia: russiaPrecipitationLabels};
 const riverNamesJa: Record<string, string> = {Volga:'ボルガ川',Ob:'オビ川',Yenisey:'エニセイ川',Lena:'レナ川',Amur:'アムール川',Murray:'マレー川',Darling:'ダーリング川',Waikato:'ワイカト川'};
 
 export function regionalRiverLayer(region: Region) {
@@ -23,11 +26,29 @@ export function regionalRiverLayer(region: Region) {
 
 const escapeRiver = (s: string) => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 export function renderRegionalRivers(region: Region, project: (position: number[]) => number[], clip: string, scale: number): string {
- return riverSources[region].rivers.map(river => {
+ const items=riverSources[region].rivers.map(river => {
   const paths = river.lines.map(line => line.map((point, i) => {const [x, y] = project(point);return `${i?'L':'M'}${x.toFixed(2)},${y.toFixed(2)}`;}).join('')).join('');
   const [x, y] = project(river.labelPosition);
-  return `<g data-river-name="${escapeRiver(river.name)}"><path d="${paths}" clip-path="url(#${clip})" fill="none" stroke="#24658c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"><title>${escapeRiver(riverNamesJa[river.name])}（${escapeRiver(river.name)}）：原本の河川中心線。流向は示しません。</title></path><text x="${x.toFixed(2)}" y="${(y-5*scale).toFixed(2)}" text-anchor="middle" font-size="${(13*scale).toFixed(2)}" fill="#164d6f" stroke="#fffefa" stroke-width="${(2.5*scale).toFixed(2)}" paint-order="stroke">${escapeRiver(riverNamesJa[river.name])}</text></g>`;
- }).join('');
+  return {id:escapeRiver(river.name),name:escapeRiver(riverNamesJa[river.name]),paths,x,y};
+ });
+ const lines=items.map(item=>`<g data-river-name="${item.id}"><path d="${item.paths}" clip-path="url(#${clip})" fill="none" stroke="#24658c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"><title>${item.name}：原本の河川中心線。流向は示しません。</title></path><path d="${item.paths}" clip-path="url(#${clip})" fill="none" stroke="transparent" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></g>`).join('');
+ const labels=items.map(item=>`<text data-river-label="${item.id}" role="button" tabindex="0" aria-label="${item.name}を読む" aria-pressed="false" x="${item.x.toFixed(2)}" y="${(item.y-5*scale).toFixed(2)}" text-anchor="middle" font-size="${(13*scale).toFixed(2)}" fill="#164d6f" stroke="#fffefa" stroke-width="${(2.5*scale).toFixed(2)}" paint-order="stroke">${item.name}</text>`).join('');
+ return lines+labels;
+}
+
+/** Labels refer to checked pixels in the saved contour image; offsets keep the
+ * number legible while the leader continues to identify that exact line. */
+export function renderRegionalPrecipitationLabels(region: Region, project: (position: number[]) => number[], frame: number[], scale: number): string {
+ const items=precipitationLabels[region].labels.flatMap(label=>{
+  const [x,y]=project(label.coordinates);
+  if(x<frame[0]||x>frame[0]+frame[2]||y<frame[1]||y>frame[1]+frame[3])return [];
+  const value=label.mm.toLocaleString('ja-JP'),width=(value.length*8+12)*scale,height=22*scale;
+  const cx=Math.max(frame[0]+width/2+4*scale,Math.min(x+label.offsetPx[0]*scale,frame[0]+frame[2]-width/2-4*scale));
+  const cy=Math.max(frame[1]+height/2+4*scale,Math.min(y+label.offsetPx[1]*scale,frame[1]+frame[3]-height/2-4*scale));
+  const leader=Math.abs(cx-x)+Math.abs(cy-y)>2*scale?`<path d="M${x} ${y}L${cx} ${cy}" fill="none" stroke="#244b69" stroke-width="1" vector-effect="non-scaling-stroke"/><circle cx="${x}" cy="${y}" r="${2*scale}" fill="#244b69"/>`:'';
+  return [`<g data-isohyet-label="${label.id}" data-isohyet-mm="${label.mm}" data-isohyet-anchor="${x},${y}" style="pointer-events:none"><title>${value} mm／年：1991–2020年の保存済み等雨量線</title>${leader}<rect data-isohyet-label-box x="${cx-width/2}" y="${cy-height/2}" width="${width}" height="${height}" rx="${3*scale}" fill="#fffefa" fill-opacity=".94"/><text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="${14*scale}" style="fill:#173e58;stroke:none;font-family:var(--sans);font-weight:650">${value}</text></g>`];
+ });
+ return `<g data-precipitation-labels style="pointer-events:none">${items.join('')}<g data-precipitation-map-unit><rect x="${frame[0]+10*scale}" y="${frame[1]+10*scale}" width="${145*scale}" height="${24*scale}" rx="${3*scale}" fill="#fffefa" fill-opacity=".94"/><text x="${frame[0]+18*scale}" y="${frame[1]+26*scale}" font-size="${13*scale}" style="fill:#173e58;stroke:none;font-family:var(--sans)">線の数値：mm／年</text></g></g>`;
 }
 
 export function physicalLayer(region: Region, type: 'precipitation' | 'elevation') {
@@ -39,9 +60,9 @@ export function physicalLayer(region: Region, type: 'precipitation' | 'elevation
    id: 'precipitation', field: 'nature' as const, title: '年降水量と250 mm間隔の等雨量線',
    period: '1991–2020年の平年値', unit: 'mm／年', kind: 'raster' as const,
    image: `/assets/atlas/${region}-physical-v1/precipitation.png`, bounds,
-   legend: data.colors.map((color, i) => ({color, label: i === 0 ? '0〜250 mm未満' : i === data.colors.length - 1 ? '4,000 mm以上' : `${i * 250}〜${(i + 1) * 250} mm未満`})),
+   legend: [...data.colors.map((color, i) => ({color, label: i === 0 ? '0〜250 mm未満' : i === data.colors.length - 1 ? '4,000 mm以上' : `${i * 250}〜${(i + 1) * 250} mm未満`})), {label:'欠測・未収録（0ではない）',color:'#e6e3d6',shape:'missing' as const}],
    sources: [{title: `${data.citation}（CC BY 4.0、原本から加工）`, url: data.sourceUrl, note: '12か月の平年値を合計。線は元0.25°格子から250 mm刻みで補間。'}],
-   coverage: '1991–2020年の月別平年値12か月を合計した年降水量。青が濃いほど多雨です。線は250 mm間隔で、雨量観測点や河川・利用可能な水量を示しません。欠測セルは推定せず、国境で切り抜いています。',
+   coverage: '1991–2020年の月別平年値12か月を合計した年降水量。青が濃いほど多雨です。線は250 mm間隔で、主要線にmm／年の数値を表示します。引出線の先が該当する等雨量線です。雨量観測点や河川・利用可能な水量を示しません。欠測セルは推定せず、国境で切り抜いています。',
    resolution: '原本0.25°格子・等雨量線は補間'
   };
  }
@@ -50,7 +71,7 @@ export function physicalLayer(region: Region, type: 'precipitation' | 'elevation
   id: 'elevation', field: 'nature' as const, title: '地形の標高と500 m間隔の等高線',
   period: 'ETOPO 2022年版', unit: 'm（海抜）', kind: 'raster' as const,
   image: `/assets/atlas/${region}-physical-v1/elevation.png`, bounds,
-  legend: data.colors.map((color, i) => ({color, label: i === 0 ? '0 m未満' : i === data.colors.length - 1 ? '6,000 m以上' : `${(i - 1) * 500}〜${i * 500} m未満`})),
+  legend: [...data.colors.map((color, i) => ({color, label: i === 0 ? '0 m未満' : i === data.colors.length - 1 ? '6,000 m以上' : `${(i - 1) * 500}〜${i * 500} m未満`})), {label:'欠測・未収録（0ではない）',color:'#e6e3d6',shape:'missing' as const}],
   sources: [{title: 'NOAA NCEI, ETOPO 2022 60″ surface elevation（米国政府公開資料、原本から加工）', url: data.sourceUrl, note: '陸上標高を500 m階級で塗り分け、等高線は元60秒格子から補間。'}],
   coverage: '標高のある陸域を海抜500 mごとの段階色で表示します。線は500 m間隔の等高線です。海底深度、山頂の厳密な高さ、地形の名称や地質を示しません。表示画像は元60秒格子を縮小したものです。',
   resolution: '元60秒格子・表示画像は縮小'

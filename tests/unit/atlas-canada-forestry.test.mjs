@@ -1,6 +1,15 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import {createHash} from 'node:crypto';import {transform} from 'esbuild';import sharp from 'sharp';
 const data=JSON.parse(await readFile('src/data/atlas/canada/forestry.json','utf8')),manifest=JSON.parse(await readFile('public/assets/atlas/canada-forestry-v1/manifest.json','utf8')),parse=l=>[...l.matchAll(/"((?:[^"]|"")*)"(?:,|$)/g)].map(m=>m[1].replaceAll('""','"'));
 const lib=await import(`data:text/javascript;base64,${Buffer.from((await transform(await readFile('src/lib/atlas-canada-forestry.ts','utf8'),{loader:'ts',format:'esm'})).code).toString('base64')}`);
+test('Only the seven source-backed forest activities survive a local nature comparison',async()=>{
+ const source=JSON.parse(await readFile('src/data/atlas/canada/forestry-activity-references.json','utf8'));
+ assert.deepEqual(lib.canadaForestryActivityIds,source.references.map(r=>r.id));
+ const url=new URL('https://example.test/forestry/?forestActivity=prince-george-harvest&keep=ignored'),state=lib.readCanadaForestryState(url,data.years,data.provinces.map(p=>p.id));
+ const target=()=>lib.canadaForestryComparisonUrl(url,new URL('https://example.test/nature/?city=vancouver'),state);
+ assert.equal(new URLSearchParams(target().searchParams.get('forestryReturn')).get('forestActivity'),'prince-george-harvest');
+ for(const invalid of ['unknown','https://example.net/','../elsewhere']){url.searchParams.set('forestActivity',invalid);assert.equal(new URLSearchParams(target().searchParams.get('forestryReturn')).has('forestActivity'),false);}
+ assert.equal(new URLSearchParams(target().searchParams.get('forestryReturn')).has('keep'),false);
+});
 test('Forestry selection retains 66 original nominal manufacturing revenues, 20 confidential values, quality and vectors',async()=>{
  const lines=(await readFile('data-source/atlas/canada/agriculture/forestry/forestry-selected.csv','utf8')).trim().split(/\r?\n/),headers=parse(lines.shift());assert.equal(lines.length,66);assert.equal(data.data.length,33);let suppressed=0;
  for(const line of lines){const r=Object.fromEntries(parse(line).map((v,i)=>[headers[i],v])),m=data.metrics.find(m=>m.source===r['North American Industry Classification System (NAICS)']);assert.ok(m);assert.equal(r['Principal statistics'],'Revenue from goods manufactured');assert.equal(r.UOM,'Dollars');assert.equal(r.SCALAR_FACTOR,'thousands');assert.ok(['2021','2023','2024'].includes(r.REF_DATE));const v=data.data.find(v=>String(v.year)===r.REF_DATE&&v.id===r.GEO).values[m.id];assert.equal(v.value,r.VALUE===''?null:Number(r.VALUE));assert.equal(v.status,r.STATUS);assert.equal(v.symbol,r.SYMBOL);assert.equal(v.vector,r.VECTOR);assert.equal(v.decimals,Number(r.DECIMALS));if(r.STATUS==='x'){suppressed++;assert.equal(v.value,null);}}

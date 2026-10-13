@@ -12,12 +12,13 @@ import {readCanadaNaturalLayerState,writeCanadaNaturalLayerState,type NaturalLay
 import {initCanadaWaterResources} from './atlas-canada-water-resources';
 import {canadaWaterFullFrame, readCanadaWaterState,writeCanadaWaterState,type CanadaWaterState} from '../lib/atlas-canada-water-state';
 import {renderCanadaWaterOrigin} from './atlas-canada-water-origin';
+import {isCanadaForestryActivity} from '../lib/atlas-canada-forestry';
 export function initCanadaNature(root:HTMLElement){
  const config=JSON.parse(root.querySelector('[data-canada-config]')!.textContent!);
  const ids=config.cities.map((c:any)=>c.id),waters=config.waters;
  const $=<T extends Element=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const map=$<SVGSVGElement>('[data-canada-map]');
- function drawLocatorCamera(){const box=map.getBoundingClientRect();map.setAttribute('viewBox',(state.frame ? canadaLegacyFrame(state.frame) : canadaSouthernFrame(box.width && box.height ? box.width/box.height : 1.85)).join(' '));layoutRiverLabels();}
+ function drawLocatorCamera(){const box=map.getBoundingClientRect();map.setAttribute('viewBox',(state.frame ? canadaLegacyFrame(state.frame) : canadaSouthernFrame(box.width && box.height ? box.width/box.height : 1.85)).join(' '));layoutRiverLabels();layoutLakeLabels();layoutPacificLabel();}
  function layoutRiverLabels(){
   const scale=map.getScreenCTM?.()?.a;if(!scale||!Number.isFinite(scale))return;
   const [left,top,width,height]=map.getAttribute('viewBox')!.split(' ').map(Number),gap=8/scale;
@@ -28,6 +29,8 @@ export function initCanadaNature(root:HTMLElement){
    const length=text.getComputedTextLength?.()??0;if(x+gap+length>left+width-gap){text.setAttribute('text-anchor','end');text.setAttribute('x',String(-gap));}
   }
  }
+ function layoutPacificLabel(){const label=root.querySelector<SVGTextElement>('[data-canada-ocean-name="pacific"]'),scale=map.getScreenCTM?.()?.a;if(label&&scale&&Number.isFinite(scale))label.style.fontSize=`${18/scale}px`;}
+ function layoutLakeLabels(){const scale=map.getScreenCTM?.()?.a;if(!scale||!Number.isFinite(scale))return;const [left,top,width,height]=map.getAttribute('viewBox')!.split(' ').map(Number);for(const label of root.querySelectorAll<SVGGElement>('[data-canada-lake-name]')){const x=Number(label.dataset.lakeX),y=Number(label.dataset.lakeY);label.style.display=x<left||x>left+width||y<top||y>top+height?'none':'';label.querySelector('[data-lake-label-glyph]')?.setAttribute('transform',`scale(${1/scale})`);}}
  let state=readCanadaNatureState(new URL(location.href),ids,waters);
  const waterHost=root.querySelector<HTMLElement>('[data-canada-water-resources]');
  const waterConfig=waterHost?JSON.parse(waterHost.querySelector('[data-canada-water-resource-config]')!.textContent!):null;
@@ -66,7 +69,7 @@ export function initCanadaNature(root:HTMLElement){
   for(const button of root.querySelectorAll<HTMLElement>('[data-canada-water-topic]'))button.setAttribute('aria-pressed',String(button.dataset.canadaWaterTopic===waterState.topic));
   waterMap?.render(waterResource?waterState:{...waterState,topic:'surface'});
   const forestryBack=root.querySelector<HTMLAnchorElement>('[data-canada-forestry-return]'),savedForestry=new URL(location.href).searchParams.get('forestryReturn');
-  if(forestryBack){forestryBack.hidden=!savedForestry;if(savedForestry){const back=new URL(forestryBack.getAttribute('href')!,location.href),params=new URLSearchParams(savedForestry);back.search='';for(const key of ['year','province','compare','metric','cover','region','zoom','forestCamera']){const value=params.get(key);if(value)back.searchParams.set(key,value);}forestryBack.href=back.href;}}
+  if(forestryBack){forestryBack.hidden=!savedForestry;if(savedForestry){const back=new URL(forestryBack.getAttribute('href')!,location.href),params=new URLSearchParams(savedForestry);back.search='';for(const key of ['year','province','compare','metric','cover','region','zoom','forestCamera']){const value=params.get(key);if(value)back.searchParams.set(key,value);}const activity=params.get('forestActivity');if(isCanadaForestryActivity(activity))back.searchParams.set('forestActivity',activity);forestryBack.href=back.href;}}
   const forestContext=root.querySelector<HTMLElement>('[data-canada-forest-context]'),forestMap=root.querySelector<SVGElement>('[data-canada-forest-context-map]'),forestLegend=root.querySelector<HTMLElement>('[data-canada-forest-context-legend]');
   if(forestContext&&forestMap&&forestLegend){
    forestContext.hidden=!savedForestry;root.classList.toggle('is-learning-comparison',!!savedForestry);forestMap.style.display=savedForestry&&state.view!=='landform'?'':'none';forestLegend.hidden=!savedForestry||state.view==='landform';
@@ -146,6 +149,7 @@ export function initCanadaNature(root:HTMLElement){
   if(waterText)waterText.textContent=waterGroup?'五大湖からセントローレンス川の河口域までの位置を、産業の州別構成と比べます。この図は航路や輸送量を示しません。':selectedWater?.body??'マッケンジー川は北極海、フレーザー川は太平洋、ネルソン川はハドソン湾、セントローレンス川は大西洋側へ向かいます。地図の川名から選ぶと、その川の説明が出ます。';
   if(waterScope)waterScope.textContent=state.only&&state.water?'選択水域だけを表示中です。つながる他の湖・川は「すべての水系へ戻す」で照合できます。線の太さは流量、湖の色は水質ではありません。':'線は川の概略形状、面は湖です。セントローレンス川は公式地名データの範囲の輪郭です。流量・水質・航路・流域境界は示しません。';
   const waterLabels=root.querySelector<SVGElement>('[data-canada-industry-water-labels]');if(waterLabels)waterLabels.style.display=waterGroup?'':'none';
+  root.querySelector<SVGElement>('[data-canada-lake-names]')?.toggleAttribute('hidden',state.view!=='water'||waterState.topic!=='surface'||waterGroup);layoutLakeLabels();
   const riverLabels=root.querySelector<SVGElement>('[data-canada-river-labels]');if(riverLabels)riverLabels.toggleAttribute('hidden',state.view!=='water'||waterState.topic!=='surface'||waterGroup);
   for(const label of root.querySelectorAll<SVGElement>('[data-canada-river-label]'))label.setAttribute('aria-pressed',String(label.getAttribute('data-canada-river-label')===state.water));
   for(const ocean of root.querySelectorAll<SVGElement>('.canada-ocean'))ocean.style.display=waterGroup?'none':'';
@@ -166,7 +170,7 @@ export function initCanadaNature(root:HTMLElement){
  function updateWater(patch:Partial<CanadaWaterState>){waterState={...waterState,...patch};state={...state,view:'water'};history.pushState(null,'',writeCanadaWaterState(writeCanadaNatureState(new URL(location.href),state),waterState));render();}
  waterHost?.addEventListener('canada-water-update',event=>updateWater((event as CustomEvent<Partial<CanadaWaterState>>).detail));
  for(const button of root.querySelectorAll<HTMLElement>('[data-canada-water-family]'))button.addEventListener('click',()=>{const family=button.dataset.canadaWaterFamily!,currentFamily=['precipitation','drainage'].includes(waterState.topic)?waterState.topic:'surface';if(state.view==='water'&&family===currentFamily)return;updateWater({topic:family as CanadaWaterState['topic'],area:null,only:false,frame:null});});
- const select=(city:string)=>update({city});
+ const select=(city:string)=>{if(city!==state.city)update({city});};
  function updateNatural(layer:NaturalLayer,patch:Partial<NaturalLayerState>){naturalStates[layer]={...naturalStates[layer],...patch};history.pushState(null,'',writeCanadaNaturalLayerState(new URL(location.href),layer,naturalStates[layer]));render();}
  for(const layer of naturalLayers){const host=naturalHosts[layer];if(!host)continue;
   host.addEventListener('canada-natural-select',event=>updateNatural(layer,{selected:(event as CustomEvent).detail.id}));

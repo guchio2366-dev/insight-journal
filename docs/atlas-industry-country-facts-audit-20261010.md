@@ -25,3 +25,15 @@ Asia manifestには取得URL・版・応答ハッシュがあるが、元source-
 このローカル環境のChromeはSUID sandboxが未構成であることを既に確認しているため、安全機能を無効化した再実行はしない。修正後のブラウザ画面検証はローカルでは未検証。標準GitHub runner上のsandbox有効レビューでのみ確認し、その結果をPRへ記録する。修正前のsandbox無効画像を修正後の検証証拠として使用しない。
 
 単体・production build・Europe実コントローラE2Eは修正後に実行し、数値追記の撤回・既存本文一致・定義リンク・フランスの範囲注記を確認する。マージ・公開はしない。
+
+## 2026-10-13：Draft #342のスクロール検査の競合
+
+対象head `a8d7d60f000042d805c75a63c4fcc6361c0c9c7b` の[regional industry run 38382955966](https://github.com/guchio2366-dev/insight-journal/actions/runs/38382955966)、job `115247652432` のログを通常のGitHubコネクタで取得した。build、Latin、Russiaのレビューは成功後、既存国レビューの55行で `locator.scrollIntoViewIfNeeded: Element is not attached to the DOM` が発生。「要素が安定するまで待機」中の切断であり、リンクの内容不一致・数量の変化としては失敗していない。`a8d7d60f` の直前との差分は資料記録2ファイルのみだが、それだけを競合と判断する根拠にはしていない。
+
+`atlas-europe-explorer.ts` は最初に `render(true)` を実行してから非同期に地図を起動する。地図の `load` コールバックでも `render(true)` を実行し、`updateReader()` が出典リンクを `replaceChildren()` で再生成する。旧検査は本文の一致だけを待っていたため、最初の描画の時点で進行し、後の地図loadとスクロールが競合できた。固定版Playwright 1.56.1の `Locator.scrollIntoViewIfNeeded()` は内部の `_withElement()` で一度取得したElementHandleに対して安定待機を行うため、この間に外れた旧ノードを自動で現在のリンクへ読み替えない。
+
+修正は `scripts/verify-industry-existing-country-review.mjs` の同期と検証だけに限定する。初回とreloadの両方で実地図の `.is-ready` と既存本文の一致を待ち、現在のリンクをLocatorで取得してからスクロールする。固定sleep、検査スキップ、待機時間・閾値の緩和、例外の無視、簡易地図への切替で通す処理は追加しない。既存の本文・リンク2件・定義URL・分母・フランス範囲・URL復元・横はみ出し・pageerrorの確認を維持する。
+
+1024×768と1440×900のドイツ入口では、ローカルの実MapLibreモジュール応答だけを一時保留する。初期本文とリンクが先に存在し、実地図は未準備であることを検証してから応答を開放し、初期リンクの接続状態と準備完了をログへ残す。実地図はモックへ置き換えない。独英仏伊では準備完了後とreload後に、リンクが通常の操作判定を通ることと、キーボードEnterが期待したhrefを起動することを確認する。外部サイトへの訪問のみclickイベントで抑え、出典の取得を行わない。
+
+この検証により、初期描画・地図load境界でのノード差替えと、準備完了後のリンク操作を分けて評価する。読込中のあらゆるキーボードフォーカス保持まで保証する試験ではない。本番のリンク・数量・DOM生成コードは変更しない。ローカルは構文確認、差分確認、Europe国概要の実コントローラを含む単体20件に成功。sandbox有効の実Chromeでの境界再現と操作結果、最終headの全CI結果はDraft #342本文に対象SHA・runを付けて記録する。

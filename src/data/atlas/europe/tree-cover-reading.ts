@@ -9,6 +9,8 @@ export const europeTreeCoverReading = {
     { label: 'ESA WorldCover：2021年の土地被覆と利用条件', url: 'https://esa-worldcover.org/en/data-access' },
     { label: 'ESA WorldCover：樹木被覆区分の定義（利用者向け資料）', url: 'https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/docs/WorldCover_PUM_V2.0.pdf' },
     { label: 'UPM：カウカスの木材加工拠点', url: 'https://www.upmpulp.com/pulp-production/kaukas/' },
+    { label: 'Metsä Fibre：ラウマのパルプ加工拠点', url: 'https://www.metsagroup.com/metsafibre/about-metsafibre/pulp-production/rauma-pulp-mill/' },
+    { label: 'Port of HaminaKotka：木材製品の輸出港', url: 'https://www.haminakotka.com/services-and-price-list/wood-processing-industry' },
     { label: 'FAOSTAT Forestry：丸太・製材の国別生産量', url: 'https://www.fao.org/faostat/en/#data/FO' },
   ],
   comparisonQuestions: {

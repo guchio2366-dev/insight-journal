@@ -10,7 +10,9 @@ export function layoutCanadaPopulationLabels(root:HTMLElement){
  const placements=[],symbols=[];
  for(const marker of markers){
   const anchor=marker.querySelector<SVGCircleElement>('.population-anchor')!,label=marker.querySelector<SVGTextElement>('[data-population-label]')!,dots=marker.querySelector<SVGElement>('[data-population-category-dots]'),id=marker.dataset.populationMapCma!,x=Number(anchor.getAttribute('cx')),y=Number(anchor.getAttribute('cy')),point=screen(x,y);
-  anchor.style.display=priority.includes(id)||marker.getAttribute('aria-pressed')==='true'?'':'none';anchor.style.r=3/scale+'px';anchor.style.strokeWidth=1/scale+'px';anchor.style.pointerEvents='auto';anchor.style.cursor='pointer';label.style.fontSize=14/scale+'px';label.style.pointerEvents='auto';label.style.cursor='pointer';
+  // The source circle supplies coordinates only. Visible city guides use a line,
+  // so they cannot be mistaken for high-density population pixels.
+  anchor.style.display='none';anchor.style.pointerEvents='none';label.style.fontSize=14/scale+'px';label.style.pointerEvents='auto';label.style.cursor='pointer';
   marker.querySelector('[data-population-label-leader]')?.remove();
   const inFrame=point[0]>=4&&point[0]<frame.width-4&&point[1]>=4&&point[1]<frame.height-4;
   if(dots){
