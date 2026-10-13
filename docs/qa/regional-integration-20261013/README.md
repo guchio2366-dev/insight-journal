@@ -84,7 +84,7 @@ workspace、基点、固定headの全Git treeに`AGENTS.md`／`.agents/skills`�
 |メキシコ|名付き本流・河口／流向・地下水原表の結合、SUA需給・輸出相手・複数年世界比|
 |中南米|全域森林、正確な工場敷地、実流域／地下水、全域の民族宗教実居住域|
 |欧州|7自然全流域・本支流接続、Kaisaniemiの同期間降水、酪農・ブドウ・オリーブ個別面、欧州全域の社会／言語分布|
-|オセアニア／ロシア|全域林業、自然流域・地下水、追加作物／用途別家畜、実施設と供給網、民族宗教。共有林業の外枠不整合は中南米台帳の既存残件として保持|
+|オセアニア／ロシア|**49ebae11の追加ラベルは正値セルとの一致だけでは主要集積の代表性を確定できない。親の受入で指摘され、元担当が追加修正中。親から別途指示されるまで後続headを取り込まない。** 全域林業、自然流域・地下水、追加作物／用途別家畜、実施設と供給網、民族宗教。共有林業の外枠不整合は中南米台帳の既存残件として保持|
 |アフリカ|全域森林・人工林、Ghana16州形状、雨林観測所、主要帯水層、カカオ面、全大陸の宗派／言語居住域|
 |東南アジア|PSA地方境界への対応、民族全住民分布、米相手表・供給／用途。新ジャンル採否は親の判断|
 |南／中央アジア|未確認国の地区別社会原表と分母・対応境界、全域林業。GeoEPR/EPR-EDを住民構成に読み替えない|
@@ -97,3 +97,13 @@ workspace、基点、固定headの全Git treeに`AGENTS.md`／`.agents/skills`�
 ## 二重マージを避ける関係
 
 統合Draftは、上表の固定12headを一括でレビューするための候補。親が将来統合PRを採用するなら、元12PRは同じ固定差分を別途マージする経路として併用しない。元PRの後続headを採用する場合は、この固定一覧との差分を別に確認して統合する必要がある。今回、元PRの状態変更・閉鎖・mainへのマージは行わない。Draft・CI成功は公開承認ではない。
+
+## 統合CIで発見した差と検証の追補
+
+最初の統合Draft [#344](https://github.com/guchio2366-dev/insight-journal/pull/344) のhead `398b9af1`で、ローカルの順次単体1,292成功／3既存skip／0失敗、built E2E612成功／9条件付きskip／0失敗を確定。112ページbuildと`generate-release --commit 398b9af1…`／`verify-release --commit 398b9af1…`成功。9skipには南／中央3ブラウザ試験を含み、[同headのEast PC CI](https://github.com/guchio2366-dev/insight-journal/actions/runs/38397148641)ではそれらをsandbox付きChromeで実行して成功した。
+
+- [Africa初回CI](https://github.com/guchio2366-dev/insight-journal/actions/runs/38397148673)：統合記録コミットが元#337の`Africa-Review-Scope: remaining`を持たず、旧default検査へ進んだ。通常GitHubコネクタでこの新jobのログを取得し、旧検査73行で人口都市expected12／actual13の失敗を確認。元#337は13地点・アブジャを含む受入試験を使用する。元PRと同じトレーラーを最新統合コミットに引き継ぐ。workflow・assertion・閾値・skipの変更は0。旧defaultスクリプトはsandboxを外すコードも持つため、この経路を合格証拠に使わず、元PRの`chromiumSandbox:true`試験を使う。
+- [Oceania/Russia初回CI](https://github.com/guchio2366-dev/insight-journal/actions/runs/38397149015)：通常sandbox Chromeの追加気候都市検査で、1440×900のDarwin右欄がtop299／bottom977となり画面下へ77pxはみ出した。統合全差分で気候都市検査が追加起動し、#336単独の既存検査が通るだけではこの経路の適合は確認できなかった。新タブ位置より前の固定210/220px差引を使っていたため、選択中の右欄だけ実際の上端から画面下14pxまでの高さへ更新し、内部スクロールを維持する。resize、復元、解除を確認する単体1件を追加し、元のChrome矩形判定は緩めない。地図枠・投影・ラベル・原値を変えない。
+- [Japan初回CI](https://github.com/guchio2366-dev/insight-journal/actions/runs/38397148850)：公開済み`a07ab727`の基準撮影中に503と30秒待機期限。統合版の撮影前に停止した。通常コネクタが取得した**この新job**の標準ログには、既存`export-japan-review.mjs`による4ファイルの圧縮出力があり、既存拒否ZIPを要求せずそこに含まれるJSONを照合した。gzip SHA256 `fc14ad60a13d54588c03f1ef00e11dce1a9680c0895d7e490a9d2602ca2d03f2`。公開基点のrelease一致、農業・自然・東京選択の3枚生成、東京のカメラ／再読込成功、pageerror0、503とTimeoutを確認。これらを統合版の操作成功／画像目視と扱わない。新headの通常CIで再確認する。
+
+上記補修は統合検証に必要な既存表示の適合と受入経路の保存のみ。#336の集積代表性不足の修正は含まない。新headと各CI・画像／目視の最終状態はDraft本文へ記録する。

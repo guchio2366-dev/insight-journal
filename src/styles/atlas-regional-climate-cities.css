@@ -2,6 +2,12 @@
 [data-regional-climate-reading][hidden]{display:none!important}
 [data-climate-city-selected=true]>:not([data-regional-climate-reading]):not(template){display:none!important}
 [data-climate-city-selected=true]{height:calc(100dvh - 210px)}
+@media(min-width:900px){
+ .atlas-desktop-shell .oceania-learning[data-field=nature] .oceania-learning-reading[data-climate-city-selected=true]{height:var(--regional-climate-pane-height);max-height:var(--regional-climate-pane-height);min-height:0}
+}
+@media(min-width:960px){
+ .russia-workspace .russia-learning[data-field=nature] .russia-learning-reading[data-climate-city-selected=true]{height:var(--regional-climate-pane-height);max-height:var(--regional-climate-pane-height);min-height:0}
+}
 .regional-climate-reading{display:flex;flex:1;flex-direction:column;min-height:0;max-height:100%;padding:12px 14px;gap:8px;box-sizing:border-box}
 .regional-climate-heading h2{font:600 18px/1.45 var(--sans);margin:0 0 5px;overflow-wrap:anywhere}
 .regional-climate-heading button{font:12px var(--sans);padding:5px 8px;min-height:30px;border:1px solid #8a9c9c;background:#fffdf5;color:#294752;cursor:pointer}
