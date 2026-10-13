@@ -1,0 +1,129 @@
+region,group,count
+Western,catholic,227687
+Central,catholic,215851
+Greater Accra,catholic,310769
+Volta,catholic,189013
+Eastern,catholic,156777
+Ashanti,catholic,522586
+Western North,catholic,124540
+Ahafo,catholic,71110
+Bono,catholic,238843
+Bono East,catholic,170072
+Oti,catholic,94920
+Northern,catholic,115186
+Savannah,catholic,69636
+North East,catholic,28226
+Upper East,catholic,232774
+Upper West,catholic,303854
+Western,protestant,434496
+Central,protestant,560242
+Greater Accra,protestant,1033081
+Volta,protestant,321711
+Eastern,protestant,700978
+Ashanti,protestant,1192037
+Western North,protestant,184103
+Ahafo,protestant,104804
+Bono,protestant,271211
+Bono East,protestant,192130
+Oti,protestant,85535
+Northern,protestant,77916
+Savannah,protestant,27447
+North East,protestant,44426
+Upper East,protestant,108365
+Upper West,protestant,25838
+Western,pentecostal-charismatic,717294
+Central,pentecostal-charismatic,1057847
+Greater Accra,pentecostal-charismatic,2569981
+Volta,pentecostal-charismatic,606714
+Eastern,pentecostal-charismatic,1186714
+Ashanti,pentecostal-charismatic,1723369
+Western North,pentecostal-charismatic,277120
+Ahafo,pentecostal-charismatic,175838
+Bono,pentecostal-charismatic,355740
+Bono East,pentecostal-charismatic,263631
+Oti,pentecostal-charismatic,217213
+Northern,pentecostal-charismatic,132547
+Savannah,pentecostal-charismatic,54791
+North East,pentecostal-charismatic,94714
+Upper East,pentecostal-charismatic,211813
+Upper West,pentecostal-charismatic,58025
+Western,other-christian,326435
+Central,other-christian,565824
+Greater Accra,other-christian,673684
+Volta,other-christian,184174
+Eastern,other-christian,467954
+Ashanti,other-christian,800935
+Western North,other-christian,110184
+Ahafo,other-christian,70720
+Bono,other-christian,114478
+Bono East,other-christian,126459
+Oti,other-christian,76931
+Northern,other-christian,93567
+Savannah,other-christian,31724
+North East,other-christian,35515
+Upper East,other-christian,88926
+Upper West,other-christian,25683
+Western,islam,193794
+Central,islam,259902
+Greater Accra,islam,631591
+Volta,islam,77136
+Eastern,islam,194838
+Ashanti,islam,866117
+Western North,islam,105226
+Ahafo,islam,93153
+Bono,islam,154145
+Bono East,islam,289268
+Oti,islam,97928
+Northern,islam,1532977
+Savannah,islam,418352
+North East,islam,402352
+Upper East,islam,385020
+Upper West,islam,406731
+Western,traditionalist,6591
+Central,traditionalist,8570
+Greater Accra,traditionalist,14767
+Volta,traditionalist,160439
+Eastern,traditionalist,16064
+Ashanti,traditionalist,22270
+Western North,traditionalist,3074
+Ahafo,traditionalist,1706
+Bono,traditionalist,7707
+Bono East,traditionalist,45530
+Oti,traditionalist,94711
+Northern,traditionalist,265766
+Savannah,traditionalist,28861
+North East,traditionalist,39975
+Upper East,traditionalist,227626
+Upper West,traditionalist,55662
+Western,other-religion,129112
+Central,other-religion,147009
+Greater Accra,other-religion,152511
+Volta,other-religion,99502
+Eastern,other-religion,154527
+Ashanti,other-religion,251678
+Western North,other-religion,56866
+Ahafo,other-religion,29020
+Bono,other-religion,48732
+Bono East,other-religion,89927
+Oti,other-religion,66212
+Northern,other-religion,80636
+Savannah,other-religion,17403
+North East,other-religion,10481
+Upper East,other-religion,31034
+Upper West,other-religion,19399
+Western,no-religion,19454
+Central,no-religion,38090
+Greater Accra,no-religion,50700
+Volta,no-religion,15961
+Eastern,no-religion,40771
+Ashanti,no-religion,49189
+Western North,no-religion,17742
+Ahafo,no-religion,17292
+Bono,no-religion,14606
+Bono East,no-religion,22769
+Oti,no-religion,11033
+Northern,no-religion,8213
+Savannah,no-religion,4358
+North East,no-religion,2144
+Upper East,no-religion,12621
+Upper West,no-religion,3778

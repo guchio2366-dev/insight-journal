@@ -23,6 +23,31 @@ async function withAfricaPage(url,run){
 }
 const change=(w,node,value)=>{node.value=value;node.dispatchEvent(new w.Event('change',{bubbles:true}));};
 
+test('individual language selection retains every source point and camera through clicks, keyboard, URL and history',async()=>{
+ let saved;
+ await withAfricaPage('https://example.com/atlas/africa/?field=population&topic=language&unknown=keep',async(w,q,settle)=>{
+  const records=JSON.parse(readFileSync(new URL('../../public/assets/atlas/africa-culture-v2/language-points.json',import.meta.url))).points;
+  const choices=records.filter(row=>/Swahili|Zulu/.test(row.name)).slice(0,2);assert.equal(choices.length,2);
+  const positions=()=>[...q('[data-africa-actual-layer]').querySelectorAll('[data-africa-language-point]')].map(n=>[n.dataset.africaLanguagePoint,n.getAttribute('cx'),n.getAttribute('cy'),n.getAttribute('r')]);
+  const before=positions(),camera=q('.africa-map').getAttribute('viewBox');assert.equal(q('[data-africa-language-record]').options.length,2223);
+  change(w,q('[data-africa-language-record]'),choices[0].id);assert.equal(q('[data-africa-language-reading]').dataset.africaLanguageReading,choices[0].id);assert.deepEqual(positions(),before);assert.equal(q('.africa-map').getAttribute('viewBox'),camera);assert.equal(new URL(w.location.href).searchParams.get('layerClass'),'language:'+choices[0].id);
+  q(`[data-africa-language-point="${choices[1].id}"]`).dispatchEvent(new w.MouseEvent('click',{bubbles:true}));assert.equal(q('[data-africa-language-reading]').dataset.africaLanguageReading,choices[1].id);assert.deepEqual(positions(),before);assert.equal(q(`[data-africa-language-point="${choices[1].id}"]`).getAttribute('aria-pressed'),'true');saved=w.location.href;
+  q(`[data-africa-language-point="${choices[0].id}"]`).dispatchEvent(new w.KeyboardEvent('keydown',{key:' ',bubbles:true}));assert.equal(q('[data-africa-language-reading]').dataset.africaLanguageReading,choices[0].id);w.history.back();await settle();assert.equal(q('[data-africa-language-reading]').dataset.africaLanguageReading,choices[1].id);assert.equal(new URL(w.location.href).searchParams.get('unknown'),'keep');
+  const table=q('[data-africa-culture-evidence] table');assert.equal(table.querySelectorAll('tbody tr').length,17);assert.equal(table.querySelectorAll('thead th').length,10);assert(q('[data-africa-culture-evidence]').textContent.includes('1歳未満を除く'));
+  q('[data-field="nature"]').click();await settle();assert.equal(q('[data-africa-culture-evidence]').hidden,true);assert(!new URL(w.location.href).searchParams.has('layerClass'));
+ });
+ await withAfricaPage(saved,(_w,q)=>assert(q('[data-africa-language-reading]')));
+});
+
+test('Ghana denomination table supplements the original Pew map and keeps all source counts separate from shapes',async()=>{
+ await withAfricaPage('https://example.com/atlas/africa/?field=population&topic=religion',(w,q)=>{
+  assert.equal(w.document.querySelectorAll('[data-africa-religion-country]:not([data-africa-religion-mixed])').length,55);
+  assert.equal(w.document.querySelectorAll('[data-africa-religion-region]').length,0);assert.equal(q('[data-africa-culture-evidence]').querySelectorAll('[data-africa-religion-evidence-group]').length,8);
+  const table=q('[data-africa-culture-evidence] table');assert.equal(table.querySelectorAll('tbody tr').length,16);assert.equal(table.querySelectorAll('thead th').length,9);assert.match(q('[data-africa-culture-evidence]').textContent,/30,753,327/);assert.match(q('[data-theme-source]').href,/pewresearch/);
+  q('[data-africa-topic="ethnicity"]').click();assert.equal(q('[data-africa-culture-evidence]').hidden,true);assert.equal(q('[data-africa-atlas]').dataset.layerMode,'guide');assert.equal(w.document.querySelectorAll('[data-africa-ethnicity-composition-group]').length,144);
+ });
+});
+
 test('three industry sectors keep all sector points, fixed labels, right-only filtering and history',async()=>{
  await withAfricaPage('https://example.com/insight-journal/atlas/africa/?field=industry&place=EGY&compare=GHA&year=2023&unknown=preserve',(w,q)=>{
   const marks=()=>[...q('[data-theme-marks]').querySelectorAll('[data-africa-industry-location]')];

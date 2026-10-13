@@ -6,14 +6,14 @@ import {africaRiverForFeature,africaRiverSelectedColor} from '../data/atlas/afri
 import neighbours from '../data/atlas/africa-neighbours.json' with {type:'json'};
 import {africaClimateCities} from '../data/atlas/africa-climate-cities.ts';
 import {africaReligionRows,africaReligionGroups,africaReligionOverview} from '../data/atlas/africa-religion-overview.ts';
-import {africaLanguageAsset,africaLanguageFamilies,africaLanguageOverview} from '../data/atlas/africa-language-overview.ts';
+import {africaLanguageAsset,africaLanguageFamilies,africaLanguageOverview,type AfricaLanguagePoint} from '../data/atlas/africa-language-overview.ts';
 import {africaEthnicityEvidence} from '../data/atlas/africa-ethnicity-evidence.ts';
 import {africaTerrainLabels,africaRiverLabels,africaSeaLabels,africaCurrentLabels,africaWindLabels,africaTerrainRanges} from '../data/atlas/africa-natural-labels.ts';
 
 type Row=Record<string,any>;
 type Feature={type:string;id?:string;geometry:Row;properties:Row};
 export type AfricaLayerKey={id:string;label:string;color:string;code?:string;description?:string};
-export type AfricaLayerView={key:string;ready:boolean;loading:boolean;error:string;title:string;period:string;unit:string;scope:string;method:string;sourceUrl:string;sourceLabel:string;legend:AfricaLayerKey[];takeaway:string;description:string;guide?:boolean;selectedVisible?:boolean;visibleLayers?:{key:string;title:string;unit:string;color:string;ready:boolean;loading:boolean;error:string;period:string;sourceUrl:string;sourceLabel:string}[]};
+export type AfricaLayerView={key:string;ready:boolean;loading:boolean;error:string;title:string;period:string;unit:string;scope:string;method:string;sourceUrl:string;sourceLabel:string;legend:AfricaLayerKey[];takeaway:string;description:string;guide?:boolean;languagePoints?:AfricaLanguagePoint[];selectedVisible?:boolean;visibleLayers?:{key:string;title:string;unit:string;color:string;ready:boolean;loading:boolean;error:string;period:string;sourceUrl:string;sourceLabel:string}[]};
 type Loaded={value?:any;error?:string;promise?:Promise<void>};
 const SVG='http://www.w3.org/2000/svg';
 export const africaClimateClassAnchors=[{coordinates:[10,24],id:4,label:'BWh'},{coordinates:[20,0],id:1,label:'Af'},{coordinates:[23,-9],id:3,label:'Aw'},{coordinates:[38,12],id:12,label:'Cwb'},{coordinates:[19,-33],id:8,label:'Csa'}] as const;
@@ -222,17 +222,22 @@ export function createAfricaLayerRenderer(root:HTMLElement,onReady:()=>void,fetc
   const key=africaActualLayerKey(state),config=setup(key);currentKey=key;
   if(key==='religion'||key==='language'){
    const religion=key==='religion',overview=religion?africaReligionOverview:africaLanguageOverview,language=religion?null:request(withBase(africaLanguageAsset));
-   const legend=(religion?africaReligionGroups:africaLanguageFamilies).map(item=>({...item}));
+   const languagePoints:AfricaLanguagePoint[]=language?.value?.points??[],selectedLanguage=languagePoints.find(point=>'language:'+point.id===state.layerClass);
+   const legend:AfricaLayerKey[]=(religion?africaReligionGroups:africaLanguageFamilies).map(item=>({...item}));
+   if(selectedLanguage)legend.push({id:'language:'+selectedLanguage.id,label:selectedLanguage.name,color:africaLanguageFamilies.find(row=>row.id===selectedLanguage.family)?.color??'#899590',description:'言語資料の記録位置。話者面や人数ではありません。'});
    const paint=[key,state.place,state.layerClass,language?.value?'loaded':'',group.ownerSVGElement?.getAttribute('viewBox'),group.ownerSVGElement?.getBoundingClientRect().width].join('|');
    if(paint!==lastPaint){group.replaceChildren();lastPaint=paint;
     const box=group.ownerSVGElement?.getBoundingClientRect(),viewport=(group.ownerSVGElement?.getAttribute('viewBox')??`0 0 ${africaWidth} ${africaHeight}`).split(/[ ,]+/).map(Number),scale=Math.max(viewport[2]/(box?.width||700),viewport[3]/(box?.height||580));
     if(religion){
      if(!group.ownerSVGElement?.querySelector('#africa-religion-mixed')){const pattern=svg('pattern',{id:'africa-religion-mixed',width:8,height:8,patternUnits:'userSpaceOnUse'});pattern.append(svg('path',{d:'M0 8L8 0',stroke:'#fffdf8','stroke-width':2}));group.ownerSVGElement?.querySelector('defs')?.append(pattern);}
      for(const original of root.querySelectorAll<SVGPathElement>('[data-country-path]')){const row=africaReligionRows.find(item=>item.countryCode===original.dataset.countryPath);if(!row)continue;const attrs={d:original.getAttribute('d')??'',fill:africaReligionGroups.find(item=>item.id===row.primary)!.color,'fill-opacity':.76,'fill-rule':'evenodd','data-africa-religion-country':row.countryCode,'pointer-events':'none'};group.append(svg('path',attrs));if(row.mixed)group.append(svg('path',{...attrs,fill:'url(#africa-religion-mixed)','data-africa-religion-mixed':row.countryCode}));}
-    }else for(const point of language?.value?.points??[]){const category=africaLanguageFamilies.find(item=>item.id===point.family)??africaLanguageFamilies.find(item=>item.id==='other')!,[cx,cy]=projectAfrica(point.coordinates);if(cx<viewport[0]||cy<viewport[1]||cx>viewport[0]+viewport[2]||cy>viewport[1]+viewport[3])continue;const node=svg('circle',{cx,cy,r:2.3*scale,fill:category.color,opacity:state.layerClass&&state.layerClass!==category.id?.25:.8,'data-africa-language-point':point.id,'pointer-events':'none'}),title=svg('title',{});title.textContent=`${point.name} · ${point.family}（言語資料の記録位置）`;node.append(title);group.append(node);}
+    }else {
+     for(const point of languagePoints){const category=africaLanguageFamilies.find(item=>item.id===point.family)??africaLanguageFamilies.find(item=>item.id==='other')!,[cx,cy]=projectAfrica(point.coordinates);if(cx<viewport[0]||cy<viewport[1]||cx>viewport[0]+viewport[2]||cy>viewport[1]+viewport[3])continue;const selected=selectedLanguage?.id===point.id,node=svg('circle',{cx,cy,r:2.3*scale,fill:category.color,opacity:state.layerClass&&!selected&&state.layerClass!==category.id?.25:.8,'data-africa-language-point':point.id,'pointer-events':'all',role:'button',tabindex:selected?0:-1,'aria-label':`${point.name}・${point.family}の言語資料を読む`,'aria-pressed':String(selected)}),title=svg('title',{});title.textContent=`${point.name} · ${point.family}（言語資料の記録位置）`;node.append(title);group.append(node);}
+     if(selectedLanguage){const [x,y]=projectAfrica(selectedLanguage.coordinates);group.append(svg('circle',{cx:x,cy:y,r:8*scale,fill:'none',stroke:'#365b72','stroke-width':2,'vector-effect':'non-scaling-stroke','pointer-events':'none','data-africa-language-selected':selectedLanguage.id}));const name=svg('text',{x:Math.min(viewport[0]+viewport[2]-180*scale,Math.max(viewport[0]+4*scale,x+11*scale)),y:Math.max(viewport[1]+18*scale,Math.min(viewport[1]+viewport[3]-8*scale,y-10*scale)),'font-size':13*scale,'font-weight':700,fill:'#365b72',stroke:'#fffdf8','stroke-width':3*scale,'paint-order':'stroke','pointer-events':'none','data-africa-language-selected-name':selectedLanguage.id});name.textContent=selectedLanguage.name;group.append(name);const width=typeof name.getBBox==='function'?name.getBBox().width:selectedLanguage.name.length*13*scale;name.setAttribute('x',String(Math.max(viewport[0]+4*scale,Math.min(viewport[0]+viewport[2]-width-4*scale,x+11*scale))));}
+    }
     paintBorders(state,group);
    }
-   return {key,ready:religion||!!language?.value,loading:!!language?.promise,error:language?.error??'',title:overview.title,period:religion?'2020年（2025公表）':'Glottolog 5.3（2026）',unit:religion?'国別構成':'言語の記録位置',scope:overview.scope,method:overview.attribution,sourceUrl:overview.source.url,sourceLabel:overview.source.label,legend,takeaway:overview.reading,description:overview.reading};
+   return {key,languagePoints:religion?undefined:languagePoints,ready:religion||!!language?.value,loading:!!language?.promise,error:language?.error??'',title:overview.title,period:religion?'2020年（2025公表）':'Glottolog 5.3（2026）',unit:religion?'国別構成':'言語の記録位置',scope:overview.scope,method:overview.attribution,sourceUrl:overview.source.url,sourceLabel:overview.source.label,legend,takeaway:overview.reading,description:overview.reading};
   }
   const outlineSelection=['climate','terrain','elevation','distribution','water-rain'].includes(key);
   if(key==='ethnicity'){
