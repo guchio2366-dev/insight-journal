@@ -2,17 +2,17 @@ import {groundwaterClasses} from './asia-water.ts';
 import {japanClimateCities} from './japan-climate-cities.ts';
 import records from './japan-nature-v2-records.json' with {type:'json'};
 
-export type JapanNatureTopic = 'stations' | 'climate' | 'precipitation' | 'water' | 'groundwater' | 'elevation';
+export type JapanNatureTopic = 'stations' | 'climate' | 'precipitation' | 'water' | 'groundwater' | 'basins' | 'terrain' | 'elevation';
 export type JapanNatureReading = {title:string;overview:string;reason:string;gap:string;source?:string};
 export const japanNatureAssetBase='/assets/atlas/japan-nature-v2/';
 export const japanNatureCities=japanClimateCities;
 export const japanNatureTopics: {id:JapanNatureTopic;label:string}[]=[
- {id:'climate',label:'気候'}, {id:'precipitation',label:'年降水量'},
- {id:'water',label:'河川・集水域'}, {id:'groundwater',label:'地下水'}, {id:'elevation',label:'地形・標高'},
+ {id:'climate',label:'気候区分'}, {id:'water',label:'河川・地下水'}, {id:'precipitation',label:'年降水量'}, {id:'basins',label:'流域（既存資料）'}, {id:'terrain',label:'地形'}, {id:'elevation',label:'標高'},
 ];
 export const japanNatureFeatureIds={
  climate:['hokkaido','japan-sea','pacific','central-highlands','seto-inland','southwest-islands'].map(id=>'climate-region-'+id),
- water:[...records.basins.map(record=>record.id),...records.rivers.map(record=>record.id)],
+ water:[...records.groundwater.map(record=>record.id),...records.rivers.map(record=>record.id)],
+ basins:[...records.basins.map(record=>record.id),...records.rivers.map(record=>record.id)],
  groundwater:records.groundwater.map(record=>record.id),
 };
 export const riverLabels=records.rivers.map(river=>({id:river.id,name:river.name,coordinates:river.point as [number,number],source:river.sourceUrl}));
@@ -33,7 +33,9 @@ const readings:Record<JapanNatureTopic,JapanNatureReading>={
  stations:{title:'観測所の季節変化を読む',overview:'札幌・東京・那覇・金沢・松本・高松の位置と、1991–2020年の月平均気温・降水量を示します。選択しても地図範囲は動かず、都市の観測所の平年値を比較できます。',reason:'緯度差・標高・季節風と海の影響が観測値の季節変化に関わります。観測所1点の値は都市全域や県全体の平均ではありません。',gap:'6観測所を収録。地点平年値は都市全域・県全体の平均ではなく、山地の気候も1点では代表しません。',source:'https://www.data.jma.go.jp/stats/etrn/'},
  precipitation:{title:'年降水量の広がりを読む',overview:'太平洋に面する山地や南西諸島では、内陸や瀬戸内の一部より年降水量の多い場所が見られます。段階色と250mm間隔の線は、GPCCの1991–2020年の月別平年値12か月の合計から作っています。',reason:'湿った空気が山地を上昇すると冷えて雨を降らせ、風下では少なくなることがあります。季節風・梅雨前線・台風が年間の分布を重ねて作ります。年合計だけでは雨の季節、雪の割合、河川流量や利用可能な水量を決められません。',gap:'原格子は0.25°（約20–28km）で、線の250mm間隔は測定精度を意味しません。平滑化・細部の補充なし。原欠測の海岸・小島は基図色のままです。',source:'https://doi.org/10.5676/DWD_GPCC/CLIMAT_V2025_025'},
  elevation:{title:'山地と低地の位置を読む',overview:'日本列島の内陸には山地が連なり、平野や海岸の低地と対照をなします。500m間隔の等高線と段階色はETOPO2022の原60秒格子から作り、基図と同じ海岸線で切り取っています。',reason:'プレートの運動や火山活動は山地の形成に関わり、風化・河川の侵食と堆積は谷や平野を作ります。低地は居住・農業・交通の場所と結び付き、山地は気候と水の流れを分けます。',gap:'原資料は約1–2km格子の広域地形モデルで、土地の現地測量ではありません。海岸セルに海底の影響による負の標高を含む場合があり、数値を改変せず最低色に含めています。標高はEGM2008基準、2022は版年です。',source:'https://www.ncei.noaa.gov/products/etopo-global-relief-model'},
- water:{title:'河川と集水域を分けて読む',overview:'山地の両側に水が流れ、海へ向かう集水域が並びます。色はBasinATLASの集水域資料、線と川名はNatural Earthの石狩川・利根川・最上川の収録区間です。沿岸の小流域群は一つの大河川の流域ではありません。',reason:'分水界は雨や雪解け水が向かう方向を分けます。流域の地形・降水、ダムや用水、土地利用が下流の水利用に関わります。資料の集水域面積だけで洪水危険度や年間利用可能量を確定できません。',gap:'一般化された世界資料です。川名のある線は3河川のみで、全国の国内河川網・湖沼は未整備。国交省W05原資料が取得不可のため、流域と河川を補って創作しません。',source:'https://www.hydrosheds.org/hydroatlas'},
+ basins:{title:'河川と集水域を分けて読む',overview:'山地の両側に水が流れ、海へ向かう集水域が並びます。色はBasinATLASの集水域資料、線と川名はNatural Earthの石狩川・利根川・最上川の収録区間です。沿岸の小流域群は一つの大河川の流域ではありません。',reason:'分水界は雨や雪解け水が向かう方向を分けます。流域の地形・降水、ダムや用水、土地利用が下流の水利用に関わります。資料の集水域面積だけで洪水危険度や年間利用可能量を確定できません。',gap:'一般化された世界資料です。川名のある線は3河川のみで、全国の国内河川網・湖沼は未整備。国交省W05原資料が取得不可のため、流域と河川を補って創作しません。',source:'https://www.hydrosheds.org/hydroatlas'},
+ water:{title:'河川・地下水の分布を読む',overview:'青い線と川名は、原資料にある石狩川・利根川・最上川の収録区間です。背景の色はWHYMAPの広域地下水分類で、井戸や地下水量の測量ではありません。',reason:'地形の起伏は地表の水が流れる方向に関わり、岩石・地層の空隙と透水性は地下水の蓄積や移動に関わります。河川の線と地下水の分類は異なる資料・現象です。',gap:'国内主要河道の西日本などは未収録です。河川の原線と名称・接続を確認できない地域に推測した線を足していません。WHYMAPは2008年・1:25,000,000の広域分類で、年間利用可能量・総貯留量・現在の枯渇は表しません。',source:'https://www.whymap.org/'},
+ terrain:{title:'地形の起伏と地形名を読む',overview:'ETOPO2022の標高モデルから作った起伏の陰影に、山脈・平野・盆地の参照名を重ねます。地形の高低と、人口・農業や河川の位置を結び付けて読む背景です。',reason:'山地の形成にはプレートの運動や火山活動が関わり、侵食・堆積が谷や平野を形作ります。陰影は仮想光源による表示で、実際の写真や地質分類ではありません。',gap:'元資料は60秒（約1–2km）の広域標高モデルです。名称は概略位置の参照で、地形区分の境界や井戸・農地の範囲を示しません。',source:'https://www.ncei.noaa.gov/products/etopo-global-relief-model'},
  groundwater:{title:'帯水層の大まかな地域差を読む',overview:'広域の地下水盆地、局地的・浅い帯水層、複雑な帯水層構造をWHYMAPの地域分類で示します。色は地質・帯水層の区分で、各地点でくみ上げられる水量ではありません。',reason:'雨が地中へ浸透し、岩石や地層のすき間を通って移動します。地形・地質、かん養と取水のつり合いが地下水利用を左右します。河川の水と地下水は関わりますが、同じ資料・同じ量ではありません。',gap:'WHYMAP2008・1:25,000,000の広域資料。国内の細かな地質・取水量・水質・現在の枯渇は未収録で、世界資料の空隙は残します。',source:'https://www.whymap.org/'},
 };
 export function getJapanNatureReading(topic:JapanNatureTopic|string,featureId?:string|null):JapanNatureReading{
@@ -42,13 +44,13 @@ export function getJapanNatureReading(topic:JapanNatureTopic|string,featureId?:s
   const region=japanClimateRegions.find(region=>'climate-region-'+region.id===featureId);
   if(region)return {...base,title:region.name+'の季節と地形',overview:`${region.representative}を位置の目安に${region.name}の気候を考えます。これは国内の地理的説明で、地図のKöppen–Geiger区分と同一の面分類ではありません。${japanNatureCities.some(city=>city.name===region.representative)?'この代表都市の観測所平年値を別に選んで比較できます。':'この代表都市の月別平年値は未収録のため雨温図を作りません。'}`,reason:region.reason,source:'https://www.jma.go.jp/jma/kishou/know/kisetsu_riyou/tenkou/Average_Climate_Japan.html'};
  }
- if(topic==='water'&&featureId){
+ if(['water','basins'].includes(topic)&&featureId){
   const river=records.rivers.find(record=>record.id===featureId);
-  if(river)return {...base,title:river.name,overview:`地図の線は${river.name}のNatural Earth収録区間です。線の太さは実際の川幅や流量を表しません。`,reason:'山地から低地・海へ向かう水の通り道です。河川とその周囲の色で示す集水域は別の資料なので、名前だけで同一の流域と決めません。',source:river.sourceUrl};
-  const basin=records.basins.find(record=>record.id===featureId);
+  if(river)return {...base,title:river.name,overview:`地図の線は${river.name}のNatural Earth収録区間です。線の太さは実際の川幅や流量を表しません。`,reason:topic==='basins'?'河川とその周囲の色で示す集水域は別の資料なので、名前だけで同一の流域と決めません。':'河川の線と、背景の広域地下水分類は異なる資料・現象です。川名から帯水層の範囲や水量を推定しません。',source:river.sourceUrl};
+  const basin=topic==='basins'?records.basins.find(record=>record.id===featureId):undefined;
   if(basin)return {...base,title:basin.name,overview:`BasinATLAS集水域資料の面積は${basin.areaKm2.toLocaleString('ja-JP')}km²です。${basin.coastal?'複数の沿岸小流域をまとめた群で、単独の大河川の流域ではありません。':'面積は資料で定義された連結集水域で、行政区の面積ではありません。'}`,reason:'降水と雪解け水が地形に沿って移動する範囲です。資料の輪郭は一般化されているため、国内の水系境界の精密な判定には使えません。'};
  }
- if(topic==='groundwater'&&featureId){
+ if(['groundwater','water'].includes(topic)&&featureId){
   const aquifer=records.groundwater.find(record=>record.id===featureId);
   if(aquifer){const category=groundwaterClasses[aquifer.class];return {...base,title:category?.type??'広域の帯水層区分',overview:`原資料の帯水層分類は「${category?.type??aquifer.aquifer}」、かん養区分は${category?.recharge??aquifer.recharge}mm/年です。この範囲の貯水量や安全な取水量を示す値ではありません。`,reason:'岩石や地層の空隙と透水性が地下水の蓄積・移動に関わります。地域分類から個々の井戸の条件は決められません。'};}
  }
