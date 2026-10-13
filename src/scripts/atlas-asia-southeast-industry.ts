@@ -1,4 +1,4 @@
-import {southeastIndustryKinds,southeastIndustrySites,type SoutheastIndustryKind} from '../data/atlas/asia/southeast-asia-industry-sites';
+import {southeastIndustryKinds,southeastIndustrySectors,southeastIndustrySites,southeastSiteSectors,type SoutheastIndustryKind,type SoutheastIndustrySector} from '../data/atlas/asia/southeast-asia-industry-sites';
 import type {AsiaState} from '../lib/atlas-asia-state';
 
 /** Sourced regional examples. Country GDP share and trade layers use their own data. */
@@ -6,17 +6,19 @@ export function createSoutheastIndustryLocations(root:HTMLElement,getState:()=>A
  const overlay=root.querySelector<HTMLElement>('[data-southeast-industry-map]');
  if(!overlay)return {show(_map:import('maplibre-gl').Map|null){},render(){}};
  const categories=[...root.querySelectorAll<HTMLButtonElement>('[data-southeast-industry-kind]')];
+ const sectors=[...root.querySelectorAll<HTMLButtonElement>('[data-southeast-industry-sector]')];
  const list=[...root.querySelectorAll<HTMLButtonElement>('[data-southeast-industry-site]')];
  const summary=root.querySelector<HTMLElement>('[data-southeast-industry-summary]')!;
  const selected=root.querySelector<HTMLElement>('[data-southeast-industry-selected]')!;
- const requestedKind=new URL(location.href).searchParams.get('industryKind');
- let kind:'all'|SoutheastIndustryKind=southeastIndustryKinds.some(group=>group.id===requestedKind)?requestedKind as SoutheastIndustryKind:'all',selectedId:string|null=null,map:import('maplibre-gl').Map|null=null;
- const saveKind=()=>{const url=new URL(location.href);if(kind==='all')url.searchParams.delete('industryKind');else url.searchParams.set('industryKind',kind);history.replaceState(history.state,'',url);};
+ const requestedKind=new URL(location.href).searchParams.get('industryKind'),requestedSector=new URL(location.href).searchParams.get('industrySector');
+ let kind:'all'|SoutheastIndustryKind=southeastIndustryKinds.some(group=>group.id===requestedKind)?requestedKind as SoutheastIndustryKind:'all',sector:'all'|SoutheastIndustrySector=southeastIndustrySectors.some(group=>group.id===requestedSector)?requestedSector as SoutheastIndustrySector:'all',selectedId:string|null=null,map:import('maplibre-gl').Map|null=null;
+ const saveKind=()=>{const url=new URL(location.href);if(kind==='all')url.searchParams.delete('industryKind');else url.searchParams.set('industryKind',kind);if(sector==='all')url.searchParams.delete('industrySector');else url.searchParams.set('industrySector',sector);history.replaceState(history.state,'',url);};
  const points=new Map<string,HTMLButtonElement>();
  const labels=new Map<string,HTMLElement>();
  const leaders=document.createElementNS('http://www.w3.org/2000/svg','svg');leaders.classList.add('southeast-industry-leaders');leaders.setAttribute('aria-hidden','true');overlay.append(leaders);
  const legend=document.createElement('div');legend.className='southeast-industry-map-legend';legend.dataset.southeastIndustryLegend='';legend.textContent='● 工場・港・都市　◆ 原料地域の代表位置 ／ 青=製造、橙=資源、緑=港、紫=サービス';overlay.append(legend);
- const family=(site:typeof southeastIndustrySites[number])=>site.kind==='rubber'||site.kind==='wood'||site.kind==='metals'||site.kind==='energy'?'resource':site.kind==='tourism'||site.kind==='finance'||site.kind==='it-bpm'?'service':site.kind==='logistics'?'network':'factory';
+ const family=(site:typeof southeastIndustrySites[number])=>site.stage==='raw'||site.kind==='metals'||site.kind==='energy'?'resource':site.kind==='tourism'||site.kind==='finance'||site.kind==='it-bpm'?'service':site.kind==='logistics'?'network':'factory';
+ const inSector=(site:typeof southeastIndustrySites[number])=>sector==='all'||southeastSiteSectors(site).includes(sector);
  const overviewSites=new Map<SoutheastIndustryKind,string>([
   ['electronics','bacninh'],['automotive','java-auto'],['textiles','phnom-textile'],['food','kiengiang-food'],
   ['metals','sulawesi-nickel'],['energy','kalimantan-coal'],['petrochemicals','maptaphut-petro'],
@@ -33,7 +35,7 @@ export function createSoutheastIndustryLocations(root:HTMLElement,getState:()=>A
   const locations=southeastIndustrySites.map(site=>({site,p:map!.project(site.point)}));
   for(const {site,p} of locations){const point=points.get(site.id)!;point.style.left=p.x+'px';point.style.top=p.y+'px';point.hidden=p.x<8||p.x>width-8||p.y<8||p.y>height-8;labels.get(site.id)!.hidden=true;}
   // In the overview, one callout per group keeps all distribution dots visible without 30 labels.
-  const visible=kind==='all'?southeastIndustryKinds.slice(1).map(group=>locations.find(x=>x.site.id===overviewSites.get(group.id as SoutheastIndustryKind))!).filter(x=>x&&!points.get(x.site.id)!.hidden):locations.filter(x=>x.site.kind===kind&&!points.get(x.site.id)!.hidden);
+  const visible=kind==='all'?southeastIndustryKinds.slice(1).map(group=>locations.find(x=>x.site.id===overviewSites.get(group.id as SoutheastIndustryKind)&&inSector(x.site))??locations.find(x=>x.site.kind===group.id&&inSector(x.site))).filter(x=>x&&!points.get(x.site.id)!.hidden):locations.filter(x=>x.site.kind===kind&&inSector(x.site)&&!points.get(x.site.id)!.hidden);
   const compact=width<600,labelWidth=kind==='all'?(compact?94:112):compact?(kind==='rubber'?94:112):132,labelHeight=kind==='all'?(compact?29:32):compact?32:36;
   type Box={left:number;top:number;right:number;bottom:number};
   const overlaps=(a:Box,b:Box,padding=0)=>a.left<b.right+padding&&a.right>b.left-padding&&a.top<b.bottom+padding&&a.bottom>b.top-padding;
@@ -70,14 +72,16 @@ export function createSoutheastIndustryLocations(root:HTMLElement,getState:()=>A
  function render(){
   const state=getState(),active=state.field==='industry'&&!state.place&&!['trade-exports','trade-imports'].includes(state.topic??'');
   overlay.hidden=!active;
-  summary.textContent=southeastIndustryKinds.find(x=>x.id===kind)!.reading;
-  for(const b of categories)b.setAttribute('aria-pressed',String(b.dataset.southeastIndustryKind===kind));
-  for(const site of southeastIndustrySites){const emphasis=kind==='all'||kind===site.kind,chosen=selectedId===site.id;const item=list.find(b=>b.dataset.southeastIndustrySite===site.id)!;item.classList.toggle('muted',!emphasis);item.setAttribute('aria-pressed',String(chosen));const point=points.get(site.id)!;point.classList.toggle('muted',!emphasis);point.classList.toggle('chosen',chosen);point.setAttribute('aria-pressed',String(chosen));}
+  summary.textContent=kind==='all'?southeastIndustrySectors.find(x=>x.id===sector)!.reading:southeastIndustryKinds.find(x=>x.id===kind)!.reading;
+  for(const b of sectors)b.setAttribute('aria-pressed',String(b.dataset.southeastIndustrySector===sector));
+  for(const b of categories){b.setAttribute('aria-pressed',String(b.dataset.southeastIndustryKind===kind));b.hidden=b.dataset.southeastIndustryKind!=='all'&&sector!=='all'&&!southeastIndustrySites.some(site=>site.kind===b.dataset.southeastIndustryKind&&inSector(site));}
+  for(const site of southeastIndustrySites){const emphasis=inSector(site)&&(kind==='all'||kind===site.kind),chosen=selectedId===site.id;const item=list.find(b=>b.dataset.southeastIndustrySite===site.id)!;item.classList.toggle('muted',!emphasis);item.setAttribute('aria-pressed',String(chosen));const point=points.get(site.id)!;point.classList.toggle('muted',!emphasis);point.classList.toggle('chosen',chosen);point.setAttribute('aria-pressed',String(chosen));}
   const site=southeastIndustrySites.find(x=>x.id===selectedId);selected.hidden=!site;
   if(site){selected.querySelector<HTMLElement>('[data-southeast-industry-selected-title]')!.textContent=site.label;selected.querySelector<HTMLElement>('[data-southeast-industry-selected-reading]')!.textContent=site.reading;selected.querySelector<HTMLElement>('[data-southeast-industry-selected-year]')!.textContent=site.sourceYear;const a=selected.querySelector<HTMLAnchorElement>('[data-southeast-industry-selected-source]')!;a.textContent=site.sourceLabel;a.href=site.sourceUrl;}
   position();
  }
- function chooseSite(id:string){const site=southeastIndustrySites.find(s=>s.id===id);if(!site)return;selectedId=selectedId===id?null:id;kind=site.kind;saveKind();render();}
+ function chooseSite(id:string){const site=southeastIndustrySites.find(s=>s.id===id);if(!site)return;selectedId=selectedId===id?null:id;if(!inSector(site))sector=southeastSiteSectors(site)[0];kind=site.kind;saveKind();render();}
+ for(const b of sectors)b.addEventListener('click',()=>{sector=b.dataset.southeastIndustrySector as typeof sector;kind='all';selectedId=null;saveKind();render();});
  for(const b of categories)b.addEventListener('click',()=>{kind=b.dataset.southeastIndustryKind as typeof kind;selectedId=null;saveKind();render();});
  for(const b of list)b.addEventListener('click',()=>chooseSite(b.dataset.southeastIndustrySite!));
  return {render,show(next:import('maplibre-gl').Map|null){if(next&&next!==map){map=next;map.on('move',position);map.on('resize',position);}render();}};

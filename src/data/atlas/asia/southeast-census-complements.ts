@@ -1,11 +1,11 @@
 /** Official census observations shown separately from GeoEPR and EPR-ED areas. */
 export const southeastPhilippineEthnicity=[
  {region:'イロコス地方',group:'イロカノ',share:58.3,point:[120.7,17.4] as [number,number],mapLabel:'イロコス · イロカノ 58.3％'},
- {region:'カラバルソン地方',group:'タガログ',share:74.4,point:[121.2,14.1] as [number,number]},
+ {region:'カラバルソン地方',group:'タガログ',share:74.4,point:[121.2,14.1] as [number,number],mapLabel:'カラバルソン · タガログ 74.4％'},
  {region:'ビコール地方',group:'ビコール',share:78.8,point:[123.6,13.4] as [number,number],mapLabel:'ビコール · ビコール 78.8％'},
  {region:'西ビサヤ地方',group:'イロンゴ',share:67.6,point:[122.3,10.7] as [number,number],mapLabel:'西ビサヤ · イロンゴ 67.6％'},
- {region:'中ビサヤ地方',group:'セブアノ',share:61.4,point:[123.8,10.2] as [number,number]},
- {region:'東ビサヤ地方',group:'ワライ',share:64.2,point:[125,11.2] as [number,number]},
+ {region:'中ビサヤ地方',group:'セブアノ',share:61.4,point:[123.8,10.2] as [number,number],mapLabel:'中ビサヤ · セブアノ 61.4％'},
+ {region:'東ビサヤ地方',group:'ワライ',share:64.2,point:[125,11.2] as [number,number],mapLabel:'東ビサヤ · ワライ 64.2％'},
  {region:'バンサモロ自治地域',group:'マギンダナオ',share:26.4,point:[124.3,7.3] as [number,number],mapLabel:'バンサモロ · マギンダナオ 26.4％'},
 ];
 export const southeastReligionCensuses=[
