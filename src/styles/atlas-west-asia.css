@@ -82,7 +82,7 @@
  .west-agri-controls .atlas-water-tabs button,.west-atlas .industry-controls button,.west-subtabs button{font-size:14px;line-height:20px;min-height:40px;padding:9px 12px}
  .west-regional-navigation{margin:0 0 6px!important}
  .west-atlas:not([data-comparing=true]) .atlas-primary-grid{grid-template-columns:minmax(0,1.65fr) minmax(320px,1fr);gap:14px;align-items:start}
- .atlas-desktop-shell .west-atlas[data-field]:not([data-comparing=true]) .atlas-map-frame{height:auto!important;aspect-ratio:1.32;min-height:300px!important;max-height:610px}
+ .atlas-desktop-shell .west-atlas[data-field]:not([data-comparing=true]) .atlas-map-frame{height:auto!important;aspect-ratio:1000/987;min-height:300px!important;max-width:calc((100dvh - 315px) * 1000 / 987);max-height:calc(100dvh - 315px)}
  .west-atlas:not([data-comparing=true]) .west-reading{display:flex;flex-direction:column;height:clamp(420px,calc(100dvh - 305px),580px)!important;overflow:hidden;padding:14px 16px}
  .west-atlas:not([data-comparing=true]) .west-reading-header:has([data-west-reading-overview]){display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:8px;align-items:center}
  .west-atlas:not([data-comparing=true]) .west-reading-header:has([data-west-reading-overview]) .atlas-eyebrow{grid-column:1/-1;grid-row:1}
@@ -161,7 +161,10 @@
 .west-atlas .atlas-map-tools button{min-width:44px;min-height:44px}
 .west-country-line{fill:transparent;stroke:#52646d;stroke-width:.8;vector-effect:non-scaling-stroke;cursor:pointer}
 .west-country-line.is-selected{stroke:#365560;stroke-width:2}
+.west-atlas[data-topic=annual-precipitation] .west-country-line{stroke:#96a9ab;stroke-width:.55}
+.west-atlas[data-topic=climate] .west-station.is-selected circle{stroke-width:1}
 .west-map-label{font:11px var(--sans);fill:#243e48;paint-order:stroke;stroke:#fffef4;stroke-width:3;stroke-linejoin:round;pointer-events:none}
+.west-climate-code{font-weight:700}
 .west-station{cursor:pointer}
 .west-station circle{fill:#fffdf2;stroke:#284652;stroke-width:1.4;vector-effect:non-scaling-stroke}
 .west-station line{stroke:#526e75;stroke-width:1;vector-effect:non-scaling-stroke;pointer-events:none}
@@ -377,6 +380,7 @@
 .west-industry-marker[data-industry-role="refining"] .west-industry-secondary{fill:#853474}
 .west-industry-marker[data-kind="manufacturing"] circle{fill:#3f7696}
 .west-industry-marker[data-kind="transit"] circle{fill:#467f69}
+.west-industry-marker[data-kind="service"] circle{fill:#7955a0}
 .west-industry-marker.is-selected :is(circle,rect,.west-industry-symbol),.west-industry-marker:focus :is(circle,rect,.west-industry-symbol){stroke:#252e33;stroke-width:3px}
 .west-industry-marker text{font-size:11px;font-weight:750;fill:#24343a;paint-order:stroke;stroke:#fffdf3;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
 .west-industry-marker rect.west-industry-label-hit,.west-place-marker rect.west-place-label-hit{fill:transparent;stroke:none;pointer-events:all}
@@ -422,8 +426,11 @@
 .west-industry-key i[data-industry-kind="petrochemical"]{background:#853474;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);border:0}
 .west-industry-key i[data-industry-kind="manufacturing"]{background:#3f7696}
 .west-industry-key i[data-industry-kind="transit"]{background:#467f69}
+.west-industry-key i[data-industry-kind="service"]{background:#7955a0}
 .west-industry-site-reading{border-left:3px solid #3f7696;padding-left:10px;margin:10px 0}
 .west-industry-only-button{min-height:34px;padding:5px 10px;margin:5px 0;border:1px solid #718b92;border-radius:3px;background:#fffef8;color:#214651;font:600 12px var(--sans);cursor:pointer}
 .west-industry-only-button[aria-pressed=true]{background:#e1edf0;border-color:#315f71}
 .west-ethnicity-map-label{font-size:12px;font-weight:800;fill:#1d363d;stroke:#fffef4;stroke-width:4px}
+.west-religion-map-label{font-size:12px;font-weight:800;fill:#1d363d;stroke:#fffef4;stroke-width:4px;paint-order:stroke}
+.west-atlas[data-topic="religion"] .west-country-line,.west-atlas[data-topic="ethnicity"] .west-country-line{stroke:#a5b0af;stroke-width:.5}
 [data-natural-feature]:focus,[data-basin]:focus,[data-ground]:focus { outline:none; stroke:#a23f2d; stroke-width:3px; }
