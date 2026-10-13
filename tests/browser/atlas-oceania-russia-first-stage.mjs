@@ -57,7 +57,7 @@ try{
   });
  };
  const open=async(region,field,search='')=>{await page.goto(`${base}atlas/${region}/${field}/${search}`,{waitUntil:'networkidle'});await ready(region);};
- const shot=async name=>{if(!name.includes('-nature-')){if(focusDeltaOnly&&!/^(?:oceania-agriculture-(1536|1920|1024)|russia-agriculture-(1536|1920))-(overview|crop-focus|single-product|selected-with-other-distributions)$/.test(name))return;if(representativeOnly&&!/^(?:oceania|russia)-agriculture-(1536|1024|1920)-(overview|crop-focus|single-product|selected-with-other-distributions)$/.test(name))return;}await page.screenshot({path:resolve(output,name+'.png'),fullPage:true});result.screenshots.push(name+'.png');};
+ const shot=async name=>{if(!name.includes('-nature-')&&!name.includes('-belt-detail')){if(focusDeltaOnly&&!/^(?:oceania-agriculture-(1536|1920|1024)|russia-agriculture-(1536|1920))-(overview|crop-focus|single-product|selected-with-other-distributions)$/.test(name))return;if(representativeOnly&&!/^(?:oceania|russia)-agriculture-(1536|1024|1920)-(overview|crop-focus|single-product|selected-with-other-distributions)$/.test(name))return;}await page.screenshot({path:resolve(output,name+'.png'),fullPage:true});result.screenshots.push(name+'.png');};
  const annotationShot=async(map,product)=>{
   // Capture document pixels without element scrolling or a retained SVG handle.
   // Closing the details can resize the root and replace its SVG in the next frame.
@@ -257,6 +257,7 @@ try{
       assert.equal(await places.locator('text').filter({hasText:'小麦｜'}).count(),2);assert.equal(await places.locator('text').filter({hasText:'牛｜'}).count(),2);
       const labels=await places.locator('rect').evaluateAll(elements=>elements.map(el=>{const b=el.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};}));
       for(let i=0;i<labels.length;i++)for(let j=i+1;j<labels.length;j++)assert.ok(labels[i].x+labels[i].width<=labels[j].x||labels[j].x+labels[j].width<=labels[i].x||labels[i].y+labels[i].height<=labels[j].y||labels[j].y+labels[j].height<=labels[i].y,'Farming names do not overlap');
+
       const legendDetails=host.locator('[data-climate-dictionary]');await legendDetails.locator('summary').click();
       assert.ok(await host.locator('[data-primary-legend-definitions]').isVisible());assert.match(await legendDetails.textContent(),/牛の有効0は点を描きません/);
       assert.equal(await legendDetails.locator('[data-farming-legend="cattle"] > div > span').count(),6);
@@ -299,6 +300,12 @@ try{
       for(const id of ['wheat-southeast','wheat-nz','coconut-png-islands','cacao-solomon-west'])assert.equal(await map.locator(`[data-farming-place="${id}"]`).count(),1);
       const labels=await places.locator('rect').evaluateAll(elements=>elements.map(el=>{const b=el.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};}));
       for(let i=0;i<labels.length;i++)for(let j=i+1;j<labels.length;j++)assert.ok(labels[i].x+labels[i].width<=labels[j].x||labels[j].x+labels[j].width<=labels[i].x||labels[i].y+labels[i].height<=labels[j].y||labels[j].y+labels[j].height<=labels[i].y,'Farming names do not overlap');
+      const measured=await places.evaluateAll(elements=>elements.map(el=>{const [x,y]=el.dataset.farmingAnchor.split(',').map(Number),point=el.ownerSVGElement.createSVGPoint();point.x=x;point.y=y;const screen=point.matrixTransform(el.ownerSVGElement.getScreenCTM()),box=el.querySelector('rect').getBoundingClientRect();return {id:el.dataset.farmingPlace,anchor:{x:screen.x,y:screen.y},box:{x:box.x,y:box.y,width:box.width,height:box.height},distance:Math.hypot(Math.max(box.x-screen.x,0,screen.x-box.x-box.width),Math.max(box.y-screen.y,0,screen.y-box.y-box.height))};}));
+      for(const item of measured){
+       for(const other of measured)assert.equal(item.anchor.x>other.box.x&&item.anchor.x<other.box.x+other.box.width&&item.anchor.y>other.box.y&&item.anchor.y<other.box.y+other.box.height,false,'Names do not cover the source distribution anchors');
+       if(['wheat-southeast','wheat-nz','coconut-png-islands','cacao-solomon-west'].includes(item.id))assert.ok(item.distance<=80,`${width}/${item.id}: name remains near its measured concentration, ${item.distance}px`);
+      }
+      (result.beltLabelDistances??=[]).push({width,labels:measured});
       const legendDetails=host.locator('[data-primary-legend-dictionary]');await legendDetails.locator('summary').click();
       assert.ok(await host.locator('[data-primary-legend-definitions]').isVisible());
       assert.equal(await legendDetails.locator('[data-farming-legend]').count(),5);
@@ -422,6 +429,19 @@ try{
  result.checks.push(farmingOnly?'Changed farming pages start with all saved crop/livestock products, full extent and overview. Product focus, country/native keyboard region selection, reload and reset retain other distributions.':'All eight direct field routes start at full extent and overview without a selected country/region/theme.');
  result.checks.push(farmingOnly?'At the requested PC widths including 1920×1080, crop focus keeps the full frame, and the explicit single-product mode survives reload and restores all saved products.':'All four field map dimensions agree per region at 1920, 1536, 1280 and 1024px; hidden legend duplicates reserve no height.');
  if(farmingOnly&&regions.includes('russia'))result.checks.push('Russia has source-backed crop/cattle names in the map, one left region control, a compact two-product key below the map, visible geographical reading and folded full technical/quantity information. Native keyboard focus and product retention pass.');
+ if(regions.includes('oceania'))for(const width of [1536,1024]){
+  await page.setViewportSize({width,height:864});
+  for(const [country,product,id] of [['NZL','wheat','wheat-nz'],['SLB','cacao','cacao-solomon-west']]){
+   await open('oceania','agriculture',`?place=${country}&scope=country&layer=${product}`);
+   const host=root('oceania'),map=host.locator('[data-primary-map]'),label=map.locator(`[data-farming-place="${id}"]`);
+   assert.equal(await label.count(),1);assert.equal(await host.locator('[data-place]').inputValue(),country);
+   assert.ok(await map.locator(`[data-farming-product="${product}"][data-farming-mode="quantity"]`).count()>0);
+   const frame=await map.locator('svg').first().getAttribute('viewBox');
+   await shot(`oceania-agriculture-${width}-${country}-${product}-belt-detail`);
+   await page.reload({waitUntil:'networkidle'});await ready('oceania');
+   assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);assert.equal(await label.count(),1);
+  }
+ }
  await page.setViewportSize({width:1536,height:864});
  for(const region of regions){
   await open(region,'agriculture','?scope=all&layer=wheat&compare=cattle&view=comparison');

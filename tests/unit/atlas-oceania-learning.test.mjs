@@ -366,3 +366,34 @@ test('Oceania farming example names stay inside the saved country and on a posit
   }
  }
 });
+
+test('added belt anchors represent the largest connected regional quantity group and its densest neighbourhood',()=>{
+ const report=JSON.parse(readFileSync(new URL('../../docs/oceania-crop-belt-selection-20261013.json',import.meta.url),'utf8'));
+ const runsToSet=runs=>new Set(runs.flatMap(([row,start,end])=>Array.from({length:end-start},(_,i)=>row*1680+start+i)));
+ const close=(actual,expected)=>assert.ok(Math.abs(actual-expected)<.001,`${actual} differs from ${expected}`);
+ for(const selection of report.selections){
+  const values=gunzipSync(readFileSync(new URL('../../'+selection.sourceGrid,import.meta.url)));
+  const value=key=>values.readFloatLE(key*4),region=runsToSet(selection.regionPositiveCellRuns),primary=runsToSet(selection.primaryComponentCellRuns);
+  let regionHa=0;for(const key of region){assert.ok(value(key)>0);regionHa+=value(key);}
+  close(regionHa,selection.regionHarvestedHa);assert.equal(region.size,selection.regionPositiveCells);
+  const unvisited=new Set(region),groups=[];
+  while(unvisited.size){
+   const first=unvisited.values().next().value,queue=[first],group=new Set([first]);unvisited.delete(first);let ha=0;
+   for(let i=0;i<queue.length;i++){
+    const key=queue[i];ha+=value(key);
+    for(const next of [key-1680,key+1680,...(key%1680?[key-1]:[]),...(key%1680<1679?[key+1]:[])])if(unvisited.delete(next)){group.add(next);queue.push(next);}
+   }
+   groups.push({group,ha});
+  }
+  groups.sort((a,b)=>b.ha-a.ha);assert.deepEqual([...primary].sort((a,b)=>a-b),[...groups[0].group].sort((a,b)=>a-b));
+  close(groups[0].ha,selection.topComponentsByHarvestedHa[0].harvestedHa);
+  const local=key=>{const row=Math.floor(key/1680),col=key%1680;let ha=0;for(let dy=-6;dy<=6;dy++)for(let dx=-6;dx<=6;dx++){const target=(row+dy)*1680+col+dx;if(col+dx>=0&&col+dx<1680&&primary.has(target))ha+=value(target);}return ha;};
+  const selected=selection.selectedCell[1]*1680+selection.selectedCell[0];assert.ok(primary.has(selected));
+  const scores=[...primary].map(key=>({key,ha:local(key)})),peak=Math.max(...scores.map(item=>item.ha));
+  close(local(selected),peak);close(peak,selection.maximumPrimaryNeighbourhoodHa);close(local(selected),selection.selectedNeighbourhood.primaryComponentHarvestedHa);
+  const cx=[...primary].reduce((sum,key)=>sum+(key%1680)*value(key),0)/groups[0].ha,cy=[...primary].reduce((sum,key)=>sum+Math.floor(key/1680)*value(key),0)/groups[0].ha;
+  const distance=key=>(key%1680-cx)**2+(Math.floor(key/1680)-cy)**2;
+  const bestDistance=Math.min(...scores.filter(item=>Math.abs(item.ha-peak)<.000001).map(item=>distance(item.key)));
+  close(distance(selected),bestDistance);
+ }
+});

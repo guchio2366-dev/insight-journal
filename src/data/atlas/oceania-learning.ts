@@ -172,15 +172,33 @@ function renderOceaniaFarmingMarks(layer:OceaniaLayer,state:OceaniaState,sceneId
   marks+=`<g data-farming-product="${item.id}" data-farming-mode="missing" opacity="${opacity}" clip-path="url(#${clip})"><rect x="${x}" y="${y}" width="${x2-x}" height="${y2-y}" fill="url(#${pattern})" mask="url(#${mask})"/></g>`;
   marks+=image(item.image,item.id,'texture',opacity);
  }
- const boxes:number[][]=[];
+ const visiblePlaces=oceaniaFarmingPlaces.filter(place=>{if(state.single&&place.product!==focused)return false;const [px,py]=projectOceania([...place.coordinates]);return px>=frame[0]&&px<=frame[0]+frame[2]&&py>=frame[1]&&py<=frame[1]+frame[3];});
+ const anchors=visiblePlaces.map(place=>projectOceania([...place.coordinates]));
+ const boxes:number[][]=[],labelBoxes=new Map<string,number[]>();
+ // Give the measured concentration labels first choice, then keep every other
+ // reading name. Layout is independent of product focus, so only opacity changes.
+ const ordered=[...visiblePlaces.filter(place=>'selection' in place),...visiblePlaces.filter(place=>!('selection' in place))];
+ for(const place of ordered){
+  const [px,py]=projectOceania([...place.coordinates]),crop=['wheat','coconut','cacao'].includes(place.product);
+  const label=farmingTitles[place.product]+'｜'+place.name,w=(label.length*14+18+(crop?22:0))*scale,h=26*scale;
+  const candidates:number[][]=[];
+  for(let top=frame[1]+8*scale;top+h<=frame[1]+frame[3]-8*scale;top+=8*scale)for(let left=frame[0]+4*scale;left+w<=frame[0]+frame[2]-4*scale;left+=8*scale){
+   if(boxes.some(([x,y,bw,bh])=>left<x+bw+5*scale&&left+w+5*scale>x&&top<y+bh+5*scale&&top+h+5*scale>y))continue;
+   if(anchors.some(([x,y])=>x>left-9*scale&&x<left+w+9*scale&&y>top-9*scale&&y<top+h+9*scale))continue;
+   const cx=left+w/2,cy=top+h/2,score=(cx-px)**2+(cy-py)**2+.02*((cx-px-place.offset[0]*scale)**2+(cy-py-place.offset[1]*scale)**2);
+   candidates.push([score,left,top,w,h]);
+  }
+  candidates.sort((a,b)=>a[0]-b[0]);
+  const best=candidates[0];
+  if(best){const box=best.slice(1);boxes.push(box);labelBoxes.set(place.id,box);}
+ }
  for(const place of oceaniaFarmingPlaces){
   if(state.single&&place.product!==focused)continue;
   const [px,py]=projectOceania([...place.coordinates]);if(px<frame[0]||px>frame[0]+frame[2]||py<frame[1]||py>frame[1]+frame[3])continue;
   const crop=['wheat','coconut','cacao'].includes(place.product),color=farmingColors[place.product],label=farmingTitles[place.product]+'｜'+place.name,w=(label.length*14+18+(crop?22:0))*scale,h=26*scale;
-  const left=Math.max(frame[0]+4*scale,Math.min(px+place.offset[0]*scale-w/2,frame[0]+frame[2]-w-4*scale));
-  let top=Math.max(frame[1]+8*scale,Math.min(py+place.offset[1]*scale-h/2,frame[1]+frame[3]-h-8*scale));
-  for(let attempt=0;attempt<=boxes.length;attempt++){const obstacle=boxes.find(([bx,by,bw,bh])=>left<bx+bw+4*scale&&left+w+4*scale>bx&&top<by+bh+4*scale&&top+h+4*scale>by);if(!obstacle)break;top=Math.max(frame[1]+8*scale,obstacle[1]-h-6*scale);}
-  boxes.push([left,top,w,h]);
+  const placed=labelBoxes.get(place.id);
+  const left=placed?.[0]??Math.max(frame[0]+4*scale,Math.min(px-w/2,frame[0]+frame[2]-w-4*scale));
+  const top=placed?.[1]??Math.max(frame[1]+8*scale,Math.min(py-h/2-16*scale,frame[1]+frame[3]-h-8*scale));
   const icons:Record<string,string>={
    wheat:'<path d="M0 7V-7M0-4L-4-7M0 0L-4-3M0 4L-4 1M0-2L4-5M0 2L4-1" fill="none" stroke="currentColor" stroke-width="1.7"/>',
    coconut:'<path d="M0 7L1-4M1-4Q-6-9-7-3M1-4Q7-9 8-3M1-4Q-2-11 2-9" fill="none" stroke="currentColor" stroke-width="1.6"/>',
@@ -189,7 +207,7 @@ function renderOceaniaFarmingMarks(layer:OceaniaLayer,state:OceaniaState,sceneId
    cattle:'<path d="M-5-3L-8-6M5-3L8-6M-5-3Q0-5 5-3L4 5Q0 8-4 5Z" fill="#eef5f8" stroke="currentColor" stroke-width="1.4"/><circle cx="-2" cy="1" r=".8" fill="currentColor"/><circle cx="2" cy="1" r=".8" fill="currentColor"/>'
   };
   const annotationOpacity=cropFocus&&place.product!==layer.id?0.32:1;
-  marks+=`<g class="oceania-farming-place" data-farming-place="${place.id}" data-place-product="${place.product}" ${crop?'data-farming-belt="true"':''} opacity="${annotationOpacity}" style="color:${color}"><title>${escape(label+(crop?'：2020年の正の収穫面積を持つ分布帯の読取り位置。':'：2020年の保存格子で正の値がある代表位置。')+'実際の農場境界・全国順位ではありません。')}</title><path d="M${px} ${py}L${left+w/2} ${top+h/2}" stroke="${color}" stroke-width=".8" vector-effect="non-scaling-stroke"/>${crop?'':`<g transform="translate(${px},${py}) scale(${scale})">${icons[place.product]}</g>`}<rect x="${left}" y="${top}" width="${w}" height="${h}" rx="${3*scale}" fill="#fffef7" fill-opacity=".92" stroke="${color}" stroke-opacity=".5" stroke-width=".6" vector-effect="non-scaling-stroke"/>${crop?`<g transform="translate(${left+12*scale},${top+h/2}) scale(${scale})">${icons[place.product]}</g>`:''}<text x="${left+w/2+(crop?10*scale:0)}" y="${top+h/2}" text-anchor="middle" dominant-baseline="central" font-size="${14*scale}" fill="${color}">${escape(label)}</text></g>`;
+  marks+=`<g class="oceania-farming-place" data-farming-place="${place.id}" data-place-product="${place.product}" data-farming-anchor="${px},${py}" ${crop?'data-farming-belt="true"':''} opacity="${annotationOpacity}" style="color:${color}"><title>${escape(label+(crop?'：2020年の正の収穫面積を持つ分布帯の読取り位置。':'：2020年の保存格子で正の値がある代表位置。')+'実際の農場境界・全国順位ではありません。')}</title><path d="M${px} ${py}L${left+w/2} ${top+h/2}" stroke="${color}" stroke-width=".8" vector-effect="non-scaling-stroke"/>${crop?'':`<g transform="translate(${px},${py}) scale(${scale})">${icons[place.product]}</g>`}<rect data-farming-label-box="true" x="${left}" y="${top}" width="${w}" height="${h}" rx="${3*scale}" fill="#fffef7" fill-opacity=".92" stroke="${color}" stroke-opacity=".5" stroke-width=".6" vector-effect="non-scaling-stroke"/>${crop?`<g transform="translate(${left+12*scale},${top+h/2}) scale(${scale})">${icons[place.product]}</g>`:''}<text x="${left+w/2+(crop?10*scale:0)}" y="${top+h/2}" text-anchor="middle" dominant-baseline="central" font-size="${14*scale}" fill="${color}">${escape(label)}</text></g>`;
  }
  return {marks,defs};
 }
