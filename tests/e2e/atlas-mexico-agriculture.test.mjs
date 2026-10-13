@@ -64,6 +64,25 @@ test('Overview, all crop/animal/forest entries and related statistics are reacha
  }finally{await ctx.window.happyDOM.close();}
 });
 
+test('Three-column Mexico statistics keep confirmed production and one-year world shares separate from missing series',async()=>{
+ const comparison=JSON.parse(await readFile('src/data/atlas/mexico/agriculture-comparison-2024.json','utf8'));
+ assert.equal(comparison.year,2024);assert.deepEqual(Object.keys(comparison.products).sort(),['beef','broiler','coffee','dairy','eggs','pork']);
+ for(const product of Object.values(comparison.products))assert.ok(Math.abs(product.sharePct-product.mexicoTonnes/product.worldTonnes*100)<0.0001);
+ const ctx=await page('',false);try{
+  for(const id of ['corn','coffee','beef','dairy','pork','broiler','eggs']){
+   const columns=ctx.q(`[data-mexico-agriculture-three-columns="${id}"]`);
+   assert.ok(columns,id);assert.equal(columns.children.length,3);
+   assert.match(columns.children[0].textContent,/供給と用途.*国内生産.*需給原表は未取得/s);
+   assert.match(columns.children[1].textContent,/輸出相手.*未取得.*米国の輸出先統計をメキシコの値として使っていません/s);
+   assert.match(columns.children[2].textContent,/世界生産に占める割合.*複数年.*未取得/s);
+  }
+  assert.match(ctx.q('[data-mexico-agriculture-three-columns="beef"] .mexico-agriculture-share').textContent,/3\.23%/);
+  assert.match(ctx.q('[data-mexico-agriculture-three-columns="coffee"]').textContent,/生豆.*コーヒー果実.*別系列/s);
+  assert.equal(ctx.q('[data-mexico-agriculture-three-columns="pine"]'),null);
+  assert.doesNotMatch(ctx.q('[data-mexico-agriculture-three-columns="corn"]').textContent,/3\.23%/);
+ }finally{await ctx.window.happyDOM.close();}
+});
+
 test('Repeated selection adds no duplicate history; Back, Forward and reload restore item, layers and zoom',async()=>{
  const ctx=await page();let reload;try{
   const initial=ctx.window.history.length;ctx.q('[data-crop-select="corn"]').click();

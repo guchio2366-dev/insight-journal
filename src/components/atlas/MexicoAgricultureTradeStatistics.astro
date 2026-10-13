@@ -1,0 +1,35 @@
+---
+import comparison from '../../data/atlas/mexico/agriculture-comparison-2024.json';
+interface Props {productId:string; production:number|null; unit:string; year:string}
+const {productId,production,unit,year}=Astro.props;
+const fao=comparison.products[productId as keyof typeof comparison.products];
+const number=(value:number)=>value.toLocaleString('ja-JP',{maximumFractionDigits:0});
+const livestock=['beef','dairy','pork','broiler','eggs'].includes(productId);
+---
+<div class="mexico-agriculture-three-columns" data-mexico-agriculture-three-columns={productId}>
+ <section>
+  <h3>供給と用途</h3>
+  <p class="mexico-agriculture-column-period">DGSIAP・{year}</p>
+  <p>国内生産：<strong>{production===null?'単位の異なる品目を合算しません':`${number(production)} ${unit}`}</strong></p>
+  <p>輸入・輸出・在庫増減・用途別消費を同一品目で結ぶメキシコの需給原表は未取得です。国内供給量や自給率を生産量から推定していません。</p>
+  <a href={livestock?'https://nube.agricultura.gob.mx/datosAbiertos/Pecuario.php':'https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php'}>出典：DGSIAP 年次生産統計</a>
+  <span> ／ </span><a href="https://www.fao.org/faostat/en/#data/SCL">必要な原表：FAOSTAT 需給表</a>
+ </section>
+ <section>
+  <h3>輸出相手</h3>
+  <p class="mexico-agriculture-column-period">メキシコを報告国とする品目別数量</p>
+  <p>相手国別のメキシコ輸出原表は未取得です。輸出先の割合や順位は表示しません。米国の輸出先統計をメキシコの値として使っていません。</p>
+  <a href="https://www.fao.org/faostat/en/#data/TM">必要な原表：FAOSTAT 詳細貿易マトリクス</a>
+ </section>
+ <section>
+  <h3>世界生産に占める割合</h3>
+  {fao?<>
+   <p class="mexico-agriculture-column-period">FAOSTAT QCL・{comparison.year}年・{fao.definition}・t</p>
+   <p class="mexico-agriculture-share">{fao.sharePct.toFixed(2)}<span>%</span></p>
+   <p>メキシコ {number(fao.mexicoTonnes)} t ／ 世界 {number(fao.worldTonnes)} t。同一年・同一定義の生産量で比較しました。</p>
+   {productId==='coffee'&&<p>SIAPの2025年生産量はコーヒー果実。FAOSTATの生豆とは換算せず、別系列として示します。</p>}
+  </>:<p>この品目と世界を同一定義で比較するメキシコ行は保管済み抽出にありません。</p>}
+  <p>複数年のメキシコ・世界の対応行は未取得です。2024年の値を推移として描いていません。</p>
+  <a href="https://www.fao.org/faostat/en/#data/QCL">出典・必要な時系列：FAOSTAT QCL</a>
+ </section>
+</div>

@@ -1,0 +1,59 @@
+{
+  "year": 2024,
+  "elementCode": "5510",
+  "unit": "t",
+  "products": {
+    "coffee": {
+      "itemCode": "656",
+      "definition": "生豆",
+      "mexicoTonnes": 194470.0,
+      "worldTonnes": 11284877.41,
+      "sharePct": 1.7233
+    },
+    "beef": {
+      "itemCode": "867",
+      "definition": "骨付き牛肉",
+      "mexicoTonnes": 2253615.34,
+      "worldTonnes": 69749016.37,
+      "sharePct": 3.231
+    },
+    "dairy": {
+      "itemCode": "882",
+      "definition": "牛の生乳",
+      "mexicoTonnes": 13962372.08,
+      "worldTonnes": 797287454.1,
+      "sharePct": 1.7512
+    },
+    "pork": {
+      "itemCode": "1035",
+      "definition": "骨付き豚肉",
+      "mexicoTonnes": 1882461.19,
+      "worldTonnes": 125357199.58,
+      "sharePct": 1.5017
+    },
+    "broiler": {
+      "itemCode": "1058",
+      "definition": "鶏肉",
+      "mexicoTonnes": 4013215.82,
+      "worldTonnes": 128307229.46,
+      "sharePct": 3.1278
+    },
+    "eggs": {
+      "itemCode": "1062",
+      "definition": "殻付き鶏卵",
+      "mexicoTonnes": 3270074.51,
+      "worldTonnes": 93693573.42,
+      "sharePct": 3.4902
+    }
+  },
+  "sources": [
+    {
+      "path": "data-source/atlas/latin-agriculture/raw/faostat-qcl-2024-selected.csv",
+      "sha256": "12f1a5fd1d6fdfb38eb332b8054ee83d45ecb2ded9fe2473c5259c50c86737d9"
+    },
+    {
+      "path": "data-source/atlas/livestock/faostat-qcl-2024-extract.json",
+      "sha256": "55ca92c3b3db92c3a4f36954f6e5da224c9cf84b0169865800402c2a806098c6"
+    }
+  ]
+}
