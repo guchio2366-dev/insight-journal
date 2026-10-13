@@ -1,7 +1,7 @@
 import countryData from './africa-countries.json' with {type:'json'};
 import statistics from './africa-statistics.json' with {type:'json'};
 import {themes} from './africa-themes.ts';
-import {africaIndustryLocationById,africaIndustryCommodityById} from './africa-industry-locations.ts';
+import {africaSectorSiteById,africaSectorIndustryById,canonicalAfricaIndustry,canonicalAfricaIndustrySector,type AfricaIndustrySector} from './africa-industry-sectors.ts';
 import {africaClimateCityById} from './africa-climate-cities.ts';
 export type Field = 'nature' | 'agriculture' | 'industry' | 'population';
 export type Region = 'all' | 'north' | 'west' | 'central' | 'east' | 'south';
@@ -80,7 +80,7 @@ export const agriLayerKeys=[
   'livestock-cattle','livestock-goats','livestock-sheep'
 ] as const;
 export type AgriLayerKey=typeof agriLayerKeys[number];
-export type State={field:Field;metric:string;year:number;place:string;compare:string;region:Region;zoom:'all'|'region'|'country'|'theme';theme:string;overview:boolean;context:string;topic:string;water:string;river:string;city:string;industryLocation:string;industryCommodity:string;crop:Crop;livestock:Livestock;cropMeasure:CropMeasure;agriLayers:string|null;agriDisplay:'all'|'crops'|'livestock';agriOutline:boolean;layerClass:string;layerPoint:string;sourceState:string;view:'distribution'|'statistics'};
+export type State={field:Field;metric:string;year:number;place:string;compare:string;region:Region;zoom:'all'|'region'|'country'|'theme';theme:string;overview:boolean;context:string;topic:string;water:string;river:string;city:string;industryLocation:string;industryCommodity:string;industrySector:AfricaIndustrySector|'';industryOnly:boolean;crop:Crop;livestock:Livestock;cropMeasure:CropMeasure;agriLayers:string|null;agriDisplay:'all'|'crops'|'livestock';agriOutline:boolean;layerClass:string;layerPoint:string;sourceState:string;view:'distribution'|'statistics'};
 /** An absent layer list shows all seven products; an explicit empty list means all off. */
 export function canonicalAgriLayers(value:unknown):string|null {
   if(typeof value!=='string'||value.length>2048)return null;
@@ -129,8 +129,13 @@ export function readState(search:string):State {
   const theme=themes.find(t=>t.id===p.get('theme')&&t.field===safeField)??themes.find(t=>t.field===safeField)!;
   const place=exists(p.get('place'))?p.get('place')!:'';
   const region=p.get('region')??'all';
-  const industryLocation=safeField==='industry'&&africaIndustryLocationById(p.get('industryLocation')??'')?p.get('industryLocation')!:'';
-  const industryCommodity=safeField==='industry'?(africaIndustryCommodityById(p.get('industryCommodity')??'')?.id??(p.has('theme')&&!p.has('overview')?theme.id==='copperbelt-connections'?'copper-cobalt':theme.id==='casablanca-manufacturing'?'automotive-aerospace':'':'')):'';
+  let industryLocation=safeField==='industry'&&africaSectorSiteById(p.get('industryLocation')??'')?p.get('industryLocation')!:'';
+  const requestedIndustry=p.get('industryCommodity')??(p.has('theme')&&!p.has('overview')?theme.id==='copperbelt-connections'?'copper-cobalt':theme.id==='casablanca-manufacturing'?'aerospace':'':'');
+  const industrySector=safeField==='industry'?canonicalAfricaIndustrySector(p.get('industrySector')??'',requestedIndustry,industryLocation):'';
+  if(industryLocation){const site=africaSectorSiteById(industryLocation)!;if(site.roles.length&&!site.roles.some(role=>role.sector===industrySector))industryLocation='';}
+  const candidateIndustry=canonicalAfricaIndustry(requestedIndustry,industryLocation);
+  const industryCommodity=safeField==='industry'&&africaSectorIndustryById(candidateIndustry)?.sector===industrySector?candidateIndustry:'';
+  const industryOnly=!!industryCommodity&&p.get('industryOnly')==='1';
   const overview=!industryLocation&&!industryCommodity&&(p.get('overview')==='1'||!p.has('overview')&&!p.has('theme')&&!(safeField==='agriculture'&&(p.has('crop')||p.has('livestock')||p.get('topic')==='livestock')));
   const context=metrics.some(m=>m.id===p.get('context'))&&(p.get('context')===theme.compareMetric||p.has('sourceState')||safeField==='agriculture'&&metric.id==='AG.LND.FRST.ZS'&&p.get('context')===metric.id)?p.get('context')!:'';
   const layerClass=/^[a-zA-Z0-9_:.-]{1,100}$/.test(p.get('layerClass')??'')?p.get('layerClass')!:'';
@@ -144,7 +149,7 @@ export function readState(search:string):State {
   const crop=cropChoices.find(row=>row.id===p.get('crop'))?.id??'maize';
   const livestock=livestockChoices.find(row=>row.id===p.get('livestock'))?.id??'cattle';
   const cropMeasure=cropMeasureChoices.find(row=>row.id===p.get('cropMeasure'))?.id??'harvested';
-  return {field:safeField,metric:metric.id,year:years.includes(Number(p.get('year')))?Number(p.get('year')):2021,place,compare:place&&exists(p.get('compare'))&&p.get('compare')!==place?p.get('compare')!:'',region:Object.hasOwn(regionNames,region)?region as Region:'all',zoom:['all','region','country','theme'].includes(zoom)?zoom as State['zoom']:'all',theme:theme.id,overview,context:culture?'':context??'',topic,water,river,industryLocation,industryCommodity,city:safeField==='nature'&&topic==='climate'&&africaClimateCityById(p.get('city')??'')?p.get('city')!:'',crop,livestock,cropMeasure,agriLayers:canonicalAgriLayers(p.get('agriLayers')),agriDisplay:p.get('agriDisplay')==='crops'?'crops':p.get('agriDisplay')==='livestock'?'livestock':'all',agriOutline:p.get('agriOutline')==='1',layerClass:culture?'':layerClass,layerPoint:culture?'':layerPoint,sourceState:culture?'':sourceState,view:culture?'distribution':p.get('view')==='statistics'||!p.has('view')&&p.has('theme')&&!p.has('topic')?'statistics':'distribution'};
+  return {field:safeField,metric:metric.id,year:years.includes(Number(p.get('year')))?Number(p.get('year')):2021,place,compare:place&&exists(p.get('compare'))&&p.get('compare')!==place?p.get('compare')!:'',region:Object.hasOwn(regionNames,region)?region as Region:'all',zoom:['all','region','country','theme'].includes(zoom)?zoom as State['zoom']:'all',theme:theme.id,overview,context:culture?'':context??'',topic,water,river,industryLocation,industryCommodity,industrySector,industryOnly,city:safeField==='nature'&&topic==='climate'&&africaClimateCityById(p.get('city')??'')?p.get('city')!:'',crop,livestock,cropMeasure,agriLayers:canonicalAgriLayers(p.get('agriLayers')),agriDisplay:p.get('agriDisplay')==='crops'?'crops':p.get('agriDisplay')==='livestock'?'livestock':'all',agriOutline:p.get('agriOutline')==='1',layerClass:culture?'':layerClass,layerPoint:culture?'':layerPoint,sourceState:culture?'':sourceState,view:culture?'distribution':p.get('view')==='statistics'||!p.has('view')&&p.has('theme')&&!p.has('topic')?'statistics':'distribution'};
 }
 export function africaComparisonSnapshot(state:State):string {
   return writeState({...state,context:'',sourceState:''},new URL('https://atlas.invalid/')).searchParams.toString();
@@ -153,18 +158,23 @@ export function writeState(state:State,url:URL) {
   state.topic=canonicalTopic(state.field,state.metric,state.topic);
   state.water=state.field==='nature'?canonicalWater(state.metric,state.water):'';
   state.river=canonicalRiver(state,state.river);
-  state.industryLocation=state.field==='industry'&&africaIndustryLocationById(state.industryLocation)?state.industryLocation:'';
-  state.industryCommodity=state.field==='industry'&&africaIndustryCommodityById(state.industryCommodity)?state.industryCommodity:'';
+  state.industryLocation=state.field==='industry'&&africaSectorSiteById(state.industryLocation)?state.industryLocation:'';
+  state.industryCommodity=state.field==='industry'?canonicalAfricaIndustry(state.industryCommodity,state.industryLocation):'';
+  state.industrySector=state.field==='industry'?canonicalAfricaIndustrySector(state.industrySector,state.industryCommodity,state.industryLocation):'';
+  if(africaSectorIndustryById(state.industryCommodity)?.sector!==state.industrySector)state.industryCommodity='';
+  if(state.industryLocation){const site=africaSectorSiteById(state.industryLocation)!;if(site.roles.length&&!site.roles.some(role=>role.sector===state.industrySector))state.industryLocation='';}
+  state.industryOnly=state.field==='industry'&&!!state.industryCommodity&&state.industryOnly===true;
   state.city=state.field==='nature'&&state.topic==='climate'&&africaClimateCityById(state.city)?state.city:'';
   if(state.field==='population'&&(state.topic==='ethnicity'||state.topic==='religion')){state.context='';state.layerClass='';state.layerPoint='';state.sourceState='';state.view='distribution';}
   state.agriLayers=canonicalAgriLayers(state.agriLayers);
   state.agriOutline=state.agriOutline===true;
   for(const [key,value] of Object.entries(state)){
-    if(key==='agriLayers'||key==='agriOutline'||key==='overview')continue;
+    if(key==='agriLayers'||key==='agriOutline'||key==='overview'||key==='industryOnly')continue;
     value===''?url.searchParams.delete(key):url.searchParams.set(key,String(value));
   }
   if(state.agriLayers===null)url.searchParams.delete('agriLayers');else url.searchParams.set('agriLayers',state.agriLayers);
   if(state.agriOutline)url.searchParams.set('agriOutline','1');else url.searchParams.delete('agriOutline');
+  if(state.industryOnly)url.searchParams.set('industryOnly','1');else url.searchParams.delete('industryOnly');
   url.searchParams.set('overview',state.overview?'1':'0');
   return url;
 }

@@ -1,0 +1,56 @@
+[
+  {
+    "item": "noaa_normals_index",
+    "url": "https://www.ncei.noaa.gov/data/normals-old/WMO/1961-1990/RA-I/",
+    "method": "ordinary GET using existing configured proxy",
+    "retrievedAt": "2026-10-13T07:13:19Z",
+    "status": "not-acquired",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+    "bytes": 0
+  },
+  {
+    "item": "umd_tree_cover_documentation",
+    "url": "https://glad.umd.edu/dataset/global-forest-change",
+    "method": "ordinary GET using existing configured proxy",
+    "retrievedAt": "2026-10-13T07:13:19Z",
+    "status": "not-acquired",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+    "bytes": 0
+  },
+  {
+    "item": "gss_geoportal_catalogue",
+    "url": "https://geoportal.statsghana.gov.gh/",
+    "method": "ordinary GET using existing configured proxy",
+    "retrievedAt": "2026-10-13T07:13:19Z",
+    "status": "not-acquired",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+    "bytes": 0
+  },
+  {
+    "item": "ifpri_spam_dataset_catalogue",
+    "url": "https://www.mapspam.info/data/",
+    "method": "ordinary GET using existing configured proxy",
+    "retrievedAt": "2026-10-13T07:13:19Z",
+    "status": "not-acquired",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+    "bytes": 0
+  },
+  {
+    "item": "igrac_aquifer_catalogue",
+    "url": "https://ggis.un-igrac.org/",
+    "method": "ordinary GET using existing configured proxy",
+    "retrievedAt": "2026-10-13T07:14:33Z",
+    "status": "not-acquired",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+    "bytes": 0
+  },
+  {
+    "item": "wri_planted_trees_catalogue",
+    "url": "https://www.globalforestwatch.org/blog/data-and-tools/spatial-database-planted-trees-v2/",
+    "method": "ordinary GET using existing configured proxy",
+    "retrievedAt": "2026-10-13T07:14:33Z",
+    "status": "not-acquired",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+    "bytes": 0
+  }
+]

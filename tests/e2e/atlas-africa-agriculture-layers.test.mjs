@@ -38,7 +38,7 @@ test('map labels select and outline a product while other distributions remain, 
  await withController('?field=agriculture&zoom=all',async({window,root,q})=>{
   assert.deepEqual(visibleKeys(root),[...keys].sort());assert.equal(q('[data-africa-agri-footprint]'),null);
   assert.equal(root.querySelectorAll('[data-africa-agri-distribution]').length,9);
-  assert.deepEqual(new Set([...root.querySelectorAll('[data-africa-agri-glyph]')].map(node=>node.dataset.africaAgriGlyph)),new Set(['cattle','goats','sheep']));
+  assert.equal(root.querySelectorAll('[data-africa-agri-glyph]').length,0,'animal illustrations are removed while all three livestock distributions remain');
   const rice=q('[data-africa-agri-label="crop-rice-harvested"]');assert.ok(rice);rice.focus();rice.dispatchEvent(new window.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
   assert.equal(parameters(window).get('crop'),'rice');assert.equal(parameters(window).get('overview'),'0');
   assert.ok(q('[data-africa-agri-footprint="crop-rice-harvested"]'));assert.deepEqual(visibleKeys(root),[...keys].sort());

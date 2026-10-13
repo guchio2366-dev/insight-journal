@@ -1,0 +1,310 @@
+{
+  "schemaVersion": 1,
+  "countryCode": "GHA",
+  "year": 2021,
+  "total": 30753327,
+  "christianSubtotal": 21932708,
+  "groups": [
+    {
+      "id": "catholic",
+      "label": "カトリック",
+      "national": 3071844,
+      "publishedPercent": 10.0,
+      "christian": true
+    },
+    {
+      "id": "protestant",
+      "label": "プロテスタント（原分類）",
+      "national": 5364320,
+      "publishedPercent": 17.4,
+      "christian": true
+    },
+    {
+      "id": "pentecostal-charismatic",
+      "label": "ペンテコステ・カリスマ",
+      "national": 9703351,
+      "publishedPercent": 31.6,
+      "christian": true
+    },
+    {
+      "id": "other-christian",
+      "label": "その他のキリスト教",
+      "national": 3793193,
+      "publishedPercent": 12.3,
+      "christian": true
+    },
+    {
+      "id": "islam",
+      "label": "イスラム教",
+      "national": 6108530,
+      "publishedPercent": 19.9,
+      "christian": false
+    },
+    {
+      "id": "traditionalist",
+      "label": "伝統宗教（原分類）",
+      "national": 999319,
+      "publishedPercent": 3.2,
+      "christian": false
+    },
+    {
+      "id": "other-religion",
+      "label": "その他の宗教",
+      "national": 1384049,
+      "publishedPercent": 4.5,
+      "christian": false
+    },
+    {
+      "id": "no-religion",
+      "label": "宗教なし",
+      "national": 328721,
+      "publishedPercent": 1.1,
+      "christian": false
+    }
+  ],
+  "regions": [
+    {
+      "name": "Western",
+      "total": 2054863,
+      "counts": {
+        "catholic": 227687,
+        "protestant": 434496,
+        "pentecostal-charismatic": 717294,
+        "other-christian": 326435,
+        "islam": 193794,
+        "traditionalist": 6591,
+        "other-religion": 129112,
+        "no-religion": 19454
+      }
+    },
+    {
+      "name": "Central",
+      "total": 2853335,
+      "counts": {
+        "catholic": 215851,
+        "protestant": 560242,
+        "pentecostal-charismatic": 1057847,
+        "other-christian": 565824,
+        "islam": 259902,
+        "traditionalist": 8570,
+        "other-religion": 147009,
+        "no-religion": 38090
+      }
+    },
+    {
+      "name": "Greater Accra",
+      "total": 5437084,
+      "counts": {
+        "catholic": 310769,
+        "protestant": 1033081,
+        "pentecostal-charismatic": 2569981,
+        "other-christian": 673684,
+        "islam": 631591,
+        "traditionalist": 14767,
+        "other-religion": 152511,
+        "no-religion": 50700
+      }
+    },
+    {
+      "name": "Volta",
+      "total": 1654650,
+      "counts": {
+        "catholic": 189013,
+        "protestant": 321711,
+        "pentecostal-charismatic": 606714,
+        "other-christian": 184174,
+        "islam": 77136,
+        "traditionalist": 160439,
+        "other-religion": 99502,
+        "no-religion": 15961
+      }
+    },
+    {
+      "name": "Eastern",
+      "total": 2918623,
+      "counts": {
+        "catholic": 156777,
+        "protestant": 700978,
+        "pentecostal-charismatic": 1186714,
+        "other-christian": 467954,
+        "islam": 194838,
+        "traditionalist": 16064,
+        "other-religion": 154527,
+        "no-religion": 40771
+      }
+    },
+    {
+      "name": "Ashanti",
+      "total": 5428181,
+      "counts": {
+        "catholic": 522586,
+        "protestant": 1192037,
+        "pentecostal-charismatic": 1723369,
+        "other-christian": 800935,
+        "islam": 866117,
+        "traditionalist": 22270,
+        "other-religion": 251678,
+        "no-religion": 49189
+      }
+    },
+    {
+      "name": "Western North",
+      "total": 878855,
+      "counts": {
+        "catholic": 124540,
+        "protestant": 184103,
+        "pentecostal-charismatic": 277120,
+        "other-christian": 110184,
+        "islam": 105226,
+        "traditionalist": 3074,
+        "other-religion": 56866,
+        "no-religion": 17742
+      }
+    },
+    {
+      "name": "Ahafo",
+      "total": 563643,
+      "counts": {
+        "catholic": 71110,
+        "protestant": 104804,
+        "pentecostal-charismatic": 175838,
+        "other-christian": 70720,
+        "islam": 93153,
+        "traditionalist": 1706,
+        "other-religion": 29020,
+        "no-religion": 17292
+      }
+    },
+    {
+      "name": "Bono",
+      "total": 1205462,
+      "counts": {
+        "catholic": 238843,
+        "protestant": 271211,
+        "pentecostal-charismatic": 355740,
+        "other-christian": 114478,
+        "islam": 154145,
+        "traditionalist": 7707,
+        "other-religion": 48732,
+        "no-religion": 14606
+      }
+    },
+    {
+      "name": "Bono East",
+      "total": 1199786,
+      "counts": {
+        "catholic": 170072,
+        "protestant": 192130,
+        "pentecostal-charismatic": 263631,
+        "other-christian": 126459,
+        "islam": 289268,
+        "traditionalist": 45530,
+        "other-religion": 89927,
+        "no-religion": 22769
+      }
+    },
+    {
+      "name": "Oti",
+      "total": 744483,
+      "counts": {
+        "catholic": 94920,
+        "protestant": 85535,
+        "pentecostal-charismatic": 217213,
+        "other-christian": 76931,
+        "islam": 97928,
+        "traditionalist": 94711,
+        "other-religion": 66212,
+        "no-religion": 11033
+      }
+    },
+    {
+      "name": "Northern",
+      "total": 2306808,
+      "counts": {
+        "catholic": 115186,
+        "protestant": 77916,
+        "pentecostal-charismatic": 132547,
+        "other-christian": 93567,
+        "islam": 1532977,
+        "traditionalist": 265766,
+        "other-religion": 80636,
+        "no-religion": 8213
+      }
+    },
+    {
+      "name": "Savannah",
+      "total": 652572,
+      "counts": {
+        "catholic": 69636,
+        "protestant": 27447,
+        "pentecostal-charismatic": 54791,
+        "other-christian": 31724,
+        "islam": 418352,
+        "traditionalist": 28861,
+        "other-religion": 17403,
+        "no-religion": 4358
+      }
+    },
+    {
+      "name": "North East",
+      "total": 657833,
+      "counts": {
+        "catholic": 28226,
+        "protestant": 44426,
+        "pentecostal-charismatic": 94714,
+        "other-christian": 35515,
+        "islam": 402352,
+        "traditionalist": 39975,
+        "other-religion": 10481,
+        "no-religion": 2144
+      }
+    },
+    {
+      "name": "Upper East",
+      "total": 1298179,
+      "counts": {
+        "catholic": 232774,
+        "protestant": 108365,
+        "pentecostal-charismatic": 211813,
+        "other-christian": 88926,
+        "islam": 385020,
+        "traditionalist": 227626,
+        "other-religion": 31034,
+        "no-religion": 12621
+      }
+    },
+    {
+      "name": "Upper West",
+      "total": 898970,
+      "counts": {
+        "catholic": 303854,
+        "protestant": 25838,
+        "pentecostal-charismatic": 58025,
+        "other-christian": 25683,
+        "islam": 406731,
+        "traditionalist": 55662,
+        "other-religion": 19399,
+        "no-religion": 3778
+      }
+    }
+  ],
+  "source": {
+    "publisher": "Ghana Statistical Service",
+    "url": "https://census2021.statsghana.gov.gh/gssmain/fileUpload/reportthemelist/2021%20PHC%20General%20Report%20Vol%203C_Background%20Characteristics_181121.pdf",
+    "table": "5.7",
+    "printedPage": 58,
+    "pdfPage": 72,
+    "selection": "All locality types; Both sexes; published religious-affiliation population",
+    "retrievedAt": "2026-10-13",
+    "access": "Public publisher table read with web.open; numerical factual excerpt manually transcribed and national/region totals reconciled",
+    "originalPdfSha256": null,
+    "excerptSha256": "fd88ca6f2ebc057a9749b25d294ba0da552a468c4ebcf31bfdfeb656d4f96c5e",
+    "reuse": "Numerical factual excerpt with attribution; original report prose, images, and administrative/religious geometry not redistributed; no GIS/report licence asserted"
+  },
+  "limits": [
+    "表の対象30,753,327人。全人口30,832,019人や民族表のガーナ人数30,484,536人と異なる。対象を勝手に補わない。",
+    "Christian行は4分類の小計。小計と4分類を足し合わせない。",
+    "ガーナだけの2021国勢調査分類。Pew2020の大分類/他国の宗派/福音派概念へ読み替えない。",
+    "州別統計であり、州内の居住境界やアフリカ全域の宗派面ではない。"
+  ]
+}

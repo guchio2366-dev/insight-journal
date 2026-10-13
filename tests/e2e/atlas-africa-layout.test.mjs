@@ -70,7 +70,7 @@ test('population data status follows the tabs and distinguishes density estimate
   const {root,q}=context,status=q('[data-africa-subfield-status]'),nav=q('[data-africa-subfields]');
   assert.equal(status.previousElementSibling,nav);assert.equal(status.nextElementSibling,q('.africa-workspace'));
   assert.equal(status.getAttribute('role'),'status');assert.equal(status.hidden,false);
-  assert.equal(status.textContent,'色は人口密度の推計区分。国の平均とは異なります。');
+  assert.equal(status.textContent,'色は人口密度の推計区分。国の平均とは異なります。小さな淡い輪は都市の位置で、人口量を表しません。');
   assert.equal(q('[data-africa-layer-scope]').hidden,true,'the same explanation must not repeat below the legend');
   assert.equal(root.querySelectorAll('[data-africa-layer-class]').length,7,'all original density classes remain available');
   navigateTabs(context,'data-africa-topic',[['ArrowRight','ethnicity']]);
@@ -78,7 +78,7 @@ test('population data status follows the tabs and distinguishes density estimate
   navigateTabs(context,'data-africa-topic',[['ArrowRight','religion']]);
   assert.match(status.textContent,/Pew.*国別/);assert.equal(root.querySelectorAll('[data-africa-religion-country]:not([data-africa-religion-mixed])').length,55);
   navigateTabs(context,'data-africa-topic',[['Home','distribution']]);
-  assert.equal(status.textContent,'色は人口密度の推計区分。国の平均とは異なります。');
+  assert.equal(status.textContent,'色は人口密度の推計区分。国の平均とは異なります。小さな淡い輪は都市の位置で、人口量を表しません。');
   q('.africa-fields [data-field="nature"]').click();
   await wait(()=>q('[data-africa-layer-class]')&&root.dataset.actualLayer==='true','nature distribution must load after leaving population');
   assert.equal(q('.africa-map-card').contains(status),true);assert.equal(status.hidden,true);assert.equal(q('[data-africa-layer-scope]').hidden,false);

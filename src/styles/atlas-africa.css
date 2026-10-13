@@ -652,10 +652,46 @@
 }
 
 .africa-atlas[data-field=nature]:not([data-topic=climate]) .africa-ocean{display:none}
+
+/* Third review: cultural views share the population map's PC reading space. */
+@media(min-width:960px){
+ .africa-atlas[data-field=population] .africa-map-frame{height:clamp(450px,calc(100dvh - 330px),640px);min-height:450px;aspect-ratio:auto}
+ .africa-atlas[data-field=population] .africa-map-frame>.africa-map{height:100%;min-height:0;max-height:none}
+ .africa-atlas[data-field=population] .africa-detail{height:var(--africa-map-height,640px);max-height:var(--africa-map-height,640px);overflow-y:auto;scrollbar-gutter:stable}
+ .africa-atlas .africa-region-controls{justify-content:flex-start}
+ .africa-atlas .africa-region-row{justify-content:flex-start;flex:0 1 auto}
+ .africa-atlas .africa-region-row>label{margin-left:0}
+ .africa-atlas[data-field=agriculture] .africa-region-row>label[data-africa-agri-region-label]{margin-left:0}
+}
 .africa-ethnicity-evidence{margin:.7rem 0;font-size:.84rem}
 .africa-ethnicity-evidence table{width:100%;border-collapse:collapse;margin:.8rem 0;table-layout:auto}
 .africa-ethnicity-evidence caption{text-align:left;font-weight:750;padding:.4rem 0}
 .africa-ethnicity-evidence th,.africa-ethnicity-evidence td{padding:.35rem .25rem;border-bottom:1px solid #d9dfd7;text-align:left;overflow-wrap:anywhere}
 .africa-ethnicity-evidence td:last-child{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.africa-ethnicity-swatch{display:inline-block;width:9px;height:9px;margin-right:4px;border:1px solid #6f7e78}
+[data-africa-ethnicity-composition]{display:block;margin-top:5px;max-width:100%;overflow:visible}
 
 @media(min-width:960px){.africa-atlas[data-field=population][data-topic=ethnicity] .africa-detail{height:var(--africa-map-height,660px);max-height:var(--africa-map-height,660px);overflow-y:auto;scrollbar-gutter:stable}}
+.africa-industry-reading{padding:10px 12px;border-bottom:1px solid #d8ddd5;font-size:14px;line-height:1.65}
+.africa-industry-reading h3{margin:4px 0 6px;font-size:15px}
+.africa-industry-reading p{margin:6px 0 12px}
+.africa-industry-reading [data-africa-industry-sites]{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.africa-industry-reading button,.africa-atlas[data-field=industry] [data-africa-layer-legend] button{border:1px solid #becbc5;border-radius:4px;padding:6px 8px;background:#fffdf8;color:#263e45;font:inherit;cursor:pointer}
+.africa-atlas[data-field=industry] [data-africa-layer-legend] button[aria-pressed=true],.africa-industry-reading button[aria-pressed=true]{border-color:#224c59;box-shadow:inset 0 0 0 1px #224c59}
+.africa-atlas[data-field=industry] [data-africa-layer-legend] button i{display:inline-block;width:10px;height:10px;margin-right:5px}
+.africa-industry-hit:focus-visible rect,.africa-industry-hit:focus-visible text{stroke:#bc5c35;stroke-width:3px}
+@media(min-width:960px){.africa-atlas[data-field=industry] .africa-country-controls{display:none}.africa-atlas[data-field=industry] .africa-main>.africa-subfields{height:auto;min-height:74px}.africa-atlas[data-field=industry] .africa-map-tools{display:none}}
+
+.africa-culture-evidence{padding:12px;font-size:14px;line-height:1.65;border-bottom:1px solid #d8ddd5}
+.africa-culture-evidence h3{font-size:16px;line-height:1.5;margin:12px 0 6px}
+.africa-culture-evidence p{margin:8px 0}
+.africa-culture-evidence select{display:block;max-width:100%;width:100%;margin-top:5px;padding:7px;font:inherit}
+.africa-culture-stat-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 8px;margin:9px 0;font-size:13px}
+.africa-culture-stat-track{grid-row:2;grid-column:1/-1;display:block;height:5px;background:#edf0eb}
+.africa-culture-stat-track i{display:block;height:100%}
+.africa-culture-table-scroll{max-width:100%;overflow-x:auto;font-size:12px}
+.africa-culture-table-scroll table{border-collapse:collapse;width:max-content}
+.africa-culture-table-scroll th,.africa-culture-table-scroll td{padding:6px;white-space:nowrap;border-bottom:1px solid #d8ddd5;text-align:right}
+.africa-culture-table-scroll th:first-child{position:sticky;left:0;background:#fffdf8;text-align:left}
+[data-africa-language-point]{cursor:pointer;outline:none}
+[data-africa-language-point]:focus-visible{stroke:#bc5c35;stroke-width:3px}
