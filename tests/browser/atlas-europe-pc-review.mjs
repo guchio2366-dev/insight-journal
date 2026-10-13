@@ -361,7 +361,7 @@ async function completeAlpsCopy(page) {
 async function drainageState(page) {
   return page.evaluate(() => {
     const params = new URL(location.href).searchParams;
-    return {point: params.get('point'), basin: params.get('basin'), choice: document.querySelector('[data-eu-drainage-choice]').value,
+    return {point: params.get('point'), basin: params.get('basin'), riverBasin: params.get('riverBasin'), choice: document.querySelector('[data-eu-drainage-choice]').value,
       outline: document.querySelector('[data-eu-drainage-selection]').style.display !== 'none',
       summary: document.querySelector('[data-eu-basin-summary]').textContent, result: document.querySelector('[data-eu-subject-result]').textContent,
       comparison: document.querySelector('[data-eu-comparison-link="drainage-density"]').href};
@@ -373,15 +373,16 @@ async function feedbackPlacement(page) {
   const measured = await page.evaluate(() => {
     const group = document.querySelector('[data-eu-drainage-controls]'), summary = group.querySelector('[data-eu-basin-summary]');
     const grid = document.querySelector('[data-eu-subject-grid]'), result = document.querySelector('[data-eu-subject-result]');
-    return {insideControls: grid.parentElement === group, afterSummary: summary.nextElementSibling === grid,
-      gridGap: grid.getBoundingClientRect().top - summary.getBoundingClientRect().bottom,
+    const details=group.querySelector('details');
+    return {insideControls: grid.parentElement === group, afterSummary: Boolean(summary.compareDocumentPosition(grid) & Node.DOCUMENT_POSITION_FOLLOWING),
+      gridGap: grid.getBoundingClientRect().top - details.getBoundingClientRect().bottom,
       rightReader: group.closest('.eu-read-panel') !== null,
-      externalChoicesHidden: group.querySelector('label').hidden && group.querySelector('button').hidden,
+      legacyChoicesCollapsed: !details.open,
       fontSize: parseFloat(getComputedStyle(result).fontSize), live: result.getAttribute('aria-live'),
       horizontalOverflow: document.documentElement.scrollWidth > innerWidth || group.scrollWidth > group.clientWidth + 1};
   });
   assert.equal(measured.insideControls, true); assert.equal(measured.afterSummary, true);
-  assert.equal(measured.rightReader, true); assert.equal(measured.externalChoicesHidden, true);
+  assert.equal(measured.rightReader, true); assert.equal(measured.legacyChoicesCollapsed, true);
   assert.ok(measured.gridGap >= 0 && measured.gridGap <= 24, JSON.stringify(measured));
   assert.ok(measured.fontSize >= 14); assert.equal(measured.live, 'polite'); assert.equal(measured.horizontalOverflow, false);
   return measured;
@@ -450,28 +451,28 @@ async function europeOperations(page, profile, render) {
 
   await openEurope(page, 'atlas/europe/nature/?layer=drainage', render);
   assert.equal(await page.locator('[data-eu-feature-list]').isVisible(),false);
-  await page.locator('[data-eu-map-place="rhine"][data-eu-map-kind="feature"]').click(); await settled(page, '表示格子中心.*BasinATLAS');
+  await page.locator('[data-eu-river-label="rhine"]').click();
   await page.waitForFunction(() => document.querySelector('[data-eu-drainage-selection]').style.display !== 'none');
-  const selected = await drainageState(page); assert.ok(selected.point); assert.ok(selected.basin); assert.doesNotMatch(selected.result, /データなし/);
+  const selected = await drainageState(page); assert.equal(selected.point,null); assert.ok(selected.basin); assert.equal(selected.riverBasin,'rhine'); assert.match(selected.summary,/ライン川.*全流域ではありません/);
   const selectedFeedback = await feedbackPlacement(page);
   await page.locator('.eu-map-stage').scrollIntoViewIfNeeded();
   const drainageBounds = await page.locator('.eu-map-stage').boundingBox(); assert.ok(drainageBounds);
-  await page.mouse.click(drainageBounds.x + 8, drainageBounds.y + drainageBounds.height * .2);
+  await page.mouse.click(drainageBounds.x + 8, drainageBounds.y + drainageBounds.height * .5);
   await settled(page, 'データなし');
   const outside = await drainageState(page), outsideFeedback = await feedbackPlacement(page);
-  assert.ok(outside.point); assert.equal(outside.basin, null); assert.equal(outside.choice, ''); assert.equal(outside.outline, false);
+  assert.ok(outside.point); assert.equal(outside.basin, null); assert.equal(outside.riverBasin,null); assert.equal(outside.choice, ''); assert.equal(outside.outline, false);
   assert.match(outside.summary, /有効な区画がありません/);
   const comparison = new URL(outside.comparison), origin = new URLSearchParams(comparison.searchParams.get('europeReturn') ?? '');
   assert.equal(comparison.searchParams.has('basin'), false); assert.equal(origin.has('basin'), false); assert.equal(origin.has('point'), true);
   if (normal) await snapshot(page, profile, 'drainage-outside');
-  await page.goBack(); await ready(page, 'europe', render); await settled(page, '表示格子中心.*BasinATLAS');
+  await page.goBack(); await ready(page, 'europe', render);
   await page.waitForFunction(() => document.querySelector('[data-eu-drainage-selection]').style.display !== 'none');
-  assert.equal((await drainageState(page)).basin, selected.basin);
+  assert.equal((await drainageState(page)).basin, selected.basin);assert.equal((await drainageState(page)).riverBasin,'rhine');
   await page.goForward(); await ready(page, 'europe', render); assert.equal((await drainageState(page)).basin, null);
   await page.reload({waitUntil: 'networkidle'}); await ready(page, 'europe', render);
   const reloaded = await drainageState(page); assert.equal(reloaded.basin, null); assert.equal(reloaded.point, outside.point); assert.equal(reloaded.choice, ''); assert.equal(reloaded.outline, false); await feedbackPlacement(page);
   record.drainage = {selected, selectedFeedback, outside, outsideFeedback};
-  record.checks.push('real valid basin then missing-data click clears basin/outline without fabricating a category', 'single live drainage result below summary at >=14px', 'drainage back/forward/reload');
+  record.checks.push('named retained basin then missing-data click clears basin/outline without fabricating a category', 'single live drainage result below summary at >=14px', 'drainage back/forward/reload');
 
   await openEurope(page, 'atlas/europe/population/?layer=density', render);
   await page.locator('.eu-map-stage').scrollIntoViewIfNeeded();
@@ -574,7 +575,7 @@ async function stageOneOperations(page, profile) {
   assert.equal(manifest.network.requests.filter(item=>new URL(item.url).pathname.endsWith('/precipitation-v1/precipitation.png')).length,0,'Neither route requests the former mesh raster');
   manifest.checks.push({profile:profile.name,precipitationRoutes:{direct:directRain,tabs:tabRain,formerMeshRequests:0}});
   await openEurope(page, 'atlas/europe/nature/?layer=drainage', 'normal');
-  await page.locator('[data-eu-map-place="rhine"][data-eu-map-kind="feature"]').click();
+  await page.locator('[data-eu-river-label="rhine"]').click();
   await page.waitForFunction(() => document.querySelector('[data-eu-basin-summary]').textContent.includes('ライン川'));
   assert.match(await page.locator('[data-eu-basin-summary]').textContent(), /同じMAIN_BAS.*モデル区画/);
   await snapshot(page, profile, 'drainage-river-reading');
