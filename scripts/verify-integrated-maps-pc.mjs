@@ -36,6 +36,20 @@ async function shot(name){
  report.images.push({file,sha256:hash(bytes),url:page.url()});
 }
 async function settle(){await page.waitForLoadState('networkidle');await page.evaluate(async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});}
+async function stableFarmSnapshot(selected){
+ return page.evaluate(async selected=>{
+  let previous='',since=0,frames=0,last;const started=performance.now();
+  while(performance.now()-started<10000){
+   const root=document.querySelector('[data-asia-atlas]'),frame=root.querySelector('.asia-map-frame'),b=frame.getBoundingClientRect();
+   last={selected:root.dataset.farmSelected,ready:root.dataset.farmContextStatus,mapReady:root.dataset.mapReady,camera:JSON.parse(root.dataset.mapCamera),frame:{width:b.width,height:b.height},layout:{height:root.style.getPropertyValue('--asia-farm-map-height'),available:root.style.getPropertyValue('--asia-map-available-height')},points:[...root.querySelectorAll('.asia-livestock-point')].filter(n=>n.getBoundingClientRect().width&&!n.hidden).map(n=>({name:n.getAttribute('aria-label'),x:parseFloat(n.style.left),y:parseFloat(n.style.top),opacity:parseFloat(getComputedStyle(n).opacity)}))};
+   const fingerprint=JSON.stringify(last),now=performance.now();
+   if(last.ready==='ready'&&last.mapReady==='true'&&last.selected===selected&&last.points.length&&fingerprint===previous){frames++;if(frames>=3&&now-since>=500)return{...last,stableFrames:frames,stableMs:now-since};}
+   else{since=now;frames=1;previous=fingerprint;}
+   await new Promise(r=>requestAnimationFrame(r));
+  }
+  throw Error('Farm layout did not reach a naturally stable state: '+JSON.stringify(last));
+ },selected);
+}
 async function checkAsset(relative){
  const response=await page.request.get(base+'/'+relative);assert.equal(response.status(),200,relative);
  const actual=await response.body(),local=await readFile(resolve(dist,relative));
@@ -110,11 +124,13 @@ try{
   const product=await page.locator('[data-asia-config]').evaluate(node=>JSON.parse(node.textContent).presentation.farming.products.find(p=>p.kind==='crop'&&p.id!=='rice').id);
   const points=page.locator('.asia-livestock-point:visible');
   const anchors=()=>points.evaluateAll(nodes=>nodes.map(node=>({name:node.getAttribute('aria-label'),x:parseFloat(node.style.left),y:parseFloat(node.style.top),opacity:parseFloat(getComputedStyle(node).opacity)})));
-  const before=await anchors();assert(before.length>0,region+' sourced livestock is visible');
-  const beforeCamera=await camera({cameraRoot:'[data-asia-atlas]'});
+  const beforeSnapshot=await stableFarmSnapshot(''),before=beforeSnapshot.points;assert(before.length>0,region+' sourced livestock is visible');
+  const beforeCamera=beforeSnapshot.camera;
   await page.locator(`[data-farm-choice="${product}"]`).first().click();
   await page.locator(`[data-asia-atlas][data-farm-context-status="ready"][data-farm-selected="${product}"]`).waitFor();await settle();
-  const selected=await anchors();assert.equal(selected.length,before.length,region+' retains other livestock points');
+  const afterSnapshot=await stableFarmSnapshot(product),selected=afterSnapshot.points;
+  report.operations.push({region,kind:'farm-layout-diagnostic',before:beforeSnapshot,after:afterSnapshot});
+  assert.equal(selected.length,before.length,region+' retains other livestock points');
   for(let i=0;i<before.length;i++){assert.equal(selected[i].name,before[i].name);assert.equal(selected[i].opacity,.2);for(const axis of ['x','y'])assert(Math.abs(selected[i][axis]-before[i][axis])<=1,region+' retains source anchors within 1 CSS pixel');}
   sameCamera(await camera({cameraRoot:'[data-asia-atlas]'}),beforeCamera);assert.equal(await page.locator('[data-farming-legend]').isVisible(),false);
   await page.reload({waitUntil:'networkidle'});await page.locator(`[data-asia-atlas][data-farm-context-status="ready"][data-farm-selected="${product}"]`).waitFor();await settle();
