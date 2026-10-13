@@ -91,7 +91,9 @@
         "implementation": "cabbage/tomato: 24市町村の数表と県計のみの地図参照点。市町村位置は未確認。",
         "observedUnit": "a",
         "rawFile": null,
-        "rawSha256": null
+        "rawSha256": null,
+        "independentRawVerification": "tokushima-2025-audit.json#independentRawVerification",
+        "rawVerificationStatus": "parent-verified-100-cells-and-sha256; local-download-failure-retained"
       }
     },
     {
