@@ -11,7 +11,7 @@ import {mapPaintDifference,labelInk} from '../browser/helpers/atlas-map-paint-re
 const enabled=process.env.ATLAS_ASIA_BROWSER==='1';
 const base='/insight-journal',root=path.resolve('dist');
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.gz':'application/gzip','.png':'image/png','.svg':'image/svg+xml','.webp':'image/webp','.woff2':'font/woff2'};
-const reviewFolder=path.resolve('review-artifacts/south-central-focus'),review={head:null,requestedHead:process.env.REVIEW_HEAD_SHA??null,buildRelease:null,sandbox:true,images:[],industryTransitions:[],captureAdjustments:[],renderChecks:[]};
+const reviewFolder=path.resolve('review-artifacts/south-central-focus'),review={head:null,requestedHead:process.env.REVIEW_HEAD_SHA??null,buildRelease:null,sandbox:true,images:[],industryTransitions:[],captureAdjustments:[],renderChecks:[],deliveredPaintChecks:[]};
 const renderReferences=new WeakMap();
 const renderFollowup=new Set(['south-asia-industry','south-asia-industry-cleared','south-asia-industry-cleared-confirmed','1920-south-asia-industry-selected-sc-chattogram-garments','1440-south-asia-industry-selected-sc-dhaka-garments','1440-south-asia-industry-selected-sc-chattogram-garments','1024-south-asia-industry-selected-sc-dhaka-garments','1024-south-asia-industry-selected-sc-chattogram-garments']);
 async function saveReview(){
@@ -76,6 +76,14 @@ async function capturePc(page,name){
  if(!render){await page.waitForLoadState('networkidle');await settled(page);}await mkdir(reviewFolder,{recursive:true});
  const file=name+'.png';await page.screenshot({path:path.join(reviewFolder,file),animations:'disabled',fullPage:false});
  const bytes=await readFile(path.join(reviewFolder,file)),state=await page.evaluate(()=>({region:document.querySelector('[data-asia-config]')?.textContent?JSON.parse(document.querySelector('[data-asia-config]').textContent).focusId:null,field:document.querySelector('[data-asia-atlas]')?.dataset.field,query:location.search,dpr:devicePixelRatio}));
+ if(render){
+  assert.equal(state.dpr,1,'paint comparison uses the recorded DPR1 viewport');
+  const clip=render.scene.clip,{data,info}=await sharp(bytes).extract({left:clip.x,top:clip.y,width:clip.width,height:clip.height}).ensureAlpha().raw().toBuffer({resolveWithObject:true}),pixels={data,width:info.width,height:info.height},reference=renderReferences.get(page);
+  const paint=mapPaintDifference(reference.pixels,pixels,[...reference.scene.masks,...render.scene.masks]),ink={before:labelInk(reference.pixels,reference.scene.steel),after:labelInk(pixels,render.scene.steel)};
+  assert.ok(paint.fraction<=.005,file+': the delivered viewport PNG retains complete geographic paint: '+JSON.stringify(paint));
+  assert.ok(ink.after.dark>=ink.before.dark*.95,file+': the delivered viewport PNG retains steel label paint: '+JSON.stringify(ink));
+  review.deliveredPaintChecks.push({file,paint,steelInk:ink,status:'passed'});
+ }
  review.images.push({file,head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),viewport:page.viewportSize(),dpr:state.dpr,pngSize:{width:bytes.readUInt32BE(16),height:bytes.readUInt32BE(20)},sha256:createHash('sha256').update(bytes).digest('hex'),bytes:bytes.length,url:page.url(),state,mapBounds:render?.scene.bounds??null});await saveReview();
 }
 async function industrySnapshot(page){
