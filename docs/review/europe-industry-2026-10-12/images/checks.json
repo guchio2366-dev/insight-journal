@@ -1,0 +1,470 @@
+{
+  "viewport": {
+    "width": 1920,
+    "height": 1080
+  },
+  "deviceScaleFactor": 1,
+  "checks": [
+    {
+      "renderer": "auto",
+      "sector": "resources",
+      "groups": 4,
+      "labels": 10,
+      "initial": {
+        "frame": "101.33333333333331 71.68160798443563 744 957.6606219578113",
+        "labels": {
+          "ormen": {
+            "transform": "translate(373.974px, 157.2px)",
+            "w": 154,
+            "h": 22
+          },
+          "nyhamna": {
+            "transform": "translate(405.573px, 219.075px)",
+            "w": 132,
+            "h": 22
+          },
+          "pernis": {
+            "transform": "translate(384.434px, 429.595px)",
+            "w": 110,
+            "h": 22
+          },
+          "lubin": {
+            "transform": "translate(532.23px, 483.393px)",
+            "w": 108,
+            "h": 22
+          },
+          "glogow": {
+            "transform": "translate(530.989px, 433.407px)",
+            "w": 108,
+            "h": 22
+          },
+          "kvilldal": {
+            "transform": "translate(401.726px, 260.654px)",
+            "w": 132,
+            "h": 22
+          },
+          "gravelines": {
+            "transform": "translate(339.263px, 491.117px)",
+            "w": 145,
+            "h": 22
+          },
+          "kiruna": {
+            "transform": "translate(593.113px, 25.8161px)",
+            "w": 86,
+            "h": 22
+          },
+          "kaukas": {
+            "transform": "translate(659.132px, 222.076px)",
+            "w": 153,
+            "h": 22
+          },
+          "johan": {
+            "transform": "translate(299.73px, 319.928px)",
+            "w": 233,
+            "h": 22
+          }
+        },
+        "geography": "detailed",
+        "render": "live"
+      }
+    },
+    {
+      "renderer": "auto",
+      "sector": "manufacturing",
+      "groups": 8,
+      "labels": 17,
+      "initial": {
+        "frame": "101.33333333333331 71.68160798443563 744 957.6606219578113",
+        "labels": {
+          "pernis": {
+            "transform": "translate(384.434px, 429.595px)",
+            "w": 110,
+            "h": 22
+          },
+          "glogow": {
+            "transform": "translate(530.989px, 433.407px)",
+            "w": 108,
+            "h": 22
+          },
+          "rotterdam": {
+            "transform": "translate(430.566px, 453.991px)",
+            "w": 16,
+            "h": 16
+          },
+          "ludwigshafen": {
+            "transform": "translate(378.314px, 554px)",
+            "w": 223,
+            "h": 22
+          },
+          "munich": {
+            "transform": "translate(539.653px, 523.315px)",
+            "w": 147,
+            "h": 22
+          },
+          "mlada": {
+            "transform": "translate(469.723px, 398px)",
+            "w": 201,
+            "h": 22
+          },
+          "kvasiny": {
+            "transform": "translate(578.975px, 487.761px)",
+            "w": 16,
+            "h": 16
+          },
+          "toulouse": {
+            "transform": "translate(343.332px, 626.52px)",
+            "w": 118,
+            "h": 22
+          },
+          "hamburg": {
+            "transform": "translate(404px, 372px)",
+            "w": 108,
+            "h": 22
+          },
+          "brasov": {
+            "transform": "translate(648.749px, 591.287px)",
+            "w": 108,
+            "h": 22
+          },
+          "veldhoven": {
+            "transform": "translate(296px, 483.194px)",
+            "w": 177,
+            "h": 22
+          },
+          "kalundborg": {
+            "transform": "translate(468.821px, 346px)",
+            "w": 108,
+            "h": 22
+          },
+          "oulu": {
+            "transform": "translate(651.76px, 158.051px)",
+            "w": 99,
+            "h": 22
+          },
+          "kaukas": {
+            "transform": "translate(646.132px, 222.076px)",
+            "w": 179,
+            "h": 22
+          },
+          "portugal_textile": {
+            "transform": "translate(191.602px, 664.895px)",
+            "w": 178,
+            "h": 22
+          },
+          "parma_food": {
+            "transform": "translate(476px, 632px)",
+            "w": 121,
+            "h": 22
+          },
+          "prato_textile": {
+            "transform": "translate(450.445px, 658px)",
+            "w": 145,
+            "h": 22
+          }
+        },
+        "geography": "detailed",
+        "render": "live"
+      }
+    },
+    {
+      "renderer": "auto",
+      "sector": "services",
+      "groups": 4,
+      "labels": 9,
+      "initial": {
+        "frame": "101.33333333333331 71.68160798443563 744 957.6606219578113",
+        "labels": {
+          "kista": {
+            "transform": "translate(502.821px, 307.829px)",
+            "w": 210,
+            "h": 22
+          },
+          "rotterdam": {
+            "transform": "translate(356px, 428.991px)",
+            "w": 132,
+            "h": 22
+          },
+          "hamburg": {
+            "transform": "translate(446.81px, 398px)",
+            "w": 121,
+            "h": 22
+          },
+          "oulu": {
+            "transform": "translate(651.76px, 158.051px)",
+            "w": 99,
+            "h": 22
+          },
+          "frankfurt": {
+            "transform": "translate(434.788px, 508.698px)",
+            "w": 117,
+            "h": 22
+          },
+          "adriatic_tourism": {
+            "transform": "translate(525.248px, 620.157px)",
+            "w": 117,
+            "h": 22
+          },
+          "wageningen_food": {
+            "transform": "translate(372.941px, 372px)",
+            "w": 165,
+            "h": 22
+          },
+          "tyrol_tourism": {
+            "transform": "translate(484.668px, 562.468px)",
+            "w": 84,
+            "h": 22
+          },
+          "london_finance": {
+            "transform": "translate(325.591px, 481.203px)",
+            "w": 117,
+            "h": 22
+          }
+        },
+        "geography": "detailed",
+        "render": "live"
+      }
+    },
+    {
+      "renderer": "static",
+      "sector": "resources",
+      "groups": 4,
+      "labels": 10,
+      "initial": {
+        "frame": "101.33333333333331 71.68160798443563 744 957.6606219578113",
+        "labels": {
+          "ormen": {
+            "transform": "translate(383.148px, 192.63px)",
+            "w": 154,
+            "h": 22
+          },
+          "nyhamna": {
+            "transform": "translate(412.194px, 252.285px)",
+            "w": 132,
+            "h": 22
+          },
+          "pernis": {
+            "transform": "translate(395.037px, 431.198px)",
+            "w": 110,
+            "h": 22
+          },
+          "lubin": {
+            "transform": "translate(524.647px, 483.779px)",
+            "w": 108,
+            "h": 22
+          },
+          "glogow": {
+            "transform": "translate(523.56px, 434.536px)",
+            "w": 108,
+            "h": 22
+          },
+          "kvilldal": {
+            "transform": "translate(408.824px, 283.236px)",
+            "w": 132,
+            "h": 22
+          },
+          "gravelines": {
+            "transform": "translate(353.294px, 490.544px)",
+            "w": 145,
+            "h": 22
+          },
+          "kiruna": {
+            "transform": "translate(579.351px, 121.561px)",
+            "w": 86,
+            "h": 22
+          },
+          "kaukas": {
+            "transform": "translate(633.041px, 293.449px)",
+            "w": 153,
+            "h": 22
+          },
+          "johan": {
+            "transform": "translate(313.207px, 340.614px)",
+            "w": 233,
+            "h": 22
+          }
+        },
+        "geography": "detailed",
+        "render": "static"
+      }
+    },
+    {
+      "renderer": "static",
+      "sector": "manufacturing",
+      "groups": 8,
+      "labels": 17,
+      "initial": {
+        "frame": "101.33333333333331 71.68160798443563 744 957.6606219578113",
+        "labels": {
+          "pernis": {
+            "transform": "translate(380px, 431.198px)",
+            "w": 110,
+            "h": 22
+          },
+          "glogow": {
+            "transform": "translate(523.56px, 434.536px)",
+            "w": 108,
+            "h": 22
+          },
+          "rotterdam": {
+            "transform": "translate(441.276px, 455.669px)",
+            "w": 16,
+            "h": 16
+          },
+          "ludwigshafen": {
+            "transform": "translate(296px, 516.214px)",
+            "w": 223,
+            "h": 22
+          },
+          "munich": {
+            "transform": "translate(524px, 538.012px)",
+            "w": 147,
+            "h": 22
+          },
+          "mlada": {
+            "transform": "translate(536px, 398px)",
+            "w": 201,
+            "h": 22
+          },
+          "kvasiny": {
+            "transform": "translate(571.3px, 485.245px)",
+            "w": 16,
+            "h": 16
+          },
+          "toulouse": {
+            "transform": "translate(358.531px, 609.132px)",
+            "w": 118,
+            "h": 22
+          },
+          "hamburg": {
+            "transform": "translate(404px, 401.592px)",
+            "w": 108,
+            "h": 22
+          },
+          "brasov": {
+            "transform": "translate(626.731px, 578.275px)",
+            "w": 108,
+            "h": 22
+          },
+          "veldhoven": {
+            "transform": "translate(308px, 483.605px)",
+            "w": 177,
+            "h": 22
+          },
+          "kalundborg": {
+            "transform": "translate(469.094px, 361.422px)",
+            "w": 108,
+            "h": 22
+          },
+          "oulu": {
+            "transform": "translate(629.927px, 198.839px)",
+            "w": 99,
+            "h": 22
+          },
+          "kaukas": {
+            "transform": "translate(620.041px, 293.449px)",
+            "w": 179,
+            "h": 22
+          },
+          "portugal_textile": {
+            "transform": "translate(221.881px, 642.741px)",
+            "w": 178,
+            "h": 22
+          },
+          "parma_food": {
+            "transform": "translate(488px, 606px)",
+            "w": 121,
+            "h": 22
+          },
+          "prato_textile": {
+            "transform": "translate(488px, 632px)",
+            "w": 145,
+            "h": 22
+          }
+        },
+        "geography": "detailed",
+        "render": "static"
+      }
+    },
+    {
+      "renderer": "static",
+      "sector": "services",
+      "groups": 4,
+      "labels": 9,
+      "initial": {
+        "frame": "101.33333333333331 71.68160798443563 744 957.6606219578113",
+        "labels": {
+          "kista": {
+            "transform": "translate(492.564px, 330.017px)",
+            "w": 210,
+            "h": 22
+          },
+          "rotterdam": {
+            "transform": "translate(368px, 430.669px)",
+            "w": 132,
+            "h": 22
+          },
+          "hamburg": {
+            "transform": "translate(449.004px, 401.592px)",
+            "w": 121,
+            "h": 22
+          },
+          "oulu": {
+            "transform": "translate(629.927px, 198.839px)",
+            "w": 99,
+            "h": 22
+          },
+          "frankfurt": {
+            "transform": "translate(438.72px, 505.942px)",
+            "w": 117,
+            "h": 22
+          },
+          "adriatic_tourism": {
+            "transform": "translate(517.973px, 603.56px)",
+            "w": 117,
+            "h": 22
+          },
+          "wageningen_food": {
+            "transform": "translate(381.561px, 372px)",
+            "w": 165,
+            "h": 22
+          },
+          "tyrol_tourism": {
+            "transform": "translate(484.464px, 553.034px)",
+            "w": 84,
+            "h": 22
+          },
+          "london_finance": {
+            "transform": "translate(308px, 481.861px)",
+            "w": 117,
+            "h": 22
+          }
+        },
+        "geography": "detailed",
+        "render": "static"
+      }
+    }
+  ],
+  "screenshots": [
+    "auto-resources-initial.png",
+    "auto-manufacturing-initial.png",
+    "auto-services-initial.png",
+    "auto-manufacturing-aircraft.png",
+    "auto-manufacturing-aircraft-only.png",
+    "static-resources-initial.png",
+    "static-manufacturing-initial.png",
+    "static-services-initial.png",
+    "static-manufacturing-aircraft.png",
+    "static-manufacturing-aircraft-only.png"
+  ],
+  "release": {
+    "articles": [
+      {
+        "payloadHash": "2c6ef0cd92ddb67af00ab81f04d553ca7d072d929e0bf1f277221867ad5bf646",
+        "publicId": "a-11111111-1111-4111-8111-111111111111",
+        "revision": 1
+      }
+    ],
+    "builtAt": "2026-10-12T21:18:10.210Z",
+    "commitSha": "local"
+  }
+}

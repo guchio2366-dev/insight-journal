@@ -1,0 +1,46 @@
+{
+  "port": {
+    "publisher": "Natural Earth",
+    "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/9380cca83db5f9aef52d5e762765100745f84b27/geojson/ne_10m_ports.geojson",
+    "licence": "public domain",
+    "sourceSha256": "c5a5028f5187a5e1b9fe7f0fab99804a8be7482099a2365d404fb7e9dd6b5457",
+    "sourceBytes": 279075,
+    "feature": {
+      "type": "Feature",
+      "properties": {
+        "scalerank": 8,
+        "featurecla": "Port",
+        "name": "Kotka",
+        "website": "www.portofkotka.fi",
+        "natlscale": 5,
+        "ne_id": 1730087431
+      },
+      "bbox": [
+        26.941814,
+        60.461111,
+        26.941814,
+        60.461111
+      ],
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          26.941814,
+          60.461111
+        ]
+      }
+    },
+    "activitySource": "https://www.haminakotka.com/services-and-price-list/wood-processing-industry"
+  },
+  "processing": {
+    "source": "https://www.metsagroup.com/metsafibre/about-metsafibre/pulp-production/rauma-pulp-mill/",
+    "sourceAddress": "Maanpääntie 9, Rauma",
+    "coordinates": [
+      21.465131,
+      61.1102011
+    ],
+    "coordinateEvidence": "Publisher-linked Google Maps place at address; !3d61.1102011!4d21.465131. The factual coordinate is used; no map tiles or third-party images copied.",
+    "definition": "visitor-address point, not mill extent or sourcing footprint"
+  },
+  "checkedAt": "2026-10-12",
+  "quantityMeaning": "none; equal-size reference locations, no procurement or throughput inference"
+}

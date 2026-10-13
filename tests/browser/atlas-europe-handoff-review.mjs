@@ -25,6 +25,7 @@ async function open(field,layer,render='auto'){
   await page.goto(new URL(`atlas/europe/${field}/?layer=${layer}${render==='static'?'&render=static':''}`,base).href,{waitUntil:'networkidle'});
   await page.waitForFunction(()=>document.querySelector('[data-europe-detail]')?.dataset.initialized==='true');
   if(render==='auto')await page.locator('[data-eu-live].is-ready').waitFor();
+  assert.equal(await page.locator('[data-europe-detail]').getAttribute('data-eu-geography'),'detailed');
   await page.evaluate(async()=>{await document.fonts.ready;await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
   assert.equal(await page.evaluate(()=>devicePixelRatio),1);
   assert.equal(await page.evaluate(()=>visualViewport.scale),1);
@@ -33,39 +34,43 @@ async function open(field,layer,render='auto'){
 try{
   for(const render of ['auto','static']){
     await open('nature','water',render);
-    const labels=await page.locator('[data-eu-river-label]').evaluateAll(nodes=>nodes.map(node=>({id:node.dataset.euRiverLabel,hidden:node.hidden,rect:node.getBoundingClientRect().toJSON()})));
-    assert.equal(labels.length,22);
+    const labels=await page.locator('[data-eu-river-label]:visible').evaluateAll(nodes=>nodes.map(node=>({id:node.dataset.euRiverLabel,hidden:node.hidden,rect:node.getBoundingClientRect().toJSON()})));
+    assert.equal(labels.length,7);
     assert.deepEqual(labels.filter(item=>item.hidden).map(item=>item.id),[]);
     assert.ok(labels.every(item=>item.rect.bottom<=1080),'every river name fits the PC viewport');
     const intersect=(a,b)=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
     for(let i=0;i<labels.length;i++)for(let j=i+1;j<labels.length;j++)assert.equal(intersect(labels[i].rect,labels[j].rect),false,`${labels[i].id}/${labels[j].id}`);
     const box=await page.locator('[data-eu-static]').getAttribute('viewBox');
-    await page.locator('[data-eu-river-label=loire]').click();
-    assert.equal(new URL(page.url()).searchParams.get('feature'),'loire');
+    await page.locator('[data-eu-river-label=thames]').click();
+    assert.equal(new URL(page.url()).searchParams.get('feature'),'thames');
     assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'),box);
-    assert.match(await page.locator('[data-eu-subject-reader]').innerText(),/ロワール川/);
+    assert.match(await page.locator('[data-eu-subject-reader]').innerText(),/テムズ川/);
     if(render==='static'){
-      const point=await page.locator('[data-eu-major-river=po]').first().evaluate(path=>{const p=path.getPointAtLength(path.getTotalLength()*.5).matrixTransform(path.getScreenCTM());return {x:p.x,y:p.y};});
+      const point=await page.locator('[data-eu-major-river=seine]').first().evaluate(path=>{const p=path.getPointAtLength(path.getTotalLength()*.5).matrixTransform(path.getScreenCTM());return {x:p.x,y:p.y};});
       await page.mouse.click(point.x,point.y);
-    }else await page.locator('[data-eu-river-label=po]').click();
-    assert.equal(new URL(page.url()).searchParams.get('feature'),'po');
-    assert.match(await page.locator('[data-eu-subject-reader]').innerText(),/ポー川/);
+    }else await page.locator('[data-eu-river-label=seine]').click();
+    assert.equal(new URL(page.url()).searchParams.get('feature'),'seine');
+    assert.match(await page.locator('[data-eu-subject-reader]').innerText(),/セーヌ川/);
     if(render==='auto'){
-      await page.screenshot({path:`${output}/rivers-22-1920x1080.png`});
-      // A displaced additional name has an anchor on a retained line and no
-      // button covering the anchor. Exercise the live river hit layer there.
-      const anchor=await page.locator('[data-eu-river-leader]').evaluateAll(lines=>{
-        const line=lines.find(line=>line.style.display!=='none'&&!['rhine','danube','seine','thames'].includes(line.dataset.euRiverLeader));
-        if(!line)return null;
-        const rect=line.ownerSVGElement.getBoundingClientRect();
-        return {id:line.dataset.euRiverLeader,x:rect.left+Number(line.getAttribute('x1')),y:rect.top+Number(line.getAttribute('y1'))};
+      await page.screenshot({path:`${output}/rivers-seven-1920x1080.png`});
+      // Select a real retained river vertex outside the name hit area.
+      const anchor=await page.evaluate(()=>{
+        const config=JSON.parse(document.querySelector('[data-eu-config]').textContent);
+        const a=config.readings.find(r=>r.id==='rhine'),b=config.readings.find(r=>r.id==='volga');
+        const an=document.querySelector('[data-eu-river-label=rhine]'),bn=document.querySelector('[data-eu-river-label=volga]');
+        const merc=lat=>Math.log(Math.tan(Math.PI/4+lat*Math.PI/360));
+        const sx=(Number(bn.dataset.euAnchorX)-Number(an.dataset.euAnchorX))/(b.coordinates[0]-a.coordinates[0]);
+        const sy=(Number(bn.dataset.euAnchorY)-Number(an.dataset.euAnchorY))/(merc(b.coordinates[1])-merc(a.coordinates[1]));
+        const g=config.majorRivers.features.find(f=>f.properties.id==='don').geometry;
+        const line=g.type==='MultiLineString'?g.coordinates[0]:g.coordinates;
+        const point=line[Math.floor(line.length*.3)],r=document.querySelector('.eu-map-stage').getBoundingClientRect();
+        return {id:'don',x:r.left+Number(an.dataset.euAnchorX)+(point[0]-a.coordinates[0])*sx,y:r.top+Number(an.dataset.euAnchorY)+(merc(point[1])-merc(a.coordinates[1]))*sy};
       });
-      assert.ok(anchor,'a river label was displaced with a leader');
       await page.mouse.click(anchor.x,anchor.y);
       assert.equal(new URL(page.url()).searchParams.get('feature'),anchor.id);
       checks.push({topic:'water',render,liveDirectLineHit:anchor.id});
     }
-    checks.push({topic:'water',render,labels:labels.length,noCollisions:true,labelClick:'loire',selection:'po',staticDirectLineHit:render==='static',noAutomaticZoom:true});
+    checks.push({topic:'water',render,labels:labels.length,noCollisions:true,labelClick:'thames',selection:'seine',staticDirectLineHit:render==='static',noAutomaticZoom:true});
   }
   for(const [genre,ids,selected] of [['livestock',['cattle','pig','chicken','sheep'],'cattle'],['horticulture',['citrus','temperatefruit','vegetables'],'citrus']]){
     await open('agriculture',genre);
@@ -94,16 +99,7 @@ try{
     const box=await page.locator('[data-eu-static]').getAttribute('viewBox');
     assert.equal(await page.locator('[data-eu-religion-supplement]').getAttribute('open'),null);
     assert.equal(await page.locator('[data-eu-pew-surface-group=unaffiliated]').isVisible(),false);
-    for(const [code,values] of [['FRA',['40%','50.5%']],['CHE',['38%','27.1%','22%']],['DEU',['30.2%','29.2%','33.1%']]]){
-      assert.equal(await page.locator(`[data-eu-smre-marker=${code}]`).isVisible(),true);
-      const text=await page.locator(`[data-eu-smre-marker=${code}]`).textContent();
-      for(const value of values)assert.ok(text.includes(value),`${code} ${value} is present without selection`);
-    }
-    const markerBoxes=await page.locator('[data-eu-smre-marker]:visible').evaluateAll(nodes=>nodes.map(node=>{const r=node.getBoundingClientRect();return {code:node.dataset.euSmreMarker,left:r.left,right:r.right,top:r.top,bottom:r.bottom};}));
-    assert.equal(markerBoxes.length,31,'all countries with multiple major categories are visible');
-    for(let i=0;i<markerBoxes.length;i++)for(let j=i+1;j<markerBoxes.length;j++){
-      const a=markerBoxes[i],b=markerBoxes[j];assert.ok(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,`${a.code}/${b.code} do not overlap`);
-    }
+    assert.equal(await page.locator('[data-eu-smre-marker]:visible').count(),0,'National percentages remain in the reader');
     if(render==='auto')await page.screenshot({path:`${output}/religion-coexistence-1920x1080.png`});
     await page.locator('[data-eu-religion-supplement] > summary').click();
     await page.locator('[data-eu-religion-country]').selectOption('DEU');
@@ -130,7 +126,7 @@ try{
     assert.equal(await page.locator('[data-eu-smre-key]').isVisible(),true);
     assert.equal(await page.locator('[data-eu-pew-marker]:visible').count(),0);
     assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'),box);
-    checks.push({topic:'religion',render,smreCountries:45,denominations:true,majorCoexistenceVisible:true,visibleNationalSummaries:markerBoxes.length,supplementCollapsedByDefault:true,originalEightCategories:true,regionalEvidenceRetained:true,pewRetained:true,noAutomaticZoom:true});
+    checks.push({topic:'religion',render,smreCountries:45,denominations:true,wholeEuropeResidentialDistributionComplete:false,visibleNationalSummaries:0,supplementCollapsedByDefault:true,originalEightCategories:true,regionalEvidenceRetained:true,pewRetained:true,noAutomaticZoom:true});
   }
   assert.deepEqual(errors,[]);
   await writeFile(`${output}/checks.json`,JSON.stringify({gitHead,expectedHead,gitStatus:execFileSync('git',['status','--porcelain'],{encoding:'utf8'}),scriptSha256:createHash('sha256').update(await readFile(new URL(import.meta.url))).digest('hex'),browserVersion:browser.version(),viewport:{width:1920,height:1080},deviceScaleFactor:1,zoom:1,checks,errors},null,2)+'\n');

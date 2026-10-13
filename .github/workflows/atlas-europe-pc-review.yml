@@ -9,6 +9,9 @@ on:
       - '.github/workflows/atlas-europe-pc-review.yml'
       - 'tests/browser/atlas-europe-pc-review.mjs'
       - 'tests/browser/atlas-europe-handoff-review.mjs'
+      - 'tests/browser/atlas-europe-industry-review.mjs'
+      - 'tests/browser/atlas-europe-remainder-review.mjs'
+      - 'tests/browser/atlas-europe-language-review.mjs'
       - 'docs/atlas-europe-pc-review.md'
       - 'src/components/atlas/Europe*.astro'
       - 'src/data/atlas/europe/**'
@@ -32,7 +35,7 @@ jobs:
   europe-pc-review:
     name: Europe PC maps and selection return
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 15
     env:
       ASTRO_TELEMETRY_DISABLED: '1'
       EUROPE_REVIEW_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
@@ -103,7 +106,7 @@ jobs:
           node scripts/verify-release.mjs --commit "$EUROPE_REVIEW_EXPECTED_HEAD"
 
       - name: Check PC operations and capture Europe and US reference images
-        timeout-minutes: 6
+        timeout-minutes: 9
         shell: bash
         env:
           EUROPE_REVIEW_OUTPUT: ${{ runner.temp }}/europe-pc-review
@@ -122,6 +125,9 @@ jobs:
           curl --fail --silent "$EUROPE_REVIEW_BASE_URL" > /dev/null
           node tests/browser/atlas-europe-pc-review.mjs
           EUROPE_REVIEW_OUTPUT="$EUROPE_REVIEW_OUTPUT/handoff-1920" node tests/browser/atlas-europe-handoff-review.mjs
+          EUROPE_INDUSTRY_OUTPUT="$EUROPE_REVIEW_OUTPUT/industry-1920" node tests/browser/atlas-europe-industry-review.mjs
+          EUROPE_REMAINDER_OUTPUT="$EUROPE_REVIEW_OUTPUT/remainder-1920" node tests/browser/atlas-europe-remainder-review.mjs
+          EUROPE_LANGUAGE_OUTPUT="$EUROPE_REVIEW_OUTPUT/language-1920" node tests/browser/atlas-europe-language-review.mjs
 
       - name: Include existing source review images
         if: always()

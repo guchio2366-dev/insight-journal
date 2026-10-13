@@ -92,11 +92,11 @@ test('return envelopes accept canonical basin IDs, normalize invalid IDs and rej
 
 test('a drainage return label names the selected source identifier, never a whole named river', () => {
   const original = state(`?layer=drainage&basin=${selected}&feature=rhine&place=GBR`);
-  assert.equal(europeComparisonSourceLabel(original), `流域の区画・HYBAS_ID ${selected}`);
+  assert.equal(europeComparisonSourceLabel(original), `主要水系・保存済み流域面・HYBAS_ID ${selected}`);
   assert.doesNotMatch(europeComparisonSourceLabel(original), /ライン川|全流域|英国/);
-  assert.equal(europeComparisonSourceLabel({ ...original, basin: undefined }), '流域の区画');
-  assert.equal(europeComparisonSourceLabel({ ...original, basin: String(selectedIndex) }), '流域の区画');
-  assert.equal(europeComparisonSourceLabel({ ...original, layer: 'overlay', returnLayer: 'drainage' }), `流域の区画・HYBAS_ID ${selected}`);
+  assert.equal(europeComparisonSourceLabel({ ...original, basin: undefined }), '主要水系・保存済み流域面');
+  assert.equal(europeComparisonSourceLabel({ ...original, basin: String(selectedIndex) }), '主要水系・保存済み流域面');
+  assert.equal(europeComparisonSourceLabel({ ...original, layer: 'overlay', returnLayer: 'drainage' }), `主要水系・保存済み流域面・HYBAS_ID ${selected}`);
 });
 
 test('Russia frame units from source region 3 support strict URL and full named-return restoration', () => {
@@ -113,7 +113,7 @@ test('Russia frame units from source region 3 support strict URL and full named-
       assert.equal(target.searchParams.get('basin'), basin);
       const saved = readEuropeReturn(target.searchParams.get('europeReturn'), countries, cityIds);
       assert.deepEqual(saved, original);
-      assert.equal(europeComparisonSourceLabel(saved), `流域の区画・HYBAS_ID ${basin}`);
+      assert.equal(europeComparisonSourceLabel(saved), `主要水系・保存済み流域面・HYBAS_ID ${basin}`);
       const returned = europeNamedReturnUrl(target, saved);
       assert.equal(returned.pathname, '/insight-journal/atlas/europe/nature/');
       assert.deepEqual(state(returned.search), original);

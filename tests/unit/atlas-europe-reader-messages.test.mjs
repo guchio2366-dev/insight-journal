@@ -98,7 +98,7 @@ test('自然・産業・人口をつなぐ説明でも欠測、量、位置の�
   assert.match(copy('terrain').takeaway, /北ヨーロッパ平原.*ピレネー.*アルプス.*カルパチア/);
   assert.match(copy('terrain').body, /プレートの収束.*氷河侵食/);
   assert.match(copy('contours').note, /間隔は標高精度を意味しません/);
-  assert.match(copy('hubs').body, /港湾物流.*化学.*交通.*原料搬入/);
+  assert.match(copy('hubs').body, /鉱床.*海底資源.*港.*加工設備.*送電/);
   assert.match(copy('hubs').note, /生産量・雇用の大小を表しません/);
   assert.match(copy('density').body, /交通.*仕事.*歴史的な都市形成/);
   assert.match(copy('density').note, /2020年.*現在の人口移動・避難状況.*ではありません/);
@@ -109,7 +109,7 @@ test('読解の地域例に対応した一次資料を少数で示し、全国�
   const sources = id => europeReaderSources(europeLayers.find(layer => layer.id === id));
   for (const layer of europeLayers) {
     const items = europeReaderSources(layer);
-    assert.ok(items.length >= 1 && items.length <= (layer.id === 'drainage' ? 5 : 4), layer.id);
+    assert.ok(items.length >= 1 && items.length <= (layer.id === 'treecover' ? 6 : layer.id === 'drainage' ? 5 : layer.id==='hubs'?10:4), layer.id);
     assert.equal(new Set(items.map(item => item.url)).size, items.length, layer.id);
     for (const item of items) assert.ok(item.url.startsWith('https://') && item.label.trim(), layer.id);
   }
@@ -117,9 +117,9 @@ test('読解の地域例に対応した一次資料を少数で示し、全国�
   assert.ok(sources('wheat').some(item => item.url.startsWith('https://www.ksh.hu/')));
   assert.ok(sources('cattle').some(item => item.url.startsWith('https://www.luke.fi/')));
   assert.ok(sources('density').some(item => item.url.startsWith('https://ghsl.jrc.ec.europa.eu/')));
-  assert.ok(sources('hubs').some(item => item.url.startsWith('https://www.portofrotterdam.com/')));
-  assert.ok(sources('hubs').some(item => item.url.startsWith('https://www.basf.com/')));
-  assert.ok(sources('hubs').some(item => item.url.startsWith('https://www.airbus.com/')));
+  assert.ok(sources('hubs').some(item => item.url.startsWith('https://www.norskpetroleum.no/')));
+  assert.ok(sources('hubs').some(item => item.url.startsWith('https://kghm.com/')));
+  assert.ok(sources('hubs').some(item => item.url.startsWith('https://www.edf.fr/')));
   assert.ok(sources('forest').some(item => item.url.startsWith('https://www.upmpulp.com/')));
   for (const id of ['forest','manufacturing','industry','services','urban','age','growth']) {
     assert.ok(sources(id).some(item => item.url === europeLayers.find(layer => layer.id === id).source), id);

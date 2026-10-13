@@ -68,7 +68,7 @@ test('actual display-contributing basic identifier records include all relevant 
   assert.equal(drainageLayer.nodata, -1);
   assert.equal(drainageLayer.gridType, 'display');
   assert.equal(drainageLayer.breaks, undefined, 'categorical units have no quantitative breaks');
-  assert.deepEqual(drainageLayer.colors, manifest.colors);
+  assert.deepEqual(drainageLayer.colors,JSON.parse(bytes(base+'main-basin-overview-manifest.json')).groups.map(group=>group.color));
 });
 
 test('all 2,703,600 image pixels exactly match the integer float32 lookup and missing mask', () => {

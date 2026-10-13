@@ -139,7 +139,7 @@ def prepare_secondary(features, dominant_features, land):
 
 
 def main():
-    countries_path = ROOT / 'src/data/atlas/europe-countries.json'
+    countries_path = ROOT / 'data-source/atlas/europe/legacy-country-mask-110m-v1.json'
     countries = json.loads(read(countries_path, role='target-country land boundary'))
     targets = [feature for feature in countries['features']
                if feature['properties']['kind'] == 'europe']

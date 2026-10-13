@@ -1,0 +1,100 @@
+{
+  "source": "https://doi.org/10.6084/m9.figshare.9890531.v1",
+  "licence": "CC BY4.0 (BasinATLAS geometry/topology)",
+  "inputSha256": "6c1afeb901ccb1b264aca2883ffecbca2cbb1dc8dceb2cc8eea9bde80bfa5567",
+  "method": "Assign retained raster cells to five source MAIN_BAS identifiers; no smoothing or extension. Other model units neutral. Existing raw indices, selectable outlines and numeric lookup remain.",
+  "bounds": [
+    -25,
+    32,
+    65,
+    73
+  ],
+  "width": 1800,
+  "height": 1502,
+  "groups": [
+    {
+      "id": "rhine",
+      "name": "ライン川",
+      "mainBasin": 2040023010,
+      "color": "#92bbcf",
+      "unitIds": [
+        2040023010
+      ],
+      "displayPixels": 12387,
+      "coverage": "retained country-masked display cells only; not the complete natural basin"
+    },
+    {
+      "id": "danube",
+      "name": "ドナウ川",
+      "mainBasin": 2040008490,
+      "color": "#b6cda7",
+      "unitIds": [
+        2040008490,
+        2040539930,
+        2040540100,
+        2040543090,
+        2040543160,
+        2040548500,
+        2040548700,
+        2040555600,
+        2040555780
+      ],
+      "displayPixels": 54116,
+      "coverage": "retained country-masked display cells only; not the complete natural basin"
+    },
+    {
+      "id": "seine",
+      "name": "セーヌ川",
+      "mainBasin": 2040022150,
+      "color": "#c7bbd9",
+      "unitIds": [
+        2040022150
+      ],
+      "displayPixels": 5437,
+      "coverage": "retained country-masked display cells only; not the complete natural basin"
+    },
+    {
+      "id": "don",
+      "name": "ドン川",
+      "mainBasin": 2040006590,
+      "color": "#e0c998",
+      "unitIds": [
+        2040006590,
+        2040439100,
+        2040439160,
+        2040439790,
+        2040439800,
+        2040491970,
+        2040491980,
+        2040501810,
+        2040501940
+      ],
+      "displayPixels": 34184,
+      "coverage": "retained country-masked display cells only; not the complete natural basin"
+    },
+    {
+      "id": "volga",
+      "name": "ヴォルガ川",
+      "mainBasin": 2040068680,
+      "color": "#adcbd1",
+      "unitIds": [
+        2040068680,
+        2040288980,
+        2040289120,
+        2040292580,
+        2040292690,
+        2040309560,
+        2040309610,
+        2040315940,
+        2040315950
+      ],
+      "displayPixels": 146596,
+      "coverage": "retained country-masked display cells only; not the complete natural basin"
+    }
+  ],
+  "unavailable": [
+    "Thames: existing level4 unit includes other British coastal catchments; must not rename it Thames",
+    "Ural: absent in existing country-masked display"
+  ],
+  "imageSha256": "369fd2c13dfa24b870084536c9c3c1abeeef3e0e74c9724311b7ab7c9ed4059e"
+}

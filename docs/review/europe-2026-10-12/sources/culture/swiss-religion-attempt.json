@@ -1,0 +1,5 @@
+{
+  "url": "https://www.bfs.admin.ch/bfsstatic/dam/assets/36347568/master",
+  "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))",
+  "retried": false
+}

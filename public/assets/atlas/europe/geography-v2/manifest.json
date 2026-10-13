@@ -1,0 +1,23 @@
+{
+  "source": "https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-0-countries/",
+  "download": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/9380cca83db5f9aef52d5e762765100745f84b27/geojson/ne_10m_admin_0_countries.geojson",
+  "licence": "public domain",
+  "terms": "https://www.naturalearthdata.com/about/terms-of-use/",
+  "sourceSha256": "239eec57ac17f100a11e2536cffc56752c318b50ae765b0918ff7aab4ce8f255",
+  "sourceBytes": 13287234,
+  "bounds": [
+    -25,
+    32,
+    65,
+    73
+  ],
+  "processing": "Intersect original 1:10m polygons with display window; retain existing country identifiers and names. No smoothing, densification or invented coast detail. Natural Earth de facto boundaries are generalized cartography, not surveyed boundaries.",
+  "oldVertices": 3182,
+  "vertices": 103907,
+  "features": 68,
+  "missingOriginalCountries": [],
+  "officialRepositoryCommit": "9380cca83db5f9aef52d5e762765100745f84b27",
+  "gzipSha256": "4b5334fb8ad9d88a9105ec71d91f01bcba27202e416ca6f5ee28998b942d9204",
+  "gzipBytes": 823586,
+  "geometrySha256": "810fb62cfca4ca4345eeb4698e09030e637ad5ea4576eb6f642dd18aff1feeb3"
+}

@@ -138,7 +138,7 @@ function encodePng(rgba) {
 await fs.mkdir(cache, { recursive: true });
 await fs.mkdir(output, { recursive: true });
 await fs.mkdir(provenance, { recursive: true });
-const geographyPath = path.join(root, 'src/data/atlas/europe-countries.json');
+const geographyPath = path.join(root, 'data-source/atlas/europe/legacy-country-mask-110m-v1.json');
 const geographyBytes = await fs.readFile(geographyPath);
 const countries = JSON.parse(geographyBytes).features.filter(feature => feature.properties.kind === 'europe');
 if (countries.length !== 45) throw new Error('Expected existing 45-country Europe coverage');
@@ -218,7 +218,7 @@ const manifest = {
   extraction: { tileCount: inputs.length, overviewWidth: 562, overviewHeight: 562, originalWidth: 36000, originalHeight: 36000, supplierOverviewLevels: [2, 4, 8, 16, 32, 64], supplierOverviewResampling: 'Not specified in the source product metadata or user manual; no quantitative aggregation claim is made.', reprojection: 'Nearest-neighbour categorical sampling at Web Mercator display pixel centres; no interpolation between class codes.', clipping: 'Existing 45 target-country Natural Earth outlines, with polygon holes preserved; countries remain selectable separately. Small countries can be unresolved by display pixel centres.', originalResolutionIsDisplayPrecision: false },
   limitations: ['This is a generalized tree-cover distribution map, not an exact forest or stand boundary.', 'Tree cover includes plantations and olive trees; it does not identify wood supply, commercial forestry, forest type, biomass, tree volume or national forest area.', 'Provider overviews and display sampling omit small patches; no tree-cover percentage or area statistic is computed.', 'Other valid cover is different from missing data. Source code 0 and land outside the 45-country target mask remain missing/transparent.', 'The 2021 tree-cover map and the WDI 2023 national forest-area share use different definitions, dates and geographic units and are shown separately.'],
   countryCoverage,
-  inputs: [{ path: 'src/data/atlas/europe-countries.json', sha256: sha(geographyBytes), role: '45 target-country land mask' }, { path: 'data-source/atlas/europe/tree-cover/range-inputs.json', sha256: sha(inputBytes), role: 'Exact bounded COG input range hashes and categorical validation' }],
+  inputs: [{ path: 'data-source/atlas/europe/legacy-country-mask-110m-v1.json', sha256: sha(geographyBytes), role: '45 target-country land mask' }, { path: 'data-source/atlas/europe/tree-cover/range-inputs.json', sha256: sha(inputBytes), role: 'Exact bounded COG input range hashes and categorical validation' }],
   files: { 'tree-cover.png': { sha256: sha(image), bytes: image.length }, 'mask.bin.gz': { sha256: sha(lookup), bytes: lookup.length } },
 };
 await fs.writeFile(path.join(output, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');

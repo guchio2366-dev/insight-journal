@@ -156,7 +156,7 @@ test('three genre menus show only figures matching the selected commodity',async
       assert.equal(visible[0].querySelectorAll('.eu-verified-food-band').length,0,id);
       if(!matches[id])assert.match(visible[0].textContent,/別の品目の数値で代用しません/,id);
     }
-    assert.equal(app.q('[data-eu-layer="dairy"]'),null,'A national milk button cannot stand in for a dairy production belt');
+    assert.match(app.q('[data-eu-layer="dairy"]').textContent,/分布未収録/,'The separate national milk choice explicitly does not claim a dairy belt');
     app.q('[data-eu-topic="crops"]').click();await tick();
     assert.equal(app.q('[data-eu-verified-overview]').hidden,false);
     assert.equal(app.w.document.querySelectorAll('[data-eu-verified-topic]:not([hidden])').length,0);

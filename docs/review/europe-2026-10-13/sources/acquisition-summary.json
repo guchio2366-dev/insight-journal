@@ -1,0 +1,43 @@
+{
+  "baseHead": "1fbaabc216dbfb4f729a78bdfca45795fbc261db",
+  "unchangedRemote": true,
+  "newAttempts": [
+    {
+      "url": "https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi%3A%3Aobservations%3A%3Aweather%3A%3Adaily%3A%3Atimevaluepair",
+      "purpose": "Independent open daily observations: metadata only, not the denied website normals table",
+      "retried": false,
+      "method": "GET",
+      "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))"
+    },
+    {
+      "url": "https://www.nomisweb.co.uk/output/census/2021/census2021-ts024.zip",
+      "purpose": "New ONS TS024 main-language topic; TS021/TS030 and the matching 2021 boundary are retained",
+      "retried": false,
+      "method": "GET",
+      "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))"
+    },
+    {
+      "url": "https://ec.europa.eu/eurostat/cache/lucas/EU_2018_20200213.CSV",
+      "purpose": "Independent LUCAS in-situ land-cover observations, not CORINE/EuroCrops redistribution",
+      "method": "GET",
+      "retried": false,
+      "previousWebFailure": "Reader capacity: content exceeds 4MB, not publisher denial",
+      "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))"
+    },
+    {
+      "url": "https://publikacje.new.stat.gov.pl/sites/default/files/2025-10/wyniki_ostateczne_nsp2021_narodowsc_jezyk_wyznanie_2023_11_29.xlsx",
+      "purpose": "Independent Polish 2021 census: 16 voivodeship ethnicity, home languages and religion; CC BY4.0 publisher",
+      "method": "GET",
+      "retried": false,
+      "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))"
+    },
+    {
+      "url": "https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/graph_mkhtml_nrm.php?n=2974&m=1",
+      "purpose": "Distinct airport station candidate, not Kaisaniemi; no values may fill the existing station",
+      "method": "GET",
+      "retried": false,
+      "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))"
+    }
+  ],
+  "inheritedDenialsRetried": false
+}

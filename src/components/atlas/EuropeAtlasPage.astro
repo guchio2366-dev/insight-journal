@@ -6,21 +6,23 @@ import '../../styles/atlas-europe-workspace.css';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import EuropeClimateReading from './EuropeClimateReading.astro';
 import EuropeStatistics from './EuropeStatistics.astro';
-import farmingAreas from '../../data/atlas/europe/farming-areas.json';
-import farmingDominantAreas from '../../data/atlas/europe/farming-dominant-areas.json';
-import farmingSecondaryAreas from '../../data/atlas/europe/farming-secondary-areas.json';
+import farmingAreas from '../../data/atlas/europe/farming-full-display.json';
+import farmingDominantAreas from '../../data/atlas/europe/farming-dominant-overview.json';
+import farmingSecondaryAreas from '../../data/atlas/europe/farming-secondary-overview.json';
 import { farmingVisualWeight } from '../../lib/atlas-europe-farming';
 import { europeFarmingGenres, europeFarmingGenreIds } from '../../data/atlas/europe/farming-genres';
 import EuropeSubjectReader from './EuropeSubjectReader.astro';
 import EuropePopulationCases from './EuropePopulationCases.astro';
 import '../../styles/atlas-europe-comparison.css';
 import { europeLayers, fields, europeFieldHeadings, type EuropeField } from '../../data/atlas/europe/layers';
+import { europeForestryPlaces } from '../../data/atlas/europe/forestry-places';
 import { europeReadings } from '../../data/atlas/europe/readings';
 import populationCities from '../../data/atlas/europe/population-cities.json';
 import statistics from '../../data/atlas/europe/country-statistics.json';
 import { withBase } from '../../lib/urls';
 import { frame, viewPath, project } from '../../lib/atlas-europe-view';
 import geography from '../../data/atlas/europe-countries.json';
+import fallbackGeography from '../../../data-source/atlas/europe/legacy-country-mask-110m-v1.json';
 import countries from '../../data/atlas/europe/countries.json';
 import cities from '../../data/atlas/europe/climate-cities.json';
 import legend from '../../data/atlas/europe/climate-legend.json';
@@ -28,6 +30,9 @@ import wheatLegend from '../../data/atlas/europe/wheat-legend.json';
 import mapLabels from '../../data/atlas/europe/map-labels.json';
 import climateWater from '../../data/atlas/europe/climate-water.json';
 import rivers from '../../../public/assets/atlas/europe/context-v1/rivers.json';
+import waterLakes from '../../../public/assets/atlas/europe/context-v1/lakes.json';
+import languageObservations from '../../data/atlas/europe/language-observations.json';
+import mainLanguage from '../../data/atlas/europe/main-language-ts024-2021.json';
 import riverNames from '../../data/atlas/europe/river-names.json';
 import { europeTerrainGuides } from '../../data/atlas/europe/terrain-geography';
 import { pew2020EuropeGroups } from '../../data/atlas/europe/pew-religion-2020';
@@ -35,10 +40,15 @@ import {smreMapGroups} from '../../lib/atlas-europe-smre-surface';
 import { pewSurfaceGroups, pewSurfaceColors } from '../../lib/atlas-europe-pew-surface';
 
 import { majorClimateCities } from '../../lib/atlas-europe-annotations';
-import { europeIndustryCountries, europeIndustryGroups, europeIndustryColors } from '../../lib/atlas-europe-industry';
+import { europeFarmingMapName } from '../../lib/atlas-europe-farming';
+import { europeMainRivers } from '../../lib/atlas-europe-drainage';
+import { europeIndustryCountries, europeIndustryGroups, europeIndustryColors, europeIndustryInSector, europeIndustrySectorCopy } from '../../lib/atlas-europe-industry';
 import { countryOverview, countryOverviewSource } from '../../data/atlas/europe/country-overviews';
 import { europeReaderCopy } from '../../lib/atlas-europe-reader';
 import '../../styles/atlas-europe.css';
+import languageRegionalSources from '../../data/atlas/europe/language-regional-observations.json';
+const czechRegionalLanguage=languageRegionalSources['cze-mother-tongue-regional-source-statements-2021'];
+const irishDailyUse=languageRegionalSources['ireland-daily-irish-towns-2022'];
 interface Props { field?: EuropeField }
 const { field = 'nature' } = Astro.props;
 const agriculture = field === 'agriculture';
@@ -51,7 +61,7 @@ const layers = europeLayers.map(l=>({...l,image:l.image?withBase(l.image):undefi
 const initialLayer = layers.find(l=>l.id===currentField.initial)!;
 const initialClimateReader = field==='nature';
 const climateOverview = europeReaderCopy(layers.find(l=>l.id==='climate')!);
-const initialFeatures = field==='population'?populationCities:field==='industry'?europeReadings.filter(r=>r.field==='industry'):[];
+const initialFeatures = field==='population'?populationCities:field==='industry'?europeReadings.filter(r=>r.field==='industry'&&europeIndustryInSector(r.id,'resources')):[];
 const initialPointVisible = (p:{id:string;rank?:number}) => initialFeatures.some(f=>f.id===p.id)&&(p.rank??0)<=1;
 const renderPriority=(feature:(typeof farmingAreas.features)[number])=>{const index=europeFarmingGenres.crops.ids.indexOf(feature.properties.id as typeof europeFarmingGenres.crops.ids[number]);return index<0?europeFarmingGenres.crops.ids.length:index;};
 const displayFarmingAreas={...farmingAreas,features:[...farmingAreas.features].sort((a,b)=>renderPriority(a)-renderPriority(b))};
@@ -62,7 +72,7 @@ const riverPath=(geometry:{type:string;coordinates:unknown})=>{
   return lines.map(line=>line.map((coordinate,index)=>`${index?'L':'M'}${project(coordinate).join(' ')}`).join(' ')).join(' ');
 };
 const industryOverviews = Object.fromEntries(europeIndustryCountries.map(code=>{const copy=countryOverview(code)!.topics.industry!;return [code,{...copy,sources:copy.sourceIds.map(id=>{const source=countryOverviewSource(id)!;const indicator=id==='society-wdi-manufacturing'?'NV.IND.MANF.ZS':id==='society-wdi-services'?'NV.SRV.TOTL.ZS':undefined;return indicator?{...source,definitionUrl:`https://databank.worldbank.org/metadataglossary/world-development-indicators/series/${indicator}`} :source;})}];}));
-const config = { industryOverviews, farmingAreas:displayFarmingAreas, farmingDominantAreas, farmingSecondaryAreas, majorRivers, geography, climateWater, countries, cities: cities.map(({ id, name, country, coordinates }) => ({ id, name, country, coordinates })), climate, wheat, wheatValues: withBase('/assets/atlas/europe/wheat-v1/values.bin.gz'), initialLayer: currentField.initial, layers, populationCities, readings:europeReadings, statistics };
+const config = { industryOverviews, farmingAreas:displayFarmingAreas, farmingDominantAreas, farmingSecondaryAreas, majorRivers, waterLakes, geography:fallbackGeography, geographyURL:withBase('/assets/atlas/europe/geography-v2/countries-10m.geojson.gz'), climateWater, countries, cities: cities.map(({ id, name, country, coordinates }) => ({ id, name, country, coordinates })), climate, wheat, wheatValues: withBase('/assets/atlas/europe/wheat-v1/values.bin.gz'), initialLayer: currentField.initial, layers, populationCities, readings:[...europeReadings,...europeForestryPlaces], statistics };
 ---
 <BaseLayout title={`欧州の${currentField.label}`} description="欧州の自然環境・農林業・産業・人口を、国境をまたぐ分布と国別の数値で読み比べる地図。" compactAtlas>
   <div class="eu-atlas eu-workspace-root" data-europe-detail>
@@ -81,18 +91,18 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, farmingDom
       <section class="eu-map-panel" aria-labelledby="eu-map-title">
         <div class="eu-map-stage" data-map-surface tabindex="0" role="region" aria-label="欧州の地図">
           <EuropeLayoutControls position="map" {field} />
-          <div class="eu-map-buttons" role="group" aria-label="地図の縮尺と表示"><button type="button" data-eu-reset>全体へ</button><button type="button" data-eu-zoom="in" aria-label="地図を拡大">＋</button><button type="button" data-eu-zoom="out" aria-label="地図を縮小">−</button><button type="button" data-eu-render>簡易表示</button></div>
-          <p class="eu-map-affordance" data-eu-city-hint hidden={field!=='nature'}>地図の都市名をクリックすると雨温図が開きます</p>
-          <div class="eu-map-heading"><div><h2 id="eu-map-title" data-eu-map-title>{initialLayer.title}</h2><p data-eu-map-status>{initialClimateReader?'都市を選ぶと、その観測所の気候を表示します。':agriculture?'穀物・畑作の品目を同時表示しています。品目名を選ぶと輪郭を強調します。':'地図の分布と右側の説明を読み比べます。'}</p></div><p data-eu-focus aria-live="polite">欧州全体</p></div>
+          <div class="eu-map-heading"><div><h2 id="eu-map-title" data-eu-map-title>{field==='industry'?'資源・エネルギーの集積':initialLayer.title}</h2><p data-eu-map-status>{initialClimateReader?'観測所の平年値・1991–2020年。':agriculture?'穀物・畑作の品目を同時表示しています。品目名を選ぶと輪郭を強調します。':'地図の分布と右側の説明を読み比べます。'}</p></div><p data-eu-focus aria-live="polite">欧州全体</p></div>
           <svg class="eu-static-map" data-eu-static viewBox={`0 0 ${frame.width} ${frame.height}`} role="img" aria-labelledby="eu-map-label">
             <title id="eu-map-label">欧州の{initialLayer.title}。{initialLayer.unit}。地図の名前から地点や品目を選べます。</title>
             <rect width={frame.width} height={frame.height} fill="#e7eff1" />
-            {geography.features.map(f => <path d={viewPath(f.geometry)} fill="#edece5" />)}
+            <defs>{geography.features.map(f=><path id={`eu-country-${f.properties.code}`} d={viewPath(f.geometry)} vector-effect="non-scaling-stroke" />)}</defs>
+            {geography.features.map(f => <use href={`#eu-country-${f.properties.code}`} fill="#edece5" fill-rule="evenodd" />)}
             <image data-eu-climate-image href={field === 'nature' ? climate : undefined} x="0" y="0" width={frame.width} height={frame.height} preserveAspectRatio="none" />
             <image data-eu-wheat-image x="0" y="0" width={frame.width} height={frame.height} preserveAspectRatio="none" />
             <image data-eu-subject-image href={field==='population'?initialLayer.image:undefined} x="0" y="0" width={frame.width} height={frame.height} preserveAspectRatio="none" />
             <g data-eu-terrain-guides style="display:none">{europeTerrainGuides.map(guide=><polyline points={guide.line.map(point=>project(point).join(',')).join(' ')} fill="none" stroke="#574b3c" stroke-width="2" stroke-dasharray="6 4" vector-effect="non-scaling-stroke" />)}</g>
-            <g data-eu-major-rivers style="display:none">{majorRivers.features.map(river=><g><path d={riverPath(river.geometry)} data-eu-major-river-hit={river.properties.id} fill="none" stroke="#176783" stroke-opacity="0" stroke-width="12" pointer-events="stroke" vector-effect="non-scaling-stroke" /><path d={riverPath(river.geometry)} data-eu-major-river={river.properties.id} fill="none" stroke="#176783" stroke-width="2.5" vector-effect="non-scaling-stroke"><title>{river.properties.name}・Natural Earthに収録された河道の一部</title></path></g>)}</g>
+            <g data-eu-water-lakes style="display:none">{waterLakes.features.map(lake=><path d={viewPath(lake.geometry as any)} fill="#91bdd0" fill-opacity=".85" stroke="#749daa" stroke-width=".6" vector-effect="non-scaling-stroke"><title>{lake.properties.name}・Natural Earth 1:50m</title></path>)}</g>
+            <g data-eu-major-rivers style="display:none">{majorRivers.features.map(river=><g><path d={riverPath(river.geometry)} data-eu-major-river-hit={river.properties.id} style={['rhine','danube','seine','thames','don','volga','ural'].includes(river.properties.id)?undefined:'display:none'} fill="none" stroke="#176783" stroke-opacity="0" stroke-width="12" pointer-events="stroke" vector-effect="non-scaling-stroke" /><path d={riverPath(river.geometry)} data-eu-major-river={river.properties.id} style={['rhine','danube','seine','thames','don','volga','ural'].includes(river.properties.id)?undefined:'display:none'} fill="none" stroke="#176783" stroke-width="2.5" vector-effect="non-scaling-stroke"><title>{river.properties.name}・Natural Earthに収録された河道の一部</title></path></g>)}</g>
             <image data-eu-drainage-selection x="0" y="0" width={frame.width} height={frame.height} preserveAspectRatio="none" style="display:none" />
             <image data-eu-origin-image x="0" y="0" width={frame.width} height={frame.height} preserveAspectRatio="none" style="display:none" />
             <defs>{displayFarmingAreas.features.map(f=><path id={`eu-farm-geometry-${f.properties.id}`} d={viewPath(f.geometry as any)} />)}{farmingDominantAreas.features.map(f=><path id={`eu-farm-dominant-${f.properties.id}`} d={viewPath(f.geometry as any)} />)}{farmingSecondaryAreas.features.map(f=><path id={`eu-farm-secondary-${f.properties.id}`} d={viewPath(f.geometry as any)} />)}</defs>
@@ -105,7 +115,7 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, farmingDom
             <g class="eu-farming-selection">
               {farmingAreas.features.map(f=><g><use href={`#eu-farm-geometry-${f.properties.id}`} data-eu-farm-outline={f.properties.id} fill="none" stroke="#fffdf2" stroke-width="5" vector-effect="non-scaling-stroke" style="display:none"/><use href={`#eu-farm-geometry-${f.properties.id}`} data-eu-farm-outline={f.properties.id} fill="none" stroke="#173c48" stroke-width="2.5" vector-effect="non-scaling-stroke" style="display:none"/></g>)}
             </g>
-            {geography.features.map(f => <path d={viewPath(f.geometry)} class:list={['eu-outline', { 'eu-context': f.properties.kind === 'context' }]} data-eu-shape={f.properties.kind === 'europe' ? f.properties.code : undefined} />)}
+            {geography.features.map(f => <use href={`#eu-country-${f.properties.code}`} fill-rule="evenodd" class:list={['eu-outline', { 'eu-context': f.properties.kind === 'context' }]} data-eu-shape={f.properties.kind === 'europe' ? f.properties.code : undefined} />)}
             <g data-eu-climate-water style={initialClimateReader?'':'display:none'}>
               {climateWater.features.map(f=><path d={viewPath(f.geometry)} data-eu-water-mask={f.properties.id} fill="#e7eff1" fill-rule="evenodd" stroke="#8ca6aa" stroke-width="0.7" vector-effect="non-scaling-stroke"><title>{f.properties.name}の水面</title></path>)}
             </g>
@@ -115,18 +125,19 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, farmingDom
             <g data-eu-static-crops hidden></g>
             <g data-eu-comparison-overlay></g>
             <g data-eu-culture-layer></g>
+            <g data-eu-language-layer></g>
           </svg>
           <div class="eu-live-map" data-eu-live aria-label="操作できる欧州地図"></div>
-          <div class="eu-map-inline-key" data-eu-inline-farm-key hidden={!agriculture} aria-label="農畜産分布の品目色"><strong data-eu-farm-key-title>穀物・畑作</strong>{farmingAreas.features.map(f=><span data-eu-farm-key-item={f.properties.id} hidden={!europeFarmingGenres.crops.ids.some(id=>id===f.properties.id)}><i style={`background:${f.properties.color}`}></i>{f.properties.name}</span>)}<small data-eu-farm-key-note>点線＝同じ品目の色面外に続く集中域</small></div>
-          <div class="eu-map-inline-key eu-map-industry-key" data-eu-inline-industry-key hidden={field!=='industry'} aria-label="産業拠点の色と分野">{europeIndustryGroups.map(group=><span><i style={`background:${europeIndustryColors[group]}`}></i>{group}</span>)}</div>
+          <div class="eu-map-inline-key" data-eu-inline-farm-key hidden={!agriculture} aria-label="農畜産分布の品目色"><strong data-eu-farm-key-title>穀物・畑作</strong>{farmingAreas.features.map(f=><span data-eu-farm-key-item={f.properties.id} hidden={!europeFarmingGenres.crops.ids.some(id=>id===f.properties.id)}><i style={`background:${f.properties.color}`}></i>{europeFarmingMapName(f.properties.id,f.properties.name)}</span>)}<small data-eu-farm-key-note>点線＝同じ品目の色面外に続く集中域</small></div>
+          <div class="eu-map-inline-key eu-map-industry-key" data-eu-inline-industry-key hidden={field!=='industry'} aria-label="産業拠点の色と分野">{europeIndustryGroups.map(group=><span data-eu-industry-key-item={group} hidden={!europeIndustrySectorCopy.resources.groups.includes(group)}><i style={`background:${europeIndustryColors[group]}`}></i>{group}</span>)}</div>
           <div class="eu-map-annotations" data-eu-annotations aria-label="地図の都市と地点"><svg aria-hidden="true"></svg></div>
           <div class="eu-farming-focus-marker" data-eu-farming-focus-marker hidden><span aria-hidden="true"></span><strong data-eu-farming-focus-point-label></strong></div>
           <span class="eu-selected-point" data-eu-selected-point role="img" aria-label="選択地点" hidden></span>
         </div>
-        <div class="eu-map-legend" data-eu-map-legend><p class="eu-water-note">河川・湖の位置、年降水量、流域区画を切り替えます。地下水の歴史的な水理地質図は利用条件を確認済みですが、原画像を取得・位置合わせできていないため未収録です。</p><p data-eu-farming-regional-note hidden>四角は資料が挙げる主要国の目印で、国内全域を産地とする意味ではありません。果樹・園芸の葡はワイン用ブドウ畑、オはオリーブ樹園です。国別の値と地域例は右の説明に記載します。畜産の丸印は乳牛・非乳牛などの地域例で、農場の位置や統計地域の境界ではありません。</p><div class="eu-pew-surface-key" data-eu-pew-surface-key hidden><strong>補足：別資料の全国推計・構成詳細</strong><div role="group" aria-label="色面で見る宗教的帰属"><button type="button" data-eu-smre-overview aria-pressed="true">宗派・宗教の広域図</button>{pewSurfaceGroups.map(group=><button type="button" data-eu-pew-surface-group={group} aria-pressed="false">{pew2020EuropeGroups.find(item=>item.id===group)!.label}</button>)}</div><label>国の構成を読む <select data-eu-religion-country><option value="">欧州全体</option>{countries.map(country=><option value={country.code}>{country.name}</option>)}</select></label><p data-eu-pew-surface-note>濃い色ほど選んだ分類の全国割合が高い。灰色はPewの対象外です。国の中は均一に塗り、国内差やキリスト教の宗派は示しません。</p><div class="eu-pew-surface-scale" data-eu-pew-surface-scale>{pewSurfaceColors.unaffiliated.map((color,index)=><span><i style={`background:${color}`}></i>{['10%未満','10–25%','25–50%','50–75%','75%以上'][index]}</span>)}</div></div><div class="eu-pew-surface-key" data-eu-smre-key hidden><strong>宗派・宗教の広域分布 · 45か国</strong><div class="eu-pew-surface-scale">{smreMapGroups.map(group=><span><i style={`background:${group.color}`}></i>{group.label}</span>)}</div><p>色面＝各国の最大分類（過半数とは限りません）。名前付き記号＝10%以上の分類が複数ある31か国の全国割合。カ：カトリック、プ：プロテスタント、正：正教会、イ：イスラム教、無：宗教的帰属なし、他：その他のキリスト教。記号は同じ幅で、国内の居住境界・人口規模を表しません。</p><small>SMRE 2010期（原観測2006–2015年）・01/2018版。国勢調査などを統合した推計で、現在の分布ではありません。<a href="https://www.smre-data.ch/en/content/download/159">Liedhegener・Odermatt（2018）, Appendix A</a> · <a href="https://www.smre-data.ch/en/content/privacy-policy-impressum">SMRE / ODbL・DBCL</a>（45か国抜粋・表示分類を付加）</small></div><div class="eu-pew-map-key" data-eu-pew-map-key hidden><strong>Pew 2020年 · 国別の宗教構成</strong><small>各小帯の幅はその国の全人口に対する7分類の割合です。国内の細地域・宗派分布ではありません。未掲載国は数値なしです。</small></div></div>
+        <div class="eu-map-legend" data-eu-map-legend><p class="eu-water-note">河川・湖の位置、年降水量、流域区画を切り替えます。地下水の歴史的な水理地質図は利用条件を確認済みですが、原画像を取得・位置合わせできていないため未収録です。</p><p data-eu-farming-regional-note hidden>農畜産の概略面は元資料の測定対象に沿って表示します。牛は乳用・肉用の合計、果樹・園芸は資料の集合品目です。酪農専用とブドウ・オリーブの個別生産域は原資料未収録です。</p><div class="eu-pew-surface-key" data-eu-pew-surface-key hidden><strong>補足：別資料の全国推計・構成詳細</strong><div role="group" aria-label="色面で見る宗教的帰属"><button type="button" data-eu-smre-overview aria-pressed="true">宗派・宗教の広域図</button>{pewSurfaceGroups.map(group=><button type="button" data-eu-pew-surface-group={group} aria-pressed="false">{pew2020EuropeGroups.find(item=>item.id===group)!.label}</button>)}</div><label>国の構成を読む <select data-eu-religion-country><option value="">欧州全体</option>{countries.map(country=><option value={country.code}>{country.name}</option>)}</select></label><p data-eu-pew-surface-note>濃い色ほど選んだ分類の全国割合が高い。灰色はPewの対象外です。国の中は均一に塗り、国内差やキリスト教の宗派は示しません。</p><div class="eu-pew-surface-scale" data-eu-pew-surface-scale>{pewSurfaceColors.unaffiliated.map((color,index)=><span><i style={`background:${color}`}></i>{['10%未満','10–25%','25–50%','50–75%','75%以上'][index]}</span>)}</div></div><div class="eu-pew-surface-key" data-eu-smre-key hidden><strong>45か国の宗教構成 · 全国集計</strong><div class="eu-pew-surface-scale">{smreMapGroups.map(group=><span><i style={`background:${group.color}`}></i>{group.label}</span>)}</div><p>色面＝各国の最大分類（過半数とは限りません）。全国割合は右の説明に記載。カ：カトリック、プ：プロテスタント、正：正教会、イ：イスラム教、無：宗教的帰属なし、他：その他のキリスト教。全国統計は国内の居住境界・人口規模を表しません。国内の宗派・無所属の実分布は未収録です。</p><small>SMRE 2010期（原観測2006–2015年）・01/2018版。国勢調査などを統合した推計で、現在の分布ではありません。<a href="https://www.smre-data.ch/en/content/download/159">Liedhegener・Odermatt（2018）, Appendix A</a> · <a href="https://www.smre-data.ch/en/content/privacy-policy-impressum">SMRE / ODbL・DBCL</a>（45か国抜粋・表示分類を付加）</small></div><div class="eu-pew-map-key" data-eu-pew-map-key hidden><strong>Pew 2020年 · 国別の宗教構成</strong><small>各小帯の幅はその国の全人口に対する7分類の割合です。国内の細地域・宗派分布ではありません。未掲載国は数値なしです。</small></div></div>
         <div class="eu-item-list" data-eu-farming-list hidden={!agriculture} aria-label="現在のジャンルの品目を選ぶ">
           <p class="eu-item-ranking-note" data-eu-farming-ranking-note>選んだジャンルの品目を同時表示します。色は品目を表し、面積や濃さで生産量を比較しません。</p>
-          {europeFarmingGenreIds.map(genre=><section data-eu-farming-children={genre} hidden={genre!=='crops'}><h3>{europeFarmingGenres[genre].title}</h3><div>{europeFarmingGenres[genre].ids.map(id=>{const f=farmingAreas.features.find(feature=>feature.properties.id===id);return f?<button type="button" data-eu-layer={id} aria-pressed="false"><span class:list={['eu-item-swatch',{'is-livestock':f.properties.kind==='livestock'}]} style={{'--item-color':f.properties.color}}></span>{f.properties.name}</button>:null;})}</div><p class="eu-farm-missing">{europeFarmingGenres[genre].missing}</p></section>)}
+          {europeFarmingGenreIds.map(genre=><section data-eu-farming-children={genre} hidden={genre!=='crops'}><h3>{europeFarmingGenres[genre].title}</h3><div>{europeFarmingGenres[genre].ids.map(id=>{const f=farmingAreas.features.find(feature=>feature.properties.id===id);return f?<button type="button" data-eu-layer={id} aria-pressed="false"><span class:list={['eu-item-swatch',{'is-livestock':f.properties.kind==='livestock'}]} style={{'--item-color':f.properties.color}}></span>{europeFarmingMapName(f.properties.id,f.properties.name)}</button>:null;})}{genre==='livestock'&&<button type="button" data-eu-layer="dairy" aria-pressed="false">酪農・生乳（分布未収録）</button>}</div><p class="eu-farm-missing">{europeFarmingGenres[genre].missing}</p></section>)}
           <section data-eu-farming-children="forest" hidden><h3>林業</h3><button type="button" data-eu-layer="treecover" aria-pressed="false">樹木被覆の分布 · 2021</button><button type="button" data-eu-layer="forest" aria-pressed="false">国別の森林面積比率 · 2023</button></section>
         </div>
         <div class="eu-map-candidates" data-eu-farm-candidates hidden aria-live="polite"></div>
@@ -161,7 +172,12 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, farmingDom
         
       </section>
       <aside class="eu-read-panel" aria-labelledby={initialClimateReader?'eu-city-heading':'eu-subject-title'}>
-        <div class="eu-drainage-choice" data-eu-drainage-controls hidden><label hidden>流域区画（HYBAS_ID）<select data-eu-drainage-choice tabindex="-1"><option value="">地図から区画を選ぶ</option></select></label><button type="button" data-eu-drainage-clear hidden tabindex="-1">選択を解除</button><p data-eu-basin-summary aria-live="polite">地図上の流域区画を選ぶと、その範囲と識別番号を表示します。色は区画の識別用で、量の大小ではありません。</p></div>
+        <div class="eu-drainage-choice" data-eu-drainage-controls hidden>
+          <label>本流の水系<select data-eu-main-river-choice aria-label="流域の本流を選ぶ"><option value="">主要水系を同時に見る</option>{europeMainRivers.map(river=><option value={river.id}>{river.name}{river.mainBasin===null?'（原流域面未収録）':''}</option>)}</select></label>
+          <button type="button" data-eu-main-river-clear hidden>水系の選択を解除</button>
+          <p data-eu-basin-summary aria-live="polite">主要5水系の保存面を同時表示しています。本流名・河川線から水系を選べます。テムズ・ウラルの原流域面は未収録です。</p>
+          <details><summary>補足：元のモデル区画と識別番号</summary><label>流域区画（HYBAS_ID）<select data-eu-drainage-choice><option value="">地図から区画を選ぶ</option></select></label><button type="button" data-eu-drainage-clear>区画の選択を解除</button></details>
+        </div>
         <section class="eu-comparison-context" data-eu-comparison-context hidden aria-label="元の分布との比較">
           <h2 data-eu-comparison-heading></h2>
           <a data-eu-comparison-return href={withBase('/atlas/europe/agriculture/')}>元の分布へ戻る</a>
@@ -175,6 +191,34 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, farmingDom
         <div data-eu-culture-host hidden><EuropePopulationCases /></div>
         <details class="eu-religion-supplement" data-eu-religion-supplement hidden><summary>補足資料・国の詳細・地域事例</summary><p>年代・分類・地域粒度が異なる資料です。基本の広域図とは区別して読みます。</p><div data-eu-religion-supplement-controls></div></details>
         <p id="eu-industry-scope-note" class="eu-industry-scope-note" data-eu-industry-scope-note hidden={field!=='industry'}>各点は産業が集まる地域・施設の代表位置です。量・額や順位ではありません。分野を選んでも他の産業の位置を残します。国別の数値は国の概要で確認できます。</p>
+        <section data-eu-language-reader hidden aria-labelledby="eu-language-heading">
+          <h3 id="eu-language-heading">使用言語・母語</h3>
+          <p>欧州全体の地図と地域・国選択を保ちます。色のある自治体面は、イングランド・ウェールズ331地方自治体の2021年国勢調査「主な言語」だけです。他の地域の無着色は0%ではなく未収録を表します。3歳以上の通常居住者が分母です。欧州全域の実使用分布は未収録です。</p>
+          <div class="eu-language-controls">
+            <label>地図に表示する主な言語 <select data-eu-language-category disabled>{mainLanguage.categories.map(category=><option value={category.id}>{category.label}</option>)}</select></label>
+            <label>地方自治体を読む <select data-eu-language-area disabled><option value="">地域未選択</option>{mainLanguage.areas.toSorted((a,b)=>a.name.localeCompare(b.name,'en')).map(area=><option value={area.code}>{area.name}</option>)}</select></label>
+          </div>
+          <div class="eu-language-extent-actions"><button type="button" data-eu-language-fit disabled>England/Walesの事例へ拡大</button><button type="button" data-eu-language-reset disabled>欧州の選択範囲へ戻す</button></div>
+          <p data-eu-language-reading aria-live="polite">地方自治体を選ぶと、割合と人数を表示します。地図からも選べます。</p>
+          <div class="eu-language-scale" data-eu-language-scale aria-label="主な言語の地域割合の凡例"></div>
+          <p class="eu-language-scope">「英語（ウェールズでは英語またはウェールズ語）」は原表の多数派の人数をそのまま表示します。「英語以外」は原表の全体からその原列を差し引いた値です。ウェールズのウェールズ語のみの人数・割合はこの表では分離できません。ポーランド語などは原表の分類人数です。「南アジアの言語」はウルドゥー語・パンジャーブ語などを含む親分類で、子分類と合算しません。小地域の人口そのものではなく、各地域の3歳以上人口に対する比率を比べます。</p>
+          <p class="eu-language-scope">母語は幼少期に最初に習得した言語。家庭内使用・日常使用・会話能力、公用語の制度は別の質問・定義です。民族的帰属とも区別します。以下のチェコの母語・アイルランドの日常使用は別資料です。</p>
+          <p class="eu-language-sources"><a href={mainLanguage.source}>ONS Census 2021：TS024 主な言語（詳細）</a> · <a href="https://www.ons.gov.uk/methodology/geography/licences">ONS地理情報の利用条件</a> · <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">OGL v3.0</a><br/>Source: Office for National Statistics licensed under the Open Government Licence v.3.0. Contains OS data © Crown copyright and database right 2026. 原表の分類選択と差分計算を加えています。</p>
+          <details><summary>収録済みの原統計：チェコ2021年・母語</summary>
+            <p>通常居住人口 {languageObservations.denominator.toLocaleString('ja-JP')} 人。母語未回答 {languageObservations.notStated.toLocaleString('ja-JP')} 人。母語は2つまで回答可能です。</p>
+            <table><caption>全国集計。国内の分布位置は示しません。</caption><thead><tr><th>原言語分類</th><th>1言語のみ</th><th>第二言語を含む</th></tr></thead><tbody>{languageObservations.values.map(value=><tr><th>{value.language}</th><td>{value.exclusive.toLocaleString('ja-JP')}人</td><td>{value.includingSecond.toLocaleString('ja-JP')}人</td></tr>)}</tbody></table>
+            <p>「第二言語を含む」は回答が重複し、合計を100%の構成帯にできません。モラヴィア語・ロマニ語も原回答分類を保持しています。</p>
+            <a href={languageObservations.source}>CZSO：2021年国勢調査・母語</a> · <a href={languageObservations.licenseUrl}>CZSOデータ利用条件</a>
+          </details>
+          <details data-eu-language-regional><summary>チェコ：公表された地域の母語割合・2021年</summary>
+            <p>母語を回答した人口が分母の、公表された丸め済み割合です。全国集計の全居住人口や第二言語込みの人数と分母を混ぜません。収録した地域・言語の例で、県内の居住境界や全県の構成を示すものではありません。</p>
+            <table><thead><tr><th>原地域名</th><th>母語</th><th>公表割合</th></tr></thead><tbody>{czechRegionalLanguage.values.map(value=><tr><th>{value.region}</th><td>{value.language}</td><td>{value.share}%</td></tr>)}</tbody></table><a href={czechRegionalLanguage.source}>CZSO：母語の地域差</a>
+          </details>
+          <details data-eu-language-daily><summary>アイルランド：日常的なアイルランド語使用・2022年</summary>
+            <p>3歳以上のアイルランド語を話せる人のうち、教育中だけの使用を除いて毎日使う人。町の全人口が分母ではありません。公表された上位10の国勢調査町の例で、全アイルランドの使用地域図ではありません。</p>
+            <table><thead><tr><th>原町名</th><th>話せる人</th><th>日常使用</th><th>公表割合</th></tr></thead><tbody>{irishDailyUse.values.map(value=><tr><th>{value.town}</th><td>{value.irishSpeakers}人</td><td>{value.dailyUsers}人</td><td>{value.sourceRoundedShare}%</td></tr>)}</tbody></table><a href={irishDailyUse.source}>CSO：Table 1.6・日常使用</a> · <a href={irishDailyUse.licenseUrl}>CSO：CC BY 4.0</a>
+          </details>
+        </section>
         <EuropeSubjectReader layer={initialLayer} />
         <details class="eu-legend eu-climate-primary-key" data-eu-climate-legend hidden={field!=='nature'}><summary>気候分類 · 1991–2020 · 全17区分</summary><div class="eu-legend-grid">{legend.map(l => <div><span class="eu-swatch" style={`background:${l.color}`}></span><strong>{l.code}</strong><span>{l.name}</span></div>)}</div><details class="eu-legend-methods"><summary>対象範囲・出典</summary><p>区分はBeckほかのKöppen–Geiger分類。周辺の北アフリカ・西アジアも同じ色で表示します。掲載画像の元格子は0.05度で、細かな局地気候を表すものではありません。</p><p>カスピ海の水面には気候区分を表示しません。輪郭は<a href={climateWater.source.url}>Natural Earth 5.1.2（1:110m）</a>に基づきます。</p></details></details>
         <div data-eu-climate-reader hidden={!initialClimateReader}>
@@ -201,9 +245,9 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, farmingDom
     </EuropeStatistics>
     <details class="eu-sources eu-consolidated-sources"><summary>地図・統計の出典と加工記録</summary>
       <ul>
-        <li>作物：<a href="https://doi.org/10.7910/DVN/SWPENT">IFPRI SPAM 2020 v2r2・V6</a>、家畜：FAO GLW4 2020。<a href={withBase('/assets/atlas/europe/farming-overview-v2/manifest.json')}>農畜産の形状・加工記録</a>。統計：<a href="https://doi.org/10.4060/cd4313en">FAO Statistical Yearbook 2025</a>（2023年欧州・世界集計、CC BY 4.0）、<a href="https://comtradeapi.un.org/">UN Comtrade</a>（2021年の対象40報告国・地域、金額）。</li>
+        <li>作物：<a href="https://doi.org/10.7910/DVN/SWPENT">IFPRI SPAM 2020 v2r2・V6</a>、家畜：FAO GLW4 2020。<a href={withBase('/assets/atlas/europe/farming-overview-v2/manifest.json')}>農畜産の形状・加工記録</a>・<a href={withBase('/assets/atlas/europe/farming-overview-v3/manifest.json')}>概略表示の省略・固定ラベル</a>。統計：<a href="https://doi.org/10.4060/cd4313en">FAO Statistical Yearbook 2025</a>（2023年欧州・世界集計、CC BY 4.0）、<a href="https://comtradeapi.un.org/">UN Comtrade</a>（2021年の対象40報告国・地域、金額）。</li>
         <li>林業：<a href="https://ec.europa.eu/eurostat/databrowser/view/for_basic/default/table?lang=en">Eurostat for_basic</a>・<a href="https://ec.europa.eu/eurostat/databrowser/view/for_swpan/default/table?lang=en">for_swpan</a>（2024年、4か国）。樹木被覆：<a href="https://esa-worldcover.org/en/data-access">ESA WorldCover 2021</a>（CC BY 4.0、<a href={withBase('/assets/atlas/europe/tree-cover-v1/manifest.json')}>加工記録</a>）。</li>
-        <li>地形・標高：NOAA NCEI ETOPO 2022、60秒角、EGM2008基準（<a href={withBase('/assets/atlas/europe/physical-v1/manifest.json')}>加工記録</a>）。河川・湖：Natural Earth 5.1.2、1:50m、パブリックドメイン。国境：Natural Earth 1:110mに微小国の1:50mを補完。</li>
+        <li>地形・標高：NOAA NCEI ETOPO 2022、60秒角、EGM2008基準（<a href={withBase('/assets/atlas/europe/physical-v1/manifest.json')}>加工記録</a>）。河川・湖：Natural Earth 5.1.2、1:50m、パブリックドメイン。国境・海岸線：<a href="https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-0-countries/">Natural Earth 1:10m</a>、パブリックドメイン。旧格子の国マスクは生成時の旧概略形状を保持し、新しい海岸の細部へ数値を推測補完しません。</li>
         <li>気候：<a href="https://www.gloh2o.org/koppen/">Beck et al. (2023)</a>、1991–2020、CC BY 4.0（<a href={withBase('/assets/atlas/europe/climate-v1/manifest.json')}>加工記録</a>）。雨温図：<a href="https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/outline.html">気象庁 ClimatView</a>（<a href={withBase('/assets/atlas/europe/climate-v1/cities-manifest.json')}>取得記録</a>）。</li>
         <li>年降水量：<a href="https://doi.org/10.5676/DWD_GPCC/CLIMAT_V2025_025">GPCC/DWD、Rustemeier et al. (2025)</a>、1991–2020年、CC BY 4.0（<a href={layers.find(layer=>layer.id==='precipitation')!.manifest}>加工記録</a>）。流域区画：<a href="https://doi.org/10.6084/m9.figshare.9890531.v1">BasinATLAS v1.0 / HydroATLAS</a>、レベル4、CC BY 4.0（<a href={withBase('/assets/atlas/europe/drainage-v1/manifest.json')}>加工記録</a>）。</li>
         <li>人口密度：欧州委員会JRC・GHSL R2023A、2020年、CC BY 4.0（<a href={withBase('/assets/atlas/europe/population-v1/manifest.json')}>加工記録</a>）。国別統計：World Bank WDI。都市位置：Natural Earth 5.1.2（<a href={withBase('/assets/atlas/europe/context-v1/manifest.json')}>取得記録</a>）。</li>

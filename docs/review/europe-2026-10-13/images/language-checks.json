@@ -1,0 +1,36 @@
+[
+  {
+    "renderer": "auto",
+    "releaseCommit": "local",
+    "width": 1920,
+    "height": 1080,
+    "deviceScaleFactor": 1,
+    "areas": 331,
+    "categories": 11,
+    "defaultFillCount": 5,
+    "selected": "Newham",
+    "majorityCategory": "english-welsh",
+    "europeExtent": "62.400000000000006 354.6799709687467 1008.5333333333334 662.4677193427202",
+    "explicitLocalExtent": "232.74666666666664 532.7853542095999 143.84000000000003 167.3002213781485",
+    "regionAndCountrySelection": true,
+    "reloadReturnsToEurope": true,
+    "errors": []
+  },
+  {
+    "renderer": "static",
+    "releaseCommit": "local",
+    "width": 1920,
+    "height": 1080,
+    "deviceScaleFactor": 1,
+    "areas": 331,
+    "categories": 11,
+    "defaultFillCount": 5,
+    "selected": "Newham",
+    "majorityCategory": "english-welsh",
+    "europeExtent": "62.400000000000006 354.6799709687467 1008.5333333333334 662.4677193427202",
+    "explicitLocalExtent": "232.74666666666664 532.7853542095999 143.84000000000003 167.3002213781485",
+    "regionAndCountrySelection": true,
+    "reloadReturnsToEurope": true,
+    "errors": []
+  }
+]

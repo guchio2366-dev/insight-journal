@@ -153,7 +153,7 @@ export async function prepareDrainage(sourceDir) {
   const mask = new Uint16Array(width * height);
   let overlapPixels = 0;
   for (const basin of polygons) overlapPixels += rasterizeRings(mask, basin.rings, basin.index, false);
-  const geographyPath = 'src/data/atlas/europe-countries.json', geographyBytes = await fs.readFile(path.join(root, geographyPath));
+  const geographyPath = 'data-source/atlas/europe/legacy-country-mask-110m-v1.json', geographyBytes = await fs.readFile(path.join(root, geographyPath));
   const countries = JSON.parse(geographyBytes).features.filter(feature => feature.properties.kind === 'europe');
   if (countries.length !== 45) throw new Error('Expected existing 45-country display mask');
   const countryMask = new Uint8Array(width * height);

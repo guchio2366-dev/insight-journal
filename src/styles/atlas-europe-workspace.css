@@ -530,6 +530,7 @@
 .eu-workspace-root[data-europe-detail] .eu-river-label { position:absolute; z-index:4; transform:translate(-50%,-50%); border:1px solid #a8c8d1; border-radius:3px; padding:2px 4px; background:#f5fcffed; color:#135773; font:700 12px/1.25 var(--sans); cursor:pointer; white-space:nowrap; }
 .eu-workspace-root[data-europe-detail] .eu-river-label:is(:hover,:focus-visible,[aria-pressed=true]) { outline:2px solid #176783; outline-offset:1px; background:#fff; }
 @media(min-width:1600px) {
+ .eu-workspace-root[data-europe-detail] .eu-region-navigation { display:flex; align-items:center; gap:10px; }
  .eu-workspace-root[data-europe-detail].is-eu-water-reading .eu-map-stage { height:calc(var(--eu-reader-height,680px) - 44px); min-height:360px; max-height:none; aspect-ratio:auto; }
 }
 .eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry]:not(.is-point-only) { border-left:4px solid var(--eu-industry-color); background:#fffef4e8; }
@@ -548,6 +549,37 @@
 .eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry].is-point-only>:is(strong,small) { display:none; }
 .eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry].is-point-only:is(:hover,:focus-visible) { width:auto; height:auto; padding:2px 4px; border:1px solid #708887; border-left:4px solid var(--eu-industry-color); background:#fffef4; }
 .eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry].is-point-only:is(:hover,:focus-visible)>:is(strong,small) { display:inline; }
+
+@media(min-width:1600px) {
+ .eu-workspace-root[data-europe-detail] .eu-breadcrumb { margin:2px 0 5px; }
+ .eu-workspace-root[data-europe-detail] .eu-region-navigation { margin-bottom:5px; }
+ .eu-workspace-root[data-europe-detail] .eu-region-top a { min-height:34px; padding:5px 12px; }
+ .eu-workspace-root[data-europe-detail] .eu-region-buttons button { min-height:32px; padding:4px 12px; }
+ .eu-workspace-root[data-europe-detail] .eu-country-navigation { margin:4px 0; }
+ .eu-workspace-root[data-europe-detail] .eu-field-nav { margin-bottom:4px; }
+ .eu-workspace-root[data-europe-detail] .eu-topic-above button { min-height:38px; }
+ .eu-workspace-root[data-europe-detail]:has([data-eu-topic="climate"][aria-pressed="true"]) .eu-map-stage { height:calc(var(--eu-reader-height,820px) - 10px); min-height:800px; max-height:none; aspect-ratio:auto; }
+}
+
+/* Geographic names retain the same metrics on selection. */
+.eu-workspace-root .eu-map-label[data-eu-map-kind="city"] { cursor:pointer; font-weight:600; text-decoration:underline; text-decoration-color:#426b6b80; text-underline-offset:3px; }
+.eu-workspace-root .eu-map-label[data-eu-map-kind="city"][aria-pressed=true] { font-weight:600; text-decoration-color:#203e49; }
+.eu-workspace-root .eu-crop-label,.eu-workspace-root .eu-crop-label[aria-pressed=true] { border:0; border-bottom:2px solid var(--crop-color); border-radius:0; padding:1px 3px; background:transparent; color:var(--crop-color); text-shadow:0 1px 2px #fff,1px 0 2px #fff,-1px 0 2px #fff; font:700 12px/1.35 var(--sans); box-shadow:none; }
+.eu-workspace-root .eu-crop-label[aria-pressed=true] { outline:1px solid var(--crop-color); outline-offset:2px; }
+.eu-workspace-root .eu-population-cross { fill:none; stroke:#263d49; stroke-width:1.3; }
+.eu-workspace-root .eu-population-cross.is-active { fill:none; stroke:#872d43; stroke-width:2; }
+
+/* Geographic annotations follow their anchors immediately in every motion mode. */
+.eu-workspace-root[data-europe-detail] .eu-map-label,
+.eu-workspace-root[data-europe-detail] .eu-terrain-place-label,
+.eu-workspace-root[data-europe-detail] .eu-river-label { transition:none; }
+
+.eu-workspace-root[data-europe-detail] .eu-terrain-place-label { border:0; background:transparent; padding:2px 3px; min-height:22px; font-weight:600; text-shadow:0 1px 2px #fff,1px 0 2px #fff,-1px 0 2px #fff; }
+.eu-workspace-root[data-europe-detail] .eu-terrain-place-label[data-kind=mountain],.eu-workspace-root[data-europe-detail] .eu-terrain-place-label[data-kind=upland] { color:#604a38; font-weight:700; }
+.eu-workspace-root[data-europe-detail] .eu-terrain-place-label[data-kind=plain] { color:#3c6047; letter-spacing:1px; }
+.eu-workspace-root[data-europe-detail] .eu-terrain-place-label[data-kind=sea],.eu-workspace-root[data-europe-detail] .eu-terrain-place-label[data-kind=strait] { color:#205d74; font-style:italic; }
+.eu-workspace-root[data-europe-detail] .eu-terrain-place-label[data-kind=wind] { color:#74442c; border:0; border-bottom:1px dashed #74442c; }
+.eu-workspace-root[data-europe-detail] .eu-river-label { border:0; border-radius:0; background:transparent; padding:2px 3px; font:600 12px/1.25 var(--sans); text-shadow:0 1px 2px #fff,1px 0 2px #fff,-1px 0 2px #fff; }
 @media (min-width:960px) {
  .eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="industry"] { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:5px; }
  .eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="industry"] button { width:100%; min-height:42px; height:auto; padding:6px 3px; font-size:13px; }
@@ -586,3 +618,16 @@
 .eu-workspace-root.is-eu-culture-reading[data-eu-religion-overview="pew"]:has([data-eu-pew-map-key]:not([hidden])) .eu-map-annotations { z-index:7; }
 /* The shared reduced-motion duration must not animate measured map positions. */
 .eu-workspace-root :is(.eu-smre-marker,.eu-pew-marker,[data-eu-religion-national],[data-eu-religion-evidence]) { transition-property:none; }
+
+/* Three sectors retain one frame; industry choices and labels change emphasis only. */
+.eu-workspace-root[data-europe-detail] .eu-topic-above[data-eu-topic-field="industry"] { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); }
+.eu-workspace-root[data-europe-detail] .eu-industry-choices { display:flex; flex-wrap:wrap; gap:3px 8px; margin-top:4px; }
+.eu-workspace-root[data-europe-detail] .eu-industry-choices[hidden],.eu-workspace-root [data-eu-industry-key-item][hidden] { display:none; }
+.eu-workspace-root .eu-industry-choices button { min-height:32px; padding:3px 7px; border:0; border-bottom:2px solid transparent; background:transparent; color:#294753; font:600 13px/1.4 var(--sans); }
+.eu-workspace-root .eu-industry-choices button[aria-pressed=true] { border-bottom-color:#294753; background:#e8eee7; }
+.eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry]:not(.is-point-only) { border-width:0; border-left:3px solid var(--eu-industry-color); padding:2px 4px; font-weight:700; box-shadow:none; }
+.eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry][aria-pressed=true] { border-width:0; border-left-width:3px; outline:2px solid #234553; outline-offset:1px; }
+.eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry].is-muted { opacity:.55; }
+.eu-workspace-root[data-europe-detail] .eu-label-industry { font:700 13px/1.25 var(--sans); }
+.eu-workspace-root[data-europe-detail] .eu-label-location { font-size:11px; }
+.eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry].is-emphasized { box-shadow:none; }
