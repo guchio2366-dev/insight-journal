@@ -1,0 +1,530 @@
+{
+  "reviewedAt": "2026-10-12",
+  "newIndustries": [
+    "potash",
+    "uranium",
+    "food",
+    "wood",
+    "paper"
+  ],
+  "newLocations": [
+    {
+      "id": "potash-allan",
+      "place": "アラン",
+      "coordinates": [
+        -106.08,
+        51.89
+      ],
+      "industry": "potash",
+      "stage": "採掘・選鉱・肥料原料",
+      "sources": [
+        "nutrien-potash"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": ""
+    },
+    {
+      "id": "potash-cory",
+      "place": "サスカトゥーン西郊（コリー）",
+      "coordinates": [
+        -106.86,
+        52.12
+      ],
+      "industry": "potash",
+      "stage": "採掘・選鉱・肥料原料",
+      "sources": [
+        "nutrien-potash"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": ""
+    },
+    {
+      "id": "potash-lanigan",
+      "place": "ラニガン",
+      "coordinates": [
+        -105.18,
+        51.82
+      ],
+      "industry": "potash",
+      "stage": "採掘・選鉱・肥料原料",
+      "sources": [
+        "nutrien-potash"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": ""
+    },
+    {
+      "id": "potash-patience",
+      "place": "パティエンス湖",
+      "coordinates": [
+        -106.26,
+        52.02
+      ],
+      "industry": "potash",
+      "stage": "採掘・選鉱・肥料原料",
+      "sources": [
+        "nutrien-potash"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": ""
+    },
+    {
+      "id": "potash-rocanville",
+      "place": "ロカンビル",
+      "coordinates": [
+        -101.68,
+        50.5
+      ],
+      "industry": "potash",
+      "stage": "採掘・選鉱・肥料原料",
+      "sources": [
+        "nutrien-potash"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": ""
+    },
+    {
+      "id": "potash-vanscoy",
+      "place": "バンスコイ",
+      "coordinates": [
+        -107.02,
+        52.0
+      ],
+      "industry": "potash",
+      "stage": "採掘・選鉱・肥料原料",
+      "sources": [
+        "nutrien-potash"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": ""
+    },
+    {
+      "id": "uranium-mcarthur",
+      "place": "マッカーサーリバー",
+      "coordinates": [
+        -105.0,
+        57.76
+      ],
+      "industry": "uranium",
+      "stage": "ウラン採掘",
+      "sources": [
+        "cameco-mcarthur"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": ""
+    },
+    {
+      "id": "uranium-key",
+      "place": "キー湖",
+      "coordinates": [
+        -105.63,
+        57.2
+      ],
+      "industry": "uranium",
+      "stage": "鉱石処理・ウラン精鉱",
+      "sources": [
+        "cameco-mcarthur"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": ""
+    },
+    {
+      "id": "uranium-cigar",
+      "place": "シガー湖",
+      "coordinates": [
+        -104.5,
+        58.07
+      ],
+      "industry": "uranium",
+      "stage": "ウラン採掘",
+      "sources": [
+        "cameco-cigar"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": ""
+    },
+    {
+      "id": "uranium-mcclean",
+      "place": "マクリーン湖",
+      "coordinates": [
+        -103.83,
+        58.25
+      ],
+      "industry": "uranium",
+      "stage": "鉱石処理・ウラン精鉱",
+      "sources": [
+        "cameco-cigar"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": ""
+    },
+    {
+      "id": "food-high-river",
+      "place": "ハイリバー",
+      "coordinates": [
+        -113.86,
+        50.58
+      ],
+      "industry": "food",
+      "stage": "食肉加工",
+      "sources": [
+        "cargill-food"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "food-guelph",
+      "place": "グエルフ",
+      "coordinates": [
+        -80.21,
+        43.54
+      ],
+      "industry": "food",
+      "stage": "食肉加工",
+      "sources": [
+        "cargill-food"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "food-coaldale",
+      "place": "コールデール",
+      "coordinates": [
+        -112.62,
+        49.73
+      ],
+      "industry": "food",
+      "stage": "ばれいしょ加工",
+      "sources": [
+        "mccain-coaldale"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "wood-grande-prairie",
+      "place": "グランドプレーリー",
+      "coordinates": [
+        -118.8,
+        55.17
+      ],
+      "industry": "wood",
+      "stage": "製材",
+      "sources": [
+        "canfor-grande-prairie"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "wood-acheson",
+      "place": "アチソン",
+      "coordinates": [
+        -113.76,
+        53.55
+      ],
+      "industry": "wood",
+      "stage": "木材仕上げ・構造材",
+      "sources": [
+        "canfor-locations"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "wood-thunder-bay",
+      "place": "サンダーベイ",
+      "coordinates": [
+        -89.25,
+        48.38
+      ],
+      "industry": "wood",
+      "stage": "製材",
+      "sources": [
+        "domtar-mills"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "wood-atikokan",
+      "place": "アティコーカン",
+      "coordinates": [
+        -91.6,
+        48.76
+      ],
+      "industry": "wood",
+      "stage": "製材",
+      "sources": [
+        "domtar-mills"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "wood-ignace",
+      "place": "イグネース",
+      "coordinates": [
+        -91.64,
+        49.42
+      ],
+      "industry": "wood",
+      "stage": "製材",
+      "sources": [
+        "domtar-mills"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "wood-senneterre",
+      "place": "セネテール（アビティビ）",
+      "coordinates": [
+        -77.24,
+        48.39
+      ],
+      "industry": "wood",
+      "stage": "製材",
+      "sources": [
+        "domtar-mills"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "wood-lac-saint-jean",
+      "place": "ラックサンジャン周辺",
+      "coordinates": [
+        -72.22,
+        48.7
+      ],
+      "industry": "wood",
+      "stage": "製材・構造材",
+      "sources": [
+        "domtar-mills"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "paper-skookumchuck",
+      "place": "スクーカムチャック",
+      "coordinates": [
+        -115.73,
+        49.92
+      ],
+      "industry": "paper",
+      "stage": "パルプ",
+      "sources": [
+        "domtar-mills"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "paper-port-alberni",
+      "place": "ポートアルバーニ",
+      "coordinates": [
+        -124.82,
+        49.24
+      ],
+      "industry": "paper",
+      "stage": "紙",
+      "sources": [
+        "domtar-mills"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "paper-meadow-lake",
+      "place": "メドーレイク",
+      "coordinates": [
+        -108.44,
+        54.13
+      ],
+      "industry": "paper",
+      "stage": "パルプ",
+      "sources": [
+        "domtar-mills"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "paper-saint-felicien",
+      "place": "サンフェリシアン",
+      "coordinates": [
+        -72.45,
+        48.65
+      ],
+      "industry": "paper",
+      "stage": "パルプ",
+      "sources": [
+        "domtar-saint-felicien",
+        "domtar-mills"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "paper-saguenay",
+      "place": "サグネ",
+      "coordinates": [
+        -71.23,
+        48.4
+      ],
+      "industry": "paper",
+      "stage": "紙",
+      "sources": [
+        "domtar-kenogami"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": ""
+    },
+    {
+      "id": "paper-windsor",
+      "place": "ウィンザー（ケベック）",
+      "coordinates": [
+        -72.0,
+        45.57
+      ],
+      "industry": "paper",
+      "stage": "パルプ・紙",
+      "sources": [
+        "domtar-windsor"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": ""
+    }
+  ],
+  "sourceLedger": {
+    "nutrien-potash": {
+      "title": "Nutrien：カリの6生産施設",
+      "url": "https://www.nutrien.com/about/our-business/locations?tab=potash",
+      "scope": "現行のPotash施設欄で6鉱山の地名を確認。所在地の案内位置であり鉱床境界・生産量ではない。",
+      "accessed": "2026-10-12"
+    },
+    "cameco-mcarthur": {
+      "title": "Cameco：マッカーサーリバー／キー湖",
+      "url": "https://www.cameco.com/businesses/uranium-operations/canada/mcarthur-river-key-lake",
+      "scope": "採掘と鉱石処理。原料をキー湖へ道路輸送する関係を操業者が明記。2026年Q2実績を確認、将来計画を生産量にしない。",
+      "accessed": "2026-10-12"
+    },
+    "cameco-cigar": {
+      "title": "Cameco：シガー湖とマクリーン湖",
+      "url": "https://www.cameco.com/businesses/uranium-operations/canada/cigar-lake",
+      "scope": "シガー湖の鉱石をOranoのマクリーン湖へ道路輸送して処理。2026年7月の一時停止と再開を区別。",
+      "accessed": "2026-10-12"
+    },
+    "cargill-food": {
+      "title": "Cargill Canada：食肉加工の2地域",
+      "url": "https://www.cargill.ca/en/meat-processing",
+      "scope": "High RiverとGuelphにある食肉加工施設。旧人数・処理頭数を新しい全国統計へ転載しない。",
+      "accessed": "2026-10-12"
+    },
+    "mccain-coaldale": {
+      "title": "McCain：コールデールのばれいしょ加工",
+      "url": "https://www.mccain.com/information-centre/news/mccain-foods-coaldale/",
+      "scope": "2023年資料が2000年以来の操業施設と南部アルバータ農家との関係を明記。拡張計画の数量は採用しない。",
+      "accessed": "2026-10-12"
+    },
+    "canfor-locations": {
+      "title": "Canfor：西部の木材加工",
+      "url": "https://www.canfor.com/company/locations",
+      "scope": "Achesonの木材仕上げ製品と、会社のGrande Prairie製材所事例を確認。本社を製造拠点にしない。",
+      "accessed": "2026-10-12"
+    },
+    "canfor-grande-prairie": {
+      "title": "Canfor：グランドプレーリー製材所",
+      "url": "https://www.canfor.com/company/locations",
+      "scope": "現行所在地欄と2025年3月19日の製材所見学事例。操業の連続性や生産量は推計しない。",
+      "accessed": "2026-10-12"
+    },
+    "domtar-mills": {
+      "title": "Domtar：木材・パルプ・紙の加工施設",
+      "url": "https://www.domtar.com/our-company/all-locations/",
+      "scope": "Wood Products、Paper、Pulpの施設区分を区別。オンタリオ北西部、ケベック、BC等の複数施設を採用。会社本社・物流倉庫・停止が判明した施設は製造例から除外。",
+      "accessed": "2026-10-12"
+    },
+    "domtar-windsor": {
+      "title": "Domtar：ウィンザーのパルプ・紙",
+      "url": "https://www.domtar.com/our-location/windsor-mill/",
+      "scope": "ケベック州Eastern Townshipsの一貫加工と周辺の自社管理林。オンタリオ州Windsorと混同しない。",
+      "accessed": "2026-10-12"
+    },
+    "domtar-saint-felicien": {
+      "title": "Domtar：サンフェリシアンのパルプ",
+      "url": "https://www.domtar.com/wp-content/uploads/2026/07/Domtar_Fact-Sheet_Saint-Felicien.pdf",
+      "scope": "2026年7月の施設資料。操業所在地と製品段階だけを要約。",
+      "accessed": "2026-10-12"
+    },
+    "domtar-kenogami": {
+      "title": "Domtar：サグネの紙製造",
+      "url": "https://www.domtar.com/wp-content/uploads/2026/07/Domtar_Fact-Sheet_Kenogami.pdf",
+      "scope": "2026年7月のKénogami施設資料。製材と紙製造を別工程で扱う。",
+      "accessed": "2026-10-12"
+    }
+  },
+  "geometry": "Editorial WGS84 locality guides. Neither industrial footprint nor mine boundary. Aggregated localities contain named source-confirmed operations.",
+  "statistics": "Existing 2021 NAICS food and combined wood-paper indicators. Wood/paper selections reference the same combined statistic and must not be added. Mining references all mining, not potash/uranium production.",
+  "omittedOperatingExamples": [
+    "Howe Sound and Bayview Fibre: operator reports indefinite idling August 2026.",
+    "Dryden sold; Espanola idled; not treated as current Domtar operating examples.",
+    "Canfor Northwood/Polar closures and announced projects: not adopted as operating examples."
+  ]
+}

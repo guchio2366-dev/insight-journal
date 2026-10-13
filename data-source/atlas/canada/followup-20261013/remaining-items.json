@@ -1,0 +1,143 @@
+{
+  "scope": "Previously approved Canada pilot remaining work; unrelated regional expansion and new year UI are outside this task",
+  "executable": [
+    {
+      "id": "forest-activity-selection",
+      "status": "implemented; final-head CI and separate browser-review evidence required",
+      "work": "Selected activity label/marker/leader visibly highlighted; all peers and camera retained; clear, history, reload and repeated selection handled."
+    },
+    {
+      "id": "forest-nature-return",
+      "status": "implemented; final-head CI and separate browser-review evidence required",
+      "work": "Verified activity survives local nature roundtrip; only seven source-backed IDs pass the return whitelist."
+    },
+    {
+      "id": "forest-reading-current-scope",
+      "status": "implemented",
+      "work": "Ontario now describes existing processing guides and highlight-with-peers; scope describes ten agriculture products; BC update reference states 2020 stand-age example."
+    }
+  ],
+  "acquisitionBlocked": [
+    {
+      "id": "annual-harvest-distribution",
+      "status": "blocked for raw bytes; publication and metadata confirmed",
+      "requests": [
+        {
+          "name": "nfi-harvest-1985-2022",
+          "url": "https://opendata.nfis.org/downloads/forest_change/CA_Forest_Harvest_1985-2022.zip",
+          "requestedAtUtc": "2026-10-13T09:57:47.062150+00:00",
+          "transport": "ordinary HTTPS with normal certificate verification",
+          "range": "bytes=0-65535",
+          "status": "unavailable",
+          "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>",
+          "originResponseReceived": false
+        },
+        {
+          "name": "canlad-annual-2025",
+          "url": "https://download-telecharger.services.geo.ca/pub/nrcan_rncan/Forests_Foret/canlad_including_insect_defoliation/v1.1/TS_FinalFilter_20260508/canlad_annual_2025_v1_1_20260508.tif",
+          "requestedAtUtc": "2026-10-13T10:01:00.209872+00:00",
+          "transport": "ordinary HTTPS with normal certificate verification",
+          "range": "bytes=0-65535",
+          "status": "unavailable",
+          "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>",
+          "originResponseReceived": false
+        }
+      ],
+      "minimumInput": {
+        "ntemsOption": [
+          "CA_Forest_Harvest_1985-2022.zip with original raster, noData definitions, CRS and source citation"
+        ],
+        "canladOneYearOption": [
+          "canlad_annual_2025_v1_1_20260508.tif",
+          "_readme.txt",
+          "_projectionDefinitionWKT_lcccan83.prj.txt",
+          "legend_type.csv"
+        ],
+        "canladPeriodOption": [
+          "canlad_1985_2025_latest_type_v1_1_20260508.tif",
+          "canlad_1985_2025_latest_start_year_v1_1_20260508.tif",
+          "canlad_1985_2025_latest_ending_year_v1_1_20260508.tif",
+          "same readme, CRS and legend"
+        ],
+        "alternativeClippedInput": "Source-derived raster with native class values/noData/CRS/geotransform retained and an explicit clip extent, period, source hash and licence; no smoothing or quantity allocation."
+      },
+      "limit": "These permit satellite-detected tree-removal distribution, not exact legal annual logging cutblocks. No year comparison UI is needed."
+    },
+    {
+      "id": "exact-cutblock-polygons",
+      "status": "BC publication confirmed; catalogue acquisition failed; exact event schema/years not obtained",
+      "requests": [
+        {
+          "name": "bc-results-catalogue",
+          "url": "https://catalogue.data.gov.bc.ca/dataset/results-openings-svw",
+          "requestedAtUtc": "2026-10-13T09:57:47.104709+00:00",
+          "transport": "ordinary HTTPS with normal certificate verification",
+          "range": null,
+          "status": "unavailable",
+          "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>",
+          "originResponseReceived": false
+        }
+      ],
+      "minimumInput": [
+        "BC RESULTS openings/treatment-unit geospatial export (GeoPackage or complete SHP set), for at least Prince George DPG",
+        "Linked actual disturbance records containing event type and completed harvest date, opening/treatment-unit ID, cancellation/status and source dictionary",
+        "CRS, geometry completeness, extraction date and OGL-BC notice"
+      ],
+      "limit": "Do not use REFERENCE_YEAR as harvest year or natural-disturbance openings as logging. BC covers only that province; other provinces remain unverified rather than zero."
+    },
+    {
+      "id": "ct-ethnic-cultural-origin-and-religion",
+      "status": "known CONNECT403; expressly not retried",
+      "request": {
+        "url": "https://www12.statcan.gc.ca/census-recensement/2021/dp-pd/prof/details/download-telecharger/comp/getFile.cfm?LANG=E&GEONO=007&FILETYPE=CSV",
+        "requestedAtUtc": "2026-10-12T10:44:19Z",
+        "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>"
+      },
+      "minimumInput": [
+        "Official 98-401-X2021007 GEONO007 ZIP or lossless filtered CSV with original headers, dictionary, CT DGUID and CTUID strings",
+        "Actual ethnic/cultural-origin response rows and own denominator; multiple-response totals must not be exclusivized",
+        "Nine top-level religion counts and their own private-household 25% denominator; flags/quality metadata",
+        "2021 CT boundary geometry joined by DGUID, with CRS and 2021-01-01 geography reference; separate coarse CD coverage outside CTs"
+      ],
+      "limit": "335 coarse geographies and 3350 religion cells are available, but do not become within-region residential distribution."
+    },
+    {
+      "id": "raw-precipitation-recheck",
+      "status": "previous CONNECT403 retained; no new acquisition attempted",
+      "request": {
+        "url": "https://crd-data-donnees-rdc.ec.gc.ca/CDAS/products/CanGridP_V2/CanGridP_mlyV2_1948-2023.nc",
+        "error": "URLError: Tunnel connection failed: 403 Forbidden",
+        "sourceRecord": "public/assets/atlas/canada-precipitation-contours-v1/manifest.json"
+      },
+      "minimumInput": {
+        "fullFile": "CanGridP_mlyV2_1948-2023.nc",
+        "equivalentLosslessWindow": {
+          "headerAndGeolocationBytes": 9345296,
+          "monthlyRangeStart": 1188502116,
+          "monthlyRangeEndInclusive": 2029089155,
+          "period": "1991-2020, 360 float64 monthly totals plus land mask and 2D lat/lon",
+          "requirement": "Source identity/ETag/hash and offset metadata must accompany a byte-window export."
+        },
+        "precisionOnlyInput": "Full-precision annual NPZ plus source mask, lat/lon, calculation provenance can verify output precision but does not independently recheck raw monthly completeness."
+      },
+      "limit": "Current 0.1 mm CSV and native mask/250 mm contours are verified; raw monthly and full-precision recheck remain incomplete."
+    },
+    {
+      "id": "original-attached-reference",
+      "status": "previous Library transfer failed; no fresh retry",
+      "error": "library file transfer failed: download failed",
+      "minimumInput": [
+        "Original attached PNG/JPEG through a successful Library transfer or an accessible original file",
+        "Exact existing Library file identity must be resolved before replacement; browser viewport/DPR/zoom if a layout comparison is required"
+      ],
+      "limit": "Independent measured 1920 CSS images are available. Original image pixel dimensions must not be treated as CSS viewport."
+    }
+  ],
+  "personDecisionWaiting": [],
+  "personDecisionReason": "No user decision blocks the approved fixes or source research. Publication, new year UI and broad source/feature scope changes are not performed.",
+  "notCurrentAcceptanceRequirements": [
+    "Full facility census and all actual supply transactions",
+    "New harvest-volume annual comparison",
+    "Worldwide rollout beyond the Canada pilot"
+  ]
+}

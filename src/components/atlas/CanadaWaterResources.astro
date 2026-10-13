@@ -23,15 +23,7 @@ const bcPath = industryGeometry.features.find(feature => feature.code === '59')?
 const labels = {precipitation:'降水量',drainage:'河川の流域'};
 const conciseNote = (_topic: string, dataset: typeof datasets.precipitation) => dataset.note ? dataset.note.split('。')[0] + '。' : '';
 // Each anchor was checked against the held full-extent class mask, not inferred from a city observation.
-const rainLabels=[
- {id:'p0',point:[-126,69],text:'250 mm未満',y:-8},
- {id:'p1',point:[-112,53],text:'250〜500 mm',y:22},
- {id:'p2',point:[-99,54],text:'500〜750 mm',y:-8},
- {id:'p3',point:[-86,53],text:'750〜1,000 mm',y:22},
- {id:'p4',point:[-73,47],text:'1,000〜1,500 mm',y:22,side:'left'},
- {id:'p5',point:[-130,54],text:'1,500〜2,000 mm',y:-8},
- {id:'p6',point:[-126,50],text:'2,000 mm以上',y:22},
-];
+const rainLabels=datasets.precipitation.contourLabels??[];
 ---
 <section class="canada-water-resources" data-canada-water-resources hidden={hidden} aria-label="カナダの水資源分布">
  <div class="canada-water-map-column">
@@ -43,18 +35,18 @@ const rainLabels=[
     <rect x="0" y="0" width="900" height="580" fill="#e4eff0" />
     <CanadaMapLand />
     <g data-canada-water-resource-raster clip-path="url(#canada-water-national-clip)"></g>
-    <g data-canada-water-resource-vectors></g>
+    <g data-canada-water-resource-vectors clip-path="url(#canada-water-national-clip)"></g>
     <g data-canada-basin-water hidden aria-hidden="true">{lakes.features.map(f=><path class="canada-basin-lake" d={canadaMapPath(f.geometry)} fill-rule="evenodd" />)}{rivers.features.map(f=><path class="canada-basin-river" d={riverPath(f.geometry)} vector-effect="non-scaling-stroke"><title>{riverNames[f.properties.name]??f.properties.name}</title></path>)}</g>
     <g data-canada-basin-labels hidden>{datasets.drainage.groups.filter(g=>(g as any).labelAnchor).map(g=>{const [x,y]=projectCanadaMap((g as any).labelAnchor);return <g data-canada-basin-label={g.id} role="button" tabindex="0" aria-label={`${g.name}の流域を読む`}><text x={x} y={y}>{g.name}</text></g>})}</g>
     <path class="canada-water-national-outline" data-canada-water-national-outline d={nationalPath} fill="none" vector-effect="non-scaling-stroke" aria-hidden="true" />
 
-    <g class="canada-rain-map-labels" data-canada-rain-map-labels hidden aria-label="各降水帯の年降水量">{rainLabels.map(label=>{const [x,y]=projectCanadaMap(label.point);return <g data-canada-rain-map-label={label.id} data-rain-x={x} data-rain-y={y} transform={`translate(${x} ${y})`}><g data-canada-rain-label-glyph><rect x="-65" y="-14" width="130" height="21" rx="3" fill={canadaAnnualRainColor(label.id)} stroke="#456c8155" stroke-width=".7"/><text x="0" y="0" text-anchor="middle" fill={Number(label.id.slice(1))>=4?'#fff':'#173f56'}>{label.text}</text></g></g>})}</g>
+    <g class="canada-rain-map-labels" data-canada-rain-map-labels hidden aria-label="等雨量線の値">{rainLabels.map((label,index)=>{const [x,y]=projectCanadaMap(label.coordinates);return <g data-canada-rain-map-label={index} data-rain-mm={label.mm} data-rain-x={x} data-rain-y={y} transform={`translate(${x} ${y})`}><g data-canada-rain-label-glyph><text x="0" y="4" text-anchor="middle" fill="#174d70">{label.mm.toLocaleString('ja-JP')}</text></g></g>})}</g>
    </svg>
    <p class="canada-water-loading" data-canada-water-load role="status">分布図は表示時に読み込みます。</p>
    <span class="canada-rain-map-unit" data-canada-rain-map-unit hidden>年降水量 · mm/年</span>
   </div>
-  <div class="canada-water-map-key">{Object.entries(datasets).map(([topic,dataset])=><div class="canada-water-legend" data-canada-water-resource-legend={topic} hidden aria-label="地図の凡例">{dataset.groups.filter(group=>!(group as any).parent).map(group=><button type="button" data-canada-water-group={group.id} data-canada-water-group-topic={topic} aria-pressed="false"><i style={`background:${topic==='precipitation'?(canadaAnnualRainColor(group.id)??group.color):group.color}`} aria-hidden="true"></i><span>{group.name}</span></button>)}{dataset.groups.some(group=>(group as any).parent)&&<div class="canada-water-subbasin-key">ネルソン川水系の支流域：{dataset.groups.filter(group=>(group as any).parent).map(group=><button type="button" data-canada-water-group={group.id} data-canada-water-group-topic={topic} aria-pressed="false">{group.name}</button>)}（破線）</div>}</div>)}</div>
-  <p class="canada-water-precipitation-key" data-canada-water-precipitation-key hidden>年降水量（雨・雪の水当量）。濃い青ほど多雨。区分の幅は一定ではありません。</p>
+  <div class="canada-water-map-key">{Object.entries(datasets).map(([topic,dataset])=><div class="canada-water-legend" data-canada-water-resource-legend={topic} hidden aria-label="地図の凡例">{dataset.groups.filter(group=>!(group as any).parent).map(group=><button type="button" data-canada-water-group={group.id} data-canada-water-group-topic={topic} aria-pressed="false"><i style={`background:${group.color}`} aria-hidden="true"></i><span>{group.name}</span></button>)}{dataset.groups.some(group=>(group as any).parent)&&<div class="canada-water-subbasin-key">ネルソン川水系の支流域：{dataset.groups.filter(group=>(group as any).parent).map(group=><button type="button" data-canada-water-group={group.id} data-canada-water-group-topic={topic} aria-pressed="false">{group.name}</button>)}（破線）</div>}</div>)}</div>
+  <p class="canada-water-precipitation-key" data-canada-water-precipitation-key hidden>年降水量（雨・雪の水当量）。線は250 mm間隔、数値はその線の値。線間の青は250 mmごとの段階です。</p>
   <div class="canada-water-selection"><label>区分を選ぶ <select data-canada-water-area aria-label="水資源の区分を選ぶ"><option value="">すべて</option></select></label><label class="canada-water-only"><input type="checkbox" data-canada-water-resource-only disabled /> 選んだ区分だけ表示</label><button type="button" data-canada-water-resource-reset>選択を解除</button></div>
   <p class="canada-water-status" data-canada-water-resource-status aria-live="polite">色の区分と表示範囲を確認できます。</p>
   <button class="canada-water-retry" type="button" data-canada-water-retry hidden>地図を再読み込み</button>

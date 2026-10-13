@@ -15,7 +15,10 @@
 .canada-water-reading-note{font-size:11px;color:#645d51;border-left:2px solid #9a7961;padding-left:8px}
 .canada-water-references{pointer-events:none}.canada-water-references circle{fill:#263e48;stroke:#fffef8;stroke-width:1.5}.canada-water-references text{fill:#263e48;font-size:20px;font-weight:600;paint-order:stroke;stroke:#fffef8;stroke-width:2.5;stroke-linejoin:round}
 .canada-rain-map-labels{pointer-events:none}
-.canada-rain-map-labels text{font-size:12px;font-weight:600;stroke:none}
+.canada-rain-map-labels text{font-size:12px;font-weight:700;stroke:#f9fdff;stroke-width:3;paint-order:stroke}
+.canada-isohyet{fill:none;stroke:#30729d;stroke-width:.9;pointer-events:none}
+[data-canada-water-vector-topic=precipitation] .canada-water-shape{stroke:none}
+[data-canada-water-vector-topic=precipitation] .canada-water-shape.is-selected{stroke:#783914;stroke-width:2}
 .canada-nature[data-canada-nature] .canada-water-shape:focus,.canada-nature[data-canada-nature] .canada-water-shape:focus-visible{outline:none}
 .canada-water-shape[data-canada-water-parent]{stroke:#718b70;stroke-dasharray:3 2;fill-opacity:.28}
 .canada-water-shape[data-canada-water-parent].is-selected{stroke:#972f24;stroke-width:2.5;fill-opacity:.75}

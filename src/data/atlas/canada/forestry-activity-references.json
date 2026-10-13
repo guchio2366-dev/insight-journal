@@ -1,0 +1,12 @@
+{
+  "meaning":"森林被覆と別に、伐採・更新の記録がある参考地域と加工施設の集積を示します。地点は地域の案内位置で、伐採区画・供給圏・施設外形や活動量ではありません。",
+  "references":[
+    {"id":"prince-george-harvest","kind":"harvest","label":"伐採・更新：BC内陸","coordinates":[-123.1,54.0],"note":"BC政府の公開例は、Prince George地区のRESULTS記録を用いて西部カラマツの植林区画を示し、2020年の林齢を集計しています。伐採後の更新の地域例です。地点は地区の案内位置で、現在伐採中の区画や年度別の伐採量を示しません。","source":"https://bcgov.github.io/bcdata/articles/explore-silviculture-data-using-bcdata.html"},
+    {"id":"windsor-managed-forest","kind":"management","label":"管理・更新：QC南部","coordinates":[-72.2,45.7],"note":"Eastern TownshipsのWindsor工場は周辺の私有林を管理し、植林・森林の再生を行います。管理林の地域例として扱い、管理する全域を伐採済み面や現在の伐採予定地に読み替えません。","source":"https://www.domtar.com/wp-content/uploads/2026/07/Domtar_Fact-Sheet_Windsor.pdf"},
+    {"id":"grande-prairie-wood","kind":"wood","label":"製材：グランドプレーリー","coordinates":[-118.8,55.17],"note":"Canforが示す製材所の地域例です。森林被覆とは別の木材加工活動を示します。近い森林からの個別出荷は推定しません。","source":"https://www.canfor.com/company/locations"},
+    {"id":"northwest-ontario-wood","kind":"wood","label":"製材：ON北西部","coordinates":[-90.5,49.0],"note":"Thunder Bay・Atikokan・Ignaceの製材施設が確認できます。3施設を地域の案内位置にまとめ、森林面積・原料供給圏・生産量を示す範囲にはしません。","source":"https://www.domtar.com/our-company/all-locations/"},
+    {"id":"lac-saint-jean-processing","kind":"wood","label":"木材・パルプ：ラックサンジャン","coordinates":[-72.4,48.7],"note":"Saint-Félicien・Dolbeau-Mistassiniなどに製材・構造材とパルプ・紙の加工施設が分布します。森林4分類とは別の加工集積として読みます。","source":"https://www.domtar.com/our-company/all-locations/"},
+    {"id":"skookumchuck-pulp","kind":"paper","label":"パルプ：BC南東部","coordinates":[-115.73,49.92],"note":"Skookumchuckのパルプ加工施設の案内位置です。パルプは繊維原料で、製材や森林被覆とは別の段階です。","source":"https://www.domtar.com/our-company/all-locations/"},
+    {"id":"windsor-paper","kind":"paper","label":"紙：ウィンザー（QC）","coordinates":[-72.0,45.57],"note":"ケベック州Windsorのパルプ・紙の一貫加工です。オンタリオ州の同名都市と区別し、管理林・加工施設・森林被覆を同一の面として扱いません。","source":"https://www.domtar.com/our-location/windsor-mill/"}
+  ]
+}

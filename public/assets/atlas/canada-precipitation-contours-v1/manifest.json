@@ -1,0 +1,210 @@
+{
+  "source": "ECCC CanGridP mlyV2, held 1991–2020 derived annual cell table",
+  "sourceUrl": "https://crd-data-donnees-rdc.ec.gc.ca/CDAS/products/CanGridP_V2/CanGridP_mlyV2_1948-2023.nc",
+  "sourceExportSha256": "05230c91440028ce9c3491c9b97aea3f3e369269c8107e3c9bb57d266c69b5b0",
+  "nativeShapeXMajor": [
+    621,
+    470
+  ],
+  "validCells": 100945,
+  "maskedCells": 190925,
+  "reportedOriginalMissingLandCells": 0,
+  "reportedOriginalLandCells": 100945,
+  "sourcePrecision": {
+    "annualMm": 0.1,
+    "longitudeLatitudeDegrees": 0.0001
+  },
+  "stepMm": 250,
+  "cornerMask": false,
+  "method": "Marching squares in native x-major grid topology. Interpolate only between valid held cell centres. Geographic registration uses the supplied lon/lat values; x/y indices are not geographic degrees. Entire cells touching a nonland/missing vertex are excluded. Bands and isohyets share one generator; boundaries are not polygon smoothing of prior classes. Canada UI clips to the held national outline. No extrapolation or fabricated values.",
+  "limitations": [
+    "The full-precision annual NPZ is not held in this checkout; annual CSV rounds to 0.1 mm and geolocation to 0.0001 degrees.",
+    "Normal HTTPS range retrieval of the current original NetCDF header was blocked by proxy Tunnel connection failed: 403 Forbidden. No permission/security change or alternate route was used. Raw current land/monthly arrays were not independently rechecked.",
+    "Native valid-index mask, retained SHA, 100945 cells, reported source counts, valid extrema and no interpolation across missing/nonland are checked. Values and labels remain derived climate normals, not station measurements."
+  ],
+  "bands": [
+    {
+      "id": "p0",
+      "name": "0–250 mm/年",
+      "color": "#eff7fb",
+      "lowerBoundMm": 0,
+      "upperBoundExclusiveMm": 250,
+      "sourceName": "0–<250 mm/year",
+      "sourceCellCount": 6837,
+      "description": "1991–2020年の平均年降水量。250 mm間隔。雨・雪の水当量。"
+    },
+    {
+      "id": "p1",
+      "name": "250–500 mm/年",
+      "color": "#d7eaf5",
+      "lowerBoundMm": 250,
+      "upperBoundExclusiveMm": 500,
+      "sourceName": "250–<500 mm/year",
+      "sourceCellCount": 34606,
+      "description": "1991–2020年の平均年降水量。250 mm間隔。雨・雪の水当量。"
+    },
+    {
+      "id": "p2",
+      "name": "500–750 mm/年",
+      "color": "#b9d9ed",
+      "lowerBoundMm": 500,
+      "upperBoundExclusiveMm": 750,
+      "sourceName": "500–<750 mm/year",
+      "sourceCellCount": 27498,
+      "description": "1991–2020年の平均年降水量。250 mm間隔。雨・雪の水当量。"
+    },
+    {
+      "id": "p3",
+      "name": "750–1,000 mm/年",
+      "color": "#98c7e1",
+      "lowerBoundMm": 750,
+      "upperBoundExclusiveMm": 1000,
+      "sourceName": "750–<1000 mm/year",
+      "sourceCellCount": 13132,
+      "description": "1991–2020年の平均年降水量。250 mm間隔。雨・雪の水当量。"
+    },
+    {
+      "id": "p4",
+      "name": "1,000–1,250 mm/年",
+      "color": "#77b4d7",
+      "lowerBoundMm": 1000,
+      "upperBoundExclusiveMm": 1250,
+      "sourceName": "1000–<1250 mm/year",
+      "sourceCellCount": 12770,
+      "description": "1991–2020年の平均年降水量。250 mm間隔。雨・雪の水当量。"
+    },
+    {
+      "id": "p5",
+      "name": "1,250–1,500 mm/年",
+      "color": "#559ecb",
+      "lowerBoundMm": 1250,
+      "upperBoundExclusiveMm": 1500,
+      "sourceName": "1250–<1500 mm/year",
+      "sourceCellCount": 3500,
+      "description": "1991–2020年の平均年降水量。250 mm間隔。雨・雪の水当量。"
+    },
+    {
+      "id": "p6",
+      "name": "1,500–1,750 mm/年",
+      "color": "#3888bd",
+      "lowerBoundMm": 1500,
+      "upperBoundExclusiveMm": 1750,
+      "sourceName": "1500–<1750 mm/year",
+      "sourceCellCount": 1669,
+      "description": "1991–2020年の平均年降水量。250 mm間隔。雨・雪の水当量。"
+    },
+    {
+      "id": "p7",
+      "name": "1,750–2,000 mm/年",
+      "color": "#2173ac",
+      "lowerBoundMm": 1750,
+      "upperBoundExclusiveMm": 2000,
+      "sourceName": "1750–<2000 mm/year",
+      "sourceCellCount": 421,
+      "description": "1991–2020年の平均年降水量。250 mm間隔。雨・雪の水当量。"
+    },
+    {
+      "id": "p8",
+      "name": "2,000–2,250 mm/年",
+      "color": "#126197",
+      "lowerBoundMm": 2000,
+      "upperBoundExclusiveMm": 2250,
+      "sourceName": "2000–<2250 mm/year",
+      "sourceCellCount": 204,
+      "description": "1991–2020年の平均年降水量。250 mm間隔。雨・雪の水当量。"
+    },
+    {
+      "id": "p9",
+      "name": "2,250–2,500 mm/年",
+      "color": "#0b5082",
+      "lowerBoundMm": 2250,
+      "upperBoundExclusiveMm": 2500,
+      "sourceName": "2250–<2500 mm/year",
+      "sourceCellCount": 146,
+      "description": "1991–2020年の平均年降水量。250 mm間隔。雨・雪の水当量。"
+    },
+    {
+      "id": "p10",
+      "name": "2,500–2,750 mm/年",
+      "color": "#08406e",
+      "lowerBoundMm": 2500,
+      "upperBoundExclusiveMm": 2750,
+      "sourceName": "2500–<2750 mm/year",
+      "sourceCellCount": 104,
+      "description": "1991–2020年の平均年降水量。250 mm間隔。雨・雪の水当量。"
+    },
+    {
+      "id": "p11",
+      "name": "2,750–3,000 mm/年",
+      "color": "#07365e",
+      "lowerBoundMm": 2750,
+      "upperBoundExclusiveMm": 3000,
+      "sourceName": "2750–<3000 mm/year",
+      "sourceCellCount": 42,
+      "description": "1991–2020年の平均年降水量。250 mm間隔。雨・雪の水当量。"
+    },
+    {
+      "id": "p12",
+      "name": "3,000–3,250 mm/年",
+      "color": "#062d50",
+      "lowerBoundMm": 3000,
+      "upperBoundExclusiveMm": 3250,
+      "sourceName": "3000–<3250 mm/year",
+      "sourceCellCount": 10,
+      "description": "1991–2020年の平均年降水量。250 mm間隔。雨・雪の水当量。"
+    },
+    {
+      "id": "p13",
+      "name": "3,250–3,500 mm/年",
+      "color": "#052545",
+      "lowerBoundMm": 3250,
+      "upperBoundExclusiveMm": 3500,
+      "sourceName": "3250–<3500 mm/year",
+      "sourceCellCount": 2,
+      "description": "1991–2020年の平均年降水量。250 mm間隔。雨・雪の水当量。"
+    },
+    {
+      "id": "p14",
+      "name": "3,500–3,750 mm/年",
+      "color": "#041e3b",
+      "lowerBoundMm": 3500,
+      "upperBoundExclusiveMm": 3750,
+      "sourceName": "3500–<3750 mm/year",
+      "sourceCellCount": 3,
+      "description": "1991–2020年の平均年降水量。250 mm間隔。雨・雪の水当量。"
+    },
+    {
+      "id": "p15",
+      "name": "3,750–4,000 mm/年",
+      "color": "#031930",
+      "lowerBoundMm": 3750,
+      "upperBoundExclusiveMm": 4000,
+      "sourceName": "3750–<4000 mm/year",
+      "sourceCellCount": 1,
+      "description": "1991–2020年の平均年降水量。250 mm間隔。雨・雪の水当量。"
+    }
+  ],
+  "contours": 161,
+  "labelCandidates": 129,
+  "files": {
+    "bands.geojson": {
+      "bytes": 367125,
+      "sha256": "9b6d08bda76070c5c4e3ed8476a205b81f7637d20f7f9f8c289bc775669cce6b"
+    },
+    "isohyets.geojson": {
+      "bytes": 109628,
+      "sha256": "94c2f45c31c88479a180b0f47d0c5fe7b453dbbc39783655d2477ef6c87e39a5"
+    },
+    "native-annual.float32.gz": {
+      "bytes": 234211,
+      "sha256": "04c53a5926570b01addcaaaf67dd8b13a60eb21b8889ea223ed8d90bad6035f5"
+    },
+    "labels.json": {
+      "bytes": 6066,
+      "sha256": "3a507d22e31392699b2959bda27f440eb1184b0e43e25b3c8e874f5aef73ca06"
+    }
+  },
+  "license": "Open Government Licence – Canada",
+  "licenseUrl": "https://open.canada.ca/en/open-government-licence-canada",
+  "attribution": "Source: Environment and Climate Change Canada, CanGridP mlyV2; annual normals and contours adapted by Insight Journal."
+}
