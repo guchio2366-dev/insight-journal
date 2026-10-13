@@ -1,0 +1,241 @@
+{
+  "reviewedAtUtc": "2026-10-13",
+  "scope": "Inventory and independently published harvest products; no year-comparison UI, new harvest raster or cutblock polygons adopted",
+  "heldSources": {
+    "files": [
+      {
+        "file": "data-source/atlas/canada/agriculture/forestry/16100117-metadata.csv",
+        "bytes": 35362,
+        "sha256": "104deff615f98571d0bface068e62a2acac834a215b35a0a33dcea67e2149ee4"
+      },
+      {
+        "file": "data-source/atlas/canada/agriculture/forestry/README.md",
+        "bytes": 7232,
+        "sha256": "6df04b050309b7be3051b786014f7f47d9e8df8a997e7b3dfcafd25b7fea06f8"
+      },
+      {
+        "file": "data-source/atlas/canada/agriculture/forestry/forestry-selected.csv",
+        "bytes": 11900,
+        "sha256": "fd4014be30d582ece90c7901bc7aa5c7948b048a754f4c44878f6a6ea9283cab"
+      },
+      {
+        "file": "data-source/atlas/canada/agriculture/forestry/landcover-2020-cog-header.bin",
+        "bytes": 131072,
+        "sha256": "9a985f6c0ea0722c8ebe19d567dcddc203e1f9bc6c19b5a70ea12f113bb346c5"
+      },
+      {
+        "file": "data-source/atlas/canada/agriculture/forestry/landcover-2020-wms.png",
+        "bytes": 575949,
+        "sha256": "aa110b392f3efffe9d9110f4e71fd9e5e5f9eb6d8e58acfe2e5c8a05121343c5"
+      },
+      {
+        "file": "data-source/atlas/canada/agriculture/forestry/landcover-official-legend.png",
+        "bytes": 34138,
+        "sha256": "c8f7dea3fdb2eabd24582e1823fbd619517fb1255dcac0f6fa5d3e8adf965970"
+      },
+      {
+        "file": "data-source/atlas/canada/agriculture/forestry/provenance.json",
+        "bytes": 3669,
+        "sha256": "929f7b32bc67f752c3dae90883042085e21993ac79a6d3d07924f664432e00b6"
+      },
+      {
+        "file": "public/assets/atlas/canada-forestry-v1/forest-all-2020.png",
+        "bytes": 117500,
+        "sha256": "419b4b08440f35994ba9aac0876c4fa6128e4a3af574986a649bf11d1e616abd"
+      },
+      {
+        "file": "public/assets/atlas/canada-forestry-v1/forest-broadleaf-2020.png",
+        "bytes": 17120,
+        "sha256": "38ee95018615a0ee7c3cba914b323c13cb36b5b2908731f2b59463cfe521f826"
+      },
+      {
+        "file": "public/assets/atlas/canada-forestry-v1/forest-mixed-2020.png",
+        "bytes": 32977,
+        "sha256": "9ea6c6f773d03c5eac1663f5142ebfb6b80178ff8b9bf49e2524bbd842905734"
+      },
+      {
+        "file": "public/assets/atlas/canada-forestry-v1/forest-needleleaf-2020-mercator.png",
+        "bytes": 97990,
+        "sha256": "aeadee3b315313164c59cfb4de765942686019f89adaed32484043047848151e"
+      },
+      {
+        "file": "public/assets/atlas/canada-forestry-v1/forest-needleleaf-2020.png",
+        "bytes": 86984,
+        "sha256": "31d915b19db23b57f01146d768854d41ac75439c6d89439bf17fef11462dde5c"
+      },
+      {
+        "file": "public/assets/atlas/canada-forestry-v1/forest-taiga-2020.png",
+        "bytes": 19454,
+        "sha256": "bb0d8f94b556803bf254d56b62aabcb65b5378e932c89081e1c0a77efbae91f7"
+      },
+      {
+        "file": "public/assets/atlas/canada-forestry-v1/forestry-selected.csv",
+        "bytes": 11900,
+        "sha256": "fd4014be30d582ece90c7901bc7aa5c7948b048a754f4c44878f6a6ea9283cab"
+      },
+      {
+        "file": "public/assets/atlas/canada-forestry-v1/manifest.json",
+        "bytes": 5389,
+        "sha256": "b961464af5d1172b9f9debeeae5ddc967c7c3ec8a88fd17f701005307c87549d"
+      },
+      {
+        "file": "src/data/atlas/canada/forestry-activity-references.json",
+        "bytes": 3055,
+        "sha256": "06a7acf4e27af701d2289e31e446f58d9bb397c7569c84cc5df270f9cc3df078"
+      }
+    ],
+    "forestCoverYear": 2020,
+    "displayPixels": [
+      1800,
+      1160
+    ],
+    "sourceClassCodes": [
+      1,
+      2,
+      5,
+      6
+    ],
+    "manufacturingCells": 66,
+    "suppressedManufacturingCells": 20,
+    "manufacturingYears": [
+      2021,
+      2023,
+      2024
+    ],
+    "activityGuides": 7,
+    "harvestGeometryHeld": false,
+    "whatHeldDataSupport": [
+      "Actual reduced forest-cover class distribution",
+      "Named source-backed activity reference points",
+      "Provincial manufacturing revenue; no forest harvest quantity or area inferred"
+    ]
+  },
+  "publicSources": [
+    {
+      "id": "ntems-harvest-1985-2022",
+      "agency": "NRCan Canadian Forest Service / NTEMS",
+      "metadata": "https://www.app.geo.ca/en-ca/map-browser/record/87e35bf0-b734-4c4e-9eb6-e08ffe80e3fe",
+      "producer": "https://opendata.nfis.org/mapserver/nfis-change_eng.html",
+      "download": "https://opendata.nfis.org/downloads/forest_change/CA_Forest_Harvest_1985-2022.zip",
+      "scope": "Canadian forested ecosystems, approximately 650 million hectares",
+      "period": [
+        1985,
+        2022
+      ],
+      "publishedYear": 2024,
+      "resolutionMetres": 30,
+      "format": "GeoTIFF within producer-linked ZIP; directory describes 978 MB",
+      "licence": "Open Government Licence - Canada; retain source and Hermosilla et al. 2016 citation",
+      "meaning": "Greatest detected stand-replacing harvest disturbance year over the period. Remote sensing; not all events, actual timber deliveries, legal cutblocks or current cutting permissions.",
+      "downloadAcquired": false,
+      "metadataCaution": "The Geo.ca record labels a ZIP as Harvest while pointing to a Fire ZIP. Use the producer harvest link recorded here; no fire raster was adopted."
+    },
+    {
+      "id": "canlad-v1.1-20260508",
+      "agency": "NRCan Canadian Forest Service",
+      "metadata": "https://www.app.geo.ca/en-ca/map-browser/record/902801fd-4d9d-4df4-9e95-319e429545cc",
+      "resourceIndex": "https://download-telecharger.services.geo.ca/pub/nrcan_rncan/Forests_Foret/canlad_including_insect_defoliation/v1.1/",
+      "readme": "https://download-telecharger.services.geo.ca/pub/nrcan_rncan/Forests_Foret/canlad_including_insect_defoliation/v1.1/_readme.txt",
+      "annualDirectory": "https://download-telecharger.services.geo.ca/pub/nrcan_rncan/Forests_Foret/canlad_including_insect_defoliation/v1.1/TS_FinalFilter_20260508/",
+      "latestDirectory": "https://download-telecharger.services.geo.ca/pub/nrcan_rncan/Forests_Foret/canlad_including_insect_defoliation/v1.1/Latest_filtered_CAN_20260508/",
+      "scope": "Entire non-Arctic land mass of Canada",
+      "periodFromCurrentReadme": [
+        1985,
+        2025
+      ],
+      "publishedDateFromReadme": "2026-05-08",
+      "catalogueDescribesEarlierPeriod": [
+        1985,
+        2024
+      ],
+      "resolutionMetres": 30,
+      "minimumDetectableHectares": 1.08,
+      "latestTypeBytesDirectoryLabel": "463 MB",
+      "annual2025BytesDirectoryLabel": "130 MB",
+      "licenceFromReadme": "CC BY 4.0, source attribution required; research and commercial use allowed",
+      "licenceFromCatalogue": "Open Government Licence - Canada",
+      "licenceHandling": "Keep the version-specific readme and dataset/publication citation with any future derivative; both notices permit attributed reuse. Do not silently replace the readme notice with the older catalogue notice.",
+      "annualClassCodes": {
+        "0": "Undisturbed the current year",
+        "1": "Wildfire",
+        "2": "Harvesting",
+        "3": "Other disturbances, including partial harvest",
+        "4": "Water extension",
+        "5": "Defoliation followed by harvesting",
+        "6": "Low severity defoliation",
+        "7": "Medium severity defoliation",
+        "8": "High severity defoliation"
+      },
+      "interpretationLimits": [
+        "Tree removal may include road, mining or other infrastructure clearing; a harvested legal cutblock cannot be inferred.",
+        "Observation years may lag the event by one or two years; latest years have greater commission error.",
+        "Class 5 start year is the defoliation onset and ending year is harvest; do not count the start as harvest.",
+        "Latest rasters retain only the latest disturbance and cannot reconstruct every annual event.",
+        "Annual directory also lists an extra 1984 raster; the current documented coverage is 1985-2025."
+      ],
+      "downloadAcquired": false
+    },
+    {
+      "id": "bc-results",
+      "agency": "Government of British Columbia",
+      "metadata": "https://catalogue.data.gov.bc.ca/dataset/results-openings-svw",
+      "example": "https://bcgov.github.io/bcdata/articles/explore-silviculture-data-using-bcdata.html",
+      "forestCoverRecord": "https://catalogue.data.gov.bc.ca/dataset/258bb088-4113-47b1-b568-ce20bd64e3e3",
+      "scope": "BC Crown-land openings and silviculture submissions; existing reference is Prince George district DPG",
+      "temporalCoverage": "Historical and continually updated records; complete earliest/latest actual harvest years cannot be established without source attributes. The public example calculates stand age for 2020.",
+      "licence": "Open Government Licence - British Columbia, documented in the government example",
+      "geometry": "Multipolygon treatment units, NAD83 / BC Albers (EPSG:3005)",
+      "interpretationLimits": [
+        "Opening boundaries can include natural disturbances and silviculture obligations. Filter completed harvest events and join verified dates; an opening alone is not a harvested area for a year.",
+        "Forest-cover REFERENCE_YEAR is an inventory reference year, not a verified harvest completion year.",
+        "Historical records can lack spatial boundaries; retain missing geometry rather than inventing polygons.",
+        "BC source cannot represent all Canadian provinces."
+      ],
+      "downloadAcquired": false
+    }
+  ],
+  "ordinaryAcquisition": [
+    {
+      "name": "nfi-harvest-1985-2022",
+      "url": "https://opendata.nfis.org/downloads/forest_change/CA_Forest_Harvest_1985-2022.zip",
+      "requestedAtUtc": "2026-10-13T09:57:47.062150+00:00",
+      "transport": "ordinary HTTPS with normal certificate verification",
+      "range": "bytes=0-65535",
+      "status": "unavailable",
+      "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>",
+      "originResponseReceived": false
+    },
+    {
+      "name": "canlad-catalogue",
+      "url": "https://open.canada.ca/data/en/dataset/902801fd-4d9d-4df4-9e95-319e429545cc",
+      "requestedAtUtc": "2026-10-13T09:57:47.099372+00:00",
+      "transport": "ordinary HTTPS with normal certificate verification",
+      "range": null,
+      "status": "unavailable",
+      "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>",
+      "originResponseReceived": false
+    },
+    {
+      "name": "bc-results-catalogue",
+      "url": "https://catalogue.data.gov.bc.ca/dataset/results-openings-svw",
+      "requestedAtUtc": "2026-10-13T09:57:47.104709+00:00",
+      "transport": "ordinary HTTPS with normal certificate verification",
+      "range": null,
+      "status": "unavailable",
+      "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>",
+      "originResponseReceived": false
+    },
+    {
+      "name": "canlad-annual-2025",
+      "url": "https://download-telecharger.services.geo.ca/pub/nrcan_rncan/Forests_Foret/canlad_including_insect_defoliation/v1.1/TS_FinalFilter_20260508/canlad_annual_2025_v1_1_20260508.tif",
+      "requestedAtUtc": "2026-10-13T10:01:00.209872+00:00",
+      "transport": "ordinary HTTPS with normal certificate verification",
+      "range": "bytes=0-65535",
+      "status": "unavailable",
+      "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>",
+      "originResponseReceived": false
+    }
+  ],
+  "knownCTAcquisitionRetried": false,
+  "unsafeBrowserFlagsOrPermissionChangesUsed": false
+}

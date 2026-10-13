@@ -1,7 +1,7 @@
 {
   "meaning":"森林被覆と別に、伐採・更新の記録がある参考地域と加工施設の集積を示します。地点は地域の案内位置で、伐採区画・供給圏・施設外形や活動量ではありません。",
   "references":[
-    {"id":"prince-george-harvest","kind":"harvest","label":"伐採・更新：BC内陸","coordinates":[-123.1,54.0],"note":"BC政府のRESULTS公開資料が、Prince George地区の伐採後の植林・森林被覆記録を使います。過去の伐採・更新の地域例であり、森林色面全体が現在伐採されているという意味ではありません。個別の伐採区画・年度別伐採量は本図に収録していません。","source":"https://bcgov.github.io/bcdata/articles/explore-silviculture-data-using-bcdata.html"},
+    {"id":"prince-george-harvest","kind":"harvest","label":"伐採・更新：BC内陸","coordinates":[-123.1,54.0],"note":"BC政府の公開例は、Prince George地区のRESULTS記録を用いて西部カラマツの植林区画を示し、2020年の林齢を集計しています。伐採後の更新の地域例です。地点は地区の案内位置で、現在伐採中の区画や年度別の伐採量を示しません。","source":"https://bcgov.github.io/bcdata/articles/explore-silviculture-data-using-bcdata.html"},
     {"id":"windsor-managed-forest","kind":"management","label":"管理・更新：QC南部","coordinates":[-72.2,45.7],"note":"Eastern TownshipsのWindsor工場は周辺の私有林を管理し、植林・森林の再生を行います。管理林の地域例として扱い、管理する全域を伐採済み面や現在の伐採予定地に読み替えません。","source":"https://www.domtar.com/wp-content/uploads/2026/07/Domtar_Fact-Sheet_Windsor.pdf"},
     {"id":"grande-prairie-wood","kind":"wood","label":"製材：グランドプレーリー","coordinates":[-118.8,55.17],"note":"Canforが示す製材所の地域例です。森林被覆とは別の木材加工活動を示します。近い森林からの個別出荷は推定しません。","source":"https://www.canfor.com/company/locations"},
     {"id":"northwest-ontario-wood","kind":"wood","label":"製材：ON北西部","coordinates":[-90.5,49.0],"note":"Thunder Bay・Atikokan・Ignaceの製材施設が確認できます。3施設を地域の案内位置にまとめ、森林面積・原料供給圏・生産量を示す範囲にはしません。","source":"https://www.domtar.com/our-company/all-locations/"},
