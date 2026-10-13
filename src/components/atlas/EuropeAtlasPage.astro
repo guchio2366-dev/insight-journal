@@ -39,10 +39,15 @@ import {smreMapGroups} from '../../lib/atlas-europe-smre-surface';
 import { pewSurfaceGroups, pewSurfaceColors } from '../../lib/atlas-europe-pew-surface';
 
 import { majorClimateCities } from '../../lib/atlas-europe-annotations';
+import { europeFarmingMapName } from '../../lib/atlas-europe-farming';
+import { europeMainRivers } from '../../lib/atlas-europe-drainage';
 import { europeIndustryCountries, europeIndustryGroups, europeIndustryColors, europeIndustryInSector, europeIndustrySectorCopy } from '../../lib/atlas-europe-industry';
 import { countryOverview, countryOverviewSource } from '../../data/atlas/europe/country-overviews';
 import { europeReaderCopy } from '../../lib/atlas-europe-reader';
 import '../../styles/atlas-europe.css';
+import languageRegionalSources from '../../data/atlas/europe/language-regional-observations.json';
+const czechRegionalLanguage=languageRegionalSources['cze-mother-tongue-regional-source-statements-2021'];
+const irishDailyUse=languageRegionalSources['ireland-daily-irish-towns-2022'];
 interface Props { field?: EuropeField }
 const { field = 'nature' } = Astro.props;
 const agriculture = field === 'agriculture';
@@ -121,16 +126,16 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, farmingDom
             <g data-eu-culture-layer></g>
           </svg>
           <div class="eu-live-map" data-eu-live aria-label="操作できる欧州地図"></div>
-          <div class="eu-map-inline-key" data-eu-inline-farm-key hidden={!agriculture} aria-label="農畜産分布の品目色"><strong data-eu-farm-key-title>穀物・畑作</strong>{farmingAreas.features.map(f=><span data-eu-farm-key-item={f.properties.id} hidden={!europeFarmingGenres.crops.ids.some(id=>id===f.properties.id)}><i style={`background:${f.properties.color}`}></i>{f.properties.name}</span>)}<small data-eu-farm-key-note>点線＝同じ品目の色面外に続く集中域</small></div>
+          <div class="eu-map-inline-key" data-eu-inline-farm-key hidden={!agriculture} aria-label="農畜産分布の品目色"><strong data-eu-farm-key-title>穀物・畑作</strong>{farmingAreas.features.map(f=><span data-eu-farm-key-item={f.properties.id} hidden={!europeFarmingGenres.crops.ids.some(id=>id===f.properties.id)}><i style={`background:${f.properties.color}`}></i>{europeFarmingMapName(f.properties.id,f.properties.name)}</span>)}<small data-eu-farm-key-note>点線＝同じ品目の色面外に続く集中域</small></div>
           <div class="eu-map-inline-key eu-map-industry-key" data-eu-inline-industry-key hidden={field!=='industry'} aria-label="産業拠点の色と分野">{europeIndustryGroups.map(group=><span data-eu-industry-key-item={group} hidden={!europeIndustrySectorCopy.resources.groups.includes(group)}><i style={`background:${europeIndustryColors[group]}`}></i>{group}</span>)}</div>
           <div class="eu-map-annotations" data-eu-annotations aria-label="地図の都市と地点"><svg aria-hidden="true"></svg></div>
           <div class="eu-farming-focus-marker" data-eu-farming-focus-marker hidden><span aria-hidden="true"></span><strong data-eu-farming-focus-point-label></strong></div>
           <span class="eu-selected-point" data-eu-selected-point role="img" aria-label="選択地点" hidden></span>
         </div>
-        <div class="eu-map-legend" data-eu-map-legend><p class="eu-water-note">河川・湖の位置、年降水量、流域区画を切り替えます。地下水の歴史的な水理地質図は利用条件を確認済みですが、原画像を取得・位置合わせできていないため未収録です。</p><p data-eu-farming-regional-note hidden>四角は資料が挙げる主要国の目印で、国内全域を産地とする意味ではありません。果樹・園芸の葡はワイン用ブドウ畑、オはオリーブ樹園です。国別の値と地域例は右の説明に記載します。畜産の丸印は乳牛・非乳牛などの地域例で、農場の位置や統計地域の境界ではありません。</p><div class="eu-pew-surface-key" data-eu-pew-surface-key hidden><strong>補足：別資料の全国推計・構成詳細</strong><div role="group" aria-label="色面で見る宗教的帰属"><button type="button" data-eu-smre-overview aria-pressed="true">宗派・宗教の広域図</button>{pewSurfaceGroups.map(group=><button type="button" data-eu-pew-surface-group={group} aria-pressed="false">{pew2020EuropeGroups.find(item=>item.id===group)!.label}</button>)}</div><label>国の構成を読む <select data-eu-religion-country><option value="">欧州全体</option>{countries.map(country=><option value={country.code}>{country.name}</option>)}</select></label><p data-eu-pew-surface-note>濃い色ほど選んだ分類の全国割合が高い。灰色はPewの対象外です。国の中は均一に塗り、国内差やキリスト教の宗派は示しません。</p><div class="eu-pew-surface-scale" data-eu-pew-surface-scale>{pewSurfaceColors.unaffiliated.map((color,index)=><span><i style={`background:${color}`}></i>{['10%未満','10–25%','25–50%','50–75%','75%以上'][index]}</span>)}</div></div><div class="eu-pew-surface-key" data-eu-smre-key hidden><strong>宗派・宗教の広域分布 · 45か国</strong><div class="eu-pew-surface-scale">{smreMapGroups.map(group=><span><i style={`background:${group.color}`}></i>{group.label}</span>)}</div><p>色面＝各国の最大分類（過半数とは限りません）。全国割合は右の説明に記載。カ：カトリック、プ：プロテスタント、正：正教会、イ：イスラム教、無：宗教的帰属なし、他：その他のキリスト教。全国統計は国内の居住境界・人口規模を表しません。国内の宗派・無所属の実分布は未収録です。</p><small>SMRE 2010期（原観測2006–2015年）・01/2018版。国勢調査などを統合した推計で、現在の分布ではありません。<a href="https://www.smre-data.ch/en/content/download/159">Liedhegener・Odermatt（2018）, Appendix A</a> · <a href="https://www.smre-data.ch/en/content/privacy-policy-impressum">SMRE / ODbL・DBCL</a>（45か国抜粋・表示分類を付加）</small></div><div class="eu-pew-map-key" data-eu-pew-map-key hidden><strong>Pew 2020年 · 国別の宗教構成</strong><small>各小帯の幅はその国の全人口に対する7分類の割合です。国内の細地域・宗派分布ではありません。未掲載国は数値なしです。</small></div></div>
+        <div class="eu-map-legend" data-eu-map-legend><p class="eu-water-note">河川・湖の位置、年降水量、流域区画を切り替えます。地下水の歴史的な水理地質図は利用条件を確認済みですが、原画像を取得・位置合わせできていないため未収録です。</p><p data-eu-farming-regional-note hidden>農畜産の概略面は元資料の測定対象に沿って表示します。牛は乳用・肉用の合計、果樹・園芸は資料の集合品目です。酪農専用とブドウ・オリーブの個別生産域は原資料未収録です。</p><div class="eu-pew-surface-key" data-eu-pew-surface-key hidden><strong>補足：別資料の全国推計・構成詳細</strong><div role="group" aria-label="色面で見る宗教的帰属"><button type="button" data-eu-smre-overview aria-pressed="true">宗派・宗教の広域図</button>{pewSurfaceGroups.map(group=><button type="button" data-eu-pew-surface-group={group} aria-pressed="false">{pew2020EuropeGroups.find(item=>item.id===group)!.label}</button>)}</div><label>国の構成を読む <select data-eu-religion-country><option value="">欧州全体</option>{countries.map(country=><option value={country.code}>{country.name}</option>)}</select></label><p data-eu-pew-surface-note>濃い色ほど選んだ分類の全国割合が高い。灰色はPewの対象外です。国の中は均一に塗り、国内差やキリスト教の宗派は示しません。</p><div class="eu-pew-surface-scale" data-eu-pew-surface-scale>{pewSurfaceColors.unaffiliated.map((color,index)=><span><i style={`background:${color}`}></i>{['10%未満','10–25%','25–50%','50–75%','75%以上'][index]}</span>)}</div></div><div class="eu-pew-surface-key" data-eu-smre-key hidden><strong>45か国の宗教構成 · 全国集計</strong><div class="eu-pew-surface-scale">{smreMapGroups.map(group=><span><i style={`background:${group.color}`}></i>{group.label}</span>)}</div><p>色面＝各国の最大分類（過半数とは限りません）。全国割合は右の説明に記載。カ：カトリック、プ：プロテスタント、正：正教会、イ：イスラム教、無：宗教的帰属なし、他：その他のキリスト教。全国統計は国内の居住境界・人口規模を表しません。国内の宗派・無所属の実分布は未収録です。</p><small>SMRE 2010期（原観測2006–2015年）・01/2018版。国勢調査などを統合した推計で、現在の分布ではありません。<a href="https://www.smre-data.ch/en/content/download/159">Liedhegener・Odermatt（2018）, Appendix A</a> · <a href="https://www.smre-data.ch/en/content/privacy-policy-impressum">SMRE / ODbL・DBCL</a>（45か国抜粋・表示分類を付加）</small></div><div class="eu-pew-map-key" data-eu-pew-map-key hidden><strong>Pew 2020年 · 国別の宗教構成</strong><small>各小帯の幅はその国の全人口に対する7分類の割合です。国内の細地域・宗派分布ではありません。未掲載国は数値なしです。</small></div></div>
         <div class="eu-item-list" data-eu-farming-list hidden={!agriculture} aria-label="現在のジャンルの品目を選ぶ">
           <p class="eu-item-ranking-note" data-eu-farming-ranking-note>選んだジャンルの品目を同時表示します。色は品目を表し、面積や濃さで生産量を比較しません。</p>
-          {europeFarmingGenreIds.map(genre=><section data-eu-farming-children={genre} hidden={genre!=='crops'}><h3>{europeFarmingGenres[genre].title}</h3><div>{europeFarmingGenres[genre].ids.map(id=>{const f=farmingAreas.features.find(feature=>feature.properties.id===id);return f?<button type="button" data-eu-layer={id} aria-pressed="false"><span class:list={['eu-item-swatch',{'is-livestock':f.properties.kind==='livestock'}]} style={{'--item-color':f.properties.color}}></span>{f.properties.name}</button>:null;})}{genre==='livestock'&&<button type="button" data-eu-layer="dairy" aria-pressed="false">酪農・生乳（分布未収録）</button>}</div><p class="eu-farm-missing">{europeFarmingGenres[genre].missing}</p></section>)}
+          {europeFarmingGenreIds.map(genre=><section data-eu-farming-children={genre} hidden={genre!=='crops'}><h3>{europeFarmingGenres[genre].title}</h3><div>{europeFarmingGenres[genre].ids.map(id=>{const f=farmingAreas.features.find(feature=>feature.properties.id===id);return f?<button type="button" data-eu-layer={id} aria-pressed="false"><span class:list={['eu-item-swatch',{'is-livestock':f.properties.kind==='livestock'}]} style={{'--item-color':f.properties.color}}></span>{europeFarmingMapName(f.properties.id,f.properties.name)}</button>:null;})}{genre==='livestock'&&<button type="button" data-eu-layer="dairy" aria-pressed="false">酪農・生乳（分布未収録）</button>}</div><p class="eu-farm-missing">{europeFarmingGenres[genre].missing}</p></section>)}
           <section data-eu-farming-children="forest" hidden><h3>林業</h3><button type="button" data-eu-layer="treecover" aria-pressed="false">樹木被覆の分布 · 2021</button><button type="button" data-eu-layer="forest" aria-pressed="false">国別の森林面積比率 · 2023</button></section>
         </div>
         <div class="eu-map-candidates" data-eu-farm-candidates hidden aria-live="polite"></div>
@@ -165,7 +170,12 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, farmingDom
         
       </section>
       <aside class="eu-read-panel" aria-labelledby={initialClimateReader?'eu-city-heading':'eu-subject-title'}>
-        <div class="eu-drainage-choice" data-eu-drainage-controls hidden><label hidden>流域区画（HYBAS_ID）<select data-eu-drainage-choice tabindex="-1"><option value="">地図から区画を選ぶ</option></select></label><button type="button" data-eu-drainage-clear hidden tabindex="-1">選択を解除</button><p data-eu-basin-summary aria-live="polite">地図上の流域区画を選ぶと、その範囲と識別番号を表示します。色は区画の識別用で、量の大小ではありません。</p></div>
+        <div class="eu-drainage-choice" data-eu-drainage-controls hidden>
+          <label>本流の水系<select data-eu-main-river-choice aria-label="流域の本流を選ぶ"><option value="">主要水系を同時に見る</option>{europeMainRivers.map(river=><option value={river.id}>{river.name}{river.mainBasin===null?'（原流域面未収録）':''}</option>)}</select></label>
+          <button type="button" data-eu-main-river-clear hidden>水系の選択を解除</button>
+          <p data-eu-basin-summary aria-live="polite">主要5水系の保存面を同時表示しています。本流名・河川線から水系を選べます。テムズ・ウラルの原流域面は未収録です。</p>
+          <details><summary>補足：元のモデル区画と識別番号</summary><label>流域区画（HYBAS_ID）<select data-eu-drainage-choice><option value="">地図から区画を選ぶ</option></select></label><button type="button" data-eu-drainage-clear>区画の選択を解除</button></details>
+        </div>
         <section class="eu-comparison-context" data-eu-comparison-context hidden aria-label="元の分布との比較">
           <h2 data-eu-comparison-heading></h2>
           <a data-eu-comparison-return href={withBase('/atlas/europe/agriculture/')}>元の分布へ戻る</a>
@@ -188,6 +198,14 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, farmingDom
             <table><caption>全国集計。国内の分布位置は示しません。</caption><thead><tr><th>原言語分類</th><th>1言語のみ</th><th>第二言語を含む</th></tr></thead><tbody>{languageObservations.values.map(value=><tr><th>{value.language}</th><td>{value.exclusive.toLocaleString('ja-JP')}人</td><td>{value.includingSecond.toLocaleString('ja-JP')}人</td></tr>)}</tbody></table>
             <p>「第二言語を含む」は回答が重複し、合計を100%の構成帯にできません。モラヴィア語・ロマニ語も原回答分類を保持しています。</p>
             <a href={languageObservations.source}>CZSO：2021年国勢調査・母語</a> · <a href={languageObservations.licenseUrl}>CZSOデータ利用条件</a>
+          </details>
+          <details data-eu-language-regional><summary>チェコ：公表された地域の母語割合・2021年</summary>
+            <p>母語を回答した人口が分母の、公表された丸め済み割合です。全国集計の全居住人口や第二言語込みの人数と分母を混ぜません。収録した地域・言語の例で、県内の居住境界や全県の構成を示すものではありません。</p>
+            <table><thead><tr><th>原地域名</th><th>母語</th><th>公表割合</th></tr></thead><tbody>{czechRegionalLanguage.values.map(value=><tr><th>{value.region}</th><td>{value.language}</td><td>{value.share}%</td></tr>)}</tbody></table><a href={czechRegionalLanguage.source}>CZSO：母語の地域差</a>
+          </details>
+          <details data-eu-language-daily><summary>アイルランド：日常的なアイルランド語使用・2022年</summary>
+            <p>3歳以上のアイルランド語を話せる人のうち、教育中だけの使用を除いて毎日使う人。町の全人口が分母ではありません。公表された上位10の国勢調査町の例で、全アイルランドの使用地域図ではありません。</p>
+            <table><thead><tr><th>原町名</th><th>話せる人</th><th>日常使用</th><th>公表割合</th></tr></thead><tbody>{irishDailyUse.values.map(value=><tr><th>{value.town}</th><td>{value.irishSpeakers}人</td><td>{value.dailyUsers}人</td><td>{value.sourceRoundedShare}%</td></tr>)}</tbody></table><a href={irishDailyUse.source}>CSO：Table 1.6・日常使用</a> · <a href={irishDailyUse.licenseUrl}>CSO：CC BY 4.0</a>
           </details>
         </section>
         <EuropeSubjectReader layer={initialLayer} />

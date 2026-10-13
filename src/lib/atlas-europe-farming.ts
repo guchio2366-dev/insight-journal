@@ -5,6 +5,8 @@ import { europeFarmingGenreForLayer, europeFarmingGenres } from '../data/atlas/e
 export type FarmingItem = { id:string; name:string; kind:'crop'|'livestock'; color:string; labelCoordinate:number[] };
 export type FarmingAreas = {type:'FeatureCollection';features:{type:'Feature';properties:FarmingItem;geometry:unknown}[]};
 
+export function europeFarmingMapName(id:string,name:string){return id==='cattle'?'牛（乳用・肉用計）':name;}
+
 /** All source-backed areas in the selected genre carry their own color. */
 export function farmingVisualWeight(item:FarmingItem,selectedId:string|undefined,single:boolean){
   if(single||item.id===selectedId)return {fill:.8,line:.9,width:1.4};

@@ -1,0 +1,7 @@
+{
+  "url": "https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/graph_mkhtml_nrm.php?n=2974&m=1",
+  "purpose": "Distinct airport station candidate, not Kaisaniemi; no values may fill the existing station",
+  "method": "GET",
+  "retried": false,
+  "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))"
+}

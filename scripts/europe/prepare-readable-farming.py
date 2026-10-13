@@ -12,7 +12,7 @@ ROOT=Path(__file__).resolve().parents[2]
 DATA=ROOT/'src/data/atlas/europe';ASSET=ROOT/'public/assets/atlas/europe'
 lon=-25+(np.arange(1080)+.5)/12;lat=73-(np.arange(492)+.5)/12
 xx,yy=np.meshgrid(lon,lat)
-windows={'wheat':(23,44,39,51),'maize':(19,43,29,48),'potato':(14,49,25,55),'sugarbeet':(0,46,10,52)}
+windows={'wheat':(23,44,39,51),'maize':(19,43,29,48),'potato':(14,49,25,55),'sugarbeet':(0,46,10,52),'cattle':(-5,46,2,50)}
 countryBytes=(ROOT/'src/data/atlas/europe-countries.json').read_bytes()
 land=union_all([shape(f['geometry']) for f in json.loads(countryBytes)['features'] if f['properties']['kind']=='europe'])
 def parts(g):
@@ -35,8 +35,10 @@ for stem in ('dominant','secondary'):
   gridpath=ASSET/('wheat-v1/values.bin.gz' if identifier=='wheat' else f'farming-v1/{identifier}.bin.gz')
   raw=gridpath.read_bytes();grid=np.frombuffer(gzip.decompress(raw),dtype='<f4').reshape(492,1080)
   valid=(grid>0)&contains_xy(geometry,xx,yy)
-  # For the requested eastern cereal anchors, choose a genuinely supported
-  # concentration within that region. This is not a rank of all Europe.
+  # Choose a genuinely supported
+  # concentration within that region. Western French cattle keep the expanded
+  # total-cattle label separate from the northern Italian chicken label.
+  # This is not a rank of all Europe.
   region=windows.get(identifier)
   mask=valid.copy()
   if region:

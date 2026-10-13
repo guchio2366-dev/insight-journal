@@ -1,0 +1,135 @@
+{
+  "cze-mother-tongue-regional-source-statements-2021": {
+    "id": "cze-mother-tongue-regional-source-statements-2021",
+    "source": "https://scitani.gov.cz/matersky-jazyk",
+    "licenseUrl": "https://scitani.gov.cz/podminky-uzivani-dat",
+    "year": 2021,
+    "geographicUnit": "named actual regions; geometry not acquired",
+    "measure": "exclusive mother tongue; source-reported rounded percentage",
+    "denominator": "source population with stated mother tongue; exclude multi-language responses from exclusive categories; do not substitute total residents",
+    "values": [
+      {
+        "region": "Hlavní město Praha",
+        "language": "Czech",
+        "share": 82.5
+      },
+      {
+        "region": "Kraj Vysočina",
+        "language": "Czech",
+        "share": 96.7
+      },
+      {
+        "region": "Jihomoravský kraj",
+        "language": "Moravian",
+        "share": 0.8
+      },
+      {
+        "region": "Zlínský kraj",
+        "language": "Moravian",
+        "share": 0.6
+      },
+      {
+        "region": "Olomoucký kraj",
+        "language": "Moravian",
+        "share": 0.5
+      },
+      {
+        "region": "Hlavní město Praha",
+        "language": "Russian",
+        "share": 2.8
+      },
+      {
+        "region": "Hlavní město Praha",
+        "language": "Ukrainian",
+        "share": 2.6
+      },
+      {
+        "region": "Hlavní město Praha",
+        "language": "Slovak",
+        "share": 2.5
+      }
+    ],
+    "limitations": [
+      "Statements are selected real region observations, not a complete regional distribution.",
+      "Obtain full regional counts and geometries before any area rendering."
+    ]
+  },
+  "ireland-daily-irish-towns-2022": {
+    "id": "ireland-daily-irish-towns-2022",
+    "source": "https://www.cso.ie/en/releasesandpublications/ep/p-cpp8/censusofpopulation2022profile8-theirishlanguageandeducation/irishlanguageandthegaeltacht/",
+    "table": "1.6",
+    "license": "CC BY 4.0, CSO statistical information",
+    "licenseUrl": "https://www.cso.ie/en/aboutus/whoweare/copyrightpolicy/",
+    "year": 2022,
+    "geographicUnit": "census towns; geometry and exact official anchors not acquired",
+    "universe": "Irish speakers aged three and over in each town",
+    "measure": "daily use of Irish, excluding education-only use; includes daily within-and-outside education",
+    "values": [
+      {
+        "town": "An Bun Beag",
+        "irishSpeakers": 570,
+        "dailyUsers": 396,
+        "sourceRoundedShare": 69
+      },
+      {
+        "town": "An Cheathrú Rua",
+        "irishSpeakers": 520,
+        "dailyUsers": 358,
+        "sourceRoundedShare": 69
+      },
+      {
+        "town": "Mín Lárach",
+        "irishSpeakers": 385,
+        "dailyUsers": 261,
+        "sourceRoundedShare": 68
+      },
+      {
+        "town": "Doirí Beaga",
+        "irishSpeakers": 611,
+        "dailyUsers": 403,
+        "sourceRoundedShare": 66
+      },
+      {
+        "town": "Rann Na Feirste",
+        "irishSpeakers": 342,
+        "dailyUsers": 208,
+        "sourceRoundedShare": 61
+      },
+      {
+        "town": "Bun Na Leaca",
+        "irishSpeakers": 452,
+        "dailyUsers": 270,
+        "sourceRoundedShare": 60
+      },
+      {
+        "town": "Cill Rónáin",
+        "irishSpeakers": 149,
+        "dailyUsers": 86,
+        "sourceRoundedShare": 58
+      },
+      {
+        "town": "Gort An Choirce",
+        "irishSpeakers": 252,
+        "dailyUsers": 140,
+        "sourceRoundedShare": 56
+      },
+      {
+        "town": "An Spidéal",
+        "irishSpeakers": 182,
+        "dailyUsers": 87,
+        "sourceRoundedShare": 48
+      },
+      {
+        "town": "Loch An Iúir",
+        "irishSpeakers": 259,
+        "dailyUsers": 114,
+        "sourceRoundedShare": 44
+      }
+    ],
+    "limitations": [
+      "These percentages have Irish speakers as denominator, not all residents.",
+      "Top ten selected towns; not a complete Irish language map.",
+      "Gaeltacht legal boundaries do not automatically describe daily users."
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "url": "https://www.nomisweb.co.uk/output/census/2021/census2021-ts024.zip",
+  "purpose": "New ONS TS024 main-language topic; TS021/TS030 and the matching 2021 boundary are retained",
+  "retried": false,
+  "method": "GET",
+  "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))"
+}

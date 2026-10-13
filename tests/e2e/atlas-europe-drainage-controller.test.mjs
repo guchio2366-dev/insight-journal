@@ -6,7 +6,7 @@ import { gunzipSync } from 'node:zlib';
 import { build } from 'esbuild';
 import { Window } from 'happy-dom';
 import { project } from '../../src/lib/atlas-europe-view.ts';
-import { europeDrainageBasins, europeDrainageCell, europeDrainageOutline, readEuropeDrainageValues } from '../../src/lib/atlas-europe-drainage.ts';
+import { europeDrainageBasins, europeDrainageCell, europeDrainageOutline, europeMainRiverForBasin, readEuropeDrainageValues } from '../../src/lib/atlas-europe-drainage.ts';
 
 const entry=path.resolve('src/lib/atlas-europe-explorer.ts');
 const bundled=await build({
@@ -88,7 +88,7 @@ test('drainage lookup feedback follows the basin choice with one live result, an
   const assertDrainageLocation=()=>{
     assertSameReading();
     assert.ok(app.grid.closest('[data-eu-drainage-controls]')===controls,'Drainage feedback belongs in the basin controls');
-    assert.ok(app.grid.previousElementSibling===app.q('[data-eu-basin-summary]'),'The value follows the existing basin summary directly');
+    assert.ok(app.grid.compareDocumentPosition(app.q('[data-eu-basin-summary]'))&app.w.Node.DOCUMENT_POSITION_PRECEDING,'The value follows the basin summary');
     assert.ok(app.q('[data-eu-drainage-choice]').compareDocumentPosition(app.grid)&app.w.Node.DOCUMENT_POSITION_FOLLOWING,'Feedback follows the existing basin selector');
     assert.equal(controls.hidden,false);assert.equal(app.grid.hidden,false);
     assert.equal(app.q('[data-eu-layer-source]').href,app.config.layers.find(layer=>layer.id==='drainage').source);
@@ -258,6 +258,11 @@ test('a drainage section names a representative river only when its retained MAI
         continue;
       }
       app.choose(String(cell.basin.HYBAS_ID));
+      if(!europeMainRiverForBasin(String(cell.basin.HYBAS_ID))){
+        await until(()=>app.q('[data-eu-basin-summary]').textContent.includes('選択区画：HYBAS_ID'));
+        assert.equal(app.q('[data-eu-basin-summary]').textContent.includes(river.name),false,'A raw coastal unit must not be renamed as a whole river basin');
+        continue;
+      }
       await until(()=>app.q('[data-eu-basin-summary]').textContent.includes(river.name));
       const summary=app.q('[data-eu-basin-summary]').textContent;
       if([2040008490,2040068680,2040006590].includes(cell.basin.MAIN_BAS)){

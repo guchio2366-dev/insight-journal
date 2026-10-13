@@ -1,0 +1,8 @@
+{
+  "url": "https://ec.europa.eu/eurostat/cache/lucas/EU_2018_20200213.CSV",
+  "purpose": "Independent LUCAS in-situ land-cover observations, not CORINE/EuroCrops redistribution",
+  "method": "GET",
+  "retried": false,
+  "previousWebFailure": "Reader capacity: content exceeds 4MB, not publisher denial",
+  "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))"
+}

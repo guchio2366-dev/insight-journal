@@ -6,7 +6,7 @@ import climateCities from '../data/atlas/europe/climate-cities.json' with { type
 import populationCities from '../data/atlas/europe/population-cities.json' with { type:'json' };
 import { normaliseEuropePoint, readEuropeState, writeEuropeState, type EuropeState } from './atlas-europe-view.ts';
 import { cultureSelection } from './atlas-europe-population-cases.ts';
-import { normaliseEuropeDrainageBasin } from './atlas-europe-drainage.ts';
+import { normaliseEuropeDrainageBasin, europeMainRivers, europeMainRiverSelection } from './atlas-europe-drainage.ts';
 import { europeFarmingComparisonLinks, europeFarmingComparisonFocus, writeEuropeFarmingFocus } from '../data/atlas/europe/farming-water-comparisons.ts';
 
 export type EuropeComparisonLink = {
@@ -26,7 +26,7 @@ export type EuropeComparisonLink = {
   sources?: readonly { label: string; url: string }[];
 };
 
-const returnKeys = new Set(['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'point', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin','farmYear','farmMeasure','farmCompare','farmExtent','industrySector','industryGroup','industryOnly']);
+const returnKeys = new Set(['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'point', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin','farmYear','farmMeasure','farmCompare','farmExtent','industrySector','industryGroup','industryOnly','riverBasin']);
 const returnLimit = 2048;
 const knownLayer = (id: string) => europeLayers.some(layer => layer.id === id);
 const sourceLayer = (state: EuropeState) => state.layer === 'overlay' ? (state.returnLayer === 'climate' ? 'wheat' : state.returnLayer) : state.layer;
@@ -165,7 +165,7 @@ export function europeComparisonUrl(base: URL, source: EuropeState, comparison: 
   // Unnamed field comparisons keep independent saved selections, including
   // the source's basin when viewing crops or population. Named destinations
   // and registered farming focuses own their target point instead.
-  if (focus) { target.feature = undefined; target.basin = undefined; target.point = undefined; }
+  if (focus) { target.feature = undefined; target.basin = undefined; target.riverBasin=undefined; target.point = undefined; }
   if (comparison.city) target.city = comparison.city;
   if (comparison.feature) {
     target.feature = comparison.feature;
@@ -174,7 +174,8 @@ export function europeComparisonUrl(base: URL, source: EuropeState, comparison: 
     target.point=!focus&&['terrain','contours','drainage'].includes(target.layer)
       ? normaliseEuropePoint(feature?.coordinates) : undefined;
   }
-  if (comparison.basin) target.basin = comparison.basin;
+  if(target.layer==='drainage'&&!comparison.basin&&!focus){const selection=europeMainRiverSelection(target.feature);if(selection){delete target.basin;delete target.feature;delete target.point;Object.assign(target,selection);}}
+  if (comparison.basin) {target.basin = comparison.basin;delete target.riverBasin;}
   const next = writeEuropeState(localFieldUrl(base, target), target);
   next.searchParams.set('europeReturn', encodeEuropeReturn(source));
   // Each entrance replaces the previous comparison focus, including a second
@@ -209,6 +210,8 @@ export function europeComparisonQuestion(source: EuropeState, targetLayer: strin
 export function europeComparisonSourceLabel(source: EuropeState): string {
   const layer = europeLayers.find(item => item.id === sourceLayer(source));
   if(layer?.id==='drainage') {
+    const river=europeMainRivers.find(river=>river.id===source.riverBasin);
+    if(river)return `${river.name}水系・${river.mainBasin?'保存範囲':'原流域面未収録'}`;
     const basin=normaliseEuropeDrainageBasin(source.basin);
     return basin?`${layer.title}・HYBAS_ID ${basin}`:layer.title;
   }

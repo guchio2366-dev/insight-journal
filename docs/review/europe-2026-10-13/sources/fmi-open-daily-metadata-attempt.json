@@ -1,0 +1,7 @@
+{
+  "url": "https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=DescribeStoredQueries&storedquery_id=fmi%3A%3Aobservations%3A%3Aweather%3A%3Adaily%3A%3Atimevaluepair",
+  "purpose": "Independent open daily observations: metadata only, not the denied website normals table",
+  "retried": false,
+  "method": "GET",
+  "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))"
+}

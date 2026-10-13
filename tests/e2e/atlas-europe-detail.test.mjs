@@ -9,10 +9,10 @@ test('4分野を直接開け、初期地図・解説・凡例がJavaScriptなし
     const window=new Window();const doc=window.document;
     doc.write(readFileSync(new URL(`../../dist/atlas/europe/${field}/index.html`,import.meta.url),'utf8'));
     assert.ok(doc.querySelector('[data-eu-static]'));
-    assert.equal(doc.querySelectorAll('.eu-read-panel select').length,4);
-    assert.equal(doc.querySelector('[data-eu-drainage-choice]').closest('label').hidden,true);
+    assert.equal(doc.querySelectorAll('.eu-read-panel select').length,5);
+    assert.equal(doc.querySelector('[data-eu-drainage-choice]').closest('[data-eu-drainage-controls]').hidden,true);
     assert.equal(doc.querySelector('[data-eu-culture-host]').hidden,true,'The bounded census case does not replace the default whole-Europe map');
-    assert.ok([...doc.querySelectorAll('.eu-read-panel select:not([data-eu-drainage-choice])')].every(select=>select.disabled));
+    assert.ok([...doc.querySelectorAll('.eu-read-panel select:not([data-eu-drainage-choice]):not([data-eu-main-river-choice])')].every(select=>select.disabled));
     assert.equal(doc.querySelectorAll('[data-city-card]').length,24);
     assert.equal(doc.querySelectorAll('[data-city-card="kyiv"] tbody tr').length,12);
     assert.ok(doc.querySelector('[data-city-card="rome"]').textContent.includes('欠測'));

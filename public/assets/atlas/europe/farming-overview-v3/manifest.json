@@ -107,7 +107,7 @@
         16.958333,
         50.708333
       ],
-      "anchorCellValue": 694.0,
+      "anchorCellValue": 694,
       "regionalAnchorWindow": null,
       "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
       "retainedGridCells": 6666
@@ -119,12 +119,17 @@
       "overviewComponents": 20,
       "sourceGridSha256": "e58b6cb8d2651646e3f3b3c8a41b6333891d5846ff94a199a9a9cf2b425bb2b2",
       "sourceAnchor": [
-        10.125,
-        45.291667
+        -1.041667,
+        48.458333
       ],
-      "anchorCellValue": 199.62222290039062,
-      "regionalAnchorWindow": null,
-      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "anchorCellValue": 200.0406494140625,
+      "regionalAnchorWindow": [
+        -5,
+        46,
+        2,
+        50
+      ],
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons within the western-France window; separates total cattle from the northern-Italy chicken label; not a milk-cow distribution or Europe-wide ranking",
       "retainedGridCells": 18618
     },
     {
@@ -242,7 +247,7 @@
         7.625,
         44.708333
       ],
-      "anchorCellValue": 2496.0,
+      "anchorCellValue": 2496,
       "regionalAnchorWindow": null,
       "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
       "retainedGridCells": 2503
@@ -379,12 +384,17 @@
       "overviewComponents": 30,
       "sourceGridSha256": "e58b6cb8d2651646e3f3b3c8a41b6333891d5846ff94a199a9a9cf2b425bb2b2",
       "sourceAnchor": [
-        5.708333,
-        51.541667
+        -1.375,
+        46.791667
       ],
-      "anchorCellValue": 182.32424926757812,
-      "regionalAnchorWindow": null,
-      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
+      "anchorCellValue": 94.34086608886719,
+      "regionalAnchorWindow": [
+        -5,
+        46,
+        2,
+        50
+      ],
+      "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons within the western-France window; separates total cattle from the northern-Italy chicken label; not a milk-cow distribution or Europe-wide ranking",
       "retainedGridCells": 15135
     },
     {
@@ -442,7 +452,7 @@
         13.375,
         37.875
       ],
-      "anchorCellValue": 42.0,
+      "anchorCellValue": 42,
       "regionalAnchorWindow": null,
       "anchorRule": "maximum 7x7 sum of positive source values in retained display polygons; regional window only where specified; not a Europe-wide product ranking",
       "retainedGridCells": 10

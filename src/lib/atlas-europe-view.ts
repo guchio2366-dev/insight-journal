@@ -2,7 +2,7 @@ import { europeRings, type Geometry } from './atlas-europe-geometry.ts';
 import { europeLayers } from '../data/atlas/europe/layers.ts';
 import censusCases from '../../public/assets/atlas/europe/population-cases-v1/cases.json' with { type:'json' };
 import { normalisePopulationCaseChoice, type PopulationCensusCasePackage, type PopulationCaseChoiceState } from '../data/atlas/europe/population-cases.ts';
-import { normaliseEuropeDrainageBasin, type EuropeDrainageState } from './atlas-europe-drainage.ts';
+import { normaliseEuropeDrainageBasin, normaliseEuropeMainRiver, europeMainRiverSelection, type EuropeDrainageState } from './atlas-europe-drainage.ts';
 import { isEuropeIndustryCountry, normaliseEuropeIndustryGroup, type EuropeIndustryGroup, normaliseEuropeIndustrySector, europeIndustrySectorForGroup, europeIndustrySectorForSite, europeIndustrySectorCopy, type EuropeIndustrySector } from './atlas-europe-industry.ts';
 import { europeFarmMetric, europeFarmValidYear } from '../data/atlas/europe/farming-statistics.ts';
 
@@ -67,6 +67,7 @@ export function readEuropeState(search: string, countries: { code: string; regio
   if (point) state.point = point;
   const basin = normaliseEuropeDrainageBasin(p.get('basin'));
   if (basin) state.basin = basin;
+  if(layer==='drainage'){const selection=europeMainRiverSelection(p.get('riverBasin'));if(selection){delete state.basin;Object.assign(state,selection);}}
   if(layer==='ethnicity'||layer==='religion')Object.assign(state,normalisePopulationCaseChoice(p,layer,censusCases as PopulationCensusCasePackage));
   else {
     const censusCase=censusCases.cases.find(item=>item.id===p.get('cultureCase'));
@@ -77,6 +78,7 @@ export function readEuropeState(search: string, countries: { code: string; regio
     }
   }
   if (layer!=='contours'&&/^[a-z0-9_-]{1,60}$/.test(p.get('feature') ?? '')) state.feature = p.get('feature')!;
+  if(layer==='drainage'&&!p.has('riverBasin')&&!p.has('basin')&&!p.has('point')){const selection=europeMainRiverSelection(state.feature);if(selection){Object.assign(state,selection);delete state.feature;}}
   if(layer==='hubs'&&!p.has('industrySector')&&!industryGroup&&state.feature)state.industrySector=europeIndustrySectorForSite(state.feature);
   if (p.get('crops') === 'off') state.showCrops = false;
   if (p.get('livestock') === 'off') state.showLivestock = false;
@@ -94,7 +96,7 @@ export function writeEuropeState(url: URL, state: EuropeState): URL {
   const displayedLayer=state.layer==='overlay'?(state.returnLayer==='climate'?'wheat':state.returnLayer):state.layer;
   const field=europeLayers.find(layer=>layer.id===displayedLayer)?.field;
   if(field)next.pathname=next.pathname.replace(/(\/atlas\/europe\/)(nature|agriculture|industry|population)\/?$/,`$1${field}/`);
-  for (const key of ['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'point', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin','farmYear','farmMeasure','farmCompare','farmExtent','industryGroup','industrySector','industryOnly']) next.searchParams.delete(key);
+  for (const key of ['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'point', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin','farmYear','farmMeasure','farmCompare','farmExtent','industryGroup','industrySector','industryOnly','riverBasin']) next.searchParams.delete(key);
   if (state.region !== 'all') next.searchParams.set('region', state.region);
   if (state.place) next.searchParams.set('place', state.place);
   if (state.city) next.searchParams.set('city', state.city);
@@ -113,6 +115,8 @@ export function writeEuropeState(url: URL, state: EuropeState): URL {
   if (point) next.searchParams.set('point', point.join(','));
   const basin = normaliseEuropeDrainageBasin(state.basin);
   if (basin) next.searchParams.set('basin', basin);
+  const river=normaliseEuropeMainRiver(state.riverBasin);
+  if(state.layer==='drainage'&&river){next.searchParams.set('riverBasin',river);const selection=europeMainRiverSelection(river)!;if(selection.basin)next.searchParams.set('basin',selection.basin);else next.searchParams.delete('basin');}
   if (state.showCrops === false) next.searchParams.set('crops', 'off');
   if (state.showLivestock === false) next.searchParams.set('livestock', 'off');
   if (state.farmExtent === 'full') next.searchParams.set('farmExtent','full');

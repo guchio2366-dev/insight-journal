@@ -1,6 +1,6 @@
 import { layoutNatureLabels, leaderEnd, type Box, type Point, type LabelPlacement } from './atlas-nature-labels';
 import { layoutClimateCodes, type CodePlacement } from './atlas-climate-code-labels';
-import type { FarmingItem } from './atlas-europe-farming';
+import { europeFarmingMapName, type FarmingItem } from './atlas-europe-farming';
 import climateLabels from '../data/atlas/europe/map-labels.json';
 import { europeIndustryMembership, europeIndustryColors, type EuropeIndustryGroup, europeIndustryGroupsForSite, europeIndustrySiteLabels, type EuropeIndustrySector } from './atlas-europe-industry';
 
@@ -25,7 +25,7 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
     const industry=industries?.[0];
     const shortIndustry:Partial<Record<EuropeIndustryGroup,string>>={'自動車・機械':'機械','化学・医薬品':'化学','鉱業・素材':'素材','港湾物流':'港湾','繊維・衣服':'繊維'};
     const sectorName=industry?europeIndustrySiteLabels[place.id]??industries!.map(group=>shortIndustry[group]??group).join('・'):'';
-    const name=kind==='feature'?(mapNames[place.id]??(industry?`${sectorName}｜${place.name}`:place.name)):place.name;
+    const name=kind==='crop'?europeFarmingMapName(place.id,place.name):kind==='feature'?(mapNames[place.id]??(industry?`${sectorName}｜${place.name}`:place.name)):place.name;
     const button=document.createElement('button');button.type='button';button.className='eu-map-label';
     if(industry){
       const sector=document.createElement('strong'),location=document.createElement('small');
@@ -72,7 +72,7 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
           &&(!!europeIndustryMembership[item.id]||!view.detailed));
       item.button.classList.toggle('is-point-only',pointOnly);
       item.button.classList.toggle('is-muted',item.kind==='crop'&&!!view.selectedFarming&&item.id!==view.selectedFarming||!!view.industrySector&&!(view.emphasizedFeatures??[]).includes(item.id));
-      item.button.title=item.name;
+      item.button.title=item.kind==='crop'?europeFarmingMapName(item.id,item.name):item.name;
       if(item.kind==='feature')decorateFeature?.(item.id,item.button);
       return {id:item.kind+'-'+item.id,anchor:project(item.coordinates),width:pointOnly?16:item.button.offsetWidth,height:pointOnly?16:item.button.offsetHeight};
     }).filter(p=>p.anchor.x>=bounds.left&&p.anchor.x<=bounds.right&&p.anchor.y>=bounds.top&&p.anchor.y<=bounds.bottom);
