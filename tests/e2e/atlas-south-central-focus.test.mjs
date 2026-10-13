@@ -34,9 +34,14 @@ async function verifyIndustrySelection(page,before,selected,context){
  const after=await industrySnapshot(page);
  const identities=snapshot=>snapshot.labels.map(({id,name,compact,named})=>({id,name,compact,named}));
  assert.deepEqual(identities(after),identities(before),context+': displayed names and compact markers remain fixed');
- assert.equal(after.camera,before.camera,context+': camera remains fixed');
- for(const key of ['left','top','width','height'])assert.ok(Math.abs(after.canvas[key]-before.canvas[key])<=.75,context+': map '+key+' remains fixed');
- for(const [i,label]of after.labels.entries())for(const key of ['left','top','width','height'])assert.ok(Math.abs(label[key]-before.labels[i][key])<=.75,`${context}: ${label.id} ${key} remains fixed relative to the map`);
+ // History restores the existing URL precision (5 decimals for coordinates,
+ // 3 for zoom). Pointer clicks may also scroll the document to the reading list.
+ // Neither is a geographic label move: compare that precision, map size and
+ // every label's position relative to the map, including compact markers.
+ const camera=value=>{const c=JSON.parse(value);return {lng:c.lng.toFixed(5),lat:c.lat.toFixed(5),zoom:c.zoom.toFixed(3)};};
+ assert.deepEqual(camera(after.camera),camera(before.camera),context+': camera remains fixed at the retained URL precision');
+ for(const key of ['width','height'])assert.ok(Math.abs(after.canvas[key]-before.canvas[key])<=.75,context+': map '+key+' remains fixed: '+JSON.stringify({before:before.canvas,after:after.canvas}));
+ for(const [i,label]of after.labels.entries())for(const key of ['left','top','width','height'])assert.ok(Math.abs(label[key]-before.labels[i][key])<=.75,`${context}: ${label.id} ${key} remains fixed relative to the map: ${before.labels[i][key]} → ${label[key]}`);
  assert.deepEqual(after.labels.filter(label=>label.pressed).map(label=>label.id),selected?[selected]:[],context+': only the chosen marker is emphasized');
  review.industryTransitions.push({context,viewport:page.viewportSize(),selected,before,after,status:'passed'});await saveReview();
  return after;

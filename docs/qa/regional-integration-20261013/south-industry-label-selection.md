@@ -24,6 +24,8 @@
 
 全画像は既存CI artifact `south-central-focus-<run>-<attempt>` に保存。追加した `review.json` はcheckoutの40桁head、指定review head、buildのrelease情報、各PNGのhead・viewport・DPR・画素寸法・bytes・SHA256・URL／状態を記録する。産業選択の検査前後の表示集合・相対矩形・cameraも記録する。buildRelease.commitShaは既存のGITHUB_SHA（PR検査用合成commitの場合がある）と区別し、撮影headを捏造しない。workflow・公開設定の変更はない。
 
+最初の追補 `b7b51f42` のPC CIではダッカ選択自体の表示集合・相対位置は成功したが、履歴解除で既存URLの座標5桁／zoom3桁への丸めと生のcamera文字列を比較して失敗した。また一覧を実際にクリックするとブラウザーが文書をスクロールするため、絶対画面座標のmap topを固定する新検査も失敗した。検査対象をユーザー要件の地理範囲・地図に対する相対位置へ合わせ、cameraは既存URL精度で照合する。全19ラベルの名称・compact・相対矩形の0.75 CSS px条件は保持し、絶対画面座標も記録する。
+
 ## 目視・取得制限
 
 この担当の正規Library consumer-local取得は、返された完全なtransferを現行helperへ渡して1回実行したが `library file transfer failed: download failed`。HTTPコードは返っていないので403と推測せず、再試行・拒否配信先への別経路取得は行っていない。この担当が元ZIPを実見したとは扱わない。
