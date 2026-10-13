@@ -1,12 +1,46 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
-import {mkdir,readFile} from 'node:fs/promises';
+import {mkdir,readFile,writeFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
 import path from 'node:path';
 
 const enabled=process.env.ATLAS_ASIA_BROWSER==='1';
 const base='/insight-journal',root=path.resolve('dist');
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.gz':'application/gzip','.png':'image/png','.svg':'image/svg+xml','.webp':'image/webp','.woff2':'font/woff2'};
+const reviewFolder=path.resolve('review-artifacts/south-central-focus'),review={head:null,requestedHead:process.env.REVIEW_HEAD_SHA??null,buildRelease:null,sandbox:true,images:[],industryTransitions:[]};
+async function saveReview(){
+ await mkdir(reviewFolder,{recursive:true});
+ if(!review.head){review.head=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();review.buildRelease=JSON.parse(await readFile(path.join(root,'_release.json'),'utf8'));if(review.requestedHead)assert.equal(review.head,review.requestedHead);}
+ await writeFile(path.join(reviewFolder,'review.json'),JSON.stringify(review,null,2)+'\n');
+}
+async function settled(page){await page.evaluate(async()=>{await document.fonts.ready;scrollTo(0,0);await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});}
+async function capturePc(page,name){
+ await page.waitForLoadState('networkidle');await settled(page);await mkdir(reviewFolder,{recursive:true});
+ const file=name+'.png';await page.screenshot({path:path.join(reviewFolder,file),animations:'disabled',fullPage:false});
+ const bytes=await readFile(path.join(reviewFolder,file)),state=await page.evaluate(()=>({region:document.querySelector('[data-asia-config]')?.textContent?JSON.parse(document.querySelector('[data-asia-config]').textContent).focusId:null,field:document.querySelector('[data-asia-atlas]')?.dataset.field,query:location.search,dpr:devicePixelRatio}));
+ review.images.push({file,head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),viewport:page.viewportSize(),dpr:state.dpr,pngSize:{width:bytes.readUInt32BE(16),height:bytes.readUInt32BE(20)},sha256:createHash('sha256').update(bytes).digest('hex'),bytes:bytes.length,url:page.url(),state});await saveReview();
+}
+async function industrySnapshot(page){
+ await page.waitForLoadState('networkidle');
+ await settled(page);
+ return page.evaluate(()=>{
+  const canvas=document.querySelector('.maplibregl-canvas').getBoundingClientRect();
+  return {canvas:{left:canvas.left,top:canvas.top,width:canvas.width,height:canvas.height},camera:document.querySelector('[data-asia-atlas]').dataset.mapCamera,labels:[...document.querySelectorAll('.asia-industry-regional-label')].map(label=>{const box=label.getBoundingClientRect();return {id:label.dataset.industrySite,name:label.textContent,compact:label.classList.contains('is-compact'),named:[...label.children].some(child=>getComputedStyle(child).display!=='none'),pressed:label.getAttribute('aria-pressed')==='true',left:box.left-canvas.left,top:box.top-canvas.top,width:box.width,height:box.height};})};
+ });
+}
+async function verifyIndustrySelection(page,before,selected,context){
+ const after=await industrySnapshot(page);
+ const identities=snapshot=>snapshot.labels.map(({id,name,compact,named})=>({id,name,compact,named}));
+ assert.deepEqual(identities(after),identities(before),context+': displayed names and compact markers remain fixed');
+ assert.equal(after.camera,before.camera,context+': camera remains fixed');
+ for(const key of ['left','top','width','height'])assert.ok(Math.abs(after.canvas[key]-before.canvas[key])<=.75,context+': map '+key+' remains fixed');
+ for(const [i,label]of after.labels.entries())for(const key of ['left','top','width','height'])assert.ok(Math.abs(label[key]-before.labels[i][key])<=.75,`${context}: ${label.id} ${key} remains fixed relative to the map`);
+ assert.deepEqual(after.labels.filter(label=>label.pressed).map(label=>label.id),selected?[selected]:[],context+': only the chosen marker is emphasized');
+ review.industryTransitions.push({context,viewport:page.viewportSize(),selected,before,after,status:'passed'});await saveReview();
+ return after;
+}
 async function serve(){
  const server=createServer(async(req,res)=>{try{
   const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);
@@ -24,9 +58,9 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
  try{
   browser=await chromium.launch({headless:true,chromiumSandbox:true,...(process.env.REVIEW_CHROME_PATH?{executablePath:process.env.REVIEW_CHROME_PATH}:{})});
   const page=await browser.newPage({viewport:{width:1920,height:1080},deviceScaleFactor:1}),errors=[];
-  const focusedCaptures=new Set(['south-asia-climate','south-asia-agriculture','south-asia-agriculture-tea','south-asia-forest-use','south-asia-terrain','south-asia-landform','south-asia-industry','south-asia-industry-selected','south-asia-population','south-asia-ethnicity','south-asia-religion','south-asia-nepal-religion','south-asia-sri-lanka-religion','south-asia-precipitation','south-asia-basins','south-asia-basin-selected','south-asia-groundwater','central-asia-climate','central-asia-industry','central-asia-industry-selected','central-asia-agriculture','central-asia-population','central-asia-terrain','central-asia-landform','central-asia-religion','central-asia-precipitation','central-asia-water-selected','central-asia-ethnicity']);
+  const focusedCaptures=new Set(['south-asia-climate-initial','south-asia-climate','south-asia-agriculture','south-asia-agriculture-tea','south-asia-forest-use','south-asia-terrain','south-asia-landform','south-asia-industry','south-asia-industry-selected','south-asia-industry-cleared','south-asia-population','south-asia-ethnicity','south-asia-religion','south-asia-nepal-religion','south-asia-sri-lanka-religion','south-asia-precipitation','south-asia-basins','south-asia-basin-selected','south-asia-groundwater','central-asia-climate-initial','central-asia-climate','central-asia-industry','central-asia-industry-selected','central-asia-agriculture','central-asia-population','central-asia-terrain','central-asia-landform','central-asia-religion','central-asia-precipitation','central-asia-water-selected','central-asia-ethnicity']);
 
-  const capture=async name=>{if(process.env.SC_FOCUSED_REVIEW==='1'&&!focusedCaptures.has(name))return;const folder=path.resolve('review-artifacts/south-central-focus');await mkdir(folder,{recursive:true});await page.waitForLoadState('networkidle');await page.evaluate(async()=>{await document.fonts.ready;scrollTo(0,0);await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});await page.screenshot({path:path.join(folder,`${name}.png`),animations:'disabled'});};
+  const capture=async name=>{if(process.env.SC_FOCUSED_REVIEW==='1'&&!focusedCaptures.has(name))return;await capturePc(page,name);};
   page.on('pageerror',error=>errors.push(error.message));
   for(const [region,expected,selected,city,foreign] of [
    ['south-asia',['AFG','BGD','BTN','IND','LKA','MDV','NPL','PAK'],'IND','new-delhi','KAZ'],
@@ -47,6 +81,11 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
     assert.match(await wind.textContent(),/偏西風/);
     assert.match(await page.locator('#asia-sources').textContent(),/地図の偏西風は/);
    }
+   assert.equal(await page.locator('[data-country-select]').inputValue(),'');
+   assert.equal(await page.locator('[data-city-select]').inputValue(),'');
+   assert.equal(new URL(page.url()).searchParams.get('city'),null);
+   assert.equal(new URL(page.url()).searchParams.get('place'),null);
+   await capture(`${region}-climate-initial`);
    await page.locator('[data-city-select]').selectOption(city);
    assert.equal(new URL(page.url()).searchParams.get('city'),city);
    assert.equal(new URL(page.url()).searchParams.get('place'),null);
@@ -91,13 +130,16 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
     }
    }
    if(region==='central-asia')for(const [id,name] of [['sc-inkai-uranium','インカイのウラン'],['sc-bozshakol-copper','ボズシャコルの銅'],['sc-muruntau-gold','ムルンタウの金']])assert.match(await page.locator(`[data-industry-site="${id}"]`).textContent(),new RegExp(name));
+   const industryBefore=region==='south-asia'?await industrySnapshot(page):null;
    await capture(`${region}-industry`);
    await page.locator(region==='south-asia'?'.asia-industry-regional-label[data-industry-site="sc-dhaka-garments"]':'.asia-industry-regional-label').first().click();
    assert.ok(new URL(page.url()).searchParams.get('detail'));
    assert.equal(await page.locator('.asia-industry-regional-label[aria-pressed="true"].is-compact').count(),0);
+   if(industryBefore)await verifyIndustrySelection(page,industryBefore,'sc-dhaka-garments','1920 South Asia Dhaka selection');
    await capture(`${region}-industry-selected`);
    await page.goBack();
    await page.waitForFunction(()=>new URL(location.href).searchParams.get('detail')===null);
+   if(industryBefore){await verifyIndustrySelection(page,industryBefore,null,'1920 South Asia clear through history');await capture('south-asia-industry-cleared');}
    await page.goBack();
    await page.waitForURL(`**/atlas/asia/${region}/nature/**`);
    assert.equal(await page.locator('[data-country-select]').inputValue(),'');
@@ -292,7 +334,7 @@ test('中央アジアの地形操作は国選択を作らず宗教色面の透�
  const {chromium}=await import('playwright'),{server,url}=await serve();let browser;
  try{
   browser=await chromium.launch({headless:true,chromiumSandbox:true,...(process.env.REVIEW_CHROME_PATH?{executablePath:process.env.REVIEW_CHROME_PATH}:{})});
-  const page=await browser.newPage({viewport:{width:1920,height:1080}});
+  const page=await browser.newPage({viewport:{width:1920,height:1080},deviceScaleFactor:1});
   await page.goto(`${url}/atlas/asia/central-asia/nature/?topic=terrain&place=KAZ`);
   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.contourBandStatus==='ready');
   assert.equal(new URL(page.url()).searchParams.get('place'),null);
@@ -305,11 +347,46 @@ test('中央アジアの地形操作は国選択を作らず宗教色面の透�
   await contour.click();
   assert.equal(new URL(page.url()).searchParams.get('place'),null);
   assert.match(await page.locator('.asia-point-marker').textContent(),/選択した地点/);
+  await capturePc(page,'central-asia-terrain-selected');
   await page.goto(`${url}/atlas/asia/central-asia/population/?topic=ethnicity`);
   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.settlementPaintOpacity==='0.8');
+  await capturePc(page,'central-asia-ethnicity-before-religion');
   await page.locator('[data-population-group="religion"]').click();
   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.settlementPaintOpacity==='0.43');
+  await capturePc(page,'central-asia-religion-between-ethnicity');
   await page.locator('[data-population-group="identity"]').click();
   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.settlementPaintOpacity==='0.8');
+  await capturePc(page,'central-asia-ethnicity-restored');
+ }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
+});
+
+test('南アジア産業の全地点選択はPC三幅で表示集合と相対位置を固定する',{skip:enabled?false:'ATLAS_ASIA_BROWSER=1 with a production build',timeout:90000},async()=>{
+ const {chromium}=await import('playwright'),{server,url}=await serve();let browser;
+ try{
+  browser=await chromium.launch({headless:true,chromiumSandbox:true,...(process.env.REVIEW_CHROME_PATH?{executablePath:process.env.REVIEW_CHROME_PATH}:{})});
+  for(const [width,height]of [[1920,1080],[1440,900],[1024,768]]){
+   const page=await browser.newPage({viewport:{width,height},deviceScaleFactor:1}),errors=[];page.on('pageerror',error=>errors.push(error.message));
+   await page.goto(`${url}/atlas/asia/south-asia/industry/`,{waitUntil:'domcontentloaded'});
+   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelectorAll('.asia-industry-regional-label').length>0);
+   const before=await industrySnapshot(page);
+   assert.ok(before.labels.some(label=>label.compact));
+   assert.equal(before.labels.some(label=>label.pressed),false);
+   const sites=JSON.parse(await page.locator('[data-asia-config]').textContent()).industrySites;
+   assert.deepEqual(before.labels.map(label=>label.id).sort(),sites.map(site=>site.id).sort());
+   await capturePc(page,`${width}-south-asia-industry-initial`);
+   const compact=before.labels.find(label=>label.compact).id;
+   for(const label of before.labels){
+    // The existing reading list also selects sites whose overview marker is compact.
+    await page.locator('.sc-industry-site-list button').filter({hasText:sites.find(site=>site.id===label.id).name}).click();
+    await page.waitForFunction(id=>new URL(location.href).searchParams.get('detail')===id,label.id);
+    await verifyIndustrySelection(page,before,label.id,`${width} South Asia ${label.id}`);
+    if(label.id==='sc-dhaka-garments'||label.id===compact)await capturePc(page,`${width}-south-asia-industry-selected-${label.id}`);
+   }
+   await page.locator('[data-reset]').click();
+   await page.waitForFunction(()=>new URL(location.href).searchParams.get('detail')===null);
+   await verifyIndustrySelection(page,before,null,`${width} South Asia reset`);
+   await capturePc(page,`${width}-south-asia-industry-reset`);
+   assert.deepEqual(errors,[]);await page.close();
+  }
  }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
 });
