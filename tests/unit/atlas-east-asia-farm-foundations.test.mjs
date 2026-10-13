@@ -68,7 +68,8 @@ test('East under-map reading changes with country and topic without treating mis
    assert.match(section.textContent,/カロリー構成と自給/);
    assert.match(section.textContent,/未収録/);
    assert.doesNotMatch(section.textContent,/丸太生産量|製材の供給|全商品輸出先/);
-   assert.equal(section.querySelectorAll('.east-pie,.east-bar').length,0,'no fabricated amounts or unrelated chart');
+   assert.equal(section.querySelectorAll('[data-east-forest-flows] .east-bar,[data-east-world-share] .east-bar,[data-east-world-share] .east-pie').length,0,'missing food balance/calories never receive production or forest charts');
+   assert.equal(section.querySelectorAll('[data-east-export-partners] .east-pie').length,topic==='overview'?8:topic==='cotton'?0:2,'only verified matching commodity partner tables appear');
   }
   renderEastAsiaFarmFoundations(root,'east-asia',true,'wheat',{code:'JPN',name:'日本'});
   assert.match(section.querySelector('[data-east-supply-title]').textContent,/日本の小麦：供給と国内消費/);
@@ -88,12 +89,15 @@ test('East under-map reading changes with country and topic without treating mis
   renderEastAsiaFarmFoundations(root,'east-asia',true,'forest',undefined);
   assert.match(section.textContent,/北朝鮮.*モンゴル/s);
   assert.match(section.querySelector('[data-east-export-partners]').textContent,/HS44.*2023年.*名目米ドル/s);
-  assert.equal(section.querySelectorAll('.east-pie').length,0,'all-merchandise partners cannot substitute for wood partners');
+  assert.equal(section.querySelectorAll('.east-pie').length,4,'only source-matched sawnwood and untreated coniferous wood partner tables appear');
+  assert.deepEqual(Array.from(section.querySelectorAll('[data-east-trade-product]'),n=>n.dataset.eastTradeProduct),['sawnwood','coniferous-roundwood']);
   assert.match(section.querySelector('[data-east-world-share]').textContent,/森林面積.*千ha/s);
   assert.doesNotMatch(section.querySelector('[data-east-world-share]').textContent,/森林面積.*[0-9]％.*千ha/);
   renderEastAsiaFarmFoundations(root,'east-asia',true,'forest',{code:'PRK',name:'北朝鮮'});
   assert.match(section.querySelector('[data-east-export-partners]').textContent,/未収録（0ではありません）/);
-  assert.match(section.querySelector('[data-east-forest-flows]').textContent,/7.94百万m³/);
+  assert.equal(section.querySelectorAll('[data-east-export-partners] .east-pie').length,0);
+  assert.doesNotMatch(section.querySelector('[data-east-export-partners]').textContent,/対世界 0＄|対象外相手 0＄/,'unavailable reporter totals remain unknown');
+  assert.match(section.querySelector('[data-east-forest-flows]').textContent,/2023年.*7.91百万m³/);
   renderEastAsiaFarmFoundations(root,'east-asia',false,'wheat' ,{code:'JPN',name:'日本'});
   assert.equal(section.hidden,true);
  }finally{globalThis.document=old;await window.happyDOM.close();}

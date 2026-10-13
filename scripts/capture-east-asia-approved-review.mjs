@@ -9,7 +9,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {chromium} from 'playwright';
 import astroConfig from '../astro.config.mjs';
-import {eastClusters,eastIndustries} from '../src/data/atlas/east-asia-industry-clusters.ts';
+import {eastSectors,eastSectorIndustries,eastSectorRows} from '../src/data/atlas/east-asia-industry-sectors.ts';
 import {eastCultureExamples} from '../src/data/atlas/east-asia-cultural-geography.ts';
 import {eastAsiaReligionCountries,eastAsiaReligionColors,eastAsiaChinaReligionMeasures} from '../src/data/atlas/east-asia-religion.ts';
 const repo=fileURLToPath(new URL('../',import.meta.url));
@@ -23,8 +23,8 @@ const save=async()=>{
  const html='<!doctype html><html lang="ja"><meta charset="utf-8"><title>東アジア・承認済み添削の実画面</title><style>body{font:14px/1.7 sans-serif;margin:24px;background:#f6f7f1}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:20px}figure{margin:0;background:white;padding:12px}img{width:100%;height:auto}code{overflow-wrap:anywhere}</style><h1>東アジア・承認済み添削の実画面</h1><p>head: <code>'+results.head+'</code> · '+results.status+' · sandbox有効のChrome · PC 1920×1080・100%・DPR1</p><p>本番比較元: <code>'+(results.production?.commitSha??'未取得')+'</code></p><p>初期／選択／戻る／タブ往復の検証記録は results.json。画像は実ブラウザーのキャプチャです。</p><main>'+results.images.map(i=>'<figure><figcaption>'+i.name+'</figcaption><a href="'+i.name+'"><img loading="lazy" src="'+i.name+'" alt="'+i.name+'"></a></figure>').join('')+'</main></html>';
  await writeFile(path.join(output,'index.html'),html);
 };
-async function serveBuild(){
- const root=await realpath(path.join(repo,'dist'));
+async function serveBuild(directory='dist'){
+ const root=await realpath(path.resolve(repo,directory));
  const server=createServer(async(req,res)=>{
   try{
    assert(['GET','HEAD'].includes(req.method));
@@ -41,9 +41,9 @@ async function serveBuild(){
  return {server,origin:`http://127.0.0.1:${server.address().port}`};
 }
 
-let browser,host;
+let browser,host,baselineHost;
 try{
- host=await serveBuild();
+ host=await serveBuild();if(process.env.REVIEW_BASELINE_DIST){baselineHost=await serveBuild(process.env.REVIEW_BASELINE_DIST);const r=await fetch(baselineHost.origin+basePath+'/_release.json');assert(r.ok);results.baseline=await r.json();}
  assert(results.fonts.trim(),'Japanese fonts are required');
  assert(process.env.REVIEW_CHROME_PATH,'An already-installed Chrome is required');
  browser=await chromium.launch({executablePath:process.env.REVIEW_CHROME_PATH,headless:true,chromiumSandbox:true});
@@ -89,52 +89,15 @@ try{
     const swatch=items.nth(index).locator('i'),mark=page.locator(`.east-industry-map-labels svg [data-industry="${kind.id}"]`).first();assert(await swatch.isVisible());assert(await mark.isVisible());assert.equal(await swatch.evaluate(n=>getComputedStyle(n).backgroundColor),await mark.evaluate(n=>getComputedStyle(n).fill),'the legend color matches '+kind.label+' on the map');
    }
   }
-  async function industryLabels(page,kind=null){
-   if(!kind)return industryOverviewLabels(page);
-   const rows=await page.locator('[data-industry-cluster]:visible').evaluateAll(nodes=>nodes.map(n=>{
-    const box=e=>{const r=e.getBoundingClientRect();return {left:r.left,top:r.top,right:r.right,bottom:r.bottom,width:r.width,height:r.height};};
-    const primary=n.querySelector('[data-cluster-industries]'),city=n.querySelector('[data-cluster-city]'),primaryStyle=getComputedStyle(primary),cityStyle=getComputedStyle(city),anchor=JSON.parse(n.dataset.clusterAnchor),leader=document.querySelector(`line[data-cluster-leader="${n.dataset.industryCluster}"]`);
-    return {id:n.dataset.industryCluster,box:box(n),primaryBox:box(primary),cityBox:box(city),city:city.textContent,industries:[...primary.children].map(e=>({id:e.dataset.industry,label:e.textContent,color:getComputedStyle(e,'::before').backgroundColor})),marks:[...document.querySelectorAll(`svg [data-cluster-mark="${n.dataset.industryCluster}"]`)].map(e=>({id:e.dataset.industry,color:getComputedStyle(e).fill})),font:{primary:parseFloat(primaryStyle.fontSize),city:parseFloat(cityStyle.fontSize),primaryWeight:parseInt(primaryStyle.fontWeight),cityWeight:parseInt(cityStyle.fontWeight)},clipped:primary.scrollWidth>primary.clientWidth+1||city.scrollWidth>city.clientWidth+1,anchor,leader:{x:Number(leader.getAttribute('x1')),y:Number(leader.getAttribute('y1')),length:Math.hypot(Number(leader.getAttribute('x2'))-anchor.x,Number(leader.getAttribute('y2'))-anchor.y)}};
-   }));
-   const expected=eastClusters.filter(c=>!kind||c.industries.includes(kind));assert.deepEqual(rows.map(r=>r.id).sort(),expected.map(c=>c.id).sort(),'all existing sites retain their labels');
-   const frame=(await geometry(page)).map;
-   for(const row of rows){
-    const c=expected.find(c=>c.id===row.id),ids=c.industries.filter(id=>!kind||id===kind);assert.equal(row.city,c.name);assert.deepEqual(row.industries.map(i=>i.id),ids);assert.deepEqual(row.industries.map(i=>i.label),ids.map(id=>eastIndustries.find(i=>i.id===id).label));assert.deepEqual(row.marks.map(i=>i.id),ids);
-    for(const industry of row.industries)assert.equal(industry.color,row.marks.find(m=>m.id===industry.id).color,'each industry name matches its own site marker');
-    assert(row.font.primary>row.font.city&&row.font.primaryWeight>=700&&row.font.cityWeight<=400,'industry names have priority over auxiliary city names');assert(row.primaryBox.bottom<=row.cityBox.top+.5,'industry name precedes the city');assert.equal(row.clipped,false,'the complete name is readable');
-    assert(row.box.left>=frame.left&&row.box.right<=frame.right&&row.box.top>=frame.top&&row.box.bottom<=frame.bottom,'labels stay inside the map');assert.deepEqual(row.leader.x,row.anchor.x);assert.deepEqual(row.leader.y,row.anchor.y);assert(row.leader.length>=7,'a leader identifies the original site');
-    for(const other of rows.filter(r=>r.id!==row.id))assert(!(row.box.left<other.box.right&&row.box.right>other.box.left&&row.box.top<other.box.bottom&&row.box.bottom>other.box.top),'industry labels do not overlap: '+row.id+'/'+other.id);
-   }return rows;
+  async function industryLabels(page){
+   const labels=await page.locator('[data-industry-label]:visible').evaluateAll(nodes=>nodes.map(n=>{const b=n.getBoundingClientRect();return {industry:n.dataset.industryLabel,site:n.dataset.labelAnchorSite,coordinate:n.dataset.coordinate,text:n.textContent,box:{left:b.left,top:b.top,right:b.right,bottom:b.bottom},left:n.style.left,top:n.style.top};}));
+   const sector=await page.locator('[data-asia-atlas]').getAttribute('data-industry-sector-map'),expected=eastSectorIndustries.filter(i=>i.sectors.includes(sector));
+   assert.deepEqual([...new Set(labels.map(l=>l.industry))].sort(),expected.map(i=>i.id).sort(),'each adopted industry has a visible primary name');const frame=(await geometry(page)).map;
+   for(const label of labels){assert.equal(label.text,expected.find(i=>i.id===label.industry).label);assert(label.box.left>=frame.left&&label.box.right<=frame.right&&label.box.top>=frame.top&&label.box.bottom<=frame.bottom);for(const other of labels.filter(l=>l!==label))assert(!(label.box.left<other.box.right&&label.box.right>other.box.left&&label.box.top<other.box.bottom&&label.box.bottom>other.box.top),'industry names do not collide');}
+   const lengths=await page.locator('[data-industry-name-leader]').evaluateAll(nodes=>nodes.map(n=>Math.hypot(Number(n.getAttribute('x2'))-Number(n.getAttribute('x1')),Number(n.getAttribute('y2'))-Number(n.getAttribute('y1')))));assert(lengths.every(n=>n>=7&&n<=72),'industry leaders remain local');return labels.map(({box,...position})=>position);
   }
-  async function industryOverviewLabels(page){
-   const groups=await page.locator('[data-industry-group]:visible').evaluateAll(nodes=>nodes.map(n=>{
-    const r=n.getBoundingClientRect(),primary=n.querySelector('[data-cluster-industries]');
-    return {id:n.dataset.industryGroup,sites:JSON.parse(n.dataset.groupSites),members:JSON.parse(n.dataset.groupMembers),box:{left:r.left,top:r.top,right:r.right,bottom:r.bottom},industries:[...primary.children].map(s=>({id:s.dataset.industry,label:s.textContent,color:getComputedStyle(s,'::before').backgroundColor})),rows:new Set([...primary.children].map(child=>Math.round(child.getBoundingClientRect().top))).size,primarySize:parseFloat(getComputedStyle(primary).fontSize),primaryWeight:parseInt(getComputedStyle(primary).fontWeight),clipped:n.scrollWidth>n.clientWidth+1,leaders:[...document.querySelectorAll(`line[data-group-leader="${n.dataset.industryGroup}"]`)].map(l=>({id:l.dataset.clusterLeader,from:{x:Number(l.getAttribute('x1')),y:Number(l.getAttribute('y1'))},to:{x:Number(l.getAttribute('x2')),y:Number(l.getAttribute('y2'))}}))};
-   }));
-   const points=await page.locator('.east-industry-group-point:visible').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return {id:n.dataset.industryCluster,aria:n.getAttribute('aria-label'),x:(r.left+r.right)/2,y:(r.top+r.bottom)/2};}));
-   assert.equal(groups.length,9,'nearby sites share nine initial industry labels');assert.deepEqual(groups.flatMap(g=>g.members).sort(),eastClusters.map(c=>c.id).sort());assert.deepEqual(points.map(p=>p.id).sort(),eastClusters.map(c=>c.id).sort(),'every original geographic point stays selectable');
-   const frame=(await geometry(page)).map,origin=await page.locator('.east-industry-map-labels').evaluate(n=>{const r=n.getBoundingClientRect();return {left:r.left,top:r.top};}),allLeaders=groups.flatMap(g=>g.leaders.map(l=>({...l,group:g.id}))),lengths=[];
-   const intersects=(a,b,c,d)=>{const turn=(x,y,z)=>(y.x-x.x)*(z.y-x.y)-(y.y-x.y)*(z.x-x.x);return turn(a,b,c)*turn(a,b,d)<-.001&&turn(c,d,a)*turn(c,d,b)<-.001;};
-   for(const g of groups){
-    const members=g.members.map(id=>eastClusters.find(c=>c.id===id));assert.equal(new Set(members.map(c=>c.country)).size,1,'groups stay within the same country/region');
-    const kinds=eastIndustries.filter(i=>members.some(c=>c.industries.includes(i.id)));assert.deepEqual(g.industries.map(i=>i.id),kinds.map(i=>i.id));assert.deepEqual(g.industries.map(i=>i.label),kinds.map(i=>i.label));assert(g.primarySize>=12&&g.primaryWeight>=700);assert.equal(g.clipped,false);if(profile.width>=1600)assert(g.rows<=2,'initial industry labels use at most two rows while retaining every industry: '+g.id+' rows='+g.rows);assert(g.box.left>=frame.left&&g.box.right<=frame.right&&g.box.top>=frame.top&&g.box.bottom<=frame.bottom);
-    assert.deepEqual(g.leaders.map(l=>l.id).sort(),g.members.toSorted());
-    for(const site of g.sites){
-     const point=points.find(p=>p.id===site.id),c=members.find(c=>c.id===site.id),leader=g.leaders.find(l=>l.id===site.id);assert.match(point.aria,new RegExp(c.name));assert(Math.abs(point.x-origin.left-site.anchor.x)<.5&&Math.abs(point.y-origin.top-site.anchor.y)<.5,'point remains at its original projected position');assert.deepEqual(leader.from,site.anchor);
-     const length=Math.hypot(leader.to.x-leader.from.x,leader.to.y-leader.from.y);lengths.push(length);assert(length>=7&&length<=66.5,'initial labels stay within 66px of every assigned site: '+site.id+' '+length);
-     const marks=page.locator(`.east-industry-map-labels svg [data-cluster-mark="${site.id}"]`);assert.deepEqual(await marks.evaluateAll(nodes=>nodes.map(n=>n.dataset.industry)),c.industries);
-     for(const id of c.industries){const mark=page.locator(`.east-industry-map-labels svg [data-cluster-mark="${site.id}"][data-industry="${id}"]`);assert.equal(await mark.evaluate(n=>getComputedStyle(n).fill),g.industries.find(i=>i.id===id).color);}
-    }
-    for(const other of groups.filter(o=>o.id!==g.id)){
-     assert(!(g.box.left<other.box.right&&g.box.right>other.box.left&&g.box.top<other.box.bottom&&g.box.bottom>other.box.top),'group labels do not overlap');
-     const b={left:other.box.left-origin.left,right:other.box.right-origin.left,top:other.box.top-origin.top,bottom:other.box.bottom-origin.top},edges=[[{x:b.left,y:b.top},{x:b.right,y:b.top}],[{x:b.right,y:b.top},{x:b.right,y:b.bottom}],[{x:b.right,y:b.bottom},{x:b.left,y:b.bottom}],[{x:b.left,y:b.bottom},{x:b.left,y:b.top}]];
-     for(const l of g.leaders)assert(!edges.some(([a,b])=>intersects(l.from,l.to,a,b)),'leaders do not pass through another label');
-    }
-    for(const p of points)assert(!(p.x>g.box.left-5&&p.x<g.box.right+5&&p.y>g.box.top-5&&p.y<g.box.bottom+5),'group labels do not cover geographic points');
-   }
-   for(const a of allLeaders)for(const b of allLeaders.filter(b=>b.group!==a.group))assert(!intersects(a.from,a.to,b.from,b.to),'leaders of different groups do not cross: '+a.id+'/'+b.id);
-   return {groups,pointCount:points.length,maxLeader:Math.max(...lengths),crossings:0};
-  }
+  function sameIndustryPositions(actual,before,message){assert.deepEqual(actual.map(n=>[n.industry??n.id,n.site??n.id,n.coordinate]),before.map(n=>[n.industry??n.id,n.site??n.id,n.coordinate]),message+' source IDs and coordinates');for(const [index,row] of actual.entries())for(const key of ['left','top'])assert(Math.abs(parseFloat(row[key])-parseFloat(before[index][key]))<=.5,message+' at the public camera serialization precision');}
+  async function industryPoints(page){return page.locator('[data-industry-cluster]:visible').evaluateAll(nodes=>nodes.map(n=>({id:n.dataset.industryCluster,coordinate:n.dataset.coordinate,left:n.style.left,top:n.style.top})).sort((a,b)=>a.id.localeCompare(b.id)));}
   async function rainfallLeaders(page){
    const evidence=await page.evaluate(()=>{
     const overlay=document.querySelector('[data-map-annotations]').getBoundingClientRect();
@@ -151,15 +114,14 @@ try{
    }return evidence;
   }
   async function stations(page){return page.locator('[data-station]:visible').evaluateAll(nodes=>nodes.map(n=>({id:n.dataset.station,x:n.style.left,y:n.style.top})).sort((a,b)=>a.id.localeCompare(b.id)));}
-  async function religionCards(page){
-   await page.waitForFunction(()=>{const cards=[...document.querySelectorAll('.asia-religion-marker')];return cards.length===5&&cards.every(n=>n.offsetWidth>0&&n.offsetHeight>0);});
-   const rows=await page.locator('.asia-religion-marker:visible').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect(),bar=n.querySelector('.asia-religion-map-bar'),b=bar?.getBoundingClientRect();return {country:n.dataset.country??'CHN',text:n.textContent,box:{left:r.left,right:r.right,top:r.top,bottom:r.bottom},bar:b?{width:b.width,height:b.height,aria:bar.getAttribute('aria-label'),shares:[...bar.children].map(p=>({value:Number(p.style.flexGrow),color:p.style.backgroundColor}))}:null};}));
-   const frame=(await geometry(page)).map;assert.equal(rows.length,5);assert.deepEqual(rows.filter(r=>r.bar).map(r=>r.country).sort(),eastAsiaReligionCountries.map(c=>c.code).sort());
-   for(const row of rows){assert(row.box.left>=frame.left&&row.box.right<=frame.right&&row.box.top>=frame.top&&row.box.bottom<=frame.bottom,'religion cards fit the shared PC map frame: '+JSON.stringify(row));for(const other of rows.filter(r=>r.country!==row.country))assert(!(row.box.left<other.box.right&&row.box.right>other.box.left&&row.box.top<other.box.bottom&&row.box.bottom>other.box.top),'religion cards do not overlap: '+row.country+'/'+other.country);if(!row.bar)continue;
-    const country=eastAsiaReligionCountries.find(c=>c.code===row.country),nonzero=country.shares.filter(s=>s[2]>0);assert(row.bar.width>100&&row.bar.height>=8);assert.deepEqual(row.bar.shares.map(s=>s.value),nonzero.map(s=>s[2]));assert.match(row.text,new RegExp(String(country.year)));assert.match(row.text,new RegExp(country.headline));
-    for(const [index,[id,label,value]] of nonzero.entries()){assert(row.bar.aria.includes(label+value+'％'));const color=eastAsiaReligionColors[id],rgb='rgb('+[1,3,5].map(p=>parseInt(color.slice(p,p+2),16)).join(', ')+')';assert.equal(row.bar.shares[index].color,rgb);}
-   }
-   const china=rows.find(r=>r.country==='CHN');assert.equal(china.bar,null);assert.match(china.text,/別設問.*宗教帰属 10％.*33％/s);return rows;
+  async function religionAreas(page){
+   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.settlementStatus==='ready');
+   assert.equal(await page.locator('.asia-religion-marker:visible').count(),0);
+   const names=await page.locator('.asia-settlement-label:visible').allTextContents();assert(names.some(n=>n.includes('仏教'))&&names.some(n=>n.includes('イスラム')));
+   const rendered=Number(await page.locator('[data-asia-atlas]').getAttribute('data-settlement-features'));assert(rendered>0,'regional source polygons are actually rendered');
+   const bars=page.locator('[data-settlement-reading="religion"] .asia-religion-measure');assert.equal(await bars.count(),4);
+   for(const [index,country] of eastAsiaReligionCountries.entries())assert.deepEqual(await bars.nth(index).locator('span').evaluateAll(nodes=>nodes.map(n=>Number(n.style.flexGrow))),country.shares.filter(c=>c[2]>0).map(c=>c[2]));
+   return {names,rendered,nationalStatistics:'four independent country rows in the right panel'};
   }
   async function sameStations(page,before,message){
    const expected=before.map(x=>x.id);
@@ -182,6 +144,27 @@ try{
    for(const example of expected)assert.equal(await page.locator(`[data-east-culture-example="${example.id}"] a`).getAttribute('href'),example.source.url);
    return refs;
   }
+  if(baselineHost)await run('application-startup-and-selection',async()=>{
+   const samples=[];
+   for(const [variant,trialHost] of [['main-before',baselineHost],['candidate-after',host]])for(let sample=0;sample<3;sample++){
+    const cold=await browser.newContext({viewport:{width:profile.width,height:profile.height},deviceScaleFactor:1,serviceWorkers:'block'});await cold.route('**/*',route=>new URL(route.request().url()).origin===trialHost.origin?route.continue():route.abort('blockedbyclient'));const page=await cold.newPage();
+    try{const started=performance.now();await page.goto(`${trialHost.origin}${basePath}/atlas/asia/east-asia/nature/`,{waitUntil:'domcontentloaded'});await ready(page);const startup=performance.now()-started,camera=JSON.parse(await page.locator('[data-map-camera]').getAttribute('data-map-camera')),selectStarted=performance.now();await page.locator('[data-station="tokyo"]').click();await page.locator('[data-city-panel="tokyo"]').waitFor({state:'visible'});await ready(page);const selection=performance.now()-selectStarted;assert.deepEqual(JSON.parse(await page.locator('[data-map-camera]').getAttribute('data-map-camera')),camera);samples.push({variant,sample,startupMs:startup,selectionMs:selection,mapLoadMs:Number(await page.locator('[data-map-load-ms]').getAttribute('data-map-load-ms'))});}finally{await cold.close();}
+   }
+   return {baseline:results.baseline.commitSha,head:results.head,method:'Two actual production builds from PR base and current head; same runner, sandboxed browser, viewport and local server implementation. Fresh browser context for every sample; three cold navigations per build. Startup and selection include the same readiness/font/network-idle waits.',samples};
+  });
+  await run('coast-startup-and-selection',async page=>{
+   const samples=[];
+   const old=await readFile(path.join(repo,'public/assets/atlas/asia-geography-v1.json'));
+   for(const variant of ['previous-coarse','regional-1500m'])for(let sample=0;sample<3;sample++){
+    if(variant==='previous-coarse')await page.route('**/east-asia-v2/coast.json',route=>route.fulfill({contentType:'application/json',body:old}));else await page.unroute('**/east-asia-v2/coast.json');
+    const started=performance.now();await open(page,'nature');await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.coastStatus==='ready');const startup=performance.now()-started;
+    const before=JSON.parse(await page.locator('[data-map-camera]').getAttribute('data-map-camera')),selectStart=performance.now();await page.locator('[data-station="tokyo"]').click();await page.locator('[data-city-panel="tokyo"]').waitFor({state:'visible'});await ready(page);const selected=performance.now()-selectStart;assert.deepEqual(JSON.parse(await page.locator('[data-map-camera]').getAttribute('data-map-camera')),before);samples.push({variant,sample,startupMs:startup,selectionMs:selected,mapLoadMs:Number(await page.locator('[data-map-load-ms]').getAttribute('data-map-load-ms'))});
+   }
+   await page.unroute('**/east-asia-v2/coast.json');return {method:'same final application, viewport, browser and fresh navigation; substitute the actual previous coarse source only; three samples per source, includes readiness and network-idle wait; no speed claim from byte counts',samples};
+  });
+  await run('static-elevation',async page=>{
+   await open(page,'nature','?topic=terrain&place=CHN&detail=sichuan-basin&lng=118&lat=32&z=3.2');await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.contourBandStatus==='ready');assert.equal(new URL(page.url()).searchParams.get('place'),null);assert.equal(new URL(page.url()).searchParams.get('detail'),null);assert.equal(await page.locator('[data-physical-value]').isVisible(),false);assert.equal(await page.locator('[data-physical-focus]').isVisible(),false);const before=page.url();await page.locator('.maplibregl-canvas').click({position:{x:220,y:240}});assert.equal(page.url(),before);await shot(page,'elevation-initial');await page.reload();await ready(page);assert.equal(await page.locator('[data-physical-value]').isVisible(),false);return {backgroundSelection:false,intervalMetres:500};
+  });
   await run('ethnicity',async page=>{
    await open(page,'population');await page.locator('[data-population-group="identity"][data-topic="ethnicity"]').click();await ready(page);const initial=await layout(page),refs=await cultureReferences(page,'ethnicity');
    const expected=['チベット系','ウイグル系','モンゴル系','カザフ系','チワン族','台湾先住民族','アイヌ','沖縄の集団'];
@@ -194,19 +177,19 @@ try{
    await page.locator('[data-field="industry"]').first().click();await ready(page);assert.equal(await page.locator('.asia-culture-label:visible').count(),0);await page.locator('[data-field="population"]').first().click();await ready(page);await page.locator('[data-population-group="identity"][data-topic="ethnicity"]').click();await ready(page);await cultureReferences(page,'ethnicity');assert.deepEqual((await page.locator('.asia-settlement-label:visible').allTextContents()).sort(),expected,'all source labels return after the tab round trip');await sameStoredCamera();await shot(page,'ethnicity-tab-restored');return {initial,refs,selection:'ethnicity-4',camera:'unchanged',journey:['initial','selection','reload','clear','tab-round-trip']};
   });
   await run('religion',async page=>{
-   await open(page,'population');await page.locator('[data-population-group="religion"]').click();await ready(page);const initial=await layout(page),cards=await religionCards(page),refs=await cultureReferences(page,'religion'),reading=page.locator('[data-settlement-reading="religion"]');assert(await reading.isVisible());
+   await open(page,'population');await page.locator('[data-population-group="religion"]').click();await ready(page);const initial=await layout(page),areas=await religionAreas(page),refs=await cultureReferences(page,'religion'),reading=page.locator('[data-settlement-reading="religion"]');assert(await reading.isVisible());
    const text=await reading.innerText();assert.match(text,/2023年.*18歳以上/s);assert.match(text,/15歳以上.*59.4％.*40.6％.*分母.*換算/s);assert.match(text,/28\/31省級地域.*新疆・チベット・海南/s);
-   for(const m of eastAsiaChinaReligionMeasures)assert(text.includes(m.question)&&text.includes(m.value+'％'));assert.match(text,/帰属と信仰・実践を同じ宗教構成へ足しません/);assert.match(await page.locator('[data-grid-reading]').innerText(),/宗教回答の構成/);
+   for(const m of eastAsiaChinaReligionMeasures)assert(text.includes(m.question)&&text.includes(m.value+'％'));assert.match(text,/帰属と信仰・実践を同じ宗教構成へ足しません/);assert.match(await page.locator('[data-grid-reading]').innerText(),/宗教文化圏/);
    await shot(page,'religion-initial');const mapBox=(await geometry(page)).map;await shot(page,'religion-initial-map',false,{x:mapBox.left,y:mapBox.top,width:mapBox.width,height:mapBox.height});
    const camera=JSON.parse(await page.locator('[data-asia-atlas]').getAttribute('data-map-camera'));
    await page.locator('[data-culture-point="niigata-shrines"]:visible').click();assert.deepEqual(JSON.parse(await page.locator('[data-asia-atlas]').getAttribute('data-map-camera')),camera);await shot(page,'religion-domestic-reading');
-   await page.locator('.asia-settlement-cases summary').click();await page.locator('[data-settlement-topic="religion"][data-settlement-choice="religion-0"]').click();await ready(page);const detail=page.locator('[data-settlement-detail="religion-0"]');assert(await detail.isVisible());assert.match(await detail.innerText(),/GeoEPR.*全住民.*割合/s);assert.deepEqual(JSON.parse(await page.locator('[data-asia-atlas]').getAttribute('data-map-camera')),camera);assert.equal(await page.locator('.asia-religion-marker:visible').count(),0);await detail.scrollIntoViewIfNeeded();await shot(page,'religion-selected');
-   await page.reload();await ready(page);assert(await detail.isVisible());await page.locator('[data-settlement-reading="religion"] [data-settlement-clear]:visible').click();await ready(page);await religionCards(page);
-   await page.locator('[data-field="industry"]').first().click();await ready(page);await industryLegend(page,eastIndustries);await industryLabels(page);assert.equal(await page.locator('.asia-religion-marker:visible').count(),0);
-   await page.locator('[data-field="population"]').first().click();await ready(page);await page.locator('[data-population-group="religion"]').click();await ready(page);await religionCards(page);return {initial,cards,selectedCamera:camera,regionalReferences:refs,sourceData:'regional official examples plus four independent published composition rows; China questions remain independent'};
+   await page.locator('.asia-settlement-label:visible').filter({hasText:'仏教'}).click();await ready(page);const detail=page.locator('[data-settlement-detail="religion-1"]');assert(await detail.isVisible());assert.match(await detail.innerText(),/GeoEPR.*全住民.*割合/s);assert.deepEqual(JSON.parse(await page.locator('[data-asia-atlas]').getAttribute('data-map-camera')),camera);assert.equal(await page.locator('.asia-religion-marker:visible').count(),0);await religionAreas(page);await cultureReferences(page,'religion');await detail.scrollIntoViewIfNeeded();await shot(page,'religion-selected');
+   await page.reload();await ready(page);assert(await detail.isVisible());await page.locator('[data-settlement-reading="religion"] [data-settlement-clear]:visible').click();await ready(page);await religionAreas(page);
+   await page.locator('[data-field="industry"]').first().click();await ready(page);await industryLegend(page,eastSectorIndustries.filter(i=>i.sectors.includes('manufacturing')));await industryLabels(page);assert.equal(await page.locator('.asia-religion-marker:visible').count(),0);
+   await page.locator('[data-field="population"]').first().click();await ready(page);await page.locator('[data-population-group="religion"]').click();await ready(page);await religionAreas(page);return {initial,areas,selectedCamera:camera,regionalReferences:refs,sourceData:'regional official examples plus four independent published composition rows; China questions remain independent'};
   });
   await run('climate',async page=>{
-   await open(page,'nature');const initial=await layout(page),before=await stations(page);assert(before.length>0);await shot(page,'climate-initial');
+   await open(page,'nature');const initial=await layout(page),before=await stations(page);assert.equal(before.length,13);const physicalNames=await page.locator('.asia-geographic-name:visible').allTextContents();assert(physicalNames.includes('チベット高原'));assert(physicalNames.every(n=>['チベット高原','四川盆地','華北平原','モンゴル高原','北アルプス','中央山脈'].includes(n)));await shot(page,'climate-initial');
    await page.locator('[data-station="tokyo"]').click();await ready(page);const selected=page.locator('[data-city-panel="tokyo"]');assert.equal(await selected.isVisible(),true);assert.match(await selected.locator('h2').textContent(),/東京―日本の雨温図/);assert.match(await selected.locator('[data-city-class-description]').textContent(),/0℃超.*22℃以上.*乾燥帯B/);const text=await selected.textContent();assert.match(text,/秋雨前線.*台風/);assert.match(text,/西高東低.*山地/);assert.match(text,/関東平野/);assert.doesNotMatch(text,/長江|黄河|二期作/);await sameStations(page,before,'Tokyo must preserve all geographic station positions');await shot(page,'climate-tokyo');
    assert.equal(new URL(page.url()).searchParams.get('place'),null);
    assert.match(await selected.locator('[data-climate-place]').textContent(),/東京―日本の雨温図/);
@@ -238,29 +221,24 @@ try{
   });
   await run('population',async page=>{
    await open(page,'population');const initial=await layout(page);const reading=await visibleReading(page,'[data-population-title]','[data-population-takeaway]','[data-population-detail]');assert.match(await page.locator('[data-population-takeaway]').textContent(),/四川盆地.*成都.*重慶.*武漢.*西安/);assert.match(await page.locator('[data-population-detail]').textContent(),/灌漑農業.*工業化/);const helper=page.locator('.population-picker');assert.equal(await helper.isVisible(),true);assert(await helper.evaluate(n=>Boolean(n.closest('[data-asia-map-items]'))));await shot(page,'population-initial');
-   const city=page.locator('[data-map-urban]:visible').first(),id=await city.getAttribute('data-map-urban');await city.click();await ready(page);assert.match(await page.locator('[data-population-title]').textContent(),/人口/);const camera=new URL(page.url()).searchParams;assert(camera.has('z'));await shot(page,'population-selected');await page.goBack();await ready(page);assert.equal(new URL(page.url()).searchParams.has('detail'),false);
+   const city=page.locator('[data-urban-point]:visible').first(),id=await city.getAttribute('data-urban-point');await city.click();await ready(page);assert.match(await page.locator('[data-population-title]').textContent(),/人口/);const camera=new URL(page.url()).searchParams;assert(camera.has('z'));await shot(page,'population-selected');await page.goBack();await ready(page);assert.equal(new URL(page.url()).searchParams.has('detail'),false);
    await page.locator('[data-field="industry"]').first().click();await ready(page);assert.equal(await helper.isVisible(),false);await page.locator('[data-field="population"]').first().click();await ready(page);assert.equal(await helper.isVisible(),true);return {initial,city:id,reading};
   });
-  await run('industry',async page=>{
-   await open(page,'industry');const initial=await layout(page);
-   await industryLegend(page,eastIndustries);assert.equal(new URL(page.url()).searchParams.get('topic'),'east-clusters');
-   const host=page.locator('[data-east-cluster-reading]');assert.equal(await host.isVisible(),true);assert.match(await host.textContent(),/台湾/);assert.equal(await page.locator('[data-east-industry-journey]').isVisible(),false);
-   const initialLabels=await industryLabels(page);await shot(page,'industry-initial');const mapBox=(await geometry(page)).map;await shot(page,'industry-initial-map',false,{x:mapBox.left,y:mapBox.top,width:mapBox.width,height:mapBox.height});
-   await page.locator('[data-industry-cluster="hsinchu"]').click();await ready(page);assert.match(await host.locator('[data-east-cluster-detail]').textContent(),/新竹/);await industryLabels(page);await page.goBack();await ready(page);assert.equal(await host.locator('[data-east-cluster-detail]').isVisible(),false);const selectedLabels={};
-   for(const kind of eastIndustries){
-    await page.locator(`[data-industry-feature="east-${kind.id}"]`).click();await ready(page);await industryLegend(page,[kind]);
-    selectedLabels[kind.id]=await industryLabels(page,kind.id);await shot(page,`industry-${kind.id}-selected`);
+  await run('industry-three-sectors',async page=>{
+   await open(page,'industry');const initial=await layout(page),camera=JSON.parse(await page.locator('[data-asia-atlas]').getAttribute('data-map-camera')),evidence=[];
+   for(const sector of eastSectors){
+    await page.locator(`[data-east-industry-sector="${sector.id}"]`).click();await ready(page);assert.equal(await page.locator('[data-asia-atlas]').getAttribute('data-industry-sector-map'),sector.id);const sectorCamera=JSON.parse(await page.locator('[data-map-camera]').getAttribute('data-map-camera'));assert.deepEqual([sectorCamera.lng.toFixed(5),sectorCamera.lat.toFixed(5),sectorCamera.zoom.toFixed(3)],[camera.lng.toFixed(5),camera.lat.toFixed(5),camera.zoom.toFixed(3)]);
+    const kinds=eastSectorIndustries.filter(i=>i.sectors.includes(sector.id));await industryLegend(page,kinds);const labels=await industryLabels(page),points=await industryPoints(page);assert.deepEqual(points.map(p=>p.id).sort(),eastSectorRows(sector.id).map(s=>s.id).sort());await shot(page,'industry-'+sector.id+'-initial');
+    for(const kind of kinds){await page.locator(`[data-east-industry-kinds="${sector.id}"] [data-industry-feature="east-${kind.id}"]`).click();await ready(page);assert.deepEqual(await industryLabels(page),labels,'selection preserves all label coordinates');assert.deepEqual(await industryPoints(page),points,'selection retains every source point');assert.deepEqual(JSON.parse(await page.locator('[data-map-camera]').getAttribute('data-map-camera')),sectorCamera);assert.match(await page.locator('[data-east-cluster-title]').textContent(),new RegExp(kind.label));}
+    await shot(page,'industry-'+sector.id+'-selected');const selected=eastSectorRows(sector.id).find(s=>s.industries.includes(kinds.at(-1).id));const marker=page.locator(`[data-industry-cluster="${selected.id}"]`);await marker.focus();await page.keyboard.press('Enter');await ready(page);assert.equal(new URL(page.url()).searchParams.get('detail'),selected.id);assert.match(await page.locator('[data-east-cluster-detail]').textContent(),new RegExp(selected.name));assert.deepEqual(await industryLabels(page),labels);await shot(page,'industry-'+sector.id+'-site');
+    await page.locator('[data-east-industry-only]').click();await ready(page);const single=await industryPoints(page);assert(single.length>0&&single.length<points.length);assert(single.every(p=>eastSectorRows(sector.id).find(s=>s.id===p.id).industries.includes(kinds.at(-1).id)));await shot(page,'industry-'+sector.id+'-single');await page.reload();await ready(page);assert.equal(new URL(page.url()).searchParams.get('industryview'),'single');assert.equal(new URL(page.url()).searchParams.get('detail'),selected.id);await page.locator('[data-east-industry-only]').click();await ready(page);sameIndustryPositions(await industryLabels(page),labels,'reloaded label placement');sameIndustryPositions(await industryPoints(page),points,'reloaded source points');await page.locator('[data-east-industry-clear]').click();await ready(page);assert.equal(new URL(page.url()).searchParams.get('detail'),null);await page.goBack();await ready(page);assert.equal(new URL(page.url()).searchParams.get('detail'),selected.id);await page.goForward();await ready(page);assert.equal(new URL(page.url()).searchParams.get('detail'),null);evidence.push({sector:sector.id,kinds:kinds.map(i=>i.id),points:points.length,labels,selectionCamera:'unchanged',journey:['initial','all industry selections','site keyboard selection','single display','reload','restore all','clear','back','forward']});
    }
-   await page.locator('[data-industry-feature="east-chips"]').click();await ready(page);assert.match(await host.locator('[data-east-cluster-title]').textContent(),/半導体/);
-   await page.locator('[data-industry-cluster="hsinchu"]').click();await ready(page);assert.match(await host.locator('[data-east-cluster-detail]').textContent(),/新竹/);await industryLabels(page,'chips');await shot(page,'industry-chips-hsinchu');
-   await page.goBack();await ready(page);assert.equal(await host.locator('[data-east-cluster-detail]').isVisible(),false);
-   await page.locator('[data-field="natural"]').first().click();await ready(page);assert.equal(await host.isVisible(),false);
-   await page.locator('[data-field="industry"]').first().click();await ready(page);assert.equal(await host.isVisible(),true);await industryLabels(page);
-   return {initial,initialLabels,selectedLabels};
+   const statistics=page.locator('[data-east-industry-statistics]');assert(await statistics.isVisible());assert.equal(await statistics.locator('tbody tr').count(),12);assert.match(await statistics.innerText(),/2024年.*GDP.*％.*台湾.*未収録/s);await statistics.scrollIntoViewIfNeeded();await shot(page,'industry-statistics');await page.locator('[data-field="population"]').first().click();await ready(page);assert.equal(await statistics.isVisible(),false);await page.locator('[data-field="industry"]').first().click();await ready(page);await industryLabels(page);const endCamera=JSON.parse(await page.locator('[data-map-camera]').getAttribute('data-map-camera'));assert.deepEqual([endCamera.lng.toFixed(5),endCamera.lat.toFixed(5),endCamera.zoom.toFixed(3)],[camera.lng.toFixed(5),camera.lat.toFixed(5),camera.zoom.toFixed(3)]);return {initial,evidence,statistics:'two source-matched national GDP series; Taiwan and North Korea remain missing'};
   });
   await run('farming',async page=>{
    await open(page,'agriculture');const initial=await layout(page),section=page.locator('[data-east-farm-foundations]');const reading=await visibleReading(page,'[data-farm-insight-title]','[data-farm-insight-lead]','[data-farm-overview-reading]>h3+p');assert.equal(await section.isVisible(),true);const text=await section.textContent();assert.match(text,/供給と用途.*域外輸出入相手.*カロリー構成/s);assert.doesNotMatch(text,/丸太生産量|全商品輸出先|丸太・製材の供給/);assert.match(text,/未収録/);assert.match(await page.locator('[data-farm-overview-reading]').textContent(),/日本.*朝鮮半島.*モンゴル/s);await shot(page,'farming-initial');await section.scrollIntoViewIfNeeded();await shot(page,'farming-statistics');
-   await page.locator('[data-farm-choice="rice"]').first().click();await ready(page);assert.doesNotMatch(await section.textContent(),/丸太生産量|全商品輸出先/);await page.goBack();await ready(page);assert.equal(new URL(page.url()).searchParams.get('topic')??'overview','overview');assert.equal(await page.locator('[data-farm-overview-reading]').isVisible(),true);await page.locator('[data-field="population"]').first().click();await ready(page);assert.equal(await section.isVisible(),false);await page.locator('[data-field="agriculture"]').first().click();await ready(page);assert.equal(await section.isVisible(),true);return {initial,missingDataExplicit:true,reading};
+   assert.deepEqual(await section.locator('[data-east-trade-product]').evaluateAll(nodes=>nodes.map(n=>n.dataset.eastTradeProduct)),['rice','wheat','maize','soybean']);assert.equal(await section.locator('[data-east-export-partners] .east-pie').count(),8);assert.equal(await section.locator('[data-east-world-share] .east-food-band').count(),0,'unacquired calories never receive invented widths');
+   await page.locator('[data-farm-choice="rice"]').first().click();await ready(page);assert.doesNotMatch(await section.textContent(),/丸太生産量|全商品輸出先/);assert.equal(await section.locator('[data-east-export-partners] .east-pie').count(),2);await shot(page,'farming-rice-trade');await page.reload();await ready(page);assert.equal(await section.locator('[data-east-trade-product=rice]').count(),1);await page.goBack();await ready(page);assert.equal(new URL(page.url()).searchParams.get('topic')??'overview','overview');assert.equal(await page.locator('[data-farm-overview-reading]').isVisible(),true);await page.locator('[data-field="population"]').first().click();await ready(page);assert.equal(await section.isVisible(),false);await page.locator('[data-field="agriculture"]').first().click();await ready(page);assert.equal(await section.isVisible(),true);return {initial,missingDataExplicit:true,observedTradeProducts:4,reading};
   });
   await run('rainfall',async page=>{
    await open(page,'nature','?topic=precipitation');await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.contourBandStatus==='ready');const initial=await layout(page);assert.match(await page.locator('[data-hydrology-scene-reading]').textContent(),/山.*内陸/s);assert.match(await page.locator('[data-hydrology-legend-note]').textContent(),/1981–2010.*1991–2020/);const labels=page.locator('.asia-rain-label:visible');const numbers=await labels.allTextContents();assert(numbers.includes('4,500'),'4500 line needs a visible label');assert(numbers.includes('5,500'),'5500 line needs a visible label');const callouts=await rainfallLeaders(page);await shot(page,'rainfall-initial');await page.locator('.asia-rain-label:visible').filter({hasText:'4,500'}).click();await ready(page);await page.waitForFunction(()=>/mm\/年/.test(document.querySelector('[data-hydrology-value]')?.textContent??''));assert.match(await page.locator('[data-hydrology-value]').textContent(),/mm\/年/);await shot(page,'rainfall-selected');await page.goBack();await ready(page);assert.equal(new URL(page.url()).searchParams.has('at'),false);await page.locator('[data-field="population"]').first().click();await ready(page);await page.locator('[data-field="natural"]').first().click();await ready(page);return {initial,labels:numbers,callouts};
@@ -269,7 +247,7 @@ try{
    await open(page,'nature','?topic=basins');const names=['長江','黄河','タリム川','アムール川'];for(const name of names)await page.locator('.asia-river-label').filter({hasText:name}).waitFor({state:'visible'});const initial=await layout(page);assert.equal(await page.locator('[data-basin-shortcuts]').isVisible(),false);assert.match(await page.locator('[data-hydrology-lead]').textContent(),/長江.*黄河.*アムール.*タリム/s);await shot(page,'basins-initial');await page.locator('.asia-river-label').filter({hasText:'黄河'}).click();await ready(page);assert.equal(new URL(page.url()).searchParams.get('detail'),'b-4060007850');assert.match(await page.locator('[data-hydrology-scene-reading]').textContent(),/青海.*渤海.*灌漑/s);await shot(page,'basins-yellow');await page.goBack();await ready(page);assert.equal(new URL(page.url()).searchParams.has('detail'),false);await page.locator('[data-field="agriculture"]').first().click();await ready(page);await page.locator('[data-field="natural"]').first().click();await ready(page);assert.equal(await page.locator('.asia-river-label:visible').filter({hasText:'黄河'}).count(),0);await page.locator('[data-natural-group="water"]').click();await ready(page);await page.locator('[data-water-view="basins"]').click();await ready(page);for(const name of names)assert.equal(await page.locator('.asia-river-label:visible').filter({hasText:name}).count(),1);return {initial,riverNames:names};
   });
   await run('river-name-selection',async page=>{
-   await open(page,'nature','?topic=water');const yellow=page.locator('.asia-river-label:visible').filter({hasText:'黄河'});await yellow.waitFor();const before=JSON.parse(await page.locator('[data-asia-atlas]').getAttribute('data-map-camera'));await shot(page,'water-initial');
+   await open(page,'nature','?topic=water');const yellow=page.locator('.asia-river-label:visible').filter({hasText:'黄河'});await yellow.waitFor();const before=JSON.parse(await page.locator('[data-asia-atlas]').getAttribute('data-map-camera'));assert.equal(await page.locator('.asia-city-name:visible').count(),0);const cityPoints=page.locator('[data-east-water-city]');assert(await cityPoints.count()>0);assert.equal(await cityPoints.first().locator('span').isVisible(),false);await cityPoints.first().focus();assert(await cityPoints.first().locator('span').isVisible());await shot(page,'water-hover-city');await page.locator('[data-map-surface]').focus();assert.equal(await cityPoints.first().locator('span').isVisible(),false);await shot(page,'water-initial');
    await yellow.click();await ready(page);assert.equal(new URL(page.url()).searchParams.get('detail'),'rivers-213');assert.match(await page.locator('[data-hydrology-scene-reading]').textContent(),/青海.*渤海.*灌漑/s);assert.deepEqual(JSON.parse(await page.locator('[data-asia-atlas]').getAttribute('data-map-camera')),before);await shot(page,'water-yellow');
    await page.reload();await ready(page);assert.equal(new URL(page.url()).searchParams.get('detail'),'rivers-213');await page.goBack();await ready(page);assert.equal(new URL(page.url()).searchParams.has('detail'),false);
    await page.locator('[data-field="agriculture"]').first().click();await ready(page);await page.locator('[data-field="natural"]').first().click();await ready(page);return {river:'rivers-213',camera:'unchanged',reload:true,back:true};
@@ -285,19 +263,19 @@ try{
   });
   await run('forestry',async page=>{
    await open(page,'agriculture');await page.locator('[data-farm-group="forestry"]').click();await ready(page);await page.locator('[data-east-forest-flows] .east-bar').first().waitFor();
-   await shot(page,'forest-map');const section=page.locator('[data-east-farm-foundations]');await section.scrollIntoViewIfNeeded();await shot(page,'forest-statistics');
+   assert.match(await page.locator('[data-farming-takeaway]').textContent(),/中国東北部.*南部.*朝鮮半島.*モンゴル/);assert.match(await page.locator('[data-east-forest-reason]').textContent(),/乾燥内陸.*水の制約/);const sites=page.locator('[data-forest-site]:visible');assert.equal(await sites.count(),5);const before=JSON.parse(await page.locator('[data-asia-atlas]').getAttribute('data-map-camera'));await shot(page,'forest-map');await sites.filter({hasText:'石巻工場'}).click();await ready(page);assert.equal(new URL(page.url()).searchParams.get('place'),'JPN');assert(page.url().includes('/east-asia/'));assert.match(await page.locator('[data-farming-takeaway]').textContent(),/天然林と人工林/);assert.deepEqual(JSON.parse(await page.locator('[data-asia-atlas]').getAttribute('data-map-camera')),before);assert.equal(await sites.count(),5);await shot(page,'forest-japan-selected');await page.reload();await ready(page);assert.equal(new URL(page.url()).searchParams.get('place'),'JPN');await page.goBack();await ready(page);const section=page.locator('[data-east-farm-foundations]');await section.scrollIntoViewIfNeeded();await shot(page,'forest-statistics');
    assert.match(await section.innerText(),/北朝鮮.*モンゴル/s);assert.match(await page.locator('[data-east-export-partners]').innerText(),/HS44.*2023年/s);
-   assert.match(await page.locator('[data-east-world-share]').innerText(),/森林面積.*千ha/s);assert.equal(await section.locator('.east-pie').count(),0);
-   await page.goBack();await ready(page);return {reporters:6,woodPartners:'missing; all-goods pie removed'};
+   assert.match(await page.locator('[data-east-world-share]').innerText(),/森林面積.*2023年.*千ha/s);assert.deepEqual(await section.locator('[data-east-trade-product]').evaluateAll(nodes=>nodes.map(n=>n.dataset.eastTradeProduct)),['sawnwood','coniferous-roundwood']);assert.equal(await section.locator('.east-pie').count(),4,'only the two verified wood product tables supply import/export pies');assert.match(await section.innerText(),/未収録.*地域全体の総額ではありません/s);assert.doesNotMatch(await section.innerText(),/全商品輸出先/);
+   await page.goBack();await ready(page);return {reporters:6,woodPartners:['HS4407','HS440320'],year:2023,regionalCoverage:'observed reporters only; missing reporters are not zero'};
   });
   await run('landform-extents',async page=>{
    await open(page,'nature','?topic=landform');await page.locator('.asia-landform-label:visible').filter({hasText:'四川盆地'}).waitFor();
-   await shot(page,'landforms-initial');const before=await stations(page);
-   await page.locator('.asia-landform-label:visible').filter({hasText:'四川盆地'}).click();await ready(page);assert.equal(new URL(page.url()).searchParams.get('detail'),'sichuan-basin');await shot(page,'landforms-sichuan');
+   const named=await page.locator('.asia-geographic-name:visible,.asia-river-label:visible').allTextContents();for(const name of ['長江','黄河','タリム川','アムール川','黒潮','親潮','対馬暖流','北西季節風','黄海','東シナ海','日本海','太平洋'])assert(named.includes(name),'major proper name is visible: '+name);await shot(page,'landforms-initial');const camera=JSON.parse(await page.locator('[data-asia-atlas]').getAttribute('data-map-camera'));
+   await page.locator('.asia-landform-label:visible').filter({hasText:'四川盆地'}).click();await ready(page);assert.equal(new URL(page.url()).searchParams.get('detail'),'sichuan-basin');assert.equal(new URL(page.url()).searchParams.get('place'),null);assert.deepEqual(JSON.parse(await page.locator('[data-asia-atlas]').getAttribute('data-map-camera')),camera);await shot(page,'landforms-sichuan');
    await page.reload();await ready(page);assert.equal(new URL(page.url()).searchParams.get('detail'),'sichuan-basin');
    await page.locator('[data-field="population"]').first().click();await ready(page);await page.locator('[data-field="natural"]').first().click();await ready(page);return {extents:9,geometry:'unmodified Natural Earth geographic region polygons'};
   });
   await context.close();
  }
  results.status=results.cases.every(c=>c.passed)&&results.externalAttempts.length===0?'passed':'failed';await save();assert.equal(results.status,'passed','See results.json and failure images');
-}finally{await save();await browser?.close();await new Promise(resolve=>host?.server.close(resolve)??resolve());}
+}finally{await save();await browser?.close();await Promise.all([host,baselineHost].filter(Boolean).map(h=>new Promise(resolve=>h.server.close(resolve))));}

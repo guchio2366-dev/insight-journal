@@ -1,0 +1,69 @@
+{
+  "sourceFile": "asia-industry-v1/national.json.gz",
+  "sourceSha256": "366005795594183a68458534434a2b677b2e68a7446338ffa23f24774b4615c4",
+  "source": "World Bank World Development Indicators",
+  "license": "CC BY 4.0",
+  "retrievedAt": "2026-09-25",
+  "year": 2024,
+  "countries": [
+    {
+      "code": "CHN",
+      "name": "中国"
+    },
+    {
+      "code": "JPN",
+      "name": "日本"
+    },
+    {
+      "code": "KOR",
+      "name": "韓国"
+    },
+    {
+      "code": "TWN",
+      "name": "台湾"
+    },
+    {
+      "code": "MNG",
+      "name": "モンゴル"
+    },
+    {
+      "code": "PRK",
+      "name": "北朝鮮"
+    }
+  ],
+  "series": [
+    {
+      "id": "manufacturing",
+      "label": "製造業の付加価値",
+      "unit": "GDP比 %",
+      "metadataUrl": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NV.IND.MANF.ZS",
+      "sourceUrl": "https://api.worldbank.org/v2/country/AFG;BGD;BRN;BTN;CHN;IDN;IND;JPN;KAZ;KGZ;KHM;KOR;LAO;LKA;MDV;MMR;MNG;MYS;NPL;PAK;PHL;PRK;SGP;THA;TJK;TLS;TKM;UZB;VNM/indicator/NV.IND.MANF.ZS?format=json&date=2010:2024&per_page=20000&source=2",
+      "sourceUpdated": "2026-07-13",
+      "values": {
+        "CHN": 24.8415841892631,
+        "JPN": 18.817440470747,
+        "KOR": 26.6179725157922,
+        "TWN": null,
+        "MNG": 5.57316319739662,
+        "PRK": null
+      }
+    },
+    {
+      "id": "services",
+      "label": "サービス業の付加価値",
+      "unit": "GDP比 %",
+      "metadataUrl": "https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NV.SRV.TOTL.ZS",
+      "sourceUrl": "https://api.worldbank.org/v2/country/AFG;BGD;BRN;BTN;CHN;IDN;IND;JPN;KAZ;KGZ;KHM;KOR;LAO;LKA;MDV;MMR;MNG;MYS;NPL;PAK;PHL;PRK;SGP;THA;TJK;TLS;TKM;UZB;VNM/indicator/NV.SRV.TOTL.ZS?format=json&date=2010:2024&per_page=20000&source=2",
+      "sourceUpdated": "2026-07-13",
+      "values": {
+        "CHN": 56.831400416389,
+        "JPN": 71.4295377357598,
+        "KOR": 57.5005082410932,
+        "TWN": null,
+        "MNG": 44.3407185995683,
+        "PRK": null
+      }
+    }
+  ],
+  "method": "Copy the same-year national observations only. No replacement year, neighbouring country, point-based allocation or imputation. These are GDP composition references, not the quantities of the mapped industrial sites."
+}

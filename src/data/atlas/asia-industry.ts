@@ -1,4 +1,4 @@
-import {eastClusters} from './east-asia-industry-clusters.ts';
+import {eastSectorSites,eastSectorRows,eastIndustrySector} from './east-asia-industry-sectors.ts';
 import type {AsiaState} from '../../lib/atlas-asia-state';
 export type IndustryTopic={id:string;title:string;parent:string;kind:'national'|'admin'|'power'|'steel'|'trade'|'regional'|'clusters';unit:string;year:string;source:string;note:string;country?:string;fuel?:string};
 export type IndustryCountryScope={label:string;countries:{code:string;name:string}[];regionalTrade?:boolean;readings?:Record<string,{title:string;reading:string;scope:string;source:{label:string;url:string}}>};
@@ -34,7 +34,7 @@ export function normalizeIndustryState(region:IndustryRegion,state:AsiaState,dat
  if(state.topic&&state.topic!==topic.id)state={...state,detail:null,point:null};
  const candidate=state.detail&&isIndustryDetailId(state.detail)?state.detail:null;
  if(topic.kind==='regional')return {...state,topic:topic.id,place:state.place&&region.countries.includes(state.place)?state.place:null,detail:candidate,city:null};
- if(topic.kind==='clusters')return {...state,topic:topic.id,city:null,detail:eastClusters.some(c=>c.id===candidate&&(!state.place||c.country===state.place))?candidate:null};
+ if(topic.kind==='clusters'){const sector=eastIndustrySector(topic.id,state.sector),kind=topic.id.slice(5),item=eastSectorSites.find(c=>c.id===candidate&&eastSectorRows(sector).includes(c)&&(!state.place||c.country===state.place));return {...state,topic:topic.id,city:null,only:Boolean(state.only&&!['clusters','resources','services'].includes(kind)),detail:item&&(['clusters','resources','services'].includes(kind)||item.industries.includes(kind))?candidate:null};}
  if(topic.kind==='trade')return {...state,topic:topic.id,city:null};
  // Keep a bounded URL candidate until the lazy dataset can validate it. No
  // facility names, coordinates or selections are displayed from this ID alone.
