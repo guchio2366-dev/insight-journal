@@ -1,7 +1,7 @@
 name: Review Japan national atlas
 on:
   pull_request:
-    branches: [main, codex/japan-atlas-preview]
+    branches: [main, codex/japan-atlas-preview, codex/regional-integration-validation-20261013]
     paths:
       - '.github/workflows/atlas-japan-pc-review.yml'
       - 'scripts/capture-japan-review.mjs'

@@ -19,7 +19,7 @@ export function japanFoundationPresentation(state:JapanState,nature?:JapanNature
    const areaPoints=series.rows.filter(r=>r.value!==null&&(r.point||r.prefecture&&prefPoints[r.prefecture]));
    return {title:series.title,period:series.year+'・'+series.grain,method:series.method+' '+series.coverage,
     reading:{title:series.title,overview:`${series.grain}ごとに公表された${series.measure}。${series.coverage}`,reason:`点は集計地域を示す参照位置です。${series.method} 地域内の産地や農場の位置・密度は示しません。`,gap:`${series.year}、単位${series.unit}。米・小麦・豚の2020年モデル面とは指標・粒度が異なるため、この表示ではモデル面を重ねません。`},
-    legend:[{label:`集計地域の${series.measure}（${series.unit}・${series.year}）`,color:product.color},{label:visible?'同一資料内の円面積で比較（最小直径7px）。丸めた0は白抜き、未掲載・秘匿は数量円なし':'この品目は表示OFF',color:visible?product.color:'#b5bda1'}],
+    legend:[{label:`集計地域の${series.measure}（${series.unit}・${series.year}）`,color:product.color},{label:visible?(series.mapNote??'同一資料内の円面積で比較（最小直径7px）。丸めた0は白抜き、未掲載・秘匿は数量円なし'):'この品目は表示OFF',color:visible?product.color:'#b5bda1'}],
     labels:visible?areaPoints.map(r=>({id:'farm-'+r.id,title:r.name,fullTitle:r.name+' '+formatFarmRegionalValue(r,series.unit),subtitle:formatFarmRegionalValue(r,series.unit),point:r.point??prefPoints[r.prefecture!]!,color:product.color,kind:'feature',selected:state.farmRegion===r.id})):[],
     selection:chosen?{title:chosen.name+'｜'+formatFarmRegionalValue(chosen,series.unit),body:`${series.year}・${series.grain}の${series.measure}。${series.coverage} ${series.method}`,source:series.source}:undefined};
   }

@@ -1,0 +1,302 @@
+[
+  {
+    "id": "JP-36",
+    "name": "徳島県",
+    "cabbage": {
+      "entities": "336",
+      "area": "18003.07"
+    },
+    "tomato": {
+      "entities": "296",
+      "area": "4516.38"
+    }
+  },
+  {
+    "id": "36201",
+    "name": "徳島市",
+    "cabbage": {
+      "entities": "31",
+      "area": "1660"
+    },
+    "tomato": {
+      "entities": "25",
+      "area": "392.95"
+    }
+  },
+  {
+    "id": "36202",
+    "name": "鳴門市",
+    "cabbage": {
+      "entities": "7",
+      "area": "78"
+    },
+    "tomato": {
+      "entities": "6",
+      "area": "81.86"
+    }
+  },
+  {
+    "id": "36203",
+    "name": "小松島市",
+    "cabbage": {
+      "entities": "15",
+      "area": "88"
+    },
+    "tomato": {
+      "entities": "17",
+      "area": "849.57"
+    }
+  },
+  {
+    "id": "36204",
+    "name": "阿南市",
+    "cabbage": {
+      "entities": "16",
+      "area": "388"
+    },
+    "tomato": {
+      "entities": "16",
+      "area": "228.22"
+    }
+  },
+  {
+    "id": "36205",
+    "name": "吉野川市",
+    "cabbage": {
+      "entities": "27",
+      "area": "x"
+    },
+    "tomato": {
+      "entities": "15",
+      "area": "83.01"
+    }
+  },
+  {
+    "id": "36206",
+    "name": "阿波市",
+    "cabbage": {
+      "entities": "93",
+      "area": "12144"
+    },
+    "tomato": {
+      "entities": "62",
+      "area": "1513.76"
+    }
+  },
+  {
+    "id": "36207",
+    "name": "美馬市",
+    "cabbage": {
+      "entities": "17",
+      "area": "104"
+    },
+    "tomato": {
+      "entities": "30",
+      "area": "194.36"
+    }
+  },
+  {
+    "id": "36208",
+    "name": "三好市",
+    "cabbage": {
+      "entities": "11",
+      "area": "x"
+    },
+    "tomato": {
+      "entities": "18",
+      "area": "108.3"
+    }
+  },
+  {
+    "id": "36301",
+    "name": "勝浦町",
+    "cabbage": {
+      "entities": "5",
+      "area": "27"
+    },
+    "tomato": {
+      "entities": "8",
+      "area": "46.5"
+    }
+  },
+  {
+    "id": "36302",
+    "name": "上勝町",
+    "cabbage": {
+      "entities": "1",
+      "area": "x"
+    },
+    "tomato": {
+      "entities": "1",
+      "area": "x"
+    }
+  },
+  {
+    "id": "36321",
+    "name": "佐那河内村",
+    "cabbage": {
+      "entities": "2",
+      "area": "x"
+    },
+    "tomato": {
+      "entities": "2",
+      "area": "x"
+    }
+  },
+  {
+    "id": "36341",
+    "name": "石井町",
+    "cabbage": {
+      "entities": "41",
+      "area": "1197"
+    },
+    "tomato": {
+      "entities": "13",
+      "area": "211.16"
+    }
+  },
+  {
+    "id": "36342",
+    "name": "神山町",
+    "cabbage": {
+      "entities": "9",
+      "area": "23"
+    },
+    "tomato": {
+      "entities": "8",
+      "area": "x"
+    }
+  },
+  {
+    "id": "36368",
+    "name": "那賀町",
+    "cabbage": {
+      "entities": "1",
+      "area": "x"
+    },
+    "tomato": {
+      "entities": "-",
+      "area": "-"
+    }
+  },
+  {
+    "id": "36383",
+    "name": "牟岐町",
+    "cabbage": {
+      "entities": "2",
+      "area": "x"
+    },
+    "tomato": {
+      "entities": "1",
+      "area": "x"
+    }
+  },
+  {
+    "id": "36387",
+    "name": "美波町",
+    "cabbage": {
+      "entities": "5",
+      "area": "x"
+    },
+    "tomato": {
+      "entities": "6",
+      "area": "x"
+    }
+  },
+  {
+    "id": "36388",
+    "name": "海陽町",
+    "cabbage": {
+      "entities": "3",
+      "area": "5"
+    },
+    "tomato": {
+      "entities": "3",
+      "area": "14"
+    }
+  },
+  {
+    "id": "36401",
+    "name": "松茂町",
+    "cabbage": {
+      "entities": "-",
+      "area": "-"
+    },
+    "tomato": {
+      "entities": "-",
+      "area": "-"
+    }
+  },
+  {
+    "id": "36402",
+    "name": "北島町",
+    "cabbage": {
+      "entities": "3",
+      "area": "25"
+    },
+    "tomato": {
+      "entities": "2",
+      "area": "x"
+    }
+  },
+  {
+    "id": "36403",
+    "name": "藍住町",
+    "cabbage": {
+      "entities": "9",
+      "area": "413"
+    },
+    "tomato": {
+      "entities": "8",
+      "area": "129"
+    }
+  },
+  {
+    "id": "36404",
+    "name": "板野町",
+    "cabbage": {
+      "entities": "7",
+      "area": "33"
+    },
+    "tomato": {
+      "entities": "9",
+      "area": "153.3"
+    }
+  },
+  {
+    "id": "36405",
+    "name": "上板町",
+    "cabbage": {
+      "entities": "6",
+      "area": "x"
+    },
+    "tomato": {
+      "entities": "4",
+      "area": "x"
+    }
+  },
+  {
+    "id": "36468",
+    "name": "つるぎ町",
+    "cabbage": {
+      "entities": "7",
+      "area": "513"
+    },
+    "tomato": {
+      "entities": "4",
+      "area": "x"
+    }
+  },
+  {
+    "id": "36489",
+    "name": "東みよし町",
+    "cabbage": {
+      "entities": "18",
+      "area": "x"
+    },
+    "tomato": {
+      "entities": "38",
+      "area": "314.25"
+    }
+  }
+]

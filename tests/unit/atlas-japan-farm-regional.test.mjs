@@ -3,13 +3,46 @@ import assert from 'node:assert/strict';
 import {japanFarmRegionalSeries,japanFarmRegionalSeriesById,formatFarmRegionalValue,farmRegionalDiameter} from '../../src/data/atlas/japan-farm-regional-statistics.ts';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
 import {readJapanState,writeJapanState} from '../../src/lib/atlas-japan-state.ts';
 
 const url=query=>new URL('https://example.org/insight-journal/atlas/japan/agriculture/'+query);
 const context={prefectures:[],cities:[],sites:[],agricultureSites:[]};
 
+test('徳島の全25地域・2品目をLibrary全行抽出と照合し、原本hashとは区別する',()=>{
+ execFileSync('python3',['scripts/prepare-japan-tokushima-2025.py','--check']);
+ const selected=JSON.parse(readFileSync(new URL('../../src/data/atlas/japan-farm-tokushima-2025.json',import.meta.url)));
+ const audit=JSON.parse(readFileSync(new URL('../../data-source/atlas/japan-farm-regional/tokushima-2025-audit.json',import.meta.url)));
+ assert.equal(audit.rawFile,null);assert.equal(audit.rawSha256,null);assert.equal(audit.library.hasMore,false);assert.equal(audit.library.totalLines,55);
+ for(const [product,total,subtotal,hidden,absent,entities] of [['cabbage',18003.07,16698,9,1,336],['tomato',4516.38,4320.24,8,2,296]]){
+  const series=japanFarmRegionalSeriesById(product+'-tokushima-2025');assert.equal(series.unit,'a');assert.match(series.year,/2025/);assert.equal(series.rows.length,25);
+  assert.equal(series.rows[0].value,total);assert.equal(series.rows[0].name,'徳島県計');assert.equal(series.rows[0].prefecture,'JP-36');
+  const cities=series.rows.slice(1);assert.equal(cities.filter(r=>r.value!==null).length,14);assert.equal(cities.filter(r=>r.status==='suppressed').length,hidden);assert.equal(cities.filter(r=>r.status==='no-occurrence').length,absent);
+  assert.equal(cities.reduce((n,r)=>n+Math.round((r.value??0)*100),0),Math.round(subtotal*100));
+  assert.equal(selected.slice(1).reduce((n,r)=>n+(r[product].entities==='-'?0:Number(r[product].entities)),0),entities);
+  for(const input of selected){const row=series.rows.find(r=>r.id===input.id),token=input[product].area;assert(row);assert.equal(row.value,['x','-'].includes(token)?null:Number(token));assert.equal(row.status,token==='x'?'suppressed':token==='-'?'no-occurrence':undefined);}
+  for(const row of cities){assert(!row.point&&!row.prefecture);assert(row.mapOmitted);}
+ }
+ const tomato=japanFarmRegionalSeriesById('tomato-tokushima-2025');
+ assert.equal(formatFarmRegionalValue(tomato.rows.find(r=>r.id==='36203'),'a'),'849.57a');
+ assert.equal(formatFarmRegionalValue(tomato.rows.find(r=>r.id==='36368'),'a'),'該当なし（－）');
+ assert.equal(formatFarmRegionalValue(tomato.rows.find(r=>r.id==='36302'),'a'),'秘匿（X）');
+});
+
+test('徳島は確認済みの県参照点だけを描き、市町村の数値・秘匿・該当なしを表選択で保持する',async()=>{
+ const {build}=await import('esbuild');const bundle=await build({entryPoints:['src/scripts/atlas-japan-foundation-presentations.ts'],bundle:true,write:false,format:'esm',platform:'node'});
+ const {japanFoundationPresentation}=await import('data:text/javascript;base64,'+Buffer.from(bundle.outputFiles[0].text).toString('base64'));
+ const state=readJapanState(url('?topic=tomato&farmData=tomato-tokushima-2025&farmRegion=36203&lng=134&lat=34&z=6'),context);
+ const view=japanFoundationPresentation(state,null,{'JP-36':[134.56,34.07]});
+ assert.deepEqual(view.labels.map(r=>r.id),['farm-JP-36']);assert.match(view.labels[0].subtitle,/4,516.38a/);assert.match(view.selection.title,/小松島市.*849.57a/);assert.match(view.legend[1].label,/県.*計のみ/);
+ for(const [id,expected] of [['36302','秘匿'],['36368','該当なし']]){
+  const next=readJapanState(writeJapanState(url(''),{...state,farmRegion:id}),context);assert.deepEqual(next.camera,state.camera);
+  assert.match(japanFoundationPresentation(next).selection.title,new RegExp(expected));assert.equal(japanFoundationPresentation({...next,showCrops:false}).labels.length,0);
+ }
+});
+
 test('公表数量は出典の年・単位・集計地域を保持し、掲載外と丸めた0を区別する',()=>{
- assert.equal(japanFarmRegionalSeries.length,8);
+ assert.equal(japanFarmRegionalSeries.length,10);
  const potato=japanFarmRegionalSeriesById('potato-spring-2025');
  assert.equal(potato.rows.length,15);assert.equal(potato.rows.find(r=>r.id==='JP-01').value,1692000);
  assert.equal(potato.rows.find(r=>r.id==='JP-42').value,64400);assert.equal(potato.rows.find(r=>r.id==='JP-47'),undefined);
@@ -23,7 +56,7 @@ test('公表数量は出典の年・単位・集計地域を保持し、掲載�
  assert.equal(japanFarmRegionalSeriesById('milk-ikeda-2020').rows[0].value,2931);
  assert.equal(japanFarmRegionalSeriesById('beef-ikeda-2020').rows[0].value,6151);
  assert.notEqual(japanFarmRegionalSeriesById('milk-ikeda-2020').measure,'生乳生産量');
- for(const series of japanFarmRegionalSeries){assert(series.source.startsWith('https://'));assert(series.coverage);assert(series.year);assert(series.method);assert(series.rows.length);for(const row of series.rows){if(row.value===null){assert(['suppressed','not-reported'].includes(row.status));}else{assert(Number.isFinite(row.value)&&row.value>=0);assert(row.point||row.prefecture);}}}
+ for(const series of japanFarmRegionalSeries){assert(series.source.startsWith('https://'));assert(series.coverage);assert(series.year);assert(series.method);assert(series.rows.length);for(const row of series.rows){if(row.value===null){assert(['suppressed','not-reported','no-occurrence'].includes(row.status));}else{assert(Number.isFinite(row.value)&&row.value>=0);assert(row.point||row.prefecture||row.mapOmitted);}}}
 });
 
 test('数量円は未知値を0にせず、同一系列内で面積を比較し、全0でも有限になる',()=>{

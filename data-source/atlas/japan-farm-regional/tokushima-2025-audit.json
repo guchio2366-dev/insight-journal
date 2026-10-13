@@ -1,0 +1,347 @@
+{
+  "schemaVersion": 1,
+  "investigated": "2026-10-13",
+  "baseCommit": "831bba225b372dd63c7e7d663b38305dd10feb62",
+  "fixedJapanHead": "4f89febf0b35657f169a58223de6d5e5270862dd",
+  "officialUrl": "https://www.pref.tokushima.lg.jp/file/attachment/1048674.xlsx",
+  "indexUrl": "https://www.pref.tokushima.lg.jp/statistics/year/afc/7240681/",
+  "library": {
+    "libraryFileId": "libfile_e3d1642962c88191a1a186a6a850da6e",
+    "fileId": "file_00000000e924820b9a7b59bea5eb119d",
+    "fileName": "(11)販売目的の野菜類の作物別作付（栽培）経営体数と作付（栽培）面積.xlsx",
+    "reportedSizeBytes": 21087,
+    "versionId": null,
+    "startLine": 1,
+    "endLine": 55,
+    "totalLines": 55,
+    "hasMore": false,
+    "sheet": "2(11)",
+    "transferAttempts": 1,
+    "transferError": "library file transfer failed: download failed",
+    "consumerLocalFileExists": false
+  },
+  "rawFile": null,
+  "rawSha256": null,
+  "extraction": {
+    "file": "tokushima-2025-vegetables.library.txt",
+    "kind": "Library full extracted text, not XLSX bytes",
+    "sha256": "b5897ceae94dcf50d3f1fe66dd5f137a77be91d4454449b7bbab190af7feda57",
+    "serialization": "content.join('\\n') + '\\n', UTF-8",
+    "csvIndexRows": [
+      0,
+      32
+    ],
+    "csvColumns": {
+      "municipalityCode": "Unnamed: 0",
+      "municipalityName": "Unnamed: 1",
+      "cabbageEntities": "Unnamed: 13",
+      "cabbageArea": "Unnamed: 14",
+      "tomatoEntities": "Unnamed: 29",
+      "tomatoArea": "Unnamed: 30"
+    }
+  },
+  "interpretation": {
+    "censusYear": 2025,
+    "referenceDate": "2025-02-01",
+    "yearEvidence": "公式索引。XLSX抽出表のタイトル自身には年の記載なし。",
+    "period": "調査期日までの過去1年間",
+    "unit": "a",
+    "areaType": "販売目的の野菜類の作付（栽培）延べ面積。収穫重量でも圃場の占有面積でもない。",
+    "symbolSource": "https://www.maff.go.jp/j/tokei/kouhyou/noucen/gaiyou/index.html",
+    "questionnaireSource": "https://www.maff.go.jp/j/tokei/kouhyou/noucen/gaiyou/attach/pdf/index-23.pdf",
+    "symbols": {
+      "0": "単位未満の丸め値。今回採用する面積セルにはなし。",
+      "x": "秘匿：null/suppressed",
+      "-": "調査したが事実なし：null/no-occurrence",
+      "…": "不詳又は調査を欠く。今回採用する面積セルにはなし。"
+    },
+    "tomatoMiniCoverage": "原表はトマト表記。ミニトマトの内訳・扱いはこの提供表と確認した調査票に明記されず、推測しない。"
+  },
+  "products": {
+    "cabbage": {
+      "prefectureArea": 18003.07,
+      "prefectureEntities": 336,
+      "municipalities": 24,
+      "numericMunicipalities": 14,
+      "suppressedMunicipalities": 9,
+      "noOccurrenceMunicipalities": 1,
+      "publishedMunicipalitySubtotal": 16698,
+      "municipalityEntitiesSum": 336
+    },
+    "tomato": {
+      "prefectureArea": 4516.38,
+      "prefectureEntities": 296,
+      "municipalities": 24,
+      "numericMunicipalities": 14,
+      "suppressedMunicipalities": 8,
+      "noOccurrenceMunicipalities": 2,
+      "publishedMunicipalitySubtotal": 4320.24,
+      "municipalityEntitiesSum": 296
+    }
+  },
+  "map": {
+    "scope": "県計のみ既存JP-36参照点。24市町村の数値は表のみ。",
+    "municipalPointsVerified": false,
+    "sourceCandidate": "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P05-v3_0.html",
+    "candidateDescription": "国土数値情報・2022年市町村役場等及び公的集会施設。案内の書誌のみ確認。",
+    "candidateLocalGetAttempts": 1,
+    "candidateLocalGetError": "URLError <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "candidateRawFile": null,
+    "candidateRawSha256": null,
+    "note": "座標未取得。再試行・迂回・位置推測はしない。行政面のぼかし、未掲載地域の補間、県計から秘匿市町村の逆算はしない。",
+    "newSourceInvestigations": [
+      {
+        "url": "https://www.pref.tokushima.lg.jp/file/attachment/1049102.pdf",
+        "indexUrl": "https://www.pref.tokushima.lg.jp/statistics/sougou/yearbooks/7312624/",
+        "title": "令和6年徳島県統計書・土地気象",
+        "webRead": "20頁PDFは開けたが抽出テキストで座標を確認できず。web screenshotの戻り値は画像のない参照文字列で実見できず。",
+        "localGetAttempts": 1,
+        "localGetError": "URLError <urlopen error Tunnel connection failed: 403 Forbidden>",
+        "coordinatesVerified": false,
+        "retry": false
+      },
+      {
+        "url": "https://www.gsi.go.jp/common/000238259.pdf",
+        "indexUrl": "https://www.gsi.go.jp/kihonjohochousa/gazetteer.html",
+        "title": "地名集日本2021",
+        "webAttempts": 2,
+        "webError": "400 Timeout fetching",
+        "localGetAttempts": 0,
+        "coordinatesVerified": false,
+        "retry": false
+      },
+      {
+        "url": "https://www.gsi.go.jp/common/000238260.pdf",
+        "indexUrl": "https://www.gsi.go.jp/kihonjohochousa/gazetteer.html",
+        "title": "地名集日本2007",
+        "webRead": "本文の一部に度分単位の自治体座標を確認したが、対象17件・測地系・現在の役場との関係は未確認。",
+        "localGetAttempts": 1,
+        "localGetError": "URLError <urlopen error Tunnel connection failed: 403 Forbidden>",
+        "coordinatesVerified": false,
+        "retry": false
+      },
+      {
+        "url": "https://opendata.pref.tokushima.lg.jp/dataset/4527/resource/13740/362069_%E5%85%AC%E5%85%B1%E6%96%BD%E8%A8%AD%E4%B8%80%E8%A6%A7.csv",
+        "indexUrl": "https://opendata.pref.tokushima.lg.jp/dataset/4527.html",
+        "previewUrl": "https://opendata.pref.tokushima.lg.jp/dataset/4527/resource/13740/content.html",
+        "title": "阿波市公共施設一覧",
+        "webRead": "403以前に公式プレビューで阿波市役所の数値を確認。測地系は未確認。CSVへのwebアクセスは400 OK。",
+        "localGetAttempts": 1,
+        "localGetError": "URLError <urlopen error Tunnel connection failed: 403 Forbidden>",
+        "coordinatesVerified": false,
+        "retry": false
+      },
+      {
+        "url": "https://opendata.pref.tokushima.lg.jp/dataset/4519.html",
+        "previewUrl": "https://opendata.pref.tokushima.lg.jp/dataset/4519/resource/14541/content.html",
+        "title": "小松島市公共施設一覧",
+        "webRead": "公式プレビューの市役所庁舎行で数値を確認。測地系は未確認。",
+        "localGetAttempts": 0,
+        "coordinatesVerified": false
+      },
+      {
+        "url": "https://opendata.pref.tokushima.lg.jp/dataset/5119.html",
+        "previewUrl": "https://opendata.pref.tokushima.lg.jp/dataset/5119/resource/16939/content.html",
+        "title": "北島町公共施設一覧（令和7年4月1日時点）",
+        "webRead": "公式プレビューの役場行で数値を確認。測地系は未確認。",
+        "localGetAttempts": 0,
+        "coordinatesVerified": false
+      },
+      {
+        "url": "https://opendata.pref.tokushima.lg.jp/dataset/4545.html",
+        "previewUrl": "https://opendata.pref.tokushima.lg.jp/dataset/4545/resource/13793/content.html",
+        "title": "公共施設一覧（藍住町）",
+        "webRead": "役場の緯度・経度欄が両方空欄。0化・住所からの推定はしない。",
+        "localGetAttempts": 0,
+        "coordinatesVerified": false
+      },
+      {
+        "url": "https://opendata.pref.tokushima.lg.jp/dataset/4685.html",
+        "title": "徳島県公共施設一覧（自治体標準オープンデータセット）",
+        "webRead": "案内は県庁舎・県立施設等の一覧。17市町村の役場座標を網羅する資料とは確認できず。",
+        "localGetAttempts": 0,
+        "coordinatesVerified": false
+      },
+      {
+        "url": "https://dataset.address-br.digital.go.jp/",
+        "indexUrl": "https://www.digital.go.jp/policies/base_registry_address",
+        "title": "デジタル庁アドレス・ベース・レジストリ",
+        "webRead": "公式政策ページから入口を確認したが、データサイトのweb抽出は0行。市区町村参照位置データ本体・測地系は未確認。",
+        "localGetAttempts": 1,
+        "localGetError": "URLError <urlopen error Tunnel connection failed: 403 Forbidden>",
+        "coordinatesVerified": false,
+        "retry": false
+      }
+    ],
+    "requiredMunicipalities": [
+      {
+        "id": "36201",
+        "name": "徳島市",
+        "cabbageNumeric": true,
+        "tomatoNumeric": true
+      },
+      {
+        "id": "36202",
+        "name": "鳴門市",
+        "cabbageNumeric": true,
+        "tomatoNumeric": true
+      },
+      {
+        "id": "36203",
+        "name": "小松島市",
+        "cabbageNumeric": true,
+        "tomatoNumeric": true
+      },
+      {
+        "id": "36204",
+        "name": "阿南市",
+        "cabbageNumeric": true,
+        "tomatoNumeric": true
+      },
+      {
+        "id": "36205",
+        "name": "吉野川市",
+        "cabbageNumeric": false,
+        "tomatoNumeric": true
+      },
+      {
+        "id": "36206",
+        "name": "阿波市",
+        "cabbageNumeric": true,
+        "tomatoNumeric": true
+      },
+      {
+        "id": "36207",
+        "name": "美馬市",
+        "cabbageNumeric": true,
+        "tomatoNumeric": true
+      },
+      {
+        "id": "36208",
+        "name": "三好市",
+        "cabbageNumeric": false,
+        "tomatoNumeric": true
+      },
+      {
+        "id": "36301",
+        "name": "勝浦町",
+        "cabbageNumeric": true,
+        "tomatoNumeric": true
+      },
+      {
+        "id": "36341",
+        "name": "石井町",
+        "cabbageNumeric": true,
+        "tomatoNumeric": true
+      },
+      {
+        "id": "36342",
+        "name": "神山町",
+        "cabbageNumeric": true,
+        "tomatoNumeric": false
+      },
+      {
+        "id": "36388",
+        "name": "海陽町",
+        "cabbageNumeric": true,
+        "tomatoNumeric": true
+      },
+      {
+        "id": "36402",
+        "name": "北島町",
+        "cabbageNumeric": true,
+        "tomatoNumeric": false
+      },
+      {
+        "id": "36403",
+        "name": "藍住町",
+        "cabbageNumeric": true,
+        "tomatoNumeric": true
+      },
+      {
+        "id": "36404",
+        "name": "板野町",
+        "cabbageNumeric": true,
+        "tomatoNumeric": true
+      },
+      {
+        "id": "36468",
+        "name": "つるぎ町",
+        "cabbageNumeric": true,
+        "tomatoNumeric": false
+      },
+      {
+        "id": "36489",
+        "name": "東みよし町",
+        "cabbageNumeric": false,
+        "tomatoNumeric": true
+      }
+    ],
+    "requiredMunicipalityCount": 17,
+    "eligibleMunicipalPoints": 0,
+    "coordinateCandidates": [
+      {
+        "municipalityCode": "36203",
+        "publishedCode": "362034",
+        "name": "小松島市",
+        "referenceName": "小松島市役所庁舎",
+        "sourceRowId": "0000000069",
+        "latitude": "34.0049",
+        "longitude": "134.59045",
+        "crs": null,
+        "source": "https://opendata.pref.tokushima.lg.jp/dataset/4519/resource/14541/content.html",
+        "sourceKind": "official HTML preview, not original CSV bytes",
+        "eligible": false
+      },
+      {
+        "municipalityCode": "36206",
+        "publishedCode": "362069",
+        "name": "阿波市",
+        "referenceName": "阿波市役所",
+        "sourceRowId": "3620690041",
+        "latitude": "34.102182",
+        "longitude": "134.297437",
+        "crs": null,
+        "source": "https://opendata.pref.tokushima.lg.jp/dataset/4527/resource/13740/content.html",
+        "sourceKind": "official HTML preview observed before local 403, not original CSV bytes",
+        "eligible": false
+      },
+      {
+        "municipalityCode": "36402",
+        "publishedCode": "364029",
+        "name": "北島町",
+        "referenceName": "北島町役場",
+        "sourceRowId": "1200000001",
+        "latitude": "34.125668",
+        "longitude": "134.547012",
+        "crs": null,
+        "source": "https://opendata.pref.tokushima.lg.jp/dataset/5119/resource/16939/content.html",
+        "sourceKind": "official HTML preview, not original XLSX bytes",
+        "eligible": false
+      }
+    ],
+    "remainingInput": "数値公開地域の和集合17市町村について、自治体コード・参照施設名・経度・緯度・明示された測地系・基準日・公式出典を照合可能な資料。3候補は座標数値のみ確認でCRS未確認のため未採用。全24市町村や圃場境界は着手条件にしない。",
+    "implementationPlan": [
+      "自治体コードで統計行と参照点を結合し、各品目の数値14行だけを地図に表示する。",
+      "県計は数表に残し、市町村円と併置せず、市町村の円スケールから除外する。",
+      "役所等は自治体全体の統計参照位置と明記し、作付場所・農場分布と扱わない。",
+      "秘匿・該当なしは円を作らず、ラベル回避で座標自体をずらさない。",
+      "四国表示の1920/1440/1024幅で重なり、選択時カメラ保持、URL再読込を検証し、画像目視は別に受け入れる。"
+    ]
+  },
+  "independentRawVerification": {
+    "verified": true,
+    "verifiedBy": "親スレッド 01a10cfd-e445-7142-8092-433c3143e0d0",
+    "reportedOn": "2026-10-13",
+    "acquisition": "親側の正式Library materialization",
+    "sizeBytes": 21087,
+    "rawSha256": "9283747d317b262dbd7fa39c86c4d15d4bef40f428b1cd019d07486cfa54f3d2",
+    "comparedHead": "39c039e0347334ca9d078395b2d810798103de44",
+    "areaCellsMatched": 50,
+    "allSelectedCellsMatched": 100,
+    "suppressedValuesInferred": false,
+    "missingConvertedToZero": false,
+    "officialIndexVerified": "2025年2月1日現在・確定値",
+    "note": "親からの独立照合結果。子の原取得失敗履歴と抽出テキストhashは保持し、子ローカルで原バイトを取得・再計算したとは主張しない。"
+  }
+}
