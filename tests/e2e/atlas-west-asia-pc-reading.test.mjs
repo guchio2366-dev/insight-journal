@@ -137,6 +137,10 @@ test('西アジアのPC実画面で地域説明・3か国・欠測年・選択�
    await page.locator('[data-west-farming-only]').click();
    await page.waitForFunction(()=>document.querySelectorAll('[data-west-farm-context]').length===5);
    await shot('wheat-full-context');
+   await open('population/?topic=religion');
+   assert.match(await page.locator('[data-west-detail]').innerText(),/イスラエルのユダヤ系記録は全国単位、イランのユダヤ系記録は位置を描けない都市型/);
+   assert.equal(await page.locator('[data-west-scene] [data-settlement]').count(),4);
+   await shot('religion-source-limits');
    await context.close();
   }
   assert.deepEqual(errors,[]);assert.deepEqual(failures,[]);
