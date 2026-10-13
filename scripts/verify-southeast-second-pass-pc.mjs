@@ -71,7 +71,28 @@ try{
  assert.equal(await page.locator('[data-landform-extent]').count()>=7,true);assert.match(await page.locator('[data-physical-reading]').textContent(),/Natural Earth.*名前付き地形ポリゴン.*ボルネオは島全体/s);
  assert.equal(await page.locator('.asia-marine-label:visible').count()>=3,true);
  check('terrain uses aligned 500 m colors and contours with seven Natural Earth named label areas');await shot('terrain');
+ const seasonalLabels=async()=>page.locator('.asia-marine-process-label:visible').evaluateAll(nodes=>{
+  const bounds=document.querySelector('[data-map-annotations]').getBoundingClientRect();
+  const others=[...document.querySelectorAll('.asia-map-annotations button:not([hidden]):not(.asia-marine-process-label)')].map(node=>node.getBoundingClientRect());
+  const intersects=(a,b)=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
+  const boxes=nodes.map(node=>node.getBoundingClientRect());
+  return {names:nodes.map(node=>node.textContent),within:boxes.every(b=>b.left>=bounds.left&&b.right<=bounds.right&&b.top>=bounds.top&&b.bottom<=bounds.bottom),clear:boxes.every((b,i)=>boxes.every((c,j)=>i===j||!intersects(b,c))&&others.every(c=>!intersects(b,c)))};
+ });
+ for(const part of ['all','mainland','islands']){
+  if(part!=='all'){await page.locator(`[data-southeast-part="${part}"]`).click();await page.waitForFunction(value=>new URL(location.href).searchParams.get('part')===value,part);await page.waitForTimeout(350);}
+  const labels=await seasonalLabels();assert(labels.names.length>=1,`${part}: ${JSON.stringify(labels)}`);assert(labels.within&&labels.clear,`${part}: ${JSON.stringify(labels)}`);
+  if(part==='all')assert.match(labels.names.join('、'),/季節風.*ベトナム沖沿岸流/s);
+  await shot(`terrain-seasonal-${part}`);
+ }
+ assert.match(await page.locator('[data-southeast-seasonal-sea-source]').textContent(),/11～3月.*5月下旬～9月.*冬に南西向き、夏に北東向き/s);
+ check('seasonal monsoon and Vietnam coastal current labels remain inside and clear in all, mainland and island terrain views');
  await open('nature/?city=jakarta');assert.match(await page.locator('[data-city-panel="jakarta"] [data-climate-place]').textContent(),/雨温図/);assert.equal(await page.locator('[data-southeast-climate-key]').isVisible(),true);assert.equal(await page.locator('[data-map-city="jakarta"]').textContent(),'ジャカルタ');check('Jakarta chart and compact Af/Am/Aw map reading');await shot('jakarta-climate');
+ for(const part of ['all','mainland','islands']){
+  if(part!=='all'){await page.locator(`[data-southeast-part="${part}"]`).click();await page.waitForFunction(value=>new URL(location.href).searchParams.get('part')===value,part);await page.waitForTimeout(350);}
+  const climateClear=await page.evaluate(()=>{const key=document.querySelector('[data-southeast-climate-key]').getBoundingClientRect(),labels=[...document.querySelectorAll('.asia-climate-code:not([hidden]),.asia-city-name:not([hidden])')].map(node=>node.getBoundingClientRect());return labels.every(b=>b.right<=key.left||b.left>=key.right||b.bottom<=key.top||b.top>=key.bottom);});
+  assert.equal(climateClear,true,`Af/Am/Aw note collision in ${part}`);await shot(`climate-key-${part}`);
+ }
+ check('Af/Am/Aw key clears map labels in all, mainland and island climate views');
  await open('population/');assert.equal(await page.locator('.asia-landform-label:visible').filter({hasText:'ジャワ島'}).count(),1);const options=await page.locator('[data-population-city] option').evaluateAll(nodes=>nodes.map(n=>({id:n.value,country:n.dataset.country,disabled:n.disabled})));const idn=options.find(o=>o.country==='IDN'),vnm=options.find(o=>o.country==='VNM');assert(idn&&vnm&&!idn.disabled&&!vnm.disabled);
  await page.locator('[data-population-city]').selectOption(idn.id);await page.locator('[data-population-city]').selectOption(vnm.id);assert.equal(await page.locator('[data-population-city]').inputValue(),vnm.id);await page.reload({waitUntil:'networkidle'});assert.equal(await page.locator('[data-population-city]').inputValue(),vnm.id);
  check('population city can switch Indonesia to Vietnam and survives reload');await shot('population-vietnam');

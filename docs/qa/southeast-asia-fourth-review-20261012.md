@@ -10,6 +10,7 @@
 - 熱帯の Af/Am/Aw を短い説明で地図に載せ、マニラ・ジャカルタの地図名を短くする。水の地図は都市名を抑え、河川名を線の近くに置く。
 - 年降水量は250mmの線・帯を維持し、8,000mm以上で同色に潰れていた段階色を広げる。地図内の数値は低雨量域から12,000mmまで代表値を選ぶ。資料の値や境界は変えない。
 - 地形名は固有名詞へ短縮。海と海峡の位置名は [Natural Earth physical labels](https://www.naturalearthdata.com/downloads/10m-physical-vectors/10m-physical-labels/) を参照した案内位置であり、境界・測深・流向を示さない。
+- 地形図の海上に北東・南西季節風とベトナム沖沿岸流を、冬・夏の向きとともに小さく示す。流向は日々変わるため、季節平均の概略という説明と一次資料リンクを右欄に添えた。Af/Am/Aw の海上凡例をラベル配置の障害物として扱い、地図名との重なりを避ける。
 - 主要産業は資源・エネルギー／製造業／サービス業に分類し、30の根拠地点を保持。原料と加工を分け、精錬・精製は意味の違う二分類へ重ねる。地域全体の産業地図では製造業GDP比の国塗りを消し、国別の数値画面でのみ表示する。
 - 人口地図にジャワ島名を載せる。民族・宗教の地方別札は地点を小点と細い線で結び、重なりを避ける。宗教地図の主張は「フィリピン全体のカトリック回答78.8％だけでは地方差が分からない」。同じ2020年国勢調査のビコール93.5％、中ビサヤ90.5％、バンサモロ5.3％を位置と対応させる。ベトナム・東ティモールの国値と分母を混ぜない。
 
@@ -18,9 +19,9 @@
 - 実装：上記のコードを変更。農林業の供給・仕向け統計や民族の実分布の資料不足は以前から残る。行政区をぼかした擬似分布は加えていない。
 - 自動検証：対象の単体・E2E 28件に成功。最終版の build、PC CI、画像は PR head を固定して別途記録する。
 - 実画面：この環境の Chromium は SUID サンドボックスの設定不備で起動しない。`--no-sandbox` は使わない。通常サンドボックス Chrome の CI 画像と操作結果の確認が必要。
-- 海流の固有名・流向、季節風の地図上の表現は原資料と季節の確認が残る。海面の矢印や恒常的な流向を推測で描かない。海・海峡の札も最終画像で衝突を確認する。
+- 季節風と沿岸流は資料が支える範囲で実装。特定の海流の通年の流向や、全東南アジアの一様な風向は示さない。全体・大陸部・島嶼部のラベル重なりはPC CIの矩形判定と画像で確認する。CI画像の直接目視は別途記録する。
 - 公開：この PR の変更は未公開。親の全項目確認後に判断する。
 
 ## 出典と表示限界
 
-地形名の概略域は既存の Natural Earth 1:10m geography regions、海・海峡の名称は [Natural Earth physical labels](https://www.naturalearthdata.com/downloads/10m-physical-vectors/10m-physical-labels/) を参照。風の季節と向きは [シンガポール気象局](https://www.weather.gov.sg/climate-climate-of-singapore/) の説明を候補資料として確認したが、東南アジア全体の風向や海流へ一律に拡張していない。民族・宗教の地方値は [フィリピン統計庁の2020年国勢調査](https://psa.gov.ph/content/religious-affiliation-philippines-2020-census-population-and-housing) と既存の出典記録に従う。
+地形名の概略域は既存の Natural Earth 1:10m geography regions、海・海峡の名称は [Natural Earth physical labels](https://www.naturalearthdata.com/downloads/10m-physical-vectors/10m-physical-labels/) を参照。季節風は [マレーシア気象局](https://www.met.gov.my/en/pendidikan/fenomena-cuaca/) が北東季節風11～3月、南西季節風5月下旬～9月と説明する。[シンガポール気象局](https://www.weather.gov.sg/climate-climate-of-singapore/) も北東季節風12月～3月上旬と南西季節風6～9月を観測するが、近赤道では南西季節風期に南寄りとなるため、単一の正確な矢印として扱わない。南シナ海西岸の季節的な沿岸流は [Gan ほか（2006）](https://doi.org/10.1029/2005JC003298) のモデルと衛星観測による冬南西向き・夏北東向きの結果を用い、ベトナム沖に限る。民族・宗教の地方値は [フィリピン統計庁の2020年国勢調査](https://psa.gov.ph/content/religious-affiliation-philippines-2020-census-population-and-housing) と既存の出典記録に従う。

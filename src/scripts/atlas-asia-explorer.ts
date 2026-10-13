@@ -482,7 +482,7 @@ function start(root:HTMLElement) {
   }
   function renderPhysical() {
     const physical=isPhysical();
-    optionalHidden('[data-east-landform-source]',!physical||naturalTopic()!=='landform');optionalHidden('[data-physical-reading]',!physical);optionalHidden('[data-physical-legend]',!physical);root.dataset.physicalView=naturalTopic()??'';
+    optionalHidden('[data-east-landform-source]',!physical||naturalTopic()!=='landform');optionalHidden('[data-southeast-seasonal-sea-source]',!physical||!['terrain','landform'].includes(naturalTopic()??''));optionalHidden('[data-physical-reading]',!physical);optionalHidden('[data-physical-legend]',!physical);root.dataset.physicalView=naturalTopic()??'';
     const gesture=$('[data-map-gesture]');if(gesture)gesture.textContent=physical?'地形の着目点・河川・湖は一覧からも選べます。地図は2本指で移動・拡大できます。':state.field==='natural'?'都市の点を選ぶと雨温図が開きます。地図は2本指で移動・拡大できます。':'品目名から米の分布を選びます。雨温図などから同じ場所を比較すると米の収穫面積を表示します。背景クリックでは選択を変えません。地図は2本指で移動・拡大できます。';
     if(!physical||!config.physical)return;
     const bands=naturalTopic()==='terrain'?config.presentation?.terrain?.bands:undefined;
