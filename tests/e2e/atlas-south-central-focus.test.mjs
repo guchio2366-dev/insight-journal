@@ -39,7 +39,7 @@ async function stableIndustryFrame(page,name){
    const box=element=>{const r=element.getBoundingClientRect();return {left:r.left-rect.left,top:r.top-rect.top,right:r.right-rect.left,bottom:r.bottom-rect.top};};
    const markers=[...root.querySelectorAll('.maplibregl-marker')].filter(element=>element.getBoundingClientRect().width>0&&getComputedStyle(element).visibility!=='hidden');
    const masks=markers.map(element=>{const r=box(element);return {left:r.left-7,top:r.top-7,right:r.right+7,bottom:r.bottom+7};});
-   const config=JSON.parse(root.querySelector('[data-asia-config]').textContent());for(const site of config.industrySites){const p=map.project(site.point);masks.push({left:p.x-22,top:p.y-22,right:p.x+22,bottom:p.y+22});}
+   const config=JSON.parse(root.querySelector('[data-asia-config]').textContent);for(const site of config.industrySites){const p=map.project(site.point);masks.push({left:p.x-22,top:p.y-22,right:p.x+22,bottom:p.y+22});}
    const visible=[[rect.left+4,rect.top+4],[rect.right-4,rect.top+4],[rect.left+4,rect.bottom-4],[rect.right-4,rect.bottom-4]].every(([x,y])=>x>=0&&y>=0&&x<innerWidth&&y<innerHeight&&frame.contains(document.elementFromPoint(x,y)));
    return {bounds:{left:rect.left,top:rect.top,width:rect.width,height:rect.height},clip:{x:Math.floor(rect.left),y:Math.floor(rect.top),width:Math.ceil(rect.right)-Math.floor(rect.left),height:Math.ceil(rect.bottom)-Math.floor(rect.top)},visible,loaded:map.loaded(),tilesLoaded:map.areTilesLoaded(),moving:map.isMoving(),contextHealthy:!!gl&&!gl.isContextLost(),masks,steel:box(root.querySelector('[data-industry-site="sc-odisha-steel"]'))};
   });
