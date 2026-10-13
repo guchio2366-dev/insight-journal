@@ -18,7 +18,7 @@ export function renderRussiaWorkspaceLegend(layer:ReturnType<typeof getRussiaLay
  if(layer.field==='agriculture')return renderRussiaFarmingKey(layer);
  if(layer.id==='precipitation'||layer.id==='elevation'){
   const indices=layer.id==='precipitation'?[0,2,4,8,16]:[0,1,3,5,9,13];
-  return renderRussiaLegend({...layer,legend:indices.map(i=>layer.legend[i])})+`<span>${layer.id==='precipitation'?'等雨量線 250 mm間隔':'等高線 500 m間隔'}</span>`;
+  return renderRussiaLegend({...layer,legend:[...indices.map(i=>layer.legend[i]),...layer.legend.filter(item=>item.shape==='missing')]})+`<span>${layer.id==='precipitation'?'等雨量線 250 mm間隔':'等高線 500 m間隔'}</span>`;
  }
  return renderRussiaLegend(layer.id==='climate'?{...layer,legend:layer.legend.map(item=>{const code=item.label.split(' ')[0];return {...item,label:climateShortNames[code]?code+climateShortNames[code]:item.label};})}:layer);
 }

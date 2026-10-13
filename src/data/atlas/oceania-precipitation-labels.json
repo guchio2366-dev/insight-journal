@@ -1,0 +1,128 @@
+{
+  "imageSha256": "e9ca55e46722775727c0dd2b534ad16976c3c26edfa608e1d18a9615e0c2408c",
+  "period": "1991–2020",
+  "unit": "mm/year",
+  "method": "Anchor is an exact saved #244b69 contour pixel; its 11×11 pixel neighborhood contains only the adjacent lower and upper 250 mm palette classes. Anchor is inside the displayed target-country land. Offsets are screen pixels for legibility; leaders retain the contour anchor. Coordinates identify a rendered pixel, not a station or new native-grid observation.",
+  "labels": [
+    {
+      "id": "australia-inland",
+      "mm": 250,
+      "pixel": [
+        263,
+        981
+      ],
+      "coordinates": [
+        125.34166666666667,
+        -28.78005284015852
+      ],
+      "offsetPx": [
+        0,
+        0
+      ],
+      "adjacentBandIndices": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "australia-north",
+      "mm": 500,
+      "pixel": [
+        387,
+        812
+      ],
+      "coordinates": [
+        132.575,
+        -19.515191545574638
+      ],
+      "offsetPx": [
+        0,
+        0
+      ],
+      "adjacentBandIndices": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "australia-east",
+      "mm": 750,
+      "pixel": [
+        684,
+        1005
+      ],
+      "coordinates": [
+        149.9,
+        -30.09577278731836
+      ],
+      "offsetPx": [
+        24,
+        0
+      ],
+      "adjacentBandIndices": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": "australia-tropical-coast",
+      "mm": 1000,
+      "pixel": [
+        605,
+        792
+      ],
+      "coordinates": [
+        145.29166666666666,
+        -18.418758256274764
+      ],
+      "offsetPx": [
+        22,
+        -8
+      ],
+      "adjacentBandIndices": [
+        3,
+        4
+      ]
+    },
+    {
+      "id": "papua-new-guinea",
+      "mm": 2500,
+      "pixel": [
+        578,
+        555
+      ],
+      "coordinates": [
+        143.71666666666667,
+        -5.4260237780713325
+      ],
+      "offsetPx": [
+        0,
+        -30
+      ],
+      "adjacentBandIndices": [
+        9,
+        10
+      ]
+    },
+    {
+      "id": "new-zealand",
+      "mm": 1000,
+      "pixel": [
+        1085,
+        1228
+      ],
+      "coordinates": [
+        173.29166666666666,
+        -42.32100396301189
+      ],
+      "offsetPx": [
+        34,
+        12
+      ],
+      "adjacentBandIndices": [
+        3,
+        4
+      ]
+    }
+  ]
+}

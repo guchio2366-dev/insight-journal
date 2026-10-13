@@ -1,0 +1,148 @@
+{
+  "imageSha256": "387970dc965c2c9a1976d90be1a3fb217f26489beaa77141dd6d8fafbd7f3e9e",
+  "period": "1991–2020",
+  "unit": "mm/year",
+  "method": "Anchor is an exact saved #244b69 contour pixel; its 11×11 pixel neighborhood contains only the adjacent lower and upper 250 mm palette classes. Anchor is inside the displayed target-country land. Offsets are screen pixels for legibility; leaders retain the contour anchor. Coordinates identify a rendered pixel, not a station or new native-grid observation.",
+  "labels": [
+    {
+      "id": "european-russia",
+      "mm": 500,
+      "pixel": [
+        319,
+        876
+      ],
+      "coordinates": [
+        40.99458333333333,
+        51.45226130653266
+      ],
+      "offsetPx": [
+        0,
+        0
+      ],
+      "adjacentBandIndices": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "ural",
+      "mm": 750,
+      "pixel": [
+        521,
+        618
+      ],
+      "coordinates": [
+        55.555416666666666,
+        60.743718592964825
+      ],
+      "offsetPx": [
+        0,
+        0
+      ],
+      "adjacentBandIndices": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": "west-siberia",
+      "mm": 500,
+      "pixel": [
+        800,
+        708
+      ],
+      "coordinates": [
+        75.66666666666666,
+        57.50251256281407
+      ],
+      "offsetPx": [
+        0,
+        0
+      ],
+      "adjacentBandIndices": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "north-siberia",
+      "mm": 250,
+      "pixel": [
+        1136,
+        229
+      ],
+      "coordinates": [
+        99.88666666666667,
+        74.75293132328308
+      ],
+      "offsetPx": [
+        0,
+        0
+      ],
+      "adjacentBandIndices": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "east-siberia",
+      "mm": 250,
+      "pixel": [
+        1536,
+        444
+      ],
+      "coordinates": [
+        128.72,
+        67.01005025125627
+      ],
+      "offsetPx": [
+        0,
+        0
+      ],
+      "adjacentBandIndices": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "far-east",
+      "mm": 500,
+      "pixel": [
+        1709,
+        641
+      ],
+      "coordinates": [
+        141.19041666666666,
+        59.915410385259634
+      ],
+      "offsetPx": [
+        0,
+        0
+      ],
+      "adjacentBandIndices": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": "kamchatka",
+      "mm": 1000,
+      "pixel": [
+        1985,
+        782
+      ],
+      "coordinates": [
+        161.08541666666665,
+        54.83752093802345
+      ],
+      "offsetPx": [
+        26,
+        8
+      ],
+      "adjacentBandIndices": [
+        3,
+        4
+      ]
+    }
+  ]
+}
