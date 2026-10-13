@@ -137,7 +137,7 @@ export function initMexicoPopulation(root: HTMLElement) {
     query<HTMLElement>('[data-population-region-text]').textContent = region?.text??Object.values(mexicoPopulationReading.regions).map(item=>item.text).join(' ');
     query<HTMLElement>('[data-population-region-cause]').textContent = region?.cause??Object.values(mexicoPopulationReading.regions).map(item=>item.cause).join(' ');
     const shortText = !region ? '中央部の首都圏には人口が多く集まります。北部は広い州の中に都市・輸出産業の拠点があり、中西部では内陸の製造業と交通が都市を結びます。地図の色は州平均で、都市内部や農村の密度を示すものではありません。' : region === mexicoPopulationReading.regions.central
-      ? 'メキシコ州は人口が最多、メキシコ市は密度が最高。人口規模と密度を重ねて読みます。'
+      ? 'メキシコ州は人口が最多、メキシコシティは密度が最高。人口規模と密度を重ねて読みます。'
       : region === mexicoPopulationReading.regions.northern
         ? '北部の広い州の平均密度と、都市・輸出産業の集積をつなげて読みます。'
         : region === mexicoPopulationReading.regions.bajio

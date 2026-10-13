@@ -130,9 +130,33 @@
       },
       {
         "left": 318.40787181302545,
-        "right": 430.32787181302547,
+        "right": 422.40787181302545,
         "top": 235.7141232228132,
         "bottom": 266.7141232228132
+      },
+      {
+        "left": 339.2039147827271,
+        "right": 359.2039147827271,
+        "top": 146.83598021435424,
+        "bottom": 166.83598021435424
+      },
+      {
+        "left": 357.2039147827271,
+        "right": 425.2039147827271,
+        "top": 126.83598021435424,
+        "bottom": 157.83598021435424
+      },
+      {
+        "left": 688.2913672697739,
+        "right": 708.2913672697739,
+        "top": 444.2889630659104,
+        "bottom": 464.2889630659104
+      },
+      {
+        "left": 706.2913672697739,
+        "right": 846.2913672697739,
+        "top": 424.2889630659104,
+        "bottom": 455.2889630659104
       }
     ],
     "textWidthEstimate": "0.68 em per ASCII code glyph; 1 em per Japanese glyph; 10 SVG units extra stroke/padding; label height font size + 10 SVG units",
@@ -140,7 +164,7 @@
     "semantics": "displayPointNative is a derived annotation centre only. pointNative remains the strictly interior source anchor. Displaced text requires a leader from pointNative to leaderEndNative; no geographic feature or source coordinate moves.",
     "stationCoordinateSource": {
       "file": "src/data/atlas/mexico/climate-normals.json",
-      "sha256": "cfa2c3d504da5feb50c3fe5d385aa78525af599f064fc124d8bc41578f1f72f5"
+      "sha256": "f4fa9d7f4609b5423b323e3bcb75d5f52b5e68ee9b5f6028245457ffa5015388"
     },
     "frameSource": {
       "file": "src/data/atlas/mexico/geometry-index.json",
@@ -150,8 +174,8 @@
   "assets": [
     {
       "file": "labels.json",
-      "sha256": "e3566bf3ff1508f5987b9e8d02ecee9c1cc9c402b35623996d12a8d5df77b292",
-      "bytes": 44702
+      "sha256": "c804722e1a84594efeeefc7c5306ac19c9e79c78409d74804d22a524dd04fc17",
+      "bytes": 45264
     },
     {
       "file": "palette.json",

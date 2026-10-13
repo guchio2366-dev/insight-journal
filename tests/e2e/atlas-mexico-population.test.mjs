@@ -5,7 +5,7 @@ import path from 'node:path';
 import {build} from 'esbuild';
 import {Window} from 'happy-dom';
 import {mexicoDensityColor,mexicoPopulationRadius,mexicoPopulationLegendValues} from '../../src/lib/atlas-mexico-population.ts';
-import {mexicoCompositionColor,mexicoCompositionHighlights,mexicoCompositionRadius,formatMexicoCompositionShare} from '../../src/lib/atlas-mexico-population-composition.ts';
+import {mexicoCompositionColor,mexicoCompositionHighlights,mexicoCompositionRadius,mexicoCompositionShare,formatMexicoCompositionShare} from '../../src/lib/atlas-mexico-population-composition.ts';
 
 const folder='atlas/north-america/mexico/population';
 const population=JSON.parse(await readFile('src/data/atlas/mexico/population.json','utf8'));
@@ -43,7 +43,7 @@ test('JavaScript-free population page retains every source value, actual geometr
   const map=d.querySelector('[data-population-map]'),settings=d.querySelector('[data-population-display-settings]');
   assert.equal(map.getAttribute('preserveAspectRatio'),'xMidYMid meet');assert.equal(map.getAttribute('viewBox'),'0 0 900 580');assert.equal(settings.open,false);assert.equal(settings.closest('.mexico-map-frame'),null);
   for(const selector of ['[data-population-view]','[data-population-state]'])assert.equal(d.querySelector(selector).closest('[data-population-display-settings]'),settings);
-  assert.deepEqual([...map.querySelectorAll('[data-population-state-label]')].map(label=>label.textContent),['チワワ州','メキシコ市','ユカタン州']);
+  assert.deepEqual([...map.querySelectorAll('[data-population-state-label]')].map(label=>label.textContent),['チワワ州','メキシコシティ','ユカタン州']);
   assert.equal(d.querySelector('[data-population-table]').open,true);assert.equal(d.querySelector('[data-population-view]').disabled,true);assert.equal(d.querySelector('[data-population-state]').disabled,true);assert.equal(d.querySelector('[data-population-only]').disabled,true);
   assert.equal(d.querySelector('[data-population-symbols]').hasAttribute('hidden'),true);assert.equal(d.querySelector('[data-population-fallback]').hidden,true);
   for(const row of population.states){const shape=d.querySelector(`[data-population-state-shape="${row.stateCode}"]`);assert.ok(shape.getAttribute('d').length>50);assert.equal(shape.getAttribute('fill'),mexicoDensityColor(row.density));assert.equal(shape.getAttribute('role'),'button');assert.equal(shape.getAttribute('fill-rule'),'evenodd');const tr=d.querySelector(`[data-population-row="${row.stateCode}"]`);assert.ok(tr.textContent.includes(row.population.toLocaleString('ja-JP')));assert.ok(tr.textContent.includes(row.density.toLocaleString('ja-JP',{minimumFractionDigits:1,maximumFractionDigits:1})));}
@@ -142,6 +142,10 @@ test('National entry has no implicit capital selection; one overview map retains
     for(const [index,a] of marks.entries())for(const b of marks.slice(index+1))assert(Math.hypot(a[0]-b[0],a[1]-b[1])>=20,'Overview badges do not overlap');
     assert.equal(q('[data-population-display-settings]').hidden,true);
     if(category==='religion'){
+     assert.equal(overview.querySelectorAll('.population-overview-land use.is-catholic-majority').length,32);
+     assert.ok(population.states.every(row=>mexicoCompositionShare(compositionData.metrics.find(metric=>metric.id==='catholic').states[row.stateCode])>50));
+     assert.equal(overview.querySelectorAll('.population-overview-religion-dots circle').length,64);
+     for(const id of ['protestant_evangelical','no_religion']){const metric=compositionData.metrics.find(item=>item.id===id),circle=overview.querySelector(`[data-overview-religion-state="09"] [data-overview-religion-metric="${id}"]`);assert.ok(circle);assert.ok(Math.abs(Number(circle.getAttribute('r'))-11*Math.sqrt(mexicoCompositionShare(metric.states['09'])/25))<1e-8);}
      assert.equal(q('[data-population-overview-reading-category="religion"]').querySelectorAll('[data-population-overview-metric]').length,8);
      const denominators=overview.querySelectorAll('[data-population-overview-denominator="religion"]');assert.equal(denominators.length,1);assert.match(denominators[0].textContent,/全年齢の通常居住人口（不詳を含む）/);assert.ok(denominators[0].textContent.includes(population.nationalPopulation.toLocaleString('ja-JP')));
      assert.match(overview.textContent,/右欄には8区分/);

@@ -25,8 +25,11 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
  const overviewMarkers:Marker[]=[];
  for(const kind of config.livestockKinds){
   const candidates=config.markers.filter(marker=>marker.kindId===kind.id);
-  const clearance=(marker:Marker)=>overviewMarkers.length?Math.min(...overviewMarkers.map(other=>Math.hypot(marker.point[0]-other.point[0],marker.point[1]-other.point[1]))):0;
-  candidates.sort((a,b)=>clearance(b)-clearance(a));if(candidates[0])overviewMarkers.push(candidates[0]);
+  for(let index=0;index<Math.min(2,candidates.length);index++){
+   const clearance=(marker:Marker)=>overviewMarkers.length?Math.min(...overviewMarkers.map(other=>Math.hypot(marker.point[0]-other.point[0],marker.point[1]-other.point[1]))):Infinity;
+   candidates.sort((a,b)=>clearance(b)-clearance(a)||b.production-a.production);
+   overviewMarkers.push(candidates.shift()!);
+  }
  }
  const overviewMarkerIds=new Set(overviewMarkers.map(marker=>marker.id));
 
@@ -51,6 +54,7 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
   renderAgricultureMarkers({holder,width:frame.clientWidth,height:frame.clientHeight,
    items:visible?config.markers.filter(marker=>marker.kindId===state.item||overviewMarkerIds.has(marker.id)).filter(marker=>!state.onlyItem||!state.item||marker.kindId===state.item).map(region=>({region,point:project(region.point)})):[],
    kinds,selectedKind:state.item,selectedRegion:state.region,
+   clusterLabel:regions=>[...new Set(regions.map(region=>kinds.get(region.kindId)?.label??region.kindId))].join('・'),
    select:region=>choose(region.kindId,region),candidates:regions=>{candidates=regions;renderCandidates();},
   });
   renderMapLabels();
@@ -63,13 +67,13 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
    const rect=node.getBoundingClientRect();
    return rect.width&&rect.height?{left:rect.left-frameRect.left,top:rect.top-frameRect.top,right:rect.right-frameRect.left,bottom:rect.bottom-frameRect.top}:null;
   };
-  const obstacles=Array.from(root.querySelectorAll('[data-agri-layers],.atlas-map-tools,.atlas-layer-caption,.atlas-livestock-marker,.mexico-agriculture-forest-states text')).filter(node=>!node.closest('[hidden]')).map(box).filter((value):value is AgricultureLabelBox=>!!value);
+  const obstacles=Array.from(root.querySelectorAll('[data-agri-layers],.atlas-map-tools,.atlas-layer-caption,.atlas-livestock-marker')).filter(node=>!node.closest('[hidden]')).map(box).filter((value):value is AgricultureLabelBox=>!!value);
   const visible=state.crops&&state.item!=='pine'&&state.item!=='rice';
   const items=cropLabels.filter(node=>visible&&(!state.onlyItem||!state.item||node.dataset.cropLabel===state.item)).map(node=>{
-   const selected=node.dataset.cropLabel===state.item,fontSize=selected?15:width<560?12.5:13.5;
+   const selected=node.dataset.cropLabel===state.item,fontSize=selected?17:width<560?13.5:15;
    hidden(node,false);node.style.fontSize=`${fontSize/scale}px`;
    const measured=node.getComputedTextLength?.();
-   return {id:node.dataset.cropLabel!,selected,width:(measured&&Number.isFinite(measured)?measured*scale:Array.from(node.textContent??'').length*fontSize)+6,height:fontSize+8,anchors:labelAnchors.get(node.dataset.cropLabel!)!.map(project)};
+   return {id:node.dataset.cropLabel!,selected:selected||node.dataset.cropLabel==='sugarcane'||node.dataset.cropLabel==='wheat',width:(measured&&Number.isFinite(measured)?measured*scale:Array.from(node.textContent??'').length*fontSize)+6,height:fontSize+8,anchors:labelAnchors.get(node.dataset.cropLabel!)!.map(project)};
   });
   const placements=placeMexicoAgricultureLabels(items,width,height,obstacles),byId=new Map(placements.map(item=>[item.id,item]));
   const [vx,vy]=agricultureCameraViewBox(state),left=(width-viewWidth*scale)/2,top=(height-viewHeight*scale)/2;
@@ -112,6 +116,7 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
   root.dataset.agricultureCropSelected=String(cropSelected);root.dataset.agricultureCurrentItem=state.item??'';root.dataset.agricultureCurrentState=state.state??'';
   root.dataset.agricultureCrops=String(state.crops);root.dataset.agricultureLivestock=String(state.livestock);
   hidden(overview,selected);hidden(panel,!selected);heading.textContent=state.item?mexicoAgricultureLabel(state.item):'';
+  hidden(q('[data-agriculture-only-item-label]'),!(cropSelected||animalSelected));
   for(const copy of root.querySelectorAll<HTMLElement>('[data-agriculture-reading]'))hidden(copy,copy.dataset.agricultureReading!==state.item);
   for(const input of root.querySelectorAll<HTMLInputElement>('[data-agri-layer]'))input.checked=input.value==='crops'?state.crops:state.livestock;
   const cropVisible=state.crops&&!forestry&&state.item!=='rice'&&(!state.onlyItem||!state.item||cropSelected);
@@ -122,7 +127,9 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
    hidden(node,cropVisible&&state.onlyItem&&!!state.item&&id!==state.item);
   }
   hidden(q('[data-agri-layers]'),forestry);hidden(q('[data-mexico-tree-cover]'),!forestry);
-  hidden(q('[data-mexico-forest-states]'),!forestry);hidden(q('[data-mexico-forest-key]'),!forestry);
+  hidden(q('[data-mexico-product-key]'),forestry);hidden(q('[data-rice-supplement]'),forestry);
+  hidden(q('[data-mexico-forest-key]'),!forestry);
+  hidden(q('[data-mexico-agriculture-overview-statistics]'),selected);
   const farmingTab=q('[data-mexico-agriculture-overview]'),forestryTab=q('[data-forestry-select]');
   if(farmingTab){if(forestry)farmingTab.removeAttribute('aria-current');else farmingTab.setAttribute('aria-current','page');}
   if(forestryTab){if(forestry)forestryTab.setAttribute('aria-current','page');else forestryTab.removeAttribute('aria-current');}
@@ -165,9 +172,9 @@ export function initMexicoAgricultureAtlas(root:HTMLElement):void {
   syncMainFields();
   svg.classList.toggle('is-zoomed',state.zoom>1);
   svg.setAttribute('viewBox',agricultureCameraViewBox(state).map(value=>value.toFixed(2)).join(' '));
-  text('[data-mexico-map-note]',forestry?'緑は2021年の樹木被覆。松材取得量の多いドゥランゴ・チワワなどの州別数量は統計で確認できます。樹木被覆は松林・伐採区域の境界ではありません。':'作物は推計主要栽培域、畜産は生産の多い市町村の代表位置。記号の大きさは数量を表しません。');
+  text('[data-mexico-map-note]',forestry?'緑は2021年の樹木被覆。松材の州別数量は下の統計で確認できます。樹木被覆は松林・伐採区域の境界ではありません。':state.item==='other'?'「その他」は複数の作物をまとめた統計区分です。単一作物の栽培域として地図に塗らず、数量は下の統計に残しています。':'作物は推計主要栽培域、畜産は生産の多い市町村の代表位置。記号の大きさは数量を表しません。');
   text('#mexico-agriculture-map-title',forestry?'メキシコの樹木被覆と森林資源':'メキシコの主要栽培域と畜産の産地');
-  text('[data-layer-caption]',forestry?'樹木被覆2021・州別松材統計2022':state.item==='rice'?'米は補足統計・栽培域は主図に非表示':state.item==='irrigation'?'主要栽培域と地形・河川 / 灌漑率は統計で確認':'作物 2020推計・畜産産地 2025（概略）');
+  text('[data-layer-caption]',forestry?'樹木被覆2021・州別松材統計2022':state.item==='rice'?'米は補足統計・栽培域は主図に非表示':state.item==='other'?'「その他」の栽培域は主図に非表示':state.item==='irrigation'?'主要栽培域と地形・河川 / 灌漑率は統計で確認':'作物 2020推計・畜産産地 2025（概略）');
   q<HTMLButtonElement>('[data-map-action="out"]').disabled=state.zoom<=1;
   q<HTMLButtonElement>('[data-map-action="in"]').disabled=state.zoom>=5;
   renderMarkers();renderCandidates();root.dataset.agricultureReady='true';root.dataset.renderState='ready';

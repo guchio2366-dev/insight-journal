@@ -7,6 +7,7 @@ export const agricultureSources = {
   cattle: 'https://www.inegi.org.mx/contenidos/programas/ca/2022/datosabiertos/ca_2022_upagro_csv.zip',
   cattleDefinition: 'https://www.inegi.org.mx/contenidos/programas/ca/2022/doc/ca2022_rdnal.pdf',
   woodUses: 'https://www.inegi.org.mx/contenidos/programas/ca/2022/tabulados/ca2022_for18.xlsx',
+  woodProcessing: 'https://arauco.com/uk/puntos_mapa/maderas_y_paneles_mexico/',
   temperateForest: 'https://www.biodiversidad.gob.mx/ecosistemas/bosqueTemplado',
   maizeFoodChain: 'https://www.gob.mx/agricultura/articulos/del-campo-al-comal-el-proceso-de-hacer-tortillas-de-maiz?idiom=es',
   licence: 'https://www.inegi.org.mx/inegi/terminos.html',
@@ -44,6 +45,7 @@ export const agricultureReading = {
     steps: [
       {title: '山地の松・オーク林', body: '西シエラマドレなどの冷涼な山地には、松やオークを中心とする温帯林が分布します。ドゥランゴとチワワの松材取得の集中を、木材資源の分布と結び付けて読めます。', source: agricultureSources.temperateForest},
       {title: '取得した木材の利用', body: '松材の取得量は、参照期間に林業生産単位が取得した木材の体積です。取得した木材は、丸太や製材原料などとして加工や市場へつながります。', source: agricultureSources.woodUses},
+      {title: '加工拠点の所在地を確認する', body: 'ARAUCOが公表するメキシコの拠点例は、ドゥランゴ市の Carretera Panamericana Km 959 と、ミチョアカン州シタクアロの Carretera Federal 15 Toluca–Morelia km 105.7 です。これらは施設の公表住所であり、松材の州別取得量を各工場へ割り当てる資料ではありません。地図には厳密な工場座標や未確認の搬出港を置いていません。', source: agricultureSources.woodProcessing},
       {title: '木材供給と森林の機能', body: '森林は木材を供給し、水の浸透、侵食の抑制、生物の生息地も支えます。取得量に加えて、森林の変化と管理方法を調べると、木材利用とこうした機能の関係を考えられます。', source: agricultureSources.temperateForest},
     ],
   },

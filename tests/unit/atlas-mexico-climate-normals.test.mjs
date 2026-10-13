@@ -29,18 +29,18 @@ function sourceSeries(text, heading) {
   return { monthly: normals.slice(0, 12).map(Number), annual: Number(normals[12]), years: years.map(Number) };
 }
 
-test('Mexico uses two named 1991–2020 station records and twelve monthly observations', () => {
+test('Mexico uses four named 1991–2020 station records and twelve monthly observations', () => {
   assert.equal(data.schemaVersion, 1);
   assert.equal(data.period, '1991–2020');
   assert.deepEqual(data.months, Array.from({ length: 12 }, (_, i) => i + 1));
   assert.deepEqual(data.units, { temperatureC: '°C', precipitationMm: 'mm' });
-  assert.deepEqual(data.stations.map(item => item.stationId), ['09048', '25015']);
-  assert.equal(new Set(data.stations.map(item => item.id)).size, 2);
+  assert.deepEqual(data.stations.map(item => item.stationId), ['09048', '25015', '08040', '27054']);
+  assert.equal(new Set(data.stations.map(item => item.id)).size, 4);
   for (const item of data.stations) {
     assert.equal(item.period, data.period);
-    assert.equal(item.emittedAt, '2026-10-02');
-    assert.equal(item.retrievedAt, '2026-10-05');
-    assert.match(item.sourceUrl, /^https:\/\/smn\.conagua\.gob\.mx\/tools\/RESOURCES\/Normales_Climatologicas\/Normales9120\/(df|sin)\/nor9120_\d{5}\.txt$/);
+    assert.equal(item.emittedAt, item.stationId === '08040' ? '2026-10-09' : '2026-10-02');
+    assert.equal(item.retrievedAt, item.selectedSourceFile ? '2026-10-05' : null);
+    assert.match(item.sourceUrl, /^https:\/\/smn\.conagua\.gob\.mx\/tools\/RESOURCES\/Normales_Climatologicas\/Normales9120\/(df|sin|chih|tab)\/nor9120_\d{5}\.txt$/);
     for (const key of ['temperatureC', 'precipitationMm', 'temperatureYears', 'precipitationYears']) {
       assert.equal(item[key].length, 12, `${item.stationId} ${key}`);
       assert.ok(item[key].every(Number.isFinite));
@@ -52,7 +52,7 @@ test('Mexico uses two named 1991–2020 station records and twelve monthly obser
 });
 
 test('Every delivered climate value and year count equals the retained official source column', () => {
-  for (const item of data.stations) {
+  for (const item of data.stations.filter(item => item.selectedSourceFile)) {
     const sourceText = read(item.selectedSourceFile).toString('utf8');
     const temperature = sourceSeries(sourceText, 'TEMPERATURA MEDIA');
     const precipitation = sourceSeries(sourceText, 'PRECIPITACION');
@@ -110,6 +110,31 @@ test('Culiacán October available-year counts remain distinct from a complete 30
   assert.equal(station('25015').annualPrecipitationMm, 687.2);
   assert.equal(provenance.processing.calculatedAnnualValues, false);
   assert.equal(provenance.processing.spatialInterpolation, false);
+});
+
+test('Parent-reviewed northern and southeastern SMN normals retain every reported value and do not claim raw-file hashes', () => {
+  const evidence = json(`${evidenceRoot}parent-reviewed-additions.json`);
+  assert.equal(evidence.stations.length, 2);
+  const chihuahua = station('08040'), villahermosa = station('27054');
+  assert.deepEqual(chihuahua.temperatureC, [10.6,13.4,16.7,20.4,24.3,27.3,26.6,25.2,23.2,19.9,14.6,11.2]);
+  assert.deepEqual(chihuahua.precipitationMm, [7.8,5.1,6.3,8.5,15.6,37.6,109,94.3,77.9,24.5,12.8,14]);
+  assert.deepEqual(chihuahua.temperatureYears, Array(12).fill(30));
+  assert.deepEqual(chihuahua.precipitationYears, Array(12).fill(30));
+  assert.equal(chihuahua.annualTemperatureC, 19.4);
+  assert.equal(chihuahua.annualPrecipitationMm, 413.4);
+  assert.deepEqual(villahermosa.temperatureC, [23.9,25,27,29,30.1,29.5,29.3,29.3,28.8,27.5,25.7,24.4]);
+  assert.deepEqual(villahermosa.precipitationMm, [159.7,72.1,43.3,42,99.2,182.9,158.3,217.9,305.9,313.3,226.5,132.6]);
+  assert.deepEqual(villahermosa.temperatureYears, [29,29,29,29,29,29,29,29,28,28,26,27]);
+  assert.deepEqual(villahermosa.precipitationYears, [29,29,29,29,29,27,29,29,27,28,26,26]);
+  assert.equal(villahermosa.annualTemperatureC, 27.5);
+  assert.equal(villahermosa.annualPrecipitationMm, 1953.7);
+  for (const item of [chihuahua,villahermosa]) {
+    assert.equal(item.retrievedAt, null);
+    assert.equal(item.sourceSha256, null);
+    assert.equal(item.selectedSourceFile, null);
+    assert.equal(item.selectedSourceSha256, null);
+    assert.deepEqual(evidence.stations.find(row => row.stationId === item.stationId), item);
+  }
 });
 
 test('Selected official evidence and extraction script match their audit hashes', () => {

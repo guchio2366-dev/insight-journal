@@ -57,6 +57,9 @@
 .mexico-workspace.mexico-nature .mexico-nature-outline-key{height:3px!important;background:#59696a;margin-top:7px}
 .mexico-workspace.mexico-nature .mexico-nature-relief-shade-key{background:linear-gradient(100deg,#d5d4c5,#f5f1dc,#bebfaf)}
 [data-mexico-nature-relief-background]{pointer-events:none}
+[data-mexico-nature-relief-background] image{filter:contrast(1.12) brightness(.91)}
+.mexico-nature[data-mexico-nature-category=elevation] .mexico-nature-map{background:#d5e8ee}
+[data-mexico-precipitation-values] text{font:600 17px sans-serif;text-anchor:middle;dominant-baseline:central;fill:#173d5e;stroke:#fff;stroke-width:4px;stroke-linejoin:round;paint-order:stroke fill}
 .mexico-water-basin-label{cursor:pointer;font:700 16px var(--sans);fill:#203d3f;paint-order:stroke fill;stroke:#fffdf7;stroke-width:3px;stroke-linejoin:round}
 .mexico-water-basin-label[aria-pressed=true]{text-decoration:underline}
 .mexico-water-basin-label:focus-visible{outline:2px solid #173f42}
@@ -66,6 +69,13 @@
 .mexico-workspace.mexico-nature .mexico-climate-city-key{width:8px!important;height:8px!important;flex-basis:8px!important;border-radius:50%;background:#263e48;border:1px solid #fff;outline:1px solid #263e48}
 .mexico-climate-stations circle{fill:#263e48;stroke:#fffdf7;stroke-width:1.5}
 .mexico-climate-stations text{font:700 18px var(--sans);fill:#263e48;stroke:#fffdf7;stroke-width:3px;paint-order:stroke fill}
+.mexico-nature-primary{position:relative}
+.mexico-climate-map-key{position:absolute;left:9px;bottom:9px;z-index:3;display:grid;gap:2px;max-width:min(300px,calc(100% - 70px));padding:7px 10px;background:#fffef5e8;border:1px solid #9eaca3;border-radius:5px;color:#203b3c;font:600 12.5px/1.4 var(--sans);pointer-events:none;box-shadow:0 1px 4px #243b4820}
+.mexico-climate-map-key strong{font-size:12px}
+@media(max-width:959px){.mexico-climate-map-key{position:static;max-width:none;margin:6px 0 0;pointer-events:auto;background:#fffef5;box-shadow:none}}
+.mexico-nature[data-mexico-nature-view]:not([data-mexico-nature-view=climate]) .mexico-climate-map-key,.mexico-nature[data-mexico-nature-category]:not([data-mexico-nature-category=""]) .mexico-climate-map-key{display:none}
+.mexico-climate-stations [data-mexico-climate-city]{cursor:pointer}
+.mexico-climate-stations [data-mexico-climate-city]:hover circle{stroke:#102d36;stroke-width:3}
 .mexico-climate-stations [aria-pressed=true] circle{fill:#fff;stroke:#263e48;stroke-width:2.5}
 .mexico-nature[data-mexico-nature-view]:not([data-mexico-nature-view=climate]) [data-mexico-climate-stations],.mexico-nature[data-mexico-nature-category]:not([data-mexico-nature-category=""]) [data-mexico-climate-stations]{display:none}
 .mexico-nature .mexico-climate-diagrams{display:none}

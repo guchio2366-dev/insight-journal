@@ -2,6 +2,7 @@ import {validateMexicoSurfaceManifest, mexicoSurfaceGradient, mexicoSurfaceTickP
 import {mexicoBasinLabelPoint,validateMexicoWaterCollection, type MexicoWaterFeature} from '../lib/atlas-mexico-hydrology';
 import {projectLonLat,geometryPath} from '../lib/atlas-mexico-geometry';
 import {preparedMexicoBasinPlan} from '../lib/atlas-mexico-basin-evidence.mjs';
+import gpccIsohyetProvenance from '../../public/assets/atlas/mexico-quantitative-v1/gpcc/mexico-gpcc-1991-2020-isohyets-250mm.json';
 
 export interface MexicoNaturePreparedAssets {surfaceAssetBase: string; basinAssetBase: string}
 
@@ -28,6 +29,9 @@ export function initMexicoNatureSurfaces(
   const foreground = document.createElementNS(ns,'g');
   foreground.setAttribute('data-mexico-basin-foreground','');
   q('[data-mexico-nature-main-map]')?.append(foreground);
+  const valueForeground = document.createElementNS(ns,'g');
+  valueForeground.setAttribute('data-mexico-precipitation-values','');
+  valueForeground.setAttribute('pointer-events','none');
   const overviewButton=document.createElement('button');
   overviewButton.type='button';overviewButton.textContent='3水系の概要へ戻る';
   overviewButton.setAttribute('data-mexico-basin-overview','');
@@ -101,15 +105,18 @@ export function initMexicoNatureSurfaces(
       label.classList.add('mexico-basin-system-label');label.dataset.mexicoBasinLabel=plan.id;
       label.dataset.sourceLonlat=JSON.stringify(point);label.setAttribute('x',String(x));label.setAttribute('y',String(y));
       label.setAttribute('font-size',String(fontSize));label.setAttribute('text-anchor','middle');
-      const words=plan.label.split('―');
-      const rows=words.length===3?[words[0]+'―',words.slice(1).join('―')]:words.length===2?[words[0]+'―',words[1]]:[plan.label];
+      const displayLabel=plan.id==='lerma-chapala-santiago'?'レルマ水系':plan.label;
+      const words=displayLabel.split('―');
+      const rows=words.length===2?[words[0]+'―',words[1]]:[displayLabel];
       rows.forEach((row:string,index:number)=>{const span=document.createElementNS(ns,'tspan');span.setAttribute('x',String(x));span.setAttribute('dy',index?'1.2em':'0');span.textContent=row;label.append(span);});
+      const title=document.createElementNS(ns,'title');title.textContent=plan.label;label.append(title);
       labels.push(label);
     }
     return labels;
   }
   function reset(): void {
     group.style.display = 'none'; foreground.style.display='none';legend.hidden = true;
+    valueForeground.replaceChildren(); valueForeground.remove();
     precipitationReason.hidden = true;
     const mapLegendHost = q<HTMLElement>('[data-mexico-precipitation-legend-host]');
     if (mapLegendHost) mapLegendHost.hidden = true;
@@ -122,6 +129,7 @@ export function initMexicoNatureSurfaces(
   }
   reset();
   async function render(category: 'precipitation' | 'elevation' | 'basins', feature: string, current: () => boolean): Promise<string | null> {
+    valueForeground.replaceChildren(); valueForeground.remove();
     if (category === 'basins') {
       if (!basins) basins = await json('catalog.json', assets.basinAssetBase);
       if (!current()) return null;
@@ -250,6 +258,21 @@ export function initMexicoNatureSurfaces(
     }
     group.style.display = ''; group.removeAttribute('data-mexico-basin-system'); root.dataset.mexicoPreparedCategory = category;
     readyImage(assets.surfaceAssetBase + layer.image.file, current);
+    if (category === 'precipitation') {
+      const labels = gpccIsohyetProvenance.labels;
+      if (!Array.isArray(labels) || labels.length === 0 || labels.some((item: any) =>
+        !Number.isInteger(item.valueMmPerYear) || item.valueMmPerYear % 250 !== 0 ||
+        !Number.isFinite(item.x) || item.x < 0 || item.x > 900 ||
+        !Number.isFinite(item.y) || item.y < 0 || item.y > 580)) throw new Error('GPCC label provenance is invalid');
+      for (const item of labels) {
+        const value = document.createElementNS(ns, 'text');
+        value.setAttribute('x', String(item.x)); value.setAttribute('y', String(item.y));
+        value.setAttribute('data-mexico-precipitation-value', String(item.valueMmPerYear));
+        value.textContent = item.valueMmPerYear.toLocaleString('ja-JP');
+        valueForeground.append(value);
+      }
+      q('[data-mexico-nature-main-map]')?.append(valueForeground);
+    }
     return layer.titleJa;
   }
   return {render, reset, invalidate: () => {surfaces = null; basins = null;basinControlsLoaded=false;basinFeatures.clear();basinLabelPoints.clear();}};
