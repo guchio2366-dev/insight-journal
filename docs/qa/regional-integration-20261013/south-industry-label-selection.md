@@ -22,6 +22,8 @@
 
 親の追加指定に従い、南／中央の気候都市未選択初期、中央地形の地点選択後、中央の民族→宗教→民族への復帰も撮影する。前者の気候初期は国・都市未選択をassertし、後者は元の国選択なし・透過度0.80→0.43→0.80のassertを維持する。
 
+中央の選択後は、標高・等高線による地点選択 `central-asia-terrain-selected.png` と地形名選択 `central-asia-landform-selected.png` の両方を含める。元の地形名選択試験は維持し、focused資料からも省略しない。
+
 全画像は既存CI artifact `south-central-focus-<run>-<attempt>` に保存。追加した `review.json` はcheckoutの40桁head、指定review head、buildのrelease情報、各PNGのhead・viewport・DPR・画素寸法・bytes・SHA256・URL／状態を記録する。産業選択の検査前後の表示集合・相対矩形・cameraも記録する。buildRelease.commitShaは既存のGITHUB_SHA（PR検査用合成commitの場合がある）と区別し、撮影headを捏造しない。workflow・公開設定の変更はない。
 
 最初の追補 `b7b51f42` のPC CIではダッカ選択自体の表示集合・相対位置は成功したが、履歴解除で既存URLの座標5桁／zoom3桁への丸めと生のcamera文字列を比較して失敗した。また一覧を実際にクリックするとブラウザーが文書をスクロールするため、絶対画面座標のmap topを固定する新検査も失敗した。検査対象をユーザー要件の地理範囲・地図に対する相対位置へ合わせ、cameraは既存URL精度で照合する。全19ラベルの名称・compact・相対矩形の0.75 CSS px条件は保持し、絶対画面座標も記録する。

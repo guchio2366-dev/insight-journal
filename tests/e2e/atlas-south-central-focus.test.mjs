@@ -210,6 +210,7 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    if(region==='central-asia')assert.equal(new URL(page.url()).searchParams.get('place'),null);
    assert.equal(await page.locator('[data-physical-reading]').isVisible(),true);
    await capture(`${region}-landform-selected`);
+   if(region==='central-asia'&&process.env.SC_FOCUSED_REVIEW==='1')await capturePc(page,'central-asia-landform-selected');
    await page.goto(`${url}/atlas/asia/${region}/population/?topic=religion`,{waitUntil:'domcontentloaded'});
    await page.waitForFunction(count=>document.querySelectorAll('.sc-religion-marker').length===count,region==='central-asia'?1:5);
    await page.waitForFunction(count=>document.querySelectorAll('.sc-religion-report-marker:not(.local)').length===count,region==='central-asia'?4:0);
