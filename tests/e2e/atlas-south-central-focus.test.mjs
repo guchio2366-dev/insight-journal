@@ -5,22 +5,78 @@ import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import path from 'node:path';
+import sharp from 'sharp';
+import {mapPaintDifference,labelInk} from '../browser/helpers/atlas-map-paint-review.mjs';
 
 const enabled=process.env.ATLAS_ASIA_BROWSER==='1';
 const base='/insight-journal',root=path.resolve('dist');
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.gz':'application/gzip','.png':'image/png','.svg':'image/svg+xml','.webp':'image/webp','.woff2':'font/woff2'};
-const reviewFolder=path.resolve('review-artifacts/south-central-focus'),review={head:null,requestedHead:process.env.REVIEW_HEAD_SHA??null,buildRelease:null,sandbox:true,images:[],industryTransitions:[]};
+const reviewFolder=path.resolve('review-artifacts/south-central-focus'),review={head:null,requestedHead:process.env.REVIEW_HEAD_SHA??null,buildRelease:null,sandbox:true,images:[],industryTransitions:[],captureAdjustments:[],renderChecks:[]};
+const renderReferences=new WeakMap();
+const renderFollowup=new Set(['south-asia-industry','south-asia-industry-cleared','south-asia-industry-cleared-confirmed','1920-south-asia-industry-selected-sc-chattogram-garments','1440-south-asia-industry-selected-sc-dhaka-garments','1440-south-asia-industry-selected-sc-chattogram-garments','1024-south-asia-industry-selected-sc-dhaka-garments','1024-south-asia-industry-selected-sc-chattogram-garments']);
 async function saveReview(){
  await mkdir(reviewFolder,{recursive:true});
  if(!review.head){review.head=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();review.buildRelease=JSON.parse(await readFile(path.join(root,'_release.json'),'utf8'));if(review.requestedHead)assert.equal(review.head,review.requestedHead);}
  await writeFile(path.join(reviewFolder,'review.json'),JSON.stringify(review,null,2)+'\n');
 }
 async function settled(page){await page.evaluate(async()=>{await document.fonts.ready;scrollTo(0,0);await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});}
+async function captureState(page){return page.evaluate(()=>{const root=document.querySelector('[data-asia-atlas]'),map=root.atlasReviewMap,c=map.getCenter();return {url:location.href,camera:{lng:c.lng,lat:c.lat,zoom:map.getZoom()},selected:[...root.querySelectorAll('.asia-industry-regional-label[aria-pressed="true"]')].map(label=>label.dataset.industrySite),country:root.querySelector('[data-country-select]')?.value??null};});}
+async function stableIndustryFrame(page,name){
+ await page.waitForFunction(()=>{const root=document.querySelector('[data-asia-atlas]'),map=root?.atlasReviewMap;return map&&root.dataset.mapReady==='true'&&map.loaded()&&map.areTilesLoaded()&&!map.isMoving();});
+ const before=await captureState(page);
+ await page.mouse.move(1,1);
+ await page.locator('.asia-map-frame').evaluate(frame=>frame.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'}));
+ await page.evaluate(async()=>{await document.fonts.ready;await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
+ const after=await captureState(page);assert.deepEqual(after,before,name+': revealing the map preserves URL, selection and exact camera');
+ const saved=process.env.SC_FOCUSED_REVIEW!=='1'||renderFollowup.has(name);
+ review.captureAdjustments.push({case:name,file:saved?name+'.png':null,viewport:page.viewportSize(),before,after,status:'passed'});
+ let previous=null,consecutive=0,stableSince=0,result;
+ const deadline=Date.now()+10000;
+ while(Date.now()<deadline){
+  await page.waitForFunction(()=>{const map=document.querySelector('[data-asia-atlas]')?.atlasReviewMap;return map&&map.loaded()&&map.areTilesLoaded()&&!map.isMoving();});
+  const scene=await page.evaluate(()=>{
+   const root=document.querySelector('[data-asia-atlas]'),map=root.atlasReviewMap,canvas=map.getCanvas(),rect=canvas.getBoundingClientRect(),frame=root.querySelector('.asia-map-frame'),gl=canvas.getContext('webgl2');
+   const box=element=>{const r=element.getBoundingClientRect();return {left:r.left-rect.left,top:r.top-rect.top,right:r.right-rect.left,bottom:r.bottom-rect.top};};
+   const markers=[...root.querySelectorAll('.maplibregl-marker')].filter(element=>element.getBoundingClientRect().width>0&&getComputedStyle(element).visibility!=='hidden');
+   const masks=markers.map(element=>{const r=box(element);return {left:r.left-7,top:r.top-7,right:r.right+7,bottom:r.bottom+7};});
+   const config=JSON.parse(root.querySelector('[data-asia-config]').textContent());for(const site of config.industrySites){const p=map.project(site.point);masks.push({left:p.x-22,top:p.y-22,right:p.x+22,bottom:p.y+22});}
+   const visible=[[rect.left+4,rect.top+4],[rect.right-4,rect.top+4],[rect.left+4,rect.bottom-4],[rect.right-4,rect.bottom-4]].every(([x,y])=>x>=0&&y>=0&&x<innerWidth&&y<innerHeight&&frame.contains(document.elementFromPoint(x,y)));
+   return {bounds:{left:rect.left,top:rect.top,width:rect.width,height:rect.height},clip:{x:Math.floor(rect.left),y:Math.floor(rect.top),width:Math.ceil(rect.right)-Math.floor(rect.left),height:Math.ceil(rect.bottom)-Math.floor(rect.top)},visible,loaded:map.loaded(),tilesLoaded:map.areTilesLoaded(),moving:map.isMoving(),contextHealthy:!!gl&&!gl.isContextLost(),masks,steel:box(root.querySelector('[data-industry-site="sc-odisha-steel"]'))};
+  });
+  assert.equal(scene.visible,true,name+': the complete map is inside the viewport and unobstructed');assert.equal(scene.contextHealthy,true,name+': live WebGL context');
+  const png=await page.screenshot({clip:scene.clip,animations:'disabled'}),hash=createHash('sha256').update(png).digest('hex');
+  if(hash===previous){consecutive++;}else{previous=hash;consecutive=1;stableSince=Date.now();}
+  result={scene,png,hash,consecutive,stableMs:Date.now()-stableSince};
+  if(consecutive>=3&&result.stableMs>=500)break;
+  await page.waitForTimeout(100);
+ }
+ assert.ok(result?.consecutive>=3&&result.stableMs>=500,name+': three equal rendered map frames remain stable for at least 500ms');
+ const {data,info}=await sharp(result.png).ensureAlpha().raw().toBuffer({resolveWithObject:true});result.pixels={data,width:info.width,height:info.height};
+ let ocean=0,land=0;for(let i=0;i<data.length;i+=4){if(Math.abs(data[i]-230)<=3&&Math.abs(data[i+1]-238)<=3&&Math.abs(data[i+2]-240)<=3)ocean++;if(Math.abs(data[i]-225)<=3&&Math.abs(data[i+1]-228)<=3&&Math.abs(data[i+2]-219)<=3)land++;}
+ const painted={oceanFraction:ocean/(info.width*info.height),landFraction:land/(info.width*info.height)};
+ assert.ok(painted.oceanFraction>.02&&painted.landFraction>.05,name+': the stable reference contains the actual ocean and land paint: '+JSON.stringify(painted));
+ const reference=renderReferences.get(page);let paint=null,ink=null;
+ if(reference){
+  paint=mapPaintDifference(reference.pixels,result.pixels,[...reference.scene.masks,...result.scene.masks]);
+  assert.ok(paint.sampled>result.pixels.width*result.pixels.height*.2,name+': enough geographic pixels remain outside the overlays');
+  assert.ok(paint.fraction<=.005,name+': geography has no persistent missing paint: '+JSON.stringify(paint));
+  const beforeInk=labelInk(reference.pixels,reference.scene.steel),afterInk=labelInk(result.pixels,result.scene.steel);ink={before:beforeInk,after:afterInk};
+  assert.ok(beforeInk.dark>20&&afterInk.dark>=beforeInk.dark*.95,name+': retained steel label text has no missing paint: '+JSON.stringify(ink));
+ }else{renderReferences.set(page,result);}
+ review.renderChecks.push({case:name,file:saved?name+'.png':null,viewport:page.viewportSize(),scene:result.scene,canvasSha256:result.hash,stableFrames:result.consecutive,stableMs:result.stableMs,painted,paint,steelInk:ink,status:'passed'});
+ console.log(`Map render ${name}: visible, loaded, stable ${result.consecutive} frames/${result.stableMs}ms; missing paint ${paint?.fraction??'reference'}`);
+ return result;
+}
 async function capturePc(page,name){
- await page.waitForLoadState('networkidle');await settled(page);await mkdir(reviewFolder,{recursive:true});
+ const baseline=name==='south-asia-industry'||/^\d+-south-asia-industry-initial$/.test(name),wanted=process.env.SC_FOCUSED_REVIEW!=='1'||renderFollowup.has(name);
+ if(!wanted&&!baseline)return;
+ let render=null;
+ if(baseline||renderFollowup.has(name)){await page.waitForLoadState('networkidle');render=await stableIndustryFrame(page,name);}
+ if(!wanted){await saveReview();return;}
+ if(!render){await page.waitForLoadState('networkidle');await settled(page);}await mkdir(reviewFolder,{recursive:true});
  const file=name+'.png';await page.screenshot({path:path.join(reviewFolder,file),animations:'disabled',fullPage:false});
  const bytes=await readFile(path.join(reviewFolder,file)),state=await page.evaluate(()=>({region:document.querySelector('[data-asia-config]')?.textContent?JSON.parse(document.querySelector('[data-asia-config]').textContent).focusId:null,field:document.querySelector('[data-asia-atlas]')?.dataset.field,query:location.search,dpr:devicePixelRatio}));
- review.images.push({file,head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),viewport:page.viewportSize(),dpr:state.dpr,pngSize:{width:bytes.readUInt32BE(16),height:bytes.readUInt32BE(20)},sha256:createHash('sha256').update(bytes).digest('hex'),bytes:bytes.length,url:page.url(),state});await saveReview();
+ review.images.push({file,head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),viewport:page.viewportSize(),dpr:state.dpr,pngSize:{width:bytes.readUInt32BE(16),height:bytes.readUInt32BE(20)},sha256:createHash('sha256').update(bytes).digest('hex'),bytes:bytes.length,url:page.url(),state,mapBounds:render?.scene.bounds??null});await saveReview();
 }
 async function industrySnapshot(page){
  await page.waitForLoadState('networkidle');
@@ -63,6 +119,7 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
  try{
   browser=await chromium.launch({headless:true,chromiumSandbox:true,...(process.env.REVIEW_CHROME_PATH?{executablePath:process.env.REVIEW_CHROME_PATH}:{})});
   const page=await browser.newPage({viewport:{width:1920,height:1080},deviceScaleFactor:1}),errors=[];
+  await page.addInitScript(()=>{window.atlasRenderReview=true;});
   const focusedCaptures=new Set(['south-asia-climate-initial','south-asia-climate','south-asia-agriculture','south-asia-agriculture-tea','south-asia-forest-use','south-asia-terrain','south-asia-landform','south-asia-industry','south-asia-industry-selected','south-asia-industry-cleared','south-asia-population','south-asia-ethnicity','south-asia-religion','south-asia-nepal-religion','south-asia-sri-lanka-religion','south-asia-precipitation','south-asia-basins','south-asia-basin-selected','south-asia-groundwater','central-asia-climate-initial','central-asia-climate','central-asia-industry','central-asia-industry-selected','central-asia-agriculture','central-asia-population','central-asia-terrain','central-asia-landform','central-asia-religion','central-asia-precipitation','central-asia-water-selected','central-asia-ethnicity']);
 
   const capture=async name=>{if(process.env.SC_FOCUSED_REVIEW==='1'&&!focusedCaptures.has(name))return;await capturePc(page,name);};
@@ -145,7 +202,7 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    await page.goBack();
    await page.waitForFunction(()=>new URL(location.href).searchParams.get('detail')===null);
    // URL round-trip can cross MapLibre's nearest-pixel boundary by one pixel.
-   if(industryBefore){await verifyIndustrySelection(page,industryBefore,null,'1920 South Asia clear through history',1);await capture('south-asia-industry-cleared');}
+   if(industryBefore){await verifyIndustrySelection(page,industryBefore,null,'1920 South Asia clear through history',1);await capture('south-asia-industry-cleared');await capturePc(page,'south-asia-industry-cleared-confirmed');}
    await page.goBack();
    await page.waitForURL(`**/atlas/asia/${region}/nature/**`);
    assert.equal(await page.locator('[data-country-select]').inputValue(),'');
@@ -373,6 +430,7 @@ test('南アジア産業の全地点とPC三幅の代表選択は表示集合と
   browser=await chromium.launch({headless:true,chromiumSandbox:true,...(process.env.REVIEW_CHROME_PATH?{executablePath:process.env.REVIEW_CHROME_PATH}:{})});
   for(const [width,height]of [[1920,1080],[1440,900],[1024,768]]){
    const page=await browser.newPage({viewport:{width,height},deviceScaleFactor:1}),errors=[];page.on('pageerror',error=>errors.push(error.message));
+   await page.addInitScript(()=>{window.atlasRenderReview=true;});
    await page.goto(`${url}/atlas/asia/south-asia/industry/`,{waitUntil:'domcontentloaded'});
    await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelectorAll('.asia-industry-regional-label').length>0);
    const before=await industrySnapshot(page);
@@ -397,6 +455,11 @@ test('南アジア産業の全地点とPC三幅の代表選択は表示集合と
    await capturePc(page,`${width}-south-asia-industry-reset`);
    assert.deepEqual(errors,[]);await page.close();
    console.log(`South industry ${width}px: ${selectionIds.length} selections and reset passed`);
+  }
+  if(process.env.SC_FOCUSED_REVIEW==='1'){
+   assert.equal(review.images.length,8,'only the eight requested render followup views are saved');
+   const total=review.images.reduce((sum,image)=>sum+image.bytes,0)+(await readFile(path.join(reviewFolder,'review.json'))).length;
+   assert.ok(total<20_000_000,'the standalone render followup remains below 20MB');console.log(`Render followup: ${review.images.length} PNGs plus review.json; ${total} uncompressed bytes < 20MB.`);
   }
  }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
 });

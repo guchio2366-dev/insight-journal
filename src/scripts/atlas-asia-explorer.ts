@@ -106,6 +106,9 @@ function start(root:HTMLElement) {
   }
   let state:AsiaState=readState();
   let map:import('maplibre-gl').Map|null=null;
+  // Opt-in screenshot diagnostics read the actual map's public readiness APIs.
+  // This getter neither changes the scene nor exists in normal page sessions.
+  if(config.focusId==='south-asia'&&(window as Window&{atlasRenderReview?:boolean}).atlasRenderReview===true)Object.defineProperty(root,'atlasReviewMap',{get:()=>map,configurable:true});
   let mapReady=false,starting=false,suppressCamera=false,sourceFailed=false,attempt=0,moveTimer:ReturnType<typeof setTimeout>|undefined;
   const navigationBounds=config.dataBounds??config.bounds;
   const climateManifest={regions:{[config.regionId]:config.climate}};
