@@ -57,7 +57,7 @@ try{
   });
  };
  const open=async(region,field,search='')=>{await page.goto(`${base}atlas/${region}/${field}/${search}`,{waitUntil:'networkidle'});await ready(region);};
- const shot=async name=>{if(!name.includes('-nature-')){if(focusDeltaOnly&&!/^(?:oceania|russia)-agriculture-(1536|1920)-(overview|crop-focus|single-product|selected-with-other-distributions)$/.test(name))return;if(representativeOnly&&!/^(?:oceania|russia)-agriculture-(1536|1024|1920)-(overview|crop-focus|single-product|selected-with-other-distributions)$/.test(name))return;}await page.screenshot({path:resolve(output,name+'.png'),fullPage:true});result.screenshots.push(name+'.png');};
+ const shot=async name=>{if(!name.includes('-nature-')){if(focusDeltaOnly&&!/^(?:oceania-agriculture-(1536|1920|1024)|russia-agriculture-(1536|1920))-(overview|crop-focus|single-product|selected-with-other-distributions)$/.test(name))return;if(representativeOnly&&!/^(?:oceania|russia)-agriculture-(1536|1024|1920)-(overview|crop-focus|single-product|selected-with-other-distributions)$/.test(name))return;}await page.screenshot({path:resolve(output,name+'.png'),fullPage:true});result.screenshots.push(name+'.png');};
  const annotationShot=async(map,product)=>{
   // Capture document pixels without element scrolling or a retained SVG handle.
   // Closing the details can resize the root and replace its SVG in the next frame.
@@ -79,7 +79,7 @@ try{
   const frame=await map.locator('svg').first().getAttribute('viewBox');
   assert.equal(await host.locator('[data-place]').inputValue(),'all');
   assert.equal(await host.locator('[data-layer]').inputValue(),'industry-all');
-  assert.equal(await marks().count(),6);
+  assert.equal(await marks().count(),8);
   assert.equal(await mines().count(),347);
   assert.equal(await map.locator('[data-oceania-industry-location][aria-pressed="true"]').count(),0);
   assert.match(await host.locator('[data-theme-title]').textContent(),/オセアニアの主要産業/);
@@ -91,24 +91,24 @@ try{
   assert.match(await host.locator('[data-source-list]').textContent(),/ラエ港の位置資料/);
   assert.equal(await host.locator('[data-oceania-industry-return]').isVisible(),true);
   assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
-  assert.equal(await marks().count(),6);assert.equal(await mines().count(),347);
+  assert.equal(await marks().count(),8);assert.equal(await mines().count(),347);
   assert.equal(await map.locator('[data-oceania-industry-location="lae-port"]').getAttribute('aria-pressed'),'true');
   await capture('lae-selected');
   await page.reload({waitUntil:'networkidle'});await ready('oceania');
   assert.equal(await host.locator('[data-theme-title]').textContent(),'ラエ港');
-  assert.equal(await marks().count(),6);assert.equal(await mines().count(),347);
+  assert.equal(await marks().count(),8);assert.equal(await mines().count(),347);
   await capture('lae-reloaded');
   await host.locator('[data-oceania-industry-return]').click();await ready('oceania');
   assert.equal(new URL(page.url()).searchParams.has('industryLocation'),false);
   assert.equal(await host.locator('[data-oceania-industry-return]').isVisible(),false);
-  assert.equal(await marks().count(),6);assert.equal(await mines().count(),347);
+  assert.equal(await marks().count(),8);assert.equal(await mines().count(),347);
   assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
   await capture('reset');
   await page.reload({waitUntil:'networkidle'});await ready('oceania');
   assert.equal(new URL(page.url()).searchParams.has('industryLocation'),false);
   assert.equal(await host.locator('[data-oceania-industry-return]').isVisible(),false);
-  assert.equal(await marks().count(),6);assert.equal(await mines().count(),347);
-  result.checks.push('Oceania industry at 1920×1080 CSS pixels and DPR 1: overview, Lae representative selection, reload and reset retain all six named places, 347 Australian mine marks, source reading and the full regional frame.');
+  assert.equal(await marks().count(),8);assert.equal(await mines().count(),347);
+  result.checks.push('Oceania industry at 1920×1080 CSS pixels and DPR 1: overview, Lae representative selection, reload and reset retain all eight named places, 347 Australian mine marks, source reading and the full regional frame.');
  }
  if(!farmingOnly||physicalReview){
   for(const width of [1920,1536,1024]){
@@ -294,7 +294,9 @@ try{
       assert.ok(regionControl.y<bounds.y&&layerControl.y<bounds.y);
       assert.ok(regionControl.x<(await reading.boundingBox()).x);
       assert.equal(await host.locator('.oceania-learning-layer > span').evaluate(el=>getComputedStyle(el).whiteSpace),'nowrap');
-      const places=map.locator('[data-farming-place]');assert.equal(await places.count(),5);
+      const places=map.locator('[data-farming-place]');assert.equal(await places.count(),9);
+      assert.equal(await map.locator('[data-farming-belt]').count(),7);
+      for(const id of ['wheat-southeast','wheat-nz','coconut-png-islands','cacao-solomon-west'])assert.equal(await map.locator(`[data-farming-place="${id}"]`).count(),1);
       const labels=await places.locator('rect').evaluateAll(elements=>elements.map(el=>{const b=el.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};}));
       for(let i=0;i<labels.length;i++)for(let j=i+1;j<labels.length;j++)assert.ok(labels[i].x+labels[i].width<=labels[j].x||labels[j].x+labels[j].width<=labels[i].x||labels[i].y+labels[i].height<=labels[j].y||labels[j].y+labels[j].height<=labels[i].y,'Farming names do not overlap');
       const legendDetails=host.locator('[data-primary-legend-dictionary]');await legendDetails.locator('summary').click();
@@ -318,7 +320,7 @@ try{
      const products=region==='russia'?['cattle','wheat']:['cacao','cattle','coconut','sheep','wheat'];
      const shown=async()=>[...new Set(await map.locator('[data-farming-product]').evaluateAll(elements=>elements.map(el=>el.dataset.farmingProduct)))].sort();
      assert.deepEqual(await shown(),products);
-     if(region==='oceania')assert.deepEqual(await map.locator('[data-farming-place]').evaluateAll(elements=>elements.map(el=>Number(getComputedStyle(el).opacity))),[1,1,1,1,1]);
+     if(region==='oceania')assert.equal(await map.locator('[data-farming-place]').evaluateAll(elements=>elements.every(el=>Number(getComputedStyle(el).opacity)===1)),true);
      assert.match(await host.locator('[data-explanation]').textContent(),region==='russia'?/他の品目の全国分布格子は未収録/:/上位10/);
      const cattle=map.locator('[data-farming-product="cattle"][data-farming-mode="texture"]');
      const initialOpacity=Number(await cattle.getAttribute('opacity'));

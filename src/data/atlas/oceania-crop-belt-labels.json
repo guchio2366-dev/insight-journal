@@ -1,0 +1,109 @@
+{
+  "year": 2020,
+  "unit": "harvested ha/native 5 arc-minute source cell",
+  "source": "https://doi.org/10.7910/DVN/SWPENT",
+  "license": "CC BY 4.0",
+  "method": "Native source-cell centre and positive Float32 value from the saved grid. The positions identify regional positive harvested-area distributions, not farm boundaries, production quantity or national rank. Surrounding zero and missing cells remain unchanged. No new inclusion threshold is applied.",
+  "places": [
+    {
+      "id": "wheat-southeast",
+      "product": "wheat",
+      "country": "AUS",
+      "name": "豪州南東部",
+      "coordinates": [
+        145.0416664302728,
+        -34.791666575909076
+      ],
+      "offset": [
+        -12,
+        40
+      ],
+      "displayCell": [
+        420,
+        717
+      ],
+      "nativeSourceCell": [
+        3900,
+        1497
+      ],
+      "sourceCellHa": 5.199999809265137,
+      "sourceGrid": "public/assets/atlas/oceania-crops-v1/wheat.values.gz",
+      "sourceGridSha256": "f33a98f2b1b6ca87cdb4920c3ea8942afeb129bfc3979dae32fc31d3de1b843a"
+    },
+    {
+      "id": "wheat-nz",
+      "product": "wheat",
+      "country": "NZL",
+      "name": "NZ南島",
+      "coordinates": [
+        171.5416664110001,
+        -43.87499990263636
+      ],
+      "offset": [
+        140,
+        -26
+      ],
+      "displayCell": [
+        738,
+        826
+      ],
+      "nativeSourceCell": [
+        4218,
+        1606
+      ],
+      "sourceCellHa": 830.0,
+      "sourceGrid": "public/assets/atlas/oceania-crops-v1/wheat.values.gz",
+      "sourceGridSha256": "f33a98f2b1b6ca87cdb4920c3ea8942afeb129bfc3979dae32fc31d3de1b843a"
+    },
+    {
+      "id": "coconut-png-islands",
+      "product": "coconut",
+      "country": "PNG",
+      "name": "PNG島嶼部",
+      "coordinates": [
+        150.3749999999249,
+        -5.541666666644915
+      ],
+      "offset": [
+        120,
+        -26
+      ],
+      "displayCell": [
+        484,
+        366
+      ],
+      "nativeSourceCell": [
+        3964,
+        1146
+      ],
+      "sourceCellHa": 567.0999755859375,
+      "sourceGrid": "public/assets/atlas/oceania-crops-v1/coconut.values.gz",
+      "sourceGridSha256": "a96f2ec26cc15b12d7e38931916b20fedc72942eab819e90ceaa4c601776c98f"
+    },
+    {
+      "id": "cacao-solomon-west",
+      "product": "cacao",
+      "country": "SLB",
+      "name": "ソロモン西部",
+      "coordinates": [
+        156.7083333332568,
+        -7.791666666644403
+      ],
+      "offset": [
+        88,
+        -42
+      ],
+      "displayCell": [
+        560,
+        393
+      ],
+      "nativeSourceCell": [
+        4040,
+        1173
+      ],
+      "sourceCellHa": 9.5,
+      "sourceGrid": "public/assets/atlas/oceania-crops-v1/cacao.values.gz",
+      "sourceGridSha256": "f7fec4ccb2b7a4e537dd08b1bf484e5daaea40d8aa920258784637c75010ef8c"
+    }
+  ]
+}

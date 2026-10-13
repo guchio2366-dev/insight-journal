@@ -2,6 +2,7 @@ import test, {after} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
+import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {build,stop} from 'esbuild';
 import {Window} from 'happy-dom';
@@ -167,13 +168,13 @@ test('industry representative places open sourced details while all marks remain
   try{
     const first=controllerFixture('https://example.test/insight-journal/atlas/oceania/industry/?utm_source=qa','industry');sessions.push(first);
     const root=first.root;
-    assert.equal(root.querySelectorAll('[data-oceania-industry-location]').length,6);
+    assert.equal(root.querySelectorAll('[data-oceania-industry-location]').length,8);
     assert.equal(root.querySelectorAll('[data-oceania-industry-location][aria-pressed="true"]').length,0);
     root.querySelector('[data-oceania-industry-location="lae-port"]')?.dispatchEvent(new first.window.MouseEvent('click',{bubbles:true}));
     assert.equal(root.querySelector('[data-theme-title]').textContent,'ラエ港');
     assert.match(root.querySelector('[data-explanation]').textContent,/個々の鉱山の輸出港/);
     assert.match(root.querySelector('[data-source-list]').textContent,/ラエ港の位置資料/);
-    assert.equal(root.querySelectorAll('[data-oceania-industry-location]').length,6);
+    assert.equal(root.querySelectorAll('[data-oceania-industry-location]').length,8);
     assert.equal(root.querySelectorAll('circle[stroke="#fff"]').length,347);
     assert.equal(root.querySelector('[data-oceania-industry-location="lae-port"]').getAttribute('aria-pressed'),'true');
     const url=first.window.location.href;
@@ -222,6 +223,19 @@ test('overlapping industry mark keeps the current sector and isolation through r
     assert.equal(query.get('sector'),'resources');
     assert.equal(query.has('sectorOnly'),false);
   }finally{for(const session of sessions)session.window.happyDOM.abort();}
+});
+
+test('NZ processing guide positions reuse the saved city coordinates and explicitly distinguish factory addresses',()=>{
+ const marks=JSON.parse(readFileSync(new URL('../../public/assets/atlas/oceania-industry-v2/places.json',import.meta.url),'utf8')).places;
+ for(const id of ['nz-dairy-guide','nz-wood-guide']){
+  const mark=marks.find(item=>item.id===id),city=cities.find(item=>item.id===mark.coordinateSource.urbanCentreId);
+  assert.deepEqual(mark.coordinates,city.coordinates);
+  assert.equal(mark.coordinateMeaning,'urban-centre-guide-not-factory');
+  assert.match(mark.note,/都市中心の案内位置.*入口・敷地ではありません/);
+  assert.match(mark.note,/生産量は示しません/);
+  const state=api.createOceaniaState('?industryLocation='+id,'industry');
+  assert.equal(state.industryLocation,id);
+ }
 });
 
 test('comparison reload and named return preserve original crop, country, legends, unrelated query and hash',()=>{
@@ -313,7 +327,7 @@ test('saved Oceania farming products start together and direct product URLs choo
    const holder=win.document.createElement('div');holder.innerHTML=api.renderOceaniaScene(api.getOceaniaLayer(product),focus);
    assert.deepEqual([...new Set([...holder.querySelectorAll('[data-farming-product]')].map(el=>el.dataset.farmingProduct))].sort(),['cacao','cattle','coconut','sheep','wheat']);
    assert.equal(holder.querySelectorAll('[data-map-place]').length,0,'Agriculture country selection uses the native control');
-   assert.equal(holder.querySelectorAll('[data-farming-place]').length,5);
+   assert.equal(holder.querySelectorAll('[data-farming-place]').length,9);
    for(const annotation of holder.querySelectorAll('[data-farming-place]'))assert.equal(Number(annotation.getAttribute('opacity')),['wheat','coconut','cacao'].includes(product)&&annotation.dataset.placeProduct!==product?0.32:1);
    assert.equal(holder.querySelectorAll(`[data-farming-product="${product}"][data-farming-mode="quantity"]`).length,1);
    assert.equal(holder.querySelector('[data-farming-product="wheat"][data-farming-mode="outline"]').getAttribute('opacity'),product==='wheat'?'1':'0.75');
@@ -329,7 +343,7 @@ test('Oceania single-product URL hides other mapped products and keeps the selec
  const win=new Window();try{
   const holder=win.document.createElement('div');holder.innerHTML=api.renderOceaniaScene(api.getOceaniaLayer(state.layer),state);
   assert.deepEqual([...new Set([...holder.querySelectorAll('[data-farming-product]')].map(el=>el.dataset.farmingProduct))],['coconut']);
-  assert.deepEqual([...holder.querySelectorAll('[data-farming-place]')].map(el=>el.dataset.placeProduct),['coconut']);
+  assert.deepEqual([...new Set([...holder.querySelectorAll('[data-farming-place]')].map(el=>el.dataset.placeProduct))],['coconut']);
   assert.equal(api.createOceaniaState('?layer=farming-all&single=1','agriculture').single,false);
  }finally{win.happyDOM.abort();}
 });
@@ -345,5 +359,10 @@ test('Oceania farming example names stay inside the saved country and on a posit
   const [lon,lat]=place.coordinates,column=Math.floor((lon-west)/(east-west)*layer.width),row=Math.floor((north-lat)/(north-south)*layer.height);
   const values=gunzipSync(readFileSync(new URL(base+layer.grid,import.meta.url)));
   assert.ok(values.readFloatLE((row*layer.width+column)*4)>0,place.id+' must use a source positive');
+  if(place.displayCell){
+   assert.deepEqual([column,row],place.displayCell);
+   assert.equal(values.readFloatLE((row*layer.width+column)*4),place.sourceCellHa);
+   assert.equal(createHash('sha256').update(readFileSync(new URL('../../'+place.sourceGrid,import.meta.url))).digest('hex'),place.sourceGridSha256);
+  }
  }
 });

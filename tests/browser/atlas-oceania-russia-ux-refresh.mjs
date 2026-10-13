@@ -92,6 +92,30 @@ try{
     await root.locator(`[data-industry-sector="${region==='oceania'?'resources':'services'}"]`).click();
     assert.equal(new URL(page.url()).searchParams.has('sector'),false);
     assert.equal(await map.getAttribute('viewBox'),frame);
+    if(region==='oceania'){
+     const guideLabels=root.locator('[data-primary-map] [data-oceania-industry-location^="nz-"] text');
+     const guideBoxes=await guideLabels.evaluateAll(nodes=>nodes.map(node=>{const b=node.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};}));
+     const otherBoxes=await map.locator('[data-oceania-industry-location]:not([data-oceania-industry-location^="nz-"]) text, svg > text').evaluateAll(nodes=>nodes.map(node=>{const b=node.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};}));
+     const overlap=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
+     const bounds=await root.locator('[data-primary-map]').boundingBox();
+     for(const box of guideBoxes)assert.ok(box.x>=bounds.x&&box.y>=bounds.y&&box.x+box.width<=bounds.x+bounds.width&&box.y+box.height<=bounds.y+bounds.height,`${width}: NZ guide names stay inside the map`);
+     for(const [index,box] of guideBoxes.entries())for(const other of [...guideBoxes.slice(index+1),...otherBoxes])assert.equal(overlap(box,other),false,`${width}: NZ guide names avoid other map names`);
+     for(const id of ['nz-dairy-guide','nz-wood-guide']){
+      await root.locator(`[data-primary-map] [data-oceania-industry-location="${id}"] circle`).click();
+      assert.equal(new URL(page.url()).searchParams.get('industryLocation'),id);
+      assert.equal(new URL(page.url()).searchParams.get('sector'),'manufacturing');
+      assert.match(await root.locator('[data-takeaway]').textContent(),/都市中心の案内位置.*工場の入口・敷地ではありません/);
+      assert.match(await root.locator('[data-explanation]').textContent(),/案内位置.*入口・敷地ではありません/);
+      assert.equal(await map.getAttribute('viewBox'),frame);
+      await capture(`${width}-${region}-industry-${id}`);
+      await page.reload({waitUntil:'networkidle'});
+      await page.waitForFunction(()=>document.querySelector('[data-oceania-learning]')?.dataset.oceaniaReady==='true');
+      assert.equal(new URL(page.url()).searchParams.get('industryLocation'),id);
+     }
+     await root.locator('[data-primary-map] [data-oceania-industry-location="tauranga-port"] circle').click();
+     assert.equal(new URL(page.url()).searchParams.get('industryLocation'),'tauranga-port','The nearby wood guide does not intercept the original port marker');
+     await root.locator('[data-oceania-industry-return]').click();
+    }
    }
    if(field==='agriculture'){
     const crop=root.locator('[data-farming-group=crop]'),livestock=root.locator('[data-farming-group=livestock]');
