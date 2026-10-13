@@ -41,7 +41,7 @@ async function stableFarmSnapshot(selected){
   let previous='',since=0,frames=0,last;const started=performance.now();
   while(performance.now()-started<10000){
    const root=document.querySelector('[data-asia-atlas]'),frame=root.querySelector('.asia-map-frame'),b=frame.getBoundingClientRect();
-   last={selected:root.dataset.farmSelected,ready:root.dataset.farmContextStatus,mapReady:root.dataset.mapReady,camera:JSON.parse(root.dataset.mapCamera),frame:{width:b.width,height:b.height},layout:{height:root.style.getPropertyValue('--asia-farm-map-height'),available:root.style.getPropertyValue('--asia-map-available-height')},points:[...root.querySelectorAll('.asia-livestock-point')].filter(n=>n.getBoundingClientRect().width&&!n.hidden).map(n=>({name:n.getAttribute('aria-label'),x:parseFloat(n.style.left),y:parseFloat(n.style.top),opacity:parseFloat(getComputedStyle(n).opacity)}))};
+   last={selected:root.dataset.farmSelected,ready:root.dataset.farmContextStatus,mapReady:root.dataset.mapReady,camera:JSON.parse(root.dataset.mapCamera),scroll:{x:scrollX,y:scrollY},frame:{x:b.x,y:b.y,width:b.width,height:b.height},layout:{height:root.style.getPropertyValue('--asia-farm-map-height'),available:root.style.getPropertyValue('--asia-map-available-height')},points:[...root.querySelectorAll('.asia-livestock-point')].filter(n=>n.getBoundingClientRect().width&&!n.hidden).map(n=>({name:n.getAttribute('aria-label'),x:parseFloat(n.style.left),y:parseFloat(n.style.top),opacity:parseFloat(getComputedStyle(n).opacity)}))};
    const fingerprint=JSON.stringify(last),now=performance.now();
    if(last.ready==='ready'&&last.mapReady==='true'&&last.selected===selected&&last.points.length&&fingerprint===previous){frames++;if(frames>=3&&now-since>=500)return{...last,stableFrames:frames,stableMs:now-since};}
    else{since=now;frames=1;previous=fingerprint;}
@@ -124,12 +124,17 @@ try{
   const product=await page.locator('[data-asia-config]').evaluate(node=>JSON.parse(node.textContent).presentation.farming.products.find(p=>p.kind==='crop'&&p.id!=='rice').id);
   const points=page.locator('.asia-livestock-point:visible');
   const anchors=()=>points.evaluateAll(nodes=>nodes.map(node=>({name:node.getAttribute('aria-label'),x:parseFloat(node.style.left),y:parseFloat(node.style.top),opacity:parseFloat(getComputedStyle(node).opacity)})));
+  await page.evaluate(()=>scrollTo({top:0,left:0,behavior:'instant'}));
   const beforeSnapshot=await stableFarmSnapshot(''),before=beforeSnapshot.points;assert(before.length>0,region+' sourced livestock is visible');
   const beforeCamera=beforeSnapshot.camera;
-  await page.locator(`[data-farm-choice="${product}"]`).first().click();
+  const trigger=page.locator(`[data-farm-choice="${product}"]`).first(),triggerBox=await trigger.boundingBox();await trigger.click();
   await page.locator(`[data-asia-atlas][data-farm-context-status="ready"][data-farm-selected="${product}"]`).waitFor();await settle();
+  const afterClick=await stableFarmSnapshot(product),selectedURL=page.url();sameCamera(afterClick.camera,beforeCamera);
+  await page.evaluate(()=>scrollTo({top:0,left:0,behavior:'instant'}));
   const afterSnapshot=await stableFarmSnapshot(product),selected=afterSnapshot.points;
-  report.operations.push({region,kind:'farm-layout-diagnostic',before:beforeSnapshot,after:afterSnapshot});
+  assert.equal(page.url(),selectedURL,'Measurement scroll preserves the selected URL');sameCamera(afterSnapshot.camera,afterClick.camera);
+  assert.deepEqual(afterSnapshot.frame,beforeSnapshot.frame,'Compare anchors in the same naturally settled viewport frame');
+  report.operations.push({region,kind:'farm-layout-diagnostic',triggerBox,before:beforeSnapshot,afterClick,after:afterSnapshot,measurementScrollPreservesUrlAndCamera:true});
   assert.equal(selected.length,before.length,region+' retains other livestock points');
   for(let i=0;i<before.length;i++){assert.equal(selected[i].name,before[i].name);assert.equal(selected[i].opacity,.2);for(const axis of ['x','y'])assert(Math.abs(selected[i][axis]-before[i][axis])<=1,region+' retains source anchors within 1 CSS pixel');}
   sameCamera(await camera({cameraRoot:'[data-asia-atlas]'}),beforeCamera);assert.equal(await page.locator('[data-farming-legend]').isVisible(),false);
