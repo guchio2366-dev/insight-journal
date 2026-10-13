@@ -3,18 +3,18 @@
   "region": "russia",
   "field": "industry",
   "dataset": "representative-industry-places",
-  "checkedAt": "2026-10-10",
-  "recordCount": 8,
+  "checkedAt": "2026-10-12",
+  "recordCount": 10,
   "quantityEncoding": "none",
   "production": true,
   "reserves": false,
   "capacity": true,
   "routes": false,
   "coordinateOrder": "longitude,latitude",
-  "coverage": "Eight representative examples: oil, gas, coal, metal mining/processing, refining, management/logistics and two ports. Not a complete industry inventory.",
-  "temporalCoverage": "Company operations descriptions are explicitly dated 2024 or 2025. Port coordinate pages have no displayed publication year and were checked on 2026-10-01. No current 2026 operating-status or output claim is inferred. EIA 2025 publication supplies 2024 national oil/dry-gas, 2023 national coal and estimated 2025 Omsk refinery capacity in text only.",
-  "geographicCoverage": "The four representative locations lie away from disputed territories. These source pages are not used to construct national totals, national statistical boundaries or claims over Crimea and other disputed territories.",
-  "coordinateMethod": "Natural Earth v5.1.2 Point records unchanged for Norilsk and Moscow. Published Rosmorport degree/minute coordinates converted to decimal degrees for Murmansk and Vladivostok. City and port reference positions are approximate teaching positions, not industrial facility entrances or survey/navigation data. Surgut, Kemerovo and Omsk: Natural Earth 50m; Novy Urengoy: 10m, both v5.1.2. These city reference positions are not facilities.",
+  "coverage": "Ten representative examples: oil, gas, coal, metal mining/processing, refining, steel, trucks, management/logistics and two ports. Not a complete industry inventory.",
+  "temporalCoverage": "Company operations descriptions are explicitly dated 2024 or 2025. Port coordinate pages have no displayed publication year and were checked on 2026-10-01. No current 2026 operating-status or output claim is inferred. EIA 2025 publication supplies 2024 national oil/dry-gas, 2023 national coal and estimated 2025 Omsk refinery capacity in text only. Severstal and KAMAZ company pages were checked on 2026-10-12; their facts are paraphrased without deriving 2026 facility output.",
+  "geographicCoverage": "All ten representative locations lie away from disputed territories. Source pages are not used to construct national totals or claims over disputed territories.",
+  "coordinateMethod": "Natural Earth v5.1.2 Point records unchanged for Norilsk and Moscow. Published Rosmorport degree/minute coordinates converted to decimal degrees for Murmansk and Vladivostok. City and port reference positions are approximate teaching positions, not industrial facility entrances or survey/navigation data. Surgut, Kemerovo and Omsk: Natural Earth 50m; Novy Urengoy: 10m, both v5.1.2. These city reference positions are not facilities. Cherepovets and Naberezhnye Chelny are GHSL R2024A V1.2 urban-centre centroids (2025 boundaries, 2020 population model), not factory locations.",
   "fullBodiesStored": false,
   "reuse": "Only metadata, URLs, retrieval dates, hashes, selected public-domain city coordinates and minimal paraphrased factual statements are stored. Corporate and port pages, diagrams, photographs and articles are not republished.",
   "legend": [
@@ -35,7 +35,7 @@
     },
     {
       "kind": "processing",
-      "label": "石油精製の代表位置",
+      "label": "精製・製造を読む都市の代表位置",
       "quantity": "none"
     }
   ],
@@ -144,6 +144,32 @@
       "sourceUrls": [
         "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_50m_populated_places.geojson",
         "https://www.eia.gov/international/content/analysis/countries_long/Russia/pdf/Russia%20CAB_2025.pdf"
+      ]
+    },
+    {
+      "id": "cherepovets-steel",
+      "name": "鋼材製造：チェレポヴェツ",
+      "coordinates": [
+        37.895435280503406,
+        59.128856499971405
+      ],
+      "kind": "processing",
+      "sourceUrls": [
+        "https://severstal.com/eng/about/structure/businesses/cherepovetskiy-metallurgicheskiy-kombinat/",
+        "https://doi.org/10.2905/1a338be6-7eaf-480c-9664-3a8ade88cbcd"
+      ]
+    },
+    {
+      "id": "naberezhnye-chelny-trucks",
+      "name": "トラック製造：チェルヌイ",
+      "coordinates": [
+        52.383848224859086,
+        55.722010443569204
+      ],
+      "kind": "processing",
+      "sourceUrls": [
+        "https://kamaz.ru/en/about/general-information/",
+        "https://doi.org/10.2905/1a338be6-7eaf-480c-9664-3a8ade88cbcd"
       ]
     }
   ],
@@ -390,6 +416,57 @@
         "2023 Russia national coal 529 million short tons, not metric tonnes or Kuzbass-only production.",
         "2025 Omsk estimated refining capacity 440 thousand barrels/day, not actual output."
       ]
+    },
+    {
+      "id": "severstal-cherepovets",
+      "publisher": "Severstal",
+      "url": "https://severstal.com/eng/about/structure/businesses/cherepovetskiy-metallurgicheskiy-kombinat/",
+      "referenceYear": null,
+      "checkedAt": "2026-10-12",
+      "verification": "Official search result excerpt identified steelmaking, flat and long products; direct reader returned HTTP 403, not retried. No body or response hash is claimed.",
+      "fullBodyStored": false,
+      "selectedFacts": [
+        "Cherepovets Steel Mill has steelmaking and production of flat and long products."
+      ]
+    },
+    {
+      "id": "kamaz-general-information",
+      "publisher": "KAMAZ PTC",
+      "url": "https://kamaz.ru/en/about/general-information/",
+      "referenceYear": 2026,
+      "checkedAt": "2026-10-12",
+      "verification": "Official company page read in web reader.",
+      "fullBodyStored": false,
+      "selectedFacts": [
+        "Foundry, forge, engine, stamping, truck assembly and component operations are listed in Naberezhnye Chelny."
+      ]
+    },
+    {
+      "id": "ghsl-urban-centroids",
+      "publisher": "European Commission Joint Research Centre",
+      "url": "https://doi.org/10.2905/1a338be6-7eaf-480c-9664-3a8ade88cbcd",
+      "referenceYear": 2020,
+      "boundaryYear": 2025,
+      "version": "GHS-UCDB R2024A V1.2",
+      "license": "CC BY 4.0; representative city centroid only",
+      "checkedAt": "2026-10-12",
+      "fullBodyStored": false,
+      "selectedSourceRecords": [
+        {
+          "name": "Cherepovets",
+          "coordinates": [
+            37.895435280503406,
+            59.128856499971405
+          ]
+        },
+        {
+          "name": "Naberezhnye Chelny",
+          "coordinates": [
+            52.383848224859086,
+            55.722010443569204
+          ]
+        }
+      ]
     }
   ],
   "limitations": [
@@ -398,15 +475,15 @@
     "The broader Vladivostok port reference position must not be described as the VMTP berth.",
     "Transport modes are described from sources; routes are not estimated or drawn.",
     "Company reports are operator-reported descriptions with their stated reference years, not independently measured regional statistics.",
-    "New energy examples are city reference anchors for resource regions; national amounts remain national text. Major steel and other manufacturing geography is not completed. USGS original PDF download returned 403 and was not bypassed."
+    "Energy examples are city anchors for resource regions; national amounts remain national text. Two manufacturing cities illustrate steel and trucks, not a complete manufacturing geography. USGS original PDF download returned 403 and was not bypassed."
   ],
   "diagnostics": {
     "invalidCoordinates": 0,
     "duplicateIds": 0,
     "quantityFields": 0,
-    "sourceVerifiedPositions": 8,
+    "sourceVerifiedPositions": 10,
     "readingSourceCoverage": true
   },
   "readingModule": "src/data/atlas/russia-industry-reading.ts",
-  "readingModuleSha256": "fda39978457df685c28eaf2c485626521a38aa7438f4d51379f8797e91b031c7"
+  "readingModuleSha256": "e1c97f9edef8c392a6c8da2a2bb1c4eb077489accb730befe6aac48c740f9e3e"
 }

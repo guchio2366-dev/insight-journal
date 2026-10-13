@@ -16,7 +16,7 @@ export function renderOceaniaRequiredLegend(layer:OceaniaLayer):string{
  if(layer.field==='agriculture')return renderOceaniaFarmingKey(layer);
  if(layer.id==='precipitation'||layer.id==='elevation'){
   const indices=layer.id==='precipitation'?[0,2,4,8,16]:[0,1,3,5,9,13];
-  return renderOceaniaLegend({...layer,legend:indices.map(i=>layer.legend[i])})+`<span>${layer.id==='precipitation'?'等雨量線 250 mm間隔':'等高線 500 m間隔'}</span>`;
+  return renderOceaniaLegend({...layer,legend:[...indices.map(i=>layer.legend[i]),...layer.legend.filter(item=>item.shape==='missing')]})+`<span>${layer.id==='precipitation'?'等雨量線 250 mm間隔':'等高線 500 m間隔'}</span>`;
  }
  const legend=renderOceaniaLegend(layer);
  if(layer.id!=='climate')return legend;
