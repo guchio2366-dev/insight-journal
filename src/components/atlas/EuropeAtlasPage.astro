@@ -193,14 +193,15 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, farmingDom
         <p id="eu-industry-scope-note" class="eu-industry-scope-note" data-eu-industry-scope-note hidden={field!=='industry'}>各点は産業が集まる地域・施設の代表位置です。量・額や順位ではありません。分野を選んでも他の産業の位置を残します。国別の数値は国の概要で確認できます。</p>
         <section data-eu-language-reader hidden aria-labelledby="eu-language-heading">
           <h3 id="eu-language-heading">使用言語・母語</h3>
-          <p>地図はイングランド・ウェールズ331地方自治体の2021年国勢調査による「主な言語」です。3歳以上の通常居住者を分母とし、色は選択分類の地域割合です。欧州全域の実使用分布は未収録です。</p>
+          <p>欧州全体の地図と地域・国選択を保ちます。色のある自治体面は、イングランド・ウェールズ331地方自治体の2021年国勢調査「主な言語」だけです。他の地域の無着色は0%ではなく未収録を表します。3歳以上の通常居住者が分母です。欧州全域の実使用分布は未収録です。</p>
           <div class="eu-language-controls">
             <label>地図に表示する主な言語 <select data-eu-language-category disabled>{mainLanguage.categories.map(category=><option value={category.id}>{category.label}</option>)}</select></label>
             <label>地方自治体を読む <select data-eu-language-area disabled><option value="">地域未選択</option>{mainLanguage.areas.toSorted((a,b)=>a.name.localeCompare(b.name,'en')).map(area=><option value={area.code}>{area.name}</option>)}</select></label>
           </div>
+          <div class="eu-language-extent-actions"><button type="button" data-eu-language-fit disabled>England/Walesの事例へ拡大</button><button type="button" data-eu-language-reset disabled>欧州の選択範囲へ戻す</button></div>
           <p data-eu-language-reading aria-live="polite">地方自治体を選ぶと、割合と人数を表示します。地図からも選べます。</p>
           <div class="eu-language-scale" data-eu-language-scale aria-label="主な言語の地域割合の凡例"></div>
-          <p class="eu-language-scope">「英語以外」は原表の「英語（ウェールズでは英語またはウェールズ語）」を全体から差し引いた値です。ウェールズのウェールズ語のみの人数・割合はこの表では分離できません。ポーランド語などは原表の分類人数です。「南アジアの言語」はウルドゥー語・パンジャーブ語などを含む親分類で、子分類と合算しません。小地域の人口そのものではなく、各地域の3歳以上人口に対する比率を比べます。</p>
+          <p class="eu-language-scope">「英語（ウェールズでは英語またはウェールズ語）」は原表の多数派の人数をそのまま表示します。「英語以外」は原表の全体からその原列を差し引いた値です。ウェールズのウェールズ語のみの人数・割合はこの表では分離できません。ポーランド語などは原表の分類人数です。「南アジアの言語」はウルドゥー語・パンジャーブ語などを含む親分類で、子分類と合算しません。小地域の人口そのものではなく、各地域の3歳以上人口に対する比率を比べます。</p>
           <p class="eu-language-scope">母語は幼少期に最初に習得した言語。家庭内使用・日常使用・会話能力、公用語の制度は別の質問・定義です。民族的帰属とも区別します。以下のチェコの母語・アイルランドの日常使用は別資料です。</p>
           <p class="eu-language-sources"><a href={mainLanguage.source}>ONS Census 2021：TS024 主な言語（詳細）</a> · <a href="https://www.ons.gov.uk/methodology/geography/licences">ONS地理情報の利用条件</a> · <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">OGL v3.0</a><br/>Source: Office for National Statistics licensed under the Open Government Licence v.3.0. Contains OS data © Crown copyright and database right 2026. 原表の分類選択と差分計算を加えています。</p>
           <details><summary>収録済みの原統計：チェコ2021年・母語</summary>

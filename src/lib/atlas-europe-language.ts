@@ -23,7 +23,7 @@ export function europeLanguageReading(choice: EuropeLanguageChoice) {
   return { category, area, count, share };
 }
 export function europeLanguageBreaks(categoryId: string) {
-  return categoryId === europeLanguageDefault ? [2, 5, 10, 20] : [0.1, 0.5, 1, 3];
+  return categoryId === europeLanguageDefault ? [2, 5, 10, 20] : categoryId === 'english-welsh' ? [75, 85, 90, 95] : [0.1, 0.5, 1, 3];
 }
 export function europeLanguageColor(share: number | null, categoryId: string): string {
   if (share === null || !Number.isFinite(share)) return '#b8bec7';

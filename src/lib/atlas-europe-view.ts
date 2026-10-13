@@ -69,7 +69,7 @@ export function readEuropeState(search: string, countries: { code: string; regio
   const basin = normaliseEuropeDrainageBasin(p.get('basin'));
   if (basin) state.basin = basin;
   if(layer==='drainage'){const selection=europeMainRiverSelection(p.get('riverBasin'));if(selection){delete state.basin;Object.assign(state,selection);}}
-  if(layer==='language'){state.region='all';state.place='';state.city='';state.compare=[];Object.assign(state,normaliseEuropeLanguageChoice(p));}
+  if(layer==='language'){state.city='';state.compare=[];Object.assign(state,normaliseEuropeLanguageChoice(p));}
   if(layer==='ethnicity'||layer==='religion')Object.assign(state,normalisePopulationCaseChoice(p,layer,censusCases as PopulationCensusCasePackage));
   else {
     const censusCase=censusCases.cases.find(item=>item.id===p.get('cultureCase'));

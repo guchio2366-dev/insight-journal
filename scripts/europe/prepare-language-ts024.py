@@ -13,6 +13,7 @@ OUTPUT = ROOT / "src/data/atlas/europe/main-language-ts024-2021.json"
 # Zero-based positions in the CSV, retained with the original ONS column labels.
 CATEGORIES = [
     ("other", "英語以外の主言語（ウェールズでは英語・ウェールズ語以外）", None),
+    ("english-welsh", "英語（ウェールズでは英語またはウェールズ語）", 5),
     ("polish", "ポーランド語", 23),
     ("romanian", "ルーマニア語", 26),
     ("french", "フランス語", 17),

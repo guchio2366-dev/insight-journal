@@ -32,7 +32,7 @@ export const europeLayers: EuropeLayer[] = [
  {id:'growth',field:'population',title:'人口増加率',period:'2023',unit:'% / 年',note:'国全体の年間人口増加率。自然増減と移動を含む総人口の変化であり、移民数そのものではありません。',source:'https://data.worldbank.org/indicator/SP.POP.GROW',indicator:'growth',breaks:[-2,-1,0,1,2],colors:['#91452c','#bf7d59','#e6c6b2','#c9dfd9','#78aba1','#337e73']},
  {...europePrecipitationLayer,attribution:europePrecipitationReading.attribution,licence:'https://creativecommons.org/licenses/by/4.0/'},
  drainageLayer,
- {id:'language',field:'population',title:'使用言語・母語',period:'2021年（収録分）',unit:'原質問ごとの人数・地域割合',note:'ONS 2021年の主な言語はEngland/Walesの331地方自治体で表示します。チェコの母語・アイルランドの日常使用とは定義を分け、欧州全域に外挿しません。',source:'https://www.ons.gov.uk/datasets/TS024/editions/2021/versions/1'},
+ {id:'language',field:'population',title:'使用言語・母語',period:'2021年（収録分）',unit:'原質問ごとの人数・地域割合',note:'欧州全体図を保ち、ONS 2021年の主な言語はEngland/Walesの331地方自治体だけを着色します。原表の英語（ウェールズでは英語またはウェールズ語）も選べます。他地域の無着色は欠測で、チェコの母語・アイルランドの日常使用とは定義を分けます。',source:'https://www.ons.gov.uk/datasets/TS024/editions/2021/versions/1'},
  {id:'ethnicity',field:'population',title:'民族的帰属の地域事例',period:'2021年国勢調査',unit:'同じ表の総人口比 %',note:'イングランド・ウェールズの行政区とクロアチアの全国値の事例です。欧州全域の分布ではありません。自己申告の元分類と表ごとの分母を使い、未回答・不明を区別します。',source:'https://www.ons.gov.uk/census',breaks:[5,20,50,80],colors:['#deedf2','#a9cbd9','#6d9eb8','#3d718f','#184a65'],labels:['0〜5%未満','5〜20%未満','20〜50%未満','50〜80%未満','80〜100%']},
  {id:'religion',field:'population',title:'宗派・宗教の広域分布',period:'2010期（2006–2015年）',unit:'各国の宗教的帰属 %',note:'SMREの標準化推計を45か国で比較します。初期色面は各国の最大分類で、国内の均一性や多数派の領域を示しません。カトリック・プロテスタント・正教会を区別し、宗教的帰属なしも元の分類です。国選択後に全8分類、資料品質と既存の国勢調査・Pew 2020年推計を別掲します。',source:'https://www.smre-data.ch/en/content/download/159',breaks:[],colors:[],labels:[]},
 ];

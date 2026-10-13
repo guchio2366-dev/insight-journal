@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-import { europeMainLanguage, europeLanguageReading, europeLanguageMapData, normaliseEuropeLanguageChoice, europeLanguageColor } from '../../src/lib/atlas-europe-language.ts';
+import { europeMainLanguage, europeLanguageReading, europeLanguageMapData, normaliseEuropeLanguageChoice, europeLanguageColor, europeLanguageBreaks } from '../../src/lib/atlas-europe-language.ts';
 import { readEuropeState, writeEuropeState } from '../../src/lib/atlas-europe-view.ts';
 
 const boundary = JSON.parse(await fs.readFile(new URL('../../public/assets/atlas/europe/population-cases-v1/england-wales-lad2021.geojson', import.meta.url)));
@@ -13,12 +13,24 @@ test('TS024 preserves one real 2021 LAD row per existing official boundary', () 
   assert.deepEqual(data.areas.map(item => item.code).sort(), boundary.features.map(item => item.properties.code).sort());
   assert.equal(data.denominator, 'Main language (detailed): Total: All usual residents aged 3 years and over');
   assert.equal(data.categories.find(item => item.id === 'other').sourceColumn, 'Derived: column 4 minus column 5');
+  assert.equal(data.categories.find(item => item.id === 'english-welsh').sourceColumn, 'Main language (detailed): English (English or Welsh in Wales)');
   assert.equal(data.categories.find(item => item.id === 'polish').sourceColumn, 'Main language (detailed): Other European language (EU): Polish');
   for (const area of data.areas) {
     assert.equal(area.counts.length, data.categories.length);
     assert(area.denominator > 0 && area.counts.every(value => Number.isSafeInteger(value) && value >= 0 && value <= area.denominator));
+    assert.equal(area.counts[data.categories.findIndex(item => item.id === 'other')] + area.counts[data.categories.findIndex(item => item.id === 'english-welsh')], area.denominator);
     assert(area.counts[data.categories.findIndex(item => item.id === 'urdu')] <= area.counts[data.categories.findIndex(item => item.id === 'south-asian')]);
   }
+});
+
+test('published English/Welsh main-language column is selectable with its own useful majority scale', () => {
+  const reading = europeLanguageReading({ languageCategory: 'english-welsh', languageArea: 'E09000025' });
+  assert.equal(reading.category.label, '英語（ウェールズでは英語またはウェールズ語）');
+  assert.equal(reading.count, 220022);
+  assert(reading.share > 65 && reading.share < 66);
+  assert.deepEqual(europeLanguageBreaks('english-welsh'), [75, 85, 90, 95]);
+  const map = europeLanguageMapData(boundary, { languageCategory: 'english-welsh' });
+  assert.equal(new Set(map.features.map(feature => feature.properties.fill)).size, 5);
 });
 
 test('retained Library text extract matches the declared extract hash, without claiming original-byte identity', async () => {
@@ -49,11 +61,14 @@ test('language category and area URLs reject unknown codes and survive return na
   const state = readEuropeState('?layer=language&place=GBR&feature=london&languageCategory=polish&languageArea=E09000025', countries, [], 'density');
   assert.equal(state.languageCategory, 'polish');
   assert.equal(state.languageArea, 'E09000025');
-  assert.equal(state.place, '');
+  assert.equal(state.place, 'GBR');
+  assert.equal(state.region, 'west');
   assert.equal(state.feature, undefined);
   const url = writeEuropeState(new URL('https://example.org/atlas/europe/population/'), state);
   assert.equal(url.searchParams.get('languageCategory'), 'polish');
   assert.equal(url.searchParams.get('languageArea'), 'E09000025');
+  assert.equal(url.searchParams.get('place'), 'GBR');
+  assert.equal(readEuropeState('?layer=language&region=east', countries, [], 'density').region, 'east');
   const otherLayer = writeEuropeState(url, { ...state, layer: 'density' });
   assert.equal(otherLayer.searchParams.has('languageCategory'), false);
   assert.equal(otherLayer.searchParams.has('languageArea'), false);
