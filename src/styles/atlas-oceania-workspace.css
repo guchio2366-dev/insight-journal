@@ -58,6 +58,7 @@
 .atlas-desktop-shell .oceania-learning-message,.oceania-workspace-overview-message{flex:none;padding:15px 16px 13px;background:#fbfaf3;border-bottom:1px solid #d4d8cc}
 .atlas-desktop-shell .oceania-learning-message h2,.atlas-desktop-shell .oceania-overview .overview-region-reading h2{font-size:23px;line-height:1.3;margin:0 0 8px}
 .oceania-learning-scene [data-oceania-industry-location]{cursor:pointer}
+.oceania-learning-scene .oceania-country.is-outline-only{cursor:default;pointer-events:none}
 .oceania-learning-scene svg[data-scene] > text{pointer-events:none}
 .oceania-learning-scene [data-oceania-industry-location]:focus-visible path{stroke:#102f3e;stroke-width:3.5}
 .oceania-industry-return{display:block;margin:0 0 10px;padding:5px 8px;border:1px solid #597678;border-radius:4px;background:#fff;color:#173f4d;font-size:14px}

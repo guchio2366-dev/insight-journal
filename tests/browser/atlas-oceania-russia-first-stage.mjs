@@ -133,6 +133,13 @@ try{
      assert.match(await host.locator('[data-primary-legend]').textContent(),/欠測・未収録（0ではない）/);
      assert.match(await host.locator('[data-coverage]').textContent(),id==='precipitation'?/河川|水量/:/標高/);
      assert.ok((await host.locator('[data-primary-legend]').boundingBox()).height<190);
+     if(region==='oceania'){
+      assert.equal(await map.locator('[data-map-place]').count(),0,'Numeric nature surfaces have outlines without country-selection targets');
+      const point=await map.locator('svg').first().evaluate(svg=>{const point=svg.createSVGPoint();point.x=(134-110)/140*1200;point.y=(25+25)/83*757;const screen=point.matrixTransform(svg.getScreenCTM());return {x:screen.x,y:screen.y};});
+      const before=page.url();await page.mouse.click(point.x,point.y);
+      assert.equal(page.url(),before,'Clicking the Australian numeric surface retains the whole-region reading');
+      assert.equal(await map.locator('svg').first().getAttribute('viewBox'),frame);
+     }
      if(id==='precipitation'){
       const labels=map.locator('[data-isohyet-label]');
       assert.equal(await labels.count(),region==='oceania'?6:7);

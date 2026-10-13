@@ -28,6 +28,10 @@ test('new nature layers have verified generated images, source metadata and hone
    assert.equal(image.subarray(0,8).toString('hex'),'89504e470d0a1a0a');
    assert.equal(image.readUInt32BE(16),data.size[0]);assert.equal(image.readUInt32BE(20),data.size[1]);
    assert.match(layer.coverage,id==='precipitation'?/河川|水量/:/標高/);
+   if(region==='oceania'){
+    const scene=api.renderOceaniaScene(layer,api.createOceaniaState(`?layer=${id}`,'nature'));
+    assert.doesNotMatch(scene,/data-map-place=/);assert.match(scene,/is-outline-only/);
+   }
   }
   assert.deepEqual(manifest.gpcc.breaksMm.slice(0,3),[250,500,750]);
   assert.deepEqual(manifest.etopo.breaksM.slice(0,3),[0,500,1000]);
