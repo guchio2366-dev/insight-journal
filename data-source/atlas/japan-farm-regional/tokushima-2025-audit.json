@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "investigated": "2026-10-13",
+  "baseCommit": "831bba225b372dd63c7e7d663b38305dd10feb62",
+  "fixedJapanHead": "4f89febf0b35657f169a58223de6d5e5270862dd",
+  "officialUrl": "https://www.pref.tokushima.lg.jp/file/attachment/1048674.xlsx",
+  "indexUrl": "https://www.pref.tokushima.lg.jp/statistics/year/afc/7240681/",
+  "library": {
+    "libraryFileId": "libfile_e3d1642962c88191a1a186a6a850da6e",
+    "fileId": "file_00000000e924820b9a7b59bea5eb119d",
+    "fileName": "(11)販売目的の野菜類の作物別作付（栽培）経営体数と作付（栽培）面積.xlsx",
+    "reportedSizeBytes": 21087,
+    "versionId": null,
+    "startLine": 1,
+    "endLine": 55,
+    "totalLines": 55,
+    "hasMore": false,
+    "sheet": "2(11)",
+    "transferAttempts": 1,
+    "transferError": "library file transfer failed: download failed",
+    "consumerLocalFileExists": false
+  },
+  "rawFile": null,
+  "rawSha256": null,
+  "extraction": {
+    "file": "tokushima-2025-vegetables.library.txt",
+    "kind": "Library full extracted text, not XLSX bytes",
+    "sha256": "b5897ceae94dcf50d3f1fe66dd5f137a77be91d4454449b7bbab190af7feda57",
+    "serialization": "content.join('\\n') + '\\n', UTF-8",
+    "csvIndexRows": [
+      0,
+      32
+    ],
+    "csvColumns": {
+      "municipalityCode": "Unnamed: 0",
+      "municipalityName": "Unnamed: 1",
+      "cabbageEntities": "Unnamed: 13",
+      "cabbageArea": "Unnamed: 14",
+      "tomatoEntities": "Unnamed: 29",
+      "tomatoArea": "Unnamed: 30"
+    }
+  },
+  "interpretation": {
+    "censusYear": 2025,
+    "referenceDate": "2025-02-01",
+    "yearEvidence": "公式索引。XLSX抽出表のタイトル自身には年の記載なし。",
+    "period": "調査期日までの過去1年間",
+    "unit": "a",
+    "areaType": "販売目的の野菜類の作付（栽培）延べ面積。収穫重量でも圃場の占有面積でもない。",
+    "symbolSource": "https://www.maff.go.jp/j/tokei/kouhyou/noucen/gaiyou/index.html",
+    "questionnaireSource": "https://www.maff.go.jp/j/tokei/kouhyou/noucen/gaiyou/attach/pdf/index-23.pdf",
+    "symbols": {
+      "0": "単位未満の丸め値。今回採用する面積セルにはなし。",
+      "x": "秘匿：null/suppressed",
+      "-": "調査したが事実なし：null/no-occurrence",
+      "…": "不詳又は調査を欠く。今回採用する面積セルにはなし。"
+    },
+    "tomatoMiniCoverage": "原表はトマト表記。ミニトマトの内訳・扱いはこの提供表と確認した調査票に明記されず、推測しない。"
+  },
+  "products": {
+    "cabbage": {
+      "prefectureArea": 18003.07,
+      "prefectureEntities": 336,
+      "municipalities": 24,
+      "numericMunicipalities": 14,
+      "suppressedMunicipalities": 9,
+      "noOccurrenceMunicipalities": 1,
+      "publishedMunicipalitySubtotal": 16698,
+      "municipalityEntitiesSum": 336
+    },
+    "tomato": {
+      "prefectureArea": 4516.38,
+      "prefectureEntities": 296,
+      "municipalities": 24,
+      "numericMunicipalities": 14,
+      "suppressedMunicipalities": 8,
+      "noOccurrenceMunicipalities": 2,
+      "publishedMunicipalitySubtotal": 4320.24,
+      "municipalityEntitiesSum": 296
+    }
+  },
+  "map": {
+    "scope": "県計のみ既存JP-36参照点。24市町村の数値は表のみ。",
+    "municipalPointsVerified": false,
+    "sourceCandidate": "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P05-v3_0.html",
+    "candidateDescription": "国土数値情報・2022年市町村役場等及び公的集会施設。案内の書誌のみ確認。",
+    "candidateLocalGetAttempts": 1,
+    "candidateLocalGetError": "URLError <urlopen error Tunnel connection failed: 403 Forbidden>",
+    "candidateRawFile": null,
+    "candidateRawSha256": null,
+    "note": "座標未取得。再試行・迂回・位置推測はしない。行政面のぼかし、未掲載地域の補間、県計から秘匿市町村の逆算はしない。"
+  }
+}

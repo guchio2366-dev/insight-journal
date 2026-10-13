@@ -84,7 +84,15 @@
       "rawFile": null,
       "rawSha256": null,
       "valuesVerified": false,
-      "implementationEligible": false
+      "implementationEligible": false,
+      "supplement": {
+        "status": "supplied-library-extraction-verified",
+        "auditFile": "tokushima-2025-audit.json",
+        "implementation": "cabbage/tomato: 24市町村の数表と県計のみの地図参照点。市町村位置は未確認。",
+        "observedUnit": "a",
+        "rawFile": null,
+        "rawSha256": null
+      }
     },
     {
       "id": "tokushima-fruit",
@@ -185,6 +193,7 @@
     "rawFile/rawSha256は公式バイト列を保存していないためnull。",
     "既知の拒否資料は再試行せず、新たに403となった6ファイルも各1回で停止。",
     "山形の読込失敗は403と断定しない。直ファイルURLも未取得。",
-    "今回追加の数量は0件。既存8系列47数値・UIは変更しない。"
+    "今回追加の数量は0件。既存8系列47数値・UIは変更しない。",
+    "上記0件・未確認は元の調査時点。徳島野菜のみ、本人提供Library全行抽出による追補をtokushima-2025-audit.jsonへ記録。公式GETの403履歴は保持。"
   ]
 }
