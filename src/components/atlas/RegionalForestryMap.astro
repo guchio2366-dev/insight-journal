@@ -30,11 +30,16 @@ const forestClip=`forest-land-${region}`,missing=`forest-missing-${region}`,disp
          const [dx,dy]=example.markerOffset??[0,0],[lx,ly]=example.labelOffset??[16,5];
          return <a href={`?example=${example.id}`} data-forest-example={example.id} data-forest-kind={processing?'processing-locality':undefined} aria-label={`${index+1} ${example.title}の解説`} transform={`translate(${x},${y})`}>
           <g data-forest-symbol>
-           {processing&&(dx||dy)&&<><path class="forest-processing-leader" d={`M0 0L${dx} ${dy}`}/><circle class="forest-processing-anchor" r="2"/></>}
-           <g transform={processing?`translate(${dx},${dy})`:undefined}>
-            {processing?<path class="forest-processing-marker" d="M0 -12L12 0L0 12L-12 0Z"/>:region==='latin-america'&&example.id!=='amazon'?<rect x="-9" y="-9" width="18" height="18" rx="2" fill="#bf7b36"/>:<circle r="10" fill={region==='latin-america'?'#466d56':undefined}/>}
-            <text class="forest-marker-number" text-anchor="middle" y="4">{index+1}</text><text class="forest-marker-label" x={lx} y={ly} text-anchor={processing&&lx<0?'end':undefined}>{example.label}</text>
-           </g>
+           {processing?<>
+            {(dx||dy)&&<><path class="forest-processing-leader" d={`M0 0L${dx} ${dy}`}/><circle class="forest-processing-anchor" r="2"/></>}
+            <g transform={`translate(${dx},${dy})`}>
+             <path class="forest-processing-marker" d="M0 -12L12 0L0 12L-12 0Z"/>
+             <text class="forest-marker-number" text-anchor="middle" y="4">{index+1}</text><text class="forest-marker-label" x={lx} y={ly} text-anchor={lx<0?'end':undefined}>{example.label}</text>
+            </g>
+           </>:<>
+            {region==='latin-america'&&example.id!=='amazon'?<rect x="-9" y="-9" width="18" height="18" rx="2" fill="#bf7b36"/>:<circle r="10" fill={region==='latin-america'?'#466d56':undefined}/>}
+            <text class="forest-marker-number" text-anchor="middle" y="4">{index+1}</text><text class="forest-marker-label" x="16" y="5">{example.label}</text>
+           </>}
           </g><title>{example.title}：{example.coordinateMeaning??'説明を読むための代表位置。森林・伐採地の境界ではありません。'}</title>
          </a>;
         })}</g>

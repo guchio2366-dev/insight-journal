@@ -23,6 +23,7 @@ test('all three processing readers preserve the scene, distinguish factory addre
   await w.happyDOM.waitUntilComplete();const d=w.document,map=d.querySelector('[data-forest-map]'),config=JSON.parse(d.querySelector('[data-forest-config]').textContent);
   const scene=()=>[...d.querySelectorAll('svg [data-forest-example]')].map(el=>({id:el.getAttribute('data-forest-example'),point:el.getAttribute('transform'),label:el.querySelector('.forest-marker-label').outerHTML}));
   const original=scene();assert.equal(original.length,7);const nav=d.querySelector('.latin-fields').outerHTML;
+  assert.ok(d.querySelector('[data-forest-example=amazon] [data-forest-symbol]>circle'),'original natural-forest symbol retains the CSS-bearing direct-child structure');
   d.querySelector('[data-forest-zoom=in]').click();const camera=map.getAttribute('viewBox');
   for(const example of config.reading.examples.filter(example=>example.kind==='processing-locality')){
    const marker=d.querySelector(`svg [data-forest-example="${example.id}"]`);assert.ok(marker.querySelector('.forest-processing-marker'));marker.dispatchEvent(new w.MouseEvent('click',{bubbles:true,cancelable:true}));
