@@ -6,6 +6,11 @@ on:
     paths:
       - '.github/workflows/atlas-asia-pc-review.yml'
       - 'scripts/capture-east-asia-approved-review.mjs'
+      - 'scripts/east-asia/prepare-food-wood-statistics.py'
+      - 'src/scripts/atlas-east-agri-statistics.ts'
+      - 'src/lib/atlas-east-food-model.ts'
+      - 'tests/unit/atlas-east-food*.test.mjs'
+      - 'data-source/atlas/east-asia/statistics-2023/**'
       - 'src/data/atlas/east-asia-*'
       - 'src/scripts/atlas-east-asia-*'
       - 'src/lib/atlas-east-industry-labels.ts'
