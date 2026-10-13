@@ -126,6 +126,7 @@ async function setup(query = '', options = {}) {
     physicalBase:'/assets/physical/',physical:{width:1,height:1,bounds3857:[west,south,east,north],grid:'elevation.gz',image:'terrain.png',contours:'contours.png',water:'water.json',imageCoordinates:[[72,56],[155,56],[155,17],[72,17]],waterFeatures:[{id:'rivers-1',name:'試験河川',kind:'rivers',countries:['CHN'],bounds:[90,30,120,40]}]},
     physicalFocus:[{id:'basin',region:'east-asia',country:'CHN',name:'盆地',coordinates:[100,35],reading:'周囲の山地と比較します。'}],
   });
+  if(options.layoutRegion){const conf=JSON.parse(q('[data-asia-config]').textContent);conf.regionId=options.layoutRegion;q('[data-asia-config]').textContent=JSON.stringify(conf);}
   if(options.climateReference){const conf=JSON.parse(q('[data-asia-config]').textContent);conf.physicalFocus.push({id:'tibetan-plateau',region:'east-asia',country:'CHN',name:'チベット高原',coordinates:[130,45],reading:'参照位置'});q('[data-asia-config]').textContent=JSON.stringify(conf);}
   if(options.population){
     const conf=JSON.parse(q('[data-asia-config]').textContent);
@@ -1277,8 +1278,9 @@ test('不要な農林業・流域背景クリックは無反応で、流域と�
  }finally{await river.window.happyDOM.close();}
 });
 
-test('東アジア農業の品目選択中の文書スクロールで地図高さを増やさず、表示位置へ戻ってもcameraと高さを保つ',async()=>{
- const {window,root,q}=await setup('?field=agriculture&topic=wheat&lng=116&lat=35&z=4',{farming:true});
+test('アジア農業の品目選択中の文書スクロールで地図高さを増やさず、表示位置へ戻ってもcameraと高さを保つ',async()=>{
+ for(const region of ['east-asia','south-central-asia','southeast-asia']){
+ const {window,root,q}=await setup('?field=agriculture&topic=wheat&lng=116&lat=35&z=4',{farming:true,layoutRegion:region});
  try{
   window.happyDOM.setViewport({width:1920,height:1080});let scroll=0;
   Object.defineProperty(window,'scrollY',{get:()=>scroll});
@@ -1300,6 +1302,7 @@ test('東アジア農業の品目選択中の文書スクロールで地図高�
   window.happyDOM.setViewport({width:1440,height:900});
   assert.equal(root.style.getPropertyValue('--asia-map-available-height'),'587px','an actual viewport resize still updates the height');
  }finally{await window.happyDOM.close();}
+ }
 });
 
 test('自動全景は実extentと小余白を使い、resizeのmoveend後も全景を保ち、明示した保存cameraは優先する',async()=>{

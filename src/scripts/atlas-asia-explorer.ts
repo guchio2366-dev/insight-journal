@@ -833,8 +833,8 @@ function start(root:HTMLElement) {
   function syncLayout(){
     const frame=$('.asia-map-frame'),key=$('[data-farm-overview-legend]');
     // A bottom-legend click can scroll the document before ResizeObserver
-    // measures it. Keep the East Asia farm viewport independent of that scroll.
-    const frameTop=frame?(frame.getBoundingClientRect().top+(config.regionId==='east-asia'&&state.field==='agriculture'?window.scrollY:0)):0;
+    // measures it. Keep the farm viewport independent of that scroll.
+    const frameTop=frame?(frame.getBoundingClientRect().top+(state.field==='agriculture'?window.scrollY:0)):0;
     if(frame&&config.regionId==='east-asia'&&window.innerWidth>=960&&config.contentExtent){
       const [west,south,east,north]=config.contentExtent,merc=(lat:number)=>Math.log(Math.tan(Math.PI/4+lat*Math.PI/360));
       const ratio=(merc(north)-merc(south))/((east-west)*Math.PI/180);
