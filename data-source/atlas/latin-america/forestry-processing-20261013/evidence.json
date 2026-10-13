@@ -193,5 +193,32 @@
     "No facility polygon, forest cover, logging boundary, road/port route, volume, capacity, national total or current environmental outcome inferred",
     "Marker offsets are screen-pixel display offsets with short anchor leaders; original city points remain unchanged"
   ],
-  "license": "Operator facts paraphrased and official documents linked; no original report image/map reused or new redistribution permission assumed"
+  "license": "Operator facts paraphrased and official documents linked; no original report image/map reused or new redistribution permission assumed",
+  "displayPlacement": {
+    "unit": "screen CSS pixels, not map coordinates",
+    "method": "Original city anchors stay fixed. Inverse-scaled markers and labels use short anchor leaders. Selection does not change their placement.",
+    "defaultOffsets": {
+      "upm-paso-de-los-toros": [
+        -30,
+        24
+      ],
+      "upm-fray-bentos": [
+        -52,
+        -28
+      ]
+    },
+    "compactPasoOffset": {
+      "when": "rendered SVG width <700 CSS pixels",
+      "offset": [
+        -30,
+        48
+      ],
+      "reason": "Separate Paso label from the existing Chile-region label; leader endpoint follows the displayed marker."
+    },
+    "verifiedViewports": [
+      "1920x1080 primary",
+      "1024x768 auxiliary"
+    ],
+    "test": "PC capture checks pairwise label non-overlap at both widths and marker/leader endpoint agreement. See final CI report for pass/fail."
+  }
 }

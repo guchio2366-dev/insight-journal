@@ -61,7 +61,15 @@ export function initRegionalForestry(root=document.querySelector<HTMLElement>('[
  function draw(persist=true) {
   svg.setAttribute('viewBox',camera.join(' '));
   const box=svg.getBoundingClientRect(),scale=Math.max(camera[2]/Math.max(box.width,1),camera[3]/Math.max(box.height,1));
-  svg.querySelectorAll('[data-forest-symbol]').forEach(symbol=>symbol.setAttribute('transform',`scale(${scale})`));
+  svg.querySelectorAll('[data-forest-symbol]').forEach(symbol=>{
+   symbol.setAttribute('transform',`scale(${scale})`);
+   const marker=symbol.querySelector('[data-forest-processing-offset]');
+   if(!marker)return;
+   const example=reading.examples.find(example=>example.id===symbol.parentElement?.getAttribute('data-forest-example'));
+   const [dx,dy]=box.width<700&&example?.id==='upm-paso-de-los-toros'?[-30,48]:example?.markerOffset??[0,0];
+   marker.setAttribute('transform',`translate(${dx},${dy})`);
+   symbol.querySelector('.forest-processing-leader')?.setAttribute('d',`M0 0L${dx} ${dy}`);
+  });
   if(persist)save();
  }
  function zoom(factor:number) {

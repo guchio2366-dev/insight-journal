@@ -32,7 +32,7 @@ const forestClip=`forest-land-${region}`,missing=`forest-missing-${region}`,disp
           <g data-forest-symbol>
            {processing?<>
             {(dx||dy)&&<><path class="forest-processing-leader" d={`M0 0L${dx} ${dy}`}/><circle class="forest-processing-anchor" r="2"/></>}
-            <g transform={`translate(${dx},${dy})`}>
+            <g data-forest-processing-offset transform={`translate(${dx},${dy})`}>
              <path class="forest-processing-marker" d="M0 -12L12 0L0 12L-12 0Z"/>
              <text class="forest-marker-number" text-anchor="middle" y="4">{index+1}</text><text class="forest-marker-label" x={lx} y={ly} text-anchor={lx<0?'end':undefined}>{example.label}</text>
             </g>

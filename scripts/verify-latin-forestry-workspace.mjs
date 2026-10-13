@@ -50,6 +50,9 @@ try{
    report.viewports.at(-1).originalMarkerStyles=originalStyles;
    const scene=()=>page.locator('svg [data-forest-example]').evaluateAll(elements=>elements.map(el=>{const r=el.querySelector('.forest-marker-label').getBoundingClientRect(),symbol=el.querySelector('.forest-processing-marker,rect,circle').getBoundingClientRect();return {id:el.getAttribute('data-forest-example'),anchor:el.getAttribute('transform'),label:{x:r.x,y:r.y,width:r.width,height:r.height},symbol:{x:symbol.x,y:symbol.y,width:symbol.width,height:symbol.height}};}));
    const originalScene=await scene(),originalCamera=await page.locator('[data-forest-map]').getAttribute('viewBox');
+   const leaders=await page.locator('svg [data-forest-kind=processing-locality]').evaluateAll(elements=>elements.filter(el=>el.querySelector('.forest-processing-leader')).map(el=>{const line=el.querySelector('.forest-processing-leader'),end=line.getPointAtLength(line.getTotalLength()).matrixTransform(line.getScreenCTM()),r=el.querySelector('.forest-processing-marker').getBoundingClientRect();return {id:el.getAttribute('data-forest-example'),errorPixels:Math.hypot(end.x-r.x-r.width/2,end.y-r.y-r.height/2)};}));
+   for(const leader of leaders)assert.ok(leader.errorPixels<.01,'Leader reaches its displayed marker: '+leader.id);
+   report.viewports.at(-1).processingLeaders=leaders;
    const processing=config.reading.examples.filter(example=>example.kind==='processing-locality');
    assert.equal(processing.length,3);assert.equal(originalScene.length,7);
    const selections=[];
@@ -66,7 +69,7 @@ try{
    }
    // Display offsets use short leaders; every source anchor remains unchanged.
    const overlaps=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
-   if(viewport.width===1920)for(let i=0;i<originalScene.length;i++)for(let j=i+1;j<originalScene.length;j++)assert.equal(overlaps(originalScene[i].label,originalScene[j].label),false,`Labels overlap: ${originalScene[i].id}/${originalScene[j].id}`);
+   for(let i=0;i<originalScene.length;i++)for(let j=i+1;j<originalScene.length;j++)assert.equal(overlaps(originalScene[i].label,originalScene[j].label),false,`Labels overlap at ${viewport.width}: ${originalScene[i].id}/${originalScene[j].id}`);
    report.viewports.at(-1).processingSelections=selections;
    await page.goto(base+`/atlas/latin-america/agriculture/forestry/?example=${config.reading.examples[0].id}`,{waitUntil:'networkidle'});await ready();assert.equal(await page.locator('[data-forest-reading-title]').textContent(),config.reading.examples[0].title);assertCommon(agriculture,await measure());
    await page.reload({waitUntil:'networkidle'});await ready();assert.equal(await page.locator('[data-forest-reading-title]').textContent(),config.reading.examples[0].title);assertCommon(agriculture,await measure());
