@@ -338,10 +338,11 @@ try{
      assert.equal(Number(await map.locator('[data-farming-product="wheat"][data-farming-mode="outline"]').getAttribute('opacity')),1);
      if(region==='oceania'){
       const annotations=await map.locator('[data-farming-place]').evaluateAll(elements=>elements.map(el=>({product:el.dataset.placeProduct,opacity:Number(getComputedStyle(el).opacity),hasName:!!el.querySelector('text'),hasIcon:!!el.querySelector('g[transform]')})));
-      assert.equal(annotations.length,5);assert.equal(annotations.find(item=>item.product==='wheat').opacity,1);
+      assert.equal(annotations.length,9);assert.ok(annotations.filter(item=>item.product==='wheat').every(item=>item.opacity===1));
       for(const item of annotations.filter(item=>item.product!=='wheat')){assert.ok(item.opacity>0&&item.opacity<.4,'Other names and livestock icons become faint');assert.ok(item.hasName&&item.hasIcon,'Faint annotations remain in the map');}
       const renderDeltas=[];
-      for(const item of annotations.filter(item=>item.product!=='wheat')){
+      for(const product of new Set(annotations.filter(item=>item.product!=='wheat').map(item=>item.product))){
+       const item=annotations.find(item=>item.product===product);
        const before=initialAnnotationPixels.get(item.product),after=await annotationShot(map,item.product);
        assert.equal(after.clip.width,before.clip.width,'Annotation width stays fixed after crop focus');
        assert.equal(after.clip.height,before.clip.height,'Annotation height stays fixed after crop focus');
@@ -350,7 +351,7 @@ try{
        renderDeltas.push({product:item.product,overviewOpacity:1,cropFocusOpacity:item.opacity,clip:before.clip,overviewPngSha256:createHash('sha256').update(before.png).digest('hex'),cropFocusPngSha256:createHash('sha256').update(after.png).digest('hex')});
       }
       (result.annotationRenderDeltas??=[]).push({width,items:renderDeltas});
-      result.checks.push(`Oceania ${width}px: overview names/icons opacity 1; wheat selection retains wheat opacity 1 and fades the other four to 0.32 while all five distributions remain.`);
+      result.checks.push(`Oceania ${width}px: all nine reading names start at opacity 1; wheat selection retains all three wheat names and fades the other products' names/icons to 0.32 while all five distributions remain.`);
      }
      await shot(`${region}-agriculture-${width}-crop-focus`);
      await page.reload({waitUntil:'networkidle'});await ready(region);
