@@ -15,12 +15,22 @@ test('region coverage is existing geography; blocked datasets have no substitute
  for(const region of library.forestryRegions){
   assert.equal(library.forestryGeography(region).length,availability.regions[region].countryCount);
   const reading=library.forestryReading(region);
-  assert.ok(reading.examples.length>=2&&reading.examples.length<=4);
+  assert.ok(region==='latin-america'?reading.examples.length===7:reading.examples.length>=2&&reading.examples.length<=4);
   const ids=new Set();
   for(const example of reading.examples){assert.ok(!ids.has(example.id));ids.add(example.id);assert.equal(example.point.length,2);assert.ok(example.sources.every(source=>source.url.startsWith('https://')&&source.period));const [x,y]=library.projectForestry(region,example.point),frame=library.forestryFrame(region);assert.ok(x>=0&&x<=frame.width&&y>=0&&y<=frame.height);}
   if(region!=='russia'){assert.equal(library.forestryRaster(region),null);assert.equal(availability.regions[region].coverage,['africa','oceania'].includes(region)?'partial-JRC-2020-reference-only':'not-acquired');assert.equal(availability.regions[region].treeClass,null);assert.equal(availability.regions[region].year,null);}
  }
  assert.match(availability.accessFailure,/CONNECT proxy returned 403/);
+});
+test('Latin processing descriptions use exact source city guides and keep unverified factory coordinates separate',()=>{
+ const examples=library.forestryReading('latin-america').examples.filter(example=>example.kind==='processing-locality');
+ const source=JSON.parse(fs.readFileSync('data-source/atlas/latin-america/forestry-processing-20261013/natural-earth-locality-source.geojson'));
+ const ledger=JSON.parse(fs.readFileSync('data-source/atlas/latin-america/forestry-processing-20261013/evidence.json'));
+ assert.deepEqual(examples.map(example=>example.id),['suzano-tres-lagoas','upm-paso-de-los-toros','upm-fray-bentos']);
+ for(const example of examples){const record=source.features.find(feature=>feature.properties.NE_ID===example.coordinateSource.neId);assert.ok(record);assert.deepEqual(example.point,record.geometry.coordinates);assert.equal(example.coordinateSource.type,'locality-guide');assert.equal(example.facilityCoordinates,null);assert.match(example.coordinateMeaning,/市の案内位置/);assert.match(example.coordinateMeaning,/未確認/);assert.ok(example.sources.some(source=>source.url.endsWith('.pdf')));}
+ assert.equal(crypto.createHash('sha256').update(fs.readFileSync('data-source/atlas/latin-america/forestry-processing-20261013/'+ledger.localityCoordinates.subsetFile)).digest('hex'),ledger.localityCoordinates.subsetSHA256);
+ assert.equal(ledger.newLandingByteAcquisitions.length,2);assert.ok(ledger.newLandingByteAcquisitions.every(request=>request.attempts===1&&/403/.test(request.error)));
+ const original=JSON.parse(fs.readFileSync('src/data/atlas/regional-forestry.json'));for(const region of ['africa','oceania','russia'])assert.deepEqual(library.forestryReading(region),original[region]);
 });
 test('reused source bytes and source nodata stay intact; no national total is inferred',()=>{
  for(const input of availability.reusedInputs){const bytes=fs.readFileSync(input.path);assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),input.sha256);assert.equal(bytes.length,input.bytes);}

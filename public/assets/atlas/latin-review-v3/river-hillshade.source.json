@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "publisher": "NOAA NCEI",
+  "dataset": "ETOPO 2022 v1 60 arc-second surface",
+  "sourceUrl": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/60s/60s_surface_elev_gtif/ETOPO_2022_v1_60s_N90W180_surface.tif",
+  "documentation": "https://www.ncei.noaa.gov/products/etopo-global-relief-model",
+  "license": "U.S. government public-domain data; cite NOAA NCEI / ETOPO 2022",
+  "sourceEdition": 2022,
+  "sourceUnits": "EGM2008 height metres",
+  "sourceCRS": "EPSG:4326; vertical EPSG:3855",
+  "sourceResolutionDegrees": 0.016666666666666666,
+  "sourceGridSha256": "e33dfb988981659f7c11385314dd084879be0fb3cbbfc99f33101a09e19c2187",
+  "sourceWindow": [
+    5220,
+    3720,
+    8820,
+    8760
+  ],
+  "sourceBounds": [
+    -93,
+    -56,
+    -33,
+    28
+  ],
+  "sourceAcquisition": "Previously acquired normal HTTPS byte ranges; unchanged raw grid; no new download",
+  "wholeGlobalFileRetrieved": false,
+  "globalFileHashLocallyVerified": false,
+  "missingSourceCells": 0,
+  "displayCRS": "EPSG:3857",
+  "displayFrame": [
+    0,
+    0,
+    900,
+    580
+  ],
+  "uniformScale": 5.974181367693006,
+  "sourceRasterFrame": [
+    0,
+    0,
+    358.45088206158033,
+    580
+  ],
+  "method": "Native physical-metre gradients, northwest 45-degree light, vertical exaggeration 1.5, luminance 190+59*illumination, bilinear Web Mercator display sampling; nonnegative source relief only; target-country polygon clip must be applied by renderer",
+  "meaning": "DEM-derived schematic illumination revealing land relief. This is not satellite/aerial imagery, land cover, current sunlight, a flow-direction model or a measured basin boundary.",
+  "use": "Quiet terrain context underneath river lines. Do not present gray values as a measured thematic quantity.",
+  "file": {
+    "name": "hillshade.png",
+    "width": 1800,
+    "height": 1160,
+    "bytes": 192834,
+    "sha256": "1e9d0f58ebfd03e77e94753ae068107d28cdfe2d37dd654cc55160f2a68fa9c3"
+  },
+  "preparationScriptSha256": "9b6c005043e015f28dffbcfc99e79a4e970deb73be82c0e5980c7fd8aa4eaa77",
+  "validation": {
+    "sourceGridHashMatches": true,
+    "finitePixels": true,
+    "grayRange": [
+      201,
+      247
+    ],
+    "knownPeaks": {
+      "Aconcagua": {
+        "coordinate": [
+          -70.011,
+          -32.653
+        ],
+        "nativeCellHeightMetres": 6188.22265625
+      },
+      "Amazon lowland near Manaus": {
+        "coordinate": [
+          -60.02,
+          -3.11
+        ],
+        "nativeCellHeightMetres": 39.23571014404297
+      },
+      "Guatemala highlands": {
+        "coordinate": [
+          -90.5,
+          14.6
+        ],
+        "nativeCellHeightMetres": 1506.1317138671875
+      }
+    }
+  }
+}

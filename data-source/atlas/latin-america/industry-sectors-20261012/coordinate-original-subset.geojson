@@ -1,0 +1,382 @@
+{
+  "type": "FeatureCollection",
+  "sourceUrl": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_populated_places.geojson",
+  "fullInputSha256": "9b8e3de09048ef00dfc70357dbb9fa324493f214b5e0ae4daf1aa79a8d10116b",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159112663,
+        "NAME": "Fray Bentos",
+        "ADM0NAME": "Uruguay"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -58.303998,
+          -33.138999
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159122371,
+        "NAME": "Heredia",
+        "ADM0NAME": "Costa Rica"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.120002,
+          9.991998
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159122949,
+        "NAME": "Paso de los Toros",
+        "ADM0NAME": "Uruguay"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -56.51005,
+          -32.810001
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159129861,
+        "NAME": "Cartago",
+        "ADM0NAME": "Costa Rica"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.929978,
+          9.869978
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159129873,
+        "NAME": "Alajuela",
+        "ADM0NAME": "Costa Rica"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.230037,
+          10.02002
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159131305,
+        "NAME": "Duque de Caxias",
+        "ADM0NAME": "Brazil"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -43.305602,
+          -22.796378
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159132019,
+        "NAME": "São José dos Campos",
+        "ADM0NAME": "Brazil"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -45.879949,
+          -23.199994
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159143281,
+        "NAME": "Paragominas",
+        "ADM0NAME": "Brazil"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -47.490006,
+          -2.959575
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159144189,
+        "NAME": "Zárate",
+        "ADM0NAME": "Argentina"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -59.040025,
+          -34.089561
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159146069,
+        "NAME": "La Romana",
+        "ADM0NAME": "Dominican Republic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.966602,
+          18.417001
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159146929,
+        "NAME": "Montego Bay",
+        "ADM0NAME": "Jamaica"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.916676,
+          18.466688
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159147621,
+        "NAME": "Vitória",
+        "ADM0NAME": "Brazil"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -40.353943,
+          -20.332042
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159148987,
+        "NAME": "Caruaru",
+        "ADM0NAME": "Brazil"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -35.980011,
+          -8.280026
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159149417,
+        "NAME": "Arequipa",
+        "ADM0NAME": "Peru"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.531957,
+          -16.418048
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159150183,
+        "NAME": "São Luís",
+        "ADM0NAME": "Brazil"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -44.267937,
+          -2.514039
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159150193,
+        "NAME": "Belo Horizonte",
+        "ADM0NAME": "Brazil"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -43.91695,
+          -19.91308
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159150303,
+        "NAME": "Rosario",
+        "ADM0NAME": "Argentina"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -60.668253,
+          -32.949184
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159150305,
+        "NAME": "Campinas",
+        "ADM0NAME": "Brazil"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -47.055885,
+          -22.907898
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159150469,
+        "NAME": "Montevideo",
+        "ADM0NAME": "Uruguay"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -56.186823,
+          -34.905376
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159150929,
+        "NAME": "Antofagasta",
+        "ADM0NAME": "Chile"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.400003,
+          -23.649992
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159151099,
+        "NAME": "Bahía Blanca",
+        "ADM0NAME": "Argentina"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -62.265021,
+          -38.740027
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159151441,
+        "NAME": "Belém",
+        "ADM0NAME": "Brazil"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -48.481969,
+          -1.448057
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159151461,
+        "NAME": "Recife",
+        "ADM0NAME": "Brazil"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -34.908766,
+          -8.060532
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159151559,
+        "NAME": "Buenos Aires",
+        "ADM0NAME": "Argentina"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -58.432513,
+          -34.610715
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NE_ID": 1159151621,
+        "NAME": "São Paulo",
+        "ADM0NAME": "Brazil"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -46.626966,
+          -23.556734
+        ]
+      }
+    }
+  ]
+}

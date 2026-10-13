@@ -1,4 +1,5 @@
 import {latinIndustryLocationById,latinIndustryLocationOverview,latinIndustryLocations} from '../data/atlas/latin-america-industry-locations.ts';
+import {isIndustrySectorRoute,initLatinIndustrySectors} from './atlas-latin-industry-sectors';
 import {latinCountries} from '../lib/atlas-latin-america-geometry';
 import {readLatinLearningState,writeLatinLearningState,latinLearningUrl,latinSourceReturnUrl,latinComparisonState,type LatinLearningState,type LatinLearningSelection} from '../lib/atlas-latin-learning-state';
 import {latinIndustryData,latinIndustryLayers,latinIndustryReadings,renderLatinIndustryMap,renderLatinIndustryLegend,industryCountryRow,industryCountryName,industryReadingForPlace,formatLatinIndustryValue} from '../lib/atlas-latin-industry';
@@ -7,6 +8,10 @@ import {renderLatinNatureMap,renderLatinNatureLegend} from '../lib/atlas-latin-n
 import {renderLatinAgricultureMap,renderLatinAgricultureLegend,agricultureLayerTitle} from '../lib/atlas-latin-agriculture';
 
 export function initLatinIndustry(root:HTMLElement){
+ const sectors=root.querySelector<HTMLElement>('[data-latin-industry-sectors]'),legacy=root.querySelector<HTMLElement>('[data-industry-legacy]');
+ if(sectors&&isIndustrySectorRoute()){sectors.hidden=false;if(legacy)legacy.hidden=true;initLatinIndustrySectors(sectors);return;}
+ if(sectors)sectors.hidden=true;if(legacy)legacy.hidden=false;
+ root.querySelector<HTMLElement>('[data-industry-sector-nav]')?.setAttribute('hidden','');root.querySelector<HTMLElement>('[data-industry-legacy-nav]')?.removeAttribute('hidden');
  const base=root.dataset.basePath??'/atlas/latin-america/';
  const shared=root.closest<HTMLElement>('[data-latin-workspace]');
  const allowed=latinIndustryLayers.map(l=>l.id);

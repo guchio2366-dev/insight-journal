@@ -1,0 +1,294 @@
+{
+  "checkedAt": "2026-10-12",
+  "basisHead": "a07ab7277b2c7eb89e51ef1be0d72dccfbec497d",
+  "status": "3 municipal statistic locators joined to retained source place positions; no residence/boundary geometry",
+  "country": "BRA",
+  "sourceUrl": "https://static.poder360.com.br/2023/12/dados%E2%80%93censo%E2%80%932022%E2%80%93cor%E2%80%93de%E2%80%93pele.pdf",
+  "sourceTitle": "IBGE Censo2022 Identificação étnico-racial; Table7",
+  "sourcePdfPageOneBased": 59,
+  "year": 2022,
+  "metric": "Municipal cor/raça parda count; raw published count and whole resident total only",
+  "nativeCategoriesUnchanged": true,
+  "coordinateReference": "EPSG:4326; coordinates copied unchanged from retained NaturalEarth places",
+  "coverageLabel": "原Table7の上位市抜粋・原位置資料と対応できた3集計単位のみ",
+  "pointMeaning": "市単位統計の表示位置。実際の居住点・点密度・市境界を示しません。",
+  "renderRecommendation": "A small, bordered statistic glyph/bar with a locator anchor; preserve country/state context. Do not fill the country/state; do not turn these counts into random residence points. Do not use a full 5-group pie because the source subset contains parda only. Keep all raw classes unknown except recorded parda.",
+  "labelsShort": [
+    "São Paulo（SP・市集計）",
+    "Rio de Janeiro（RJ・市集計）",
+    "Brasília（DF集計）"
+  ],
+  "unlocatedCount": 17,
+  "unlocatedRows": [
+    {
+      "name": "Fortaleza",
+      "UF": "CE",
+      "rankKind": "top10-count",
+      "reason": "No strictly matched retained original populated-place source record; no guessed coordinates"
+    },
+    {
+      "name": "Manaus",
+      "UF": "AM",
+      "rankKind": "top10-count",
+      "reason": "No strictly matched retained original populated-place source record; no guessed coordinates"
+    },
+    {
+      "name": "Salvador",
+      "UF": "BA",
+      "rankKind": "top10-count",
+      "reason": "No strictly matched retained original populated-place source record; no guessed coordinates"
+    },
+    {
+      "name": "Belo Horizonte",
+      "UF": "MG",
+      "rankKind": "top10-count",
+      "reason": "No strictly matched retained original populated-place source record; no guessed coordinates"
+    },
+    {
+      "name": "Belém",
+      "UF": "PA",
+      "rankKind": "top10-count",
+      "reason": "No strictly matched retained original populated-place source record; no guessed coordinates"
+    },
+    {
+      "name": "Recife",
+      "UF": "PE",
+      "rankKind": "top10-count",
+      "reason": "No strictly matched retained original populated-place source record; no guessed coordinates"
+    },
+    {
+      "name": "Goiânia",
+      "UF": "GO",
+      "rankKind": "top10-count",
+      "reason": "No strictly matched retained original populated-place source record; no guessed coordinates"
+    },
+    {
+      "name": "Boa Vista do Ramos",
+      "UF": "AM",
+      "rankKind": "top10-percent",
+      "reason": "No strictly matched retained original populated-place source record; no guessed coordinates"
+    },
+    {
+      "name": "São João da Ponta",
+      "UF": "PA",
+      "rankKind": "top10-percent",
+      "reason": "No strictly matched retained original populated-place source record; no guessed coordinates"
+    },
+    {
+      "name": "Tracuateua",
+      "UF": "PA",
+      "rankKind": "top10-percent",
+      "reason": "No strictly matched retained original populated-place source record; no guessed coordinates"
+    },
+    {
+      "name": "Cachoeira Grande",
+      "UF": "MA",
+      "rankKind": "top10-percent",
+      "reason": "No strictly matched retained original populated-place source record; no guessed coordinates"
+    },
+    {
+      "name": "Urucará",
+      "UF": "AM",
+      "rankKind": "top10-percent",
+      "reason": "No strictly matched retained original populated-place source record; no guessed coordinates"
+    },
+    {
+      "name": "Nhamundá",
+      "UF": "AM",
+      "rankKind": "top10-percent",
+      "reason": "No strictly matched retained original populated-place source record; no guessed coordinates"
+    },
+    {
+      "name": "Primeira Cruz",
+      "UF": "MA",
+      "rankKind": "top10-percent",
+      "reason": "No strictly matched retained original populated-place source record; no guessed coordinates"
+    },
+    {
+      "name": "Augusto Corrêa",
+      "UF": "PA",
+      "rankKind": "top10-percent",
+      "reason": "No strictly matched retained original populated-place source record; no guessed coordinates"
+    },
+    {
+      "name": "Belágua",
+      "UF": "MA",
+      "rankKind": "top10-percent",
+      "reason": "No strictly matched retained original populated-place source record; no guessed coordinates"
+    },
+    {
+      "name": "Caapiranga",
+      "UF": "AM",
+      "rankKind": "top10-percent",
+      "reason": "No strictly matched retained original populated-place source record; no guessed coordinates"
+    }
+  ],
+  "locators": [
+    {
+      "municipalityName": "São Paulo",
+      "UF": "SP",
+      "IBGEMunicipalityCode": null,
+      "rankKind": "top10-count",
+      "rank": 1,
+      "residentTotal": 11451999,
+      "count": 3820326,
+      "percent": null,
+      "id": "bra-parda-municipal-sp-1",
+      "country": "BRA",
+      "year": 2022,
+      "group": "pardo",
+      "nativeClass": "cor ou raça: parda",
+      "coordinate": [
+        -46.626966,
+        -23.556734
+      ],
+      "locatorSourceId": "ne-1159151621",
+      "locatorSourceName": "サンパウロ",
+      "locatorSourceCountry": "BRA",
+      "locatorSource": {
+        "name": "Natural Earth Populated Places 1:110m",
+        "version": "5.1.2",
+        "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_110m_populated_places.geojson",
+        "license": "Public domain",
+        "method": "Selected fields only; point coordinates are unchanged. Population values are not used or displayed.",
+        "displayNames": "アスタナは既存のアジア地図に合わせ、東京・マルキョクは都市・集落の短い表示名を使用。元の日本語名は各レコードのsourceNameに保持。座標と首都分類は出典の値を変更しない。"
+      },
+      "sourceNameMatch": {
+        "method": "explicit reviewed Portuguese-to-retained-Japanese place alias; no fuzzy matching",
+        "censusName": "São Paulo",
+        "censusUF": "SP",
+        "retainedCityName": "サンパウロ",
+        "retainedCityId": "ne-1159151621",
+        "NEAdmin1Code": "BRA-1311",
+        "NEAdmin1Name": "São Paulo",
+        "pointWithinCorrespondingStateGeometry": true
+      },
+      "sourceTable": 7,
+      "sourcePdfPage": 59,
+      "sourceUrl": "https://static.poder360.com.br/2023/12/dados%E2%80%93censo%E2%80%932022%E2%80%93cor%E2%80%93de%E2%80%93pele.pdf",
+      "aggregationMeaning": "2022年のmunicipal集計。点は都市位置の表示記号で居住点・民族領域・密度ではありません。",
+      "locatorMeaning": "Natural Earthの都市ラベル位置。役所敷地の実測位置・居住者の点ではありません。",
+      "geometry": null,
+      "municipalityCodeVerified": false,
+      "isCityPopulationAgglomeration": false,
+      "isStatisticalLocator": true,
+      "displayNote": "市域の集計値。UN都市圏人口・州全域の値とは別。"
+    },
+    {
+      "municipalityName": "Rio de Janeiro",
+      "UF": "RJ",
+      "IBGEMunicipalityCode": null,
+      "rankKind": "top10-count",
+      "rank": 2,
+      "residentTotal": 6211223,
+      "count": 2403895,
+      "percent": null,
+      "id": "bra-parda-municipal-rj-2",
+      "country": "BRA",
+      "year": 2022,
+      "group": "pardo",
+      "nativeClass": "cor ou raça: parda",
+      "coordinate": [
+        -43.212117,
+        -22.907308
+      ],
+      "locatorSourceId": "ne-1159151619",
+      "locatorSourceName": "リオデジャネイロ",
+      "locatorSourceCountry": "BRA",
+      "locatorSource": {
+        "name": "Natural Earth Populated Places 1:110m",
+        "version": "5.1.2",
+        "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_110m_populated_places.geojson",
+        "license": "Public domain",
+        "method": "Selected fields only; point coordinates are unchanged. Population values are not used or displayed.",
+        "displayNames": "アスタナは既存のアジア地図に合わせ、東京・マルキョクは都市・集落の短い表示名を使用。元の日本語名は各レコードのsourceNameに保持。座標と首都分類は出典の値を変更しない。"
+      },
+      "sourceNameMatch": {
+        "method": "explicit reviewed Portuguese-to-retained-Japanese place alias; no fuzzy matching",
+        "censusName": "Rio de Janeiro",
+        "censusUF": "RJ",
+        "retainedCityName": "リオデジャネイロ",
+        "retainedCityId": "ne-1159151619",
+        "NEAdmin1Code": "BRA-627",
+        "NEAdmin1Name": "Rio de Janeiro",
+        "pointWithinCorrespondingStateGeometry": true
+      },
+      "sourceTable": 7,
+      "sourcePdfPage": 59,
+      "sourceUrl": "https://static.poder360.com.br/2023/12/dados%E2%80%93censo%E2%80%932022%E2%80%93cor%E2%80%93de%E2%80%93pele.pdf",
+      "aggregationMeaning": "2022年のmunicipal集計。点は都市位置の表示記号で居住点・民族領域・密度ではありません。",
+      "locatorMeaning": "Natural Earthの都市ラベル位置。役所敷地の実測位置・居住者の点ではありません。",
+      "geometry": null,
+      "municipalityCodeVerified": false,
+      "isCityPopulationAgglomeration": false,
+      "isStatisticalLocator": true,
+      "displayNote": "市域の集計値。UN都市圏人口・州全域の値とは別。"
+    },
+    {
+      "municipalityName": "Brasília",
+      "UF": "DF",
+      "IBGEMunicipalityCode": null,
+      "rankKind": "top10-count",
+      "rank": 5,
+      "residentTotal": 2817381,
+      "count": 1370836,
+      "percent": null,
+      "id": "bra-parda-municipal-df-5",
+      "country": "BRA",
+      "year": 2022,
+      "group": "pardo",
+      "nativeClass": "cor ou raça: parda",
+      "coordinate": [
+        -47.917998,
+        -15.781394
+      ],
+      "locatorSourceId": "ne-1159151443",
+      "locatorSourceName": "ブラジリア",
+      "locatorSourceCountry": "BRA",
+      "locatorSource": {
+        "name": "Natural Earth Populated Places 1:110m",
+        "version": "5.1.2",
+        "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_110m_populated_places.geojson",
+        "license": "Public domain",
+        "method": "Selected fields only; point coordinates are unchanged. Population values are not used or displayed.",
+        "displayNames": "アスタナは既存のアジア地図に合わせ、東京・マルキョクは都市・集落の短い表示名を使用。元の日本語名は各レコードのsourceNameに保持。座標と首都分類は出典の値を変更しない。"
+      },
+      "sourceNameMatch": {
+        "method": "explicit reviewed Portuguese-to-retained-Japanese place alias; no fuzzy matching",
+        "censusName": "Brasília",
+        "censusUF": "DF",
+        "retainedCityName": "ブラジリア",
+        "retainedCityId": "ne-1159151443",
+        "NEAdmin1Code": "BRA-599",
+        "NEAdmin1Name": "Distrito Federal",
+        "pointWithinCorrespondingStateGeometry": true
+      },
+      "sourceTable": 7,
+      "sourcePdfPage": 59,
+      "sourceUrl": "https://static.poder360.com.br/2023/12/dados%E2%80%93censo%E2%80%932022%E2%80%93cor%E2%80%93de%E2%80%93pele.pdf",
+      "aggregationMeaning": "2022年のmunicipal集計。点は都市位置の表示記号で居住点・民族領域・密度ではありません。",
+      "locatorMeaning": "Natural Earthの都市ラベル位置。役所敷地の実測位置・居住者の点ではありません。",
+      "geometry": null,
+      "municipalityCodeVerified": false,
+      "isCityPopulationAgglomeration": false,
+      "isStatisticalLocator": true,
+      "displayNote": "ブラジリアは連邦区DFに対応する原Table7の集計単位。2018年UN都市圏人口と混ぜません。"
+    }
+  ],
+  "provenance": {
+    "locatorDataPath": "src/data/atlas/overview-cities.json",
+    "locatorDataSha256": "10d20773b3c9234ab95c5225580ba561a172f0d85a83b426b41e36a6297aa248",
+    "NEAdmin1DataPath": "data-source/atlas/latin-reading/geographic-distributions-20261011.json",
+    "NEAdmin1DataSha256": "4fcf0b6f92af88907cf102708e4078549eccea9f8c671942ca6d135387a2d052",
+    "locatorGeometryMethod": "No coordinate changes, no geocoding. Point-in-polygon checks only validate UF context of exact retained named city records. Source IDs are NE place IDs, not official IBGE municipality IDs.",
+    "statisticalSourceReadMethod": "Original report text read; binary acquisition and source-page eye review unavailable. Raw numbers retained; no derived percentages inserted.",
+    "statisticalSourceLicence": "IBGE 2023 report copyright; explicit blanket reuse licence not verified here. Independently organized published numeric facts only; no original source map/text/graphic reproduction."
+  },
+  "notVerified": [
+    "Original municipal boundaries",
+    "IBGE municipal codes",
+    "Source-page image eye review",
+    "Complete Brazilian municipality 5-class data",
+    "Actual group residence distribution beyond municipal aggregate"
+  ]
+}

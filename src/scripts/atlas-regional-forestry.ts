@@ -1,4 +1,4 @@
-type Example={id:string;title:string;label:string;point:number[];fact:string;explanation:string;use:string;sources:{title:string;url:string;period:string}[]};
+import type {ForestryExample as Example} from '../lib/atlas-regional-forestry';
 type Config={region:string;frame:{width:number;height:number};reading:{name:string;overview:string;distribution:string;reason:string;examples:Example[]}};
 type ViewportBudgetInput={region:string;viewportWidth:number;viewportHeight:number;scrollY:number;stageViewportTop:number;legendOuterHeight:number;readerViewportTop:number};
 export function regionalForestryViewportBudget(input:ViewportBudgetInput) {
@@ -39,13 +39,18 @@ export function initRegionalForestry(root=document.querySelector<HTMLElement>('[
  }
  function choose(id:string,persist=true) {
   const example=reading.examples.find(example=>example.id===id);selected=example?.id??'';
-  setText('[data-forest-kicker]',example?'重要な林業の事例 · 代表位置':'地域全体');
+  setText('[data-forest-kicker]',example?.kind==='processing-locality'?'パルプ加工の事例 · 市の案内位置':example?'重要な林業の事例 · 代表位置':'地域全体');
   setText('[data-forest-reading-title]',example?.title??`${reading.name}の森林と木材利用`);
   setText('[data-forest-takeaway]',example?.fact??reading.overview);
-  setText('[data-forest-fact]',root!.dataset.forestRasterStatus==='failed'?'2021年の樹木被覆画像を表示できません。2020年の参考表示とは別の資料です。番号は解説の代表位置、斜線は欠測・分類未判定です。':example?`${example.fact} 番号は説明の代表位置です。選んでも他地域の位置と取得済みの被覆面を残します。`:reading.distribution);
+  setText('[data-forest-fact]',root!.dataset.forestRasterStatus==='failed'?'2021年の樹木被覆画像を表示できません。2020年の参考表示とは別の資料です。番号は解説の代表位置、斜線は欠測・分類未判定です。':example?`${example.fact} ${example.kind==='processing-locality'?'ひし形は市の案内位置で、工場敷地の点ではありません。':'番号は説明の代表位置です。'}選んでも他地域の位置と取得済みの被覆面を残します。`:reading.distribution);
   if(root!.dataset.forestReferenceStatus==='failed')q('[data-forest-fact]').textContent+=' 一部の2020年参考画像を表示できません。表示に失敗した範囲の森林分布は読めません。';
   setText('[data-forest-reason]',example?.explanation??reading.reason);
   setText('[data-forest-use]',example?.use??'');
+  if(config.region==='latin-america'){
+   q('[data-forest-location-section]').hidden=!example?.coordinateMeaning;
+   setText('[data-forest-coordinate-meaning]',example?.coordinateMeaning??'');
+   setText('[data-forest-facility-address]',example?.facilityAddress?`公式資料の工場住所：${example.facilityAddress}`:'工場敷地の数値座標・外形は未確認です。');
+  }
   q('[data-forest-use-section]').hidden=!example;q('[data-forest-clear]').hidden=!example;
   root!.querySelectorAll('[data-forest-example]').forEach(element=>{const active=element.getAttribute('data-forest-example')===selected;element.classList.toggle('is-selected',active);if(element.tagName==='BUTTON')element.setAttribute('aria-pressed',String(active));else if(active)element.setAttribute('aria-current','true');else element.removeAttribute('aria-current');});
   q('[data-forest-overview]').setAttribute('aria-pressed',String(!example));
@@ -56,7 +61,15 @@ export function initRegionalForestry(root=document.querySelector<HTMLElement>('[
  function draw(persist=true) {
   svg.setAttribute('viewBox',camera.join(' '));
   const box=svg.getBoundingClientRect(),scale=Math.max(camera[2]/Math.max(box.width,1),camera[3]/Math.max(box.height,1));
-  svg.querySelectorAll('[data-forest-symbol]').forEach(symbol=>symbol.setAttribute('transform',`scale(${scale})`));
+  svg.querySelectorAll('[data-forest-symbol]').forEach(symbol=>{
+   symbol.setAttribute('transform',`scale(${scale})`);
+   const marker=symbol.querySelector('[data-forest-processing-offset]');
+   if(!marker)return;
+   const example=reading.examples.find(example=>example.id===symbol.parentElement?.getAttribute('data-forest-example'));
+   const [dx,dy]=box.width<700&&example?.id==='upm-paso-de-los-toros'?[-30,48]:example?.markerOffset??[0,0];
+   marker.setAttribute('transform',`translate(${dx},${dy})`);
+   symbol.querySelector('.forest-processing-leader')?.setAttribute('d',`M0 0L${dx} ${dy}`);
+  });
   if(persist)save();
  }
  function zoom(factor:number) {

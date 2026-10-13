@@ -1,0 +1,7 @@
+{
+  "operation": "Normal HTTPS read of source-linked independent publisher product directory/page",
+  "url": "https://geoftp.ibge.gov.br/informacoes_ambientais/estudos_ambientais/bacias_e_divisoes_hidrograficas_do_brasil/2021/Bacias_Hidrograficas_do_Brasil_BHB250/vetores/",
+  "time": "2026-10-12T08:52:20.163248+00:00",
+  "retried": false,
+  "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+}

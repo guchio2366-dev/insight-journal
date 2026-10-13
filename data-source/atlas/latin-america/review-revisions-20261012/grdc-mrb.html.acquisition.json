@@ -1,0 +1,7 @@
+{
+  "operation": "Normal HTTPS read of independent publisher landing page",
+  "url": "https://mrb.grdc.bafg.de/",
+  "time": "2026-10-12T08:47:09.062418+00:00",
+  "retried": false,
+  "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+}
