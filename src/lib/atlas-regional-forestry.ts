@@ -1,5 +1,6 @@
 import frames from '../data/atlas/regional-forestry-frames.json';
 import readings from '../data/atlas/regional-forestry.json';
+import latinProcessing from '../data/atlas/latin-america/forestry-processing.json';
 import africa from '../data/atlas/africa-geography.json';
 import latin from '../data/atlas/latin-america/countries.json';
 import oceania from '../data/atlas/oceania-countries.json';
@@ -12,7 +13,15 @@ import westAsiaForestry from '../../public/assets/atlas/west-asia-v1/raster-mani
 export type ForestryRegion = keyof typeof frames;
 type Geometry = {type:string;coordinates:number[][][]|number[][][][]};
 export const forestryRegions = Object.keys(frames) as ForestryRegion[];
-export const forestryReading = (region:ForestryRegion) => readings[region];
+export type ForestryExample={id:string;title:string;label:string;point:number[];fact:string;explanation:string;use:string;sources:{title:string;url:string;period:string}[];kind?:string;markerOffset?:number[];labelOffset?:number[];coordinateMeaning?:string;facilityAddress?:string;facilityCoordinates?:number[]|null};
+export const forestryReading = (region:ForestryRegion) => {
+ const reading=readings[region];
+ if(region!=='latin-america')return {...reading,examples:reading.examples as ForestryExample[]};
+ return {...reading,
+  overview:reading.overview+' トレス・ラゴアス、パソ・デ・ロス・トロス、フライ・ベントスのパルプ加工も、市の案内位置から読みます。',
+  distribution:reading.distribution+' 青いひし形は加工拠点を読む市の案内位置で、工場敷地の点ではありません。細線は記号から案内位置への引出線です。',
+  examples:[...reading.examples,...latinProcessing.examples] as ForestryExample[]};
+};
 export const forestryFrame = (region:ForestryRegion) => {
  const definition=frames[region],bounds=definition.bounds;
  const height=900*(mercator(bounds[3])-mercator(bounds[1]))/((bounds[2]-bounds[0])*Math.PI/180);

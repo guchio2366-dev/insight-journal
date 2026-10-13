@@ -44,6 +44,26 @@ try{
    await page.getByRole('link',{name:'農畜産',exact:true}).click();await page.waitForURL('**/agriculture/**');await ready();assert.deepEqual(await measure(),agriculture);
    await page.goto(base+'/atlas/latin-america/agriculture/forestry/?example=amazon',{waitUntil:'networkidle'});await ready();assertCommon(agriculture,await measure());
    const config=await page.locator('[data-forest-config]').evaluate(el=>JSON.parse(el.textContent));
+   const scene=()=>page.locator('svg [data-forest-example]').evaluateAll(elements=>elements.map(el=>{const r=el.querySelector('.forest-marker-label').getBoundingClientRect(),symbol=el.querySelector('.forest-processing-marker,rect,circle').getBoundingClientRect();return {id:el.getAttribute('data-forest-example'),anchor:el.getAttribute('transform'),label:{x:r.x,y:r.y,width:r.width,height:r.height},symbol:{x:symbol.x,y:symbol.y,width:symbol.width,height:symbol.height}};}));
+   const originalScene=await scene(),originalCamera=await page.locator('[data-forest-map]').getAttribute('viewBox');
+   const processing=config.reading.examples.filter(example=>example.kind==='processing-locality');
+   assert.equal(processing.length,3);assert.equal(originalScene.length,7);
+   const selections=[];
+   for(const example of processing){
+    const marker=page.locator(`svg [data-forest-example="${example.id}"] .forest-processing-marker`);
+    await marker.click();assert.equal(await page.locator('[data-forest-reading-title]').textContent(),example.title);assert.equal(await page.locator('[data-forest-coordinate-meaning]').textContent(),example.coordinateMeaning);
+    assert.equal(await page.locator('[data-forest-location-section]').isVisible(),true);assert.equal(await page.locator('[data-forest-map]').getAttribute('viewBox'),originalCamera);assert.deepEqual(await scene(),originalScene);assertCommon(agriculture,await measure());
+    await page.locator(`svg [data-forest-example="${example.id}"]`).focus();await page.keyboard.press('Enter');assert.equal(await page.locator('[data-forest-reading-title]').textContent(),example.title);
+    const url=page.url();assert.equal(new URL(url).searchParams.get('example'),example.id);
+    await page.reload({waitUntil:'networkidle'});await ready();assert.equal(await page.locator('[data-forest-reading-title]').textContent(),example.title);assert.deepEqual(await scene(),originalScene);assertCommon(agriculture,await measure());
+    const image=await shot(example.id);selections.push({id:example.id,url:new URL(url).pathname+new URL(url).search,image,scene:await scene(),common:await measure()});
+    await page.goto(base+'/atlas/latin-america/agriculture/forestry/',{waitUntil:'networkidle'});await ready();
+    await page.goto(url,{waitUntil:'networkidle'});await ready();assert.equal(await page.locator('[data-forest-reading-title]').textContent(),example.title);await page.goBack({waitUntil:'networkidle'});await ready();assert.equal(await page.locator('[data-forest-clear]').isVisible(),false);await page.goForward({waitUntil:'networkidle'});await ready();assert.equal(await page.locator('[data-forest-reading-title]').textContent(),example.title);assertCommon(agriculture,await measure());
+   }
+   // Display offsets use short leaders; every source anchor remains unchanged.
+   const overlaps=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
+   if(viewport.width===1920)for(let i=0;i<originalScene.length;i++)for(let j=i+1;j<originalScene.length;j++)assert.equal(overlaps(originalScene[i].label,originalScene[j].label),false,`Labels overlap: ${originalScene[i].id}/${originalScene[j].id}`);
+   report.viewports.at(-1).processingSelections=selections;
    await page.goto(base+`/atlas/latin-america/agriculture/forestry/?example=${config.reading.examples[0].id}`,{waitUntil:'networkidle'});await ready();assert.equal(await page.locator('[data-forest-reading-title]').textContent(),config.reading.examples[0].title);assertCommon(agriculture,await measure());
    await page.reload({waitUntil:'networkidle'});await ready();assert.equal(await page.locator('[data-forest-reading-title]').textContent(),config.reading.examples[0].title);assertCommon(agriculture,await measure());
    await page.locator('[data-forest-clear]').click();await page.evaluate(()=>scrollTo(0,0));assertCommon(agriculture,await measure());
@@ -59,7 +79,7 @@ try{
  assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedRequests,[]);report.result=baseline?'baseline-recorded':'passed';await save();
  if(process.env.LATIN_FORESTRY_INLINE_PREVIEWS==='1'){
   const {default:sharp}=await import('sharp');
-  for(const view of report.viewports)for(const shot of [view.agricultureImage,view.forestryImage]){
+  for(const view of report.viewports)for(const shot of [view.agricultureImage,view.forestryImage,...(view.processingSelections??[]).map(selection=>selection.image)]){
    const bytes=await sharp(path.join(output,shot.file)).webp({quality:90}).toBuffer(),encoded=bytes.toString('base64'),parts=Math.ceil(encoded.length/8192);
    const name=(baseline?'before-':'after-')+shot.file.replace(/\.png$/,'.webp');
    shot.preview={file:name,sha256:crypto.createHash('sha256').update(bytes).digest('hex'),imagePixels:shot.imagePixels};

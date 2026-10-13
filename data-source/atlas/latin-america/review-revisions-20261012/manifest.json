@@ -94,10 +94,10 @@
       "sha256": "b05765677560a881b729eaacfaf72109fad0f9d70b6b4705d51e8f91c1b0004d"
     }
   ],
-  "scope": "Latin normal readers only. Legacy comparison renderer defaults and source grids retained. Industry, Canada and Mexico implementation unchanged.",
+  "scope": "Latin normal readers; later approved industry extension retained (separate industry ledger). This forestry follow-up does not change industry, Canada or Mexico implementation.",
   "unimplemented": [
     "Actual full Latin forest-cover surface",
-    "Source-coordinate verified wood-processing factories",
+    "Georeferenced factory-site points/footprints (three sourced processing examples now readable via city guides; factory coordinates remain unverified)",
     "Authentic hydrological basin polygons",
     "Groundwater availability/renewal/storage",
     "Finer actual ethnic/religious residence distribution beyond existing real aggregates and 3 municipal statistic locators",
@@ -109,5 +109,6 @@
     "No counts recovered from rounded density",
     "No forest-cover inferred from representative forestry locators"
   ],
-  "newNetworkBlocks": "Only normal source acquisitions, proxy403 recorded by researchers. No bypass/retry mirrors or CI source redownload."
+  "newNetworkBlocks": "Only normal source acquisitions, proxy403 recorded by researchers. No bypass/retry mirrors or CI source redownload.",
+  "forestryProcessingFollowUp": "../forestry-processing-20261013/evidence.json"
 }

@@ -1,0 +1,197 @@
+{
+  "date": "2026-10-13",
+  "baseHead": "0bf4f23d5bdcc6582c0dc3cd6f9f5696c7719dab",
+  "scope": "Reconcile prior confirmed processing examples with later industry evidence, Latin forestry only. No industry/Canada/Mexico code modification.",
+  "reconciliation": "Prior processingReferences recorded facility coordinates as null and did not implement already-confirmed city-level processing facts. Later industry implementation confirmed UPM Paso/Fray operators and separate Natural Earth city-guide coordinates. Forestry now uses three city guides and verified qualitative processing facts, while all facilityCoordinates remain null.",
+  "localityCoordinates": {
+    "publisher": "Natural Earth",
+    "version": "5.1.2",
+    "sourceUrl": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_populated_places.geojson",
+    "sourceCRS": "EPSG:4326",
+    "license": "public domain",
+    "retrieval": "Reuse already-acquired consumer-local industry input; no new acquisition",
+    "originalBytes": 19359003,
+    "originalSHA256": "9b8e3de09048ef00dfc70357dbb9fa324493f214b5e0ae4daf1aa79a8d10116b",
+    "subsetFile": "natural-earth-locality-source.geojson",
+    "subsetBytes": 13069,
+    "subsetSHA256": "28fc362d1fa49eebd7343eafeff1eec797f6828f6a119061295e2bce19b6956a",
+    "method": "Unchanged original features selected by exact NE_ID. No geocoding, interpolation or facility-coordinate derivation."
+  },
+  "examples": [
+    {
+      "id": "suzano-tres-lagoas",
+      "cityPoint": [
+        -51.720006,
+        -20.790011
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159130939,
+        "sourceName": "Três Lagoas",
+        "sourceCountry": "Brazil",
+        "type": "locality-guide"
+      },
+      "facilityCoordinates": null,
+      "facilityAddress": null,
+      "facilityCoordinateStatus": "not-verified-from-checked-official-inputs",
+      "geometryMeaning": "City guide only; neither facility location/footprint nor supply/forest area",
+      "sources": [
+        {
+          "title": "Suzano：Mato Grosso do Sul の操業案内",
+          "url": "https://www.suzano.com.br/en/sustainability/people/neighboring-communities/mato-grosso-do-sul",
+          "period": "2026年10月12日の既存確認資料。2009年・2017年の操業説明"
+        },
+        {
+          "title": "Suzano：Sustainability Report 2022",
+          "url": "https://centraldesustentabilidade.suzano.com.br/relatorios/Suzano%20Sustainability%20Report%202022.pdf",
+          "period": "2022年、本文p.17（PDF p.17）：Três Lagoas Unit。敷地座標は未確認"
+        },
+        {
+          "title": "Natural Earth：Populated places",
+          "url": "https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-populated-places/",
+          "period": "v5.1.2、public domain。市の案内座標のみ"
+        }
+      ]
+    },
+    {
+      "id": "upm-paso-de-los-toros",
+      "cityPoint": [
+        -56.51005,
+        -32.810001
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159122949,
+        "sourceName": "Paso de los Toros",
+        "sourceCountry": "Uruguay",
+        "type": "locality-guide"
+      },
+      "facilityCoordinates": null,
+      "facilityAddress": "Camino El Tala 1, Ruta 5 KM 245.9, Padrón 834, Centenario, Durazno, Uruguay",
+      "facilityCoordinateStatus": "not-verified-from-checked-official-inputs",
+      "geometryMeaning": "City guide only; neither facility location/footprint nor supply/forest area",
+      "sources": [
+        {
+          "title": "UPM：Paso de los Toros mill",
+          "url": "https://www.upmpulp.com/pulp-production/paso-de-los-toros/",
+          "period": "2026年10月13日の本文確認。2023年操業開始"
+        },
+        {
+          "title": "UPM：工場の予備環境・社会影響評価",
+          "url": "https://www.upm.uy/siteassets/documents/growth/upm-pulp-mill-esia-study-report-2018-en.pdf",
+          "period": "2018年、PDF p.1。相対位置の説明、数値座標は未確認"
+        },
+        {
+          "title": "UPM：Paso de los Toros 製品資料",
+          "url": "https://www.upm.com/siteassets/certificate-finder/environmental-product-declaration/carbon-footprint---euca-pulp---upm-paso-de-los-toros-mill.pdf",
+          "period": "2025年版、PDF p.1。住所・製品だけを使用"
+        },
+        {
+          "title": "Natural Earth：Populated places",
+          "url": "https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-populated-places/",
+          "period": "v5.1.2、public domain。市の案内座標のみ"
+        }
+      ]
+    },
+    {
+      "id": "upm-fray-bentos",
+      "cityPoint": [
+        -58.303998,
+        -33.138999
+      ],
+      "coordinateSource": {
+        "publisher": "Natural Earth",
+        "version": "5.1.2",
+        "neId": 1159112663,
+        "sourceName": "Fray Bentos",
+        "sourceCountry": "Uruguay",
+        "type": "locality-guide"
+      },
+      "facilityCoordinates": null,
+      "facilityAddress": "Ruta Vladimir Roslik Km. 307, 65000 Fray Bentos, Uruguay",
+      "facilityCoordinateStatus": "not-verified-from-checked-official-inputs",
+      "geometryMeaning": "City guide only; neither facility location/footprint nor supply/forest area",
+      "sources": [
+        {
+          "title": "UPM：Fray Bentos mill",
+          "url": "https://www.upmpulp.com/pulp-production/fray-bentos/",
+          "period": "2026年10月13日の本文確認。2007年操業開始"
+        },
+        {
+          "title": "UPM：Fray Bentos EMAS Environmental Performance 2025",
+          "url": "https://www.upm.com/siteassets/reporting-hub/emas-reports/emas-report-2025-upm-fray-bentos-mill-english.pdf",
+          "period": "2025年、製品・拠点・住所の説明。敷地の数値座標は未確認"
+        },
+        {
+          "title": "Natural Earth：Populated places",
+          "url": "https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-populated-places/",
+          "period": "v5.1.2、public domain。市の案内座標のみ"
+        }
+      ]
+    }
+  ],
+  "officialCoordinateChecks": [
+    {
+      "url": "https://www.upm.uy/siteassets/documents/growth/upm-pulp-mill-esia-study-report-2018-en.pdf",
+      "status": "official-text-read",
+      "period": "2018 preliminary study",
+      "finding": "PDF p.1 describes planned site on the Rio Negro left bank, 5 km downstream of the named towns. No numerical facility coordinate verified. Relative description not converted into a coordinate."
+    },
+    {
+      "url": "https://www.upm.com/siteassets/certificate-finder/environmental-product-declaration/carbon-footprint---euca-pulp---upm-paso-de-los-toros-mill.pdf",
+      "status": "official-text-read",
+      "period": "2025 product document",
+      "finding": "PDF p.1 confirms product and facility postal address. No numerical facility coordinate verified. Inconsistent report-period/issue-date fields and all footprint/emission values excluded."
+    },
+    {
+      "url": "https://www.upm.com/siteassets/reporting-hub/emas-reports/emas-report-2025-upm-fray-bentos-mill-english.pdf",
+      "status": "official-text-read",
+      "period": "2025 EMAS report",
+      "finding": "Confirms mill/product/address. Text search found no coord or location match. No numerical facility coordinate verified; this does not prove no coordinate exists in every image/annex."
+    },
+    {
+      "url": "https://centraldesustentabilidade.suzano.com.br/relatorios/Suzano%20Sustainability%20Report%202022.pdf",
+      "status": "official-text-read",
+      "period": "2022 annual report",
+      "finding": "PDF page 17 (zero-based page 16) names Tres Lagoas Unit. No coord or location text match. No numerical facility coordinate verified; does not establish current capacity or exact site geometry."
+    },
+    {
+      "url": "https://www.upm.com/sustainability/managing-sustainability/reporting-and-data/emas-reports/",
+      "status": "official-text-read",
+      "finding": "Portal identifies both Uruguay mills. Dynamic latest-report cards do not expose facility coordinates in returned text."
+    },
+    {
+      "url": "https://www.ambiente.gub.uy/oan/evaluacion-de-impacto-ambiental/manifiestos/",
+      "status": "official-page-read-no-project-coordinate-extracted",
+      "finding": "Public ministry landing page returned. No project-specific georeferenced facility input extracted; not an access refusal."
+    }
+  ],
+  "newLandingByteAcquisitions": [
+    {
+      "name": "paso-page",
+      "url": "https://www.upmpulp.com/pulp-production/paso-de-los-toros/",
+      "attempts": 1,
+      "status": "failed",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "name": "fray-page",
+      "url": "https://www.upmpulp.com/pulp-production/fray-bentos/",
+      "attempts": 1,
+      "status": "failed",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    }
+  ],
+  "accessDistinction": "UPM page facts were read with normal web retrieval before executor raw-HTML attempts were refused403. Those blocked raw-HTML requests were not retried via another route. Separate official ESIA/EPD/EMAS and Suzano annual report documents were read as distinct inputs, without downloading/mirroring blocked landing bytes. Prior blocked Suzano landing, forest/basin datasets remain untouched. Numerical facility coordinates are insufficient inputs, not automatically a403.",
+  "remainingInputs": [
+    "Official numerical, georeferenced facility coordinates/footprints for all three mills (postal addresses and city coordinates cannot substitute)",
+    "Actual full Latin forest cover and basin polygons: unchanged prior acquisition failures"
+  ],
+  "noInvention": [
+    "No facility polygon, forest cover, logging boundary, road/port route, volume, capacity, national total or current environmental outcome inferred",
+    "Marker offsets are screen-pixel display offsets with short anchor leaders; original city points remain unchanged"
+  ],
+  "license": "Operator facts paraphrased and official documents linked; no original report image/map reused or new redistribution permission assumed"
+}

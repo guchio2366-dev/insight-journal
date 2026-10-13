@@ -128,5 +128,16 @@
       "license": "Facts paraphrased, source linked; no original map reuse permission assumed",
       "originalBytesSHA256": null
     }
-  ]
+  ],
+  "processingReconciliation": {
+    "date": "2026-10-13",
+    "evidence": "../forestry-processing-20261013/evidence.json",
+    "implemented": [
+      "suzano-tres-lagoas",
+      "upm-paso-de-los-toros",
+      "upm-fray-bentos"
+    ],
+    "meaning": "Original null coordinate fields describe missing factory coordinates, not unavailable processing facts. City guides and official processing descriptions now implemented. Historical acquisition refusals preserved.",
+    "facilityCoordinates": "still not verified"
+  }
 }

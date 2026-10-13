@@ -18,6 +18,21 @@ test('Latin forestry and farming share one region frame, category band, news rai
   assert.equal(f.document.querySelector('.latin-agriculture-subfields [aria-current]').textContent,'林業');assert.equal(a.document.querySelector('.latin-agriculture-subfields [aria-pressed=true]').textContent,'農畜産');
  }finally{await a.happyDOM.close();await f.happyDOM.close();}
 });
+test('all three processing readers preserve the scene, distinguish factory addresses, and restore city-guide URLs',async()=>{
+ const w=page('forestry','',true);try{
+  await w.happyDOM.waitUntilComplete();const d=w.document,map=d.querySelector('[data-forest-map]'),config=JSON.parse(d.querySelector('[data-forest-config]').textContent);
+  const scene=()=>[...d.querySelectorAll('svg [data-forest-example]')].map(el=>({id:el.getAttribute('data-forest-example'),point:el.getAttribute('transform'),label:el.querySelector('.forest-marker-label').outerHTML}));
+  const original=scene();assert.equal(original.length,7);const nav=d.querySelector('.latin-fields').outerHTML;
+  d.querySelector('[data-forest-zoom=in]').click();const camera=map.getAttribute('viewBox');
+  for(const example of config.reading.examples.filter(example=>example.kind==='processing-locality')){
+   const marker=d.querySelector(`svg [data-forest-example="${example.id}"]`);assert.ok(marker.querySelector('.forest-processing-marker'));marker.dispatchEvent(new w.MouseEvent('click',{bubbles:true,cancelable:true}));
+   assert.equal(d.querySelector('[data-forest-reading-title]').textContent,example.title);assert.equal(d.querySelector('[data-forest-location-section]').hidden,false);assert.equal(d.querySelector('[data-forest-coordinate-meaning]').textContent,example.coordinateMeaning);assert.match(d.querySelector('[data-forest-facility-address]').textContent,example.facilityAddress?new RegExp(example.facilityAddress.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')):/未確認/);
+   assert.equal(map.getAttribute('viewBox'),camera);assert.deepEqual(scene(),original);assert.equal(d.querySelector('.latin-fields').outerHTML,nav);assert.equal(new URL(w.location.href).searchParams.get('example'),example.id);
+   const restored=page('forestry',w.location.search,true);try{await restored.happyDOM.waitUntilComplete();assert.equal(restored.document.querySelector('[data-forest-reading-title]').textContent,example.title);assert.deepEqual(restored.document.querySelector('[data-forest-map]').getAttribute('viewBox').split(' ').map(Number),camera.split(' ').map(value=>Number(Number(value).toFixed(3))));}finally{await restored.happyDOM.close();}
+  }
+  w.history.replaceState(null,'','?example=amazon');w.dispatchEvent(new w.PopStateEvent('popstate'));assert.equal(d.querySelector('[data-forest-location-section]').hidden,true);assert.equal(d.querySelector('[data-forest-reading-title]').textContent,config.reading.examples[0].title);assert.deepEqual(scene(),original);
+ }finally{await w.happyDOM.close();}
+});
 test('direct forestry URL and popstate retain forestry activation, selected reading, and return country/scope',async()=>{
  const query='?place=CRI&scope=country&only=1&fallback=1';const w=page('forestry',query,true);try{
   await w.happyDOM.waitUntilComplete();const d=w.document,root=d.querySelector('[data-latin-workspace]');assert.equal(root.dataset.latinActiveSection,'forestry');assert.equal(root.classList.contains('has-unavailable-section'),false);
