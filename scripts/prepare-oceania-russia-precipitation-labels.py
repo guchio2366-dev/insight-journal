@@ -12,12 +12,12 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 TARGETS = {
     "oceania": [
-        ("australia-inland", 250, [263, 981], [0, 0]),
-        ("australia-north", 500, [387, 812], [0, 0]),
+        ("australia-inland", 250, [263, 981], [0, 18]),
+        ("australia-north", 500, [387, 812], [0, -16]),
         ("australia-east", 750, [684, 1005], [24, 0]),
         ("australia-tropical-coast", 1000, [605, 792], [22, -8]),
         ("papua-new-guinea", 2500, [578, 555], [0, -44]),
-        ("new-zealand", 1000, [1085, 1228], [34, 12]),
+        ("new-zealand", 1000, [1085, 1228], [34, 20]),
     ],
     "russia": [
         ("european-russia", 500, [319, 876], [0, 0]),

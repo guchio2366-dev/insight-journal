@@ -17,7 +17,7 @@
       ],
       "offsetPx": [
         0,
-        0
+        18
       ],
       "adjacentBandIndices": [
         0,
@@ -37,7 +37,7 @@
       ],
       "offsetPx": [
         0,
-        0
+        -16
       ],
       "adjacentBandIndices": [
         1,
@@ -117,7 +117,7 @@
       ],
       "offsetPx": [
         34,
-        12
+        20
       ],
       "adjacentBandIndices": [
         3,
