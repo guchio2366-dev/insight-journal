@@ -1,0 +1,82 @@
+{
+  "fixed_head_ancestry": true,
+  "unique_file_counts": {
+    "332": 82,
+    "333": 47,
+    "334": 101,
+    "335": 163,
+    "337": 28,
+    "338": 9,
+    "339": 11,
+    "340": 10,
+    "341": 95,
+    "342": 36,
+    "343": 16,
+    "336": 32
+  },
+  "unique_file_changes_lost": [],
+  "shared_paths": {
+    "tests/e2e/atlas-regional-layout.test.mjs": [
+      335,
+      343
+    ],
+    "src/components/atlas/AsiaAtlasPage.astro": [
+      338,
+      339,
+      340,
+      341
+    ],
+    "src/components/atlas/AsiaSettlementPanel.astro": [
+      338,
+      339,
+      340,
+      341
+    ],
+    "src/data/atlas/asia-physical-reading.ts": [
+      338,
+      340,
+      341
+    ],
+    "src/scripts/atlas-asia-explorer.ts": [
+      338,
+      339,
+      340,
+      341
+    ],
+    "src/scripts/atlas-asia-industry.ts": [
+      338,
+      339,
+      340
+    ],
+    "src/scripts/atlas-asia-presentation.ts": [
+      338,
+      339,
+      340,
+      341
+    ],
+    "src/scripts/atlas-asia-water.ts": [
+      338,
+      339
+    ],
+    "src/components/atlas/AsiaFieldNavigation.astro": [
+      339,
+      341
+    ],
+    "src/data/atlas/asia-south-central-landform-reading.ts": [
+      339,
+      340
+    ],
+    "src/data/atlas/asia-south-central-rainfall-legend.ts": [
+      339,
+      340
+    ],
+    "src/scripts/atlas-asia-comparison.ts": [
+      339,
+      341
+    ],
+    "tests/e2e/atlas-south-central-focus.test.mjs": [
+      339,
+      340
+    ]
+  }
+}
