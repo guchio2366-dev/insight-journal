@@ -14,7 +14,8 @@ import { europeReaderCopy, europeReaderSources } from './atlas-europe-reader';
 import { europeComparisonLinks, readEuropeReturn, europeComparisonUrl, europeNamedReturnUrl, europeComparisonQuestion, europeComparisonSourceLabel } from './atlas-europe-comparison';
 import { renderEuropeOrigin } from './atlas-europe-comparison-renderer';
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
-import { createEuropePopulationCases, cultureSelection, cultureColor, type CultureMapData, type CultureBounds } from './atlas-europe-population-cases';
+import { createEuropePopulationCases, cultureSelection, cultureColor, cultureGeometryPath, fetchCaseGeometry, type CultureGeometry, type CultureMapData, type CultureBounds } from './atlas-europe-population-cases';
+import { europeMainLanguage, europeLanguageBreaks, europeLanguageColors, europeLanguageReading, europeLanguageMapData, normaliseEuropeLanguageChoice } from './atlas-europe-language';
 import { europeDrainageBasins, europeDrainageBasinByIndex, europeDrainageIndexForBasin, normaliseEuropeDrainageBasin, europeDrainageOutline, europeDrainageMainBasinOutline, europeMainRivers, normaliseEuropeMainRiver, europeMainRiverForBasin, europeMainRiverSelection } from './atlas-europe-drainage';
 import mainBasinOverview from '../../public/assets/atlas/europe/drainage-v1/main-basin-overview-manifest.json' with {type:'json'};
 import drainageManifest from '../../public/assets/atlas/europe/drainage-v1/manifest.json' with {type:'json'};
@@ -98,6 +99,67 @@ export async function initEuropeAtlas() {
   const topicCountrySelect=query<HTMLSelectElement>('[data-eu-topic-country]');
   topicCountrySelect.addEventListener('change',()=>selectCountry(topicCountrySelect.value));
   const cultureActive=()=>state.layer==='ethnicity'||state.layer==='religion';
+  const languageActive=()=>state.layer==='language';
+  const languageLayer=query<SVGGElement>('[data-eu-language-layer]');
+  const languageCategory=query<HTMLSelectElement>('[data-eu-language-category]');
+  const languageArea=query<HTMLSelectElement>('[data-eu-language-area]');
+  let languageGeometry:CultureGeometry|undefined;
+  let languageLoading=false;
+  let languageData:ReturnType<typeof europeLanguageMapData>|undefined;
+  function paintLanguage(){
+    if(!map?.getLayer('land'))return;
+    if(languageData){
+      const source=map.getSource('eu-language') as any;
+      if(source)source.setData(languageData);
+      else {
+        map.addSource('eu-language',{type:'geojson',data:languageData as any});
+        map.addLayer({id:'eu-language-fill',type:'fill',source:'eu-language',paint:{'fill-color':['get','fill']}},'borders');
+        map.addLayer({id:'eu-language-line',type:'line',source:'eu-language',paint:{'line-color':['case',['get','selected'],'#841e37','#f7f5eb'],'line-width':['case',['get','selected'],2.5,.55]}},'borders');
+      }
+    }
+    for(const id of ['eu-language-fill','eu-language-line'])if(map.getLayer(id))map.setLayoutProperty(id,'visibility',languageActive()?'visible':'none');
+  }
+  async function updateLanguage(){
+    languageLayer.style.display=languageActive()?'':'none';
+    languageCategory.disabled=!languageActive();languageArea.disabled=!languageActive();
+    paintLanguage();
+    if(!languageActive())return;
+    Object.assign(state,normaliseEuropeLanguageChoice(state));
+    const reading=europeLanguageReading(state);
+    languageCategory.value=reading.category.id;
+    languageArea.value=reading.area?.code??'';
+    query<HTMLElement>('[data-eu-language-reading]').textContent=reading.area&&reading.count!==null&&reading.share!==null
+      ?`${reading.area.name}：${reading.category.label} ${reading.share.toLocaleString('ja-JP',{maximumFractionDigits:2})}%（${reading.count.toLocaleString('ja-JP')}人 / 3歳以上 ${reading.area.denominator.toLocaleString('ja-JP')}人）`
+      :'地方自治体を選ぶと、割合と人数を表示します。地図からも選べます。';
+    const breaks=europeLanguageBreaks(reading.category.id);
+    const scale=query<HTMLElement>('[data-eu-language-scale]');scale.replaceChildren();
+    const labels=[`0–${breaks[0]}%未満`,...breaks.slice(0,-1).map((value,index)=>`${value}–${breaks[index+1]}%未満`),`${breaks[3]}%以上`];
+    europeLanguageColors.forEach((color,index)=>{const span=document.createElement('span'),swatch=document.createElement('i');swatch.style.background=color;span.append(swatch,labels[index]);scale.append(span);});
+    if(!languageGeometry&&!languageLoading){
+      languageLoading=true;
+      try{languageGeometry=await fetchCaseGeometry('england-wales-2021',{base:location.pathname.split('/atlas/europe/')[0]+'/'});}
+      catch(error){console.warn('TS024 boundary unavailable',error);query<HTMLElement>('[data-eu-language-reading]').textContent='地方自治体の境界を取得できませんでした。';}
+      finally{languageLoading=false;}
+    }
+    if(!languageGeometry||!languageActive())return;
+    languageData=europeLanguageMapData(languageGeometry,state);
+    if(!languageLayer.childElementCount){
+      for(const feature of languageData.features){
+        const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+        path.setAttribute('d',cultureGeometryPath(feature.geometry));path.setAttribute('fill-rule','evenodd');path.setAttribute('vector-effect','non-scaling-stroke');
+        path.setAttribute('class','eu-language-area');path.dataset.euLanguageShape=feature.properties.code;
+        path.setAttribute('tabindex','0');path.setAttribute('role','button');
+        path.addEventListener('click',()=>selectLanguageArea(feature.properties.code));
+        path.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();selectLanguageArea(feature.properties.code);}});
+        languageLayer.append(path);
+      }
+    }
+    for(const feature of languageData.features){const path=languageLayer.querySelector<SVGPathElement>(`[data-eu-language-shape="${feature.properties.code}"]`)!;path.style.fill=feature.properties.fill;path.style.stroke=feature.properties.selected?'#841e37':'#f7f5eb';path.style.strokeWidth=feature.properties.selected?'2.5':'.55';path.setAttribute('aria-label',`${feature.properties.name}：${reading.category.label} ${feature.properties.share?.toLocaleString('ja-JP',{maximumFractionDigits:2})??'数値なし'}%`);}
+    paintLanguage();
+  }
+  function selectLanguageArea(code:string){state.languageArea=code;commit(false);}
+  languageCategory.addEventListener('change',()=>{state.languageCategory=languageCategory.value;commit(false);});
+  languageArea.addEventListener('change',()=>{state.languageArea=languageArea.value||undefined;commit(false);});
   let pewSurfaceGroup:PewSurfaceGroup='unaffiliated';
   let religionOverviewMode:'smre'|'pew'='smre';
   const cultureOverview=createEuropeCultureOverview(root,id=>selectFeature(id),()=>{delete state.feature;state.place='';commit(false);});
@@ -360,13 +422,14 @@ export async function initEuropeAtlas() {
   function setLayer(id:string, save = true) {
     if(id==='overlay' && state.layer!=='overlay')state.returnLayer=state.layer;
     state.layer=id;
+    if(id==='language'){state.region='all';state.place='';state.city='';state.compare=[];delete state.feature;delete state.point;}
     if(id==='contours')delete state.feature;
     if(id!=='drainage')delete state.riverBasin;
     if(id!=='hubs'){delete state.industryGroup;delete state.industryOnly;}
     if(state.farmMeasure&&!europeFarmAvailableMetrics(id).some(metric=>metric.id===state.farmMeasure))delete state.farmMeasure;
     if(!farmingItems.some(item=>item.id===id))delete state.single;
     query<HTMLElement>('[data-eu-farm-candidates]').hidden=true;
-    if(save)commit(['water','drainage','precipitation','terrain','contours','density'].includes(id)&&state.region==='all'&&!state.place);
+    if(save)commit(['water','drainage','precipitation','terrain','contours','density','language'].includes(id)&&state.region==='all'&&!state.place);
   }
   function selectFeature(id:string) {
     if(cultureActive()&&europeReligionNationalProfile(id)){
@@ -781,6 +844,7 @@ export async function initEuropeAtlas() {
   }
 
   function selectionBounds() {
+    if(languageActive())return [[-6.5,49.8],[2.2,55.9]] as [[number,number],[number,number]];
     if(subject().field==='industry')return [[-12,36],[33,69]] as [[number,number],[number,number]];
     const focus=comparisonFocus();
     if(focus)return [[focus.focusBounds[0],focus.focusBounds[1]],[focus.focusBounds[2],focus.focusBounds[3]]] as [[number,number],[number,number]];
@@ -858,7 +922,7 @@ export async function initEuropeAtlas() {
       query('[data-culture-map-status]').textContent='Pew 2020年の国別推計。灰色は未掲載で0%ではありません。';
     }
     cultureOverview.renderEvidence(cultureActive()&&topic==='religion'&&!state.cultureCase,state.feature,state.place);
-    const selectedTopic=currentField.id==='agriculture'?(['forest','treecover'].includes(topic)?'treecover':europeFarmingGenreForLayer(topic)??'crops'):currentField.id==='population'?(cultureActive()?topic:'density'):['precipitation','drainage'].includes(topic)?'water':topic;
+    const selectedTopic=currentField.id==='agriculture'?(['forest','treecover'].includes(topic)?'treecover':europeFarmingGenreForLayer(topic)??'crops'):currentField.id==='population'?(cultureActive()||languageActive()?topic:'density'):['precipitation','drainage'].includes(topic)?'water':topic;
     all<HTMLElement>('[data-eu-topic]').forEach(button=>{
       const industryGroup=normaliseEuropeIndustryGroup(button.dataset.euIndustryGroup);
       const selected=button.closest('[data-eu-water-options]')?topic:selectedTopic;
@@ -878,8 +942,10 @@ export async function initEuropeAtlas() {
     });
     document.title=`欧州の${currentField.label}｜Insight Journal`;
     const canonical=writeEuropeState(new URL(location.href),state);
-    if(canonical.pathname!==location.pathname||(cultureActive()||state.layer==='contours')&&canonical.href!==location.href)history.replaceState({},'',canonical);
+    if(canonical.pathname!==location.pathname||(cultureActive()||languageActive()||state.layer==='contours')&&canonical.href!==location.href)history.replaceState({},'',canonical);
     query<HTMLElement>('[data-eu-region-host]').hidden=currentField.id==='industry';
+    topicCountrySelect.disabled=languageActive();
+    topicCountrySelect.title=languageActive()?'この地図の原表はイングランド・ウェールズの自治体です。':'';
     query<HTMLElement>('[data-eu-industry-scope-host]').hidden=true;
     query<HTMLElement>('[data-eu-industry-scope-note]').hidden=currentField.id!=='industry';
     query<HTMLSelectElement>('[data-eu-industry-scope]').value=isEuropeIndustryCountry(state.place)?`country:${state.place}`:`region:${state.region}`;
@@ -887,10 +953,11 @@ export async function initEuropeAtlas() {
     const place = countries.find(c => c.code === state.place);
     query('[data-eu-focus]').textContent = `${place?.name ?? regionNames[state.region]} · ${subject().period}${state.place === 'RUS' ? subject().indicator?' · 数値はロシア全土':' · 地図は表示枠内のみ' : ''}`;
     if(cultureActive())query('[data-eu-focus]').textContent=topic==='religion'&&!state.cultureCase?`${countries.find(c=>c.code===state.place)?.name??'欧州全体'} · ${religionOverviewMode==='smre'?'SMRE 2010期の宗派・宗教':'Pew 2020年国別推計'}`: `${cultureSelection(culture.readState(),topic as 'ethnicity'|'religion').area?.name ?? '欧州全体・地域未選択'} · 2021年国勢調査`;
+    if(languageActive())query('[data-eu-focus]').textContent=`${europeLanguageReading(state).area?.name??'イングランド・ウェールズ'} · 2021年主な言語`;
     all<HTMLButtonElement>('[data-eu-region]').forEach(button => {
-      button.setAttribute('aria-pressed',String(!cultureActive()&&button.dataset.euRegion===state.region));
-      button.disabled=cultureActive();
-      button.title=cultureActive()?'この事例の表示範囲は地図下の「事例」で選びます。':'';
+      button.setAttribute('aria-pressed',String(!cultureActive()&&!languageActive()&&button.dataset.euRegion===state.region));
+      button.disabled=cultureActive()||languageActive();
+      button.title=cultureActive()?'この事例の表示範囲は地図下の「事例」で選びます。':languageActive()?'ONSの収録範囲はイングランド・ウェールズです。':'';
     });
     all<SVGElement>('[data-eu-shape]').forEach(shape => shape.classList.toggle('is-selected', shape.dataset.euShape === state.place));
     all<HTMLElement>('[data-city-card]').forEach(card => { card.hidden = !active.includes(card.dataset.cityCard!); card.style.order = String(active.indexOf(card.dataset.cityCard!)); });
@@ -909,6 +976,7 @@ export async function initEuropeAtlas() {
     all<HTMLAnchorElement>('[data-base-map]').forEach(a => { a.href = writeEuropeState(new URL(a.href), state).href; });
     all<HTMLAnchorElement>('[data-eu-field]').forEach(a => { a.href = writeEuropeState(new URL(a.href), { ...state, layer: a.dataset.euField! }).href;if(a.dataset.euField===currentField.initial)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current'); });
     layers();
+    void updateLanguage();
     updateReader();
     updateComparison();
     if(!state.point){
@@ -917,7 +985,7 @@ export async function initEuropeAtlas() {
     }else if(restorePoint)void showGrid(state.point,false);
     query<HTMLElement>('.eu-read-panel').setAttribute('aria-labelledby',state.layer==='language'?'eu-language-heading':cultureActive()?'eu-culture-reader-title':climateReader()?'eu-city-heading':'eu-subject-title');
     const farm=farmingView();
-    const guidance=subject().id==='hubs'?state.industryOnly?`${state.industryGroup}のみ表示中です。右側から全業種へ戻れます。`:'産業を選ぶと同じ業種の拠点を強調します。地図の名前・点から拠点の工程を読めます。':climateReader()?'観測所の平年値 · 1991–2020年':state.layer==='language'?'実使用分布の原図形は未収録です。右に母語の定義と収録済みの原統計を示します。':state.layer==='religion'&&!state.cultureCase?religionOverviewMode==='smre'?'SMREの45か国の最大分類を比較します。国を押すと8分類の割合と原資料を右に示します。':'Pewの2020年国別推計を地図上の小さな構成帯で示します。国を押すと7分類の値を右に示します。':cultureActive()?'地図下で事例・分類・行政区を選び、同じ表の総人口に対する割合を読みます。':farm.active?farm.single?`${farm.item!.name}だけを表示中です。元の表示には右側のボタンで戻れます。`:'品目名を選ぶと、その分布全体の輪郭を強調します。重なる場所では候補を選べます。':visibleFeatures().length?'地図の名前を押すと、その場所の説明を表示します。':subject().id==='precipitation'?'地図を押すと、その地点の年降水量を右側に表示します。':subject().id==='terrain'?'地図の山脈・平原・半島・海域の名前と右側の説明を読みます。':subject().grid?'地図を押すと、その位置の値を右側に表示します。':subject().indicator?'国を押すと、画面下部に国全体の数値を表示します。':'地図の凡例と右側の説明を読み比べます。';
+    const guidance=subject().id==='hubs'?state.industryOnly?`${state.industryGroup}のみ表示中です。右側から全業種へ戻れます。`:'産業を選ぶと同じ業種の拠点を強調します。地図の名前・点から拠点の工程を読めます。':climateReader()?'観測所の平年値 · 1991–2020年':state.layer==='language'?'ONS 2021年の主な言語を331地方自治体の割合で表示します。地図か右側の選択欄から地域を読めます。':state.layer==='religion'&&!state.cultureCase?religionOverviewMode==='smre'?'SMREの45か国の最大分類を比較します。国を押すと8分類の割合と原資料を右に示します。':'Pewの2020年国別推計を地図上の小さな構成帯で示します。国を押すと7分類の値を右に示します。':cultureActive()?'地図下で事例・分類・行政区を選び、同じ表の総人口に対する割合を読みます。':farm.active?farm.single?`${farm.item!.name}だけを表示中です。元の表示には右側のボタンで戻れます。`:'品目名を選ぶと、その分布全体の輪郭を強調します。重なる場所では候補を選べます。':visibleFeatures().length?'地図の名前を押すと、その場所の説明を表示します。':subject().id==='precipitation'?'地図を押すと、その地点の年降水量を右側に表示します。':subject().id==='terrain'?'地図の山脈・平原・半島・海域の名前と右側の説明を読みます。':subject().grid?'地図を押すと、その位置の値を右側に表示します。':subject().indicator?'国を押すと、画面下部に国全体の数値を表示します。':'地図の凡例と右側の説明を読み比べます。';
     status.textContent=(failed?'簡易地図で表示中。':'')+guidance;
     query<HTMLElement>('[data-eu-statistics]').hidden=all<HTMLElement>('[data-eu-statistics] > *').every(section=>section.hidden);
     all<HTMLElement>('[data-eu-extra-field]').forEach(el=>{el.hidden=el.dataset.euExtraField!==currentField.id;});
@@ -971,6 +1039,7 @@ export async function initEuropeAtlas() {
     commit(false);
   }
   function mapSelection(point:number[]) {
+    if(languageActive())return;
     const farm=farmingView();
     if(!farm.active){if(subject().grid&&subject().id!=='terrain')delete state.feature;void showGrid(point);return;}
     const candidates=farmingAtPoint(config.farmingAreas,point,farm.visible.map(item=>item.id));
@@ -1036,6 +1105,7 @@ export async function initEuropeAtlas() {
         map.addLayer({ id: 'selected', type: 'line', source: 'countries', filter: ['==', ['get', 'code'], state.place], paint: { 'line-color': '#173c48', 'line-width': 3 } });
         map.on('click', 'land', e => { const code = e.features?.[0]?.properties?.code; if ((subject().indicator||state.layer==='religion') && countries.some(c => c.code === code)) selectCountry(code); });
         map.on('click','eu-culture-fill',e=>{if(cultureActive()){const code=e.features?.[0]?.properties?.code;if(typeof code==='string')culture.selectArea(code);}});
+        map.on('click','eu-language-fill',e=>{if(languageActive()){const code=e.features?.[0]?.properties?.code;if(typeof code==='string')selectLanguageArea(code);}});
         map.on('click', e => { mapSelection([e.lngLat.lng, e.lngLat.lat]); });
         liveMap.classList.add('is-ready'); staticMap.style.visibility = 'hidden'; status.textContent = '地図の名前から地点を選べます。';
         render(true);

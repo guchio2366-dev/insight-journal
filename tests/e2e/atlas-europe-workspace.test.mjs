@@ -29,7 +29,7 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
     assert.ok(doc.querySelector('.eu-read-panel,.europe-side'));
     if (!field) assert.equal(doc.querySelectorAll('[data-europe-country-select] option').length,46);
     if (field) {
-      assert.equal(doc.querySelectorAll('.eu-read-panel select:not([data-eu-drainage-choice]):not([data-eu-main-river-choice])').length, 3,'Case controls move to the map only when the runtime activates the census case');
+      assert.equal(doc.querySelectorAll('.eu-read-panel select:not([data-eu-drainage-choice]):not([data-eu-main-river-choice])').length, 5,'The two extra TS024 controls stay disabled inside the initially hidden language reader');
       assert.equal(doc.querySelector('[data-eu-drainage-choice]').closest('[data-eu-drainage-controls]').hidden,true);
       assert.equal(doc.querySelector('[data-eu-main-river-choice]').closest('[data-eu-drainage-controls]').hidden,true);
       assert.equal(doc.querySelector('[data-eu-culture-host]').hidden,true);

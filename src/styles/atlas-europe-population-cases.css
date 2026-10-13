@@ -86,6 +86,17 @@
 [data-eu-culture-layer] .eu-culture-area { cursor:pointer; }
 [data-eu-culture-layer] .eu-culture-area:hover { stroke:#841e37; stroke-width:1.5; }
 [data-eu-culture-layer] .eu-culture-area:focus-visible { outline:none; stroke:#841e37; stroke-width:3; }
+[data-eu-language-layer] .eu-language-area { cursor:pointer; }
+[data-eu-language-layer] .eu-language-area:hover,[data-eu-language-layer] .eu-language-area:focus-visible { outline:none; stroke:#841e37; stroke-width:2; }
+.eu-language-controls { display:grid; gap:8px; margin:10px 0; }
+.eu-language-controls label { display:grid; gap:4px; font-weight:700; font-size:12px; }
+.eu-language-controls select { min-width:0; width:100%; min-height:40px; padding:6px; border:1px solid #93a5aa; background:#fffef7; color:#223c47; font:13px/1.4 var(--sans,sans-serif); }
+.eu-language-scale { display:flex; flex-wrap:wrap; gap:4px 8px; margin:8px 0; font-size:11px; }
+.eu-language-scale span { display:inline-flex; align-items:center; gap:4px; }
+.eu-language-scale i { width:17px; height:12px; border:1px solid #769096; }
+.eu-language-scope,.eu-language-sources { font-size:12px; }
+.eu-language-sources a { color:#24546b; text-decoration:underline; }
+@media(min-width:960px) { .eu-language-controls { grid-template-columns:1fr 1fr; } }
 @media (max-width:360px) { .eu-culture-legend { grid-template-columns:1fr; } }
 @media(min-width:960px) {
  .eu-culture-controls-host .eu-culture-controls { grid-template-columns:repeat(3,minmax(0,1fr)); gap:3px 8px; margin-top:1px; }

@@ -32,6 +32,7 @@ import climateWater from '../../data/atlas/europe/climate-water.json';
 import rivers from '../../../public/assets/atlas/europe/context-v1/rivers.json';
 import waterLakes from '../../../public/assets/atlas/europe/context-v1/lakes.json';
 import languageObservations from '../../data/atlas/europe/language-observations.json';
+import mainLanguage from '../../data/atlas/europe/main-language-ts024-2021.json';
 import riverNames from '../../data/atlas/europe/river-names.json';
 import { europeTerrainGuides } from '../../data/atlas/europe/terrain-geography';
 import { pew2020EuropeGroups } from '../../data/atlas/europe/pew-religion-2020';
@@ -94,7 +95,7 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, farmingDom
           <svg class="eu-static-map" data-eu-static viewBox={`0 0 ${frame.width} ${frame.height}`} role="img" aria-labelledby="eu-map-label">
             <title id="eu-map-label">欧州の{initialLayer.title}。{initialLayer.unit}。地図の名前から地点や品目を選べます。</title>
             <rect width={frame.width} height={frame.height} fill="#e7eff1" />
-            <defs>{geography.features.map(f=><path id={`eu-country-${f.properties.code}`} d={viewPath(f.geometry)} />)}</defs>
+            <defs>{geography.features.map(f=><path id={`eu-country-${f.properties.code}`} d={viewPath(f.geometry)} vector-effect="non-scaling-stroke" />)}</defs>
             {geography.features.map(f => <use href={`#eu-country-${f.properties.code}`} fill="#edece5" fill-rule="evenodd" />)}
             <image data-eu-climate-image href={field === 'nature' ? climate : undefined} x="0" y="0" width={frame.width} height={frame.height} preserveAspectRatio="none" />
             <image data-eu-wheat-image x="0" y="0" width={frame.width} height={frame.height} preserveAspectRatio="none" />
@@ -124,6 +125,7 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, farmingDom
             <g data-eu-static-crops hidden></g>
             <g data-eu-comparison-overlay></g>
             <g data-eu-culture-layer></g>
+            <g data-eu-language-layer></g>
           </svg>
           <div class="eu-live-map" data-eu-live aria-label="操作できる欧州地図"></div>
           <div class="eu-map-inline-key" data-eu-inline-farm-key hidden={!agriculture} aria-label="農畜産分布の品目色"><strong data-eu-farm-key-title>穀物・畑作</strong>{farmingAreas.features.map(f=><span data-eu-farm-key-item={f.properties.id} hidden={!europeFarmingGenres.crops.ids.some(id=>id===f.properties.id)}><i style={`background:${f.properties.color}`}></i>{europeFarmingMapName(f.properties.id,f.properties.name)}</span>)}<small data-eu-farm-key-note>点線＝同じ品目の色面外に続く集中域</small></div>
@@ -191,8 +193,16 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, farmingDom
         <p id="eu-industry-scope-note" class="eu-industry-scope-note" data-eu-industry-scope-note hidden={field!=='industry'}>各点は産業が集まる地域・施設の代表位置です。量・額や順位ではありません。分野を選んでも他の産業の位置を残します。国別の数値は国の概要で確認できます。</p>
         <section data-eu-language-reader hidden aria-labelledby="eu-language-heading">
           <h3 id="eu-language-heading">使用言語・母語</h3>
-          <p>欧州全域の実使用分布は未収録です。全国人数から国内の居住面を作らず、地図の無着色は欠測を表します。</p>
-          <p>母語は幼少期に最初に習得した言語。家庭内使用・日常使用・会話能力、公用語の制度は別の質問・定義です。民族的帰属とも区別します。</p>
+          <p>地図はイングランド・ウェールズ331地方自治体の2021年国勢調査による「主な言語」です。3歳以上の通常居住者を分母とし、色は選択分類の地域割合です。欧州全域の実使用分布は未収録です。</p>
+          <div class="eu-language-controls">
+            <label>地図に表示する主な言語 <select data-eu-language-category disabled>{mainLanguage.categories.map(category=><option value={category.id}>{category.label}</option>)}</select></label>
+            <label>地方自治体を読む <select data-eu-language-area disabled><option value="">地域未選択</option>{mainLanguage.areas.toSorted((a,b)=>a.name.localeCompare(b.name,'en')).map(area=><option value={area.code}>{area.name}</option>)}</select></label>
+          </div>
+          <p data-eu-language-reading aria-live="polite">地方自治体を選ぶと、割合と人数を表示します。地図からも選べます。</p>
+          <div class="eu-language-scale" data-eu-language-scale aria-label="主な言語の地域割合の凡例"></div>
+          <p class="eu-language-scope">「英語以外」は原表の「英語（ウェールズでは英語またはウェールズ語）」を全体から差し引いた値です。ウェールズのウェールズ語のみの人数・割合はこの表では分離できません。ポーランド語などは原表の分類人数です。「南アジアの言語」はウルドゥー語・パンジャーブ語などを含む親分類で、子分類と合算しません。小地域の人口そのものではなく、各地域の3歳以上人口に対する比率を比べます。</p>
+          <p class="eu-language-scope">母語は幼少期に最初に習得した言語。家庭内使用・日常使用・会話能力、公用語の制度は別の質問・定義です。民族的帰属とも区別します。以下のチェコの母語・アイルランドの日常使用は別資料です。</p>
+          <p class="eu-language-sources"><a href={mainLanguage.source}>ONS Census 2021：TS024 主な言語（詳細）</a> · <a href="https://www.ons.gov.uk/methodology/geography/licences">ONS地理情報の利用条件</a> · <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">OGL v3.0</a><br/>Source: Office for National Statistics licensed under the Open Government Licence v.3.0. Contains OS data © Crown copyright and database right 2026. 原表の分類選択と差分計算を加えています。</p>
           <details><summary>収録済みの原統計：チェコ2021年・母語</summary>
             <p>通常居住人口 {languageObservations.denominator.toLocaleString('ja-JP')} 人。母語未回答 {languageObservations.notStated.toLocaleString('ja-JP')} 人。母語は2つまで回答可能です。</p>
             <table><caption>全国集計。国内の分布位置は示しません。</caption><thead><tr><th>原言語分類</th><th>1言語のみ</th><th>第二言語を含む</th></tr></thead><tbody>{languageObservations.values.map(value=><tr><th>{value.language}</th><td>{value.exclusive.toLocaleString('ja-JP')}人</td><td>{value.includingSecond.toLocaleString('ja-JP')}人</td></tr>)}</tbody></table>

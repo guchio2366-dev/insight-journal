@@ -1,0 +1,28 @@
+[
+  {
+    "renderer": "auto",
+    "width": 1920,
+    "height": 1080,
+    "deviceScaleFactor": 1,
+    "areas": 331,
+    "categories": 10,
+    "defaultFillCount": 5,
+    "selected": "Newham",
+    "category": "polish",
+    "reload": true,
+    "errors": []
+  },
+  {
+    "renderer": "static",
+    "width": 1920,
+    "height": 1080,
+    "deviceScaleFactor": 1,
+    "areas": 331,
+    "categories": 10,
+    "defaultFillCount": 5,
+    "selected": "Newham",
+    "category": "polish",
+    "reload": true,
+    "errors": []
+  }
+]

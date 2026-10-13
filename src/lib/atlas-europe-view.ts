@@ -5,6 +5,7 @@ import { normalisePopulationCaseChoice, type PopulationCensusCasePackage, type P
 import { normaliseEuropeDrainageBasin, normaliseEuropeMainRiver, europeMainRiverSelection, type EuropeDrainageState } from './atlas-europe-drainage.ts';
 import { isEuropeIndustryCountry, normaliseEuropeIndustryGroup, type EuropeIndustryGroup, normaliseEuropeIndustrySector, europeIndustrySectorForGroup, europeIndustrySectorForSite, europeIndustrySectorCopy, type EuropeIndustrySector } from './atlas-europe-industry.ts';
 import { europeFarmMetric, europeFarmValidYear } from '../data/atlas/europe/farming-statistics.ts';
+import { normaliseEuropeLanguageChoice, type EuropeLanguageChoice } from './atlas-europe-language.ts';
 
 export const frame = { width: 1200, height: 1001, west: -25, east: 65, south: 32, north: 73 };
 export const europeFarmingInitialBounds: [[number,number],[number,number]] = [[-12,35],[48,61]];
@@ -24,7 +25,7 @@ export function visibleBounds(geometries: Geometry[]): [[number, number], [numbe
   if (!points.length) return [[-25, 32], [65, 73]];
   return points.reduce<[[number,number],[number,number]]>((bounds,[x,y])=>[[Math.min(bounds[0][0],x),Math.min(bounds[0][1],y)],[Math.max(bounds[1][0],x),Math.max(bounds[1][1],y)]],[[Infinity,Infinity],[-Infinity,-Infinity]]);
 }
-export type EuropeState = { region: string; place: string; city: string; compare: string[]; render: string; layer: string; returnLayer: string; industryGroup?: EuropeIndustryGroup; industrySector?:EuropeIndustrySector; industryOnly?:boolean; feature?: string; point?: [number, number]; showCrops?: boolean; showLivestock?: boolean; single?: boolean; farmYear?:number; farmMeasure?:string; farmCompare?:string[]; farmExtent?:'full' } & Partial<PopulationCaseChoiceState> & EuropeDrainageState;
+export type EuropeState = { region: string; place: string; city: string; compare: string[]; render: string; layer: string; returnLayer: string; industryGroup?: EuropeIndustryGroup; industrySector?:EuropeIndustrySector; industryOnly?:boolean; feature?: string; point?: [number, number]; showCrops?: boolean; showLivestock?: boolean; single?: boolean; farmYear?:number; farmMeasure?:string; farmCompare?:string[]; farmExtent?:'full' } & Partial<PopulationCaseChoiceState> & EuropeDrainageState & EuropeLanguageChoice;
 /** Keep the original precision so restoring a click cannot select a neighbouring cell. */
 export function normaliseEuropePoint(value: unknown): [number, number] | undefined {
   if (!Array.isArray(value) || value.length !== 2 || !value.every(Number.isFinite)) return undefined;
@@ -64,10 +65,11 @@ export function readEuropeState(search: string, countries: { code: string; regio
   }
   const coordinates = p.get('point')?.split(',');
   const point = p.getAll('point').length === 1 && coordinates?.every(value => value.trim() !== '') ? normaliseEuropePoint(coordinates.map(Number)) : undefined;
-  if (point) state.point = point;
+  if (point && layer !== 'language') state.point = point;
   const basin = normaliseEuropeDrainageBasin(p.get('basin'));
   if (basin) state.basin = basin;
   if(layer==='drainage'){const selection=europeMainRiverSelection(p.get('riverBasin'));if(selection){delete state.basin;Object.assign(state,selection);}}
+  if(layer==='language'){state.region='all';state.place='';state.city='';state.compare=[];Object.assign(state,normaliseEuropeLanguageChoice(p));}
   if(layer==='ethnicity'||layer==='religion')Object.assign(state,normalisePopulationCaseChoice(p,layer,censusCases as PopulationCensusCasePackage));
   else {
     const censusCase=censusCases.cases.find(item=>item.id===p.get('cultureCase'));
@@ -77,7 +79,7 @@ export function readEuropeState(search: string, countries: { code: string; regio
       if(censusCase.topics.some(topic=>topic.areas.some(area=>area.code===p.get('cultureArea'))))state.cultureArea=p.get('cultureArea')!;
     }
   }
-  if (layer!=='contours'&&/^[a-z0-9_-]{1,60}$/.test(p.get('feature') ?? '')) state.feature = p.get('feature')!;
+  if (layer!=='contours'&&layer!=='language'&&/^[a-z0-9_-]{1,60}$/.test(p.get('feature') ?? '')) state.feature = p.get('feature')!;
   if(layer==='drainage'&&!p.has('riverBasin')&&!p.has('basin')&&!p.has('point')){const selection=europeMainRiverSelection(state.feature);if(selection){Object.assign(state,selection);delete state.feature;}}
   if(layer==='hubs'&&!p.has('industrySector')&&!industryGroup&&state.feature)state.industrySector=europeIndustrySectorForSite(state.feature);
   if (p.get('crops') === 'off') state.showCrops = false;
@@ -96,7 +98,7 @@ export function writeEuropeState(url: URL, state: EuropeState): URL {
   const displayedLayer=state.layer==='overlay'?(state.returnLayer==='climate'?'wheat':state.returnLayer):state.layer;
   const field=europeLayers.find(layer=>layer.id===displayedLayer)?.field;
   if(field)next.pathname=next.pathname.replace(/(\/atlas\/europe\/)(nature|agriculture|industry|population)\/?$/,`$1${field}/`);
-  for (const key of ['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'point', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','basin','farmYear','farmMeasure','farmCompare','farmExtent','industryGroup','industrySector','industryOnly','riverBasin']) next.searchParams.delete(key);
+  for (const key of ['region', 'place', 'city', 'compare', 'render', 'layer', 'returnLayer', 'feature', 'point', 'crops', 'livestock', 'single','cultureCase','cultureCategory','cultureArea','languageCategory','languageArea','basin','farmYear','farmMeasure','farmCompare','farmExtent','industryGroup','industrySector','industryOnly','riverBasin']) next.searchParams.delete(key);
   if (state.region !== 'all') next.searchParams.set('region', state.region);
   if (state.place) next.searchParams.set('place', state.place);
   if (state.city) next.searchParams.set('city', state.city);
@@ -104,7 +106,7 @@ export function writeEuropeState(url: URL, state: EuropeState): URL {
   if (state.render === 'static') next.searchParams.set('render', 'static');
   if (state.layer) next.searchParams.set('layer', state.layer);
   if (state.layer === 'overlay') next.searchParams.set('returnLayer', state.returnLayer);
-  if (state.feature&&state.layer!=='contours') next.searchParams.set('feature', state.feature);
+  if (state.feature&&state.layer!=='contours'&&state.layer!=='language') next.searchParams.set('feature', state.feature);
   const industryGroup = normaliseEuropeIndustryGroup(state.industryGroup);
   if(state.layer==='hubs'){
     const sector=normaliseEuropeIndustrySector(state.industrySector)??(industryGroup?europeIndustrySectorForGroup(industryGroup):europeIndustrySectorForSite(state.feature));
@@ -112,7 +114,7 @@ export function writeEuropeState(url: URL, state: EuropeState): URL {
     if(industryGroup&&europeIndustrySectorCopy[sector].groups.includes(industryGroup)){next.searchParams.set('industryGroup',industryGroup);if(state.industryOnly)next.searchParams.set('industryOnly','1');}
   }
   const point = normaliseEuropePoint(state.point);
-  if (point) next.searchParams.set('point', point.join(','));
+  if (point&&state.layer!=='language') next.searchParams.set('point', point.join(','));
   const basin = normaliseEuropeDrainageBasin(state.basin);
   if (basin) next.searchParams.set('basin', basin);
   const river=normaliseEuropeMainRiver(state.riverBasin);
@@ -122,6 +124,11 @@ export function writeEuropeState(url: URL, state: EuropeState): URL {
   if (state.farmExtent === 'full') next.searchParams.set('farmExtent','full');
   if (state.single === true && isIndividualFarmingLayer(state.layer)) next.searchParams.set('single', '1');
   for(const key of ['cultureCase','cultureCategory','cultureArea'] as const)if(state[key])next.searchParams.set(key,state[key]!);
+  if(state.layer==='language'){
+    const choice=normaliseEuropeLanguageChoice(state);
+    if(choice.languageCategory!=='other')next.searchParams.set('languageCategory',choice.languageCategory!);
+    if(choice.languageArea)next.searchParams.set('languageArea',choice.languageArea);
+  }
   if(europeFarmValidYear(state.farmYear))next.searchParams.set('farmYear',String(state.farmYear));
   if(state.farmMeasure&&europeFarmMetric(state.farmMeasure))next.searchParams.set('farmMeasure',state.farmMeasure);
   if(state.farmCompare?.length)next.searchParams.set('farmCompare',[...new Set(state.farmCompare)].filter(code=>code!==state.place).slice(0,2).join(','));
