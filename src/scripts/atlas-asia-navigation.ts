@@ -74,10 +74,11 @@ export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|un
    if(currentFeature){const listed=[...row.querySelectorAll<HTMLElement>('[data-industry-feature]:not([data-industry-current-feature])')].some(b=>b.dataset.industryFeature===current.id);currentFeature.hidden=row.hidden||listed||group.sector!==sector;currentFeature.dataset.industryFeature=currentFeature.hidden?'':current.id;currentFeature.textContent=current.title;currentFeature.setAttribute('aria-pressed','true');}
   }
   for(const b of all('[data-industry-subsector]'))b.setAttribute('aria-pressed',String(b.dataset.sector===sector&&b.dataset.industrySubsector===subsector));
-  const choices=$('.east-industry-choices');if(choices)choices.hidden=state.field!=='industry';
+  // East clusters own all three kind rows; do not reopen the first (resources) row.
+  const choices=$('.east-industry-choices');if(choices&&!newEastMap)choices.hidden=state.field!=='industry';
   const title=$('[data-industry-navigation-label]');if(title)title.textContent=(industrySectors.find(s=>s.id===sector)?.label??'全産業')+(sector==='all'?'':' ／ '+(industrySubsectors[sector].find(s=>s.id===subsector)?.label??'全分野'));
   const currentMap=$('[data-industry-current-map]');if(currentMap)currentMap.textContent=current.title;
-  const note=$('[data-industry-navigation-note]');if(note){const matches=sector==='all'||sector===group.sector&&(subsector==='all'||subsector===group.subsector);note.hidden=matches;note.textContent=`選択した分野だけを示す地図は未収録です。現在の地図は「${current.title}」を表示しています。`;}
+  const note=$('[data-industry-navigation-note]');if(note){const matches=newEastMap||sector==='all'||sector===group.sector&&(subsector==='all'||subsector===group.subsector);note.hidden=matches;note.textContent=`選択した分野だけを示す地図は未収録です。現在の地図は「${current.title}」を表示しています。`;}
  }
  return {render};
 }

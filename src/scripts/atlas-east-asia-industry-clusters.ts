@@ -1,5 +1,5 @@
 import {eastSectors,eastSectorIndustries,eastSectorSites,eastSectorRows,eastIndustrySector} from '../data/atlas/east-asia-industry-sectors.ts';
-import {leaderEnd} from '../lib/atlas-nature-labels';
+import {leaderEnd} from '../lib/atlas-nature-labels.ts';
 import {placeEastSectorNames} from '../lib/atlas-east-sector-names.ts';
 import type {AsiaState,AsiaCamera} from '../lib/atlas-asia-state';
 
