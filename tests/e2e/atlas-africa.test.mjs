@@ -23,6 +23,19 @@ async function withAfricaPage(url,run){
 }
 const change=(w,node,value)=>{node.value=value;node.dispatchEvent(new w.Event('change',{bubbles:true}));};
 
+test('country supplements follow the whole-Africa explanation and open only by matching country or explicit disclosure',async()=>{
+ for(const [topic,country,other]of [['language','ZAF','EGY'],['religion','GHA','ZAF']])await withAfricaPage(`https://example.com/atlas/africa/?field=population&topic=${topic}`,async(w,q,settle)=>{
+  const supplement=()=>q('[data-africa-culture-supplement]'),reader=q('[data-africa-culture-evidence]'),explanation=q('[data-theme-takeaway-detail]'),source=q('[data-theme-source]');
+  assert(explanation.compareDocumentPosition(reader)&w.Node.DOCUMENT_POSITION_FOLLOWING);assert.equal(source.nextElementSibling,reader);assert.equal(supplement().open,false);assert.equal(supplement().dataset.africaCultureSupplement,country);
+  supplement().open=true;change(w,q('[data-africa-layer-category]'),'');assert.equal(supplement().open,true,'explicit expansion survives same-context renders');
+  change(w,q('[data-place]'),other);await settle();assert.equal(supplement().open,false,'another country does not automatically show the example');
+  change(w,q('[data-place]'),country);await settle();assert.equal(supplement().open,true,'matching country exposes its limited source');
+  supplement().open=false;change(w,q('[data-africa-layer-category]'),'');assert.equal(supplement().open,false,'explicit collapse is respected');
+  change(w,q('[data-place]'),'');await settle();assert.equal(supplement().open,false,'whole-Africa return closes country details');
+  if(topic==='language')assert.equal(q('[data-africa-language-record]').options.length,2223);
+ });
+});
+
 test('individual language selection retains every source point and camera through clicks, keyboard, URL and history',async()=>{
  let saved;
  await withAfricaPage('https://example.com/atlas/africa/?field=population&topic=language&unknown=keep',async(w,q,settle)=>{
