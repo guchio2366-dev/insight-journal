@@ -78,5 +78,32 @@
       339,
       340
     ]
+  },
+  "final_with_parent_336_delta": {
+    "additional_head": "662018adad9428a0096acae9126e6bb0771d75f1",
+    "all_effective_fixed_heads_are_ancestors": true,
+    "unique_file_counts": {
+      "332": 82,
+      "333": 47,
+      "334": 101,
+      "335": 163,
+      "337": 28,
+      "338": 9,
+      "339": 11,
+      "340": 10,
+      "341": 95,
+      "342": 36,
+      "343": 16,
+      "336": 33
+    },
+    "unique_paths": 631,
+    "intentional_integration_test_differences": [
+      {
+        "pr": 336,
+        "path": "tests/browser/atlas-oceania-russia-ux-refresh.mjs"
+      }
+    ],
+    "lost_source_changes": [],
+    "workflow_changes_beyond_original_fixed_heads": []
   }
 }

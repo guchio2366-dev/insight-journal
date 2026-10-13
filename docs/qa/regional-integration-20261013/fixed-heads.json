@@ -124,7 +124,18 @@
   "remaining_scope": "Integration validation only. Regional source/data incompleteness and unreviewed screenshots remain separate. No deployment, Ready, main update, or merge of remote PRs.",
   "pr336_parent_followup": {
     "fixed_head_still_authorized": "49ebae11372a08e17750ed05c6f57111c360089e",
-    "remaining": "Positive native cells alone do not establish that the new crop labels represent the major concentration belts. Original owner is correcting the aggregate representativeness evidence.",
-    "integration_action": "Keep this residual explicit. Wait for a separate parent instruction before incorporating any later delta; do not refresh remote head or ask the user to resolve parent-owned version coordination again."
-  }
+    "initial_residual": "Positive native cells alone did not establish that the four new crop labels represented the major concentration belts.",
+    "followup_authorized_head": "662018adad9428a0096acae9126e6bb0771d75f1",
+    "parent_confirmation": "Remote head agreement, all five CI runs successful, limited acceptance without a new defect; explicit instruction to integrate the already-approved correction delta.",
+    "integrated_delta": "Use maximum native harvested-area 4-neighbour connected components and 13x13 local concentration windows for four crop labels. Retain original quantities, distributions and processing guides.",
+    "remaining": "Full forestry, basins, groundwater, other crop/livestock coverage, exact facilities, supply chains and ethnoreligious coverage remain separate. No later remote head is automatically included."
+  },
+  "additional_fixed_deltas": [
+    {
+      "pr": 336,
+      "base": "49ebae11372a08e17750ed05c6f57111c360089e",
+      "head": "662018adad9428a0096acae9126e6bb0771d75f1",
+      "authorized_by": "Explicit parent follow-up after independent remote/CI and limited acceptance review"
+    }
+  ]
 }

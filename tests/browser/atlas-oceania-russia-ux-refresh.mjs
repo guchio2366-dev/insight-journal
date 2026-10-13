@@ -93,12 +93,16 @@ try{
     assert.equal(new URL(page.url()).searchParams.has('sector'),false);
     assert.equal(await map.getAttribute('viewBox'),frame);
     if(region==='oceania'){
-     const guideLabels=root.locator('[data-primary-map] [data-oceania-industry-location^="nz-"] text');
-     const guideBoxes=await guideLabels.evaluateAll(nodes=>nodes.map(node=>{const b=node.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};}));
-     const otherBoxes=await map.locator('[data-oceania-industry-location]:not([data-oceania-industry-location^="nz-"]) text, svg > text').evaluateAll(nodes=>nodes.map(node=>{const b=node.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};}));
+     // ResizeObserver can redraw after the sector controls change the reader.
+     // Measure every name and its frame together after that render boundary.
+     await page.evaluate(async()=>{await document.fonts.ready;await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));});
+     const {guideBoxes,otherBoxes,bounds}=await root.evaluate(element=>{
+      const stage=element.querySelector('[data-primary-map]'),svg=stage.querySelector('svg');
+      const box=node=>{const b=node.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};};
+      return {guideBoxes:[...svg.querySelectorAll('[data-oceania-industry-location^="nz-"] text')].map(box),otherBoxes:[...svg.querySelectorAll('[data-oceania-industry-location]:not([data-oceania-industry-location^="nz-"]) text, svg > text')].map(box),bounds:box(stage)};
+     });
      const overlap=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
-     const bounds=await root.locator('[data-primary-map]').boundingBox();
-     for(const box of guideBoxes)assert.ok(box.x>=bounds.x&&box.y>=bounds.y&&box.x+box.width<=bounds.x+bounds.width&&box.y+box.height<=bounds.y+bounds.height,`${width}: NZ guide names stay inside the map`);
+     for(const box of guideBoxes)assert.ok(box.width>0&&box.height>0&&box.x>=bounds.x&&box.y>=bounds.y&&box.x+box.width<=bounds.x+bounds.width&&box.y+box.height<=bounds.y+bounds.height,`${width}: NZ guide names stay inside the map: ${JSON.stringify({box,bounds})}`);
      for(const [index,box] of guideBoxes.entries())for(const other of [...guideBoxes.slice(index+1),...otherBoxes])assert.equal(overlap(box,other),false,`${width}: NZ guide names avoid other map names`);
      for(const id of ['nz-dairy-guide','nz-wood-guide']){
       await root.locator(`[data-primary-map] [data-oceania-industry-location="${id}"] circle`).click();
