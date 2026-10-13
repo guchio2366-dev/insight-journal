@@ -61,7 +61,7 @@ try{
  const annotationShot=async(map,product)=>{
   // Capture document pixels without element scrolling or a retained SVG handle.
   // Closing the details can resize the root and replace its SVG in the next frame.
-  const clip=await map.locator(`[data-farming-place][data-place-product="${product}"]`).evaluate(el=>{
+  const clip=await map.locator(`[data-farming-place][data-place-product="${product}"]`).first().evaluate(el=>{
    const b=el.getBoundingClientRect(),x=Math.floor(b.x+scrollX),y=Math.floor(b.y+scrollY);
    return {x,y,width:Math.ceil(b.right+scrollX)-x,height:Math.ceil(b.bottom+scrollY)-y};
   });
