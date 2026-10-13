@@ -1277,6 +1277,31 @@ test('不要な農林業・流域背景クリックは無反応で、流域と�
  }finally{await river.window.happyDOM.close();}
 });
 
+test('東アジア農業の品目選択中の文書スクロールで地図高さを増やさず、表示位置へ戻ってもcameraと高さを保つ',async()=>{
+ const {window,root,q}=await setup('?field=agriculture&topic=wheat&lng=116&lat=35&z=4',{farming:true});
+ try{
+  window.happyDOM.setViewport({width:1920,height:1080});let scroll=0;
+  Object.defineProperty(window,'scrollY',{get:()=>scroll});
+  const frame=q('.asia-map-frame');Object.defineProperties(frame,{clientWidth:{value:1274},clientHeight:{value:767}});
+  frame.getBoundingClientRect=()=>new window.DOMRect(298,301-scroll,1274,767);
+  const legend=window.document.createElement('section');legend.dataset.farmOverviewLegend='';legend.getBoundingClientRect=()=>new window.DOMRect(298,1068-scroll,1274,40);root.append(legend);
+  window.dispatchEvent(new window.Event('resize'));
+  assert.equal(root.style.getPropertyValue('--asia-map-available-height'),'767px');
+  const camera={...window.__map.getCenter(),zoom:window.__map.getZoom()};
+  // The native click scrolls the bottom legend 14px into view before its
+  // selection causes ResizeObserver to measure the map container again.
+  scroll=14;q('[data-farming-topic]').value='chicken';q('[data-farming-topic]').dispatchEvent(new window.Event('change'));
+  window.dispatchEvent(new window.Event('resize'));
+  assert.equal(new URL(window.location.href).searchParams.get('topic'),'chicken');
+  assert.equal(root.style.getPropertyValue('--asia-map-available-height'),'767px');
+  scroll=0;window.dispatchEvent(new window.Event('scroll'));await delay();
+  assert.equal(root.style.getPropertyValue('--asia-map-available-height'),'767px');
+  assert.deepEqual({...window.__map.getCenter(),zoom:window.__map.getZoom()},camera);
+  window.happyDOM.setViewport({width:1440,height:900});
+  assert.equal(root.style.getPropertyValue('--asia-map-available-height'),'587px','an actual viewport resize still updates the height');
+ }finally{await window.happyDOM.close();}
+});
+
 test('自動全景は実extentと小余白を使い、resizeのmoveend後も全景を保ち、明示した保存cameraは優先する',async()=>{
  const extent=[73.602256,15.776109,145.824962,53.567791],fitted=await setup('',{contentExtent:extent});
  try{

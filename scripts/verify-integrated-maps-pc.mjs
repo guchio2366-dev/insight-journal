@@ -127,14 +127,20 @@ try{
   await page.evaluate(()=>scrollTo({top:0,left:0,behavior:'instant'}));
   const beforeSnapshot=await stableFarmSnapshot(''),before=beforeSnapshot.points;assert(before.length>0,region+' sourced livestock is visible');
   const beforeCamera=beforeSnapshot.camera;
+  if(region==='east-asia')await shot('east-asia-farm-before');
   const trigger=page.locator(`[data-farm-choice="${product}"]`).first(),triggerBox=await trigger.boundingBox();await trigger.click();
   await page.locator(`[data-asia-atlas][data-farm-context-status="ready"][data-farm-selected="${product}"]`).waitFor();await settle();
   const afterClick=await stableFarmSnapshot(product),selectedURL=page.url();sameCamera(afterClick.camera,beforeCamera);
+  if(region==='east-asia'){
+   assert.deepEqual({width:afterClick.frame.width,height:afterClick.frame.height},{width:beforeSnapshot.frame.width,height:beforeSnapshot.frame.height},'A native legend click does not resize the East Asia farm map');
+   assert.equal(afterClick.points.length,before.length);for(let i=0;i<before.length;i++)for(const axis of ['x','y'])assert(Math.abs(afterClick.points[i][axis]-before[i][axis])<=1,'East Asia anchors stay fixed before measurement scroll');
+  }
   await page.evaluate(()=>scrollTo({top:0,left:0,behavior:'instant'}));
   const afterSnapshot=await stableFarmSnapshot(product),selected=afterSnapshot.points;
   assert.equal(page.url(),selectedURL,'Measurement scroll preserves the selected URL');sameCamera(afterSnapshot.camera,afterClick.camera);
   assert.deepEqual(afterSnapshot.frame,beforeSnapshot.frame,'Compare anchors in the same naturally settled viewport frame');
   report.operations.push({region,kind:'farm-layout-diagnostic',triggerBox,before:beforeSnapshot,afterClick,after:afterSnapshot,measurementScrollPreservesUrlAndCamera:true});
+  if(region==='east-asia')await shot('east-asia-farm-selected');
   assert.equal(selected.length,before.length,region+' retains other livestock points');
   for(let i=0;i<before.length;i++){assert.equal(selected[i].name,before[i].name);assert.equal(selected[i].opacity,.2);for(const axis of ['x','y'])assert(Math.abs(selected[i][axis]-before[i][axis])<=1,region+' retains source anchors within 1 CSS pixel');}
   sameCamera(await camera({cameraRoot:'[data-asia-atlas]'}),beforeCamera);assert.equal(await page.locator('[data-farming-legend]').isVisible(),false);
