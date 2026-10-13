@@ -323,8 +323,9 @@ export function initializeAfricaAtlas() {
   const riverView=isRiverView(),river=africaRiverById(state.river);
   root!.dataset.riverView=String(riverView);
   const climateView=state.field==='nature'&&state.topic==='climate'&&state.view==='distribution';
-  map.setAttribute('role',riverView||climateView||isAgriMap()||state.field==='industry'?'group':'img');
-  text('#africa-svg-desc',industryMap()?'品目別の代表産地・都市の位置。点と産業名をクリック、またはTabで移動してEnterかスペースで読むことができます。選択しても他産業を残します。':climateView?'気候区分の格子図です。12観測所の都市名や地点を選ぶと、右側に雨温図と観測地点の格子分類が表示されます。Tabで移動し、Enterかスペースキーで選べます。':riverView?'収録された河川・湖の中心線。主要河川は名前のボタン、または地図の線で選択できます。線にはTabで移動し、Enterかスペースキーで解説を開けます。':isAgriMap()?'作物は品目別の色帯、家畜は半透明の品目色。地図内の品目名・分布や下の色凡例から選択でき、右に地域と生産・利用の説明を表示します。選択しても他分布を残します。':'分布テーマと国別統計を重ねた地図。地図下の凡例と右の説明から、表示した分布を読み取れます。国は選択欄や一覧からも選べます。');
+  const languageView=state.field==='population'&&state.topic==='language';
+  map.setAttribute('role',riverView||climateView||isAgriMap()||state.field==='industry'||languageView?'group':'img');
+  text('#africa-svg-desc',languageView?'点は言語資料の記録位置で、話者数や居住域ではありません。右の個別資料一覧または地図の点から選択できます。選択した点はTabとEnter/スペースでも操作できます。選択しても他点と元のカメラを保持します。':industryMap()?'品目別の代表産地・都市の位置。点と産業名をクリック、またはTabで移動してEnterかスペースで読むことができます。選択しても他産業を残します。':climateView?'気候区分の格子図です。12観測所の都市名や地点を選ぶと、右側に雨温図と観測地点の格子分類が表示されます。Tabで移動し、Enterかスペースキーで選べます。':riverView?'収録された河川・湖の中心線。主要河川は名前のボタン、または地図の線で選択できます。線にはTabで移動し、Enterかスペースキーで解説を開けます。':isAgriMap()?'作物は品目別の色帯、家畜は半透明の品目色。地図内の品目名・分布や下の色凡例から選択でき、右に地域と生産・利用の説明を表示します。選択しても他分布を残します。':'分布テーマと国別統計を重ねた地図。地図下の凡例と右の説明から、表示した分布を読み取れます。国は選択欄や一覧からも選べます。');
   const actions=query<HTMLElement>('.africa-theme-actions'),explanation=query<HTMLElement>('[data-theme-takeaway-detail]');
   const countryStatistics=query<HTMLDetailsElement>('[data-country-statistics]'),statisticsMode=actual&&!state.context?'reference':'comparison';
   countryStatistics.hidden=industryMap()||!state.place&&!state.context||riverView&&!state.context;

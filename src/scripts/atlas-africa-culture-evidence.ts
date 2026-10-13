@@ -35,5 +35,4 @@ export function renderAfricaCultureEvidence(root:HTMLElement,state:State,actual:
   details.append(table('ガーナ2021 表5.7：州別の宗教所属（人数）',['州・対象人数',...religion.groups.map(group=>group.label)],religion.regions.map(region=>[`${ethnicityRegionNames[region.name]} · ${region.total.toLocaleString('ja-JP')}人`,...religion.groups.map(group=>region.counts[group.id as keyof typeof region.counts].toLocaleString('ja-JP'))])));reader.append(details);
   notes(reader,religion.limits);reader.append(sourceLink('Ghana Statistical Service・2021国勢調査 表5.7（本文58頁）',religion.source.url));
  }
- reader.append(node('p','公表数値の事実を抜粋して出典を付記しています。原報告書の図・文章や行政区/居住域の形状は転載していません。'));
 }
