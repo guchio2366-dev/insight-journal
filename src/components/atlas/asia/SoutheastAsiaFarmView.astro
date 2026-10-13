@@ -26,6 +26,8 @@ const forestItems=[['1861','丸太材'],['1872','製材']] as const;
 const forestRows=forestItems.flatMap(([item,label])=>studyCountries.map(([code,name])=>({item:label,name,value:faoValue(code,item),flag:statistics.countries[code]?.observations.find((o:{domain:string;item:string;element:string;year:number;flag:string})=>o.domain==='Forestry'&&o.item===item&&o.element==='Production'&&o.year===2024)?.flag,share:shares.series.find(s=>s.id===(item==='1861'?'roundwood-production':'sawnwood-production'))?.years.find(y=>y.year===2024)?.countries[code]?.share})));
 const tradeItems=southeastExportExamples;
 const exportRows=tradeItems.map(([code,hs,label])=>({name:countryNames[code],hs,label,value:trade.countries[code].products[hs]?.X as number|undefined}));
+const riceTradeRows=Object.entries(countryNames).map(([code,name])=>({code,name,imports:trade.countries[code]?.products['1006']?.M as number|undefined,exports:trade.countries[code]?.products['1006']?.X as number|undefined}));
+const riceTradeAmount=(value:number|undefined)=>value===undefined?'欠測':value===0?'0':value<100000?'<0.1':(value/1e6).toLocaleString('ja-JP',{maximumFractionDigits:1});
 const woodExportRows=studyCountries.map(([code,name])=>({name,value:trade.countries[code].products['44']?.X as number|undefined}));
 const riceProducers=Object.keys(countryNames).map(code=>({code,name:countryNames[code],value:faoValue(code,'27')})).filter((r):r is {code:string;name:string;value:number}=>r.value!==undefined).sort((a,b)=>b.value-a.value).slice(0,5);
 const riceMax=riceProducers[0]?.value??1;
@@ -65,6 +67,9 @@ const pieStyle=`conic-gradient(${[...topPartners.map((row,index)=>({share:row.sh
  <summary>3か国の主要な農林産品の輸出額を比べる</summary>
  <p>インドネシアのパーム油、ベトナムのコーヒーと木材製品、タイの米と天然ゴムについて、2023年の商品輸出額を同じ米ドル単位で比べます。収穫物と加工品、国際商品分類の4桁と2桁が混在するため、合計した順位ではありません。</p>
  <table><caption>UN Comtrade、2023年、輸出額（億米ドル）。HS44は木材・木材製品・木炭の2桁章</caption><thead><tr><th scope="col">国</th><th scope="col">商品</th><th scope="col">HS</th><th scope="col">億米ドル</th></tr></thead><tbody>{exportRows.map(row=><tr><th scope="row">{row.name}</th><td>{row.label}</td><td>{row.hs}</td><td>{dollars(row.value)}</td></tr>)}</tbody></table>
+ <h3>米の国別輸出・輸入報告額</h3><p>同じ2023年のHS1006「米」。輸出と輸入は別の方向で、各国の対世界報告額です。国内で消費された量や、どの輸出国からどの輸入国へ届いたかは分かりません。</p>
+ <table data-southeast-rice-trade><caption>UN Comtrade、2023年、HS1006、百万米ドル。輸出10/11か国、輸入11/11か国に値</caption><thead><tr><th scope="col">報告国</th><th scope="col">輸出</th><th scope="col">輸入</th></tr></thead><tbody>{riceTradeRows.map(row=><tr><th scope="row">{row.name}</th><td>{riceTradeAmount(row.exports)}</td><td>{riceTradeAmount(row.imports)}</td></tr>)}</tbody></table>
+ <p>タイ・ベトナムは輸出報告額が大きく、インドネシア・フィリピンは輸入報告額が大きい一方、ベトナム自身にも輸入があります。11か国分を足すと域内の越境と再輸出を含むため、地域の純供給量にはなりません。東ティモールの輸出欄は欠測で、0ではありません。</p>
  <p>生産量から輸出額を差し引いて国内向け数量を求めることはできません。品目ごとの輸出相手は保持した原資料にないため、この表は輸出先の内訳を表しません。</p>
  <p class="source">出典：<a href="https://comtradeplus.un.org/">UN Comtrade</a>、2023年、各国報告の輸出額（current USD）。<a href="https://uncomtrade.org/docs/policy-on-use-and-re-dissemination/">利用・再配布方針</a>。FAOSTATの2024年生産量とは年・単位が異なります。</p>
 </details>

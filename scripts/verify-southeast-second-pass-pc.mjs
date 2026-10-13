@@ -33,6 +33,7 @@ try{
  assert.equal(await page.locator('.asia-livestock-point:visible').count()>0,true);check('selected maize retains lighter livestock points');await shot('farming-maize');
  await page.locator('[data-farm-choice="chicken"]').click();await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmSelected==='chicken');
  check('livestock selection is legible with the regional map');await shot('farming-chicken');
+ await page.locator('[data-southeast-trade-reading] summary').click();assert.equal(await page.locator('[data-southeast-rice-trade] tbody tr').count(),11);const riceTrade=await page.locator('[data-southeast-rice-trade]').textContent();assert.match(riceTrade,/タイ.*5,147.3/s);assert.match(riceTrade,/ベトナム.*4,374.6/s);assert.match(riceTrade,/東ティモール.*欠測/s);check('2023 HS1006 rice exports and imports show eleven reporters without inventing bilateral flows or domestic use');await shot('rice-trade-reporters','[data-southeast-trade-reading]');
  await open('agriculture/?topic=forest');await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.southeastFarmTopic==='forest');
  assert.equal(await page.locator('.southeast-forest-connections').isVisible(),true);
  assert.equal(await page.locator('[data-south-central-farm-connections] > .asia-farm-connections-grid').isVisible(),false);
@@ -97,11 +98,11 @@ try{
  await page.locator('[data-population-city]').selectOption(idn.id);await page.locator('[data-population-city]').selectOption(vnm.id);assert.equal(await page.locator('[data-population-city]').inputValue(),vnm.id);await page.reload({waitUntil:'networkidle'});assert.equal(await page.locator('[data-population-city]').inputValue(),vnm.id);
  check('population city can switch Indonesia to Vietnam and survives reload');await shot('population-vietnam');
  await open('population/?topic=ethnicity');await page.waitForFunction(()=>document.querySelector('[data-settlement-reading="ethnicity"]')?.hidden===false);
- assert.equal(await page.locator('[data-southeast-census-ethnicity]').count(),4);assert.match(await page.locator('[data-southeast-ethnicity-census]').textContent(),/タガログ.*ビコール.*マギンダナオ/s);
- assert.match(await page.locator('[data-map-annotations]').textContent(),/イロコス.*イロカノ.*ビコール.*西ビサヤ.*イロンゴ.*バンサモロ.*マギンダナオ/s);
+ assert.equal(await page.locator('[data-southeast-census-ethnicity]').count(),7);assert.match(await page.locator('[data-southeast-ethnicity-census]').textContent(),/タガログ.*ビコール.*マギンダナオ/s);
+ assert.match(await page.locator('[data-map-annotations]').textContent(),/イロコス.*イロカノ.*カラバルソン.*タガログ.*ビコール.*西ビサヤ.*イロンゴ.*中ビサヤ.*セブアノ.*東ビサヤ.*ワライ.*バンサモロ.*マギンダナオ/s);
  const labelsInside=async selector=>page.locator(selector).evaluateAll(nodes=>{const map=document.querySelector('[data-map-annotations]').getBoundingClientRect(),rects=nodes.map(node=>node.getBoundingClientRect());return rects.every(r=>r.left>=map.left&&r.right<=map.right&&r.top>=map.top&&r.bottom<=map.bottom)&&rects.every((a,i)=>rects.every((b,j)=>i===j||a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top));});
  assert.equal(await labelsInside('[data-southeast-census-ethnicity]'),true);
- check('Philippine regional ethnic names and shares complement GeoEPR as four distinct map labels');await shot('ethnicity-philippines');
+ check('Philippine regional ethnic names and shares complement GeoEPR as seven distinct map labels');await shot('ethnicity-philippines');
  await open('population/?topic=religion');await page.waitForFunction(()=>document.querySelector('[data-settlement-reading="religion"]')?.hidden===false);
  assert.equal(await page.locator('[data-southeast-census-religion]').count(),2);assert.equal(await page.locator('[data-southeast-census-religion-region]').count(),3);
  assert.match(await page.locator('[data-map-annotations]').textContent(),/ビコール.*93.5.*中ビサヤ.*90.5.*バンサモロ.*5.3/s);
