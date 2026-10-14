@@ -38,6 +38,7 @@ const nationalIndicators=[['NY.GDP.PETR.RT.ZS','石油資源レント'],['NY.GDP
     <div class="wi-map-key" data-wi-map-key><strong>集積例の位置</strong><span>色＝産業 · ● 採取・サービス　■ 加工・製造　◇ 本社</span></div>
    </div>
    <p class="wi-map-note">点は集積地域の案内位置。細い引出線は産業名の位置案内で、取引・輸送経路を表しません。点の数・大きさは生産量を表しません。</p>
+   <p class="wi-map-note">LNG＝液化天然ガス · PE＝ポリエチレン · PP＝ポリプロピレン · DRI＝直接還元鉄。</p>
    <div class="wi-industry-picker" aria-label="産業を一覧から選ぶ">{sectors.map(s=><div data-wi-picker={s.id} hidden={s.id!=='resources'}>{catalog.filter(i=>i.sectors.includes(s.id)).map(i=><button type="button" data-wi-industry={i.id} aria-pressed="false" style={`--wi-color:${i.color}`}><i aria-hidden="true"></i>{i.label}</button>)}</div>)}</div>
   </div>
   <aside class="atlas-national wi-reading" aria-label="産業分布の概説と解説">
@@ -52,6 +53,7 @@ const nationalIndicators=[['NY.GDP.PETR.RT.ZS','石油資源レント'],['NY.GDP
   </aside>
  </div>
  <section class="wi-statistics" id="west-industry-statistics" aria-label="地図下の産業統計">
+  <p>通貨：USD＝米ドル、EUR＝ユーロ、SAR＝サウジリヤル、QAR＝カタールリヤル、JOD＝ヨルダンディナール、NIS＝イスラエルシェケル。為替換算して合計しません。</p>
   <div class="wi-stat-overview" data-wi-stat-overview><section><h2>地域経済の規模</h2><p>産業を選ぶと、生産・輸出・付加価値・雇用など適切な実績を表示します。資源と製品、国と企業、金額と数量を区別します。</p></section><section><h2>世界での位置</h2><p>世界生産・輸出順位・供給集中、国際観光・金融評価など、産業ごとに意味のある分母を使います。世界値未取得の系列も明記します。</p></section><section><h2>国ごとの違い</h2><p>湾岸の資源・電力集約型加工、トルコの輸出製造、死海の肥料、イスラエルの情報サービスなどを異なる指標で読みます。掲載点がない国でも、産業が存在しない意味ではありません。</p></section></div>
   {catalog.map(item=><section data-wi-stat-panel={item.id} hidden>
    <h2>{item.label}の規模・世界での位置</h2><div class="wi-stat-cards">
