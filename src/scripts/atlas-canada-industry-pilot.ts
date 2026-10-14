@@ -47,7 +47,7 @@ export function initCanadaIndustryPilot(root:HTMLElement){
   const markOrder=[...visible].sort((a,b)=>Number(a.c.industry===state.industry)-Number(b.c.industry===state.industry)||Number(a.c.id===state.site)-Number(b.c.id===state.site));
   for(const {c,point:[x,y]}of markOrder){
    if(state.only&&c.industry!==state.industry)continue;
-   const color=pilot.industries.find(i=>i.id===c.industry)!.color,processing=/精|製|選鉱|処理|加工|パルプ|紙|構造体|部品|機体/.test(c.stage);
+   const color=pilot.industries.find(i=>i.id===c.industry)!.color,processing=/精|製|選鉱|処理|加工|パルプ|紙|構造体|部品|機体|造船|組立|搾油|包装|ペレット/.test(c.stage);
    const peers=visible.filter(v=>v.c.coordinates.join(',')===c.coordinates.join(',')),index=peers.findIndex(v=>v.c.id===c.id),cx=x+(index-(peers.length-1)/2)*14;
    const group=element('g',{'data-ca-marker':c.id,role:'button',tabindex:'0','aria-pressed':String(c.id===state.site),'aria-label':`${pilotIndustryLabel(c.industry,state.sector)} · ${c.place} · ${stageLabel(c)}`});
    const inactive=!!c.status&&c.status!=='operating';
