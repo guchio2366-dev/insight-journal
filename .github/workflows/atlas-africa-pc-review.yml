@@ -121,24 +121,24 @@ jobs:
           if [[ "$africa_review_scope" == industry-sectors || "$africa_review_scope" == remaining ]]; then
             africa_culture_scope=third
             if [[ "$africa_review_scope" == remaining ]]; then africa_culture_scope=remaining; fi
-            AFRICA_REVIEW_SCOPE="$africa_culture_scope" AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node tests/e2e/atlas-africa-round2-review.spec.mjs
-            node scripts/verify-africa-industry-review.mjs
+            AFRICA_REVIEW_SCOPE="$africa_culture_scope" AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node scripts/run-review-with-annotations.mjs tests/e2e/atlas-africa-round2-review.spec.mjs
+            node scripts/run-review-with-annotations.mjs scripts/verify-africa-industry-review.mjs
           elif [[ "$africa_review_scope" == third ]]; then
-            AFRICA_REVIEW_SCOPE=third AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node tests/e2e/atlas-africa-round2-review.spec.mjs
+            AFRICA_REVIEW_SCOPE=third AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node scripts/run-review-with-annotations.mjs tests/e2e/atlas-africa-round2-review.spec.mjs
           elif [[ "$africa_review_scope" == round2 && "$africa_review_evidence" == sources ]]; then
-            AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node tests/e2e/atlas-africa-source-evidence.spec.mjs
+            AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node scripts/run-review-with-annotations.mjs tests/e2e/atlas-africa-source-evidence.spec.mjs
           elif [[ "$africa_review_scope" == round2 ]]; then
-            AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node tests/e2e/atlas-africa-round2-review.spec.mjs
+            AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node scripts/run-review-with-annotations.mjs tests/e2e/atlas-africa-round2-review.spec.mjs
           elif [[ "$africa_review_scope" == beverages ]]; then
-            AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node scripts/verify-africa-beverages-review.mjs
+            AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node scripts/run-review-with-annotations.mjs scripts/verify-africa-beverages-review.mjs
           else
             if [[ "$africa_review_scope" == madagascar ]]; then
               export AFRICA_REVIEW_SCOPE=madagascar
             fi
-            AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node scripts/verify-africa-approved-review.mjs
+            AFRICA_REVIEW_OUTPUT=review-artifacts/africa-pc-review node scripts/run-review-with-annotations.mjs scripts/verify-africa-approved-review.mjs
           fi
           if [[ "$africa_review_scope" != round2 && "$africa_review_scope" != third && "$africa_review_scope" != industry-sectors && "$africa_review_scope" != remaining ]]; then
-            node scripts/verify-africa-industry-review.mjs
+            node scripts/run-review-with-annotations.mjs scripts/verify-africa-industry-review.mjs
           fi
           if [[ "$africa_review_scope" == industry-sectors || "$africa_review_scope" == remaining ]]; then
             node --input-type=module <<'JS'

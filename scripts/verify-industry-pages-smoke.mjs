@@ -65,7 +65,11 @@ async function snapshot(scene){
 }
 function fixed(before,after,name){
  for(const k of ['width','height'])assert(Math.abs(before[k]-after[k])<=1,name+': map '+k+' changes');
- assert.equal(after.frame,before.frame,name+': map viewBox changes');
+ if(before.frame!==null&&after.frame!==null){
+  const a=before.frame.split(/[ ,]+/).map(Number),b=after.frame.split(/[ ,]+/).map(Number);
+  assert.equal(b.length,a.length,name+': map viewBox dimension count');
+  assert(a.every((value,i)=>Math.abs(value-b[i])<=.001),name+': map viewBox changes beyond SVG serialization rounding');
+ }else assert.equal(after.frame,before.frame,name+': map viewBox changes');
 }
 async function choose(scene){
  if(scene.mode==='select'){

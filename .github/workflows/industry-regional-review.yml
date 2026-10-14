@@ -47,7 +47,7 @@ jobs:
         run: |
           set -euo pipefail
           if [[ -f scripts/verify-world-industry.mjs ]]; then
-            REVIEW_CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)" node scripts/verify-world-industry.mjs
+            REVIEW_CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)" node scripts/run-review-with-annotations.mjs scripts/verify-world-industry.mjs
           fi
       - name: Verify industry maps and capture evidence
         if: github.event_name == 'pull_request'
@@ -60,21 +60,21 @@ jobs:
           if [[ "${GITHUB_HEAD_REF:-}" == "codex/canada-map-revision-20261011" ]]; then export CANADA_REVIEW_LOG_IMAGES=1; fi
           if [[ "${GITHUB_HEAD_REF:-}" == "codex/canada-map-followup-20261012" ]]; then
             canada_followup_status=0
-            node scripts/verify-canada-industry-followup-review.mjs || canada_followup_status=$?
-            CANADA_REVIEW_LOG_IMAGES=0 ATLAS_CHROMIUM_PATH="$INDUSTRY_REVIEW_CHROME_PATH" ATLAS_QA_OUTPUT="review-artifacts/canada-maps" node scripts/verify-canada-us-parity.mjs || canada_followup_status=$?
+            node scripts/run-review-with-annotations.mjs scripts/verify-canada-industry-followup-review.mjs || canada_followup_status=$?
+            CANADA_REVIEW_LOG_IMAGES=0 ATLAS_CHROMIUM_PATH="$INDUSTRY_REVIEW_CHROME_PATH" ATLAS_QA_OUTPUT="review-artifacts/canada-maps" node scripts/run-review-with-annotations.mjs scripts/verify-canada-us-parity.mjs || canada_followup_status=$?
             if [[ "$canada_followup_status" != 0 ]]; then exit "$canada_followup_status"; fi
           fi
           for review in scripts/verify-latin-industry-locations-review.mjs scripts/verify-russia-industry-review.mjs scripts/verify-industry-existing-country-review.mjs scripts/capture-canada-industry-pilot-review.mjs; do
-            if [[ -f "$review" ]]; then node "$review"; fi
+            if [[ -f "$review" ]]; then node scripts/run-review-with-annotations.mjs "$review"; fi
           done
           if [[ -f scripts/verify-east-asia-industries.mjs ]]; then
-            EAST_INDUSTRY_REVIEW_OUTPUT=review-artifacts/east-asia-industries node scripts/verify-east-asia-industries.mjs
+            EAST_INDUSTRY_REVIEW_OUTPUT=review-artifacts/east-asia-industries node scripts/run-review-with-annotations.mjs scripts/verify-east-asia-industries.mjs
           fi
           if [[ -f scripts/verify-central-asia-industry.mjs ]]; then
-            CENTRAL_REVIEW_OUTPUT=review-artifacts/central-asia-industry node scripts/verify-central-asia-industry.mjs
+            CENTRAL_REVIEW_OUTPUT=review-artifacts/central-asia-industry node scripts/run-review-with-annotations.mjs scripts/verify-central-asia-industry.mjs
           fi
           if [[ "${GITHUB_HEAD_REF:-}" == "codex/canada-map-revision-20261011" ]]; then
-            CANADA_REVIEW_LOG_IMAGES=0 ATLAS_CHROMIUM_PATH="$INDUSTRY_REVIEW_CHROME_PATH" ATLAS_QA_OUTPUT="review-artifacts/canada-maps" node scripts/verify-canada-us-parity.mjs
+            CANADA_REVIEW_LOG_IMAGES=0 ATLAS_CHROMIUM_PATH="$INDUSTRY_REVIEW_CHROME_PATH" ATLAS_QA_OUTPUT="review-artifacts/canada-maps" node scripts/run-review-with-annotations.mjs scripts/verify-canada-us-parity.mjs
           fi
       - name: Verify the deployed approved Pages release
         if: github.event_name == 'workflow_dispatch'
@@ -85,11 +85,11 @@ jobs:
           set -euo pipefail
           test -n "$(fc-list ':lang=ja' family)"
           export INDUSTRY_REVIEW_CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)"
-          node scripts/verify-approved-pages-release.mjs
+          node scripts/run-review-with-annotations.mjs scripts/verify-approved-pages-release.mjs
           if [[ -f scripts/verify-world-industry.mjs ]]; then
-            WORLD_INDUSTRY_REVIEW_URL=https://guchio2366-dev.github.io/insight-journal/atlas/industry/world/ REVIEW_CHROME_PATH="$INDUSTRY_REVIEW_CHROME_PATH" node scripts/verify-world-industry.mjs
+            WORLD_INDUSTRY_REVIEW_URL=https://guchio2366-dev.github.io/insight-journal/atlas/industry/world/ REVIEW_CHROME_PATH="$INDUSTRY_REVIEW_CHROME_PATH" node scripts/run-review-with-annotations.mjs scripts/verify-world-industry.mjs
           fi
-          INDUSTRY_SMOKE_TARGET=production REVIEW_CHROME_PATH="$INDUSTRY_REVIEW_CHROME_PATH" node scripts/verify-industry-pages-smoke.mjs
+          INDUSTRY_SMOKE_TARGET=production REVIEW_CHROME_PATH="$INDUSTRY_REVIEW_CHROME_PATH" node scripts/run-review-with-annotations.mjs scripts/verify-industry-pages-smoke.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -120,7 +120,7 @@ jobs:
           set -euo pipefail
           sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
           test -n "$(fc-list ':lang=ja' family)"
-          REVIEW_CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)" node scripts/verify-industry-pages-smoke.mjs
+          REVIEW_CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)" node scripts/run-review-with-annotations.mjs scripts/verify-industry-pages-smoke.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

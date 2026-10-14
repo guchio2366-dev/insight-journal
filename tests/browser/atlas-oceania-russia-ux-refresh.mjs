@@ -120,7 +120,10 @@ try{
      const {guideBoxes,otherBoxes,bounds}=await root.evaluate(element=>{
       const stage=element.querySelector('[data-primary-map]'),svg=stage.querySelector('svg');
       const box=node=>{const b=node.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};};
-      return {guideBoxes:[...svg.querySelectorAll('[data-oceania-industry-location^="nz-"] text')].map(box),otherBoxes:[...svg.querySelectorAll('[data-oceania-industry-location]:not([data-oceania-industry-location^="nz-"]) text, svg > text')].map(box),bounds:box(stage)};
+      // The complete catalog replaces duplicate saved-guide captions with
+      // the dairy/wood callouts; the original geographic markers remain.
+      const catalog=svg.querySelector('[data-oceania-catalog-map]');
+      return {guideBoxes:[...svg.querySelectorAll(catalog?'[data-oceania-product-label="dairy"] text,[data-oceania-product-label="wood"] text':'[data-oceania-industry-location^="nz-"] text')].map(box),otherBoxes:[...svg.querySelectorAll(catalog?'[data-oceania-product-label]:not([data-oceania-product-label="dairy"]):not([data-oceania-product-label="wood"]) text':'[data-oceania-industry-location]:not([data-oceania-industry-location^="nz-"]) text, svg > text')].map(box),bounds:box(stage)};
      });
      const overlap=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
      for(const box of guideBoxes)assert.ok(box.width>0&&box.height>0&&box.x>=bounds.x&&box.y>=bounds.y&&box.x+box.width<=bounds.x+bounds.width&&box.y+box.height<=bounds.y+bounds.height,`${width}: NZ guide names stay inside the map: ${JSON.stringify({box,bounds})}`);
