@@ -10,7 +10,11 @@ function load(url:string){
 }
 function initialize(host:HTMLElement){
  if(instances.has(host))return instances.get(host)!;
- const config=JSON.parse(host.querySelector('[data-agro-config]')!.textContent!) as Config;
+ const configNode=host.querySelector('[data-agro-config]');
+ // Standalone readers and no-script fixtures may retain HTML while removing
+ // embedded configuration. Optional statistics must never break the atlas.
+ if(!configNode){host.hidden=true;return (_selection:Selection)=>{};}
+ const config=JSON.parse(configNode.textContent!) as Config;
  const content=host.querySelector<HTMLElement>('[data-agro-content]')!,status=host.querySelector<HTMLElement>('[data-agro-status]')!,heading=host.querySelector<HTMLElement>('[data-agro-heading]')!,retry=host.querySelector<HTMLButtonElement>('[data-agro-retry]')!,seriesSelect=host.querySelector<HTMLSelectElement>('[data-agro-series-select]')!,countrySelect=host.querySelector<HTMLSelectElement>('[data-agro-country-select]');
  let selection:Selection={country:config.country,topic:config.topic,active:true},generation=0,chosen='';
  async function update(next:Selection){

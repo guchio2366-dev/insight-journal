@@ -160,3 +160,13 @@ test('overview product controls offer only existing page topics and fetch one se
  assert.deepEqual(requested,['/fixture/rice.json','/fixture/maize.json']);
  assert.equal([...h.select.options].some(option=>option.value==='soybean-production'),false,'an unrelated retained product must not enlarge page scope');
 }));
+
+test('optional statistics without embedded configuration cannot interrupt an atlas reader',async()=>{
+ await withDom(async window=>{
+  const h=await harness(window);h.host.querySelector('[data-agro-config]').remove();
+  const map=window.document.createElement('p');map.textContent='既存の地図・凡例';h.root.append(map);
+  globalThis.fetch=()=>{assert.fail('a reader without statistics configuration must not request data');};
+  assert.doesNotThrow(()=>h.sync({country:'CHN',topic:'rice',active:true}));
+  assert.equal(h.host.hidden,true);assert.equal(map.textContent,'既存の地図・凡例');
+ });
+});
