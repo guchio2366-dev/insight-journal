@@ -1,34 +1,21 @@
+import {southeastIndustryProfiles} from './southeast-asia-industry-catalog.ts';
 /** Official-source teaching examples, not an inventory of sites or output. */
-export type SoutheastIndustryKind='electronics'|'automotive'|'textiles'|'food'|'metals'|'energy'|'petrochemicals'|'logistics'|'tourism'|'finance'|'it-bpm'|'rubber'|'wood';
-export type SoutheastIndustrySite={id:string;label:string;industryName:string;placeName:string;kind:SoutheastIndustryKind;stage:'raw'|'processing'|'service';point:[number,number];reading:string;sourceLabel:string;sourceUrl:string;sourceYear:string};
+export type SoutheastIndustryKind='electronics'|'automotive'|'textiles'|'food'|'metals'|'energy'|'petrochemicals'|'logistics'|'tourism'|'finance'|'it-bpm'|'rubber'|'wood'|'palm'|'rice'|'lng'|'hydro'|'solar';
+export type SoutheastIndustrySite={id:string;label:string;industryName:string;placeName:string;kind:SoutheastIndustryKind;stage:'raw'|'processing'|'service';point:[number,number];reading:string;sourceLabel:string;sourceUrl:string;sourceYear:string;positionScope:'regional-guide';facilityCoordinates:null;operationalStatus:'source-dated-example'};
 export type SoutheastIndustrySector='resource'|'manufacturing'|'services';
 export const southeastIndustrySectors:{id:'all'|SoutheastIndustrySector;label:string;reading:string}[]=[
- {id:'all',label:'全体',reading:'資源・エネルギー、製造業、サービス業の根拠付き立地を重ねます。地点数は生産規模ではありません。'},
- {id:'resource',label:'資源・エネルギー',reading:'ゴム・木材・ニッケル・石炭の原料地域と、製錬・精製・発電など利用可能な状態にする拠点を分けて読みます。'},
- {id:'manufacturing',label:'製造業',reading:'電子、自動車、衣料、食品、金属、石化、タイヤ、家具の製造・加工がどこへ集まるかを読みます。原料の代表位置は必要な工程だけ残します。'},
- {id:'services',label:'サービス業',reading:'港湾、観光、金融、IT-BPMがどこへ集まるかを読みます。港は産地でも工場でもありません。'},
+ {id:'all',label:'全体',reading:'ニッケル・石炭の資源域、半島と都市周辺の製造集積、海峡・観光地・業務都市のサービス拠点は異なる地理を持つ。'},
+ {id:'resource',label:'資源・エネルギー',reading:'スラウェシ・カリマンタンの資源域とビントゥル・ラオス中部のエネルギー拠点では、鉱床・ガス供給・水資源が立地に関わる。'},
+ {id:'manufacturing',label:'製造業',reading:'ペナン・タイ東部・ジャワ島西部・ベトナム南北の加工集積では原料、人材、工業団地、港湾への接続が工程ごとの立地を支える。'},
+ {id:'services',label:'サービス業',reading:'海峡沿いの港湾・金融、バリやプーケットの観光、マニラ・セブの受託業務には異なる需要と専門機能が集まる。'},
 ];
 export function southeastSiteSectors(site:SoutheastIndustrySite):SoutheastIndustrySector[]{
- if(site.stage==='service'||site.kind==='logistics')return ['services'];
- if(site.stage==='raw'||site.kind==='energy')return ['resource'];
- if(site.kind==='metals'||site.kind==='petrochemicals')return ['resource','manufacturing'];
- return ['manufacturing'];
+ if(site.stage==='raw')return ['resource'];
+ return southeastIndustryProfiles.find(p=>p.id===site.kind)?.sectors??[];
 }
 export const southeastIndustryKinds:{id:'all'|SoutheastIndustryKind;label:string;reading:string}[]=[
- {id:'all',label:'全分布',reading:'13の産業群の立地事例を重ねます。丸は工場・港・都市、ひし形は広い原料産地を読む代表位置です。地点の数や大きさは生産規模を示しません。'},
- {id:'rubber',label:'ゴム・タイヤ',reading:'タイ南部のゴム栽培地域とラヨーンのタイヤ製造を別工程として読みます。'},
- {id:'wood',label:'木材・家具',reading:'ベトナム北中部の植林材とビンズオンの家具製造を区別します。加工には輸入木材も使われます。'},
- {id:'electronics',label:'電子・半導体',reading:'ペナンの電子産業、クリムの半導体前工程、バクニンの組立・検査を区別します。同じ電子産業でも工程は異なります。'},
- {id:'automotive',label:'自動車・部品',reading:'タイ東部臨海部とジャワ島西部の自動車・部品産業を比べます。EVはその一部です。'},
- {id:'textiles',label:'繊維・衣料',reading:'プノンペンとベトナム南部の縫製集積を読みます。繊維原料の産地ではありません。'},
- {id:'food',label:'食品加工',reading:'メコンデルタの水産加工とジョホールのパーム油精製を比べます。漁場や作物の栽培場所とは区別します。'},
- {id:'metals',label:'金属・鉱業',reading:'スラウェシのニッケル資源地域とモロワリの製錬を別工程として読みます。'},
- {id:'energy',label:'資源・エネルギー',reading:'カリマンタンの石炭、ビントゥルのLNG、ラオスの水力発電を区別します。'},
- {id:'petrochemicals',label:'石油精製・石化',reading:'ジュロン、マプタプット、ペンゲランの精製・石油化学集積です。原油の採掘場所とは区別します。'},
- {id:'logistics',label:'港湾・物流',reading:'シンガポール、ポートクラン、レムチャバンの港湾を比べます。輸出先や実際の貨物経路は示しません。'},
- {id:'tourism',label:'観光',reading:'バリ、プーケット、シェムリアップは異なる自然・文化資源を生かす観光地です。'},
- {id:'finance',label:'金融',reading:'シンガポールの金融機関の集積を都市のサービス業として読みます。'},
- {id:'it-bpm',label:'IT-BPM',reading:'マニラ首都圏とセブの顧客対応・事務処理などのIT-BPM拠点を読みます。'},
+ {id:'all',label:'全産業',reading:southeastIndustrySectors[0].reading},
+ ...southeastIndustryProfiles.map(p=>({id:p.id,label:p.label,reading:p.reading})),
 ];
 const source={
  penang:['マレーシア投資開発庁・電気電子産業','https://www.mida.gov.my/industries/manufacturing/electrical-electronics/','2026閲覧'],
@@ -59,7 +46,7 @@ const source={
  timber:['世界銀行・ベトナム北中部の植林','https://documents1.worldbank.org/curated/en/114511621491387556/pdf/Vietnam-North-Central-Region-Emission-Reductions-Program-Project.pdf','2021'],
  furniture:['米国農務省・ベトナムの木材加工業','https://apps.fas.usda.gov/newgainapi/api/Report/DownloadReportByFileName?fileName=Vietnam+Wood+Processing+Industry_Ho+Chi+Minh+City_Vietnam_06-11-2020','2020'],
 } satisfies Record<string,[string,string,string]>;
-function site(id:string,kind:SoutheastIndustryKind,label:string,industryName:string,placeName:string,point:[number,number],stage:SoutheastIndustrySite['stage'],reading:string,src:keyof typeof source):SoutheastIndustrySite{const [sourceLabel,sourceUrl,sourceYear]=source[src];return {id,kind,label,industryName,placeName,point,stage,reading,sourceLabel,sourceUrl,sourceYear};}
+function site(id:string,kind:SoutheastIndustryKind,label:string,industryName:string,placeName:string,point:[number,number],stage:SoutheastIndustrySite['stage'],reading:string,src:keyof typeof source):SoutheastIndustrySite{const [sourceLabel,sourceUrl,sourceYear]=source[src];return {id,kind,label,industryName,placeName,point,stage,reading,sourceLabel,sourceUrl,sourceYear,positionScope:'regional-guide',facilityCoordinates:null,operationalStatus:'source-dated-example'};}
 export const southeastIndustrySites:SoutheastIndustrySite[]=[
  site('penang','electronics','ペナンの電子産業','電子部品・機器','ペナン',[100.3,5.3],'processing','電子企業と人材が集まる。','penang'),
  site('kulim','electronics','クリムの半導体前工程','半導体前工程','クリム',[100.57,5.43],'processing','半導体製造施設。組立・検査と工程が異なります。','kulim'),
@@ -69,12 +56,12 @@ export const southeastIndustrySites:SoutheastIndustrySite[]=[
  site('hcm-textile','textiles','ホーチミン市の衣料','衣料縫製','ホーチミン市',[106.7,10.8],'processing','衣料産業クラスターを見る都市の代表位置。資料は2013年の事例です。','vietnamTextile'),
  site('phnom-textile','textiles','プノンペン周辺の衣料','衣料縫製','プノンペン周辺',[104.93,11.55],'processing','首都圏の縫製集積を見る代表位置。','textile'),
  site('kiengiang-food','food','キエンザン省の水産加工','水産加工','メコンデルタ',[105.08,10.0],'processing','漁獲物の加工産業を読む省の代表位置。漁場や個別工場の位置ではありません。','food'),
- site('johor-food','food','パシルグダンのパーム油精製','パーム油精製','ジョホール',[103.9,1.45],'processing','食用油脂などをつくる既存の製油所。アブラヤシの栽培地とは区別します。','palm'),
+ site('johor-food','palm','パシルグダンのパーム油精製','パーム油精製','ジョホール',[103.9,1.45],'processing','食用油脂などをつくる既存の製油所。アブラヤシの栽培地とは区別します。','palm'),
  site('sulawesi-nickel','metals','スラウェシのニッケル鉱床','ニッケル資源','スラウェシ',[121.3,-2.7],'raw','広い鉱床地域を読む代表位置。鉱床境界ではありません。','nickel'),
  site('morowali-smelter','metals','モロワリの製錬','ニッケル製錬','モロワリ',[121.9,-2.9],'processing','鉱石を加工する産業地区の事例。','nickel'),
  site('kalimantan-coal','energy','カリマンタンの石炭','石炭資源','カリマンタン',[115.8,-1.1],'raw','東・南カリマンタンの資源を読む代表位置。','coal'),
- site('bintulu-lng','energy','ビントゥルのLNG','天然ガス液化','ビントゥル',[113.04,3.17],'processing','天然ガス液化施設。ガス田とは異なります。','lng'),
- site('namtheun-hydro','energy','ナムトゥン2の水力発電','水力発電','ラオス中部',[105.27,17.95],'processing','水力発電事業。石炭やLNGとは別の電源です。','hydro'),
+ site('bintulu-lng','lng','ビントゥルのLNG','天然ガス液化','ビントゥル',[113.04,3.17],'processing','天然ガス液化施設。ガス田とは異なります。','lng'),
+ site('namtheun-hydro','hydro','ナムトゥン2の水力発電','水力発電','ラオス中部',[105.27,17.95],'processing','水力発電事業。石炭やLNGとは別の電源です。','hydro'),
  site('jurong-petro','petrochemicals','ジュロン島の精製・石化','精製・石油化学','ジュロン島',[103.7,1.28],'processing','精製・化学工場の集積。原油産地ではありません。','jurong'),
  site('maptaphut-petro','petrochemicals','マプタプットの石化','石油化学','マプタプット',[101.16,12.68],'processing','タイ東部の石化と港の立地例。','eec'),
  site('pengerang-petro','petrochemicals','ペンゲランの精製・石化','精製・石油化学','ペンゲラン',[104.12,1.37],'processing','精製と石化を組み合わせる施設。','pengerang'),
@@ -90,5 +77,5 @@ export const southeastIndustrySites:SoutheastIndustrySite[]=[
  site('southern-rubber','rubber','タイ南部のゴム栽培','天然ゴム栽培','タイ南部',[99.9,7.0],'raw','ゴム栽培地域の代表位置。','rubber'),
  site('rayong-tires','rubber','ラヨーンのタイヤ製造','タイヤ製造','ラヨーン',[101.28,12.68],'processing','タイヤ工場の立地事例。','tire'),
  site('north-central-timber','wood','ベトナム北中部の植林材','植林材','ベトナム北中部',[106.8,16.8],'raw','広い植林材地域を読む代表位置。','timber'),
- site('binh-duong-furniture','wood','ビンズオンの家具加工','家具加工','ビンズオン',[106.68,11.15],'processing','木材加工・家具製造が集積。輸入材も使われます。','furniture'),
+ site('binh-duong-furniture','wood','ビンズオンの家具加工','家具加工','旧ビンズオン',[106.68,11.15],'processing','2020年資料の木材加工・家具集積。旧ビンズオンは2025年の行政再編後のホーチミン市域に含まれ、輸入材も加工する。','furniture'),
 ];
