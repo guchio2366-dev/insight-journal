@@ -31,7 +31,7 @@ try{
    if(['russia','oceania'].includes(region))await page.waitForFunction(()=>document.querySelector('[data-regional-forestry]')?.dataset.forestReferenceStatus==='ready');
    if(region==='russia')await page.waitForFunction(()=>document.querySelector('[data-regional-forestry]')?.dataset.forestRasterStatus==='ready');
    assert.equal(await page.locator('[data-forest-raster]').count(),region==='russia'?1:0);
-   assert.equal(await page.locator('select').count(),0);
+   assert.equal(await page.locator('select:not([data-agro-series-select]):not([data-agro-country-select])').count(),0);
    const references=['africa','russia'].includes(region)?2:region==='oceania'?1:0;assert.equal(await page.locator('[data-forest-reference]').count(),references);
    const config=await page.locator('[data-forest-config]').evaluate(element=>JSON.parse(element.textContent));
    const map=page.locator('[data-forest-map]'),camera=await map.getAttribute('viewBox'),locators=await page.locator('svg [data-forest-example]').count();

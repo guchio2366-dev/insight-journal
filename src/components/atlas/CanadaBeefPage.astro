@@ -68,8 +68,8 @@ import '../../styles/atlas-canada-country-parity.css';
      <details class="canada-scope-details"><summary>公開範囲</summary>   <p class="canola-scope">公開項目：カノーラ・小麦・肉牛と放牧・林業の初回版。その他の主要作物・畜産、林業の伐採量比較は準備中です。農畜林業分野全体の完成を意味しません。</p></details>
     </aside>
    </div>
-   </div>
    <AgroStatistics scope="カナダ" country="CAN" topic="beef" />
+   </div>
    <section class="canada-statistics">     <section class="canada-reading-section" id="beef-definitions"><h3>放牧地・Total hayの区分</h3><p>放牧地は「Tame or seeded pasture」と「Natural land for pasture」の合計です。2021年の全国値4,828,538 ha＋13,731,114 haは原図の18,559,652 haに一致します。牧草の刈取り用地は放牧地と分けます。</p><p>Total hayは原図の名称を維持しています。調査票はアルファルファ等の乾草・サイレージ・生草用、その他の牧草・飼料作物、採種用を分けており、「乾草だけ」と読み替えません。地図の用途別内訳はここでは再集計しません。</p><p><a href={beefSources.pastureDefinition}>2021年土地利用表</a> ／ <a href={beefSources.questionnaire}>調査票の作物・土地利用区分</a> ／ <a href={beefSources.forageDefinition}>飼料作物等の表</a></p><p>操作できる地域地図の「干草・栽培牧草」は、アルファルファ・混播とその他の栽培干草・飼料作物の二成分合算です。採種用牧草を含まず、全国5,238,906 haです。閉じた詳細に残した公式原図のTotal hay（5,394,265 ha）とは定義が異なるため、同じ指標として比較しません。</p></section>
      <h2>牛の役割を分けて、州別頭数を比べる</h2>
      <div class="canola-stat-controls"><label>年（各年7月1日）<select data-beef-year>{data.years.map(y=><option value={y} selected={y===2021}>{y}年</option>)}</select></label><label>牛の区分<select data-beef-metric>{data.metrics.map(m=><option value={m.id}>{m.name}（千頭）</option>)}</select></label><label>読む地域<select data-beef-province>{data.provinces.map(p=><option value={p.id} selected={p.id==='Alberta'}>{p.name}</option>)}</select></label><label>比べる地域<select data-beef-compare><option value="">比較なし</option>{data.provinces.map(p=><option value={p.id}>{p.name}</option>)}</select></label></div>
