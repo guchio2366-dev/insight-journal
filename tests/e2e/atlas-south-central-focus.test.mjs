@@ -30,7 +30,7 @@ async function stableIndustryFrame(page,name){
  const after=await captureState(page);assert.deepEqual(after,before,name+': revealing the map preserves URL, selection and exact camera');
  const saved=process.env.SC_FOCUSED_REVIEW!=='1'||renderFollowup.has(name);
  review.captureAdjustments.push({case:name,file:saved?name+'.png':null,viewport:page.viewportSize(),before,after,status:'passed'});
- let previous=null,consecutive=0,stableSince=0,result;
+ let previous=null,consecutive=0,stableSince=0,result,lastScene;
  const deadline=Date.now()+10000;
  while(Date.now()<deadline){
   await page.waitForFunction(()=>{const map=document.querySelector('[data-asia-atlas]')?.atlasReviewMap;return map&&map.loaded()&&map.areTilesLoaded()&&!map.isMoving();});
@@ -41,17 +41,23 @@ async function stableIndustryFrame(page,name){
    const masks=markers.map(element=>{const r=box(element);return {left:r.left-7,top:r.top-7,right:r.right+7,bottom:r.bottom+7};});
    for(const line of root.querySelectorAll('.south-industry-label-guides line')){const r=box(line);masks.push({left:r.left-3,top:r.top-3,right:r.right+3,bottom:r.bottom+3});}
    const config=JSON.parse(root.querySelector('[data-asia-config]').textContent);for(const site of config.industrySites){const p=map.project(site.point);masks.push({left:p.x-22,top:p.y-22,right:p.x+22,bottom:p.y+22});}
-   const visible=[[rect.left+4,rect.top+4],[rect.right-4,rect.top+4],[rect.left+4,rect.bottom-4],[rect.right-4,rect.bottom-4]].every(([x,y])=>x>=0&&y>=0&&x<innerWidth&&y<innerHeight&&frame.contains(document.elementFromPoint(x,y)));
-   return {bounds:{left:rect.left,top:rect.top,width:rect.width,height:rect.height},clip:{x:Math.floor(rect.left),y:Math.floor(rect.top),width:Math.ceil(rect.right)-Math.floor(rect.left),height:Math.ceil(rect.bottom)-Math.floor(rect.top)},visible,loaded:map.loaded(),tilesLoaded:map.areTilesLoaded(),moving:map.isMoving(),contextHealthy:!!gl&&!gl.isContextLost(),masks,steel:box(root.querySelector('[data-industry-site="sc-odisha-steel"]')),steelOpacity:Number(getComputedStyle(root.querySelector('[data-industry-site="sc-odisha-steel"]')).opacity)};
+   const corners=[[rect.left+4,rect.top+4],[rect.right-4,rect.top+4],[rect.left+4,rect.bottom-4],[rect.right-4,rect.bottom-4]].map(([x,y])=>{const hit=document.elementFromPoint(x,y);return {x,y,inside:x>=0&&y>=0&&x<innerWidth&&y<innerHeight&&frame.contains(hit),hit:hit?hit.tagName+'.'+String(hit.className?.baseVal??hit.className):null};});
+   return {bounds:{left:rect.left,top:rect.top,width:rect.width,height:rect.height},clip:{x:Math.floor(rect.left),y:Math.floor(rect.top),width:Math.ceil(rect.right)-Math.floor(rect.left),height:Math.ceil(rect.bottom)-Math.floor(rect.top)},visible:corners.every(c=>c.inside),corners,viewport:{width:innerWidth,height:innerHeight,scrollY},loaded:map.loaded(),tilesLoaded:map.areTilesLoaded(),moving:map.isMoving(),contextHealthy:!!gl&&!gl.isContextLost(),masks,steel:box(root.querySelector('[data-industry-site="sc-odisha-steel"]')),steelOpacity:Number(getComputedStyle(root.querySelector('[data-industry-site="sc-odisha-steel"]')).opacity)};
   });
-  assert.equal(scene.visible,true,name+': the complete map is inside the viewport and unobstructed');assert.equal(scene.contextHealthy,true,name+': live WebGL context');
+  lastScene=scene;
+  if(!scene.visible){
+   review.captureAdjustments.push({case:name,kind:'wait for scroll layout',bounds:scene.bounds,corners:scene.corners,viewport:scene.viewport});
+   previous=null;consecutive=0;await page.locator('.asia-map-frame').evaluate(frame=>frame.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'}));await page.waitForTimeout(100);continue;
+  }
+  assert.equal(scene.contextHealthy,true,name+': live WebGL context');
   const png=await page.screenshot({clip:scene.clip,animations:'disabled'}),hash=createHash('sha256').update(png).digest('hex');
   if(hash===previous){consecutive++;}else{previous=hash;consecutive=1;stableSince=Date.now();}
   result={scene,png,hash,consecutive,stableMs:Date.now()-stableSince};
   if(consecutive>=3&&result.stableMs>=500)break;
   await page.waitForTimeout(100);
  }
- assert.ok(result?.consecutive>=3&&result.stableMs>=500,name+': three equal rendered map frames remain stable for at least 500ms');
+ assert.ok(result?.scene.visible&&result.consecutive>=3&&result.stableMs>=500,name+': the complete unobstructed map has three equal rendered frames stable for at least 500ms: '+JSON.stringify({bounds:lastScene?.bounds,corners:lastScene?.corners,viewport:lastScene?.viewport}));
+ assert.deepEqual(await captureState(page),before,name+': settling viewport visibility preserves URL, selection and exact camera');
  const {data,info}=await sharp(result.png).ensureAlpha().raw().toBuffer({resolveWithObject:true});result.pixels={data,width:info.width,height:info.height};
  let ocean=0,land=0;for(let i=0;i<data.length;i+=4){if(Math.abs(data[i]-230)<=3&&Math.abs(data[i+1]-238)<=3&&Math.abs(data[i+2]-240)<=3)ocean++;if(Math.abs(data[i]-225)<=3&&Math.abs(data[i+1]-228)<=3&&Math.abs(data[i+2]-219)<=3)land++;}
  const painted={oceanFraction:ocean/(info.width*info.height),landFraction:land/(info.width*info.height)};
