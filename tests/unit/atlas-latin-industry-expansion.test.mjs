@@ -7,6 +7,16 @@ const code=await industryBundle("export * from './src/lib/atlas-latin-industry-e
 const lib=await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
 const initial={sector:'resources',industry:null,site:null,single:false,scope:'all',place:'all'};
 
+test('Small industry labels retain readable contrast on land, their light highlight and their halo',()=>{
+ const rgb=hex=>[1,3,5].map(start=>parseInt(hex.slice(start,start+2),16));
+ const luminance=channels=>channels.map(n=>n/255).map(n=>n<=.04045?n/12.92:((n+.055)/1.055)**2.4).reduce((sum,n,index)=>sum+n*[.2126,.7152,.0722][index],0);
+ for(const i of raw.industries){
+  const text=luminance(rgb(lib.industryLabelColor(i.color))),land=rgb('#f2f1e8');
+  for(const bg of [land,rgb('#fffefa'),land.map((n,j)=>Math.round(n*.9+rgb(i.color)[j]*.1))])
+   assert.ok((luminance(bg)+.05)/(text+.05)>=4.5,i.id+' text contrast');
+ }
+});
+
 test('Every one of the 17 main and 5 additional research groups has a sourced map and distinct statistical coverage',()=>{
  assert.equal(raw.requirements.length,22);assert.equal(raw.requirements.filter(r=>r.researchRole==='main').length,17);
  assert.equal(raw.requirements.filter(r=>r.researchRole==='additional').length,5);
