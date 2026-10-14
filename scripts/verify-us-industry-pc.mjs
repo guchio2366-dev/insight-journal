@@ -25,7 +25,7 @@ try{
      await page.locator(`[data-us-sector="${sector}"]`).click();const labels=await page.locator('[data-us-map-industry]').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return {id:n.dataset.usMapIndustry,x:r.x,y:r.y,right:r.right,bottom:r.bottom};}));
      for(let i=0;i<labels.length;i++)for(const b of labels.slice(i+1)){const a=labels[i];assert.ok(!(a.x<b.right&&a.right>b.x&&a.y<b.bottom&&a.bottom>b.y),`${viewport.width}/${sector}: ${a.id}/${b.id} overlap`);}
      await page.screenshot({path:resolve(out,`after-industry-${sector}-${viewport.width}.jpg`),type:'jpeg',quality:78});
-     const key=await page.locator('[data-us-key]').innerText();assert.ok(key.length>0);
+     const key=await page.locator('nav[data-us-key]').innerText();assert.ok(key.length>0);
     }
     await page.locator('[data-us-sector="manufacturing"]').click();await page.locator('[data-us-key="chip-packaging"]').click();await page.reload({waitUntil:'networkidle'});await page.locator('[data-us-title]').filter({hasText:'半導体後工程'}).waitFor();
     await page.locator('[data-us-site-list]').evaluate(n=>n.parentElement.open=true);await page.locator('[data-us-site-option="rio-rancho-packaging"]').click();assert.match(await page.locator('[data-us-site-scope]').textContent(),/稼働/);
@@ -39,4 +39,14 @@ try{
   const context=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:1,isMobile:true,hasTouch:true,locale:'ja-JP'}),page=await context.newPage();await page.goto(`http://127.0.0.1:${server.address().port}/insight-journal/atlas/north-america/industry/`,{waitUntil:'networkidle'});await page.locator('[data-us-key="power"]').click();assert.match(await page.locator('[data-us-title]').textContent(),/電力/);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);await page.screenshot({path:resolve(out,'after-industry-mobile.jpg'),type:'jpeg',quality:78});await context.close();
  }
  assert.deepEqual(report.errors,[]);report.status='passed';
-}catch(error){report.status='failed';report.failure=String(error);throw error;}finally{await writeFile(resolve(out,`${phase}-report.json`),JSON.stringify(report,null,2)+'\n');await browser?.close();await new Promise(r=>server.close(r));}
+}catch(error){report.status='failed';report.failure=String(error);throw error;}finally{
+ await writeFile(resolve(out,`${phase}-report.json`),JSON.stringify(report,null,2)+'\n');
+ // The existing authenticated Actions log reader is also an evidence transport.
+ // This is generated review evidence, with no credential or permission changes.
+ if(process.env.GITHUB_ACTIONS==='true'){
+  console.log('US_REVIEW_REPORT '+JSON.stringify(report));
+  for(const field of ['agriculture','nature','industry','population']){const file=`${phase}-${field}-1920.jpg`;try{console.log('US_REVIEW_IMAGE '+JSON.stringify({file,base64:(await readFile(resolve(out,file))).toString('base64')}));}catch{}}
+  if(phase==='after'){const file='after-industry-manufacturing-1024.jpg';try{console.log('US_REVIEW_IMAGE '+JSON.stringify({file,base64:(await readFile(resolve(out,file))).toString('base64')}));}catch{}}
+ }
+ await browser?.close();await new Promise(r=>server.close(r));
+}

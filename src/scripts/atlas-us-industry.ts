@@ -76,7 +76,7 @@ export function initUsIndustry(root:HTMLElement){
   // Original published charts remain separate from the new narrow product metrics.
   root.querySelectorAll<HTMLElement>('[data-industry-national-panel]').forEach(p=>p.hidden=p.dataset.industryNationalPanel!==state.sector);
   root.querySelectorAll<HTMLElement>('[data-industry-detail]').forEach(p=>p.hidden=p.dataset.industryDetail!==`${item?.legacy?item.sector:state.sector}:${item?.legacy??'all'}`);
-  statistics();renderMap();set('[data-us-live]',`${item?.label??sector.label}の分布・解説・統計を表示しました。`);
+  statistics();renderMap();root.dataset.renderState='ready';set('[data-us-live]',`${item?.label??sector.label}の分布・解説・統計を表示しました。`);
  }
  const sector=(id:string)=>{state={...state,sector:id as UsSector,industry:null,site:null,only:false};save();};
  root.querySelectorAll<HTMLElement>('[data-us-sector]').forEach(button=>button.addEventListener('click',()=>sector(button.dataset.usSector!)));

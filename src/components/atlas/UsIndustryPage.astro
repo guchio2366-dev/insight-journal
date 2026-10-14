@@ -22,7 +22,8 @@ const first=usIndustrySectors[0];
 ---
 <BaseLayout title="米国の主要産業｜資源・製造・サービスの集積" description="原油・LNG、製造工程、情報金融物流と観光を、確認した集積地域・規模・立地理由から読む。" compactAtlas>
 <AtlasWorkspaceFrame region="north-america" mapActions={false}>
-<article class="atlas-explorer atlas-workspace us-industry" data-us-industry data-atlas-explorer data-field="industry" data-render-state="ready" data-pagefind-body>
+<article class="atlas-explorer atlas-workspace us-industry" data-us-industry data-atlas-explorer data-field="industry" data-render-state="loading" data-pagefind-body>
+ <section class="atlas-workspace">
  <div class="atlas-compact-heading"><nav aria-label="パンくず"><a href={withBase('/atlas/')}>地図から見る</a> / <a href={base}>北米地図</a></nav><span>米国</span></div>
  <div class="atlas-region-controls"><AtlasRegionNavigation group="americas" current="north-america" country="usa" /></div>
  <h1 class="visually-hidden">米国の主要産業</h1>
@@ -35,7 +36,7 @@ const first=usIndustrySectors[0];
  <div class="atlas-primary-grid" id="us-industry-panel" role="tabpanel" aria-labelledby="us-sector-resources">
   <div class="atlas-map-column">
    <div class="atlas-map-frame us-industry-map-frame" data-us-map-frame data-map-frame>
-    <svg data-us-map viewBox="0 0 1000 600" role="group" aria-label="米国の産業集積図。色と産業名は同じ産業を示し、点の大きさは数量を示しません。" tabindex="0">
+    <svg data-us-map data-map-surface viewBox="0 0 1000 600" role="group" aria-label="米国の産業集積図。色と産業名は同じ産業を示し、点の大きさは数量を示しません。" tabindex="0">
      <defs>{Object.entries(usMapPanels).map(([id,p])=><clipPath id={`us-clip-${id}`}><rect x={p.box[0]} y={p.box[1]} width={p.box[2]} height={p.box[3]}/></clipPath>)}</defs>
      <rect x="-4000" y="-4000" width="9000" height="9000" fill="#e6eef0"/>
      <g clip-path="url(#us-clip-main)">{countries.map(f=><path d={usIndustryGeometryPath(f.geometry)} fill={f.properties.code==='USA'?'#eeeddd':'#f6f4e9'} stroke="#9dafaa" stroke-width="1" fill-rule="evenodd" vector-effect="non-scaling-stroke"/>)}</g>
@@ -50,7 +51,7 @@ const first=usIndustrySectors[0];
    <p class="us-map-note">色は産業、記号は工程・状態。点は出典で確認した地域の案内位置で、全工場分布・境界・取引線ではありません。b/d＝バレル/日、gal＝米ガロン。</p>
    <nav class="us-industry-key" data-us-key aria-label="産業名と色から選ぶ"></nav>
   </div>
-  <aside class="us-industry-reading" aria-label="産業分布の概説と理由">
+  <aside class="us-industry-reading" data-field-national="industry" aria-label="産業分布の概説と理由">
    <h2 data-us-title>{first.label}</h2><p class="us-industry-lead" data-us-reading>{first.reading}</p>
    <h3>なぜここに集まるのか</h3><p data-us-why>{first.why}</p>
    <section data-us-site-reading hidden><h3 data-us-site-title></h3><p data-us-site-copy></p><p data-us-site-scale></p><p data-us-site-scope></p><div data-us-site-sources></div></section>
@@ -67,6 +68,7 @@ const first=usIndustrySectors[0];
  <details class="industry-method" id="us-industry-sources"><summary>出典・対象年・地理・表示方法</summary><p>資料確認：{usIndustryCheckedAt}。本土の主図とアラスカ・ハワイの別縮尺図。国土は既存Natural Earth資料を再利用。地域案内点は工場全数や精密施設座標ではありません。記号や名札の位置から工場同士の取引を推定しません。</p><p>米国本社企業の世界売上、米国内生産、設備能力と実績、金額と数量を区別します。Census財貿易にはプエルトリコ等を含み、州GDPは50州＋DCです。NSFは2024年の国際分類別推計。狭い品目や工程へ広い分類のGDPを転用しません。未取得・未確認を0と表示しません。</p><ul>{Object.entries(usIndustrySources).map(([id,s])=><li id={`us-source-${id}`}><a href={s.url}>{s.title}</a></li>)}</ul></details>
  <p class="visually-hidden" aria-live="polite" data-us-live></p>
  <noscript><p>産業選択にはJavaScriptが必要です。以下に全採用品目の解説・統計・出典を掲載します。</p>{usIndustries.map(i=><section><h2>{i.label}</h2><p>{i.reading}</p><p>{i.why}</p><ul>{i.metrics.map(m=><li>{m.label}：{m.display}（{m.period}）。{m.definition} <a href={usIndustrySources[m.source].url}>出典</a></li>)}</ul></section>)}</noscript>
+ </section>
 </article>
 </AtlasWorkspaceFrame>
 </BaseLayout>
