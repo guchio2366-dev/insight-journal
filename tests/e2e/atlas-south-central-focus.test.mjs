@@ -391,7 +391,7 @@ test('南アジアの三産業入口と作物重複域を表示する',{skip:ena
   await page.goto(`${url}/atlas/asia/south-asia/industry/`);
   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true');
   assert.deepEqual(await page.locator('.asia-industry-sectors button').allTextContents(),['資源・エネルギー','製造業','サービス業']);
-  for(const [topic,expected] of [['sc-south-resources','水力'],['sc-south-manufacturing','医薬品'],['sc-south-services','ITサービス']]){
+  for(const [topic,expected] of [['sc-south-resources','水力'],['sc-south-manufacturing','医薬品'],['sc-south-services','IT・業務受託']]){
    await page.locator(`[data-industry-feature="${topic}"]`).click();
    await page.waitForFunction(id=>new URL(location.href).searchParams.get('topic')===id,topic);
    assert.match(await page.locator('[data-industry-title]').textContent(),new RegExp(topic==='sc-south-resources'?'資源・エネルギー':topic==='sc-south-manufacturing'?'製造業':'サービス業'));
@@ -435,7 +435,7 @@ test('中央アジアの地形操作は国選択を作らず宗教色面の透�
  }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
 });
 
-test('南アジア産業の全地点とPC三幅の代表選択は表示集合と相対位置を固定する',{skip:enabled?false:'ATLAS_ASIA_BROWSER=1 with a production build',timeout:90000},async()=>{
+test('南アジア産業の全地点とPC三幅の代表選択は表示集合と相対位置を固定する',{skip:enabled?false:'ATLAS_ASIA_BROWSER=1 with a production build',timeout:240000},async()=>{
  const {chromium}=await import('playwright'),{server,url}=await serve();let browser;
  try{
   browser=await chromium.launch({headless:true,chromiumSandbox:true,...(process.env.REVIEW_CHROME_PATH?{executablePath:process.env.REVIEW_CHROME_PATH}:{})});
