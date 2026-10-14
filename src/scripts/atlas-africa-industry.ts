@@ -41,7 +41,6 @@ export function renderAfricaIndustry(root:HTMLElement,state:State){
   const peers=points.filter(row=>row.point[0]===px&&row.point[1]===py),index=peers.findIndex(row=>row.site.id===site.id),radius=peers.length>1?5+3*(peers.length-1-index):5;
   const group=svg('g',{'data-africa-industry-location':site.id,'data-industry':role.industry,'data-stage':role.stage,'data-geographic-scope':site.geographicScope??'region',tabindex:displayed(site)?0:-1,role:'button','aria-label':`${definition.label} · ${site.label} · ${role.stage}を読む`,'aria-pressed':String(isActive),class:'africa-industry-hit',opacity:industry&&!isActive?.6:1});
   if(!displayed(site))group.style.display='none';
-  if(peers.length===1)group.append(svg('circle',{cx:x,cy:y,r:12/scale,fill:'transparent','pointer-events':'all'}));
   const attrs=/採掘/.test(role.stage)?{cx:x,cy:y,r:radius/scale}:{x:x-radius/scale,y:y-radius/scale,width:2*radius/scale,height:2*radius/scale};
   group.append(svg(/採掘/.test(role.stage)?'circle':'rect',{...attrs,'data-africa-industry-point':site.id,fill:peers.length>1&&index<peers.length-1?'none':color,stroke:peers.length>1&&index<peers.length-1?color:'#fffdf8','stroke-width':1.6,'stroke-dasharray':site.status==='production'?'':'3 2','vector-effect':'non-scaling-stroke','pointer-events':'visiblePainted'}));
   if(isActive)group.append(svg('circle',{cx:x,cy:y,r:11/scale,fill:'none',stroke:color,'stroke-width':2,'vector-effect':'non-scaling-stroke','pointer-events':'none','data-africa-industry-emphasis':site.id}));
