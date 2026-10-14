@@ -198,6 +198,25 @@ test('overview product controls offer only existing page topics and fetch one se
  assert.equal([...h.select.options].some(option=>option.value==='soybean-production'),false,'an unrelated retained product must not enlarge page scope');
 }));
 
+test('ready selections preserve opened references while year, country and explicit product changes still render',async()=>withDom(async window=>{
+ const h=await harness(window),rice=series([observation(2023,20),observation(2024,30)]),maize=series([observation(2023,40),observation(2024,50)],{id:'maize-production',item:'56',label:'トウモロコシ'});
+ globalThis.fetch=async url=>new Response(JSON.stringify(dataset({CHN:{name:'中国',series:[url.endsWith('maize.json')?maize:rice]},IDN:{name:'インドネシア',series:[url.endsWith('maize.json')?maize:rice]}})));
+ const waitReady=()=>settled(()=>h.host.dataset.agroReady==='true'&&h.content.querySelector('[data-agro-series]'),'changed source selection did not settle');
+ h.sync({country:'IDN',topic:'rice',active:true,year:2024});await waitReady();
+ const readyNode=h.content.firstElementChild,definitions=h.content.querySelector('.agro-definitions');definitions.open=true;
+ for(const next of [{country:'IDN',topic:'rice',active:true},{country:'IDN',topic:'rice',year:2024},{country:'IDN',topic:'rice',active:true,year:2024}]){
+  h.sync(next);assert.equal(h.content.firstElementChild,readyNode,'same effective selection must not clear ready figures');assert.equal(h.host.dataset.agroReady,'true');
+  await new Promise(resolve=>setImmediate(resolve));assert.equal(h.content.firstElementChild,readyNode);assert.equal(definitions.open,true,'late native synchronization keeps disclosure state');
+ }
+ h.sync({country:'IDN',topic:'rice',active:true,year:2023});assert.equal(h.content.childElementCount,0,'changing the effective year still clears stale content');await waitReady();assert.notEqual(h.content.firstElementChild,readyNode);assert.match(h.content.textContent,/2023/);
+ h.sync({country:'CHN',topic:'rice',active:true,year:2023});await waitReady();assert.equal(h.content.querySelector('[data-agro-country]').dataset.agroCountry,'CHN');
+ h.sync({country:'IDN',topic:'overview',active:true,year:2024});await waitReady();
+ h.select.value='maize-production';h.select.dispatchEvent(new window.Event('change'));assert.equal(h.content.childElementCount,0,'an explicitly changed product must not be deduplicated');await waitReady();assert.equal(h.content.querySelector('[data-agro-series]').dataset.agroSeries,'maize-production');
+ const chosenNode=h.content.firstElementChild;h.sync({country:'IDN',topic:'overview',active:true,year:2024});await new Promise(resolve=>setImmediate(resolve));assert.equal(h.content.firstElementChild,chosenNode,'the selected product remains stable once rendered');
+ h.sync({country:'IDN',topic:'overview',active:false,year:2024});assert.equal(h.host.hidden,true);assert.equal(h.content.childElementCount,0);
+ h.sync({country:'IDN',topic:'overview',active:true,year:2024});await waitReady();assert.equal(h.host.hidden,false);assert.equal(h.content.querySelector('[data-agro-series]').dataset.agroSeries,'maize-production');
+}));
+
 test('optional statistics without embedded configuration cannot interrupt an atlas reader',async()=>{
  await withDom(async window=>{
   const h=await harness(window);h.host.querySelector('[data-agro-config]').remove();

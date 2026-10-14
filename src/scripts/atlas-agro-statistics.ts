@@ -21,6 +21,11 @@ function initialize(host:HTMLElement){
  const content=host.querySelector<HTMLElement>('[data-agro-content]')!,status=host.querySelector<HTMLElement>('[data-agro-status]')!,heading=host.querySelector<HTMLElement>('[data-agro-heading]')!,retry=host.querySelector<HTMLButtonElement>('[data-agro-retry]')!,seriesSelect=host.querySelector<HTMLSelectElement>('[data-agro-series-select]')!,countrySelect=host.querySelector<HTMLSelectElement>('[data-agro-country-select]');
  let selection:Selection={country:config.country,topic:config.topic,active:true},generation=0,chosen='';
  async function update(next:Selection){
+  // Native source panels can report an unchanged selection again after their
+  // asynchronous work settles. Keep the ready DOM and opened references intact.
+  const same=selection.country===next.country&&selection.topic===next.topic&&(selection.active!==false)===(next.active!==false)&&(selection.year??2024)===(next.year??2024);
+  const renderedSeries=content.querySelector<HTMLElement>('[data-agro-series]')?.dataset.agroSeries;
+  if(same&&host.dataset.agroReady==='true'&&(!chosen||chosen===renderedSeries))return;
   const changed=selection.country!==next.country||selection.topic!==next.topic;if(changed)chosen='';selection={...next};const token=++generation;
   // Japan's existing, independent display is excluded even on an East Asia map.
   const overview=['overview','all','farming-overview','farming-all','crops'].includes(next.topic);
