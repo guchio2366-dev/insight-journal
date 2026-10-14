@@ -79,6 +79,9 @@ jobs:
           test -n "$(fc-list ':lang=ja' family)"
           export INDUSTRY_REVIEW_CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)"
           node scripts/verify-approved-pages-release.mjs
+          if [[ -f scripts/verify-world-industry.mjs ]]; then
+            WORLD_INDUSTRY_REVIEW_URL=https://guchio2366-dev.github.io/insight-journal/atlas/industry/world/ REVIEW_CHROME_PATH="$INDUSTRY_REVIEW_CHROME_PATH" node scripts/verify-world-industry.mjs
+          fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:

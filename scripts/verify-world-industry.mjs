@@ -5,7 +5,13 @@ import path from 'node:path';
 import { chromium } from 'playwright';
 import { sectors } from '../src/data/atlas/world-industry/index.ts';
 
-const dist = await realpath('dist');
+const publicUrl = process.env.WORLD_INDUSTRY_REVIEW_URL;
+const expectedRelease = process.env.EXPECTED_RELEASE_SHA;
+const dist = publicUrl ? path.resolve('dist') : await realpath('dist');
+if (publicUrl) {
+  assert.equal(publicUrl, 'https://guchio2366-dev.github.io/insight-journal/atlas/industry/world/', 'Public verification is restricted to the existing Pages destination');
+  assert.match(expectedRelease ?? '', /^[a-f0-9]{40}$/, 'Require the exact published release SHA');
+}
 const output = path.resolve(process.env.WORLD_INDUSTRY_REVIEW_OUTPUT ?? 'review-artifacts/world-industry');
 await mkdir(output, { recursive: true });
 const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml' };
@@ -21,19 +27,29 @@ const server = createServer(async (req, res) => {
     res.end(await readFile(file));
   } catch { res.writeHead(404); res.end('Not found'); }
 });
-await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+if (!publicUrl) await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 let browser;
 try {
   browser = await chromium.launch({ executablePath: process.env.REVIEW_CHROME_PATH ?? '/usr/bin/chromium', headless: true, chromiumSandbox: true });
 } catch (error) {
   await writeFile(path.join(output, 'report.json'), JSON.stringify({ passed: false, blocked: 'sandboxed-browser-launch', error: error.message, screenshotCaptured: false }, null, 2) + '\n');
-  await new Promise(resolve => server.close(resolve));
+  if (server.listening) await new Promise(resolve => server.close(resolve));
   throw error;
 }
-const base = `http://127.0.0.1:${server.address().port}/insight-journal/atlas/industry/world/`;
-const report = { browser: browser.version(), sandbox: true, cases: [] };
+const base = publicUrl ?? `http://127.0.0.1:${server.address().port}/insight-journal/atlas/industry/world/`;
+const report = { browser: browser.version(), sandbox: true, target: publicUrl ? 'existing-pages' : 'build', expectedReleaseSha: publicUrl ? expectedRelease : null, cases: [] };
+async function checkPublicRelease() {
+  if (!publicUrl) return;
+  const context = await browser.newContext();
+  try {
+    const response = await context.request.get(new URL('../../../_release.json', publicUrl).href);
+    assert.equal(response.status(), 200);
+    assert.equal((await response.json()).commitSha, expectedRelease, 'Public release matches the approved integrated commit');
+  } finally { await context.close(); }
+}
 const labelPositions = panel => panel.locator('[data-wi-label]').evaluateAll(nodes => nodes.map(n => ({ id: n.dataset.wiLabel, transform: n.getAttribute('transform') })));
 try {
+  await checkPublicRelease();
   for (const [width, height] of [[1440, 900], [1280, 800], [390, 844], [844, 390]]) {
     const page = await browser.newPage({ viewport: { width, height } });
     const errors = []; page.on('pageerror', e => errors.push(e.message));
@@ -111,6 +127,7 @@ try {
   assert.equal(await nojs.locator('[data-wi-card]:visible').count(), 1); await nojs.close();
   const invalid = await browser.newPage(); await invalid.goto(`${base}?sector=unknown&stage=bad&site=bad&link=bad`);
   await invalid.waitForSelector('[data-ready=true]'); assert.equal(await invalid.locator('[data-wi-panel=semiconductor]').isVisible(), true); await invalid.close();
+  await checkPublicRelease();
   report.passed = true;
   delete report.phase;
   await writeFile(path.join(output, 'report.json'), JSON.stringify(report, null, 2) + '\n');
@@ -120,4 +137,4 @@ try {
   await writeFile(path.join(output, 'report.json'), JSON.stringify(report, null, 2) + '\n');
   console.error(`::error title=World industry browser review::${report.phase ?? 'initialization'}: ${error.message.replaceAll('%', '%25').replaceAll('\r', '%0D').replaceAll('\n', '%0A')}`);
   throw error;
-} finally { await browser.close(); await new Promise(resolve => server.close(resolve)); }
+} finally { await browser.close(); if (server.listening) await new Promise(resolve => server.close(resolve)); }
