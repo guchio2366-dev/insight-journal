@@ -39,9 +39,10 @@ async function stableIndustryFrame(page,name){
    const box=element=>{const r=element.getBoundingClientRect();return {left:r.left-rect.left,top:r.top-rect.top,right:r.right-rect.left,bottom:r.bottom-rect.top};};
    const markers=[...root.querySelectorAll('.maplibregl-marker')].filter(element=>element.getBoundingClientRect().width>0&&getComputedStyle(element).visibility!=='hidden');
    const masks=markers.map(element=>{const r=box(element);return {left:r.left-7,top:r.top-7,right:r.right+7,bottom:r.bottom+7};});
+   for(const line of root.querySelectorAll('.south-industry-label-guides line')){const r=box(line);masks.push({left:r.left-3,top:r.top-3,right:r.right+3,bottom:r.bottom+3});}
    const config=JSON.parse(root.querySelector('[data-asia-config]').textContent);for(const site of config.industrySites){const p=map.project(site.point);masks.push({left:p.x-22,top:p.y-22,right:p.x+22,bottom:p.y+22});}
    const visible=[[rect.left+4,rect.top+4],[rect.right-4,rect.top+4],[rect.left+4,rect.bottom-4],[rect.right-4,rect.bottom-4]].every(([x,y])=>x>=0&&y>=0&&x<innerWidth&&y<innerHeight&&frame.contains(document.elementFromPoint(x,y)));
-   return {bounds:{left:rect.left,top:rect.top,width:rect.width,height:rect.height},clip:{x:Math.floor(rect.left),y:Math.floor(rect.top),width:Math.ceil(rect.right)-Math.floor(rect.left),height:Math.ceil(rect.bottom)-Math.floor(rect.top)},visible,loaded:map.loaded(),tilesLoaded:map.areTilesLoaded(),moving:map.isMoving(),contextHealthy:!!gl&&!gl.isContextLost(),masks,steel:box(root.querySelector('[data-industry-site="sc-odisha-steel"]'))};
+   return {bounds:{left:rect.left,top:rect.top,width:rect.width,height:rect.height},clip:{x:Math.floor(rect.left),y:Math.floor(rect.top),width:Math.ceil(rect.right)-Math.floor(rect.left),height:Math.ceil(rect.bottom)-Math.floor(rect.top)},visible,loaded:map.loaded(),tilesLoaded:map.areTilesLoaded(),moving:map.isMoving(),contextHealthy:!!gl&&!gl.isContextLost(),masks,steel:box(root.querySelector('[data-industry-site="sc-odisha-steel"]')),steelOpacity:Number(getComputedStyle(root.querySelector('[data-industry-site="sc-odisha-steel"]')).opacity)};
   });
   assert.equal(scene.visible,true,name+': the complete map is inside the viewport and unobstructed');assert.equal(scene.contextHealthy,true,name+': live WebGL context');
   const png=await page.screenshot({clip:scene.clip,animations:'disabled'}),hash=createHash('sha256').update(png).digest('hex');
@@ -61,7 +62,8 @@ async function stableIndustryFrame(page,name){
   assert.ok(paint.sampled>result.pixels.width*result.pixels.height*.2,name+': enough geographic pixels remain outside the overlays');
   assert.ok(paint.fraction<=.005,name+': geography has no persistent missing paint: '+JSON.stringify(paint));
   const beforeInk=labelInk(reference.pixels,reference.scene.steel),afterInk=labelInk(result.pixels,result.scene.steel);ink={before:beforeInk,after:afterInk};
-  assert.ok(beforeInk.dark>20&&afterInk.dark>=beforeInk.dark*.95,name+': retained steel label text has no missing paint: '+JSON.stringify(ink));
+  if(result.scene.steelOpacity===1)assert.ok(beforeInk.dark>20&&afterInk.dark>=beforeInk.dark*.95,name+': retained steel label text has no missing paint: '+JSON.stringify(ink));
+  else ink.intentionalIndustryDimming=result.scene.steelOpacity;
  }else{renderReferences.set(page,result);}
  review.renderChecks.push({case:name,file:saved?name+'.png':null,viewport:page.viewportSize(),scene:result.scene,canvasSha256:result.hash,stableFrames:result.consecutive,stableMs:result.stableMs,painted,paint,steelInk:ink,status:'passed'});
  console.log(`Map render ${name}: visible, loaded, stable ${result.consecutive} frames/${result.stableMs}ms; missing paint ${paint?.fraction??'reference'}`);
@@ -81,7 +83,8 @@ async function capturePc(page,name){
   const clip=render.scene.clip,{data,info}=await sharp(bytes).extract({left:clip.x,top:clip.y,width:clip.width,height:clip.height}).ensureAlpha().raw().toBuffer({resolveWithObject:true}),pixels={data,width:info.width,height:info.height},reference=renderReferences.get(page);
   const paint=mapPaintDifference(reference.pixels,pixels,[...reference.scene.masks,...render.scene.masks]),ink={before:labelInk(reference.pixels,reference.scene.steel),after:labelInk(pixels,render.scene.steel)};
   assert.ok(paint.fraction<=.005,file+': the delivered viewport PNG retains complete geographic paint: '+JSON.stringify(paint));
-  assert.ok(ink.after.dark>=ink.before.dark*.95,file+': the delivered viewport PNG retains steel label paint: '+JSON.stringify(ink));
+  if(render.scene.steelOpacity===1)assert.ok(ink.after.dark>=ink.before.dark*.95,file+': the delivered viewport PNG retains steel label paint: '+JSON.stringify(ink));
+  else ink.intentionalIndustryDimming=render.scene.steelOpacity;
   review.deliveredPaintChecks.push({file,paint,steelInk:ink,status:'passed'});
  }
  review.images.push({file,head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),viewport:page.viewportSize(),dpr:state.dpr,pngSize:{width:bytes.readUInt32BE(16),height:bytes.readUInt32BE(20)},sha256:createHash('sha256').update(bytes).digest('hex'),bytes:bytes.length,url:page.url(),state,mapBounds:render?.scene.bounds??null});await saveReview();
@@ -189,11 +192,11 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    assert.equal(await page.locator('[data-sc-industry-topic] option[value="sc-hydro"]').count(),1);
    await page.locator('.asia-industry-regional-label').first().waitFor({state:'visible'});
    assert.equal(await page.locator('.asia-industry-regional-label').count(),industry.industrySites.length);
-   assert.match(await page.locator('.asia-industry-regional-label').first().textContent(),region==='south-asia'?/医薬品/: /石油|ウラン/);
+   assert.match(await page.locator('.asia-industry-regional-label').first().textContent(),region==='south-asia'?/石炭/: /石油|ウラン/);
    if(region==='south-asia'){
     assert.ok(await page.locator('.asia-industry-regional-label.is-compact').count()>0);
-    assert.equal(await page.locator('.asia-industry-regional-label[data-industry-site="sc-dhaka-garments"] span').textContent(),'ダッカ・チッタゴン');
-    for(const [id,industryName] of [['sc-ahmedabad-pharma','医薬品'],['sc-bengaluru-it','ITサービス']]){
+    assert.equal(await page.locator('.asia-industry-regional-label[data-industry-site="sc-dhaka-garments"] span').textContent(),'ダッカ・ガジプル');
+    for(const [id,industryName] of [['sc-hyderabad-pharma','医薬品'],['sc-bengaluru-it','IT・業務受託']]){
      const label=page.locator(`.asia-industry-regional-label[data-industry-site="${id}"]`);
      assert.equal(await label.evaluate(node=>node.classList.contains('is-compact')),false);
      assert.match(await label.textContent(),new RegExp(industryName));
@@ -447,10 +450,11 @@ test('南アジア産業の全地点とPC三幅の代表選択は表示集合と
    const sites=JSON.parse(await page.locator('[data-asia-config]').textContent()).industrySites;
    assert.deepEqual(before.labels.map(label=>label.id).sort(),sites.map(site=>site.id).sort());
    await capturePc(page,`${width}-south-asia-industry-initial`);
-   const compact='sc-chattogram-garments';assert.equal(before.labels.find(label=>label.id===compact).compact,true);
+   const compact=before.labels.find(label=>label.compact)?.id;assert.ok(compact,'The overview has compact locators as well as named labels');
    const selectionIds=width===1920?before.labels.map(label=>label.id):['sc-dhaka-garments',compact,'sc-ahmedabad-pharma','sc-bengaluru-it'];
    for(const id of selectionIds){
     console.log(`South industry ${width}px: selecting ${id}`);
+    await page.locator('[data-industry-content] > details').evaluate(node=>node.open=true);
     // The existing reading list also selects sites whose overview marker is compact.
     await page.locator('.sc-industry-site-list button').filter({hasText:sites.find(site=>site.id===id).name}).click();
     await page.waitForFunction(selected=>new URL(location.href).searchParams.get('detail')===selected,id);

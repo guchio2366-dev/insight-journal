@@ -34,7 +34,9 @@ export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|un
  for(const b of all('[data-industry-subsector]'))b.addEventListener('click',()=>selectIndustry(b.dataset.sector as IndustrySector,b.dataset.industrySubsector!));
  for(const b of all('[data-industry-feature]'))b.addEventListener('click',()=>{
   const t=industry?.topics.find(t=>t.id===b.dataset.industryFeature);if(!t)return;
-  const s=getState();if(root.dataset.region==='east-asia'&&t.kind==='clusters'){const scope=b.closest<HTMLElement>('[data-east-industry-kinds]')?.dataset.eastIndustryKinds??eastIndustrySector(t.id,s.sector);navigate({...s,topic:t.id,sector:scope,subsector:null,place:null,detail:null,point:null,city:null,story:null,only:false,camera:root.dataset.mapCamera?JSON.parse(root.dataset.mapCamera):s.camera},false);return;}if(east&&s.place&&t.country&&t.country!==s.place)return;
+  const s=getState();
+  if(root.dataset.focus==='south-asia'&&root.querySelector('[data-south-industry-statistics]')&&t.kind==='regional'){navigate({...s,topic:t.id,sector:null,subsector:null,place:null,detail:null,point:null,city:null,story:null,camera:root.dataset.mapCamera?JSON.parse(root.dataset.mapCamera):s.camera},false);return;}
+  if(root.dataset.region==='east-asia'&&t.kind==='clusters'){const scope=b.closest<HTMLElement>('[data-east-industry-kinds]')?.dataset.eastIndustryKinds??eastIndustrySector(t.id,s.sector);navigate({...s,topic:t.id,sector:scope,subsector:null,place:null,detail:null,point:null,city:null,story:null,only:false,camera:root.dataset.mapCamera?JSON.parse(root.dataset.mapCamera):s.camera},false);return;}if(east&&s.place&&t.country&&t.country!==s.place)return;
   const place=t.country??(east?s.place:null),fit=!!place&&place!==s.place;navigate({...s,topic:t.id,sector:null,subsector:null,detail:null,city:null,point:null,place,camera:fit?null:s.camera},fit);
  });
  function render(){
@@ -66,6 +68,13 @@ export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|un
   const selector=$<HTMLSelectElement>('[data-industry-topic]');if(selector){for(const o of [...selector.options]){o.hidden=!topics.some(t=>t.id===o.value);o.disabled=o.hidden;}for(const group of [...selector.querySelectorAll('optgroup')])group.hidden=[...group.children].every(o=>(o as HTMLOptionElement).hidden);}
   for(const b of all('[data-industry-feature]'))b.setAttribute('aria-pressed',String(b.dataset.industryFeature===(state.topic??'manufacturing')));
   const current=industry.topics.find(t=>t.id===state.topic)??industry.topics[0],group=industryTopicGroup(current);
+  if(root.dataset.focus==='south-asia'&&root.querySelector('[data-south-industry-statistics]')&&current.kind==='regional'){
+   for(const button of all('[data-south-industry-sector]'))button.setAttribute('aria-pressed',String(button.dataset.southIndustrySector===current.id||button.dataset.southSectorGroups?.split(',').includes(current.id)));
+   const title=$('[data-industry-navigation-label]');if(title)title.textContent=current.title;
+   const currentMap=$('[data-industry-current-map]');if(currentMap)currentMap.textContent='産業の所在地と工程';
+   const note=$('[data-industry-navigation-note]');if(note)note.hidden=true;
+   return;
+  }
   const sector=(state.sector??group.sector) as IndustrySector,subsector=state.subsector??(state.sector?'all':group.subsector);
   for(const b of all('[data-industry-sector]'))b.setAttribute('aria-pressed',String(b.dataset.industrySector===sector));
   for(const row of all('[data-industry-subsectors]')){

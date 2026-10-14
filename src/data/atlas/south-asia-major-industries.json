@@ -1,0 +1,1654 @@
+{
+  "version": 1,
+  "scope": [
+    "AFG",
+    "BGD",
+    "BTN",
+    "IND",
+    "LKA",
+    "MDV",
+    "NPL",
+    "PAK"
+  ],
+  "checked": "2026-10-14",
+  "sources": {
+    "bd": {
+      "label": "BGMEA／輸出振興局・輸出実績",
+      "url": "https://www.bgmea.com.bd/page/Export_Performance",
+      "year": "2025–26年度",
+      "scope": "既製衣料と商品輸出。改訂系列を使用。",
+      "accessed": "2026-10-14"
+    },
+    "pk-man": {
+      "label": "パキスタン財務省・経済調査2025–26、製造業章",
+      "url": "https://www.finance.gov.pk/survey/chapter_26/3_Manufacturing%20and%20Mining.pdf",
+      "year": "2025–26年度7～3月",
+      "scope": "9か月集計。繊維衣料、二輪・三輪、乗用車を区別。",
+      "accessed": "2026-10-14"
+    },
+    "in-textile": {
+      "label": "インド繊維省・2025–26年度輸出",
+      "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2254367",
+      "year": "2025–26年度",
+      "scope": "既製衣料と手工芸を含む繊維全体は別対象。",
+      "accessed": "2026-10-14"
+    },
+    "sl-export": {
+      "label": "スリランカ輸出開発庁・2025年実績",
+      "url": "https://www.srilankabusiness.com/news/sri-lankas-export-performance-exceeded-us-17.2-billion-in-2025.html",
+      "year": "2025年",
+      "scope": "商品輸出とICT・BPM推計。観光収入を含まない。",
+      "accessed": "2026-10-14"
+    },
+    "coal": {
+      "label": "インド石炭省・2025年総括",
+      "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2213723",
+      "year": "2025年／2024–25年度",
+      "scope": "政府の石炭生産。IEAの褐炭を含む分類と別。",
+      "accessed": "2026-10-14"
+    },
+    "coal-import": {
+      "label": "インド石炭省・生産と輸入",
+      "url": "https://coal.nic.in/major-statistics/production-and-supplies",
+      "year": "2025–26年度",
+      "scope": "原料炭と非原料炭の輸入量。",
+      "accessed": "2026-10-14"
+    },
+    "coal-resource": {
+      "label": "インド石炭省・州別石炭資源",
+      "url": "https://coal.nic.in/major-statistics/coal-reserves",
+      "year": "2025年4月1日",
+      "scope": "地質資源量。採掘可能埋蔵量や年産ではない。",
+      "accessed": "2026-10-14"
+    },
+    "pk-energy": {
+      "label": "パキスタン財務省・経済調査2025–26、エネルギー章",
+      "url": "https://www.finance.gov.pk/survey/chapter_26/14_Energy.pdf",
+      "year": "2024–25年度／2025–26年度",
+      "scope": "石炭の生産・輸入と、タール炭・輸入炭発電。",
+      "accessed": "2026-10-14"
+    },
+    "iea-coal": {
+      "label": "IEA Coal 2025・供給章",
+      "url": "https://www.iea.org/reports/coal-2025/supply",
+      "year": "2025年予測",
+      "scope": "褐炭を含む石炭。実績値に読み替えない。",
+      "accessed": "2026-10-14"
+    },
+    "steel": {
+      "label": "世界鉄鋼協会 World Steel in Figures 2026",
+      "url": "https://worldsteel.org/data/world-steel-in-figures/world-steel-in-figures-2026/",
+      "year": "2025年",
+      "scope": "粗鋼生産と鋼材見掛け消費は別工程。",
+      "accessed": "2026-10-14"
+    },
+    "tata": {
+      "label": "Tata Steel・オディシャの複数製鋼拠点",
+      "url": "https://www.tatasteel.com/investors/integrated-report-2024-25/100-years-in-odisha.html",
+      "year": "2024–25年度",
+      "scope": "企業の州内能力・拠点。全国生産の代用にはしない。",
+      "accessed": "2026-10-14"
+    },
+    "refining": {
+      "label": "インド石油・天然ガス省・国会答弁",
+      "url": "https://sansad.in/getFile/annex/271/AS228_LNKNdD.pdf?source=pqars",
+      "year": "2026年8月10日／2025–26年度",
+      "scope": "稼働23製油所の能力、製品生産・消費。石油化学とは別。",
+      "accessed": "2026-10-14"
+    },
+    "ril": {
+      "label": "Reliance・精製事業",
+      "url": "https://www.ril.com/businesses/energy/refining-marketing",
+      "year": "資料年未記載・2026年確認",
+      "scope": "ジャムナガルの企業拠点。工場敷地境界は未収録。",
+      "accessed": "2026-10-14"
+    },
+    "ppac": {
+      "label": "PPAC・石油製品データ",
+      "url": "https://ppac.gov.in/",
+      "year": "2026年8月",
+      "scope": "月次の輸出数量／国内製品生産数量。",
+      "accessed": "2026-10-14"
+    },
+    "siam": {
+      "label": "SIAM・生産／販売／輸出統計",
+      "url": "https://www.siam.in/knowledge/industry-data/industry-trends",
+      "year": "2025–26年度",
+      "scope": "台数。国内販売はメーカー出荷。付加価値ではない。",
+      "accessed": "2026-10-14"
+    },
+    "siam-world": {
+      "label": "SIAM・世界販売市場比較",
+      "url": "https://www.siam.in/knowledge/industry-data/global-sales-data",
+      "year": "2024年",
+      "scope": "販売台数シェア。世界生産シェアとは別。",
+      "accessed": "2026-10-14"
+    },
+    "honda": {
+      "label": "Honda・インド4二輪車工場",
+      "url": "https://global.honda/en/newsroom/news/2025/c250522beng.html",
+      "year": "2025年5月22日",
+      "scope": "既存能力614万台／年。2027年増設計画を既存能力に加えない。",
+      "accessed": "2026-10-14"
+    },
+    "suzuki": {
+      "label": "Suzuki・カルコダ生産開始",
+      "url": "https://www.globalsuzuki.com/globalnews/2025/0225.html",
+      "year": "2025年2月25日",
+      "scope": "既存グルグラム・マネサル・グジャラートと新規稼働カルコダ。計画工場は除外。",
+      "accessed": "2026-10-14"
+    },
+    "suzuki-export": {
+      "label": "Suzuki・グジャラート工場の出荷",
+      "url": "https://www.globalsuzuki.com/globalnews/2025/0826.html",
+      "year": "2025年8月26日",
+      "scope": "グジャラート工場とピパバブ港の出荷関係。輸送経路は描かない。",
+      "accessed": "2026-10-14"
+    },
+    "pharma": {
+      "label": "インド医薬品局・年次報告2025–26、3–4頁",
+      "url": "https://pharma-dept.gov.in/sites/default/files/Annual%20Report%202025-26.pdf",
+      "year": "2024–25年度",
+      "scope": "原薬・中間体・製剤・生物学的製剤。医療機器は別。",
+      "accessed": "2026-10-14"
+    },
+    "pharma-cluster": {
+      "label": "インド医薬品局・製薬クラスター調査",
+      "url": "https://pharma-dept.gov.in/sites/default/files/Final%20Report-Survey%20of%20Pharma%20Clusters.pdf",
+      "year": "調査年は原資料参照",
+      "scope": "製造集積と立地要因。計画Pharma Cityを稼働工場にしない。",
+      "accessed": "2026-10-14"
+    },
+    "api": {
+      "label": "インド国会・原薬と中間体輸入",
+      "url": "https://sansad.in/getFile/loksabhaquestions/annex/178/AU4912.pdf?source=pqals",
+      "year": "2020–21年度〔過去年〕",
+      "scope": "中国比率は輸入額分母。国内使用量分母ではない。",
+      "accessed": "2026-10-14"
+    },
+    "rbi-it": {
+      "label": "インド準備銀行・ソフトウェア輸出調査",
+      "url": "https://rbi.org.in/scripts/BS_PressReleaseDisplay.aspx?prid=63625",
+      "year": "2025–26年度・2026年9月公表",
+      "scope": "ソフトウェア・IT関連サービス。海外拠点現地販売を除く。",
+      "accessed": "2026-10-14"
+    },
+    "pk-it": {
+      "label": "パキスタン財務省・IT章",
+      "url": "https://www.finance.gov.pk/survey/chapter_26/15_Information_Technology.pdf",
+      "year": "2024–25年度／2025–26年度7～3月",
+      "scope": "通信を含むICT輸出。フリーランス収入は内数。",
+      "accessed": "2026-10-14"
+    },
+    "stpi": {
+      "label": "インド政府STPI・都市拠点と産業支援",
+      "url": "https://stpi.in/en/about-stpi",
+      "year": "設立史・2026年確認",
+      "scope": "技術人材・通信・事業支援。都市別生産額ではない。",
+      "accessed": "2026-10-14"
+    },
+    "irena": {
+      "label": "IRENA Renewable Capacity Statistics 2026",
+      "url": "https://www.irena.org/-/media/Files/IRENA/Agency/Publication/2026/Mar/IRENA_DAT_RE_capacity_statistics_2026.pdf",
+      "year": "2025年末",
+      "scope": "再生可能水力。純揚水を除く。国別に推計を含む。",
+      "accessed": "2026-10-14"
+    },
+    "wb-bhutan": {
+      "label": "世界銀行・Bhutan Development Update Spring 2026",
+      "url": "https://documents1.worldbank.org/curated/en/099657304082610713/pdf/IDU-ee5b76a2-8edc-4ca2-b4a5-278affeb8451.pdf",
+      "year": "2024–25年度推計",
+      "scope": "水力輸出額／GDP。水力付加価値比率ではない。",
+      "accessed": "2026-10-14"
+    },
+    "wb-nepal": {
+      "label": "世界銀行・Nepal Development Update October 2026",
+      "url": "https://documents1.worldbank.org/curated/en/099514210052618832/pdf/IDU-595c97d5-48e8-4e50-9a96-b02022966072.pdf",
+      "year": "2026年8月洪水",
+      "scope": "稼働7水力発電所の被災設備。国全体の停電率ではない。",
+      "accessed": "2026-10-14"
+    },
+    "nea": {
+      "label": "ネパール電力庁・カリガンダキ水力",
+      "url": "https://genrd.nea.org.np/officelist/251",
+      "year": "公式施設案内・2026年確認",
+      "scope": "既存施設。年度発電量は未収録。",
+      "accessed": "2026-10-14"
+    },
+    "druk": {
+      "label": "Druk Green・複数水力施設",
+      "url": "https://www.drukgreen.bt/",
+      "year": "施設案内・2026年確認",
+      "scope": "チュカ・タラ・マンデチュ等。会社全体能力のページ内不一致値は使用しない。",
+      "accessed": "2026-10-14"
+    },
+    "tea": {
+      "label": "インドTea Board・世界茶統計",
+      "url": "https://www.teaboard.gov.in/pdf/Global_Tea_Website_pdf2451.pdf",
+      "year": "2024年",
+      "scope": "国際茶業委員会統計の公的転載。製茶後重量・輸出・競売平均。",
+      "accessed": "2026-10-14"
+    },
+    "tea-india": {
+      "label": "インドTea Board・ダージリン",
+      "url": "https://www.teaboard.gov.in/TEABOARDCSM/MjI0MA==",
+      "year": "産地案内・2026年確認",
+      "scope": "標高・降水と製茶。紹介上の概数を最新生産量にしない。",
+      "accessed": "2026-10-14"
+    },
+    "tea-assam": {
+      "label": "インドTea Board・アッサム",
+      "url": "https://www.teaboard.gov.in/TEABOARDCSM/MjI0MQ==",
+      "year": "産地案内・2026年確認",
+      "scope": "多雨域の茶産地。点は産地の案内位置。",
+      "accessed": "2026-10-14"
+    },
+    "tea-sl": {
+      "label": "スリランカTea Board・茶産地",
+      "url": "https://srilankateaboard.lk/",
+      "year": "産地案内・2026年確認",
+      "scope": "ヌワラエリヤ・ウバなど。栽培と製茶を区別。",
+      "accessed": "2026-10-14"
+    },
+    "mdv": {
+      "label": "モルディブ統計局 Tourism Statistics 2025",
+      "url": "https://statisticsmaldives.gov.mv/mbs/wp-content/uploads/2026/09/WTD-2026-1.pdf",
+      "year": "2025年・2026年9月公表",
+      "scope": "実質GDPの観光部門、到着客、施設・ベッド。波及効果は別。",
+      "accessed": "2026-10-14"
+    },
+    "sl-tourism": {
+      "label": "スリランカ観光開発庁 Year in Review 2025",
+      "url": "https://www.sltda.gov.lk/storage/common_media/Year_in_Review_2025_Final_updated_Report_2026_04_02-1.pdf",
+      "year": "2025年・2026年4月改訂",
+      "scope": "観光収入、外国人到着、地区別登録客室。",
+      "accessed": "2026-10-14"
+    },
+    "pokhara": {
+      "label": "ネパール観光庁・ポカラ",
+      "url": "https://ntb.gov.np/pokhara",
+      "year": "観光地案内・2026年確認",
+      "scope": "山岳観光の入口。宿泊数・収入は未取得。",
+      "accessed": "2026-10-14"
+    },
+    "rice": {
+      "label": "米国農務省 Grain World Markets and Trade",
+      "url": "https://apps.fas.usda.gov/psdonline/circulars/grain.pdf",
+      "year": "2026年10月号",
+      "scope": "米輸出は暦年・精米換算。2026年は推計。生産は現地販売年度。",
+      "accessed": "2026-10-14"
+    },
+    "krbl": {
+      "label": "KRBL・米加工事業と沿革",
+      "url": "https://krblrice.com/about-us/",
+      "year": "企業沿革・2026年確認",
+      "scope": "ドゥリ・ガウタムブッダナガルの加工施設。現時点の稼働量・工場境界は未確認。",
+      "accessed": "2026-10-14"
+    },
+    "ilo": {
+      "label": "ILO・バングラデシュ衣料工場分布",
+      "url": "https://www.ilo.org/media/438656/download",
+      "year": "2015年",
+      "scope": "所在地・産業史に使用。古い工場数を最新集積度には転用しない。",
+      "accessed": "2026-10-14"
+    },
+    "tiruppur": {
+      "label": "インド中小企業省・ティルプル地区産業調査",
+      "url": "https://dcmsme.gov.in/dips/2016-17/DIP.TIRUPUR.2015.16.pdf",
+      "year": "2015–16年",
+      "scope": "ニット・衣料の加工地域。数量は歴史資料。",
+      "accessed": "2026-10-14"
+    },
+    "faisalabad": {
+      "label": "パキスタンSMEDA・ファイサラーバード織布集積",
+      "url": "https://smeda.org/phocadownload/Punjab/cluster_profiles/power%20looms%20-%20faisalabad.pdf",
+      "year": "2005–06年等の歴史調査",
+      "scope": "複数の織布・加工工程と市内分布。古い輸出比率は使用しない。",
+      "accessed": "2026-10-14"
+    },
+    "tourism-world": {
+      "label": "国連世界観光機関・2024年世界到着数",
+      "url": "https://www.untourism.int/news/international-tourism-recovers-pre-pandemic-levels-in-2024",
+      "year": "2024年",
+      "scope": "世界約14億到着。モルディブ2024年2,046,615、スリランカ2,053,465は各国の掲載資料。2か国小計。",
+      "accessed": "2026-10-14"
+    }
+  },
+  "groups": [
+    {
+      "id": "sc-coal",
+      "title": "石炭",
+      "color": "#585650",
+      "fact": "インド東中部のオディシャ・ジャールカンド・チャッティースガルの炭田とパキスタンのタール炭が国内燃料供給を支え、臨海発電は輸入炭にも接続します。",
+      "reason": "地質が採炭地域を定めます。一般炭・コークス用原料炭・褐炭は品質と用途が異なり、国内炭への転換と脱炭素は別の政策です。",
+      "source": {
+        "label": "インド石炭省・2025年総括",
+        "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2213723",
+        "year": "2025年／2024–25年度",
+        "scope": "政府の石炭生産。IEAの褐炭を含む分類と別。",
+        "accessed": "2026-10-14"
+      },
+      "sourceId": "coal",
+      "domestic": [
+        {
+          "label": "インド・石炭生産",
+          "value": 1042.9,
+          "unit": "百万t",
+          "year": "2025暦年",
+          "source": "coal",
+          "definition": "政府の石炭分類。褐炭を含むIEA系列と別。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "暫定"
+        },
+        {
+          "label": "パキスタン・国内炭生産",
+          "value": 18.746,
+          "unit": "百万t",
+          "year": "2024–25年度",
+          "source": "pk-energy",
+          "definition": "国内採炭の年間実績。",
+          "countries": [
+            "PAK"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        }
+      ],
+      "world": [
+        {
+          "label": "インド・世界生産シェア",
+          "value": 11.952584787619362,
+          "unit": "%",
+          "year": "2025年予測",
+          "source": "iea-coal",
+          "definition": "褐炭を含む。世界第2位。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "世界生産予測9,111百万t／インド1,089百万t",
+          "status": "予測・計算"
+        }
+      ],
+      "concentration": [
+        {
+          "label": "インド・原料炭輸入",
+          "value": 66.33,
+          "unit": "百万t",
+          "year": "2025–26年度",
+          "source": "coal-import",
+          "definition": "コークス用原料炭。総輸入246.37百万tの内数。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "インド・非原料炭輸入",
+          "value": 180.04,
+          "unit": "百万t",
+          "year": "2025–26年度",
+          "source": "coal-import",
+          "definition": "原料炭との品質差を区別。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "パキスタン・石炭輸入",
+          "value": 6.981,
+          "unit": "百万t",
+          "year": "2024–25年度",
+          "source": "pk-energy",
+          "definition": "生産との単純差を消費量にしない。",
+          "countries": [
+            "PAK"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        }
+      ],
+      "note": "国別の最新石炭付加価値・雇用、南アジア8か国合計は未取得。",
+      "agricultureTopic": null
+    },
+    {
+      "id": "sc-refining",
+      "title": "石油精製",
+      "color": "#986044",
+      "fact": "ジャムナガル・ムンバイ・コチの沿岸拠点とパニパット・バラウニの内陸拠点が、原油の受入と各地への製品供給を分けて担います。",
+      "reason": "臨海拠点では原油輸送と出荷、内陸拠点では消費地への輸送網が立地を支えます。油田・製油所・石油化学は別の工程です。",
+      "source": {
+        "label": "インド石油・天然ガス省・国会答弁",
+        "url": "https://sansad.in/getFile/annex/271/AS228_LNKNdD.pdf?source=pqars",
+        "year": "2026年8月10日／2025–26年度",
+        "scope": "稼働23製油所の能力、製品生産・消費。石油化学とは別。",
+        "accessed": "2026-10-14"
+      },
+      "sourceId": "refining",
+      "domestic": [
+        {
+          "label": "インド・稼働製油所",
+          "value": 23,
+          "unit": "か所",
+          "year": "2026年8月10日",
+          "source": "refining",
+          "definition": "全国の稼働施設。地図の例示数と別。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "インド・精製能力",
+          "value": 267.1,
+          "unit": "百万t／年",
+          "year": "2026年8月10日",
+          "source": "refining",
+          "definition": "設備能力。生産実績と別。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "インド・石油製品生産",
+          "value": 285,
+          "unit": "百万t",
+          "year": "2025–26年度",
+          "source": "refining",
+          "definition": "政府答弁の約数。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "概数"
+        },
+        {
+          "label": "インド・国内製品消費",
+          "value": 241.6,
+          "unit": "百万t",
+          "year": "2025–26年度",
+          "source": "refining",
+          "definition": "生産との差は輸出量ではない。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        }
+      ],
+      "world": [
+        {
+          "label": "インド・精製能力順位",
+          "value": 4,
+          "unit": "位",
+          "year": "2026年8月10日",
+          "source": "refining",
+          "definition": "政府答弁の世界順位。アジア第2位。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "世界の国別精製能力",
+          "status": "公表値"
+        }
+      ],
+      "concentration": [
+        {
+          "label": "石油製品輸出／国内生産",
+          "value": 20.3,
+          "unit": "%",
+          "year": "2026年8月",
+          "source": "ppac",
+          "definition": "月次・数量比。年度輸出額ではない。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "同月の国内石油製品生産数量",
+          "status": "公表値"
+        }
+      ],
+      "note": "他国の同年能力合計・最新原油調達先構成は未取得。石油化学の付加価値を精製へ転用しません。",
+      "agricultureTopic": null
+    },
+    {
+      "id": "sc-hydro",
+      "title": "水力発電",
+      "color": "#3b8194",
+      "fact": "ネパールのカリガンダキとブータンのチュカ・トンサ周辺では、河川流量と山地の落差を利用する水力が国内供給と対インド電力取引を支えます。",
+      "reason": "発電立地は水と落差、利用には送電網・取引契約・季節流量が関わります。純揚水設備と再生可能水力を同じ容量にしません。",
+      "source": {
+        "label": "IRENA Renewable Capacity Statistics 2026",
+        "url": "https://www.irena.org/-/media/Files/IRENA/Agency/Publication/2026/Mar/IRENA_DAT_RE_capacity_statistics_2026.pdf",
+        "year": "2025年末",
+        "scope": "再生可能水力。純揚水を除く。国別に推計を含む。",
+        "accessed": "2026-10-14"
+      },
+      "sourceId": "irena",
+      "domestic": [
+        {
+          "label": "インド・再生可能水力容量",
+          "value": 49123,
+          "unit": "MW",
+          "year": "2025年末",
+          "source": "irena",
+          "definition": "純揚水を除く。IRENA補完推計を含む。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "推計を含む"
+        },
+        {
+          "label": "パキスタン・再生可能水力容量",
+          "value": 11520,
+          "unit": "MW",
+          "year": "2025年末",
+          "source": "irena",
+          "definition": "純揚水を除く。IRENA補完推計を含む。",
+          "countries": [
+            "PAK"
+          ],
+          "denominator": "",
+          "status": "推計を含む"
+        },
+        {
+          "label": "ネパール・再生可能水力容量",
+          "value": 3810,
+          "unit": "MW",
+          "year": "2025年末",
+          "source": "irena",
+          "definition": "純揚水を除く。IRENA補完推計を含む。",
+          "countries": [
+            "NPL"
+          ],
+          "denominator": "",
+          "status": "推計を含む"
+        },
+        {
+          "label": "ブータン・再生可能水力容量",
+          "value": 3490,
+          "unit": "MW",
+          "year": "2025年末",
+          "source": "irena",
+          "definition": "純揚水を除く。IRENA補完推計を含む。",
+          "countries": [
+            "BTN"
+          ],
+          "denominator": "",
+          "status": "推計を含む"
+        },
+        {
+          "label": "スリランカ・再生可能水力容量",
+          "value": 1969,
+          "unit": "MW",
+          "year": "2025年末",
+          "source": "irena",
+          "definition": "純揚水を除く。IRENA補完推計を含む。",
+          "countries": [
+            "LKA"
+          ],
+          "denominator": "",
+          "status": "推計を含む"
+        },
+        {
+          "label": "アフガニスタン・再生可能水力容量",
+          "value": 487,
+          "unit": "MW",
+          "year": "2025年末",
+          "source": "irena",
+          "definition": "純揚水を除く。IRENA補完推計を含む。",
+          "countries": [
+            "AFG"
+          ],
+          "denominator": "",
+          "status": "推計を含む"
+        },
+        {
+          "label": "バングラデシュ・再生可能水力容量",
+          "value": 230,
+          "unit": "MW",
+          "year": "2025年末",
+          "source": "irena",
+          "definition": "純揚水を除く。IRENA補完推計を含む。",
+          "countries": [
+            "BGD"
+          ],
+          "denominator": "",
+          "status": "推計を含む"
+        }
+      ],
+      "world": [
+        {
+          "label": "確認7か国／世界容量",
+          "value": 5.450756888787705,
+          "unit": "%",
+          "year": "2025年末",
+          "source": "irena",
+          "definition": "7か国小計。モルディブを含む8か国合計ではない。",
+          "countries": [
+            "IND",
+            "PAK",
+            "NPL",
+            "BTN",
+            "LKA",
+            "AFG",
+            "BGD"
+          ],
+          "denominator": "世界1,295,765 MW／7か国70,629 MW",
+          "status": "計算"
+        }
+      ],
+      "concentration": [
+        {
+          "label": "ブータン・水力輸出／GDP",
+          "value": 6.5,
+          "unit": "%",
+          "year": "2024–25年度",
+          "source": "wb-bhutan",
+          "definition": "輸出額／GDP。水力付加価値比率ではない。",
+          "countries": [
+            "BTN"
+          ],
+          "denominator": "ブータンの同年度GDP",
+          "status": "推計"
+        },
+        {
+          "label": "ネパール・被災稼働水力",
+          "value": 256.1,
+          "unit": "MW",
+          "year": "2026年8月",
+          "source": "wb-nepal",
+          "definition": "洪水で被災した7発電所の設備容量。",
+          "countries": [
+            "NPL"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        }
+      ],
+      "note": "未掲載国・年度を0とせず、国別最新発電量・輸出額は補完していません。",
+      "agricultureTopic": null
+    },
+    {
+      "id": "sc-textiles",
+      "title": "繊維・衣料",
+      "color": "#ac554a",
+      "fact": "ダッカ・ガジプルの縫製、ファイサラーバードの織布、ティルプルのニット衣料が、労働力と糸・生地・染色・縫製の加工網を背景に集積します。",
+      "reason": "綿花の一次生産、紡績・織布、衣料縫製は別工程です。港への接続と買い手の発注が加工産業の立地を支えます。",
+      "source": {
+        "label": "BGMEA／輸出振興局・輸出実績",
+        "url": "https://www.bgmea.com.bd/page/Export_Performance",
+        "year": "2025–26年度",
+        "scope": "既製衣料と商品輸出。改訂系列を使用。",
+        "accessed": "2026-10-14"
+      },
+      "sourceId": "bd",
+      "domestic": [
+        {
+          "label": "バングラデシュ・既製衣料輸出",
+          "value": 38.70115,
+          "unit": "十億USD",
+          "year": "2025–26年度7～6月",
+          "source": "bd",
+          "definition": "改訂系列。商品輸出48.00191十億USDの80.62%。",
+          "countries": [
+            "BGD"
+          ],
+          "denominator": "同国の商品輸出",
+          "status": "公表値"
+        },
+        {
+          "label": "パキスタン・繊維衣料輸出",
+          "value": 13.5818,
+          "unit": "十億USD",
+          "year": "2025–26年度7～3月",
+          "source": "pk-man",
+          "definition": "9か月。糸・布・寝具を含み商品輸出の59.7%。",
+          "countries": [
+            "PAK"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "インド・既製衣料輸出",
+          "value": 1.393496,
+          "unit": "兆INR",
+          "year": "2025–26年度4～3月",
+          "source": "in-textile",
+          "definition": "139,349.6 crore。1 crore＝1,000万ルピー。手工芸等は除く。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "スリランカ・衣料繊維輸出",
+          "value": 4.90905,
+          "unit": "十億USD",
+          "year": "2025年",
+          "source": "sl-export",
+          "definition": "商品輸出13.57938十億USDの36.15%〔計算〕。",
+          "countries": [
+            "LKA"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        }
+      ],
+      "world": [
+        {
+          "label": "最新の世界衣料輸出順位・シェア",
+          "value": null,
+          "unit": "未照合",
+          "year": "2026年確認",
+          "source": "bd",
+          "definition": "EU合算と国別順位を区別。未取得を0にしない。",
+          "countries": [],
+          "denominator": "同じ年・品目集合の世界衣料輸出",
+          "status": "未確認"
+        }
+      ],
+      "concentration": [
+        {
+          "label": "バングラデシュ衣料・EU向け",
+          "value": 49.25,
+          "unit": "%",
+          "year": "2025–26年度",
+          "source": "bd",
+          "definition": "英国を含まないEU向け。",
+          "countries": [
+            "BGD"
+          ],
+          "denominator": "同国の既製衣料輸出額",
+          "status": "公表値"
+        },
+        {
+          "label": "同・米国向け",
+          "value": 20.01,
+          "unit": "%",
+          "year": "2025–26年度",
+          "source": "bd",
+          "definition": "米国向け輸出額。",
+          "countries": [
+            "BGD"
+          ],
+          "denominator": "同国の既製衣料輸出額",
+          "status": "公表値"
+        },
+        {
+          "label": "同・英国向け",
+          "value": 11.34,
+          "unit": "%",
+          "year": "2025–26年度",
+          "source": "bd",
+          "definition": "3市場で80.60%。",
+          "countries": [
+            "BGD"
+          ],
+          "denominator": "同国の既製衣料輸出額",
+          "status": "公表値"
+        }
+      ],
+      "note": "年度・期間・製品集合が異なる国別値を合計しません。立地資料の古い工場数・雇用数は最新値に転用しません。",
+      "agricultureTopic": "cotton"
+    },
+    {
+      "id": "sc-steel",
+      "title": "鉄鋼",
+      "color": "#746989",
+      "fact": "オディシャのカリンガナガル・メラマンダリなどでは鉱石と既存投資が製鉄集積を支え、インドの粗鋼生産規模はバングラデシュ・パキスタンを大きく上回ります。",
+      "reason": "鉱石・原料炭・電力と輸送が関わります。粗鋼・圧延鋼材・設備能力・船舶解体のスクラップは別工程・別指標です。",
+      "source": {
+        "label": "世界鉄鋼協会 World Steel in Figures 2026",
+        "url": "https://worldsteel.org/data/world-steel-in-figures/world-steel-in-figures-2026/",
+        "year": "2025年",
+        "scope": "粗鋼生産と鋼材見掛け消費は別工程。",
+        "accessed": "2026-10-14"
+      },
+      "sourceId": "steel",
+      "domestic": [
+        {
+          "label": "インド・粗鋼生産",
+          "value": 164.9,
+          "unit": "百万t",
+          "year": "2025年",
+          "source": "steel",
+          "definition": "年間実績。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "バングラデシュ・粗鋼生産",
+          "value": 4.5,
+          "unit": "百万t",
+          "year": "2025年",
+          "source": "steel",
+          "definition": "世界鉄鋼協会の推計。",
+          "countries": [
+            "BGD"
+          ],
+          "denominator": "",
+          "status": "推計"
+        },
+        {
+          "label": "パキスタン・粗鋼生産",
+          "value": 3.6,
+          "unit": "百万t",
+          "year": "2025年",
+          "source": "steel",
+          "definition": "年間粗鋼。",
+          "countries": [
+            "PAK"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "インド・鋼材見掛け消費",
+          "value": 159.8,
+          "unit": "百万t",
+          "year": "2025年",
+          "source": "steel",
+          "definition": "完成鋼材の消費。粗鋼生産との差を輸出量にしない。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        }
+      ],
+      "world": [
+        {
+          "label": "インド／世界粗鋼",
+          "value": 8.918816593650277,
+          "unit": "%",
+          "year": "2025年",
+          "source": "steel",
+          "definition": "世界第2位。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "世界粗鋼1,848.9百万t",
+          "status": "計算"
+        },
+        {
+          "label": "確認3か国／世界粗鋼",
+          "value": 9.356914922386284,
+          "unit": "%",
+          "year": "2025年",
+          "source": "steel",
+          "definition": "8か国合計ではない。",
+          "countries": [
+            "IND",
+            "BGD",
+            "PAK"
+          ],
+          "denominator": "世界粗鋼1,848.9百万t／3か国173.0百万t",
+          "status": "計算"
+        }
+      ],
+      "concentration": [
+        {
+          "label": "インド・原料炭輸入",
+          "value": 66.33,
+          "unit": "百万t",
+          "year": "2025–26年度",
+          "source": "coal-import",
+          "definition": "国内の石炭総量だけでは製鉄原料の自給を説明できない。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        }
+      ],
+      "note": "地図の企業拠点能力を全国の粗鋼生産や州全体付加価値に読み替えません。",
+      "agricultureTopic": null
+    },
+    {
+      "id": "sc-two-wheelers",
+      "title": "二輪車",
+      "color": "#a57628",
+      "fact": "マネサル・タプカラ・ナルサプラ・ヴィタラプルなどに二輪車の工場が分散し、国内の日常交通市場と工業団地・部品調達網が現地生産を支えます。",
+      "reason": "大きな国内販売市場、組立と部品供給、販売・保守網が関わります。ガソリン車と電動車、二輪と三輪、乗用車は区別します。",
+      "source": {
+        "label": "Honda・インド4二輪車工場",
+        "url": "https://global.honda/en/newsroom/news/2025/c250522beng.html",
+        "year": "2025年5月22日",
+        "scope": "既存能力614万台／年。2027年増設計画を既存能力に加えない。",
+        "accessed": "2026-10-14"
+      },
+      "sourceId": "honda",
+      "domestic": [
+        {
+          "label": "インド・二輪車生産",
+          "value": 26.691916,
+          "unit": "百万台",
+          "year": "2025–26年度",
+          "source": "siam",
+          "definition": "年間の完成二輪車。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "インド・国内販売",
+          "value": 21.705974,
+          "unit": "百万台",
+          "year": "2025–26年度",
+          "source": "siam",
+          "definition": "メーカー出荷。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "インド・二輪車輸出",
+          "value": 5.180429,
+          "unit": "百万台",
+          "year": "2025–26年度",
+          "source": "siam",
+          "definition": "国内生産との差は在庫等で一致しない。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "パキスタン・二輪三輪生産",
+          "value": 1.433074,
+          "unit": "百万台",
+          "year": "2025–26年度7～3月",
+          "source": "pk-man",
+          "definition": "三輪を含む9か月集計。インド二輪年間値と同一でない。",
+          "countries": [
+            "PAK"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        }
+      ],
+      "world": [
+        {
+          "label": "インド／世界二輪販売",
+          "value": 31,
+          "unit": "%",
+          "year": "2024年",
+          "source": "siam-world",
+          "definition": "世界約63.4百万台、中国27%。生産シェアではない。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "世界の二輪販売台数",
+          "status": "概数"
+        }
+      ],
+      "concentration": [
+        {
+          "label": "Honda・インド既存能力",
+          "value": 6.14,
+          "unit": "百万台／年",
+          "year": "2025年5月",
+          "source": "honda",
+          "definition": "4工場の企業設備能力。2027年増設を除く。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "Honda・インド従業員",
+          "value": 23000,
+          "unit": "人",
+          "year": "2025年5月",
+          "source": "honda",
+          "definition": "企業の概数。産業全体の雇用ではない。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "概数"
+        }
+      ],
+      "note": "施設例はHondaの4拠点。全メーカーの分布・各国の未取得値を補っていません。",
+      "agricultureTopic": null
+    },
+    {
+      "id": "sc-auto",
+      "title": "乗用車",
+      "color": "#8b6c2d",
+      "fact": "ハリヤーナ州のグルグラム・マネサル・カルコダとグジャラートの既存工場が、国内市場の拡大と輸出のための組立拠点を形成します。",
+      "reason": "完成車組立、部品調達、輸送網と国内販売市場が関わります。企業能力・年間国内生産・販売台数は別で、計画工場を稼働拠点に加えません。",
+      "source": {
+        "label": "Suzuki・カルコダ生産開始",
+        "url": "https://www.globalsuzuki.com/globalnews/2025/0225.html",
+        "year": "2025年2月25日",
+        "scope": "既存グルグラム・マネサル・グジャラートと新規稼働カルコダ。計画工場は除外。",
+        "accessed": "2026-10-14"
+      },
+      "sourceId": "suzuki",
+      "domestic": [
+        {
+          "label": "インド・乗用車生産",
+          "value": 5.539115,
+          "unit": "百万台",
+          "year": "2025–26年度",
+          "source": "siam",
+          "definition": "完成乗用車。二輪車を含まない。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "インド・乗用車輸出",
+          "value": 0.9052,
+          "unit": "百万台",
+          "year": "2025–26年度",
+          "source": "siam",
+          "definition": "輸出台数。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "パキスタン・乗用車生産",
+          "value": 115495,
+          "unit": "台",
+          "year": "2025–26年度7～3月",
+          "source": "pk-man",
+          "definition": "9か月。",
+          "countries": [
+            "PAK"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        }
+      ],
+      "world": [
+        {
+          "label": "インド／世界乗用車販売",
+          "value": 5.2,
+          "unit": "%",
+          "year": "2024年",
+          "source": "siam-world",
+          "definition": "販売市場第3位。生産順位ではない。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "世界約82百万台",
+          "status": "公表値"
+        }
+      ],
+      "concentration": [
+        {
+          "label": "カルコダ・初年度設備能力",
+          "value": 250000,
+          "unit": "台／年",
+          "year": "2025年2月稼働開始",
+          "source": "suzuki",
+          "definition": "Maruti Suzukiの1工場。実生産台数ではない。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        }
+      ],
+      "note": "二輪車と車両GDPを合算しません。確認した組立拠点に限り表示し、部品の納入線は推測しません。",
+      "agricultureTopic": null
+    },
+    {
+      "id": "sc-pharma",
+      "title": "医薬品",
+      "color": "#7b668b",
+      "fact": "ハイデラバード、アーメダバード・バルーチ、バッディに医薬品製造が集まり、研究人材・化学品供給・工業団地が集積を支えます。",
+      "reason": "製剤を輸出する能力と、原薬（API：医薬品の有効成分）・中間体の調達は別です。医療機器や広い化学産業のGDPを製剤へ転用しません。",
+      "source": {
+        "label": "インド医薬品局・製薬クラスター調査",
+        "url": "https://pharma-dept.gov.in/sites/default/files/Final%20Report-Survey%20of%20Pharma%20Clusters.pdf",
+        "year": "調査年は原資料参照",
+        "scope": "製造集積と立地要因。計画Pharma Cityを稼働工場にしない。",
+        "accessed": "2026-10-14"
+      },
+      "sourceId": "pharma-cluster",
+      "domestic": [
+        {
+          "label": "インド・医薬品売上",
+          "value": 4.71898,
+          "unit": "兆INR",
+          "year": "2024–25年度",
+          "source": "pharma",
+          "definition": "471,898 crore。売上であり付加価値ではない。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "インド・医薬品輸出",
+          "value": 29.046,
+          "unit": "十億USD",
+          "year": "2024–25年度",
+          "source": "pharma",
+          "definition": "原薬・中間体・製剤・生物学的製剤。医療機器を除く。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        }
+      ],
+      "world": [
+        {
+          "label": "インド・数量順位",
+          "value": 3,
+          "unit": "位",
+          "year": "年次報告2025–26の概況",
+          "source": "pharma",
+          "definition": "基準年・数量単位の詳細は未照合。価額順位11位と別政府資料14位は不一致。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "世界の医薬品数量・定義未照合",
+          "status": "概況"
+        },
+        {
+          "label": "後発医薬品・世界供給",
+          "value": 20,
+          "unit": "%",
+          "year": "年次報告2025–26の概況",
+          "source": "pharma",
+          "definition": "基準年・数量単位が十分に明記されない概数。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "世界の後発医薬品供給",
+          "status": "概数"
+        }
+      ],
+      "concentration": [
+        {
+          "label": "中国／インド原薬等輸入額",
+          "value": 68.01149707315363,
+          "unit": "%",
+          "year": "2020–21年度〔過去年〕",
+          "source": "api",
+          "definition": "国内使用量分母ではない。最新依存率は未確認。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "原薬・中間体輸入28,529 crore／中国19,403 crore",
+          "status": "計算・過去年"
+        }
+      ],
+      "note": "商工省の別集計輸出30.47十億USDとは品目集合未照合のため結合しません。他国の最新製剤・原薬輸出規模は未取得。",
+      "agricultureTopic": null
+    },
+    {
+      "id": "sc-tea",
+      "title": "製茶・茶輸出",
+      "color": "#548465",
+      "fact": "アッサム、ダージリンとスリランカのヌワラエリヤ・ウバでは、気温・雨・標高の違いと生葉を近くで加工する条件が産地銘柄を形成します。",
+      "reason": "栽培は一次生産、製茶は加工です。乾燥・選別・包装と競売・輸出を区別し、産地の量と銘柄・販路の稼ぎ方をつなげます。",
+      "source": {
+        "label": "インドTea Board・世界茶統計",
+        "url": "https://www.teaboard.gov.in/pdf/Global_Tea_Website_pdf2451.pdf",
+        "year": "2024年",
+        "scope": "国際茶業委員会統計の公的転載。製茶後重量・輸出・競売平均。",
+        "accessed": "2026-10-14"
+      },
+      "sourceId": "tea",
+      "domestic": [
+        {
+          "label": "インド・完成茶生産",
+          "value": 1303.53,
+          "unit": "百万kg",
+          "year": "2024年",
+          "source": "tea",
+          "definition": "製茶後重量。生葉や栽培面積ではない。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "スリランカ・完成茶生産",
+          "value": 262.16,
+          "unit": "百万kg",
+          "year": "2024年",
+          "source": "tea",
+          "definition": "製茶後重量。",
+          "countries": [
+            "LKA"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "スリランカ・茶輸出額",
+          "value": 1.50719,
+          "unit": "十億USD",
+          "year": "2025年",
+          "source": "sl-export",
+          "definition": "同国商品輸出の11.10%〔計算〕。",
+          "countries": [
+            "LKA"
+          ],
+          "denominator": "同国商品輸出13.57938十億USD",
+          "status": "公表値"
+        }
+      ],
+      "world": [
+        {
+          "label": "インド＋スリランカ／世界生産",
+          "value": 22.13280332255689,
+          "unit": "%",
+          "year": "2024年",
+          "source": "tea",
+          "definition": "2か国小計。南アジア全域合計ではない。",
+          "countries": [
+            "IND",
+            "LKA"
+          ],
+          "denominator": "世界7,074.07百万kg",
+          "status": "計算"
+        },
+        {
+          "label": "同2か国／世界茶輸出",
+          "value": 25.720961692184712,
+          "unit": "%",
+          "year": "2024年",
+          "source": "tea",
+          "definition": "インド256.17百万kg、スリランカ245.79百万kg。輸出量順位3位・4位。",
+          "countries": [
+            "IND",
+            "LKA"
+          ],
+          "denominator": "世界1,951.56百万kg",
+          "status": "計算"
+        }
+      ],
+      "concentration": [
+        {
+          "label": "インド・平均競売価格",
+          "value": 2.41,
+          "unit": "USD／kg",
+          "year": "2024年",
+          "source": "tea",
+          "definition": "品種・品質構成の異なる平均。利益率ではない。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "スリランカ・平均競売価格",
+          "value": 4.12,
+          "unit": "USD／kg",
+          "year": "2024年",
+          "source": "tea",
+          "definition": "同じ茶の価格差とは扱わない。",
+          "countries": [
+            "LKA"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        }
+      ],
+      "note": "2025年の同年世界比較は未取得。製茶の重量を農業GDPや茶栽培雇用に転用しません。",
+      "agricultureTopic": "tea"
+    },
+    {
+      "id": "sc-rice",
+      "title": "精米・米輸出",
+      "color": "#9c8741",
+      "fact": "パンジャーブのドゥリとウッタルプラデシュのガウタムブッダナガルなどでは米の加工事業が営まれ、調達・乾燥・精米・保管・販売が農業と市場をつなぎます。",
+      "reason": "水田の一次生産と、籾すり・精米・選別・包装を分けます。輸出の精米換算数量から精米産業の付加価値や工場別生産は求めません。",
+      "source": {
+        "label": "KRBL・製茶ではなく米の加工事業と沿革",
+        "url": "https://krblrice.com/about-us/",
+        "year": "企業沿革・2026年確認",
+        "scope": "ドゥリ・ガウタムブッダナガルの加工施設。現時点の稼働量・工場境界は未確認。",
+        "accessed": "2026-10-14"
+      },
+      "sourceId": "krbl",
+      "domestic": [
+        {
+          "label": "インド・米輸出",
+          "value": 23,
+          "unit": "百万t・精米換算",
+          "year": "2026暦年",
+          "source": "rice",
+          "definition": "2026年10月推計。籾・玄米・精米・砕米を換算。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "推計"
+        },
+        {
+          "label": "パキスタン・米輸出",
+          "value": 4.6,
+          "unit": "百万t・精米換算",
+          "year": "2026暦年",
+          "source": "rice",
+          "definition": "2026年10月推計。",
+          "countries": [
+            "PAK"
+          ],
+          "denominator": "",
+          "status": "推計"
+        },
+        {
+          "label": "精米産業の付加価値・雇用",
+          "value": null,
+          "unit": "未取得",
+          "year": "2026年確認",
+          "source": "rice",
+          "definition": "米生産・輸出や農業GDPで代用しない。",
+          "countries": [],
+          "denominator": "",
+          "status": "未取得"
+        }
+      ],
+      "world": [
+        {
+          "label": "インド＋パキスタン／世界輸出",
+          "value": 46.27533826266285,
+          "unit": "%",
+          "year": "2026暦年",
+          "source": "rice",
+          "definition": "2か国輸出小計。地域の生産シェアではない。",
+          "countries": [
+            "IND",
+            "PAK"
+          ],
+          "denominator": "世界輸出59.643百万t・精米換算",
+          "status": "推計・計算"
+        }
+      ],
+      "concentration": [
+        {
+          "label": "KRBL・籾加工能力",
+          "value": 195,
+          "unit": "t／時",
+          "year": "企業案内・基準年未記載",
+          "source": "krbl",
+          "definition": "会社の設備能力。実績や国内生産ではない。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "企業公表・基準年未記載"
+        }
+      ],
+      "note": "加工立地は企業沿革の複数例。直近稼働量、パキスタンの精米工場分布、個別買い手の調達集中は未確認。",
+      "agricultureTopic": "rice"
+    },
+    {
+      "id": "sc-it",
+      "title": "IT・業務受託",
+      "color": "#386f91",
+      "fact": "ベンガルール・ハイデラバード・プネ・チェンナイでは、専門人材と通信・事業支援の蓄積が、米欧の顧客に遠隔提供するサービス拠点を支えます。",
+      "reason": "IT（情報技術）関連サービスとBPO（業務プロセス受託）を扱います。顧客国・提供形態・輸出収入で整理し、物品の需給式やハードウェアを含むGDPを当てません。",
+      "source": {
+        "label": "インド政府STPI・都市拠点と産業支援",
+        "url": "https://stpi.in/en/about-stpi",
+        "year": "設立史・2026年確認",
+        "scope": "技術人材・通信・事業支援。都市別生産額ではない。",
+        "accessed": "2026-10-14"
+      },
+      "sourceId": "stpi",
+      "domestic": [
+        {
+          "label": "インド・ソフトウェア等輸出",
+          "value": 221.4,
+          "unit": "十億USD",
+          "year": "2025–26年度",
+          "source": "rbi-it",
+          "definition": "海外拠点現地販売を除く。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "パキスタン・ICTサービス輸出",
+          "value": 3.812,
+          "unit": "十億USD",
+          "year": "2024–25年度",
+          "source": "pk-it",
+          "definition": "通信を含むICT（情報通信技術）。インドと対象が異なる。",
+          "countries": [
+            "PAK"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "スリランカ・ICT業務受託輸出",
+          "value": 1.64483,
+          "unit": "十億USD",
+          "year": "2025年",
+          "source": "sl-export",
+          "definition": "ICT・BPM（業務プロセス管理）の推計。",
+          "countries": [
+            "LKA"
+          ],
+          "denominator": "",
+          "status": "推計"
+        }
+      ],
+      "world": [
+        {
+          "label": "最新の同一定義世界シェア",
+          "value": null,
+          "unit": "未照合",
+          "year": "2026年確認",
+          "source": "rbi-it",
+          "definition": "広い技術産業の売上・雇用・GDP比は使わない。",
+          "countries": [],
+          "denominator": "同年同定義の世界サービス輸出",
+          "status": "未確認"
+        }
+      ],
+      "concentration": [
+        {
+          "label": "インド輸出・米国向け",
+          "value": 54.1,
+          "unit": "%",
+          "year": "2025–26年度",
+          "source": "rbi-it",
+          "definition": "顧客所在地。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "インドの同対象サービス輸出額",
+          "status": "公表値"
+        },
+        {
+          "label": "同・欧州向け",
+          "value": 31.8,
+          "unit": "%",
+          "year": "2025–26年度",
+          "source": "rbi-it",
+          "definition": "英国15.4%は欧州の内数。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "インドの同対象サービス輸出額",
+          "status": "公表値"
+        },
+        {
+          "label": "同・オフサイト提供",
+          "value": 91.7,
+          "unit": "%",
+          "year": "2025–26年度",
+          "source": "rbi-it",
+          "definition": "遠隔提供。海外拠点現地売上と別。",
+          "countries": [
+            "IND"
+          ],
+          "denominator": "同対象輸出の提供形態",
+          "status": "公表値"
+        }
+      ],
+      "note": "国別の対象・期間が異なるため南アジア合計にしません。",
+      "agricultureTopic": null
+    },
+    {
+      "id": "sc-tourism",
+      "title": "国際観光",
+      "color": "#618968",
+      "fact": "モルディブの環礁リゾートとスリランカのコロンボ・ゴール沿岸に宿泊が集まり、ポカラは山岳観光の入口として景観と交通・宿泊を結びます。",
+      "reason": "海岸・山岳景観だけでなく空港・宿泊・人材が立地を支えます。顧客国籍と航空経路は別。観光収入・到着・宿泊・直接GDPを分けます。",
+      "source": {
+        "label": "モルディブ統計局 Tourism Statistics 2025",
+        "url": "https://statisticsmaldives.gov.mv/mbs/wp-content/uploads/2026/09/WTD-2026-1.pdf",
+        "year": "2025年・2026年9月公表",
+        "scope": "実質GDPの観光部門、到着客、施設・ベッド。波及効果は別。",
+        "accessed": "2026-10-14"
+      },
+      "sourceId": "mdv",
+      "domestic": [
+        {
+          "label": "モルディブ・観光／実質GDP",
+          "value": 20.3,
+          "unit": "%",
+          "year": "2025年",
+          "source": "mdv",
+          "definition": "統計局の観光部門。波及効果全体ではない。",
+          "countries": [
+            "MDV"
+          ],
+          "denominator": "同国の実質GDP",
+          "status": "公表値"
+        },
+        {
+          "label": "モルディブ・外国人到着",
+          "value": 2246516,
+          "unit": "人",
+          "year": "2025年",
+          "source": "mdv",
+          "definition": "到着回数。ユニーク人数や国内旅行ではない。",
+          "countries": [
+            "MDV"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "スリランカ・外国人到着",
+          "value": 2362521,
+          "unit": "人",
+          "year": "2025年",
+          "source": "sl-tourism",
+          "definition": "年間外国人到着。",
+          "countries": [
+            "LKA"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        },
+        {
+          "label": "スリランカ・観光収入",
+          "value": 3.219,
+          "unit": "十億USD",
+          "year": "2025年",
+          "source": "sl-tourism",
+          "definition": "衣料・ICT等の商品／選定サービス輸出集計と別。",
+          "countries": [
+            "LKA"
+          ],
+          "denominator": "",
+          "status": "公表値"
+        }
+      ],
+      "world": [
+        {
+          "label": "モルディブ＋スリランカ／世界到着",
+          "value": 0.29286285714285715,
+          "unit": "%",
+          "year": "2024年",
+          "source": "tourism-world",
+          "definition": "2か国計4,100,080到着。各国の2024年値は両国観光統計参照。南アジア合計ではない。量的な世界優位でなく、小国GDPへの重みで採用。",
+          "countries": [
+            "MDV",
+            "LKA"
+          ],
+          "denominator": "世界約14億外国人到着〔概数〕",
+          "status": "概数・計算"
+        }
+      ],
+      "concentration": [
+        {
+          "label": "コロンボ＋ゴール／登録客室",
+          "value": 35.95119003659069,
+          "unit": "%",
+          "year": "2025年",
+          "source": "sl-tourism",
+          "definition": "コロンボ11,398室＋ゴール10,021室。",
+          "countries": [
+            "LKA"
+          ],
+          "denominator": "全国登録59,578室",
+          "status": "計算"
+        },
+        {
+          "label": "モルディブ到着客・中国",
+          "value": 14.6,
+          "unit": "%",
+          "year": "2025年",
+          "source": "mdv",
+          "definition": "国籍別。航空便の出発地とは別。",
+          "countries": [
+            "MDV"
+          ],
+          "denominator": "同国外国人到着客",
+          "status": "公表値"
+        },
+        {
+          "label": "同・ロシア",
+          "value": 12.4,
+          "unit": "%",
+          "year": "2025年",
+          "source": "mdv",
+          "definition": "国籍別。",
+          "countries": [
+            "MDV"
+          ],
+          "denominator": "同国外国人到着客",
+          "status": "公表値"
+        }
+      ],
+      "note": "モルディブ施設179・稼働64,676床は全国値。ネパール・ブータンの最新同定義観光収入は未取得。",
+      "agricultureTopic": null
+    }
+  ]
+}

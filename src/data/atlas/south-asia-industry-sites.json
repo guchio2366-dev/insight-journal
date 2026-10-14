@@ -1,0 +1,767 @@
+[
+  {
+    "id": "sc-dhaka-garments",
+    "group": "sc-textiles",
+    "name": "ダッカ・ガジプル：衣料縫製",
+    "point": [
+      90.4,
+      23.88
+    ],
+    "country": "BGD",
+    "fact": "ILOの2015年調査が挙げる複数地区の衣料工場集積。最新の地区別工場数は未照合。",
+    "reason": "縫製の労働力、糸・生地の調達と輸出港への輸送が関わります。",
+    "sourceId": "ilo",
+    "kind": "縫製集積",
+    "evidenceYear": "2015年調査",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-chattogram-garments",
+    "group": "sc-textiles",
+    "name": "チョットグラム：衣料と港",
+    "point": [
+      91.8,
+      22.35
+    ],
+    "country": "BGD",
+    "fact": "ILOが衣料工場の集積地区の一つとして記載。",
+    "reason": "輸出港への接続が工場立地の条件になります。",
+    "sourceId": "ilo",
+    "kind": "縫製集積",
+    "evidenceYear": "2015年調査",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-tiruppur-textiles",
+    "group": "sc-textiles",
+    "name": "ティルプル：ニット衣料",
+    "point": [
+      77.34,
+      11.11
+    ],
+    "country": "IND",
+    "fact": "インド政府地区調査が複数のニット・衣料加工を記載。",
+    "reason": "編立・染色・縫製と企業・労働力の近接が加工を支えます。",
+    "sourceId": "tiruppur",
+    "kind": "衣料加工集積",
+    "evidenceYear": "2015–16年調査",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-faisalabad-textiles",
+    "group": "sc-textiles",
+    "name": "ファイサラーバード：織布",
+    "point": [
+      73.09,
+      31.42
+    ],
+    "country": "PAK",
+    "fact": "SMEDAは市内の複数地区に織布・糊付け・染色などが分布すると説明。",
+    "reason": "糸市場・機械・染料・加工業者の集積が織布を支えます。",
+    "sourceId": "faisalabad",
+    "kind": "織布加工集積",
+    "evidenceYear": "歴史調査・最新工場数は未照合",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-odisha-coal",
+    "group": "sc-coal",
+    "name": "オディシャ：石炭資源",
+    "point": [
+      85.1,
+      21.1
+    ],
+    "country": "IND",
+    "fact": "2025年4月1日の地質資源量は100.99十億t。州内案内点であり炭鉱1施設ではない。",
+    "reason": "地質資源量と年間生産・採掘可能量を区別します。",
+    "sourceId": "coal-resource",
+    "kind": "資源分布",
+    "evidenceYear": "2025年4月1日",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "2025資源量 100.99十億t"
+  },
+  {
+    "id": "sc-jharkhand-coal",
+    "group": "sc-coal",
+    "name": "ジャールカンド：石炭資源",
+    "point": [
+      85.6,
+      23.9
+    ],
+    "country": "IND",
+    "fact": "2025年4月1日の地質資源量は93.25十億t。採掘実績ではない。",
+    "reason": "一般炭と製鉄用原料炭の品質・用途は異なります。",
+    "sourceId": "coal-resource",
+    "kind": "資源分布",
+    "evidenceYear": "2025年4月1日",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "2025資源量 93.25十億t"
+  },
+  {
+    "id": "sc-chhattisgarh-coal",
+    "group": "sc-coal",
+    "name": "チャッティースガル：石炭資源",
+    "point": [
+      82.6,
+      22.3
+    ],
+    "country": "IND",
+    "fact": "2025年4月1日の地質資源量は85.26十億t。工場位置や年間生産ではない。",
+    "reason": "炭田側の供給と消費地への輸送を分けます。",
+    "sourceId": "coal-resource",
+    "kind": "資源分布",
+    "evidenceYear": "2025年4月1日",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "2025資源量 85.26十億t"
+  },
+  {
+    "id": "sc-thar-coal",
+    "group": "sc-coal",
+    "name": "タール：国内炭と発電",
+    "point": [
+      69.75,
+      24.75
+    ],
+    "country": "PAK",
+    "fact": "財務省の2025–26年調査はタール炭による輸入代替と発電を説明。点は炭田地域の案内位置。",
+    "reason": "褐炭の国内利用と輸入炭の臨海発電は供給経路が異なります。",
+    "sourceId": "pk-energy",
+    "kind": "採炭・発電地域",
+    "evidenceYear": "2025–26年調査",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-odisha-steel",
+    "group": "sc-steel",
+    "name": "カリンガナガル：鉄鋼",
+    "point": [
+      85.98,
+      20.97
+    ],
+    "country": "IND",
+    "fact": "Tata Steelの2024–25年度資料では既存拠点の年産能力を3から8百万tへ増強。",
+    "reason": "鉱石資源と既存投資・輸送の蓄積が製鉄を支えます。能力8百万tは年の実生産ではありません。",
+    "sourceId": "tata",
+    "kind": "稼働製鋼拠点",
+    "evidenceYear": "2024–25年度",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "2024–25能力 800万t／年"
+  },
+  {
+    "id": "sc-meramandali-steel",
+    "group": "sc-steel",
+    "name": "メラマンダリ：鉄鋼",
+    "point": [
+      85.3,
+      20.83
+    ],
+    "country": "IND",
+    "fact": "Tata Steelがオディシャ州の既存製鋼資産として掲載。",
+    "reason": "同州に複数の製鋼拠点があることを示す例で、会社だけを州全体としません。",
+    "sourceId": "tata",
+    "kind": "既存製鋼拠点",
+    "evidenceYear": "2024–25年度",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-jamnagar-refining",
+    "group": "sc-refining",
+    "name": "ジャムナガル：石油精製",
+    "point": [
+      70.08,
+      22.47
+    ],
+    "country": "IND",
+    "fact": "Relianceが大型の単一立地精製複合拠点として掲載。",
+    "reason": "港から原油を受け、燃料や原料を加工・出荷する臨海立地。",
+    "sourceId": "ril",
+    "kind": "既存精製拠点",
+    "evidenceYear": "企業案内・資料年未記載",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-panipat-refining",
+    "group": "sc-refining",
+    "name": "パニパット：石油精製",
+    "point": [
+      76.97,
+      29.39
+    ],
+    "country": "IND",
+    "fact": "2026年8月の政府答弁が既存製油所の所在地として掲載。",
+    "reason": "既存精製の案内位置。増設の計画能力を現在の能力に加えません。",
+    "sourceId": "refining",
+    "kind": "既存精製拠点",
+    "evidenceYear": "2026年8月答弁",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-mumbai-refining",
+    "group": "sc-refining",
+    "name": "ムンバイ：石油精製",
+    "point": [
+      72.88,
+      19.07
+    ],
+    "country": "IND",
+    "fact": "2026年8月の政府答弁が既存製油所の所在地として掲載。",
+    "reason": "既存精製の案内位置。増設の計画能力を現在の能力に加えません。",
+    "sourceId": "refining",
+    "kind": "既存精製拠点",
+    "evidenceYear": "2026年8月答弁",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-kochi-refining",
+    "group": "sc-refining",
+    "name": "コチ：石油精製",
+    "point": [
+      76.28,
+      9.97
+    ],
+    "country": "IND",
+    "fact": "2026年8月の政府答弁が既存製油所の所在地として掲載。",
+    "reason": "既存精製の案内位置。増設の計画能力を現在の能力に加えません。",
+    "sourceId": "refining",
+    "kind": "既存精製拠点",
+    "evidenceYear": "2026年8月答弁",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-barauni-refining",
+    "group": "sc-refining",
+    "name": "バラウニ：石油精製",
+    "point": [
+      86.02,
+      25.47
+    ],
+    "country": "IND",
+    "fact": "2026年8月の政府答弁が既存製油所の所在地として掲載。",
+    "reason": "既存精製の案内位置。増設の計画能力を現在の能力に加えません。",
+    "sourceId": "refining",
+    "kind": "既存精製拠点",
+    "evidenceYear": "2026年8月答弁",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-manesar-two-wheelers",
+    "group": "sc-two-wheelers",
+    "name": "マネサル：二輪車",
+    "point": [
+      76.94,
+      28.35
+    ],
+    "country": "IND",
+    "fact": "Hondaが2025年5月時点の既存工場として掲載。年380,000台の設備能力。",
+    "reason": "企業の設備能力であり年間実生産ではありません。2027年の増設は計画として別に扱います。",
+    "sourceId": "honda",
+    "kind": "既存二輪車工場",
+    "evidenceYear": "2025年5月",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "2025能力 38万台／年"
+  },
+  {
+    "id": "sc-tapukara-two-wheelers",
+    "group": "sc-two-wheelers",
+    "name": "タプカラ：二輪車",
+    "point": [
+      76.84,
+      28.14
+    ],
+    "country": "IND",
+    "fact": "Hondaが2025年5月時点の既存工場として掲載。年1,300,000台の設備能力。",
+    "reason": "企業の設備能力であり年間実生産ではありません。2027年の増設は計画として別に扱います。",
+    "sourceId": "honda",
+    "kind": "既存二輪車工場",
+    "evidenceYear": "2025年5月",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "2025能力 130万台／年"
+  },
+  {
+    "id": "sc-narasapura-two-wheelers",
+    "group": "sc-two-wheelers",
+    "name": "ナルサプラ：二輪車",
+    "point": [
+      77.99,
+      13.12
+    ],
+    "country": "IND",
+    "fact": "Hondaが2025年5月時点の既存工場として掲載。年2,500,000台の設備能力。",
+    "reason": "企業の設備能力であり年間実生産ではありません。2027年の増設は計画として別に扱います。",
+    "sourceId": "honda",
+    "kind": "既存二輪車工場",
+    "evidenceYear": "2025年5月",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "2025能力 250万台／年"
+  },
+  {
+    "id": "sc-vithalapur-two-wheelers",
+    "group": "sc-two-wheelers",
+    "name": "ヴィタラプル：二輪車",
+    "point": [
+      72.07,
+      23.43
+    ],
+    "country": "IND",
+    "fact": "Hondaが2025年5月時点の既存工場として掲載。年1,960,000台の設備能力。",
+    "reason": "企業の設備能力であり年間実生産ではありません。2027年の増設は計画として別に扱います。",
+    "sourceId": "honda",
+    "kind": "既存二輪車工場",
+    "evidenceYear": "2025年5月",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "2025能力 196万台／年"
+  },
+  {
+    "id": "sc-gurugram-auto",
+    "group": "sc-auto",
+    "name": "グルグラム：乗用車組立",
+    "point": [
+      77.03,
+      28.46
+    ],
+    "country": "IND",
+    "fact": "Suzukiの2025年2月発表に掲載された既存生産施設。",
+    "reason": "国内市場・部品供給と交通網が現地組立を支えます。会社の能力を国内生産に転用しません。",
+    "sourceId": "suzuki",
+    "kind": "稼働乗用車工場",
+    "evidenceYear": "2025年2月",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-manesar-auto",
+    "group": "sc-auto",
+    "name": "マネサル：乗用車組立",
+    "point": [
+      76.94,
+      28.35
+    ],
+    "country": "IND",
+    "fact": "Suzukiの2025年2月発表に掲載された既存生産施設。",
+    "reason": "国内市場・部品供給と交通網が現地組立を支えます。会社の能力を国内生産に転用しません。",
+    "sourceId": "suzuki",
+    "kind": "稼働乗用車工場",
+    "evidenceYear": "2025年2月",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-kharkhoda-auto",
+    "group": "sc-auto",
+    "name": "カルコダ：乗用車組立",
+    "point": [
+      76.91,
+      28.88
+    ],
+    "country": "IND",
+    "fact": "2025年2月25日にMaruti Suzukiが生産開始。初年度能力250,000台／年。",
+    "reason": "国内市場・部品供給と交通網が現地組立を支えます。会社の能力を国内生産に転用しません。",
+    "sourceId": "suzuki",
+    "kind": "稼働乗用車工場",
+    "evidenceYear": "2025年2月",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "2025初年度能力 25万台／年"
+  },
+  {
+    "id": "sc-gujarat-auto",
+    "group": "sc-auto",
+    "name": "グジャラート：乗用車組立",
+    "point": [
+      72.07,
+      23.48
+    ],
+    "country": "IND",
+    "fact": "Suzukiは2025年8月に既存グジャラート工場から電気自動車の出荷開始を発表。",
+    "reason": "ピパバブ港から世界市場へ出荷すると企業が記載。航路や個別の取引線は描きません。",
+    "sourceId": "suzuki-export",
+    "kind": "稼働乗用車工場",
+    "evidenceYear": "2025年8月",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-hyderabad-pharma",
+    "group": "sc-pharma",
+    "name": "ハイデラバード：医薬品",
+    "point": [
+      78.49,
+      17.39
+    ],
+    "country": "IND",
+    "fact": "インド医薬品局の委託調査が複数企業を含む製薬集積として掲載。",
+    "reason": "製剤・原薬・研究は別工程。化学品供給、専門人材、工業団地が関わります。計画Pharma Cityの地点ではありません。",
+    "sourceId": "pharma-cluster",
+    "kind": "製薬集積",
+    "evidenceYear": "委託調査・最新工場数未照合",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-ahmedabad-pharma",
+    "group": "sc-pharma",
+    "name": "アーメダバード：医薬品",
+    "point": [
+      72.58,
+      23.03
+    ],
+    "country": "IND",
+    "fact": "インド医薬品局の委託調査が複数企業を含む製薬集積として掲載。",
+    "reason": "製剤・原薬・研究は別工程。化学品供給、専門人材、工業団地が関わります。計画Pharma Cityの地点ではありません。",
+    "sourceId": "pharma-cluster",
+    "kind": "製薬集積",
+    "evidenceYear": "委託調査・最新工場数未照合",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-baddi-pharma",
+    "group": "sc-pharma",
+    "name": "バッディ：医薬品",
+    "point": [
+      76.79,
+      30.95
+    ],
+    "country": "IND",
+    "fact": "インド医薬品局の委託調査が複数企業を含む製薬集積として掲載。",
+    "reason": "製剤・原薬・研究は別工程。化学品供給、専門人材、工業団地が関わります。計画Pharma Cityの地点ではありません。",
+    "sourceId": "pharma-cluster",
+    "kind": "製薬集積",
+    "evidenceYear": "委託調査・最新工場数未照合",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-ankleshwar-pharma",
+    "group": "sc-pharma",
+    "name": "アンクレーシュワル：医薬品",
+    "point": [
+      73.01,
+      21.63
+    ],
+    "country": "IND",
+    "fact": "インド医薬品局の委託調査が複数企業を含む製薬集積として掲載。",
+    "reason": "製剤・原薬・研究は別工程。化学品供給、専門人材、工業団地が関わります。計画Pharma Cityの地点ではありません。",
+    "sourceId": "pharma-cluster",
+    "kind": "製薬集積",
+    "evidenceYear": "委託調査・最新工場数未照合",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-bengaluru-it",
+    "group": "sc-it",
+    "name": "ベンガルール：ITサービス",
+    "point": [
+      77.59,
+      12.97
+    ],
+    "country": "IND",
+    "fact": "STPIの都市拠点・設立史で確認できるソフトウェア支援の都市。",
+    "reason": "専門人材、通信と事業支援の蓄積が遠隔提供を支えます。州のサービス業GDPや本社売上をこの都市のIT生産額にしません。",
+    "sourceId": "stpi",
+    "kind": "サービス都市",
+    "evidenceYear": "設立史・2026年確認",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-hyderabad-it",
+    "group": "sc-it",
+    "name": "ハイデラバード：ITサービス",
+    "point": [
+      78.4,
+      17.45
+    ],
+    "country": "IND",
+    "fact": "STPIの都市拠点・設立史で確認できるソフトウェア支援の都市。",
+    "reason": "専門人材、通信と事業支援の蓄積が遠隔提供を支えます。州のサービス業GDPや本社売上をこの都市のIT生産額にしません。",
+    "sourceId": "stpi",
+    "kind": "サービス都市",
+    "evidenceYear": "設立史・2026年確認",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-pune-it",
+    "group": "sc-it",
+    "name": "プネ：ITサービス",
+    "point": [
+      73.86,
+      18.52
+    ],
+    "country": "IND",
+    "fact": "STPIの都市拠点・設立史で確認できるソフトウェア支援の都市。",
+    "reason": "専門人材、通信と事業支援の蓄積が遠隔提供を支えます。州のサービス業GDPや本社売上をこの都市のIT生産額にしません。",
+    "sourceId": "stpi",
+    "kind": "サービス都市",
+    "evidenceYear": "設立史・2026年確認",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-chennai-it",
+    "group": "sc-it",
+    "name": "チェンナイ：ITサービス",
+    "point": [
+      80.28,
+      13.08
+    ],
+    "country": "IND",
+    "fact": "STPIの都市拠点・設立史で確認できるソフトウェア支援の都市。",
+    "reason": "専門人材、通信と事業支援の蓄積が遠隔提供を支えます。州のサービス業GDPや本社売上をこの都市のIT生産額にしません。",
+    "sourceId": "stpi",
+    "kind": "サービス都市",
+    "evidenceYear": "設立史・2026年確認",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-nepal-hydro",
+    "group": "sc-hydro",
+    "name": "カリガンダキ：水力発電",
+    "point": [
+      83.65,
+      27.93
+    ],
+    "country": "NPL",
+    "fact": "ネパール電力庁の既存水力施設案内。",
+    "reason": "河川の流量と落差、送電を組み合わせます。国別容量をこの施設の能力にしません。",
+    "sourceId": "nea",
+    "kind": "既存水力施設",
+    "evidenceYear": "公式施設案内",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-bhutan-hydro",
+    "group": "sc-hydro",
+    "name": "チュカ：水力発電",
+    "point": [
+      89.55,
+      27.06
+    ],
+    "country": "BTN",
+    "fact": "Druk Greenが既存水力施設として掲載。設備能力336 MW。",
+    "reason": "河川の落差、送電と電力取引が利用を支えます。容量は発電量ではありません。地区付近の案内位置です。",
+    "sourceId": "druk",
+    "kind": "既存水力施設",
+    "evidenceYear": "公式施設案内・2026年確認",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "設備容量 336 MW"
+  },
+  {
+    "id": "sc-tala-hydro",
+    "group": "sc-hydro",
+    "name": "タラ：水力発電",
+    "point": [
+      89.55,
+      26.91
+    ],
+    "country": "BTN",
+    "fact": "Druk Greenが既存水力施設として掲載。設備能力1020 MW。",
+    "reason": "河川の落差、送電と電力取引が利用を支えます。容量は発電量ではありません。地区付近の案内位置です。",
+    "sourceId": "druk",
+    "kind": "既存水力施設",
+    "evidenceYear": "公式施設案内・2026年確認",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "設備容量 1,020 MW"
+  },
+  {
+    "id": "sc-mangdechhu-hydro",
+    "group": "sc-hydro",
+    "name": "トンサ・マンデチュ：水力発電",
+    "point": [
+      90.5,
+      27.5
+    ],
+    "country": "BTN",
+    "fact": "Druk Greenが既存水力施設として掲載。設備能力720 MW。",
+    "reason": "河川の落差、送電と電力取引が利用を支えます。容量は発電量ではありません。地区付近の案内位置です。",
+    "sourceId": "druk",
+    "kind": "既存水力施設",
+    "evidenceYear": "公式施設案内・2026年確認",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "設備容量 720 MW"
+  },
+  {
+    "id": "sc-darjeeling-tea",
+    "group": "sc-tea",
+    "name": "ダージリン：製茶",
+    "point": [
+      88.26,
+      27.04
+    ],
+    "country": "IND",
+    "fact": "Tea Boardは600～2,000mの標高・降水と加工条件を説明。",
+    "reason": "栽培した生葉の加工と産地銘柄の管理を区別します。",
+    "sourceId": "tea-india",
+    "kind": "栽培・製茶地域",
+    "evidenceYear": "産地案内",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-assam-tea",
+    "group": "sc-tea",
+    "name": "アッサム：製茶",
+    "point": [
+      94.91,
+      27.47
+    ],
+    "country": "IND",
+    "fact": "Tea Boardの多雨域の茶産地。生葉の地域と製茶後重量は別。",
+    "reason": "茶葉の栽培条件と摘採後の加工条件が製茶立地を支えます。",
+    "sourceId": "tea-assam",
+    "kind": "栽培・製茶地域",
+    "evidenceYear": "産地案内",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-nuwara-eliya-tea",
+    "group": "sc-tea",
+    "name": "ヌワラエリヤ：製茶",
+    "point": [
+      80.77,
+      6.97
+    ],
+    "country": "LKA",
+    "fact": "スリランカTea Boardが地域別茶産地として掲載。",
+    "reason": "標高・雨・気温と近接する加工が茶の性質と産地銘柄を形成します。",
+    "sourceId": "tea-sl",
+    "kind": "栽培・製茶地域",
+    "evidenceYear": "産地案内",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-uva-tea",
+    "group": "sc-tea",
+    "name": "ウバ：製茶",
+    "point": [
+      81.06,
+      6.99
+    ],
+    "country": "LKA",
+    "fact": "スリランカTea Boardが地域別茶産地として掲載。",
+    "reason": "標高・雨・気温と近接する加工が茶の性質と産地銘柄を形成します。",
+    "sourceId": "tea-sl",
+    "kind": "栽培・製茶地域",
+    "evidenceYear": "産地案内",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-dhuri-rice",
+    "group": "sc-rice",
+    "name": "ドゥリ：米加工",
+    "point": [
+      75.87,
+      30.37
+    ],
+    "country": "IND",
+    "fact": "KRBLの企業沿革がドゥリ加工施設の開設を記載。直近の稼働量は未確認。",
+    "reason": "籾の調達、精米・選別・保管と販売をつなぐ加工拠点例。",
+    "sourceId": "krbl",
+    "kind": "沿革で確認した加工施設",
+    "evidenceYear": "企業沿革・直近稼働量未確認",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-gautam-buddha-rice",
+    "group": "sc-rice",
+    "name": "ガウタムブッダナガル：米加工",
+    "point": [
+      77.5,
+      28.5
+    ],
+    "country": "IND",
+    "fact": "KRBLの企業沿革が同地区の加工施設を記載。企業本社の点ではない。",
+    "reason": "水田の生産分布、企業の加工能力、全国の精米換算輸出を別指標として読みます。",
+    "sourceId": "krbl",
+    "kind": "沿革で確認した加工施設",
+    "evidenceYear": "企業沿革・直近稼働量未確認",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-maldives-tourism",
+    "group": "sc-tourism",
+    "name": "モルディブ：環礁観光",
+    "point": [
+      73.5,
+      4.3
+    ],
+    "country": "MDV",
+    "fact": "2025年全国に179のリゾート等、稼働ベッド64,676床。点は環礁観光の案内位置で1施設ではない。",
+    "reason": "島の景観と空港・船によるアクセス、宿泊が立地を支えます。",
+    "sourceId": "mdv",
+    "kind": "観光地域",
+    "evidenceYear": "2025年",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  },
+  {
+    "id": "sc-colombo-tourism",
+    "group": "sc-tourism",
+    "name": "コロンボ：宿泊・観光",
+    "point": [
+      79.86,
+      6.93
+    ],
+    "country": "LKA",
+    "fact": "2025年の地区登録客室は11,398室。全国59,578室の地区内数。",
+    "reason": "海岸景観、空港からのアクセスと宿泊設備が観光サービスを支えます。",
+    "sourceId": "sl-tourism",
+    "kind": "地区別宿泊集積",
+    "evidenceYear": "2025年",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "2025登録客室 11,398室"
+  },
+  {
+    "id": "sc-galle-tourism",
+    "group": "sc-tourism",
+    "name": "ゴール：宿泊・観光",
+    "point": [
+      80.22,
+      6.03
+    ],
+    "country": "LKA",
+    "fact": "2025年の地区登録客室は10,021室。全国59,578室の地区内数。",
+    "reason": "海岸景観、空港からのアクセスと宿泊設備が観光サービスを支えます。",
+    "sourceId": "sl-tourism",
+    "kind": "地区別宿泊集積",
+    "evidenceYear": "2025年",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "2025登録客室 10,021室"
+  },
+  {
+    "id": "sc-pokhara-tourism",
+    "group": "sc-tourism",
+    "name": "ポカラ：山岳観光",
+    "point": [
+      83.99,
+      28.21
+    ],
+    "country": "NPL",
+    "fact": "ネパール観光庁が湖と山岳観光の入口として紹介。地区収入・客室数は未取得。",
+    "reason": "景観への入口となる交通と宿泊が関わります。",
+    "sourceId": "pokhara",
+    "kind": "観光都市",
+    "evidenceYear": "公式観光案内",
+    "locationPrecision": "地域・都市周辺の案内位置。工場敷地・産業境界ではない。",
+    "scaleLabel": "地域・施設の位置例"
+  }
+]

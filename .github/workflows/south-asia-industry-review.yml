@@ -1,0 +1,56 @@
+name: Review South Asia major industries
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/data/atlas/south-asia-*'
+      - 'src/data/atlas/asia-focus.ts'
+      - 'src/components/atlas/asia/SouthAsiaIndustryStatistics.astro'
+      - 'src/styles/atlas-south-asia-industry.css'
+      - 'src/scripts/atlas-south-asia-industry-reading.ts'
+      - 'src/lib/atlas-south-asia-industry-labels.ts'
+      - 'scripts/verify-south-asia-industries.mjs'
+      - '.github/workflows/south-asia-industry-review.yml'
+  push:
+    branches: [codex/south-asia-industries-20261014]
+permissions:
+  contents: read
+concurrency:
+  group: south-industry-review-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - name: Verify in sandboxed runner Chrome
+        shell: bash
+        run: |
+          set -euo pipefail
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          test -n "$chrome_path"
+          if [[ -z "$(fc-list ':lang=ja' family)" ]]; then
+            sudo apt-get update
+            sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+          fi
+          test -n "$(fc-list ':lang=ja' family)"
+          REVIEW_CHROME_PATH="$chrome_path" node scripts/verify-south-asia-industries.mjs
+      - name: Upload screenshots and exact-head verification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: south-asia-industries-${{ github.event.pull_request.head.sha || github.sha }}
+          path: review-artifacts/south-asia-industries
+          if-no-files-found: warn
+          retention-days: 7
