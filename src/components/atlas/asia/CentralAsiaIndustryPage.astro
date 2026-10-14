@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import AtlasWorkspaceFrame from '../AtlasWorkspaceFrame.astro';
+import AtlasRegionNavigation from '../AtlasRegionNavigation.astro';
+import CentralAsiaIndustryStatistics from './CentralAsiaIndustryStatistics.astro';
+import geography from '../../../../public/assets/atlas/asia-population-v1/south-central-asia.geography.json';
+import {centralIndustries,centralIndustrySectors,centralIndustrySites,centralIndustryCountries,centralIndustrySources,centralIndustryOmissions} from '../../../data/atlas/central-asia-industry';
+import {projectCentralIndustry,centralIndustryGeometryPath,fitCentralIndustryFrame} from '../../../lib/atlas-central-asia-industry';
+import {withBase} from '../../../lib/urls';
+import '../../../styles/atlas-central-asia-industry.css';
+const codes=new Set(centralIndustryCountries.map(c=>c.code));
+const selected=geography.features.filter(f=>codes.has(f.properties.code as any));
+const extent=[Infinity,Infinity,-Infinity,-Infinity];
+const visit=(value:any)=>{if(typeof value?.[0]==='number'){extent[0]=Math.min(extent[0],value[0]);extent[1]=Math.min(extent[1],value[1]);extent[2]=Math.max(extent[2],value[0]);extent[3]=Math.max(extent[3],value[1]);}else if(Array.isArray(value))value.forEach(visit);};
+selected.forEach(f=>visit(f.geometry.coordinates));
+const initialFrame=fitCentralIndustryFrame(extent,1.65);
+const contextCodes=new Set(['RUS','CHN','AFG','IRN','AZE']);
+const fields=[{id:'agriculture',path:'agriculture',label:'農林業'},{id:'natural',path:'nature',label:'自然環境'},{id:'industry',path:'industry',label:'主要産業'},{id:'population',path:'population',label:'人口'}];
+const config={label:'中央アジア',regionId:'south-central-asia',focusId:'central-asia',bounds:extent,contentExtent:extent,countries:centralIndustryCountries,industryCountryCodes:[],industrySites:centralIndustrySites,projection:'equirectangular-44N',version:1};
+---
+<BaseLayout title="中央アジアの主要産業｜資源・加工・サービスの集積" description="中央アジア5か国の11産業を、産地・加工拠点・物流と旅行サービスの分布、実績と世界での位置から読む。" compactAtlas canonicalPath="/atlas/asia/central-asia/industry/">
+ <div class="asia-atlas-root" data-asia-atlas data-region="south-central-asia" data-focus="central-asia" data-field="industry">
+ <AtlasWorkspaceFrame region="south-central-asia" mapActions={false}>
+ <article class="atlas-explorer atlas-workspace central-industry" data-central-industry data-atlas-explorer data-field="industry">
+  <div class="atlas-compact-heading"><nav aria-label="パンくず"><a href={withBase('/atlas/')}>地図から見る</a> / 中央アジア</nav><span data-current-place>中央アジア全体</span></div>
+  <h1 class="visually-hidden">中央アジアの主要産業</h1>
+  <div class="atlas-region-controls"><AtlasRegionNavigation group="asia" current="central-asia" />
+   <div class="central-country-controls"><label>地域の強調<select data-country-select aria-label="国・地域を選ぶ"><option value="">中央アジア全体</option>{centralIndustryCountries.map(country=><option value={country.code}>{country.name}</option>)}</select></label><button type="button" data-reset>全体に戻す</button></div>
+  </div>
+  <nav class="atlas-tabs atlas-tabs-with-overview" aria-label="地図の分野"><a href={withBase('/atlas/asia/central-asia/overview/')} data-atlas-overview-link>概要</a>{fields.map(field=><a href={withBase(`/atlas/asia/central-asia/${field.path}/`)} data-field={field.id} aria-current={field.id==='industry'?'page':undefined}>{field.label}</a>)}</nav>
+  <nav class="central-sector-tabs" role="tablist" aria-label="主要産業の三分類">{centralIndustrySectors.map(sector=><button type="button" role="tab" data-central-sector={sector.id} id={`central-sector-${sector.id}`} aria-selected={String(sector.id==='resources')} tabindex={sector.id==='resources'?0:-1} aria-controls="central-industry-panel">{sector.label}</button>)}</nav>
+  <div class="central-industry-choices" aria-label="産業を選ぶ">{centralIndustrySectors.map(sector=><div data-central-choices={sector.id} hidden={sector.id!=='resources'}><button type="button" data-central-overview={sector.id} aria-pressed="true">分布全体</button>{centralIndustries.filter(industry=>industry.sectors.includes(sector.id)).map(industry=><button type="button" data-central-choice={industry.id} data-owner-sector={sector.id} aria-pressed="false" style={`--industry-color:${industry.color}`}><i aria-hidden="true"/>{industry.label}</button>)}</div>)}</div>
+  <div class="central-primary-grid atlas-primary-grid" id="central-industry-panel" role="tabpanel" aria-labelledby="central-sector-resources">
+   <section class="atlas-map-column" aria-label="産業名を主役にした集積図">
+    <div class="atlas-map-frame central-map-frame" data-central-map-frame>
+     <svg class="central-industry-map" data-central-map viewBox={initialFrame.join(' ')} role="group" tabindex="0" aria-label="中央アジア5か国の産業地図。産業名で選択し、矢印キーで移動できます。">
+      <rect x="-4000" y="-4000" width="9000" height="9000" fill="#e6eef0"/>
+      {geography.features.filter(f=>contextCodes.has(f.properties.code)).map(f=><path d={centralIndustryGeometryPath(f.geometry)} class="central-context-country" vector-effect="non-scaling-stroke" />)}
+      {selected.map(f=><path d={centralIndustryGeometryPath(f.geometry)} class="central-country-shape" data-central-country={f.properties.code} fill-rule="evenodd" vector-effect="non-scaling-stroke"><title>{centralIndustryCountries.find(c=>c.code===f.properties.code)?.name}</title></path>)}
+      {centralIndustryCountries.map(country=>{const [x,y]=projectCentralIndustry(country.labelPoint);return <text class="central-country-name" data-central-country-name={country.code} x={x} y={y}>{country.name}</text>;})}
+     </svg>
+     <div class="central-map-labels" data-central-labels></div>
+     <nav class="central-map-tools" aria-label="地図の範囲"><button type="button" data-central-fit aria-label="中央アジア5か国の全景">全景</button><button type="button" data-central-zoom-in aria-label="地図を拡大">＋</button><button type="button" data-central-zoom-out aria-label="地図を縮小">−</button></nav>
+    </div>
+    <p class="central-map-key"><span>● 採掘・発電・サービス　■ 加工　□ 州の加工集積</span><span>点の大きさは数量を表しません。引出線は産業名との対応で、取引・輸送経路ではありません。</span><span>破線の点：一部稼働・建設中</span></p>
+    <p class="central-label-note" data-central-label-note hidden>細部の産業名は、拡大または下の「集積と工程の一覧」でも確認できます。</p>
+    <div class="central-map-caption" data-central-map-caption>中央アジア5か国 · 確認した産業集積・操業地域</div>
+   </section>
+   <aside class="central-reading" aria-label="産業分布の概説と立地の理由">
+    <h2 data-central-title>資源・エネルギー</h2><p class="central-insight" data-central-insight>{centralIndustrySectors[0].insight}</p>
+    <h3>主な集積の位置</h3><p data-central-reading>{centralIndustrySectors[0].overview}</p>
+    <h3>なぜここに集まるのか</h3><p data-central-why>{centralIndustrySectors[0].why}</p>
+    <section class="central-selected-site" data-central-site-reading hidden><h3 data-central-site-title></h3><p data-central-site-note></p><p class="central-site-status" data-central-site-status></p><div data-central-site-sources></div></section>
+    <section data-central-process hidden><h3>工程と市場</h3><p data-central-process-copy></p><p class="central-scope-note" data-central-limits></p></section>
+    <div class="central-selection-actions"><button type="button" data-central-clear hidden>選択を解除</button><label data-central-only-wrap hidden><input type="checkbox" data-central-only />この産業だけ表示</label><button type="button" data-central-overlap hidden></button></div>
+    <p class="central-scope-note">銅・クロムの加工拠点は資源と製造の両方で読みます。表示を重ねても統計は加算しません。</p>
+    <p class="central-reading-links"><a href="#central-industry-statistics">統計・集積の量へ</a><a href="#central-industry-locations">集積と工程の一覧</a></p>
+   </aside>
+  </div>
+  <CentralAsiaIndustryStatistics />
+  <details class="central-locations" id="central-industry-locations"><summary>集積と工程の一覧から選ぶ</summary><p>産業ごとの確認済み地域です。近い拠点間の取引や、未収録の工場数は補いません。</p><div data-central-site-list></div></details>
+  <details class="central-source-method" id="central-industry-sources"><summary>全11品目の出典・年・範囲</summary><p>国境は既存のNatural Earth 1:10mから加工した中央アジア5か国の形状です。44°Nを標準緯線とする局地的な正距円筒図法で、面積比較・敷地測定には使いません。地点は資料で確認した地域の案内位置です。</p><p>単位：USDは米ドル、KZTはカザフスタンのテンゲ。tUはウラン金属含有量のトン、U₃O₈は酸化ウランの重量。MWは設備出力のメガワット、GWhは発電量のギガワット時（100万kWh）。TEUは20フィートコンテナ換算です。</p><ul>{centralIndustryOmissions.map(note=><li>{note}</li>)}</ul><div class="central-source-list">{Object.entries(centralIndustrySources).map(([id,source])=><section id={`central-source-${id}`}><h3><a href={source.url}>{source.title}</a></h3><p>{source.publisher} · {source.period} · 確認 {source.checked}</p><p>{source.scope}</p></section>)}</div></details>
+  <noscript><section class="central-noscript"><h2>産業と集積の位置</h2>{centralIndustries.map(industry=><section><h3>{industry.label}</h3><p>{industry.overview}</p><p>{industry.why}</p></section>)}<p>地図の選択にはJavaScriptを使います。概説・初期統計・出典はこのまま閲覧できます。</p></section></noscript>
+  <script type="application/json" data-asia-config data-central-config set:html={JSON.stringify(config).replace(/</g,'\\u003c')} />
+ </article>
+ </AtlasWorkspaceFrame>
+ </div>
+</BaseLayout>
+<script>import {initCentralAsiaIndustry} from '../../../scripts/atlas-central-asia-industry';const root=document.querySelector<HTMLElement>('[data-central-industry]');if(root)initCentralAsiaIndustry(root);</script>

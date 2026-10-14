@@ -164,7 +164,13 @@ test('南アジア・中央アジアは別URLと初期範囲を持ち、元資�
    const q=s=>window.document.querySelector(s),cfg=JSON.parse(q('[data-asia-config]').textContent);
    assert.equal(cfg.label,label);assert.equal(cfg.regionId,'south-central-asia');assert.equal(cfg.focusId,id);assert.deepEqual(cfg.bounds,cfg.contentExtent);
    assert.deepEqual(cfg.countries.map(c=>c.code).sort(),(id==='south-asia'?['AFG','BGD','BTN','IND','LKA','MDV','NPL','PAK']:['KAZ','KGZ','TJK','TKM','UZB']));
-   assert.equal(cfg.climate.image.includes('south-central-asia'),true);
+   if(id==='central-asia'&&field==='industry'){
+    assert.equal(cfg.projection,'equirectangular-44N');
+    assert.equal(q('[data-central-map]').tagName.toLowerCase(),'svg');
+    assert.equal(window.document.querySelectorAll('[data-central-sector]').length,3);
+    assert.equal(new Set([...window.document.querySelectorAll('[data-central-choice]')].map(b=>b.dataset.centralChoice)).size,11);
+    assert.equal(window.document.querySelectorAll('[data-central-stat-column]').length,3);
+   }else assert.equal(cfg.climate.image.includes('south-central-asia'),true);
    assert.ok(q('link[rel=canonical]').href.endsWith(`/atlas/asia/${id}/${field}/`));
    assert.ok(q('[data-focus-link="'+id+'"][aria-current="page"]'));
    assert.ok((await readFile('dist/sitemap.xml','utf8')).includes(`/atlas/asia/${id}/${field}/`));
