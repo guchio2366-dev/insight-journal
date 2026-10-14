@@ -72,7 +72,7 @@ export function createSoutheastIndustryLocations(root:HTMLElement,getState:()=>A
   const candidates=locations.filter(({site})=>!points.get(site.id)!.hidden&&(!compact||!seen.has(site.kind)&&!!seen.add(site.kind)));
   const frame=overlay.getBoundingClientRect();
   const reserved=[legend,root.querySelector<HTMLElement>('.asia-map-tools')].filter((node):node is HTMLElement=>!!node).map(node=>{const r=node.getBoundingClientRect();return {left:r.left-frame.left-3,top:r.top-frame.top-3,right:r.right-frame.left+3,bottom:r.bottom-frame.top+3};});
-  const boxes=placeSoutheastIndustryLabels(candidates.map(({site,p})=>({id:site.id,x:p.x,y:p.y,width:compact?112:130,height:cue[site.id]?52:40})),width,height,reserved);
+  const boxes=placeSoutheastIndustryLabels(candidates.map(({site,p})=>({id:site.id,x:p.x,y:p.y,width:compact?112:130,height:cue[site.id]?52:40})),width,height,reserved,locations.map(x=>x.p));
   for(const {site,p} of candidates){const box=boxes.get(site.id);if(!box)continue;const label=labels.get(site.id)!;label.hidden=false;Object.assign(label.style,{left:box.left+'px',top:box.top+'px',width:box.right-box.left+'px',height:box.bottom-box.top+'px'});
    const line=document.createElementNS('http://www.w3.org/2000/svg','line');line.dataset.southeastIndustryLeader=site.id;line.setAttribute('x1',String(p.x));line.setAttribute('y1',String(p.y));line.setAttribute('x2',String(Math.max(box.left,Math.min(p.x,box.right))));line.setAttribute('y2',String(Math.max(box.top,Math.min(p.y,box.bottom))));leaders.append(line);
   }
@@ -81,7 +81,7 @@ export function createSoutheastIndustryLocations(root:HTMLElement,getState:()=>A
  function render(){
   const state=getState(),active=state.field==='industry'&&!state.place&&!['trade-exports','trade-imports'].includes(state.topic??'');
   root.dataset.southeastIndustryActive=String(active);root.dataset.southeastIndustryKind=kind;root.dataset.southeastIndustrySector=sector;
-  overlay.hidden=!active;controls.hidden=!active;story.hidden=!active;statistics.hidden=!active;countryEvidence(active);
+  overlay.hidden=!active||!map;controls.hidden=!active;story.hidden=!active;statistics.hidden=!active;countryEvidence(active);
   query('[data-southeast-palm-map-key]').hidden=!active||kind!=='palm';
   if(palmLoaded&&map)for(const id of ['southeast-palm-processing','southeast-palm-processing-lines'])map.setLayoutProperty(id,'visibility',active&&kind==='palm'?'visible':'none');
   const profile=kind==='all'?null:southeastIndustryProfile(kind)!;

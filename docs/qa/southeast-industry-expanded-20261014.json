@@ -1,0 +1,20 @@
+{
+  "region": "southeast-asia",
+  "baseMain": "63e998cc16e671230b3c1a9d0a95803e1d6d0545",
+  "adoptedIndustries": 18,
+  "existingGuidePositions": 30,
+  "newFactoryPositions": 0,
+  "palmStateGeometries": 7,
+  "localTargeted": {"unit": 4, "builtPageAndController": 3, "passed": 7, "failed": 0},
+  "localBroadUnitAttempt": {"tests": 1355, "passed": 1348, "failed": 4, "skipped": 3, "failures": "Unchanged tests/unit/atlas-mexico-nature-surfaces.test.mjs waitFor/waitContours conditions; not a passing full-suite result"},
+  "localBroadBuiltSiteAttempt": "Unchanged-region wait failures observed; no passing full-suite result claimed",
+  "localProductionBuild": "112 pages, succeeded before final small label/fallback safeguards; final rebuild recorded separately",
+  "localReleaseBoundary": "succeeded on built c6a28fb8",
+  "localRealBrowser": {"executed": false, "error": "Chromium setuid_sandbox_host.cc:166: /usr/lib/chromium/chrome-sandbox not configured correctly", "sandboxDisabled": false, "permissionsChanged": false},
+  "realBrowserPlan": {"script": "scripts/verify-southeast-industry-expanded.mjs", "viewports": ["1920x1080", "1024x768", "390x844"], "checks": ["18 industry selections", "3 sector emphasis", "fixed map/label/camera", "non-overlap", "URL reload and history", "right prose and below-map statistics", "palm state inputs", "country-only solar and rice evidence"]},
+  "existingPushCI": {"head": "c6a28fb81909e11c80955e8616e6660928aa257b", "url": "https://github.com/guchio2366-dev/insight-journal/actions/runs/38623827426", "observedSteps": {"unit": "success", "productionBuild": "success", "builtSite": "in_progress"}, "doesNotProveSoutheastBrowserAcceptance": true},
+  "pullRequest": {"created": false, "attempts": 2, "action": "github_create_pull_request draft=true", "repository": "guchio2366-dev/insight-journal", "head": "codex/sea-industry-expanded-20261014", "base": "main", "block": "Automatic approval review rejected PR creation citing the earlier PR prohibition and reported test failures. The same action was retried once with the existing authorization evidence and remained rejected. No CLI workaround or further retry."},
+  "merged": false,
+  "published": false,
+  "remaining": ["PR creation approval block", "Southeast Asia real browser acceptance and image inspection", "final-head broad CI completion"]
+}
