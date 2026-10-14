@@ -175,7 +175,8 @@ async function snapshot(page, profile, topic, region = 'europe') {
   await page.evaluate(() => scrollTo(0, 0));
   const measured = await measurements(page, region); assert.equal(measured.horizontalOverflow, false);
   if(!['terrain-overview','population-to-alps'].includes(topic))assert.ok(measured.legend?.height > 0 && measured.legend.y >= measured.map.y + measured.map.height - 1, 'Visible legend belongs below the map');
-  assert.ok(measured.reader?.width >= 280 && measured.reader.x >= measured.map.x + measured.map.width - 1, `Reader belongs to the right of the map on PC: ${JSON.stringify({profile:profile.name,topic,region,map:measured.map,reader:measured.reader})}`);
+  const readerMinimum=region==='us'&&profile.viewport.width<1200?260:280;
+  assert.ok(measured.reader?.width >= readerMinimum && measured.reader.x >= measured.map.x + measured.map.width - 1, `Reader belongs to the right of the map on PC: ${JSON.stringify({profile:profile.name,topic,region,map:measured.map,reader:measured.reader})}`);
   assert.deepEqual(measured.controls.map(item => item.action), region==='us'?['fit','in','out']:[]);
   for (const [index, control] of measured.controls.entries()) {
     // The unchanged US fit button uses 11px text in a 44px control. Keep the

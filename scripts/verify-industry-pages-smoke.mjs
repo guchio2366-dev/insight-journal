@@ -51,7 +51,8 @@ for(const scene of scenes){
  if(scene.mode!=='select')scene.products=scene.products.replace(/(\[[^\]]+\])$/,'button$1');
 }
 assert.equal(scenes.length,13);
-const report={head,target:production?'existing-pages':'build',expectedReleaseSha:production?expected:null,sandboxRequired:true,status:'running',cases:[],images:[],errors:[],failedResponses:[]};
+const report={head,target:production?'existing-pages':'build',expectedReleaseSha:production?expected:null,sandboxRequired:true,status:'running',cases:[],failedCases:[],images:[],errors:[],failedResponses:[]};
+function canonicalUrl(value){const url=new URL(value);url.searchParams.sort();return url.href;}
 const excluded=new Set(['','all','overview','sc-overview','sc-south-resources','sc-south-manufacturing','sc-south-services','east-resources','east-manufacturing','east-services']);
 async function settle(scene){
  await page.locator(scene.ready).waitFor();
@@ -103,6 +104,7 @@ try{
   await page.setViewportSize(viewport);
   for(const scene of scenes){
    report.phase=viewport.width+'/'+scene.id;
+   try{
    const response=await page.goto(base+'/atlas/'+scene.route,{waitUntil:'networkidle'});assert.equal(response.status(),200);await settle(scene);
    const tabs=page.locator(scene.sectors+':visible'),tabCount=await tabs.count();assert.equal(tabCount,scene.id==='us'?4:3,scene.id+': retained sector controls');
    const selected=[];
@@ -112,7 +114,7 @@ try{
     if(scene.mode==='select')assert.equal(await choice.control.inputValue(),choice.id);else assert.equal(await choice.control.getAttribute('aria-pressed'),'true');
     fixed(before,await snapshot(scene),scene.id+' '+choice.id);
     assert(await page.locator(scene.sources+':visible').count()>0,scene.id+': selected evidence has a visible source link');
-    const selectedUrl=page.url();await page.reload({waitUntil:'networkidle'});await settle(scene);assert.equal(page.url(),selectedUrl,scene.id+': URL reload');
+    const selectedUrl=page.url();await page.reload({waitUntil:'networkidle'});await settle(scene);assert.equal(canonicalUrl(page.url()),canonicalUrl(selectedUrl),scene.id+': URL state reload');
     const restored=scene.mode==='select'?page.locator(scene.products).first():page.locator(`${scene.products}[${scene.key}="${choice.id}"]:visible`).first();
     if(scene.mode==='select')assert.equal(await restored.inputValue(),choice.id);else assert.equal(await restored.getAttribute('aria-pressed'),'true');
     fixed(before,await snapshot(scene),scene.id+' reloaded '+choice.id);selected.push(choice.id);
@@ -121,8 +123,9 @@ try{
    await page.evaluate(()=>scrollTo(0,0));await page.mouse.move(0,0);const file=`${viewport.width}-${scene.id}.jpg`,bytes=await page.screenshot({path:path.join(output,file),type:'jpeg',quality:80,animations:'disabled'});
    report.images.push({file,sha256:createHash('sha256').update(bytes).digest('hex'),url:page.url(),viewport});
    report.cases.push({id:scene.id,viewport,sectors:tabCount,selected,checks:['native selection','source links','map size and viewBox stable','URL reload','no document overflow']});
+   }catch(error){report.failedCases.push({phase:report.phase,error:String(error)});console.error(`::error title=Industry Pages case::${report.phase}: ${String(error).replaceAll('%','%25').replaceAll('\n','%0A').replaceAll('\r','%0D')}`);}
   }
  }
- await checkRelease(context);assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedResponses,[]);report.status='passed';delete report.phase;
+ await checkRelease(context);assert.deepEqual(report.failedCases,[]);assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedResponses,[]);report.status='passed';delete report.phase;
 }catch(error){report.status=browser?'failed':'blocked';report.failure=String(error);process.exitCode=1;console.error(`::error title=Industry Pages acceptance::${report.phase??'browser prerequisite'}: ${String(error).replaceAll('%','%25').replaceAll('\n','%0A').replaceAll('\r','%0D')}`);}
 finally{await writeFile(path.join(output,'verification.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));await browser?.close();if(server?.listening)await new Promise(r=>server.close(r));}

@@ -17,6 +17,8 @@ on:
       - 'src/lib/atlas-latin-learning-state.ts'
       - 'src/scripts/atlas-latin-essential-legends.ts'
       - 'scripts/verify-*-industry*-review.mjs'
+      - 'scripts/verify-industry-pages-smoke.mjs'
+      - 'scripts/run-review-with-annotations.mjs'
       - 'scripts/*canada-industry*.mjs'
       - 'src/lib/atlas-canada-industry-pilot.ts'
       - '.github/workflows/industry-regional-review.yml'
