@@ -1,11 +1,30 @@
 ---
 import data from '../../../../public/assets/atlas/east-asia-v2/economic-statistics.json';
+import {eastIndustryEvidence,formatEastIndustryMetric} from '../../../data/atlas/east-asia-industry-evidence';
+import {eastSectorIndustries,eastSectors} from '../../../data/atlas/east-asia-industry-sectors';
 const countries=data.countries;
 const indicators=data.series;
 ---
 <section class="east-industry-statistics" data-east-industry-statistics hidden>
- <h2>国・地域全体の補助統計</h2><p>2024年の付加価値／GDP（％）。産業別の案内点の数量ではなく、国全体の経済構成です。製造業とサービス業だけでGDP全体を分割した表でもありません。資源・エネルギーの5分類に一致する地域合計は未収録です。</p>
+ <h2 data-east-evidence-heading>産業の規模と世界での位置</h2>
+ <p>量・金額・割合は、それぞれの年と対象範囲で読みます。企業の世界売上と国内生産、設備能力と実生産は別の指標です。確認日：2026年10月14日。</p>
+ <p class="asia-small">通貨：CNY＝中国元、JPY＝日本円、KRW＝韓国ウォン、TWD＝台湾ドル、USD＝米ドル。GDPは国内総生産、IEAは国際エネルギー機関です。GWは定格出力の単位、電池のGWhは蓄電容量換算の量です。</p>
+ {eastSectors.map(sector=><section data-east-evidence-overview={sector.id} hidden={sector.id!=='manufacturing'}>
+  <div class="east-industry-evidence-grid">{(sector.id==='resources'?['coal','gas','rareearths']:sector.id==='manufacturing'?['foundry','steel','batteries']:['finance','digital','logistics']).map(id=>{const item=eastSectorIndustries.find(i=>i.id===id)!,evidence=eastIndustryEvidence[id],metric=evidence.world[0];return <section class="east-industry-evidence-card"><h3>{item.label}</h3><p>{metric.label}</p><strong>{formatEastIndustryMetric(metric)} <small>{metric.unit}</small></strong><p>{metric.year} · {metric.scope}</p>{metric.denominator&&<p>分母：{metric.denominator}</p>}<p><a href={metric.source}>{metric.publisher}</a></p><p>{evidence.meaning}</p></section>})}</div>
+  <p>地図は確認した立地例を一定サイズで示します。上記は別々の製品・市場の指標で、三分野の合計や地点別の数量ではありません。</p>
+ </section>)}
+ {Object.entries(eastIndustryEvidence).map(([id,evidence])=><section data-east-evidence={id} hidden>
+  <h3>{eastSectorIndustries.find(i=>i.id===id)!.label}</h3>
+  <div class="east-industry-evidence-grid">
+   {(['economic','world'] as const).map(kind=><section class="east-industry-evidence-card"><h4>{kind==='economic'?'経済・生産・調達の規模':'世界での位置・供給集中'}</h4><dl>{evidence[kind].map(metric=><div><dt>{metric.label}</dt><dd><strong>{formatEastIndustryMetric(metric)}</strong> {metric.unit}</dd><p>{metric.year} · {metric.scope}</p>{metric.denominator&&<p>分母：{metric.denominator}</p>}<p><a href={metric.source}>{metric.publisher}</a></p></div>)}</dl></section>)}
+   <section class="east-industry-evidence-card"><h4>供給網・企業・政策とのつながり</h4><p>{evidence.meaning}</p><h4>数値の対象範囲</h4><p>{evidence.boundary}</p><p>確信度：{evidence.confidence}。数値の定義と、地図の立地事例の収録範囲は別です。</p></section>
+  </div>
+ </section>)}
+ <p data-east-evidence-missing hidden>この既存項目の品目別数量・世界シェアは未取得です。広い業種のGDPで補わず、下の国全体の統計とは分けて表示します。</p>
+ <details><summary>国・地域全体の補助統計（2024年）</summary>
+ <p>2024年の付加価値／GDP（％）。産業別の案内点の数量ではなく、国全体の経済構成です。製造業とサービス業だけでGDP全体を分割した表でもありません。資源・エネルギーの学習分類に一致する地域合計は未収録です。</p>
  <div class="east-industry-statistics-grid">{indicators.map(item=><section><h3>{item.label}</h3><table><thead><tr><th>国・地域</th><th>GDP比（％）</th></tr></thead><tbody>{countries.map(({code,name})=>{const value=item.values[code as keyof typeof item.values];return <tr><th>{name}</th><td>{typeof value==='number'?value.toLocaleString('ja-JP',{maximumFractionDigits:1}):'未収録'}</td></tr>})}</tbody></table><p><a href={item.metadataUrl}>World Bank WDI・指標の定義</a></p></section>)}</div>
  <p>同じ2024年だけを掲載し、欠測に別年・他国の値を入れません。台湾は採用WDIに系列がなく、0ではありません。2026-09-25取得の固定資料で、世界銀行の出典・元系列のSHAを元のデータに保持しています。</p>
  <details><summary>国内の立地統計を別資料で読む</summary><p>日本の都道府県別出荷額と中国の省別鉄鋼設備能力は対象、年、単位が異なります。今回の三分野を行政区へ塗った分布として扱いません。</p><div class="asia-industry-reading-links"><button type="button" data-industry-reading-topic="jp-31">日本・輸送用機械の県別出荷額</button><button type="button" data-industry-reading-topic="jp-28">日本・電子部品の県別出荷額</button><button type="button" data-industry-reading-topic="cn-steel">中国・省別鉄鋼設備能力</button><button type="button" data-industry-reading-topic="steel-capacity">地域・鉄鋼設備能力</button></div></details>
+ </details>
 </section>

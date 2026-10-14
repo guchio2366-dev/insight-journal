@@ -81,3 +81,14 @@
 .east-industry-reading-actions{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}[data-east-industry-site-list]{display:grid;gap:6px}[data-east-industry-site-list] button{font:12px/1.6 var(--sans);padding:5px;text-align:left;border:1px solid #c6d1c0;background:#fafcf5;color:#315746;cursor:pointer}
 .east-industry-statistics{margin-top:20px;border-top:1px solid var(--rule);padding-top:16px;font-size:13px;line-height:1.8}.east-industry-statistics-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.east-industry-statistics table{width:100%;border-collapse:collapse}.east-industry-statistics th,.east-industry-statistics td{padding:5px;border-bottom:1px solid #c8d2c3}.east-industry-statistics td{text-align:right;font-variant-numeric:tabular-nums}
 [data-region=east-asia][data-industry-clusters=true] .asia-industry-guide{display:none}
+.east-industry-evidence-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:14px 0}
+.east-industry-evidence-card{min-width:0;border:1px solid #bdcbc1;background:#f9fbf5;padding:14px}
+.east-industry-evidence-card :is(h3,h4){margin:0 0 10px;font-size:15px}
+.east-industry-evidence-card strong{font-size:20px;font-variant-numeric:tabular-nums;color:#25473e}
+.east-industry-evidence-card :is(p,dt){font-size:12px;line-height:1.7;overflow-wrap:anywhere}
+.east-industry-evidence-card dd{margin:4px 0}.east-industry-evidence-card dl>div+div{border-top:1px solid #c8d2c3;padding-top:10px;margin-top:10px}
+@media(max-width:959px){.east-industry-evidence-grid{grid-template-columns:1fr}.east-industry-sectors{flex-wrap:wrap}.east-industry-statistics-grid{grid-template-columns:1fr}}
+@media(max-width:959px){[data-region=east-asia][data-industry-clusters=true] .asia-map-frame{min-height:320px!important;height:clamp(320px,92vw,560px)!important;aspect-ratio:auto!important}}
+[data-region=east-asia][data-industry-clusters=true] [data-place-reading]{display:none}
+[data-region=east-asia][data-industry-clusters=true] [data-map-gesture]{display:none}
+[data-region=east-asia][data-industry-clusters=true] .asia-reading-dock{display:none}

@@ -2,18 +2,20 @@ import {eastClusters,eastIndustries} from './east-asia-industry-clusters.ts';
 import {eastForestSites} from './east-asia-review-geography.ts';
 import power from '../../../public/assets/atlas/east-asia-v2/power-examples.json' with {type:'json'};
 import type {IndustryTopic} from './asia-industry';
+import {eastAdditionalIndustries,eastAdditionalSites} from './east-asia-industry-extensions.ts';
 export type EastSector='resources'|'manufacturing'|'services';
-export type EastSectorIndustry={id:string;label:string;color:string;sectors:EastSector[];lead:string;reason:string;source:string};
-export type EastSectorSite={id:string;name:string;country:string;point:[number,number];industries:string[];stage:string;scope:string;source:string;sources?:string[]};
+export type EastSectorIndustry={id:string;label:string;mapLabel?:string;color:string;sectors:EastSector[];lead:string;reason:string;source:string};
+export type EastSectorSite={id:string;name:string;country:string;point:[number,number];industries:string[];stage:string;scope:string;source:string;sources?:string[];observedYear?:string;status?:'所在地・工程確認'|'既存工場'|'既存操業拠点'|'量産公表'|'現在の操業未確認'};
 export const eastSectors:{id:EastSector;topic:string;label:string;lead:string;reason:string}[]=[
- {id:'resources',topic:'east-resources',label:'資源・エネルギー',lead:'モンゴル南部に石炭・銅の採掘と選鉱、日本に天然ガスの採取・処理とLNG受入、沿岸に精錬・精製、各地に発電施設の事例があります。採れる場所と使える素材・燃料・電力になる場所を分けます。',reason:'採掘は鉱床の位置に制約されます。選鉱・選炭は不要な部分を取り除き、精錬・精製は素材や燃料へ加工します。輸入原料を扱う拠点には港と設備、水・電力が必要です。発電では落差と水量、燃料調達、冷却水、送電と需要の位置が関わります。地図の鉱山と別の国の工場の近さから取引関係を推測しません。'},
- {id:'manufacturing',topic:'east-clusters',label:'製造業',lead:'自動車・半導体・鉄鋼・電池に加え、造船・石油化学、食品・紙、燃料・金属の加工を示します。台湾の半導体、中国の沿海・長江沿い、日本と韓国の工業地域を同じ産業名で読みます。',reason:'原料と製品の大量輸送には港・鉄道・道路、組立と工程改良には部品・材料・装置企業と人材が重要です。食品は原料と消費市場、紙は原料・水・エネルギー、半導体は研究開発と安定した電力・高純度の水が関わります。素材・燃料の加工は資源の分野とも重複しますが、生産量を二重に加算しません。'},
+ {id:'resources',topic:'east-resources',label:'資源・エネルギー',lead:'中国の烏海・准格爾に採炭、南ゴビに石炭・銅の採掘、日韓台の沿岸にLNG受入、包頭・贛州・寧波に永久磁石の製造、秋田に亜鉛製錬副産物由来のガリウム原料があります。鉱床・受入港・精製技術の条件は異なります。',reason:'採掘は鉱床の位置に制約されます。選鉱・選炭は不要な部分を取り除き、精錬・精製は素材や燃料へ加工します。輸入原料を扱う拠点には港と設備、水・電力が必要です。発電では落差と水量、燃料調達、冷却水、送電と需要の位置が関わります。地図の鉱山と別の国の工場の近さから取引関係を推測しません。'},
+ {id:'manufacturing',topic:'east-clusters',label:'製造業',lead:'台湾の新竹・台南に受託製造、高雄・中壢に半導体の組立検査、韓国・日本にメモリー、日本に装置・材料、中国に電池・太陽光製品の拠点があります。既存の工場投資と専門技術の蓄積が工程ごとに異なる集積を支えます。',reason:'原料と製品の大量輸送には港・鉄道・道路、組立と工程改良には部品・材料・装置企業と人材が重要です。食品は原料と消費市場、紙は原料・水・エネルギー、半導体は研究開発と安定した電力・高純度の水が関わります。素材・燃料の加工は資源の分野とも重複しますが、生産量を二重に加算しません。'},
  {id:'services',topic:'east-services',label:'サービス業',lead:'金融は東京・上海・香港・台北、情報技術は杭州・東京・城南・台北、物流は港、教育研究は大学の拠点例から読みます。人と情報、商取引と輸送の機能が集まる場所です。',reason:'金融には取引制度と情報・専門人材、情報技術には開発者・企業・通信、教育研究には教員・学生・研究施設が集まります。港湾物流は航路と陸上輸送の接点です。企業のオフィス、港、大学は異なる機能の事例で、点の密度や都市人口をサービス業の就業者数へ換算しません。'},
 ];
 export const eastSectorIndustries:EastSectorIndustry[]=[
+ ...eastAdditionalIndustries,
  ...eastIndustries.map(i=>({...i,sectors:['manufacturing'] as EastSector[]})),
- {id:'coal',label:'石炭',color:'#695747',sectors:['resources'],lead:'南ゴビのウハー・ホダグでは原料炭を採掘し、同じ操業拠点の選炭設備で洗炭します。中国の鉱山全体を網羅した図ではありません。',reason:'鉱床の所在が採掘場所を決めます。選炭は原炭を用途に合う製品へ加工する工程で、水と設備、販売先への輸送が必要です。原料炭は製鉄用コークスに使われ、発電用石炭と用途が異なります。',source:'https://www.mmc.mn/operations/ukhaa-khudag-mine/en'},
- {id:'gas',label:'天然ガス・LNG',color:'#897837',sectors:['resources'],lead:'新潟の南長岡で天然ガスを採取・処理し、直江津では輸入LNGを受け入れて気化します。北海道の勇払にも採取とLNG供給の拠点があります。',reason:'地下のガスを処理して供給規格へ整える工程と、低温で液化輸送されたガスを使える状態へ戻す工程を区別します。直江津では輸入ガスと国産ガスを組み合わせて供給すると操業者が説明しています。',source:'https://www.inpex.com/english/business/project/minami-nagaoka.html'},
+ {id:'coal',label:'石炭',color:'#695747',sectors:['resources'],lead:'中国の内モンゴルの烏海・准格爾に採炭、モンゴル南ゴビのウハー・ホダグに原料炭の採炭・選炭拠点があります。鉱床の所在と中国の製鉄・発電需要への輸送が立地を支えます。',reason:'鉱床の所在が採掘場所を決めます。選炭は原炭を用途に合う製品へ加工する工程で、水と設備、販売先への輸送が必要です。原料炭は製鉄用コークスに使われ、発電用石炭と用途が異なります。',source:'https://www.mmc.mn/operations/ukhaa-khudag-mine/en'},
+ {id:'gas',label:'天然ガス・LNG',color:'#897837',sectors:['resources'],lead:'新潟の南長岡・北海道の勇払に国産ガスの採取、日本の直江津、韓国の仁川・平沢、台湾の台中・永安にLNG受入の拠点があります。ガス田は地下資源、受入基地は海上輸送と需要への接続に立地を制約されます。',reason:'地下のガスを処理して供給規格へ整える工程と、低温で液化輸送されたガスを使える状態へ戻す工程を区別します。直江津では輸入ガスと国産ガスを組み合わせて供給すると操業者が説明しています。',source:'https://www.inpex.com/english/business/project/minami-nagaoka.html'},
  {id:'copper',label:'銅・精錬',color:'#ae713e',sectors:['resources','manufacturing'],lead:'モンゴル南部のオユ・トルゴイでは銅鉱石を採掘・選鉱し、愛媛の東予では輸入精鉱から電気銅を作ります。二拠点間の直接取引は示していません。',reason:'選鉱は鉱石中の銅を濃縮し、製錬と電解精製は高純度の金属を作ります。東予の臨海立地は精鉱の荷揚げと大量処理に適し、銅は配線・電子機器などに使われます。',source:'https://www.riotinto.com/en/operations/asia/oyu-tolgoi'},
  {id:'refining',label:'石油精製',color:'#a18d53',sectors:['resources','manufacturing'],lead:'根岸・水島・仙台の製油所を、燃料へ加工する臨海拠点の事例として示します。東アジアの製油所をすべて掲載した地図ではありません。',reason:'原油を受け入れ、蒸留・分解などによって燃料や原料に加工します。原油採掘、石油精製、石油化学製品の製造は異なる工程です。港・用地・設備と大きな需要への接続が関わります。',source:'https://www.eneos.co.jp/company/branch/'},
  {id:'power',label:'電力',color:'#437e90',sectors:['resources'],lead:'中国の三峡、日本の奥多々良木、韓国のハンビッ、台湾の台中、北朝鮮の水豊、モンゴルのウランバートル第4を、2021年公開の発電施設資料から抜粋します。',reason:'水力は水量と落差、火力は燃料と冷却水、原子力は大型設備と冷却・送電の条件に関わります。点は2021年資料の施設所在で、現在の稼働・発電量・供給先や各国の全電源構成を示しません。',source:'https://datasets.wri.org/dataset/globalpowerplantdatabase'},
@@ -27,7 +29,8 @@ export const eastSectorIndustries:EastSectorIndustry[]=[
 const guide='公式所在地・地理概説に対応する地域案内点。施設外形や数量を示しません。';
 const site=(id:string,name:string,country:string,point:[number,number],industry:string,stage:string,source:string,scope=guide):EastSectorSite=>({id,name,country,point,industries:[industry],stage,source,scope});
 export const eastSectorSites:EastSectorSite[]=[
- ...eastClusters.map(c=>({...c,stage:'製品・素材の製造',scope:'既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。'})),
+ ...eastClusters.map(c=>({...c,industries:[...c.industries,...(['kumamoto','shanghai','pyeongtaek','hsinchu','tainan'].includes(c.id)?['foundry']:[]),...(c.id==='cheongju'?['memory']:[])],stage:c.id==='kumamoto'?'JASM第1工場・半導体受託製造（第2工場は計画・建設）':c.id==='cheongju'?'メモリー・電池（M15既存／M15X増設資料）':'製品・素材の製造',scope:'既存の確認済み都市・工業地域の案内点。工場の境界や生産量ではありません。'})),
+ ...eastAdditionalSites,
  site('ukhaa-khudag','ウハー・ホダグ','MNG',[105.5,43.8],'coal','採炭・選炭','https://www.mmc.mn/operations/ukhaa-khudag-mine/en'),
  site('oyu-tolgoi','オユ・トルゴイ','MNG',[106.9,43.0],'copper','採掘・選鉱','https://www.riotinto.com/en/operations/asia/oyu-tolgoi'),
  site('toyo-copper','東予','JPN',[133.3,34.0],'copper','銅製錬・電解精製','https://www.smm.co.jp/en/corp_info/location/domestic/toyo/'),
@@ -61,4 +64,6 @@ export function eastIndustrySector(topic:string|null|undefined,context?:string|n
  return item?.sectors.includes(context as EastSector)?context as EastSector:item?.sectors[0]??'manufacturing';
 }
 export function eastSectorRows(sector:EastSector){const ids=eastSectorIndustries.filter(i=>i.sectors.includes(sector)).map(i=>i.id);return eastSectorSites.filter(s=>s.industries.some(id=>ids.includes(id)));}
-export const eastSectorTopics:IndustryTopic[]=[...eastSectors.map(s=>({id:s.topic,title:s.label,parent:s.label,kind:'clusters' as const,unit:'出典のある立地事例',year:'資料別',source:eastSectorIndustries.find(i=>i.sectors.includes(s.id))!.source,note:'一定サイズの案内点。施設の外形・生産量・現在の全拠点ではありません。'})),...eastSectorIndustries.map(i=>({id:'east-'+i.id,title:i.label,parent:eastSectors.find(s=>s.id===i.sectors[0])!.label,kind:'clusters' as const,unit:'出典のある立地事例',year:'資料別',source:i.source,note:'掲載した産業の立地事例です。施設全数・敷地・生産量ではありません。'}))];
+// Keep the initial topic metadata below its existing 30 KB budget. Full site
+// scope, product definitions and process readings have their own records/UI.
+export const eastSectorTopics:IndustryTopic[]=[...eastSectors.map(s=>({id:s.topic,title:s.label,parent:s.label,kind:'clusters' as const,unit:'出典のある立地事例',year:'資料別',source:eastSectorIndustries.find(i=>i.sectors.includes(s.id))!.source,note:'数量を示さない立地案内点。'})),...eastSectorIndustries.map(i=>({id:'east-'+i.id,title:i.label,parent:eastSectors.find(s=>s.id===i.sectors[0])!.label,kind:'clusters' as const,unit:'出典のある立地事例',year:'資料別',source:i.source,note:'数量を示さない立地案内点。'}))];
