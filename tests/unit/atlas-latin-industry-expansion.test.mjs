@@ -71,7 +71,7 @@ test('Manufacturing distinguishes raw materials from documented processing and d
 });
 
 test('All industry names fit desktop and mobile without collisions, moving source positions or using selection as layout',()=>{
- for(const [width,height] of [[960,770],[800,520],[640,440],[360,560]])for(const sector of raw.sectors){
+ for(const [width,height] of [[960,770],[800,520],[640,440],[360,560],[300,600],[320,600]])for(const sector of raw.sectors){
   const state={...initial,sector:sector.id},scene=lib.industrySectorScene(state,width,height);
   for(const i of lib.sectorIndustries(sector.id))assert.ok(scene.labels.some(l=>l.industry===i.id),width+' '+i.id);
   for(let i=0;i<scene.labels.length;i++){const a=scene.labels[i];assert.ok(a.x>=8&&a.x+a.width<=width-8);assert.ok(a.y-a.height>=8&&a.y<=height-8);

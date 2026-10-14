@@ -18,7 +18,7 @@ await new Promise(r=>server.listen(0,'127.0.0.1',r));const origin=`http://127.0.
 const save=()=>writeFile(path.join(output,'report.json'),JSON.stringify(report,null,2)+'\n');
 try{
  browser=await chromium.launch({executablePath:process.env.REVIEW_CHROME_PATH??'/usr/bin/chromium',headless:true,chromiumSandbox:true});report.browser={version:browser.version(),chromiumSandbox:true};
- for(const viewport of (baseline?[{width:1920,height:1080},{width:1896,height:996}]:[{width:1920,height:1080},{width:1896,height:996},{width:1440,height:900},{width:390,height:844}])){
+ for(const viewport of (baseline?[{width:1920,height:1080},{width:1896,height:996}]:[{width:1920,height:1080},{width:1896,height:996},{width:1440,height:900},{width:390,height:844},{width:360,height:800}])){
   const mobile=viewport.width<960;
   const context=await browser.newContext({viewport,deviceScaleFactor:1,serviceWorkers:'block'});await context.route('**/*',r=>new URL(r.request().url()).origin===origin?r.continue():r.abort());
   const page=await context.newPage();page.on('pageerror',e=>report.errors.push(e.message));page.on('response',r=>{if(r.status()>=400)report.failedRequests.push(r.url());});

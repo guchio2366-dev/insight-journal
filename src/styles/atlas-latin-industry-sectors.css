@@ -29,3 +29,5 @@
 .latin-sector-stat-card details{font-size:12px;line-height:1.7;margin-top:5px}.latin-sector-stat-card details a{display:block;overflow-wrap:anywhere;margin-top:4px}
 .latin-sector-stat-card [data-status=missing] dd>strong{font-size:19px;color:#6b6656}.latin-sector-method{margin-top:16px;font-size:14px;line-height:1.7}.latin-sector-method p{font-size:13px;line-height:1.75}
 @media(max-width:959px){.latin-sector-grid{grid-template-columns:minmax(0,1fr)}[data-lis-map]{height:clamp(560px,65dvh,680px)}.latin-sector-reader{height:auto;min-height:0;max-height:620px}.latin-sector-stat-grid{grid-template-columns:minmax(0,1fr)}.latin-sector-stat-card+article{border-left:0;border-top:1px solid #d9dfd5;padding:14px 0 0}[data-lis-legend] button,[data-lis-sites] button,.latin-sector-reader button{min-height:44px}.latin-sector-statistics{margin-top:14px}}
+
+@media(max-width:400px){[data-lis-map]{height:600px}}
