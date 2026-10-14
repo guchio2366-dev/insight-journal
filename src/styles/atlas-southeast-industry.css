@@ -1,0 +1,64 @@
+/* Region-only overrides; other atlases and shared renderer contracts stay intact. */
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-controls{margin:8px 0 12px;border-bottom:1px solid #9daea7;padding-bottom:8px}
+.asia-atlas-root[data-region=southeast-asia] .southeast-industry-sectors,.asia-atlas-root[data-region=southeast-asia] .southeast-industry-choices{display:flex;flex-wrap:wrap;gap:5px;margin:5px 0}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-controls button{min-height:44px;padding:7px 10px;border:1px solid #9baea8;border-radius:4px;background:#fff;color:#264c52;font:600 12px/1.4 var(--sans);cursor:pointer}
+.asia-atlas-root[data-region=southeast-asia] .southeast-industry-sectors button{font-size:14px;font-weight:700;background:#edf3ef}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-controls button[aria-pressed=true]{background:#245c67;border-color:#245c67;color:#fff}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-controls button:disabled{opacity:.42;cursor:default}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-story h2{font-size:21px;line-height:1.5;margin:4px 0 10px}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-story h3{font-size:14px;margin:16px 0 5px}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-story p{font-size:13px;line-height:1.85;margin:8px 0}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-story .sea-industry-eyebrow{font-size:11px;color:#527063;margin:0}
+.asia-atlas-root[data-region=southeast-asia] .southeast-industry-summary{font-weight:650}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-story button{min-height:44px;padding:8px;border:1px solid #a0b4ac;border-radius:3px;color:#254b51;background:#fff;font:600 12px var(--sans);cursor:pointer}
+.asia-atlas-root[data-region=southeast-asia] .southeast-industry-sites{display:grid;gap:5px;grid-template-columns:1fr}
+.asia-atlas-root[data-region=southeast-asia] .southeast-industry-sites button{text-align:left}
+.asia-atlas-root[data-region=southeast-asia] .southeast-industry-sites button.muted{opacity:.5}
+.asia-atlas-root[data-region=southeast-asia] .southeast-industry-sites button.chosen{border-color:#245c67;background:#e8f0eb}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-story details{margin-top:12px;border-top:1px solid #c8d5cd}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-story summary{min-height:44px;font-size:12px;cursor:pointer;padding:6px 0}
+.asia-atlas-root[data-region=southeast-asia] [data-southeast-industry-selected]{margin-top:12px;border-left:3px solid #4b806d;padding:8px 10px;background:#f1f5ed}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-scope{font-size:11px!important;color:#52675f;line-height:1.7}
+.asia-atlas-root[data-region=southeast-asia] .southeast-industry-source{font-size:11px!important}
+.asia-atlas-root[data-region=southeast-asia][data-southeast-industry-active=true] [data-reading-dock]>:is(.eyebrow,[data-reading-dock-title],[data-reading-dock-summary]){display:none}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-statistics{margin-top:18px;border-top:2px solid #426e62;padding-top:12px}
+.asia-atlas-root[data-region=southeast-asia] .sea-palm-key{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:11px;padding-bottom:12px}
+.asia-atlas-root[data-region=southeast-asia] .sea-palm-key i{display:inline-block;width:12px;height:12px;vertical-align:middle;border:1px solid #71877b;margin-right:4px}
+.asia-atlas-root[data-region=southeast-asia] .sea-palm-key p{width:100%;margin:0}
+.asia-atlas-root[data-region=southeast-asia] [data-southeast-palm-map-key][hidden]{display:none!important}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-statistics h2{font-size:18px;margin:0 0 8px}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-statistics p{font-size:12px;line-height:1.7}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-table-wrap{overflow-x:auto}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-statistics table{border-collapse:collapse;width:100%;font-size:12px;text-align:left}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-statistics th,.asia-atlas-root[data-region=southeast-asia] .sea-industry-statistics td{padding:10px 8px;border-bottom:1px solid #c8d4cd;vertical-align:top}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-statistics th:first-child{width:22%}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-statistics td small{display:block;margin:5px 0;font-size:11px;line-height:1.6}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-statistics td a{font-size:10px}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-statistics button{min-height:44px;border:0;background:transparent;text-align:left;color:#245c67;font:700 12px/1.5 var(--sans);cursor:pointer}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-fact-columns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-fact-columns>section{border-top:1px solid #aabdb2;padding-top:8px;min-width:0}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-fact-columns h3{font-size:13px;line-height:1.5;margin:0 0 12px}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-figure{padding:5px 0 12px}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-figure h4{font-size:12px;margin:0 0 5px}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-figure .sea-industry-value{font-size:19px;font-weight:700;color:#284f44;line-height:1.5;margin:4px 0}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-definition,.asia-atlas-root[data-region=southeast-asia] .sea-industry-evidence{font-size:11px!important;color:#52645f}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-evidence{border-left:2px solid #95714b;padding-left:6px}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-figure a{font-size:11px;overflow-wrap:anywhere}
+.asia-atlas-root[data-region=southeast-asia] .southeast-industry-map-label[type=button]{pointer-events:auto;cursor:pointer;min-height:0;text-align:left;font-family:var(--sans)}
+.asia-atlas-root[data-region=southeast-asia] .southeast-industry-map-label.muted{opacity:.32}
+.asia-atlas-root[data-region=southeast-asia] .southeast-industry-map-label.chosen{outline:2px solid #213b45;outline-offset:1px}
+.asia-atlas-root[data-region=southeast-asia] .southeast-industry-map-label .sea-map-quantity{font-weight:700;color:#244b43;font-size:9px}
+.asia-atlas-root[data-region=southeast-asia] .southeast-industry-map-legend[data-southeast-industry-legend]{white-space:pre-line;width:265px;max-width:calc(100% - 90px);font-size:10px;line-height:1.4}
+.asia-atlas-root[data-region=southeast-asia] :is(.sea-industry-controls,.sea-industry-story,.sea-industry-statistics,.southeast-industry-map-sites) :is(button,summary,a):focus-visible{outline:3px solid #a74830;outline-offset:3px}
+.asia-atlas-root[data-region=southeast-asia] :is(.sea-industry-controls,.sea-industry-story,.sea-industry-statistics)[hidden],.asia-atlas-root[data-region=southeast-asia] [data-southeast-industry-facts][hidden]{display:none!important}
+@media(min-width:960px){
+ .atlas-desktop-shell .asia-atlas-root[data-region=southeast-asia][data-southeast-industry-active=true] .asia-atlas[data-field=industry] .asia-layout{grid-template-columns:minmax(0,1.85fr) minmax(300px,1fr)!important;align-items:start}
+ .atlas-desktop-shell .asia-atlas-root[data-region=southeast-asia][data-southeast-industry-active=true] .asia-atlas[data-field=industry] .asia-map-frame{height:clamp(460px,calc(100dvh - 300px),720px)!important;max-height:none!important;min-height:460px!important;aspect-ratio:auto!important}
+}
+@media(max-width:700px){
+ .asia-atlas-root[data-region=southeast-asia] .sea-industry-controls button{font-size:11px;padding:7px 8px}
+ .asia-atlas-root[data-region=southeast-asia] .sea-industry-fact-columns{grid-template-columns:1fr}
+ .asia-atlas-root[data-region=southeast-asia] .sea-industry-story h2{font-size:19px}
+ .asia-atlas-root[data-region=southeast-asia] .sea-industry-statistics th,.asia-atlas-root[data-region=southeast-asia] .sea-industry-statistics td{padding:8px 4px}
+ .asia-atlas-root[data-region=southeast-asia] .sea-industry-statistics th:first-child{width:27%}
+}

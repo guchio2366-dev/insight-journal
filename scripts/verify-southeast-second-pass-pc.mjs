@@ -112,3 +112,6 @@ try{
  assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
  console.log(JSON.stringify({passed:true,checks,images:images.length,browser:browser.version(),viewport:'1920x1080 CSS px, DPR 1'}));
 }catch(error){failure=String(error?.stack??error);throw error;}finally{await writeFile(join(out,'results.json'),JSON.stringify({passed:!failure&&errors.length===0&&external.length===0,checks,images,errors,external,failure,head:process.env.REVIEW_HEAD_SHA??null},null,2));await browser?.close();await new Promise(r=>server.close(r));}
+
+// Reuse this existing read-only regional job for the 18 adopted industries.
+await import('./verify-southeast-industry-expanded.mjs');

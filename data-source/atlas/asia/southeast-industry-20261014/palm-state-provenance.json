@@ -1,0 +1,61 @@
+{
+  "geometrySource": "public/assets/atlas/asia-industry-v1/southeast-asia.json",
+  "geometrySourceSha256": "2440acc3a0b1093fdd94678d3ab7705ffc71ca1c4527f37fd4af25ad68a19dd3",
+  "geometryOperation": "Copy existing seven Malaysian state geometries unchanged; no buffer, union, interpolation or new location",
+  "period": 2025,
+  "measure": "Annual refinery input: CPO + CPKO in tonnes, not output or value added",
+  "source": "https://bepi.mpob.gov.my/stat/web_report1.php?val=202527",
+  "rows": [
+    {
+      "id": "MY-01",
+      "name": "ジョホール",
+      "cpo": 3819238,
+      "cpko": 379003,
+      "inputTonnes": 4198241
+    },
+    {
+      "id": "MY-06",
+      "name": "パハン",
+      "cpo": 675749,
+      "cpko": 251074,
+      "inputTonnes": 926823
+    },
+    {
+      "id": "MY-08",
+      "name": "ペラ",
+      "cpo": 929557,
+      "cpko": 90349,
+      "inputTonnes": 1019906
+    },
+    {
+      "id": "MY-07",
+      "name": "ペナン",
+      "cpo": 350074,
+      "cpko": 158,
+      "inputTonnes": 350232
+    },
+    {
+      "id": "MY-10",
+      "name": "セランゴール",
+      "cpo": 4149002,
+      "cpko": 628669,
+      "inputTonnes": 4777671
+    },
+    {
+      "id": "MY-12",
+      "name": "サバ",
+      "cpo": 3364657,
+      "cpko": 192041,
+      "inputTonnes": 3556698
+    },
+    {
+      "id": "MY-13",
+      "name": "サラワク",
+      "cpo": 2341635,
+      "cpko": 95349,
+      "inputTonnes": 2436984
+    }
+  ],
+  "reportedTotal": 17266555,
+  "missingPolicy": "Other states omitted; source blanks are not inferred zero"
+}
