@@ -98,7 +98,7 @@ test('自然・産業・人口をつなぐ説明でも欠測、量、位置の�
   assert.match(copy('terrain').takeaway, /北ヨーロッパ平原.*ピレネー.*アルプス.*カルパチア/);
   assert.match(copy('terrain').body, /プレートの収束.*氷河侵食/);
   assert.match(copy('contours').note, /間隔は標高精度を意味しません/);
-  assert.match(copy('hubs').body, /鉱床.*海底資源.*港.*加工設備.*送電/);
+  assert.match(copy('hubs').body, /海底資源.*鉱床.*港.*加工.*送電/);
   assert.match(copy('hubs').note, /生産量・雇用の大小を表しません/);
   assert.match(copy('density').body, /交通.*仕事.*歴史的な都市形成/);
   assert.match(copy('density').note, /2020年.*現在の人口移動・避難状況.*ではありません/);

@@ -2,6 +2,7 @@
 import AgroStatistics from './AgroStatistics.astro';
 import EuropeClimateDiagram from './EuropeClimateDiagram.astro';
 import EuropeVerifiedStatistics from './EuropeVerifiedStatistics.astro';
+import EuropeIndustryStatistics from './EuropeIndustryStatistics.astro';
 import cities from '../../data/atlas/europe/climate-cities.json';
 import countries from '../../data/atlas/europe/countries.json';
 import type { EuropeField } from '../../data/atlas/europe/layers';
@@ -13,6 +14,7 @@ const { field } = Astro.props;
 const countryName = (code: string) => countries.find(country => country.code === code)?.name ?? code;
 ---
 <section class="eu-statistics" data-eu-statistics aria-label="選択中の分野・品目の統計">
+  <EuropeIndustryStatistics active={field==='industry'} />
   <section id="europe-climate-statistics" data-eu-climate-statistics hidden aria-labelledby="europe-climate-statistics-title">
     <header class="eu-statistics-heading">
       <h2 id="europe-climate-statistics-title">月別の数値・年間の要約</h2>

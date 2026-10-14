@@ -110,7 +110,7 @@ for (const field of ['', 'agriculture/', 'nature/', 'industry/', 'population/'])
     if (field==='industry/') {
       const topics=doc.querySelector('[data-eu-topic-field="industry"]');
       assert.deepEqual([...topics.querySelectorAll('[data-eu-industry-sector]')].map(button=>button.textContent),['資源・エネルギー','製造業','サービス業']);
-      assert.equal(doc.querySelectorAll('[data-eu-industry-group]').length,13);
+      assert.equal(doc.querySelectorAll('[data-eu-industry-group]').length,21);
       assert.equal(topics.querySelectorAll('button').length,3);
       const scope=doc.querySelector('[data-eu-industry-scope]');
       assert.deepEqual([...scope.options].map(option=>option.value),['region:all','region:north','region:west','region:south','region:east','country:DEU','country:GBR','country:FRA','country:ITA']);

@@ -2,7 +2,7 @@ import { layoutNatureLabels, leaderEnd, type Box, type Point, type LabelPlacemen
 import { layoutClimateCodes, type CodePlacement } from './atlas-climate-code-labels';
 import { europeFarmingMapName, type FarmingItem } from './atlas-europe-farming';
 import climateLabels from '../data/atlas/europe/map-labels.json';
-import { europeIndustryMembership, europeIndustryColors, type EuropeIndustryGroup, europeIndustryGroupsForSite, europeIndustrySiteLabels, type EuropeIndustrySector } from './atlas-europe-industry';
+import { europeIndustryMembership, europeIndustryColors, europeIndustryGroupsForSite, europeIndustrySiteLabels, europeIndustrySectorCopy, type EuropeIndustrySector } from './atlas-europe-industry';
 
 export const majorClimateCities = ['london','paris','moscow','madrid','rome','athens','lisbon','reykjavik','helsinki'];
 /** Names sample distinct crop/livestock concentrations; this is not a value rank. */
@@ -23,8 +23,7 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
   for(const [kind, places] of [['city',cities],['feature',features],['crop',farmingPlaces]] as const) for(const place of places) {
     const industries=kind==='feature'?europeIndustryMembership[place.id]:undefined;
     const industry=industries?.[0];
-    const shortIndustry:Partial<Record<EuropeIndustryGroup,string>>={'自動車・機械':'機械','化学・医薬品':'化学','鉱業・素材':'素材','港湾物流':'港湾','繊維・衣服':'繊維'};
-    const sectorName=industry?europeIndustrySiteLabels[place.id]??industries!.map(group=>shortIndustry[group]??group).join('・'):'';
+    const sectorName=industry?europeIndustrySiteLabels[place.id]??industries!.join('・'):'';
     const name=kind==='crop'?europeFarmingMapName(place.id,place.name):kind==='feature'?(mapNames[place.id]??(industry?`${sectorName}｜${place.name}`:place.name)):place.name;
     const button=document.createElement('button');button.type='button';button.className='eu-map-label';
     if(industry){
@@ -45,6 +44,7 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
     const dot=kind==='feature'&&!industry?create('path'):create('circle');dot.classList.add('eu-label-dot');dot.setAttribute('r','3.5');
     if(dot.tagName==='path')dot.classList.add('eu-population-cross');
     if(industry){dot.dataset.euIndustry=industry;dot.style.setProperty('--eu-industry-color',europeIndustryColors[industry]);if(industries![1])dot.style.setProperty('--eu-industry-outline',europeIndustryColors[industries![1]]);dot.setAttribute('r','5');}
+    if(industry&&/（(?:全国|輸出)統計）/.test(place.name)){button.dataset.euIndustryAnchor='national';dot.dataset.euIndustryAnchor='national';}
     dot.dataset.euLabelPoint=kind+'-'+place.id;
     svg.append(line,dot);overlay.append(button);items.push({...place,kind,button,line,dot});
   }
@@ -62,13 +62,15 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
     svg.setAttribute('viewBox',`0 0 ${width} ${height}`);
     const bounds:Box={left:5,top:5,right:width-5,bottom:height-32};
     const farmingIds=new Set(view.farmingIds??[]);
+    // This responsive policy reserves the same peers for every selection/solo state.
+    const labelIds=view.industrySector&&width<600?europeIndustrySectorCopy[view.industrySector].compactLabels:view.featureLabelIds;
     const visible=items.filter(item=>view.climate ? item.kind==='city' : view.crops ? item.kind==='crop'&&farmingIds.has(item.id)&&(view.detailed||overviewFarmingLabels.includes(item.id)||item.id===view.selectedFarming) : item.kind==='feature'&&view.places.some(p=>p.id===item.id));
     const selected=(item:Annotation)=>item.kind==='city'?item.id===view.city:item.kind==='crop'?farmingIds.has(item.id)&&item.id===view.selectedFarming:item.id===view.feature;
     const inputs=visible.map(item=>{
       item.button.hidden=false;
-      if(view.industrySector&&europeIndustryMembership[item.id]){const groups=europeIndustryGroupsForSite(item.id,view.industrySector),group=groups[0];item.button.querySelector('strong')!.textContent=item.id==='kaukas'&&view.industrySector==='resources'?'木質燃料':europeIndustrySiteLabels[item.id]??groups.join('・');if(group){item.button.style.setProperty('--eu-industry-color',europeIndustryColors[group]);item.dot.style.setProperty('--eu-industry-color',europeIndustryColors[group]);}}
+      if(view.industrySector&&europeIndustryMembership[item.id]){const groups=europeIndustryGroupsForSite(item.id,view.industrySector),group=groups[0];const serviceName:Record<string,string>={rotterdam:'港湾・物流',hamburg:'港湾・物流',oulu:'通信・IT研究'};item.button.querySelector('strong')!.textContent=(view.industrySector==='services'?serviceName[item.id]:undefined)??europeIndustrySiteLabels[item.id]??groups.join('・');if(group){item.button.style.setProperty('--eu-industry-color',europeIndustryColors[group]);item.dot.style.setProperty('--eu-industry-color',europeIndustryColors[group]);}}
 
-      const pointOnly=(item.kind==='feature'&&!!view.featureLabelIds&&!view.featureLabelIds.includes(item.id)
+      const pointOnly=(item.kind==='feature'&&!!labelIds&&!labelIds.includes(item.id)
           &&(!!europeIndustryMembership[item.id]||!view.detailed));
       item.button.classList.toggle('is-point-only',pointOnly);
       item.button.classList.toggle('is-muted',item.kind==='crop'&&!!view.selectedFarming&&item.id!==view.selectedFarming||!!view.industrySector&&!(view.emphasizedFeatures??[]).includes(item.id));
@@ -88,7 +90,7 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
       item.button.classList.toggle('is-emphasized',emphasized);item.dot.classList.toggle('is-emphasized',emphasized);
     }
     const stageRect=stage.getBoundingClientRect();
-    const obstacles=[...stage.querySelectorAll<HTMLElement>('.eu-map-buttons,.eu-topic-map:not([hidden]),.eu-map-footer')].map(el=>{
+    const obstacles=[...stage.querySelectorAll<HTMLElement>('.eu-map-buttons,.eu-topic-map:not([hidden]),.eu-map-footer,.eu-map-inline-key:not([hidden])')].map(el=>{
       const r=el.getBoundingClientRect();return {left:r.left-stageRect.left-5,top:r.top-stageRect.top-5,right:r.right-stageRect.left+5,bottom:r.bottom-stageRect.top+5};
     });
     const signature=JSON.stringify([width,height,view.climate,view.crops,inputs.map(p=>[p.id,p.anchor.x.toFixed(2),p.anchor.y.toFixed(2),p.width,p.height])]);

@@ -529,6 +529,11 @@ export async function initEuropeAtlas() {
     query<HTMLElement>('[data-eu-return-multi]').hidden=layer.id==='hubs'?!state.industryOnly:!farm.single;
     query<HTMLElement>('[data-eu-climate-statistics]').hidden=!climateReader()||!state.city;
     query<HTMLElement>('[data-eu-farming-statistics]').hidden=layer.field!=='agriculture';
+    query<HTMLElement>('[data-eu-industry-statistics]').hidden=layer.field!=='industry';
+    all<HTMLElement>('[data-eu-industry-evidence]').forEach(panel=>{
+      const group=normaliseEuropeIndustryGroup(panel.dataset.euIndustryEvidence);
+      panel.hidden=layer.field!=='industry'||!group||(state.industryGroup?group!==state.industryGroup:!europeIndustrySectorCopy[industrySector()].groups.includes(group));
+    });
     const forestryStatistics=['forest','treecover'].includes(layer.id);
     query<HTMLElement>('[data-eu-verified-agriculture]').hidden=forestryStatistics;
     const selectedTopic=farm.item?.id??(layer.id==='dairy'?'dairy':'');
@@ -767,12 +772,12 @@ export async function initEuropeAtlas() {
     query<HTMLElement>('[data-eu-city-list]').hidden=!climateReader();
     query<HTMLElement>('[data-eu-water-options]').hidden=!['water','precipitation','drainage'].includes(state.layer);
     const places=visibleFeatures().filter(p=>featureVisible(p.id));
-    query<HTMLElement>('[data-eu-feature-list]').hidden=!places.length||layer.field==='nature'||layer.id==='hubs';
+    query<HTMLElement>('[data-eu-feature-list]').hidden=!places.length||layer.field==='nature';
     const choices=query('[data-eu-feature-options]');choices.replaceChildren();
     if(layer.field==='population'||layer.field==='industry'){
       const select=document.createElement('select');select.setAttribute('aria-label',layer.field==='industry'?'産業拠点の解説を選ぶ':'人口地図の都市を選ぶ');select.dataset.euFeatureChoice='';
       const prompt=document.createElement('option');prompt.value='';prompt.textContent=layer.field==='industry'?'地図の拠点を選ぶ':'都市を選ぶ';select.append(prompt);
-      for(const place of places){const option=document.createElement('option');option.value=place.id;option.textContent=place.name;select.append(option);}
+      for(const place of places){const option=document.createElement('option');option.value=place.id;option.textContent=layer.field==='industry'?europeIndustryGroupsForSite(place.id,industrySector()).join('・')+' · '+place.name:place.name;select.append(option);}
       select.value=state.feature??'';select.addEventListener('change',()=>{if(select.value)selectFeature(select.value);else{delete state.feature;commit(false);}});choices.append(select);
     } else for(const place of places){const button=document.createElement('button');button.type='button';button.textContent=place.name;button.dataset.euFeatureSelect=place.id;button.setAttribute('aria-pressed',String(state.feature===place.id));button.addEventListener('click',()=>selectFeature(place.id));choices.append(button);}
     query<HTMLElement>('[data-eu-subject-legend]').hidden=!custom||cultureActive()||layer.id==='terrain';
@@ -1147,7 +1152,7 @@ export async function initEuropeAtlas() {
     const sector=normaliseEuropeIndustrySector(button.dataset.euIndustrySector);
     if(sector){state.layer='hubs';state.industrySector=sector;state.place='';state.region='all';state.city='';state.compare=[];delete state.feature;delete state.industryGroup;delete state.industryOnly;commit(false);return;}
     const group=normaliseEuropeIndustryGroup(button.dataset.euIndustryGroup);
-    if(group){state.layer='hubs';state.industryGroup=group;delete state.feature;delete state.single;delete state.industryOnly;commit(false);}
+    if(group){state.layer='hubs';state.industryGroup=group;state.place='';state.region='all';delete state.feature;delete state.single;delete state.industryOnly;commit(false);}
     else {
       if(subject().field==='industry'){
         delete state.feature;delete state.industryGroup;delete state.industryOnly;
