@@ -1,0 +1,90 @@
+{
+  "baselineMain": "63e998cc16e671230b3c1a9d0a95803e1d6d0545",
+  "state": "full-scope-validation-in-progress",
+  "sources": [
+    {
+      "region": "world",
+      "pr": 352,
+      "head": "5347a8f7810993b7ffd155d885041b431d7ebd82",
+      "selectionCount": 7
+    },
+    {
+      "region": "canada",
+      "pr": 354,
+      "head": "8988ebdcf46ad33a7993d9b720d1d327630f3ea7",
+      "selectionCount": 28
+    },
+    {
+      "region": "russia",
+      "pr": 353,
+      "head": "79fa4079501009d7e6785eeb5d6572af2964a529",
+      "selectionCount": 19
+    },
+    {
+      "region": "europe",
+      "pr": 357,
+      "head": "8cb386cdef6303c6875c452dc0c739dbd8587096",
+      "selectionCount": 21
+    },
+    {
+      "region": "west-asia",
+      "pr": 358,
+      "head": "91c062abc2eb9d74e8f83f4d1f8daca1e1edfc3c",
+      "selectionCount": 21
+    },
+    {
+      "region": "africa",
+      "pr": 359,
+      "head": "0fb371ac3bf3256f0c6bf5481cc419aea389f854",
+      "selectionCount": 36
+    },
+    {
+      "region": "east-asia",
+      "pr": 360,
+      "head": "eb2ca60d0ad16d6e7db1f25d990647121376d6d2",
+      "selectionCount": 27
+    },
+    {
+      "region": "oceania",
+      "pr": 361,
+      "head": "2ebd9b25cbde8d55198ae030fb69c3733f84af56",
+      "selectionCount": 18
+    },
+    {
+      "region": "mexico",
+      "pr": 364,
+      "head": "ce802dc7142aa4ae9baff56515a495da1a8aa971",
+      "selectionCount": 34
+    },
+    {
+      "region": "central-asia",
+      "pr": 365,
+      "head": "f6e83c5da9b1a1ef673e1238fdd0b3b044072f8a",
+      "selectionCount": 11
+    },
+    {
+      "region": "south-asia",
+      "pr": 355,
+      "head": "a2ef1f6aedc71319caac5300faf8f7e191e30637",
+      "selectionCount": 12
+    },
+    {
+      "region": "southeast-asia",
+      "pr": 366,
+      "head": "14fc3a5450c8c0f674028b1c5750f3fe047e3a3d",
+      "selectionCount": 18
+    },
+    {
+      "region": "latin-america",
+      "pr": 363,
+      "head": "5577eb4ac9a374f29677528ce63457f5568434d5",
+      "selectionCount": 31
+    },
+    {
+      "region": "us",
+      "pr": 356,
+      "head": "779b76d84522b453c4a3e0c11252f93214cc7333",
+      "selectionCount": 31
+    }
+  ]
+}

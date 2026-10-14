@@ -89,6 +89,7 @@ jobs:
           if [[ -f scripts/verify-world-industry.mjs ]]; then
             WORLD_INDUSTRY_REVIEW_URL=https://guchio2366-dev.github.io/insight-journal/atlas/industry/world/ REVIEW_CHROME_PATH="$INDUSTRY_REVIEW_CHROME_PATH" node scripts/verify-world-industry.mjs
           fi
+          INDUSTRY_SMOKE_TARGET=production REVIEW_CHROME_PATH="$INDUSTRY_REVIEW_CHROME_PATH" node scripts/verify-industry-pages-smoke.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -96,3 +97,34 @@ jobs:
           path: review-artifacts/
           retention-days: 7
           if-no-files-found: error
+  smoke:
+    name: Verify all 13 regional industry pages
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ASTRO_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - name: Verify native operations in sandboxed Chrome
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+          test -n "$(fc-list ':lang=ja' family)"
+          REVIEW_CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)" node scripts/verify-industry-pages-smoke.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: industry-pages-smoke-${{ github.run_id }}
+          path: review-artifacts/industry-pages-smoke
+          if-no-files-found: warn
+          retention-days: 7
