@@ -18,7 +18,7 @@ const mean=(a:number[])=>a.reduce((s,n)=>s+n,0)/a.length;
 const delta=shares.length?mean(shares.slice(-3))-mean(shares.slice(0,3)):0;
 ---
 <figure class="atlas-world-chart" data-world-production={p.id}>
-  <figcaption class="atlas-comparison-caption"><strong>世界生産と{focusName}シェア</strong><span>{p.period}</span><span>{p.basis} · {p.unit} · 国・地域別</span></figcaption>
+  <figcaption class="atlas-comparison-caption"><strong>① 生産量と世界シェア</strong><span>{p.period}</span><span>{p.basis} · {p.unit} · 国・地域別</span></figcaption>
   <div class="atlas-donut-layout">
     <svg class="atlas-donut" viewBox="0 0 144 144" role="img" aria-labelledby={`world-title-${p.id} world-desc-${p.id}`}>
       <title id={`world-title-${p.id}`}>{p.name}の世界生産構成</title><desc id={`world-desc-${p.id}`}>世界総量{fmt(p.worldTotal)}{p.unit}。{focusName}{us.share.toFixed(1)}%。国・地域別の値は隣の凡例と数値表に表示。</desc>

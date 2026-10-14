@@ -1,0 +1,291 @@
+{
+  "schemaVersion": 1,
+  "records": [
+    {
+      "countryCode": "CHN",
+      "countryName": "中国本土",
+      "seriesId": "soybean-production",
+      "label": "大豆（丸大豆）",
+      "year": 2023,
+      "unit": "t",
+      "production": 20841700.0,
+      "worldProduction": 370876094.01,
+      "imports": 87387600.0,
+      "exports": 71398.1,
+      "partners": [
+        {
+          "code": "Korea, Rep.",
+          "name": "Korea, Rep.",
+          "value": 40404.0
+        },
+        {
+          "code": "Japan",
+          "name": "Japan",
+          "value": 16511.8
+        },
+        {
+          "code": "Vietnam",
+          "name": "Vietnam",
+          "value": 3786.2
+        },
+        {
+          "code": "Hong Kong, China",
+          "name": "Hong Kong, China",
+          "value": 2237.12
+        },
+        {
+          "code": "United Kingdom",
+          "name": "United Kingdom",
+          "value": 2167.45
+        },
+        {
+          "code": "Australia",
+          "name": "Australia",
+          "value": 1100.77
+        },
+        {
+          "code": "Other Asia, nes",
+          "name": "Other Asia, nes",
+          "value": 821.652
+        },
+        {
+          "code": "Malaysia",
+          "name": "Malaysia",
+          "value": 931.38
+        },
+        {
+          "code": "United States",
+          "name": "United States",
+          "value": 597.281
+        },
+        {
+          "code": "Thailand",
+          "name": "Thailand",
+          "value": 254.69
+        },
+        {
+          "code": "Philippines",
+          "name": "Philippines",
+          "value": 370.75
+        },
+        {
+          "code": "Nepal",
+          "name": "Nepal",
+          "value": 397.5
+        },
+        {
+          "code": "Netherlands",
+          "name": "Netherlands",
+          "value": 289.25
+        },
+        {
+          "code": "Canada",
+          "name": "Canada",
+          "value": 197.417
+        },
+        {
+          "code": "Singapore",
+          "name": "Singapore",
+          "value": 195.606
+        },
+        {
+          "code": "Spain",
+          "name": "Spain",
+          "value": 265.915
+        },
+        {
+          "code": "New Zealand",
+          "name": "New Zealand",
+          "value": 131.7
+        },
+        {
+          "code": "Russian Federation",
+          "name": "Russian Federation",
+          "value": 347.15
+        },
+        {
+          "code": "Germany",
+          "name": "Germany",
+          "value": 42.323
+        },
+        {
+          "code": "France",
+          "name": "France",
+          "value": 45.272
+        },
+        {
+          "code": "Korea, Dem. Rep.",
+          "name": "Korea, Dem. Rep.",
+          "value": 99.96
+        },
+        {
+          "code": "Poland",
+          "name": "Poland",
+          "value": 40.0
+        },
+        {
+          "code": "Italy",
+          "name": "Italy",
+          "value": 31.437
+        },
+        {
+          "code": "Saudi Arabia",
+          "name": "Saudi Arabia",
+          "value": 24.5
+        },
+        {
+          "code": "Belgium",
+          "name": "Belgium",
+          "value": 24.0
+        },
+        {
+          "code": "Jordan",
+          "name": "Jordan",
+          "value": 23.25
+        },
+        {
+          "code": "Mongolia",
+          "name": "Mongolia",
+          "value": 19.95
+        },
+        {
+          "code": "Serbia, FR(Serbia/Montenegro)",
+          "name": "Serbia, FR(Serbia/Montenegro)",
+          "value": 7.5
+        },
+        {
+          "code": "Indonesia",
+          "name": "Indonesia",
+          "value": 6.49
+        },
+        {
+          "code": "Finland",
+          "name": "Finland",
+          "value": 9.0
+        },
+        {
+          "code": "Portugal",
+          "name": "Portugal",
+          "value": 5.75
+        },
+        {
+          "code": "Hungary",
+          "name": "Hungary",
+          "value": 4.0
+        },
+        {
+          "code": "Sweden",
+          "name": "Sweden",
+          "value": 3.0
+        },
+        {
+          "code": "Costa Rica",
+          "name": "Costa Rica",
+          "value": 2.0
+        },
+        {
+          "code": "Macao",
+          "name": "Macao",
+          "value": 0.9
+        },
+        {
+          "code": "Greece",
+          "name": "Greece",
+          "value": 1.0
+        },
+        {
+          "code": "Panama",
+          "name": "Panama",
+          "value": 0.046
+        },
+        {
+          "code": "Tanzania",
+          "name": "Tanzania",
+          "value": 0.1
+        },
+        {
+          "code": "Brazil",
+          "name": "Brazil",
+          "value": 0.001
+        },
+        {
+          "code": "Cambodia",
+          "name": "Cambodia",
+          "value": 0.001
+        },
+        {
+          "code": "Senegal",
+          "name": "Senegal",
+          "value": 0.002
+        },
+        {
+          "code": "Pakistan",
+          "name": "Pakistan",
+          "value": 0.002
+        }
+      ],
+      "partnerRoundingGap": 0.015,
+      "actualDomesticUse": null,
+      "stockVariation": null,
+      "productionFlag": "A",
+      "worldProductionFlag": "A",
+      "source": {
+        "productionUrl": "https://www.fao.org/faostat/en/#data/QCL",
+        "importUrl": "https://wits.worldbank.org/trade/comtrade/en/country/CHN/year/2023/tradeflow/Imports/partner/ALL/product/120100",
+        "exportUrl": "https://wits.worldbank.org/trade/comtrade/en/country/CHN/year/2023/tradeflow/Exports/partner/ALL/product/120100"
+      },
+      "provenance": {
+        "productionPath": "public/assets/atlas/asia-farming-v1/statistics.json",
+        "worldProductionPath": "src/data/atlas/shared-world-statistics.json",
+        "worldKey": "QCL:236:5510:2023:t",
+        "productionArchiveSha256": "c5835418c18f9322e7decbd6800f93a216eaae3cdfa31acb08f0518c0c6d6853",
+        "productionItem": "236",
+        "productionElement": "5510",
+        "productionItemLabel": "Soya beans",
+        "productionRawValue": "20841700.0",
+        "worldProductionRawValue": "370876094.010000",
+        "importPath": "data-source/atlas/east-asia/statistics-2023/wits/CHN-Import-120100.json",
+        "exportPath": "data-source/atlas/east-asia/statistics-2023/wits/CHN-Export-120100.json",
+        "importSha256": "9bccee2ca4ec48a39f7d69152c231a7347a18948d0ab9f4af68b37d9c1752be8",
+        "exportSha256": "92f1e720b6aeedd164c1ffc5efa749027302193f72a020c160dfd847b58be22b",
+        "tradeClassification": "HS 1988/92 (H0)",
+        "tradeProduct": "120100",
+        "tradeProductDescription": "Soya beans",
+        "tradeQuantityUnit": "Kg",
+        "tradeConversion": "t = Kg / 1000",
+        "importWorldQuantityKg": "87387600000",
+        "exportWorldQuantityKg": "71398100",
+        "exportPartnerQuantityKgSum": "71398115",
+        "productDescriptionVerification": {
+          "publisher": "World Bank WITS / UN Comtrade",
+          "url": "https://wits.worldbank.org/trade/comtrade/en/country/CHN/year/2023/tradeflow/Exports/partner/ALL/product/120100",
+          "verifiedOn": "2026-10-14",
+          "verifiedBy": "Parent task read official source page",
+          "evidence": "HS 1988/92 (H0), 120100: Soya beans; Product Description: Soya beans; imports and exports are gross."
+        },
+        "sourceCountryNames": {
+          "production": "China, mainland",
+          "tradeReporter": "CHN",
+          "tradePageCountry": "China"
+        },
+        "importProductDescriptionVerification": {
+          "publisher": "World Bank WITS / UN Comtrade",
+          "url": "https://wits.worldbank.org/trade/comtrade/en/country/CHN/year/2023/tradeflow/Imports/partner/ALL/product/120100",
+          "verifiedOn": "2026-10-14",
+          "verifiedBy": "Parent task read official source page",
+          "evidence": "HS 1988/92 (H0), 120100: Soya beans; World quantity 87387600000 Kg; imports and exports are gross."
+        }
+      },
+      "notes": [
+        "2023暦年の大豆数量比較。FAO QCL236のSoya beans生産と、公式WITSページでSoya beansと確認したHS1988/92(H0)120100の総輸入・総輸出です。大豆油・油かすの量を加えません。",
+        "FAO国生産とWorld生産は同じ取得版・同じ年・同じ品目・t単位。WITSのKgは1,000で割ってtへ換算します。",
+        "国内の見かけ量は生産＋総輸入−総輸出。在庫変動・損耗・食用・飼料・搾油・種子等は未収録で、実際の国内利用や国産大豆の仕向け割合ではありません。",
+        "生産と貿易は提供元・改訂版が異なる数量比較。総輸出には再輸出や輸入原料由来を含み得るため、輸出÷生産と国内見かけ量÷生産を100%へ合わせません。",
+        "輸出先は保存された全42相手。日本・韓国・Other Asia, nes（原表区分）・香港・マカオなど同地域の外国相手も含め、東アジア域外だけには限定しません。相手識別codeは原表の相手名で、推定ISOコードではありません。",
+        "輸出先構成の分母は同じWITS原表のWorld総輸出71,398.1t。相手合計71,398.115tとの差＋0.015t（15kg）は公表数量の丸め差として別に記し、架空のその他や国内用途へ押し込みません。",
+        "この比較は原料の生産国から最終用途までを追跡したフローではありません。在庫変動と実際の用途別内訳は欠測のまま保持します。",
+        "生産の国区分は原表China, mainland（中国本土）、貿易の報告区分はWITS CHN（ページ名China）。香港・マカオを国内生産へ合算せず、相手行のOther Asia, nesを推定国名へ置き換えません。"
+      ]
+    }
+  ]
+}

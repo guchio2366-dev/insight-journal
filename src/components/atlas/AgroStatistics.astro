@@ -3,7 +3,9 @@ import {readFileSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {withBase} from '../../lib/urls';
 import {agroProduction,agroTopicSeries,renderAgroColumns,type AgroData,type AgroReference} from '../../lib/atlas-agro-statistics';
+import {renderAgroOverviewColumns} from '../../lib/atlas-agro-statistics-overview';
 import '../../styles/atlas-agro-statistics.css';
+import '../../styles/atlas-agro-selected-native.css';
 interface Props {scope:string; country?:string; topic?:string; topics?:string[];countries?:{code:string;name:string}[]; nationalOnly?:boolean;reference?:AgroReference}
 const {scope,country='',topic='overview',topics=[],countries=[],nationalOnly=true,reference}=Astro.props;
 const data=JSON.parse(readFileSync(resolve('public/assets/atlas/regional-production-statistics-v1/statistics.json'),'utf8')) as AgroData;
@@ -11,18 +13,22 @@ const manifest=JSON.parse(readFileSync(resolve('public/assets/atlas/regional-pro
 const allowed=countries.length?countries.filter(c=>c.code!=='JPN'):country?[{code:country,name:data.countries[country]?.name??country}]:[];
 const series=data.countries[country]?.series.filter(agroProduction)??[];
 const ids=agroTopicSeries(topic),current=series.find(s=>ids.includes(s.id));
-const config={scope,country,topic,topics,countries:allowed,nationalOnly,url:withBase('/assets/atlas/regional-production-statistics-v1/'),files:manifest.files,reference,labels:Object.fromEntries(Object.values(data.countries).flatMap(c=>c.series.map(s=>[s.id,s.label])))};
+const overview=['overview','all','farming-overview','farming-all','crops'].includes(topic);
+const renderColumns=overview?renderAgroOverviewColumns:renderAgroColumns;
+const sourceUrl=withBase('/assets/atlas/regional-production-statistics-v1/');
+const sources={overview:`<a href="${sourceUrl}statistics.json">照合済み国・世界原値と原表SHA-256</a> · FAO, FAOSTAT（保存済み版）。<a href="https://www.fao.org/contact-us/terms/db-terms-of-use/">CC BY 4.0</a>。在庫や最終用途は生産量から推定しません。`,selected:`採用原表・利用条件は各数量図と定義欄に示します。<a href="${sourceUrl}statistics.json">FAOSTAT保存原値と原表SHA-256</a>は別資料の参考です（<a href="https://www.fao.org/contact-us/terms/db-terms-of-use/">CC BY 4.0</a>）。在庫や最終用途は生産量から推定しません。`};
+const config={sources,scope,country,topic,topics,countries:allowed,nationalOnly,url:withBase('/assets/atlas/regional-production-statistics-v1/'),files:manifest.files,reference,labels:Object.fromEntries(Object.values(data.countries).flatMap(c=>c.series.map(s=>[s.id,s.label])))};
 ---
-<section class="agro-statistics" data-agro-statistics data-agro-scope={scope} hidden={nationalOnly&&!country} aria-label={`${scope}の国別供給・貿易・世界生産`}>
+<section class="agro-statistics" data-agro-statistics data-agro-scope={scope} hidden={nationalOnly&&!country} aria-label={overview?`${scope}の国別供給・貿易・世界生産`:`${scope}の品目別生産・国内使用・輸出先`}>
  <h2 data-agro-heading>{scope} · {country?(data.countries[country]?.name??country):'国別の統計'}</h2>
- <p class="agro-meta" data-agro-status>国・品目ごとに原表の年・単位・加工段階を確認します。地域全体の合計とは区別します。</p>
+ <p class="agro-meta" data-agro-status>{overview?'国・品目ごとに原表の年・単位・加工段階を確認します。地域全体の合計とは区別します。':'生産量と世界シェア → 国内での使用・輸出 → 輸出先の量と構成比。'}</p>
  <div class="agro-stat-controls">
   {allowed.length>1&&<label data-agro-country-control>統計対象国<select data-agro-country-select>{allowed.map(c=><option value={c.code} selected={country===c.code}>{c.name}</option>)}</select></label>}
   <label data-agro-series-control hidden={ids.length<2}>生産品目<select data-agro-series-select>{series.filter(s=>ids.includes(s.id)).map(s=><option value={s.id} selected={s.id===current?.id}>{s.label}</option>)}</select></label>
   <button type="button" data-agro-retry hidden>統計を再読み込み</button>
  </div>
- <div data-agro-content set:html={renderAgroColumns(data,country,current?.id??ids[0],2024,reference)}/>
- <p class="agro-meta"><a href={config.url+'statistics.json'}>照合済み国・世界原値と原表SHA-256</a> · FAO, FAOSTAT（保存済み版）。<a href="https://www.fao.org/contact-us/terms/db-terms-of-use/">CC BY 4.0</a>。在庫や最終用途は生産量から推定しません。</p>
+ <div data-agro-content set:html={renderColumns(data,country,current?.id??ids[0],2024,reference)}/>
+ <p class="agro-meta" data-agro-sources set:html={overview?sources.overview:sources.selected}/>
  <script type="application/json" data-agro-config set:html={JSON.stringify(config).replaceAll('<','\\u003c')}/>
  <noscript><p>上の原値と定義を静的に表示します。選択国を変更する操作にはJavaScriptが必要です。</p></noscript>
 </section>

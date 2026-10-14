@@ -1,0 +1,11 @@
+{
+  "url": "https://www.adb.org/sites/default/files/publication/1067171/ki2025.pdf",
+  "requestedAtUtc": "2026-10-14T08:49:11.344522+00:00",
+  "method": "Single ordinary urllib HTTPS GET, default system certificate/proxy settings; no retries or alternate hosts",
+  "publisher": "Asian Development Bank",
+  "publication": "Key Indicators for Asia and the Pacific 2025",
+  "independentOfBlockedFaostat": true,
+  "outcome": "unavailable",
+  "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>",
+  "stopped": true
+}

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "recordedOn": "2026-10-14",
+  "requestedAtUtc": null,
+  "timestampNote": "The attempt's exact timestamp was not retained; the audit date is known.",
+  "purpose": "Discover public Luke forestry PxWeb metadata for Finland 2024 roundwood/sawnwood imports, exports and all partner quantities.",
+  "request": {
+    "url": "https://statdb.luke.fi/PxWeb/api/v1/en/LUKE/met/",
+    "method": "GET",
+    "client": "Python urllib.request.urlopen",
+    "timeoutSeconds": 25,
+    "credentialsUsed": false
+  },
+  "outcome": {
+    "status": "unavailable-connection-tunnel",
+    "errorType": "URLError",
+    "errorText": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+    "publisherHttpStatus": null,
+    "originResponseReceived": false,
+    "responseHeadersRetained": false,
+    "sourceBytesAcquired": false,
+    "note": "The reported 403 concerns establishment of the connection tunnel. No Luke origin response, metadata or table body was obtained; this is not evidence that Luke itself returned HTTP 403."
+  },
+  "attemptCountInThisAudit": 1,
+  "retried": false,
+  "alternateRouteAttempted": false,
+  "childTableRequested": false,
+  "stopped": true
+}

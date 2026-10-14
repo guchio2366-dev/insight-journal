@@ -8,7 +8,9 @@ const positiveTotal=data.destinations.reduce((sum,item)=>sum+item.value,0);
 const scale=Math.max(data.totalSupply,positiveTotal);
 ---
 <section class="crop-supply-use" id={`supply-use-${data.id}`} aria-labelledby={`supply-title-${data.id}`} data-supply-use={data.id}>
-  <header><h4 id={`supply-title-${data.id}`}>供給元と行き先</h4><span>2024/25 販売年度 · 実績</span></header>
+  <header><h4 id={`supply-title-${data.id}`}>② 国内利用と輸出</h4><span>2024/25 販売年度 · 実績</span></header>
+  <p class="supply-total">輸出 <strong>{fmt(data.exports)}</strong> {data.unit} · 生産量との比 <strong>{(data.exports/data.production*100).toFixed(1)}%</strong></p>
+  <p class="supply-source">輸入・持越在庫を含む収支です。この比率は国産収穫物の仕向けを追跡した割合ではありません。</p>
   <p class="supply-takeaway">{data.takeaway}</p>
   <p class="supply-total">総供給 <strong>{fmt(data.totalSupply)}</strong> {data.unit}</p>
   <figure><figcaption>２本とも総供給が100%。{data.basis}</figcaption>
@@ -18,7 +20,7 @@ const scale=Math.max(data.totalSupply,positiveTotal);
         {row.segments.map(s=><span class={`supply-segment role-${s.role}`} style={`width:${s.value/scale*100}%`} />)}
         <i class="supply-hundred" style={`left:${data.totalSupply/scale*100}%`} aria-hidden="true" />
       </div>
-      <ol class="supply-key">{row.segments.map(s=><li><i class={`role-${s.role}`} aria-hidden="true"/><span>{s.label}</span><strong>{formatShare(s.value,data.totalSupply)}</strong></li>)}</ol>
+      <ol class="supply-key">{row.segments.map(s=><li><i class={`role-${s.role}`} aria-hidden="true"/><span>{s.label}</span><strong>{fmt(s.value)} · {formatShare(s.value,data.totalSupply)}</strong></li>)}</ol>
     </div>)}
     {data.adjustment!==0&&<p class="supply-adjustment">行き先の合計に、原表の未勘定 {fmt(data.adjustment)} {data.unit}を加えると総供給に一致します。100%の線からの差を引き伸ばして補正していません。</p>}
   </figure>

@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "recordedOn": "2026-10-14",
+  "purpose": "Verify raw crop product definitions before joining FAOSTAT QCL production to retained WITS HS quantity records.",
+  "attempts": [
+    {
+      "url": "https://www.fao.org/waicent/faoinfo/economic/faodef/fdef14e.htm",
+      "method": "GET",
+      "client": "web.open",
+      "requestedAtUtc": null,
+      "observedResult": "Failed to fetch: (404) Not Found",
+      "sourceBytesAcquired": false
+    },
+    {
+      "url": "https://www.fao.org/waicent/faoinfo/economic/faodef/fdef07e.htm",
+      "method": "GET",
+      "client": "Python urllib.request.urlopen",
+      "requestedAtUtc": "2026-10-14T09:09:35.149307+00:00",
+      "timeoutSeconds": 20,
+      "credentialsUsed": false,
+      "errorType": "URLError",
+      "errorText": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "publisherHttpStatus": null,
+      "originResponseReceived": false,
+      "sourceBytesAcquired": false,
+      "note": "Connection-tunnel rejection; no FAO definition content was obtained."
+    },
+    {
+      "url": "https://unstats.un.org/unsd/classifications/Econ/Detail/EN/14/1201",
+      "method": "GET",
+      "client": "web.open",
+      "requestedAtUtc": null,
+      "observedResult": "URL is not accessible via this tool",
+      "publisherHttpStatus": null,
+      "sourceBytesAcquired": false,
+      "note": "No official classification content was obtained; no equivalence is inferred from this attempted URL."
+    }
+  ],
+  "restrictedUrlRetried": false,
+  "alternateRouteAttemptedAfter403": false,
+  "stoppedAfter403": true,
+  "verifiedProductCrosswalk": null
+}

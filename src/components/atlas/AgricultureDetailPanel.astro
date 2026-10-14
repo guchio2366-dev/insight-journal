@@ -6,7 +6,8 @@ const attrs=crop?{'data-stat-panel':id}:{'data-livestock-stat-panel':id};
 ---
 <article class="atlas-crop-panel" id={`${crop?'crop':'livestock'}-${id}`} role="tabpanel" aria-labelledby={`${crop?'stat':'livestock-stat'}-tab-${id}`} tabindex="-1" style={`--crop-color:${color}`} {...attrs}>
   <div class="atlas-crop-copy"><slot name="copy" /></div>
+  <div class="atlas-crop-charts" data-agri-flow-stage="production"><slot name="world" /></div>
   <div class="atlas-crop-data"><slot name="supply" /></div>
-  <div class="atlas-crop-charts"><slot name="exports" /><slot name="world" /></div>
+  <div class="atlas-crop-charts" data-agri-flow-stage="destinations"><slot name="exports" /></div>
   {hasExtra&&<div class="atlas-crop-extra"><slot name="extra" /></div>}
 </article>

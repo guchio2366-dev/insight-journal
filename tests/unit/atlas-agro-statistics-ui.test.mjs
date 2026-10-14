@@ -5,7 +5,7 @@ import {build} from 'esbuild';
 import {Window} from 'happy-dom';
 
 const compiled=await build({entryPoints:['src/lib/atlas-agro-statistics.ts'],bundle:true,platform:'node',format:'esm',write:false});
-const {agroShare,agroRanking,agroTopicSeries,renderAgroColumns,renderAgroWorld}=await import('data:text/javascript;base64,'+Buffer.from(compiled.outputFiles[0].text).toString('base64'));
+const {agroShare,agroRanking,agroTopicSeries,agroDisposition,renderAgroColumns,renderAgroWorld}=await import('data:text/javascript;base64,'+Buffer.from(compiled.outputFiles[0].text).toString('base64'));
 const controller=await build({entryPoints:['src/scripts/atlas-agro-statistics.ts'],bundle:true,platform:'node',format:'esm',write:false});
 let controllerId=0;
 
@@ -60,6 +60,15 @@ test('a null World denominator never yields a ratio or world pie',async()=>withD
  assert.doesNotMatch(root.textContent,/NaN|Infinity/);
 }));
 
+test('an unsupported selected product keeps the reading order with brief gaps and no substitute series',async()=>withDom(window=>{
+ const data=dataset({CAN:{name:'カナダ',series:[series([observation(2024,100)],{id:'soybean-production',item:'236'})]}});
+ const root=parse(window,renderAgroColumns(data,'CAN','roundwood-production'));
+ assert.deepEqual([...root.querySelectorAll('.agro-columns>section')].map(n=>n.dataset.agroStage),['production','use','destinations']);
+ assert.equal(root.querySelectorAll('.agro-world-pie,.agro-partner-pie,.agro-band,svg').length,0);
+ assert.doesNotMatch(root.textContent,/100 t|米（籾米）/,'another retained crop is not a forest production value');
+ assert.equal(root.querySelectorAll('.agro-flow-gap').length,3);
+}));
+
 test('equal production shares a rank and an appended selected country keeps its true rank',async()=>withDom(window=>{
  const countries=Object.fromEntries([100,100,90,80,70,60,50,40].map((value,index)=>['C'+index,{name:'対象'+index,series:[series([observation(2024,value)])]}]));
  // A differently defined observation must not enter the matching ranking.
@@ -75,21 +84,28 @@ test('equal production shares a rank and an appended selected country keeps its 
  assert.match(root.textContent,/全世界の網羅順位ではありません/);
 }));
 
-test('forestry bands include production and imports without fabricating domestic use from exports',async()=>withDom(window=>{
+test('the quantity flow keeps stockless apparent use distinct from domestic production allocation',async()=>withDom(window=>{
  const base={id:'roundwood-production',label:'丸太',domain:'FO',item:'1861',element:'5516',unit:'m3'};
  const production=series([observation(2024,300)],base);
  const imports=series([observation(2024,100,null)],{...base,id:'roundwood-imports',element:'5616'});
  const exports=series([observation(2024,350,null)],{...base,id:'roundwood-exports',element:'5916'});
  const data=dataset({CHN:{name:'中国',series:[production,imports,exports]}});
- const root=parse(window,renderAgroColumns(data,'CHN',production.id)),left=root.querySelector('.agro-columns>section');
- assert.match(left.querySelector('figcaption').textContent,/供給元（在庫を含まない） · 400 m³/);
- const bands=[...left.querySelectorAll('.agro-track span')];
+ const root=parse(window,renderAgroColumns(data,'CHN',production.id)),use=root.querySelector('[data-agro-stage="use"]');
+ assert.deepEqual([...root.querySelectorAll('.agro-columns>section')].map(n=>n.dataset.agroStage),['production','use','destinations']);
+ assert.match(use.querySelector('figcaption').textContent,/輸入込み・在庫未調整.*400 m³/);
+ const bands=[...use.querySelectorAll('.agro-track span')];
  assert.equal(bands.length,2);
- assert.deepEqual(bands.map(piece=>piece.style.width),['75%','25%']);
- assert.match(left.textContent,/公表輸出：350 m³/);
- assert.match(left.textContent,/国内仕向けの帯や実消費は算出しません/);
- assert.equal(left.querySelectorAll('figure').length,1);
- assert.doesNotMatch(left.textContent,/国内消費.*50|国内仕向け.*50/,'P + I - X is not a measured end use');
+ assert.deepEqual(bands.map(piece=>piece.style.width),['12.5%','87.5%']);
+ assert.match(use.textContent,/輸出量：350 m³.*116\.67%/s);
+ assert.match(use.textContent,/生産量を国内・輸出へ二分した比率ではありません/);
+ assert.equal(use.querySelectorAll('figure').length,1);
+ assert.match(use.textContent,/国内見掛消費 50 m³/);
+ assert.doesNotMatch(use.textContent,/実消費 50|国産分の国内仕向け 50/,'P + I - X is not a measured domestic-harvest use');
+ assert.equal(agroDisposition(data,'CHN',production,2023).apparent,null,'never substitute another year');
+ imports.rows[0].value=null;
+ assert.equal(agroDisposition(data,'CHN',production,2024).apparent,null,'a missing import is not zero');
+ imports.rows[0].value=0;
+ assert.equal(agroDisposition(data,'CHN',production,2024).apparent,null,'a negative balance is not a domestic consumption');
 }));
 
 test('trend lines break at both explicit missing observations and absent calendar years',async()=>withDom(window=>{
@@ -101,6 +117,27 @@ test('trend lines break at both explicit missing observations and absent calenda
   assert.equal(root.querySelectorAll('.agro-trend circle').length,4);
   assert.doesNotMatch(root.querySelector('.agro-trend').textContent,/2022年/);
  }
+}));
+
+test('the retained Chinese soy comparison connects one year and one export denominator across all three stages',async()=>withDom(window=>{
+ const data=JSON.parse(readFileSync('public/assets/atlas/regional-production-statistics-v1/statistics.json'));
+ const root=parse(window,renderAgroColumns(data,'CHN','soybean-production'));
+ assert.equal(root.querySelector('[data-agro-quantity-flow]').dataset.agroQuantityFlow,'2023');
+ const production=root.querySelector('[data-agro-stage="production"]'),use=root.querySelector('[data-agro-stage="use"]'),destinations=root.querySelector('[data-agro-stage="destinations"]');
+ assert.match(production.textContent,/2023暦年.*20,841,700 t/s);
+ assert.match(production.textContent,/370,876,094\.01 t/);
+ assert.match(use.textContent,/輸出量 71,398\.1 t.*0\.34%/s);
+ assert.match(use.textContent,/国内見掛消費 108,157,901\.9 t/);
+ assert.match(use.textContent,/実消費・国産分の国内仕向けではありません/);
+ assert.match(destinations.textContent,/71,398\.1 t/);
+ assert.match(destinations.textContent,/Korea, Rep\..*40,404 t.*56\.59%/s);
+ assert.match(destinations.textContent,/Japan.*16,511\.8 t/);
+ assert.equal(destinations.querySelectorAll('tbody tr').length,42);
+ assert.match(destinations.textContent,/0\.015 t/);
+ assert.equal(destinations.querySelector('[data-agro-partner-gap]'),null);
+ assert.equal(destinations.querySelector('[data-agro-existing-trade]'),null,'different-year money does not appear inside this quantity flow');
+ const mismatched=structuredClone(data);mismatched.countries.CHN.series.find(s=>s.id==='soybean-production').rows.find(r=>r.year===2023).value++;
+ assert.throws(()=>renderAgroColumns(mismatched,'CHN','soybean-production'),/版が一致しません/,'an inconsistent revision cannot silently join the chain');
 }));
 
 test('existing Latin and Asia topic aliases resolve to their retained product files',()=>{
@@ -159,6 +196,70 @@ test('overview product controls offer only existing page topics and fetch one se
  await settled(()=>h.content.querySelector('[data-agro-series]')?.dataset.agroSeries==='maize-production','overview product switch did not render');
  assert.deepEqual(requested,['/fixture/rice.json','/fixture/maize.json']);
  assert.equal([...h.select.options].some(option=>option.value==='soybean-production'),false,'an unrelated retained product must not enlarge page scope');
+}));
+
+test('ready selections preserve opened references while year, country and explicit product changes still render',async()=>withDom(async window=>{
+ const h=await harness(window),rice=series([observation(2023,20),observation(2024,30)]),maize=series([observation(2023,40),observation(2024,50)],{id:'maize-production',item:'56',label:'トウモロコシ'});
+ globalThis.fetch=async url=>new Response(JSON.stringify(dataset({CHN:{name:'中国',series:[url.endsWith('maize.json')?maize:rice]},IDN:{name:'インドネシア',series:[url.endsWith('maize.json')?maize:rice]}})));
+ const waitReady=()=>settled(()=>h.host.dataset.agroReady==='true'&&h.content.querySelector('[data-agro-series]'),'changed source selection did not settle');
+ h.sync({country:'IDN',topic:'rice',active:true,year:2024});await waitReady();
+ const readyNode=h.content.firstElementChild,definitions=h.content.querySelector('.agro-definitions');definitions.open=true;
+ for(const next of [{country:'IDN',topic:'rice',active:true},{country:'IDN',topic:'rice',year:2024},{country:'IDN',topic:'rice',active:true,year:2024}]){
+  h.sync(next);assert.equal(h.content.firstElementChild,readyNode,'same effective selection must not clear ready figures');assert.equal(h.host.dataset.agroReady,'true');
+  await new Promise(resolve=>setImmediate(resolve));assert.equal(h.content.firstElementChild,readyNode);assert.equal(definitions.open,true,'late native synchronization keeps disclosure state');
+ }
+ h.sync({country:'IDN',topic:'rice',active:true,year:2023});assert.equal(h.content.childElementCount,0,'changing the effective year still clears stale content');await waitReady();assert.notEqual(h.content.firstElementChild,readyNode);assert.match(h.content.textContent,/2023/);
+ h.sync({country:'CHN',topic:'rice',active:true,year:2023});await waitReady();assert.equal(h.content.querySelector('[data-agro-country]').dataset.agroCountry,'CHN');
+ h.sync({country:'IDN',topic:'overview',active:true,year:2024});await waitReady();
+ h.select.value='maize-production';h.select.dispatchEvent(new window.Event('change'));assert.equal(h.content.childElementCount,0,'an explicitly changed product must not be deduplicated');await waitReady();assert.equal(h.content.querySelector('[data-agro-series]').dataset.agroSeries,'maize-production');
+ const chosenNode=h.content.firstElementChild;h.sync({country:'IDN',topic:'overview',active:true,year:2024});await new Promise(resolve=>setImmediate(resolve));assert.equal(h.content.firstElementChild,chosenNode,'the selected product remains stable once rendered');
+ h.sync({country:'IDN',topic:'overview',active:false,year:2024});assert.equal(h.host.hidden,true);assert.equal(h.content.childElementCount,0);
+ h.sync({country:'IDN',topic:'overview',active:true,year:2024});await waitReady();assert.equal(h.host.hidden,false);assert.equal(h.content.querySelector('[data-agro-series]').dataset.agroSeries,'maize-production');
+}));
+
+test('late native sources refresh only references and preserve ready primary figures and disclosure state',async()=>withDom(async window=>{
+ const h=await harness(window),rice=series([observation(2024,30)]);window.document.body.append(h.root);
+ globalThis.fetch=async()=>new Response(JSON.stringify(single(rice)));
+ const selection={country:'CHN',topic:'rice',active:true};h.sync(selection);
+ await settled(()=>h.host.dataset.agroReady==='true','primary rice did not settle');
+ const primary=h.content.querySelector('[data-agro-stage="production"]'),definitions=h.content.querySelector('.agro-definitions'),trade=h.content.querySelector('[data-agro-existing-trade]'),outer=trade.closest('details');
+ definitions.open=true;outer.open=true;assert.equal(outer.hidden,true,'empty reference disclosure remains attached and hidden');
+ const native=document.createElement('section');native.dataset.eastFarmFoundations='';window.document.body.append(native);
+ h.sync(selection);h.sync(selection);
+ await settled(()=>trade.querySelector('.east-pie'),'late native source did not populate the retained reference marker');
+ assert.equal(h.content.querySelector('[data-agro-stage="production"]'),primary);assert.equal(definitions.open,true);assert.equal(trade.closest('details'),outer);assert.equal(outer.open,true);assert.equal(outer.hidden,false);
+ const inner=trade.querySelector('details');inner.open=true;const partnerCard=trade.querySelector('.east-trade-card');
+ h.sync(selection);await new Promise(resolve=>setImmediate(resolve));await new Promise(resolve=>setImmediate(resolve));
+ assert.equal(trade.querySelector('.east-trade-card'),partnerCard,'identical source markup must not be replaced merely because a nested disclosure is open');assert.equal(inner.open,true);
+ const obsolete=document.createElement('p');obsolete.textContent='obsolete reference-only content';trade.append(obsolete);h.sync(selection);
+ await settled(()=>!trade.textContent.includes('obsolete reference-only content'),'changed references did not refresh');
+ assert.equal(trade.querySelector('details').open,true,'changed reference content keeps the matching nested disclosure state');assert.equal(outer.open,true);assert.equal(h.content.querySelector('[data-agro-stage="production"]'),primary);
+ const originalQuery=document.querySelector.bind(document);let referenceFailure=true;
+ document.querySelector=selector=>{if(referenceFailure&&selector==='[data-east-farm-foundations]')throw Error('Test: optional native source temporarily unavailable');return originalQuery(selector);};
+ h.sync(selection);await settled(()=>!h.retry.hidden,'reference failure did not offer retry');assert.match(h.status.textContent,/主統計は表示済み.*参考資料.*失敗/);assert.equal(h.content.querySelector('[data-agro-stage="production"]'),primary);assert.equal(trade.closest('details').open,true);
+ referenceFailure=false;h.retry.click();await settled(()=>h.retry.hidden,'reference retry did not recover');assert.doesNotMatch(h.status.textContent,/失敗/);assert.equal(h.content.querySelector('[data-agro-stage="production"]'),primary);document.querySelector=originalQuery;
+ h.sync(selection);h.sync({country:'JPN',topic:'rice',active:true});await new Promise(resolve=>setImmediate(resolve));assert.equal(h.host.hidden,true);assert.equal(h.content.childElementCount,0,'a late reference refresh cannot repopulate a different selection');
+}));
+
+test('an unretained product keeps its supplied reference visible even when native reference markers are empty',async()=>withDom(async window=>{
+ const h=await harness(window,{files:{},reference:{label:'Existing source reference',value:7,unit:'t',year:2022,sourceUrl:'https://example.test/source',definition:'Retained reference definition.'}});
+ globalThis.fetch=()=>assert.fail('an unretained product must not fetch a substitute');h.sync({country:'IDN',topic:'temf',active:true});
+ await settled(()=>h.host.dataset.agroReady==='true','unretained selected product did not settle');
+ const reference=h.content.querySelector('[data-agro-existing-supply]').closest('details');assert.equal(reference.hidden,false);assert.match(reference.textContent,/Existing source reference.*7 t/s);assert.match(reference.textContent,/Retained reference definition/);
+}));
+
+test('a regional source link opens its disclosures and scrolls without changing the app URL or selection',async()=>withDom(async window=>{
+ window.happyDOM.setURL('https://example.test/atlas/example/agriculture/?country=IDN&topic=rice&year=2024');
+ const h=await harness(window),rice=series([observation(2024,30)]);document.body.append(h.root);
+ globalThis.fetch=async()=>new Response(JSON.stringify(dataset({IDN:{name:'インドネシア',series:[rice]}})));
+ h.sync({country:'IDN',topic:'rice',active:true,year:2024});await settled(()=>h.host.dataset.agroReady==='true','primary source selection did not settle');
+ const primary=h.content.querySelector('[data-agro-stage="production"]'),beforeUrl=window.location.href,beforeHistory=window.history.length;
+ const outer=document.createElement('details');outer.className='agro-existing-regional-reference';outer.innerHTML='<summary>別年・範囲の参考</summary><details><summary>原表の説明</summary><section id="agro-reference-west-wheat">Regional source reference</section></details>';document.body.append(outer);
+ const inner=outer.querySelector('details'),target=outer.querySelector('section');let scrollCalls=0;target.scrollIntoView=options=>{scrollCalls++;assert.equal(options.block,'nearest');};
+ const link=document.createElement('a');link.href='#agro-reference-west-wheat';link.dataset.agroReferenceLink='';link.textContent='地域の原表を読む';h.content.append(link);
+ const click=new window.MouseEvent('click',{bubbles:true,cancelable:true,button:0});link.dispatchEvent(click);
+ assert.equal(click.defaultPrevented,true,'an in-page source disclosure must not trigger hash navigation and native route rendering');assert.equal(outer.open,true);assert.equal(inner.open,true);assert.equal(scrollCalls,1);assert.equal(window.location.href,beforeUrl);assert.equal(window.history.length,beforeHistory);assert.equal(h.content.querySelector('[data-agro-stage="production"]'),primary);assert.equal(h.content.querySelector('[data-agro-country]').dataset.agroCountry,'IDN');assert.equal(link.getAttribute('href'),'#agro-reference-west-wheat','the target URL remains available for copying or modified clicks');
+ outer.open=false;inner.open=false;const modified=new window.MouseEvent('click',{bubbles:true,cancelable:true,button:0,ctrlKey:true});link.dispatchEvent(modified);assert.equal(modified.defaultPrevented,false);assert.equal(outer.open,false);assert.equal(inner.open,false);assert.equal(scrollCalls,1,'modified clicks retain browser link behavior');
 }));
 
 test('optional statistics without embedded configuration cannot interrupt an atlas reader',async()=>{

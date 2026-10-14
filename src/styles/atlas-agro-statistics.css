@@ -22,3 +22,5 @@
 .agro-statistics :is(.east-trade-key,.sc-flow-destinations) i{display:inline-block;width:10px;height:10px;flex:none;margin-top:5px}
 .agro-existing-forest{margin:16px 0;border-top:1px solid #d6dcd1;padding-top:12px}
 .agro-statistics .sc-flow-track{display:flex;height:16px}.agro-statistics .sc-flow-track>span{display:block;height:16px}
+.agro-flow-period{font-weight:650}.agro-columns>[data-agro-stage]{border-top:3px solid #3d7666}.agro-flow-gap{color:#5f675f}.agro-other-reference{margin-top:12px;border-top:1px solid #d6dcd1}.agro-production-context{margin-top:8px}
+.agro-definitions pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}.agro-quantity-flow h3{font-size:16px;margin:0 0 12px}.agro-quantity-flow p{font-size:14px;line-height:1.8}.agro-quantity-flow .agro-meta{font-size:12px}

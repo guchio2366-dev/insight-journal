@@ -17,7 +17,9 @@ const cases=[
  ['canada-beef','/atlas/north-america/canada/agriculture/beef/','CAN','cattle-meat'],
  ['canada-wheat','/atlas/north-america/canada/agriculture/wheat/','CAN',null],
  ['canada-forestry','/atlas/north-america/canada/agriculture/forestry/','CAN',null],
+ ['mexico-corn','/atlas/north-america/mexico/agriculture/?agriItem=corn&reading=item','MEX','maize-production'],
  ['east-rice','/atlas/asia/east-asia/agriculture/?topic=rice&place=CHN','CHN','rice-production'],
+ ['east-soybean-quantity','/atlas/asia/east-asia/agriculture/?topic=soybean&place=CHN','CHN','soybean-production'],
  ['southeast-forest','/atlas/asia/southeast-asia/agriculture/?topic=forest&place=IDN','IDN','roundwood-production'],
  ['south-wheat','/atlas/asia/south-asia/agriculture/?topic=wheat&place=IND','IND','wheat-production'],
  ['central-wheat','/atlas/asia/central-asia/agriculture/?topic=wheat&place=KAZ','KAZ','wheat-production'],
@@ -43,13 +45,22 @@ try{
   const context=await browser.newContext({viewport,locale:'ja-JP',reducedMotion:'reduce'}),page=await context.newPage();
   page.on('pageerror',error=>report.errors.push(String(error)));
   for(const [name,path,country,series] of cases){
+   try{
    await page.goto(reviewUrl(path),{waitUntil:'networkidle'});await page.evaluate(()=>document.fonts.ready);
-   const host=page.locator('[data-agro-statistics]');await host.waitFor({state:'visible'});
-   await page.waitForFunction(()=>{const node=document.querySelector('[data-agro-statistics]');return !node.hidden&&node.dataset.agroReady==='true'&&node.querySelector('[data-agro-content]')?.children.length>0&&!node.querySelector('[data-agro-status]').textContent.includes('読み込んで');});
-   if(series){await host.locator(`[data-agro-country="${country}"][data-agro-series="${series}"]`).waitFor();}
-   const measured=await host.evaluate(el=>{const b=el.getBoundingClientRect(),columns=[...el.querySelectorAll('.agro-columns>section')].map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,font:parseFloat(getComputedStyle(n.querySelector('p:not(.agro-meta)')??n).fontSize)};}),rail=document.querySelector('.atlas-news'),r=rail?.getBoundingClientRect(),map=(document.querySelector('[data-canada-census-stage]')??document.querySelector('[data-map-surface],.eu-map-stage,.africa-map-frame,[data-latin-agriculture-map-container],[data-forestry-stage],.forest-map-stage,[data-primary-map]'))?.getBoundingClientRect();return{x:b.x,w:b.width,y:b.y,columns,rail:r?{x:r.x,right:r.right,w:r.width,bottom:r.bottom}:null,map:map?{x:map.x,y:map.y,bottom:map.bottom}:null,overflow:document.documentElement.scrollWidth>innerWidth+1,statisticsOverflow:el.scrollWidth>el.clientWidth+1,overflowElements:[...document.querySelectorAll('body *')].filter(node=>node instanceof HTMLElement&&node.checkVisibility?.({visibilityProperty:true})&&!node.closest('details:not([open])')&&!node.closest('.agro-table-scroll')).flatMap(node=>{const r=node.getBoundingClientRect();return r.width>0&&(r.right>innerWidth+1||r.left<-1)?[{tag:node.tagName,class:node.className?.baseVal??node.className,x:r.x,right:r.right,w:r.width,inNewStatistics:el.contains(node)}]:[];}).slice(0,12)};});
+   const mexico=name==='mexico-corn',host=page.locator(mexico?'[data-mexico-agriculture-three-columns="corn"]':'[data-agro-statistics]');await host.waitFor({state:'visible'});
+   if(mexico)await page.waitForFunction(()=>document.querySelector('[data-mexico-agriculture-atlas]')?.dataset.agricultureReady==='true');
+   else await page.waitForFunction(()=>{const node=document.querySelector('[data-agro-statistics]');return !node.hidden&&node.dataset.agroReady==='true'&&node.querySelector('[data-agro-content]')?.children.length>0&&!node.querySelector('[data-agro-status]').textContent.includes('読み込んで');});
+   if(series&&!mexico){await host.locator(`[data-agro-country="${country}"][data-agro-series="${series}"]`).waitFor();}
+   // Native reference panels settle independently of the primary quantity data.
+   // Wait for the expected retained source, including content in closed details.
+   const referenceSelectors={'east-rice':'[data-agro-existing-trade] .east-pie','europe-wheat':'.agro-partner-pie','south-rice':'.sc-flow-pie','west-wheat':'[data-agro-reference-link]','europe-germany-forest':'[data-agro-existing-supply] .agro-band','europe-finland-forest':'[data-agro-existing-supply] .agro-existing-forest'};
+   if(referenceSelectors[name])await host.locator(referenceSelectors[name]).first().waitFor({state:'attached'});
+   if(name==='europe-germany-forest')await page.waitForFunction(()=>document.querySelectorAll('[data-agro-statistics] [data-agro-existing-supply] .agro-band').length>=3);
+   const measured=await host.evaluate(el=>{const b=el.getBoundingClientRect(),columns=[...el.querySelectorAll('.agro-columns>section')].map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,font:parseFloat(getComputedStyle(n.querySelector('p:not(.agro-meta)')??n).fontSize)};}),rail=document.querySelector('.atlas-news'),r=rail?.getBoundingClientRect(),map=(document.querySelector('[data-canada-census-stage]')??document.querySelector('[data-map-surface],.eu-map-stage,.africa-map-frame,[data-latin-agriculture-map-container],[data-forestry-stage],.forest-map-stage,[data-primary-map],[data-agriculture-map]'))?.getBoundingClientRect();return{x:b.x,w:b.width,y:b.y,columns,rail:r?{x:r.x,right:r.right,w:r.width,bottom:r.bottom}:null,map:map?{x:map.x,y:map.y,bottom:map.bottom}:null,overflow:document.documentElement.scrollWidth>innerWidth+1,statisticsOverflow:el.scrollWidth>el.clientWidth+1,overflowElements:[...document.querySelectorAll('body *')].filter(node=>node instanceof HTMLElement&&node.checkVisibility?.({visibilityProperty:true})&&!node.closest('details:not([open])')&&!node.closest('.agro-table-scroll')).flatMap(node=>{const r=node.getBoundingClientRect();return r.width>0&&(r.right>innerWidth+1||r.left<-1)?[{tag:node.tagName,class:node.className?.baseVal??node.className,x:r.x,right:r.right,w:r.width,inNewStatistics:el.contains(node)}]:[];}).slice(0,12)};});
    console.log(JSON.stringify({name,viewport,measured}));
+   if(mexico)measured.columns=await host.locator(':scope>section').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,font:parseFloat(getComputedStyle(n.querySelector('p:not(.agro-meta)')??n).fontSize)};}));
    assert.equal(measured.columns.length,3,`${name}: three columns`);
+   assert.deepEqual(await host.locator(mexico?':scope>section':'.agro-columns>section').evaluateAll(nodes=>nodes.map(n=>n.dataset.agroStage)),['production','use','destinations'],`${name}: production → use/export → destinations`);
    assert.equal(measured.statisticsOverflow,false,`${name}: statistics overflow`);
    if(measured.overflow)report.errors.push({kind:'page-overflow',name,viewport,elements:measured.overflowElements});
    assert.ok(measured.columns.every(c=>c.font>=13),`${name}: readable prose`);
@@ -58,18 +69,27 @@ try{
    if(measured.map)assert.ok(measured.y>=measured.map.bottom-1,`${name}: statistics below map`);
    await host.scrollIntoViewIfNeeded();await page.screenshot({path:resolve(out,`${viewport.width}-${name}.png`),fullPage:true});
    report.cases.push({name,path,viewport,...measured});
+   if(mexico){assert.match(await host.locator('[data-agro-stage="production"]').innerText(),/23\.1.*1,235\.03/s);assert.match(await host.locator('[data-agro-stage="use"]').innerText(),/0\.03.*0\.13%.*49\.1/s);report.operations.push({name,viewport,samePublisherYear:true,nationalNotRegional:true});}
+   // Different-year/unit references are intentionally collapsed in the primary
+   // quantity flow. Open them explicitly to test the retained reference tools.
+   for(const details of await host.locator('.agro-other-reference:not([hidden])').all())if(!await details.evaluate(el=>el.open))await details.locator(':scope>summary').click();
    if(name==='east-rice'){assert.ok(await host.locator('[data-agro-existing-trade] .east-pie').count()>0);assert.match(await host.locator('[data-agro-existing-trade]').innerText(),/2023.*(?:米ドル|金額)/s);report.operations.push({name,viewport,retainedPartnerPie:true});}
+   if(name==='east-soybean-quantity'){assert.equal(await host.locator('[data-agro-quantity-flow="2023"]').count(),1);assert.match(await host.locator('[data-agro-stage="use"]').innerText(),/71,398\.1.*0\.34%/s);assert.match(await host.locator('[data-agro-stage="destinations"]').innerText(),/Korea, Rep\..*40,404.*Japan.*16,511\.8/s);await host.locator('[data-agro-stage="destinations"] summary').click();assert.equal(await host.locator('[data-agro-stage="destinations"] tbody tr').count(),42);report.operations.push({name,viewport,sameYearQuantity:true,allForeignPartners:true,sharedExportDenominator:true});}
    if(name==='europe-wheat'){assert.equal(await host.locator('.agro-partner-pie').count(),1);assert.match(await host.locator('[data-agro-existing-trade]').innerText(),/2021年.*current USD/s);report.operations.push({name,viewport,regionalMoneyReference:true});}
    if(name==='south-rice'){assert.equal(await host.locator('.sc-flow-pie').count(),1);assert.match(await host.locator('[data-agro-existing-trade]').innerText(),/5,242,182t/);report.operations.push({name,viewport,basmatiReference:true});}
-   if(name==='west-wheat'){const link=host.locator('[data-agro-reference-link]');await link.click();assert.ok(await page.locator('#agro-reference-west-wheat').isVisible());report.operations.push({name,viewport,regionalPartnerReference:true});}
-   if(name==='russia-wheat'){const world=host.locator('.agro-columns>section').nth(2);assert.match(await world.innerText(),/公式値限定/);assert.equal(await world.locator('.agro-world-pie').count(),0);assert.ok(!(await world.innerText()).includes('82,588,000'));assert.ok(!(await world.locator('.agro-trend').getAttribute('aria-label')).includes('連続'));report.operations.push({name,viewport,unofficialExcluded:true});}
+   if(name==='west-wheat'){const link=host.locator('[data-agro-reference-link]'),beforeUrl=page.url();await link.click();await page.locator('#agro-reference-west-wheat').waitFor({state:'visible'});assert.ok(await page.locator('#agro-reference-west-wheat').isVisible());assert.equal(page.url(),beforeUrl,'reference links keep the selected map URL');report.operations.push({name,viewport,regionalPartnerReference:true,selectionUrlPreserved:true});}
+   if(name==='russia-wheat'){const world=host.locator('[data-agro-stage="production"]');assert.match(await world.innerText(),/公式値限定/);assert.equal(await world.locator('.agro-world-pie').count(),0);assert.ok(!(await world.innerText()).includes('82,588,000'));assert.ok(!(await world.locator('.agro-trend').getAttribute('aria-label')).includes('連続'));report.operations.push({name,viewport,unofficialExcluded:true});}
    if(name==='europe-germany-forest'){assert.ok(await host.locator('[data-agro-existing-supply] .agro-band').count()>=3);assert.match(await host.locator('[data-agro-existing-supply]').innerText(),/在庫未調整/);report.operations.push({name,viewport,sourceSupplyAndUses:true});}
    if(name==='europe-finland-forest'){assert.match(await host.locator('[data-agro-existing-supply]').innerText(),/62,655.*樹皮あり/s);report.operations.push({name,viewport,firstUseSeparate:true});}
-   if(name==='europe-britain-forest'){await host.locator('[data-agro-series-select]').selectOption('sawnwood-production');await page.waitForFunction(()=>document.querySelector('[data-agro-statistics]')?.dataset.agroReady==='true');assert.match(await host.locator('[data-agro-existing-supply]').innerText(),/25,000m³以上/);report.operations.push({name,viewport,restrictedMarketShares:true});}
+   if(name==='europe-britain-forest'){await host.locator('[data-agro-series-select]').selectOption('sawnwood-production');await host.locator('[data-agro-series="sawnwood-production"]').waitFor();await page.waitForFunction(()=>document.querySelector('[data-agro-statistics]')?.dataset.agroReady==='true');await host.locator('[data-agro-stage="use"]>.agro-other-reference>summary').click();assert.match(await host.locator('[data-agro-existing-supply]').innerText(),/25,000m³以上/);report.operations.push({name,viewport,restrictedMarketShares:true});}
    if(name==='southeast-forest'){
     await host.locator('[data-agro-series-select]').selectOption('sawnwood-production');await host.locator('[data-agro-series="sawnwood-production"]').waitFor();
     await host.locator('.agro-definitions>summary').click();assert.ok(await host.locator('.agro-definitions table').isVisible());
     report.operations.push({name,viewport,seriesChange:true,definitionToggle:true});
+   }
+   }catch(error){
+    const failure={kind:'case-failure',name,path,viewport,error:String(error)};report.errors.push(failure);console.error(JSON.stringify(failure));
+    await page.screenshot({path:resolve(out,`${viewport.width}-${name}-failed.png`),fullPage:true}).catch(()=>{});
    }
   }
   // Region overview must show partial coverage, not Indonesia as the region.
@@ -81,14 +101,19 @@ try{
   await page.waitForFunction(()=>document.querySelector('[data-agro-statistics]')?.hidden);report.operations.push({name:'japan-excluded',viewport,hidden:true});
   await context.close();
  }
- // The unmodified US is the visual baseline, captured from this exact build.
+ // Review the US baseline from this exact build, including its selected flow.
  const page=await browser.newPage({viewport:{width:1440,height:900}});
  await page.goto(reviewUrl('/atlas/north-america/agriculture/'),{waitUntil:'domcontentloaded'});
  await page.locator('[data-crop-select="corn"]').click();await page.locator('[data-agri-statistics]').waitFor({state:'visible'});
+ const us=page.locator('[data-stat-panel="corn"]');
+ const order=await us.evaluate(el=>{const production=el.querySelector('[data-us-flow-production="corn"]').getBoundingClientRect(),use=el.querySelector('[data-us-marketing-flow="corn"]').getBoundingClientRect(),destinations=el.querySelector('#exports-corn').getBoundingClientRect();return{production:production.x,use:use.x,destinations:destinations.x};});
+ assert.ok(order.production<order.use&&order.use<order.destinations,'US production → use/export → destinations');
+ assert.match(await us.innerText(),/1,235\.03.*311\.24.*72\.97/s);
  await page.screenshot({path:resolve(out,'1440-us-baseline.png'),fullPage:true});
  report.operations.push({name:'us-baseline',cornSelection:true,sharedNationalHost:await page.locator('[data-agro-statistics]').count()});
  if(publicOrigin)for(const field of ['agriculture','nature','industry','population']){await page.goto(reviewUrl('/atlas/japan/'+field+'/'),{waitUntil:'networkidle'});await page.waitForFunction(()=>document.querySelector('[data-japan-atlas]')?.dataset.mapReady==='true');assert.equal(await page.locator('[data-agro-statistics]').count(),0);report.operations.push({name:'production-japan-'+field,sharedHostAbsent:true});await page.screenshot({path:resolve(out,'1440-production-japan-'+field+'.png'),fullPage:true});}
  assert.deepEqual(report.errors,[],'browser errors or page overflow diagnostics require resolution');
+ assert.equal(report.cases.length,cases.length*3,'all selected regional cases must be reviewed');
  report.status='passed';
 }catch(error){report.status='failed';report.failure=String(error);throw error;}
 finally{await writeFile(resolve(out,'report.json'),JSON.stringify(report,null,2)+'\n');await browser?.close();await new Promise(r=>server.close(r));}

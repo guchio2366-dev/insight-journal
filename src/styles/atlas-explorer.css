@@ -495,6 +495,7 @@
 .agri-statistics>h2{font-size:18px;margin:0 0 10px}
 .agri-statistics .atlas-crop-panel{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;padding:0;border:0;align-items:start}
 .agri-statistics .atlas-crop-charts{display:contents}
+.agri-statistics .atlas-crop-charts[data-agri-flow-stage]{display:block;grid-column:auto;min-width:0}
 .agri-statistics .atlas-crop-extra{grid-column:1/-1;min-width:0}
 .agri-statistics .atlas-crop-data{min-width:0}
 .agri-statistics .crop-supply-use,.agri-statistics .livestock-supply-use,.agri-statistics .atlas-export-chart,.agri-statistics .atlas-world-chart{padding:12px;margin:0;min-width:0}
@@ -518,7 +519,7 @@
 .agri-statistics .supply-bar,.agri-statistics .animal-supply-bar{height:12px}
 .agri-statistics .supply-key,.agri-statistics .animal-supply-key{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:4px 10px;margin:0}
 .agri-statistics .supply-key li,.agri-statistics .animal-supply-key li{display:flex;gap:4px;align-items:baseline;font-size:14px;line-height:1.6}
-.agri-statistics .animal-supply-key li>strong{display:none}
+.agri-statistics .animal-supply-key li>strong{display:inline}
 .agri-statistics .supply-takeaway,.agri-statistics .animal-supply-takeaway{font-size:14px;line-height:1.7;margin:8px 0}
 .agri-statistics .animal-production,.agri-statistics .animal-supply-total{font-size:12px;margin:8px 0}
 .agri-statistics .animal-production strong,.agri-statistics .animal-supply-total strong{font-size:16px}
