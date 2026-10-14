@@ -47,3 +47,20 @@ CENTRAL_REVIEW_OUTPUT=/tmp/central-asia-review node scripts/verify-central-asia-
 ガスの最新の品目単独GDP・輸出金額、製粉単独の付加価値・雇用、ウズベキスタンの地域別製粉数量、2025年フェロクロム製品別値、繊維製品・輸送サービスの同一定義の世界シェアは未確認。石油・ガスの世界比較は確認できたEI 2025年版の2024年値を使い、2026年版の全文数値は未検証と表示する。カザフスタン輸送サービスの確認済み値は2024年。
 
 これらは未実装品目ではなく、統計上の未確認範囲。地図の地点がない地域も生産ゼロを意味しない。一次資料の国・企業・州の範囲を5か国の地域合計へ勝手に広げない。
+
+
+## 実画面と検証結果
+
+検証したコードSHA：`abb642d341a0f11eaa33954af51590bd3041a182`。ビルドの `_release.json` も同じSHA。後続のコミットは確認画像・検証JSON・この記録と、共通E2Eの中央アジア専用構造の契約だけを追加する。productionのsrcは変更しない。
+
+- 全体単体テスト：1,356件、1,353合格、失敗0、既存スキップ3。
+- production build：成功。
+- 実ブラウザー：4画面幅×3分類、全11品目と地点選択、位置固定、限定表示、復帰、履歴、キーボード、実タッチ、南アジアの描画を確認。31画像を保存。
+- 全体E2E：623件を実行し、612合格・失敗1・既存スキップ10。失敗は旧Asiaセレクターを要求する共通レイアウト契約。中央アジアの専用構造へ契約を更新し、該当ファイル4件を再実行して全件合格（失敗0）。検査契約だけの変更のため全体を再実行していない。
+- release検証：ビルドのSHAと公開内容・索引・秘匿情報検査を含めて成功。
+
+PCの初期表示：[資源](1920-resources-initial.png) ／ [製造](1920-manufacturing-initial.png) ／ [サービス](1920-services-initial.png)。選択状態：[資源](1920-resources-selected.png) ／ [製造](1920-manufacturing-selected.png) ／ [サービス](1920-services-selected.png)。[1440px製造](1440-manufacturing-initial.png) ／ [地図下の統計3列](1920-statistics-three-columns.png)。
+
+モバイルはページ全体の縦スクロールを保ち、地図自体の画像も保存：[資源](390-resources-initial-map.png) ／ [製造](390-manufacturing-initial-map.png) ／ [サービス](390-services-initial-map.png)。
+
+PC3分類、1440px製造、モバイル3分類と統計3列を目視し、産業名を主役にした表示、範囲の説明、右側の概説、枠内・非重複を確認した。全31画像と [review.json](review.json) の座標・寸法・操作記録を同梱する。

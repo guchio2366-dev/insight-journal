@@ -13,9 +13,10 @@ const eastApprovedCss=await readFile('src/styles/atlas-east-asia-approved.css','
 const configurations={
   europe:{root:'[data-europe-detail]',nav:'.eu-field-nav',grid:'.eu-layout',frame:'.eu-map-stage',reading:'.eu-read-panel',stats:'[data-eu-statistics]'},
   asia:{root:'[data-asia-atlas]',nav:'.asia-field-tabs',grid:'.asia-layout',frame:'.asia-map-frame',reading:'.asia-reading-panel',stats:'[data-asia-statistics]'},
-  west:{root:'[data-west-atlas]',nav:'.atlas-tabs',grid:'.atlas-primary-grid',frame:'.atlas-map-frame',reading:'.west-reading',stats:'[data-west-comparison]'}
+  west:{root:'[data-west-atlas]',nav:'.atlas-tabs',grid:'.atlas-primary-grid',frame:'.atlas-map-frame',reading:'.west-reading',stats:'[data-west-comparison]'},
+  centralIndustry:{root:'[data-asia-atlas]',nav:'.atlas-tabs',grid:'.central-primary-grid',frame:'.central-map-frame',reading:'.central-reading',stats:'.central-industry-statistics',surface:'[data-central-map]'}
 };
-const configuration=region=>configurations[region==='europe'?'europe':region==='west-asia'?'west':'asia'];
+const configuration=(region,field)=>configurations[region==='asia/central-asia'&&field==='industry'?'centralIndustry':region==='europe'?'europe':region==='west-asia'?'west':'asia'];
 async function loadStyles(w){
   for(const node of w.document.querySelectorAll('style,link[rel=stylesheet]')){
     const path=node.tagName==='LINK'?`dist/${node.getAttribute('href').split('/insight-journal/')[1]}`:null;
@@ -33,7 +34,7 @@ async function page(region,field,width=1366,styles=false){
 
 test('all seven regional workspaces retain five main destinations and one map/reading/news frame',async()=>{
   for(const region of regions)for(const field of fields){
-    const w=await page(region,field),d=w.document,c=configuration(region),root=d.querySelector(c.root);
+    const w=await page(region,field),d=w.document,c=configuration(region,field),root=d.querySelector(c.root),centralIndustry=c===configurations.centralIndustry;
     try{
       assert.ok(root,`${region}/${field}: regional root`);
       const nav=root.querySelector(c.nav),links=[...nav.querySelectorAll(':scope > a')];
@@ -41,16 +42,22 @@ test('all seven regional workspaces retain five main destinations and one map/re
       assert.deepEqual(links.map(a=>new URL(a.href).pathname),['overview',...fields].map(f=>`/insight-journal/atlas/${region}/${f}/`));
       assert.equal(nav.querySelector('[aria-current=page]').getAttribute('href'),`/insight-journal/atlas/${region}/${field}/`);
       assert.equal(d.querySelectorAll('[data-news-rail]').length,1);
-      assert.equal(d.querySelectorAll('[data-map-surface]').length,1);
+      const surface=c.surface??'[data-map-surface]';
+      assert.equal(d.querySelectorAll(surface).length,1);
       const grid=root.querySelector(c.grid),frame=root.querySelector(c.frame),reading=root.querySelector(c.reading);
       assert.ok(grid.contains(frame)&&grid.contains(reading),`${region}: map and reading share the main grid`);
       assert.ok(frame.compareDocumentPosition(reading)&4,`${region}: reading follows the map`);
-      assert.ok(d.querySelector('[data-map-surface]').closest('[data-atlas-shell]'));
+      assert.ok(d.querySelector(surface).closest('[data-atlas-shell]'));
       const stats=root.querySelector(c.stats)??d.querySelector(c.stats);
       assert.ok(stats&&!reading.contains(stats),`${region}: statistics are outside the right reading column`);
       assert.ok(grid.compareDocumentPosition(stats)&4,`${region}: statistics follow the complete main grid`);
       if(region==='europe')assert.equal(stats.parentElement,d.querySelector('[data-atlas-shell]'),'Europe statistics occupy the map and reading width within the shell');
-      if(region.startsWith('asia/')){
+      if(centralIndustry){
+        assert.equal(stats.parentElement,root.querySelector('[data-central-industry]'),'Central Asia industry statistics span its map and reading content');
+        assert.equal(stats.querySelectorAll('[data-central-stat-column]').length,3);
+        assert.equal(root.querySelector('[data-central-reading]').hidden,false,'the complete source-backed overview is visible immediately');
+        assert.equal(reading.querySelectorAll('[data-central-metric]').length,0,'statistics remain below the map');
+      }else if(region.startsWith('asia/')){
         assert.equal(stats.parentElement,d.querySelector('[data-atlas-shell]'),'Asia statistics span the news/map/reading shell');
         const compactEastFarm=region==='asia/east-asia'&&field==='agriculture';
         assert.equal(root.querySelector('[data-reading-details]').open,true,'approved regional reading is initially open beside the map');
