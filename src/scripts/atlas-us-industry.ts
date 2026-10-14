@@ -77,8 +77,8 @@ export function initUsIndustry(root:HTMLElement){
   const sourceIds=[...new Set((item?item.metrics.map(m=>m.source):[]).concat(sites.flatMap(s=>s.sources)))];q('[data-us-product-sources]').replaceChildren(...sourceIds.map(link));set('[data-us-product-scope]',item?.why??'統計と位置はそれぞれの一次資料の年・範囲で示す。集積案内・稼働・登録・計画と企業本社を区別する。');
   const key=q('[data-us-key]');key.replaceChildren();for(const id of usSectorIndustryIds(state.sector)){const i=usIndustryById(id)!,button=el('button',i.label) as HTMLButtonElement;button.type='button';button.dataset.usKey=id;button.style.setProperty('--us-color',i.color);button.setAttribute('aria-pressed',String(item?.id===id));button.addEventListener('click',()=>chooseIndustry(id));key.append(button);}
   // Original published charts remain separate from the new narrow product metrics.
-  root.querySelectorAll<HTMLElement>('[data-industry-national-panel]').forEach(p=>p.hidden=p.dataset.industryNationalPanel!==state.sector);
-  root.querySelectorAll<HTMLElement>('[data-industry-detail]').forEach(p=>p.hidden=p.dataset.industryDetail!==`${item?.legacy?item.sector:state.sector}:${item?.legacy??'all'}`);
+  root.querySelectorAll<HTMLElement>('[data-industry-national-panel]').forEach(p=>p.hidden=p.dataset.industryNationalPanel!=='all'&&p.dataset.industryNationalPanel!==state.sector);
+  root.querySelectorAll<HTMLElement>('[data-industry-detail]').forEach(p=>p.hidden=p.dataset.industryDetail!=='all:all'&&p.dataset.industryDetail!==`${item?.legacy?item.sector:state.sector}:${item?.legacy??'all'}`);
   statistics();renderMap();root.dataset.renderState='ready';set('[data-us-live]',`${item?.label??sector.label}の分布・解説・統計を表示しました。`);
  }
  const sector=(id:string)=>{state={...state,sector:id as UsSector,industry:null,site:null,only:false};save();};
