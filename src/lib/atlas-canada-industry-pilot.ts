@@ -1,7 +1,7 @@
 import raw from '../data/atlas/canada/industry-pilot.json';
 export type PilotSector = 'resources' | 'manufacturing' | 'services';
 export type PilotIndustry = {id:string;label:string;color:string;sectors:string[];metrics:Record<string,string>;overview:string;why:string};
-export type PilotCluster = {id:string;place:string;coordinates:number[];industry:string;stage:string;sources:string[];sectors:string[];note:string};
+export type PilotCluster = {id:string;place:string;coordinates:number[];industry:string;stage:string;sources:string[];sectors:string[];note:string;status?:'operating'|'planned'|'construction'|'paused';asOf?:string};
 export const canadaIndustryPilot = raw as typeof raw & {industries:PilotIndustry[];clusters:PilotCluster[]};
 export const pilotClusters = (sector:string, industry:string|null=null) => canadaIndustryPilot.clusters.filter(c=>c.sectors.includes(sector)&&(!industry||c.industry===industry));
 export const pilotIndustry = (id:string) => canadaIndustryPilot.industries.find(i=>i.id===id);

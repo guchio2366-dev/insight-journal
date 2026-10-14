@@ -4,21 +4,21 @@
     {
       "id": "resources",
       "label": "資源・エネルギー",
-      "overview": "石油・ガスは西部の堆積盆地と東岸沖、ニッケルはサドベリー・トンプソン・ラブラドールに分布します。精製・精錬の拠点と、水力発電の地域も重ねています。 サスカチュワン南部のカリと、北部のウラン採掘・鉱石処理も、工程を分けて示します。",
+      "overview": "西部の石油・ガスとBCの銅・製鉄用石炭、プレーリーのカリ・ウラン、盾状地の金・ニッケル・鉄鉱石を読む。水力・精錬と、リチウム・黒鉛の操業／計画段階も区別する。",
       "why": "資源を採る場所は地質に制約されます。原料を使える状態にする場所には輸送設備やエネルギーが必要です。サドベリーは採掘と精錬が近接し、ヴォイジーズ・ベイでは精鉱を海上輸送してロングハーバーで金属にします。",
       "insight": "どこで採れ、どこで使える原料・エネルギーになるか"
     },
     {
       "id": "manufacturing",
       "label": "製造業",
-      "overview": "自動車はオンタリオ南部に複数の製造拠点が連なり、航空機・部品はモントリオール近郊とオンタリオに集まります。西部と東部の精製、サドベリー・東岸の金属精錬、サグネとキティマットのアルミ製錬も同じ地図で読めます。 食肉・ばれいしょ加工、木材製品とパルプ・紙は、それぞれの確認した加工集積を追加しています。",
+      "overview": "ON・QCの自動車・航空機と沿岸の造船、各地の木材・紙・食品加工を読む。搾油・製粉・水産加工、鉄道車両、電池を加え、工場・本社・計画を分ける。",
       "why": "組立工業では部品供給、専門人材、市場への交通が立地を支えます。精錬・精製は原料を燃料や金属へ変える製造でもあります。製品の用途と原料の供給関係は区別し、近い工場どうしに取引があるとは推定しません。",
       "insight": "どこで何がつくられ、調達と用途がどう関わるか"
     },
     {
       "id": "services",
       "label": "サービス業",
-      "overview": "金融はトロントとモントリオール、情報技術は両都市に加えウォータールー・オタワ・バンクーバー・カルガリーにも集積します。物流は太平洋岸、プレーリー、中央回廊、大西洋岸をつなぐ拠点に分布します。",
+      "overview": "大都市の金融・情報サービスと東西の港湾・物流、BanffやNiagaraの観光需要を読む。都市の位置、業種全体のGDP、観光需要のGDPは別の尺度。",
       "why": "金融・情報技術では専門人材、大学・研究機関、企業の意思決定が近くに集まることが仕事を支えます。物流では港・空港・鉄道・道路の接続が人と貨物を集めます。都市規模と、個別サービスの集積は同じ指標ではありません。",
       "insight": "どこに人・情報・接続機能が集まるか"
     }
@@ -222,6 +222,165 @@
       },
       "overview": "BCのスクーカムチャックとポートアルバーニ、サスカチュワンのメドーレイク、ケベックのラックサンジャン・サグネとウィンザーにパルプ・紙の工場があります。",
       "why": "パルプは木材などから繊維を取り出した原料、紙は繊維をシート等に加工した製品です。原料、エネルギー、水、輸送を使う加工で、森林の広さと同じ分布にはなりません。停止が確認されたハウサウンド等は稼働例へ含めません。"
+    },
+    {
+      "id": "gold",
+      "label": "金採掘",
+      "color": "#b18414",
+      "sectors": [
+        "resources"
+      ],
+      "metrics": {
+        "resources": "mining"
+      },
+      "overview": "オンタリオ・ケベックの盾状地に集積。Canadian MalarticとDetour Lakeを代表例として読む。北方にも金鉱山があり、この図は全鉱山を網羅しない。",
+      "why": "2024年の改訂国内生産は185.6t、ONとQCで69.0%。世界4位という位置と、価格上昇で出荷価額が膨らむ性格を合わせて採用。"
+    },
+    {
+      "id": "copper",
+      "label": "銅採掘・選鉱",
+      "color": "#b36434",
+      "sectors": [
+        "resources"
+      ],
+      "metrics": {
+        "resources": "mining"
+      },
+      "overview": "BCの大規模銅鉱山と、Sudburyのニッケル・銅共産を対比。精鉱と精製銅を別の段階として読む。",
+      "why": "国内改訂生産の67.5%がBC。送電・電化に使われる素材の地域集中と、精鉱を売る企業の収益段階を学べる。"
+    },
+    {
+      "id": "iron-ore",
+      "label": "鉄鉱石・ペレット",
+      "color": "#805a57",
+      "sectors": [
+        "resources"
+      ],
+      "metrics": {
+        "resources": "mining"
+      },
+      "overview": "Labrador Cityで採掘・処理し、Sept-Îlesで船積みする。港を鉱山として数えない。",
+      "why": "2024年の粗鉱量7,000.2万tは鉄含有量4,200万tと別。鉱山・ペレット・鉄道・港の段階を区別できるため採用。"
+    },
+    {
+      "id": "steel-coal",
+      "label": "製鉄用石炭",
+      "color": "#55575a",
+      "sectors": [
+        "resources"
+      ],
+      "metrics": {
+        "resources": "mining"
+      },
+      "overview": "BC Elk Valleyの製鉄用石炭。発電用石炭と用途を分ける。",
+      "why": "4鉱山・5,000人超という企業地域雇用が根拠。鉄鋼脱炭素で需要が変わる原料を学ぶ補助品目とする。"
+    },
+    {
+      "id": "battery",
+      "label": "電池",
+      "color": "#526e94",
+      "sectors": [
+        "manufacturing"
+      ],
+      "metrics": {},
+      "overview": "Windsorの商業セル生産と、St. Thomasの発表済み計画を分ける。原料鉱山の生産量とは合算しない。",
+      "why": "NextStarは2026年2月に累計100万セル、直接雇用1,300人超。成長テーマとして採用し、将来能力を現在の地域生産と扱わない。"
+    },
+    {
+      "id": "lithium",
+      "label": "リチウム鉱石",
+      "color": "#937086",
+      "sectors": [
+        "resources"
+      ],
+      "metrics": {
+        "resources": "mining"
+      },
+      "overview": "QC La CorneのNorth American LithiumとMB Bernic LakeのTanco。鉱石と電池用化合物を区別。",
+      "why": "USGSの2024年スポジュメン推計18.9万tと2操業鉱山が根拠。中国企業所有を含む調達・所有構造を考える補助品目。"
+    },
+    {
+      "id": "graphite",
+      "label": "黒鉛",
+      "color": "#575d69",
+      "sectors": [
+        "resources"
+      ],
+      "metrics": {
+        "resources": "mining"
+      },
+      "overview": "QCのLac des Îlesは2026年9月資料で休止・再開延期。Matawinie phase2は2026年8月資料で建設中。",
+      "why": "2024年の鉱山生産1.17万tと、その後の休止・建設を区別。電池負極の供給網が計画通りには増えない点を学ぶ補助品目。"
+    },
+    {
+      "id": "shipbuilding",
+      "label": "造船",
+      "color": "#2d7581",
+      "sectors": [
+        "manufacturing"
+      ],
+      "metrics": {
+        "manufacturing": "shipbuilding"
+      },
+      "overview": "国家造船戦略のVancouver、Halifax、Lévisの提携造船所。政府調達と長期建造を読む。",
+      "why": "2023年船舶・ボート製造の直接GDPは11億CAD。政府需要の持続性と事業段階を学べる補助品目。"
+    },
+    {
+      "id": "railway",
+      "label": "鉄道車両",
+      "color": "#87634d",
+      "sectors": [
+        "manufacturing"
+      ],
+      "metrics": {
+        "manufacturing": "railway"
+      },
+      "overview": "Thunder BayとLa Pocatièreの製造・組立。企業本社と工場を分け、累計納入車両を年産と扱わない。",
+      "why": "全国鉄道車両GDPは2021年4.654億CAD。規模よりも都市交通の脱炭素と国内供給者の連なりを学ぶ補助品目。"
+    },
+    {
+      "id": "tourism",
+      "label": "観光",
+      "color": "#497d5b",
+      "sectors": [
+        "services"
+      ],
+      "metrics": {},
+      "overview": "Banffの自然観光とNiagaraの訪問地域を対比。訪問数・観光需要GDP・都市人口を分ける。",
+      "why": "2024年の観光直接GDPは508億CAD、全国の1.8%。国内収入76.1%という需要構造があり、海外客だけで稼ぐ業種ではない。"
+    },
+    {
+      "id": "canola-crush",
+      "label": "カノーラ搾油",
+      "color": "#8a871e",
+      "sectors": [
+        "manufacturing"
+      ],
+      "metrics": {},
+      "overview": "プレーリーの搾油工場で種子から油とミールを生産。YorktonとLethbridgeを操業例として読む。",
+      "why": "2024年の搾油投入1,140万t、油480万t、ミール660万t。食用油と飼料を同時に供給する国内加工を食料安全保障の観点で採用。"
+    },
+    {
+      "id": "flour",
+      "label": "小麦製粉",
+      "color": "#a38945",
+      "sectors": [
+        "manufacturing"
+      ],
+      "metrics": {},
+      "overview": "小麦を栽培する一次産業とは別の製粉工程。BCの2工場は確認できた例で、全国の中心地順位ではない。",
+      "why": "2024年に小麦330万tを挽き小麦粉250万tを生産。主食原料を国内で利用できる形にする工程を採用。"
+    },
+    {
+      "id": "seafood",
+      "label": "水産加工",
+      "color": "#4c778c",
+      "sectors": [
+        "manufacturing"
+      ],
+      "metrics": {},
+      "overview": "NS・NLの沿岸加工工場。漁獲する海域、加工施設、企業本社を分ける。",
+      "why": "加工の2023年収入70.3億CAD・雇用18,334人が根拠。2024年の魚介輸出81.1億CADには原料も含むため加工売上と区別。"
     }
   ],
   "clusters": [
@@ -1444,6 +1603,494 @@
         "manufacturing"
       ],
       "note": ""
+    },
+    {
+      "id": "malartic-gold",
+      "place": "Canadian Malartic／QC北西部",
+      "coordinates": [
+        -78.13,
+        48.14
+      ],
+      "industry": "gold",
+      "stage": "採掘・鉱石処理",
+      "sources": [
+        "malartic"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": "BarnatとOdysseyの鉱山群。旧Malartic坑の採掘終了と現在の複合鉱山を区別。"
+    },
+    {
+      "id": "detour-gold",
+      "place": "Detour Lake／ON北東部",
+      "coordinates": [
+        -79.73,
+        50.02
+      ],
+      "industry": "gold",
+      "stage": "採掘・鉱石処理",
+      "sources": [
+        "detour"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": "2025年に金692,675ozを生産。会社の予測715,000oz（2026年）と別。座標はCochrane地区の鉱山案内位置。"
+    },
+    {
+      "id": "highland-copper",
+      "place": "Highland Valley／BC",
+      "coordinates": [
+        -121.05,
+        50.5
+      ],
+      "industry": "copper",
+      "stage": "採掘・選鉱",
+      "sources": [
+        "highland-valley"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": "銅・モリブデン鉱山と選鉱。BCの全国銅生産シェアをこの鉱山単独へ割り当てない。"
+    },
+    {
+      "id": "sudbury-copper",
+      "place": "サドベリー",
+      "coordinates": [
+        -81.0,
+        46.5
+      ],
+      "industry": "copper",
+      "stage": "採掘・銅精鉱",
+      "sources": [
+        "sudbury-complex"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": "ValeのClarabelle選鉱場で銅精鉱とニッケル精鉱を分離。銅精鉱は市場販売、ニッケルは精錬へ。銅製錬所とは扱わない。"
+    },
+    {
+      "id": "labrador-iron",
+      "place": "Labrador City",
+      "coordinates": [
+        -66.91,
+        52.95
+      ],
+      "industry": "iron-ore",
+      "stage": "採掘・精鉱・ペレット",
+      "sources": [
+        "ioc"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": "IOCの鉱山・処理拠点。会社のMontreal本社と区別。"
+    },
+    {
+      "id": "sept-iles-iron",
+      "place": "Sept-Îles",
+      "coordinates": [
+        -66.38,
+        50.2
+      ],
+      "industry": "iron-ore",
+      "stage": "貯蔵・船積み",
+      "sources": [
+        "ioc"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": "IOCの輸出港。鉱山とのQNSL鉄道418kmは資料で確認した関係だが、取引量・地図経路は補わない。"
+    },
+    {
+      "id": "elkview-coal",
+      "place": "Elk Valley／Elkview",
+      "coordinates": [
+        -114.88,
+        49.8
+      ],
+      "industry": "steel-coal",
+      "stage": "製鉄用石炭の採掘",
+      "sources": [
+        "evr"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": "EVRのElk Valley4鉱山の一例。座標は地域案内位置で坑口の測量位置ではない。"
+    },
+    {
+      "id": "fording-coal",
+      "place": "Elk Valley／Fording River",
+      "coordinates": [
+        -114.9,
+        50.2
+      ],
+      "industry": "steel-coal",
+      "stage": "製鉄用石炭の採掘",
+      "sources": [
+        "evr"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": "EVRのElk Valley4鉱山の一例。4鉱山合計の企業雇用をこの鉱山単独へ転用しない。"
+    },
+    {
+      "id": "windsor-battery",
+      "place": "Windsor／NextStar",
+      "coordinates": [
+        -83.02,
+        42.3
+      ],
+      "industry": "battery",
+      "stage": "電池セル・モジュール製造",
+      "sources": [
+        "nextstar-2026"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": "2025年11月から商業セル生産。2026年2月12日資料で累計100万セル。年産量や国全体の生産量ではない。",
+      "status": "operating",
+      "asOf": "2026-02-12"
+    },
+    {
+      "id": "st-thomas-battery",
+      "place": "St. Thomas／PowerCo",
+      "coordinates": [
+        -81.18,
+        42.78
+      ],
+      "industry": "battery",
+      "stage": "電池工場計画",
+      "sources": [
+        "powerco-plan"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": "2023年3月資料の2027年生産開始計画。稼働実績・最新進捗は未確認。",
+      "status": "planned",
+      "asOf": "2023-03-13"
+    },
+    {
+      "id": "nal-lithium",
+      "place": "La Corne／NAL",
+      "coordinates": [
+        -77.98,
+        48.35
+      ],
+      "industry": "lithium",
+      "stage": "スポジュメン採掘・選鉱",
+      "sources": [
+        "usgs-canada-2024"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": "USGSが2024年操業を確認したQCのNorth American Lithium。電池用水酸化リチウムの生産とは別。",
+      "status": "operating",
+      "asOf": "2024"
+    },
+    {
+      "id": "tanco-lithium",
+      "place": "Bernic Lake／Tanco",
+      "coordinates": [
+        -95.45,
+        50.43
+      ],
+      "industry": "lithium",
+      "stage": "スポジュメン採掘・選鉱",
+      "sources": [
+        "usgs-canada-2024"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": "USGSが2024年操業を確認したMBのTanco。Sinomine所有という企業所有構造と販売先は別の情報。",
+      "status": "operating",
+      "asOf": "2024"
+    },
+    {
+      "id": "ldi-graphite",
+      "place": "Lac des Îles／QC",
+      "coordinates": [
+        -75.5,
+        46.4
+      ],
+      "industry": "graphite",
+      "stage": "採掘・処理休止",
+      "sources": [
+        "ldi-2026"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": "2026年9月1日資料：Q2に採掘・処理なし、再開延期。2024年操業を現在の稼働と扱わない。",
+      "status": "paused",
+      "asOf": "2026-09-01"
+    },
+    {
+      "id": "matawinie-graphite",
+      "place": "Matawinie／QC",
+      "coordinates": [
+        -73.95,
+        46.65
+      ],
+      "industry": "graphite",
+      "stage": "phase2建設",
+      "sources": [
+        "nmg-2026"
+      ],
+      "sectors": [
+        "resources"
+      ],
+      "note": "2026年8月13日資料：phase2の建設開始。商業量の鉱山生産ではない。Bécancourの負極材計画をこの点の実生産にしない。",
+      "status": "construction",
+      "asOf": "2026-08-13"
+    },
+    {
+      "id": "vancouver-ships",
+      "place": "Vancouver／Seaspan",
+      "coordinates": [
+        -123.1,
+        49.31
+      ],
+      "industry": "shipbuilding",
+      "stage": "造船・修繕拠点",
+      "sources": [
+        "nss"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": "国家造船戦略の提携造船所。案内位置はNorth Vancouver。NSS推計波及効果をこの工場のGDPにしない。"
+    },
+    {
+      "id": "halifax-ships",
+      "place": "Halifax／Irving",
+      "coordinates": [
+        -63.6,
+        44.67
+      ],
+      "industry": "shipbuilding",
+      "stage": "造船拠点",
+      "sources": [
+        "nss"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": "国家造船戦略の提携造船所。政府契約の提携状況と個別船の完成・建造中を区別。"
+    },
+    {
+      "id": "levis-ships",
+      "place": "Lévis／Davie",
+      "coordinates": [
+        -71.18,
+        46.82
+      ],
+      "industry": "shipbuilding",
+      "stage": "造船・修繕拠点",
+      "sources": [
+        "nss"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": "国家造船戦略の提携造船所。契約額を年間生産額と扱わない。"
+    },
+    {
+      "id": "thunder-bay-rail",
+      "place": "Thunder Bay",
+      "coordinates": [
+        -89.25,
+        48.38
+      ],
+      "industry": "railway",
+      "stage": "鉄道車両製造・組立",
+      "sources": [
+        "alstom-impact"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": "Alstom 2023/24報告p8の製造・組立拠点。納入済み979両などは累計であり年産ではない。"
+    },
+    {
+      "id": "la-pocatiere-rail",
+      "place": "La Pocatière",
+      "coordinates": [
+        -70.02,
+        47.37
+      ],
+      "industry": "railway",
+      "stage": "地下鉄車両製造・組立",
+      "sources": [
+        "alstom-impact"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": "Alstom 2023/24報告p8の製造拠点。STM地下鉄639両などは累計契約車両であり年産ではない。"
+    },
+    {
+      "id": "yorkton-canola",
+      "place": "Yorkton",
+      "coordinates": [
+        -102.47,
+        51.21
+      ],
+      "industry": "canola-crush",
+      "stage": "搾油・ミール製造",
+      "sources": [
+        "richardson-oilseed"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": "Richardsonの操業搾油工場。250万t/年は処理能力で、実際の年間投入・全国生産とは別。"
+    },
+    {
+      "id": "lethbridge-canola",
+      "place": "Lethbridge",
+      "coordinates": [
+        -112.83,
+        49.69
+      ],
+      "industry": "canola-crush",
+      "stage": "搾油・包装",
+      "sources": [
+        "richardson-oilseed"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": "Richardsonの搾油・包装拠点。国内小売・外食向け製品も扱う。"
+    },
+    {
+      "id": "armstrong-flour",
+      "place": "Armstrong／BC",
+      "coordinates": [
+        -119.2,
+        50.45
+      ],
+      "industry": "flour",
+      "stage": "小麦製粉",
+      "sources": [
+        "rogers-flour"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": "Rogers Foodsの工場。確認できた立地例であり、BCが全国製粉量の首位という意味ではない。"
+    },
+    {
+      "id": "chilliwack-flour",
+      "place": "Chilliwack／BC",
+      "coordinates": [
+        -121.95,
+        49.16
+      ],
+      "industry": "flour",
+      "stage": "小麦製粉",
+      "sources": [
+        "rogers-flour"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": "Rogers Foodsの工場。国内製粉量をこの2施設へ割り当てない。"
+    },
+    {
+      "id": "glace-bay-seafood",
+      "place": "Glace Bay／NS",
+      "coordinates": [
+        -59.95,
+        46.2
+      ],
+      "industry": "seafood",
+      "stage": "水産加工",
+      "sources": [
+        "clearwater-plants"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": "ClearwaterのHighland Fisheries加工施設。企業本社の案内ではない。"
+    },
+    {
+      "id": "lockeport-seafood",
+      "place": "Lockeport／NS",
+      "coordinates": [
+        -65.11,
+        43.7
+      ],
+      "industry": "seafood",
+      "stage": "水産加工",
+      "sources": [
+        "clearwater-plants"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": "ClearwaterのPierce Fisheries加工施設。漁獲海域や輸出先への量を補わない。"
+    },
+    {
+      "id": "grand-bank-seafood",
+      "place": "Grand Bank／NL",
+      "coordinates": [
+        -55.75,
+        47.1
+      ],
+      "industry": "seafood",
+      "stage": "貝類加工",
+      "sources": [
+        "clearwater-plants"
+      ],
+      "sectors": [
+        "manufacturing"
+      ],
+      "note": "Clearwaterの貝類加工施設。会社の施設説明は全国加工統計とは別。"
+    },
+    {
+      "id": "banff-tourism",
+      "place": "Banff国立公園",
+      "coordinates": [
+        -115.57,
+        51.18
+      ],
+      "industry": "tourism",
+      "stage": "自然観光・来訪",
+      "sources": [
+        "banff-2024"
+      ],
+      "sectors": [
+        "services"
+      ],
+      "note": "2024年の公園訪問者約421万人。地域人口・重複のない旅行者数・地域GDPとは異なる。"
+    },
+    {
+      "id": "niagara-tourism",
+      "place": "Niagara Falls・ワイン地域",
+      "coordinates": [
+        -79.08,
+        43.09
+      ],
+      "industry": "tourism",
+      "stage": "観光・国内訪問",
+      "sources": [
+        "domestic-visits-2024"
+      ],
+      "sectors": [
+        "services"
+      ],
+      "note": "2024年国内訪問825.6万回。観光以外の目的や反復訪問を含み、公園入場者と尺度を統一しない。"
     }
   ],
   "flows": [
@@ -1638,13 +2285,229 @@
       "url": "https://www.domtar.com/wp-content/uploads/2026/07/Domtar_Fact-Sheet_Kenogami.pdf",
       "scope": "2026年7月のKénogami施設資料。製材と紙製造を別工程で扱う。",
       "accessed": "2026-10-12"
+    },
+    "usgs-canada-2024": {
+      "title": "USGS · Canada 2024",
+      "url": "https://www.usgs.gov/centers/national-minerals-information-center/canada",
+      "accessed": "2026-10-14",
+      "scope": "2024年の鉱山・精錬段階別数量、暫定世界順位・シェア。推計値と後日の国内改訂値を区別。"
+    },
+    "nrcan-2024-revised": {
+      "title": "NRCan · 鉱物生産2024（2026年2月改訂）",
+      "url": "https://sead.nrcan-rncan.gc.ca/PDF/MIS2024TableG01-en.pdf",
+      "accessed": "2026-10-14",
+      "scope": "生産量、出荷量、出荷価額は別列。価額は千CAD。USGSの推計と混合して世界シェアを計算しない。"
+    },
+    "critical-gdp-2024": {
+      "title": "Statistics Canada · 重要鉱物の付加価値",
+      "url": "https://www150.statcan.gc.ca/n1/daily-quotidien/261008/dq261008a-eng.htm",
+      "accessed": "2026-10-14",
+      "scope": "2024年、基本価格の名目GDP、暫定値。アルミは公表の集計範囲。"
+    },
+    "energy-trade-2024": {
+      "title": "CER · 2024 Canada–US energy trade",
+      "url": "https://www.cer-rec.gc.ca/en/data-analysis/energy-markets/market-snapshots/2025/market-snapshot-overview-of-2024-canada-us-energy-trade.html",
+      "accessed": "2026-10-14",
+      "scope": "税関ベースの対米輸出。既存CER原油輸出シリーズの93%と定義が異なる95.7%を区別。"
+    },
+    "cer-canada": {
+      "title": "CER · Canada energy profile",
+      "url": "https://www.cer-rec.gc.ca/en/data-analysis/energy-markets/province-territory-energy-profiles/canada.html",
+      "accessed": "2026-10-14",
+      "scope": "2023年の世界位置、2024年の製油所数・能力。能力は実生産ではない。"
+    },
+    "gas-2024": {
+      "title": "Statistics Canada · Natural gas 2024",
+      "url": "https://www.statcan.gc.ca/o1/en/plus/8156-record-high-production-and-record-low-prices-natural-gas-year-review-2024",
+      "accessed": "2026-10-14",
+      "scope": "天然ガス生産の州集中度と生産者価格。石油の指標と分ける。"
+    },
+    "hydro-2024": {
+      "title": "Statistics Canada · Electricity 2024",
+      "url": "https://www150.statcan.gc.ca/n1/daily-quotidien/251022/dq251022c-eng.htm",
+      "accessed": "2026-10-14",
+      "scope": "発電量TWhと電源構成、2024年暫定値。水力GDPへの転用はしない。"
+    },
+    "auto-trade-2024": {
+      "title": "Statistics Canada · Canada–US trade 2024",
+      "url": "https://www150.statcan.gc.ca/n1/daily-quotidien/250403/dq250403a-eng.htm",
+      "accessed": "2026-10-14",
+      "scope": "自動車・部品の国内輸出額と対米比率。バス単独の輸出規模ではない。"
+    },
+    "aerospace-2024": {
+      "title": "ISED · State of aerospace industry",
+      "url": "https://ised-isde.canada.ca/site/ised/en/research-and-business-intelligence/industry-sector-intelligence/manufacturing-industries/aerospace-and-defence/state-canadas-aerospace-industry",
+      "accessed": "2026-10-14",
+      "scope": "2024年の製造直接GDP・雇用・輸出。MRO・間接誘発効果を分離。世界順位は2025年。"
+    },
+    "food-2024": {
+      "title": "AAFC · Food and beverage processing",
+      "url": "https://agriculture.canada.ca/en/sector/food-processing-industry/overview-food-beverage",
+      "accessed": "2026-10-14",
+      "scope": "食品・飲料加工全体の2024年集計。牛肉やばれいしょの値として転用しない。"
+    },
+    "potato-2024": {
+      "title": "AAFC · Potato market 2024/25",
+      "url": "https://agriculture.canada.ca/en/sector/horticulture/reports/potato-market-information-review-2024-2025",
+      "accessed": "2026-10-14",
+      "scope": "表5.2.3の冷凍ばれいしょ輸出。作物年、価額と重量、加工品と生鮮を区別。"
+    },
+    "canola-2024": {
+      "title": "Statistics Canada · Canola crushing 2024",
+      "url": "https://www150.statcan.gc.ca/n1/daily-quotidien/250313/dq250313f-eng.htm",
+      "accessed": "2026-10-14",
+      "scope": "暦年の搾油投入量、油・ミールの産出量。米国との比較は世界順位ではない。"
+    },
+    "flour-2024": {
+      "title": "Statistics Canada · Wheat milling 2024",
+      "url": "https://www150.statcan.gc.ca/n1/daily-quotidien/250513/dq250513a-eng.htm",
+      "accessed": "2026-10-14",
+      "scope": "小麦製粉投入量、小麦粉産出・輸出量。一次農業の小麦生産と区別。"
+    },
+    "seafood-2024": {
+      "title": "DFO · Fisheries fast facts 2024",
+      "url": "https://www.dfo-mpo.gc.ca/stats/publications/fast-facts-info-eclair/2024/index-eng.html",
+      "accessed": "2026-10-14",
+      "scope": "加工の収入・雇用・直接GDPは2023年。2024年魚介類輸出は原料も含む。造船・船舶製造の直接GDPも2023年。"
+    },
+    "wood-2024": {
+      "title": "Statistics Canada · Softwood lumber 2024",
+      "url": "https://www150.statcan.gc.ca/n1/pub/11-627-m/11-627-m2025061-eng.htm",
+      "accessed": "2026-10-14",
+      "scope": "2024年の針葉樹製材体積と対米輸出。2026年2月訂正版。"
+    },
+    "software-2024": {
+      "title": "Statistics Canada · Software and computer services",
+      "url": "https://www150.statcan.gc.ca/n1/daily-quotidien/260311/dq260311c-eng.htm",
+      "accessed": "2026-10-14",
+      "scope": "2024年のソフトウェア出版社とシステム設計を別業種として集計。売上と利益率はGDPではない。"
+    },
+    "transport-2024-gdp": {
+      "title": "Transport Canada · Economic indicators 2024",
+      "url": "https://tdih-cdit.tc.canada.ca/en/addendum-tables/2024/table-ec1-economic-indicators-2024",
+      "accessed": "2026-10-14",
+      "scope": "運輸・倉庫GDP、固定2017年価格。旅客も含む。連鎖価格の値と混合しない。"
+    },
+    "tourism-2024": {
+      "title": "Destination Canada / Statistics Canada · Tourism 2024",
+      "url": "https://www.tourismdatacollective.ca/system/files/2025-07/The%20Contribution%20of%20Tourism%20in%202024_0.pdf",
+      "accessed": "2026-10-14",
+      "scope": "2024年の観光需要による直接GDP・雇用と観光収入。当年CAD。観光関連業種全体の雇用とは異なる。"
+    },
+    "gdp-2021-retained": {
+      "title": "Statistics Canada · 2021 GDP retained extract",
+      "url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3610040201",
+      "accessed": "2026-10-14",
+      "scope": "リポジトリ保持済み2021年原CSV、13州・準州の基本価格・当年価格GDP。木材321、紙322、金融52、鉄道車両3365を別集計。原表は更新停止のため保持CSVも出典欄に掲載。"
+    },
+    "malartic": {
+      "title": "Agnico Eagle · Canadian Malartic complex",
+      "url": "https://www.agnicoeagle.com/English/operations-and-projects/global-operations-and-development-projects/canadian-malartic-complex/default.aspx",
+      "accessed": "2026-10-14",
+      "scope": "QC北西部の操業鉱山群。旧Malartic坑は2023年終了、BarnatとOdysseyを区別。"
+    },
+    "meliadine": {
+      "title": "Agnico Eagle · Meliadine",
+      "url": "https://www.agnicoeagle.com/English/operations-and-projects/global-operations-and-development-projects/meliadine/default.aspx",
+      "accessed": "2026-10-14",
+      "scope": "ヌナブトの操業金鉱山。地域案内位置。"
+    },
+    "highland-valley": {
+      "title": "Teck · Highland Valley Copper",
+      "url": "https://www.teck.com/operations/canada/operations/highland-valley-copper",
+      "accessed": "2026-10-14",
+      "scope": "BC南中央部の銅・モリブデン鉱山と選鉱。"
+    },
+    "ioc": {
+      "title": "Iron Ore Company of Canada · Operations",
+      "url": "https://www.ironore.ca/en/about/our-expertise/our-operations",
+      "accessed": "2026-10-14",
+      "scope": "Labrador Cityで採掘・処理、Sept-Îlesで貯蔵・船積み、418kmのQNSL鉄道。本社と生産拠点を区別。"
+    },
+    "evr": {
+      "title": "Elk Valley Resources · Operations and workforce",
+      "url": "https://jobs.evr.com/career-description/902e146c-8020-40c8-873a-6625d7144d24",
+      "accessed": "2026-10-14",
+      "scope": "BC Elk Valleyの製鉄用石炭4鉱山、5,000人超の企業雇用。Canada全体の石炭雇用ではない。"
+    },
+    "nextstar-2026": {
+      "title": "NextStar · One million battery cells",
+      "url": "https://nextstar-energy.com/nextstar-energy-celebrates-one-millionth-battery-cell-made/",
+      "accessed": "2026-10-14",
+      "scope": "2026年2月12日、Windsorで累計100万セル、2025年11月から商業生産、直接雇用1,300人超。年間生産能力と別。"
+    },
+    "powerco-plan": {
+      "title": "Volkswagen · St. Thomas project",
+      "url": "https://www.volkswagen-group.com/en/press-releases/volkswagen-group-steps-up-activities-in-north-america-canada-chosen-as-location-for-first-overseas-gigafactory-of-its-battery-company-powerco-se-16930",
+      "accessed": "2026-10-14",
+      "scope": "2023年3月の発表、2027年生産開始の計画。最新の操業実績を確認したものではない。"
+    },
+    "nmg-2026": {
+      "title": "Nouveau Monde Graphite · Q2 2026",
+      "url": "https://nmg.com/q2-2026/",
+      "accessed": "2026-10-14",
+      "scope": "2026年8月13日、Matawinie phase2建設開始。商業生産ではない。政府との将来オフテイクを含む。"
+    },
+    "ldi-2026": {
+      "title": "Northern Graphite · Q2 2026",
+      "url": "https://www.northerngraphite.com/northern-graphite-announces-second-quarter-2026-results-and-provides-corporate-update/",
+      "accessed": "2026-10-14",
+      "scope": "2026年9月1日、Lac des Îlesの再開延期。Q2に採掘・処理なし。2024年の操業記録と区別。"
+    },
+    "nss": {
+      "title": "Government of Canada · National Shipbuilding Strategy",
+      "url": "https://www.canada.ca/en/public-services-procurement/services/acquisitions/defence-marine/national-shipbuilding-strategy/about.html",
+      "accessed": "2026-10-14",
+      "scope": "Vancouver、Halifax、Lévisの3提携造船所。2012–2024年の推計波及効果は年間直接業種GDPではない。"
+    },
+    "alstom-impact": {
+      "title": "Alstom · Canada impact report 2023/24",
+      "url": "https://www.alstom.com/sites/alstom.com/files/2024/11/25/20241126_Alstom_Canada_Impact_Report_EN.pdf",
+      "accessed": "2026-10-14",
+      "scope": "p5とp8の製造・組立拠点、企業直接雇用約5,000人、約920社の供給者。車両台数は累計契約・運用車両であり年間生産量ではない。"
+    },
+    "richardson-oilseed": {
+      "title": "Richardson · Oilseed processing",
+      "url": "https://www.richardson.ca/oilseed/",
+      "accessed": "2026-10-14",
+      "scope": "Yorkton搾油能力250万t/年、Lethbridge搾油・包装。能力は実生産量ではない。"
+    },
+    "rogers-flour": {
+      "title": "Rogers Foods · Commercial sales",
+      "url": "https://rogersfoods.com/commercial-sales/",
+      "accessed": "2026-10-14",
+      "scope": "BC ArmstrongとChilliwackの製粉工場。全国の工場分布を網羅する資料ではない。"
+    },
+    "clearwater-plants": {
+      "title": "Clearwater · Processing facilities",
+      "url": "https://www.clearwater.ca/en/ocean-to-plate/processing-facilities/",
+      "accessed": "2026-10-14",
+      "scope": "NSとNLの操業水産加工施設。本社所在地ではない。"
+    },
+    "banff-2024": {
+      "title": "Parks Canada · Banff annual report 2023/2024",
+      "url": "https://www.parks.canada.ca/pn-np/ab/banff/info/gestion-management/involved/plan/2023-2024",
+      "accessed": "2026-10-14",
+      "scope": "2024年Banff国立公園の訪問者約421万人。公園の訪問数で、都市人口や地域GDPではない。"
+    },
+    "domestic-visits-2024": {
+      "title": "Statistics Canada · Domestic visits 2024",
+      "url": "https://www.statcan.gc.ca/o1/en/plus/8364-great-big-see-sea-sea-sea-snapshot-vacations-canada",
+      "accessed": "2026-10-14",
+      "scope": "2024年の国内旅行訪問数。Niagara Falls and wine country 825.6万回。複数訪問、観光以外の目的を含む。"
+    },
+    "detour": {
+      "title": "Agnico Eagle · Detour Lake",
+      "url": "https://www.agnicoeagle.com/English/operations-and-projects/global-operations-and-development-projects/detour-lake/default.aspx",
+      "accessed": "2026-10-14",
+      "scope": "ON北東部Cochrane地区の操業金鉱山。2025年692,675ozの金生産実績と2026年見通しを区別。"
     }
   },
-  "positionMethod": "WGS84の概略案内位置を編集作成。地名・工程の存在は各一次資料で確認。鉱床境界、施設外形、密度・数量の測定値ではない。同じ集積内の複数施設を地域単位にまとめる。",
+  "positionMethod": "WGS84の概略案内位置を編集作成。地名・工程の存在は各一次資料で確認。鉱床境界、施設外形、密度・数量の測定値ではない。同じ集積内の複数施設を地域単位にまとめる。 追加地点も一次資料で確認した地域案内位置。地理座標は施設の測量位置ではなく、同一地域で異なる工程を区別する。計画・建設・休止の地点には資料時点を表示する。",
   "omissions": [
-    "鉄鉱石・銅・金の分布と鉱物ごとの生産量",
-    "食品・木材・紙の全国完全台帳、機械・電子機器等の追加",
-    "医療・教育・観光・行政と都市別サービス雇用",
-    "操業施設の全数、原料供給圏・集積範囲の実測境界"
+    "全工場・全鉱山を網羅した分布",
+    "品目別の未確認GDP・世界シェア",
+    "資料で未確認の販売先・輸送量",
+    "一次農業の小麦・カノーラ生産（農業ページで扱う）"
   ]
 }
