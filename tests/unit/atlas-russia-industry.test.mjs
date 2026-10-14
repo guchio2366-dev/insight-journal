@@ -7,7 +7,7 @@ const D=await import('data:text/javascript;base64,'+Buffer.from(bundle.outputFil
 after(()=>stop());
 test('Russia includes every agreed main/additional theme, with stages and missing data retained',()=>{
  const required=['oil','gas','coal','palladium','nickel','copper','gold','aluminum','steel','nitrogen','potash','phosphate','enrichment','logistics','diamond','helium','wheat','trucks','management'];
- assert.deepEqual(D.ruIndustries.map(i=>i.id),required);assert.equal(new Set(D.ruSites.map(s=>s.id)).size,48);
+ assert.deepEqual(D.ruIndustries.map(i=>i.id),required);assert.equal(new Set(D.ruSites.map(s=>s.id)).size,49);
  for(const i of D.ruIndustries){assert.ok(i.reading.length>35);assert.ok(i.why.length>25);assert.ok(i.missing.length>15);assert.ok(D.ruSites.some(s=>s.industries.includes(i.id)));for(const key of i.sourceIds)assert.ok(D.ruSources[key]);for(const m of i.metrics){assert.ok(m.period&&m.scope&&m.note&&D.ruSources[m.source]);}}
  const text=id=>JSON.stringify(D.ruIndustries.find(i=>i.id===id));
  assert.match(text('coal'),/2023年/);assert.match(text('coal'),/short ton/);
@@ -19,8 +19,21 @@ test('Russia includes every agreed main/additional theme, with stages and missin
 test('every city coordinate matches a pinned geographic source rather than an invented facility location',()=>{
  const gh=JSON.parse(readFileSync('public/assets/atlas/russia-population-v1/centres.json')).centres;
  const ne=JSON.parse(readFileSync('src/data/atlas/russia-industry-city-positions.json')).positions;
- for(const site of D.ruSites){const expected=site.positionSource==='ghsl'?gh.find(c=>c.name===site.positionName)?.coordinates:ne[site.positionName];assert.deepEqual(site.coordinates,expected,site.id);assert.ok(site.sourceIds.every(id=>D.ruSources[id]));assert.ok(site.note.length>12);}
+ const zelenogorsk=JSON.parse(readFileSync('src/data/atlas/russia-industry-zelenogorsk-position.json'));
+ for(const site of D.ruSites){const expected=site.positionSource==='ghsl'?gh.find(c=>c.name===site.positionName)?.coordinates:site.positionSource==='geonames'?zelenogorsk.representation.coordinates:ne[site.positionName];assert.deepEqual(site.coordinates,expected,site.id);assert.ok(site.sourceIds.every(id=>D.ruSources[id]));assert.ok(site.note.length>12);}
  assert.ok(D.ruSites.find(s=>s.id==='nakhodka-port').coordinates[0]>130,'Reject the homonymous Yamal settlement');
+});
+test('Zelenogorsk is the Krasnoyarsk-45 city guide, with traceable rounding and all four enrichment sites',()=>{
+ const position=JSON.parse(readFileSync('src/data/atlas/russia-industry-zelenogorsk-position.json'));
+ assert.equal(position.record.geonameId,1488253);assert.equal(position.record.admin1,'Krasnoyarsk Krai');assert.ok(position.record.aliases.includes('Krasnoyarsk-45'));
+ assert.deepEqual(position.representation.coordinates,position.record.coordinates.map(value=>Math.round(value*100)/100));
+ const site=D.ruSites.find(s=>s.id==='zelenogorsk-enrichment');assert.deepEqual(site.coordinates,[94.59,56.11]);assert.match(site.note,/工場敷地・建物の精密位置ではない/);assert.match(site.note,/サンクトペテルブルク/);assert.match(site.note,/ジェレズノゴルスク/);
+ assert.ok(site.sourceIds.includes('zelenogorskCity'));assert.ok(site.sourceIds.includes('geonames'));
+ for(const sector of ['manufacturing','services']){
+  const sites=D.visibleRuSites(sector).filter(s=>s.industries.includes('enrichment'));assert.equal(sites.length,4);assert.ok(D.groupRuPoints(sector,760,378.1).some(g=>g.sites.some(s=>s.id===site.id)));
+  assert.equal(D.readRuIndustryState(new URL(`https://example.test/?sector=${sector}&industry=enrichment&site=zelenogorsk-enrichment`)).site,site.id);
+ }
+ const industry=D.ruIndustries.find(i=>i.id==='enrichment');assert.equal(industry.metrics[0].value,'2,913.3万SWU/年');assert.equal(industry.metrics[1].value,'42.8%','Completing a location does not change the national four-plant capacity');
 });
 const overlaps=(a,b)=>a[0]<b[2]&&a[2]>b[0]&&a[1]<b[3]&&a[3]>b[1];
 test('all sector labels fit without overlaps and source points stay separate at mobile and desktop map widths',()=>{

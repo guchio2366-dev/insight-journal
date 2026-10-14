@@ -35,7 +35,7 @@ try{
   for(const region of ['oceania','russia'])for(const field of ['agriculture','nature','industry','population']){
    await page.goto(`${base}atlas/${region}/${field}/`,{waitUntil:'networkidle'});
    // Russia's dedicated industry page owns its three-sector/product contract.
-   // The complete 19-product/48-place checks live in verify-russia-industry-review.mjs.
+   // The complete 19-product/49-place checks live in verify-russia-industry-review.mjs.
    if(region==='russia'&&field==='industry'){
     await page.waitForFunction(()=>document.querySelector('[data-ru-industry]')?.dataset.ruReady==='true');
     const host=page.locator('[data-ru-industry]'),map=host.locator('[data-ru-map]'),frame=await map.getAttribute('viewBox');
