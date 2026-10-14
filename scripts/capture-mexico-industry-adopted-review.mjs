@@ -23,7 +23,12 @@ const sourceFiles=['src/components/atlas/MexicoIndustryAdopted.astro','src/lib/a
 const sourceSha256={};for(const file of sourceFiles)sourceSha256[file]=createHash('sha256').update(await readFile(path.join(repo,file))).digest('hex');
 const report={commit:execFileSync('git',['rev-parse','HEAD'],{cwd:repo,encoding:'utf8'}).trim(),runId:process.env.GITHUB_RUN_ID??null,sourceSha256,passed:false,browser:null,cases:[],blocker:null};let browser;
 const ready=page=>page.waitForFunction(()=>document.querySelector('[data-ma-atlas]')?.dataset.maLabelsComplete==='true');
-const boxes=page=>page.locator('.ma-map-label:not([hidden])').evaluateAll(nodes=>nodes.map(n=>{const b=n.getBoundingClientRect(),f=n.closest('[data-ma-frame]').getBoundingClientRect();return {id:n.dataset.maGroup,x:b.x-f.x,y:b.y-f.y,right:b.right-f.x,bottom:b.bottom-f.y};}));
+const boxes=async page=>{
+ await page.evaluate(async()=>{await document.fonts.ready;await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
+ // A queued camera redraw replaces label nodes after only-display changes.
+ // Read the frame and its current labels atomically inside the same DOM task.
+ return page.locator('[data-ma-frame]').evaluate(frame=>{const f=frame.getBoundingClientRect();return [...frame.querySelectorAll('.ma-map-label:not([hidden])')].map(n=>{const b=n.getBoundingClientRect();return {id:n.dataset.maGroup,x:b.x-f.x,y:b.y-f.y,right:b.right-f.x,bottom:b.bottom-f.y};});});
+};
 function assertBoxes(items,frame){for(const b of items)assert(b.x>=frame.x-1&&b.y>=frame.y-1&&b.right<=frame.right+1&&b.bottom<=frame.bottom+1,`${b.id} outside frame`);for(let i=0;i<items.length;i++)for(let j=i+1;j<items.length;j++)assert(!(Math.min(items[i].right,items[j].right)>Math.max(items[i].x,items[j].x)+1&&Math.min(items[i].bottom,items[j].bottom)>Math.max(items[i].y,items[j].y)+1),`${items[i].id}/${items[j].id} overlap`);}
 try{
  browser=await chromium.launch({executablePath:process.env.REVIEW_CHROME_PATH??'/usr/bin/chromium',headless:true,chromiumSandbox:true});report.browser=browser.version();
