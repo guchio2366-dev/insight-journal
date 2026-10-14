@@ -1,7 +1,6 @@
 #!/usr/bin/env node
-// Local built-page review only: installed browser, no external calls. The
-// checked container limitation uses the same explicit opt-in as the existing
-// atlas-asia-industry-status suite; machine permissions are never changed.
+// Local built-page review only: sandboxed browser, no external calls.
+// A sandbox prerequisite failure must be resolved in an eligible environment.
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
 import {execFileSync} from 'node:child_process';
@@ -24,11 +23,11 @@ const server=createServer(async(req,res)=>{try{
 }catch{res.writeHead(404).end('Missing built asset');}});
 await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 const origin='http://127.0.0.1:'+server.address().port;
-const sandbox=process.env.ATLAS_ASIA_BROWSER_UNSANDBOXED!=='1';
+const sandbox=true;
 const results={head:execFileSync('git',['rev-parse','HEAD'],{cwd:repo,encoding:'utf8'}).trim(),sandbox,externalRequests:[],cases:[],status:'running'};
 let browser;
 try{
- browser=await chromium.launch({executablePath:process.env.REVIEW_CHROME_PATH??'/usr/bin/chromium',headless:true,chromiumSandbox:sandbox,env:{...process.env,XDG_CONFIG_HOME:'/tmp/east-browser-config',XDG_CACHE_HOME:'/tmp/east-browser-cache'}});
+ browser=await chromium.launch({executablePath:process.env.REVIEW_CHROME_PATH??'/usr/bin/chromium',headless:true,chromiumSandbox:sandbox,ignoreDefaultArgs:['--unsafely-disable-devtools-self-xss-warnings'],env:{...process.env,XDG_CONFIG_HOME:'/tmp/east-browser-config',XDG_CACHE_HOME:'/tmp/east-browser-cache'}});
  results.browser=browser.version();
  for(const viewport of [{width:1920,height:1080},{width:1896,height:996},{width:1440,height:1000},{width:390,height:844}].filter(v=>!process.env.EAST_INDUSTRY_REVIEW_WIDTH||v.width===Number(process.env.EAST_INDUSTRY_REVIEW_WIDTH))){
   const context=await browser.newContext({viewport,deviceScaleFactor:1,serviceWorkers:'block'});
