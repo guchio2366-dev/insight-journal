@@ -33,6 +33,7 @@ try{
  for(const [width,height] of [[1536,900],[1024,768]]){
   await page.setViewportSize({width,height});
   for(const region of ['oceania','russia'])for(const field of ['agriculture','nature','industry','population']){
+   report.phase=`${width}/${region}/${field}`;
    await page.goto(`${base}atlas/${region}/${field}/`,{waitUntil:'networkidle'});
    // Russia's dedicated industry page owns its three-sector/product contract.
    // The complete 19-product/49-place checks live in verify-russia-industry-review.mjs.
@@ -169,6 +170,6 @@ try{
    report.checks.push({width,height,region,field,frame});
   }
  }
- assert.deepEqual(report.errors,[]);report.status='passed';console.log(`Oceania/Russia UX: ${report.checks.length} PC field views, ${report.screenshots.length} screenshots; sandbox enabled.`);
-}catch(error){report.status='failed';report.errors.push(String(error));console.error(`::error::${String(error)}`);throw error;}
+ assert.deepEqual(report.errors,[]);report.status='passed';delete report.phase;console.log(`Oceania/Russia UX: ${report.checks.length} PC field views, ${report.screenshots.length} screenshots; sandbox enabled.`);
+}catch(error){report.status='failed';const detail=`${report.phase??'initialization'}: ${String(error)}; browser errors: ${report.errors.join(' | ')}`;report.errors.push(String(error));console.error(`::error::${detail.replaceAll('%','%25').replaceAll('\n','%0A').replaceAll('\r','%0D')}`);throw error;}
 finally{await writeFile(resolve(output,'ux-review.json'),JSON.stringify(report,null,2)+'\n');await browser?.close();await new Promise(done=>server.close(done));}

@@ -581,7 +581,7 @@ async function stageOneOperations(page, profile) {
   await snapshot(page, profile, 'drainage-river-reading');
   await openEurope(page, 'atlas/europe/industry/?layer=hubs', 'normal');
   assert.equal(new URL(page.url()).searchParams.has('feature'), false);
-  assert.equal(await page.locator('[data-eu-industry-group]').count(),13);
+  assert.equal(await page.locator('[data-eu-industry-group]').count(),21);
   const industryOverview = await snapshot(page, profile, 'industry-overview');
   await captureEurope(page,profile,'industry');
   const usIndustry = await page.context().newPage();
@@ -595,7 +595,7 @@ async function stageOneOperations(page, profile) {
   const industryExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
   await quietFeatures('industry');
   await page.locator('[data-eu-industry-sector="manufacturing"]').click();
-  await page.locator('[data-eu-industry-group="自動車・機械"]').click();
+  await page.locator('[data-eu-industry-group="自動車完成車・部品"]').click();
   assert.equal(new URL(page.url()).searchParams.has('place'), false);
   assert.equal(new URL(page.url()).searchParams.has('feature'), false);
   assert.equal(await page.locator('[data-eu-static]').getAttribute('viewBox'), industryExtent);
