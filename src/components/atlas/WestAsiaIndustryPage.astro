@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
+import {withBase} from '../../lib/urls';
+import {getOverviewRegion} from '../../data/atlas/country-overview';
+import data from '../../data/atlas/west-asia.json';
+import geography from '../../../public/assets/atlas/west-asia-v1/geography.json';
+import {westFields} from '../../data/atlas/west-asia-topics.mjs';
+import {westIndustryCatalog as catalog,westIndustrySectors as sectors,westIndustrySources as sources,westIndustryAdoption as adoption} from '../../data/atlas/west-asia-industry-catalog.mjs';
+import {westIndustryPath,projectWestIndustry,westIndustryValue} from '../../lib/atlas-west-asia-industry.mjs';
+import '../../styles/atlas-industry.css';
+import '../../styles/atlas-west-asia-industry.css';
+const region=getOverviewRegion('west-asia');
+const neighbors=['RUS','UKR','BGR','GRC','LBY','SDN','AFG','PAK','TKM','UZB'];
+const sourceLink=(id:string)=>sources[id];
+const contextLabels=data.countries.filter(c=>['TUR','IRN','SAU','IRQ','OMN','EGY','YEM'].includes(c.code));
+const nationalIndicators=[['NY.GDP.PETR.RT.ZS','石油資源レント'],['NY.GDP.NGAS.RT.ZS','天然ガス資源レント'],['NV.IND.MANF.ZS','製造業付加価値'],['NV.SRV.TOTL.ZS','サービス業付加価値']];
+---
+<BaseLayout title="西アジア・中東の主要産業｜資源・製造・サービスの集積" description="原油・LNG・肥料・アルミからトルコの製造業、金融・物流・観光・情報サービスまで、国の違いと集積理由を地図から読む。" compactAtlas>
+<AtlasWorkspaceFrame region="west-asia" mapActions={false}>
+<article class="atlas-explorer atlas-workspace west-industry" data-west-industry data-west-atlas data-field="industry">
+ <div class="atlas-compact-heading"><nav aria-label="パンくず"><a href={withBase('/atlas/')}>地図から見る</a> / <a href={withBase('/atlas/west-asia/')}>西アジア・中東地図</a></nav><span data-wi-scope>20か国・地域</span></div>
+ <h1 class="visually-hidden">西アジア・中東の主要産業</h1>
+ <div class="atlas-region-controls"><nav class="wi-region-links" aria-label="世界の地域"><a href={withBase('/atlas/')}>世界の地域</a>{region.peers.map(id=>{const peer=getOverviewRegion(id);return <a href={withBase(peer.path)} aria-current={id===region.id?'page':undefined}>{peer.label}</a>})}</nav><label class="wi-country-control">国・地域<select data-west-country data-wi-country aria-label="国・地域を選択"><option value="">地域全体</option>{data.countries.map(c=><option value={c.code}>{c.name}</option>)}</select></label></div>
+ <nav class="atlas-tabs atlas-tabs-with-overview" aria-label="地図の分野"><a data-atlas-overview-link href={withBase('/atlas/west-asia/overview/')}>概要</a>{westFields.map(f=><a data-west-field={f.id} href={withBase(`/atlas/west-asia/${f.route}/`)} aria-current={f.id==='industry'?'page':undefined}>{f.label}</a>)}</nav>
+ <div class="industry-controls"><div class="industry-tab-row" role="tablist" aria-label="主要産業の分類">{sectors.map(s=><button type="button" role="tab" id={`wi-sector-${s.id}`} data-wi-sector={s.id} aria-selected={s.id==='resources'?'true':'false'} tabindex={s.id==='resources'?0:-1} aria-controls="wi-panel">{s.label}</button>)}</div><p class="wi-guide"><span>湾岸の資源・加工、トルコの製造、都市のサービス集積</span><a href="#west-industry-statistics">統計へ</a><a href="#west-industry-sources">出典・範囲</a></p></div>
+ <div class="atlas-primary-grid" id="wi-panel" role="tabpanel" aria-labelledby="wi-sector-resources">
+  <div class="atlas-map-column">
+   <div class="atlas-map-frame wi-map-frame">
+    <svg data-wi-map data-west-map data-map-surface viewBox={`0 0 ${data.width} ${data.height}`} tabindex="0" role="group" aria-label="西アジア・中東の産業集積図。産業名から選択。矢印キーで地図を移動、プラスとマイナスで拡大・縮小。">
+     <title>西アジア・中東の主要産業と国別実績</title><rect x="-5000" y="-5000" width="11000" height="11000" fill="#e4eff0"/>
+     <g data-wi-land>{geography.features.filter(f=>f.properties.target||neighbors.includes(f.properties.code)).map(f=><path class="wi-country" data-wi-country-shape={f.properties.code} d={westIndustryPath(f.geometry)} fill="#f0efe3" stroke="#a8b8ad" stroke-width=".75" vector-effect="non-scaling-stroke" fill-rule="evenodd"><title>{f.properties.name}</title></path>)}</g>
+     <g class="wi-country-labels" aria-hidden="true">{contextLabels.map(c=>{const p=projectWestIndustry(c.center);return <text x={p[0]} y={p[1]} text-anchor="middle">{c.name}</text>})}</g>
+     <g data-wi-points></g>
+    </svg>
+    <div class="wi-labels" data-wi-labels aria-label="産業名から集積を選ぶ"></div>
+    <div class="wi-map-tools"><button type="button" data-wi-zoom="0.7" aria-label="地図を拡大">＋</button><button type="button" data-wi-zoom="1.43" aria-label="地図を縮小">−</button><button type="button" data-wi-reset>範囲を戻す</button></div>
+    <div class="wi-map-key" data-wi-map-key><strong>集積例の位置</strong><span>色＝産業 · ● 採取・サービス　■ 加工・製造　◇ 本社</span></div>
+   </div>
+   <p class="wi-map-note">点は集積地域の案内位置。細い引出線は産業名の位置案内で、取引・輸送経路を表しません。点の数・大きさは生産量を表しません。</p>
+   <p class="wi-map-note">LNG＝液化天然ガス · PE＝ポリエチレン · PP＝ポリプロピレン · DRI＝直接還元鉄。</p>
+   <div class="wi-industry-picker" aria-label="産業を一覧から選ぶ">{sectors.map(s=><div data-wi-picker={s.id} hidden={s.id!=='resources'}>{catalog.filter(i=>i.sectors.includes(s.id)).map(i=><button type="button" data-wi-industry={i.id} aria-pressed="false" style={`--wi-color:${i.color}`}><i aria-hidden="true"></i>{i.label}</button>)}</div>)}</div>
+  </div>
+  <aside class="atlas-national wi-reading" aria-label="産業分布の概説と解説">
+   <h2 data-wi-title>資源・エネルギー</h2><p class="wi-insight" data-wi-summary>{sectors[0].summary}</p>
+   <h3>なぜここに集まるのか</h3><p data-wi-why>{sectors[0].why}</p>
+   <section data-wi-meaning hidden><h3>供給網・国際経済との関係</h3><p></p></section>
+   <section class="wi-place-reading" data-wi-place-reading hidden></section>
+   <div class="wi-actions"><button type="button" data-wi-clear hidden>分類の概説へ</button><label data-wi-only-wrap hidden><input type="checkbox" data-wi-only/> この産業だけ表示</label></div>
+   <details><summary>この産業の集積例を一覧から選ぶ</summary><div class="wi-place-list" data-wi-place-list></div></details>
+   <p data-wi-limit class="wi-limit">比較に使える国別値がある系列は、選択時に国の色で実績を示します。未取得は薄い地色で、0ではありません。詳しい年・分母・出典は地図下にあります。</p>
+   <a class="wi-back-map" href="#wi-panel">地図へ戻る ↑</a>
+  </aside>
+ </div>
+ <section class="wi-statistics" id="west-industry-statistics" aria-label="地図下の産業統計">
+  <p>通貨：USD＝米ドル、EUR＝ユーロ、SAR＝サウジリヤル、QAR＝カタールリヤル、JOD＝ヨルダンディナール、NIS＝イスラエルシェケル。為替換算して合計しません。</p>
+  <div class="wi-stat-overview" data-wi-stat-overview><section><h2>地域経済の規模</h2><p>産業を選ぶと、生産・輸出・付加価値・雇用など適切な実績を表示します。資源と製品、国と企業、金額と数量を区別します。</p></section><section><h2>世界での位置</h2><p>世界生産・輸出順位・供給集中、国際観光・金融評価など、産業ごとに意味のある分母を使います。世界値未取得の系列も明記します。</p></section><section><h2>国ごとの違い</h2><p>湾岸の資源・電力集約型加工、トルコの輸出製造、死海の肥料、イスラエルの情報サービスなどを異なる指標で読みます。掲載点がない国でも、産業が存在しない意味ではありません。</p></section></div>
+  {catalog.map(item=><section data-wi-stat-panel={item.id} hidden>
+   <h2>{item.label}の規模・世界での位置</h2><div class="wi-stat-cards">
+    <section><h3>国・地点別の実績</h3><p data-wi-stat-scope>数値・単位・年・対象範囲を揃えた系列のみ地図の色に使います。</p><div class="wi-ranking" data-wi-ranking={item.id}></div><p>他の指標と全値は下の表にあります。</p></section>
+    <section><h3>世界での優位性・供給集中</h3>{item.world.map(f=><p>{f.text} <a href={sourceLink(f.source).url}>{sourceLink(f.source).title}</a></p>)}</section>
+    <section><h3>定義・未取得・確認範囲</h3><p>{item.limits}</p><p>確信度：{item.confidence} · 資料確認 {adoption.accessed}。確信度は資料の比較可能性を含む編集判断です。</p></section>
+   </div>
+   <div class="wi-table-wrap"><table><caption>{item.label}：異なる年・単位・製品段階は合計しません。</caption><thead><tr><th>国・企業・地点</th><th>実績</th><th>年</th><th>指標・分母・範囲</th><th>一次出典</th></tr></thead><tbody>{item.metrics.map(row=><tr data-wi-metric-country={row.country??'global'}><th>{row.place}</th><td>{westIndustryValue(row)} {row.unit}</td><td>{row.year}</td><td><strong>{row.measure}</strong><br/>{row.denominator}</td><td><a href={sourceLink(row.source).url}>{sourceLink(row.source).title}</a></td></tr>)}</tbody></table></div>
+   <p class="wi-missing" data-wi-missing={item.id}></p>
+  </section>)}
+ </section>
+ <details class="wi-method"><summary>国ごとの産業構造と採用理由</summary>
+  <p>サウジは原油から燃料・樹脂・肥料・アルミへの加工、UAEはアブダビの資源・加工とドバイの物流・金融・観光、カタールはLNG・尿素・ヘリウム、バーレーンは一次アルミ・金融、オマーンは外洋側のLNG・港湾と金属加工を対比します。イラク・クウェートは石油輸出の重要性、イランはガス・鉄鋼、アゼルバイジャンはカスピ海資源とパイプライン、トルコは輸出製造・観光、ヨルダン・イスラエルは死海の肥料、イスラエル中部は情報サービス、ジョージア・キプロスは観光を扱います。</p>
+  <p>主案17系列と追加候補4系列をすべて採用。港湾と航空は物流の異なるサービスとして分離しました。肥料の窒素・リン・カリ、自動車と白物家電、粗鋼とDRIを区別します。精製・一次アルミ・リン鉱石／カリ・鉄鋼・ホウ素は工程の学習上の意味から複数分類に載せ、分類の統計を合計しません。</p>
+  <p>原油・LNGは日本のエネルギーと海峡集中、樹脂・アルミ・DRIは原料と電力・脱炭素、肥料は食料安全保障、トルコの製造は欧州との供給網、都市のサービスは物品以外の稼ぎ方を説明します。追加のホウ素・ヘリウムは輸出金額の大きさだけで落とさず調達集中、防衛装備は契約と引渡しの違いを学ぶ系列として採用しました。</p>
+  <p>レバノン・シリア・パレスチナ・イエメン、アルメニア等の同一定義の最新細分統計・地点根拠は未取得です。過去の工場を現在の稼働拠点と断定せず、未取得を0と扱いません。</p>
+ </details>
+ <details class="wi-method"><summary>既存の国別経済指標（WDI、GDP比）の参考表</summary><p>既存の保存資料を再利用。資源レントは産出価値から採掘費を引いた推計で、政府収入や生産量ではありません。広い製造・サービス業の付加価値を個別産業へ割り当てません。明示的に年がない値は補いません。</p><div class="wi-table-wrap"><table><caption>World Bank WDI · % GDP · 保存済み2020–2024年の最新収録値</caption><thead><tr><th>国・地域</th>{nationalIndicators.map(([,name])=><th>{name}</th>)}</tr></thead><tbody>{data.countries.map(c=><tr><th>{c.name}</th>{nationalIndicators.map(([id])=>{const row=data.worldBank.indicators[id]?.filter(r=>r.code===c.code&&r.value!==null).sort((a,b)=>b.year-a.year)[0];return <td>{row?`${row.value.toFixed(1)}%（${row.year}）`:'未収録'}</td>})}</tr>)}</tbody></table></div><a href="https://data.worldbank.org/">World Bank WDI</a></details>
+ <details class="wi-method" id="west-industry-sources"><summary>一次出典・地図の方法・20対象の範囲</summary>
+  <p>{adoption.scope} 国連M49の西アジア18対象へイラン・エジプトを加えた編集範囲です。エジプトはアフリカとの境界国補足で、地域合計は作りません。</p>
+  <p>地理資料は既存のNatural Earth v5.1.2を再利用。Webメルカトル図法、位置の案内用。境界・名称は現在の実効支配や領有権の確定を示しません。パレスチナとキプロスの集計は各出典の範囲を優先します。</p>
+  <p>国の色は、選んだ産業の同一年・同一単位・同一製品段階の比較可能な実績のみ。凡例に指標・年・単位を表示。港・空港の値は地点だけの実績で国の面を塗りません。未取得の国は地色、0ではありません。点・引出線は案内であり流量・施設境界を示しません。本社、製造、採取、通過点を区別します。</p>
+  <p>統計は主に2025年実績、鉱物・一部貿易は確認済みの2024年。2026年の資料であっても統計年は別です。USGS全文PDF・Maaden年報・iGA本文等の403は回避せず、取得できる公式国別ページや公式公表索引を使い、比較上の限界を各系列へ残しました。</p>
+  <ul>{Object.entries(sources).filter(([id])=>catalog.some(i=>i.metrics.some(m=>m.source===id)||i.world.some(f=>f.source===id)||i.locations.some(l=>l.source===id))).map(([,s])=><li><a href={s.url}>{s.title}</a>（確認 {adoption.accessed}）</li>)}</ul>
+ </details>
+ <noscript><p>産業の選択・地図操作にはJavaScriptが必要です。全21系列の実績・定義・出典は下の表で読めます。</p><style is:inline>.west-industry [data-wi-stat-panel][hidden]{display:block!important}</style></noscript>
+</article>
+</AtlasWorkspaceFrame>
+</BaseLayout>
+<script>import '../../scripts/atlas-west-asia-industry';</script>

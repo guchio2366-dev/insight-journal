@@ -17,7 +17,17 @@ test('西アジアの全4分野は共通枠・一つの地図・20の選択肢�
    assert.ok(overview.hasAttribute('data-atlas-overview-link'));
    assert.equal(overview.hasAttribute('data-west-field'),false,'概要は地図主題ではなく独立ページへ移動する');
    assert.equal(q('.atlas-tabs [aria-current]').getAttribute('href'),`/insight-journal/atlas/west-asia/${route}/`);
-   assert.equal(all('[data-west-country] option').length,21);assert.equal(all('[data-west-chart]').length,18);
+   assert.equal(all('[data-west-country] option').length,21);
+   if(field==='industry'){
+    assert.ok(q('[data-west-industry]'));assert.equal(all('[data-wi-stat-panel]').length,21);
+    const tabs=all('[data-wi-sector]');assert.deepEqual(tabs.map(b=>b.dataset.wiSector),['resources','manufacturing','services']);
+    assert.equal(tabs.filter(b=>b.getAttribute('aria-selected')==='true').length,1);
+    assert(q('.atlas-primary-grid>.atlas-national'));assert(q('#west-industry-statistics'));
+    assert.match(q('#west-industry-sources').textContent,/未取得.*0/s);assert.match(q('#west-industry-sources').textContent,/実効支配や領有権の確定を示しません/);
+    assert.equal(all('[data-west-chart]').length,0,'the industry page reuses geography, not unused climate templates');
+    continue;
+   }
+   assert.equal(all('[data-west-chart]').length,18);
    assert.equal(q('[data-west-topic]'),null,'全項目のプルダウンを上部に重ねない');
    assert.equal(q('.west-heading'),null,'独自の大見出しで地図を押し下げない');
    assert.ok(q('.atlas-primary-grid>.atlas-national'),'解説は北米と同じ隣接パネル');
