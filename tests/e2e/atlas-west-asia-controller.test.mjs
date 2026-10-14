@@ -259,13 +259,8 @@ test('資料取得に失敗しても国と主題を切り替えられる',async(
   select('[data-west-country]','SAU');assert.equal(q('[data-west-active-chart]'),null);select('[data-west-city]','riyadh');await until(()=>q('[data-west-climate-class]')?.textContent.includes('BWh'));assert.equal(q('[data-west-country]').value,'SAU');assert.match(q('[data-west-scope]').textContent,/サウジアラビア/);
  }finally{await w.happyDOM.close();}
 });
-test('直接指定された未収録年は保ち、主題切替時は実際の収録年を明示する',async()=>{
- const {w,q,select}=await setup('industry','?topic=oil&country=SAU&year=2024');
- try{
-  assert.equal(q('[data-west-year]').value,'2024');assert.match(q('[data-west-detail]').textContent,/未収録/);
-  q('[data-west-topic-button="gas"]').click();assert.equal(q('[data-west-year]').value,'2021');assert.match(q('[data-west-point]').textContent,/2021年へ切り替え/);assert.match(q('[data-west-detail]').textContent,/天然ガス資源レント/);
- }finally{await w.happyDOM.close();}
-});
+// The WDI industry reference table is retained; the new product-level industry
+// controller is covered by atlas-west-asia-industry.test.mjs.
 
 test('地域の気候から都市を選ぶと雨温図・説明を右に読み、地図の範囲は動かない',async()=>{
  const {w,q,select}=await setup('nature');
@@ -336,15 +331,7 @@ test('都市中心部の固定範囲・3時点人口は全列下に一つだけ�
  }finally{await app.w.happyDOM.close();}
 });
 
-test('比較で系列の収録年が異なる場合も元の年へ戻り、不正な比較元を採用しない',async()=>{
- const source=await setup('industry','?topic=manufacturing&country=SAU&year=2024');let comparison;
- try{
-  comparison=await setup('industry',new URL(source.q('[data-west-compare="oil"]').href).search);
-  assert.equal(comparison.q('[data-west-year]').value,'2021');
-  assert.match(comparison.q('[data-west-legend]').textContent,/2024年/);
-  assert.match(comparison.q('[data-west-legend]').textContent,/2021年/);
-  assert.equal(new URL(comparison.q('[data-west-return]').href).searchParams.get('year'),'2024');
- }finally{await source.w.happyDOM.close();if(comparison)await comparison.w.happyDOM.close();}
+test('不正な比較元を採用しない',async()=>{
  const invalid=await setup('nature','?topic=climate&from='+encodeURIComponent('?topic=oil&country=XXX&year=1800'));
  try{assert.equal(invalid.q('[data-west-atlas]').dataset.comparing,'false');assert.equal(invalid.q('[data-west-return]'),null);}finally{await invalid.w.happyDOM.close();}
 });

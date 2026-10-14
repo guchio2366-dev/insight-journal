@@ -8,7 +8,7 @@ import {readFile,mkdir,stat,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {chromium} from 'playwright';
 import {createHash} from 'node:crypto';
-test('西アジアのPC実画面で地域説明・3か国・欠測年・選択・復帰を確認する', {skip:!process.env.CI,timeout:150000},async()=>{
+test('西アジアのPC実画面で21産業・地域説明・欠測・選択・復帰を確認する', {skip:!process.env.CI,timeout:150000},async()=>{
  const output='/tmp/atlas-canada-qa/west-asia';await mkdir(output,{recursive:true});
  const executablePath=process.env.REVIEW_CHROME_PATH||execFileSync('sh',['-c','command -v google-chrome || command -v google-chrome-stable'],{encoding:'utf8'}).trim();
  assert(executablePath,'Existing sandboxed Chrome is required');
@@ -31,7 +31,7 @@ test('西アジアのPC実画面で地域説明・3か国・欠測年・選択�
    const context=await browser.newContext({viewport,serviceWorkers:'block'});
    await context.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());
    const page=await context.newPage();page.on('pageerror',error=>errors.push(error.message));page.on('response',response=>{if(response.status()>=400)failures.push(response.url());});
-   const open=async route=>{await page.goto(origin+'/insight-journal/atlas/west-asia/'+route);await page.waitForFunction(()=>document.querySelector('[data-west-atlas]')?.dataset.ready==='true'&&document.querySelector('[data-west-loading]')?.hidden);await page.evaluate(()=>document.fonts.ready);};
+   const open=async route=>{await page.goto(origin+'/insight-journal/atlas/west-asia/'+route);await page.waitForFunction(()=>document.querySelector('[data-west-atlas]')?.dataset.ready==='true'&&(document.querySelector('[data-west-loading]')?.hidden??true));await page.evaluate(()=>document.fonts.ready);};
    const shot=async label=>{
     await page.evaluate(()=>window.scrollTo(0,0));
     const file=`${viewport.width}-${label}.png`;const png=await page.screenshot({path:path.join(output,file),animations:'disabled'});
@@ -41,40 +41,30 @@ test('西アジアのPC実画面で地域説明・3か国・欠測年・選択�
     records.push({file,viewport,sha256:createHash('sha256').update(png).digest('hex'),...dimensions});
    };
    await open('industry/');
-   await assert.doesNotReject(()=>page.locator('[data-west-regional-reading]').filter({hasText:'地域全体の供給網'}).waitFor());
-   assert.equal(await page.locator('[data-industry-site]').count(),16);
-   await shot('supply-network');
-   await page.locator('[data-west-topic-button="industry-services"]').click();
-   await page.waitForFunction(()=>document.querySelector('[data-west-atlas]')?.dataset.topic==='industry-services'&&document.querySelector('[data-west-atlas]')?.dataset.ready==='true');
-   const serviceLabels=()=>page.locator('[data-industry-site]').evaluateAll(markers=>Object.fromEntries(markers.map(marker=>{const label=marker.querySelector('[data-marker-label]');return [marker.getAttribute('data-industry-site'),label?{position:label.getAttribute('transform'),display:label.style.display,line:marker.querySelector('line')?.style.display}:null];})));
-   const stableLabels=await serviceLabels();
-   for(const id of ['kafd','difc','istanbul-finance'])assert(stableLabels[id],`${id} has a label before selection`);
-   for(const id of ['kafd','difc','istanbul-finance']){
-    await page.locator(`[data-industry-site="${id}"]`).press('Enter');
-    await page.waitForFunction(id=>document.querySelector(`[data-industry-site="${id}"]`)?.getAttribute('aria-pressed')==='true'&&document.querySelector('[data-west-atlas]')?.dataset.ready==='true',id);
-    assert.deepEqual(await serviceLabels(),stableLabels,`${id} does not reflow other labels`);
-   }
-   await open('industry/?topic=industry-services');
-   assert.deepEqual(await serviceLabels(),stableLabels,'clearing selection restores the same labels');
-   await open('industry/');
-   await page.locator('[data-industry-site="jubail"]').press('Enter');
-   await page.waitForFunction(()=>document.querySelector('.west-industry-site-reading')?.textContent.includes('石油化学'));
-   assert((await page.locator('.west-industry-site-reading a').getAttribute('href')).includes('cpchem.com'));
-   await shot('jubail-industry-site');
-   for(const [code,word] of [['SAU','ジュバイル'],['ARE','ジュベル・アリ'],['TUR','ブルサ']]){
-    await page.locator(`[data-west-industry-scope] [data-west-country-button="${code}"]`).click();
-    await page.waitForFunction(code=>document.querySelector('[data-west-country]').value===code&&document.querySelector('[data-west-atlas]').dataset.ready==='true',code);
-    assert((await page.locator('[data-west-regional-reading]').innerText()).includes(word));
-    assert((await page.locator('[data-west-detail] .atlas-reading-takeaway').innerText()).includes(word));
-    await shot('industry-'+code);
-   }
-   await page.locator('[data-west-industry-scope] [data-west-country-button=""]').press('Enter');
-   assert.equal(await page.locator('[data-west-country]').inputValue(),'');
-   await open('industry/?topic=oil&country=SAU&year=2024');
-   assert((await page.locator('[data-west-detail]').innerText()).includes('未収録'));
-   assert.equal(await page.locator('[data-west-year]').inputValue(),'2024');
-   await page.reload();await page.waitForFunction(()=>document.querySelector('[data-west-atlas]')?.dataset.ready==='true');
-   assert.equal(await page.locator('[data-west-year]').inputValue(),'2024');
+   assert((await page.locator('[data-wi-summary]').innerText()).includes('ペルシャ湾'));
+   assert.equal(await page.locator('[data-wi-stat-panel]').count(),21);
+   const frame=await page.locator('[data-wi-map]').getAttribute('viewBox');
+   const labelPositions=()=>page.locator('[data-wi-label]').evaluateAll(nodes=>Object.fromEntries(nodes.map(n=>[n.dataset.wiLabel,[n.style.left,n.style.top,n.style.width,n.style.height]])));
+   const stableLabels=await labelPositions();
+   await shot('resources-overview');
+   await page.locator('[data-wi-label=lng]').click();
+   assert.deepEqual(await labelPositions(),stableLabels);
+   await page.locator('[data-wi-country]').selectOption('QAT');
+   assert((await page.locator('[data-wi-ranking=lng]').innerText()).includes('81.51'));
+   assert.equal(await page.locator('[data-wi-map]').getAttribute('viewBox'),frame);
+   await shot('qatar-lng');
+   await page.locator('[data-wi-country]').selectOption('IRN');
+   assert((await page.locator('[data-wi-ranking=lng]').innerText()).includes('未取得'));
+   await page.reload();await page.waitForFunction(()=>document.querySelector('[data-west-industry]')?.dataset.ready==='true');
+   assert.equal(await page.locator('[data-wi-country]').inputValue(),'IRN');
+   await page.locator('[data-wi-country]').selectOption('');
+   await page.locator('[data-wi-sector=manufacturing]').click();
+   await page.locator('[data-wi-label=polymers]').click();
+   await page.locator('[data-wi-point=polymers]').first().press('Enter');
+   assert((await page.locator('[data-wi-place-reading]').innerText()).includes('石化製造'));
+   await shot('polymers-place');
+   await page.locator('[data-wi-sector=services]').click();
+   await shot('services-overview');
    await open('nature/?topic=groundwater');
    assert((await page.locator('[data-west-detail]').innerText()).includes('再生しにくい地下水'));
    assert.equal(await page.locator('[data-west-scene] [data-country]').count(),0);

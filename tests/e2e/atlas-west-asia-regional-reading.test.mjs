@@ -4,7 +4,6 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {build} from 'esbuild';
 import {Window} from 'happy-dom';
-import {westIndustryCountries} from '../../src/data/atlas/west-asia-readings.mjs';
 const bundle=await build({entryPoints:['src/scripts/atlas-west-asia.ts'],bundle:true,write:false,format:'iife'});
 async function until(check){for(let i=0;i<300;i++){if(check())return;await new Promise(resolve=>setTimeout(resolve,10));}throw Error('West Asia reading did not settle');}
 async function setup(route,query=''){
@@ -17,75 +16,8 @@ async function setup(route,query=''){
  await until(()=>q('[data-west-atlas]')?.dataset.ready==='true'&&q('[data-west-loading]').hidden);
  return {w,q,select:(selector,value)=>{q(selector).value=value;q(selector).dispatchEvent(new w.Event('change'));}};
 }
-test('産業は未選択の地域供給網から始まり、国別の比較・地図選択を指定3か国へ限定する',async()=>{
- const {w,q}=await setup('industry');
- try{
-  const frame=q('[data-west-map]').getAttribute('viewBox');
-  assert.equal(q('[data-west-country]').value,'');
-  assert.match(q('[data-west-regional-reading]').textContent,/イランとオマーン.*エジプト.*アゼルバイジャン/s);
-  assert.deepEqual([...q('[data-west-industry-scope]').querySelectorAll('[data-west-country-button]')].map(node=>node.dataset.westCountryButton).filter(Boolean),westIndustryCountries);assert.equal(q('[data-industry-site]')!==null,true);
-  assert.deepEqual([...q('[data-west-country]').options].filter(option=>option.value&&!option.disabled).map(option=>option.value).sort(),[...westIndustryCountries].sort());
-  assert.equal(q('[data-west-scene]').querySelectorAll('[data-country]').length,0);
-  q('[data-industry-site="jubail"]').dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
-  await until(()=>q('[data-west-industry-scope]')&&q('.west-industry-site-reading')?.textContent.includes('石油化学'));
-  assert.match(q('.west-industry-site-reading a').href,/cpchem.com/);
-  assert.equal(q('[data-west-map]').getAttribute('viewBox'),frame);
-  for(const [code,expected] of [['SAU',/ジュバイル.*ヤンブー/s],['ARE',/アブダビ.*ジュベル・アリ.*輸出.*輸入/s],['TUR',/ブルサ.*イズミット.*欧州市場/s]]){
-   q(`[data-west-industry-scope] [data-west-country-button="${code}"]`).click();
-   await until(()=>q('[data-west-atlas]').dataset.ready==='true'&&q('[data-west-country]').value===code);
-   assert.match(q('[data-west-regional-reading]').textContent,expected);
-   assert.match(q('[data-west-detail] .atlas-reading-takeaway').textContent,code==='SAU'?/ジュバイル/:code==='ARE'?/ジュベル・アリ/:/ブルサ/);
-   assert.equal(new URL(w.location.href).searchParams.get('country'),code);
-   assert.equal(q('[data-west-map]').getAttribute('viewBox'),frame,'country industry selection retains the full regional map');
-   assert.equal(q(`[data-west-industry-scope] [data-west-country-button="${code}"]`).getAttribute('aria-pressed'),'true');
-   assert(q('[data-industry-site]'));assert([...q('[data-west-scene]').querySelectorAll('[data-industry-site]')].some(node=>node.dataset.industrySite==='hormuz')&&[...q('[data-west-scene]').querySelectorAll('[data-industry-site]')].some(node=>node.dataset.industrySite==='suez'));
-  }
-  q('[data-west-industry-scope] [data-west-country-button=""]').click();
-  await until(()=>q('[data-west-atlas]').dataset.ready==='true'&&!q('[data-west-country]').value);
-  assert.equal(q('[data-west-map]').getAttribute('viewBox'),frame);
- }finally{await w.happyDOM.close();}
-});
-test('サービス業の地点選択と解除で同じ部門の他地点名は移動・出現・消失しない',async()=>{
- const {w,q}=await setup('industry','?topic=industry-services');
- try{
-  const svg=q('[data-west-map]');
-  Object.defineProperties(svg,{clientWidth:{value:900,configurable:true},clientHeight:{value:650,configurable:true}});
-  q('[data-west-reset]').click();
-  const labels=()=>Object.fromEntries([...q('[data-west-scene]').querySelectorAll('[data-industry-site]')].map(marker=>{
-   const label=marker.querySelector('[data-marker-label]');
-   return [marker.dataset.industrySite,label?{position:label.getAttribute('transform'),display:label.style.display,line:marker.querySelector('line').style.display}:null];
-  }));
-  const base=w.location.href,expected=labels();
-  for(const id of ['kafd','difc','istanbul-finance'])assert(expected[id],'採用した金融地区の名を未選択時から用意する');
-  assert(Object.values(expected).some(label=>label&&label.display!=='none'),'PC幅で地点名を表示する');
-  for(const id of ['kafd','difc','istanbul-finance','jebel-ali']){
-   q(`[data-industry-site="${id}"]`).dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',bubbles:true}));
-   await until(()=>q('[data-west-atlas]').dataset.ready==='true'&&q(`[data-industry-site="${id}"]`)?.getAttribute('aria-pressed')==='true');
-   assert.deepEqual(labels(),expected,`${id}選択時`);
-   w.history.replaceState({},'',base);w.dispatchEvent(new w.PopStateEvent('popstate'));
-   await until(()=>q('[data-west-atlas]').dataset.ready==='true'&&!q('[data-west-scene] .west-industry-marker.is-selected'));
-   assert.deepEqual(labels(),expected,`${id}選択解除時`);
-  }
-  const rationale=q('[data-west-detail] details')?.textContent??'';
-  assert.match(rationale,/採用：.*リヤドの金融地区.*ドバイの金融センター.*イスタンブールの金融センター/s);
-  assert.match(rationale,/次点：.*観光/);
-  assert.doesNotMatch(rationale,/次点：[^。]*金融/);
- }finally{await w.happyDOM.close();}
-});
-test('対象外の旧産業URLは地域供給網へ復元し、明示した未収録年を他年で埋めない',async()=>{
- const {w,q,select}=await setup('industry','?topic=oil&country=IRQ&year=2024&map=10,20,400,300');
- try{
-  assert.equal(q('[data-west-country]').value,'');assert.match(q('[data-west-regional-reading]').textContent,/地域全体の供給網/);
-  assert.equal(q('[data-west-map]').getAttribute('viewBox'),'10 20 400 300');
-  assert.equal(q('[data-west-year]').value,'2024');
-  q('[data-west-industry-scope] [data-west-country-button="SAU"]').click();
-  await until(()=>q('[data-west-country]').value==='SAU'&&q('[data-west-atlas]').dataset.ready==='true');
-  assert.match(q('[data-west-detail]').textContent,/未収録.*0ではありません/s);
-  assert.equal(q('[data-west-year]').value,'2024');
-  select('[data-west-year]','2021');await until(()=>q('[data-west-detail]').textContent.includes('23.7'));
-  assert.match(q('[data-west-detail]').textContent,/2021年.*World Bank WDI/s);
- }finally{await w.happyDOM.close();}
-});
+// Industry now has 21 researched series and its own controller; its acceptance
+// coverage lives in atlas-west-asia-industry.test.mjs and the PC review.
 test('地域水説明・元流域・雨温図の具体的理由を既存資料と一緒に保持する',async()=>{
  for(const [query,pattern] of [['?topic=groundwater',/再生しにくい地下水.*アル・アハサー.*エネルギー/s],['?topic=desalination',/電力.*送水.*小麦畑.*断定/s],['?topic=basins&basin=1060034260',/ナイル川.*地域外の南/s],['?topic=basins&basin=2060073570',/チグリス・ユーフラテス.*シリア・イラク/s]]){
   const {w,q}=await setup('nature',query);try{assert.match(q('[data-west-detail]').textContent,pattern);assert.ok(q('[data-west-regional-reading] a'));}finally{await w.happyDOM.close();}
