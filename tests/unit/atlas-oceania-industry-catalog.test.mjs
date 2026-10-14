@@ -17,7 +17,7 @@ test('all researched proposals and additions have distinct stages, denominators 
  assert.match(api.getOceaniaCatalogItem('education').limitation,/州別輸出額/);
 });
 test('selection and explicit isolation preserve every annotation position and source coordinate at desktop and narrow widths',()=>{
- const win=new Window();try{for(const screen of [{width:950,height:950*710/1100},{width:640,height:350},{width:320,height:320*710/1100}]){
+ const win=new Window();try{for(const screen of [{width:950,height:950*710/1100},{width:731.0739436619718,height:471.875},{width:820,height:820*710/1100},{width:640,height:350},{width:320,height:320*710/1100}]){
  const frame=[0,35,1100,710],parse=state=>{const holder=win.document.createElement('div');holder.innerHTML='<svg>'+api.renderOceaniaIndustryCatalogMap(state,api.oceaniaCountries,frame,screen)+'</svg>';return holder;};
  const initial=parse({}),labels=[...initial.querySelectorAll('[data-label-box]')].map(n=>n.dataset.labelBox);
  assert.equal(labels.length,18);const boxes=labels.map(v=>v.split(',').map(Number));

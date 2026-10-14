@@ -24,9 +24,9 @@ const overlaps=(a:Box,b:Box)=>a.x<b.x+b.width+3&&a.x+a.width+3>b.x&&a.y<b.y+b.he
 const shortLabels:Record<string,string>={'met-coal':'原料炭','thermal-coal':'一般炭',lng:'LNG','rare-earths':'レアアース',aluminium:'アルミ工程',meat:'食肉加工',wood:'製材・パルプ',tuna:'マグロ漁業・加工',education:'国際教育・留学'};
 /** Layout always consumes the complete catalog, independent of selection/only.
  * Callout correspondences are annotation lines, never transport/trade flows. */
-export function renderOceaniaIndustryCatalogMap(state:State,countries:Country[],frame:number[],screen:{width:number;height:number}){
+export function renderOceaniaIndustryCatalogMap(state:State,countries:Country[],frame:number[],screen:{width:number;height:number},forceCompact=false){
  const factor=Math.min(screen.width/frame[2],screen.height/frame[3]);
- const w=frame[2]*factor,h=frame[3]*factor,compact=w<560;
+ const w=frame[2]*factor,h=frame[3]*factor,compact=w<560||forceCompact;
  const width=Math.min(compact?(w<480?(w-25)/3:132):190,w/2-12),height=compact?24:66;
  // Large source country extents discourage cards covering the main land masses.
  // This changes annotation placement only, never geographic source geometry.
@@ -43,7 +43,13 @@ export function renderOceaniaIndustryCatalogMap(state:State,countries:Country[],
   const score=(b:Box)=>Math.hypot(b.x+width/2-px,b.y+height/2-py)+(compact?100:450)*land.reduce((n,c)=>n+cover(b,c),0);
   candidates.sort((a,b)=>score(a)-score(b));
   const box=candidates.find(b=>!occupied.some(a=>overlaps(a,b)));
-  if(!box)throw new Error('Industry labels cannot fit viewport '+w+'x'+h);
+  if(!box){
+   // Country-name reservations can exhaust the detailed-card grid at
+   // intermediate PC widths. Rebuild the complete, fixed layout with the
+   // compact names; selection never participates in this decision.
+   if(!compact)return renderOceaniaIndustryCatalogMap(state,countries,frame,screen,true);
+   throw new Error('Industry labels cannot fit viewport '+w+'x'+h);
+  }
   occupied.push(box);layout.push(box);
  }
  return `<g data-oceania-catalog-map="true">${oceaniaIndustryCatalog.map((item,i)=>{
