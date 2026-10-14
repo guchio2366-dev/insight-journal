@@ -49,5 +49,5 @@ try{
   report.cases.push({width,height,selectedIndustries:new Set(selected).size,labels:[6,9,8],errors});await page.close();
  }
  report.passed=true;
-}catch(error){report.blocker=error.message.split('\n')[0];process.exitCode=1;console.error(report.blocker);
+}catch(error){report.blocker=error.message.split('\n')[0];process.exitCode=1;console.error(report.blocker);console.error('::error title=Mexico adopted industry review::'+String(error.stack??error).replaceAll('%','%25').replaceAll('\n','%0A').replaceAll('\r','%0D'));
 }finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));await writeFile(path.join(output,'report.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));}
