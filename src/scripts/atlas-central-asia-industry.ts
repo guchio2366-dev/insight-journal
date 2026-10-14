@@ -20,7 +20,7 @@ export function initCentralAsiaIndustry(root:HTMLElement){
  function save(){state.frame=frame.slice();const url=writeCentralIndustryState(new URL(location.href),state);if(url.href!==location.href)history.pushState(null,'',url);render();}
  function chooseIndustry(id:CentralIndustryId){state={...state,industry:state.industry===id?null:id,site:null,only:false};save();}
  function chooseSite(site:CentralSite){state={...state,industry:site.industry,site:site.id};save();}
- function chooseSector(id:CentralIndustrySector){state={...state,sector:id,industry:null,site:null,only:false};save();}
+ function chooseSector(id:CentralIndustrySector){suppressMapClickUntil=0;state={...state,sector:id,industry:null,site:null,only:false};save();}
  function publish(){
   (root as any).centralIndustryView={...state,frame:frame.slice(),initialFrame:initialFrame.slice(),visibleSites:centralIndustrySites.filter(site=>site.sectors.includes(state.sector)&&(!state.only||site.industry===state.industry)).map(site=>site.id)};
   root.dataset.centralReady='true';root.closest<HTMLElement>('[data-asia-atlas]')!.dataset.mapReady='true';
@@ -121,8 +121,8 @@ export function initCentralAsiaIndustry(root:HTMLElement){
  q<HTMLInputElement>('[data-central-only]').addEventListener('change',event=>{state.only=(event.target as HTMLInputElement).checked;save();});
  q('[data-central-overlap]').addEventListener('click',()=>{const site=selectedSite(),other=site?.sectors.find(id=>id!==state.sector);if(other){state.sector=other;state.only=false;save();}});
  q<HTMLSelectElement>('[data-country-select]').addEventListener('change',event=>{state.country=(event.target as HTMLSelectElement).value as CentralIndustryState['country']||null;if(state.site&&selectedSite()?.country!==state.country)state.site=null;save();});
- q('[data-reset]').addEventListener('click',()=>{state={...state,industry:null,site:null,only:false,country:null};frame=initialFrame.slice();save();});
- q('[data-central-fit]').addEventListener('click',()=>{frame=initialFrame.slice();save();});
+ q('[data-reset]').addEventListener('click',()=>{suppressMapClickUntil=0;state={...state,industry:null,site:null,only:false,country:null};frame=initialFrame.slice();save();});
+ q('[data-central-fit]').addEventListener('click',()=>{suppressMapClickUntil=0;frame=initialFrame.slice();save();});
  q('[data-central-zoom-in]').addEventListener('click',()=>{frame=rounded(zoomCentralIndustryFrame(frame,.8));save();});
  q('[data-central-zoom-out]').addEventListener('click',()=>{frame=rounded(zoomCentralIndustryFrame(frame,1.25));save();});
  svg.addEventListener('keydown',event=>{if((event.target as Element).closest('[data-central-marker]'))return;if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key)){event.preventDefault();frame=rounded([frame[0]+(event.key==='ArrowLeft'?-.07:event.key==='ArrowRight'?.07:0)*frame[2],frame[1]+(event.key==='ArrowUp'?-.07:event.key==='ArrowDown'?.07:0)*frame[3],frame[2],frame[3]]);save();}else if(event.key==='+'||event.key==='-'){event.preventDefault();frame=rounded(zoomCentralIndustryFrame(frame,event.key==='+'?.8:1.25));save();}});

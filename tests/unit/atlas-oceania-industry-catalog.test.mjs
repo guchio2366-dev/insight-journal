@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {buildSync} from 'esbuild';
 import {fileURLToPath} from 'node:url';
 import {Window} from 'happy-dom';
+import savedPlaces from '../../public/assets/atlas/oceania-industry-v2/places.json' with {type:'json'};
 const root=fileURLToPath(new URL('../../',import.meta.url));
 const code=buildSync({stdin:{contents:"export * from './src/data/atlas/oceania-industry-catalog'; export * from './src/lib/atlas-oceania-industry-catalog'; export * from './src/data/atlas/oceania-learning';",resolveDir:root,loader:'ts'},bundle:true,write:false,platform:'node',format:'cjs',define:{'import.meta.env.BASE_URL':JSON.stringify('/insight-journal')}}).outputFiles[0].text;
 const module={exports:{}};new Function('module','exports',code)(module,module.exports);const api=module.exports;
@@ -22,7 +23,7 @@ test('selection and explicit isolation preserve every annotation position and so
  const initial=parse({}),labels=[...initial.querySelectorAll('[data-label-box]')].map(n=>n.dataset.labelBox);
  assert.equal(labels.length,18);const boxes=labels.map(v=>v.split(',').map(Number));
  const factor=Math.min(screen.width/frame[2],screen.height/frame[3]);
- const savedMarkers=api.oceaniaIndustryRepresentativeMarks.map(mark=>{const p=api.resolveOceaniaIndustryAnchor({kind:'saved',key:mark.id},api.oceaniaCountries).point;return [p[0]-10/factor,p[1]-10/factor,20/factor,20/factor];});
+ const savedMarkers=savedPlaces.places.map(mark=>{const p=api.resolveOceaniaIndustryAnchor({kind:'saved',key:mark.id},api.oceaniaCountries).point;return [p[0]-10/factor,p[1]-10/factor,20/factor,20/factor];});
  for(const [i,a] of boxes.entries()){assert(a[0]>=0&&a[1]>=35&&a[0]+a[2]<=1100&&a[1]+a[3]<=745);for(const b of [...boxes.slice(i+1),...savedMarkers])assert(!(a[0]<b[0]+b[2]&&a[0]+a[2]>b[0]&&a[1]<b[1]+b[3]&&a[1]+a[3]>b[1]),'catalog captions preserve peer labels and saved guide hit areas');}
  for(const item of api.oceaniaIndustryCatalog){const selected=parse({industry:item.id,industryOnly:true,sector:item.sector});assert.deepEqual([...selected.querySelectorAll('[data-label-box]')].map(n=>n.dataset.labelBox),labels);assert.equal(selected.querySelectorAll('[data-oceania-product-mark]:not([style="display:none"])').length,1);}
  }}finally{win.happyDOM.abort();}
