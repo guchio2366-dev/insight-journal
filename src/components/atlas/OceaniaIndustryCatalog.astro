@@ -1,0 +1,17 @@
+---
+import {oceaniaIndustryCatalog as items,oceaniaCatalogSources as sources} from '../../data/atlas/oceania-industry-catalog';
+const headings={scale:'地域経済の規模',world:'世界での位置',concentration:'供給網・集中と定義'};
+const overview=[items.find(i=>i.id==='iron')!,items.find(i=>i.id==='gold')!,items.find(i=>i.id==='tourism')!];
+---
+<section class="oceania-industry-statistics" data-oceania-industry-statistics aria-label="主要産業の統計と対象範囲">
+ <h2 data-catalog-stat-title>豪州の供給力と島嶼部の所得</h2>
+ <div class="oceania-industry-stat-grid">
+ {Object.entries(headings).map(([key,heading],index)=><article data-catalog-stat={key}><h3>{heading}</h3><p data-catalog-stat-copy>{index===0?overview[1].scale.text:index===1?overview[0].world.text:overview[2].concentration.text}</p><div data-catalog-stat-sources>{(index===0?overview[1].scale:index===1?overview[0].world:overview[2].concentration).sources.map(id=><a href={sources[id].url}>{sources[id].title}</a>)}</div></article>)}
+ </div>
+ <p class="oceania-industry-stat-note">確認：2026年10月14日。国計・地域計・施設事例を区別。豪州年度は7月〜翌6月。輸出額は名目で付加価値・企業利益ではありません。地図の固定記号は生産量を示さず、未収録を0としません。</p>
+ <details class="oceania-industry-stat-ledger"><summary>全18産業の年・単位・定義・一次出典</summary>
+ {items.map(item=><section data-catalog-ledger={item.id}><h3>{item.label}</h3><p>{item.geography}</p><p>{item.stages}</p>{Object.entries(headings).map(([key,heading])=>{const stat=item[key as keyof typeof headings];return <div><h4>{heading}</h4><p>{stat.text}</p>{stat.sources.map(id=><a href={sources[id].url}>{sources[id].title}</a>)}</div>;})}<p>{item.limitation}</p></section>)}
+ <h3>位置資料と表示方法</h3><p>鉱山点はGA 2025原本。都市案内は保存済みGHS-UCDBの都市中心（工場敷地ではない）。国計注記はNatural Earth境界の表示用中心で、施設・漁場・EEZの位置ではありません。注記線は位置との対応だけを示し、取引・輸送経路や量を表しません。ラベル配置は全18項目から固定計算し、選択で再配置しません。</p>
+ {['mines','cities','boundaries'].map(id=><a href={sources[id].url}>{sources[id].title}</a>)}
+ </details>
+</section>
