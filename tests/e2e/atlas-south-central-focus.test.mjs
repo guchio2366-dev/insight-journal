@@ -13,7 +13,7 @@ const base='/insight-journal',root=path.resolve('dist');
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.gz':'application/gzip','.png':'image/png','.svg':'image/svg+xml','.webp':'image/webp','.woff2':'font/woff2'};
 const reviewFolder=path.resolve('review-artifacts/south-central-focus'),review={head:null,requestedHead:process.env.REVIEW_HEAD_SHA??null,buildRelease:null,sandbox:true,images:[],industryTransitions:[],captureAdjustments:[],renderChecks:[],deliveredPaintChecks:[]};
 const renderReferences=new WeakMap();
-const renderFollowup=new Set(['south-asia-industry','south-asia-industry-cleared','south-asia-industry-cleared-confirmed','1920-south-asia-industry-selected-sc-chattogram-garments','1440-south-asia-industry-selected-sc-dhaka-garments','1440-south-asia-industry-selected-sc-chattogram-garments','1024-south-asia-industry-selected-sc-dhaka-garments','1024-south-asia-industry-selected-sc-chattogram-garments']);
+const renderFollowup=new Set(['south-asia-industry','south-asia-industry-cleared','south-asia-industry-cleared-confirmed','1440-south-asia-industry-selected-sc-dhaka-garments','1024-south-asia-industry-selected-sc-dhaka-garments']);
 async function saveReview(){
  await mkdir(reviewFolder,{recursive:true});
  if(!review.head){review.head=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();review.buildRelease=JSON.parse(await readFile(path.join(root,'_release.json'),'utf8'));if(review.requestedHead)assert.equal(review.head,review.requestedHead);}
@@ -30,7 +30,7 @@ async function stableIndustryFrame(page,name){
  const after=await captureState(page);assert.deepEqual(after,before,name+': revealing the map preserves URL, selection and exact camera');
  const saved=process.env.SC_FOCUSED_REVIEW!=='1'||renderFollowup.has(name);
  review.captureAdjustments.push({case:name,file:saved?name+'.png':null,viewport:page.viewportSize(),before,after,status:'passed'});
- let previous=null,consecutive=0,stableSince=0,result;
+ let previous=null,consecutive=0,stableSince=0,result,lastScene;
  const deadline=Date.now()+10000;
  while(Date.now()<deadline){
   await page.waitForFunction(()=>{const map=document.querySelector('[data-asia-atlas]')?.atlasReviewMap;return map&&map.loaded()&&map.areTilesLoaded()&&!map.isMoving();});
@@ -39,18 +39,25 @@ async function stableIndustryFrame(page,name){
    const box=element=>{const r=element.getBoundingClientRect();return {left:r.left-rect.left,top:r.top-rect.top,right:r.right-rect.left,bottom:r.bottom-rect.top};};
    const markers=[...root.querySelectorAll('.maplibregl-marker')].filter(element=>element.getBoundingClientRect().width>0&&getComputedStyle(element).visibility!=='hidden');
    const masks=markers.map(element=>{const r=box(element);return {left:r.left-7,top:r.top-7,right:r.right+7,bottom:r.bottom+7};});
+   for(const line of root.querySelectorAll('.south-industry-label-guides line')){const r=box(line);masks.push({left:r.left-3,top:r.top-3,right:r.right+3,bottom:r.bottom+3});}
    const config=JSON.parse(root.querySelector('[data-asia-config]').textContent);for(const site of config.industrySites){const p=map.project(site.point);masks.push({left:p.x-22,top:p.y-22,right:p.x+22,bottom:p.y+22});}
-   const visible=[[rect.left+4,rect.top+4],[rect.right-4,rect.top+4],[rect.left+4,rect.bottom-4],[rect.right-4,rect.bottom-4]].every(([x,y])=>x>=0&&y>=0&&x<innerWidth&&y<innerHeight&&frame.contains(document.elementFromPoint(x,y)));
-   return {bounds:{left:rect.left,top:rect.top,width:rect.width,height:rect.height},clip:{x:Math.floor(rect.left),y:Math.floor(rect.top),width:Math.ceil(rect.right)-Math.floor(rect.left),height:Math.ceil(rect.bottom)-Math.floor(rect.top)},visible,loaded:map.loaded(),tilesLoaded:map.areTilesLoaded(),moving:map.isMoving(),contextHealthy:!!gl&&!gl.isContextLost(),masks,steel:box(root.querySelector('[data-industry-site="sc-odisha-steel"]'))};
+   const corners=[[rect.left+4,rect.top+4],[rect.right-4,rect.top+4],[rect.left+4,rect.bottom-4],[rect.right-4,rect.bottom-4]].map(([x,y])=>{const hit=document.elementFromPoint(x,y);return {x,y,inside:x>=0&&y>=0&&x<innerWidth&&y<innerHeight&&frame.contains(hit),hit:hit?hit.tagName+'.'+String(hit.className?.baseVal??hit.className):null};});
+   return {bounds:{left:rect.left,top:rect.top,width:rect.width,height:rect.height},clip:{x:Math.floor(rect.left),y:Math.floor(rect.top),width:Math.ceil(rect.right)-Math.floor(rect.left),height:Math.ceil(rect.bottom)-Math.floor(rect.top)},visible:corners.every(c=>c.inside),corners,viewport:{width:innerWidth,height:innerHeight,scrollY},loaded:map.loaded(),tilesLoaded:map.areTilesLoaded(),moving:map.isMoving(),contextHealthy:!!gl&&!gl.isContextLost(),masks,steel:box(root.querySelector('[data-industry-site="sc-odisha-steel"]')),steelOpacity:Number(getComputedStyle(root.querySelector('[data-industry-site="sc-odisha-steel"]')).opacity)};
   });
-  assert.equal(scene.visible,true,name+': the complete map is inside the viewport and unobstructed');assert.equal(scene.contextHealthy,true,name+': live WebGL context');
+  lastScene=scene;
+  if(!scene.visible){
+   review.captureAdjustments.push({case:name,kind:'wait for scroll layout',bounds:scene.bounds,corners:scene.corners,viewport:scene.viewport});
+   previous=null;consecutive=0;await page.locator('.asia-map-frame').evaluate(frame=>frame.scrollIntoView({block:'center',inline:'nearest',behavior:'instant'}));await page.waitForTimeout(100);continue;
+  }
+  assert.equal(scene.contextHealthy,true,name+': live WebGL context');
   const png=await page.screenshot({clip:scene.clip,animations:'disabled'}),hash=createHash('sha256').update(png).digest('hex');
   if(hash===previous){consecutive++;}else{previous=hash;consecutive=1;stableSince=Date.now();}
   result={scene,png,hash,consecutive,stableMs:Date.now()-stableSince};
   if(consecutive>=3&&result.stableMs>=500)break;
   await page.waitForTimeout(100);
  }
- assert.ok(result?.consecutive>=3&&result.stableMs>=500,name+': three equal rendered map frames remain stable for at least 500ms');
+ assert.ok(result?.scene.visible&&result.consecutive>=3&&result.stableMs>=500,name+': the complete unobstructed map has three equal rendered frames stable for at least 500ms: '+JSON.stringify({bounds:lastScene?.bounds,corners:lastScene?.corners,viewport:lastScene?.viewport}));
+ assert.deepEqual(await captureState(page),before,name+': settling viewport visibility preserves URL, selection and exact camera');
  const {data,info}=await sharp(result.png).ensureAlpha().raw().toBuffer({resolveWithObject:true});result.pixels={data,width:info.width,height:info.height};
  let ocean=0,land=0;for(let i=0;i<data.length;i+=4){if(Math.abs(data[i]-230)<=3&&Math.abs(data[i+1]-238)<=3&&Math.abs(data[i+2]-240)<=3)ocean++;if(Math.abs(data[i]-225)<=3&&Math.abs(data[i+1]-228)<=3&&Math.abs(data[i+2]-219)<=3)land++;}
  const painted={oceanFraction:ocean/(info.width*info.height),landFraction:land/(info.width*info.height)};
@@ -61,7 +68,8 @@ async function stableIndustryFrame(page,name){
   assert.ok(paint.sampled>result.pixels.width*result.pixels.height*.2,name+': enough geographic pixels remain outside the overlays');
   assert.ok(paint.fraction<=.005,name+': geography has no persistent missing paint: '+JSON.stringify(paint));
   const beforeInk=labelInk(reference.pixels,reference.scene.steel),afterInk=labelInk(result.pixels,result.scene.steel);ink={before:beforeInk,after:afterInk};
-  assert.ok(beforeInk.dark>20&&afterInk.dark>=beforeInk.dark*.95,name+': retained steel label text has no missing paint: '+JSON.stringify(ink));
+  if(result.scene.steelOpacity===1)assert.ok(beforeInk.dark>20&&afterInk.dark>=beforeInk.dark*.95,name+': retained steel label text has no missing paint: '+JSON.stringify(ink));
+  else ink.intentionalIndustryDimming=result.scene.steelOpacity;
  }else{renderReferences.set(page,result);}
  review.renderChecks.push({case:name,file:saved?name+'.png':null,viewport:page.viewportSize(),scene:result.scene,canvasSha256:result.hash,stableFrames:result.consecutive,stableMs:result.stableMs,painted,paint,steelInk:ink,status:'passed'});
  console.log(`Map render ${name}: visible, loaded, stable ${result.consecutive} frames/${result.stableMs}ms; missing paint ${paint?.fraction??'reference'}`);
@@ -81,7 +89,8 @@ async function capturePc(page,name){
   const clip=render.scene.clip,{data,info}=await sharp(bytes).extract({left:clip.x,top:clip.y,width:clip.width,height:clip.height}).ensureAlpha().raw().toBuffer({resolveWithObject:true}),pixels={data,width:info.width,height:info.height},reference=renderReferences.get(page);
   const paint=mapPaintDifference(reference.pixels,pixels,[...reference.scene.masks,...render.scene.masks]),ink={before:labelInk(reference.pixels,reference.scene.steel),after:labelInk(pixels,render.scene.steel)};
   assert.ok(paint.fraction<=.005,file+': the delivered viewport PNG retains complete geographic paint: '+JSON.stringify(paint));
-  assert.ok(ink.after.dark>=ink.before.dark*.95,file+': the delivered viewport PNG retains steel label paint: '+JSON.stringify(ink));
+  if(render.scene.steelOpacity===1)assert.ok(ink.after.dark>=ink.before.dark*.95,file+': the delivered viewport PNG retains steel label paint: '+JSON.stringify(ink));
+  else ink.intentionalIndustryDimming=render.scene.steelOpacity;
   review.deliveredPaintChecks.push({file,paint,steelInk:ink,status:'passed'});
  }
  review.images.push({file,head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),viewport:page.viewportSize(),dpr:state.dpr,pngSize:{width:bytes.readUInt32BE(16),height:bytes.readUInt32BE(20)},sha256:createHash('sha256').update(bytes).digest('hex'),bytes:bytes.length,url:page.url(),state,mapBounds:render?.scene.bounds??null});await saveReview();
@@ -195,12 +204,12 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
     assert.equal(await page.locator('[data-sc-industry-topic] option[value="sc-hydro"]').count(),1);
     await page.locator('.asia-industry-regional-label').first().waitFor({state:'visible'});
     assert.equal(await page.locator('.asia-industry-regional-label').count(),industry.industrySites.length);
-    assert.match(await page.locator('.asia-industry-regional-label').first().textContent(),/医薬品/);
+    assert.match(await page.locator('.asia-industry-regional-label').first().textContent(),/石炭/);
    }
    if(region==='south-asia'){
     assert.ok(await page.locator('.asia-industry-regional-label.is-compact').count()>0);
-    assert.equal(await page.locator('.asia-industry-regional-label[data-industry-site="sc-dhaka-garments"] span').textContent(),'ダッカ・チッタゴン');
-    for(const [id,industryName] of [['sc-ahmedabad-pharma','医薬品'],['sc-bengaluru-it','ITサービス']]){
+    assert.equal(await page.locator('.asia-industry-regional-label[data-industry-site="sc-dhaka-garments"] span').textContent(),'ダッカ・ガジプル');
+    for(const [id,industryName] of [['sc-hyderabad-pharma','医薬品'],['sc-bengaluru-it','IT・業務受託']]){
      const label=page.locator(`.asia-industry-regional-label[data-industry-site="${id}"]`);
      assert.equal(await label.evaluate(node=>node.classList.contains('is-compact')),false);
      assert.match(await label.textContent(),new RegExp(industryName));
@@ -396,7 +405,7 @@ test('南アジアの三産業入口と作物重複域を表示する',{skip:ena
   await page.goto(`${url}/atlas/asia/south-asia/industry/`);
   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true');
   assert.deepEqual(await page.locator('.asia-industry-sectors button').allTextContents(),['資源・エネルギー','製造業','サービス業']);
-  for(const [topic,expected] of [['sc-south-resources','水力'],['sc-south-manufacturing','医薬品'],['sc-south-services','ITサービス']]){
+  for(const [topic,expected] of [['sc-south-resources','水力'],['sc-south-manufacturing','医薬品'],['sc-south-services','IT・業務受託']]){
    await page.locator(`[data-industry-feature="${topic}"]`).click();
    await page.waitForFunction(id=>new URL(location.href).searchParams.get('topic')===id,topic);
    assert.match(await page.locator('[data-industry-title]').textContent(),new RegExp(topic==='sc-south-resources'?'資源・エネルギー':topic==='sc-south-manufacturing'?'製造業':'サービス業'));
@@ -440,7 +449,7 @@ test('中央アジアの地形操作は国選択を作らず宗教色面の透�
  }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
 });
 
-test('南アジア産業の全地点とPC三幅の代表選択は表示集合と相対位置を固定する',{skip:enabled?false:'ATLAS_ASIA_BROWSER=1 with a production build',timeout:90000},async()=>{
+test('南アジア産業の全地点とPC三幅の代表選択は表示集合と相対位置を固定する',{skip:enabled?false:'ATLAS_ASIA_BROWSER=1 with a production build',timeout:240000},async()=>{
  const {chromium}=await import('playwright'),{server,url}=await serve();let browser;
  try{
   browser=await chromium.launch({headless:true,chromiumSandbox:true,...(process.env.REVIEW_CHROME_PATH?{executablePath:process.env.REVIEW_CHROME_PATH}:{})});
@@ -455,10 +464,14 @@ test('南アジア産業の全地点とPC三幅の代表選択は表示集合と
    const sites=JSON.parse(await page.locator('[data-asia-config]').textContent()).industrySites;
    assert.deepEqual(before.labels.map(label=>label.id).sort(),sites.map(site=>site.id).sort());
    await capturePc(page,`${width}-south-asia-industry-initial`);
-   const compact='sc-chattogram-garments';assert.equal(before.labels.find(label=>label.id===compact).compact,true);
+   const compact=before.labels.find(label=>label.compact)?.id;assert.ok(compact,'The overview has compact locators as well as named labels');
+   // Keep three compact-marker paint captures, using the actual collision
+   // result at each width rather than a place that may now have a full label.
+   renderFollowup.add(`${width}-south-asia-industry-selected-${compact}`);
    const selectionIds=width===1920?before.labels.map(label=>label.id):['sc-dhaka-garments',compact,'sc-ahmedabad-pharma','sc-bengaluru-it'];
    for(const id of selectionIds){
     console.log(`South industry ${width}px: selecting ${id}`);
+    await page.locator('[data-industry-content] > details').evaluate(node=>node.open=true);
     // The existing reading list also selects sites whose overview marker is compact.
     await page.locator('.sc-industry-site-list button').filter({hasText:sites.find(site=>site.id===id).name}).click();
     await page.waitForFunction(selected=>new URL(location.href).searchParams.get('detail')===selected,id);

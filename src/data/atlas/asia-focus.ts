@@ -2,6 +2,7 @@
 // The viewport changes; national statistics are not relabelled as subregional totals.
 import type {AsiaField} from '../../lib/atlas-asia-state';
 import {southCentralIndustryGroups,southCentralIndustrySites} from './asia-south-central-industry.ts';
+import {southIndustryCatalog,southIndustrySites,southIndustryOverview} from './south-asia-major-industries.ts';
 export const asiaFocusViews = {
  'south-asia': {
   label:'南アジア', bounds:[60.8,5.5,97.6,37.2] as [number,number,number,number],
@@ -34,11 +35,11 @@ export const asiaFocusFarmProducts:Record<AsiaFocusId,readonly string[]>={
 // regional entrance may offer as a named example, without changing the source
 // grid or presenting a combined-region statistic as a regional total.
 export const asiaFocusIndustryGroups:Record<AsiaFocusId,readonly string[]>={
- 'south-asia':['sc-textiles','sc-steel','sc-refining','sc-auto','sc-pharma','sc-it','sc-hydro','sc-tourism','sc-tea'],
+ 'south-asia':southIndustryCatalog.map(group=>group.id),
  'central-asia':['sc-oilgas','sc-minerals','sc-cotton','sc-hydro'],
 };
 export const asiaFocusIndustryOverview:Record<AsiaFocusId,string>={
- 'south-asia':'バングラデシュの衣料縫製、インド東部の鉄鋼と南西部の精製、ヒマラヤ側の水力など、確認できる立地例を示します。原料、加工、交通や市場の役割を地点ごとに読みます。国別の州内産業統計はインドだけを対象とします。',
+ 'south-asia':southIndustryOverview,
  'central-asia':'カザフスタン西部の油田と北東部の銅、トルクメニスタンのガス、ウズベキスタンの綿繊維、天山・パミールの水力を確認できる地点で示します。鉱床、加工、送電や輸送を分けて読みます。',
 };
 export const asiaFocusWaterRivers:Record<AsiaFocusId,readonly string[]>={
@@ -66,6 +67,7 @@ export const asiaFocusFarmKindReading:Record<AsiaFocusId,Record<'crop'|'livestoc
  },
 };
 export function asiaFocusIndustry(focusId:AsiaFocusId){
+ if(focusId==='south-asia')return {groups:southIndustryCatalog,sites:southIndustrySites,overview:southIndustryOverview};
  const countries=new Set(asiaFocusCountries[focusId]);
  const allowed=new Set(asiaFocusIndustryGroups[focusId]);
  const sites=southCentralIndustrySites.filter(site=>countries.has(site.country)&&allowed.has(site.group));
