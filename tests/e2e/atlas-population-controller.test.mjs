@@ -20,10 +20,11 @@ const stub=`export function setWorkerCount(){};export function setWorkerUrl(url)
 const bundle=await build({entryPoints:['src/scripts/atlas-explorer.ts'],bundle:true,write:false,format:'iife',globalName:'NatureTest',plugins:[{name:'map-boundary',setup(b){b.onResolve({filter:/^maplibre-gl\/dist\/maplibre-gl-worker\.mjs\?worker&url$/},()=>({path:'worker-url',namespace:'worker-url-stub'}));b.onLoad({filter:/.*/,namespace:'worker-url-stub'},()=>({contents:"export default '/insight-journal/_astro/maplibre-gl-worker.test.js'",loader:'js'}));b.onResolve({filter:/^maplibre-gl$/},()=>({path:'maplibre',namespace:'stub'}));b.onLoad({filter:/.*/,namespace:'stub'},()=>({contents:stub,loader:'js'}));}}]});
 const delay=()=>new Promise(resolve=>setTimeout(resolve,25));
 async function waitFor(check,label){for(let attempt=0;attempt<120;attempt++){if(check())return;await delay();}throw new Error('Timed out: '+label);}
-async function setup(query='',fail=false,field='population'){
+async function setup(query='',fail=false,field='population',options={}){
  const window=new Window({url:'https://example.com/insight-journal/atlas/north-america/'+field+'/'+query,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true}});
  const html=await readFile('dist/atlas/north-america/'+(field==='industry'?'population/industry':field)+'/index.html','utf8');
  window.document.body.innerHTML=html.replace(/<script(?![^>]*application\/json)[\s\S]*?<\/script>/g,'');
+ if(options.reviewMode){const node=window.document.querySelector('[data-explorer-config]'),config=JSON.parse(node.textContent);config.reviewMode=true;node.textContent=JSON.stringify(config);}
  window.__resizeObservers=[];
  window.ResizeObserver=class {constructor(callback){this.callback=callback;window.__resizeObservers.push(this);}observe(target){this.target=target;}disconnect(){}};
  window.createImageBitmap=async()=>({width:1,height:1,close(){}});
@@ -181,8 +182,10 @@ test('legend changes only the reading, preserving all map colors, camera and req
   assert.equal(map.getSource('population'),source);
  }finally{await window.happyDOM.close();}
 });
-test('city replaces nationwide reading and national reset clears it without moving density map',async()=>{
- const {window,q,requests}=await setup('?lng=-96&lat=38&z=5');
+test('review controller: city reading resets and legacy field navigation reuses the density map',async()=>{
+ // Public industry navigation now opens the dedicated page; the browser review
+ // verifies that route. Keep this original engine's SPA regression in review mode.
+ const {window,q,requests}=await setup('?lng=-96&lat=38&z=5',false,'population',{reviewMode:true});
  try{
   const map=window.__map,moves=map.cameraChanges;await waitFor(()=>map.getLayer('population-fill'),'density map');
   q('.population-city-list [data-pop-city="los-angeles"]').click();
