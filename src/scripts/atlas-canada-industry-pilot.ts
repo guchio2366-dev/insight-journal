@@ -34,7 +34,11 @@ export function initCanadaIndustryPilot(root:HTMLElement){
   // All peers reserve their places even while only one industry is displayed.
   const visible=pilot.clusters.filter(c=>c.sectors.includes(state.sector)).map(c=>({c,point:screen(c.coordinates)})).filter(({point:[x,y]})=>x>=0&&x<=w&&y>=0&&y<=h);
   const groups=groupPilotLabelPoints(visible,130),keyHeight=q('.ca-pilot-map-key').getBoundingClientRect().height;
-  const occupied:number[][]=[[0,0,w,keyHeight+14],[0,h-25,w,h],...visible.map(({point:[x,y]})=>[x-7,y-7,x+7,y+7])];
+  const markerPoints=new Map(visible.map(({c,point:[x,y]})=>{
+   const peers=visible.filter(v=>Math.hypot(v.point[0]-x,v.point[1]-y)<12),index=peers.findIndex(v=>v.c.id===c.id);
+   return [c.id,[x+(index-(peers.length-1)/2)*14,y]];
+  }));
+  const occupied:number[][]=[[0,0,w,keyHeight+14],[0,h-25,w,h],...visible.map(({point:[x,y]})=>[x-7,y-7,x+7,y+7]),...[...markerPoints.values()].map(([x,y])=>[x-8,y-8,x+8,y+8])];
   // The only arrow is the source-documented supply relation. Its sea route is schematic.
   for(const flow of pilot.flows.filter(f=>f.sector===state.sector&&(!state.only||state.industry===f.industry))){
    const from=visible.find(v=>v.c.id===flow.from),to=visible.find(v=>v.c.id===flow.to);if(!from||!to)continue;
@@ -48,7 +52,7 @@ export function initCanadaIndustryPilot(root:HTMLElement){
   for(const {c,point:[x,y]}of markOrder){
    if(state.only&&c.industry!==state.industry)continue;
    const color=pilot.industries.find(i=>i.id===c.industry)!.color,processing=/精|製|選鉱|処理|加工|パルプ|紙|構造体|部品|機体|造船|組立|搾油|包装|ペレット/.test(c.stage);
-   const peers=visible.filter(v=>v.c.coordinates.join(',')===c.coordinates.join(',')),index=peers.findIndex(v=>v.c.id===c.id),cx=x+(index-(peers.length-1)/2)*14;
+   const [cx]=markerPoints.get(c.id)!;
    const group=element('g',{'data-ca-marker':c.id,role:'button',tabindex:'0','aria-pressed':String(c.id===state.site),'aria-label':`${pilotIndustryLabel(c.industry,state.sector)} · ${c.place} · ${stageLabel(c)}`});
    const inactive=!!c.status&&c.status!=='operating';
    const attrs={'data-ca-cluster':c.id,'data-industry':c.industry,'data-coordinate':c.coordinates.join(','),'data-status':c.status??'source-supported',fill:inactive?'#fffef7':color,stroke:inactive?color:'#fff','stroke-width':1.2,...(inactive?{'stroke-dasharray':'2 1'}:{})};

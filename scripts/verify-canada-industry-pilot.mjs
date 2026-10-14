@@ -42,6 +42,7 @@ export async function verifyCanadaIndustryPilot({page,url,output,result}){
   await page.locator('[data-ca-sector=resources]').click();await wait(page);await page.locator(`[data-ca-marker="${id}"]`).click();await wait(page);const before=(await state()).frame;
   await capture(`1920-resources-overlap-${id}`);await page.locator('[data-ca-overlap]').click();await wait(page);assert.equal((await state()).sector,'manufacturing');assert.equal((await state()).site,id);assert.deepEqual((await state()).frame,before);await checkDistribution('manufacturing');await capture(`1920-manufacturing-overlap-${id}`);
  }
+ await page.locator('[data-ca-sector=resources]').click();await wait(page);await page.locator('[data-ca-marker=sudbury-copper]').click();assert.equal((await state()).site,'sudbury-copper');await checkDistribution('resources');
  await page.locator('[data-ca-sector=resources]').click();await page.locator('[data-ca-subtabs=resources] [data-ca-subsector=nickel]').click();await wait(page);assert.equal(await page.locator('[data-ca-flow=voisey-long-harbour]').count(),1);await capture('1920-nickel-documented-supply');
  await page.locator('[data-ca-sector=manufacturing]').click();assert.equal(await page.locator('[data-ca-flow]').count(),0);
  assert.match(await page.locator('[data-ca-international-indicator=exports]').textContent(),/420/);assert.match(await page.locator('[data-ca-international-indicator=us-share]').textContent(),/93/);assert.match(await page.locator('[data-ca-international-indicator=alberta-share]').textContent(),/91/);
