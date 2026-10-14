@@ -19,13 +19,41 @@ function initialize(host:HTMLElement){
  const config=JSON.parse(configNode.textContent!) as Config;
  const referenceRoot=host.closest('[data-asia-atlas],[data-west-atlas],[data-oceania-learning]')??host.parentElement!;
  const content=host.querySelector<HTMLElement>('[data-agro-content]')!,status=host.querySelector<HTMLElement>('[data-agro-status]')!,heading=host.querySelector<HTMLElement>('[data-agro-heading]')!,retry=host.querySelector<HTMLButtonElement>('[data-agro-retry]')!,seriesSelect=host.querySelector<HTMLSelectElement>('[data-agro-series-select]')!,countrySelect=host.querySelector<HTMLSelectElement>('[data-agro-country-select]');
- let selection:Selection={country:config.country,topic:config.topic,active:true},generation=0,chosen='';
+ let selection:Selection={country:config.country,topic:config.topic,active:true},generation=0,chosen='',referenceFailed=false;
+ async function refreshReferences(country:string,seriesId:string,overview:boolean,token:number){
+  // Native source panels may arrive after the primary quantities. Build their
+  // references separately so a late synchronization never replaces the flow.
+  if(!content.querySelector('[data-agro-existing-trade]'))return true;
+  try{
+  const temporary=document.createElement('div');temporary.innerHTML='<div data-agro-existing-trade></div><div data-agro-existing-supply></div>';
+  await renderAgroExistingStatistics(temporary,country,seriesId,!overview);
+  if(token!==generation||host.hidden)return false;
+  const comparable=(node:HTMLElement)=>{const clone=node.cloneNode(true) as HTMLElement;for(const details of clone.querySelectorAll('details'))details.removeAttribute('open');return clone.innerHTML;};
+  for(const selector of ['[data-agro-existing-trade]','[data-agro-existing-supply]']){
+   const target=content.querySelector<HTMLElement>(selector),next=temporary.querySelector<HTMLElement>(selector);if(!target||!next||comparable(target)===comparable(next))continue;
+   const states=[...target.querySelectorAll<HTMLDetailsElement>('details')].map(details=>({summary:details.querySelector('summary')?.textContent,open:details.open}));
+   target.replaceChildren(...next.childNodes);
+   for(const [index,details] of [...target.querySelectorAll<HTMLDetailsElement>('details')].entries())if(states[index]?.summary===details.querySelector('summary')?.textContent)details.open=states[index].open;
+  }
+  if(!overview)for(const details of content.querySelectorAll<HTMLDetailsElement>('.agro-other-reference')){
+   details.hidden=![...details.children].some(child=>child.tagName!=='SUMMARY'&&(child.childElementCount>0||Boolean(child.textContent?.trim())));
+  }
+  if(referenceFailed){referenceFailed=false;retry.hidden=true;status.textContent=overview?`${selection.year??2024}年・全国値。地図の収穫面積・家畜密度とは別の数量です。左・中央・右の原表と欠測を個別に示します。`:'生産量と世界シェア → 国内での使用・輸出 → 輸出先の量と構成比。年・製品が異なる参考は別掲します。';}
+  return true;
+  }catch{
+   if(token===generation&&!host.hidden){referenceFailed=true;status.textContent='主統計は表示済みです。参考資料の追加確認に失敗しました。統計を再読み込みすると確認を再試行します。';retry.hidden=false;}
+   return false;
+  }
+ }
  async function update(next:Selection){
   // Native source panels can report an unchanged selection again after their
   // asynchronous work settles. Keep the ready DOM and opened references intact.
   const same=selection.country===next.country&&selection.topic===next.topic&&(selection.active!==false)===(next.active!==false)&&(selection.year??2024)===(next.year??2024);
   const renderedSeries=content.querySelector<HTMLElement>('[data-agro-series]')?.dataset.agroSeries;
-  if(same&&host.dataset.agroReady==='true'&&(!chosen||chosen===renderedSeries))return;
+  if(same&&host.dataset.agroReady==='true'&&(!chosen||chosen===renderedSeries)){
+   if(!host.hidden&&renderedSeries){const token=++generation,overview=['overview','all','farming-overview','farming-all','crops'].includes(next.topic);await refreshReferences(next.country,renderedSeries,overview,token);}
+   return;
+  }
   const changed=selection.country!==next.country||selection.topic!==next.topic;if(changed)chosen='';selection={...next};const token=++generation;
   // Japan's existing, independent display is excluded even on an East Asia map.
   const overview=['overview','all','farming-overview','farming-all','crops'].includes(next.topic);
@@ -55,8 +83,7 @@ function initialize(host:HTMLElement){
    const sourceHost=host.querySelector<HTMLElement>('[data-agro-sources]');if(sourceHost&&config.sources)sourceHost.innerHTML=overview?config.sources.overview:config.sources.selected;
    status.textContent=overview?`${next.year??2024}年・全国値。地図の収穫面積・家畜密度とは別の数量です。左・中央・右の原表と欠測を個別に示します。`:'生産量と世界シェア → 国内での使用・輸出 → 輸出先の量と構成比。年・製品が異なる参考は別掲します。';
    content.innerHTML=renderer(data,next.country,id,next.year??2024,config.reference);
-   await renderAgroExistingStatistics(content,next.country,id,!overview);
-   if(!overview)for(const details of content.querySelectorAll<HTMLDetailsElement>('.agro-other-reference'))if(!details.querySelector('[data-agro-existing-trade],[data-agro-existing-supply]')?.children.length)details.remove();
+   await refreshReferences(next.country,id,overview,token);
    if(token===generation&&!host.hidden)host.dataset.agroReady='true';
   }catch{if(token!==generation)return;syncAgroRegionalReferences(referenceRoot,false);status.textContent='統計を取得できませんでした。地図の選択は保持しています。';retry.hidden=false;}
  }

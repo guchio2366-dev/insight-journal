@@ -217,6 +217,37 @@ test('ready selections preserve opened references while year, country and explic
  h.sync({country:'IDN',topic:'overview',active:true,year:2024});await waitReady();assert.equal(h.host.hidden,false);assert.equal(h.content.querySelector('[data-agro-series]').dataset.agroSeries,'maize-production');
 }));
 
+test('late native sources refresh only references and preserve ready primary figures and disclosure state',async()=>withDom(async window=>{
+ const h=await harness(window),rice=series([observation(2024,30)]);window.document.body.append(h.root);
+ globalThis.fetch=async()=>new Response(JSON.stringify(single(rice)));
+ const selection={country:'CHN',topic:'rice',active:true};h.sync(selection);
+ await settled(()=>h.host.dataset.agroReady==='true','primary rice did not settle');
+ const primary=h.content.querySelector('[data-agro-stage="production"]'),definitions=h.content.querySelector('.agro-definitions'),trade=h.content.querySelector('[data-agro-existing-trade]'),outer=trade.closest('details');
+ definitions.open=true;outer.open=true;assert.equal(outer.hidden,true,'empty reference disclosure remains attached and hidden');
+ const native=document.createElement('section');native.dataset.eastFarmFoundations='';window.document.body.append(native);
+ h.sync(selection);h.sync(selection);
+ await settled(()=>trade.querySelector('.east-pie'),'late native source did not populate the retained reference marker');
+ assert.equal(h.content.querySelector('[data-agro-stage="production"]'),primary);assert.equal(definitions.open,true);assert.equal(trade.closest('details'),outer);assert.equal(outer.open,true);assert.equal(outer.hidden,false);
+ const inner=trade.querySelector('details');inner.open=true;const partnerCard=trade.querySelector('.east-trade-card');
+ h.sync(selection);await new Promise(resolve=>setImmediate(resolve));await new Promise(resolve=>setImmediate(resolve));
+ assert.equal(trade.querySelector('.east-trade-card'),partnerCard,'identical source markup must not be replaced merely because a nested disclosure is open');assert.equal(inner.open,true);
+ const obsolete=document.createElement('p');obsolete.textContent='obsolete reference-only content';trade.append(obsolete);h.sync(selection);
+ await settled(()=>!trade.textContent.includes('obsolete reference-only content'),'changed references did not refresh');
+ assert.equal(trade.querySelector('details').open,true,'changed reference content keeps the matching nested disclosure state');assert.equal(outer.open,true);assert.equal(h.content.querySelector('[data-agro-stage="production"]'),primary);
+ const originalQuery=document.querySelector.bind(document);let referenceFailure=true;
+ document.querySelector=selector=>{if(referenceFailure&&selector==='[data-east-farm-foundations]')throw Error('Test: optional native source temporarily unavailable');return originalQuery(selector);};
+ h.sync(selection);await settled(()=>!h.retry.hidden,'reference failure did not offer retry');assert.match(h.status.textContent,/主統計は表示済み.*参考資料.*失敗/);assert.equal(h.content.querySelector('[data-agro-stage="production"]'),primary);assert.equal(trade.closest('details').open,true);
+ referenceFailure=false;h.retry.click();await settled(()=>h.retry.hidden,'reference retry did not recover');assert.doesNotMatch(h.status.textContent,/失敗/);assert.equal(h.content.querySelector('[data-agro-stage="production"]'),primary);document.querySelector=originalQuery;
+ h.sync(selection);h.sync({country:'JPN',topic:'rice',active:true});await new Promise(resolve=>setImmediate(resolve));assert.equal(h.host.hidden,true);assert.equal(h.content.childElementCount,0,'a late reference refresh cannot repopulate a different selection');
+}));
+
+test('an unretained product keeps its supplied reference visible even when native reference markers are empty',async()=>withDom(async window=>{
+ const h=await harness(window,{files:{},reference:{label:'Existing source reference',value:7,unit:'t',year:2022,sourceUrl:'https://example.test/source',definition:'Retained reference definition.'}});
+ globalThis.fetch=()=>assert.fail('an unretained product must not fetch a substitute');h.sync({country:'IDN',topic:'temf',active:true});
+ await settled(()=>h.host.dataset.agroReady==='true','unretained selected product did not settle');
+ const reference=h.content.querySelector('[data-agro-existing-supply]').closest('details');assert.equal(reference.hidden,false);assert.match(reference.textContent,/Existing source reference.*7 t/s);assert.match(reference.textContent,/Retained reference definition/);
+}));
+
 test('optional statistics without embedded configuration cannot interrupt an atlas reader',async()=>{
  await withDom(async window=>{
   const h=await harness(window);h.host.querySelector('[data-agro-config]').remove();
