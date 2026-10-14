@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RussiaNewsRail from './RussiaNewsRail.astro';
+import geography from '../../data/atlas/russia-countries.json';
+import disputed from '../../data/atlas/russia-disputed-areas.json';
+import {ruIndustries,ruSectors,ruSites,ruSources} from '../../data/atlas/russia-industry-catalog';
+import {russiaPath,russiaWidth,russiaHeight} from '../../lib/atlas-russia-geometry';
+import {layoutRuIndustryLabels,groupRuPoints} from '../../lib/atlas-russia-industry';
+import {withBase} from '../../lib/urls';
+import '../../styles/atlas-explorer.css';
+import '../../styles/atlas-desktop.css';
+import '../../styles/atlas-russia-learning.css';
+import '../../styles/atlas-russia-industry.css';
+const fields=[['','概要'],['agriculture','農林業'],['nature','自然環境'],['industry','主要産業'],['population','人口']];
+---
+<BaseLayout title="ロシアの主要産業｜資源・製造・サービスの集積" description="ロシアの資源・製造・サービスを、産地・加工・物流の位置と生産・世界シェア・調達集中から読む。" compactAtlas>
+ <div class="russia-workspace ru-industry" data-ru-industry><div class="russia-desktop-shell" data-atlas-shell><RussiaNewsRail/><article class="russia-learning atlas-explorer" data-field="industry">
+  <header class="russia-learning-heading"><p class="russia-learning-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / <a href={withBase('/atlas/russia/')}>ロシア</a></p><span>ロシア全域</span><h1 class="visually-hidden">ロシアの主要産業</h1></header>
+  <nav class="russia-learning-fields" aria-label="ロシアの分野">{fields.map(([id,label])=><a href={withBase(`/atlas/russia/${id?id+'/':''}`)} data-field-link={id||'overview'} aria-current={id==='industry'?'page':undefined}>{label}</a>)}</nav>
+  <div class="ru-sector-tabs" role="tablist" aria-label="主要産業の分類">{ruSectors.map(s=><button type="button" id={`ru-sector-${s.id}`} data-ru-sector={s.id} role="tab" aria-selected={String(s.id==='resources')} tabindex={s.id==='resources'?0:-1} aria-controls="ru-industry-panel">{s.name}</button>)}</div>
+  <nav class="ru-product-tabs" aria-label="産業名から選ぶ">{ruSectors.map(s=><div data-ru-products={s.id} hidden={s.id!=='resources'}>{ruIndustries.filter(i=>i.sectors.includes(s.id)).map(i=><button type="button" data-ru-product={i.id} aria-pressed="false" style={`--ru-color:${i.color}`}><i aria-hidden="true"/>{i.short}</button>)}</div>)}</nav>
+  <div id="ru-industry-panel" class="ru-primary-grid" role="tabpanel" aria-labelledby="ru-sector-resources">
+   <section class="ru-map-column" aria-label="産業の集積図">
+    <div class="ru-map-scroll" tabindex="0" aria-label="ロシア産業地図。小画面では地図内を横にスクロールできます。"><div class="ru-map-canvas" data-ru-canvas>
+     <svg data-ru-map viewBox={`0 0 ${russiaWidth} ${russiaHeight}`} role="img" aria-labelledby="ru-map-title ru-map-desc">
+      <title id="ru-map-title">ロシアの産業集積</title><desc id="ru-map-desc">産業名と都市の案内点。点の大きさは数量を表さず、短い線はラベルとの対応だけを示します。全地点は地図の後の一覧でも選べます。</desc>
+      <defs><pattern id="ru-industry-disputed" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M0 0L6 6" stroke="#6f7776" stroke-width="1"/></pattern></defs>
+      <rect width={russiaWidth} height={russiaHeight} fill="#e1edf0"/>
+      {geography.features.map(f=><path d={russiaPath(f.geometry as any)} fill={f.properties.kind==='russia'?'#f0f0df':'#d6ded9'} stroke="#a6b6ad" stroke-width=".6" fill-rule="evenodd"/>)}
+      {disputed.features.map(f=><path d={russiaPath(f.geometry as any)} fill="url(#ru-industry-disputed)" stroke="#6f7776" stroke-width=".7" fill-rule="evenodd"><title>{f.properties.name}：固定版資料の係争地表現</title></path>)}
+      <g fill="#627c86" font-size="17" text-anchor="middle" aria-hidden="true"><text x="510" y="65">北極海</text><text x="460" y="420">西シベリア</text><text x="805" y="385">東シベリア</text><text x="1000" y="480">極東</text></g>
+     </svg>
+     <div class="ru-map-overlay" data-ru-overlay><svg class="ru-point-layer" viewBox="0 0 960 477.6" role="img" aria-label="資源・エネルギーの産業名と都市の案内点">
+      {groupRuPoints('resources',960,477.6).map(g=><circle cx={g.point[0]} cy={g.point[1]} r="5" fill="#386358"><title>{g.sites.map(s=>s.place+'：'+s.stage).join('／')}</title></circle>)}
+      {layoutRuIndustryLabels('resources',960,477.6).map(label=><g><line x1={label.anchor[0]} y1={label.anchor[1]} x2={label.box[0]} y2={label.box[1]+23} stroke="#7c9081"/><rect x={label.box[0]} y={label.box[1]} width="114" height="46" fill="#fffefa" stroke="#abbeb1"/><text x={label.box[0]+6} y={label.box[1]+20} font-size="13" fill="#243c45">{ruIndustries.find(i=>i.id===label.industry)!.short}</text></g>)}
+     </svg></div>
+    </div></div>
+    <p class="ru-map-key">● 採取地域・役務　■ 加工・製造　数字＝近接する案内点の数。色に加えて産業名で識別。</p>
+    <p class="ru-map-note">点は都市・地域の案内位置で、鉱山・工場の敷地や数量の比例記号ではありません。短い実線はラベルの位置案内で、輸送経路ではありません。</p>
+    <p class="ru-map-links"><a href="#russia-industry-statistics">生産・世界シェア・貿易</a><a href="#russia-industry-sources">出典・年・欠測</a><a href={withBase('/atlas/russia/agriculture/')}>小麦の農業分布</a></p>
+   </section>
+   <aside class="ru-reading" aria-label="分布と集積理由" aria-live="polite">
+    <p class="ru-eyebrow">ロシアの主要産業</p><h2 data-ru-title>{ruSectors[0].name}</h2>
+    <h3>どこに集まるか</h3><p data-ru-reading>{ruSectors[0].reading}</p>
+    <h3>なぜここか</h3><p data-ru-why>{ruSectors[0].why}</p>
+    <section class="ru-site-reading" data-ru-selected hidden><h3 data-ru-site-title></h3><p data-ru-site-stage></p><p data-ru-site-note></p><div data-ru-site-sources></div></section>
+    <section data-ru-nearby hidden><h3>近接する案内点</h3><div class="ru-nearby-list" data-ru-nearby-list></div></section>
+    <p class="ru-chain" data-ru-chain>資源・製造・役務は学習のための分類です。採掘と加工の重複表示を含み、統計を足し合わせません。</p>
+    <div class="ru-selection-actions"><button type="button" data-ru-clear hidden>分類全体へ戻る</button><label data-ru-only-wrap hidden><input type="checkbox" data-ru-only/> この産業だけ表示</label></div>
+    <details><summary>地点と産業を一覧から選ぶ</summary><div class="ru-site-list" data-ru-site-list>{ruSites.map(s=><p>{s.place}：{s.stage}</p>)}</div></details>
+    <div class="ru-reading-sources" data-ru-reading-sources></div>
+   </aside>
+  </div>
+  <section class="ru-statistics" id="russia-industry-statistics" aria-labelledby="ru-statistics-title">
+   <h2 id="ru-statistics-title">生産・世界での規模・調達集中</h2>
+   <p class="ru-stat-scope" data-ru-stat-scope>年と製品段階を揃えて読むための統計。地域別の数量を取得できていない地点は、点の大きさで順位付けしていません。</p>
+   <div class="ru-stat-overview"><section><h3>地域経済の規模</h3><p>品目に一致する生産量・売上・輸出量を掲載。石炭の産出額、企業売上、港湾取扱量は国内総生産（GDP）ではありません。</p></section><section><h3>世界での優位性</h3><p>鉱山生産、一次金属、肥料の含有量、濃縮設備能力は分母が異なります。同じ段階の世界量で示します。</p></section><section><h3>制裁後の貿易</h3><p>2024年の日本・米国・中国側の輸入報告と、米国エネルギー情報局（EIA）の推計を区別。未取得の2025年品目別貿易を0にしません。</p></section></div>
+   <p class="ru-stat-scope">単位：t＝メートルトン、ft³＝立方フィート（約0.0283m³）、oz＝トロイオンス（約31.1g）、carat＝カラット（0.2g）。USD＝米ドル、RUB＝ロシアルーブル。HSは貿易の国際品目分類、SWUは濃縮の分離作業単位です。</p>
+   <div class="ru-stat-grid">{ruIndustries.map(i=><details class="ru-stat-card" data-ru-stat={i.id} data-sectors={i.sectors.join(' ')}><summary><span>{i.name}</span><strong>{i.metrics[0]?.value??'数量未取得'}</strong></summary><p>{i.chain}</p><div class="ru-metric-grid">{i.metrics.map(metric=><section class="ru-metric"><h4>{metric.label}</h4><p class="ru-metric-value">{metric.value}</p><p>{metric.period} · {metric.scope}</p><p>{metric.note}</p><a href={ruSources[metric.source].url}>{ruSources[metric.source].title}</a></section>)}</div><p class="ru-missing">未取得・注意：{i.missing}</p></details>)}</div>
+  </section>
+  <details class="ru-method" id="russia-industry-sources"><summary>一次資料・集計範囲・位置と欠測</summary><p>確認日：2026年10月14日。政府・業界団体・企業の資料を区別し、広い業種のGDPを狭い品目に転用していません。製品段階・年・国集合が異なる指標は合算しません。</p><p>全国量に一致する地域別の生産・雇用は多くが未取得です。表示のない地点を産業の不在と判断せず、全国量を点へ配分しません。ゼレノゴルスクの濃縮工場は所在を確認したものの、採用座標資料に位置がなく、地図点は補っていません。</p><p>都市点は既存GHSL都市重心またはNatural Earth都市座標。地域の案内点と実際の工場・鉱山を区別します。近接点は最初の出典座標にまとめ、元座標を動かして工場の位置に見せることはありません。</p><p>国境・係争地は既存ロシア地図の固定版Natural Earthを再使用。斜線は同資料の係争地。現時点の実効支配や領有権を確定する表現ではありません。USDAなど個別統計の集計領域は、この背景地図と別です。</p><ul><li><a href={geography.source.url}>{geography.source.title??'Natural Earth — 国境の固定版資料'}</a></li><li><a href={disputed.source.url}>{disputed.source.title}</a></li>{Object.entries(ruSources).map(([id,s])=><li id={`ru-source-${id}`}><a href={s.url}>{s.title}</a> — {s.period}。{s.method}</li>)}</ul><p>USGSの個別PDF、GeoNamesのダウンロードでアクセス制限があった資料は回避せず、公開のUSGS国別HTMLと既存GHSL／公開Natural Earthの位置を採用。企業非開示・秘匿・未取得は0と区別しています。</p></details>
+  <noscript><p>産業選択にはJavaScriptが必要です。全地点の一覧、全19産業の統計と出典はこのページに掲載しています。</p></noscript>
+ </article></div></div>
+ <script>import {initRussiaIndustry} from '../../scripts/atlas-russia-industry';document.querySelectorAll<HTMLElement>('[data-ru-industry]').forEach(initRussiaIndustry);</script>
+</BaseLayout>
