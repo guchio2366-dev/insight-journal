@@ -21,7 +21,9 @@ test('selection and explicit isolation preserve every annotation position and so
  const frame=[0,35,1100,710],parse=state=>{const holder=win.document.createElement('div');holder.innerHTML='<svg>'+api.renderOceaniaIndustryCatalogMap(state,api.oceaniaCountries,frame,screen)+'</svg>';return holder;};
  const initial=parse({}),labels=[...initial.querySelectorAll('[data-label-box]')].map(n=>n.dataset.labelBox);
  assert.equal(labels.length,18);const boxes=labels.map(v=>v.split(',').map(Number));
- for(const [i,a] of boxes.entries()){assert(a[0]>=0&&a[1]>=35&&a[0]+a[2]<=1100&&a[1]+a[3]<=745);for(const b of boxes.slice(i+1))assert(!(a[0]<b[0]+b[2]&&a[0]+a[2]>b[0]&&a[1]<b[1]+b[3]&&a[1]+a[3]>b[1]));}
+ const factor=Math.min(screen.width/frame[2],screen.height/frame[3]);
+ const savedMarkers=api.oceaniaIndustryRepresentativeMarks.map(mark=>{const p=api.resolveOceaniaIndustryAnchor({kind:'saved',key:mark.id},api.oceaniaCountries).point;return [p[0]-10/factor,p[1]-10/factor,20/factor,20/factor];});
+ for(const [i,a] of boxes.entries()){assert(a[0]>=0&&a[1]>=35&&a[0]+a[2]<=1100&&a[1]+a[3]<=745);for(const b of [...boxes.slice(i+1),...savedMarkers])assert(!(a[0]<b[0]+b[2]&&a[0]+a[2]>b[0]&&a[1]<b[1]+b[3]&&a[1]+a[3]>b[1]),'catalog captions preserve peer labels and saved guide hit areas');}
  for(const item of api.oceaniaIndustryCatalog){const selected=parse({industry:item.id,industryOnly:true,sector:item.sector});assert.deepEqual([...selected.querySelectorAll('[data-label-box]')].map(n=>n.dataset.labelBox),labels);assert.equal(selected.querySelectorAll('[data-oceania-product-mark]:not([style="display:none"])').length,1);}
  }}finally{win.happyDOM.abort();}
 });

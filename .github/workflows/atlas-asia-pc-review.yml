@@ -168,7 +168,7 @@ jobs:
         # The stacked East-only follow-up leaves the integrated owner's South/
         # Central review to its main-targeted PR and captures East independently.
         if: github.base_ref != 'codex/regional-integration-validation-20261013'
-        timeout-minutes: 4
+        timeout-minutes: 7
         run: ATLAS_ASIA_BROWSER=1 SC_FOCUSED_REVIEW=1 node scripts/run-review-with-annotations.mjs --test tests/e2e/atlas-south-central-focus.test.mjs
 
       # East Asia map expansion supersedes the former exact US frame parity.

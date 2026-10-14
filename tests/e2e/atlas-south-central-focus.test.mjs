@@ -394,7 +394,7 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    }
   }
   assert.deepEqual(errors,[]);
- }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
+ }catch(error){console.error('::error title=South Central journey::'+String(error.stack??error).replaceAll('%','%25').replaceAll('\n','%0A').replaceAll('\r','%0D'));throw error;}finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
 });
 
 test('南アジアの三産業入口と作物重複域を表示する',{skip:enabled?false:'ATLAS_ASIA_BROWSER=1 with a production build',timeout:120000},async()=>{
@@ -416,7 +416,7 @@ test('南アジアの三産業入口と作物重複域を表示する',{skip:ena
   const manifest=JSON.parse(await page.locator('[data-asia-config]').textContent());
   assert.equal(manifest.presentation.farming.cropFile,'south-asia.crop-areas.json.gz');
   assert.match(await page.locator('[data-grid-reading]').textContent(),/他作物と重なる/);
- }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
+ }catch(error){console.error('::error title=South Central journey::'+String(error.stack??error).replaceAll('%','%25').replaceAll('\n','%0A').replaceAll('\r','%0D'));throw error;}finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
 });
 
 test('中央アジアの地形操作は国選択を作らず宗教色面の透過度を復元する',{skip:enabled?false:'ATLAS_ASIA_BROWSER=1 with a production build',timeout:120000},async()=>{
@@ -446,7 +446,7 @@ test('中央アジアの地形操作は国選択を作らず宗教色面の透�
   await page.locator('[data-population-group="identity"]').click();
   await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.settlementPaintOpacity==='0.8');
   await capturePc(page,'central-asia-ethnicity-restored');
- }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
+ }catch(error){console.error('::error title=South Central journey::'+String(error.stack??error).replaceAll('%','%25').replaceAll('\n','%0A').replaceAll('\r','%0D'));throw error;}finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
 });
 
 test('南アジア産業の全地点とPC三幅の代表選択は表示集合と相対位置を固定する',{skip:enabled?false:'ATLAS_ASIA_BROWSER=1 with a production build',timeout:240000},async()=>{
@@ -490,5 +490,5 @@ test('南アジア産業の全地点とPC三幅の代表選択は表示集合と
    const total=review.images.reduce((sum,image)=>sum+image.bytes,0)+(await readFile(path.join(reviewFolder,'review.json'))).length;
    assert.ok(total<20_000_000,'the standalone render followup remains below 20MB');console.log(`Render followup: ${review.images.length} PNGs plus review.json; ${total} uncompressed bytes < 20MB.`);
   }
- }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
+ }catch(error){console.error('::error title=South Central journey::'+String(error.stack??error).replaceAll('%','%25').replaceAll('\n','%0A').replaceAll('\r','%0D'));throw error;}finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
 });

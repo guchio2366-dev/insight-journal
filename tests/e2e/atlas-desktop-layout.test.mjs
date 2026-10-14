@@ -84,7 +84,15 @@ test('West Asia retains its independent regional map and reading widths while US
     try {
       for(const [selector,property] of [['.atlas-primary-grid','grid-template-columns'],['.atlas-map-frame','aspect-ratio'],['.atlas-map-frame','min-height'],['.atlas-tabs','grid-template-columns']]) {
         // West Asia gives its near-square regional extent more vertical room.
-        if(width>=960 && selector==='.atlas-map-frame') {
+        if(field==='industry' && selector==='.atlas-map-frame') {
+          // The dedicated regional industry page keeps its regional extent
+          // at every width and lets that extent determine the frame height.
+          if(property==='aspect-ratio'){const [numerator,denominator=1]=west.css(selector,property).split('/').map(Number);assert.ok(Math.abs(numerator/denominator-1000/987)<.001,`${field} ${width}px regional map aspect`);}
+          else assert.equal(west.css(selector,property),'0',`${field} ${width}px extent-driven map minimum`);
+        } else if(field==='industry' && selector==='.atlas-primary-grid') {
+          const columns=width<960?'1fr':width<1200?'minmax(0,1.7fr)minmax(250px,1fr)':width<1600?'minmax(0,2fr)minmax(300px,1fr)':'minmax(0,2.2fr)minmax(340px,1fr)';
+          assert.equal(west.css(selector,property),columns,`${field} ${width}px dedicated regional reading column`);
+        } else if(width>=960 && selector==='.atlas-map-frame') {
           if(property==='aspect-ratio'){const [numerator,denominator=1]=west.css(selector,property).split('/').map(Number);assert.ok(Math.abs(numerator/denominator-1000/987)<.001,`${field} ${width}px regional map aspect`);}
           else assert.equal(west.css(selector,property),'300px',`${field} ${width}px regional map minimum`);
         } else if(width>=960 && selector==='.atlas-primary-grid') {

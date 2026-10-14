@@ -34,7 +34,7 @@ const scenes=[
  {id:'mexico',route:'north-america/mexico/industry/',ready:'[data-ma-atlas][data-ma-ready=true]',map:'[data-ma-frame]',sectors:'[data-ma-sector]',products:'[data-ma-industry]',key:'data-ma-industry',sources:'[data-ma-indicators] a',camera:'[data-ma-map]'},
  {id:'europe',route:'europe/industry/',ready:'[data-europe-detail][data-initialized=true]',map:'.eu-map-stage',sectors:'[data-eu-industry-sector]',products:'[data-eu-industry-group]',key:'data-eu-industry-group',sources:'[data-eu-industry-evidence] a',camera:'[data-eu-static]'},
  {id:'east-asia',route:'asia/east-asia/industry/',ready:'[data-asia-atlas][data-map-ready=true]',map:'.asia-map-frame',sectors:'[data-east-industry-sector]',products:'[data-east-industry-kinds] [data-industry-feature]',key:'data-industry-feature',sources:'[data-east-industry-statistics] a'},
- {id:'southeast-asia',route:'asia/southeast-asia/industry/',ready:'[data-asia-atlas][data-southeast-industry-layout-ready=true]',map:'.asia-map-frame',sectors:'[data-southeast-industry-sector]',products:'[data-southeast-industry-kind]',key:'data-southeast-industry-kind',sources:'[data-southeast-industry-facts] a'},
+ {id:'southeast-asia',route:'asia/southeast-asia/industry/',ready:'[data-asia-atlas][data-southeast-industry-layout-ready=true]',map:'.asia-map-frame',sectors:'[data-southeast-industry-sector]:not([data-southeast-industry-sector="all"])',products:'[data-southeast-industry-kind]',key:'data-southeast-industry-kind',sources:'[data-southeast-industry-facts] a'},
  {id:'south-asia',route:'asia/south-asia/industry/',ready:'[data-asia-atlas][data-map-ready=true]',map:'.asia-map-frame',sectors:'[data-south-industry-sector]',products:'.south-industry-products [data-industry-feature]',key:'data-industry-feature',sources:'[data-south-industry-evidence] a'},
  {id:'central-asia',route:'asia/central-asia/industry/',ready:'[data-central-industry][data-central-ready=true]',map:'[data-central-map-frame]',sectors:'[data-central-sector]',products:'[data-central-choice]',key:'data-central-choice',sources:'[data-central-metric] a',camera:'[data-central-map]'},
  {id:'west-asia',route:'west-asia/industry/',ready:'[data-west-industry][data-ready=true]',map:'.wi-map-frame',sectors:'[data-wi-sector]',products:'[data-wi-industry]',key:'data-wi-industry',sources:'[data-wi-stat-panel] a',camera:'[data-wi-map]'},
@@ -108,7 +108,7 @@ try{
    const selected=[];
    for(let i=0;i<tabCount;i++){
     await tabs.nth(i).click();await settle(scene);const before=await snapshot(scene),choice=await choose(scene);await settle(scene);
-    assert(new URL(page.url()).search.includes(choice.id),scene.id+': selected industry is represented in URL');
+    assert([...new URL(page.url()).searchParams.values()].some(value=>value.includes(choice.id)),scene.id+': selected industry is represented in URL');
     if(scene.mode==='select')assert.equal(await choice.control.inputValue(),choice.id);else assert.equal(await choice.control.getAttribute('aria-pressed'),'true');
     fixed(before,await snapshot(scene),scene.id+' '+choice.id);
     assert(await page.locator(scene.sources+':visible').count()>0,scene.id+': selected evidence has a visible source link');
