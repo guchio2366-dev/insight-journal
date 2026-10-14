@@ -103,3 +103,9 @@
   }
 }
 [data-atlas-explorer] .atlas-nature-label { transition:none!important; }
+
+/* The US fields share a measured PC map frame, independent of other countries. */
+@media(min-width:960px){
+ .atlas-desktop-shell [data-us-explorer]:is([data-field=agriculture],[data-field=natural],[data-field=population],[data-field=industry]) .atlas-primary-grid{grid-template-columns:minmax(0,1fr) clamp(260px,24vw,350px)!important;gap:14px}
+ .atlas-desktop-shell [data-us-explorer]:is([data-field=agriculture],[data-field=natural],[data-field=population],[data-field=industry]) .atlas-map-frame{height:auto!important;min-height:0!important;max-height:none!important;aspect-ratio:1.78!important}
+}

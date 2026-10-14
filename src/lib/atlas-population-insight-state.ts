@@ -39,7 +39,7 @@ export function readPopulationInsight(url:URL,base:string){
 }
 export function populationInsightUrl(source:URL,base:string,id:string){
  const item=populationInsightFor(id);if(!item)throw new Error('Unknown population insight');
- const url=new URL(base+item.page+'/',source);
+ const url=new URL(base+(item.page==='industry'?'population/industry':item.page)+'/',source);
  for(const [key,value] of Object.entries(item.params))url.searchParams.set(key,value);
  url.searchParams.set('popStory',item.id);url.searchParams.set('popStoryReturn',canonicalReturn(source,base).searchParams.toString());
  return url;

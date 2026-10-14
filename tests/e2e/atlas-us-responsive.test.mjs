@@ -75,12 +75,11 @@ for(const [field,id] of [['agriculture','agriculture'],['nature','natural'],['in
         }
         if(field==='industry'){
           assert.equal(window.document.querySelector('[data-atlas-explorer]').dataset.industrySubsector,'all');
-          // esbuild emits arithmetic inside clamp; Happy DOM does not compute it.
-          // Keep its exact release declaration, while browser QA checks 407px.
-          assert.ok([...window.document.querySelectorAll('style')].some(style=>/height:\s*clamp\(320px,\s*(?:calc\()?100dvh\s*-\s*350px\)?,\s*430px\)/.test(style.textContent)));
+          assert.equal(css('.atlas-primary-grid','grid-template-columns'),'minmax(0,1fr)260px');
+          assert.equal(css('.atlas-map-frame','height'),'auto');
           assert.equal(css('.atlas-map-frame','min-height'),'0','the runtime overview must not restore its old 620px minimum');
           assert.equal(css('.atlas-map-frame','max-height'),'none');
-          assert.equal(css('.atlas-map-frame','aspect-ratio'),'auto');
+          assert.equal(css('.atlas-map-frame','aspect-ratio'),'5/3');
         }
       }finally{await page.window.happyDOM.close();}
     }

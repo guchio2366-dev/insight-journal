@@ -21,8 +21,11 @@ const delay=()=>new Promise(resolve=>setTimeout(resolve,25));
 async function waitFor(check,label){for(let attempt=0;attempt<120;attempt++){if(check())return;await delay();}throw new Error('Timed out: '+label);}
 async function setup(query='',fail=false,width=800){
  const window=new Window({url:'https://example.com/insight-journal/atlas/north-america/industry/'+query,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true}});
- const html=await readFile('dist/atlas/north-america/industry/index.html','utf8');
+ // The previous explorer remains the US review/reference implementation.
+ // The new public industry page has its own production workflow tests.
+ const html=await readFile('dist/atlas/north-america/review/index.html','utf8');
  window.document.body.innerHTML=html.replace(/<script(?![^>]*application\/json)[\s\S]*?<\/script>/g,'');
+ const configNode=window.document.querySelector('[data-explorer-config]'),config=JSON.parse(configNode.textContent);config.initialField='industry';configNode.textContent=JSON.stringify(config);
  window.ResizeObserver=class {observe(){}disconnect(){}};
  window.createImageBitmap=async()=>({width:1,height:1,close(){}});
  window.HTMLCanvasElement.prototype.getContext=()=>({drawImage(){},getImageData:()=>({width:1,height:1,data:new Uint8ClampedArray([9,0,0,255])})});
