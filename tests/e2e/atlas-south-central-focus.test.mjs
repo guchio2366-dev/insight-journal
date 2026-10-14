@@ -13,7 +13,7 @@ const base='/insight-journal',root=path.resolve('dist');
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.gz':'application/gzip','.png':'image/png','.svg':'image/svg+xml','.webp':'image/webp','.woff2':'font/woff2'};
 const reviewFolder=path.resolve('review-artifacts/south-central-focus'),review={head:null,requestedHead:process.env.REVIEW_HEAD_SHA??null,buildRelease:null,sandbox:true,images:[],industryTransitions:[],captureAdjustments:[],renderChecks:[],deliveredPaintChecks:[]};
 const renderReferences=new WeakMap();
-const renderFollowup=new Set(['south-asia-industry','south-asia-industry-cleared','south-asia-industry-cleared-confirmed','1920-south-asia-industry-selected-sc-chattogram-garments','1440-south-asia-industry-selected-sc-dhaka-garments','1440-south-asia-industry-selected-sc-chattogram-garments','1024-south-asia-industry-selected-sc-dhaka-garments','1024-south-asia-industry-selected-sc-chattogram-garments']);
+const renderFollowup=new Set(['south-asia-industry','south-asia-industry-cleared','south-asia-industry-cleared-confirmed','1440-south-asia-industry-selected-sc-dhaka-garments','1024-south-asia-industry-selected-sc-dhaka-garments']);
 async function saveReview(){
  await mkdir(reviewFolder,{recursive:true});
  if(!review.head){review.head=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();review.buildRelease=JSON.parse(await readFile(path.join(root,'_release.json'),'utf8'));if(review.requestedHead)assert.equal(review.head,review.requestedHead);}
@@ -451,6 +451,9 @@ test('南アジア産業の全地点とPC三幅の代表選択は表示集合と
    assert.deepEqual(before.labels.map(label=>label.id).sort(),sites.map(site=>site.id).sort());
    await capturePc(page,`${width}-south-asia-industry-initial`);
    const compact=before.labels.find(label=>label.compact)?.id;assert.ok(compact,'The overview has compact locators as well as named labels');
+   // Keep three compact-marker paint captures, using the actual collision
+   // result at each width rather than a place that may now have a full label.
+   renderFollowup.add(`${width}-south-asia-industry-selected-${compact}`);
    const selectionIds=width===1920?before.labels.map(label=>label.id):['sc-dhaka-garments',compact,'sc-ahmedabad-pharma','sc-bengaluru-it'];
    for(const id of selectionIds){
     console.log(`South industry ${width}px: selecting ${id}`);
