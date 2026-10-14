@@ -2,7 +2,7 @@
 [data-us-industry] [hidden]{display:none!important}
 [data-us-industry] .atlas-primary-grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
 [data-us-industry] .atlas-map-column{position:static!important;min-width:0}
-[data-us-industry] .atlas-map-frame.us-industry-map-frame{min-height:0!important;max-height:none!important;height:auto!important;aspect-ratio:5/3;background:#e6eef0;overflow:hidden;position:relative}
+[data-us-industry] .atlas-map-frame.us-industry-map-frame{min-height:0!important;max-height:none!important;height:auto!important;aspect-ratio:5/3!important;background:#e6eef0;overflow:hidden;position:relative}
 [data-us-map]{display:block;width:100%;height:100%;touch-action:none}
 .us-map-context{font:12px var(--sans);fill:#425853}
 .us-industry-overlay,.us-industry-points{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
@@ -11,8 +11,8 @@
 .us-industry-map-label{position:absolute;box-sizing:border-box;padding:3px 6px 3px 17px;border:1px solid #c2cec3;border-radius:4px;background:#fffef5f2;color:#233f47;font:700 12px/20px var(--sans);white-space:nowrap;text-align:left;cursor:pointer;pointer-events:auto;transition:none!important}
 .us-industry-map-label::before,.us-industry-key button::before{content:'';width:7px;height:7px;background:var(--us-color);border-radius:50%;display:inline-block;flex:none}
 .us-industry-map-label::before{position:absolute;left:5px;top:10px}
-.us-industry-map-label strong{display:block;font:700 12px/20px var(--sans)}
-.us-industry-map-label small{display:block;font:10px/15px var(--sans);color:#445d54;white-space:nowrap}
+.us-industry-map-label strong{display:block;font:700 12px/20px var(--sans);overflow:hidden;text-overflow:ellipsis}
+.us-industry-map-label small{display:block;font:10px/15px var(--sans);color:#445d54;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .us-industry-map-label[aria-pressed=true]{box-shadow:inset 0 0 0 2px var(--us-color);background:#fffdf0}
 .us-industry-map-label.is-context{opacity:.52}
 [data-us-industry] :is(button,a,input):focus-visible{outline:3px solid #a95135;outline-offset:2px}

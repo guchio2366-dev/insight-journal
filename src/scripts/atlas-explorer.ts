@@ -12,7 +12,7 @@ import {cityClimateCodes} from '../data/atlas/city-climate-reading';
 import {createWaterController} from './atlas-water';
 import {createPopulationController} from './atlas-population';
 import {createPopulationInsights} from './atlas-population-insights';
-import {normalizePopulationInsight} from '../lib/atlas-population-insight-state';
+import {normalizePopulationInsight,readPopulationInsight} from '../lib/atlas-population-insight-state';
 import { createAgricultureDetails } from './atlas-agriculture-details';
 import type { AgricultureRelation } from '../data/atlas/agriculture-relations';
 import { relationContextFeatures } from '../lib/atlas-relation-geometry';
@@ -139,6 +139,7 @@ export async function startAtlas() {
     if(restoring)return;
     let url=water.write(population.write(industries.write(writeAtlasState(sourceUrl,config.base,field,cameraState(),selectedCrop,selectedRegion,selectedStats,view,[...agriLayers] as any,selectedAnimal,selectedAnimalRegion,{env:natureMode,city:selectedCity,natureFeature},selectedRelation,agricultureDetails.state()))));
     url=normalizePopulationInsight(normalizeForestNavigation(normalizeInsightNavigation(url,sourceUrl,config.base,field),field),config.base);
+    if(readPopulationInsight(url,config.base)?.item.page==='industry')url.pathname=config.base+'population/industry/';
     if(field==='industry'&&push)url.hash='';
     if(config.reviewMode){url.pathname=config.base+'review/';url.searchParams.set('field',field);}
     history[push?'pushState':'replaceState']({},'',url);
@@ -550,7 +551,7 @@ export async function startAtlas() {
     const link=(event.target as Element).closest<HTMLAnchorElement>('a[data-agri-insight-link],a.agri-insight-back,a[data-nature-reading-link],a[data-forest-compare],a[data-forest-back],a[data-pop-story-link],a[data-pop-story-back],a[data-pop-story-compare]');
     if(!link||link.hasAttribute('download')||(link.target&&link.target!=='_self'))return;
     const url=new URL(link.href,location.href);
-    if(url.origin!==location.origin||![config.base+'agriculture/',config.base+'nature/',config.base+'industry/',config.base+'population/'].includes(url.pathname))return;
+    if(url.origin!==location.origin||![config.base+'agriculture/',config.base+'nature/',config.base+'industry/',config.base+'population/',config.base+'population/industry/'].includes(url.pathname))return;
     event.preventDefault();
     const previous=new URL(location.href);
     const isPopulationStory=link.matches('[data-pop-story-link],[data-pop-story-back],[data-pop-story-compare]');

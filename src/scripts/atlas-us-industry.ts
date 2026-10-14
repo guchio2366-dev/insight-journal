@@ -1,9 +1,11 @@
 import {usIndustries,usIndustrySites,usIndustrySectors,usIndustrySources,usSectorIndustryIds,usSitesForSector,type UsSite,type UsSector} from '../data/atlas/us-industry.ts';
 import {readUsIndustryState,writeUsIndustryState,projectUsIndustry,layoutUsIndustryLabels,usIndustryById} from '../lib/atlas-us-industry.ts';
+import {readPopulationInsight} from '../lib/atlas-population-insight-state.ts';
 
 const ns='http://www.w3.org/2000/svg';
 const status={cluster:'確認集積例',operating:'稼働施設例',registered:'登録位置・現在の稼働未確認',planned:'計画・建設段階',headquarters:'企業本社'};
 export function initUsIndustry(root:HTMLElement){
+ const legacyUrl=new URL(location.href),base=legacyUrl.pathname.replace(/industry\/$/,'');if(readPopulationInsight(legacyUrl,base)?.item.page==='industry'){legacyUrl.pathname=base+'population/industry/';location.replace(legacyUrl.href);return;}
  if(root.dataset.usInitialized)return;root.dataset.usInitialized='true';
  const q=<T extends Element=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  const frame=q<HTMLElement>('[data-us-map-frame]'),map=q<SVGSVGElement>('[data-us-map]'),overlay=q<HTMLElement>('[data-us-overlay]');
@@ -23,10 +25,11 @@ export function initUsIndustry(root:HTMLElement){
   const sectorSites=usSitesForSector(state.sector),ids=usSectorIndustryIds(state.sector),width=frame.clientWidth||1000,height=frame.clientHeight||600;
   const positions=sectorSites.map(s=>({site:s,point:screen(projectUsIndustry(s.coordinates))})).filter(p=>p.point[0]>=0&&p.point[0]<=width&&p.point[1]>=0&&p.point[1]<=height-30);
   // Layout inputs depend on classification/camera/viewport only, never selection.
-  const inputs=ids.map(id=>{const peers=positions.filter(p=>p.site.industry===id),item=usIndustryById(id)!,reference=peers.find(p=>p.site.mapScale)??peers[0];return {id,anchor:reference?.point??[width/2,height/2] as [number,number],width:Math.min(175,Math.max(126,item.short.length*12+22))};});
+  const inputs=ids.map(id=>{const peers=positions.filter(p=>p.site.industry===id),item=usIndustryById(id)!,reference=peers.find(p=>p.site.mapScale)??peers[0];return {id,anchor:reference?.point??[width/2,height/2] as [number,number],width:Math.min(175,Math.max(126,item.short.length*12+22,(reference?.site.mapScale?.length??0)*6+22))};});
   const layoutKey=[state.sector,width,height,...camera()].join(':');if(cachedLayout?.key!==layoutKey)cachedLayout={key:layoutKey,boxes:layoutUsIndustryLabels(inputs,width,height)};
   const layout=cachedLayout.boxes,points=svg('svg',{width:'100%',height:'100%','aria-label':'確認した集積地域・施設状態'});points.classList.add('us-industry-points');
   overlay.replaceChildren(points);
+  for(const box of layout){if(state.only&&box.id!==state.industry)continue;const anchor=inputs.find(i=>i.id===box.id)!.anchor,x=Math.max(box.left,Math.min(box.left+box.width,anchor[0])),y=Math.max(box.top,Math.min(box.top+box.height,anchor[1]));if(Math.hypot(x-anchor[0],y-anchor[1])>4)points.append(svg('line',{x1:anchor[0],y1:anchor[1],x2:x,y2:y,stroke:usIndustryById(box.id)!.color,'stroke-width':1,opacity:state.industry&&state.industry!==box.id?'.2':'.55','pointer-events':'none'}));}
   for(const {site,point:[px,py]} of positions){
    const peers=positions.filter(p=>p.site.coordinates.join(',')===site.coordinates.join(',')),index=peers.findIndex(p=>p.site.id===site.id),angle=index*Math.PI*2/peers.length;
    const x=px+(peers.length>1?Math.cos(angle)*10:0),y=py+(peers.length>1?Math.sin(angle)*10:0),item=usIndustryById(site.industry)!;
@@ -42,7 +45,7 @@ export function initUsIndustry(root:HTMLElement){
   }
   for(const box of layout){
    const item=usIndustryById(box.id)!,button=el('button') as HTMLButtonElement,reference=positions.find(p=>p.site.industry===item.id&&p.site.mapScale)?.site;button.append(el('strong',item.short));if(reference)button.append(el('small',reference.mapScale!));button.type='button';button.className='us-industry-map-label';button.dataset.usMapIndustry=item.id;
-   button.setAttribute('aria-label',`${item.label}の分布と規模を読む`);button.setAttribute('aria-pressed',String(state.industry===item.id));button.style.cssText=`left:${box.left}px;top:${box.top}px;width:${box.width}px;height:${box.height}px;--us-color:${item.color}`;
+   button.setAttribute('aria-label',`${item.label}の分布と規模を読む`);button.title=[item.label,reference?`${reference.place}：${reference.mapScale}`:''].filter(Boolean).join(' · ');button.setAttribute('aria-pressed',String(state.industry===item.id));button.style.cssText=`left:${box.left}px;top:${box.top}px;width:${box.width}px;height:${box.height}px;--us-color:${item.color}`;
    if(state.only&&item.id!==state.industry)button.hidden=true;else if(state.industry&&item.id!==state.industry)button.classList.add('is-context');
    button.addEventListener('click',()=>chooseIndustry(item.id));overlay.append(button);
   }

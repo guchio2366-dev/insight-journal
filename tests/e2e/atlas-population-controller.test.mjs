@@ -22,7 +22,7 @@ const delay=()=>new Promise(resolve=>setTimeout(resolve,25));
 async function waitFor(check,label){for(let attempt=0;attempt<120;attempt++){if(check())return;await delay();}throw new Error('Timed out: '+label);}
 async function setup(query='',fail=false,field='population'){
  const window=new Window({url:'https://example.com/insight-journal/atlas/north-america/'+field+'/'+query,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true}});
- const html=await readFile('dist/atlas/north-america/'+field+'/index.html','utf8');
+ const html=await readFile('dist/atlas/north-america/'+(field==='industry'?'population/industry':field)+'/index.html','utf8');
  window.document.body.innerHTML=html.replace(/<script(?![^>]*application\/json)[\s\S]*?<\/script>/g,'');
  window.__resizeObservers=[];
  window.ResizeObserver=class {constructor(callback){this.callback=callback;window.__resizeObservers.push(this);}observe(target){this.target=target;}disconnect(){}};
