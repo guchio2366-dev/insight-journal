@@ -10,7 +10,9 @@ const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json
 const server=createServer(async(req,res)=>{try{let path=resolve(dist,decodeURIComponent(new URL(req.url,'http://localhost').pathname).replace(/^\/insight-journal\//,''));if(!path.startsWith(dist+sep))throw Error('outside build');if((await stat(path)).isDirectory())path=resolve(path,'index.html');res.writeHead(200,{'Content-Type':mime[extname(path)]??'application/octet-stream'});res.end(await readFile(path));}catch{res.writeHead(404);res.end();}});
 await new Promise(r=>server.listen(0,'127.0.0.1',r));
 const report={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),sandbox:true,status:'running',cases:[],operations:[],errors:[]};
-const origin=`http://127.0.0.1:${server.address().port}/insight-journal`;
+const publicOrigin=process.env.AGRO_PUBLIC_ORIGIN?.replace(/\/$/,'');
+const origin=publicOrigin??`http://127.0.0.1:${server.address().port}/insight-journal`;
+const reviewUrl=(path)=>{const url=new URL(origin+path);if(publicOrigin)url.searchParams.set('__review_sha',report.head);return url.href;};
 const cases=[
  ['canada-beef','/atlas/north-america/canada/agriculture/beef/','CAN','cattle-meat'],
  ['canada-wheat','/atlas/north-america/canada/agriculture/wheat/','CAN',null],
@@ -35,12 +37,13 @@ const cases=[
 let browser;
 try{
  assert.equal(JSON.parse(await readFile(resolve(dist,'_release.json'),'utf8')).commitSha,report.head);
+ if(publicOrigin){const response=await fetch(reviewUrl('/_release.json'),{cache:'no-store'});assert.ok(response.ok,'public release HTTP '+response.status);const release=await response.json();assert.equal(release.commitSha,report.head,'public release must match reviewed commit');report.production={url:publicOrigin,release};}
  browser=await chromium.launch({headless:true,chromiumSandbox:true,executablePath:process.env.REVIEW_CHROME_PATH});
  for(const viewport of [{width:1440,height:900},{width:1024,height:768},{width:390,height:844}]){
   const context=await browser.newContext({viewport,locale:'ja-JP',reducedMotion:'reduce'}),page=await context.newPage();
   page.on('pageerror',error=>report.errors.push(String(error)));
   for(const [name,path,country,series] of cases){
-   await page.goto(origin+path,{waitUntil:'networkidle'});await page.evaluate(()=>document.fonts.ready);
+   await page.goto(reviewUrl(path),{waitUntil:'networkidle'});await page.evaluate(()=>document.fonts.ready);
    const host=page.locator('[data-agro-statistics]');await host.waitFor({state:'visible'});
    await page.waitForFunction(()=>{const node=document.querySelector('[data-agro-statistics]');return !node.hidden&&node.dataset.agroReady==='true'&&node.querySelector('[data-agro-content]')?.children.length>0&&!node.querySelector('[data-agro-status]').textContent.includes('読み込んで');});
    if(series){await host.locator(`[data-agro-country="${country}"][data-agro-series="${series}"]`).waitFor();}
@@ -70,21 +73,22 @@ try{
    }
   }
   // Region overview must show partial coverage, not Indonesia as the region.
-  await page.goto(origin+'/atlas/asia/southeast-asia/agriculture/',{waitUntil:'domcontentloaded'});
+  await page.goto(reviewUrl('/atlas/asia/southeast-asia/agriculture/'),{waitUntil:'domcontentloaded'});
   const regional=page.locator('[data-south-central-world-share]');await regional.waitFor();await page.waitForFunction(()=>document.querySelector('[data-south-central-world-share]')?.textContent.includes('10/11'));
   assert.match(await regional.innerText(),/10\/11.*24\.02%/);assert.equal(await regional.locator('svg').count(),0);
   report.operations.push({name:'southeast-overview',viewport,partialCoverage:true});
-  await page.goto(origin+'/atlas/asia/east-asia/agriculture/?topic=wheat&place=JPN',{waitUntil:'domcontentloaded'});
+  await page.goto(reviewUrl('/atlas/asia/east-asia/agriculture/?topic=wheat&place=JPN'),{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>document.querySelector('[data-agro-statistics]')?.hidden);report.operations.push({name:'japan-excluded',viewport,hidden:true});
   await context.close();
  }
  // The unmodified US is the visual baseline, captured from this exact build.
  const page=await browser.newPage({viewport:{width:1440,height:900}});
- await page.goto(origin+'/atlas/north-america/agriculture/',{waitUntil:'domcontentloaded'});
+ await page.goto(reviewUrl('/atlas/north-america/agriculture/'),{waitUntil:'domcontentloaded'});
  await page.locator('[data-crop-select="corn"]').click();await page.locator('[data-agri-statistics]').waitFor({state:'visible'});
  await page.screenshot({path:resolve(out,'1440-us-baseline.png'),fullPage:true});
  report.operations.push({name:'us-baseline',cornSelection:true,sharedNationalHost:await page.locator('[data-agro-statistics]').count()});
- assert.equal(report.errors.filter(e=>typeof e==='object'&&e.kind==='page-overflow').length,0,'page overflow diagnostics require resolution');
+ if(publicOrigin)for(const field of ['agriculture','nature','industry','population']){await page.goto(reviewUrl('/atlas/japan/'+field+'/'),{waitUntil:'networkidle'});await page.waitForFunction(()=>document.querySelector('[data-japan-atlas]')?.dataset.mapReady==='true');assert.equal(await page.locator('[data-agro-statistics]').count(),0);report.operations.push({name:'production-japan-'+field,sharedHostAbsent:true});await page.screenshot({path:resolve(out,'1440-production-japan-'+field+'.png'),fullPage:true});}
+ assert.deepEqual(report.errors,[],'browser errors or page overflow diagnostics require resolution');
  report.status='passed';
 }catch(error){report.status='failed';report.failure=String(error);throw error;}
 finally{await writeFile(resolve(out,'report.json'),JSON.stringify(report,null,2)+'\n');await browser?.close();await new Promise(r=>server.close(r));}

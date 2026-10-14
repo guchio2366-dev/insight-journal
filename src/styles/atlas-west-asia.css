@@ -436,3 +436,5 @@
 [data-natural-feature]:focus,[data-basin]:focus,[data-ground]:focus { outline:none; stroke:#a23f2d; stroke-width:3px; }
 
 @media(min-width:960px){.atlas-desktop-shell>.west-layout-statistics:has(.west-production-summary){grid-column:2;min-width:0}}
+
+@media(max-width:959px){.west-farm-supply{grid-template-columns:minmax(0,1fr)}}

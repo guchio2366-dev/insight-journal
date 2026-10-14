@@ -1,6 +1,10 @@
 name: Review agriculture supply trade and production
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: [Deploy GitHub Pages]
+    types: [completed]
+    branches: [main]
   pull_request:
     paths:
       - 'src/components/atlas/AgroStatistics.astro'
@@ -17,25 +21,28 @@ concurrency:
   cancel-in-progress: true
 jobs:
   review:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
       - uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
       - run: npm ci --no-audit --no-fund
       - name: Build the exact reviewed commit
         env:
-          REVIEW_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+          REVIEW_HEAD: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || github.sha }}
         run: |
           test "$(git rev-parse HEAD)" = "$REVIEW_HEAD"
           npm run build
           node scripts/generate-release.mjs --commit "$REVIEW_HEAD"
       - name: Review three columns in sandboxed Chrome
+        env:
+          AGRO_PUBLIC_ORIGIN: ${{ github.event_name == 'workflow_run' && 'https://guchio2366-dev.github.io/insight-journal' || '' }}
         run: |
           sudo apt-get install -y fonts-noto-cjk
           REVIEW_CHROME_PATH="$(command -v google-chrome)" node scripts/capture-agro-statistics-review.mjs
