@@ -10,7 +10,7 @@ const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json
 const server=createServer(async(req,res)=>{try{let path=resolve(dist,decodeURIComponent(new URL(req.url,'http://localhost').pathname).replace(/^\/insight-journal\//,''));if(!path.startsWith(dist+sep))throw Error('outside build');if((await stat(path)).isDirectory())path=resolve(path,'index.html');res.writeHead(200,{'Content-Type':mime[extname(path)]??'application/octet-stream'});res.end(await readFile(path));}catch{res.writeHead(404);res.end();}});
 await new Promise(r=>server.listen(0,'127.0.0.1',r));
 const report={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),sandbox:true,status:'running',cases:[],operations:[],errors:[]};
-const publicOrigin=process.env.AGRO_PUBLIC_ORIGIN?.replace(/\/$/,'');
+const publicOrigin=process.env.AGRO_PUBLIC_ORIGIN?.replace(/\/$/,'')||undefined;
 const origin=publicOrigin??`http://127.0.0.1:${server.address().port}/insight-journal`;
 const reviewUrl=(path)=>{const url=new URL(origin+path);if(publicOrigin)url.searchParams.set('__review_sha',report.head);return url.href;};
 const cases=[
