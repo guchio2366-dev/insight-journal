@@ -13,7 +13,7 @@
 .ca-pilot-map-label{position:absolute;pointer-events:auto;width:max-content;max-width:136px;box-sizing:border-box;background:#fffef7ee;border:1px solid #b6c6bb;border-radius:3px;padding:3px 5px;color:#29453b;text-align:left;cursor:pointer;font-family:var(--sans)}
 .ca-pilot-map-label>strong{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:700;white-space:nowrap;line-height:1.4}
 .ca-pilot-map-label.is-highlighted{border-color:var(--pilot-color);box-shadow:inset 0 -2px var(--pilot-color)}
-.ca-pilot-map-label>small{display:block;color:#53655c;font-size:11px;line-height:1.35}
+.ca-pilot-map-label>small{display:block;color:#53655c;font-size:11px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ca-pilot-map-label button{display:block;width:100%;padding:2px 0;border:0;background:transparent;color:#29453b;text-align:left;font-family:var(--sans);cursor:pointer;line-height:1.3;min-height:26px}
 .ca-pilot-map-label button strong{display:flex;align-items:center;gap:5px;font-size:13px;font-weight:700}
 .ca-pilot-map-label button span{display:block;font-size:11px;color:#596960;line-height:1.3;margin-left:14px}

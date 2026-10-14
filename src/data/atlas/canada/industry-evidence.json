@@ -263,7 +263,7 @@
         {
           "label": "公表アルミ区分の雇用",
           "value": 15800,
-          "unit": "人",
+          "unit": "仕事（jobs）",
           "year": "2024",
           "geography": "全国",
           "denominator": "公表アルミ区分の雇用",
