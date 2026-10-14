@@ -54,7 +54,7 @@ try {
       if (width >= 1280) {
         const flow = await panel.locator('.wi-flow').boundingBox(), map = await panel.locator('.wi-map-scroll').boundingBox();
         assert.ok(flow.x + flow.width <= map.x, 'value flow sits next to the map');
-        assert.ok(flow.y + flow.height < height && map.y + map.height < height, 'complete flow and map are visible together on PC');
+        assert.ok(flow.y >= 0 && map.y >= 0 && flow.y + flow.height < height && map.y + map.height < height, `complete flow and map are visible together on PC: ${JSON.stringify({flow,map,height})}`);
       }
       for (const stage of sector.stages) {
         report.phase = `${width}/${sector.id}/stage/${stage.id}`;
@@ -62,6 +62,10 @@ try {
         assert.equal(await panel.locator('[data-wi-place]:not([hidden])').count(), sector.sites.filter(s => s.stage === stage.id).length);
         assert.equal(await panel.locator('[data-wi-line]:not([hidden])').count(), 0);
         assert.deepEqual(await labelPositions(panel), positions, 'stage selection leaves labels fixed');
+        if (width >= 1280) {
+          const flow = await panel.locator('.wi-flow').boundingBox();
+          assert.ok(flow.y >= 0 && flow.y + flow.height < height, `selected flow fits PC viewport: ${JSON.stringify({flow,height})}`);
+        }
       }
       await panel.locator('[data-wi-stage=all]').click();
       for (const site of sector.sites) {
