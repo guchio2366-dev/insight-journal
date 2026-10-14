@@ -74,15 +74,16 @@ const pieStyle=`conic-gradient(${[...topPartners.map((row,index)=>({share:row.sh
  <p class="source">出典：<a href="https://comtradeplus.un.org/">UN Comtrade</a>、2023年、各国報告の輸出額（current USD）。<a href="https://uncomtrade.org/docs/policy-on-use-and-re-dissemination/">利用・再配布方針</a>。FAOSTATの2024年生産量とは年・単位が異なります。</p>
 </details>
 <template data-southeast-supply-template>
- <h3>米を生産する国</h3><p>FAOSTAT、2024年・籾米の生産重量。11か国の有効値から上位5か国。輸出や国内向けの割合ではありません。</p>
+ <h3>地域の供給と仕向け</h3><p>地理的な東南アジア11か国の同年・原料換算の需給表と域内移動の対応行は未収録です。国内用途・地域外輸出入・在庫の横帯は未算出です。数量比をカロリー自給率とは呼びません。</p><details><summary>参考：米を生産する国（需給ではありません）</summary><p>FAOSTAT、2024年・籾米の生産重量。11か国の有効値から上位5か国。輸出や国内向けの割合ではありません。</p>
  <ol class="southeast-supply-bars">{riceProducers.map(row=><li><span>{row.name}</span><strong>{quantity(row.value)}万t</strong><i style={`--bar-width:${row.value/riceMax*100}%`}></i></li>)}</ol>
- <p>メコン・紅河の低地やジャワなどで生産を比べます。地図の色は2020年の収穫面積で、この2024年の国計とは別です。</p>
+ <p>メコン・紅河の低地やジャワなどで生産を比べます。地図の色は2020年の収穫面積で、この2024年の国計とは別です。</p></details>
 </template>
 <template data-southeast-partner-template>
- <h3>油脂類の輸出先</h3><p>インドネシアからのHS15章（動植物性・微生物性の油脂等）、2023年・輸出額。<strong>パーム油HS1511だけの相手国ではありません。</strong></p>
+ <h3>地域外の輸出先・輸入元</h3><p>11か国の同一品目・同年の全相手行列は未収録です。域内相手を除く地域外数量の分母と円は未算出です。国別対世界額の合算は地域外貿易ではありません。</p><details><summary>別定義の国の例：インドネシアの油脂類輸出額</summary><p>インドネシアからのHS15章（動植物性・微生物性の油脂等）、2023年・輸出額。<strong>パーム油HS1511だけの相手国ではありません。</strong></p>
  <div class="southeast-partner-pie" role="img" aria-label="インドネシアのHS15章輸出額に占める相手国の割合。正確な値は直後の一覧を参照。" style={`background:${pieStyle}`}></div>
  <ul class="southeast-partner-list">{topPartners.map((row,index)=><li><i style={`background:${pieColors[index]}`}></i>{row.label} {shareText(row.share)}</li>)}<li><i style={`background:${pieColors[4]}`}></i>その他 {shareText(otherPartnerShare)}</li></ul>
  <p>分母は同国のHS15章の対世界輸出額、約{dollars(fatPartners.world)}億米ドル。その他には掲載した4相手国以外と統計上の差分を含みます。国内向けではありません。</p>
+</details>
 </template>
 <template data-southeast-forest-template>
  <div class="southeast-forest-connections">

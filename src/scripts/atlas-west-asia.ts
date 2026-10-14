@@ -1,3 +1,4 @@
+import {syncAgroStatistics} from './atlas-agro-statistics.ts';
 import {westFields,westTopics,statisticalColors,observation,westReading,westProductionSelection} from '../data/atlas/west-asia-topics.mjs';
 import {readWestState,westSearch,gridIndex,decodeWestGrid,zoomWestView,panWestView} from '../lib/atlas-west-asia-state.mjs';
 import {stationAnnualRainfall,rainfallBreaks,rainfallColors,rainfallColor,isSettlementTopic,settlementSubject,validateSettlementCollection} from '../lib/atlas-west-asia-completion.mjs';
@@ -452,6 +453,7 @@ async function init(root:HTMLElement){
  }
  function details(){
   const t=topic(),c=country(),city=data.cities.find((x:any)=>x.id===state.city),urban=data.urban.cities.find((x:any)=>x.id===state.urban);
+  syncAgroStatistics(root,{country:state.country??'',topic:t.id.replace(/-(irrigated|rainfed)$/,''),active:field==='agriculture'});
   farmSupply(t);
   const reading=westReading(t),source=sourceTopic(),comparison=source?westReading(source).comparisons.find((x:any)=>x.topic===t.id):null;
   const waterReading=!source&&Object.hasOwn(westWaterIntroductions,t.id);

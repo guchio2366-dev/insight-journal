@@ -434,3 +434,5 @@
 .west-religion-map-label{font-size:12px;font-weight:800;fill:#1d363d;stroke:#fffef4;stroke-width:4px;paint-order:stroke}
 .west-atlas[data-topic="religion"] .west-country-line,.west-atlas[data-topic="ethnicity"] .west-country-line{stroke:#a5b0af;stroke-width:.5}
 [data-natural-feature]:focus,[data-basin]:focus,[data-ground]:focus { outline:none; stroke:#a23f2d; stroke-width:3px; }
+
+@media(min-width:960px){.atlas-desktop-shell>.west-layout-statistics:has(.west-production-summary){grid-column:2;min-width:0}}

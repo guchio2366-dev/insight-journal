@@ -19,6 +19,26 @@ export function renderSouthCentralFarmConnections(root:HTMLElement,region:AsiaRe
  section.hidden=!active||(region!=='south-central-asia'&&region!=='southeast-asia');if(section.hidden)return;
  renderSouthCentralRiceFlow(section,region,topic,country?.code??focusExample?.country,focusId);
  const host=section.querySelector<HTMLElement>('[data-south-central-world-share]')!;host.replaceChildren();
+ if(!country&&!focusExample){
+  const name=region==='southeast-asia'?'東南アジア':'南・中央アジア';
+  const wanted=topic==='overview'||!topic?'rice-production':worldShareByTopic[topic];
+  const dataset=region==='southeast-asia'?southeastShares:southCentralShares;
+  const series=dataset.series.find(s=>s.id===wanted);
+  if(region==='southeast-asia'&&series){
+   const rows=series.years as {year:number;world:number;reportedRegion?:{value:number;share:number;countryCount:number;complete:boolean}}[];
+   const latest=rows.find(r=>r.year===2024)?.reportedRegion;
+   const lead=document.createElement('p');lead.textContent=latest?`${name}の${shareName[wanted]??series.label}：2024年の報告${latest.countryCount}/11か国の合計 ${latest.value.toLocaleString('ja-JP')} ${series.unit}。同年Worldに対する比 ${latest.share.toFixed(2)}%。${latest.complete?'対象国の値が揃っています。':'欠測国を含む地域完全値ではありません。'}`:'この品目の地域比較値は未収録です。';host.append(lead);
+   const note=document.createElement('p');note.textContent='地理的な東南アジア11か国（東ティモールを含む）。2015–2024年の集合で、当時のASEAN10加盟国や2025年加盟後のASEAN11とは別です。カロリー構成・自給率は未算出。年ごとの有効国集合が変わるため、合計比の折れ線は描きません。';host.append(note);
+   const details=document.createElement('details');const summary=document.createElement('summary');summary.textContent='年別の報告範囲とWorld分母';details.append(summary);
+   for(const row of rows){const p=document.createElement('p');p.textContent=row.reportedRegion?`${row.year}年：${row.reportedRegion.countryCount}/11か国、${row.reportedRegion.value.toLocaleString('ja-JP')} ${series.unit} / World ${row.world.toLocaleString('ja-JP')} ${series.unit}、${row.reportedRegion.share.toFixed(2)}%。`:`${row.year}年：未収録`;details.append(p);}host.append(details);
+  }else{
+   const p=document.createElement('p');p.textContent='対象国集合・欠測を照合した地域全体の生産シェアは未集計です。国を選ぶとその国の同年・同品目のWorld比を表示します。';host.append(p);
+   // Preserve the verified India rice example as a labelled reference, not the
+   // regional supply balance or a default country's regional world share.
+   for(const selector of ['[data-south-central-supply]','[data-south-central-destinations]']){const target=section.querySelector<HTMLElement>(selector);if(!target||!target.childNodes.length)continue;const details=document.createElement('details'),summary=document.createElement('summary');summary.textContent='国別参考例（地域集計ではありません）';details.append(summary,...target.childNodes);target.replaceChildren();const p=document.createElement('p');p.textContent='地域全体の同年・同品目の供給用途・地域外相手数量は未収録です。';target.append(p,details);}
+  }
+  return;
+ }
  const isSoutheast=region==='southeast-asia',worldSeries=(isSoutheast?southeastShares.series:southCentralShares.series) as ShareSeries[];
  const sharePercent=(value:number)=>isSoutheast?(value>0&&value<.01?'0.01％未満':`${value.toLocaleString('ja-JP',{maximumFractionDigits:2,minimumFractionDigits:2})}％`):percentage(value);
  let code=country?.code??focusExample?.country??(isSoutheast?'IDN':'IND'),id=worldShareByTopic[topic??''];

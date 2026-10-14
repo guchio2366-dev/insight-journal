@@ -1,12 +1,18 @@
 ---
+import {readFileSync} from 'node:fs';
+import {resolve} from 'node:path';
+import {agroTopicSeries,renderAgroWorld,type AgroData} from '../../lib/atlas-agro-statistics';
+import '../../styles/atlas-agro-statistics.css';
 import comparison from '../../data/atlas/mexico/agriculture-comparison-2024.json';
 interface Props {productId:string; production:number|null; unit:string; year:string}
 const {productId,production,unit,year}=Astro.props;
+const shared=JSON.parse(readFileSync(resolve('public/assets/atlas/regional-production-statistics-v1/statistics.json'),'utf8')) as AgroData;
+const series=shared.countries.MEX?.series.find(s=>agroTopicSeries(productId).includes(s.id));
 const fao=comparison.products[productId as keyof typeof comparison.products];
 const number=(value:number)=>value.toLocaleString('ja-JP',{maximumFractionDigits:0});
 const livestock=['beef','dairy','pork','broiler','eggs'].includes(productId);
 ---
-<div class="mexico-agriculture-three-columns" data-mexico-agriculture-three-columns={productId}>
+<div class="mexico-agriculture-three-columns agro-statistics" data-mexico-agriculture-three-columns={productId}>
  <section>
   <h3>供給と用途</h3>
   <p class="mexico-agriculture-column-period">DGSIAP・{year}</p>
@@ -22,14 +28,16 @@ const livestock=['beef','dairy','pork','broiler','eggs'].includes(productId);
   <a href="https://www.fao.org/faostat/en/#data/TM">必要な原表：FAOSTAT 詳細貿易マトリクス</a>
  </section>
  <section>
-  <h3>世界生産に占める割合</h3>
+  {series?<div set:html={renderAgroWorld(shared,'MEX',series)} />:<><h3>世界生産に占める割合</h3>
   {fao?<>
    <p class="mexico-agriculture-column-period">FAOSTAT QCL・{comparison.year}年・{fao.definition}・t</p>
    <p class="mexico-agriculture-share">{fao.sharePct.toFixed(2)}<span>%</span></p>
    <p>メキシコ {number(fao.mexicoTonnes)} t ／ 世界 {number(fao.worldTonnes)} t。同一年・同一定義の生産量で比較しました。</p>
    {productId==='coffee'&&<p>SIAPの2025年生産量はコーヒー果実。FAOSTATの生豆とは換算せず、別系列として示します。</p>}
   </>:<p>この品目と世界を同一定義で比較するメキシコ行は保管済み抽出にありません。</p>}
-  <p>複数年のメキシコ・世界の対応行は未取得です。2024年の値を推移として描いていません。</p>
+  </>}
+  {productId==='coffee'&&<p>DGSIAPのコーヒー果実とFAOSTATの生豆は年・加工段階が異なる別系列です。</p>}
+  {!series&&<p>複数年のメキシコ・世界の対応行は未取得です。2024年の値を推移として描いていません。</p>}
   <a href="https://www.fao.org/faostat/en/#data/QCL">出典・必要な時系列：FAOSTAT QCL</a>
  </section>
 </div>

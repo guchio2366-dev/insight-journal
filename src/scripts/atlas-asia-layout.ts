@@ -5,6 +5,8 @@ export function createAsiaLayout(root:HTMLElement){
  const items=root.querySelector<HTMLElement>('[data-asia-map-items]');
  const statistics=root.querySelector<HTMLElement>('[data-asia-statistics]');
  if(!items||!statistics)return {render(_state:AsiaState){}};
+ const connections=root.querySelector<HTMLElement>('[data-south-central-farm-connections]');
+ if(connections)statistics.before(connections);
  const query=(s:string)=>root.querySelector<HTMLElement>(s);
  const mainLegend=query('[data-reading-map-legend]'),legendHost=query('[data-asia-map-legend]');
  const seasonalControls=query('.seasonal-month-controls'),seasonalLegend=query('[data-seasonal-legend]'),comparisonKeys=query('[data-comparison-compact]');

@@ -1,3 +1,4 @@
+import {syncAgroStatistics} from './atlas-agro-statistics.ts';
 import {latinReadingProducts,latinProductReading} from '../data/atlas/latin-america/reading-products';
 import {initLatinMapCamera,latinProductAtPointer} from './atlas-latin-reading-map';
 import cropManifest from '../../public/assets/atlas/latin-america-agriculture-v1/manifest.json';
@@ -29,6 +30,7 @@ export function initialiseLatinAgriculture():void {
  };
  const render=()=>{
   const overview=state.layer==='all',layer=agricultureLayer(state.layer),reading=overview?latinAgricultureOverviewReading:latinProductReading(state.layer);
+  syncAgroStatistics(workspace,{country:state.place??'',topic:state.layer,active:true});
   const selected=layer.countries.find(c=>c.code===state.place);
   const originalLayer=data.layers.some(l=>l.id===state.layer),isComparison=(state.layer==='all'||originalLayer)&&state.source?.field==='nature';
   workspace.classList.toggle('is-comparison',isComparison);

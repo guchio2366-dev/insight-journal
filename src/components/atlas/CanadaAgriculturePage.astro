@@ -1,4 +1,5 @@
 ---
+import AgroStatistics from './AgroStatistics.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AtlasRegionNavigation from './AtlasRegionNavigation.astro';
 import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
@@ -75,6 +76,7 @@ import '../../styles/atlas-canada-country-parity.css';
     </aside>
    </div>
    </div>
+   <AgroStatistics scope="カナダ" country="CAN" topic={isWheat?"wheat":"canola"} reference={{label:`カナダの${cropName}・国内生産`,value:canola.data.find(r=>r.year===2025&&r.id==='Canada')?.values.production.value??null,unit:'t',year:2025,sourceUrl:canolaSources.table,definition:'Statistics Canada全国値。地図の2021年と異なる2025年の生産量で、FAOSTATの2024年世界分母へ接続しません。輸入・在庫・国内用途と相手国の対応行は未収録です。'}} />
    <details class="canada-statistics canada-agri-annual-statistics"><summary>{cropName}の年次統計：州別の面積・生産量</summary>     <h2>州別の面積と生産量を比べる</h2>
      <div class="canola-stat-controls"><label>年次統計の年<select data-canola-year>{canola.years.map(y=><option value={y} selected={y===2021}>{y}年</option>)}</select></label><label>指標<select data-canola-metric>{canola.metrics.map(m=><option value={m.id}>{m.name}（{m.unit}）</option>)}</select></label><label>読む地域<select data-canola-province>{canola.provinces.map(p=><option value={p.id} selected={p.id==='Saskatchewan'}>{p.name}</option>)}</select></label><label>比べる地域<select data-canola-compare><option value="">比較なし</option>{canola.provinces.map(p=><option value={p.id}>{p.name}</option>)}</select></label></div>
      <div class="canada-city-list">{canola.provinces.filter(p=>['Alberta','Saskatchewan','Manitoba'].includes(p.id)).map(p=><button data-canola-province-button={p.id} aria-pressed={p.id==='Saskatchewan'}>{p.name}</button>)}</div>

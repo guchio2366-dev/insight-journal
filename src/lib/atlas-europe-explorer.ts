@@ -1,3 +1,4 @@
+import {syncAgroStatistics} from '../scripts/atlas-agro-statistics.ts';
 import { frame, europeFarmingInitialBounds, project, unproject, wheatCell, displayCell, visibleBounds, readEuropeState, writeEuropeState, defaultEuropeCity, normaliseEuropePoint } from './atlas-europe-view';
 import { farmingPresentation, farmingAtPoint, updateFarmingMap, type FarmingAreas } from './atlas-europe-farming';
 import { europeFarmingGenreForLayer, europeFarmingGenres } from '../data/atlas/europe/farming-genres.ts';
@@ -545,6 +546,7 @@ export async function initEuropeAtlas() {
     query('[data-eu-statistics-title]').textContent=statisticsName+'の統計';
     all<HTMLElement>('[data-eu-statistics-item]').forEach(el=>{el.textContent=statisticsName;});
     query('#eu-farm-numbers-title').textContent=nationalDetail?statisticsName+'の国別数値・推移':'生産・飼養・木材の国別数量';
+    syncAgroStatistics(root,{country:state.place??'',topic:state.layer,active:subject().field==='agriculture',year:state.farmYear??2024});
     void farmStatistics.update(nationalDetail?{...state,farmYear:undefined,farmCompare:undefined}:state);
     query<HTMLElement>('[data-eu-subject-intro]').hidden=!!feature;
     const card=query<HTMLElement>('[data-eu-feature-card]');card.replaceChildren();card.hidden=!feature;

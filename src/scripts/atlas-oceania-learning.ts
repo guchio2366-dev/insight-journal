@@ -1,3 +1,4 @@
+import {syncAgroStatistics} from './atlas-agro-statistics.ts';
 import {withBase} from '../lib/urls';
 import {createRegionalClimateSelection} from './atlas-regional-climate-selection';
 import {renderOceaniaRequiredLegend} from './atlas-oceania-legend';
@@ -44,6 +45,7 @@ export function initOceaniaLearningAtlas(root:HTMLElement):void{
   one('source-list').innerHTML=unique.map(s=>`<div class="oceania-learning-citation"><a href="${htmlEscape(s.url)}">${htmlEscape(s.title)}</a>${s.note?`<p>${htmlEscape(s.note)}</p>`:''}</div>`).join('');
  };
  const render=()=>{
+  syncAgroStatistics(root,{country:state.place==='all'?'':state.place,topic:state.layer,active:field==='agriculture'});
   climateSelection.beforeRender();
   const theme=getOceaniaTheme(state),layer=getOceaniaLayer(state.layer,state),compare=getOceaniaLayer(state.compareLayer,state);
   const contextualReading=selectedReading&&layer.id!=='farming-all'&&(state.place==='all'||theme.countryCodes.includes(state.place));

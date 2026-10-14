@@ -1,3 +1,4 @@
+import {syncAgroStatistics} from './atlas-agro-statistics.ts';
 import {countries,fields,metrics,regionNames,years,readState,writeState,africaComparisonSnapshot,canonicalTopic,canonicalWater,canonicalAgriLayers,africaAgriVisibleLayers,metricById,valueAt,latestValueAt,formatValue,fillFor,rankedCountries,palette,sources,defaultYear,cropChoices,livestockChoices,cropMeasureChoices,type Field,type Region,type Metric,type Crop,type Livestock,type CropMeasure} from '../data/atlas/africa-atlas.ts';
 import {projectAfrica,africaWidth,africaHeight} from '../lib/atlas-africa-geometry.ts';
 import {themes,type AfricaTheme} from '../data/atlas/africa-themes.ts';
@@ -165,12 +166,13 @@ export function initializeAfricaAtlas() {
   map.dataset.theme=theme.id;map.dataset.context=state.context;
  }
  function renderRegionalStatistics(){
+  syncAgroStatistics(root!,{country:state.place??'',topic:state.topic==='forestry'?'forest':state.topic==='livestock'?state.livestock:state.crop,active:state.field==='agriculture'&&!state.overview});
   const host=query<HTMLElement>('[data-africa-regional-statistics]');host.hidden=!isAgriMap();host.replaceChildren();if(host.hidden)return;
   host.append(make('h2',`${regionNames[state.region]}の生産・食料供給`),make('p','主要品目の世界シェア · 2024年 · 生産量t。同じ品目・年・単位の地域集計と世界値を比べます。分布地図は2020年基準です。'));
   const table=make('table'),head=make('thead'),header=make('tr');for(const label of ['品目','地域生産量（t）','世界生産量比']){const cell=make('th',label);cell.setAttribute('scope','col');header.append(cell);}head.append(header);table.append(head);const body=make('tbody');
   const rows=regionalStatistics.regions[state.region];
   for(const row of rows){const tr=make('tr');tr.dataset.africaRegionalStatistic=row.id;const label=make('th',row.label);label.setAttribute('scope','row');tr.append(label);const value=row.regional?Number(row.regional.rawValue).toLocaleString('ja-JP',{maximumFractionDigits:0}):'未取得';tr.append(make('td',value),make('td',row.share===null?'未取得':`${row.share.toFixed(1)}%`));body.append(tr);}table.append(body);host.append(table);
-  const missing=make('div');missing.className='africa-statistics-unavailable';for(const item of regionalStatistics.unavailable){const section=make('section');section.append(make('h3',item.label),make('p',item.reason));missing.append(section);}host.append(missing);
+  const columns=make('div');columns.className='agro-columns';const supply=make('section');supply.append(make('h3','地域の供給と仕向け'),make('p','同じ品目・年・単位の地域内生産・地域外輸入・輸出・在庫・用途原表は未収録です。供給構成や国内用途の帯は算出しません。'));const world=make('section');world.append(make('h3','地域の世界生産比'),table);const missing=make('div');missing.className='africa-statistics-unavailable';for(const item of regionalStatistics.unavailable){const section=make('section');section.append(make('h3',item.label),make('p',item.reason));missing.append(section);}const trade=missing.firstElementChild!;columns.append(supply,trade,world);host.classList.add('agro-statistics');host.append(columns,missing);
   const source=make('p'),link=make('a','FAOSTAT QCL · 2025-12-31公開版') as HTMLAnchorElement;link.href=regionalStatistics.source.url;source.append(link,make('span',' · CC BY 4.0。公表地域行を採用し、国別値や地図の面積を足していません。'));host.append(source);
   const details=make('details');details.append(make('summary','定義・原表と未取得の範囲'),make('p',regionalStatistics.method));
   details.append(make('p','FAOSTAT地域区分の公表集計。牛肉・生乳・コーヒーのみ同一定義の地域・世界行が保持済みです。他品目の未取得は生産0ではありません。E/Iなど原表の推計・補完フラグは保持しています。'));

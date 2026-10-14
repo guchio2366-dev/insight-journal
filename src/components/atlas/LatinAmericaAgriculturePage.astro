@@ -1,4 +1,5 @@
 ---
+import AgroStatistics from './AgroStatistics.astro';
 import LatinAmericaWorkspace from './LatinAmericaWorkspace.astro';
 import {latinReadingProducts} from '../../data/atlas/latin-america/reading-products';
 import data from '../../data/atlas/latin-america/agriculture.json';
@@ -53,6 +54,10 @@ const productionPercent=(tonnes:number|null,worldT:number)=>tonnes===null?'原�
   <details><summary>地図と統計の読み方</summary><p data-latin-agriculture-definition>{data.definitions.crop}</p><p data-latin-agriculture-coffee-definition hidden>{data.definitions.coffee}</p><p>{data.definitions.zero} {data.definitions.missing}</p></details>
  </Fragment>
  <Fragment slot="statistics">
+  <AgroStatistics scope="中南米" countries={latinCountries34} topics={latinReadingProducts.map(p=>p.id)} />
+  <div class="agro-statistics"><div class="agro-columns">
+   <section><h3>地域の供給と仕向け</h3><p>対象34か国・地域の同年・同品目の供給用途原表は未収録です。地域外輸入・輸出・在庫・加工・飼料・損失の対応行が揃うまで、地域の需給帯は算出しません。</p><a href="https://www.fao.org/faostat/en/#data/FBS">必要資料：FAOSTAT 食料需給表</a></section>
+   <section><h3>地域外の輸出先・輸入元</h3><p>対象国間の域内取引と、地域外相手への輸出・輸入を区別する完全な数量行列は未収録です。国の対世界額を合算して地域外円の分母にしません。</p><a href="https://www.fao.org/faostat/en/#data/TM">必要資料：FAOSTAT 詳細貿易行列</a></section>
   <section class="latin-world-production" aria-labelledby="latin-world-production-heading" data-latin-world-production>
    <h2 id="latin-world-production-heading">主要3作物の世界生産シェア</h2>
    <p class="latin-takeaway">2024年の生産量を、FAOSTATの同年の世界計と比較します。大豆は値のある中南米16か国・地域の合計で世界計の約{Math.round(latinWorldProductionShares.find(item=>item.id==='soyb')!.regionalPercent)}%です。</p>
@@ -65,6 +70,7 @@ const productionPercent=(tonnes:number|null,worldT:number)=>tonnes===null?'原�
    <p class="latin-caption">分子は表示対象34か国・地域のうちFAOSTATに値のある国だけの2024年生産量（t）の合計。欠測・原表行なしは0とせず、世界計から差し引いた残りを「域外」とは呼びません。2020年の地図は収穫面積推計（ha）で、コーヒーの地図はアラビカ種のみです。世界シェアは輸出シェアではありません。</p>
    <p class="latin-caption">対象は既存の上位10作物のうち、保存済み原表に2024年の世界計と国別値が揃う大豆・バナナ・コーヒーです。ほかの7作物は比較用の同年世界計を保持しておらず、省略は生産量の小ささを意味しません。単年値のため推移線は描きません。<a href="https://www.fao.org/faostat/en/#data/QCL" target="_blank" rel="noopener noreferrer">FAO, FAOSTAT Crops and livestock products</a>（2025年12月31日更新、2026年10月1日取得、CC BY 4.0）。</p>
   </section>
+  </div></div>
   <section class="latin-crop-area-ranking" aria-labelledby="latin-crop-area-heading" data-latin-crop-area-ranking>
    <h2 id="latin-crop-area-heading">既存12作物の収穫面積：上位10</h2>
    <p class="latin-takeaway">大豆ととうもろこしで、地図に載せた12作物の推計収穫面積合計の約{leadingShare}%を占めます。面積から輸出額や生産価値は読めません。</p>
