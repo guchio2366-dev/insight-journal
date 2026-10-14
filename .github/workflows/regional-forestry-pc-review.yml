@@ -84,7 +84,7 @@ jobs:
           LATIN_FORESTRY_BASELINE: '1'
           LATIN_FORESTRY_OUTPUT: ${{ runner.temp }}/regional-forestry-review/latin-before
           LATIN_FORESTRY_INLINE_PREVIEWS: '1'
-      - name: Confirm extraction leaves the other forestry regions unchanged
+      - name: Confirm statistics preserve the other forestry maps and readers
         run: |
           node --input-type=module <<'JS'
           import assert from 'node:assert/strict';
@@ -103,7 +103,9 @@ jobs:
             if(africaRound2&&original.region==='africa')continue;
             const current=after.otherRegions.find(item=>item.region===original.region);
             assert.deepEqual(current.layout,original.layout,original.region+' layout changed');
-            assert.equal(current.image.sha256,original.image.sha256,original.region+' screenshot changed');
+            // Statistics below the map may change this viewport under the
+            // current cross-region task; protect the actual map and reader.
+            assert.equal(current.primaryImage.sha256,original.primaryImage.sha256,original.region+' map/reader pixels changed');
           }
           JS
       - name: Upload screenshots and exact-head report

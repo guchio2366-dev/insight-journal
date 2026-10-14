@@ -35,14 +35,15 @@ try{
   const context=await browser.newContext({viewport,locale:'ja-JP',reducedMotion:'reduce'}),page=await context.newPage();
   page.on('pageerror',error=>report.errors.push(String(error)));
   for(const [name,path,country,series] of cases){
-   await page.goto(origin+path,{waitUntil:'domcontentloaded'});
+   await page.goto(origin+path,{waitUntil:'networkidle'});await page.evaluate(()=>document.fonts.ready);
    const host=page.locator('[data-agro-statistics]');await host.waitFor({state:'visible'});
    await page.waitForFunction(()=>{const node=document.querySelector('[data-agro-statistics]');return !node.hidden&&node.querySelector('[data-agro-content]')?.children.length>0&&!node.querySelector('[data-agro-status]').textContent.includes('読み込んで');});
    if(series){await host.locator(`[data-agro-country="${country}"][data-agro-series="${series}"]`).waitFor();}
-   const measured=await host.evaluate(el=>{const b=el.getBoundingClientRect(),columns=[...el.querySelectorAll('.agro-columns>section')].map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,font:parseFloat(getComputedStyle(n.querySelector('p:not(.agro-meta)')??n).fontSize)};}),rail=document.querySelector('.atlas-news'),r=rail?.getBoundingClientRect(),map=(document.querySelector('[data-canada-census-stage]')??document.querySelector('[data-map-surface],.eu-map-stage,.africa-map-frame,[data-latin-agriculture-map-container],[data-forestry-stage],.forest-map-stage,[data-primary-map]'))?.getBoundingClientRect();return{x:b.x,w:b.width,y:b.y,columns,rail:r?{x:r.x,right:r.right,w:r.width,bottom:r.bottom}:null,map:map?{x:map.x,y:map.y,bottom:map.bottom}:null,overflow:document.documentElement.scrollWidth>innerWidth+1};});
+   const measured=await host.evaluate(el=>{const b=el.getBoundingClientRect(),columns=[...el.querySelectorAll('.agro-columns>section')].map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,font:parseFloat(getComputedStyle(n.querySelector('p:not(.agro-meta)')??n).fontSize)};}),rail=document.querySelector('.atlas-news'),r=rail?.getBoundingClientRect(),map=(document.querySelector('[data-canada-census-stage]')??document.querySelector('[data-map-surface],.eu-map-stage,.africa-map-frame,[data-latin-agriculture-map-container],[data-forestry-stage],.forest-map-stage,[data-primary-map]'))?.getBoundingClientRect();return{x:b.x,w:b.width,y:b.y,columns,rail:r?{x:r.x,right:r.right,w:r.width,bottom:r.bottom}:null,map:map?{x:map.x,y:map.y,bottom:map.bottom}:null,overflow:document.documentElement.scrollWidth>innerWidth+1,statisticsOverflow:el.scrollWidth>el.clientWidth+1,overflowElements:[...document.querySelectorAll('body *')].filter(node=>node instanceof HTMLElement&&node.checkVisibility?.({visibilityProperty:true})&&!node.closest('details:not([open])')&&!node.closest('.agro-table-scroll')).flatMap(node=>{const r=node.getBoundingClientRect();return r.width>0&&(r.right>innerWidth+1||r.left<-1)?[{tag:node.tagName,class:node.className?.baseVal??node.className,x:r.x,right:r.right,w:r.width,inNewStatistics:el.contains(node)}]:[];}).slice(0,12)};});
    console.log(JSON.stringify({name,viewport,measured}));
    assert.equal(measured.columns.length,3,`${name}: three columns`);
-   assert.equal(measured.overflow,false,`${name}: page overflow`);
+   assert.equal(measured.statisticsOverflow,false,`${name}: statistics overflow`);
+   if(measured.overflow)report.errors.push({kind:'page-overflow',name,viewport,elements:measured.overflowElements});
    assert.ok(measured.columns.every(c=>c.font>=13),`${name}: readable prose`);
    if(viewport.width>=960){assert.ok(Math.max(...measured.columns.map(c=>c.y))-Math.min(...measured.columns.map(c=>c.y))<2,`${name}: common row`);if(measured.rail&&measured.rail.w<viewport.width*.5)assert.ok(measured.x>=measured.rail.right-1,`${name}: keep statistics outside news width`);}
    else assert.ok(measured.columns[1].y>measured.columns[0].y,`${name}: mobile stacking`);
@@ -70,6 +71,7 @@ try{
  await page.locator('[data-crop-select="corn"]').click();await page.locator('[data-agri-statistics]').waitFor({state:'visible'});
  await page.screenshot({path:resolve(out,'1440-us-baseline.png'),fullPage:true});
  report.operations.push({name:'us-baseline',cornSelection:true,sharedNationalHost:await page.locator('[data-agro-statistics]').count()});
+ assert.equal(report.errors.filter(e=>typeof e==='object'&&e.kind==='page-overflow').length,0,'page overflow diagnostics require resolution');
  report.status='passed';
 }catch(error){report.status='failed';report.failure=String(error);throw error;}
 finally{await writeFile(resolve(out,'report.json'),JSON.stringify(report,null,2)+'\n');await browser?.close();await new Promise(r=>server.close(r));}
