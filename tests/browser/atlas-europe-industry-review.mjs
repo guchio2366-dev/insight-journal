@@ -6,8 +6,8 @@ import path from 'node:path';
 const base=process.env.EUROPE_REVIEW_BASE_URL??'http://127.0.0.1:4322/insight-journal/';
 const output=process.env.EUROPE_INDUSTRY_OUTPUT??'docs/review/europe-industry-2026-10-14/images';
 await mkdir(output,{recursive:true});
-const browser=await chromium.launch({executablePath:process.env.EUROPE_REVIEW_CHROMIUM_PATH??'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']});
-const result={viewport:{width:1920,height:1080},deviceScaleFactor:1,checks:[],screenshots:[]};
+const browser=await chromium.launch({executablePath:process.env.EUROPE_REVIEW_CHROMIUM_PATH??'/usr/bin/chromium',headless:true,chromiumSandbox:true,ignoreDefaultArgs:['--unsafely-disable-devtools-self-xss-warnings']});
+const result={viewport:{width:1920,height:1080},deviceScaleFactor:1,sandboxRequired:true,browserVersion:browser.version(),checks:[],screenshots:[]};
 try{
  for(const renderer of ['auto','static']){
   const context=await browser.newContext({viewport:result.viewport,deviceScaleFactor:1});

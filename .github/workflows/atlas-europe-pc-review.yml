@@ -10,6 +10,7 @@ on:
       - 'tests/browser/atlas-europe-pc-review.mjs'
       - 'tests/browser/atlas-europe-handoff-review.mjs'
       - 'tests/browser/atlas-europe-industry-review.mjs'
+      - 'tests/browser/atlas-europe-industry-responsive-review.mjs'
       - 'tests/browser/atlas-europe-remainder-review.mjs'
       - 'tests/browser/atlas-europe-language-review.mjs'
       - 'docs/atlas-europe-pc-review.md'
@@ -126,6 +127,7 @@ jobs:
           node tests/browser/atlas-europe-pc-review.mjs
           EUROPE_REVIEW_OUTPUT="$EUROPE_REVIEW_OUTPUT/handoff-1920" node tests/browser/atlas-europe-handoff-review.mjs
           EUROPE_INDUSTRY_OUTPUT="$EUROPE_REVIEW_OUTPUT/industry-1920" node tests/browser/atlas-europe-industry-review.mjs
+          EUROPE_INDUSTRY_OUTPUT="$EUROPE_REVIEW_OUTPUT/industry-responsive" node tests/browser/atlas-europe-industry-responsive-review.mjs
           EUROPE_REMAINDER_OUTPUT="$EUROPE_REVIEW_OUTPUT/remainder-1920" node tests/browser/atlas-europe-remainder-review.mjs
           EUROPE_LANGUAGE_OUTPUT="$EUROPE_REVIEW_OUTPUT/language-1920" node tests/browser/atlas-europe-language-review.mjs
 
