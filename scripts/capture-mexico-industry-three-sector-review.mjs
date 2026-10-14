@@ -76,7 +76,7 @@ try{
  }
  report.passed=true;await writeFile(path.join(output,'report.json'),JSON.stringify(report,null,2)+'\n');
  console.log(JSON.stringify(report));
-}finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
+}catch(error){console.error('::error title=Mexico industry review::'+String(error.stack??error).replaceAll('%','%25').replaceAll('\n','%0A').replaceAll('\r','%0D'));throw error;}finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
 
 // The existing sandboxed-Chrome CI review uploads this directory. Verify the
 // normal adopted view too, retaining the legacy comparison checks above.

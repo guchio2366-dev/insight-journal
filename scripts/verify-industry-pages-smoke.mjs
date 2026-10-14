@@ -35,13 +35,13 @@ const scenes=[
  {id:'europe',route:'europe/industry/',ready:'[data-europe-detail][data-initialized=true]',map:'.eu-map-stage',sectors:'[data-eu-industry-sector]',products:'[data-eu-industry-group]',key:'data-eu-industry-group',sources:'[data-eu-industry-evidence] a',camera:'[data-eu-static]'},
  {id:'east-asia',route:'asia/east-asia/industry/',ready:'[data-asia-atlas][data-map-ready=true]',map:'.asia-map-frame',sectors:'[data-east-industry-sector]',products:'[data-east-industry-kinds] [data-industry-feature]',key:'data-industry-feature',sources:'[data-east-industry-statistics] a'},
  {id:'southeast-asia',route:'asia/southeast-asia/industry/',ready:'[data-asia-atlas][data-southeast-industry-layout-ready=true]',map:'.asia-map-frame',sectors:'[data-southeast-industry-sector]:not([data-southeast-industry-sector="all"])',products:'[data-southeast-industry-kind]',key:'data-southeast-industry-kind',sources:'[data-southeast-industry-facts] a'},
- {id:'south-asia',route:'asia/south-asia/industry/',ready:'[data-asia-atlas][data-map-ready=true]',map:'.asia-map-frame',sectors:'[data-south-industry-sector]',products:'.south-industry-products [data-industry-feature]',key:'data-industry-feature',sources:'[data-south-industry-evidence] a'},
+ {id:'south-asia',route:'asia/south-asia/industry/',ready:'[data-asia-atlas][data-map-ready=true]',map:'.asia-map-frame',sectors:'[data-south-industry-sector]',products:'.south-industry-products [data-industry-feature]',key:'data-industry-feature',samples:['sc-coal','sc-steel','sc-it'],sources:'[data-south-industry-evidence] a'},
  {id:'central-asia',route:'asia/central-asia/industry/',ready:'[data-central-industry][data-central-ready=true]',map:'[data-central-map-frame]',sectors:'[data-central-sector]',products:'[data-central-choice]',key:'data-central-choice',sources:'[data-central-metric] a',camera:'[data-central-map]'},
  {id:'west-asia',route:'west-asia/industry/',ready:'[data-west-industry][data-ready=true]',map:'.wi-map-frame',sectors:'[data-wi-sector]',products:'[data-wi-industry]',key:'data-wi-industry',sources:'[data-wi-stat-panel] a',camera:'[data-wi-map]'},
  {id:'africa',route:'africa/?field=industry',ready:'[data-africa-atlas][data-initialized=true]',map:'.africa-map-frame',sectors:'[data-africa-industry-sector]',products:'[data-africa-industry-commodity]',mode:'select',sources:'[data-africa-industry-statistics] a',camera:'.africa-map'},
- {id:'oceania',route:'oceania/industry/',ready:'[data-oceania-learning][data-oceania-ready=true]',map:'[data-primary-map]',sectors:'[data-industry-sector]',products:'[data-oceania-product]',mode:'select',sources:'[data-catalog-stat-sources] a',camera:'[data-primary-map] svg'},
- {id:'latin-america',route:'latin-america/industry/',ready:'[data-latin-industry-sectors][data-lis-ready=true]',map:'[data-lis-map]',sectors:'[data-latin-industry-sector]',products:'[data-lis-industry]',key:'data-lis-industry',sources:'[data-lis-statistics-body] a',camera:'[data-lis-map]'},
- {id:'us',route:'north-america/industry/',ready:'[data-us-industry][data-us-initialized=true]',map:'[data-us-map-frame]',sectors:'[data-us-sector]',products:'[data-us-product]',key:'data-us-product',sources:'[data-us-statistics] a',camera:'[data-us-map]'},
+ {id:'oceania',route:'oceania/industry/',ready:'[data-oceania-learning][data-oceania-ready=true]',map:'[data-primary-map]',sectors:'[data-industry-sector]',products:'[data-oceania-product]',mode:'select',samples:['iron','aluminium','tourism'],sources:'[data-catalog-stat-sources] a',camera:'[data-primary-map] svg'},
+ {id:'latin-america',route:'latin-america/industry/',ready:'[data-latin-industry-sectors][data-lis-ready=true]',map:'[data-lis-map]',sectors:'[data-latin-industry-sector]',products:'[data-lis-industry]',key:'data-lis-industry',sources:'[data-lis-sources] a',sourceDisclosure:'details:has([data-lis-sources]) > summary',camera:'[data-lis-map]'},
+ {id:'us',route:'north-america/industry/',ready:'[data-us-industry][data-us-initialized=true]',map:'[data-us-map-frame]',sectors:'[data-us-sector]',products:'[data-us-key]',key:'data-us-key',sources:'[data-us-statistics] a',camera:'[data-us-map]'},
  {id:'russia',route:'russia/industry/',ready:'[data-ru-industry][data-ru-ready=true]',map:'[data-ru-canvas]',sectors:'[data-ru-sector]',products:'[data-ru-product]',key:'data-ru-product',sources:'[data-ru-stat] a',camera:'[data-ru-map]'},
 ];
 // Controllers may expose the current value on a root element as well as on
@@ -72,17 +72,17 @@ function fixed(before,after,name){
   assert(a.every((value,i)=>Math.abs(value-b[i])<=.001),name+': map viewBox changes beyond SVG serialization rounding');
  }else assert.equal(after.frame,before.frame,name+': map viewBox changes');
 }
-async function choose(scene){
+async function choose(scene,sample){
  if(scene.mode==='select'){
   const control=page.locator(scene.products).first();
   const choices=await control.locator('option').evaluateAll(nodes=>nodes.filter(n=>!n.disabled&&!n.hidden).map(n=>n.value));
-  const id=choices.find(id=>!excluded.has(id));assert(id,scene.id+': no selectable industry');
+  const id=choices.find(id=>!excluded.has(id)&&(!sample||id===sample));assert(id,scene.id+': no selectable industry');
   await control.selectOption(id);return {id,control};
  }
- const controls=page.locator(scene.products+':visible');
+ const controls=page.locator(scene.products+':visible:not(:disabled)');
  for(let i=0;i<await controls.count();i++){
   const control=controls.nth(i),id=await control.getAttribute(scene.key);
-  if(id&&!excluded.has(id)){await control.click();return {id,control};}
+  if(id&&!excluded.has(id)&&(!sample||id===sample)){await control.click();return {id,control};}
  }
  throw Error(scene.id+': no selectable industry');
 }
@@ -109,10 +109,11 @@ try{
    const tabs=page.locator(scene.sectors+':visible'),tabCount=await tabs.count();assert.equal(tabCount,scene.id==='us'?4:3,scene.id+': retained sector controls');
    const selected=[];
    for(let i=0;i<tabCount;i++){
-    await tabs.nth(i).click();await settle(scene);const before=await snapshot(scene),choice=await choose(scene);await settle(scene);
+    await tabs.nth(i).click();await settle(scene);const before=await snapshot(scene),choice=await choose(scene,scene.samples?.[i]);await settle(scene);
     assert([...new URL(page.url()).searchParams.values()].some(value=>value.includes(choice.id)),scene.id+': selected industry is represented in URL');
     if(scene.mode==='select')assert.equal(await choice.control.inputValue(),choice.id);else assert.equal(await choice.control.getAttribute('aria-pressed'),'true');
     fixed(before,await snapshot(scene),scene.id+' '+choice.id);
+    if(scene.sourceDisclosure&&!await page.locator(scene.sources+':visible').count())await page.locator(scene.sourceDisclosure).click();
     assert(await page.locator(scene.sources+':visible').count()>0,scene.id+': selected evidence has a visible source link');
     const selectedUrl=page.url();await page.reload({waitUntil:'networkidle'});await settle(scene);assert.equal(canonicalUrl(page.url()),canonicalUrl(selectedUrl),scene.id+': URL state reload');
     const restored=scene.mode==='select'?page.locator(scene.products).first():page.locator(`${scene.products}[${scene.key}="${choice.id}"]:visible`).first();
