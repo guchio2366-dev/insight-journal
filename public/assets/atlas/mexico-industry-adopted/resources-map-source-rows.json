@@ -1,0 +1,1203 @@
+{
+  "sgmYear": 2024,
+  "sgmMineRows": {
+    "copper": [
+      {
+        "sourceLine": 3155,
+        "name": "Total:",
+        "2024Raw": "777 106.15",
+        "value": 777106.15
+      },
+      {
+        "sourceLine": 3156,
+        "name": "Aguascalientes",
+        "2024Raw": "386.00",
+        "value": 386.0
+      },
+      {
+        "sourceLine": 3157,
+        "name": "Baja California Sur",
+        "2024Raw": "13 978.00",
+        "value": 13978.0
+      },
+      {
+        "sourceLine": 3158,
+        "name": "Chihuahua",
+        "2024Raw": "19 844.46",
+        "value": 19844.46
+      },
+      {
+        "sourceLine": 3159,
+        "name": "Coahuila",
+        "2024Raw": "15 000.00",
+        "value": 15000.0
+      },
+      {
+        "sourceLine": 3160,
+        "name": "Durango",
+        "2024Raw": "6 934.01",
+        "value": 6934.01
+      },
+      {
+        "sourceLine": 3161,
+        "name": "Guanajuato",
+        "2024Raw": "-",
+        "value": null
+      },
+      {
+        "sourceLine": 3162,
+        "name": "Guerrero",
+        "2024Raw": "10 881.03",
+        "value": 10881.03
+      },
+      {
+        "sourceLine": 3163,
+        "name": "Hidalgo",
+        "2024Raw": "3 245.92",
+        "value": 3245.92
+      },
+      {
+        "sourceLine": 3164,
+        "name": "Jalisco",
+        "2024Raw": "1 578.62",
+        "value": 1578.62
+      },
+      {
+        "sourceLine": 3165,
+        "name": "México",
+        "2024Raw": "1 133.00",
+        "value": 1133.0
+      },
+      {
+        "sourceLine": 3166,
+        "name": "Michoacán",
+        "2024Raw": "2 081.43",
+        "value": 2081.43
+      },
+      {
+        "sourceLine": 3167,
+        "name": "Nayarit",
+        "2024Raw": "-",
+        "value": null
+      },
+      {
+        "sourceLine": 3168,
+        "name": "Oaxaca",
+        "2024Raw": "911.09",
+        "value": 911.09
+      },
+      {
+        "sourceLine": 3169,
+        "name": "Puebla",
+        "2024Raw": "-",
+        "value": null
+      },
+      {
+        "sourceLine": 3170,
+        "name": "Querétaro",
+        "2024Raw": "1 544.00",
+        "value": 1544.0
+      },
+      {
+        "sourceLine": 3171,
+        "name": "San Luis Potosí",
+        "2024Raw": "33 479.99",
+        "value": 33479.99
+      },
+      {
+        "sourceLine": 3172,
+        "name": "Sinaloa",
+        "2024Raw": "427.00",
+        "value": 427.0
+      },
+      {
+        "sourceLine": 3173,
+        "name": "Sonora",
+        "2024Raw": "544 345.80",
+        "value": 544345.8
+      },
+      {
+        "sourceLine": 3174,
+        "name": "Zacatecas",
+        "2024Raw": "121 335.80",
+        "value": 121335.8
+      }
+    ],
+    "gold": [
+      {
+        "sourceLine": 3325,
+        "name": "Total:",
+        "2024Raw": "119 527.77",
+        "value": 119527.77
+      },
+      {
+        "sourceLine": 3326,
+        "name": "Aguascalientes",
+        "2024Raw": "60.00",
+        "value": 60.0
+      },
+      {
+        "sourceLine": 3327,
+        "name": "Baja California",
+        "2024Raw": "-",
+        "value": null
+      },
+      {
+        "sourceLine": 3328,
+        "name": "Chihuahua",
+        "2024Raw": "9 607.54",
+        "value": 9607.54
+      },
+      {
+        "sourceLine": 3329,
+        "name": "Coahuila",
+        "2024Raw": "105.12",
+        "value": 105.12
+      },
+      {
+        "sourceLine": 3330,
+        "name": "Durango",
+        "2024Raw": "8 108.57",
+        "value": 8108.57
+      },
+      {
+        "sourceLine": 3331,
+        "name": "Guanajuato",
+        "2024Raw": "1 300.00",
+        "value": 1300.0
+      },
+      {
+        "sourceLine": 3332,
+        "name": "Guerrero",
+        "2024Raw": "19 710.00",
+        "value": 19710.0
+      },
+      {
+        "sourceLine": 3333,
+        "name": "Hidalgo",
+        "2024Raw": "35.66",
+        "value": 35.66
+      },
+      {
+        "sourceLine": 3334,
+        "name": "Jalisco",
+        "2024Raw": "6.73",
+        "value": 6.73
+      },
+      {
+        "sourceLine": 3335,
+        "name": "México",
+        "2024Raw": "813.59",
+        "value": 813.59
+      },
+      {
+        "sourceLine": 3336,
+        "name": "Michoacán",
+        "2024Raw": "44.88",
+        "value": 44.88
+      },
+      {
+        "sourceLine": 3337,
+        "name": "Morelos",
+        "2024Raw": "-",
+        "value": null
+      },
+      {
+        "sourceLine": 3338,
+        "name": "Nayarit",
+        "2024Raw": "70.00",
+        "value": 70.0
+      },
+      {
+        "sourceLine": 3339,
+        "name": "Oaxaca",
+        "2024Raw": "390.00",
+        "value": 390.0
+      },
+      {
+        "sourceLine": 3340,
+        "name": "Querétaro",
+        "2024Raw": "216.54",
+        "value": 216.54
+      },
+      {
+        "sourceLine": 3341,
+        "name": "San Luis Potosí",
+        "2024Raw": "2 660.00",
+        "value": 2660.0
+      },
+      {
+        "sourceLine": 3342,
+        "name": "Sinaloa",
+        "2024Raw": "166.00",
+        "value": 166.0
+      },
+      {
+        "sourceLine": 3343,
+        "name": "Sonora",
+        "2024Raw": "38 360.30",
+        "value": 38360.3
+      },
+      {
+        "sourceLine": 3344,
+        "name": "Zacatecas",
+        "2024Raw": "37 872.85",
+        "value": 37872.85
+      }
+    ],
+    "silver": [
+      {
+        "sourceLine": 3388,
+        "name": "Total:",
+        "2024Raw": "7 221 026.44",
+        "value": 7221026.44
+      },
+      {
+        "sourceLine": 3389,
+        "name": "Aguascalientes",
+        "2024Raw": "16 790.00",
+        "value": 16790.0
+      },
+      {
+        "sourceLine": 3390,
+        "name": "Baja California",
+        "2024Raw": "-",
+        "value": null
+      },
+      {
+        "sourceLine": 3391,
+        "name": "Chihuahua",
+        "2024Raw": "1 045 873.90",
+        "value": 1045873.9
+      },
+      {
+        "sourceLine": 3392,
+        "name": "Coahuila",
+        "2024Raw": "96 770.00",
+        "value": 96770.0
+      },
+      {
+        "sourceLine": 3393,
+        "name": "Durango",
+        "2024Raw": "812 980.00",
+        "value": 812980.0
+      },
+      {
+        "sourceLine": 3394,
+        "name": "Guanajuato",
+        "2024Raw": "55 130.00",
+        "value": 55130.0
+      },
+      {
+        "sourceLine": 3395,
+        "name": "Guerrero",
+        "2024Raw": "114 470.00",
+        "value": 114470.0
+      },
+      {
+        "sourceLine": 3396,
+        "name": "Hidalgo",
+        "2024Raw": "101 680.00",
+        "value": 101680.0
+      },
+      {
+        "sourceLine": 3397,
+        "name": "Jalisco",
+        "2024Raw": "76 020.00",
+        "value": 76020.0
+      },
+      {
+        "sourceLine": 3398,
+        "name": "México",
+        "2024Raw": "136 930.00",
+        "value": 136930.0
+      },
+      {
+        "sourceLine": 3399,
+        "name": "Michoacán",
+        "2024Raw": "-",
+        "value": null
+      },
+      {
+        "sourceLine": 3400,
+        "name": "Morelos",
+        "2024Raw": "-",
+        "value": null
+      },
+      {
+        "sourceLine": 3401,
+        "name": "Nayarit",
+        "2024Raw": "5 030.00",
+        "value": 5030.0
+      },
+      {
+        "sourceLine": 3402,
+        "name": "Oaxaca",
+        "2024Raw": "31 750.00",
+        "value": 31750.0
+      },
+      {
+        "sourceLine": 3403,
+        "name": "Puebla",
+        "2024Raw": "-",
+        "value": null
+      },
+      {
+        "sourceLine": 3404,
+        "name": "Querétaro",
+        "2024Raw": "1 270.00",
+        "value": 1270.0
+      },
+      {
+        "sourceLine": 3405,
+        "name": "San Luis Potosí",
+        "2024Raw": "217 660.00",
+        "value": 217660.0
+      },
+      {
+        "sourceLine": 3406,
+        "name": "Sinaloa",
+        "2024Raw": "40 980.00",
+        "value": 40980.0
+      },
+      {
+        "sourceLine": 3407,
+        "name": "Sonora",
+        "2024Raw": "835 288.10",
+        "value": 835288.1
+      },
+      {
+        "sourceLine": 3408,
+        "name": "Zacatecas",
+        "2024Raw": "3 632 404.44",
+        "value": 3632404.44
+      }
+    ],
+    "zinc": [
+      {
+        "sourceLine": 3568,
+        "name": "Total:",
+        "2024Raw": "1 009 493.57",
+        "value": 1009493.57
+      },
+      {
+        "sourceLine": 3569,
+        "name": "Aguascalientes",
+        "2024Raw": "8 381.00",
+        "value": 8381.0
+      },
+      {
+        "sourceLine": 3570,
+        "name": "Baja California Sur",
+        "2024Raw": "-",
+        "value": null
+      },
+      {
+        "sourceLine": 3571,
+        "name": "Chihuahua",
+        "2024Raw": "115 878.35",
+        "value": 115878.35
+      },
+      {
+        "sourceLine": 3572,
+        "name": "Coahuila",
+        "2024Raw": "15 000.00",
+        "value": 15000.0
+      },
+      {
+        "sourceLine": 3573,
+        "name": "Durango",
+        "2024Raw": "97 404.99",
+        "value": 97404.99
+      },
+      {
+        "sourceLine": 3574,
+        "name": "Guerrero",
+        "2024Raw": "32 406.50",
+        "value": 32406.5
+      },
+      {
+        "sourceLine": 3575,
+        "name": "Hidalgo",
+        "2024Raw": "25 639.97",
+        "value": 25639.97
+      },
+      {
+        "sourceLine": 3576,
+        "name": "Jalisco",
+        "2024Raw": "5 479.19",
+        "value": 5479.19
+      },
+      {
+        "sourceLine": 3577,
+        "name": "México",
+        "2024Raw": "27 583.70",
+        "value": 27583.7
+      },
+      {
+        "sourceLine": 3578,
+        "name": "Michoacán",
+        "2024Raw": "-",
+        "value": null
+      },
+      {
+        "sourceLine": 3579,
+        "name": "Oaxaca",
+        "2024Raw": "9 506.33",
+        "value": 9506.33
+      },
+      {
+        "sourceLine": 3580,
+        "name": "Querétaro",
+        "2024Raw": "3 649.00",
+        "value": 3649.0
+      },
+      {
+        "sourceLine": 3581,
+        "name": "San Luis Potosí",
+        "2024Raw": "27 039.19",
+        "value": 27039.19
+      },
+      {
+        "sourceLine": 3582,
+        "name": "Sinaloa",
+        "2024Raw": "-",
+        "value": null
+      },
+      {
+        "sourceLine": 3583,
+        "name": "Sonora",
+        "2024Raw": "78 029.61",
+        "value": 78029.61
+      },
+      {
+        "sourceLine": 3584,
+        "name": "Zacatecas",
+        "2024Raw": "563 495.74",
+        "value": 563495.74
+      }
+    ]
+  },
+  "steelYear": 2023,
+  "steelRows": [
+    {
+      "state": "00",
+      "name": "00 Estados Unidos Mexicanos",
+      "3311EmploymentRaw": "16,312||",
+      "3312EmploymentRaw": "64,969||",
+      "value": 81281.0,
+      "status": "available"
+    },
+    {
+      "state": "01",
+      "name": "01 Aguascalientes",
+      "3311EmploymentRaw": "-||",
+      "3312EmploymentRaw": "280||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "02",
+      "name": "02 Baja California",
+      "3311EmploymentRaw": "-||",
+      "3312EmploymentRaw": "2,634||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "03",
+      "name": "03 Baja California Sur",
+      "3311EmploymentRaw": "-||",
+      "3312EmploymentRaw": "-||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "04",
+      "name": "04 Campeche",
+      "3311EmploymentRaw": "SD||",
+      "3312EmploymentRaw": "-||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "05",
+      "name": "05 Coahuila de Zaragoza",
+      "3311EmploymentRaw": "SD||",
+      "3312EmploymentRaw": "3,792||",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "06",
+      "name": "06 Colima",
+      "3311EmploymentRaw": "-||",
+      "3312EmploymentRaw": "-||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "07",
+      "name": "07 Chiapas",
+      "3311EmploymentRaw": "SD||",
+      "3312EmploymentRaw": "-||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "08",
+      "name": "08 Chihuahua",
+      "3311EmploymentRaw": "SD||",
+      "3312EmploymentRaw": "1,387||",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "09",
+      "name": "09 Ciudad de México",
+      "3311EmploymentRaw": "-||",
+      "3312EmploymentRaw": "1,384||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "10",
+      "name": "10 Durango",
+      "3311EmploymentRaw": "-||",
+      "3312EmploymentRaw": "-||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "11",
+      "name": "11 Guanajuato",
+      "3311EmploymentRaw": "-||",
+      "3312EmploymentRaw": "2,211||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "12",
+      "name": "12 Guerrero",
+      "3311EmploymentRaw": "SD||",
+      "3312EmploymentRaw": "-||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "13",
+      "name": "13 Hidalgo",
+      "3311EmploymentRaw": "SD||",
+      "3312EmploymentRaw": "1,390||",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "14",
+      "name": "14 Jalisco",
+      "3311EmploymentRaw": "-||",
+      "3312EmploymentRaw": "5,140||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "15",
+      "name": "15 México",
+      "3311EmploymentRaw": "-||",
+      "3312EmploymentRaw": "4,621||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "16",
+      "name": "16 Michoacán de Ocampo",
+      "3311EmploymentRaw": "5,112||",
+      "3312EmploymentRaw": "90||",
+      "value": 5202.0,
+      "status": "available"
+    },
+    {
+      "state": "17",
+      "name": "17 Morelos",
+      "3311EmploymentRaw": "SD||",
+      "3312EmploymentRaw": "-||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "18",
+      "name": "18 Nayarit",
+      "3311EmploymentRaw": "SD||",
+      "3312EmploymentRaw": "-||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "19",
+      "name": "19 Nuevo León",
+      "3311EmploymentRaw": "1,911||",
+      "3312EmploymentRaw": "27,056||",
+      "value": 28967.0,
+      "status": "available"
+    },
+    {
+      "state": "20",
+      "name": "20 Oaxaca",
+      "3311EmploymentRaw": "-||",
+      "3312EmploymentRaw": "-||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "21",
+      "name": "21 Puebla",
+      "3311EmploymentRaw": "-||",
+      "3312EmploymentRaw": "1,375||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "22",
+      "name": "22 Querétaro",
+      "3311EmploymentRaw": "SD||",
+      "3312EmploymentRaw": "340||",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "23",
+      "name": "23 Quintana Roo",
+      "3311EmploymentRaw": "SD||",
+      "3312EmploymentRaw": "-||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "24",
+      "name": "24 San Luis Potosí",
+      "3311EmploymentRaw": "SD||",
+      "3312EmploymentRaw": "7,438||",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "25",
+      "name": "25 Sinaloa",
+      "3311EmploymentRaw": "-||",
+      "3312EmploymentRaw": "153||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "26",
+      "name": "26 Sonora",
+      "3311EmploymentRaw": "-||",
+      "3312EmploymentRaw": "449||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "27",
+      "name": "27 Tabasco",
+      "3311EmploymentRaw": "-||",
+      "3312EmploymentRaw": "-||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "28",
+      "name": "28 Tamaulipas",
+      "3311EmploymentRaw": "-||",
+      "3312EmploymentRaw": "893||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "29",
+      "name": "29 Tlaxcala",
+      "3311EmploymentRaw": "-||",
+      "3312EmploymentRaw": "-||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "30",
+      "name": "30 Veracruz de Ignacio de la Llave",
+      "3311EmploymentRaw": "-||",
+      "3312EmploymentRaw": "2,436||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "31",
+      "name": "31 Yucatán",
+      "3311EmploymentRaw": "-||",
+      "3312EmploymentRaw": "127||",
+      "value": null,
+      "status": "confidential"
+    },
+    {
+      "state": "32",
+      "name": "32 Zacatecas",
+      "3311EmploymentRaw": "SD||",
+      "3312EmploymentRaw": "64||",
+      "value": null,
+      "status": "unknown"
+    }
+  ],
+  "refiningYear": 2025,
+  "refiningRows": [
+    {
+      "state": "01",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "02",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "03",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "04",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "05",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "06",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "07",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "08",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "09",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "10",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "11",
+      "value": 117,
+      "status": "available"
+    },
+    {
+      "state": "12",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "13",
+      "value": 212,
+      "status": "available"
+    },
+    {
+      "state": "14",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "15",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "16",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "17",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "18",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "19",
+      "value": 146,
+      "status": "available"
+    },
+    {
+      "state": "20",
+      "value": 201,
+      "status": "available"
+    },
+    {
+      "state": "21",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "22",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "23",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "24",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "25",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "26",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "27",
+      "value": 134,
+      "status": "available"
+    },
+    {
+      "state": "28",
+      "value": null,
+      "status": "unretrieved"
+    },
+    {
+      "state": "29",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "30",
+      "value": null,
+      "status": "unretrieved"
+    },
+    {
+      "state": "31",
+      "value": null,
+      "status": "unknown"
+    },
+    {
+      "state": "32",
+      "value": null,
+      "status": "unknown"
+    }
+  ],
+  "refiningPublishedRuns": [
+    {
+      "refinery": "Tula",
+      "state": "13",
+      "value": 212
+    },
+    {
+      "refinery": "Salina Cruz",
+      "state": "20",
+      "value": 201
+    },
+    {
+      "refinery": "Cadereyta",
+      "state": "19",
+      "value": 146
+    },
+    {
+      "refinery": "Olmeca (Dos Bocas)",
+      "state": "27",
+      "value": 134
+    },
+    {
+      "refinery": "Salamanca",
+      "state": "11",
+      "value": 117
+    }
+  ],
+  "oilGasExportYear": 2025,
+  "oilGasExportRows": [
+    {
+      "state": "01",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "02",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "03",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "04",
+      "value": 8.269053,
+      "sourceValue": 8269053,
+      "sourceStatus": "Disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "available"
+    },
+    {
+      "state": "05",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "06",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "07",
+      "value": 0.418486,
+      "sourceValue": 418486,
+      "sourceStatus": "Disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "available"
+    },
+    {
+      "state": "08",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "09",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "10",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "11",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "12",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "13",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "14",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "15",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "16",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "17",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "18",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "19",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "20",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "21",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "22",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "23",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "24",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "25",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "26",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "27",
+      "value": 5.510417,
+      "sourceValue": 5510417,
+      "sourceStatus": "Disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "available"
+    },
+    {
+      "state": "28",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "29",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "30",
+      "value": 0.620662,
+      "sourceValue": 620662,
+      "sourceStatus": "Disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "available"
+    },
+    {
+      "state": "31",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    },
+    {
+      "state": "32",
+      "value": null,
+      "sourceValue": null,
+      "sourceStatus": "No disponible",
+      "publicationStatus": "Cifras Preliminares.",
+      "status": "unknown"
+    }
+  ],
+  "notes": [
+    "SGMの原文数値列の2024値を抽出。列非掲載と「-」を不明として保持。",
+    "CE合計は全構成業種が公開数値のときのみ計算。「-」は秘匿、SDは不明。",
+    "精製量は国内PEMEX７製油所のある州が対象。非所在25州はnull/unknown、個別処理量未取得の２州はnull/unretrieved。施設一覧から数値0を生成しない。",
+    "石油・ガス地図は保存した既存ETEF211のFOB輸出価額。原状態と原典千USD値を保持。全国分母を生成せず、国内精製量に流用しない。"
+  ]
+}

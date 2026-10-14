@@ -1,5 +1,6 @@
 ---
 import MexicoWorkspace from './MexicoWorkspace.astro';
+import MexicoIndustryAdopted from './MexicoIndustryAdopted.astro';
 import MexicoFoodProcessingReading from './MexicoFoodProcessingReading.astro';
 import {mexicoFoodProcessingReading} from '../../data/atlas/mexico/food-processing-reading';
 import originalData from '../../data/atlas/mexico/industry.json';
@@ -50,13 +51,14 @@ const config={data,population,reading,labels,views,industryHref,populationHref,m
 const value=(v:unknown)=>industryValueText(v as MexicoIndustryValue);
 ---
 <MexicoWorkspace field="industry" title="メキシコの主要産業｜地域・輸送・市場をつなぐ" lead="資源・エネルギー、製造業、サービス業の主要地域から、資源・人・交通・市場のつながりを読む。">
-  <div slot="controls" class="industry-controls country-industry-navigation" data-industry-controls>
+  <div slot="controls" class="industry-controls country-industry-navigation" data-industry-controls data-ma-legacy>
+   <p><a href={industryHref}>産業・品目の集積図へ戻る</a></p>
    <div class="industry-tab-row" role="tablist" aria-label="主要産業の3分野">{mexicoIndustryPrimarySectors.map(sector=><button type="button" role="tab" id={`mi-sector-${sector.id}`} data-industry-sector={sector.id} aria-selected={sector.id==='resources'?'true':'false'} tabindex={sector.id==='resources'?0:-1} aria-controls="mi-primary-map-panel">{sector.label}</button>)}</div>
    {mexicoIndustryPrimarySectors.map(sector=><div class="industry-tab-row industry-subtabs" role="tablist" aria-label={`${sector.label}の分野`} data-industry-subtabs={sector.id} data-mi-metric-tabs hidden>{(sector.id==='services'?[{id:'all',label:'全分野'},{id:'finance',label:'金融・専門サービス'},{id:'tourism',label:'宿泊・飲食'}]:mexicoIndustrySubsectorsFor(sector.id)).map(sub=><button type="button" role="tab" id={`mi-category-${sector.id}-${sub.id}`} data-industry-subsector={sub.id} data-owner-sector={sector.id} data-mi-metric-button={sub.id==='all'||sector.id==='services'?undefined:sub.id} aria-selected={sub.id==='all'?'true':'false'} tabindex={sub.id==='all'?0:-1} aria-controls="mi-description mi-statistics">{sub.label}</button>)}</div>)}
    <p class="industry-guide"><span data-industry-breadcrumb>資源・エネルギー</span><a href="#mi-statistics">この分野の統計へ</a></p>
    <select data-mi-metric hidden aria-label="輸出業種" tabindex="-1">{data.metrics.map(m=><option value={m.id} selected={m.id==='transport'}>{m.name}</option>)}</select>
   </div>
- <div slot="map" class="mi-map-panel">
+ <Fragment slot="map"><MexicoIndustryAdopted /><div class="mi-map-panel" data-ma-legacy>
   <div data-mi-comparison-heading hidden><h2 data-mi-comparison-title>{reading.comparison.title}</h2><p class="mexico-caption" data-mi-comparison-lead>{reading.comparison.lead}</p></div>
   <div class="mi-map-grid" data-mi-map-grid>
    {['primary','secondary'].map((slot,i)=><figure class="mi-map-figure" data-mi-figure={slot} hidden={i===1}>
@@ -86,8 +88,8 @@ const value=(v:unknown)=>industryValueText(v as MexicoIndustryValue);
    </figure>)}
   </div>
   <p class="mexico-caption" data-mi-map-status aria-live="polite">2025年速報・輸送機器の輸出額。32州の公開状態を表示。</p>
- </div>
- <div slot="items" class="industry-key"><div data-mi-sector-legend>{mexicoIndustryPrimarySectors.map(s=><span><i style={`--industry-color:${s.color}`} aria-hidden="true">{s.symbol}</i>{s.label}</span>)}</div><p data-mi-geography-scope>●は州単位の案内位置、○は原典で活動を確認した都市の市街位置です。採掘・精製・工場・都市集積の実際の敷地や点の数量を表しません。表示のない州を産業の不在とは判断しません。背景：INEGI自然地理地域（2001年の区分図）。</p><div class="mi-reading-keys">
+ </div></Fragment>
+ <div slot="items" class="industry-key" data-ma-legacy><div data-mi-sector-legend>{mexicoIndustryPrimarySectors.map(s=><span><i style={`--industry-color:${s.color}`} aria-hidden="true">{s.symbol}</i>{s.label}</span>)}</div><p data-mi-geography-scope>●は州単位の案内位置、○は原典で活動を確認した都市の市街位置です。採掘・精製・工場・都市集積の実際の敷地や点の数量を表しません。表示のない州を産業の不在とは判断しません。背景：INEGI自然地理地域（2001年の区分図）。</p><div class="mi-reading-keys">
   <label class="mi-export-overlay-control" data-mi-export-overlay-wrap hidden><input type="checkbox" data-mi-export-overlay/>州別FOB輸出額を面で表示（補助統計）</label>
   {['primary','secondary'].map((slot,i)=><div data-mi-legend-slot={slot}>
    <div data-mi-export-legend={slot}>
@@ -100,7 +102,7 @@ const value=(v:unknown)=>industryValueText(v as MexicoIndustryValue);
    </div>}
   </div>)}
  </div></div>
- <div slot="reading" class="mi-reading industry-map-reading" id="mi-description">
+ <div slot="reading" data-ma-legacy class="mi-reading industry-map-reading" id="mi-description">
   <section data-mi-reading-comparison hidden><h2 data-mi-reading-comparison-title>{reading.comparison.title}</h2><p class="mexico-takeaway" data-mi-reading-comparison-text>{reading.comparison.text}</p><p class="mexico-caption" data-mi-period-note hidden>{reading.populationComparison.periodNote}</p><a class="mexico-return" data-mi-return href={`${industryHref}?state=05&metric=transport`}>コアウイラの輸送機器地図へ戻る</a></section>
   <p class="mexico-caption mi-fallback-note" data-mi-fallback-note hidden>簡易表示。州は上の選択欄で選べます。</p>
   <div class="industry-selected-reading" data-mi-reading-normal>
@@ -141,21 +143,23 @@ const value=(v:unknown)=>industryValueText(v as MexicoIndustryValue);
   <details class="mi-topic-reading" hidden><summary>選んだ業種の立地・交通・市場を読む</summary><h3 data-mi-topic-heading>{reading.transport.heading}</h3><p data-mi-topic-text>{reading.transport.text}</p></details>
   <details><summary>業種と公開状態の意味</summary><p>{reading.transport.note}</p><p>{reading.electronics.note}</p><p>FOB型の輸出額は、輸出国の国境まで届ける費用を含む価額。国境から先の運賃・保険料は含みません。<a href={reading.sources[9].url}>国連の貿易統計の定義</a></p><p>秘匿：個別業種の値を公表しない。未把握：輸出の有無を特定する情報がない。数値0：輸出なし。500米ドル未満、対象外、未取得もゼロと分けます。</p><p>{data.notes.scope}</p><p>{data.notes.confidential}</p><p>表示は千米ドルを1,000,000で割った10億米ドル。州別GDPや工場数への換算はしていません。</p></details>
  </div>
- <section slot="statistics" class="mi-industry-summary" aria-label="表示分野を支える統計"><h2 data-mi-summary-title>資源・エネルギーの州別輸出額</h2><p data-mi-summary-scope>2025年速報・FOB輸出額。州の生産地に配分した値です。</p><ol data-mi-summary-list></ol><p data-mi-summary-source>出典：INEGI ETEF。秘匿・未把握は順位に含めません。</p></section>
- <details slot="statistics" class="mi-statistics" id="mi-statistics"><summary>この分野の統計：選択州・全32州の輸出額と人口値</summary>
+ <section slot="statistics" data-ma-legacy class="mi-industry-summary" aria-label="表示分野を支える統計"><h2 data-mi-summary-title>資源・エネルギーの州別輸出額</h2><p data-mi-summary-scope>2025年速報・FOB輸出額。州の生産地に配分した値です。</p><ol data-mi-summary-list></ol><p data-mi-summary-source>出典：INEGI ETEF。秘匿・未把握は順位に含めません。</p></section>
+ <details slot="statistics" data-ma-legacy class="mi-statistics" id="mi-statistics"><summary>この分野の統計：選択州・全32州の輸出額と人口値</summary>
   <div class="mexico-controls mi-controls" data-mi-supplementary-controls><label>州 <select data-mi-state-select><option value="" selected>全国・州未選択</option>{data.states.map(s=><option value={s.id} selected={s.id===selected.id}>{s.name}</option>)}</select></label><label data-mi-source-view-control hidden>元の分布 <select data-mi-source-view><option value="density">人口密度</option><option value="population">人口</option></select></label></div>
   <div class="mexico-actions mi-actions"><label><input type="checkbox" data-mi-only/> 読む州だけ</label><button type="button" data-mi-zoom aria-pressed="false">読む州を拡大</button><button type="button" data-mi-all>全32州へ</button></div>
   <h2><span data-mi-stats-state>{selected.name}</span>の値を確認</h2>
   <div class="mexico-table-scroll"><table class="mi-selected-table"><caption>選択州・輸出額2025年速報／人口・密度2020年</caption><thead><tr><th scope="col">指標</th><th scope="col">値</th><th scope="col">原典の公開状態</th></tr></thead><tbody>{data.metrics.map(m=><tr><th scope="row">{m.name}輸出額・10億米ドル</th><td data-mi-stats-value={m.id}>—</td><td data-mi-stats-status={m.id}>州を選択</td></tr>)}<tr data-mi-population-stats hidden><th scope="row" data-mi-population-stats-label>人口密度・人/km²</th><td data-mi-population-stats-value>—</td><td>INEGI 公表値</td></tr></tbody></table></div>
   <details class="mi-all-data"><summary>全32州の輸出額・公開状態を原典と照合する</summary><div class="mexico-table-scroll"><table><caption>INEGI ETEF・2025年年次速報。原典はFOB千米ドル、表示は10億米ドル。</caption><thead><tr><th scope="col">州</th>{data.metrics.map(m=><Fragment><th scope="col">{m.name}<br/>10億米ドル</th><th scope="col">原典・千米ドル<br/>公開状態</th></Fragment>)}</tr></thead><tbody>{data.states.map(s=>{const r=rows.get(s.id)!;return <tr data-mi-data-row={s.id}><th scope="row">{s.name}<small>{s.sourceName}</small></th>{data.metrics.map(m=>{const v=r.values[m.id as 'transport'|'electronics'];return <Fragment><td>{value(v)}</td><td>{v.sourceValue===null?'—':v.sourceValue.toLocaleString('ja-JP')}<small>{v.sourceStatus}</small></td></Fragment>;})}</tr>;})}</tbody></table></div></details>
  </details>
- <div slot="sources">
+ <div slot="sources" data-ma-legacy>
   <details><summary>原典・加工・配信と利用条件</summary><p>出典：INEGI, Exportaciones por Entidad Federativa (ETEF)。2025年年次速報、原典更新2026年3月31日、取得2026年10月1日。従来の輸送機器・電子機器は32州×2業種の64原典行、追加の資源・製造6業種は32州×6業種の192値を保持しています。原典のFOB千米ドルを10億米ドルへ換算しました。サービス業の就業者は別資料の2023年経済センサスで、輸出額へ換算していません。</p><p>{data.notes.method}</p><p>{data.notes.classificationMetadata}</p><p>州境：INEGI Marco Geoestadístico, diciembre de 2025。2020年人口と2025年輸出額を州コードで結合。投影と表示用一般化：{geometryMetadata.projection.name}。</p><p>{reading.national}</p><p><a href={`${assets}/industry-selected-2025.csv`} download>従来2業種・64行の原典CSV</a> / <a href={`${assets}/official-metadata.txt`}>個別メタデータ</a> / <a href={`${assets}/official-data-dictionary.csv`}>データ辞書・単位</a> / <a href={`${assets}/manifest.json`}>取得・加工のSHA-256台帳</a></p><ul>{reading.sources.map(s=><li><a href={s.url}>{s.label}</a></li>)}<li><a href={catalog.source.url}>INEGI ETEF・追加6業種</a></li><li><a href="https://www.inegi.org.mx/contenidos/programas/ce/2024/doc/mcdmx_ce24.pdf">INEGI 2024・メキシコシティのサービス</a></li><li><a href="https://www.inegi.org.mx/contenidos/programas/ce/2024/doc/mqroo_ce24.pdf">INEGI 2024・キンタナ・ローのサービス</a></li></ul><p>INEGIの自由利用条件に基づき、原典メタデータを保持して出典と独自加工を明示しています。</p></details>
  </div>
+ <script is:inline>{const root=document.currentScript?.closest('[data-mexico-field=industry]');if(root){const p=new URL(location.href).searchParams;root.dataset.maMode=p.get('legacy')==='1'||['population','electronics'].includes(p.get('compare')??'')?'legacy':'adopted';}}</script>
  <script type="application/json" data-mi-config set:html={JSON.stringify(config)} />
 </MexicoWorkspace>
 <script>
  import {initMexicoIndustry} from '../../scripts/atlas-mexico-industry';
+ import {initMexicoIndustryAdopted} from '../../scripts/atlas-mexico-industry-adopted';
  const root=document.querySelector<HTMLElement>('[data-mexico-field="industry"]');
- if(root)initMexicoIndustry(root);
+ if(root){const query=new URL(location.href).searchParams,legacy=query.get('legacy')==='1'||['population','electronics'].includes(query.get('compare')??'');root.dataset.maMode=legacy?'legacy':'adopted';if(legacy)initMexicoIndustry(root);else initMexicoIndustryAdopted(root.querySelector<HTMLElement>('[data-ma-atlas]')!);}
 </script>

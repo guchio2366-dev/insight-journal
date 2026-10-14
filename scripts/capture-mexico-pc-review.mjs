@@ -101,7 +101,10 @@ async function capture(browser, origin, basePath, output, scene, commit, profile
   page.on('response', response => {if (response.status() >= 400) failedRequests.push({url: response.url(), status: response.status()}); else if (['image', 'stylesheet', 'script', 'fetch', 'xhr', 'font'].includes(response.request().resourceType())) assets.add(response.url());});
   page.on('requestfailed', request => {if (request.failure()?.errorText !== 'net::ERR_ABORTED') failedRequests.push({url: request.url(), error: request.failure()?.errorText});});
   const route = `/atlas/north-america/${country === 'mexico' ? 'mexico/' : ''}${field}/`;
-  const record = {name, country, field, scene: id, commit, status: 'failed', profile, requestedUrl: `${origin}${basePath}${route}`, errors, consoleMessages, failedRequests};
+  // These scenarios operate the retained export/population comparison UI.
+  // The normal 34-industry view has its own desktop/mobile review in the same CI.
+  const search = country === 'mexico' && field === 'industry' ? '?legacy=1' : '';
+  const record = {name, country, field, scene: id, commit, status: 'failed', profile, requestedUrl: `${origin}${basePath}${route}${search}`, errors, consoleMessages, failedRequests};
   try {
     const response = await page.goto(record.requestedUrl, {waitUntil: 'domcontentloaded'});
     assert.equal(response?.status(), 200, 'Page did not load successfully');

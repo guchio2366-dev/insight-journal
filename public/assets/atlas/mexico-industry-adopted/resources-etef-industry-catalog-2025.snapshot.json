@@ -1,0 +1,1730 @@
+{
+  "schemaVersion": 1,
+  "year": 2025,
+  "sourceUnit": "thousands USD FOB",
+  "displayUnit": "billions USD FOB",
+  "conversionDivisor": 1000000,
+  "source": {
+    "publisher": "INEGI",
+    "product": "Exportaciones por Entidad Federativa (ETEF)",
+    "url": "https://www.inegi.org.mx/programas/exporta_ef/",
+    "downloadUrl": "https://www.inegi.org.mx/contenidos/programas/exporta_ef/datosabiertos/conjunto_de_datos_eef_csv.zip",
+    "metadataUrl": "https://www.inegi.org.mx/rnm/index.php/catalog/1108",
+    "updated": "2026-03-31",
+    "accessed": "2026-10-01",
+    "licenseUrl": "https://www.inegi.org.mx/inegi/terminos.html",
+    "sourceUnit": "thousands USD FOB",
+    "displayUnit": "billions USD FOB",
+    "classification": "SCIAN México 2018; source subsector codes retained. Bundled dictionary/catalog VERSION is 2007.",
+    "publicationStatus": "Cifras Preliminares.",
+    "geographicAssignment": "Origin of production, allocated using linked establishments; not border crossing or exporter headquarters."
+  },
+  "metrics": [
+    {
+      "id": "oil-gas",
+      "sector": "resources",
+      "subsector": "oil-gas",
+      "name": "石油・天然ガス",
+      "longName": "石油・天然ガスの採掘",
+      "sourceCodes": [
+        "211"
+      ],
+      "scope": "2025年暫定・生産地へ配分した財の輸出額（FOB）。業種全体の生産額・GDP・雇用・サービス輸出ではありません。",
+      "reading": {
+        "heading": "採掘する地域を読む",
+        "text": "石油・天然ガスを採掘した財の輸出額を州で比べます。製油所の加工品や発電は含みません。",
+        "note": "秘匿・不明は輸出なし（0）と区別します。"
+      },
+      "topStates": [
+        "04",
+        "27",
+        "30"
+      ]
+    },
+    {
+      "id": "mining",
+      "sector": "resources",
+      "subsector": "mining",
+      "name": "鉱業",
+      "longName": "金属・非金属鉱物の採掘（石油・ガスを除く）",
+      "sourceCodes": [
+        "212"
+      ],
+      "scope": "2025年暫定・生産地へ配分した財の輸出額（FOB）。業種全体の生産額・GDP・雇用・サービス輸出ではありません。",
+      "reading": {
+        "heading": "鉱床と輸送条件を合わせて読む",
+        "text": "金属・非金属鉱物を採掘した財の輸出額です。製錬・金属加工とは工程を分けて読みます。",
+        "note": "秘匿・不明は輸出なし（0）と区別します。"
+      },
+      "topStates": [
+        "26",
+        "32",
+        "05"
+      ]
+    },
+    {
+      "id": "food",
+      "sector": "manufacturing",
+      "subsector": "food",
+      "name": "食品加工",
+      "longName": "食品工業（飲料・たばこを除く）",
+      "sourceCodes": [
+        "311"
+      ],
+      "scope": "2025年暫定・生産地へ配分した財の輸出額（FOB）。業種全体の生産額・GDP・雇用・サービス輸出ではありません。",
+      "reading": {
+        "heading": "農水産物と加工・配送をつなぐ",
+        "text": "食品を加工した財の輸出額を比べます。農産物の収穫量や飲料・たばこの輸出額ではありません。",
+        "note": "秘匿・不明は輸出なし（0）と区別します。"
+      },
+      "topStates": [
+        "19",
+        "30",
+        "15"
+      ]
+    },
+    {
+      "id": "chemicals",
+      "sector": "manufacturing",
+      "subsector": "chemicals",
+      "name": "化学",
+      "longName": "化学工業",
+      "sourceCodes": [
+        "325"
+      ],
+      "scope": "2025年暫定・生産地へ配分した財の輸出額（FOB）。業種全体の生産額・GDP・雇用・サービス輸出ではありません。",
+      "reading": {
+        "heading": "原料・工程・市場を分けて読む",
+        "text": "化学工業の財の輸出額です。石油の採掘・石油製品・プラスチック製品の別業種とは区別します。",
+        "note": "秘匿・不明は輸出なし（0）と区別します。"
+      },
+      "topStates": [
+        "28",
+        "15",
+        "09"
+      ]
+    },
+    {
+      "id": "metals",
+      "sector": "manufacturing",
+      "subsector": "metals",
+      "name": "金属",
+      "longName": "一次金属・金属製品（331＋332）",
+      "sourceCodes": [
+        "331",
+        "332"
+      ],
+      "scope": "2025年暫定・生産地へ配分した財の輸出額（FOB）。業種全体の生産額・GDP・雇用・サービス輸出ではありません。",
+      "reading": {
+        "heading": "採掘から金属をつくる工程へ",
+        "text": "一次金属と金属製品の二業種を、両方の金額が公開された州だけ合計します。鉱山の採掘額とは異なります。",
+        "note": "各原業種が公開値の場合のみ合計。秘匿・不明を0に置き換えません。"
+      },
+      "topStates": [
+        "05",
+        "19",
+        "02"
+      ]
+    },
+    {
+      "id": "machinery",
+      "sector": "manufacturing",
+      "subsector": "machinery",
+      "name": "機械",
+      "longName": "機械・設備の製造",
+      "sourceCodes": [
+        "333"
+      ],
+      "scope": "2025年暫定・生産地へ配分した財の輸出額（FOB）。業種全体の生産額・GDP・雇用・サービス輸出ではありません。",
+      "reading": {
+        "heading": "設備をつくる地域を読む",
+        "text": "機械・設備を製造した財の輸出額です。輸送機器や電子機器・電気機器は別の業種です。",
+        "note": "秘匿・不明は輸出なし（0）と区別します。"
+      },
+      "topStates": [
+        "19",
+        "05",
+        "08"
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "id": "01",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "food": {
+          "value": 0.295198,
+          "sourceValue": 295198,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": 0.021068,
+          "sourceValue": 21068,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": 0.056013,
+          "sourceValue": 56013,
+          "sourceStatus": "Disponible + Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "machinery": {
+          "value": 0.145838,
+          "sourceValue": 145838,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "02",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "food": {
+          "value": 0.829986,
+          "sourceValue": 829986,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": 0.557665,
+          "sourceValue": 557665,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": 3.463515,
+          "sourceValue": 3463515,
+          "sourceStatus": "Disponible + Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "machinery": {
+          "value": 2.191196,
+          "sourceValue": 2191196,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "03",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "food": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "chemicals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "metals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible + No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "machinery": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "id": "04",
+      "values": {
+        "oil-gas": {
+          "value": 8.269053,
+          "sourceValue": 8269053,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "food": {
+          "value": 0.02277,
+          "sourceValue": 22770,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "metals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible + Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "machinery": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "id": "05",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": 1.337365,
+          "sourceValue": 1337365,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "food": {
+          "value": 0.421467,
+          "sourceValue": 421467,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": 0.081751,
+          "sourceValue": 81751,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": 8.443589,
+          "sourceValue": 8443589,
+          "sourceStatus": "Disponible + Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "machinery": {
+          "value": 4.206893,
+          "sourceValue": 4206893,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "06",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "food": {
+          "value": 0.182211,
+          "sourceValue": 182211,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "metals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial + No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "machinery": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "id": "07",
+      "values": {
+        "oil-gas": {
+          "value": 0.418486,
+          "sourceValue": 418486,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "food": {
+          "value": 0.229867,
+          "sourceValue": 229867,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "metals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible + Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "machinery": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "id": "08",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": 0.728076,
+          "sourceValue": 728076,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "food": {
+          "value": 0.987532,
+          "sourceValue": 987532,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": 0.494839,
+          "sourceValue": 494839,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": 2.265101,
+          "sourceValue": 2265101,
+          "sourceStatus": "Disponible + Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "machinery": {
+          "value": 4.171583,
+          "sourceValue": 4171583,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "09",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "food": {
+          "value": 0.193637,
+          "sourceValue": 193637,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": 1.80308,
+          "sourceValue": 1803080,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": 0.129387,
+          "sourceValue": 129387,
+          "sourceStatus": "Disponible + Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "machinery": {
+          "value": 0.033285,
+          "sourceValue": 33285,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "10",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": 0.519857,
+          "sourceValue": 519857,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "food": {
+          "value": 0.398593,
+          "sourceValue": 398593,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "metals": {
+          "value": 0.157474,
+          "sourceValue": 157474,
+          "sourceStatus": "Disponible + Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "machinery": {
+          "value": 0.013888,
+          "sourceValue": 13888,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "11",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "food": {
+          "value": 1.447428,
+          "sourceValue": 1447428,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": 0.715323,
+          "sourceValue": 715323,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": 1.390316,
+          "sourceValue": 1390316,
+          "sourceStatus": "Disponible + Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "machinery": {
+          "value": 0.282606,
+          "sourceValue": 282606,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "12",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "food": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "chemicals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "metals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible + No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "machinery": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "id": "13",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": 0.001292,
+          "sourceValue": 1292,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "food": {
+          "value": 0.083258,
+          "sourceValue": 83258,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": 0.084702,
+          "sourceValue": 84702,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": 0.116384,
+          "sourceValue": 116384,
+          "sourceStatus": "Disponible + Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "machinery": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        }
+      }
+    },
+    {
+      "id": "14",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "food": {
+          "value": 1.35026,
+          "sourceValue": 1350260,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": 0.986748,
+          "sourceValue": 986748,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": 0.925206,
+          "sourceValue": 925206,
+          "sourceStatus": "Disponible + Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "machinery": {
+          "value": 0.074692,
+          "sourceValue": 74692,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "15",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "food": {
+          "value": 1.544297,
+          "sourceValue": 1544297,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": 1.886125,
+          "sourceValue": 1886125,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": 1.328851,
+          "sourceValue": 1328851,
+          "sourceStatus": "Disponible + Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "machinery": {
+          "value": 0.400558,
+          "sourceValue": 400558,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "16",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "food": {
+          "value": 0.761521,
+          "sourceValue": 761521,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": 0.263258,
+          "sourceValue": 263258,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible + Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "machinery": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        }
+      }
+    },
+    {
+      "id": "17",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "food": {
+          "value": 0.134887,
+          "sourceValue": 134887,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": 0.403793,
+          "sourceValue": 403793,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible + Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "machinery": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        }
+      }
+    },
+    {
+      "id": "18",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "food": {
+          "value": 0.045963,
+          "sourceValue": 45963,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "metals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible + No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "machinery": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "id": "19",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": 0.07189,
+          "sourceValue": 71890,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "food": {
+          "value": 2.306992,
+          "sourceValue": 2306992,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": 0.630224,
+          "sourceValue": 630224,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": 4.314297,
+          "sourceValue": 4314297,
+          "sourceStatus": "Disponible + Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "machinery": {
+          "value": 8.076817,
+          "sourceValue": 8076817,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "20",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "food": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "chemicals": {
+          "value": 0.014278,
+          "sourceValue": 14278,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible + No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "machinery": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "id": "21",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "food": {
+          "value": 0.907633,
+          "sourceValue": 907633,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": 0.226136,
+          "sourceValue": 226136,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": 0.4529,
+          "sourceValue": 452900,
+          "sourceStatus": "Disponible + Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "machinery": {
+          "value": 0.063199,
+          "sourceValue": 63199,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "22",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "food": {
+          "value": 0.371312,
+          "sourceValue": 371312,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": 0.38684,
+          "sourceValue": 386840,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": 0.838699,
+          "sourceValue": 838699,
+          "sourceStatus": "Disponible + Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "machinery": {
+          "value": 1.511596,
+          "sourceValue": 1511596,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "23",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "food": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "chemicals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "metals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible + No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "machinery": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        }
+      }
+    },
+    {
+      "id": "24",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": 0.004803,
+          "sourceValue": 4803,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "food": {
+          "value": 0.700925,
+          "sourceValue": 700925,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": 0.224534,
+          "sourceValue": 224534,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": 0.740504,
+          "sourceValue": 740504,
+          "sourceStatus": "Disponible + Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "machinery": {
+          "value": 1.713675,
+          "sourceValue": 1713675,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "25",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": 0.042133,
+          "sourceValue": 42133,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "food": {
+          "value": 0.675817,
+          "sourceValue": 675817,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "metals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial + Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "machinery": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        }
+      }
+    },
+    {
+      "id": "26",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": 3.497013,
+          "sourceValue": 3497013,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "food": {
+          "value": 0.284733,
+          "sourceValue": 284733,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": 1.26582,
+          "sourceValue": 1265820,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": 1.66884,
+          "sourceValue": 1668840,
+          "sourceStatus": "Disponible + Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "machinery": {
+          "value": 0.588313,
+          "sourceValue": 588313,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "27",
+      "values": {
+        "oil-gas": {
+          "value": 5.510417,
+          "sourceValue": 5510417,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "food": {
+          "value": 0.049539,
+          "sourceValue": 49539,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": 0.465168,
+          "sourceValue": 465168,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible + No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "machinery": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        }
+      }
+    },
+    {
+      "id": "28",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "food": {
+          "value": 0.068955,
+          "sourceValue": 68955,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": 1.991429,
+          "sourceValue": 1991429,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": 1.200083,
+          "sourceValue": 1200083,
+          "sourceStatus": "Disponible + Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "machinery": {
+          "value": 3.612797,
+          "sourceValue": 3612797,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "29",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "food": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "chemicals": {
+          "value": 0.113037,
+          "sourceValue": 113037,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Disponible + Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "machinery": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        }
+      }
+    },
+    {
+      "id": "30",
+      "values": {
+        "oil-gas": {
+          "value": 0.620662,
+          "sourceValue": 620662,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "food": {
+          "value": 1.765274,
+          "sourceValue": 1765274,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": 1.150422,
+          "sourceValue": 1150422,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": 1.699659,
+          "sourceValue": 1699659,
+          "sourceStatus": "Disponible + Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "machinery": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        }
+      }
+    },
+    {
+      "id": "31",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "food": {
+          "value": 0.452506,
+          "sourceValue": 452506,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "metals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible + Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "machinery": {
+          "value": 0.015719,
+          "sourceValue": 15719,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        }
+      }
+    },
+    {
+      "id": "32",
+      "values": {
+        "oil-gas": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        },
+        "mining": {
+          "value": 2.915106,
+          "sourceValue": 2915106,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "food": {
+          "value": 0.095548,
+          "sourceValue": 95548,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "chemicals": {
+          "value": 0.002064,
+          "sourceValue": 2064,
+          "sourceStatus": "Disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "available"
+        },
+        "metals": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "Confidencial + Confidencial",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "confidential"
+        },
+        "machinery": {
+          "value": null,
+          "sourceValue": null,
+          "sourceStatus": "No disponible",
+          "publicationStatus": "Cifras Preliminares.",
+          "status": "unknown"
+        }
+      }
+    }
+  ],
+  "sectorReadings": {
+    "resources": {
+      "lead": "採掘の地域と、加工・輸送・市場をつないで読む。",
+      "heading": "ソノラの銅とサカテカスの銀",
+      "text": "北西部のソノラでは銅、内陸のサカテカスでは銀の生産を地域例として読みます。採掘地点に加え、加工・電力・水・輸送・市場という条件を順に考えます。",
+      "sourceURL": "https://www.sgm.gob.mx/productos/pdf/Anuario_2024_Edicion_2025.pdf",
+      "sourceYear": "2024年暫定値／2025年版",
+      "places": [
+        {
+          "state": "26",
+          "name": "ソノラ",
+          "text": "銅の生産を読む州の例。鉱山の位置を示す点ではありません。"
+        },
+        {
+          "state": "32",
+          "name": "サカテカス",
+          "text": "銀の生産を読む州の例。製錬所の位置を示す点ではありません。"
+        }
+      ]
+    },
+    "services": {
+      "lead": "都市の企業・住民と観光客では、需要を支える条件が違う。",
+      "heading": "都市のサービスと観光地のサービス",
+      "text": "メキシコ市の金融・専門サービスと、キンタナ・ローの宿泊・飲食を比べます。企業・住民・観光客の需要と、それを支える交通や働き手を考えます。",
+      "sourceURL": "https://www.inegi.org.mx/contenidos/programas/ce/2024/doc/mqroo_ce24.pdf",
+      "sourceYear": "2023年の経済活動／Censos Económicos 2024確報",
+      "places": [
+        {
+          "state": "09",
+          "name": "メキシコ市",
+          "text": "金融・専門サービスを読む都市の例。州別サービス総額の分布は収録していません。",
+          "sourceURL": "https://www.inegi.org.mx/contenidos/programas/ce/2024/doc/mcdmx_ce24.pdf"
+        },
+        {
+          "state": "23",
+          "name": "キンタナ・ロー",
+          "text": "宿泊・飲食を読む州の例。観光施設の位置を示す点ではありません。"
+        }
+      ]
+    },
+    "construction-real-estate": {
+      "lead": "人口の分布を、住宅・施設の需要を考える背景として読む。",
+      "heading": "建てる活動と、貸す・仲介する活動",
+      "text": "メキシコ市とメヒコ州の2020年人口分布を、住宅・交通施設・事業所の需要を考える背景として読みます。建設は建物や土木工事をつくる活動、不動産は賃貸・仲介・管理です。人口図から建設額や住宅価格は分かりません。",
+      "sourceURL": "https://www.inegi.org.mx/contenidos/app/scian/estructura2023.pdf",
+      "sourceYear": "SCIAN México 2023／人口背景は2020年",
+      "places": [
+        {
+          "state": "09",
+          "name": "メキシコ市",
+          "text": "人口密度を需要の背景として比較します。建設工事の分布ではありません。"
+        },
+        {
+          "state": "15",
+          "name": "メヒコ州",
+          "text": "人口規模を需要の背景として比較します。住宅価格の分布ではありません。"
+        }
+      ]
+    }
+  },
+  "notes": {
+    "scope": "製造業等の生産地に配分した財の輸出統計。商業・サービスと RENEM に結合できない通関取引は対象外。",
+    "confidential": "秘匿された小業種の金額はコード000に合算される。000を特定業種へ配分しない。",
+    "unknown": "No disponible は輸出の有無を特定する情報がない状態。",
+    "zero": "Disponible の数値0は、その期間の該当州・業種で輸出がなかったことを示す。",
+    "notSignificant": "No Significativo は500米ドル未満。ゼロとして扱わない。",
+    "method": "原典の千米ドルを1,000,000で割って10億米ドルへ変換。各州を面積や人口で割らず、公開値の合計から全国シェアを計算しない。",
+    "classificationMetadata": "同梱旧カタログのVERSION欄は2007。現行2025年RNMのSCIAN México2018の定義で範囲を確認し、コードと正式業種名を保持する。",
+    "coverage": "追加6指標。商業・サービス・建設の量は未収録。産業CSVは211・212と製造業21コードを保持。000と農林漁業コードは除外。",
+    "topStates": "金額が公開されている州内での上位例。秘匿・不明を含む全国順位・全国シェアではありません。",
+    "aggregation": "331＋332の両方が公開値の場合のみ金額を合計。一方が秘匿なら合計は秘匿、秘匿がなく不明なら合計は不明。各原状態は抽出CSVに保持。",
+    "sectorReadings": "公式資料に基づく地域例と学習上の問い。施設位置や州別サービス・建設額の分布ではありません。"
+  }
+}

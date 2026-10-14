@@ -1,0 +1,1133 @@
+{
+  "type": "verified numeric extraction; not an original document copy",
+  "verifiedOn": "2026-10-14",
+  "sources": {
+    "mx-service-ce2023": {
+      "title": "INEGI CE2024：州・SCIAN別就業者数とセンサス付加価値（参照2023年）",
+      "url": "https://www.inegi.org.mx/app/tabulados/interactivos/?bd=CE2024&px=CE_GENNCE_1",
+      "year": 2023,
+      "scope": "CE_GENNCE_1。民間・国営企業、都市で捕捉した対象。全国＋32州、SCIAN23/48-49/52/53/54/5415/561422/721、就業者数・VACB。家計調査の全国就業者や国民勘定GDPとは範囲が異なる。'-'は秘匿、SDは非存在または本社所在地への計上。建設・運輸・金融等は本社所在地基準。"
+    },
+    "mx-service-cbs2025": {
+      "title": "INEGI CBS2025（2026年10月2日公表）",
+      "url": "https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2026/pibact/CBS2026_RR.pdf",
+      "year": 2025,
+      "scope": "表2：基本価格・当年価格VAB。全国VAB33,576,797百万MXN、市場価格GDP35,923,239百万MXN。図4：有給・企業所属就業ポスト。表4：平均年報酬。産業大分類の値を狭い製品・業務へ配賦しない。"
+    },
+    "mx-service-cstm2024": {
+      "title": "INEGI観光サテライト勘定2024（2025年12月18日公表）",
+      "url": "https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2025/turismo/CSTM2024_CP.pdf",
+      "year": 2024,
+      "scope": "観光VAB・有給就業ポスト。全国VAB31,331,232百万MXN、全国有給ポスト39,653,160。観光全体は複数産業にまたがり、CE721宿泊と一致しない。WTTC間接・誘発効果込みの総寄与とも区別。"
+    },
+    "mx-service-evi2025": {
+      "title": "INEGI EVI：2025年国際訪問者・支出（2026年2月12日公表、年次表2）",
+      "url": "https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2026/ViajInternales/evi2026_02.pdf",
+      "year": 2025,
+      "scope": "外国居住者の来訪回数・支出。宿泊観光客と日帰り客、境界内滞在と内陸を区分。固有人数ではない。国籍別入国やUPM居住国別航空入国と分母が異なる。暫定値。"
+    },
+    "mx-service-bop2025": {
+      "title": "Banco de México：2025年サービス貿易、2026年8月25日改訂（表A1）",
+      "url": "https://www.banxico.org.mx/publicaciones-y-prensa/balanza-de-pagos/%7BE333A05C-EB45-9A4A-6F1D-591845A64896%7D.pdf",
+      "year": 2025,
+      "scope": "国際収支MBP6、百万USD。サービス総輸出65,802。狭いSCIAN業種とサービス品目は対応しない。旧2026年2月公表値から改訂済み。"
+    },
+    "mx-service-bts2025": {
+      "title": "米国BTS：米墨貨物貿易2025（2026年5月15日公表）",
+      "url": "https://www.bts.gov/newsroom/transborder-freight-data-annual-report-2025-0",
+      "year": 2025,
+      "scope": "運ばれた商品の貿易価額。物流企業の売上・付加価値・サービス輸出ではない。表1b輸送手段、表4b国境ゲート。米国側統計。"
+    },
+    "mx-service-datatur-ranking2024": {
+      "title": "DataTur：UN Tourismに基づく2024年国際観光順位",
+      "url": "https://www.datatur.sectur.gob.mx/SitePages/omt.aspx",
+      "year": 2024,
+      "scope": "宿泊を伴う国際観光客到着数6位、旅行受取16位。人数と収入は別の順位。2025年世界順位ではない。"
+    },
+    "mx-service-datatur-residence2025": {
+      "title": "DataTur RAT2025年12月：UPM居住国別航空入国（14頁）",
+      "url": "https://datatur.sectur.gob.mx/Documentoscompartidos/rat/RAT-2025-12(ES).pdf",
+      "year": 2025,
+      "scope": "UPM外国居住者航空来訪約20.6百万人、米国約13.7、カナダ約2.8。丸め値。EVI航空観光客22.867百万人、国籍別航空入国22.1百万人とは別系列。"
+    },
+    "mx-service-ecis2024": {
+      "title": "INEGI ECIS2025（参照2024年、2026年8月13日公表）",
+      "url": "https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2026/ecis/ECIS2025_RR.pdf",
+      "year": 2024,
+      "scope": "対象9,796社、標本5,938社。工業・商業・民間非金融サービス。通信・コンピューター・情報の対象企業収入99.7%、その他企業サービス86.6%がデジタル供給。全収入の米国比76.9%をIT/BPMだけの比率にしない。BOP全サービスと分母が異なる。"
+    },
+    "mx-service-aws2025": {
+      "title": "AWS：メキシコ地域稼働と投資計画（2025年1月14日）",
+      "url": "https://press.aboutamazon.com/2025/1/aws-launches-infrastructure-region-in-mexico",
+      "year": 2025,
+      "scope": "地域稼働は実績。15年間50億USD超の投資は計画で支出実績ではない。企業の推計効果は国全体のIT付加価値や雇用へ流用しない。"
+    }
+  },
+  "sourceTableLocations": {
+    "mx-service-cbs2025": "表2・図4・表4",
+    "mx-service-cstm2024": "表1・表2",
+    "mx-service-evi2025": "年次表2",
+    "mx-service-bop2025": "表A1・2025年年次欄",
+    "mx-service-bts2025": "表1b・表4b",
+    "mx-service-datatur-residence2025": "14頁",
+    "mx-service-ecis2024": "17頁"
+  },
+  "indicators": {
+    "tourism": {
+      "domestic": [
+        {
+          "label": "CE対象業種の全国就業者",
+          "value": 438724,
+          "unit": "人",
+          "year": 2023,
+          "definition": "CE対象SCIAN721の就業者。企業所属・外部所属、無給等も含み、ENOE全国雇用や有給ポストと異なる。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "CE対象全国就業者に占める比率",
+          "value": 1.5688081782963987,
+          "unit": "%",
+          "year": 2023,
+          "definition": "同年CE対象全業種を分母とするSCIAN721の比率。全経済雇用比ではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国CE対象全業種就業者",
+            "value": 27965433,
+            "unit": "人"
+          }
+        },
+        {
+          "label": "CE対象業種の全国付加価値",
+          "value": 142303.625,
+          "unit": "百万MXN",
+          "year": 2023,
+          "definition": "SCIAN721の当年価格VACB。国民勘定GDPではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国CE対象全業種VACB（同年・参考）",
+            "value": 15667989.992,
+            "unit": "百万MXN"
+          }
+        },
+        {
+          "label": "観光全体の付加価値",
+          "value": 2713120,
+          "unit": "百万MXN",
+          "year": 2024,
+          "definition": "観光サテライト勘定。CE721宿泊業だけの値ではない。WTTC総寄与とも異なる。",
+          "sourceIds": [
+            "mx-service-cstm2024"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "観光全体の全国付加価値比",
+          "value": 8.7,
+          "unit": "%",
+          "year": 2024,
+          "definition": "CSTM公表値。観光全体の寄与、州地図の塗り値ではない。",
+          "sourceIds": [
+            "mx-service-cstm2024"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "同公表時点の全国VAB",
+            "value": 31331232,
+            "unit": "百万MXN"
+          }
+        },
+        {
+          "label": "観光全体の有給就業ポスト",
+          "value": 2931592,
+          "unit": "ポスト",
+          "year": 2024,
+          "definition": "同じ人の複数ポストを含み得る。CE就業者人数とは異なる。",
+          "sourceIds": [
+            "mx-service-cstm2024"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国有給就業ポスト",
+            "value": 39653160,
+            "unit": "ポスト"
+          }
+        },
+        {
+          "label": "観光全体の有給就業ポスト比",
+          "value": 7.4,
+          "unit": "%",
+          "year": 2024,
+          "definition": "CSTM公表の丸め比率。CE721宿泊業やENOE全国就業者の比ではない。",
+          "sourceIds": [
+            "mx-service-cstm2024"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国有給就業ポスト",
+            "value": 39653160,
+            "unit": "ポスト"
+          }
+        },
+        {
+          "label": "宿泊サービスの付加価値（CSTM）",
+          "value": 568815,
+          "unit": "百万MXN",
+          "year": 2024,
+          "definition": "CSTMの来訪者向け宿泊サービス。観光全体とは別の範囲。",
+          "sourceIds": [
+            "mx-service-cstm2024"
+          ],
+          "status": "observed"
+        }
+      ],
+      "world": [
+        {
+          "label": "国際観光客到着数の世界順位",
+          "value": 6,
+          "unit": "位",
+          "year": 2024,
+          "definition": "UN Tourismの宿泊を伴う国際観光客到着数。2025年順位ではない。",
+          "sourceIds": [
+            "mx-service-datatur-ranking2024"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "国際旅行受取の世界順位",
+          "value": 16,
+          "unit": "位",
+          "year": 2024,
+          "definition": "人数の順位とは別。DataTurによるUN Tourism集計。",
+          "sourceIds": [
+            "mx-service-datatur-ranking2024"
+          ],
+          "status": "observed"
+        }
+      ],
+      "trade": [
+        {
+          "label": "外国居住者の全来訪",
+          "value": 98202774,
+          "unit": "来訪回",
+          "year": 2025,
+          "definition": "宿泊観光客と日帰り客を合算。固有の人数ではない。暫定値。",
+          "sourceIds": [
+            "mx-service-evi2025"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "宿泊を伴う国際観光客",
+          "value": 47786706,
+          "unit": "来訪回",
+          "year": 2025,
+          "definition": "境界内滞在20,415,107回と内陸27,371,599回。全訪問者とは異なる。",
+          "sourceIds": [
+            "mx-service-evi2025"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "日帰りの国際訪問者",
+          "value": 50416068,
+          "unit": "来訪回",
+          "year": 2025,
+          "definition": "宿泊を伴わない境界来訪・クルーズ。",
+          "sourceIds": [
+            "mx-service-evi2025"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "外国居住者の旅行支出",
+          "value": 34991.6,
+          "unit": "百万USD",
+          "year": 2025,
+          "definition": "EVI全訪問者支出。宿泊31,715.4、日帰り3,276.3。航空運賃等の輸送サービスと区別。",
+          "sourceIds": [
+            "mx-service-evi2025"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "航空来訪の米国居住者比（UPM）",
+          "value": 66.50485436893203,
+          "unit": "%",
+          "year": 2025,
+          "definition": "UPM居住国別の丸め値から自算。米国約13.7百万人、総計約20.6百万人。EVI航空観光客を分母にしない。",
+          "sourceIds": [
+            "mx-service-datatur-residence2025"
+          ],
+          "status": "estimate",
+          "denominator": {
+            "label": "UPM外国居住者航空来訪（丸め値）",
+            "value": 20.6,
+            "unit": "百万人"
+          }
+        }
+      ]
+    },
+    "logistics": {
+      "domestic": [
+        {
+          "label": "CE対象業種の全国就業者",
+          "value": 1273482,
+          "unit": "人",
+          "year": 2023,
+          "definition": "CE対象SCIAN48-49の就業者。企業所属・外部所属、無給等も含み、ENOE全国雇用や有給ポストと異なる。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "CE対象全国就業者に占める比率",
+          "value": 4.5537717939142945,
+          "unit": "%",
+          "year": 2023,
+          "definition": "同年CE対象全業種を分母とするSCIAN48-49の比率。全経済雇用比ではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国CE対象全業種就業者",
+            "value": 27965433,
+            "unit": "人"
+          }
+        },
+        {
+          "label": "CE対象業種の全国付加価値",
+          "value": 571858.648,
+          "unit": "百万MXN",
+          "year": 2023,
+          "definition": "SCIAN48-49の当年価格VACB。国民勘定GDPではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国CE対象全業種VACB（同年・参考）",
+            "value": 15667989.992,
+            "unit": "百万MXN"
+          }
+        },
+        {
+          "label": "国民勘定の業種付加価値",
+          "value": 2702854,
+          "unit": "百万MXN",
+          "year": 2025,
+          "definition": "基本価格・当年価格。SCIAN48-49の広い業種。CE2023とは年・推計範囲が異なる。",
+          "sourceIds": [
+            "mx-service-cbs2025"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "全国付加価値に占める比率",
+          "value": 8.0,
+          "unit": "%",
+          "year": 2025,
+          "definition": "CBS公表の丸め比率。市場価格GDP比ではない。",
+          "sourceIds": [
+            "mx-service-cbs2025"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国基本価格VAB",
+            "value": 33576797,
+            "unit": "百万MXN"
+          }
+        },
+        {
+          "label": "参考：交通郵便倉庫の有給就業ポスト比",
+          "value": 7.8,
+          "unit": "%",
+          "year": 2025,
+          "definition": "CBS48-49。貨物物流だけでなく旅客・郵便を含む。CE就業者人数とも異なる。",
+          "sourceIds": [
+            "mx-service-cbs2025"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国有給・企業所属就業ポスト",
+            "value": 39600138,
+            "unit": "ポスト"
+          }
+        }
+      ],
+      "world": [
+        {
+          "label": "同範囲の世界サービス輸出シェア",
+          "value": null,
+          "unit": "%",
+          "year": "未確認",
+          "definition": "SCIAN48-49と対応する世界輸出分母を未確認。国内重要性の有無を示す欠測ではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "unconfirmed"
+        }
+      ],
+      "trade": [
+        {
+          "label": "参考：輸送サービス輸出",
+          "value": 7378,
+          "unit": "百万USD",
+          "year": 2025,
+          "definition": "BOP旅客・貨物・その他輸送の全体。貨物物流だけではない。",
+          "sourceIds": [
+            "mx-service-bop2025"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "参考：輸送サービス輸入",
+          "value": 25407,
+          "unit": "百万USD",
+          "year": 2025,
+          "definition": "BOP旅客・貨物・その他輸送の全体。",
+          "sourceIds": [
+            "mx-service-bop2025"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "米墨の貨物貿易価額",
+          "value": 872833677052,
+          "unit": "USD",
+          "year": 2025,
+          "definition": "米国側統計。運ばれた商品の輸出入価額で、運賃・物流売上ではない。",
+          "sourceIds": [
+            "mx-service-bts2025"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "米墨貨物価額のトラック比",
+          "value": 73.6,
+          "unit": "%",
+          "year": 2025,
+          "definition": "トラック輸送の商品価額642,241,157,455USD。",
+          "sourceIds": [
+            "mx-service-bts2025"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "米墨貨物貿易価額",
+            "value": 872833677052,
+            "unit": "USD"
+          }
+        },
+        {
+          "label": "トラック貿易価額のラレド比",
+          "value": 46.1,
+          "unit": "%",
+          "year": 2025,
+          "definition": "ゲート別の商品価額。イスレタ17.5%、オタイメサ9.1%。メキシコの全輸出比ではない。",
+          "sourceIds": [
+            "mx-service-bts2025"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "米墨トラック貨物貿易価額",
+            "value": 642241157455,
+            "unit": "USD"
+          }
+        }
+      ]
+    },
+    "professional": {
+      "domestic": [
+        {
+          "label": "CE対象業種の全国就業者",
+          "value": 680712,
+          "unit": "人",
+          "year": 2023,
+          "definition": "CE対象SCIAN54の就業者。企業所属・外部所属、無給等も含み、ENOE全国雇用や有給ポストと異なる。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "CE対象全国就業者に占める比率",
+          "value": 2.4341192929142204,
+          "unit": "%",
+          "year": 2023,
+          "definition": "同年CE対象全業種を分母とするSCIAN54の比率。全経済雇用比ではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国CE対象全業種就業者",
+            "value": 27965433,
+            "unit": "人"
+          }
+        },
+        {
+          "label": "CE対象業種の全国付加価値",
+          "value": 192426.559,
+          "unit": "百万MXN",
+          "year": 2023,
+          "definition": "SCIAN54の当年価格VACB。国民勘定GDPではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国CE対象全業種VACB（同年・参考）",
+            "value": 15667989.992,
+            "unit": "百万MXN"
+          }
+        },
+        {
+          "label": "国民勘定の業種付加価値",
+          "value": 816996,
+          "unit": "百万MXN",
+          "year": 2025,
+          "definition": "基本価格・当年価格。SCIAN54の広い業種。CE2023とは年・推計範囲が異なる。",
+          "sourceIds": [
+            "mx-service-cbs2025"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "全国付加価値に占める比率",
+          "value": 2.4,
+          "unit": "%",
+          "year": 2025,
+          "definition": "CBS公表の丸め比率。市場価格GDP比ではない。",
+          "sourceIds": [
+            "mx-service-cbs2025"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国基本価格VAB",
+            "value": 33576797,
+            "unit": "百万MXN"
+          }
+        }
+      ],
+      "world": [
+        {
+          "label": "同範囲の世界サービス輸出シェア",
+          "value": null,
+          "unit": "%",
+          "year": "未確認",
+          "definition": "SCIAN54と対応する世界輸出分母を未確認。国内重要性の有無を示す欠測ではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "unconfirmed"
+        }
+      ],
+      "trade": [
+        {
+          "label": "専門・経営コンサルの輸出",
+          "value": 9986,
+          "unit": "百万USD",
+          "year": 2025,
+          "definition": "BOPサービス品目。CE54全体と同一の範囲ではない。",
+          "sourceIds": [
+            "mx-service-bop2025"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "専門・経営コンサルの輸入",
+          "value": 7371,
+          "unit": "百万USD",
+          "year": 2025,
+          "definition": "BOPサービス品目。CE54全体と同一の範囲ではない。",
+          "sourceIds": [
+            "mx-service-bop2025"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "専門・経営コンサルのサービス輸出比",
+          "value": 15.175830521868635,
+          "unit": "%",
+          "year": 2025,
+          "definition": "同じ改訂時点のサービス貿易から自算。国内付加価値比ではない。",
+          "sourceIds": [
+            "mx-service-bop2025"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国サービス総輸出",
+            "value": 65802,
+            "unit": "百万USD"
+          }
+        }
+      ]
+    },
+    "finance": {
+      "domestic": [
+        {
+          "label": "CE対象業種の全国就業者",
+          "value": 647493,
+          "unit": "人",
+          "year": 2023,
+          "definition": "CE対象SCIAN52の就業者。企業所属・外部所属、無給等も含み、ENOE全国雇用や有給ポストと異なる。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "CE対象全国就業者に占める比率",
+          "value": 2.315333361725527,
+          "unit": "%",
+          "year": 2023,
+          "definition": "同年CE対象全業種を分母とするSCIAN52の比率。全経済雇用比ではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国CE対象全業種就業者",
+            "value": 27965433,
+            "unit": "人"
+          }
+        },
+        {
+          "label": "CE対象業種の全国付加価値",
+          "value": 1479364.8,
+          "unit": "百万MXN",
+          "year": 2023,
+          "definition": "SCIAN52の当年価格VACB。国民勘定GDPではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国CE対象全業種VACB（同年・参考）",
+            "value": 15667989.992,
+            "unit": "百万MXN"
+          }
+        },
+        {
+          "label": "国民勘定の業種付加価値",
+          "value": 1692255,
+          "unit": "百万MXN",
+          "year": 2025,
+          "definition": "基本価格・当年価格。SCIAN52の広い業種。CE2023とは年・推計範囲が異なる。",
+          "sourceIds": [
+            "mx-service-cbs2025"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "全国付加価値に占める比率",
+          "value": 5.0,
+          "unit": "%",
+          "year": 2025,
+          "definition": "CBS公表の丸め比率。市場価格GDP比ではない。",
+          "sourceIds": [
+            "mx-service-cbs2025"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国基本価格VAB",
+            "value": 33576797,
+            "unit": "百万MXN"
+          }
+        },
+        {
+          "label": "金融保険の平均年報酬",
+          "value": 815815,
+          "unit": "MXN／有給ポスト・年",
+          "year": 2025,
+          "definition": "CBS52の有給・企業所属ポスト。当年価格。全産業平均271,767MXNの約3倍。雇用人数や国際優位の指標ではない。",
+          "sourceIds": [
+            "mx-service-cbs2025"
+          ],
+          "status": "observed"
+        }
+      ],
+      "world": [
+        {
+          "label": "同範囲の世界サービス輸出シェア",
+          "value": null,
+          "unit": "%",
+          "year": "未確認",
+          "definition": "SCIAN52と対応する世界輸出分母を未確認。国内重要性の有無を示す欠測ではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "unconfirmed"
+        }
+      ],
+      "trade": [
+        {
+          "label": "金融サービス輸出",
+          "value": 1071,
+          "unit": "百万USD",
+          "year": 2025,
+          "definition": "手数料等と間接測定金融サービス。資金移動・貸出残高ではない。",
+          "sourceIds": [
+            "mx-service-bop2025"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "金融サービス輸入",
+          "value": 2347,
+          "unit": "百万USD",
+          "year": 2025,
+          "definition": "BOP金融サービス品目。",
+          "sourceIds": [
+            "mx-service-bop2025"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "保険・年金サービス輸出",
+          "value": 5539,
+          "unit": "百万USD",
+          "year": 2025,
+          "definition": "サービス価額。保険料の総額ではない。",
+          "sourceIds": [
+            "mx-service-bop2025"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "保険・年金サービス輸入",
+          "value": 9953,
+          "unit": "百万USD",
+          "year": 2025,
+          "definition": "サービス価額。保険料の総額ではない。",
+          "sourceIds": [
+            "mx-service-bop2025"
+          ],
+          "status": "observed"
+        }
+      ]
+    },
+    "digital": {
+      "domestic": [
+        {
+          "label": "CE対象業種の全国就業者",
+          "value": 92366,
+          "unit": "人",
+          "year": 2023,
+          "definition": "CE対象SCIAN5415の就業者。企業所属・外部所属、無給等も含み、ENOE全国雇用や有給ポストと異なる。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "CE対象全国就業者に占める比率",
+          "value": 0.3302863216886361,
+          "unit": "%",
+          "year": 2023,
+          "definition": "同年CE対象全業種を分母とするSCIAN5415の比率。全経済雇用比ではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国CE対象全業種就業者",
+            "value": 27965433,
+            "unit": "人"
+          }
+        },
+        {
+          "label": "CE対象業種の全国付加価値",
+          "value": 32114.106,
+          "unit": "百万MXN",
+          "year": 2023,
+          "definition": "SCIAN5415の当年価格VACB。国民勘定GDPではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国CE対象全業種VACB（同年・参考）",
+            "value": 15667989.992,
+            "unit": "百万MXN"
+          }
+        },
+        {
+          "label": "狭い業種の国民勘定GDP比",
+          "value": null,
+          "unit": "%",
+          "year": "未確認",
+          "definition": "SCIAN5415に限った国民勘定付加価値を未確認。上位業種のGDP比は代用しない。",
+          "sourceIds": [
+            "mx-service-cbs2025"
+          ],
+          "status": "unconfirmed"
+        }
+      ],
+      "world": [
+        {
+          "label": "同範囲の世界サービス輸出シェア",
+          "value": null,
+          "unit": "%",
+          "year": "未確認",
+          "definition": "SCIAN5415と対応する世界輸出分母を未確認。国内重要性の有無を示す欠測ではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "unconfirmed"
+        }
+      ],
+      "trade": [
+        {
+          "label": "同範囲のサービス輸出",
+          "value": null,
+          "unit": "百万USD",
+          "year": "未確認",
+          "definition": "SCIAN5415の輸出を独立した範囲で未確認。物量の生産＋輸入−輸出式は用いない。",
+          "sourceIds": [
+            "mx-service-bop2025"
+          ],
+          "status": "unconfirmed"
+        },
+        {
+          "label": "参考：通信・コンピューター・情報の輸出",
+          "value": 2735,
+          "unit": "百万USD",
+          "year": 2025,
+          "definition": "IT5415より広いBOPサービス品目。IT設計だけの輸出にしない。",
+          "sourceIds": [
+            "mx-service-bop2025"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "参考：通信・コンピューター・情報の輸入",
+          "value": 6525,
+          "unit": "百万USD",
+          "year": 2025,
+          "definition": "IT5415より広いBOPサービス品目。輸入依存率を算出する分母ではない。",
+          "sourceIds": [
+            "mx-service-bop2025"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "参考：通信情報サービスのデジタル供給比",
+          "value": 99.7,
+          "unit": "%",
+          "year": 2024,
+          "definition": "ECIS対象企業の当該サービス収入を分母とする。IT5415だけでもBOP全体でもない。",
+          "sourceIds": [
+            "mx-service-ecis2024"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "参考：AWSの15年間投資計画",
+          "value": 5,
+          "unit": "十億USD超",
+          "year": "2025年公表・15年間計画",
+          "definition": "メキシコ地域は2025年1月稼働。投資額は計画、国全体の支出実績ではない。",
+          "sourceIds": [
+            "mx-service-aws2025"
+          ],
+          "status": "estimate"
+        }
+      ]
+    },
+    "bpm": {
+      "domestic": [
+        {
+          "label": "CE対象業種の全国就業者",
+          "value": 62857,
+          "unit": "人",
+          "year": 2023,
+          "definition": "CE対象SCIAN561422の就業者。企業所属・外部所属、無給等も含み、ENOE全国雇用や有給ポストと異なる。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "CE対象全国就業者に占める比率",
+          "value": 0.22476676831715783,
+          "unit": "%",
+          "year": 2023,
+          "definition": "同年CE対象全業種を分母とするSCIAN561422の比率。全経済雇用比ではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国CE対象全業種就業者",
+            "value": 27965433,
+            "unit": "人"
+          }
+        },
+        {
+          "label": "CE対象業種の全国付加価値",
+          "value": 21623.099,
+          "unit": "百万MXN",
+          "year": 2023,
+          "definition": "SCIAN561422の当年価格VACB。国民勘定GDPではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国CE対象全業種VACB（同年・参考）",
+            "value": 15667989.992,
+            "unit": "百万MXN"
+          }
+        },
+        {
+          "label": "狭い業種の国民勘定GDP比",
+          "value": null,
+          "unit": "%",
+          "year": "未確認",
+          "definition": "SCIAN561422に限った国民勘定付加価値を未確認。上位業種のGDP比は代用しない。",
+          "sourceIds": [
+            "mx-service-cbs2025"
+          ],
+          "status": "unconfirmed"
+        }
+      ],
+      "world": [
+        {
+          "label": "同範囲の世界サービス輸出シェア",
+          "value": null,
+          "unit": "%",
+          "year": "未確認",
+          "definition": "SCIAN561422と対応する世界輸出分母を未確認。国内重要性の有無を示す欠測ではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "unconfirmed"
+        }
+      ],
+      "trade": [
+        {
+          "label": "同範囲のサービス輸出",
+          "value": null,
+          "unit": "百万USD",
+          "year": "未確認",
+          "definition": "SCIAN561422の輸出を独立した範囲で未確認。物量の生産＋輸入−輸出式は用いない。",
+          "sourceIds": [
+            "mx-service-bop2025"
+          ],
+          "status": "unconfirmed"
+        }
+      ]
+    },
+    "construction": {
+      "domestic": [
+        {
+          "label": "CE対象業種の全国就業者",
+          "value": 711553,
+          "unit": "人",
+          "year": 2023,
+          "definition": "CE対象SCIAN23の就業者。企業所属・外部所属、無給等も含み、ENOE全国雇用や有給ポストと異なる。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "CE対象全国就業者に占める比率",
+          "value": 2.544401869264817,
+          "unit": "%",
+          "year": 2023,
+          "definition": "同年CE対象全業種を分母とするSCIAN23の比率。全経済雇用比ではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国CE対象全業種就業者",
+            "value": 27965433,
+            "unit": "人"
+          }
+        },
+        {
+          "label": "CE対象業種の全国付加価値",
+          "value": 322190.567,
+          "unit": "百万MXN",
+          "year": 2023,
+          "definition": "SCIAN23の当年価格VACB。国民勘定GDPではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国CE対象全業種VACB（同年・参考）",
+            "value": 15667989.992,
+            "unit": "百万MXN"
+          }
+        },
+        {
+          "label": "国民勘定の業種付加価値",
+          "value": 2284549,
+          "unit": "百万MXN",
+          "year": 2025,
+          "definition": "基本価格・当年価格。SCIAN23の広い業種。CE2023とは年・推計範囲が異なる。",
+          "sourceIds": [
+            "mx-service-cbs2025"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "全国付加価値に占める比率",
+          "value": 6.8,
+          "unit": "%",
+          "year": 2025,
+          "definition": "CBS公表の丸め比率。市場価格GDP比ではない。",
+          "sourceIds": [
+            "mx-service-cbs2025"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国基本価格VAB",
+            "value": 33576797,
+            "unit": "百万MXN"
+          }
+        }
+      ],
+      "world": [
+        {
+          "label": "同範囲の世界サービス輸出シェア",
+          "value": null,
+          "unit": "%",
+          "year": "未確認",
+          "definition": "SCIAN23と対応する世界輸出分母を未確認。国内重要性の有無を示す欠測ではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "unconfirmed"
+        }
+      ],
+      "trade": [
+        {
+          "label": "同範囲のサービス輸出",
+          "value": null,
+          "unit": "百万USD",
+          "year": "未確認",
+          "definition": "SCIAN23の輸出を独立した範囲で未確認。物量の生産＋輸入−輸出式は用いない。",
+          "sourceIds": [
+            "mx-service-bop2025"
+          ],
+          "status": "unconfirmed"
+        }
+      ]
+    },
+    "real-estate": {
+      "domestic": [
+        {
+          "label": "CE対象業種の全国就業者",
+          "value": 332650,
+          "unit": "人",
+          "year": 2023,
+          "definition": "CE対象SCIAN53の就業者。企業所属・外部所属、無給等も含み、ENOE全国雇用や有給ポストと異なる。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "CE対象全国就業者に占める比率",
+          "value": 1.18950419970254,
+          "unit": "%",
+          "year": 2023,
+          "definition": "同年CE対象全業種を分母とするSCIAN53の比率。全経済雇用比ではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国CE対象全業種就業者",
+            "value": 27965433,
+            "unit": "人"
+          }
+        },
+        {
+          "label": "CE対象業種の全国付加価値",
+          "value": 132283.822,
+          "unit": "百万MXN",
+          "year": 2023,
+          "definition": "SCIAN53の当年価格VACB。国民勘定GDPではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国CE対象全業種VACB（同年・参考）",
+            "value": 15667989.992,
+            "unit": "百万MXN"
+          }
+        },
+        {
+          "label": "国民勘定の業種付加価値",
+          "value": 3053435,
+          "unit": "百万MXN",
+          "year": 2025,
+          "definition": "基本価格・当年価格。SCIAN53の広い業種。CE2023とは年・推計範囲が異なる。",
+          "sourceIds": [
+            "mx-service-cbs2025"
+          ],
+          "status": "observed"
+        },
+        {
+          "label": "全国付加価値に占める比率",
+          "value": 9.1,
+          "unit": "%",
+          "year": 2025,
+          "definition": "CBS公表の丸め比率。市場価格GDP比ではない。",
+          "sourceIds": [
+            "mx-service-cbs2025"
+          ],
+          "status": "observed",
+          "denominator": {
+            "label": "全国基本価格VAB",
+            "value": 33576797,
+            "unit": "百万MXN"
+          }
+        }
+      ],
+      "world": [
+        {
+          "label": "同範囲の世界サービス輸出シェア",
+          "value": null,
+          "unit": "%",
+          "year": "未確認",
+          "definition": "SCIAN53と対応する世界輸出分母を未確認。国内重要性の有無を示す欠測ではない。",
+          "sourceIds": [
+            "mx-service-ce2023"
+          ],
+          "status": "unconfirmed"
+        }
+      ],
+      "trade": [
+        {
+          "label": "同範囲のサービス輸出",
+          "value": null,
+          "unit": "百万USD",
+          "year": "未確認",
+          "definition": "SCIAN53の輸出を独立した範囲で未確認。物量の生産＋輸入−輸出式は用いない。",
+          "sourceIds": [
+            "mx-service-bop2025"
+          ],
+          "status": "unconfirmed"
+        }
+      ]
+    }
+  }
+}

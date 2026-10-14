@@ -1,0 +1,13 @@
+{
+  "accessed": "2026-10-14",
+  "api": "https://www.inegi.org.mx/app/tabulados/pxwebapi/api/datatable",
+  "metadataApi": "https://www.inegi.org.mx/app/tabulados/pxwebapi/api/tabulado?lang=es&file=CE2024%2FCE_GENNCE_1",
+  "method": "Read-only POST query; 33 geographies × 11 SCIAN industries × employment and VACB. Saved result only for regeneration.",
+  "license": "https://www.inegi.org.mx/inegi/terminos.html",
+  "files": {
+    "manufacturing-ce-metadata.json": "66c8cbf4db341f545270f6094dcd0aed215b538b0b80c4c94f2e2b02dcc32ae7",
+    "manufacturing-ce-request.json": "c944b50fc493eb7cbf467739485cf1ae602dcd423bf8d9011909a25c6259912b",
+    "manufacturing-ce-result.json": "e025eb219265725cde920e42dd5ea251c13754bba3e8c00eafadbecab32f46e4"
+  },
+  "classificationBoundary": "CE reference2023, urban private/paraestatal coverage. Not national GDP. HS product trade and VAEMG have separate definitions and years."
+}
