@@ -87,7 +87,7 @@ function initialize(host:HTMLElement){
    if(token===generation&&!host.hidden)host.dataset.agroReady='true';
   }catch{if(token!==generation)return;syncAgroRegionalReferences(referenceRoot,false);status.textContent='統計を取得できませんでした。地図の選択は保持しています。';retry.hidden=false;}
  }
- host.addEventListener('click',event=>{const a=(event.target as Element).closest<HTMLAnchorElement>('[data-agro-reference-link]');if(!a)return;const target=document.getElementById(a.hash.slice(1));if(!target)return;for(let node:HTMLElement|null=target;node;node=node.parentElement)if(node instanceof HTMLDetailsElement)node.open=true;});
+ host.addEventListener('click',event=>{const a=(event.target as Element).closest<HTMLAnchorElement>('[data-agro-reference-link]');if(!a||event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;const target=document.getElementById(a.hash.slice(1));if(!target)return;event.preventDefault();for(let node:HTMLElement|null=target;node;node=node.parentElement)if(node.tagName==='DETAILS')(node as HTMLDetailsElement).open=true;target.scrollIntoView({block:'nearest'});});
  seriesSelect.addEventListener('change',()=>{chosen=seriesSelect.value;void update(selection);});
  countrySelect?.addEventListener('change',()=>void update({...selection,country:countrySelect.value}));
  retry.addEventListener('click',()=>void update(selection));

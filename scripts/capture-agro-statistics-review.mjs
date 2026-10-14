@@ -45,6 +45,7 @@ try{
   const context=await browser.newContext({viewport,locale:'ja-JP',reducedMotion:'reduce'}),page=await context.newPage();
   page.on('pageerror',error=>report.errors.push(String(error)));
   for(const [name,path,country,series] of cases){
+   try{
    await page.goto(reviewUrl(path),{waitUntil:'networkidle'});await page.evaluate(()=>document.fonts.ready);
    const mexico=name==='mexico-corn',host=page.locator(mexico?'[data-mexico-agriculture-three-columns="corn"]':'[data-agro-statistics]');await host.waitFor({state:'visible'});
    if(mexico)await page.waitForFunction(()=>document.querySelector('[data-mexico-agriculture-atlas]')?.dataset.agricultureReady==='true');
@@ -76,7 +77,7 @@ try{
    if(name==='east-soybean-quantity'){assert.equal(await host.locator('[data-agro-quantity-flow="2023"]').count(),1);assert.match(await host.locator('[data-agro-stage="use"]').innerText(),/71,398\.1.*0\.34%/s);assert.match(await host.locator('[data-agro-stage="destinations"]').innerText(),/Korea, Rep\..*40,404.*Japan.*16,511\.8/s);await host.locator('[data-agro-stage="destinations"] summary').click();assert.equal(await host.locator('[data-agro-stage="destinations"] tbody tr').count(),42);report.operations.push({name,viewport,sameYearQuantity:true,allForeignPartners:true,sharedExportDenominator:true});}
    if(name==='europe-wheat'){assert.equal(await host.locator('.agro-partner-pie').count(),1);assert.match(await host.locator('[data-agro-existing-trade]').innerText(),/2021年.*current USD/s);report.operations.push({name,viewport,regionalMoneyReference:true});}
    if(name==='south-rice'){assert.equal(await host.locator('.sc-flow-pie').count(),1);assert.match(await host.locator('[data-agro-existing-trade]').innerText(),/5,242,182t/);report.operations.push({name,viewport,basmatiReference:true});}
-   if(name==='west-wheat'){const link=host.locator('[data-agro-reference-link]');await link.click();assert.ok(await page.locator('#agro-reference-west-wheat').isVisible());report.operations.push({name,viewport,regionalPartnerReference:true});}
+   if(name==='west-wheat'){const link=host.locator('[data-agro-reference-link]'),beforeUrl=page.url();await link.click();await page.locator('#agro-reference-west-wheat').waitFor({state:'visible'});assert.ok(await page.locator('#agro-reference-west-wheat').isVisible());assert.equal(page.url(),beforeUrl,'reference links keep the selected map URL');report.operations.push({name,viewport,regionalPartnerReference:true,selectionUrlPreserved:true});}
    if(name==='russia-wheat'){const world=host.locator('[data-agro-stage="production"]');assert.match(await world.innerText(),/公式値限定/);assert.equal(await world.locator('.agro-world-pie').count(),0);assert.ok(!(await world.innerText()).includes('82,588,000'));assert.ok(!(await world.locator('.agro-trend').getAttribute('aria-label')).includes('連続'));report.operations.push({name,viewport,unofficialExcluded:true});}
    if(name==='europe-germany-forest'){assert.ok(await host.locator('[data-agro-existing-supply] .agro-band').count()>=3);assert.match(await host.locator('[data-agro-existing-supply]').innerText(),/在庫未調整/);report.operations.push({name,viewport,sourceSupplyAndUses:true});}
    if(name==='europe-finland-forest'){assert.match(await host.locator('[data-agro-existing-supply]').innerText(),/62,655.*樹皮あり/s);report.operations.push({name,viewport,firstUseSeparate:true});}
@@ -85,6 +86,10 @@ try{
     await host.locator('[data-agro-series-select]').selectOption('sawnwood-production');await host.locator('[data-agro-series="sawnwood-production"]').waitFor();
     await host.locator('.agro-definitions>summary').click();assert.ok(await host.locator('.agro-definitions table').isVisible());
     report.operations.push({name,viewport,seriesChange:true,definitionToggle:true});
+   }
+   }catch(error){
+    const failure={kind:'case-failure',name,path,viewport,error:String(error)};report.errors.push(failure);console.error(JSON.stringify(failure));
+    await page.screenshot({path:resolve(out,`${viewport.width}-${name}-failed.png`),fullPage:true}).catch(()=>{});
    }
   }
   // Region overview must show partial coverage, not Indonesia as the region.
@@ -96,7 +101,7 @@ try{
   await page.waitForFunction(()=>document.querySelector('[data-agro-statistics]')?.hidden);report.operations.push({name:'japan-excluded',viewport,hidden:true});
   await context.close();
  }
- // The unmodified US is the visual baseline, captured from this exact build.
+ // Review the US baseline from this exact build, including its selected flow.
  const page=await browser.newPage({viewport:{width:1440,height:900}});
  await page.goto(reviewUrl('/atlas/north-america/agriculture/'),{waitUntil:'domcontentloaded'});
  await page.locator('[data-crop-select="corn"]').click();await page.locator('[data-agri-statistics]').waitFor({state:'visible'});
@@ -108,6 +113,7 @@ try{
  report.operations.push({name:'us-baseline',cornSelection:true,sharedNationalHost:await page.locator('[data-agro-statistics]').count()});
  if(publicOrigin)for(const field of ['agriculture','nature','industry','population']){await page.goto(reviewUrl('/atlas/japan/'+field+'/'),{waitUntil:'networkidle'});await page.waitForFunction(()=>document.querySelector('[data-japan-atlas]')?.dataset.mapReady==='true');assert.equal(await page.locator('[data-agro-statistics]').count(),0);report.operations.push({name:'production-japan-'+field,sharedHostAbsent:true});await page.screenshot({path:resolve(out,'1440-production-japan-'+field+'.png'),fullPage:true});}
  assert.deepEqual(report.errors,[],'browser errors or page overflow diagnostics require resolution');
+ assert.equal(report.cases.length,cases.length*3,'all selected regional cases must be reviewed');
  report.status='passed';
 }catch(error){report.status='failed';report.failure=String(error);throw error;}
 finally{await writeFile(resolve(out,'report.json'),JSON.stringify(report,null,2)+'\n');await browser?.close();await new Promise(r=>server.close(r));}

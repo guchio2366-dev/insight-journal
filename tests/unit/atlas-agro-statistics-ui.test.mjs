@@ -248,6 +248,20 @@ test('an unretained product keeps its supplied reference visible even when nativ
  const reference=h.content.querySelector('[data-agro-existing-supply]').closest('details');assert.equal(reference.hidden,false);assert.match(reference.textContent,/Existing source reference.*7 t/s);assert.match(reference.textContent,/Retained reference definition/);
 }));
 
+test('a regional source link opens its disclosures and scrolls without changing the app URL or selection',async()=>withDom(async window=>{
+ window.happyDOM.setURL('https://example.test/atlas/example/agriculture/?country=IDN&topic=rice&year=2024');
+ const h=await harness(window),rice=series([observation(2024,30)]);document.body.append(h.root);
+ globalThis.fetch=async()=>new Response(JSON.stringify(dataset({IDN:{name:'インドネシア',series:[rice]}})));
+ h.sync({country:'IDN',topic:'rice',active:true,year:2024});await settled(()=>h.host.dataset.agroReady==='true','primary source selection did not settle');
+ const primary=h.content.querySelector('[data-agro-stage="production"]'),beforeUrl=window.location.href,beforeHistory=window.history.length;
+ const outer=document.createElement('details');outer.className='agro-existing-regional-reference';outer.innerHTML='<summary>別年・範囲の参考</summary><details><summary>原表の説明</summary><section id="agro-reference-west-wheat">Regional source reference</section></details>';document.body.append(outer);
+ const inner=outer.querySelector('details'),target=outer.querySelector('section');let scrollCalls=0;target.scrollIntoView=options=>{scrollCalls++;assert.equal(options.block,'nearest');};
+ const link=document.createElement('a');link.href='#agro-reference-west-wheat';link.dataset.agroReferenceLink='';link.textContent='地域の原表を読む';h.content.append(link);
+ const click=new window.MouseEvent('click',{bubbles:true,cancelable:true,button:0});link.dispatchEvent(click);
+ assert.equal(click.defaultPrevented,true,'an in-page source disclosure must not trigger hash navigation and native route rendering');assert.equal(outer.open,true);assert.equal(inner.open,true);assert.equal(scrollCalls,1);assert.equal(window.location.href,beforeUrl);assert.equal(window.history.length,beforeHistory);assert.equal(h.content.querySelector('[data-agro-stage="production"]'),primary);assert.equal(h.content.querySelector('[data-agro-country]').dataset.agroCountry,'IDN');assert.equal(link.getAttribute('href'),'#agro-reference-west-wheat','the target URL remains available for copying or modified clicks');
+ outer.open=false;inner.open=false;const modified=new window.MouseEvent('click',{bubbles:true,cancelable:true,button:0,ctrlKey:true});link.dispatchEvent(modified);assert.equal(modified.defaultPrevented,false);assert.equal(outer.open,false);assert.equal(inner.open,false);assert.equal(scrollCalls,1,'modified clicks retain browser link behavior');
+}));
+
 test('optional statistics without embedded configuration cannot interrupt an atlas reader',async()=>{
  await withDom(async window=>{
   const h=await harness(window);h.host.querySelector('[data-agro-config]').remove();
