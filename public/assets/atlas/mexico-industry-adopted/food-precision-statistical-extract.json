@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "capturedDate": "2026-10-14",
+  "method": "Previously verified primary-source figures transcribed as a selected numerical extract. This file is not the original HTML/PDF or a complete industry/product table. The unmodified CE API response files are retained separately.",
+  "records": {
+    "feed2025": {
+      "sourceId": "mx-food-alltech-2026",
+      "year": 2025,
+      "sourcePages": "6–7",
+      "unit": "million metric tonnes",
+      "mexico": 41.883,
+      "world": 1440.077,
+      "rank": 5,
+      "scope": "Alltech global compound-feed survey: 142 countries and 38,837 feed mills. Both numerator and denominator belong to this survey."
+    },
+    "cornInputs2025_26": {
+      "sourceId": "mx-food-usda-grain-2026",
+      "year": "2025/26 marketing year (October 2025–September 2026)",
+      "sourcePages": "6, 8–11",
+      "unit": "million metric tonnes",
+      "production": 25.3,
+      "imports": 26.5,
+      "consumption": 51.5,
+      "usImportOriginShareGreaterThanPercent": 99,
+      "feedVerticallyIntegratedProductionSharePercent": 61,
+      "yellowCornStocksDaysApproximately": 20,
+      "scope": "USDA Mexico Post estimates/forecasts published in March 2026. Corn, primarily yellow corn for feed/starch, is an input; this is not the import dependence of manufactured feed or tortillas."
+    },
+    "beerProduction2025": {
+      "sourceId": "mx-food-barthhaas-2026",
+      "year": 2025,
+      "sourcePages": "1–2",
+      "unit": "million hectolitres",
+      "mexico": 147.87,
+      "worldApproximately": 1896,
+      "rank": 4,
+      "scope": "BarthHaas compiled country production estimates; the world total is rounded. This is production, not the export ranking."
+    },
+    "beerExports2025": {
+      "sourceIds": ["mx-food-agriculture-beer-2025", "mx-food-agriculture-balance-2025"],
+      "year": 2025,
+      "valueMillionUsd": 6479.56,
+      "volumeMillionLitres": 4285,
+      "exportRank": 1,
+      "scope": "Mexican Agriculture Ministry beer-export publication and December 2025 agro-food balance. The article's 36% world-export value share is a 2021–25 average, not a 2025 single-year figure. Article figures were verified from the indexed official publication; full-body retrieval returned 403."
+    },
+    "beerExports2024Wits": {
+      "sourceId": "mx-food-wits-beer-2024",
+      "year": 2024,
+      "unit": "thousand USD / litres",
+      "worldValueThousandUsd": 6497161.39,
+      "usValueThousandUsd": 6255899.12,
+      "worldLitres": 4242340000,
+      "usLitres": 4042770000,
+      "scope": "Mexico-reported gross exports, HS H0 220300. Do not combine ratios with Data México's differently revised 2024 series."
+    },
+    "tequila2024": {
+      "sourceId": "mx-food-crt-2024",
+      "year": 2024,
+      "unit": "million litres as published by CRT",
+      "production": 495.8,
+      "exports": 400.3,
+      "usExports": 334.9,
+      "agaveConsumedMillionTonnes": 1.8,
+      "scope": "A single CRT publication. No stock adjustment or origin-specific domestic-sales table; production minus exports is not domestic consumption. CRT and government 2025 totals differ, so 2025 values are not combined."
+    },
+    "tequila2026FirstHalf": {
+      "sourceId": "mx-food-crt-2026",
+      "year": "2026 first half",
+      "unit": "million litres as published by CRT",
+      "production": 302.1,
+      "exports": 214.4,
+      "exportYearOnYearPercent": 3.3,
+      "scope": "CRT's 24 July 2026 report; a half year, not the 2026 full year."
+    },
+    "medical2024Wits": {
+      "sourceId": "mx-food-wits-medical-2024",
+      "worldSourceId": "mx-food-wits-medical-world-2024",
+      "year": 2024,
+      "unit": "thousand USD",
+      "totalExports": 13874037.89,
+      "usExports": 13052567.3,
+      "reportedCountryExportRankExcludingEuAggregate": 4,
+      "scope": "HS H0 9018, medical/surgical/dental/veterinary instruments including electro-medical apparatus. Not all HS90 or all medical devices. Ranking is among the reported countries in the retrieved WITS table; EU aggregate excluded to avoid double counting."
+    },
+    "catheters2024Wits": {
+      "sourceId": "mx-food-wits-catheters-2024",
+      "year": 2024,
+      "unit": "thousand USD",
+      "totalExports": 4394720.86,
+      "usExports": 4133743.02,
+      "scope": "HS H0 901839: needles, catheters, cannulae and the like, nes; a subset of HS9018. Trade quantities were not available in the retrieved table."
+    },
+    "aeroEngineParts2024Wits": {
+      "sourceId": "mx-food-wits-aero-engine-2024",
+      "year": 2024,
+      "unit": "thousand USD / kg",
+      "totalExports": 1147868.68,
+      "usExports": 1085733.87,
+      "totalKg": 6496520,
+      "scope": "HS H0 841191, parts of turbo-jets/turbo-propellers. Not the whole aerospace industry, assembled aircraft or all types of engines."
+    },
+    "aeroAirframeParts2024Wits": {
+      "sourceId": "mx-food-wits-aero-parts-2024",
+      "year": 2024,
+      "unit": "thousand USD / kg",
+      "totalExports": 395958.04,
+      "usExports": 344347.57,
+      "scope": "HS H0 880330, aircraft parts nes. Not complete aircraft. Current HS nomenclatures move parts into HS8807; no cross-version series is joined here."
+    },
+    "preparedMeat2024Wits": {
+      "sourceId": "mx-food-wits-prepared-meat-2024",
+      "year": 2024,
+      "unit": "thousand USD",
+      "totalExports": 86881.95,
+      "usExports": 75164.78,
+      "scope": "HS H0 1602, prepared/preserved meat, meat offal or blood. Excludes raw meat in HS02 and is not equivalent to the full SCIAN3116 industry."
+    },
+    "apparel2024": {
+      "sourceIds": ["mx-food-datamexico-apparel-knit-2024", "mx-food-datamexico-apparel-woven-2024"],
+      "year": 2024,
+      "unit": "million USD",
+      "knittedExports": 3038,
+      "wovenExports": 2663,
+      "wovenUsExports": 2494,
+      "wovenImports": 2978,
+      "wovenImportsFromChina": 1150,
+      "scope": "Data México national figures, HS2012 chapters61/62, displayed rounded to million USD. Worldwide comparison on these pages is 2022/OEC, so not a current world-production share."
+    }
+  }
+}
