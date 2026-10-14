@@ -64,3 +64,6 @@ PCの初期表示：[資源](1920-resources-initial.png) ／ [製造](1920-manuf
 モバイルはページ全体の縦スクロールを保ち、地図自体の画像も保存：[資源](390-resources-initial-map.png) ／ [製造](390-manufacturing-initial-map.png) ／ [サービス](390-services-initial-map.png)。
 
 PC3分類、1440px製造、モバイル3分類と統計3列を目視し、産業名を主役にした表示、範囲の説明、右側の概説、枠内・非重複を確認した。全31画像と [review.json](review.json) の座標・寸法・操作記録を同梱する。
+# 統合検証の追記
+
+下記の旧ローカルブラウザー記録は `chromiumSandbox:false` による実行であり、安全設定を維持した受入検証には数えない。統合では `chromiumSandbox:true` に固定し、既存の産業レビューCIに全11品目の再検証を接続した。旧31画像・JSONを、安全な新実行の証跡として扱わない。

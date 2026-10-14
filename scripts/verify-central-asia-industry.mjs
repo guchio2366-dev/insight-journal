@@ -12,10 +12,10 @@ const server=createServer(async(req,res)=>{try{const pathname=decodeURIComponent
 await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});
 const url=`http://127.0.0.1:${server.address().port}${base}/atlas/asia/central-asia/industry/`;
 await mkdir(output,{recursive:true});
-const result={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),buildRelease:JSON.parse(await readFile(path.join(root,'_release.json'),'utf8')),browser:{executable:process.env.REVIEW_CHROME_PATH??'/usr/bin/chromium',chromiumSandbox:false,scope:'Local production build inside the existing execution sandbox; no OS permissions changed'},screenshots:[],viewports:[],checks:[]};
+const result={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),buildRelease:JSON.parse(await readFile(path.join(root,'_release.json'),'utf8')),browser:{executable:process.env.REVIEW_CHROME_PATH??'/usr/bin/chromium',chromiumSandbox:true,scope:'Local production build in sandboxed Chrome; no OS permissions changed'},screenshots:[],viewports:[],checks:[]};
 let browser;
 try{
- browser=await chromium.launch({headless:true,executablePath:result.browser.executable,chromiumSandbox:result.browser.chromiumSandbox});
+ browser=await chromium.launch({headless:true,executablePath:result.browser.executable,chromiumSandbox:result.browser.chromiumSandbox,ignoreDefaultArgs:['--unsafely-disable-devtools-self-xss-warnings']});
  const page=await browser.newPage({deviceScaleFactor:1}),errors=[];page.on('pageerror',error=>errors.push(error.message));
  const settle=async()=>{await page.waitForFunction(()=>document.querySelector('[data-central-industry]')?.dataset.centralReady==='true');await page.evaluate(async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});};
  const state=()=>page.locator('[data-central-industry]').evaluate(root=>root.centralIndustryView);
