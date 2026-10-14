@@ -186,10 +186,17 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    await page.waitForURL(`**/atlas/asia/${region}/industry/**`);
    const industry=JSON.parse(await page.locator('[data-asia-config]').textContent());
    assert.ok(industry.industrySites.every(site=>expected.includes(site.country)));
-   assert.equal(await page.locator('[data-sc-industry-topic] option[value="sc-hydro"]').count(),1);
-   await page.locator('.asia-industry-regional-label').first().waitFor({state:'visible'});
-   assert.equal(await page.locator('.asia-industry-regional-label').count(),industry.industrySites.length);
-   assert.match(await page.locator('.asia-industry-regional-label').first().textContent(),region==='south-asia'?/医薬品/: /石油|ウラン/);
+   if(region==='central-asia'){
+    await page.locator('[data-central-label-industry]').first().waitFor({state:'visible'});
+    assert.equal(await page.locator('[data-central-marker]').count(),industry.industrySites.filter(site=>site.sectors.includes('resources')).length);
+    assert.equal(await page.locator('[data-central-choice="hydro"]').count(),1);
+    assert.equal(await page.locator('[data-central-sector]').count(),3);
+   }else{
+    assert.equal(await page.locator('[data-sc-industry-topic] option[value="sc-hydro"]').count(),1);
+    await page.locator('.asia-industry-regional-label').first().waitFor({state:'visible'});
+    assert.equal(await page.locator('.asia-industry-regional-label').count(),industry.industrySites.length);
+    assert.match(await page.locator('.asia-industry-regional-label').first().textContent(),/医薬品/);
+   }
    if(region==='south-asia'){
     assert.ok(await page.locator('.asia-industry-regional-label.is-compact').count()>0);
     assert.equal(await page.locator('.asia-industry-regional-label[data-industry-site="sc-dhaka-garments"] span').textContent(),'ダッカ・チッタゴン');
@@ -199,12 +206,13 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
      assert.match(await label.textContent(),new RegExp(industryName));
     }
    }
-   if(region==='central-asia')for(const [id,name] of [['sc-inkai-uranium','インカイのウラン'],['sc-bozshakol-copper','ボズシャコルの銅'],['sc-muruntau-gold','ムルンタウの金']])assert.match(await page.locator(`[data-industry-site="${id}"]`).textContent(),new RegExp(name));
+   if(region==='central-asia')for(const id of ['sc-inkai-uranium','sc-bozshakol-copper','sc-muruntau-gold'])assert.equal(await page.locator(`[data-central-marker="${id}"]`).count(),1);
    const industryBefore=region==='south-asia'?await industrySnapshot(page):null;
    await capture(`${region}-industry`);
-   await page.locator(region==='south-asia'?'.asia-industry-regional-label[data-industry-site="sc-dhaka-garments"]':'.asia-industry-regional-label').first().click();
+   await page.locator(region==='south-asia'?'.asia-industry-regional-label[data-industry-site="sc-dhaka-garments"]':'[data-central-marker="sc-tengiz-oil"]').first().click();
    assert.ok(new URL(page.url()).searchParams.get('detail'));
-   assert.equal(await page.locator('.asia-industry-regional-label[aria-pressed="true"].is-compact').count(),0);
+   if(region==='central-asia')assert.equal(await page.locator('[data-central-marker="sc-tengiz-oil"]').getAttribute('aria-pressed'),'true');
+   else assert.equal(await page.locator('.asia-industry-regional-label[aria-pressed="true"].is-compact').count(),0);
    if(industryBefore)await verifyIndustrySelection(page,industryBefore,'sc-dhaka-garments','1920 South Asia Dhaka selection');
    await capture(`${region}-industry-selected`);
    await page.goBack();
