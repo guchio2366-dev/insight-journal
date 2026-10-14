@@ -13,11 +13,10 @@ const content=()=>root.querySelector('[data-south-central-world-share]');
 test('the regional default identifies country examples and draws only a sourced world-share series',()=>{
  renderSouthCentralFarmConnections(root,'south-central-asia',true,'overview',undefined);
  assert.equal(section.hidden,false);
- assert.match(content().textContent,/インドの米（籾米）は、2024年に世界生産量の26\.6％/);
- assert.match(content().textContent,/カザフスタンの小麦/);
- assert.equal(content().querySelectorAll('svg.sc-share-chart').length,1);
- assert.equal(content().querySelectorAll('tbody tr').length,10);
- assert.doesNotMatch(content().textContent,/輸出量|国内向け/);
+ assert.match(content().textContent,/地域全体.*未集計/);
+ assert.doesNotMatch(content().textContent,/インドの米|カザフスタンの小麦/);
+ assert.equal(content().querySelectorAll('svg.sc-share-chart').length,0);
+ assert.match(root.querySelector('[data-south-central-supply] details').textContent,/国別参考例/);
 });
 
 test('country and item selection update the series, while unsupported items show no invented graph',()=>{

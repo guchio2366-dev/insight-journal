@@ -74,9 +74,10 @@ test('Three-column Mexico statistics keep confirmed production and one-year worl
    assert.ok(columns,id);assert.equal(columns.children.length,3);
    assert.match(columns.children[0].textContent,/供給と用途.*国内生産.*需給原表は未取得/s);
    assert.match(columns.children[1].textContent,/輸出相手.*未取得.*米国の輸出先統計をメキシコの値として使っていません/s);
-   assert.match(columns.children[2].textContent,/世界生産に占める割合.*複数年.*未取得/s);
+   assert.match(columns.children[2].textContent,/世界生産.*複数年.*未取得|世界生産.*複数年.*未収録/s);
+   if(comparison.products[id]){assert.equal(columns.children[2].querySelectorAll('.agro-trend').length,0,'single-year production must not become a trend');assert.ok(columns.children[2].querySelector('.agro-ranking'));}
   }
-  assert.match(ctx.q('[data-mexico-agriculture-three-columns="beef"] .mexico-agriculture-share').textContent,/3\.23%/);
+  assert.match(ctx.q('[data-mexico-agriculture-three-columns="beef"] .agro-world-pie span').textContent,/3\.23%/);
   assert.match(ctx.q('[data-mexico-agriculture-three-columns="coffee"]').textContent,/生豆.*コーヒー果実.*別系列/s);
   assert.equal(ctx.q('[data-mexico-agriculture-three-columns="pine"]'),null);
   assert.doesNotMatch(ctx.q('[data-mexico-agriculture-three-columns="corn"]').textContent,/3\.23%/);

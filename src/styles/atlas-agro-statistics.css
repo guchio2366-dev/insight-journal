@@ -1,0 +1,24 @@
+.agro-statistics{grid-column:1/-1;min-width:0;padding:18px 0;margin:18px 0;border-top:1px solid var(--rule,#d6dcd1)}
+.agro-statistics[hidden]{display:none!important}.agro-statistics h2{font:700 20px/1.5 var(--serif,serif);margin:0 0 10px}.agro-statistics h3{font-size:16px;margin:0 0 12px}.agro-statistics p{font-size:14px;line-height:1.8;margin:10px 0}.agro-statistics a{font-size:12px;overflow-wrap:anywhere}
+.agro-columns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}.agro-columns>section{min-width:0;background:#faf9f3;border:1px solid #d6dcd1;padding:14px}.agro-statistics .agro-meta{font-size:12px}.agro-stat-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:10px 0}.agro-stat-controls label{font-size:13px}.agro-stat-controls select,.agro-statistics button{min-height:44px;max-width:100%;font-size:14px;padding:6px 10px}.agro-statistics :is(button,select,summary):focus-visible{outline:3px solid #176f89;outline-offset:3px}
+.agro-band{margin:16px 0}.agro-band figcaption{font-size:14px;font-weight:650}.agro-track{display:flex;height:16px;margin:8px 0;background:#e3e1d7}.agro-track span{display:block;min-width:0}.agro-key{list-style:none;padding:0;margin:10px 0;font-size:14px}.agro-key li{margin:7px 0}.agro-key i{display:inline-block;width:10px;height:10px;margin-right:7px}.agro-key strong{font-weight:600}
+.agro-world-pie{width:132px;height:132px;border-radius:50%;display:grid;place-items:center;margin:12px 0}.agro-world-pie span{width:86px;height:86px;border-radius:50%;display:grid;place-items:center;background:#faf9f3;font-size:20px;font-weight:700}.agro-trend{width:100%;height:auto;max-width:400px}.agro-trend text{font-size:13px;fill:currentColor}.agro-trend line{stroke:#a8b3a7}.agro-trend polyline{fill:none;stroke:#3d7666;stroke-width:2}.agro-trend circle{fill:#3d7666}.agro-statistics summary{min-height:44px;align-content:center;font-size:13px;cursor:pointer}.agro-statistics table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}.agro-statistics th,.agro-statistics td{padding:8px 5px;border-bottom:1px solid #d6dcd1;text-align:right;overflow-wrap:anywhere}.agro-statistics th:first-child{text-align:left}.agro-table-scroll{overflow-x:auto}.agro-definitions{margin-top:12px}
+@media(max-width:959px),(max-height:599px){.agro-columns{grid-template-columns:1fr}}
+
+@media(min-width:960px){.atlas-desktop-shell>.agro-statistics,.atlas-desktop-shell>.asia-farm-connections{grid-column:2;min-width:0;width:100%}}
+
+.agro-columns .latin-world-production-grid{grid-template-columns:1fr}.agro-columns .latin-world-production h2{font-size:16px}
+
+.agro-statistics .agro-trend-scale,.agro-statistics .agro-trend-years{font-size:12px;margin:4px 0}.agro-trend-years{display:flex;justify-content:space-between;padding:0 8px}.agro-statistics figure{min-width:0}
+@media(min-width:1200px){.latin-workspace.latin-agriculture>.latin-below-workspace{padding-inline-start:calc(20px + clamp(220px,19vw,340px) + 16px)}}
+@media(min-width:960px) and (max-width:1199px){.latin-workspace.latin-agriculture>.latin-below-workspace{padding-inline-start:184px}}
+.agro-statistics td small{display:block;font-size:12px}
+.agro-statistics :is([data-agro-existing-trade],[data-agro-existing-supply]){min-width:0;overflow-wrap:anywhere}
+.agro-statistics [data-agro-existing-trade] .east-trade-pair{display:grid;grid-template-columns:minmax(0,1fr)}
+.agro-statistics :is(.east-pie,.sc-flow-pie,.agro-partner-pie){display:block;width:min(132px,100%);height:auto;aspect-ratio:1;border-radius:50%;min-height:0}
+.agro-statistics [data-agro-existing-trade] figure{margin:10px 0}
+.agro-statistics :is(.east-trade-key,.sc-flow-destinations){padding-left:0;list-style:none}
+.agro-statistics :is(.east-trade-key,.sc-flow-destinations) li{display:flex;flex-wrap:wrap;gap:5px;font-size:13px}
+.agro-statistics :is(.east-trade-key,.sc-flow-destinations) i{display:inline-block;width:10px;height:10px;flex:none;margin-top:5px}
+.agro-existing-forest{margin:16px 0;border-top:1px solid #d6dcd1;padding-top:12px}
+.agro-statistics .sc-flow-track{display:flex;height:16px}.agro-statistics .sc-flow-track>span{display:block;height:16px}

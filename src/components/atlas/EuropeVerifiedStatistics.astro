@@ -31,18 +31,6 @@ const topics=[...farmingAreas.features.map(feature=>({id:feature.properties.id,n
 <div class="eu-verified-agriculture" data-eu-verified-agriculture>
   <div data-eu-verified-overview>
   <div class="eu-farm-three-columns">
-    <section aria-labelledby="eu-verified-share-title">
-      <h3 id="eu-verified-share-title">主要品目の世界生産シェア</h3>
-      <p class="eu-verified-meta">FAO公表の欧州地域 ÷ 世界 · 2023年 · 同品目の生産量</p>
-      <div class="eu-verified-share-list">{production.items.map(item=><div class="eu-verified-share-row"><span>{item.label_ja}</span><span class="eu-verified-share-track"><span style={`width:${item.world_share_percent}%`}></span></span><strong>{percentage(item.world_share_percent)}</strong></div>)}</div>
-      <p class="eu-verified-foot">生乳は牛・水牛の合計、肉類は生体数ではありません。ロシアは全土を含み、EU集計ではありません。</p>
-    </section>
-    <section aria-labelledby="eu-verified-trade-title">
-      <h3 id="eu-verified-trade-title">欧州域外の輸出先・輸入元</h3>
-      <p class="eu-verified-meta">UN Comtrade · 2021年 · 金額割合</p>
-      <div class="eu-verified-trade-charts">{trade.charts.map(chart=><figure><figcaption>{chart.title_ja}</figcaption><div class="eu-verified-donut" style={`background:${bar(chart.segments)}`} role="img" aria-label={`${chart.title_ja}。${chart.segments.map(segment=>`${segment.label_ja}${percentage(segment.share_pct)}`).join('、')}`}></div><ul>{chart.segments.map((segment,index)=><li><span class="eu-verified-trade-key" style={`background:${tradeColors[index]}`}></span>{segment.label_ja} <strong>{percentage(segment.share_pct)}</strong></li>)}</ul></figure>)}</div>
-      <p class="eu-verified-foot">対象40報告国・地域の相手国別金額が分母。小麦・メスリンのWorld製品記録は35報告国。地理帰属不明を除外し、関税領域とM49欧州は完全一致しません。</p>
-    </section>
     <section aria-labelledby="eu-verified-food-title">
       <h3 id="eu-verified-food-title">食品群の供給熱量構成</h3>
       <p class="eu-verified-meta">FAO公表の欧州地域 · 2023年 · 計3,490 kcal/人/日</p>
@@ -51,6 +39,18 @@ const topics=[...farmingAreas.features.map(feature=>({id:feature.properties.id,n
       </div>
       <ul class="eu-verified-food-key">{food.groups.map((group,index)=><li><span style={`background:${foodColors[index]}`}></span>{group.label_ja} <strong>{percentage(group.width_share_percent)}</strong></li>)}</ul>
       <p class="eu-verified-foot">人が利用できる食料の熱量で、実際の摂取量ではありません。自給率は同年・同群の対応表が未確認のため表示しません。</p>
+    </section>
+    <section aria-labelledby="eu-verified-trade-title">
+      <h3 id="eu-verified-trade-title">欧州域外の輸出先・輸入元</h3>
+      <p class="eu-verified-meta">UN Comtrade · 2021年 · 金額割合</p>
+      <div class="eu-verified-trade-charts">{trade.charts.map(chart=><figure><figcaption>{chart.title_ja}</figcaption><div class="eu-verified-donut" style={`background:${bar(chart.segments)}`} role="img" aria-label={`${chart.title_ja}。${chart.segments.map(segment=>`${segment.label_ja}${percentage(segment.share_pct)}`).join('、')}`}></div><ul>{chart.segments.map((segment,index)=><li><span class="eu-verified-trade-key" style={`background:${tradeColors[index]}`}></span>{segment.label_ja} <strong>{percentage(segment.share_pct)}</strong></li>)}</ul></figure>)}</div>
+      <p class="eu-verified-foot">対象40報告国・地域の相手国別金額が分母。小麦・メスリンのWorld製品記録は35報告国。地理帰属不明を除外し、関税領域とM49欧州は完全一致しません。</p>
+    </section>
+    <section aria-labelledby="eu-verified-share-title">
+      <h3 id="eu-verified-share-title">主要品目の世界生産シェア</h3>
+      <p class="eu-verified-meta">FAO公表の欧州地域 ÷ 世界 · 2023年 · 同品目の生産量</p>
+      <div class="eu-verified-share-list">{production.items.map(item=><div class="eu-verified-share-row"><span>{item.label_ja}</span><span class="eu-verified-share-track"><span style={`width:${item.world_share_percent}%`}></span></span><strong>{percentage(item.world_share_percent)}</strong></div>)}</div>
+      <p class="eu-verified-foot">生乳は牛・水牛の合計、肉類は生体数ではありません。ロシアは全土を含み、EU集計ではありません。</p>
     </section>
   </div>
   <p class="eu-verified-source">出典：<a href={production.source.official_url}>FAO Statistical Yearbook 2025、表21・24・25・49</a>（CC BY 4.0）、<a href="https://comtradeapi.un.org/">UN Comtrade、HS 1001・1201</a>。貿易円は消費量・自給率を示しません。</p>

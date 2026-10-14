@@ -1,4 +1,5 @@
 ---
+import AgroStatistics from '../../../components/atlas/AgroStatistics.astro';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import {withBase} from '../../../lib/urls';
 import geography from '../../../data/atlas/africa-geography.json';
@@ -149,6 +150,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
     </section>
    </aside>
   </div>
+  <AgroStatistics scope="アフリカ" {countries} topics={['maize','rice','wheat','cassava','coffee','tea','cattle','goats','sheep']} />
   <section class="africa-regional-statistics" data-africa-regional-statistics hidden aria-label="地域の農畜産統計"></section>
   <div class="africa-secondary">
 <div class="africa-agri-notes" data-africa-agri-notes hidden></div>

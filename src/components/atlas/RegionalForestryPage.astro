@@ -1,4 +1,5 @@
 ---
+import AgroStatistics from './AgroStatistics.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import RegionalForestryMap from './RegionalForestryMap.astro';
 import RegionalForestryReading from './RegionalForestryReading.astro';
@@ -28,6 +29,7 @@ const config={region,reading,frame};
  </Fragment>
  <RegionalForestryReading slot="reading-heading" {region} part="heading"/>
  <RegionalForestryReading slot="reading" {region} part="body"/>
+ <AgroStatistics slot="statistics" scope={reading.name} topic="forest" countries={[]} nationalOnly={false}/>
  <RegionalForestrySources slot="sources" {region}/>
  <script type="application/json" data-forest-config set:html={JSON.stringify(config).replaceAll('<','\\u003c')}/>
  <noscript><p>全体の概説と資料の範囲を表示しています。各地域の詳しい説明はJavaScriptを有効にして選べます。</p></noscript>
@@ -51,6 +53,7 @@ const config={region,reading,frame};
       <RegionalForestryReading {region} part="body"/>
      </aside>
     </div>
+    <AgroStatistics scope={reading.name} country={region==='russia'?'RUS':''} topic="forest" nationalOnly={region==='russia'} />
     {region==='russia'&&<RussiaForestryStatistics />}
     <RegionalForestrySources {region}/>
    </article>

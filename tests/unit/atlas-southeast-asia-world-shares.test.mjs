@@ -77,10 +77,10 @@ test('the shared under-map panel draws the sourced Southeast trend and handles u
   const section=root.querySelector('[data-south-central-farm-connections]'),content=()=>root.querySelector('[data-south-central-world-share]');
   renderSouthCentralFarmConnections(root,'southeast-asia',true,'overview',undefined);
   assert.equal(section.hidden,false);
-  assert.match(content().textContent,/インドネシアの米（籾米）.*2024年.*6\.48％/);
-  assert.match(content().textContent,/ベトナム.*タイ.*地域全体の世界比ではありません/);
-  assert.equal(content().querySelectorAll('svg.sc-share-chart').length,1);
-  assert.equal(content().querySelectorAll('tbody tr').length,10);
+  assert.match(content().textContent,/報告10\/11か国.*24\.02%.*地域完全値ではありません/);
+  assert.match(content().textContent,/ASEAN10.*ASEAN11とは別/);
+  assert.equal(content().querySelectorAll('svg.sc-share-chart').length,0);
+  assert.doesNotMatch(content().textContent,/インドネシアの米/);
   renderSouthCentralFarmConnections(root,'southeast-asia',true,'maize',{code:'VNM',name:'ベトナム'});
   assert.match(content().textContent,/ベトナムのトウモロコシ.*2024年.*0\.36％/);
   assert.equal(content().querySelectorAll('svg.sc-share-chart').length,1);

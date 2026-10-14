@@ -118,7 +118,7 @@ test('water modes retain ready local distributions, metric units and URL history
 });
 
 test('Africa build includes sitemap, all fields, countries, sources and truthful CSV missing values',async()=>{
- await withAfricaPage('https://example.com/atlas/africa/',(_w,q)=>{assert.equal(q('[data-africa-atlas]').querySelectorAll('[data-country-path]').length,55);assert.equal(q('[data-place]').options.length,56);assert.equal(q('[data-place]').options[0].value,'');assert.equal(q('[data-metric]').options.length,15);assert.equal(q('[data-africa-atlas]').querySelectorAll('[data-field]').length,4);assert.match(q('noscript').textContent,/CSV/);});
+ await withAfricaPage('https://example.com/atlas/africa/',(_w,q)=>{assert.equal(q('[data-africa-atlas]').querySelectorAll('[data-country-path]').length,55);assert.equal(q('[data-place]').options.length,56);assert.equal(q('[data-place]').options[0].value,'');assert.equal(q('[data-metric]').options.length,15);assert.equal(q('[data-africa-atlas]').querySelectorAll('[data-field]').length,4);assert.ok([..._w.document.querySelectorAll('noscript')].some(node=>/CSV/.test(node.textContent)));});
  assert.ok(readFileSync(new URL('../../dist/sitemap.xml',import.meta.url),'utf8').includes('/insight-journal/atlas/africa/'));const csv=readFileSync(new URL('../../dist/assets/atlas/africa/indicators.csv',import.meta.url),'utf8');assert.ok(csv.includes('NGA,ナイジェリア,SP.POP.TOTL,2023,227882945'));assert.ok(csv.includes('ESH,西サハラ,SP.POP.TOTL,2023,\r\n'));
 });
 

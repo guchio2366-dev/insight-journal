@@ -79,7 +79,9 @@ try{
   if(viewport.width===1920)for(const region of ['africa','oceania','russia']){
    await page.goto(base+`/atlas/${region}/agriculture/forestry/`,{waitUntil:'networkidle'});await page.waitForFunction(()=>document.querySelector('[data-regional-forestry]')?.dataset.forestInitialized==='true');await page.evaluate(()=>document.fonts.ready);await page.evaluate(()=>scrollTo(0,0));
    const layout=await page.evaluate(()=>{const b=s=>{const el=document.querySelector(s),r=el.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};};return {news:b('.atlas-news'),fields:b('.forest-fields,.africa-fields'),map:b('.forest-map-stage'),reading:b('.forest-reading')};});
-   report.otherRegions.push({region,layout,image:await shot(region+'-forestry')});
+   const primaryFile=`${region}-forestry-protected-${viewport.width}.png`,primaryBytes=await page.locator('.forest-primary-grid').screenshot({path:path.join(output,primaryFile),animations:'disabled'});
+   const primaryImage={file:primaryFile,sha256:crypto.createHash('sha256').update(primaryBytes).digest('hex'),imagePixels:{width:primaryBytes.readUInt32BE(16),height:primaryBytes.readUInt32BE(20)}};
+   report.otherRegions.push({region,layout,image:await shot(region+'-forestry'),primaryImage});
   }
   await context.close();await save();
  }

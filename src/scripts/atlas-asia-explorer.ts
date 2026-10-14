@@ -1,3 +1,4 @@
+import {syncAgroStatistics} from './atlas-agro-statistics.ts';
 import eastLandforms from '../../public/assets/atlas/east-asia-v1/landforms.json';
 import {createAsiaPresentation,type AsiaPresentation} from './atlas-asia-presentation';
 import {contourBandLabels} from '../data/atlas/asia-contour-bands';
@@ -460,6 +461,7 @@ function start(root:HTMLElement) {
   }
   function renderFarming(){
     const active=state.field==='agriculture',layer=farmingLayer(),topic=farmingTopic();
+    syncAgroStatistics(root,{country:state.place??'',topic:topic??'overview',active});
     if(config.regionId==='southeast-asia')root.dataset.southeastFarmTopic=active?topic??'overview':'';
     renderSouthCentralFarmConnections(root,config.regionId,active,topic,config.countries.find(c=>c.code===state.place),config.focusShareExample,config.focusId);
     renderEastAsiaFarmFoundations(root,config.regionId,active,topic,config.countries.find(c=>c.code===state.place));

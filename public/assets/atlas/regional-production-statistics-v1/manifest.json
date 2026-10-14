@@ -1,0 +1,199 @@
+{
+  "schemaVersion": 1,
+  "seriesIds": [
+    "banana-production",
+    "barley-production",
+    "buffalo-milk",
+    "cassava-production",
+    "cattle-meat",
+    "cattle-milk",
+    "chicken-eggs",
+    "chicken-meat",
+    "coffee-production",
+    "forest-area",
+    "industrial-roundwood-production",
+    "maize-production",
+    "pig-meat",
+    "potato-production",
+    "qcl-156-production",
+    "qcl-191-production",
+    "qcl-201-production",
+    "qcl-254-production",
+    "qcl-328-production",
+    "qcl-79-production",
+    "qcl-836-production",
+    "rapeseed-production",
+    "rice-production",
+    "roundwood-production",
+    "sawnwood-production",
+    "sheep-meat",
+    "soybean-production",
+    "sugarbeet-production",
+    "sunflower-production",
+    "tea-production",
+    "wheat-production",
+    "wood-fuel-production"
+  ],
+  "files": {
+    "banana-production": {
+      "file": "by-series/banana-production.json.gz",
+      "gzipBytes": 7852,
+      "countryCount": 146
+    },
+    "barley-production": {
+      "file": "by-series/barley-production.json.gz",
+      "gzipBytes": 17306,
+      "countryCount": 58
+    },
+    "buffalo-milk": {
+      "file": "by-series/buffalo-milk.json.gz",
+      "gzipBytes": 4716,
+      "countryCount": 19
+    },
+    "cassava-production": {
+      "file": "by-series/cassava-production.json.gz",
+      "gzipBytes": 4578,
+      "countryCount": 17
+    },
+    "cattle-meat": {
+      "file": "by-series/cattle-meat.json.gz",
+      "gzipBytes": 30017,
+      "countryCount": 191
+    },
+    "cattle-milk": {
+      "file": "by-series/cattle-milk.json.gz",
+      "gzipBytes": 30016,
+      "countryCount": 185
+    },
+    "chicken-eggs": {
+      "file": "by-series/chicken-eggs.json.gz",
+      "gzipBytes": 27742,
+      "countryCount": 192
+    },
+    "chicken-meat": {
+      "file": "by-series/chicken-meat.json.gz",
+      "gzipBytes": 30200,
+      "countryCount": 193
+    },
+    "coffee-production": {
+      "file": "by-series/coffee-production.json.gz",
+      "gzipBytes": 7254,
+      "countryCount": 80
+    },
+    "forest-area": {
+      "file": "by-series/forest-area.json.gz",
+      "gzipBytes": 24549,
+      "countryCount": 91
+    },
+    "industrial-roundwood-production": {
+      "file": "by-series/industrial-roundwood-production.json.gz",
+      "gzipBytes": 13883,
+      "countryCount": 50
+    },
+    "maize-production": {
+      "file": "by-series/maize-production.json.gz",
+      "gzipBytes": 18127,
+      "countryCount": 63
+    },
+    "pig-meat": {
+      "file": "by-series/pig-meat.json.gz",
+      "gzipBytes": 25931,
+      "countryCount": 174
+    },
+    "potato-production": {
+      "file": "by-series/potato-production.json.gz",
+      "gzipBytes": 12479,
+      "countryCount": 39
+    },
+    "qcl-156-production": {
+      "file": "by-series/qcl-156-production.json.gz",
+      "gzipBytes": 4941,
+      "countryCount": 20
+    },
+    "qcl-191-production": {
+      "file": "by-series/qcl-191-production.json.gz",
+      "gzipBytes": 3446,
+      "countryCount": 8
+    },
+    "qcl-201-production": {
+      "file": "by-series/qcl-201-production.json.gz",
+      "gzipBytes": 3680,
+      "countryCount": 10
+    },
+    "qcl-254-production": {
+      "file": "by-series/qcl-254-production.json.gz",
+      "gzipBytes": 3249,
+      "countryCount": 6
+    },
+    "qcl-328-production": {
+      "file": "by-series/qcl-328-production.json.gz",
+      "gzipBytes": 4866,
+      "countryCount": 22
+    },
+    "qcl-79-production": {
+      "file": "by-series/qcl-79-production.json.gz",
+      "gzipBytes": 4758,
+      "countryCount": 19
+    },
+    "qcl-836-production": {
+      "file": "by-series/qcl-836-production.json.gz",
+      "gzipBytes": 4188,
+      "countryCount": 15
+    },
+    "rapeseed-production": {
+      "file": "by-series/rapeseed-production.json.gz",
+      "gzipBytes": 11234,
+      "countryCount": 35
+    },
+    "rice-production": {
+      "file": "by-series/rice-production.json.gz",
+      "gzipBytes": 15253,
+      "countryCount": 64
+    },
+    "roundwood-production": {
+      "file": "by-series/roundwood-production.json.gz",
+      "gzipBytes": 34790,
+      "countryCount": 91
+    },
+    "sawnwood-production": {
+      "file": "by-series/sawnwood-production.json.gz",
+      "gzipBytes": 32501,
+      "countryCount": 91
+    },
+    "sheep-meat": {
+      "file": "by-series/sheep-meat.json.gz",
+      "gzipBytes": 11841,
+      "countryCount": 39
+    },
+    "soybean-production": {
+      "file": "by-series/soybean-production.json.gz",
+      "gzipBytes": 17737,
+      "countryCount": 116
+    },
+    "sugarbeet-production": {
+      "file": "by-series/sugarbeet-production.json.gz",
+      "gzipBytes": 10793,
+      "countryCount": 36
+    },
+    "sunflower-production": {
+      "file": "by-series/sunflower-production.json.gz",
+      "gzipBytes": 9197,
+      "countryCount": 31
+    },
+    "tea-production": {
+      "file": "by-series/tea-production.json.gz",
+      "gzipBytes": 4063,
+      "countryCount": 14
+    },
+    "wheat-production": {
+      "file": "by-series/wheat-production.json.gz",
+      "gzipBytes": 22362,
+      "countryCount": 76
+    },
+    "wood-fuel-production": {
+      "file": "by-series/wood-fuel-production.json.gz",
+      "gzipBytes": 13475,
+      "countryCount": 50
+    }
+  }
+}
