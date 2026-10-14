@@ -60,6 +60,15 @@ test('a null World denominator never yields a ratio or world pie',async()=>withD
  assert.doesNotMatch(root.textContent,/NaN|Infinity/);
 }));
 
+test('an unsupported selected product keeps the reading order with brief gaps and no substitute series',async()=>withDom(window=>{
+ const data=dataset({CAN:{name:'カナダ',series:[series([observation(2024,100)],{id:'soybean-production',item:'236'})]}});
+ const root=parse(window,renderAgroColumns(data,'CAN','roundwood-production'));
+ assert.deepEqual([...root.querySelectorAll('.agro-columns>section')].map(n=>n.dataset.agroStage),['production','use','destinations']);
+ assert.equal(root.querySelectorAll('.agro-world-pie,.agro-partner-pie,.agro-band,svg').length,0);
+ assert.doesNotMatch(root.textContent,/100 t|米（籾米）/,'another retained crop is not a forest production value');
+ assert.equal(root.querySelectorAll('.agro-flow-gap').length,3);
+}));
+
 test('equal production shares a rank and an appended selected country keeps its true rank',async()=>withDom(window=>{
  const countries=Object.fromEntries([100,100,90,80,70,60,50,40].map((value,index)=>['C'+index,{name:'対象'+index,series:[series([observation(2024,value)])]}]));
  // A differently defined observation must not enter the matching ranking.

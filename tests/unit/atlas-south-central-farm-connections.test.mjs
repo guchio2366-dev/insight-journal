@@ -21,10 +21,13 @@ test('the regional default identifies country examples and draws only a sourced 
 
 test('country and item selection update the series, while unsupported items show no invented graph',()=>{
  renderSouthCentralFarmConnections(root,'south-central-asia',true,'wheat',{code:'KAZ',name:'カザフスタン'});
- assert.match(content().textContent,/カザフスタンの小麦は、2024年に世界生産量の2\.3％/);
+ assert.match(content().textContent,/カザフスタンの小麦：18,576,694\.15\s*t（2024年）/);
+ assert.match(content().textContent,/世界生産量の2\.3％/);
+ assert.match(content().textContent,/World 798,481,711\.07\s*t/);
  assert.equal(content().querySelectorAll('svg.sc-share-chart').length,1);
  renderSouthCentralFarmConnections(root,'south-central-asia',true,'cotton',{code:'KAZ',name:'カザフスタン'});
  assert.match(content().textContent,/未収録/);
+ assert.doesNotMatch(content().textContent,/18,576,694\.15|798,481,711\.07|2\.3％/,'unsupported cotton must not reuse the wheat quantities or world share');
  assert.equal(content().querySelectorAll('svg').length,0);
  renderSouthCentralFarmConnections(root,'east-asia',true,'wheat',{code:'KAZ',name:'カザフスタン'});
  assert.equal(section.hidden,true);
