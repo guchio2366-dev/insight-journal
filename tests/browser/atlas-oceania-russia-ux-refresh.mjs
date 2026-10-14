@@ -34,6 +34,26 @@ try{
   await page.setViewportSize({width,height});
   for(const region of ['oceania','russia'])for(const field of ['agriculture','nature','industry','population']){
    await page.goto(`${base}atlas/${region}/${field}/`,{waitUntil:'networkidle'});
+   // Russia's dedicated industry page owns its three-sector/product contract.
+   // The complete 19-product/48-place checks live in verify-russia-industry-review.mjs.
+   if(region==='russia'&&field==='industry'){
+    await page.waitForFunction(()=>document.querySelector('[data-ru-industry]')?.dataset.ruReady==='true');
+    const host=page.locator('[data-ru-industry]'),map=host.locator('[data-ru-map]'),frame=await map.getAttribute('viewBox');
+    assert.equal(frame,'0 0 1200 597');
+    for(const sector of ['resources','manufacturing','services']){
+     await host.locator(`[data-ru-sector="${sector}"]`).click();
+     assert.equal(new URL(page.url()).searchParams.get('sector'),sector);
+     assert.ok(await host.locator('[data-ru-marker]').count()>0);
+     assert.ok(await host.locator('[data-ru-label]').count()>0);
+     assert.equal(await map.getAttribute('viewBox'),frame);
+     assert.ok((await host.locator('[data-ru-reading]').textContent()).length>35);
+     await host.locator('[data-ru-canvas]').scrollIntoViewIfNeeded();
+     await capture(`${width}-russia-industry-${sector}`);
+    }
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
+    report.checks.push({region,field,width,status:'passed',contract:'dedicated three-sector industry page'});
+    continue;
+   }
    await page.waitForFunction(r=>document.querySelector(`[data-${r}-learning]`)?.dataset[r+'Ready']==='true',region);
    await page.evaluate(async()=>{await document.fonts.ready;await Promise.all([...document.querySelectorAll('[data-primary-map] image')].map(el=>new Promise((done,reject)=>{const image=new Image();image.onload=done;image.onerror=()=>reject(new Error('Map image failed: '+el.getAttribute('href')));image.src=el.getAttribute('href');})));});
    const root=page.locator(`[data-${region}-learning]`),map=root.locator('[data-primary-map] svg'),frame=await map.getAttribute('viewBox');
