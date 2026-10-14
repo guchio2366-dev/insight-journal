@@ -2,14 +2,15 @@ import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
 import path from 'node:path';
+import {execFileSync} from 'node:child_process';
 const output=process.env.OCEANIA_REVIEW_OUTPUT??'/tmp/oceania-industry-review';
 await mkdir(output,{recursive:true});
-const browser=await chromium.launch({executablePath:process.env.OCEANIA_CHROMIUM??'/usr/bin/chromium',headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
+const browser=await chromium.launch({executablePath:process.env.OCEANIA_CHROMIUM??'/usr/bin/chromium',headless:true,chromiumSandbox:true,ignoreDefaultArgs:['--unsafely-disable-devtools-self-xss-warnings']});
 const context=await browser.newContext({deviceScaleFactor:1});
 const page=await context.newPage(),errors=[];
 page.on('pageerror',e=>errors.push(e.message));
 const route=process.env.OCEANIA_REVIEW_URL??'http://localhost:4321/insight-journal/atlas/oceania/industry/';
-const report={route,viewports:[],checks:[],screenshots:[],errors};
+const report={route,head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),sandboxRequired:true,browserVersion:browser.version(),viewports:[],checks:[],screenshots:[],errors};
 const settle=async()=>{await page.evaluate(()=>document.fonts.ready);await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));};
 const geometry=()=>page.locator('[data-primary-map] [data-oceania-product-label]').evaluateAll(nodes=>nodes.map(n=>({id:n.dataset.oceaniaProductLabel,box:n.dataset.labelBox})));
 async function audit(){

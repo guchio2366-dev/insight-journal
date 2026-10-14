@@ -9,6 +9,7 @@ on:
       - 'tests/browser/atlas-oceania-russia-first-stage.mjs'
       - 'tests/browser/atlas-oceania-russia-ux-refresh.mjs'
       - 'tests/browser/atlas-oceania-russia-climate-cities.mjs'
+      - 'scripts/verify-oceania-industry-catalog.mjs'
       - 'src/components/atlas/RegionalClimateCityReading.astro'
       - 'src/data/atlas/oceania-russia-climate-cities.json'
       - 'src/lib/atlas-regional-climate-cities.ts'
@@ -126,6 +127,23 @@ jobs:
         env:
           REGION_REVIEW_OUTPUT: ${{ runner.temp }}/oceania-russia-pc-review/ux-refresh
         run: node tests/browser/atlas-oceania-russia-ux-refresh.mjs
+      - name: Review all adopted Oceania industries in sandboxed Chrome
+        if: env.REGION_REVIEW_INDUSTRY == '1'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -f scripts/verify-oceania-industry-catalog.mjs ]]; then
+            npm run preview -- --host 127.0.0.1 --port 4175 > "$RUNNER_TEMP/oceania-industry-preview.log" 2>&1 &
+            preview_pid=$!
+            trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+            for attempt in {1..40}; do
+              if curl --fail --silent http://127.0.0.1:4175/insight-journal/atlas/oceania/industry/ > /dev/null; then break; fi
+              kill -0 "$preview_pid"
+              sleep 1
+            done
+            curl --fail --silent http://127.0.0.1:4175/insight-journal/atlas/oceania/industry/ > /dev/null
+            OCEANIA_CHROMIUM="$REGION_REVIEW_CHROME_PATH" OCEANIA_REVIEW_URL=http://127.0.0.1:4175/insight-journal/atlas/oceania/industry/ OCEANIA_REVIEW_OUTPUT="$RUNNER_TEMP/oceania-russia-pc-review/industry-catalog" node scripts/verify-oceania-industry-catalog.mjs
+          fi
       - name: Review Oceania and Russia climate cities at both PC sizes
         if: env.REGION_REVIEW_CLIMATE_CITIES == '1'
         env:
