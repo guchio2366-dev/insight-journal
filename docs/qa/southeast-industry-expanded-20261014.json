@@ -5,16 +5,115 @@
   "existingGuidePositions": 30,
   "newFactoryPositions": 0,
   "palmStateGeometries": 7,
-  "localTargeted": {"unit": 4, "builtPageAndController": 3, "passed": 7, "failed": 0},
-  "localBroadUnitAttempt": {"tests": 1355, "passed": 1348, "failed": 4, "skipped": 3, "failures": "Unchanged tests/unit/atlas-mexico-nature-surfaces.test.mjs waitFor/waitContours conditions; not a passing full-suite result"},
+  "localTargeted": {
+    "unit": 4,
+    "builtPageAndController": 3,
+    "passed": 7,
+    "failed": 0
+  },
+  "localBroadUnitAttempt": {
+    "tests": 1355,
+    "passed": 1348,
+    "failed": 4,
+    "skipped": 3,
+    "failures": "Unchanged tests/unit/atlas-mexico-nature-surfaces.test.mjs waitFor/waitContours conditions; not a passing full-suite result"
+  },
   "localBroadBuiltSiteAttempt": "Unchanged-region wait failures observed; no passing full-suite result claimed",
   "localProductionBuild": "112 pages, succeeded before final small label/fallback safeguards; final rebuild recorded separately",
   "localReleaseBoundary": "succeeded on built c6a28fb8",
-  "localRealBrowser": {"executed": false, "error": "Chromium setuid_sandbox_host.cc:166: /usr/lib/chromium/chrome-sandbox not configured correctly", "sandboxDisabled": false, "permissionsChanged": false},
-  "realBrowserPlan": {"script": "scripts/verify-southeast-industry-expanded.mjs", "viewports": ["1920x1080", "1024x768", "390x844"], "checks": ["18 industry selections", "3 sector emphasis", "fixed map/label/camera", "non-overlap", "URL reload and history", "right prose and below-map statistics", "palm state inputs", "country-only solar and rice evidence"]},
-  "existingPushCI": {"head": "c6a28fb81909e11c80955e8616e6660928aa257b", "url": "https://github.com/guchio2366-dev/insight-journal/actions/runs/38623827426", "observedSteps": {"unit": "success", "productionBuild": "success", "builtSite": "in_progress"}, "doesNotProveSoutheastBrowserAcceptance": true},
-  "pullRequest": {"created": false, "attempts": 2, "action": "github_create_pull_request draft=true", "repository": "guchio2366-dev/insight-journal", "head": "codex/sea-industry-expanded-20261014", "base": "main", "block": "Automatic approval review rejected PR creation citing the earlier PR prohibition and reported test failures. The same action was retried once with the existing authorization evidence and remained rejected. No CLI workaround or further retry."},
+  "localRealBrowser": {
+    "executed": false,
+    "error": "Chromium setuid_sandbox_host.cc:166: /usr/lib/chromium/chrome-sandbox not configured correctly",
+    "sandboxDisabled": false,
+    "permissionsChanged": false
+  },
+  "realBrowserPlan": {
+    "script": "scripts/verify-southeast-industry-expanded.mjs",
+    "viewports": [
+      "1920x1080",
+      "1024x768",
+      "390x844"
+    ],
+    "checks": [
+      "18 industry selections",
+      "3 sector emphasis",
+      "fixed map/label/camera",
+      "non-overlap",
+      "URL reload and history",
+      "right prose and below-map statistics",
+      "palm state inputs",
+      "country-only solar and rice evidence"
+    ]
+  },
+  "existingPushCI": {
+    "head": "c6a28fb81909e11c80955e8616e6660928aa257b",
+    "url": "https://github.com/guchio2366-dev/insight-journal/actions/runs/38623827426",
+    "observedSteps": {
+      "unit": "success",
+      "productionBuild": "success",
+      "builtSite": "in_progress"
+    },
+    "doesNotProveSoutheastBrowserAcceptance": true
+  },
+  "pullRequest": {
+    "created": false,
+    "attempts": 2,
+    "action": "github_create_pull_request draft=true",
+    "repository": "guchio2366-dev/insight-journal",
+    "head": "codex/sea-industry-expanded-20261014",
+    "base": "main",
+    "block": "Automatic approval review rejected PR creation citing the earlier PR prohibition and reported test failures. The same action was retried once with the existing authorization evidence and remained rejected. No CLI workaround or further retry."
+  },
   "merged": false,
   "published": false,
-  "remaining": ["PR creation approval block", "Southeast Asia real browser acceptance and image inspection", "final-head broad CI completion"]
+  "remaining": [
+    "PR creation approval block",
+    "Southeast Asia real browser acceptance and image inspection",
+    "final-head broad CI completion"
+  ],
+  "revalidation": {
+    "applicationHead": "be029220c15894e984fa2248ee84e5e6ebec8447",
+    "broadCI": {
+      "url": "https://github.com/guchio2366-dev/insight-journal/actions/runs/38626800224",
+      "conclusion": "success",
+      "unit": "success",
+      "builtSite": "success",
+      "productionBuild": "success",
+      "existingRealBrowser": "success",
+      "releaseBoundary": "success",
+      "rawLogDownload": "403 Forbidden; no alternate retrieval"
+    },
+    "isolatedLocalBuiltSite": {
+      "tests": 17,
+      "passed": 13,
+      "failed": 1,
+      "skipped": 3,
+      "failure": "Unchanged Africa agriculture readiness wait"
+    },
+    "isolatedLocalMexicoUnit": {
+      "tests": 11,
+      "passed": 10,
+      "failed": 1,
+      "failure": "Unchanged elevation contour readiness wait"
+    },
+    "temporaryMexicoWaitProbe": {
+      "controllerUnchanged": true,
+      "originalAssertionsUnchanged": true,
+      "onlyWaitLimitExtended": true,
+      "preparedAfterMs": 12123,
+      "passed": true,
+      "notCountedAsOriginalTestPass": true
+    },
+    "industryBrowserArtifactDirectory": "review-artifacts/southeast-second-pass/industry-expanded",
+    "samePRToolRetry": "pending, once only after new user evidence; no alternative creation path",
+    "temporaryAfricaWaitProbe": {
+      "controllerUnchanged": true,
+      "originalAssertionsUnchanged": true,
+      "onlyWaitLimitExtended": true,
+      "preparedAfterMs": 5953,
+      "passed": true,
+      "notCountedAsOriginalTestPass": true,
+      "cause": "Variable local readiness duration; exact scheduling cause unconfirmed"
+    }
+  }
 }

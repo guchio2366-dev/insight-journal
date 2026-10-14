@@ -4,7 +4,7 @@ import {readFile,mkdir,writeFile} from 'node:fs/promises';
 import {resolve,extname,join,sep} from 'node:path';
 import {createHash} from 'node:crypto';
 import {chromium} from 'playwright';
-const root=resolve('dist'),out=resolve(process.env.SEA_INDUSTRY_REVIEW_OUTPUT??'review-artifacts/southeast-industry-expanded');await mkdir(out,{recursive:true});
+const root=resolve('dist'),out=resolve(process.env.SEA_INDUSTRY_REVIEW_OUTPUT??'review-artifacts/southeast-second-pass/industry-expanded');await mkdir(out,{recursive:true});
 const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.gz':'application/octet-stream','.png':'image/png','.svg':'image/svg+xml','.woff2':'font/woff2'};
 const server=createServer(async(req,res)=>{try{let path=decodeURIComponent(new URL(req.url,'http://localhost').pathname);assert(path.startsWith('/insight-journal/'));path=path.slice('/insight-journal'.length);const file=resolve(root,'.'+path,path.endsWith('/')?'index.html':'');assert(file.startsWith(root+sep));res.writeHead(200,{'content-type':mime[extname(file)]??'application/octet-stream'}).end(await readFile(file));}catch{res.writeHead(404).end('Missing local asset');}});
 await new Promise(r=>server.listen(0,'127.0.0.1',r));const base=`http://127.0.0.1:${server.address().port}`;
