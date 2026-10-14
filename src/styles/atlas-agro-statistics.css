@@ -13,3 +13,12 @@
 @media(min-width:1200px){.latin-workspace.latin-agriculture>.latin-below-workspace{padding-inline-start:calc(20px + clamp(220px,19vw,340px) + 16px)}}
 @media(min-width:960px) and (max-width:1199px){.latin-workspace.latin-agriculture>.latin-below-workspace{padding-inline-start:184px}}
 .agro-statistics td small{display:block;font-size:12px}
+.agro-statistics :is([data-agro-existing-trade],[data-agro-existing-supply]){min-width:0;overflow-wrap:anywhere}
+.agro-statistics [data-agro-existing-trade] .east-trade-pair{display:grid;grid-template-columns:minmax(0,1fr)}
+.agro-statistics :is(.east-pie,.sc-flow-pie,.agro-partner-pie){display:block;width:min(132px,100%);height:auto;aspect-ratio:1;border-radius:50%;min-height:0}
+.agro-statistics [data-agro-existing-trade] figure{margin:10px 0}
+.agro-statistics :is(.east-trade-key,.sc-flow-destinations){padding-left:0;list-style:none}
+.agro-statistics :is(.east-trade-key,.sc-flow-destinations) li{display:flex;flex-wrap:wrap;gap:5px;font-size:13px}
+.agro-statistics :is(.east-trade-key,.sc-flow-destinations) i{display:inline-block;width:10px;height:10px;flex:none;margin-top:5px}
+.agro-existing-forest{margin:16px 0;border-top:1px solid #d6dcd1;padding-top:12px}
+.agro-statistics .sc-flow-track{display:flex;height:16px}.agro-statistics .sc-flow-track>span{display:block;height:16px}

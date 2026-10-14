@@ -37,8 +37,8 @@ test('manifest gzip slices retain the exact selected series and matching forestr
 
 test('national normalization preserves exact definitions, missingness, source joins and incomplete ranking scope', () => {
   assert.deepEqual(gunzipSync(readFileSync(output + '.gz')), readFileSync(output));
-  assert.equal(data.countries.JPN, undefined);
-  assert.equal(data.countries.USA, undefined);
+  assert.ok(data.countries.JPN, 'Japan remains in comparison data without a new page');
+  assert.ok(data.countries.USA, 'US remains in comparison data without replacing its page');
   assert.equal(data.countries.World, undefined);
   assert.equal(data.unmatchedPublisherAreas.length, 0);
   assert.match(data.method, /収録国・地域中の順位/);

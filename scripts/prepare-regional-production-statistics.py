@@ -13,7 +13,6 @@ import json
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / 'public/assets/atlas/regional-production-statistics-v1/statistics.json'
 DOMAINS = {'Production_Crops_Livestock': 'QCL', 'Forestry': 'FO', 'Inputs_LandUse': 'RL'}
-EXCLUDED = {'JPN', 'USA'}
 
 
 def prepare():
@@ -43,7 +42,7 @@ def prepare():
 
     def add(code, domain, item, element, year, unit, raw, flag, note, path):
         item, element, year = str(item), str(element), int(year)
-        if code in EXCLUDED or element not in ('5510', '5516', '5616', '5916', '5110'):
+        if element not in ('5510', '5516', '5616', '5916', '5110'):
             return
         # 5110 is forest land area only, not a generic crop or population measure.
         if element == '5110' and (domain, item) != ('RL', '6646'):
@@ -266,7 +265,7 @@ def prepare():
         if series:
             countries[code] = {'name':names.get(code, code), 'series':series}
     payload = {'schemaVersion':1, 'countries':countries, 'sources':[inputs[p] for p in sorted(inputs)],
-        'method':'保存済みFAOSTATの同一原表SHA-256・domain/item/element/year/unitの国別値とWorld公表値を照合。Decimalで重複値を照合し不一致は停止。国合計をWorldの代替にせず、欠測M/L・空欄はnull、公表0は0。輸入・輸出には生産の世界分母を適用しない。森林面積、丸太、製材、肉、生乳を区別。収録国・地域中の順位であり世界順位・自給率・域外貿易ではない。日本・米国は出力対象外。',
+        'method':'保存済みFAOSTATの同一原表SHA-256・domain/item/element/year/unitの国別値とWorld公表値を照合。Decimalで重複値を照合し不一致は停止。国合計をWorldの代替にせず、欠測M/L・空欄はnull、公表0は0。輸入・輸出には生産の世界分母を適用しない。森林面積、丸太、製材、肉、生乳を区別。収録国・地域中の順位であり世界順位・自給率・域外貿易ではない。日本・米国の保存原値も順位比較に含める。対象ページと比較データは別で、日本専用と米国既存表示は変更しない。',
         'limits':['国別系列の収録範囲は不完全。ランキングは同一系列・年・単位の有効値がある収録国・地域中だけ。',
                   '2015–2024年以外は補完しない。単年資料は推移を作らない。',
                   '一部Asia国別値は元のJSONが数値であり、rawValueは保持数値の文字列表現。CSV/tupleの原数値文字列が重複する場合はそちらを優先。',

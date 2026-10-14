@@ -57,13 +57,13 @@ AsiaFarmStatistics の共通元は `public/assets/atlas/asia-farming-v1/statisti
 |オセアニア|`oceania-livestock-production.json` は豪州・NZの2024牛肉・牛生乳。`OceaniaLearningPage.astro` はABARES2026 Figure6による2022/23–2024/25平均輸出割合（カノーラ85・羊肉82・牛肉77・小麦75%）。|豪州7・NZ6 QCL単年系列を保存値から照合。輸出平均割合を同年の供給帯に変換しない。豪NZ比較をオセアニア地域全体とは呼ばない。牛/羊GLW頭密度から肉量・用途を作らない。FBS／相手貿易／FO／多品目過去年次は未収録。|
 |ロシア|`RussiaLearningPage.astro` にUSDA2021報告の小麦2020/21用途（輸出39.5、食用・種子・工業用23.5、飼料・残差18.0百万t）、輸出先説明とQCL2020–22世界比。`russia-forestry-statistics.json` にRL森林面積・FO丸太/製材2015–24。|欧州原表から15 QCL生産＋2 FO生産＋1 RL面積の18系列・180年次行を厳密照合。USDA用途3値は年度の独立量で2020収穫量の分割ではない。全相手数量未収録のため輸出先円は作れない。小麦2023/24原値X（非公式）を共通データでは旗付き保持するが、既存の公式値2020–22限定表示合意を消さない。林業輸入/輸出、パルプ、用途は未収録。|
 
-共通化は `scripts/prepare-regional-production-statistics.py` を実行し、`public/assets/atlas/regional-production-statistics-v1/statistics.json` と同内容の `statistics.json.gz` を生成する。197国・地域、2,593系列、18,451年次行。QCLは194対象・1,847系列・11,186行、FOは90対象・656系列・6,365行、RL森林面積は90対象・90系列・900行。日本JPNと米国USAを出力から除き、FAO World・地域集計・China351合計も国ランキングから除外する。CHNはFAO mainland156、TWNは158を別報告区分として保持する。欠測・未収録は順位に含めず、順位の分母は同一系列・年・単位の有効値がある収録国・地域。日本・米国を含む世界全件順位ではない。順位表示は必ず「収録N国・地域の中」とする。
+共通化は `scripts/prepare-regional-production-statistics.py` を実行し、`public/assets/atlas/regional-production-statistics-v1/statistics.json` と同内容の `statistics.json.gz` を生成する。199国・地域、2,627系列、18,755年次行。QCLは196対象・1,868系列・11,360行、FOは91対象・668系列・6,485行、RLは91対象・91系列・910行。日本JPNと米国USAの保存原値も比較に含め、FAO World・地域集計・China351合計も国ランキングから除外する。CHNはFAO mainland156、TWNは158を別報告区分として保持する。欠測・未収録は順位に含めず、順位の分母は同一系列・年・単位の有効値がある収録国・地域。日本・米国を含むが、全品目の世界全件順位を保証する保存範囲ではない。順位表示は必ず「収録N国・地域の中」とする。
 
 国別契約は `countries[ISO] = {name,series:[{id,label,domain,item,element,unit,definition,sourceUrl,archiveSha256,rows}]}`。`rows` は `year,value,rawValue,flag,note,worldValue,worldRawValue,worldFlag,share,retainedSources` を保持。FO輸入/輸出（5616／5916、例えば `roundwood-imports`／`sawnwood-exports`）に世界生産分母を付けず、`worldValue/share=null`。丸太全体1861・製材1872・薪材1864・産業用丸太1865は別系列で、丸太生産と製材生産の二重加算・差し引きをしない。RL森林面積は森林面積比であり生産シェアではない。パルプは保存FO国別原表がなく生成しない。
 
 19入力ファイルのSHA-256を出力 `sources` に記録。FAOSTAT原ZIP版SHA一致を確認した上で、domain/item/element/year/unitが一致する国別／World行だけ結合。Decimalで重複値と旗を照合し、値・旗・単位・版の不一致は生成停止。Mexico、Latin、Oceania、Russiaの既存消費データも保存元と照合。CSV・欧州tupleの元数値文字列を優先する。Asiaの元JSONが数値しか持たない行は、その保持数値の文字列表現がrawValueであり、未保存の原CSV桁を作らない。M/L・空欄をnull、公表0を0として保持。World未収録時に国合計・別年・別単位を代替せずshare=null。
 
-plain JSONは5,586,918 bytes、gzipは598,099 bytes（約584 KiB）。gzipは`mtime=0`で決定的生成し、ブラウザで使う場合は解凍可能な既存方式で一度だけ取得する。全データをページ初期HTMLへ埋め込む必要はない。
+plain JSONは5,674,034 bytes、gzipは606,919 bytes（約592 KiB）。gzipは`mtime=0`で決定的生成し、ブラウザで使う場合は解凍可能な既存方式で一度だけ取得する。全データをページ初期HTMLへ埋め込む必要はない。
 
 検証：`node --test tests/unit/atlas-regional-production-statistics.test.mjs` の2件成功。全出力値／元文字列、分母と比率、欠測と公表0、FO輸出入の分母不適用、source全19ハッシュ、gzipとplain一致、再生成一致を確認。故障注入で同版重複の値変更、単位変更、ZIP版変更が生成停止することも確認した。独立データ担当の検証はデータ契約までで、UI適用・実画面・最終CIは統合担当が行う。
 
@@ -71,41 +71,78 @@ plain JSONは5,586,918 bytes、gzipは598,099 bytes（約584 KiB）。gzipは`mt
 
 共通統計の追加取得を100,000 bytes以内へ抑えるため、元JSONと全体gzipを保持したまま `by-series/{id}.json.gz` 32ファイルを追加。生産（QCL5510／FO5516）と森林面積（RL5110）のidごとに分割し、FOは同domain/item/unitの輸入5616・輸出5916だけ同梱。他品目は含めない。対象国・原数値・分母・旗・出典・method・limitsは全体JSONと完全一致し、断片同士の取得で年や定義を変えない。
 
-`manifest.json` の契約は `{schemaVersion,seriesIds,files:{[id]:{file,gzipBytes,countryCount}}}`。最大1ファイルは34,234 bytes。牛肉29,357 bytes＋牛生乳29,358 bytes＝58,715 bytes（約57.3 KiB）、同時取得も100,000 bytes以内。manifest自体は別途5,217 bytesで、肉乳と合算しても63,932 bytes。gzipは全32ファイルmtime=0。初期の農業overviewで全32系列を一括取得する実装は、この分割予算の対象ではなく避ける。
+`manifest.json` の契約は `{schemaVersion,seriesIds,files:{[id]:{file,gzipBytes,countryCount}}}`。最大1ファイルは34,790 bytes。牛肉30,017 bytes＋牛生乳30,016 bytes＝60,033 bytes（約58.6 KiB）、同時取得も100,000 bytes以内。manifest自体は別途5,217 bytesで、肉乳と合算しても65,250 bytes。gzipは全32ファイルmtime=0。初期の農業overviewで全32系列を一括取得する実装は、この分割予算の対象ではなく避ける。
 
 |生産／面積series id|gzip bytes|収録国・地域数|
 |---|---:|---:|
-|banana-production|7,695|144|
-|barley-production|17,237|58|
-|buffalo-milk|4,641|19|
-|cassava-production|4,503|17|
-|cattle-meat|29,357|189|
-|cattle-milk|29,358|183|
-|chicken-eggs|27,057|190|
-|chicken-meat|29,537|191|
-|coffee-production|7,136|79|
-|forest-area|24,240|90|
-|industrial-roundwood-production|13,458|49|
-|maize-production|17,729|62|
-|pig-meat|25,376|172|
-|potato-production|12,409|39|
-|qcl-156-production|4,753|19|
-|qcl-191-production|3,373|8|
-|qcl-201-production|3,605|10|
-|qcl-254-production|3,177|6|
-|qcl-328-production|4,791|22|
-|qcl-79-production|4,562|18|
-|qcl-836-production|4,114|15|
-|rapeseed-production|11,165|35|
-|rice-production|14,932|63|
-|roundwood-production|34,234|90|
-|sawnwood-production|31,925|90|
-|sheep-meat|11,769|39|
-|soybean-production|17,342|114|
-|sugarbeet-production|10,723|36|
-|sunflower-production|9,130|31|
-|tea-production|3,872|13|
-|wheat-production|22,050|75|
-|wood-fuel-production|13,102|49|
+|banana-production|7,852|146|
+|barley-production|17,306|58|
+|buffalo-milk|4,716|19|
+|cassava-production|4,578|17|
+|cattle-meat|30,017|191|
+|cattle-milk|30,016|185|
+|chicken-eggs|27,742|192|
+|chicken-meat|30,200|193|
+|coffee-production|7,254|80|
+|forest-area|24,549|91|
+|industrial-roundwood-production|13,883|50|
+|maize-production|18,127|63|
+|pig-meat|25,931|174|
+|potato-production|12,479|39|
+|qcl-156-production|4,941|20|
+|qcl-191-production|3,446|8|
+|qcl-201-production|3,680|10|
+|qcl-254-production|3,249|6|
+|qcl-328-production|4,866|22|
+|qcl-79-production|4,758|19|
+|qcl-836-production|4,188|15|
+|rapeseed-production|11,234|35|
+|rice-production|15,253|64|
+|roundwood-production|34,790|91|
+|sawnwood-production|32,501|91|
+|sheep-meat|11,841|39|
+|soybean-production|17,737|116|
+|sugarbeet-production|10,793|36|
+|sunflower-production|9,197|31|
+|tea-production|4,063|14|
+|wheat-production|22,362|76|
+|wood-fuel-production|13,475|50|
 
 追加検証：`node --test tests/unit/atlas-regional-production-statistics.test.mjs` は3件成功。32圧縮ファイルを解凍し、元データから選択した生産系列と同FO品目の輸出入との完全同値、無関係品目の除外、manifestのid／ファイル集合／サイズ／国数、gzip時刻0、個別取得と肉乳同時取得の100,000 bytes予算を確認。
+
+## ロシアQCLの公式値限定方針と資料区分の監査
+
+既存 `russia-wheat-world-share.ts` は小麦の2020–2022年を明示し、国・WorldともAの3組だけ採用。`russia-farming-products.ts` と `data-source/atlas/russia/agriculture/product-selection-2022.md` は候補比較を2022年の国A値に固定し、2023–24年のX/I混在を基準年にしない。共通データは原値を保持するためX等を含むが、それを自動的に主図へ昇格させない。
+
+RUS共通18系列180行の国フラグはA117/E27/I17/X19、Fは0。QCLで主図に使える範囲は国・WorldともA、以下表の最右欄。予測F、推計E、補完I、非公式note付きXを主図の公的報告へ読み替えない。FO/RLの外部機関XをQCL非公式行と一律扱いにしない。保存版のQCL旗辞書自体もXを「Figure from external organization」と記す一方、RUSの後年作物X行のnoteが「Unofficial figure」と明記する。主図の非採用方針はこの既存合意と行noteに基づく。
+
+|系列|domain|国フラグ・年数|国とWorld両方Aの年|
+|---|---|---|---|
+|barley-production|QCL|A:8, X:2|2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022|
+|cattle-meat|QCL|A:9, I:1|2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023|
+|cattle-milk|QCL|A:8, E:2|2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022|
+|chicken-eggs|QCL|E:9, I:1|なし|
+|chicken-meat|QCL|A:9, I:1|2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023|
+|forest-area|RL|I:8, X:2|なし|
+|maize-production|QCL|A:8, X:2|2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022|
+|pig-meat|QCL|A:9, I:1|2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023|
+|potato-production|QCL|A:8, I:2|2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022|
+|rapeseed-production|QCL|A:8, X:2|2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022|
+|rice-production|QCL|A:10|2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024|
+|roundwood-production|FO|E:5, X:5|なし|
+|sawnwood-production|FO|E:10|なし|
+|sheep-meat|QCL|A:8, E:1, I:1|なし|
+|soybean-production|QCL|A:8, X:2|2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022|
+|sugarbeet-production|QCL|A:8, I:2|2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022|
+|sunflower-production|QCL|A:8, X:2|2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022|
+|wheat-production|QCL|A:8, X:2|2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022|
+
+主図から外すQCL Xの具体量（t）は小麦2023＝92,770,000／2024＝82,588,000、大麦20,500,000／16,667,000、トウモロコシ15,000,000／13,954,000、菜種4,196,000／4,610,000、大豆6,820,000／7,000,000、ヒマワリ18,600,000／17,200,000。全て2023/2024の順。2024小麦世界比10.343129824%を主図に出さず、原値詳細に旗・注記とともに保持する。順位は他国を選んだ場合も同じRUSの不採用規約を適用する。
+
+国／Worldの両方A限定では鶏卵と羊肉は全期間に採用行がない（鶏卵国E/I、羊肉World常E）。未採用は0や生産不存在を意味しない。国内生産の左欄と右の主図・推移・順位へ同じ品質規約を適用し、元量と比率・原記号・noteは開閉できる原値詳細へ残す。ロシアの小麦主図から2023/24を外した後も、同年順位の全体の年ラベルを別年へ黙って変えない。
+
+FO丸太の国Xは2015–19、Eは2020–24。FO製材は国Eが2015–24全期間。RL森林面積は国Xが2015/2020、Iがその他8年で、Worldも2015/2020がX。このFO/RL既存表示は外部機関・推計・補完区分を明示して保持する独立方針であり、新しいQCL公式値限定で一律に消さない。
+
+独立テスト `tests/unit/atlas-agro-statistics-quality.test.mjs` の4件成功。実保存RUS全QCL非A年の供給左／右円／推移点／自身と他国からの順位除外、非採用理由、元量・旗・非公式noteの原値詳細保持、WorldE/I/X/Fの非採用、既存小麦2020–22Aペア一致、FO/RL Xの既存採用維持を確認。UI/controllerの修正責任は統合担当に保持し、この監査担当は新テストと文書のみ更新した。
+
+追補：順位比較データには保存原表のJPN/USAを保持する。日本専用の保留は比較データの除外を意味しない。最大品目gzip 34,790 bytes、牛肉/牛乳計60,033 bytes、manifest 5217 bytes。用途・在庫の新取得なし。EU stocksは8行null、Sweden在庫は出典/定義のみ。不足は国×同年×丸太/製材/パルプ別の期首/期末/変動と符号・樹皮基準、工程別投入/損耗/副産物、全Partner数量および輸出先用途の独立資料。過去拒否資料は再取得しない。

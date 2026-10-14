@@ -24,6 +24,11 @@ const cases=[
  ['latin-soybean','/atlas/latin-america/agriculture/?layer=soyb&place=BRA','BRA','soybean-production'],
  ['africa-cattle','/atlas/africa/?field=agriculture&topic=livestock&livestock=cattle&place=KEN&overview=0','KEN','cattle-meat'],
  ['oceania-cattle','/atlas/oceania/agriculture/?layer=cattle&place=AUS&scope=country','AUS','cattle-meat'],
+ ['south-rice','/atlas/asia/south-asia/agriculture/?topic=rice&place=IND','IND','rice-production'],
+ ['west-wheat','/atlas/west-asia/agriculture/?topic=wheat&country=TUR','TUR','wheat-production'],
+ ['europe-germany-forest','/atlas/europe/agriculture/?layer=forest&place=DEU','DEU','roundwood-production'],
+ ['europe-finland-forest','/atlas/europe/agriculture/?layer=forest&place=FIN','FIN','roundwood-production'],
+ ['europe-britain-forest','/atlas/europe/agriculture/?layer=forest&place=GBR','GBR','roundwood-production'],
  ['russia-wheat','/atlas/russia/agriculture/','RUS','wheat-production'],
  ['russia-forest','/atlas/russia/agriculture/forestry/','RUS','roundwood-production'],
 ];
@@ -37,7 +42,7 @@ try{
   for(const [name,path,country,series] of cases){
    await page.goto(origin+path,{waitUntil:'networkidle'});await page.evaluate(()=>document.fonts.ready);
    const host=page.locator('[data-agro-statistics]');await host.waitFor({state:'visible'});
-   await page.waitForFunction(()=>{const node=document.querySelector('[data-agro-statistics]');return !node.hidden&&node.querySelector('[data-agro-content]')?.children.length>0&&!node.querySelector('[data-agro-status]').textContent.includes('読み込んで');});
+   await page.waitForFunction(()=>{const node=document.querySelector('[data-agro-statistics]');return !node.hidden&&node.dataset.agroReady==='true'&&node.querySelector('[data-agro-content]')?.children.length>0&&!node.querySelector('[data-agro-status]').textContent.includes('読み込んで');});
    if(series){await host.locator(`[data-agro-country="${country}"][data-agro-series="${series}"]`).waitFor();}
    const measured=await host.evaluate(el=>{const b=el.getBoundingClientRect(),columns=[...el.querySelectorAll('.agro-columns>section')].map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,font:parseFloat(getComputedStyle(n.querySelector('p:not(.agro-meta)')??n).fontSize)};}),rail=document.querySelector('.atlas-news'),r=rail?.getBoundingClientRect(),map=(document.querySelector('[data-canada-census-stage]')??document.querySelector('[data-map-surface],.eu-map-stage,.africa-map-frame,[data-latin-agriculture-map-container],[data-forestry-stage],.forest-map-stage,[data-primary-map]'))?.getBoundingClientRect();return{x:b.x,w:b.width,y:b.y,columns,rail:r?{x:r.x,right:r.right,w:r.width,bottom:r.bottom}:null,map:map?{x:map.x,y:map.y,bottom:map.bottom}:null,overflow:document.documentElement.scrollWidth>innerWidth+1,statisticsOverflow:el.scrollWidth>el.clientWidth+1,overflowElements:[...document.querySelectorAll('body *')].filter(node=>node instanceof HTMLElement&&node.checkVisibility?.({visibilityProperty:true})&&!node.closest('details:not([open])')&&!node.closest('.agro-table-scroll')).flatMap(node=>{const r=node.getBoundingClientRect();return r.width>0&&(r.right>innerWidth+1||r.left<-1)?[{tag:node.tagName,class:node.className?.baseVal??node.className,x:r.x,right:r.right,w:r.width,inNewStatistics:el.contains(node)}]:[];}).slice(0,12)};});
    console.log(JSON.stringify({name,viewport,measured}));
@@ -50,6 +55,14 @@ try{
    if(measured.map)assert.ok(measured.y>=measured.map.bottom-1,`${name}: statistics below map`);
    await host.scrollIntoViewIfNeeded();await page.screenshot({path:resolve(out,`${viewport.width}-${name}.png`),fullPage:true});
    report.cases.push({name,path,viewport,...measured});
+   if(name==='east-rice'){assert.ok(await host.locator('[data-agro-existing-trade] .east-pie').count()>0);assert.match(await host.locator('[data-agro-existing-trade]').innerText(),/2023.*(?:米ドル|金額)/s);report.operations.push({name,viewport,retainedPartnerPie:true});}
+   if(name==='europe-wheat'){assert.equal(await host.locator('.agro-partner-pie').count(),1);assert.match(await host.locator('[data-agro-existing-trade]').innerText(),/2021年.*current USD/s);report.operations.push({name,viewport,regionalMoneyReference:true});}
+   if(name==='south-rice'){assert.equal(await host.locator('.sc-flow-pie').count(),1);assert.match(await host.locator('[data-agro-existing-trade]').innerText(),/5,242,182t/);report.operations.push({name,viewport,basmatiReference:true});}
+   if(name==='west-wheat'){const link=host.locator('[data-agro-reference-link]');await link.click();assert.ok(await page.locator('#agro-reference-west-wheat').isVisible());report.operations.push({name,viewport,regionalPartnerReference:true});}
+   if(name==='russia-wheat'){const world=host.locator('.agro-columns>section').nth(2);assert.match(await world.innerText(),/公式値限定/);assert.equal(await world.locator('.agro-world-pie').count(),0);assert.ok(!(await world.innerText()).includes('82,588,000'));assert.ok(!(await world.locator('.agro-trend').getAttribute('aria-label')).includes('連続'));report.operations.push({name,viewport,unofficialExcluded:true});}
+   if(name==='europe-germany-forest'){assert.ok(await host.locator('[data-agro-existing-supply] .agro-band').count()>=3);assert.match(await host.locator('[data-agro-existing-supply]').innerText(),/在庫未調整/);report.operations.push({name,viewport,sourceSupplyAndUses:true});}
+   if(name==='europe-finland-forest'){assert.match(await host.locator('[data-agro-existing-supply]').innerText(),/62,655.*樹皮あり/s);report.operations.push({name,viewport,firstUseSeparate:true});}
+   if(name==='europe-britain-forest'){await host.locator('[data-agro-series-select]').selectOption('sawnwood-production');await page.waitForFunction(()=>document.querySelector('[data-agro-statistics]')?.dataset.agroReady==='true');assert.match(await host.locator('[data-agro-existing-supply]').innerText(),/25,000m³以上/);report.operations.push({name,viewport,restrictedMarketShares:true});}
    if(name==='southeast-forest'){
     await host.locator('[data-agro-series-select]').selectOption('sawnwood-production');await host.locator('[data-agro-series="sawnwood-production"]').waitFor();
     await host.locator('.agro-definitions>summary').click();assert.ok(await host.locator('.agro-definitions table').isVisible());

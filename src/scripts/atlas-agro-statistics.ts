@@ -1,3 +1,4 @@
+import {renderAgroExistingStatistics} from './atlas-agro-existing-statistics.ts';
 import {agroProduction,agroTopicSeries,renderAgroColumns,type AgroData,type AgroReference} from '../lib/atlas-agro-statistics.ts';
 type Selection={country:string;topic:string;active?:boolean;year?:number};
 type Config={scope:string;country:string;topic:string;topics:string[];countries:{code:string;name:string}[];nationalOnly:boolean;url:string;files:Record<string,{file:string}>;reference?:AgroReference;labels:Record<string,string>};
@@ -24,7 +25,7 @@ function initialize(host:HTMLElement){
   if(host.hidden){content.replaceChildren();return;}
   heading.textContent=config.scope+' · '+(config.countries.find(c=>c.code===next.country)?.name??next.country);
   if(countrySelect)countrySelect.value=next.country;
-  retry.hidden=true;status.textContent='国・Worldの同定義の原値を読み込んでいます…';
+  host.dataset.agroReady='false';retry.hidden=true;status.textContent='国・Worldの同定義の原値を読み込んでいます…';
   // Clear immediately so a pending request cannot display the previous country.
   content.replaceChildren();
   try{
@@ -43,8 +44,10 @@ function initialize(host:HTMLElement){
    host.querySelector<HTMLElement>('[data-agro-series-control]')!.hidden=options.length<2;
    status.textContent=`${next.year??2024}年・全国値。地図の収穫面積・家畜密度とは別の数量です。左・中央・右の原表と欠測を個別に示します。`;
    content.innerHTML=renderAgroColumns(data,next.country,id,next.year??2024,config.reference);
+   await renderAgroExistingStatistics(content,next.country,id);if(token===generation&&!host.hidden)host.dataset.agroReady='true';
   }catch{if(token!==generation)return;status.textContent='統計を取得できませんでした。地図の選択は保持しています。';retry.hidden=false;}
  }
+ host.addEventListener('click',event=>{const a=(event.target as Element).closest<HTMLAnchorElement>('[data-agro-reference-link]');if(!a)return;const target=document.getElementById(a.hash.slice(1));if(!target)return;for(let node:HTMLElement|null=target;node;node=node.parentElement)if(node instanceof HTMLDetailsElement)node.open=true;});
  seriesSelect.addEventListener('change',()=>{chosen=seriesSelect.value;void update(selection);});
  countrySelect?.addEventListener('change',()=>void update({...selection,country:countrySelect.value}));
  retry.addEventListener('click',()=>void update(selection));
