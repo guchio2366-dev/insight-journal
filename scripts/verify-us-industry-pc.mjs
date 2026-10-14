@@ -24,9 +24,11 @@ try{
     const geometry=()=>page.locator('[data-us-overlay]').getAttribute('data-layout'),before=await geometry(),camera=await page.locator('[data-us-map]').getAttribute('viewBox');
     await page.locator('[data-us-map-industry="natural-gas"]').click();assert.equal(await geometry(),before);assert.equal(await page.locator('[data-us-map]').getAttribute('viewBox'),camera);assert.match(await page.locator('[data-us-title]').textContent(),/天然ガス/);
     await page.locator('[data-us-only]').check();assert.equal(await geometry(),before);await page.locator('[data-us-only]').uncheck();
-    for(const sector of ['manufacturing','services','construction-real-estate']){
+    for(const sector of ['resources','manufacturing','services','construction-real-estate']){
      await page.locator(`[data-us-sector="${sector}"]`).click();const labels=await page.locator('[data-us-map-industry]').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return {id:n.dataset.usMapIndustry,x:r.x,y:r.y,right:r.right,bottom:r.bottom};}));
      for(let i=0;i<labels.length;i++)for(const b of labels.slice(i+1)){const a=labels[i];assert.ok(!(a.x<b.right&&a.right>b.x&&a.y<b.bottom&&a.bottom>b.y),`${viewport.width}/${sector}: ${a.id}/${b.id} overlap`);}
+     const obstacles=await page.locator('.us-industry-map-tools,[data-us-industry] .atlas-layer-caption').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return {id:n.className,x:r.x,y:r.y,right:r.right,bottom:r.bottom};}));
+     for(const a of labels){assert.ok(a.x>=data.frame.x&&a.right<=data.frame.right&&a.y>=data.frame.y&&a.bottom<=data.frame.bottom,`${viewport.width}/${sector}: ${a.id} outside frame`);for(const b of obstacles)assert.ok(!(a.x<b.right&&a.right>b.x&&a.y<b.bottom&&a.bottom>b.y),`${viewport.width}/${sector}: ${a.id}/${b.id} overlap`);}
      await page.screenshot({path:resolve(out,`after-industry-${sector}-${viewport.width}.jpg`),type:'jpeg',quality:78});
      const key=await page.locator('nav[data-us-key]').innerText();assert.ok(key.length>0);
     }
