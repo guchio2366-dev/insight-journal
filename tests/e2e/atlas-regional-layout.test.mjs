@@ -14,9 +14,10 @@ const configurations={
   europe:{root:'[data-europe-detail]',nav:'.eu-field-nav',grid:'.eu-layout',frame:'.eu-map-stage',reading:'.eu-read-panel',stats:'[data-eu-statistics]'},
   asia:{root:'[data-asia-atlas]',nav:'.asia-field-tabs',grid:'.asia-layout',frame:'.asia-map-frame',reading:'.asia-reading-panel',stats:'[data-asia-statistics]'},
   west:{root:'[data-west-atlas]',nav:'.atlas-tabs',grid:'.atlas-primary-grid',frame:'.atlas-map-frame',reading:'.west-reading',stats:'[data-west-comparison]'},
+  westIndustry:{root:'[data-west-industry]',nav:'.atlas-tabs',grid:'.atlas-primary-grid',frame:'.atlas-map-frame',reading:'.wi-reading',stats:'#west-industry-statistics',surface:'[data-wi-map]'},
   centralIndustry:{root:'[data-asia-atlas]',nav:'.atlas-tabs',grid:'.central-primary-grid',frame:'.central-map-frame',reading:'.central-reading',stats:'.central-industry-statistics',surface:'[data-central-map]'}
 };
-const configuration=(region,field)=>configurations[region==='asia/central-asia'&&field==='industry'?'centralIndustry':region==='europe'?'europe':region==='west-asia'?'west':'asia'];
+const configuration=(region,field)=>configurations[region==='asia/central-asia'&&field==='industry'?'centralIndustry':region==='europe'?'europe':region==='west-asia'&&field==='industry'?'westIndustry':region==='west-asia'?'west':'asia'];
 async function loadStyles(w){
   for(const node of w.document.querySelectorAll('style,link[rel=stylesheet]')){
     const path=node.tagName==='LINK'?`dist/${node.getAttribute('href').split('/insight-journal/')[1]}`:null;
