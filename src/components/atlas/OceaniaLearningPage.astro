@@ -1,5 +1,7 @@
 ---
 import AgroStatistics from './AgroStatistics.astro';
+import OceaniaIndustryCatalog from './OceaniaIndustryCatalog.astro';
+import {oceaniaIndustryCatalog} from '../../data/atlas/oceania-industry-catalog';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
 import OceaniaWorkspaceRegionNavigation from './OceaniaWorkspaceRegionNavigation.astro';
@@ -15,6 +17,7 @@ import {
 } from '../../data/atlas/oceania-learning';
 import '../../styles/atlas-oceania-learning.css';
 import '../../styles/atlas-oceania-workspace.css';
+import '../../styles/atlas-oceania-industry-catalog.css';
 interface Props {field?:OceaniaField}
 const {field='nature'}=Astro.props;
 const state=createOceaniaState('',field);
@@ -58,12 +61,15 @@ const australiaExportShares=[
   {field==='nature'?<nav class="oceania-workspace-subviews" aria-label="自然環境の資料"><span aria-current="page">気候区分・降水量・河川・標高は地図の分布で選択</span><details class="oceania-workspace-unready"><summary>地下水・流域 <small>未整備</small></summary><p>主要河川の位置は地図で選べます。流向・河口と流域全体、地下水・利用可能水量は未整備です。年降水量から水資源量を推定しません。</p></details></nav>:<nav class="oceania-workspace-subviews" aria-label="分野内の項目">{field==='industry'&&[['resources','資源・エネルギー'],['manufacturing','製造業'],['services','サービス業']].map(([id,label])=><button type="button" data-industry-sector={id} aria-pressed="false">{label}</button>)}{field!=='industry'&&subviews.map((label,index)=>index===0?<button type="button" aria-pressed="true">{label}</button>:field==='agriculture'?<a href={withBase('/atlas/oceania/agriculture/forestry/')} style="display:inline-flex;align-items:center;padding:8px 14px;min-height:40px;color:inherit">{label}</a>:<details class="oceania-workspace-unready"><summary>{label}<small>未整備</small></summary><p>この地域の{label}の分布資料は未整備です。</p></details>)}{field==='population'&&<p class="oceania-population-unready">人種・民族・宗教：未整備</p>}</nav>}
   <div class="oceania-learning-normal" data-normal-view>
    <section class="oceania-learning-map-panel" aria-labelledby="oceania-primary-title">
+    {field==='industry'&&<div class="oceania-catalog-controls"><label>産業<select data-oceania-product><option value="all">全18産業の分布</option>{[['resources','資源・エネルギー'],['manufacturing','製造業'],['services','サービス業']].map(([sector,label])=><optgroup label={label}>{oceaniaIndustryCatalog.filter(item=>item.sector===sector).map(item=><option value={item.id}>{item.label}</option>)}</optgroup>)}</select></label><button type="button" data-oceania-product-only aria-pressed="false" disabled>この産業だけ表示</button><button type="button" data-oceania-product-clear>選択を解除</button></div>}
     <div class="oceania-learning-map-heading"><div><h2 id="oceania-primary-title" data-primary-title>{layer.title}</h2><p><span data-primary-period>{layer.period}</span><span data-primary-unit>{layer.unit}</span></p></div><label class="oceania-learning-layer"><span class:list={{'visually-hidden':field!=='agriculture'}}>{field==='agriculture'?'分布':'地図の分布を選ぶ'}</span><select data-layer>{fieldLayers.map(item=><option value={item.id} selected={item.id===layer.id}>{item.id==='farming-all'?'保存5品目の全分布':item.title}</option>)}</select></label>{field==='agriculture'&&<button type="button" class="oceania-farming-single" data-farming-single aria-pressed="false" hidden={layer.id==='farming-all'}>この品目だけ表示</button>}{field==='agriculture'&&<details class="oceania-farming-view-options"><summary>範囲・テーマ</summary><div class="oceania-farming-advanced-controls"><div class="oceania-learning-themes" aria-label="学ぶテーマ">{fieldThemes.map(item=><button type="button" data-theme={item.id} title={item.title} aria-pressed="false">{themeLabels[item.id]??item.title}</button>)}</div><div class="oceania-learning-scope" aria-label="地図の範囲">{scopeOptions.map(item=><button type="button" data-scope={item.id} aria-pressed={item.id===state.scope?'true':'false'} disabled={item.id==='country'&&state.place==='all'}>{item.label}</button>)}</div></div></details>}</div>
     {field==='agriculture'&&<div class="oceania-farming-visibility" role="group" aria-label="地図に重ねる分布"><button type="button" data-farming-group="crop" aria-pressed="true">作物</button><button type="button" data-farming-group="livestock" aria-pressed="true">畜産</button></div>}
     <div class="oceania-learning-scene" data-primary-map set:html={renderOceaniaScene(layer,state,'primary')}></div>
+    {field==='industry'&&<p class="oceania-industry-map-key">● 鉱山原本の地点（2025年・固定サイズ）　□ 都市案内・国計注記（施設の敷地ではない）　ラベル内の国計はその地点の生産量ではありません。注記線は位置との対応で、輸送経路ではありません。炭鉱原本は炭種未分類。NC＝ニューカレドニア、FJD＝フィジードル、NSW＝ニューサウスウェールズ州、VIC＝ビクトリア州。</p>}
     {field==='agriculture'&&<section class="oceania-farming-map-legend" data-key-legend data-required-legend-layer={layer.id} aria-label="品目と色の凡例"><div class="oceania-learning-legend" data-primary-legend set:html={compactPrimaryLegend}></div><details class="oceania-learning-legend-dictionary oceania-farming-legend-details" data-primary-legend-dictionary><summary>数量階級・単位・欠測の詳しい凡例</summary><p data-primary-legend-unit>{layer.period} ・ {layer.unit}</p><div class="oceania-learning-legend" data-primary-legend-dictionary-content data-primary-legend-definitions set:html={primaryLegend}></div></details></section>}
     <div class="oceania-learning-legend oceania-workspace-legend-spacer" data-primary-legend-spacer aria-hidden="true" inert set:html={renderOceaniaLegend(layer)}></div>
     {field!=='agriculture'&&<div class="oceania-learning-toolbar"><div class="oceania-learning-themes" aria-label="学ぶテーマ">{fieldThemes.map(item=><button type="button" data-theme={item.id} title={item.title} aria-pressed="false">{themeLabels[item.id]??item.title}</button>)}</div><div class="oceania-learning-scope" aria-label="地図の範囲">{scopeOptions.map(item=><button type="button" data-scope={item.id} aria-pressed={item.id===state.scope?'true':'false'} disabled={item.id==='country'&&state.place==='all'}>{item.label}</button>)}</div></div>}
+    {field==='industry'&&<OceaniaIndustryCatalog />}
    </section>
    <aside class="oceania-learning-reading" aria-label="地図から読み取ること">
     {field==='nature'&&<RegionalClimateCityReading region="oceania" legendHtml={primaryLegend}/>}
