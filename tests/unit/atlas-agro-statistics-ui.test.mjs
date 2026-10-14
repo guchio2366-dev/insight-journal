@@ -5,7 +5,7 @@ import {build} from 'esbuild';
 import {Window} from 'happy-dom';
 
 const compiled=await build({entryPoints:['src/lib/atlas-agro-statistics.ts'],bundle:true,platform:'node',format:'esm',write:false});
-const {agroShare,agroRanking,agroTopicSeries,renderAgroColumns,renderAgroWorld}=await import('data:text/javascript;base64,'+Buffer.from(compiled.outputFiles[0].text).toString('base64'));
+const {agroShare,agroRanking,agroTopicSeries,agroDisposition,renderAgroColumns,renderAgroWorld}=await import('data:text/javascript;base64,'+Buffer.from(compiled.outputFiles[0].text).toString('base64'));
 const controller=await build({entryPoints:['src/scripts/atlas-agro-statistics.ts'],bundle:true,platform:'node',format:'esm',write:false});
 let controllerId=0;
 
@@ -75,21 +75,28 @@ test('equal production shares a rank and an appended selected country keeps its 
  assert.match(root.textContent,/全世界の網羅順位ではありません/);
 }));
 
-test('forestry bands include production and imports without fabricating domestic use from exports',async()=>withDom(window=>{
+test('the quantity flow keeps stockless apparent use distinct from domestic production allocation',async()=>withDom(window=>{
  const base={id:'roundwood-production',label:'丸太',domain:'FO',item:'1861',element:'5516',unit:'m3'};
  const production=series([observation(2024,300)],base);
  const imports=series([observation(2024,100,null)],{...base,id:'roundwood-imports',element:'5616'});
  const exports=series([observation(2024,350,null)],{...base,id:'roundwood-exports',element:'5916'});
  const data=dataset({CHN:{name:'中国',series:[production,imports,exports]}});
- const root=parse(window,renderAgroColumns(data,'CHN',production.id)),left=root.querySelector('.agro-columns>section');
- assert.match(left.querySelector('figcaption').textContent,/供給元（在庫を含まない） · 400 m³/);
- const bands=[...left.querySelectorAll('.agro-track span')];
+ const root=parse(window,renderAgroColumns(data,'CHN',production.id)),use=root.querySelector('[data-agro-stage="use"]');
+ assert.deepEqual([...root.querySelectorAll('.agro-columns>section')].map(n=>n.dataset.agroStage),['production','use','destinations']);
+ assert.match(use.querySelector('figcaption').textContent,/輸入込み・在庫未調整.*400 m³/);
+ const bands=[...use.querySelectorAll('.agro-track span')];
  assert.equal(bands.length,2);
- assert.deepEqual(bands.map(piece=>piece.style.width),['75%','25%']);
- assert.match(left.textContent,/公表輸出：350 m³/);
- assert.match(left.textContent,/国内仕向けの帯や実消費は算出しません/);
- assert.equal(left.querySelectorAll('figure').length,1);
- assert.doesNotMatch(left.textContent,/国内消費.*50|国内仕向け.*50/,'P + I - X is not a measured end use');
+ assert.deepEqual(bands.map(piece=>piece.style.width),['12.5%','87.5%']);
+ assert.match(use.textContent,/輸出量：350 m³.*116\.67%/s);
+ assert.match(use.textContent,/生産量を国内・輸出へ二分した比率ではありません/);
+ assert.equal(use.querySelectorAll('figure').length,1);
+ assert.match(use.textContent,/国内見掛消費 50 m³/);
+ assert.doesNotMatch(use.textContent,/実消費 50|国産分の国内仕向け 50/,'P + I - X is not a measured domestic-harvest use');
+ assert.equal(agroDisposition(data,'CHN',production,2023).apparent,null,'never substitute another year');
+ imports.rows[0].value=null;
+ assert.equal(agroDisposition(data,'CHN',production,2024).apparent,null,'a missing import is not zero');
+ imports.rows[0].value=0;
+ assert.equal(agroDisposition(data,'CHN',production,2024).apparent,null,'a negative balance is not a domestic consumption');
 }));
 
 test('trend lines break at both explicit missing observations and absent calendar years',async()=>withDom(window=>{
@@ -101,6 +108,27 @@ test('trend lines break at both explicit missing observations and absent calenda
   assert.equal(root.querySelectorAll('.agro-trend circle').length,4);
   assert.doesNotMatch(root.querySelector('.agro-trend').textContent,/2022年/);
  }
+}));
+
+test('the retained Chinese soy comparison connects one year and one export denominator across all three stages',async()=>withDom(window=>{
+ const data=JSON.parse(readFileSync('public/assets/atlas/regional-production-statistics-v1/statistics.json'));
+ const root=parse(window,renderAgroColumns(data,'CHN','soybean-production'));
+ assert.equal(root.querySelector('[data-agro-quantity-flow]').dataset.agroQuantityFlow,'2023');
+ const production=root.querySelector('[data-agro-stage="production"]'),use=root.querySelector('[data-agro-stage="use"]'),destinations=root.querySelector('[data-agro-stage="destinations"]');
+ assert.match(production.textContent,/2023暦年.*20,841,700 t/s);
+ assert.match(production.textContent,/370,876,094\.01 t/);
+ assert.match(use.textContent,/輸出量 71,398\.1 t.*0\.34%/s);
+ assert.match(use.textContent,/国内見掛消費 108,157,901\.9 t/);
+ assert.match(use.textContent,/実消費・国産分の国内仕向けではありません/);
+ assert.match(destinations.textContent,/71,398\.1 t/);
+ assert.match(destinations.textContent,/Korea, Rep\..*40,404 t.*56\.59%/s);
+ assert.match(destinations.textContent,/Japan.*16,511\.8 t/);
+ assert.equal(destinations.querySelectorAll('tbody tr').length,42);
+ assert.match(destinations.textContent,/0\.015 t/);
+ assert.equal(destinations.querySelector('[data-agro-partner-gap]'),null);
+ assert.equal(destinations.querySelector('[data-agro-existing-trade]'),null,'different-year money does not appear inside this quantity flow');
+ const mismatched=structuredClone(data);mismatched.countries.CHN.series.find(s=>s.id==='soybean-production').rows.find(r=>r.year===2023).value++;
+ assert.throws(()=>renderAgroColumns(mismatched,'CHN','soybean-production'),/版が一致しません/,'an inconsistent revision cannot silently join the chain');
 }));
 
 test('existing Latin and Asia topic aliases resolve to their retained product files',()=>{

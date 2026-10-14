@@ -12,7 +12,7 @@ const heading=(host:HTMLElement,title:string,note:string)=>{
 
 /** Existing, verified partner series keep their own year, money/volume basis,
  * geographic coverage and product definition. They do not become FAO balances. */
-export async function renderAgroExistingStatistics(content:HTMLElement,country:string,seriesId:string){
+export async function renderAgroExistingStatistics(content:HTMLElement,country:string,seriesId:string,showQuantities=false){
  const trade=content.querySelector<HTMLElement>('[data-agro-existing-trade]'),supply=content.querySelector<HTMLElement>('[data-agro-existing-supply]');
  if(!trade)return;
  const product=agroExistingTradeProduct(seriesId);
@@ -43,7 +43,7 @@ export async function renderAgroExistingStatistics(content:HTMLElement,country:s
  if(document.querySelector('[data-south-central-farm-connections]')&&country==='IND'&&seriesId==='rice-production'){
   const {renderSouthCentralRiceFlow}=await import('./atlas-south-central-rice-flow.ts');
   const wrapper=document.createElement('section');wrapper.innerHTML='<div data-south-central-supply></div><div data-south-central-destinations></div>';
-  renderSouthCentralRiceFlow(wrapper,'south-central-asia','rice','IND');
+  renderSouthCentralRiceFlow(wrapper,'south-central-asia','rice','IND',undefined,showQuantities);
   heading(trade,'インド・バスマティ米の確認済み輸出先','2023–24年度・t。分母はバスマティ米5,242,182tで、米全体16,358,885tでもFAO2024籾米生産でもありません。輸入元は未収録です。');
   trade.append(...wrapper.querySelector('[data-south-central-destinations]')!.childNodes);
   if(supply){heading(supply,'別定義参考：2023–24年度の米輸出内訳','全米輸出のうちバスマティ米／その他の米を区別する既存公表量です。国内用途・在庫の帯とは呼びません。');supply.append(...wrapper.querySelector('[data-south-central-supply]')!.childNodes);}

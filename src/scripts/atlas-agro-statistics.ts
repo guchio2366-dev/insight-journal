@@ -1,7 +1,7 @@
 import {renderAgroExistingStatistics} from './atlas-agro-existing-statistics.ts';
 import {agroProduction,agroTopicSeries,renderAgroColumns,type AgroData,type AgroReference} from '../lib/atlas-agro-statistics.ts';
 type Selection={country:string;topic:string;active?:boolean;year?:number};
-type Config={scope:string;country:string;topic:string;topics:string[];countries:{code:string;name:string}[];nationalOnly:boolean;url:string;files:Record<string,{file:string}>;reference?:AgroReference;labels:Record<string,string>};
+type Config={scope:string;country:string;topic:string;topics:string[];countries:{code:string;name:string}[];nationalOnly:boolean;url:string;files:Record<string,{file:string}>;reference?:AgroReference;labels:Record<string,string>;sources?:{overview:string;selected:string}};
 const instances=new WeakMap<HTMLElement,(selection:Selection)=>void>();
 const requested=new Map<string,Promise<AgroData>>();
 function load(url:string){
@@ -42,9 +42,14 @@ function initialize(host:HTMLElement){
    const options=overview?allowed.filter(id=>config.files[id]).map(id=>({id,label:available.find(s=>s.id===id)?.label??config.labels[id]??id})):available;
    seriesSelect.replaceChildren(...options.map(series=>{const option=document.createElement('option');option.value=series.id;option.textContent=series.label;return option;}));seriesSelect.value=id;
    host.querySelector<HTMLElement>('[data-agro-series-control]')!.hidden=options.length<2;
-   status.textContent=`${next.year??2024}年・全国値。地図の収穫面積・家畜密度とは別の数量です。左・中央・右の原表と欠測を個別に示します。`;
-   content.innerHTML=renderAgroColumns(data,next.country,id,next.year??2024,config.reference);
-   await renderAgroExistingStatistics(content,next.country,id);if(token===generation&&!host.hidden)host.dataset.agroReady='true';
+   const renderer=overview?(await import('../lib/atlas-agro-statistics-overview.ts')).renderAgroOverviewColumns:renderAgroColumns;
+   if(token!==generation)return;
+   const sourceHost=host.querySelector<HTMLElement>('[data-agro-sources]');if(sourceHost&&config.sources)sourceHost.innerHTML=overview?config.sources.overview:config.sources.selected;
+   status.textContent=overview?`${next.year??2024}年・全国値。地図の収穫面積・家畜密度とは別の数量です。左・中央・右の原表と欠測を個別に示します。`:'生産量と世界シェア → 国内での使用・輸出 → 輸出先の量と構成比。年・製品が異なる参考は別掲します。';
+   content.innerHTML=renderer(data,next.country,id,next.year??2024,config.reference);
+   await renderAgroExistingStatistics(content,next.country,id,!overview);
+   if(!overview)for(const details of content.querySelectorAll<HTMLDetailsElement>('.agro-other-reference'))if(!details.querySelector('[data-agro-existing-trade],[data-agro-existing-supply]')?.children.length)details.remove();
+   if(token===generation&&!host.hidden)host.dataset.agroReady='true';
   }catch{if(token!==generation)return;status.textContent='統計を取得できませんでした。地図の選択は保持しています。';retry.hidden=false;}
  }
  host.addEventListener('click',event=>{const a=(event.target as Element).closest<HTMLAnchorElement>('[data-agro-reference-link]');if(!a)return;const target=document.getElementById(a.hash.slice(1));if(!target)return;for(let node:HTMLElement|null=target;node;node=node.parentElement)if(node instanceof HTMLDetailsElement)node.open=true;});

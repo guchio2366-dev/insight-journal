@@ -1,0 +1,98 @@
+{
+  "reviewedAtUtc": "2026-10-14T08:52:27.972408+00:00",
+  "scope": "Independent ASEANstats/ADB publications, not the root-assigned FAO ASEAN food-security report cc4137en",
+  "priorRefusalsReviewed": [
+    "docs/east-asia-food-wood-residuals-20261013.md",
+    "data-source/atlas/east-asia/statistics-2023/acquisition-results.json",
+    "docs/qa/southeast-asia-ethnicity-trade-audit-20261013.md",
+    "docs/qa/southeast-asia-overview-source-review-20261008.md"
+  ],
+  "priorRefusedMaterialNotRetried": [
+    "FAOSTAT FBS API",
+    "FAOSTAT bulk ZIP",
+    "FAO cd4313en",
+    "UN Comtrade API"
+  ],
+  "webReads": [
+    {
+      "url": "https://www.adb.org/publications/key-indicators-asia-and-pacific-2025",
+      "outcome": "success",
+      "verified": [
+        "Publication August 2025, 372 printed pages",
+        "Official download PDF ki2025.pdf and economy-table XLS",
+        "CC BY 3.0 IGO"
+      ]
+    },
+    {
+      "url": "https://www.adb.org/sites/default/files/publication/1067171/ki2025.pdf",
+      "outcome": "parsed text success before the subsequent single ordinary-download 403",
+      "parsedPdfPages": 375,
+      "contentAssessment": "No parsed-text matches for calori, food supply, Food Balances. SDG table 1.2.1 covers undernourishment and child nutrition; country undernourishment column labelled 2023 means 2022–2024 average. These are not kcal supply composition or product supply/use balances.",
+      "rawOriginalRetained": false,
+      "originalSha256": null
+    },
+    {
+      "url": "https://www.aseanstats.org/",
+      "outcome": "success",
+      "verified": [
+        "Official homepage links ASEAN Key Figures 2025",
+        "Official homepage links ASEAN Statistical Yearbook 2023",
+        "No confirmed Yearbook 2025 link found"
+      ]
+    },
+    {
+      "url": "https://www.aseanstats.org/publication/akf2025/",
+      "outcome": "success",
+      "verified": [
+        "Publication page identifies independent ASEAN Key Figures 2025",
+        "Available Timor-Leste data included as the eleventh member; year-specific scope must be checked before using 2023/2024 figures",
+        "Official PDF link in acquisition file"
+      ]
+    },
+    {
+      "url": "https://www.aseanstats.org/publication/asean-statistical-yearbook-2023/",
+      "outcome": "success",
+      "verified": [
+        "Official PDF and XLS download links exist",
+        "This is 2023 edition, not verified 2025 edition"
+      ]
+    }
+  ],
+  "unavailableWebResources": [
+    {
+      "url": "https://www.aseanstats.org/publications/",
+      "outcome": "URL not accessible via web tool; no repeated request"
+    },
+    {
+      "description": "ADB combined economy-tables XLS link",
+      "source": "https://www.adb.org/publications/key-indicators-asia-and-pacific-2025",
+      "outcome": "web tool Internal Error; no retried download or mirrored copy used"
+    },
+    {
+      "url": "https://www.aseanstats.org/wp-content/uploads/2026/04/ASEAN-KEY-Figures-2025_141917042026.pdf",
+      "outcome": "web parser content-length limit 19,251,976 bytes, not HTTP access denial; then a single ordinary download failed with CONNECT403 and stopped"
+    },
+    {
+      "url": "https://www.afsisnc.org/",
+      "outcome": "URL not accessible via web tool; no original publication link identified"
+    },
+    {
+      "url": "https://www.aptfsis.org/",
+      "outcome": "timeout on possible current AFSIS public entry; no publication retrieved, no second request"
+    },
+    {
+      "url": "https://www.asean.org/our-communities/economic-community/agriculture-and-forestry/",
+      "outcome": "URL not accessible via web tool; no second request"
+    }
+  ],
+  "newMachineDownloadAttempts": 2,
+  "successfulNewOriginalDownloads": 0,
+  "newUsableFoodBalanceOrFoodGroupKcalRows": 0,
+  "restrictionsRespected": [
+    "No FAO API or blocked-original retries",
+    "No alternate download host, mirror, proxy, certificate changes",
+    "No authentication, fees or expanded permissions",
+    "No application code or statistical values changed"
+  ],
+  "limits": "Web publication metadata and prior parsed text are new source review, not a downloaded original PDF, not a complete retained data extract. Original SHA-256 is null when original bytes were not obtained."
+}

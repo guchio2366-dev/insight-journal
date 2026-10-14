@@ -395,6 +395,7 @@
 .west-atlas[data-field=natural] .west-station[data-city] [data-marker-label] text{font-size:11px;font-weight:700;fill:#244958;paint-order:stroke;stroke:#fffdf3;stroke-width:3px;stroke-linejoin:round}
 .west-farm-supply{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:12px 0}
 .west-farm-supply[hidden]{display:none}
+.west-farm-supply>.west-flow-period-note{grid-column:1/-1;font-size:13px}
 .west-farm-supply section{min-width:0;padding:10px;border:1px solid #cad6ce;background:#fafbf6}
 .west-farm-supply h3{font-size:13px;margin:0 0 6px;color:#2b5357}
 .west-farm-supply p{font-size:12px;line-height:1.5;margin:4px 0}

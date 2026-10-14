@@ -4,6 +4,9 @@ import AgricultureDetailPanel from './AgricultureDetailPanel.astro';
 import ProductionShareChart from './ProductionShareChart.astro';
 import CropSupplyUse from './CropSupplyUse.astro';
 import ConditionText from './ConditionText.astro';
+import {agroMarketingYearFlow} from '../../data/atlas/agro-marketing-year-flow';
+import {renderAgroMarketingProduction,renderAgroMarketingUse} from '../../lib/atlas-agro-statistics';
+import '../../styles/atlas-agro-statistics.css';
 import { cropExplanations } from '../../data/atlas/explorer';
 import { atlasStatistics, statisticCropIds, statisticsSources, type StatisticCropId } from '../../data/atlas/statistics';
 import { sources } from '../../data/atlas/north-america-agriculture';
@@ -34,6 +37,7 @@ const productionUnit = (id:StatisticCropId) => id==='cotton'?'千480ポンド俵
     const description=cropExplanations.find(entry=>entry.id===id)!;
     const exportData=atlasStatistics.exports[id];
     const production=atlasStatistics.production[id];
+    const flow=agroMarketingYearFlow('USA',({corn:'maize-production',soybean:'soybean-production',wheat:'wheat-production',rice:'rice-milled-production',cotton:'cotton-lint-production'} as Record<string,string>)[id]??'');
     let offset=0;
     return <AgricultureDetailPanel id={id} group="crops" color={colors[id]}>
       <Fragment slot="copy">
@@ -42,9 +46,10 @@ const productionUnit = (id:StatisticCropId) => id==='cotton'?'千480ポンド俵
         {id!=='corn'&&<p class="atlas-crop-uses"><strong>主な用途</strong>{description.uses}</p>}
         <p class="atlas-inline-sources">地理・用途：{description.sources.map((sourceId,sourceIndex)=><Fragment>{sourceIndex>0?' ／ ':''}<a href={`#${sourceId}`}>{sources.find(source=>source.id===sourceId)?.publisher}</a></Fragment>)}</p>
       </Fragment>
-      <CropSupplyUse slot="supply" cropId={id} />
+      <Fragment slot="supply">{flow?<section class="crop-supply-use agro-quantity-flow" data-us-marketing-flow={id}><div set:html={renderAgroMarketingUse({...flow,countryName:'米国'})}/><details class="agro-other-reference"><summary>{id==='rice'?'同年度の別基準参考（籾米換算）':id==='cotton'?'同年度の米国原表と用途内訳':'同年度の用途内訳（元のブッシェル単位）'}</summary><CropSupplyUse cropId={id}/></details><p class="supply-source"><a href={`${flow.source.url}#page=${flow.source.page}`}>USDA WASDE-675 p.{flow.source.page}</a></p></section>:<CropSupplyUse cropId={id}/>}</Fragment>
         <figure class="atlas-export-chart" id={`exports-${id}`} slot="exports">
-          <figcaption class="atlas-comparison-caption"><strong>米国からの輸出先</strong><span>参考：{exportData.year}暦年・数量（予備値）</span><span>{names[id]}{id==='rice'?'・精米換算':''} · トン</span></figcaption>
+          <figcaption class="atlas-comparison-caption"><strong>③ 輸出先の量と構成比</strong><span>別期間の参考：{exportData.year}暦年・数量（予備値）</span><span>{names[id]}{id==='rice'?'・精米換算':''} · トン</span></figcaption>
+          <p class="atlas-chart-note">②の2024/25販売年度と期間{id==='rice'?'・籾米／精米の換算基準':''}が異なるため、②の輸出量の内訳には接続できません。</p>
           <div class="atlas-donut-layout">
             <svg class="atlas-donut" viewBox="0 0 144 144" role="img" aria-labelledby={`crop-export-title-${id}`}>
               <title id={`crop-export-title-${id}`}>{names[id]}の輸出数量構成。総量{fmtQuantity(exportData.total)}トン{ id==='rice'?'（精米換算）':''}。国・地域別の値は隣の一覧と数値表に表示。</title>
@@ -55,7 +60,7 @@ const productionUnit = (id:StatisticCropId) => id==='cotton'?'千480ポンド俵
               })}
               <text x="72" y="62" text-anchor="middle">総輸出量</text><text x="72" y="80" text-anchor="middle" class="atlas-donut-total">{fmt(exportData.total/1_000_000)}</text><text x="72" y="96" text-anchor="middle">百万トン</text>
             </svg>
-            <ol class="atlas-donut-key">{exportData.destinations.map((entry,entryIndex)=><li><i class={`atlas-donut-color--${entryIndex}`} aria-hidden="true"></i><span class="atlas-donut-label"><span>{countries[entry.country]??entry.country}</span><strong>{pct(entry.value,exportData.total).toFixed(1)}%</strong></span></li>)}</ol>
+            <ol class="atlas-donut-key">{exportData.destinations.map((entry,entryIndex)=><li><i class={`atlas-donut-color--${entryIndex}`} aria-hidden="true"></i><span class="atlas-donut-label"><span>{countries[entry.country]??entry.country}</span><strong>{pct(entry.value,exportData.total).toFixed(1)}%</strong><span>{fmt(entry.value)} t</span></span></li>)}</ol>
           </div>
           <p class="atlas-chart-note">{id==='rice'?'FAS換算可能な明細の精米換算（MTMEQ）。':'上位5市場とその他を表示。'}</p>
           <details class="atlas-chart-data"><summary>輸出量・対象範囲を確認</summary>
@@ -65,7 +70,8 @@ const productionUnit = (id:StatisticCropId) => id==='cotton'?'千480ポンド俵
           <a href={sourceForExport(id).url} target="_blank" rel="noopener noreferrer">出典：{sourceForExport(id).publisher}</a>
         </figure>
 
-      <ProductionShareChart slot="world" id={id} name={names[id]} period={`${production.marketYear}販売年度`} basis={id==='rice'?'米・精米換算':names[id]} unit={productionUnit(id)} totalUnit={id==='cotton'?'百万480lb俵':'百万トン'} totalDivisor={1000} worldTotal={production.worldTotal} countries={production.countries} trend={production.trend} sourceUrl={productionSource.url} sourceLabel="USDA FAS PSD" />
+      <Fragment slot="world">{flow&&<section class="atlas-world-chart agro-quantity-flow" data-us-flow-production={id}><div set:html={renderAgroMarketingProduction({...flow,countryName:'米国'})}/></section>}
+      <details class="agro-other-reference" open={!flow}><summary>保存済みPSDの順位・推移（別資料）</summary><p class="atlas-chart-note">PSD抽出の国・地域行合計が分母です。上のWASDE公表Worldと別の版・集計で、②の数量へ置き換えません。</p><ProductionShareChart id={id} name={names[id]} period={`${production.marketYear}販売年度`} basis={id==='rice'?'米・精米換算':names[id]} unit={productionUnit(id)} totalUnit={id==='cotton'?'百万480lb俵':'百万トン'} totalDivisor={1000} worldTotal={production.worldTotal} countries={production.countries} trend={production.trend} sourceUrl={productionSource.url} sourceLabel="USDA FAS PSD" /></details></Fragment>
     </AgricultureDetailPanel>;
   })}
   <noscript><style>.atlas-stat-tabs{display:none}</style><p class="atlas-chart-note">各作物の本文と図を順に表示しています。</p></noscript>

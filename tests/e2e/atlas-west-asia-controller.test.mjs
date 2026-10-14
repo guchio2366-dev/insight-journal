@@ -44,6 +44,8 @@ test('中東の農畜産は五品目を同時表示し、作物の輪郭選択�
   const contexts=()=>[...q('[data-west-scene]').querySelectorAll('[data-west-farm-context]')].map(el=>el.dataset.westFarmContext);
   assert.deepEqual(contexts(),['wheat','barley','sheep','goat','cattle']);
   assert.equal(q('[data-west-country]').value,'');assert.equal(q('[data-west-atlas]').dataset.topic,'farming-overview');
+  assert.equal(q('[data-west-farm-supply]').querySelectorAll('[data-regional-flow-stage]').length,0);
+  assert.equal(q('[data-west-farm-supply]').querySelectorAll('.west-wheat-destinations li small').length,0);
   assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-raster]').length,0);
   assert.match(q('[data-west-legend]').textContent,/2020年.*濃い輪郭.*上位25%.*淡い面/);
   assert.match(q('[data-west-legend]').textContent,/生産量シェアや支配的品目の判定ではありません/);
@@ -51,6 +53,8 @@ test('中東の農畜産は五品目を同時表示し、作物の輪郭選択�
   assert.equal(q('[data-west-farm-map-key]').querySelectorAll('[data-west-farm-map-label]').length,5);
   assert.equal(q('[data-west-farm-overlap]')!==null,true);
   q('[data-west-topic-button=wheat]').click();await until(()=>q('[data-west-farm-selected=wheat]'));
+  assert.deepEqual([...q('[data-west-farm-supply]').querySelectorAll(':scope>[data-regional-flow-stage]')].map(s=>s.dataset.regionalFlowStage),['production','use','destinations']);
+  assert.equal(q('[data-west-farm-supply]').querySelectorAll('.west-wheat-destinations li small').length,6);
   assert.deepEqual(contexts(),['wheat','barley','sheep','goat','cattle']);
   assert.notEqual(q('[data-west-farm-selected=wheat]').getAttribute('d'),q('[data-west-farm-context=wheat] path[stroke]').getAttribute('d'),'強調輪郭は薄く残す全正値域と別');
   for(const id of ['sheep','goat','cattle']){assert.equal(q('[data-west-farm-context='+id+']').getAttribute('opacity'),'.24');assert.equal(q('[data-west-farm-map-label='+id+']').classList.contains('is-muted'),true);}
@@ -61,6 +65,8 @@ test('中東の農畜産は五品目を同時表示し、作物の輪郭選択�
   assert.deepEqual(contexts(),['wheat','barley','sheep','goat','cattle']);
   w.history.replaceState({},'',initial);w.dispatchEvent(new w.PopStateEvent('popstate'));
   await until(()=>q('[data-west-atlas]').dataset.topic==='farming-overview'&&q('[data-west-loading]').hidden);
+  assert.equal(q('[data-west-farm-supply]').querySelectorAll('[data-regional-flow-stage]').length,0);
+  assert.equal(q('[data-west-farm-supply]').querySelectorAll('.west-wheat-destinations li small').length,0);
   assert.deepEqual(contexts(),['wheat','barley','sheep','goat','cattle']);assert.equal(q('[data-west-country]').value,'');
  }finally{await w.happyDOM.close();}
 });

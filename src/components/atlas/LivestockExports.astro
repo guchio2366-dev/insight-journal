@@ -8,7 +8,8 @@ const fmt=(n:number,digits=1)=>n.toLocaleString('ja-JP',{maximumFractionDigits:d
 let offset=0;
 ---
 <figure class="atlas-export-chart" data-livestock-exports={id}>
-  <figcaption class="atlas-comparison-caption"><strong>米国からの輸出先</strong><span>2025暦年 · 輸出額</span><span>{label.exports} · 名目米ドル</span></figcaption>
+  <figcaption class="atlas-comparison-caption"><strong>③ 輸出先（別定義の金額参考）</strong><span>2025暦年 · 輸出額</span><span>{label.exports} · 名目米ドル</span></figcaption>
+  <p class="atlas-chart-note">②の輸出数量とは製品範囲・単位が異なります。同じ数量の輸出先内訳は、この資料では示せません。</p>
   <div class="atlas-donut-layout">
     <svg class="atlas-donut" viewBox="0 0 144 144" role="img" aria-labelledby={`animal-export-title-${id}`}><title id={`animal-export-title-${id}`}>{label.exports}の輸出額構成。総額{fmt(d.totalUsd,0)}米ドル。相手国別の額は下の表に表示。</title>
       {d.destinations.map((r,i)=>{const share=r.value/d.totalUsd*100,start=offset;offset+=share;return <circle cx="72" cy="72" r="52" pathLength="100" class={`atlas-donut-slice atlas-donut-slice--${i}`} stroke-dasharray={`${share} ${100-share}`} stroke-dashoffset={-start} transform="rotate(-90 72 72)"><title>{names[r.country]??r.country} {share.toFixed(1)}%</title></circle>;})}

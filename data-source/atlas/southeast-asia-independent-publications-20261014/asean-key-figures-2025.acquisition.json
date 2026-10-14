@@ -1,0 +1,13 @@
+{
+  "url": "https://www.aseanstats.org/wp-content/uploads/2026/04/ASEAN-KEY-Figures-2025_141917042026.pdf",
+  "requestedAtUtc": "2026-10-14T08:50:17.069341+00:00",
+  "method": "Single ordinary urllib HTTPS GET, default certificate/proxy settings; no retries or alternate hosts",
+  "publisher": "ASEANstats",
+  "publication": "ASEAN Key Figures 2025",
+  "landingUrl": "https://www.aseanstats.org/publication/akf2025/",
+  "priorWebRead": "Parser declined body because content length 19,251,976 exceeds tool limit; not an HTTP access denial",
+  "independentOfBlockedFaostat": true,
+  "outcome": "unavailable",
+  "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>",
+  "stopped": true
+}
