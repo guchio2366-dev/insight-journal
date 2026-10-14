@@ -20,8 +20,8 @@ const metricLabel = (basis: string) => basis === '非公表' ? '資料に数値�
     {sectors.map((sector, sectorIndex) => {
       const group = groups.find(g => g.ids.includes(sector.id))!;
       const layout = layoutSites(sector.sites);
-      const initial = sector.sites[0];
-      return <section class="wi-panel" data-wi-panel={sector.id} data-wi-group={group.id} hidden={sectorIndex !== 0} aria-label={sector.label}>
+      const initial = sector.sites.find(site => site.scale.basis === '生産実績') ?? sector.sites.find(site => site.scale.basis === '設備能力' && !site.scale.value.includes('計画')) ?? sector.sites[0];
+      return <section class="wi-panel" data-wi-panel={sector.id} data-wi-group={group.id} data-default-site={initial.id} hidden={sectorIndex !== 0} aria-label={sector.label}>
         <div class="wi-purpose"><h2>{sector.label}</h2><p><b>{group.purpose}</b><span>{group.note}</span></p></div>
         <div class="wi-atlas-workspace">
         <section class="wi-flow" aria-label="地図と連動するバリューフロー">
@@ -50,7 +50,7 @@ const metricLabel = (basis: string) => basis === '非公表' ? '資料に数値�
             {sector.links.map(link => <path class="wi-supply-line" data-wi-line={link.id} d={connectionPath(sector.sites.find(s => s.id === link.from)!, sector.sites.find(s => s.id === link.to)!)} marker-end={`url(#${sector.id}-arrow)`} hidden><title>{link.label} · {link.year} · {link.evidence}</title></path>)}
             {layout.map(({ site, px, py, x, y, width, height }, i) => {
               const stageIndex = sector.stages.findIndex(s => s.id === site.stage);
-              return <g class:list={['wi-site', { 'is-selected': i === 0 }]} data-wi-site={site.id} data-stage={site.stage} role="button" tabindex="0" aria-pressed={i === 0} aria-label={`${i + 1} ${site.name}、${sector.stages[stageIndex].label}、${site.scale.value} ${site.scale.unit}、${site.scale.year}、${metricLabel(site.scale.basis)}`} style={`--stage-color:${stageColors[stageIndex]}`}>
+              return <g class:list={['wi-site', { 'is-selected': site.id === initial.id }]} data-wi-site={site.id} data-stage={site.stage} role="button" tabindex="0" aria-pressed={site.id === initial.id} aria-label={`${i + 1} ${site.name}、${sector.stages[stageIndex].label}、${site.scale.value} ${site.scale.unit}、${site.scale.year}、${metricLabel(site.scale.basis)}`} style={`--stage-color:${stageColors[stageIndex]}`}>
                 <title>{site.name} · {site.country} · {site.kind} · {site.scale.value} {site.scale.unit}（{site.scale.year}・{metricLabel(site.scale.basis)}）</title>
                 <line class="wi-locator" x1={px} y1={py} x2={Math.max(x, Math.min(px, x + width))} y2={y + height / 2} />
                 <circle class="wi-location" cx={px} cy={py} r="5" />
@@ -64,10 +64,10 @@ const metricLabel = (basis: string) => basis === '非公表' ? '資料に数値�
           </svg>
         </div>
         <div class="wi-map-summary" aria-label="選択地点の規模">
-          {sector.sites.map((site,i) => <div data-wi-map-summary={site.id} hidden={i !== 0}><b>{site.name}</b><span><strong>{site.scale.value}</strong> {site.scale.unit}</span><small>{site.scale.year} · {metricLabel(site.scale.basis)}</small></div>)}
+          {sector.sites.map(site => <div data-wi-map-summary={site.id} hidden={site.id !== initial.id}><b>{site.name}</b><span><strong>{site.scale.value}</strong> {site.scale.unit}</span><small>{site.scale.year} · {metricLabel(site.scale.basis)}</small></div>)}
         </div>
         </div>
-        <div class="wi-legend"><span><i class="wi-dot"></i>代表地点</span><span><i class="wi-selected-key"></i>選択中</span><span><i class="wi-locator-key"></i>地点とラベルの引出線</span><span class="wi-scroll-hint">地図は横にスクロールできます</span></div>
+        <div class="wi-legend"><span><i class="wi-dot"></i>代表地点</span><span>色＝工程 / 番号＝場所一覧</span><span><i class="wi-selected-key"></i>選択中</span><span><i class="wi-locator-key"></i>地点とラベルの引出線</span><span class="wi-scroll-hint">地図は横にスクロールできます</span></div>
         </section>
         </div>
         <p class="wi-scope">{sector.scope}</p>
@@ -78,10 +78,10 @@ const metricLabel = (basis: string) => basis === '非公表' ? '資料に数値�
         </section> : <p class="wi-no-links">この分野の個別拠点間供給は未収録。工程の関係は上の矢印で確認できます。</p>}
         <div class="wi-reading" id={`${sector.id}-places`}>
           <section class="wi-places" aria-label="代表地点を選ぶ"><h3>場所と規模 <small>番号は地図と対応</small></h3><div class="wi-place-list">
-            {sector.sites.map((site, i) => <button type="button" data-wi-place={site.id} data-stage={site.stage} aria-pressed={i === 0}><span>{String(i + 1).padStart(2, '0')}</span><b>{site.name}<small>{site.country} · {sector.stages.find(s => s.id === site.stage)!.label}</small></b><span class="wi-place-scale">{site.scale.value} <small>{site.scale.unit}<br />{site.scale.year} · {metricLabel(site.scale.basis)}</small></span></button>)}
+            {sector.sites.map((site, i) => <button type="button" data-wi-place={site.id} data-stage={site.stage} aria-pressed={site.id === initial.id}><span>{String(i + 1).padStart(2, '0')}</span><b>{site.name}<small>{site.country} · {sector.stages.find(s => s.id === site.stage)!.label}</small></b><span class="wi-place-scale">{site.scale.value} <small>{site.scale.unit}<br />{site.scale.year} · {metricLabel(site.scale.basis)}</small></span></button>)}
           </div></section>
           <aside class="wi-reader" aria-label="選択地点の規模と出典">
-            {sector.sites.map((site, i) => <section data-wi-card={site.id} hidden={i !== 0}>
+            {sector.sites.map(site => <section data-wi-card={site.id} hidden={site.id !== initial.id}>
               <p class="wi-reader-kicker">{site.country} · {site.kind} · {site.status}（資料時点）</p>
               <h3>{site.name}</h3><p class="wi-value"><b>{site.scale.value}</b> <span>{site.scale.unit}</span></p>
               <p class="wi-metric-type">{site.scale.year} · {metricLabel(site.scale.basis)}</p><p class="wi-scale-scope">{site.scale.scope}</p><p>{site.note}</p>

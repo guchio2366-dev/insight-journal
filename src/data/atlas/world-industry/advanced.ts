@@ -12,15 +12,19 @@ const unavailable = (unit: string, scope: string, year = checked): Site['scale']
   value: '数値未収録', unit, year, basis: '非公表', scope: `${scope}。確認資料に拠点別数量の記載なし。`,
 });
 
-const arm = source('Arm｜Cambridge設計拠点', 'https://careers.arm.com/uk-cambridge-office');
+const arm = source('Arm｜San Jose技術・管理拠点', 'https://careers.arm.com/usa-san-jose-office');
 const asml = source('ASML｜Veldhoven製造・研究拠点', 'https://www.asml.com/en/company/about-asml/locations/veldhoven');
 const siltronic = source('Siltronic｜製造拠点一覧', 'https://www.siltronic.com/en/our-company/sites.html');
 const tsmcFabs = source('TSMC｜前工程・先端後工程の拠点一覧', 'https://www.tsmc.com/english/aboutTSMC/TSMC_Fabs');
-const tsmcArizona = source('TSMC｜Arizona量産状況', 'https://www.tsmc.com/static/abouttsmcaz/index.htm');
+const jasmPlan = source('TSMC｜JASM第1工場の能力計画（2022）', 'https://pr.tsmc.com/english/news/2911');
+const tsmcAnnual = source('TSMC｜2025年報・JASM量産状況', 'https://investor.tsmc.com/static/annualReports/2025/english/index.html');
+const gfDresden = source('GlobalFoundries｜Dresden製造能力', 'https://gf.com/manufacturing/dresden/');
 const gfCapacity = source('GlobalFoundries｜Singapore拡張設備開設（2023）', 'https://gf.com/news-and-events/news/globalfoundries-officially-opens-us4-billion-expansion-facility-in-singapore-creating-1000-new-jobs/');
 const gfCurrent = source('GlobalFoundries｜Singapore製造拠点', 'https://gf.com/manufacturing/singapore/');
 const amkor = source('Amkor｜Bac Ninh工場開設（2023）', 'https://amkor.com/blog/amkor-inaugurates-latest-factory-in-vietnam/');
 const wacker = source('WACKER｜Nünchritz製造拠点', 'https://www.wacker.com/cms/en-us/about-wacker/production-sites/nuenchritz.html');
+const oci = source('OCI Holdings｜Samalajuのポリシリコン年産規模', 'https://www.oci-holdings.co.kr/en/business/green-energy');
+const ociSite = source('OCI TerraSus｜Samalaju製造拠点', 'https://www.ociterrasus.com/about');
 const longi = source('LONGi｜工程別の製造拠点一覧', 'https://www.longi.com/en/global-distribution/');
 const longiWuhu = source('LONGi｜Wuhuモジュール工場（2026）', 'https://www.longi.com/en/news/longi-wuhu-cmmm-level-4/');
 const qcells = source('Qcells｜Cartersvilleセル生産開始・Dalton能力（2026）', 'https://us.qcells.com/blog/qcells-begins-solar-cell-manufacturing-at-americas-first-and-only-vertically-integrated-solar-factory-in-cartersville-georgia/');
@@ -46,9 +50,9 @@ export const advancedSectors: Sector[] = [
     ],
     sites: [
       {
-        id: 'semi-arm-cambridge', name: 'Arm・Cambridge', country: '英国', coordinates: [0.17, 52.18], stage: 'design', kind: '設計拠点', status: '稼働',
-        scale: unavailable('設計量', 'Cambridge拠点の設計規模。工場の生産能力ではない'),
-        note: '設計・研究の拠点で、本社機能も持ちます。半導体を製造する工場としては表示していません。', sources: [arm], labelOffset: [-145, -70],
+        id: 'semi-arm-sanjose', name: 'Arm・San Jose', country: '米国', coordinates: [-121.94, 37.4], stage: 'design', kind: '設計拠点', status: '稼働',
+        scale: { value: '400超', unit: '人（拠点全職種）', year: '対象年未記載・2026-10-14確認', basis: '参考指標', scope: '技術・機械学習・営業・管理部門などを含む拠点従業員数。設計者だけの人数や半導体の生産能力ではない。' },
+        note: '設計を支える技術・機械学習部門のある米国拠点。米国本社も兼ねます。半導体の製造工場ではありません。', sources: [arm], labelOffset: [-145, -30],
       },
       {
         id: 'semi-asml-veldhoven', name: 'ASML・Veldhoven', country: 'オランダ', coordinates: [5.41, 51.41], stage: 'equipment', kind: '工場', status: '稼働',
@@ -61,14 +65,14 @@ export const advancedSectors: Sector[] = [
         note: '単結晶を引き上げ、最大300mm径の基板用ウエハーを製造。回路を形成する前工程とは別です。', sources: [siltronic], labelOffset: [40, 18],
       },
       {
-        id: 'semi-tsmc-hsinchu', name: 'TSMC・新竹Fab 12B', country: '台湾', coordinates: [121.0, 24.77], stage: 'front-end', kind: '工場', status: '稼働',
-        scale: unavailable('枚/年', 'Fab 12B単体のウエハー加工能力'),
-        note: '300mmウエハーの前工程工場。新竹の会社本社とは所在地と対象を分けています。', sources: [tsmcFabs], labelOffset: [28, -52],
+        id: 'semi-jasm-kumamoto', name: 'JASM・熊本第1工場', country: '日本', coordinates: [130.88, 32.88], stage: 'front-end', kind: '工場', status: '稼働',
+        scale: { value: '5.5万（当初計画）', unit: '枚/月（300mm）', year: '2022年2月発表', basis: '設備能力', scope: '第1工場の公表時点の計画能力。現在の到達能力や実生産量を確認した値ではない。' },
+        note: '第1工場は2024年末に量産開始。数量は2022年の建設時計画を明示し、第2工場の将来計画を含めていません。', sources: [jasmPlan, tsmcAnnual], labelOffset: [28, -52],
       },
       {
-        id: 'semi-tsmc-arizona', name: 'TSMC・Phoenix', country: '米国', coordinates: [-112.17, 33.8], stage: 'front-end', kind: '工場', status: '稼働',
-        scale: unavailable('枚/年', 'Arizona第1工場単体のウエハー加工能力'),
-        note: '第1工場は2024年Q4にN4量産開始。後続工場・後工程施設の建設計画を稼働能力に加えていません。', sources: [tsmcArizona, tsmcFabs], labelOffset: [-120, -32],
+        id: 'semi-gf-dresden', name: 'GF・Dresden', country: 'ドイツ', coordinates: [13.71, 51.13], stage: 'front-end', kind: '工場', status: '稼働',
+        scale: { value: '95万', unit: '枚/年（300mm換算）', year: '対象年未記載・2026-10-14確認', basis: '設備能力', scope: 'GF Dresden拠点の公表年産能力。実生産量ではなく、将来の拡張目標も含めない。' },
+        note: 'FD-SOI・CMOSなどの前工程拠点。TSMCがDresdenで建設する別工場とは異なります。', sources: [gfDresden], labelOffset: [65, -25],
       },
       {
         id: 'semi-gf-singapore', name: 'GF・Singapore', country: 'シンガポール', coordinates: [103.81, 1.45], stage: 'front-end', kind: '工場', status: '稼働',
@@ -90,7 +94,7 @@ export const advancedSectors: Sector[] = [
   },
   {
     id: 'solar', label: '太陽電池', shortLabel: '太陽電池',
-    scope: '結晶シリコン系の原料・ウエハー・セル・モジュールを代表7地点で表示。薄膜系、全工場、発電所は未収録。GW/年は製品定格出力で換算した製造能力で、発電電力量ではありません。',
+    scope: '結晶シリコン系の原料・ウエハー・セル・モジュールを代表8地点で表示。薄膜系、全工場、発電所は未収録。GW/年は製品定格出力で換算した製造能力で、発電電力量ではありません。',
     stages: [
       { id: 'polysilicon', label: '原料・ポリシリコン', note: 'シリコン原料を太陽電池向けの高純度ポリシリコンに加工します。' },
       { id: 'wafer', label: 'ウエハ', note: '結晶を作り、薄いウエハーへ切り出します。' },
@@ -104,9 +108,14 @@ export const advancedSectors: Sector[] = [
         note: '太陽電池向け高純度多結晶シリコンを製造。併産するシリコーンなどの数量を混ぜていません。', sources: [wacker], labelOffset: [15, -20],
       },
       {
-        id: 'solar-longi-chuxiong', name: 'LONGi・楚雄', country: '中国', coordinates: [101.55, 25.03], stage: 'wafer', kind: '工場', status: '稼働',
+        id: 'solar-longi-chuxiong', name: 'LONGi・楚雄', country: '中国', coordinates: [102.08, 25.15], stage: 'wafer', kind: '工場', status: '稼働',
         scale: unavailable('GW/年', '楚雄ウエハー工場の年産能力'),
-        note: '雲南のウエハー製造拠点。LONGi全社の能力や出荷量を、この工場の規模として配分していません。', sources: [longi], labelOffset: [-155, -45],
+        note: '雲南省楚雄州の禄豊地区にあるウエハー製造拠点。LONGi全社の能力や出荷量を、この工場の規模として配分していません。', sources: [longi, source('LONGi｜2021年半期報告・楚雄拠点の所在地', 'https://static.longi.com/LON_Gi_Semiannual_Report_2021_b6bc6a5630.pdf')], labelOffset: [-155, -45],
+      },
+      {
+        id: 'solar-oci-samalaju', name: 'OCI・Samalaju', country: 'マレーシア', coordinates: [113.32, 3.55], stage: 'polysilicon', kind: '工場', status: '稼働',
+        scale: { value: '3.5万', unit: 't/年（ポリシリコン）', year: '対象年未記載・2026-10-14確認', basis: '参考指標', scope: '親会社が説明するOCI TerraSusの太陽電池向け年産規模。実績年や稼働率が示されず、特定年の実生産量とはしない。' },
+        note: '旧OCI M。Samalaju工業団地の太陽電池向けポリシリコン工場。別事業の半導体向け増設計画は含めません。', sources: [oci, ociSite], labelOffset: [45, 45],
       },
       {
         id: 'solar-longi-kuching', name: 'LONGi・Kuching', country: 'マレーシア', coordinates: [110.36, 1.56], stage: 'wafer', kind: '工場', status: '稼働',
@@ -125,8 +134,8 @@ export const advancedSectors: Sector[] = [
       },
       {
         id: 'solar-rec-singapore', name: 'REC・Singapore', country: 'シンガポール', coordinates: [103.63, 1.3], stage: 'module', kind: '工場', status: '稼働',
-        scale: unavailable('GW/年', 'Singapore統合製造拠点のモジュール年産能力'),
-        note: '太陽電池モジュールを製造する統合工場。Norwayの会社本社の位置とは別です。', sources: [rec], labelOffset: [-140, 50],
+        scale: { value: '400万', unit: '枚/年（モジュール）', year: '対象年未記載・2026-10-14確認', basis: '参考指標', scope: 'Singapore工場紹介が掲げる年間製造枚数の目安。対象年や設備能力の定義がなく、暦年の確定生産実績とはしない。' },
+        note: '太陽電池モジュールを製造する統合工場。枚数を、出力の異なる製品のGW能力へ換算していません。', sources: [rec], labelOffset: [-140, 50],
       },
       {
         id: 'solar-longi-wuhu', name: 'LONGi・蕪湖', country: '中国', coordinates: [118.38, 31.33], stage: 'module', kind: '工場', status: '稼働',
@@ -148,7 +157,7 @@ export const advancedSectors: Sector[] = [
     sites: [
       {
         id: 'battery-albemarle-atacama', name: 'Albemarle・Atacama', country: 'チリ', coordinates: [-68.35, -23.5], stage: 'processing', kind: '鉱山', status: '稼働',
-        scale: { value: '約6', unit: 'Li濃度（%）', year: checked, basis: '参考指標', scope: '蒸発濃縮後のかん水のリチウム濃度。採掘量・年間生産量・設備能力ではない。' },
+        scale: { value: '約6', unit: 'Li濃度（%）', year: '対象年未記載・2026-10-14確認', basis: '参考指標', scope: '蒸発濃縮後のかん水のリチウム濃度。採掘量・年間生産量・設備能力ではない。' },
         note: '塩湖かん水を蒸発池で濃縮する前処理拠点。濃縮かん水のLa Negraへの輸送が公式資料に明記。', sources: [albemarle], labelOffset: [15, -30],
       },
       {

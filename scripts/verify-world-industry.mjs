@@ -39,8 +39,10 @@ try {
     const errors = []; page.on('pageerror', e => errors.push(e.message));
     page.on('response', r => { if (r.status() >= 400) errors.push(`HTTP ${r.status()} ${r.url()}`); });
     await page.goto(base); await page.waitForSelector('[data-world-industry][data-ready=true]');
+    if (width === 1440) await page.screenshot({ path: path.join(output, '1440-initial.jpg'), type: 'jpeg', quality: 84, animations: 'disabled' });
     const cases = [];
     for (const sector of sectors) {
+      report.phase = `${width}/${sector.id}/sector`;
       await page.locator(`[data-wi-sector="${sector.id}"]`).click();
       const panel = page.locator(`[data-wi-panel="${sector.id}"]`);
       assert.equal(await page.locator('[data-wi-panel]:not([hidden])').count(), 1);
@@ -55,6 +57,7 @@ try {
         assert.ok(flow.y + flow.height < height && map.y + map.height < height, 'complete flow and map are visible together on PC');
       }
       for (const stage of sector.stages) {
+        report.phase = `${width}/${sector.id}/stage/${stage.id}`;
         await panel.locator(`[data-wi-stage="${stage.id}"]`).click();
         assert.equal(await panel.locator('[data-wi-place]:not([hidden])').count(), sector.sites.filter(s => s.stage === stage.id).length);
         assert.equal(await panel.locator('[data-wi-line]:not([hidden])').count(), 0);
@@ -62,15 +65,18 @@ try {
       }
       await panel.locator('[data-wi-stage=all]').click();
       for (const site of sector.sites) {
+        report.phase = `${width}/${sector.id}/site/${site.id}`;
         await panel.locator(`[data-wi-place="${site.id}"]`).click();
         assert.equal(await panel.locator(`[data-wi-card="${site.id}"]`).isVisible(), true);
         assert.equal(await panel.locator(`[data-wi-site="${site.id}"]`).getAttribute('aria-pressed'), 'true');
         assert.equal(new URL(page.url()).searchParams.get('site'), site.id);
       }
       const first = panel.locator('[data-wi-site]').first();
+      report.phase = `${width}/${sector.id}/keyboard`;
       await first.focus(); await page.keyboard.press('Enter');
       assert.equal(await first.getAttribute('aria-pressed'), 'true');
       for (const link of sector.links) {
+        report.phase = `${width}/${sector.id}/link/${link.id}`;
         await panel.locator(`[data-wi-link="${link.id}"]`).click();
         assert.equal(await panel.locator('[data-wi-line]:not([hidden])').count(), 1);
         assert.equal(await panel.locator(`[data-wi-evidence="${link.id}"]`).isVisible(), true);
@@ -102,6 +108,12 @@ try {
   const invalid = await browser.newPage(); await invalid.goto(`${base}?sector=unknown&stage=bad&site=bad&link=bad`);
   await invalid.waitForSelector('[data-ready=true]'); assert.equal(await invalid.locator('[data-wi-panel=semiconductor]').isVisible(), true); await invalid.close();
   report.passed = true;
+  delete report.phase;
   await writeFile(path.join(output, 'report.json'), JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify(report));
+} catch (error) {
+  report.passed = false; report.error = error.message;
+  await writeFile(path.join(output, 'report.json'), JSON.stringify(report, null, 2) + '\n');
+  console.error(`::error title=World industry browser review::${report.phase ?? 'initialization'}: ${error.message.replaceAll('%', '%25').replaceAll('\r', '%0D').replaceAll('\n', '%0A')}`);
+  throw error;
 } finally { await browser.close(); await new Promise(resolve => server.close(resolve)); }

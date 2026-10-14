@@ -52,7 +52,8 @@ if (root) {
     state.stage = matching('[data-wi-stage]', 'wiStage', stage) ? stage : 'all';
     const place = [...panel().querySelectorAll<HTMLElement>('[data-wi-place]')];
     const requestedPlace = place.find(p => p.dataset.wiPlace === params.get('site') && (state.stage === 'all' || p.dataset.stage === state.stage));
-    state.site = (requestedPlace ?? place.find(p => state.stage === 'all' || p.dataset.stage === state.stage))!.dataset.wiPlace!;
+    const defaultPlace = state.stage === 'all' ? place.find(p => p.dataset.wiPlace === panel().dataset.defaultSite) : undefined;
+    state.site = (requestedPlace ?? defaultPlace ?? place.find(p => state.stage === 'all' || p.dataset.stage === state.stage))!.dataset.wiPlace!;
     const link = params.get('link') ?? 'none';
     state.link = matching('[data-wi-link]', 'wiLink', link) ? link : 'none';
     render(false);
@@ -65,7 +66,7 @@ if (root) {
     if (target.dataset.wiSector) {
       state.sector = target.dataset.wiSector;
       state.stage = 'all'; state.link = 'none';
-      state.site = panel().querySelector<HTMLElement>('[data-wi-place]')!.dataset.wiPlace!;
+      state.site = panel().dataset.defaultSite!;
     } else if (target.dataset.wiStage) {
       state.stage = target.dataset.wiStage; state.link = 'none';
       const sites = [...panel().querySelectorAll<HTMLElement>('[data-wi-place]')].filter(p => state.stage === 'all' || p.dataset.stage === state.stage);
