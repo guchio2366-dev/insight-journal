@@ -402,12 +402,12 @@ test('産業分野は国を自動選択せず、全拠点を保ったまま強�
   try{
     const full=app.q('[data-eu-static]').getAttribute('viewBox');
     app.q('[data-eu-industry-sector="manufacturing"]').click();await tick();
-    app.q('[data-eu-industry-group="自動車・機械"]').click();await tick();
+    app.q('[data-eu-industry-group="自動車完成車・部品"]').click();await tick();
     const params=new URL(app.w.location.href).searchParams;
-    assert.equal(params.get('industryGroup'),'自動車・機械');assert.equal(params.has('place'),false);assert.equal(params.has('feature'),false);
+    assert.equal(params.get('industryGroup'),'自動車完成車・部品');assert.equal(params.has('place'),false);assert.equal(params.has('feature'),false);
     assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
     const config=app.config.readings.filter(item=>item.field==='industry');
-    assert.equal(config.filter(item=>app.q(`[data-eu-feature-point="${item.id}"]`).style.display!=='none').length,17);
+    assert.equal(config.filter(item=>app.q(`[data-eu-feature-point="${item.id}"]`).style.display!=='none').length,31);
     assert.match(app.q('[data-eu-subject-takeaway]').textContent,/ドイツ南部.*チェコ/);
     const country=app.q('[data-eu-country-navigation]');country.value='DEU';country.dispatchEvent(new app.w.Event('change'));
     assert.match(app.q('[data-eu-country-overview]').href,/\/atlas\/europe\/overview\/\?country=DEU$/);
@@ -418,19 +418,37 @@ test('産業分野は国を自動選択せず、全拠点を保ったまま強�
   }finally{await app.w.happyDOM.close();}
 });
 
-test('産業は10分野の復元でも他分野の拠点と欧州全体の表示を保つ',async()=>{
+test('21品目の数値は地図下で対象と出典を保ち、品目・履歴に同期する',async()=>{
+ const app=await setup('/insight-journal/atlas/europe/industry/?layer=hubs&render=static');
+ try{
+  const panels=()=>[...app.w.document.querySelectorAll('[data-eu-industry-evidence]')].filter(panel=>!panel.hidden);
+  assert.equal(app.q('[data-eu-industry-statistics]').closest('.eu-read-panel'),null);
+  for(const sector of ['resources','manufacturing','services']){
+   app.q(`[data-eu-industry-sector="${sector}"]`).click();await tick();
+   const groups=[...app.w.document.querySelectorAll('[data-eu-industry-group]')].filter(button=>!button.hidden);
+   assert.equal(panels().length,groups.length);
+   for(const button of groups){button.click();await tick();assert.equal(panels().length,1);assert.equal(panels()[0].dataset.euIndustryEvidence,button.dataset.euIndustryGroup);assert.ok(panels()[0].querySelectorAll('a[href^="https://"]').length>=2);assert.match(panels()[0].textContent,/未収録・確認の限界/);}
+  }
+  app.restore('?layer=hubs&industrySector=manufacturing&industryGroup=半導体製造装置&render=static');await tick();
+  assert.equal(panels()[0].dataset.euIndustryEvidence,'半導体製造装置');
+  assert.match(panels()[0].textContent,/ASMLの世界連結事業/);
+  app.restore('?layer=climate&render=static');await tick();assert.equal(app.q('[data-eu-industry-statistics]').hidden,true);
+ }finally{await app.w.happyDOM.close();}
+});
+
+test('産業は旧分類URLの復元でも他分野の拠点と欧州全体の表示を保つ',async()=>{
   const app=await setup('/insight-journal/atlas/europe/industry/?layer=hubs&industryGroup=化学・医薬品&render=static');
   try{
     const full=app.q('[data-eu-static]').getAttribute('viewBox');
     assert.equal(app.q('[data-eu-industry-scope-host]').hidden,true);
     assert.equal(app.q('[data-eu-country-reader]').hidden,true);
-    assert.match(app.q('[data-eu-subject-takeaway]').textContent,/ライン川下流.*化学/);
+    assert.match(app.q('[data-eu-subject-takeaway]').textContent,/ロッテルダム.*ライン川.*化学/);
     app.restore('?layer=hubs&place=NLD&feature=rotterdam&render=static');await tick();
     assert.equal(app.q('[data-eu-country-reader]').hidden,true);assert.match(app.q('[data-eu-subject-title]').textContent,/ロッテルダム/);
     assert.equal(app.q('[data-eu-static]').getAttribute('viewBox'),full);
     app.restore('?layer=hubs&industryGroup=食品加工&render=static');await tick();
-    assert.match(app.q('[data-eu-subject-title]').textContent,/食品加工/);
-    assert.equal(app.q('[data-eu-topic="hubs"][data-eu-industry-group="食品加工"]').getAttribute('aria-pressed'),'true');
+    assert.match(app.q('[data-eu-subject-title]').textContent,/食品・飲料加工/);
+    assert.equal(app.q('[data-eu-topic="hubs"][data-eu-industry-group="食品・飲料加工"]').getAttribute('aria-pressed'),'true');
     const points=app.config.readings.filter(item=>item.field==='industry'&&europeIndustryInSector(item.id,'manufacturing'));assert.ok(points.every(item=>app.q(`[data-eu-feature-point="${item.id}"]`).style.display!=='none'));
   }finally{await app.w.happyDOM.close();}
 });

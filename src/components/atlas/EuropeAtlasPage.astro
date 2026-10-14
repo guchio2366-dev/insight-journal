@@ -190,7 +190,7 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, farmingDom
         </section>
         <div data-eu-culture-host hidden><EuropePopulationCases /></div>
         <details class="eu-religion-supplement" data-eu-religion-supplement hidden><summary>補足資料・国の詳細・地域事例</summary><p>年代・分類・地域粒度が異なる資料です。基本の広域図とは区別して読みます。</p><div data-eu-religion-supplement-controls></div></details>
-        <p id="eu-industry-scope-note" class="eu-industry-scope-note" data-eu-industry-scope-note hidden={field!=='industry'}>各点は産業が集まる地域・施設の代表位置です。量・額や順位ではありません。分野を選んでも他の産業の位置を残します。国別の数値は国の概要で確認できます。</p>
+
         <section data-eu-language-reader hidden aria-labelledby="eu-language-heading">
           <h3 id="eu-language-heading">使用言語・母語</h3>
           <p>欧州全体の地図と地域・国選択を保ちます。色のある自治体面は、イングランド・ウェールズ331地方自治体の2021年国勢調査「主な言語」だけです。他の地域の無着色は0%ではなく未収録を表します。3歳以上の通常居住者が分母です。欧州全域の実使用分布は未収録です。</p>
@@ -220,6 +220,7 @@ const config = { industryOverviews, farmingAreas:displayFarmingAreas, farmingDom
           </details>
         </section>
         <EuropeSubjectReader layer={initialLayer} />
+        <p id="eu-industry-scope-note" class="eu-industry-scope-note" data-eu-industry-scope-note hidden={field!=='industry'}>色付きの点は設備・産業地区、中抜きの点は全国統計の目印です。境界や量は示しません。細線は名前と位置の対応で、輸送経路・量ではありません。細かい地点は地図下の拠点選択からも確認できます。数値・年・対象国・未確認事項は地図下の品目別統計に記載します。</p>
         <details class="eu-legend eu-climate-primary-key" data-eu-climate-legend hidden={field!=='nature'}><summary>気候分類 · 1991–2020 · 全17区分</summary><div class="eu-legend-grid">{legend.map(l => <div><span class="eu-swatch" style={`background:${l.color}`}></span><strong>{l.code}</strong><span>{l.name}</span></div>)}</div><details class="eu-legend-methods"><summary>対象範囲・出典</summary><p>区分はBeckほかのKöppen–Geiger分類。周辺の北アフリカ・西アジアも同じ色で表示します。掲載画像の元格子は0.05度で、細かな局地気候を表すものではありません。</p><p>カスピ海の水面には気候区分を表示しません。輪郭は<a href={climateWater.source.url}>Natural Earth 5.1.2（1:110m）</a>に基づきます。</p></details></details>
         <div data-eu-climate-reader hidden={!initialClimateReader}>
         <div class="eu-reader-heading"><h2 id="eu-city-heading">欧州の気候分布</h2></div>

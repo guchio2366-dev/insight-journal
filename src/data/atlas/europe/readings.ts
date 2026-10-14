@@ -1,4 +1,5 @@
 import { europeIndustryAdditions } from './industry-additions.ts';
+import { europeIndustryExpansion } from './industry-expansion.ts';
 import { europeTerrainGuides, europeTerrainPlaceNames, europeTerrainWinds } from './terrain-geography.ts';
 import riverNames from './river-names.json' with { type: 'json' };
 
@@ -27,6 +28,7 @@ const terrainReadings: EuropeReading[] = [
   ...('explanationSource' in item ? {explanationSource:item.explanationSource} : {}),
 }));
 export const europeReadings: EuropeReading[] = [
+ ...europeIndustryExpansion,
  ...europeIndustryAdditions,
  {id:'danube',name:'ドナウ川',field:'nature',country:'HUN',coordinates:[19.04,47.50],group:'水系',layer:'water',body:'ドナウ川の本流はドイツ南西部から中欧・南東欧の低地を東へ進み、デルタを経て黒海へ注ぎます。アルプスやカルパチアなど周囲の山地からの支流も集まります。地図の線は河道であり、集水域の外縁ではありません。流域は19か国にまたがるため、水利用や洪水の管理には国を越えた協力が必要です。',question:'ブダペスト周辺から西と東へ本流を追い、支流が入る方向と黒海の河口を確かめます。',source:'https://www.icpdr.org/danube-basin/danube-river-basin',sourceLabel:'ICPDR・ドナウ川と流域の地理',period:'2026-10-10参照'},
  {id:'rhine',name:'ライン川',field:'nature',country:'DEU',coordinates:[7.59,50.36],group:'水系',layer:'water',body:'ライン川はアルプス方面から北へ流れ、ドイツ西部の谷と低地を通ってオランダの河口域から北海へ注ぎます。支流の水を集める一方、地図の線だけでは流域界や流量は分かりません。沿岸と内陸を結ぶ水路として利用され、水利用・洪水・生態系は流域の国々が協力して管理しています。',question:'アルプス方面から北海まで河道を追い、沿岸港と内陸の位置関係を確かめます。',source:'https://www.iksr.org/en/icpr/rhine-2040',sourceLabel:'ICPR・Rhine 2040',period:'2040年に向けた流域計画'},
