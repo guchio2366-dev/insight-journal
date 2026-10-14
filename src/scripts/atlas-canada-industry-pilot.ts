@@ -59,7 +59,12 @@ export function initCanadaIndustryPilot(root:HTMLElement){
    group.addEventListener('click',()=>chooseSite(c));group.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();chooseSite(c);}});lines.append(group);
   }
   // Selection changes emphasis, never the allocation order or a label's size.
-  const ordered=groups.sort((a,b)=>b.length-a.length||a[0].c.id.localeCompare(b[0].c.id));
+  const center=(g:typeof groups[number])=>[0,1].map(i=>g.reduce((sum,p)=>sum+p.point[i],0)/g.length);
+  const centers=new Map(groups.map(g=>[g,center(g)]));
+  const density=(g:typeof groups[number])=>groups.filter(peer=>Math.hypot(...centers.get(g)!.map((value,i)=>value-centers.get(peer)![i]))<150).length;
+  // Allocate the constrained ON/QC neighbourhood before isolated groups. This
+  // depends only on coordinates and frame, so selection cannot rearrange cards.
+  const ordered=groups.sort((a,b)=>density(b)-density(a)||b.length-a.length||a[0].c.id.localeCompare(b[0].c.id));
   for(const group of ordered){
    const industry=group[0].c.industry,item=pilot.industries.find(i=>i.id===industry)!,card=document.createElement('button');card.type='button';card.className='ca-pilot-map-label';card.dataset.caLabelGroup=industry;card.dataset.caLabelSites=group.map(v=>v.c.id).join(',');card.style.setProperty('--pilot-color',item.color);
    if(state.industry&&industry!==state.industry)card.classList.add('is-context');if(industry===state.industry)card.classList.add('is-highlighted');
@@ -69,7 +74,7 @@ export function initCanadaIndustryPilot(root:HTMLElement){
    const statuses=[...new Set(group.filter(v=>v.c.status&&v.c.status!=='operating').map(v=>v.c.status))];if(statuses.length){const status=document.createElement('span');status.className='ca-pilot-status';status.textContent=statuses.map(s=>s==='planned'?'計画':s==='construction'?'建設':'休止').join('・');card.append(status);}
    card.addEventListener('click',()=>chooseIndustry(industry));overlay.append(card);
    const box=placePilotLabel(group.map(v=>v.point),[card.offsetWidth||110,card.offsetHeight||38],[w,h],occupied);
-   if(!box){card.remove();root.dataset.labelsIncomplete='true';continue;}
+   if(!box){card.remove();root.dataset.labelsIncomplete='true';root.dataset.labelsMissing=[root.dataset.labelsMissing,group.map(v=>v.c.id).join(',')].filter(Boolean).join(';');continue;}
    occupied.push(box);card.style.left=box[0]+'px';card.style.top=box[1]+'px';
    if(state.only&&industry!==state.industry){card.hidden=true;continue;}
    for(const {point:[x,y],c}of group){const endX=Math.max(box[0],Math.min(box[2],x)),endY=Math.max(box[1],Math.min(box[3],y));
@@ -78,7 +83,7 @@ export function initCanadaIndustryPilot(root:HTMLElement){
   }
   if(selectedFocus)overlay.querySelector<SVGElement>(`[data-ca-marker="${selectedFocus}"]`)?.focus({preventScroll:true});
  }
- function camera(){svg.setAttribute('viewBox',frame.join(' '));delete root.dataset.labelsIncomplete;labels();(root as any).canadaIndustryView={...state,frame:frame.slice(),initialFrame:initialFrame.slice(),province:state.province,subsector:state.industry??'all'};}
+ function camera(){svg.setAttribute('viewBox',frame.join(' '));delete root.dataset.labelsIncomplete;delete root.dataset.labelsMissing;labels();(root as any).canadaIndustryView={...state,frame:frame.slice(),initialFrame:initialFrame.slice(),province:state.province,subsector:state.industry??'all'};}
  function evidence(){
   const item=state.industry?canadaIndustryEvidence.items[state.industry]:null;
   q('[data-ca-evidence-title]').textContent=item?`${pilotIndustryLabel(state.industry!,state.sector)}｜採用の根拠`:'品目を選ぶと、採用の定量根拠を比較できます';
@@ -109,8 +114,11 @@ export function initCanadaIndustryPilot(root:HTMLElement){
   const table=document.createElement('table');table.innerHTML='<thead><tr><th scope="col">州・準州</th><th scope="col">GDP（百万CAD）</th></tr></thead>';const tbody=document.createElement('tbody');for(const p of ranked){const tr=document.createElement('tr'),th=document.createElement('th'),td=document.createElement('td');th.scope='row';th.textContent=p.name;td.textContent=fmt(p.gdp);tr.append(th,td);tbody.append(tr);}table.append(tbody);q('[data-ca-numbers]').replaceChildren(table);
   const p=m.provinces.find(p=>p.id===state.province);q('[data-ca-value]').hidden=!p;if(p)q('[data-ca-value]').textContent=`${p.name} · 2021年 · ${name} · ${fmt(p.gdp)}百万CAD`;
   const oil=state.sector==='resources'&&(!state.industry||['oil-gas','refining'].includes(state.industry));q('[data-ca-international]').hidden=!oil;
-  q('[data-ca-port-statistics]').hidden=state.sector!=='services';q('[data-ca-process]').hidden=oil||state.sector==='services';
+  const ports=state.sector==='services'&&(!state.industry||state.industry==='logistics');
+  q('[data-ca-port-statistics]').hidden=!ports;q('[data-ca-process]').hidden=oil||ports;
+  q('[data-ca-process-title]').textContent=state.sector==='services'?'誰の需要に応えるか':'原料から製品へ';
   q('[data-ca-process-copy]').textContent=state.industry==='uranium'?'確認された実流通：マッカーサーリバーの鉱石をキー湖へ、シガー湖の鉱石をマクリーン湖へ道路輸送して処理。線の近さから作った納入関係ではありません。':state.industry==='potash'?'工程：カリを含む鉱床 → 採掘・選鉱 → 肥料原料。個々の農場への販売先や輸送量は未収録です。':state.industry==='nickel'?(state.sector==='resources'?'確認された実流通：ヴォイジーズ・ベイの精鉱をロングハーバーへ海上輸送し、ニッケル・銅・コバルトに加工。':'概念的な用途：精錬した高純度ニッケル → 合金 → 航空宇宙・電子機器など。特定の組立工場への納入を示しません。'):state.industry==='aluminum'?'工程：アルミナ → 電気分解 → アルミ金属。ケマノ → キティマットの製錬への送電は操業者が示す関係です。個々の製品工場への販売先は未収録です。':'採掘・原料処理 → 素材・燃料 → 製品・利用という概念的な工程。資料で確認できない拠点間の取引・輸送量は補いません。';
+  if(state.sector==='services'&&state.industry)q('[data-ca-process-copy]').textContent=canadaIndustryEvidence.items[state.industry].adoptionReason+' 個別企業の顧客別売上や販売先は、業種全体の指標から推定しません。';
  }
  function render(){
   const sector=pilot.sectors.find(s=>s.id===state.sector)!,item=pilot.industries.find(i=>i.id===state.industry),site=pilot.clusters.find(c=>c.id===state.site);
