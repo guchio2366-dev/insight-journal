@@ -41,6 +41,14 @@ jobs:
       - run: npm run build
         if: github.event_name == 'pull_request'
       - run: sudo apt-get update && sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+      - name: Verify world industry map and value flow together
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -f scripts/verify-world-industry.mjs ]]; then
+            REVIEW_CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)" node scripts/verify-world-industry.mjs
+          fi
       - name: Verify industry maps and capture evidence
         if: github.event_name == 'pull_request'
         shell: bash

@@ -1,0 +1,107 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { withBase } from '../../../../lib/urls';
+import { features } from '../../../../data/atlas/regional-atlas';
+import { sectors, groups, stageColors, checkedAt } from '../../../../data/atlas/world-industry';
+import { countryPath, layoutSites, connectionPath, project, mapWidth, mapHeight } from '../../../../lib/world-industry-map';
+import '../../../../styles/world-industry.css';
+const background = features.filter(f => f.properties.code !== 'ATA').map(f => countryPath(f.geometry));
+const metricLabel = (basis: string) => basis === '非公表' ? '資料に数値記載なし' : basis;
+---
+<BaseLayout title="世界の産業工程｜7分野の場所と規模" description="半導体・太陽電池・蓄電池・天然ガス・石油・銅・鉄鋼の代表拠点を、場所・規模・工程のつながりから読む世界地図。" compactAtlas>
+  <article class="wi" data-world-industry>
+    <header class="wi-heading">
+      <p class="wi-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / <a href={withBase('/atlas/industry/')}>産業を動かす地理</a> / 世界の工程</p>
+      <div><h1>世界の産業を、工程から。</h1><span class="wi-edition">7分野のパイロット · 確認 {checkedAt}</span></div>
+    </header>
+    <nav class="wi-sectors" aria-label="世界の産業分野">
+      {groups.map(group => <div class="wi-group"><span>{group.label}</span><div>{sectors.filter(s => group.ids.includes(s.id)).map(s => <a href={`?sector=${s.id}`} role="button" data-wi-sector={s.id} aria-pressed={s.id === sectors[0].id}>{s.shortLabel}</a>)}</div></div>)}
+    </nav>
+    {sectors.map((sector, sectorIndex) => {
+      const group = groups.find(g => g.ids.includes(sector.id))!;
+      const layout = layoutSites(sector.sites);
+      const initial = sector.sites[0];
+      return <section class="wi-panel" data-wi-panel={sector.id} data-wi-group={group.id} hidden={sectorIndex !== 0} aria-label={sector.label}>
+        <div class="wi-purpose"><h2>{sector.label}</h2><p><b>{group.purpose}</b><span>{group.note}</span></p></div>
+        <div class="wi-atlas-workspace">
+        <section class="wi-flow" aria-label="地図と連動するバリューフロー">
+        <div class="wi-process-caption"><b>バリューフロー</b><span>工程を選ぶと地図で強調</span></div>
+        <div class="wi-stages" role="group" aria-label={`${sector.label}の工程`}>
+          <button type="button" data-wi-stage="all" aria-pressed="true">全体</button>
+          {sector.stages.map((stage, i) => <>
+            {i > 0 && <span class="wi-process-arrow" aria-hidden="true">{sector.id === 'semiconductor' && i === 1 ? '＋' : '→'}</span>}
+            <button type="button" data-wi-stage={stage.id} data-note={stage.note} aria-pressed="false" style={`--stage-color:${stageColors[i]}`}><i aria-hidden="true">{i + 1}</i>{stage.label}</button>
+          </>)}
+        </div>
+        <p class="wi-stage-note" data-wi-stage-note>{group.note}</p>
+        <p class="wi-flow-key">矢印は一般的な工程の関係。個別企業の取引・数量を示しません。</p>
+        </section>
+        <section class="wi-map-panel" aria-label="代表地点の世界地図">
+        <div class="wi-map-heading"><p><b>代表地点</b> <span data-wi-count>{sector.sites.length}地点</span> · 点の大きさは共通、規模は下の数値で読む</p><a href={`#${sector.id}-places`}>場所・規模の一覧 ↓</a></div>
+        <div class="wi-map-frame">
+        <div class="wi-map-scroll" tabindex="0" role="region" aria-label={`${sector.label}の世界地図。狭い画面では横にスクロールできます。`}>
+          <svg class="wi-map" viewBox={`0 0 ${mapWidth} ${mapHeight}`} role="group" aria-labelledby={`${sector.id}-map-title ${sector.id}-map-desc`}>
+            <title id={`${sector.id}-map-title`}>{sector.label}の代表地点と工程</title>
+            <desc id={`${sector.id}-map-desc`}>番号と名前を選ぶと規模・対象年・出典を表示。番号は下の場所一覧と対応します。位置は拠点付近または地域の案内点です。線の表示は確認できた供給の実例から一つ選べます。</desc>
+            <defs><marker id={`${sector.id}-arrow`} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b04b32" /></marker></defs>
+            <g class="wi-land" aria-hidden="true">{background.map(d => <path d={d} fill-rule="evenodd" />)}</g>
+            <g class="wi-graticule" aria-hidden="true">{[-30, 0, 30, 60].map(lat => <line x1="0" x2={mapWidth} y1={project([0, lat])[1]} y2={project([0, lat])[1]} />)}</g>
+            <g class="wi-oceans" aria-hidden="true"><text x="165" y="300">太平洋</text><text x="420" y="275">大西洋</text><text x="760" y="360">インド洋</text><text x="1050" y="275">太平洋</text></g>
+            {sector.links.map(link => <path class="wi-supply-line" data-wi-line={link.id} d={connectionPath(sector.sites.find(s => s.id === link.from)!, sector.sites.find(s => s.id === link.to)!)} marker-end={`url(#${sector.id}-arrow)`} hidden><title>{link.label} · {link.year} · {link.evidence}</title></path>)}
+            {layout.map(({ site, px, py, x, y, width, height }, i) => {
+              const stageIndex = sector.stages.findIndex(s => s.id === site.stage);
+              return <g class:list={['wi-site', { 'is-selected': i === 0 }]} data-wi-site={site.id} data-stage={site.stage} role="button" tabindex="0" aria-pressed={i === 0} aria-label={`${i + 1} ${site.name}、${sector.stages[stageIndex].label}、${site.scale.value} ${site.scale.unit}、${site.scale.year}、${metricLabel(site.scale.basis)}`} style={`--stage-color:${stageColors[stageIndex]}`}>
+                <title>{site.name} · {site.country} · {site.kind} · {site.scale.value} {site.scale.unit}（{site.scale.year}・{metricLabel(site.scale.basis)}）</title>
+                <line class="wi-locator" x1={px} y1={py} x2={Math.max(x, Math.min(px, x + width))} y2={y + height / 2} />
+                <circle class="wi-location" cx={px} cy={py} r="5" />
+                <g class="wi-map-label" data-wi-label={site.id} transform={`translate(${x},${y})`}>
+                  <rect width={width} height={height} rx="3" />
+                  <circle cx="14" cy="14.5" r="10" /><text class="wi-map-number" x="14" y="18.7" text-anchor="middle">{i + 1}</text>
+                  <text class="wi-map-name" x="29" y="19">{site.name}</text>
+                </g>
+              </g>;
+            })}
+          </svg>
+        </div>
+        <div class="wi-map-summary" aria-label="選択地点の規模">
+          {sector.sites.map((site,i) => <div data-wi-map-summary={site.id} hidden={i !== 0}><b>{site.name}</b><span><strong>{site.scale.value}</strong> {site.scale.unit}</span><small>{site.scale.year} · {metricLabel(site.scale.basis)}</small></div>)}
+        </div>
+        </div>
+        <div class="wi-legend"><span><i class="wi-dot"></i>代表地点</span><span><i class="wi-selected-key"></i>選択中</span><span><i class="wi-locator-key"></i>地点とラベルの引出線</span><span class="wi-scroll-hint">地図は横にスクロールできます</span></div>
+        </section>
+        </div>
+        <p class="wi-scope">{sector.scope}</p>
+        {sector.links.length > 0 ? <section class="wi-connections" aria-label="確認できた供給の実例">
+          <div><h3>確認できた供給の実例</h3><p>一度に1本。実線は接続の模式線で、航路・管路の正確な形ではありません。</p></div>
+          <div class="wi-link-buttons"><button type="button" data-wi-link="none" aria-pressed="true">線を消す</button>{sector.links.map(link => <button type="button" data-wi-link={link.id} data-from={link.from} data-to={link.to} aria-pressed="false">{link.label}</button>)}</div>
+          {sector.links.map(link => <p class="wi-link-evidence" data-wi-evidence={link.id} hidden><b>{link.label} · {link.year}</b> {link.evidence} {link.sources.map(source => <a href={source.url}>{source.label} ↗</a>)}</p>)}
+        </section> : <p class="wi-no-links">この分野の個別拠点間供給は未収録。工程の関係は上の矢印で確認できます。</p>}
+        <div class="wi-reading" id={`${sector.id}-places`}>
+          <section class="wi-places" aria-label="代表地点を選ぶ"><h3>場所と規模 <small>番号は地図と対応</small></h3><div class="wi-place-list">
+            {sector.sites.map((site, i) => <button type="button" data-wi-place={site.id} data-stage={site.stage} aria-pressed={i === 0}><span>{String(i + 1).padStart(2, '0')}</span><b>{site.name}<small>{site.country} · {sector.stages.find(s => s.id === site.stage)!.label}</small></b><span class="wi-place-scale">{site.scale.value} <small>{site.scale.unit}<br />{site.scale.year} · {metricLabel(site.scale.basis)}</small></span></button>)}
+          </div></section>
+          <aside class="wi-reader" aria-label="選択地点の規模と出典">
+            {sector.sites.map((site, i) => <section data-wi-card={site.id} hidden={i !== 0}>
+              <p class="wi-reader-kicker">{site.country} · {site.kind} · {site.status}（資料時点）</p>
+              <h3>{site.name}</h3><p class="wi-value"><b>{site.scale.value}</b> <span>{site.scale.unit}</span></p>
+              <p class="wi-metric-type">{site.scale.year} · {metricLabel(site.scale.basis)}</p><p class="wi-scale-scope">{site.scale.scope}</p><p>{site.note}</p>
+              <ul class="wi-sources">{site.sources.map(source => <li><a href={source.url}>{source.label} ↗</a></li>)}</ul>
+            </section>)}
+          </aside>
+        </div>
+        <details class="wi-data"><summary>全代表地点の規模・年・出典を一覧で確認</summary><div class="wi-table-scroll"><table><caption>{sector.label} · 代表地点のみ / 資料確認 {checkedAt}</caption><thead><tr><th>地点・範囲</th><th>工程</th><th>規模</th><th>年・指標</th><th>出典</th></tr></thead><tbody>{sector.sites.map(site => <tr><th scope="row">{site.name}<small>{site.country} · {site.kind} · {site.status}（資料時点）</small></th><td>{sector.stages.find(s => s.id === site.stage)!.label}</td><td>{site.scale.value} {site.scale.unit}<small>{site.scale.scope}</small></td><td>{site.scale.year}<br />{metricLabel(site.scale.basis)}</td><td>{site.sources.map(source => <a href={source.url}>{source.label}</a>)}</td></tr>)}</tbody></table></div></details>
+      </section>;
+    })}
+    <details class="wi-method"><summary>代表地点・規模・地図の読み方</summary>
+      <p>世界の主要拠点を網羅したデータではありません。7分野の工程と地域差を試すため、一次資料で位置・工程・規模の範囲を確認できた代表例を掲載しています。未収録はゼロを意味しません。日本専用ページは今回追加していません。</p>
+      <p>点は施設や地域付近の案内位置で、敷地境界ではありません。「設計拠点」「工場」「地域」「需要地」を区別しています。地域集計を個別工場の生産量とみなさず、会社全体の数量を拠点へ割り振りません。</p>
+      <p>稼働・計画は各資料時点の状態です。規模は設備能力と生産・処理・出荷・需要実績を区別し、対象年を併記しています。単位・製品・範囲の異なる値は単純比較できません。点や線の太さには量を割り当てていません。</p>
+      <p>工程の矢印は一般的な関係、地図の実線は個別に出典を添えた供給の実例です。線は選択時に一つだけ表示し、実輸送量や航路の形を表しません。一般工程のつながりから企業間取引を推定していません。</p>
+      <p>既存の<a href={withBase('/atlas/industry/')}>北米・欧州・アジアの産業比較</a>は国の代表点で比較する別の読み方です。太陽資源の精密な塗分けはこのページに使用していません。</p>
+      <p>国境背景：<a href="https://www.naturalearthdata.com/about/terms-of-use/">Natural Earth（パブリックドメイン）</a>。既存atlasの概略境界を再利用。等距円筒図法、北緯85度〜南緯65度。面積の比較には適しません。原資料の図表・写真・ロゴは転載せず、短い事実要約とリンクを掲載しています。</p>
+    </details>
+    <p class="wi-live visually-hidden" role="status" data-wi-live></p>
+    <noscript><p>JavaScriptが無効です。半導体の初期地図・規模・出典を表示しています。分野と工程の切替にはJavaScriptが必要です。</p></noscript>
+  </article>
+</BaseLayout>
+<script>import '../../../../scripts/world-industry';</script>
