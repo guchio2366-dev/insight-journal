@@ -18,7 +18,9 @@ try{
  const ready=async()=>{await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-asia-atlas]')?.dataset.southeastIndustryLayoutReady==='true'&&document.querySelector('[data-map-fallback]')?.hidden);await page.evaluate(async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});};
  const open=async(query='')=>{await page.goto(base+'/insight-journal/atlas/asia/southeast-asia/industry/'+query,{waitUntil:'networkidle'});await ready();};
  const geometry=async()=>page.evaluate(()=>{
-  const rect=n=>{const r=n.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};};
+  // Native controls may scroll into view on mobile. Compare the map's
+  // document position, dimensions and camera independently of page scrolling.
+  const rect=n=>{const r=n.getBoundingClientRect();return {x:r.x+scrollX,y:r.y+scrollY,width:r.width,height:r.height};};
   return {frame:rect(document.querySelector('.asia-map-frame')),camera:document.querySelector('[data-asia-atlas]').dataset.mapCamera,labels:[...document.querySelectorAll('[data-southeast-industry-label]:not([hidden])')].map(n=>({id:n.dataset.southeastIndustryLabel,left:n.style.left,top:n.style.top,width:n.style.width,height:n.style.height,text:n.textContent})),points:[...document.querySelectorAll('[data-southeast-industry-point]')].map(n=>({id:n.dataset.southeastIndustryPoint,left:n.style.left,top:n.style.top,hidden:n.hidden}))};
  });
  const labelsClear=async()=>page.evaluate(()=>{

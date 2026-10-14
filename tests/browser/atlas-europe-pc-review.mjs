@@ -736,7 +736,7 @@ try {
   manifest.release = {sourceURL: releaseURL.href, ...await response.json()};
   assert.equal(manifest.release.commitSha, manifest.gitHead, 'Served production build must match the checkout');
   manifest.checks.push('served release commit matches git HEAD and expected CI head');
-  browser = await chromium.launch({headless: true, chromiumSandbox: Boolean(process.env.CI), ...(process.env.EUROPE_REVIEW_CHROMIUM_PATH ? {executablePath: process.env.EUROPE_REVIEW_CHROMIUM_PATH} : {}), args: ['--enable-unsafe-swiftshader', '--disable-background-networking', '--disable-component-update']});
+  browser = await chromium.launch({headless: true, chromiumSandbox: true, ignoreDefaultArgs: ['--unsafely-disable-devtools-self-xss-warnings'], ...(process.env.EUROPE_REVIEW_CHROMIUM_PATH ? {executablePath: process.env.EUROPE_REVIEW_CHROMIUM_PATH} : {}), args: ['--disable-background-networking', '--disable-component-update']});
   manifest.browser = {version: await browser.version(), executable: process.env.EUROPE_REVIEW_CHROMIUM_PATH ?? 'Playwright default'};
   for (const profile of profiles) {
     const context = await guardedContext(profile), page = await context.newPage();
