@@ -46,7 +46,7 @@ jobs:
       - run: npm ci --no-audit --no-fund
       - run: node --test tests/unit/atlas-latin-reading.test.mjs tests/unit/atlas-latin-review-revisions.test.mjs tests/unit/atlas-latin-culture-patterns.test.mjs tests/unit/atlas-latin-agriculture.test.mjs tests/unit/atlas-latin-nature.test.mjs tests/unit/atlas-latin-water-terrain.test.mjs tests/unit/atlas-latin-nature-reading.test.mjs
       - run: npm run build
-      - run: node --test tests/unit/atlas-latin-industry-sectors.test.mjs tests/unit/atlas-latin-industry.test.mjs tests/e2e/atlas-latin-industry-sectors.test.mjs tests/e2e/atlas-latin-industry.test.mjs
+      - run: node --test tests/unit/atlas-latin-industry-sectors.test.mjs tests/unit/atlas-latin-industry-expansion.test.mjs tests/unit/atlas-latin-industry.test.mjs tests/e2e/atlas-latin-industry-sectors.test.mjs tests/e2e/atlas-latin-industry.test.mjs
       - run: node --test tests/e2e/atlas-latin-population.test.mjs tests/e2e/atlas-latin-essential-legends.test.mjs tests/e2e/atlas-latin-workspace-navigation.test.mjs tests/e2e/atlas-regional-workspace-navigation.test.mjs tests/e2e/atlas-latin-forestry-workspace.test.mjs tests/e2e/atlas-latin-nature-reading.test.mjs
       - name: Capture and test exact PR head at 1920x1080 and auxiliary 1896x996
         run: node scripts/verify-latin-review-revisions-pc.mjs

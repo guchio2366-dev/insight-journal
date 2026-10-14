@@ -3,6 +3,7 @@ from pathlib import Path
 repo=Path(__file__).resolve().parents[2]
 parser=argparse.ArgumentParser(description='Build the curated catalog from the pinned Natural Earth source; performs no network calls.')
 parser.add_argument('--places',type=Path,required=True)
+parser.add_argument('--regions',type=Path,help='Pinned Natural Earth admin1 input for the reviewed 2026-10-14 expansion')
 args=parser.parse_args()
 raw=args.places
 assert hashlib.sha256(raw.read_bytes()).hexdigest()=='9b8e3de09048ef00dfc70357dbb9fa324493f214b5e0ae4daf1aa79a8d10116b', 'Unexpected Natural Earth input'
@@ -100,5 +101,10 @@ add('bahia-logistics','logistics','バイアブランカ','Bahía Blanca','Argen
 add('madeira-logistics','logistics','サンルイス圏・ポンタダマデイラ','São Luís','Brazil','鉄鉱石の港湾物流','service',[S],['vale'],'Valeの操業者資料で確認したカラジャス鉄道の港を読む都市案内位置。図の点を埠頭の正確な座標としては扱いません。')
 sectors=[dict(id=R,label='資源・エネルギー',overview='アンデスの銅・リチウム、ブラジル北部の鉄鉱石・ボーキサイト、大西洋沖の石油・ガスを、処理・精製・製錬・発電の場所とともに読みます。',why='鉱床・塩湖・河川は採取や発電の立地を制約します。資源を利用できる状態にする加工設備は別の場所にも立地し、原料と製品の段階を分ける必要があります。'),dict(id=M,label='製造業',overview='ブラジルの素材・燃料・航空機、アルゼンチンの車両、ウルグアイのパルプ、コスタリカの医療機器など、何をどこで作るかを読みます。',why='原料だけでなく、専門技能・設備・電力・水・物流と市場が製造を支えます。資源側にも登場する精製・製錬は、ここでは作る製品と工程に注目します。'),dict(id=S,label='サービス業',overview='金融・証券、IT・デジタル、港湾・運河物流、カリブ海の観光の集積例を、同じ産業の複数の場所として読みます。',why='人材・情報・企業間の接点や、地峡・海港・観光地へのアクセスがサービスを支えます。都市を一つの産業に固定せず、機能ごとの立地を重ねて考えます。')]
 result=dict(schemaVersion=1,reviewedAt='2026-10-12',geographicScope='既存中南米34国・地域。メキシコは別地域で含めない。主要例の選定であり全施設・全産業の網羅図ではない。',coordinateSource=dict(url='https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_populated_places.geojson',publisher='Natural Earth',version='5.1.2',crs='EPSG:4326',license='Public domain',inputSha256=hashlib.sha256(raw.read_bytes()).hexdigest()),sectors=sectors,industries=industries,sites=sites,sources=sources,flows=[],nextCandidates=[{'industry':'食品加工の追加工場・加工品内訳','reason':'全国輸出統計や会社全体の製品一覧を各工場の製品・数量へ読み替えず、原資料照合が必要。'},{'industry':'石炭・金・ガイアナの石油・トリニダードのLNG','reason':'追加候補。今回の少数例を資源全体の網羅としない。'},{'industry':'自動車の追加拠点・電子機器・繊維','reason':'製品と稼働状況・立地の追加照合が必要。'},{'industry':'ITの他国拠点・教育研究・行政','reason':'人口・国のサービス比率から局所の集積を推定しない。'}])
+if (repo/'data-source/atlas/latin-america/industry-expansion-20261014/evidence.json').exists():
+ if not args.regions:parser.error('--regions is required for the current expanded catalog')
+ from industry_expansion import apply_expansion
+ result=apply_expansion(result,ne,args.regions)
+ industries=result['industries'];sites=result['sites'];sectors=result['sectors']
 out=repo/'src/data/atlas/latin-america/industry-sectors.json';out.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
 print(json.dumps({'industries':len(industries),'sites':len(sites),'sectors':{s['id']:sum(s['id'] in p['sectors'] for p in sites) for s in sectors}},ensure_ascii=False))

@@ -1,10 +1,13 @@
 import {latinIndustrySectors as data,sectorIndustries,sectorSitesForScope,industryById,readIndustrySectorState,writeIndustrySectorState,renderIndustrySectorMap,type IndustrySectorState} from '../lib/atlas-latin-industry-sectors';
+import {renderLatinIndustryStatistics} from '../lib/atlas-latin-industry-evidence';
 export function isIndustrySectorRoute(){const p=new URLSearchParams(location.search);return p.has('sector')||!p.has('layer')&&!p.has('from')&&!p.has('case');}
 export function initLatinIndustrySectors(root:HTMLElement){
  if(root.dataset.lisReady==='true')return;root.dataset.lisReady='true';const workspace=root.closest<HTMLElement>('[data-latin-workspace]')!;
  const q=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s)!;
  let state=readIndustrySectorState(new URL(location.href));
  const map=q('[data-lis-map]');
+ const statistics=q('[data-lis-statistics]');
+ workspace.querySelector('[data-latin-below-workspace]')?.prepend(statistics);
  const text=(s:string,t:string)=>q(s).textContent=t;
  function save(push=true){const url=writeIndustrySectorState(new URL(location.href),state);if(url.href!==location.href)history[push?'pushState':'replaceState'](null,'',url);render();}
  function choose(id:string,site:string|null=null){if(state.industry===id&&state.site===site&&!state.single)return;state={...state,industry:id,site,single:false};save();}
@@ -12,14 +15,17 @@ export function initLatinIndustrySectors(root:HTMLElement){
   const sector=data.sectors.find(s=>s.id===state.sector)!,industry=industryById(state.industry),site=data.sites.find(s=>s.id===state.site);
   workspace.dataset.industrySectorMode='true';workspace.dataset.latinReady='true';root.dataset.sector=state.sector;root.dataset.industry=state.industry??'all';root.dataset.site=state.site??'';
   const grid=root.querySelector<HTMLElement>('.latin-sector-grid')!,top=Math.round(grid.getBoundingClientRect().top+scrollY)||298;root.style.setProperty('--lis-top',top+'px');
-  const rect=map.getBoundingClientRect(),width=Math.max(400,rect.width||960),height=Math.max(440,rect.height||770);const focused=(document.activeElement as HTMLElement)?.dataset.lisSite??(document.activeElement as HTMLElement)?.dataset.lisIndustry;
+  const rect=map.getBoundingClientRect(),width=Math.max(240,rect.width||960),height=Math.max(440,rect.height||770);const focused=(document.activeElement as HTMLElement)?.dataset.lisSite??(document.activeElement as HTMLElement)?.dataset.lisIndustry;
   map.innerHTML=renderIndustrySectorMap(state,width,height);
   for(const b of workspace.querySelectorAll<HTMLButtonElement>('[data-latin-industry-sector]')){const active=b.dataset.latinIndustrySector===state.sector;b.setAttribute('aria-pressed',String(active));b.tabIndex=active?0:-1;}
   text('[data-lis-title]',industry?.labels[state.sector as keyof typeof industry.labels]??sector.label);text('[data-lis-overview]',industry?.overview??sector.overview);text('[data-lis-why]',industry?.why??sector.why);
+  statistics.dataset.industry=state.industry??'all';statistics.dataset.sector=state.sector;
+  statistics.querySelector('[data-lis-statistics-title]')!.textContent=(industry?.label??sector.label)+'の規模と集積';
+  statistics.querySelector('[data-lis-statistics-body]')!.innerHTML=renderLatinIndustryStatistics(state.sector,state.industry);
   const range=q('[data-lis-range-note]'),scoped=sectorSitesForScope(state.sector,state.scope);range.hidden=state.scope==='all';range.textContent=`この分野・範囲の採用例：${scoped.length}拠点。表示がない地域に産業がないという意味ではありません。`+(site&&!scoped.some(s=>s.id===site.id)?' 選択した拠点は現在の表示範囲外です。':industry&&!scoped.some(s=>s.industry===industry.id)?' 選択した産業の採用例は現在の表示範囲にありません。':'');
   q('[data-lis-single]').hidden=!industry;q<HTMLButtonElement>('[data-lis-single]').textContent=state.single?'ほかの産業も表示する':'この産業だけを見る';q('[data-lis-clear]').hidden=!industry;
   const legend=q('[data-lis-legend]');legend.replaceChildren();for(const i of sectorIndustries(state.sector)){const b=document.createElement('button');b.type='button';b.dataset.lisIndustry=i.id;b.setAttribute('aria-pressed',String(i.id===state.industry));const key=document.createElement('i');key.style.background=i.color;b.append(key,document.createTextNode(i.labels[state.sector as keyof typeof i.labels]??i.label));legend.append(b);}
-  const list=q('[data-lis-sites]');list.replaceChildren();for(const s of scoped.filter(s=>!industry||s.industry===industry.id)){const b=document.createElement('button');b.type='button';b.dataset.lisSite=s.id;b.textContent=s.place+'｜'+s.stage;b.setAttribute('aria-pressed',String(s.id===state.site));list.append(b);}
+  const list=q('[data-lis-sites]');list.replaceChildren();for(const s of scoped.filter(s=>!industry||s.industry===industry.id)){const b=document.createElement('button');b.type='button';b.dataset.lisSite=s.id;b.textContent=industryById(s.industry)!.label+'｜'+s.place+'｜'+s.stage;b.setAttribute('aria-pressed',String(s.id===state.site));list.append(b);}
   q('[data-lis-site-reading]').hidden=!site;if(site){text('[data-lis-site-title]',site.place+'：'+site.stage);text('[data-lis-site-note]',site.note);text('[data-lis-coordinate-note]',site.coordinateMeaning);}
   const refs=q('[data-lis-sources]');refs.replaceChildren();const ids=new Set(site?.sources??industry?.sources??sectorIndustries(state.sector).flatMap(i=>i.sources));for(const id of ids){const source=data.sources.find(s=>s.id===id);if(!source)continue;const li=document.createElement('li'),a=document.createElement('a');a.href=source.url;a.textContent=source.title+'（'+source.period+'）';li.append(a);refs.append(li);}
   const overlap=q<HTMLButtonElement>('[data-lis-overlap]'),other=site?.sectors.find(s=>s!==state.sector);overlap.hidden=!other;if(other)overlap.textContent='同じ拠点を'+data.sectors.find(s=>s.id===other)!.label+'で読む';

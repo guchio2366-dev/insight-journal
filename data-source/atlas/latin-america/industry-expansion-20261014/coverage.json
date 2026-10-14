@@ -1,0 +1,220 @@
+{
+  "baseMain": "63e998cc",
+  "reviewedAt": "2026-10-14",
+  "requirements": [
+    {
+      "id": "copper",
+      "label": "銅",
+      "industryIds": [
+        "copper"
+      ],
+      "researchRole": "main",
+      "adopted": true
+    },
+    {
+      "id": "lithium",
+      "label": "リチウム",
+      "industryIds": [
+        "lithium"
+      ],
+      "researchRole": "main",
+      "adopted": true
+    },
+    {
+      "id": "niobium",
+      "label": "ニオブ",
+      "industryIds": [
+        "niobium"
+      ],
+      "researchRole": "main",
+      "adopted": true
+    },
+    {
+      "id": "iron",
+      "label": "鉄鉱石",
+      "industryIds": [
+        "iron"
+      ],
+      "researchRole": "main",
+      "adopted": true
+    },
+    {
+      "id": "oil",
+      "label": "原油",
+      "industryIds": [
+        "oil-gas"
+      ],
+      "researchRole": "main",
+      "adopted": true
+    },
+    {
+      "id": "hydro",
+      "label": "水力発電",
+      "industryIds": [
+        "hydro"
+      ],
+      "researchRole": "main",
+      "adopted": true
+    },
+    {
+      "id": "soy",
+      "label": "大豆採油・粕",
+      "industryIds": [
+        "food"
+      ],
+      "researchRole": "main",
+      "adopted": true
+    },
+    {
+      "id": "sugar-ethanol",
+      "label": "砂糖・エタノール",
+      "industryIds": [
+        "sugar",
+        "ethanol"
+      ],
+      "researchRole": "main",
+      "adopted": true
+    },
+    {
+      "id": "meat",
+      "label": "牛肉・鶏肉加工",
+      "industryIds": [
+        "beef",
+        "poultry"
+      ],
+      "researchRole": "main",
+      "adopted": true
+    },
+    {
+      "id": "pulp",
+      "label": "パルプ",
+      "industryIds": [
+        "pulp"
+      ],
+      "researchRole": "main",
+      "adopted": true
+    },
+    {
+      "id": "juice",
+      "label": "オレンジ果汁",
+      "industryIds": [
+        "juice"
+      ],
+      "researchRole": "main",
+      "adopted": true
+    },
+    {
+      "id": "auto",
+      "label": "自動車",
+      "industryIds": [
+        "auto"
+      ],
+      "researchRole": "main",
+      "adopted": true
+    },
+    {
+      "id": "aviation",
+      "label": "航空機",
+      "industryIds": [
+        "aviation"
+      ],
+      "researchRole": "main",
+      "adopted": true
+    },
+    {
+      "id": "medical",
+      "label": "医療機器",
+      "industryIds": [
+        "medical"
+      ],
+      "researchRole": "main",
+      "adopted": true
+    },
+    {
+      "id": "fish",
+      "label": "魚粉・魚油",
+      "industryIds": [
+        "fishmeal",
+        "fish-oil"
+      ],
+      "researchRole": "main",
+      "adopted": true
+    },
+    {
+      "id": "canal",
+      "label": "パナマ運河・物流",
+      "industryIds": [
+        "logistics"
+      ],
+      "researchRole": "main",
+      "adopted": true
+    },
+    {
+      "id": "tourism",
+      "label": "国際観光",
+      "industryIds": [
+        "tourism"
+      ],
+      "researchRole": "main",
+      "adopted": true
+    },
+    {
+      "id": "shrimp",
+      "label": "養殖エビ・冷凍加工",
+      "industryIds": [
+        "shrimp"
+      ],
+      "researchRole": "additional",
+      "adopted": true
+    },
+    {
+      "id": "bauxite-alumina",
+      "label": "ボーキサイト・アルミナ",
+      "industryIds": [
+        "bauxite",
+        "alumina"
+      ],
+      "researchRole": "additional",
+      "adopted": true
+    },
+    {
+      "id": "coffee",
+      "label": "可溶性コーヒー",
+      "industryIds": [
+        "coffee"
+      ],
+      "researchRole": "additional",
+      "adopted": true
+    },
+    {
+      "id": "corporate",
+      "label": "企業・知識サービス",
+      "industryIds": [
+        "corporate"
+      ],
+      "researchRole": "additional",
+      "adopted": true
+    },
+    {
+      "id": "coal",
+      "label": "石炭",
+      "industryIds": [
+        "coal"
+      ],
+      "researchRole": "additional",
+      "adopted": true
+    }
+  ],
+  "industries": 31,
+  "sites": 76,
+  "statistics": 109,
+  "regions": 19,
+  "flows": 0,
+  "coordinateKinds": {
+    "admin-region-guide": 22,
+    "aerodrome-reference-point": 1,
+    "locality-guide": 46,
+    "official-well-reference": 1,
+    "retained-region-guide": 6
+  }
+}
