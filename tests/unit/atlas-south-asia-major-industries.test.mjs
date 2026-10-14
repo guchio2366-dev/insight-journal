@@ -46,7 +46,8 @@ test('Industry and place selection keeps all 45 marker positions and names fixed
   controller.render();await controller.show(map);const initial=snapshot();assert.equal(initial.length,45);
   for(const group of groups){state={...state,topic:group.id,detail:null};controller.render();await controller.show(map);assert.deepEqual(snapshot(),initial,group.id+' keeps geographic labels');const visible=[...root.querySelectorAll('[data-south-industry-evidence]')].filter(n=>!n.hidden);assert.deepEqual(visible.map(n=>n.dataset.southIndustryEvidence),[group.id]);}
   state={...state,topic:'sc-overview'};
-  for(const site of sites){controller.select(site.id);controller.render();await controller.show(map);assert.deepEqual(snapshot(),initial,site.id);assert.equal(state.detail,site.id);assert.deepEqual(state.camera,camera);assert.match(root.querySelector('[data-south-industry-selected]').textContent,new RegExp(site.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')));}
+  const inventory=()=>root.querySelector('[data-industry-content] > details');assert.equal(inventory().open,false);inventory().open=true;
+  for(const site of sites){controller.select(site.id);controller.render();await controller.show(map);assert.deepEqual(snapshot(),initial,site.id);assert.equal(state.detail,site.id);assert.deepEqual(state.camera,camera);assert.equal(inventory().open,true,'Place selection preserves the open inventory and its page space');assert.match(root.querySelector('[data-south-industry-selected]').textContent,new RegExp(site.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')));}
   controller.select('');controller.render();await controller.show(map);assert.deepEqual(snapshot(),initial);assert.equal(root.querySelector('[data-south-industry-selected]').hidden,true);
   assert.equal(controller.normalize({...state,topic:'sc-overview',place:'BGD',detail:'sc-bengaluru-it',point:[77,13]}).detail,null);
   assert.equal(controller.normalize({...state,detail:'unknown-site'}).detail,null);
