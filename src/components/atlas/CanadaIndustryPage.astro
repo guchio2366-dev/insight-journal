@@ -30,7 +30,7 @@ const total=data.metrics[0];
  <NorthAmericaCountryFieldNavigation country="canada" field="industry" />
  <div class="industry-controls">
   <div class="industry-tab-row" role="tablist" aria-label="主要産業の表示分類">{pilot.sectors.map(s=><button type="button" role="tab" id={`ca-sector-${s.id}`} aria-selected={String(s.id==='resources')} tabindex={s.id==='resources'?0:-1} aria-controls="ca-industry-panel" data-ca-sector={s.id}>{s.label}</button>)}</div>
-  <p class="industry-guide"><span data-ca-breadcrumb>どこで採れ、どこで使える原料・エネルギーになるか</span><a href="#canada-industry-statistics">統計へ</a><a href="#canada-industry-sources">出典・範囲</a></p>
+  <p class="industry-guide"><span data-ca-breadcrumb>どこで採れ、どこで使える原料・エネルギーになるか</span><a href="#canada-industry-evidence">品目の根拠へ</a><a href="#canada-industry-sources">出典・範囲</a></p>
  </div>
  <div class="atlas-primary-grid" id="ca-industry-panel" role="tabpanel" aria-labelledby="ca-sector-resources">
   <div class="atlas-map-column">
@@ -46,7 +46,7 @@ const total=data.metrics[0];
 
     <p class="atlas-layer-caption" data-ca-map-caption>産業の色＋工程の記号 · 位置を示し、数量は表しません</p>
    </div>
-   <p class="ca-pilot-map-note"><span>● 採取・発電・サービス　■ 加工・精製・精錬</span><span>点は集積地域の案内位置。短い実線は同じ産業名との対応で、取引・輸送を表しません。</span></p>
+   <p class="ca-pilot-map-note"><span>● 採取・発電・サービス　■ 加工・精製・精錬　白抜き・破線枠＝計画／建設／休止</span><span>点は集積地域の案内位置。短い実線は同じ産業名との対応で、取引・輸送を表しません。</span></p>
   </div>
   <aside class="ca-pilot-reading" aria-label="産業分布の概説と理由">
    <h2 data-ca-title>資源・エネルギー</h2>
@@ -59,18 +59,23 @@ const total=data.metrics[0];
    <p class="ca-pilot-boundary">学習のための3分類。精錬・精製は資源と製造の両方に表示します。表示地点や分類の統計を合算しません。</p>
   </aside>
  </div>
+ <section class="ca-industry-evidence" id="canada-industry-evidence" aria-labelledby="ca-industry-evidence-title" aria-live="polite">
+  <header><h2 id="ca-industry-evidence-title" data-ca-evidence-title>品目を選ぶと、採用の定量根拠を比較できます</h2><p data-ca-evidence-reason>地図・凡例から産業を選択。地域規模、世界位置・集中度、需要・供給網を別々に読みます。</p><p class="ca-evidence-confidence" data-ca-evidence-confidence>金額はCAD。生産・加工・完成品・サービスを分け、資料がない指標は未確認と表示します。</p></header>
+  <div class="ca-evidence-columns"><section><h3>経済・生産の規模</h3><div data-ca-evidence-scale></div></section><section><h3>世界位置・地域集中</h3><div data-ca-evidence-comparison></div></section><section><h3>需要・供給網・変化</h3><div data-ca-evidence-strategy></div></section></div>
+ </section>
+ <p class="ca-pilot-reference-heading">参考：2021年の広い統計区分。品目固有の規模は上の根拠で確認します。</p>
  <section class="ca-pilot-statistics" id="canada-industry-statistics" aria-label="地図の下の3列の統計">
   <section class="ca-pilot-stat-card"><h2 data-ca-stat-title>採掘・電気等の供給</h2><p data-ca-stat-scope></p><dl class="ca-pilot-kpis"><div><dt>全国GDP</dt><dd data-ca-stat-gdp></dd><small>百万CAD・当年価格・基本価格</small></div><div><dt>年平均の就業者</dt><dd data-ca-stat-employment></dd><small>千人・15歳以上・自営業を含む</small></div></dl><p data-ca-stat-note></p><p class="industry-economic-value" data-ca-value hidden></p><p><a href="#canada-industry-sources">Statistics Canada · 2021年</a></p></section>
   <section class="ca-pilot-stat-card"><h2>州別GDPの大きさ</h2><p data-ca-ranking-scope></p><ol class="ca-pilot-ranking" data-ca-ranking></ol><details><summary>13州・準州の金額を確かめる</summary><div data-ca-numbers></div><div class="industry-region-list">{total.provinces.map(p=><button type="button" data-ca-place={p.id}>{p.name}</button>)}</div></details></section>
   <section class="ca-pilot-stat-card">
    <section class="ca-industry-international" data-ca-international aria-labelledby="ca-industry-international-title"><h2 id="ca-industry-international-title">{international.title}</h2><p>{international.source.referenceYear}年 · {international.geography}</p><dl class="ca-industry-international-values">{international.indicators.map(metric=>{const display=formatCanadaIndustryInternationalIndicator(metric);return <div data-ca-international-indicator={metric.id}><dt>{metric.label}</dt><dd><strong>{display.value}</strong><span>{display.unit}</span></dd></div>;})}</dl><p>割合の分母：カナダの原油輸出量。米国向けはCER公表値。</p><p>{international.reading}</p><button type="button" data-ca-international-place>採取と精製の場所を地図で見る</button><p><a href={international.source.url}>CER · {international.source.edition}</a></p></section>
    <section data-ca-port-statistics hidden><h2>太平洋の港が扱う貨物</h2><p>2024年 · 港湾貨物量（百万t）</p><dl class="ca-pilot-kpis"><div><dt>バンクーバー港</dt><dd>158</dd></div><div><dt>プリンスルパート港</dt><dd>23.5</dd></div></dl><p>全貨物の重量。都市の雇用・GDP・コンテナ個数と別の指標です。</p><a href={pilot.sources.transport.url}>Transport Canada · 2024</a></section>
-   <section data-ca-process hidden><h2>原料から製品へ</h2><p data-ca-process-copy></p><p class="ca-pilot-boundary">工程の説明と個別の取引は区別します。品目別生産量・地域別雇用は未収録です。</p></section>
+   <section data-ca-process hidden><h2>原料から製品へ</h2><p data-ca-process-copy></p><p class="ca-pilot-boundary">工程の説明と個別の取引は区別します。品目別の確認済み数量は上の根拠に掲載し、未確認の地域数量は補いません。</p></section>
   </section>
  </section>
  <details class="canada-industry-statistics"><summary>既存の全国付加価値・雇用構成（2021年）</summary><p>全国を100%。原NAICS区分に基づく既存の内訳で、地図の学習分類の合計ではありません。GDPは13州・準州計、雇用は準州を除く全国。</p><div class="industry-paired-heading"><span>区分</span><span>GDP</span><span>雇用</span></div><ol class="industry-bars industry-paired-bars" data-ca-bars>{data.nationalChart.map(r=><li><div class="industry-paired-row"><span class="industry-paired-name">{r.label}</span><span>{(r.gdp/total.gdp*100).toFixed(1)}%</span><span>{(r.employment/total.employment*100).toFixed(1)}%</span></div></li>)}</ol></details>
  <p class="industry-return" data-ca-population-return-wrap hidden><a data-canada-population-industry-return href={withBase('/atlas/north-america/canada/population/')}>元の人口比較へ戻る</a></p>
- <details class="industry-method"><summary>地図に採用した地域・工程・一次資料</summary><p>{pilot.positionMethod}</p><p>実流通が確認できる線は、ヴォイジーズ・ベイからロングハーバーへの精鉱輸送のみ。線の経路は模式です。他の引出線はラベルの位置案内です。</p><ul>{Object.values(pilot.sources).map(s=><li><a href={s.url}>{s.title}</a>（確認 {s.accessed}） — {s.scope}</li>)}</ul><p>初版の未収録範囲：{pilot.omissions.join('／')}。表示がない場所を産業の不在とは判断しません。</p></details>
+ <details class="industry-method"><summary>地図に採用した地域・工程・一次資料</summary><p>{pilot.positionMethod}</p><p>実流通が確認できる線は、ヴォイジーズ・ベイからロングハーバーへの精鉱輸送のみ。線の経路は模式です。他の引出線はラベルの位置案内です。</p><ul>{Object.values(pilot.sources).map(s=><li><a href={s.url}>{s.title}</a>（確認 {s.accessed}） — {s.scope}</li>)}</ul><p>未収録範囲：{pilot.omissions.join('／')}。表示がない場所を産業の不在とは判断しません。</p></details>
  <details class="industry-method" id="canada-industry-sources"><summary>出典・年・分類・利用条件</summary>
   <section class="ca-industry-international-definitions" data-ca-international-definitions>
    <h3>原油輸出：2024年</h3>

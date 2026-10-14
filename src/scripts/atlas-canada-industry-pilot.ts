@@ -4,6 +4,7 @@ import population from '../data/atlas/canada/population.json';
 import {groupPilotLabelPoints,placePilotLabel} from '../lib/atlas-canada-industry-labels';
 import {readCanadaPopulationState,writeCanadaPopulationState,copyCanadaPopulationMapState} from '../lib/atlas-canada-population';
 import {isCanadaDemographicTopic} from '../lib/atlas-canada-demographics';
+import {canadaIndustryEvidence,formatCanadaIndustryFact} from '../lib/atlas-canada-industry-evidence';
 type Metric={id:string;label:string;gdp:number;employment:number|null;gdpCodes:string[];provinces:{id:string;name:string;gdp:number}[]};
 const ns='http://www.w3.org/2000/svg';
 const fmt=(n:number)=>n.toLocaleString('ja-JP',{maximumFractionDigits:1});
@@ -49,7 +50,8 @@ export function initCanadaIndustryPilot(root:HTMLElement){
    const color=pilot.industries.find(i=>i.id===c.industry)!.color,processing=/精|製|選鉱|処理|加工|パルプ|紙|構造体|部品|機体/.test(c.stage);
    const peers=visible.filter(v=>v.c.coordinates.join(',')===c.coordinates.join(',')),index=peers.findIndex(v=>v.c.id===c.id),cx=x+(index-(peers.length-1)/2)*14;
    const group=element('g',{'data-ca-marker':c.id,role:'button',tabindex:'0','aria-pressed':String(c.id===state.site),'aria-label':`${pilotIndustryLabel(c.industry,state.sector)} · ${c.place} · ${stageLabel(c)}`});
-   const attrs={'data-ca-cluster':c.id,'data-industry':c.industry,'data-coordinate':c.coordinates.join(','),fill:color,stroke:'#fff','stroke-width':1.2};
+   const inactive=!!c.status&&c.status!=='operating';
+   const attrs={'data-ca-cluster':c.id,'data-industry':c.industry,'data-coordinate':c.coordinates.join(','),'data-status':c.status??'source-supported',fill:inactive?'#fffef7':color,stroke:inactive?color:'#fff','stroke-width':1.2,...(inactive?{'stroke-dasharray':'2 1'}:{})};
    group.append(element('circle',{cx,cy:y,r:6,fill:'transparent'}));
    group.append(processing?element('rect',{...attrs,x:cx-4,y:y-4,width:8,height:8}):element('circle',{...attrs,cx,cy:y,r:4.5}));
    if(state.industry&&c.industry!==state.industry)group.setAttribute('opacity','.5');
@@ -63,7 +65,9 @@ export function initCanadaIndustryPilot(root:HTMLElement){
    if(state.industry&&industry!==state.industry)card.classList.add('is-context');if(industry===state.industry)card.classList.add('is-highlighted');
    card.setAttribute('aria-pressed',String(industry===state.industry));card.setAttribute('aria-label',`${pilotIndustryLabel(industry,state.sector)}：${group.map(v=>v.c.place).join('、')}を強調`);
    const label=document.createElement('strong');label.textContent=industry==='digital'?'情報技術':industry==='uranium'?'ウラン採掘・処理':industry==='nickel'&&state.sector==='resources'?'ニッケル':pilotIndustryLabel(industry,state.sector);const icon=document.createElement('i');icon.setAttribute('aria-hidden','true');label.prepend(icon);card.append(label);
-   const place=document.createElement('small');const places=[...new Set(group.map(v=>v.c.place.split(/[／〜]/)[0]))];if(state.sector==='services'){card.dataset.sector='services';for(const [index,name]of places.entries()){if(index)place.append('・');const city=document.createElement('span');city.textContent=name;city.style.display='inline-block';place.append(city);}}else place.textContent=places.length<=2?places.join('・'):places.slice(0,2).join('・')+'ほか';card.append(place);card.addEventListener('click',()=>chooseIndustry(industry));overlay.append(card);
+   const place=document.createElement('small');const places=[...new Set(group.map(v=>v.c.place.split(/[／〜]/)[0]))];if(state.sector==='services'){card.dataset.sector='services';for(const [index,name]of places.entries()){if(index)place.append('・');const city=document.createElement('span');city.textContent=name;city.style.display='inline-block';place.append(city);}}else place.textContent=places.length<=2?places.join('・'):places.slice(0,2).join('・')+'ほか';card.append(place);
+   const statuses=[...new Set(group.filter(v=>v.c.status&&v.c.status!=='operating').map(v=>v.c.status))];if(statuses.length){const status=document.createElement('span');status.className='ca-pilot-status';status.textContent=statuses.map(s=>s==='planned'?'計画':s==='construction'?'建設':'休止').join('・');card.append(status);}
+   card.addEventListener('click',()=>chooseIndustry(industry));overlay.append(card);
    const box=placePilotLabel(group.map(v=>v.point),[card.offsetWidth||110,card.offsetHeight||38],[w,h],occupied);
    if(!box){card.remove();root.dataset.labelsIncomplete='true';continue;}
    occupied.push(box);card.style.left=box[0]+'px';card.style.top=box[1]+'px';
@@ -75,6 +79,24 @@ export function initCanadaIndustryPilot(root:HTMLElement){
   if(selectedFocus)overlay.querySelector<SVGElement>(`[data-ca-marker="${selectedFocus}"]`)?.focus({preventScroll:true});
  }
  function camera(){svg.setAttribute('viewBox',frame.join(' '));delete root.dataset.labelsIncomplete;labels();(root as any).canadaIndustryView={...state,frame:frame.slice(),initialFrame:initialFrame.slice(),province:state.province,subsector:state.industry??'all'};}
+ function evidence(){
+  const item=state.industry?canadaIndustryEvidence.items[state.industry]:null;
+  q('[data-ca-evidence-title]').textContent=item?`${pilotIndustryLabel(state.industry!,state.sector)}｜採用の根拠`:'品目を選ぶと、採用の定量根拠を比較できます';
+  q('[data-ca-evidence-reason]').textContent=item?.adoptionReason??'地図・凡例から産業を選択。地域規模、世界位置・集中度、需要・供給網を別々に読みます。';
+  q('[data-ca-evidence-confidence]').textContent=item?`根拠の確信度：${item.confidence} · 資料確認 ${canadaIndustryEvidence.asOf} · 金額はCAD`:'生産・加工・完成品・サービスを分け、資料がない指標は未確認と表示します。業種GDPと観光需要GDPなど、重なる統計は合算しません。';
+  for(const column of ['scale','comparison','strategy'] as const){
+   const container=q(`[data-ca-evidence-${column}]`);container.replaceChildren();
+   if(!item){const p=document.createElement('p');p.textContent=column==='scale'?'GDP・売上・生産・雇用から、その品目に合う尺度を使用。':column==='comparison'?'世界順位が確認できない品目は、国内集中や同一定義の比較を使用。':'対米依存、原料と製品、操業実績と将来能力を区別。';container.append(p);continue;}
+   for(const fact of item[column]){
+    const card=document.createElement('article');card.className='ca-evidence-fact';if(fact.value===null)card.classList.add('is-missing');
+    const title=document.createElement('h4');title.textContent=fact.label;const value=document.createElement('strong');value.textContent=formatCanadaIndustryFact(fact);
+    const scope=document.createElement('p');scope.className='ca-evidence-scope';scope.textContent=`${fact.year} · ${fact.geography} · 分母／対象：${fact.denominator}`;
+    const definition=document.createElement('p');definition.textContent=fact.definition;const refs=document.createElement('p');
+    for(const [index,id]of fact.sources.entries()){if(index)refs.append(' ／ ');const s=pilot.sources[id as keyof typeof pilot.sources],a=document.createElement('a');a.href=s.url;a.textContent=s.title;refs.append(a);}
+    card.append(title,value,scope,definition,refs);container.append(card);
+   }
+  }
+ }
  function statistics(){
   const item=pilot.industries.find(i=>i.id===state.industry),id=item?.metrics[state.sector]??state.sector,m=metrics.find(m=>m.id===id)!;
   const name=m.id==='resources'?'採掘・電気等の供給（NAICS 21＋22）':m.id==='services'?'既存のサービス統計（不動産を除く）':m.label;
@@ -99,13 +121,13 @@ export function initCanadaIndustryPilot(root:HTMLElement){
   q('[data-ca-breadcrumb]').textContent=sector.insight;q('[data-ca-title]').textContent=item?pilotIndustryLabel(item.id,state.sector):sector.label;q('[data-ca-lead]').textContent=sector.insight;
   q('[data-ca-heading]').textContent=item?'主な集積の位置':state.sector==='resources'?'西部の資源と各地の加工・電力':state.sector==='manufacturing'?'中央部の組立と各地の素材・燃料':'都市の専門機能と東西の物流';
   q('[data-ca-reading]').textContent=item?.overview??sector.overview;q('[data-ca-why]').textContent=item?.why??sector.why;
-  q('[data-ca-site-reading]').hidden=!site;if(site){q('[data-ca-site-title]').textContent=site.place+'｜'+stageLabel(site);q('[data-ca-site-copy]').textContent=site.note||`${site.place}の${pilotIndustryLabel(site.industry,state.sector)}。${stageLabel(site)}の地域案内位置です。`;const refs=q('[data-ca-site-sources]');refs.replaceChildren();for(const id of site.sources){const s=pilot.sources[id as keyof typeof pilot.sources],a=document.createElement('a');a.href=s.url;a.textContent=s.title;refs.append(a);}}
+  q('[data-ca-site-reading]').hidden=!site;if(site){q('[data-ca-site-title]').textContent=site.place+'｜'+stageLabel(site);q('[data-ca-site-copy]').textContent=(site.asOf?`資料時点 ${site.asOf}。`:'')+(site.note||`${site.place}の${pilotIndustryLabel(site.industry,state.sector)}。${stageLabel(site)}の地域案内位置です。`);const refs=q('[data-ca-site-sources]');refs.replaceChildren();for(const id of site.sources){const s=pilot.sources[id as keyof typeof pilot.sources],a=document.createElement('a');a.href=s.url;a.textContent=s.title;refs.append(a);}}
   q('[data-ca-clear]').hidden=!item;q('[data-ca-only-wrap]').hidden=!item;q<HTMLInputElement>('[data-ca-only]').checked=state.only;
   const other=site?.sectors.find(s=>s!==state.sector),overlap=q<HTMLButtonElement>('[data-ca-overlap]');overlap.hidden=!other;if(other)overlap.textContent=`同じ拠点を${other==='resources'?'資源・エネルギー':'製造業'}で読む`;
   const list=q('[data-ca-site-list]');list.replaceChildren();for(const c of pilot.clusters.filter(c=>c.sectors.includes(state.sector))){const b=document.createElement('button');b.type='button';b.textContent=`${pilotIndustryLabel(c.industry,state.sector)} · ${c.place}`;b.setAttribute('aria-pressed',String(c.id===state.site));b.addEventListener('click',()=>chooseSite(c));list.append(b);}
   q('[data-ca-map-caption]').textContent=`${sector.label}${state.only?' · 選択産業のみ':''}${state.sector==='resources'?' · 破線矢印＝確認された精鉱輸送（海路は模式）':''}`;
   const raw=new URL(location.href).searchParams.get('populationReturn'),wrap=q('[data-ca-population-return-wrap]');wrap.hidden=true;if(raw){const source=new URL('?'+raw,location.href);if(!isCanadaDemographicTopic(source.searchParams.get('topic'))){const p=readCanadaPopulationState(source,population.cmas.map(c=>c.id)),back=q<HTMLAnchorElement>('[data-canada-population-industry-return]');back.href=copyCanadaPopulationMapState(source,writeCanadaPopulationState(new URL(back.getAttribute('href')!,location.href),p)).href;back.textContent=`元の${p.year}年${p.metric==='density'?'人口密度':'都市圏人口'}比較へ戻る`;wrap.hidden=false;}}
-  statistics();camera();requestAnimationFrame(camera);
+  evidence();statistics();camera();requestAnimationFrame(camera);
  }
  for(const b of root.querySelectorAll<HTMLElement>('[data-ca-sector]'))b.addEventListener('click',()=>{state={...state,sector:b.dataset.caSector as PilotState['sector'],industry:null,site:null,only:false,province:null};save();});
  for(const b of root.querySelectorAll<HTMLElement>('[data-ca-subsector]'))b.addEventListener('click',()=>chooseIndustry(b.dataset.caSubsector!));

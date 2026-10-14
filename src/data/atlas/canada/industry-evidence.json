@@ -1,0 +1,1679 @@
+{
+  "asOf": "2026-10-14",
+  "currency": "CAD",
+  "items": {
+    "oil-gas": {
+      "confidence": "高",
+      "adoptionReason": "規模と対米エネルギー供給の両方が大きい。石油とガスを別指標で読む。",
+      "scale": [
+        {
+          "label": "原油輸出量",
+          "value": 4.2,
+          "unit": "百万b/日",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "平均日量",
+          "definition": "CER税関貿易の原油。天然ガスや精製品を含まない。",
+          "sources": [
+            "energy-trade-2024"
+          ]
+        },
+        {
+          "label": "天然ガスの対米輸出",
+          "value": 8.4,
+          "unit": "十億立方フィート/日",
+          "year": "2024",
+          "geography": "全国→米国",
+          "denominator": "平均日量",
+          "definition": "パイプライン輸出。",
+          "sources": [
+            "energy-trade-2024"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "原油の世界生産順位",
+          "value": 4,
+          "unit": "位",
+          "year": "2023",
+          "geography": "世界の国比較",
+          "denominator": "原油生産国",
+          "definition": "CERの2023年比較。2024年輸出量とは別年。",
+          "sources": [
+            "cer-canada"
+          ]
+        },
+        {
+          "label": "天然ガス生産のAB・BC集中",
+          "value": 98.9,
+          "unit": "%",
+          "year": "2024",
+          "geography": "AB＋BC",
+          "denominator": "全国天然ガス生産",
+          "definition": "天然ガス単独の地域集中。",
+          "sources": [
+            "gas-2024"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "原油輸出の米国向け",
+          "value": 95.7,
+          "unit": "%",
+          "year": "2024",
+          "geography": "全国→米国",
+          "denominator": "原油輸出数量、税関ベース",
+          "definition": "下段のCER輸出シリーズ93%とは定義が異なる。",
+          "sources": [
+            "energy-trade-2024"
+          ]
+        },
+        {
+          "label": "天然ガス生産者価格の前年比",
+          "value": -21.3,
+          "unit": "%",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "2023年生産者価格",
+          "definition": "数量拡大と収益の耐性は別。",
+          "sources": [
+            "gas-2024"
+          ]
+        }
+      ]
+    },
+    "refining": {
+      "confidence": "高",
+      "adoptionReason": "採掘国が燃料をどこで精製し、誰に売るかを示す。",
+      "scale": [
+        {
+          "label": "製油所能力",
+          "value": 1.93,
+          "unit": "百万b/日",
+          "year": "2024",
+          "geography": "全国・17製油所",
+          "denominator": "設計／操業能力の合計",
+          "definition": "能力であり実生産ではない。",
+          "sources": [
+            "cer-canada"
+          ]
+        },
+        {
+          "label": "精製石油製品輸出量",
+          "value": 0.41,
+          "unit": "百万b/日",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "平均日量",
+          "definition": "原油輸出とは別の製品段階。",
+          "sources": [
+            "energy-trade-2024"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "米国の精製品輸入に占めるカナダ",
+          "value": 25.3,
+          "unit": "%",
+          "year": "2024",
+          "geography": "米国",
+          "denominator": "米国の精製石油製品輸入量",
+          "definition": "米国側の調達集中を示す。",
+          "sources": [
+            "energy-trade-2024"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "精製品輸出の米国向け",
+          "value": 85.3,
+          "unit": "%",
+          "year": "2024",
+          "geography": "全国→米国",
+          "denominator": "カナダの精製品輸出量",
+          "definition": "製品数量の比率。対米輸出価額175億CADと尺度が違う。",
+          "sources": [
+            "energy-trade-2024"
+          ]
+        }
+      ]
+    },
+    "hydro": {
+      "confidence": "高",
+      "adoptionReason": "資源条件と低炭素電力供給を数量で結び付けられる。",
+      "scale": [
+        {
+          "label": "水力発電量",
+          "value": 343.5,
+          "unit": "TWh",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "年間発電量",
+          "definition": "暫定値。電力・ガス・水道GDPではない。",
+          "sources": [
+            "hydro-2024"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "国内電力の水力比率",
+          "value": 55.2,
+          "unit": "%",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "全電源発電622.2TWh",
+          "definition": "原公表値から計算。丸めた数量の比率は概数。",
+          "sources": [
+            "hydro-2024"
+          ],
+          "numerator": 343.5,
+          "denominatorValue": 622.2
+        },
+        {
+          "label": "水力発電のQC集中",
+          "value": 50.2,
+          "unit": "%",
+          "year": "2024",
+          "geography": "QC",
+          "denominator": "全国水力343.5TWh",
+          "definition": "原公表値から計算。丸めた数量の比率は概数。",
+          "sources": [
+            "hydro-2024"
+          ],
+          "numerator": 172.5,
+          "denominatorValue": 343.5
+        },
+        {
+          "label": "水力発電の世界順位",
+          "value": 3,
+          "unit": "位",
+          "year": "2023",
+          "geography": "世界",
+          "denominator": "国別水力発電量",
+          "definition": "CERの2023年比較。",
+          "sources": [
+            "cer-canada"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "水力発電量の前年比",
+          "value": -3.8,
+          "unit": "%",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "2023年水力発電量",
+          "definition": "低炭素電源も渇水による数量変動を受ける。",
+          "sources": [
+            "hydro-2024"
+          ]
+        }
+      ]
+    },
+    "aluminum": {
+      "confidence": "高",
+      "adoptionReason": "水力と電力多消費素材を合わせて学ぶ。ボーキサイト採掘とは分ける。",
+      "scale": [
+        {
+          "label": "一次アルミ生産",
+          "value": 3314960,
+          "unit": "t",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "年間金属量",
+          "definition": "USGS一次金属。スクラップ再生量やアルミナ量ではない。",
+          "sources": [
+            "usgs-canada-2024"
+          ]
+        },
+        {
+          "label": "公表アルミ区分の直接GDP",
+          "value": 6.4,
+          "unit": "十億CAD",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "基本価格・名目GDP",
+          "definition": "Statistics Canada公表集計範囲。特定製錬所の値ではない。",
+          "sources": [
+            "critical-gdp-2024"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "一次アルミの世界位置",
+          "value": "4位・約5",
+          "unit": "%",
+          "year": "2024",
+          "geography": "世界",
+          "denominator": "世界一次アルミ生産",
+          "definition": "USGSの丸めた暫定シェア。",
+          "sources": [
+            "usgs-canada-2024"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "公表アルミ区分の雇用",
+          "value": 15800,
+          "unit": "人",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "公表アルミ区分の雇用",
+          "definition": "水力による供給条件を読む。個別製錬所への雇用配賦はしない。",
+          "sources": [
+            "critical-gdp-2024"
+          ]
+        }
+      ]
+    },
+    "potash": {
+      "confidence": "高",
+      "adoptionReason": "世界の肥料供給と食料安全保障に直結する。",
+      "scale": [
+        {
+          "label": "カリ鉱業の直接GDP",
+          "value": 7,
+          "unit": "十億CAD",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "基本価格・名目GDP",
+          "definition": "暫定値。2022年147億CADから変動。",
+          "sources": [
+            "critical-gdp-2024"
+          ]
+        },
+        {
+          "label": "生産量・K₂O換算",
+          "value": 14394026,
+          "unit": "t K₂O",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "年間K₂O相当量",
+          "definition": "製品重量MOPと分ける。",
+          "sources": [
+            "usgs-canada-2024"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "世界位置",
+          "value": "1位・約31",
+          "unit": "%",
+          "year": "2024",
+          "geography": "世界",
+          "denominator": "世界カリ生産・USGS比較",
+          "definition": "丸めた暫定シェア。",
+          "sources": [
+            "usgs-canada-2024"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "2022年の直接GDP",
+          "value": 14.7,
+          "unit": "十億CAD",
+          "year": "2022",
+          "geography": "全国",
+          "denominator": "基本価格・名目GDP",
+          "definition": "数量と肥料価格の変動が収益に効く。2024年との名目比較。",
+          "sources": [
+            "critical-gdp-2024"
+          ]
+        }
+      ]
+    },
+    "uranium": {
+      "confidence": "高",
+      "adoptionReason": "核燃料供給の世界位置と採掘・処理の集中が明確。",
+      "scale": [
+        {
+          "label": "鉱山生産・U含有量",
+          "value": 14309,
+          "unit": "t U",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "年間U含有量",
+          "definition": "U₃O₈重量ではない。USGS表の定義。",
+          "sources": [
+            "usgs-canada-2024"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "世界位置",
+          "value": "2位・約24",
+          "unit": "%",
+          "year": "2024",
+          "geography": "世界",
+          "denominator": "世界ウラン鉱山生産",
+          "definition": "USGSの丸めた暫定シェア。",
+          "sources": [
+            "usgs-canada-2024"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "確認した処理の組",
+          "value": 2,
+          "unit": "組",
+          "year": "資料確認2026",
+          "geography": "SKの4施設",
+          "denominator": "この地図で資料確認した鉱山→処理場の組",
+          "definition": "McArthur→Key、Cigar→McClean。全国施設数や生産シェアではない。",
+          "sources": [
+            "cameco-mcarthur",
+            "cameco-cigar"
+          ]
+        }
+      ]
+    },
+    "nickel": {
+      "confidence": "高",
+      "adoptionReason": "鉱山・精鉱・精錬の段階と合金向けの販売を比較できる。",
+      "scale": [
+        {
+          "label": "改訂鉱山生産",
+          "value": 132429,
+          "unit": "t",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "年間Ni量",
+          "definition": "NRCan改訂値。出荷量129,962tと別。",
+          "sources": [
+            "nrcan-2024-revised"
+          ]
+        },
+        {
+          "label": "鉱山出荷価額",
+          "value": 2.597263,
+          "unit": "十億CAD",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "出荷価額",
+          "definition": "GDPや精錬製品売上ではない。",
+          "sources": [
+            "nrcan-2024-revised"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "USGS世界位置",
+          "value": "4位・約3",
+          "unit": "%",
+          "year": "2024",
+          "geography": "世界",
+          "denominator": "USGSの鉱山生産比較",
+          "definition": "同資料の国内推計125,363t。改訂国内量と混ぜて世界シェアを再計算しない。",
+          "sources": [
+            "usgs-canada-2024"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "精錬生産・USGS",
+          "value": 110000,
+          "unit": "t",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "年間精錬Ni量",
+          "definition": "推計値。鉱山量と合計しない。高純度材は合金・航空宇宙・電子機器等の用途を持つ。",
+          "sources": [
+            "usgs-canada-2024",
+            "sudbury-complex"
+          ]
+        }
+      ]
+    },
+    "gold": {
+      "confidence": "高",
+      "adoptionReason": "金属量の地域集中と価格に敏感な出荷価額を対比できる。",
+      "scale": [
+        {
+          "label": "改訂鉱山生産",
+          "value": 185.555,
+          "unit": "t",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "年間金量",
+          "definition": "原表185,555kgをtへ換算。",
+          "sources": [
+            "nrcan-2024-revised"
+          ]
+        },
+        {
+          "label": "鉱山出荷価額",
+          "value": 19.22095,
+          "unit": "十億CAD",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "出荷価額",
+          "definition": "GDPではない。出荷重量は185,376kg。",
+          "sources": [
+            "nrcan-2024-revised"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "ON＋QCの生産集中",
+          "value": 69.0,
+          "unit": "%",
+          "year": "2024",
+          "geography": "ON＋QC",
+          "denominator": "全国金生産185,555kg",
+          "definition": "原公表値から計算。丸めた数量の比率は概数。",
+          "sources": [
+            "nrcan-2024-revised"
+          ],
+          "numerator": 127946,
+          "denominatorValue": 185555
+        },
+        {
+          "label": "USGS世界位置",
+          "value": "4位・約6",
+          "unit": "%",
+          "year": "2024",
+          "geography": "世界",
+          "denominator": "世界金鉱山生産",
+          "definition": "USGS国内200tは推計。改訂185.6tと混ぜない。",
+          "sources": [
+            "usgs-canada-2024"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "対米依存・契約別の価格耐性",
+          "value": null,
+          "unit": "",
+          "year": "未確認",
+          "geography": "カナダ",
+          "denominator": "該当する同一定義の比較未取得",
+          "definition": "同じ定義の最新系列を未収録。安全資産という用途だけで輸出先や価格耐性を決めない。",
+          "sources": [
+            "usgs-canada-2024"
+          ]
+        }
+      ]
+    },
+    "copper": {
+      "confidence": "高",
+      "adoptionReason": "電化の素材であり、国内生産のBC集中を定量化できる。",
+      "scale": [
+        {
+          "label": "改訂鉱山生産",
+          "value": 444587,
+          "unit": "t Cu",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "年間銅量",
+          "definition": "出荷437,861tとは別。",
+          "sources": [
+            "nrcan-2024-revised"
+          ]
+        },
+        {
+          "label": "鉱山出荷価額",
+          "value": 4.855395,
+          "unit": "十億CAD",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "出荷価額",
+          "definition": "GDPや精製銅の売上ではない。",
+          "sources": [
+            "nrcan-2024-revised"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "BCの鉱山生産集中",
+          "value": 67.5,
+          "unit": "%",
+          "year": "2024",
+          "geography": "BC",
+          "denominator": "全国銅鉱山生産444,587t",
+          "definition": "原公表値から計算。丸めた数量の比率は概数。",
+          "sources": [
+            "nrcan-2024-revised"
+          ],
+          "numerator": 300187,
+          "denominatorValue": 444587
+        }
+      ],
+      "strategy": [
+        {
+          "label": "一次銅精製生産・USGS",
+          "value": 288700,
+          "unit": "t",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "年間一次精製銅量",
+          "definition": "鉱山生産514,582tという同資料の値とは別段階。改訂鉱山値との比較に注意。",
+          "sources": [
+            "usgs-canada-2024"
+          ]
+        }
+      ]
+    },
+    "iron-ore": {
+      "confidence": "高（数量）・中（比較）",
+      "adoptionReason": "鉱山から加工・鉄道・港までの工程を明確に読める。",
+      "scale": [
+        {
+          "label": "鉄鉱石・粗重量",
+          "value": 70002000,
+          "unit": "t",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "年間gross weight",
+          "definition": "鉄含有量やペレット単独量ではない。",
+          "sources": [
+            "usgs-canada-2024"
+          ]
+        },
+        {
+          "label": "鉄含有量",
+          "value": 42000000,
+          "unit": "t Fe",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "年間Fe含有量",
+          "definition": "USGS推計。粗重量と足さない。",
+          "sources": [
+            "usgs-canada-2024"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "同一定義の世界順位・シェア",
+          "value": null,
+          "unit": "",
+          "year": "未確認",
+          "geography": "カナダ",
+          "denominator": "該当する同一定義の比較未取得",
+          "definition": "最新の比較を未収録。粗重量を世界の鉄含有量の分母に置かない。",
+          "sources": [
+            "usgs-canada-2024"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "確認されたQNSL鉄道",
+          "value": 418,
+          "unit": "km",
+          "year": "資料確認2026",
+          "geography": "Labrador City→Sept-Îles",
+          "denominator": "IOC専用鉄道の長さ",
+          "definition": "物流の接続条件。年間輸送量ではない。",
+          "sources": [
+            "ioc"
+          ]
+        }
+      ]
+    },
+    "steel-coal": {
+      "confidence": "中",
+      "adoptionReason": "製鉄の脱炭素移行と地域の雇用を考える補助品目。",
+      "scale": [
+        {
+          "label": "EVRの地域直接雇用",
+          "value": "5,000超",
+          "unit": "人",
+          "year": "資料確認2026",
+          "geography": "BC Elk Valley",
+          "denominator": "EVRの4鉱山等の企業雇用",
+          "definition": "Canada全国・製鉄用石炭業種全体の雇用ではない。",
+          "sources": [
+            "evr"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "EVRの製鉄用石炭鉱山",
+          "value": 4,
+          "unit": "鉱山",
+          "year": "資料確認2026",
+          "geography": "BC Elk Valley",
+          "denominator": "EVRの操業拠点",
+          "definition": "Fording River、Elkview、Greenhills、Line Creek。全国数ではない。",
+          "sources": [
+            "evr"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "製鉄用石炭だけの最新輸出量・世界順位",
+          "value": null,
+          "unit": "",
+          "year": "未確認",
+          "geography": "カナダ",
+          "denominator": "該当する同一定義の比較未取得",
+          "definition": "全石炭統計は発電用を含むため転用しない。製鉄の方式転換による需要変化を追う。",
+          "sources": [
+            "evr"
+          ]
+        }
+      ]
+    },
+    "auto": {
+      "confidence": "高",
+      "adoptionReason": "生産と輸出の大きさ、対米需要依存を対比できる。バスは立地例として別扱い。",
+      "scale": [
+        {
+          "label": "自動車・部品の国内輸出",
+          "value": 80.3,
+          "unit": "十億CAD",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "年間国内輸出価額",
+          "definition": "再輸出を除く。バス単独の規模ではない。",
+          "sources": [
+            "auto-trade-2024"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "国内輸出の米国向け",
+          "value": 94.1,
+          "unit": "%",
+          "year": "2024",
+          "geography": "全国→米国",
+          "denominator": "自動車・部品の国内輸出価額",
+          "definition": "数量や生産台数の比率ではない。",
+          "sources": [
+            "auto-trade-2024"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "バス単独の全国規模",
+          "value": null,
+          "unit": "",
+          "year": "未確認",
+          "geography": "カナダ",
+          "denominator": "該当する同一定義の比較未取得",
+          "definition": "バス工場の立地は確認。自動車・部品の輸出値をバスに割り当てない。",
+          "sources": [
+            "auto"
+          ]
+        }
+      ]
+    },
+    "aerospace": {
+      "confidence": "高",
+      "adoptionReason": "輸出型製造とQCへの雇用集中が明確。",
+      "scale": [
+        {
+          "label": "航空宇宙製造の直接GDP",
+          "value": 9.711,
+          "unit": "十億CAD",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "直接GDP",
+          "definition": "MROの51.29億CAD、間接・誘発効果と分離。",
+          "sources": [
+            "aerospace-2024"
+          ]
+        },
+        {
+          "label": "航空宇宙製造輸出",
+          "value": 25.684,
+          "unit": "十億CAD",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "年間輸出価額",
+          "definition": "製造売上372.22億CADと別。",
+          "sources": [
+            "aerospace-2024"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "製造雇用のQC集中",
+          "value": 61,
+          "unit": "%",
+          "year": "2024",
+          "geography": "QC",
+          "denominator": "全国航空宇宙製造直接雇用57,700人",
+          "definition": "企業本社所在地の比率ではない。",
+          "sources": [
+            "aerospace-2024"
+          ]
+        },
+        {
+          "label": "民間機／エンジン世界順位",
+          "value": "4位／3位",
+          "unit": "",
+          "year": "2025",
+          "geography": "世界",
+          "denominator": "ISEDの民間航空製品比較",
+          "definition": "シミュレーターは1位。2024年GDPと別年。",
+          "sources": [
+            "aerospace-2024"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "製造輸出／製造売上",
+          "value": 69.0,
+          "unit": "%",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "航空宇宙製造売上372.22億CAD",
+          "definition": "原公表値から計算。丸めた数量の比率は概数。",
+          "sources": [
+            "aerospace-2024"
+          ],
+          "numerator": 25.684,
+          "denominatorValue": 37.222
+        }
+      ]
+    },
+    "food": {
+      "confidence": "高",
+      "adoptionReason": "食品加工全体の規模を示し、牛肉工場と冷凍ばれいしょの品目根拠を分ける。",
+      "scale": [
+        {
+          "label": "食品・飲料加工売上",
+          "value": 173.4,
+          "unit": "十億CAD",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "全食品・飲料加工",
+          "definition": "牛肉や冷凍ばれいしょ単独の値ではない。",
+          "sources": [
+            "food-2024"
+          ]
+        },
+        {
+          "label": "冷凍ばれいしょ輸出",
+          "value": 2.711290918,
+          "unit": "十億CAD",
+          "year": "2024/25",
+          "geography": "全国",
+          "denominator": "作物年の冷凍ばれいしょ輸出価額",
+          "definition": "フライドポテトだけとは限らない。生鮮を除く。",
+          "sources": [
+            "potato-2024"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "食品・飲料加工のGDP比",
+          "value": 1.6,
+          "unit": "%",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "全国GDP",
+          "definition": "全食品・飲料加工の比率。牛肉への転用をしない。",
+          "sources": [
+            "food-2024"
+          ]
+        },
+        {
+          "label": "冷凍ばれいしょ輸出のMB比",
+          "value": 29.4,
+          "unit": "%",
+          "year": "2024/25",
+          "geography": "MB",
+          "denominator": "全国冷凍ばれいしょ輸出価額",
+          "definition": "原公表値から計算。丸めた数量の比率は概数。",
+          "sources": [
+            "potato-2024"
+          ],
+          "numerator": 796369115,
+          "denominatorValue": 2711290918
+        }
+      ],
+      "strategy": [
+        {
+          "label": "冷凍ばれいしょ輸出の対米比",
+          "value": 90.4,
+          "unit": "%",
+          "year": "2024/25",
+          "geography": "全国→米国",
+          "denominator": "全国冷凍ばれいしょ輸出価額",
+          "definition": "原公表値から計算。丸めた数量の比率は概数。",
+          "sources": [
+            "potato-2024"
+          ],
+          "numerator": 2451115743,
+          "denominatorValue": 2711290918
+        },
+        {
+          "label": "牛肉加工単独のGDP・全国雇用",
+          "value": null,
+          "unit": "",
+          "year": "未確認",
+          "geography": "カナダ",
+          "denominator": "該当する同一定義の比較未取得",
+          "definition": "CargillのHigh River・Guelphの加工施設は確認。食品全体の数値を牛肉に付け替えない。",
+          "sources": [
+            "cargill-food"
+          ]
+        }
+      ]
+    },
+    "canola-crush": {
+      "confidence": "高",
+      "adoptionReason": "油と飼料を同時に生む加工が、農産物輸出とは別の役割を持つ。",
+      "scale": [
+        {
+          "label": "搾油投入カノーラ",
+          "value": 11.4,
+          "unit": "百万t",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "暦年の種子投入量",
+          "definition": "一次農業の種子生産量とは別。",
+          "sources": [
+            "canola-2024"
+          ]
+        },
+        {
+          "label": "油／ミール産出",
+          "value": "4.8／6.6",
+          "unit": "百万t",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "加工産出量",
+          "definition": "同じ投入から生まれる別製品。GDPの足し算ではない。",
+          "sources": [
+            "canola-2024"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "米国の搾油投入量",
+          "value": 2.2,
+          "unit": "百万t",
+          "year": "2024",
+          "geography": "米国",
+          "denominator": "同年カノーラ搾油投入量",
+          "definition": "Canada11.4百万tとの北米比較。世界順位ではない。",
+          "sources": [
+            "canola-2024"
+          ]
+        },
+        {
+          "label": "Yorkton工場能力",
+          "value": 2.5,
+          "unit": "百万t/年",
+          "year": "確認2026",
+          "geography": "SK Yorkton",
+          "denominator": "Richardsonの処理能力",
+          "definition": "実生産量ではない。",
+          "sources": [
+            "richardson-oilseed"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "カノーラ油輸出",
+          "value": 3.5,
+          "unit": "百万t",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "暦年の油輸出量",
+          "definition": "種子輸出・ミール輸出と分ける。",
+          "sources": [
+            "canola-2024"
+          ]
+        }
+      ]
+    },
+    "flour": {
+      "confidence": "高（国内加工）・中（地図網羅）",
+      "adoptionReason": "主食原料を国内で利用する工程。確認した2工場は全国順位を示さない。",
+      "scale": [
+        {
+          "label": "小麦製粉投入",
+          "value": 3.3,
+          "unit": "百万t",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "暦年の小麦投入量",
+          "definition": "畑の収穫量と別。",
+          "sources": [
+            "flour-2024"
+          ]
+        },
+        {
+          "label": "小麦粉産出",
+          "value": 2.5,
+          "unit": "百万t",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "暦年の小麦粉生産",
+          "definition": "投入と足さない。",
+          "sources": [
+            "flour-2024"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "小麦粉輸出",
+          "value": 0.22,
+          "unit": "百万t",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "暦年輸出重量",
+          "definition": "国内利用の残差をこの2数字だけで厳密に決めない。",
+          "sources": [
+            "flour-2024"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "小麦粉輸出の米国向け",
+          "value": 92.8,
+          "unit": "%",
+          "year": "2024",
+          "geography": "全国→米国",
+          "denominator": "小麦粉輸出重量",
+          "definition": "輸出先集中。全国売上の92.8%という意味ではない。",
+          "sources": [
+            "flour-2024"
+          ]
+        }
+      ]
+    },
+    "seafood": {
+      "confidence": "高",
+      "adoptionReason": "沿岸の加工雇用と食料輸出を、原料漁獲から分ける。",
+      "scale": [
+        {
+          "label": "魚介加工収入",
+          "value": 7.03216,
+          "unit": "十億CAD",
+          "year": "2023",
+          "geography": "全国",
+          "denominator": "加工業の年間収入",
+          "definition": "2024年資料内の2023年統計。",
+          "sources": [
+            "seafood-2024"
+          ]
+        },
+        {
+          "label": "魚介加工雇用",
+          "value": 18334,
+          "unit": "人",
+          "year": "2023",
+          "geography": "全国",
+          "denominator": "加工業の雇用",
+          "definition": "漁業・養殖の雇用を含まない。",
+          "sources": [
+            "seafood-2024"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "魚介加工の直接GDP",
+          "value": 1.3,
+          "unit": "十億CAD",
+          "year": "2023",
+          "geography": "全国",
+          "denominator": "DFOモデルの直接GDP",
+          "definition": "業種収入とは別。",
+          "sources": [
+            "seafood-2024"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "魚介類輸出・全段階",
+          "value": 8.111368,
+          "unit": "十億CAD",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "魚介類の年間輸出価額",
+          "definition": "原料・加工品を含む。加工売上だけの輸出額ではない。",
+          "sources": [
+            "seafood-2024"
+          ]
+        }
+      ]
+    },
+    "wood": {
+      "confidence": "高",
+      "adoptionReason": "製材の数量と対米需要集中を地域の木材加工と結び付ける。",
+      "scale": [
+        {
+          "label": "針葉樹製材生産",
+          "value": 47.895,
+          "unit": "百万m³",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "年間製材体積",
+          "definition": "立木・丸太・木材製品全体とは別。",
+          "sources": [
+            "wood-2024"
+          ]
+        },
+        {
+          "label": "木材製品製造GDP",
+          "value": 21.5143,
+          "unit": "十億CAD",
+          "year": "2021",
+          "geography": "全国13州・準州",
+          "denominator": "NAICS321・基本価格・当年価格",
+          "definition": "保持原CSVの13地域を合計。紙322と分離。",
+          "sources": [
+            "gdp-2021-retained"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "対米製材輸出／国内製材生産",
+          "value": 58.3,
+          "unit": "%",
+          "year": "2024",
+          "geography": "全国→米国",
+          "denominator": "国内針葉樹製材生産47.895百万m³",
+          "definition": "原公表値から計算。丸めた数量の比率は概数。",
+          "sources": [
+            "wood-2024"
+          ],
+          "numerator": 27.927,
+          "denominatorValue": 47.895
+        }
+      ],
+      "strategy": [
+        {
+          "label": "木材製品輸出の米国向け",
+          "value": 86,
+          "unit": "%",
+          "year": "2024",
+          "geography": "全国→米国",
+          "denominator": "木材製品輸出価額",
+          "definition": "紙・パルプの比率へ転用しない。",
+          "sources": [
+            "wood-2024"
+          ]
+        }
+      ]
+    },
+    "paper": {
+      "confidence": "高（GDP分類）・中（最新比較）",
+      "adoptionReason": "木材からパルプ・紙への加工を製材と分ける。",
+      "scale": [
+        {
+          "label": "紙製品製造GDP",
+          "value": 9.034,
+          "unit": "十億CAD",
+          "year": "2021",
+          "geography": "全国13州・準州",
+          "denominator": "NAICS322・基本価格・当年価格",
+          "definition": "保持原CSVの13地域を合計。木材321を含まない。",
+          "sources": [
+            "gdp-2021-retained"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "最新のパルプ／紙別世界位置",
+          "value": null,
+          "unit": "",
+          "year": "未確認",
+          "geography": "カナダ",
+          "denominator": "該当する同一定義の比較未取得",
+          "definition": "紙製品GDPにはパルプを含む公表業種範囲。パルプだけの規模へ転用しない。",
+          "sources": [
+            "gdp-2021-retained"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "紙・パルプ単独の対米依存",
+          "value": null,
+          "unit": "",
+          "year": "未確認",
+          "geography": "カナダ",
+          "denominator": "該当する同一定義の比較未取得",
+          "definition": "製材・木材製品の86%を紙へ転用しない。工場資料で原料と製品を確認する。",
+          "sources": [
+            "domtar-mills",
+            "canfor-locations"
+          ]
+        }
+      ]
+    },
+    "finance": {
+      "confidence": "高",
+      "adoptionReason": "国内の大きな付加価値とONへの集中を示す。都市順位を企業売上順位にしない。",
+      "scale": [
+        {
+          "label": "金融・保険GDP",
+          "value": 168.2093,
+          "unit": "十億CAD",
+          "year": "2021",
+          "geography": "全国13州・準州",
+          "denominator": "NAICS52・基本価格・当年価格",
+          "definition": "不動産を含まない。2024年四半期年率を通年GDPと扱わない。",
+          "sources": [
+            "gdp-2021-retained"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "金融・保険GDPのON集中",
+          "value": 53.3,
+          "unit": "%",
+          "year": "2021",
+          "geography": "ON",
+          "denominator": "全国金融・保険GDP168,209.3百万CAD",
+          "definition": "原公表値から計算。丸めた数量の比率は概数。",
+          "sources": [
+            "gdp-2021-retained"
+          ],
+          "numerator": 89700.3,
+          "denominatorValue": 168209.3
+        }
+      ],
+      "strategy": [
+        {
+          "label": "国際金融シェア・顧客別収益",
+          "value": null,
+          "unit": "",
+          "year": "未確認",
+          "geography": "カナダ",
+          "denominator": "該当する同一定義の比較未取得",
+          "definition": "都市の誘致資料から世界順位や海外売上割合を推定しない。",
+          "sources": [
+            "toronto-finance"
+          ]
+        }
+      ]
+    },
+    "digital": {
+      "confidence": "高",
+      "adoptionReason": "海外顧客から稼ぐソフトウェアと国内のシステム設計を分ける。",
+      "scale": [
+        {
+          "label": "ソフトウェア出版社売上",
+          "value": 27.9,
+          "unit": "十億CAD",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "ソフトウェア出版社の売上",
+          "definition": "情報通信全体やシステム設計売上ではない。",
+          "sources": [
+            "software-2024"
+          ]
+        },
+        {
+          "label": "システム設計売上",
+          "value": 113,
+          "unit": "十億CAD",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "コンピューターシステム設計の売上",
+          "definition": "別業種として表示。地図の全IT地点の合計に配賦しない。",
+          "sources": [
+            "software-2024"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "システム設計売上のON／QC比",
+          "value": "51.3／23.8",
+          "unit": "%",
+          "year": "2024",
+          "geography": "ON／QC",
+          "denominator": "全国システム設計売上",
+          "definition": "ソフトウェア出版社の地域比率へ転用しない。",
+          "sources": [
+            "software-2024"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "ソフトウェア出版社の海外売上比",
+          "value": 68.8,
+          "unit": "%",
+          "year": "2024",
+          "geography": "全国→海外",
+          "denominator": "ソフトウェア出版社売上",
+          "definition": "対米だけの割合ではない。",
+          "sources": [
+            "software-2024"
+          ]
+        },
+        {
+          "label": "同業の営業利益率",
+          "value": 4.7,
+          "unit": "%",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "ソフトウェア出版社の営業収入",
+          "definition": "大きい売上と利益持続性は別。",
+          "sources": [
+            "software-2024"
+          ]
+        }
+      ]
+    },
+    "logistics": {
+      "confidence": "高",
+      "adoptionReason": "港湾貨物と運輸業種GDPを分け、資源・製造の市場接続を読む。",
+      "scale": [
+        {
+          "label": "運輸・倉庫GDP",
+          "value": 96.515,
+          "unit": "十億CAD",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "固定2017年価格・業種GDP",
+          "definition": "旅客も含む。貨物物流だけのGDPではない。",
+          "sources": [
+            "transport-2024-gdp"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "運輸・倉庫のGDP比",
+          "value": 4.3,
+          "unit": "%",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "全業種GDP2,267.794十億CAD・固定2017年価格",
+          "definition": "原公表値から計算。丸めた数量の比率は概数。",
+          "sources": [
+            "transport-2024-gdp"
+          ],
+          "numerator": 96.515,
+          "denominatorValue": 2267.794
+        },
+        {
+          "label": "Vancouver港／Prince Rupert港",
+          "value": "158／23.5",
+          "unit": "百万t",
+          "year": "2024",
+          "geography": "各港",
+          "denominator": "年間全貨物重量",
+          "definition": "コンテナ個数や都市GDPではない。",
+          "sources": [
+            "transport"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "鉄道輸送GDP",
+          "value": 9.839,
+          "unit": "十億CAD",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "固定2017年価格・鉄道輸送業種",
+          "definition": "車両製造とは別。物流拠点の集積理由を読む。",
+          "sources": [
+            "transport-2024-gdp"
+          ]
+        }
+      ]
+    },
+    "tourism": {
+      "confidence": "高",
+      "adoptionReason": "国際観光だけでなく国内需要の大きさを示す。",
+      "scale": [
+        {
+          "label": "観光需要による直接GDP",
+          "value": 50.8,
+          "unit": "十億CAD",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "当年価格・直接観光GDP",
+          "definition": "宿泊・飲食など業種全体のGDPとは別。",
+          "sources": [
+            "tourism-2024"
+          ]
+        },
+        {
+          "label": "直接観光雇用",
+          "value": 702700,
+          "unit": "仕事",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "観光需要に帰属する直接jobs",
+          "definition": "観光関連業種全体の約200万jobsと分離。",
+          "sources": [
+            "tourism-2024"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "全国GDPに占める観光",
+          "value": 1.8,
+          "unit": "%",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "全国GDP",
+          "definition": "観光需要の直接GDP比。",
+          "sources": [
+            "tourism-2024"
+          ]
+        },
+        {
+          "label": "Banff国立公園訪問者",
+          "value": 4.21,
+          "unit": "百万人",
+          "year": "2024",
+          "geography": "Banff国立公園",
+          "denominator": "年間公園訪問者数",
+          "definition": "Niagaraの国内訪問回数と同一尺度ではない。",
+          "sources": [
+            "banff-2024"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "観光収入の国内需要比",
+          "value": 76.0,
+          "unit": "%",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "全観光収入129.7十億CAD",
+          "definition": "原公表値から計算。丸めた数量の比率は概数。",
+          "sources": [
+            "tourism-2024"
+          ],
+          "numerator": 98.6,
+          "denominatorValue": 129.7
+        },
+        {
+          "label": "Niagaraの国内訪問",
+          "value": 8.256,
+          "unit": "百万回",
+          "year": "2024",
+          "geography": "Niagara Falls・ワイン地域",
+          "denominator": "国内旅行による訪問数",
+          "definition": "反復訪問・観光以外の目的を含む。公園入場者と足さない。",
+          "sources": [
+            "domestic-visits-2024"
+          ]
+        }
+      ]
+    },
+    "battery": {
+      "confidence": "中（実績と計画）",
+      "adoptionReason": "実績のあるセル生産と将来工場を対比する成長テーマ。",
+      "scale": [
+        {
+          "label": "NextStar累計セル生産",
+          "value": 1,
+          "unit": "百万セル",
+          "year": "2026-02-12",
+          "geography": "Windsor工場",
+          "denominator": "2025年11月商業開始からの累計",
+          "definition": "年間生産能力や国全体の年産ではない。",
+          "sources": [
+            "nextstar-2026"
+          ]
+        },
+        {
+          "label": "NextStar直接雇用",
+          "value": "1,300超",
+          "unit": "人",
+          "year": "2026-02-12",
+          "geography": "Windsor工場",
+          "denominator": "企業工場の直接雇用",
+          "definition": "全国電池業種の雇用ではない。",
+          "sources": [
+            "nextstar-2026"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "全国電池生産の世界シェア",
+          "value": null,
+          "unit": "",
+          "year": "未確認",
+          "geography": "カナダ",
+          "denominator": "該当する同一定義の比較未取得",
+          "definition": "セル数からGWhを推定しない。計画能力を現在の世界供給に入れない。",
+          "sources": [
+            "nextstar-2026"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "St. Thomasの開始計画",
+          "value": 2027,
+          "unit": "年",
+          "year": "発表2023-03",
+          "geography": "ON St. Thomas",
+          "denominator": "PowerCo発表の開始予定年",
+          "definition": "操業実績ではない。最新進捗は未確認。",
+          "sources": [
+            "powerco-plan"
+          ]
+        }
+      ]
+    },
+    "lithium": {
+      "confidence": "中",
+      "adoptionReason": "所有・調達の政治性と、鉱石から電池化学品への段階を学ぶ。",
+      "scale": [
+        {
+          "label": "スポジュメン生産・推計",
+          "value": 189000,
+          "unit": "t",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "年間鉱石製品重量",
+          "definition": "金属Li含有量・炭酸Li換算ではない。",
+          "sources": [
+            "usgs-canada-2024"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "USGSが確認した操業鉱山",
+          "value": 2,
+          "unit": "鉱山",
+          "year": "2024",
+          "geography": "QC・MB",
+          "denominator": "USGSの2024年操業鉱山",
+          "definition": "NALとTanco。現在の操業を確認した資料ではない。",
+          "sources": [
+            "usgs-canada-2024"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "Tanco所有者",
+          "value": "Sinomine",
+          "unit": "",
+          "year": "2024",
+          "geography": "MB Tanco",
+          "denominator": "USGS記載の企業所有",
+          "definition": "中国企業所有。所有と輸出先・顧客は別で、未確認の販売関係は描かない。",
+          "sources": [
+            "usgs-canada-2024"
+          ]
+        }
+      ]
+    },
+    "graphite": {
+      "confidence": "中",
+      "adoptionReason": "電池供給網の計画と実生産の差、休止リスクを学ぶ。",
+      "scale": [
+        {
+          "label": "天然黒鉛鉱山生産",
+          "value": 11700,
+          "unit": "t",
+          "year": "2024",
+          "geography": "全国",
+          "denominator": "年間天然黒鉛重量",
+          "definition": "合成黒鉛・負極材製品を含まない。",
+          "sources": [
+            "usgs-canada-2024"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "Lac des Îlesの状態",
+          "value": "休止・再開延期",
+          "unit": "",
+          "year": "2026-09-01",
+          "geography": "QC Lac des Îles",
+          "denominator": "Northern Graphite Q2発表",
+          "definition": "Q2採掘・処理なし。過去生産を現在稼働と扱わない。",
+          "sources": [
+            "ldi-2026"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "Matawinie phase2の状態",
+          "value": "建設開始",
+          "unit": "",
+          "year": "2026-08-13",
+          "geography": "QC Matawinie",
+          "denominator": "NMG Q2発表",
+          "definition": "最終投資決定・建設。商業生産量ではない。",
+          "sources": [
+            "nmg-2026"
+          ]
+        }
+      ]
+    },
+    "shipbuilding": {
+      "confidence": "中",
+      "adoptionReason": "国家調達による長期需要を学ぶ補助品目。",
+      "scale": [
+        {
+          "label": "船舶・ボート製造直接GDP",
+          "value": 1.1,
+          "unit": "十億CAD",
+          "year": "2023",
+          "geography": "全国",
+          "denominator": "DFOモデルの直接GDP",
+          "definition": "NSSの間接・誘発効果を含む推計と分離。",
+          "sources": [
+            "seafood-2024"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "国家造船戦略の提携造船所",
+          "value": 3,
+          "unit": "造船所",
+          "year": "確認2026",
+          "geography": "BC・NS・QC",
+          "denominator": "NSSの大型船提携造船所",
+          "definition": "Vancouver、Halifax、Lévis。全国の全造船所数ではない。",
+          "sources": [
+            "nss"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "NSS推計GDP・年間平均",
+          "value": 2.3,
+          "unit": "十億CAD",
+          "year": "2012–2024",
+          "geography": "全国",
+          "denominator": "同期間の推計経済波及効果の年平均",
+          "definition": "2024年の直接GDPではなく、船舶製造GDPと合算しない。",
+          "sources": [
+            "nss"
+          ]
+        }
+      ]
+    },
+    "railway": {
+      "confidence": "中",
+      "adoptionReason": "国内交通調達と供給者の連なりを学ぶ補助品目。",
+      "scale": [
+        {
+          "label": "鉄道車両製造GDP",
+          "value": 0.4654,
+          "unit": "十億CAD",
+          "year": "2021",
+          "geography": "全国13州・準州",
+          "denominator": "NAICS3365・基本価格・当年価格",
+          "definition": "鉄道運行GDPではない。保持原CSVで再現できる。",
+          "sources": [
+            "gdp-2021-retained"
+          ]
+        }
+      ],
+      "comparison": [
+        {
+          "label": "Alstom Canada直接雇用",
+          "value": "約5,000",
+          "unit": "人",
+          "year": "2023/24",
+          "geography": "Canada企業事業",
+          "denominator": "Alstomの国内直接雇用",
+          "definition": "車両製造だけの業種雇用ではない。",
+          "sources": [
+            "alstom-impact"
+          ]
+        }
+      ],
+      "strategy": [
+        {
+          "label": "Alstom国内供給者",
+          "value": "約920",
+          "unit": "社",
+          "year": "2023/24",
+          "geography": "全国",
+          "denominator": "同社が取引する国内供給者",
+          "definition": "全車両業種の取引先数・売上集中度ではない。",
+          "sources": [
+            "alstom-impact"
+          ]
+        }
+      ]
+    }
+  }
+}
