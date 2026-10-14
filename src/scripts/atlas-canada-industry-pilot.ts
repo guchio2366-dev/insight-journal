@@ -1,7 +1,7 @@
 import {projectCanadaMap,canadaLegacyPoint} from '../lib/atlas-canada-map-presentation';
 import {canadaIndustryPilot as pilot,pilotIndustryLabel,readPilotState,writePilotState,zoomPilotFrame,type PilotState,type PilotCluster} from '../lib/atlas-canada-industry-pilot';
 import population from '../data/atlas/canada/population.json';
-import {groupPilotLabelPoints,placePilotLabel} from '../lib/atlas-canada-industry-labels';
+import {groupPilotLabelPoints,placePilotLabelGroups} from '../lib/atlas-canada-industry-labels';
 import {readCanadaPopulationState,writeCanadaPopulationState,copyCanadaPopulationMapState} from '../lib/atlas-canada-population';
 import {isCanadaDemographicTopic} from '../lib/atlas-canada-demographics';
 import {canadaIndustryEvidence,formatCanadaIndustryFact} from '../lib/atlas-canada-industry-evidence';
@@ -33,7 +33,7 @@ export function initCanadaIndustryPilot(root:HTMLElement){
   const screen=(coordinates:number[])=>{const [x,y]=projectCanadaMap(coordinates);return [matrix.a*x+matrix.c*y+matrix.e-rect.x,matrix.b*x+matrix.d*y+matrix.f-rect.y];};
   // All peers reserve their places even while only one industry is displayed.
   const visible=pilot.clusters.filter(c=>c.sectors.includes(state.sector)).map(c=>({c,point:screen(c.coordinates)})).filter(({point:[x,y]})=>x>=0&&x<=w&&y>=0&&y<=h);
-  const groups=groupPilotLabelPoints(visible),keyHeight=q('.ca-pilot-map-key').getBoundingClientRect().height;
+  const groups=groupPilotLabelPoints(visible,130),keyHeight=q('.ca-pilot-map-key').getBoundingClientRect().height;
   const occupied:number[][]=[[0,0,w,keyHeight+14],[0,h-25,w,h],...visible.map(({point:[x,y]})=>[x-7,y-7,x+7,y+7])];
   // The only arrow is the source-documented supply relation. Its sea route is schematic.
   for(const flow of pilot.flows.filter(f=>f.sector===state.sector&&(!state.only||state.industry===f.industry))){
@@ -59,12 +59,7 @@ export function initCanadaIndustryPilot(root:HTMLElement){
    group.addEventListener('click',()=>chooseSite(c));group.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();chooseSite(c);}});lines.append(group);
   }
   // Selection changes emphasis, never the allocation order or a label's size.
-  const center=(g:typeof groups[number])=>[0,1].map(i=>g.reduce((sum,p)=>sum+p.point[i],0)/g.length);
-  const centers=new Map(groups.map(g=>[g,center(g)]));
-  const density=(g:typeof groups[number])=>groups.filter(peer=>Math.hypot(...centers.get(g)!.map((value,i)=>value-centers.get(peer)![i]))<150).length;
-  // Allocate the constrained ON/QC neighbourhood before isolated groups. This
-  // depends only on coordinates and frame, so selection cannot rearrange cards.
-  const ordered=groups.sort((a,b)=>density(b)-density(a)||b.length-a.length||a[0].c.id.localeCompare(b[0].c.id));
+  const ordered=groups.sort((a,b)=>a[0].c.id.localeCompare(b[0].c.id)),entries:{group:typeof groups[number];card:HTMLButtonElement;item:typeof pilot.industries[number]}[]=[];
   for(const group of ordered){
    const industry=group[0].c.industry,item=pilot.industries.find(i=>i.id===industry)!,card=document.createElement('button');card.type='button';card.className='ca-pilot-map-label';card.dataset.caLabelGroup=industry;card.dataset.caLabelSites=group.map(v=>v.c.id).join(',');card.style.setProperty('--pilot-color',item.color);
    if(state.industry&&industry!==state.industry)card.classList.add('is-context');if(industry===state.industry)card.classList.add('is-highlighted');
@@ -73,9 +68,13 @@ export function initCanadaIndustryPilot(root:HTMLElement){
    const place=document.createElement('small');const places=[...new Set(group.map(v=>v.c.place.split(/[／〜]/)[0]))];if(state.sector==='services'){card.dataset.sector='services';for(const [index,name]of places.entries()){if(index)place.append('・');const city=document.createElement('span');city.textContent=name;city.style.display='inline-block';place.append(city);}}else place.textContent=places.length<=2?places.join('・'):places.slice(0,2).join('・')+'ほか';card.append(place);
    const statuses=[...new Set(group.filter(v=>v.c.status&&v.c.status!=='operating').map(v=>v.c.status))];if(statuses.length){const status=document.createElement('span');status.className='ca-pilot-status';status.textContent=statuses.map(s=>s==='planned'?'計画':s==='construction'?'建設':'休止').join('・');label.append(status);}
    card.addEventListener('click',()=>chooseIndustry(industry));overlay.append(card);
-   const box=placePilotLabel(group.map(v=>v.point),[card.offsetWidth||110,card.offsetHeight||38],[w,h],occupied);
+   entries.push({group,card,item});
+  }
+  const boxes=placePilotLabelGroups(entries.map(({group,card})=>({id:group[0].c.id,points:group.map(v=>v.point),size:[card.offsetWidth||110,card.offsetHeight||38]})),[w,h],occupied);
+  for(const [index,{group,card,item}]of entries.entries()){
+   const industry=item.id,box=boxes[index];
    if(!box){card.remove();root.dataset.labelsIncomplete='true';root.dataset.labelsMissing=[root.dataset.labelsMissing,group.map(v=>v.c.id).join(',')].filter(Boolean).join(';');continue;}
-   occupied.push(box);card.style.left=box[0]+'px';card.style.top=box[1]+'px';
+   card.style.left=box[0]+'px';card.style.top=box[1]+'px';
    if(state.only&&industry!==state.industry){card.hidden=true;continue;}
    for(const {point:[x,y],c}of group){const endX=Math.max(box[0],Math.min(box[2],x)),endY=Math.max(box[1],Math.min(box[3],y));
     lines.insertBefore(element('line',{x1:x,y1:y,x2:endX,y2:endY,stroke:item.color,'stroke-width':industry===state.industry?1.4:.9,'data-ca-correspondence':c.id}),lines.firstChild);

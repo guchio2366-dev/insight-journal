@@ -25,3 +25,22 @@ export function placePilotLabel(points:number[][],size:number[],frame:number[],o
  }
  return null;
 }
+
+/** Compare deterministic packing orders; selection is deliberately absent. */
+export function placePilotLabelGroups(items:{id:string;points:number[][];size:number[]}[],frame:number[],reserved:number[][]){
+ const centers=items.map(item=>[0,1].map(axis=>item.points.reduce((sum,p)=>sum+p[axis],0)/item.points.length));
+ const ids=items.map((_,index)=>index),tie=(a:number,b:number)=>items[b].points.length-items[a].points.length||items[a].id.localeCompare(items[b].id);
+ const orders=[120,150,180].map(radius=>{
+  const density=centers.map(c=>centers.filter(p=>Math.hypot(c[0]-p[0],c[1]-p[1])<radius).length);
+  return [...ids].sort((a,b)=>density[b]-density[a]||tie(a,b));
+ });
+ orders.push([...ids].sort(tie),[...ids].sort((a,b)=>centers[b][0]-centers[a][0]||tie(a,b)));
+ let best:(number[]|null)[]=items.map(()=>null),bestCount=0;
+ for(const order of orders){
+  const occupied=reserved.slice(),boxes:(number[]|null)[]=items.map(()=>null);let count=0;
+  for(const index of order){const item=items[index],box=placePilotLabel(item.points,item.size,frame,occupied);if(box){boxes[index]=box;occupied.push(box);count++;}}
+  if(count>bestCount){best=boxes;bestCount=count;}
+  if(count===items.length)break;
+ }
+ return best;
+}
