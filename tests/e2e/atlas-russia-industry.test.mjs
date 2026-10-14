@@ -7,8 +7,8 @@ const bundle=await build({stdin:{contents:"export {initRussiaIndustry} from './s
 const html=readFileSync('dist/atlas/russia/industry/index.html','utf8').replace(/<script(?![^>]*type="application\/json")[^>]*>[\s\S]*?<\/script>/g,'');
 after(()=>stop());
 function page(query='',interactive=true){const win=new Window({url:'https://example.test/insight-journal/atlas/russia/industry/'+query,settings:{enableJavaScriptEvaluation:true,disableCSSFileLoading:true,disableJavaScriptFileLoading:true,suppressInsecureJavaScriptEnvironmentWarning:true}});win.document.body.innerHTML=html;win.ResizeObserver=class{observe(){}};win.eval(bundle.outputFiles[0].text);const root=win.document.querySelector('[data-ru-industry]');if(interactive)win.Ru.initRussiaIndustry(root);return {win,root,q:s=>root.querySelector(s)};}
-test('Russia industry SSR retains a real map, all 19 product statistics, 48 places and source definitions',()=>{
- const {win,root,q}=page('',false);try{assert.equal(root.dataset.ruReady,undefined);assert.equal(q('[data-ru-map]').getAttribute('viewBox'),'0 0 1200 597');assert.ok(q('[data-ru-overlay] circle'));assert.equal(root.querySelectorAll('[data-ru-stat]').length,19);assert.equal(q('[data-ru-site-list]').children.length,48);assert.equal(root.querySelectorAll('[data-field-link]').length,5);assert.match(q('#russia-industry-sources').textContent,/直接|相手|報告/);assert.match(root.textContent,/未取得/);assert.ok(q('noscript'));}finally{win.happyDOM.abort();}
+test('Russia industry SSR retains a real map, all 19 product statistics, 49 places and source definitions',()=>{
+ const {win,root,q}=page('',false);try{assert.equal(root.dataset.ruReady,undefined);assert.equal(q('[data-ru-map]').getAttribute('viewBox'),'0 0 1200 597');assert.ok(q('[data-ru-overlay] circle'));assert.equal(root.querySelectorAll('[data-ru-stat]').length,19);assert.equal(q('[data-ru-site-list]').children.length,49);assert.equal(root.querySelectorAll('[data-field-link]').length,5);assert.match(q('#russia-industry-sources').textContent,/直接|相手|報告/);assert.match(root.textContent,/未取得/);assert.ok(q('noscript'));}finally{win.happyDOM.abort();}
 });
 test('all sectors, products and site choices update evidence and keep label positions stable',()=>{
  const {win,root,q}=page('?keep=source#reference');try{
@@ -27,4 +27,14 @@ test('direct links, browser navigation, only and keyboard tabs preserve the expe
   win.history.replaceState(null,'','?sector=resources&industry=diamond');win.dispatchEvent(new win.PopStateEvent('popstate'));assert.equal(q('[data-ru-title]').textContent,'天然ダイヤモンド');
   const marker=q('[data-ru-marker="mirny-diamond"]');assert.ok(marker);marker.dispatchEvent(new win.KeyboardEvent('keydown',{key:' ',bubbles:true}));assert.equal(new URL(win.location.href).searchParams.get('site'),'mirny-diamond');
  }finally{win.happyDOM.abort();}
+});
+test('Zelenogorsk deep link explains city identity, guide-point precision and both public sources',()=>{
+ for(const sector of ['manufacturing','services']){
+  const {win,q}=page(`?sector=${sector}&industry=enrichment&site=zelenogorsk-enrichment`);try{
+   assert.equal(q('[data-ru-site-title]').textContent,'ゼレノゴルスク（クラスノヤルスク地方）');
+   assert.match(q('[data-ru-site-note]').textContent,/56\.11度・東経約94\.59度/);assert.match(q('[data-ru-site-note]').textContent,/工場敷地・建物の精密位置ではない/);
+   const links=[...q('[data-ru-site-sources]').querySelectorAll('a')].map(a=>a.href);assert.ok(links.includes(win.Ru.ruSources.geonames.url));assert.ok(links.includes(win.Ru.ruSources.zelenogorskCity.url));
+   assert.ok(q('[data-ru-stat=enrichment]').textContent.includes('2,913.3万SWU/年'));assert.equal(q('[data-ru-selected]').hidden,false);
+  }finally{win.happyDOM.abort();}
+ }
 });

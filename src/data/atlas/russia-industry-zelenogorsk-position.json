@@ -1,0 +1,37 @@
+{
+  "source": {
+    "publisher": "GeoNames",
+    "url": "https://www.geonames.org/advanced-search.html?q=Krasnoyarsk%2C+Russia",
+    "recordUrl": "https://www.geonames.org/1488253/zelenogorsk.html",
+    "accessedAt": "2026-10-14",
+    "coordinateReferenceSystem": "WGS84",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "licenseSourceUrl": "https://www.geonames.org/about.html",
+    "method": "Transcribed from the publicly readable GeoNames search table. The table links this entry to record 1488253; the record's dynamic place panel was unavailable. No bulk-download access restriction was bypassed."
+  },
+  "record": {
+    "geonameId": 1488253,
+    "name": "Zelenogorsk",
+    "country": "Russia",
+    "admin1": "Krasnoyarsk Krai",
+    "aliases": ["Krasnoyarsk-45", "Barga", "Ust’-Barga"],
+    "featureLabel": "seat of a second-order administrative division",
+    "coordinates": [94.58698, 56.109207]
+  },
+  "representation": {
+    "coordinates": [94.59, 56.11],
+    "method": "Source longitude and latitude rounded independently to two decimal degrees. A city guide point, not a surveyed plant location, footprint or building centroid. No accuracy at the factory level is claimed."
+  },
+  "identityConfirmation": {
+    "publisher": "Administration of ZATO Zelenogorsk",
+    "url": "https://www.zeladmin.ru/gorozhanam/organizacii/inye-organizacii/akcionernoe-obshestvo-proizvodstvennoe-obedinenie-elektrohimicheskij-zavod",
+    "accessedAt": "2026-10-14",
+    "organization": "Production Association Electrochemical Plant",
+    "admin1": "Krasnoyarsk Krai",
+    "city": "Zelenogorsk",
+    "postalCode": "663690",
+    "activity": "Uranium enrichment for nuclear power plants",
+    "method": "Municipal organization listing confirms both the region/city address and enrichment activity. This is not the namesake near Saint Petersburg, nor Zheleznogorsk / Krasnoyarsk-26."
+  }
+}

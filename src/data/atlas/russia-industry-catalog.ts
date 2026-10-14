@@ -24,6 +24,8 @@ export const ruSources:Record<string,RuSource> = {
  phosagro:{title:'PhosAgro 2025 — operational performance',url:'https://ar2025.phosagro.com/en/perfomance-review/operational-performance/',period:'2025年',method:'会社のDAP/MAP製品量。りん含有量やロシア全国生産量ではない。'},
  phosphateMarket:{title:'PhosAgro 2025 — market overview',url:'https://ar2025.phosagro.com/en/strategic-report/market-overview/',period:'2025年',method:'世界DAP/MAP製品量は会社の市場推計。国のシェアではなく同社の下限的規模として表示。'},
  enrichment:{title:'World Nuclear Association — uranium enrichment',url:'https://world-nuclear.org/information-library/nuclear-fuel-cycle/conversion-enrichment-and-fabrication/uranium-enrichment',period:'2025年能力・2026-09-29更新',method:'SWUは分離作業単位。年能力であり実際の生産や売上ではない。Rosatomのロシア4工場。'},
+ zelenogorskCity:{title:'ゼレノゴルスク市行政 — 電気化学工場の所在地・事業',url:'https://www.zeladmin.ru/gorozhanam/organizacii/inye-organizacii/akcionernoe-obshestvo-proizvodstvennoe-obedinenie-elektrohimicheskij-zavod',period:'2026-10-14確認・ページ公表年不明',method:'クラスノヤルスク地方ゼレノゴルスク市、郵便番号663690の所在地と原発向けウラン濃縮事業を確認。同名のサンクトペテルブルク近郊の都市と区別。'},
+ geonames:{title:'GeoNames — Zelenogorsk / Krasnoyarsk-45（都市案内点）',url:'https://www.geonames.org/advanced-search.html?q=Krasnoyarsk%2C+Russia',period:'2026-10-14確認・公開検索表',method:'GeoNames record 1488253、Krasnoyarsk Krai、旧称Krasnoyarsk-45。WGS84の北緯56.109207・東経94.58698を各小数第2位へ丸め、市の案内点として使用。工場敷地・建物の精密位置ではない。GeoNames / CC BY 4.0（https://www.geonames.org/about.html）。'},
  usSwu:{title:'EIA — Uranium Marketing Annual Report, table 16',url:'https://www.eia.gov/uranium/marketing/table16.php',period:'2025年・2026年改訂',method:'米国原発事業者の購入濃縮役務。供給元別SWU。W（秘匿）は0ではない。'},
  ports:{title:'ASOP — Russian seaport cargo turnover 2025',url:'https://www.morport.com/rus/news/gruzooborot-morskih-portov-rossii-za-2025-god',period:'2025年・2026-01-16公表',method:'港湾協会のロシア港湾集計。輸出・輸入・通過・内航を含む取扱量。国産品の輸出量やGDPではない。地理範囲は同協会の報告範囲。'},
  alrosa:{title:'ALROSA — IFRS statements 2025',url:'https://www.alrosa.ru/upload/iblock/716/4qtpyyo2q8ggbhcpysfxhauxoolmzuww/ALROSA%20IFRS%202025%20ENG%20with%20exception.pdf',period:'2025年',method:'連結売上には他事業を含む。ダイヤモンド単独の売上内訳は秘匿。注記1の操業地域を使用。'},
@@ -55,7 +57,7 @@ export const ruIndustries:RuIndustry[]=[
  {id:'nitrogen',name:'窒素肥料・アンモニア',short:'窒素肥料',color:'#58863a',sectors:['manufacturing'],reading:'トリヤッチ、チェレポヴェツ、サラヴァトなどに窒素肥料設備が分布し、天然ガス供給と化学工業基盤が立地を支える。',why:'アンモニアは天然ガスから水素を得る製法が中心で、ガスの安定調達と大型連続設備が肥料の費用構造を左右する。',chain:'天然ガス → 水素・アンモニア → 尿素等の窒素肥料。アンモニア製品tと窒素含有tを区別。',metrics:[m('全国アンモニア製品量','1,860万t','2025年','製品重量・業界集計','2024年は1,810万t。窒素含有量ではない。','rapu'),m('全国アンモニア中の窒素','1,490.3万t N','2024年','窒素含有量','世界の同じ含有量の9.6%・インドと並び第2位。2025年製品tと直結しない。','usgs')],missing:'窒素肥料だけの付加価値・雇用と直接報告による最新品目別輸出は未取得。',sourceIds:['rapu','usgs','nitrogenSites']},
  {id:'potash',name:'カリ鉱業・カリ肥料',short:'カリ肥料',color:'#986a48',sectors:['resources','manufacturing'],reading:'ペルミ地方の上カマ鉱床に沿うベレズニキとソリカムスクに採掘・加工が集まり、鉱床への近接がカリ肥料の供給を集中させる。',why:'採掘可能なカリ塩鉱床の地理的偏在が、窒素肥料とは異なる供給集中と調達リスクを生む。',chain:'地下のカリ塩 → 採掘・選鉱 → 塩化カリ肥料。製品tとK₂O換算tは別。',metrics:[m('全国塩化カリ製品量','1,790万t','2025年','KCl製品重量・業界集計','2024年1,690万t。K₂O量ではない。','rapu'),m('全国カリ生産','1,000万t K₂O','2024年','酸化カリ換算の含有量','世界同定義の21%・第2位。製品重量と足し合わせない。','usgs')],missing:'カリ単独のGDP・雇用、最新輸出実績の直接報告値は未取得。',sourceIds:['rapu','usgs','potashSites']},
  {id:'phosphate',name:'りん鉱業・りん酸肥料',short:'りん酸肥料',color:'#7b8350',sectors:['resources','manufacturing'],reading:'コラ半島ヒビヌイのアパタイト鉱床と、チェレポヴェツ・ヴォルホフ・バラコヴォの加工拠点が、原料採掘と肥料製造の分業を形成する。',why:'りんを含む鉱石の産地と化学反応・複合肥料の設備が離れ、原料輸送と既存化学工業が加工拠点を支える。',chain:'アパタイト精鉱 → りん酸 → りん安・複合肥料。DAP/MAPはりん酸二安／一安、製品重量。',metrics:[m('全国アパタイト精鉱','1,530万t','2025年','精鉱製品重量・業界集計','りん含有量・りん鉱石重量と別。','rapu'),m('PhosAgro DAP/MAP生産','456.77万t','2025年','会社のりん安製品重量','世界DAP/MAP 6,500万tという同社推計の7.0%。ロシア全国シェアではない。','phosagro'),m('世界DAP/MAP市場','6,500万t','2025年・企業推計','世界の同じ肥料製品重量','国のりん鉱石生産順位と混同しない。','phosphateMarket')],missing:'りん酸肥料だけの全国売上・GDP・雇用は未取得。複合肥料全体の値を転用しない。',sourceIds:['rapu','phosagro','phosphateMarket']},
- {id:'enrichment',name:'ウラン濃縮・核燃料役務',short:'ウラン濃縮',color:'#766b29',sectors:['manufacturing','services'],reading:'ノヴォウラリスク、ゼレノゴルスク、アンガルスク、セヴェルスクの4工場に濃縮能力が集まり、遠心分離設備の蓄積が原発燃料の国際調達を左右する。',why:'濃縮は鉱石産地よりも高度な分離設備・技能と長期契約に依存し、原発の燃料仕様と調達先変更には時間がかかる。',chain:'天然ウランの転換 → 濃縮役務 → 再転換・燃料加工。SWU（分離作業単位）はウランの重量ではない。',metrics:[m('Rosatom ロシア濃縮能力','2,913.3万SWU/年','2025年','ロシア4工場の年能力','実際の濃縮量・ウラン鉱石生産・売上とは別。','enrichment'),m('世界の濃縮設備能力','42.8%','2025年','世界6,807.6万SWU/年','同じ年能力の比。世界実生産シェアではない。','enrichment'),m('米国購入濃縮役務のロシア分','25.8%','2025年','米国事業者の購入1,271万SWU','ロシア328.4万SWU。秘匿Wは0にしない。','usSwu')],missing:'最新の実際の全国役務生産・売上・雇用は未取得。ゼレノゴルスクは位置未収録で地図点を補わない。',sourceIds:['enrichment','usSwu']},
+ {id:'enrichment',name:'ウラン濃縮・核燃料役務',short:'ウラン濃縮',color:'#766b29',sectors:['manufacturing','services'],reading:'ノヴォウラリスク、ゼレノゴルスク、アンガルスク、セヴェルスクの4工場に濃縮能力が集まり、遠心分離設備の蓄積が原発燃料の国際調達を左右する。',why:'濃縮は鉱石産地よりも高度な分離設備・技能と長期契約に依存し、原発の燃料仕様と調達先変更には時間がかかる。',chain:'天然ウランの転換 → 濃縮役務 → 再転換・燃料加工。SWU（分離作業単位）はウランの重量ではない。',metrics:[m('Rosatom ロシア濃縮能力','2,913.3万SWU/年','2025年','ロシア4工場の年能力','実際の濃縮量・ウラン鉱石生産・売上とは別。','enrichment'),m('世界の濃縮設備能力','42.8%','2025年','世界6,807.6万SWU/年','同じ年能力の比。世界実生産シェアではない。','enrichment'),m('米国購入濃縮役務のロシア分','25.8%','2025年','米国事業者の購入1,271万SWU','ロシア328.4万SWU。秘匿Wは0にしない。','usSwu')],missing:'最新の実際の全国役務生産・売上・雇用と工場別実績は未取得。4都市は案内点で、工場敷地の位置ではない。',sourceIds:['enrichment','usSwu','zelenogorskCity','geonames']},
  {id:'logistics',name:'鉄道・港湾・国際物流',short:'鉄道・港湾物流',color:'#386d82',sectors:['services'],reading:'黒海ノヴォロシースク、バルト海、北極海ムルマンスク、極東のヴォストーチヌイ・ヴァニノ・ウラジオストクが異なる海域への出口を担い、東方港への内陸輸送は鉄道容量に制約される。',why:'西シベリアの資源と海港の距離が大きく、既設の東西幹線と港湾設備が荷主の航路選択と輸送費を左右する。',chain:'サービスは貨物を運ぶ機能。生産−輸出＝国内使用の物品需給式を当てはめない。線のない地図から実際の個別航路を推定しない。',metrics:[m('ロシア港湾総取扱量','8億8,450万t','2025年','ASOPのロシア港湾範囲','輸出6億9,660万、輸入4,120万、通過7,150万、内航7,520万t。総量と輸出を区別。','ports'),m('上位3港の総取扱量比','43.3%','2025年','全国港湾総量8億8,450万t','ノヴォロシースク1億6,800万、ウスチルガ1億3,050万、ヴォストーチヌイ8,470万t。','ports'),m('極東の港の取扱実績','ヴァニノ4,210万t','2025年','全貨物取扱量','ウラジオストク4,160万t。コンテナ個数やロシア国産品の輸出量ではない。','ports')],missing:'貨物輸送だけの最新全国GDP・雇用・国際比較順位は未取得。鉄道会社連結売上を貨物役務へ転用しない。',sourceIds:['ports','eia','gasTrade']},
  {id:'diamond',name:'天然ダイヤモンド',short:'天然ダイヤ',color:'#965a88',sectors:['resources'],reading:'サハ共和国のミールヌイ・ウダーチヌイ周辺とアルハンゲリスク州に天然ダイヤの採掘が分布し、キンバーライト鉱床が立地を決める。',why:'宝飾用の評価と原産地追跡が販売を左右し、天然石は合成ダイヤの供給とは別の鉱床・流通基盤に依存する。',chain:'採掘 → 選別 → 原石取引 → 研磨・宝飾。天然宝飾用・天然工業用・合成品を分ける。',metrics:[m('全国の天然宝飾用生産','2,090万carat','2024年','天然・宝飾用','世界同分類の30%・第1位。1 carat=0.2 g。','usgs'),m('全国の天然工業用生産','1,640万carat','2024年','天然・工業用','世界同分類の42%・第1位。合成品を含む工業用全市場の42%ではない。','usgs'),m('ALROSA連結売上','2,350.89億RUB','2025年','他事業を含む企業連結','ダイヤ単独売上内訳は秘匿。全国輸出額として使わない。','alrosa')],missing:'制裁後の天然原石の全国輸出相手別直接報告と、ダイヤ単独売上は未取得／秘匿。',sourceIds:['usgs','alrosa']},
  {id:'helium',name:'ヘリウム',short:'ヘリウム',color:'#548586',sectors:['resources','manufacturing'],reading:'オレンブルクとアムール州スヴォボードヌイ周辺のガス処理がヘリウム供給を担い、天然ガス中の成分を回収する設備が立地を決める。',why:'低濃度のヘリウムをガスから分離するため、資源組成と大規模ガス処理設備が必要で、MRIや半導体向けの供給を短期に代替しにくい。',chain:'ヘリウムを含む天然ガス → ガス処理・分離 → 精製・液化。ガス田の埋蔵量や設計能力を実生産にしない。',metrics:[m('全国ヘリウム生産','1,530万m³','2024年','生産されたヘリウムの気体体積','前年比97%増。アムール設備の全設計能力ではない。','usgs'),m('世界の生産','9.3%・第3位','2024年','世界の同じヘリウム生産体積','天然ガスの世界シェアとは別の市場。','usgs')],missing:'2025年通年の全国実生産、ヘリウムだけの売上・GDP・雇用は未取得。',sourceIds:['usgs']},
@@ -68,7 +70,7 @@ export const ruSectors:{id:RuSector;name:string;reading:string;why:string}[]=[
  {id:'manufacturing',name:'製造業',reading:'欧露部の鉄鋼・肥料、シベリアの水力を使うアルミ製錬、ガス処理・石油精製と核燃料設備が、原料・電力・蓄積した技能を加工価値へ変える。',why:'素材産業は原料だけでなく安定した電力と大型連続設備に依存し、燃料・金属・肥料・車両で異なる供給網を形成する。'},
  {id:'services',name:'サービス業',reading:'モスクワの企業管理、黒海・バルト海・北極海・極東の港湾、4都市の核燃料濃縮役務が、都市の専門機能と既存設備に集中する。',why:'管理には人・情報、物流には港湾と鉄道、濃縮役務には特殊設備が必要で、物品の産地と役務の集積は一致しない。'},
 ];
-export type RuSite={id:string;place:string;coordinates:[number,number];positionSource:'ne'|'ghsl';positionName:string;industries:string[];sectors:RuSector[];stage:string;note:string;sourceIds:string[]};
+export type RuSite={id:string;place:string;coordinates:[number,number];positionSource:'ne'|'ghsl'|'geonames';positionName:string;industries:string[];sectors:RuSector[];stage:string;note:string;sourceIds:string[]};
 
 export const ruSites:RuSite[]=[
  {
@@ -1116,6 +1118,30 @@ export const ruSites:RuSite[]=[
   "sourceIds": [
    "kola",
    "krastsvetmet"
+  ]
+ },
+ {
+  "id": "zelenogorsk-enrichment",
+  "place": "ゼレノゴルスク（クラスノヤルスク地方）",
+  "coordinates": [
+   94.59,
+   56.11
+  ],
+  "positionSource": "geonames",
+  "positionName": "Zelenogorsk / Krasnoyarsk-45, Krasnoyarsk Krai (GeoNames 1488253)",
+  "industries": [
+   "enrichment"
+  ],
+  "sectors": [
+   "manufacturing",
+   "services"
+  ],
+  "stage": "ウラン濃縮設備・役務（市の案内点）",
+  "note": "市行政資料で同地方の工場所在地と原発向けウラン濃縮を確認。GeoNamesの都市座標を小数第2位に丸めた北緯約56.11度・東経約94.59度の案内点。工場敷地・建物の精密位置ではない。同名のサンクトペテルブルク近郊都市、別都市ジェレズノゴルスクとは区別。",
+  "sourceIds": [
+   "enrichment",
+   "zelenogorskCity",
+   "geonames"
   ]
  }
 ];
