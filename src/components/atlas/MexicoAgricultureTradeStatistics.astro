@@ -1,34 +1,24 @@
 ---
 import {readFileSync} from 'node:fs';
 import {resolve} from 'node:path';
-import {agroTopicSeries,renderAgroWorld,type AgroData} from '../../lib/atlas-agro-statistics';
+import {agroTopicSeries,renderAgroWorld,renderAgroMarketingProduction,renderAgroMarketingUse,type AgroData} from '../../lib/atlas-agro-statistics';
+import {agroMarketingYearFlow} from '../../data/atlas/agro-marketing-year-flow';
 import '../../styles/atlas-agro-statistics.css';
 import comparison from '../../data/atlas/mexico/agriculture-comparison-2024.json';
 interface Props {productId:string; production:number|null; unit:string; year:string}
 const {productId,production,unit,year}=Astro.props;
 const shared=JSON.parse(readFileSync(resolve('public/assets/atlas/regional-production-statistics-v1/statistics.json'),'utf8')) as AgroData;
 const series=shared.countries.MEX?.series.find(s=>agroTopicSeries(productId).includes(s.id));
+const flow=agroTopicSeries(productId).map(id=>agroMarketingYearFlow('MEX',id)).find(Boolean);
 const fao=comparison.products[productId as keyof typeof comparison.products];
 const number=(value:number)=>value.toLocaleString('ja-JP',{maximumFractionDigits:0});
 const livestock=['beef','dairy','pork','broiler','eggs'].includes(productId);
+const pine=productId==='pine';
 ---
 <div class="mexico-agriculture-three-columns agro-statistics" data-mexico-agriculture-three-columns={productId}>
- <section>
-  <h3>供給と用途</h3>
-  <p class="mexico-agriculture-column-period">DGSIAP・{year}</p>
-  <p>国内生産：<strong>{production===null?'単位の異なる品目を合算しません':`${number(production)} ${unit}`}</strong></p>
-  <p>輸入・輸出・在庫増減・用途別消費を同一品目で結ぶメキシコの需給原表は未取得です。国内供給量や自給率を生産量から推定していません。</p>
-  <a href={livestock?'https://nube.agricultura.gob.mx/datosAbiertos/Pecuario.php':'https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php'}>出典：DGSIAP 年次生産統計</a>
-  <span> ／ </span><a href="https://www.fao.org/faostat/en/#data/SCL">必要な原表：FAOSTAT 需給表</a>
- </section>
- <section>
-  <h3>輸出相手</h3>
-  <p class="mexico-agriculture-column-period">メキシコを報告国とする品目別数量</p>
-  <p>相手国別のメキシコ輸出原表は未取得です。輸出先の割合や順位は表示しません。米国の輸出先統計をメキシコの値として使っていません。</p>
-  <a href="https://www.fao.org/faostat/en/#data/TM">必要な原表：FAOSTAT 詳細貿易マトリクス</a>
- </section>
- <section>
-  {series?<div set:html={renderAgroWorld(shared,'MEX',series)} />:<><h3>世界生産に占める割合</h3>
+ <section data-agro-stage="production">
+  <p class="mexico-agriculture-column-period">メキシコ全国{flow?` · ${flow.year}販売年度 · ${flow.label}`:''}</p>
+  {flow?<div set:html={renderAgroMarketingProduction(flow)} />:pine?<><h3>① 生産量と世界シェア</h3><p>この松材取得量と同定義・同期間の世界生産量は未収録です。丸太全体や製材の世界量で代用しません。</p></>:series?<div set:html={renderAgroWorld(shared,'MEX',series)} />:<><h3>① 生産量と世界シェア</h3>
   {fao?<>
    <p class="mexico-agriculture-column-period">FAOSTAT QCL・{comparison.year}年・{fao.definition}・t</p>
    <p class="mexico-agriculture-share">{fao.sharePct.toFixed(2)}<span>%</span></p>
@@ -36,8 +26,31 @@ const livestock=['beef','dairy','pork','broiler','eggs'].includes(productId);
    {productId==='coffee'&&<p>SIAPの2025年生産量はコーヒー果実。FAOSTATの生豆とは換算せず、別系列として示します。</p>}
   </>:<p>この品目と世界を同一定義で比較するメキシコ行は保管済み抽出にありません。</p>}
   </>}
-  {productId==='coffee'&&<p>DGSIAPのコーヒー果実とFAOSTATの生豆は年・加工段階が異なる別系列です。</p>}
-  {!series&&<p>複数年のメキシコ・世界の対応行は未取得です。2024年の値を推移として描いていません。</p>}
-  <a href="https://www.fao.org/faostat/en/#data/QCL">出典・必要な時系列：FAOSTAT QCL</a>
+  {productId==='coffee'&&<p>DGSIAPの{year}コーヒー果実とFAOSTATの2024年生豆は年・加工段階が異なる別系列です。</p>}
+  {!flow&&!series&&!pine&&<p>複数年のメキシコ・世界の対応行は未取得です。2024年の値を推移として描いていません。</p>}
+  {flow?<a href={`${flow.source.url}#page=${flow.source.page}`}>出典：USDA WASDE-675・メキシコ行</a>:!pine&&<a href="https://www.fao.org/faostat/en/#data/QCL">出典・必要な時系列：FAOSTAT QCL</a>}
+  <details class="agro-other-reference"><summary>別年・別指標の全国参考（{pine?'INEGI':'DGSIAP'}・{year}）</summary>
+   <p>{pine?'INEGIの全国松材取得量':'DGSIAPの国内生産'}：<strong>{production===null?'単位の異なる品目を合算しません':`${number(production)} ${unit}`}</strong>（{year}）。{pine?'取得・販売の数量は世界丸太生産や製材生産と別の指標です。販売先・国内消費・在庫・輸出は分かりません。':'①の資料とは別の年・範囲で、同じ数量へ差し引きません。'}</p>
+   <a href={pine?'https://www.inegi.org.mx/programas/ca/2022/':livestock?'https://nube.agricultura.gob.mx/datosAbiertos/Pecuario.php':'https://nube.agricultura.gob.mx/datosAbiertos/Agricola.php'}>出典：{pine?'INEGI 2022年農業センサス':'DGSIAP 年次生産統計'}</a>
+  </details>
+ </section>
+ <section data-agro-stage="use">
+  {flow?<div set:html={renderAgroMarketingUse(flow)} />:<><h3>② 国内利用と輸出</h3>
+   <p class="agro-flow-gap">同年・同製品・同単位の国内利用、輸出、輸入、在庫変動の対応行は未収録です。生産量から仕向けの帯や自給率を推定しません。</p>
+   <a href="https://www.fao.org/faostat/en/#data/SCL">必要な原表：FAOSTAT 需給表</a>
+  </>}
+ </section>
+ <section data-agro-stage="destinations">
+  <h3>③ 輸出先の量と構成比</h3>
+  <p class="mexico-agriculture-column-period">メキシコを報告国とする{flow?`${flow.year}販売年度・${flow.unit}`:'同年・同製品の数量'}</p>
+  <p class="agro-flow-gap" data-agro-partner-gap>同じ{flow?'販売年度・子実とうもろこし':'年・品目'}の全相手国別輸出数量は未収録です。輸出先の量・構成比は算出しません。米国の輸出先統計をメキシコの値として使っていません。</p>
+  <a href="https://www.fao.org/faostat/en/#data/TM">必要な原表：詳細貿易マトリクス</a>
  </section>
 </div>
+{flow&&<details class="agro-definitions"><summary>同年度の数量・原値・在庫・品目定義</summary>
+ <p>USDA WASDE-675・メキシコ全国・{flow.year}販売年度・{flow.unit}。①と②は同じ公表表の国別行とWorld行です。</p>
+ {flow.notes.map(note=><p>{note}</p>)}
+ <pre>{flow.rawLine}</pre><pre>{flow.worldRawLine}</pre>
+ <p>保存原文：{flow.source.path} · SHA-256 {flow.source.sha256}</p>
+ <a href={`${flow.source.url}#page=${flow.source.page}`}>USDA WASDE-675 p.{flow.source.page}</a>
+</details>}

@@ -44,6 +44,8 @@ test('country overview aliases keep the published columns through a selected-pro
  const config={sources:{overview:'<a href="/fixture/statistics.json">Published FAOSTAT reference</a>',selected:'Selected sources are recorded on each quantity figure; FAOSTAT is supplementary.'},scope:'東南アジア',country:'',topic:'rice',topics:['rice'],countries:[{code:'IDN',name:'インドネシア'}],nationalOnly:true,url:'/fixture/',files:{'rice-production':{file:'rice.json'}},labels:{'rice-production':'fixture rice'}};
  const root=w.document.createElement('main');root.innerHTML='<section data-agro-statistics><script type="application/json" data-agro-config></script><h2 data-agro-heading></h2><p data-agro-status></p><label data-agro-country-control><select data-agro-country-select><option value="IDN">インドネシア</option></select></label><label data-agro-series-control><select data-agro-series-select></select></label><button data-agro-retry hidden></button><div data-agro-content></div><p data-agro-sources></p></section>';
  root.querySelector('[data-agro-config]').textContent=JSON.stringify(config);
+ const nativeReferences=w.document.createElement('aside');nativeReferences.dataset.nativeFixture='';nativeReferences.innerHTML='<p>before</p><section data-south-central-farm-connections><button>existing listener</button></section><p>between</p><section data-west-farm-supply>Regional FBS</section><section data-export-reading>ABARES different period</section><section data-oceania-livestock-production>Existing country production</section><section data-eu-verified-agriculture><select><option>Existing year control</option></select></section><section data-east-farm-foundations>Existing active table</section><p>after</p>';root.append(nativeReferences);
+ const originalReferences=nativeReferences.innerHTML,existingButton=nativeReferences.querySelector('button');let clicks=0;existingButton.addEventListener('click',()=>clicks++);
  const content=root.querySelector('[data-agro-content]'),status=root.querySelector('[data-agro-status]');
  const wait=async predicate=>{for(let i=0;i<100;i++){if(predicate())return;await new Promise(resolve=>setImmediate(resolve));}assert.fail('selected overview controller did not settle');};
  try{
@@ -57,9 +59,20 @@ test('country overview aliases keep the published columns through a selected-pro
   sync('rice');await wait(()=>content.querySelector('[data-agro-stage="production"]'));
   assert.deepEqual([...content.querySelectorAll('.agro-columns>section')].map(h=>h.dataset.agroStage),['production','use','destinations']);
   assert.equal(root.querySelector('[data-agro-sources]').textContent,config.sources.selected);
+  assert.equal(nativeReferences.querySelectorAll('.agro-existing-regional-reference').length,4);
+  assert.equal(nativeReferences.querySelectorAll('.agro-existing-regional-reference[open]').length,0);
+  assert.equal(nativeReferences.querySelector('[data-eu-verified-agriculture]').parentElement,nativeReferences);
+  assert.equal(nativeReferences.querySelector('[data-east-farm-foundations]').parentElement,nativeReferences);
+  existingButton.click();assert.equal(clicks,1,'wrapping keeps original listeners');
   for(const topic of ['overview','all','farming-overview','farming-all','crops']){
    sync(topic);await wait(()=>content.querySelector('[data-agro-series]')&&!content.querySelector('[data-agro-stage]'));
-   assert.equal(content.innerHTML,publishedMarkup,topic);assert.equal(status.textContent,publishedStatus,topic);assert.equal(root.querySelector('[data-agro-sources]').innerHTML,publishedSources,topic);
+   assert.equal(content.innerHTML,publishedMarkup,topic);assert.equal(status.textContent,publishedStatus,topic);assert.equal(root.querySelector('[data-agro-sources]').innerHTML,publishedSources,topic);assert.equal(nativeReferences.innerHTML,originalReferences,topic);
   }
+  for(const selection of [{country:'',topic:'rice',active:true},{country:'JPN',topic:'rice',active:true},{country:'IDN',topic:'rice',active:false}]){
+   sync('rice');await wait(()=>content.querySelector('[data-agro-stage="production"]'));
+   api.syncAgroStatistics(root,selection);
+   assert.equal(nativeReferences.innerHTML,originalReferences,'country deselection, Japan and field changes restore original DOM placement');
+  }
+  existingButton.click();assert.equal(clicks,2,'restoring keeps the same original listener');
  }finally{globalThis.document=previousDocument;globalThis.fetch=previousFetch;await w.happyDOM.abort();}
 });

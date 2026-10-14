@@ -1,3 +1,4 @@
+import {syncAgroRegionalReferences} from './atlas-agro-regional-reference.ts';
 import {renderAgroExistingStatistics} from './atlas-agro-existing-statistics.ts';
 import {agroProduction,agroTopicSeries,renderAgroColumns,type AgroData,type AgroReference} from '../lib/atlas-agro-statistics.ts';
 type Selection={country:string;topic:string;active?:boolean;year?:number};
@@ -16,12 +17,15 @@ function initialize(host:HTMLElement){
  // embedded configuration. Optional statistics must never break the atlas.
  if(!configNode){host.hidden=true;return (_selection:Selection)=>{};}
  const config=JSON.parse(configNode.textContent!) as Config;
+ const referenceRoot=host.closest('[data-asia-atlas],[data-west-atlas],[data-oceania-learning]')??host.parentElement!;
  const content=host.querySelector<HTMLElement>('[data-agro-content]')!,status=host.querySelector<HTMLElement>('[data-agro-status]')!,heading=host.querySelector<HTMLElement>('[data-agro-heading]')!,retry=host.querySelector<HTMLButtonElement>('[data-agro-retry]')!,seriesSelect=host.querySelector<HTMLSelectElement>('[data-agro-series-select]')!,countrySelect=host.querySelector<HTMLSelectElement>('[data-agro-country-select]');
  let selection:Selection={country:config.country,topic:config.topic,active:true},generation=0,chosen='';
  async function update(next:Selection){
   const changed=selection.country!==next.country||selection.topic!==next.topic;if(changed)chosen='';selection={...next};const token=++generation;
   // Japan's existing, independent display is excluded even on an East Asia map.
+  const overview=['overview','all','farming-overview','farming-all','crops'].includes(next.topic);
   host.hidden=next.active===false||next.country==='JPN'||config.nationalOnly&&!next.country;
+  syncAgroRegionalReferences(referenceRoot,!host.hidden&&!overview&&Boolean(next.country));
   if(host.hidden){content.replaceChildren();return;}
   heading.textContent=config.scope+' · '+(config.countries.find(c=>c.code===next.country)?.name??next.country);
   if(countrySelect)countrySelect.value=next.country;
@@ -29,7 +33,6 @@ function initialize(host:HTMLElement){
   // Clear immediately so a pending request cannot display the previous country.
   content.replaceChildren();
   try{
-   const overview=['overview','all','farming-overview','farming-all','crops'].includes(next.topic);
    const allowed=overview?[...new Set((config.topics??[]).flatMap(agroTopicSeries))]:agroTopicSeries(next.topic);
    // An overview offers existing products; request one product at a time rather
    // than downloading all national series merely to populate the selector.
@@ -50,7 +53,7 @@ function initialize(host:HTMLElement){
    await renderAgroExistingStatistics(content,next.country,id,!overview);
    if(!overview)for(const details of content.querySelectorAll<HTMLDetailsElement>('.agro-other-reference'))if(!details.querySelector('[data-agro-existing-trade],[data-agro-existing-supply]')?.children.length)details.remove();
    if(token===generation&&!host.hidden)host.dataset.agroReady='true';
-  }catch{if(token!==generation)return;status.textContent='統計を取得できませんでした。地図の選択は保持しています。';retry.hidden=false;}
+  }catch{if(token!==generation)return;syncAgroRegionalReferences(referenceRoot,false);status.textContent='統計を取得できませんでした。地図の選択は保持しています。';retry.hidden=false;}
  }
  host.addEventListener('click',event=>{const a=(event.target as Element).closest<HTMLAnchorElement>('[data-agro-reference-link]');if(!a)return;const target=document.getElementById(a.hash.slice(1));if(!target)return;for(let node:HTMLElement|null=target;node;node=node.parentElement)if(node instanceof HTMLDetailsElement)node.open=true;});
  seriesSelect.addEventListener('change',()=>{chosen=seriesSelect.value;void update(selection);});

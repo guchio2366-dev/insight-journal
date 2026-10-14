@@ -1,3 +1,7 @@
 /* Explicit product selections only; published unselected views are preserved. */
 [data-regional-flow-stage="destinations"] :is(.sc-flow-destinations,.west-wheat-destinations) li{flex-wrap:wrap}
 [data-regional-flow-stage="destinations"] :is(.sc-flow-destinations,.west-wheat-destinations) li small{flex-basis:100%;padding-left:13px}
+.agro-existing-regional-reference{min-width:0;margin:12px 0;padding:10px 12px;border:1px solid var(--rule,#d6dcd1)}
+.agro-existing-regional-reference>summary{cursor:pointer;font-size:13px;font-weight:600}
+.agro-existing-regional-reference>summary:focus-visible{outline:3px solid #176f89;outline-offset:3px}
+@media(min-width:960px){.agro-existing-regional-reference{grid-column:2/-1}}
