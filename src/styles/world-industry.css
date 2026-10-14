@@ -34,7 +34,7 @@
 .wi-stages button[data-wi-stage=all] { justify-content: center; margin-bottom: 12px; min-height: 31px; font-size: 11px; }
 .wi-stages button i { display: grid; place-content: center; width: 20px; height: 20px; flex: 0 0 20px; color: white; background: var(--stage-color); border-radius: 50%; font-size: 10px; font-style: normal; }
 .wi-stages button[aria-pressed=true] { background: var(--ink); color: white; border-color: var(--ink); box-shadow: inset 3px 0 0 var(--stage-color, var(--accent)); }
-.wi-process-arrow { text-align: center; height: 22px; line-height: 22px; font-size: 16px; color: #596c71; transform: rotate(90deg); }
+.wi-process-arrow { align-self: center; width: 22px; height: 22px; text-align: center; line-height: 22px; font-size: 16px; color: #596c71; transform: rotate(90deg); pointer-events: none; }
 .wi-stage-note { margin: 14px 0 9px; font-size: 11px; line-height: 1.7; color: #263e4c; }
 .wi-flow-key { font-size: 10px; color: var(--ink-soft); margin: 10px 0 0; padding-top: 9px; border-top: 1px solid var(--rule); }
 .wi-scope { font-size: 10px; color: var(--ink-soft); margin: 8px 0 0; max-width: 125ch; }
