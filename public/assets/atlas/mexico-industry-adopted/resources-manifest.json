@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "retrieved": "2026-10-14",
+  "inputFiles": [
+    {
+      "file": "resources-sgm-2024-original-extract.txt",
+      "bytes": 11717,
+      "sha256": "6a297b16d46c5e8e83d8ebd8d81aee12e76182f8b0b3132608d553178fdbad4b"
+    },
+    {
+      "file": "resources-statistics-original-rows.json",
+      "bytes": 8526,
+      "sha256": "c2d2cc242727287c73f59d58004c3369a1d00870c59c940b545209683ac44c44"
+    },
+    {
+      "file": "resources-ce-steel-request.json",
+      "bytes": 1364,
+      "sha256": "15271c2b6b0ee4fe0f71492030bfaa071fe6ae9e9765285a9b1180bea6de7985"
+    },
+    {
+      "file": "resources-ce-steel-response.json",
+      "bytes": 7336,
+      "sha256": "72562f0e4e3788641cd09cb86fc2a4e993f7149f761c33305c4d8de6beb0244e"
+    },
+    {
+      "file": "resources-etef-industry-catalog-2025.snapshot.json",
+      "bytes": 55018,
+      "sha256": "03e1762c39e10e11e3bca6ce6ab4d7706aeb180f53022554ae7dcbcf6e14f5ac"
+    }
+  ],
+  "output": {
+    "file": "src/data/atlas/mexico/industry-adopted-resources.json",
+    "sha256": "8740f541c1077fa5b5a538548c0583f4f26feb4d1147eb8b1dee3d6148d9107a"
+  },
+  "industries": [
+    "oil-gas",
+    "refining",
+    "silver",
+    "copper",
+    "gold",
+    "zinc",
+    "steel"
+  ],
+  "mapStatusCounts": {
+    "oil-gas": {
+      "unknown": 28,
+      "available": 4
+    },
+    "refining": {
+      "unknown": 25,
+      "available": 5,
+      "unretrieved": 2
+    },
+    "silver": {
+      "available": 16,
+      "unknown": 16
+    },
+    "copper": {
+      "available": 16,
+      "unknown": 16
+    },
+    "gold": {
+      "available": 17,
+      "unknown": 15
+    },
+    "zinc": {
+      "available": 13,
+      "unknown": 19
+    },
+    "steel": {
+      "confidential": 24,
+      "unknown": 6,
+      "available": 2
+    }
+  },
+  "availability": {
+    "sgm": "Browser PDF text extraction succeeded. Command download returned HTTP403; saved selected original table/definition text.",
+    "usgsAndSilverSurvey": "Original primary-PDF headers and numeric rows obtained via search. Direct PDF open HTTP403; no image verification.",
+    "pemex": "Original 20-F table and NRS refinery paragraphs extracted via primary-site search; direct large HTML retrieval restricted.",
+    "ceSteel": "Official POST response and exact request saved with all 33 national/state rows."
+  },
+  "boundaries": [
+    "Map nationalTotal is from the same source, year and process as its state values.",
+    "Domestic gross valuation, census value added and national-account GDP are separately labelled.",
+    "Global production, capacity, reserves and gross ore weights are not interchanged.",
+    "Apparent consumption is not domestic-produced goods directed to domestic users.",
+    "Selected tariff export groups are not treated as national same-stage metal quantities."
+  ]
+}

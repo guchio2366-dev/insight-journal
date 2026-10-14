@@ -91,7 +91,7 @@ export function initializeAfricaAtlas() {
  function chooseRiver(id:string){const river=africaRiverById(id);if(id&&!river)return;state.river=id;state.context='';state.sourceState='';state.layerClass='';state.layerPoint='';render(true);}
  readSelectionPins();
  function chooseTheme(id:string){
-  const theme=themes.find(t=>t.id===id)!;state.industryLocation='';if(state.field==='industry')state.industryCommodity=id==='copperbelt-connections'?'copper-cobalt':id==='casablanca-manufacturing'?'aerospace':'';state.theme=id;state.overview=false;state.context='';state.zoom=state.field==='industry'||state.field==='nature'&&state.topic==='climate'||(state.field==='population'||state.field==='agriculture')&&state.view==='distribution'?'all':'theme';
+  const theme=themes.find(t=>t.id===id)!;state.industryLocation='';if(state.field==='industry')state.industryCommodity=id==='copperbelt-connections'?'copper':id==='casablanca-manufacturing'?'aerospace':'';state.theme=id;state.overview=false;state.context='';state.zoom=state.field==='industry'||state.field==='nature'&&state.topic==='climate'||(state.field==='population'||state.field==='agriculture')&&state.view==='distribution'?'all':'theme';
   state.sourceState='';state.layerClass='';state.layerPoint='';
   if(!regionPinned)state.region='all';
  }

@@ -4,7 +4,7 @@ import {mkdir,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 const base=process.env.EUROPE_REVIEW_BASE_URL??'http://127.0.0.1:4322/insight-journal/';
 const output=process.env.EUROPE_REMAINDER_OUTPUT??'docs/review/europe-2026-10-13/images';await mkdir(output,{recursive:true});
-const browser=await chromium.launch({executablePath:process.env.EUROPE_REVIEW_CHROMIUM_PATH??'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']});
+const browser=await chromium.launch({executablePath:process.env.EUROPE_REVIEW_CHROMIUM_PATH??'/usr/bin/chromium',chromiumSandbox:true,ignoreDefaultArgs:['--unsafely-disable-devtools-self-xss-warnings']});
 const records=[];
 try{
  for(const renderer of ['auto','static']){

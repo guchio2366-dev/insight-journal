@@ -1,0 +1,143 @@
+{
+  "retrievedOn": "2026-10-14",
+  "ceEndpoint": "https://www.inegi.org.mx/app/tabulados/pxwebapi/api/datatable",
+  "ceTable": "CE2024/CE_GENNCE_1",
+  "geography": "00全国と01–32州。地図は全国行を除き、nationalTotalに保存。",
+  "cells": "州×8業種×2指標。応答のstub順で解釈し要求順を仮定しない。",
+  "missing": {
+    "-": "confidential",
+    "SD": "unknown：非存在または本社所在地集約で区別できない",
+    "numeric 0": "zero"
+  },
+  "checks": [
+    "32州キー重複なし",
+    "公開完全6業種の州就業者合計＝全国同業種",
+    "IT/BPM全国値を既取得原票と再照合",
+    "出典ID・欠測・数値の契約検証"
+  ],
+  "archived": [
+    {
+      "path": "public/assets/atlas/mexico-industry-adopted/services-cbs2025-original.pdf",
+      "bytes": 518844,
+      "sha256": "7732a1c05219e87141d96b3bff35c6789040c8419cfbf4b898c9c2e603e6bc81"
+    },
+    {
+      "path": "public/assets/atlas/mexico-industry-adopted/services-ce2023-original.json",
+      "bytes": 11755,
+      "sha256": "ab5d524220a18fe5cd987da01614fe01f40c14e54c32d27f02b06cd5886f4d84"
+    },
+    {
+      "path": "public/assets/atlas/mexico-industry-adopted/services-ce2023-total-original.json",
+      "bytes": 4742,
+      "sha256": "6e2d9f05f862f0af47670597551462c4a9347f96e77b9c34788e8697b328092a"
+    },
+    {
+      "path": "public/assets/atlas/mexico-industry-adopted/services-cstm2024-original.pdf",
+      "bytes": 324987,
+      "sha256": "cebca6cd43e58db933a2380aff3574b74a49499d4e1177469d3ee5be28b668fc"
+    },
+    {
+      "path": "public/assets/atlas/mexico-industry-adopted/services-ecis2024-original.pdf",
+      "bytes": 2010561,
+      "sha256": "7eaca51ac4d85a9f436dfd8c3150276017dce53ace42326f09ab3b140777ac8b"
+    },
+    {
+      "path": "public/assets/atlas/mexico-industry-adopted/services-evi2025-original.pdf",
+      "bytes": 364431,
+      "sha256": "b223e2a9e3bd2cbc98059134b41be277e9ed5c72da5e2c5ac326ac9f7ec2a8e4"
+    }
+  ],
+  "sources": {
+    "mx-service-ce2023": {
+      "title": "INEGI CE2024：州・SCIAN別就業者数とセンサス付加価値（参照2023年）",
+      "url": "https://www.inegi.org.mx/app/tabulados/interactivos/?bd=CE2024&px=CE_GENNCE_1",
+      "year": 2023,
+      "scope": "CE_GENNCE_1。民間・国営企業、都市で捕捉した対象。全国＋32州、SCIAN23/48-49/52/53/54/5415/561422/721、就業者数・VACB。家計調査の全国就業者や国民勘定GDPとは範囲が異なる。'-'は秘匿、SDは非存在または本社所在地への計上。建設・運輸・金融等は本社所在地基準。"
+    },
+    "mx-service-cbs2025": {
+      "title": "INEGI CBS2025（2026年10月2日公表）",
+      "url": "https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2026/pibact/CBS2026_RR.pdf",
+      "year": 2025,
+      "scope": "表2：基本価格・当年価格VAB。全国VAB33,576,797百万MXN、市場価格GDP35,923,239百万MXN。図4：有給・企業所属就業ポスト。表4：平均年報酬。産業大分類の値を狭い製品・業務へ配賦しない。"
+    },
+    "mx-service-cstm2024": {
+      "title": "INEGI観光サテライト勘定2024（2025年12月18日公表）",
+      "url": "https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2025/turismo/CSTM2024_CP.pdf",
+      "year": 2024,
+      "scope": "観光VAB・有給就業ポスト。全国VAB31,331,232百万MXN、全国有給ポスト39,653,160。観光全体は複数産業にまたがり、CE721宿泊と一致しない。WTTC間接・誘発効果込みの総寄与とも区別。"
+    },
+    "mx-service-evi2025": {
+      "title": "INEGI EVI：2025年国際訪問者・支出（2026年2月12日公表、年次表2）",
+      "url": "https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2026/ViajInternales/evi2026_02.pdf",
+      "year": 2025,
+      "scope": "外国居住者の来訪回数・支出。宿泊観光客と日帰り客、境界内滞在と内陸を区分。固有人数ではない。国籍別入国やUPM居住国別航空入国と分母が異なる。暫定値。"
+    },
+    "mx-service-bop2025": {
+      "title": "Banco de México：2025年サービス貿易、2026年8月25日改訂（表A1）",
+      "url": "https://www.banxico.org.mx/publicaciones-y-prensa/balanza-de-pagos/%7BE333A05C-EB45-9A4A-6F1D-591845A64896%7D.pdf",
+      "year": 2025,
+      "scope": "国際収支MBP6、百万USD。サービス総輸出65,802。狭いSCIAN業種とサービス品目は対応しない。旧2026年2月公表値から改訂済み。"
+    },
+    "mx-service-bts2025": {
+      "title": "米国BTS：米墨貨物貿易2025（2026年5月15日公表）",
+      "url": "https://www.bts.gov/newsroom/transborder-freight-data-annual-report-2025-0",
+      "year": 2025,
+      "scope": "運ばれた商品の貿易価額。物流企業の売上・付加価値・サービス輸出ではない。表1b輸送手段、表4b国境ゲート。米国側統計。"
+    },
+    "mx-service-datatur-ranking2024": {
+      "title": "DataTur：UN Tourismに基づく2024年国際観光順位",
+      "url": "https://www.datatur.sectur.gob.mx/SitePages/omt.aspx",
+      "year": 2024,
+      "scope": "宿泊を伴う国際観光客到着数6位、旅行受取16位。人数と収入は別の順位。2025年世界順位ではない。"
+    },
+    "mx-service-datatur-residence2025": {
+      "title": "DataTur RAT2025年12月：UPM居住国別航空入国（14頁）",
+      "url": "https://datatur.sectur.gob.mx/Documentoscompartidos/rat/RAT-2025-12(ES).pdf",
+      "year": 2025,
+      "scope": "UPM外国居住者航空来訪約20.6百万人、米国約13.7、カナダ約2.8。丸め値。EVI航空観光客22.867百万人、国籍別航空入国22.1百万人とは別系列。"
+    },
+    "mx-service-ecis2024": {
+      "title": "INEGI ECIS2025（参照2024年、2026年8月13日公表）",
+      "url": "https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2026/ecis/ECIS2025_RR.pdf",
+      "year": 2024,
+      "scope": "対象9,796社、標本5,938社。工業・商業・民間非金融サービス。通信・コンピューター・情報の対象企業収入99.7%、その他企業サービス86.6%がデジタル供給。全収入の米国比76.9%をIT/BPMだけの比率にしない。BOP全サービスと分母が異なる。"
+    },
+    "mx-service-aws2025": {
+      "title": "AWS：メキシコ地域稼働と投資計画（2025年1月14日）",
+      "url": "https://press.aboutamazon.com/2025/1/aws-launches-infrastructure-region-in-mexico",
+      "year": 2025,
+      "scope": "地域稼働は実績。15年間50億USD超の投資は計画で支出実績ではない。企業の推計効果は国全体のIT付加価値や雇用へ流用しない。"
+    }
+  },
+  "verifiedExtractFile": "public/assets/atlas/mexico-industry-adopted/services-verified-extracts.json",
+  "sourceArchiveLimitations": "Banxico/BTS/DataTur/AWSは公開Webツールで本文確認済み。環境からの原文取得が403となったため、該当原PDF/HTMLは未保存で、確認した統計の出典・頁・範囲を別の検証済み抜粋へ保存。抜粋を原文コピーと表示しない。",
+  "mapStatusCounts": {
+    "tourism": {
+      "available": 32
+    },
+    "logistics": {
+      "available": 32
+    },
+    "professional": {
+      "available": 32
+    },
+    "finance": {
+      "available": 32
+    },
+    "digital": {
+      "available": 27,
+      "confidential": 5
+    },
+    "bpm": {
+      "available": 14,
+      "confidential": 13,
+      "unknown": 5
+    },
+    "construction": {
+      "available": 32
+    },
+    "real-estate": {
+      "available": 32
+    }
+  }
+}

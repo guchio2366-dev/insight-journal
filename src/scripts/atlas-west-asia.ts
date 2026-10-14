@@ -197,7 +197,7 @@ async function init(root:HTMLElement){
  function compareHref(id:string){
   const target=westTopics.find(t=>t.id===id)!;
   const next={...state,field:target.field,topic:id};
-  if(target.field==='industry'&&!westIndustryCountry(next.country))next.country='';
+  // The dedicated industry page now accepts all 20 regional countries.
   if((target.indicator||target.faoItem)&&!statisticalCountries(target).some((c:any)=>observation(data,target,c.code,next.year).value!==null)){
    next.year=[2024,2023,2022,2021,2020].find(y=>statisticalCountries(target).some((c:any)=>observation(data,target,c.code,y).value!==null))??next.year;
   }

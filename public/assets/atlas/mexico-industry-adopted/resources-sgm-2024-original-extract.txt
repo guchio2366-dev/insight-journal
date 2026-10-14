@@ -1,0 +1,193 @@
+SGM Anuario Estadístico de la Minería Mexicana 2024, edición 2025
+URL: https://www.sgm.gob.mx/productos/pdf/Anuario_2024_Edicion_2025.pdf
+Retrieved: 2026-10-14
+Format: original factual table rows and source-definition excerpts extracted by browser PDF text reader; not a downloaded copy of the full PDF.
+Page convention: P is zero-based PDF page; printed page = P + 1.
+Direct command download: HTTP 403. Browser PDF extraction succeeded.
+Missing source '-' and unlisted states have not been converted to zero.
+
+L323@P4: 2026
+L324@P4: Exportaciones
+L325@P4: Importaciones
+L326@P4: II
+L327@P4: 60
+L328@P4: 80
+L329@P4: 100
+L330@P4: 120
+L1351@P45:  Productos 2023 2024 p/ 2024/2023 2023 2024 p/ 2024/2023
+L1352@P45: % %
+L1353@P45: Total: 261 244 671.10 312 461 239.50 19.60
+L1354@P45: I. Metales preciosos*** 125 440 858.70 164 290 393.20 30.97
+L1355@P45: Oro (kg) 70 059.00 68 009.00 -2.93 77 494 771.60 96 049 821.00 23.94
+L1356@P45: Plata (kg) 3 593 209.00 4 077 918.00 13.49 47 946 087.10 68 240 572.20 42.33
+L1357@P45: II. Metales industriales no ferrosos*** 104 551 577.80 118 563 599.60 13.40
+L1358@P45: Cadmio 1 021.00 1 187.00 16.26 50 478.50 58 516.60 15.92
+L1359@P45: Cobre 508 804.00 488 682.00 -3.95 76 303 107.60 82 654 834.50 8.32
+L1360@P45: Molibdeno 17 497.00 16 190.00 -7.47 8 278 215.80 7 901 652.70 -4.55
+L1361@P45: Plomo 134 355.00 172 130.00 28.12 5 213 105.10 6 543 189.70 25.51
+L1362@P45: Selenio 139.00 78.00 -43.88 51 332.10 29 585.10 -42.37
+L1363@P45: Zinc 282 974.00 412 501.00 45.77 14 655 338.70 21 375 821.00 45.86
+L1385@P45: p/ Cifras preliminares.
+L1386@P45: Masa: expresada en toneladas, excepto oro y plata.
+L1387@P45: *Se refiere a la producción minera de carbón "mineral".
+L1388@P45: **Masa del mineral.
+L1389@P45: ***Contenido metálico.
+L1390@P45: ****Obtenido de la refinería del petróleo crudo.
+L1391@P45: *****Incluye la producción de arena para vidrio, cuarzo y materiales silicosos.
+L1392@P45: Cifras compiladas al mes de septiembre 2024.
+L1393@P45: Nota: La suma de los parciales puede no coincidir con los totales debido al redondeo. El valor de la producción para los metales excepto para el selenio y pellet de fierro, se obtiene con las cotizaciones internacionales;
+L1394@P45: para los minerales no metálicos, el valor de la producción se obtiene con los precios del mercado nacional.
+L1395@P45: 1.2 Producción minero-metalúrgica por productos
+L1396@P45:  metálicos y no metálicos (2023-2024)
+L1397@P45: (Toneladas, miles de pesos corrientes y variaciones porcentuales anuales)
+L1398@P45: Fuente: elaboración propia a partir de datos proporcionados por CAMIMEX e INEGI.
+L1399@P45: Masa Valor
+L1400@P45: La producción minero-metalúrgica es la cantidad de metal o producto útil obtenido después
+L1401@P45: del procesamiento del mineral extraído, mediante procesos físicos y/o químicos como
+L1402@P45: trituración, molienda, lixiviación, fundición o refinación.
+L3154@P98-99: Anuario Estadístico de la Minería Mexicana, edición 2025 99Estados/Años 2020 2021 2022 2023 2024 p/
+L3155@P99: Total: 800 315.60 782 136.26 828 180.00 778 838.95 777 106.15
+L3156@P99: Aguascalientes 1 012.00 1 636.93 730.00 593.00 386.00
+L3157@P99: Baja California Sur 17 084.30 10 941.40 13 490.00 14 141.70 13 978.00
+L3158@P99: Chihuahua 21 252.65 15 905.79 14 600.00 14 987.81 19 844.46
+L3159@P99: Coahuila 50.00 - - - 15 000.00
+L3160@P99: Durango 4 751.20 3 768.09 6 690.00 7 529.83 6 934.01
+L3161@P99: Guanajuato .99 - - - -
+L3162@P99: Guerrero 3 370.27 5 569.18 8 820.00 11 549.99 10 881.03
+L3163@P99: Hidalgo 1 543.55 2 892.00 10 920.00 3 461.28 3 245.92
+L3164@P99: Jalisco 166 679.70 2 592.19 7 260.00 - 1 578.62
+L3165@P99: México 808.41 1 525.00 1 370.00 1 331.54 1 133.00
+L3166@P99: Michoacán 30.00 5 128.71 4 650.00 93 805.44 2 081.43
+L3167@P99: Nayarit 1.65 - - - -
+L3168@P99: Oaxaca 1 912.31 - 2 170.00 1 666.45 911.09
+L3169@P99: Puebla - - 240.00 - -
+L3170@P99: Querétaro 994.00 129.59 - - 1 544.00
+L3171@P99: San Luis Potosí 4 226.18 113 223.60 34 680.00 - 33 479.99
+L3172@P99: Sinaloa 575.00 527.00 670.00 466.00 427.00
+L3173@P99: Sonora 528 145.72 542 753.09 641 050.00 550 597.50 544 345.80
+L3174@P99: Zacatecas 47 877.67 75 543.69 80 840.00 78 708.41 121 335.80
+L3175@P99: p/ Cifras preliminares.
+L3176@P99: Fuente: elaboración propia a partir de datos proporcionados por DGM, IFOMEGEM.
+L3177@P99: 7.3 Cobre
+L3178@P99: Producción minera por entidad federativa
+L3179@P99: (Toneladas)
+L3324@P104-105: Anuario Estadístico de la Minería Mexicana, edición 2025 105Estados/Años 2020 2021 2022 2023 2024 p/
+L3325@P105: Total: 142 787.27 133 340.00 147 700.00 131 842.27 119 527.77
+L3326@P105: Aguascalientes 333.00 500.00 160.00 160.00 60.00
+L3327@P105: Baja California 837.00 480.00 270.00 - -
+L3328@P105: Chihuahua 17 982.29 17 700.00 15 860.00 15 126.25 9 607.54
+L3329@P105: Coahuila 275.20 170.00 10.00 9.98 105.12
+L3330@P105: Durango 15 991.83 14 940.00 11 940.00 8 153.31 8 108.57
+L3331@P105: Guanajuato 4 118.43 1 100.00 1 170.00 3 398.46 1 300.00
+L3332@P105: Guerrero 15 816.76 21 440.00 24 270.00 22 682.01 19 710.00
+L3333@P105: Hidalgo 73.00 90.00 50.00 20.86 35.66
+L3334@P105: Jalisco 118.96 170.00 10.00 20.95 6.73
+L3335@P105: México 2 472.05 1 250.00 1 190.00 1 316.69 813.59
+L3336@P105: Michoacán 180.50 70.00 140.00 94.75 44.88
+L3337@P105: Morelos 19.26 - - - -
+L3338@P105: Nayarit 156.93 120.00 140.00 102.56 70.00
+L3339@P105: Oaxaca 3 317.60 40.00 2 590.00 1 677.00 390.00
+L3340@P105: Querétaro 324.00 300.00 300.00 277.68 216.54
+L3341@P105: San Luis Potosí 2 435.10 10.00 2 270.00 - 2 660.00
+L3342@P105: Sinaloa 368.05 150.00 1 020.00 273.47 166.00
+L3343@P105: Sonora 37 423.72 40 030.00 51 600.00 55 903.03 38 360.30
+L3344@P105: Zacatecas 40 543.59 34 780.00 34 710.00 22 625.27 37 872.85
+L3345@P105: p/ Cifras preliminares.
+L3346@P105: Fuente: elaboración propia a partir de datos proporcionados por DGM.
+L3347@P105: 7.7 Oro
+L3348@P105: Producción minera por entidad federativa
+L3349@P105: (Kilogramos)
+L3387@P106-107: Anuario Estadístico de la Minería Mexicana, edición 2025 107Estados/Años 2020 2021 2022 2023 2024 p/
+L3388@P107: Total: 7 424 554.05 6 492 180.00 7 067 580.00 7 277 840.30 7 221 026.44
+L3389@P107: Aguascalientes 45 577.00 32 040.00 20 050.00 23 897.00 16 790.00
+L3390@P107: Baja California 19 101.00 9 830.00 4 620.00 - -
+L3391@P107: Chihuahua 1 486 389.80 1 475 290.00 1 525 190.00 1 642 649.00 1 045 873.90
+L3392@P107: Coahuila 128 867.64 114 010.00 96 150.00 84 565.96 96 770.00
+L3393@P107: Durango 780 980.30 1 005 050.00 886 590.00 892 327.53 812 980.00
+L3394@P107: Guanajuato 40 567.09 35 710.00 50 370.00 213 642.26 55 130.00
+L3395@P107: Guerrero 123 331.06 234 840.00 217 080.00 174 312.22 114 470.00
+L3396@P107: Hidalgo 49 209.12 85 480.00 78 920.00 87 510.93 101 680.00
+L3397@P107: Jalisco 25 455.37 32 510.00 32 550.00 3 335.78 76 020.00
+L3398@P107: México 198 743.21 206 120.00 202 570.00 206 946.00 136 930.00
+L3399@P107: Michoacán 979.44 3 360.00 1 920.00 - -
+L3400@P107: Morelos 220.55 - - - -
+L3401@P107: Nayarit 1 569.24 6 090.00 5 590.00 5 394.27 5 030.00
+L3402@P107: Oaxaca 956 654.00 6 430.00 237 690.00 183 737.00 31 750.00
+L3403@P107: Puebla - - 20.00 - -
+L3404@P107: Querétaro 6 396.20 2 800.00 2 150.00 1 463.38 1 270.00
+L3405@P107: San Luis Potosí 60 236.50 64 760.00 215 020.00 - 217 660.00
+L3406@P107: Sinaloa 33 979.31 34 010.00 102 130.00 44 406.90 40 980.00
+L3407@P107: Sonora 653 041.24 586 180.00 469 900.00 745 524.77 835 288.10
+L3408@P107: Zacatecas 2 813 255.98 2 557 670.00 2 919 070.00 2 968 127.30 3 632 404.44
+L3409@P107: p/ Cifras preliminares.
+L3410@P107: Fuente: elaboración propia a partir de datos proporcionados por DGM.
+L3411@P107: 7.8 Plata
+L3412@P107: Producción minera por entidad federativa
+L3413@P107: (Kilogramos)
+L3567@P112-113: Anuario Estadístico de la Minería Mexicana, edición 2025 113Estados/Años 2020 2021 2022 2023 2024 p/
+L3568@P113: Total: 1 008 252.25 2 542 750.69 877 000.00 744 284.64 1 009 493.57
+L3569@P113: Aguascalientes 14 249.00 11 318.66 9 300.00 9 703.00 8 381.00
+L3570@P113: Baja California Sur 1 520.00 1 506.00 700.00 269.00 -
+L3571@P113: Chihuahua 121 834.88 148 864.65 120 860.00 116 739.31 115 878.35
+L3572@P113: Coahuila 30 382.00 11 245.00 - - 15 000.00
+L3573@P113: Durango 127 135.75 1 759 628.37 141 440.00 108 374.13 97 404.99
+L3574@P113: Guerrero 33 648.69 58 193.00 51 360.00 50 811.03 32 406.50
+L3575@P113: Hidalgo 10 015.70 21 832.00 21 250.00 23 224.57 25 639.97
+L3576@P113: Jalisco 86 524.20 5 007.37 4 950.00 - 5 479.19
+L3577@P113: México 38 304.54 40 801.00 38 440.00 42 339.12 27 583.70
+L3578@P113: Michoacán .02 20.40 1 120.00 - -
+L3579@P113: Oaxaca 26 090.18 - 25 140.00 15 842.99 9 506.33
+L3580@P113: Querétaro 2 598.00 358.07 - - 3 649.00
+L3581@P113: San Luis Potosí 29 287.62 29 192.75 25 000.00 - 27 039.19
+L3582@P113: Sinaloa 2 027.81 2 345.45 32 500.00 - -
+L3583@P113: Sonora - - - 1.05 78 029.61
+L3584@P113: Zacatecas 484 633.86 452 437.97 404 940.00 376 980.44 563 495.74
+L3585@P113: p/ Cifras preliminares.
+L3586@P113: Fuente: elaboración propia a partir de datos proporcionados por DGM.
+L3587@P113: 7.12 Zinc
+L3588@P113: Producción minera por entidad federativa
+L3589@P113: (Toneladas)
+L6408@P232: Productos 2023 2023/2022 2024 p/ 2024/2023
+L6409@P232: Total: 16 784 358 737 9.60 17 685 879 730 5.37
+L6410@P232: A) Minerales metálicos 12 544 966 538 -13.63 13 407 644 365 6.88
+L6411@P232: I. Metales preciosos 2 902 121 072 -39.40 2 861 540 271 -1.40
+L6412@P232: Oro 14 674 478 -99.44 13 478 389 -8.15
+L6413@P232: Plata 2 825 513 180 41.14 2 812 649 164 -0.46
+L6414@P232: Platino 60 410 789 -62.37 35 412 718 -41.38
+L6415@P232: Paladio 1 522 625 100.00 - -100.00
+L6416@P232: II. Metales industriales 9 642 845 466 -0.96 10 546 104 094 9.37
+L6417@P232: Aluminio 1 256 645 767 -7.75 1 332 556 406 6.04
+L6418@P232: Antimonio 2 583 888 1838.10 2 685 006 3.91
+L6419@P232: Bismuto 1 208 664 100.00 846 293 -29.98
+L6420@P232: Cadmio - 0.00 57 631 100.00
+L6421@P232: Cobalto 475 440 100.00 1 329 429 179.62
+L6422@P232: Cobre 5 277 228 108 16.92 5 383 445 514 2.01
+L6423@P232: Cromo 124 -97.19 - -100.00
+L6424@P232: Estaño 30 635 222 53.44 26 033 273 -15.02
+L6425@P232: Fierro 1 377 361 471 -36.89 1 541 021 391 11.88
+L6426@P232: Magnesio 13 520 536 55.17 27 744 524 105.20
+L6427@P232: Níquel 207 294 999 455.63 194 208 307 -6.31
+L6428@P232: Plomo 956 752 486 8.08 1 238 253 068 29.42
+L6429@P232: Tantalio - 0.00 31 716 100.00
+L6430@P232: Titanio 4 720 179 4.83 15 651 882 231.60
+L6431@P232: Tungsteno 5 866 950 -28.79 3 145 911 -46.38
+L6432@P232: Vanadio 5 770 961 79.20 5 194 619 -9.99
+L6433@P232: Zinc 502 780 671 -29.23 773 899 124 53.92
+L6466@P233: p/ Cifras preliminares.
+L6467@P233: *Comprende arcillas cerámicas y refractarias.
+L6468@P233: **Incluye la producción de arena para vidrio, cuarzo y materiales silicosos.
+L6469@P233: Cifras revisadas al mes de agosto de 2025.
+L6470@P233: Fuente: elaboración propia a partir de datos obtenidos del INEGI (2025).
+L18104@P516: Producción minero-metalúrgica: se refiere a los
+L18105@P516: metales afinados más los contenidos metálicos
+L18106@P516: de los metales impuros obtenidos de primera
+L18107@P516: fusión (fundición) y de los concentrados y/o
+L18108@P516: precipitados (beneficio), cuyo destino final es la
+L18109@P516: exportación. En el caso de los minerales no
+L18110@P516: metálicos se considera el peso seco obtenido de
+L18111@P516: la mina o de la planta de beneficio, según el
+L18112@P516: último proceso que presente el mineral no
+L18113@P516: metálico. La producción minero-metalúrgica hace
+L18114@P516: referencia a las actividades de extracción,
+L18115@P516: beneficio, fundición y afinación.
+

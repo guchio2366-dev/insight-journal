@@ -1,5 +1,6 @@
 ---
 import AsiaAtlasPage from '../../../../components/atlas/AsiaAtlasPage.astro';
+import CentralAsiaIndustryPage from '../../../../components/atlas/asia/CentralAsiaIndustryPage.astro';
 import { asiaMapIds } from '../../../../data/atlas/regional-atlas';
 import {asiaFocusIds} from '../../../../data/atlas/asia-focus';
 export function getStaticPaths() {
@@ -7,4 +8,4 @@ export function getStaticPaths() {
 }
 const {regionId,initialField,focusId}=Astro.props;
 ---
-<AsiaAtlasPage {regionId} {initialField} {focusId} />
+{focusId==='central-asia'&&initialField==='industry'?<CentralAsiaIndustryPage />:<AsiaAtlasPage {regionId} {initialField} {focusId} />}

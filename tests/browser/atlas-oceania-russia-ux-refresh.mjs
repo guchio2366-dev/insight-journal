@@ -33,7 +33,28 @@ try{
  for(const [width,height] of [[1536,900],[1024,768]]){
   await page.setViewportSize({width,height});
   for(const region of ['oceania','russia'])for(const field of ['agriculture','nature','industry','population']){
+   report.phase=`${width}/${region}/${field}`;
    await page.goto(`${base}atlas/${region}/${field}/`,{waitUntil:'networkidle'});
+   // Russia's dedicated industry page owns its three-sector/product contract.
+   // The complete 19-product/49-place checks live in verify-russia-industry-review.mjs.
+   if(region==='russia'&&field==='industry'){
+    await page.waitForFunction(()=>document.querySelector('[data-ru-industry]')?.dataset.ruReady==='true');
+    const host=page.locator('[data-ru-industry]'),map=host.locator('[data-ru-map]'),frame=await map.getAttribute('viewBox');
+    assert.equal(frame,'0 0 1200 597');
+    for(const sector of ['resources','manufacturing','services']){
+     await host.locator(`[data-ru-sector="${sector}"]`).click();
+     assert.equal(new URL(page.url()).searchParams.get('sector'),sector);
+     assert.ok(await host.locator('[data-ru-marker]').count()>0);
+     assert.ok(await host.locator('[data-ru-label]').count()>0);
+     assert.equal(await map.getAttribute('viewBox'),frame);
+     assert.ok((await host.locator('[data-ru-reading]').textContent()).length>35);
+     await host.locator('[data-ru-canvas]').scrollIntoViewIfNeeded();
+     await capture(`${width}-russia-industry-${sector}`);
+    }
+    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
+    report.checks.push({region,field,width,status:'passed',contract:'dedicated three-sector industry page'});
+    continue;
+   }
    await page.waitForFunction(r=>document.querySelector(`[data-${r}-learning]`)?.dataset[r+'Ready']==='true',region);
    await page.evaluate(async()=>{await document.fonts.ready;await Promise.all([...document.querySelectorAll('[data-primary-map] image')].map(el=>new Promise((done,reject)=>{const image=new Image();image.onload=done;image.onerror=()=>reject(new Error('Map image failed: '+el.getAttribute('href')));image.src=el.getAttribute('href');})));});
    const root=page.locator(`[data-${region}-learning]`),map=root.locator('[data-primary-map] svg'),frame=await map.getAttribute('viewBox');
@@ -99,7 +120,10 @@ try{
      const {guideBoxes,otherBoxes,bounds}=await root.evaluate(element=>{
       const stage=element.querySelector('[data-primary-map]'),svg=stage.querySelector('svg');
       const box=node=>{const b=node.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};};
-      return {guideBoxes:[...svg.querySelectorAll('[data-oceania-industry-location^="nz-"] text')].map(box),otherBoxes:[...svg.querySelectorAll('[data-oceania-industry-location]:not([data-oceania-industry-location^="nz-"]) text, svg > text')].map(box),bounds:box(stage)};
+      // The complete catalog replaces duplicate saved-guide captions with
+      // the dairy/wood callouts; the original geographic markers remain.
+      const catalog=svg.querySelector('[data-oceania-catalog-map]');
+      return {guideBoxes:[...svg.querySelectorAll(catalog?'[data-oceania-product-label="dairy"] text,[data-oceania-product-label="wood"] text':'[data-oceania-industry-location^="nz-"] text')].map(box),otherBoxes:[...svg.querySelectorAll(catalog?'[data-oceania-product-label]:not([data-oceania-product-label="dairy"]):not([data-oceania-product-label="wood"]) text':'[data-oceania-industry-location]:not([data-oceania-industry-location^="nz-"]) text, svg > text')].map(box),bounds:box(stage)};
      });
      const overlap=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
      for(const box of guideBoxes)assert.ok(box.width>0&&box.height>0&&box.x>=bounds.x&&box.y>=bounds.y&&box.x+box.width<=bounds.x+bounds.width&&box.y+box.height<=bounds.y+bounds.height,`${width}: NZ guide names stay inside the map: ${JSON.stringify({box,bounds})}`);
@@ -149,6 +173,6 @@ try{
    report.checks.push({width,height,region,field,frame});
   }
  }
- assert.deepEqual(report.errors,[]);report.status='passed';console.log(`Oceania/Russia UX: ${report.checks.length} PC field views, ${report.screenshots.length} screenshots; sandbox enabled.`);
-}catch(error){report.status='failed';report.errors.push(String(error));console.error(`::error::${String(error)}`);throw error;}
+ assert.deepEqual(report.errors,[]);report.status='passed';delete report.phase;console.log(`Oceania/Russia UX: ${report.checks.length} PC field views, ${report.screenshots.length} screenshots; sandbox enabled.`);
+}catch(error){report.status='failed';const detail=`${report.phase??'initialization'}: ${String(error)}; browser errors: ${report.errors.join(' | ')}`;report.errors.push(String(error));console.error(`::error::${detail.replaceAll('%','%25').replaceAll('\n','%0A').replaceAll('\r','%0D')}`);throw error;}
 finally{await writeFile(resolve(output,'ux-review.json'),JSON.stringify(report,null,2)+'\n');await browser?.close();await new Promise(done=>server.close(done));}

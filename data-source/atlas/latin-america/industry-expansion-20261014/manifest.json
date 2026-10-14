@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-14",
+  "baseMain": "63e998cc",
+  "countryScope": "中南米・カリブ34国地域。メキシコを除く。世界値は各指標に限る。",
+  "counts": {
+    "requirements": 22,
+    "industries": 31,
+    "sites": 76,
+    "statistics": 109,
+    "administrativeRegions": 19,
+    "sources": 95
+  },
+  "inputs": [
+    {
+      "publisher": "Natural Earth",
+      "version": "5.1.2",
+      "file": "ne_10m_populated_places.geojson",
+      "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_populated_places.geojson",
+      "sha256": "9b8e3de09048ef00dfc70357dbb9fa324493f214b5e0ae4daf1aa79a8d10116b",
+      "method": "通常の公開URLから取得。加工前の採用featureと原属性をsubsetに保存。"
+    },
+    {
+      "publisher": "Natural Earth",
+      "version": "5.1.2",
+      "file": "ne_10m_admin_1_states_provinces.geojson",
+      "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_admin_1_states_provinces.geojson",
+      "sha256": "22d0e3ad85eb3e27f17cabf8ba2d50e554fbc27a87796ff891d958185da62fb5",
+      "method": "通常の公開URLから取得。加工前の採用featureと原属性をsubsetに保存。"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "src/data/atlas/latin-america/industry-sectors.json",
+      "bytes": 429077,
+      "sha256": "86fac5495b6e984fa6f2c09e7bfccef847c312e32e3bf6f1f70634655d7031d7"
+    },
+    {
+      "path": "data-source/atlas/latin-america/industry-expansion-20261014/coverage.json",
+      "bytes": 4213,
+      "sha256": "2ccba2ca679340f5cfd877311c20e3d7d57d5c370a77e86f20a045ece2405bac"
+    },
+    {
+      "path": "data-source/atlas/latin-america/industry-expansion-20261014/coordinate-original-subset.geojson",
+      "bytes": 165731,
+      "sha256": "1df866e74545f8cd00dc2b77e8dc3edab22a20e5093943d65d46c8af3505ac4d"
+    },
+    {
+      "path": "data-source/atlas/latin-america/industry-expansion-20261014/admin-original-subset.geojson",
+      "bytes": 1664363,
+      "sha256": "f6677a780c25ce8ad334165af8f40ce12f568ce959d8c4bad5e1a5394f8f9c7e"
+    },
+    {
+      "path": "data-source/atlas/latin-america/industry-expansion-20261014/evidence.json",
+      "bytes": 156424,
+      "sha256": "53edf483e88a13a0953f764078fa55fa90477d8bc9f974c73d5e3383e70c9384"
+    }
+  ],
+  "acquisitionNotes": [
+    {
+      "source": "ibge-slaughter-2025",
+      "status": "official-search-excerpt",
+      "detail": "州別2025年比率の公式検索表示を確認。本文403、制限回避なし。"
+    },
+    {
+      "source": "USGS mineral commodity summaries 2026",
+      "status": "403",
+      "detail": "国別の公開公式HTMLへ代替。2025年世界比較の未取得は2024年で明示。"
+    },
+    {
+      "source": "Embraer 20-F 2025",
+      "status": "large-document",
+      "detail": "公式年次報告の検索表示を含む確認。国内雇用比率と連結収入の対象範囲を分離。"
+    }
+  ],
+  "determinism": "同一の保存入力による再生成で全4生成物のSHA-256一致を確認。既存20261012台帳は当時の履歴として保持。現行カタログは本manifestを参照。"
+}

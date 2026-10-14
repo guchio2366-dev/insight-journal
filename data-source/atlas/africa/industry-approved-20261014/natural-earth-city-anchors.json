@@ -1,0 +1,117 @@
+{
+  "dataset": "Natural Earth 1:10m populated places v5.1.2",
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_populated_places.geojson",
+  "sha256_full_geojson": "9b8e3de09048ef00dfc70357dbb9fa324493f214b5e0ae4daf1aa79a8d10116b",
+  "license": "public domain",
+  "usage": "Named city guide points, not facility coordinates",
+  "cities": [
+    {
+      "ne_id": 1159135763,
+      "name": "Gisenyi",
+      "country": "RWA",
+      "coordinates": [
+        29.262906,
+        -1.684666
+      ]
+    },
+    {
+      "ne_id": 1159136927,
+      "name": "El Jadida",
+      "country": "MAR",
+      "coordinates": [
+        -8.509982,
+        33.260359
+      ]
+    },
+    {
+      "ne_id": 1159148063,
+      "name": "Tangier",
+      "country": "MAR",
+      "coordinates": [
+        -5.806198,
+        35.775925
+      ]
+    },
+    {
+      "ne_id": 1159149853,
+      "name": "Suez",
+      "country": "EGY",
+      "coordinates": [
+        32.549941,
+        30.004976
+      ]
+    },
+    {
+      "ne_id": 1159149859,
+      "name": "Aswan",
+      "country": "EGY",
+      "coordinates": [
+        32.898911,
+        24.087508
+      ]
+    },
+    {
+      "ne_id": 1159150675,
+      "name": "Marrakesh",
+      "country": "MAR",
+      "coordinates": [
+        -8.001933,
+        31.631939
+      ]
+    },
+    {
+      "ne_id": 1159150871,
+      "name": "Luxor",
+      "country": "EGY",
+      "coordinates": [
+        32.650038,
+        25.700019
+      ]
+    },
+    {
+      "ne_id": 1159151349,
+      "name": "Alexandria",
+      "country": "EGY",
+      "coordinates": [
+        29.94805,
+        31.201965
+      ]
+    },
+    {
+      "ne_id": 1159151439,
+      "name": "Abidjan",
+      "country": "CIV",
+      "coordinates": [
+        -4.020207,
+        5.323126
+      ]
+    },
+    {
+      "ne_id": 1159151583,
+      "name": "Cape Town",
+      "country": "ZAF",
+      "coordinates": [
+        18.433042,
+        -33.918065
+      ]
+    },
+    {
+      "ne_id": 1159151597,
+      "name": "Nairobi",
+      "country": "KEN",
+      "coordinates": [
+        36.814711,
+        -1.281401
+      ]
+    },
+    {
+      "ne_id": 1159151603,
+      "name": "Cairo",
+      "country": "EGY",
+      "coordinates": [
+        31.248022,
+        30.051906
+      ]
+    }
+  ]
+}

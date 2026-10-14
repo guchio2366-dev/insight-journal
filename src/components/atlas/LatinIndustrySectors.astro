@@ -1,5 +1,6 @@
 ---
 import {latinIndustrySectors as data,renderIndustrySectorMap} from '../../lib/atlas-latin-industry-sectors';
+import {renderLatinIndustryStatistics} from '../../lib/atlas-latin-industry-evidence';
 import '../../styles/atlas-latin-industry-sectors.css';
 const state={sector:'resources' as const,industry:null,site:null,single:false,scope:'all' as const,place:'all'};
 ---
@@ -8,8 +9,8 @@ const state={sector:'resources' as const,industry:null,site:null,single:false,sc
  <div class="latin-sector-grid">
   <div class="latin-sector-map-column">
    <div data-lis-map set:html={renderIndustrySectorMap(state)}/>
-   <div class="latin-sector-map-key" aria-label="記号の読み方">○ 採取　■ 加工・発電　◇ サービス<br/>数量を表さない案内点。都市位置を使う例を含みます。<br/>近接記号は短い対応線で原位置からずらしています。</div>
-   <p class="latin-sector-note">丸：採取地域　四角：加工・発電　ひし形：サービス。資料に対応する案内位置で、数量・施設境界・産業区域は表しません。</p>
+   <div class="latin-sector-map-key" aria-label="記号の読み方">○ 原料・採取　■ 加工・発電　◇ サービス<br/>白抜き：地域案内　注記：国・州等の集計値<br/>細線：行政界（産業の密度ではありません）</div>
+   <p class="latin-sector-note">点は資料に対応する立地・地域の案内。短い線は元座標との対応で、取引線ではありません。点の大きさは数量を表しません。</p>
    <div data-lis-legend aria-label="産業の色と選択">{data.industries.filter(i=>i.sectors.includes('resources')).map(i=><button type="button" data-lis-industry={i.id} aria-pressed="false"><i style={`background:${i.color}`}/>{i.label}</button>)}</div>
   </div>
   <aside class="latin-sector-reader" data-lis-reader aria-label="全体の概説と産業・拠点の解説">
@@ -23,7 +24,18 @@ const state={sector:'resources' as const,industry:null,site:null,single:false,sc
    <details><summary>出典と対象時期</summary><ul data-lis-sources/>
     <p>{data.geographicScope}</p><p>都市・近隣都市を用いる地域案内点と、原資料の施設基準点を区別します。選択すると個別の位置の根拠を読めます。空白は産業の不存在ではありません。</p>
    </details>
-   <p>補助統計と原資料は地図の下へ。</p>
+   <p>集積の規模、世界での位置、取引と定義の統計は地図下に掲載しています。</p>
   </aside>
  </div>
+ <section class="latin-sector-statistics" data-lis-statistics aria-label="中南米の産業別統計と定義">
+  <h2 data-lis-statistics-title>資源・エネルギーの規模と集積</h2>
+  <p class="latin-sector-statistics-scope">値の対象範囲は各行に明記しています。国・州全体の値は個々の工場の数量ではなく、地図の切り取り範囲の合計でもありません。</p>
+  <div class="latin-sector-stat-grid" data-lis-statistics-body set:html={renderLatinIndustryStatistics('resources',null)}/>
+  <details class="latin-sector-method"><summary>品目・工程・欠測と地理の対象を確かめる</summary>
+   <p>主案17群と追加候補5群を採用しています。大豆油と粕、砂糖とエタノール、牛肉と鶏肉、魚粉と魚油は別の製品・系列です。一次農林水産業と加工、設備能力と実績、企業全世界売上と国内生産、金額と数量を分けています。</p>
+   <p>推計、予測、計算値、対象範囲に留保のある値、未取得を表示します。欠測はゼロではありません。世界順位・シェアの対象年と分母は各行に記載しています。</p>
+   <p>都市案内点、行政地域の案内位置、公式の飛行場・井戸基準点を区別します。行政界の色は資料の集計・立地対象で、全域に産業が均一に分布する意味ではありません。Natural Earth v5.1.2、経緯度WGS84の資料を使用。投影は面積比較に適しません。</p>
+   <p>下記の既存WDI「製造品」輸出比率はSITC 5～8（68を除く）の分類で、食品加工も含むこの地図の製造業分類とは範囲が異なります。品目別統計へ配分していません。</p>
+  </details>
+ </section>
 </section>

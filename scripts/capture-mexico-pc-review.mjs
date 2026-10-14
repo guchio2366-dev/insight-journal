@@ -74,7 +74,7 @@ async function measure(page, selected) {
       return {url, width: image.naturalWidth, height: image.naturalHeight};
     }));
     // Read all bounds after image decoding, without an asynchronous gap between them.
-    const layout = {article: bounds(root), workspace: bounds(root.querySelector('.atlas-workspace')), grid: bounds(grid), map: bounds(map), mapFrame: bounds(map.closest('.atlas-map-frame')), reading: bounds(root.querySelector(selected.reading)), news: bounds(root.closest('[data-atlas-shell]')?.querySelector('[data-news-rail]'))};
+    const layout = {article: bounds(root), workspace: bounds(root.querySelector('.atlas-workspace') ?? (root.hasAttribute('data-us-industry') ? root : null)), grid: bounds(grid), map: bounds(map), mapFrame: bounds(map.closest('.atlas-map-frame')), reading: bounds(root.querySelector(selected.reading)), news: bounds(root.closest('[data-atlas-shell]')?.querySelector('[data-news-rail]'))};
     const elements = ['.atlas-region-controls', '.atlas-tabs', '.atlas-primary-grid'].map(selector => ({selector, ...bounds(root.querySelector(selector))}));
     if (elements.some(element => !element.visible)) throw new Error('Missing visible workspace region');
     const x = Math.floor(Math.min(...elements.map(box => box.x))), y = Math.floor(Math.min(...elements.map(box => box.y)));
@@ -101,7 +101,10 @@ async function capture(browser, origin, basePath, output, scene, commit, profile
   page.on('response', response => {if (response.status() >= 400) failedRequests.push({url: response.url(), status: response.status()}); else if (['image', 'stylesheet', 'script', 'fetch', 'xhr', 'font'].includes(response.request().resourceType())) assets.add(response.url());});
   page.on('requestfailed', request => {if (request.failure()?.errorText !== 'net::ERR_ABORTED') failedRequests.push({url: request.url(), error: request.failure()?.errorText});});
   const route = `/atlas/north-america/${country === 'mexico' ? 'mexico/' : ''}${field}/`;
-  const record = {name, country, field, scene: id, commit, status: 'failed', profile, requestedUrl: `${origin}${basePath}${route}`, errors, consoleMessages, failedRequests};
+  // These scenarios operate the retained export/population comparison UI.
+  // The normal 34-industry view has its own desktop/mobile review in the same CI.
+  const search = country === 'mexico' && field === 'industry' ? '?legacy=1' : '';
+  const record = {name, country, field, scene: id, commit, status: 'failed', profile, requestedUrl: `${origin}${basePath}${route}${search}`, errors, consoleMessages, failedRequests};
   try {
     const response = await page.goto(record.requestedUrl, {waitUntil: 'domcontentloaded'});
     assert.equal(response?.status(), 200, 'Page did not load successfully');
@@ -140,8 +143,9 @@ async function capture(browser, origin, basePath, output, scene, commit, profile
       const available = Math.max(200, record.viewport.height - Math.max(0, record.layout.reading.y) - 12);
       assert(record.layout.reading.height <= available + 2, 'Population reader retained a height from an earlier scroll position');
     }
-    assert(record.rendering.mode === (country === 'us' ? 'webgl2' : 'svg'), 'Expected live map rendering');
-    if (country === 'us') assert.equal(record.rendering.webgl.contextLost, false);
+    const usIndustrySVG=country==='us'&&field==='industry'&&Object.hasOwn(record.rootDataset,'usIndustry');
+    assert(record.rendering.mode === (country === 'us'&&!usIndustrySVG ? 'webgl2' : 'svg'), 'Expected live map rendering');
+    if (country === 'us'&&!usIndustrySVG) assert.equal(record.rendering.webgl.contextLost, false);
     else {
       assert(record.rendering.visibleGeometryCount > 0, 'Visible SVG map geometry is missing');
       for (const use of record.rendering.svgUses) assert(use.targetHasGeometry, `SVG use has no local source geometry: ${use.href}`);

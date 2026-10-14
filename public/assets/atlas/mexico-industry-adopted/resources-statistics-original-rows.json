@@ -1,0 +1,260 @@
+{
+  "schemaVersion": 1,
+  "retrieved": "2026-10-14",
+  "note": "Original factual row extracts, with separate years and processing stages. Amounts are not GDP unless labelled GDP or census value added.",
+  "sgm": {
+    "url": "https://www.sgm.gob.mx/productos/pdf/Anuario_2024_Edicion_2025.pdf",
+    "GDP": {
+      "year": 2024,
+      "unit": "million MXN at 2018 prices",
+      "national": 25437866,
+      "oilGas": 583823
+    },
+    "mineroMetallurgical": {
+      "year": 2024,
+      "unit": "million current MXN",
+      "total": 312461.2395,
+      "gold": 96049.821,
+      "silver": 68240.5722,
+      "copper": 82654.8345,
+      "zinc": 21375.821
+    },
+    "trade": {
+      "year": 2024,
+      "unit": "current USD",
+      "copper": 5383445514,
+      "silver": 2812649164,
+      "zinc": 773899124,
+      "note": "Selected SGM tariff groups, combining different product stages. Not all national exports of the metal; gross weight is not contained metal."
+    }
+  },
+  "usgs": {
+    "url": "https://pubs.usgs.gov/periodicals/mcs2026/mcs2026.pdf",
+    "year": 2025,
+    "status": "estimate",
+    "gold": {
+      "unit": "metric tonnes gold content",
+      "Mexico": 140,
+      "world": 3300,
+      "rank": 7,
+      "columns": [
+        "Mine production 2024",
+        "Mine production 2025e",
+        "Reserves"
+      ],
+      "MexicoRow": [
+        140,
+        140,
+        1400
+      ],
+      "worldRow": [
+        3280,
+        3300,
+        66000
+      ]
+    },
+    "copper": {
+      "unit": "thousand metric tonnes Cu content",
+      "Mexico": 690,
+      "world": 23000,
+      "rank": 11,
+      "refinedMexico": 480,
+      "refinedWorld": 29000,
+      "columns": [
+        "Mine production 2024",
+        "Mine production 2025e",
+        "Refinery production 2024",
+        "Refinery production 2025e",
+        "Reserves"
+      ],
+      "MexicoRow": [
+        717,
+        690,
+        489,
+        480,
+        53000
+      ],
+      "worldRow": [
+        23000,
+        23000,
+        27600,
+        29000,
+        980000
+      ]
+    },
+    "zinc": {
+      "unit": "thousand metric tonnes zinc content",
+      "Mexico": 780,
+      "world": 13000,
+      "rank": 5,
+      "columns": [
+        "Mine production 2024",
+        "Mine production 2025e",
+        "Reserves"
+      ],
+      "MexicoRow": [
+        773,
+        780,
+        14000
+      ],
+      "worldRow": [
+        11900,
+        13000,
+        240000
+      ]
+    },
+    "availability": "Primary PDF text search yielded original table headers and rows; direct PDF open returned HTTP 403, so no image verification or local PDF copy."
+  },
+  "silverSurvey": {
+    "url": "https://silverinstitute.org/wp-content/uploads/2026/04/World-Silver-Survey-2026.pdf",
+    "table": "Appendix 12b Top 20 Producing Countries",
+    "year": 2025,
+    "unit": "metric tonnes silver content",
+    "Mexico": 5378,
+    "world": 26331,
+    "rank": 1,
+    "columns": [
+      "2024",
+      "2025",
+      "Y/Y"
+    ],
+    "MexicoRow": [
+      5633,
+      5378,
+      "-5%"
+    ],
+    "worldRow": [
+      25618,
+      26331,
+      "3%"
+    ],
+    "availability": "Primary PDF original table returned in search text; direct PDF HTTP 403."
+  },
+  "silverDemand": {
+    "url": "https://silverinstitute.org/elevated-lease-rates-regional-liquidity-tightness-and-robust-investor-interest-resulted-in-record-silver-prices-in-2025/",
+    "year": 2025,
+    "industrialMoz": 657.4,
+    "industrialChangePct": -3
+  },
+  "pemex": {
+    "url": "https://www.sec.gov/Archives/edgar/data/932782/000093278226000006/ck0000932782-20251231.htm",
+    "year": 2025,
+    "table": "Refining Production; National Refining System, Mexico; Deer Park excluded",
+    "unit": "thousand barrels/day",
+    "crudeRuns": 1013.8,
+    "crudeAndCondensatesProduction": 1618.5,
+    "rawGasProductionMMcfPerDay": 4556.1,
+    "dryGasProductionMMcfPerDay": 1721.4,
+    "gasProcessingBoundary": "Exploration and Extraction natural gas output differs from Energy Transformation dry gas output; dry gas includes ethane reinjected in the natural gas stream. Do not compute their ratio as a national recovery yield.",
+    "gasoline": 355.6,
+    "diesel": 227.7,
+    "refinedAll": 1022.1,
+    "highestRuns": [
+      {
+        "refinery": "Tula",
+        "state": "13",
+        "value": 212
+      },
+      {
+        "refinery": "Salina Cruz",
+        "state": "20",
+        "value": 201
+      },
+      {
+        "refinery": "Cadereyta",
+        "state": "19",
+        "value": 146
+      },
+      {
+        "refinery": "Olmeca (Dos Bocas)",
+        "state": "27",
+        "value": 134
+      },
+      {
+        "refinery": "Salamanca",
+        "state": "11",
+        "value": 117
+      }
+    ],
+    "allDomesticRefineries": [
+      "Cadereyta",
+      "Madero",
+      "Minatitlán",
+      "Olmeca",
+      "Salamanca",
+      "Salina Cruz",
+      "Tula"
+    ],
+    "note": "Highest-run refinery figures are rounded annual means for five of seven refineries. Processing-volume map scope is the states containing these seven domestic PEMEX refineries. Madero and Minatitlán are null/unretrieved; the other 25 states are null/unknown. Facility non-location is not an original numeric zero and does not establish absence of all Mexican refining industry. Do not distribute residual across Madero and Minatitlán."
+  },
+  "sener": {
+    "url": "https://sidof.segob.gob.mx/notas/docFuente/5776838",
+    "year": 2024,
+    "unit": "million cubic feet/day",
+    "gasConsumption": 8845,
+    "gasImports": 6424
+  },
+  "presidencia": {
+    "url": "https://www.gob.mx/presidencia/articulos/version-estenografica-conferencia-de-prensa-de-la-presidenta-claudia-sheinbaum-pardo-del-08-de-abril-de-2026",
+    "year": "2026-04-08",
+    "USGasConsumptionSharePct": 75,
+    "TexasImportSharePct": 80,
+    "top5EntriesSharePct": 70,
+    "note": "Government statement of current conditions, approximate shares; not a full-year 2025 statistical table. Almost 70% enters at 5 of 22 entry points: Tamaulipas Camargo and Matamoros; Chihuahua Ojinaga and San Isidro; Baja California Los Algodones."
+  },
+  "eia": {
+    "url": "https://www.eia.gov/dnav/ng/ng_move_expc_s1_a.htm",
+    "year": 2025,
+    "unit": "million cubic feet/year",
+    "USPipelineExportsToMexico": 2422839
+  },
+  "opec": {
+    "MexicoUrl": "https://publications.opec.org/asb/chapter/show/154/2827/2829",
+    "worldUrl": "https://publications.opec.org/asb/chapter/show/154/2827/2831",
+    "year": 2025,
+    "unit": "million barrels/day",
+    "MexicoCrude": 1.47,
+    "worldCrude": 74.85,
+    "note": "Rounded published values for crude oil; condensates and NGL excluded, unlike PEMEX liquid hydrocarbons."
+  },
+  "banxico": {
+    "url": "https://www.banxico.org.mx/SieInternet/consultarDirectorioInternetAction.do?accion=consultarCuadroAnalitico&idCuadro=CA176&locale=es&sector=1",
+    "year": 2025,
+    "unit": "million current USD",
+    "allGoodsExports": 664267,
+    "oilExports": 21245,
+    "crudeExports": 14818,
+    "oilImports": 46797,
+    "oilBalance": -25553,
+    "note": "Latest current CA176 revision retrieved 2026-10-14. Independently rounded series; displayed balance differs by 1 million USD from subtracting rounded imports/exports."
+  },
+  "goldTrade": {
+    "url": "https://www.banxico.org.mx/publicaciones-y-prensa/balanza-de-pagos/%7BE333A05C-EB45-9A4A-6F1D-591845A64896%7D.pdf",
+    "table": "A1, printed page 7; Credit row 6 Oro no monetario; 2025 annual column",
+    "year": 2025,
+    "unit": "million current USD",
+    "exports": 6162,
+    "imports": 188,
+    "note": "Non-monetary gold in BOP trade classification; not total mine output or the narrow selected SGM gold tariff category."
+  },
+  "worldsteel": {
+    "url": "https://worldsteel.org/data/world-steel-in-figures/world-steel-in-figures-2026/",
+    "year": 2025,
+    "unit": "million tonnes",
+    "MexicoCrude": 13.5,
+    "worldCrude": 1848.9,
+    "rank": 15,
+    "electricPct": 95.9,
+    "apparentUseFinished": 25,
+    "steelImports": 14.8,
+    "steelNetImports": 11.8,
+    "note": "Crude steel and finished steel use are different processing stages. Trade table steel products is not the same finished-steel-equivalent boundary as apparent use; no naive production+imports-exports identity."
+  },
+  "iea": {
+    "url": "https://www.iea.org/reports/global-critical-minerals-outlook-2026/executive-summary",
+    "year": 2035,
+    "copperProjectedGapPct": 25,
+    "note": "Projected global copper primary supply gap for announced projects under the report's demand scenario; not a 2025 observed shortage."
+  }
+}
+

@@ -48,7 +48,8 @@ for (const field of ['agriculture', 'nature', 'industry', 'population']) {
       const {window, css, declarations} = await openField(field, width);
       try {
         assert.equal(css('.atlas-desktop-shell', 'grid-template-columns'), 'clamp(220px,19vw,340px)minmax(0,1fr)', `${width}px news`);
-        assert.equal(css('.atlas-primary-grid', 'grid-template-columns'), 'minmax(0,1.65fr)minmax(320px,1fr)', `${width}px grid`);
+        const grid=field==='industry'?'minmax(0,1fr)340px':'minmax(0,1fr)clamp(260px,24vw,350px)';
+        assert.equal(css('.atlas-primary-grid', 'grid-template-columns'), grid, `${width}px grid`);
         const reading = `[data-field-national=${field === 'nature' ? 'natural' : field}]`;
         assert.ok(!declarations(reading, 'grid-column').includes('1'), `${width}px reading must not be forced below map`);
         if (field === 'nature') {
@@ -57,11 +58,11 @@ for (const field of ['agriculture', 'nature', 'industry', 'population']) {
         }
         window.document.querySelector('.atlas-desktop-shell').classList.add('is-reading-news');
         assert.equal(css('.atlas-desktop-shell', 'grid-template-columns'), 'clamp(380px,32vw,520px)minmax(0,1fr)');
-        assert.equal(css('.atlas-primary-grid', 'grid-template-columns'), 'minmax(0,1.65fr)minmax(320px,1fr)');
+        assert.equal(css('.atlas-primary-grid', 'grid-template-columns'), grid);
       } finally { await window.happyDOM.close(); }
     }
   });
-  test(`${field}: monitor and mobile retain their existing layouts`, async () => {
+  test(`${field}: monitor uses the wider US map and mobile keeps a single column`, async () => {
     for (const width of [390, 959, 1600, 1920]) {
       const {window, css} = await openField(field, width);
       try {
@@ -70,24 +71,34 @@ for (const field of ['agriculture', 'nature', 'industry', 'population']) {
           assert.equal(css('.atlas-desktop-shell', 'flex-direction'), 'column');
         } else {
           assert.equal(css('.atlas-desktop-shell', 'grid-template-columns'), 'clamp(300px,23vw,380px)minmax(0,1fr)');
-          assert.equal(css('.atlas-primary-grid', 'grid-template-columns'), 'minmax(0,1.8fr)minmax(280px,1fr)');
+          assert.equal(css('.atlas-primary-grid', 'grid-template-columns'), field==='industry'?'minmax(0,1fr)350px':'minmax(0,1fr)clamp(260px,24vw,350px)');
         }
       } finally { await window.happyDOM.close(); }
     }
   });
 }
 
-test('West Asia adopts the regional normal-map frame while retaining US navigation and wide-grid contracts', async () => {
+test('West Asia retains its independent regional map and reading widths while US map proportions change', async () => {
   for(const field of ['agriculture','nature','industry','population']) for(const width of [390, 1024, 1440, 1920]) {
     const north=await openField(field,width),west=await openField(field,width,{},768,'west-asia');
     try {
       for(const [selector,property] of [['.atlas-primary-grid','grid-template-columns'],['.atlas-map-frame','aspect-ratio'],['.atlas-map-frame','min-height'],['.atlas-tabs','grid-template-columns']]) {
         // West Asia gives its near-square regional extent more vertical room.
-        if(width>=960 && selector==='.atlas-map-frame') {
+        if(field==='industry' && selector==='.atlas-map-frame') {
+          // The dedicated regional industry page keeps its regional extent
+          // at every width and lets that extent determine the frame height.
+          if(property==='aspect-ratio'){const [numerator,denominator=1]=west.css(selector,property).split('/').map(Number);assert.ok(Math.abs(numerator/denominator-1000/987)<.001,`${field} ${width}px regional map aspect`);}
+          else assert.equal(west.css(selector,property),'0',`${field} ${width}px extent-driven map minimum`);
+        } else if(field==='industry' && selector==='.atlas-primary-grid') {
+          const columns=width<960?'1fr':width<1200?'minmax(0,1.7fr)minmax(250px,1fr)':width<1600?'minmax(0,2fr)minmax(300px,1fr)':'minmax(0,2.2fr)minmax(340px,1fr)';
+          assert.equal(west.css(selector,property),columns,`${field} ${width}px dedicated regional reading column`);
+        } else if(width>=960 && selector==='.atlas-map-frame') {
           if(property==='aspect-ratio'){const [numerator,denominator=1]=west.css(selector,property).split('/').map(Number);assert.ok(Math.abs(numerator/denominator-1000/987)<.001,`${field} ${width}px regional map aspect`);}
           else assert.equal(west.css(selector,property),'300px',`${field} ${width}px regional map minimum`);
-        } else if(width===1024 && selector==='.atlas-primary-grid') {
-          assert.equal(west.css(selector,property),'minmax(0,1.65fr)minmax(320px,1fr)',`${field} ${width}px regional reading column`);
+        } else if(width>=960 && selector==='.atlas-primary-grid') {
+          assert.equal(west.css(selector,property),width>=1600?'minmax(0,1.8fr)minmax(280px,1fr)':'minmax(0,1.65fr)minmax(320px,1fr)',`${field} ${width}px regional reading column`);
+        } else if(width<960 && selector==='.atlas-map-frame' && field==='industry') {
+          assert.equal(west.css(selector,property),property==='aspect-ratio'?'1.44/1':'0',`${field} ${width}px original regional frame`);
         } else {
           assert.equal(west.css(selector,property),north.css(selector,property),`${field} ${width}px ${property}`);
         }
@@ -100,7 +111,7 @@ test('corn keeps its existing laptop story layout', async () => {
   const corn = await openField('agriculture', 1366, {'data-corn-index':''});
   try {
     assert.equal(corn.css('.atlas-desktop-shell', 'grid-template-columns'), 'clamp(220px,19vw,340px)minmax(0,1fr)');
-    assert.equal(corn.css('.atlas-primary-grid', 'grid-template-columns'), 'minmax(0,1.65fr)minmax(320px,1fr)');
+    assert.equal(corn.css('.atlas-primary-grid', 'grid-template-columns'), 'minmax(0,1fr)clamp(260px,24vw,350px)');
     assert.ok(corn.declarations('[data-field-national=agriculture]', 'grid-area').includes('1/2'));
   } finally { await corn.window.happyDOM.close(); }
 });

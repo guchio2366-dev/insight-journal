@@ -1,0 +1,24 @@
+---
+import {centralIndustryMetrics,centralIndustries,centralIndustrySectors,centralIndustrySources,formatCentralMetric} from '../../../data/atlas/central-asia-industry';
+const initialIds=new Set(centralIndustrySectors[0].metricIds);
+const columns=[{id:'size',title:'規模と稼ぎ方'},{id:'distribution',title:'地域の集積・供給先'},{id:'world',title:'世界での位置'}];
+---
+<section class="central-industry-statistics" id="central-industry-statistics" aria-label="地図の下の3列の統計">
+ <p class="central-stat-context" data-central-stat-context>資源・エネルギーの代表指標。各行の年・地域・製品段階は異なり、合算しません。</p>
+ <div class="central-stat-columns">
+ {columns.map(column=><section class="central-stat-column" data-central-stat-column={column.id}>
+  <h2>{column.title}</h2>
+  <div class="central-stat-records">
+   {centralIndustryMetrics.filter(metric=>metric.column===column.id).map(metric=><article class="central-stat-record" data-central-metric={metric.id} data-central-metric-industry={metric.industry} hidden={!initialIds.has(metric.id)}>
+    <h3>{centralIndustries.find(i=>i.id===metric.industry)?.shortLabel} · {metric.label}</h3>
+    <p class="central-metric-value" data-value={metric.value===null?'missing':String(metric.value)}>{formatCentralMetric(metric)}</p>
+    <p class="central-metric-scope">{metric.year} · {metric.scope}{metric.status!=='実績'&&` · ${metric.status}`}</p>
+    <p>{metric.definition}</p>
+    {metric.denominator&&<p class="central-denominator">分母：{metric.denominator}</p>}
+    {metric.formula&&<p class="central-formula">算出：{metric.formula}</p>}
+    <p class="central-stat-sources">{metric.sources.map((id,index)=><>{index>0?' ／ ':''}<a href={centralIndustrySources[id].url}>{centralIndustrySources[id].publisher}</a></>)}</p>
+   </article>)}
+  </div>
+ </section>)}
+ </div>
+</section>

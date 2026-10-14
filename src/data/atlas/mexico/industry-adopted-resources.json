@@ -1,0 +1,2843 @@
+{
+  "sources": {
+    "mx-resource-sgm-value": {
+      "title": "SGM 鉱業・冶金生産の数量・評価額（表1.2、p46）",
+      "url": "https://www.sgm.gob.mx/productos/pdf/Anuario_2024_Edicion_2025.pdf#page=46",
+      "year": 2024,
+      "scope": "精製金属＋輸出向け初回製錬金属・精鉱・沈殿物の含有金属。国際相場で評価した総生産価額。GDP・付加価値ではない。2024年暫定値。原表の編纂時点注記は「septiembre 2024」。"
+    },
+    "mx-resource-sgm-definition": {
+      "title": "SGM 鉱業・冶金系列の定義（用語集p517）",
+      "url": "https://www.sgm.gob.mx/productos/pdf/Anuario_2024_Edicion_2025.pdf#page=517",
+      "year": 2024,
+      "scope": "採掘全量と処理後の鉱業・冶金生産は加工段階・集計範囲が異なる。"
+    },
+    "mx-resource-sgm-gdp": {
+      "title": "SGM 国内GDPと石油・ガス採掘GDP（表2.1、p14）",
+      "url": "https://www.sgm.gob.mx/productos/pdf/Anuario_2024_Edicion_2025.pdf#page=14",
+      "year": 2024,
+      "scope": "2018年価格の実質GDP。SCIAN211は石油・ガス採掘のみで製油所を含まない。"
+    },
+    "mx-resource-sgm-trade": {
+      "title": "SGM 品目分類別輸出額（p233）",
+      "url": "https://www.sgm.gob.mx/productos/pdf/Anuario_2024_Edicion_2025.pdf#page=233",
+      "year": 2024,
+      "scope": "SGMが選択した関税品目群、米ドル現在価格。採掘・精鉱・地金・加工品・スクラップ等を含む範囲が品目により異なる。国全体の同一段階金属輸出量とはみなさない。"
+    },
+    "mx-resource-sgm-copper-mine": {
+      "title": "SGM 銅の州別採掘量（p100）",
+      "url": "https://www.sgm.gob.mx/productos/pdf/Anuario_2024_Edicion_2025.pdf#page=100",
+      "year": 2024,
+      "scope": "DGM等の2024年暫定採掘金属含有量。掲載州の同年数量と全国Totalを抽出。USGS/Metals Focusとは同じ年でも情報源・集計範囲が異なるため接合しない。"
+    },
+    "mx-resource-sgm-gold-mine": {
+      "title": "SGM 金の州別採掘量（p106）",
+      "url": "https://www.sgm.gob.mx/productos/pdf/Anuario_2024_Edicion_2025.pdf#page=106",
+      "year": 2024,
+      "scope": "DGM等の2024年暫定採掘金属含有量。掲載州の同年数量と全国Totalを抽出。USGS/Metals Focusとは同じ年でも情報源・集計範囲が異なるため接合しない。"
+    },
+    "mx-resource-sgm-silver-mine": {
+      "title": "SGM 銀の州別採掘量（p108）",
+      "url": "https://www.sgm.gob.mx/productos/pdf/Anuario_2024_Edicion_2025.pdf#page=108",
+      "year": 2024,
+      "scope": "DGM等の2024年暫定採掘金属含有量。掲載州の同年数量と全国Totalを抽出。USGS/Metals Focusとは同じ年でも情報源・集計範囲が異なるため接合しない。"
+    },
+    "mx-resource-sgm-zinc-mine": {
+      "title": "SGM 亜鉛の州別採掘量（p114）",
+      "url": "https://www.sgm.gob.mx/productos/pdf/Anuario_2024_Edicion_2025.pdf#page=114",
+      "year": 2024,
+      "scope": "DGM等の2024年暫定採掘金属含有量。掲載州の同年数量と全国Totalを抽出。USGS/Metals Focusとは同じ年でも情報源・集計範囲が異なるため接合しない。"
+    },
+    "mx-resource-pemex-2025": {
+      "title": "PEMEX 2025年20-F、採掘・ガス処理・石油精製",
+      "url": "https://www.sec.gov/Archives/edgar/data/932782/000093278226000006/ck0000932782-20251231.htm",
+      "year": 2025,
+      "scope": "PEMEX単社の工程別実績。製油所データはメキシコ国内National Refining System、米国Deer Parkを除外。処理量は実際の原油投入量で能力ではない。個別製油所処理量は丸め値。上流ガスと乾性ガスは別工程。原表本文は検索抽出で確認。直接HTML表示は取得制限あり。"
+    },
+    "mx-resource-sener-gas": {
+      "title": "SENER エネルギー部門計画2025–2030、2024年ガス需給",
+      "url": "https://sidof.segob.gob.mx/notas/docFuente/5776838",
+      "year": 2024,
+      "scope": "全国ガス消費と輸入の年平均MMpcd。輸入÷消費は輸入依存の目安で、国内生産品の国内仕向け割合ではない。"
+    },
+    "mx-resource-gas-concentration": {
+      "title": "エネルギー省説明、2026年4月8日記者会見",
+      "url": "https://www.gob.mx/presidencia/articulos/version-estenografica-conferencia-de-prensa-de-la-presidenta-claudia-sheinbaum-pardo-del-08-de-abril-de-2026",
+      "year": "2026-04-08",
+      "scope": "当時の状況を説明した概数。2025年通年統計ではない。米国由来ガスの消費比75%、輸入のTexas比80%、5入口への集中はほぼ70%。"
+    },
+    "mx-resource-eia-gas": {
+      "title": "EIA 米国の国別天然ガス輸出・年間表",
+      "url": "https://www.eia.gov/dnav/ng/ng_move_expc_s1_a.htm",
+      "year": 2025,
+      "scope": "米国からメキシコへのパイプラインガス輸出。百万立方フィート/年。LNGを含むメキシコ全輸入量とは別。"
+    },
+    "mx-resource-opec-mexico-crude": {
+      "title": "OPEC ASB2026 メキシコ原油産出",
+      "url": "https://publications.opec.org/asb/chapter/show/154/2827/2829",
+      "year": 2025,
+      "scope": "原油のみの百万b/d。コンデンセート・NGLを含まない。公表値は小数2桁への丸め。"
+    },
+    "mx-resource-opec-world-crude": {
+      "title": "OPEC ASB2026 世界原油産出",
+      "url": "https://publications.opec.org/asb/chapter/show/154/2827/2831",
+      "year": 2025,
+      "scope": "世界原油のみの百万b/d。メキシコと同じ原油系列。"
+    },
+    "mx-resource-banxico-ca176": {
+      "title": "Banxico CA176 財貿易（最新修正表）",
+      "url": "https://www.banxico.org.mx/SieInternet/consultarDirectorioInternetAction.do?accion=consultarCuadroAnalitico&idCuadro=CA176&locale=es&sector=1",
+      "year": 2025,
+      "scope": "2026年10月14日取得の2025年通年値、百万米ドル。石油貿易分類は原油とその他石油を含み、燃料のみの分類ではない。初報の全国総輸出664,837百万から改定済み。"
+    },
+    "mx-resource-banxico-gold": {
+      "title": "Banxico 2026年第2四半期BOP、表A1（p7）",
+      "url": "https://www.banxico.org.mx/publicaciones-y-prensa/balanza-de-pagos/%7BE333A05C-EB45-9A4A-6F1D-591845A64896%7D.pdf#page=7",
+      "year": 2025,
+      "scope": "2025年通年の非貨幣金輸出入価額。採掘金量・国内冶金評価額・SGMの狭い金関税群とは異なる分類。"
+    },
+    "mx-resource-usgs-gold": {
+      "title": "USGS MCS2026 金・世界生産表",
+      "url": "https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-gold.pdf",
+      "year": 2025,
+      "scope": "2025eの鉱山産出推計、金属含有量。銅は鉱山と精製を別列として保持。世界分母は同表の丸め値。原PDFの表見出しと行を検索抽出で確認したが直接表示はHTTP403、画像照合・全PDF保存は未完了。"
+    },
+    "mx-resource-usgs-copper": {
+      "title": "USGS MCS2026 銅・世界生産表",
+      "url": "https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-copper.pdf",
+      "year": 2025,
+      "scope": "2025eの鉱山産出推計、金属含有量。銅は鉱山と精製を別列として保持。世界分母は同表の丸め値。原PDFの表見出しと行を検索抽出で確認したが直接表示はHTTP403、画像照合・全PDF保存は未完了。"
+    },
+    "mx-resource-usgs-zinc": {
+      "title": "USGS MCS2026 亜鉛・世界生産表",
+      "url": "https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-zinc.pdf",
+      "year": 2025,
+      "scope": "2025eの鉱山産出推計、金属含有量。銅は鉱山と精製を別列として保持。世界分母は同表の丸め値。原PDFの表見出しと行を検索抽出で確認したが直接表示はHTTP403、画像照合・全PDF保存は未完了。"
+    },
+    "mx-resource-silver-survey": {
+      "title": "Silver Institute World Silver Survey2026 Appendix12b",
+      "url": "https://silverinstitute.org/wp-content/uploads/2026/04/World-Silver-Survey-2026.pdf",
+      "year": 2025,
+      "scope": "Metals Focusの2025年鉱山産出量。USGSの年初推計6300tとは出典・公表時点が異なる。原表を検索抽出で確認、直接PDFはHTTP403で画像照合できていない。"
+    },
+    "mx-resource-silver-demand": {
+      "title": "Silver Institute 2026年4月15日、2025年需給発表",
+      "url": "https://silverinstitute.org/elevated-lease-rates-regional-liquidity-tightness-and-robust-investor-interest-resulted-in-record-silver-prices-in-2025/",
+      "year": 2025,
+      "scope": "世界の工業銀需要。太陽電池の省銀化・代替を含むため太陽光設備拡大と銀需要増を同一視しない。"
+    },
+    "mx-resource-iea-copper": {
+      "title": "IEA Global Critical Minerals Outlook2026",
+      "url": "https://www.iea.org/reports/global-critical-minerals-outlook-2026/executive-summary",
+      "year": 2026,
+      "scope": "発表済み案件と報告書の需要シナリオに基づく将来の銅一次供給不足推計。現時点の実績不足率ではない。"
+    },
+    "mx-resource-worldsteel": {
+      "title": "worldsteel World Steel in Figures2026",
+      "url": "https://worldsteel.org/data/world-steel-in-figures/world-steel-in-figures-2026/",
+      "year": 2025,
+      "scope": "粗鋼、生産方式、完成鋼の見かけ消費、鋼材貿易は別の表・工程。世界粗鋼1848.9Mtを分母に使用。鋼材貿易から粗鋼の国内仕向けを計算しない。"
+    },
+    "mx-resource-ce-steel": {
+      "title": "INEGI CE2024 確報、鉄鋼基本3311＋鉄鋼製品3312",
+      "url": "https://www.inegi.org.mx/app/tabulados/interactivos/?bd=CE2024&px=CE_GENNCE_1",
+      "year": 2023,
+      "scope": "2023年の総従事者数と名目の付加価値VACB、全国＋32州、3311・3312・製造業全体をPOST原票から取得。国全体GDPとは異なるセンサス対象範囲。秘匿「-」とSDを保持。"
+    },
+    "mx-resource-etef-oil-gas": {
+      "title": "INEGI ETEF2025、SCIAN211・州別採掘財FOB輸出価額",
+      "url": "https://www.inegi.org.mx/programas/exporta_ef/",
+      "year": 2025,
+      "scope": "既存industry-catalog.jsonの2025年暫定値をそのまま保存して再使用。RENEMに結合した事業所から財輸出を生産地配分。RENEMに結合できない通関取引・商業・サービスを除外。原典単位は千USD、表示は10億USD。公開値・秘匿・不明を維持し、500USD未満等の特殊状態は欠測扱いで原状態を保存。全国分母なし。",
+      "snapshotFile": "public/assets/atlas/mexico-industry-adopted/resources-etef-industry-catalog-2025.snapshot.json",
+      "sha256": "03e1762c39e10e11e3bca6ce6ab4d7706aeb180f53022554ae7dcbcf6e14f5ac",
+      "metadataUrl": "https://www.inegi.org.mx/rnm/index.php/catalog/1108",
+      "downloadUrl": "https://www.inegi.org.mx/contenidos/programas/exporta_ef/datosabiertos/conjunto_de_datos_eef_csv.zip"
+    }
+  },
+  "industries": [
+    {
+      "id": "oil-gas",
+      "label": "石油・天然ガス",
+      "family": "energy",
+      "sectors": [
+        "resources"
+      ],
+      "overview": "南東部・メキシコ湾の石油・ガスを、精製・発電・産業への供給につなげて読みます。北部の米国ガス受入れも扱います。",
+      "why": "採掘GDPは全国の約2.30%（2024年実質系列）。一方、ガス輸入量は消費の約72.6%に相当し、原油生産国でも燃料・ガスを輸入する構造を説明できます。",
+      "process": "原油・ガスの採掘 → 分離・脱水・ガス処理 → 製油所・ガス導管 → 発電・熱・石油化学。原油と利用可能なガスの工程を分けます。",
+      "boundary": "地図は2025年暫定の採掘財FOB輸出価額で、生産量・GDP・国内精製量ではありません。RENEM対象範囲内の生産地配分で、全国分母を持たず公開州合計から全国比を作りません。原油のみ、コンデンセート込み液体、未処理ガス、乾性ガスは別系列。ガス輸入の地域案内は別工程。国内生産品の国内仕向け量は未確認。",
+      "map": {
+        "kind": "quantity",
+        "year": 2025,
+        "unit": "10億USD（FOB輸出価額）",
+        "definition": "ETEF2025年暫定、SCIAN211の採掘財FOB輸出価額をRENEMに結合した事業所情報から生産地の州へ配分。生産量・業種総生産額・GDP・国内精製量ではありません。RENEMに結合できない通関取引と商業・サービスは対象外。原典の千USDを1000000で割って10億USDへ変換。欠測・閾値未満を0に置換せず、公開州の合計を全国分母・全国比に使いません。",
+        "sourceIds": [
+          "mx-resource-etef-oil-gas"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "02",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "03",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "04",
+            "value": 8.269053,
+            "status": "available",
+            "note": "原状態: available / Disponible。Cifras Preliminares."
+          },
+          {
+            "state": "05",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "07",
+            "value": 0.418486,
+            "status": "available",
+            "note": "原状態: available / Disponible。Cifras Preliminares."
+          },
+          {
+            "state": "08",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "09",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "10",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "11",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "12",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "13",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "14",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "15",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "16",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "17",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "18",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "19",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "20",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "21",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "22",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "23",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "24",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "25",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "26",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "27",
+            "value": 5.510417,
+            "status": "available",
+            "note": "原状態: available / Disponible。Cifras Preliminares."
+          },
+          {
+            "state": "28",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "29",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "30",
+            "value": 0.620662,
+            "status": "available",
+            "note": "原状態: available / Disponible。Cifras Preliminares."
+          },
+          {
+            "state": "31",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          },
+          {
+            "state": "32",
+            "value": null,
+            "status": "unknown",
+            "note": "原状態: unknown / No disponible。Cifras Preliminares."
+          }
+        ],
+        "regions": [
+          {
+            "state": "04",
+            "stage": "採掘財輸出",
+            "note": "カンペチェ。生産地に配分された採掘財のFOB輸出価額を読む地域例。海上採掘量の州別割当てではありません。",
+            "sourceIds": [
+              "mx-resource-etef-oil-gas"
+            ]
+          },
+          {
+            "state": "27",
+            "stage": "採掘財輸出",
+            "note": "タバスコ。採掘財の輸出価額を比べます。国内精製量ではありません。",
+            "sourceIds": [
+              "mx-resource-etef-oil-gas"
+            ]
+          },
+          {
+            "state": "30",
+            "stage": "採掘財輸出",
+            "note": "ベラクルス。採掘財の輸出価額を読む地域例。",
+            "sourceIds": [
+              "mx-resource-etef-oil-gas"
+            ]
+          },
+          {
+            "state": "07",
+            "stage": "採掘財輸出",
+            "note": "チアパス。公開された採掘財の輸出価額を読む地域例。",
+            "sourceIds": [
+              "mx-resource-etef-oil-gas"
+            ]
+          },
+          {
+            "state": "28",
+            "stage": "ガス輸入",
+            "note": "Camargo・Matamorosの入口。米国からの受入れ工程を読む案内。この輸入地域案内は、地図のSCIAN211輸出価額とは別の工程です。",
+            "sourceIds": [
+              "mx-resource-gas-concentration"
+            ]
+          },
+          {
+            "state": "08",
+            "stage": "ガス輸入",
+            "note": "Ojinaga・San Isidroの入口。採掘量の表示ではありません。この輸入地域案内は、地図のSCIAN211輸出価額とは別の工程です。",
+            "sourceIds": [
+              "mx-resource-gas-concentration"
+            ]
+          },
+          {
+            "state": "02",
+            "stage": "ガス輸入",
+            "note": "Los Algodonesの入口を読む案内。この輸入地域案内は、地図のSCIAN211輸出価額とは別の工程です。",
+            "sourceIds": [
+              "mx-resource-gas-concentration"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "石油・ガス採掘GDP",
+            "value": 583823,
+            "unit": "百万MXN（2018年価格）",
+            "year": 2024,
+            "definition": "SCIAN211の実質GDP。製油・発電を除く。",
+            "sourceIds": [
+              "mx-resource-sgm-gdp"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国実質GDP",
+              "value": 25437866,
+              "unit": "百万MXN（2018年価格）"
+            }
+          },
+          {
+            "label": "全国GDPに占める採掘比",
+            "value": 2.295094250437517,
+            "unit": "%",
+            "year": 2024,
+            "definition": "583823÷25437866×100。同年・同価格のGDPを比較。",
+            "sourceIds": [
+              "mx-resource-sgm-gdp"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "PEMEX原油・コンデンセート産出",
+            "value": 1618.5,
+            "unit": "千b/d",
+            "year": 2025,
+            "definition": "PEMEX単社の液体炭化水素。全国原油のみのOPEC値とは対象と工程範囲が異なる。",
+            "sourceIds": [
+              "mx-resource-pemex-2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "PEMEX採掘ガス産出",
+            "value": 4556.1,
+            "unit": "百万立方フィート/日",
+            "year": 2025,
+            "definition": "Exploration and Extractionの天然ガス産出。乾性ガス生産量・全国の利用可能ガス量ではない。",
+            "sourceIds": [
+              "mx-resource-pemex-2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "PEMEX処理後の乾性ガス",
+            "value": 1721.4,
+            "unit": "百万立方フィート/日",
+            "year": 2025,
+            "definition": "Energy Transformationのメタン含有率90%超の乾性ガス。再注入エタンを含む。上流全ガスと集計工程が異なり、両値の比を回収率としない。",
+            "sourceIds": [
+              "mx-resource-pemex-2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "全国の天然ガス消費",
+            "value": 8845,
+            "unit": "百万立方フィート/日",
+            "year": 2024,
+            "definition": "SENERの2024年全国消費。",
+            "sourceIds": [
+              "mx-resource-sener-gas"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "国内生産ガスの国内仕向け",
+            "value": null,
+            "unit": "百万立方フィート/日",
+            "year": 2024,
+            "definition": "国内生産由来のガスが国内需要へ向かう量。見かけ消費と区別。",
+            "sourceIds": [
+              "mx-resource-sener-gas"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          }
+        ],
+        "world": [
+          {
+            "label": "原油生産量",
+            "value": 1.47,
+            "unit": "百万b/d",
+            "year": 2025,
+            "definition": "原油のみ、コンデンセート・NGLを除く。世界比は約1.96%。丸め値の比率。",
+            "sourceIds": [
+              "mx-resource-opec-mexico-crude",
+              "mx-resource-opec-world-crude"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "世界原油生産量",
+              "value": 74.85,
+              "unit": "百万b/d"
+            }
+          },
+          {
+            "label": "世界原油生産シェア",
+            "value": 1.963927855711423,
+            "unit": "%",
+            "year": 2025,
+            "definition": "1.47÷74.85×100。原油のみの同工程比較。",
+            "sourceIds": [
+              "mx-resource-opec-mexico-crude",
+              "mx-resource-opec-world-crude"
+            ],
+            "status": "observed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "全国原油輸出額",
+            "value": 14818,
+            "unit": "百万USD",
+            "year": 2025,
+            "definition": "CA176原油貿易価額。量・PEMEX単社売上とは別。",
+            "sourceIds": [
+              "mx-resource-banxico-ca176"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国財輸出額",
+              "value": 664267,
+              "unit": "百万USD"
+            }
+          },
+          {
+            "label": "全国財輸出に占める原油",
+            "value": 2.2307295108743923,
+            "unit": "%",
+            "year": 2025,
+            "definition": "14818÷664267×100、最新改定分母。",
+            "sourceIds": [
+              "mx-resource-banxico-ca176"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "天然ガス輸入量",
+            "value": 6424,
+            "unit": "百万立方フィート/日",
+            "year": 2024,
+            "definition": "全国のガス輸入。2024年消費8845を分母にすると約72.6%。",
+            "sourceIds": [
+              "mx-resource-sener-gas"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国ガス消費",
+              "value": 8845,
+              "unit": "百万立方フィート/日"
+            }
+          },
+          {
+            "label": "ガス輸入量/消費量",
+            "value": 72.62860373092143,
+            "unit": "%",
+            "year": 2024,
+            "definition": "6424÷8845×100。国内生産品の輸出・国内仕向け比ではない。",
+            "sourceIds": [
+              "mx-resource-sener-gas"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "米国からの導管ガス",
+            "value": 6637.915068493151,
+            "unit": "百万立方フィート/日",
+            "year": 2025,
+            "definition": "年間2422839百万立方フィート÷365日。米国輸出側の導管ガスのみ。",
+            "sourceIds": [
+              "mx-resource-eia-gas"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "ガス消費の米国由来比",
+            "value": 75,
+            "unit": "%",
+            "year": "2026-04-08",
+            "definition": "当日の政府説明による概数。通年値ではない。",
+            "sourceIds": [
+              "mx-resource-gas-concentration"
+            ],
+            "status": "estimate"
+          },
+          {
+            "label": "輸入ガスのTexas集中",
+            "value": 80,
+            "unit": "%",
+            "year": "2026-04-08",
+            "definition": "政府説明。分母は輸入ガス。残る約20%はCalifornia。",
+            "sourceIds": [
+              "mx-resource-gas-concentration"
+            ],
+            "status": "estimate"
+          },
+          {
+            "label": "ガスの5入口への集中",
+            "value": 70,
+            "unit": "%",
+            "year": "2026-04-08",
+            "definition": "22入口のうち5入口でほぼ70%。ほぼという概数を保持。",
+            "sourceIds": [
+              "mx-resource-gas-concentration"
+            ],
+            "status": "estimate"
+          }
+        ]
+      }
+    },
+    {
+      "id": "refining",
+      "label": "石油精製",
+      "family": "energy",
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "overview": "原油をガソリン・軽油などの燃料へ変える工程と、国内製油所・燃料輸入を比較します。",
+      "why": "原油を産出しても製品の供給は精製と輸入に左右されます。国内処理量1013.8千b/dと石油貿易赤字を並べ、採掘と使える燃料の違いを示します。",
+      "process": "原油受入れ → 蒸留 → 脱硫・分解・改質 → ガソリン・軽油・ジェット燃料 → 配送・需要地。石油化学の原料にもつながります。",
+      "boundary": "地図の処理量はPEMEX国内７製油所のある州が対象。他州のネットワーク非所在をメキシコ全産業の無生産とみなさず、数値0にも置換しません。生産能力、採掘量、米国Deer Parkの生産とは別。燃料の全国輸入依存率や国内産燃料の国内仕向け量は未確認。",
+      "map": {
+        "kind": "quantity",
+        "year": 2025,
+        "unit": "千b/d（原油処理）",
+        "nationalTotal": 1013.8,
+        "definition": "PEMEX国内７製油所のある州のみを対象とする実際の年平均原油処理量。本文掲載の５製油所は丸め値、MaderoとMinatitlánの個別量は未取得。他25州はこの製油所網の処理量を収録せず、不明として保持します。施設の非所在を数値0に置換せず、メキシコ全産業の無生産を示しません。設備能力・全国の全企業生産とは別。",
+        "sourceIds": [
+          "mx-resource-pemex-2025"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "02",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "03",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "05",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "07",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "08",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "09",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "10",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "11",
+            "value": 117,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "13",
+            "value": 212,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "15",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "16",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "17",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "18",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "19",
+            "value": 146,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": 201,
+            "status": "available"
+          },
+          {
+            "state": "21",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "22",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "23",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "24",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "25",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "26",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "27",
+            "value": 134,
+            "status": "available"
+          },
+          {
+            "state": "28",
+            "value": null,
+            "status": "unretrieved"
+          },
+          {
+            "state": "29",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "30",
+            "value": null,
+            "status": "unretrieved"
+          },
+          {
+            "state": "31",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "32",
+            "value": null,
+            "status": "unknown"
+          }
+        ],
+        "regions": [
+          {
+            "state": "13",
+            "stage": "精製",
+            "note": "Tula。原油処理量212千b/d（丸め値）。",
+            "sourceIds": [
+              "mx-resource-pemex-2025"
+            ]
+          },
+          {
+            "state": "20",
+            "stage": "精製",
+            "note": "Salina Cruz。201千b/d（丸め値）。",
+            "sourceIds": [
+              "mx-resource-pemex-2025"
+            ]
+          },
+          {
+            "state": "19",
+            "stage": "精製",
+            "note": "Cadereyta。146千b/d（丸め値）。",
+            "sourceIds": [
+              "mx-resource-pemex-2025"
+            ]
+          },
+          {
+            "state": "27",
+            "stage": "精製",
+            "note": "Olmeca（Dos Bocas）。134千b/d（丸め値）。",
+            "sourceIds": [
+              "mx-resource-pemex-2025"
+            ]
+          },
+          {
+            "state": "11",
+            "stage": "精製",
+            "note": "Salamanca。117千b/d（丸め値）。",
+            "sourceIds": [
+              "mx-resource-pemex-2025"
+            ]
+          },
+          {
+            "state": "28",
+            "stage": "精製",
+            "note": "Madero。個別処理量は未取得。",
+            "sourceIds": [
+              "mx-resource-pemex-2025"
+            ]
+          },
+          {
+            "state": "30",
+            "stage": "精製",
+            "note": "Minatitlán。個別処理量は未取得。",
+            "sourceIds": [
+              "mx-resource-pemex-2025"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "国内製油所の原油処理",
+            "value": 1013.8,
+            "unit": "千b/d",
+            "year": 2025,
+            "definition": "PEMEX National Refining Systemの実際の原油処理。設備能力ではない。",
+            "sourceIds": [
+              "mx-resource-pemex-2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "国内ガソリン生産",
+            "value": 355.6,
+            "unit": "千b/d",
+            "year": 2025,
+            "definition": "PEMEX国内網のTotal Gasoline。Deer Parkを除く。",
+            "sourceIds": [
+              "mx-resource-pemex-2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "国内軽油生産",
+            "value": 227.7,
+            "unit": "千b/d",
+            "year": 2025,
+            "definition": "PEMEX国内網のTotal Diesel。Deer Parkを除く。",
+            "sourceIds": [
+              "mx-resource-pemex-2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "国内産燃料の国内仕向け",
+            "value": null,
+            "unit": "千b/d",
+            "year": 2025,
+            "definition": "国内生産由来燃料の国内販売・使用量。輸入混合販売や在庫を除く必要がある。",
+            "sourceIds": [
+              "mx-resource-pemex-2025"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          }
+        ],
+        "world": [
+          {
+            "label": "同工程の世界生産シェア",
+            "value": null,
+            "unit": "%",
+            "year": 2025,
+            "definition": "国内原油処理量と同じ工程・対象の世界分母を未確認。",
+            "sourceIds": [
+              "mx-resource-pemex-2025"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          }
+        ],
+        "trade": [
+          {
+            "label": "全国石油分類の輸出額",
+            "value": 21245,
+            "unit": "百万USD",
+            "year": 2025,
+            "definition": "原油とその他石油を含むCA176分類。精製燃料だけの輸出ではない。",
+            "sourceIds": [
+              "mx-resource-banxico-ca176"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "全国石油分類の輸入額",
+            "value": 46797,
+            "unit": "百万USD",
+            "year": 2025,
+            "definition": "CA176石油分類。燃料だけの輸入価額とは異なる。",
+            "sourceIds": [
+              "mx-resource-banxico-ca176"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "全国石油貿易収支",
+            "value": -25553,
+            "unit": "百万USD",
+            "year": 2025,
+            "definition": "原表の公表収支。各系列の丸めのため21245−46797と1百万USDずれる。",
+            "sourceIds": [
+              "mx-resource-banxico-ca176"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "燃料輸入の全国依存率",
+            "value": null,
+            "unit": "%",
+            "year": 2025,
+            "definition": "製品別の全国需給・在庫・輸出をそろえた比率を未確認。",
+            "sourceIds": [
+              "mx-resource-banxico-ca176"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "silver",
+      "label": "銀",
+      "family": "minerals",
+      "sectors": [
+        "resources"
+      ],
+      "overview": "銀鉱山と多金属鉱山の共産を、精製・電子部品・太陽電池・貴金属需要へつなぎます。",
+      "why": "世界鉱山産出の約20.42%を供給する最大生産国。国内の鉱業・冶金評価額でも約21.84%を占め、世界供給と地域経済の両面を読めます。",
+      "process": "採掘 → 選鉱・精鉱 → 製錬・精製銀 → 電気接点・電子部品・太陽電池・宝飾。金・鉛・亜鉛・銅の鉱山からの共産もあります。",
+      "boundary": "地図は2024年SGM採掘系列、評価額は同年の鉱業・冶金系列、世界比は2025年の別出典系列です。加工段階・集計範囲・年を区別します。鉱石重量や埋蔵量を金属産出量として使いません。原PDF直接表示が403の世界表は検索抽出確認で、画像照合は未完了です。",
+      "map": {
+        "kind": "quantity",
+        "year": 2024,
+        "unit": "kg（銀含有量）",
+        "nationalTotal": 7221026.44,
+        "definition": "SGM・DGMの2024年暫定採掘系列の金属含有量。鉱石の総重量・埋蔵量・精製量ではありません。全国分母も同じ表の2024年採掘系列。未掲載州と原表の「-」は不明として残し、0に置換しません。",
+        "sourceIds": [
+          "mx-resource-sgm-silver-mine"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": 16790.0,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "03",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "05",
+            "value": 96770.0,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "07",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "08",
+            "value": 1045873.9,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "10",
+            "value": 812980.0,
+            "status": "available"
+          },
+          {
+            "state": "11",
+            "value": 55130.0,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": 114470.0,
+            "status": "available"
+          },
+          {
+            "state": "13",
+            "value": 101680.0,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": 76020.0,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 136930.0,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "17",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "18",
+            "value": 5030.0,
+            "status": "available"
+          },
+          {
+            "state": "19",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "20",
+            "value": 31750.0,
+            "status": "available"
+          },
+          {
+            "state": "21",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "22",
+            "value": 1270.0,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "24",
+            "value": 217660.0,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": 40980.0,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": 835288.1,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "28",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "29",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "30",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "31",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "32",
+            "value": 3632404.44,
+            "status": "available"
+          }
+        ],
+        "regions": [
+          {
+            "state": "32",
+            "stage": "銀と多金属採掘",
+            "note": "サカテカス、Fresnillo・Mazapilなどを読む案内。",
+            "sourceIds": [
+              "mx-resource-sgm-silver-mine"
+            ]
+          },
+          {
+            "state": "08",
+            "stage": "銀採掘",
+            "note": "チワワの銀と多金属採掘。",
+            "sourceIds": [
+              "mx-resource-sgm-silver-mine"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "全国採掘量（地図と同じ系列）",
+            "value": 7221026.44,
+            "unit": "kg（銀含有量）",
+            "year": 2024,
+            "definition": "SGM・DGMの同年採掘含有金属量。地図の全国分母。",
+            "sourceIds": [
+              "mx-resource-sgm-silver-mine"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "鉱業・冶金生産の評価額",
+            "value": 68240.5722,
+            "unit": "百万MXN（現在価格）",
+            "year": 2024,
+            "definition": "SGM表1.2の鉱業・冶金系列。精製金属と輸出向け初回製錬・精鉱等の含有金属を国際相場で評価。GDP/GVAや採掘総量ではない。",
+            "sourceIds": [
+              "mx-resource-sgm-value",
+              "mx-resource-sgm-definition"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "同系列の全品目評価額",
+              "value": 312461.2395,
+              "unit": "百万MXN（現在価格）"
+            }
+          },
+          {
+            "label": "同系列評価額に占める比率",
+            "value": 21.83969195961664,
+            "unit": "%",
+            "year": 2024,
+            "definition": "品目の鉱業・冶金評価額÷同系列全品目312461.2395百万MXN。GDP構成比ではない。",
+            "sourceIds": [
+              "mx-resource-sgm-value"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "銀単独の国内付加価値",
+            "value": null,
+            "unit": "百万MXN",
+            "year": 2024,
+            "definition": "品目単独の付加価値は未確認。広い鉱業GDPや総生産価額を代用しない。",
+            "sourceIds": [
+              "mx-resource-sgm-value"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          },
+          {
+            "label": "国内生産品の国内仕向け",
+            "value": null,
+            "unit": "kg（銀含有量）",
+            "year": 2024,
+            "definition": "同じ金属含有量・工程で国内生産由来の国内使用を追う量。在庫、輸入由来の再輸出を区別。",
+            "sourceIds": [
+              "mx-resource-sgm-silver-mine",
+              "mx-resource-sgm-trade"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          }
+        ],
+        "world": [
+          {
+            "label": "鉱山産出量・世界比較",
+            "value": 5378,
+            "unit": "t（銀含有量）",
+            "year": 2025,
+            "definition": "同じ出典・工程の世界分母で比較。SGM州別採掘系列・冶金系列とは接合しない。",
+            "sourceIds": [
+              "mx-resource-silver-survey"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "同表の世界鉱山産出量",
+              "value": 26331,
+              "unit": "t（銀含有量）"
+            }
+          },
+          {
+            "label": "世界鉱山産出シェア",
+            "value": 20.424594584330258,
+            "unit": "%",
+            "year": 2025,
+            "definition": "メキシコ鉱山産出量÷同出典世界量×100。",
+            "sourceIds": [
+              "mx-resource-silver-survey"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "世界鉱山産出順位",
+            "value": 1,
+            "unit": "位",
+            "year": 2025,
+            "definition": "同じ世界表の国別産出量順位。",
+            "sourceIds": [
+              "mx-resource-silver-survey"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "世界の工業銀需要",
+            "value": 657.4,
+            "unit": "百万トロイオンス",
+            "year": 2025,
+            "definition": "世界工業用途の銀需要。鉱山供給とは別指標。",
+            "sourceIds": [
+              "mx-resource-silver-demand"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "工業銀需要の前年比",
+            "value": -3,
+            "unit": "%",
+            "year": 2025,
+            "definition": "太陽電池の省銀化・代替などで工業需要は3%減。",
+            "sourceIds": [
+              "mx-resource-silver-demand"
+            ],
+            "status": "observed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "SGM品目群の輸出額",
+            "value": 2812.649164,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "SGMが選択した銀関税品目群の価額。工程の異なる品目を含み、全国同段階の金属輸出量ではない。",
+            "sourceIds": [
+              "mx-resource-sgm-trade"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "同工程の金属輸出量",
+            "value": null,
+            "unit": "t（銀含有量）",
+            "year": 2025,
+            "definition": "精鉱・地金・加工品を同じ含有金属量と工程へそろえた輸出量は未確認。",
+            "sourceIds": [
+              "mx-resource-silver-survey",
+              "mx-resource-sgm-trade"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          },
+          {
+            "label": "輸出先の国別構成",
+            "value": null,
+            "unit": "%",
+            "year": 2025,
+            "definition": "国別輸出の関税品目と製品段階の統一が未完了。米国の輸入相手比をメキシコ輸出先比として使わない。",
+            "sourceIds": [
+              "mx-resource-sgm-trade"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "copper",
+      "label": "銅",
+      "family": "minerals",
+      "sectors": [
+        "resources",
+        "manufacturing"
+      ],
+      "overview": "ソノラを中心とする銅採掘から、精鉱・精製銅・電線・送電機器へつなぎます。",
+      "why": "世界鉱山産出の約3%、国内鉱業・冶金評価額の約26.45%。採掘と精製の世界比が異なり、電動化・送電網を支える工程の分担を説明できます。",
+      "process": "採掘 → 選鉱・精鉱 → 製錬・電解精製、または浸出・電解採取 → 銅線・電線・送電機器。地図は採掘工程を表示します。",
+      "boundary": "地図は2024年SGM採掘系列、評価額は同年の鉱業・冶金系列、世界比は2025年の別出典系列です。加工段階・集計範囲・年を区別します。鉱石重量や埋蔵量を金属産出量として使いません。原PDF直接表示が403の世界表は検索抽出確認で、画像照合は未完了です。",
+      "map": {
+        "kind": "quantity",
+        "year": 2024,
+        "unit": "t（銅含有量）",
+        "nationalTotal": 777106.15,
+        "definition": "SGM・DGMの2024年暫定採掘系列の金属含有量。鉱石の総重量・埋蔵量・精製量ではありません。全国分母も同じ表の2024年採掘系列。未掲載州と原表の「-」は不明として残し、0に置換しません。",
+        "sourceIds": [
+          "mx-resource-sgm-copper-mine"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": 386.0,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "03",
+            "value": 13978.0,
+            "status": "available"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "05",
+            "value": 15000.0,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "07",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "08",
+            "value": 19844.46,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "10",
+            "value": 6934.01,
+            "status": "available"
+          },
+          {
+            "state": "11",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "12",
+            "value": 10881.03,
+            "status": "available"
+          },
+          {
+            "state": "13",
+            "value": 3245.92,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": 1578.62,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 1133.0,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": 2081.43,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "18",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "19",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "20",
+            "value": 911.09,
+            "status": "available"
+          },
+          {
+            "state": "21",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "22",
+            "value": 1544.0,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "24",
+            "value": 33479.99,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": 427.0,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": 544345.8,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "28",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "29",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "30",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "31",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "32",
+            "value": 121335.8,
+            "status": "available"
+          }
+        ],
+        "regions": [
+          {
+            "state": "26",
+            "stage": "銅採掘",
+            "note": "ソノラ、Cananea・Nacozari周辺を読む案内。",
+            "sourceIds": [
+              "mx-resource-sgm-copper-mine"
+            ]
+          },
+          {
+            "state": "32",
+            "stage": "多金属採掘",
+            "note": "サカテカスの銅を含む採掘。",
+            "sourceIds": [
+              "mx-resource-sgm-copper-mine"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "全国採掘量（地図と同じ系列）",
+            "value": 777106.15,
+            "unit": "t（銅含有量）",
+            "year": 2024,
+            "definition": "SGM・DGMの同年採掘含有金属量。地図の全国分母。",
+            "sourceIds": [
+              "mx-resource-sgm-copper-mine"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "鉱業・冶金生産の評価額",
+            "value": 82654.8345,
+            "unit": "百万MXN（現在価格）",
+            "year": 2024,
+            "definition": "SGM表1.2の鉱業・冶金系列。精製金属と輸出向け初回製錬・精鉱等の含有金属を国際相場で評価。GDP/GVAや採掘総量ではない。",
+            "sourceIds": [
+              "mx-resource-sgm-value",
+              "mx-resource-sgm-definition"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "同系列の全品目評価額",
+              "value": 312461.2395,
+              "unit": "百万MXN（現在価格）"
+            }
+          },
+          {
+            "label": "同系列評価額に占める比率",
+            "value": 26.452828079496875,
+            "unit": "%",
+            "year": 2024,
+            "definition": "品目の鉱業・冶金評価額÷同系列全品目312461.2395百万MXN。GDP構成比ではない。",
+            "sourceIds": [
+              "mx-resource-sgm-value"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "銅単独の国内付加価値",
+            "value": null,
+            "unit": "百万MXN",
+            "year": 2024,
+            "definition": "品目単独の付加価値は未確認。広い鉱業GDPや総生産価額を代用しない。",
+            "sourceIds": [
+              "mx-resource-sgm-value"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          },
+          {
+            "label": "国内生産品の国内仕向け",
+            "value": null,
+            "unit": "t（銅含有量）",
+            "year": 2024,
+            "definition": "同じ金属含有量・工程で国内生産由来の国内使用を追う量。在庫、輸入由来の再輸出を区別。",
+            "sourceIds": [
+              "mx-resource-sgm-copper-mine",
+              "mx-resource-sgm-trade"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          }
+        ],
+        "world": [
+          {
+            "label": "鉱山産出量・世界比較",
+            "value": 690,
+            "unit": "千t（銅含有量）",
+            "year": 2025,
+            "definition": "同じ出典・工程の世界分母で比較。SGM州別採掘系列・冶金系列とは接合しない。",
+            "sourceIds": [
+              "mx-resource-usgs-copper"
+            ],
+            "status": "estimate",
+            "denominator": {
+              "label": "同表の世界鉱山産出量",
+              "value": 23000,
+              "unit": "千t（銅含有量）"
+            }
+          },
+          {
+            "label": "世界鉱山産出シェア",
+            "value": 3.0,
+            "unit": "%",
+            "year": 2025,
+            "definition": "メキシコ鉱山産出量÷同出典世界量×100。",
+            "sourceIds": [
+              "mx-resource-usgs-copper"
+            ],
+            "status": "estimate"
+          },
+          {
+            "label": "世界鉱山産出順位",
+            "value": 11,
+            "unit": "位",
+            "year": 2025,
+            "definition": "同じ世界表の国別産出量順位。",
+            "sourceIds": [
+              "mx-resource-usgs-copper"
+            ],
+            "status": "estimate"
+          },
+          {
+            "label": "精製銅の生産量",
+            "value": 480,
+            "unit": "千t（銅含有量）",
+            "year": 2025,
+            "definition": "USGSのRefinery production列。地図の採掘量と別工程。",
+            "sourceIds": [
+              "mx-resource-usgs-copper"
+            ],
+            "status": "estimate",
+            "denominator": {
+              "label": "世界精製銅生産量",
+              "value": 29000,
+              "unit": "千t（銅含有量）"
+            }
+          },
+          {
+            "label": "精製銅の世界シェア",
+            "value": 1.6551724137931034,
+            "unit": "%",
+            "year": 2025,
+            "definition": "480÷29000×100。採掘シェアとは別。",
+            "sourceIds": [
+              "mx-resource-usgs-copper"
+            ],
+            "status": "estimate"
+          },
+          {
+            "label": "将来の世界一次銅供給不足",
+            "value": 25,
+            "unit": "%",
+            "year": 2035,
+            "definition": "発表済み案件と需要シナリオに基づく2035年推計。2025年の不足実績ではない。",
+            "sourceIds": [
+              "mx-resource-iea-copper"
+            ],
+            "status": "estimate"
+          }
+        ],
+        "trade": [
+          {
+            "label": "SGM品目群の輸出額",
+            "value": 5383.445514,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "SGMが選択した銅関税品目群の価額。工程の異なる品目を含み、全国同段階の金属輸出量ではない。",
+            "sourceIds": [
+              "mx-resource-sgm-trade"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "同工程の金属輸出量",
+            "value": null,
+            "unit": "千t（銅含有量）",
+            "year": 2025,
+            "definition": "精鉱・地金・加工品を同じ含有金属量と工程へそろえた輸出量は未確認。",
+            "sourceIds": [
+              "mx-resource-usgs-copper",
+              "mx-resource-sgm-trade"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          },
+          {
+            "label": "輸出先の国別構成",
+            "value": null,
+            "unit": "%",
+            "year": 2025,
+            "definition": "国別輸出の関税品目と製品段階の統一が未完了。米国の輸入相手比をメキシコ輸出先比として使わない。",
+            "sourceIds": [
+              "mx-resource-sgm-trade"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "gold",
+      "label": "金",
+      "family": "minerals",
+      "sectors": [
+        "resources"
+      ],
+      "overview": "ソノラ・サカテカスなどの金採掘を、地金・宝飾・投資・電子材料へつなぎます。",
+      "why": "世界鉱山産出の約4.24%、国内鉱業・冶金評価額では最大の約30.74%。国内生産の評価と非貨幣金の外貨獲得を別の統計で読めます。",
+      "process": "採掘 → 選鉱・浸出 → ドーレ（金銀合金） → 精製金 → 宝飾・地金・電子部品。採掘金とリサイクル金・中央銀行保有金を区別します。",
+      "boundary": "地図は2024年SGM採掘系列、評価額は同年の鉱業・冶金系列、世界比は2025年の別出典系列です。加工段階・集計範囲・年を区別します。鉱石重量や埋蔵量を金属産出量として使いません。原PDF直接表示が403の世界表は検索抽出確認で、画像照合は未完了です。",
+      "map": {
+        "kind": "quantity",
+        "year": 2024,
+        "unit": "kg（金含有量）",
+        "nationalTotal": 119527.77,
+        "definition": "SGM・DGMの2024年暫定採掘系列の金属含有量。鉱石の総重量・埋蔵量・精製量ではありません。全国分母も同じ表の2024年採掘系列。未掲載州と原表の「-」は不明として残し、0に置換しません。",
+        "sourceIds": [
+          "mx-resource-sgm-gold-mine"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": 60.0,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "03",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "05",
+            "value": 105.12,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "07",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "08",
+            "value": 9607.54,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "10",
+            "value": 8108.57,
+            "status": "available"
+          },
+          {
+            "state": "11",
+            "value": 1300.0,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": 19710.0,
+            "status": "available"
+          },
+          {
+            "state": "13",
+            "value": 35.66,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": 6.73,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 813.59,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": 44.88,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "18",
+            "value": 70.0,
+            "status": "available"
+          },
+          {
+            "state": "19",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "20",
+            "value": 390.0,
+            "status": "available"
+          },
+          {
+            "state": "21",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "22",
+            "value": 216.54,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "24",
+            "value": 2660.0,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": 166.0,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": 38360.3,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "28",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "29",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "30",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "31",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "32",
+            "value": 37872.85,
+            "status": "available"
+          }
+        ],
+        "regions": [
+          {
+            "state": "26",
+            "stage": "金採掘",
+            "note": "ソノラの金採掘。",
+            "sourceIds": [
+              "mx-resource-sgm-gold-mine"
+            ]
+          },
+          {
+            "state": "32",
+            "stage": "金・銀採掘",
+            "note": "サカテカスの金・銀・多金属採掘。",
+            "sourceIds": [
+              "mx-resource-sgm-gold-mine"
+            ]
+          },
+          {
+            "state": "12",
+            "stage": "金採掘",
+            "note": "ゲレロの金採掘。",
+            "sourceIds": [
+              "mx-resource-sgm-gold-mine"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "全国採掘量（地図と同じ系列）",
+            "value": 119527.77,
+            "unit": "kg（金含有量）",
+            "year": 2024,
+            "definition": "SGM・DGMの同年採掘含有金属量。地図の全国分母。",
+            "sourceIds": [
+              "mx-resource-sgm-gold-mine"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "鉱業・冶金生産の評価額",
+            "value": 96049.821,
+            "unit": "百万MXN（現在価格）",
+            "year": 2024,
+            "definition": "SGM表1.2の鉱業・冶金系列。精製金属と輸出向け初回製錬・精鉱等の含有金属を国際相場で評価。GDP/GVAや採掘総量ではない。",
+            "sourceIds": [
+              "mx-resource-sgm-value",
+              "mx-resource-sgm-definition"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "同系列の全品目評価額",
+              "value": 312461.2395,
+              "unit": "百万MXN（現在価格）"
+            }
+          },
+          {
+            "label": "同系列評価額に占める比率",
+            "value": 30.739755482535614,
+            "unit": "%",
+            "year": 2024,
+            "definition": "品目の鉱業・冶金評価額÷同系列全品目312461.2395百万MXN。GDP構成比ではない。",
+            "sourceIds": [
+              "mx-resource-sgm-value"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "金単独の国内付加価値",
+            "value": null,
+            "unit": "百万MXN",
+            "year": 2024,
+            "definition": "品目単独の付加価値は未確認。広い鉱業GDPや総生産価額を代用しない。",
+            "sourceIds": [
+              "mx-resource-sgm-value"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          },
+          {
+            "label": "国内生産品の国内仕向け",
+            "value": null,
+            "unit": "kg（金含有量）",
+            "year": 2024,
+            "definition": "同じ金属含有量・工程で国内生産由来の国内使用を追う量。在庫、輸入由来の再輸出を区別。",
+            "sourceIds": [
+              "mx-resource-sgm-gold-mine",
+              "mx-resource-sgm-trade"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          }
+        ],
+        "world": [
+          {
+            "label": "鉱山産出量・世界比較",
+            "value": 140,
+            "unit": "t（金含有量）",
+            "year": 2025,
+            "definition": "同じ出典・工程の世界分母で比較。SGM州別採掘系列・冶金系列とは接合しない。",
+            "sourceIds": [
+              "mx-resource-usgs-gold"
+            ],
+            "status": "estimate",
+            "denominator": {
+              "label": "同表の世界鉱山産出量",
+              "value": 3300,
+              "unit": "t（金含有量）"
+            }
+          },
+          {
+            "label": "世界鉱山産出シェア",
+            "value": 4.242424242424243,
+            "unit": "%",
+            "year": 2025,
+            "definition": "メキシコ鉱山産出量÷同出典世界量×100。",
+            "sourceIds": [
+              "mx-resource-usgs-gold"
+            ],
+            "status": "estimate"
+          },
+          {
+            "label": "世界鉱山産出順位",
+            "value": 7,
+            "unit": "位",
+            "year": 2025,
+            "definition": "同じ世界表の国別産出量順位。",
+            "sourceIds": [
+              "mx-resource-usgs-gold"
+            ],
+            "status": "estimate"
+          }
+        ],
+        "trade": [
+          {
+            "label": "全国の非貨幣金輸出額",
+            "value": 6162,
+            "unit": "百万USD",
+            "year": 2025,
+            "definition": "Banxico BOP表A1、非貨幣金の全国輸出。採掘金量やSGM金分類とは別。",
+            "sourceIds": [
+              "mx-resource-banxico-gold"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国財輸出額",
+              "value": 664267,
+              "unit": "百万USD"
+            }
+          },
+          {
+            "label": "全国の非貨幣金輸入額",
+            "value": 188,
+            "unit": "百万USD",
+            "year": 2025,
+            "definition": "BOPの非貨幣金輸入。原料金量や国内需要量と同一ではない。",
+            "sourceIds": [
+              "mx-resource-banxico-gold"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "同工程の金属輸出量",
+            "value": null,
+            "unit": "t（金含有量）",
+            "year": 2025,
+            "definition": "精鉱・地金・加工品を同じ含有金属量と工程へそろえた輸出量は未確認。",
+            "sourceIds": [
+              "mx-resource-usgs-gold",
+              "mx-resource-sgm-trade"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          },
+          {
+            "label": "輸出先の国別構成",
+            "value": null,
+            "unit": "%",
+            "year": 2025,
+            "definition": "国別輸出の関税品目と製品段階の統一が未完了。米国の輸入相手比をメキシコ輸出先比として使わない。",
+            "sourceIds": [
+              "mx-resource-sgm-trade"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "zinc",
+      "label": "亜鉛",
+      "family": "minerals",
+      "sectors": [
+        "resources"
+      ],
+      "overview": "サカテカスなどの鉛・亜鉛・銀を含む鉱山から、鋼材の防食へつなぎます。",
+      "why": "世界鉱山産出の約6%を担い、国内鉱業・冶金評価額は約6.84%。自動車・建設向けの亜鉛めっき鋼材を介して鉄鋼と重複して扱えます。",
+      "process": "採掘 → 選鉱・亜鉛精鉱 → 製錬・精製亜鉛 → 鋼材の亜鉛めっき・合金。多金属鉱山の銀・金と鉱床・工程を共有します。",
+      "boundary": "地図は2024年SGM採掘系列、評価額は同年の鉱業・冶金系列、世界比は2025年の別出典系列です。加工段階・集計範囲・年を区別します。鉱石重量や埋蔵量を金属産出量として使いません。原PDF直接表示が403の世界表は検索抽出確認で、画像照合は未完了です。",
+      "map": {
+        "kind": "quantity",
+        "year": 2024,
+        "unit": "t（亜鉛含有量）",
+        "nationalTotal": 1009493.57,
+        "definition": "SGM・DGMの2024年暫定採掘系列の金属含有量。鉱石の総重量・埋蔵量・精製量ではありません。全国分母も同じ表の2024年採掘系列。未掲載州と原表の「-」は不明として残し、0に置換しません。",
+        "sourceIds": [
+          "mx-resource-sgm-zinc-mine"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": 8381.0,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "03",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "05",
+            "value": 15000.0,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "07",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "08",
+            "value": 115878.35,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "10",
+            "value": 97404.99,
+            "status": "available"
+          },
+          {
+            "state": "11",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "12",
+            "value": 32406.5,
+            "status": "available"
+          },
+          {
+            "state": "13",
+            "value": 25639.97,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": 5479.19,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 27583.7,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "17",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "18",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "19",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "20",
+            "value": 9506.33,
+            "status": "available"
+          },
+          {
+            "state": "21",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "22",
+            "value": 3649.0,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "24",
+            "value": 27039.19,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "26",
+            "value": 78029.61,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "28",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "29",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "30",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "31",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "32",
+            "value": 563495.74,
+            "status": "available"
+          }
+        ],
+        "regions": [
+          {
+            "state": "32",
+            "stage": "鉛・亜鉛・銀採掘",
+            "note": "サカテカスの多金属採掘。",
+            "sourceIds": [
+              "mx-resource-sgm-zinc-mine"
+            ]
+          },
+          {
+            "state": "08",
+            "stage": "鉛・亜鉛採掘",
+            "note": "チワワの多金属採掘。",
+            "sourceIds": [
+              "mx-resource-sgm-zinc-mine"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "全国採掘量（地図と同じ系列）",
+            "value": 1009493.57,
+            "unit": "t（亜鉛含有量）",
+            "year": 2024,
+            "definition": "SGM・DGMの同年採掘含有金属量。地図の全国分母。",
+            "sourceIds": [
+              "mx-resource-sgm-zinc-mine"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "鉱業・冶金生産の評価額",
+            "value": 21375.821,
+            "unit": "百万MXN（現在価格）",
+            "year": 2024,
+            "definition": "SGM表1.2の鉱業・冶金系列。精製金属と輸出向け初回製錬・精鉱等の含有金属を国際相場で評価。GDP/GVAや採掘総量ではない。",
+            "sourceIds": [
+              "mx-resource-sgm-value",
+              "mx-resource-sgm-definition"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "同系列の全品目評価額",
+              "value": 312461.2395,
+              "unit": "百万MXN（現在価格）"
+            }
+          },
+          {
+            "label": "同系列評価額に占める比率",
+            "value": 6.8411112476560465,
+            "unit": "%",
+            "year": 2024,
+            "definition": "品目の鉱業・冶金評価額÷同系列全品目312461.2395百万MXN。GDP構成比ではない。",
+            "sourceIds": [
+              "mx-resource-sgm-value"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "亜鉛単独の国内付加価値",
+            "value": null,
+            "unit": "百万MXN",
+            "year": 2024,
+            "definition": "品目単独の付加価値は未確認。広い鉱業GDPや総生産価額を代用しない。",
+            "sourceIds": [
+              "mx-resource-sgm-value"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          },
+          {
+            "label": "国内生産品の国内仕向け",
+            "value": null,
+            "unit": "t（亜鉛含有量）",
+            "year": 2024,
+            "definition": "同じ金属含有量・工程で国内生産由来の国内使用を追う量。在庫、輸入由来の再輸出を区別。",
+            "sourceIds": [
+              "mx-resource-sgm-zinc-mine",
+              "mx-resource-sgm-trade"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          }
+        ],
+        "world": [
+          {
+            "label": "鉱山産出量・世界比較",
+            "value": 780,
+            "unit": "千t（亜鉛含有量）",
+            "year": 2025,
+            "definition": "同じ出典・工程の世界分母で比較。SGM州別採掘系列・冶金系列とは接合しない。",
+            "sourceIds": [
+              "mx-resource-usgs-zinc"
+            ],
+            "status": "estimate",
+            "denominator": {
+              "label": "同表の世界鉱山産出量",
+              "value": 13000,
+              "unit": "千t（亜鉛含有量）"
+            }
+          },
+          {
+            "label": "世界鉱山産出シェア",
+            "value": 6.0,
+            "unit": "%",
+            "year": 2025,
+            "definition": "メキシコ鉱山産出量÷同出典世界量×100。",
+            "sourceIds": [
+              "mx-resource-usgs-zinc"
+            ],
+            "status": "estimate"
+          },
+          {
+            "label": "世界鉱山産出順位",
+            "value": 5,
+            "unit": "位",
+            "year": 2025,
+            "definition": "同じ世界表の国別産出量順位。",
+            "sourceIds": [
+              "mx-resource-usgs-zinc"
+            ],
+            "status": "estimate"
+          }
+        ],
+        "trade": [
+          {
+            "label": "SGM品目群の輸出額",
+            "value": 773.899124,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "SGMが選択した亜鉛関税品目群の価額。工程の異なる品目を含み、全国同段階の金属輸出量ではない。",
+            "sourceIds": [
+              "mx-resource-sgm-trade"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "同工程の金属輸出量",
+            "value": null,
+            "unit": "千t（亜鉛含有量）",
+            "year": 2025,
+            "definition": "精鉱・地金・加工品を同じ含有金属量と工程へそろえた輸出量は未確認。",
+            "sourceIds": [
+              "mx-resource-usgs-zinc",
+              "mx-resource-sgm-trade"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          },
+          {
+            "label": "輸出先の国別構成",
+            "value": null,
+            "unit": "%",
+            "year": 2025,
+            "definition": "国別輸出の関税品目と製品段階の統一が未完了。米国の輸入相手比をメキシコ輸出先比として使わない。",
+            "sourceIds": [
+              "mx-resource-sgm-trade"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "steel",
+      "label": "鉄鋼・鋼材",
+      "family": "materials",
+      "sectors": [
+        "manufacturing"
+      ],
+      "overview": "鉄鉱石・還元鉄・スクラップを粗鋼・鋼材へ変え、自動車・建設の素材供給へつなぎます。",
+      "why": "世界粗鋼の約0.73%でも、完成鋼の見かけ消費25.0Mtと鋼材純輸入11.8Mtを持つ供給網の結節です。電炉比95.9%から電力・ガス・還元鉄・スクラップの調達を考えます。",
+      "process": "鉄鉱石 → 還元鉄、またはスクラップ → 電炉等で粗鋼 → 圧延・鋼管・鋼材 → 自動車・機械・建設。亜鉛めっきで亜鉛産業とも接続します。",
+      "boundary": "地図は2023年の3311＋3312従事者数。2025年の粗鋼量、完成鋼見かけ消費、鋼材貿易は工程・範囲が異なります。粗鋼13.5＋純輸入11.8を同じ物量として加算しません。",
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "nationalTotal": 81281.0,
+        "definition": "CE2024で調べた2023年の鉄鋼基本3311＋鉄鋼製品3312の総従事者数。両業種が公開数値の州だけ合計し、原表「-」は秘匿、SDは不明として保持します。公開州だけの合計を全国分母にしません。粗鋼トン数の地図ではありません。",
+        "sourceIds": [
+          "mx-resource-ce-steel"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "02",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "03",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "05",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "07",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "08",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "09",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "10",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "11",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "12",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "13",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "14",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "15",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "16",
+            "value": 5202.0,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "18",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "19",
+            "value": 28967.0,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "21",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "22",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "23",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "24",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "25",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "26",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "27",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "28",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "29",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "30",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "31",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "32",
+            "value": null,
+            "status": "unknown"
+          }
+        ],
+        "regions": [
+          {
+            "state": "19",
+            "stage": "鉄鋼基本・鋼材加工",
+            "note": "ヌエボレオン。両対象業種の雇用公開値を合計できます。",
+            "sourceIds": [
+              "mx-resource-ce-steel"
+            ]
+          },
+          {
+            "state": "16",
+            "stage": "鉄鋼基本・鋼材加工",
+            "note": "ミチョアカン。粗鋼工程から鋼材加工へつなぐ地域例。",
+            "sourceIds": [
+              "mx-resource-ce-steel"
+            ]
+          },
+          {
+            "state": "05",
+            "stage": "鋼材加工",
+            "note": "コアウイラ。3312雇用は公開、合計は3311がSDのため不明として保持。",
+            "sourceIds": [
+              "mx-resource-ce-steel"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "鉄鋼基本・鋼材製造の従事者",
+            "value": 81281.0,
+            "unit": "人",
+            "year": 2023,
+            "definition": "CE2024確報の総従事者。3311の16312＋3312の64969。",
+            "sourceIds": [
+              "mx-resource-ce-steel"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "鉄鋼基本・鋼材の付加価値",
+            "value": 158734.708,
+            "unit": "百万MXN（現在価格）",
+            "year": 2023,
+            "definition": "CEのVACB。3311の64703.574＋3312の94031.134。国民経済計算GDPではない。",
+            "sourceIds": [
+              "mx-resource-ce-steel"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業全体のVACB",
+              "value": 5390947.292,
+              "unit": "百万MXN（現在価格）"
+            }
+          },
+          {
+            "label": "CE製造業付加価値に占める比",
+            "value": 2.9444678161768976,
+            "unit": "%",
+            "year": 2023,
+            "definition": "158734.708÷5390947.292×100。同じCE対象範囲で比較。",
+            "sourceIds": [
+              "mx-resource-ce-steel"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "完成鋼の見かけ消費",
+            "value": 25,
+            "unit": "百万t（完成鋼）",
+            "year": 2025,
+            "definition": "worldsteelのApparent steel use。国内生産由来の国内仕向けではない。",
+            "sourceIds": [
+              "mx-resource-worldsteel"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "国内産鋼材の国内仕向け",
+            "value": null,
+            "unit": "百万t",
+            "year": 2025,
+            "definition": "同じ製品段階で国内生産由来の国内使用を追う統計は未確認。",
+            "sourceIds": [
+              "mx-resource-worldsteel"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          }
+        ],
+        "world": [
+          {
+            "label": "粗鋼生産量",
+            "value": 13.5,
+            "unit": "百万t（粗鋼）",
+            "year": 2025,
+            "definition": "能力ではなく粗鋼生産。世界比約0.73%。",
+            "sourceIds": [
+              "mx-resource-worldsteel"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "世界粗鋼生産量",
+              "value": 1848.9,
+              "unit": "百万t（粗鋼）"
+            }
+          },
+          {
+            "label": "世界粗鋼生産シェア",
+            "value": 0.7301638812266753,
+            "unit": "%",
+            "year": 2025,
+            "definition": "13.5÷1848.9×100。",
+            "sourceIds": [
+              "mx-resource-worldsteel"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "世界粗鋼生産順位",
+            "value": 15,
+            "unit": "位",
+            "year": 2025,
+            "definition": "worldsteel国別粗鋼表。",
+            "sourceIds": [
+              "mx-resource-worldsteel"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "粗鋼の電炉比",
+            "value": 95.9,
+            "unit": "%",
+            "year": 2025,
+            "definition": "Crude steel production by process、Electric列。電力が低炭素である割合とは別。",
+            "sourceIds": [
+              "mx-resource-worldsteel"
+            ],
+            "status": "observed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "鋼材輸入量",
+            "value": 14.8,
+            "unit": "百万t（鋼材）",
+            "year": 2025,
+            "definition": "worldsteel主要鋼材輸入国表。完成鋼見かけ消費と境界を統一した依存率は算出しない。",
+            "sourceIds": [
+              "mx-resource-worldsteel"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "鋼材純輸入量",
+            "value": 11.8,
+            "unit": "百万t（鋼材）",
+            "year": 2025,
+            "definition": "輸入−輸出、原表の純輸入。粗鋼量との直接加算をしない。",
+            "sourceIds": [
+              "mx-resource-worldsteel"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "鋼材の輸出先構成",
+            "value": null,
+            "unit": "%",
+            "year": 2025,
+            "definition": "製品分類と国別内訳を統一した構成は未確認。",
+            "sourceIds": [
+              "mx-resource-worldsteel"
+            ],
+            "status": "unconfirmed",
+            "note": "未確認。0や生産量−輸出量で補完しません。"
+          }
+        ]
+      }
+    }
+  ]
+}

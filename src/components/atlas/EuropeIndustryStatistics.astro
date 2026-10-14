@@ -1,0 +1,15 @@
+---
+import { europeIndustryGroups, europeIndustryProfiles, europeIndustryScopeNote, europeIndustryReviewed } from '../../data/atlas/europe/industry-catalog';
+import { europeIndustrySectorCopy } from '../../lib/atlas-europe-industry';
+import '../../styles/atlas-europe-industry.css';
+interface Props { active:boolean }
+const {active}=Astro.props;
+---
+<section class="eu-industry-statistics" data-eu-industry-statistics hidden={!active} aria-labelledby="eu-industry-statistics-title">
+ <header><h2 id="eu-industry-statistics-title">産業の規模・世界での位置・供給網</h2><p>{europeIndustryScopeNote}</p><p class="eu-data-note">資料確認日：{europeIndustryReviewed}。同じ年・分類・集合の数値だけで比率を解釈します。地図の点や色の数は生産量・雇用順位ではありません。国全体の産業構成は、この品目別統計とは別の補足です。</p></header>
+ {europeIndustryGroups.map(group=>{const profile=europeIndustryProfiles[group];return <article data-eu-industry-evidence={group} hidden={!europeIndustrySectorCopy.resources.groups.includes(group)}>
+  <h3>{group}</h3><p class="eu-industry-meaning">{profile.meaning}</p>
+  <div class="eu-industry-table-wrap" tabindex="0" role="region" aria-label={`${group}の統計表（狭い画面では横にスクロール）`}><table><caption>{group}の指標と対象範囲</caption><thead><tr><th scope="col">指標・数値</th><th scope="col">年・対象</th><th scope="col">定義・分母・一次出典</th></tr></thead><tbody>{profile.evidence.map(item=><tr><th scope="row"><span>{item.label}</span><strong>{item.value}</strong></th><td><strong>{item.year}</strong><span>{item.scope}</span></td><td><p>{item.definition}</p><a href={item.source}>{item.sourceLabel}</a></td></tr>)}</tbody></table></div>
+  <p class="eu-industry-missing"><strong>未収録・確認の限界：</strong>{profile.missing}</p>
+ </article>;})}
+</section>

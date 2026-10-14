@@ -1,0 +1,66 @@
+{
+  "source": {
+    "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_populated_places.geojson",
+    "note": "SHA256 of downloaded JSON serialization; selected NAME and source geometry retained. Public domain.",
+    "accessed": "2026-10-14",
+    "serializationSHA256": "ad6551a76e3550999ea3792c11bd6be56f8f68205452017b749304b7e9a2be23"
+  },
+  "positions": {
+    "Norilsk": [
+      88.224992,
+      69.340017
+    ],
+    "Monchegorsk": [
+      32.828735,
+      67.929121
+    ],
+    "Bodaybo": [
+      114.193242,
+      57.850748
+    ],
+    "Aldan": [
+      125.38939,
+      58.602998
+    ],
+    "Mirny": [
+      113.961354,
+      62.540019
+    ],
+    "Udachny": [
+      112.39654,
+      66.423166
+    ],
+    "Korsakov": [
+      142.777476,
+      46.642436
+    ],
+    "Svobodnyy": [
+      128.131187,
+      51.406176
+    ],
+    "Sayanogorsk": [
+      91.400405,
+      53.089433
+    ],
+    "Tayshet": [
+      97.987703,
+      55.927709
+    ],
+    "Solikamsk": [
+      56.749962,
+      59.669987
+    ],
+    "Kirovsk": [
+      33.668735,
+      67.609089
+    ],
+    "Volkhov": [
+      32.338739,
+      59.929093
+    ],
+    "Vanino": [
+      140.242489,
+      49.087325
+    ]
+  }
+}

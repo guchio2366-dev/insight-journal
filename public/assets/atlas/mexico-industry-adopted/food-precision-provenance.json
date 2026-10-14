@@ -1,0 +1,534 @@
+{
+  "schemaVersion": 1,
+  "owner": "mexico-food-precision",
+  "capturedDate": "2026-10-14",
+  "generator": "scripts/prepare-mexico-industry-adopted-food-precision.mjs",
+  "inputFiles": [
+    {
+      "key": "national",
+      "file": "public/assets/atlas/mexico-industry-adopted/food-precision-source-ce-national-2023.json",
+      "bytes": 5900,
+      "sha256": "3b276b8395c3cc1ee81e71cbd9e72ce20b2dffe0df2ad420e80cd014afc0eefc",
+      "preservation": "unmodified retained INEGI API response"
+    },
+    {
+      "key": "states",
+      "file": "public/assets/atlas/mexico-industry-adopted/food-precision-source-ce-states-2023.json",
+      "bytes": 18746,
+      "sha256": "6873aa60d56ff6af760dcf843e49323932d369f3fe1e646b4e8278957d99dc27",
+      "preservation": "unmodified retained INEGI API response"
+    },
+    {
+      "key": "feed",
+      "file": "public/assets/atlas/mexico-industry-adopted/food-precision-source-ce-feed-2023.json",
+      "bytes": 7489,
+      "sha256": "2bddec34741a403c7af949d5bf94e3f275694efd6163dec0beb46f5d5daf740b",
+      "preservation": "unmodified retained INEGI API response"
+    },
+    {
+      "key": "classes",
+      "file": "public/assets/atlas/mexico-industry-adopted/food-precision-source-ce-medical-classes-2023.json",
+      "bytes": 5868,
+      "sha256": "8b9899e08cdbd662301da53ccb1a6cb0d142abf26576b14048951ae818929dec",
+      "preservation": "unmodified retained INEGI API response"
+    },
+    {
+      "key": "extract",
+      "file": "public/assets/atlas/mexico-industry-adopted/food-precision-statistical-extract.json",
+      "bytes": 6082,
+      "sha256": "35c032701e9c1646b3bbcea652969303f8d64d76ae5a075df12d4a4db1cbaa82",
+      "preservation": "selected numeric transcription; not original PDF/HTML"
+    }
+  ],
+  "sources": {
+    "mx-food-ce2024": {
+      "title": "INEGI：Censos Económicos 2024・2023年の雇用、産出、センサス付加価値",
+      "url": "https://www.inegi.org.mx/app/tabulados/interactivos/?bd=CE2024&px=CE_GENNCE_1",
+      "year": 2023,
+      "scope": "2023年活動。Censos Económicos 2024の都市部・民間／国営等の対象事業所。州別雇用と全国同SCIAN値。全国総雇用・GDPを網羅する表ではなく、VACBはセンサス付加価値。"
+    },
+    "mx-food-alltech-2026": {
+      "title": "Alltech Agri-Food Outlook 2026：2025年配合飼料生産",
+      "url": "https://www.alltech.com/agri-food-outlook",
+      "year": 2025,
+      "scope": "出版社公式の2026年版報告書案内。Alltech Agri-Food Outlook 2026、pp.6–7。142か国・38,837工場の調査による配合飼料生産推計。メキシコと世界の分母を同じ表から取得。"
+    },
+    "mx-food-usda-grain-2026": {
+      "title": "USDA Mexico Post：Grain and Feed Annual 2026",
+      "url": "https://apps.fas.usda.gov/newgainapi/api/Report/DownloadReportByFileName?fileName=Grain%20and%20Feed%20Annual_Mexico%20City_Mexico_MX2026-0018.pdf",
+      "year": "2025/26商業年度・2026年3月公表",
+      "scope": "pp.6、8–11。2025年10月～2026年9月のトウモロコシ需給等の現地推計・見通し。加工飼料・肉の物量そのものではない。"
+    },
+    "mx-food-barthhaas-2026": {
+      "title": "BarthHaas Report 2025/2026：2025年ビール生産",
+      "url": "https://www.barthhaas.com/fileadmin/user_upload/02_PR_World-beer-market_2026.pdf",
+      "year": 2025,
+      "scope": "各国生産の集計推計。メキシコ147.87百万hl、丸めた世界約1,896百万hl、生産4位。輸出順位とは別。"
+    },
+    "mx-food-agriculture-beer-2025": {
+      "title": "メキシコ農業省：2025年ビール輸出",
+      "url": "https://www.gob.mx/agricultura/prensa/exportaciones-de-cerveza-mexicana-superan-6-400-mdd-y-llegan-a-98-paises",
+      "year": 2025,
+      "scope": "輸出価額・数量・輸出順位。36%という世界輸出価額比は2021～25年の平均で、2025年単年の世界シェアではない。"
+    },
+    "mx-food-agriculture-balance-2025": {
+      "title": "メキシコ農業省：2025年12月農産・食品貿易収支",
+      "url": "https://nube.agricultura.gob.mx/BalanzaComercial/diciembre2025.php",
+      "year": 2025,
+      "scope": "ビール輸出価額6,479,560千USD。農産食品全体と食品工業311は別範囲。"
+    },
+    "mx-food-wits-beer-2024": {
+      "title": "WITS／UN Comtrade：2024年メキシコの麦芽ビール輸出先",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/220300",
+      "year": 2024,
+      "scope": "H0 220300、総輸出、千USD・L。Data Méxicoの別改定系列と分子・分母を混合しない。"
+    },
+    "mx-food-crt-2024": {
+      "title": "CRT：2024年テキーラ生産・輸出・米国向け数量",
+      "url": "https://www.crt.org.mx/2025/03/05/continuara-el-trabajo-coordinado-para-fortalecer-a-la-agroindustria-tequilera/",
+      "year": 2024,
+      "scope": "同一CRT公表のL。濃度換算、在庫、国内生産品の国内販売は未確認。2025年の他系列とは混合しない。"
+    },
+    "mx-food-crt-2026": {
+      "title": "CRT：2026年前半テキーラ実績",
+      "url": "https://www.crt.org.mx/2026/08/07/24-de-julio-dia-nacional-del-tequila/",
+      "year": "2026年前半",
+      "scope": "生産302.1百万L、輸出214.4百万L。半期値であり、通年へ倍増換算しない。原産地は5州。"
+    },
+    "mx-food-wits-medical-2024": {
+      "title": "WITS／UN Comtrade：2024年メキシコHS9018輸出先",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/9018",
+      "year": 2024,
+      "scope": "H0 9018の医科・外科・歯科・獣医科器械等。HS90全体や全医療機器ではなく、SCIAN3391と同義でもない。"
+    },
+    "mx-food-wits-medical-world-2024": {
+      "title": "WITS／UN Comtrade：2024年HS9018報告国別輸出額",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/ALL/year/2024/tradeflow/Exports/partner/WLD/product/9018",
+      "year": 2024,
+      "scope": "取得時の公開報告国表内での輸出価額順位。EU集計を除外。未報告国・再輸出を含めた完全な世界生産シェアではない。"
+    },
+    "mx-food-wits-catheters-2024": {
+      "title": "WITS／UN Comtrade：2024年針・カテーテル・カニューレ等輸出",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/901839",
+      "year": 2024,
+      "scope": "H0 901839、HS9018の内数。千USD。取得表に比較可能な数量はない。"
+    },
+    "mx-food-wits-aero-engine-2024": {
+      "title": "WITS／UN Comtrade：2024年ジェット・ターボプロップ部品輸出",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/841191",
+      "year": 2024,
+      "scope": "H0 841191。エンジン部品のみ。完成航空機・航空産業全体ではない。千USD・kg。"
+    },
+    "mx-food-wits-aero-parts-2024": {
+      "title": "WITS／UN Comtrade：2024年その他の航空機部品輸出",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/880330",
+      "year": 2024,
+      "scope": "H0 880330。完成機を除く。新しいHSの8807へ分類変更された品との時系列接合は行わない。"
+    },
+    "mx-food-wits-prepared-meat-2024": {
+      "title": "WITS／UN Comtrade：2024年調製・保存肉輸出",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/1602",
+      "year": 2024,
+      "scope": "H0 1602。HS02の生鮮・冷凍肉等を含まず、屠畜から加工までを含むSCIAN3116全体とは別。"
+    },
+    "mx-food-datamexico-apparel-knit-2024": {
+      "title": "Data México：2024年ニット衣服・付属品貿易",
+      "url": "https://www.economia.gob.mx/datamexico/es/profile/product/apparel-and-accessories-accessories-of-knitted-or-crocheted",
+      "year": 2024,
+      "scope": "HS2012第61類、表示は百万USDに丸め済み。国際比較欄の2022年OECを最新世界生産値へ流用しない。"
+    },
+    "mx-food-datamexico-apparel-woven-2024": {
+      "title": "Data México：2024年非ニット衣服・付属品貿易",
+      "url": "https://economia.gob.mx/datamexico/es/profile/product/garments-and-accessories-accessories-knitted-knitted-or-crocheted",
+      "year": 2024,
+      "scope": "HS2012第62類、百万USDに丸め済み。国内分類315・繊維産業全体と同義ではない。"
+    },
+    "mx-food-cbrands-2026": {
+      "title": "Constellation Brands：2026年2月期10-K",
+      "url": "https://ir.cbrands.com/sec-filings/all-sec-filings/content/0000016918-26-000011/stz-20260228.htm",
+      "year": "2026年2月期",
+      "scope": "企業例。メキシコ製造と米国ブランド・販売権の関係。企業全体・部門業績はメキシコ国内のGDP・付加価値とは別。"
+    },
+    "mx-food-discus-2025": {
+      "title": "DISCUS：2025年米国蒸留酒供給者売上",
+      "url": "https://distilledspirits.org/news/distilled-spirits-council-annual-economic-briefing-2025/",
+      "year": 2025,
+      "scope": "米国市場のテキーラ・メスカル合計売上。メキシコ生産額・輸出額、テキーラ単独の世界シェアではない。"
+    },
+    "mx-food-ita-aerospace-2026": {
+      "title": "米国商務省：メキシコ航空産業の工程・地域集積",
+      "url": "https://www.trade.gov/knowledge-product/mexico-b-aerospace",
+      "year": "2026年公表",
+      "scope": "地域・工程の案内資料。範囲が不明な航空全体GDP比や世界順位は数量指標へ採用しない。"
+    }
+  },
+  "ceApi": {
+    "metadataUrl": "https://www.inegi.org.mx/app/tabulados/pxwebapi/api/tabulado?lang=es&file=CE2024%2FCE_GENNCE_1",
+    "readPostUrl": "https://www.inegi.org.mx/app/tabulados/pxwebapi/api/datatable",
+    "requests": {
+      "national": {
+        "lang": "es",
+        "file": "CE2024/CE_GENNCE_1",
+        "stub": [
+          "Entidad federativa",
+          "Actividad económica"
+        ],
+        "heading": [
+          "Variables"
+        ],
+        "query": {
+          "query": [
+            {
+              "code": "Entidad federativa",
+              "selection": {
+                "filter": "item",
+                "values": [
+                  "0"
+                ]
+              }
+            },
+            {
+              "code": "Actividad económica",
+              "selection": {
+                "filter": "item",
+                "values": [
+                  "1",
+                  "185",
+                  "186",
+                  "225",
+                  "260",
+                  "267",
+                  "275",
+                  "319",
+                  "708",
+                  "737"
+                ]
+              }
+            },
+            {
+              "code": "Variables",
+              "selection": {
+                "filter": "item",
+                "values": [
+                  "1",
+                  "2",
+                  "16",
+                  "18"
+                ]
+              }
+            }
+          ],
+          "response": {
+            "format": "json-stat"
+          }
+        }
+      },
+      "states": {
+        "lang": "es",
+        "file": "CE2024/CE_GENNCE_1",
+        "stub": [
+          "Entidad federativa",
+          "Actividad económica"
+        ],
+        "heading": [
+          "Variables"
+        ],
+        "query": {
+          "query": [
+            {
+              "code": "Entidad federativa",
+              "selection": {
+                "filter": "item",
+                "values": [
+                  "0",
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "11",
+                  "12",
+                  "13",
+                  "14",
+                  "15",
+                  "16",
+                  "17",
+                  "18",
+                  "19",
+                  "20",
+                  "21",
+                  "22",
+                  "23",
+                  "24",
+                  "25",
+                  "26",
+                  "27",
+                  "28",
+                  "29",
+                  "30",
+                  "31",
+                  "32"
+                ]
+              }
+            },
+            {
+              "code": "Actividad económica",
+              "selection": {
+                "filter": "item",
+                "values": [
+                  "186",
+                  "225",
+                  "260",
+                  "267",
+                  "275",
+                  "319",
+                  "708",
+                  "737"
+                ]
+              }
+            },
+            {
+              "code": "Variables",
+              "selection": {
+                "filter": "item",
+                "values": [
+                  "2",
+                  "16",
+                  "18"
+                ]
+              }
+            }
+          ],
+          "response": {
+            "format": "json-stat"
+          }
+        }
+      },
+      "feed": {
+        "lang": "es",
+        "file": "CE2024/CE_GENNCE_1",
+        "stub": [
+          "Entidad federativa",
+          "Actividad económica"
+        ],
+        "heading": [
+          "Variables"
+        ],
+        "query": {
+          "query": [
+            {
+              "code": "Entidad federativa",
+              "selection": {
+                "filter": "item",
+                "values": [
+                  "0",
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "10",
+                  "11",
+                  "12",
+                  "13",
+                  "14",
+                  "15",
+                  "16",
+                  "17",
+                  "18",
+                  "19",
+                  "20",
+                  "21",
+                  "22",
+                  "23",
+                  "24",
+                  "25",
+                  "26",
+                  "27",
+                  "28",
+                  "29",
+                  "30",
+                  "31",
+                  "32"
+                ]
+              }
+            },
+            {
+              "code": "Actividad económica",
+              "selection": {
+                "filter": "item",
+                "values": [
+                  "187"
+                ]
+              }
+            },
+            {
+              "code": "Variables",
+              "selection": {
+                "filter": "item",
+                "values": [
+                  "2",
+                  "16",
+                  "18"
+                ]
+              }
+            }
+          ],
+          "response": {
+            "format": "json-stat"
+          }
+        }
+      },
+      "classes": {
+        "lang": "es",
+        "file": "CE2024/CE_GENNCE_1",
+        "stub": [
+          "Entidad federativa",
+          "Actividad económica"
+        ],
+        "heading": [
+          "Variables"
+        ],
+        "query": {
+          "query": [
+            {
+              "code": "Entidad federativa",
+              "selection": {
+                "filter": "item",
+                "values": [
+                  "0",
+                  "2",
+                  "8",
+                  "14",
+                  "26",
+                  "28"
+                ]
+              }
+            },
+            {
+              "code": "Actividad económica",
+              "selection": {
+                "filter": "item",
+                "values": [
+                  "739",
+                  "740",
+                  "741"
+                ]
+              }
+            },
+            {
+              "code": "Variables",
+              "selection": {
+                "filter": "item",
+                "values": [
+                  "2",
+                  "18"
+                ]
+              }
+            }
+          ],
+          "response": {
+            "format": "json-stat"
+          }
+        }
+      }
+    },
+    "activityValueIds": "Original capture IDs for the CE2024/CE_GENNCE_1 metadata snapshot; verify metadata before any new acquisition."
+  },
+  "output": {
+    "file": "src/data/atlas/mexico/industry-adopted-food-precision.json",
+    "bytes": 105257,
+    "sha256": "b8ba603a2eadc098faf8d957879e74cf7fe4ba3e98efe2ee0494baba0ab5ab28"
+  },
+  "employmentExtract": {
+    "file": "public/assets/atlas/mexico-industry-adopted/food-precision-employment-2023.csv",
+    "records": 256,
+    "bytes": 10913,
+    "sha256": "ad077773a1d09d05aad08d48ddc674445addbcba004d772ac23013db38dcd095"
+  },
+  "mapNationalTotals": {
+    "food": 1214261,
+    "feed": 34910,
+    "meat": 132735,
+    "beer": 16214,
+    "tequila": 15096,
+    "medical": 212561,
+    "aerospace": 45915,
+    "apparel": 296915
+  },
+  "statusCounts": {
+    "food": {
+      "available": 32,
+      "zero": 0,
+      "confidential": 0,
+      "unknown": 0,
+      "unretrieved": 0
+    },
+    "feed": {
+      "available": 26,
+      "zero": 0,
+      "confidential": 5,
+      "unknown": 1,
+      "unretrieved": 0
+    },
+    "meat": {
+      "available": 30,
+      "zero": 0,
+      "confidential": 2,
+      "unknown": 0,
+      "unretrieved": 0
+    },
+    "beer": {
+      "available": 13,
+      "zero": 0,
+      "confidential": 16,
+      "unknown": 3,
+      "unretrieved": 0
+    },
+    "tequila": {
+      "available": 3,
+      "zero": 0,
+      "confidential": 12,
+      "unknown": 17,
+      "unretrieved": 0
+    },
+    "medical": {
+      "available": 32,
+      "zero": 0,
+      "confidential": 0,
+      "unknown": 0,
+      "unretrieved": 0
+    },
+    "aerospace": {
+      "available": 5,
+      "zero": 0,
+      "confidential": 11,
+      "unknown": 16,
+      "unretrieved": 0
+    },
+    "apparel": {
+      "available": 32,
+      "zero": 0,
+      "confidential": 0,
+      "unknown": 0,
+      "unretrieved": 0
+    }
+  },
+  "notes": [
+    "CE原票の「-」は秘匿。「SD」は原票注記に活動なし等の複数説明があり、数値0に変えずunknown。",
+    "全国値は州別原票内の同年・同SCIAN全国行。公開州の合計で代用しない。",
+    "CE対象の雇用・VACB比は全国総雇用比・GDP比ではない。食品311の内数の飼料・肉と、医療3391の細分類を重複加算しない。",
+    "世界と国内は資料ごとの製品段階・単位・年を維持。推計・商業年度・半期を明記。P−Xを国内消費として表示しない。",
+    "CE以外の保持ファイルは検証済みの数値転記。元HTML/PDF全体の原票としては扱わない。未確認指標はnull。",
+    "このスクリプトは保存入力だけから再生成。--checkは出力を書き換えず照合する。"
+  ]
+}

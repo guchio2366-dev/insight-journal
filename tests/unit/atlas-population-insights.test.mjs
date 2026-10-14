@@ -9,7 +9,7 @@ test('all four destinations preserve the source selection and camera through a d
  for(const item of populationInsights){
   const target=populationInsightUrl(source,base,item.id),ctx=readPopulationInsight(new URL(target.href),base);
   assert.equal(ctx.item.id,item.id);assert.equal(target.searchParams.has('z'),false);
-  assert.equal(target.pathname,base+item.page+'/');
+  assert.equal(target.pathname,base+(item.page==='industry'?'population/industry':item.page)+'/');
   for(const key of ['popView','popCity','popGeo','popEthnicity','view','lng','lat','z'])assert.equal(ctx.back.searchParams.get(key),source.searchParams.get(key));
   assert.equal(ctx.back.origin,source.origin);assert.equal(ctx.back.pathname,base+'population/');
  }

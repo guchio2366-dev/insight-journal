@@ -2,6 +2,7 @@ import type {State} from '../data/atlas/africa-atlas.ts';
 import {africaIndustrySectors,africaSectorIndustries,africaIndustrySectorSites,africaSectorSiteById,africaSectorIndustryById,africaIndustryNationalReferences,africaIndustryMapScope,type AfricaSectorSite} from '../data/atlas/africa-industry-sectors.ts';
 import {projectAfrica,africaWidth,africaHeight} from '../lib/atlas-africa-geometry.ts';
 import {placePilotLabel} from '../lib/atlas-canada-industry-labels.ts';
+import {renderAfricaIndustryStatistics} from './atlas-africa-industry-statistics.ts';
 
 const ns='http://www.w3.org/2000/svg';
 function svg(tag:string,attrs:Record<string,string|number>,text?:string){const node=document.createElementNS(ns,tag);for(const [key,value]of Object.entries(attrs))node.setAttribute(key,String(value));if(text!==undefined)node.textContent=text;return node;}
@@ -13,9 +14,11 @@ export function renderAfricaIndustry(root:HTMLElement,state:State){
  let reading=root.querySelector<HTMLElement>('[data-africa-industry-reading]');
  if(!reading){reading=html('section');reading.dataset.africaIndustryReading='';reading.className='africa-industry-reading';q('.africa-detail-scroll').prepend(reading);}
  reading.hidden=state.field!=='industry';q<HTMLElement>('[data-africa-industry-return]').hidden=state.field!=='industry'||!state.industryCommodity&&!state.industryLocation;
+ q<HTMLElement>('[data-africa-industry-statistics]').hidden=state.field!=='industry';
  if(state.field!=='industry')return;
  const sector=africaIndustrySectors.find(row=>row.id===state.industrySector)!,industries=africaSectorIndustries.filter(row=>row.sector===sector.id),sites=africaIndustrySectorSites(sector.id);
  const industry=africaSectorIndustryById(state.industryCommodity),selected=africaSectorSiteById(state.industryLocation);
+ renderAfricaIndustryStatistics(root,sector.id,industry?.id??'');
  const roleFor=(site:AfricaSectorSite)=>site.roles.find(role=>role.sector===sector.id)!;
  const active=(site:AfricaSectorSite)=>selected?site.id===selected.id:!!industry&&roleFor(site).industry===industry.id;
  const displayed=(site:AfricaSectorSite)=>!state.industryOnly||!industry||roleFor(site).industry===industry.id;
@@ -35,12 +38,11 @@ export function renderAfricaIndustry(root:HTMLElement,state:State){
  const pointGroups=new Map<string,SVGGElement>();
  for(const {site,point:[px,py]}of points){
   const role=roleFor(site),definition=africaSectorIndustryById(role.industry)!,[x,y]=[px/scale,py/scale],isActive=active(site),color=definition.color;
-  const peers=points.filter(row=>row.point[0]===px&&row.point[1]===py),index=peers.findIndex(row=>row.site.id===site.id),radius=peers.length>1?(index===0?8:4):5;
+  const peers=points.filter(row=>row.point[0]===px&&row.point[1]===py),index=peers.findIndex(row=>row.site.id===site.id),radius=peers.length>1?5+3*(peers.length-1-index):5;
   const group=svg('g',{'data-africa-industry-location':site.id,'data-industry':role.industry,'data-stage':role.stage,'data-geographic-scope':site.geographicScope??'region',tabindex:displayed(site)?0:-1,role:'button','aria-label':`${definition.label} · ${site.label} · ${role.stage}を読む`,'aria-pressed':String(isActive),class:'africa-industry-hit',opacity:industry&&!isActive?.6:1});
   if(!displayed(site))group.style.display='none';
-  if(peers.length===1)group.append(svg('circle',{cx:x,cy:y,r:12/scale,fill:'transparent','pointer-events':'all'}));
   const attrs=/採掘/.test(role.stage)?{cx:x,cy:y,r:radius/scale}:{x:x-radius/scale,y:y-radius/scale,width:2*radius/scale,height:2*radius/scale};
-  group.append(svg(/採掘/.test(role.stage)?'circle':'rect',{...attrs,'data-africa-industry-point':site.id,fill:peers.length>1&&index===0?'none':color,stroke:peers.length>1&&index===0?color:'#fffdf8','stroke-width':1.6,'stroke-dasharray':site.status==='production'?'':'3 2','vector-effect':'non-scaling-stroke','pointer-events':'visiblePainted'}));
+  group.append(svg(/採掘/.test(role.stage)?'circle':'rect',{...attrs,'data-africa-industry-point':site.id,fill:peers.length>1&&index<peers.length-1?'none':color,stroke:peers.length>1&&index<peers.length-1?color:'#fffdf8','stroke-width':1.6,'stroke-dasharray':site.status==='production'?'':'3 2','vector-effect':'non-scaling-stroke','pointer-events':'visiblePainted'}));
   if(isActive)group.append(svg('circle',{cx:x,cy:y,r:11/scale,fill:'none',stroke:color,'stroke-width':2,'vector-effect':'non-scaling-stroke','pointer-events':'none','data-africa-industry-emphasis':site.id}));
   group.append(svg('title',{},`${site.label} · ${role.stage} · ${site.evidencePeriod} · ${site.status==='development'?'開発':site.status==='paused'?'休止':'操業資料あり'}：${site.note}`));
   marks.append(group);pointGroups.set(site.id,group as SVGGElement);

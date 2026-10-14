@@ -1,0 +1,2802 @@
+{
+  "sources": {
+    "mx-service-ce2023": {
+      "title": "INEGI CE2024：州・SCIAN別就業者数とセンサス付加価値（参照2023年）",
+      "url": "https://www.inegi.org.mx/app/tabulados/interactivos/?bd=CE2024&px=CE_GENNCE_1",
+      "year": 2023,
+      "scope": "CE_GENNCE_1。民間・国営企業、都市で捕捉した対象。全国＋32州、SCIAN23/48-49/52/53/54/5415/561422/721、就業者数・VACB。家計調査の全国就業者や国民勘定GDPとは範囲が異なる。'-'は秘匿、SDは非存在または本社所在地への計上。建設・運輸・金融等は本社所在地基準。"
+    },
+    "mx-service-cbs2025": {
+      "title": "INEGI CBS2025（2026年10月2日公表）",
+      "url": "https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2026/pibact/CBS2026_RR.pdf",
+      "year": 2025,
+      "scope": "表2：基本価格・当年価格VAB。全国VAB33,576,797百万MXN、市場価格GDP35,923,239百万MXN。図4：有給・企業所属就業ポスト。表4：平均年報酬。産業大分類の値を狭い製品・業務へ配賦しない。"
+    },
+    "mx-service-cstm2024": {
+      "title": "INEGI観光サテライト勘定2024（2025年12月18日公表）",
+      "url": "https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2025/turismo/CSTM2024_CP.pdf",
+      "year": 2024,
+      "scope": "観光VAB・有給就業ポスト。全国VAB31,331,232百万MXN、全国有給ポスト39,653,160。観光全体は複数産業にまたがり、CE721宿泊と一致しない。WTTC間接・誘発効果込みの総寄与とも区別。"
+    },
+    "mx-service-evi2025": {
+      "title": "INEGI EVI：2025年国際訪問者・支出（2026年2月12日公表、年次表2）",
+      "url": "https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2026/ViajInternales/evi2026_02.pdf",
+      "year": 2025,
+      "scope": "外国居住者の来訪回数・支出。宿泊観光客と日帰り客、境界内滞在と内陸を区分。固有人数ではない。国籍別入国やUPM居住国別航空入国と分母が異なる。暫定値。"
+    },
+    "mx-service-bop2025": {
+      "title": "Banco de México：2025年サービス貿易、2026年8月25日改訂（表A1）",
+      "url": "https://www.banxico.org.mx/publicaciones-y-prensa/balanza-de-pagos/%7BE333A05C-EB45-9A4A-6F1D-591845A64896%7D.pdf",
+      "year": 2025,
+      "scope": "国際収支MBP6、百万USD。サービス総輸出65,802。狭いSCIAN業種とサービス品目は対応しない。旧2026年2月公表値から改訂済み。"
+    },
+    "mx-service-bts2025": {
+      "title": "米国BTS：米墨貨物貿易2025（2026年5月15日公表）",
+      "url": "https://www.bts.gov/newsroom/transborder-freight-data-annual-report-2025-0",
+      "year": 2025,
+      "scope": "運ばれた商品の貿易価額。物流企業の売上・付加価値・サービス輸出ではない。表1b輸送手段、表4b国境ゲート。米国側統計。"
+    },
+    "mx-service-datatur-ranking2024": {
+      "title": "DataTur：UN Tourismに基づく2024年国際観光順位",
+      "url": "https://www.datatur.sectur.gob.mx/SitePages/omt.aspx",
+      "year": 2024,
+      "scope": "宿泊を伴う国際観光客到着数6位、旅行受取16位。人数と収入は別の順位。2025年世界順位ではない。"
+    },
+    "mx-service-datatur-residence2025": {
+      "title": "DataTur RAT2025年12月：UPM居住国別航空入国（14頁）",
+      "url": "https://datatur.sectur.gob.mx/Documentoscompartidos/rat/RAT-2025-12(ES).pdf",
+      "year": 2025,
+      "scope": "UPM外国居住者航空来訪約20.6百万人、米国約13.7、カナダ約2.8。丸め値。EVI航空観光客22.867百万人、国籍別航空入国22.1百万人とは別系列。"
+    },
+    "mx-service-ecis2024": {
+      "title": "INEGI ECIS2025（参照2024年、2026年8月13日公表）",
+      "url": "https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2026/ecis/ECIS2025_RR.pdf",
+      "year": 2024,
+      "scope": "対象9,796社、標本5,938社。工業・商業・民間非金融サービス。通信・コンピューター・情報の対象企業収入99.7%、その他企業サービス86.6%がデジタル供給。全収入の米国比76.9%をIT/BPMだけの比率にしない。BOP全サービスと分母が異なる。"
+    },
+    "mx-service-aws2025": {
+      "title": "AWS：メキシコ地域稼働と投資計画（2025年1月14日）",
+      "url": "https://press.aboutamazon.com/2025/1/aws-launches-infrastructure-region-in-mexico",
+      "year": 2025,
+      "scope": "地域稼働は実績。15年間50億USD超の投資は計画で支出実績ではない。企業の推計効果は国全体のIT付加価値や雇用へ流用しない。"
+    }
+  },
+  "industries": [
+    {
+      "id": "tourism",
+      "label": "観光・宿泊",
+      "family": "tourism",
+      "overview": "国内旅行と海外来訪を支える宿泊・飲食・移動・文化サービスを読む。地図はそのうち宿泊業の就業者数。",
+      "why": "観光VABは2024年全国の8.7%。2025年旅行受取は349.9億USDで、観光客到着数と収入の世界順位を別に見る意味がある。",
+      "process": "来訪元・国内の居住地 → 航空・道路・クルーズ → 宿泊・飲食・体験 → 滞在中の支出。",
+      "boundary": "州地図はCE721宿泊業2023年の就業者。観光全体のVAB8.7%を州の塗り値にしない。観光サテライト勘定は他業種と重なり、業種VABへ単純加算できない。",
+      "sectors": [
+        "services"
+      ],
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "CE2023・SCIAN721宿泊業の州別就業者数。観光全体、飲食業、来訪者数を表す地図ではない。",
+        "nationalTotal": 438724,
+        "sourceIds": [
+          "mx-service-ce2023"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": 2580,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": 13313,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": 28302,
+            "status": "available"
+          },
+          {
+            "state": "04",
+            "value": 3767,
+            "status": "available"
+          },
+          {
+            "state": "05",
+            "value": 5646,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": 4236,
+            "status": "available"
+          },
+          {
+            "state": "07",
+            "value": 9580,
+            "status": "available"
+          },
+          {
+            "state": "08",
+            "value": 7173,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": 30274,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": 2457,
+            "status": "available"
+          },
+          {
+            "state": "11",
+            "value": 15289,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": 18592,
+            "status": "available"
+          },
+          {
+            "state": "13",
+            "value": 4687,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": 36287,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 13681,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": 8478,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": 8402,
+            "status": "available"
+          },
+          {
+            "state": "18",
+            "value": 23045,
+            "status": "available"
+          },
+          {
+            "state": "19",
+            "value": 9168,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": 17215,
+            "status": "available"
+          },
+          {
+            "state": "21",
+            "value": 11837,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": 7651,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": 85328,
+            "status": "available"
+          },
+          {
+            "state": "24",
+            "value": 6079,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": 14787,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": 9632,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": 4389,
+            "status": "available"
+          },
+          {
+            "state": "28",
+            "value": 6632,
+            "status": "available"
+          },
+          {
+            "state": "29",
+            "value": 2120,
+            "status": "available"
+          },
+          {
+            "state": "30",
+            "value": 16496,
+            "status": "available"
+          },
+          {
+            "state": "31",
+            "value": 9193,
+            "status": "available"
+          },
+          {
+            "state": "32",
+            "value": 2408,
+            "status": "available"
+          }
+        ],
+        "regions": [
+          {
+            "state": "23",
+            "stage": "就業集計",
+            "note": "Quintana Roo：CE2023の公開値85,328人。全国分母は同じSCIAN721。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          },
+          {
+            "state": "14",
+            "stage": "就業集計",
+            "note": "Jalisco：CE2023の公開値36,287人。全国分母は同じSCIAN721。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          },
+          {
+            "state": "09",
+            "stage": "就業集計",
+            "note": "Ciudad de México：CE2023の公開値30,274人。全国分母は同じSCIAN721。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "CE対象業種の全国就業者",
+            "value": 438724,
+            "unit": "人",
+            "year": 2023,
+            "definition": "CE対象SCIAN721の就業者。企業所属・外部所属、無給等も含み、ENOE全国雇用や有給ポストと異なる。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "CE対象全国就業者に占める比率",
+            "value": 1.5688081782963987,
+            "unit": "%",
+            "year": 2023,
+            "definition": "同年CE対象全業種を分母とするSCIAN721の比率。全経済雇用比ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国CE対象全業種就業者",
+              "value": 27965433,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "CE対象業種の全国付加価値",
+            "value": 142303.625,
+            "unit": "百万MXN",
+            "year": 2023,
+            "definition": "SCIAN721の当年価格VACB。国民勘定GDPではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国CE対象全業種VACB（同年・参考）",
+              "value": 15667989.992,
+              "unit": "百万MXN"
+            }
+          },
+          {
+            "label": "観光全体の付加価値",
+            "value": 2713120,
+            "unit": "百万MXN",
+            "year": 2024,
+            "definition": "観光サテライト勘定。CE721宿泊業だけの値ではない。WTTC総寄与とも異なる。",
+            "sourceIds": [
+              "mx-service-cstm2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "観光全体の全国付加価値比",
+            "value": 8.7,
+            "unit": "%",
+            "year": 2024,
+            "definition": "CSTM公表値。観光全体の寄与、州地図の塗り値ではない。",
+            "sourceIds": [
+              "mx-service-cstm2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "同公表時点の全国VAB",
+              "value": 31331232,
+              "unit": "百万MXN"
+            }
+          },
+          {
+            "label": "観光全体の有給就業ポスト",
+            "value": 2931592,
+            "unit": "ポスト",
+            "year": 2024,
+            "definition": "同じ人の複数ポストを含み得る。CE就業者人数とは異なる。",
+            "sourceIds": [
+              "mx-service-cstm2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国有給就業ポスト",
+              "value": 39653160,
+              "unit": "ポスト"
+            }
+          },
+          {
+            "label": "観光全体の有給就業ポスト比",
+            "value": 7.4,
+            "unit": "%",
+            "year": 2024,
+            "definition": "CSTM公表の丸め比率。CE721宿泊業やENOE全国就業者の比ではない。",
+            "sourceIds": [
+              "mx-service-cstm2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国有給就業ポスト",
+              "value": 39653160,
+              "unit": "ポスト"
+            }
+          },
+          {
+            "label": "宿泊サービスの付加価値（CSTM）",
+            "value": 568815,
+            "unit": "百万MXN",
+            "year": 2024,
+            "definition": "CSTMの来訪者向け宿泊サービス。観光全体とは別の範囲。",
+            "sourceIds": [
+              "mx-service-cstm2024"
+            ],
+            "status": "observed"
+          }
+        ],
+        "world": [
+          {
+            "label": "国際観光客到着数の世界順位",
+            "value": 6,
+            "unit": "位",
+            "year": 2024,
+            "definition": "UN Tourismの宿泊を伴う国際観光客到着数。2025年順位ではない。",
+            "sourceIds": [
+              "mx-service-datatur-ranking2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "国際旅行受取の世界順位",
+            "value": 16,
+            "unit": "位",
+            "year": 2024,
+            "definition": "人数の順位とは別。DataTurによるUN Tourism集計。",
+            "sourceIds": [
+              "mx-service-datatur-ranking2024"
+            ],
+            "status": "observed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "外国居住者の全来訪",
+            "value": 98202774,
+            "unit": "来訪回",
+            "year": 2025,
+            "definition": "宿泊観光客と日帰り客を合算。固有の人数ではない。暫定値。",
+            "sourceIds": [
+              "mx-service-evi2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "宿泊を伴う国際観光客",
+            "value": 47786706,
+            "unit": "来訪回",
+            "year": 2025,
+            "definition": "境界内滞在20,415,107回と内陸27,371,599回。全訪問者とは異なる。",
+            "sourceIds": [
+              "mx-service-evi2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "日帰りの国際訪問者",
+            "value": 50416068,
+            "unit": "来訪回",
+            "year": 2025,
+            "definition": "宿泊を伴わない境界来訪・クルーズ。",
+            "sourceIds": [
+              "mx-service-evi2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "外国居住者の旅行支出",
+            "value": 34991.6,
+            "unit": "百万USD",
+            "year": 2025,
+            "definition": "EVI全訪問者支出。宿泊31,715.4、日帰り3,276.3。航空運賃等の輸送サービスと区別。",
+            "sourceIds": [
+              "mx-service-evi2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "航空来訪の米国居住者比（UPM）",
+            "value": 66.50485436893203,
+            "unit": "%",
+            "year": 2025,
+            "definition": "UPM居住国別の丸め値から自算。米国約13.7百万人、総計約20.6百万人。EVI航空観光客を分母にしない。",
+            "sourceIds": [
+              "mx-service-datatur-residence2025"
+            ],
+            "status": "estimate",
+            "denominator": {
+              "label": "UPM外国居住者航空来訪（丸め値）",
+              "value": 20.6,
+              "unit": "百万人"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "logistics",
+      "label": "物流・輸送・倉庫",
+      "family": "logistics",
+      "overview": "工業地域・農産地・港と国境ゲート、域内市場を結ぶ輸送と保管。",
+      "why": "米墨貨物貿易は2025年8,728億USD、その73.6%がトラック。北米の製造・食料供給網と国境経路の集中を比較できる。",
+      "process": "調達・生産 → 集荷・倉庫 → 道路・鉄道・港湾・空港・通関 → 工場・販売市場。",
+      "boundary": "州地図とVABは旅客輸送・郵便も含む48-49の広い分類。CEは本社所在地に集約され、現場ドライバー・港湾労働者や荷物の所在を表さない。BTSの商品価額を物流売上にしない。",
+      "sectors": [
+        "services"
+      ],
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "CE2023・SCIAN48-49交通郵便倉庫の本社等の集計所在地別就業者。貨物専業でも現場人員でもない。",
+        "nationalTotal": 1273482,
+        "sourceIds": [
+          "mx-service-ce2023"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": 23585,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": 39722,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": 8172,
+            "status": "available"
+          },
+          {
+            "state": "04",
+            "value": 5212,
+            "status": "available"
+          },
+          {
+            "state": "05",
+            "value": 41534,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": 20231,
+            "status": "available"
+          },
+          {
+            "state": "07",
+            "value": 18637,
+            "status": "available"
+          },
+          {
+            "state": "08",
+            "value": 41386,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": 263757,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": 10245,
+            "status": "available"
+          },
+          {
+            "state": "11",
+            "value": 57094,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": 9035,
+            "status": "available"
+          },
+          {
+            "state": "13",
+            "value": 13871,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": 70295,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 134201,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": 26184,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": 18039,
+            "status": "available"
+          },
+          {
+            "state": "18",
+            "value": 2875,
+            "status": "available"
+          },
+          {
+            "state": "19",
+            "value": 158065,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": 13350,
+            "status": "available"
+          },
+          {
+            "state": "21",
+            "value": 42732,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": 25613,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": 10447,
+            "status": "available"
+          },
+          {
+            "state": "24",
+            "value": 19742,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": 23215,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": 23115,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": 11498,
+            "status": "available"
+          },
+          {
+            "state": "28",
+            "value": 69398,
+            "status": "available"
+          },
+          {
+            "state": "29",
+            "value": 4156,
+            "status": "available"
+          },
+          {
+            "state": "30",
+            "value": 48020,
+            "status": "available"
+          },
+          {
+            "state": "31",
+            "value": 15525,
+            "status": "available"
+          },
+          {
+            "state": "32",
+            "value": 4531,
+            "status": "available"
+          }
+        ],
+        "regions": [
+          {
+            "state": "09",
+            "stage": "就業集計",
+            "note": "Ciudad de México：CE2023の公開値263,757人。全国分母は同じSCIAN48-49。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          },
+          {
+            "state": "19",
+            "stage": "就業集計",
+            "note": "Nuevo León：CE2023の公開値158,065人。全国分母は同じSCIAN48-49。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          },
+          {
+            "state": "15",
+            "stage": "就業集計",
+            "note": "México：CE2023の公開値134,201人。全国分母は同じSCIAN48-49。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "CE対象業種の全国就業者",
+            "value": 1273482,
+            "unit": "人",
+            "year": 2023,
+            "definition": "CE対象SCIAN48-49の就業者。企業所属・外部所属、無給等も含み、ENOE全国雇用や有給ポストと異なる。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "CE対象全国就業者に占める比率",
+            "value": 4.5537717939142945,
+            "unit": "%",
+            "year": 2023,
+            "definition": "同年CE対象全業種を分母とするSCIAN48-49の比率。全経済雇用比ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国CE対象全業種就業者",
+              "value": 27965433,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "CE対象業種の全国付加価値",
+            "value": 571858.648,
+            "unit": "百万MXN",
+            "year": 2023,
+            "definition": "SCIAN48-49の当年価格VACB。国民勘定GDPではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国CE対象全業種VACB（同年・参考）",
+              "value": 15667989.992,
+              "unit": "百万MXN"
+            }
+          },
+          {
+            "label": "国民勘定の業種付加価値",
+            "value": 2702854,
+            "unit": "百万MXN",
+            "year": 2025,
+            "definition": "基本価格・当年価格。SCIAN48-49の広い業種。CE2023とは年・推計範囲が異なる。",
+            "sourceIds": [
+              "mx-service-cbs2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "全国付加価値に占める比率",
+            "value": 8.0,
+            "unit": "%",
+            "year": 2025,
+            "definition": "CBS公表の丸め比率。市場価格GDP比ではない。",
+            "sourceIds": [
+              "mx-service-cbs2025"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国基本価格VAB",
+              "value": 33576797,
+              "unit": "百万MXN"
+            }
+          },
+          {
+            "label": "参考：交通郵便倉庫の有給就業ポスト比",
+            "value": 7.8,
+            "unit": "%",
+            "year": 2025,
+            "definition": "CBS48-49。貨物物流だけでなく旅客・郵便を含む。CE就業者人数とも異なる。",
+            "sourceIds": [
+              "mx-service-cbs2025"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国有給・企業所属就業ポスト",
+              "value": 39600138,
+              "unit": "ポスト"
+            }
+          }
+        ],
+        "world": [
+          {
+            "label": "同範囲の世界サービス輸出シェア",
+            "value": null,
+            "unit": "%",
+            "year": "未確認",
+            "definition": "SCIAN48-49と対応する世界輸出分母を未確認。国内重要性の有無を示す欠測ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "unconfirmed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "参考：輸送サービス輸出",
+            "value": 7378,
+            "unit": "百万USD",
+            "year": 2025,
+            "definition": "BOP旅客・貨物・その他輸送の全体。貨物物流だけではない。",
+            "sourceIds": [
+              "mx-service-bop2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "参考：輸送サービス輸入",
+            "value": 25407,
+            "unit": "百万USD",
+            "year": 2025,
+            "definition": "BOP旅客・貨物・その他輸送の全体。",
+            "sourceIds": [
+              "mx-service-bop2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "米墨の貨物貿易価額",
+            "value": 872833677052,
+            "unit": "USD",
+            "year": 2025,
+            "definition": "米国側統計。運ばれた商品の輸出入価額で、運賃・物流売上ではない。",
+            "sourceIds": [
+              "mx-service-bts2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "米墨貨物価額のトラック比",
+            "value": 73.6,
+            "unit": "%",
+            "year": 2025,
+            "definition": "トラック輸送の商品価額642,241,157,455USD。",
+            "sourceIds": [
+              "mx-service-bts2025"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "米墨貨物貿易価額",
+              "value": 872833677052,
+              "unit": "USD"
+            }
+          },
+          {
+            "label": "トラック貿易価額のラレド比",
+            "value": 46.1,
+            "unit": "%",
+            "year": 2025,
+            "definition": "ゲート別の商品価額。イスレタ17.5%、オタイメサ9.1%。メキシコの全輸出比ではない。",
+            "sourceIds": [
+              "mx-service-bts2025"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "米墨トラック貨物貿易価額",
+              "value": 642241157455,
+              "unit": "USD"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "professional",
+      "label": "専門・企業サービス",
+      "family": "business",
+      "overview": "設計・研究、法務会計、経営支援など、企業活動を支える人と知識の集中。",
+      "why": "専門科学技術サービスの2025年VABは全国の2.4%。専門・経営コンサルの国際サービス輸出は99.9億USD。工場以外の稼ぎ方を読む。",
+      "process": "顧客の課題 → 設計・研究・法務会計・助言 → 成果物や継続支援 → 国内外の顧客へ提供。",
+      "boundary": "CE54はIT設計5415も含むため、digitalの就業者を足し直すと重複する。BOP専門・経営コンサルはSCIAN54全体と同じ範囲ではない。",
+      "sectors": [
+        "services"
+      ],
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "CE2023・SCIAN54専門科学技術サービスの州別就業者。IT設計5415を含む上位分類。",
+        "nationalTotal": 680712,
+        "sourceIds": [
+          "mx-service-ce2023"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": 10069,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": 22652,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": 6885,
+            "status": "available"
+          },
+          {
+            "state": "04",
+            "value": 5313,
+            "status": "available"
+          },
+          {
+            "state": "05",
+            "value": 16378,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": 4093,
+            "status": "available"
+          },
+          {
+            "state": "07",
+            "value": 9299,
+            "status": "available"
+          },
+          {
+            "state": "08",
+            "value": 16298,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": 180590,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": 5739,
+            "status": "available"
+          },
+          {
+            "state": "11",
+            "value": 24328,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": 5647,
+            "status": "available"
+          },
+          {
+            "state": "13",
+            "value": 9646,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": 59526,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 42758,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": 16375,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": 7390,
+            "status": "available"
+          },
+          {
+            "state": "18",
+            "value": 5029,
+            "status": "available"
+          },
+          {
+            "state": "19",
+            "value": 59565,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": 10341,
+            "status": "available"
+          },
+          {
+            "state": "21",
+            "value": 27268,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": 23711,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": 8339,
+            "status": "available"
+          },
+          {
+            "state": "24",
+            "value": 12314,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": 15360,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": 16602,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": 7366,
+            "status": "available"
+          },
+          {
+            "state": "28",
+            "value": 11329,
+            "status": "available"
+          },
+          {
+            "state": "29",
+            "value": 3722,
+            "status": "available"
+          },
+          {
+            "state": "30",
+            "value": 18925,
+            "status": "available"
+          },
+          {
+            "state": "31",
+            "value": 13844,
+            "status": "available"
+          },
+          {
+            "state": "32",
+            "value": 4011,
+            "status": "available"
+          }
+        ],
+        "regions": [
+          {
+            "state": "09",
+            "stage": "就業集計",
+            "note": "Ciudad de México：CE2023の公開値180,590人。全国分母は同じSCIAN54。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          },
+          {
+            "state": "19",
+            "stage": "就業集計",
+            "note": "Nuevo León：CE2023の公開値59,565人。全国分母は同じSCIAN54。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          },
+          {
+            "state": "14",
+            "stage": "就業集計",
+            "note": "Jalisco：CE2023の公開値59,526人。全国分母は同じSCIAN54。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "CE対象業種の全国就業者",
+            "value": 680712,
+            "unit": "人",
+            "year": 2023,
+            "definition": "CE対象SCIAN54の就業者。企業所属・外部所属、無給等も含み、ENOE全国雇用や有給ポストと異なる。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "CE対象全国就業者に占める比率",
+            "value": 2.4341192929142204,
+            "unit": "%",
+            "year": 2023,
+            "definition": "同年CE対象全業種を分母とするSCIAN54の比率。全経済雇用比ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国CE対象全業種就業者",
+              "value": 27965433,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "CE対象業種の全国付加価値",
+            "value": 192426.559,
+            "unit": "百万MXN",
+            "year": 2023,
+            "definition": "SCIAN54の当年価格VACB。国民勘定GDPではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国CE対象全業種VACB（同年・参考）",
+              "value": 15667989.992,
+              "unit": "百万MXN"
+            }
+          },
+          {
+            "label": "国民勘定の業種付加価値",
+            "value": 816996,
+            "unit": "百万MXN",
+            "year": 2025,
+            "definition": "基本価格・当年価格。SCIAN54の広い業種。CE2023とは年・推計範囲が異なる。",
+            "sourceIds": [
+              "mx-service-cbs2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "全国付加価値に占める比率",
+            "value": 2.4,
+            "unit": "%",
+            "year": 2025,
+            "definition": "CBS公表の丸め比率。市場価格GDP比ではない。",
+            "sourceIds": [
+              "mx-service-cbs2025"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国基本価格VAB",
+              "value": 33576797,
+              "unit": "百万MXN"
+            }
+          }
+        ],
+        "world": [
+          {
+            "label": "同範囲の世界サービス輸出シェア",
+            "value": null,
+            "unit": "%",
+            "year": "未確認",
+            "definition": "SCIAN54と対応する世界輸出分母を未確認。国内重要性の有無を示す欠測ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "unconfirmed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "専門・経営コンサルの輸出",
+            "value": 9986,
+            "unit": "百万USD",
+            "year": 2025,
+            "definition": "BOPサービス品目。CE54全体と同一の範囲ではない。",
+            "sourceIds": [
+              "mx-service-bop2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "専門・経営コンサルの輸入",
+            "value": 7371,
+            "unit": "百万USD",
+            "year": 2025,
+            "definition": "BOPサービス品目。CE54全体と同一の範囲ではない。",
+            "sourceIds": [
+              "mx-service-bop2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "専門・経営コンサルのサービス輸出比",
+            "value": 15.175830521868635,
+            "unit": "%",
+            "year": 2025,
+            "definition": "同じ改訂時点のサービス貿易から自算。国内付加価値比ではない。",
+            "sourceIds": [
+              "mx-service-bop2025"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国サービス総輸出",
+              "value": 65802,
+              "unit": "百万USD"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "finance",
+      "label": "金融・保険",
+      "family": "business",
+      "overview": "銀行・保険・金融仲介・決済の機能と、資金・人・情報の集中。",
+      "why": "2025年金融保険VABは全国の5.0%。国内の資金仲介として大きく、金融サービス輸出だけを理由に世界的金融優位を主張しない。",
+      "process": "預金・保険料・投資資金 → 仲介・審査・運用・リスク分担 → 融資・決済・保険給付。",
+      "boundary": "CE52は本社所在地に集計され、支店網、顧客、現場勤務者の実際の州別分布とは異なる。金融取引額や資金残高は付加価値・サービス輸出ではない。",
+      "sectors": [
+        "services"
+      ],
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "CE2023・SCIAN52金融保険の本社等の集計所在地別就業者。支店や顧客の分布ではない。",
+        "nationalTotal": 647493,
+        "sourceIds": [
+          "mx-service-ce2023"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": 2000,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": 7232,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": 1057,
+            "status": "available"
+          },
+          {
+            "state": "04",
+            "value": 1426,
+            "status": "available"
+          },
+          {
+            "state": "05",
+            "value": 8081,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": 1189,
+            "status": "available"
+          },
+          {
+            "state": "07",
+            "value": 5876,
+            "status": "available"
+          },
+          {
+            "state": "08",
+            "value": 6007,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": 411249,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": 2526,
+            "status": "available"
+          },
+          {
+            "state": "11",
+            "value": 21483,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": 2527,
+            "status": "available"
+          },
+          {
+            "state": "13",
+            "value": 3009,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": 15480,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 12543,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": 7503,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": 2755,
+            "status": "available"
+          },
+          {
+            "state": "18",
+            "value": 1837,
+            "status": "available"
+          },
+          {
+            "state": "19",
+            "value": 66686,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": 5692,
+            "status": "available"
+          },
+          {
+            "state": "21",
+            "value": 7580,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": 6240,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": 2369,
+            "status": "available"
+          },
+          {
+            "state": "24",
+            "value": 4435,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": 6322,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": 5996,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": 2536,
+            "status": "available"
+          },
+          {
+            "state": "28",
+            "value": 5093,
+            "status": "available"
+          },
+          {
+            "state": "29",
+            "value": 919,
+            "status": "available"
+          },
+          {
+            "state": "30",
+            "value": 10482,
+            "status": "available"
+          },
+          {
+            "state": "31",
+            "value": 7990,
+            "status": "available"
+          },
+          {
+            "state": "32",
+            "value": 1373,
+            "status": "available"
+          }
+        ],
+        "regions": [
+          {
+            "state": "09",
+            "stage": "就業集計",
+            "note": "Ciudad de México：CE2023の公開値411,249人。全国分母は同じSCIAN52。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          },
+          {
+            "state": "19",
+            "stage": "就業集計",
+            "note": "Nuevo León：CE2023の公開値66,686人。全国分母は同じSCIAN52。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          },
+          {
+            "state": "11",
+            "stage": "就業集計",
+            "note": "Guanajuato：CE2023の公開値21,483人。全国分母は同じSCIAN52。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "CE対象業種の全国就業者",
+            "value": 647493,
+            "unit": "人",
+            "year": 2023,
+            "definition": "CE対象SCIAN52の就業者。企業所属・外部所属、無給等も含み、ENOE全国雇用や有給ポストと異なる。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "CE対象全国就業者に占める比率",
+            "value": 2.315333361725527,
+            "unit": "%",
+            "year": 2023,
+            "definition": "同年CE対象全業種を分母とするSCIAN52の比率。全経済雇用比ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国CE対象全業種就業者",
+              "value": 27965433,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "CE対象業種の全国付加価値",
+            "value": 1479364.8,
+            "unit": "百万MXN",
+            "year": 2023,
+            "definition": "SCIAN52の当年価格VACB。国民勘定GDPではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国CE対象全業種VACB（同年・参考）",
+              "value": 15667989.992,
+              "unit": "百万MXN"
+            }
+          },
+          {
+            "label": "国民勘定の業種付加価値",
+            "value": 1692255,
+            "unit": "百万MXN",
+            "year": 2025,
+            "definition": "基本価格・当年価格。SCIAN52の広い業種。CE2023とは年・推計範囲が異なる。",
+            "sourceIds": [
+              "mx-service-cbs2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "全国付加価値に占める比率",
+            "value": 5.0,
+            "unit": "%",
+            "year": 2025,
+            "definition": "CBS公表の丸め比率。市場価格GDP比ではない。",
+            "sourceIds": [
+              "mx-service-cbs2025"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国基本価格VAB",
+              "value": 33576797,
+              "unit": "百万MXN"
+            }
+          },
+          {
+            "label": "金融保険の平均年報酬",
+            "value": 815815,
+            "unit": "MXN／有給ポスト・年",
+            "year": 2025,
+            "definition": "CBS52の有給・企業所属ポスト。当年価格。全産業平均271,767MXNの約3倍。雇用人数や国際優位の指標ではない。",
+            "sourceIds": [
+              "mx-service-cbs2025"
+            ],
+            "status": "observed"
+          }
+        ],
+        "world": [
+          {
+            "label": "同範囲の世界サービス輸出シェア",
+            "value": null,
+            "unit": "%",
+            "year": "未確認",
+            "definition": "SCIAN52と対応する世界輸出分母を未確認。国内重要性の有無を示す欠測ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "unconfirmed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "金融サービス輸出",
+            "value": 1071,
+            "unit": "百万USD",
+            "year": 2025,
+            "definition": "手数料等と間接測定金融サービス。資金移動・貸出残高ではない。",
+            "sourceIds": [
+              "mx-service-bop2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "金融サービス輸入",
+            "value": 2347,
+            "unit": "百万USD",
+            "year": 2025,
+            "definition": "BOP金融サービス品目。",
+            "sourceIds": [
+              "mx-service-bop2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "保険・年金サービス輸出",
+            "value": 5539,
+            "unit": "百万USD",
+            "year": 2025,
+            "definition": "サービス価額。保険料の総額ではない。",
+            "sourceIds": [
+              "mx-service-bop2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "保険・年金サービス輸入",
+            "value": 9953,
+            "unit": "百万USD",
+            "year": 2025,
+            "definition": "サービス価額。保険料の総額ではない。",
+            "sourceIds": [
+              "mx-service-bop2025"
+            ],
+            "status": "observed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "digital",
+      "label": "IT設計・関連サービス",
+      "family": "business",
+      "overview": "ソフト開発・システム設計・関連サービスを、電子機器製造や通信と分けて読む。",
+      "why": "CE2023で狭いIT設計5415は92,366人、VACB321.1億MXN。クラウド稼働・企業のデジタル需要と、国内に残る仕事・付加価値を比較する。",
+      "process": "要件・データ → システム設計・ソフト開発・統合 → 運用支援 → 国内外の利用企業。",
+      "boundary": "地図は5415のみ。上位の専門サービス54や情報メディア51、BOP通信コンピューター情報全体をIT設計だけのGDP・輸出へ流用しない。秘匿州はゼロではない。",
+      "sectors": [
+        "services"
+      ],
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "CE2023・SCIAN5415コンピューターシステム設計・関連サービスの州別就業者。電子製造・通信・BPMは含まない。",
+        "nationalTotal": 92366,
+        "sourceIds": [
+          "mx-service-ce2023"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": 971,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": 2566,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": 126,
+            "status": "available"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "05",
+            "value": 719,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": 183,
+            "status": "available"
+          },
+          {
+            "state": "07",
+            "value": 114,
+            "status": "available"
+          },
+          {
+            "state": "08",
+            "value": 1429,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": 35954,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "11",
+            "value": 1343,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "13",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "14",
+            "value": 15763,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 2286,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": 1365,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": 455,
+            "status": "available"
+          },
+          {
+            "state": "18",
+            "value": 390,
+            "status": "available"
+          },
+          {
+            "state": "19",
+            "value": 13653,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": 168,
+            "status": "available"
+          },
+          {
+            "state": "21",
+            "value": 2461,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": 5989,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": 261,
+            "status": "available"
+          },
+          {
+            "state": "24",
+            "value": 349,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": 945,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": 1511,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": 116,
+            "status": "available"
+          },
+          {
+            "state": "28",
+            "value": 579,
+            "status": "available"
+          },
+          {
+            "state": "29",
+            "value": 327,
+            "status": "available"
+          },
+          {
+            "state": "30",
+            "value": 660,
+            "status": "available"
+          },
+          {
+            "state": "31",
+            "value": 1080,
+            "status": "available"
+          },
+          {
+            "state": "32",
+            "value": null,
+            "status": "confidential"
+          }
+        ],
+        "regions": [
+          {
+            "state": "09",
+            "stage": "就業集計",
+            "note": "Ciudad de México：CE2023の公開値35,954人。全国分母は同じSCIAN5415。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          },
+          {
+            "state": "14",
+            "stage": "就業集計",
+            "note": "Jalisco：CE2023の公開値15,763人。全国分母は同じSCIAN5415。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          },
+          {
+            "state": "19",
+            "stage": "就業集計",
+            "note": "Nuevo León：CE2023の公開値13,653人。全国分母は同じSCIAN5415。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "CE対象業種の全国就業者",
+            "value": 92366,
+            "unit": "人",
+            "year": 2023,
+            "definition": "CE対象SCIAN5415の就業者。企業所属・外部所属、無給等も含み、ENOE全国雇用や有給ポストと異なる。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "CE対象全国就業者に占める比率",
+            "value": 0.3302863216886361,
+            "unit": "%",
+            "year": 2023,
+            "definition": "同年CE対象全業種を分母とするSCIAN5415の比率。全経済雇用比ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国CE対象全業種就業者",
+              "value": 27965433,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "CE対象業種の全国付加価値",
+            "value": 32114.106,
+            "unit": "百万MXN",
+            "year": 2023,
+            "definition": "SCIAN5415の当年価格VACB。国民勘定GDPではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国CE対象全業種VACB（同年・参考）",
+              "value": 15667989.992,
+              "unit": "百万MXN"
+            }
+          },
+          {
+            "label": "狭い業種の国民勘定GDP比",
+            "value": null,
+            "unit": "%",
+            "year": "未確認",
+            "definition": "SCIAN5415に限った国民勘定付加価値を未確認。上位業種のGDP比は代用しない。",
+            "sourceIds": [
+              "mx-service-cbs2025"
+            ],
+            "status": "unconfirmed"
+          }
+        ],
+        "world": [
+          {
+            "label": "同範囲の世界サービス輸出シェア",
+            "value": null,
+            "unit": "%",
+            "year": "未確認",
+            "definition": "SCIAN5415と対応する世界輸出分母を未確認。国内重要性の有無を示す欠測ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "unconfirmed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "同範囲のサービス輸出",
+            "value": null,
+            "unit": "百万USD",
+            "year": "未確認",
+            "definition": "SCIAN5415の輸出を独立した範囲で未確認。物量の生産＋輸入−輸出式は用いない。",
+            "sourceIds": [
+              "mx-service-bop2025"
+            ],
+            "status": "unconfirmed"
+          },
+          {
+            "label": "参考：通信・コンピューター・情報の輸出",
+            "value": 2735,
+            "unit": "百万USD",
+            "year": 2025,
+            "definition": "IT5415より広いBOPサービス品目。IT設計だけの輸出にしない。",
+            "sourceIds": [
+              "mx-service-bop2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "参考：通信・コンピューター・情報の輸入",
+            "value": 6525,
+            "unit": "百万USD",
+            "year": 2025,
+            "definition": "IT5415より広いBOPサービス品目。輸入依存率を算出する分母ではない。",
+            "sourceIds": [
+              "mx-service-bop2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "参考：通信情報サービスのデジタル供給比",
+            "value": 99.7,
+            "unit": "%",
+            "year": 2024,
+            "definition": "ECIS対象企業の当該サービス収入を分母とする。IT5415だけでもBOP全体でもない。",
+            "sourceIds": [
+              "mx-service-ecis2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "参考：AWSの15年間投資計画",
+            "value": 5,
+            "unit": "十億USD超",
+            "year": "2025年公表・15年間計画",
+            "definition": "メキシコ地域は2025年1月稼働。投資額は計画、国全体の支出実績ではない。",
+            "sourceIds": [
+              "mx-service-aws2025"
+            ],
+            "status": "estimate"
+          }
+        ]
+      }
+    },
+    {
+      "id": "bpm",
+      "label": "電話受付・販促受託",
+      "family": "business",
+      "overview": "顧客対応・電話受付・販促受託を、ソフト開発や他の業務受託と分けて読む。",
+      "why": "CE2023の電話受付・販促561422は62,857人、VACB216.2億MXN。人の技能と遠隔業務の分業を、狭い観測範囲で紹介する。",
+      "process": "委託企業の顧客・業務 → 電話受付・顧客対応・販促 → 処理結果を企業へ返す。",
+      "boundary": "561422はBPM/BPO全体ではなく電話受付・販促に限る。秘匿13州、SD5州があり、公開州だけを完全な全国分布や全国順位にしない。SDは非存在か本社集約か区別できず不明。",
+      "sectors": [
+        "services"
+      ],
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "CE2023・SCIAN561422電話受付・電話販促の州別就業者。BPM/BPO全体ではない。秘匿・SDを欠測として保持。",
+        "nationalTotal": 62857,
+        "sourceIds": [
+          "mx-service-ce2023"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": 1061,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": 5476,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "05",
+            "value": 273,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "07",
+            "value": 26,
+            "status": "available"
+          },
+          {
+            "state": "08",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "09",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "10",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "11",
+            "value": 1116,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "13",
+            "value": 1149,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "15",
+            "value": 10016,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": 377,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "18",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "19",
+            "value": 9273,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "21",
+            "value": 3568,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "23",
+            "value": 175,
+            "status": "available"
+          },
+          {
+            "state": "24",
+            "value": 279,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": 45,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "27",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "28",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "29",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "30",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "31",
+            "value": 1287,
+            "status": "available"
+          },
+          {
+            "state": "32",
+            "value": null,
+            "status": "unknown"
+          }
+        ],
+        "regions": [
+          {
+            "state": "15",
+            "stage": "就業集計",
+            "note": "México：CE2023の公開値10,016人。全国分母は同じSCIAN561422。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          },
+          {
+            "state": "19",
+            "stage": "就業集計",
+            "note": "Nuevo León：CE2023の公開値9,273人。全国分母は同じSCIAN561422。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          },
+          {
+            "state": "02",
+            "stage": "就業集計",
+            "note": "Baja California：CE2023の公開値5,476人。全国分母は同じSCIAN561422。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "CE対象業種の全国就業者",
+            "value": 62857,
+            "unit": "人",
+            "year": 2023,
+            "definition": "CE対象SCIAN561422の就業者。企業所属・外部所属、無給等も含み、ENOE全国雇用や有給ポストと異なる。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "CE対象全国就業者に占める比率",
+            "value": 0.22476676831715783,
+            "unit": "%",
+            "year": 2023,
+            "definition": "同年CE対象全業種を分母とするSCIAN561422の比率。全経済雇用比ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国CE対象全業種就業者",
+              "value": 27965433,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "CE対象業種の全国付加価値",
+            "value": 21623.099,
+            "unit": "百万MXN",
+            "year": 2023,
+            "definition": "SCIAN561422の当年価格VACB。国民勘定GDPではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国CE対象全業種VACB（同年・参考）",
+              "value": 15667989.992,
+              "unit": "百万MXN"
+            }
+          },
+          {
+            "label": "狭い業種の国民勘定GDP比",
+            "value": null,
+            "unit": "%",
+            "year": "未確認",
+            "definition": "SCIAN561422に限った国民勘定付加価値を未確認。上位業種のGDP比は代用しない。",
+            "sourceIds": [
+              "mx-service-cbs2025"
+            ],
+            "status": "unconfirmed"
+          }
+        ],
+        "world": [
+          {
+            "label": "同範囲の世界サービス輸出シェア",
+            "value": null,
+            "unit": "%",
+            "year": "未確認",
+            "definition": "SCIAN561422と対応する世界輸出分母を未確認。国内重要性の有無を示す欠測ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "unconfirmed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "同範囲のサービス輸出",
+            "value": null,
+            "unit": "百万USD",
+            "year": "未確認",
+            "definition": "SCIAN561422の輸出を独立した範囲で未確認。物量の生産＋輸入−輸出式は用いない。",
+            "sourceIds": [
+              "mx-service-bop2025"
+            ],
+            "status": "unconfirmed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "construction",
+      "label": "建設",
+      "family": "built",
+      "overview": "住宅・工場・道路などの建設を、資材製造や不動産賃貸と分けて読む。",
+      "why": "建設の2025年VABは全国の6.8%。工業立地・都市需要と、工場や交通設備への投資を結ぶ産業として読む。",
+      "process": "発注・設計 → 建材と専門工事の調達 → 施工・設備設置 → 住宅・産業施設・インフラの引渡し。",
+      "boundary": "表示上はservicesの建設不動産群に分類するが、メキシコ国民勘定では建設は第二次活動。CE23は本社所在地集計で、施工場所・建設量・現場人員の所在ではない。",
+      "sectors": [
+        "services"
+      ],
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "CE2023・SCIAN23建設の本社等の集計所在地別就業者。施工現場・建設需要の分布ではない。",
+        "nationalTotal": 711553,
+        "sourceIds": [
+          "mx-service-ce2023"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": 8810,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": 19475,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": 13856,
+            "status": "available"
+          },
+          {
+            "state": "04",
+            "value": 6826,
+            "status": "available"
+          },
+          {
+            "state": "05",
+            "value": 23389,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": 7454,
+            "status": "available"
+          },
+          {
+            "state": "07",
+            "value": 9926,
+            "status": "available"
+          },
+          {
+            "state": "08",
+            "value": 20824,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": 161182,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": 10730,
+            "status": "available"
+          },
+          {
+            "state": "11",
+            "value": 26108,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": 3619,
+            "status": "available"
+          },
+          {
+            "state": "13",
+            "value": 14858,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": 54873,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 29366,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": 13006,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": 3163,
+            "status": "available"
+          },
+          {
+            "state": "18",
+            "value": 7919,
+            "status": "available"
+          },
+          {
+            "state": "19",
+            "value": 51117,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": 9065,
+            "status": "available"
+          },
+          {
+            "state": "21",
+            "value": 22257,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": 21453,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": 10287,
+            "status": "available"
+          },
+          {
+            "state": "24",
+            "value": 12227,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": 28246,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": 29848,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": 11666,
+            "status": "available"
+          },
+          {
+            "state": "28",
+            "value": 17457,
+            "status": "available"
+          },
+          {
+            "state": "29",
+            "value": 2506,
+            "status": "available"
+          },
+          {
+            "state": "30",
+            "value": 26482,
+            "status": "available"
+          },
+          {
+            "state": "31",
+            "value": 27026,
+            "status": "available"
+          },
+          {
+            "state": "32",
+            "value": 6532,
+            "status": "available"
+          }
+        ],
+        "regions": [
+          {
+            "state": "09",
+            "stage": "就業集計",
+            "note": "Ciudad de México：CE2023の公開値161,182人。全国分母は同じSCIAN23。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          },
+          {
+            "state": "14",
+            "stage": "就業集計",
+            "note": "Jalisco：CE2023の公開値54,873人。全国分母は同じSCIAN23。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          },
+          {
+            "state": "19",
+            "stage": "就業集計",
+            "note": "Nuevo León：CE2023の公開値51,117人。全国分母は同じSCIAN23。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "CE対象業種の全国就業者",
+            "value": 711553,
+            "unit": "人",
+            "year": 2023,
+            "definition": "CE対象SCIAN23の就業者。企業所属・外部所属、無給等も含み、ENOE全国雇用や有給ポストと異なる。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "CE対象全国就業者に占める比率",
+            "value": 2.544401869264817,
+            "unit": "%",
+            "year": 2023,
+            "definition": "同年CE対象全業種を分母とするSCIAN23の比率。全経済雇用比ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国CE対象全業種就業者",
+              "value": 27965433,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "CE対象業種の全国付加価値",
+            "value": 322190.567,
+            "unit": "百万MXN",
+            "year": 2023,
+            "definition": "SCIAN23の当年価格VACB。国民勘定GDPではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国CE対象全業種VACB（同年・参考）",
+              "value": 15667989.992,
+              "unit": "百万MXN"
+            }
+          },
+          {
+            "label": "国民勘定の業種付加価値",
+            "value": 2284549,
+            "unit": "百万MXN",
+            "year": 2025,
+            "definition": "基本価格・当年価格。SCIAN23の広い業種。CE2023とは年・推計範囲が異なる。",
+            "sourceIds": [
+              "mx-service-cbs2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "全国付加価値に占める比率",
+            "value": 6.8,
+            "unit": "%",
+            "year": 2025,
+            "definition": "CBS公表の丸め比率。市場価格GDP比ではない。",
+            "sourceIds": [
+              "mx-service-cbs2025"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国基本価格VAB",
+              "value": 33576797,
+              "unit": "百万MXN"
+            }
+          }
+        ],
+        "world": [
+          {
+            "label": "同範囲の世界サービス輸出シェア",
+            "value": null,
+            "unit": "%",
+            "year": "未確認",
+            "definition": "SCIAN23と対応する世界輸出分母を未確認。国内重要性の有無を示す欠測ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "unconfirmed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "同範囲のサービス輸出",
+            "value": null,
+            "unit": "百万USD",
+            "year": "未確認",
+            "definition": "SCIAN23の輸出を独立した範囲で未確認。物量の生産＋輸入−輸出式は用いない。",
+            "sourceIds": [
+              "mx-service-bop2025"
+            ],
+            "status": "unconfirmed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "real-estate",
+      "label": "不動産・賃貸",
+      "family": "built",
+      "overview": "建物の利用・賃貸・仲介・管理と、製造・観光・住宅需要をつなぐ。",
+      "why": "不動産・動産無形資産賃貸の2025年VABは全国の9.1%。企業・家計が場所や設備を利用する経済を読む。",
+      "process": "土地・建物・設備 → 賃貸・仲介・管理 → 家計・宿泊業・工業・商業の利用。",
+      "boundary": "CE53は不動産だけでなく動産・無形資産賃貸も含む。国民勘定VABには持家の帰属家賃等も含まれ、CEの市場向け企業就業者と範囲が異なる。不動産売買価格・建築施工量でもない。",
+      "sectors": [
+        "services"
+      ],
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "CE2023・SCIAN53不動産・動産無形資産賃貸の州別就業者。持家の帰属家賃や不動産価格の地図ではない。",
+        "nationalTotal": 332650,
+        "sourceIds": [
+          "mx-service-ce2023"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": 4809,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": 11808,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": 6729,
+            "status": "available"
+          },
+          {
+            "state": "04",
+            "value": 3775,
+            "status": "available"
+          },
+          {
+            "state": "05",
+            "value": 9564,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": 2809,
+            "status": "available"
+          },
+          {
+            "state": "07",
+            "value": 5510,
+            "status": "available"
+          },
+          {
+            "state": "08",
+            "value": 9135,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": 46732,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": 3934,
+            "status": "available"
+          },
+          {
+            "state": "11",
+            "value": 14366,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": 6321,
+            "status": "available"
+          },
+          {
+            "state": "13",
+            "value": 5195,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": 24437,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 30092,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": 9325,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": 3654,
+            "status": "available"
+          },
+          {
+            "state": "18",
+            "value": 4957,
+            "status": "available"
+          },
+          {
+            "state": "19",
+            "value": 22304,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": 6221,
+            "status": "available"
+          },
+          {
+            "state": "21",
+            "value": 14055,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": 7939,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": 10062,
+            "status": "available"
+          },
+          {
+            "state": "24",
+            "value": 6936,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": 10953,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": 9723,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": 6238,
+            "status": "available"
+          },
+          {
+            "state": "28",
+            "value": 8097,
+            "status": "available"
+          },
+          {
+            "state": "29",
+            "value": 2936,
+            "status": "available"
+          },
+          {
+            "state": "30",
+            "value": 10998,
+            "status": "available"
+          },
+          {
+            "state": "31",
+            "value": 10119,
+            "status": "available"
+          },
+          {
+            "state": "32",
+            "value": 2917,
+            "status": "available"
+          }
+        ],
+        "regions": [
+          {
+            "state": "09",
+            "stage": "就業集計",
+            "note": "Ciudad de México：CE2023の公開値46,732人。全国分母は同じSCIAN53。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          },
+          {
+            "state": "15",
+            "stage": "就業集計",
+            "note": "México：CE2023の公開値30,092人。全国分母は同じSCIAN53。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          },
+          {
+            "state": "14",
+            "stage": "就業集計",
+            "note": "Jalisco：CE2023の公開値24,437人。全国分母は同じSCIAN53。秘匿・不明州を含めた順位ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "CE対象業種の全国就業者",
+            "value": 332650,
+            "unit": "人",
+            "year": 2023,
+            "definition": "CE対象SCIAN53の就業者。企業所属・外部所属、無給等も含み、ENOE全国雇用や有給ポストと異なる。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "CE対象全国就業者に占める比率",
+            "value": 1.18950419970254,
+            "unit": "%",
+            "year": 2023,
+            "definition": "同年CE対象全業種を分母とするSCIAN53の比率。全経済雇用比ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国CE対象全業種就業者",
+              "value": 27965433,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "CE対象業種の全国付加価値",
+            "value": 132283.822,
+            "unit": "百万MXN",
+            "year": 2023,
+            "definition": "SCIAN53の当年価格VACB。国民勘定GDPではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国CE対象全業種VACB（同年・参考）",
+              "value": 15667989.992,
+              "unit": "百万MXN"
+            }
+          },
+          {
+            "label": "国民勘定の業種付加価値",
+            "value": 3053435,
+            "unit": "百万MXN",
+            "year": 2025,
+            "definition": "基本価格・当年価格。SCIAN53の広い業種。CE2023とは年・推計範囲が異なる。",
+            "sourceIds": [
+              "mx-service-cbs2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "全国付加価値に占める比率",
+            "value": 9.1,
+            "unit": "%",
+            "year": 2025,
+            "definition": "CBS公表の丸め比率。市場価格GDP比ではない。",
+            "sourceIds": [
+              "mx-service-cbs2025"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全国基本価格VAB",
+              "value": 33576797,
+              "unit": "百万MXN"
+            }
+          }
+        ],
+        "world": [
+          {
+            "label": "同範囲の世界サービス輸出シェア",
+            "value": null,
+            "unit": "%",
+            "year": "未確認",
+            "definition": "SCIAN53と対応する世界輸出分母を未確認。国内重要性の有無を示す欠測ではない。",
+            "sourceIds": [
+              "mx-service-ce2023"
+            ],
+            "status": "unconfirmed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "同範囲のサービス輸出",
+            "value": null,
+            "unit": "百万USD",
+            "year": "未確認",
+            "definition": "SCIAN53の輸出を独立した範囲で未確認。物量の生産＋輸入−輸出式は用いない。",
+            "sourceIds": [
+              "mx-service-bop2025"
+            ],
+            "status": "unconfirmed"
+          }
+        ]
+      }
+    }
+  ]
+}

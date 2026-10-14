@@ -1,0 +1,78 @@
+/* Russia industry route only. No shared map or other-region overrides. */
+.ru-industry [hidden]{display:none!important}
+.ru-industry{color:#243c45;line-height:1.65}
+.ru-industry .russia-learning{min-width:0}
+.ru-industry button,.ru-industry input{font:inherit}
+.ru-industry button,.ru-industry summary{cursor:pointer}
+.ru-industry :is(button,a,summary,input,[tabindex]):focus-visible{outline:3px solid #ab4b2d;outline-offset:3px}
+.ru-sector-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:10px;border:1px solid #aebcb8}
+.ru-industry .ru-sector-tabs button{border:0;border-right:1px solid #aebcb8;background:#f1f2e9;font-weight:750;min-height:44px}
+.ru-industry .ru-sector-tabs button[aria-selected=true]{background:#254952;color:#fff}
+.ru-product-tabs{padding:9px 0 11px}
+.ru-product-tabs>div{display:flex;flex-wrap:wrap;gap:5px}
+.ru-industry .ru-product-tabs button{display:flex;align-items:center;gap:6px;min-height:38px;padding:5px 9px;background:#fffefa;border:1px solid #c6cfc5;border-radius:3px;font-size:13px}
+.ru-product-tabs i{width:9px;height:9px;flex:none;background:var(--ru-color)}
+.ru-industry .ru-product-tabs button[aria-pressed=true]{box-shadow:inset 0 -3px var(--ru-color);border-color:var(--ru-color);font-weight:750}
+.ru-primary-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;align-items:start;gap:14px}
+.ru-map-column{min-width:0}
+.ru-map-scroll{overflow-x:auto;overscroll-behavior-x:contain;border:1px solid #afbfba;background:#e1edf0;scrollbar-width:auto}
+.ru-map-canvas{position:relative;width:100%;min-width:760px;aspect-ratio:1200/597}
+.ru-map-canvas>svg{display:block;width:100%;height:100%}
+.ru-map-overlay{position:absolute;inset:0}
+.ru-point-layer{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.ru-point-layer [data-ru-marker]{cursor:pointer;pointer-events:all}
+.ru-point-layer .is-muted{opacity:.25}
+.ru-industry .ru-map-label{position:absolute;box-sizing:border-box;width:114px;height:46px;min-height:46px;padding:5px 6px;text-align:left;border:1px solid #b5c3ba;border-left:4px solid var(--ru-color);background:#fffffff2;border-radius:3px;line-height:1.25;color:#243c45;overflow:hidden}
+.ru-map-label strong{display:block;font-size:12px;white-space:nowrap;font-weight:750}
+.ru-map-label small{display:block;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
+.ru-map-label.is-selected{border-color:var(--ru-color);background:#fff9da;box-shadow:0 0 0 1px var(--ru-color)}
+.ru-map-label.is-muted{opacity:.5}
+.ru-map-key,.ru-map-note{font-size:12px;padding-top:7px;color:#49616a}
+.ru-map-links{display:flex;gap:14px;flex-wrap:wrap;padding-top:9px;font-size:13px}
+.ru-reading{border:1px solid #c9d0c3;background:#fffefa;padding:16px;min-width:0}
+.ru-reading .ru-eyebrow{font-size:11px;letter-spacing:.08em;color:#597174}
+.ru-reading h2{font-family:var(--serif);font-size:22px;line-height:1.5;margin:4px 0 10px}
+.ru-reading h3{font-size:14px;margin:14px 0 3px}
+.ru-reading p{font-size:13px;line-height:1.8}
+.ru-reading a{font-size:11px;overflow-wrap:anywhere}
+.ru-reading-sources,.ru-site-reading [data-ru-site-sources]{display:grid;gap:4px;margin-top:10px}
+.ru-site-reading{border-top:2px solid #9cae9e;margin-top:12px}
+.ru-chain{padding-top:12px;color:#567069}
+.ru-selection-actions{display:flex;flex-wrap:wrap;gap:10px;margin:13px 0;font-size:12px}
+.ru-selection-actions label{display:flex;align-items:center;gap:6px;min-height:44px}
+.ru-industry .ru-selection-actions button{font-size:12px;min-height:44px}
+.ru-reading details{margin-top:12px;border-top:1px solid #d4d9cb;padding-top:9px}
+.ru-reading summary{font-size:12px;min-height:40px}
+.ru-site-list,.ru-nearby-list{display:grid;gap:5px;margin:7px 0}
+.ru-industry :is(.ru-site-list,.ru-nearby-list) button{min-height:44px;text-align:left;font-size:12px;padding:7px;background:#fff;border:1px solid #c4d0c6}
+.ru-site-list button[aria-pressed=true],.ru-nearby-list button[aria-pressed=true]{background:#e9f0dd;font-weight:750}
+.ru-statistics{margin-top:26px;border-top:2px solid #a1b3aa;padding-top:16px}
+.ru-statistics>h2{font-size:21px;font-family:var(--serif)}
+.ru-stat-scope{font-size:12px;color:#59706d;padding:7px 0 14px}
+.ru-stat-overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:12px}
+.ru-stat-overview>section{border:1px solid #d7ddce;padding:13px;background:#f4f5ec}
+.ru-stat-overview h3{font-size:14px;margin-bottom:6px}
+.ru-stat-overview p{font-size:12px;line-height:1.8}
+.ru-stat-grid{display:grid;gap:8px}
+.ru-stat-card{border:1px solid #c6d0c5;background:#fffefa;padding:12px}
+.ru-stat-card summary{display:flex;justify-content:space-between;gap:16px;min-height:30px;align-items:center;font-size:14px}
+.ru-stat-card summary::before{content:'＋';color:#6b8378}
+.ru-stat-card[open] summary::before{content:'−'}
+.ru-stat-card summary span{flex:1;font-weight:750}
+.ru-stat-card summary strong{font-size:13px}
+.ru-stat-card>p{font-size:12px;margin-top:12px;line-height:1.8}
+.ru-metric-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+.ru-metric{padding:12px;background:#f2f5ed;border-top:3px solid #77958b;min-width:0}
+.ru-metric h4{font-size:12px}
+.ru-metric .ru-metric-value{font-size:23px;font-family:var(--serif);font-weight:750;margin:6px 0;line-height:1.5}
+.ru-metric p,.ru-metric a{font-size:12px;line-height:1.8;overflow-wrap:anywhere}
+.ru-metric p+p{margin-top:6px}
+.ru-metric a{display:block;margin-top:8px}
+.ru-missing{color:#785934}
+.ru-method{margin-top:20px;padding:14px;border:1px solid #c6d0c5;font-size:12px;line-height:1.9}
+.ru-method summary{font-weight:750;min-height:36px}
+.ru-method p,.ru-method ul{margin-top:12px}
+.ru-method li{margin:9px 0;overflow-wrap:anywhere}
+@media(max-width:1490px){.ru-primary-grid{grid-template-columns:minmax(0,1fr)}.ru-reading{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 22px}.ru-reading>:is(.ru-eyebrow,h2,.ru-chain,.ru-selection-actions,details,.ru-reading-sources){grid-column:1/-1}.ru-reading h3{align-self:end}.ru-reading [data-ru-reading]{grid-column:1}.ru-reading>h3:nth-of-type(2){grid-column:2;grid-row:3}.ru-reading [data-ru-why]{grid-column:2;grid-row:4}.ru-site-reading{grid-column:1/-1}.ru-reading [data-ru-nearby]{grid-column:1/-1}}
+@media(max-width:959px){.ru-industry .russia-desktop-shell{display:flex;flex-direction:column}.ru-industry .russia-desktop-shell>.russia-learning{order:0}.ru-industry .russia-news{order:1}.ru-industry .russia-learning{width:100%}.ru-map-canvas{min-width:760px}.ru-industry .ru-product-tabs button{min-height:44px}.ru-stat-overview{grid-template-columns:1fr}.ru-metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.ru-reading{display:block}.ru-industry .ru-sector-tabs button{font-size:12px;padding:8px 3px}.ru-metric-grid{grid-template-columns:1fr}.ru-stat-card summary{flex-wrap:wrap;gap:6px}.ru-stat-card summary strong{margin-left:auto}.ru-statistics>h2{font-size:19px}.ru-map-key,.ru-map-note{font-size:11px}.ru-industry .ru-product-tabs button{font-size:12px}.ru-reading h3{margin-top:13px}.ru-stat-overview{gap:7px}}

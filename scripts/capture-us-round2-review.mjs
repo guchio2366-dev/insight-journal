@@ -24,7 +24,7 @@ try{
    await page.evaluate(()=>document.fonts.ready);await page.waitForTimeout(800);
    if(name==='forest')await page.locator('[data-atlas-explorer][data-forest-active=true]').waitFor();
    if(['precipitation','basins'].includes(name))assert.equal(await page.locator('[data-water-view][aria-selected=true]').getAttribute('data-water-view'),name);
-   if(['auto','electronics','oil'].includes(name))assert.equal(await page.locator('[data-atlas-explorer]').getAttribute('data-industry-subsector'),name==='oil'?'oil-gas':name);
+   if(['auto','electronics','oil'].includes(name)){const updated=await page.locator('[data-us-industry]').count();assert.equal(await page.locator('[data-atlas-explorer]').getAttribute('data-industry-subsector'),updated?(name==='electronics'?'chip-design':name==='oil'?'crude-oil':name):(name==='oil'?'oil-gas':name));}
    if(['density','ethnicity','religion'].includes(name)){
     await page.waitForFunction(()=>/郡のデータ/.test(document.querySelector('[data-pop-status]')?.textContent??''));
     assert.equal(await page.locator('[data-pop-view][aria-pressed=true]').getAttribute('data-pop-view'),name==='density'?'distribution':name);
@@ -33,7 +33,7 @@ try{
    assert.equal(await page.locator('[data-fallback]').isVisible(),false,`${target}/${name}: actual MapLibre`);
    const frame=await page.locator('[data-map-frame]').boundingBox();
    assert.ok(frame.width>600&&frame.height>300,`${target}/${name}: readable map frame`);
-   if(target==='build'&&['climate','river','precipitation','basins'].includes(name))assert.ok(frame.width>=1050&&frame.height>=680,`${name}: larger primary PC map area`);
+   if(target==='build'&&['climate','river','precipitation','basins'].includes(name))assert.ok(frame.width>=1050&&frame.height>=580,`${name}: wide PC map frame matched to continental US aspect`);
    if(target==='build'&&name==='forest'){assert.equal(await page.locator('[data-forest-site]').count(),2);assert.match(await page.locator('[data-forest-national]').textContent(),/2017/);}
    if(target==='build'&&name==='industry')assert.equal(await page.evaluate(()=>{const boxes=[...document.querySelectorAll('[data-industry-markers] .industry-overview-label:not([hidden])')].map(n=>n.getBoundingClientRect());return boxes.some((a,i)=>boxes.slice(i+1).some(b=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top));}),false,'initial all-industry labels must not overlap');
    // Save the actual screen before layout assertions, including on failure.
@@ -86,6 +86,12 @@ try{
  await page.locator('[data-water-view="precipitation"]').click();await page.locator('[data-water-label="1000-1500"]').click();
  assert.match(await page.locator('[data-water-title]').textContent(),/1,000/);await snapshot('rain-band');
  await page.goto(origin+'industry/?sector=manufacturing&subsector=auto',{waitUntil:'networkidle'});await ready();
+ if(await page.locator('[data-us-industry]').count()){
+  const layout=await page.locator('[data-us-overlay]').getAttribute('data-layout'),camera=await page.locator('[data-us-map]').getAttribute('viewBox');
+  await page.locator('[data-us-key="chip-design"]').click();assert.match(await page.locator('[data-us-title]').textContent(),/設計/);assert.equal(await page.locator('[data-us-overlay]').getAttribute('data-layout'),layout);assert.equal(await page.locator('[data-us-map]').getAttribute('viewBox'),camera);await snapshot('chip-design-selection');
+  await page.locator('[data-us-key="chip-packaging"]').click();await page.locator('[data-us-site-list]').evaluate(n=>n.parentElement.open=true);await page.locator('[data-us-site-option="rio-rancho-packaging"]').click();assert.match(await page.locator('[data-us-site-scope]').textContent(),/稼働/);await page.reload({waitUntil:'networkidle'});await ready();assert.match(await page.locator('[data-us-site-title]').textContent(),/リオランチョ/);await snapshot('chip-packaging-reload');
+  await page.locator('[data-us-key="chip-materials"]').click();const materialSites=page.locator('[data-us-site-list]').locator('..');if(!await materialSites.evaluate(n=>n.open))await materialSites.locator(':scope > summary').click();await page.locator('[data-us-site-option="hemlock-material-plan"]').click();assert.match(await page.locator('[data-us-site-scope]').textContent(),/計画/);await snapshot('chip-material-plan');
+ }else{
  assert.equal(await page.locator('[data-industry-markers] [data-industry-place]').count(),4);
  assert.equal(await page.locator('[data-industry-state-marker]').count(),0);assert.match(await page.locator('[data-industry-economic-legend]').textContent(),/9\/51/);
  await page.locator('[data-industry-economic-legend] summary').click();assert.equal(await page.locator('[data-industry-state-option]').count(),51);
@@ -114,6 +120,7 @@ try{
    // Restore the chosen site before checking the next source location.
    await panel.locator(`[data-industry-region-option="${id}"]`).click();
   }
+ }
  }
  await page.goto(origin+'agriculture/',{waitUntil:'networkidle'});await ready();assert.match(await page.locator('.atlas-quantity-note').textContent(),/生産量を表しません/);
  await page.locator('[data-crop-select="wheat"]').first().click();await page.reload({waitUntil:'networkidle'});await ready();assert.equal(new URL(page.url()).searchParams.get('crop'),'wheat');await snapshot('agriculture-reload');

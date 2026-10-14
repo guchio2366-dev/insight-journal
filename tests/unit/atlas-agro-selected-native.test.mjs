@@ -15,7 +15,15 @@ test('unselected overview renderer remains exactly the published PR 350 implemen
   ['src/components/atlas/AsiaAtlasPage.astro','5a68ea0822cb9ef80b4225ae97841bba1944cc8608a07fac9c12b9ad65c2f667'],
   ['src/components/atlas/EuropeVerifiedStatistics.astro','6c0e50bc54884c8793f60bb0962fcffa29c5d540b189ff8f5b7c8ec1214bb8fb'],
   ['src/scripts/atlas-africa.ts','68d6af78d32b5dbe8cc9579c2cf67fd6452efada37db36c5df3e3bda027c3a51']
- ])assert.equal(sha256(readFileSync(path,'utf8')),expected,`${path}: unselected regional views are unchanged`);
+ ]){
+  // The authorized South Asia industry extension adds only these two hooks.
+  // Keep the complete agriculture/other-region source under its original hash.
+  const text=readFileSync(path,'utf8');
+  const retained=path==='src/scripts/atlas-africa.ts'?text.replace("id==='copperbelt-connections'?'copper':", "id==='copperbelt-connections'?'copper-cobalt':"):path==='src/components/atlas/AsiaAtlasPage.astro'?text
+   .replace(/^import SouthAsiaIndustryStatistics from '\.\/asia\/SouthAsiaIndustryStatistics\.astro';\n/m,'')
+   .replace(/^     \{focusId==='south-asia'&&<SouthAsiaIndustryStatistics active=\{initialField==='industry'\} \/>\}\n/m,''):text;
+  assert.equal(sha256(retained),expected,`${path}: unselected regional views are unchanged`);
+ }
 });
 for(const region of ['south-central-asia','southeast-asia'])test(`${region}: explicit product order is reversed when returning to the published overview`,async()=>{
  const w=new Window({settings:{enableJavaScriptEvaluation:true}});

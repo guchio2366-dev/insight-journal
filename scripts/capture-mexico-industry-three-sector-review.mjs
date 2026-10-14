@@ -33,7 +33,7 @@ const noCollisions=items=>{for(let i=0;i<items.length;i++)for(let j=i+1;j<items.
 try{
  for(const [width,height] of [[1920,1080],[1280,800]]){
   const page=await browser.newPage({viewport:{width,height},deviceScaleFactor:1});const errors=[];page.on('pageerror',error=>errors.push(error.message));
-  await page.goto(`http://127.0.0.1:${server.address().port}/insight-journal/atlas/north-america/mexico/industry/`);
+  await page.goto(`http://127.0.0.1:${server.address().port}/insight-journal/atlas/north-america/mexico/industry/?legacy=1`);
   await page.waitForSelector('[data-mi-ready="true"]');await page.waitForFunction(()=>document.querySelector('[data-mexico-field="industry"]')?.dataset.miLabelLayoutReady==='true');
   const initial=await labels(page);assert.equal(initial.length,6);noCollisions(initial);
   assert.equal(await page.locator('[data-mi-site-kind="refinery"]:not([hidden])').count(),2);
@@ -76,4 +76,8 @@ try{
  }
  report.passed=true;await writeFile(path.join(output,'report.json'),JSON.stringify(report,null,2)+'\n');
  console.log(JSON.stringify(report));
-}finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
+}catch(error){console.error('::error title=Mexico industry review::'+String(error.stack??error).replaceAll('%','%25').replaceAll('\n','%0A').replaceAll('\r','%0D'));throw error;}finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
+
+// The existing sandboxed-Chrome CI review uploads this directory. Verify the
+// normal adopted view too, retaining the legacy comparison checks above.
+await import('./capture-mexico-industry-adopted-review.mjs');

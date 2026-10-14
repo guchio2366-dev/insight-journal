@@ -49,6 +49,7 @@ export async function verifySouthCentralAsia(page,{source,profile,capture}){
  await page.locator('[data-sc-industry-topic]').selectOption('sc-hydro');
  assert.equal(new URL(page.url()).searchParams.get('topic'),'sc-hydro');
  assert.match(await page.locator('[data-industry-lead]').textContent(),/キルギス.*タジキスタン.*ネパール.*ブータン/s);
+ const industryList=page.locator('[data-industry-content] > details');if(await industryList.count())await industryList.evaluate(node=>node.open=true);
  await page.locator('.sc-industry-site-list button').first().click();
  assert.match(new URL(page.url()).searchParams.get('detail'),/^sc-/);
  assert.match(await page.locator('[data-industry-content]').textContent(),/立地を読む/);

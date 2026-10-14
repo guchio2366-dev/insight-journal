@@ -695,3 +695,26 @@
 .africa-culture-table-scroll th:first-child{position:sticky;left:0;background:#fffdf8;text-align:left}
 [data-africa-language-point]{cursor:pointer;outline:none}
 [data-africa-language-point]:focus-visible{stroke:#bc5c35;stroke-width:3px}
+/* The Africa industry reader keeps quantitative evidence below the map workspace. */
+.africa-industry-statistics{margin:18px 0 26px;padding:18px;border:1px solid #d6dfd7;border-radius:10px;background:#fffdf8;color:#263d40}
+.africa-industry-statistics[hidden]{display:none}
+.africa-industry-stat-heading{max-width:78ch;margin-bottom:16px}
+.africa-industry-stat-heading>p:first-child{margin:0 0 4px;color:#526d68;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+.africa-industry-stat-heading h2{margin:0 0 6px;font-size:clamp(20px,2vw,27px)}
+.africa-industry-stat-heading>p:last-child{margin:0;line-height:1.65;font-size:14px}
+.africa-industry-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}
+.africa-industry-stat-overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.africa-industry-stat-overview>article,.africa-industry-stat-column{min-width:0}
+.africa-industry-stat-overview>article{padding:12px;border:1px solid #d9e1d9;border-radius:7px;background:#f7faf5}
+.africa-industry-stat-overview>article>h3,.africa-industry-stat-column>h3{margin:0 0 8px;font-size:16px}
+.africa-industry-stat-card{padding:12px;border:1px solid #d9e1d9;border-radius:7px;background:#f7faf5;overflow-wrap:anywhere;line-height:1.55}
+.africa-industry-stat-column>.africa-industry-stat-card+.africa-industry-stat-card{margin-top:10px}
+.africa-industry-stat-overview .africa-industry-stat-card{padding:0;border:0;background:none}
+.africa-industry-stat-card h3{margin:0 0 4px;font-size:13px;font-weight:700;color:#526d68}
+.africa-industry-stat-card p{margin:4px 0;font-size:13px}
+.africa-industry-stat-card .africa-industry-stat-value{font-size:20px;font-weight:750;line-height:1.35;color:#203f45;font-variant-numeric:tabular-nums}
+.africa-industry-stat-card a{display:inline-block;min-height:28px;margin-top:5px;font-size:13px;text-underline-offset:3px}
+.africa-industry-stat-card small{margin-left:8px;color:#5d665f}
+@media(max-width:1050px){.africa-industry-stat-overview{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.africa-industry-stat-grid,.africa-industry-stat-overview{grid-template-columns:minmax(0,1fr)}.africa-industry-statistics{padding:12px}}
+@media(min-width:1200px){.africa-atlas[data-field=industry] .africa-map-frame{height:clamp(620px,calc(100dvh - 320px),760px);min-height:620px}.africa-atlas[data-field=industry] .africa-map-frame>.africa-map{height:100%;min-height:0;max-height:none}}

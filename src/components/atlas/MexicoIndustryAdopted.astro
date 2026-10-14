@@ -1,0 +1,76 @@
+---
+import {adoptedIndustries,adoptedSources,adoptedSectors,adoptedGroups,adoptedFamilyLabels} from '../../lib/atlas-mexico-industry-adopted';
+import data from '../../data/atlas/mexico/industry.json';
+import {stateFeatures,geometryPath,stateLabelPoint,geometryMetadata} from '../../lib/atlas-mexico-geometry';
+import {withBase} from '../../lib/urls';
+import '../../styles/atlas-mexico-industry-adopted.css';
+const geometry=stateFeatures.map(feature=>({id:feature.properties.code,path:geometryPath(feature.geometry),point:stateLabelPoint(feature.properties.code)}));
+const legacyHref=withBase('/atlas/north-america/mexico/industry/?legacy=1');
+const assets=withBase('/assets/atlas/mexico-industry-adopted');
+const config={industries:adoptedIndustries,sources:adoptedSources,states:data.states,geometry:geometry.map(g=>({id:g.id,point:g.point})),legacyHref};
+---
+<section class="ma-atlas" data-ma-atlas aria-label="メキシコの産業から地域を読む">
+ <h1 class="visually-hidden">メキシコの主要産業：資源・エネルギー、製造業、サービス業</h1>
+ <div class="ma-controls">
+  <div class="ma-sectors" role="tablist" aria-label="主要産業の三分野">{adoptedSectors.map(s=><button type="button" role="tab" data-ma-sector={s.id} id={`ma-sector-${s.id}`} aria-controls="ma-panel" aria-selected={String(s.id==='resources')} tabindex={s.id==='resources'?0:-1}>{s.label}</button>)}</div>
+  <p class="ma-guide"><span data-ma-breadcrumb>{adoptedSectors[0].lead}</span><a href="#ma-statistics">地図の下の統計へ</a></p>
+  <nav class="ma-industry-choices" aria-label="産業と具体品目を選ぶ">{adoptedSectors.map(sector=><div data-ma-choices={sector.id} hidden={sector.id!=='resources'}>
+   <button type="button" data-ma-overview={sector.id} aria-pressed="true">全体</button>
+   {adoptedGroups(sector.id).map(group=><span class="ma-choice-family" style={`--ma-color:${group.color}`}>
+    {sector.id==='manufacturing'&&<span class="ma-family-name">{adoptedFamilyLabels[group.id]??group.label}</span>}
+    {group.industries.map(item=><button type="button" data-ma-industry={item.id} data-ma-owner={sector.id} aria-pressed="false">{item.label}</button>)}
+   </span>)}
+  </div>)}</nav>
+ </div>
+ <div class="ma-grid" id="ma-panel" role="tabpanel" aria-labelledby="ma-sector-resources">
+  <div class="ma-map-column">
+   <div class="ma-camera" role="group" aria-label="地図の表示範囲"><span>産業名を選んで地域と集積を読む</span><button type="button" data-ma-camera="fit">全体</button><button type="button" data-ma-camera="in" aria-label="地図を拡大">＋</button><button type="button" data-ma-camera="out" aria-label="地図を縮小">−</button></div>
+   <div class="ma-map-frame" data-ma-frame>
+    <svg data-ma-map class="ma-map" viewBox="0 0 900 580" role="group" tabindex="0" aria-labelledby="ma-map-title ma-map-description">
+     <title id="ma-map-title" data-ma-map-title>メキシコの資源・エネルギーの集積地域</title>
+     <desc id="ma-map-description" data-ma-map-description>点は州の地域案内位置で、施設所在地や数量ではありません。産業を選ぶと、対応する州別数量または就業者の集積を色で示します。統計不足はゼロと区別します。</desc>
+     <defs>
+      <pattern id="ma-confidential" width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" fill="#e3e5df"/><path d="M0,9L9,0M-3,3L3,-3M6,12L12,6" stroke="#7b877c"/></pattern>
+      <pattern id="ma-unknown" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="#f4f4ec"/><circle cx="3" cy="3" r="1.2" fill="#839487"/></pattern>
+      <pattern id="ma-unretrieved" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="#eee9dd"/><path d="M2,2L8,8M8,2L2,8" stroke="#9b9279"/></pattern>
+     </defs>
+     <image href={withBase('/assets/atlas/mexico-nature-v1/relief.svg')} width="900" height="580" opacity=".25" aria-hidden="true"/>
+     {geometry.map(g=>{const state=data.states.find(s=>s.id===g.id)!;return <path data-ma-state={g.id} d={g.path} fill="#e6e9dc" stroke="#899d8f" stroke-width=".75" vector-effect="non-scaling-stroke" fill-rule="evenodd" role="button" tabindex="0" aria-pressed="false" aria-label={`${state.name}の地域を選ぶ`}><title>{state.name}の地域案内</title></path>;})}
+    </svg>
+    <div class="ma-labels" data-ma-labels></div>
+   </div>
+   <p class="ma-map-caption" data-ma-map-caption>産業名と、資料で確認した集積地域の案内。点の大きさは数量を表しません。</p>
+   <div class="ma-legend" data-ma-legend hidden aria-label="州の色の意味"></div>
+   <p class="ma-map-method" data-ma-map-definition>州の案内点と産業名を結ぶ細線は位置対応です。個別施設の敷地・取引・輸送経路を表しません。</p>
+   <div class="ma-map-sources" data-ma-map-sources></div>
+  </div>
+  <aside class="ma-reading" aria-label="産業分布の概説と立地の理由">
+   <h2 data-ma-title>{adoptedSectors[0].label}</h2><p class="ma-key-sentence" data-ma-lead>{adoptedSectors[0].lead}</p>
+   <h3>集まる地域と役割</h3><p data-ma-overview-copy>{adoptedSectors[0].overview}</p>
+   <h3>なぜこの位置にあるか</h3><p data-ma-why>{adoptedSectors[0].why}</p>
+   <section data-ma-process-wrap hidden><h3>原料・工程・使い先</h3><p data-ma-process></p></section>
+   <section class="ma-selected-place" data-ma-place-reading hidden><h3 data-ma-place-title></h3><p data-ma-place-note></p><div data-ma-place-sources></div></section>
+   <div class="ma-actions"><button type="button" data-ma-clear hidden>全体に戻す</button><label data-ma-only-wrap hidden><input type="checkbox" data-ma-only/>この産業だけ表示</label><button type="button" data-ma-overlap hidden></button></div>
+   <details><summary>産業の地域を一覧から選ぶ</summary><div class="ma-place-list" data-ma-place-list></div></details>
+   <p class="ma-boundary" data-ma-boundary>工程の重複掲載があります。各表示の統計を三分野の合計へ足し合わせません。資料のない場所を産業の不在とは判断しません。</p>
+  </aside>
+ </div>
+ <section class="ma-statistics" id="ma-statistics" aria-label="地図下の国内・世界・販路の統計">
+  <header class="ma-statistics-heading"><h2 data-ma-statistics-title>産業別の統計を確かめる</h2><p data-ma-statistics-scope>国内規模、世界供給、使い先・販路をそれぞれの年と定義で読みます。</p></header>
+  <div class="ma-statistics-grid">
+   <section class="ma-stat-card"><h3>国内規模と地域の集積</h3><div data-ma-indicators="domestic"></div><div data-ma-state-value></div><section data-ma-ranking-wrap hidden><h4 data-ma-ranking-title>州別の公開値</h4><ol class="ma-ranking" data-ma-ranking></ol><details><summary>全32州・欠測・分母を確認</summary><div class="ma-table-scroll" data-ma-state-table></div></details></section></section>
+   <section class="ma-stat-card"><h3>世界供給での位置</h3><div data-ma-indicators="world"></div></section>
+   <section class="ma-stat-card"><h3>国内の使用・調達・輸出先</h3><div data-ma-indicators="trade"></div><p class="ma-stat-note">見かけ消費と国内生産品の国内仕向けは別です。生産＋輸入−輸出だけで、国内生産品の消費量を決めません。</p></section>
+  </div>
+ </section>
+ <details class="ma-method" id="ma-sources"><summary>採用した全産業・工程・出典と保存原表</summary>
+  <p>{adoptedIndustries.length}項目。州境・地域案内位置は既存INEGI地理データを再利用。投影：{geometryMetadata.projection.name}。個別の施設座標、取引線、数量のない地点は新設していません。</p>
+  <ul>{adoptedIndustries.map(item=><li><strong>{item.label}</strong> — {item.process}。{item.boundary}</li>)}</ul>
+  <h3>年・対象範囲と一次資料</h3><ul>{Object.entries(adoptedSources).map(([id,source])=><li id={`ma-source-${id}`}><a href={source.url}>{source.title}</a>（{source.year}） — {source.scope}</li>)}</ul>
+  <p>保存原表・照会条件・SHA-256と取得上の限界：<a href={`${assets}/resources-manifest.json`}>資源・鉄鋼</a> ／ <a href={`${assets}/manufacturing-provenance.json`}>機器・自動車・化学</a> ／ <a href={`${assets}/food-precision-provenance.json`}>食品・精密製品</a> ／ <a href={`${assets}/services-provenance.json`}>サービス</a></p>
+  <p>秘匿は斜線、未把握は点、未取得は交差模様。数値0として公表された値だけを0と表示します。世界輸出シェアと世界生産シェアは分け、企業売上・能力・計画を国内生産実績へ置き換えません。</p>
+ </details>
+ <p class="ma-legacy-link"><a href={legacyHref}>保持済みの州別輸出・人口比較を開く</a></p>
+ <noscript><p>地図の産業・地域選択にはJavaScriptが必要です。出典と全採用産業は下の一覧で確認できます。</p></noscript>
+ <script type="application/json" data-ma-config set:html={JSON.stringify(config).replace(/</g,'\\u003c')}/>
+</section>

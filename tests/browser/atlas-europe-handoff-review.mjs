@@ -13,7 +13,7 @@ const gitHead=execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim();
 const expectedHead=process.env.EUROPE_REVIEW_EXPECTED_HEAD??null;
 if(expectedHead)assert.equal(gitHead,expectedHead);
 await mkdir(output,{recursive:true});
-const browser=await chromium.launch({headless:true,executablePath:process.env.EUROPE_REVIEW_CHROMIUM_PATH??'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']});
+const browser=await chromium.launch({headless:true,executablePath:process.env.EUROPE_REVIEW_CHROMIUM_PATH??'/usr/bin/chromium',chromiumSandbox:true,ignoreDefaultArgs:['--unsafely-disable-devtools-self-xss-warnings']});
 const context=await browser.newContext({viewport:{width:1920,height:1080},deviceScaleFactor:1,reducedMotion:'reduce',serviceWorkers:'block'});
 await context.route('**/*',route=>{
   const url=new URL(route.request().url());

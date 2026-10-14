@@ -1,0 +1,3336 @@
+{
+  "sources": {
+    "mx-manufact-ce": {
+      "title": "INEGI 経済センサス2024・2023年の活動",
+      "url": "https://www.inegi.org.mx/app/tabulados/interactivos/?bd=CE2024&px=CE_GENNCE_1",
+      "year": 2023,
+      "scope": "都市部の民間・国営企業等。雇用は就業者、VACBはセンサス付加価値でGDPではない。SDは欠測扱い、-は秘匿。"
+    },
+    "mx-manufact-oica": {
+      "title": "OICA 2025年の車種別・国別生産",
+      "url": "https://oica.net/wp-content/uploads/2025/11/prod-total-2025.pdf",
+      "year": 2025,
+      "scope": "全車種の国別集計。国による対象範囲の差があり、集計世界は報告値の合計。"
+    },
+    "mx-manufact-ina": {
+      "title": "INA 自動車部品産業の2025年実績",
+      "url": "https://ina.com.mx/",
+      "year": 2025,
+      "scope": "部品生産価額と米国の部品輸入に占めるメキシコ比。メキシコの輸出先構成とは別。"
+    },
+    "mx-manufact-vaemg": {
+      "title": "INEGI VAEMG 2024",
+      "url": "https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2025/pibval/VAEMG2024_RR.pdf",
+      "year": 2024,
+      "scope": "グローバル製造の国内内容。生産者の付加価値と国内投入材等を含む。GDP・企業利益ではない。"
+    },
+    "mx-manufact-trade-pc": {
+      "title": "経済省 Data México・pc",
+      "url": "https://www.economia.gob.mx/datamexico/en/profile/product/data-processing-machines-and-data-processing-units-not-elsewhere-specified-or-included-elsewhere",
+      "year": "2024年（世界比較の参考系列は2022年）",
+      "scope": "メキシコのHS2012貿易価額。製造業SCIAN分類と一致しない。輸入は同製品の輸入で、工場の部材投入割合ではない。"
+    },
+    "mx-manufact-trade-communications": {
+      "title": "経済省 Data México・communications",
+      "url": "https://www.economia.gob.mx/datamexico/en/profile/product/telephones-including-mobile-phones-and-those-of-other-wireless-networks",
+      "year": "2024年（世界比較の参考系列は2022年）",
+      "scope": "メキシコのHS2012貿易価額。製造業SCIAN分類と一致しない。輸入は同製品の輸入で、工場の部材投入割合ではない。"
+    },
+    "mx-manufact-trade-displays": {
+      "title": "経済省 Data México・displays",
+      "url": "https://www.economia.gob.mx/datamexico/en/profile/product/monitors-and-projectors-not-incorporating-television-reception-apparatus",
+      "year": "2024年（世界比較の参考系列は2022年）",
+      "scope": "メキシコのHS2012貿易価額。製造業SCIAN分類と一致しない。輸入は同製品の輸入で、工場の部材投入割合ではない。"
+    },
+    "mx-manufact-trade-refrigeration": {
+      "title": "経済省 Data México・refrigeration",
+      "url": "https://www.economia.gob.mx/datamexico/en/profile/product/refrigerators-freezers-and-other-refrigerating-or-freezing-equipment",
+      "year": "2024年（世界比較の参考系列は2022年）",
+      "scope": "メキシコのHS2012貿易価額。製造業SCIAN分類と一致しない。輸入は同製品の輸入で、工場の部材投入割合ではない。"
+    },
+    "mx-manufact-trade-pharma": {
+      "title": "経済省 Data México・pharma",
+      "url": "https://www.economia.gob.mx/datamexico/en/profile/product/medicaments-consisting-of-mixed-or-unmixed-products-preparations-for-therapeutic-or-prophylactic-uses",
+      "year": "2024年（世界比較の参考系列は2022年）",
+      "scope": "メキシコのHS2012貿易価額。製造業SCIAN分類と一致しない。輸入は同製品の輸入で、工場の部材投入割合ではない。"
+    }
+  },
+  "industries": [
+    {
+      "id": "automotive",
+      "label": "完成車",
+      "family": "automotive",
+      "sectors": [
+        "manufacturing"
+      ],
+      "overview": "北部とバヒオの組立拠点を、部品供給と米国市場への近さから読む。",
+      "why": "既存工場・部品企業・国境を越える輸送が重なる。",
+      "process": "鋼板・電装・部品 → 完成車組立 → 国内販売・輸出",
+      "boundary": "SCIAN 3361の製造業分類。HS製品貿易との範囲差を明示し、工場・企業の売上や生産数量へ換算しません。",
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "SCIAN 3361。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+        "sourceIds": [
+          "mx-manufact-ce"
+        ],
+        "nationalTotal": 136982.0,
+        "values": [
+          {
+            "state": "01",
+            "value": 16224.0,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "03",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "05",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "07",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "08",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "09",
+            "value": 5608.0,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "11",
+            "value": 21600.0,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "13",
+            "value": 761.0,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "15",
+            "value": 13255.0,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "17",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "18",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "19",
+            "value": 9609.0,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "21",
+            "value": 18291.0,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "23",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "24",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "25",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "26",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "27",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "28",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "29",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "30",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "31",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "32",
+            "value": null,
+            "status": "unknown"
+          }
+        ],
+        "regions": [
+          {
+            "state": "11",
+            "stage": "製造・加工",
+            "note": "SCIAN 3361の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "21",
+            "stage": "製造・加工",
+            "note": "SCIAN 3361の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "01",
+            "stage": "製造・加工",
+            "note": "SCIAN 3361の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "製造就業者",
+            "value": 136982.0,
+            "unit": "人",
+            "year": 2023,
+            "definition": "SCIAN 3361。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業の就業者",
+              "value": 7190294,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "センサス付加価値",
+            "value": 813019.688,
+            "unit": "百万ペソ",
+            "year": 2023,
+            "definition": "SCIAN 3361のVACB。全国GDPの内訳ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業のVACB",
+              "value": 5390947.292,
+              "unit": "百万ペソ"
+            }
+          },
+          {
+            "label": "グローバル製造の国内内容",
+            "value": 980647,
+            "unit": "百万ペソ",
+            "year": 2024,
+            "definition": "SCIAN 3361のVAEMG。国内投入材等を含み、GDP・企業利益ではない。",
+            "sourceIds": [
+              "mx-manufact-vaemg"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全業種のVAEMG",
+              "value": 3648915,
+              "unit": "百万ペソ"
+            }
+          }
+        ],
+        "world": [
+          {
+            "label": "全車種の生産",
+            "value": 4092448,
+            "unit": "台",
+            "year": 2025,
+            "definition": "OICAのメキシコ全車種生産。集計世界との比率。",
+            "sourceIds": [
+              "mx-manufact-oica"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "OICA集計世界の全車種生産",
+              "value": 96383650,
+              "unit": "台"
+            }
+          }
+        ],
+        "trade": [
+          {
+            "label": "同じ製品範囲の輸出・国内仕向け",
+            "value": null,
+            "unit": "未確認",
+            "year": "未確認",
+            "definition": "SCIAN 3361とHS製品の対応・国内生産品の国内仕向けは未確認。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "unconfirmed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "auto-parts",
+      "label": "自動車部品",
+      "family": "automotive",
+      "sectors": [
+        "manufacturing"
+      ],
+      "overview": "完成車と別に、コアウイラ・チワワ・グアナフアト等の部品生産を読む。",
+      "why": "組立工場との工程分担、調達と輸送の条件が集積を支える。",
+      "process": "素材 → 電装・変速機・座席・エンジン等の部品 → 組立・補修",
+      "boundary": "SCIAN 3363の製造業分類。HS製品貿易との範囲差を明示し、工場・企業の売上や生産数量へ換算しません。",
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "SCIAN 3363。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+        "sourceIds": [
+          "mx-manufact-ce"
+        ],
+        "nationalTotal": 1203759.0,
+        "values": [
+          {
+            "state": "01",
+            "value": 51407.0,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": 24663.0,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "05",
+            "value": 210615.0,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "07",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "08",
+            "value": 176763.0,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": 8205.0,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": 39349.0,
+            "status": "available"
+          },
+          {
+            "state": "11",
+            "value": 110648.0,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "13",
+            "value": 1753.0,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": 33137.0,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 42360.0,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": 25.0,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": 2249.0,
+            "status": "available"
+          },
+          {
+            "state": "18",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "19",
+            "value": 105221.0,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "21",
+            "value": 40965.0,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": 69190.0,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "24",
+            "value": 63091.0,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": 13806.0,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": 51033.0,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "28",
+            "value": 97283.0,
+            "status": "available"
+          },
+          {
+            "state": "29",
+            "value": 14272.0,
+            "status": "available"
+          },
+          {
+            "state": "30",
+            "value": 41.0,
+            "status": "available"
+          },
+          {
+            "state": "31",
+            "value": 4490.0,
+            "status": "available"
+          },
+          {
+            "state": "32",
+            "value": null,
+            "status": "confidential"
+          }
+        ],
+        "regions": [
+          {
+            "state": "05",
+            "stage": "製造・加工",
+            "note": "SCIAN 3363の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "08",
+            "stage": "製造・加工",
+            "note": "SCIAN 3363の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "11",
+            "stage": "製造・加工",
+            "note": "SCIAN 3363の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "製造就業者",
+            "value": 1203759.0,
+            "unit": "人",
+            "year": 2023,
+            "definition": "SCIAN 3363。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業の就業者",
+              "value": 7190294,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "センサス付加価値",
+            "value": 783536.622,
+            "unit": "百万ペソ",
+            "year": 2023,
+            "definition": "SCIAN 3363のVACB。全国GDPの内訳ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業のVACB",
+              "value": 5390947.292,
+              "unit": "百万ペソ"
+            }
+          },
+          {
+            "label": "グローバル製造の国内内容",
+            "value": 677363,
+            "unit": "百万ペソ",
+            "year": 2024,
+            "definition": "SCIAN 3363のVAEMG。国内投入材等を含み、GDP・企業利益ではない。",
+            "sourceIds": [
+              "mx-manufact-vaemg"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全業種のVAEMG",
+              "value": 3648915,
+              "unit": "百万ペソ"
+            }
+          }
+        ],
+        "world": [
+          {
+            "label": "部品生産価額",
+            "value": 119000,
+            "unit": "百万USD",
+            "year": 2025,
+            "definition": "INAによるメキシコの部品生産価額。企業売上ではない。",
+            "sourceIds": [
+              "mx-manufact-ina"
+            ],
+            "status": "observed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "米国部品輸入のメキシコ比",
+            "value": 43.74,
+            "unit": "%",
+            "year": 2025,
+            "definition": "分母は米国の自動車部品輸入価額。メキシコの輸出先比率ではない。",
+            "sourceIds": [
+              "mx-manufact-ina"
+            ],
+            "status": "observed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "computers",
+      "label": "コンピューター",
+      "family": "electronics",
+      "sectors": [
+        "manufacturing"
+      ],
+      "overview": "チワワとハリスコに集まるコンピューター・周辺機器の製造を読む。",
+      "why": "米国市場への近さと電子部品・組立・技術者の集積が重なる。",
+      "process": "電子部品・基板 → コンピューター・周辺機器 → 企業・消費者",
+      "boundary": "SCIAN 3341の製造業分類。HS製品貿易との範囲差を明示し、工場・企業の売上や生産数量へ換算しません。",
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "SCIAN 3341。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+        "sourceIds": [
+          "mx-manufact-ce"
+        ],
+        "nationalTotal": 52946.0,
+        "values": [
+          {
+            "state": "01",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "02",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "03",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "05",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "07",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "08",
+            "value": 25908.0,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": 455.0,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "11",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "12",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "13",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "14",
+            "value": 20810.0,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 102.0,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "17",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "18",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "19",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "20",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "21",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "22",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "23",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "24",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "25",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "26",
+            "value": 1624.0,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "28",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "29",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "30",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "31",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "32",
+            "value": null,
+            "status": "unknown"
+          }
+        ],
+        "regions": [
+          {
+            "state": "08",
+            "stage": "製造・加工",
+            "note": "SCIAN 3341の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "14",
+            "stage": "製造・加工",
+            "note": "SCIAN 3341の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "26",
+            "stage": "製造・加工",
+            "note": "SCIAN 3341の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "製造就業者",
+            "value": 52946.0,
+            "unit": "人",
+            "year": 2023,
+            "definition": "SCIAN 3341。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業の就業者",
+              "value": 7190294,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "センサス付加価値",
+            "value": 26055.377,
+            "unit": "百万ペソ",
+            "year": 2023,
+            "definition": "SCIAN 3341のVACB。全国GDPの内訳ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業のVACB",
+              "value": 5390947.292,
+              "unit": "百万ペソ"
+            }
+          },
+          {
+            "label": "グローバル製造の国内内容",
+            "value": 138403,
+            "unit": "百万ペソ",
+            "year": 2024,
+            "definition": "SCIAN 3341のVAEMG。国内投入材等を含み、GDP・企業利益ではない。",
+            "sourceIds": [
+              "mx-manufact-vaemg"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全業種のVAEMG",
+              "value": 3648915,
+              "unit": "百万ペソ"
+            }
+          }
+        ],
+        "world": [
+          {
+            "label": "同じ製品段階の世界生産",
+            "value": null,
+            "unit": "未確認",
+            "year": 2025,
+            "definition": "完成品・部品・工程を揃えた世界生産分母は未確認。輸出価額を世界生産量へ置き換えない。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "unconfirmed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "製品輸出価額",
+            "value": 34900,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS8471の総輸出。表示資料の丸め値。SCIAN 3341全体の輸出・生産ではない。",
+            "sourceIds": [
+              "mx-manufact-trade-pc"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "米国向け輸出",
+            "value": 31500,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS8471の米国向け輸出。丸め値からの割合は概数。",
+            "sourceIds": [
+              "mx-manufact-trade-pc"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "HS8471の製品輸出価額",
+              "value": 34900,
+              "unit": "百万USD"
+            }
+          },
+          {
+            "label": "製品輸入価額",
+            "value": 13400,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS8471の総輸入。同じ製品の輸入で、投入部材の調達比ではない。",
+            "sourceIds": [
+              "mx-manufact-trade-pc"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "中国原産の製品輸入",
+            "value": 3920,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS8471輸入。同製品の輸入原産国で、国内工場の部品投入ではない。",
+            "sourceIds": [
+              "mx-manufact-trade-pc"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "HS8471製品輸入価額",
+              "value": 13400,
+              "unit": "百万USD"
+            }
+          },
+          {
+            "label": "タイ原産の製品輸入",
+            "value": 3460,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS8471輸入。",
+            "sourceIds": [
+              "mx-manufact-trade-pc"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "HS8471製品輸入価額",
+              "value": 13400,
+              "unit": "百万USD"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "electronic-components",
+      "label": "電子部品",
+      "family": "electronics",
+      "sectors": [
+        "manufacturing"
+      ],
+      "overview": "チワワ・ハリスコ・バハカリフォルニアの電子部品製造を読む。",
+      "why": "電子機器や輸出組立との分業と、工程を担う人材が立地を支える。",
+      "process": "材料 → 電子部品・基板等 → 電子機器への組込み",
+      "boundary": "SCIAN 3344の製造業分類。HS製品貿易との範囲差を明示し、工場・企業の売上や生産数量へ換算しません。半導体だけの値でも、ウェハ前工程の製造能力でもありません。",
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "SCIAN 3344。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+        "sourceIds": [
+          "mx-manufact-ce"
+        ],
+        "nationalTotal": 247502.0,
+        "values": [
+          {
+            "state": "01",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "02",
+            "value": 50051.0,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "05",
+            "value": 13079.0,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "07",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "08",
+            "value": 53316.0,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": 1596.0,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "11",
+            "value": 1169.0,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "13",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "14",
+            "value": 50885.0,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 360.0,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "17",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "18",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "19",
+            "value": 12692.0,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "21",
+            "value": 11.0,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": 6401.0,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "24",
+            "value": 1674.0,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "26",
+            "value": 23337.0,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "28",
+            "value": 17111.0,
+            "status": "available"
+          },
+          {
+            "state": "29",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "30",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "31",
+            "value": 844.0,
+            "status": "available"
+          },
+          {
+            "state": "32",
+            "value": null,
+            "status": "confidential"
+          }
+        ],
+        "regions": [
+          {
+            "state": "08",
+            "stage": "製造・加工",
+            "note": "SCIAN 3344の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "14",
+            "stage": "製造・加工",
+            "note": "SCIAN 3344の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "02",
+            "stage": "製造・加工",
+            "note": "SCIAN 3344の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "製造就業者",
+            "value": 247502.0,
+            "unit": "人",
+            "year": 2023,
+            "definition": "SCIAN 3344。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業の就業者",
+              "value": 7190294,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "センサス付加価値",
+            "value": 125424.181,
+            "unit": "百万ペソ",
+            "year": 2023,
+            "definition": "SCIAN 3344のVACB。全国GDPの内訳ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業のVACB",
+              "value": 5390947.292,
+              "unit": "百万ペソ"
+            }
+          },
+          {
+            "label": "グローバル製造の国内内容",
+            "value": 120774,
+            "unit": "百万ペソ",
+            "year": 2024,
+            "definition": "SCIAN 3344のVAEMG。国内投入材等を含み、GDP・企業利益ではない。",
+            "sourceIds": [
+              "mx-manufact-vaemg"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全業種のVAEMG",
+              "value": 3648915,
+              "unit": "百万ペソ"
+            }
+          }
+        ],
+        "world": [
+          {
+            "label": "同じ製品段階の世界生産",
+            "value": null,
+            "unit": "未確認",
+            "year": 2025,
+            "definition": "完成品・部品・工程を揃えた世界生産分母は未確認。輸出価額を世界生産量へ置き換えない。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "unconfirmed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "同じ製品範囲の輸出・国内仕向け",
+            "value": null,
+            "unit": "未確認",
+            "year": "未確認",
+            "definition": "SCIAN 3344とHS製品の対応・国内生産品の国内仕向けは未確認。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "unconfirmed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "communications",
+      "label": "通信機器",
+      "family": "electronics",
+      "sectors": [
+        "manufacturing"
+      ],
+      "overview": "タマウリパス・チワワ等の通信機器製造を、アジアとの調達と北米向け販売に結ぶ。",
+      "why": "国境への近さ、電子機器の分業、企業向け通信需要が重なる。",
+      "process": "部品 → 電話・通信網機器 → 通信設備・端末の利用",
+      "boundary": "SCIAN 3342の製造業分類。HS製品貿易との範囲差を明示し、工場・企業の売上や生産数量へ換算しません。",
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "SCIAN 3342。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+        "sourceIds": [
+          "mx-manufact-ce"
+        ],
+        "nationalTotal": 56412.0,
+        "values": [
+          {
+            "state": "01",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "02",
+            "value": 4564.0,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "05",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "07",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "08",
+            "value": 19482.0,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": 265.0,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "11",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "12",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "13",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "14",
+            "value": 922.0,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 523.0,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "17",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "18",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "19",
+            "value": 5842.0,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "21",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "22",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "23",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "24",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "25",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "26",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "27",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "28",
+            "value": 19973.0,
+            "status": "available"
+          },
+          {
+            "state": "29",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "30",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "31",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "32",
+            "value": null,
+            "status": "unknown"
+          }
+        ],
+        "regions": [
+          {
+            "state": "28",
+            "stage": "製造・加工",
+            "note": "SCIAN 3342の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "08",
+            "stage": "製造・加工",
+            "note": "SCIAN 3342の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "19",
+            "stage": "製造・加工",
+            "note": "SCIAN 3342の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "製造就業者",
+            "value": 56412.0,
+            "unit": "人",
+            "year": 2023,
+            "definition": "SCIAN 3342。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業の就業者",
+              "value": 7190294,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "センサス付加価値",
+            "value": 23764.788,
+            "unit": "百万ペソ",
+            "year": 2023,
+            "definition": "SCIAN 3342のVACB。全国GDPの内訳ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業のVACB",
+              "value": 5390947.292,
+              "unit": "百万ペソ"
+            }
+          }
+        ],
+        "world": [
+          {
+            "label": "同じ製品段階の世界生産",
+            "value": null,
+            "unit": "未確認",
+            "year": 2025,
+            "definition": "完成品・部品・工程を揃えた世界生産分母は未確認。輸出価額を世界生産量へ置き換えない。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "unconfirmed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "製品輸出価額",
+            "value": 14900,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS8517の総輸出。表示資料の丸め値。SCIAN 3342全体の輸出・生産ではない。",
+            "sourceIds": [
+              "mx-manufact-trade-communications"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "米国向け輸出",
+            "value": 11600,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS8517の米国向け輸出。丸め値からの割合は概数。",
+            "sourceIds": [
+              "mx-manufact-trade-communications"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "HS8517の製品輸出価額",
+              "value": 14900,
+              "unit": "百万USD"
+            }
+          },
+          {
+            "label": "製品輸入価額",
+            "value": 17400,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS8517の総輸入。同じ製品の輸入で、投入部材の調達比ではない。",
+            "sourceIds": [
+              "mx-manufact-trade-communications"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "中国原産の製品輸入",
+            "value": 9440,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS8517輸入。通信網機器と端末を含む。",
+            "sourceIds": [
+              "mx-manufact-trade-communications"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "HS8517製品輸入価額",
+              "value": 17400,
+              "unit": "百万USD"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "displays",
+      "label": "音声・映像機器",
+      "family": "electronics",
+      "sectors": [
+        "manufacturing"
+      ],
+      "overview": "バハカリフォルニア等の音声・映像機器の生産集積を読む。",
+      "why": "米国への輸送距離と部材・組立企業の集積が支える。",
+      "process": "電子部品・表示部材 → テレビ・モニター等 → 企業・家庭",
+      "boundary": "SCIAN 3343の製造業分類。HS製品貿易との範囲差を明示し、工場・企業の売上や生産数量へ換算しません。",
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "SCIAN 3343。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+        "sourceIds": [
+          "mx-manufact-ce"
+        ],
+        "nationalTotal": 60020.0,
+        "values": [
+          {
+            "state": "01",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "02",
+            "value": 32703.0,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "05",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "07",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "08",
+            "value": 5220.0,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "10",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "11",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "12",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "13",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "14",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "15",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "16",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "17",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "18",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "19",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "20",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "21",
+            "value": 88.0,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": 3282.0,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "24",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "25",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "26",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "27",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "28",
+            "value": 11803.0,
+            "status": "available"
+          },
+          {
+            "state": "29",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "30",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "31",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "32",
+            "value": null,
+            "status": "confidential"
+          }
+        ],
+        "regions": [
+          {
+            "state": "02",
+            "stage": "製造・加工",
+            "note": "SCIAN 3343の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "28",
+            "stage": "製造・加工",
+            "note": "SCIAN 3343の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "08",
+            "stage": "製造・加工",
+            "note": "SCIAN 3343の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "製造就業者",
+            "value": 60020.0,
+            "unit": "人",
+            "year": 2023,
+            "definition": "SCIAN 3343。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業の就業者",
+              "value": 7190294,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "センサス付加価値",
+            "value": 21282.407,
+            "unit": "百万ペソ",
+            "year": 2023,
+            "definition": "SCIAN 3343のVACB。全国GDPの内訳ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業のVACB",
+              "value": 5390947.292,
+              "unit": "百万ペソ"
+            }
+          },
+          {
+            "label": "グローバル製造の国内内容",
+            "value": 130082,
+            "unit": "百万ペソ",
+            "year": 2024,
+            "definition": "SCIAN 3343のVAEMG。国内投入材等を含み、GDP・企業利益ではない。",
+            "sourceIds": [
+              "mx-manufact-vaemg"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全業種のVAEMG",
+              "value": 3648915,
+              "unit": "百万ペソ"
+            }
+          }
+        ],
+        "world": [
+          {
+            "label": "同じ製品段階の世界生産",
+            "value": null,
+            "unit": "未確認",
+            "year": 2025,
+            "definition": "完成品・部品・工程を揃えた世界生産分母は未確認。輸出価額を世界生産量へ置き換えない。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "unconfirmed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "製品輸出価額",
+            "value": 11800,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS8528の総輸出。表示資料の丸め値。SCIAN 3343全体の輸出・生産ではない。",
+            "sourceIds": [
+              "mx-manufact-trade-displays"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "米国向け輸出",
+            "value": 10400,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS8528の米国向け輸出。丸め値からの割合は概数。",
+            "sourceIds": [
+              "mx-manufact-trade-displays"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "HS8528の製品輸出価額",
+              "value": 11800,
+              "unit": "百万USD"
+            }
+          },
+          {
+            "label": "製品輸入価額",
+            "value": 1670,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS8528の総輸入。同じ製品の輸入で、投入部材の調達比ではない。",
+            "sourceIds": [
+              "mx-manufact-trade-displays"
+            ],
+            "status": "observed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "refrigeration",
+      "label": "空調・冷蔵冷凍設備",
+      "family": "equipment",
+      "sectors": [
+        "manufacturing"
+      ],
+      "overview": "ヌエボレオン・タマウリパス・コアウイラ等の工業・商業用設備製造を読む。",
+      "why": "金属加工・部品企業、北米市場、工場・店舗の冷却需要が重なる。",
+      "process": "圧縮機・金属・電装 → 空調・冷蔵冷凍設備 → 工場・店舗等",
+      "boundary": "SCIAN 3334の製造業分類。HS製品貿易との範囲差を明示し、工場・企業の売上や生産数量へ換算しません。空調・暖房・工業商業用冷凍等を含み、冷蔵庫単独ではありません。",
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "SCIAN 3334。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+        "sourceIds": [
+          "mx-manufact-ce"
+        ],
+        "nationalTotal": 72409.0,
+        "values": [
+          {
+            "state": "01",
+            "value": 294.0,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": 5946.0,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "05",
+            "value": 7484.0,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "07",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "08",
+            "value": 3193.0,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": 1512.0,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": 1567.0,
+            "status": "available"
+          },
+          {
+            "state": "11",
+            "value": 2451.0,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "13",
+            "value": 49.0,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": 877.0,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 968.0,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": 19.0,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "18",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "19",
+            "value": 27376.0,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "21",
+            "value": 1915.0,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": 3668.0,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "24",
+            "value": 4344.0,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": 66.0,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": 355.0,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": 30.0,
+            "status": "available"
+          },
+          {
+            "state": "28",
+            "value": 9448.0,
+            "status": "available"
+          },
+          {
+            "state": "29",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "30",
+            "value": 19.0,
+            "status": "available"
+          },
+          {
+            "state": "31",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "32",
+            "value": null,
+            "status": "unknown"
+          }
+        ],
+        "regions": [
+          {
+            "state": "19",
+            "stage": "製造・加工",
+            "note": "SCIAN 3334の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "28",
+            "stage": "製造・加工",
+            "note": "SCIAN 3334の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "05",
+            "stage": "製造・加工",
+            "note": "SCIAN 3334の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "製造就業者",
+            "value": 72409.0,
+            "unit": "人",
+            "year": 2023,
+            "definition": "SCIAN 3334。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業の就業者",
+              "value": 7190294,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "センサス付加価値",
+            "value": 51629.597,
+            "unit": "百万ペソ",
+            "year": 2023,
+            "definition": "SCIAN 3334のVACB。全国GDPの内訳ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業のVACB",
+              "value": 5390947.292,
+              "unit": "百万ペソ"
+            }
+          },
+          {
+            "label": "グローバル製造の国内内容",
+            "value": 63121,
+            "unit": "百万ペソ",
+            "year": 2024,
+            "definition": "SCIAN 3334のVAEMG。国内投入材等を含み、GDP・企業利益ではない。",
+            "sourceIds": [
+              "mx-manufact-vaemg"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "全業種のVAEMG",
+              "value": 3648915,
+              "unit": "百万ペソ"
+            }
+          }
+        ],
+        "world": [
+          {
+            "label": "同じ製品段階の世界生産",
+            "value": null,
+            "unit": "未確認",
+            "year": 2025,
+            "definition": "完成品・部品・工程を揃えた世界生産分母は未確認。輸出価額を世界生産量へ置き換えない。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "unconfirmed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "製品輸出価額",
+            "value": 6560,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS8418の総輸出。表示資料の丸め値。SCIAN 3334全体の輸出・生産ではない。",
+            "sourceIds": [
+              "mx-manufact-trade-refrigeration"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "米国向け輸出",
+            "value": 5990,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS8418の米国向け輸出。丸め値からの割合は概数。",
+            "sourceIds": [
+              "mx-manufact-trade-refrigeration"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "HS8418の製品輸出価額",
+              "value": 6560,
+              "unit": "百万USD"
+            }
+          },
+          {
+            "label": "製品輸入価額",
+            "value": 1700,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS8418の総輸入。同じ製品の輸入で、投入部材の調達比ではない。",
+            "sourceIds": [
+              "mx-manufact-trade-refrigeration"
+            ],
+            "status": "observed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "home-appliances",
+      "label": "家庭用電気器具",
+      "family": "equipment",
+      "sectors": [
+        "manufacturing"
+      ],
+      "overview": "家電の組立・部品集積を、北部の製造網と家庭の需要に結ぶ。",
+      "why": "金属・電装部材と北米の販売市場へのアクセスが立地を支える。",
+      "process": "部材 → 冷蔵庫・洗濯機等の家電 → 家庭での利用",
+      "boundary": "SCIAN 3352の製造業分類。HS製品貿易との範囲差を明示し、工場・企業の売上や生産数量へ換算しません。各家電の製造数量を合計した値ではありません。",
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "SCIAN 3352。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+        "sourceIds": [
+          "mx-manufact-ce"
+        ],
+        "nationalTotal": 73144.0,
+        "values": [
+          {
+            "state": "01",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "02",
+            "value": 5307.0,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "05",
+            "value": 9305.0,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "07",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "08",
+            "value": 12624.0,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": 959.0,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "11",
+            "value": 7219.0,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "13",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "14",
+            "value": 289.0,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 3218.0,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "17",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "18",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "19",
+            "value": 9646.0,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "21",
+            "value": 194.0,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": 8317.0,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "24",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "25",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "26",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "27",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "28",
+            "value": 8462.0,
+            "status": "available"
+          },
+          {
+            "state": "29",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "30",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "31",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "32",
+            "value": null,
+            "status": "unknown"
+          }
+        ],
+        "regions": [
+          {
+            "state": "08",
+            "stage": "製造・加工",
+            "note": "SCIAN 3352の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "19",
+            "stage": "製造・加工",
+            "note": "SCIAN 3352の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "05",
+            "stage": "製造・加工",
+            "note": "SCIAN 3352の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "製造就業者",
+            "value": 73144.0,
+            "unit": "人",
+            "year": 2023,
+            "definition": "SCIAN 3352。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業の就業者",
+              "value": 7190294,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "センサス付加価値",
+            "value": 62990.056,
+            "unit": "百万ペソ",
+            "year": 2023,
+            "definition": "SCIAN 3352のVACB。全国GDPの内訳ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業のVACB",
+              "value": 5390947.292,
+              "unit": "百万ペソ"
+            }
+          }
+        ],
+        "world": [
+          {
+            "label": "同じ製品段階の世界生産",
+            "value": null,
+            "unit": "未確認",
+            "year": 2025,
+            "definition": "完成品・部品・工程を揃えた世界生産分母は未確認。輸出価額を世界生産量へ置き換えない。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "unconfirmed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "同じ製品範囲の輸出・国内仕向け",
+            "value": null,
+            "unit": "未確認",
+            "year": "未確認",
+            "definition": "SCIAN 3352とHS製品の対応・国内生産品の国内仕向けは未確認。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "unconfirmed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "machinery",
+      "label": "産業機械・設備",
+      "family": "equipment",
+      "sectors": [
+        "manufacturing"
+      ],
+      "overview": "ヌエボレオン・コアウイラ・チワワ等の機械・設備製造を読む。",
+      "why": "工業集積そのものが設備・保守・金型等の需要と技術の蓄積を生む。",
+      "process": "素材・部品 → 機械・金型・ポンプ等 → 他産業の生産設備",
+      "boundary": "SCIAN 333の製造業分類。HS製品貿易との範囲差を明示し、工場・企業の売上や生産数量へ換算しません。",
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "SCIAN 333。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+        "sourceIds": [
+          "mx-manufact-ce"
+        ],
+        "nationalTotal": 233161.0,
+        "values": [
+          {
+            "state": "01",
+            "value": 2889.0,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": 19919.0,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": 53.0,
+            "status": "available"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "05",
+            "value": 29867.0,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": 55.0,
+            "status": "available"
+          },
+          {
+            "state": "07",
+            "value": 117.0,
+            "status": "available"
+          },
+          {
+            "state": "08",
+            "value": 18194.0,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": 6354.0,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": 2811.0,
+            "status": "available"
+          },
+          {
+            "state": "11",
+            "value": 9050.0,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": 55.0,
+            "status": "available"
+          },
+          {
+            "state": "13",
+            "value": 1256.0,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": 9890.0,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 11979.0,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": 872.0,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": 1103.0,
+            "status": "available"
+          },
+          {
+            "state": "18",
+            "value": 80.0,
+            "status": "available"
+          },
+          {
+            "state": "19",
+            "value": 53073.0,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": 95.0,
+            "status": "available"
+          },
+          {
+            "state": "21",
+            "value": 5236.0,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": 17449.0,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "24",
+            "value": 11314.0,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": 1338.0,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": 4638.0,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": 102.0,
+            "status": "available"
+          },
+          {
+            "state": "28",
+            "value": 22104.0,
+            "status": "available"
+          },
+          {
+            "state": "29",
+            "value": 365.0,
+            "status": "available"
+          },
+          {
+            "state": "30",
+            "value": 1081.0,
+            "status": "available"
+          },
+          {
+            "state": "31",
+            "value": 1054.0,
+            "status": "available"
+          },
+          {
+            "state": "32",
+            "value": 519.0,
+            "status": "available"
+          }
+        ],
+        "regions": [
+          {
+            "state": "19",
+            "stage": "製造・加工",
+            "note": "SCIAN 333の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "05",
+            "stage": "製造・加工",
+            "note": "SCIAN 333の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "28",
+            "stage": "製造・加工",
+            "note": "SCIAN 333の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "製造就業者",
+            "value": 233161.0,
+            "unit": "人",
+            "year": 2023,
+            "definition": "SCIAN 333。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業の就業者",
+              "value": 7190294,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "センサス付加価値",
+            "value": 178414.455,
+            "unit": "百万ペソ",
+            "year": 2023,
+            "definition": "SCIAN 333のVACB。全国GDPの内訳ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業のVACB",
+              "value": 5390947.292,
+              "unit": "百万ペソ"
+            }
+          }
+        ],
+        "world": [
+          {
+            "label": "同じ製品段階の世界生産",
+            "value": null,
+            "unit": "未確認",
+            "year": 2025,
+            "definition": "完成品・部品・工程を揃えた世界生産分母は未確認。輸出価額を世界生産量へ置き換えない。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "unconfirmed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "同じ製品範囲の輸出・国内仕向け",
+            "value": null,
+            "unit": "未確認",
+            "year": "未確認",
+            "definition": "SCIAN 333とHS製品の対応・国内生産品の国内仕向けは未確認。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "unconfirmed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "chemicals",
+      "label": "基礎化学・樹脂等",
+      "family": "materials",
+      "sectors": [
+        "manufacturing"
+      ],
+      "overview": "化学工業を、原料・エネルギーと各地の加工・消費市場に結ぶ。",
+      "why": "原料供給、エネルギー、水、輸送と下流の製造需要を組み合わせて読む。",
+      "process": "原料 → 基礎化学品・樹脂等 → 素材・加工製品",
+      "boundary": "SCIAN 325の製造業分類。HS製品貿易との範囲差を明示し、工場・企業の売上や生産数量へ換算しません。",
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "SCIAN 325。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+        "sourceIds": [
+          "mx-manufact-ce"
+        ],
+        "nationalTotal": 286099.0,
+        "values": [
+          {
+            "state": "01",
+            "value": 1976.0,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": 6910.0,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": 100.0,
+            "status": "available"
+          },
+          {
+            "state": "04",
+            "value": 552.0,
+            "status": "available"
+          },
+          {
+            "state": "05",
+            "value": 4975.0,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": 188.0,
+            "status": "available"
+          },
+          {
+            "state": "07",
+            "value": 2459.0,
+            "status": "available"
+          },
+          {
+            "state": "08",
+            "value": 4196.0,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": 47145.0,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": 1512.0,
+            "status": "available"
+          },
+          {
+            "state": "11",
+            "value": 16401.0,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": 322.0,
+            "status": "available"
+          },
+          {
+            "state": "13",
+            "value": 4022.0,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": 41209.0,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 59522.0,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": 6321.0,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": 6698.0,
+            "status": "available"
+          },
+          {
+            "state": "18",
+            "value": 154.0,
+            "status": "available"
+          },
+          {
+            "state": "19",
+            "value": 20601.0,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": 716.0,
+            "status": "available"
+          },
+          {
+            "state": "21",
+            "value": 7230.0,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": 12265.0,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": 239.0,
+            "status": "available"
+          },
+          {
+            "state": "24",
+            "value": 3072.0,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": 1494.0,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": 4390.0,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": 4746.0,
+            "status": "available"
+          },
+          {
+            "state": "28",
+            "value": 8867.0,
+            "status": "available"
+          },
+          {
+            "state": "29",
+            "value": 2481.0,
+            "status": "available"
+          },
+          {
+            "state": "30",
+            "value": 13674.0,
+            "status": "available"
+          },
+          {
+            "state": "31",
+            "value": 1431.0,
+            "status": "available"
+          },
+          {
+            "state": "32",
+            "value": 231.0,
+            "status": "available"
+          }
+        ],
+        "regions": [
+          {
+            "state": "15",
+            "stage": "製造・加工",
+            "note": "SCIAN 325の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "09",
+            "stage": "製造・加工",
+            "note": "SCIAN 325の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "14",
+            "stage": "製造・加工",
+            "note": "SCIAN 325の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "製造就業者",
+            "value": 286099.0,
+            "unit": "人",
+            "year": 2023,
+            "definition": "SCIAN 325。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業の就業者",
+              "value": 7190294,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "センサス付加価値",
+            "value": 390410.775,
+            "unit": "百万ペソ",
+            "year": 2023,
+            "definition": "SCIAN 325のVACB。全国GDPの内訳ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業のVACB",
+              "value": 5390947.292,
+              "unit": "百万ペソ"
+            }
+          }
+        ],
+        "world": [
+          {
+            "label": "同じ製品段階の世界生産",
+            "value": null,
+            "unit": "未確認",
+            "year": 2025,
+            "definition": "完成品・部品・工程を揃えた世界生産分母は未確認。輸出価額を世界生産量へ置き換えない。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "unconfirmed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "同じ製品範囲の輸出・国内仕向け",
+            "value": null,
+            "unit": "未確認",
+            "year": "未確認",
+            "definition": "SCIAN 325とHS製品の対応・国内生産品の国内仕向けは未確認。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "unconfirmed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pharmaceuticals",
+      "label": "医薬品",
+      "family": "precision",
+      "sectors": [
+        "manufacturing"
+      ],
+      "overview": "医薬品製造を、原料・製剤・流通と国内医療需要に結ぶ。",
+      "why": "製剤・品質管理を担う人材と大きな国内市場、医療の調達が立地を支える。",
+      "process": "原薬・添加材 → 製剤・包装 → 医療機関・薬局",
+      "boundary": "SCIAN 3254の製造業分類。HS製品貿易との範囲差を明示し、工場・企業の売上や生産数量へ換算しません。",
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "SCIAN 3254。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+        "sourceIds": [
+          "mx-manufact-ce"
+        ],
+        "nationalTotal": 88829.0,
+        "values": [
+          {
+            "state": "01",
+            "value": 1138.0,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": 707.0,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "05",
+            "value": 1530.0,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "07",
+            "value": 92.0,
+            "status": "available"
+          },
+          {
+            "state": "08",
+            "value": 224.0,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": 28928.0,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": 153.0,
+            "status": "available"
+          },
+          {
+            "state": "11",
+            "value": 1393.0,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "13",
+            "value": 522.0,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": 23208.0,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 14309.0,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": 2038.0,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": 5180.0,
+            "status": "available"
+          },
+          {
+            "state": "18",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "19",
+            "value": 1500.0,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": 142.0,
+            "status": "available"
+          },
+          {
+            "state": "21",
+            "value": 2268.0,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": 2788.0,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "24",
+            "value": 114.0,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": 381.0,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": 231.0,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": 98.0,
+            "status": "available"
+          },
+          {
+            "state": "28",
+            "value": 285.0,
+            "status": "available"
+          },
+          {
+            "state": "29",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "30",
+            "value": 1277.0,
+            "status": "available"
+          },
+          {
+            "state": "31",
+            "value": 278.0,
+            "status": "available"
+          },
+          {
+            "state": "32",
+            "value": null,
+            "status": "confidential"
+          }
+        ],
+        "regions": [
+          {
+            "state": "09",
+            "stage": "製造・加工",
+            "note": "SCIAN 3254の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "14",
+            "stage": "製造・加工",
+            "note": "SCIAN 3254の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          },
+          {
+            "state": "15",
+            "stage": "製造・加工",
+            "note": "SCIAN 3254の公開就業者が多い州の例。工場敷地を表す点ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "製造就業者",
+            "value": 88829.0,
+            "unit": "人",
+            "year": 2023,
+            "definition": "SCIAN 3254。2023年のCE対象企業の就業者。全国合計と州別値は同一分類・同年。秘匿を0にしない。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業の就業者",
+              "value": 7190294,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "センサス付加価値",
+            "value": 83781.238,
+            "unit": "百万ペソ",
+            "year": 2023,
+            "definition": "SCIAN 3254のVACB。全国GDPの内訳ではありません。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE製造業のVACB",
+              "value": 5390947.292,
+              "unit": "百万ペソ"
+            }
+          }
+        ],
+        "world": [
+          {
+            "label": "同じ製品段階の世界生産",
+            "value": null,
+            "unit": "未確認",
+            "year": 2025,
+            "definition": "完成品・部品・工程を揃えた世界生産分母は未確認。輸出価額を世界生産量へ置き換えない。",
+            "sourceIds": [
+              "mx-manufact-ce"
+            ],
+            "status": "unconfirmed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "製品輸出価額",
+            "value": 2220,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS3004の総輸出。表示資料の丸め値。SCIAN 3254全体の輸出・生産ではない。",
+            "sourceIds": [
+              "mx-manufact-trade-pharma"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "米国向け輸出",
+            "value": 999,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS3004の米国向け輸出。丸め値からの割合は概数。",
+            "sourceIds": [
+              "mx-manufact-trade-pharma"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "HS3004の製品輸出価額",
+              "value": 2220,
+              "unit": "百万USD"
+            }
+          },
+          {
+            "label": "製品輸入価額",
+            "value": 5260,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS3004の総輸入。同じ製品の輸入で、投入部材の調達比ではない。",
+            "sourceIds": [
+              "mx-manufact-trade-pharma"
+            ],
+            "status": "observed"
+          }
+        ]
+      }
+    }
+  ]
+}

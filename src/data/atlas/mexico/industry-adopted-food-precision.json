@@ -1,0 +1,3068 @@
+{
+  "sources": {
+    "mx-food-ce2024": {
+      "title": "INEGI：Censos Económicos 2024・2023年の雇用、産出、センサス付加価値",
+      "url": "https://www.inegi.org.mx/app/tabulados/interactivos/?bd=CE2024&px=CE_GENNCE_1",
+      "year": 2023,
+      "scope": "2023年活動。Censos Económicos 2024の都市部・民間／国営等の対象事業所。州別雇用と全国同SCIAN値。全国総雇用・GDPを網羅する表ではなく、VACBはセンサス付加価値。"
+    },
+    "mx-food-alltech-2026": {
+      "title": "Alltech Agri-Food Outlook 2026：2025年配合飼料生産",
+      "url": "https://www.alltech.com/agri-food-outlook",
+      "year": 2025,
+      "scope": "出版社公式の2026年版報告書案内。Alltech Agri-Food Outlook 2026、pp.6–7。142か国・38,837工場の調査による配合飼料生産推計。メキシコと世界の分母を同じ表から取得。"
+    },
+    "mx-food-usda-grain-2026": {
+      "title": "USDA Mexico Post：Grain and Feed Annual 2026",
+      "url": "https://apps.fas.usda.gov/newgainapi/api/Report/DownloadReportByFileName?fileName=Grain%20and%20Feed%20Annual_Mexico%20City_Mexico_MX2026-0018.pdf",
+      "year": "2025/26商業年度・2026年3月公表",
+      "scope": "pp.6、8–11。2025年10月～2026年9月のトウモロコシ需給等の現地推計・見通し。加工飼料・肉の物量そのものではない。"
+    },
+    "mx-food-barthhaas-2026": {
+      "title": "BarthHaas Report 2025/2026：2025年ビール生産",
+      "url": "https://www.barthhaas.com/fileadmin/user_upload/02_PR_World-beer-market_2026.pdf",
+      "year": 2025,
+      "scope": "各国生産の集計推計。メキシコ147.87百万hl、丸めた世界約1,896百万hl、生産4位。輸出順位とは別。"
+    },
+    "mx-food-agriculture-beer-2025": {
+      "title": "メキシコ農業省：2025年ビール輸出",
+      "url": "https://www.gob.mx/agricultura/prensa/exportaciones-de-cerveza-mexicana-superan-6-400-mdd-y-llegan-a-98-paises",
+      "year": 2025,
+      "scope": "輸出価額・数量・輸出順位。36%という世界輸出価額比は2021～25年の平均で、2025年単年の世界シェアではない。"
+    },
+    "mx-food-agriculture-balance-2025": {
+      "title": "メキシコ農業省：2025年12月農産・食品貿易収支",
+      "url": "https://nube.agricultura.gob.mx/BalanzaComercial/diciembre2025.php",
+      "year": 2025,
+      "scope": "ビール輸出価額6,479,560千USD。農産食品全体と食品工業311は別範囲。"
+    },
+    "mx-food-wits-beer-2024": {
+      "title": "WITS／UN Comtrade：2024年メキシコの麦芽ビール輸出先",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/220300",
+      "year": 2024,
+      "scope": "H0 220300、総輸出、千USD・L。Data Méxicoの別改定系列と分子・分母を混合しない。"
+    },
+    "mx-food-crt-2024": {
+      "title": "CRT：2024年テキーラ生産・輸出・米国向け数量",
+      "url": "https://www.crt.org.mx/2025/03/05/continuara-el-trabajo-coordinado-para-fortalecer-a-la-agroindustria-tequilera/",
+      "year": 2024,
+      "scope": "同一CRT公表のL。濃度換算、在庫、国内生産品の国内販売は未確認。2025年の他系列とは混合しない。"
+    },
+    "mx-food-crt-2026": {
+      "title": "CRT：2026年前半テキーラ実績",
+      "url": "https://www.crt.org.mx/2026/08/07/24-de-julio-dia-nacional-del-tequila/",
+      "year": "2026年前半",
+      "scope": "生産302.1百万L、輸出214.4百万L。半期値であり、通年へ倍増換算しない。原産地は5州。"
+    },
+    "mx-food-wits-medical-2024": {
+      "title": "WITS／UN Comtrade：2024年メキシコHS9018輸出先",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/9018",
+      "year": 2024,
+      "scope": "H0 9018の医科・外科・歯科・獣医科器械等。HS90全体や全医療機器ではなく、SCIAN3391と同義でもない。"
+    },
+    "mx-food-wits-medical-world-2024": {
+      "title": "WITS／UN Comtrade：2024年HS9018報告国別輸出額",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/ALL/year/2024/tradeflow/Exports/partner/WLD/product/9018",
+      "year": 2024,
+      "scope": "取得時の公開報告国表内での輸出価額順位。EU集計を除外。未報告国・再輸出を含めた完全な世界生産シェアではない。"
+    },
+    "mx-food-wits-catheters-2024": {
+      "title": "WITS／UN Comtrade：2024年針・カテーテル・カニューレ等輸出",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/901839",
+      "year": 2024,
+      "scope": "H0 901839、HS9018の内数。千USD。取得表に比較可能な数量はない。"
+    },
+    "mx-food-wits-aero-engine-2024": {
+      "title": "WITS／UN Comtrade：2024年ジェット・ターボプロップ部品輸出",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/841191",
+      "year": 2024,
+      "scope": "H0 841191。エンジン部品のみ。完成航空機・航空産業全体ではない。千USD・kg。"
+    },
+    "mx-food-wits-aero-parts-2024": {
+      "title": "WITS／UN Comtrade：2024年その他の航空機部品輸出",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/880330",
+      "year": 2024,
+      "scope": "H0 880330。完成機を除く。新しいHSの8807へ分類変更された品との時系列接合は行わない。"
+    },
+    "mx-food-wits-prepared-meat-2024": {
+      "title": "WITS／UN Comtrade：2024年調製・保存肉輸出",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/1602",
+      "year": 2024,
+      "scope": "H0 1602。HS02の生鮮・冷凍肉等を含まず、屠畜から加工までを含むSCIAN3116全体とは別。"
+    },
+    "mx-food-datamexico-apparel-knit-2024": {
+      "title": "Data México：2024年ニット衣服・付属品貿易",
+      "url": "https://www.economia.gob.mx/datamexico/es/profile/product/apparel-and-accessories-accessories-of-knitted-or-crocheted",
+      "year": 2024,
+      "scope": "HS2012第61類、表示は百万USDに丸め済み。国際比較欄の2022年OECを最新世界生産値へ流用しない。"
+    },
+    "mx-food-datamexico-apparel-woven-2024": {
+      "title": "Data México：2024年非ニット衣服・付属品貿易",
+      "url": "https://economia.gob.mx/datamexico/es/profile/product/garments-and-accessories-accessories-knitted-knitted-or-crocheted",
+      "year": 2024,
+      "scope": "HS2012第62類、百万USDに丸め済み。国内分類315・繊維産業全体と同義ではない。"
+    },
+    "mx-food-cbrands-2026": {
+      "title": "Constellation Brands：2026年2月期10-K",
+      "url": "https://ir.cbrands.com/sec-filings/all-sec-filings/content/0000016918-26-000011/stz-20260228.htm",
+      "year": "2026年2月期",
+      "scope": "企業例。メキシコ製造と米国ブランド・販売権の関係。企業全体・部門業績はメキシコ国内のGDP・付加価値とは別。"
+    },
+    "mx-food-discus-2025": {
+      "title": "DISCUS：2025年米国蒸留酒供給者売上",
+      "url": "https://distilledspirits.org/news/distilled-spirits-council-annual-economic-briefing-2025/",
+      "year": 2025,
+      "scope": "米国市場のテキーラ・メスカル合計売上。メキシコ生産額・輸出額、テキーラ単独の世界シェアではない。"
+    },
+    "mx-food-ita-aerospace-2026": {
+      "title": "米国商務省：メキシコ航空産業の工程・地域集積",
+      "url": "https://www.trade.gov/knowledge-product/mexico-b-aerospace",
+      "year": "2026年公表",
+      "scope": "地域・工程の案内資料。範囲が不明な航空全体GDP比や世界順位は数量指標へ採用しない。"
+    }
+  },
+  "industries": [
+    {
+      "id": "food",
+      "label": "食品加工",
+      "family": "food",
+      "sectors": [
+        "manufacturing"
+      ],
+      "overview": "農産・畜産・水産原料を保存・調理・包装し、国内の食卓と域外市場へ届ける。",
+      "why": "2023年のセンサス製造業雇用の16.89%、付加価値の15.41%を占める。輸出だけでなく、原料調達と国内食品供給を合わせて読む。",
+      "process": "農林水産原料→食品の加工・保存・包装→卸売・低温配送→食卓／輸出。飼料・肉加工は内数として詳しく選べる。",
+      "boundary": "SCIAN311。飲料・たばこ312、農畜産原料の生産、飲食サービスを除く。食品全体の重量を単一単位へ合算しない。飼料・肉加工との重複を足し上げない。 地図は2023年の雇用で、産出数量ではない。VACBはGDPではない。",
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "2023年活動。Censos Económicos 2024の都市部・民間／国営等の対象事業所。州別雇用と全国同SCIAN値。全国総雇用・GDPを網羅する表ではなく、VACBはセンサス付加価値。 SCIAN 311。数値0のみzero、秘匿「-」はconfidential、SDはunknown。公開州の合計を全国値としない。州の案内位置は工場座標ではない。",
+        "nationalTotal": 1214261,
+        "sourceIds": [
+          "mx-food-ce2024"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": 18910,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": 26345,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": 5629,
+            "status": "available"
+          },
+          {
+            "state": "04",
+            "value": 5284,
+            "status": "available"
+          },
+          {
+            "state": "05",
+            "value": 25505,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": 7967,
+            "status": "available"
+          },
+          {
+            "state": "07",
+            "value": 29623,
+            "status": "available"
+          },
+          {
+            "state": "08",
+            "value": 27083,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": 71937,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": 19325,
+            "status": "available"
+          },
+          {
+            "state": "11",
+            "value": 81235,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": 22816,
+            "status": "available"
+          },
+          {
+            "state": "13",
+            "value": 26764,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": 131981,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 146203,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": 57067,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": 16912,
+            "status": "available"
+          },
+          {
+            "state": "18",
+            "value": 10326,
+            "status": "available"
+          },
+          {
+            "state": "19",
+            "value": 71489,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": 44504,
+            "status": "available"
+          },
+          {
+            "state": "21",
+            "value": 68281,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": 24935,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": 5738,
+            "status": "available"
+          },
+          {
+            "state": "24",
+            "value": 29546,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": 37336,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": 38361,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": 12867,
+            "status": "available"
+          },
+          {
+            "state": "28",
+            "value": 16279,
+            "status": "available"
+          },
+          {
+            "state": "29",
+            "value": 18323,
+            "status": "available"
+          },
+          {
+            "state": "30",
+            "value": 72455,
+            "status": "available"
+          },
+          {
+            "state": "31",
+            "value": 33166,
+            "status": "available"
+          },
+          {
+            "state": "32",
+            "value": 10069,
+            "status": "available"
+          }
+        ],
+        "regions": [
+          {
+            "state": "14",
+            "stage": "食品の加工・包装",
+            "note": "ハリスコの加工雇用と原料・国内市場の接続を読む。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "15",
+            "stage": "食品の加工・配送",
+            "note": "メヒコ州の加工雇用と大消費地への配送を読む。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "19",
+            "stage": "食品の加工・包装",
+            "note": "ヌエボレオンは加工製品・出荷の地域例。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "30",
+            "stage": "食品の加工・包装",
+            "note": "ベラクルスは加工地域の例。農産原料の収穫分布とは別。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "製造雇用（全国）",
+            "value": 1214261,
+            "unit": "人",
+            "year": 2023,
+            "definition": "地図と同じSCIAN・同じCE原表の全国値。家計調査の全国総雇用とは範囲が異なる。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "センサス製造業に占める雇用比",
+            "value": 16.887501,
+            "unit": "%",
+            "year": 2023,
+            "definition": "同じCEの当該業種雇用／製造業31–33雇用。全国総雇用比ではない。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE対象の製造業雇用",
+              "value": 7190294,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "センサス付加価値（VACB）",
+            "value": 830583.527,
+            "unit": "百万ペソ",
+            "year": 2023,
+            "definition": "CEの当該SCIANの付加価値。GDP、売上、輸出額とは別。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "センサス製造業に占める付加価値比",
+            "value": 15.407005,
+            "unit": "%",
+            "year": 2023,
+            "definition": "当該SCIANのVACB／同じCEの製造業31–33のVACB。GDP比ではない。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE対象の製造業VACB",
+              "value": 5390947.292,
+              "unit": "百万ペソ"
+            }
+          },
+          {
+            "label": "国内生産品の国内仕向け",
+            "value": null,
+            "unit": "品目別",
+            "year": "未確認",
+            "definition": "原産地別の国内販売・輸出、在庫等の整合が必要。生産＋輸入−輸出という見かけ供給やP−Xと区別する。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          },
+          {
+            "label": "製造量（品目・工程別）",
+            "value": null,
+            "unit": "品目別",
+            "year": "未確認",
+            "definition": "当該業種の品目・工程を揃えた生産量は未収録。センサス付加価値・雇用を物量へ換算しない。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          }
+        ],
+        "world": [
+          {
+            "label": "食品311の世界付加価値シェア",
+            "value": null,
+            "unit": "%",
+            "year": "未確認",
+            "definition": "同年・同分類の世界付加価値分母は未確認。異なる食品の重量を合算して世界生産比を作らない。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          }
+        ],
+        "trade": [
+          {
+            "label": "食品311全体の輸出量・相手国比",
+            "value": null,
+            "unit": "品目別",
+            "year": "未確認",
+            "definition": "農産食品貿易全体、ビール、飼料、調製肉の個別値を食品311全体へ流用しない。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "feed",
+      "label": "配合飼料",
+      "family": "food",
+      "sectors": [
+        "manufacturing"
+      ],
+      "overview": "穀物・油糧種子等を調合し、畜産・養殖が使える飼料を作る。",
+      "why": "2025年世界調査の配合飼料生産5位、世界比約2.91%。2025/26年のトウモロコシ輸入は消費の約51.46%という推計があり、食料供給と原料調達集中をつなぐ。",
+      "process": "国内・輸入穀物／油かす等→配合・粉砕・造粒→畜産・養殖→肉・乳・卵。",
+      "boundary": "SCIAN3111は食品311の内数。穀物の収穫量、飼料の重量、食肉の重量を合算しない。トウモロコシ輸入比は原料の指標であり、配合飼料そのものの輸入依存率ではない。 地図は2023年の雇用で、産出数量ではない。VACBはGDPではない。",
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "2023年活動。Censos Económicos 2024の都市部・民間／国営等の対象事業所。州別雇用と全国同SCIAN値。全国総雇用・GDPを網羅する表ではなく、VACBはセンサス付加価値。 SCIAN 3111。数値0のみzero、秘匿「-」はconfidential、SDはunknown。公開州の合計を全国値としない。州の案内位置は工場座標ではない。",
+        "nationalTotal": 34910,
+        "sourceIds": [
+          "mx-food-ce2024"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": 2350,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": 630,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": 36,
+            "status": "available"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "05",
+            "value": 394,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "07",
+            "value": 609,
+            "status": "available"
+          },
+          {
+            "state": "08",
+            "value": 616,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": 702,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": 1269,
+            "status": "available"
+          },
+          {
+            "state": "11",
+            "value": 3446,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "13",
+            "value": 338,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": 7281,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 2850,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": 454,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": 869,
+            "status": "available"
+          },
+          {
+            "state": "18",
+            "value": 150,
+            "status": "available"
+          },
+          {
+            "state": "19",
+            "value": 1725,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": 37,
+            "status": "available"
+          },
+          {
+            "state": "21",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "22",
+            "value": 2752,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "24",
+            "value": 1280,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": 749,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": 1884,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "28",
+            "value": 213,
+            "status": "available"
+          },
+          {
+            "state": "29",
+            "value": 242,
+            "status": "available"
+          },
+          {
+            "state": "30",
+            "value": 1542,
+            "status": "available"
+          },
+          {
+            "state": "31",
+            "value": 1422,
+            "status": "available"
+          },
+          {
+            "state": "32",
+            "value": 24,
+            "status": "available"
+          }
+        ],
+        "regions": [
+          {
+            "state": "14",
+            "stage": "配合・加工",
+            "note": "ハリスコは公開雇用・付加価値の大きい飼料加工地域。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "22",
+            "stage": "配合・加工",
+            "note": "ケレタロの加工と畜産需要の関係を読む。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "10",
+            "stage": "配合・加工",
+            "note": "ドゥランゴは公開加工額の地域例。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "30",
+            "stage": "配合・加工",
+            "note": "ベラクルスの加工地域。原料の国内産・輸入産は別途確認する。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "製造雇用（全国）",
+            "value": 34910,
+            "unit": "人",
+            "year": 2023,
+            "definition": "地図と同じSCIAN・同じCE原表の全国値。家計調査の全国総雇用とは範囲が異なる。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "センサス製造業に占める雇用比",
+            "value": 0.485516,
+            "unit": "%",
+            "year": 2023,
+            "definition": "同じCEの当該業種雇用／製造業31–33雇用。全国総雇用比ではない。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE対象の製造業雇用",
+              "value": 7190294,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "センサス付加価値（VACB）",
+            "value": 73012.44,
+            "unit": "百万ペソ",
+            "year": 2023,
+            "definition": "CEの当該SCIANの付加価値。GDP、売上、輸出額とは別。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "センサス製造業に占める付加価値比",
+            "value": 1.354353,
+            "unit": "%",
+            "year": 2023,
+            "definition": "当該SCIANのVACB／同じCEの製造業31–33のVACB。GDP比ではない。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE対象の製造業VACB",
+              "value": 5390947.292,
+              "unit": "百万ペソ"
+            }
+          },
+          {
+            "label": "国内生産品の国内仕向け",
+            "value": null,
+            "unit": "品目別",
+            "year": "未確認",
+            "definition": "原産地別の国内販売・輸出、在庫等の整合が必要。生産＋輸入−輸出という見かけ供給やP−Xと区別する。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          },
+          {
+            "label": "配合飼料生産量",
+            "value": 41.883,
+            "unit": "百万t",
+            "year": 2025,
+            "definition": "Alltech global compound-feed survey: 142 countries and 38,837 feed mills. Both numerator and denominator belong to this survey.",
+            "sourceIds": [
+              "mx-food-alltech-2026"
+            ],
+            "status": "estimate"
+          }
+        ],
+        "world": [
+          {
+            "label": "配合飼料の世界生産比",
+            "value": 2.908386,
+            "unit": "%",
+            "year": 2025,
+            "definition": "同じAlltech調査のメキシコ／世界配合飼料生産量。国の強制統計全数調査ではない。",
+            "sourceIds": [
+              "mx-food-alltech-2026"
+            ],
+            "status": "estimate",
+            "denominator": {
+              "label": "同調査の世界配合飼料生産",
+              "value": 1440.077,
+              "unit": "百万t"
+            }
+          },
+          {
+            "label": "配合飼料生産順位",
+            "value": 5,
+            "unit": "位",
+            "year": 2025,
+            "definition": "Alltech世界飼料調査の国別生産順位。",
+            "sourceIds": [
+              "mx-food-alltech-2026"
+            ],
+            "status": "estimate"
+          }
+        ],
+        "trade": [
+          {
+            "label": "原料トウモロコシの輸入量",
+            "value": 26.5,
+            "unit": "百万t",
+            "year": "2025/26 marketing year (October 2025–September 2026)",
+            "definition": "加工飼料の輸入量ではない。主に飼料・澱粉用の黄トウモロコシを含む穀物輸入。",
+            "sourceIds": [
+              "mx-food-usda-grain-2026"
+            ],
+            "status": "estimate",
+            "note": "2026年3月公表時点のUSDA現地推計。暦年値ではない。"
+          },
+          {
+            "label": "原料トウモロコシの輸入／消費",
+            "value": 51.456311,
+            "unit": "%",
+            "year": "2025/26 marketing year (October 2025–September 2026)",
+            "definition": "トウモロコシ輸入／同穀物消費。加工飼料の輸入依存率や白トウモロコシ・トルティーヤの輸入依存率ではない。",
+            "sourceIds": [
+              "mx-food-usda-grain-2026"
+            ],
+            "status": "estimate",
+            "denominator": {
+              "label": "同じUSDA推計のトウモロコシ消費",
+              "value": 51.5,
+              "unit": "百万t"
+            }
+          },
+          {
+            "label": "原料トウモロコシ輸入の米国比（下限）",
+            "value": 99,
+            "unit": "%超",
+            "year": "2025/26 marketing year (October 2025–September 2026)",
+            "definition": "USDA現地報告は99%以上が米国原産という見通し。加工飼料の輸出先比ではない。",
+            "sourceIds": [
+              "mx-food-usda-grain-2026"
+            ],
+            "status": "estimate"
+          },
+          {
+            "label": "加工飼料の輸出量・相手国比",
+            "value": null,
+            "unit": "t・%",
+            "year": "未確認",
+            "definition": "原料穀物の輸入量・原産地比を加工飼料製品の輸出へ流用しない。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "meat",
+      "label": "屠畜・肉加工",
+      "family": "food",
+      "sectors": [
+        "manufacturing"
+      ],
+      "overview": "家畜・家禽を屠畜し、食肉を包装・調理・保存して供給する。",
+      "why": "2023年センサス製造業付加価値の2.11%。飼料原料の輸入、畜産、加工、国内消費・輸出のつながりを、ビールなどのブランド型輸出と比較できる。",
+      "process": "飼料・畜産→屠畜→枝肉・部分肉／調理・保存肉→低温物流→国内市場／輸出。",
+      "boundary": "SCIAN3116は屠畜・包装・肉加工を含む。生体家畜や枝肉重量、HS02の生鮮・冷凍肉、HS1602の調製・保存肉はそれぞれ別系列。食品311の内数。 地図は2023年の雇用で、産出数量ではない。VACBはGDPではない。",
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "2023年活動。Censos Económicos 2024の都市部・民間／国営等の対象事業所。州別雇用と全国同SCIAN値。全国総雇用・GDPを網羅する表ではなく、VACBはセンサス付加価値。 SCIAN 3116。数値0のみzero、秘匿「-」はconfidential、SDはunknown。公開州の合計を全国値としない。州の案内位置は工場座標ではない。",
+        "nationalTotal": 132735,
+        "sourceIds": [
+          "mx-food-ce2024"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": 2557,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": 2617,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": 125,
+            "status": "available"
+          },
+          {
+            "state": "04",
+            "value": 117,
+            "status": "available"
+          },
+          {
+            "state": "05",
+            "value": 1945,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "07",
+            "value": 1307,
+            "status": "available"
+          },
+          {
+            "state": "08",
+            "value": 4357,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": 3045,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": 7461,
+            "status": "available"
+          },
+          {
+            "state": "11",
+            "value": 7733,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": 1061,
+            "status": "available"
+          },
+          {
+            "state": "13",
+            "value": 2538,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": 20684,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 13426,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": 6847,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": 886,
+            "status": "available"
+          },
+          {
+            "state": "18",
+            "value": 371,
+            "status": "available"
+          },
+          {
+            "state": "19",
+            "value": 11326,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": 1857,
+            "status": "available"
+          },
+          {
+            "state": "21",
+            "value": 2875,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "23",
+            "value": 255,
+            "status": "available"
+          },
+          {
+            "state": "24",
+            "value": 3583,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": 7338,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": 9570,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": 1020,
+            "status": "available"
+          },
+          {
+            "state": "28",
+            "value": 1182,
+            "status": "available"
+          },
+          {
+            "state": "29",
+            "value": 978,
+            "status": "available"
+          },
+          {
+            "state": "30",
+            "value": 4344,
+            "status": "available"
+          },
+          {
+            "state": "31",
+            "value": 9487,
+            "status": "available"
+          },
+          {
+            "state": "32",
+            "value": 421,
+            "status": "available"
+          }
+        ],
+        "regions": [
+          {
+            "state": "19",
+            "stage": "屠畜・包装・加工",
+            "note": "ヌエボレオンは公開付加価値が大きい加工地域。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "14",
+            "stage": "屠畜・包装・加工",
+            "note": "ハリスコは加工雇用の大きい地域。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "26",
+            "stage": "屠畜・包装・加工",
+            "note": "ソノラの加工雇用と畜産・出荷を読む。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "31",
+            "stage": "屠畜・包装・加工",
+            "note": "ユカタンの加工雇用を比較する。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "製造雇用（全国）",
+            "value": 132735,
+            "unit": "人",
+            "year": 2023,
+            "definition": "地図と同じSCIAN・同じCE原表の全国値。家計調査の全国総雇用とは範囲が異なる。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "センサス製造業に占める雇用比",
+            "value": 1.84603,
+            "unit": "%",
+            "year": 2023,
+            "definition": "同じCEの当該業種雇用／製造業31–33雇用。全国総雇用比ではない。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE対象の製造業雇用",
+              "value": 7190294,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "センサス付加価値（VACB）",
+            "value": 113858.446,
+            "unit": "百万ペソ",
+            "year": 2023,
+            "definition": "CEの当該SCIANの付加価値。GDP、売上、輸出額とは別。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "センサス製造業に占める付加価値比",
+            "value": 2.11203,
+            "unit": "%",
+            "year": 2023,
+            "definition": "当該SCIANのVACB／同じCEの製造業31–33のVACB。GDP比ではない。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE対象の製造業VACB",
+              "value": 5390947.292,
+              "unit": "百万ペソ"
+            }
+          },
+          {
+            "label": "国内生産品の国内仕向け",
+            "value": null,
+            "unit": "品目別",
+            "year": "未確認",
+            "definition": "原産地別の国内販売・輸出、在庫等の整合が必要。生産＋輸入−輸出という見かけ供給やP−Xと区別する。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          },
+          {
+            "label": "製造量（品目・工程別）",
+            "value": null,
+            "unit": "品目別",
+            "year": "未確認",
+            "definition": "当該業種の品目・工程を揃えた生産量は未収録。センサス付加価値・雇用を物量へ換算しない。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          }
+        ],
+        "world": [
+          {
+            "label": "肉加工3116の世界生産シェア",
+            "value": null,
+            "unit": "%",
+            "year": "未確認",
+            "definition": "屠畜・包装・加工を含む3116と同じ工程・品目の世界物量分母は未確認。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          }
+        ],
+        "trade": [
+          {
+            "label": "調製・保存肉の輸出額（HS1602）",
+            "value": 86.88195,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS H0 1602, prepared/preserved meat, meat offal or blood. Excludes raw meat in HS02 and is not equivalent to the full SCIAN3116 industry.",
+            "sourceIds": [
+              "mx-food-wits-prepared-meat-2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "調製・保存肉輸出額の米国比",
+            "value": 86.513689,
+            "unit": "%",
+            "year": 2024,
+            "definition": "同じWITS表のHS1602米国向け／メキシコ総輸出価額。生鮮・冷凍肉等を含む肉加工全体の比率ではない。",
+            "sourceIds": [
+              "mx-food-wits-prepared-meat-2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "メキシコHS1602総輸出額",
+              "value": 86.88195,
+              "unit": "百万USD"
+            }
+          },
+          {
+            "label": "肉加工全体の輸出量",
+            "value": null,
+            "unit": "品目別",
+            "year": "未確認",
+            "definition": "生鮮・冷凍肉と調製肉を種別・加工段階別に整理する必要がある。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "beer",
+      "label": "ビール",
+      "family": "food",
+      "sectors": [
+        "manufacturing"
+      ],
+      "overview": "麦芽などを醸造・包装し、国内消費と米国中心の輸出市場へ届ける。",
+      "why": "2025年の生産は世界4位・約7.8%、輸出は世界1位。米国向けは2024年WITS輸出価額の約96.29%で、原料加工・ブランド・市場の関係が特徴的。",
+      "process": "穀物→麦芽等→醸造→瓶・缶→国内販売／輸出→ブランド・販売網。",
+      "boundary": "SCIAN312120。食品311、麦芽製造、流通・飲食雇用とは別。生産4位と輸出1位を混同しない。輸出から引いた残りを国内生産品の国内消費としない。 地図は2023年の雇用で、産出数量ではない。VACBはGDPではない。",
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "2023年活動。Censos Económicos 2024の都市部・民間／国営等の対象事業所。州別雇用と全国同SCIAN値。全国総雇用・GDPを網羅する表ではなく、VACBはセンサス付加価値。 SCIAN 312120。数値0のみzero、秘匿「-」はconfidential、SDはunknown。公開州の合計を全国値としない。州の案内位置は工場座標ではない。",
+        "nationalTotal": 16214,
+        "sourceIds": [
+          "mx-food-ce2024"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "02",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "03",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "05",
+            "value": 3991,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "07",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "08",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "09",
+            "value": 1667,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "11",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "12",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "13",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "14",
+            "value": 1118,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "16",
+            "value": 55,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "18",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "19",
+            "value": 502,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": 1618,
+            "status": "available"
+          },
+          {
+            "state": "21",
+            "value": 61,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": 64,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "24",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "25",
+            "value": 274,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": 1618,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "28",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "29",
+            "value": 8,
+            "status": "available"
+          },
+          {
+            "state": "30",
+            "value": 476,
+            "status": "available"
+          },
+          {
+            "state": "31",
+            "value": 375,
+            "status": "available"
+          },
+          {
+            "state": "32",
+            "value": null,
+            "status": "confidential"
+          }
+        ],
+        "regions": [
+          {
+            "state": "05",
+            "stage": "醸造・包装",
+            "note": "コアウイラは公開雇用・付加価値の大きい醸造地域。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "26",
+            "stage": "醸造・包装",
+            "note": "ソノラの醸造雇用を読む。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "20",
+            "stage": "醸造・包装",
+            "note": "オアハカは雇用値が公開されている醸造地域の例。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "19",
+            "stage": "醸造・包装",
+            "note": "ヌエボレオンの公開雇用を比較する。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "製造雇用（全国）",
+            "value": 16214,
+            "unit": "人",
+            "year": 2023,
+            "definition": "地図と同じSCIAN・同じCE原表の全国値。家計調査の全国総雇用とは範囲が異なる。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "センサス製造業に占める雇用比",
+            "value": 0.225498,
+            "unit": "%",
+            "year": 2023,
+            "definition": "同じCEの当該業種雇用／製造業31–33雇用。全国総雇用比ではない。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE対象の製造業雇用",
+              "value": 7190294,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "センサス付加価値（VACB）",
+            "value": 100927.945,
+            "unit": "百万ペソ",
+            "year": 2023,
+            "definition": "CEの当該SCIANの付加価値。GDP、売上、輸出額とは別。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "センサス製造業に占める付加価値比",
+            "value": 1.872175,
+            "unit": "%",
+            "year": 2023,
+            "definition": "当該SCIANのVACB／同じCEの製造業31–33のVACB。GDP比ではない。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE対象の製造業VACB",
+              "value": 5390947.292,
+              "unit": "百万ペソ"
+            }
+          },
+          {
+            "label": "国内生産品の国内仕向け",
+            "value": null,
+            "unit": "品目別",
+            "year": "未確認",
+            "definition": "原産地別の国内販売・輸出、在庫等の整合が必要。生産＋輸入−輸出という見かけ供給やP−Xと区別する。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          },
+          {
+            "label": "ビール生産量",
+            "value": 147.87,
+            "unit": "百万hl",
+            "year": 2025,
+            "definition": "BarthHaas compiled country production estimates; the world total is rounded. This is production, not the export ranking.",
+            "sourceIds": [
+              "mx-food-barthhaas-2026"
+            ],
+            "status": "estimate"
+          }
+        ],
+        "world": [
+          {
+            "label": "ビール世界生産比（概数）",
+            "value": 7.799051,
+            "unit": "%",
+            "year": 2025,
+            "definition": "メキシコ147.87百万hl／同資料の丸めた世界約1,896百万hl。輸出シェアではない。",
+            "sourceIds": [
+              "mx-food-barthhaas-2026"
+            ],
+            "status": "estimate",
+            "denominator": {
+              "label": "世界ビール生産（概数）",
+              "value": 1896,
+              "unit": "百万hl"
+            },
+            "note": "約7.8%。世界分母が概数なので比率も概数。"
+          },
+          {
+            "label": "ビール生産順位",
+            "value": 4,
+            "unit": "位",
+            "year": 2025,
+            "definition": "BarthHaasの国別生産順位。輸出順位とは別。",
+            "sourceIds": [
+              "mx-food-barthhaas-2026"
+            ],
+            "status": "estimate"
+          },
+          {
+            "label": "ビール輸出額順位",
+            "value": 1,
+            "unit": "位",
+            "year": 2025,
+            "definition": "農業省が公表した輸出順位。生産順位4位とは別。36%は複数年平均であり、単年世界比として表示しない。",
+            "sourceIds": [
+              "mx-food-agriculture-beer-2025"
+            ],
+            "status": "observed"
+          }
+        ],
+        "trade": [
+          {
+            "label": "ビール輸出量",
+            "value": 4285,
+            "unit": "百万L",
+            "year": 2025,
+            "definition": "農業省の2025年輸出公表。生産から引いた残りは国内消費ではない。",
+            "sourceIds": [
+              "mx-food-agriculture-beer-2025",
+              "mx-food-agriculture-balance-2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "ビール輸出額",
+            "value": 6479.56,
+            "unit": "百万USD",
+            "year": 2025,
+            "definition": "農業省の2025年麦芽ビール輸出価額。",
+            "sourceIds": [
+              "mx-food-agriculture-beer-2025",
+              "mx-food-agriculture-balance-2025"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "ビール輸出価額の米国比",
+            "value": 96.286651,
+            "unit": "%",
+            "year": 2024,
+            "definition": "同じWITS H0 220300表の米国向け／メキシコ総輸出額。",
+            "sourceIds": [
+              "mx-food-wits-beer-2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "同表のメキシコビール総輸出額",
+              "value": 6497.161389999999,
+              "unit": "百万USD"
+            }
+          },
+          {
+            "label": "ビール輸出数量の米国比",
+            "value": 95.295757,
+            "unit": "%",
+            "year": 2024,
+            "definition": "同じWITS表のLによる米国向け／メキシコ総輸出数量。価額比とは別。",
+            "sourceIds": [
+              "mx-food-wits-beer-2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "同表のメキシコビール総輸出量",
+              "value": 4242.34,
+              "unit": "百万L"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "tequila",
+      "label": "テキーラ",
+      "family": "food",
+      "sectors": [
+        "manufacturing"
+      ],
+      "overview": "アガベを蒸留・熟成・瓶詰めし、原産地とブランドの価値で販売する。",
+      "why": "2023年製造雇用の約96.75%がハリスコに集中。2024年輸出数量の米国比は約83.66%。生産・ブランドの立地と販路の集中を合わせて読む。",
+      "process": "認められた原産地のアガベ→蒸留→熟成／瓶詰め→ブランド販売→国内市場／輸出。",
+      "boundary": "SCIAN312144。アガベ栽培、他の蒸留酒、流通と別。正規テキーラの原産地限定は蒸留酒全体の世界シェアではない。2025年はCRT・政府の値が一致しないため、同一CRT系列の2024年を使う。 地図は2023年の雇用で、産出数量ではない。VACBはGDPではない。",
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "2023年活動。Censos Económicos 2024の都市部・民間／国営等の対象事業所。州別雇用と全国同SCIAN値。全国総雇用・GDPを網羅する表ではなく、VACBはセンサス付加価値。 SCIAN 312144。数値0のみzero、秘匿「-」はconfidential、SDはunknown。公開州の合計を全国値としない。州の案内位置は工場座標ではない。",
+        "nationalTotal": 15096,
+        "sourceIds": [
+          "mx-food-ce2024"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "02",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "03",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "05",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "07",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "08",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "09",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "10",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "11",
+            "value": 269,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "13",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "14",
+            "value": 14606,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "16",
+            "value": 139,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "18",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "19",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "20",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "21",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "22",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "23",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "24",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "25",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "26",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "27",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "28",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "29",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "30",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "31",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "32",
+            "value": null,
+            "status": "unknown"
+          }
+        ],
+        "regions": [
+          {
+            "state": "14",
+            "stage": "蒸留・熟成・瓶詰め",
+            "note": "ハリスコに製造雇用が集中。栽培面積・ブランド本社・製造量は別の指標。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "11",
+            "stage": "蒸留・瓶詰め",
+            "note": "グアナフアトは製造雇用公開地域の例。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "16",
+            "stage": "蒸留・瓶詰め",
+            "note": "ミチョアカンは製造雇用公開地域の例。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "製造雇用（全国）",
+            "value": 15096,
+            "unit": "人",
+            "year": 2023,
+            "definition": "地図と同じSCIAN・同じCE原表の全国値。家計調査の全国総雇用とは範囲が異なる。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "センサス製造業に占める雇用比",
+            "value": 0.20995,
+            "unit": "%",
+            "year": 2023,
+            "definition": "同じCEの当該業種雇用／製造業31–33雇用。全国総雇用比ではない。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE対象の製造業雇用",
+              "value": 7190294,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "センサス付加価値（VACB）",
+            "value": 22635.296,
+            "unit": "百万ペソ",
+            "year": 2023,
+            "definition": "CEの当該SCIANの付加価値。GDP、売上、輸出額とは別。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "センサス製造業に占める付加価値比",
+            "value": 0.419876,
+            "unit": "%",
+            "year": 2023,
+            "definition": "当該SCIANのVACB／同じCEの製造業31–33のVACB。GDP比ではない。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE対象の製造業VACB",
+              "value": 5390947.292,
+              "unit": "百万ペソ"
+            }
+          },
+          {
+            "label": "国内生産品の国内仕向け",
+            "value": null,
+            "unit": "品目別",
+            "year": "未確認",
+            "definition": "原産地別の国内販売・輸出、在庫等の整合が必要。生産＋輸入−輸出という見かけ供給やP−Xと区別する。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          },
+          {
+            "label": "テキーラ生産量（同一CRT系列）",
+            "value": 495.8,
+            "unit": "百万L",
+            "year": 2024,
+            "definition": "CRT公表のL。純アルコール換算・濃度換算は未確認。",
+            "sourceIds": [
+              "mx-food-crt-2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "テキーラ生産量（半期）",
+            "value": 302.1,
+            "unit": "百万L",
+            "year": "2026 first half",
+            "definition": "CRTの2026年前半実績。通年へ外挿しない。",
+            "sourceIds": [
+              "mx-food-crt-2026"
+            ],
+            "status": "observed"
+          }
+        ],
+        "world": [
+          {
+            "label": "蒸留酒全体に占めるテキーラの世界生産比",
+            "value": null,
+            "unit": "%",
+            "year": "未確認",
+            "definition": "正規テキーラの原産地が限定されることは、蒸留酒全体の生産比・市場比を意味しない。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          }
+        ],
+        "trade": [
+          {
+            "label": "テキーラ輸出量（同一CRT系列）",
+            "value": 400.3,
+            "unit": "百万L",
+            "year": 2024,
+            "definition": "CRT2024年公表。生産と同じ公表系列だが在庫・国内仕向けは未確認。",
+            "sourceIds": [
+              "mx-food-crt-2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "テキーラ輸出数量の米国比",
+            "value": 83.662253,
+            "unit": "%",
+            "year": 2024,
+            "definition": "同じCRT公表の米国334.9百万L／輸出400.3百万L。2025年の政府値と混合しない。",
+            "sourceIds": [
+              "mx-food-crt-2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "同じCRT系列のテキーラ総輸出量",
+              "value": 400.3,
+              "unit": "百万L"
+            }
+          },
+          {
+            "label": "テキーラ輸出量（半期）",
+            "value": 214.4,
+            "unit": "百万L",
+            "year": "2026 first half",
+            "definition": "CRT2026年前半実績。2024年通年と同じ長さの期間ではない。",
+            "sourceIds": [
+              "mx-food-crt-2026"
+            ],
+            "status": "observed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "medical",
+      "label": "医療器械・消耗品",
+      "family": "precision",
+      "sectors": [
+        "manufacturing"
+      ],
+      "overview": "医科・歯科・検査用の非電子器械、医療消耗品や眼科用品を製造する。",
+      "why": "2023年製造業雇用の2.96%、付加価値の1.67%。2024年HS9018輸出の米国比は約94.08%で、カテーテル等も含む北米の精密製造・調達集中を読む。",
+      "process": "樹脂・金属・部材等→精密加工／成形・組立・滅菌→医療器械・消耗品→医療現場／輸出。",
+      "boundary": "地図はSCIAN3391で電子医療機器を含まない。貿易HS9018は電子器械等も含み、両者は同義ではない。HS90全体、高度画像診断機器、医療サービスの規模をこの製造量へ流用しない。 地図は2023年の雇用で、産出数量ではない。VACBはGDPではない。",
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "2023年活動。Censos Económicos 2024の都市部・民間／国営等の対象事業所。州別雇用と全国同SCIAN値。全国総雇用・GDPを網羅する表ではなく、VACBはセンサス付加価値。 SCIAN 3391。数値0のみzero、秘匿「-」はconfidential、SDはunknown。公開州の合計を全国値としない。州の案内位置は工場座標ではない。",
+        "nationalTotal": 212561,
+        "sourceIds": [
+          "mx-food-ce2024"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": 560,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": 90392,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": 19,
+            "status": "available"
+          },
+          {
+            "state": "04",
+            "value": 8,
+            "status": "available"
+          },
+          {
+            "state": "05",
+            "value": 1655,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": 26,
+            "status": "available"
+          },
+          {
+            "state": "07",
+            "value": 93,
+            "status": "available"
+          },
+          {
+            "state": "08",
+            "value": 52018,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": 3113,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": 39,
+            "status": "available"
+          },
+          {
+            "state": "11",
+            "value": 666,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": 92,
+            "status": "available"
+          },
+          {
+            "state": "13",
+            "value": 425,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": 7350,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 9169,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": 254,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": 2975,
+            "status": "available"
+          },
+          {
+            "state": "18",
+            "value": 62,
+            "status": "available"
+          },
+          {
+            "state": "19",
+            "value": 1849,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": 88,
+            "status": "available"
+          },
+          {
+            "state": "21",
+            "value": 1706,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": 852,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": 17,
+            "status": "available"
+          },
+          {
+            "state": "24",
+            "value": 303,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": 90,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": 15941,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": 107,
+            "status": "available"
+          },
+          {
+            "state": "28",
+            "value": 19287,
+            "status": "available"
+          },
+          {
+            "state": "29",
+            "value": 1751,
+            "status": "available"
+          },
+          {
+            "state": "30",
+            "value": 535,
+            "status": "available"
+          },
+          {
+            "state": "31",
+            "value": 1058,
+            "status": "available"
+          },
+          {
+            "state": "32",
+            "value": 61,
+            "status": "available"
+          }
+        ],
+        "regions": [
+          {
+            "state": "02",
+            "stage": "非電子器械・消耗品の製造",
+            "note": "バハカリフォルニアの製造雇用を読む。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "08",
+            "stage": "非電子器械・消耗品の製造",
+            "note": "チワワの製造雇用を読む。2州で全国同業種雇用の約67%。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "28",
+            "stage": "器械・消耗品の製造",
+            "note": "タマウリパスは公開製造雇用が大きい地域。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "26",
+            "stage": "器械・消耗品の製造",
+            "note": "ソノラの製造雇用と北米供給網を読む。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "製造雇用（全国）",
+            "value": 212561,
+            "unit": "人",
+            "year": 2023,
+            "definition": "地図と同じSCIAN・同じCE原表の全国値。家計調査の全国総雇用とは範囲が異なる。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "センサス製造業に占める雇用比",
+            "value": 2.956221,
+            "unit": "%",
+            "year": 2023,
+            "definition": "同じCEの当該業種雇用／製造業31–33雇用。全国総雇用比ではない。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE対象の製造業雇用",
+              "value": 7190294,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "センサス付加価値（VACB）",
+            "value": 89942.772,
+            "unit": "百万ペソ",
+            "year": 2023,
+            "definition": "CEの当該SCIANの付加価値。GDP、売上、輸出額とは別。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "センサス製造業に占める付加価値比",
+            "value": 1.668404,
+            "unit": "%",
+            "year": 2023,
+            "definition": "当該SCIANのVACB／同じCEの製造業31–33のVACB。GDP比ではない。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE対象の製造業VACB",
+              "value": 5390947.292,
+              "unit": "百万ペソ"
+            }
+          },
+          {
+            "label": "国内生産品の国内仕向け",
+            "value": null,
+            "unit": "品目別",
+            "year": "未確認",
+            "definition": "原産地別の国内販売・輸出、在庫等の整合が必要。生産＋輸入−輸出という見かけ供給やP−Xと区別する。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          },
+          {
+            "label": "製造量（品目・工程別）",
+            "value": null,
+            "unit": "品目別",
+            "year": "未確認",
+            "definition": "当該業種の品目・工程を揃えた生産量は未収録。センサス付加価値・雇用を物量へ換算しない。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          },
+          {
+            "label": "非電子医科・歯科・検査用品の製造雇用",
+            "value": 98300,
+            "unit": "人",
+            "year": 2023,
+            "definition": "SCIAN339111。地図の3391の内数。電子医療機器の製造・医療サービスではない。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "医療消耗品の製造雇用",
+            "value": 100847,
+            "unit": "人",
+            "year": 2023,
+            "definition": "SCIAN339112。地図の3391の内数。電子医療機器の製造・医療サービスではない。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "眼科用品の製造雇用",
+            "value": 13414,
+            "unit": "人",
+            "year": 2023,
+            "definition": "SCIAN339113。地図の3391の内数。電子医療機器の製造・医療サービスではない。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed"
+          }
+        ],
+        "world": [
+          {
+            "label": "HS9018輸出額の公開報告国表内順位",
+            "value": 4,
+            "unit": "位",
+            "year": 2024,
+            "definition": "WITSの取得した2024年報告国表、EU集計を除いて4位。世界生産順位・全医療機器順位ではない。",
+            "sourceIds": [
+              "mx-food-wits-medical-world-2024"
+            ],
+            "status": "observed",
+            "note": "未報告国・再輸出・製品範囲があり、完全な世界生産分母として扱わない。"
+          },
+          {
+            "label": "医療器械・消耗品の世界生産シェア",
+            "value": null,
+            "unit": "%",
+            "year": "未確認",
+            "definition": "同じ製品段階・分類の世界生産量分母は未確認。HS輸出額順位を生産比へ換算しない。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          }
+        ],
+        "trade": [
+          {
+            "label": "医科等の器械輸出額（HS9018）",
+            "value": 13874.037890000001,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS H0 9018, medical/surgical/dental/veterinary instruments including electro-medical apparatus. Not all HS90 or all medical devices. Ranking is among the reported countries in the retrieved WITS table; EU aggregate excluded to avoid double counting.",
+            "sourceIds": [
+              "mx-food-wits-medical-2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "HS9018輸出額の米国比",
+            "value": 94.079081,
+            "unit": "%",
+            "year": 2024,
+            "definition": "同じWITS H0 9018表の米国向け／メキシコ総輸出価額。SCIAN3391の国内出荷比ではない。",
+            "sourceIds": [
+              "mx-food-wits-medical-2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "メキシコHS9018総輸出額",
+              "value": 13874.037890000001,
+              "unit": "百万USD"
+            }
+          },
+          {
+            "label": "針・カテーテル等の輸出額（HS901839）",
+            "value": 4394.72086,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS H0 901839: needles, catheters, cannulae and the like, nes; a subset of HS9018. Trade quantities were not available in the retrieved table.",
+            "sourceIds": [
+              "mx-food-wits-catheters-2024"
+            ],
+            "status": "observed",
+            "note": "HS9018の内数。総額へ加算しない。"
+          },
+          {
+            "label": "針・カテーテル等輸出額の米国比",
+            "value": 94.06156,
+            "unit": "%",
+            "year": 2024,
+            "definition": "同じWITS H0 901839の米国向け／同品群メキシコ総輸出価額。",
+            "sourceIds": [
+              "mx-food-wits-catheters-2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "メキシコHS901839総輸出額",
+              "value": 4394.72086,
+              "unit": "百万USD"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "aerospace",
+      "label": "航空機部品・航空製造",
+      "family": "precision",
+      "sectors": [
+        "manufacturing"
+      ],
+      "overview": "エンジン部品・機体部品などを製造し、国外の完成機製造や航空機運用へ供給する。",
+      "why": "2023年センサス航空製造の雇用は45,915人。公開値の4州に約88.71%が集まる。2024年ジェット・ターボプロップ部品輸出価額の約94.59%が米国向けで、技能・認証・調達の分業を学べる。",
+      "process": "金属・複合材・部材→精密加工・部品組立→国外等の完成機・エンジン組立→運用・整備。",
+      "boundary": "地図はSCIAN3364の製造。完成機・部品・エンジン部品を別に統計化し、整備・設計サービスの雇用を合算しない。航空全体の範囲不明なGDP比・世界順位は採用しない。 地図は2023年の雇用で、産出数量ではない。VACBはGDPではない。",
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "2023年活動。Censos Económicos 2024の都市部・民間／国営等の対象事業所。州別雇用と全国同SCIAN値。全国総雇用・GDPを網羅する表ではなく、VACBはセンサス付加価値。 SCIAN 3364。数値0のみzero、秘匿「-」はconfidential、SDはunknown。公開州の合計を全国値としない。州の案内位置は工場座標ではない。",
+        "nationalTotal": 45915,
+        "sourceIds": [
+          "mx-food-ce2024"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "02",
+            "value": 14513,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "04",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "05",
+            "value": 2016,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "07",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "08",
+            "value": 13631,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "10",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "11",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "12",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "13",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "14",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "15",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "16",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "17",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "18",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "19",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "20",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "21",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "22",
+            "value": 5704,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "24",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "25",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "26",
+            "value": 6883,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "28",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "29",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "30",
+            "value": null,
+            "status": "unknown"
+          },
+          {
+            "state": "31",
+            "value": null,
+            "status": "confidential"
+          },
+          {
+            "state": "32",
+            "value": null,
+            "status": "confidential"
+          }
+        ],
+        "regions": [
+          {
+            "state": "02",
+            "stage": "加工・部品組立",
+            "note": "バハカリフォルニアの航空製造雇用。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "08",
+            "stage": "加工・部品組立",
+            "note": "チワワの航空製造雇用。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "26",
+            "stage": "加工・部品組立",
+            "note": "ソノラの航空製造雇用。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "22",
+            "stage": "航空製造",
+            "note": "ケレタロの地図値は製造雇用。整備・設計等の集積とは別に読む。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "製造雇用（全国）",
+            "value": 45915,
+            "unit": "人",
+            "year": 2023,
+            "definition": "地図と同じSCIAN・同じCE原表の全国値。家計調査の全国総雇用とは範囲が異なる。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "センサス製造業に占める雇用比",
+            "value": 0.638569,
+            "unit": "%",
+            "year": 2023,
+            "definition": "同じCEの当該業種雇用／製造業31–33雇用。全国総雇用比ではない。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE対象の製造業雇用",
+              "value": 7190294,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "センサス付加価値（VACB）",
+            "value": 25143.493,
+            "unit": "百万ペソ",
+            "year": 2023,
+            "definition": "CEの当該SCIANの付加価値。GDP、売上、輸出額とは別。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "センサス製造業に占める付加価値比",
+            "value": 0.466402,
+            "unit": "%",
+            "year": 2023,
+            "definition": "当該SCIANのVACB／同じCEの製造業31–33のVACB。GDP比ではない。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE対象の製造業VACB",
+              "value": 5390947.292,
+              "unit": "百万ペソ"
+            }
+          },
+          {
+            "label": "国内生産品の国内仕向け",
+            "value": null,
+            "unit": "品目別",
+            "year": "未確認",
+            "definition": "原産地別の国内販売・輸出、在庫等の整合が必要。生産＋輸入−輸出という見かけ供給やP−Xと区別する。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          },
+          {
+            "label": "製造量（品目・工程別）",
+            "value": null,
+            "unit": "品目別",
+            "year": "未確認",
+            "definition": "当該業種の品目・工程を揃えた生産量は未収録。センサス付加価値・雇用を物量へ換算しない。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          }
+        ],
+        "world": [
+          {
+            "label": "航空製造全体の世界生産比",
+            "value": null,
+            "unit": "%",
+            "year": "未確認",
+            "definition": "完成機、エンジン、部品、整備サービスを区分した比較可能な世界分母は未確認。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          }
+        ],
+        "trade": [
+          {
+            "label": "ジェット等エンジン部品の輸出額",
+            "value": 1147.86868,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS H0 841191, parts of turbo-jets/turbo-propellers. Not the whole aerospace industry, assembled aircraft or all types of engines.",
+            "sourceIds": [
+              "mx-food-wits-aero-engine-2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "ジェット等エンジン部品の輸出重量",
+            "value": 6496520,
+            "unit": "kg",
+            "year": 2024,
+            "definition": "同じWITS H0 841191の部品重量。国内生産量・完成機台数・エンジン台数や性能へ換算しない。",
+            "sourceIds": [
+              "mx-food-wits-aero-engine-2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "ジェット等エンジン部品輸出額の米国比",
+            "value": 94.586941,
+            "unit": "%",
+            "year": 2024,
+            "definition": "同じWITS H0 841191表の米国向け／メキシコ総輸出額。",
+            "sourceIds": [
+              "mx-food-wits-aero-engine-2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "メキシコHS841191総輸出額",
+              "value": 1147.86868,
+              "unit": "百万USD"
+            }
+          },
+          {
+            "label": "その他の航空機部品の輸出額",
+            "value": 395.95804,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "HS H0 880330, aircraft parts nes. Not complete aircraft. Current HS nomenclatures move parts into HS8807; no cross-version series is joined here.",
+            "sourceIds": [
+              "mx-food-wits-aero-parts-2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "その他の航空機部品輸出額の米国比",
+            "value": 86.965672,
+            "unit": "%",
+            "year": 2024,
+            "definition": "同じWITS H0 880330表の米国向け／メキシコ総輸出額。",
+            "sourceIds": [
+              "mx-food-wits-aero-parts-2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "メキシコHS880330総輸出額",
+              "value": 395.95804,
+              "unit": "百万USD"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "apparel",
+      "label": "衣服",
+      "family": "textiles",
+      "sectors": [
+        "manufacturing"
+      ],
+      "overview": "糸・生地を調達し、裁断・縫製・仕上げによって衣服を作る。",
+      "why": "2023年の製造業雇用の4.13%。2024年非ニット衣服の輸出は米国へ約93.65%集中する一方、同品群輸入価額の中国比は約38.62%。雇用・輸出加工・国内市場の競争を比較できる。",
+      "process": "国内・輸入糸／生地→ニット・裁断・縫製・仕上げ→衣服→国内販売／輸出。",
+      "boundary": "SCIAN315。糸・生地の繊維産業313、その他繊維製品314、革・履物316とは別。HS61／62と完全一致しない。欠測大国のある表から最新世界生産順位・比率を確定しない。 地図は2023年の雇用で、産出数量ではない。VACBはGDPではない。",
+      "map": {
+        "kind": "employment",
+        "year": 2023,
+        "unit": "人",
+        "definition": "2023年活動。Censos Económicos 2024の都市部・民間／国営等の対象事業所。州別雇用と全国同SCIAN値。全国総雇用・GDPを網羅する表ではなく、VACBはセンサス付加価値。 SCIAN 315。数値0のみzero、秘匿「-」はconfidential、SDはunknown。公開州の合計を全国値としない。州の案内位置は工場座標ではない。",
+        "nationalTotal": 296915,
+        "sourceIds": [
+          "mx-food-ce2024"
+        ],
+        "values": [
+          {
+            "state": "01",
+            "value": 9195,
+            "status": "available"
+          },
+          {
+            "state": "02",
+            "value": 12097,
+            "status": "available"
+          },
+          {
+            "state": "03",
+            "value": 201,
+            "status": "available"
+          },
+          {
+            "state": "04",
+            "value": 8188,
+            "status": "available"
+          },
+          {
+            "state": "05",
+            "value": 14193,
+            "status": "available"
+          },
+          {
+            "state": "06",
+            "value": 318,
+            "status": "available"
+          },
+          {
+            "state": "07",
+            "value": 2943,
+            "status": "available"
+          },
+          {
+            "state": "08",
+            "value": 1121,
+            "status": "available"
+          },
+          {
+            "state": "09",
+            "value": 15861,
+            "status": "available"
+          },
+          {
+            "state": "10",
+            "value": 8080,
+            "status": "available"
+          },
+          {
+            "state": "11",
+            "value": 16926,
+            "status": "available"
+          },
+          {
+            "state": "12",
+            "value": 2943,
+            "status": "available"
+          },
+          {
+            "state": "13",
+            "value": 14612,
+            "status": "available"
+          },
+          {
+            "state": "14",
+            "value": 11491,
+            "status": "available"
+          },
+          {
+            "state": "15",
+            "value": 41351,
+            "status": "available"
+          },
+          {
+            "state": "16",
+            "value": 4184,
+            "status": "available"
+          },
+          {
+            "state": "17",
+            "value": 1742,
+            "status": "available"
+          },
+          {
+            "state": "18",
+            "value": 561,
+            "status": "available"
+          },
+          {
+            "state": "19",
+            "value": 5218,
+            "status": "available"
+          },
+          {
+            "state": "20",
+            "value": 5678,
+            "status": "available"
+          },
+          {
+            "state": "21",
+            "value": 56539,
+            "status": "available"
+          },
+          {
+            "state": "22",
+            "value": 4704,
+            "status": "available"
+          },
+          {
+            "state": "23",
+            "value": 352,
+            "status": "available"
+          },
+          {
+            "state": "24",
+            "value": 2867,
+            "status": "available"
+          },
+          {
+            "state": "25",
+            "value": 1603,
+            "status": "available"
+          },
+          {
+            "state": "26",
+            "value": 2700,
+            "status": "available"
+          },
+          {
+            "state": "27",
+            "value": 1197,
+            "status": "available"
+          },
+          {
+            "state": "28",
+            "value": 2984,
+            "status": "available"
+          },
+          {
+            "state": "29",
+            "value": 13027,
+            "status": "available"
+          },
+          {
+            "state": "30",
+            "value": 6707,
+            "status": "available"
+          },
+          {
+            "state": "31",
+            "value": 26142,
+            "status": "available"
+          },
+          {
+            "state": "32",
+            "value": 1190,
+            "status": "available"
+          }
+        ],
+        "regions": [
+          {
+            "state": "21",
+            "stage": "衣服製造",
+            "note": "プエブラは衣服製造雇用が大きい地域。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "15",
+            "stage": "衣服製造",
+            "note": "メヒコ州の衣服製造雇用を読む。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "31",
+            "stage": "衣服製造",
+            "note": "ユカタンの衣服製造雇用を比較する。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          },
+          {
+            "state": "11",
+            "stage": "衣服製造",
+            "note": "グアナフアトの衣服製造雇用。繊維・履物との重複を分ける。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "domestic": [
+          {
+            "label": "製造雇用（全国）",
+            "value": 296915,
+            "unit": "人",
+            "year": 2023,
+            "definition": "地図と同じSCIAN・同じCE原表の全国値。家計調査の全国総雇用とは範囲が異なる。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "センサス製造業に占める雇用比",
+            "value": 4.129386,
+            "unit": "%",
+            "year": 2023,
+            "definition": "同じCEの当該業種雇用／製造業31–33雇用。全国総雇用比ではない。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE対象の製造業雇用",
+              "value": 7190294,
+              "unit": "人"
+            }
+          },
+          {
+            "label": "センサス付加価値（VACB）",
+            "value": 59352.87,
+            "unit": "百万ペソ",
+            "year": 2023,
+            "definition": "CEの当該SCIANの付加価値。GDP、売上、輸出額とは別。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "センサス製造業に占める付加価値比",
+            "value": 1.100973,
+            "unit": "%",
+            "year": 2023,
+            "definition": "当該SCIANのVACB／同じCEの製造業31–33のVACB。GDP比ではない。",
+            "sourceIds": [
+              "mx-food-ce2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "CE対象の製造業VACB",
+              "value": 5390947.292,
+              "unit": "百万ペソ"
+            }
+          },
+          {
+            "label": "国内生産品の国内仕向け",
+            "value": null,
+            "unit": "品目別",
+            "year": "未確認",
+            "definition": "原産地別の国内販売・輸出、在庫等の整合が必要。生産＋輸入−輸出という見かけ供給やP−Xと区別する。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          },
+          {
+            "label": "製造量（品目・工程別）",
+            "value": null,
+            "unit": "品目別",
+            "year": "未確認",
+            "definition": "当該業種の品目・工程を揃えた生産量は未収録。センサス付加価値・雇用を物量へ換算しない。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          }
+        ],
+        "world": [
+          {
+            "label": "衣服の最新世界生産シェア",
+            "value": null,
+            "unit": "%",
+            "year": "未確認",
+            "definition": "Data México国際欄は2022年／OEC。別の2024年報告国表には主要輸出国の欠測があり、最新世界順位・比率を確定しない。",
+            "sourceIds": [],
+            "status": "unconfirmed",
+            "note": "数量・年・製品段階を揃えた値は本データに未収録。雇用、能力、輸出額を代用しない。"
+          }
+        ],
+        "trade": [
+          {
+            "label": "ニット衣服・付属品輸出額（HS61）",
+            "value": 3038,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "Data México national figures, HS2012 chapters61/62, displayed rounded to million USD. Worldwide comparison on these pages is 2022/OEC, so not a current world-production share.",
+            "sourceIds": [
+              "mx-food-datamexico-apparel-knit-2024"
+            ],
+            "status": "observed",
+            "note": "百万USDに丸めた公開値。SCIAN315と完全一致しない。"
+          },
+          {
+            "label": "非ニット衣服・付属品輸出額（HS62）",
+            "value": 2663,
+            "unit": "百万USD",
+            "year": 2024,
+            "definition": "Data México national figures, HS2012 chapters61/62, displayed rounded to million USD. Worldwide comparison on these pages is 2022/OEC, so not a current world-production share.",
+            "sourceIds": [
+              "mx-food-datamexico-apparel-woven-2024"
+            ],
+            "status": "observed"
+          },
+          {
+            "label": "非ニット衣服輸出額の米国比",
+            "value": 93.653774,
+            "unit": "%",
+            "year": 2024,
+            "definition": "同じData México HS62表の米国2,494／輸出2,663百万USD。丸めた値からの計算。",
+            "sourceIds": [
+              "mx-food-datamexico-apparel-woven-2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "メキシコHS62総輸出額（丸め値）",
+              "value": 2663,
+              "unit": "百万USD"
+            }
+          },
+          {
+            "label": "非ニット衣服輸入額の中国比",
+            "value": 38.616521,
+            "unit": "%",
+            "year": 2024,
+            "definition": "同じData México HS62表の中国1,150／輸入2,978百万USD。原料生地の調達比ではなく、衣服等輸入の原産地比。",
+            "sourceIds": [
+              "mx-food-datamexico-apparel-woven-2024"
+            ],
+            "status": "observed",
+            "denominator": {
+              "label": "メキシコHS62総輸入額（丸め値）",
+              "value": 2978,
+              "unit": "百万USD"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

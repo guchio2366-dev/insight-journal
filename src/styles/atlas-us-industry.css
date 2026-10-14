@@ -1,0 +1,58 @@
+/* US only; no Canada/Mexico/shared-sector changes. */
+[data-us-industry] [hidden]{display:none!important}
+[data-us-industry] .atlas-primary-grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
+[data-us-industry] .atlas-map-column{position:static!important;min-width:0}
+[data-us-industry] .atlas-map-frame.us-industry-map-frame{min-height:0!important;max-height:none!important;height:auto!important;aspect-ratio:5/3!important;background:#e6eef0;overflow:hidden;position:relative}
+[data-us-map]{display:block;width:100%;height:100%;touch-action:none}
+[data-us-industry] .atlas-map-frame .atlas-layer-caption{bottom:6px!important}
+.us-map-context{font:12px var(--sans);fill:#425853}
+.us-industry-overlay,.us-industry-points{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.us-industry-pin{pointer-events:auto;cursor:pointer}
+.us-industry-pin:focus-visible{outline:2px solid #28454f}
+.us-industry-map-label{position:absolute;box-sizing:border-box;padding:3px 6px 3px 17px;border:1px solid #c2cec3;border-radius:4px;background:#fffef5f2;color:#233f47;font:700 12px/20px var(--sans);white-space:nowrap;text-align:left;cursor:pointer;pointer-events:auto;transition:none!important}
+.us-industry-map-label::before,.us-industry-key button::before{content:'';width:7px;height:7px;background:var(--us-color);border-radius:50%;display:inline-block;flex:none}
+.us-industry-map-label::before{position:absolute;left:5px;top:10px}
+.us-industry-map-label strong{display:block;font:700 12px/20px var(--sans);overflow:hidden;text-overflow:ellipsis}
+.us-industry-map-label small{display:block;font:10px/15px var(--sans);color:#445d54;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.us-industry-map-label[aria-pressed=true]{box-shadow:inset 0 0 0 2px var(--us-color);background:#fffdf0}
+.us-industry-map-label.is-context{opacity:.52}
+[data-us-industry] :is(button,a,input):focus-visible{outline:3px solid #a95135;outline-offset:2px}
+.us-industry-map-tools{position:absolute;top:8px;right:8px;display:flex;gap:4px}
+.us-industry-map-tools button{min-width:34px;min-height:34px;border:1px solid #b9c9c2;border-radius:4px;background:#fffdf6;color:#254751;font:700 13px var(--sans);cursor:pointer}
+.us-map-note{font-size:12px;line-height:1.6;margin:8px 0;color:#4c625b}
+.us-industry-key{display:flex;flex-wrap:wrap;gap:5px}
+.us-industry-key button{display:flex;align-items:center;gap:6px;min-height:34px;border:1px solid #ccd6cb;border-radius:4px;background:#fffdf6;color:#28424a;text-align:left;padding:5px 8px;font:12px/1.4 var(--sans);cursor:pointer}
+.us-industry-key button[aria-pressed=true]{border-color:var(--us-color);box-shadow:inset 0 0 0 1px var(--us-color)}
+.us-industry-reading{padding:16px;background:#fffdf6;border:1px solid #d6ddcf;border-radius:6px;max-height:calc(100dvh - 270px);overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;font-size:14px;line-height:1.8}
+.us-industry-reading h2{font-size:21px;line-height:1.5;margin:0 0 12px}
+.us-industry-reading h3{font-size:15px;line-height:1.6;margin:16px 0 6px}
+.us-industry-reading p{margin:0 0 12px}
+.us-industry-reading a{display:block;font-size:12px;line-height:1.7;overflow-wrap:anywhere;margin:5px 0}
+.us-industry-lead{font-weight:600;color:#294b4d}
+.us-industry-actions{display:flex;flex-wrap:wrap;gap:8px;font-size:12px;margin:10px 0}
+.us-industry-actions button,.us-industry-site-list button{min-height:38px;padding:7px;border:1px solid #b8c9bf;background:#f8faf2;color:#29474b;border-radius:4px;font:inherit;cursor:pointer}
+.us-industry-site-list{display:grid;gap:6px;margin-top:8px}
+.us-industry-site-list button{text-align:left;font-size:12px}
+.us-industry-reading summary{min-height:38px;cursor:pointer;padding:6px 0;font-size:12px;line-height:1.6}
+.us-industry-statistics{margin-top:20px;border-top:1px solid #ccd7ca;padding-top:14px}
+.us-industry-statistics header h2{font-size:21px;margin:0 0 6px}
+.us-industry-statistics header p{font-size:12px;line-height:1.6;margin:0 0 14px}
+.us-industry-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}
+.us-industry-stat-card{min-width:0;background:#fffdf6;border:1px solid #d6ddcf;border-radius:6px;padding:14px;font-size:13px;line-height:1.7}
+.us-industry-stat-card h3{font-size:16px;margin:0 0 10px}
+.us-industry-stat-card dl{margin:0}
+.us-industry-stat-card dl>div+div{border-top:1px solid #e1e6d9;margin-top:12px;padding-top:10px}
+.us-industry-stat-card dt{font-size:12px;color:#4b635b}
+.us-industry-stat-card dd{margin:4px 0;font-weight:700;font-size:19px;line-height:1.5;overflow-wrap:anywhere}
+.us-industry-stat-card p{font-size:12px;margin:5px 0}
+.us-industry-stat-card a{font-size:12px;overflow-wrap:anywhere}
+.us-industry-stat-card [data-status=missing] dd{font-size:15px;color:#6b6860}
+.us-industry-legacy-statistics{margin:20px 0}
+.us-industry-legacy-statistics>summary{cursor:pointer;padding:10px 0;font-weight:700}
+.us-industry-legacy-statistics .industry-national{position:static;max-height:none}
+.us-industry-legacy-statistics .industry-reading{margin:20px 0}
+@media(min-width:1200px){.atlas-desktop-shell [data-us-industry] .atlas-primary-grid{grid-template-columns:minmax(0,1fr) 340px!important}}
+@media(min-width:1600px){.atlas-desktop-shell [data-us-industry] .atlas-primary-grid{grid-template-columns:minmax(0,1fr) 350px!important}}
+@media(min-width:960px) and (max-width:1199px){.atlas-desktop-shell:has(>[data-us-industry]){display:grid;grid-template-columns:160px minmax(0,1fr);gap:12px;padding:10px 12px 24px}.atlas-desktop-shell:has(>[data-us-industry]) .atlas-news{position:sticky;top:10px;width:auto;height:calc(100dvh - 82px)}[data-us-industry] .atlas-primary-grid{grid-template-columns:minmax(0,1fr) 260px!important;gap:12px}.us-industry-reading{padding:12px;font-size:13px}}
+@media(max-width:959px){[data-us-industry] .atlas-primary-grid{grid-template-columns:minmax(0,1fr)}.us-industry-reading{max-height:none}.us-industry-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}[data-us-industry] .atlas-map-frame.us-industry-map-frame{min-height:620px!important}.us-industry-map-label{font-size:11px}}
+@media(max-width:550px){.us-industry-stat-grid{grid-template-columns:minmax(0,1fr)}[data-us-industry] .atlas-layer-caption{font-size:10px;bottom:6px;left:7px;right:7px}.us-industry-map-tools{top:4px;right:4px}.us-industry-map-tools button{min-width:30px;min-height:30px}}

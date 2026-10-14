@@ -4,10 +4,10 @@ import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 const base=process.env.EUROPE_REVIEW_BASE_URL??'http://127.0.0.1:4322/insight-journal/';
-const output=process.env.EUROPE_INDUSTRY_OUTPUT??'docs/review/europe-industry-2026-10-12/images';
+const output=process.env.EUROPE_INDUSTRY_OUTPUT??'docs/review/europe-industry-2026-10-14/images';
 await mkdir(output,{recursive:true});
-const browser=await chromium.launch({executablePath:process.env.EUROPE_REVIEW_CHROMIUM_PATH??'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']});
-const result={viewport:{width:1920,height:1080},deviceScaleFactor:1,checks:[],screenshots:[]};
+const browser=await chromium.launch({executablePath:process.env.EUROPE_REVIEW_CHROMIUM_PATH??'/usr/bin/chromium',headless:true,chromiumSandbox:true,ignoreDefaultArgs:['--unsafely-disable-devtools-self-xss-warnings']});
+const result={viewport:{width:1920,height:1080},deviceScaleFactor:1,sandboxRequired:true,browserVersion:browser.version(),checks:[],screenshots:[]};
 try{
  for(const renderer of ['auto','static']){
   const context=await browser.newContext({viewport:result.viewport,deviceScaleFactor:1});
@@ -39,12 +39,15 @@ try{
    await pointer.click();await settle();stable(initial,await snapshot());
    await page.locator('[data-eu-industry-all]').click();await settle();
    const groups=await page.locator('[data-eu-industry-group]:visible').evaluateAll(nodes=>nodes.map(n=>n.dataset.euIndustryGroup));
+   assert.equal(await page.locator('[data-eu-industry-evidence]:visible').count(),groups.length);
    await page.locator('[data-eu-industry-all]').focus();await page.keyboard.press('ArrowRight');await settle();stable(initial,await snapshot());
    assert.equal(new URL(page.url()).searchParams.get('industryGroup'),groups[0]);
    await page.keyboard.press('Escape');await settle();assert.equal(new URL(page.url()).searchParams.has('industryGroup'),false);
    const visited=new Set();
    for(const group of groups){
     await page.locator(`[data-eu-industry-group="${group}"]`).click();await settle();stable(initial,await snapshot());
+    assert.equal(await page.locator('[data-eu-industry-evidence]:visible').count(),1);
+    assert.equal(await page.locator('[data-eu-industry-evidence]:visible').getAttribute('data-eu-industry-evidence'),group);
     assert.equal(await page.locator('[data-eu-single]').isVisible(),true);
     const ids=await page.locator('[data-eu-map-kind="feature"][data-eu-industry]:visible').evaluateAll(nodes=>nodes.map(n=>n.dataset.euMapPlace));
     for(const id of ids.filter(id=>!visited.has(id))){
@@ -71,7 +74,7 @@ try{
    console.log(JSON.stringify({renderer,sector,groups:groups.length,labels}));
   }
   await page.locator('[data-eu-industry-sector="manufacturing"]').click();await settle();
-  await page.locator('[data-eu-industry-group="航空機"]').click();await settle();await capture('manufacturing-aircraft');
+  await page.locator('[data-eu-industry-group="民間航空機"]').click();await settle();await capture('manufacturing-aircraft');
   await page.locator('[data-eu-single]').click();await settle();await capture('manufacturing-aircraft-only');
   assert.deepEqual(errors,[]);await context.close();
  }

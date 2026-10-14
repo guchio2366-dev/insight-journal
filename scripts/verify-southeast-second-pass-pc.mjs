@@ -41,22 +41,22 @@ try{
  assert.match(await page.locator('.southeast-forest-connections').textContent(),/森林面積.*丸太材.*木材製品の輸出/s);
  check('forest separates JRC map, FAO forest area and wood production, and HS44 exports');await shot('forest-map');await shot('forest-statistics','.southeast-forest-connections');
  await page.locator('.southeast-forest-connections a[href*="industryKind=wood"]').click();
- await page.waitForFunction(()=>document.querySelector('[data-southeast-industry-kind="wood"]')?.getAttribute('aria-pressed')==='true');await mapReady();
+ await page.waitForFunction(()=>document.querySelector('button[data-southeast-industry-kind="wood"]')?.getAttribute('aria-pressed')==='true');await mapReady();
  assert.equal(new URL(page.url()).searchParams.get('industryKind'),'wood');await page.reload({waitUntil:'networkidle'});
- await page.waitForFunction(()=>document.querySelector('[data-southeast-industry-kind="wood"]')?.getAttribute('aria-pressed')==='true');await mapReady();
+ await page.waitForFunction(()=>document.querySelector('button[data-southeast-industry-kind="wood"]')?.getAttribute('aria-pressed')==='true');await mapReady();
  check('forest to wood industry survives reload');await shot('wood-industry');
  await open('agriculture/?topic=rubber');assert.equal(await page.locator('.southeast-rubber-bridge').isVisible(),true);
- await page.locator('.southeast-rubber-bridge a').click();await page.waitForFunction(()=>document.querySelector('[data-southeast-industry-kind="rubber"]')?.getAttribute('aria-pressed')==='true');await mapReady();
+ await page.locator('.southeast-rubber-bridge a').click();await page.waitForFunction(()=>document.querySelector('button[data-southeast-industry-kind="rubber"]')?.getAttribute('aria-pressed')==='true');await mapReady();
  await page.locator('[data-southeast-industry-point="rayong-tires"]:visible').waitFor();await page.locator('[data-southeast-industry-point="southern-rubber"]:visible').waitFor();
  check('rubber distribution opens rendered rubber and tire sites');await shot('rubber-industry');
  await page.reload({waitUntil:'networkidle'});await mapReady();await page.locator('[data-southeast-industry-point="rayong-tires"]:visible').waitFor();
  check('rubber industry map and selected category survive reload');await shot('rubber-industry-reloaded');
- await open('industry/');assert.equal(await page.locator('[data-southeast-industry-sector]').count(),4);assert.equal(await page.locator('[data-industry-legend]').isVisible(),false);
+ await open('industry/');assert.equal(await page.locator('button[data-southeast-industry-sector]').count(),4);assert.equal(await page.locator('[data-industry-legend]').isVisible(),false);
  const cameraBefore=await page.locator('[data-asia-atlas]').getAttribute('data-map-camera');
- await page.locator('[data-southeast-industry-sector="resource"]').click();assert.equal(await page.locator('[data-southeast-industry-sector="resource"]').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('[data-southeast-industry-point="southern-rubber"]').getAttribute('aria-pressed'),'false');
- await page.locator('[data-southeast-industry-sector="manufacturing"]').click();await page.locator('[data-southeast-industry-kind="rubber"]').click();
+ await page.locator('button[data-southeast-industry-sector="resource"]').click();assert.equal(await page.locator('button[data-southeast-industry-sector="resource"]').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('[data-southeast-industry-point="southern-rubber"]').getAttribute('aria-pressed'),'false');
+ await page.locator('button[data-southeast-industry-sector="manufacturing"]').click();await page.locator('button[data-southeast-industry-kind="rubber"]').click();
  assert.equal(await page.locator('[data-southeast-industry-point="rayong-tires"]').isVisible(),true);assert.equal(await page.locator('[data-asia-atlas]').getAttribute('data-map-camera'),cameraBefore);await shot('manufacturing-rubber');
- await page.locator('[data-southeast-industry-sector="services"]').click();assert.equal(await page.locator('[data-southeast-industry-kind="tourism"]').isVisible(),true);await page.reload({waitUntil:'networkidle'});await mapReady();assert.equal(await page.locator('[data-southeast-industry-sector="services"]').getAttribute('aria-pressed'),'true');
+ await page.locator('button[data-southeast-industry-sector="services"]').click();assert.equal(await page.locator('button[data-southeast-industry-kind="tourism"]').isVisible(),true);await page.reload({waitUntil:'networkidle'});await mapReady();assert.equal(await page.locator('button[data-southeast-industry-sector="services"]').getAttribute('aria-pressed'),'true');
  check('three industry sectors retain site locations, neutral background and reload state');await shot('service-industry');
  await open('nature/?topic=basins');await page.waitForFunction(()=>document.querySelector('[data-hydrology-status]')?.textContent==='');
  assert.equal(await page.locator('[data-basin-shortcut]').count(),5);
@@ -112,3 +112,6 @@ try{
  assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
  console.log(JSON.stringify({passed:true,checks,images:images.length,browser:browser.version(),viewport:'1920x1080 CSS px, DPR 1'}));
 }catch(error){failure=String(error?.stack??error);throw error;}finally{await writeFile(join(out,'results.json'),JSON.stringify({passed:!failure&&errors.length===0&&external.length===0,checks,images,errors,external,failure,head:process.env.REVIEW_HEAD_SHA??null},null,2));await browser?.close();await new Promise(r=>server.close(r));}
+
+// Reuse this existing read-only regional job for the 18 adopted industries.
+await import('./verify-southeast-industry-expanded.mjs');

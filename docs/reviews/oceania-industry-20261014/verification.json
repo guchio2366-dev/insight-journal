@@ -1,0 +1,140 @@
+{
+  "route": "http://127.0.0.1:4322/insight-journal/atlas/oceania/industry/",
+  "viewports": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "labels": 18,
+      "products": 18,
+      "map": {
+        "x": 376,
+        "y": 362,
+        "right": 1316.1875,
+        "bottom": 968.84375,
+        "width": 940.1875,
+        "height": 606.84375
+      },
+      "statistics": {
+        "x": 376,
+        "y": 1027.625,
+        "right": 1316.1875,
+        "bottom": 1415.34375,
+        "width": 940.1875,
+        "height": 387.71875
+      },
+      "checks": [
+        "initial overview",
+        "18 selections",
+        "fixed labels and camera",
+        "explicit only",
+        "reload",
+        "clear",
+        "history",
+        "3 sectors",
+        "keyboard",
+        "statistics below map",
+        "no horizontal overflow"
+      ]
+    },
+    {
+      "width": 1896,
+      "height": 996,
+      "labels": 18,
+      "products": 18,
+      "map": {
+        "x": 376,
+        "y": 362,
+        "right": 1301.234375,
+        "bottom": 959.1875,
+        "width": 925.234375,
+        "height": 597.1875
+      },
+      "statistics": {
+        "x": 376,
+        "y": 1017.96875,
+        "right": 1301.234375,
+        "bottom": 1405.6875,
+        "width": 925.234375,
+        "height": 387.71875
+      },
+      "checks": [
+        "initial overview",
+        "18 selections",
+        "fixed labels and camera",
+        "explicit only",
+        "reload",
+        "clear",
+        "history",
+        "3 sectors",
+        "keyboard",
+        "statistics below map",
+        "no horizontal overflow"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "labels": 18,
+      "products": 18,
+      "map": {
+        "x": 16,
+        "y": 713,
+        "right": 374,
+        "bottom": 944.0625,
+        "width": 358,
+        "height": 231.0625
+      },
+      "statistics": {
+        "x": 16,
+        "y": 1084.40625,
+        "right": 374,
+        "bottom": 1850.234375,
+        "width": 358,
+        "height": 765.828125
+      },
+      "checks": [
+        "initial overview",
+        "18 selections",
+        "fixed labels and camera",
+        "explicit only",
+        "reload",
+        "clear",
+        "history",
+        "3 sectors",
+        "keyboard",
+        "statistics below map",
+        "no horizontal overflow"
+      ]
+    }
+  ],
+  "checks": [
+    "No page errors; source-backed 347 mines and 8 existing guides retained; all 18 products visible and operable; labels fit and do not overlap."
+  ],
+  "screenshots": [
+    "1920-initial.png",
+    "1920-nickel.png",
+    "1920-dairy-statistics.png",
+    "390-initial.png"
+  ],
+  "errors": [],
+  "buildMode": "production-preview",
+  "unitSuite": {
+    "passed": 1351,
+    "skipped": 3,
+    "failed": 0
+  },
+  "regionalUnitSuite": {
+    "passed": 48,
+    "failed": 0
+  },
+  "finalChangedUnitSuite": {
+    "passed": 20,
+    "failed": 0
+  },
+  "oceaniaBuiltE2E": {
+    "passed": 15,
+    "failed": 0
+  },
+  "build": "passed",
+  "releaseVerification": "passed"
+}

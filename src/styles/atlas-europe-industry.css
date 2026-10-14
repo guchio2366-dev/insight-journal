@@ -1,0 +1,29 @@
+/* Europe-only additions; measured label boxes never depend on selection. */
+.eu-workspace-root [data-eu-industry-statistics][hidden],.eu-workspace-root [data-eu-industry-evidence][hidden] { display:none; }
+.eu-workspace-root .eu-statistics:has([data-eu-industry-statistics]:not([hidden])) { width:100%; max-width:100%; min-width:0; contain:inline-size; }
+.eu-workspace-root .eu-industry-statistics { margin-top:20px; color:#243c47; }
+.eu-workspace-root .eu-industry-statistics header p { max-width:105ch; font:14px/1.85 var(--sans); }
+.eu-workspace-root .eu-industry-statistics article { margin-top:22px; padding-top:15px; border-top:1px solid #bfcac0; }
+.eu-workspace-root .eu-industry-statistics h3 { margin:0 0 8px; font:700 20px/1.5 var(--sans); }
+.eu-workspace-root .eu-industry-meaning { font:15px/1.85 var(--sans); }
+.eu-workspace-root .eu-industry-table-wrap { max-width:100%; overflow-x:auto; }
+.eu-workspace-root .eu-industry-table-wrap:focus-visible { outline:2px solid #294753; outline-offset:2px; }
+.eu-workspace-root .eu-industry-statistics table { width:100%; border-collapse:collapse; font:14px/1.75 var(--sans); }
+.eu-workspace-root .eu-industry-statistics caption { text-align:left; padding:7px 0; font-weight:700; }
+.eu-workspace-root .eu-industry-statistics th,.eu-workspace-root .eu-industry-statistics td { padding:10px; border:1px solid #c9d0c4; vertical-align:top; text-align:left; }
+.eu-workspace-root .eu-industry-statistics thead { background:#e9eee6; }
+.eu-workspace-root .eu-industry-statistics tbody th { width:28%; background:#f5f5ee; }
+.eu-workspace-root .eu-industry-statistics td:nth-child(2) { width:25%; }
+.eu-workspace-root .eu-industry-statistics :is(th,td)>:is(strong,span) { display:block; }
+.eu-workspace-root .eu-industry-statistics td p { margin:0 0 7px; }
+.eu-workspace-root .eu-industry-missing { font:13px/1.8 var(--sans); color:#52635e; }
+.eu-workspace-root[data-europe-detail] .eu-label-dot[data-eu-industry-anchor="national"] { fill:#fffef4; stroke:var(--eu-industry-color); stroke-dasharray:2 1; }
+.eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry]:not(.is-point-only) { display:flex; flex-direction:column; align-items:flex-start; gap:2px; max-width:145px; white-space:normal; text-align:left; }
+.eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry].is-point-only:is(:hover,:focus-visible) { width:16px; height:16px; padding:0; border:0; outline:2px solid #234553; background:transparent; }
+.eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry].is-point-only:is(:hover,:focus-visible)>:is(strong,small) { display:none; }
+@media(max-width:640px) {
+ .eu-workspace-root .eu-industry-statistics table { min-width:650px; }
+ .eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry]:not(.is-point-only) { max-width:118px; min-height:32px; padding:2px 3px; }
+ .eu-workspace-root[data-europe-detail] .eu-label-industry { font-size:12px; }
+ .eu-workspace-root[data-europe-detail] .eu-label-location { font-size:10px; }
+}

@@ -1,0 +1,182 @@
+[
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "renderer": "auto",
+    "sector": "resources",
+    "groups": 4,
+    "layout": {
+      "width": 390,
+      "labels": 5,
+      "outside": [],
+      "overlaps": []
+    }
+  },
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "renderer": "auto",
+    "sector": "manufacturing",
+    "groups": 15,
+    "layout": {
+      "width": 390,
+      "labels": 8,
+      "outside": [],
+      "overlaps": []
+    }
+  },
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "renderer": "auto",
+    "sector": "services",
+    "groups": 4,
+    "layout": {
+      "width": 390,
+      "labels": 6,
+      "outside": [],
+      "overlaps": []
+    }
+  },
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "renderer": "static",
+    "sector": "resources",
+    "groups": 4,
+    "layout": {
+      "width": 390,
+      "labels": 5,
+      "outside": [],
+      "overlaps": []
+    }
+  },
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "renderer": "static",
+    "sector": "manufacturing",
+    "groups": 15,
+    "layout": {
+      "width": 390,
+      "labels": 8,
+      "outside": [],
+      "overlaps": []
+    }
+  },
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "renderer": "static",
+    "sector": "services",
+    "groups": 4,
+    "layout": {
+      "width": 390,
+      "labels": 6,
+      "outside": [],
+      "overlaps": []
+    }
+  },
+  {
+    "viewport": {
+      "width": 844,
+      "height": 390
+    },
+    "renderer": "auto",
+    "sector": "resources",
+    "groups": 4,
+    "layout": {
+      "width": 844,
+      "labels": 5,
+      "outside": [],
+      "overlaps": []
+    }
+  },
+  {
+    "viewport": {
+      "width": 844,
+      "height": 390
+    },
+    "renderer": "auto",
+    "sector": "manufacturing",
+    "groups": 15,
+    "layout": {
+      "width": 844,
+      "labels": 8,
+      "outside": [],
+      "overlaps": []
+    }
+  },
+  {
+    "viewport": {
+      "width": 844,
+      "height": 390
+    },
+    "renderer": "auto",
+    "sector": "services",
+    "groups": 4,
+    "layout": {
+      "width": 844,
+      "labels": 6,
+      "outside": [],
+      "overlaps": []
+    }
+  },
+  {
+    "viewport": {
+      "width": 844,
+      "height": 390
+    },
+    "renderer": "static",
+    "sector": "resources",
+    "groups": 4,
+    "layout": {
+      "width": 844,
+      "labels": 5,
+      "outside": [],
+      "overlaps": []
+    }
+  },
+  {
+    "viewport": {
+      "width": 844,
+      "height": 390
+    },
+    "renderer": "static",
+    "sector": "manufacturing",
+    "groups": 15,
+    "layout": {
+      "width": 844,
+      "labels": 8,
+      "outside": [],
+      "overlaps": []
+    }
+  },
+  {
+    "viewport": {
+      "width": 844,
+      "height": 390
+    },
+    "renderer": "static",
+    "sector": "services",
+    "groups": 4,
+    "layout": {
+      "width": 844,
+      "labels": 6,
+      "outside": [],
+      "overlaps": []
+    }
+  }
+]

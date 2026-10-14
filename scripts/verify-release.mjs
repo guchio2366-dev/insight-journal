@@ -6,6 +6,7 @@ import { calculatePayloadHash } from "../src/lib/publication/serialize.ts";
 import { loadAllPublicContent, parseArguments, walkFiles } from "./lib/content.mjs";
 import { isVerifiedFarmingGrid } from "./lib/atlas-numeric-release.mjs";
 import { isVerifiedOceaniaCropGrid } from "./lib/atlas-oceania-numeric-release.mjs";
+import {eastPublicSourceScanText} from '../src/data/atlas/east-asia-public-sources.ts';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const args = parseArguments(process.argv.slice(2));
@@ -19,6 +20,8 @@ const forbiddenPatterns = [
 ];
 
 function privateIdScanText(filename, text) {
+  // One verified public publisher URL; do not exempt its ID in other contexts.
+  text=eastPublicSourceScanText(text);
   const relative = path.relative(dist, filename).split(path.sep).join("/");
   if (!/^assets\/atlas\/(?:[^/]+\/)+manifest\.json$/.test(relative)) return text;
   try {
