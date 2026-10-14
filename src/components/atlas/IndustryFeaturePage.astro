@@ -17,6 +17,7 @@ const bodies = [ ['all','すべて'], ['suv','SUV'], ['sedan','セダン／ハ�
     <header class="if-heading">
       <p class="if-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a><span aria-hidden="true"> / </span>特集・産業の地理</p>
       <div class="if-title-row"><h1>資源の場所、工場の場所、売れる場所</h1><span class="if-edition">初回版 · 確認 2026.10.01</span></div>
+      <p style="margin:8px 0 0;font-size:12px"><a data-world-industry-entry href={withBase('/atlas/industry/world/')}>世界の産業工程へ → 半導体・太陽電池・蓄電池・天然ガス・石油・銅・鉄鋼の場所と規模</a></p>
     </header>
     <nav class="if-sectors" aria-label="特集の分野">
       {sectors.map((s,i) => <button type="button" data-if-sector={s.id} aria-pressed={i===0}><span class="if-number">0{i+1}</span>{s.label}</button>)}

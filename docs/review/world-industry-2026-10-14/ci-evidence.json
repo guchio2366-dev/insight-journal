@@ -1,0 +1,47 @@
+{
+  "reviewedImplementationCommit": "55aa40ff2778469b5219808b37a31c96b2281c01",
+  "runUrl": "https://github.com/guchio2366-dev/insight-journal/actions/runs/38622727113",
+  "jobUrl": "https://github.com/guchio2366-dev/insight-journal/actions/runs/38622727113/job/116054064065",
+  "conclusion": "success",
+  "worldIndustryBrowserStep": "success",
+  "existingRegionalBrowserStep": "success",
+  "browserSandboxEnabled": true,
+  "viewports": [[1440, 900], [1280, 800], [390, 844], [844, 390]],
+  "sectors": 7,
+  "representativeSites": 53,
+  "evidencedConnections": 10,
+  "checks": [
+    "all sectors, stages, sites and evidenced connections",
+    "map and value flow simultaneously visible on PC, including selected stages",
+    "fixed label transforms and unchanged map viewBox",
+    "labels fit their fixed boxes",
+    "one supply line at a time with evidence",
+    "URL reload, invalid URL fallback, keyboard, no JavaScript fallback",
+    "no document horizontal overflow"
+  ],
+  "artifact": {
+    "id": 11922950909,
+    "name": "industry-map-review-38622727113",
+    "worldIndustryDirectory": "world-industry/",
+    "url": "https://github.com/guchio2366-dev/insight-journal/actions/runs/38622727113/artifacts/11922950909"
+  },
+  "manualImageInspection": {
+    "completed": false,
+    "reason": "Artifact delivery domain returned HTTP 403 in the selected environment. No access restriction was bypassed."
+  },
+  "localValidation": {
+    "allUnitPassed": 1350,
+    "allUnitSkipped": 3,
+    "worldUnitAtReviewedCommitPassed": 2,
+    "latestFocusedE2EPassed": 17,
+    "latestStaticBuild": "success",
+    "releaseVerification": "success",
+    "initialBroadE2E": {
+      "passed": 615,
+      "skipped": 10,
+      "failed": 1,
+      "resolution": "The world test encountered an old built HTML and newly updated data IDs. Rebuilt with final data, then reran all three world tests and 14 existing industry tests; all 17 passed."
+    }
+  },
+  "published": false
+}
