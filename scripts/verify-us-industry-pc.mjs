@@ -13,7 +13,7 @@ try{
  for(const viewport of [{width:1920,height:1080},{width:1440,height:900},{width:1366,height:768},{width:1024,height:768}]){
   const context=await browser.newContext({viewport,deviceScaleFactor:1,locale:'ja-JP',reducedMotion:'reduce'}),page=await context.newPage();page.on('pageerror',e=>report.errors.push(e.message));
   for(const field of ['agriculture','nature','industry','population']){
-   const populationGeometry=field==='population'?page.waitForResponse(r=>r.url().endsWith('/population/v1/counties.geo.json')&&r.ok()):null;
+   const populationGeometry=field==='population'?page.waitForResponse(r=>/\/population\/v1\/counties\.geo\.json(?:\.gz)?$/.test(new URL(r.url()).pathname)&&r.ok()):null;
    await page.goto(`http://127.0.0.1:${server.address().port}/insight-journal/atlas/north-america/${field}/`,{waitUntil:'networkidle'});
    if(populationGeometry){await (await populationGeometry).finished();await page.waitForTimeout(2000);}
    await page.waitForFunction(()=>document.querySelector('[data-atlas-explorer]')?.dataset.renderState==='ready',{timeout:30000});await page.evaluate(()=>document.fonts.ready);await page.evaluate(()=>scrollTo(0,0));await page.waitForTimeout(200);
