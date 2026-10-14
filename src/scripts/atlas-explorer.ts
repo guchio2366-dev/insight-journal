@@ -511,8 +511,8 @@ export async function startAtlas() {
   el('[data-enable-relation-layers]').addEventListener('click',()=>{activeRelation()?.requiredLayers.forEach(layer=>agriLayers.add(layer));syncAgricultureLayers();});
   el('[data-agri-enable-layers]').addEventListener('click',()=>{const required=activeRelation()?.requiredLayers??(selectedCrop?['crops']:selectedAnimal?['livestock']:[]);required.forEach(layer=>agriLayers.add(layer));syncAgricultureLayers();});
 
-  el('[data-industry-return-link]').addEventListener('click',event=>{if((event as MouseEvent).metaKey||(event as MouseEvent).ctrlKey||(event as MouseEvent).shiftKey||(event as MouseEvent).altKey)return;event.preventDefault();setField('industry',true);});
-  root.querySelectorAll<HTMLAnchorElement>('[data-field]').forEach(link=>link.addEventListener('click',event=>{if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;event.preventDefault();setField(link.dataset.field as MapField,true);}));
+  el('[data-industry-return-link]').addEventListener('click',event=>{if(!config.reviewMode||(event as MouseEvent).metaKey||(event as MouseEvent).ctrlKey||(event as MouseEvent).shiftKey||(event as MouseEvent).altKey)return;event.preventDefault();setField('industry',true);});
+  root.querySelectorAll<HTMLAnchorElement>('[data-field]').forEach(link=>link.addEventListener('click',event=>{if(!config.reviewMode&&link.dataset.field==='industry'||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;event.preventDefault();setField(link.dataset.field as MapField,true);}));
   root.querySelectorAll<HTMLButtonElement>('[data-nature-mode]').forEach(button=>{
     button.addEventListener('click',()=>setNatureMode(button.dataset.natureMode as NatureMode,true));
     button.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key))return;event.preventDefault();const buttons=[...root.querySelectorAll<HTMLButtonElement>('[data-nature-mode]')],step=['ArrowRight','ArrowDown'].includes(event.key)?1:-1,next=(buttons.indexOf(button)+step+buttons.length)%buttons.length;buttons[next].focus();setNatureMode(buttons[next].dataset.natureMode as NatureMode,true);});
@@ -574,7 +574,9 @@ export async function startAtlas() {
     const empty={type:'FeatureCollection',features:[]};
     const [lib,manifest,base,crops,land,stateLabels,cropLabels,natureManifest,overlays]=await Promise.all([import('maplibre-gl'),fetchJson(config.assetBase,'manifest.json'),fetchJson(config.assetBase,'base.geojson'),loadAgricultureGeometry(config.assetBase),fetchJson(config.assetBase,'land.geojson'),fetchJson(config.assetBase,'labels.json'),fetchJson(config.assetBase,'crop-labels.json'),natureLoader.json('manifest.json'),fetchJson(config.natureAssetBase,'overlays.geojson')]);
     if(failed)return;
-    fitBounds=[[-128,22],[-64,52]];landFeatures=land.features;cropFeatures=crops.features;baseFeatures=base.features;overlayFeatures=overlays.features;
+    // Fit the continental US, not the wider source-data extraction rectangle.
+    // Source geometry and fallback georeferencing retain their original extent.
+    fitBounds=[[-125.2,24.2],[-66.4,49.6]];landFeatures=land.features;cropFeatures=crops.features;baseFeatures=base.features;overlayFeatures=overlays.features;
     const style=createAtlasStyle(config,manifest,base,crops,land,{manifest:natureManifest,cities:config.climateCities,aquifers:empty,contours:empty,overlays});
     lib.setWorkerUrl(workerUrl);
     lib.setWorkerCount(1);map=new lib.Map({container:surface,style,attributionControl:false,cooperativeGestures:true,locale:{'CooperativeGesturesHandler.MobileHelpText':'地図は２本指で動かせます'},renderWorldCopies:false,dragRotate:false,touchPitch:false,pitchWithRotate:false,rollEnabled:false,maxPitch:0,maxZoom:10,minZoom:1,pixelRatio:Math.min(devicePixelRatio,2),bounds:fitBounds,fitBoundsOptions:{padding:{top:30,bottom:14,left:12,right:12}},maxBounds:[[-137,16],[-56,58]],refreshExpiredTiles:false,fadeDuration:0});

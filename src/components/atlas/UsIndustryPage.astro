@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
+import AtlasRegionNavigation from './AtlasRegionNavigation.astro';
+import IndustryNationalSummary from './IndustryNationalSummary.astro';
+import IndustryReading from './IndustryReading.astro';
+import {northAmericaFields} from '../../data/atlas/regions';
+import {usIndustries,usIndustrySectors,usSectorIndustryIds,usIndustrySources,usIndustryCheckedAt} from '../../data/atlas/us-industry';
+import {usIndustryGeometryPath,usMapPanels} from '../../lib/atlas-us-industry';
+import geography from '../../data/atlas/regional-countries.json';
+import continentalBaseRaw from '../../../public/assets/atlas/v3/base.geojson?raw';
+import {withBase} from '../../lib/urls';
+import '../../styles/atlas-explorer.css';
+import '../../styles/atlas-industry.css';
+import '../../styles/atlas-desktop.css';
+import '../../styles/atlas-us-responsive.css';
+import '../../styles/atlas-us-industry.css';
+const base=withBase('/atlas/north-america/');
+const countries=geography.features.filter(f=>['USA','CAN','MEX'].includes(f.properties.code));
+const continentalBase=JSON.parse(continentalBaseRaw);
+const first=usIndustrySectors[0];
+---
+<BaseLayout title="米国の主要産業｜資源・製造・サービスの集積" description="原油・LNG、製造工程、情報金融物流と観光を、確認した集積地域・規模・立地理由から読む。" compactAtlas>
+<AtlasWorkspaceFrame region="north-america" mapActions={false}>
+<article class="atlas-explorer atlas-workspace us-industry" data-us-industry data-atlas-explorer data-field="industry" data-render-state="ready" data-pagefind-body>
+ <div class="atlas-compact-heading"><nav aria-label="パンくず"><a href={withBase('/atlas/')}>地図から見る</a> / <a href={base}>北米地図</a></nav><span>米国</span></div>
+ <div class="atlas-region-controls"><AtlasRegionNavigation group="americas" current="north-america" country="usa" /></div>
+ <h1 class="visually-hidden">米国の主要産業</h1>
+ <nav class="atlas-tabs atlas-tabs-with-overview" aria-label="地図の分野"><a href={`${base}overview/?country=USA`}>概要</a>{northAmericaFields.map(f=>f.status==='ready'?<a href={withBase(f.href)} aria-current={f.id==='industry'?'page':undefined}>{f.label}</a>:<span>{f.label}</span>)}</nav>
+ <div class="industry-controls us-industry-controls">
+  <div class="industry-tab-row" role="tablist" aria-label="主要産業の分類">{usIndustrySectors.map(s=><button type="button" role="tab" data-us-sector={s.id} data-industry-sector={s.id} id={`us-sector-${s.id}`} aria-controls="us-industry-panel" aria-selected={String(s.id==='resources')} tabindex={s.id==='resources'?0:-1}>{s.label}</button>)}</div>
+  {usIndustrySectors.map(s=><div class="industry-tab-row industry-subtabs" data-us-subtabs={s.id} data-industry-subtabs={s.id} hidden={s.id!=='resources'} role="tablist" aria-label={`${s.label}の産業`}><button type="button" role="tab" data-us-product="" data-industry-subsector="all" data-owner-sector={s.id} aria-selected="true" tabindex="0">全分野</button>{usIndustries.filter(i=>usSectorIndustryIds(s.id).includes(i.id)).map(i=><button type="button" role="tab" data-us-product={i.id} data-industry-subsector={i.id} data-owner-sector={s.id} aria-selected="false" tabindex="-1" style={`--us-color:${i.color}`}>{i.label}</button>)}</div>)}
+  <p class="industry-guide"><span data-us-breadcrumb>{first.label}</span><a href="#us-industry-statistics">統計へ</a><a href="#us-industry-sources">出典・範囲</a></p>
+ </div>
+ <div class="atlas-primary-grid" id="us-industry-panel" role="tabpanel" aria-labelledby="us-sector-resources">
+  <div class="atlas-map-column">
+   <div class="atlas-map-frame us-industry-map-frame" data-us-map-frame data-map-frame>
+    <svg data-us-map viewBox="0 0 1000 600" role="group" aria-label="米国の産業集積図。色と産業名は同じ産業を示し、点の大きさは数量を示しません。" tabindex="0">
+     <defs>{Object.entries(usMapPanels).map(([id,p])=><clipPath id={`us-clip-${id}`}><rect x={p.box[0]} y={p.box[1]} width={p.box[2]} height={p.box[3]}/></clipPath>)}</defs>
+     <rect x="-4000" y="-4000" width="9000" height="9000" fill="#e6eef0"/>
+     <g clip-path="url(#us-clip-main)">{countries.map(f=><path d={usIndustryGeometryPath(f.geometry)} fill={f.properties.code==='USA'?'#eeeddd':'#f6f4e9'} stroke="#9dafaa" stroke-width="1" fill-rule="evenodd" vector-effect="non-scaling-stroke"/>)}</g>
+     <g clip-path="url(#us-clip-main)" aria-hidden="true">{continentalBase.features.filter(f=>f.properties.kind==='state').map(f=><path d={usIndustryGeometryPath(f.geometry)} fill="none" stroke="#bdc4b7" stroke-width=".5" vector-effect="non-scaling-stroke"/>)}</g>
+     {(['alaska','hawaii'] as const).map(id=><g><rect x={usMapPanels[id].box[0]} y={usMapPanels[id].box[1]} width={usMapPanels[id].box[2]} height={usMapPanels[id].box[3]} fill="#e6eef0" stroke="#bac8c4"/><g clip-path={`url(#us-clip-${id})`}>{countries.filter(f=>f.properties.code==='USA').map(f=><path d={usIndustryGeometryPath(f.geometry,id)} fill="#eeeddd" stroke="#9dafaa" stroke-width=".7" fill-rule="evenodd" vector-effect="non-scaling-stroke"/>)}</g></g>)}
+     <text x="24" y="454" class="us-map-context">アラスカ（別縮尺）</text><text x="211" y="543" class="us-map-context">ハワイ（別縮尺）</text>
+    </svg>
+    <div class="us-industry-overlay" data-us-overlay></div>
+    <div class="us-industry-map-tools"><button type="button" data-us-zoom="in" aria-label="地図を拡大">＋</button><button type="button" data-us-zoom="out" aria-label="地図を縮小">−</button><button type="button" data-us-zoom="fit">全体へ</button></div>
+    <p class="atlas-layer-caption">● 集積案内　■ 稼働施設例　◇ 登録・計画 · 記号の大きさは数量ではありません</p>
+   </div>
+   <p class="us-map-note">色は産業、記号は工程・状態。点は出典で確認した地域の案内位置で、全工場分布・境界・取引線ではありません。b/d＝バレル/日、gal＝米ガロン。</p>
+   <nav class="us-industry-key" data-us-key aria-label="産業名と色から選ぶ"></nav>
+  </div>
+  <aside class="us-industry-reading" aria-label="産業分布の概説と理由">
+   <h2 data-us-title>{first.label}</h2><p class="us-industry-lead" data-us-reading>{first.reading}</p>
+   <h3>なぜここに集まるのか</h3><p data-us-why>{first.why}</p>
+   <section data-us-site-reading hidden><h3 data-us-site-title></h3><p data-us-site-copy></p><p data-us-site-scale></p><p data-us-site-scope></p><div data-us-site-sources></div></section>
+   <div class="us-industry-actions"><button type="button" data-us-clear hidden>分類の概説へ戻る</button><label data-us-only-wrap hidden><input type="checkbox" data-us-only/> 選んだ産業だけ表示</label></div>
+   <details><summary>選んだ産業の地域・工程</summary><div data-us-site-list class="us-industry-site-list"></div></details>
+   <details><summary>この産業の範囲・一次資料</summary><p data-us-product-scope>産地・加工・サービスを分けて表示します。</p><div data-us-product-sources></div></details>
+  </aside>
+ </div>
+ <section class="us-industry-statistics" id="us-industry-statistics" aria-label="地図下の産業別統計">
+  <header><h2 data-us-stat-heading>資源・エネルギーの規模と分布</h2><p>各数値の年・単位・分母は別記。重複する工程・産業の数値は合算しません。</p></header>
+  <div class="us-industry-stat-grid" data-us-statistics></div>
+ </section>
+ <details class="us-industry-legacy-statistics"><summary>保存済み全国構成・時系列・州別統計の詳細</summary><p>既存の業種分類・対象年を維持。狭い工程に広い業種の数値を割り当てません。</p><IndustryNationalSummary/><IndustryReading/></details>
+ <details class="industry-method" id="us-industry-sources"><summary>出典・対象年・地理・表示方法</summary><p>資料確認：{usIndustryCheckedAt}。本土の主図とアラスカ・ハワイの別縮尺図。国土は既存Natural Earth資料を再利用。地域案内点は工場全数や精密施設座標ではありません。記号や名札の位置から工場同士の取引を推定しません。</p><p>米国本社企業の世界売上、米国内生産、設備能力と実績、金額と数量を区別します。Census財貿易にはプエルトリコ等を含み、州GDPは50州＋DCです。NSFは2024年の国際分類別推計。狭い品目や工程へ広い分類のGDPを転用しません。未取得・未確認を0と表示しません。</p><ul>{Object.entries(usIndustrySources).map(([id,s])=><li id={`us-source-${id}`}><a href={s.url}>{s.title}</a></li>)}</ul></details>
+ <p class="visually-hidden" aria-live="polite" data-us-live></p>
+ <noscript><p>産業選択にはJavaScriptが必要です。以下に全採用品目の解説・統計・出典を掲載します。</p>{usIndustries.map(i=><section><h2>{i.label}</h2><p>{i.reading}</p><p>{i.why}</p><ul>{i.metrics.map(m=><li>{m.label}：{m.display}（{m.period}）。{m.definition} <a href={usIndustrySources[m.source].url}>出典</a></li>)}</ul></section>)}</noscript>
+</article>
+</AtlasWorkspaceFrame>
+</BaseLayout>
+<script>import {initUsIndustry} from '../../scripts/atlas-us-industry';const root=document.querySelector<HTMLElement>('[data-us-industry]');if(root)initUsIndustry(root);</script>

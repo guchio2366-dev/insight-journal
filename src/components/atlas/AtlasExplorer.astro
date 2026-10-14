@@ -50,7 +50,7 @@ const initialMode=(natureModes.some(mode=>mode.id===requestedMode)?requestedMode
 const fallbackName=initialField==='population'?'density.webp':initialField==='agriculture'?'agriculture-fallback.webp':initialField==='natural'?`${initialMode}-fallback.webp`:'land-fallback.webp';
 const payload = JSON.stringify({ initialField, initialMode, populationAssetBase, agricultureRelations, assetBase, natureAssetBase, livestockAssetBase, livestockKinds, livestockRegions, industryRegions, industrySources, reviewMode, base: withBase('/atlas/north-america/'), crops:cropExplanations, regionalInsights, statisticCropIds, geographicLabels, climateCities, climateCodeLabels, natureModes, natureLabels, natureFeatureCopy }).replace(/</g,'\\u003c');
 ---
-<article class="atlas-explorer" data-atlas-explorer data-field={initialField} data-nature-mode={initialMode} data-pagefind-body={reviewMode?undefined:true} data-pagefind-ignore={reviewMode?'all':undefined}>
+<article class="atlas-explorer" data-atlas-explorer data-us-explorer data-field={initialField} data-nature-mode={initialMode} data-pagefind-body={reviewMode?undefined:true} data-pagefind-ignore={reviewMode?'all':undefined}>
   <section class="atlas-workspace" aria-label="北米の分野別地図">
     <div class="atlas-compact-heading">
       <nav aria-label="パンくずリスト"><a href={withBase('/atlas/')}>地図から見る</a><span aria-hidden="true"> / </span><a href={withBase('/atlas/north-america/')}>北米地図</a></nav>

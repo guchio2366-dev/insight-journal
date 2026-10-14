@@ -1,0 +1,62 @@
+name: Validate US industry and PC maps
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/**/us-industry*'
+      - 'src/**/atlas-us-industry*'
+      - 'src/components/atlas/UsIndustryPage.astro'
+      - 'src/components/atlas/AtlasExplorer.astro'
+      - 'src/styles/atlas-us-responsive.css'
+      - 'src/scripts/atlas-explorer.ts'
+      - 'src/pages/atlas/north-america/industry/**'
+      - 'scripts/verify-us-industry-pc.mjs'
+      - '.github/workflows/validate-us-industry.yml'
+permissions:
+  contents: read
+jobs:
+  pc-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v7
+        with:
+          ref: 63e998cc16e671230b3c1a9d0a95803e1d6d0545
+          path: us-before
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - run: npm ci --no-audit --no-fund
+      - name: Use runner Chrome with its sandbox
+        run: |
+          chrome_path="$(command -v google-chrome || command -v chromium)"
+          echo "REVIEW_CHROME_PATH=$chrome_path" >> "$GITHUB_ENV"
+          test -n "$(fc-list ':lang=ja' family)" || { sudo apt-get update && sudo apt-get install -y --no-install-recommends fonts-noto-cjk; }
+      - name: Build unchanged baseline
+        working-directory: us-before
+        env:
+          ASTRO_TELEMETRY_DISABLED: '1'
+        run: |
+          ln -s ../node_modules node_modules
+          npm run build
+      - name: Capture before at four PC sizes
+        env:
+          US_REVIEW_PHASE: before
+          US_REVIEW_BUILD: us-before/dist
+        run: node scripts/verify-us-industry-pc.mjs
+      - name: Build changes
+        env:
+          ASTRO_TELEMETRY_DISABLED: '1'
+        run: npm run build
+      - name: Capture after and verify selection/camera/labels
+        run: node scripts/verify-us-industry-pc.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: us-industry-pc-review
+          path: docs/review/us-industry-20261014/
+          retention-days: 7
