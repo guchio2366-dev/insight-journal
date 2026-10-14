@@ -56,6 +56,7 @@
  .atlas-desktop-shell .asia-atlas-root[data-region=southeast-asia][data-southeast-industry-active=true] .asia-atlas[data-field=industry] .asia-map-frame{height:clamp(460px,calc(100dvh - 300px),720px)!important;max-height:none!important;min-height:460px!important;aspect-ratio:auto!important}
 }
 @media(max-width:700px){
+ .asia-atlas-root[data-region=southeast-asia][data-southeast-industry-active=true] .asia-atlas[data-field=industry] .asia-map-frame{height:clamp(460px,60dvh,620px)!important;min-height:460px!important;max-height:none!important;aspect-ratio:auto!important}
  .asia-atlas-root[data-region=southeast-asia] .sea-industry-controls button{font-size:11px;padding:7px 8px}
  .asia-atlas-root[data-region=southeast-asia] .sea-industry-fact-columns{grid-template-columns:1fr}
  .asia-atlas-root[data-region=southeast-asia] .sea-industry-story h2{font-size:19px}
