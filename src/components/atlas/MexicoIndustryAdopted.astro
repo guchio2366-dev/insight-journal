@@ -1,6 +1,7 @@
 ---
 import {adoptedIndustries,adoptedSources,adoptedSectors,adoptedGroups,adoptedFamilyLabels} from '../../lib/atlas-mexico-industry-adopted';
 import data from '../../data/atlas/mexico/industry.json';
+import MexicoIndustrySectorMap from './MexicoIndustrySectorMap.astro';
 import {stateFeatures,geometryPath,stateLabelPoint,geometryMetadata} from '../../lib/atlas-mexico-geometry';
 import {withBase} from '../../lib/urls';
 import '../../styles/atlas-mexico-industry-adopted.css';
@@ -14,35 +15,17 @@ const config={industries:adoptedIndustries,sources:adoptedSources,states:data.st
  <div class="ma-controls">
   <div class="ma-sectors" role="tablist" aria-label="主要産業の三分野">{adoptedSectors.map(s=><button type="button" role="tab" data-ma-sector={s.id} id={`ma-sector-${s.id}`} aria-controls="ma-panel" aria-selected={String(s.id==='resources')} tabindex={s.id==='resources'?0:-1}>{s.label}</button>)}</div>
   <p class="ma-guide"><span data-ma-breadcrumb>{adoptedSectors[0].lead}</span><a href="#ma-statistics">地図の下の統計へ</a></p>
-  <nav class="ma-industry-choices" aria-label="産業と具体品目を選ぶ">{adoptedSectors.map(sector=><div data-ma-choices={sector.id} hidden={sector.id!=='resources'}>
-   <button type="button" data-ma-overview={sector.id} aria-pressed="true">全体</button>
-   {adoptedGroups(sector.id).map(group=><span class="ma-choice-family" style={`--ma-color:${group.color}`}>
-    {sector.id==='manufacturing'&&<span class="ma-family-name">{adoptedFamilyLabels[group.id]??group.label}</span>}
-    {group.industries.map(item=><button type="button" data-ma-industry={item.id} data-ma-owner={sector.id} aria-pressed="false">{item.label}</button>)}
-   </span>)}
-  </div>)}</nav>
+  <div class="ma-industry-choices" aria-label="産業と具体品目を選ぶ">{adoptedSectors.map(sector=><label data-ma-choices={sector.id} hidden={sector.id!=='resources'}>
+   <span>品目</span><select data-ma-industry-select={sector.id} aria-label={`${sector.label}の品目`}>
+    <option value="">分野の全体を見る</option>
+    {adoptedGroups(sector.id).map(group=><optgroup label={group.label}>{group.industries.map(item=><option value={item.id} data-ma-industry={item.id} data-ma-owner={sector.id}>{item.label}</option>)}</optgroup>)}
+   </select>
+  </label>)}</div>
  </div>
  <div class="ma-grid" id="ma-panel" role="tabpanel" aria-labelledby="ma-sector-resources">
   <div class="ma-map-column">
-   <div class="ma-camera" role="group" aria-label="地図の表示範囲"><span>産業名を選んで地域と集積を読む</span><button type="button" data-ma-camera="fit">全体</button><button type="button" data-ma-camera="in" aria-label="地図を拡大">＋</button><button type="button" data-ma-camera="out" aria-label="地図を縮小">−</button></div>
-   <div class="ma-map-frame" data-ma-frame>
-    <svg data-ma-map class="ma-map" viewBox="0 0 900 580" role="group" tabindex="0" aria-labelledby="ma-map-title ma-map-description">
-     <title id="ma-map-title" data-ma-map-title>メキシコの資源・エネルギーの集積地域</title>
-     <desc id="ma-map-description" data-ma-map-description>点は州の地域案内位置で、施設所在地や数量ではありません。産業を選ぶと、対応する州別数量または就業者の集積を色で示します。統計不足はゼロと区別します。</desc>
-     <defs>
-      <pattern id="ma-confidential" width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" fill="#e3e5df"/><path d="M0,9L9,0M-3,3L3,-3M6,12L12,6" stroke="#7b877c"/></pattern>
-      <pattern id="ma-unknown" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="#f4f4ec"/><circle cx="3" cy="3" r="1.2" fill="#839487"/></pattern>
-      <pattern id="ma-unretrieved" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="#eee9dd"/><path d="M2,2L8,8M8,2L2,8" stroke="#9b9279"/></pattern>
-     </defs>
-     <image href={withBase('/assets/atlas/mexico-nature-v1/relief.svg')} width="900" height="580" opacity=".25" aria-hidden="true"/>
-     {geometry.map(g=>{const state=data.states.find(s=>s.id===g.id)!;return <path data-ma-state={g.id} d={g.path} fill="#e6e9dc" stroke="#899d8f" stroke-width=".75" vector-effect="non-scaling-stroke" fill-rule="evenodd" role="button" tabindex="0" aria-pressed="false" aria-label={`${state.name}の地域を選ぶ`}><title>{state.name}の地域案内</title></path>;})}
-    </svg>
-    <div class="ma-labels" data-ma-labels></div>
-   </div>
-   <p class="ma-map-caption" data-ma-map-caption>産業名と、資料で確認した集積地域の案内。点の大きさは数量を表しません。</p>
-   <div class="ma-legend" data-ma-legend hidden aria-label="州の色の意味"></div>
-   <p class="ma-map-method" data-ma-map-definition>州の案内点と産業名を結ぶ細線は位置対応です。個別施設の敷地・取引・輸送経路を表しません。</p>
-   <div class="ma-map-sources" data-ma-map-sources></div>
+   <div class="ma-camera" role="group" aria-label="地図の表示範囲"><span>品目は地図の外で選択。点から地域を読む</span><button type="button" data-ma-camera="fit">全体</button><button type="button" data-ma-camera="in" aria-label="地図を拡大">＋</button><button type="button" data-ma-camera="out" aria-label="地図を縮小">−</button></div>
+   {adoptedSectors.map(sector=><MexicoIndustrySectorMap sector={sector.id}/>)}
   </div>
   <aside class="ma-reading" aria-label="産業分布の概説と立地の理由">
    <h2 data-ma-title>{adoptedSectors[0].label}</h2><p class="ma-key-sentence" data-ma-lead>{adoptedSectors[0].lead}</p>
@@ -64,6 +47,7 @@ const config={industries:adoptedIndustries,sources:adoptedSources,states:data.st
   </div>
  </section>
  <details class="ma-method" id="ma-sources"><summary>採用した全産業・工程・出典と保存原表</summary>
+  <p>短い地域ラベルは、この分野の出典付き州を近接地域へまとめた産業例です。規模の順位でも公式の統計地域でもありません。詳しい品目・州・工程は右の地域一覧と地図下の統計で確認できます。</p>
   <p>{adoptedIndustries.length}項目。州境・地域案内位置は既存INEGI地理データを再利用。投影：{geometryMetadata.projection.name}。個別の施設座標、取引線、数量のない地点は新設していません。</p>
   <ul>{adoptedIndustries.map(item=><li><strong>{item.label}</strong> — {item.process}。{item.boundary}</li>)}</ul>
   <h3>年・対象範囲と一次資料</h3><ul>{Object.entries(adoptedSources).map(([id,source])=><li id={`ma-source-${id}`}><a href={source.url}>{source.title}</a>（{source.year}） — {source.scope}</li>)}</ul>
