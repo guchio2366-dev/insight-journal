@@ -1,6 +1,15 @@
 import type {PilotCluster} from './atlas-canada-industry-pilot';
 
 export type PilotLabelPoint={c:PilotCluster;point:number[]};
+/** Short map annotations; full product/stage names stay in the reading panel. */
+export function compactPilotIndustryLabel(id:string,sector:string){
+ const names:Record<string,string>={'oil-gas':'石油・ガス',refining:'石油精製',nickel:sector==='manufacturing'?'ニッケル精錬':'ニッケル',aluminum:'アルミ製錬',hydro:'水力',auto:'自動車・バス',aerospace:'航空機',finance:'金融・保険',digital:'IT・ソフト',logistics:'物流',potash:'カリ',uranium:'ウラン',food:'食品加工',wood:'木材',paper:'パルプ・紙',gold:'金',copper:'銅','iron-ore':'鉄鉱石','steel-coal':'製鉄用石炭',battery:'電池',lithium:'リチウム',graphite:'黒鉛',shipbuilding:'造船',railway:'鉄道車両',tourism:'観光','canola-crush':'カノーラ搾油',flour:'小麦製粉',seafood:'水産加工'};
+ return names[id]??id;
+}
+/** A real source point anchors each group; no new industrial centre is inferred. */
+export function pilotLabelAnchor(group:PilotLabelPoint[]):number[]{
+ return [...group].sort((a,b)=>group.reduce((sum,p)=>sum+Math.hypot(a.point[0]-p.point[0],a.point[1]-p.point[1]),0)-group.reduce((sum,p)=>sum+Math.hypot(b.point[0]-p.point[0],b.point[1]-p.point[1]),0)||a.c.id.localeCompare(b.c.id))[0].point;
+}
 /** Nearby guide positions share an industry label; no industrial extent or flow is inferred. */
 export function groupPilotLabelPoints(points:PilotLabelPoint[],maximumDiameter=105){
  const groups:PilotLabelPoint[][]=[];
@@ -27,7 +36,7 @@ export function placePilotLabel(points:number[][],size:number[],frame:number[],o
 }
 
 /** Compare deterministic packing orders; selection is deliberately absent. */
-export function placePilotLabelGroups(items:{id:string;points:number[][];size:number[]}[],frame:number[],reserved:number[][]){
+export function placePilotLabelGroups(items:{id:string;points:number[][];size:number[]}[],frame:number[],reserved:number[][],maximumLeader=95){
  const centers=items.map(item=>[0,1].map(axis=>item.points.reduce((sum,p)=>sum+p[axis],0)/item.points.length));
  const ids=items.map((_,index)=>index),tie=(a:number,b:number)=>items[b].points.length-items[a].points.length||items[a].id.localeCompare(items[b].id);
  const orders=[120,150,180].map(radius=>{
@@ -38,7 +47,7 @@ export function placePilotLabelGroups(items:{id:string;points:number[][];size:nu
  let best:(number[]|null)[]=items.map(()=>null),bestCount=0;
  for(const order of orders){
   const occupied=reserved.slice(),boxes:(number[]|null)[]=items.map(()=>null);let count=0;
-  for(const index of order){const item=items[index],box=placePilotLabel(item.points,item.size,frame,occupied);if(box){boxes[index]=box;occupied.push(box);count++;}}
+  for(const index of order){const item=items[index],box=placePilotLabel(item.points,item.size,frame,occupied,maximumLeader);if(box){boxes[index]=box;occupied.push(box);count++;}}
   if(count>bestCount){best=boxes;bestCount=count;}
   if(count===items.length)break;
  }
