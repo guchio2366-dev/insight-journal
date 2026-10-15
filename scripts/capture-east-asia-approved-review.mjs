@@ -92,21 +92,21 @@ try{
   async function industryNavigation(page,sector,selectedIndustry){
    assert.deepEqual(await page.locator('.east-industry-choices:visible').evaluateAll(nodes=>nodes.map(n=>n.dataset.eastIndustryKinds)),[sector],'only the current sector kind row is visible');
    assert.equal(await page.locator('[data-industry-navigation-note]').isVisible(),false,'a sourced East clusters map must not be called missing');
-   const contrasts=await page.locator('[data-industry-label][aria-pressed="true"]:visible').evaluateAll(nodes=>nodes.map(n=>{
+   const contrasts=await page.locator(`[data-east-industry-kinds="${sector}"] [data-industry-feature][aria-pressed="true"]:visible`).evaluateAll(nodes=>nodes.map(n=>{
     const style=getComputedStyle(n),rgb=value=>value.match(/[\d.]+/g).slice(0,3).map(Number),luminance=color=>rgb(color).map(v=>v/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4).reduce((total,v,i)=>total+v*[.2126,.7152,.0722][i],0);
     const fg=luminance(style.color),bg=luminance(style.backgroundColor);
-    return {industry:n.dataset.industryLabel,foreground:style.color,background:style.backgroundColor,ratio:(Math.max(fg,bg)+.05)/(Math.min(fg,bg)+.05),opacity:style.opacity};
+    return {industry:n.dataset.industryFeature?.replace(/^east-/,''),foreground:style.color,background:style.backgroundColor,ratio:(Math.max(fg,bg)+.05)/(Math.min(fg,bg)+.05),opacity:style.opacity};
    }));
-   if(selectedIndustry){assert(contrasts.length>0,'the selected industry has a visible name');assert(contrasts.every(item=>item.industry===selectedIndustry));}
+   if(selectedIndustry){assert(contrasts.length>0,'the selected industry has a visible control outside the map');assert(contrasts.every(item=>item.industry===selectedIndustry));}
    for(const item of contrasts){assert.equal(item.opacity,'1');assert(item.ratio>=4.5,'selected '+item.industry+' has readable foreground/background contrast');}
    return {visibleKindRows:[sector],missingMapNotice:false,contrasts};
   }
   async function industryLabels(page){
    const labels=await page.locator('[data-industry-label]:visible').evaluateAll(nodes=>nodes.map(n=>{const b=n.getBoundingClientRect();return {industry:n.dataset.industryLabel,site:n.dataset.labelAnchorSite,coordinate:n.dataset.coordinate,text:n.textContent,box:{left:b.left,top:b.top,right:b.right,bottom:b.bottom},left:n.style.left,top:n.style.top};}));
    const sector=await page.locator('[data-asia-atlas]').getAttribute('data-industry-sector-map'),expected=eastSectorIndustries.filter(i=>i.sectors.includes(sector));
-   assert.deepEqual([...new Set(labels.map(l=>l.industry))].sort(),expected.map(i=>i.id).sort(),'each adopted industry has a visible primary name');const frame=(await geometry(page)).map;
-   for(const label of labels){const item=expected.find(i=>i.id===label.industry);assert.equal(label.text,item.mapLabel??item.label);assert(label.box.left>=frame.left&&label.box.right<=frame.right&&label.box.top>=frame.top&&label.box.bottom<=frame.bottom);for(const other of labels.filter(l=>l!==label))assert(!(label.box.left<other.box.right&&label.box.right>other.box.left&&label.box.top<other.box.bottom&&label.box.bottom>other.box.top),'industry names do not collide');}
-   const lengths=await page.locator('[data-industry-name-leader]').evaluateAll(nodes=>nodes.map(n=>Math.hypot(Number(n.getAttribute('x2'))-Number(n.getAttribute('x1')),Number(n.getAttribute('y2'))-Number(n.getAttribute('y1')))));assert(lengths.every(n=>n>=7&&n<=72),'industry leaders remain local');return labels.map(({box,...position})=>position);
+   const frame=(await geometry(page)).map;assert(labels.length>0&&labels.length<=(frame.width<650?4:frame.width<1100?8:10),'map annotations stay sparse');assert.equal(await page.locator('.east-sector-map-label').count(),0,'industry choices live outside the map');
+   for(const label of labels){assert(expected.some(i=>i.id===label.industry),'annotation belongs to the chosen sector');assert(label.box.left>=frame.left&&label.box.right<=frame.right&&label.box.top>=frame.top&&label.box.bottom<=frame.bottom);for(const other of labels.filter(l=>l!==label))assert(!(label.box.left<other.box.right&&label.box.right>other.box.left&&label.box.top<other.box.bottom&&label.box.bottom>other.box.top),'industry names do not collide');}
+   const lengths=await page.locator('[data-industry-name-leader]').evaluateAll(nodes=>nodes.map(n=>Math.hypot(Number(n.getAttribute('x2'))-Number(n.getAttribute('x1')),Number(n.getAttribute('y2'))-Number(n.getAttribute('y1')))));assert(lengths.every(n=>n>=6&&n<=24),'geographic annotation leaders remain local');return labels.map(({box,...position})=>position);
   }
   function sameIndustryPositions(actual,before,message){assert.deepEqual(actual.map(n=>[n.industry??n.id,n.site??n.id,n.coordinate]),before.map(n=>[n.industry??n.id,n.site??n.id,n.coordinate]),message+' source IDs and coordinates');for(const [index,row] of actual.entries())for(const key of ['left','top'])assert(Math.abs(parseFloat(row[key])-parseFloat(before[index][key]))<=.5,message+' at the public camera serialization precision');}
   async function industryPoints(page){return page.locator('[data-industry-cluster]:visible').evaluateAll(nodes=>nodes.map(n=>({id:n.dataset.industryCluster,coordinate:n.dataset.coordinate,left:n.style.left,top:n.style.top})).sort((a,b)=>a.id.localeCompare(b.id)));}

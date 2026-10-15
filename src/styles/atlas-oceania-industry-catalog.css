@@ -7,11 +7,11 @@
 .oceania-learning[data-field=industry] .oceania-learning-scene{height:auto!important;aspect-ratio:1100/710!important;max-height:none!important;min-height:0!important}
 .oceania-learning[data-field=industry] .oceania-learning-reading{height:calc((100vw - 380px)*.365);min-height:380px;max-height:650px}
 .oceania-learning[data-field=industry] .oceania-learning-normal .oceania-learning-map-heading{display:none!important}
-.oceania-learning[data-field=industry] [data-oceania-product-label]{cursor:pointer}
+.oceania-learning[data-field=industry] [data-oceania-product-label]{pointer-events:none}
 .oceania-learning[data-field=industry] [data-oceania-product-label]:focus-visible>rect{stroke:#111;stroke-width:3}
-.oceania-learning[data-field=industry] [data-oceania-product-mark][data-catalog-match=false]{opacity:.34}
-.oceania-learning[data-field=industry] [data-primary-map]:has([data-oceania-catalog-map])>[data-scene]>text{display:none}
-.oceania-learning[data-field=industry] [data-primary-map]:has([data-oceania-catalog-map]) [data-oceania-industry-location]>text{display:none}
+.oceania-learning[data-field=industry] [data-oceania-product-mark][data-catalog-match=false]{opacity:.45}
+.oceania-learning[data-field=industry] svg:has([data-oceania-catalog-map])>text{display:none}
+.oceania-learning[data-field=industry] svg:has([data-oceania-catalog-map]) [data-oceania-industry-location]>text{display:none}
 .oceania-industry-map-key{font-size:12px;line-height:1.7;padding:8px;background:#f5f6ef;border:1px solid #c7ccbf}
 .oceania-industry-statistics{padding:14px 0 0;color:#273c43}
 .oceania-industry-statistics h2{font-size:18px;margin-bottom:10px!important}

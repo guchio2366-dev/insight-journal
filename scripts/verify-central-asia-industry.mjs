@@ -5,6 +5,7 @@ import path from 'node:path';
 import {execFileSync} from 'node:child_process';
 import {chromium} from 'playwright';
 import {centralIndustries,centralIndustrySites,centralIndustrySectors} from '../src/data/atlas/central-asia-industry.ts';
+import {centralIndustryStageReading,centralIndustryAnnotationLabel} from '../src/lib/atlas-central-asia-industry.ts';
 
 const root=path.resolve('dist'),base='/insight-journal',output=path.resolve(process.env.CENTRAL_REVIEW_OUTPUT??'review-artifacts/central-asia-industry');
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript','.css':'text/css','.json':'application/json','.gz':'application/gzip','.png':'image/png','.svg':'image/svg+xml','.woff2':'font/woff2'};
@@ -39,12 +40,12 @@ try{
    await page.locator(`[data-central-sector="${sector}"]`).click();assert.equal(await page.locator('[data-central-reading]').textContent(),centralIndustrySectors.find(item=>item.id===sector).overview);assert.equal(await page.locator(`[data-central-overview="${sector}"]`).textContent(),'分布全体');const baseline=await verify(sector);await capture(`${width}-${sector}-initial`);
    const initial=await state();
    for(const item of centralIndustries.filter(industry=>industry.sectors.includes(sector))){
-    await page.locator(`[data-central-choices="${sector}"] [data-central-choice="${item.id}"]`).click();await verify(sector);assert.equal((await state()).industry,item.id);assert.deepEqual(stableGeometry(await layout()),stableGeometry(baseline),'Selecting '+item.id+' never changes geometry');
-    assert.equal(await page.locator('[data-central-title]').textContent(),item.label);assert.equal(await page.locator('[data-central-reading]').textContent(),item.overview);assert((await page.locator(`[data-central-metric-industry="${item.id}"]:visible`).count())>0,'Adopted item exposes its own statistics');
+    await openIndustryPicker(page);await page.locator(`[data-central-choices="${sector}"] [data-central-choice="${item.id}"]`).click();await verify(sector);assert.equal((await state()).industry,item.id);assert.deepEqual(stableGeometry(await layout()),stableGeometry(baseline),'Selecting '+item.id+' never changes geometry');
+    const reading=centralIndustryStageReading(item.id,sector);assert.equal(await page.locator('[data-central-title]').textContent(),reading.title);assert.equal(await page.locator('[data-central-reading]').textContent(),reading.overview);assert((await page.locator(`[data-central-metric-industry="${item.id}"]:visible`).count())>0,'Adopted item exposes its own statistics');
     await page.locator('[data-central-clear]').click();assert.deepEqual(stableGeometry(await layout()),stableGeometry(baseline));
    }
    const item=centralIndustries.find(industry=>industry.sectors.includes(sector)),site=centralIndustrySites.find(site=>site.industry===item.id&&site.sectors.includes(sector));
-   await page.locator(`[data-central-choices="${sector}"] [data-central-choice="${item.id}"]`).click();await page.locator('#central-industry-locations').evaluate(node=>node.open=true);await page.locator(`[data-central-site-choice="${site.id}"]`).click();await settle();assert.equal((await state()).site,site.id);assert.deepEqual((await state()).frame,initial.frame);await verify(sector);await page.evaluate(()=>scrollTo(0,0));await capture(`${width}-${sector}-selected`);
+   await openIndustryPicker(page);await page.locator(`[data-central-choices="${sector}"] [data-central-choice="${item.id}"]`).click();await page.locator('#central-industry-locations').evaluate(node=>node.open=true);await page.locator(`[data-central-site-choice="${site.id}"]`).click();await settle();assert.equal((await state()).site,site.id);assert.deepEqual((await state()).frame,initial.frame);await verify(sector);await page.evaluate(()=>scrollTo(0,0));await capture(`${width}-${sector}-selected`);
    await page.locator('[data-central-only]').check();await verify(sector,true);const beforeOnly=await layout();assert.deepEqual(beforeOnly.labels.filter(label=>!label.hidden).map(({id,rect})=>({id,rect})),baseline.labels.filter(label=>label.industry===item.id).map(({id,rect})=>({id,rect})),'Only mode reserves peer label positions');
    await page.reload({waitUntil:'networkidle'});await settle();assert.equal((await state()).site,site.id);assert.equal((await state()).only,true);await verify(sector,true);
    await page.locator('[data-central-only]').uncheck();await page.locator('[data-central-clear]').click();await page.goBack();await settle();assert.equal((await state()).site,site.id);await page.goForward();await settle();assert.equal((await state()).site,null);await verify(sector);
@@ -53,7 +54,10 @@ try{
  }
  await page.setViewportSize({width:1920,height:1080});await page.goto(url,{waitUntil:'networkidle'});await settle();
  for(const id of ['central-zhezkazgan','central-aktobe-chromium']){
-  await page.locator('[data-central-sector="resources"]').click();await page.locator('#central-industry-locations').evaluate(node=>node.open=true);await page.locator(`[data-central-site-choice="${id}"]`).click();await settle();const before=(await state()).frame;await page.locator('[data-central-overlap]').click();await settle();assert.equal((await state()).sector,'manufacturing');assert.equal((await state()).site,id);assert.deepEqual((await state()).frame,before);await verify('manufacturing');
+  const site=centralIndustrySites.find(site=>site.id===id);
+  await page.locator('[data-central-sector="resources"]').click();assert.equal(await page.locator(`[data-central-marker="${id}"]`).count(),1);await page.locator('#central-industry-locations').evaluate(node=>node.open=true);await page.locator(`[data-central-site-choice="${id}"]`).click();await settle();const before=(await state()).frame;
+  const label=page.locator('[data-central-label-industry]').filter({hasText:centralIndustryAnnotationLabel(site,'resources')});assert(await label.count()>0,'Shared processing places keep their actual process name');
+  await page.locator('[data-central-overlap]').click();await settle();assert.equal((await state()).sector,'manufacturing');assert.equal((await state()).site,id);assert.deepEqual((await state()).frame,before);await verify('manufacturing');
  }
  await page.locator('[data-country-select]').selectOption('KAZ');assert.equal((await state()).country,'KAZ');await page.locator('[data-reset]').click();assert.equal((await state()).country,null);assert.equal(new URL(page.url()).pathname,base+'/atlas/asia/central-asia/industry/');
  await page.locator('[data-central-sector="resources"]').focus();await page.keyboard.press('ArrowRight');assert.equal((await state()).sector,'manufacturing');
@@ -63,7 +67,7 @@ try{
  await page.locator('.central-industry-statistics').scrollIntoViewIfNeeded();await capture('1920-statistics-three-columns');const columns=(await layout()).columns;assert(columns.every(column=>Math.abs(column[1]-columns[0][1])<1));assert(columns[0][0]<columns[1][0]&&columns[1][0]<columns[2][0]);
  assert.equal(await page.locator('[data-central-flow]').count(),0,'No inferred transaction arrows');assert.match(await page.locator('[data-central-metric="logistics-world"]').textContent(),/未確認/);
  await page.locator('[data-central-sector="resources"]').click();const beforeMarker=await layout();await page.locator('[data-central-marker="sc-tengiz-oil"]').click();assert.equal((await state()).site,'sc-tengiz-oil');assert.deepEqual(stableGeometry(await layout()),stableGeometry(beforeMarker));await page.locator('[data-central-marker="sc-inkai-uranium"]').focus();await page.keyboard.press('Enter');assert.equal((await state()).site,'sc-inkai-uranium');assert.deepEqual(stableGeometry(await layout()),stableGeometry(beforeMarker));
- assert.deepEqual(errors,[]);result.checks.push('All eleven items, all three sectors, four viewports, category keyboard, pan/zoom/reset, same-site overlapping sectors, exact URL history/reload, no inferred flows, no JS errors');
+ assert.deepEqual(errors,[]);result.checks.push('All eleven items, all three sectors, four viewports, category keyboard, pan/zoom/reset, shared process references with correct phase labels, exact URL history/reload, no inferred flows, no JS errors');
  const touchContext=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:1,isMobile:true,hasTouch:true});
  const touchPage=await touchContext.newPage();
  touchPage.on('pageerror',error=>errors.push(error.message));
@@ -95,3 +99,5 @@ try{
  await writeFile(path.join(output,'review.json'),JSON.stringify(result,null,2)+'\n');
  console.log(JSON.stringify({output,viewports:result.viewports.length,screenshots:result.screenshots.length,checks:result.checks},null,2));
 }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
+
+async function openIndustryPicker(page){const menu=page.locator('[data-central-product-menu]');if(!await menu.evaluate(node=>node.open))await menu.locator(':scope > summary').click();}

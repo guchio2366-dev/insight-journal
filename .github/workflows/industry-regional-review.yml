@@ -106,6 +106,7 @@ jobs:
     timeout-minutes: 15
     env:
       ASTRO_TELEMETRY_DISABLED: '1'
+      INDUSTRY_SMOKE_LOG_IMAGES: '1'
     steps:
       - uses: actions/checkout@v7
         with:

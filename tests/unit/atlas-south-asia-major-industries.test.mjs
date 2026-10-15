@@ -29,7 +29,7 @@ test('World shares keep their real country sets and missing global data remains 
  assert.match(groups.find(g=>g.id==='sc-it').reason,/需給式/);
 });
 
-test('Industry and place selection keeps all 45 marker positions and names fixed; country-invalid URL places are cleared',async()=>{
+test('South Asia retains all 45 evidenced sites across independent sector maps with stable labels and scoped legends',async()=>{
  const bundle=await build({stdin:{contents:"import {createAsiaIndustry} from './src/scripts/atlas-asia-industry.ts';window.createAsiaIndustry=createAsiaIndustry;",resolveDir:process.cwd(),loader:'ts'},bundle:true,write:false,format:'iife',platform:'browser',logLevel:'silent',plugins:[{name:'marker',setup(b){b.onResolve({filter:/^maplibre-gl$/},()=>({path:'marker',namespace:'fixture'}));b.onLoad({filter:/.*/,namespace:'fixture'},()=>({contents:'export class Marker{constructor(o){this.options=o;window.markers.push(this)}setLngLat(p){this.point=p;return this}addTo(m){m.element.append(this.options.element);return this}remove(){this.options.element.remove()}}',loader:'js'}));}}]});
  const window=new Window();
  try{
@@ -38,17 +38,26 @@ test('Industry and place selection keeps all 45 marker positions and names fixed
   window.document.body.innerHTML='<main data-asia-atlas data-region="south-central-asia" data-focus="south-asia"><div class="asia-map-frame"></div>'+selectors.map(s=>`<div data-${s}></div>`).join('')+'<select data-industry-topic></select><select data-industry-detail></select><input data-industry-search><section data-south-industry-statistics>'+groups.map(g=>`<section data-south-industry-evidence="${g.id}"></section>`).join('')+'</section></main>';
   window.eval(bundle.outputFiles[0].text);
   const root=window.document.querySelector('main'),element=root.querySelector('.asia-map-frame'),layers=new Map(),data=new Map();
-  const map={element,on(){},getSource:id=>data.get(id),addSource:(id,s)=>data.set(id,s),getLayer:id=>layers.get(id),addLayer:l=>layers.set(l.id,l),setLayoutProperty(){},setFilter(){},setPaintProperty(){},getCanvas:()=>({getBoundingClientRect:()=>({width:1080,height:720})}),project:([x,y])=>({x:(x-60)*22,y:(39-y)*18})};
+  const map={element,on(){},getSource:id=>data.get(id),addSource:(id,s)=>data.set(id,{...s,setData(value){this.data=value}}),getLayer:id=>layers.get(id),addLayer:l=>layers.set(l.id,l),setLayoutProperty(){},setFilter(){},setPaintProperty(){},getCanvas:()=>({getBoundingClientRect:()=>({width:1080,height:720})}),project:([x,y])=>({x:(x-60)*22,y:(39-y)*18})};
   const camera={lng:80,lat:21,zoom:3,bearing:0,pitch:0};let state={field:'industry',topic:'sc-overview',place:null,detail:null,city:null,point:null,camera:null};
   const topics=[{id:'sc-overview',title:'分布全体',kind:'regional'},...southIndustrySectors.map(s=>({id:s.id,title:s.title,kind:'regional'})),...groups.map(g=>({id:g.id,title:g.title,kind:'regional'}))];
   const controller=window.createAsiaIndustry(root,{industry:{topics,countries:[...asiaFocusCountries['south-asia']]},industryBase:'',focusId:'south-asia',countries:asiaFocusCountries['south-asia'].map(code=>({code,name:code})),industryGroups:groups,industrySites:sites,industryOverview:southIndustryOverview},()=>state,(next,fit)=>{assert.equal(fit,false);state=next;},()=>camera,()=>{});
   const snapshot=()=>window.markers.filter(m=>m.options.element.isConnected).map(m=>({id:m.options.element.dataset.industrySite,text:m.options.element.textContent,compact:m.options.element.classList.contains('is-compact'),anchor:m.options.anchor,offset:[...m.options.offset],point:[...m.point]}));
-  controller.render();await controller.show(map);const initial=snapshot();assert.equal(initial.length,45);
-  for(const group of groups){state={...state,topic:group.id,detail:null};controller.render();await controller.show(map);assert.deepEqual(snapshot(),initial,group.id+' keeps geographic labels');const visible=[...root.querySelectorAll('[data-south-industry-evidence]')].filter(n=>!n.hidden);assert.deepEqual(visible.map(n=>n.dataset.southIndustryEvidence),[group.id]);}
-  state={...state,topic:'sc-overview'};
-  const inventory=()=>root.querySelector('[data-industry-content] > details');assert.equal(inventory().open,false);inventory().open=true;
-  for(const site of sites){controller.select(site.id);controller.render();await controller.show(map);assert.deepEqual(snapshot(),initial,site.id);assert.equal(state.detail,site.id);assert.deepEqual(state.camera,camera);assert.equal(inventory().open,true,'Place selection preserves the open inventory and its page space');assert.match(root.querySelector('[data-south-industry-selected]').textContent,new RegExp(site.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')));}
-  controller.select('');controller.render();await controller.show(map);assert.deepEqual(snapshot(),initial);assert.equal(root.querySelector('[data-south-industry-selected]').hidden,true);
+  const shown=new Set();
+  const inventory=()=>root.querySelector('[data-industry-content] > details');
+  for(const sector of southIndustrySectors){
+   state={...state,topic:sector.id,detail:null};controller.render();await controller.show(map);
+   const initial=snapshot(),members=sites.filter(site=>sector.groups.includes(site.group));
+   assert(initial.length>0&&initial.length<=14);
+   const features=data.get('asia-industry-regional').data.features;
+   assert.deepEqual(features.map(f=>f.properties.id),members.map(site=>site.id));features.forEach(f=>shown.add(f.properties.id));
+   assert.deepEqual([...root.querySelector('[data-industry-scale]').children].map(n=>n.textContent),groups.filter(g=>sector.groups.includes(g.id)).map(g=>g.title));
+   for(const group of groups.filter(g=>sector.groups.includes(g.id))){state={...state,topic:group.id,detail:null};controller.render();await controller.show(map);assert.deepEqual(snapshot(),initial,group.id+' keeps its sector labels');const visible=[...root.querySelectorAll('[data-south-industry-evidence]')].filter(n=>!n.hidden);assert.deepEqual(visible.map(n=>n.dataset.southIndustryEvidence),[group.id]);}
+   inventory().open=true;
+   for(const site of members){controller.select(site.id);controller.render();await controller.show(map);assert.deepEqual(snapshot(),initial,site.id);assert.equal(state.detail,site.id);assert.deepEqual(state.camera,camera);assert.equal(inventory().open,true);assert(root.querySelector('[data-south-industry-selected]').textContent.includes(site.name));}
+   controller.select('');controller.render();await controller.show(map);assert.deepEqual(snapshot(),initial);assert.equal(root.querySelector('[data-south-industry-selected]').hidden,true);
+  }
+  assert.deepEqual(shown,new Set(sites.map(site=>site.id)));
   assert.equal(controller.normalize({...state,topic:'sc-overview',place:'BGD',detail:'sc-bengaluru-it',point:[77,13]}).detail,null);
   assert.equal(controller.normalize({...state,detail:'unknown-site'}).detail,null);
   state={...state,field:'agriculture',topic:'rice'};controller.render();assert.equal(root.querySelector('[data-south-industry-statistics]').hidden,true);

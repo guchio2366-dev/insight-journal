@@ -1,5 +1,6 @@
 import {ruIndustries,ruSites,type RuSector,type RuSite} from '../data/atlas/russia-industry-catalog';
 import {projectRussia,russiaWidth,russiaHeight} from './atlas-russia-geometry';
+import {ruMapLabelSpecs} from '../data/atlas/russia-industry-map-labels';
 export type RuIndustryState={sector:RuSector;industry:string|null;site:string|null;only:boolean};
 export const sectorIndustries=(sector:RuSector)=>ruIndustries.filter(i=>i.sectors.includes(sector));
 export function readRuIndustryState(url:URL):RuIndustryState{
@@ -24,21 +25,27 @@ export function groupRuPoints(sector:RuSector,width:number,height:number):RuPoin
  const groups:RuPointGroup[]=[];
  for(const site of visibleRuSites(sector)){const point=ruPoint(site,width,height),group=groups.find(g=>Math.hypot(point[0]-g.point[0],point[1]-g.point[1])<26);if(group)group.sites.push(site);else groups.push({id:site.id,sites:[site],point});}return groups;
 }
-export type RuLabel={id:string;industry:string;box:[number,number,number,number];anchor:[number,number];place:string};
+export type RuLabel={id:string;industries:string[];box:[number,number,number,number];anchor:[number,number];place:string;title:string};
+const textWidth=(text:string,size:number)=>[...text].reduce((n,c)=>n+size*(/[\x20-\x7e]/.test(c)?.61:1),0);
 export function layoutRuIndustryLabels(sector:RuSector,width:number,height:number):RuLabel[]{
  const points=groupRuPoints(sector,width,height),occupied=points.map(g=>[g.point[0]-13,g.point[1]-13,g.point[0]+13,g.point[1]+13]);
- const out:RuLabel[]=[],w=114,h=46;
- for(const industry of sectorIndustries(sector)){
-  const site=visibleRuSites(sector).find(s=>s.industries.includes(industry.id))!;
-  const group=points.find(g=>g.sites.some(s=>s.id===site.id))!,anchor=group.point;
+ const out:RuLabel[]=[],covered=new Set<string>(),remaining=[...ruMapLabelSpecs[sector]];
+ const limit=sector==='services'?10:width<900?10:12;
+ while(remaining.length&&out.length<limit){
+  // Cover distinct industries first, then add geographic examples. Selection is never an input.
+  remaining.sort((a,b)=>Number(b.industries.some(id=>!covered.has(id)))-Number(a.industries.some(id=>!covered.has(id)))||b.priority-a.priority);
+  const spec=remaining.shift()!,group=points.find(g=>g.sites.some(s=>s.id===spec.site));if(!group)continue;
+  const anchor=group.point,[a,b]=anchor,w=Math.ceil(Math.max(textWidth(spec.title,12),textWidth(spec.place,10)))+4,h=29;
   let best:[number,number,number,number]|null=null,score=Infinity;
-  for(let y=8;y+h<=height-8;y+=8)for(let x=8;x+w<=width-8;x+=8){
+  const candidates=[18,30].flatMap(d=>[[a+d,b-h/2],[a-w-d,b-h/2],[a-w/2,b-h-d],[a-w/2,b+d],[a+d,b-h-6],[a-w-d,b-h-6],[a+d,b+6],[a-w-d,b+6]]);
+  for(const [x,y] of candidates){
    const b:[number,number,number,number]=[x,y,x+w,y+h];
-   if(occupied.some(a=>b[0]<a[2]+5&&b[2]>a[0]-5&&b[1]<a[3]+5&&b[3]>a[1]-5))continue;
+   if(x<6||y<6||x+w>width-6||y+h>height-6||occupied.some(a=>b[0]<a[2]+4&&b[2]>a[0]-4&&b[1]<a[3]+4&&b[3]>a[1]-4))continue;
    const d=Math.hypot(x+w/2-anchor[0],y+h/2-anchor[1]);if(d<score){score=d;best=b;}
   }
-  if(!best)throw new Error(`Russia industry label does not fit: ${industry.id} (${width}×${height})`);
-  occupied.push(best);out.push({id:industry.id,industry:industry.id,box:best,anchor,place:site.place});
+  // Leave the sourced marker and list entry intact if a nearby annotation cannot fit.
+  if(!best)continue;
+  occupied.push(best);spec.industries.forEach(id=>covered.add(id));out.push({id:spec.site,industries:spec.industries,box:best,anchor,place:spec.place,title:spec.title});
  }
  return out;
 }

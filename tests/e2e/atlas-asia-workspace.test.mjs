@@ -66,18 +66,18 @@ test('アジア3地域の分野ページは一つの地図・ニュース欄・�
       assert.equal(q('[data-farm-overview-reading]').hidden,field!=='agriculture');
       assert.equal(all('[data-farm-kind]').length,0);
       const features=all('.asia-industry-subsectors [data-industry-feature]:not([data-industry-current-feature])');
-      assert.ok(features.length>=4&&features.length<=6);assert.equal(all('[data-farm-toggle]').length,2);assert.ok(q('[data-industry-all]'));for(const b of features)assert.ok(config.industry.topics.some(t=>t.id===b.dataset.industryFeature));
+      assert.ok(region==='east-asia'?features.length===0:features.length>=4&&features.length<=6);assert.equal(all('[data-farm-toggle]').length,2);assert.ok(q('[data-industry-all]'));for(const b of features)assert.ok(config.industry.topics.some(t=>t.id===b.dataset.industryFeature));
       if(region==='east-asia'){
         assert.deepEqual(Array.from(all('[data-east-industry-sector]'),b=>b.dataset.eastIndustrySector),['resources','manufacturing','services']);
-        for(const [sector,overview,count] of [['resources','east-resources',7],['manufacturing','east-clusters',20],['services','east-services',5]]){
-          const clusters=all(`[data-east-industry-kinds="${sector}"] [data-industry-feature]`);
+        for(const [sector,overview,count] of [['resources','east-resources',6],['manufacturing','east-clusters',17],['services','east-services',5]]){
+          const clusters=all(`[data-east-industry-kinds="${sector}"] option`);
           assert.equal(clusters.length,count+1,'each approved sector offers its overview and sourced industry kinds');
-          assert.equal(clusters[0].dataset.industryFeature,overview);
-          for(const b of clusters)assert.ok(config.industry.topics.some(t=>t.id===b.dataset.industryFeature));
+          assert.equal(clusters[0].value,overview);
+          for(const b of clusters)assert.ok(config.industry.topics.some(t=>t.id===b.value));
         }
         assert.equal(config.industry.topics.filter(t=>t.kind==='clusters').length,30);
       }
-      assert.equal(all('[data-industry-sector]').length,5,'industry uses the same parent categories as the US');
+      assert.equal(all('[data-industry-sector]').length,region==='east-asia'?0:5,'East Asia uses its three regional sector tabs');
       for(const current of all('[data-industry-current-feature]'))assert.equal(current.hidden,true,'current-topic placeholders cannot imply unpublished data before initialization');
       assert.equal(all('[data-industry-subsector]').length,0);
       assert.equal(all('[data-population-group]').length,3);

@@ -13,16 +13,24 @@ test('unselected overview renderer remains exactly the published PR 350 implemen
  assert.equal(sha256(retained),'2f3cc797a573c678cf710334bde7f14dda5aecce242767c5b2f4c6608def5377');
  for(const [path,expected] of [
   ['src/components/atlas/AsiaAtlasPage.astro','5a68ea0822cb9ef80b4225ae97841bba1944cc8608a07fac9c12b9ad65c2f667'],
-  ['src/components/atlas/EuropeVerifiedStatistics.astro','6c0e50bc54884c8793f60bb0962fcffa29c5d540b189ff8f5b7c8ec1214bb8fb'],
-  ['src/scripts/atlas-africa.ts','68d6af78d32b5dbe8cc9579c2cf67fd6452efada37db36c5df3e3bda027c3a51']
+  ['src/components/atlas/EuropeVerifiedStatistics.astro','6c0e50bc54884c8793f60bb0962fcffa29c5d540b189ff8f5b7c8ec1214bb8fb']
  ]){
   // The authorized South Asia industry extension adds only these two hooks.
   // Keep the complete agriculture/other-region source under its original hash.
   const text=readFileSync(path,'utf8');
-  const retained=path==='src/scripts/atlas-africa.ts'?text.replace("id==='copperbelt-connections'?'copper':", "id==='copperbelt-connections'?'copper-cobalt':"):path==='src/components/atlas/AsiaAtlasPage.astro'?text
+  const retained=path==='src/components/atlas/AsiaAtlasPage.astro'?text
    .replace(/^import SouthAsiaIndustryStatistics from '\.\/asia\/SouthAsiaIndustryStatistics\.astro';\n/m,'')
    .replace(/^     \{focusId==='south-asia'&&<SouthAsiaIndustryStatistics active=\{initialField==='industry'\} \/>\}\n/m,''):text;
   assert.equal(sha256(retained),expected,`${path}: unselected regional views are unchanged`);
+ }
+});
+// Industry now has three independent SVG panels. Keep the original agriculture
+// routines unchanged apart from equivalent accessible-title selectors.
+// The existing field-transition tests also verify the active agriculture map.
+test('Africa agriculture reading and crop/livestock choice retain their published implementation',()=>{
+ const text=readFileSync('src/scripts/atlas-africa.ts','utf8').replaceAll("'[data-africa-svg-title]'","'#africa-svg-title'").replaceAll("'[data-africa-svg-desc]'","'#africa-svg-desc'");
+ for(const [start,end,expected] of [[" function renderAgricultureReading(){", " function renderActualReading(){", "3e29ddc1491d7b4d51d16d8690df98f777ad33a48eb772b7756e457797c28df8"], [" function chooseAgriLayer(key:string){", " root.addEventListener('click'", "e00d40e4ea9a971abe2be974f2b4647cfa735ea32f2a0b71de120c4b667475f5"]]){
+  const offset=text.indexOf(start);assert(offset>=0);const limit=text.indexOf(end,offset);assert(limit>offset);assert.equal(sha256(text.slice(offset,limit)),expected);
  }
 });
 for(const region of ['south-central-asia','southeast-asia'])test(`${region}: explicit product order is reversed when returning to the published overview`,async()=>{

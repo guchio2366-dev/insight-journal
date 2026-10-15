@@ -30,19 +30,19 @@ if(!production){
  base=`http://127.0.0.1:${server.address().port}/insight-journal`;
 }
 const scenes=[
- {id:'canada',route:'north-america/canada/industry/',ready:'[data-ca-industry-pilot]',map:'[data-ca-map-frame]',sectors:'[data-ca-sector]',products:'[data-ca-subsector]',key:'data-ca-subsector',sources:'[data-ca-evidence-scale] a',camera:'[data-ca-map]'},
- {id:'mexico',route:'north-america/mexico/industry/',ready:'[data-ma-atlas][data-ma-ready=true]',map:'[data-ma-frame]',sectors:'[data-ma-sector]',products:'[data-ma-industry]',key:'data-ma-industry',sources:'[data-ma-indicators] a',camera:'[data-ma-map]'},
- {id:'europe',route:'europe/industry/',ready:'[data-europe-detail][data-initialized=true]',map:'.eu-map-stage',sectors:'[data-eu-industry-sector]',products:'[data-eu-industry-group]',key:'data-eu-industry-group',sources:'[data-eu-industry-evidence] a',camera:'[data-eu-static]'},
- {id:'east-asia',route:'asia/east-asia/industry/',ready:'[data-asia-atlas][data-map-ready=true]',map:'.asia-map-frame',sectors:'[data-east-industry-sector]',products:'[data-east-industry-kinds] [data-industry-feature]',key:'data-industry-feature',sources:'[data-east-industry-statistics] a'},
- {id:'southeast-asia',route:'asia/southeast-asia/industry/',ready:'[data-asia-atlas][data-southeast-industry-layout-ready=true]',map:'.asia-map-frame',sectors:'[data-southeast-industry-sector]:not([data-southeast-industry-sector="all"])',products:'[data-southeast-industry-kind]',key:'data-southeast-industry-kind',sources:'[data-southeast-industry-facts] a'},
- {id:'south-asia',route:'asia/south-asia/industry/',ready:'[data-asia-atlas][data-map-ready=true]',map:'.asia-map-frame',sectors:'[data-south-industry-sector]',products:'.south-industry-products [data-industry-feature]',key:'data-industry-feature',samples:['sc-coal','sc-steel','sc-it'],sources:'[data-south-industry-evidence] a'},
- {id:'central-asia',route:'asia/central-asia/industry/',ready:'[data-central-industry][data-central-ready=true]',map:'[data-central-map-frame]',sectors:'[data-central-sector]',products:'[data-central-choice]',key:'data-central-choice',sources:'[data-central-metric] a',camera:'[data-central-map]'},
- {id:'west-asia',route:'west-asia/industry/',ready:'[data-west-industry][data-ready=true]',map:'.wi-map-frame',sectors:'[data-wi-sector]',products:'[data-wi-industry]',key:'data-wi-industry',sources:'[data-wi-stat-panel] a',camera:'[data-wi-map]'},
- {id:'africa',route:'africa/?field=industry',ready:'[data-africa-atlas][data-initialized=true]',map:'.africa-map-frame',sectors:'[data-africa-industry-sector]',products:'[data-africa-industry-commodity]',mode:'select',sources:'[data-africa-industry-statistics] a',camera:'.africa-map'},
+ {id:'canada',route:'north-america/canada/industry/',ready:'[data-ca-industry-pilot]',map:'[data-ca-map-frame]',sectors:'[data-ca-sector]',products:'[data-ca-industry-picker]:visible',mode:'select',sources:'[data-ca-evidence-scale] a',camera:'[data-ca-map]'},
+ {id:'mexico',route:'north-america/mexico/industry/',ready:'[data-ma-atlas][data-ma-ready=true]',map:'[data-ma-sector-map]:not([hidden]) [data-ma-frame]',sectors:'[data-ma-sector]',products:'[data-ma-choices]:not([hidden]) [data-ma-industry-select]',mode:'select',sources:'[data-ma-indicators] a',camera:'[data-ma-sector-map]:not([hidden]) [data-ma-map]'},
+ {id:'europe',route:'europe/industry/',ready:'[data-europe-detail][data-initialized=true]',map:'.eu-map-stage',sectors:'[data-eu-industry-sector]',products:'[data-eu-industry-group]',key:'data-eu-industry-group',productsDisclosure:'[data-eu-industry-product-menu] > summary',sources:'[data-eu-industry-evidence] a',camera:'[data-eu-static]'},
+ {id:'east-asia',route:'asia/east-asia/industry/',ready:'[data-asia-atlas][data-map-ready=true]',map:'.asia-map-frame',sectors:'[data-east-industry-sector]',products:'[data-east-industry-item]:visible',mode:'select',sources:'[data-east-industry-statistics] a'},
+ {id:'southeast-asia',route:'asia/southeast-asia/industry/',ready:'[data-asia-atlas][data-southeast-industry-layout-ready=true]',map:'.asia-map-frame',sectors:'[data-southeast-industry-sector]:not([data-southeast-industry-sector="all"])',products:'[data-southeast-industry-picker]:visible',mode:'select',sources:'[data-southeast-industry-facts] a'},
+ {id:'south-asia',route:'asia/south-asia/industry/',ready:'[data-asia-atlas][data-map-ready=true]',map:'.asia-map-frame',sectors:'[data-south-industry-sector]',products:'[data-south-industry-item]:visible',mode:'select',samples:['sc-coal','sc-steel','sc-it'],sources:'[data-south-industry-evidence] a'},
+ {id:'central-asia',route:'asia/central-asia/industry/',ready:'[data-central-industry][data-central-ready=true]',map:'[data-central-map-frame]',sectors:'[data-central-sector]',products:'[data-central-choice]',key:'data-central-choice',productsDisclosure:'[data-central-product-menu] > summary',sources:'[data-central-metric] a',camera:'[data-central-map]'},
+ {id:'west-asia',route:'west-asia/industry/',ready:'[data-west-industry][data-ready=true]',map:'.wi-map-frame',sectors:'[data-wi-sector]',products:'[data-wi-industry]',key:'data-wi-industry',productsDisclosure:'[data-wi-product-menu] > summary',sources:'[data-wi-stat-panel] a',camera:'[data-wi-map]'},
+ {id:'africa',route:'africa/?field=industry',ready:'[data-africa-atlas][data-initialized=true]',map:'[data-africa-map-active=true]',sectors:'[data-africa-industry-sector]',products:'[data-africa-industry-commodity]',mode:'select',sources:'[data-africa-industry-statistics] a',camera:'[data-africa-map-active=true] .africa-map'},
  {id:'oceania',route:'oceania/industry/',ready:'[data-oceania-learning][data-oceania-ready=true]',map:'[data-primary-map]',sectors:'[data-industry-sector]',products:'[data-oceania-product]',mode:'select',samples:['iron','aluminium','tourism'],sources:'[data-catalog-stat-sources] a',camera:'[data-primary-map] svg'},
- {id:'latin-america',route:'latin-america/industry/',ready:'[data-latin-industry-sectors][data-lis-ready=true]',map:'[data-lis-map]',sectors:'[data-latin-industry-sector]',products:'[data-lis-industry]',key:'data-lis-industry',sources:'[data-lis-sources] a',sourceDisclosure:'details:has([data-lis-sources]) > summary',camera:'[data-lis-map]'},
- {id:'us',route:'north-america/industry/',ready:'[data-us-industry][data-us-initialized=true]',map:'[data-us-map-frame]',sectors:'[data-us-sector]',products:'[data-us-key]',key:'data-us-key',sources:'[data-us-statistics] a',camera:'[data-us-map]'},
- {id:'russia',route:'russia/industry/',ready:'[data-ru-industry][data-ru-ready=true]',map:'[data-ru-canvas]',sectors:'[data-ru-sector]',products:'[data-ru-product]',key:'data-ru-product',sources:'[data-ru-stat] a',camera:'[data-ru-map]'},
+ {id:'latin-america',route:'latin-america/industry/',ready:'[data-latin-industry-sectors][data-lis-ready=true]',map:'[data-lis-map]',sectors:'[data-latin-industry-sector]',products:'[data-lis-industry]',key:'data-lis-industry',productsDisclosure:'.latin-sector-industry-picker > summary',sources:'[data-lis-sources] a',sourceDisclosure:'details:has([data-lis-sources]) > summary',camera:'[data-lis-map]'},
+ {id:'us',route:'north-america/industry/',ready:'[data-us-industry][data-us-initialized=true]',map:'[data-us-map-frame]',sectors:'[data-us-sector][role=tab]',products:'[data-us-product-select]',mode:'select',sources:'[data-us-statistics] a',camera:'[data-us-map]'},
+ {id:'russia',route:'russia/industry/',ready:'[data-ru-industry][data-ru-ready=true]',map:'[data-ru-canvas]:visible',sectors:'[data-ru-sector]',products:'[data-ru-product-select]',mode:'select',sources:'[data-ru-stat] a',camera:'[data-ru-map]:visible'},
 ];
 // Controllers may expose the current value on a root element as well as on
 // controls. Exercise only the native controls and their selected state.
@@ -50,10 +50,12 @@ for(const scene of scenes){
  scene.sectors='button'+scene.sectors;
  if(scene.mode!=='select')scene.products=scene.products.replace(/(\[[^\]]+\])$/,'button$1');
 }
+const labelSelectors={canada:'[data-ca-label-sites]',mexico:'[data-ma-cluster]',europe:'.eu-label-industry','east-asia':'.asia-industry-regional-label','southeast-asia':'[data-southeast-industry-label]','south-asia':'.asia-industry-regional-label','central-asia':'[data-central-label-industry]','west-asia':'[data-wi-annotation]',africa:'[data-africa-industry-annotation]',oceania:'[data-oceania-product-mark]','latin-america':'[data-lis-label]',us:'[data-us-map-label]',russia:'[data-ru-label]'};
+for(const scene of scenes)scene.labels=labelSelectors[scene.id];
 assert.equal(scenes.length,13);
 const report={head,target:production?'existing-pages':'build',expectedReleaseSha:production?expected:null,sandboxRequired:true,status:'running',cases:[],failedCases:[],images:[],errors:[],failedResponses:[]};
 function canonicalUrl(value){const url=new URL(value);url.searchParams.sort();return url.href;}
-const excluded=new Set(['','all','overview','sc-overview','sc-south-resources','sc-south-manufacturing','sc-south-services','east-resources','east-manufacturing','east-services']);
+const excluded=new Set(['','all','overview','sc-overview','sc-south-resources','sc-south-manufacturing','sc-south-services','east-resources','east-manufacturing','east-clusters','east-services']);
 async function settle(scene){
  await page.locator(scene.ready).waitFor();
  if(scene.id==='canada')await page.waitForFunction(()=>!!document.querySelector('[data-ca-industry-pilot]')?.canadaIndustryView);
@@ -62,9 +64,12 @@ async function settle(scene){
 async function snapshot(scene){
  const box=await page.locator(scene.map).first().boundingBox();assert(box?.width>100&&box.height>100,scene.id+': nonempty map');
  const frame=scene.camera?await page.locator(scene.camera).first().getAttribute('viewBox'):null;
- return {width:box.width,height:box.height,frame};
+ const labels=await page.locator(scene.map).first().evaluate((root,selector)=>{const map=root.getBoundingClientRect();return [...root.querySelectorAll(selector)].filter(node=>{const r=node.getBoundingClientRect();return r.width>0&&r.height>0;}).map(node=>{const r=node.getBoundingClientRect();return {text:node.textContent.trim(),x:r.x-map.x,y:r.y-map.y,width:r.width,height:r.height};});},scene.labels);
+ return {width:box.width,height:box.height,frame,labels};
 }
 function fixed(before,after,name){
+ assert.equal(after.labels.length,before.labels.length,name+': sector label count changes');
+ for(let i=0;i<before.labels.length;i++){assert.equal(after.labels[i].text,before.labels[i].text,name+': sector caption changes');for(const k of ['x','y'])assert(Math.abs(after.labels[i][k]-before.labels[i][k])<=1.5,name+': sector caption '+k+' moves');}
  for(const k of ['width','height'])assert(Math.abs(before[k]-after[k])<=1,name+': map '+k+' changes');
  if(before.frame!==null&&after.frame!==null){
   const a=before.frame.split(/[ ,]+/).map(Number),b=after.frame.split(/[ ,]+/).map(Number);
@@ -72,7 +77,9 @@ function fixed(before,after,name){
   assert(a.every((value,i)=>Math.abs(value-b[i])<=.001),name+': map viewBox changes beyond SVG serialization rounding');
  }else assert.equal(after.frame,before.frame,name+': map viewBox changes');
 }
+async function revealProducts(scene){if(scene.productsDisclosure&&!await page.locator(scene.products+':visible').count())await page.locator(scene.productsDisclosure).click();}
 async function choose(scene,sample){
+ await revealProducts(scene);
  if(scene.mode==='select'){
   const control=page.locator(scene.products).first();
   const choices=await control.locator('option').evaluateAll(nodes=>nodes.filter(n=>!n.disabled&&!n.hidden).map(n=>n.value));
@@ -86,6 +93,15 @@ async function choose(scene,sample){
  }
  throw Error(scene.id+': no selectable industry');
 }
+async function capture(scene,profile,stage,sectorIndex){
+ await page.evaluate(()=>scrollTo(0,0));await page.mouse.move(0,0);
+ const file=`${profile.name}-${scene.id}-${sectorIndex}-${stage}.jpg`,bytes=await page.screenshot({path:path.join(output,file),type:'jpeg',quality:78,animations:'disabled'});
+ const actualViewport=await page.evaluate(()=>({width:innerWidth,height:innerHeight,deviceScaleFactor:devicePixelRatio,visualViewportScale:visualViewport?.scale}));
+ report.images.push({file,sha256:createHash('sha256').update(bytes).digest('hex'),url:page.url(),viewport:{width:profile.width,height:profile.height},profile,actualViewport,stage,sectorIndex});
+ // The same evidence is retained as an artifact. Optional exact image bytes in
+ // ordinary CI logs allow authorized review when artifact transfer is unavailable.
+ if(process.env.INDUSTRY_SMOKE_LOG_IMAGES==='1'&&profile.name==='primary-reproduction'&&stage==='initial')console.log('INDUSTRY_REVIEW_IMAGE '+JSON.stringify({file,mimeType:'image/jpeg',base64:bytes.toString('base64')}));
+}
 async function checkRelease(context){
  if(!production)return;
  const response=await context.request.get(base+'/_release.json');assert.equal(response.status(),200);
@@ -94,39 +110,40 @@ async function checkRelease(context){
 try{
  browser=await chromium.launch({executablePath:process.env.REVIEW_CHROME_PATH??process.env.INDUSTRY_REVIEW_CHROME_PATH,headless:true,chromiumSandbox:true,ignoreDefaultArgs:['--unsafely-disable-devtools-self-xss-warnings']});
  report.browserVersion=browser.version();
- const context=await browser.newContext({viewport:{width:1920,height:1080},deviceScaleFactor:1,locale:'ja-JP',serviceWorkers:'block',reducedMotion:'reduce'});
+ const sandbox=await browser.newPage();await sandbox.goto('chrome://sandbox');report.sandboxStatus=await sandbox.locator('body').innerText();assert.match(report.sandboxStatus,/adequately sandboxed/i,'Chrome must report its sandbox as adequate');await sandbox.close();
+ const profiles=[{name:'primary-reproduction',width:1896,height:996,deviceScaleFactor:1,sourceCssViewportMeasured:false},{name:'historical-pc',width:1280,height:665,deviceScaleFactor:1.5,sourceCssViewportMeasured:true},{name:'portrait',width:390,height:844,deviceScaleFactor:1,sourceCssViewportMeasured:false}];
  const origin=new URL(base).origin;
+ for(const profile of profiles){
+ const viewport={width:profile.width,height:profile.height};
+ const context=await browser.newContext({viewport,deviceScaleFactor:profile.deviceScaleFactor,locale:'ja-JP',serviceWorkers:'block',reducedMotion:'reduce'});
  await context.route('**/*',route=>new URL(route.request().url()).origin===origin?route.continue():route.abort());
  await context.addInitScript(()=>{window.atlasRenderReview=true;});
  await checkRelease(context);page=await context.newPage();page.setDefaultTimeout(30000);
  page.on('pageerror',error=>report.errors.push(error.message));page.on('response',response=>{if(response.status()>=400)report.failedResponses.push({url:response.url(),status:response.status()});});
- for(const viewport of [{width:1920,height:1080},{width:390,height:844}]){
-  await page.setViewportSize(viewport);
   for(const scene of scenes){
    report.phase=viewport.width+'/'+scene.id;
    try{
    const response=await page.goto(base+'/atlas/'+scene.route,{waitUntil:'networkidle'});assert.equal(response.status(),200);await settle(scene);
-   const tabs=page.locator(scene.sectors+':visible'),tabCount=await tabs.count();assert.equal(tabCount,scene.id==='us'?4:3,scene.id+': retained sector controls');
+   const tabs=page.locator(scene.sectors+':visible'),tabCount=await tabs.count();assert.equal(tabCount,3,scene.id+': three independent sector controls');
    const selected=[];
    for(let i=0;i<tabCount;i++){
-    await tabs.nth(i).click();await settle(scene);const before=await snapshot(scene),choice=await choose(scene,scene.samples?.[i]);await settle(scene);
+    await tabs.nth(i).click();await settle(scene);await capture(scene,profile,'initial',i);const before=await snapshot(scene),choice=await choose(scene,scene.samples?.[i]);await settle(scene);
     assert([...new URL(page.url()).searchParams.values()].some(value=>value.includes(choice.id)),scene.id+': selected industry is represented in URL');
     if(scene.mode==='select')assert.equal(await choice.control.inputValue(),choice.id);else assert.equal(await choice.control.getAttribute('aria-pressed'),'true');
     fixed(before,await snapshot(scene),scene.id+' '+choice.id);
     if(scene.sourceDisclosure&&!await page.locator(scene.sources+':visible').count())await page.locator(scene.sourceDisclosure).click();
     assert(await page.locator(scene.sources+':visible').count()>0,scene.id+': selected evidence has a visible source link');
     const selectedUrl=page.url();await page.reload({waitUntil:'networkidle'});await settle(scene);assert.equal(canonicalUrl(page.url()),canonicalUrl(selectedUrl),scene.id+': URL state reload');
-    const restored=scene.mode==='select'?page.locator(scene.products).first():page.locator(`${scene.products}[${scene.key}="${choice.id}"]:visible`).first();
+    await revealProducts(scene);const restored=scene.mode==='select'?page.locator(scene.products).first():page.locator(`${scene.products}[${scene.key}="${choice.id}"]:visible`).first();
     if(scene.mode==='select')assert.equal(await restored.inputValue(),choice.id);else assert.equal(await restored.getAttribute('aria-pressed'),'true');
-    fixed(before,await snapshot(scene),scene.id+' reloaded '+choice.id);selected.push(choice.id);
+    fixed(before,await snapshot(scene),scene.id+' reloaded '+choice.id);await capture(scene,profile,'selected',i);selected.push(choice.id);
    }
    assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,scene.id+': document overflow');
-   await page.evaluate(()=>scrollTo(0,0));await page.mouse.move(0,0);const file=`${viewport.width}-${scene.id}.jpg`,bytes=await page.screenshot({path:path.join(output,file),type:'jpeg',quality:80,animations:'disabled'});
-   report.images.push({file,sha256:createHash('sha256').update(bytes).digest('hex'),url:page.url(),viewport});
-   report.cases.push({id:scene.id,viewport,sectors:tabCount,selected,checks:['native selection','source links','map size and viewBox stable','URL reload','no document overflow']});
+   report.cases.push({id:scene.id,viewport,profile,sectors:tabCount,selected,checks:['native selection','source links','map size, viewBox and sector captions stable','URL reload','no document overflow']});
    }catch(error){report.failedCases.push({phase:report.phase,error:String(error)});console.error(`::error title=Industry Pages case::${report.phase}: ${String(error).replaceAll('%','%25').replaceAll('\n','%0A').replaceAll('\r','%0D')}`);}
   }
+ await checkRelease(context);await context.close();
  }
- await checkRelease(context);assert.deepEqual(report.failedCases,[]);assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedResponses,[]);report.status='passed';delete report.phase;
+ assert.deepEqual(report.failedCases,[]);assert.deepEqual(report.errors,[]);assert.deepEqual(report.failedResponses,[]);report.status='passed';delete report.phase;
 }catch(error){report.status=browser?'failed':'blocked';report.failure=String(error);process.exitCode=1;console.error(`::error title=Industry Pages acceptance::${report.phase??'browser prerequisite'}: ${String(error).replaceAll('%','%25').replaceAll('\n','%0A').replaceAll('\r','%0D')}`);}
 finally{await writeFile(path.join(output,'verification.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));await browser?.close();if(server?.listening)await new Promise(r=>server.close(r));}

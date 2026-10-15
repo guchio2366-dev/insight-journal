@@ -32,11 +32,12 @@ try{
    if(renderer==='auto')assert.equal(initial.render,'live');
    const labels=await page.locator('[data-eu-map-kind="feature"][data-eu-industry]:visible').count();assert.ok(labels>=9);
    const overlaps=await page.evaluate(()=>{const labels=[...document.querySelectorAll('[data-eu-map-kind="feature"][data-eu-industry]:not(.is-point-only)')].filter(n=>!n.hidden).map(n=>({id:n.dataset.euMapPlace,r:n.getBoundingClientRect()}));return labels.flatMap((a,i)=>labels.slice(i+1).filter(b=>a.r.left<b.r.right&&a.r.right>b.r.left&&a.r.top<b.r.bottom&&a.r.bottom>b.r.top).map(b=>[a.id,b.id]));});assert.deepEqual(overlaps,[]);
-   for(const id of europeIndustrySectorCopy[sector].labels)assert.equal(await page.locator(`[data-eu-map-place="${id}"][data-eu-map-kind="feature"]:not(.is-point-only)`).isVisible(),true,id+' required name');
+   const named=await page.locator('[data-eu-map-kind="feature"][data-eu-industry]:not(.is-point-only):visible').evaluateAll(nodes=>nodes.map(node=>node.dataset.euMapPlace));assert.ok(named.length>=4&&named.length<=europeIndustrySectorCopy[sector].labels.length);assert.ok(named.every(id=>europeIndustrySectorCopy[sector].labels.includes(id)));
    await capture(sector+'-initial');
    const pointer=page.locator('[data-eu-map-kind="feature"][data-eu-industry]:not(.is-point-only):visible').first();
    await pointer.click();await settle();stable(initial,await snapshot());
    await pointer.click();await settle();stable(initial,await snapshot());
+   await page.locator('[data-eu-industry-product-menu]').evaluate(node=>node.open=true);await settle();
    await page.locator('[data-eu-industry-all]').click();await settle();
    const groups=await page.locator('[data-eu-industry-group]:visible').evaluateAll(nodes=>nodes.map(n=>n.dataset.euIndustryGroup));
    assert.equal(await page.locator('[data-eu-industry-evidence]:visible').count(),groups.length);
@@ -66,8 +67,10 @@ try{
      await page.locator('[data-eu-return-multi]').click();await settle();stable(initial,await snapshot());
      await page.goBack();await settle();assert.equal(new URL(page.url()).searchParams.get('industryOnly'),'1');stable(initial,await snapshot());
      await page.goForward();await settle();stable(initial,await snapshot());
+     await page.locator('[data-eu-industry-product-menu]').evaluate(node=>node.open=true);await settle();
     }else{await page.locator('[data-eu-return-multi]').click();await settle();stable(initial,await snapshot());}
    }
+   await page.locator('[data-eu-industry-product-menu]').evaluate(node=>node.open=true);await settle();
    await page.locator('[data-eu-industry-all]').click();await settle();stable(initial,await snapshot());
    assert.equal(new URL(page.url()).searchParams.has('industryGroup'),false);
    result.checks.push({renderer,sector,groups:groups.length,labels,initial});

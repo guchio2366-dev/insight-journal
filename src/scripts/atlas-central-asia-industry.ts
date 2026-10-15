@@ -1,5 +1,5 @@
-import {centralIndustries,centralIndustrySectors,centralIndustrySites,centralIndustryCountries,centralIndustrySources,centralIndustryMetric,formatCentralMetric,type CentralIndustryId,type CentralIndustrySector,type CentralSite} from '../data/atlas/central-asia-industry';
-import {readCentralIndustryState,writeCentralIndustryState,projectCentralIndustry,fitCentralIndustryFrame,zoomCentralIndustryFrame,groupCentralIndustryLabels,placeCentralIndustryLabel,type CentralIndustryState} from '../lib/atlas-central-asia-industry';
+import {centralIndustries,centralIndustrySectors,centralIndustrySites,centralIndustryCountries,centralIndustrySources,type CentralIndustryId,type CentralIndustrySector,type CentralSite} from '../data/atlas/central-asia-industry';
+import {readCentralIndustryState,writeCentralIndustryState,projectCentralIndustry,fitCentralIndustryFrame,zoomCentralIndustryFrame,groupCentralIndustryLabels,placeCentralIndustryLabel,centralIndustryStageReading,centralIndustryAnnotationLabel,centralIndustryGroupPlace,type CentralIndustryState} from '../lib/atlas-central-asia-industry';
 const ns='http://www.w3.org/2000/svg';
 const rounded=(frame:number[])=>frame.map(n=>Number(n.toFixed(3)));
 const svgElement=(tag:string,attrs:Record<string,string|number>={})=>{const node=document.createElementNS(ns,tag);for(const [key,value]of Object.entries(attrs))node.setAttribute(key,String(value));return node;};
@@ -27,16 +27,18 @@ export function initCentralAsiaIndustry(root:HTMLElement){
  }
  function sources(container:HTMLElement,ids:string[]){container.replaceChildren();for(const id of ids){const source=centralIndustrySources[id],link=document.createElement('a');link.href=source.url;link.textContent=source.publisher+' · '+source.title;container.append(link);}}
  function updateReading(){
-  const item=industry(),currentSector=sector(),site=selectedSite();
-  root.dataset.industrySector=state.sector;root.dataset.industrySubsector=state.industry??'all';
+  const item=industry(),currentSector=sector(),site=selectedSite(),reading=item?centralIndustryStageReading(item.id,state.sector):null;
+  root.dataset.industrySector=state.sector;root.dataset.industrySubsector=state.industry??'all';svg.dataset.centralMapView=state.sector;
+  svg.setAttribute('aria-label','中央アジア5か国の'+currentSector.label+'の地図。地点を選択でき、矢印キーで移動できます。');
+  for(const key of root.querySelectorAll<HTMLElement>('[data-central-map-key-sector]'))key.hidden=key.dataset.centralMapKeySector!==state.sector;
   q('#central-industry-panel').setAttribute('aria-labelledby','central-sector-'+state.sector);
   for(const button of root.querySelectorAll<HTMLButtonElement>('[data-central-sector]')){const active=button.dataset.centralSector===state.sector;button.setAttribute('aria-selected',String(active));button.tabIndex=active?0:-1;}
   for(const row of root.querySelectorAll<HTMLElement>('[data-central-choices]'))row.hidden=row.dataset.centralChoices!==state.sector;
   for(const button of root.querySelectorAll('[data-central-choice]'))button.setAttribute('aria-pressed',String((button as HTMLElement).dataset.centralChoice===state.industry));
   for(const button of root.querySelectorAll('[data-central-overview]'))button.setAttribute('aria-pressed',String(!state.industry));
-  q('[data-central-title]').textContent=item?.label??currentSector.label;
+  q('[data-central-title]').textContent=reading?.title??currentSector.label;
   q('[data-central-insight]').textContent=currentSector.insight;
-  q('[data-central-reading]').textContent=item?.overview??currentSector.overview;
+  q('[data-central-reading]').textContent=reading?.overview??currentSector.overview;
   q('[data-central-why]').textContent=item?.why??currentSector.why;
   q('[data-central-process]').hidden=!item;
   if(item){q('[data-central-process-copy]').textContent=item.process;q('[data-central-limits]').textContent=item.limits;}
@@ -61,16 +63,6 @@ export function initCentralAsiaIndustry(root:HTMLElement){
    target.append(group);
   }
  }
- function numericLabel(group:{site:CentralSite}[]):string{
-  if(group.length===1&&group[0].site.localMetric){const metric=centralIndustryMetric(group[0].site.localMetric)!;return formatCentralMetric(metric)+' · '+metric.year+(metric.industry==='tourism'?'・'+metric.scope:group[0].site.kind==='regional'?'・州等全体':'');}
-  const ids=group.map(point=>point.site.id).sort();
-  if(ids.length===3&&ids.includes('sc-fergana-cotton')&&ids.includes('central-andijan-textiles')&&ids.includes('central-namangan-textiles'))return '3州計19.5兆スム · 2026年1–7月／繊維';
-  const metrics=group.map(point=>point.site.localMetric?centralIndustryMetric(point.site.localMetric):null);
-  if(metrics.every(m=>m&&typeof m.value==='number'&&m.unit===metrics[0]!.unit&&m.year===metrics[0]!.year&&m.sources.join(',')===metrics[0]!.sources.join(','))&&['textiles','tourism'].includes(group[0].site.industry)){
-   const total=metrics.reduce((sum,m)=>sum+(m!.value as number),0),first=metrics[0]!;return group.length+'州等計'+total.toLocaleString('ja-JP',{maximumFractionDigits:2})+' '+first.unit+' · '+first.year+(first.industry==='tourism'?'／代理店':'／繊維');
-  }
-  return '';
- }
  function drawGeometry(){
   svg.setAttribute('viewBox',frame.join(' '));
   const key=[state.sector,stage.clientWidth,stage.clientHeight,...frame].join(':');if(key===geometryKey)return;geometryKey=key;
@@ -93,21 +85,23 @@ export function initCentralAsiaIndustry(root:HTMLElement){
    mark.addEventListener('click',event=>{event.stopPropagation();chooseSite(site);});mark.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();chooseSite(site);}});lines.append(mark);
    occupied.push([x-6,y-6,x+6,y+6]);
   }
-  for(const group of groupCentralIndustryLabels(points,width<600?68:70)){
-   const item=centralIndustries.find(i=>i.id===group[0].site.industry)!,card=document.createElement('button');card.type='button';card.className='central-map-label';card.dataset.centralLabelIndustry=item.id;card.dataset.centralLabelSites=group.map(point=>point.site.id).join(',');card.style.setProperty('--industry-color',item.color);card.setAttribute('aria-pressed','false');
-   const heading=document.createElement('strong'),icon=document.createElement('i');icon.setAttribute('aria-hidden','true');heading.append(icon,document.createTextNode(item.shortLabel));card.append(heading);
-   const subtitle=document.createElement('small');subtitle.textContent=group.length<=2?group.map(point=>point.site.place).join('・'):group.map(point=>point.site.place).slice(0,2).join('・')+'ほか';card.append(subtitle);
-   const local=numericLabel(group);if(local){const value=document.createElement('span');value.className='central-local-value';value.textContent=local;card.append(value);}
-   card.setAttribute('aria-label',item.label+'：'+group.map(point=>point.site.place).join('、')+'を強調');card.addEventListener('click',()=>chooseIndustry(item.id));overlay.append(card);
-   const box=placeCentralIndustryLabel(group.map(point=>point.point),[card.offsetWidth,card.offsetHeight],[width,height],occupied,width<600?180:150);
+  for(const group of groupCentralIndustryLabels(points,width<600?76:92)){
+   const item=centralIndustries.find(i=>i.id===group[0].site.industry)!,card=document.createElement('div');card.className='central-map-label';card.dataset.centralLabelIndustry=item.id;card.dataset.centralLabelSites=group.map(point=>point.site.id).join(',');card.style.setProperty('--industry-color',item.color);card.setAttribute('role','note');
+   const heading=document.createElement('strong'),icon=document.createElement('i');icon.setAttribute('aria-hidden','true');heading.append(icon,document.createTextNode(centralIndustryAnnotationLabel(group[0].site,state.sector)));card.append(heading);
+   const subtitle=document.createElement('small');subtitle.textContent=centralIndustryGroupPlace(group);card.append(subtitle);
+   card.title=item.label+'：'+group.map(point=>point.site.place).join('、');card.setAttribute('aria-label',card.title);overlay.append(card);
+   const center=group.reduce((sum,point)=>[sum[0]+point.point[0]/group.length,sum[1]+point.point[1]/group.length],[0,0]);
+   const anchor=group.reduce((nearest,point)=>Math.hypot(point.point[0]-center[0],point.point[1]-center[1])<Math.hypot(nearest.point[0]-center[0],nearest.point[1]-center[1])?point:nearest,group[0]);
+   let box=placeCentralIndustryLabel([anchor.point],[card.offsetWidth,card.offsetHeight],[width,height],occupied,40);
+   if(!box){subtitle.hidden=true;box=placeCentralIndustryLabel([anchor.point],[card.offsetWidth,card.offsetHeight],[width,height],occupied,40);}
    if(!box){card.remove();root.dataset.labelsIncomplete='true';continue;}
    occupied.push(box);card.style.left=box[0]+'px';card.style.top=box[1]+'px';
-   for(const {site,point:[x,y]}of group){const endX=Math.max(box[0],Math.min(box[2],x)),endY=Math.max(box[1],Math.min(box[3],y)),line=svgElement('line',{x1:x,y1:y,x2:endX,y2:endY,stroke:item.color,'stroke-width':.9,'data-central-correspondence':site.id,'data-industry':item.id,'data-country':site.country});lines.insertBefore(line,lines.firstChild);}
+   for(const {site,point:[x,y]}of [anchor]){const endX=Math.max(box[0],Math.min(box[2],x)),endY=Math.max(box[1],Math.min(box[3],y));if(Math.hypot(x-endX,y-endY)<18)continue;const line=svgElement('line',{x1:x,y1:y,x2:endX,y2:endY,stroke:item.color,'stroke-width':.9,'data-central-correspondence':site.id,'data-industry':item.id,'data-country':site.country});lines.insertBefore(line,lines.firstChild);}
   }
  }
  function emphasize(){
   for(const marker of root.querySelectorAll<SVGElement>('[data-central-marker]')){const selected=marker.dataset.centralMarker===state.site,peer=!state.industry||marker.dataset.industry===state.industry,inCountry=!state.country||marker.dataset.country===state.country;marker.setAttribute('aria-pressed',String(selected));marker.style.opacity=peer?(inCountry?'1':'.45'):'.4';marker.style.display=state.only&&!peer?'none':'';marker.querySelector('[data-central-halo]')?.setAttribute('visibility',selected?'visible':'hidden');}
-  for(const card of root.querySelectorAll<HTMLElement>('[data-central-label-industry]')){const peer=card.dataset.centralLabelIndustry===state.industry,siteIds=card.dataset.centralLabelSites!.split(','),inCountry=!state.country||siteIds.some(id=>centralIndustrySites.find(site=>site.id===id)?.country===state.country);card.hidden=state.only&&!peer;card.classList.toggle('is-highlighted',peer);card.classList.toggle('is-context',!!state.industry&&!peer);card.classList.toggle('is-country-context',!inCountry);card.setAttribute('aria-pressed',String(peer));}
+  for(const card of root.querySelectorAll<HTMLElement>('[data-central-label-industry]')){const peer=card.dataset.centralLabelIndustry===state.industry,siteIds=card.dataset.centralLabelSites!.split(','),inCountry=!state.country||siteIds.some(id=>centralIndustrySites.find(site=>site.id===id)?.country===state.country);card.hidden=state.only&&!peer;card.classList.toggle('is-highlighted',peer);card.classList.toggle('is-context',!!state.industry&&!peer);card.classList.toggle('is-country-context',!inCountry);}
   for(const line of root.querySelectorAll<SVGElement>('[data-central-correspondence]')){line.style.display=state.only&&line.dataset.industry!==state.industry?'none':'';line.style.opacity=state.industry&&line.dataset.industry!==state.industry?'.35':'1';}
   for(const shape of root.querySelectorAll('[data-central-country]'))shape.classList.toggle('is-emphasized',(shape as HTMLElement).dataset.centralCountry===state.country);
   q('[data-central-label-note]').hidden=!root.dataset.labelsIncomplete;

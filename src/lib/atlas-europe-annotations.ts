@@ -3,6 +3,7 @@ import { layoutClimateCodes, type CodePlacement } from './atlas-climate-code-lab
 import { europeFarmingMapName, type FarmingItem } from './atlas-europe-farming';
 import climateLabels from '../data/atlas/europe/map-labels.json';
 import { europeIndustryMembership, europeIndustryColors, europeIndustryGroupsForSite, europeIndustrySiteLabels, europeIndustrySectorCopy, type EuropeIndustrySector } from './atlas-europe-industry';
+import { europeIndustryMapLabel, europeIndustryLabelClusters, layoutEuropeIndustryLabels } from './atlas-europe-industry-labels';
 
 export const majorClimateCities = ['london','paris','moscow','madrid','rome','athens','lisbon','reykjavik','helsinki'];
 /** Names sample distinct crop/livestock concentrations; this is not a value rank. */
@@ -53,7 +54,7 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
     group.dataset.euClimateCode=label.code;line.classList.add('eu-code-leader');text.classList.add('eu-climate-code');text.textContent=label.code;
     group.append(line,text);svg.prepend(group);return [label.id,{group,line,text}] as const;
   }));
-  let placements:LabelPlacement[]=[], codes:CodePlacement[]=[];
+  let placements:LabelPlacement[]=[], codes:CodePlacement[]=[],industryNames=new Set<string>();
   const codeCoordinates=new Map<string,number[]>();
   let pending=0, needsLayout=false, lastLayout='';
   function draw(relayout=true) {
@@ -68,7 +69,18 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
     const selected=(item:Annotation)=>item.kind==='city'?item.id===view.city:item.kind==='crop'?farmingIds.has(item.id)&&item.id===view.selectedFarming:item.id===view.feature;
     const inputs=visible.map(item=>{
       item.button.hidden=false;
-      if(view.industrySector&&europeIndustryMembership[item.id]){const groups=europeIndustryGroupsForSite(item.id,view.industrySector),group=groups[0];const serviceName:Record<string,string>={rotterdam:'港湾・物流',hamburg:'港湾・物流',oulu:'通信・IT研究'};item.button.querySelector('strong')!.textContent=(view.industrySector==='services'?serviceName[item.id]:undefined)??europeIndustrySiteLabels[item.id]??groups.join('・');if(group){item.button.style.setProperty('--eu-industry-color',europeIndustryColors[group]);item.dot.style.setProperty('--eu-industry-color',europeIndustryColors[group]);}}
+      if(view.industrySector&&europeIndustryMembership[item.id]){
+        const groups=europeIndustryGroupsForSite(item.id,view.industrySector),group=groups[0],label=europeIndustryMapLabel(item.id,view.industrySector);
+        item.button.querySelector('strong')!.textContent=label.title;
+        const location=item.button.querySelector<HTMLElement>('small')!;location.textContent=label.place??'';location.hidden=!label.place;
+        const members=europeIndustryLabelClusters[view.industrySector]?.[item.id];
+        item.button.dataset.euIndustryMembers=(members??[item.id]).join(',');
+        item.button.setAttribute('aria-label',`${item.name}の解説${members?`（共通名称：${members.map(id=>features.find(place=>place.id===id)?.name??id).join('、')}）`:''}`);
+        if(group){
+          item.button.dataset.euIndustry=item.dot.dataset.euIndustry=group;
+          for(const node of [item.button,item.dot]){node.style.setProperty('--eu-industry-color',europeIndustryColors[group]);node.style.removeProperty('--eu-industry-outline');}
+        }
+      }
 
       const pointOnly=(item.kind==='feature'&&!!labelIds&&!labelIds.includes(item.id)
           &&(!!europeIndustryMembership[item.id]||!view.detailed));
@@ -97,15 +109,23 @@ export function createEuropeAnnotations(stage:HTMLElement, cities:Place[], featu
     relayout=relayout&&signature!==lastLayout;
     if(relayout) {
       lastLayout=signature;
+      if(view.industrySector){
+        const names=inputs.filter(input=>!items.find(item=>input.id===item.kind+'-'+item.id)?.button.classList.contains('is-point-only')).sort((a,b)=>(labelIds??[]).indexOf(a.id.slice(8))-(labelIds??[]).indexOf(b.id.slice(8)));
+        const named=layoutEuropeIndustryLabels(names,inputs,bounds,obstacles);
+        industryNames=new Set(named.map(item=>item.id));
+        placements=[...named,...inputs.filter(input=>!industryNames.has(input.id)).map(input=>({...input,left:input.anchor.x-8,top:input.anchor.y-8,right:input.anchor.x+8,bottom:input.anchor.y+8}))];
+      }else{
       const pointObstacles=view.featureLabelIds?inputs.filter(input=>items.find(item=>input.id===item.kind+'-'+item.id)?.button.classList.contains('is-point-only')).map(input=>({left:input.anchor.x-7,top:input.anchor.y-7,right:input.anchor.x+7,bottom:input.anchor.y+7})):[];
       placements=view.crops?inputs.map(input=>({...input,left:input.anchor.x-input.width/2,top:input.anchor.y-input.height/2,right:input.anchor.x+input.width/2,bottom:input.anchor.y+input.height/2,leader:false})):layoutNatureLabels(inputs.filter(input=>!items.find(item=>input.id===item.kind+'-'+item.id)?.button.classList.contains('is-point-only')),bounds,[...obstacles,...pointObstacles]);
       placements.push(...inputs.filter(input=>items.find(item=>input.id===item.kind+'-'+item.id)?.button.classList.contains('is-point-only')).map(input=>({...input,left:input.anchor.x-8,top:input.anchor.y-8,right:input.anchor.x+8,bottom:input.anchor.y+8,leader:false})));
+      }
     }
     for(const item of visible) {
       const p=placements.find(p=>p.id===item.kind+'-'+item.id), input=inputs.find(p=>p.id===item.kind+'-'+item.id);
       if(!p||!input||(view.hiddenFeatureIds??[]).includes(item.id)){item.button.hidden=true;item.line.style.display=item.dot.style.display='none';continue;}
       const dx=input.anchor.x-p.anchor.x,dy=input.anchor.y-p.anchor.y;
       const box={left:p.left+dx,top:p.top+dy,right:p.right+dx,bottom:p.bottom+dy};
+      if(view.industrySector){const named=industryNames.has(item.kind+'-'+item.id);item.button.classList.toggle('is-point-only',!named);item.line.style.display=named?'':'none';}
       item.button.style.transform=`translate(${box.left}px,${box.top}px)`;
       const end=leaderEnd(input.anchor,box);
       item.line.setAttribute('x1',String(input.anchor.x));item.line.setAttribute('y1',String(input.anchor.y));

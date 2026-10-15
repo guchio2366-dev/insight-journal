@@ -1,0 +1,14 @@
+/* Opt-in classes; maps outside the industry display contract are unaffected. */
+.industry-sector-map-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:0}
+.industry-sector-map-tabs button{min-height:44px;padding:8px 14px;border:1px solid #c6cfcd;border-radius:6px;background:#fff;color:#243e38;font:inherit;cursor:pointer}
+.industry-sector-map-tabs button[aria-pressed=true]{background:#234d42;color:#fff;border-color:#234d42}
+.industry-sector-map-description{margin:6px 0;color:#52615c;font-size:13px}
+.industry-sector-map-picker{display:flex;align-items:center;gap:10px;max-width:100%;font-size:13px}
+.industry-sector-map-picker select{min-height:44px;max-width:100%;padding:6px 28px 6px 10px;font:inherit}
+.industry-sector-map-picker[hidden]{display:none}
+.industry-map-label{display:block;box-sizing:border-box;max-width:none;width:max-content;height:26px;min-height:0;padding:3px 7px;border:1px solid #d9dfdc;border-left:3px solid var(--site-color,#547b6a);border-radius:3px;background:#fffffff2;color:#213e36;font:600 13px/18px system-ui,sans-serif;white-space:nowrap;box-shadow:0 1px 2px #18332b18;cursor:pointer}
+.industry-map-label[aria-pressed=true]{outline:2px solid #963f29;outline-offset:1px}
+.industry-map-label:focus-visible{outline:3px solid #155dc0;outline-offset:2px}
+.industry-map-label-guides{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:hidden}
+.industry-map-label-guides line{stroke:#6f8278;stroke-width:1;opacity:.65;vector-effect:non-scaling-stroke}
+@media(max-width:600px){.industry-sector-map-tabs button{flex:1;padding:8px 6px;font-size:13px}.industry-sector-map-picker{align-items:flex-start;flex-direction:column;gap:3px}.industry-sector-map-picker select{width:100%}}

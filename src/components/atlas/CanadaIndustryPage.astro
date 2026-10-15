@@ -34,19 +34,22 @@ const total=data.metrics[0];
  </div>
  <div class="atlas-primary-grid" id="ca-industry-panel" role="tabpanel" aria-labelledby="ca-sector-resources">
   <div class="atlas-map-column">
+   <div class="ca-pilot-map-tools" aria-label="表示中の分野の産業を選ぶ">
+    {pilot.sectors.map(s=><label data-ca-subtabs={s.id} hidden={s.id!=='resources'}><span>{s.label}の地図</span><select data-ca-industry-picker={s.id} aria-label={`${s.label}の産業`}><option value="">分野全体</option>{pilot.industries.filter(i=>i.sectors.includes(s.id)).map(i=><option value={i.id} data-ca-subsector={i.id}>{pilotIndustryLabel(i.id,s.id)}</option>)}</select></label>)}
+    <details class="ca-pilot-map-key"><summary>産業の色を見る</summary>{pilot.sectors.map(s=><ul data-ca-color-key={s.id} hidden={s.id!=='resources'}>{pilot.industries.filter(i=>i.sectors.includes(s.id)).map(i=><li style={`--pilot-color:${i.color}`}><i aria-hidden="true"/>{pilotIndustryLabel(i.id,s.id)}</li>)}</ul>)}</details>
+   </div>
    <div class="atlas-map-frame" data-ca-map-frame>
-    <svg class="ca-industry-map" data-ca-map viewBox="50 220 940 440" role="group" tabindex="0" aria-label="カナダの産業集積図。産業名から選択。矢印キーで地図を移動できます。">
+    <svg class="ca-industry-map" data-ca-map data-ca-map-sector="resources" viewBox="50 220 940 440" role="group" tabindex="0" aria-label="カナダの資源・エネルギーの地図。地点を選択。矢印キーで地図を移動できます。">
      <rect x="-4000" y="-4000" width="9000" height="9000" fill="#e4eff0"/>
      {geography.features.filter(f=>['CAN','USA','GRL'].includes(f.properties.code)).map(f=><path d={canadaLandformPath(f.geometry as any)} fill="#f0efe3" stroke="#abbab3" stroke-width=".7" vector-effect="non-scaling-stroke"/>)}
      <CanadaTerrainContext/>
      {geometry.features.map(g=><path class="ca-province" data-ca-province-shape={g.id} d={canadaLegacyPath(g.path)} fill="transparent" stroke="#9baea5" stroke-width=".6" vector-effect="non-scaling-stroke" fill-rule="evenodd"/>)}
     </svg>
     <div class="ca-industry-labels" data-ca-labels></div>
-    <nav class="ca-pilot-map-key" aria-label="地図の産業と色">{pilot.sectors.map(s=><div data-ca-subtabs={s.id} hidden={s.id!=='resources'}>{pilot.industries.filter(i=>i.sectors.includes(s.id)).map(i=><button type="button" data-ca-subsector={i.id} data-owner-sector={s.id} aria-pressed="false" style={`--pilot-color:${i.color}`}><i aria-hidden="true"/>{pilotIndustryLabel(i.id,s.id)}</button>)}</div>)}</nav>
-
     <p class="atlas-layer-caption" data-ca-map-caption>産業の色＋工程の記号 · 位置を示し、数量は表しません</p>
    </div>
-   <p class="ca-pilot-map-note"><span>● 採取・発電・サービス　■ 加工・精製・精錬　白抜き・破線枠＝計画／建設／休止</span><span>点は集積地域の案内位置。短い実線は同じ産業名との対応で、取引・輸送を表しません。</span></p>
+   <p class="ca-pilot-map-note"><span>● 採取・発電・サービス　■ 加工・精製・精錬　白抜き・破線枠＝計画／建設／休止</span><span>産業名に続く数字は、この図に収録した近接地点の数。生産規模や地域の範囲を表しません。点を選ぶと地名・工程・出典を確認できます。</span></p>
+   <p class="ca-pilot-label-help" data-ca-label-help hidden role="status">この画面幅では一部の産業名を省略しています。地図の外の産業選択欄・色の一覧と、各地点から確認できます。</p>
   </div>
   <aside class="ca-pilot-reading" aria-label="産業分布の概説と理由">
    <h2 data-ca-title>資源・エネルギー</h2>

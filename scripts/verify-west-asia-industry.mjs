@@ -3,6 +3,7 @@ import {createServer} from 'node:http';
 import {readFile,mkdir,stat,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {chromium,firefox} from 'playwright';
+import {westIndustryMapLabel} from '../src/data/atlas/west-asia-industry-map.mjs';
 import {westIndustryCatalog as catalog,westIndustrySectors as sectors} from '../src/data/atlas/west-asia-industry-catalog.mjs';
 
 export async function verifyWestAsiaIndustry({output='/tmp/atlas-canada-qa/west-asia/industries-20261014',browserName='chromium',executablePath=process.env.REVIEW_CHROME_PATH}={}){
@@ -27,10 +28,10 @@ export async function verifyWestAsiaIndustry({output='/tmp/atlas-canada-qa/west-
    const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)failures.push(r.url());});
    await page.goto(route,{waitUntil:'networkidle'});await page.waitForFunction(()=>document.querySelector('[data-west-industry]')?.dataset.ready==='true');await page.evaluate(()=>document.fonts.ready);
    const frame=await page.locator('[data-wi-map]').getAttribute('viewBox');
-   const labelPositions=()=>page.locator('[data-wi-label]').evaluateAll(nodes=>Object.fromEntries(nodes.map(n=>[n.dataset.wiLabel,[n.style.left,n.style.top,n.style.width,n.style.height]])));
+   const labelPositions=()=>page.locator('[data-wi-annotation]').evaluateAll(nodes=>Object.fromEntries(nodes.map(n=>[n.dataset.wiAnnotation,[n.style.left,n.style.top,n.style.width,n.style.height]])));
    async function layoutCheck(){
     const dimensions=await page.evaluate(()=>{
-     const map=document.querySelector('[data-wi-map]').getBoundingClientRect(),labels=[...document.querySelectorAll('[data-wi-label]')].filter(n=>!n.hidden).map(n=>({id:n.dataset.wiLabel,...n.getBoundingClientRect().toJSON()}));
+     const map=document.querySelector('[data-wi-map]').getBoundingClientRect(),labels=[...document.querySelectorAll('[data-wi-annotation]')].filter(n=>!n.hidden).map(n=>({id:n.dataset.wiAnnotation,...n.getBoundingClientRect().toJSON()}));
      const collisions=[];for(let a=0;a<labels.length;a++)for(let b=a+1;b<labels.length;b++){const x=labels[a],y=labels[b];if(x.left<y.right&&y.left<x.right&&x.top<y.bottom&&y.top<x.bottom)collisions.push([x.id,y.id]);}
      const outside=labels.filter(n=>n.left<map.left-1||n.top<map.top-1||n.right>map.right+1||n.bottom>map.bottom-50).map(n=>n.id);
      return {map:map.toJSON(),collisions,outside,overflow:document.documentElement.scrollWidth>innerWidth,labels:labels.length};
@@ -45,24 +46,24 @@ export async function verifyWestAsiaIndustry({output='/tmp/atlas-canada-qa/west-
     await page.locator(`[data-wi-sector="${sector.id}"]`).click();await layoutCheck();await capture(sector.id+'-overview');
     const expected=await labelPositions();
     for(const i of catalog.filter(i=>i.sectors.includes(sector.id))){
-     await page.locator(`[data-wi-label="${i.id}"]`).click();
-     assert.equal(await page.locator('[data-wi-title]').innerText(),i.label);assert.equal(await page.locator(`[data-wi-stat-panel="${i.id}"]`).isVisible(),true);
+     await openIndustryPicker(page);await page.locator(`[data-wi-picker="${sector.id}"] [data-wi-industry="${i.id}"]`).click();
+     assert.equal(await page.locator('[data-wi-title]').innerText(),westIndustryMapLabel(i,sector.id));assert.equal(await page.locator(`[data-wi-stat-panel="${i.id}"]`).isVisible(),true);
      assert.deepEqual(await labelPositions(),expected,`${viewport.width}/${i.id}: selection label positions`);
      assert.equal(await page.locator('[data-wi-map]').getAttribute('viewBox'),frame);
      // List alternative also tests points obscured by nearby industry labels.
      await page.locator('.wi-reading details').evaluate(n=>n.open=true);
      await page.locator(`[data-wi-place-button="${i.id}"]`).first().click();
      assert.equal(await page.locator('[data-wi-place-reading]').isVisible(),true);assert.deepEqual(await labelPositions(),expected);
-     await page.locator('[data-wi-only]').check();assert.equal(await page.locator('[data-wi-label]:visible').count(),1);assert.deepEqual(await labelPositions(),expected);
+     await page.locator('[data-wi-only]').check();assert(await page.locator('[data-wi-annotation]:visible').count()<=1);assert.deepEqual(await labelPositions(),expected);
      await page.locator('[data-wi-clear]').click();assert.deepEqual(await labelPositions(),expected);await page.locator('.wi-reading details').evaluate(n=>n.open=false);
     }
    }
-   await page.locator('[data-wi-sector=resources]').click();await page.locator('[data-wi-label=lng]').click();
+   await page.locator('[data-wi-sector=resources]').click();await openIndustryPicker(page);await page.locator('[data-wi-picker=resources] [data-wi-industry=lng]').click();
    await page.locator('[data-wi-country]').selectOption('QAT');assert.match(await page.locator('[data-wi-ranking=lng]').innerText(),/81.51/);
    await capture('qatar-lng');await capture('lng-statistics',true);
    await page.locator('[data-wi-country]').selectOption('IRN');assert.match(await page.locator('[data-wi-ranking=lng]').innerText(),/未取得.*0/s);
    await page.reload();await page.waitForFunction(()=>document.querySelector('[data-west-industry]')?.dataset.ready==='true');assert.equal(await page.locator('[data-wi-country]').inputValue(),'IRN');
-   await page.locator('[data-wi-country]').selectOption('');await page.locator('[data-wi-sector=services]').click();await page.locator('[data-wi-label=ports]').click();
+   await page.locator('[data-wi-country]').selectOption('');await page.locator('[data-wi-sector=services]').click();await openIndustryPicker(page);await page.locator('[data-wi-picker=services] [data-wi-industry=ports]').click();
    assert.equal(await page.locator('[data-wi-country-shape=ARE]').first().getAttribute('fill'),'#f0efe3');
    await page.goBack();await page.waitForFunction(()=>document.querySelector('[data-west-industry]')?.dataset.ready==='true');assert.equal(await page.locator('[data-wi-title]').innerText(),'サービス業');
    await page.goForward();await page.waitForFunction(()=>document.querySelector('[data-west-industry]')?.dataset.ready==='true');assert.equal(await page.locator('[data-wi-title]').innerText(),'港湾・物流');
@@ -78,3 +79,5 @@ export async function verifyWestAsiaIndustry({output='/tmp/atlas-canada-qa/west-
  }finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===path.resolve(new URL(import.meta.url).pathname))console.log(await verifyWestAsiaIndustry({browserName:process.env.WEST_ASIA_REVIEW_BROWSER??'chromium',executablePath:process.env.REVIEW_CHROME_PATH??'/usr/bin/chromium',output:process.env.WEST_ASIA_REVIEW_OUTPUT??'/tmp/atlas-canada-qa/west-asia/industries-20261014'}));
+
+async function openIndustryPicker(page){const menu=page.locator('[data-wi-product-menu]');if(!await menu.evaluate(node=>node.open))await menu.locator(':scope > summary').click();}

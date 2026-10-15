@@ -1,7 +1,7 @@
 import {projectCanadaMap,canadaLegacyPoint} from '../lib/atlas-canada-map-presentation';
 import {canadaIndustryPilot as pilot,pilotIndustryLabel,readPilotState,writePilotState,zoomPilotFrame,type PilotState,type PilotCluster} from '../lib/atlas-canada-industry-pilot';
 import population from '../data/atlas/canada/population.json';
-import {groupPilotLabelPoints,placePilotLabelGroups} from '../lib/atlas-canada-industry-labels';
+import {groupPilotLabelPoints,placePilotLabelGroups,compactPilotIndustryLabel,pilotLabelAnchor} from '../lib/atlas-canada-industry-labels';
 import {readCanadaPopulationState,writeCanadaPopulationState,copyCanadaPopulationMapState} from '../lib/atlas-canada-population';
 import {isCanadaDemographicTopic} from '../lib/atlas-canada-demographics';
 import {canadaIndustryEvidence,formatCanadaIndustryFact} from '../lib/atlas-canada-industry-evidence';
@@ -21,7 +21,7 @@ export function initCanadaIndustryPilot(root:HTMLElement){
   initialFrame=[(bounds[0]+bounds[2]-width)/2,(bounds[1]+bounds[3]-height)/2-12,width,height];
  }
  function clusters(){return pilot.clusters.filter(c=>c.sectors.includes(state.sector)&&(!state.only||c.industry===state.industry));}
- function chooseIndustry(id:string){state.industry=state.industry===id?null:id;state.site=null;state.only=false;save();}
+ function chooseIndustry(id:string){state.industry=id||null;state.site=null;state.only=false;save();}
  function chooseSite(c:PilotCluster){state.industry=c.industry;state.site=c.id;save();}
  const stageLabel=(c:PilotCluster)=>state.sector==='manufacturing'&&c.id==='sudbury'?'精錬・金属製品':c.stage;
  function save(){state.frame=frame.slice();const url=writePilotState(new URL(location.href),state);if(url.href!==location.href)history.pushState(null,'',url);render();}
@@ -29,16 +29,16 @@ export function initCanadaIndustryPilot(root:HTMLElement){
   const matrix=svg.getScreenCTM?.();if(!matrix)return;
   const rect=stage.getBoundingClientRect(),w=rect.width,h=rect.height,selectedFocus=(document.activeElement as HTMLElement)?.dataset?.caMarker;
   overlay.replaceChildren();
-  const lines=element('svg',{width:'100%',height:'100%','aria-label':'産業の集積位置とラベル対応'});lines.classList.add('ca-pilot-connectors');overlay.append(lines);
+  const lines=element('svg',{width:'100%',height:'100%','aria-label':'表示中の分野の集積位置と確認された輸送'});lines.classList.add('ca-pilot-connectors');overlay.append(lines);
   const screen=(coordinates:number[])=>{const [x,y]=projectCanadaMap(coordinates);return [matrix.a*x+matrix.c*y+matrix.e-rect.x,matrix.b*x+matrix.d*y+matrix.f-rect.y];};
   // All peers reserve their places even while only one industry is displayed.
   const visible=pilot.clusters.filter(c=>c.sectors.includes(state.sector)).map(c=>({c,point:screen(c.coordinates)})).filter(({point:[x,y]})=>x>=0&&x<=w&&y>=0&&y<=h);
-  const groups=groupPilotLabelPoints(visible,130),keyHeight=q('.ca-pilot-map-key').getBoundingClientRect().height;
+  const groups=groupPilotLabelPoints(visible,130);
   const markerPoints=new Map(visible.map(({c,point:[x,y]})=>{
    const peers=visible.filter(v=>Math.hypot(v.point[0]-x,v.point[1]-y)<12),index=peers.findIndex(v=>v.c.id===c.id);
    return [c.id,[x+(index-(peers.length-1)/2)*14,y]];
   }));
-  const occupied:number[][]=[[0,0,w,keyHeight+14],[0,h-25,w,h],...visible.map(({point:[x,y]})=>[x-7,y-7,x+7,y+7]),...[...markerPoints.values()].map(([x,y])=>[x-8,y-8,x+8,y+8])];
+  const occupied:number[][]=[[0,0,w,8],[0,h-25,w,h],...visible.map(({point:[x,y]})=>[x-7,y-7,x+7,y+7]),...[...markerPoints.values()].map(([x,y])=>[x-8,y-8,x+8,y+8])];
   // The only arrow is the source-documented supply relation. Its sea route is schematic.
   for(const flow of pilot.flows.filter(f=>f.sector===state.sector&&(!state.only||state.industry===f.industry))){
    const from=visible.find(v=>v.c.id===flow.from),to=visible.find(v=>v.c.id===flow.to);if(!from||!to)continue;
@@ -63,30 +63,27 @@ export function initCanadaIndustryPilot(root:HTMLElement){
    group.addEventListener('click',()=>chooseSite(c));group.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();chooseSite(c);}});lines.append(group);
   }
   // Selection changes emphasis, never the allocation order or a label's size.
-  const ordered=groups.sort((a,b)=>a[0].c.id.localeCompare(b[0].c.id)),entries:{group:typeof groups[number];card:HTMLButtonElement;item:typeof pilot.industries[number]}[]=[];
+  const ordered=groups.sort((a,b)=>a[0].c.id.localeCompare(b[0].c.id)),entries:{group:typeof groups[number];card:HTMLSpanElement;item:typeof pilot.industries[number]}[]=[];
   for(const group of ordered){
-   const industry=group[0].c.industry,item=pilot.industries.find(i=>i.id===industry)!,card=document.createElement('button');card.type='button';card.className='ca-pilot-map-label';card.dataset.caLabelGroup=industry;card.dataset.caLabelSites=group.map(v=>v.c.id).join(',');card.style.setProperty('--pilot-color',item.color);
+   const industry=group[0].c.industry,item=pilot.industries.find(i=>i.id===industry)!,card=document.createElement('span');card.className='ca-pilot-map-label';card.dataset.caLabelGroup=industry;card.dataset.caLabelSites=group.map(v=>v.c.id).join(',');card.style.setProperty('--pilot-color',item.color);
    if(state.industry&&industry!==state.industry)card.classList.add('is-context');if(industry===state.industry)card.classList.add('is-highlighted');
-   card.setAttribute('aria-pressed',String(industry===state.industry));card.setAttribute('aria-label',`${pilotIndustryLabel(industry,state.sector)}：${group.map(v=>v.c.place).join('、')}を強調`);
-   const label=document.createElement('strong');label.textContent=industry==='digital'?'情報技術':industry==='uranium'?'ウラン採掘・処理':industry==='nickel'&&state.sector==='resources'?'ニッケル':pilotIndustryLabel(industry,state.sector);const icon=document.createElement('i');icon.setAttribute('aria-hidden','true');label.prepend(icon);card.append(label);
-   const place=document.createElement('small');const places=[...new Set(group.map(v=>v.c.place.split(/[／〜]/)[0]))];if(state.sector==='services'){card.dataset.sector='services';for(const [index,name]of places.entries()){if(index)place.append('・');const city=document.createElement('span');city.textContent=name;city.style.display='inline-block';place.append(city);}}else place.textContent=places.length<=2?places.join('・'):places.slice(0,2).join('・')+'ほか';card.append(place);
-   const statuses=[...new Set(group.filter(v=>v.c.status&&v.c.status!=='operating').map(v=>v.c.status))];if(statuses.length){const status=document.createElement('span');status.className='ca-pilot-status';status.textContent=statuses.map(s=>s==='planned'?'計画':s==='construction'?'建設':'休止').join('・');label.append(status);}
-   card.addEventListener('click',()=>chooseIndustry(industry));overlay.append(card);
+   card.setAttribute('aria-label',`${pilotIndustryLabel(industry,state.sector)}：${group.map(v=>v.c.place).join('、')}`);
+   const label=document.createElement('strong');label.textContent=compactPilotIndustryLabel(industry,state.sector);const icon=document.createElement('i');icon.setAttribute('aria-hidden','true');label.prepend(icon);card.append(label);
+   if(group.length>1){const count=document.createElement('small');count.className='ca-pilot-label-count';count.textContent=String(group.length);count.setAttribute('aria-label',`収録${group.length}地点`);label.append(count);}
+   const statuses=[...new Set(group.filter(v=>v.c.status&&v.c.status!=='operating').map(v=>v.c.status))];if(statuses.length){const status=document.createElement('span');status.className='ca-pilot-status';status.textContent=statuses.map(s=>s==='planned'?'計画':s==='construction'?'建設':'休止').join('・')+(group.some(v=>!v.c.status||v.c.status==='operating')?'含む':'');label.append(status);}
+   overlay.append(card);
    entries.push({group,card,item});
   }
-  const boxes=placePilotLabelGroups(entries.map(({group,card})=>({id:group[0].c.id,points:group.map(v=>v.point),size:[card.offsetWidth||110,card.offsetHeight||38]})),[w,h],occupied);
+  const boxes=placePilotLabelGroups(entries.map(({group,card})=>({id:group[0].c.id,points:[pilotLabelAnchor(group)],size:[card.offsetWidth||80,card.offsetHeight||20]})),[w,h],occupied,60);
   for(const [index,{group,card,item}]of entries.entries()){
    const industry=item.id,box=boxes[index];
    if(!box){card.remove();root.dataset.labelsIncomplete='true';root.dataset.labelsMissing=[root.dataset.labelsMissing,group.map(v=>v.c.id).join(',')].filter(Boolean).join(';');continue;}
    card.style.left=box[0]+'px';card.style.top=box[1]+'px';
    if(state.only&&industry!==state.industry){card.hidden=true;continue;}
-   for(const {point:[x,y],c}of group){const endX=Math.max(box[0],Math.min(box[2],x)),endY=Math.max(box[1],Math.min(box[3],y));
-    lines.insertBefore(element('line',{x1:x,y1:y,x2:endX,y2:endY,stroke:item.color,'stroke-width':industry===state.industry?1.4:.9,'data-ca-correspondence':c.id}),lines.firstChild);
-   }
   }
   if(selectedFocus)overlay.querySelector<SVGElement>(`[data-ca-marker="${selectedFocus}"]`)?.focus({preventScroll:true});
  }
- function camera(){svg.setAttribute('viewBox',frame.join(' '));delete root.dataset.labelsIncomplete;delete root.dataset.labelsMissing;labels();(root as any).canadaIndustryView={...state,frame:frame.slice(),initialFrame:initialFrame.slice(),province:state.province,subsector:state.industry??'all'};}
+ function camera(){svg.setAttribute('viewBox',frame.join(' '));delete root.dataset.labelsIncomplete;delete root.dataset.labelsMissing;labels();q('[data-ca-label-help]').hidden=!root.dataset.labelsIncomplete;(root as any).canadaIndustryView={...state,frame:frame.slice(),initialFrame:initialFrame.slice(),province:state.province,subsector:state.industry??'all'};}
  function evidence(){
   const item=state.industry?canadaIndustryEvidence.items[state.industry]:null;
   q('[data-ca-evidence-title]').textContent=item?`${pilotIndustryLabel(state.industry!,state.sector)}｜採用の根拠`:'品目を選ぶと、採用の定量根拠を比較できます';
@@ -128,7 +125,9 @@ export function initCanadaIndustryPilot(root:HTMLElement){
   root.dataset.industrySubsector=state.industry??'all';q('#ca-industry-panel').setAttribute('aria-labelledby','ca-sector-'+state.sector);
   for(const b of root.querySelectorAll<HTMLElement>('[data-ca-sector]')){const active=b.dataset.caSector===state.sector;b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;}
   for(const row of root.querySelectorAll<HTMLElement>('[data-ca-subtabs]'))row.hidden=row.dataset.caSubtabs!==state.sector;
-  for(const b of root.querySelectorAll<HTMLElement>('[data-ca-subsector]'))b.setAttribute('aria-pressed',String(b.dataset.caSubsector===state.industry));
+  for(const row of root.querySelectorAll<HTMLElement>('[data-ca-color-key]'))row.hidden=row.dataset.caColorKey!==state.sector;
+  for(const picker of root.querySelectorAll<HTMLSelectElement>('[data-ca-industry-picker]'))picker.value=picker.dataset.caIndustryPicker===state.sector?state.industry??'':'';
+  svg.dataset.caMapSector=state.sector;svg.setAttribute('aria-label',`カナダの${sector.label}の地図。地点を選択。矢印キーで地図を移動できます。`);
   q('[data-ca-breadcrumb]').textContent=sector.insight;q('[data-ca-title]').textContent=item?pilotIndustryLabel(item.id,state.sector):sector.label;q('[data-ca-lead]').textContent=sector.insight;
   q('[data-ca-heading]').textContent=item?'主な集積の位置':state.sector==='resources'?'西部の資源と各地の加工・電力':state.sector==='manufacturing'?'中央部の組立と各地の素材・燃料':'都市の専門機能と東西の物流';
   q('[data-ca-reading]').textContent=item?.overview??sector.overview;q('[data-ca-why]').textContent=item?.why??sector.why;
@@ -141,7 +140,7 @@ export function initCanadaIndustryPilot(root:HTMLElement){
   evidence();statistics();camera();requestAnimationFrame(camera);
  }
  for(const b of root.querySelectorAll<HTMLElement>('[data-ca-sector]'))b.addEventListener('click',()=>{state={...state,sector:b.dataset.caSector as PilotState['sector'],industry:null,site:null,only:false,province:null};save();});
- for(const b of root.querySelectorAll<HTMLElement>('[data-ca-subsector]'))b.addEventListener('click',()=>chooseIndustry(b.dataset.caSubsector!));
+ for(const picker of root.querySelectorAll<HTMLSelectElement>('[data-ca-industry-picker]'))picker.addEventListener('change',()=>chooseIndustry(picker.value));
  q('[data-ca-clear]').addEventListener('click',()=>{state.industry=null;state.site=null;state.only=false;save();});q<HTMLInputElement>('[data-ca-only]').addEventListener('change',e=>{state.only=(e.target as HTMLInputElement).checked;save();});
  q('[data-ca-overlap]').addEventListener('click',()=>{const site=pilot.clusters.find(c=>c.id===state.site)!;state.sector=site.sectors.find(s=>s!==state.sector) as PilotState['sector'];state.only=false;save();});
  q('[data-ca-international-place]').addEventListener('click',()=>{state.sector='resources';state.industry='oil-gas';state.site='athabasca';state.only=false;save();});
