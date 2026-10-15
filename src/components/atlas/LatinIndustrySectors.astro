@@ -9,15 +9,15 @@ const state={sector:'resources' as const,industry:null,site:null,single:false,sc
  <div class="latin-sector-grid">
   <div class="latin-sector-map-column">
    <div data-lis-map set:html={renderIndustrySectorMap(state)}/>
-   <div class="latin-sector-map-key" aria-label="記号の読み方">○ 原料・採取　■ 加工・発電　◇ サービス<br/>白抜き：地域案内　注記：国・州等の集計値<br/>細線：行政界（産業の密度ではありません）</div>
-   <p class="latin-sector-note">点は資料に対応する立地・地域の案内。短い線は元座標との対応で、取引線ではありません。点の大きさは数量を表しません。</p>
-   <div data-lis-legend aria-label="産業の色と選択">{data.industries.filter(i=>i.sectors.includes('resources')).map(i=><button type="button" data-lis-industry={i.id} aria-pressed="false"><i style={`background:${i.color}`}/>{i.label}</button>)}</div>
+   <div class="latin-sector-map-key" aria-label="記号の読み方"><span data-lis-map-key>○ 採掘・採取　■ 水力発電</span>。数字は近接する同産業の掲載例数。数字なしの白抜きは資料の地域案内点です。</div>
+   <p class="latin-sector-note">記号は資料に対応する立地・地域の案内です。近接例を集約し、重なる記号を小幅にずらしています。大きさや例数は生産量を表しません。</p>
   </div>
   <aside class="latin-sector-reader" data-lis-reader aria-label="全体の概説と産業・拠点の解説">
    <h2 data-lis-title>資源・エネルギー</h2>
    <p data-lis-range-note hidden/>
    <p data-lis-overview>{data.sectors[0].overview}</p>
    <h3>なぜ、その場所にあるか</h3><p data-lis-why>{data.sectors[0].why}</p>
+   <details class="latin-sector-industry-picker"><summary>産業を選ぶ</summary><div data-lis-legend aria-label="この分野の産業を選ぶ"/></details>
    <div><button type="button" data-lis-single hidden>この産業だけを見る</button> <button type="button" data-lis-clear hidden>全体の概説へ戻る</button></div>
    <section data-lis-site-reading hidden><h3 data-lis-site-title/><p data-lis-site-note/><p data-lis-coordinate-note/><button type="button" data-lis-overlap hidden/></section>
    <details><summary>この分野の拠点を読む</summary><div data-lis-sites/></details>

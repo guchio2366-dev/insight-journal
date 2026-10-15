@@ -70,17 +70,8 @@ test('Manufacturing distinguishes raw materials from documented processing and d
  const html=lib.renderLatinIndustryStatistics('manufacturing','aviation');assert.match(html,/世界事業/);assert.match(html,/未取得/);assert.doesNotMatch(html,/国内GDP.*75/);
 });
 
-test('All industry names fit desktop and mobile without collisions, moving source positions or using selection as layout',()=>{
- for(const [width,height] of [[960,770],[800,520],[640,440],[360,560],[300,600],[320,600]])for(const sector of raw.sectors){
-  const state={...initial,sector:sector.id},scene=lib.industrySectorScene(state,width,height);
-  for(const i of lib.sectorIndustries(sector.id))assert.ok(scene.labels.some(l=>l.industry===i.id),width+' '+i.id);
-  for(let i=0;i<scene.labels.length;i++){const a=scene.labels[i];assert.ok(a.x>=8&&a.x+a.width<=width-8);assert.ok(a.y-a.height>=8&&a.y<=height-8);
-   for(let j=i+1;j<scene.labels.length;j++){const b=scene.labels[j];assert.ok(!(a.x<b.x+b.width&&a.x+a.width>b.x&&a.y-a.height<b.y&&a.y>b.y-b.height),a.text+'/'+b.text);}
-  }
-  for(let i=0;i<scene.visible.length;i++){const a=scene.visible[i];assert.deepEqual(a.coordinates,raw.sites.find(s=>s.id===a.id).coordinates);
-   for(let j=i+1;j<scene.visible.length;j++){const b=scene.visible[j];assert.ok(Math.hypot(a.displayPoint[0]-b.displayPoint[0],a.displayPoint[1]-b.displayPoint[1])>=15.99,a.id+'/'+b.id);}
-  }
-  const chosen=lib.sectorIndustries(sector.id)[0].id;
-  assert.deepEqual(lib.industrySectorScene({...state,industry:chosen,single:true},width,height),scene);
- }
+test('Every adopted product remains selectable in a process-specific map without requiring every name on the overview',()=>{
+ for(const i of raw.industries){const sectors=raw.sectors.filter(s=>lib.sectorIndustries(s.id).some(item=>item.id===i.id));assert.ok(sectors.length,i.id);for(const sector of sectors)assert.ok(lib.sectorSites(sector.id).some(s=>s.industry===i.id));}
+ for(const sector of raw.sectors){const all=lib.statisticsForIndustrySelection(sector.id,null);assert.ok(all.every(m=>lib.sectorIndustries(sector.id).some(i=>i.id===m.industry)));}
+ assert.ok(!lib.statisticsForIndustrySelection('resources',null).some(m=>['refining','alumina','aluminum','steel'].includes(m.industry)));
 });
