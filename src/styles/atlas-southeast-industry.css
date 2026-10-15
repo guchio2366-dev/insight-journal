@@ -81,3 +81,5 @@
  .asia-atlas-root[data-region=southeast-asia] .sea-industry-statistics th,.asia-atlas-root[data-region=southeast-asia] .sea-industry-statistics td{padding:8px 4px}
  .asia-atlas-root[data-region=southeast-asia] .sea-industry-statistics th:first-child{width:27%}
 }
+
+.asia-atlas-root[data-region=southeast-asia][data-southeast-industry-active=true] [data-industry-navigation]{display:none!important}

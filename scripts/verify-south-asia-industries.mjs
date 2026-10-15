@@ -40,7 +40,7 @@ try{
    await page.locator(`[data-south-industry-sector="${sector.id}"]`).click();await ready();
    let positions=await snapshot();const visible=sites.filter(site=>sector.groups.includes(site.group));
    assert.deepEqual(positions.sourcePoints,visible.map(site=>({id:site.id,coordinates:site.point})).sort((a,b)=>a.id.localeCompare(b.id)),'Every declared site is a source point, with no off-sector points');seenSites.push(...visible.map(site=>site.id));
-   const budget=positions.size[0]<620?7:14;assert(positions.labels.length>0&&positions.labels.length<=budget,'A short readable subset of labels accompanies all source points');
+   const budget=viewport.width<600?7:14;assert(positions.labels.length>0&&positions.labels.length<=budget,'A short readable subset of labels accompanies all source points');
    const named=await noLabelCollisions();result.viewports.push({viewport,sector:sector.id,sourceSites:visible.length,namedLabels:named});await capture(viewport.width+'-'+sector.id+'-initial');
    for(const id of sector.groups){
     await page.locator('[data-south-industry-item]').selectOption(id);await page.waitForFunction(id=>new URL(location.href).searchParams.get('topic')===id,id);fixed(positions,await snapshot(),viewport.width+' '+id);

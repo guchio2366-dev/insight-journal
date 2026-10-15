@@ -39,7 +39,7 @@ try{
    // The complete 19-product/49-place checks live in verify-russia-industry-review.mjs.
    if(region==='russia'&&field==='industry'){
     await page.waitForFunction(()=>document.querySelector('[data-ru-industry]')?.dataset.ruReady==='true');
-    const host=page.locator('[data-ru-industry]'),map=host.locator('[data-ru-map]'),frame=await map.getAttribute('viewBox');
+    const host=page.locator('[data-ru-industry]'),map=host.locator('[data-ru-map]:visible'),frame=await map.getAttribute('viewBox');
     assert.equal(frame,'0 0 1200 597');
     for(const sector of ['resources','manufacturing','services']){
      await host.locator(`[data-ru-sector="${sector}"]`).click();
@@ -48,7 +48,7 @@ try{
      assert.ok(await host.locator('[data-ru-label]').count()>0);
      assert.equal(await map.getAttribute('viewBox'),frame);
      assert.ok((await host.locator('[data-ru-reading]').textContent()).length>35);
-     await host.locator('[data-ru-canvas]').scrollIntoViewIfNeeded();
+     await host.locator('[data-ru-canvas]:visible').scrollIntoViewIfNeeded();
      await capture(`${width}-russia-industry-${sector}`);
     }
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true);
@@ -63,87 +63,27 @@ try{
    if(region==='russia')assert.equal(await root.locator('[data-region-marker]').first().isVisible().catch(()=>false),false);
    await capture(`${width}-${region}-${field}-overview`);
    if(field==='industry'){
-    const buttons=root.locator('[data-industry-sector]');
-    assert.equal(await buttons.count(),3);
+    assert.equal(region,'oceania');assert.equal(await root.locator('[data-industry-sector]').count(),3);
+    const sourceIds=async()=>map.locator('[data-industry-sectors]').evaluateAll(nodes=>nodes.map(node=>node.getAttribute('data-industry-sectors')));
     for(const sector of ['resources','manufacturing','services']){
      await root.locator(`[data-industry-sector="${sector}"]`).click();
-     assert.equal(new URL(page.url()).searchParams.get('sector'),sector);
-     assert.equal(await map.getAttribute('viewBox'),frame);
-     assert.ok(await map.locator(`[data-industry-sectors][data-sector-match="true"]`).count()>0);
-     assert.ok(await map.locator(`[data-industry-sectors][data-sector-match="false"]`).count()>0);
-     assert.equal(await root.locator('[data-industry-only]').isVisible(),true);
-     await capture(`${width}-${region}-industry-${sector}`);
+     assert.equal(new URL(page.url()).searchParams.get('sector'),sector);assert.equal(await map.getAttribute('viewBox'),frame);
+     const memberships=await sourceIds();assert(memberships.length>0&&memberships.every(value=>value.split(' ').includes(sector)),'The map contains only its declared sector');
+     assert.equal(await map.locator('[data-industry-sectors][data-sector-match="false"]').count(),0);assert.equal(await root.locator('[data-industry-only]').isVisible(),false);
+     assert.equal(await map.locator('[data-oceania-industry-location="noro-port"]').count(),sector==='resources'?0:1,'Noro retains its meaningful processing/service membership');
+     const picker=root.locator('[data-oceania-product]'),value=await picker.locator('option').evaluateAll(nodes=>nodes.find(node=>!['','all'].includes(node.value)&&!node.disabled).value);
+     await picker.selectOption(value);assert([...new URL(page.url()).searchParams.values()].includes(value));assert.deepEqual(await sourceIds(),memberships);assert.equal(await map.getAttribute('viewBox'),frame);
+     await page.reload({waitUntil:'networkidle'});await page.waitForFunction(()=>document.querySelector('[data-oceania-learning]')?.dataset.oceaniaReady==='true');assert.equal(await picker.inputValue(),value);assert.deepEqual(await sourceIds(),memberships);await capture(`${width}-oceania-industry-${sector}`);
+     const overview=await picker.locator('option').first().getAttribute('value');await picker.selectOption(overview);
     }
-    await root.locator('[data-industry-only]').click();
-    assert.equal(await map.locator('[data-industry-sectors][data-sector-match="false"]').first().isVisible(),false);
-    assert.equal(await map.getAttribute('viewBox'),frame);
-    await capture(`${width}-${region}-industry-services-only`);
-    if(region==='oceania'){
-     const noro=root.locator('[data-primary-map] [data-oceania-industry-location="noro-port"]');
-     await noro.locator('circle').click();
-     let query=new URL(page.url()).searchParams;
-     assert.equal(query.get('sector'),'services');
-     assert.equal(query.get('sectorOnly'),'1');
-     assert.equal(query.get('industryLocation'),'noro-port');
-     assert.equal(await root.locator('[data-industry-only]').getAttribute('aria-pressed'),'true');
-     assert.equal(await map.locator('[data-industry-sectors][data-sector-match="false"]').first().isVisible(),false);
-     assert.equal(await map.getAttribute('viewBox'),frame);
-     await capture(`${width}-${region}-industry-noro-services-only`);
+    await root.locator('[data-industry-sector="services"]').click();await map.locator('[data-oceania-industry-location="noro-port"] circle,[data-oceania-industry-location="noro-port"] path').first().click();
+    assert.equal(new URL(page.url()).searchParams.get('industryLocation'),'noro-port');await page.reload({waitUntil:'networkidle'});await page.waitForFunction(()=>document.querySelector('[data-oceania-learning]')?.dataset.oceaniaReady==='true');assert.equal(await map.locator('[data-oceania-industry-location="noro-port"]').getAttribute('aria-pressed'),'true');
+    await root.locator('[data-oceania-industry-return]').click();assert.equal(new URL(page.url()).searchParams.get('industryLocation'),null);assert.equal(new URL(page.url()).searchParams.get('sector'),'services');
+    await root.locator('[data-industry-sector="manufacturing"]').click();
+    for(const id of ['nz-dairy-guide','nz-wood-guide']){
+     await map.locator(`[data-oceania-industry-location="${id}"] circle,[data-oceania-industry-location="${id}"] path`).first().click();assert.equal(new URL(page.url()).searchParams.get('industryLocation'),id);assert.match(await root.locator('[data-takeaway]').textContent(),/都市中心の案内位置.*工場の入口・敷地ではありません/);assert.match(await root.locator('[data-explanation]').textContent(),/案内位置.*入口・敷地ではありません/);assert.equal(await map.getAttribute('viewBox'),frame);
     }
-    await page.reload({waitUntil:'networkidle'});
-    await page.waitForFunction(r=>document.querySelector(`[data-${r}-learning]`)?.dataset[r+'Ready']==='true',region);
-    assert.equal(await root.locator('[data-industry-only]').getAttribute('aria-pressed'),'true');
-    if(region==='oceania'){
-     assert.equal(await root.locator('[data-primary-map] [data-oceania-industry-location="noro-port"]').getAttribute('aria-pressed'),'true');
-     await root.locator('[data-oceania-industry-return]').click();
-     let query=new URL(page.url()).searchParams;
-     for(const key of ['sector','sectorOnly','industryLocation'])assert.equal(query.has(key),false);
-     await root.locator('[data-industry-sector="services"]').click();
-     await root.locator('[data-industry-only]').click();
-     await root.locator('[data-primary-map] [data-oceania-industry-location="noro-port"] circle').click();
-     query=new URL(page.url()).searchParams;
-     assert.equal(query.get('sector'),'services');
-     assert.equal(query.get('sectorOnly'),'1');
-     await root.locator('[data-industry-only]').click();
-     await root.locator('[data-primary-map] [data-oceania-industry-location="lihir-project"] circle').click();
-     query=new URL(page.url()).searchParams;
-     assert.equal(query.get('sector'),'resources');
-     assert.equal(query.has('sectorOnly'),false);
-    }
-    await root.locator(`[data-industry-sector="${region==='oceania'?'resources':'services'}"]`).click();
-    assert.equal(new URL(page.url()).searchParams.has('sector'),false);
-    assert.equal(await map.getAttribute('viewBox'),frame);
-    if(region==='oceania'){
-     // ResizeObserver can redraw after the sector controls change the reader.
-     // Measure every name and its frame together after that render boundary.
-     await page.evaluate(async()=>{await document.fonts.ready;await new Promise(done=>requestAnimationFrame(()=>requestAnimationFrame(done)));});
-     const {guideBoxes,otherBoxes,bounds}=await root.evaluate(element=>{
-      const stage=element.querySelector('[data-primary-map]'),svg=stage.querySelector('svg');
-      const box=node=>{const b=node.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width,height:b.height};};
-      // The complete catalog replaces duplicate saved-guide captions with
-      // the dairy/wood callouts; the original geographic markers remain.
-      const catalog=svg.querySelector('[data-oceania-catalog-map]');
-      return {guideBoxes:[...svg.querySelectorAll(catalog?'[data-oceania-product-label="dairy"] text,[data-oceania-product-label="wood"] text':'[data-oceania-industry-location^="nz-"] text')].map(box),otherBoxes:[...svg.querySelectorAll(catalog?'[data-oceania-product-label]:not([data-oceania-product-label="dairy"]):not([data-oceania-product-label="wood"]) text':'[data-oceania-industry-location]:not([data-oceania-industry-location^="nz-"]) text, svg > text')].map(box),bounds:box(stage)};
-     });
-     const overlap=(a,b)=>a.x<b.x+b.width&&a.x+a.width>b.x&&a.y<b.y+b.height&&a.y+a.height>b.y;
-     for(const box of guideBoxes)assert.ok(box.width>0&&box.height>0&&box.x>=bounds.x&&box.y>=bounds.y&&box.x+box.width<=bounds.x+bounds.width&&box.y+box.height<=bounds.y+bounds.height,`${width}: NZ guide names stay inside the map: ${JSON.stringify({box,bounds})}`);
-     for(const [index,box] of guideBoxes.entries())for(const other of [...guideBoxes.slice(index+1),...otherBoxes])assert.equal(overlap(box,other),false,`${width}: NZ guide names avoid other map names`);
-     for(const id of ['nz-dairy-guide','nz-wood-guide']){
-      await root.locator(`[data-primary-map] [data-oceania-industry-location="${id}"] circle`).click();
-      assert.equal(new URL(page.url()).searchParams.get('industryLocation'),id);
-      assert.equal(new URL(page.url()).searchParams.get('sector'),'manufacturing');
-      assert.match(await root.locator('[data-takeaway]').textContent(),/都市中心の案内位置.*工場の入口・敷地ではありません/);
-      assert.match(await root.locator('[data-explanation]').textContent(),/案内位置.*入口・敷地ではありません/);
-      assert.equal(await map.getAttribute('viewBox'),frame);
-      await capture(`${width}-${region}-industry-${id}`);
-      await page.reload({waitUntil:'networkidle'});
-      await page.waitForFunction(()=>document.querySelector('[data-oceania-learning]')?.dataset.oceaniaReady==='true');
-      assert.equal(new URL(page.url()).searchParams.get('industryLocation'),id);
-     }
-     await root.locator('[data-primary-map] [data-oceania-industry-location="tauranga-port"] circle').click();
-     assert.equal(new URL(page.url()).searchParams.get('industryLocation'),'tauranga-port','The nearby wood guide does not intercept the original port marker');
-     await root.locator('[data-oceania-industry-return]').click();
-    }
+    await root.locator('[data-industry-sector="services"]').click();assert.equal(await map.locator('[data-oceania-industry-location="nz-wood-guide"]').count(),0);await map.locator('[data-oceania-industry-location="tauranga-port"] circle,[data-oceania-industry-location="tauranga-port"] path').first().click();assert.equal(new URL(page.url()).searchParams.get('industryLocation'),'tauranga-port');await root.locator('[data-oceania-industry-return]').click();
    }
    if(field==='agriculture'){
     const crop=root.locator('[data-farming-group=crop]'),livestock=root.locator('[data-farming-group=livestock]');

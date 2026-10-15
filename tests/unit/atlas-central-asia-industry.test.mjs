@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {centralIndustries,centralIndustrySites,centralIndustryMetrics,centralIndustrySources,centralIndustryMetric,formatCentralMetric,centralIndustrySectors} from '../../src/data/atlas/central-asia-industry.ts';
-import {readCentralIndustryState,writeCentralIndustryState,projectCentralIndustry,fitCentralIndustryFrame,zoomCentralIndustryFrame,groupCentralIndustryLabels,placeCentralIndustryLabel,centralIndustryVisibleSites,centralIndustryStageReading,centralIndustryAnnotationLabel} from '../../src/lib/atlas-central-asia-industry.ts';
+import {readCentralIndustryState,writeCentralIndustryState,projectCentralIndustry,fitCentralIndustryFrame,zoomCentralIndustryFrame,groupCentralIndustryLabels,placeCentralIndustryLabel,centralIndustryVisibleSites,centralIndustryStageReading,centralIndustryAnnotationLabel,layoutCentralIndustryAnnotations} from '../../src/lib/atlas-central-asia-industry.ts';
 
 test('All eleven approved items have sourced Central Asian locations, stage-aware sectors and independently scoped quantities',()=>{
  assert.deepEqual(new Set(centralIndustries.map(i=>i.id)),new Set(['oil','gas','uranium','copper','gold','hydro','textiles','flour','logistics','tourism','chromium']));
@@ -80,4 +80,21 @@ test('Only Central Asia industry routes to the dedicated component; other region
  const route=readFileSync('src/pages/atlas/asia/[region]/[field].astro','utf8');assert.match(route,/focusId==='central-asia'&&initialField==='industry'/);assert.match(route,/:<AsiaAtlasPage/);
  const page=readFileSync('src/components/atlas/asia/CentralAsiaIndustryPage.astro','utf8');assert(page.indexOf('<CentralAsiaIndustryStatistics')>page.indexOf('</aside>'));assert.match(page,/data-central-config/);
  const script=readFileSync('src/scripts/atlas-central-asia-industry.ts','utf8');assert.match(script,/if\(key===geometryKey\)return/);assert.doesNotMatch(script,/flyTo|easeTo|addSource|fetch\(/);assert.doesNotMatch(script,/data-central-flow/);
+});
+
+
+test('Fixed annotation boxes retain all source members and stable slots across product selection and URL restoration',()=>{
+ for(const viewport of [[960,620],[560,520],[358,530]])for(const sector of centralIndustrySectors){
+  const source=centralIndustrySites.filter(site=>site.sectors.includes(sector.id)),projected=source.map(site=>projectCentralIndustry(site.coordinates)),xs=projected.map(p=>p[0]),ys=projected.map(p=>p[1]),left=Math.min(...xs)-20,top=Math.min(...ys)-20,w=Math.max(...xs)-left+20,h=Math.max(...ys)-top+20,k=Math.min((viewport[0]-20)/w,(viewport[1]-20)/h);
+  const project=site=>{const [x,y]=projectCentralIndustry(site.coordinates);return {site,point:[10+(x-left)*k,10+(y-top)*k]};};
+  const points=source.map(project),layout=layoutCentralIndustryAnnotations(points,sector.id,viewport),placed=layout.filter(row=>row.box);
+  assert(placed.length>0);assert(placed.length<=(viewport[0]<600?7:14));
+  assert.deepEqual(new Set(layout.flatMap(row=>row.group.map(p=>p.site.id))),new Set(source.map(site=>site.id)),'Omitted text never drops a source record');
+  for(const row of placed){const [x,y,right,bottom]=row.box;assert(x>=6&&y>=6&&right<=viewport[0]-6&&bottom<=viewport[1]-6);assert(row.group.includes(row.anchor));assert(row.title===centralIndustryAnnotationLabel(row.anchor.site,sector.id));assert(Math.abs(right-x-row.size[0])<1e-6&&Math.abs(bottom-y-row.size[1])<1e-6);const [px,py]=row.anchor.point;assert(Math.hypot(px-Math.max(x,Math.min(right,px)),py-Math.max(y,Math.min(bottom,py)))<=40.001);}
+  for(let a=0;a<placed.length;a++)for(let b=a+1;b<placed.length;b++){const x=placed[a].box,y=placed[b].box;assert(x[2]<=y[0]||y[2]<=x[0]||x[3]<=y[1]||y[3]<=x[1]);}
+  for(const item of centralIndustries.filter(item=>item.sectors.includes(sector.id))){
+   const state=readCentralIndustryState(writeCentralIndustryState(new URL('https://example.test/industry/'),{sector:sector.id,industry:item.id,site:null,only:false,country:null,frame:null}));
+   assert.deepEqual(layoutCentralIndustryAnnotations(centralIndustryVisibleSites(state).map(project),sector.id,viewport),layout);
+  }
+ }
 });

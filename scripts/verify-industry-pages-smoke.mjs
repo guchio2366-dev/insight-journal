@@ -58,6 +58,7 @@ function canonicalUrl(value){const url=new URL(value);url.searchParams.sort();re
 const excluded=new Set(['','all','overview','sc-overview','sc-south-resources','sc-south-manufacturing','sc-south-services','east-resources','east-manufacturing','east-clusters','east-services']);
 async function settle(scene){
  await page.locator(scene.ready).waitFor();
+ if(scene.id==='southeast-asia')assert.equal(await page.locator('[data-industry-navigation]').isVisible(),false,'The regional three-sector controls replace the generic national row');
  if(scene.id==='canada')await page.waitForFunction(()=>!!document.querySelector('[data-ca-industry-pilot]')?.canadaIndustryView);
  await page.evaluate(async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});
 }

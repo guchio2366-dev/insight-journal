@@ -91,3 +91,25 @@ export function placeCentralIndustryLabel(points:number[][],size:number[],viewpo
  }
  return null;
 }
+
+/** Pixel boxes are fixed before emphasis; DOM flow and selection never size them. */
+export function layoutCentralIndustryAnnotations(points:Parameters<typeof groupCentralIndustryLabels>[0],sector:CentralIndustrySector,viewport:number[],reserved:number[][]=[]){
+ const [width,height]=viewport,small=width<600,font=small?11:12,budget=small?7:14;
+ const groups=groupCentralIndustryLabels(points,small?76:92),first:typeof groups=[],rest:typeof groups=[];
+ for(const item of centralIndustries){
+  const matches=groups.filter(group=>group[0].site.industry===item.id);
+  const preferred=sector==='resources'?matches.find(group=>group[0].site.kind!=='processing')??matches[0]:matches[0];
+  if(preferred)first.push(preferred);rest.push(...matches.filter(group=>group!==preferred));
+ }
+ const occupied=[[width-130,0,width,48],...reserved,...points.map(({point:[x,y]})=>[x-6,y-6,x+6,y+6])],textWidth=(text:string,size:number)=>[...text].reduce((sum,char)=>sum+(/[\u0000-\u007f]/.test(char)?size*.65:size),0);
+ let named=0;
+ return [...first,...rest].map(group=>{
+  const title=centralIndustryAnnotationLabel(group[0].site,sector),place=centralIndustryGroupPlace(group),center=group.reduce((sum,row)=>[sum[0]+row.point[0]/group.length,sum[1]+row.point[1]/group.length],[0,0]);
+  const anchor=group.reduce((nearest,row)=>Math.hypot(row.point[0]-center[0],row.point[1]-center[1])<Math.hypot(nearest.point[0]-center[0],nearest.point[1]-center[1])?row:nearest,group[0]);
+  const titleWidth=Math.ceil(textWidth(title,font)+13),fullWidth=Math.min(158,Math.ceil(Math.max(titleWidth,textWidth(place,10)+4))),fullHeight=Math.ceil(font*1.25+12.5);
+  let compact=false,size=[fullWidth,fullHeight],box=named<budget?placeCentralIndustryLabel([anchor.point],size,viewport,occupied,40):null;
+  if(!box&&named<budget){compact=true;size=[titleWidth,Math.ceil(font*1.25)];box=placeCentralIndustryLabel([anchor.point],size,viewport,occupied,40);}
+  if(box){occupied.push(box);named++;}
+  return {group,anchor,title,place,font,compact,size,box};
+ });
+}

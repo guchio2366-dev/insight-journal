@@ -22,7 +22,7 @@ try{
   // Native controls may scroll into view on mobile. Compare the map's
   // document position, dimensions and camera independently of page scrolling.
   const rect=n=>{const r=n.getBoundingClientRect();return {x:r.x+scrollX,y:r.y+scrollY,width:r.width,height:r.height};};
-  return {frame:rect(document.querySelector('.asia-map-frame')),camera:document.querySelector('[data-asia-atlas]').dataset.mapCamera,labels:[...document.querySelectorAll('[data-southeast-industry-label]:not([hidden])')].map(n=>({id:n.dataset.southeastIndustryLabel,left:n.style.left,top:n.style.top,width:n.style.width,height:n.style.height,text:n.textContent})),points:[...document.querySelectorAll('[data-southeast-industry-point]')].map(n=>({id:n.dataset.southeastIndustryPoint,left:n.style.left,top:n.style.top,hidden:n.hidden}))};
+  return {frame:rect(document.querySelector('.asia-map-frame')),camera:Object.fromEntries(Object.entries(JSON.parse(document.querySelector('[data-asia-atlas]').dataset.mapCamera)).map(([key,value])=>[key,Number(value.toFixed(key==='zoom'?3:5))])),labels:[...document.querySelectorAll('[data-southeast-industry-label]:not([hidden])')].map(n=>({id:n.dataset.southeastIndustryLabel,left:n.style.left,top:n.style.top,width:n.style.width,height:n.style.height,text:n.textContent})),points:[...document.querySelectorAll('[data-southeast-industry-point]:not([hidden])')].map(n=>({id:n.dataset.southeastIndustryPoint,left:n.style.left,top:n.style.top,hidden:n.hidden}))};
  });
  const labelsClear=async()=>page.evaluate(()=>{
   const frame=document.querySelector('[data-southeast-industry-map]').getBoundingClientRect(),labels=[...document.querySelectorAll('[data-southeast-industry-label]:not([hidden])')].map(n=>({id:n.dataset.southeastIndustryLabel,r:n.getBoundingClientRect(),clipped:n.scrollWidth>n.clientWidth+1||n.scrollHeight>n.clientHeight+1}));
@@ -36,6 +36,7 @@ try{
  for(const viewport of [{width:1920,height:1080},{width:1024,height:768},{width:390,height:844}]){
   await page.setViewportSize(viewport);await open('?industrySector=resource');
   assert.equal(await page.locator('button[data-southeast-industry-sector]').count(),3);
+  assert.equal(await page.locator('[data-industry-navigation]').isVisible(),false,'The three regional sector controls replace the generic national tab rows');
   assert.equal(await page.locator('[data-southeast-industry-picker]').count(),1);
   assert.equal(await page.locator('.asia-map-frame [data-southeast-industry-picker],.asia-map-frame [data-southeast-industry-controls]').count(),0);
   for(const sector of ['resource','manufacturing','services']){

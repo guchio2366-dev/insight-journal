@@ -77,7 +77,7 @@ async function stableIndustryFrame(page,name){
  return result;
 }
 async function capturePc(page,name){
- const baseline=name==='south-asia-industry'||name.endsWith('-initial'),wanted=process.env.SC_FOCUSED_REVIEW!=='1'||renderFollowup.has(name);
+ const baseline=name==='south-asia-industry'||/^\d+-south-asia-(?:industry|sc-south-(?:resources|manufacturing|services))-initial$/.test(name),wanted=process.env.SC_FOCUSED_REVIEW!=='1'||renderFollowup.has(name);
  if(!wanted&&!baseline)return;
  let render=null;
  if(baseline||renderFollowup.has(name)){await page.waitForLoadState('networkidle');render=await stableIndustryFrame(page,name);}
@@ -476,7 +476,7 @@ test('南アジア産業の全地点とPC三幅の代表選択は表示集合と
    }
    assert.deepEqual([...new Set(seen)].sort(),sites.map(site=>site.id).sort(),'All source sites are retained across the three maps');
    assert.deepEqual(errors,[]);await page.close();
-   console.log(`South industry ${width}px: ${selectionIds.length} selections and reset passed`);
+   console.log(`South industry ${width}px: all three sector inventories, site choices and clear passed`);
   }
   if(process.env.SC_FOCUSED_REVIEW==='1'){
    assert(review.images.length>=18,'Each sector and PC width has initial and selected paint evidence');

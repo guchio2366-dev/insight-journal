@@ -48,3 +48,10 @@
 .eu-workspace-root[data-europe-detail] .eu-industry-map-key { order:1; }
 
 .eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-read-panel{position:static;align-self:start}
+
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-subject-reader{max-height:none;overflow:visible}
+
+/* Expanded product choices keep their own space in the reader's scroll flow. */
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-read-panel{overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] :is(.eu-subject-reader,.eu-industry-product-menu,.eu-industry-scope-note){flex:none}
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-reader-body{flex:none;max-height:none;overflow:visible}
