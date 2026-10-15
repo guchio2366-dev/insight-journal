@@ -7,6 +7,7 @@ import data from '../../data/atlas/west-asia.json';
 import geography from '../../../public/assets/atlas/west-asia-v1/geography.json';
 import {westFields} from '../../data/atlas/west-asia-topics.mjs';
 import {westIndustryCatalog as catalog,westIndustrySectors as sectors,westIndustrySources as sources,westIndustryAdoption as adoption} from '../../data/atlas/west-asia-industry-catalog.mjs';
+import {westIndustryMapLabel} from '../../data/atlas/west-asia-industry-map.mjs';
 import {westIndustryPath,projectWestIndustry,westIndustryValue} from '../../lib/atlas-west-asia-industry.mjs';
 import '../../styles/atlas-industry.css';
 import '../../styles/atlas-west-asia-industry.css';
@@ -33,13 +34,13 @@ const nationalIndicators=[['NY.GDP.PETR.RT.ZS','石油資源レント'],['NY.GDP
      <g class="wi-country-labels" aria-hidden="true">{contextLabels.map(c=>{const p=projectWestIndustry(c.center);return <text x={p[0]} y={p[1]} text-anchor="middle">{c.name}</text>})}</g>
      <g data-wi-points></g>
     </svg>
-    <div class="wi-labels" data-wi-labels aria-label="産業名から集積を選ぶ"></div>
+    <div class="wi-annotations" data-wi-labels aria-label="この分野の主要な産業地域"></div>
     <div class="wi-map-tools"><button type="button" data-wi-zoom="0.7" aria-label="地図を拡大">＋</button><button type="button" data-wi-zoom="1.43" aria-label="地図を縮小">−</button><button type="button" data-wi-reset>範囲を戻す</button></div>
     <div class="wi-map-key" data-wi-map-key><strong>集積例の位置</strong><span>色＝産業 · ● 採取・サービス　■ 加工・製造　◇ 本社</span></div>
    </div>
-   <p class="wi-map-note">点は集積地域の案内位置。細い引出線は産業名の位置案内で、取引・輸送経路を表しません。点の数・大きさは生産量を表しません。</p>
+   <p class="wi-map-note">点は資料で確認した集積例。近接する同一産業・同一国の地点はまとめ、数字は掲載地点数を示します。重なる記号の短い細線は元位置への案内で、取引・輸送ではありません。点の数・大きさは生産量を表しません。</p>
    <p class="wi-map-note">LNG＝液化天然ガス · PE＝ポリエチレン · PP＝ポリプロピレン · DRI＝直接還元鉄。</p>
-   <div class="wi-industry-picker" aria-label="産業を一覧から選ぶ">{sectors.map(s=><div data-wi-picker={s.id} hidden={s.id!=='resources'}>{catalog.filter(i=>i.sectors.includes(s.id)).map(i=><button type="button" data-wi-industry={i.id} aria-pressed="false" style={`--wi-color:${i.color}`}><i aria-hidden="true"></i>{i.label}</button>)}</div>)}</div>
+   <div class="wi-industry-picker" aria-label="産業を一覧から選ぶ">{sectors.map(s=><div data-wi-picker={s.id} hidden={s.id!=='resources'}>{catalog.filter(i=>i.sectors.includes(s.id)).map(i=><button type="button" data-wi-industry={i.id} aria-pressed="false" style={`--wi-color:${i.color}`}><i aria-hidden="true"></i>{westIndustryMapLabel(i,s.id)}</button>)}</div>)}</div>
   </div>
   <aside class="atlas-national wi-reading" aria-label="産業分布の概説と解説">
    <h2 data-wi-title>資源・エネルギー</h2><p class="wi-insight" data-wi-summary>{sectors[0].summary}</p>
@@ -67,7 +68,7 @@ const nationalIndicators=[['NY.GDP.PETR.RT.ZS','石油資源レント'],['NY.GDP
  </section>
  <details class="wi-method"><summary>国ごとの産業構造と採用理由</summary>
   <p>サウジは原油から燃料・樹脂・肥料・アルミへの加工、UAEはアブダビの資源・加工とドバイの物流・金融・観光、カタールはLNG・尿素・ヘリウム、バーレーンは一次アルミ・金融、オマーンは外洋側のLNG・港湾と金属加工を対比します。イラク・クウェートは石油輸出の重要性、イランはガス・鉄鋼、アゼルバイジャンはカスピ海資源とパイプライン、トルコは輸出製造・観光、ヨルダン・イスラエルは死海の肥料、イスラエル中部は情報サービス、ジョージア・キプロスは観光を扱います。</p>
-  <p>主案17系列と追加候補4系列をすべて採用。港湾と航空は物流の異なるサービスとして分離しました。肥料の窒素・リン・カリ、自動車と白物家電、粗鋼とDRIを区別します。精製・一次アルミ・リン鉱石／カリ・鉄鋼・ホウ素は工程の学習上の意味から複数分類に載せ、分類の統計を合計しません。</p>
+  <p>主案17系列と追加候補4系列をすべて採用。港湾と航空は物流の異なるサービスとして分離しました。肥料の窒素・リン・カリ、自動車と白物家電、粗鋼とDRIを区別します。アルミの鉱石採掘と精錬、リン鉱石の採掘と肥料加工は地点の工程に応じて別の地図へ掲載します。鉄鋼・DRIは製造業。精製燃料、死海の採取・加工、ホウ素の採掘・加工は工程上の意味がある場合に複数分野へ掲載し、分類の統計を合計しません。</p>
   <p>原油・LNGは日本のエネルギーと海峡集中、樹脂・アルミ・DRIは原料と電力・脱炭素、肥料は食料安全保障、トルコの製造は欧州との供給網、都市のサービスは物品以外の稼ぎ方を説明します。追加のホウ素・ヘリウムは輸出金額の大きさだけで落とさず調達集中、防衛装備は契約と引渡しの違いを学ぶ系列として採用しました。</p>
   <p>レバノン・シリア・パレスチナ・イエメン、アルメニア等の同一定義の最新細分統計・地点根拠は未取得です。過去の工場を現在の稼働拠点と断定せず、未取得を0と扱いません。</p>
  </details>
