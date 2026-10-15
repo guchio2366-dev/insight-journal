@@ -27,8 +27,11 @@ export function createCanadaElevationRaster(root:HTMLElement,fallback:SVGSVGElem
   const merc=(y:number)=>Math.log(Math.tan(Math.PI/4+y*Math.PI/360));
   const x=Math.floor((lon-config.coordinates[0][0])/(config.coordinates[1][0]-config.coordinates[0][0])*config.width),y=Math.floor((merc(config.coordinates[0][1])-merc(lat))/(merc(config.coordinates[0][1])-merc(config.coordinates[2][1]))*config.height);
   if(x<0||y<0||x>=config.width||y>=config.height)return null;
-  if(!canvas){canvas=document.createElement('canvas');canvas.width=config.width;canvas.height=config.height;canvas.getContext('2d',{willReadFrequently:true})!.drawImage(bitmap,0,0);}
-  const pixel=canvas.getContext('2d')!.getImageData(x,y,1,1).data;if(!pixel[3])return null;
+  if(!canvas){canvas=document.createElement('canvas');canvas.width=1;canvas.height=1;}
+  const context=canvas.getContext('2d',{willReadFrequently:true})!;
+  context.imageSmoothingEnabled=false;context.clearRect(0,0,1,1);
+  context.drawImage(bitmap,x,y,1,1,0,0,1,1);
+  const pixel=context.getImageData(0,0,1,1).data;if(!pixel[3])return null;
   const color='#'+[...pixel.slice(0,3)].map(v=>v.toString(16).padStart(2,'0')).join(''),index=config.palette.indexOf(color);return index>0?config.groups[index-1].id:null;
  }
  return {

@@ -1,0 +1,142 @@
+{
+  "baseline": "d166204299c2a12acd7c0275b9d0114d49c5040e saved immutable build",
+  "method": "Same unmodified browser tests, same Chromium sandbox launch hook, baseline dist served through a separate cwd; no application changes",
+  "comparisons": [
+    {
+      "title": "real browser: Asia industry preserves source publication status across controls, tables and return navigation",
+      "matchingFailureNames": true,
+      "candidate": {
+        "title": "real browser: Asia industry preserves source publication status across controls, tables and return navigation",
+        "failingCases": [
+          "desktop",
+          "laptop",
+          "mobile",
+          "real browser: Asia industry preserves source publication status across controls, tables and return navigation"
+        ],
+        "messages": [
+          "|-",
+          "1",
+          "0",
+          "|-",
+          "1",
+          "0",
+          "|-",
+          "1",
+          "0",
+          "'3 subtests failed'"
+        ],
+        "logSHA256": "1438273ab41a319a1f228153e8a52da56ad8f55b7d72f95b6e89de832cb58b7a"
+      },
+      "baseline": {
+        "title": "real browser: Asia industry preserves source publication status across controls, tables and return navigation",
+        "failingCases": [
+          "desktop",
+          "laptop",
+          "mobile",
+          "real browser: Asia industry preserves source publication status across controls, tables and return navigation"
+        ],
+        "messages": [
+          "|-",
+          "1",
+          "0",
+          "|-",
+          "1",
+          "0",
+          "|-",
+          "1",
+          "0",
+          "'3 subtests failed'"
+        ],
+        "logSHA256": "ad2957e9874f469b5b06a8991f32cb7b4559a3587b0d523726284ee06ee99302"
+      }
+    },
+    {
+      "title": "real browser: Asia desktop headers and maps align with the US reference",
+      "matchingFailureNames": true,
+      "candidate": {
+        "title": "real browser: Asia desktop headers and maps align with the US reference",
+        "failingCases": [
+          "manufacturing and transport topic layouts align with the US reference",
+          "climate and population layouts align with the US reference without claiming population fill equivalence",
+          "country selection and reset remain usable in the industry header",
+          "South and Central Asia focus links remain a separate keyboard-operable row",
+          "climate city and monthly precipitation controls retain their selection and return paths",
+          "1024px PC",
+          "manufacturing and transport topic layouts align with the US reference",
+          "climate and population layouts align with the US reference without claiming population fill equivalence",
+          "country selection and reset remain usable in the industry header",
+          "South and Central Asia focus links remain a separate keyboard-operable row",
+          "climate city and monthly precipitation controls retain their selection and return paths",
+          "1440px PC",
+          "real browser: Asia desktop headers and maps align with the US reference"
+        ],
+        "messages": [
+          "|-",
+          "'nature: map y aligns within 1 CSS px (69)'",
+          "true",
+          "false",
+          "'1024px industry region/country/reset: controls share a row ([{\"x\":214,\"y\":93,\"width\":87.453125,\"height\":44,\"right\":301.453125,\"bottom\":137},{\"x\":307.453125,\"y\":93,\"width\":101.453125,\"height\":44,\"right\":408.90625,\"bottom\":137},{\"x\":414.90625,\"y\":93,\"width\":87.453125,\"height\":44,\"right\":502.359375,\"bottom\":137},{\"x\":508.359375,\"y\":93,\"width\":101.453125,\"height\":44,\"right\":609.8125,\"bottom\":137},{\"x\":270.015625,\"y\":144,\"width\":121,\"height\":40,\"right\":391.015625,\"bottom\":184},{\"x\":401.015625,\"y\":144,\"width\":87.015625,\"height\":40,\"right\":488.03125,\"bottom\":184}])'",
+          "true",
+          "false",
+          "|-",
+          "|-",
+          "'5 subtests failed'",
+          "|-",
+          "'nature: map y aligns within 1 CSS px (22)'",
+          "true",
+          "false",
+          "|-",
+          "'JPN'",
+          "~",
+          "|-",
+          "|-",
+          "'5 subtests failed'",
+          "'2 subtests failed'"
+        ],
+        "logSHA256": "b005d0d246023593207ccdc02aface612632b4d4397080befb5c73350ad0c2a5"
+      },
+      "baseline": {
+        "title": "real browser: Asia desktop headers and maps align with the US reference",
+        "failingCases": [
+          "manufacturing and transport topic layouts align with the US reference",
+          "climate and population layouts align with the US reference without claiming population fill equivalence",
+          "country selection and reset remain usable in the industry header",
+          "South and Central Asia focus links remain a separate keyboard-operable row",
+          "climate city and monthly precipitation controls retain their selection and return paths",
+          "1024px PC",
+          "manufacturing and transport topic layouts align with the US reference",
+          "climate and population layouts align with the US reference without claiming population fill equivalence",
+          "country selection and reset remain usable in the industry header",
+          "South and Central Asia focus links remain a separate keyboard-operable row",
+          "climate city and monthly precipitation controls retain their selection and return paths",
+          "1440px PC",
+          "real browser: Asia desktop headers and maps align with the US reference"
+        ],
+        "messages": [
+          "|-",
+          "'nature: map y aligns within 1 CSS px (69)'",
+          "true",
+          "false",
+          "'1024px industry region/country/reset: controls share a row ([{\"x\":214,\"y\":93,\"width\":87.453125,\"height\":44,\"right\":301.453125,\"bottom\":137},{\"x\":307.453125,\"y\":93,\"width\":101.453125,\"height\":44,\"right\":408.90625,\"bottom\":137},{\"x\":414.90625,\"y\":93,\"width\":87.453125,\"height\":44,\"right\":502.359375,\"bottom\":137},{\"x\":508.359375,\"y\":93,\"width\":101.453125,\"height\":44,\"right\":609.8125,\"bottom\":137},{\"x\":270.015625,\"y\":144,\"width\":121,\"height\":40,\"right\":391.015625,\"bottom\":184},{\"x\":401.015625,\"y\":144,\"width\":87.015625,\"height\":40,\"right\":488.03125,\"bottom\":184}])'",
+          "true",
+          "false",
+          "|-",
+          "|-",
+          "'5 subtests failed'",
+          "|-",
+          "'nature: map y aligns within 1 CSS px (22)'",
+          "true",
+          "false",
+          "|-",
+          "'JPN'",
+          "~",
+          "|-",
+          "|-",
+          "'5 subtests failed'",
+          "'2 subtests failed'"
+        ],
+        "logSHA256": "ae87b041357210e921794949b20c52082b710c8022f070c9d40e9a9a7a652db9"
+      }
+    }
+  ]
+}

@@ -1,0 +1,356 @@
+TAP version 13
+# Subtest: real browser: Asia industry preserves source publication status across controls, tables and return navigation
+    # Subtest: desktop
+    not ok 1 - desktop
+      ---
+      duration_ms: 2005.508968
+      type: 'test'
+      location: '/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:124:12'
+      failureType: 'testCodeFailure'
+      error: |-
+        the current non-featured topic appears exactly once
+
+        0 !== 1
+
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 1
+      actual: 0
+      operator: 'strictEqual'
+      stack: |-
+        assertCurrentTopicChip (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:102:9)
+        async TestContext.<anonymous> (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:133:6)
+        async Test.run (node:internal/test_runner/test:1389:7)
+        async TestContext.<anonymous> (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:124:4)
+        async Test.run (node:internal/test_runner/test:1389:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+      ...
+    # Subtest: laptop
+    not ok 2 - laptop
+      ---
+      duration_ms: 1600.244355
+      type: 'test'
+      location: '/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:124:12'
+      failureType: 'testCodeFailure'
+      error: |-
+        the current non-featured topic appears exactly once
+
+        0 !== 1
+
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 1
+      actual: 0
+      operator: 'strictEqual'
+      stack: |-
+        assertCurrentTopicChip (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:102:9)
+        async TestContext.<anonymous> (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:133:6)
+        async Test.run (node:internal/test_runner/test:1389:7)
+        async TestContext.<anonymous> (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:124:4)
+        async Test.run (node:internal/test_runner/test:1389:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+      ...
+    # Subtest: mobile
+    not ok 3 - mobile
+      ---
+      duration_ms: 1472.702144
+      type: 'test'
+      location: '/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:124:12'
+      failureType: 'testCodeFailure'
+      error: |-
+        the current non-featured topic appears exactly once
+
+        0 !== 1
+
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 1
+      actual: 0
+      operator: 'strictEqual'
+      stack: |-
+        assertCurrentTopicChip (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:102:9)
+        async TestContext.<anonymous> (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:133:6)
+        async Test.run (node:internal/test_runner/test:1389:7)
+        async TestContext.<anonymous> (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:124:4)
+        async Test.run (node:internal/test_runner/test:1389:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+      ...
+    # Subtest: failed industry request retries without changing selection or publication status
+    ok 4 - failed industry request retries without changing selection or publication status
+      ---
+      duration_ms: 2452.501228
+      type: 'test'
+      ...
+    1..4
+not ok 1 - real browser: Asia industry preserves source publication status across controls, tables and return navigation
+  ---
+  duration_ms: 7885.544645
+  type: 'test'
+  location: '/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:108:1'
+  failureType: 'subtestsFailed'
+  error: '3 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Real Chromium 151.0.7922.173; chromiumSandbox=true; locally hosted production build; executed viewport profiles are reported above; no certificate exceptions.
+# Subtest: real browser: Asia desktop headers and maps align with the US reference
+    # Subtest: 1024px PC
+        # Subtest: manufacturing and transport topic layouts align with the US reference
+        not ok 1 - manufacturing and transport topic layouts align with the US reference
+          ---
+          duration_ms: 30566.545745
+          type: 'test'
+          location: '/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:311:20'
+          failureType: 'testCodeFailure'
+          error: |-
+            locator.getAttribute: Timeout 30000ms exceeded.
+            Call log:
+              - waiting for locator('[data-industry-subtabs="manufacturing"] [data-industry-subsector="all"]')
+
+          code: 'ERR_TEST_FAILURE'
+          name: 'TimeoutError'
+          stack: |-
+            TestContext.<anonymous> (/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:317:124)
+            async TestContext.<anonymous> (/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:311:6)
+            async TestContext.<anonymous> (/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:307:4)
+          ...
+        # Subtest: climate and population layouts align with the US reference without claiming population fill equivalence
+        not ok 2 - climate and population layouts align with the US reference without claiming population fill equivalence
+          ---
+          duration_ms: 2389.558022
+          type: 'test'
+          location: '/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:342:20'
+          failureType: 'testCodeFailure'
+          error: 'nature: map y aligns within 1 CSS px (69)'
+          code: 'ERR_ASSERTION'
+          name: 'AssertionError'
+          expected: true
+          actual: false
+          operator: '=='
+          stack: |-
+            TestContext.<anonymous> (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:350:55)
+            async Test.run (node:internal/test_runner/test:1389:7)
+            async TestContext.<anonymous> (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:342:6)
+            async Test.run (node:internal/test_runner/test:1389:7)
+            async TestContext.<anonymous> (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:307:4)
+            async Test.run (node:internal/test_runner/test:1389:7)
+            async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+          ...
+        # Subtest: country selection and reset remain usable in the industry header
+        not ok 3 - country selection and reset remain usable in the industry header
+          ---
+          duration_ms: 1017.124895
+          type: 'test'
+          location: '/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:360:20'
+          failureType: 'testCodeFailure'
+          error: '1024px industry region/country/reset: controls share a row ([{"x":214,"y":93,"width":87.453125,"height":44,"right":301.453125,"bottom":137},{"x":307.453125,"y":93,"width":101.453125,"height":44,"right":408.90625,"bottom":137},{"x":414.90625,"y":93,"width":87.453125,"height":44,"right":502.359375,"bottom":137},{"x":508.359375,"y":93,"width":101.453125,"height":44,"right":609.8125,"bottom":137},{"x":270.015625,"y":144,"width":121,"height":40,"right":391.015625,"bottom":184},{"x":401.015625,"y":144,"width":87.015625,"height":40,"right":488.03125,"bottom":184}])'
+          code: 'ERR_ASSERTION'
+          name: 'AssertionError'
+          expected: true
+          actual: false
+          operator: '=='
+          stack: |-
+            sameRow (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:291:10)
+            industryHeader (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:299:19)
+            async TestContext.<anonymous> (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:362:7)
+            async Test.run (node:internal/test_runner/test:1389:7)
+            async TestContext.<anonymous> (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:360:6)
+            async Test.run (node:internal/test_runner/test:1389:7)
+            async TestContext.<anonymous> (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:307:4)
+            async Test.run (node:internal/test_runner/test:1389:7)
+            async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+          ...
+        # Subtest: South and Central Asia focus links remain a separate keyboard-operable row
+        not ok 4 - South and Central Asia focus links remain a separate keyboard-operable row
+          ---
+          duration_ms: 31462.988293
+          type: 'test'
+          location: '/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:372:20'
+          failureType: 'testCodeFailure'
+          error: |-
+            page.waitForURL: Timeout 30000ms exceeded.
+            =========================== logs ===========================
+            waiting for navigation to "**/atlas/asia/south-asia/industry/**" until "load"
+              navigated to "http://127.0.0.1:43509/insight-journal/atlas/asia/south-asia/?topic=manufacturing"
+              navigated to "http://127.0.0.1:43509/insight-journal/atlas/asia/south-asia/nature/"
+            ============================================================
+          code: 'ERR_TEST_FAILURE'
+          name: 'TimeoutError'
+          stack: |-
+            TestContext.<anonymous> (/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:382:19)
+            async TestContext.<anonymous> (/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:372:6)
+            async TestContext.<anonymous> (/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:307:4)
+          ...
+        # Subtest: climate city and monthly precipitation controls retain their selection and return paths
+        not ok 5 - climate city and monthly precipitation controls retain their selection and return paths
+          ---
+          duration_ms: 1353.923929
+          type: 'test'
+          location: '/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:395:20'
+          failureType: 'testCodeFailure'
+          error: |-
+            locator.evaluate: TypeError: Cannot read properties of null (reading 'textContent')
+                at eval (eval at evaluate (:290:30), <anonymous>:1:100)
+                at UtilityScript.evaluate (<anonymous>:292:16)
+                at UtilityScript.<anonymous> (<anonymous>:1:44)
+          code: 'ERR_TEST_FAILURE'
+          stack: |-
+            eval (eval at evaluate (:290:30), <anonymous>:1:100)
+            UtilityScript.evaluate (<anonymous>:292:16)
+            UtilityScript.<anonymous> (<anonymous>:1:44)
+            TestContext.<anonymous> (/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:409:37)
+            async TestContext.<anonymous> (/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:395:6)
+            async TestContext.<anonymous> (/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:307:4)
+          ...
+        1..5
+    not ok 1 - 1024px PC
+      ---
+      duration_ms: 66943.483029
+      type: 'test'
+      location: '/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:307:12'
+      failureType: 'subtestsFailed'
+      error: '5 subtests failed'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        async TestContext.<anonymous> (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:307:4)
+      ...
+    # Subtest: 1440px PC
+        # Subtest: manufacturing and transport topic layouts align with the US reference
+        not ok 1 - manufacturing and transport topic layouts align with the US reference
+          ---
+          duration_ms: 30395.066774
+          type: 'test'
+          location: '/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:311:20'
+          failureType: 'testCodeFailure'
+          error: |-
+            locator.getAttribute: Timeout 30000ms exceeded.
+            Call log:
+              - waiting for locator('[data-industry-subtabs="manufacturing"] [data-industry-subsector="all"]')
+
+          code: 'ERR_TEST_FAILURE'
+          name: 'TimeoutError'
+          stack: |-
+            TestContext.<anonymous> (/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:317:124)
+            async TestContext.<anonymous> (/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:311:6)
+            async TestContext.<anonymous> (/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:307:4)
+          ...
+        # Subtest: climate and population layouts align with the US reference without claiming population fill equivalence
+        not ok 2 - climate and population layouts align with the US reference without claiming population fill equivalence
+          ---
+          duration_ms: 2722.212235
+          type: 'test'
+          location: '/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:342:20'
+          failureType: 'testCodeFailure'
+          error: 'nature: map y aligns within 1 CSS px (22)'
+          code: 'ERR_ASSERTION'
+          name: 'AssertionError'
+          expected: true
+          actual: false
+          operator: '=='
+          stack: |-
+            TestContext.<anonymous> (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:350:55)
+            async Test.run (node:internal/test_runner/test:1389:7)
+            async TestContext.<anonymous> (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:342:6)
+            async Test.run (node:internal/test_runner/test:1389:7)
+            async TestContext.<anonymous> (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:307:4)
+            async Test.run (node:internal/test_runner/test:1389:7)
+            async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+          ...
+        # Subtest: country selection and reset remain usable in the industry header
+        not ok 3 - country selection and reset remain usable in the industry header
+          ---
+          duration_ms: 1513.096158
+          type: 'test'
+          location: '/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:360:20'
+          failureType: 'testCodeFailure'
+          error: |-
+            Expected values to be strictly equal:
+
+            null !== 'JPN'
+
+          code: 'ERR_ASSERTION'
+          name: 'AssertionError'
+          expected: 'JPN'
+          actual: ~
+          operator: 'strictEqual'
+          stack: |-
+            TestContext.<anonymous> (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:364:14)
+            async Test.run (node:internal/test_runner/test:1389:7)
+            async TestContext.<anonymous> (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:360:6)
+            async Test.run (node:internal/test_runner/test:1389:7)
+            async TestContext.<anonymous> (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:307:4)
+            async Test.run (node:internal/test_runner/test:1389:7)
+            async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+          ...
+        # Subtest: South and Central Asia focus links remain a separate keyboard-operable row
+        not ok 4 - South and Central Asia focus links remain a separate keyboard-operable row
+          ---
+          duration_ms: 31486.641626
+          type: 'test'
+          location: '/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:372:20'
+          failureType: 'testCodeFailure'
+          error: |-
+            page.waitForURL: Timeout 30000ms exceeded.
+            =========================== logs ===========================
+            waiting for navigation to "**/atlas/asia/south-asia/industry/**" until "load"
+              navigated to "http://127.0.0.1:43509/insight-journal/atlas/asia/south-asia/?topic=manufacturing"
+              navigated to "http://127.0.0.1:43509/insight-journal/atlas/asia/south-asia/nature/"
+            ============================================================
+          code: 'ERR_TEST_FAILURE'
+          name: 'TimeoutError'
+          stack: |-
+            TestContext.<anonymous> (/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:382:19)
+            async TestContext.<anonymous> (/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:372:6)
+            async TestContext.<anonymous> (/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:307:4)
+          ...
+        # Subtest: climate city and monthly precipitation controls retain their selection and return paths
+        not ok 5 - climate city and monthly precipitation controls retain their selection and return paths
+          ---
+          duration_ms: 1591.199991
+          type: 'test'
+          location: '/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:395:20'
+          failureType: 'testCodeFailure'
+          error: |-
+            locator.evaluate: TypeError: Cannot read properties of null (reading 'textContent')
+                at eval (eval at evaluate (:290:30), <anonymous>:1:100)
+                at UtilityScript.evaluate (<anonymous>:292:16)
+                at UtilityScript.<anonymous> (<anonymous>:1:44)
+          code: 'ERR_TEST_FAILURE'
+          stack: |-
+            eval (eval at evaluate (:290:30), <anonymous>:1:100)
+            UtilityScript.evaluate (<anonymous>:292:16)
+            UtilityScript.<anonymous> (<anonymous>:1:44)
+            TestContext.<anonymous> (/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:409:37)
+            async TestContext.<anonymous> (/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:395:6)
+            async TestContext.<anonymous> (/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:307:4)
+          ...
+        1..5
+    not ok 2 - 1440px PC
+      ---
+      duration_ms: 67866.515197
+      type: 'test'
+      location: '/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:307:12'
+      failureType: 'subtestsFailed'
+      error: '5 subtests failed'
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        async TestContext.<anonymous> (file:///workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:307:4)
+      ...
+    1..2
+not ok 2 - real browser: Asia desktop headers and maps align with the US reference
+  ---
+  duration_ms: 135143.208674
+  type: 'test'
+  location: '/workspace/insight-journal/tests/e2e/atlas-asia-industry-status.test.mjs:275:1'
+  failureType: 'subtestsFailed'
+  error: '2 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..2
+# tests 18
+# suites 0
+# pass 1
+# fail 17
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 143326.158088

@@ -34,12 +34,118 @@ async function setup(query='',options={}){
  window.createImageBitmap=async()=>({width:1,height:1,close(){}});
  window.HTMLCanvasElement.prototype.getContext=()=>({drawImage(){},getImageData:()=>({width:1,height:1,data:new Uint8ClampedArray([window.__climateId??9,0,0,255])})});
  const requests=[];
- window.fetch=async (url)=>{requests.push(String(url));return new Response(await readFile('public/'+String(url).replace(/^.*?\/insight-journal\//,'')));};
+ window.fetch=async (url)=>{requests.push(String(url));if(options.fetchOverride){const response=await options.fetchOverride(String(url));if(response)return response;}return new Response(await readFile('public/'+String(url).replace(/^.*?\/insight-journal\//,'')));};
  options.beforeStart?.(window);
  window.Response=Response;window.DecompressionStream=DecompressionStream;
- const entry=window.eval(bundle.outputFiles[0].text+"; NatureTest;");await entry.startAtlas();assert.equal(window.__workerUrl,'/insight-journal/_astro/maplibre-gl-worker.test.js');await waitFor(()=>options.pending||options.fallback||window.document.querySelector('[data-atlas-explorer]').dataset.natureLoad==='ready','initial data ready');await delay();
+ const entry=window.eval(bundle.outputFiles[0].text+"; NatureTest;");await entry.startAtlas();assert.equal(window.__workerUrl,'/insight-journal/_astro/maplibre-gl-worker.test.js');await waitFor(()=>{const root=window.document.querySelector('[data-atlas-explorer]');return options.pending||options.fallback||(root.dataset.field==='natural'?root.dataset.natureLoad==='ready':root.dataset.renderState==='ready');},'initial data ready');await delay();
  return {window,requests,root:window.document.querySelector('[data-atlas-explorer]'),q:s=>window.document.querySelector(s)};
 }
+
+test('農業の直接起動は共通データと並列に取得し、用意できた作物を初期ソースに使う',async()=>{
+ const {window,requests,root,q}=await setup('',{fieldPath:'agriculture',fetchOverride:async url=>{if(url.endsWith('/base.geojson'))await new Promise(resolve=>setTimeout(resolve,100));}});
+ try{
+  assert.ok(window.__map.options.style.sources.crops.data.features.length>0);
+  assert.equal(window.__map.sources.crops.setDataCalls,0);
+  assert.equal(root.dataset.agricultureLoad,'ready');assert.ok(root.querySelectorAll('.atlas-geolabel--crop').length>0);
+  q('[data-field="natural"]').click();q('[data-field="agriculture"]').click();
+  assert.equal(window.__map.sources.crops.setDataCalls,0);
+  for(const name of ['agriculture.geojson','crop-labels.json'])assert.equal(requests.filter(url=>url.endsWith('/'+name)).length,1);
+ }finally{await window.happyDOM.close();}
+});
+
+test('農業の直接起動でも遅い作物ラベルは別分野の起動を妨げず、完了で上書きしない',async()=>{
+ let release;
+ const {window,root,q}=await setup('',{fieldPath:'agriculture',pending:true,fetchOverride:async url=>{if(url.endsWith('/crop-labels.json'))await new Promise(resolve=>release=resolve);}});
+ try{
+  await waitFor(()=>release&&root.dataset.agricultureLoad==='loading','agriculture loading');
+  q('[data-field="natural"]').click();await waitFor(()=>root.dataset.natureLoad==='ready','nature ready without crop labels');
+  release();await waitFor(()=>root.dataset.agricultureLoad==='ready','crop labels complete');
+  assert.equal(root.dataset.field,'natural');assert.equal(root.dataset.renderState,'ready');
+ }finally{release?.();await window.happyDOM.close();}
+});
+
+for(const fieldPath of ['nature','population'])test(`${fieldPath}は農業専用データを取得せず、農業の初回選択だけ取得・設定する`,async()=>{
+ const {window,requests,root,q}=await setup('',{fieldPath});
+ try{
+  const count=name=>requests.filter(url=>url.endsWith('/'+name)).length;
+  assert.equal(count('agriculture.geojson'),0);assert.equal(count('crop-labels.json'),0);
+  assert.equal(window.__map.sources.crops.data.features.length,0);
+  q('[data-field="agriculture"]').click();await waitFor(()=>root.dataset.agricultureLoad==='ready','agriculture ready');
+  assert.equal(count('agriculture.geojson'),1);assert.equal(count('crop-labels.json'),1);assert.equal(window.__map.sources.crops.setDataCalls,1);
+  const labels=root.querySelectorAll('.atlas-geolabel--crop').length;assert.ok(labels>0);
+  for(let i=0;i<5;i++){q('[data-field="natural"]').click();q('[data-field="agriculture"]').click();}
+  assert.equal(root.dataset.renderState,'ready');assert.equal(window.__map.sources.crops.setDataCalls,1);
+  assert.equal(root.querySelectorAll('.atlas-geolabel--crop').length,labels);
+  assert.equal(count('agriculture.geojson'),1);assert.equal(count('crop-labels.json'),1);
+ }finally{await window.happyDOM.close();}
+});
+
+test('遅れた農業データと失敗は別分野を上書きせず、再選択・再試行・履歴で復元する',async()=>{
+ let release,failLabels=true;
+ const {window,requests,root,q}=await setup('',{fetchOverride:async url=>{
+  if(url.endsWith('/crop-labels.json')&&failLabels){await new Promise(resolve=>release=resolve);return new Response('',{status:503});}
+ }});
+ try{
+  const original=window.location.href;
+  q('[data-field="agriculture"]').click();const agriculture=window.location.href;
+  await waitFor(()=>release,'pending labels');q('[data-field="natural"]').click();release();await delay();
+  assert.equal(root.dataset.field,'natural');assert.equal(root.dataset.renderState,'ready');
+  failLabels=false;
+  window.history.replaceState({},'',agriculture);window.dispatchEvent(new window.PopStateEvent('popstate'));
+  await waitFor(()=>root.dataset.agricultureLoad==='ready','agriculture after failure');
+  assert.equal(root.dataset.field,'agriculture');assert.ok(window.__map.sources.crops.data.features.length>0);
+  assert.equal(requests.filter(url=>url.endsWith('/agriculture.geojson')).length,1);
+  window.history.replaceState({},'',original);window.dispatchEvent(new window.PopStateEvent('popstate'));await delay();
+  assert.equal(root.dataset.field,'natural');assert.equal(root.dataset.renderState,'ready');
+ }finally{release?.();await window.happyDOM.close();}
+});
+
+test('農業専用データの失敗は代替図と再試行で回復し、速い往復でも重複しない',async()=>{
+ let fail=true,release;
+ const {window,requests,root,q}=await setup('',{fetchOverride:async url=>{
+  if(url.endsWith('/agriculture.geojson')&&fail)return new Response('',{status:503});
+  if(url.endsWith('/crop-labels.json'))await new Promise(resolve=>release=resolve);
+ }});
+ try{
+  q('[data-field="agriculture"]').click();await waitFor(()=>root.dataset.agricultureLoad==='error','agriculture error');
+  assert.equal(root.dataset.renderState,'fallback');assert.equal(q('[data-retry-nature]').hidden,false);assert.equal(q('[data-fallback]').hidden,false);
+  release?.();await delay();fail=false;
+  q('[data-retry-nature]').click();await waitFor(()=>release,'retry labels');
+  for(let i=0;i<5;i++){q('[data-field="natural"]').click();q('[data-field="agriculture"]').click();}
+  release();await waitFor(()=>root.dataset.agricultureLoad==='ready','retry ready');
+  assert.equal(root.dataset.renderState,'ready');assert.equal(q('[data-retry-nature]').hidden,true);
+  assert.equal(requests.filter(url=>url.endsWith('/agriculture.geojson')).length,2);
+  assert.equal(window.__map.sources.crops.setDataCalls,1);
+ }finally{release?.();await window.happyDOM.close();}
+});
+
+test('自然環境の保存URLは比較元の作物形状だけ読み、失敗後も再試行で復元する',async()=>{
+ let fail=true;
+ const {window,requests,root,q}=await setup('?crop=rice&env=landform',{pending:true,fetchOverride:async url=>url.endsWith('/agriculture.geojson')&&fail?new Response('',{status:503}):undefined});
+ try{
+  await waitFor(()=>root.dataset.natureLoad==='error','comparison crop failure');
+  assert.equal(q('[data-retry-nature]').hidden,false);assert.equal(root.dataset.renderState,'fallback');
+  fail=false;q('[data-retry-nature]').click();await waitFor(()=>root.dataset.natureLoad==='ready','comparison crop retry');
+  assert.ok(window.__map.sources['crop-context'].data.features.some(item=>item.properties.id==='rice'));
+  assert.equal(requests.filter(url=>url.endsWith('/crop-labels.json')).length,0);
+  assert.equal(requests.filter(url=>url.endsWith('/agriculture.geojson')).length,2);
+ }finally{await window.happyDOM.close();}
+});
+
+test('成功した古い農業リクエストは新しい自然環境の表示を変更しない',async()=>{
+ let release;
+ const {window,requests,root,q}=await setup('',{fetchOverride:async url=>{if(url.endsWith('/crop-labels.json'))await new Promise(resolve=>release=resolve);}});
+ try{
+  q('[data-field="agriculture"]').click();await waitFor(()=>release,'labels held');
+  q('[data-field="natural"]').click();q('[data-nature-mode="landform"]').click();
+  await waitFor(()=>root.dataset.natureLoad==='ready','landform ready');const camera=window.__map.cameraChanges;
+  release();await waitFor(()=>root.dataset.agricultureLoad==='ready','background agriculture complete');
+  assert.equal(root.dataset.field,'natural');assert.equal(root.dataset.natureMode,'landform');assert.equal(root.dataset.renderState,'ready');assert.equal(window.__map.cameraChanges,camera);
+  assert.equal(q('[data-nature-summary-panel="landform"]').hidden,false);
+  q('[data-field="agriculture"]').click();assert.equal(root.dataset.renderState,'ready');
+  assert.equal(requests.filter(url=>url.endsWith('/crop-labels.json')).length,1);
+ }finally{release?.();await window.happyDOM.close();}
+});
 
 test('12都市は地図から切り替え、モード・分野を往復しても都市とカメラを保つ',async()=>{
  const {window,root,q}=await setup('?city=miami&crop=rice&region=sacramento-rice&lng=-120&lat=38&z=5');

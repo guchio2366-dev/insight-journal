@@ -52,7 +52,7 @@ const metropolitanAreas2020=[
  <p class="population-scope-caption" data-population-scope>2020年・全国32州のデータ。州境は2025年。</p>
  </Fragment>
  <Fragment slot="map">
-  <svg class="population-shape-definitions" width="0" height="0" aria-hidden="true" focusable="false"><defs>{shapes.map(({row,path})=><path id={`mexico-population-outline-${row.stateCode}`} d={path} fill-rule="evenodd"/>)}</defs></svg>
+  <svg class="population-shape-definitions" width="0" height="0" aria-hidden="true" focusable="false"><defs>{shapes.map(({row,path})=><path id={`mexico-population-outline-${row.stateCode}`} d={path} fill-rule="evenodd" style="vector-effect:var(--population-stroke-effect,none)"/>)}</defs></svg>
   <section class="population-overview-maps" data-population-overview-maps hidden aria-label="全国の分布を一覧で比較">
    {overviewGroups.map(category=><div data-population-overview-category={category} hidden>
     <h2>{category==='religion'?'宗教の特徴的な分布':'民族・自己認識の特徴的な分布'}</h2>
@@ -79,7 +79,7 @@ const metropolitanAreas2020=[
     <desc id="mexico-population-map-desc">INEGIの32州の人口密度を色で表示。単位は人/km²、州全域の平均です。人口規模を選ぶと円の面積で州人口を表示します。選ぶ州のメニューと全州の表でも値を読めます。表示州境は2025年、統計は2020年です。</desc>
     <defs><pattern id="mexico-population-missing" width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" fill="#eef0e7"/><path d="M-2,2L2,-2M0,9L9,0M7,11L11,7" stroke="#798c83" stroke-width="2"/></pattern></defs>
     <g aria-hidden="true">{shapes.map(({row}) => <use href={`#mexico-population-outline-${row.stateCode}`} class="mexico-context population-context" />)}</g>
-    <g>{shapes.map(({row,path}) => <path d={path} class="population-state" data-population-state-shape={row.stateCode} fill={mexicoDensityColor(row.density)} fill-rule="evenodd" role="button" tabindex="0" aria-pressed="false" aria-label={`${row.nameJa}、2020年人口密度 ${formatMexicoDensity(row.density)}人/km²、人口 ${formatMexicoPopulation(row.population)}人`}><title>{row.nameJa}：{formatMexicoDensity(row.density)}人/km²、{formatMexicoPopulation(row.population)}人（2020年）</title></path>)}</g>
+    <g>{shapes.map(({row}) => <use href={`#mexico-population-outline-${row.stateCode}`} class="population-state" data-population-state-shape={row.stateCode} fill={mexicoDensityColor(row.density)} fill-rule="evenodd" role="button" tabindex="0" aria-pressed="false" aria-label={`${row.nameJa}、2020年人口密度 ${formatMexicoDensity(row.density)}人/km²、人口 ${formatMexicoPopulation(row.population)}人`}><title>{row.nameJa}：{formatMexicoDensity(row.density)}人/km²、{formatMexicoPopulation(row.population)}人（2020年）</title></use>)}</g>
     <g data-population-symbols hidden>{symbolShapes.map(({row,point}) => <g class="population-symbol" data-population-state-symbol={row.stateCode} role="button" tabindex="0" aria-pressed="false" aria-label={`${row.nameJa}、2020年人口 ${formatMexicoPopulation(row.population)}人`}><circle cx={point[0]} cy={point[1]} r={mexicoPopulationRadius(row.population)} /><title>{row.nameJa}：{formatMexicoPopulation(row.population)}人（円の面積、2020年）</title></g>)}</g>
     <g aria-hidden="true" class="population-labels">{mapLabels.map(({stateCode,label,point,anchor,leader}) => <g data-population-state-label={stateCode}>{leader&&<path d={`M${stateLabelPoint(stateCode).join(',')}L${point[0]-12},${point[1]-12}h8`} />}<text x={point[0]} y={point[1]-6} text-anchor={anchor}>{label}</text></g>)}</g>
     <g class="population-selected-label" data-population-selected-label aria-hidden="true" hidden><path d={`M${selectedX},${selectedY}l20,-24`} /><text x={selectedX+25} y={selectedY-25} data-population-selected-label-text></text></g>
@@ -88,7 +88,7 @@ const metropolitanAreas2020=[
    </svg>
   </figure>
   <figure class="population-map-fallback" data-population-fallback hidden>
-   <img class="population-fallback-image" data-population-fallback-image src={`${assetRoot}/density.svg`} width="900" height="580" alt="2020年の32州の人口密度。全州の値は下の表でも確認できます。" />
+   <img class="population-fallback-image" data-population-fallback-image width="900" height="580" alt="2020年の32州の人口密度。全州の値は下の表でも確認できます。" />
    <figcaption data-population-fallback-caption>地図の代替表示：全32州の分布。選んだ州の値は右側で確認できます。</figcaption>
   </figure>
   </div>

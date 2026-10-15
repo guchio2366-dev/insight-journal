@@ -31,6 +31,14 @@ jobs:
         run: |
           npx playwright install --with-deps chromium
           sudo apt-get install -y fonts-noto-cjk
+      - name: Verify Asia native controls and regional journeys
+        timeout-minutes: 6
+        shell: bash
+        run: |
+          set -euo pipefail
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          test -n "$chrome_path"
+          ATLAS_ASIA_BROWSER=1 ATLAS_ASIA_DESKTOP_LAYOUT=1 ATLAS_ASIA_BROWSER_UNSANDBOXED=0 REVIEW_CHROME_PATH="$chrome_path" NODE_OPTIONS="${NODE_OPTIONS:+$NODE_OPTIONS }--import=./scripts/qa-sandbox-browser.mjs" node --test tests/e2e/atlas-asia-industry-status.test.mjs
       - name: Compare Canada and US in real Chromium
         shell: bash
         run: |

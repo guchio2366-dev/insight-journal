@@ -1,0 +1,237 @@
+TAP version 13
+# Subtest: real browser: East Asia industry country entry keeps scope, missing data and regional return coherent
+    # Subtest: 1440px
+    ok 1 - 1440px
+      ---
+      duration_ms: 7134.676061
+      type: 'test'
+      ...
+    # Subtest: 1024px
+    ok 2 - 1024px
+      ---
+      duration_ms: 5445.558019
+      type: 'test'
+      ...
+    # Subtest: 390px
+    ok 3 - 390px
+      ---
+      duration_ms: 4580.65547
+      type: 'test'
+      ...
+    1..3
+ok 1 - real browser: East Asia industry country entry keeps scope, missing data and regional return coherent
+  ---
+  duration_ms: 17451.781434
+  type: 'test'
+  ...
+# Subtest: real browser: Asia industry preserves source publication status across controls, tables and return navigation
+    # Subtest: desktop
+        # Subtest: detailed and main legends explain all nonnumeric statuses
+        ok 1 - detailed and main legends explain all nonnumeric statuses
+          ---
+          duration_ms: 14.975246
+          type: 'test'
+          ...
+        # Subtest: 24-sector buttons can be clicked and preserve the region
+        ok 2 - 24-sector buttons can be clicked and preserve the region
+          ---
+          duration_ms: 658.04729
+          type: 'test'
+          ...
+        # Subtest: comparison legend retains the original publication-status meaning
+        ok 3 - comparison legend retains the original publication-status meaning
+          ---
+          duration_ms: 165.327123
+          type: 'test'
+          ...
+        # Subtest: East Asia sector pickers restore sourced topics
+        ok 4 - East Asia sector pickers restore sourced topics
+          ---
+          duration_ms: 3189.293503
+          type: 'test'
+          ...
+        1..4
+    ok 1 - desktop
+      ---
+      duration_ms: 12282.385643
+      type: 'test'
+      ...
+    # desktop: JP published/confidential/not applicable, 24-sector values, numeric ranks, annual values, comparison return/reload and current Southeast Asia sector/picker/reload passed; legend and 24-sector pointer results are reported separately.
+    # desktop: rendering evidence {"mapReady":"true","fallbackHidden":true}
+    # Subtest: laptop
+        # Subtest: detailed and main legends explain all nonnumeric statuses
+        ok 1 - detailed and main legends explain all nonnumeric statuses
+          ---
+          duration_ms: 19.93109
+          type: 'test'
+          ...
+        # Subtest: 24-sector buttons can be clicked and preserve the region
+        ok 2 - 24-sector buttons can be clicked and preserve the region
+          ---
+          duration_ms: 333.347282
+          type: 'test'
+          ...
+        # Subtest: comparison legend retains the original publication-status meaning
+        ok 3 - comparison legend retains the original publication-status meaning
+          ---
+          duration_ms: 112.643884
+          type: 'test'
+          ...
+        # Subtest: East Asia sector pickers restore sourced topics
+        ok 4 - East Asia sector pickers restore sourced topics
+          ---
+          duration_ms: 2896.082492
+          type: 'test'
+          ...
+        1..4
+    ok 2 - laptop
+      ---
+      duration_ms: 11302.643198
+      type: 'test'
+      ...
+    # laptop: JP published/confidential/not applicable, 24-sector values, numeric ranks, annual values, comparison return/reload and current Southeast Asia sector/picker/reload passed; legend and 24-sector pointer results are reported separately.
+    # laptop: rendering evidence {"mapReady":"true","fallbackHidden":true}
+    # Subtest: mobile
+        # Subtest: detailed and main legends explain all nonnumeric statuses
+        ok 1 - detailed and main legends explain all nonnumeric statuses
+          ---
+          duration_ms: 22.029302
+          type: 'test'
+          ...
+        # Subtest: 24-sector buttons can be clicked and preserve the region
+        ok 2 - 24-sector buttons can be clicked and preserve the region
+          ---
+          duration_ms: 212.308767
+          type: 'test'
+          ...
+        # Subtest: comparison legend retains the original publication-status meaning
+        ok 3 - comparison legend retains the original publication-status meaning
+          ---
+          duration_ms: 53.234108
+          type: 'test'
+          ...
+        # Subtest: East Asia sector pickers restore sourced topics
+        ok 4 - East Asia sector pickers restore sourced topics
+          ---
+          duration_ms: 2288.465334
+          type: 'test'
+          ...
+        1..4
+    ok 3 - mobile
+      ---
+      duration_ms: 9569.300131
+      type: 'test'
+      ...
+    # mobile: JP published/confidential/not applicable, 24-sector values, numeric ranks, annual values, comparison return/reload and current Southeast Asia sector/picker/reload passed; legend and 24-sector pointer results are reported separately.
+    # mobile: rendering evidence {"mapReady":"true","fallbackHidden":true}
+    # Subtest: failed industry request retries without changing selection or publication status
+    ok 4 - failed industry request retries without changing selection or publication status
+      ---
+      duration_ms: 1690.119451
+      type: 'test'
+      ...
+    1..4
+ok 2 - real browser: Asia industry preserves source publication status across controls, tables and return navigation
+  ---
+  duration_ms: 35171.780039
+  type: 'test'
+  ...
+# Real Chromium 151.0.7922.173; chromiumSandbox=true; locally hosted production build; executed viewport profiles are reported above; no certificate exceptions.
+# Subtest: real browser: Asia desktop maps, native controls and regional journeys remain usable
+    # Subtest: 1024px PC
+        # Subtest: US and East Asia manufacturing controls retain readable maps and current native pickers
+        ok 1 - US and East Asia manufacturing controls retain readable maps and current native pickers
+          ---
+          duration_ms: 3850.822172
+          type: 'test'
+          ...
+        # Subtest: climate and population maps remain reachable and population scope remains readable
+        ok 2 - climate and population maps remain reachable and population scope remains readable
+          ---
+          duration_ms: 3972.43825
+          type: 'test'
+          ...
+        # Subtest: country selection and reset remain usable in the industry header
+        ok 3 - country selection and reset remain usable in the industry header
+          ---
+          duration_ms: 3103.945116
+          type: 'test'
+          ...
+        # Subtest: South and Central Asia focus links remain a separate keyboard-operable row
+        ok 4 - South and Central Asia focus links remain a separate keyboard-operable row
+          ---
+          duration_ms: 3477.252729
+          type: 'test'
+          ...
+        # Subtest: climate city and monthly precipitation controls retain their selection and return paths
+        ok 5 - climate city and monthly precipitation controls retain their selection and return paths
+          ---
+          duration_ms: 4869.294496
+          type: 'test'
+          ...
+        1..5
+    ok 1 - 1024px PC
+      ---
+      duration_ms: 19403.242465
+      type: 'test'
+      ...
+    # 1024px US manufacturing/all map=556×333.59375; East Asia manufacturing map=494×329; header={"regions":[{"x":214,"y":93,"width":87.453125,"height":44,"right":301.453125,"bottom":137},{"x":307.453125,"y":93,"width":101.453125,"height":44,"right":408.90625,"bottom":137},{"x":414.90625,"y":93,"width":87.453125,"height":44,"right":502.359375,"bottom":137},{"x":508.359375,"y":93,"width":101.453125,"height":44,"right":609.8125,"bottom":137}],"country":{"x":270.015625,"y":144,"width":121,"height":40,"right":391.015625,"bottom":184},"reset":{"x":401.015625,"y":144,"width":87.015625,"height":40,"right":488.03125,"bottom":184}}
+    # 1024px US manufacturing/auto map=556×333.59375; East Asia jp-31 map=494×329; header={"regions":[{"x":214,"y":93,"width":87.453125,"height":44,"right":301.453125,"bottom":137},{"x":307.453125,"y":93,"width":101.453125,"height":44,"right":408.90625,"bottom":137},{"x":414.90625,"y":93,"width":87.453125,"height":44,"right":502.359375,"bottom":137},{"x":508.359375,"y":93,"width":101.453125,"height":44,"right":609.8125,"bottom":137}],"country":{"x":270.015625,"y":144,"width":121,"height":40,"right":391.015625,"bottom":184},"reset":{"x":401.015625,"y":144,"width":87.015625,"height":40,"right":488.03125,"bottom":184}}
+    # 1024px nature: US map={"x":184,"y":227,"width":554,"height":311.234375,"right":738,"bottom":538.234375}; Asia map={"x":214,"y":296,"width":494,"height":329,"right":708,"bottom":625}; each uses its approved layout.
+    # 1024px population: US map={"x":184,"y":293,"width":554,"height":311.234375,"right":738,"bottom":604.234375}; Asia map={"x":214,"y":340,"width":494,"height":329,"right":708,"bottom":669}; each uses its approved layout.
+    # Subtest: 1440px PC
+        # Subtest: US and East Asia manufacturing controls retain readable maps and current native pickers
+        ok 1 - US and East Asia manufacturing controls retain readable maps and current native pickers
+          ---
+          duration_ms: 4235.961949
+          type: 'test'
+          ...
+        # Subtest: climate and population maps remain reachable and population scope remains readable
+        ok 2 - climate and population maps remain reachable and population scope remains readable
+          ---
+          duration_ms: 5210.579964
+          type: 'test'
+          ...
+        # Subtest: country selection and reset remain usable in the industry header
+        ok 3 - country selection and reset remain usable in the industry header
+          ---
+          duration_ms: 3843.824351
+          type: 'test'
+          ...
+        # Subtest: South and Central Asia focus links remain a separate keyboard-operable row
+        ok 4 - South and Central Asia focus links remain a separate keyboard-operable row
+          ---
+          duration_ms: 3646.083368
+          type: 'test'
+          ...
+        # Subtest: climate city and monthly precipitation controls retain their selection and return paths
+        ok 5 - climate city and monthly precipitation controls retain their selection and return paths
+          ---
+          duration_ms: 5084.797283
+          type: 'test'
+          ...
+        1..5
+    ok 2 - 1440px PC
+      ---
+      duration_ms: 22181.320222
+      type: 'test'
+      ...
+    # 1440px US manufacturing/all map=756.40625×453.84375; East Asia manufacturing map=817.203125×542; header={"regions":[{"x":274.796875,"y":95,"width":87.453125,"height":44,"right":362.25,"bottom":139},{"x":368.25,"y":95,"width":101.453125,"height":44,"right":469.703125,"bottom":139},{"x":475.703125,"y":95,"width":87.453125,"height":44,"right":563.15625,"bottom":139},{"x":569.15625,"y":95,"width":101.453125,"height":44,"right":670.609375,"bottom":139}],"country":{"x":330.8125,"y":146,"width":121,"height":40,"right":451.8125,"bottom":186},"reset":{"x":461.8125,"y":146,"width":87.015625,"height":40,"right":548.828125,"bottom":186}}
+    # 1440px US manufacturing/auto map=756.40625×453.84375; East Asia jp-31 map=817.203125×542; header={"regions":[{"x":274.796875,"y":95,"width":87.453125,"height":44,"right":362.25,"bottom":139},{"x":368.25,"y":95,"width":101.453125,"height":44,"right":469.703125,"bottom":139},{"x":475.703125,"y":95,"width":87.453125,"height":44,"right":563.15625,"bottom":139},{"x":569.15625,"y":95,"width":101.453125,"height":44,"right":670.609375,"bottom":139}],"country":{"x":330.8125,"y":146,"width":121,"height":40,"right":451.8125,"bottom":186},"reset":{"x":461.8125,"y":146,"width":87.015625,"height":40,"right":548.828125,"bottom":186}}
+    # 1440px nature: US map={"x":309.59375,"y":276,"width":750.8125,"height":421.796875,"right":1060.40625,"bottom":697.796875}; Asia map={"x":274.796875,"y":298,"width":817.203125,"height":542,"right":1092,"bottom":840}; each uses its approved layout.
+    # 1440px population: US map={"x":309.59375,"y":342,"width":750.8125,"height":421.796875,"right":1060.40625,"bottom":763.796875}; Asia map={"x":274.796875,"y":342,"width":817.203125,"height":542,"right":1092,"bottom":884}; each uses its approved layout.
+    1..2
+ok 3 - real browser: Asia desktop maps, native controls and regional journeys remain usable
+  ---
+  duration_ms: 41838.307006
+  type: 'test'
+  ...
+1..3
+# tests 34
+# suites 0
+# pass 34
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 94727.845493

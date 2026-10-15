@@ -1,0 +1,66 @@
+{
+  "baselineCommit": "d166204299c2a12acd7c0275b9d0114d49c5040e",
+  "applicationRevision": "9c43ebc9bbc0b40511c29ae94da6edd717ace0b1",
+  "applicationChangedDuringTestRepair": false,
+  "browser": "Chromium 151.0.7922.173",
+  "chromiumSandbox": true,
+  "flags": {
+    "ATLAS_ASIA_BROWSER": "1",
+    "ATLAS_ASIA_DESKTOP_LAYOUT": "1",
+    "ATLAS_ASIA_BROWSER_UNSANDBOXED": "0",
+    "REVIEW_CHROME_PATH": "/usr/bin/chromium",
+    "NODE_OPTIONS": "--import=./scripts/qa-sandbox-browser.mjs"
+  },
+  "viewports": [
+    "1440x1000",
+    "1024x768",
+    "390x844"
+  ],
+  "testFile": "tests/e2e/atlas-asia-industry-status.test.mjs",
+  "testSHA256": "37122ffe34aefea49f62739679711f75c027a044423f81e546600eef95549082",
+  "results": {
+    "candidate": {
+      "tests": 34,
+      "pass": 34,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "duration_ms": 91887.050352,
+      "rawLogSHA256": "918bccd5347ffeb5410fb69c3df9e9120f0e9eb8a4e242c468724aa4d4b9a15e",
+      "savedLog": "repaired-candidate-asia.txt",
+      "savedLogSHA256": "918bccd5347ffeb5410fb69c3df9e9120f0e9eb8a4e242c468724aa4d4b9a15e"
+    },
+    "baseline": {
+      "tests": 34,
+      "pass": 34,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "duration_ms": 94727.845493,
+      "rawLogSHA256": "ff05a5daa72e44f369cd0ac9f0c2a648e61290bf50b6e1e73a900af08ffb96d2",
+      "savedLog": "repaired-baseline-asia.txt",
+      "savedLogSHA256": "ff05a5daa72e44f369cd0ac9f0c2a648e61290bf50b6e1e73a900af08ffb96d2"
+    }
+  },
+  "unitTests": {
+    "tests": 1436,
+    "pass": 1433,
+    "fail": 0,
+    "skipped": 3,
+    "duration_ms": 71693.004619,
+    "rawLogSHA256": "22839f5c4f3931dcd3069d0de8723dbf50641620bb19627974ab96cc17a1ec54"
+  },
+  "originalPagesCI": {
+    "sha": "d166204299c2a12acd7c0275b9d0114d49c5040e",
+    "run": 38670870998,
+    "job": 116213438243,
+    "conclusion": "success",
+    "builtSiteTests": {
+      "tests": 650,
+      "pass": 642,
+      "fail": 0,
+      "skipped": 8
+    },
+    "affectedParentsExplicitlySkipped": true
+  }
+}

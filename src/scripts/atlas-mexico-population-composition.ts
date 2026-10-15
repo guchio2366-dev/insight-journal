@@ -4,7 +4,13 @@ import {mexicoCompositionMetric,mexicoCompositionNationalRecord,mexicoCompositio
 
 const nativeMarkup=new WeakMap<HTMLElement,{viewOptions:Node[];symbolKeys:Node[];mapDescription:string;attributes:{element:Element;attributes:Record<string,string|null>;title:string|null}[]}>();
 export function copyMexicoPopulationDefinitions(root:HTMLElement,svg:SVGSVGElement):void {
- const definitions=root.querySelector('.population-shape-definitions defs');if(definitions)svg.prepend(definitions.cloneNode(true));
+ const definitions=root.querySelector('.population-shape-definitions defs');
+ if(definitions){
+  const copy=definitions.cloneNode(true) as SVGDefsElement;
+  // Standalone fallback SVGs already apply their original path stroke rule.
+  for(const path of copy.querySelectorAll<SVGPathElement>('path'))path.style.removeProperty('vector-effect');
+  svg.prepend(copy);
+ }
 }
 export function captureMexicoPopulationComposition(root:HTMLElement):void {
  if(nativeMarkup.has(root))return;
@@ -79,7 +85,7 @@ export function renderMexicoPopulationComposition(root:HTMLElement,data:MexicoCo
  const title=`${data.referenceYear}年・${metric.label}${estimateSuffix}${compared?'の割合と人数':selection.measure==='share'?'の割合':'の人数'}`;
  text('[data-population-map-heading]',title);text('[data-population-map] title',title);
  text('[data-population-map] desc',`${metric.definition} ${showShare?'色は各州の割合。':''}${showCount?'円の面積は公表人数。':''}分母は${metric.countDenominatorLabel}。統計${data.referenceYear}年、表示州境2025年。州選択と全32州表で値を読めます。`);
- for(const shape of root.querySelectorAll<SVGPathElement>('[data-population-state-shape]')){
+ for(const shape of root.querySelectorAll<SVGUseElement>('[data-population-state-shape]')){
   const code=shape.dataset.populationStateShape!,entry=metric.states[code],row=rows.find(item=>item.stateCode===code)!;
   shape.setAttribute('fill',showShare?mexicoCompositionColor(entry,metric):['value','zero'].includes(entry.status)?'#e0e7d8':'url(#mexico-population-missing)');shape.style.display=colorOnly&&code!==colorState?'none':'';
   const label=`${row.nameJa}：${metric.label} ${count(entry)}人、${percent(entry)}`;shape.setAttribute('aria-label',label);const pathTitle=shape.querySelector('title');if(pathTitle)pathTitle.textContent=label;shape.setAttribute('tabindex',colorOnly&&code!==colorState?'-1':'0');
