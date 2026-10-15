@@ -45,7 +45,7 @@ try{
    const camera=await page.locator('[data-map-camera]').getAttribute('data-map-camera'),initial=await positions();
    const layout=await page.evaluate(()=>{const frame=document.querySelector('.asia-map-frame').getBoundingClientRect(),stats=document.querySelector('[data-east-industry-statistics]').getBoundingClientRect();return {width:frame.width,height:frame.height,statsBelow:stats.top>=frame.bottom,overflow:document.documentElement.scrollWidth>innerWidth};});
    assert.equal(layout.overflow,false);assert(layout.width>=300&&layout.height>=320,JSON.stringify(layout));assert(layout.statsBelow);
-   const overlap=await page.locator('[data-industry-label]:visible').evaluateAll(nodes=>{const boxes=nodes.map(n=>n.getBoundingClientRect());return boxes.some((a,i)=>boxes.some((b,j)=>i!==j&&a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top));});assert.equal(overlap,false);
+   const overlap=await page.locator('[data-industry-label]:visible').evaluateAll(nodes=>{const boxes=nodes.map(n=>n.getBoundingClientRect());return boxes.some((a,i)=>boxes.some((b,j)=>i!==j&&a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top));});assert.equal(overlap,false);assert.equal(await page.locator('.east-sector-map-label').count(),0);assert((await positions()).length<=(layout.width<650?4:layout.width<1100?8:10));
    record.sectors.push({id:sector.id,layout,visibleNames:[...new Set(initial.map(p=>p.industry))]});
    for(const item of eastSectorIndustries.filter(i=>i.sectors.includes(sector.id)&&eastAdoptedIndustryIds.includes(i.id))){
     await page.locator(`[data-east-industry-kinds="${sector.id}"] [data-industry-feature="east-${item.id}"]`).click();await ready();
