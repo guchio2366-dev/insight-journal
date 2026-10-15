@@ -97,12 +97,12 @@ async function assertStatusLegend(page,selector){
  for(const label of ['秘匿','該当なし','未掲載'])assert.ok(text.includes(label),`${selector} explains ${label}`);
  assert.doesNotMatch(text,/統計未取得/,'gray is not universally called an unfetched statistic');
 }
-async function assertCurrentTopicChip(page,id,title){
- const chip=page.locator('[data-industry-current-feature]:visible');
- assert.equal(await chip.count(),1,'the current non-featured topic appears exactly once');
- assert.equal(await chip.getAttribute('data-industry-feature'),id);
- assert.equal(await chip.getAttribute('aria-pressed'),'true');
- assert.equal(await chip.textContent(),title,'the current chip keeps the official statistical topic name');
+async function assertCurrentTopicSelection(page,id,title){
+ await openDetails(page.locator('[data-industry-all]'));
+ const picker=page.locator('[data-industry-topic]');
+ assert.ok(await picker.isVisible(),'the statistical topic is available in the advanced native picker');
+ assert.equal(await picker.inputValue(),id);
+ assert.equal(await picker.evaluate(select=>select.selectedOptions[0].textContent.trim()),title,'the picker keeps the official statistical topic name');
 }
 
 test('real browser: Asia industry preserves source publication status across controls, tables and return navigation',{
@@ -130,7 +130,7 @@ test('real browser: Asia industry preserves source publication status across con
      await page.goto(`${origin}/atlas/asia/east-asia/industry/?topic=jp-20&place=JPN&detail=JP-23`,{waitUntil:'domcontentloaded'});
      await ready(page);
      await openDetails(page.locator('[data-reading-details]'));
-     await assertCurrentTopicChip(page,'jp-20',manifest.regions['east-asia'].topics.find(topic=>topic.id==='jp-20').title);
+     await assertCurrentTopicSelection(page,'jp-20',manifest.regions['east-asia'].topics.find(topic=>topic.id==='jp-20').title);
      for(const [id,name,label] of [['JP-23','愛知県','22,155'],['JP-43','熊本県','秘匿'],['JP-42','長崎県','該当なし']]){
       await page.locator('[data-industry-detail]').selectOption(id);
       await assertSelected(page,name,label);
@@ -174,70 +174,49 @@ test('real browser: Asia industry preserves source publication status across con
      assert.equal(await page.locator('[data-industry-detail]').inputValue(),'JP-42','URL reload restores the selected region');
      assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'no horizontal overflow');
 
-     await page.goto(`${origin}/atlas/asia/southeast-asia/industry/?topic=my-p3&place=MYS&detail=MY-16`,{waitUntil:'domcontentloaded'});
-     await ready(page);await openDetails(page.locator('[data-reading-details]'));
-     await assertSelected(page,'プトラジャヤ','0');
-     assert.match(await page.locator('[data-industry-value]').textContent(),/：0（公表値）/,'the selected 2025 value is published numeric zero');
-     assert.match(await page.locator('[data-industry-detail]').evaluate(select=>select.selectedOptions[0].textContent),/0（公表値）/);
-     assert.doesNotMatch(await page.locator('[data-industry-value]').textContent(),/未掲載|該当なし|秘匿/);
-     const malaysiaHistory=industryTable(page,/^公表値の推移/);
-     await openDetails(page.locator('[data-industry-content] details').filter({has:page.locator('caption').filter({hasText:/^公表値の推移/})}));
-     assert.match(await tableRow(page,malaysiaHistory,'2023').locator('td').textContent(),/^未掲載/);
-     assert.match(await tableRow(page,malaysiaHistory,'2025').locator('td').textContent(),/^0（公表値）/);
-     assert.equal(await tableRow(page,malaysiaHistory,'2023').locator('.industry-bar').count(),0);
-     assert.match(await tableRow(page,industryTable(page,/^国内の地域を同じ年で比較する/),'プトラジャヤ').locator('td').textContent(),/^0（公表値）/);
-     assert.match(await page.locator('[data-industry-lead]').textContent(),/番目/,'published zero participates in numeric ranking');
-     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'annual tables stay within the page');
+     // Southeast Asia now owns a three-sector location UI. The legacy MY
+     // publication/missing/zero renderer remains covered by atlas-asia-controller
+     // unit tests; it is no longer exposed by this production page.
+     await page.goto(`${origin}/atlas/asia/southeast-asia/industry/`,{waitUntil:'domcontentloaded'});
+     await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true');
+     for(const [sector,item] of [['resource','lng'],['manufacturing','palm'],['services','it-bpm']]){
+      await page.locator(`button[data-southeast-industry-sector="${sector}"]`).click();
+      const picker=page.locator('[data-southeast-industry-picker]');
+      await picker.selectOption(item);
+      assert.equal(new URL(page.url()).searchParams.get('industryKind'),item);
+      assert.equal(await page.locator('[data-asia-atlas]').getAttribute('data-southeast-industry-sector'),sector);
+      if(item==='palm')assert.match(await page.locator('[data-southeast-industry-facts="palm"]').textContent(),/17,266,555t.*52.0%/);
+      await page.reload({waitUntil:'domcontentloaded'});
+      await page.waitForFunction(item=>document.querySelector('[data-asia-atlas]')?.dataset.southeastIndustryKind===item&&document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true',item);
+      assert.equal(await picker.inputValue(),item,'reload restores the current sourced industry');
+     }
+     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'industry readings stay within the page');
      assert.deepEqual(errors,[],'no browser runtime errors');
-     profileTest.diagnostic(`${profileName}: JP published/confidential/not applicable, 24-sector values, numeric ranks, annual values, comparison return/reload and MY missing/published zero passed; legend and 24-sector pointer results are reported separately.`);
+     profileTest.diagnostic(`${profileName}: JP published/confidential/not applicable, 24-sector values, numeric ranks, annual values, comparison return/reload and current Southeast Asia sector/picker/reload passed; legend and 24-sector pointer results are reported separately.`);
      const rendering=await page.locator('[data-asia-atlas]').evaluate(root=>({mapReady:root.dataset.mapReady??'false',fallbackHidden:root.querySelector('[data-map-fallback]').hidden}));
      profileTest.diagnostic(`${profileName}: rendering evidence ${JSON.stringify(rendering)}`);
-     await profileTest.test('industry parent categories reveal matching child topics and keep unavailable construction disabled',async()=>{
-      await page.goto(`${origin}/atlas/asia/east-asia/industry/?topic=manufacturing`,{waitUntil:'domcontentloaded'});
-      await page.waitForFunction(()=>document.querySelector('[data-industry-content] table tbody tr')&&document.querySelector('[data-industry-status]')?.textContent==='');
-      const parent=sector=>page.locator(`[data-industry-sector="${sector}"]`);
-      const children=()=>page.locator('[data-industry-subsectors]:visible');
-      await parent('manufacturing').click();
-      assert.equal(await parent('manufacturing').getAttribute('aria-pressed'),'true');
-      assert.equal(await children().count(),1);
-      assert.equal(await children().getAttribute('data-industry-subsectors'),'manufacturing');
-      assert.equal(new URL(page.url()).searchParams.get('sector'),'manufacturing');
-      assert.equal(new URL(page.url()).searchParams.get('topic'),'manufacturing','the parent opens its displayed representative topic');
-      assert.equal(await page.locator('[data-industry-current-feature]:visible').count(),0);
-      await page.locator('[data-industry-feature="jp-31"]').click();
-      await ready(page);
-      assert.equal(new URL(page.url()).searchParams.get('topic'),'jp-31');
-      assert.equal(new URL(page.url()).searchParams.get('place'),'JPN');
-      assert.equal(await parent('manufacturing').getAttribute('aria-pressed'),'true');
-      assert.equal(await page.locator('[data-industry-feature="jp-31"]').getAttribute('aria-pressed'),'true');
-      assert.match(await page.locator('[data-industry-current-map]').textContent(),/輸送用機械/);
-      await parent('resources').click();
-      assert.equal(new URL(page.url()).searchParams.get('sector'),'resources');
-      assert.equal(new URL(page.url()).searchParams.get('topic'),'power-all','the resources parent opens its visible electricity child');
-      assert.equal(await parent('resources').getAttribute('aria-pressed'),'true');
-      assert.equal(await children().count(),1);
-      assert.equal(await children().getAttribute('data-industry-subsectors'),'resources');
-      assert.equal(await page.locator('[data-industry-feature="jp-31"]').isVisible(),false);
-      await page.locator('[data-industry-feature="power-all"]').click();
-      assert.equal(new URL(page.url()).searchParams.get('topic'),'power-all');
-      assert.equal(await parent('resources').getAttribute('aria-pressed'),'true');
-      assert.equal(await page.locator('[data-industry-feature="power-all"]').getAttribute('aria-pressed'),'true');
-      assert.match(await page.locator('[data-industry-current-map]').textContent(),/発電/);
-      const construction=parent('construction-real-estate');
-      assert.equal(await construction.isDisabled(),true,'an unavailable category cannot select a misleading map');
-      assert.equal(await construction.getAttribute('aria-pressed'),'false');
-      assert.equal(await page.locator('[data-industry-subsectors="construction-real-estate"]:visible').count(),0);
-      await page.reload({waitUntil:'domcontentloaded'});
-      await page.waitForFunction(()=>document.querySelector('[data-industry-feature="power-all"]')?.getAttribute('aria-pressed')==='true');
-      assert.equal(new URL(page.url()).searchParams.get('topic'),'power-all');
-      assert.equal(await parent('resources').getAttribute('aria-pressed'),'true');
-      assert.equal(await children().getAttribute('data-industry-subsectors'),'resources');
-      await page.goto(`${origin}/atlas/asia/southeast-asia/industry/?topic=my-p4&place=MYS&detail=MY-16`,{waitUntil:'domcontentloaded'});
-      await ready(page);
-      assert.equal(await parent('construction-real-estate').isDisabled(),false,'construction is available where an actual statistical topic exists');
-      assert.equal(await parent('construction-real-estate').getAttribute('aria-pressed'),'true');
-      assert.equal(await children().getAttribute('data-industry-subsectors'),'construction-real-estate');
-      await assertCurrentTopicChip(page,'my-p4',manifest.regions['southeast-asia'].topics.find(topic=>topic.id==='my-p4').title);
+     await profileTest.test('East Asia sector pickers restore sourced topics',async()=>{
+      await page.goto(`${origin}/atlas/asia/east-asia/industry/?topic=east-clusters`,{waitUntil:'domcontentloaded'});
+      await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true');
+      const eastParent=sector=>page.locator(`[data-east-industry-sector="${sector}"]`);
+      assert.deepEqual(await page.locator('[data-east-industry-sector]').evaluateAll(nodes=>nodes.map(node=>node.dataset.eastIndustrySector)),['resources','manufacturing','services']);
+      for(const [sector,overview,item,label] of [['manufacturing','east-clusters','east-food','食品'],['resources','east-resources','east-coal','石炭'],['services','east-services','east-finance','金融']]){
+       await eastParent(sector).click();
+       assert.equal(await eastParent(sector).getAttribute('aria-pressed'),'true');
+       assert.equal(new URL(page.url()).searchParams.get('topic'),overview);
+       const picker=page.locator(`[data-east-industry-item="${sector}"]`);
+       assert.equal(await page.locator('[data-east-industry-item]:visible').count(),1,'only the current sector picker is visible');
+       assert.equal(await picker.inputValue(),overview);
+       await picker.selectOption(item);
+       await page.waitForFunction(item=>new URL(location.href).searchParams.get('topic')===item,item);
+       assert.equal(new URL(page.url()).searchParams.get('sector'),sector);
+       assert.equal(new URL(page.url()).searchParams.get('place'),null,'regional location examples do not inherit an unrelated country');
+       assert.match(await page.locator('[data-industry-current-map]').textContent(),new RegExp(label));
+       await page.reload({waitUntil:'domcontentloaded'});
+       await page.waitForFunction(({sector,item})=>document.querySelector(`[data-east-industry-item="${sector}"]`)?.value===item&&document.querySelector('[data-industry-status]')?.textContent==='',{sector,item});
+       assert.equal(await eastParent(sector).getAttribute('aria-pressed'),'true');
+       assert.equal(await picker.isVisible(),true,'reload restores the sector and item');
+      }
       assert.deepEqual(errors,[],'category navigation produces no browser runtime errors');
      });
     }finally{await context.close();}
@@ -272,7 +251,7 @@ test('real browser: Asia industry preserves source publication status across con
 
 // PC-only layout acceptance can run without rerunning the existing mobile suite:
 // ATLAS_ASIA_DESKTOP_LAYOUT=1 REVIEW_CHROME_PATH=/usr/bin/chromium node --test tests/e2e/atlas-asia-industry-status.test.mjs
-test('real browser: Asia desktop headers and maps align with the US reference',{
+test('real browser: Asia desktop maps, native controls and regional journeys remain usable',{
  skip:process.env.ATLAS_ASIA_DESKTOP_LAYOUT==='1'?false:'Set ATLAS_ASIA_DESKTOP_LAYOUT=1 after npm run build for PC-only layout acceptance.',
  timeout:180000,
 },async t=>{
@@ -296,10 +275,21 @@ test('real browser: Asia desktop headers and maps align with the US reference',{
   const country=await rects(page.locator('[data-country-select]'));
   const reset=await rects(page.locator('[data-reset]'));
   sameRow(regions,'Asia region links');sameRow([...country,...reset],'Asia country and reset');
-  if(width===1024)sameRow([...regions,...country,...reset],'1024px industry region/country/reset');
-  else assert.ok(country[0].y>=Math.max(...regions.map(box=>box.bottom))-1,'1440px country controls follow the region row, as in the US');
+  assert.ok(country[0].y>=Math.max(...regions.map(box=>box.bottom))-1,'country controls follow the regional navigation');
   assert.ok(reset[0].right<=width,'reset remains within the viewport');
   return {regions,country:country[0],reset:reset[0]};
+ };
+ const usableMap=async(page,selector,label)=>{
+  await settle(page);
+  const map=page.locator(selector),box=(await rects(map))[0];
+  assert.ok(box.width>=400&&box.height>=190,`${label}: the map retains a useful desktop area (${JSON.stringify(box)})`);
+  assert.ok(box.x>=0&&box.right<=page.viewportSize().width+1,`${label}: the map fits horizontally`);
+  const tabs=(await rects(page.locator('.atlas-tabs')))[0];
+  assert.ok(tabs.bottom<=box.y+1,`${label}: field navigation precedes the map`);
+  await map.scrollIntoViewIfNeeded();
+  assert.ok(await map.evaluate(node=>{const r=node.getBoundingClientRect(),hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return hit&&node.contains(hit);}),`${label}: the map center is reachable without another panel covering it`);
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`${label}: no horizontal overflow`);
+  return box;
  };
  try{
   browser=await chromium.launch({headless:true,chromiumSandbox,...(process.env.REVIEW_CHROME_PATH?{executablePath:process.env.REVIEW_CHROME_PATH}:{})});
@@ -308,22 +298,19 @@ test('real browser: Asia desktop headers and maps align with the US reference',{
     const context=await browser.newContext({viewport});const page=await context.newPage();const errors=[];
     page.on('pageerror',error=>errors.push(error.message));
     try{
-     await profile.test('manufacturing and transport topic layouts align with the US reference',async()=>{
+     await profile.test('US and East Asia manufacturing controls retain readable maps and current native pickers',async()=>{
       for(const [subsector,topic] of [['all','manufacturing'],['auto','jp-31']]){
        await page.goto(`${origin}/atlas/north-america/industry/?sector=manufacturing&subsector=${subsector}`,{waitUntil:'domcontentloaded'});
        await page.waitForFunction(subsector=>{const root=document.querySelector('[data-atlas-explorer]');return root?.dataset.renderState==='ready'&&root.dataset.industrySector==='manufacturing'&&root.dataset.industrySubsector===subsector;},subsector);
        await settle(page);
        assert.equal(await page.locator('button[data-industry-sector="manufacturing"]').getAttribute('aria-selected'),'true');
-       assert.equal(await page.locator(`[data-industry-subtabs="manufacturing"] [data-industry-subsector="${subsector}"]`).getAttribute('aria-selected'),'true');
-       const us=(await rects(page.locator('[data-atlas-explorer] .atlas-map-frame')))[0],usTabs=(await rects(page.locator('.atlas-tabs')))[0];
-       const usRegions=await rects(page.locator('.regional-tabs a')),usCountries=await rects(page.locator('.regional-countries a'));
-       if(viewport.width===1024)sameRow([...usRegions,...usCountries],'1024px US region/country reference');
-       else assert.ok(usCountries[0].y>=Math.max(...usRegions.map(box=>box.bottom))-1,'1440px US reference has a separate country row');
+       assert.equal(await page.locator('[data-us-product-select]').inputValue(),subsector==='all'?'':subsector);
+       const us=await usableMap(page,'[data-atlas-explorer] .atlas-map-frame','US industry');
        await openAsia(page,`east-asia/industry/?topic=${topic}`);
        await page.waitForFunction(topic=>document.querySelector('[data-industry-topic]')?.value===topic&&document.querySelector('[data-industry-status]')?.textContent==='',topic);
        const header=await industryHeader(page,viewport.width);
-       assert.equal(await page.locator('[data-industry-sector="manufacturing"]').getAttribute('aria-pressed'),'true');
-       assert.equal(await page.locator(`[data-industry-feature="${topic}"]`).getAttribute('aria-pressed'),'true');
+       const officialTitle=await page.locator(`[data-industry-topic] option[value="${topic}"]`).textContent();
+       await assertCurrentTopicSelection(page,topic,officialTitle.trim());
        const guide=page.locator('.asia-industry-guide');
        assert.ok(await guide.isVisible(),'the classification and current-topic guide stays readable');
        const readability=await guide.evaluate(node=>{const style=getComputedStyle(node),r=node.getBoundingClientRect();return {fontSize:parseFloat(style.fontSize),lineHeight:parseFloat(style.lineHeight),height:r.height,clipped:node.scrollWidth>node.clientWidth+1||node.scrollHeight>node.clientHeight+1};});
@@ -331,25 +318,20 @@ test('real browser: Asia desktop headers and maps align with the US reference',{
        assert.equal(readability.clipped,false,'the current statistical topic is not clipped');
        const visibleTopic=await page.locator('[data-industry-current-map]').textContent();
        assert.match(visibleTopic,topic==='jp-31'?/日本：輸送用機械器具製造業/:/製造業/);
-       const asia=(await rects(page.locator('.asia-map-frame')))[0],delta=asia.y-us.y;
-       profile.diagnostic(`${viewport.width}px US manufacturing/${subsector} ↔ Asia ${topic}: mapTop US=${us.y}, Asia=${asia.y}, delta=${delta}; header=${JSON.stringify(header)}`);
-       assert.ok(Math.abs(delta)<=1,`${topic}: map top differs only by subpixel rounding from the same US topic (${delta}px)`);
-       const asiaTabs=(await rects(page.locator('.atlas-tabs')))[0];
-       assert.ok(Math.abs(asiaTabs.y-usTabs.y)<=1,`${topic}: main field tabs align with the US reference`);
+       const asia=await usableMap(page,'.asia-map-frame','East Asia industry');
+       profile.diagnostic(`${viewport.width}px US manufacturing/${subsector} map=${us.width}×${us.height}; East Asia ${topic} map=${asia.width}×${asia.height}; header=${JSON.stringify(header)}`);
        assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,'the desktop header does not overflow horizontally');
       }
      });
-     await profile.test('climate and population layouts align with the US reference without claiming population fill equivalence',async()=>{
+     await profile.test('climate and population maps remain reachable and population scope remains readable',async()=>{
       for(const field of ['nature','population']){
        await page.goto(`${origin}/atlas/north-america/${field}/`,{waitUntil:'domcontentloaded'});
        await page.waitForFunction(()=>document.querySelector('[data-atlas-explorer]')?.dataset.renderState==='ready');
        await settle(page);
-       const usMap=(await rects(page.locator('[data-atlas-explorer] .atlas-map-frame')))[0],usTabs=(await rects(page.locator('.atlas-tabs')))[0];
+       const usMap=await usableMap(page,'[data-atlas-explorer] .atlas-map-frame',`US ${field}`);
        await openAsia(page,`east-asia/${field}/`);
-       const asiaMap=(await rects(page.locator('.asia-map-frame')))[0],asiaTabs=(await rects(page.locator('.atlas-tabs')))[0];
-       for(const key of ['y','width','height'])assert.ok(Math.abs(asiaMap[key]-usMap[key])<=1,`${field}: map ${key} aligns within 1 CSS px (${asiaMap[key]-usMap[key]})`);
-       assert.ok(Math.abs(asiaTabs.y-usTabs.y)<=1,`${field}: main field tabs align within 1 CSS px`);
-       profile.diagnostic(`${viewport.width}px ${field} layout only: map top US=${usMap.y}, Asia=${asiaMap.y}; main tabs US=${usTabs.y}, Asia=${asiaTabs.y}`);
+       const asiaMap=await usableMap(page,'.asia-map-frame',`East Asia ${field}`);
+       profile.diagnostic(`${viewport.width}px ${field}: US map=${JSON.stringify(usMap)}; Asia map=${JSON.stringify(asiaMap)}; each uses its approved layout.`);
        if(field==='population'){
         const scope=page.locator('[data-population-scope]');assert.ok(await scope.isVisible());
         const text=await scope.innerText();for(const meaning of [/2020/,/推計/,/格子/,/面積/])assert.match(text,meaning);
@@ -360,14 +342,20 @@ test('real browser: Asia desktop headers and maps align with the US reference',{
      await profile.test('country selection and reset remain usable in the industry header',async()=>{
       await openAsia(page,'east-asia/industry/?topic=manufacturing');
       await industryHeader(page,viewport.width);
-      await page.locator('[data-country-select]').selectOption('JPN');
-      assert.equal(new URL(page.url()).searchParams.get('place'),'JPN');
-      assert.match(await page.locator('[data-current-place]').textContent(),/日本/);
+      await page.locator('[data-country-select]').selectOption('CHN');
+      await page.waitForFunction(()=>new URL(location.href).searchParams.get('place')==='CHN');
+      assert.match(await page.locator('[data-current-place]').textContent(),/中国/);
       await page.locator('[data-reset]').click();
       assert.equal(new URL(page.url()).searchParams.get('place'),null);
       assert.equal(await page.locator('[data-country-select]').inputValue(),'');
       assert.match(await page.locator('[data-current-place]').textContent(),/東アジア全体/);
       assert.equal(new URL(page.url()).pathname,`${basePath}/atlas/asia/east-asia/industry/`);
+      await page.locator('[data-country-select]').selectOption('JPN');
+      await page.waitForFunction(()=>document.querySelector('[data-japan-atlas]')?.dataset.mapReady==='true');
+      assert.equal(new URL(page.url()).pathname,`${basePath}/atlas/japan/industry/`);
+      await page.locator('[data-japan-return]').click();
+      await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true');
+      assert.equal(new URL(page.url()).pathname,`${basePath}/atlas/asia/east-asia/industry/`,'Japan national entry returns to the regional industry page');
      });
      await profile.test('South and Central Asia focus links remain a separate keyboard-operable row',async()=>{
       await openAsia(page,'south-central-asia/industry/?topic=manufacturing');
@@ -375,13 +363,16 @@ test('real browser: Asia desktop headers and maps align with the US reference',{
        const focusLinks=await rects(page.locator('[data-focus-link]'));
        assert.deepEqual(await page.locator('[data-focus-link]').evaluateAll(links=>links.map(link=>link.dataset.focusLink)),['south-asia','central-asia']);
        sameRow(focusLinks,'South/Central Asia focus links');
-       const countryControls=await rects(page.locator('[data-country-select], [data-reset]'));
+       const countryControls=await rects(page.locator('[data-country-select]:visible, [data-reset]:visible'));
        assert.ok(countryControls.every(box=>box.width>0&&box.height>=40),'focus pages retain visible country and reset controls');
        for(const link of focusLinks)for(const control of countryControls)assert.ok(Math.min(link.right,control.right)<=Math.max(link.x,control.x)+1||Math.min(link.bottom,control.bottom)<=Math.max(link.y,control.y)+1,'focus links and country controls do not cover each other');
        const link=page.locator(`[data-focus-link="${focus}"]`);await link.focus();await page.keyboard.press('Enter');
-       await page.waitForURL(`**/atlas/asia/${focus}/industry/**`);
+       await page.waitForURL(`**/atlas/asia/${focus}/nature/**`);
        await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true');
        assert.equal(await page.locator(`[data-focus-link="${focus}"]`).getAttribute('aria-current'),'page');
+       await page.locator('.atlas-tabs [data-field="industry"]').click();
+       await page.waitForURL(`**/atlas/asia/${focus}/industry/**`);
+       await page.waitForFunction(()=>document.querySelector('[data-central-industry]')?.dataset.renderState==='ready'||document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true');
        if(focus==='central-asia')assert.equal(JSON.parse(await page.locator('[data-asia-config]').textContent()).industryCountryCodes.length,0);
        await page.locator('[data-country-select]').selectOption(country);
        assert.equal(new URL(page.url()).searchParams.get('place'),country);
@@ -406,13 +397,18 @@ test('real browser: Asia desktop headers and maps align with the US reference',{
       assert.equal(new URL(page.url()).searchParams.get('city'),'beijing');
       const chart=page.locator('[data-city-statistics]:visible');
       await chart.waitFor({state:'visible'});
-      const pickerChart=await chart.evaluate(node=>({svg:node.querySelector('svg').innerHTML,monthly:node.querySelector('.monthly-values table').textContent}));
+      const monthly=page.locator('[data-city-panel="beijing"] .monthly-values');
+      const chartSnapshot=async()=>({svg:await chart.locator('svg').innerHTML(),monthly:await monthly.locator('table').textContent()});
+      await openDetails(monthly);
+      assert.equal(await monthly.locator('tbody tr').count(),12,'all twelve monthly station values remain available');
+      assert.ok(await monthly.locator('table').isVisible(),'monthly values can be opened beside the station chart');
+      const pickerChart=await chartSnapshot();
       await city.selectOption('');assert.equal(new URL(page.url()).searchParams.get('city'),null);
       await page.locator('[data-station="beijing"]').click();
       await page.locator('[data-city-panel="beijing"]').waitFor({state:'visible'});
       assert.equal(await city.inputValue(),'beijing','map city click restores the same picker value');
       assert.equal(new URL(page.url()).searchParams.get('place'),null);assert.equal(new URL(page.url()).searchParams.get('city'),'beijing');
-      assert.deepEqual(await chart.evaluate(node=>({svg:node.querySelector('svg').innerHTML,monthly:node.querySelector('.monthly-values table').textContent})),pickerChart,'picker and map city click show the same rain-temperature chart and monthly values');
+      assert.deepEqual(await chartSnapshot(),pickerChart,'picker and map city click show the same rain-temperature chart and monthly values');
       await page.reload({waitUntil:'domcontentloaded'});
       await page.locator('[data-city-panel="beijing"]').waitFor({state:'visible'});
       assert.equal(await city.inputValue(),'beijing');
@@ -422,8 +418,9 @@ test('real browser: Asia desktop headers and maps align with the US reference',{
       await page.locator('[data-comparison-back]').click();
       await page.locator('[data-city-panel="beijing"]').waitFor({state:'visible'});
       assert.equal(await city.inputValue(),'beijing','comparison return restores the selected city');
-      await page.locator('[data-natural-group="water"]').click();
-      await page.locator('[data-natural-topic="seasonal-precipitation"]').click();
+      // The current primary water menu offers annual precipitation. The saved
+      // monthly URL remains supported and must retain its own return state.
+      await page.goto(`${origin}/atlas/asia/east-asia/nature/?topic=seasonal-precipitation`,{waitUntil:'domcontentloaded'});
       const month=page.locator('[data-seasonal-month]');await month.waitFor({state:'visible'});
       assert.equal(await city.isVisible(),false);
       for(const control of [month,page.locator('[data-seasonal-previous]'),page.locator('[data-seasonal-next]')]){

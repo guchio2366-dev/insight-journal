@@ -1,0 +1,7 @@
+2026-10-15T02:26:40.1083271Z ℹ fail 0
+2026-10-15T02:33:24.2544350Z ﹣ real browser: Asia industry preserves source publication status across controls, tables and return navigation (0.153486ms) # Set ATLAS_ASIA_BROWSER=1 after npm run build to run real Chromium acceptance.
+2026-10-15T02:33:24.2550152Z ﹣ real browser: Asia desktop headers and maps align with the US reference (0.144332ms) # Set ATLAS_ASIA_DESKTOP_LAYOUT=1 after npm run build for PC-only layout acceptance.
+2026-10-15T02:38:52.7332160Z ℹ tests 650
+2026-10-15T02:38:52.7332621Z ℹ pass 642
+2026-10-15T02:38:52.7332799Z ℹ fail 0
+2026-10-15T02:38:52.7333175Z ℹ skipped 8
