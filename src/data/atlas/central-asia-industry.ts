@@ -162,9 +162,9 @@ export const centralIndustrySites:CentralSite[]=[
  site('central-nurabad','uranium','ヌラバード地区',[66.25,39.6],'UZB',['resources'],'採掘・溶液回収','extraction','サマルカンド州の生産地区。近い都市との取引線は推定しない。',['nur-sites']),
  site('sc-bozshakol-copper','copper','ボズシャコル',[74.2914,51.8477],'KAZ',['resources'],'採掘・選鉱','extraction','パヴロダル州の操業地域。位置は操業者の尾鉱施設座標からの広域案内。鉱山別2025年生産は97.7千t。',['bozshakol','kaz-coordinates','kaz-production'],{localMetric:'copper-bozshakol'}),
  site('central-aktogay','copper','アクトガイ',[79.9367,46.9474],'KAZ',['resources'],'採掘・選鉱・酸化鉱処理','extraction','アバイ州の操業地域。位置は操業者の尾鉱施設座標からの広域案内。鉱山別2025年生産は225.7千t。',['aktogay','kaz-coordinates','kaz-production'],{localMetric:'copper-aktogay'}),
- site('central-zhezkazgan','copper','ジェズカズガン',[67.71,47.78],'KAZ',['manufacturing'],'銅の製錬・精製','processing','鉱石産地と加工設備が近接する銅の地域。都市付近の案内点で工場敷地ではない。',['usgs-kz']),
- site('central-balkhash','copper','バルハシ',[74.98,46.85],'KAZ',['manufacturing'],'銅の製錬・精製','processing','鉱石・精鉱を金属へ加工する地域。確認できない鉱山からの納入関係は描かない。',['usgs-kz']),
- site('central-almalyk','copper','アルマリク',[69.6,40.85],'UZB',['manufacturing'],'銅の製錬（鉱山・選鉱が近接）','processing','タシケント州。カルマキル・サリチェク鉱床と加工設備が近接。将来の増設能力は現在の生産と区別。',['usgs-uz']),
+ site('central-zhezkazgan','copper','ジェズカズガン',[67.71,47.78],'KAZ',['resources','manufacturing'],'銅の製錬・精製','processing','鉱石産地と加工設備が近接する銅の地域。都市付近の案内点で工場敷地ではない。',['usgs-kz']),
+ site('central-balkhash','copper','バルハシ',[74.98,46.85],'KAZ',['resources','manufacturing'],'銅の製錬・精製','processing','鉱石・精鉱を金属へ加工する地域。確認できない鉱山からの納入関係は描かない。',['usgs-kz']),
+ site('central-almalyk','copper','アルマリク',[69.6,40.85],'UZB',['resources','manufacturing'],'銅の製錬（鉱山・選鉱が近接）','processing','タシケント州。カルマキル・サリチェク鉱床と加工設備が近接。将来の増設能力は現在の生産と区別。',['usgs-uz']),
  site('sc-muruntau-gold','gold','ムルンタウ',[64.55,41.53],'UZB',['resources'],'金の採掘・鉱石処理','extraction','中央キジルクムの露天掘り鉱床。NMMC全社生産・収入をこの鉱山へ割り当てない。',['usgs-uz','nmmc']),
  site('central-kumtor','gold','クムトール',[78.2,41.86],'KGZ',['resources'],'金の採掘・鉱石処理','extraction','天山山地の操業事業。監査済みの2025年生産12.081tは事業の年間実績。',['kumtor'],{localMetric:'gold-kumtor'}),
  site('sc-nurek-hydro','hydro','ヌレーク',[69.37,38.38],'TJK',['resources'],'水力発電・貯水','energy','ヴァフシュ川の稼働発電施設。全国水力容量5,841MWはこの施設だけの値ではない。',['nurek','irena-capacity']),
@@ -188,8 +188,8 @@ export const centralIndustrySites:CentralSite[]=[
  site('central-khiva-tourism','tourism','ヒヴァ',[60.36,41.38],'UZB',['services'],'文化観光・旅行サービス','service','UNESCOのイチャンカラ。73.1十億スムはホラズム州の代理店売上で、ヒヴァだけの収入ではない。',['khiva','travel-agencies'],{localMetric:'travel-khorezm'}),
  site('central-tashkent-tourism','tourism','タシケント',[69.24,41.31],'UZB',['services'],'交通・旅行手配','service','代理店の請求所在地としての売上1.7兆スム（概数）。都市への宿泊客数ではない。',['travel-agencies'],{localMetric:'travel-tashkent'}),
  site('central-khromtau','chromium','フロムタウ',[58.43,50.25],'KAZ',['resources'],'クロム鉱石の採掘・選鉱','extraction','ドンスコイ鉱山・選鉱の地域。鉱石とフェロクロムの生産段階を分ける。',['kazchrome','usgs-kz']),
- site('central-aktobe-chromium','chromium','アクトベ',[57.17,50.28],'KAZ',['manufacturing'],'フェロクロム製錬','processing','電気炉で合金をつくる地域。Kazchromeの全社製品別売上をこの工場へ割り当てない。',['kazchrome']),
- site('central-aksu-chromium','chromium','アクス',[76.88,52.04],'KAZ',['manufacturing'],'フェロクロム製錬','processing','電力を使う合金製錬の地域。全社販売量と工場別生産量は別。',['kazchrome']),
+ site('central-aktobe-chromium','chromium','アクトベ',[57.17,50.28],'KAZ',['resources','manufacturing'],'フェロクロム製錬','processing','電気炉で合金をつくる地域。Kazchromeの全社製品別売上をこの工場へ割り当てない。',['kazchrome']),
+ site('central-aksu-chromium','chromium','アクス',[76.88,52.04],'KAZ',['resources','manufacturing'],'フェロクロム製錬','processing','電力を使う合金製錬の地域。全社販売量と工場別生産量は別。',['kazchrome']),
 ];
 
 export const centralIndustryOmissions=[

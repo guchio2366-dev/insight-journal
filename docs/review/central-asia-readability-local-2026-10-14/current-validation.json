@@ -1,0 +1,33 @@
+{
+  "baseSha": "6f3d4a27c17bf205220d0eb44563975af2bcbdad",
+  "classification": "Meaningful processing references are shared between resources and manufacturing; labels follow the real operation.",
+  "counts": {
+    "resources": 20,
+    "manufacturing": 14,
+    "services": 8,
+    "uniqueSourceLocations": 37
+  },
+  "sourceSha256": {
+    "src/data/atlas/central-asia-industry.ts": "b736ca18eb7bab86e22e31af6c0631f2b43f029c0ee9efd166ccd0867c492e73",
+    "src/lib/atlas-central-asia-industry.ts": "f95107bca9793665e2117605bddcb85b5fe10e94c68514b3894f5a61ff5ab39f",
+    "src/scripts/atlas-central-asia-industry.ts": "94aeb8ecac22e369ff5b0558dbf8c89fab896ad9e80117aab434c6296cb92273",
+    "src/styles/atlas-central-asia-industry.css": "5e43cacdb362b9dd108012ef9cca509ee2358a198691da7078e15fdfe81be7ec",
+    "src/components/atlas/asia/CentralAsiaIndustryPage.astro": "7ab25772341e53b7717d75293be769ff0fbf1fde4d5f89c8eed4cc7bab22513f"
+  },
+  "checks": {
+    "unit": {
+      "total": 8,
+      "passed": 8,
+      "failed": 0
+    },
+    "build": "passed",
+    "release": "passed",
+    "browser": {
+      "status": "blocked before launch",
+      "chromiumSandbox": true,
+      "reason": "SUID sandbox helper is not configured correctly; Chrome requires root ownership and mode 4755.",
+      "unsafeFallbackRepeated": false
+    }
+  },
+  "historicalEvidence": "before/, after/, interaction-images/ and their JSON are from the previous single-classification revision, with inner sandbox disabled; they do not verify this revision."
+}

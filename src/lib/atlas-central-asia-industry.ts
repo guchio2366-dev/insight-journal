@@ -42,14 +42,16 @@ export type CentralLabelPoint={site:CentralSite;point:number[]};
 export function centralIndustryStageReading(id:CentralIndustryId,sector:CentralIndustrySector){
  const item=centralIndustries.find(item=>item.id===id)!;
  if(id==='copper')return sector==='resources'
-  ?{label:'銅採掘',title:'銅の採掘・選鉱',overview:'カザフスタンのボズシャコルとアクトガイでは、大規模鉱床に沿って銅の採掘・選鉱・鉱石処理が集積しています。'}
+  ?{label:'銅鉱業',title:'銅の採掘・選鉱と製錬',overview:'銅の採掘・選鉱はボズシャコル・アクトガイ、金属加工はジェズカズガン・バルハシ・アルマリクに分布し、鉱床と加工設備の立地が鉱石から金属までの工程を支えます。'}
   :{label:'銅製錬',title:'銅の製錬・精製',overview:'ジェズカズガン・バルハシ・アルマリクに銅の加工設備が分布し、鉱石・精鉱の供給、電力と輸送の接続を利用して金属銅をつくります。'};
  if(id==='chromium')return sector==='resources'
-  ?{label:'クロム鉱',title:'クロム鉱石の採掘・選鉱',overview:'カザフスタン西部のフロムタウでクロム鉱石の採掘・選鉱が集積し、鉱床と自社原料が合金生産の基盤になります。'}
+  ?{label:'クロム',title:'クロム鉱業とフェロクロム製錬',overview:'フロムタウのクロム鉱床と、アクトベ・アクスの製錬設備が、自社原料と電力を利用するフェロクロム生産の基盤になります。'}
   :{label:'フェロクロム',title:'フェロクロム製錬',overview:'アクトベとアクスの製錬設備が、クロム鉱石と電力を組み合わせてステンレス鋼向けフェロクロムを生産します。'};
  return {label:item.shortLabel,title:item.label,overview:item.overview};
 }
 export function centralIndustryAnnotationLabel(site:CentralSite,sector:CentralIndustrySector):string{
+ if(site.industry==='copper')return site.kind==='processing'?'銅製錬':'銅採掘';
+ if(site.industry==='chromium')return site.kind==='processing'?'フェロクロム':'クロム鉱';
  if(site.industry==='tourism')return site.stage==='交通・旅行手配'?'旅行手配':'文化観光';
  return centralIndustryStageReading(site.industry,sector).label;
 }
@@ -67,7 +69,7 @@ export function centralIndustryGroupPlace(points:CentralLabelPoint[]):string{
 export function groupCentralIndustryLabels(points:CentralLabelPoint[],diameter=86):CentralLabelPoint[][]{
  const groups:CentralLabelPoint[][]=[];
  // These annotations contain no quantities: different periods are never summed.
- const key=(site:CentralSite)=>site.industry+'|'+site.country+'|'+site.sectors.join(',')+(site.kind==='service'?'|'+site.stage:'');
+ const key=(site:CentralSite)=>site.industry+'|'+site.country+'|'+site.kind+(site.kind==='service'?'|'+site.stage:'');
  for(const point of [...points].sort((a,b)=>a.site.id.localeCompare(b.site.id))){
   const group=groups.find(g=>key(g[0].site)===key(point.site)&&g.every(p=>Math.hypot(p.point[0]-point.point[0],p.point[1]-point.point[1])<=diameter));
   if(group)group.push(point);else groups.push([point]);

@@ -5,7 +5,7 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {chromium} from 'playwright';
 
-const baseline=process.argv.includes('--baseline'),localBrowser=process.env.CENTRAL_LOCAL_BROWSER==='1';
+const baseline=process.argv.includes('--baseline'),executable=process.env.REVIEW_CHROME_PATH??'/usr/bin/chromium';
 const output=path.resolve(process.env.CENTRAL_READABILITY_OUTPUT??`/tmp/central-asia-readability-${baseline?'before':'after'}`);
 const dist=path.resolve('dist'),base='/insight-journal';
 const server=createServer(async(req,res)=>{try{
@@ -18,9 +18,9 @@ const server=createServer(async(req,res)=>{try{
 }catch{res.writeHead(404).end();}});
 await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 await mkdir(output,{recursive:true});
-const browser=await chromium.launch({headless:true,executablePath:'/usr/bin/chromium',chromiumSandbox:!localBrowser,ignoreDefaultArgs:['--unsafely-disable-devtools-self-xss-warnings']});
-const page=await browser.newPage({deviceScaleFactor:1}),errors=[],result={baseline,baseSha:'6f3d4a27c17bf205220d0eb44563975af2bcbdad',browser:{chromiumSandbox:!localBrowser,deviceScaleFactor:1},views:[],checks:[]};
-result.workingTree='uncommitted local changes';result.sourceSha256={};for(const file of ['src/data/atlas/central-asia-industry.ts','src/lib/atlas-central-asia-industry.ts','src/scripts/atlas-central-asia-industry.ts','src/styles/atlas-central-asia-industry.css','src/components/atlas/asia/CentralAsiaIndustryPage.astro'])result.sourceSha256[file]=createHash('sha256').update(await readFile(file)).digest('hex');
+const browser=await chromium.launch({headless:true,executablePath:executable,chromiumSandbox:true,ignoreDefaultArgs:['--unsafely-disable-devtools-self-xss-warnings']});
+const page=await browser.newPage({deviceScaleFactor:1}),errors=[],result={baseline,baseSha:'6f3d4a27c17bf205220d0eb44563975af2bcbdad',browser:{executable,chromiumSandbox:true,deviceScaleFactor:1},views:[],checks:[]};
+result.workingTree='Local source snapshot; see sourceSha256';result.sourceSha256={};for(const file of ['src/data/atlas/central-asia-industry.ts','src/lib/atlas-central-asia-industry.ts','src/scripts/atlas-central-asia-industry.ts','src/styles/atlas-central-asia-industry.css','src/components/atlas/asia/CentralAsiaIndustryPage.astro'])result.sourceSha256[file]=createHash('sha256').update(await readFile(file)).digest('hex');
 page.on('pageerror',e=>errors.push(e.message));
 const settle=async()=>{await page.waitForFunction(()=>document.querySelector('[data-central-industry]')?.dataset.centralReady==='true');await page.evaluate(async()=>{await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});};
 const view=()=>page.evaluate(()=>{
@@ -37,8 +37,9 @@ try{
   for(const sector of ['resources','manufacturing','services']){
    await page.locator(`[data-central-sector="${sector}"]`).click();await settle();const initial=await view(),expected=config.industrySites.filter(site=>site.sectors.includes(sector));
    assert.deepEqual([...initial.markers].sort(),expected.map(site=>site.id).sort(),'Only the active map supplies markers');assert.equal(initial.overflow,false);if(!baseline)assert.equal(initial.incomplete,null,'Every compact annotation fits');
+   const expectedIds=new Set(expected.map(site=>site.id));assert(initial.labels.every(label=>label.sites.split(',').every(id=>expectedIds.has(id))),'Annotations belong to the active map');for(const site of expected.filter(site=>site.kind==='processing')){const label=initial.labels.find(label=>label.sites.split(',').includes(site.id));if(!baseline)assert(label?.text.includes(site.industry==='copper'?'銅製錬':'フェロクロム'),'Processing references retain their real stage in every map');}
    const boxes=initial.labels.filter(label=>!label.hidden);for(const [i,label]of boxes.entries()){const [x,y,w,h]=label.rect;assert(x>=0&&y>=0&&x+w<=initial.map[0]+1&&y+h<=initial.map[1]+1);for(const other of boxes.slice(i+1)){const [a,b,c,d]=other.rect;assert(!(x<a+c&&x+w>a&&y<b+d&&y+h>b),'Annotations do not overlap');}}
-   if(!baseline){assert.equal(initial.labelButtons,0,'No industry picker cards live on the map');assert(initial.labelAreaRatio<.12);assert(initial.lines.every(line=>line.length<=40.1));assert(initial.labels.every(label=>!/[0-9]|兆|百万|千t/.test(label.text)),'Quantities and periods stay in the sourced detail and statistics');if(sector==='resources')assert(expected.every(site=>site.kind!=='processing'));assert.equal(await page.locator(`[data-central-map-key-sector="${sector}"]:visible`).count(),1);assert.equal(await page.locator('[data-central-map-key-sector]:visible').count(),1);}
+   if(!baseline){assert.equal(initial.labelButtons,0,'No industry picker cards live on the map');assert(initial.labelAreaRatio<.12);assert(initial.lines.every(line=>line.length<=40.1));assert(initial.labels.every(label=>!/[0-9]|兆|百万|千t/.test(label.text)),'Quantities and periods stay in the sourced detail and statistics');assert.equal(await page.locator(`[data-central-map-key-sector="${sector}"]:visible`).count(),1);assert.equal(await page.locator('[data-central-map-key-sector]:visible').count(),1);}
    const file=`${width}-${sector}.png`;await page.locator('[data-central-map-frame]').screenshot({path:path.join(output,file)});await page.screenshot({path:path.join(output,`${width}-${sector}-page.png`)});result.views.push({width,height,file,...initial});
    if(!baseline){
     for(const button of await page.locator(`[data-central-choices="${sector}"] [data-central-choice]`).all()){
