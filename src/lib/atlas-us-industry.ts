@@ -1,4 +1,4 @@
-import {usIndustries,usIndustrySites,usIndustrySectors,usSectorIndustryIds,type UsSector} from '../data/atlas/us-industry.ts';
+import {usIndustries,usIndustrySites,usIndustrySectors,usSectorIndustryIds,type UsSector,type UsSite} from '../data/atlas/us-industry.ts';
 
 export type UsIndustryState={sector:UsSector;industry:string|null;site:string|null;only:boolean;zoom:number;x:number;y:number};
 export function readUsIndustryState(url:URL):UsIndustryState{
@@ -26,26 +26,44 @@ export function usIndustryGeometryPath(geometry:{type:string;coordinates:any},pa
  const rings=geometry.type==='Polygon'?geometry.coordinates:geometry.type==='MultiPolygon'?geometry.coordinates.flat():[];
  return rings.map((ring:number[][])=>ring.map((p,i)=>{const [x,y]=projectUsIndustry(p,panel);return `${i?'L':'M'}${x.toFixed(2)},${y.toFixed(2)}`;}).join(' ')+'Z').join(' ');
 }
-export type UsLabelBox={id:string;left:number;top:number;width:number;height:number};
-/** Deterministic, selection-independent placement; every industry keeps a label. */
+export type UsLabelBox={id:string;left:number;top:number;width:number;height:number;anchor:[number,number]};
+export type UsMapGroup={id:string;industry:string;sites:UsSite[];anchor:[number,number]};
+/** A group is a screen-space collection of source examples, never a plant count.
+ * Its anchor remains one original source position, rather than an invented centroid. */
+export function groupUsIndustryPoints(points:{site:UsSite;point:[number,number]}[],radius=16):UsMapGroup[]{
+ const groups:UsMapGroup[]=[];
+ for(const {site,point} of points){
+  const panel=site.coordinates[1]>51?'alaska':site.coordinates[0]<-150?'hawaii':'main';
+  const match=groups.find(g=>g.industry===site.industry&&
+   (g.sites[0].coordinates[1]>51?'alaska':g.sites[0].coordinates[0]<-150?'hawaii':'main')===panel&&
+   Math.hypot(g.anchor[0]-point[0],g.anchor[1]-point[1])<=radius);
+  if(match)match.sites.push(site);else groups.push({id:site.id,industry:site.industry,sites:[site],anchor:point});
+ }
+ return groups;
+}
+export const usMapLabelIndustryOrder=['crude-oil','natural-gas','power','mining','auto','aerospace','chip-fabrication','petrochemicals','pharma','food','chip-design','refining','chip-equipment','steel','machinery','oilseed-processing','biofuels','medical-devices','chip-packaging','chip-materials','shipbuilding','railway','other-manufacturing','software-cloud','finance','logistics','tourism','professional','health-education','construction','real-estate'];
+export const usMapLabelSitePreference:Record<string,string>={'crude-oil':'permian','natural-gas':'appalachia',power:'il-nuclear',refining:'la-refining','software-cloud':'virginia-data',logistics:'la-port'};
+export function usMapIndustryLabel(id:string){
+ const short:Record<string,string>={power:'発電',mining:'鉱業',auto:'自動車',refining:'精製',pharma:'医薬',food:'食品','natural-gas':'天然ガス','software-cloud':'情報・クラウド',finance:'金融',logistics:'物流',tourism:'観光','oilseed-processing':'搾油',biofuels:'エタノール'};
+ return short[id]??usIndustries.find(i=>i.id===id)!.short;
+}
+export function usMapPlaceLabel(site:UsSite){
+ const short:Record<string,string>={'az-packaging-plan':'アリゾナ','mn-devices':'ミネアポリス都市圏','nc-pharma':'研究三角地帯','baytown-chemical-petrochemicals':'ベイタウン','puget-refinery-refining':'ピュージェットサウンド'};
+ return short[site.id]??site.place.split(/[／（]/)[0];
+}
+export function usMapLabelBudget(width:number){return width>=900?8:width>=650?6:width>=500?5:3;}
+/** Small annotations stay beside their evidence. If no nearby slot is available,
+ * the point remains inspectable and its full information stays outside the map. */
 export function layoutUsIndustryLabels(inputs:{id:string;anchor:[number,number];width:number}[],width:number,height:number):UsLabelBox[]{
- const placed:UsLabelBox[]=[];const gap=4,labelHeight=44;
+ const placed:UsLabelBox[]=[],gap=5,labelHeight=18;
  const collides=(l:number,t:number,w:number)=>placed.some(b=>l<b.left+b.width+gap&&l+w>b.left-gap&&t<b.top+b.height+gap&&t+labelHeight>b.top-gap);
  for(const input of inputs){
-  const w=Math.min(input.width,width-12),candidates:[number,number][]=[];
-  for(let t=6;t<=height-labelHeight-30;t+=6)for(let l=6;l<=width-w-6;l+=6)if(!(t<46&&l+w>width-145)&&!collides(l,t,w))candidates.push([l,t]);
-  candidates.sort((a,b)=>(a[0]+w/2-input.anchor[0])**2+(a[1]+labelHeight/2-input.anchor[1])**2-((b[0]+w/2-input.anchor[0])**2+(b[1]+labelHeight/2-input.anchor[1])**2));
-  if(!candidates.length){
-   // Dense screens use a complete shelf packing instead of an overlapping
-   // last-resort box. Coordinates of the actual industrial points stay intact.
-   const rows:{used:number;items:typeof inputs}[]=[];
-   for(const item of [...inputs].sort((a,b)=>b.width-a.width||a.id.localeCompare(b.id))){
-    const row=rows.find((r,index)=>r.used+item.width+gap<=width-12-(index===0?145:0));
-    if(row){row.items.push(item);row.used+=item.width+gap;}else rows.push({used:item.width+gap,items:[item]});
-   }
-   return rows.flatMap((row,index)=>{let left=6;return row.items.sort((a,b)=>a.anchor[0]-b.anchor[0]||a.id.localeCompare(b.id)).map(item=>{const box={id:item.id,left,top:6+index*(labelHeight+gap),width:item.width,height:labelHeight};left+=item.width+gap;return box;});});
-  }
-  const [left,top]=candidates[0];placed.push({id:input.id,left,top,width:w,height:labelHeight});
+  if(placed.length>=usMapLabelBudget(width))break;
+  const [x,y]=input.anchor,w=Math.min(input.width,width-12);
+  const candidates:[number,number][]=[[x+9,y-9],[x+9,y+5],[x-w-9,y-9],[x-w-9,y+5],[x-w/2,y-26],[x-w/2,y+9]];
+  const candidate=candidates.find(([l,t])=>l>=6&&l+w<=width-6&&t>=6&&t+labelHeight<=height-32&&
+   !(t<48&&l+w>width-150)&&!collides(l,t,w));
+  if(candidate)placed.push({id:input.id,left:candidate[0],top:candidate[1],width:w,height:labelHeight,anchor:input.anchor});
  }
  return placed;
 }
