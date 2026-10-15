@@ -152,7 +152,7 @@ function controllerFixture(url,field='agriculture'){
   root.innerHTML=`<select data-place>${options(['all',...api.oceaniaCountries.map(c=>c.code)])}</select><select data-layer>${options(api.oceaniaLayers.map(l=>l.id))}</select><select data-compare-layer>${options(api.oceaniaLayers.map(l=>l.id))}</select>`+
     api.oceaniaThemes.filter(t=>t.field===field).map(t=>`<button data-theme="${t.id}"></button>`).join('')+
     ['all','theme','country'].map(scope=>`<button data-scope="${scope}"></button>`).join('')+
-    '<button data-comparison></button><button data-return></button><button data-oceania-industry-return hidden></button>'+['resources','manufacturing','services'].map(sector=>`<button data-industry-sector="${sector}"></button>`).join('')+'<button data-industry-only></button><div data-normal-view><div data-primary-map></div></div><div data-comparison-view><div data-original-map></div><div data-comparison-map></div></div>'+
+    '<button data-comparison></button><button data-return></button><button data-oceania-industry-return hidden></button>'+['resources','manufacturing','services'].map(sector=>`<button data-industry-sector="${sector}"></button>`).join('')+'<div data-normal-view><div data-primary-map></div></div><div data-comparison-view><div data-original-map></div><div data-comparison-map></div></div>'+
     ['primary','original','comparison'].flatMap(prefix=>['title','period','unit',...(prefix==='primary'?[]:['legend'])].map(suffix=>`<div data-${prefix}-${suffix}></div>`)).join('')+
     '<div data-primary-legend-spacer></div><section data-required-legend-layer><p data-primary-legend-unit></p><div data-primary-legend></div></section><details data-primary-legend-dictionary><div data-primary-legend-dictionary-content></div></details>'+
     ['geography-reading','theme-title','takeaway','explanation','coverage','comparison-explanation','social-context','source-list'].map(hook=>`<div data-${hook}></div>`).join('')+
@@ -163,19 +163,20 @@ function controllerFixture(url,field='agriculture'){
   return {window,root};
 }
 
-test('industry representative places open sourced details while all marks remain and URL reload restores selection',()=>{
+test('industry representative details stay within the selected sector and URL reload restores selection',()=>{
   const sessions=[];
   try{
     const first=controllerFixture('https://example.test/insight-journal/atlas/oceania/industry/?utm_source=qa','industry');sessions.push(first);
     const root=first.root;
-    assert.equal(root.querySelectorAll('[data-oceania-industry-location]').length,8);
+    assert.equal(root.querySelectorAll('[data-oceania-industry-location]').length,1);
+    root.querySelector('[data-industry-sector=services]').click();
     assert.equal(root.querySelectorAll('[data-oceania-industry-location][aria-pressed="true"]').length,0);
     root.querySelector('[data-oceania-industry-location="lae-port"]')?.dispatchEvent(new first.window.MouseEvent('click',{bubbles:true}));
     assert.equal(root.querySelector('[data-theme-title]').textContent,'ラエ港');
     assert.match(root.querySelector('[data-explanation]').textContent,/個々の鉱山の輸出港/);
     assert.match(root.querySelector('[data-source-list]').textContent,/ラエ港の位置資料/);
-    assert.equal(root.querySelectorAll('[data-oceania-industry-location]').length,8);
-    assert.equal(root.querySelectorAll('circle[stroke="#fff"]').length,347);
+    assert.equal(root.querySelectorAll('[data-oceania-industry-location]').length,4);
+    assert.equal(root.querySelectorAll('circle[data-oceania-mine-tags]').length,0);
     assert.equal(root.querySelector('[data-oceania-industry-location="lae-port"]').getAttribute('aria-pressed'),'true');
     const url=first.window.location.href;
     assert.equal(new URL(url).searchParams.get('industryLocation'),'lae-port');
@@ -199,29 +200,30 @@ test('overlapping industry mark keeps the current sector and isolation through r
     const first=controllerFixture('https://example.test/insight-journal/atlas/oceania/industry/','industry');sessions.push(first);
     const clickMark=(session,id)=>session.root.querySelector(`[data-oceania-industry-location="${id}"]`).dispatchEvent(new session.window.MouseEvent('click',{bubbles:true}));
     first.root.querySelector('[data-industry-sector="services"]').click();
-    first.root.querySelector('[data-industry-only]').click();
+    assert.equal(first.root.querySelector('[data-industry-only]'),null);
     clickMark(first,'noro-port');
     let query=new URL(first.window.location.href).searchParams;
     assert.equal(query.get('sector'),'services');
     assert.equal(query.get('sectorOnly'),'1');
     assert.equal(query.get('industryLocation'),'noro-port');
-    assert.equal(first.root.querySelector('[data-industry-only]').getAttribute('aria-pressed'),'true');
+    assert.equal(first.root.querySelectorAll('[data-oceania-mine-tags]').length,0);
     const reload=controllerFixture(first.window.location.href,'industry');sessions.push(reload);
     assert.equal(reload.root.querySelector('[data-industry-sector="services"]').getAttribute('aria-pressed'),'true');
     assert.equal(reload.root.querySelector('[data-oceania-industry-location="noro-port"]').getAttribute('aria-pressed'),'true');
     reload.root.querySelector('[data-oceania-industry-return]').click();
     query=new URL(reload.window.location.href).searchParams;
-    for(const key of ['sector','sectorOnly','industryLocation'])assert.equal(query.has(key),false);
+    assert.equal(query.has('industryLocation'),false);assert.equal(query.get('sector'),'services');assert.equal(query.get('sectorOnly'),'1');
     reload.root.querySelector('[data-industry-sector="services"]').click();
-    reload.root.querySelector('[data-industry-only]').click();
+    assert.equal(new URL(reload.window.location.href).searchParams.get('sectorOnly'),'1');
     clickMark(reload,'noro-port');
     assert.equal(new URL(reload.window.location.href).searchParams.get('sector'),'services');
     assert.equal(new URL(reload.window.location.href).searchParams.get('sectorOnly'),'1');
-    reload.root.querySelector('[data-industry-only]').click();
+    assert.equal(new URL(reload.window.location.href).searchParams.get('sectorOnly'),'1');
+    reload.root.querySelector('[data-industry-sector=resources]').click();
     clickMark(reload,'lihir-project');
     query=new URL(reload.window.location.href).searchParams;
     assert.equal(query.get('sector'),'resources');
-    assert.equal(query.has('sectorOnly'),false);
+    assert.equal(query.get('sectorOnly'),'1');
   }finally{for(const session of sessions)session.window.happyDOM.abort();}
 });
 

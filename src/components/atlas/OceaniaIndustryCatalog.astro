@@ -1,10 +1,10 @@
 ---
 import {oceaniaIndustryCatalog as items,oceaniaCatalogSources as sources} from '../../data/atlas/oceania-industry-catalog';
 const headings={scale:'地域経済の規模',world:'世界での位置',concentration:'供給網・集中と定義'};
-const overview=[items.find(i=>i.id==='iron')!,items.find(i=>i.id==='gold')!,items.find(i=>i.id==='tourism')!];
+const overview=[items.find(i=>i.id==='iron')!,items.find(i=>i.id==='gold')!,items.find(i=>i.id==='lng')!];
 ---
 <section class="oceania-industry-statistics" data-oceania-industry-statistics aria-label="主要産業の統計と対象範囲">
- <h2 data-catalog-stat-title>豪州の供給力と島嶼部の所得</h2>
+ <h2 data-catalog-stat-title>資源・エネルギーの規模と供給網</h2>
  <div class="oceania-industry-stat-grid">
  {Object.entries(headings).map(([key,heading],index)=><article data-catalog-stat={key}><h3>{heading}</h3><p data-catalog-stat-copy>{index===0?overview[1].scale.text:index===1?overview[0].world.text:overview[2].concentration.text}</p><div data-catalog-stat-sources>{(index===0?overview[1].scale:index===1?overview[0].world:overview[2].concentration).sources.map(id=><a href={sources[id].url}>{sources[id].title}</a>)}</div></article>)}
  </div>

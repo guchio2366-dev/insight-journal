@@ -13,8 +13,8 @@ export type OceaniaIndustryMark = {
 };
 export type OceaniaIndustrySector = 'resources' | 'manufacturing' | 'services';
 export const oceaniaIndustrySectors: Record<OceaniaIndustrySector, {title:string; takeaway:string; explanation:string}> = {
-  resources: {title:'資源・エネルギー',takeaway:'豪州のピルバラ・ボーエン盆地・西豪州南西部、PNGの高地・島々、ニューカレドニアの鉱床に資源産業が集積する。',explanation:'鉱山347点は2025版の稼働地点で、量や埋蔵量を示しません。PNGのリヒールは2023年末の採掘・鉱石処理地区です。採掘から利用可能な状態への処理までをこの分野に含めます。'},
-  manufacturing: {title:'製造業',takeaway:'豪州の沿岸素材加工、NZの集乳圏・植林材加工、ソロモン諸島ノロの水産加工は原料・電力・港湾条件に支えられる。',explanation:'豪州ポートケンブラの鋼材生産、ソロモン諸島ノロの水産缶詰、NZのSynlaitの乳加工とPan Pacのパルプ加工を代表例にします。NZの2点は、企業の工程と住所を読むための保存済み都市中心の案内位置です。工場の入口・敷地や全工場の分布は示しません。港の点や総牛密度を工場・酪農地帯の位置には置き換えません。'},
+  resources: {title:'資源・エネルギー',takeaway:'豪州のピルバラ・ボーエン盆地・西豪州南西部、PNGの高地・島々、ニューカレドニアの鉱床に資源産業が集積する。',explanation:'豪州の鉄鉱石・石炭・金属、PNGの金・銅・LNG、ニューカレドニアのニッケルを扱います。豪州鉱山347点は2025版の地点で、生産量・埋蔵量を表しません。石炭の原本は炭種未分類です。PNGのリヒールは2023年末の採掘・鉱石処理地区で、都市案内や全国統計とは区別します。'},
+  manufacturing: {title:'製造業',takeaway:'豪州の沿岸素材加工、NZの集乳圏・植林材加工、ソロモン諸島ノロの水産加工は原料・電力・港湾条件に支えられる。',explanation:'豪州沿岸のアルミ・鋼材、NZの乳・食肉・木材加工、ノロの水産加工を扱います。都市案内と加工地区を示し、工場の入口・敷地や全工場の分布ではありません。ボーキサイト採掘や漁場の点はこの製造業地図に混ぜず、前工程として解説と統計に残します。食肉等の全国注記は文字のみで、個別施設の位置・数を示しません。'},
   services: {title:'サービス業',takeaway:'大学の集まる豪州大都市と、海洋・文化資源のあるフィジー・サモア・パラオに異なるサービスの集積がある。',explanation:'NZのタウランガ、PNGのラエ、ソロモン諸島のノロ、フィジーのスバは港や都市の代表地点です。観光と留学は産業別に選択し、港湾は物流条件の補助情報として扱います。線で結ぶ輸送経路や都市別産業割合は資料から推定しません。'},
 };
 export const oceaniaIndustryMarkSectors: Record<string,OceaniaIndustrySector[]> = {

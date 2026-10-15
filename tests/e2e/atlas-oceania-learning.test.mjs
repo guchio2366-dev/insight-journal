@@ -16,7 +16,7 @@ function page(field,query=''){
  return {win,root:win.document.querySelector('[data-oceania-learning]')};
 }
 test('all four built Oceania pages expose real initial distributions, complete legends, messages and working entries',()=>{
- const expected={nature:18,agriculture:5,industry:9,population:10};
+ const expected={nature:18,agriculture:5,industry:8,population:10};
  const sitemap=readFileSync(new URL('../../dist/sitemap.xml',import.meta.url),'utf8');
  for(const [field,count] of Object.entries(expected)){
   const {win,root}=page(field);
@@ -31,6 +31,26 @@ test('all four built Oceania pages expose real initial distributions, complete l
   assert.ok(sitemap.includes(`/atlas/oceania/${field}/`),field);
   win.happyDOM.abort();
  }
+});
+test('Oceania industry selects separate sectors with external product controls and fixed non-interactive captions',()=>{
+ const {win,root}=page('industry');try{
+  assert.equal(new URL(win.location.href).searchParams.get('sector'),'resources');
+  for(const sector of ['resources','manufacturing','services']){
+   root.querySelector(`[data-industry-sector=${sector}]`).click();
+   const map=root.querySelector('[data-primary-map]');
+   assert([...map.querySelectorAll('[data-catalog-sector]')].every(n=>n.dataset.catalogSector===sector));
+   assert.equal(map.querySelectorAll('[data-oceania-mine-tags]').length,sector==='resources'?347:0);
+   assert.equal(map.querySelectorAll('[data-oceania-product-label][role=button],[data-oceania-product-label] rect').length,0);
+   const select=root.querySelector('[data-oceania-product]'),options=[...select.options].map(n=>n.value).filter(v=>v!=='all');
+   assert.equal(options.length,{resources:10,manufacturing:6,services:2}[sector]);
+   const labels=()=>[...root.querySelectorAll('[data-primary-map] [data-label-box]')].map(n=>[n.dataset.captionKey,n.dataset.labelBox]);
+   const fixed=labels();
+   for(const id of options){select.value=id;select.dispatchEvent(new win.Event('change'));assert.deepEqual(labels(),fixed);assert.equal(new URL(win.location.href).searchParams.get('sector'),sector);}
+   root.querySelector('[data-oceania-product-only]').click();for(const [key,box]of labels())assert.equal(new Map(fixed).get(key),box);
+   root.querySelector('[data-oceania-product-clear]').click();assert.deepEqual(labels(),fixed);assert.equal(new URL(win.location.href).searchParams.get('sector'),sector);
+   root.querySelector(`[data-industry-sector=${sector}]`).click();assert.equal(new URL(win.location.href).searchParams.get('sector'),sector);
+  }
+ }finally{win.happyDOM.abort();}
 });
 test('Oceania export reading keeps the Australian production denominator separate from the 2020 map',()=>{
  const {win,root}=page('agriculture');
