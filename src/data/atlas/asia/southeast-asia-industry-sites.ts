@@ -3,18 +3,18 @@ import {southeastIndustryProfiles} from './southeast-asia-industry-catalog.ts';
 export type SoutheastIndustryKind='electronics'|'automotive'|'textiles'|'food'|'metals'|'energy'|'petrochemicals'|'logistics'|'tourism'|'finance'|'it-bpm'|'rubber'|'wood'|'palm'|'rice'|'lng'|'hydro'|'solar';
 export type SoutheastIndustrySite={id:string;label:string;industryName:string;placeName:string;kind:SoutheastIndustryKind;stage:'raw'|'processing'|'service';point:[number,number];reading:string;sourceLabel:string;sourceUrl:string;sourceYear:string;positionScope:'regional-guide';facilityCoordinates:null;operationalStatus:'source-dated-example'};
 export type SoutheastIndustrySector='resource'|'manufacturing'|'services';
-export const southeastIndustrySectors:{id:'all'|SoutheastIndustrySector;label:string;reading:string}[]=[
- {id:'all',label:'全体',reading:'ニッケル・石炭の資源域、半島と都市周辺の製造集積、海峡・観光地・業務都市のサービス拠点は異なる地理を持つ。'},
+export const southeastIndustrySectors:{id:SoutheastIndustrySector;label:string;reading:string}[]=[
  {id:'resource',label:'資源・エネルギー',reading:'スラウェシ・カリマンタンの資源域とビントゥル・ラオス中部のエネルギー拠点では、鉱床・ガス供給・水資源が立地に関わる。'},
  {id:'manufacturing',label:'製造業',reading:'ペナン・タイ東部・ジャワ島西部・ベトナム南北の加工集積では原料、人材、工業団地、港湾への接続が工程ごとの立地を支える。'},
  {id:'services',label:'サービス業',reading:'海峡沿いの港湾・金融、バリやプーケットの観光、マニラ・セブの受託業務には異なる需要と専門機能が集まる。'},
 ];
 export function southeastSiteSectors(site:SoutheastIndustrySite):SoutheastIndustrySector[]{
- if(site.stage==='raw')return ['resource'];
- return southeastIndustryProfiles.find(p=>p.id===site.kind)?.sectors??[];
+ if(site.stage==='raw'||site.kind==='lng'||site.kind==='hydro')return ['resource'];
+ if(southeastIndustryProfiles.find(p=>p.id===site.kind)?.sectors.includes('services'))return ['services'];
+ return ['manufacturing'];
 }
 export const southeastIndustryKinds:{id:'all'|SoutheastIndustryKind;label:string;reading:string}[]=[
- {id:'all',label:'全産業',reading:southeastIndustrySectors[0].reading},
+ {id:'all',label:'この分野の全産業',reading:southeastIndustrySectors[0].reading},
  ...southeastIndustryProfiles.map(p=>({id:p.id,label:p.label,reading:p.reading})),
 ];
 const source={
