@@ -1,0 +1,2043 @@
+{
+  "base": "d166204299c2a12acd7c0275b9d0114d49c5040e",
+  "branch": "perf/atlas-deferred-data-20261015",
+  "sourceSHA256": {
+    "src/scripts/atlas-explorer.ts": "9395bf0ef56bbf3fbecdde9e7b2bacb0ed931e63644e88aaca669a2a5bdc9a02",
+    "src/scripts/atlas-canada-elevation-raster.ts": "a454eadc67699bab893d68f7f24ade548a56b7f32e9a120dff5392d99c0e9284",
+    "src/scripts/atlas-mexico-population.ts": "262e4ab6c988378fc8f62c4f32cf24fee14655eb289de9128b70ed4ab083a5a5",
+    "src/scripts/atlas-mexico-population-composition.ts": "0e537e54590650769bb4bae67f46e4223e5b72dd681810648c99fe38f50edc2a",
+    "src/components/atlas/MexicoPopulationPage.astro": "f24c5c0ed9d6fddec02d425909e8558d21daff7e5328cb22f26a7bccc4f8332d",
+    "src/styles/atlas-mexico-population.css": "0d4da010ad5c86dd88653aba0ef5ede2ee5dd111ba98df2d1cd7205c349b58e9"
+  },
+  "browser": "151.0.7922.173",
+  "conditions": "Cloud Chromium; sandbox enabled; fresh context per load; raw loopback HTTP; no throttling; three loads per route/viewport",
+  "unmeasured": [
+    "Production CDN compression and network latency",
+    "Actual process/GPU memory",
+    "Worker/GPU execution time"
+  ],
+  "groups": [
+    {
+      "width": 1896,
+      "route": "nature/",
+      "before": {
+        "transferred": {
+          "min": 4354169,
+          "median": 4354169,
+          "max": 4354169
+        },
+        "mainThreadTaskSeconds": {
+          "min": 1.475433,
+          "median": 1.605139,
+          "max": 1.792207
+        }
+      },
+      "after": {
+        "transferred": {
+          "min": 4210168,
+          "median": 4210168,
+          "max": 4210168
+        },
+        "mainThreadTaskSeconds": {
+          "min": 1.347813,
+          "median": 1.406103,
+          "max": 1.503568
+        }
+      },
+      "transferReduction": 144001
+    },
+    {
+      "width": 1896,
+      "route": "population/",
+      "before": {
+        "transferred": {
+          "min": 5214528,
+          "median": 5214528,
+          "max": 5214528
+        },
+        "mainThreadTaskSeconds": {
+          "min": 1.847511,
+          "median": 1.91762,
+          "max": 1.981888
+        }
+      },
+      "after": {
+        "transferred": {
+          "min": 5070527,
+          "median": 5070527,
+          "max": 5070527
+        },
+        "mainThreadTaskSeconds": {
+          "min": 1.78364,
+          "median": 1.798239,
+          "max": 1.877451
+        }
+      },
+      "transferReduction": 144001
+    },
+    {
+      "width": 1896,
+      "route": "agriculture/",
+      "before": {
+        "transferred": {
+          "min": 4443996,
+          "median": 4443996,
+          "max": 4443996
+        },
+        "mainThreadTaskSeconds": {
+          "min": 1.654911,
+          "median": 1.821432,
+          "max": 1.822168
+        }
+      },
+      "after": {
+        "transferred": {
+          "min": 4445357,
+          "median": 4445357,
+          "max": 4445357
+        },
+        "mainThreadTaskSeconds": {
+          "min": 1.908473,
+          "median": 1.984388,
+          "max": 2.043616
+        }
+      },
+      "transferReduction": -1361
+    },
+    {
+      "width": 1896,
+      "route": "mexico/population/",
+      "before": {
+        "transferred": {
+          "min": 10355455,
+          "median": 10355455,
+          "max": 10355455
+        },
+        "mainThreadTaskSeconds": {
+          "min": 0.485335,
+          "median": 0.562415,
+          "max": 0.653971
+        }
+      },
+      "after": {
+        "transferred": {
+          "min": 4044861,
+          "median": 4044861,
+          "max": 4044861
+        },
+        "mainThreadTaskSeconds": {
+          "min": 0.431865,
+          "median": 0.47055,
+          "max": 0.487284
+        }
+      },
+      "transferReduction": 6310594
+    },
+    {
+      "width": 1896,
+      "route": "mexico/population/?view=density",
+      "before": {
+        "transferred": {
+          "min": 10023562,
+          "median": 10023562,
+          "max": 10023562
+        },
+        "mainThreadTaskSeconds": {
+          "min": 0.393879,
+          "median": 0.425983,
+          "max": 0.473204
+        }
+      },
+      "after": {
+        "transferred": {
+          "min": 3712968,
+          "median": 3712968,
+          "max": 3712968
+        },
+        "mainThreadTaskSeconds": {
+          "min": 0.316223,
+          "median": 0.317922,
+          "max": 0.349561
+        }
+      },
+      "transferReduction": 6310594
+    },
+    {
+      "width": 1280,
+      "route": "nature/",
+      "before": {
+        "transferred": {
+          "min": 4354169,
+          "median": 4354169,
+          "max": 4354169
+        },
+        "mainThreadTaskSeconds": {
+          "min": 1.48701,
+          "median": 1.506383,
+          "max": 1.53019
+        }
+      },
+      "after": {
+        "transferred": {
+          "min": 4210168,
+          "median": 4210168,
+          "max": 4210168
+        },
+        "mainThreadTaskSeconds": {
+          "min": 1.291255,
+          "median": 1.393657,
+          "max": 1.478958
+        }
+      },
+      "transferReduction": 144001
+    },
+    {
+      "width": 1280,
+      "route": "population/",
+      "before": {
+        "transferred": {
+          "min": 5214528,
+          "median": 5214528,
+          "max": 5214528
+        },
+        "mainThreadTaskSeconds": {
+          "min": 1.650318,
+          "median": 1.669072,
+          "max": 1.721191
+        }
+      },
+      "after": {
+        "transferred": {
+          "min": 5070527,
+          "median": 5070527,
+          "max": 5070527
+        },
+        "mainThreadTaskSeconds": {
+          "min": 1.637648,
+          "median": 1.669946,
+          "max": 1.756966
+        }
+      },
+      "transferReduction": 144001
+    },
+    {
+      "width": 1280,
+      "route": "agriculture/",
+      "before": {
+        "transferred": {
+          "min": 4443996,
+          "median": 4443996,
+          "max": 4443996
+        },
+        "mainThreadTaskSeconds": {
+          "min": 1.653072,
+          "median": 1.688666,
+          "max": 1.839638
+        }
+      },
+      "after": {
+        "transferred": {
+          "min": 4445357,
+          "median": 4445357,
+          "max": 4445357
+        },
+        "mainThreadTaskSeconds": {
+          "min": 1.90279,
+          "median": 1.97629,
+          "max": 2.07355
+        }
+      },
+      "transferReduction": -1361
+    },
+    {
+      "width": 1280,
+      "route": "mexico/population/",
+      "before": {
+        "transferred": {
+          "min": 10355455,
+          "median": 10355455,
+          "max": 10355455
+        },
+        "mainThreadTaskSeconds": {
+          "min": 0.478057,
+          "median": 0.514082,
+          "max": 0.555582
+        }
+      },
+      "after": {
+        "transferred": {
+          "min": 4044861,
+          "median": 4044861,
+          "max": 4044861
+        },
+        "mainThreadTaskSeconds": {
+          "min": 0.354651,
+          "median": 0.35708,
+          "max": 0.389295
+        }
+      },
+      "transferReduction": 6310594
+    },
+    {
+      "width": 1280,
+      "route": "mexico/population/?view=density",
+      "before": {
+        "transferred": {
+          "min": 10023562,
+          "median": 10023562,
+          "max": 10023562
+        },
+        "mainThreadTaskSeconds": {
+          "min": 0.379476,
+          "median": 0.383682,
+          "max": 0.406431
+        }
+      },
+      "after": {
+        "transferred": {
+          "min": 3712968,
+          "median": 3712968,
+          "max": 3712968
+        },
+        "mainThreadTaskSeconds": {
+          "min": 0.278994,
+          "median": 0.2979,
+          "max": 0.315805
+        }
+      },
+      "transferReduction": 6310594
+    }
+  ],
+  "html": {
+    "before": {
+      "nature/": {
+        "raw": 1257080,
+        "gzip": 242577
+      },
+      "population/": {
+        "raw": 1251379,
+        "gzip": 241366
+      },
+      "agriculture/": {
+        "raw": 1251447,
+        "gzip": 241396
+      },
+      "mexico/population/": {
+        "raw": 6546947,
+        "gzip": 1287289
+      },
+      "mexico/population/?view=density": {
+        "raw": 6546947,
+        "gzip": 1287289
+      }
+    },
+    "after": {
+      "nature/": {
+        "raw": 1257080,
+        "gzip": 242575
+      },
+      "population/": {
+        "raw": 1251379,
+        "gzip": 241364
+      },
+      "agriculture/": {
+        "raw": 1251447,
+        "gzip": 241394
+      },
+      "mexico/population/": {
+        "raw": 3395871,
+        "gzip": 666505
+      },
+      "mexico/population/?view=density": {
+        "raw": 3395871,
+        "gzip": 666505
+      }
+    }
+  },
+  "runs": {
+    "before": [
+      {
+        "route": "nature/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 0,
+        "transferred": 4354169,
+        "mainThreadTaskSeconds": 1.792207,
+        "scriptSeconds": 0.412576,
+        "layoutSeconds": 0.201259,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "nature/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 1,
+        "transferred": 4354169,
+        "mainThreadTaskSeconds": 1.605139,
+        "scriptSeconds": 0.34178,
+        "layoutSeconds": 0.127716,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "nature/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 2,
+        "transferred": 4354169,
+        "mainThreadTaskSeconds": 1.475433,
+        "scriptSeconds": 0.321373,
+        "layoutSeconds": 0.11561,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "population/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 0,
+        "transferred": 5214528,
+        "mainThreadTaskSeconds": 1.91762,
+        "scriptSeconds": 0.382061,
+        "layoutSeconds": 0.131661,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "population/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 1,
+        "transferred": 5214528,
+        "mainThreadTaskSeconds": 1.981888,
+        "scriptSeconds": 0.357196,
+        "layoutSeconds": 0.131806,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "population/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 2,
+        "transferred": 5214528,
+        "mainThreadTaskSeconds": 1.847511,
+        "scriptSeconds": 0.357105,
+        "layoutSeconds": 0.117429,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "agriculture/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 0,
+        "transferred": 4443996,
+        "mainThreadTaskSeconds": 1.822168,
+        "scriptSeconds": 0.251009,
+        "layoutSeconds": 0.228917,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "agriculture/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 1,
+        "transferred": 4443996,
+        "mainThreadTaskSeconds": 1.821432,
+        "scriptSeconds": 0.211576,
+        "layoutSeconds": 0.223372,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "agriculture/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 2,
+        "transferred": 4443996,
+        "mainThreadTaskSeconds": 1.654911,
+        "scriptSeconds": 0.245446,
+        "layoutSeconds": 0.186775,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "mexico/population/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 0,
+        "transferred": 10355455,
+        "mainThreadTaskSeconds": 0.485335,
+        "scriptSeconds": 0.061984,
+        "layoutSeconds": 0.114601,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/mexico-population-v1/density.svg",
+            "encoded": 3159467
+          }
+        ]
+      },
+      {
+        "route": "mexico/population/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 1,
+        "transferred": 10355455,
+        "mainThreadTaskSeconds": 0.653971,
+        "scriptSeconds": 0.079569,
+        "layoutSeconds": 0.231461,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/mexico-population-v1/density.svg",
+            "encoded": 3159467
+          }
+        ]
+      },
+      {
+        "route": "mexico/population/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 2,
+        "transferred": 10355455,
+        "mainThreadTaskSeconds": 0.562415,
+        "scriptSeconds": 0.076409,
+        "layoutSeconds": 0.119194,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/mexico-population-v1/density.svg",
+            "encoded": 3159467
+          }
+        ]
+      },
+      {
+        "route": "mexico/population/?view=density",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 0,
+        "transferred": 10023562,
+        "mainThreadTaskSeconds": 0.393879,
+        "scriptSeconds": 0.023366,
+        "layoutSeconds": 0.112636,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/mexico-population-v1/density.svg",
+            "encoded": 3159467
+          }
+        ]
+      },
+      {
+        "route": "mexico/population/?view=density",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 1,
+        "transferred": 10023562,
+        "mainThreadTaskSeconds": 0.473204,
+        "scriptSeconds": 0.028346,
+        "layoutSeconds": 0.112249,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/mexico-population-v1/density.svg",
+            "encoded": 3159467
+          }
+        ]
+      },
+      {
+        "route": "mexico/population/?view=density",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 2,
+        "transferred": 10023562,
+        "mainThreadTaskSeconds": 0.425983,
+        "scriptSeconds": 0.02992,
+        "layoutSeconds": 0.100874,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/mexico-population-v1/density.svg",
+            "encoded": 3159467
+          }
+        ]
+      },
+      {
+        "route": "nature/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 0,
+        "transferred": 4354169,
+        "mainThreadTaskSeconds": 1.53019,
+        "scriptSeconds": 0.313632,
+        "layoutSeconds": 0.157922,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "nature/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 1,
+        "transferred": 4354169,
+        "mainThreadTaskSeconds": 1.506383,
+        "scriptSeconds": 0.292923,
+        "layoutSeconds": 0.105227,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "nature/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 2,
+        "transferred": 4354169,
+        "mainThreadTaskSeconds": 1.48701,
+        "scriptSeconds": 0.282681,
+        "layoutSeconds": 0.126038,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "population/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 0,
+        "transferred": 5214528,
+        "mainThreadTaskSeconds": 1.669072,
+        "scriptSeconds": 0.263994,
+        "layoutSeconds": 0.123625,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "population/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 1,
+        "transferred": 5214528,
+        "mainThreadTaskSeconds": 1.721191,
+        "scriptSeconds": 0.254601,
+        "layoutSeconds": 0.121721,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "population/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 2,
+        "transferred": 5214528,
+        "mainThreadTaskSeconds": 1.650318,
+        "scriptSeconds": 0.244729,
+        "layoutSeconds": 0.113968,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "agriculture/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 0,
+        "transferred": 4443996,
+        "mainThreadTaskSeconds": 1.653072,
+        "scriptSeconds": 0.190333,
+        "layoutSeconds": 0.178879,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "agriculture/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 1,
+        "transferred": 4443996,
+        "mainThreadTaskSeconds": 1.839638,
+        "scriptSeconds": 0.203538,
+        "layoutSeconds": 0.204042,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "agriculture/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 2,
+        "transferred": 4443996,
+        "mainThreadTaskSeconds": 1.688666,
+        "scriptSeconds": 0.204557,
+        "layoutSeconds": 0.191536,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "mexico/population/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 0,
+        "transferred": 10355455,
+        "mainThreadTaskSeconds": 0.478057,
+        "scriptSeconds": 0.069382,
+        "layoutSeconds": 0.100255,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/mexico-population-v1/density.svg",
+            "encoded": 3159467
+          }
+        ]
+      },
+      {
+        "route": "mexico/population/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 1,
+        "transferred": 10355455,
+        "mainThreadTaskSeconds": 0.514082,
+        "scriptSeconds": 0.072809,
+        "layoutSeconds": 0.105182,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/mexico-population-v1/density.svg",
+            "encoded": 3159467
+          }
+        ]
+      },
+      {
+        "route": "mexico/population/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 2,
+        "transferred": 10355455,
+        "mainThreadTaskSeconds": 0.555582,
+        "scriptSeconds": 0.064476,
+        "layoutSeconds": 0.121223,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/mexico-population-v1/density.svg",
+            "encoded": 3159467
+          }
+        ]
+      },
+      {
+        "route": "mexico/population/?view=density",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 0,
+        "transferred": 10023562,
+        "mainThreadTaskSeconds": 0.406431,
+        "scriptSeconds": 0.026606,
+        "layoutSeconds": 0.107806,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/mexico-population-v1/density.svg",
+            "encoded": 3159467
+          }
+        ]
+      },
+      {
+        "route": "mexico/population/?view=density",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 1,
+        "transferred": 10023562,
+        "mainThreadTaskSeconds": 0.383682,
+        "scriptSeconds": 0.019961,
+        "layoutSeconds": 0.094607,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/mexico-population-v1/density.svg",
+            "encoded": 3159467
+          }
+        ]
+      },
+      {
+        "route": "mexico/population/?view=density",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 2,
+        "transferred": 10023562,
+        "mainThreadTaskSeconds": 0.379476,
+        "scriptSeconds": 0.021586,
+        "layoutSeconds": 0.090841,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/mexico-population-v1/density.svg",
+            "encoded": 3159467
+          }
+        ]
+      }
+    ],
+    "after": [
+      {
+        "route": "nature/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 0,
+        "transferred": 4210168,
+        "mainThreadTaskSeconds": 1.503568,
+        "scriptSeconds": 0.363071,
+        "layoutSeconds": 0.242375,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "nature/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 1,
+        "transferred": 4210168,
+        "mainThreadTaskSeconds": 1.347813,
+        "scriptSeconds": 0.293839,
+        "layoutSeconds": 0.107089,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "nature/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 2,
+        "transferred": 4210168,
+        "mainThreadTaskSeconds": 1.406103,
+        "scriptSeconds": 0.339487,
+        "layoutSeconds": 0.12647,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "population/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 0,
+        "transferred": 5070527,
+        "mainThreadTaskSeconds": 1.877451,
+        "scriptSeconds": 0.359699,
+        "layoutSeconds": 0.132271,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "population/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 1,
+        "transferred": 5070527,
+        "mainThreadTaskSeconds": 1.78364,
+        "scriptSeconds": 0.329635,
+        "layoutSeconds": 0.142081,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "population/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 2,
+        "transferred": 5070527,
+        "mainThreadTaskSeconds": 1.798239,
+        "scriptSeconds": 0.374875,
+        "layoutSeconds": 0.108872,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "agriculture/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 0,
+        "transferred": 4445357,
+        "mainThreadTaskSeconds": 2.043616,
+        "scriptSeconds": 0.273807,
+        "layoutSeconds": 0.239884,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "agriculture/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 1,
+        "transferred": 4445357,
+        "mainThreadTaskSeconds": 1.908473,
+        "scriptSeconds": 0.222543,
+        "layoutSeconds": 0.2253,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "agriculture/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 2,
+        "transferred": 4445357,
+        "mainThreadTaskSeconds": 1.984388,
+        "scriptSeconds": 0.281999,
+        "layoutSeconds": 0.237515,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "mexico/population/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 0,
+        "transferred": 4044861,
+        "mainThreadTaskSeconds": 0.47055,
+        "scriptSeconds": 0.101026,
+        "layoutSeconds": 0.124329,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "mexico/population/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 1,
+        "transferred": 4044861,
+        "mainThreadTaskSeconds": 0.487284,
+        "scriptSeconds": 0.095202,
+        "layoutSeconds": 0.133254,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "mexico/population/",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 2,
+        "transferred": 4044861,
+        "mainThreadTaskSeconds": 0.431865,
+        "scriptSeconds": 0.074913,
+        "layoutSeconds": 0.115478,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "mexico/population/?view=density",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 0,
+        "transferred": 3712968,
+        "mainThreadTaskSeconds": 0.349561,
+        "scriptSeconds": 0.025049,
+        "layoutSeconds": 0.102235,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "mexico/population/?view=density",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 1,
+        "transferred": 3712968,
+        "mainThreadTaskSeconds": 0.316223,
+        "scriptSeconds": 0.023735,
+        "layoutSeconds": 0.102393,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "mexico/population/?view=density",
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "dpr": 1,
+        "repeat": 2,
+        "transferred": 3712968,
+        "mainThreadTaskSeconds": 0.317922,
+        "scriptSeconds": 0.033569,
+        "layoutSeconds": 0.101186,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "nature/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 0,
+        "transferred": 4210168,
+        "mainThreadTaskSeconds": 1.478958,
+        "scriptSeconds": 0.29041,
+        "layoutSeconds": 0.164682,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "nature/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 1,
+        "transferred": 4210168,
+        "mainThreadTaskSeconds": 1.291255,
+        "scriptSeconds": 0.255487,
+        "layoutSeconds": 0.11317,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "nature/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 2,
+        "transferred": 4210168,
+        "mainThreadTaskSeconds": 1.393657,
+        "scriptSeconds": 0.273368,
+        "layoutSeconds": 0.125388,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "population/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 0,
+        "transferred": 5070527,
+        "mainThreadTaskSeconds": 1.756966,
+        "scriptSeconds": 0.297197,
+        "layoutSeconds": 0.129564,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "population/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 1,
+        "transferred": 5070527,
+        "mainThreadTaskSeconds": 1.637648,
+        "scriptSeconds": 0.261553,
+        "layoutSeconds": 0.112362,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "population/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 2,
+        "transferred": 5070527,
+        "mainThreadTaskSeconds": 1.669946,
+        "scriptSeconds": 0.289285,
+        "layoutSeconds": 0.119618,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "agriculture/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 0,
+        "transferred": 4445357,
+        "mainThreadTaskSeconds": 2.07355,
+        "scriptSeconds": 0.235146,
+        "layoutSeconds": 0.243583,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "agriculture/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 1,
+        "transferred": 4445357,
+        "mainThreadTaskSeconds": 1.90279,
+        "scriptSeconds": 0.218516,
+        "layoutSeconds": 0.199379,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "agriculture/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 2,
+        "transferred": 4445357,
+        "mainThreadTaskSeconds": 1.97629,
+        "scriptSeconds": 0.214357,
+        "layoutSeconds": 0.239436,
+        "errors": [],
+        "selectedAssets": [
+          {
+            "url": "/insight-journal/assets/atlas/v3/agriculture.geojson",
+            "encoded": 142114
+          },
+          {
+            "url": "/insight-journal/assets/atlas/v3/crop-labels.json",
+            "encoded": 2846
+          }
+        ]
+      },
+      {
+        "route": "mexico/population/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 0,
+        "transferred": 4044861,
+        "mainThreadTaskSeconds": 0.389295,
+        "scriptSeconds": 0.063835,
+        "layoutSeconds": 0.090848,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "mexico/population/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 1,
+        "transferred": 4044861,
+        "mainThreadTaskSeconds": 0.354651,
+        "scriptSeconds": 0.06195,
+        "layoutSeconds": 0.085535,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "mexico/population/",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 2,
+        "transferred": 4044861,
+        "mainThreadTaskSeconds": 0.35708,
+        "scriptSeconds": 0.06324,
+        "layoutSeconds": 0.089137,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "mexico/population/?view=density",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 0,
+        "transferred": 3712968,
+        "mainThreadTaskSeconds": 0.278994,
+        "scriptSeconds": 0.032901,
+        "layoutSeconds": 0.071234,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "mexico/population/?view=density",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 1,
+        "transferred": 3712968,
+        "mainThreadTaskSeconds": 0.2979,
+        "scriptSeconds": 0.025162,
+        "layoutSeconds": 0.08768,
+        "errors": [],
+        "selectedAssets": []
+      },
+      {
+        "route": "mexico/population/?view=density",
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "dpr": 1.5,
+        "repeat": 2,
+        "transferred": 3712968,
+        "mainThreadTaskSeconds": 0.315805,
+        "scriptSeconds": 0.023144,
+        "layoutSeconds": 0.109158,
+        "errors": [],
+        "selectedAssets": []
+      }
+    ]
+  },
+  "checks": {
+    "before": [
+      {
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "name": "nature-crop",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "name": "agriculture-product",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "name": "agriculture-relation",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "name": "mexico-selected",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "name": "mexico-religion",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "name": "mexico-isolated",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "name": "mexico-static",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "name": "canada-elevation",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "name": "Mexico without JavaScript and print",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "name": "nature-crop",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "name": "agriculture-product",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "name": "agriculture-relation",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "name": "mexico-selected",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "name": "mexico-religion",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "name": "mexico-isolated",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "name": "mexico-static",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "name": "canada-elevation",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "name": "Mexico without JavaScript and print",
+        "status": "passed"
+      }
+    ],
+    "after": [
+      {
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "name": "nature-crop",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "name": "agriculture-product",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "name": "agriculture-relation",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "name": "mexico-selected",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "name": "mexico-religion",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "name": "mexico-isolated",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "name": "mexico-static",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "name": "canada-elevation",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "name": "Delayed agriculture tab round trip, camera, browser back/forward, error and retry",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1896,
+          "height": 996,
+          "dpr": 1
+        },
+        "name": "Mexico without JavaScript and print",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "name": "nature-crop",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "name": "agriculture-product",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "name": "agriculture-relation",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "name": "mexico-selected",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "name": "mexico-religion",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "name": "mexico-isolated",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "name": "mexico-static",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "name": "canada-elevation",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "name": "Delayed agriculture tab round trip, camera, browser back/forward, error and retry",
+        "status": "passed"
+      },
+      {
+        "size": {
+          "width": 1280,
+          "height": 665,
+          "dpr": 1.5
+        },
+        "name": "Mexico without JavaScript and print",
+        "status": "passed"
+      }
+    ]
+  },
+  "canada": {
+    "conditions": "Cloud Chromium, sandbox enabled, actual 5460×7515 PNG, no throttling; full reference RGBA retained only in this test",
+    "runs": [
+      {
+        "repeat": 0,
+        "implementation": "before",
+        "firstHitMs": 138.5,
+        "batchMs": 328.20000000001164,
+        "points": 28908,
+        "classes": 14,
+        "mismatches": 0,
+        "dimensions": [
+          [
+            5460,
+            7515
+          ]
+        ]
+      },
+      {
+        "repeat": 0,
+        "implementation": "after",
+        "firstHitMs": 0.40000000002328306,
+        "batchMs": 718.5999999999767,
+        "points": 28908,
+        "classes": 14,
+        "mismatches": 0,
+        "dimensions": [
+          [
+            1,
+            1
+          ]
+        ]
+      },
+      {
+        "repeat": 1,
+        "implementation": "before",
+        "firstHitMs": 133.29999999998836,
+        "batchMs": 293.20000000001164,
+        "points": 28908,
+        "classes": 14,
+        "mismatches": 0,
+        "dimensions": [
+          [
+            5460,
+            7515
+          ]
+        ]
+      },
+      {
+        "repeat": 1,
+        "implementation": "after",
+        "firstHitMs": 0.5,
+        "batchMs": 343.0999999999767,
+        "points": 28908,
+        "classes": 14,
+        "mismatches": 0,
+        "dimensions": [
+          [
+            1,
+            1
+          ]
+        ]
+      },
+      {
+        "repeat": 2,
+        "implementation": "before",
+        "firstHitMs": 70,
+        "batchMs": 131.19999999995343,
+        "points": 28908,
+        "classes": 14,
+        "mismatches": 0,
+        "dimensions": [
+          [
+            5460,
+            7515
+          ]
+        ]
+      },
+      {
+        "repeat": 2,
+        "implementation": "after",
+        "firstHitMs": 0.5,
+        "batchMs": 271,
+        "points": 28908,
+        "classes": 14,
+        "mismatches": 0,
+        "dimensions": [
+          [
+            1,
+            1
+          ]
+        ]
+      }
+    ],
+    "status": "passed"
+  }
+}
