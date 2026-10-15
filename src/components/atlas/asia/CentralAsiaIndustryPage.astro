@@ -29,7 +29,7 @@ const config={label:'中央アジア',regionId:'south-central-asia',focusId:'cen
   </div>
   <nav class="atlas-tabs atlas-tabs-with-overview" aria-label="地図の分野"><a href={withBase('/atlas/asia/central-asia/overview/')} data-atlas-overview-link>概要</a>{fields.map(field=><a href={withBase(`/atlas/asia/central-asia/${field.path}/`)} data-field={field.id} aria-current={field.id==='industry'?'page':undefined}>{field.label}</a>)}</nav>
   <nav class="central-sector-tabs" role="tablist" aria-label="主要産業の三分類">{centralIndustrySectors.map(sector=><button type="button" role="tab" data-central-sector={sector.id} id={`central-sector-${sector.id}`} aria-selected={String(sector.id==='resources')} tabindex={sector.id==='resources'?0:-1} aria-controls="central-industry-panel">{sector.label}</button>)}</nav>
-  <div class="central-industry-choices" aria-label="産業を選ぶ">{centralIndustrySectors.map(sector=><div data-central-choices={sector.id} hidden={sector.id!=='resources'}><button type="button" data-central-overview={sector.id} aria-pressed="true">分布全体</button>{centralIndustries.filter(industry=>industry.sectors.includes(sector.id)).map(industry=><button type="button" data-central-choice={industry.id} data-owner-sector={sector.id} aria-pressed="false" style={`--industry-color:${industry.color}`}><i aria-hidden="true"/>{industry.label}</button>)}</div>)}</div>
+  <details class="central-industry-choices" data-central-product-menu><summary>産業を選ぶ</summary>{centralIndustrySectors.map(sector=><div data-central-choices={sector.id} hidden={sector.id!=='resources'}><button type="button" data-central-overview={sector.id} aria-pressed="true">分布全体</button>{centralIndustries.filter(industry=>industry.sectors.includes(sector.id)).map(industry=><button type="button" data-central-choice={industry.id} data-owner-sector={sector.id} aria-pressed="false" style={`--industry-color:${industry.color}`}><i aria-hidden="true"/>{industry.label}</button>)}</div>)}</details>
   <div class="central-primary-grid atlas-primary-grid" id="central-industry-panel" role="tabpanel" aria-labelledby="central-sector-resources">
    <section class="atlas-map-column" aria-label="産業名を主役にした集積図">
     <div class="atlas-map-frame central-map-frame" data-central-map-frame>
@@ -42,8 +42,8 @@ const config={label:'中央アジア',regionId:'south-central-asia',focusId:'cen
      <div class="central-map-labels" data-central-labels></div>
      <nav class="central-map-tools" aria-label="地図の範囲"><button type="button" data-central-fit aria-label="中央アジア5か国の全景">全景</button><button type="button" data-central-zoom-in aria-label="地図を拡大">＋</button><button type="button" data-central-zoom-out aria-label="地図を縮小">−</button></nav>
     </div>
-    <p class="central-map-key"><span>● 採掘・発電・サービス　■ 加工　□ 州の加工集積</span><span>点の大きさは数量を表しません。引出線は産業名との対応で、取引・輸送経路ではありません。</span><span>破線の点：一部稼働・建設中</span></p>
-    <p class="central-label-note" data-central-label-note hidden>細部の産業名は、拡大または下の「集積と工程の一覧」でも確認できます。</p>
+    <p class="central-map-key"><span data-central-map-key-sector="resources">● 採掘・発電　■ 鉱産物加工　破線：一部稼働・建設中</span><span data-central-map-key-sector="manufacturing" hidden>■ 金属加工　□ 繊維・製粉の州集積</span><span data-central-map-key-sector="services" hidden>● 物流の接続・旅行サービス</span><span>小点は確認した操業・集積の案内位置。短い線は注記との対応を示します。</span></p>
+    <p class="central-label-note" data-central-label-note hidden>表示幅に応じて一部の注記を省略しています。すべての拠点は下の一覧から読めます。</p>
     <div class="central-map-caption" data-central-map-caption>中央アジア5か国 · 確認した産業集積・操業地域</div>
    </section>
    <aside class="central-reading" aria-label="産業分布の概説と立地の理由">
@@ -53,7 +53,7 @@ const config={label:'中央アジア',regionId:'south-central-asia',focusId:'cen
     <section class="central-selected-site" data-central-site-reading hidden><h3 data-central-site-title></h3><p data-central-site-note></p><p class="central-site-status" data-central-site-status></p><div data-central-site-sources></div></section>
     <section data-central-process hidden><h3>工程と市場</h3><p data-central-process-copy></p><p class="central-scope-note" data-central-limits></p></section>
     <div class="central-selection-actions"><button type="button" data-central-clear hidden>選択を解除</button><label data-central-only-wrap hidden><input type="checkbox" data-central-only />この産業だけ表示</label><button type="button" data-central-overlap hidden></button></div>
-    <p class="central-scope-note">銅・クロムの加工拠点は資源と製造の両方で読みます。表示を重ねても統計は加算しません。</p>
+    <p class="central-scope-note">銅とクロムの資源地図では採掘と関連する金属加工を区別し、製造地図では加工の仕事を示します。共有する加工地点の統計を重ねて加算しません。</p>
     <p class="central-reading-links"><a href="#central-industry-statistics">統計・集積の量へ</a><a href="#central-industry-locations">集積と工程の一覧</a></p>
    </aside>
   </div>

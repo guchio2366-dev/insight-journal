@@ -1,0 +1,30 @@
+---
+import {type AdoptedSector,adoptedSectors} from '../../lib/atlas-mexico-industry-adopted';
+import data from '../../data/atlas/mexico/industry.json';
+import {stateFeatures,geometryPath} from '../../lib/atlas-mexico-geometry';
+import {withBase} from '../../lib/urls';
+interface Props {sector:AdoptedSector}
+const {sector}=Astro.props;
+const label=adoptedSectors.find(s=>s.id===sector)!.label;
+---
+<section class="ma-sector-map" data-ma-sector-map={sector} id={`ma-sector-map-${sector}`} hidden={sector!=='resources'} aria-label={`${label}だけの地図`}>
+ <div class="ma-map-frame" data-ma-frame>
+  <svg data-ma-map data-ma-map-sector={sector} class="ma-map" viewBox="0 0 900 580" role="group" tabindex="0" aria-labelledby={`ma-${sector}-title ma-${sector}-description`}>
+   <title id={`ma-${sector}-title`} data-ma-map-title>メキシコの{label}の集積地域</title>
+   <desc id={`ma-${sector}-description`} data-ma-map-description>この分野の資料で確認した州の案内点。施設の位置や点の大きさによる数量ではありません。</desc>
+   <defs>
+    <pattern id={`ma-${sector}-confidential`} width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" fill="#e3e5df"/><path d="M0,9L9,0M-3,3L3,-3M6,12L12,6" stroke="#7b877c"/></pattern>
+    <pattern id={`ma-${sector}-unknown`} width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="#f4f4ec"/><circle cx="3" cy="3" r="1.2" fill="#839487"/></pattern>
+    <pattern id={`ma-${sector}-unretrieved`} width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="#eee9dd"/><path d="M2,2L8,8M8,2L2,8" stroke="#9b9279"/></pattern>
+   </defs>
+   <image href={withBase('/assets/atlas/mexico-nature-v1/relief.svg')} width="900" height="580" opacity=".25" aria-hidden="true"/>
+   {stateFeatures.map(feature=>{const state=data.states.find(s=>s.id===feature.properties.code)!;return <path data-ma-state={state.id} d={geometryPath(feature.geometry)} fill="#e6e9dc" stroke="#899d8f" stroke-width=".75" vector-effect="non-scaling-stroke" fill-rule="evenodd" role="button" tabindex="0" aria-pressed="false" aria-label={`${state.name}の地域を選ぶ`}><title>{state.name}の地域案内</title></path>;})}
+  </svg>
+  <div class="ma-labels" data-ma-labels></div>
+ </div>
+ <p class="ma-map-caption" data-ma-map-caption>短いラベルは近接州の産業例、点は資料で確認した州の案内位置です。</p>
+ <p class="ma-map-method" data-ma-label-note hidden></p>
+ <div class="ma-legend" data-ma-legend hidden aria-label={`${label}の州の色の意味`}></div>
+ <p class="ma-map-method" data-ma-map-definition>地域ラベルは表示のための集約で、統計の集計区域や個別施設の位置を表しません。</p>
+ <div class="ma-map-sources" data-ma-map-sources></div>
+</section>

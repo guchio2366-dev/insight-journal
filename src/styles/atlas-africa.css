@@ -679,6 +679,9 @@
 .africa-industry-reading button,.africa-atlas[data-field=industry] [data-africa-layer-legend] button{border:1px solid #becbc5;border-radius:4px;padding:6px 8px;background:#fffdf8;color:#263e45;font:inherit;cursor:pointer}
 .africa-atlas[data-field=industry] [data-africa-layer-legend] button[aria-pressed=true],.africa-industry-reading button[aria-pressed=true]{border-color:#224c59;box-shadow:inset 0 0 0 1px #224c59}
 .africa-atlas[data-field=industry] [data-africa-layer-legend] button i{display:inline-block;width:10px;height:10px;margin-right:5px}
+.africa-atlas[data-field=industry] [data-africa-industry-legend]{width:100%}
+.africa-atlas[data-field=industry] [data-africa-industry-legend] summary{cursor:pointer;font-weight:700;color:#29464c;padding:3px 0}
+.africa-atlas[data-field=industry] [data-africa-industry-legend]>div{display:flex;flex-wrap:wrap;gap:6px;padding:8px 0 2px}
 .africa-industry-hit:focus-visible rect,.africa-industry-hit:focus-visible text{stroke:#bc5c35;stroke-width:3px}
 @media(min-width:960px){.africa-atlas[data-field=industry] .africa-country-controls{display:none}.africa-atlas[data-field=industry] .africa-main>.africa-subfields{height:auto;min-height:74px}.africa-atlas[data-field=industry] .africa-map-tools{display:none}}
 
@@ -717,4 +720,6 @@
 .africa-industry-stat-card small{margin-left:8px;color:#5d665f}
 @media(max-width:1050px){.africa-industry-stat-overview{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.africa-industry-stat-grid,.africa-industry-stat-overview{grid-template-columns:minmax(0,1fr)}.africa-industry-statistics{padding:12px}}
-@media(min-width:1200px){.africa-atlas[data-field=industry] .africa-map-frame{height:clamp(620px,calc(100dvh - 320px),760px);min-height:620px}.africa-atlas[data-field=industry] .africa-map-frame>.africa-map{height:100%;min-height:0;max-height:none}}
+@media(min-width:1200px){.africa-atlas[data-field=industry] .africa-map-frame{height:clamp(330px,calc(100dvh - 300px),760px);min-height:330px}.africa-atlas[data-field=industry] .africa-map-frame>.africa-map{height:100%;min-height:0;max-height:none}}
+
+[data-africa-general-map-frame][hidden],[data-africa-industry-map-frame][hidden]{display:none!important}

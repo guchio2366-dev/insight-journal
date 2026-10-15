@@ -1,0 +1,18 @@
+---
+import geography from '../../data/atlas/africa-geography.json';
+import {africaIndustrySectors} from '../../data/atlas/africa-industry-sectors';
+import {africaPath,projectAfrica,africaWidth,africaHeight} from '../../lib/atlas-africa-geometry';
+---
+{africaIndustrySectors.map(sector=><section class="africa-map-frame" data-africa-industry-map-frame={sector.id} id={`africa-industry-map-${sector.id}`} role="tabpanel" aria-labelledby={`africa-industry-tab-${sector.id}`} hidden>
+ <div class="africa-map-heading"><h2 data-metric-title>{sector.label}の分布</h2><span><span data-period>資料別年</span> · <span data-unit>代表位置</span></span></div>
+ <svg class="africa-map" viewBox={`0 0 ${africaWidth} ${africaHeight}`} role="group" aria-labelledby={`africa-industry-svg-title-${sector.id} africa-industry-svg-desc-${sector.id}`}>
+  <title id={`africa-industry-svg-title-${sector.id}`} data-africa-svg-title>{sector.label}の分布</title>
+  <desc id={`africa-industry-svg-desc-${sector.id}`} data-africa-svg-desc>この分野の代表位置と産業名。規模・時期・出典は地図の外で読めます。</desc>
+  <rect width={africaWidth} height={africaHeight} fill="#e9f0f0" pointer-events="none" data-africa-map-background/>
+  {[-20,0,20].map(lat=><line x1="0" x2={africaWidth} y1={projectAfrica([0,lat])[1]} y2={projectAfrica([0,lat])[1]} class="africa-graticule"/>)}
+  {geography.features.map(feature=><path d={africaPath(feature.geometry)} data-africa-industry-country={feature.properties.code} fill="#f0efe3" fill-rule="evenodd" class="africa-country"/>)}
+  <g data-africa-actual-layer></g><g data-africa-comparison-layer></g><g data-symbols></g>
+  {[{name:'大西洋',point:[-18,-12]},{name:'インド洋',point:[56,-8]},{name:'地中海',point:[18,36]}].map(label=><text class="africa-ocean" x={projectAfrica(label.point)[0]} y={projectAfrica(label.point)[1]}>{label.name}</text>)}
+  <g data-theme-marks></g>
+ </svg>
+</section>)}

@@ -44,10 +44,11 @@ test('西アジアのPC実画面で21産業・地域説明・欠測・選択・�
    assert((await page.locator('[data-wi-summary]').innerText()).includes('ペルシャ湾'));
    assert.equal(await page.locator('[data-wi-stat-panel]').count(),21);
    const frame=await page.locator('[data-wi-map]').getAttribute('viewBox');
-   const labelPositions=()=>page.locator('[data-wi-label]').evaluateAll(nodes=>Object.fromEntries(nodes.map(n=>[n.dataset.wiLabel,[n.style.left,n.style.top,n.style.width,n.style.height]])));
+   const labelPositions=()=>page.locator('[data-wi-annotation]').evaluateAll(nodes=>Object.fromEntries(nodes.map(n=>[n.dataset.wiAnnotation,[n.style.left,n.style.top,n.style.width,n.style.height]])));
    const stableLabels=await labelPositions();
    await shot('resources-overview');
-   await page.locator('[data-wi-label=lng]').click();
+   if(!await page.locator('[data-wi-product-menu]').evaluate(node=>node.open))await page.locator('[data-wi-product-menu] > summary').click();
+   await page.locator('[data-wi-picker=resources] [data-wi-industry=lng]').click();
    assert.deepEqual(await labelPositions(),stableLabels);
    await page.locator('[data-wi-country]').selectOption('QAT');
    assert((await page.locator('[data-wi-ranking=lng]').innerText()).includes('81.51'));
@@ -59,7 +60,8 @@ test('西アジアのPC実画面で21産業・地域説明・欠測・選択・�
    assert.equal(await page.locator('[data-wi-country]').inputValue(),'IRN');
    await page.locator('[data-wi-country]').selectOption('');
    await page.locator('[data-wi-sector=manufacturing]').click();
-   await page.locator('[data-wi-label=polymers]').click();
+   if(!await page.locator('[data-wi-product-menu]').evaluate(node=>node.open))await page.locator('[data-wi-product-menu] > summary').click();
+   await page.locator('[data-wi-picker=manufacturing] [data-wi-industry=polymers]').click();
    await page.locator('[data-wi-point=polymers]').first().press('Enter');
    assert((await page.locator('[data-wi-place-reading]').innerText()).includes('石化製造'));
    await shot('polymers-place');

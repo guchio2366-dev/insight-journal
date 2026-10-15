@@ -1,4 +1,4 @@
-import {centralIndustries,centralIndustrySites,centralIndustryCountries,centralIndustryMetric,type CentralIndustryId,type CentralIndustrySector,type CentralCountry,type CentralSite} from '../data/atlas/central-asia-industry.ts';
+import {centralIndustries,centralIndustrySites,centralIndustryCountries,type CentralIndustryId,type CentralIndustrySector,type CentralCountry,type CentralSite} from '../data/atlas/central-asia-industry.ts';
 
 export type CentralIndustryState={sector:CentralIndustrySector;industry:CentralIndustryId|null;site:string|null;only:boolean;country:CentralCountry|null;frame:number[]|null};
 // Local equirectangular projection with a 44°N standard parallel, shared by
@@ -39,10 +39,37 @@ export function zoomCentralIndustryFrame(frame:number[],factor:number):number[]{
  return [frame[0]+(frame[2]-width)/2,frame[1]+(frame[3]-height)/2,width,height];
 }
 export type CentralLabelPoint={site:CentralSite;point:number[]};
+export function centralIndustryStageReading(id:CentralIndustryId,sector:CentralIndustrySector){
+ const item=centralIndustries.find(item=>item.id===id)!;
+ if(id==='copper')return sector==='resources'
+  ?{label:'銅鉱業',title:'銅の採掘・選鉱と製錬',overview:'銅の採掘・選鉱はボズシャコル・アクトガイ、金属加工はジェズカズガン・バルハシ・アルマリクに分布し、鉱床と加工設備の立地が鉱石から金属までの工程を支えます。'}
+  :{label:'銅製錬',title:'銅の製錬・精製',overview:'ジェズカズガン・バルハシ・アルマリクに銅の加工設備が分布し、鉱石・精鉱の供給、電力と輸送の接続を利用して金属銅をつくります。'};
+ if(id==='chromium')return sector==='resources'
+  ?{label:'クロム',title:'クロム鉱業とフェロクロム製錬',overview:'フロムタウのクロム鉱床と、アクトベ・アクスの製錬設備が、自社原料と電力を利用するフェロクロム生産の基盤になります。'}
+  :{label:'フェロクロム',title:'フェロクロム製錬',overview:'アクトベとアクスの製錬設備が、クロム鉱石と電力を組み合わせてステンレス鋼向けフェロクロムを生産します。'};
+ return {label:item.shortLabel,title:item.label,overview:item.overview};
+}
+export function centralIndustryAnnotationLabel(site:CentralSite,sector:CentralIndustrySector):string{
+ if(site.industry==='copper')return site.kind==='processing'?'銅製錬':'銅採掘';
+ if(site.industry==='chromium')return site.kind==='processing'?'フェロクロム':'クロム鉱';
+ if(site.industry==='tourism')return site.stage==='交通・旅行手配'?'旅行手配':'文化観光';
+ return centralIndustryStageReading(site.industry,sector).label;
+}
+export function centralIndustryGroupPlace(points:CentralLabelPoint[]):string{
+ const ids=new Set(points.map(point=>point.site.id));
+ const valley=['sc-fergana-cotton','central-andijan-textiles','central-namangan-textiles'];
+ if(valley.every(id=>ids.has(id)))return ids.has('central-tashkent-clothing')?'フェルガナ盆地・タシケント':points.length===3?'フェルガナ盆地':'フェルガナ盆地ほか';
+ if(['central-samarkand-tourism','central-bukhara-tourism','central-khiva-tourism'].every(id=>ids.has(id)))return 'サマルカンド・ブハラ等';
+ const shortPlace=(place:string)=>place.replace('アルティンコリ／ホルゴス','ホルゴス');
+ if(points.length===1)return shortPlace(points[0].site.place);
+ if(points.length===2)return points.map(point=>shortPlace(point.site.place).replace(/地区|港/g,'')).join('・');
+ return points[0].site.place.replace(/地区|港/g,'')+'ほか';
+}
 /** Geographic proximity only groups the same industry, never unrelated city functions. */
 export function groupCentralIndustryLabels(points:CentralLabelPoint[],diameter=86):CentralLabelPoint[][]{
  const groups:CentralLabelPoint[][]=[];
- const key=(site:CentralSite)=>{const metric=site.localMetric?centralIndustryMetric(site.localMetric):null;return site.industry+(site.kind==='regional'?'|'+(metric?metric.unit+'|'+metric.year:'without-quantity'):'');};
+ // These annotations contain no quantities: different periods are never summed.
+ const key=(site:CentralSite)=>site.industry+'|'+site.country+'|'+site.kind+(site.kind==='service'?'|'+site.stage:'');
  for(const point of [...points].sort((a,b)=>a.site.id.localeCompare(b.site.id))){
   const group=groups.find(g=>key(g[0].site)===key(point.site)&&g.every(p=>Math.hypot(p.point[0]-point.point[0],p.point[1]-point.point[1])<=diameter));
   if(group)group.push(point);else groups.push([point]);
@@ -50,11 +77,11 @@ export function groupCentralIndustryLabels(points:CentralLabelPoint[],diameter=8
  return groups.sort((a,b)=>b.length-a.length||a[0].site.id.localeCompare(b[0].site.id));
 }
 /** Deterministic allocation: no selected state, color or current-only filter is an input. */
-export function placeCentralIndustryLabel(points:number[][],size:number[],viewport:number[],occupied:number[][],maximumLeader=120):number[]|null{
+export function placeCentralIndustryLabel(points:number[][],size:number[],viewport:number[],occupied:number[][],maximumLeader=40):number[]|null{
  const [width,height]=size,[mapWidth,mapHeight]=viewport,x=points.reduce((n,p)=>n+p[0],0)/points.length,y=points.reduce((n,p)=>n+p[1],0)/points.length;
  if(width>mapWidth-12||height>mapHeight-12)return null;
  const offsets:number[][]=[];
- for(let dy=-210;dy<=210;dy+=6)for(let dx=-210;dx<=210;dx+=6)offsets.push([dx,dy]);
+ for(let dy=-84;dy<=84;dy+=3)for(let dx=-84;dx<=84;dx+=3)offsets.push([dx,dy]);
  offsets.sort((a,b)=>a[0]**2+a[1]**2-b[0]**2-b[1]**2||a[1]-b[1]||a[0]-b[0]);
  for(const [dx,dy]of offsets){
   const left=Math.max(6,Math.min(mapWidth-width-6,x+dx-width/2)),top=Math.max(6,Math.min(mapHeight-height-6,y+dy-height/2)),box=[left,top,left+width,top+height];
@@ -63,4 +90,26 @@ export function placeCentralIndustryLabel(points:number[][],size:number[],viewpo
   return box;
  }
  return null;
+}
+
+/** Pixel boxes are fixed before emphasis; DOM flow and selection never size them. */
+export function layoutCentralIndustryAnnotations(points:Parameters<typeof groupCentralIndustryLabels>[0],sector:CentralIndustrySector,viewport:number[],reserved:number[][]=[]){
+ const [width,height]=viewport,small=width<600,font=small?11:12,budget=small?7:14;
+ const groups=groupCentralIndustryLabels(points,small?76:92),first:typeof groups=[],rest:typeof groups=[];
+ for(const item of centralIndustries){
+  const matches=groups.filter(group=>group[0].site.industry===item.id);
+  const preferred=sector==='resources'?matches.find(group=>group[0].site.kind!=='processing')??matches[0]:matches[0];
+  if(preferred)first.push(preferred);rest.push(...matches.filter(group=>group!==preferred));
+ }
+ const occupied=[[width-130,0,width,48],...reserved,...points.map(({point:[x,y]})=>[x-6,y-6,x+6,y+6])],textWidth=(text:string,size:number)=>[...text].reduce((sum,char)=>sum+(/[\u0000-\u007f]/.test(char)?size*.65:size),0);
+ let named=0;
+ return [...first,...rest].map(group=>{
+  const title=centralIndustryAnnotationLabel(group[0].site,sector),place=centralIndustryGroupPlace(group),center=group.reduce((sum,row)=>[sum[0]+row.point[0]/group.length,sum[1]+row.point[1]/group.length],[0,0]);
+  const anchor=group.reduce((nearest,row)=>Math.hypot(row.point[0]-center[0],row.point[1]-center[1])<Math.hypot(nearest.point[0]-center[0],nearest.point[1]-center[1])?row:nearest,group[0]);
+  const titleWidth=Math.ceil(textWidth(title,font)+13),fullWidth=Math.min(158,Math.ceil(Math.max(titleWidth,textWidth(place,10)+4))),fullHeight=Math.ceil(font*1.25+12.5);
+  let compact=false,size=[fullWidth,fullHeight],box=named<budget?placeCentralIndustryLabel([anchor.point],size,viewport,occupied,40):null;
+  if(!box&&named<budget){compact=true;size=[titleWidth,Math.ceil(font*1.25)];box=placeCentralIndustryLabel([anchor.point],size,viewport,occupied,40);}
+  if(box){occupied.push(box);named++;}
+  return {group,anchor,title,place,font,compact,size,box};
+ });
 }

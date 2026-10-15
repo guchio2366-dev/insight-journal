@@ -1,25 +1,28 @@
 ---
 import {southeastIndustryKinds,southeastIndustrySectors,southeastIndustrySites} from '../../../data/atlas/asia/southeast-asia-industry-sites';
 import {southeastIndustryProfiles,southeastIndustrySources,southeastFigureValue,southeastIndustryEvidenceDate,southeastPalmProcessing} from '../../../data/atlas/asia/southeast-asia-industry-catalog';
+import {southeastSiteScaleNotes} from '../../../data/atlas/asia/southeast-industry-map-scenes';
 import '../../../styles/atlas-southeast-industry.css';
 const columns=[['scale','産業の規模'],['position','世界の供給・調達での位置'],['market','域内・域外の市場と用途']] as const;
 ---
 <div data-southeast-industry-controls class="sea-industry-controls" hidden>
- <nav class="southeast-industry-sectors" aria-label="産業の三分類">{southeastIndustrySectors.map(sector=><button type="button" data-southeast-industry-sector={sector.id} aria-pressed={String(sector.id==='all')}>{sector.label}</button>)}</nav>
- <nav class="southeast-industry-choices" aria-label="主要産業を選ぶ">{southeastIndustryKinds.map(kind=><button type="button" data-southeast-industry-kind={kind.id} aria-pressed={String(kind.id==='all')}>{kind.label}</button>)}</nav>
+ <nav class="southeast-industry-sectors" aria-label="産業の分野別地図">{southeastIndustrySectors.map(sector=><button type="button" data-southeast-industry-sector={sector.id} aria-pressed={String(sector.id==='resource')}>{sector.label}</button>)}</nav>
+ <label class="southeast-industry-choices">この分野の産業<select data-southeast-industry-picker>{southeastIndustryKinds.map(kind=><option value={kind.id}>{kind.label}</option>)}</select></label>
 </div>
 <section data-industry-region-reading class="sea-industry-story" hidden aria-label="東南アジアの産業分布の解説">
  <p class="sea-industry-eyebrow">東南アジアの主要産業</p>
- <h2 data-southeast-industry-story-title>資源・工業地区・サービス都市</h2>
+ <h2 data-southeast-industry-story-title>資源・エネルギーの産業分布</h2>
+ <p class="sea-industry-scope" data-southeast-industry-map-stage></p>
  <p class="southeast-industry-summary" data-southeast-industry-summary>{southeastIndustrySectors[0].reading}</p>
  <h3>集積を支える条件</h3><p data-southeast-industry-why>原料、人材、交通、市場への接続は工程ごとに異なります。</p>
  <p class="sea-industry-scope" data-southeast-industry-caveat></p>
  <button type="button" data-southeast-industry-clear>産業の選択を解除</button>
- <section data-southeast-industry-selected hidden><h3 data-southeast-industry-selected-title></h3><p data-southeast-industry-selected-reading></p><p class="southeast-industry-source">立地資料：<span data-southeast-industry-selected-year></span> · <a data-southeast-industry-selected-source></a></p></section>
- <details class="southeast-industry-site-directory"><summary>出典付きの立地案内 {southeastIndustrySites.length}例</summary><div class="southeast-industry-sites">{southeastIndustrySites.map(site=><button type="button" data-southeast-industry-site={site.id}>{site.industryName} · {site.placeName}</button>)}</div></details>
+ <section data-southeast-industry-selected hidden><h3 data-southeast-industry-selected-title></h3><p data-southeast-industry-selected-reading></p><p data-southeast-industry-group-note class="sea-industry-scope" hidden></p><p class="southeast-industry-source">立地資料：<span data-southeast-industry-selected-year></span> · <a data-southeast-industry-selected-source></a></p></section>
+ <details class="southeast-industry-site-directory"><summary>この分野の出典付き立地案内 <span data-southeast-industry-site-count></span>地点</summary><div class="southeast-industry-sites">{southeastIndustrySites.map(site=><button type="button" data-southeast-industry-site={site.id}>{site.industryName} · {site.placeName}</button>)}</div></details>
  <details class="sea-industry-source-method"><summary>位置と数量の意味・出典範囲</summary><p>既存資料で確認した地区・都市・拠点の案内位置です。個別工場の敷地座標、施設の全数、産業の実測集積範囲を表しません。丸の大きさと地点数は数量を表しません。細線は札と案内位置を対応させる線で、取引経路ではありません。</p><p>精米と太陽電池の青い国境は国単位の加工品貿易資料の確認範囲です。国内全域が加工産地という意味ではありません。原料生産の世界シェアは加工業の優位性に転用しません。統計未取得はゼロにしません。</p><p>統計資料確認日：{southeastIndustryEvidenceDate}。出典年と対象を各数値に表示します。国別GDP・既存商品貿易は別資料として保持しています。</p></details>
 </section>
 <section data-southeast-industry-statistics class="sea-industry-statistics" hidden aria-label="主要産業の規模と市場の統計">
+ <section data-southeast-industry-site-scales class="sea-industry-site-scales"><h3>拠点・州の規模と資料の範囲</h3><ul>{southeastSiteScaleNotes.map(note=><li data-southeast-industry-scale-kind={note.kind} data-southeast-industry-scale-sector={note.sector}>{note.text} <a href={note.source.url}>{note.source.label}</a></li>)}</ul></section>
  <div data-southeast-palm-map-key hidden class="sea-palm-key"><strong>州の精製所による粗油処理量 · 2025年</strong><span><i style="background:#edf2e0"></i>100万t未満</span><span><i style="background:#9bbdae"></i>100～300万t未満</span><span><i style="background:#397a67"></i>300万t以上</span><p>州合計の投入量。工場の実生産量・面積当たり密度ではありません。表に値がない州を0として塗っていません。</p><p data-southeast-palm-map-status role="status"></p></div>
  <section data-southeast-industry-overview-statistics>
   <h2>産業ごとに異なる規模の指標</h2><p>各行の国・製品・工程・年は異なります。地域全体の合計や共通の順位を示す表ではありません。</p>

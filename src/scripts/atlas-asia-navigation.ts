@@ -1,4 +1,4 @@
-import {eastIndustrySector} from '../data/atlas/east-asia-industry-sectors.ts';
+import {eastIndustrySector,eastSectorIndustries,eastSectors} from '../data/atlas/east-asia-industry-sectors.ts';
 import {industryTopicGroup,industrySectors,industrySubsectors,naturalGroup,populationGroup} from '../data/atlas/asia-navigation.ts';
 import {industryCountryChoices,hasIndustryCountryScope,industryTopicsForPlace,type IndustryRegion} from '../data/atlas/asia-industry.ts';
 import type {AsiaState} from '../lib/atlas-asia-state';
@@ -32,6 +32,11 @@ export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|un
  }
  for(const b of all('[data-industry-sector]'))b.addEventListener('click',()=>selectIndustry(b.dataset.industrySector as IndustrySector,'all'));
  for(const b of all('[data-industry-subsector]'))b.addEventListener('click',()=>selectIndustry(b.dataset.sector as IndustrySector,b.dataset.industrySubsector!));
+ for(const select of all<HTMLSelectElement>('[data-east-industry-item]'))select.addEventListener('change',()=>{
+  const sector=select.dataset.eastIndustryItem,overview=eastSectors.find(s=>s.id===sector),item=eastSectorIndustries.find(i=>'east-'+i.id===select.value&&i.sectors.includes(sector as never));
+  if(!overview||select.value!==overview.topic&&!item)return;
+  const state=getState();navigate({...state,field:'industry',topic:select.value,sector:overview.id,subsector:null,place:null,detail:null,point:null,story:null,only:false,camera:root.dataset.mapCamera?JSON.parse(root.dataset.mapCamera):state.camera},false);
+ });
  for(const b of all('[data-industry-feature]'))b.addEventListener('click',()=>{
   const t=industry?.topics.find(t=>t.id===b.dataset.industryFeature);if(!t)return;
   const s=getState();
@@ -75,6 +80,7 @@ export function createAsiaNavigation(root:HTMLElement,industry:IndustryRegion|un
    const note=$('[data-industry-navigation-note]');if(note)note.hidden=true;
    return;
   }
+  if(newEastMap){const sector=eastIndustrySector(current.id,state.sector);for(const row of all('[data-east-industry-kinds]')){row.hidden=row.dataset.eastIndustryKinds!==sector;const picker=row.querySelector<HTMLSelectElement>('[data-east-industry-item]');if(picker)picker.value=[...picker.options].some(option=>option.value===current.id)?current.id:eastSectors.find(s=>s.id===row.dataset.eastIndustryKinds)!.topic;}}
   const sector=(state.sector??group.sector) as IndustrySector,subsector=state.subsector??(state.sector?'all':group.subsector);
   for(const b of all('[data-industry-sector]'))b.setAttribute('aria-pressed',String(b.dataset.industrySector===sector));
   for(const row of all('[data-industry-subsectors]')){

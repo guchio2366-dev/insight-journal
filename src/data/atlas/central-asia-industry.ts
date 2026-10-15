@@ -164,7 +164,7 @@ export const centralIndustrySites:CentralSite[]=[
  site('central-aktogay','copper','アクトガイ',[79.9367,46.9474],'KAZ',['resources'],'採掘・選鉱・酸化鉱処理','extraction','アバイ州の操業地域。位置は操業者の尾鉱施設座標からの広域案内。鉱山別2025年生産は225.7千t。',['aktogay','kaz-coordinates','kaz-production'],{localMetric:'copper-aktogay'}),
  site('central-zhezkazgan','copper','ジェズカズガン',[67.71,47.78],'KAZ',['resources','manufacturing'],'銅の製錬・精製','processing','鉱石産地と加工設備が近接する銅の地域。都市付近の案内点で工場敷地ではない。',['usgs-kz']),
  site('central-balkhash','copper','バルハシ',[74.98,46.85],'KAZ',['resources','manufacturing'],'銅の製錬・精製','processing','鉱石・精鉱を金属へ加工する地域。確認できない鉱山からの納入関係は描かない。',['usgs-kz']),
- site('central-almalyk','copper','アルマリク',[69.6,40.85],'UZB',['resources','manufacturing'],'採掘・選鉱・製錬','processing','タシケント州。カルマキル・サリチェク鉱床と加工設備が近接。将来の増設能力は現在の生産と区別。',['usgs-uz']),
+ site('central-almalyk','copper','アルマリク',[69.6,40.85],'UZB',['resources','manufacturing'],'銅の製錬（鉱山・選鉱が近接）','processing','タシケント州。カルマキル・サリチェク鉱床と加工設備が近接。将来の増設能力は現在の生産と区別。',['usgs-uz']),
  site('sc-muruntau-gold','gold','ムルンタウ',[64.55,41.53],'UZB',['resources'],'金の採掘・鉱石処理','extraction','中央キジルクムの露天掘り鉱床。NMMC全社生産・収入をこの鉱山へ割り当てない。',['usgs-uz','nmmc']),
  site('central-kumtor','gold','クムトール',[78.2,41.86],'KGZ',['resources'],'金の採掘・鉱石処理','extraction','天山山地の操業事業。監査済みの2025年生産12.081tは事業の年間実績。',['kumtor'],{localMetric:'gold-kumtor'}),
  site('sc-nurek-hydro','hydro','ヌレーク',[69.37,38.38],'TJK',['resources'],'水力発電・貯水','energy','ヴァフシュ川の稼働発電施設。全国水力容量5,841MWはこの施設だけの値ではない。',['nurek','irena-capacity']),

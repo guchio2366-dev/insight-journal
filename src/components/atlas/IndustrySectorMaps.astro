@@ -1,0 +1,51 @@
+---
+import {industryMapSectors, type IndustryMapSector} from '../../lib/atlas-industry-sector-map';
+interface Props {
+  sector?: IndustryMapSector;
+  items: {id: string; label: string; sectors: readonly IndustryMapSector[]}[];
+  item?: string;
+  description?: string;
+  label?: string;
+}
+const {sector = 'resources', items, item = 'all', description, label = '産業の地図'} = Astro.props;
+---
+<div class="industry-sector-map-controls" data-industry-sector-maps data-sector={sector}>
+  <nav class="industry-sector-map-tabs" aria-label={label}>
+    {industryMapSectors.map(s => <button type="button" data-industry-map-sector={s.id} aria-pressed={s.id === sector}>{s.label}</button>)}
+  </nav>
+  {description && <p class="industry-sector-map-description">{description}</p>}
+  {industryMapSectors.map(s => <label class="industry-sector-map-picker" data-industry-map-picker={s.id} hidden={s.id !== sector}>
+    {s.label}の品目
+    <select data-industry-map-item={s.id} aria-label={s.label + 'の品目'}>
+      <option value="all" selected={item === 'all'}>この分野の分布</option>
+      {items.filter(i => i.sectors.includes(s.id)).map(i => <option value={i.id} selected={item === i.id}>{i.label}</option>)}
+    </select>
+  </label>)}
+</div>
+<script>
+  import {industryMapSector} from '../../lib/atlas-industry-sector-map';
+  for (const root of document.querySelectorAll<HTMLElement>('[data-industry-sector-maps]')) {
+    const display = (sector: string, item: string) => {
+      root.dataset.sector = sector;
+      for (const button of root.querySelectorAll<HTMLElement>('[data-industry-map-sector]')) button.setAttribute('aria-pressed', String(button.dataset.industryMapSector === sector));
+      for (const picker of root.querySelectorAll<HTMLElement>('[data-industry-map-picker]')) picker.hidden = picker.dataset.industryMapPicker !== sector;
+      const select = root.querySelector<HTMLSelectElement>(`[data-industry-map-item="${sector}"]`)!;
+      select.value = [...select.options].some(option => option.value === item) ? item : 'all';
+    };
+    const change = (sector: string, item: string) => {
+      display(sector, item);
+      // Each regional controller keeps its data, URL and camera semantics.
+      root.dispatchEvent(new CustomEvent('industry-map-change', {bubbles: true, detail: {sector, item}}));
+    };
+    root.addEventListener('industry-map-state', event => {
+      const detail = (event as CustomEvent<{sector: string; item: string}>).detail;
+      if (detail) display(industryMapSector(detail.sector), detail.item);
+    });
+    for (const button of root.querySelectorAll<HTMLButtonElement>('[data-industry-map-sector]')) button.addEventListener('click', () => {
+      const sector = industryMapSector(button.dataset.industryMapSector);
+      const select = root.querySelector<HTMLSelectElement>(`[data-industry-map-item="${sector}"]`)!;
+      select.value = 'all'; change(sector, 'all');
+    });
+    for (const select of root.querySelectorAll<HTMLSelectElement>('[data-industry-map-item]')) select.addEventListener('change', () => change(industryMapSector(select.dataset.industryMapItem), select.value));
+  }
+</script>

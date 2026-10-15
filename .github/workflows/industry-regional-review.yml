@@ -49,7 +49,7 @@ jobs:
         run: |
           set -euo pipefail
           if [[ -f scripts/verify-world-industry.mjs ]]; then
-            REVIEW_CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)" node scripts/run-review-with-annotations.mjs scripts/verify-world-industry.mjs
+            WORLD_INDUSTRY_LOG_IMAGES=1 REVIEW_CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)" node scripts/run-review-with-annotations.mjs scripts/verify-world-industry.mjs
           fi
       - name: Verify industry maps and capture evidence
         if: github.event_name == 'pull_request'
@@ -89,7 +89,7 @@ jobs:
           export INDUSTRY_REVIEW_CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)"
           node scripts/run-review-with-annotations.mjs scripts/verify-approved-pages-release.mjs
           if [[ -f scripts/verify-world-industry.mjs ]]; then
-            WORLD_INDUSTRY_REVIEW_URL=https://guchio2366-dev.github.io/insight-journal/atlas/industry/world/ REVIEW_CHROME_PATH="$INDUSTRY_REVIEW_CHROME_PATH" node scripts/run-review-with-annotations.mjs scripts/verify-world-industry.mjs
+            WORLD_INDUSTRY_LOG_IMAGES=1 WORLD_INDUSTRY_REVIEW_URL=https://guchio2366-dev.github.io/insight-journal/atlas/industry/world/ REVIEW_CHROME_PATH="$INDUSTRY_REVIEW_CHROME_PATH" node scripts/run-review-with-annotations.mjs scripts/verify-world-industry.mjs
           fi
           INDUSTRY_SMOKE_TARGET=production REVIEW_CHROME_PATH="$INDUSTRY_REVIEW_CHROME_PATH" node scripts/run-review-with-annotations.mjs scripts/verify-industry-pages-smoke.mjs
       - uses: actions/upload-artifact@v4
@@ -99,6 +99,49 @@ jobs:
           path: review-artifacts/
           retention-days: 7
           if-no-files-found: error
+  preview:
+    name: Industry image preview (${{ matrix.profile }} / ${{ matrix.sector_index }})
+    if: github.event_name == 'pull_request'
+    needs: smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        profile: [historical-pc, portrait]
+        sector_index: [0, 1, 2]
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: industry-pages-smoke-${{ github.run_id }}
+          path: ${{ runner.temp }}/industry-pages-smoke-preview
+      - name: Export exact captured images in a bounded profile log
+        env:
+          REVIEW_DIRECTORY: ${{ runner.temp }}/industry-pages-smoke-preview
+          REVIEW_PROFILE: ${{ matrix.profile }}
+          REVIEW_SECTOR_INDEX: ${{ matrix.sector_index }}
+          REVIEW_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python3 - <<'PY'
+          import base64, hashlib, json, os
+          from pathlib import Path
+          root = Path(os.environ['REVIEW_DIRECTORY'])
+          report = json.loads((root / 'verification.json').read_text())
+          assert report['head'] == os.environ['REVIEW_EXPECTED_HEAD']
+          assert report['status'] == 'passed' and not report['failedCases']
+          count = 0
+          for entry in report['images']:
+              if entry['profile']['name'] != os.environ['REVIEW_PROFILE'] or entry['stage'] != 'initial' or entry['sectorIndex'] != int(os.environ['REVIEW_SECTOR_INDEX']):
+                  continue
+              file = entry['file']
+              image = (root / file).resolve()
+              assert image.parent == root.resolve()
+              data = image.read_bytes()
+              assert hashlib.sha256(data).hexdigest() == entry['sha256']
+              print('INDUSTRY_REVIEW_IMAGE ' + json.dumps({'file': file, 'mimeType': 'image/jpeg', 'base64': base64.b64encode(data).decode()}))
+              count += 1
+          assert count == 13
+          print('INDUSTRY_PROFILE_REVIEW ' + json.dumps({'head': report['head'], 'profile': os.environ['REVIEW_PROFILE'], 'sectorIndex': int(os.environ['REVIEW_SECTOR_INDEX']), 'images': count, 'hashVerified': True}))
+          PY
   smoke:
     name: Verify all 13 regional industry pages
     if: github.event_name == 'pull_request'
@@ -106,6 +149,7 @@ jobs:
     timeout-minutes: 15
     env:
       ASTRO_TELEMETRY_DISABLED: '1'
+      INDUSTRY_SMOKE_LOG_IMAGES: '1'
     steps:
       - uses: actions/checkout@v7
         with:

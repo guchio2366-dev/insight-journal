@@ -1,6 +1,6 @@
 import type {AsiaState} from '../lib/atlas-asia-state';
 import type {SouthIndustryGroup,SouthIndustrySite} from '../data/atlas/south-asia-major-industries';
-import {southIndustrySectors,southIndustryGroups} from '../data/atlas/south-asia-industry-sectors';
+import {southIndustryMapView} from '../data/atlas/south-asia-industry-cartography';
 
 // The South Asia contract is opt-in. Other regions retain their own reading,
 // markers, national statistics and navigation.
@@ -14,29 +14,29 @@ export function createSouthIndustryReading(root:HTMLElement,groups:SouthIndustry
  return {render(state:AsiaState,topic:{id:string;title:string;kind:string}){
   const active=state.field==='industry'&&topic.kind==='regional';statistics.hidden=!active;
   if(!active){selectedPanel.hidden=true;return;}
-  const sector=southIndustrySectors.find(s=>s.id===topic.id||s.groups.includes(topic.id as never));
-  const selected=sites.find(s=>s.id===state.detail&&(!state.place||s.country===state.place));
+  const view=southIndustryMapView(topic.id,state.place),sector=view.sector;
+  const visible=sites.filter(s=>view.groupIds.includes(s.group)&&(!state.place||s.country===state.place));
+  const selected=visible.find(s=>s.id===state.detail);
   const group=groups.find(g=>g.id===(selected?.group??topic.id));
-  const visible=sites.filter(s=>!state.place||s.country===state.place);
-  const allowed=group?[group.id]:southIndustryGroups(topic.id)??groups.map(g=>g.id);
-  const title=group?.title??sector?.title??'南アジアの主要産業';
+  const allowed=group?[group.id]:view.groupIds;
+  const title=group?.title??sector.title;
   $('[data-industry-title]').textContent=title;
-  $('[data-industry-lead]').textContent=group?.fact??overview;
-  $('[data-industry-definition]').textContent=group?.reason??'炭田・河川・産地を使う産業と、港・都市の加工網・技術人材を使う産業では集積の条件が異なります。バングラデシュ・パキスタンの繊維、ネパール・ブータンの電力、スリランカ・モルディブの観光も地域経済を支えます。';
+  $('[data-industry-lead]').textContent=group?.fact??view.reading;
+  $('[data-industry-definition]').textContent=group?.reason??'所在地は根拠を確認した都市・地区・施設の例です。近接する同業の見出しをまとめても、工程、年、施設能力、地域の生産実績は合算しません。';
   $('[data-industry-value]').hidden=true;
   $('[data-industry-coverage]').textContent='地図は根拠を確認した集積・施設の例です。色は産業、点は所在地を示します。国別・世界の数量、集積の規模、未取得の範囲は地図下で確認できます。';
   $('[data-industry-status]').textContent='';$('[data-industry-retry]').hidden=true;$('[data-industry-detail-label]').hidden=true;$('[data-industry-search-label]').hidden=true;
   $('[data-grid-reading]').textContent=selected?selected.name:'点は施設・集積地域の案内位置。大きさは生産量・施設数を表しません。';
-  $('[data-map-title]').textContent=title;$('[data-map-period]').textContent='所在地と工程の例 · 国別統計は地図下';$('[data-map-eyebrow]').textContent='Industry · South Asia';
-  $('[data-map-gesture]').textContent=group?.fact??overview;
+  $('[data-map-title]').textContent='南アジア｜'+sector.title;$('[data-map-period]').textContent='所在地の例 · 規模と工程は解説へ';$('[data-map-eyebrow]').textContent='Industry · South Asia';
+  $('[data-map-gesture]').textContent=view.reading;
   const legend=$('[data-industry-scale]');legend.replaceChildren();$('[data-industry-legend-title]').textContent='産業と所在地';
-  for(const g of groups){const item=make('span',''),swatch=make('i','');swatch.style.backgroundColor=g.color;item.append(swatch,root.ownerDocument.createTextNode(g.title));legend.append(item);}
-  $('[data-industry-legend-note]').textContent='色は産業、点は所在地。点から札への細い破線はラベルの位置案内で、取引・輸送ではありません。点の数・大きさは生産規模ではありません。';
+  for(const g of groups.filter(g=>view.groupIds.includes(g.id))){const item=make('span',''),swatch=make('i','');swatch.style.backgroundColor=g.color;item.append(swatch,root.ownerDocument.createTextNode(g.title));legend.append(item);}
+  $('[data-industry-legend-note]').textContent='色はこの分野の業種、点は確認した所在地です。近接する同業拠点は短い地域見出しにまとめます。点の数・大きさは生産規模ではありません。';
   const method=$('[data-industry-method]');method.replaceChildren(make('p','都市・地区の案内位置で、敷地境界や施設全数ではありません。国別統計の年・単位・定義は地図下に記載。'),source(group?.source.label??groups[0].source.label,group?.source.url??groups[0].source.url));
   selectedPanel.hidden=!selected;selectedPanel.replaceChildren();
-  if(selected){selectedPanel.append(make('h3',selected.name),make('p',selected.fact),make('p',selected.reason),make('p',selected.kind+' · '+selected.evidenceYear+'。'+selected.locationPrecision),source(selected.source.label,selected.source.url));const clear=make('button','選択を解除') as HTMLButtonElement;clear.type='button';clear.className='south-industry-clear';clear.addEventListener('click',()=>select(''));selectedPanel.append(clear);}
+  if(selected){selectedPanel.append(make('h3',selected.name),make('p',selected.scaleLabel),make('p',selected.fact),make('p',selected.reason),make('p',selected.kind+' · '+selected.evidenceYear+'。'+selected.locationPrecision),source(selected.source.label,selected.source.url));const summary=view.labels.find(label=>label.summary&&label.siteIds.includes(selected.id));if(summary){selectedPanel.append(make('p',summary.place+'の'+summary.industry+'は複数の所在地例をまとめた見出しです。数値は選択した施設・地区に属し、まとめた地域の合計ではありません。'));const members=make('ul','');for(const id of summary.siteIds){const site=visible.find(site=>site.id===id)!;const item=make('li','');item.append(source(site.name,site.source.url));members.append(item);}selectedPanel.append(members);}const clear=make('button','選択を解除') as HTMLButtonElement;clear.type='button';clear.className='south-industry-clear';clear.addEventListener('click',()=>select(''));selectedPanel.append(clear);}
   const content=$('[data-industry-content]'),inventoryOpen=content.querySelector<HTMLDetailsElement>('details')?.open??false;content.replaceChildren();const details=make('details','') as HTMLDetailsElement,summary=make('summary','確認した産業拠点を一覧から選ぶ');details.open=inventoryOpen;details.append(summary);
-  for(const g of groups){const members=visible.filter(s=>s.group===g.id);if(!members.length)continue;details.append(make('h3',g.title));const list=make('div','');list.className='sc-industry-site-list';for(const site of members){const button=make('button',site.name) as HTMLButtonElement;button.type='button';button.dataset.southIndustrySiteChoice=site.id;button.setAttribute('aria-pressed',String(site.id===selected?.id));button.addEventListener('click',()=>select(site.id));list.append(button);}details.append(list);}content.append(details);
+  for(const g of groups.filter(g=>view.groupIds.includes(g.id))){const members=visible.filter(s=>s.group===g.id);if(!members.length)continue;details.append(make('h3',g.title));const list=make('div','');list.className='sc-industry-site-list';for(const site of members){const button=make('button',site.name) as HTMLButtonElement;button.type='button';button.dataset.southIndustrySiteChoice=site.id;button.title=site.scaleLabel;button.setAttribute('aria-pressed',String(site.id===selected?.id));button.addEventListener('click',()=>select(site.id));list.append(button);}details.append(list);}content.append(details);
   for(const section of root.querySelectorAll<HTMLElement>('[data-south-industry-evidence]'))section.hidden=!allowed.includes(section.dataset.southIndustryEvidence!);
   $('[data-south-statistics-title]').textContent=title+'：規模・世界での位置・供給網';
   for(const button of root.querySelectorAll<HTMLElement>('[data-south-industry-sector]'))button.setAttribute('aria-pressed',String(button.dataset.southIndustrySector===sector?.id));

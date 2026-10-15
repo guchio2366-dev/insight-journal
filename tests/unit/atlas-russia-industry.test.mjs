@@ -39,7 +39,9 @@ const overlaps=(a,b)=>a[0]<b[2]&&a[2]>b[0]&&a[1]<b[3]&&a[3]>b[1];
 test('all sector labels fit without overlaps and source points stay separate at mobile and desktop map widths',()=>{
  for(const sector of D.ruSectors)for(const width of [760,960,1280]){
   const height=width*597/1200,labels=D.layoutRuIndustryLabels(sector.id,width,height),points=D.groupRuPoints(sector.id,width,height);
-  assert.equal(labels.length,D.sectorIndustries(sector.id).length);
+  assert.ok(labels.length>0);assert.ok(labels.length<=(sector.id==='services'?10:width<900?10:12));
+  for(const label of labels){assert.ok(label.industries.every(id=>D.sectorIndustries(sector.id).some(i=>i.id===id)));const dx=Math.max(label.box[0]-label.anchor[0],0,label.anchor[0]-label.box[2]),dy=Math.max(label.box[1]-label.anchor[1],0,label.anchor[1]-label.box[3]);assert.ok(Math.hypot(dx,dy)<=31,'Annotation stays near its source cluster');}
+  if(sector.id!=='services')assert.ok(labels.reduce((sum,l)=>sum+(l.box[2]-l.box[0])*(l.box[3]-l.box[1]),0)<D.sectorIndustries(sector.id).length*114*46*.4,'Compact annotation area is under 40% of former button cards');
   assert.deepEqual(labels,D.layoutRuIndustryLabels(sector.id,width,height),'selection is not an input to label layout');
   for(const a of labels){assert.ok(a.box[0]>=0&&a.box[2]<=width&&a.box[1]>=0&&a.box[3]<=height);for(const b of labels)if(a.id!==b.id)assert.ok(!overlaps(a.box,b.box),a.id+'/'+b.id);for(const p of points)assert.ok(!overlaps(a.box,[p.point[0]-12,p.point[1]-12,p.point[0]+12,p.point[1]+12]),a.id+'/'+p.id);}
   for(let i=0;i<points.length;i++)for(let j=i+1;j<points.length;j++)assert.ok(Math.hypot(points[i].point[0]-points[j].point[0],points[i].point[1]-points[j].point[1])>=20);

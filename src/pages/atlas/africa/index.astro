@@ -8,6 +8,7 @@ import {countries,fields,metrics,regionNames,years,readState,valueAt,formatValue
 import {reading} from '../../../data/atlas/africa-reading';
 import {themes} from '../../../data/atlas/africa-themes';
 import AfricaWorkspaceFrame from '../../../components/atlas/AfricaWorkspaceFrame.astro';
+import AfricaIndustryMapFrames from '../../../components/atlas/AfricaIndustryMapFrames.astro';
 import AfricaFieldNavigation from '../../../components/atlas/AfricaFieldNavigation.astro';
 import AgricultureMapControls from '../../../components/atlas/AgricultureMapControls.astro';
 import AtlasClimatePlot from '../../../components/atlas/AtlasClimatePlot.astro';
@@ -53,11 +54,11 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
   <nav class="africa-subfields" data-africa-subfields aria-label="分野内の項目"></nav>
   <div class="africa-workspace" id="africa-map-panel">
    <section class="africa-map-card" aria-labelledby="africa-map-title">
-    <div class="africa-map-frame">
+    <div class="africa-map-frame" data-africa-general-map-frame>
     <div class="africa-agri-map-controls" data-africa-agri-map-controls hidden><AgricultureMapControls countryLabel="アフリカ" toolsHidden={true}/><label hidden>表示<select data-africa-agri-display aria-label="農産物と畜産物の表示"><option value="all">農産物＋畜産物</option><option value="crops">農産物</option><option value="livestock">畜産物</option></select></label></div>
     <div class="africa-map-heading"><h2 id="africa-map-title" data-metric-title>{metric.label}</h2><span><span data-period>長期平均</span> · <span data-unit>{metric.unit}</span></span></div>
     <svg class="africa-map" viewBox={initialViewBox.join(' ')} data-theme={initialTheme.id} data-detail={state.zoom!=='all'?'true':'false'} role="img" aria-labelledby="africa-svg-title africa-svg-desc">
-      <title id="africa-svg-title">{initialTheme.title}・国別の年降水量（長期平均）</title><desc id="africa-svg-desc">分布テーマと国別統計を重ねた地図。右の凡例と説明から、表示した分布を読み取れます。国は選択欄や一覧からも選べます。</desc>
+      <title id="africa-svg-title" data-africa-svg-title>{initialTheme.title}・国別の年降水量（長期平均）</title><desc id="africa-svg-desc" data-africa-svg-desc>分布テーマと国別統計を重ねた地図。右の凡例と説明から、表示した分布を読み取れます。国は選択欄や一覧からも選べます。</desc>
      <defs><pattern id="africa-missing" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#eeeae1"/><path d="M0 7L7 0" stroke="#b5b0a3" stroke-width="1"/></pattern></defs>
      <rect width={africaWidth} height={africaHeight} fill="#e9f0f0" pointer-events="none" data-africa-map-background/>
      {[-20,0,20].map(lat=><line x1="0" x2={africaWidth} y1={projectAfrica([0,lat])[1]} y2={projectAfrica([0,lat])[1]} class="africa-graticule"/>)}
@@ -76,6 +77,7 @@ const initialMarks=initialTheme.marks.map((mark,i)=>{
     </svg>
     <div class="africa-map-tools" aria-label="地図の表示範囲"><button data-zoom="all" type="button">全体</button><button data-zoom="theme" type="button">事例</button><button data-zoom="region" type="button">地域</button><button data-zoom="country" type="button">選択国</button><button data-reset type="button">リセット</button></div>
     </div>
+    <AfricaIndustryMapFrames/>
     <div class="africa-river-choices" data-africa-river-choices role="group" aria-label="読み解く河川" hidden></div>
     <div class="africa-commodities" data-africa-commodities role="group" hidden></div>
     <div class="africa-layer-options" data-africa-layer-options hidden></div>

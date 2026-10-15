@@ -92,3 +92,7 @@
 [data-region=east-asia][data-industry-clusters=true] [data-place-reading]{display:none}
 [data-region=east-asia][data-industry-clusters=true] [data-map-gesture]{display:none}
 [data-region=east-asia][data-industry-clusters=true] .asia-reading-dock{display:none}
+.east-industry-map-labels .east-industry-annotation{position:absolute;display:flex;align-items:baseline;gap:5px;white-space:nowrap;pointer-events:none;background:none;border:0;padding:0;height:19px;box-sizing:border-box;font:500 11px/19px var(--sans);color:#304b50;text-shadow:0 0 2px #fff,0 0 3px #fff}
+.east-industry-annotation strong{font-size:11px;font-weight:700}.east-industry-annotation small{font-size:10px;font-weight:500;color:#4a5d62}
+.east-industry-map-labels .east-industry-annotation[hidden]{display:none!important}
+.east-industry-map-labels:has(.east-industry-annotation) line{stroke:#6f8588;stroke-width:.8}

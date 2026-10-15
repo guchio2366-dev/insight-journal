@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {southIndustrySectors} from '../../src/data/atlas/south-asia-industry-sectors.ts';
 import assert from 'node:assert/strict';
 import {createServer} from 'node:http';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
@@ -42,7 +43,7 @@ async function stableIndustryFrame(page,name){
    for(const line of root.querySelectorAll('.south-industry-label-guides line')){const r=box(line);masks.push({left:r.left-3,top:r.top-3,right:r.right+3,bottom:r.bottom+3});}
    const config=JSON.parse(root.querySelector('[data-asia-config]').textContent);for(const site of config.industrySites){const p=map.project(site.point);masks.push({left:p.x-22,top:p.y-22,right:p.x+22,bottom:p.y+22});}
    const corners=[[rect.left+4,rect.top+4],[rect.right-4,rect.top+4],[rect.left+4,rect.bottom-4],[rect.right-4,rect.bottom-4]].map(([x,y])=>{const hit=document.elementFromPoint(x,y);return {x,y,inside:x>=0&&y>=0&&x<innerWidth&&y<innerHeight&&frame.contains(hit),hit:hit?hit.tagName+'.'+String(hit.className?.baseVal??hit.className):null};});
-   return {bounds:{left:rect.left,top:rect.top,width:rect.width,height:rect.height},clip:{x:Math.floor(rect.left),y:Math.floor(rect.top),width:Math.ceil(rect.right)-Math.floor(rect.left),height:Math.ceil(rect.bottom)-Math.floor(rect.top)},visible:corners.every(c=>c.inside),corners,viewport:{width:innerWidth,height:innerHeight,scrollY},loaded:map.loaded(),tilesLoaded:map.areTilesLoaded(),moving:map.isMoving(),contextHealthy:!!gl&&!gl.isContextLost(),masks,steel:box(root.querySelector('[data-industry-site="sc-odisha-steel"]')),steelOpacity:Number(getComputedStyle(root.querySelector('[data-industry-site="sc-odisha-steel"]')).opacity)};
+   return {bounds:{left:rect.left,top:rect.top,width:rect.width,height:rect.height},clip:{x:Math.floor(rect.left),y:Math.floor(rect.top),width:Math.ceil(rect.right)-Math.floor(rect.left),height:Math.ceil(rect.bottom)-Math.floor(rect.top)},visible:corners.every(c=>c.inside),corners,viewport:{width:innerWidth,height:innerHeight,scrollY},loaded:map.loaded(),tilesLoaded:map.areTilesLoaded(),moving:map.isMoving(),contextHealthy:!!gl&&!gl.isContextLost(),masks,steel:box(root.querySelector('.asia-industry-regional-label')),steelOpacity:Number(getComputedStyle(root.querySelector('.asia-industry-regional-label')).opacity)};
   });
   lastScene=scene;
   if(!scene.visible){
@@ -76,7 +77,7 @@ async function stableIndustryFrame(page,name){
  return result;
 }
 async function capturePc(page,name){
- const baseline=name==='south-asia-industry'||/^\d+-south-asia-industry-initial$/.test(name),wanted=process.env.SC_FOCUSED_REVIEW!=='1'||renderFollowup.has(name);
+ const baseline=name==='south-asia-industry'||/^\d+-south-asia-(?:industry|sc-south-(?:resources|manufacturing|services))-initial$/.test(name),wanted=process.env.SC_FOCUSED_REVIEW!=='1'||renderFollowup.has(name);
  if(!wanted&&!baseline)return;
  let render=null;
  if(baseline||renderFollowup.has(name)){await page.waitForLoadState('networkidle');render=await stableIndustryFrame(page,name);}
@@ -98,9 +99,10 @@ async function capturePc(page,name){
 async function industrySnapshot(page){
  await page.waitForLoadState('networkidle');
  await settled(page);
- return page.evaluate(()=>{
+ return page.evaluate(async()=>{
+  const atlas=document.querySelector('[data-asia-atlas]'),source=await atlas.atlasReviewMap.getSource('asia-industry-regional').getData();
   const canvas=document.querySelector('.maplibregl-canvas').getBoundingClientRect();
-  return {canvas:{left:canvas.left,top:canvas.top,width:canvas.width,height:canvas.height},camera:document.querySelector('[data-asia-atlas]').dataset.mapCamera,labels:[...document.querySelectorAll('.asia-industry-regional-label')].map(label=>{const box=label.getBoundingClientRect();return {id:label.dataset.industrySite,name:label.textContent,compact:label.classList.contains('is-compact'),named:[...label.children].some(child=>getComputedStyle(child).display!=='none'),pressed:label.getAttribute('aria-pressed')==='true',left:box.left-canvas.left,top:box.top-canvas.top,width:box.width,height:box.height};})};
+  return {sourcePoints:source.features.map(f=>({id:f.properties.id,coordinates:f.geometry.coordinates})).sort((a,b)=>a.id.localeCompare(b.id)),selectedFilter:atlas.atlasReviewMap.getFilter('asia-industry-regional-selected'),canvas:{left:canvas.left,top:canvas.top,width:canvas.width,height:canvas.height},camera:document.querySelector('[data-asia-atlas]').dataset.mapCamera,labels:[...document.querySelectorAll('.asia-industry-regional-label')].map(label=>{const box=label.getBoundingClientRect();return {id:label.dataset.industrySite,members:(label.dataset.industryMembers??label.dataset.industrySite).split(','),name:label.textContent,compact:label.classList.contains('is-compact'),named:[...label.children].some(child=>getComputedStyle(child).display!=='none'),pressed:label.getAttribute('aria-pressed')==='true',left:box.left-canvas.left,top:box.top-canvas.top,width:box.width,height:box.height};})};
  });
 }
 async function verifyIndustrySelection(page,before,selected,context,positionTolerance=.75){
@@ -115,7 +117,10 @@ async function verifyIndustrySelection(page,before,selected,context,positionTole
  assert.deepEqual(camera(after.camera),camera(before.camera),context+': camera remains fixed at the retained URL precision');
  for(const key of ['width','height'])assert.ok(Math.abs(after.canvas[key]-before.canvas[key])<=.75,context+': map '+key+' remains fixed: '+JSON.stringify({before:before.canvas,after:after.canvas}));
  for(const [i,label]of after.labels.entries())for(const key of ['left','top','width','height'])assert.ok(Math.abs(label[key]-before.labels[i][key])<=positionTolerance,`${context}: ${label.id} ${key} remains fixed relative to the map: ${before.labels[i][key]} → ${label[key]}`);
- assert.deepEqual(after.labels.filter(label=>label.pressed).map(label=>label.id),selected?[selected]:[],context+': only the chosen marker is emphasized');
+ assert.deepEqual(after.sourcePoints,before.sourcePoints,context+': every source point stays fixed');
+ assert.equal(new URL(page.url()).searchParams.get('detail'),selected,context+': selected site in URL');
+ assert(after.labels.filter(label=>label.pressed).every(label=>selected&&label.members.includes(selected)),context+': grouped labels emphasize only their source members');
+ if(selected){assert(after.sourcePoints.some(site=>site.id===selected));assert(JSON.stringify(after.selectedFilter).includes(selected),context+': the actual source marker is emphasized');}
  review.industryTransitions.push({context,viewport:page.viewportSize(),selected,positionTolerance,before,after,status:'passed'});await saveReview();
  return after;
 }
@@ -203,22 +208,17 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    }else{
     assert.equal(await page.locator('[data-sc-industry-topic] option[value="sc-hydro"]').count(),1);
     await page.locator('.asia-industry-regional-label').first().waitFor({state:'visible'});
-    assert.equal(await page.locator('.asia-industry-regional-label').count(),industry.industrySites.length);
+    const snapshot=await industrySnapshot(page);const resourceGroups=southIndustrySectors[0].groups;assert.deepEqual(snapshot.sourcePoints.map(point=>point.id),industry.industrySites.filter(site=>resourceGroups.includes(site.group)).map(site=>site.id).sort());assert(snapshot.labels.length>0&&snapshot.labels.length<=14);
     assert.match(await page.locator('.asia-industry-regional-label').first().textContent(),/石炭/);
    }
    if(region==='south-asia'){
-    assert.ok(await page.locator('.asia-industry-regional-label.is-compact').count()>0);
-    assert.equal(await page.locator('.asia-industry-regional-label[data-industry-site="sc-dhaka-garments"] span').textContent(),'ダッカ・ガジプル');
-    for(const [id,industryName] of [['sc-hyderabad-pharma','医薬品'],['sc-bengaluru-it','IT・業務受託']]){
-     const label=page.locator(`.asia-industry-regional-label[data-industry-site="${id}"]`);
-     assert.equal(await label.evaluate(node=>node.classList.contains('is-compact')),false);
-     assert.match(await label.textContent(),new RegExp(industryName));
-    }
+    await page.locator('[data-south-industry-sector="sc-south-manufacturing"]').click();await page.locator('.asia-industry-regional-label').first().waitFor({state:'visible'});
+    const snapshot=await industrySnapshot(page);assert(snapshot.labels.every(label=>!label.compact));assert(snapshot.sourcePoints.some(point=>point.id==='sc-dhaka-garments'));
    }
    if(region==='central-asia')for(const id of ['sc-inkai-uranium','sc-bozshakol-copper','sc-muruntau-gold'])assert.equal(await page.locator(`[data-central-marker="${id}"]`).count(),1);
    const industryBefore=region==='south-asia'?await industrySnapshot(page):null;
    await capture(`${region}-industry`);
-   await page.locator(region==='south-asia'?'.asia-industry-regional-label[data-industry-site="sc-dhaka-garments"]':'[data-central-marker="sc-tengiz-oil"]').first().click();
+   if(region==='south-asia'){await page.locator('[data-industry-content] > details').evaluate(node=>node.open=true);await page.locator('[data-south-industry-site-choice="sc-dhaka-garments"]').click();}else await page.locator('[data-central-marker="sc-tengiz-oil"]').click();
    assert.ok(new URL(page.url()).searchParams.get('detail'));
    if(region==='central-asia')assert.equal(await page.locator('[data-central-marker="sc-tengiz-oil"]').getAttribute('aria-pressed'),'true');
    else assert.equal(await page.locator('.asia-industry-regional-label[aria-pressed="true"].is-compact').count(),0);
@@ -229,6 +229,7 @@ test('南アジア・中央アジアの入口から選択、復帰、分野往�
    // URL round-trip can cross MapLibre's nearest-pixel boundary by one pixel.
    if(industryBefore){await verifyIndustrySelection(page,industryBefore,null,'1920 South Asia clear through history',1);await capture('south-asia-industry-cleared');await capturePc(page,'south-asia-industry-cleared-confirmed');}
    await page.goBack();
+   if(region==='south-asia')await page.goBack();
    await page.waitForURL(`**/atlas/asia/${region}/nature/**`);
    assert.equal(await page.locator('[data-country-select]').inputValue(),'');
    await page.locator(`.atlas-tabs [data-field="population"]`).click();
@@ -458,37 +459,29 @@ test('南アジア産業の全地点とPC三幅の代表選択は表示集合と
    await page.addInitScript(()=>{window.atlasRenderReview=true;});
    await page.goto(`${url}/atlas/asia/south-asia/industry/`,{waitUntil:'domcontentloaded'});
    await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelectorAll('.asia-industry-regional-label').length>0);
-   const before=await industrySnapshot(page);
-   assert.ok(before.labels.some(label=>label.compact));
-   assert.equal(before.labels.some(label=>label.pressed),false);
-   const sites=JSON.parse(await page.locator('[data-asia-config]').textContent()).industrySites;
-   assert.deepEqual(before.labels.map(label=>label.id).sort(),sites.map(site=>site.id).sort());
-   await capturePc(page,`${width}-south-asia-industry-initial`);
-   const compact=before.labels.find(label=>label.compact)?.id;assert.ok(compact,'The overview has compact locators as well as named labels');
-   // Keep three compact-marker paint captures, using the actual collision
-   // result at each width rather than a place that may now have a full label.
-   renderFollowup.add(`${width}-south-asia-industry-selected-${compact}`);
-   const selectionIds=width===1920?before.labels.map(label=>label.id):['sc-dhaka-garments',compact,'sc-ahmedabad-pharma','sc-bengaluru-it'];
-   for(const id of selectionIds){
-    console.log(`South industry ${width}px: selecting ${id}`);
-    await page.locator('[data-industry-content] > details').evaluate(node=>node.open=true);
-    // The existing reading list also selects sites whose overview marker is compact.
-    await page.locator('.sc-industry-site-list button').filter({hasText:sites.find(site=>site.id===id).name}).click();
-    await page.waitForFunction(selected=>new URL(location.href).searchParams.get('detail')===selected,id);
-    await verifyIndustrySelection(page,before,id,`${width} South Asia ${id}`);
-    if(id==='sc-dhaka-garments'||id===compact)await capturePc(page,`${width}-south-asia-industry-selected-${id}`);
+   const sites=JSON.parse(await page.locator('[data-asia-config]').textContent()).industrySites,seen=[];
+   for(const sector of southIndustrySectors){
+    await page.locator(`[data-south-industry-sector="${sector.id}"]`).click();await settled(page);renderReferences.delete(page);
+    const before=await industrySnapshot(page),visible=sites.filter(site=>sector.groups.includes(site.group));seen.push(...visible.map(site=>site.id));
+    assert.deepEqual(before.sourcePoints.map(point=>point.id),visible.map(site=>site.id).sort());assert(before.labels.length>0&&before.labels.length<=14);assert(before.labels.every(label=>!label.compact&&!label.pressed));
+    const initial=`${width}-south-asia-${sector.id}-initial`;renderFollowup.add(initial);await capturePc(page,initial);
+    const selectionIds=width===1920?visible.map(site=>site.id):[visible[0].id,visible.at(-1).id];
+    for(const id of selectionIds){
+     const details=page.locator('[data-industry-content] > details');if(!await details.evaluate(node=>node.open))await details.locator(':scope > summary').click();
+     await page.locator(`[data-south-industry-site-choice="${id}"]`).click();await page.waitForFunction(selected=>new URL(location.href).searchParams.get('detail')===selected,id);
+     await verifyIndustrySelection(page,before,id,`${width} ${sector.id} ${id}`);
+     if(id===selectionIds[0]){const name=`${width}-south-asia-${sector.id}-selected-${id}`;renderFollowup.add(name);await capturePc(page,name);}
+    }
+    await page.locator('.south-industry-clear').click();await page.waitForFunction(()=>new URL(location.href).searchParams.get('detail')===null);await verifyIndustrySelection(page,before,null,`${width} ${sector.id} clear`);
    }
-   await page.locator('[data-reset]').click();
-   await page.waitForFunction(()=>new URL(location.href).searchParams.get('detail')===null);
-   await verifyIndustrySelection(page,before,null,`${width} South Asia reset`);
-   await capturePc(page,`${width}-south-asia-industry-reset`);
+   assert.deepEqual([...new Set(seen)].sort(),sites.map(site=>site.id).sort(),'All source sites are retained across the three maps');
    assert.deepEqual(errors,[]);await page.close();
-   console.log(`South industry ${width}px: ${selectionIds.length} selections and reset passed`);
+   console.log(`South industry ${width}px: all three sector inventories, site choices and clear passed`);
   }
   if(process.env.SC_FOCUSED_REVIEW==='1'){
-   assert.equal(review.images.length,8,'only the eight requested render followup views are saved');
+   assert(review.images.length>=18,'Each sector and PC width has initial and selected paint evidence');
    const total=review.images.reduce((sum,image)=>sum+image.bytes,0)+(await readFile(path.join(reviewFolder,'review.json'))).length;
-   assert.ok(total<20_000_000,'the standalone render followup remains below 20MB');console.log(`Render followup: ${review.images.length} PNGs plus review.json; ${total} uncompressed bytes < 20MB.`);
+   assert.ok(total<40_000_000,'the standalone render followup remains below 40MB');console.log(`Render followup: ${review.images.length} PNGs plus review.json; ${total} uncompressed bytes < 40MB.`);
   }
  }catch(error){console.error('::error title=South Central journey::'+String(error.stack??error).replaceAll('%','%25').replaceAll('\n','%0A').replaceAll('\r','%0D'));throw error;}finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
 });

@@ -17,13 +17,41 @@
 .eu-workspace-root .eu-industry-statistics :is(th,td)>:is(strong,span) { display:block; }
 .eu-workspace-root .eu-industry-statistics td p { margin:0 0 7px; }
 .eu-workspace-root .eu-industry-missing { font:13px/1.8 var(--sans); color:#52635e; }
-.eu-workspace-root[data-europe-detail] .eu-label-dot[data-eu-industry-anchor="national"] { fill:#fffef4; stroke:var(--eu-industry-color); stroke-dasharray:2 1; }
-.eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry]:not(.is-point-only) { display:flex; flex-direction:column; align-items:flex-start; gap:2px; max-width:145px; white-space:normal; text-align:left; }
-.eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry].is-point-only:is(:hover,:focus-visible) { width:16px; height:16px; padding:0; border:0; outline:2px solid #234553; background:transparent; }
-.eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry].is-point-only:is(:hover,:focus-visible)>:is(strong,small) { display:none; }
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-label-dot[data-eu-industry-anchor="national"] { fill:#fffef4; stroke:var(--eu-industry-color); stroke-dasharray:2 1; }
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-map-label[data-eu-industry]:not(.is-point-only) { display:inline-flex; flex-direction:row; align-items:baseline; gap:4px; max-width:none; min-height:20px; padding:1px 2px; border:0; border-radius:0; background:transparent; white-space:nowrap; text-align:left; text-shadow:0 1px 2px #fffef4,1px 0 2px #fffef4,-1px 0 2px #fffef4,0 -1px 2px #fffef4; }
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-label-industry { font:700 12px/1.4 var(--sans); }
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-label-location { font:500 10px/1.4 var(--sans); }
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-map-label[data-eu-industry]:not(.is-point-only)[aria-pressed=true] { border:0; outline:1px solid #234553; outline-offset:1px; background:#fff7d6; }
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-label-dot[data-eu-industry] { r:3.5px; stroke-width:1.2; }
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-label-dot[data-eu-industry].is-emphasized { stroke-width:1.5; }
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-label-leader { stroke-width:.7; opacity:.65; }
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-map-label[data-eu-industry].is-point-only:is(:hover,:focus-visible) { width:16px; height:16px; padding:0; border:0; outline:2px solid #234553; background:transparent; }
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-map-label[data-eu-industry].is-point-only:is(:hover,:focus-visible)>:is(strong,small) { display:none; }
+.eu-workspace-root[data-europe-detail] .eu-industry-product-menu { display:block; margin:4px 0 6px; border-bottom:1px solid #d4dbd1; font:13px/1.5 var(--sans); }
+.eu-workspace-root[data-europe-detail] .eu-industry-product-menu[hidden] { display:none; }
+.eu-workspace-root[data-europe-detail] .eu-industry-product-menu>summary { display:list-item; height:34px; padding:6px 4px; cursor:pointer; white-space:nowrap; }
+.eu-workspace-root[data-europe-detail] .eu-industry-product-menu>summary span { display:inline-block; max-width:70%; overflow:hidden; text-overflow:ellipsis; vertical-align:bottom; color:#52635e; }
+.eu-workspace-root[data-europe-detail] .eu-industry-map-key { display:flex; flex-wrap:wrap; gap:3px 12px; padding:6px 3px; color:#52635e; font:11px/1.5 var(--sans); }
+.eu-workspace-root[data-europe-detail] .eu-industry-map-key[hidden] { display:none; }
+.eu-workspace-root[data-europe-detail] .eu-industry-map-key span { display:inline-flex; align-items:center; gap:4px; }
+.eu-workspace-root[data-europe-detail] .eu-industry-map-key i { width:7px; height:7px; border-radius:50%; }
 @media(max-width:640px) {
  .eu-workspace-root .eu-industry-statistics table { min-width:650px; }
- .eu-workspace-root[data-europe-detail] .eu-map-label[data-eu-industry]:not(.is-point-only) { max-width:118px; min-height:32px; padding:2px 3px; }
- .eu-workspace-root[data-europe-detail] .eu-label-industry { font-size:12px; }
- .eu-workspace-root[data-europe-detail] .eu-label-location { font-size:10px; }
+ .eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-map-label[data-eu-industry]:not(.is-point-only) { max-width:none; min-height:20px; padding:1px 2px; }
+ .eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-label-industry { font-size:11px; }
+ .eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-label-location { font-size:10px; }
 }
+
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-industry-map-heading { position:static; order:-1; padding:4px 2px; border:0; background:transparent; }
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-industry-map-heading h2 { font-size:13px; }
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-industry-map-heading :is(p,[data-eu-map-status]) { display:none; }
+.eu-workspace-root[data-europe-detail] .eu-industry-map-key { order:1; }
+
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-read-panel{position:static;align-self:start}
+
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-subject-reader{max-height:none;overflow:visible}
+
+/* Expanded product choices keep their own space in the reader's scroll flow. */
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-read-panel{overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] :is(.eu-subject-reader,.eu-industry-product-menu,.eu-industry-scope-note){flex:none}
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-reader-body{flex:none;max-height:none;overflow:visible}

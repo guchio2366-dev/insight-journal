@@ -13,7 +13,7 @@ test('three sectors include distinct extraction, processing, products and servic
  for(const sector of eastSectors){const kinds=eastSectorIndustries.filter(i=>i.sectors.includes(sector.id));assert(kinds.length>=4);for(const kind of kinds){assert(eastSectorRows(sector.id).some(s=>s.industries.includes(kind.id)));assert(kind.lead.length>30&&kind.reason.length>30);}}
  for(const site of eastSectorSites){assert(site.point.every(Number.isFinite));assert(['CHN','JPN','KOR','TWN','MNG','PRK'].includes(site.country));assert(site.source.startsWith('https://'));assert(site.scope);assert(site.stage);assert.equal('volume' in site,false);for(const id of site.industries)assert(eastSectorIndustries.some(i=>i.id===id));}
  assert.match(eastSectorSites.find(s=>s.id==='oyu-tolgoi').stage,/採掘・選鉱/);assert.match(eastSectorSites.find(s=>s.id==='toyo-copper').stage,/電解精製/);assert.match(eastSectorSites.find(s=>s.id==='naoetsu-lng').stage,/輸入LNG.*気化/);assert.match(eastSectorSites.find(s=>s.id==='tokyo-digital').stage,/開発・運用/);
- for(const id of ['copper','refining'])assert.deepEqual(eastSectorIndustries.find(i=>i.id===id).sectors,['resources','manufacturing']);
+ assert.deepEqual(eastSectorIndustries.find(i=>i.id==='copper').sectors,['resources','manufacturing']);assert.deepEqual(eastSectorIndustries.find(i=>i.id==='refining').sectors,['resources']);
  assert.equal(eastIndustrySector('east-copper','manufacturing'),'manufacturing');assert.equal(eastIndustrySector('east-copper','resources'),'resources');
 });
 test('electricity examples preserve the actual published source ID, fuel and coordinate',()=>{

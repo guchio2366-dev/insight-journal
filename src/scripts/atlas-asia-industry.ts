@@ -3,10 +3,11 @@ import {industryTopic,normalizeIndustryState,industryValues,industryValueLabel,i
 import type {AsiaState,AsiaCamera} from '../lib/atlas-asia-state';
 import {eastIndustrySites} from '../data/atlas/asia-east-industry-sites';
 import {southCentralIndustryGroups,southCentralIndustrySites,southCentralIndustryOverview} from '../data/atlas/asia-south-central-industry';
-import {southIndustryGroups} from '../data/atlas/south-asia-industry-sectors';
+import {southIndustryGroups,southIndustrySectors} from '../data/atlas/south-asia-industry-sectors';
+import {southIndustryMapView} from '../data/atlas/south-asia-industry-cartography';
+import {southIndustryLabelLayout} from '../lib/atlas-south-asia-industry-labels';
 import {createSouthIndustryReading} from './atlas-south-asia-industry-reading';
 import type {SouthIndustryGroup,SouthIndustrySite} from '../data/atlas/south-asia-major-industries';
-import {southIndustryLabelPlacement} from '../lib/atlas-south-asia-industry-labels';
 import {choosePlaceReading} from '../data/atlas/asia-place-readings';
 import {Marker} from 'maplibre-gl';
 type Config={industry:IndustryRegion;industryBase:string;countries:{code:string;name:string}[];focusId?:string;industrySites?:typeof southCentralIndustrySites;industryGroups?:typeof southCentralIndustryGroups;industryOverview?:string};
@@ -21,16 +22,15 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
  const clusters=createEastIndustryClusters(root,getState,navigate,camera);
  let data:IndustryData|null=null,national:IndustryNational|null=null,pending:Promise<void>|null=null,failed=false,map:import('maplibre-gl').Map|null=null,revision=0;
  let siteLabels:Marker[]=[];
- let labelGuides:SVGSVGElement|null=null;
- let guidePositions:{point:[number,number];offset:readonly number[];line:SVGLineElement}[]=[];
- const drawLabelGuides=()=>{if(!map)return;for(const guide of guidePositions){const p=map.project(guide.point);guide.line.setAttribute('x1',String(p.x));guide.line.setAttribute('y1',String(p.y));guide.line.setAttribute('x2',String(p.x+guide.offset[0]));guide.line.setAttribute('y2',String(p.y+guide.offset[1]));}};
- const clearSiteLabels=()=>{for(const marker of siteLabels)marker.remove();siteLabels=[];labelGuides?.remove();labelGuides=null;guidePositions=[];};
+ const clearSiteLabels=()=>{for(const marker of siteLabels)marker.remove();siteLabels=[];};
  const countryName=(code:string)=>config.countries.find(c=>c.code===code)?.name??code;
  const current=()=>industryTopic(region,getState());
  const east=hasIndustryCountryScope(region);
  const southCentral=region.topics.some(t=>t.id==='sc-overview');
- const matchingRegionalGroup=(topic:string,group:string)=>topic==='sc-overview'||topic===group||!!southIndustryGroups(topic)?.includes(group as never);
- const topicGroups=(topic:string)=>southIndustryGroups(topic)??(topic==='sc-overview'?null:[topic]);
+ const south=config.focusId==='south-asia';
+ const southSector=(topic:string)=>southIndustrySectors.find(sector=>sector.id===topic||sector.groups.includes(topic as never))??southIndustrySectors[0];
+ const topicGroups=(topic:string)=>south?southSector(topic).groups:southIndustryGroups(topic)??(topic==='sc-overview'?null:[topic]);
+ const matchingRegionalGroup=(topic:string,group:string)=>south?topicGroups(topic)!.includes(group as never):topic==='sc-overview'||topic===group||!!southIndustryGroups(topic)?.includes(group as never);
  const southReading=config.focusId==='south-asia'?createSouthIndustryReading(root,regionalGroups as SouthIndustryGroup[],regionalSites as SouthIndustrySite[],regionalOverview,select):null;
  const keepEastDistribution=(t:ReturnType<typeof current>)=>isEastIndustryRegion(region)&&(t.kind==='national'||t.kind==='steel');
  const mapValues=(t:ReturnType<typeof current>)=>keepEastDistribution(t)?industryValues(t,data!,national!,industryScopeCountries(region,null)):scopedValues(t);
@@ -74,7 +74,7 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
  }
  function select(id:string){
   const state=getState(),t=current(),record=t.kind==='admin'?data?.admin.find(a=>a.id===id):data?.power.find(p=>p.id===id);
-  if(t.kind==='regional'){const site=regionalSites.find(s=>s.id===id&&(southReading||matchingRegionalGroup(t.id,s.group))&&(!state.place||s.country===state.place));navigate({...state,topic:southReading&&site&&!matchingRegionalGroup(t.id,site.group)?site.group:state.topic,detail:site?.id??null,point:site?.point??null,place:state.place,story:null,camera:camera()},false);return;}
+  if(t.kind==='regional'){const site=regionalSites.find(s=>s.id===id&&matchingRegionalGroup(t.id,s.group)&&(!state.place||s.country===state.place));navigate({...state,topic:south&&site?site.group:state.topic,detail:site?.id??null,point:site?.point??null,place:state.place,story:null,camera:camera()},false);return;}
   if(!record){navigate({...state,detail:null,point:null,camera:camera()},false);return;}
   navigate(normalizeIndustryState(region,{...state,detail:record.id,place:record.country,point:record.point??null,city:null,camera:null},data));
  }
@@ -116,6 +116,15 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
  }
  function render(){
   southReading?.render(getState(),current());
+  if(south&&getState().field==='industry'&&current().kind==='regional'){
+   const sector=southSector(current().id),groups=regionalGroups.filter(group=>sector.groups.includes(group.id as never));
+   root.dataset.industryMapSector=sector.id;
+   const legend=root.querySelector<HTMLElement>('[data-industry-scale]');
+   if(legend){legend.replaceChildren(...groups.filter(group=>regionalSites.some(site=>site.group===group.id&&(!getState().place||site.country===getState().place))).map(group=>{const item=el('span'),swatch=el('i');swatch.style.backgroundColor=group.color;item.append(swatch,document.createTextNode(group.title));return item;}));}
+   for(const button of root.querySelectorAll<HTMLElement>('[data-south-industry-sector]'))button.setAttribute('aria-pressed',String(button.dataset.southIndustrySector===sector.id));
+   const picker=root.querySelector<HTMLSelectElement>('[data-south-industry-item]');
+   if(picker){picker.replaceChildren(option('この分野の分布',sector.id),...groups.map(group=>option(group.title,group.id)));picker.value=groups.some(group=>group.id===current().id)?current().id:sector.id;}
+  }
   if(southReading&&current().kind!=='regional')$('[data-industry-value]').hidden=false;
   clusters.render();
   if(clusters.active()){for(const selector of ['[data-industry-panel]','[data-east-industry-journey]','[data-industry-country-reading]','[data-industry-region-reading]']){const node=root.querySelector<HTMLElement>(selector);if(node)node.hidden=true;}$('[data-industry-status]').textContent='';$<HTMLSelectElement>('[data-industry-topic]').value=getState().topic!;return;}
@@ -125,7 +134,7 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
   const countryReading=root.querySelector<HTMLElement>('[data-industry-country-reading]');if(countryReading){countryReading.hidden=!east||state.field!=='industry'||!state.place;if(!countryReading.hidden){countryReading.querySelector('[data-industry-country-reading-title]')!.textContent=countryName(state.place!)+'の収録範囲';countryReading.querySelector('[data-industry-country-reading-text]')!.textContent=state.place==='TWN'?'台湾のWorld Bank WDI系列は未掲載で、他国の値で補っていません。国連Comtradeは台湾等を含む「Other Asia, nes」（報告区分490）であり、台湾だけの厳密な値とは言い切れません。中国本土156とは合算しません。鉄鋼の設備能力と発電施設はそれぞれの原資料の収録範囲で読みます。':state.place==='JPN'?'日本の都道府県別製造品出荷額等は2024年・百万円です。国全体の付加価値や商品輸出額とは単位・定義が異なります。国内の業種を切り替えると、同じ県の産業構成を確認できます。':state.place==='CHN'?'中国の省別鉄鋼は稼働区分の設備能力です。年の実生産量ではありません。製造業・サービス業の国全体の指標、商品貿易と分けて確認できます。':'韓国は国全体の産業指標、鉄鋼の設備能力、発電施設、商品貿易を収録しています。韓国内の地域別・業種別産業統計は未収録で、日本や中国の国内統計で補っていません。';}}
   if(countryReading&&region.countryScope){const reading=state.place?region.countryScope.readings?.[state.place]:null;const source=countryReading.querySelector<HTMLElement>('[data-industry-country-reading-source]');if(reading){countryReading.querySelector('[data-industry-country-reading-title]')!.textContent=reading.title;countryReading.querySelector('[data-industry-country-reading-text]')!.textContent=reading.reading+' '+reading.scope;}if(source){source.hidden=!reading;if(reading){const a=source.querySelector<HTMLAnchorElement>('a')!;a.textContent=reading.source.label;a.href=reading.source.url;}}}
   root.dataset.industryScope=state.field==='industry'&&['national','steel'].includes(current().kind)?'overview':'detail';
-  const scPicker=root.querySelector<HTMLElement>('[data-sc-industry-picker]');if(scPicker){scPicker.hidden=state.field!=='industry';const select=scPicker.querySelector<HTMLSelectElement>('select')!;select.value=state.field==='industry'&&state.place==='IND'&&['in-manufacturing','in-services'].includes(current().id)?current().id:current().kind==='regional'?current().id:'sc-overview';}
+  const scPicker=root.querySelector<HTMLElement>('[data-sc-industry-picker]');if(scPicker){scPicker.hidden=state.field!=='industry'||south;const select=scPicker.querySelector<HTMLSelectElement>('select')!;select.value=state.field==='industry'&&state.place==='IND'&&['in-manufacturing','in-services'].includes(current().id)?current().id:current().kind==='regional'?current().id:'sc-overview';}
   if(!active)return;
   if(southeastRegional){$('[data-industry-topics]').hidden=true;$('[data-industry-status]').textContent='';$('[data-map-title]').textContent='東南アジアの産業分布';$('[data-map-eyebrow]').textContent='Industry · location examples';$('[data-map-period]').textContent='根拠付きの立地事例';$('[data-map-gesture]').textContent='地図上の産業地点を選ぶと、立地と工程を確認できます。';return;}
   const t=current();$<HTMLSelectElement>('[data-industry-topic]').value=t.id;
@@ -171,51 +180,54 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
   }
  }
  const layerIds=['asia-industry-national','asia-industry-admin','asia-industry-admin-lines','asia-industry-admin-selected','asia-industry-power','asia-industry-power-hit','asia-industry-power-selected','asia-industry-site','asia-industry-site-hit','asia-industry-regional','asia-industry-regional-hit','asia-industry-regional-selected'];
+ const refreshSouthLabels=()=>{if(map&&south&&getState().field==='industry'&&current().kind==='regional')void show(map);};
  async function show(currentMap:import('maplibre-gl').Map){
-  if(map!==currentMap&&southReading)currentMap.on('move',drawLabelGuides);
+  if(south&&map!==currentMap){map?.off('moveend',refreshSouthLabels);currentMap.on('moveend',refreshSouthLabels);}
   map=currentMap;const seq=++revision;clearSiteLabels();
   for(const id of layerIds)if(map.getLayer(id))map.setLayoutProperty(id,'visibility','none');
   clusters.show(currentMap);if(clusters.active())return;
   if(getState().field!=='industry'||current().kind==='trade')return;
   if(root.dataset.region==='southeast-asia'&&!getState().place)return;
   if(current().kind==='regional'){
-   if(!map.getSource('asia-industry-regional')){map.addSource('asia-industry-regional',{type:'geojson',data:{type:'FeatureCollection',features:regionalSites.map(site=>({type:'Feature',properties:{id:site.id,group:site.group,country:site.country,color:regionalGroups.find(g=>g.id===site.group)?.color??'#648075'},geometry:{type:'Point',coordinates:site.point}}))}});map.addLayer({id:'asia-industry-regional',type:'circle',source:'asia-industry-regional',paint:{'circle-radius':8,'circle-color':['get','color'],'circle-opacity':.9,'circle-stroke-color':'#fff','circle-stroke-width':1.5}});map.addLayer({id:'asia-industry-regional-hit',type:'circle',source:'asia-industry-regional',paint:{'circle-radius':16,'circle-opacity':0}});map.addLayer({id:'asia-industry-regional-selected',type:'circle',source:'asia-industry-regional',paint:{'circle-radius':12,'circle-opacity':0,'circle-stroke-color':'#852d24','circle-stroke-width':3}});}
-   const topic=current(),state=getState(),filter:any=['all',...(!southReading&&topicGroups(topic.id)?[['in',['get','group'],['literal',topicGroups(topic.id)]]]:[]),...(state.place?[['==',['get','country'],state.place]]:[])];for(const id of ['asia-industry-regional','asia-industry-regional-hit']){map.setFilter(id,filter);map.setLayoutProperty(id,'visibility','visible');}map.setFilter('asia-industry-regional-selected',['all',filter,['==',['get','id'],state.detail??'']]);map.setLayoutProperty('asia-industry-regional-selected','visibility','visible');
-   const visibleSites=regionalSites.filter(site=>(southReading||matchingRegionalGroup(topic.id,site.group))&&(!state.place||site.country===state.place));
-   const activeGroups=state.detail?regionalSites.filter(site=>site.id===state.detail).map(site=>site.group):topicGroups(topic.id);
-   if(southReading)map.setPaintProperty('asia-industry-regional','circle-opacity',activeGroups?['case',['in',['get','group'],['literal',activeGroups]],.95,.18]:.9);
-   const southClusters:Record<string,{label:string;members:string[]}>=config.focusId==='south-asia'&&!southReading?{
-    'sc-dhaka-garments':{label:'ダッカ・チッタゴン',members:['sc-dhaka-garments','sc-chattogram-garments']},
-    'sc-odisha-steel':{label:'オディシャ・ジャムシェドプル',members:['sc-odisha-steel','sc-jharkhand-steel']},
-    'sc-nepal-hydro':{label:'ネパール・ブータン',members:['sc-nepal-hydro','sc-bhutan-hydro']},
-   }:{};
-   const clustered=new Set(Object.values(southClusters).flatMap(cluster=>cluster.members.slice(1)));
-   // Keep one readable label for both industries in the crowded south Indian belt.
-   const priority=southReading?regionalGroups.flatMap(group=>{const site=visibleSites.find(site=>site.group===group.id);return site?[site.id]:[];}):topic.id==='sc-overview'&&!state.place?config.focusId==='south-asia'?['sc-ahmedabad-pharma','sc-bengaluru-it']:config.focusId==='central-asia'?['sc-inkai-uranium','sc-bozshakol-copper','sc-muruntau-gold']:[]:[];
-   // South Asia keeps the overview's names and collision decisions on selection.
-   // Compact sites open their reading without displacing another site's label.
-   const stableLabels=config.focusId==='south-asia';
-   const ordered=state.detail&&!stableLabels?[...visibleSites.filter(site=>site.id===state.detail),...visibleSites.filter(site=>site.id!==state.detail)]:[...priority.flatMap(id=>visibleSites.filter(site=>site.id===id)),...visibleSites.filter(site=>!priority.includes(site.id))];
+   const topic=current(),state=getState(),visibleSites=regionalSites.filter(site=>matchingRegionalGroup(topic.id,site.group)&&(!state.place||site.country===state.place));
+   const features={type:'FeatureCollection' as const,features:visibleSites.map(site=>({type:'Feature' as const,properties:{id:site.id,group:site.group,country:site.country,color:regionalGroups.find(g=>g.id===site.group)?.color??'#648075'},geometry:{type:'Point' as const,coordinates:site.point}}))};
+   const source=map.getSource('asia-industry-regional') as import('maplibre-gl').GeoJSONSource|undefined;
+   if(source)source.setData(features);
+   else{map.addSource('asia-industry-regional',{type:'geojson',data:features});map.addLayer({id:'asia-industry-regional',type:'circle',source:'asia-industry-regional',paint:{'circle-radius':6,'circle-color':['get','color'],'circle-opacity':.9,'circle-stroke-color':'#fff','circle-stroke-width':1.5}});map.addLayer({id:'asia-industry-regional-hit',type:'circle',source:'asia-industry-regional',paint:{'circle-radius':16,'circle-opacity':0}});map.addLayer({id:'asia-industry-regional-selected',type:'circle',source:'asia-industry-regional',paint:{'circle-radius':10,'circle-opacity':0,'circle-stroke-color':'#852d24','circle-stroke-width':3}});}
+   const filter:any=['all',...(topicGroups(topic.id)?[['in',['get','group'],['literal',topicGroups(topic.id)]]]:[]),...(state.place?[['==',['get','country'],state.place]]:[])];
+   for(const id of ['asia-industry-regional','asia-industry-regional-hit']){map.setFilter(id,filter);map.setLayoutProperty(id,'visibility','visible');}
+   map.setFilter('asia-industry-regional-selected',['all',filter,['==',['get','id'],state.detail??'']]);map.setLayoutProperty('asia-industry-regional-selected','visibility','visible');
+   if(south){
+    const canvas=currentMap.getCanvas().getBoundingClientRect();
+    const view=southIndustryMapView(topic.id,state.place),ids=new Set(visibleSites.map(site=>site.id));
+    const entries=view.labels.filter(label=>ids.has(label.anchorId)&&label.siteIds.every(id=>ids.has(id)));
+    const layout=southIndustryLabelLayout(entries,point=>currentMap.project(point),canvas,visibleSites.map(site=>site.point),[{left:canvas.width-70,top:0,right:canvas.width,bottom:160}]);
+    root.dataset.industryMapOmittedLabels=String(layout.filter(entry=>!entry.placement).length);
+    for(const {label:entry,placement} of layout){
+     if(!placement)continue;
+     const label=el('button');label.type='button';label.className='asia-industry-regional-label';label.dataset.industrySite=entry.anchorId;label.dataset.industryGroup=entry.group;label.dataset.industryMembers=entry.siteIds.join(',');
+     label.append(el('strong',entry.industry),el('span',entry.place));label.style.setProperty('--site-color',entry.color);label.style.setProperty('--south-label-width',placement.width+'px');
+     label.setAttribute('aria-label',entry.industry+' · '+entry.siteIds.map(id=>regionalSites.find(site=>site.id===id)!.name).join('、')+'の説明を開く');label.setAttribute('aria-pressed',String(entry.siteIds.includes(state.detail??'')));
+     label.title=entry.industry+' · '+entry.place;label.addEventListener('click',event=>{event.stopPropagation();select(entry.anchorId);});
+     siteLabels.push(new Marker({element:label,anchor:placement.anchor,offset:placement.offset}).setLngLat(entry.point).addTo(map));
+    }
+    return;
+   }
+   const priority=topic.id==='sc-overview'&&!state.place&&config.focusId==='central-asia'?['sc-inkai-uranium','sc-bozshakol-copper','sc-muruntau-gold']:[];
+   const ordered=state.detail?[...visibleSites.filter(site=>site.id===state.detail),...visibleSites.filter(site=>site.id!==state.detail)]:[...priority.flatMap(id=>visibleSites.filter(site=>site.id===id)),...visibleSites.filter(site=>!priority.includes(site.id))];
    const occupied:{left:number;top:number;right:number;bottom:number}[]=[];
    const canvas=currentMap.getCanvas().getBoundingClientRect();
-   if(southReading){labelGuides=document.createElementNS('http://www.w3.org/2000/svg','svg');labelGuides.classList.add('south-industry-label-guides');labelGuides.setAttribute('aria-hidden','true');root.querySelector('.asia-map-frame')?.append(labelGuides);}
    const placements=[{anchor:'left',offset:[12,0],dx:12,dy:-21},{anchor:'right',offset:[-12,0],dx:-162,dy:-21},{anchor:'bottom',offset:[0,-12],dx:-75,dy:-54},{anchor:'top',offset:[0,12],dx:-75,dy:12},{anchor:'top-left',offset:[12,12],dx:12,dy:12},{anchor:'bottom-right',offset:[-12,-12],dx:-162,dy:-54}] as const;
    for(const site of ordered){
     const group=regionalGroups.find(item=>item.id===site.group),label=el('button');label.type='button';label.className='asia-industry-regional-label';label.dataset.industrySite=site.id;label.setAttribute('aria-label',site.name+'の説明を開く');label.setAttribute('aria-pressed',String(state.detail===site.id));label.style.setProperty('--site-color',group?.color??'#648075');const namedMineral=config.focusId==='central-asia'&&site.group==='sc-minerals';label.append(el('strong',namedMineral?site.name.split('：')[1]:group?.title??'産業'),el('span',site.name.split('：')[0]));label.addEventListener('click',event=>{event.stopPropagation();select(site.id);});
-    if(southReading){const scaleLabel=(site as SouthIndustrySite).scaleLabel;label.append(el('small',scaleLabel));label.title=site.name+' · '+scaleLabel;}
-    const cluster=southClusters[site.id];if(cluster&&(stableLabels||state.detail!==site.id))label.querySelector('span')!.textContent=cluster.label;
     const p=currentMap.project(site.point),selected=state.detail===site.id;
-    let placement:typeof placements[number]|ReturnType<typeof southIndustryLabelPlacement>;
-    if(southReading)placement=southIndustryLabelPlacement(p,canvas,occupied);
-    else if((selected&&!stableLabels)||!clustered.has(site.id))for(const candidate of placements){const box={left:p.x+candidate.dx,top:p.y+candidate.dy,right:p.x+candidate.dx+150,bottom:p.y+candidate.dy+42};if(canvas.width>0&&(box.left<4||box.right>canvas.width-4||box.top<4||box.bottom>canvas.height-4))continue;if(occupied.some(other=>box.left<other.right+6&&box.right+6>other.left&&box.top<other.bottom+6&&box.bottom+6>other.top))continue;placement=candidate;occupied.push(box);break;}
-    if(selected&&!stableLabels&&!placement)placement=placements[0];
+    let placement:typeof placements[number]|undefined;
+    for(const candidate of placements){const box={left:p.x+candidate.dx,top:p.y+candidate.dy,right:p.x+candidate.dx+150,bottom:p.y+candidate.dy+42};if(canvas.width>0&&(box.left<4||box.right>canvas.width-4||box.top<4||box.bottom>canvas.height-4))continue;if(occupied.some(other=>box.left<other.right+6&&box.right+6>other.left&&box.top<other.bottom+6&&box.bottom+6>other.top))continue;placement=candidate;occupied.push(box);break;}
+    if(selected&&!placement)placement=placements[0];
     if(!placement){label.classList.add('is-compact');label.title=site.name;}
-    label.classList.toggle('is-muted',Boolean(southReading&&activeGroups&&!activeGroups.includes(site.group)));
-    if(southReading&&placement&&labelGuides){const line=document.createElementNS('http://www.w3.org/2000/svg','line');line.dataset.southLabelGuide=site.id;line.classList.toggle('is-muted',Boolean(activeGroups&&!activeGroups.includes(site.group)));labelGuides.append(line);guidePositions.push({point:site.point,offset:placement.offset,line});}
     label.style.zIndex=selected?'20':placement?'5':'1';
     siteLabels.push(new Marker({element:label,anchor:placement?.anchor??'center',offset:placement?.offset??[0,0]}).setLngLat(site.point).addTo(map));
    }
-   drawLabelGuides();
    return;
   }
   // A late map-ready/rebuild must not start a second request behind the retry UI.
@@ -240,6 +252,7 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
    }
   }
  }
+ root.querySelector<HTMLSelectElement>('[data-south-industry-item]')?.addEventListener('change',event=>{const topic=(event.target as HTMLSelectElement).value;if(!topicGroups(current().id)?.includes(topic as never)&&topic!==southSector(current().id).id)return;navigate({...getState(),field:'industry',topic,detail:null,point:null,story:null,city:null,camera:camera()},false);});
  $('[data-industry-retry]').addEventListener('click',()=>{failed=false;render();});
  for(const button of eastJourney?.querySelectorAll<HTMLButtonElement>('[data-east-industry-next]')??[])button.addEventListener('click',()=>{const state=getState(),topic=button.dataset.eastIndustryTopic;if(!topic||!region.topics.some(t=>t.id===topic))return;const same=topic===state.topic;navigate({...state,topic,detail:same?state.detail:null,point:same?state.point:null,camera:camera()},false);});
  $<HTMLSelectElement>('[data-industry-detail]').addEventListener('change',e=>select((e.target as HTMLSelectElement).value));
@@ -247,8 +260,9 @@ export function createAsiaIndustry(root:HTMLElement,config:Config,getState:()=>A
  $<HTMLSelectElement>('[data-industry-topic]').addEventListener('change',e=>{const topic=region.topics.find(t=>t.id===(e.target as HTMLSelectElement).value)!;navigate({...getState(),field:'industry',sector:null,subsector:null,topic:topic.id,detail:topic.kind==='trade'&&current().kind==='trade'?getState().detail:null,place:topic.country??getState().place,point:null,city:null,camera:topic.country&&topic.country!==getState().place?null:camera()},!!topic.country&&topic.country!==getState().place);});
  root.querySelector<HTMLSelectElement>('[data-sc-industry-topic]')?.addEventListener('change',event=>{const id=(event.target as HTMLSelectElement).value;const india=id.startsWith('in-');navigate({...getState(),field:'industry',topic:id,place:india?'IND':null,detail:null,point:null,story:null,city:null,camera:camera()},false);});
  function normalize(state:AsiaState){
-  const next=normalizeIndustryState(region,state,data);
-  if(!southReading||next.field!=='industry'||industryTopic(region,next).kind!=='regional'||!next.detail)return next;
+  let next=normalizeIndustryState(region,state,data);
+  if(south&&next.field==='industry'&&next.topic==='sc-overview'){const legacy=regionalSites.find(site=>site.id===next.detail&&(!next.place||site.country===next.place)),sector=southSector(legacy?.group??next.topic);if(region.topics.some(topic=>topic.id===sector.id))next={...next,topic:sector.id,detail:legacy?.id??null,point:legacy?.point??null};}
+  if(!south||next.field!=='industry'||industryTopic(region,next).kind!=='regional'||!next.detail)return next;
   const site=regionalSites.find(site=>site.id===next.detail&&matchingRegionalGroup(next.topic!,site.group)&&(!next.place||site.country===next.place));
   return site?{...next,point:site.point}:{...next,detail:null,point:null};
  }

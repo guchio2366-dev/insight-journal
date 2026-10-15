@@ -1,4 +1,5 @@
 import raw from '../data/atlas/latin-america/industry-sectors.json';
+import {industryIdsInSector} from './atlas-latin-industry-layers';
 
 export type LatinIndustryMetric = {
  id:string; industry:string; role:'regional'|'world'|'supply'; label:string;
@@ -49,7 +50,7 @@ export function latinIndustryMapAnnotation(industry:string,sites:{country:string
 }
 
 export function statisticsForIndustrySelection(sector:string,industry:string|null){
- const ids=new Set(raw.industries.filter(i=>i.sectors.includes(sector)&&(!industry||i.id===industry)).map(i=>i.id));
+ const ids=new Set([...industryIdsInSector(sector)].filter(id=>!industry||id===industry));
  return latinIndustryMetrics.filter(m=>ids.has(m.industry));
 }
 

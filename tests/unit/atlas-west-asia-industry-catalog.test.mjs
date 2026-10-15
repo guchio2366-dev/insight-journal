@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import data from '../../src/data/atlas/west-asia.json' with {type:'json'};
 import {westIndustryCatalog as catalog,westIndustryAdoption as adoption,westIndustrySources as sources,westIndustrySectors as sectors} from '../../src/data/atlas/west-asia-industry-catalog.mjs';
-import {readWestIndustryState,westIndustrySearch,layoutWestIndustryLabels,westIndustryFrame,projectWestIndustry,comparableWestIndustryRows} from '../../src/lib/atlas-west-asia-industry.mjs';
+import {readWestIndustryState,westIndustrySearch,layoutWestIndustryAnnotations,westIndustryFrame,projectWestIndustry,comparableWestIndustryRows,comparableWestIndustryMapRows,westIndustryMapLocations,clusterWestIndustryLocations,layoutWestIndustryPointSymbols} from '../../src/lib/atlas-west-asia-industry.mjs';
 
 test('research adoption covers every main series and all four additions without a world industry route',()=>{
  assert.equal(catalog.length,21);assert.equal(new Set(catalog.map(i=>i.id)).size,21);
@@ -28,14 +28,30 @@ test('locations have individual evidence and stage, offshore oil remains offshor
  const aluminium=catalog.find(i=>i.id==='aluminium');assert(aluminium.locations.some(l=>l.name==='アルタウィーラ'&&l.note.includes('25%')));
  assert(catalog.find(i=>i.id==='crude').locations.some(l=>l.name.includes('上部ザクム')&&l.coordinates[0]<54));
 });
-test('label layout has no collisions at desktop and mobile widths and never uses selection state',()=>{
+test('four compact annotations replace map controls without collisions or long callout lines',()=>{
  for(const sector of sectors)for(const width of [280,300,320,340,390,750,1050]){
-  const height=width*.987,items=catalog.filter(i=>i.sectors.includes(sector.id)),rows=layoutWestIndustryLabels(items,width,height,westIndustryFrame);
-  assert.equal(rows.length,items.length);
+  const height=width*.987,items=catalog.filter(i=>i.sectors.includes(sector.id)),rows=layoutWestIndustryAnnotations(sector.id,width,height,westIndustryFrame);
+  assert(rows.length<=4&&rows.length>=3);
   for(const r of rows){assert(r.x>=0&&r.y>=0&&r.x+r.width<=width&&r.y+r.height<=height-62,`${sector.id} ${width} ${r.id} remains in map`);}
   for(let a=0;a<rows.length;a++)for(let b=a+1;b<rows.length;b++){const r=rows[a],s=rows[b];assert(r.x+r.width<=s.x||s.x+s.width<=r.x||r.y+r.height<=s.y||s.y+s.height<=r.y,`${sector.id}/${width} ${r.id}/${s.id} overlap`);}
-  assert.deepEqual(rows,layoutWestIndustryLabels(items,width,height,westIndustryFrame));
+  assert.deepEqual(rows,layoutWestIndustryAnnotations(sector.id,width,height,westIndustryFrame));
+  for(const r of rows)assert(r.industries.every(id=>items.some(i=>i.id===id)));
+  const groups=clusterWestIndustryLocations(items,sector.id,width,westIndustryFrame),symbols=layoutWestIndustryPointSymbols(groups,width,height,westIndustryFrame);
+  for(const symbol of symbols){assert(Math.hypot(...symbol.offset)<=20.0001);assert.deepEqual(symbol.coordinates,catalog.find(i=>i.id===symbol.industry).locations[symbol.anchor].coordinates);}
+  for(const group of groups){const i=catalog.find(i=>i.id===group.industry);assert(group.members.every(n=>i.locations[n].country===group.country));}
  }
+});
+test('separate stage maps retain every sourced location and all statistics',()=>{
+ const covered=new Set();
+ for(const sector of sectors){for(const i of catalog)for(const l of westIndustryMapLocations(i,sector.id))covered.add(i.id+':'+l.index);}
+ for(const i of catalog)for(let n=0;n<i.locations.length;n++)assert(covered.has(i.id+':'+n));
+ const aluminium=catalog.find(i=>i.id==='aluminium'),phosphate=catalog.find(i=>i.id==='phosphate');
+ assert(westIndustryMapLocations(aluminium,'resources').every(l=>l.stage.includes('採掘')));
+ assert(westIndustryMapLocations(aluminium,'manufacturing').every(l=>!l.stage.includes('採掘')));
+ assert(westIndustryMapLocations(phosphate,'resources').every(l=>l.stage.includes('採掘')));
+ assert(westIndustryMapLocations(phosphate,'manufacturing').every(l=>!l.stage.includes('採掘')));
+ assert.equal(westIndustryMapLocations(catalog.find(i=>i.id==='steel'),'resources').length,0);
+ assert.equal(readWestIndustryState('?sector=resources&industry=aluminium&place=0').place,null);
 });
 test('URL state restores country, industry, explicit filter and camera; invalid state cannot create invented places',()=>{
  const state=readWestIndustryState('?sector=resources&industry=lng&place=1&country=QAT&only=1&map=10,20,800,789.6');
@@ -45,4 +61,13 @@ test('URL state restores country, industry, explicit filter and camera; invalid 
  assert.equal(readWestIndustryState('?topic=industry-petrochemical&country=ARE').industry,'polymers');
  assert.equal(readWestIndustryState('?topic=industry-services').sector,'services');
  assert.equal(readWestIndustryState('?sector=resources&industry=apparel').industry,null);
+});
+
+test('map quantities follow the visible production stage without discarding the other observations',()=>{
+ const p=catalog.find(i=>i.id==='phosphate'),a=catalog.find(i=>i.id==='aluminium'),s=catalog.find(i=>i.id==='steel');
+ assert(comparableWestIndustryMapRows(p,'resources').every(r=>r.measure==='リン鉱石生産'));
+ assert.deepEqual(comparableWestIndustryMapRows(p,'manufacturing').map(r=>r.value),[6.233,.717]);
+ assert.equal(comparableWestIndustryMapRows(a,'resources').length,0);
+ assert(comparableWestIndustryMapRows(s,'manufacturing').every(r=>r.measure==='DRI生産'));
+ assert(s.metrics.some(r=>r.measure==='粗鋼生産'));
 });

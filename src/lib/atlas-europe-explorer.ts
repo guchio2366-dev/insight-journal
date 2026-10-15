@@ -308,6 +308,11 @@ export async function initEuropeAtlas() {
   // Regional and national examples remain in the reader; they are not map distributions.
   function positionRegionalEvidence() {}
   const features = [...config.populationCities,...config.readings,...europeCultureOverviewPlaces];
+  // The industry map owns the geographic picture; title/status stay outside it.
+  if(subject().field==='industry'){
+    const heading=query<HTMLElement>('.eu-map-heading');heading.classList.add('eu-industry-map-heading');stage.before(heading);
+    query('[data-eu-subject-reader] .eu-reader-summary').after(query('[data-eu-industry-product-menu]'));
+  }
   const industrySector=()=>state.industrySector??'resources';
   const industryPlaces=()=>config.readings.filter(r=>r.field==='industry'&&europeIndustryInSector(r.id,industrySector()));
   const visibleFeatures = () => subject().field==='population'&&!cultureActive()&&state.layer!=='language' ? config.populationCities : ['treecover','forest'].includes(state.layer)?config.readings.filter(r=>r.id==='kaukas'||r.field==='agriculture'):subject().field==='industry' ? industryPlaces() : subject().field==='nature'&&['water','drainage','terrain'].includes(state.layer) ? config.readings.filter(r=>r.field==='nature'&&r.layer===(['water','drainage'].includes(state.layer)?'water':'terrain')) : [];
@@ -946,6 +951,10 @@ export async function initEuropeAtlas() {
       }
     });
     all<HTMLElement>('[data-eu-industry-key-item]').forEach(item=>{item.hidden=!europeIndustrySectorCopy[industrySector()].groups.includes(normaliseEuropeIndustryGroup(item.dataset.euIndustryKeyItem)!);});
+    query<HTMLElement>('[data-eu-inline-industry-key]').hidden=topic!=='hubs';
+    query<HTMLElement>('[data-eu-industry-product-menu]').hidden=topic!=='hubs';
+    query<HTMLElement>('[data-eu-industry-menu-selection]').textContent=state.industryGroup??'分野全体';
+    query<HTMLElement>('.eu-map-stage').dataset.euIndustryMapSector=topic==='hubs'?industrySector():'';
     all<HTMLSelectElement>('[data-eu-layer-choice]').forEach(select=>{
       const irrelevant=cultureActive()&&select.dataset.euLayerChoice==='population';
       select.closest('label')!.hidden=irrelevant;select.disabled=irrelevant;
