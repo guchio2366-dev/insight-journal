@@ -28,6 +28,7 @@ try{
    assert.ok(layout.width<=viewport.width+1,'document overflows');assert.ok(layout.labels>=4);assert.deepEqual(layout.outside,[]);assert.deepEqual(layout.overlaps,[]);
    await page.locator('.eu-map-stage').scrollIntoViewIfNeeded();
    await page.screenshot({path:path.join(output,`${viewport.width}-${viewport.height}-${renderer}-${sector}.png`)});
+   await page.locator('[data-eu-industry-product-menu]').evaluate(node=>node.open=true);await settle();
    const groups=await page.locator('[data-eu-industry-group]:visible').evaluateAll(nodes=>nodes.map(n=>n.dataset.euIndustryGroup));
    for(const group of groups){
     await page.locator(`[data-eu-industry-group="${group}"]`).click();await settle();stable(before,await snapshot());
