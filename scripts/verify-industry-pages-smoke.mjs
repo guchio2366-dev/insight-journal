@@ -103,7 +103,8 @@ async function capture(scene,profile,stage,sectorIndex){
  report.images.push({file,sha256:createHash('sha256').update(bytes).digest('hex'),url:page.url(),viewport:{width:profile.width,height:profile.height},profile,actualViewport,stage,sectorIndex});
  // The same evidence is retained as an artifact. Optional exact image bytes in
  // ordinary CI logs allow authorized review when artifact transfer is unavailable.
- if(process.env.INDUSTRY_SMOKE_LOG_IMAGES==='1'&&profile.name==='primary-reproduction'&&stage==='initial')console.log('INDUSTRY_REVIEW_IMAGE '+JSON.stringify({file,mimeType:'image/jpeg',base64:bytes.toString('base64')}));
+ const reviewProfile=profile.name==='primary-reproduction'||profile.name==='portrait'||['central-asia','europe','southeast-asia','us'].includes(scene.id);
+ if(process.env.INDUSTRY_SMOKE_LOG_IMAGES==='1'&&reviewProfile&&stage==='initial')console.log('INDUSTRY_REVIEW_IMAGE '+JSON.stringify({file,mimeType:'image/jpeg',base64:bytes.toString('base64')}));
 }
 async function checkRelease(context){
  if(!production)return;

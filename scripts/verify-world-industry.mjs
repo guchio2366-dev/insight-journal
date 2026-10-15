@@ -132,6 +132,10 @@ try {
   delete report.phase;
   await writeFile(path.join(output, 'report.json'), JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify(report));
+  if(process.env.WORLD_INDUSTRY_LOG_IMAGES==='1')for(const file of ['1440-initial.jpg','1440-semiconductor.jpg','1440-gas.jpg','1440-copper.jpg','390-semiconductor.jpg']){
+    const bytes=await readFile(path.join(output,file));
+    console.log('WORLD_INDUSTRY_REVIEW_IMAGE '+JSON.stringify({file,mimeType:'image/jpeg',base64:bytes.toString('base64')}));
+  }
 } catch (error) {
   report.passed = false; report.error = error.message;
   await writeFile(path.join(output, 'report.json'), JSON.stringify(report, null, 2) + '\n');

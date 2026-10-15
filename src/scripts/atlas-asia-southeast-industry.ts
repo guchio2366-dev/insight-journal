@@ -75,8 +75,9 @@ export function createSoutheastIndustryLocations(root:HTMLElement,getState:()=>A
   const candidates=southeastMapLabels.filter(g=>g.sectors.includes(sector)).map(group=>({group,p:map!.project(group.point)})).filter(({p})=>p.x>=8&&p.x<=width-8&&p.y>=8&&p.y<=height-8);
   const frame=overlay.getBoundingClientRect();
   const reserved=[root.querySelector<HTMLElement>('.asia-map-tools')].filter((node):node is HTMLElement=>!!node).map(node=>{const r=node.getBoundingClientRect();return {left:r.left-frame.left-3,top:r.top-frame.top-3,right:r.right-frame.left+3,bottom:r.bottom-frame.top+3};});
-  const boxes=placeSoutheastIndustryLabels(candidates.map(({group,p})=>({id:group.id,x:p.x,y:p.y,width:Math.max(70,Math.max(group.place.length,group.industry.length)*(compact?11:12)+8),height:30})),width,height,reserved,locations.map(x=>x.p));
-  for(const {group,p} of candidates){const box=boxes.get(group.id);if(!box)continue;const label=labels.get(group.id)!;label.hidden=false;Object.assign(label.style,{left:box.left+'px',top:box.top+'px',width:box.right-box.left+'px',height:box.bottom-box.top+'px'});
+  const font=compact?11:12;
+  const boxes=placeSoutheastIndustryLabels(candidates.map(({group,p})=>({id:group.id,x:p.x,y:p.y,width:Math.max(70,Math.max(group.place.length*10,group.industry.length*font)+12),height:32})),width,height,reserved,locations.map(x=>x.p));
+  for(const {group,p} of candidates){const box=boxes.get(group.id);if(!box)continue;const label=labels.get(group.id)!;label.hidden=false;Object.assign(label.style,{left:box.left+'px',top:box.top+'px',width:box.right-box.left+'px',height:box.bottom-box.top+'px'});Object.assign(label.querySelector('strong')!.style,{fontSize:font+'px',letterSpacing:'normal'});
    const line=document.createElementNS('http://www.w3.org/2000/svg','line');line.dataset.southeastIndustryLeader=group.id;line.setAttribute('x1',String(p.x));line.setAttribute('y1',String(p.y));line.setAttribute('x2',String(Math.max(box.left,Math.min(p.x,box.right))));line.setAttribute('y2',String(Math.max(box.top,Math.min(p.y,box.bottom))));line.classList.toggle('muted',kind!=='all'&&kind!==group.kind);leaders.append(line);
   }
   root.dataset.southeastIndustryLayoutReady='true';

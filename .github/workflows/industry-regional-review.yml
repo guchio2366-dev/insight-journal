@@ -49,7 +49,7 @@ jobs:
         run: |
           set -euo pipefail
           if [[ -f scripts/verify-world-industry.mjs ]]; then
-            REVIEW_CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)" node scripts/run-review-with-annotations.mjs scripts/verify-world-industry.mjs
+            WORLD_INDUSTRY_LOG_IMAGES=1 REVIEW_CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)" node scripts/run-review-with-annotations.mjs scripts/verify-world-industry.mjs
           fi
       - name: Verify industry maps and capture evidence
         if: github.event_name == 'pull_request'
@@ -89,7 +89,7 @@ jobs:
           export INDUSTRY_REVIEW_CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable)"
           node scripts/run-review-with-annotations.mjs scripts/verify-approved-pages-release.mjs
           if [[ -f scripts/verify-world-industry.mjs ]]; then
-            WORLD_INDUSTRY_REVIEW_URL=https://guchio2366-dev.github.io/insight-journal/atlas/industry/world/ REVIEW_CHROME_PATH="$INDUSTRY_REVIEW_CHROME_PATH" node scripts/run-review-with-annotations.mjs scripts/verify-world-industry.mjs
+            WORLD_INDUSTRY_LOG_IMAGES=1 WORLD_INDUSTRY_REVIEW_URL=https://guchio2366-dev.github.io/insight-journal/atlas/industry/world/ REVIEW_CHROME_PATH="$INDUSTRY_REVIEW_CHROME_PATH" node scripts/run-review-with-annotations.mjs scripts/verify-world-industry.mjs
           fi
           INDUSTRY_SMOKE_TARGET=production REVIEW_CHROME_PATH="$INDUSTRY_REVIEW_CHROME_PATH" node scripts/run-review-with-annotations.mjs scripts/verify-industry-pages-smoke.mjs
       - uses: actions/upload-artifact@v4

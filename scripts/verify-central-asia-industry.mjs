@@ -56,7 +56,12 @@ try{
  for(const id of ['central-zhezkazgan','central-aktobe-chromium']){
   const site=centralIndustrySites.find(site=>site.id===id);
   await page.locator('[data-central-sector="resources"]').click();assert.equal(await page.locator(`[data-central-marker="${id}"]`).count(),1);await page.locator('#central-industry-locations').evaluate(node=>node.open=true);await page.locator(`[data-central-site-choice="${id}"]`).click();await settle();const before=(await state()).frame;
-  const label=page.locator('[data-central-label-industry]').filter({hasText:centralIndustryAnnotationLabel(site,'resources')});assert(await label.count()>0,'Shared processing places keep their actual process name');
+  const stageName=centralIndustryAnnotationLabel(site,'resources');
+  const labels=await page.locator('[data-central-label-industry]').evaluateAll((nodes,id)=>nodes.filter(node=>node.dataset.centralLabelSites.split(',').includes(id)).map(node=>node.textContent),id);
+  assert(labels.every(text=>text.includes(stageName)),'Visible shared-processing annotations keep the actual process name');
+  assert((await page.locator(`[data-central-marker="${id}"]`).getAttribute('aria-label')).includes(site.stage),'Every processing point retains its sourced stage, including when its annotation is omitted');
+  assert((await page.locator('[data-central-site-title]').textContent()).includes(site.stage),'Selected processing place exposes its real stage in the reading panel');
+  assert((await page.locator(`[data-central-site-choice="${id}"]`).textContent()).includes(site.stage),'The complete off-map list keeps the real process name');
   await page.locator('[data-central-overlap]').click();await settle();assert.equal((await state()).sector,'manufacturing');assert.equal((await state()).site,id);assert.deepEqual((await state()).frame,before);await verify('manufacturing');
  }
  await page.locator('[data-country-select]').selectOption('KAZ');assert.equal((await state()).country,'KAZ');await page.locator('[data-reset]').click();assert.equal((await state()).country,null);assert.equal(new URL(page.url()).pathname,base+'/atlas/asia/central-asia/industry/');
