@@ -54,3 +54,5 @@
 @media(max-width:550px){.us-industry-stat-grid{grid-template-columns:minmax(0,1fr)}[data-us-industry] .atlas-layer-caption{font-size:10px;bottom:6px;left:7px;right:7px}.us-industry-map-tools{top:4px;right:4px}.us-industry-map-tools button{min-width:30px;min-height:30px}}
 
 .us-industry-picker{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.us-industry-picker select{max-width:100%;min-height:36px;font:inherit}.us-industry-controls>[data-us-supplemental-sector]{font-size:12px;margin:4px 0}
+
+@media(min-width:960px){[data-us-industry] .us-industry-map-frame{max-width:min(100%,calc((100dvh - var(--us-map-top,380px) - 16px) * 5 / 3))!important}[data-us-industry] .us-industry-reading{max-height:calc(100dvh - var(--us-map-top,380px) - 16px)}}

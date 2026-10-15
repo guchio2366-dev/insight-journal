@@ -50,7 +50,7 @@ for(const scene of scenes){
  scene.sectors='button'+scene.sectors;
  if(scene.mode!=='select')scene.products=scene.products.replace(/(\[[^\]]+\])$/,'button$1');
 }
-const labelSelectors={canada:'[data-ca-label-sites]',mexico:'[data-ma-cluster]',europe:'.eu-label-industry','east-asia':'.asia-industry-regional-label','southeast-asia':'[data-southeast-industry-label]','south-asia':'.asia-industry-regional-label','central-asia':'[data-central-label-industry]','west-asia':'[data-wi-annotation]',africa:'[data-africa-industry-annotation]',oceania:'[data-oceania-product-mark]','latin-america':'[data-lis-label]',us:'[data-us-map-label]',russia:'[data-ru-label]'};
+const labelSelectors={canada:'[data-ca-label-sites]',mexico:'[data-ma-cluster]',europe:'.eu-label-industry','east-asia':'[data-industry-label]','southeast-asia':'[data-southeast-industry-label]','south-asia':'.asia-industry-regional-label','central-asia':'[data-central-label-industry]','west-asia':'[data-wi-annotation]',africa:'[data-africa-industry-annotation]',oceania:'[data-oceania-product-mark]','latin-america':'[data-lis-label]',us:'[data-us-map-label]',russia:'[data-ru-label]'};
 for(const scene of scenes)scene.labels=labelSelectors[scene.id];
 assert.equal(scenes.length,13);
 const report={head,target:production?'existing-pages':'build',expectedReleaseSha:production?expected:null,sandboxRequired:true,status:'running',cases:[],failedCases:[],images:[],errors:[],failedResponses:[]};
@@ -65,11 +65,13 @@ async function snapshot(scene){
  const box=await page.locator(scene.map).first().boundingBox();assert(box?.width>100&&box.height>100,scene.id+': nonempty map');
  const frame=scene.camera?await page.locator(scene.camera).first().getAttribute('viewBox'):null;
  const labels=await page.locator(scene.map).first().evaluate((root,selector)=>{const map=root.getBoundingClientRect();return [...root.querySelectorAll(selector)].filter(node=>{const r=node.getBoundingClientRect();return r.width>0&&r.height>0;}).map(node=>{const r=node.getBoundingClientRect();return {text:node.textContent.trim(),x:r.x-map.x,y:r.y-map.y,width:r.width,height:r.height};});},scene.labels);
- return {width:box.width,height:box.height,frame,labels};
+ const rawCamera=await page.locator('[data-asia-atlas]').count()?await page.locator('[data-asia-atlas]').getAttribute('data-map-camera'):null;
+ return {width:box.width,height:box.height,frame,labels,geoCamera:rawCamera?JSON.parse(rawCamera):null};
 }
 function fixed(before,after,name){
+ if(before.geoCamera){assert(after.geoCamera,name+': geographic camera missing');for(const k of ['lng','lat','zoom'])assert(Math.abs(before.geoCamera[k]-after.geoCamera[k])<=(k==='zoom'?.001:5e-5),name+': geographic '+k+' changes');}
  assert.equal(after.labels.length,before.labels.length,name+': sector label count changes');
- for(let i=0;i<before.labels.length;i++){assert.equal(after.labels[i].text,before.labels[i].text,name+': sector caption changes');for(const k of ['x','y'])assert(Math.abs(after.labels[i][k]-before.labels[i][k])<=1.5,name+': sector caption '+k+' moves');}
+ for(let i=0;i<before.labels.length;i++){assert.equal(after.labels[i].text,before.labels[i].text,name+': sector caption changes');for(const k of ['x','y'])assert(Math.abs(after.labels[i][k]-before.labels[i][k])<=1.5,name+': sector caption '+k+' moves '+JSON.stringify({before:before.labels[i],after:after.labels[i],beforeFrame:before.frame,afterFrame:after.frame}));}
  for(const k of ['width','height'])assert(Math.abs(before[k]-after[k])<=1,name+': map '+k+' changes');
  if(before.frame!==null&&after.frame!==null){
   const a=before.frame.split(/[ ,]+/).map(Number),b=after.frame.split(/[ ,]+/).map(Number);

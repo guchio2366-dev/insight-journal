@@ -39,7 +39,7 @@ export function initMexicoIndustryAdopted(root:HTMLElement){
    const visible=!state.only||active;label.setAttribute('visibility',visible?'visible':'hidden');if(!visible)label.dataset.maHidden='true';
    if(state.industry&&!active)label.classList.add('is-context');if(active)label.classList.add('is-selected');
    const title=element('title',{});title.textContent=`${cluster.name}：${cluster.states.map(name).join('、')}。${cluster.industries.map(i=>i.label).join('、')}`;label.append(title);
-   const region=element('text',{x:box[0],y:box[1]+26}),examples=element('text',{x:box[0],y:box[1]+12});region.classList.add('ma-region-name');examples.classList.add('ma-region-industries');region.textContent=cluster.name;examples.textContent=active?mexicoClusterIndustryName(cluster,item()!):cluster.examples;label.append(examples,region);annotations.append(label);
+   const region=element('text',{x:box[0],y:box[1]+26}),examples=element('text',{x:box[0],y:box[1]+12});region.classList.add('ma-region-name');examples.classList.add('ma-region-industries');region.textContent=cluster.name;examples.textContent=cluster.examples;label.append(examples,region);annotations.append(label);
   }
   for(const p of points){
    const active=!!state.industry&&p.industries.some(i=>i.id===state.industry);if(state.only&&!active)continue;

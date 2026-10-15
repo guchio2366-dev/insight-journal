@@ -46,3 +46,5 @@
 .eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-industry-map-heading h2 { font-size:13px; }
 .eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-industry-map-heading :is(p,[data-eu-map-status]) { display:none; }
 .eu-workspace-root[data-europe-detail] .eu-industry-map-key { order:1; }
+
+.eu-workspace-root[data-europe-detail] .eu-workspace[data-field="industry"] .eu-read-panel{position:static;align-self:start}

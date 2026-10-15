@@ -48,7 +48,7 @@ try{
    const overlap=await page.locator('[data-industry-label]:visible').evaluateAll(nodes=>{const boxes=nodes.map(n=>n.getBoundingClientRect());return boxes.some((a,i)=>boxes.some((b,j)=>i!==j&&a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top));});assert.equal(overlap,false);assert.equal(await page.locator('.east-sector-map-label').count(),0);assert((await positions()).length<=(layout.width<650?4:layout.width<1100?8:10));
    record.sectors.push({id:sector.id,layout,visibleNames:[...new Set(initial.map(p=>p.industry))]});
    for(const item of eastSectorIndustries.filter(i=>i.sectors.includes(sector.id)&&eastAdoptedIndustryIds.includes(i.id))){
-    await page.locator(`[data-east-industry-kinds="${sector.id}"] [data-industry-feature="east-${item.id}"]`).click();await ready();
+    await page.locator(`[data-east-industry-item="${sector.id}"]`).selectOption(`east-${item.id}`);await ready();
     assert.equal(new URL(page.url()).searchParams.get('topic'),'east-'+item.id);
     assert.deepEqual(await positions(),initial,'industry selection preserves map name positions');
     assert.equal(await page.locator('[data-map-camera]').getAttribute('data-map-camera'),camera);
@@ -65,7 +65,7 @@ try{
   assert.deepEqual([...new Set(record.products)].sort(),[...eastAdoptedIndustryIds].sort());
   // Keyboard site selection, only mode, reload, back/forward and Japanese scope.
   await page.locator('[data-east-industry-sector="manufacturing"]').click();
-  await page.locator('[data-east-industry-kinds="manufacturing"] [data-industry-feature="east-foundry"]').click();await ready();
+  await page.locator('[data-east-industry-item="manufacturing"]').selectOption('east-foundry');await ready();
   await page.locator('[data-industry-cluster="kumamoto"]').focus();await page.keyboard.press('Enter');await ready();
   assert.equal(new URL(page.url()).searchParams.get('detail'),'kumamoto');
   assert.match(await page.locator('[data-east-cluster-detail]').innerText(),/第1工場.*第2工場/);

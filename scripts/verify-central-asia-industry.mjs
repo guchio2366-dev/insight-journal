@@ -75,7 +75,7 @@ try{
  await touchPage.waitForFunction(()=>document.querySelector('[data-central-industry]')?.dataset.centralReady==='true');
  await touchPage.locator('[data-central-sector="manufacturing"]').tap();
  const touchState=()=>touchPage.locator('[data-central-industry]').evaluate(root=>root.centralIndustryView),touchBefore=(await touchState()).frame;
- await touchPage.locator('[data-central-choices="manufacturing"] [data-central-choice="textiles"]').tap();
+ await openIndustryPicker(touchPage);await touchPage.locator('[data-central-choices="manufacturing"] [data-central-choice="textiles"]').tap();
  assert.equal((await touchState()).industry,'textiles');assert.deepEqual((await touchState()).frame,touchBefore);
  await touchPage.locator('[data-central-map-frame]').scrollIntoViewIfNeeded();
  const touchBox=await touchPage.locator('[data-central-map]').boundingBox(),cx=touchBox.x+touchBox.width/2,cy=touchBox.y+touchBox.height/2,cdp=await touchContext.newCDPSession(touchPage);

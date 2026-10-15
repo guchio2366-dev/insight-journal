@@ -68,10 +68,10 @@ export function initCentralAsiaIndustry(root:HTMLElement){
   const key=[state.sector,stage.clientWidth,stage.clientHeight,...frame].join(':');if(key===geometryKey)return;geometryKey=key;
   const matrix=svg.getScreenCTM();if(!matrix){geometryKey='';return;}
   const stageRect=stage.getBoundingClientRect(),width=stageRect.width,height=stageRect.height;
-  const screen=(coordinates:number[])=>{const [x,y]=projectCentralIndustry(coordinates);return [matrix.a*x+matrix.c*y+matrix.e-stageRect.x,matrix.b*x+matrix.d*y+matrix.f-stageRect.y];};
+  const screen=(coordinates:number[])=>{const [x,y]=projectCentralIndustry(coordinates);return rounded([matrix.a*x+matrix.c*y+matrix.e-stageRect.x,matrix.b*x+matrix.d*y+matrix.f-stageRect.y]);};
   for(const label of root.querySelectorAll<SVGTextElement>('[data-central-country-name]'))label.style.fontSize=((width<600?9:11)/Math.abs(matrix.a))+'px';
   const occupied:number[][]=[[width-130,0,width,48]];
-  for(const label of root.querySelectorAll<SVGTextElement>('[data-central-country-name]')){const box=label.getBoundingClientRect();occupied.push([box.left-stageRect.left-2,box.top-stageRect.top-2,box.right-stageRect.left+2,box.bottom-stageRect.top+2]);}
+  for(const label of root.querySelectorAll<SVGTextElement>('[data-central-country-name]')){const box=label.getBoundingClientRect();occupied.push(rounded([box.left-stageRect.left-2,box.top-stageRect.top-2,box.right-stageRect.left+2,box.bottom-stageRect.top+2]));}
   const points=centralIndustrySites.filter(site=>site.sectors.includes(state.sector)).map(site=>({site,point:screen(site.coordinates)})).filter(({point:[x,y]})=>x>=0&&x<=width&&y>=0&&y<=height);
   overlay.replaceChildren();delete root.dataset.labelsIncomplete;
   const lines=svgElement('svg',{'aria-label':'地理座標と産業名の対応'});lines.classList.add('central-label-connectors');overlay.append(lines);

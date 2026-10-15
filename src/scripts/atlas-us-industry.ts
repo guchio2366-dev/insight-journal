@@ -21,6 +21,7 @@ export function initUsIndustry(root:HTMLElement){
  function chooseIndustry(id:string|null){state.industry=id;state.site=null;state.only=false;save();}
  function chooseSite(site:UsSite){state.industry=site.industry;state.site=site.id;save();q('[data-us-site-reading]').scrollTop=0;}
  function renderMap(){
+  const mapTop=Math.round(frame.getBoundingClientRect().top+window.scrollY);if(mapTop>0)root.style.setProperty('--us-map-top',mapTop+'px');
   map.setAttribute('viewBox',camera().join(' '));const siteFocus=(document.activeElement as HTMLElement)?.dataset.usSite;
   const sectorSites=usSitesForSector(state.sector),width=frame.clientWidth||1000,height=frame.clientHeight||600;
   const positions=sectorSites.map(s=>({site:s,point:screen(projectUsIndustry(s.coordinates))})).filter(p=>p.point[0]>=0&&p.point[0]<=width&&p.point[1]>=0&&p.point[1]<=height-6);

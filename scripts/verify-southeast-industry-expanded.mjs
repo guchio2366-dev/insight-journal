@@ -35,11 +35,11 @@ try{
  const seen=new Set();
  for(const viewport of [{width:1920,height:1080},{width:1024,height:768},{width:390,height:844}]){
   await page.setViewportSize(viewport);await open('?industrySector=resource');
-  assert.equal(await page.locator('[data-southeast-industry-sector]').count(),3);
+  assert.equal(await page.locator('button[data-southeast-industry-sector]').count(),3);
   assert.equal(await page.locator('[data-southeast-industry-picker]').count(),1);
   assert.equal(await page.locator('.asia-map-frame [data-southeast-industry-picker],.asia-map-frame [data-southeast-industry-controls]').count(),0);
   for(const sector of ['resource','manufacturing','services']){
-   await page.locator('[data-southeast-industry-sector="'+sector+'"]').click();await ready();
+   await page.locator('button[data-southeast-industry-sector="'+sector+'"]').click();await ready();
    const baseline=await geometry(),clear=await labelsClear();
    const expected=southeastIndustrySites.filter(s=>southeastSiteSectors(s).includes(sector)).map(s=>s.id).sort();
    assert.deepEqual(baseline.points.filter(p=>!p.hidden).map(p=>p.id).sort(),expected,sector+': only this sector is visible');

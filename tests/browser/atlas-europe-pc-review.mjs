@@ -512,7 +512,7 @@ async function stageOneOperations(page, profile) {
   const quietFeatures=async(field)=>{
     const names=await page.locator('[data-eu-map-kind="feature"]:visible:not(.is-point-only)').evaluateAll(nodes=>nodes.map(node=>{const s=getComputedStyle(node),r=node.getBoundingClientRect();return {id:node.dataset.euMapPlace,font:parseFloat(s.fontSize),background:s.backgroundColor,border:parseFloat(s.borderWidth),left:r.left,right:r.right,top:r.top,bottom:r.bottom};}));
     assert.ok(names.length>0&&names.length<=(field==='industry'?16:11),field+' initial representative names');
-    for(const name of names){assert.ok(name.font>=13);if(field==='industry')assert.notEqual(name.background,'rgba(0, 0, 0, 0)');else {assert.equal(name.background,'rgba(0, 0, 0, 0)');assert.equal(name.border,0);}}
+    for(const name of names){assert.ok(name.font>=(field==='industry'?11:13));assert.equal(name.background,'rgba(0, 0, 0, 0)');assert.equal(name.border,0);}
     for(let i=0;i<names.length;i++)for(let j=i+1;j<names.length;j++){const a=names[i],b=names[j];assert.ok(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,field+' names do not overlap');}
     const points=await page.locator('[data-eu-map-kind="feature"].is-point-only:visible').count();
     if(field!=='industry')assert.ok(points>0,field+' keeps other real places');
@@ -598,6 +598,7 @@ async function stageOneOperations(page, profile) {
   const industryExtent = await page.locator('[data-eu-static]').getAttribute('viewBox');
   await quietFeatures('industry');
   await page.locator('[data-eu-industry-sector="manufacturing"]').click();
+  if(!await page.locator('[data-eu-industry-product-menu]').evaluate(node=>node.open))await page.locator('[data-eu-industry-product-menu] > summary').click();
   await page.locator('[data-eu-industry-group="自動車完成車・部品"]').click();
   assert.equal(new URL(page.url()).searchParams.has('place'), false);
   assert.equal(new URL(page.url()).searchParams.has('feature'), false);
