@@ -1,0 +1,776 @@
+{
+  "conditions": "Same cloud Chromium process; fresh context per sample; alternating AB/BA order; no concurrent task-owned test/build jobs; raw no-store loopback HTTP; one warm-up pair per viewport excluded; same root-ready + 1000ms sampling point; CDP TaskDuration with timeTicks (main-thread task duration, not a CPU profiler)",
+  "samplesPerVersionPerViewport": 9,
+  "runs": [
+    {
+      "phase": "before",
+      "size": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1
+      },
+      "repeat": 0,
+      "transferred": 4443996,
+      "taskMs": 1869.503,
+      "scriptMs": 224.199,
+      "layoutMs": 237.877,
+      "dpr": 1,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "after",
+      "size": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1
+      },
+      "repeat": 0,
+      "transferred": 4445668,
+      "taskMs": 1873.5900000000001,
+      "scriptMs": 231.048,
+      "layoutMs": 226.61800000000002,
+      "dpr": 1,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "after",
+      "size": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1
+      },
+      "repeat": 1,
+      "transferred": 4445668,
+      "taskMs": 1901.743,
+      "scriptMs": 230.33,
+      "layoutMs": 212.625,
+      "dpr": 1,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "before",
+      "size": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1
+      },
+      "repeat": 1,
+      "transferred": 4443996,
+      "taskMs": 1953.539,
+      "scriptMs": 221.874,
+      "layoutMs": 206.078,
+      "dpr": 1,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "before",
+      "size": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1
+      },
+      "repeat": 2,
+      "transferred": 4443996,
+      "taskMs": 1945.662,
+      "scriptMs": 239.676,
+      "layoutMs": 254.38899999999998,
+      "dpr": 1,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "after",
+      "size": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1
+      },
+      "repeat": 2,
+      "transferred": 4445668,
+      "taskMs": 1886.1270000000002,
+      "scriptMs": 257.327,
+      "layoutMs": 228.48,
+      "dpr": 1,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "after",
+      "size": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1
+      },
+      "repeat": 3,
+      "transferred": 4445668,
+      "taskMs": 1918.926,
+      "scriptMs": 222.186,
+      "layoutMs": 209.19899999999998,
+      "dpr": 1,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "before",
+      "size": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1
+      },
+      "repeat": 3,
+      "transferred": 4443996,
+      "taskMs": 1759.844,
+      "scriptMs": 200.556,
+      "layoutMs": 198.858,
+      "dpr": 1,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "before",
+      "size": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1
+      },
+      "repeat": 4,
+      "transferred": 4443996,
+      "taskMs": 1859.013,
+      "scriptMs": 265.155,
+      "layoutMs": 241.718,
+      "dpr": 1,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "after",
+      "size": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1
+      },
+      "repeat": 4,
+      "transferred": 4445668,
+      "taskMs": 1895.157,
+      "scriptMs": 246.493,
+      "layoutMs": 230.452,
+      "dpr": 1,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "after",
+      "size": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1
+      },
+      "repeat": 5,
+      "transferred": 4445668,
+      "taskMs": 1744.248,
+      "scriptMs": 200.14399999999998,
+      "layoutMs": 200.799,
+      "dpr": 1,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "before",
+      "size": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1
+      },
+      "repeat": 5,
+      "transferred": 4443996,
+      "taskMs": 1869.02,
+      "scriptMs": 243.166,
+      "layoutMs": 208.45,
+      "dpr": 1,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "before",
+      "size": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1
+      },
+      "repeat": 6,
+      "transferred": 4443996,
+      "taskMs": 1822.372,
+      "scriptMs": 220.857,
+      "layoutMs": 185.057,
+      "dpr": 1,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "after",
+      "size": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1
+      },
+      "repeat": 6,
+      "transferred": 4445668,
+      "taskMs": 1894.48,
+      "scriptMs": 249.788,
+      "layoutMs": 245.54899999999998,
+      "dpr": 1,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "after",
+      "size": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1
+      },
+      "repeat": 7,
+      "transferred": 4445668,
+      "taskMs": 1836.2430000000002,
+      "scriptMs": 271.19599999999997,
+      "layoutMs": 207.91899999999998,
+      "dpr": 1,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "before",
+      "size": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1
+      },
+      "repeat": 7,
+      "transferred": 4443996,
+      "taskMs": 2000.569,
+      "scriptMs": 244.775,
+      "layoutMs": 232.493,
+      "dpr": 1,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "before",
+      "size": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1
+      },
+      "repeat": 8,
+      "transferred": 4443996,
+      "taskMs": 1793.6879999999999,
+      "scriptMs": 225.31,
+      "layoutMs": 230.53699999999998,
+      "dpr": 1,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "after",
+      "size": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1
+      },
+      "repeat": 8,
+      "transferred": 4445668,
+      "taskMs": 1877.4869999999999,
+      "scriptMs": 220.65599999999998,
+      "layoutMs": 221.269,
+      "dpr": 1,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "before",
+      "size": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "repeat": 0,
+      "transferred": 4443996,
+      "taskMs": 1811.636,
+      "scriptMs": 216.16299999999998,
+      "layoutMs": 209.68800000000002,
+      "dpr": 1.5,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "after",
+      "size": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "repeat": 0,
+      "transferred": 4445668,
+      "taskMs": 1775.441,
+      "scriptMs": 207.24,
+      "layoutMs": 198.75,
+      "dpr": 1.5,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "after",
+      "size": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "repeat": 1,
+      "transferred": 4445668,
+      "taskMs": 1929.915,
+      "scriptMs": 233.346,
+      "layoutMs": 239.224,
+      "dpr": 1.5,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "before",
+      "size": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "repeat": 1,
+      "transferred": 4443996,
+      "taskMs": 1970.041,
+      "scriptMs": 217.364,
+      "layoutMs": 210.75900000000001,
+      "dpr": 1.5,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "before",
+      "size": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "repeat": 2,
+      "transferred": 4443996,
+      "taskMs": 1902.962,
+      "scriptMs": 233.64499999999998,
+      "layoutMs": 240.21200000000002,
+      "dpr": 1.5,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "after",
+      "size": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "repeat": 2,
+      "transferred": 4445668,
+      "taskMs": 1867.425,
+      "scriptMs": 220.895,
+      "layoutMs": 210.121,
+      "dpr": 1.5,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "after",
+      "size": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "repeat": 3,
+      "transferred": 4445668,
+      "taskMs": 1744.9840000000002,
+      "scriptMs": 214.371,
+      "layoutMs": 183.30599999999998,
+      "dpr": 1.5,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "before",
+      "size": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "repeat": 3,
+      "transferred": 4443996,
+      "taskMs": 1748.484,
+      "scriptMs": 223.048,
+      "layoutMs": 207.10600000000002,
+      "dpr": 1.5,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "before",
+      "size": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "repeat": 4,
+      "transferred": 4443996,
+      "taskMs": 1793.799,
+      "scriptMs": 214.05599999999998,
+      "layoutMs": 232.806,
+      "dpr": 1.5,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "after",
+      "size": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "repeat": 4,
+      "transferred": 4445668,
+      "taskMs": 1828.6299999999999,
+      "scriptMs": 216.501,
+      "layoutMs": 238.217,
+      "dpr": 1.5,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "after",
+      "size": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "repeat": 5,
+      "transferred": 4445668,
+      "taskMs": 1726.443,
+      "scriptMs": 194.477,
+      "layoutMs": 202.435,
+      "dpr": 1.5,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "before",
+      "size": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "repeat": 5,
+      "transferred": 4443996,
+      "taskMs": 1785.757,
+      "scriptMs": 205.25099999999998,
+      "layoutMs": 203.67,
+      "dpr": 1.5,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "before",
+      "size": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "repeat": 6,
+      "transferred": 4443996,
+      "taskMs": 1863.682,
+      "scriptMs": 219.389,
+      "layoutMs": 214.505,
+      "dpr": 1.5,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "after",
+      "size": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "repeat": 6,
+      "transferred": 4445668,
+      "taskMs": 1803.721,
+      "scriptMs": 217.12300000000002,
+      "layoutMs": 186.748,
+      "dpr": 1.5,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "after",
+      "size": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "repeat": 7,
+      "transferred": 4445668,
+      "taskMs": 1727.3639999999998,
+      "scriptMs": 197.093,
+      "layoutMs": 187.98899999999998,
+      "dpr": 1.5,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "before",
+      "size": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "repeat": 7,
+      "transferred": 4443996,
+      "taskMs": 1894.16,
+      "scriptMs": 213.572,
+      "layoutMs": 230.21800000000002,
+      "dpr": 1.5,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "before",
+      "size": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "repeat": 8,
+      "transferred": 4443996,
+      "taskMs": 1770.883,
+      "scriptMs": 222.395,
+      "layoutMs": 188.668,
+      "dpr": 1.5,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    },
+    {
+      "phase": "after",
+      "size": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "repeat": 8,
+      "transferred": 4445668,
+      "taskMs": 1779.795,
+      "scriptMs": 223.137,
+      "layoutMs": 214.857,
+      "dpr": 1.5,
+      "scale": 1,
+      "field": "agriculture",
+      "requests": [
+        "/insight-journal/assets/atlas/v3/agriculture.geojson",
+        "/insight-journal/assets/atlas/v3/crop-labels.json"
+      ]
+    }
+  ],
+  "sandbox": {
+    "requested": true,
+    "executable": "/usr/bin/chromium",
+    "launchMode": "headless",
+    "prohibitedArguments": [],
+    "diagnostics": "Sandbox Status\nLayer 1 Sandbox\tNamespace\nPID namespaces\tYes\nNetwork namespaces\tYes\nSeccomp-BPF sandbox\tYes\nSeccomp-BPF sandbox supports TSYNC\tYes\nPtrace Protection with Yama LSM (Broker)\tNo\nPtrace Protection with Yama LSM (Non-broker)\tNo\n\nYou are adequately sandboxed."
+  },
+  "sourceSHA256": "9d0cd511d6e025fd1dbbe8d7bc143fb6b29205b34a9329cb4ba00387e430b971",
+  "browser": "151.0.7922.173",
+  "summary": [
+    {
+      "width": 1896,
+      "before": {
+        "n": 9,
+        "min": 1759.844,
+        "median": 1869.02,
+        "max": 2000.569,
+        "mean": 1874.8011111111114,
+        "standardDeviation": 74.4554483917052
+      },
+      "after": {
+        "n": 9,
+        "min": 1744.248,
+        "median": 1886.1270000000002,
+        "max": 1918.926,
+        "mean": 1869.7778888888888,
+        "standardDeviation": 49.345940421667535
+      }
+    },
+    {
+      "width": 1280,
+      "before": {
+        "n": 9,
+        "min": 1748.484,
+        "median": 1811.636,
+        "max": 1970.041,
+        "mean": 1837.9337777777775,
+        "standardDeviation": 69.41364280853308
+      },
+      "after": {
+        "n": 9,
+        "min": 1726.443,
+        "median": 1779.795,
+        "max": 1929.915,
+        "mean": 1798.1908888888886,
+        "standardDeviation": 64.07709952418334
+      }
+    }
+  ],
+  "status": "passed"
+}

@@ -1,5 +1,7 @@
 # Atlas internal load reductions (2026-10-15)
 
+This document records the initial `4284db4a` implementation and its measurements. The agriculture startup regression was subsequently corrected; see the [follow-up report](atlas-lightweight-followup-20261015.md) for the current startup results, full-site E2E findings and verified sandbox launch method.
+
 Base: `d166204299c2a12acd7c0275b9d0114d49c5040e` (main).
 Branch: `perf/atlas-deferred-data-20261015`.
 No deployment, access changes, dependencies, data simplification or feature removal.

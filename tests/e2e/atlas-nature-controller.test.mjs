@@ -41,6 +41,29 @@ async function setup(query='',options={}){
  return {window,requests,root:window.document.querySelector('[data-atlas-explorer]'),q:s=>window.document.querySelector(s)};
 }
 
+test('農業の直接起動は共通データと並列に取得し、用意できた作物を初期ソースに使う',async()=>{
+ const {window,requests,root,q}=await setup('',{fieldPath:'agriculture',fetchOverride:async url=>{if(url.endsWith('/base.geojson'))await new Promise(resolve=>setTimeout(resolve,100));}});
+ try{
+  assert.ok(window.__map.options.style.sources.crops.data.features.length>0);
+  assert.equal(window.__map.sources.crops.setDataCalls,0);
+  assert.equal(root.dataset.agricultureLoad,'ready');assert.ok(root.querySelectorAll('.atlas-geolabel--crop').length>0);
+  q('[data-field="natural"]').click();q('[data-field="agriculture"]').click();
+  assert.equal(window.__map.sources.crops.setDataCalls,0);
+  for(const name of ['agriculture.geojson','crop-labels.json'])assert.equal(requests.filter(url=>url.endsWith('/'+name)).length,1);
+ }finally{await window.happyDOM.close();}
+});
+
+test('農業の直接起動でも遅い作物ラベルは別分野の起動を妨げず、完了で上書きしない',async()=>{
+ let release;
+ const {window,root,q}=await setup('',{fieldPath:'agriculture',pending:true,fetchOverride:async url=>{if(url.endsWith('/crop-labels.json'))await new Promise(resolve=>release=resolve);}});
+ try{
+  await waitFor(()=>release&&root.dataset.agricultureLoad==='loading','agriculture loading');
+  q('[data-field="natural"]').click();await waitFor(()=>root.dataset.natureLoad==='ready','nature ready without crop labels');
+  release();await waitFor(()=>root.dataset.agricultureLoad==='ready','crop labels complete');
+  assert.equal(root.dataset.field,'natural');assert.equal(root.dataset.renderState,'ready');
+ }finally{release?.();await window.happyDOM.close();}
+});
+
 for(const fieldPath of ['nature','population'])test(`${fieldPath}は農業専用データを取得せず、農業の初回選択だけ取得・設定する`,async()=>{
  const {window,requests,root,q}=await setup('',{fieldPath});
  try{

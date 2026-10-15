@@ -1,0 +1,386 @@
+{
+  "comparison": "Exact RGB pixels from same cloud Chromium, viewport, DPR, crop and UI state; root-ready + 1 second for measured captures; ready + 300 ms for direct-state captures, after network idle",
+  "screenshots": [
+    {
+      "file": "1280-agriculture-product.png",
+      "width": 990,
+      "height": 557,
+      "changedPixels": 0,
+      "totalPixels": 551430,
+      "beforeRGBSHA256": "b6d9d66f9fd0f5f1cd03c7d0d3f5ae27fc4923fd1c922947c72dda55913ec120",
+      "afterRGBSHA256": "b6d9d66f9fd0f5f1cd03c7d0d3f5ae27fc4923fd1c922947c72dda55913ec120",
+      "status": "identical"
+    },
+    {
+      "file": "1280-agriculture-relation.png",
+      "width": 990,
+      "height": 557,
+      "changedPixels": 0,
+      "totalPixels": 551430,
+      "beforeRGBSHA256": "0e0148afb65c630022b969421b5ec41a1a28631bfef236c7de0bfb8a3598dd72",
+      "afterRGBSHA256": "0e0148afb65c630022b969421b5ec41a1a28631bfef236c7de0bfb8a3598dd72",
+      "status": "identical"
+    },
+    {
+      "file": "1280-agriculture_-page.png",
+      "width": 1920,
+      "height": 998,
+      "changedPixels": 0,
+      "totalPixels": 1916160,
+      "beforeRGBSHA256": "9c09b3b22b17b9c5c714ec2eb8482fe69a5fc6b9c2fa326889326657ff3b902a",
+      "afterRGBSHA256": "9c09b3b22b17b9c5c714ec2eb8482fe69a5fc6b9c2fa326889326657ff3b902a",
+      "status": "identical"
+    },
+    {
+      "file": "1280-agriculture_.png",
+      "width": 990,
+      "height": 557,
+      "changedPixels": 0,
+      "totalPixels": 551430,
+      "beforeRGBSHA256": "0559b68c8628252d0339a4eaca26e4316c2bc694e035f271f20eeaae3a95982a",
+      "afterRGBSHA256": "0559b68c8628252d0339a4eaca26e4316c2bc694e035f271f20eeaae3a95982a",
+      "status": "identical"
+    },
+    {
+      "file": "1280-canada-elevation.png",
+      "width": 905,
+      "height": 584,
+      "changedPixels": 0,
+      "totalPixels": 528520,
+      "beforeRGBSHA256": "62fbda4acf0ef1497679d7d44659660a9ccb1a101766a35a8a4cd005865a194c",
+      "afterRGBSHA256": "62fbda4acf0ef1497679d7d44659660a9ccb1a101766a35a8a4cd005865a194c",
+      "status": "identical"
+    },
+    {
+      "file": "1280-mexico-isolated.png",
+      "width": 905,
+      "height": 582,
+      "changedPixels": 0,
+      "totalPixels": 526710,
+      "beforeRGBSHA256": "9e44558241bd486021a20da61a486511c2d029a2b62b09033ae96c6815304136",
+      "afterRGBSHA256": "9e44558241bd486021a20da61a486511c2d029a2b62b09033ae96c6815304136",
+      "status": "identical"
+    },
+    {
+      "file": "1280-mexico-nojs.png",
+      "width": 902,
+      "height": 579,
+      "changedPixels": 0,
+      "totalPixels": 522258,
+      "beforeRGBSHA256": "fccb0ee796b055713e2224e33370a2fd3fae9aa17f0975278aae0376c870ccbf",
+      "afterRGBSHA256": "fccb0ee796b055713e2224e33370a2fd3fae9aa17f0975278aae0376c870ccbf",
+      "status": "identical"
+    },
+    {
+      "file": "1280-mexico-print.png",
+      "width": 1920,
+      "height": 998,
+      "changedPixels": 0,
+      "totalPixels": 1916160,
+      "beforeRGBSHA256": "5347dfffd2c592e9f79fc318a1214d9a83cb334b52563ec68ce63ebe62579b43",
+      "afterRGBSHA256": "5347dfffd2c592e9f79fc318a1214d9a83cb334b52563ec68ce63ebe62579b43",
+      "status": "identical"
+    },
+    {
+      "file": "1280-mexico-religion.png",
+      "width": 905,
+      "height": 1245,
+      "changedPixels": 0,
+      "totalPixels": 1126725,
+      "beforeRGBSHA256": "acf05f3a80a6643abf96adda5eb5cdbd3fd40f045fb27fcef6d288c610a59c36",
+      "afterRGBSHA256": "acf05f3a80a6643abf96adda5eb5cdbd3fd40f045fb27fcef6d288c610a59c36",
+      "status": "identical"
+    },
+    {
+      "file": "1280-mexico-selected.png",
+      "width": 905,
+      "height": 582,
+      "changedPixels": 0,
+      "totalPixels": 526710,
+      "beforeRGBSHA256": "d62898823b353a2ec2db3ee241fe3385b1d9d6d8d0f09bf2ed2c64df6fa0d38b",
+      "afterRGBSHA256": "d62898823b353a2ec2db3ee241fe3385b1d9d6d8d0f09bf2ed2c64df6fa0d38b",
+      "status": "identical"
+    },
+    {
+      "file": "1280-mexico-static.png",
+      "width": 905,
+      "height": 582,
+      "changedPixels": 0,
+      "totalPixels": 526710,
+      "beforeRGBSHA256": "4b7d3abb584cf80b50c3dd1e4b875d231c427dec983b54fb0ca31c3f8fe517db",
+      "afterRGBSHA256": "4b7d3abb584cf80b50c3dd1e4b875d231c427dec983b54fb0ca31c3f8fe517db",
+      "status": "identical"
+    },
+    {
+      "file": "1280-mexico_population_-page.png",
+      "width": 1920,
+      "height": 998,
+      "changedPixels": 0,
+      "totalPixels": 1916160,
+      "beforeRGBSHA256": "31d119016a3e10084a3eb56b8677e21f7123c1c335db0af690788ee284d86147",
+      "afterRGBSHA256": "31d119016a3e10084a3eb56b8677e21f7123c1c335db0af690788ee284d86147",
+      "status": "identical"
+    },
+    {
+      "file": "1280-mexico_population__view_density-page.png",
+      "width": 1920,
+      "height": 998,
+      "changedPixels": 0,
+      "totalPixels": 1916160,
+      "beforeRGBSHA256": "9e8792dffb7f709460c47ca9ecbd393d14d17242b7574bcee96828eff3ebcc6b",
+      "afterRGBSHA256": "9e8792dffb7f709460c47ca9ecbd393d14d17242b7574bcee96828eff3ebcc6b",
+      "status": "identical"
+    },
+    {
+      "file": "1280-mexico_population__view_density.png",
+      "width": 905,
+      "height": 582,
+      "changedPixels": 0,
+      "totalPixels": 526710,
+      "beforeRGBSHA256": "0a72a8db09815f9d4c4f6b885d5d2799328cb2bff96803de70a8c4a98ebcc7ba",
+      "afterRGBSHA256": "0a72a8db09815f9d4c4f6b885d5d2799328cb2bff96803de70a8c4a98ebcc7ba",
+      "status": "identical"
+    },
+    {
+      "file": "1280-nature-crop.png",
+      "width": 990,
+      "height": 557,
+      "changedPixels": 0,
+      "totalPixels": 551430,
+      "beforeRGBSHA256": "67e49ccfa6c816b6f7ee44cbcef543f789f40e0b3c936c0266f4c505565b482f",
+      "afterRGBSHA256": "67e49ccfa6c816b6f7ee44cbcef543f789f40e0b3c936c0266f4c505565b482f",
+      "status": "identical"
+    },
+    {
+      "file": "1280-nature_-page.png",
+      "width": 1920,
+      "height": 998,
+      "changedPixels": 0,
+      "totalPixels": 1916160,
+      "beforeRGBSHA256": "3492b31d7c8405136d2a452a848f84828197d4c784076046b8d4c5ab594cf48f",
+      "afterRGBSHA256": "3492b31d7c8405136d2a452a848f84828197d4c784076046b8d4c5ab594cf48f",
+      "status": "identical"
+    },
+    {
+      "file": "1280-nature_.png",
+      "width": 990,
+      "height": 557,
+      "changedPixels": 0,
+      "totalPixels": 551430,
+      "beforeRGBSHA256": "38fd586988ffef2dfd9e9cf1209cdfddf1d42566d86d17d241e9981d6322f902",
+      "afterRGBSHA256": "38fd586988ffef2dfd9e9cf1209cdfddf1d42566d86d17d241e9981d6322f902",
+      "status": "identical"
+    },
+    {
+      "file": "1280-population_-page.png",
+      "width": 1920,
+      "height": 998,
+      "changedPixels": 0,
+      "totalPixels": 1916160,
+      "beforeRGBSHA256": "e06a34d428968aca3ffb87d31067de158c236fef54165ffea295b14071732ef5",
+      "afterRGBSHA256": "e06a34d428968aca3ffb87d31067de158c236fef54165ffea295b14071732ef5",
+      "status": "identical"
+    },
+    {
+      "file": "1280-population_.png",
+      "width": 990,
+      "height": 557,
+      "changedPixels": 0,
+      "totalPixels": 551430,
+      "beforeRGBSHA256": "163079fa4e015c0c08f740f8fd2fdc64b68208445c9bf40e9a2df9c68f63e84a",
+      "afterRGBSHA256": "163079fa4e015c0c08f740f8fd2fdc64b68208445c9bf40e9a2df9c68f63e84a",
+      "status": "identical"
+    },
+    {
+      "file": "1896-agriculture-product.png",
+      "width": 1092,
+      "height": 614,
+      "changedPixels": 0,
+      "totalPixels": 670488,
+      "beforeRGBSHA256": "c4ff1625c857d65f4d3dec15129fba1cb5494e5f9a13979e14f86dfaedd926dc",
+      "afterRGBSHA256": "c4ff1625c857d65f4d3dec15129fba1cb5494e5f9a13979e14f86dfaedd926dc",
+      "status": "identical"
+    },
+    {
+      "file": "1896-agriculture-relation.png",
+      "width": 1092,
+      "height": 614,
+      "changedPixels": 0,
+      "totalPixels": 670488,
+      "beforeRGBSHA256": "33ffde7a994f9bd20d5d83a81168b26bca89270b28fca535bb15bc79949f8d9f",
+      "afterRGBSHA256": "33ffde7a994f9bd20d5d83a81168b26bca89270b28fca535bb15bc79949f8d9f",
+      "status": "identical"
+    },
+    {
+      "file": "1896-agriculture_-page.png",
+      "width": 1896,
+      "height": 996,
+      "changedPixels": 0,
+      "totalPixels": 1888416,
+      "beforeRGBSHA256": "a732ca58e12c2b5f6a4c78e9a1cd827cf9b31f63bff3f197d893bef4186580e5",
+      "afterRGBSHA256": "a732ca58e12c2b5f6a4c78e9a1cd827cf9b31f63bff3f197d893bef4186580e5",
+      "status": "identical"
+    },
+    {
+      "file": "1896-agriculture_.png",
+      "width": 1092,
+      "height": 614,
+      "changedPixels": 0,
+      "totalPixels": 670488,
+      "beforeRGBSHA256": "b1fda4c089b049e987d22a40e20c67711f59bcc9ac6729cc163beafe61d31e3a",
+      "afterRGBSHA256": "b1fda4c089b049e987d22a40e20c67711f59bcc9ac6729cc163beafe61d31e3a",
+      "status": "identical"
+    },
+    {
+      "file": "1896-canada-elevation.png",
+      "width": 1079,
+      "height": 640,
+      "changedPixels": 0,
+      "totalPixels": 690560,
+      "beforeRGBSHA256": "0abd75f7a0c0ec1aa80f0a15b9e082527717dda1b3d11c7c301b2b845cf5ebd3",
+      "afterRGBSHA256": "0abd75f7a0c0ec1aa80f0a15b9e082527717dda1b3d11c7c301b2b845cf5ebd3",
+      "status": "identical"
+    },
+    {
+      "file": "1896-mexico-isolated.png",
+      "width": 926,
+      "height": 597,
+      "changedPixels": 0,
+      "totalPixels": 552822,
+      "beforeRGBSHA256": "4d2e7178d8d0734f103fcb94ae4b40e6e83763bf54df6bb0353c7fed183075df",
+      "afterRGBSHA256": "4d2e7178d8d0734f103fcb94ae4b40e6e83763bf54df6bb0353c7fed183075df",
+      "status": "identical"
+    },
+    {
+      "file": "1896-mexico-nojs.png",
+      "width": 924,
+      "height": 595,
+      "changedPixels": 0,
+      "totalPixels": 549780,
+      "beforeRGBSHA256": "59f88917ef048e065fcd5a8d6d28b0c66639a1f05da16e2c181383c919413500",
+      "afterRGBSHA256": "59f88917ef048e065fcd5a8d6d28b0c66639a1f05da16e2c181383c919413500",
+      "status": "identical"
+    },
+    {
+      "file": "1896-mexico-print.png",
+      "width": 1896,
+      "height": 996,
+      "changedPixels": 0,
+      "totalPixels": 1888416,
+      "beforeRGBSHA256": "efde429aa5f9edf94acfc5c33f9e7f414e874d6994f9b5af115254bfdb231024",
+      "afterRGBSHA256": "efde429aa5f9edf94acfc5c33f9e7f414e874d6994f9b5af115254bfdb231024",
+      "status": "identical"
+    },
+    {
+      "file": "1896-mexico-religion.png",
+      "width": 926,
+      "height": 960,
+      "changedPixels": 0,
+      "totalPixels": 888960,
+      "beforeRGBSHA256": "12f791a70b59fad8d231d607b6c0ddad469c0fad945b069351e6162966dc078d",
+      "afterRGBSHA256": "12f791a70b59fad8d231d607b6c0ddad469c0fad945b069351e6162966dc078d",
+      "status": "identical"
+    },
+    {
+      "file": "1896-mexico-selected.png",
+      "width": 926,
+      "height": 597,
+      "changedPixels": 0,
+      "totalPixels": 552822,
+      "beforeRGBSHA256": "7276494aba42533c14c8ad38c09c8bbd995694b42e120fb70bbacb04768d8e47",
+      "afterRGBSHA256": "7276494aba42533c14c8ad38c09c8bbd995694b42e120fb70bbacb04768d8e47",
+      "status": "identical"
+    },
+    {
+      "file": "1896-mexico-static.png",
+      "width": 926,
+      "height": 597,
+      "changedPixels": 0,
+      "totalPixels": 552822,
+      "beforeRGBSHA256": "090119ec6184d6a29d96adae715c092fe6417b2c6a47e3493317bfd4077f907f",
+      "afterRGBSHA256": "090119ec6184d6a29d96adae715c092fe6417b2c6a47e3493317bfd4077f907f",
+      "status": "identical"
+    },
+    {
+      "file": "1896-mexico_population_-page.png",
+      "width": 1896,
+      "height": 996,
+      "changedPixels": 0,
+      "totalPixels": 1888416,
+      "beforeRGBSHA256": "d99dadcc19d39c5abc7679d86b411cc4ab1b94fe3566432ae3e233daaa538d72",
+      "afterRGBSHA256": "d99dadcc19d39c5abc7679d86b411cc4ab1b94fe3566432ae3e233daaa538d72",
+      "status": "identical"
+    },
+    {
+      "file": "1896-mexico_population__view_density-page.png",
+      "width": 1896,
+      "height": 996,
+      "changedPixels": 0,
+      "totalPixels": 1888416,
+      "beforeRGBSHA256": "43075c487646cf05cecef654435309eb6b7d8f39d2c455f1fab78969b4db6a5b",
+      "afterRGBSHA256": "43075c487646cf05cecef654435309eb6b7d8f39d2c455f1fab78969b4db6a5b",
+      "status": "identical"
+    },
+    {
+      "file": "1896-mexico_population__view_density.png",
+      "width": 926,
+      "height": 597,
+      "changedPixels": 0,
+      "totalPixels": 552822,
+      "beforeRGBSHA256": "734789d247c1e3aae17362514f97224c883c1553ff3e3db9476a33d761c0fd65",
+      "afterRGBSHA256": "734789d247c1e3aae17362514f97224c883c1553ff3e3db9476a33d761c0fd65",
+      "status": "identical"
+    },
+    {
+      "file": "1896-nature-crop.png",
+      "width": 1092,
+      "height": 614,
+      "changedPixels": 0,
+      "totalPixels": 670488,
+      "beforeRGBSHA256": "afc84cd3946d195f7c1e2cf783b3f6985809ea1498051fbba0ccd8d2ea1b58b1",
+      "afterRGBSHA256": "afc84cd3946d195f7c1e2cf783b3f6985809ea1498051fbba0ccd8d2ea1b58b1",
+      "status": "identical"
+    },
+    {
+      "file": "1896-nature_-page.png",
+      "width": 1896,
+      "height": 996,
+      "changedPixels": 0,
+      "totalPixels": 1888416,
+      "beforeRGBSHA256": "e2d4b0c91e6ce466e94ccca07af46b63432ef7ce380e39809a1da86c3d2d1283",
+      "afterRGBSHA256": "e2d4b0c91e6ce466e94ccca07af46b63432ef7ce380e39809a1da86c3d2d1283",
+      "status": "identical"
+    },
+    {
+      "file": "1896-nature_.png",
+      "width": 1092,
+      "height": 614,
+      "changedPixels": 0,
+      "totalPixels": 670488,
+      "beforeRGBSHA256": "d16880a57b4da13595c877870615b2da5989ea69dfda02db003209ffcc6c2745",
+      "afterRGBSHA256": "d16880a57b4da13595c877870615b2da5989ea69dfda02db003209ffcc6c2745",
+      "status": "identical"
+    },
+    {
+      "file": "1896-population_-page.png",
+      "width": 1896,
+      "height": 996,
+      "changedPixels": 0,
+      "totalPixels": 1888416,
+      "beforeRGBSHA256": "be83315368197f458a1b9945376b6c3a311d7b71bb56ca782c0671bf89ef1fb1",
+      "afterRGBSHA256": "be83315368197f458a1b9945376b6c3a311d7b71bb56ca782c0671bf89ef1fb1",
+      "status": "identical"
+    },
+    {
+      "file": "1896-population_.png",
+      "width": 1092,
+      "height": 614,
+      "changedPixels": 0,
+      "totalPixels": 670488,
+      "beforeRGBSHA256": "7f40424ee0a2738698a09e1c2a2c8159cfd0a47513ccd2505ac43bd34a389873",
+      "afterRGBSHA256": "7f40424ee0a2738698a09e1c2a2c8159cfd0a47513ccd2505ac43bd34a389873",
+      "status": "identical"
+    }
+  ],
+  "status": "passed"
+}

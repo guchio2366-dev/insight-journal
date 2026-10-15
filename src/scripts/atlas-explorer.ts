@@ -68,6 +68,7 @@ export async function startAtlas() {
   const appliedNatureKeys=new Set<string>();
   let contourLabels:any[]=[], landFeatures:any[]=[], cropFeatures:any[]=[], baseFeatures:any[]=[], overlayFeatures:any[]=[];
   let agricultureRequest:Promise<void>|undefined,agricultureApplied=false;
+  let agricultureData:{crops:any;cropLabels:any[]}|undefined,agricultureDataRequest:Promise<{crops:any;cropLabels:any[]}>|undefined;
   let natureSelectedGeometry:any=null;
   let timeout:number;
   let savedCamera=initial.camera??undefined;
@@ -395,15 +396,22 @@ export async function startAtlas() {
     labels.unshift(...items);labels.sort((left,right)=>left.priority-right.priority);
   }
 
+  function loadAgricultureData(){
+    agricultureDataRequest??=Promise.all([loadAgricultureGeometry(config.assetBase),fetchJson(config.assetBase,'crop-labels.json')])
+      .then(([crops,cropLabels])=>agricultureData={crops,cropLabels})
+      .catch(error=>{agricultureDataRequest=undefined;throw error;});
+    return agricultureDataRequest;
+  }
+
   async function ensureAgricultureData(){
-    if(!map||!ready||failed||field!=='agriculture')return;
+    if(!map||!ready||failed||field!=='agriculture'||agricultureApplied)return;
     if(!agricultureApplied){
       root.dataset.agricultureLoad='loading';root.dataset.renderState='loading';surface.hidden=true;fallback.hidden=false;
       el('[data-map-labels]').hidden=true;el('.atlas-map-tools').hidden=true;el('[data-retry-nature]').hidden=true;
       status.textContent='農林業の地図を読み込み中…';
       try{
         // Reuse one in-flight request across rapid tab changes; a rejection can be retried.
-        agricultureRequest??=Promise.all([loadAgricultureGeometry(config.assetBase),fetchJson(config.assetBase,'crop-labels.json')]).then(([crops,cropLabels])=>{
+        agricultureRequest??=loadAgricultureData().then(({crops,cropLabels})=>{
           if(!root.isConnected||!map||failed)return;
           cropFeatures=crops.features;(map.getSource('crops') as GeoJSONSource).setData(crops);
           appendLabels(cropLabels);agricultureApplied=true;root.dataset.agricultureLoad='ready';
@@ -418,7 +426,7 @@ export async function startAtlas() {
       }
     }
     // A completed old tab request must never change the current field's presentation.
-    if(!root.isConnected||field!=='agriculture'||!map||failed||!agricultureApplied)return;
+    if(!root.isConnected||field!=='agriculture'||!map||failed||!agricultureApplied||root.dataset.renderState==='ready')return;
     root.dataset.renderState='ready';surface.hidden=false;fallback.hidden=true;el('[data-map-labels]').hidden=false;el('.atlas-map-tools').hidden=false;
     const previousView=view;suppressNextMove=true;map.resize();view=previousView;suppressNextMove=false;
     renderLabels();placeSelectionCard();updateFocusButton();insights?.schedule();
@@ -619,12 +627,17 @@ export async function startAtlas() {
 
   try{
     const empty={type:'FeatureCollection',features:[]};
+    // A direct agriculture entry already selected this field: load its data in
+    // parallel with the common startup instead of waiting for an empty map.
+    if(field==='agriculture')void loadAgricultureData().catch(()=>{});
     const [lib,manifest,base,land,stateLabels,natureManifest,overlays]=await Promise.all([import('maplibre-gl'),fetchJson(config.assetBase,'manifest.json'),fetchJson(config.assetBase,'base.geojson'),fetchJson(config.assetBase,'land.geojson'),fetchJson(config.assetBase,'labels.json'),natureLoader.json('manifest.json'),fetchJson(config.natureAssetBase,'overlays.geojson')]);
     if(failed)return;
     // Fit the continental US, not the wider source-data extraction rectangle.
     // Source geometry and fallback georeferencing retain their original extent.
     fitBounds=[[-125.2,24.2],[-66.4,49.6]];landFeatures=land.features;baseFeatures=base.features;overlayFeatures=overlays.features;
-    const style=createAtlasStyle(config,manifest,base,empty,land,{manifest:natureManifest,cities:config.climateCities,aquifers:empty,contours:empty,overlays});
+    const initialAgriculture=agricultureData;
+    if(initialAgriculture){cropFeatures=initialAgriculture.crops.features;agricultureApplied=true;root.dataset.agricultureLoad='ready';}
+    const style=createAtlasStyle(config,manifest,base,initialAgriculture?.crops??empty,land,{manifest:natureManifest,cities:config.climateCities,aquifers:empty,contours:empty,overlays});
     lib.setWorkerUrl(workerUrl);
     lib.setWorkerCount(1);map=new lib.Map({container:surface,style,attributionControl:false,cooperativeGestures:true,locale:{'CooperativeGesturesHandler.MobileHelpText':'地図は２本指で動かせます'},renderWorldCopies:false,dragRotate:false,touchPitch:false,pitchWithRotate:false,rollEnabled:false,maxPitch:0,maxZoom:10,minZoom:1,pixelRatio:Math.min(devicePixelRatio,2),bounds:fitBounds,fitBoundsOptions:{padding:{top:30,bottom:14,left:12,right:12}},maxBounds:[[-137,16],[-56,58]],refreshExpiredTiles:false,fadeDuration:0});
     map.touchZoomRotate.disableRotation();map.scrollZoom.disable();if(savedCamera&&view==='custom')map.jumpTo({center:[savedCamera.lng,savedCamera.lat],zoom:savedCamera.zoom});
@@ -634,6 +647,7 @@ export async function startAtlas() {
       const size=12,rgba=new Uint8Array(size*size*4);for(let row=0;row<size;row++)for(let column=0;column<size;column++){const index=(row*size+column)*4;rgba.set((column+row)%size<3?[169,139,38,165]:[0,0,0,0],index);}map.addImage('overlap-stripe',{width:size,height:size,data:rgba});map.setPaintProperty('crops-overlap','fill-pattern','overlap-stripe');
       const pattern=new Uint8Array(size*size*4);for(let y=0;y<size;y++)for(let x=0;x<size;x++)pattern.set((x+y)%size<2?[128,112,145,220]:[0,0,0,0],(y*size+x)*4);map.addImage('aquifer-stripe',{width:size,height:size,data:pattern});map.setPaintProperty('aquifers-pattern','fill-pattern','aquifer-stripe');
       appendLabels([...config.geographicLabels.map((item:any)=>({...item,baseLabel:true})),...config.natureLabels,...stateLabels.map((item:any)=>({...item,baseLabel:true}))]);
+      if(initialAgriculture)appendLabels(initialAgriculture.cropLabels);
       setField(field);setNatureMode(natureMode);renderLabels();restoreSelectionForView();save();
       map.on('movestart',()=>{mapMoving=true;});map.on('dragstart',()=>{mapDragged=true;});
       map.on('move',()=>{forestry?.schedule();renderLabels();renderLivestockMarkers();industries.renderMarkers();population.renderMarkers();if(!selection.hidden&&selection.parentElement===frame)selection.style.visibility='hidden';});map.on('moveend',()=>{mapMoving=false;if(!suppressNextMove)view='custom';else suppressNextMove=false;renderLabels();renderLivestockMarkers();industries.renderMarkers();population.renderMarkers();placeSelectionCard();updateFocusButton();save();});
