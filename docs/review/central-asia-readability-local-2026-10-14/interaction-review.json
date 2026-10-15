@@ -1,0 +1,6383 @@
+{
+  "head": "6f3d4a27c17bf205220d0eb44563975af2bcbdad",
+  "buildRelease": {
+    "articles": [
+      {
+        "payloadHash": "2c6ef0cd92ddb67af00ab81f04d553ca7d072d929e0bf1f277221867ad5bf646",
+        "publicId": "a-11111111-1111-4111-8111-111111111111",
+        "revision": 1
+      }
+    ],
+    "builtAt": "2026-10-14T23:53:45.863Z",
+    "commitSha": "6f3d4a27c17bf205220d0eb44563975af2bcbdad"
+  },
+  "browser": {
+    "executable": "/usr/bin/chromium",
+    "chromiumSandbox": false,
+    "scope": "Local build within the existing execution sandbox; temporary local launcher disables Chromium inner sandbox; repository safe launcher unchanged."
+  },
+  "screenshots": [
+    {
+      "file": "interaction-images/1920-resources-initial.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "frame": "-35.397 -8.691 700.965 445.878",
+      "map": [
+        1005.421875,
+        640
+      ],
+      "labels": [
+        {
+          "id": "central-nurabad,central-uchkuduk,central-zafarabad",
+          "industry": "uranium",
+          "text": "ウランヌラバードほか",
+          "rect": [
+            408.390625,
+            482.28125,
+            69.90625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kashagan,sc-tengiz-oil",
+          "industry": "oil",
+          "text": "石油カシャガン・テンギス",
+          "rect": [
+            136.65625,
+            253.875,
+            100,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-rogun,sc-nurek-hydro",
+          "industry": "hydro",
+          "text": "水力発電ログン・ヌレーク",
+          "rect": [
+            514.53125,
+            468.671875,
+            80,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktogay",
+          "industry": "copper",
+          "text": "銅採掘アクトガイ",
+          "rect": [
+            747.046875,
+            232.5,
+            49.5,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khromtau",
+          "industry": "chromium",
+          "text": "クロム鉱フロムタウ",
+          "rect": [
+            300.8125,
+            137.984375,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kumtor",
+          "industry": "gold",
+          "text": "金クムトール",
+          "rect": [
+            711.796875,
+            432.078125,
+            49.203125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-bozshakol-copper",
+          "industry": "copper",
+          "text": "銅採掘ボズシャコル",
+          "rect": [
+            625.84375,
+            92.25,
+            60,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-galkynysh-gas",
+          "industry": "gas",
+          "text": "天然ガスガルキニシュ",
+          "rect": [
+            383.109375,
+            565.4375,
+            60,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-inkai-uranium",
+          "industry": "uranium",
+          "text": "ウランインカイ",
+          "rect": [
+            514.125,
+            311.109375,
+            45.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-muruntau-gold",
+          "industry": "gold",
+          "text": "金ムルンタウ",
+          "rect": [
+            448.3125,
+            387.53125,
+            49.8125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-toktogul-hydro",
+          "industry": "hydro",
+          "text": "水力発電トクトグル",
+          "rect": [
+            598.703125,
+            384.09375,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "sc-tengiz-oil",
+          "point": "53.1,46.2",
+          "display": ""
+        },
+        {
+          "id": "central-kashagan",
+          "point": "51.5,46.2",
+          "display": ""
+        },
+        {
+          "id": "sc-galkynysh-gas",
+          "point": "62.5,37.2",
+          "display": ""
+        },
+        {
+          "id": "sc-inkai-uranium",
+          "point": "68.5,44.2",
+          "display": ""
+        },
+        {
+          "id": "central-uchkuduk",
+          "point": "63.55,42.15",
+          "display": ""
+        },
+        {
+          "id": "central-zafarabad",
+          "point": "64.7,40.63",
+          "display": ""
+        },
+        {
+          "id": "central-nurabad",
+          "point": "66.25,39.6",
+          "display": ""
+        },
+        {
+          "id": "sc-bozshakol-copper",
+          "point": "74.2914,51.8477",
+          "display": ""
+        },
+        {
+          "id": "central-aktogay",
+          "point": "79.9367,46.9474",
+          "display": ""
+        },
+        {
+          "id": "sc-muruntau-gold",
+          "point": "64.55,41.53",
+          "display": ""
+        },
+        {
+          "id": "central-kumtor",
+          "point": "78.2,41.86",
+          "display": ""
+        },
+        {
+          "id": "sc-nurek-hydro",
+          "point": "69.37,38.38",
+          "display": ""
+        },
+        {
+          "id": "sc-toktogul-hydro",
+          "point": "72.9,41.65",
+          "display": ""
+        },
+        {
+          "id": "central-rogun",
+          "point": "69.78,38.7",
+          "display": ""
+        },
+        {
+          "id": "central-khromtau",
+          "point": "58.43,50.25",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          755.6875,
+          514.65625,
+          607.34375
+        ],
+        [
+          532.65625,
+          755.6875,
+          514.671875,
+          607.34375
+        ],
+        [
+          1065.328125,
+          755.6875,
+          514.671875,
+          607.34375
+        ]
+      ],
+      "mapBottom": 992,
+      "statisticsTop": 1060.5
+    },
+    {
+      "file": "interaction-images/1920-resources-selected.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "frame": "-35.397 -8.691 700.965 445.878",
+      "map": [
+        1005.421875,
+        640
+      ],
+      "labels": [
+        {
+          "id": "central-nurabad,central-uchkuduk,central-zafarabad",
+          "industry": "uranium",
+          "text": "ウランヌラバードほか",
+          "rect": [
+            408.390625,
+            482.28125,
+            69.90625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kashagan,sc-tengiz-oil",
+          "industry": "oil",
+          "text": "石油カシャガン・テンギス",
+          "rect": [
+            136.65625,
+            253.875,
+            100,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-rogun,sc-nurek-hydro",
+          "industry": "hydro",
+          "text": "水力発電ログン・ヌレーク",
+          "rect": [
+            514.53125,
+            468.671875,
+            80,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktogay",
+          "industry": "copper",
+          "text": "銅採掘アクトガイ",
+          "rect": [
+            747.046875,
+            232.5,
+            49.5,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khromtau",
+          "industry": "chromium",
+          "text": "クロム鉱フロムタウ",
+          "rect": [
+            300.8125,
+            137.984375,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kumtor",
+          "industry": "gold",
+          "text": "金クムトール",
+          "rect": [
+            711.796875,
+            432.078125,
+            49.203125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-bozshakol-copper",
+          "industry": "copper",
+          "text": "銅採掘ボズシャコル",
+          "rect": [
+            625.84375,
+            92.25,
+            60,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-galkynysh-gas",
+          "industry": "gas",
+          "text": "天然ガスガルキニシュ",
+          "rect": [
+            383.109375,
+            565.4375,
+            60,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-inkai-uranium",
+          "industry": "uranium",
+          "text": "ウランインカイ",
+          "rect": [
+            514.125,
+            311.109375,
+            45.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-muruntau-gold",
+          "industry": "gold",
+          "text": "金ムルンタウ",
+          "rect": [
+            448.3125,
+            387.53125,
+            49.8125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-toktogul-hydro",
+          "industry": "hydro",
+          "text": "水力発電トクトグル",
+          "rect": [
+            598.703125,
+            384.09375,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "sc-tengiz-oil",
+          "point": "53.1,46.2",
+          "display": ""
+        },
+        {
+          "id": "central-kashagan",
+          "point": "51.5,46.2",
+          "display": ""
+        },
+        {
+          "id": "sc-galkynysh-gas",
+          "point": "62.5,37.2",
+          "display": ""
+        },
+        {
+          "id": "sc-inkai-uranium",
+          "point": "68.5,44.2",
+          "display": ""
+        },
+        {
+          "id": "central-uchkuduk",
+          "point": "63.55,42.15",
+          "display": ""
+        },
+        {
+          "id": "central-zafarabad",
+          "point": "64.7,40.63",
+          "display": ""
+        },
+        {
+          "id": "central-nurabad",
+          "point": "66.25,39.6",
+          "display": ""
+        },
+        {
+          "id": "sc-bozshakol-copper",
+          "point": "74.2914,51.8477",
+          "display": ""
+        },
+        {
+          "id": "central-aktogay",
+          "point": "79.9367,46.9474",
+          "display": ""
+        },
+        {
+          "id": "sc-muruntau-gold",
+          "point": "64.55,41.53",
+          "display": ""
+        },
+        {
+          "id": "central-kumtor",
+          "point": "78.2,41.86",
+          "display": ""
+        },
+        {
+          "id": "sc-nurek-hydro",
+          "point": "69.37,38.38",
+          "display": ""
+        },
+        {
+          "id": "sc-toktogul-hydro",
+          "point": "72.9,41.65",
+          "display": ""
+        },
+        {
+          "id": "central-rogun",
+          "point": "69.78,38.7",
+          "display": ""
+        },
+        {
+          "id": "central-khromtau",
+          "point": "58.43,50.25",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          815.171875,
+          514.65625,
+          399.90625
+        ],
+        [
+          532.65625,
+          815.171875,
+          514.671875,
+          399.90625
+        ],
+        [
+          1065.328125,
+          815.171875,
+          514.671875,
+          399.90625
+        ]
+      ],
+      "mapBottom": 992,
+      "statisticsTop": 1119.984375
+    },
+    {
+      "file": "interaction-images/1920-manufacturing-initial.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "frame": "-35.397 -8.691 700.965 445.878",
+      "map": [
+        1005.421875,
+        640
+      ],
+      "labels": [
+        {
+          "id": "central-andijan-textiles,central-namangan-textiles,central-tashkent-clothing,sc-fergana-cotton",
+          "industry": "textiles",
+          "text": "繊維・衣料フェルガナ盆地・タシケント",
+          "rect": [
+            534.375,
+            393.6875,
+            129.40625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-akmola-flour,central-north-flour",
+          "industry": "flour",
+          "text": "製粉アクモラ州・北カザフスタン州",
+          "rect": [
+            484.9375,
+            104.984375,
+            139.5,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aksu-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクス",
+          "rect": [
+            668.625,
+            86.75,
+            81.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクトベ",
+          "rect": [
+            262.875,
+            137.125,
+            81.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-almalyk",
+          "industry": "copper",
+          "text": "銅製錬アルマリク",
+          "rect": [
+            534.265625,
+            460.984375,
+            49.90625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-balkhash",
+          "industry": "copper",
+          "text": "銅製錬バルハシ",
+          "rect": [
+            647.515625,
+            235.28125,
+            45.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-bukhara-textiles",
+          "industry": "textiles",
+          "text": "繊維・衣料ブハラ州",
+          "rect": [
+            418.125,
+            491.890625,
+            69.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khorezm-textiles",
+          "industry": "textiles",
+          "text": "繊維・衣料ホラズム州",
+          "rect": [
+            339.703125,
+            386.953125,
+            69.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kostanay-flour",
+          "industry": "flour",
+          "text": "製粉コスタナイ州",
+          "rect": [
+            406.15625,
+            52.984375,
+            60,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-zhezkazgan",
+          "industry": "copper",
+          "text": "銅製錬ジェズカズガン",
+          "rect": [
+            485.359375,
+            262.671875,
+            70,
+            27.5
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "central-zhezkazgan",
+          "point": "67.71,47.78",
+          "display": ""
+        },
+        {
+          "id": "central-balkhash",
+          "point": "74.98,46.85",
+          "display": ""
+        },
+        {
+          "id": "central-almalyk",
+          "point": "69.6,40.85",
+          "display": ""
+        },
+        {
+          "id": "sc-fergana-cotton",
+          "point": "71.78,40.38",
+          "display": ""
+        },
+        {
+          "id": "central-andijan-textiles",
+          "point": "72.34,40.78",
+          "display": ""
+        },
+        {
+          "id": "central-namangan-textiles",
+          "point": "71.67,41",
+          "display": ""
+        },
+        {
+          "id": "central-khorezm-textiles",
+          "point": "60.61,41.55",
+          "display": ""
+        },
+        {
+          "id": "central-bukhara-textiles",
+          "point": "64.42,39.77",
+          "display": ""
+        },
+        {
+          "id": "central-tashkent-clothing",
+          "point": "69.24,41.31",
+          "display": ""
+        },
+        {
+          "id": "central-kostanay-flour",
+          "point": "63.62,53.22",
+          "display": ""
+        },
+        {
+          "id": "central-akmola-flour",
+          "point": "69.39,53.29",
+          "display": ""
+        },
+        {
+          "id": "central-north-flour",
+          "point": "69.15,54.87",
+          "display": ""
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "point": "57.17,50.28",
+          "display": ""
+        },
+        {
+          "id": "central-aksu-chromium",
+          "point": "76.88,52.04",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          755.6875,
+          514.65625,
+          764.8125
+        ],
+        [
+          532.65625,
+          755.6875,
+          514.671875,
+          764.8125
+        ],
+        [
+          1065.328125,
+          755.6875,
+          514.671875,
+          764.8125
+        ]
+      ],
+      "mapBottom": 992,
+      "statisticsTop": 1060.5
+    },
+    {
+      "file": "interaction-images/1920-manufacturing-selected.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "frame": "-35.397 -8.691 700.965 445.878",
+      "map": [
+        1005.421875,
+        640
+      ],
+      "labels": [
+        {
+          "id": "central-andijan-textiles,central-namangan-textiles,central-tashkent-clothing,sc-fergana-cotton",
+          "industry": "textiles",
+          "text": "繊維・衣料フェルガナ盆地・タシケント",
+          "rect": [
+            534.375,
+            393.6875,
+            129.40625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-akmola-flour,central-north-flour",
+          "industry": "flour",
+          "text": "製粉アクモラ州・北カザフスタン州",
+          "rect": [
+            484.9375,
+            104.984375,
+            139.5,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aksu-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクス",
+          "rect": [
+            668.625,
+            86.75,
+            81.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクトベ",
+          "rect": [
+            262.875,
+            137.125,
+            81.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-almalyk",
+          "industry": "copper",
+          "text": "銅製錬アルマリク",
+          "rect": [
+            534.265625,
+            460.984375,
+            49.90625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-balkhash",
+          "industry": "copper",
+          "text": "銅製錬バルハシ",
+          "rect": [
+            647.515625,
+            235.28125,
+            45.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-bukhara-textiles",
+          "industry": "textiles",
+          "text": "繊維・衣料ブハラ州",
+          "rect": [
+            418.125,
+            491.890625,
+            69.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khorezm-textiles",
+          "industry": "textiles",
+          "text": "繊維・衣料ホラズム州",
+          "rect": [
+            339.703125,
+            386.953125,
+            69.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kostanay-flour",
+          "industry": "flour",
+          "text": "製粉コスタナイ州",
+          "rect": [
+            406.15625,
+            52.984375,
+            60,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-zhezkazgan",
+          "industry": "copper",
+          "text": "銅製錬ジェズカズガン",
+          "rect": [
+            485.359375,
+            262.671875,
+            70,
+            27.5
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "central-zhezkazgan",
+          "point": "67.71,47.78",
+          "display": ""
+        },
+        {
+          "id": "central-balkhash",
+          "point": "74.98,46.85",
+          "display": ""
+        },
+        {
+          "id": "central-almalyk",
+          "point": "69.6,40.85",
+          "display": ""
+        },
+        {
+          "id": "sc-fergana-cotton",
+          "point": "71.78,40.38",
+          "display": ""
+        },
+        {
+          "id": "central-andijan-textiles",
+          "point": "72.34,40.78",
+          "display": ""
+        },
+        {
+          "id": "central-namangan-textiles",
+          "point": "71.67,41",
+          "display": ""
+        },
+        {
+          "id": "central-khorezm-textiles",
+          "point": "60.61,41.55",
+          "display": ""
+        },
+        {
+          "id": "central-bukhara-textiles",
+          "point": "64.42,39.77",
+          "display": ""
+        },
+        {
+          "id": "central-tashkent-clothing",
+          "point": "69.24,41.31",
+          "display": ""
+        },
+        {
+          "id": "central-kostanay-flour",
+          "point": "63.62,53.22",
+          "display": ""
+        },
+        {
+          "id": "central-akmola-flour",
+          "point": "69.39,53.29",
+          "display": ""
+        },
+        {
+          "id": "central-north-flour",
+          "point": "69.15,54.87",
+          "display": ""
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "point": "57.17,50.28",
+          "display": ""
+        },
+        {
+          "id": "central-aksu-chromium",
+          "point": "76.88,52.04",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          834.96875,
+          514.65625,
+          401.5
+        ],
+        [
+          532.65625,
+          834.96875,
+          514.671875,
+          401.5
+        ],
+        [
+          1065.328125,
+          834.96875,
+          514.671875,
+          401.5
+        ]
+      ],
+      "mapBottom": 992,
+      "statisticsTop": 1139.78125
+    },
+    {
+      "file": "interaction-images/1920-services-initial.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "frame": "-35.397 -8.691 700.965 445.878",
+      "map": [
+        1005.421875,
+        640
+      ],
+      "labels": [
+        {
+          "id": "central-aktau,central-kuryk",
+          "industry": "logistics",
+          "text": "輸送・物流アクタウ・クリク",
+          "rect": [
+            140.359375,
+            326.859375,
+            79.109375,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-altynkol,central-dostyk",
+          "industry": "logistics",
+          "text": "輸送・物流ホルゴス・ドスティク",
+          "rect": [
+            731.671875,
+            366.265625,
+            99.40625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-bukhara-tourism,central-samarkand-tourism",
+          "industry": "tourism",
+          "text": "文化観光ブハラ・サマルカンド",
+          "rect": [
+            393.625,
+            491.890625,
+            99.703125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khiva-tourism",
+          "industry": "tourism",
+          "text": "文化観光ヒヴァ",
+          "rect": [
+            340.546875,
+            391.8125,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-tashkent-tourism",
+          "industry": "tourism",
+          "text": "旅行手配タシケント",
+          "rect": [
+            523.359375,
+            393.828125,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "central-dostyk",
+          "point": "82.48,45.26",
+          "display": ""
+        },
+        {
+          "id": "central-altynkol",
+          "point": "80.38,44.16",
+          "display": ""
+        },
+        {
+          "id": "central-aktau",
+          "point": "51.17,43.65",
+          "display": ""
+        },
+        {
+          "id": "central-kuryk",
+          "point": "51.44,43.18",
+          "display": ""
+        },
+        {
+          "id": "central-samarkand-tourism",
+          "point": "66.96,39.65",
+          "display": ""
+        },
+        {
+          "id": "central-bukhara-tourism",
+          "point": "64.42,39.77",
+          "display": ""
+        },
+        {
+          "id": "central-khiva-tourism",
+          "point": "60.36,41.38",
+          "display": ""
+        },
+        {
+          "id": "central-tashkent-tourism",
+          "point": "69.24,41.31",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          755.6875,
+          514.65625,
+          583.15625
+        ],
+        [
+          532.65625,
+          755.6875,
+          514.671875,
+          583.15625
+        ],
+        [
+          1065.328125,
+          755.6875,
+          514.671875,
+          583.15625
+        ]
+      ],
+      "mapBottom": 992,
+      "statisticsTop": 1060.5
+    },
+    {
+      "file": "interaction-images/1920-services-selected.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "frame": "-35.397 -8.691 700.965 445.878",
+      "map": [
+        1005.421875,
+        640
+      ],
+      "labels": [
+        {
+          "id": "central-aktau,central-kuryk",
+          "industry": "logistics",
+          "text": "輸送・物流アクタウ・クリク",
+          "rect": [
+            140.359375,
+            326.859375,
+            79.109375,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-altynkol,central-dostyk",
+          "industry": "logistics",
+          "text": "輸送・物流ホルゴス・ドスティク",
+          "rect": [
+            731.671875,
+            366.265625,
+            99.40625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-bukhara-tourism,central-samarkand-tourism",
+          "industry": "tourism",
+          "text": "文化観光ブハラ・サマルカンド",
+          "rect": [
+            393.625,
+            491.890625,
+            99.703125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khiva-tourism",
+          "industry": "tourism",
+          "text": "文化観光ヒヴァ",
+          "rect": [
+            340.546875,
+            391.8125,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-tashkent-tourism",
+          "industry": "tourism",
+          "text": "旅行手配タシケント",
+          "rect": [
+            523.359375,
+            393.828125,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "central-dostyk",
+          "point": "82.48,45.26",
+          "display": ""
+        },
+        {
+          "id": "central-altynkol",
+          "point": "80.38,44.16",
+          "display": ""
+        },
+        {
+          "id": "central-aktau",
+          "point": "51.17,43.65",
+          "display": ""
+        },
+        {
+          "id": "central-kuryk",
+          "point": "51.44,43.18",
+          "display": ""
+        },
+        {
+          "id": "central-samarkand-tourism",
+          "point": "66.96,39.65",
+          "display": ""
+        },
+        {
+          "id": "central-bukhara-tourism",
+          "point": "64.42,39.77",
+          "display": ""
+        },
+        {
+          "id": "central-khiva-tourism",
+          "point": "60.36,41.38",
+          "display": ""
+        },
+        {
+          "id": "central-tashkent-tourism",
+          "point": "69.24,41.31",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          860.96875,
+          514.65625,
+          401.5
+        ],
+        [
+          532.65625,
+          860.96875,
+          514.671875,
+          401.5
+        ],
+        [
+          1065.328125,
+          860.96875,
+          514.671875,
+          401.5
+        ]
+      ],
+      "mapBottom": 992,
+      "statisticsTop": 1165.78125
+    },
+    {
+      "file": "interaction-images/1440-resources-initial.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "frame": "-31.539 -8.691 693.249 445.878",
+      "map": [
+        682.65625,
+        440.421875
+      ],
+      "labels": [
+        {
+          "id": "central-nurabad,central-uchkuduk,central-zafarabad",
+          "industry": "uranium",
+          "text": "ウランヌラバードほか",
+          "rect": [
+            249.234375,
+            337.65625,
+            69.90625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kashagan,sc-tengiz-oil",
+          "industry": "oil",
+          "text": "石油カシャガン・テンギス",
+          "rect": [
+            74.78125,
+            162.28125,
+            100,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-rogun,sc-nurek-hydro",
+          "industry": "hydro",
+          "text": "水力発電ログン・ヌレーク",
+          "rect": [
+            357.984375,
+            309.5625,
+            80,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktogay",
+          "industry": "copper",
+          "text": "銅採掘アクトガイ",
+          "rect": [
+            501.453125,
+            147.609375,
+            49.5,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khromtau",
+          "industry": "chromium",
+          "text": "クロム鉱フロムタウ",
+          "rect": [
+            194.15625,
+            82.765625,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kumtor",
+          "industry": "gold",
+          "text": "金クムトール",
+          "rect": [
+            477.421875,
+            301.515625,
+            49.203125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-bozshakol-copper",
+          "industry": "copper",
+          "text": "銅採掘ボズシャコル",
+          "rect": [
+            416.71875,
+            51.390625,
+            60,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-galkynysh-gas",
+          "industry": "gas",
+          "text": "天然ガスガルキニシュ",
+          "rect": [
+            250.15625,
+            393.015625,
+            60,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-inkai-uranium",
+          "industry": "uranium",
+          "text": "ウランインカイ",
+          "rect": [
+            342.40625,
+            201.5625,
+            45.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-muruntau-gold",
+          "industry": "gold",
+          "text": "金ムルンタウ",
+          "rect": [
+            308.109375,
+            253.984375,
+            49.8125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-toktogul-hydro",
+          "industry": "hydro",
+          "text": "水力発電トクトグル",
+          "rect": [
+            383.5625,
+            251.640625,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "sc-tengiz-oil",
+          "point": "53.1,46.2",
+          "display": ""
+        },
+        {
+          "id": "central-kashagan",
+          "point": "51.5,46.2",
+          "display": ""
+        },
+        {
+          "id": "sc-galkynysh-gas",
+          "point": "62.5,37.2",
+          "display": ""
+        },
+        {
+          "id": "sc-inkai-uranium",
+          "point": "68.5,44.2",
+          "display": ""
+        },
+        {
+          "id": "central-uchkuduk",
+          "point": "63.55,42.15",
+          "display": ""
+        },
+        {
+          "id": "central-zafarabad",
+          "point": "64.7,40.63",
+          "display": ""
+        },
+        {
+          "id": "central-nurabad",
+          "point": "66.25,39.6",
+          "display": ""
+        },
+        {
+          "id": "sc-bozshakol-copper",
+          "point": "74.2914,51.8477",
+          "display": ""
+        },
+        {
+          "id": "central-aktogay",
+          "point": "79.9367,46.9474",
+          "display": ""
+        },
+        {
+          "id": "sc-muruntau-gold",
+          "point": "64.55,41.53",
+          "display": ""
+        },
+        {
+          "id": "central-kumtor",
+          "point": "78.2,41.86",
+          "display": ""
+        },
+        {
+          "id": "sc-nurek-hydro",
+          "point": "69.37,38.38",
+          "display": ""
+        },
+        {
+          "id": "sc-toktogul-hydro",
+          "point": "72.9,41.65",
+          "display": ""
+        },
+        {
+          "id": "central-rogun",
+          "point": "69.78,38.7",
+          "display": ""
+        },
+        {
+          "id": "central-khromtau",
+          "point": "58.43,50.25",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          556.109375,
+          358.125,
+          607.34375
+        ],
+        [
+          376.125,
+          556.109375,
+          358.140625,
+          607.34375
+        ],
+        [
+          752.265625,
+          556.109375,
+          358.125,
+          607.34375
+        ]
+      ],
+      "mapBottom": 792.421875,
+      "statisticsTop": 860.921875
+    },
+    {
+      "file": "interaction-images/1440-resources-selected.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "frame": "-31.539 -8.691 693.249 445.878",
+      "map": [
+        682.65625,
+        440.421875
+      ],
+      "labels": [
+        {
+          "id": "central-nurabad,central-uchkuduk,central-zafarabad",
+          "industry": "uranium",
+          "text": "ウランヌラバードほか",
+          "rect": [
+            249.234375,
+            337.65625,
+            69.90625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kashagan,sc-tengiz-oil",
+          "industry": "oil",
+          "text": "石油カシャガン・テンギス",
+          "rect": [
+            74.78125,
+            162.28125,
+            100,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-rogun,sc-nurek-hydro",
+          "industry": "hydro",
+          "text": "水力発電ログン・ヌレーク",
+          "rect": [
+            357.984375,
+            309.5625,
+            80,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktogay",
+          "industry": "copper",
+          "text": "銅採掘アクトガイ",
+          "rect": [
+            501.453125,
+            147.609375,
+            49.5,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khromtau",
+          "industry": "chromium",
+          "text": "クロム鉱フロムタウ",
+          "rect": [
+            194.15625,
+            82.765625,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kumtor",
+          "industry": "gold",
+          "text": "金クムトール",
+          "rect": [
+            477.421875,
+            301.515625,
+            49.203125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-bozshakol-copper",
+          "industry": "copper",
+          "text": "銅採掘ボズシャコル",
+          "rect": [
+            416.71875,
+            51.390625,
+            60,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-galkynysh-gas",
+          "industry": "gas",
+          "text": "天然ガスガルキニシュ",
+          "rect": [
+            250.15625,
+            393.015625,
+            60,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-inkai-uranium",
+          "industry": "uranium",
+          "text": "ウランインカイ",
+          "rect": [
+            342.40625,
+            201.5625,
+            45.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-muruntau-gold",
+          "industry": "gold",
+          "text": "金ムルンタウ",
+          "rect": [
+            308.109375,
+            253.984375,
+            49.8125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-toktogul-hydro",
+          "industry": "hydro",
+          "text": "水力発電トクトグル",
+          "rect": [
+            383.5625,
+            251.640625,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "sc-tengiz-oil",
+          "point": "53.1,46.2",
+          "display": ""
+        },
+        {
+          "id": "central-kashagan",
+          "point": "51.5,46.2",
+          "display": ""
+        },
+        {
+          "id": "sc-galkynysh-gas",
+          "point": "62.5,37.2",
+          "display": ""
+        },
+        {
+          "id": "sc-inkai-uranium",
+          "point": "68.5,44.2",
+          "display": ""
+        },
+        {
+          "id": "central-uchkuduk",
+          "point": "63.55,42.15",
+          "display": ""
+        },
+        {
+          "id": "central-zafarabad",
+          "point": "64.7,40.63",
+          "display": ""
+        },
+        {
+          "id": "central-nurabad",
+          "point": "66.25,39.6",
+          "display": ""
+        },
+        {
+          "id": "sc-bozshakol-copper",
+          "point": "74.2914,51.8477",
+          "display": ""
+        },
+        {
+          "id": "central-aktogay",
+          "point": "79.9367,46.9474",
+          "display": ""
+        },
+        {
+          "id": "sc-muruntau-gold",
+          "point": "64.55,41.53",
+          "display": ""
+        },
+        {
+          "id": "central-kumtor",
+          "point": "78.2,41.86",
+          "display": ""
+        },
+        {
+          "id": "sc-nurek-hydro",
+          "point": "69.37,38.38",
+          "display": ""
+        },
+        {
+          "id": "sc-toktogul-hydro",
+          "point": "72.9,41.65",
+          "display": ""
+        },
+        {
+          "id": "central-rogun",
+          "point": "69.78,38.7",
+          "display": ""
+        },
+        {
+          "id": "central-khromtau",
+          "point": "58.43,50.25",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          913.71875,
+          358.125,
+          438.28125
+        ],
+        [
+          376.125,
+          913.71875,
+          358.140625,
+          438.28125
+        ],
+        [
+          752.265625,
+          913.71875,
+          358.125,
+          438.28125
+        ]
+      ],
+      "mapBottom": 792.421875,
+      "statisticsTop": 1218.53125
+    },
+    {
+      "file": "interaction-images/1440-manufacturing-initial.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "frame": "-31.539 -8.691 693.249 445.878",
+      "map": [
+        682.65625,
+        440.421875
+      ],
+      "labels": [
+        {
+          "id": "central-andijan-textiles,central-namangan-textiles,central-tashkent-clothing,sc-fergana-cotton",
+          "industry": "textiles",
+          "text": "繊維・衣料フェルガナ盆地・タシケント",
+          "rect": [
+            312.1875,
+            258.390625,
+            129.40625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-akmola-flour,central-kostanay-flour,central-north-flour",
+          "industry": "flour",
+          "text": "製粉アクモラ州ほか",
+          "rect": [
+            342.484375,
+            77.0625,
+            69.5,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-bukhara-textiles,central-khorezm-textiles",
+          "industry": "textiles",
+          "text": "繊維・衣料ブハラ州・ホラズム州",
+          "rect": [
+            257.28125,
+            342.546875,
+            99.8125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aksu-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクス",
+          "rect": [
+            442.78125,
+            47.609375,
+            81.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクトベ",
+          "rect": [
+            164.359375,
+            82.171875,
+            81.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-almalyk",
+          "industry": "copper",
+          "text": "銅製錬アルマリク",
+          "rect": [
+            363.9375,
+            330.84375,
+            45.015625,
+            15
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-balkhash",
+          "industry": "copper",
+          "text": "銅製錬バルハシ",
+          "rect": [
+            433.9375,
+            149.515625,
+            45.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-zhezkazgan",
+          "industry": "copper",
+          "text": "銅製錬ジェズカズガン",
+          "rect": [
+            318.75,
+            185.265625,
+            70,
+            27.5
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "central-zhezkazgan",
+          "point": "67.71,47.78",
+          "display": ""
+        },
+        {
+          "id": "central-balkhash",
+          "point": "74.98,46.85",
+          "display": ""
+        },
+        {
+          "id": "central-almalyk",
+          "point": "69.6,40.85",
+          "display": ""
+        },
+        {
+          "id": "sc-fergana-cotton",
+          "point": "71.78,40.38",
+          "display": ""
+        },
+        {
+          "id": "central-andijan-textiles",
+          "point": "72.34,40.78",
+          "display": ""
+        },
+        {
+          "id": "central-namangan-textiles",
+          "point": "71.67,41",
+          "display": ""
+        },
+        {
+          "id": "central-khorezm-textiles",
+          "point": "60.61,41.55",
+          "display": ""
+        },
+        {
+          "id": "central-bukhara-textiles",
+          "point": "64.42,39.77",
+          "display": ""
+        },
+        {
+          "id": "central-tashkent-clothing",
+          "point": "69.24,41.31",
+          "display": ""
+        },
+        {
+          "id": "central-kostanay-flour",
+          "point": "63.62,53.22",
+          "display": ""
+        },
+        {
+          "id": "central-akmola-flour",
+          "point": "69.39,53.29",
+          "display": ""
+        },
+        {
+          "id": "central-north-flour",
+          "point": "69.15,54.87",
+          "display": ""
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "point": "57.17,50.28",
+          "display": ""
+        },
+        {
+          "id": "central-aksu-chromium",
+          "point": "76.88,52.04",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          556.109375,
+          358.125,
+          803.1875
+        ],
+        [
+          376.125,
+          556.109375,
+          358.140625,
+          803.1875
+        ],
+        [
+          752.265625,
+          556.109375,
+          358.125,
+          803.1875
+        ]
+      ],
+      "mapBottom": 792.421875,
+      "statisticsTop": 860.921875
+    },
+    {
+      "file": "interaction-images/1440-manufacturing-selected.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "frame": "-31.539 -8.691 693.249 445.878",
+      "map": [
+        682.65625,
+        440.421875
+      ],
+      "labels": [
+        {
+          "id": "central-andijan-textiles,central-namangan-textiles,central-tashkent-clothing,sc-fergana-cotton",
+          "industry": "textiles",
+          "text": "繊維・衣料フェルガナ盆地・タシケント",
+          "rect": [
+            312.1875,
+            258.390625,
+            129.40625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-akmola-flour,central-kostanay-flour,central-north-flour",
+          "industry": "flour",
+          "text": "製粉アクモラ州ほか",
+          "rect": [
+            342.484375,
+            77.0625,
+            69.5,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-bukhara-textiles,central-khorezm-textiles",
+          "industry": "textiles",
+          "text": "繊維・衣料ブハラ州・ホラズム州",
+          "rect": [
+            257.28125,
+            342.546875,
+            99.8125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aksu-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクス",
+          "rect": [
+            442.78125,
+            47.609375,
+            81.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクトベ",
+          "rect": [
+            164.359375,
+            82.171875,
+            81.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-almalyk",
+          "industry": "copper",
+          "text": "銅製錬アルマリク",
+          "rect": [
+            363.9375,
+            330.84375,
+            45.015625,
+            15
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-balkhash",
+          "industry": "copper",
+          "text": "銅製錬バルハシ",
+          "rect": [
+            433.9375,
+            149.515625,
+            45.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-zhezkazgan",
+          "industry": "copper",
+          "text": "銅製錬ジェズカズガン",
+          "rect": [
+            318.75,
+            185.265625,
+            70,
+            27.5
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "central-zhezkazgan",
+          "point": "67.71,47.78",
+          "display": ""
+        },
+        {
+          "id": "central-balkhash",
+          "point": "74.98,46.85",
+          "display": ""
+        },
+        {
+          "id": "central-almalyk",
+          "point": "69.6,40.85",
+          "display": ""
+        },
+        {
+          "id": "sc-fergana-cotton",
+          "point": "71.78,40.38",
+          "display": ""
+        },
+        {
+          "id": "central-andijan-textiles",
+          "point": "72.34,40.78",
+          "display": ""
+        },
+        {
+          "id": "central-namangan-textiles",
+          "point": "71.67,41",
+          "display": ""
+        },
+        {
+          "id": "central-khorezm-textiles",
+          "point": "60.61,41.55",
+          "display": ""
+        },
+        {
+          "id": "central-bukhara-textiles",
+          "point": "64.42,39.77",
+          "display": ""
+        },
+        {
+          "id": "central-tashkent-clothing",
+          "point": "69.24,41.31",
+          "display": ""
+        },
+        {
+          "id": "central-kostanay-flour",
+          "point": "63.62,53.22",
+          "display": ""
+        },
+        {
+          "id": "central-akmola-flour",
+          "point": "69.39,53.29",
+          "display": ""
+        },
+        {
+          "id": "central-north-flour",
+          "point": "69.15,54.87",
+          "display": ""
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "point": "57.17,50.28",
+          "display": ""
+        },
+        {
+          "id": "central-aksu-chromium",
+          "point": "76.88,52.04",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          907.265625,
+          358.125,
+          401.5
+        ],
+        [
+          376.125,
+          907.265625,
+          358.140625,
+          401.5
+        ],
+        [
+          752.265625,
+          907.265625,
+          358.125,
+          401.5
+        ]
+      ],
+      "mapBottom": 792.421875,
+      "statisticsTop": 1212.078125
+    },
+    {
+      "file": "interaction-images/1440-services-initial.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "frame": "-31.539 -8.691 693.249 445.878",
+      "map": [
+        682.65625,
+        440.421875
+      ],
+      "labels": [
+        {
+          "id": "central-aktau,central-kuryk",
+          "industry": "logistics",
+          "text": "輸送・物流アクタウ・クリク",
+          "rect": [
+            80.609375,
+            212.359375,
+            79.109375,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-altynkol,central-dostyk",
+          "industry": "logistics",
+          "text": "輸送・物流ホルゴス・ドスティク",
+          "rect": [
+            504.21875,
+            256.34375,
+            99.40625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-bukhara-tourism,central-khiva-tourism",
+          "industry": "tourism",
+          "text": "文化観光ブハラ・ヒヴァ",
+          "rect": [
+            260.28125,
+            342.546875,
+            70,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-samarkand-tourism",
+          "industry": "tourism",
+          "text": "文化観光サマルカンド",
+          "rect": [
+            304.15625,
+            275.90625,
+            59.703125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-tashkent-tourism",
+          "industry": "tourism",
+          "text": "旅行手配タシケント",
+          "rect": [
+            358.859375,
+            312.3125,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "central-dostyk",
+          "point": "82.48,45.26",
+          "display": ""
+        },
+        {
+          "id": "central-altynkol",
+          "point": "80.38,44.16",
+          "display": ""
+        },
+        {
+          "id": "central-aktau",
+          "point": "51.17,43.65",
+          "display": ""
+        },
+        {
+          "id": "central-kuryk",
+          "point": "51.44,43.18",
+          "display": ""
+        },
+        {
+          "id": "central-samarkand-tourism",
+          "point": "66.96,39.65",
+          "display": ""
+        },
+        {
+          "id": "central-bukhara-tourism",
+          "point": "64.42,39.77",
+          "display": ""
+        },
+        {
+          "id": "central-khiva-tourism",
+          "point": "60.36,41.38",
+          "display": ""
+        },
+        {
+          "id": "central-tashkent-tourism",
+          "point": "69.24,41.31",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          556.109375,
+          358.125,
+          621.53125
+        ],
+        [
+          376.125,
+          556.109375,
+          358.140625,
+          621.53125
+        ],
+        [
+          752.265625,
+          556.109375,
+          358.125,
+          621.53125
+        ]
+      ],
+      "mapBottom": 792.421875,
+      "statisticsTop": 860.921875
+    },
+    {
+      "file": "interaction-images/1440-services-selected.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "frame": "-31.539 -8.691 693.249 445.878",
+      "map": [
+        682.65625,
+        440.421875
+      ],
+      "labels": [
+        {
+          "id": "central-aktau,central-kuryk",
+          "industry": "logistics",
+          "text": "輸送・物流アクタウ・クリク",
+          "rect": [
+            80.609375,
+            212.359375,
+            79.109375,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-altynkol,central-dostyk",
+          "industry": "logistics",
+          "text": "輸送・物流ホルゴス・ドスティク",
+          "rect": [
+            504.21875,
+            256.34375,
+            99.40625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-bukhara-tourism,central-khiva-tourism",
+          "industry": "tourism",
+          "text": "文化観光ブハラ・ヒヴァ",
+          "rect": [
+            260.28125,
+            342.546875,
+            70,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-samarkand-tourism",
+          "industry": "tourism",
+          "text": "文化観光サマルカンド",
+          "rect": [
+            304.15625,
+            275.90625,
+            59.703125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-tashkent-tourism",
+          "industry": "tourism",
+          "text": "旅行手配タシケント",
+          "rect": [
+            358.859375,
+            312.3125,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "central-dostyk",
+          "point": "82.48,45.26",
+          "display": ""
+        },
+        {
+          "id": "central-altynkol",
+          "point": "80.38,44.16",
+          "display": ""
+        },
+        {
+          "id": "central-aktau",
+          "point": "51.17,43.65",
+          "display": ""
+        },
+        {
+          "id": "central-kuryk",
+          "point": "51.44,43.18",
+          "display": ""
+        },
+        {
+          "id": "central-samarkand-tourism",
+          "point": "66.96,39.65",
+          "display": ""
+        },
+        {
+          "id": "central-bukhara-tourism",
+          "point": "64.42,39.77",
+          "display": ""
+        },
+        {
+          "id": "central-khiva-tourism",
+          "point": "60.36,41.38",
+          "display": ""
+        },
+        {
+          "id": "central-tashkent-tourism",
+          "point": "69.24,41.31",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          933.265625,
+          358.125,
+          420.6875
+        ],
+        [
+          376.125,
+          933.265625,
+          358.140625,
+          420.6875
+        ],
+        [
+          752.265625,
+          933.265625,
+          358.125,
+          420.6875
+        ]
+      ],
+      "mapBottom": 792.421875,
+      "statisticsTop": 1238.078125
+    },
+    {
+      "file": "interaction-images/1024-resources-initial.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "frame": "2.908 -8.691 624.355 445.878",
+      "map": [
+        992,
+        708.5625
+      ],
+      "labels": [
+        {
+          "id": "central-kashagan,sc-tengiz-oil",
+          "industry": "oil",
+          "text": "石油カシャガン・テンギス",
+          "rect": [
+            95.875,
+            285.359375,
+            100,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-nurabad,central-zafarabad",
+          "industry": "uranium",
+          "text": "ウランヌラバード・ザファラバード",
+          "rect": [
+            411.15625,
+            548.53125,
+            129.8125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-rogun,sc-nurek-hydro",
+          "industry": "hydro",
+          "text": "水力発電ログン・ヌレーク",
+          "rect": [
+            483.28125,
+            587.203125,
+            80,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktogay",
+          "industry": "copper",
+          "text": "銅採掘アクトガイ",
+          "rect": [
+            769.1875,
+            261.671875,
+            49.5,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khromtau",
+          "industry": "chromium",
+          "text": "クロム鉱フロムタウ",
+          "rect": [
+            275.375,
+            157,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kumtor",
+          "industry": "gold",
+          "text": "金クムトール",
+          "rect": [
+            730.09375,
+            476.90625,
+            49.203125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-uchkuduk",
+          "industry": "uranium",
+          "text": "ウランウチクドゥク地区",
+          "rect": [
+            380.59375,
+            413.71875,
+            80,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-bozshakol-copper",
+          "industry": "copper",
+          "text": "銅採掘ボズシャコル",
+          "rect": [
+            635.484375,
+            106.359375,
+            60,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-galkynysh-gas",
+          "industry": "gas",
+          "text": "天然ガスガルキニシュ",
+          "rect": [
+            366.65625,
+            624.59375,
+            60,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-inkai-uranium",
+          "industry": "uranium",
+          "text": "ウランインカイ",
+          "rect": [
+            510.953125,
+            348.75,
+            45.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-muruntau-gold",
+          "industry": "gold",
+          "text": "金ムルンタウ",
+          "rect": [
+            454.390625,
+            460.359375,
+            49.8125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-toktogul-hydro",
+          "industry": "hydro",
+          "text": "水力発電トクトグル",
+          "rect": [
+            605.25,
+            429.5625,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "sc-tengiz-oil",
+          "point": "53.1,46.2",
+          "display": ""
+        },
+        {
+          "id": "central-kashagan",
+          "point": "51.5,46.2",
+          "display": ""
+        },
+        {
+          "id": "sc-galkynysh-gas",
+          "point": "62.5,37.2",
+          "display": ""
+        },
+        {
+          "id": "sc-inkai-uranium",
+          "point": "68.5,44.2",
+          "display": ""
+        },
+        {
+          "id": "central-uchkuduk",
+          "point": "63.55,42.15",
+          "display": ""
+        },
+        {
+          "id": "central-zafarabad",
+          "point": "64.7,40.63",
+          "display": ""
+        },
+        {
+          "id": "central-nurabad",
+          "point": "66.25,39.6",
+          "display": ""
+        },
+        {
+          "id": "sc-bozshakol-copper",
+          "point": "74.2914,51.8477",
+          "display": ""
+        },
+        {
+          "id": "central-aktogay",
+          "point": "79.9367,46.9474",
+          "display": ""
+        },
+        {
+          "id": "sc-muruntau-gold",
+          "point": "64.55,41.53",
+          "display": ""
+        },
+        {
+          "id": "central-kumtor",
+          "point": "78.2,41.86",
+          "display": ""
+        },
+        {
+          "id": "sc-nurek-hydro",
+          "point": "69.37,38.38",
+          "display": ""
+        },
+        {
+          "id": "sc-toktogul-hydro",
+          "point": "72.9,41.65",
+          "display": ""
+        },
+        {
+          "id": "central-rogun",
+          "point": "69.78,38.7",
+          "display": ""
+        },
+        {
+          "id": "central-khromtau",
+          "point": "58.43,50.25",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          1173.890625,
+          318.65625,
+          626.53125
+        ],
+        [
+          336.65625,
+          1173.890625,
+          318.671875,
+          626.53125
+        ],
+        [
+          673.328125,
+          1173.890625,
+          318.65625,
+          626.53125
+        ]
+      ],
+      "mapBottom": 1380.5625,
+      "statisticsTop": 1798.703125
+    },
+    {
+      "file": "interaction-images/1024-resources-selected.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "frame": "2.908 -8.691 624.355 445.878",
+      "map": [
+        992,
+        708.5625
+      ],
+      "labels": [
+        {
+          "id": "central-kashagan,sc-tengiz-oil",
+          "industry": "oil",
+          "text": "石油カシャガン・テンギス",
+          "rect": [
+            95.875,
+            285.359375,
+            100,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-nurabad,central-zafarabad",
+          "industry": "uranium",
+          "text": "ウランヌラバード・ザファラバード",
+          "rect": [
+            411.15625,
+            548.53125,
+            129.8125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-rogun,sc-nurek-hydro",
+          "industry": "hydro",
+          "text": "水力発電ログン・ヌレーク",
+          "rect": [
+            483.28125,
+            587.203125,
+            80,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktogay",
+          "industry": "copper",
+          "text": "銅採掘アクトガイ",
+          "rect": [
+            769.1875,
+            261.671875,
+            49.5,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khromtau",
+          "industry": "chromium",
+          "text": "クロム鉱フロムタウ",
+          "rect": [
+            275.375,
+            157,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kumtor",
+          "industry": "gold",
+          "text": "金クムトール",
+          "rect": [
+            730.09375,
+            476.90625,
+            49.203125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-uchkuduk",
+          "industry": "uranium",
+          "text": "ウランウチクドゥク地区",
+          "rect": [
+            380.59375,
+            413.71875,
+            80,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-bozshakol-copper",
+          "industry": "copper",
+          "text": "銅採掘ボズシャコル",
+          "rect": [
+            635.484375,
+            106.359375,
+            60,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-galkynysh-gas",
+          "industry": "gas",
+          "text": "天然ガスガルキニシュ",
+          "rect": [
+            366.65625,
+            624.59375,
+            60,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-inkai-uranium",
+          "industry": "uranium",
+          "text": "ウランインカイ",
+          "rect": [
+            510.953125,
+            348.75,
+            45.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-muruntau-gold",
+          "industry": "gold",
+          "text": "金ムルンタウ",
+          "rect": [
+            454.390625,
+            460.359375,
+            49.8125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-toktogul-hydro",
+          "industry": "hydro",
+          "text": "水力発電トクトグル",
+          "rect": [
+            605.25,
+            429.5625,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "sc-tengiz-oil",
+          "point": "53.1,46.2",
+          "display": ""
+        },
+        {
+          "id": "central-kashagan",
+          "point": "51.5,46.2",
+          "display": ""
+        },
+        {
+          "id": "sc-galkynysh-gas",
+          "point": "62.5,37.2",
+          "display": ""
+        },
+        {
+          "id": "sc-inkai-uranium",
+          "point": "68.5,44.2",
+          "display": ""
+        },
+        {
+          "id": "central-uchkuduk",
+          "point": "63.55,42.15",
+          "display": ""
+        },
+        {
+          "id": "central-zafarabad",
+          "point": "64.7,40.63",
+          "display": ""
+        },
+        {
+          "id": "central-nurabad",
+          "point": "66.25,39.6",
+          "display": ""
+        },
+        {
+          "id": "sc-bozshakol-copper",
+          "point": "74.2914,51.8477",
+          "display": ""
+        },
+        {
+          "id": "central-aktogay",
+          "point": "79.9367,46.9474",
+          "display": ""
+        },
+        {
+          "id": "sc-muruntau-gold",
+          "point": "64.55,41.53",
+          "display": ""
+        },
+        {
+          "id": "central-kumtor",
+          "point": "78.2,41.86",
+          "display": ""
+        },
+        {
+          "id": "sc-nurek-hydro",
+          "point": "69.37,38.38",
+          "display": ""
+        },
+        {
+          "id": "sc-toktogul-hydro",
+          "point": "72.9,41.65",
+          "display": ""
+        },
+        {
+          "id": "central-rogun",
+          "point": "69.78,38.7",
+          "display": ""
+        },
+        {
+          "id": "central-khromtau",
+          "point": "58.43,50.25",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          1454.4375,
+          318.65625,
+          438.28125
+        ],
+        [
+          336.65625,
+          1454.4375,
+          318.671875,
+          438.28125
+        ],
+        [
+          673.328125,
+          1454.4375,
+          318.65625,
+          438.28125
+        ]
+      ],
+      "mapBottom": 1380.5625,
+      "statisticsTop": 2079.25
+    },
+    {
+      "file": "interaction-images/1024-manufacturing-initial.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "frame": "2.908 -8.691 624.355 445.878",
+      "map": [
+        992,
+        708.5625
+      ],
+      "labels": [
+        {
+          "id": "central-andijan-textiles,central-namangan-textiles,central-tashkent-clothing,sc-fergana-cotton",
+          "industry": "textiles",
+          "text": "繊維・衣料フェルガナ盆地・タシケント",
+          "rect": [
+            541.21875,
+            441.15625,
+            129.40625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-akmola-flour,central-north-flour",
+          "industry": "flour",
+          "text": "製粉アクモラ州・北カザフスタン州",
+          "rect": [
+            483.734375,
+            114.65625,
+            139.5,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aksu-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクス",
+          "rect": [
+            684,
+            100.265625,
+            81.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクトベ",
+          "rect": [
+            234.640625,
+            156.046875,
+            81.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-almalyk",
+          "industry": "copper",
+          "text": "銅製錬アルマリク",
+          "rect": [
+            533.53125,
+            508.921875,
+            49.90625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-balkhash",
+          "industry": "copper",
+          "text": "銅製錬バルハシ",
+          "rect": [
+            658.671875,
+            264.75,
+            45.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-bukhara-textiles",
+          "industry": "textiles",
+          "text": "繊維・衣料ブハラ州",
+          "rect": [
+            405.9375,
+            543.140625,
+            69.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khorezm-textiles",
+          "industry": "textiles",
+          "text": "繊維・衣料ホラズム州",
+          "rect": [
+            319.0625,
+            432.734375,
+            69.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kostanay-flour",
+          "industry": "flour",
+          "text": "製粉コスタナイ州",
+          "rect": [
+            392.1875,
+            62.875,
+            60,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-zhezkazgan",
+          "industry": "copper",
+          "text": "銅製錬ジェズカズガン",
+          "rect": [
+            480.4375,
+            289.28125,
+            70,
+            27.5
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "central-zhezkazgan",
+          "point": "67.71,47.78",
+          "display": ""
+        },
+        {
+          "id": "central-balkhash",
+          "point": "74.98,46.85",
+          "display": ""
+        },
+        {
+          "id": "central-almalyk",
+          "point": "69.6,40.85",
+          "display": ""
+        },
+        {
+          "id": "sc-fergana-cotton",
+          "point": "71.78,40.38",
+          "display": ""
+        },
+        {
+          "id": "central-andijan-textiles",
+          "point": "72.34,40.78",
+          "display": ""
+        },
+        {
+          "id": "central-namangan-textiles",
+          "point": "71.67,41",
+          "display": ""
+        },
+        {
+          "id": "central-khorezm-textiles",
+          "point": "60.61,41.55",
+          "display": ""
+        },
+        {
+          "id": "central-bukhara-textiles",
+          "point": "64.42,39.77",
+          "display": ""
+        },
+        {
+          "id": "central-tashkent-clothing",
+          "point": "69.24,41.31",
+          "display": ""
+        },
+        {
+          "id": "central-kostanay-flour",
+          "point": "63.62,53.22",
+          "display": ""
+        },
+        {
+          "id": "central-akmola-flour",
+          "point": "69.39,53.29",
+          "display": ""
+        },
+        {
+          "id": "central-north-flour",
+          "point": "69.15,54.87",
+          "display": ""
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "point": "57.17,50.28",
+          "display": ""
+        },
+        {
+          "id": "central-aksu-chromium",
+          "point": "76.88,52.04",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          1200.140625,
+          318.65625,
+          803.1875
+        ],
+        [
+          336.65625,
+          1200.140625,
+          318.671875,
+          803.1875
+        ],
+        [
+          673.328125,
+          1200.140625,
+          318.65625,
+          803.1875
+        ]
+      ],
+      "mapBottom": 1303.5625,
+      "statisticsTop": 1747.953125
+    },
+    {
+      "file": "interaction-images/1024-manufacturing-selected.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "frame": "2.908 -8.691 624.355 445.878",
+      "map": [
+        992,
+        708.5625
+      ],
+      "labels": [
+        {
+          "id": "central-andijan-textiles,central-namangan-textiles,central-tashkent-clothing,sc-fergana-cotton",
+          "industry": "textiles",
+          "text": "繊維・衣料フェルガナ盆地・タシケント",
+          "rect": [
+            541.21875,
+            441.15625,
+            129.40625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-akmola-flour,central-north-flour",
+          "industry": "flour",
+          "text": "製粉アクモラ州・北カザフスタン州",
+          "rect": [
+            483.734375,
+            114.65625,
+            139.5,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aksu-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクス",
+          "rect": [
+            684,
+            100.265625,
+            81.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクトベ",
+          "rect": [
+            234.640625,
+            156.046875,
+            81.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-almalyk",
+          "industry": "copper",
+          "text": "銅製錬アルマリク",
+          "rect": [
+            533.53125,
+            508.921875,
+            49.90625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-balkhash",
+          "industry": "copper",
+          "text": "銅製錬バルハシ",
+          "rect": [
+            658.671875,
+            264.75,
+            45.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-bukhara-textiles",
+          "industry": "textiles",
+          "text": "繊維・衣料ブハラ州",
+          "rect": [
+            405.9375,
+            543.140625,
+            69.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khorezm-textiles",
+          "industry": "textiles",
+          "text": "繊維・衣料ホラズム州",
+          "rect": [
+            319.0625,
+            432.734375,
+            69.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kostanay-flour",
+          "industry": "flour",
+          "text": "製粉コスタナイ州",
+          "rect": [
+            392.1875,
+            62.875,
+            60,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-zhezkazgan",
+          "industry": "copper",
+          "text": "銅製錬ジェズカズガン",
+          "rect": [
+            480.4375,
+            289.28125,
+            70,
+            27.5
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "central-zhezkazgan",
+          "point": "67.71,47.78",
+          "display": ""
+        },
+        {
+          "id": "central-balkhash",
+          "point": "74.98,46.85",
+          "display": ""
+        },
+        {
+          "id": "central-almalyk",
+          "point": "69.6,40.85",
+          "display": ""
+        },
+        {
+          "id": "sc-fergana-cotton",
+          "point": "71.78,40.38",
+          "display": ""
+        },
+        {
+          "id": "central-andijan-textiles",
+          "point": "72.34,40.78",
+          "display": ""
+        },
+        {
+          "id": "central-namangan-textiles",
+          "point": "71.67,41",
+          "display": ""
+        },
+        {
+          "id": "central-khorezm-textiles",
+          "point": "60.61,41.55",
+          "display": ""
+        },
+        {
+          "id": "central-bukhara-textiles",
+          "point": "64.42,39.77",
+          "display": ""
+        },
+        {
+          "id": "central-tashkent-clothing",
+          "point": "69.24,41.31",
+          "display": ""
+        },
+        {
+          "id": "central-kostanay-flour",
+          "point": "63.62,53.22",
+          "display": ""
+        },
+        {
+          "id": "central-akmola-flour",
+          "point": "69.39,53.29",
+          "display": ""
+        },
+        {
+          "id": "central-north-flour",
+          "point": "69.15,54.87",
+          "display": ""
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "point": "57.17,50.28",
+          "display": ""
+        },
+        {
+          "id": "central-aksu-chromium",
+          "point": "76.88,52.04",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          1454.4375,
+          318.65625,
+          401.5
+        ],
+        [
+          336.65625,
+          1454.4375,
+          318.671875,
+          401.5
+        ],
+        [
+          673.328125,
+          1454.4375,
+          318.65625,
+          401.5
+        ]
+      ],
+      "mapBottom": 1380.5625,
+      "statisticsTop": 2079.25
+    },
+    {
+      "file": "interaction-images/1024-services-initial.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "frame": "2.908 -8.691 624.355 445.878",
+      "map": [
+        992,
+        708.5625
+      ],
+      "labels": [
+        {
+          "id": "central-aktau,central-kuryk",
+          "industry": "logistics",
+          "text": "輸送・物流アクタウ・クリク",
+          "rect": [
+            105.015625,
+            435.0625,
+            79.109375,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-altynkol,central-dostyk",
+          "industry": "logistics",
+          "text": "輸送・物流ホルゴス・ドスティク",
+          "rect": [
+            754.78125,
+            404.015625,
+            99.40625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-bukhara-tourism,central-samarkand-tourism",
+          "industry": "tourism",
+          "text": "文化観光ブハラ・サマルカンド",
+          "rect": [
+            384.4375,
+            543.140625,
+            99.703125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khiva-tourism",
+          "industry": "tourism",
+          "text": "文化観光ヒヴァ",
+          "rect": [
+            319.375,
+            438.125,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-tashkent-tourism",
+          "industry": "tourism",
+          "text": "旅行手配タシケント",
+          "rect": [
+            521.8125,
+            440.328125,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "central-dostyk",
+          "point": "82.48,45.26",
+          "display": ""
+        },
+        {
+          "id": "central-altynkol",
+          "point": "80.38,44.16",
+          "display": ""
+        },
+        {
+          "id": "central-aktau",
+          "point": "51.17,43.65",
+          "display": ""
+        },
+        {
+          "id": "central-kuryk",
+          "point": "51.44,43.18",
+          "display": ""
+        },
+        {
+          "id": "central-samarkand-tourism",
+          "point": "66.96,39.65",
+          "display": ""
+        },
+        {
+          "id": "central-bukhara-tourism",
+          "point": "64.42,39.77",
+          "display": ""
+        },
+        {
+          "id": "central-khiva-tourism",
+          "point": "60.36,41.38",
+          "display": ""
+        },
+        {
+          "id": "central-tashkent-tourism",
+          "point": "69.24,41.31",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          1173.890625,
+          318.65625,
+          640.71875
+        ],
+        [
+          336.65625,
+          1173.890625,
+          318.671875,
+          640.71875
+        ],
+        [
+          673.328125,
+          1173.890625,
+          318.65625,
+          640.71875
+        ]
+      ],
+      "mapBottom": 1303.5625,
+      "statisticsTop": 1721.703125
+    },
+    {
+      "file": "interaction-images/1024-services-selected.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 1024,
+        "height": 900
+      },
+      "frame": "2.908 -8.691 624.355 445.878",
+      "map": [
+        992,
+        708.5625
+      ],
+      "labels": [
+        {
+          "id": "central-aktau,central-kuryk",
+          "industry": "logistics",
+          "text": "輸送・物流アクタウ・クリク",
+          "rect": [
+            105.015625,
+            435.0625,
+            79.109375,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-altynkol,central-dostyk",
+          "industry": "logistics",
+          "text": "輸送・物流ホルゴス・ドスティク",
+          "rect": [
+            754.78125,
+            404.015625,
+            99.40625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-bukhara-tourism,central-samarkand-tourism",
+          "industry": "tourism",
+          "text": "文化観光ブハラ・サマルカンド",
+          "rect": [
+            384.4375,
+            543.140625,
+            99.703125,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khiva-tourism",
+          "industry": "tourism",
+          "text": "文化観光ヒヴァ",
+          "rect": [
+            319.375,
+            438.125,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-tashkent-tourism",
+          "industry": "tourism",
+          "text": "旅行手配タシケント",
+          "rect": [
+            521.8125,
+            440.328125,
+            57.015625,
+            27.5
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "central-dostyk",
+          "point": "82.48,45.26",
+          "display": ""
+        },
+        {
+          "id": "central-altynkol",
+          "point": "80.38,44.16",
+          "display": ""
+        },
+        {
+          "id": "central-aktau",
+          "point": "51.17,43.65",
+          "display": ""
+        },
+        {
+          "id": "central-kuryk",
+          "point": "51.44,43.18",
+          "display": ""
+        },
+        {
+          "id": "central-samarkand-tourism",
+          "point": "66.96,39.65",
+          "display": ""
+        },
+        {
+          "id": "central-bukhara-tourism",
+          "point": "64.42,39.77",
+          "display": ""
+        },
+        {
+          "id": "central-khiva-tourism",
+          "point": "60.36,41.38",
+          "display": ""
+        },
+        {
+          "id": "central-tashkent-tourism",
+          "point": "69.24,41.31",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          1506.6875,
+          318.65625,
+          420.6875
+        ],
+        [
+          336.65625,
+          1506.6875,
+          318.671875,
+          420.6875
+        ],
+        [
+          673.328125,
+          1506.6875,
+          318.65625,
+          420.6875
+        ]
+      ],
+      "mapBottom": 1380.5625,
+      "statisticsTop": 2131.5
+    },
+    {
+      "file": "interaction-images/390-resources-initial.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "frame": "5.268 -245.257 619.636 919.011",
+      "map": [
+        358,
+        530
+      ],
+      "labels": [
+        {
+          "id": "central-nurabad,central-uchkuduk,central-zafarabad",
+          "industry": "uranium",
+          "text": "ウランヌラバードほか",
+          "rect": [
+            111.796875,
+            264.515625,
+            69.90625,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktogay,sc-bozshakol-copper",
+          "industry": "copper",
+          "text": "銅採掘アクトガイ・ボズシャコル",
+          "rect": [
+            227.734375,
+            209.921875,
+            119.5,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kashagan,sc-tengiz-oil",
+          "industry": "oil",
+          "text": "石油カシャガン・テンギス",
+          "rect": [
+            37.1875,
+            230.515625,
+            31,
+            13.75
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-rogun,sc-nurek-hydro",
+          "industry": "hydro",
+          "text": "水力発電ログン・ヌレーク",
+          "rect": [
+            160.40625,
+            362.359375,
+            80,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khromtau",
+          "industry": "chromium",
+          "text": "クロム鉱フロムタウ",
+          "rect": [
+            83.46875,
+            171.96875,
+            53,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kumtor",
+          "industry": "gold",
+          "text": "金クムトール",
+          "rect": [
+            257.890625,
+            316.375,
+            49.203125,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-galkynysh-gas",
+          "industry": "gas",
+          "text": "天然ガスガルキニシュ",
+          "rect": [
+            92.609375,
+            369.921875,
+            60,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-inkai-uranium",
+          "industry": "uranium",
+          "text": "ウランインカイ",
+          "rect": [
+            187.203125,
+            241.484375,
+            42,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-muruntau-gold",
+          "industry": "gold",
+          "text": "金ムルンタウ",
+          "rect": [
+            189.5625,
+            293.171875,
+            20,
+            13.75
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-toktogul-hydro",
+          "industry": "hydro",
+          "text": "水力発電トクトグル",
+          "rect": [
+            236.078125,
+            267.796875,
+            53,
+            13.75
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "sc-tengiz-oil",
+          "point": "53.1,46.2",
+          "display": ""
+        },
+        {
+          "id": "central-kashagan",
+          "point": "51.5,46.2",
+          "display": ""
+        },
+        {
+          "id": "sc-galkynysh-gas",
+          "point": "62.5,37.2",
+          "display": ""
+        },
+        {
+          "id": "sc-inkai-uranium",
+          "point": "68.5,44.2",
+          "display": ""
+        },
+        {
+          "id": "central-uchkuduk",
+          "point": "63.55,42.15",
+          "display": ""
+        },
+        {
+          "id": "central-zafarabad",
+          "point": "64.7,40.63",
+          "display": ""
+        },
+        {
+          "id": "central-nurabad",
+          "point": "66.25,39.6",
+          "display": ""
+        },
+        {
+          "id": "sc-bozshakol-copper",
+          "point": "74.2914,51.8477",
+          "display": ""
+        },
+        {
+          "id": "central-aktogay",
+          "point": "79.9367,46.9474",
+          "display": ""
+        },
+        {
+          "id": "sc-muruntau-gold",
+          "point": "64.55,41.53",
+          "display": ""
+        },
+        {
+          "id": "central-kumtor",
+          "point": "78.2,41.86",
+          "display": ""
+        },
+        {
+          "id": "sc-nurek-hydro",
+          "point": "69.37,38.38",
+          "display": ""
+        },
+        {
+          "id": "sc-toktogul-hydro",
+          "point": "72.9,41.65",
+          "display": ""
+        },
+        {
+          "id": "central-rogun",
+          "point": "69.78,38.7",
+          "display": ""
+        },
+        {
+          "id": "central-khromtau",
+          "point": "58.43,50.25",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          1163.0625,
+          358,
+          600.75
+        ],
+        [
+          0,
+          1775.8125,
+          358,
+          437.09375
+        ],
+        [
+          0,
+          2224.90625,
+          358,
+          620.34375
+        ]
+      ],
+      "mapBottom": 1340.5,
+      "statisticsTop": 1907.1875
+    },
+    {
+      "file": "interaction-images/390-resources-initial-map.png",
+      "type": "map element",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "frame": "5.268 -245.257 619.636 919.011",
+      "map": [
+        358,
+        530
+      ],
+      "labels": [
+        {
+          "id": "central-nurabad,central-uchkuduk,central-zafarabad",
+          "industry": "uranium",
+          "text": "ウランヌラバードほか",
+          "rect": [
+            111.796875,
+            264.515625,
+            69.90625,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktogay,sc-bozshakol-copper",
+          "industry": "copper",
+          "text": "銅採掘アクトガイ・ボズシャコル",
+          "rect": [
+            227.734375,
+            209.921875,
+            119.5,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kashagan,sc-tengiz-oil",
+          "industry": "oil",
+          "text": "石油カシャガン・テンギス",
+          "rect": [
+            37.1875,
+            230.515625,
+            31,
+            13.75
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-rogun,sc-nurek-hydro",
+          "industry": "hydro",
+          "text": "水力発電ログン・ヌレーク",
+          "rect": [
+            160.40625,
+            362.359375,
+            80,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khromtau",
+          "industry": "chromium",
+          "text": "クロム鉱フロムタウ",
+          "rect": [
+            83.46875,
+            171.96875,
+            53,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kumtor",
+          "industry": "gold",
+          "text": "金クムトール",
+          "rect": [
+            257.890625,
+            316.375,
+            49.203125,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-galkynysh-gas",
+          "industry": "gas",
+          "text": "天然ガスガルキニシュ",
+          "rect": [
+            92.609375,
+            369.921875,
+            60,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-inkai-uranium",
+          "industry": "uranium",
+          "text": "ウランインカイ",
+          "rect": [
+            187.203125,
+            241.484375,
+            42,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-muruntau-gold",
+          "industry": "gold",
+          "text": "金ムルンタウ",
+          "rect": [
+            189.5625,
+            293.171875,
+            20,
+            13.75
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-toktogul-hydro",
+          "industry": "hydro",
+          "text": "水力発電トクトグル",
+          "rect": [
+            236.078125,
+            267.796875,
+            53,
+            13.75
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "sc-tengiz-oil",
+          "point": "53.1,46.2",
+          "display": ""
+        },
+        {
+          "id": "central-kashagan",
+          "point": "51.5,46.2",
+          "display": ""
+        },
+        {
+          "id": "sc-galkynysh-gas",
+          "point": "62.5,37.2",
+          "display": ""
+        },
+        {
+          "id": "sc-inkai-uranium",
+          "point": "68.5,44.2",
+          "display": ""
+        },
+        {
+          "id": "central-uchkuduk",
+          "point": "63.55,42.15",
+          "display": ""
+        },
+        {
+          "id": "central-zafarabad",
+          "point": "64.7,40.63",
+          "display": ""
+        },
+        {
+          "id": "central-nurabad",
+          "point": "66.25,39.6",
+          "display": ""
+        },
+        {
+          "id": "sc-bozshakol-copper",
+          "point": "74.2914,51.8477",
+          "display": ""
+        },
+        {
+          "id": "central-aktogay",
+          "point": "79.9367,46.9474",
+          "display": ""
+        },
+        {
+          "id": "sc-muruntau-gold",
+          "point": "64.55,41.53",
+          "display": ""
+        },
+        {
+          "id": "central-kumtor",
+          "point": "78.2,41.86",
+          "display": ""
+        },
+        {
+          "id": "sc-nurek-hydro",
+          "point": "69.37,38.38",
+          "display": ""
+        },
+        {
+          "id": "sc-toktogul-hydro",
+          "point": "72.9,41.65",
+          "display": ""
+        },
+        {
+          "id": "central-rogun",
+          "point": "69.78,38.7",
+          "display": ""
+        },
+        {
+          "id": "central-khromtau",
+          "point": "58.43,50.25",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          1163.0625,
+          358,
+          600.75
+        ],
+        [
+          0,
+          1775.8125,
+          358,
+          437.09375
+        ],
+        [
+          0,
+          2224.90625,
+          358,
+          620.34375
+        ]
+      ],
+      "mapBottom": 1340.5,
+      "statisticsTop": 1907.1875
+    },
+    {
+      "file": "interaction-images/390-resources-selected.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "frame": "5.268 -245.257 619.636 919.011",
+      "map": [
+        358,
+        530
+      ],
+      "labels": [
+        {
+          "id": "central-nurabad,central-uchkuduk,central-zafarabad",
+          "industry": "uranium",
+          "text": "ウランヌラバードほか",
+          "rect": [
+            111.796875,
+            264.515625,
+            69.90625,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktogay,sc-bozshakol-copper",
+          "industry": "copper",
+          "text": "銅採掘アクトガイ・ボズシャコル",
+          "rect": [
+            227.734375,
+            209.921875,
+            119.5,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kashagan,sc-tengiz-oil",
+          "industry": "oil",
+          "text": "石油カシャガン・テンギス",
+          "rect": [
+            37.1875,
+            230.515625,
+            31,
+            13.75
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-rogun,sc-nurek-hydro",
+          "industry": "hydro",
+          "text": "水力発電ログン・ヌレーク",
+          "rect": [
+            160.40625,
+            362.359375,
+            80,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khromtau",
+          "industry": "chromium",
+          "text": "クロム鉱フロムタウ",
+          "rect": [
+            83.46875,
+            171.96875,
+            53,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kumtor",
+          "industry": "gold",
+          "text": "金クムトール",
+          "rect": [
+            257.890625,
+            316.375,
+            49.203125,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-galkynysh-gas",
+          "industry": "gas",
+          "text": "天然ガスガルキニシュ",
+          "rect": [
+            92.609375,
+            369.921875,
+            60,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-inkai-uranium",
+          "industry": "uranium",
+          "text": "ウランインカイ",
+          "rect": [
+            187.203125,
+            241.484375,
+            42,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-muruntau-gold",
+          "industry": "gold",
+          "text": "金ムルンタウ",
+          "rect": [
+            189.5625,
+            293.171875,
+            20,
+            13.75
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-toktogul-hydro",
+          "industry": "hydro",
+          "text": "水力発電トクトグル",
+          "rect": [
+            236.078125,
+            267.796875,
+            53,
+            13.75
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "sc-tengiz-oil",
+          "point": "53.1,46.2",
+          "display": ""
+        },
+        {
+          "id": "central-kashagan",
+          "point": "51.5,46.2",
+          "display": ""
+        },
+        {
+          "id": "sc-galkynysh-gas",
+          "point": "62.5,37.2",
+          "display": ""
+        },
+        {
+          "id": "sc-inkai-uranium",
+          "point": "68.5,44.2",
+          "display": ""
+        },
+        {
+          "id": "central-uchkuduk",
+          "point": "63.55,42.15",
+          "display": ""
+        },
+        {
+          "id": "central-zafarabad",
+          "point": "64.7,40.63",
+          "display": ""
+        },
+        {
+          "id": "central-nurabad",
+          "point": "66.25,39.6",
+          "display": ""
+        },
+        {
+          "id": "sc-bozshakol-copper",
+          "point": "74.2914,51.8477",
+          "display": ""
+        },
+        {
+          "id": "central-aktogay",
+          "point": "79.9367,46.9474",
+          "display": ""
+        },
+        {
+          "id": "sc-muruntau-gold",
+          "point": "64.55,41.53",
+          "display": ""
+        },
+        {
+          "id": "central-kumtor",
+          "point": "78.2,41.86",
+          "display": ""
+        },
+        {
+          "id": "sc-nurek-hydro",
+          "point": "69.37,38.38",
+          "display": ""
+        },
+        {
+          "id": "sc-toktogul-hydro",
+          "point": "72.9,41.65",
+          "display": ""
+        },
+        {
+          "id": "central-rogun",
+          "point": "69.78,38.7",
+          "display": ""
+        },
+        {
+          "id": "central-khromtau",
+          "point": "58.43,50.25",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          1556.15625,
+          358,
+          438.28125
+        ],
+        [
+          0,
+          2006.4375,
+          358,
+          231.25
+        ],
+        [
+          0,
+          2249.6875,
+          358,
+          250.4375
+        ]
+      ],
+      "mapBottom": 1340.5,
+      "statisticsTop": 2300.28125
+    },
+    {
+      "file": "interaction-images/390-resources-selected-map.png",
+      "type": "map element",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "frame": "5.268 -245.257 619.636 919.011",
+      "map": [
+        358,
+        530
+      ],
+      "labels": [
+        {
+          "id": "central-nurabad,central-uchkuduk,central-zafarabad",
+          "industry": "uranium",
+          "text": "ウランヌラバードほか",
+          "rect": [
+            111.796875,
+            264.515625,
+            69.90625,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktogay,sc-bozshakol-copper",
+          "industry": "copper",
+          "text": "銅採掘アクトガイ・ボズシャコル",
+          "rect": [
+            227.734375,
+            209.921875,
+            119.5,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kashagan,sc-tengiz-oil",
+          "industry": "oil",
+          "text": "石油カシャガン・テンギス",
+          "rect": [
+            37.1875,
+            230.515625,
+            31,
+            13.75
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-rogun,sc-nurek-hydro",
+          "industry": "hydro",
+          "text": "水力発電ログン・ヌレーク",
+          "rect": [
+            160.40625,
+            362.359375,
+            80,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khromtau",
+          "industry": "chromium",
+          "text": "クロム鉱フロムタウ",
+          "rect": [
+            83.46875,
+            171.96875,
+            53,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kumtor",
+          "industry": "gold",
+          "text": "金クムトール",
+          "rect": [
+            257.890625,
+            316.375,
+            49.203125,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-galkynysh-gas",
+          "industry": "gas",
+          "text": "天然ガスガルキニシュ",
+          "rect": [
+            92.609375,
+            369.921875,
+            60,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-inkai-uranium",
+          "industry": "uranium",
+          "text": "ウランインカイ",
+          "rect": [
+            187.203125,
+            241.484375,
+            42,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-muruntau-gold",
+          "industry": "gold",
+          "text": "金ムルンタウ",
+          "rect": [
+            189.5625,
+            293.171875,
+            20,
+            13.75
+          ],
+          "hidden": false
+        },
+        {
+          "id": "sc-toktogul-hydro",
+          "industry": "hydro",
+          "text": "水力発電トクトグル",
+          "rect": [
+            236.078125,
+            267.796875,
+            53,
+            13.75
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "sc-tengiz-oil",
+          "point": "53.1,46.2",
+          "display": ""
+        },
+        {
+          "id": "central-kashagan",
+          "point": "51.5,46.2",
+          "display": ""
+        },
+        {
+          "id": "sc-galkynysh-gas",
+          "point": "62.5,37.2",
+          "display": ""
+        },
+        {
+          "id": "sc-inkai-uranium",
+          "point": "68.5,44.2",
+          "display": ""
+        },
+        {
+          "id": "central-uchkuduk",
+          "point": "63.55,42.15",
+          "display": ""
+        },
+        {
+          "id": "central-zafarabad",
+          "point": "64.7,40.63",
+          "display": ""
+        },
+        {
+          "id": "central-nurabad",
+          "point": "66.25,39.6",
+          "display": ""
+        },
+        {
+          "id": "sc-bozshakol-copper",
+          "point": "74.2914,51.8477",
+          "display": ""
+        },
+        {
+          "id": "central-aktogay",
+          "point": "79.9367,46.9474",
+          "display": ""
+        },
+        {
+          "id": "sc-muruntau-gold",
+          "point": "64.55,41.53",
+          "display": ""
+        },
+        {
+          "id": "central-kumtor",
+          "point": "78.2,41.86",
+          "display": ""
+        },
+        {
+          "id": "sc-nurek-hydro",
+          "point": "69.37,38.38",
+          "display": ""
+        },
+        {
+          "id": "sc-toktogul-hydro",
+          "point": "72.9,41.65",
+          "display": ""
+        },
+        {
+          "id": "central-rogun",
+          "point": "69.78,38.7",
+          "display": ""
+        },
+        {
+          "id": "central-khromtau",
+          "point": "58.43,50.25",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          1556.15625,
+          358,
+          438.28125
+        ],
+        [
+          0,
+          2006.4375,
+          358,
+          231.25
+        ],
+        [
+          0,
+          2249.6875,
+          358,
+          250.4375
+        ]
+      ],
+      "mapBottom": 1340.5,
+      "statisticsTop": 2300.28125
+    },
+    {
+      "file": "interaction-images/390-manufacturing-initial.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "frame": "5.268 -245.257 619.636 919.011",
+      "map": [
+        358,
+        530
+      ],
+      "labels": [
+        {
+          "id": "central-andijan-textiles,central-bukhara-textiles,central-namangan-textiles,central-tashkent-clothing,sc-fergana-cotton",
+          "industry": "textiles",
+          "text": "繊維・衣料フェルガナ盆地・タシケント",
+          "rect": [
+            101.828125,
+            271.703125,
+            129.40625,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-akmola-flour,central-kostanay-flour,central-north-flour",
+          "industry": "flour",
+          "text": "製粉アクモラ州ほか",
+          "rect": [
+            165.5625,
+            116.046875,
+            69.5,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-balkhash,central-zhezkazgan",
+          "industry": "copper",
+          "text": "銅製錬バルハシ・ジェズカズガン",
+          "rect": [
+            213.765625,
+            211.03125,
+            120,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aksu-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクス",
+          "rect": [
+            224.96875,
+            151.40625,
+            75,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクトベ",
+          "rect": [
+            62.0625,
+            171.625,
+            75,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-almalyk",
+          "industry": "copper",
+          "text": "銅製錬アルマリク",
+          "rect": [
+            135.296875,
+            342.984375,
+            49.90625,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khorezm-textiles",
+          "industry": "textiles",
+          "text": "繊維・衣料ホラズム州",
+          "rect": [
+            66,
+            337.9375,
+            64,
+            26.25
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "central-zhezkazgan",
+          "point": "67.71,47.78",
+          "display": ""
+        },
+        {
+          "id": "central-balkhash",
+          "point": "74.98,46.85",
+          "display": ""
+        },
+        {
+          "id": "central-almalyk",
+          "point": "69.6,40.85",
+          "display": ""
+        },
+        {
+          "id": "sc-fergana-cotton",
+          "point": "71.78,40.38",
+          "display": ""
+        },
+        {
+          "id": "central-andijan-textiles",
+          "point": "72.34,40.78",
+          "display": ""
+        },
+        {
+          "id": "central-namangan-textiles",
+          "point": "71.67,41",
+          "display": ""
+        },
+        {
+          "id": "central-khorezm-textiles",
+          "point": "60.61,41.55",
+          "display": ""
+        },
+        {
+          "id": "central-bukhara-textiles",
+          "point": "64.42,39.77",
+          "display": ""
+        },
+        {
+          "id": "central-tashkent-clothing",
+          "point": "69.24,41.31",
+          "display": ""
+        },
+        {
+          "id": "central-kostanay-flour",
+          "point": "63.62,53.22",
+          "display": ""
+        },
+        {
+          "id": "central-akmola-flour",
+          "point": "69.39,53.29",
+          "display": ""
+        },
+        {
+          "id": "central-north-flour",
+          "point": "69.15,54.87",
+          "display": ""
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "point": "57.17,50.28",
+          "display": ""
+        },
+        {
+          "id": "central-aksu-chromium",
+          "point": "76.88,52.04",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          1163.0625,
+          358,
+          803.1875
+        ],
+        [
+          0,
+          1978.25,
+          358,
+          684.71875
+        ],
+        [
+          0,
+          2674.96875,
+          358,
+          636.125
+        ]
+      ],
+      "mapBottom": 1109.5,
+      "statisticsTop": 1676.1875
+    },
+    {
+      "file": "interaction-images/390-manufacturing-initial-map.png",
+      "type": "map element",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "frame": "5.268 -245.257 619.636 919.011",
+      "map": [
+        358,
+        530
+      ],
+      "labels": [
+        {
+          "id": "central-andijan-textiles,central-bukhara-textiles,central-namangan-textiles,central-tashkent-clothing,sc-fergana-cotton",
+          "industry": "textiles",
+          "text": "繊維・衣料フェルガナ盆地・タシケント",
+          "rect": [
+            101.828125,
+            271.703125,
+            129.40625,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-akmola-flour,central-kostanay-flour,central-north-flour",
+          "industry": "flour",
+          "text": "製粉アクモラ州ほか",
+          "rect": [
+            165.5625,
+            116.046875,
+            69.5,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-balkhash,central-zhezkazgan",
+          "industry": "copper",
+          "text": "銅製錬バルハシ・ジェズカズガン",
+          "rect": [
+            213.765625,
+            211.03125,
+            120,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aksu-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクス",
+          "rect": [
+            224.96875,
+            151.40625,
+            75,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクトベ",
+          "rect": [
+            62.0625,
+            171.625,
+            75,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-almalyk",
+          "industry": "copper",
+          "text": "銅製錬アルマリク",
+          "rect": [
+            135.296875,
+            342.984375,
+            49.90625,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khorezm-textiles",
+          "industry": "textiles",
+          "text": "繊維・衣料ホラズム州",
+          "rect": [
+            66,
+            337.9375,
+            64,
+            26.25
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "central-zhezkazgan",
+          "point": "67.71,47.78",
+          "display": ""
+        },
+        {
+          "id": "central-balkhash",
+          "point": "74.98,46.85",
+          "display": ""
+        },
+        {
+          "id": "central-almalyk",
+          "point": "69.6,40.85",
+          "display": ""
+        },
+        {
+          "id": "sc-fergana-cotton",
+          "point": "71.78,40.38",
+          "display": ""
+        },
+        {
+          "id": "central-andijan-textiles",
+          "point": "72.34,40.78",
+          "display": ""
+        },
+        {
+          "id": "central-namangan-textiles",
+          "point": "71.67,41",
+          "display": ""
+        },
+        {
+          "id": "central-khorezm-textiles",
+          "point": "60.61,41.55",
+          "display": ""
+        },
+        {
+          "id": "central-bukhara-textiles",
+          "point": "64.42,39.77",
+          "display": ""
+        },
+        {
+          "id": "central-tashkent-clothing",
+          "point": "69.24,41.31",
+          "display": ""
+        },
+        {
+          "id": "central-kostanay-flour",
+          "point": "63.62,53.22",
+          "display": ""
+        },
+        {
+          "id": "central-akmola-flour",
+          "point": "69.39,53.29",
+          "display": ""
+        },
+        {
+          "id": "central-north-flour",
+          "point": "69.15,54.87",
+          "display": ""
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "point": "57.17,50.28",
+          "display": ""
+        },
+        {
+          "id": "central-aksu-chromium",
+          "point": "76.88,52.04",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          1163.0625,
+          358,
+          803.1875
+        ],
+        [
+          0,
+          1978.25,
+          358,
+          684.71875
+        ],
+        [
+          0,
+          2674.96875,
+          358,
+          636.125
+        ]
+      ],
+      "mapBottom": 1109.5,
+      "statisticsTop": 1676.1875
+    },
+    {
+      "file": "interaction-images/390-manufacturing-selected.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "frame": "5.268 -245.257 619.636 919.011",
+      "map": [
+        358,
+        530
+      ],
+      "labels": [
+        {
+          "id": "central-andijan-textiles,central-bukhara-textiles,central-namangan-textiles,central-tashkent-clothing,sc-fergana-cotton",
+          "industry": "textiles",
+          "text": "繊維・衣料フェルガナ盆地・タシケント",
+          "rect": [
+            101.828125,
+            271.703125,
+            129.40625,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-akmola-flour,central-kostanay-flour,central-north-flour",
+          "industry": "flour",
+          "text": "製粉アクモラ州ほか",
+          "rect": [
+            165.5625,
+            116.046875,
+            69.5,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-balkhash,central-zhezkazgan",
+          "industry": "copper",
+          "text": "銅製錬バルハシ・ジェズカズガン",
+          "rect": [
+            213.765625,
+            211.03125,
+            120,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aksu-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクス",
+          "rect": [
+            224.96875,
+            151.40625,
+            75,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクトベ",
+          "rect": [
+            62.0625,
+            171.625,
+            75,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-almalyk",
+          "industry": "copper",
+          "text": "銅製錬アルマリク",
+          "rect": [
+            135.296875,
+            342.984375,
+            49.90625,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khorezm-textiles",
+          "industry": "textiles",
+          "text": "繊維・衣料ホラズム州",
+          "rect": [
+            66,
+            337.9375,
+            64,
+            26.25
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "central-zhezkazgan",
+          "point": "67.71,47.78",
+          "display": ""
+        },
+        {
+          "id": "central-balkhash",
+          "point": "74.98,46.85",
+          "display": ""
+        },
+        {
+          "id": "central-almalyk",
+          "point": "69.6,40.85",
+          "display": ""
+        },
+        {
+          "id": "sc-fergana-cotton",
+          "point": "71.78,40.38",
+          "display": ""
+        },
+        {
+          "id": "central-andijan-textiles",
+          "point": "72.34,40.78",
+          "display": ""
+        },
+        {
+          "id": "central-namangan-textiles",
+          "point": "71.67,41",
+          "display": ""
+        },
+        {
+          "id": "central-khorezm-textiles",
+          "point": "60.61,41.55",
+          "display": ""
+        },
+        {
+          "id": "central-bukhara-textiles",
+          "point": "64.42,39.77",
+          "display": ""
+        },
+        {
+          "id": "central-tashkent-clothing",
+          "point": "69.24,41.31",
+          "display": ""
+        },
+        {
+          "id": "central-kostanay-flour",
+          "point": "63.62,53.22",
+          "display": ""
+        },
+        {
+          "id": "central-akmola-flour",
+          "point": "69.39,53.29",
+          "display": ""
+        },
+        {
+          "id": "central-north-flour",
+          "point": "69.15,54.87",
+          "display": ""
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "point": "57.17,50.28",
+          "display": ""
+        },
+        {
+          "id": "central-aksu-chromium",
+          "point": "76.88,52.04",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          1551.453125,
+          358,
+          260.03125
+        ],
+        [
+          0,
+          1823.484375,
+          358,
+          385.3125
+        ],
+        [
+          0,
+          2220.796875,
+          358,
+          414.5
+        ]
+      ],
+      "mapBottom": 1290.5,
+      "statisticsTop": 2245.578125
+    },
+    {
+      "file": "interaction-images/390-manufacturing-selected-map.png",
+      "type": "map element",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "frame": "5.268 -245.257 619.636 919.011",
+      "map": [
+        358,
+        530
+      ],
+      "labels": [
+        {
+          "id": "central-andijan-textiles,central-bukhara-textiles,central-namangan-textiles,central-tashkent-clothing,sc-fergana-cotton",
+          "industry": "textiles",
+          "text": "繊維・衣料フェルガナ盆地・タシケント",
+          "rect": [
+            101.828125,
+            271.703125,
+            129.40625,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-akmola-flour,central-kostanay-flour,central-north-flour",
+          "industry": "flour",
+          "text": "製粉アクモラ州ほか",
+          "rect": [
+            165.5625,
+            116.046875,
+            69.5,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-balkhash,central-zhezkazgan",
+          "industry": "copper",
+          "text": "銅製錬バルハシ・ジェズカズガン",
+          "rect": [
+            213.765625,
+            211.03125,
+            120,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aksu-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクス",
+          "rect": [
+            224.96875,
+            151.40625,
+            75,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクトベ",
+          "rect": [
+            62.0625,
+            171.625,
+            75,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-almalyk",
+          "industry": "copper",
+          "text": "銅製錬アルマリク",
+          "rect": [
+            135.296875,
+            342.984375,
+            49.90625,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khorezm-textiles",
+          "industry": "textiles",
+          "text": "繊維・衣料ホラズム州",
+          "rect": [
+            66,
+            337.9375,
+            64,
+            26.25
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "central-zhezkazgan",
+          "point": "67.71,47.78",
+          "display": ""
+        },
+        {
+          "id": "central-balkhash",
+          "point": "74.98,46.85",
+          "display": ""
+        },
+        {
+          "id": "central-almalyk",
+          "point": "69.6,40.85",
+          "display": ""
+        },
+        {
+          "id": "sc-fergana-cotton",
+          "point": "71.78,40.38",
+          "display": ""
+        },
+        {
+          "id": "central-andijan-textiles",
+          "point": "72.34,40.78",
+          "display": ""
+        },
+        {
+          "id": "central-namangan-textiles",
+          "point": "71.67,41",
+          "display": ""
+        },
+        {
+          "id": "central-khorezm-textiles",
+          "point": "60.61,41.55",
+          "display": ""
+        },
+        {
+          "id": "central-bukhara-textiles",
+          "point": "64.42,39.77",
+          "display": ""
+        },
+        {
+          "id": "central-tashkent-clothing",
+          "point": "69.24,41.31",
+          "display": ""
+        },
+        {
+          "id": "central-kostanay-flour",
+          "point": "63.62,53.22",
+          "display": ""
+        },
+        {
+          "id": "central-akmola-flour",
+          "point": "69.39,53.29",
+          "display": ""
+        },
+        {
+          "id": "central-north-flour",
+          "point": "69.15,54.87",
+          "display": ""
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "point": "57.17,50.28",
+          "display": ""
+        },
+        {
+          "id": "central-aksu-chromium",
+          "point": "76.88,52.04",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          1551.453125,
+          358,
+          260.03125
+        ],
+        [
+          0,
+          1823.484375,
+          358,
+          385.3125
+        ],
+        [
+          0,
+          2220.796875,
+          358,
+          414.5
+        ]
+      ],
+      "mapBottom": 1290.5,
+      "statisticsTop": 2245.578125
+    },
+    {
+      "file": "interaction-images/390-services-initial.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "frame": "5.268 -245.257 619.636 919.011",
+      "map": [
+        358,
+        530
+      ],
+      "labels": [
+        {
+          "id": "central-bukhara-tourism,central-khiva-tourism,central-samarkand-tourism",
+          "industry": "tourism",
+          "text": "文化観光サマルカンド・ブハラ等",
+          "rect": [
+            74.484375,
+            343.390625,
+            109.703125,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktau,central-kuryk",
+          "industry": "logistics",
+          "text": "輸送・物流アクタウ・クリク",
+          "rect": [
+            10.46875,
+            247.8125,
+            79.109375,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-altynkol,central-dostyk",
+          "industry": "logistics",
+          "text": "輸送・物流ホルゴス・ドスティク",
+          "rect": [
+            241.90625,
+            226.953125,
+            99.40625,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-tashkent-tourism",
+          "industry": "tourism",
+          "text": "旅行手配タシケント",
+          "rect": [
+            172.828125,
+            274.703125,
+            53,
+            26.25
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "central-dostyk",
+          "point": "82.48,45.26",
+          "display": ""
+        },
+        {
+          "id": "central-altynkol",
+          "point": "80.38,44.16",
+          "display": ""
+        },
+        {
+          "id": "central-aktau",
+          "point": "51.17,43.65",
+          "display": ""
+        },
+        {
+          "id": "central-kuryk",
+          "point": "51.44,43.18",
+          "display": ""
+        },
+        {
+          "id": "central-samarkand-tourism",
+          "point": "66.96,39.65",
+          "display": ""
+        },
+        {
+          "id": "central-bukhara-tourism",
+          "point": "64.42,39.77",
+          "display": ""
+        },
+        {
+          "id": "central-khiva-tourism",
+          "point": "60.36,41.38",
+          "display": ""
+        },
+        {
+          "id": "central-tashkent-tourism",
+          "point": "69.24,41.31",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          1187.5625,
+          358,
+          598.9375
+        ],
+        [
+          0,
+          1798.5,
+          358,
+          634.53125
+        ],
+        [
+          0,
+          2445.03125,
+          358,
+          451.28125
+        ]
+      ],
+      "mapBottom": 1059.5,
+      "statisticsTop": 1650.6875
+    },
+    {
+      "file": "interaction-images/390-services-initial-map.png",
+      "type": "map element",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "frame": "5.268 -245.257 619.636 919.011",
+      "map": [
+        358,
+        530
+      ],
+      "labels": [
+        {
+          "id": "central-bukhara-tourism,central-khiva-tourism,central-samarkand-tourism",
+          "industry": "tourism",
+          "text": "文化観光サマルカンド・ブハラ等",
+          "rect": [
+            74.484375,
+            343.390625,
+            109.703125,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktau,central-kuryk",
+          "industry": "logistics",
+          "text": "輸送・物流アクタウ・クリク",
+          "rect": [
+            10.46875,
+            247.8125,
+            79.109375,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-altynkol,central-dostyk",
+          "industry": "logistics",
+          "text": "輸送・物流ホルゴス・ドスティク",
+          "rect": [
+            241.90625,
+            226.953125,
+            99.40625,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-tashkent-tourism",
+          "industry": "tourism",
+          "text": "旅行手配タシケント",
+          "rect": [
+            172.828125,
+            274.703125,
+            53,
+            26.25
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "central-dostyk",
+          "point": "82.48,45.26",
+          "display": ""
+        },
+        {
+          "id": "central-altynkol",
+          "point": "80.38,44.16",
+          "display": ""
+        },
+        {
+          "id": "central-aktau",
+          "point": "51.17,43.65",
+          "display": ""
+        },
+        {
+          "id": "central-kuryk",
+          "point": "51.44,43.18",
+          "display": ""
+        },
+        {
+          "id": "central-samarkand-tourism",
+          "point": "66.96,39.65",
+          "display": ""
+        },
+        {
+          "id": "central-bukhara-tourism",
+          "point": "64.42,39.77",
+          "display": ""
+        },
+        {
+          "id": "central-khiva-tourism",
+          "point": "60.36,41.38",
+          "display": ""
+        },
+        {
+          "id": "central-tashkent-tourism",
+          "point": "69.24,41.31",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          1187.5625,
+          358,
+          598.9375
+        ],
+        [
+          0,
+          1798.5,
+          358,
+          634.53125
+        ],
+        [
+          0,
+          2445.03125,
+          358,
+          451.28125
+        ]
+      ],
+      "mapBottom": 1059.5,
+      "statisticsTop": 1650.6875
+    },
+    {
+      "file": "interaction-images/390-services-selected.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "frame": "5.268 -245.257 619.636 919.011",
+      "map": [
+        358,
+        530
+      ],
+      "labels": [
+        {
+          "id": "central-bukhara-tourism,central-khiva-tourism,central-samarkand-tourism",
+          "industry": "tourism",
+          "text": "文化観光サマルカンド・ブハラ等",
+          "rect": [
+            74.484375,
+            343.390625,
+            109.703125,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktau,central-kuryk",
+          "industry": "logistics",
+          "text": "輸送・物流アクタウ・クリク",
+          "rect": [
+            10.46875,
+            247.8125,
+            79.109375,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-altynkol,central-dostyk",
+          "industry": "logistics",
+          "text": "輸送・物流ホルゴス・ドスティク",
+          "rect": [
+            241.90625,
+            226.953125,
+            99.40625,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-tashkent-tourism",
+          "industry": "tourism",
+          "text": "旅行手配タシケント",
+          "rect": [
+            172.828125,
+            274.703125,
+            53,
+            26.25
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "central-dostyk",
+          "point": "82.48,45.26",
+          "display": ""
+        },
+        {
+          "id": "central-altynkol",
+          "point": "80.38,44.16",
+          "display": ""
+        },
+        {
+          "id": "central-aktau",
+          "point": "51.17,43.65",
+          "display": ""
+        },
+        {
+          "id": "central-kuryk",
+          "point": "51.44,43.18",
+          "display": ""
+        },
+        {
+          "id": "central-samarkand-tourism",
+          "point": "66.96,39.65",
+          "display": ""
+        },
+        {
+          "id": "central-bukhara-tourism",
+          "point": "64.42,39.77",
+          "display": ""
+        },
+        {
+          "id": "central-khiva-tourism",
+          "point": "60.36,41.38",
+          "display": ""
+        },
+        {
+          "id": "central-tashkent-tourism",
+          "point": "69.24,41.31",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          1626.453125,
+          358,
+          420.6875
+        ],
+        [
+          0,
+          2059.140625,
+          358,
+          428.6875
+        ],
+        [
+          0,
+          2499.828125,
+          358,
+          226.25
+        ]
+      ],
+      "mapBottom": 1240.5,
+      "statisticsTop": 2270.578125
+    },
+    {
+      "file": "interaction-images/390-services-selected-map.png",
+      "type": "map element",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "frame": "5.268 -245.257 619.636 919.011",
+      "map": [
+        358,
+        530
+      ],
+      "labels": [
+        {
+          "id": "central-bukhara-tourism,central-khiva-tourism,central-samarkand-tourism",
+          "industry": "tourism",
+          "text": "文化観光サマルカンド・ブハラ等",
+          "rect": [
+            74.484375,
+            343.390625,
+            109.703125,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktau,central-kuryk",
+          "industry": "logistics",
+          "text": "輸送・物流アクタウ・クリク",
+          "rect": [
+            10.46875,
+            247.8125,
+            79.109375,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-altynkol,central-dostyk",
+          "industry": "logistics",
+          "text": "輸送・物流ホルゴス・ドスティク",
+          "rect": [
+            241.90625,
+            226.953125,
+            99.40625,
+            26.25
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-tashkent-tourism",
+          "industry": "tourism",
+          "text": "旅行手配タシケント",
+          "rect": [
+            172.828125,
+            274.703125,
+            53,
+            26.25
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "central-dostyk",
+          "point": "82.48,45.26",
+          "display": ""
+        },
+        {
+          "id": "central-altynkol",
+          "point": "80.38,44.16",
+          "display": ""
+        },
+        {
+          "id": "central-aktau",
+          "point": "51.17,43.65",
+          "display": ""
+        },
+        {
+          "id": "central-kuryk",
+          "point": "51.44,43.18",
+          "display": ""
+        },
+        {
+          "id": "central-samarkand-tourism",
+          "point": "66.96,39.65",
+          "display": ""
+        },
+        {
+          "id": "central-bukhara-tourism",
+          "point": "64.42,39.77",
+          "display": ""
+        },
+        {
+          "id": "central-khiva-tourism",
+          "point": "60.36,41.38",
+          "display": ""
+        },
+        {
+          "id": "central-tashkent-tourism",
+          "point": "69.24,41.31",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          1626.453125,
+          358,
+          420.6875
+        ],
+        [
+          0,
+          2059.140625,
+          358,
+          428.6875
+        ],
+        [
+          0,
+          2499.828125,
+          358,
+          226.25
+        ]
+      ],
+      "mapBottom": 1240.5,
+      "statisticsTop": 2270.578125
+    },
+    {
+      "file": "interaction-images/1920-statistics-three-columns.png",
+      "type": "viewport",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "frame": "-35.397 -8.691 700.965 445.878",
+      "map": [
+        1005.421875,
+        640
+      ],
+      "labels": [
+        {
+          "id": "central-andijan-textiles,central-namangan-textiles,central-tashkent-clothing,sc-fergana-cotton",
+          "industry": "textiles",
+          "text": "繊維・衣料フェルガナ盆地・タシケント",
+          "rect": [
+            534.375,
+            393.6875,
+            129.40625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-akmola-flour,central-north-flour",
+          "industry": "flour",
+          "text": "製粉アクモラ州・北カザフスタン州",
+          "rect": [
+            484.9375,
+            104.984375,
+            139.5,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aksu-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクス",
+          "rect": [
+            668.625,
+            86.75,
+            81.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "industry": "chromium",
+          "text": "フェロクロムアクトベ",
+          "rect": [
+            262.875,
+            137.125,
+            81.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-almalyk",
+          "industry": "copper",
+          "text": "銅製錬アルマリク",
+          "rect": [
+            534.265625,
+            460.984375,
+            49.90625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-balkhash",
+          "industry": "copper",
+          "text": "銅製錬バルハシ",
+          "rect": [
+            647.515625,
+            235.28125,
+            45.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-bukhara-textiles",
+          "industry": "textiles",
+          "text": "繊維・衣料ブハラ州",
+          "rect": [
+            418.125,
+            491.890625,
+            69.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-khorezm-textiles",
+          "industry": "textiles",
+          "text": "繊維・衣料ホラズム州",
+          "rect": [
+            339.703125,
+            386.953125,
+            69.015625,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-kostanay-flour",
+          "industry": "flour",
+          "text": "製粉コスタナイ州",
+          "rect": [
+            406.15625,
+            52.984375,
+            60,
+            27.5
+          ],
+          "hidden": false
+        },
+        {
+          "id": "central-zhezkazgan",
+          "industry": "copper",
+          "text": "銅製錬ジェズカズガン",
+          "rect": [
+            485.359375,
+            262.671875,
+            70,
+            27.5
+          ],
+          "hidden": false
+        }
+      ],
+      "markers": [
+        {
+          "id": "central-zhezkazgan",
+          "point": "67.71,47.78",
+          "display": ""
+        },
+        {
+          "id": "central-balkhash",
+          "point": "74.98,46.85",
+          "display": ""
+        },
+        {
+          "id": "central-almalyk",
+          "point": "69.6,40.85",
+          "display": ""
+        },
+        {
+          "id": "sc-fergana-cotton",
+          "point": "71.78,40.38",
+          "display": ""
+        },
+        {
+          "id": "central-andijan-textiles",
+          "point": "72.34,40.78",
+          "display": ""
+        },
+        {
+          "id": "central-namangan-textiles",
+          "point": "71.67,41",
+          "display": ""
+        },
+        {
+          "id": "central-khorezm-textiles",
+          "point": "60.61,41.55",
+          "display": ""
+        },
+        {
+          "id": "central-bukhara-textiles",
+          "point": "64.42,39.77",
+          "display": ""
+        },
+        {
+          "id": "central-tashkent-clothing",
+          "point": "69.24,41.31",
+          "display": ""
+        },
+        {
+          "id": "central-kostanay-flour",
+          "point": "63.62,53.22",
+          "display": ""
+        },
+        {
+          "id": "central-akmola-flour",
+          "point": "69.39,53.29",
+          "display": ""
+        },
+        {
+          "id": "central-north-flour",
+          "point": "69.15,54.87",
+          "display": ""
+        },
+        {
+          "id": "central-aktobe-chromium",
+          "point": "57.17,50.28",
+          "display": ""
+        },
+        {
+          "id": "central-aksu-chromium",
+          "point": "76.88,52.04",
+          "display": ""
+        }
+      ],
+      "incomplete": null,
+      "overflow": false,
+      "columns": [
+        [
+          0,
+          755.6875,
+          514.65625,
+          764.8125
+        ],
+        [
+          532.65625,
+          755.6875,
+          514.671875,
+          764.8125
+        ],
+        [
+          1065.328125,
+          755.6875,
+          514.671875,
+          764.8125
+        ]
+      ],
+      "mapBottom": 199,
+      "statisticsTop": 267.5
+    }
+  ],
+  "viewports": [
+    {
+      "width": 1920,
+      "height": 1080,
+      "sector": "resources",
+      "checks": [
+        "all adopted items",
+        "stable labels and camera",
+        "site selection",
+        "only mode",
+        "reload",
+        "history",
+        "within frame",
+        "statistics below map"
+      ]
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "sector": "manufacturing",
+      "checks": [
+        "all adopted items",
+        "stable labels and camera",
+        "site selection",
+        "only mode",
+        "reload",
+        "history",
+        "within frame",
+        "statistics below map"
+      ]
+    },
+    {
+      "width": 1920,
+      "height": 1080,
+      "sector": "services",
+      "checks": [
+        "all adopted items",
+        "stable labels and camera",
+        "site selection",
+        "only mode",
+        "reload",
+        "history",
+        "within frame",
+        "statistics below map"
+      ]
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "sector": "resources",
+      "checks": [
+        "all adopted items",
+        "stable labels and camera",
+        "site selection",
+        "only mode",
+        "reload",
+        "history",
+        "within frame",
+        "statistics below map"
+      ]
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "sector": "manufacturing",
+      "checks": [
+        "all adopted items",
+        "stable labels and camera",
+        "site selection",
+        "only mode",
+        "reload",
+        "history",
+        "within frame",
+        "statistics below map"
+      ]
+    },
+    {
+      "width": 1440,
+      "height": 1000,
+      "sector": "services",
+      "checks": [
+        "all adopted items",
+        "stable labels and camera",
+        "site selection",
+        "only mode",
+        "reload",
+        "history",
+        "within frame",
+        "statistics below map"
+      ]
+    },
+    {
+      "width": 1024,
+      "height": 900,
+      "sector": "resources",
+      "checks": [
+        "all adopted items",
+        "stable labels and camera",
+        "site selection",
+        "only mode",
+        "reload",
+        "history",
+        "within frame",
+        "statistics below map"
+      ]
+    },
+    {
+      "width": 1024,
+      "height": 900,
+      "sector": "manufacturing",
+      "checks": [
+        "all adopted items",
+        "stable labels and camera",
+        "site selection",
+        "only mode",
+        "reload",
+        "history",
+        "within frame",
+        "statistics below map"
+      ]
+    },
+    {
+      "width": 1024,
+      "height": 900,
+      "sector": "services",
+      "checks": [
+        "all adopted items",
+        "stable labels and camera",
+        "site selection",
+        "only mode",
+        "reload",
+        "history",
+        "within frame",
+        "statistics below map"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "sector": "resources",
+      "checks": [
+        "all adopted items",
+        "stable labels and camera",
+        "site selection",
+        "only mode",
+        "reload",
+        "history",
+        "within frame",
+        "statistics below map"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "sector": "manufacturing",
+      "checks": [
+        "all adopted items",
+        "stable labels and camera",
+        "site selection",
+        "only mode",
+        "reload",
+        "history",
+        "within frame",
+        "statistics below map"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "sector": "services",
+      "checks": [
+        "all adopted items",
+        "stable labels and camera",
+        "site selection",
+        "only mode",
+        "reload",
+        "history",
+        "within frame",
+        "statistics below map"
+      ]
+    }
+  ],
+  "checks": [
+    "All eleven items, all three sectors, four viewports, category keyboard, pan/zoom/reset, processing sites separated by sector, exact URL history/reload, no inferred flows, no JS errors",
+    "Real mobile touch tap, two-finger pinch zoom and one-finger page scroll",
+    "South Asia still uses its existing independent renderer"
+  ],
+  "workingTree": "Uncommitted local region changes on the recorded base; no new commit.",
+  "sourceSha256": {
+    "src/data/atlas/central-asia-industry.ts": "ad3e8952784170c59ffbad670574f28236cf6aea25c4e115e983459cd65609f4",
+    "src/lib/atlas-central-asia-industry.ts": "7c76db6dba722a97bb0932f25a8c0910780d229d830bfe5fa4aa6805b148bb09",
+    "src/scripts/atlas-central-asia-industry.ts": "94aeb8ecac22e369ff5b0558dbf8c89fab896ad9e80117aab434c6296cb92273",
+    "src/styles/atlas-central-asia-industry.css": "5e43cacdb362b9dd108012ef9cca509ee2358a198691da7078e15fdfe81be7ec",
+    "src/components/atlas/asia/CentralAsiaIndustryPage.astro": "4ec689f13dfb2b8214c203e7b0e328135bf778bdd688f5437fe1a8a9ff7daebd"
+  }
+}

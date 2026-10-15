@@ -1,4 +1,4 @@
-import {centralIndustries,centralIndustrySites,centralIndustryCountries,centralIndustryMetric,type CentralIndustryId,type CentralIndustrySector,type CentralCountry,type CentralSite} from '../data/atlas/central-asia-industry.ts';
+import {centralIndustries,centralIndustrySites,centralIndustryCountries,type CentralIndustryId,type CentralIndustrySector,type CentralCountry,type CentralSite} from '../data/atlas/central-asia-industry.ts';
 
 export type CentralIndustryState={sector:CentralIndustrySector;industry:CentralIndustryId|null;site:string|null;only:boolean;country:CentralCountry|null;frame:number[]|null};
 // Local equirectangular projection with a 44°N standard parallel, shared by
@@ -39,10 +39,35 @@ export function zoomCentralIndustryFrame(frame:number[],factor:number):number[]{
  return [frame[0]+(frame[2]-width)/2,frame[1]+(frame[3]-height)/2,width,height];
 }
 export type CentralLabelPoint={site:CentralSite;point:number[]};
+export function centralIndustryStageReading(id:CentralIndustryId,sector:CentralIndustrySector){
+ const item=centralIndustries.find(item=>item.id===id)!;
+ if(id==='copper')return sector==='resources'
+  ?{label:'銅採掘',title:'銅の採掘・選鉱',overview:'カザフスタンのボズシャコルとアクトガイでは、大規模鉱床に沿って銅の採掘・選鉱・鉱石処理が集積しています。'}
+  :{label:'銅製錬',title:'銅の製錬・精製',overview:'ジェズカズガン・バルハシ・アルマリクに銅の加工設備が分布し、鉱石・精鉱の供給、電力と輸送の接続を利用して金属銅をつくります。'};
+ if(id==='chromium')return sector==='resources'
+  ?{label:'クロム鉱',title:'クロム鉱石の採掘・選鉱',overview:'カザフスタン西部のフロムタウでクロム鉱石の採掘・選鉱が集積し、鉱床と自社原料が合金生産の基盤になります。'}
+  :{label:'フェロクロム',title:'フェロクロム製錬',overview:'アクトベとアクスの製錬設備が、クロム鉱石と電力を組み合わせてステンレス鋼向けフェロクロムを生産します。'};
+ return {label:item.shortLabel,title:item.label,overview:item.overview};
+}
+export function centralIndustryAnnotationLabel(site:CentralSite,sector:CentralIndustrySector):string{
+ if(site.industry==='tourism')return site.stage==='交通・旅行手配'?'旅行手配':'文化観光';
+ return centralIndustryStageReading(site.industry,sector).label;
+}
+export function centralIndustryGroupPlace(points:CentralLabelPoint[]):string{
+ const ids=new Set(points.map(point=>point.site.id));
+ const valley=['sc-fergana-cotton','central-andijan-textiles','central-namangan-textiles'];
+ if(valley.every(id=>ids.has(id)))return ids.has('central-tashkent-clothing')?'フェルガナ盆地・タシケント':points.length===3?'フェルガナ盆地':'フェルガナ盆地ほか';
+ if(['central-samarkand-tourism','central-bukhara-tourism','central-khiva-tourism'].every(id=>ids.has(id)))return 'サマルカンド・ブハラ等';
+ const shortPlace=(place:string)=>place.replace('アルティンコリ／ホルゴス','ホルゴス');
+ if(points.length===1)return shortPlace(points[0].site.place);
+ if(points.length===2)return points.map(point=>shortPlace(point.site.place).replace(/地区|港/g,'')).join('・');
+ return points[0].site.place.replace(/地区|港/g,'')+'ほか';
+}
 /** Geographic proximity only groups the same industry, never unrelated city functions. */
 export function groupCentralIndustryLabels(points:CentralLabelPoint[],diameter=86):CentralLabelPoint[][]{
  const groups:CentralLabelPoint[][]=[];
- const key=(site:CentralSite)=>{const metric=site.localMetric?centralIndustryMetric(site.localMetric):null;return site.industry+(site.kind==='regional'?'|'+(metric?metric.unit+'|'+metric.year:'without-quantity'):'');};
+ // These annotations contain no quantities: different periods are never summed.
+ const key=(site:CentralSite)=>site.industry+'|'+site.country+'|'+site.sectors.join(',')+(site.kind==='service'?'|'+site.stage:'');
  for(const point of [...points].sort((a,b)=>a.site.id.localeCompare(b.site.id))){
   const group=groups.find(g=>key(g[0].site)===key(point.site)&&g.every(p=>Math.hypot(p.point[0]-point.point[0],p.point[1]-point.point[1])<=diameter));
   if(group)group.push(point);else groups.push([point]);
@@ -50,11 +75,11 @@ export function groupCentralIndustryLabels(points:CentralLabelPoint[],diameter=8
  return groups.sort((a,b)=>b.length-a.length||a[0].site.id.localeCompare(b[0].site.id));
 }
 /** Deterministic allocation: no selected state, color or current-only filter is an input. */
-export function placeCentralIndustryLabel(points:number[][],size:number[],viewport:number[],occupied:number[][],maximumLeader=120):number[]|null{
+export function placeCentralIndustryLabel(points:number[][],size:number[],viewport:number[],occupied:number[][],maximumLeader=40):number[]|null{
  const [width,height]=size,[mapWidth,mapHeight]=viewport,x=points.reduce((n,p)=>n+p[0],0)/points.length,y=points.reduce((n,p)=>n+p[1],0)/points.length;
  if(width>mapWidth-12||height>mapHeight-12)return null;
  const offsets:number[][]=[];
- for(let dy=-210;dy<=210;dy+=6)for(let dx=-210;dx<=210;dx+=6)offsets.push([dx,dy]);
+ for(let dy=-84;dy<=84;dy+=3)for(let dx=-84;dx<=84;dx+=3)offsets.push([dx,dy]);
  offsets.sort((a,b)=>a[0]**2+a[1]**2-b[0]**2-b[1]**2||a[1]-b[1]||a[0]-b[0]);
  for(const [dx,dy]of offsets){
   const left=Math.max(6,Math.min(mapWidth-width-6,x+dx-width/2)),top=Math.max(6,Math.min(mapHeight-height-6,y+dy-height/2)),box=[left,top,left+width,top+height];

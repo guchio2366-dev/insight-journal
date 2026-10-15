@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {centralIndustries,centralIndustrySites,centralIndustryMetrics,centralIndustrySources,centralIndustryMetric,formatCentralMetric,centralIndustrySectors} from '../../src/data/atlas/central-asia-industry.ts';
-import {readCentralIndustryState,writeCentralIndustryState,projectCentralIndustry,fitCentralIndustryFrame,zoomCentralIndustryFrame,groupCentralIndustryLabels,placeCentralIndustryLabel,centralIndustryVisibleSites} from '../../src/lib/atlas-central-asia-industry.ts';
+import {readCentralIndustryState,writeCentralIndustryState,projectCentralIndustry,fitCentralIndustryFrame,zoomCentralIndustryFrame,groupCentralIndustryLabels,placeCentralIndustryLabel,centralIndustryVisibleSites,centralIndustryStageReading} from '../../src/lib/atlas-central-asia-industry.ts';
 
 test('All eleven approved items have sourced Central Asian locations, stage-aware sectors and independently scoped quantities',()=>{
  assert.deepEqual(new Set(centralIndustries.map(i=>i.id)),new Set(['oil','gas','uranium','copper','gold','hydro','textiles','flour','logistics','tourism','chromium']));
@@ -40,6 +40,14 @@ test('Stage and denominator traps remain explicit: uranium oxide, processed flou
  for(const id of ['sc-bozshakol-copper','central-aktogay'])assert(centralIndustrySites.find(s=>s.id===id).sources.includes('kaz-coordinates'));
 });
 
+test('Three maps partition the source locations by work stage, with processing retained only in manufacturing',()=>{
+ const all=centralIndustrySectors.flatMap(sector=>centralIndustryVisibleSites({sector:sector.id,industry:null,site:null,only:false,country:null,frame:null}));
+ assert.equal(all.length,centralIndustrySites.length);assert.equal(new Set(all.map(site=>site.id)).size,all.length);
+ for(const site of centralIndustrySites){assert.equal(site.sectors.length,1);if(site.kind==='processing')assert.deepEqual(site.sectors,['manufacturing']);if(site.kind==='service')assert.deepEqual(site.sectors,['services']);}
+ assert.match(centralIndustryStageReading('copper','resources').title,/採掘/);assert.match(centralIndustryStageReading('copper','manufacturing').title,/製錬/);
+ assert.equal(centralIndustryStageReading('chromium','resources').label,'クロム鉱');assert.equal(centralIndustryStageReading('chromium','manufacturing').label,'フェロクロム');
+});
+
 test('URL restoration rejects cross-sector sites and invalid frames and preserves unrelated return state',()=>{
  const read=query=>readCentralIndustryState(new URL('https://example.org/atlas/asia/central-asia/industry/'+query));
  const state=read('?sector=manufacturing&subsector=chromium&detail=central-aktobe-chromium&only=1&place=KAZ&industryFrame=30,20,900,580');
@@ -61,7 +69,7 @@ test('Projection anchors and view framing use the same geography and do not depe
  const a=projectCentralIndustry([50,40]),b=projectCentralIndustry([60,40]),c=projectCentralIndustry([50,50]);assert(b[0]>a[0]);assert(c[1]<a[1]);
  for(const ratio of [1.65,.85]){let frame=fitCentralIndustryFrame([46,35,87,56],ratio);assert(Math.abs(frame[2]/frame[3]-ratio)<1e-10);for(const factor of [.8,1.25])for(let n=0;n<60;n++)frame=zoomCentralIndustryFrame(frame,factor);const state={sector:'resources',industry:null,site:null,only:false,country:null,frame};assert(readCentralIndustryState(writeCentralIndustryState(new URL('https://example.org/'),state)).frame);}
  const points=centralIndustrySites.map(site=>({site,point:projectCentralIndustry(site.coordinates)}));
- const groups=groupCentralIndustryLabels(points);assert.equal(groups.flat().length,points.length);assert(groups.every(g=>g.every(p=>p.site.industry===g[0].site.industry)));
+ const groups=groupCentralIndustryLabels(points);assert.equal(groups.flat().length,points.length);assert(groups.every(g=>g.every(p=>p.site.industry===g[0].site.industry&&p.site.country===g[0].site.country&&p.site.sectors[0]===g[0].site.sectors[0]&&(p.site.kind!=='service'||p.site.stage===g[0].site.stage))));
  const box=placeCentralIndustryLabel([[100,100]],[110,45],[400,300],[[95,95,105,105]]);assert(box);assert(!(box[0]<105&&box[2]>95&&box[1]<105&&box[3]>95));assert.deepEqual(placeCentralIndustryLabel([[100,100]],[110,45],[400,300],[[95,95,105,105]]),box);
 });
 
