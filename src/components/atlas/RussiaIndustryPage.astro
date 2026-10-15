@@ -18,25 +18,29 @@ const fields=[['','概要'],['agriculture','農林業'],['nature','自然環境'
   <header class="russia-learning-heading"><p class="russia-learning-breadcrumb"><a href={withBase('/atlas/')}>地図から見る</a> / <a href={withBase('/atlas/russia/')}>ロシア</a></p><span>ロシア全域</span><h1 class="visually-hidden">ロシアの主要産業</h1></header>
   <nav class="russia-learning-fields" aria-label="ロシアの分野">{fields.map(([id,label])=><a href={withBase(`/atlas/russia/${id?id+'/':''}`)} data-field-link={id||'overview'} aria-current={id==='industry'?'page':undefined}>{label}</a>)}</nav>
   <div class="ru-sector-tabs" role="tablist" aria-label="主要産業の分類">{ruSectors.map(s=><button type="button" id={`ru-sector-${s.id}`} data-ru-sector={s.id} role="tab" aria-selected={String(s.id==='resources')} tabindex={s.id==='resources'?0:-1} aria-controls="ru-industry-panel">{s.name}</button>)}</div>
-  <nav class="ru-product-tabs" aria-label="産業名から選ぶ">{ruSectors.map(s=><div data-ru-products={s.id} hidden={s.id!=='resources'}>{ruIndustries.filter(i=>i.sectors.includes(s.id)).map(i=><button type="button" data-ru-product={i.id} aria-pressed="false" style={`--ru-color:${i.color}`}><i aria-hidden="true"/>{i.short}</button>)}</div>)}</nav>
+  <div class="ru-product-select"><label for="ru-product-select">産業の詳細<select id="ru-product-select" data-ru-product-select><option value="">この分野の全体</option>{ruIndustries.filter(i=>i.sectors.includes('resources')).map(i=><option value={i.id}>{i.name}</option>)}</select></label><span>地図上の地点からも詳細を開けます</span></div>
   <div id="ru-industry-panel" class="ru-primary-grid" role="tabpanel" aria-labelledby="ru-sector-resources">
    <section class="ru-map-column" aria-label="産業の集積図">
-    <div class="ru-map-scroll" tabindex="0" aria-label="ロシア産業地図。小画面では地図内を横にスクロールできます。"><div class="ru-map-canvas" data-ru-canvas>
-     <svg data-ru-map viewBox={`0 0 ${russiaWidth} ${russiaHeight}`} role="img" aria-labelledby="ru-map-title ru-map-desc">
-      <title id="ru-map-title">ロシアの産業集積</title><desc id="ru-map-desc">産業名と都市の案内点。点の大きさは数量を表さず、短い線はラベルとの対応だけを示します。全地点は地図の後の一覧でも選べます。</desc>
-      <defs><pattern id="ru-industry-disputed" width="6" height="6" patternUnits="userSpaceOnUse"><path d="M0 0L6 6" stroke="#6f7776" stroke-width="1"/></pattern></defs>
-      <rect width={russiaWidth} height={russiaHeight} fill="#e1edf0"/>
-      {geography.features.map(f=><path d={russiaPath(f.geometry as any)} fill={f.properties.kind==='russia'?'#f0f0df':'#d6ded9'} stroke="#a6b6ad" stroke-width=".6" fill-rule="evenodd"/>)}
-      {disputed.features.map(f=><path d={russiaPath(f.geometry as any)} fill="url(#ru-industry-disputed)" stroke="#6f7776" stroke-width=".7" fill-rule="evenodd"><title>{f.properties.name}：固定版資料の係争地表現</title></path>)}
-      <g fill="#627c86" font-size="17" text-anchor="middle" aria-hidden="true"><text x="510" y="65">北極海</text><text x="460" y="420">西シベリア</text><text x="805" y="385">東シベリア</text><text x="1000" y="480">極東</text></g>
-     </svg>
-     <div class="ru-map-overlay" data-ru-overlay><svg class="ru-point-layer" viewBox="0 0 960 477.6" role="img" aria-label="資源・エネルギーの産業名と都市の案内点">
-      {groupRuPoints('resources',960,477.6).map(g=><circle cx={g.point[0]} cy={g.point[1]} r="5" fill="#386358"><title>{g.sites.map(s=>s.place+'：'+s.stage).join('／')}</title></circle>)}
-      {layoutRuIndustryLabels('resources',960,477.6).map(label=><g><line x1={label.anchor[0]} y1={label.anchor[1]} x2={label.box[0]} y2={label.box[1]+23} stroke="#7c9081"/><rect x={label.box[0]} y={label.box[1]} width="114" height="46" fill="#fffefa" stroke="#abbeb1"/><text x={label.box[0]+6} y={label.box[1]+20} font-size="13" fill="#243c45">{ruIndustries.find(i=>i.id===label.industry)!.short}</text></g>)}
-     </svg></div>
-    </div></div>
-    <p class="ru-map-key">● 採取地域・役務　■ 加工・製造　数字＝近接する案内点の数。色に加えて産業名で識別。</p>
-    <p class="ru-map-note">点は都市・地域の案内位置で、鉱山・工場の敷地や数量の比例記号ではありません。短い実線はラベルの位置案内で、輸送経路ではありません。</p>
+    {ruSectors.map(sector=><section data-ru-scene={sector.id} hidden={sector.id!=='resources'} aria-label={`${sector.name}の地図`}>
+     <h3 class="ru-map-heading">{sector.name}の集積</h3>
+     <div class="ru-map-scroll" tabindex="0" aria-label={`${sector.name}の地図。小画面では地図内を横にスクロールできます。`}><div class="ru-map-canvas" data-ru-canvas>
+      <svg data-ru-map viewBox={`0 0 ${russiaWidth} ${russiaHeight}`} role="img" aria-labelledby={`ru-map-title-${sector.id} ru-map-desc-${sector.id}`}>
+       <title id={`ru-map-title-${sector.id}`}>{sector.name}の集積</title><desc id={`ru-map-desc-${sector.id}`}>選択分野だけの案内点と短い集積注記。点の大きさは数量ではありません。全地点は地図外の一覧からも選べます。</desc>
+       <defs><pattern id={`ru-industry-disputed-${sector.id}`} width="6" height="6" patternUnits="userSpaceOnUse"><path d="M0 0L6 6" stroke="#6f7776" stroke-width="1"/></pattern></defs>
+       <rect width={russiaWidth} height={russiaHeight} fill="#e1edf0"/>
+       {geography.features.map(f=><path d={russiaPath(f.geometry as any)} fill={f.properties.kind==='russia'?'#f0f0df':'#d6ded9'} stroke="#a6b6ad" stroke-width=".6" fill-rule="evenodd"/>)}
+       {disputed.features.map(f=><path d={russiaPath(f.geometry as any)} fill={`url(#ru-industry-disputed-${sector.id})`} stroke="#6f7776" stroke-width=".7" fill-rule="evenodd"><title>{f.properties.name}：固定版資料の係争地表現</title></path>)}
+       <g fill="#627c86" font-size="17" text-anchor="middle" aria-hidden="true"><text x="510" y="65">北極海</text></g>
+      </svg>
+      <div class="ru-map-overlay" data-ru-overlay><svg class="ru-point-layer" viewBox="0 0 960 477.6" role="img" aria-label={`${sector.name}の案内点と集積注記`}>
+       {groupRuPoints(sector.id,960,477.6).map(g=><circle cx={g.point[0]} cy={g.point[1]} r="5" fill={ruIndustries.find(i=>g.sites.some(s=>s.industries.includes(i.id))&&i.sectors.includes(sector.id))!.color}><title>{g.sites.map(s=>s.place+'：'+s.stage).join('／')}</title></circle>)}
+       {layoutRuIndustryLabels(sector.id,960,477.6).map(label=><g class="ru-map-annotation" transform={`translate(${label.box[0]},${label.box[1]})`}><text y="12" font-size="12" font-weight="650" fill="#243c45" stroke="#fffefa" stroke-width="3" paint-order="stroke">{label.title}</text><text y="26" font-size="10" fill="#445e64" stroke="#fffefa" stroke-width="2.5" paint-order="stroke">{label.place}</text></g>)}
+      </svg></div>
+     </div></div>
+     <div class="ru-map-legend" data-ru-legend={sector.id} aria-label={`${sector.name}の凡例`}>{ruIndustries.filter(i=>i.sectors.includes(sector.id)).map(i=><span data-ru-legend-industry={i.id}><i style={`background:${i.color}`} aria-hidden="true"/>{i.short}</span>)}</div>
+    </section>)}
+    <p class="ru-map-key">● 採取地域・役務　■ 加工・製造　数字＝近接する案内点の数。Ni＝ニッケル、Pd＝パラジウム、Al＝アルミ、He＝ヘリウム。</p>
+    <p class="ru-map-note">点は都市・地域の案内位置で、鉱山・工場の敷地や数量ではありません。短い注記は主な集積を示し、全地点の工程・規模・出典は地図外の一覧と統計に残しています。</p>
     <p class="ru-map-links"><a href="#russia-industry-statistics">生産・世界シェア・貿易</a><a href="#russia-industry-sources">出典・年・欠測</a><a href={withBase('/atlas/russia/agriculture/')}>小麦の農業分布</a></p>
    </section>
    <aside class="ru-reading" aria-label="分布と集積理由" aria-live="polite">

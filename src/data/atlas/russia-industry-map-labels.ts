@@ -1,0 +1,52 @@
+import type {RuSector} from './russia-industry-catalog';
+/** Editorial annotations of existing, sourced sites; no new locations or quantities. */
+export type RuMapLabelSpec={site:string;title:string;place:string;industries:string[];priority:number};
+export const ruMapLabelSpecs:Record<RuSector,RuMapLabelSpec[]>={
+ resources:[
+  {site:'west-siberia-oil',title:'石油',place:'西シベリア',industries:['oil'],priority:100},
+  {site:'yamal-nenets-gas',title:'天然ガス',place:'ヤマロ・ネネツ',industries:['gas'],priority:99},
+  {site:'norilsk-resource-region',title:'銅・Ni・Pd',place:'ノリリスク',industries:['copper','nickel','palladium'],priority:98},
+  {site:'kuzbass-coal',title:'石炭',place:'クズバス',industries:['coal'],priority:97},
+  {site:'berezniki-potash',title:'カリ',place:'上カマ鉱床',industries:['potash'],priority:96},
+  {site:'khibiny-phosphate',title:'りん鉱',place:'ヒビヌイ',industries:['phosphate'],priority:95},
+  {site:'orenburg-gas-helium',title:'ガス・He',place:'オレンブルク',industries:['gas','helium'],priority:94},
+  {site:'mirny-diamond',title:'天然ダイヤ',place:'サハ共和国',industries:['diamond'],priority:93},
+  {site:'magadan-gold',title:'金',place:'マガダン州',industries:['gold'],priority:92},
+  {site:'rostov-wheat',title:'小麦',place:'ロシア南部',industries:['wheat'],priority:91},
+  {site:'transbaikal-copper',title:'銅',place:'ザバイカル',industries:['copper'],priority:80},
+  {site:'irkutsk-gold',title:'金',place:'イルクーツク州',industries:['gold'],priority:79},
+  {site:'korsakov-lng',title:'天然ガス・LNG',place:'サハリン',industries:['gas'],priority:78},
+  {site:'amur-helium',title:'He',place:'アムール州',industries:['helium'],priority:77},
+  {site:'arkhangelsk-diamond',title:'天然ダイヤ',place:'アルハンゲリスク州',industries:['diamond'],priority:70},
+  {site:'ural-copper',title:'銅',place:'ウラル',industries:['copper'],priority:69},
+ ],
+ manufacturing:[
+  {site:'norilsk-resource-region',title:'銅・Ni製錬',place:'ノリリスク',industries:['copper','nickel'],priority:100},
+  {site:'cherepovets-steel',title:'鉄鋼・肥料',place:'チェレポヴェツ',industries:['steel','nitrogen','phosphate'],priority:99},
+  {site:'krasnoyarsk-aluminum',title:'Al製錬・Pd精製',place:'クラスノヤルスク',industries:['aluminum','palladium'],priority:98},
+  {site:'omsk-refining',title:'石油精製',place:'オムスク',industries:['oil'],priority:97},
+  {site:'berezniki-potash',title:'カリ肥料',place:'上カマ',industries:['potash'],priority:96},
+  {site:'korsakov-lng',title:'LNG',place:'サハリン',industries:['gas'],priority:95},
+  {site:'amur-helium',title:'He回収',place:'アムール州',industries:['helium'],priority:94},
+  {site:'seversk-enrichment',title:'ウラン濃縮',place:'セヴェルスク',industries:['enrichment'],priority:93},
+  {site:'naberezhnye-chelny-trucks',title:'トラック',place:'チェルヌイ',industries:['trucks'],priority:101},
+  {site:'bratsk-aluminum',title:'Al製錬',place:'ブラーツクほか',industries:['aluminum'],priority:80},
+  {site:'kola-refining',title:'Ni精製',place:'コラ半島',industries:['nickel'],priority:79},
+  {site:'orenburg-gas-helium',title:'ガス・He処理',place:'オレンブルク',industries:['gas','helium'],priority:78},
+  {site:'angarsk-enrichment',title:'ウラン濃縮',place:'アンガルスク',industries:['enrichment'],priority:77},
+  {site:'ryazan-refining',title:'石油精製',place:'リャザン',industries:['oil'],priority:70},
+ ],
+ services:[
+  {site:'moscow-management-logistics',title:'企業管理',place:'モスクワ',industries:['management'],priority:100},
+  {site:'novouralsk-enrichment',title:'濃縮役務',place:'ノヴォウラリスク',industries:['enrichment'],priority:99},
+  {site:'seversk-enrichment',title:'濃縮役務',place:'セヴェルスク',industries:['enrichment'],priority:98},
+  {site:'zelenogorsk-enrichment',title:'濃縮役務',place:'ゼレノゴルスク',industries:['enrichment'],priority:97},
+  {site:'angarsk-enrichment',title:'濃縮役務',place:'アンガルスク',industries:['enrichment'],priority:96},
+  {site:'murmansk-port',title:'港湾物流',place:'ムルマンスク',industries:['logistics'],priority:95},
+  {site:'st-petersburg-port',title:'港湾物流',place:'サンクトペテルブルク',industries:['logistics'],priority:94},
+  {site:'novorossiysk-port',title:'港湾物流',place:'ノヴォロシースク',industries:['logistics'],priority:93},
+  {site:'vladivostok-port',title:'港湾物流',place:'沿海地方の港湾群',industries:['logistics'],priority:92},
+  {site:'vanino-port',title:'港湾物流',place:'ヴァニノ',industries:['logistics'],priority:91},
+ ],
+};
+export const ruMapShortNames:Record<string,string>={oil:'石油',gas:'天然ガス',coal:'石炭',palladium:'Pd',nickel:'Ni',copper:'銅',gold:'金',aluminum:'Al製錬',steel:'鉄鋼',nitrogen:'窒素肥料',potash:'カリ肥料',phosphate:'りん酸肥料',enrichment:'濃縮',logistics:'港湾物流',diamond:'天然ダイヤ',helium:'He',wheat:'小麦',trucks:'トラック',management:'企業管理'};

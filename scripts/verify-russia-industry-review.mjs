@@ -9,17 +9,18 @@ import config from '../astro.config.mjs';
 import {ruIndustries,ruSites,ruSectors} from '../src/data/atlas/russia-industry-catalog.ts';
 const dist=path.resolve('dist'),output=path.resolve('review-artifacts/russia-industry'),base=String(config.base??'').replace(/\/$/,'');
 await mkdir(output,{recursive:true});
-const report={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),sandboxRequired:true,status:'running',cases:[],screenshots:[]};
+const report={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),workingTreeDirty:!!execFileSync('git',['status','--porcelain'],{encoding:'utf8'}).trim(),sandboxRequired:true,status:'running',manualReadabilityReview:'required',cases:[],screenshots:[]};
 const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.svg':'image/svg+xml','.json':'application/json','.png':'image/png'};
 const server=createServer(async(req,res)=>{try{let url=new URL(req.url,'http://local').pathname;if(base&&url.startsWith(base))url=url.slice(base.length);if(url.endsWith('/'))url+='index.html';const file=path.resolve(dist,'.'+url);assert(file.startsWith(dist+'/'));res.writeHead(200,{'content-type':mime[path.extname(file)]??'application/octet-stream'});res.end(await readFile(file));}catch{res.writeHead(404);res.end();}});
 await new Promise(r=>server.listen(0,'127.0.0.1',r));
 const url=`http://127.0.0.1:${server.address().port}${base}/atlas/russia/industry/`;
 const settle=async page=>{await page.waitForFunction(()=>document.querySelector('[data-ru-industry]')?.dataset.ruReady==='true');await page.evaluate(()=>document.fonts.ready);};
-const positions=page=>page.locator('[data-ru-label]').evaluateAll(nodes=>nodes.map(n=>({id:n.dataset.ruLabel,x:n.style.left,y:n.style.top})));
+const active=page=>page.locator('[data-ru-scene]:visible');
+const positions=page=>active(page).locator('[data-ru-label]').evaluateAll(nodes=>nodes.map(n=>({id:n.dataset.ruLabel,transform:n.getAttribute('transform'),box:n.dataset.box})));
 async function boxes(page){
- const data=await page.locator('[data-ru-canvas]').evaluate(canvas=>{
+ const data=await active(page).locator('[data-ru-canvas]').evaluate(canvas=>{
   const offset=canvas.getBoundingClientRect(),box=n=>{const b=n.getBoundingClientRect();return{x:b.x-offset.x,y:b.y-offset.y,w:b.width,h:b.height};};
-  return {width:canvas.clientWidth,height:canvas.clientHeight,labels:[...canvas.querySelectorAll('[data-ru-label]')].map(n=>({id:n.dataset.ruLabel,...box(n),titleFits:n.querySelector('strong').scrollWidth<=n.querySelector('strong').clientWidth})),points:[...canvas.querySelectorAll('[data-ru-hit]')].map(box)};
+  return {width:canvas.clientWidth,height:canvas.clientHeight,labels:[...canvas.querySelectorAll('[data-ru-label]')].map(n=>({id:n.dataset.ruLabel,...box(n),titleFits:n.getBBox().width<=Number(n.dataset.box.split(',')[2])-Number(n.dataset.box.split(',')[0])+4})),points:[...canvas.querySelectorAll('[data-ru-hit]')].map(box)};
  });
  const intersects=(a,b)=>a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
  for(let i=0;i<data.labels.length;i++){
@@ -42,18 +43,19 @@ try{
   for(const sector of ruSectors){
    await page.locator(`button[data-ru-sector="${sector.id}"]`).click();
    const before=await positions(page),measurements=await boxes(page),items=ruIndustries.filter(i=>i.sectors.includes(sector.id));
-   assert.equal(measurements.labels.length,items.length);
-   await page.locator('[data-ru-canvas]').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(output,`${profile}-${sector.id}.png`)});report.screenshots.push(`${profile}-${sector.id}.png`);
+   assert.ok(measurements.labels.length>0&&measurements.labels.length<=12);assert.equal(await page.locator('[data-ru-scene]:visible').count(),1);assert.equal(await active(page).locator('[data-ru-canvas] button,[data-ru-canvas] select').count(),0);assert.equal(await active(page).locator('line,[data-ru-guide]').count(),0);
+   const allowed=items.map(i=>i.id),markerIds=await active(page).locator('[data-ru-marker]').evaluateAll(nodes=>nodes.flatMap(n=>n.dataset.ruIndustries.split(' ')));assert(markerIds.every(id=>allowed.includes(id)));
+   await active(page).locator('[data-ru-canvas]').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(output,`${profile}-${sector.id}.png`)});report.screenshots.push(`${profile}-${sector.id}.png`);
    for(const item of items){
-    await page.locator(`[data-ru-products="${sector.id}"] [data-ru-product="${item.id}"]`).click();
+    await page.locator('[data-ru-product-select]').selectOption(item.id);
     assert.equal(new URL(page.url()).searchParams.get('industry'),item.id);assert.equal(await page.locator('[data-ru-title]').innerText(),item.name);
     assert.deepEqual(await positions(page),before,'Selection moved a label');
     assert.equal(await page.locator(`[data-ru-stat="${item.id}"]`).getAttribute('open'),'');
    }
    await page.locator('[data-ru-clear]').click();
-   const markers=await page.locator('[data-ru-marker]').evaluateAll(nodes=>nodes.map(n=>n.dataset.ruMarker));
+   const markers=await active(page).locator('[data-ru-marker]').evaluateAll(nodes=>nodes.map(n=>n.dataset.ruMarker));
    for(const id of markers){
-    const marker=page.locator(`[data-ru-marker="${id}"]`);await marker.locator('[data-ru-hit]').click();assert.equal(await page.locator('[data-ru-selected]').isVisible(),true);
+    const marker=active(page).locator(`[data-ru-marker="${id}"]`);await marker.locator('[data-ru-hit]').click();assert.equal(await page.locator('[data-ru-selected]').isVisible(),true);
     const selected=ruSites.find(s=>s.id===new URL(page.url()).searchParams.get('site'));assert(selected);assert.equal(await page.locator('[data-ru-site-title]').innerText(),selected.place);
     assert.deepEqual(await positions(page),before);
    }
@@ -66,9 +68,9 @@ try{
    await page.locator('[data-ru-clear]').click();assert.equal(new URL(page.url()).searchParams.has('industry'),false);
    sectors.push({id:sector.id,products:items.length,siteProductChoices:choices.length,measurements});
   }
-  await page.locator('button[data-ru-sector=resources]').click();await page.locator('[data-ru-products=resources] [data-ru-product=diamond]').click();await page.locator('[data-ru-products=resources] [data-ru-product=helium]').click();await page.goBack();await settle(page);assert.equal(new URL(page.url()).searchParams.get('industry'),'diamond');
+  await page.locator('button[data-ru-sector=resources]').click();await page.locator('[data-ru-product-select]').selectOption('diamond');await page.locator('[data-ru-product-select]').selectOption('helium');await page.goBack();await settle(page);assert.equal(new URL(page.url()).searchParams.get('industry'),'diamond');
   await page.locator('button[data-ru-sector=resources]').focus();await page.keyboard.press('ArrowRight');assert.equal(new URL(page.url()).searchParams.get('sector'),'manufacturing');
-  const marker=page.locator('[data-ru-marker="omsk-refining"]');await marker.focus();await page.keyboard.press('Space');assert.equal(new URL(page.url()).searchParams.get('site'),'omsk-refining');
+  const marker=active(page).locator('[data-ru-marker="omsk-refining"]');await marker.focus();await page.keyboard.press('Space');assert.equal(new URL(page.url()).searchParams.get('site'),'omsk-refining');
   assert.equal(new URL(page.url()).searchParams.get('keep'),'source');assert.equal(new URL(page.url()).hash,'#reference');
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));assert.deepEqual(errors,[]);report.cases.push({profile,status:'passed',sectors});await context.close();
  }
