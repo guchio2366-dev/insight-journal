@@ -4,6 +4,7 @@ import {africaIndustrySectors,africaSectorIndustries,africaSectorSites,africaInd
 import {africaIndustryLocations} from '../../src/data/atlas/africa-industry-locations.ts';
 import {readState,writeState} from '../../src/data/atlas/africa-atlas.ts';
 import {africaIndustryMetrics,africaIndustryMetricsFor} from '../../src/data/atlas/africa-industry-research.ts';
+import {africaIndustryMapAnnotations} from '../../src/data/atlas/africa-industry-map-annotations.ts';
 import {readFileSync} from 'node:fs';
 
 test('source-backed three-sector roles keep old evidence, operating limits and meaningful overlaps',()=>{
@@ -16,6 +17,15 @@ test('source-backed three-sector roles keep old evidence, operating limits and m
  for(const id of ['soyo-gas','lagos','kansanshi-copper'])assert.equal(new Set(africaSectorSites.find(row=>row.id===id).roles.map(row=>row.sector)).size,2);
  const power=africaSectorSites.find(row=>row.id==='olkaria-power');assert.match(power.reading,/送電網/);assert.match(power.note,/概略代表位置/);
  for(const id of ['lekki-refining','lekki-fertilizer','bonny-lng','nairobi-digital','johannesburg-digital'])assert(africaSectorSites.find(row=>row.id===id).sources.length);
+});
+
+test('overview annotations use a bounded set of existing sites in the matching sector',()=>{
+ assert.deepEqual(africaIndustrySectors.map(sector=>africaIndustryMapAnnotations.filter(row=>row.sector===sector.id).length),[10,8,6]);
+ assert.equal(new Set(africaIndustryMapAnnotations.map(row=>row.siteId)).size,africaIndustryMapAnnotations.length);
+ for(const row of africaIndustryMapAnnotations){
+  for(const id of [row.siteId,...(row.relatedSiteIds??[])])assert(africaIndustrySectorSites(row.sector).some(site=>site.id===id),`${id} is a sourced site in ${row.sector}`);
+  assert(row.label.length<=26&&row.label.includes(' · '));
+ }
 });
 
 test('all approved Africa industries have scoped evidence and retain product-stage distinctions',()=>{

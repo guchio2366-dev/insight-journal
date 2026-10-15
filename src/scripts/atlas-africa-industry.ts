@@ -2,13 +2,14 @@ import type {State} from '../data/atlas/africa-atlas.ts';
 import {africaIndustrySectors,africaSectorIndustries,africaIndustrySectorSites,africaSectorSiteById,africaSectorIndustryById,africaIndustryNationalReferences,africaIndustryMapScope,type AfricaSectorSite} from '../data/atlas/africa-industry-sectors.ts';
 import {projectAfrica,africaWidth,africaHeight} from '../lib/atlas-africa-geometry.ts';
 import {placePilotLabel} from '../lib/atlas-canada-industry-labels.ts';
+import {africaIndustryMapAnnotations} from '../data/atlas/africa-industry-map-annotations.ts';
 import {renderAfricaIndustryStatistics} from './atlas-africa-industry-statistics.ts';
 
 const ns='http://www.w3.org/2000/svg';
 function svg(tag:string,attrs:Record<string,string|number>,text?:string){const node=document.createElementNS(ns,tag);for(const [key,value]of Object.entries(attrs))node.setAttribute(key,String(value));if(text!==undefined)node.textContent=text;return node;}
 function html<K extends keyof HTMLElementTagNameMap>(tag:K,text=''){const node=document.createElement(tag);node.textContent=text;return node;}
 
-/** Layout uses the entire sector in source order. Selection/only never enter it. */
+/** Each sector retains its own source points. Labels describe a few places, not every picker option. */
 export function renderAfricaIndustry(root:HTMLElement,state:State){
  const q=<T extends Element=HTMLElement>(selector:string)=>root.querySelector<T>(selector)!;
  let reading=root.querySelector<HTMLElement>('[data-africa-industry-reading]');
@@ -28,7 +29,7 @@ export function renderAfricaIndustry(root:HTMLElement,state:State){
  text('[data-africa-industry-return]',`← ${sector.label}の概要へ戻る`);
  text('[data-theme-caveat]',africaIndustryMapScope);text('[data-metric-title]',`${sector.label}の分布`);text('[data-period]','資料別年');text('[data-unit]','代表位置');
  text('#africa-svg-title',`アフリカの${sector.label}の分布`);text('[data-map-caption]',africaIndustryMapScope);
- text('#africa-svg-desc','丸は採掘地域、四角は加工・発電またはサービスの拠点。短い細線は産業名と点の対応です。産業や点を選んでも他の点と産業名の位置は固定です。選択産業だけの表示は右のチェックで切り替えます。');
+ text('#africa-svg-desc','丸は採掘地域、四角は加工・発電またはサービスの案内点。概要には代表的な地名だけを短く表示します。品目を選ぶと、その品目の短い案内へ切り替わります。点の位置は固定です。');
  const sources=selected?.sources??industry?.sources??[...new Map(sites.flatMap(row=>row.sources).map(row=>[row.url,row])).values()];
  const source=q<HTMLAnchorElement>('[data-theme-source]');source.href=sources[0].url;source.textContent=sources[0].label;source.hidden=false;
  const marks=q<SVGGElement>('[data-theme-marks]');marks.replaceChildren();q('[data-themes]').replaceChildren();q('[data-theme-legend]').replaceChildren();
@@ -47,36 +48,39 @@ export function renderAfricaIndustry(root:HTMLElement,state:State){
   group.append(svg('title',{},`${site.label} · ${role.stage} · ${site.evidencePeriod} · ${site.status==='development'?'開発':site.status==='paused'?'休止':'操業資料あり'}：${site.note}`));
   marks.append(group);pointGroups.set(site.id,group as SVGGElement);
  }
- let omitted=0;
- for(const definition of industries){
+ const labelGroups:{key:string;name:string;points:typeof points;color:string}[]=[];
+ if(industry){
   const groups:typeof points[]=[];
-  for(const point of points.filter(row=>roleFor(row.site).industry===definition.id)){
-   const group=groups.find(group=>group.every(row=>Math.hypot(row.point[0]-point.point[0],row.point[1]-point.point[1])<=75));
+  for(const point of points.filter(row=>roleFor(row.site).industry===industry.id)){
+   const group=groups.find(group=>group.every(row=>Math.hypot(row.point[0]-point.point[0],row.point[1]-point.point[1])<=42));
    if(group)group.push(point);else groups.push([point]);
   }
-  for(const group of groups){
-   const name=definition.label+(group.length>1?` · ${group.length}`:''),label=svg('text',{'font-size':12/scale,'font-weight':700,fill:definition.color,stroke:'#fffdf8','stroke-width':3/scale,'paint-order':'stroke','stroke-linejoin':'round'},name) as SVGTextElement;
-   // Measure the actual loaded font. The estimate is only for non-rendering DOM tests.
-   marks.append(label);const measured=typeof label.getBBox==='function'?label.getBBox():null;
-   const width=measured?.width?measured.width*scale:name.length*12,height=measured?.height?measured.height*scale:17;
-   const box=placePilotLabel(group.map(row=>row.point),[width+4,height+4],frame,occupied,75);
-   if(!box){label.remove();omitted++;continue;}occupied.push(box);
-   const holder=svg('g',{'data-africa-industry-label':definition.id,'data-sites':group.map(row=>row.site.id).join(','),'data-layout-box':box.join(','),tabindex:state.industryOnly&&industry?.id!==definition.id?-1:0,role:'button','aria-label':`${definition.label}の分布を読む`,'aria-pressed':String(industry?.id===definition.id),class:'africa-industry-hit',opacity:industry&&industry.id!==definition.id?.6:1});
-   if(state.industryOnly&&industry?.id!==definition.id)holder.style.display='none';
-   for(const {site,point:[x,y]}of group){
-    const end=[Math.max(box[0],Math.min(box[2],x)),Math.max(box[1],Math.min(box[3],y))];
-    // A label-point correspondence, never a supply or shipping flow.
-    holder.append(svg('line',{x1:x/scale,y1:y/scale,x2:end[0]/scale,y2:end[1]/scale,stroke:definition.color,'stroke-width':.7,'vector-effect':'non-scaling-stroke','pointer-events':'none','data-africa-industry-leader':site.id}));
-    pointGroups.get(site.id)!.setAttribute('data-label-visible','true');
-   }
-   label.setAttribute('x',String((box[0]+2)/scale));label.setAttribute('y',String((box[1]+2-(measured?.y??-13/scale)*scale)/scale));holder.append(label);marks.append(holder);
-  }
+  for(const group of groups)labelGroups.push({key:industry.id,name:industry.label+(group.length>1?` · ${group.length}地点`:''),points:group,color:industry.color});
+ }else for(const annotation of africaIndustryMapAnnotations.filter(row=>row.sector===sector.id)){
+  const guidePoints=[annotation.siteId,...(annotation.relatedSiteIds??[])].map(id=>points.find(row=>row.site.id===id)).filter((row):row is typeof points[number]=>!!row);
+  if(guidePoints.length)labelGroups.push({key:annotation.siteId,name:annotation.label,points:guidePoints,color:'#29464c'});
+ }
+ let omitted=0;
+ for(const group of labelGroups){
+  const label=svg('text',{'font-size':12/scale,'font-weight':700,fill:group.color,stroke:'#fffdf8','stroke-width':2.5/scale,'paint-order':'stroke','stroke-linejoin':'round'},group.name) as SVGTextElement;
+  // Measure the actual loaded font; the fallback only serves non-rendering DOM tests.
+  marks.append(label);const measured=typeof label.getBBox==='function'?label.getBBox():null;
+  const width=measured?.width?measured.width*scale:group.name.length*12,height=measured?.height?measured.height*scale:17;
+  const box=placePilotLabel(group.points.map(row=>row.point),[width+4,height+4],frame,occupied,30);
+  if(!box){label.remove();omitted++;continue;}occupied.push(box);
+  const holder=svg('g',{'data-africa-industry-annotation':group.key,'data-sites':group.points.map(row=>row.site.id).join(','),'data-layout-box':box.join(','),role:'note','aria-label':group.name,'pointer-events':'none'});
+  const nearest=group.points.map(row=>{const [x,y]=row.point,end=[Math.max(box[0],Math.min(box[2],x)),Math.max(box[1],Math.min(box[3],y))];return {row,end,distance:Math.hypot(x-end[0],y-end[1])};}).sort((a,b)=>a.distance-b.distance)[0];
+  if(nearest.distance>7)holder.append(svg('line',{x1:nearest.row.point[0]/scale,y1:nearest.row.point[1]/scale,x2:nearest.end[0]/scale,y2:nearest.end[1]/scale,stroke:group.color,'stroke-width':.7,'vector-effect':'non-scaling-stroke','data-africa-industry-leader':nearest.row.site.id}));
+  for(const {site}of group.points)pointGroups.get(site.id)!.setAttribute('data-label-visible','true');
+  label.setAttribute('x',String((box[0]+2)/scale));label.setAttribute('y',String((box[1]+2-(measured?.y??-13/scale)*scale)/scale));holder.append(label);marks.append(holder);
  }
  marks.setAttribute('data-omitted-labels',String(omitted));
- const legend=q('[data-africa-layer-legend]');legend.replaceChildren();q<HTMLElement>('[data-africa-actual-key]').hidden=false;
- for(const definition of industries){const button=html('button',definition.label),swatch=html('i');button.type='button';button.dataset.africaIndustryLabel=definition.id;button.setAttribute('aria-pressed',String(industry?.id===definition.id));swatch.style.background=definition.color;button.prepend(swatch);legend.append(button);}
+ const legend=q<HTMLElement>('[data-africa-layer-legend]'),keepLegendOpen=legend.dataset.sector===sector.id&&!!legend.querySelector('details')?.open;legend.replaceChildren();legend.dataset.sector=sector.id;q<HTMLElement>('[data-africa-actual-key]').hidden=false;
+ const legendDetails=html('details'),legendChoices=html('div');legendDetails.dataset.africaIndustryLegend='';legendDetails.open=keepLegendOpen;legendDetails.append(html('summary',`産業の色と品目一覧（${industries.length}）`));
+ for(const definition of industries){const button=html('button',definition.label),swatch=html('i');button.type='button';button.dataset.africaIndustryLabel=definition.id;button.setAttribute('aria-pressed',String(industry?.id===definition.id));swatch.style.background=definition.color;button.prepend(swatch);legendChoices.append(button);}
+ legendDetails.append(legendChoices);legend.append(legendDetails);
  text('[data-africa-layer-caption]',`${sector.label} · ${industries.length}産業 · ${sites.length}代表位置${state.industryOnly?' · 選択産業のみ表示':''}`);
- text('[data-africa-layer-scope]',`色は産業。丸：採掘／四角：加工・発電・サービス／破線：開発・休止。細線は名称と点の対応。${omitted?'混雑した名称は凡例から選べます。':''}`);
+ text('[data-africa-layer-scope]',`色は産業。丸：採掘／四角：加工・発電・サービス／破線：開発・休止。地名は代表例で、すべての地点は点から読めます。${omitted?'混雑した地名は省略しています。':''}`);
  reading.replaceChildren();const why=html('section');why.dataset.africaIndustryWhy='';why.append(html('h3','立地と利用のつながり'),html('p',sector.why));reading.append(why);
  if(industry){reading.append(html('p',industry.reason));const label=html('label'),only=html('input');only.type='checkbox';only.dataset.africaIndustryOnly='';only.checked=state.industryOnly;label.append(only,document.createTextNode(' 選択産業だけを表示'));reading.append(label);}
  if(selected){const article=html('article');article.dataset.africaIndustrySiteReading=selected.id;article.append(html('h3',selected.label),html('p',selected.reading),html('p',`${selected.evidencePeriod} · ${selected.roles.find(role=>role.sector===sector.id)?.stage??'国全体の参考資料'}`),html('p',selected.note));if(!selected.roles.length)article.append(html('p','国全体の資料なので産地の点にはしていません。'));for(const item of selected.sources){const a=html('a',item.label);a.href=item.url;const p=html('p');p.append(a);article.append(p);}reading.append(article);}
