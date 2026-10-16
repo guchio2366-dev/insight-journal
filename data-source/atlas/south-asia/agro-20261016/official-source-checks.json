@@ -1,0 +1,43 @@
+{
+  "checkedAt": "2026-10-16",
+  "method": "Public web reader; these are checked facts and provenance, not a downloaded PDF or CSV",
+  "checks": [
+    {
+      "url": "https://www.usda.gov/oce/commodity/wasde/wasde0926.pdf",
+      "result": "Public reader returned WASDE-675, September 2026, 40 pages. Tables 18/24/26 match retained 2024/25 country/World cells.",
+      "notes": [
+        "p24 note2: Total domestic includes domestic use and unreported disappearance.",
+        "p9 note3: cotton consumption includes mill use only.",
+        "Local marketing years are aggregated; do not call them a shared calendar year."
+      ]
+    },
+    {
+      "url": "https://www.usda.gov/historical-wasde-report-data-3",
+      "result": "Official separate public CSV distribution discovered for September 2026. Page says vintage files preserve publication-time estimates, with PDF the official record.",
+      "linkedCsv": "https://www.usda.gov/sites/default/files/documents/oce-wasde-report-data-2026-09.csv",
+      "csvWebResult": "Unsupported content-type: text/csv; normal direct GET acquisition is logged separately."
+    },
+    {
+      "url": "https://www.fao.org/forestry/statistics/data/en",
+      "result": "Official public table read successfully after failed API acquisition. It distinguishes roundwood/sawnwood million m3 from wood pulp million tonnes. It does not provide a complete national pulp P/I/X or partner matrix.",
+      "doNotInfer": [
+        "Do not multiply rounded India pulp-for-paper world share by the distinct wood-pulp total.",
+        "Do not use pulp capacity as pulp production or domestic consumption."
+      ]
+    },
+    {
+      "url": "https://www.fao.org/forestry/statistics/classifications/en",
+      "result": "Official classification landing page read; linked questionnaire definitions returned 403 Forbidden via normal reader. No alternate path used to retrieve the denied document.",
+      "blockedDocument": "https://openknowledge.fao.org/handle/20.500.14283/cb4108en"
+    },
+    {
+      "url": "https://www.fao.org/forestry/statistics/publications/en",
+      "result": "Official public publications index read; pulp capacity publications and forest yearbooks are separate products, not a replacement for missing same-year trade rows."
+    }
+  ],
+  "retainedSource": {
+    "path": "scripts/data/wasde0926.txt",
+    "sha256": "de4baa0dc24769b2d8cc153bac488049d905b5c8aa1fec9696e2d4e13036e285"
+  },
+  "newDownloadedPrimaryFiles": 0
+}
