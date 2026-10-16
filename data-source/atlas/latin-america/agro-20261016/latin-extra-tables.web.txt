@@ -1,0 +1,245 @@
+Paraguay Soya beans exports by country | 2024 | Data (https://wits.worldbank.org/trade/comtrade/en/country/PRY/year/2024/tradeflow/Exports/partner/ALL/product/120100)
+citeturn7view0 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"turn3view2","lineno":15}); Total lines: 61
+L0: # Paraguay Soya beans exports by country
+L1:
+L2: in 2024
+L3:
+L4: Share
+L5:
+L6:   * cite0†Facebook L7:   * cite0†Twitter L8:   * cite0†Linkedin L9:   * cite0†Google Plus L10:   * cite0†Reddit L11:   * cite0†Stumble Upon L12:   * cite0†Delicious L13:   * cite0†Email L14:
+L15: Change selection (Reporter, Year, Trade Flow, Partner and HS 6 digit Product)
+L16: Paraguay exports of Soya beans was $3,170,257.50K and quantity 7,987,010,000Kg.
+L17: Paraguay exported Soya beans to Argentina ($2,732,694.81K , 6,884,070,000 Kg), Brazil ($307,934.54K , 785,626,000 Kg), Russian Federation ($100,487.71K , 247,270,000 Kg), Uruguay ($15,841.20K , 37,622,100 Kg), Peru ($8,768.44K , 22,636,600 Kg).
+L18: cite1†Soya beans imports by country in 2024 L19: Reporter  | TradeFlow  | ProductCode  | Product Description  | Year  | Partner  | Trade Value 1000USD  | Quantity  | Quantity Unit
+L20:  Paraguay  | Export  | 120100  | Soya beans  | 2024  | cite2†World | 3,170,257.50  | 7,987,010,000  | Kg
+L21:  Paraguay  | Export  | 120100  | Soya beans  | 2024  | cite3†Argentina | 2,732,694.81  | 6,884,070,000  | Kg
+L22:  Paraguay  | Export  | 120100  | Soya beans  | 2024  | cite4†Brazil | 307,934.54  | 785,626,000  | Kg
+L23:  Paraguay  | Export  | 120100  | Soya beans  | 2024  | cite5†Russian Federation | 100,487.71  | 247,270,000  | Kg
+L24:  Paraguay  | Export  | 120100  | Soya beans  | 2024  | cite6†Uruguay | 15,841.20  | 37,622,100  | Kg
+L25:  Paraguay  | Export  | 120100  | Soya beans  | 2024  | cite7†Peru | 8,768.44  | 22,636,600  | Kg
+L26:  Paraguay  | Export  | 120100  | Soya beans  | 2024  | cite8†Spain | 2,280.97  | 5,486,660  | Kg
+L27:  Paraguay  | Export  | 120100  | Soya beans  | 2024  | cite9†United States | 1,927.82  | 3,796,480  | Kg
+L28:  Paraguay  | Export  | 120100  | Soya beans  | 2024  | cite10†Guatemala | 139.43  | 156,660  | Kg
+L29:  Paraguay  | Export  | 120100  | Soya beans  | 2024  | cite11†Japan | 66.95  | 100,000  | Kg
+L30:  Paraguay  | Export  | 120100  | Soya beans  | 2024  | cite12†Chile | 62.85  | 112,000  | Kg
+L31:  Paraguay  | Export  | 120100  | Soya beans  | 2024  | cite13†Korea, Rep. | 25.92  | 72,000  | Kg
+L32:  Paraguay  | Export  | 120100  | Soya beans  | 2024  | cite14†Kuwait | 23.24  | 56,010  | Kg
+L33:  Paraguay  | Export  | 120100  | Soya beans  | 2024  | cite15†Luxembourg | 3.00  | 7,743  | Kg
+L34:  Paraguay  | Export  | 120100  | Soya beans  | 2024  | cite16†Netherlands | 0.61  | 1,560  | Kg
+L35:  Paraguay  | Export  | 120100  | Soya beans  | 2024  | cite17†Indonesia | 0.01  | 15  | Kg
+L36: HS Nomenclature used HS 1988/92 (H0)
+L37: HS Code 120100: Soya beans
+L38: Please note: Exports is gross exports and Imports is gross imports
+L39:
+L40:   * cite18†About L41:   * .
+L42:   * cite19†Contact L43:   * .
+L44:   * cite20†Usage Conditions L45:   * .
+L46:   * cite21†Legal†www.worldbank.org L47:   * .
+L48:   * cite22†Data Providers L49:   * .
+L50:   * Page Refreshed : Oct-15-2026 23:40 ET
+L51: Partners
+L52:   * cite23†ITC†www.intracen.org L53:   * .
+L54:   * cite24†UNCTAD†unctad.org L55:   * .
+L56:   * cite25†UNSTATS†unstats.un.org L57:   * .
+L58:   * cite26†World Trade Organization†www.wto.org L59:   * .
+L60:   * cite27†World Bank†www.worldbank.org --------------------------------------------------------------------------------
+Infor :: Estadisticas Forestales (https://wef.infor.cl/index.php/sector-forestal/industria-forestal/produccion/produccion-de-celulosa?view=comercio_ind_pro_celulosa)
+citeturn7view1 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"turn6view2","lineno":40}); Total lines: 159
+L0: cite0†Image cite1†Image L1:
+L2: Sector Forestal en cifras
+L3:
+L4: cite2†Resumen de Indicadores L5:
+L6: ###
+L7:
+L8: ### [Button: Industria Forestal]
+L9:
+L10: ###### Consumo
+L11:
+L12: cite3†Consumo de trozas por industria cite4†Consumo de trozas de pino radiata cite5†Consumo de trozas de Eucalipto cite6†Consumo de trozas de madera nativa cite7†Consumo de trozas otras especies L13:
+L14: ###### Producción
+L15:
+L16: cite8†Madera aserrada por especie cite9†Producción de celulosa cite10†Producción de papeles y cartones cite11†Producción de tableros y chapas cite12†Producción Astillas a nivel nacional L17: ###### Ocupación
+L18:
+L19: cite13†Sector forestal por actividad cite14†De la industria primaria cite15†De la industria secundaria L20:
+L21: ###
+L22:
+L23: ### [Button: Exportaciones]
+L24:
+L25: cite16†Monto Total por Producto cite17†Cantidad Total por Producto cite18†Monto por País de Destino cite19†Monto productos manufacturados cite20†Monto de productos de Madera Nativa L26:
+L27: ###
+L28:
+L29: ### [Button: Importaciones]
+L30:
+L31: cite21†Monto por País de Origen cite22†Monto total por producto cite23†Cantidad total por producto L32:
+L33: ###
+L34: ### [Button: Precios de Productos Forestales]
+L35:
+L36: cite24†Trozas pino radiata cite25†Elaborada pino radiata cite26†Tableros cite27†Elaborada Especies Nativas y otras exóticas L37:
+L38: ###
+L39: ### [Button: Estadísticas Regionales]
+L40:
+L41: cite28†Región de Valparaíso cite29†Región Metropolitana de Santiago cite30†Región del Libertador General Bernardo O'Higgins cite31†Región del Maule cite32†Región de Ñuble cite33†Región del Biobío cite34†Región de la Araucanía cite35†Región de los Ríos cite36†Región de los Lagos cite37†Región de Aysén del General Carlos Ibáñez del Campo cite38†Región de Magallanes y de la Antártica Chilena L42: # Producción de celulosa
+L43:
+L44: Producción de celulosa
+L45:
+L46: (miles de toneladas)
+L47:  | PULPA QUÍMICA
+L48: --- | ---
+L49: Año  | TOTAL GENERAL  | PULPA MECÁNICA  | PULPA TERMO-MECÁNICA  | BLANQUEADA DE PINO RADIATA  | SIN BLANQUEAR DE PINO RADIATA  | BLANQUEADA DE EUCALIPTO
+L50: --- | --- | --- | --- | --- | --- | ---
+L51: 1955  | 20,0  | 17,8  | -  | -  | -  | -
+L52: 1956  | 20,5  | 17,9  | -  | -  | -  | -
+L53: 1957  | 23,7  | 20,8  | -  | -  | -  | -
+L54: 1958  | 47,1  | 44,3  | -  | -  | -  | -
+L55: 1959  | 60,2  | 49,3  | -  | -  | -  | -
+L56: 1960  | 104,9  | 51,8  | -  | -  | -  | -
+L57: 1961  | 145,5  | 67,1  | -  | -  | -  | -
+L58: 1962  | 146,0  | 62,0  | -  | -  | -  | -
+L59: 1963  | 151,7  | 68,8  | -  | -  | -  | -
+L60: 1964  | 175,0  | 84,5  | -  | -  | -  | -
+L61: 1965  | 199,0  | 102,4  | -  | -  | -  | -
+L62: 1966  | 216,6  | 109,6  | -  | -  | -  | -
+L63: 1967  | 308,5  | 103,7  | -  | -  | -  | -
+L64: 1968  | 278,5  | 106,9  | -  | -  | -  | -
+L65: 1969  | 389,7  | 110,6  | -  | -  | -  | -
+L66: 1970  | 325,5  | 114,8  | -  | -  | -  | -
+L67: 1971  | 345,4  | 112,3  | -  | -  | -  | -
+L68: 1972  | 345,0  | 102,2  | -  | -  | -  | -
+L69: 1973  | 350,3  | 108,3  | -  | -  | -  | -
+L70: 1974  | 432,8  | 119,0  | -  | -  | -  | -
+L71: 1975  | 435,8  | 110,0  | -  | -  | -  | -
+L72: 1976  | 514,5  | 124,5  | -  | -  | -  | -
+L73: 1977  | 603,3  | 125,3  | -  | -  | -  | -
+L74: 1978  | 665,0  | 129,4  | -  | -  | -  | -
+L75: 1979  | 700,8  | 130,3  | -  | -  | -  | -
+L76: 1980  | 770,7  | 136,7  | -  | -  | -  | -
+L77: 1981  | 750,5  | 130,8  | -  | -  | -  | -
+L78: 1982  | 676,5  | 121,6  | -  | -  | -  | -
+L79: 1983  | 806,7  | 148,1  | -  | -  | -  | -
+L80: 1984  | 851,0  | 166,3  | -  | -  | -  | -
+L81: 1985  | 848,9  | 166,8  | -  | -  | -  | -
+L82: 1986  | 859,0  | 163,0  | -  | -  | -  | -
+L83: 1987  | 883,3  | 170,5  | -  | -  | -  | -
+L84: 1988  | 909,8  | 181,8  | -  | -  | -  | -
+L85: 1989  | 840,8  | 161,0  | -  | -  | -  | -
+L86: 1990  | 804,1  | 159,8  | -  | 614,3  | -  | 30,0
+L87: 1991  | 1.113,0  | 179,0  | -  | 777,6  | -  | 156,4
+L88: 1992  | 1.680,3  | 181,0  | -  | 1.223,3  | -  | 276,0
+L89: 1993  | 1.864,2  | 182,7  | 5,0  | 1.006,1  | 383,4  | 287,0
+L90: 1994  | 1.952,6  | 183,7  | 5,4  | 1.099,9  | 347,5  | 316,1
+L91: 1995  | 2.112,4  | 183,8  | -  | 1.227,1  | 372,9  | 328,6
+L92: 1996  | 2.145,9  | 190,6  | 23,0  | 1.252,9  | 347,5  | 331,9
+L93: 1997  | 2.077,7  | 184,3  | 25,0  | 1.256,5  | 286,7  | 325,2
+L94: 1998  | 2.209,6  | 185,2  | 44,7  | 1.175,6  | 362,3  | 441,8
+L95: 1999  | 2.434,1  | 135,7  | 234,3  | 1.258,1  | 366,0  | 440,0
+L96: 2000  | 2.591,9  | 104,2  | 267,8  | 1.303,4  | 413,1  | 503,4
+L97: 2001  | 2.667,8  | 110,2  | 275,5  | 1.404,3  | 426,1  | 451,7
+L98: 2002  | 2.687,4  | 116,6  | 292,6  | 1.289,7  | 435,2  | 553,3
+L99: 2003  | 2.759,3  | 130,5  | 314,5  | 1.384,6  | 393,8  | 535,9
+L100: 2004  | 3.338,7  | 137,6  | 369,4  | 1.661,7  | 389,4  | 780,6
+L101: 2005  | 3.237,2  | 136,6  | 342,4  | 1.545,5  | 391,0  | 821,7
+L102: 2006  | 3.482,8  | 132,1  | 380,4  | 1.642,3  | 376,0  | 952,0
+L103: 2007  | 4.675,4  | 138,3  | 355,7  | 1.945,8  | 407,3  | 1.828,4
+L104: 2008  | 4.980,5  | 137,6  | 357,4  | 2.041,7  | 393,6  | 2.050,1
+L105: 2009  | 4.992,5  | 134,3  | 368,4  | 2.038,4  | 433,5  | 2.017,9
+L106: 2010  | 4.102,2  | 104,5  | 353,7  | 1.586,9  | 372,7  | 1.684,3
+L107: 2011  | 4.896,2  | 120,6  | 364,5  | 1.941,3  | 441,4  | 2.028,4
+L108: 2012  | 5.080,3  | 127,4  | 321,1  | 1.904,0  | 467,2  | 2.260,6
+L109: 2013  | 5.156,0  | 131,3  | 232,4  | 2.043,4  | 489,5  | 2.259,5
+L110: 2014  | 5.208,8  | 134,3  | 180,0  | 2.166,2  | 489,6  | 2.238,7
+L111: 2015  | 5.116,7  | 127,4  | 183,0  | 2.000,4  | 482,4  | 2.323,4
+L112: 2016  | 5.145,4  | 124,0  | 161,8  | 2.118,9  | 461,5  | 2.279,2
+L113: 2017  | 5.193,0  | 119,8  | 151,7  | 2.039,5  | 467,3  | 2.414,7
+L114: 2018  | 5.362,8  | 129,7  | 180,0  | 2.033,2  | 545,0  | 2.474,9
+L115: 2019  | 5.293,3  | 114,7  | 190,1  | 1.919,5  | 487,6  | 2.581,4
+L116: 2020  | 5.205,5  | 64,5  | 193,7  | 1.735,9  | 483,6  | 2.727,7
+L117: 2021  | 4.979,6  | 29,5  | 187,6  | 1.741,6  | 496,2  | 2.524,7
+L118: 2022  | 4.655,3  | 67,3  | 188,3  | 1.715,8  | 503,0  | 2.180,8
+L119: 2023  | 5.329,4  | 80,7  | 195,0  | 1.700,7  | 346,8  | 3.006,3
+--------------------------------------------------------------------------------
+Infor :: Estadisticas Forestales (https://wef.infor.cl/index.php/sector-forestal/exportaciones/cantidad-total-por-producto?view=comercio_exp_volumensegunproducto)
+citeturn7view2 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"turn6view3","lineno":40}); Total lines: 134
+L0: cite0†Image cite1†Image L1:
+L2: Sector Forestal en cifras
+L3:
+L4: cite2†Resumen de Indicadores L5:
+L6: ###
+L7:
+L8: ### [Button: Industria Forestal]
+L9:
+L10: ###### Consumo
+L11:
+L12: cite3†Consumo de trozas por industria cite4†Consumo de trozas de pino radiata cite5†Consumo de trozas de Eucalipto cite6†Consumo de trozas de madera nativa cite7†Consumo de trozas otras especies L13:
+L14: ###### Producción
+L15:
+L16: cite8†Madera aserrada por especie cite9†Producción de celulosa cite10†Producción de papeles y cartones cite11†Producción de tableros y chapas cite12†Producción Astillas a nivel nacional L17: ###### Ocupación
+L18:
+L19: cite13†Sector forestal por actividad cite14†De la industria primaria cite15†De la industria secundaria L20:
+L21: ###
+L22:
+L23: ### [Button: Exportaciones]
+L24:
+L25: cite16†Monto Total por Producto cite17†Cantidad Total por Producto cite18†Monto por País de Destino cite19†Monto productos manufacturados cite20†Monto de productos de Madera Nativa L26:
+L27: ###
+L28:
+L29: ### [Button: Importaciones]
+L30:
+L31: cite21†Monto por País de Origen cite22†Monto total por producto cite23†Cantidad total por producto L32:
+L33: ###
+L34: ### [Button: Precios de Productos Forestales]
+L35:
+L36: cite24†Trozas pino radiata cite25†Elaborada pino radiata cite26†Tableros cite27†Elaborada Especies Nativas y otras exóticas L37:
+L38: ###
+L39: ### [Button: Estadísticas Regionales]
+L40:
+L41: cite28†Región de Valparaíso cite29†Región Metropolitana de Santiago cite30†Región del Libertador General Bernardo O'Higgins cite31†Región del Maule cite32†Región de Ñuble cite33†Región del Biobío cite34†Región de la Araucanía cite35†Región de los Ríos cite36†Región de los Lagos cite37†Región de Aysén del General Carlos Ibáñez del Campo cite38†Región de Magallanes y de la Antártica Chilena L42: # Volumen Exportado según Principales Productos
+L43:
+L44: Principales productos
+L45:
+L46: Volumen en miles
+L47: PRODUCTO (unidad)  | 2018  | 2019  | 2020  | 2021  | 2022  | 2023  | 2024  | 2025  | 2026
+L48: --- | --- | --- | --- | --- | --- | --- | --- | --- | ---
+L49: PULPA  | 4.689  | 4.623  | 4.314  | 4.280  | 4.065  | 4.431  | 5.208  | 5.436  | 3.717
+L50: ❯ Blanqueada pino radiata ( t )  | 2.006  | 1.873  | 1.617  | 1.590  | 1.700  | 1.634  | 1.744  | 1.779  | 1.093
+L51: ❯ Blanqueada eucalipto ( t )  | 2.194  | 2.288  | 2.189  | 1.874  | 1.621  | 2.198  | 2.715  | 2.967  | 2.104
+L52: ❯ Cruda pino radiata ( t )  | 487  | 459  | 432  | 444  | 479  | 302  | 290  | 302  | 201
+L53: ❯ Otras pulpas ( t )  | 2  | 3  | 76  | 372  | 265  | 297  | 459  | 388  | 319
+L54: ASTILLAS  | 6.092  | 5.352  | 4.722  | 3.757  | 2.822  | 2.591  | 2.616  | 2.070  | 1.399
+L55: ❯ Eucalipto ( t )  | 6.014  | 5.352  | 4.692  | 3.757  | 2.822  | 2.550  | 2.599  | 2.070  | 1.399
+L56: ❯ Pino radiata ( t )  | 78  | 0  | 30  | 0  | 0  | 41  | 17  | 0  | 0
+L57: TROZAS  | 258  | 236  | 133  | 189  | 40  | 62  | 68  | 36  | 18
+L58: ❯ Trozas para aserrar y chapas ( m3 )  | 258  | 236  | 133  | 189  | 40  | 62  | 68  | 36  | 18
+L59: ❯ Trozas para pulpa ( m3 )  | 0  | 0  | 0  | 0  | 0  | 0  | 0  | 0  | 0
+L60: MADERA ASERRADA (1)  | 2.709  | 2.529  | 2.322  | 2.155  | 2.015  | 2.023  | 2.010  | 1.758  | 1.185
+L61: ❯ Pino radiata ( m3 )  | 2.703  | 2.525  | 2.316  | 2.150  | 2.012  | 2.021  | 2.008  | 1.756  | 1.184
+L62: ❯ Otras especies ( m3 )  | 6  | 4  | 6  | 5  | 3  | 2  | 2  | 2  | 1
+L63: PAPELES, CARTONES Y SUS DERIVADOS  | 607  | 590  | 667  | 538  | 561  | 592  | 612  | 542  | 372
+L64: ❯ Papel periodico ( t )  | 64  | 55  | 41  | 4  | 0  | 2  | 2  | 0  | 0
+L65: ❯ Cartulinas multicapa ( t )  | 328  | 336  | 393  | 361  | 361  | 324  | 355  | 320  | 221
+L66: ❯ Otros papeles, cartones y derivados (3) ( t )  | 215  | 199  | 233  | 173  | 200  | 266  | 255  | 222  | 151
+L67: MADERA ELABORADA CEPILLADA Y CLEAR (2)  | 658  | 454  | 489  | 482  | 466  | 373  | 446  | 386  | 166
+L68: ❯ Pino radiata ( m3 )  | 657  | 453  | 489  | 482  | 466  | 348  | 422  | 386  | 166
+L69: ❯ Otras especies ( m3 )  | 1  | 1  | 0  | 0  | 0  | 25  | 24  | 0  | 0
+L70: MOLDURAS  | 352  | 360  | 371  | 404  | 473  | 279  | 340  | 329  | 215
+L71: ❯ Molduras solidas ( t )  | 141  | 139  | 140  | 167  | 165  | 126  | 141  | 132  | 106
+L72: ❯ Molduras de fibra ( t )  | 211  | 221  | 231  | 237  | 308  | 153  | 192  | 195  | 108
+L73: ❯ Otras Molduras ( t )  | 0  | 0  | 0  | 0  | 0  | 0  | 7  | 2  | 1
+L74: TABLEROS Y CHAPAS  | 883  | 797  | 810  | 774  | 830  | 740  | 790  | 756  | 437
+L75: ❯ Tableros de fibra (MDF,Hardboard) ( t )  | 171  | 182  | 158  | 185  | 115  | 133  | 152  | 158  | 74
+L76: ❯ Tableros de particulas ( t )  | 144  | 125  | 133  | 139  | 163  | 153  | 151  | 147  | 105
+L77: ❯ Tableros contrachapados (3) ( t )  | 516  | 447  | 452  | 400  | 488  | 410  | 443  | 420  | 249
+L78: ❯ Chapas ( t )  | 35  | 32  | 35  | 36  | 38  | 32  | 22  | 9  | 1
+L79: ❯ Tableros OSB ( t )  | 17  | 11  | 32  | 14  | 26  | 12  | 22  | 22  | 8
+L80: ❯ Otros ( t )  | 0  | 0  | 0  | 0  | 0  | 0  | 0  | 0  | 0
+L81: PUERTAS, VENTANAS Y SUS MARCOS  | 61  | 55  | 60  | 64  | 74  | 65  | 64  | 63  | 43
+L82: ❯ Puertas ( t )  | 19  | 18  | 20  | 24  | 24  | 21  | 19  | 17  | 12
+L83: ❯ Marcos para puertas ( t )  | 11  | 10  | 9  | 12  | 14  | 8  | 10  | 11  | 8
+L84: ❯ Otros ( t )  | 31  | 27  | 31  | 28  | 36  | 36  | 35  | 35  | 23
+L85: MUEBLES DE MADERA Y SUS PARTES Y PIEZAS  | 1  | 1  | 1  | 1  | 1  | 1  | 1  | 0  | 0
+L86: ❯ Partes y piezas de muebles ( t )  | 0  | 0  | 0  | 0  | 0  | 0  | 0  | 0  | 0
+L87: ❯ Comodas y veladores ( t )  | 0  | 0  | 0  | 0  | 0  | 0  | 0  | 0  | 0
+L88: ❯ Otros ( t )  | 1  | 1  | 1  | 1  | 1  | 1  | 1  | 0  | 0
+L89: OTROS GRUPOS  | 140  | 132  | 139  | 145  | 155  | 186  | 212  | 202  | 159
+L90: ❯ PRODUCTOS NO MADEREROS (4) ( t )  | 21  | 20  | 17  | 16  | 15  | 13  | 14  | 14  | 9
+L91: ❯ PRODUCTOS PARA CONSTRUCCION ( t )  | 60  | 56  | 74  | 73  | 90  | 83  | 95  | 98  | 53
+L92: ❯ CAJAS Y OTROS ENVASES Y PLATAFORMAS ( t )  | 17  | 14  | 12  | 11  | 7  | 10  | 38  | 11  | 5

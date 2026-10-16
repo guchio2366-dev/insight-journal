@@ -1,0 +1,11 @@
+/* Statistics only: preserve all map geometry, labels and viewport budgets. */
+.latin-workspace [data-latin-quantity-key],.latin-workspace [data-latin-forest-content]{min-width:0}
+.latin-workspace .latin-quantity-notice{border-left:3px solid #b98046;padding-left:10px}
+.latin-workspace .latin-partner-list{list-style:none;padding:0;margin:14px 0}
+.latin-workspace .latin-partner-list li{display:flex;flex-wrap:wrap;gap:4px;justify-content:space-between;margin:12px 0;font-size:14px}
+.latin-workspace .latin-partner-list small,.latin-workspace [data-latin-quantity-key] th small{display:block;font-size:12px;font-weight:400;color:#566154}
+.latin-workspace .latin-partner-track{flex-basis:100%;height:8px;background:#e3e1d7}
+.latin-workspace .latin-partner-track i{display:block;height:100%;background:#3d7666}
+.latin-workspace [data-latin-quantity-error] button{display:block;margin-top:8px}
+.latin-workspace [data-latin-retained-statistics]>.agro-columns{margin-top:12px}
+.latin-workspace [data-latin-forestry-statistics][hidden]{display:none!important}

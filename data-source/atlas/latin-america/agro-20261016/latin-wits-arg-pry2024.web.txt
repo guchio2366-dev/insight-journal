@@ -1,0 +1,110 @@
+Argentina Soya beans exports by country | 2024 | Data (https://wits.worldbank.org/trade/comtrade/en/country/ARG/year/2024/tradeflow/Exports/partner/ALL/product/120100)
+citeturn8view0 [wordlim: 200] Crawled: last week; Content type: text/html; Source: open({"ref_id":"https://wits.worldbank.org/trade/comtrade/en/country/ARG/year/2024/tradeflow/Exports/partner/ALL/product/120100","lineno":null}); Total lines: 52
+L0: # Argentina Soya beans exports by country
+L1:
+L2: in 2024
+L3:
+L4: Share
+L5:
+L6:   * cite0†Facebook L7:   * cite0†Twitter L8:   * cite0†Linkedin L9:   * cite0†Google Plus L10:   * cite0†Reddit L11:   * cite0†Stumble Upon L12:   * cite0†Delicious L13:   * cite0†Email L14:
+L15: Change selection (Reporter, Year, Trade Flow, Partner and HS 6 digit Product)
+L16: Argentina exports of Soya beans was $1,806,213.92K and quantity 4,145,170,000Kg.
+L17: Argentina exported Soya beans to China ($1,692,736.28K , 3,918,800,000 Kg), United States ($68,706.72K , 127,137,000 Kg), Chile ($30,133.99K , 71,376,900 Kg), Peru ($9,454.30K , 21,300,000 Kg), Uruguay ($5,163.07K , 6,546,310 Kg).
+L18: cite1†Soya beans imports by country in 2024 L19: Reporter  | TradeFlow  | ProductCode  | Product Description  | Year  | Partner  | Trade Value 1000USD  | Quantity  | Quantity Unit
+L20:  Argentina  | Export  | 120100  | Soya beans  | 2024  | cite2†World | 1,806,213.92  | 4,145,170,000  | Kg
+L21:  Argentina  | Export  | 120100  | Soya beans  | 2024  | cite3†China | 1,692,736.28  | 3,918,800,000  | Kg
+L22:  Argentina  | Export  | 120100  | Soya beans  | 2024  | cite4†United States | 68,706.72  | 127,137,000  | Kg
+L23:  Argentina  | Export  | 120100  | Soya beans  | 2024  | cite5†Chile | 30,133.99  | 71,376,900  | Kg
+L24:  Argentina  | Export  | 120100  | Soya beans  | 2024  | cite6†Peru | 9,454.30  | 21,300,000  | Kg
+L25:  Argentina  | Export  | 120100  | Soya beans  | 2024  | cite7†Uruguay | 5,163.07  | 6,546,310  | Kg
+L26:  Argentina  | Export  | 120100  | Soya beans  | 2024  | cite8†South Africa | 19.57  | 7,380  | Kg
+L27: HS Nomenclature used HS 1988/92 (H0)
+L28: HS Code 120100: Soya beans
+L29: Please note: Exports is gross exports and Imports is gross imports
+L30:
+L31:   * cite9†About L32:   * .
+L33:   * cite10†Contact L34:   * .
+L35:   * cite11†Usage Conditions L36:   * .
+L37:   * cite12†Legal†www.worldbank.org L38:   * .
+L39:   * cite13†Data Providers L40:   * .
+L41:   * Page Refreshed : Oct-5-2026 21:41 ET
+L42: Partners
+L43:   * cite14†ITC†www.intracen.org L44:   * .
+L45:   * cite15†UNCTAD†unctad.org L46:   * .
+L47:   * cite16†UNSTATS†unstats.un.org L48:   * .
+L49:   * cite17†World Trade Organization†www.wto.org L50:   * .
+L51:   * cite18†World Bank†www.worldbank.org --------------------------------------------------------------------------------
+Argentina Soya beans imports by country | 2024 | Data (https://wits.worldbank.org/trade/comtrade/en/country/ARG/year/2024/tradeflow/Imports/partner/ALL/product/120100)
+citeturn8view1 [wordlim: 200] Crawled: last week; Content type: text/html; Source: open({"ref_id":"https://wits.worldbank.org/trade/comtrade/en/country/ARG/year/2024/tradeflow/Imports/partner/ALL/product/120100","lineno":null}); Total lines: 55
+L0: # Argentina Soya beans imports by country
+L1:
+L2: in 2024
+L3:
+L4: Share
+L5:
+L6:   * cite0†Facebook L7:   * cite0†Twitter L8:   * cite0†Linkedin L9:   * cite0†Google Plus L10:   * cite0†Reddit L11:   * cite0†Stumble Upon L12:   * cite0†Delicious L13:   * cite0†Email L14:
+L15: Change selection (Reporter, Year, Trade Flow, Partner and HS 6 digit Product)
+L16: Argentina imports of Soya beans was $3,230,408.62K and quantity 7,580,770,000Kg.
+L17: Argentina imported Soya beans from Paraguay ($2,895,880.16K , 6,804,010,000 Kg), Uruguay ($203,802.20K , 484,802,000 Kg), Brazil ($102,039.89K , 234,462,000 Kg), Bolivia ($23,277.84K , 54,461,200 Kg), United States ($5,391.43K , 3,035,590 Kg).
+L18: cite1†Soya beans exports by country in 2024 L19: Reporter  | TradeFlow  | ProductCode  | Product Description  | Year  | Partner  | Trade Value 1000USD  | Quantity  | Quantity Unit
+L20:  Argentina  | Import  | 120100  | Soya beans  | 2024  | cite2†World | 3,230,408.62  | 7,580,770,000  | Kg
+L21:  Argentina  | Import  | 120100  | Soya beans  | 2024  | cite3†Paraguay | 2,895,880.16  | 6,804,010,000  | Kg
+L22:  Argentina  | Import  | 120100  | Soya beans  | 2024  | cite4†Uruguay | 203,802.20  | 484,802,000  | Kg
+L23:  Argentina  | Import  | 120100  | Soya beans  | 2024  | cite5†Brazil | 102,039.89  | 234,462,000  | Kg
+L24:  Argentina  | Import  | 120100  | Soya beans  | 2024  | cite6†Bolivia | 23,277.84  | 54,461,200  | Kg
+L25:  Argentina  | Import  | 120100  | Soya beans  | 2024  | cite7†United States | 5,391.43  | 3,035,590  | Kg
+L26:  Argentina  | Import  | 120100  | Soya beans  | 2024  | cite8†Canada | 11.28  | 274  | Kg
+L27:  Argentina  | Import  | 120100  | Soya beans  | 2024  | cite9†Argentina | 3.28  | 94  | Kg
+L28:  Argentina  | Import  | 120100  | Soya beans  | 2024  | cite10†Italy | 2.18  | 500  | Kg
+L29:  Argentina  | Import  | 120100  | Soya beans  | 2024  | cite11†Belgium | 0.37  | 7  | Kg
+L30: HS Nomenclature used HS 1988/92 (H0)
+L31: HS Code 120100: Soya beans
+L32: Please note: Exports is gross exports and Imports is gross imports
+L33:
+L34:   * cite12†About L35:   * .
+L36:   * cite13†Contact L37:   * .
+L38:   * cite14†Usage Conditions L39:   * .
+L40:   * cite15†Legal†www.worldbank.org L41:   * .
+L42:   * cite16†Data Providers L43:   * .
+L44:   * Page Refreshed : Oct-4-2026 19:07 ET
+L45: Partners
+L46:   * cite17†ITC†www.intracen.org L47:   * .
+L48:   * cite18†UNCTAD†unctad.org L49:   * .
+L50:   * cite19†UNSTATS†unstats.un.org L51:   * .
+L52:   * cite20†World Trade Organization†www.wto.org L53:   * .
+L54:   * cite21†World Bank†www.worldbank.org --------------------------------------------------------------------------------
+Paraguay Soya beans imports by country | 2024 | Data (https://wits.worldbank.org/trade/comtrade/en/country/PRY/year/2024/tradeflow/Imports/partner/ALL/product/120100)
+citeturn8view2 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"https://wits.worldbank.org/trade/comtrade/en/country/PRY/year/2024/tradeflow/Imports/partner/ALL/product/120100","lineno":null}); Total lines: 51
+L0: # Paraguay Soya beans imports by country
+L1:
+L2: in 2024
+L3:
+L4: Share
+L5:
+L6:   * cite0†Facebook L7:   * cite0†Twitter L8:   * cite0†Linkedin L9:   * cite0†Google Plus L10:   * cite0†Reddit L11:   * cite0†Stumble Upon L12:   * cite0†Delicious L13:   * cite0†Email L14:
+L15: Change selection (Reporter, Year, Trade Flow, Partner and HS 6 digit Product)
+L16: Paraguay imports of Soya beans was $7,281.19K and quantity 6,277,080Kg.
+L17: Paraguay imported Soya beans from Brazil ($6,945.29K , 5,792,800 Kg), Argentina ($269.69K , 335,761 Kg), Bolivia ($54.86K , 138,500 Kg), Uruguay ($11.33K , 10,018 Kg), Chile ($0.01K , 0 Kg).
+L18: cite1†Soya beans exports by country in 2024 L19: Reporter  | TradeFlow  | ProductCode  | Product Description  | Year  | Partner  | Trade Value 1000USD  | Quantity  | Quantity Unit
+L20:  Paraguay  | Import  | 120100  | Soya beans  | 2024  | cite2†World | 7,281.19  | 6,277,080  | Kg
+L21:  Paraguay  | Import  | 120100  | Soya beans  | 2024  | cite3†Brazil | 6,945.29  | 5,792,800  | Kg
+L22:  Paraguay  | Import  | 120100  | Soya beans  | 2024  | cite4†Argentina | 269.69  | 335,761  | Kg
+L23:  Paraguay  | Import  | 120100  | Soya beans  | 2024  | cite5†Bolivia | 54.86  | 138,500  | Kg
+L24:  Paraguay  | Import  | 120100  | Soya beans  | 2024  | cite6†Uruguay | 11.33  | 10,018  | Kg
+L25:  Paraguay  | Import  | 120100  | Soya beans  | 2024  | cite7†Chile | 0.01  | 0  | Kg
+L26: HS Nomenclature used HS 1988/92 (H0)
+L27: HS Code 120100: Soya beans
+L28: Please note: Exports is gross exports and Imports is gross imports
+L29:
+L30:   * cite8†About L31:   * .
+L32:   * cite9†Contact L33:   * .
+L34:   * cite10†Usage Conditions L35:   * .
+L36:   * cite11†Legal†www.worldbank.org L37:   * .
+L38:   * cite12†Data Providers L39:   * .
+L40:   * Page Refreshed : Oct-15-2026 23:41 ET
+L41: Partners
+L42:   * cite13†ITC†www.intracen.org L43:   * .
+L44:   * cite14†UNCTAD†unctad.org L45:   * .
+L46:   * cite15†UNSTATS†unstats.un.org L47:   * .
+L48:   * cite16†World Trade Organization†www.wto.org L49:   * .
+L50:   * cite17†World Bank†www.worldbank.org

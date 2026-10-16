@@ -1,0 +1,6 @@
+{
+  "url": "https://wits.worldbank.org/trade/comtrade/en/country/BRA/year/2023/tradeflow/Exports/partner/ALL/product/120100",
+  "method": "ordinary unauthenticated GET",
+  "at": "2026-10-16T03:39:36.697932+00:00",
+  "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+}

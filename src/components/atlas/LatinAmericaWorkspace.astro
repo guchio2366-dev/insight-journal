@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import AtlasRegionNavigation from './AtlasRegionNavigation.astro';
 import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
 import LatinAgricultureNavigation from './LatinAgricultureNavigation.astro';
+import LatinForestryStatistics from './LatinForestryStatistics.astro';
 import {withBase} from '../../lib/urls';
 import '../../styles/atlas-latin-learning.css';
 import '../../styles/atlas-latin-review.css';
@@ -32,7 +33,7 @@ const defaultSection=sections[0][0];
    <details class="latin-base-map-entry"><summary>基礎地図・既存の詳しい資料</summary><a href={withBase('/atlas/latin-america/base-map/')}>国境・河川・既存の解説を読む</a></details>
   </div>
  </AtlasWorkspaceFrame>
- <div class="latin-below-workspace" data-latin-below-workspace>   {Astro.slots.has('statistics')?<section class="latin-statistics" aria-label="地図の値を確かめる"><slot name="statistics" /></section>:null}
+ <div class="latin-below-workspace" data-latin-below-workspace>   {Astro.slots.has('statistics')?<section class="latin-statistics" aria-label="地図の値を確かめる"><slot name="statistics" />{isForestry&&<LatinForestryStatistics/>}</section>:null}
    {Astro.slots.has('sources')?<footer class="latin-sources"><slot name="sources" /></footer>:null}
 </div>
  </article>
