@@ -1,0 +1,13 @@
+--- a/src/scripts/atlas-agro-existing-statistics.ts
++++ b/src/scripts/atlas-agro-existing-statistics.ts
+@@ -18,6 +18,10 @@
+  const product=agroExistingTradeProduct(seriesId);
+  if(document.querySelector('[data-east-farm-foundations]')&&product){
+   const {renderEastTrade}=await import('./atlas-east-agri-statistics.ts');
++  if(showQuantities&&country){
++   const {renderEastExportQuantityReference}=await import('./atlas-east-export-quantities.ts');
++   renderEastExportQuantityReference(trade,product,country);
++  }
+   heading(trade,'確認済みの域外相手：2023年・金額','2024年のFAOSTAT生産量とは年・単位・加工段階が異なります。国選択の表も東アジア域内相手を除いた範囲です。');
+   if(product==='coniferous-roundwood')heading(trade,'針葉樹丸太の別製品参考','HS440320だけの金額構成です。燃料材を含むFAO丸太総量の相手構成ではありません。');
+   renderEastTrade(trade,product,country||undefined);

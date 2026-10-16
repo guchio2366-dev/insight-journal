@@ -42,6 +42,7 @@ export function renderEastAsiaFarmFoundations(root:HTMLElement,region:AsiaRegion
  const section=root.querySelector<HTMLElement>('[data-east-farm-foundations]');if(!section)return;
  section.hidden=!active||region!=='east-asia';if(section.hidden)return;const candidates=section.querySelector<HTMLElement>('.priority');if(candidates)candidates.hidden=topic==='forest';
  const code=country?.code,forest=section.querySelector<HTMLElement>('[data-east-forest-flows]')!,destinations=section.querySelector<HTMLElement>('[data-east-export-partners]')!,share=section.querySelector<HTMLElement>('[data-east-world-share]')!;
+ const selectedQuantities=Boolean(code&&code!=='JPN'&&['rice','wheat','maize','soybean','forest'].includes(topic??''));
  forest.replaceChildren();destinations.replaceChildren();share.replaceChildren();
  const japanWheat=topic==='wheat'&&code==='JPN';
  const heading=section.querySelector<HTMLElement>('[data-east-foundations-title]'),lead=section.querySelector<HTMLElement>('[data-east-foundations-lead]');
@@ -57,11 +58,11 @@ export function renderEastAsiaFarmFoundations(root:HTMLElement,region:AsiaRegion
   if(heading)heading.textContent='農畜産の供給・域外貿易・食料自給';
   if(lead)lead.textContent='中国本土・日本・韓国・北朝鮮・モンゴル・台湾に対応する6区分を統計の対象とします。2023年の確認済み相手国表から範囲内取引を除きます。未収録の報告区分を含む地域全体の額は算出せず、供給用途とカロリーの不足も分けて示します。';
   section.querySelector<HTMLElement>('[data-east-supply-title]')!.textContent='主要品目の供給と用途';
-  section.querySelector<HTMLElement>('[data-east-partner-title]')!.textContent='主要品目の域外輸出入相手';
+  section.querySelector<HTMLElement>('[data-east-partner-title]')!.textContent=selectedQuantities?'主要品目の輸出先数量・域外輸出入相手（金額）':'主要品目の域外輸出入相手';
   section.querySelector<HTMLElement>('[data-east-share-title]')!.textContent='品目群のカロリー構成と自給状況';
   renderEastFoodInputAudit(forest,share,topic??'overview',code);
-  for(const product of topic==='overview'||!topic?['rice','wheat','maize','soybean']:[topic])renderEastTrade(destinations,product,code);
-  p(destinations,'相手国の円はHS商品の貿易額です。食料需給表の原料換算量・食用量へ合算しません。');
+  for(const product of topic==='overview'||!topic?['rice','wheat','maize','soybean']:[topic])renderEastTrade(destinations,product,code,selectedQuantities);
+  p(destinations,selectedQuantities?'国別対世界の輸出数量参考と、東アジア域内相手を除いた既存の輸出入金額は別の分母です。食料需給表の原料換算量・食用量へ合算しません。':'相手国の円はHS商品の貿易額です。食料需給表の原料換算量・食用量へ合算しません。');
   forest.append(el('a','FAOSTAT 食料需給表'));forest.querySelector('a')!.href='https://www.fao.org/faostat/en/#data/FBS';
   if(otherSources)otherSources.hidden=true;
   return;
@@ -69,7 +70,7 @@ export function renderEastAsiaFarmFoundations(root:HTMLElement,region:AsiaRegion
  if(heading)heading.textContent='森林面積と木材の生産・貿易';
  if(lead)lead.textContent='中国・日本・韓国・北朝鮮・モンゴル・台湾の公表値を示します。森林の分布・面積と、丸太・製材の体積、木材・木製品の貿易額は別の指標です。未収録は0ではありません。';
  section.querySelector<HTMLElement>('[data-east-supply-title]')!.textContent='丸太・製材の生産と輸出入';
- section.querySelector<HTMLElement>('[data-east-partner-title]')!.textContent='原木・製材の域外輸出入相手';
+ section.querySelector<HTMLElement>('[data-east-partner-title]')!.textContent=selectedQuantities?'原木・製材の輸出先数量・域外輸出入相手（金額）':'原木・製材の域外輸出入相手';
  section.querySelector<HTMLElement>('[data-east-share-title]')!.textContent='森林面積と世界比';
  const selected=code?data.countries.filter(key=>key===code):data.countries;
  for(const key of selected){
@@ -81,8 +82,8 @@ export function renderEastAsiaFarmFoundations(root:HTMLElement,region:AsiaRegion
    for(const [field,name] of [['production','生産'],['imports','輸入'],['exports','輸出']] as const){const record=values[field];if(record)addBar(forest,name,record.value,max,'m3');else p(forest,`${name}：未掲載`);}
   }
  }
- renderEastTrade(destinations,'sawnwood',code);
- renderEastTrade(destinations,'coniferous-roundwood',code);
+ renderEastTrade(destinations,'sawnwood',code,selectedQuantities);
+ renderEastTrade(destinations,'coniferous-roundwood',code,selectedQuantities);
  p(forest,'FAOの中国は中国本土（area 41）、台湾は台湾区分（area 214）です。中国合計区分と台湾を重複させていません。');
  p(forest,'FAOSTAT Forestry。生産・輸入・輸出は別の量で、在庫変動を含む国内需給ではありません。資料区分Aは公表値、Eは推計、Xは国際機関等の資料です。国別の値・区分は出典データで確認できます。');
  p(destinations,'製材HS4407の額を、FAOの丸太・製材の体積へ足しません。丸太HS4403およびHS44全体の全相手表は未収録です。');

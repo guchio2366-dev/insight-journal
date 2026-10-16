@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-16",
+  "policy": "Normal public publisher tables and permitted alternative official publications only. No credentials, proxy, token issuance, paid service, access-control bypass or denied-file mirror retrieval.",
+  "verifiedPublicTables": [
+    {"url": "https://wits.worldbank.org/trade/comtrade/en/country/KOR/year/2023/tradeflow/Exports/partner/ALL/product/120100", "result": "H0 120100 Soya beans, 2023, gross exports, World 49252 Kg, all 13 partners. Retained 2026-10-13 rows agree; not a new raw download."},
+    {"url": "https://wits.worldbank.org/trade/comtrade/en/country/KOR/year/2023/tradeflow/Imports/partner/ALL/product/120100", "result": "H0 120100 Soya beans, 2023, gross imports, World 1297860000 Kg. Retained World agrees; not an actual-use or stock series."},
+    {"url": "https://wits.worldbank.org/trade/comtrade/en/country/CHN/year/2023/tradeflow/Exports/partner/ALL/product/1001", "result": "Wheat and meslin; World 16508700 Kg. Broader than raw wheat, no FAO production subtraction."},
+    {"url": "https://wits.worldbank.org/trade/comtrade/en/country/CHN/year/2023/tradeflow/Exports/partner/ALL/product/1005", "result": "Maize (corn); World 8648030 Kg. Quantity ranking differs from value ranking."},
+    {"url": "https://wits.worldbank.org/trade/comtrade/en/country/CHN/year/2023/tradeflow/Exports/partner/ALL/product/1006", "result": "Rice; World 1625890000 Kg. No paddy-to-milled conversion inferred."},
+    {"url": "https://wits.worldbank.org/trade/comtrade/en/country/CHN/year/2023/tradeflow/Exports/partner/ALL/product/4407", "result": "Sawn/chipped/sliced/peeled wood exceeding 6mm. Kept separate from FAO sawnwood totals and raw logs."},
+    {"url": "https://wits.worldbank.org/trade/comtrade/en/country/OAS/year/2023/tradeflow/Exports/partner/ALL/product/120100", "result": "Other Asia, nes; Soya beans; 53959 Kg. Original reporter label retained; no new FAO-TWN correspondence claimed."}
+  ],
+  "alternativeOfficialPublications": [
+    {"url": "https://data.un.org/Data.aspx?d=FAO&f=itemCode%3A2511", "result": "Public FAO Wheat and products balance table is readable, including stock and use elements. Latest selectable year 2021; insufficient to join 2023 trade or 2024/25 WASDE. No old-year fallback adopted."},
+    {"url": "https://www.fao.org/forestry/statistics/data/en", "result": "Public 2024 global summary and rounded major-country shares readable. Roundwood/sawnwood m3 and wood pulp tonnes distinguished. Country-specific P/I/X, unrounded matching World and destination matrix not provided here; shares not multiplied by World to fabricate country output."},
+    {"url": "https://www.fao.org/media/docs/statisticslibraries/questionnaires/pulp-and-paper-capacities/pulp-and-paper-capacities-survey-definitions.pdf?sfvrsn=ca5dd57c_1", "result": "Independent official capacity survey definition readable. Capacity is potential output, pulp basis air-dry with 10 percent moisture; paper pulp, other-fibre pulp and dissolving pulp distinguished. Capacity is not substituted for actual production."},
+    {"url": "https://www.fao.org/forestry/statistics/classifications/en", "result": "Official links to JFSQ and capacity definitions verified."},
+    {"url": "https://www.fao.org/faostat/en/#data/FBS", "result": "Web reader returned an empty SPA body, not the requested numeric rows; not evidence that data do not exist."}
+  ],
+  "failedAcquisitions": [
+    {"action": "Python urllib public catalogue read, timeout 30 seconds", "target": "https://bulks-faostat.fao.org/production/datasets_E.json", "result": "URLError: Tunnel connection failed: 403 Forbidden", "boundary": "Connection tunnel; origin HTTP status not established", "repeated": false},
+    {"action": "Follow official JFSQ definitions link from FAO classifications page", "target": "https://openknowledge.fao.org/handle/20.500.14283/cb4108en", "result": "Web reader reported 403 Forbidden", "repeated": false},
+    {"action": "Read former official forest statistics page", "target": "https://www.fao.org/forestry/statistics/80570/en/", "result": "404 Not Found; current independent data and classification pages investigated"},
+    {"action": "Follow official classification publication link", "target": "https://www.fao.org/forestry/statistics/classifications/en (Classification of forest products 2022 link)", "result": "Web reader Internal Error; no publication bytes retained or same-file mirror retried"},
+    {"action": "Check independent UNdata public forest product tables", "targets": ["https://data.un.org/Data.aspx?d=FAO&f=itemCode%3A1875%3BcountryCode%3A41", "https://data.un.org/Data.aspx?d=FAO&f=itemCode%3A1856%3BcountryCode%3A41"], "result": "Web reader: URL not accessible; no numeric observations or product correspondence established, no zero inferred"}
+  ],
+  "retainedInputs": {
+    "newRawNumericDownloads": 0,
+    "nationalExportTablesReused": 18,
+    "partnerRowsRetained": 447,
+    "tablesWithCompleteWorldAndPartnerQuantities": 16,
+    "incomplete": ["KOR-Export-1005: World and United Arab Emirates quantities missing", "KOR-Export-440320: World and Singapore quantities missing"],
+    "sourceHashes": "src/data/atlas/east-asia-export-quantities.json records[].source; Korean production/trade in src/data/atlas/agro-east-quantity-flow.json"
+  }
+}
