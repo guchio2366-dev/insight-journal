@@ -1,0 +1,654 @@
+{
+  "head": "58be943225b7fdef8bb68392c7e377571305007d",
+  "dirty": false,
+  "viewports": [
+    {
+      "width": 1896,
+      "height": 996
+    },
+    {
+      "width": 1280,
+      "height": 665
+    }
+  ],
+  "plannedCases": 22,
+  "sandbox": true,
+  "deviceScaleFactor": 1.5,
+  "status": "passed",
+  "cases": [
+    {
+      "name": "overview",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "metrics": {
+        "columns": [],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 0,
+        "mapBottom": 816.03125
+      },
+      "file": "1896x996-overview.png"
+    },
+    {
+      "name": "soybean",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "metrics": {
+        "columns": [
+          {
+            "x": 320,
+            "y": 1651.6875,
+            "w": 509.328125
+          },
+          {
+            "x": 843.328125,
+            "y": 1651.6875,
+            "w": 509.328125
+          },
+          {
+            "x": 1366.65625,
+            "y": 1651.6875,
+            "w": 509.34375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 1518.109375,
+        "mapBottom": 816.03125
+      },
+      "file": "1896x996-soybean.png"
+    },
+    {
+      "name": "canola",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "metrics": {
+        "columns": [
+          {
+            "x": 320,
+            "y": 1314.59375,
+            "w": 509.328125
+          },
+          {
+            "x": 843.328125,
+            "y": 1314.59375,
+            "w": 509.328125
+          },
+          {
+            "x": 1366.65625,
+            "y": 1314.59375,
+            "w": 509.34375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 1181.015625,
+        "mapBottom": 815
+      },
+      "file": "1896x996-canola.png"
+    },
+    {
+      "name": "corn",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "metrics": {
+        "columns": [
+          {
+            "x": 320,
+            "y": 1683.875,
+            "w": 509.328125
+          },
+          {
+            "x": 843.328125,
+            "y": 1683.875,
+            "w": 509.328125
+          },
+          {
+            "x": 1366.65625,
+            "y": 1683.875,
+            "w": 509.34375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 1518.109375,
+        "mapBottom": 816.03125
+      },
+      "file": "1896x996-corn.png"
+    },
+    {
+      "name": "lentils",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "metrics": {
+        "columns": [
+          {
+            "x": 320,
+            "y": 1651.6875,
+            "w": 509.328125
+          },
+          {
+            "x": 843.328125,
+            "y": 1651.6875,
+            "w": 509.328125
+          },
+          {
+            "x": 1366.65625,
+            "y": 1651.6875,
+            "w": 509.34375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 1518.109375,
+        "mapBottom": 816.03125
+      },
+      "file": "1896x996-lentils.png"
+    },
+    {
+      "name": "wheat",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "metrics": {
+        "columns": [
+          {
+            "x": 320,
+            "y": 1496.15625,
+            "w": 509.328125
+          },
+          {
+            "x": 843.328125,
+            "y": 1496.15625,
+            "w": 509.328125
+          },
+          {
+            "x": 1366.65625,
+            "y": 1496.15625,
+            "w": 509.34375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 1330.390625,
+        "mapBottom": 815
+      },
+      "file": "1896x996-wheat.png"
+    },
+    {
+      "name": "beef",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "metrics": {
+        "columns": [
+          {
+            "x": 320,
+            "y": 1472.71875,
+            "w": 509.328125
+          },
+          {
+            "x": 843.328125,
+            "y": 1472.71875,
+            "w": 509.328125
+          },
+          {
+            "x": 1366.65625,
+            "y": 1472.71875,
+            "w": 509.34375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 1306.953125,
+        "mapBottom": 903.890625
+      },
+      "file": "1896x996-beef.png"
+    },
+    {
+      "name": "forest-overview",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "metrics": {
+        "columns": [],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 0,
+        "mapBottom": 822.171875
+      },
+      "file": "1896x996-forest-overview.png"
+    },
+    {
+      "name": "roundwood",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "metrics": {
+        "columns": [
+          {
+            "x": 320,
+            "y": 1320.53125,
+            "w": 509.328125
+          },
+          {
+            "x": 843.328125,
+            "y": 1320.53125,
+            "w": 509.328125
+          },
+          {
+            "x": 1366.65625,
+            "y": 1320.53125,
+            "w": 509.34375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 1186.953125,
+        "mapBottom": 822.171875
+      },
+      "file": "1896x996-roundwood.png"
+    },
+    {
+      "name": "sawnwood",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "metrics": {
+        "columns": [
+          {
+            "x": 320,
+            "y": 1320.53125,
+            "w": 509.328125
+          },
+          {
+            "x": 843.328125,
+            "y": 1320.53125,
+            "w": 509.328125
+          },
+          {
+            "x": 1366.65625,
+            "y": 1320.53125,
+            "w": 509.34375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 1186.953125,
+        "mapBottom": 822.171875
+      },
+      "file": "1896x996-sawnwood.png"
+    },
+    {
+      "name": "pulp",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "metrics": {
+        "columns": [
+          {
+            "x": 320,
+            "y": 1320.53125,
+            "w": 509.328125
+          },
+          {
+            "x": 843.328125,
+            "y": 1320.53125,
+            "w": 509.328125
+          },
+          {
+            "x": 1366.65625,
+            "y": 1320.53125,
+            "w": 509.34375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 1186.953125,
+        "mapBottom": 822.171875
+      },
+      "file": "1896x996-pulp.png"
+    },
+    {
+      "name": "overview",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "metrics": {
+        "columns": [],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 0,
+        "mapBottom": 589
+      },
+      "file": "1280x665-overview.png"
+    },
+    {
+      "name": "soybean",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "metrics": {
+        "columns": [
+          {
+            "x": 279.1875,
+            "y": 1510.046875,
+            "w": 317.59375
+          },
+          {
+            "x": 610.78125,
+            "y": 1510.046875,
+            "w": 317.609375
+          },
+          {
+            "x": 942.390625,
+            "y": 1510.046875,
+            "w": 317.59375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 1376.46875,
+        "mapBottom": 589
+      },
+      "file": "1280x665-soybean.png"
+    },
+    {
+      "name": "canola",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "metrics": {
+        "columns": [
+          {
+            "x": 279.1875,
+            "y": 1100.1875,
+            "w": 317.59375
+          },
+          {
+            "x": 610.78125,
+            "y": 1100.1875,
+            "w": 317.609375
+          },
+          {
+            "x": 942.390625,
+            "y": 1100.1875,
+            "w": 317.59375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 966.609375,
+        "mapBottom": 559
+      },
+      "file": "1280x665-canola.png"
+    },
+    {
+      "name": "corn",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "metrics": {
+        "columns": [
+          {
+            "x": 279.1875,
+            "y": 1542.234375,
+            "w": 317.59375
+          },
+          {
+            "x": 610.78125,
+            "y": 1542.234375,
+            "w": 317.609375
+          },
+          {
+            "x": 942.390625,
+            "y": 1542.234375,
+            "w": 317.59375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 1376.46875,
+        "mapBottom": 589
+      },
+      "file": "1280x665-corn.png"
+    },
+    {
+      "name": "lentils",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "metrics": {
+        "columns": [
+          {
+            "x": 279.1875,
+            "y": 1510.046875,
+            "w": 317.59375
+          },
+          {
+            "x": 610.78125,
+            "y": 1510.046875,
+            "w": 317.609375
+          },
+          {
+            "x": 942.390625,
+            "y": 1510.046875,
+            "w": 317.59375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 1376.46875,
+        "mapBottom": 589
+      },
+      "file": "1280x665-lentils.png"
+    },
+    {
+      "name": "wheat",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "metrics": {
+        "columns": [
+          {
+            "x": 279.1875,
+            "y": 1340.9375,
+            "w": 317.59375
+          },
+          {
+            "x": 610.78125,
+            "y": 1340.9375,
+            "w": 317.609375
+          },
+          {
+            "x": 942.390625,
+            "y": 1340.9375,
+            "w": 317.59375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 1175.171875,
+        "mapBottom": 559
+      },
+      "file": "1280x665-wheat.png"
+    },
+    {
+      "name": "beef",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "metrics": {
+        "columns": [
+          {
+            "x": 279.1875,
+            "y": 1236.515625,
+            "w": 317.59375
+          },
+          {
+            "x": 610.78125,
+            "y": 1236.515625,
+            "w": 317.609375
+          },
+          {
+            "x": 942.390625,
+            "y": 1236.515625,
+            "w": 317.59375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 1070.75,
+        "mapBottom": 647.890625
+      },
+      "file": "1280x665-beef.png"
+    },
+    {
+      "name": "forest-overview",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "metrics": {
+        "columns": [],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 0,
+        "mapBottom": 627.359375
+      },
+      "file": "1280x665-forest-overview.png"
+    },
+    {
+      "name": "roundwood",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "metrics": {
+        "columns": [
+          {
+            "x": 279.1875,
+            "y": 1160.71875,
+            "w": 317.59375
+          },
+          {
+            "x": 610.78125,
+            "y": 1160.71875,
+            "w": 317.609375
+          },
+          {
+            "x": 942.390625,
+            "y": 1160.71875,
+            "w": 317.59375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 1027.140625,
+        "mapBottom": 627.359375
+      },
+      "file": "1280x665-roundwood.png"
+    },
+    {
+      "name": "sawnwood",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "metrics": {
+        "columns": [
+          {
+            "x": 279.1875,
+            "y": 1160.71875,
+            "w": 317.59375
+          },
+          {
+            "x": 610.78125,
+            "y": 1160.71875,
+            "w": 317.609375
+          },
+          {
+            "x": 942.390625,
+            "y": 1160.71875,
+            "w": 317.59375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 1027.140625,
+        "mapBottom": 627.359375
+      },
+      "file": "1280x665-sawnwood.png"
+    },
+    {
+      "name": "pulp",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "metrics": {
+        "columns": [
+          {
+            "x": 279.1875,
+            "y": 1160.71875,
+            "w": 317.59375
+          },
+          {
+            "x": 610.78125,
+            "y": 1160.71875,
+            "w": 317.609375
+          },
+          {
+            "x": 942.390625,
+            "y": 1160.71875,
+            "w": 317.59375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false,
+        "statisticsY": 1027.140625,
+        "mapBottom": 627.359375
+      },
+      "file": "1280x665-pulp.png"
+    }
+  ],
+  "errors": [],
+  "sourceIdentity": {
+    "mode": "exact-commit",
+    "baseHead": "58be943225b7fdef8bb68392c7e377571305007d",
+    "buildIdentity": "58be943225b7fdef8bb68392c7e377571305007d",
+    "workingTreeDirty": false,
+    "applicationInputsDirty": false,
+    "inputFiles": 3593,
+    "workingTreeSha256": "43dcbba00136b71738aeaac9282049f8d3aa797b588b257082721a0acda347be",
+    "publishedRelease": false
+  },
+  "runtimeSandbox": {
+    "browserVersion": "151.0.7922.173",
+    "status": "Sandbox Status\nLayer 1 Sandbox\tNamespace\nPID namespaces\tYes\nNetwork namespaces\tYes\nSeccomp-BPF sandbox\tYes\nSeccomp-BPF sandbox supports TSYNC\tYes\nPtrace Protection with Yama LSM (Broker)\tNo\nPtrace Protection with Yama LSM (Non-broker)\tNo\n\nYou are adequately sandboxed.",
+    "verified": true
+  }
+}

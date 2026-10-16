@@ -4,16 +4,16 @@ async function compile(name,call){return (await build({stdin:{contents:`import {
 const code=await compile('forestry',"initCanadaForestry(document.querySelector('[data-canada-forestry]'));"),natureCode=await compile('nature',"initCanadaNature(document.querySelector('[data-canada-nature]'));");
 async function page(search='',interactive=false,patch){const w=new Window({url:`https://example.com/insight-journal/${folder}/agriculture/forestry/${search}`,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:interactive,suppressInsecureJavaScriptEnvironmentWarning:true}});w.document.write((await readFile(`dist/${folder}/agriculture/forestry/index.html`,'utf8')).replace(/<script(?![^>]*type="application\/json")[^>]*>[\s\S]*?<\/script>/g,''));if(patch){const el=w.document.querySelector('[data-forestry-config]'),cfg=JSON.parse(el.textContent);patch(cfg);el.textContent=JSON.stringify(cfg);}if(interactive)w.eval(code);return w;}
 test('Activity selection, clearing and a nature return preserve the source-backed choice without repeated history',async()=>{
- const w=await page('?forestActivity=prince-george-harvest',true);let nature;
+ const w=await page('?forestActivity=prince-george-harvest&forestProduct=sawnwood',true);let nature;
  try{
   const q=s=>w.document.querySelector(s),select=id=>q('[data-canada-forestry]').dispatchEvent(new w.CustomEvent('canada-forestry-activity',{detail:{id}}));
   assert.equal(q('[data-forestry-activity-reading]').hidden,false);const original=w.history.length;
   select('prince-george-harvest');assert.equal(w.history.length,original);select('windsor-paper');assert.equal(w.history.length,original+1);
   select('unverified');assert.equal(w.history.length,original+1);assert.match(q('[data-forestry-activity-title]').textContent,/紙.*ウィンザー/);
-  const url=new URL(q('[data-forestry-nature-link]').href);assert.equal(new URLSearchParams(url.searchParams.get('forestryReturn')).get('forestActivity'),'windsor-paper');
+  const url=new URL(q('[data-forestry-nature-link]').href);assert.equal(new URLSearchParams(url.searchParams.get('forestryReturn')).get('forestActivity'),'windsor-paper');assert.equal(new URLSearchParams(url.searchParams.get('forestryReturn')).get('forestProduct'),'sawnwood');
   nature=new Window({url:url.href,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true,suppressInsecureJavaScriptEnvironmentWarning:true}});
   nature.document.write((await readFile(`dist/${folder}/nature/index.html`,'utf8')).replace(/<script(?![^>]*type="application\/json")[^>]*>[\s\S]*?<\/script>/g,''));nature.eval(natureCode);
-  const back=new URL(nature.document.querySelector('[data-canada-forestry-return]').href);assert.equal(back.origin,url.origin);assert.equal(back.searchParams.get('forestActivity'),'windsor-paper');
+  const back=new URL(nature.document.querySelector('[data-canada-forestry-return]').href);assert.equal(back.origin,url.origin);assert.equal(back.searchParams.get('forestActivity'),'windsor-paper');assert.equal(back.searchParams.get('forestProduct'),'sawnwood');
   q('[data-forestry-activity-clear]').click();assert.equal(q('[data-forestry-activity-reading]').hidden,true);assert.equal(new URLSearchParams(new URL(q('[data-forestry-nature-link]').href).searchParams.get('forestryReturn')).has('forestActivity'),false);
  }finally{await w.happyDOM.close();if(nature)await nature.happyDOM.close();}
 });

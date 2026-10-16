@@ -1,0 +1,175 @@
+{
+  "checkedOn": "2026-10-16",
+  "baseCommit": "3fbb4c957c21685bddbf8148a95a2a03ba210553",
+  "successfulPublicTables": [
+    {
+      "publisher": "USDA FAS",
+      "report": "GAIN MX2026-0018",
+      "url": "https://apps.fas.usda.gov/newgainapi/api/Report/DownloadReportByFileName?fileName=Grain+and+Feed+Annual_Mexico+City_Mexico_MX2026-0018",
+      "method": "web official PDF text",
+      "adopted": "2024/2025 USDA Official national wheat and sorghum",
+      "originalPdfDownloaded": false
+    },
+    {
+      "publisher": "World Bank WITS / UN Comtrade",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/100590",
+      "method": "web official public table",
+      "adopted": "2024 H0 gross exports, World and all returned partners; numerical transcription",
+      "originalHtmlDownloaded": false
+    },
+    {
+      "publisher": "World Bank WITS / UN Comtrade",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/520100",
+      "method": "web official public table",
+      "adopted": "2024 H0 gross exports, World and all returned partners; numerical transcription",
+      "originalHtmlDownloaded": false
+    },
+    {
+      "publisher": "World Bank WITS / UN Comtrade",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/090111",
+      "method": "web official public table",
+      "adopted": "2024 H0 gross exports, World and all returned partners; numerical transcription",
+      "originalHtmlDownloaded": false
+    },
+    {
+      "publisher": "World Bank WITS / UN Comtrade",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/440710",
+      "method": "web official public table",
+      "adopted": "2024 H0 gross exports, World and all returned partners; numerical transcription",
+      "originalHtmlDownloaded": false
+    },
+    {
+      "publisher": "FAO",
+      "url": "https://www.fao.org/forestry/statistics/data/en",
+      "adopted": "Forest product definitions; not national production values"
+    },
+    {
+      "publisher": "SEMARNAT",
+      "url": "https://anuarios.semarnat.gob.mx/index.php/indicadores-economicos/",
+      "adopted": "No numeric observation; landing page mixes years and roll-equivalent units"
+    },
+    {
+      "publisher": "SEMARNAT",
+      "url": "https://anuarios.semarnat.gob.mx/index.php/descargas/",
+      "adopted": "Official workbook locations found"
+    }
+  ],
+  "failedActions": [
+    {
+      "action": "Python urllib ordinary GET",
+      "url": "https://bulks-faostat.fao.org/production/datasets_E.json",
+      "result": "Tunnel connection failed: 403 Forbidden",
+      "scope": "Dataset catalogue probe; no FBS/SCL/TM/FO archive body download attempted",
+      "retryOrBypass": false
+    },
+    {
+      "action": "Python urllib ordinary GET",
+      "url": "https://fenixservices.fao.org/faostat/api/v1/en/data/QCL?area_code=138&item_code=56&element_code=5510&year=2024",
+      "result": "Tunnel connection failed: 403 Forbidden",
+      "scope": "QCL public API probe",
+      "retryOrBypass": false
+    },
+    {
+      "action": "Python urllib ordinary GET",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/100590",
+      "result": "Tunnel connection failed: 403 Forbidden",
+      "scope": "Original HTML not downloadable; public table had already been read via web",
+      "retryOrBypass": false
+    },
+    {
+      "action": "Python urllib ordinary GET",
+      "url": "https://apps.fas.usda.gov/newgainapi/api/Report/DownloadReportByFileName?fileName=Grain%20and%20Feed%20Update_Mexico%20City_Mexico_MX2025-0048",
+      "result": "Tunnel connection failed: 403 Forbidden",
+      "scope": "Older GAIN MX2025-0048 PDF; not used in implementation",
+      "retryOrBypass": false
+    },
+    {
+      "action": "Web official download link",
+      "url": "https://www.fao.org/3/cc3475m/cc3475m.pdf",
+      "result": "403 Forbidden",
+      "scope": "2020 Yearbook, no downloaded values",
+      "retryOrBypass": false
+    },
+    {
+      "action": "Web DOI link",
+      "url": "https://doi.org/10.4060/cc3475m",
+      "result": "403 Forbidden",
+      "scope": "2020 Yearbook DOI",
+      "retryOrBypass": false
+    },
+    {
+      "action": "Web official public table",
+      "url": "https://data.un.org/Data.aspx?d=FAO&f=itemCode%3A1861%3BcountryCode%3A138",
+      "result": "URL not accessible via this tool",
+      "scope": "No numeric data retrieved; no assertion of zero production"
+    },
+    {
+      "action": "Web official public table",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/100700",
+      "result": "URL not accessible via this tool",
+      "scope": "No numeric data retrieved; not treated as a zero export"
+    },
+    {
+      "action": "Web official public table",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/100110",
+      "result": "URL not accessible via this tool",
+      "scope": "No numeric data retrieved; not treated as a zero export"
+    },
+    {
+      "action": "Web official public table",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/071333",
+      "result": "URL not accessible via this tool",
+      "scope": "No numeric data retrieved; not treated as a zero export"
+    },
+    {
+      "action": "Web official public table",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/440320",
+      "result": "URL not accessible via this tool",
+      "scope": "No numeric data retrieved; not treated as a zero export"
+    },
+    {
+      "action": "Web official public table",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/470321",
+      "result": "URL not accessible via this tool",
+      "scope": "No numeric data retrieved; not treated as a zero export"
+    },
+    {
+      "action": "Web official download link",
+      "url": "https://anuarios.semarnat.gob.mx/wp-content/uploads/2025/01/Exportaciones-e-Importaciones-2019-2023.xlsx",
+      "result": "400 Unsupported content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "scope": "Parser does not support XLSX; not a permission refusal"
+    },
+    {
+      "action": "Web official download link",
+      "url": "https://anuarios.semarnat.gob.mx/wp-content/uploads/2025/07/Consumo_aparente_2019-2023.xlsx",
+      "result": "400 Unsupported content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "scope": "Parser does not support XLSX; not a permission refusal"
+    },
+    {
+      "action": "Web official download link",
+      "url": "https://anuarios.semarnat.gob.mx/wp-content/uploads/2025/07/Produccion_forestal_maderable_de_Mexico_2019-2023.xlsx",
+      "result": "400 Unsupported content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "scope": "Parser does not support XLSX; not a permission refusal"
+    },
+    {
+      "action": "Python urllib ordinary download after discovering official workbook link",
+      "url": "https://anuarios.semarnat.gob.mx/wp-content/uploads/2025/07/Consumo_aparente_2019-2023.xlsx",
+      "result": "Tunnel connection failed: 403 Forbidden",
+      "scope": "Workbook not downloaded",
+      "retryOrBypass": false
+    }
+  ],
+  "browserActions": [
+    {
+      "action": "Playwright installed /usr/bin/chromium, chromiumSandbox=true",
+      "result": "SUID sandbox helper misconfigured at /usr/lib/chromium/chrome-sandbox; abort",
+      "sandboxDisabled": false
+    },
+    {
+      "action": "cloud-agent-browser-runtime ensure",
+      "result": "BROWSER_CONFIG_AUTH_TOKEN is required",
+      "configurationChanged": false
+    }
+  ],
+  "policy": "No credentials created, restrictions relaxed, proxy changed, browser sandbox disabled, user PC connected, PR opened, merge or publication performed. The follow-up authorizes pushing only the dedicated Mexico branch for integration and verifying its remote SHA."
+}

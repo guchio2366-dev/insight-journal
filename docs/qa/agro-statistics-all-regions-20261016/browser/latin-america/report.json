@@ -1,0 +1,620 @@
+{
+  "head": "58be943225b7fdef8bb68392c7e377571305007d",
+  "dirty": false,
+  "sandbox": true,
+  "deviceScaleFactor": 1.5,
+  "status": "passed",
+  "cases": [
+    {
+      "name": "ARG",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "x": 376,
+      "y": 1232.28125,
+      "w": 1500,
+      "columns": [
+        {
+          "x": 376,
+          "y": 1263.78125,
+          "w": 490.65625,
+          "font": 14
+        },
+        {
+          "x": 880.65625,
+          "y": 1263.78125,
+          "w": 490.671875,
+          "font": 14
+        },
+        {
+          "x": 1385.328125,
+          "y": 1263.78125,
+          "w": 490.65625,
+          "font": 14
+        }
+      ],
+      "overflow": false,
+      "statisticsOverflow": false,
+      "mapBottom": 1008,
+      "deviceScaleFactor": 1.5
+    },
+    {
+      "name": "PRY",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "x": 376,
+      "y": 1232.28125,
+      "w": 1500,
+      "columns": [
+        {
+          "x": 376,
+          "y": 1263.78125,
+          "w": 490.65625,
+          "font": 14
+        },
+        {
+          "x": 880.65625,
+          "y": 1263.78125,
+          "w": 490.671875,
+          "font": 14
+        },
+        {
+          "x": 1385.328125,
+          "y": 1263.78125,
+          "w": 490.65625,
+          "font": 14
+        }
+      ],
+      "overflow": false,
+      "statisticsOverflow": false,
+      "mapBottom": 1008,
+      "deviceScaleFactor": 1.5
+    },
+    {
+      "name": "BOL",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "x": 376,
+      "y": 1232.28125,
+      "w": 1500,
+      "columns": [
+        {
+          "x": 376,
+          "y": 1263.78125,
+          "w": 490.65625,
+          "font": 14
+        },
+        {
+          "x": 880.65625,
+          "y": 1263.78125,
+          "w": 490.671875,
+          "font": 14
+        },
+        {
+          "x": 1385.328125,
+          "y": 1263.78125,
+          "w": 490.65625,
+          "font": 14
+        }
+      ],
+      "overflow": false,
+      "statisticsOverflow": false,
+      "mapBottom": 1008,
+      "deviceScaleFactor": 1.5
+    },
+    {
+      "name": "BRA",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "x": 376,
+      "y": 1263.78125,
+      "w": 1500,
+      "columns": [
+        {
+          "x": 376,
+          "y": 1263.78125,
+          "w": 490.65625,
+          "font": 14
+        },
+        {
+          "x": 880.65625,
+          "y": 1263.78125,
+          "w": 490.671875,
+          "font": 14
+        },
+        {
+          "x": 1385.328125,
+          "y": 1263.78125,
+          "w": 490.65625,
+          "font": 14
+        }
+      ],
+      "overflow": false,
+      "statisticsOverflow": false,
+      "mapBottom": 1008,
+      "deviceScaleFactor": 1.5
+    },
+    {
+      "name": "URY",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "x": 376,
+      "y": 1232.28125,
+      "w": 1500,
+      "columns": [
+        {
+          "x": 376,
+          "y": 1263.78125,
+          "w": 490.65625,
+          "font": 14
+        },
+        {
+          "x": 880.65625,
+          "y": 1263.78125,
+          "w": 490.671875,
+          "font": 14
+        },
+        {
+          "x": 1385.328125,
+          "y": 1263.78125,
+          "w": 490.65625,
+          "font": 14
+        }
+      ],
+      "overflow": false,
+      "statisticsOverflow": false,
+      "mapBottom": 1008,
+      "deviceScaleFactor": 1.5
+    },
+    {
+      "name": "forest-roundwood",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "x": 376,
+      "y": 840.6875,
+      "w": 1500,
+      "columns": [
+        {
+          "x": 376,
+          "y": 840.6875,
+          "w": 490.65625,
+          "font": 14
+        },
+        {
+          "x": 880.65625,
+          "y": 840.6875,
+          "w": 490.671875,
+          "font": 14
+        },
+        {
+          "x": 1385.328125,
+          "y": 840.6875,
+          "w": 490.65625,
+          "font": 14
+        }
+      ],
+      "overflow": false,
+      "statisticsOverflow": false,
+      "mapBottom": 581,
+      "deviceScaleFactor": 1.5
+    },
+    {
+      "name": "forest-sawnwood",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "x": 376,
+      "y": 370.6875,
+      "w": 1500,
+      "columns": [
+        {
+          "x": 376,
+          "y": 370.6875,
+          "w": 490.65625,
+          "font": 14
+        },
+        {
+          "x": 880.65625,
+          "y": 370.6875,
+          "w": 490.671875,
+          "font": 14
+        },
+        {
+          "x": 1385.328125,
+          "y": 370.6875,
+          "w": 490.65625,
+          "font": 14
+        }
+      ],
+      "overflow": false,
+      "statisticsOverflow": false,
+      "mapBottom": 111,
+      "deviceScaleFactor": 1.5
+    },
+    {
+      "name": "forest-pulp",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "x": 376,
+      "y": 423.6875,
+      "w": 1500,
+      "columns": [
+        {
+          "x": 376,
+          "y": 423.6875,
+          "w": 490.65625,
+          "font": 14
+        },
+        {
+          "x": 880.65625,
+          "y": 423.6875,
+          "w": 490.671875,
+          "font": 14
+        },
+        {
+          "x": 1385.328125,
+          "y": 423.6875,
+          "w": 490.65625,
+          "font": 14
+        }
+      ],
+      "overflow": false,
+      "statisticsOverflow": false,
+      "mapBottom": 164,
+      "deviceScaleFactor": 1.5
+    },
+    {
+      "name": "ARG",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "x": 279.1875,
+      "y": 1226.859375,
+      "w": 980.8125,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1258.359375,
+          "w": 317.59375,
+          "font": 14
+        },
+        {
+          "x": 610.78125,
+          "y": 1258.359375,
+          "w": 317.609375,
+          "font": 14
+        },
+        {
+          "x": 942.390625,
+          "y": 1258.359375,
+          "w": 317.59375,
+          "font": 14
+        }
+      ],
+      "overflow": false,
+      "statisticsOverflow": false,
+      "mapBottom": 1002.578125,
+      "deviceScaleFactor": 1.5
+    },
+    {
+      "name": "PRY",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "x": 279.1875,
+      "y": 1226.859375,
+      "w": 980.8125,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1258.359375,
+          "w": 317.59375,
+          "font": 14
+        },
+        {
+          "x": 610.78125,
+          "y": 1258.359375,
+          "w": 317.609375,
+          "font": 14
+        },
+        {
+          "x": 942.390625,
+          "y": 1258.359375,
+          "w": 317.59375,
+          "font": 14
+        }
+      ],
+      "overflow": false,
+      "statisticsOverflow": false,
+      "mapBottom": 1002.578125,
+      "deviceScaleFactor": 1.5
+    },
+    {
+      "name": "BOL",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "x": 279.1875,
+      "y": 1226.859375,
+      "w": 980.8125,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1258.359375,
+          "w": 317.59375,
+          "font": 14
+        },
+        {
+          "x": 610.78125,
+          "y": 1258.359375,
+          "w": 317.609375,
+          "font": 14
+        },
+        {
+          "x": 942.390625,
+          "y": 1258.359375,
+          "w": 317.59375,
+          "font": 14
+        }
+      ],
+      "overflow": false,
+      "statisticsOverflow": false,
+      "mapBottom": 1002.578125,
+      "deviceScaleFactor": 1.5
+    },
+    {
+      "name": "BRA",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "x": 279.1875,
+      "y": 1258.359375,
+      "w": 980.8125,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1258.359375,
+          "w": 317.59375,
+          "font": 14
+        },
+        {
+          "x": 610.78125,
+          "y": 1258.359375,
+          "w": 317.609375,
+          "font": 14
+        },
+        {
+          "x": 942.390625,
+          "y": 1258.359375,
+          "w": 317.59375,
+          "font": 14
+        }
+      ],
+      "overflow": false,
+      "statisticsOverflow": false,
+      "mapBottom": 1002.578125,
+      "deviceScaleFactor": 1.5
+    },
+    {
+      "name": "URY",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "x": 279.1875,
+      "y": 1226.859375,
+      "w": 980.8125,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1258.359375,
+          "w": 317.59375,
+          "font": 14
+        },
+        {
+          "x": 610.78125,
+          "y": 1258.359375,
+          "w": 317.609375,
+          "font": 14
+        },
+        {
+          "x": 942.390625,
+          "y": 1258.359375,
+          "w": 317.59375,
+          "font": 14
+        }
+      ],
+      "overflow": false,
+      "statisticsOverflow": false,
+      "mapBottom": 1002.578125,
+      "deviceScaleFactor": 1.5
+    },
+    {
+      "name": "forest-roundwood",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "x": 279.1875,
+      "y": 717.6875,
+      "w": 980.8125,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 717.6875,
+          "w": 317.59375,
+          "font": 14
+        },
+        {
+          "x": 610.78125,
+          "y": 717.6875,
+          "w": 317.609375,
+          "font": 14
+        },
+        {
+          "x": 942.390625,
+          "y": 717.6875,
+          "w": 317.59375,
+          "font": 14
+        }
+      ],
+      "overflow": false,
+      "statisticsOverflow": false,
+      "mapBottom": 458,
+      "deviceScaleFactor": 1.5
+    },
+    {
+      "name": "forest-sawnwood",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "x": 279.1875,
+      "y": -23.3125,
+      "w": 980.8125,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": -23.3125,
+          "w": 317.59375,
+          "font": 14
+        },
+        {
+          "x": 610.78125,
+          "y": -23.3125,
+          "w": 317.609375,
+          "font": 14
+        },
+        {
+          "x": 942.390625,
+          "y": -23.3125,
+          "w": 317.59375,
+          "font": 14
+        }
+      ],
+      "overflow": false,
+      "statisticsOverflow": false,
+      "mapBottom": -283,
+      "deviceScaleFactor": 1.5
+    },
+    {
+      "name": "forest-pulp",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "x": 279.1875,
+      "y": 111.6875,
+      "w": 980.8125,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 111.6875,
+          "w": 317.59375,
+          "font": 14
+        },
+        {
+          "x": 610.78125,
+          "y": 111.6875,
+          "w": 317.609375,
+          "font": 14
+        },
+        {
+          "x": 942.390625,
+          "y": 111.6875,
+          "w": 317.59375,
+          "font": 14
+        }
+      ],
+      "overflow": false,
+      "statisticsOverflow": false,
+      "mapBottom": -148,
+      "deviceScaleFactor": 1.5
+    }
+  ],
+  "operations": [
+    {
+      "name": "overview-and-history",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "passed": true
+    },
+    {
+      "name": "maize-preserved",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "passed": true
+    },
+    {
+      "name": "forest-clear-and-url-restore",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "passed": true
+    },
+    {
+      "name": "overview-and-history",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "passed": true
+    },
+    {
+      "name": "maize-preserved",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "passed": true
+    },
+    {
+      "name": "forest-clear-and-url-restore",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "sourceIdentity": {
+    "mode": "exact-commit",
+    "baseHead": "58be943225b7fdef8bb68392c7e377571305007d",
+    "buildIdentity": "58be943225b7fdef8bb68392c7e377571305007d",
+    "workingTreeDirty": false,
+    "applicationInputsDirty": false,
+    "inputFiles": 3593,
+    "workingTreeSha256": "43dcbba00136b71738aeaac9282049f8d3aa797b588b257082721a0acda347be",
+    "publishedRelease": false
+  },
+  "runtimeSandbox": {
+    "browserVersion": "151.0.7922.173",
+    "status": "Sandbox Status\nLayer 1 Sandbox\tNamespace\nPID namespaces\tYes\nNetwork namespaces\tYes\nSeccomp-BPF sandbox\tYes\nSeccomp-BPF sandbox supports TSYNC\tYes\nPtrace Protection with Yama LSM (Broker)\tNo\nPtrace Protection with Yama LSM (Non-broker)\tNo\n\nYou are adequately sandboxed.",
+    "verified": true
+  },
+  "browser": "151.0.7922.173"
+}

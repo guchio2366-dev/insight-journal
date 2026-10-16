@@ -1,0 +1,947 @@
+{
+  "schemaVersion": 1,
+  "preparedAt": "2026-10-16",
+  "country": "CAN",
+  "usdaRapeseed": {
+    "year": "2024/25",
+    "unit": "千t",
+    "classification": "Oilseed, Rapeseed",
+    "countryPeriodStart": "2024-08-01",
+    "countryPeriodEnd": "2025-07-31",
+    "beginningStocks": null,
+    "stockVariation": null,
+    "domesticOriginUse": null,
+    "reexports": null,
+    "exportDestinations": null,
+    "sourceUrl": "https://apps.fas.usda.gov/psdonline/circulars/oilseeds.pdf",
+    "edition": "October 2026",
+    "page": 21,
+    "definitionPage": 7,
+    "rawLines": {
+      "production": "Canada (Aug-Jul) 6,710 7,512 7,954 4,821 5,480 5,868 19,239 22,227 22,500",
+      "worldProduction": "World Total 49,295 52,383 54,413 34,281 36,646 38,102 86,275 96,035 99,571",
+      "imports": "Canada (Aug-Jul) 1 5 10 16 18 20 131 109 150",
+      "worldImports": "World Total 10,147 11,801 11,448 7,096 7,578 8,565 20,057 18,363 19,661",
+      "exports": "Canada (Aug-Jul) 5,855 6,274 6,400 3,327 3,346 4,000 9,387 8,959 7,850",
+      "worldExports": "World Total 10,710 11,968 11,700 7,125 7,891 8,950 19,817 19,354 19,983",
+      "domesticUse": "Canada (Aug-Jul) 870 1,225 1,575 1,330 1,975 1,990 11,552 13,075 14,500",
+      "worldDomesticUse": "World Total 48,801 51,997 54,033 34,399 35,998 37,699 88,453 94,057 98,564",
+      "endingStocks": "Canada (Aug-Jul) 154 172 161 730 907 805 1,597 1,899 2,199",
+      "worldEndingStocks": "World Total 1,426 1,645 1,773 3,325 3,660 3,678 9,927 10,914 11,599"
+    },
+    "production": 19239,
+    "worldProduction": 86275,
+    "imports": 131,
+    "worldImports": 20057,
+    "exports": 9387,
+    "worldExports": 19817,
+    "domesticUse": 11552,
+    "worldDomesticUse": 88453,
+    "endingStocks": 1597,
+    "worldEndingStocks": 9927
+  },
+  "aafc": {
+    "wheat": {
+      "production": 35939,
+      "imports": 85,
+      "totalSupply": 41333,
+      "exports": 29220,
+      "foodIndustrial": 3543,
+      "feedWasteDockage": 3224,
+      "domesticUse": 7873,
+      "endingStocks": 4240,
+      "label": "All Wheat",
+      "year": "2024/25",
+      "periodStart": "2024-08-01",
+      "periodEnd": "2025-07-31",
+      "unit": "千t",
+      "sourceUrl": "https://agriculture.canada.ca/sites/default/files/documents/2026-09/Canada%20Outlook%20for%20Principal%20Field%20Crops_202609.pdf",
+      "page": 14,
+      "rawLine": "2024-2025 10,835 10,652 3.37 35,939 85 41,333 29,220 3,543 3,224 7,873 4,240",
+      "beginningStocksDerived": 5309,
+      "reportedBalanceGap": 0,
+      "exportProducts": "grain products included; oilseed products excluded",
+      "actualDomesticFoodConsumption": null,
+      "domesticOriginUse": null,
+      "reexports": null,
+      "exportDestinations": null
+    },
+    "corn": {
+      "production": 15345,
+      "imports": 1828,
+      "totalSupply": 19169,
+      "exports": 2776,
+      "foodIndustrial": 5848,
+      "feedWasteDockage": 8946,
+      "domesticUse": 14810,
+      "endingStocks": 1584,
+      "label": "Corn",
+      "year": "2024/25",
+      "periodStart": "2024-09-01",
+      "periodEnd": "2025-08-31",
+      "unit": "千t",
+      "sourceUrl": "https://agriculture.canada.ca/sites/default/files/documents/2026-09/Canada%20Outlook%20for%20Principal%20Field%20Crops_202609.pdf",
+      "page": 14,
+      "rawLine": "2024-2025 1,478 1,449 10.59 15,345 1,828 19,169 2,776 5,848 8,946 14,810 1,584 225",
+      "beginningStocksDerived": 1996,
+      "reportedBalanceGap": -1,
+      "exportProducts": "grain products included; oilseed products excluded",
+      "actualDomesticFoodConsumption": null,
+      "domesticOriginUse": null,
+      "reexports": null,
+      "exportDestinations": null
+    },
+    "canola": {
+      "production": 19239,
+      "imports": 131,
+      "totalSupply": 22595,
+      "exports": 9379,
+      "foodIndustrial": 11412,
+      "feedWasteDockage": 143,
+      "domesticUse": 11619,
+      "endingStocks": 1597,
+      "label": "Canola",
+      "year": "2024/25",
+      "periodStart": "2024-08-01",
+      "periodEnd": "2025-07-31",
+      "unit": "千t",
+      "sourceUrl": "https://agriculture.canada.ca/sites/default/files/documents/2026-09/Canada%20Outlook%20for%20Principal%20Field%20Crops_202609.pdf",
+      "page": 14,
+      "rawLine": "2024-2025 8,908 8,846 2.17 19,239 131 22,595 9,379 11,412 143 11,619 1,597 677",
+      "beginningStocksDerived": 3225,
+      "reportedBalanceGap": 0,
+      "exportProducts": "grain products included; oilseed products excluded",
+      "actualDomesticFoodConsumption": null,
+      "domesticOriginUse": null,
+      "reexports": null,
+      "exportDestinations": null
+    },
+    "soybeans": {
+      "production": 7728,
+      "imports": 267,
+      "totalSupply": 8601,
+      "exports": 5531,
+      "foodIndustrial": 1678,
+      "feedWasteDockage": 540,
+      "domesticUse": 2461,
+      "endingStocks": 511,
+      "label": "Soybeans",
+      "year": "2024/25",
+      "periodStart": "2024-09-01",
+      "periodEnd": "2025-08-31",
+      "unit": "千t",
+      "sourceUrl": "https://agriculture.canada.ca/sites/default/files/documents/2026-09/Canada%20Outlook%20for%20Principal%20Field%20Crops_202609.pdf",
+      "page": 14,
+      "rawLine": "2024-2025 2,311 2,290 3.38 7,728 267 8,601 5,531 1,678 540 2,461 511 487",
+      "beginningStocksDerived": 606,
+      "reportedBalanceGap": 98,
+      "exportProducts": "grain products included; oilseed products excluded",
+      "actualDomesticFoodConsumption": null,
+      "domesticOriginUse": null,
+      "reexports": null,
+      "exportDestinations": null
+    },
+    "lentils": {
+      "production": 2431,
+      "imports": 126,
+      "totalSupply": 2722,
+      "exports": 1821,
+      "domesticUse": 340,
+      "endingStocks": 561,
+      "label": "Lentils",
+      "year": "2024/25",
+      "periodStart": "2024-08-01",
+      "periodEnd": "2025-07-31",
+      "unit": "千t",
+      "sourceUrl": "https://agriculture.canada.ca/sites/default/files/documents/2026-09/Canada%20Outlook%20for%20Principal%20Field%20Crops_202609.pdf",
+      "page": 15,
+      "rawLine": "2024-2025 1,704 1,693 1.44 2,431 126 2,722 1,821 340 561 26% 790",
+      "beginningStocksDerived": 165,
+      "reportedBalanceGap": 0,
+      "exportProducts": "products excluded",
+      "actualDomesticFoodConsumption": null,
+      "domesticOriginUse": null,
+      "reexports": null,
+      "exportDestinations": null
+    }
+  },
+  "calendarTrade": {
+    "soybean": {
+      "year": 2024,
+      "classification": "HS 1988/92 (H0)",
+      "code": "120100",
+      "description": "Soya beans",
+      "unit": "kg",
+      "worldQuantity": 5133240000,
+      "partners": [
+        {
+          "name": "China",
+          "quantity": 1158070000
+        },
+        {
+          "name": "Japan",
+          "quantity": 362935000
+        },
+        {
+          "name": "Iran, Islamic Rep.",
+          "quantity": 656628000
+        },
+        {
+          "name": "Algeria",
+          "quantity": 603857000
+        },
+        {
+          "name": "United States",
+          "quantity": 307626000
+        },
+        {
+          "name": "Indonesia",
+          "quantity": 250610000
+        },
+        {
+          "name": "Italy",
+          "quantity": 205185000
+        },
+        {
+          "name": "Turkey",
+          "quantity": 198815000
+        },
+        {
+          "name": "United Kingdom",
+          "quantity": 180174000
+        },
+        {
+          "name": "Belgium",
+          "quantity": 157674000
+        },
+        {
+          "name": "Bangladesh",
+          "quantity": 189325000
+        },
+        {
+          "name": "Malaysia",
+          "quantity": 111206000
+        },
+        {
+          "name": "Vietnam",
+          "quantity": 110927000
+        },
+        {
+          "name": "Other Asia, nes",
+          "quantity": 60522200
+        },
+        {
+          "name": "Netherlands",
+          "quantity": 114313000
+        },
+        {
+          "name": "Thailand",
+          "quantity": 41700600
+        },
+        {
+          "name": "Korea, Rep.",
+          "quantity": 36620700
+        },
+        {
+          "name": "Norway",
+          "quantity": 54726400
+        },
+        {
+          "name": "Egypt, Arab Rep.",
+          "quantity": 57751000
+        },
+        {
+          "name": "Ireland",
+          "quantity": 51859400
+        },
+        {
+          "name": "Israel",
+          "quantity": 39570900
+        },
+        {
+          "name": "Germany",
+          "quantity": 37034300
+        },
+        {
+          "name": "Portugal",
+          "quantity": 33249400
+        },
+        {
+          "name": "Pakistan",
+          "quantity": 24286300
+        },
+        {
+          "name": "Singapore",
+          "quantity": 12390100
+        },
+        {
+          "name": "Philippines",
+          "quantity": 16055600
+        },
+        {
+          "name": "Hong Kong, China",
+          "quantity": 10772800
+        },
+        {
+          "name": "Greece",
+          "quantity": 19254000
+        },
+        {
+          "name": "United Arab Emirates",
+          "quantity": 10463600
+        },
+        {
+          "name": "Spain",
+          "quantity": 6726730
+        },
+        {
+          "name": "Poland",
+          "quantity": 1938440
+        },
+        {
+          "name": "Saudi Arabia",
+          "quantity": 1543510
+        },
+        {
+          "name": "Nepal",
+          "quantity": 2031670
+        },
+        {
+          "name": "France",
+          "quantity": 1088870
+        },
+        {
+          "name": "New Zealand",
+          "quantity": 935297
+        },
+        {
+          "name": "Czech Republic",
+          "quantity": 687120
+        },
+        {
+          "name": "Morocco",
+          "quantity": 751720
+        },
+        {
+          "name": "Brunei",
+          "quantity": 573730
+        },
+        {
+          "name": "Ukraine",
+          "quantity": 486762
+        },
+        {
+          "name": "Finland",
+          "quantity": 520800
+        },
+        {
+          "name": "Sweden",
+          "quantity": 462985
+        },
+        {
+          "name": "South Africa",
+          "quantity": 499690
+        },
+        {
+          "name": "Jamaica",
+          "quantity": 281810
+        },
+        {
+          "name": "Mauritius",
+          "quantity": 242810
+        },
+        {
+          "name": "Peru",
+          "quantity": 225440
+        },
+        {
+          "name": "Cambodia",
+          "quantity": 147000
+        },
+        {
+          "name": "Trinidad and Tobago",
+          "quantity": 79858
+        },
+        {
+          "name": "Denmark",
+          "quantity": 61100
+        },
+        {
+          "name": "Suriname",
+          "quantity": 79625
+        },
+        {
+          "name": "Colombia",
+          "quantity": 60480
+        },
+        {
+          "name": "Qatar",
+          "quantity": 40320
+        },
+        {
+          "name": "Chile",
+          "quantity": 36100
+        },
+        {
+          "name": "Russian Federation",
+          "quantity": 51966
+        },
+        {
+          "name": "Switzerland",
+          "quantity": 19950
+        },
+        {
+          "name": "Costa Rica",
+          "quantity": 20400
+        },
+        {
+          "name": "Slovak Republic",
+          "quantity": 18231
+        },
+        {
+          "name": "Turks and Caicos Isl.",
+          "quantity": 18434
+        },
+        {
+          "name": "Panama",
+          "quantity": 7020
+        },
+        {
+          "name": "Austria",
+          "quantity": 4316
+        }
+      ],
+      "partnerRoundingGap": 4484,
+      "sourceUrl": "https://wits.worldbank.org/trade/comtrade/en/country/CAN/year/2024/tradeflow/Exports/partner/ALL/product/120100",
+      "gross": true
+    },
+    "rapeseed": {
+      "year": 2024,
+      "classification": "HS 1988/92 (H0)",
+      "code": "120500",
+      "description": "Rape or colza seeds",
+      "unit": "kg",
+      "worldQuantity": 8730940000,
+      "partners": [
+        {
+          "name": "China",
+          "quantity": 5928580000
+        },
+        {
+          "name": "Japan",
+          "quantity": 1007130000
+        },
+        {
+          "name": "Mexico",
+          "quantity": 599902000
+        },
+        {
+          "name": "United States",
+          "quantity": 281754000
+        },
+        {
+          "name": "United Arab Emirates",
+          "quantity": 349281000
+        },
+        {
+          "name": "France",
+          "quantity": 173505000
+        },
+        {
+          "name": "Belgium",
+          "quantity": 160389000
+        },
+        {
+          "name": "Germany",
+          "quantity": 60300000
+        },
+        {
+          "name": "Portugal",
+          "quantity": 45429400
+        },
+        {
+          "name": "Bulgaria",
+          "quantity": 41330000
+        },
+        {
+          "name": "Bangladesh",
+          "quantity": 35627800
+        },
+        {
+          "name": "Nepal",
+          "quantity": 21409000
+        },
+        {
+          "name": "Malaysia",
+          "quantity": 9553450
+        },
+        {
+          "name": "Netherlands",
+          "quantity": 10400000
+        },
+        {
+          "name": "Australia",
+          "quantity": 3428100
+        },
+        {
+          "name": "Korea, Rep.",
+          "quantity": 1451840
+        },
+        {
+          "name": "Brazil",
+          "quantity": 999540
+        },
+        {
+          "name": "Chile",
+          "quantity": 23218
+        },
+        {
+          "name": "Indonesia",
+          "quantity": 80673
+        },
+        {
+          "name": "Vietnam",
+          "quantity": 72993
+        },
+        {
+          "name": "Colombia",
+          "quantity": 78219
+        },
+        {
+          "name": "Philippines",
+          "quantity": 61994
+        },
+        {
+          "name": "Costa Rica",
+          "quantity": 84710
+        },
+        {
+          "name": "Guatemala",
+          "quantity": 48920
+        },
+        {
+          "name": "Italy",
+          "quantity": 15370
+        },
+        {
+          "name": "Mauritius",
+          "quantity": 470
+        }
+      ],
+      "partnerRoundingGap": -3303,
+      "sourceUrl": "https://wits.worldbank.org/trade/comtrade/en/country/CAN/year/2024/tradeflow/Exports/partner/ALL/product/120500",
+      "gross": true
+    },
+    "coniferous-sawnwood": {
+      "year": 2024,
+      "classification": "HS 1988/92 (H0)",
+      "code": "440710",
+      "description": "Coniferous wood sawn or chipped lengthwise, sli",
+      "unit": "m³",
+      "worldQuantity": 31451200,
+      "partners": [
+        {
+          "name": "United States",
+          "quantity": 28057700
+        },
+        {
+          "name": "Japan",
+          "quantity": 989868
+        },
+        {
+          "name": "China",
+          "quantity": 1307300
+        },
+        {
+          "name": "Philippines",
+          "quantity": 207966
+        },
+        {
+          "name": "Other Asia, nes",
+          "quantity": 297901
+        },
+        {
+          "name": "Germany",
+          "quantity": 99353
+        },
+        {
+          "name": "New Zealand",
+          "quantity": 20578
+        },
+        {
+          "name": "United Kingdom",
+          "quantity": 20170
+        },
+        {
+          "name": "Mexico",
+          "quantity": 61679
+        },
+        {
+          "name": "Netherlands",
+          "quantity": 18522
+        },
+        {
+          "name": "Korea, Rep.",
+          "quantity": 40194
+        },
+        {
+          "name": "Belgium",
+          "quantity": 24377
+        },
+        {
+          "name": "Pakistan",
+          "quantity": 32278
+        },
+        {
+          "name": "Hong Kong, China",
+          "quantity": 41975
+        },
+        {
+          "name": "Australia",
+          "quantity": 10304
+        },
+        {
+          "name": "United Arab Emirates",
+          "quantity": 35554
+        },
+        {
+          "name": "Indonesia",
+          "quantity": 16817
+        },
+        {
+          "name": "India",
+          "quantity": 15675
+        },
+        {
+          "name": "Thailand",
+          "quantity": 24711
+        },
+        {
+          "name": "Saudi Arabia",
+          "quantity": 22520
+        },
+        {
+          "name": "France",
+          "quantity": 3103
+        },
+        {
+          "name": "Vietnam",
+          "quantity": 15992
+        },
+        {
+          "name": "French Polynesia",
+          "quantity": 9681
+        },
+        {
+          "name": "Malaysia",
+          "quantity": 16780
+        },
+        {
+          "name": "Denmark",
+          "quantity": 1523
+        },
+        {
+          "name": "Italy",
+          "quantity": 2191
+        },
+        {
+          "name": "El Salvador",
+          "quantity": 6669
+        },
+        {
+          "name": "Sweden",
+          "quantity": 841
+        },
+        {
+          "name": "Czech Republic",
+          "quantity": 1486
+        },
+        {
+          "name": "Egypt, Arab Rep.",
+          "quantity": 10902
+        },
+        {
+          "name": "Kuwait",
+          "quantity": 7402
+        },
+        {
+          "name": "Ireland",
+          "quantity": 724
+        },
+        {
+          "name": "Spain",
+          "quantity": 566
+        },
+        {
+          "name": "Bahrain",
+          "quantity": 5676
+        },
+        {
+          "name": "Iraq",
+          "quantity": 4533
+        },
+        {
+          "name": "Turks and Caicos Isl.",
+          "quantity": 1547
+        },
+        {
+          "name": "Estonia",
+          "quantity": 1227
+        },
+        {
+          "name": "Singapore",
+          "quantity": 2058
+        },
+        {
+          "name": "Norway",
+          "quantity": 231
+        },
+        {
+          "name": "Trinidad and Tobago",
+          "quantity": 729
+        },
+        {
+          "name": "Morocco",
+          "quantity": 313
+        },
+        {
+          "name": "Peru",
+          "quantity": 1750
+        },
+        {
+          "name": "Jordan",
+          "quantity": 1855
+        },
+        {
+          "name": "Switzerland",
+          "quantity": 590
+        },
+        {
+          "name": "Bangladesh",
+          "quantity": 1013
+        },
+        {
+          "name": "Bermuda",
+          "quantity": 341
+        },
+        {
+          "name": "Cambodia",
+          "quantity": 1238
+        },
+        {
+          "name": "Panama",
+          "quantity": 647
+        },
+        {
+          "name": "Dominica",
+          "quantity": 302
+        },
+        {
+          "name": "Barbados",
+          "quantity": 278
+        },
+        {
+          "name": "Israel",
+          "quantity": 176
+        },
+        {
+          "name": "Uruguay",
+          "quantity": 302
+        },
+        {
+          "name": "Turkey",
+          "quantity": 475
+        },
+        {
+          "name": "American Samoa",
+          "quantity": 557
+        },
+        {
+          "name": "Greece",
+          "quantity": 110
+        },
+        {
+          "name": "Grenada",
+          "quantity": 153
+        },
+        {
+          "name": "Lebanon",
+          "quantity": 42
+        },
+        {
+          "name": "Chile",
+          "quantity": 137
+        },
+        {
+          "name": "Maldives",
+          "quantity": 300
+        },
+        {
+          "name": "Dominican Republic",
+          "quantity": 190
+        },
+        {
+          "name": "Jamaica",
+          "quantity": 55
+        },
+        {
+          "name": "Antigua and Barbuda",
+          "quantity": 77
+        },
+        {
+          "name": "Austria",
+          "quantity": 140
+        },
+        {
+          "name": "Poland",
+          "quantity": 22
+        },
+        {
+          "name": "Portugal",
+          "quantity": 256
+        },
+        {
+          "name": "Cyprus",
+          "quantity": 167
+        },
+        {
+          "name": "Bulgaria",
+          "quantity": 28
+        },
+        {
+          "name": "Argentina",
+          "quantity": 42
+        },
+        {
+          "name": "Iceland",
+          "quantity": 17
+        },
+        {
+          "name": "Cayman Islands",
+          "quantity": 30
+        },
+        {
+          "name": "Lithuania",
+          "quantity": 38
+        },
+        {
+          "name": "Bahamas, The",
+          "quantity": 45
+        },
+        {
+          "name": "Haiti",
+          "quantity": 29
+        },
+        {
+          "name": "United States Minor Outlying I",
+          "quantity": 54
+        },
+        {
+          "name": "Cuba",
+          "quantity": 22
+        },
+        {
+          "name": "South Africa",
+          "quantity": 4
+        },
+        {
+          "name": "Albania",
+          "quantity": 41
+        },
+        {
+          "name": "St. Kitts and Nevis",
+          "quantity": 70
+        },
+        {
+          "name": "Guyana",
+          "quantity": 1
+        },
+        {
+          "name": "Saint Pierre and Miquelon",
+          "quantity": 5
+        },
+        {
+          "name": "Moldova",
+          "quantity": 0
+        },
+        {
+          "name": "Equatorial Guinea",
+          "quantity": 0
+        }
+      ],
+      "partnerRoundingGap": 15,
+      "sourceUrl": "https://wits.worldbank.org/trade/comtrade/en/country/CAN/year/2024/tradeflow/Exports/partner/ALL/product/440710",
+      "gross": true
+    }
+  },
+  "soybeanImports": {
+    "year": 2024,
+    "code": "120100",
+    "unit": "kg",
+    "gross": true,
+    "worldQuantityKg": 300486000,
+    "sourceUrl": "https://wits.worldbank.org/trade/comtrade/en/country/CAN/year/2024/tradeflow/Imports/partner/ALL/product/120100",
+    "includesReturningCanadaOriginKg": 1152
+  },
+  "forest": {
+    "roundwood": {
+      "label": "丸太（燃料材を含む）",
+      "unit": "m³",
+      "production": null,
+      "worldProduction": null,
+      "publishedSharePercent": null
+    },
+    "sawnwood": {
+      "label": "製材",
+      "unit": "m³",
+      "production": null,
+      "worldProduction": null,
+      "publishedSharePercent": 8
+    },
+    "paper-pulp": {
+      "label": "製紙用パルプ（Pulp for paper）",
+      "unit": "t",
+      "production": null,
+      "worldProduction": null,
+      "publishedSharePercent": 7
+    }
+  },
+  "forestSourceUrl": "https://www.fao.org/forestry/statistics/data/en/",
+  "sources": [
+    {
+      "path": "data-source/atlas/canada/agro-statistics-20261016/aafc-20260925-web-extract.txt",
+      "sha256": "9a4d5ec609e6dfdb71d6ce839d39a48682a5d678eba49dbe52d61a754366ad4d",
+      "kind": "official-web-text-extract-not-original-file"
+    },
+    {
+      "path": "data-source/atlas/canada/agro-statistics-20261016/fao-forest-facts-2024.txt",
+      "sha256": "236fbbaa372f375d427ffa3418bbcee2f7bfeace19ba6fbff0ac1af84d484441",
+      "kind": "official-web-text-extract-not-original-file"
+    },
+    {
+      "path": "data-source/atlas/canada/agro-statistics-20261016/usda-oilseeds-202610-web-extract.txt",
+      "sha256": "0b7e790da11f14144623c22a692a7afbbc15f93fe7bcdb5da5f7b031705b39e1",
+      "kind": "official-web-text-extract-not-original-file"
+    },
+    {
+      "path": "data-source/atlas/canada/agro-statistics-20261016/wits-coniferous-sawnwood-exports-2024.txt",
+      "sha256": "79e2c9fb9e53804cee4edc0097eb9913238e57e27395a31d3a76be01628548db",
+      "kind": "official-web-text-extract-not-original-file"
+    },
+    {
+      "path": "data-source/atlas/canada/agro-statistics-20261016/wits-rapeseed-exports-2024.txt",
+      "sha256": "c04158f14cbbbcba635fe8cbe4584a341dfe8c73be729c0164e49698aefee3a9",
+      "kind": "official-web-text-extract-not-original-file"
+    },
+    {
+      "path": "data-source/atlas/canada/agro-statistics-20261016/wits-soybean-exports-2024.txt",
+      "sha256": "445853ffeab241df4553865140404091955703ed789622f89a421445e9c9cef3",
+      "kind": "official-web-text-extract-not-original-file"
+    },
+    {
+      "path": "data-source/atlas/canada/agro-statistics-20261016/wits-soybean-imports-2024.txt",
+      "sha256": "be0ae468d47749f4ee6f20939772bbfacf596128e3e90637a65014b96dc6b407",
+      "kind": "official-web-text-extract-not-original-file"
+    }
+  ]
+}

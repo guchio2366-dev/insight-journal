@@ -1,0 +1,47 @@
+New Zealand Untreated coniferous wood in the rough... exports by country | 2024 | Data (https://wits.worldbank.org/trade/comtrade/en/country/NZL/year/2024/tradeflow/Exports/partner/ALL/product/440320)
+citeturn8view0 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"https://wits.worldbank.org/trade/comtrade/en/country/NZL/year/2024/tradeflow/Exports/partner/ALL/product/440320","lineno":15}); Total lines: 63
+L0: # New Zealand Untreated coniferous wood in the rough... exports by country
+L1:
+L2: in 2024
+L3:
+L4: Share
+L5:
+L6:   * cite0†Facebook L7:   * cite0†Twitter L8:   * cite0†Linkedin L9:   * cite0†Google Plus L10:   * cite0†Reddit L11:   * cite0†Stumble Upon L12:   * cite0†Delicious L13:   * cite0†Email L14:
+L15: Change selection (Reporter, Year, Trade Flow, Partner and HS 6 digit Product)
+L16: New Zealand exports of Untreated coniferous wood in the rough... was $1,885,801.63K and quantity 20,239,900m³.
+L17: New Zealand exported Untreated coniferous wood in the rough... to China ($1,697,931.10K , 18,099,400 m³), Korea, Rep. ($97,770.70K , 1,148,280 m³), India ($42,702.97K , 499,963 m³), Japan ($19,518.58K , 221,750 m³), Other Asia, nes ($17,424.29K , 182,279 m³).
+L18: cite1†Untreated coniferous wood in the rough... imports by country in 2024 L19: Reporter  | TradeFlow  | ProductCode  | Product Description  | Year  | Partner  | Trade Value 1000USD  | Quantity  | Quantity Unit
+L20:  New Zealand  | Export  | 440320  | Untreated coniferous wood in the rough...  | 2024  | cite2†World | 1,885,801.63  | 20,239,900  | m³
+L21:  New Zealand  | Export  | 440320  | Untreated coniferous wood in the rough...  | 2024  | cite3†China | 1,697,931.10  | 18,099,400  | m³
+L22:  New Zealand  | Export  | 440320  | Untreated coniferous wood in the rough...  | 2024  | cite4†Korea, Rep. | 97,770.70  | 1,148,280  | m³
+L23:  New Zealand  | Export  | 440320  | Untreated coniferous wood in the rough...  | 2024  | cite5†India | 42,702.97  | 499,963  | m³
+L24:  New Zealand  | Export  | 440320  | Untreated coniferous wood in the rough...  | 2024  | cite6†Japan | 19,518.58  | 221,750  | m³
+L25:  New Zealand  | Export  | 440320  | Untreated coniferous wood in the rough...  | 2024  | cite7†Other Asia, nes | 17,424.29  | 182,279  | m³
+L26:  New Zealand  | Export  | 440320  | Untreated coniferous wood in the rough...  | 2024  | cite8†Vietnam | 8,831.06  | 81,403  | m³
+L27:  New Zealand  | Export  | 440320  | Untreated coniferous wood in the rough...  | 2024  | cite9†Australia | 633.73  | 1,464  | m³
+L28:  New Zealand  | Export  | 440320  | Untreated coniferous wood in the rough...  | 2024  | cite10†Tonga | 397.01  | 828  | m³
+L29:  New Zealand  | Export  | 440320  | Untreated coniferous wood in the rough...  | 2024  | cite11†Hong Kong, China | 168.10  | 1,451  | m³
+L30:  New Zealand  | Export  | 440320  | Untreated coniferous wood in the rough...  | 2024  | cite12†Cambodia | 105.64  | 970  | m³
+L31:  New Zealand  | Export  | 440320  | Untreated coniferous wood in the rough...  | 2024  | cite13†Thailand | 101.80  | 998  | m³
+L32:  New Zealand  | Export  | 440320  | Untreated coniferous wood in the rough...  | 2024  | cite14†Italy | 83.49  | 16  | m³
+L33:  New Zealand  | Export  | 440320  | Untreated coniferous wood in the rough...  | 2024  | cite15†Indonesia | 54.37  | 346  | m³
+L34:  New Zealand  | Export  | 440320  | Untreated coniferous wood in the rough...  | 2024  | cite16†Mauritius | 27.33  | 54  | m³
+L35:  New Zealand  | Export  | 440320  | Untreated coniferous wood in the rough...  | 2024  | cite17†United States | 26.45  | 34  | m³
+L36:  New Zealand  | Export  | 440320  | Untreated coniferous wood in the rough...  | 2024  | cite18†Vanuatu | 14.97  | 610  | m³
+L37:  New Zealand  | Export  | 440320  | Untreated coniferous wood in the rough...  | 2024  | cite19†Cook Islands | 10.05  | 34  | m³
+L38: HS Nomenclature used HS 1988/92 (H0)
+L39: HS Code 440320: Untreated coniferous wood in the rough...
+L40: Please note: Exports is gross exports and Imports is gross imports
+L41:
+L42:   * cite20†About L43:   * .
+L44:   * cite21†Contact L45:   * .
+L46:   * cite22†Usage Conditions L47:   * .
+L48:   * cite23†Legal†www.worldbank.org L49:   * .
+L50:   * cite24†Data Providers L51:   * .
+L52:   * Page Refreshed : Oct-15-2026 23:40 ET
+L53: Partners
+L54:   * cite25†ITC†www.intracen.org L55:   * .
+L56:   * cite26†UNCTAD†unctad.org L57:   * .
+L58:   * cite27†UNSTATS†unstats.un.org L59:   * .
+L60:   * cite28†World Trade Organization†www.wto.org L61:   * .
+L62:   * cite29†World Bank†www.worldbank.org

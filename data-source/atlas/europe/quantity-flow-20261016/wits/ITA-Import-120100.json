@@ -1,0 +1,213 @@
+{
+  "reporter": "ITA",
+  "reporterName": "Italy",
+  "flow": "Import",
+  "year": 2023,
+  "classification": "HS1988/92 (H0)",
+  "productCode": "120100",
+  "productDescription": "Soya beans",
+  "sourceUrl": "https://wits.worldbank.org/trade/comtrade/en/country/ITA/year/2023/tradeflow/Imports/partner/ALL/product/120100",
+  "retrievedOn": "2026-10-16",
+  "retention": "Transcription of the complete table delivered by web.open from the official WITS public page; decimal display precision retained. This is not a downloaded Comtrade raw API response.",
+  "rows": [
+    {
+      "partner": "World",
+      "quantityRaw": "2320440000",
+      "unit": "Kg",
+      "value1000UsdRaw": "1356163.44"
+    },
+    {
+      "partner": "Brazil",
+      "quantityRaw": "1101990000",
+      "unit": "Kg",
+      "value1000UsdRaw": "631668.06"
+    },
+    {
+      "partner": "United States",
+      "quantityRaw": "421604000",
+      "unit": "Kg",
+      "value1000UsdRaw": "263614.51"
+    },
+    {
+      "partner": "Canada",
+      "quantityRaw": "229890000",
+      "unit": "Kg",
+      "value1000UsdRaw": "136239.31"
+    },
+    {
+      "partner": "Ukraine",
+      "quantityRaw": "145441000",
+      "unit": "Kg",
+      "value1000UsdRaw": "86574.01"
+    },
+    {
+      "partner": "Uruguay",
+      "quantityRaw": "99730600",
+      "unit": "Kg",
+      "value1000UsdRaw": "58768.90"
+    },
+    {
+      "partner": "Slovenia",
+      "quantityRaw": "89790700",
+      "unit": "Kg",
+      "value1000UsdRaw": "46875.25"
+    },
+    {
+      "partner": "Croatia",
+      "quantityRaw": "84967500",
+      "unit": "Kg",
+      "value1000UsdRaw": "42850.23"
+    },
+    {
+      "partner": "Romania",
+      "quantityRaw": "40481800",
+      "unit": "Kg",
+      "value1000UsdRaw": "23858.89"
+    },
+    {
+      "partner": "Hungary",
+      "quantityRaw": "34721200",
+      "unit": "Kg",
+      "value1000UsdRaw": "18447.85"
+    },
+    {
+      "partner": "Togo",
+      "quantityRaw": "23178400",
+      "unit": "Kg",
+      "value1000UsdRaw": "16358.33"
+    },
+    {
+      "partner": "Austria",
+      "quantityRaw": "18292600",
+      "unit": "Kg",
+      "value1000UsdRaw": "9947.74"
+    },
+    {
+      "partner": "France",
+      "quantityRaw": "8964920",
+      "unit": "Kg",
+      "value1000UsdRaw": "6233.63"
+    },
+    {
+      "partner": "Slovak Republic",
+      "quantityRaw": "5839300",
+      "unit": "Kg",
+      "value1000UsdRaw": "3552.94"
+    },
+    {
+      "partner": "Germany",
+      "quantityRaw": "5034680",
+      "unit": "Kg",
+      "value1000UsdRaw": "2912.02"
+    },
+    {
+      "partner": "China",
+      "quantityRaw": "2270360",
+      "unit": "Kg",
+      "value1000UsdRaw": "2706.26"
+    },
+    {
+      "partner": "Benin",
+      "quantityRaw": "2755580",
+      "unit": "Kg",
+      "value1000UsdRaw": "1682.81"
+    },
+    {
+      "partner": "Netherlands",
+      "quantityRaw": "1019110",
+      "unit": "Kg",
+      "value1000UsdRaw": "963.24"
+    },
+    {
+      "partner": "Poland",
+      "quantityRaw": "1746860",
+      "unit": "Kg",
+      "value1000UsdRaw": "934.57"
+    },
+    {
+      "partner": "Bosnia and Herzegovina",
+      "quantityRaw": "1021000",
+      "unit": "Kg",
+      "value1000UsdRaw": "652.06"
+    },
+    {
+      "partner": "Burkina Faso",
+      "quantityRaw": "504220",
+      "unit": "Kg",
+      "value1000UsdRaw": "359.81"
+    },
+    {
+      "partner": "Latvia",
+      "quantityRaw": "547649",
+      "unit": "Kg",
+      "value1000UsdRaw": "257.57"
+    },
+    {
+      "partner": "Serbia, FR(Serbia/Montenegro)",
+      "quantityRaw": "182050",
+      "unit": "Kg",
+      "value1000UsdRaw": "247.29"
+    },
+    {
+      "partner": "Belgium",
+      "quantityRaw": "153247",
+      "unit": "Kg",
+      "value1000UsdRaw": "222.20"
+    },
+    {
+      "partner": "Czech Republic",
+      "quantityRaw": "255025",
+      "unit": "Kg",
+      "value1000UsdRaw": "128.12"
+    },
+    {
+      "partner": "Japan",
+      "quantityRaw": "3994",
+      "unit": "Kg",
+      "value1000UsdRaw": "49.74"
+    },
+    {
+      "partner": "Greece",
+      "quantityRaw": "25480",
+      "unit": "Kg",
+      "value1000UsdRaw": "21.08"
+    },
+    {
+      "partner": "Spain",
+      "quantityRaw": "3025",
+      "unit": "Kg",
+      "value1000UsdRaw": "13.42"
+    },
+    {
+      "partner": "Bulgaria",
+      "quantityRaw": "24000",
+      "unit": "Kg",
+      "value1000UsdRaw": "10.48"
+    },
+    {
+      "partner": "Nepal",
+      "quantityRaw": "4080",
+      "unit": "Kg",
+      "value1000UsdRaw": "7.95"
+    },
+    {
+      "partner": "Denmark",
+      "quantityRaw": "500",
+      "unit": "Kg",
+      "value1000UsdRaw": "1.88"
+    },
+    {
+      "partner": "Argentina",
+      "quantityRaw": "201",
+      "unit": "Kg",
+      "value1000UsdRaw": "1.74"
+    },
+    {
+      "partner": "Switzerland",
+      "quantityRaw": "456",
+      "unit": "Kg",
+      "value1000UsdRaw": "1.54"
+    }
+  ],
+  "pageRefreshedRaw": "Apr-27-2026 00:58 ET"
+}

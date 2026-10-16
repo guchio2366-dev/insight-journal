@@ -1,0 +1,1123 @@
+{
+  "schemaVersion": 1,
+  "retrieved": "2026-10-16",
+  "records": [
+    {
+      "countryCode": "ARG",
+      "countryName": "アルゼンチン",
+      "year": 2024,
+      "seriesId": "soybean-production",
+      "label": "大豆（丸大豆）",
+      "unit": "t",
+      "production": {
+        "rawValue": "48213207.000000",
+        "value": 48213207.0,
+        "flag": "A",
+        "note": "",
+        "areaCode": "9",
+        "itemCode": "236",
+        "unit": "t",
+        "year": 2024
+      },
+      "world": {
+        "rawValue": "397671688.560000",
+        "value": 397671688.56,
+        "flag": "A",
+        "note": "",
+        "areaCode": "5000",
+        "itemCode": "236",
+        "unit": "t",
+        "year": 2024
+      },
+      "imports": 7580770.0,
+      "exports": 4145170.0,
+      "partners": [
+        {
+          "name": "China",
+          "rawKg": "3918800000",
+          "tonnes": 3918800.0,
+          "region": "external"
+        },
+        {
+          "name": "United States",
+          "rawKg": "127137000",
+          "tonnes": 127137.0,
+          "region": "external"
+        },
+        {
+          "name": "Chile",
+          "rawKg": "71376900",
+          "tonnes": 71376.9,
+          "region": "internal"
+        },
+        {
+          "name": "Peru",
+          "rawKg": "21300000",
+          "tonnes": 21300.0,
+          "region": "internal"
+        },
+        {
+          "name": "Uruguay",
+          "rawKg": "6546310",
+          "tonnes": 6546.31,
+          "region": "internal"
+        },
+        {
+          "name": "South Africa",
+          "rawKg": "7380",
+          "tonnes": 7.38,
+          "region": "external"
+        }
+      ],
+      "partnerRoundingGap": -2.41,
+      "importRows": [
+        {
+          "name": "World",
+          "rawKg": "7580770000",
+          "tonnes": 7580770.0
+        },
+        {
+          "name": "Paraguay",
+          "rawKg": "6804010000",
+          "tonnes": 6804010.0
+        },
+        {
+          "name": "Uruguay",
+          "rawKg": "484802000",
+          "tonnes": 484802.0
+        },
+        {
+          "name": "Brazil",
+          "rawKg": "234462000",
+          "tonnes": 234462.0
+        },
+        {
+          "name": "Bolivia",
+          "rawKg": "54461200",
+          "tonnes": 54461.2
+        },
+        {
+          "name": "United States",
+          "rawKg": "3035590",
+          "tonnes": 3035.59
+        },
+        {
+          "name": "Canada",
+          "rawKg": "274",
+          "tonnes": 0.274
+        },
+        {
+          "name": "Argentina",
+          "rawKg": "94",
+          "tonnes": 0.094
+        },
+        {
+          "name": "Italy",
+          "rawKg": "500",
+          "tonnes": 0.5
+        },
+        {
+          "name": "Belgium",
+          "rawKg": "7",
+          "tonnes": 0.007
+        }
+      ],
+      "balanceComparable": true,
+      "productionUrl": "https://www.fao.org/faostat/en/#data/QCL",
+      "exportSource": {
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/ARG/year/2024/tradeflow/Exports/partner/ALL/product/120100",
+        "transcription": "data-source/atlas/latin-america/agro-20261016/latin-wits-arg-pry2024.web.txt"
+      },
+      "importSource": {
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/ARG/year/2024/tradeflow/Imports/partner/ALL/product/120100",
+        "transcription": "data-source/atlas/latin-america/agro-20261016/latin-wits-arg-pry2024.web.txt"
+      }
+    },
+    {
+      "countryCode": "BOL",
+      "countryName": "ボリビア",
+      "year": 2024,
+      "seriesId": "soybean-production",
+      "label": "大豆（丸大豆）",
+      "unit": "t",
+      "production": {
+        "rawValue": "3216439.760000",
+        "value": 3216439.76,
+        "flag": "A",
+        "note": "",
+        "areaCode": "19",
+        "itemCode": "236",
+        "unit": "t",
+        "year": 2024
+      },
+      "world": {
+        "rawValue": "397671688.560000",
+        "value": 397671688.56,
+        "flag": "A",
+        "note": "",
+        "areaCode": "5000",
+        "itemCode": "236",
+        "unit": "t",
+        "year": 2024
+      },
+      "imports": 908.653,
+      "exports": 202391.0,
+      "partners": [
+        {
+          "name": "Peru",
+          "rawKg": "99093800",
+          "tonnes": 99093.8,
+          "region": "internal"
+        },
+        {
+          "name": "Argentina",
+          "rawKg": "53366300",
+          "tonnes": 53366.3,
+          "region": "internal"
+        },
+        {
+          "name": "Angola",
+          "rawKg": "45699200",
+          "tonnes": 45699.2,
+          "region": "external"
+        },
+        {
+          "name": "Chile",
+          "rawKg": "2881000",
+          "tonnes": 2881.0,
+          "region": "internal"
+        },
+        {
+          "name": "Indonesia",
+          "rawKg": "500000",
+          "tonnes": 500.0,
+          "region": "external"
+        },
+        {
+          "name": "Malaysia",
+          "rawKg": "500000",
+          "tonnes": 500.0,
+          "region": "external"
+        },
+        {
+          "name": "Paraguay",
+          "rawKg": "138500",
+          "tonnes": 138.5,
+          "region": "internal"
+        },
+        {
+          "name": "Canada",
+          "rawKg": "78000",
+          "tonnes": 78.0,
+          "region": "external"
+        },
+        {
+          "name": "Brazil",
+          "rawKg": "134000",
+          "tonnes": 134.0,
+          "region": "internal"
+        },
+        {
+          "name": "Colombia",
+          "rawKg": "100",
+          "tonnes": 0.1,
+          "region": "internal"
+        }
+      ],
+      "partnerRoundingGap": -0.1,
+      "importRows": [
+        {
+          "name": "World",
+          "rawKg": "908653",
+          "tonnes": 908.653
+        },
+        {
+          "name": "Argentina",
+          "rawKg": "897781",
+          "tonnes": 897.781
+        },
+        {
+          "name": "Bolivia",
+          "rawKg": "9869",
+          "tonnes": 9.869
+        },
+        {
+          "name": "Brazil",
+          "rawKg": "981",
+          "tonnes": 0.981
+        },
+        {
+          "name": "Paraguay",
+          "rawKg": "22",
+          "tonnes": 0.022
+        }
+      ],
+      "balanceComparable": true,
+      "productionUrl": "https://www.fao.org/faostat/en/#data/QCL",
+      "exportSource": {
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/BOL/year/2024/tradeflow/Exports/partner/ALL/product/120100",
+        "transcription": "data-source/atlas/latin-america/agro-20261016/latin-wits-ury-bol2024.web.txt"
+      },
+      "importSource": {
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/BOL/year/2024/tradeflow/Imports/partner/ALL/product/120100",
+        "transcription": "data-source/atlas/latin-america/agro-20261016/latin-wits-ury-bol2024.web.txt"
+      }
+    },
+    {
+      "countryCode": "BRA",
+      "countryName": "ブラジル",
+      "year": 2024,
+      "seriesId": "soybean-production",
+      "label": "大豆（丸大豆）",
+      "unit": "t",
+      "production": {
+        "rawValue": "144473768.000000",
+        "value": 144473768.0,
+        "flag": "A",
+        "note": "",
+        "areaCode": "21",
+        "itemCode": "236",
+        "unit": "t",
+        "year": 2024
+      },
+      "world": {
+        "rawValue": "397671688.560000",
+        "value": 397671688.56,
+        "flag": "A",
+        "note": "",
+        "areaCode": "5000",
+        "itemCode": "236",
+        "unit": "t",
+        "year": 2024
+      },
+      "imports": null,
+      "exports": null,
+      "partners": [
+        {
+          "name": "China",
+          "rawKg": "72867700000",
+          "tonnes": 72867700.0,
+          "region": "external"
+        },
+        {
+          "name": "Spain",
+          "rawKg": "4184300000",
+          "tonnes": 4184300.0,
+          "region": "external"
+        },
+        {
+          "name": "Thailand",
+          "rawKg": "3554810000",
+          "tonnes": 3554810.0,
+          "region": "external"
+        },
+        {
+          "name": "Turkey",
+          "rawKg": "2332790000",
+          "tonnes": 2332790.0,
+          "region": "external"
+        },
+        {
+          "name": "Iran, Islamic Rep.",
+          "rawKg": "1835780000",
+          "tonnes": 1835780.0,
+          "region": "external"
+        },
+        {
+          "name": "Mexico",
+          "rawKg": "1600100000",
+          "tonnes": 1600100.0,
+          "region": "external"
+        },
+        {
+          "name": "Other Asia, nes",
+          "rawKg": "1449640000",
+          "tonnes": 1449640.0,
+          "region": "unresolved"
+        },
+        {
+          "name": "Russian Federation",
+          "rawKg": "1077270000",
+          "tonnes": 1077270.0,
+          "region": "external"
+        },
+        {
+          "name": "Bangladesh",
+          "rawKg": "1118670000",
+          "tonnes": 1118670.0,
+          "region": "external"
+        },
+        {
+          "name": "Vietnam",
+          "rawKg": "1047460000",
+          "tonnes": 1047460.0,
+          "region": "external"
+        },
+        {
+          "name": "Netherlands",
+          "rawKg": "1055590000",
+          "tonnes": 1055590.0,
+          "region": "external"
+        },
+        {
+          "name": "Italy",
+          "rawKg": "947152000",
+          "tonnes": 947152.0,
+          "region": "external"
+        },
+        {
+          "name": "Algeria",
+          "rawKg": "789816000",
+          "tonnes": 789816.0,
+          "region": "external"
+        },
+        {
+          "name": "Japan",
+          "rawKg": "743457000",
+          "tonnes": 743457.0,
+          "region": "external"
+        },
+        {
+          "name": "Egypt, Arab Rep.",
+          "rawKg": "679808000",
+          "tonnes": 679808.0,
+          "region": "external"
+        },
+        {
+          "name": "United Kingdom",
+          "rawKg": "603634000",
+          "tonnes": 603634.0,
+          "region": "external"
+        },
+        {
+          "name": "Iraq",
+          "rawKg": "604477000",
+          "tonnes": 604477.0,
+          "region": "external"
+        },
+        {
+          "name": "Korea, Rep.",
+          "rawKg": "485124000",
+          "tonnes": 485124.0,
+          "region": "external"
+        },
+        {
+          "name": "Norway",
+          "rawKg": "288513000",
+          "tonnes": 288513.0,
+          "region": "external"
+        },
+        {
+          "name": "Tunisia",
+          "rawKg": "273603000",
+          "tonnes": 273603.0,
+          "region": "external"
+        },
+        {
+          "name": "Germany",
+          "rawKg": "264625000",
+          "tonnes": 264625.0,
+          "region": "external"
+        },
+        {
+          "name": "Argentina",
+          "rawKg": "221307000",
+          "tonnes": 221307.0,
+          "region": "internal"
+        },
+        {
+          "name": "Portugal",
+          "rawKg": "199898000",
+          "tonnes": 199898.0,
+          "region": "external"
+        },
+        {
+          "name": "Saudi Arabia",
+          "rawKg": "196941000",
+          "tonnes": 196941.0,
+          "region": "external"
+        },
+        {
+          "name": "Israel",
+          "rawKg": "168299000",
+          "tonnes": 168299.0,
+          "region": "external"
+        },
+        {
+          "name": "United States",
+          "rawKg": "134891000",
+          "tonnes": 134891.0,
+          "region": "external"
+        },
+        {
+          "name": "Malaysia",
+          "rawKg": "109076000",
+          "tonnes": 109076.0,
+          "region": "external"
+        },
+        {
+          "name": "Greece",
+          "rawKg": "111960000",
+          "tonnes": 111960.0,
+          "region": "external"
+        },
+        {
+          "name": "Costa Rica",
+          "rawKg": "97688000",
+          "tonnes": 97688.0,
+          "region": "internal"
+        },
+        {
+          "name": "Venezuela",
+          "rawKg": "46969000",
+          "tonnes": 46969.0,
+          "region": "internal"
+        },
+        {
+          "name": "United Arab Emirates",
+          "rawKg": "40797000",
+          "tonnes": 40797.0,
+          "region": "external"
+        },
+        {
+          "name": "Lebanon",
+          "rawKg": "39000200",
+          "tonnes": 39000.2,
+          "region": "external"
+        },
+        {
+          "name": "Uruguay",
+          "rawKg": "22563100",
+          "tonnes": 22563.1,
+          "region": "internal"
+        },
+        {
+          "name": "Paraguay",
+          "rawKg": "5662710",
+          "tonnes": 5662.71,
+          "region": "internal"
+        },
+        {
+          "name": "Chile",
+          "rawKg": "10001000",
+          "tonnes": 10001.0,
+          "region": "internal"
+        },
+        {
+          "name": "Angola",
+          "rawKg": "486182",
+          "tonnes": 486.182,
+          "region": "external"
+        },
+        {
+          "name": "Aruba",
+          "rawKg": "1002000",
+          "tonnes": 1002.0,
+          "region": "external"
+        },
+        {
+          "name": "France",
+          "rawKg": "511012",
+          "tonnes": 511.012,
+          "region": "external"
+        },
+        {
+          "name": "Colombia",
+          "rawKg": "100782",
+          "tonnes": 100.782,
+          "region": "internal"
+        },
+        {
+          "name": "Senegal",
+          "rawKg": "386000",
+          "tonnes": 386.0,
+          "region": "external"
+        },
+        {
+          "name": "British Virgin Islands",
+          "rawKg": "405000",
+          "tonnes": 405.0,
+          "region": "external"
+        },
+        {
+          "name": "Uganda",
+          "rawKg": "300000",
+          "tonnes": 300.0,
+          "region": "external"
+        },
+        {
+          "name": "Guyana",
+          "rawKg": "151000",
+          "tonnes": 151.0,
+          "region": "internal"
+        },
+        {
+          "name": "Peru",
+          "rawKg": "76000",
+          "tonnes": 76.0,
+          "region": "internal"
+        },
+        {
+          "name": "South Africa",
+          "rawKg": "2945",
+          "tonnes": 2.945,
+          "region": "external"
+        },
+        {
+          "name": "Marshall Islands",
+          "rawKg": "11197",
+          "tonnes": 11.197,
+          "region": "external"
+        },
+        {
+          "name": "Panama",
+          "rawKg": "18118",
+          "tonnes": 18.118,
+          "region": "internal"
+        },
+        {
+          "name": "Liberia",
+          "rawKg": "11098",
+          "tonnes": 11.098,
+          "region": "external"
+        },
+        {
+          "name": "Singapore",
+          "rawKg": "168",
+          "tonnes": 0.168,
+          "region": "external"
+        },
+        {
+          "name": "Hong Kong, China",
+          "rawKg": "466",
+          "tonnes": 0.466,
+          "region": "external"
+        },
+        {
+          "name": "Malta",
+          "rawKg": "31",
+          "tonnes": 0.031,
+          "region": "external"
+        },
+        {
+          "name": "Bahamas, The",
+          "rawKg": "144",
+          "tonnes": 0.144,
+          "region": "internal"
+        },
+        {
+          "name": "Bermuda",
+          "rawKg": "320",
+          "tonnes": 0.32,
+          "region": "external"
+        },
+        {
+          "name": "Denmark",
+          "rawKg": "6",
+          "tonnes": 0.006,
+          "region": "external"
+        },
+        {
+          "name": "Kuwait",
+          "rawKg": "10",
+          "tonnes": 0.01,
+          "region": "external"
+        },
+        {
+          "name": "Antigua and Barbuda",
+          "rawKg": "5",
+          "tonnes": 0.005,
+          "region": "internal"
+        },
+        {
+          "name": "Switzerland",
+          "rawKg": "5",
+          "tonnes": 0.005,
+          "region": "external"
+        },
+        {
+          "name": "Guinea-Bissau",
+          "rawKg": "5",
+          "tonnes": 0.005,
+          "region": "external"
+        },
+        {
+          "name": "Cook Islands",
+          "rawKg": "5",
+          "tonnes": 0.005,
+          "region": "external"
+        },
+        {
+          "name": "Belgium",
+          "rawKg": "2",
+          "tonnes": 0.002,
+          "region": "external"
+        },
+        {
+          "name": "Bulgaria",
+          "rawKg": null,
+          "tonnes": null,
+          "region": "external"
+        }
+      ],
+      "partnerRoundingGap": null,
+      "importRows": [
+        {
+          "name": "World",
+          "rawKg": null,
+          "tonnes": null
+        },
+        {
+          "name": "Paraguay",
+          "rawKg": "810654000",
+          "tonnes": 810654.0
+        },
+        {
+          "name": "Uruguay",
+          "rawKg": "10752000",
+          "tonnes": 10752.0
+        },
+        {
+          "name": "Bolivia",
+          "rawKg": "134000",
+          "tonnes": 134.0
+        },
+        {
+          "name": "Argentina",
+          "rawKg": "5204",
+          "tonnes": 5.204
+        },
+        {
+          "name": "Canada",
+          "rawKg": null,
+          "tonnes": null
+        },
+        {
+          "name": "France",
+          "rawKg": "155",
+          "tonnes": 0.155
+        },
+        {
+          "name": "United States",
+          "rawKg": "95",
+          "tonnes": 0.095
+        }
+      ],
+      "balanceComparable": true,
+      "productionUrl": "https://www.fao.org/faostat/en/#data/QCL",
+      "exportSource": {
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/BRA/year/2024/tradeflow/Exports/partner/ALL/product/120100",
+        "transcription": "data-source/atlas/latin-america/agro-20261016/latin-wits2024.web.txt"
+      },
+      "importSource": {
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/BRA/year/2024/tradeflow/Imports/partner/ALL/product/120100",
+        "transcription": "data-source/atlas/latin-america/agro-20261016/latin-infor-final.web.txt"
+      }
+    },
+    {
+      "countryCode": "PRY",
+      "countryName": "パラグアイ",
+      "year": 2024,
+      "seriesId": "soybean-production",
+      "label": "大豆（丸大豆）",
+      "unit": "t",
+      "production": {
+        "rawValue": "11100256.000000",
+        "value": 11100256.0,
+        "flag": "A",
+        "note": "",
+        "areaCode": "169",
+        "itemCode": "236",
+        "unit": "t",
+        "year": 2024
+      },
+      "world": {
+        "rawValue": "397671688.560000",
+        "value": 397671688.56,
+        "flag": "A",
+        "note": "",
+        "areaCode": "5000",
+        "itemCode": "236",
+        "unit": "t",
+        "year": 2024
+      },
+      "imports": 6277.08,
+      "exports": 7987010.0,
+      "partners": [
+        {
+          "name": "Argentina",
+          "rawKg": "6884070000",
+          "tonnes": 6884070.0,
+          "region": "internal"
+        },
+        {
+          "name": "Brazil",
+          "rawKg": "785626000",
+          "tonnes": 785626.0,
+          "region": "internal"
+        },
+        {
+          "name": "Russian Federation",
+          "rawKg": "247270000",
+          "tonnes": 247270.0,
+          "region": "external"
+        },
+        {
+          "name": "Uruguay",
+          "rawKg": "37622100",
+          "tonnes": 37622.1,
+          "region": "internal"
+        },
+        {
+          "name": "Peru",
+          "rawKg": "22636600",
+          "tonnes": 22636.6,
+          "region": "internal"
+        },
+        {
+          "name": "Spain",
+          "rawKg": "5486660",
+          "tonnes": 5486.66,
+          "region": "external"
+        },
+        {
+          "name": "United States",
+          "rawKg": "3796480",
+          "tonnes": 3796.48,
+          "region": "external"
+        },
+        {
+          "name": "Guatemala",
+          "rawKg": "156660",
+          "tonnes": 156.66,
+          "region": "internal"
+        },
+        {
+          "name": "Japan",
+          "rawKg": "100000",
+          "tonnes": 100.0,
+          "region": "external"
+        },
+        {
+          "name": "Chile",
+          "rawKg": "112000",
+          "tonnes": 112.0,
+          "region": "internal"
+        },
+        {
+          "name": "Korea, Rep.",
+          "rawKg": "72000",
+          "tonnes": 72.0,
+          "region": "external"
+        },
+        {
+          "name": "Kuwait",
+          "rawKg": "56010",
+          "tonnes": 56.01,
+          "region": "external"
+        },
+        {
+          "name": "Luxembourg",
+          "rawKg": "7743",
+          "tonnes": 7.743,
+          "region": "external"
+        },
+        {
+          "name": "Netherlands",
+          "rawKg": "1560",
+          "tonnes": 1.56,
+          "region": "external"
+        },
+        {
+          "name": "Indonesia",
+          "rawKg": "15",
+          "tonnes": 0.015,
+          "region": "external"
+        }
+      ],
+      "partnerRoundingGap": 3.828,
+      "importRows": [
+        {
+          "name": "World",
+          "rawKg": "6277080",
+          "tonnes": 6277.08
+        },
+        {
+          "name": "Brazil",
+          "rawKg": "5792800",
+          "tonnes": 5792.8
+        },
+        {
+          "name": "Argentina",
+          "rawKg": "335761",
+          "tonnes": 335.761
+        },
+        {
+          "name": "Bolivia",
+          "rawKg": "138500",
+          "tonnes": 138.5
+        },
+        {
+          "name": "Uruguay",
+          "rawKg": "10018",
+          "tonnes": 10.018
+        },
+        {
+          "name": "Chile",
+          "rawKg": "0",
+          "tonnes": 0.0
+        }
+      ],
+      "balanceComparable": true,
+      "productionUrl": "https://www.fao.org/faostat/en/#data/QCL",
+      "exportSource": {
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/PRY/year/2024/tradeflow/Exports/partner/ALL/product/120100",
+        "transcription": "data-source/atlas/latin-america/agro-20261016/latin-extra-tables.web.txt"
+      },
+      "importSource": {
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/PRY/year/2024/tradeflow/Imports/partner/ALL/product/120100",
+        "transcription": "data-source/atlas/latin-america/agro-20261016/latin-wits-arg-pry2024.web.txt"
+      }
+    },
+    {
+      "countryCode": "URY",
+      "countryName": "ウルグアイ",
+      "year": 2024,
+      "seriesId": "soybean-production",
+      "label": "大豆（丸大豆）",
+      "unit": "t",
+      "production": {
+        "rawValue": "3065000.000000",
+        "value": 3065000.0,
+        "flag": "X",
+        "note": "Unofficial figure",
+        "areaCode": "234",
+        "itemCode": "236",
+        "unit": "t",
+        "year": 2024
+      },
+      "world": {
+        "rawValue": "397671688.560000",
+        "value": 397671688.56,
+        "flag": "A",
+        "note": "",
+        "areaCode": "5000",
+        "itemCode": "236",
+        "unit": "t",
+        "year": 2024
+      },
+      "imports": 8993.53,
+      "exports": 2812810.0,
+      "partners": [
+        {
+          "name": "Free Zones",
+          "rawKg": "1817520000",
+          "tonnes": 1817520.0,
+          "region": "unresolved"
+        },
+        {
+          "name": "China",
+          "rawKg": "802965000",
+          "tonnes": 802965.0,
+          "region": "external"
+        },
+        {
+          "name": "Argentina",
+          "rawKg": "115830000",
+          "tonnes": 115830.0,
+          "region": "internal"
+        },
+        {
+          "name": "Egypt, Arab Rep.",
+          "rawKg": "32578700",
+          "tonnes": 32578.7,
+          "region": "external"
+        },
+        {
+          "name": "United States",
+          "rawKg": "11755200",
+          "tonnes": 11755.2,
+          "region": "external"
+        },
+        {
+          "name": "Malaysia",
+          "rawKg": "21478000",
+          "tonnes": 21478.0,
+          "region": "external"
+        },
+        {
+          "name": "Brazil",
+          "rawKg": "10665500",
+          "tonnes": 10665.5,
+          "region": "internal"
+        },
+        {
+          "name": "Paraguay",
+          "rawKg": "12923",
+          "tonnes": 12.923,
+          "region": "internal"
+        },
+        {
+          "name": "Canada",
+          "rawKg": "25",
+          "tonnes": 0.025,
+          "region": "external"
+        }
+      ],
+      "partnerRoundingGap": -4.652,
+      "importRows": [
+        {
+          "name": "World",
+          "rawKg": "8993530",
+          "tonnes": 8993.53
+        },
+        {
+          "name": "Argentina",
+          "rawKg": "8036690",
+          "tonnes": 8036.69
+        },
+        {
+          "name": "Paraguay",
+          "rawKg": "615600",
+          "tonnes": 615.6
+        },
+        {
+          "name": "Brazil",
+          "rawKg": "320199",
+          "tonnes": 320.199
+        },
+        {
+          "name": "United States",
+          "rawKg": "21042",
+          "tonnes": 21.042
+        }
+      ],
+      "balanceComparable": false,
+      "productionUrl": "https://www.fao.org/faostat/en/#data/QCL",
+      "exportSource": {
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/URY/year/2024/tradeflow/Exports/partner/ALL/product/120100",
+        "transcription": "data-source/atlas/latin-america/agro-20261016/latin-wits-ury-bol2024.web.txt"
+      },
+      "importSource": {
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/URY/year/2024/tradeflow/Imports/partner/ALL/product/120100",
+        "transcription": "data-source/atlas/latin-america/agro-20261016/latin-wits-ury-bol2024.web.txt"
+      }
+    }
+  ],
+  "forest": {
+    "countryCode": "CHL",
+    "countryName": "チリ",
+    "year": 2024,
+    "roundwood": {
+      "unit": "m³ ssc（樹皮なし実材積）",
+      "total": 42254600.0,
+      "rawLine": "2024  | 42.254,6  | 619,6  | 18.881,7  | 13.637,8  | 4.210,9  | 67,9  | -  | 4.601,2  | 235,4  | -",
+      "parts": [
+        {
+          "label": "機械パルプへの丸太投入",
+          "value": 619600.0,
+          "rawValue": "619,6"
+        },
+        {
+          "label": "化学パルプへの丸太投入",
+          "value": 18881700.0,
+          "rawValue": "18.881,7"
+        },
+        {
+          "label": "製材への丸太投入",
+          "value": 13637800.0,
+          "rawValue": "13.637,8"
+        },
+        {
+          "label": "合板・ボード等への丸太投入",
+          "value": 4210900.0,
+          "rawValue": "4.210,9"
+        },
+        {
+          "label": "製材・単板用丸太の直接輸出",
+          "value": 67900.0,
+          "rawValue": "67,9"
+        },
+        {
+          "label": "パルプ用丸太の直接輸出",
+          "value": null,
+          "rawValue": "-"
+        },
+        {
+          "label": "チップへの丸太投入",
+          "value": 4601200.0,
+          "rawValue": "4.601,2"
+        },
+        {
+          "label": "柱・杭への丸太投入",
+          "value": 235400.0,
+          "rawValue": "235,4"
+        },
+        {
+          "label": "その他の丸太投入",
+          "value": null,
+          "rawValue": "-"
+        }
+      ],
+      "url": "https://wef.infor.cl/index.php/sector-forestal/industria-forestal/consumo/consumo-de-trozas-por-industria?view=comercio_ind_con_total"
+    },
+    "sawnwood": {
+      "unit": "m³",
+      "production": 7036700.0,
+      "exports": 2010000.0,
+      "rawLine": "2024  | 7.036,7  | 8,8  | 5,6  | 3,6  | 0,3  | 17,4  | 56,1  | 6.919,3  | 4,4  | 8,9  | 2,1  | 10,2",
+      "exportRawLine": "MADERA ASERRADA (1)  | 2.709  | 2.529  | 2.322  | 2.155  | 2.015  | 2.023  | 2.010  | 1.758  | 1.185",
+      "url": "https://wef.infor.cl/index.php/sector-forestal/industria-forestal/produccion/madera-aserrada-por-especie?view=comercio_ind_pro_aserradaespecie"
+    },
+    "pulp": {
+      "unit": "t",
+      "production": 5938000.0,
+      "rawLine": "2024  | 5.938,0  | 75,0  | 197,7  | 1.765,2  | 326,2  | 3.574,0",
+      "url": "https://wef.infor.cl/index.php/sector-forestal/industria-forestal/produccion/produccion-de-celulosa?view=comercio_ind_pro_celulosa"
+    },
+    "tradeUrl": "https://wef.infor.cl/index.php/sector-forestal/exportaciones/cantidad-total-por-producto?view=comercio_exp_volumensegunproducto"
+  },
+  "sources": [
+    {
+      "path": "data-source/atlas/latin-america/agro-20261016/latin-extra-tables.web.txt",
+      "sha256": "fc5bbfdd1d8fa3dadfacddafca14bc60a74f67af47b583c1938c0f340ce2ebc5"
+    },
+    {
+      "path": "data-source/atlas/latin-america/agro-20261016/latin-infor-entry.web.txt",
+      "sha256": "e5b3c273708eeb1b2fa83a4b8ef54efdb3602e80b7ba7e44ecb1c4df124a08ce"
+    },
+    {
+      "path": "data-source/atlas/latin-america/agro-20261016/latin-infor-final.web.txt",
+      "sha256": "ad717798a3b2f694f41a703dde3ac32fa4e12a6d2fa3bde3599cd304040ab65c"
+    },
+    {
+      "path": "data-source/atlas/latin-america/agro-20261016/latin-infor-input.web.txt",
+      "sha256": "eebaf36c49c2ff9fe7e9c5d8cd238c85bccb0dca9314e33a292cda8461890b46"
+    },
+    {
+      "path": "data-source/atlas/latin-america/agro-20261016/latin-infor-tables.web.txt",
+      "sha256": "8c2e388ebd2be30068b66f2dd966b5a5178dda384b05a3569789fbb6e5744513"
+    },
+    {
+      "path": "data-source/atlas/latin-america/agro-20261016/latin-wits-arg-pry2024.web.txt",
+      "sha256": "83d95a4ec4b8ca9d4e98d99108e3bc8a33cbebee159bcf556c4c17895ebb0b43"
+    },
+    {
+      "path": "data-source/atlas/latin-america/agro-20261016/latin-wits-ury-bol2024.web.txt",
+      "sha256": "0b1457fe6aa6ebada05d7eba0e65439804458116e1dc30473e73ea57ee212851"
+    },
+    {
+      "path": "data-source/atlas/latin-america/agro-20261016/latin-wits2024.web.txt",
+      "sha256": "dfa39092f83cd76a52abcb2bf61a5af434ebafffa7fe9541baa6999171512e50"
+    },
+    {
+      "path": "data-source/atlas/latin-agriculture/raw/faostat-qcl-2024-selected.csv",
+      "sha256": "12f1a5fd1d6fdfb38eb332b8054ee83d45ecb2ded9fe2473c5259c50c86737d9"
+    },
+    {
+      "path": "data-source/atlas/latin-agriculture/raw/qcl-source.json",
+      "sha256": "1ebeec49c24634ca1e7da5320f004c8af90681ee241c2114e81cc5dcf8a8f3c0"
+    }
+  ],
+  "method": "FAO QCL236とWITS H0 120100のSoya beans。同じ2024暦年の原料重量比較。油・油かすは含めない。WITSは総輸出入。kg÷1000=t。在庫未調整見掛量は実消費・国産原料の仕向けではない。国別の全相手を保持し、中南米34対象内への取引と域外への取引を区別する。地域集計は作らない。Free Zonesの地理区分は推定しない。"
+}

@@ -3,9 +3,11 @@ import {forestRegions,timberExample as timber} from '../../data/atlas/forestry';
 import {withBase} from '../../lib/urls';
 import national from '../../../data-source/atlas/us-review/forest-national-2017.json';
 import {forestProcessingSites} from '../../data/atlas/us-processing-sites';
+import UsForestryStatistics from './UsForestryStatistics.astro';
 const {statistics=false}=Astro.props;
 ---
-{statistics ? <section class="forest-statistics" data-forest-statistics hidden aria-labelledby="forest-stat-title">
+{statistics ? <section class="forest-statistics" data-forest-statistics hidden aria-label="米国の林産物統計と州別用途の参考">
+ <UsForestryStatistics />
  <header><h2 id="forest-stat-title">木材が何に使われるか — 南部の一州を読む</h2><p>ノースカロライナ州・2022年の事例。全国の構成比ではありません。</p></header>
  <div class="forest-stat-grid">
   <figure><figcaption><strong>丸太生産の用途構成</strong><span>州内で生産した丸太の体積に占める割合</span></figcaption>

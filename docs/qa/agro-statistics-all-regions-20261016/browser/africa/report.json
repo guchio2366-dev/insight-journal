@@ -1,0 +1,761 @@
+{
+  "head": "58be943225b7fdef8bb68392c7e377571305007d",
+  "sandbox": true,
+  "viewports": [
+    {
+      "width": 1896,
+      "height": 996
+    },
+    {
+      "width": 1280,
+      "height": 665
+    }
+  ],
+  "deviceScaleFactor": 1.5,
+  "status": "passed",
+  "cases": [
+    {
+      "name": "overview",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "deviceScaleFactor": 1.5,
+      "measured": {
+        "box": {
+          "x": 420,
+          "y": 1029,
+          "width": 1456
+        },
+        "map": {
+          "x": 420,
+          "y": 255,
+          "width": 927,
+          "height": 650,
+          "bottom": 905
+        },
+        "rail": {
+          "right": 400,
+          "width": 380
+        },
+        "columns": [
+          {
+            "x": 437,
+            "y": 1117.796875,
+            "width": 464.65625
+          },
+          {
+            "x": 915.65625,
+            "y": 1117.796875,
+            "width": 464.671875
+          },
+          {
+            "x": 1394.328125,
+            "y": 1117.796875,
+            "width": 464.65625
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false
+      }
+    },
+    {
+      "name": "region-coffee",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "deviceScaleFactor": 1.5,
+      "measured": {
+        "box": {
+          "x": 420,
+          "y": 1031,
+          "width": 1456
+        },
+        "map": {
+          "x": 420,
+          "y": 255,
+          "width": 927,
+          "height": 650,
+          "bottom": 905
+        },
+        "rail": {
+          "right": 400,
+          "width": 380
+        },
+        "columns": [
+          {
+            "x": 420,
+            "y": 1121.59375,
+            "width": 476
+          },
+          {
+            "x": 910,
+            "y": 1121.59375,
+            "width": 476
+          },
+          {
+            "x": 1400,
+            "y": 1121.59375,
+            "width": 476
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false
+      }
+    },
+    {
+      "name": "east-cattle",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "deviceScaleFactor": 1.5,
+      "measured": {
+        "box": {
+          "x": 420,
+          "y": 1031,
+          "width": 1456
+        },
+        "map": {
+          "x": 420,
+          "y": 255,
+          "width": 927,
+          "height": 650,
+          "bottom": 905
+        },
+        "rail": {
+          "right": 400,
+          "width": 380
+        },
+        "columns": [
+          {
+            "x": 420,
+            "y": 1202.03125,
+            "width": 476
+          },
+          {
+            "x": 910,
+            "y": 1202.03125,
+            "width": 476
+          },
+          {
+            "x": 1400,
+            "y": 1202.03125,
+            "width": 476
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false
+      }
+    },
+    {
+      "name": "south-africa-maize",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "deviceScaleFactor": 1.5,
+      "measured": {
+        "box": {
+          "x": 420,
+          "y": 1031,
+          "width": 1456
+        },
+        "map": {
+          "x": 420,
+          "y": 255,
+          "width": 927,
+          "height": 650,
+          "bottom": 905
+        },
+        "rail": {
+          "right": 400,
+          "width": 380
+        },
+        "columns": [
+          {
+            "x": 420,
+            "y": 1125.1875,
+            "width": 476
+          },
+          {
+            "x": 910,
+            "y": 1125.1875,
+            "width": 476
+          },
+          {
+            "x": 1400,
+            "y": 1125.1875,
+            "width": 476
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false
+      }
+    },
+    {
+      "name": "egypt-maize",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "deviceScaleFactor": 1.5,
+      "measured": {
+        "box": {
+          "x": 420,
+          "y": 1031,
+          "width": 1456
+        },
+        "map": {
+          "x": 420,
+          "y": 255,
+          "width": 927,
+          "height": 650,
+          "bottom": 905
+        },
+        "rail": {
+          "right": 400,
+          "width": 380
+        },
+        "columns": [
+          {
+            "x": 420,
+            "y": 1125.1875,
+            "width": 476
+          },
+          {
+            "x": 910,
+            "y": 1125.1875,
+            "width": 476
+          },
+          {
+            "x": 1400,
+            "y": 1125.1875,
+            "width": 476
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false
+      }
+    },
+    {
+      "name": "nigeria-wheat",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "deviceScaleFactor": 1.5,
+      "measured": {
+        "box": {
+          "x": 420,
+          "y": 1031,
+          "width": 1456
+        },
+        "map": {
+          "x": 420,
+          "y": 255,
+          "width": 927,
+          "height": 650,
+          "bottom": 905
+        },
+        "rail": {
+          "right": 400,
+          "width": 380
+        },
+        "columns": [
+          {
+            "x": 420,
+            "y": 1125.1875,
+            "width": 476
+          },
+          {
+            "x": 910,
+            "y": 1125.1875,
+            "width": 476
+          },
+          {
+            "x": 1400,
+            "y": 1125.1875,
+            "width": 476
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false
+      }
+    },
+    {
+      "name": "kenya-cattle",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "deviceScaleFactor": 1.5,
+      "measured": {
+        "box": {
+          "x": 420,
+          "y": 1031,
+          "width": 1456
+        },
+        "map": {
+          "x": 420,
+          "y": 255,
+          "width": 927,
+          "height": 650,
+          "bottom": 905
+        },
+        "rail": {
+          "right": 400,
+          "width": 380
+        },
+        "columns": [
+          {
+            "x": 420,
+            "y": 1237.21875,
+            "width": 476
+          },
+          {
+            "x": 910,
+            "y": 1237.21875,
+            "width": 476
+          },
+          {
+            "x": 1400,
+            "y": 1237.21875,
+            "width": 476
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false
+      }
+    },
+    {
+      "name": "egypt-forestry-legacy-url",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "deviceScaleFactor": 1.5,
+      "measured": {
+        "box": {
+          "x": 420,
+          "y": 1062.421875,
+          "width": 1456
+        },
+        "map": {
+          "x": 420,
+          "y": 255,
+          "width": 927,
+          "height": 650,
+          "bottom": 905
+        },
+        "rail": {
+          "right": 400,
+          "width": 380
+        },
+        "columns": [
+          {
+            "x": 420,
+            "y": 1268.640625,
+            "width": 476
+          },
+          {
+            "x": 910,
+            "y": 1268.640625,
+            "width": 476
+          },
+          {
+            "x": 1400,
+            "y": 1268.640625,
+            "width": 476
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false
+      }
+    },
+    {
+      "name": "overview",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "deviceScaleFactor": 1.5,
+      "measured": {
+        "box": {
+          "x": 279.1875,
+          "y": 918.5,
+          "width": 980.8125
+        },
+        "map": {
+          "x": 279.1875,
+          "y": 255,
+          "width": 601.96875,
+          "height": 480,
+          "bottom": 735
+        },
+        "rail": {
+          "right": 263.1875,
+          "width": 243.1875
+        },
+        "columns": [
+          {
+            "x": 296.1875,
+            "y": 1007.296875,
+            "width": 306.265625
+          },
+          {
+            "x": 616.453125,
+            "y": 1007.296875,
+            "width": 306.265625
+          },
+          {
+            "x": 936.71875,
+            "y": 1007.296875,
+            "width": 306.28125
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false
+      }
+    },
+    {
+      "name": "region-coffee",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "deviceScaleFactor": 1.5,
+      "measured": {
+        "box": {
+          "x": 279.1875,
+          "y": 1059.4375,
+          "width": 980.8125
+        },
+        "map": {
+          "x": 279.1875,
+          "y": 255,
+          "width": 601.96875,
+          "height": 480,
+          "bottom": 735
+        },
+        "rail": {
+          "right": 263.1875,
+          "width": 243.1875
+        },
+        "columns": [
+          {
+            "x": 279.1875,
+            "y": 1150.03125,
+            "width": 317.59375
+          },
+          {
+            "x": 610.78125,
+            "y": 1150.03125,
+            "width": 317.609375
+          },
+          {
+            "x": 942.390625,
+            "y": 1150.03125,
+            "width": 317.59375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false
+      }
+    },
+    {
+      "name": "east-cattle",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "deviceScaleFactor": 1.5,
+      "measured": {
+        "box": {
+          "x": 279.1875,
+          "y": 920.5,
+          "width": 980.8125
+        },
+        "map": {
+          "x": 279.1875,
+          "y": 255,
+          "width": 601.96875,
+          "height": 480,
+          "bottom": 735
+        },
+        "rail": {
+          "right": 263.1875,
+          "width": 243.1875
+        },
+        "columns": [
+          {
+            "x": 279.1875,
+            "y": 1091.53125,
+            "width": 317.59375
+          },
+          {
+            "x": 610.78125,
+            "y": 1091.53125,
+            "width": 317.609375
+          },
+          {
+            "x": 942.390625,
+            "y": 1091.53125,
+            "width": 317.59375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false
+      }
+    },
+    {
+      "name": "south-africa-maize",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "deviceScaleFactor": 1.5,
+      "measured": {
+        "box": {
+          "x": 279.1875,
+          "y": 920.5,
+          "width": 980.8125
+        },
+        "map": {
+          "x": 279.1875,
+          "y": 255,
+          "width": 601.96875,
+          "height": 480,
+          "bottom": 735
+        },
+        "rail": {
+          "right": 263.1875,
+          "width": 243.1875
+        },
+        "columns": [
+          {
+            "x": 279.1875,
+            "y": 1014.6875,
+            "width": 317.59375
+          },
+          {
+            "x": 610.78125,
+            "y": 1014.6875,
+            "width": 317.609375
+          },
+          {
+            "x": 942.390625,
+            "y": 1014.6875,
+            "width": 317.59375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false
+      }
+    },
+    {
+      "name": "egypt-maize",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "deviceScaleFactor": 1.5,
+      "measured": {
+        "box": {
+          "x": 279.1875,
+          "y": 920.5,
+          "width": 980.8125
+        },
+        "map": {
+          "x": 279.1875,
+          "y": 255,
+          "width": 601.96875,
+          "height": 480,
+          "bottom": 735
+        },
+        "rail": {
+          "right": 263.1875,
+          "width": 243.1875
+        },
+        "columns": [
+          {
+            "x": 279.1875,
+            "y": 1014.6875,
+            "width": 317.59375
+          },
+          {
+            "x": 610.78125,
+            "y": 1014.6875,
+            "width": 317.609375
+          },
+          {
+            "x": 942.390625,
+            "y": 1014.6875,
+            "width": 317.59375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false
+      }
+    },
+    {
+      "name": "nigeria-wheat",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "deviceScaleFactor": 1.5,
+      "measured": {
+        "box": {
+          "x": 279.1875,
+          "y": 920.5,
+          "width": 980.8125
+        },
+        "map": {
+          "x": 279.1875,
+          "y": 255,
+          "width": 601.96875,
+          "height": 480,
+          "bottom": 735
+        },
+        "rail": {
+          "right": 263.1875,
+          "width": 243.1875
+        },
+        "columns": [
+          {
+            "x": 279.1875,
+            "y": 1014.6875,
+            "width": 317.59375
+          },
+          {
+            "x": 610.78125,
+            "y": 1014.6875,
+            "width": 317.609375
+          },
+          {
+            "x": 942.390625,
+            "y": 1014.6875,
+            "width": 317.59375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false
+      }
+    },
+    {
+      "name": "kenya-cattle",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "deviceScaleFactor": 1.5,
+      "measured": {
+        "box": {
+          "x": 279.1875,
+          "y": 920.5,
+          "width": 980.8125
+        },
+        "map": {
+          "x": 279.1875,
+          "y": 255,
+          "width": 601.96875,
+          "height": 480,
+          "bottom": 735
+        },
+        "rail": {
+          "right": 263.1875,
+          "width": 243.1875
+        },
+        "columns": [
+          {
+            "x": 279.1875,
+            "y": 1126.71875,
+            "width": 317.59375
+          },
+          {
+            "x": 610.78125,
+            "y": 1126.71875,
+            "width": 317.609375
+          },
+          {
+            "x": 942.390625,
+            "y": 1126.71875,
+            "width": 317.59375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false
+      }
+    },
+    {
+      "name": "egypt-forestry-legacy-url",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "deviceScaleFactor": 1.5,
+      "measured": {
+        "box": {
+          "x": 279.1875,
+          "y": 1161.265625,
+          "width": 980.8125
+        },
+        "map": {
+          "x": 279.1875,
+          "y": 255,
+          "width": 601.96875,
+          "height": 480,
+          "bottom": 735
+        },
+        "rail": {
+          "right": 263.1875,
+          "width": 243.1875
+        },
+        "columns": [
+          {
+            "x": 279.1875,
+            "y": 1367.484375,
+            "width": 317.59375
+          },
+          {
+            "x": 610.78125,
+            "y": 1367.484375,
+            "width": 317.609375
+          },
+          {
+            "x": 942.390625,
+            "y": 1367.484375,
+            "width": 317.59375
+          }
+        ],
+        "overflow": false,
+        "statisticsOverflow": false
+      }
+    }
+  ],
+  "errors": [],
+  "forestStandaloneIntegration": "proposal only; shared component unchanged",
+  "sources": {
+    "src/scripts/atlas-africa.ts": "948d2d05cc95f56aa96243628e7e6de2705cc5bbbb5b4d0119dfbbda80078d6e",
+    "src/scripts/atlas-africa-agro-statistics.ts": "38facd20e549059de156192986e40285c82ce772f3dc2650ec36ca55d6e05554",
+    "src/styles/atlas-africa.css": "9c509097aae26752378157a55f1917e8502f9449a319211f520cb9046315a112",
+    "src/data/atlas/africa-agro-marketing-year.json": "aec2e148bb35f87345162ad97cdc1f64a24b2439ddc0da1b0774d8e449aa9f31"
+  },
+  "sourceIdentity": {
+    "mode": "exact-commit",
+    "baseHead": "58be943225b7fdef8bb68392c7e377571305007d",
+    "buildIdentity": "58be943225b7fdef8bb68392c7e377571305007d",
+    "workingTreeDirty": false,
+    "applicationInputsDirty": false,
+    "inputFiles": 3593,
+    "workingTreeSha256": "43dcbba00136b71738aeaac9282049f8d3aa797b588b257082721a0acda347be",
+    "publishedRelease": false
+  },
+  "runtimeSandbox": {
+    "browserVersion": "151.0.7922.173",
+    "status": "Sandbox Status\nLayer 1 Sandbox\tNamespace\nPID namespaces\tYes\nNetwork namespaces\tYes\nSeccomp-BPF sandbox\tYes\nSeccomp-BPF sandbox supports TSYNC\tYes\nPtrace Protection with Yama LSM (Broker)\tNo\nPtrace Protection with Yama LSM (Non-broker)\tNo\n\nYou are adequately sandboxed.",
+    "verified": true
+  }
+}

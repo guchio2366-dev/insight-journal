@@ -1,0 +1,47 @@
+---
+import CropSupplyUse from './CropSupplyUse.astro';
+import {agroMarketingYearFlow} from '../../data/atlas/agro-marketing-year-flow';
+import type {StatisticCropId} from '../../data/atlas/statistics';
+import verification from '../../../data-source/atlas/us-agro-20261016/wasde-verification.json';
+interface Props {id:StatisticCropId}
+const {id}=Astro.props;
+const series={corn:'maize-production',soybean:'soybean-production',wheat:'wheat-production',rice:'rice-milled-production',cotton:'cotton-lint-production'};
+const flow=agroMarketingYearFlow('USA',series[id])!;
+const period=verification.periods[id];
+const fmt=(n:number)=>n.toLocaleString('ja-JP',{minimumFractionDigits:2,maximumFractionDigits:2});
+const supply=[{label:'国内生産',value:flow.production,role:'production'},{label:'輸入',value:flow.imports,role:'import'},{label:'期首在庫',value:flow.beginningStocks,role:'stock'}];
+const uses=[{label:'国内利用',value:flow.domesticUse,role:'domestic'},{label:'輸出',value:flow.exports,role:'export'},{label:'期末在庫',value:flow.endingStocks,role:'stock'}];
+const total=supply.reduce((sum,r)=>sum+r.value,0),scale=Math.max(total,uses.reduce((sum,r)=>sum+r.value,0));
+const rows=[{label:'供給元',values:supply},{label:'仕向け',values:uses}];
+---
+<section class="us-crop-flow" data-us-marketing-flow={id} data-us-supply-total={total}>
+ <h3>② 国内利用と輸出</h3>
+ <p class="us-flow-meta">{flow.year}販売年度 · {flow.label} · {flow.unit}</p>
+ <p class="us-flow-meta">米国の期間：{period.start}〜{period.end}。Worldは各国の販売年度を集計した公表値です。</p>
+ <p>輸出 <strong>{fmt(flow.exports)} {flow.unit}</strong> · 生産量との比 <strong>{(flow.exports/flow.production*100).toFixed(1)}%</strong></p>
+ <p>国内利用 <strong>{fmt(flow.domesticUse)} {flow.unit}</strong></p>
+ <p class="us-flow-meta" data-us-domestic-definition>{id==='cotton'?'国内利用は綿繊維の紡績等です。綿実の油・飼料利用は含みません。':'国内利用は食用・飼料・加工等を含む公表量です。'} 輸入・持越在庫を含む収支で、当年の国産品を国内利用と輸出へ二分した割合ではありません。</p>
+ <figure><figcaption>2本とも総供給 {fmt(total)} {flow.unit} が100%。</figcaption>
+ {rows.map(group=><div class="us-flow-row"><h4>{group.label}</h4>
+  <div class="us-flow-track" role="img" aria-label={`${group.label}：${group.values.map(r=>`${r.label} ${fmt(r.value)} ${flow.unit}、総供給比 ${(r.value/total*100).toFixed(1)}%`).join('。')}`}>
+   {group.values.map(r=><span class={`us-flow-${r.role}`} style={`width:${r.value/scale*100}%`}/>)}
+   <i style={`left:${total/scale*100}%`} aria-hidden="true"/>
+  </div>
+  <ul>{group.values.map(r=><li><i class={`us-flow-${r.role}`} aria-hidden="true"/><span>{r.label}</span><strong>{fmt(r.value)}</strong><span>{(r.value/total*100).toFixed(1)}%</span></li>)}</ul>
+ </div>)}
+ </figure>
+ {flow.domesticSubset&&<p class="us-flow-subset">国内利用の内数：{flow.domesticSubset.label} <strong>{fmt(flow.domesticSubset.value)} {flow.unit}</strong>。{id==='soybean'?'丸大豆の加工投入で、加工後の油・粕を追加計上しません。':'原表の飼料区分で、食用量とは区別します。'} 国内利用へ重ねて加算しません。</p>}
+ {flow.lossAdjustment!==undefined?<p class="us-flow-meta">原表の未勘定 <strong>{fmt(flow.lossAdjustment)} {flow.unit}</strong>。符号を保持して帯の外へ表示します。</p>:flow.roundingGap!==0&&<p class="us-flow-meta">供給−国内利用−輸出−期末在庫の公表丸め差 <strong>{fmt(flow.roundingGap)} {flow.unit}</strong>。用途で帳尻を合わせません。</p>}
+ {id==='cotton'&&<p class="us-flow-meta">輸入0.00は公表丸め値で、厳密なゼロを意味しません。World表の米国輸入記号「3/」は5,000俵未満です。</p>}
+ <details><summary>同じ数量基準の原値と定義</summary>
+  <table><caption>米国 · {flow.year} · {flow.label} · {flow.unit}</caption><thead><tr><th>区分</th><th>数量</th><th>総供給比</th></tr></thead><tbody>{rows.map(group=>group.values.map(r=><tr><th scope="row">{r.label}</th><td>{fmt(r.value)}</td><td>{(r.value/total*100).toFixed(2)}%</td></tr>))}</tbody></table>
+  {flow.notes.filter(note=>!note.includes('保存TXTに注記全文・日付定義')&&!note.includes('脚注全文未収録')).map(note=><p>{note}</p>)}
+  <p>米国の年度開始月は<a href={`${verification.url}#page=${period.footnotePage}`}>同じWASDE版 p.{period.footnotePage} の脚注</a>で確認。{id==='cotton'&&<a href={`${verification.url}#page=26`}>輸入記号の定義：p.26脚注3/</a>}</p>
+  <pre>{flow.rawLine}</pre>
+ </details>
+ <details class="agro-other-reference"><summary>{id==='rice'?'同年度の別基準参考（籾米換算）':id==='cotton'?'同年度の米国原表と用途内訳':'同年度の用途内訳（元のブッシェル単位）'}</summary><CropSupplyUse cropId={id}/></details>
+ <p class="us-flow-meta"><a href={`${flow.source.url}#page=${flow.source.page}`}>USDA WASDE-675 p.{flow.source.page}</a> · {flow.source.releaseDate}公表。③は別期間の参考です。</p>
+</section>
+<style>
+.us-crop-flow{padding:12px;background:#f6f5ed;border:1px solid #d4d9d0;border-radius:5px;min-width:0;font-size:14px;line-height:1.7}.us-crop-flow h3{font-size:17px;margin:0}.us-flow-meta,.us-crop-flow figcaption{font-size:12px;line-height:1.7}.us-crop-flow figure{margin:12px 0}.us-flow-row h4{font-size:14px;margin:12px 0 5px}.us-flow-track{height:12px;display:flex;position:relative;background:#e7e9e3}.us-flow-track>span{height:100%;flex-shrink:0}.us-flow-track>i{position:absolute;top:-3px;bottom:-3px;width:1px;background:#293f42}.us-flow-production{background:#426f62}.us-flow-import{background:#b57532}.us-flow-stock{background:#a8aeab}.us-flow-domestic{background:#4a7291}.us-flow-export{background:#9d597b}.us-flow-row ul{list-style:none;padding:0;margin:8px 0}.us-flow-row li{display:grid;grid-template-columns:9px 1fr auto auto;gap:7px;align-items:baseline;font-variant-numeric:tabular-nums}.us-flow-row li>i{width:9px;height:9px}.us-flow-row li>span:last-child{text-align:right;min-width:48px}.us-flow-subset{border-top:1px solid #d4d9d0;padding-top:8px}.us-crop-flow summary{min-height:44px;align-content:center;cursor:pointer}.us-crop-flow table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}.us-crop-flow th,.us-crop-flow td{padding:6px 3px;border-bottom:1px solid #d4d9d0;text-align:right;overflow-wrap:anywhere}.us-crop-flow th:first-child{text-align:left}.us-crop-flow caption{text-align:left}.us-crop-flow details p{font-size:12px}.us-crop-flow pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}.us-crop-flow :focus-visible{outline:3px solid #294749;outline-offset:3px}@media(forced-colors:active){.us-flow-track>span,.us-flow-row li>i{border:1px solid CanvasText}}
+</style>

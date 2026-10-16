@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-16",
+  "requestedViewports": [
+    {
+      "width": 1896,
+      "height": 996
+    },
+    {
+      "width": 1280,
+      "height": 665
+    }
+  ],
+  "units": "CSS px",
+  "deviceScaleFactor": 1.5,
+  "chromiumSandbox": true,
+  "completedCases": 0,
+  "status": "blocked-or-failed",
+  "headAtAttempt": "3fbb4c957c21685bddbf8148a95a2a03ba210553",
+  "workingTreeHadRegionalChanges": true,
+  "reason": "Sandboxed Chromium failed at launch: The SUID sandbox helper binary was found, but is not configured correctly. No sandbox-disabling or OS-permission changes were attempted.",
+  "screenshots": []
+}

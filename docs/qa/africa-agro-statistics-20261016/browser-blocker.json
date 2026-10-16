@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-16",
+  "action": "Launch cloud Chromium through Playwright with chromiumSandbox:true, executablePath:/usr/bin/chromium",
+  "result": "blocked before any page or screenshot",
+  "error": "FATAL:sandbox/linux/suid/client/setuid_sandbox_host.cc:166: The SUID sandbox helper binary was found, but is not configured correctly. /usr/lib/chromium/chrome-sandbox must be owned by root and have mode 4755; actual owner nobody:nogroup.",
+  "safety": "No sandbox disablement, owner/mode changes, escalation, browser-profile access or user-PC connection.",
+  "requestedViewportsCssPx": [{"width":1896,"height":996},{"width":1280,"height":665}],
+  "requestedDeviceScaleFactor": 1.5,
+  "capturedScreenshots": 0,
+  "humanImageReview": "not completed",
+  "nextAction": "Run scripts/verify-africa-agro-review.mjs on an already configured cloud Chromium with the sandbox enabled. REVIEW_CHROME_PATH selects its normal executable."
+}

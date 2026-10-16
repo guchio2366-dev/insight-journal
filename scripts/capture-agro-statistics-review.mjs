@@ -4,8 +4,9 @@ import {resolve,extname,sep} from 'node:path';
 import {execFileSync} from 'node:child_process';
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
+import {verifyAgroReviewIdentity,verifyAgroBrowserSandbox} from './lib/agro-review-identity.mjs';
 
-const dist=resolve('dist'),out=resolve('review-artifacts/agro-statistics');await mkdir(out,{recursive:true});
+const dist=resolve('dist'),out=resolve(process.env.AGRO_COMMON_REVIEW_OUT??'review-artifacts/agro-statistics');await mkdir(out,{recursive:true});
 const mime={'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.gz':'application/gzip','.png':'image/png','.webp':'image/webp','.svg':'image/svg+xml'};
 const server=createServer(async(req,res)=>{try{let path=resolve(dist,decodeURIComponent(new URL(req.url,'http://localhost').pathname).replace(/^\/insight-journal\//,''));if(!path.startsWith(dist+sep))throw Error('outside build');if((await stat(path)).isDirectory())path=resolve(path,'index.html');res.writeHead(200,{'Content-Type':mime[extname(path)]??'application/octet-stream'});res.end(await readFile(path));}catch{res.writeHead(404);res.end();}});
 await new Promise(r=>server.listen(0,'127.0.0.1',r));
@@ -38,17 +39,20 @@ const cases=[
 ];
 let browser;
 try{
- assert.equal(JSON.parse(await readFile(resolve(dist,'_release.json'),'utf8')).commitSha,report.head);
+ await verifyAgroReviewIdentity(report);
  if(publicOrigin){const response=await fetch(reviewUrl('/_release.json'),{cache:'no-store'});assert.ok(response.ok,'public release HTTP '+response.status);const release=await response.json();assert.equal(release.commitSha,report.head,'public release must match reviewed commit');report.production={url:publicOrigin,release};}
- browser=await chromium.launch({headless:true,chromiumSandbox:true,executablePath:process.env.REVIEW_CHROME_PATH});
+ browser=await chromium.launch({headless:true,chromiumSandbox:true,executablePath:process.env.REVIEW_CHROME_PATH,ignoreDefaultArgs:['--unsafely-disable-devtools-self-xss-warnings']});await verifyAgroBrowserSandbox(browser,report);
  for(const viewport of [{width:1440,height:900},{width:1024,height:768},{width:390,height:844}]){
   const context=await browser.newContext({viewport,locale:'ja-JP',reducedMotion:'reduce'}),page=await context.newPage();
   page.on('pageerror',error=>report.errors.push(String(error)));
   for(const [name,path,country,series] of cases){
    try{
    await page.goto(reviewUrl(path),{waitUntil:'networkidle'});await page.evaluate(()=>document.fonts.ready);
-   const mexico=name==='mexico-corn',host=page.locator(mexico?'[data-mexico-agriculture-three-columns="corn"]':'[data-agro-statistics]');await host.waitFor({state:'visible'});
+   const mexico=name==='mexico-corn',canadaNative=['canada-beef','canada-wheat'].includes(name),southeastNative=name==='southeast-forest';
+   const host=page.locator(mexico?'[data-mexico-agriculture-three-columns="corn"]':canadaNative?'[data-canada-selected-statistics]':southeastNative?'[data-southeast-agro-statistics]':'[data-agro-statistics]');await host.waitFor({state:'visible'});
    if(mexico)await page.waitForFunction(()=>document.querySelector('[data-mexico-agriculture-atlas]')?.dataset.agricultureReady==='true');
+   else if(canadaNative)await page.waitForFunction(()=>document.querySelector('[data-canada-selected-statistics]')?.dataset.canadaAgroReady==='true');
+   else if(southeastNative)await page.waitForFunction(()=>document.querySelector('[data-southeast-agro-statistics]')?.dataset.ready==='true');
    else await page.waitForFunction(()=>{const node=document.querySelector('[data-agro-statistics]');return !node.hidden&&node.dataset.agroReady==='true'&&node.querySelector('[data-agro-content]')?.children.length>0&&!node.querySelector('[data-agro-status]').textContent.includes('読み込んで');});
    if(series&&!mexico){await host.locator(`[data-agro-country="${country}"][data-agro-series="${series}"]`).waitFor();}
    // Native reference panels settle independently of the primary quantity data.
@@ -56,11 +60,12 @@ try{
    const referenceSelectors={'east-rice':'[data-agro-existing-trade] .east-pie','europe-wheat':'.agro-partner-pie','south-rice':'.sc-flow-pie','west-wheat':'[data-agro-reference-link]','europe-germany-forest':'[data-agro-existing-supply] .agro-band','europe-finland-forest':'[data-agro-existing-supply] .agro-existing-forest'};
    if(referenceSelectors[name])await host.locator(referenceSelectors[name]).first().waitFor({state:'attached'});
    if(name==='europe-germany-forest')await page.waitForFunction(()=>document.querySelectorAll('[data-agro-statistics] [data-agro-existing-supply] .agro-band').length>=3);
-   const measured=await host.evaluate(el=>{const b=el.getBoundingClientRect(),columns=[...el.querySelectorAll('.agro-columns>section')].map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,font:parseFloat(getComputedStyle(n.querySelector('p:not(.agro-meta)')??n).fontSize)};}),rail=document.querySelector('.atlas-news'),r=rail?.getBoundingClientRect(),map=(document.querySelector('[data-canada-census-stage]')??document.querySelector('[data-map-surface],.eu-map-stage,.africa-map-frame,[data-latin-agriculture-map-container],[data-forestry-stage],.forest-map-stage,[data-primary-map],[data-agriculture-map]'))?.getBoundingClientRect();return{x:b.x,w:b.width,y:b.y,columns,rail:r?{x:r.x,right:r.right,w:r.width,bottom:r.bottom}:null,map:map?{x:map.x,y:map.y,bottom:map.bottom}:null,overflow:document.documentElement.scrollWidth>innerWidth+1,statisticsOverflow:el.scrollWidth>el.clientWidth+1,overflowElements:[...document.querySelectorAll('body *')].filter(node=>node instanceof HTMLElement&&node.checkVisibility?.({visibilityProperty:true})&&!node.closest('details:not([open])')&&!node.closest('.agro-table-scroll')).flatMap(node=>{const r=node.getBoundingClientRect();return r.width>0&&(r.right>innerWidth+1||r.left<-1)?[{tag:node.tagName,class:node.className?.baseVal??node.className,x:r.x,right:r.right,w:r.width,inNewStatistics:el.contains(node)}]:[];}).slice(0,12)};});
+   const measured=await host.evaluate(el=>{const b=el.getBoundingClientRect(),columns=[...(el.querySelector('.agro-columns')?.children??[])].map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,font:parseFloat(getComputedStyle(n.querySelector('p:not(.agro-meta)')??n).fontSize)};}),rail=document.querySelector('.atlas-news'),r=rail?.getBoundingClientRect(),map=(document.querySelector('[data-canada-census-stage]')??document.querySelector('[data-map-surface],.eu-map-stage,.africa-map-frame,[data-latin-agriculture-map-container],[data-forestry-stage],.forest-map-stage,[data-primary-map],[data-agriculture-map]'))?.getBoundingClientRect();return{x:b.x,w:b.width,y:b.y,columns,rail:r?{x:r.x,right:r.right,w:r.width,bottom:r.bottom}:null,map:map?{x:map.x,y:map.y,bottom:map.bottom}:null,overflow:document.documentElement.scrollWidth>innerWidth+1,statisticsOverflow:el.scrollWidth>el.clientWidth+1,overflowElements:[...document.querySelectorAll('body *')].filter(node=>node instanceof HTMLElement&&node.checkVisibility?.({visibilityProperty:true})&&!node.closest('details:not([open])')&&!node.closest('.agro-table-scroll')).flatMap(node=>{const r=node.getBoundingClientRect();return r.width>0&&(r.right>innerWidth+1||r.left<-1)?[{tag:node.tagName,class:node.className?.baseVal??node.className,x:r.x,right:r.right,w:r.width,inNewStatistics:el.contains(node)}]:[];}).slice(0,12)};});
    console.log(JSON.stringify({name,viewport,measured}));
    if(mexico)measured.columns=await host.locator(':scope>section').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,font:parseFloat(getComputedStyle(n.querySelector('p:not(.agro-meta)')??n).fontSize)};}));
    assert.equal(measured.columns.length,3,`${name}: three columns`);
-   assert.deepEqual(await host.locator(mexico?':scope>section':'.agro-columns>section').evaluateAll(nodes=>nodes.map(n=>n.dataset.agroStage)),['production','use','destinations'],`${name}: production → use/export → destinations`);
+   const primarySections=mexico?host.locator(':scope>section'):host.locator('.agro-columns').first().locator(':scope>section');
+   assert.deepEqual(await primarySections.evaluateAll(nodes=>nodes.map(n=>n.dataset.agroStage)),['production','use','destinations'],`${name}: production → use/export → destinations`);
    assert.equal(measured.statisticsOverflow,false,`${name}: statistics overflow`);
    if(measured.overflow)report.errors.push({kind:'page-overflow',name,viewport,elements:measured.overflowElements});
    assert.ok(measured.columns.every(c=>c.font>=13),`${name}: readable prose`);
@@ -83,7 +88,7 @@ try{
    if(name==='europe-finland-forest'){assert.match(await host.locator('[data-agro-existing-supply]').innerText(),/62,655.*樹皮あり/s);report.operations.push({name,viewport,firstUseSeparate:true});}
    if(name==='europe-britain-forest'){await host.locator('[data-agro-series-select]').selectOption('sawnwood-production');await host.locator('[data-agro-series="sawnwood-production"]').waitFor();await page.waitForFunction(()=>document.querySelector('[data-agro-statistics]')?.dataset.agroReady==='true');await host.locator('[data-agro-stage="use"]>.agro-other-reference>summary').click();assert.match(await host.locator('[data-agro-existing-supply]').innerText(),/25,000m³以上/);report.operations.push({name,viewport,restrictedMarketShares:true});}
    if(name==='southeast-forest'){
-    await host.locator('[data-agro-series-select]').selectOption('sawnwood-production');await host.locator('[data-agro-series="sawnwood-production"]').waitFor();
+    await host.locator('[data-southeast-agro-series]').selectOption('sawnwood-production');await host.locator('[data-agro-series="sawnwood-production"]').waitFor();
     await host.locator('.agro-definitions>summary').click();assert.ok(await host.locator('.agro-definitions table').isVisible());
     report.operations.push({name,viewport,seriesChange:true,definitionToggle:true});
    }

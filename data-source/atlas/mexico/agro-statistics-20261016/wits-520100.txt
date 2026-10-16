@@ -1,0 +1,5 @@
+World Bank WITS / UN Comtrade public table
+URL: https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/520100
+Observed 2026-10-16 through web tool. Transcription of numerical table; not original HTML. No mirror imports or third-party estimates.
+Observed official table: World 9,995,060 Kg; Pakistan 4,127,170 Kg; China 3,030,610 Kg; Vietnam 2,453,330 Kg; Indonesia 383,952 Kg.
+HS Nomenclature used HS 1988/92 (H0). Exports is gross exports. Page Refreshed Sep-3-2026 13:34 ET.

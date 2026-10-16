@@ -1,0 +1,300 @@
+{
+  "status": "completed-representative-review",
+  "reviewedCommit": "58be943225b7fdef8bb68392c7e377571305007d",
+  "deviceScaleFactor": 1.5,
+  "publishedRelease": false,
+  "scope": "Actual image inspection of representative states, not every captured image or source observation.",
+  "images": [
+    {
+      "file": "browser/canada/1896x996-canola.png",
+      "region": "canada",
+      "profile": "1896x996",
+      "observed": "Map, right reading and selected three-column section visible; canola crop period/product distinction and incomplete-balance/missing-partner labels present. No overlap seen in the three columns.",
+      "sha256": "011dafca623514ae1b1f7798e776d3e9d4018a50fbe5757e2e8ec0215fb3858d",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/canada/1280x665-sawnwood.png",
+      "region": "canada",
+      "profile": "1280x665",
+      "observed": "Forestry map and product selector retained; three columns align. m3, rounded World share, missing volume/use/partners are explicit; no fabricated volume pie.",
+      "sha256": "8c7f241320fda467c1291a18bd164be79d382eb8389b0a09b02864b2ec1899c5",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/mexico/1896x996-corn-statistics.png",
+      "region": "mexico",
+      "profile": "1896x996",
+      "observed": "Three aligned primary columns. Same marketing-year production/World and two supply/destination bars; missing same-period partners kept separate from calendar reference. No overlap seen.",
+      "sha256": "8d244e85c7ffd0f348a5b43684d130470cd6e59d943c89b781d9ad0b5185ae21",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/mexico/1280x665-pine-statistics.png",
+      "region": "mexico",
+      "profile": "1280x665",
+      "observed": "Three columns fit. Acquisition/sales of pine explicitly distinct from forest product production and domestic consumption; World, balance and same-definition partners marked missing.",
+      "sha256": "3922ef3704a9aece4b8a0efc59230816382abbce09585dd89d68a9a26dd1334c",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/us/1896x996-soybean-statistics.png",
+      "region": "us",
+      "profile": "1896x996",
+      "observed": "Three columns fit; two bars share the supply denominator, crush remains a subset; 2025 partner reference is explicitly separate from 2024/25 balance.",
+      "sha256": "1379668bec5b7dd0e2a278ed0790653550db569226c1d16e5165714bd2ca95eb",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/us/1280x665-industrial-roundwood-statistics.png",
+      "region": "us",
+      "profile": "1280x665",
+      "observed": "Expanded forestry product has three aligned readable columns. Rounded share and World volume not inverted into a US production amount; missing use/partners explicit; source and unit visible.",
+      "sha256": "98fe79754d7febc5bf0761e24cb49484c3acb7d0dfadce52f9378aec24929d99",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/europe/soybean-UKR-1896x996-statistics.png",
+      "region": "europe",
+      "profile": "1896x996",
+      "observed": "Primary three-column 2023 whole-soybean comparison fits. Apparent supply, imports/reexports caveat and all-partner denominator explicit; prior-year panel closed.",
+      "sha256": "62901bd3dfe70f27bce797c21924f31592e6e025b12534819176d761f275630f",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/europe/forest-FIN-1280x665-statistics.png",
+      "region": "europe",
+      "profile": "1280x665",
+      "observed": "Inspected retained forestry reference: industrial roundwood and sawnwood separate, reported/provisional flags and stock-unadjusted caveat visible. This is the legacy reference rather than the primary three-column panel; separate primary capture still needed.",
+      "sha256": "a7830435f792feacb3b91bf3937d1824904451f6381aff9719aec95a1353c792",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/east-asia/1896-KOR-soybean-statistics.png",
+      "region": "east-asia",
+      "profile": "1896x996",
+      "observed": "Korean 2023 whole-soybean primary row fits; import-heavy apparent quantity explicitly stock-unadjusted and not real consumption; all-partner quantities and rounding gap are readable.",
+      "sha256": "215da37d59162228bc8ec48094df3c77ade0d0950bc832d238c1218582bd51a4",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/east-asia/1280-CHN-forest-statistics.png",
+      "region": "east-asia",
+      "profile": "1280x665",
+      "observed": "Chinese 2024 sawnwood primary row fits in three columns; m3 consistent, imported wood and stock-unadjusted apparent consumption stated; partner absence explicit.",
+      "sha256": "cb5ffc822ed63dd8e5c9f500514ece0fcca8887706d77910862bcff0d2d8e769",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "europe-primary-forest/1280-FIN-primary-statistics.png",
+      "region": "europe",
+      "profile": "1280x665",
+      "observed": "Primary Finnish forestry row independently captured and inspected: three columns fit, roundwood m3 and matching World shown; use and partner gaps explicitly retained.",
+      "sha256": "bf6ba2e8675dc751baf782860f40cbe89249c3b465889d7411f39fd039134749",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/south-asia/1896-IND-rice-statistics.png",
+      "region": "south-asia",
+      "profile": "1896x996",
+      "observed": "Indian milled-rice marketing-year row fits; same-table World, supply destination and missing matching partner table clearly distinguished from paddy map and basmati reference.",
+      "sha256": "e7faa8e8b2dd31b968b5a2cfd4c89e0055bafb89f4b03d20aebf0c0d8f2d7419",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/south-asia/1280-IND-forest-statistics.png",
+      "region": "south-asia",
+      "profile": "1280x665",
+      "observed": "Three forestry columns fit; total roundwood m3 and imported-volume apparent measure retained; no inferred use breakdown or partner distribution.",
+      "sha256": "f73ea714f2039d557f62693eb44d63e2fa6076bb32dda014e6d48e1a97cf17cc",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/central-asia/1896-kazakhstan-wheat-statistics.png",
+      "region": "central-asia",
+      "profile": "1896x996",
+      "observed": "Kazakhstan wheat national balance fits, matching World and period visible; feed subset collapsed and calendar wheat/flour partners kept as separate reference.",
+      "sha256": "4e2f8f6bbfdc3a7bd623b3e91b808a2310e071d74c8e18356fcea49dd6dde139",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/central-asia/1280-regional-forest-statistics.png",
+      "region": "central-asia",
+      "profile": "1280x665",
+      "observed": "Five-country regional roundwood row fits; 5/5 observed and matching World stated; internal/external trade and pulp gaps explicit, with no sum across processing stages.",
+      "sha256": "2b91f1d7dbe9eef5679d296cefc69cb1283f5d4a57e4c94e6495cbcacf137a53",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/west-asia/1896-saudi-dates.png",
+      "region": "west-asia",
+      "profile": "1896x996",
+      "observed": "Full-page layout inspected: existing map/reading retained, three selected date columns below; missing World/use and separate 2023 all-partner quantity reference visible. Existing year control retained.",
+      "sha256": "1fa7f5ac8c63e09b1649eefbc69cd55409fca5fbcaf4b2152b2f1ce7e730b1cc",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/west-asia/1280-turkey-forest.png",
+      "region": "west-asia",
+      "profile": "1280x665",
+      "observed": "Full-page layout inspected: forestry map and three primary sawnwood columns fit below; stock-unadjusted amount/import caveat and missing same-product partners visible. Existing references and year control retained.",
+      "sha256": "5dffb844e91f7a6c8a5a6f414664b73a9a9d5b771e9d56e8c6307825fde3a79c",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/africa/south-africa-maize-1896-statistics.png",
+      "region": "africa",
+      "profile": "1896x996",
+      "observed": "National maize row fits; two same-denominator supply/destination bars, feed subset and national-versus-region boundary stated; matching partners missing.",
+      "sha256": "62e07c19c9ae7cdd288543c471537ad7d362373bacec9093ffcc2b1f6b40ae55",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/africa/egypt-forestry-legacy-url-1280-statistics.png",
+      "region": "africa",
+      "profile": "1280x665",
+      "observed": "Egyptian sawnwood three-column row fits; tiny World share wraps inside the circle but remains readable, same-product m3 and imports explicit; export/production above 100% preserved rather than clipped.",
+      "sha256": "a14ac946457b8ddb0589ee31659b35aa81c73cc3921143269bf5b4002bbfe813",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/oceania/1896-aus-wheat-statistics.png",
+      "region": "oceania",
+      "profile": "1896x996",
+      "observed": "Australian wheat row fits; matching marketing-year balance separated from calendar references. Missing 2024 World quantity does not produce destination shares; 2023 narrower product states its own denominator.",
+      "sha256": "0db3adc831924def7a5005f16f787f394b11aae45a48edd51f62b67aafcd5753",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/oceania/1280-NZL-pulp-2024.png",
+      "region": "oceania",
+      "profile": "1280x665",
+      "observed": "Pulp row fits; missing main quantities and World remain explicit, while HS470321 tonnage and partner shares are labelled a different product scope, with no volume/weight conversion.",
+      "sha256": "42093980cf07034208eb18878eecbe924a15eef198d22957b1a777feb37a6662",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/latin-america/1896-ARG-statistics.png",
+      "region": "latin-america",
+      "profile": "1896x996",
+      "observed": "Argentina whole-soybean row fits; apparent imported balance distinguished from consumption. All foreign partners remain in national denominator with internal/external classifications visible.",
+      "sha256": "1c7e08c70c8be71baae1d873dfdd29e262ae6c46a5455b8de48c45fbb720d3d0",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/latin-america/1280-forest-pulp-statistics.png",
+      "region": "latin-america",
+      "profile": "1280x665",
+      "observed": "Chile pulp national production shown in t; matching World/use/partner rows missing, no derived share or consumption. Three aligned columns and source links visible.",
+      "sha256": "f8b3fd44743cf191323d31506008176598462cfd236dca1b480a4f90281d40a9",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/russia/1896x996-wheat-2024.png",
+      "region": "russia",
+      "profile": "1896x996",
+      "observed": "Full-page map/reading and three primary columns inspected; 2024 QCL non-A policy holds, no new year selector; separate wheat reference closed and missing primary quantities not replaced.",
+      "sha256": "53f470561c90a4fc6fb961f0d2488dc970599abc3445e6399156bcf693904df7",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser/russia/1280x665-sawnwood.png",
+      "region": "russia",
+      "profile": "1280x665",
+      "observed": "Full-page forestry map, three primary columns and retained national references inspected; m3/World period visible, use/partners missing; no new year selector.",
+      "sha256": "b721eeb6a863404020f20022fd069a5b3b205680007d64749c6103c6f3682342",
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d"
+    },
+    {
+      "file": "browser-final/southeast-asia/1896-rice-statistics.png",
+      "region": "southeast-asia",
+      "profile": "1896x996",
+      "observed": "Three regional rice columns fit; 10/11 observed production not called complete, paddy versus milled rice and historical ASEAN10 reference separated; internal/external gaps explicit.",
+      "sha256": "0f7cf4ba7be45e270afc06eaa751829f14d26ecf53cf181f505e5e1140961d68",
+      "captureCommit": "a80a153fcf3156de1e089bb95b1b955e6f4ecfd9"
+    },
+    {
+      "file": "browser-final/southeast-asia/1280-forest-statistics.png",
+      "region": "southeast-asia",
+      "profile": "1280x665",
+      "observed": "Three regional forest columns fit; 11/11 roundwood production and same-definition World shown; m3 and pulp t separated, no inferred regional external quantities.",
+      "sha256": "14023e05f76f5066cebb17b34e3486cf9c2f061a498e5197a02da36ffc03be5b",
+      "captureCommit": "a80a153fcf3156de1e089bb95b1b955e6f4ecfd9"
+    }
+  ],
+  "captureCommits": [
+    "58be943225b7fdef8bb68392c7e377571305007d",
+    "a80a153fcf3156de1e089bb95b1b955e6f4ecfd9"
+  ],
+  "reviewedCommitNote": "12 regional captures at the application commit; Southeast capture at a QA-script-only follow-up. Application/public/source inputs are unchanged between these commits.",
+  "reviewedImages": 27,
+  "regions": [
+    "africa",
+    "canada",
+    "central-asia",
+    "east-asia",
+    "europe",
+    "latin-america",
+    "mexico",
+    "oceania",
+    "russia",
+    "south-asia",
+    "southeast-asia",
+    "us",
+    "west-asia"
+  ],
+  "profileCoverage": {
+    "africa": [
+      "1280x665",
+      "1896x996"
+    ],
+    "canada": [
+      "1280x665",
+      "1896x996"
+    ],
+    "central-asia": [
+      "1280x665",
+      "1896x996"
+    ],
+    "east-asia": [
+      "1280x665",
+      "1896x996"
+    ],
+    "europe": [
+      "1280x665",
+      "1896x996"
+    ],
+    "latin-america": [
+      "1280x665",
+      "1896x996"
+    ],
+    "mexico": [
+      "1280x665",
+      "1896x996"
+    ],
+    "oceania": [
+      "1280x665",
+      "1896x996"
+    ],
+    "russia": [
+      "1280x665",
+      "1896x996"
+    ],
+    "south-asia": [
+      "1280x665",
+      "1896x996"
+    ],
+    "southeast-asia": [
+      "1280x665",
+      "1896x996"
+    ],
+    "us": [
+      "1280x665",
+      "1896x996"
+    ],
+    "west-asia": [
+      "1280x665",
+      "1896x996"
+    ]
+  }
+}

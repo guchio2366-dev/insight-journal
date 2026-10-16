@@ -1,0 +1,5 @@
+Source: https://www.aptfsis.org/wp-content/uploads/aco-pdfs/ACO%20No.33.pdf
+Publication: AFSIS ASEAN Agricultural Commodity Outlook No.33, December 2024; 110 PDF pages.
+Acquired: 2026-10-16 through the official PDF web parser. Original PDF bytes were not downloaded.
+Assessment: the foreword (PDF p.4) defines the reporting set as the ten ASEAN states of that period; Timor-Leste is excluded. The 2024 chapters contain estimates/outlook values, while 2025 is forecast. Production-period notes (PDF pp.99-103) use country-specific crop seasons that can cross calendar years. Treat these as a separate outlook reference, not final 2024 FAO calendar-year geography-11 statistics.
+Numeric sources: Table 8 / PDF p.20, Table 23 / PDF p.38, Table 68 / PDF p.88.

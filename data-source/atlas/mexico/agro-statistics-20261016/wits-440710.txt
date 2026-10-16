@@ -1,0 +1,17 @@
+World Bank WITS / UN Comtrade public table
+URL: https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/440710
+Observed 2026-10-16 through web tool. Transcription of numerical table; not original HTML. No mirror imports or third-party estimates.
+L77: Mexico exports of Coniferous wood sawn or chipped lengthwise, sli was $1,193.18K and quantity 57,368m³.
+L78: Mexico exported Coniferous wood sawn or chipped lengthwise, sli to United States ($1,193.18K , 57,368 m³)Mexico exports of Coniferous wood sawn or chipped lengthwise, sli was $1,193.18K and quantity 57,368m³.
+L79: Mexico exported Coniferous wood sawn or chipped lengthwise, sli to United States ($1,193.18K , 57,368 m³).
+L80:
+L81: 【43†Coniferous wood sawn or chipped lengthwise, sli imports by country in 2024】
+L82: 【55†Image: Download Excel Sheet】
+L83:
+L84: Reporter TradeFlow ProductCode Product Description Year Partner Trade Value 1000USD Quantity Quantity Unit
+L85:  Mexico Export 440710 Coniferous wood sawn or chipped lengthwise, sli 2024【44†United States】1,193.18 57,368 m³
+L86:  Mexico Export 440710 Coniferous wood sawn or chipped lengthwise, sli 2024【45† World】1,193.18 57,368 m³
+L87:
+L88: HS Nomenclature used HS 1988/92 (H0)
+L89: HS Code 440710: Coniferous wood sawn or chipped lengthwise, sli
+L90: Please note: Exports is gross exports and Imports is gross imports

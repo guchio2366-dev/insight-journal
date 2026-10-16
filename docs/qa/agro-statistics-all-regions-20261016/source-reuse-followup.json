@@ -1,0 +1,134 @@
+{
+  "baselineIntegratedHead": "a65cf1379edd79586334e9c432548a27a6294612",
+  "stage": "local-working-tree-followup-before-commit",
+  "dataCompletionClaimed": false,
+  "unitAll": {
+    "tests": 1555,
+    "pass": 1552,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 3
+  },
+  "unitAffected": {
+    "tests": 26,
+    "pass": 26,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "builtE2E": {
+    "tests": 33,
+    "pass": 29,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 4
+  },
+  "build": "passed",
+  "dataGate": {
+    "passed": false,
+    "errors": 0,
+    "sourceErrors": 0,
+    "structuralGaps": 78,
+    "notMissingObservationCount": true
+  },
+  "browser": {
+    "central-asia": {
+      "cases": 16,
+      "screenshots": 34,
+      "status": "passed",
+      "report": "/workspace/agro-statistics-local-handoff/followup-preview/central-asia/report.json"
+    },
+    "latin-america": {
+      "cases": 16,
+      "screenshots": 38,
+      "status": "passed",
+      "report": "/workspace/agro-statistics-local-handoff/followup-style-preview/latin-america/report.json"
+    }
+  },
+  "requestedProfiles": [
+    {
+      "width": 1896,
+      "height": 996,
+      "deviceScaleFactor": 1.5
+    },
+    {
+      "width": 1280,
+      "height": 665,
+      "deviceScaleFactor": 1.5
+    }
+  ],
+  "actuallyViewedAcceptedImages": [
+    {
+      "region": "central-asia",
+      "file": "/workspace/agro-statistics-local-handoff/followup-preview/central-asia/1896-regional-rice-statistics.png",
+      "sha256": "223d5c47ad933c64ddfdb144411e4f1f5eb95e6029794372e1482db041ed8a63",
+      "actuallyViewed": true,
+      "observation": "Paddy rice 1,193,722.7t, published World 820,223,277.89t, 5/5 countries; three aligned columns and separate missing use/partner quantities; no overlap observed.",
+      "sourceIdentity": {
+        "mode": "local-working-tree",
+        "baseHead": "a65cf1379edd79586334e9c432548a27a6294612",
+        "buildIdentity": "local",
+        "workingTreeDirty": true,
+        "applicationInputsDirty": true,
+        "inputFiles": 3595,
+        "workingTreeSha256": "fa9f27bf4bce5cfbd432bb4d3b7053da1d0d5dbd6cd7fbf2e7d6e3f2f5759471",
+        "publishedRelease": false
+      }
+    },
+    {
+      "region": "central-asia",
+      "file": "/workspace/agro-statistics-local-handoff/followup-preview/central-asia/1280-regional-rice-statistics.png",
+      "sha256": "6f2acef600531ee18fb5a584459af41ae7af1a69010a23e0fe75d38fc1598e06",
+      "actuallyViewed": true,
+      "observation": "Paddy rice 1,193,722.7t, published World 820,223,277.89t, 5/5 countries; three aligned columns and separate missing use/partner quantities; no overlap observed.",
+      "sourceIdentity": {
+        "mode": "local-working-tree",
+        "baseHead": "a65cf1379edd79586334e9c432548a27a6294612",
+        "buildIdentity": "local",
+        "workingTreeDirty": true,
+        "applicationInputsDirty": true,
+        "inputFiles": 3595,
+        "workingTreeSha256": "fa9f27bf4bce5cfbd432bb4d3b7053da1d0d5dbd6cd7fbf2e7d6e3f2f5759471",
+        "publishedRelease": false
+      }
+    },
+    {
+      "region": "latin-america",
+      "file": "/workspace/agro-statistics-local-handoff/followup-style-preview/latin-america/1896-BRA-unassigned-partner.png",
+      "sha256": "5e61b7704aa34ffe0f584bad4bde4f2bf2ecef35c83c6f72366eaeef7fdef27f",
+      "actuallyViewed": true,
+      "observation": "Other Asia, nes is geographically unresolved; retained 1,449,640t stays on one line at both PC sizes; missing World prevents shares, no invented external total.",
+      "sourceIdentity": {
+        "mode": "local-working-tree",
+        "baseHead": "a65cf1379edd79586334e9c432548a27a6294612",
+        "buildIdentity": "local",
+        "workingTreeDirty": true,
+        "applicationInputsDirty": true,
+        "inputFiles": 3595,
+        "workingTreeSha256": "00333dba9c13c921d5af2f6f4bda1c9226596caf381aed06fc6457b730be7308",
+        "publishedRelease": false
+      }
+    },
+    {
+      "region": "latin-america",
+      "file": "/workspace/agro-statistics-local-handoff/followup-style-preview/latin-america/1280-BRA-unassigned-partner.png",
+      "sha256": "ec426ccf742d815caf202d0fcfe4973e0bd2a4a0ac6cea9f85e90fba1d990fc4",
+      "actuallyViewed": true,
+      "observation": "Other Asia, nes is geographically unresolved; retained 1,449,640t stays on one line at both PC sizes; missing World prevents shares, no invented external total.",
+      "sourceIdentity": {
+        "mode": "local-working-tree",
+        "baseHead": "a65cf1379edd79586334e9c432548a27a6294612",
+        "buildIdentity": "local",
+        "workingTreeDirty": true,
+        "applicationInputsDirty": true,
+        "inputFiles": 3595,
+        "workingTreeSha256": "00333dba9c13c921d5af2f6f4bda1c9226596caf381aed06fc6457b730be7308",
+        "publishedRelease": false
+      }
+    }
+  ],
+  "allCapturedImagesIndividuallyViewed": false,
+  "githubCiForFollowupCommit": "not-yet-run",
+  "merged": false,
+  "deployed": false
+}

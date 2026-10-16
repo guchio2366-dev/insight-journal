@@ -1,4 +1,5 @@
 import statistics from '../../public/assets/atlas/east-asia-v2/food-wood-statistics-2023.json';
+import {renderEastExportQuantityReference} from './atlas-east-export-quantities.ts';
 import {foodFlowParts,foodCalorieBands,type FoodModels,type FoodFlow,type FoodCalories} from '../lib/atlas-east-food-model.ts';
 
 const names:Record<string,string>={CHN:'中国本土',JPN:'日本',KOR:'韓国',PRK:'北朝鮮',MNG:'モンゴル',OAS:'その他のアジア（台湾等）',TWN:'台湾',China:'中国本土',Japan:'日本','Korea, Rep.':'韓国','Korea, Dem. Rep.':'北朝鮮',Mongolia:'モンゴル','Other Asia, nes':'その他のアジア（台湾等）','Russian Federation':'ロシア',Thailand:'タイ','United States':'米国',Canada:'カナダ',Brazil:'ブラジル',Argentina:'アルゼンチン',Australia:'豪州',Vietnam:'ベトナム',Myanmar:'ミャンマー',Malaysia:'マレーシア',Indonesia:'インドネシア',Philippines:'フィリピン',France:'フランス',Germany:'ドイツ',Gabon:'ガボン',Finland:'フィンランド',Sweden:'スウェーデン','New Zealand':'ニュージーランド',Chile:'チリ',Ukraine:'ウクライナ','Hong Kong, China':'香港',Macao:'マカオ','Other external partners':'その他の対象外相手'};
@@ -8,7 +9,8 @@ const node=(tag:string,text='')=>Object.assign(document.createElement(tag),{text
 const money=(value:number|null)=>value===null?'未算出':value>=1e9?(value/1e9).toLocaleString('ja-JP',{maximumFractionDigits:2})+'十億＄':value>=1e6?(value/1e6).toLocaleString('ja-JP',{maximumFractionDigits:2})+'百万＄':value.toLocaleString('ja-JP',{maximumFractionDigits:0})+'＄';
 type Trade=typeof statistics.trade.sawnwood;
 type Model=Trade['region']['Import'];
-export function renderEastTrade(host:HTMLElement,topic:string,country?:string){
+export function renderEastTrade(host:HTMLElement,topic:string,country?:string,showQuantities=false){
+ if(showQuantities&&country)renderEastExportQuantityReference(host,topic,country);
  const product=statistics.trade[topic as keyof typeof statistics.trade];
  if(!product){host.append(node('p','この品目と同じ範囲の相手国表は未収録です。ほかの品目の相手や全商品貿易で代用しません。'));return;}
  const pair=country?product.countries[country as keyof typeof product.countries]:product.region;

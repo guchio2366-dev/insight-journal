@@ -1,0 +1,636 @@
+{
+  "schemaVersion": 1,
+  "baseCommit": "3fbb4c957c21685bddbf8148a95a2a03ba210553",
+  "scope": "Selected existing agricultural, livestock and forestry products; Japan dedicated pages and unselected overviews excluded.",
+  "requiredStages": [
+    "production-world",
+    "use-external-exports",
+    "destination-quantity"
+  ],
+  "baselineEvidence": [
+    "docs/atlas-agro-statistics-implementation-20261014.md",
+    "docs/atlas-agro-statistics-source-audit-20261014.md",
+    "docs/atlas-agro-selected-quantity-flow-20261014.md",
+    "docs/atlas-agro-quantity-flow-audit-20261014.md"
+  ],
+  "regions": [
+    {
+      "id": "us",
+      "label": "米国",
+      "status": "integrated-partial",
+      "inventoryVerified": false,
+      "baselineMissing": "同販売年度の全相手数量。畜産は同年・同製品のWorldと数量需給・数量相手表。",
+      "deliveries": [
+        {
+          "state": "final-partial-result-integrated",
+          "sourceCommit": "c409f7a8a2722ab87c3423ad0c038cef81f0b07d",
+          "sourceBranch": "codex/us-agro-residuals-20261016",
+          "sourceReport": "docs/atlas-us-agro-residuals-20261016.md",
+          "sourceReportSha256": "7072dfea24c080f6c27b1601af054c09736e793376f3553a56ae21b664476327",
+          "integrated": true,
+          "regionalSourceTestsPassed": true,
+          "regionalApplicationAndDataMatchSource": true,
+          "sourceAuditVerified": false,
+          "sourceAuditNote": "Regional source/hash/extraction tests passed. This does not certify every missing mandatory record or convert all new native packets to the common quantity contract.",
+          "integrationAdjustedFiles": [
+            "scripts/capture-us-agro-residuals-review.mjs"
+          ]
+        }
+      ],
+      "records": [
+        "wasde-675-USA-cotton-lint-production",
+        "wasde-675-USA-maize-production",
+        "wasde-675-USA-rice-milled-production",
+        "wasde-675-USA-soybean-production",
+        "wasde-675-USA-wheat-production"
+      ],
+      "unresolved": [
+        {
+          "id": "mandatory-source-coverage",
+          "reason": "同販売年度の全相手数量。畜産は同年・同製品のWorldと数量需給・数量相手表。 担当の最終残件と共通最小取得依頼を参照。"
+        }
+      ],
+      "inventory": [
+        {
+          "scopeId": "USA",
+          "seriesId": "cotton-lint-production",
+          "recordId": "wasde-675-USA-cotton-lint-production"
+        },
+        {
+          "scopeId": "USA",
+          "seriesId": "maize-production",
+          "recordId": "wasde-675-USA-maize-production"
+        },
+        {
+          "scopeId": "USA",
+          "seriesId": "rice-milled-production",
+          "recordId": "wasde-675-USA-rice-milled-production"
+        },
+        {
+          "scopeId": "USA",
+          "seriesId": "soybean-production",
+          "recordId": "wasde-675-USA-soybean-production"
+        },
+        {
+          "scopeId": "USA",
+          "seriesId": "wheat-production",
+          "recordId": "wasde-675-USA-wheat-production"
+        }
+      ],
+      "inventoryNote": "Only retained normalized marketing-year records are bound below. Built selection inventory and new regional native panels still need complete item/scope reconciliation; no all-region completion claim."
+    },
+    {
+      "id": "canada",
+      "label": "カナダ",
+      "status": "integrated-partial",
+      "inventoryVerified": false,
+      "baselineMissing": "小麦の同販売年度相手数量。カノーラ等の生産・World・需給の対応。森林は生産・World・輸出入・用途・相手数量。",
+      "deliveries": [
+        {
+          "state": "final-partial-result-integrated",
+          "sourceCommit": "12b55133a2f87942b0e37df39e3a469b1b58fd7c",
+          "sourceBranch": "canada/agro-statistics-20261016",
+          "sourceReport": "docs/canada-agro-statistics-20261016.md",
+          "sourceReportSha256": "984eb20570b4bf40aca4505aa5dc46f948bb916338b5accc1276b50bdb3d7e73",
+          "integrated": true,
+          "regionalSourceTestsPassed": true,
+          "regionalApplicationAndDataMatchSource": true,
+          "sourceAuditVerified": false,
+          "sourceAuditNote": "Regional source/hash/extraction tests passed. This does not certify every missing mandatory record or convert all new native packets to the common quantity contract.",
+          "integrationAdjustedFiles": [
+            "scripts/capture-canada-agro-statistics-review.mjs"
+          ]
+        }
+      ],
+      "records": [
+        "wasde-675-CAN-maize-production",
+        "wasde-675-CAN-wheat-production"
+      ],
+      "unresolved": [
+        {
+          "id": "mandatory-source-coverage",
+          "reason": "小麦の同販売年度相手数量。カノーラ等の生産・World・需給の対応。森林は生産・World・輸出入・用途・相手数量。 担当の最終残件と共通最小取得依頼を参照。"
+        }
+      ],
+      "inventory": [
+        {
+          "scopeId": "CAN",
+          "seriesId": "maize-production",
+          "recordId": "wasde-675-CAN-maize-production"
+        },
+        {
+          "scopeId": "CAN",
+          "seriesId": "wheat-production",
+          "recordId": "wasde-675-CAN-wheat-production"
+        }
+      ],
+      "inventoryNote": "Only retained normalized marketing-year records are bound below. Built selection inventory and new regional native panels still need complete item/scope reconciliation; no all-region completion claim."
+    },
+    {
+      "id": "mexico",
+      "label": "メキシコ",
+      "status": "integrated-partial",
+      "inventoryVerified": false,
+      "baselineMissing": "DGSIAP2025とFAO2024を混ぜない対応生産・World。とうもろこし等の同年度相手数量。松材の伐採・販売指標は国内利用・輸出へ読み替えない。",
+      "deliveries": [
+        {
+          "state": "final-partial-result-integrated",
+          "sourceCommit": "1e4affe2231f08566dc9117797610ce8457d72ce",
+          "sourceBranch": "region/mexico-agro-statistics-20261016",
+          "sourceReport": "docs/atlas-mexico-agro-statistics-20261016.md",
+          "sourceReportSha256": "4798e781a4e1fcff1ffdafbd73178bc7b54aa102ce303bae3d001d2ca116efa9",
+          "integrated": true,
+          "regionalSourceTestsPassed": true,
+          "regionalApplicationAndDataMatchSource": true,
+          "sourceAuditVerified": false,
+          "sourceAuditNote": "Regional source/hash/extraction tests passed. This does not certify every missing mandatory record or convert all new native packets to the common quantity contract.",
+          "integrationAdjustedFiles": [
+            "scripts/capture-mexico-agro-statistics.mjs"
+          ]
+        }
+      ],
+      "records": [
+        "wasde-675-MEX-maize-production",
+        "wasde-675-MEX-soybean-production"
+      ],
+      "unresolved": [
+        {
+          "id": "mandatory-source-coverage",
+          "reason": "DGSIAP2025とFAO2024を混ぜない対応生産・World。とうもろこし等の同年度相手数量。松材の伐採・販売指標は国内利用・輸出へ読み替えない。 担当の最終残件と共通最小取得依頼を参照。"
+        }
+      ],
+      "inventory": [
+        {
+          "scopeId": "MEX",
+          "seriesId": "maize-production",
+          "recordId": "wasde-675-MEX-maize-production"
+        },
+        {
+          "scopeId": "MEX",
+          "seriesId": "soybean-production",
+          "recordId": "wasde-675-MEX-soybean-production"
+        }
+      ],
+      "inventoryNote": "Only retained normalized marketing-year records are bound below. Built selection inventory and new regional native panels still need complete item/scope reconciliation; no all-region completion claim."
+    },
+    {
+      "id": "europe",
+      "label": "欧州",
+      "status": "integrated-partial",
+      "inventoryVerified": false,
+      "baselineMissing": "地理的欧州とEUの対象集合を明示した数量需給・域外全相手。国別は同年数量相手。既存2021金額・森林用途参考と分離。",
+      "deliveries": [
+        {
+          "state": "final-partial-result-integrated",
+          "sourceCommit": "ac790cd4137aeea342ccfa885260989539843148",
+          "sourceBranch": "feat/europe-agro-residuals-20261016",
+          "sourceReport": "docs/europe/agro-residuals-20261016.md",
+          "sourceReportSha256": "c1b3a0150e9d3e30c4027c64717f26b2f494d020d973ad6e9463de17cd3a6ff7",
+          "integrated": true,
+          "regionalSourceTestsPassed": true,
+          "regionalApplicationAndDataMatchSource": true,
+          "sourceAuditVerified": false,
+          "sourceAuditNote": "Regional source/hash/extraction tests passed. This does not certify every missing mandatory record or convert all new native packets to the common quantity contract.",
+          "integrationAdjustedFiles": [
+            "scripts/europe/capture-selected-quantity-flow-review.mjs"
+          ]
+        }
+      ],
+      "records": [],
+      "unresolved": [
+        {
+          "id": "mandatory-source-coverage",
+          "reason": "地理的欧州とEUの対象集合を明示した数量需給・域外全相手。国別は同年数量相手。既存2021金額・森林用途参考と分離。 担当の最終残件と共通最小取得依頼を参照。"
+        }
+      ],
+      "inventory": [],
+      "inventoryNote": "Only retained normalized marketing-year records are bound below. Built selection inventory and new regional native panels still need complete item/scope reconciliation; no all-region completion claim."
+    },
+    {
+      "id": "east-asia",
+      "label": "東アジア",
+      "status": "integrated-partial",
+      "inventoryVerified": false,
+      "baselineMissing": "中国2023丸大豆以外の品目・国の同定義需給と完全相手数量。日本専用を除外するが日本向け貿易は除外しない。",
+      "deliveries": [
+        {
+          "state": "final-partial-result-integrated",
+          "sourceCommit": "33cd6de8030729afb5ace4fbd6a777c924c4cac0",
+          "sourceBranch": "codex/east-asia-agro-statistics-20261016",
+          "sourceReport": "docs/east-asia-agro-residuals-20261016.md",
+          "sourceReportSha256": "58e40808b0832ef768b94aafc93b2eea7665b4aaccff7606b27c8d5129efa228",
+          "integrated": true,
+          "regionalSourceTestsPassed": true,
+          "regionalApplicationAndDataMatchSource": true,
+          "sourceAuditVerified": false,
+          "sourceAuditNote": "Regional source/hash/extraction tests passed. This does not certify every missing mandatory record or convert all new native packets to the common quantity contract.",
+          "integrationAdjustedFiles": [
+            "scripts/east-asia/capture-selected-quantities.mjs"
+          ]
+        }
+      ],
+      "records": [
+        "wasde-675-CHN-maize-production",
+        "wasde-675-CHN-soybean-production",
+        "wasde-675-CHN-wheat-production"
+      ],
+      "unresolved": [
+        {
+          "id": "mandatory-source-coverage",
+          "reason": "中国2023丸大豆以外の品目・国の同定義需給と完全相手数量。日本専用を除外するが日本向け貿易は除外しない。 担当の最終残件と共通最小取得依頼を参照。"
+        }
+      ],
+      "inventory": [
+        {
+          "scopeId": "CHN",
+          "seriesId": "maize-production",
+          "recordId": "wasde-675-CHN-maize-production"
+        },
+        {
+          "scopeId": "CHN",
+          "seriesId": "soybean-production",
+          "recordId": "wasde-675-CHN-soybean-production"
+        },
+        {
+          "scopeId": "CHN",
+          "seriesId": "wheat-production",
+          "recordId": "wasde-675-CHN-wheat-production"
+        }
+      ],
+      "inventoryNote": "Only retained normalized marketing-year records are bound below. Built selection inventory and new regional native panels still need complete item/scope reconciliation; no all-region completion claim."
+    },
+    {
+      "id": "southeast-asia",
+      "label": "東南アジア",
+      "status": "integrated-partial",
+      "inventoryVerified": false,
+      "baselineMissing": "地理的11か国の対象集合を固定した同年需給・域外全相手数量。米とパーム油の加工基準を保持し、ASEANの年別構成と区別。",
+      "deliveries": [
+        {
+          "state": "final-partial-result-integrated",
+          "sourceCommit": "337b381be687cae1029cf58d0ab195b4c5236070",
+          "sourceBranch": "codex/southeast-agro-residuals-20261016",
+          "sourceReport": "docs/southeast-agro-residuals-20261016.md",
+          "sourceReportSha256": "c1aa56833a594bd9f7e818d3662cd6b91fc1f801d5e12b52080cd9f40cc316ff",
+          "integrated": true,
+          "regionalSourceTestsPassed": true,
+          "regionalApplicationAndDataMatchSource": true,
+          "sourceAuditVerified": false,
+          "sourceAuditNote": "Regional source/hash/extraction tests passed. This does not certify every missing mandatory record or convert all new native packets to the common quantity contract.",
+          "integrationAdjustedFiles": [
+            "scripts/verify-southeast-agro-statistics-pc.mjs"
+          ]
+        }
+      ],
+      "records": [],
+      "unresolved": [
+        {
+          "id": "mandatory-source-coverage",
+          "reason": "地理的11か国の対象集合を固定した同年需給・域外全相手数量。米とパーム油の加工基準を保持し、ASEANの年別構成と区別。 担当の最終残件と共通最小取得依頼を参照。"
+        }
+      ],
+      "inventory": [],
+      "inventoryNote": "Only retained normalized marketing-year records are bound below. Built selection inventory and new regional native panels still need complete item/scope reconciliation; no all-region completion claim."
+    },
+    {
+      "id": "south-asia",
+      "label": "南アジア",
+      "status": "integrated-partial",
+      "inventoryVerified": false,
+      "baselineMissing": "インド等の同年度・同製品相手数量と他品目需給。バスマティ部分輸出を籾米全体の仕向けへ接合しない。",
+      "deliveries": [
+        {
+          "state": "final-partial-result-integrated",
+          "sourceCommit": "03ada49bb9068401a238e54e51e8ae326aa4b0e0",
+          "sourceBranch": "feat/south-asia-agro-statistics-20261016",
+          "sourceReport": "docs/atlas-south-asia-agro-statistics-20261016.md",
+          "sourceReportSha256": "14b8101a922c80d61700737178e5d3a7fa72eaa23955d2ed88b6243431b8278c",
+          "integrated": true,
+          "regionalSourceTestsPassed": true,
+          "regionalApplicationAndDataMatchSource": true,
+          "sourceAuditVerified": false,
+          "sourceAuditNote": "Regional source/hash/extraction tests passed. This does not certify every missing mandatory record or convert all new native packets to the common quantity contract.",
+          "integrationAdjustedFiles": [
+            "scripts/capture-south-asia-agro-review.mjs"
+          ]
+        }
+      ],
+      "records": [
+        "wasde-675-IND-wheat-production"
+      ],
+      "unresolved": [
+        {
+          "id": "mandatory-source-coverage",
+          "reason": "インド等の同年度・同製品相手数量と他品目需給。バスマティ部分輸出を籾米全体の仕向けへ接合しない。 担当の最終残件と共通最小取得依頼を参照。"
+        }
+      ],
+      "inventory": [
+        {
+          "scopeId": "IND",
+          "seriesId": "wheat-production",
+          "recordId": "wasde-675-IND-wheat-production"
+        }
+      ],
+      "inventoryNote": "Only retained normalized marketing-year records are bound below. Built selection inventory and new regional native panels still need complete item/scope reconciliation; no all-region completion claim."
+    },
+    {
+      "id": "central-asia",
+      "label": "中央アジア",
+      "status": "integrated-partial",
+      "inventoryVerified": false,
+      "baselineMissing": "カザフスタン小麦の同年度相手数量と他国・他品目の対応需給。国別例を地域全体へ読み替えない。",
+      "deliveries": [
+        {
+          "state": "final-partial-result-integrated",
+          "sourceCommit": "5bda7960d9dd576c6b1df70692b8fcab96ee79be",
+          "sourceBranch": "codex/central-asia-agro-20261016",
+          "sourceReport": "docs/atlas-central-asia-agro-20261016.md",
+          "sourceReportSha256": "7c597dadd4fcb513d31f15588b427e82be05323f039e061fbd314a799bcdd1a9",
+          "integrated": true,
+          "regionalSourceTestsPassed": true,
+          "regionalApplicationAndDataMatchSource": false,
+          "sourceAuditVerified": false,
+          "sourceAuditNote": "Regional source/hash/extraction tests passed. This does not certify every missing mandatory record or convert all new native packets to the common quantity contract.",
+          "integrationAdjustedFiles": [
+            "scripts/verify-central-asia-agro.mjs",
+            "scripts/prepare-central-asia-agro.py",
+            "src/lib/atlas-central-asia-agro.ts",
+            "src/data/atlas/central-asia-agro-production.json"
+          ],
+          "integrationFollowup": {
+            "baselineIntegratedHead": "a65cf1379edd79586334e9c432548a27a6294612",
+            "reason": "Integration follow-up reuses retained QCL2024 item27 paddy-rice rows for all five countries and the same published World; quantity uses and partners remain unavailable.",
+            "dataCompletionClaimed": false
+          }
+        }
+      ],
+      "records": [
+        "wasde-675-KAZ-wheat-production"
+      ],
+      "unresolved": [
+        {
+          "id": "regional-supply-use",
+          "reason": "Complete intra-regional supply/use balance not acquired."
+        },
+        {
+          "id": "external-partner-matrix",
+          "reason": "Complete regional external destination matrix not acquired."
+        },
+        {
+          "id": "seed-cotton-world",
+          "reason": "Matching unginned/seed-cotton World denominator not acquired."
+        },
+        {
+          "id": "sheep-goat-meat",
+          "reason": "Sheep/goat meat quantities not completed."
+        },
+        {
+          "id": "pulp",
+          "reason": "Pulp quantities not completed."
+        },
+        {
+          "id": "mandatory-source-coverage",
+          "reason": "カザフスタン小麦の同年度相手数量と他国・他品目の対応需給。国別例を地域全体へ読み替えない。 担当の最終残件と共通最小取得依頼を参照。"
+        }
+      ],
+      "inventory": [
+        {
+          "scopeId": "KAZ",
+          "seriesId": "wheat-production",
+          "recordId": "wasde-675-KAZ-wheat-production"
+        }
+      ],
+      "inventoryNote": "Only retained normalized marketing-year records are bound below. Built selection inventory and new regional native panels still need complete item/scope reconciliation; no all-region completion claim."
+    },
+    {
+      "id": "west-asia",
+      "label": "西アジア・中東",
+      "status": "integrated-partial",
+      "inventoryVerified": false,
+      "baselineMissing": "部分地域・異年・異製品のFBS/TM/QCLを接合しない同定義数量。完全な対象国集合、域外相手数量、原CSVと換算定義。",
+      "deliveries": [
+        {
+          "state": "final-partial-result-integrated",
+          "sourceCommit": "5dad43634d9907f0f652fb8ecd68041136855743",
+          "sourceBranch": "codex/west-asia-agro-residuals-20261016",
+          "sourceReport": "docs/atlas-west-asia-agro-residuals-20261016.md",
+          "sourceReportSha256": "ef3bf0f5afce3930021584949ccb84ce856ab9c368fa12ebbf558397d79d539c",
+          "integrated": true,
+          "regionalSourceTestsPassed": true,
+          "regionalApplicationAndDataMatchSource": true,
+          "sourceAuditVerified": false,
+          "sourceAuditNote": "Regional source/hash/extraction tests passed. This does not certify every missing mandatory record or convert all new native packets to the common quantity contract.",
+          "integrationAdjustedFiles": [
+            "scripts/capture-west-asia-agro-residuals-review.mjs"
+          ]
+        }
+      ],
+      "records": [],
+      "unresolved": [
+        {
+          "id": "mandatory-source-coverage",
+          "reason": "部分地域・異年・異製品のFBS/TM/QCLを接合しない同定義数量。完全な対象国集合、域外相手数量、原CSVと換算定義。 担当の最終残件と共通最小取得依頼を参照。"
+        }
+      ],
+      "inventory": [],
+      "inventoryNote": "Only retained normalized marketing-year records are bound below. Built selection inventory and new regional native panels still need complete item/scope reconciliation; no all-region completion claim."
+    },
+    {
+      "id": "africa",
+      "label": "アフリカ",
+      "status": "integrated-partial",
+      "inventoryVerified": false,
+      "baselineMissing": "農畜産の同年使用・輸出入・全相手数量。林業のFO国別・地域数量。部分対象の合計を全域と呼ばない。",
+      "deliveries": [
+        {
+          "state": "final-partial-result-integrated",
+          "sourceCommit": "2116125dd2a9721c27cdaeea65acb8ad267caebb",
+          "sourceBranch": "feat/africa-agro-statistics-20261016",
+          "sourceReport": "docs/atlas-africa-agro-statistics-20261016.md",
+          "sourceReportSha256": "978f68503f394552dbd5175f9829d22610bdb2782ce144c0994f679815c62659",
+          "integrated": true,
+          "regionalSourceTestsPassed": true,
+          "regionalApplicationAndDataMatchSource": true,
+          "sourceAuditVerified": false,
+          "sourceAuditNote": "Regional source/hash/extraction tests passed. This does not certify every missing mandatory record or convert all new native packets to the common quantity contract.",
+          "integrationAdjustedFiles": [
+            "scripts/verify-africa-agro-review.mjs"
+          ]
+        }
+      ],
+      "records": [],
+      "unresolved": [
+        {
+          "id": "mandatory-source-coverage",
+          "reason": "農畜産の同年使用・輸出入・全相手数量。林業のFO国別・地域数量。部分対象の合計を全域と呼ばない。 担当の最終残件と共通最小取得依頼を参照。"
+        }
+      ],
+      "inventory": [],
+      "inventoryNote": "Only retained normalized marketing-year records are bound below. Built selection inventory and new regional native panels still need complete item/scope reconciliation; no all-region completion claim."
+    },
+    {
+      "id": "oceania",
+      "label": "オセアニア",
+      "status": "integrated-partial",
+      "inventoryVerified": false,
+      "baselineMissing": "牛肉・乳・作物・林業の同年数量需給と全相手。豪州の複数年平均輸出率をFAO単年生産へ掛けず、豪州・NZだけを全域と呼ばない。",
+      "deliveries": [
+        {
+          "state": "final-partial-result-integrated",
+          "sourceCommit": "77e41800773be54b25aa87799d243aec4718e218",
+          "sourceBranch": "codex/oceania-agro-residuals-20261016",
+          "sourceReport": "docs/oceania-agro-statistics-residuals-20261016.md",
+          "sourceReportSha256": "d158f7140e7adb927c2c7c42c43ed5849ca8ae1a0bc73612a7570759c438d752",
+          "integrated": true,
+          "regionalSourceTestsPassed": true,
+          "regionalApplicationAndDataMatchSource": true,
+          "sourceAuditVerified": false,
+          "sourceAuditNote": "Regional source/hash/extraction tests passed. This does not certify every missing mandatory record or convert all new native packets to the common quantity contract.",
+          "integrationAdjustedFiles": [
+            "tests/browser/atlas-oceania-agro-trade.mjs"
+          ]
+        }
+      ],
+      "records": [
+        "wasde-675-AUS-wheat-production"
+      ],
+      "unresolved": [
+        {
+          "id": "mandatory-source-coverage",
+          "reason": "牛肉・乳・作物・林業の同年数量需給と全相手。豪州の複数年平均輸出率をFAO単年生産へ掛けず、豪州・NZだけを全域と呼ばない。 担当の最終残件と共通最小取得依頼を参照。"
+        }
+      ],
+      "inventory": [
+        {
+          "scopeId": "AUS",
+          "seriesId": "wheat-production",
+          "recordId": "wasde-675-AUS-wheat-production"
+        }
+      ],
+      "inventoryNote": "Only retained normalized marketing-year records are bound below. Built selection inventory and new regional native panels still need complete item/scope reconciliation; no all-region completion claim."
+    },
+    {
+      "id": "latin-america",
+      "label": "中南米",
+      "status": "integrated-partial",
+      "inventoryVerified": false,
+      "baselineMissing": "既存WASDE行の同年度相手数量、その他作物・畜産・森林の用途・在庫・貿易数量。34対象の欠測と地域内取引を明示。",
+      "deliveries": [
+        {
+          "state": "final-partial-result-integrated",
+          "sourceCommit": "e200563c99cdbad979fc49f450aedaf43ff9f0ec",
+          "sourceBranch": "codex/latin-agro-residual-20261016",
+          "sourceReport": "docs/atlas-latin-agro-quantity-20261016.md",
+          "sourceReportSha256": "145bb41f96ed2c8f52d5848814301c510f8274888bab2fd7341c163ad6efd527",
+          "integrated": true,
+          "regionalSourceTestsPassed": true,
+          "regionalApplicationAndDataMatchSource": false,
+          "sourceAuditVerified": false,
+          "sourceAuditNote": "Regional source/hash/extraction tests passed. This does not certify every missing mandatory record or convert all new native packets to the common quantity contract.",
+          "integrationAdjustedFiles": [
+            "scripts/verify-latin-agro-quantity.mjs",
+            "scripts/prepare-latin-agro-quantity.py",
+            "public/assets/atlas/latin-agro-quantity-v1/data.json",
+            "src/styles/atlas-latin-agro-quantity.css",
+            "scripts/verify-latin-agro-quantity.mjs"
+          ],
+          "integrationFollowup": {
+            "baselineIntegratedHead": "a65cf1379edd79586334e9c432548a27a6294612",
+            "reason": "Integration follow-up changes only Other Asia, nes geography from external to unresolved; all raw quantities, source flags, national totals and partner denominators are preserved. The selected partner table also preserves numeric strings on one line at the requested narrow PC width; page/map dimensions are unchanged.",
+            "dataCompletionClaimed": false
+          }
+        }
+      ],
+      "records": [
+        "wasde-675-ARG-maize-production",
+        "wasde-675-ARG-soybean-production",
+        "wasde-675-ARG-wheat-production",
+        "wasde-675-BRA-maize-production",
+        "wasde-675-BRA-soybean-production",
+        "wasde-675-BRA-wheat-production",
+        "wasde-675-PRY-soybean-production"
+      ],
+      "unresolved": [
+        {
+          "id": "mandatory-source-coverage",
+          "reason": "既存WASDE行の同年度相手数量、その他作物・畜産・森林の用途・在庫・貿易数量。34対象の欠測と地域内取引を明示。 担当の最終残件と共通最小取得依頼を参照。"
+        }
+      ],
+      "inventory": [
+        {
+          "scopeId": "ARG",
+          "seriesId": "maize-production",
+          "recordId": "wasde-675-ARG-maize-production"
+        },
+        {
+          "scopeId": "ARG",
+          "seriesId": "soybean-production",
+          "recordId": "wasde-675-ARG-soybean-production"
+        },
+        {
+          "scopeId": "ARG",
+          "seriesId": "wheat-production",
+          "recordId": "wasde-675-ARG-wheat-production"
+        },
+        {
+          "scopeId": "BRA",
+          "seriesId": "maize-production",
+          "recordId": "wasde-675-BRA-maize-production"
+        },
+        {
+          "scopeId": "BRA",
+          "seriesId": "soybean-production",
+          "recordId": "wasde-675-BRA-soybean-production"
+        },
+        {
+          "scopeId": "BRA",
+          "seriesId": "wheat-production",
+          "recordId": "wasde-675-BRA-wheat-production"
+        },
+        {
+          "scopeId": "PRY",
+          "seriesId": "soybean-production",
+          "recordId": "wasde-675-PRY-soybean-production"
+        }
+      ],
+      "inventoryNote": "Only retained normalized marketing-year records are bound below. Built selection inventory and new regional native panels still need complete item/scope reconciliation; no all-region completion claim."
+    },
+    {
+      "id": "russia",
+      "label": "ロシア",
+      "status": "integrated-partial",
+      "inventoryVerified": false,
+      "baselineMissing": "森林の同年輸出入・用途・相手数量。小麦の通年対応相手と需給。QCL国・Worldの既存公式値限定方針を保持。",
+      "deliveries": [
+        {
+          "state": "final-partial-result-integrated",
+          "sourceCommit": "eace8e1bec3a1bf8656a47988a7ecf5145388102",
+          "sourceBranch": "codex/russia-agro-residuals-20261016",
+          "sourceReport": "docs/atlas-russia-agro-residuals-20261016.md",
+          "sourceReportSha256": "76b59252fb770972a73174aebc65a46505fbfb806286276ee2f1bd213c9b3f14",
+          "integrated": true,
+          "regionalSourceTestsPassed": true,
+          "regionalApplicationAndDataMatchSource": true,
+          "sourceAuditVerified": false,
+          "sourceAuditNote": "Regional source/hash/extraction tests passed. This does not certify every missing mandatory record or convert all new native packets to the common quantity contract.",
+          "integrationAdjustedFiles": [
+            "scripts/verify-russia-agro-review.mjs"
+          ]
+        }
+      ],
+      "records": [],
+      "unresolved": [
+        {
+          "id": "mandatory-source-coverage",
+          "reason": "森林の同年輸出入・用途・相手数量。小麦の通年対応相手と需給。QCL国・Worldの既存公式値限定方針を保持。 担当の最終残件と共通最小取得依頼を参照。"
+        }
+      ],
+      "inventory": [],
+      "inventoryNote": "Only retained normalized marketing-year records are bound below. Built selection inventory and new regional native panels still need complete item/scope reconciliation; no all-region completion claim."
+    }
+  ],
+  "recordFiles": [],
+  "includeRetainedMarketingRecords": true,
+  "integrationState": "partial-candidate-not-approved-for-publication",
+  "sourceRequest": "docs/atlas-agro-source-request-minimum-20261016.md"
+}

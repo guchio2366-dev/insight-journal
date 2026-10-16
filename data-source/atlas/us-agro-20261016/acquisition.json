@@ -1,0 +1,128 @@
+{
+  "checkedOn": "2026-10-16",
+  "country": "USA",
+  "policy": "Read-only normal official entrypoints and public tables. No authentication, proxy, signed URL, sandbox disablement or permission changes. A download unsupported by the Web reader is not itself a server access denial.",
+  "attempts": [
+    {
+      "target": "https://www.usda.gov/oce/commodity/wasde/wasde0926.pdf",
+      "channel": "Web reader; original official PDF",
+      "result": "Readable 40-page WASDE-675 dated 2026-09-11. US/World quantities and US marketing-year start footnotes checked; cotton 3/ means less than 5,000 bales. Saved TXT values are retained, PDF response bytes and PDF hash unavailable."
+    },
+    {
+      "target": "https://fenixservices.fao.org/faostat/api/v1/en/data/FO?area_code=231%2C5000&year=2024&element_code=5510%2C5610%2C5910&show_codes=true&show_unit=true&page_size=1000&output_type=objects",
+      "channel": "execution environment urllib",
+      "result": "CONNECT tunnel 403 Forbidden; no origin HTTP response or rows obtained"
+    },
+    {
+      "target": "https://bulks-faostat.fao.org/production/Forestry_E_All_Data_(Normalized).zip",
+      "channel": "official bulk distribution recorded in existing provenance; execution environment urllib",
+      "result": "CONNECT tunnel 403 Forbidden; no archive bytes obtained; this is a separate official bulk distribution from the API"
+    },
+    {
+      "target": "https://unece.org/forests/forest-products-annual-market-review",
+      "channel": "Web reader",
+      "result": "403 Forbidden"
+    },
+    {
+      "target": "https://forest-data.unece.org/",
+      "channel": "independent official public data portal; Web reader",
+      "result": "403 Forbidden"
+    },
+    {
+      "target": "https://unece.org/housing-and-land-management/coffi-market-forecasts",
+      "channel": "independent official public forecast tables entrypoint; Web reader",
+      "result": "403 Forbidden"
+    },
+    {
+      "target": "https://www.fao.org/forestry/statistics/data/en",
+      "channel": "Web reader",
+      "result": "Official public HTML readable; 2024 rounded World quantities and US production shares recorded in forest-summary-2024.json; no exact national quantities or partners on this page"
+    },
+    {
+      "target": "https://www.fao.org/forestry/statistics/publications/forest-product-statistics/en",
+      "channel": "Web reader",
+      "result": "Official publications catalogue readable; linked 2024 facts and figures and 2020 yearbook examined"
+    },
+    {
+      "target": "https://openknowledge.fao.org/handle/20.500.14283/cd8005en",
+      "channel": "official 2024 facts and figures catalogue link; Web reader",
+      "result": "403 Forbidden"
+    },
+    {
+      "target": "https://openknowledge.fao.org/handle/20.500.14283/cc3475m",
+      "channel": "official 2020 forest-products yearbook catalogue link; Web reader",
+      "result": "403 Forbidden"
+    },
+    {
+      "target": "https://apps.fas.usda.gov/gats/default.aspx",
+      "channel": "Web reader",
+      "result": "Redirected to detectscreen.aspx?returnpage=default.aspx; zero readable lines; no exported table obtained"
+    },
+    {
+      "target": "https://apps.fas.usda.gov/esrquery/esrq.aspx",
+      "channel": "Web reader",
+      "result": "404 Not Found; no export-sales data obtained"
+    },
+    {
+      "target": "https://www.ers.usda.gov/data-products/oil-crops-yearbook",
+      "channel": "independent official ERS publication; Web reader",
+      "result": "Readable official download catalogue, updated 2026-03-23; XLSX/CSV unsupported by Web reader, not an access denial"
+    },
+    {
+      "target": "https://www.ers.usda.gov/media/5220/all-tables-oil-crops-yearbook.xlsx?v=31853",
+      "channel": "normal catalogue XLSX link; execution environment urllib",
+      "result": "CONNECT tunnel 403 Forbidden; no workbook bytes obtained"
+    },
+    {
+      "target": "https://www.ers.usda.gov/data-products/oil-crops-yearbook/documentation",
+      "channel": "Web reader",
+      "result": "Readable; soybean local marketing year September-August; domestic disappearance includes supply, ending stocks and exports; global local marketing years differ from October-September trade years"
+    },
+    {
+      "target": "https://www.ers.usda.gov/data-products/livestock-and-meat-international-trade-data",
+      "channel": "independent official ERS publication; Web reader",
+      "result": "Readable official catalogue, updated 2026-10-07; annual partner quantities in meat CWE and egg dozen equivalents exist; dairy excluded; CSV unsupported by Web reader"
+    },
+    {
+      "target": "https://www.ers.usda.gov/media/29552/beef-and-veal-annual-and-cumulative-year-to-date-us-trade-carcass-weight-1000-pounds.csv?v=87258",
+      "channel": "normal catalogue annual beef CSV link; execution environment urllib",
+      "result": "CONNECT tunnel 403 Forbidden; no CSV bytes obtained"
+    },
+    {
+      "target": "https://www.ers.usda.gov/data-products/livestock-and-meat-international-trade-data/documentation",
+      "channel": "Web reader",
+      "result": "Readable; annual vs YTD, country codes, commodity conversion factors, rounded and blank Excel cells described; no quantities transcribed from metadata"
+    },
+    {
+      "target": "https://data.un.org/Data.aspx?d=FAO&f=itemCode%3A1872",
+      "channel": "independent official UNdata FAO redistribution; Web reader",
+      "result": "Sawnwood public table readable; latest available year 2022; last UNdata update 2024-01-22. Not joined to 2024 quantities."
+    },
+    {
+      "target": "https://data.un.org/Data.aspx?d=FAO&f=itemCode%3A1872%3BcountryCode%3A231%3Byear%3A2022",
+      "channel": "normal UNdata filtered table; Web reader",
+      "result": "URL not accessible via this tool; no US rows obtained"
+    },
+    {
+      "target": "https://data.un.org/Data.aspx?d=FAO&f=itemCode%3A1872%3BcountryCode%3A5000%3Byear%3A2022",
+      "channel": "normal UNdata filtered table; Web reader",
+      "result": "URL not accessible via this tool; no World rows obtained"
+    },
+    {
+      "target": "https://data.un.org/Data.aspx?d=FAO&f=itemCode%3A1861%3BcountryCode%3A231%3Byear%3A2022",
+      "channel": "normal UNdata filtered table; Web reader",
+      "result": "URL not accessible via this tool; no US roundwood rows obtained"
+    },
+    {
+      "target": "https://wits.worldbank.org/trade/comtrade/en/country/USA/year/2024/tradeflow/Exports/partner/ALL/product/4407",
+      "channel": "independent official World Bank public trade table; Web reader",
+      "result": "URL not accessible via this tool; no partner quantities obtained"
+    }
+  ],
+  "requiredUserExports": [
+    "GATS standard export: five crop products, World and all partners, monthly quantities for complete US 2024/25 marketing years; retain commodity codes, conversion basis, units, revisions and re-export definition. Wheat June-May, corn/soy September-August, rice/cotton August-July must be confirmed in export metadata. Preserve milled-equivalent rice and lint cotton; wheat products must match the WASDE wheat-equivalent scope.",
+    "ERS Oil Crops Yearbook XLSX or CSV using the normal download on the official catalogue; determine whether destination tables cover the complete soybean marketing year before replacing the calendar-year reference.",
+    "ERS Livestock and Meat International Trade Data annual CSVs: beef/veal, pork, chickens/turkeys/eggs; filter Annual 2025, not year-to-date. Include matching conversion-factor workbook. Keep other chicken distinct from broilers and hatching eggs distinct from food eggs. Obtain separate official dairy component-equivalent partner quantities; this ERS product excludes dairy.",
+    "FAOSTAT FO official CSV for USA and World, 2024, industrial roundwood (or total roundwood with the matching fuel scope), sawnwood and wood pulp: production/import quantity/export quantity, units, item and element codes, flags, notes and archive revision. Also export a same-definition partner matrix with World totals; stocks/actual domestic use require separate official balance inputs. Do not supply only integer country shares."
+  ]
+}

@@ -1,0 +1,227 @@
+{
+  "head": "58be943225b7fdef8bb68392c7e377571305007d",
+  "dirty": false,
+  "chromiumSandbox": true,
+  "deviceScaleFactor": 1.5,
+  "viewports": [
+    {
+      "width": 1896,
+      "height": 996
+    },
+    {
+      "width": 1280,
+      "height": 665
+    }
+  ],
+  "cases": [
+    {
+      "name": "overview",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "status": "passed"
+    },
+    {
+      "name": "regional-wheat",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "status": "passed"
+    },
+    {
+      "name": "regional-soybean",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "status": "passed"
+    },
+    {
+      "name": "soybean-UKR",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "status": "passed"
+    },
+    {
+      "name": "soybean-FRA",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "status": "passed"
+    },
+    {
+      "name": "soybean-ITA",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "status": "passed"
+    },
+    {
+      "name": "soybean-DEU",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "status": "passed"
+    },
+    {
+      "name": "wheat-UKR",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "status": "passed"
+    },
+    {
+      "name": "wheat-GBR",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "status": "passed"
+    },
+    {
+      "name": "maize-UKR",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "status": "passed"
+    },
+    {
+      "name": "forest-FIN",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "status": "passed"
+    },
+    {
+      "name": "forest-DEU",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "status": "passed"
+    },
+    {
+      "name": "overview",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "status": "passed"
+    },
+    {
+      "name": "regional-wheat",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "status": "passed"
+    },
+    {
+      "name": "regional-soybean",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "status": "passed"
+    },
+    {
+      "name": "soybean-UKR",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "status": "passed"
+    },
+    {
+      "name": "soybean-FRA",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "status": "passed"
+    },
+    {
+      "name": "soybean-ITA",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "status": "passed"
+    },
+    {
+      "name": "soybean-DEU",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "status": "passed"
+    },
+    {
+      "name": "wheat-UKR",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "status": "passed"
+    },
+    {
+      "name": "wheat-GBR",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "status": "passed"
+    },
+    {
+      "name": "maize-UKR",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "status": "passed"
+    },
+    {
+      "name": "forest-FIN",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "status": "passed"
+    },
+    {
+      "name": "forest-DEU",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "status": "passed"
+    }
+  ],
+  "errors": [],
+  "status": "passed",
+  "sourceIdentity": {
+    "mode": "exact-commit",
+    "baseHead": "58be943225b7fdef8bb68392c7e377571305007d",
+    "buildIdentity": "58be943225b7fdef8bb68392c7e377571305007d",
+    "workingTreeDirty": false,
+    "applicationInputsDirty": false,
+    "inputFiles": 3593,
+    "workingTreeSha256": "43dcbba00136b71738aeaac9282049f8d3aa797b588b257082721a0acda347be",
+    "publishedRelease": false
+  },
+  "runtimeSandbox": {
+    "browserVersion": "151.0.7922.173",
+    "status": "Sandbox Status\nLayer 1 Sandbox\tNamespace\nPID namespaces\tYes\nNetwork namespaces\tYes\nSeccomp-BPF sandbox\tYes\nSeccomp-BPF sandbox supports TSYNC\tYes\nPtrace Protection with Yama LSM (Broker)\tNo\nPtrace Protection with Yama LSM (Non-broker)\tNo\n\nYou are adequately sandboxed.",
+    "verified": true
+  }
+}

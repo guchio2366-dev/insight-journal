@@ -81,7 +81,10 @@ const region=getOverviewRegion('west-asia');
     {initialField==='natural'&&<details class="atlas-climate-overview" data-west-climate-overview><summary><h2>各気候区分の概説</h2></summary><p>色と区分は北米と共通です。分類は1991–2020年の平均的な気温・降水の組合せを表します。</p><div class="west-climate-codes">{data.classes.map(c=><section><h3><i style={`background:${c.color}`}></i>{c.code} {c.name}</h3><p>{c.description}</p></section>)}</div></details>}
    </div>
    </section>
+   {initialField==='agriculture'&&<section class="west-regional-flow-slot" data-west-regional-flow-slot hidden aria-label="選択品目の地域統計（対象範囲別）"></section>}
    <AgroStatistics scope="西アジア・中東" countries={data.countries} topics={westTopics.filter(t=>t.field==='agriculture').map(t=>t.id.replace(/-(irrigated|rainfed)$/,''))} />
+   {initialField==='agriculture'&&<section class="agro-statistics west-product-statistics" data-west-product-statistics hidden aria-label="選択国・品目の生産・使用・輸出先"></section>}
+   {initialField==='agriculture'&&<section class="agro-statistics west-country-reference" data-west-country-reference hidden aria-label="選択国の別定義参考"></section>}
    <section class="west-statistics" id="west-statistics" data-west-comparison hidden aria-label="国別統計"></section>
    <details class="west-sources" id="west-sources"><summary>資料の範囲と読み方・全出典</summary>
     <p>このページは、国連M49の西アジア18か国・地域にイランとエジプトを加えた編集上の範囲です。国連が「中東」をこの20と定めたものではありません。<a href="https://unstats.un.org/unsd/methodology/m49/overview">国連M49</a></p>

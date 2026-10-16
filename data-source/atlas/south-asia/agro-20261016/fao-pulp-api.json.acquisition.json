@@ -1,0 +1,8 @@
+{
+  "url": "https://fenixservices.fao.org/faostat/api/v1/en/data/FO?area_code=100,165,16,900&item_code=1875&element_code=5516,5616,5916&year=2024&page_size=100",
+  "requestedAt": "2026-10-16T03:40:12.717179+00:00",
+  "method": "public GET",
+  "path": "data-source/atlas/south-asia/agro-20261016/fao-pulp-api.json",
+  "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+  "bytes": 0
+}

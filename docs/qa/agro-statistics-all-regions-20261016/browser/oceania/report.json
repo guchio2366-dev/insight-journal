@@ -1,0 +1,207 @@
+{
+  "head": "58be943225b7fdef8bb68392c7e377571305007d",
+  "build": {
+    "articles": [
+      {
+        "payloadHash": "2c6ef0cd92ddb67af00ab81f04d553ca7d072d929e0bf1f277221867ad5bf646",
+        "publicId": "a-11111111-1111-4111-8111-111111111111",
+        "revision": 1
+      }
+    ],
+    "builtAt": "2026-10-16T04:48:32.043Z",
+    "commitSha": "58be943225b7fdef8bb68392c7e377571305007d"
+  },
+  "status": "passed",
+  "chromiumSandbox": true,
+  "deviceScaleFactor": 1.5,
+  "viewports": [
+    {
+      "width": 1896,
+      "height": 996
+    },
+    {
+      "width": 1280,
+      "height": 665
+    }
+  ],
+  "checks": [
+    {
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "name": "default",
+      "status": "passed"
+    },
+    {
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "name": "aus-wheat",
+      "status": "passed"
+    },
+    {
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "name": "aus-beef",
+      "status": "passed"
+    },
+    {
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "name": "nz-milk",
+      "status": "passed"
+    },
+    {
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "name": "aus-sheep",
+      "status": "passed"
+    },
+    {
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "name": "png-cocoa-hold",
+      "status": "passed"
+    },
+    {
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "name": "forest-default",
+      "status": "passed"
+    },
+    {
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "name": "nz-logs",
+      "status": "passed"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "name": "default",
+      "status": "passed"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "name": "aus-wheat",
+      "status": "passed"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "name": "aus-beef",
+      "status": "passed"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "name": "nz-milk",
+      "status": "passed"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "name": "aus-sheep",
+      "status": "passed"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "name": "png-cocoa-hold",
+      "status": "passed"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "name": "forest-default",
+      "status": "passed"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "name": "nz-logs",
+      "status": "passed"
+    }
+  ],
+  "screenshots": [
+    "1896-default-map.png",
+    "1896-aus-wheat-map.png",
+    "1896-aus-wheat-statistics.png",
+    "1896-aus-beef-map.png",
+    "1896-aus-beef-statistics.png",
+    "1896-nz-milk-map.png",
+    "1896-nz-milk-statistics.png",
+    "1896-aus-sheep-map.png",
+    "1896-aus-sheep-statistics.png",
+    "1896-png-cocoa-hold-map.png",
+    "1896-png-cocoa-hold-statistics.png",
+    "1896-forest-default-map.png",
+    "1896-nz-logs-map.png",
+    "1896-nz-logs-statistics.png",
+    "1896-NZL-sawn-2024.png",
+    "1896-NZL-pulp-2024.png",
+    "1280-default-map.png",
+    "1280-aus-wheat-map.png",
+    "1280-aus-wheat-statistics.png",
+    "1280-aus-beef-map.png",
+    "1280-aus-beef-statistics.png",
+    "1280-nz-milk-map.png",
+    "1280-nz-milk-statistics.png",
+    "1280-aus-sheep-map.png",
+    "1280-aus-sheep-statistics.png",
+    "1280-png-cocoa-hold-map.png",
+    "1280-png-cocoa-hold-statistics.png",
+    "1280-forest-default-map.png",
+    "1280-nz-logs-map.png",
+    "1280-nz-logs-statistics.png",
+    "1280-NZL-sawn-2024.png",
+    "1280-NZL-pulp-2024.png"
+  ],
+  "errors": [],
+  "sourceIdentity": {
+    "mode": "exact-commit",
+    "baseHead": "58be943225b7fdef8bb68392c7e377571305007d",
+    "buildIdentity": "58be943225b7fdef8bb68392c7e377571305007d",
+    "workingTreeDirty": false,
+    "applicationInputsDirty": false,
+    "inputFiles": 3593,
+    "workingTreeSha256": "43dcbba00136b71738aeaac9282049f8d3aa797b588b257082721a0acda347be",
+    "publishedRelease": false
+  },
+  "runtimeSandbox": {
+    "browserVersion": "151.0.7922.173",
+    "status": "Sandbox Status\nLayer 1 Sandbox\tNamespace\nPID namespaces\tYes\nNetwork namespaces\tYes\nSeccomp-BPF sandbox\tYes\nSeccomp-BPF sandbox supports TSYNC\tYes\nPtrace Protection with Yama LSM (Broker)\tNo\nPtrace Protection with Yama LSM (Non-broker)\tNo\n\nYou are adequately sandboxed.",
+    "verified": true
+  }
+}

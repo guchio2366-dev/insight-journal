@@ -1,0 +1,18 @@
+--- a/src/components/atlas/RegionalForestryPage.astro
++++ b/src/components/atlas/RegionalForestryPage.astro
+@@ -1,5 +1,6 @@
+ ---
+ import AgroStatistics from './AgroStatistics.astro';
++import AfricaForestryStatistics from './AfricaForestryStatistics.astro';
+ import BaseLayout from '../../layouts/BaseLayout.astro';
+ import RegionalForestryMap from './RegionalForestryMap.astro';
+ import RegionalForestryReading from './RegionalForestryReading.astro';
+@@ -53,7 +54,7 @@
+       <RegionalForestryReading {region} part="body"/>
+      </aside>
+     </div>
+-    <AgroStatistics scope={reading.name} country={region==='russia'?'RUS':''} topic="forest" nationalOnly={region==='russia'} />
++    {region==='africa'?<AfricaForestryStatistics />:<AgroStatistics scope={reading.name} country={region==='russia'?'RUS':''} topic="forest" nationalOnly={region==='russia'} />}
+     {region==='russia'&&<RussiaForestryStatistics />}
+     <RegionalForestrySources {region}/>
+    </article>

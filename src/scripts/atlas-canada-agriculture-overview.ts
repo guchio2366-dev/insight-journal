@@ -4,6 +4,7 @@ export function initCanadaAgricultureOverview(root:HTMLElement){
  const selected=()=>{const q=new URL(location.href).searchParams;return q.get('item')==='overview'?false:q.get('item')==='canola'||censusIds.has(q.get('ccs')??'')||['year','province','compare','metric','zoom'].some(key=>q.has(key));};
  const render=(active=selected())=>{
   root.dataset.canolaReadingMode=active?'selected':'overview';
+  root.dispatchEvent(new CustomEvent('canada-agro-reading-mode'));
   for(const node of root.querySelectorAll<HTMLElement>('[data-canola-overview-reading],[data-canola-country-map]'))node.hidden=active;
   for(const node of root.querySelectorAll<HTMLElement>('[data-canola-selected-reading],[data-canola-selected-map]'))node.hidden=!active;
   for(const link of root.querySelectorAll<HTMLAnchorElement>('[data-canola-select-item]'))active?link.setAttribute('aria-current','true'):link.removeAttribute('aria-current');

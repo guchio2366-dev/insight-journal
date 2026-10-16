@@ -439,3 +439,21 @@
 @media(min-width:960px){.atlas-desktop-shell>.west-layout-statistics:has(.west-production-summary){grid-column:2;min-width:0}}
 
 @media(max-width:959px){.west-farm-supply{grid-template-columns:minmax(0,1fr)}}
+
+/* Selected statistics use the atlas width below the map. Overview rules above
+   stay intact; no map, legend, marker or reading-column dimensions change. */
+.west-regional-flow-slot,.west-product-statistics,.west-country-reference{min-width:0;max-width:100%}
+.west-regional-flow-slot[hidden],.west-product-statistics[hidden],.west-country-reference[hidden]{display:none!important}
+.west-selected-farm-supply{gap:14px;margin:16px 0}
+.west-selected-farm-supply>section{padding:14px}
+.west-selected-farm-supply :is(p,li,summary){font-size:13px;line-height:1.7;overflow-wrap:anywhere}
+.west-selected-farm-supply h3{font-size:16px;line-height:1.5}
+.west-selected-farm-supply .west-wheat-regional li{grid-template-columns:65px minmax(0,1fr) 96px}
+.west-selected-farm-supply .west-wheat-destinations{grid-template-columns:70px minmax(0,1fr)}
+.west-selected-farm-supply .west-wheat-pie{width:66px;height:66px}
+.west-selected-farm-supply .west-wheat-destinations li{flex-wrap:wrap;font-size:13px}
+.west-selected-farm-supply .west-wheat-destinations li strong{font-size:13px}
+.west-selected-farm-supply .west-wheat-destinations li small{flex-basis:100%;padding-left:13px;font-size:13px}
+.west-country-reference{margin:12px 0;padding:12px;border:1px solid #d6dcd1;font-size:13px;line-height:1.8}
+.west-product-statistics .agro-definitions :is(th,td){font-size:13px}
+.west-product-statistics :focus-visible,.west-country-reference :focus-visible,.west-regional-flow-slot :focus-visible{outline:3px solid #176f89;outline-offset:3px}

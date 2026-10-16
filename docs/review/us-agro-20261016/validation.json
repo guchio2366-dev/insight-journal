@@ -1,0 +1,68 @@
+{
+  "country": "USA",
+  "date": "2026-10-16",
+  "branch": "codex/us-agro-residuals-20261016",
+  "baseCommit": "3fbb4c957c21685bddbf8148a95a2a03ba210553",
+  "completion": "partial",
+  "regionalUnit": {
+    "passed": 21,
+    "failed": 0,
+    "skipped": 0,
+    "log": "/tmp/us-agro-regional-unit-final.log"
+  },
+  "regionalDomE2e": {
+    "passed": 20,
+    "failed": 0,
+    "skipped": 0,
+    "log": "/tmp/us-agro-regional-e2e-final.log",
+    "renderingBoundary": "existing MapLibre stub; not actual browser geometry or screenshot validation"
+  },
+  "wholeUnitPriorToFinalCopyCleanup": {
+    "passed": 1437,
+    "failed": 0,
+    "skipped": 3
+  },
+  "wholeRegionE2e": "Stopped per integration handoff instruction; not reported as completed.",
+  "build": {
+    "command": "ASTRO_TELEMETRY_DISABLED=1 npm run build",
+    "exitCode": 0
+  },
+  "releaseVerification": {
+    "command": "npm run verify:release",
+    "exitCode": 0,
+    "buildCommitIdentifier": "local"
+  },
+  "syntaxAndWhitespace": "node --check capture script; git diff --check; git diff --cached --check passed",
+  "browser": {
+    "status": "blocked",
+    "sandbox": true,
+    "deviceScaleFactor": 1.5,
+    "requestedCssViewports": [
+      [
+        1896,
+        996
+      ],
+      [
+        1280,
+        665
+      ]
+    ],
+    "captures": 0,
+    "reason": "SUID sandbox helper incorrectly configured; Chromium aborts. Sandbox not disabled; permissions not changed.",
+    "evidence": "browser-attempt.json"
+  },
+  "sourceFilesSha256": {
+    "src/components/atlas/CropStatistics.astro": "c4dc06dadf45ffe53e4063af820a93fab81618fd8128a80f123885453a769c2e",
+    "src/components/atlas/LivestockReading.astro": "369309647fc37a57d05a6656cc0201417949f3137d118fb903b4abe4e3d1e267",
+    "src/components/atlas/LivestockSupplyUse.astro": "37e40e1834e4f7adb777a49742b013cbff8f9024bcd9bc6c3c38a6ec9bad9044",
+    "src/components/atlas/ForestryReading.astro": "094ddf702c8fc1735eb3105642223604ea80da00578748e4292fb8ee6f6970a1",
+    "src/components/atlas/UsCropSupplyUse.astro": "e4c0029bbd43b205fac4a02eb4c7a7c06bf96388f16fba1697573e2cdc3108e3",
+    "src/components/atlas/UsForestryStatistics.astro": "5834d8a16dcc7bd30eeef357ea91f105f3103e0b9dfc0286ed00b6d2d874c5a1"
+  },
+  "remaining": [
+    "Same-marketing-year complete crop destination quantities",
+    "Same-year and same-product livestock World, supply-use and partner quantities",
+    "2024 US national forestry quantities and same-product partner matrix",
+    "Actual browser geometry and screenshots at the agreed CSS sizes and DPR"
+  ]
+}

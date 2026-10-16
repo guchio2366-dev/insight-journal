@@ -33,7 +33,9 @@ const labels:Record<string,string>={'forest-area':'森林面積','roundwood-prod
     <caption>{labels[measure.id]}（{unit}）</caption>
     <thead><tr><th scope="col">年</th><th scope="col">全国値</th><th scope="col">世界値</th><th scope="col">世界比</th></tr></thead>
     <tbody>{rows.map(row=><tr><th scope="row">{row.year}</th><td>{number(row.rawValue,row.flag)}<small>{flag(row.flag)}（{row.flag}）{row.note?' · '+row.note:''}</small></td><td>{number(row.worldRawValue,row.worldFlag)}<small>{flag(row.worldFlag)}（{row.worldFlag}）</small></td><td>{row.worldShare===null?'未収録':row.worldShare.toLocaleString('ja-JP',{maximumFractionDigits:2})+'％'}</td></tr>)}</tbody>
-   </table></div></details>
+   </table></div>
+   {measure.domain==='FO'&&<><p>同じm³でも、丸太は搬出した樹皮を除く実材積（薪材を含む）、製材は厚さ6mm超の加工製品です。製材には輸入丸太由来の製品も含みます。木材パルプは含水率10%の風乾重量tで、その他繊維パルプ・紙・板紙とは別製品です。</p><p>林産品輸入には再輸出向け、輸出には再輸出も含み得ます。在庫・加工投入・損耗・副産物が未収録のため、丸太と製材の差を国内消費や加工用途へ割り当てません。</p><p>定義：<a href="https://www.fao.org/forestry-fao/34572-0902b3c041384fd87f2451da2bb9237.pdf">FAO Forest Products Definitions</a>（生産・貿易p.2、丸太p.3、製材p.6、木材パルプp.9）。輸出入・用途・在庫・パルプの全国原行と全相手数量は引き続き未収録です。</p></>}
+   </details>
    <p class="forestry-source">出典：<a href={'https://www.fao.org/faostat/en/#data/'+measure.domain}>FAOSTAT {measure.domain}</a>（{statistics.sources.find(source=>source.id===measure.domain)?.releaseDate}公開の保存済み原表）。<a href="https://www.fao.org/contact-us/terms/db-terms-of-use/">CC BY 4.0</a>。提供元の推計・補完区分を保持。</p>
   </section>;
  })}

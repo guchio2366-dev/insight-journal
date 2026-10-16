@@ -1,0 +1,70 @@
+Australia Spelt, common wheat and meslin exports by country | 2023 | Data (https://wits.worldbank.org/trade/comtrade/en/country/AUS/year/2023/tradeflow/Exports/partner/ALL/product/100190)
+citeturn16view0 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"https://wits.worldbank.org/trade/comtrade/en/country/AUS/year/2023/tradeflow/Exports/partner/ALL/product/100190","lineno":15}); Total lines: 86
+L0: # Australia Spelt, common wheat and meslin exports by country
+L1:
+L2: in 2023
+L3:
+L4: Share
+L5:
+L6:   * cite0†Facebook L7:   * cite0†Twitter L8:   * cite0†Linkedin L9:   * cite0†Google Plus L10:   * cite0†Reddit L11:   * cite0†Stumble Upon L12:   * cite0†Delicious L13:   * cite0†Email L14:
+L15: Change selection (Reporter, Year, Trade Flow, Partner and HS 6 digit Product)
+L16: Australia exports of Spelt, common wheat and meslin was $9,193,367.99K and quantity 29,061,500,000Kg.
+L17: Australia exported Spelt, common wheat and meslin to China ($2,121,445.78K , 6,630,600,000 Kg), Indonesia ($1,326,127.94K , 4,343,770,000 Kg), Vietnam ($882,137.37K , 2,756,480,000 Kg), Philippines ($856,799.29K , 2,801,280,000 Kg), Korea, Rep. ($737,457.06K , 2,261,140,000 Kg).
+L18: cite1†Spelt, common wheat and meslin imports by country in 2023 L19: Reporter  | TradeFlow  | ProductCode  | Product Description  | Year  | Partner  | Trade Value 1000USD  | Quantity  | Quantity Unit
+L20:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite2†World | 9,193,367.99  | 29,061,500,000  | Kg
+L21:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite3†China | 2,121,445.78  | 6,630,600,000  | Kg
+L22:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite4†Indonesia | 1,326,127.94  | 4,343,770,000  | Kg
+L23:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite5†Vietnam | 882,137.37  | 2,756,480,000  | Kg
+L24:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite6†Philippines | 856,799.29  | 2,801,280,000  | Kg
+L25:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite7†Korea, Rep. | 737,457.06  | 2,261,140,000  | Kg
+L26:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite8†Thailand | 618,062.45  | 1,944,030,000  | Kg
+L27:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite9†Yemen | 414,391.22  | 1,352,590,000  | Kg
+L28:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite10†Japan | 364,324.91  | 1,149,130,000  | Kg
+L29:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite11†Malaysia | 324,902.96  | 1,029,220,000  | Kg
+L30:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite12†Iraq | 323,328.66  | 996,461,000  | Kg
+L31:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite13†New Zealand | 217,734.21  | 683,812,000  | Kg
+L32:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite14†Kuwait | 118,079.38  | 364,477,000  | Kg
+L33:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite15†Myanmar | 99,761.40  | 293,410,000  | Kg
+L34:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite16†United Arab Emirates | 90,980.44  | 292,050,000  | Kg
+L35:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite17†South Africa | 87,741.67  | 261,910,000  | Kg
+L36:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite18†Papua New Guinea | 84,363.01  | 266,285,000  | Kg
+L37:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite19†Other Asia, nes | 83,831.39  | 264,816,000  | Kg
+L38:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite20†Fiji | 59,212.71  | 180,294,000  | Kg
+L39:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite21†Oman | 53,276.33  | 163,902,000  | Kg
+L40:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite22†Egypt, Arab Rep. | 45,219.01  | 117,606,000  | Kg
+L41:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite23†Bangladesh | 45,073.93  | 145,610,000  | Kg
+L42:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite24†India | 35,350.63  | 114,833,000  | Kg
+L43:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite25†Bahrain | 33,047.35  | 95,425,900  | Kg
+L44:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite26†Singapore | 30,707.62  | 113,408,000  | Kg
+L45:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite27†Qatar | 24,118.94  | 62,636,200  | Kg
+L46:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite28†Kenya | 21,641.03  | 71,988,000  | Kg
+L47:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite29†Mozambique | 18,357.34  | 56,100,000  | Kg
+L48:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite30†Mauritius | 16,381.41  | 51,203,900  | Kg
+L49:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite31†Algeria | 11,567.25  | 30,347,700  | Kg
+L50:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite32†Turkey | 11,520.83  | 66,000,000  | Kg
+L51:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite33†New Caledonia | 9,232.58  | 28,254,600  | Kg
+L52:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite34†United Kingdom | 8,990.62  | 16,292,200  | Kg
+L53:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite35†Malawi | 8,438.33  | 27,800,200  | Kg
+L54:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite36†Solomon Islands | 5,429.01  | 15,471,600  | Kg
+L55:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite37†Saudi Arabia | 1,947.45  | 5,928,190  | Kg
+L56:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite38†Hong Kong, China | 1,128.99  | 3,219,890  | Kg
+L57:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite39†French Polynesia | 607.72  | 1,597,500  | Kg
+L58:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite40†Tanzania | 335.48  | 1,046,280  | Kg
+L59:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite41†Sri Lanka | 314.23  | 1,093,230  | Kg
+L60:  Australia  | Export  | 100190  | Spelt, common wheat and meslin  | 2023  | cite42†Vanuatu | 0.05  | 10  | Kg
+L61: HS Nomenclature used HS 1988/92 (H0)
+L62: HS Code 100190: Spelt, common wheat and meslin
+L63: Please note: Exports is gross exports and Imports is gross imports
+L64:
+L65:   * cite43†About L66:   * .
+L67:   * cite44†Contact L68:   * .
+L69:   * cite45†Usage Conditions L70:   * .
+L71:   * cite46†Legal†www.worldbank.org L72:   * .
+L73:   * cite47†Data Providers L74:   * .
+L75:   * Page Refreshed : Oct-15-2026 23:39 ET
+L76: Partners
+L77:   * cite48†ITC†www.intracen.org L78:   * .
+L79:   * cite49†UNCTAD†unctad.org L80:   * .
+L81:   * cite50†UNSTATS†unstats.un.org L82:   * .
+L83:   * cite51†World Trade Organization†www.wto.org L84:   * .
+L85:   * cite52†World Bank†www.worldbank.org

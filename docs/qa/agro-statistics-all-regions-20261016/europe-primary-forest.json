@@ -1,0 +1,70 @@
+{
+  "status": "passed",
+  "cases": [
+    {
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "geometry": {
+        "dpr": 1.5,
+        "overflow": false,
+        "statisticsOverflow": false,
+        "top": 2553.578125,
+        "mapBottom": 1011.40625,
+        "columns": [
+          {
+            "y": 2733.359375
+          },
+          {
+            "y": 2733.359375
+          },
+          {
+            "y": 2733.359375
+          }
+        ]
+      },
+      "file": "1896-FIN-primary-statistics.png"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "geometry": {
+        "dpr": 1.5,
+        "overflow": false,
+        "statisticsOverflow": false,
+        "top": 2481.6875,
+        "mapBottom": 806.4375,
+        "columns": [
+          {
+            "y": 2661.46875
+          },
+          {
+            "y": 2661.46875
+          },
+          {
+            "y": 2661.46875
+          }
+        ]
+      },
+      "file": "1280-FIN-primary-statistics.png"
+    }
+  ],
+  "sourceIdentity": {
+    "mode": "exact-commit",
+    "baseHead": "58be943225b7fdef8bb68392c7e377571305007d",
+    "buildIdentity": "58be943225b7fdef8bb68392c7e377571305007d",
+    "workingTreeDirty": false,
+    "applicationInputsDirty": false,
+    "inputFiles": 3593,
+    "workingTreeSha256": "43dcbba00136b71738aeaac9282049f8d3aa797b588b257082721a0acda347be",
+    "publishedRelease": false
+  },
+  "runtimeSandbox": {
+    "browserVersion": "151.0.7922.173",
+    "status": "Sandbox Status\nLayer 1 Sandbox\tNamespace\nPID namespaces\tYes\nNetwork namespaces\tYes\nSeccomp-BPF sandbox\tYes\nSeccomp-BPF sandbox supports TSYNC\tYes\nPtrace Protection with Yama LSM (Broker)\tNo\nPtrace Protection with Yama LSM (Non-broker)\tNo\n\nYou are adequately sandboxed.",
+    "verified": true
+  }
+}

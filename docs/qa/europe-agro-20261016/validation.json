@@ -1,0 +1,70 @@
+{
+  "baseMain": "3fbb4c957c21685bddbf8148a95a2a03ba210553",
+  "branch": "feat/europe-agro-residuals-20261016",
+  "sourceSha256": {
+    "src/components/atlas/EuropeStatistics.astro": "8a8f5246a4179973a25f47e0b44ac279d4357ce85bb33e6b2642239c9a1d27a4",
+    "src/components/atlas/EuropeVerifiedStatistics.astro": "b46a688e4c99a19835ef3194470c9831ec373be19bd621e8e2ecc66bb34ac055",
+    "src/lib/atlas-europe-explorer.ts": "9ca365207ca4432d00666988df7eb8cb0a0819d19afb5ff943cdffaa718fb40f",
+    "src/styles/atlas-europe-statistics.css": "34c3960ac9d8b78e67e1b7ccb3b59e469dd7ae2e9e43984ec03272da2d9e8d40",
+    "src/data/atlas/europe/selected-quantity-flow.json": "90312f166dce3681247ccdb5ea2edcfeb4ad89b7fd28077fd43ff00a3e9aa36d",
+    "src/data/atlas/europe/selected-quantity-flow.ts": "b3a7f7a436366a3f6b3b1f395a68a1f16d1c6bf17c0f6af26d229dc16e85d7d2",
+    "src/lib/atlas-europe-selected-quantity-flow.ts": "4da71c5739c194b88a03d6210834312c489e455e604fbdb10243c06549799d53",
+    "src/scripts/atlas-europe-selected-quantity-flow.ts": "0957347b8456f3f209c130caee0dab446896097135d7127fb5f5fca20296c08e",
+    "scripts/europe/prepare-selected-quantity-flow.py": "382b7423203b3677163b74d92562c90dd32020feaa10a26a013b49c71be5bae4",
+    "scripts/europe/capture-selected-quantity-flow-review.mjs": "e5931078deb3ba11cfae1bd397052937ad2dd67f0dca6e8cab3e14996f6f249c",
+    "tests/unit/atlas-europe-selected-quantity-flow.test.mjs": "aa4675be51b70ab363c1cba2b92e0d3d384ccbd7a46cf2bd3f7d4dc3a662622c",
+    "tests/e2e/atlas-europe-farming-water.test.mjs": "3efd8ce59fe3f060b242d140da2782fda7c9a0e1c5c162a31c5409a8ce391a40",
+    "public/assets/atlas/europe/selected-quantity-flow-v1/statistics.json": "90312f166dce3681247ccdb5ea2edcfeb4ad89b7fd28077fd43ff00a3e9aa36d"
+  },
+  "regionUnit": {
+    "command": "node --test tests/unit/atlas-europe-selected-quantity-flow.test.mjs tests/unit/atlas-europe-verified-panels.test.mjs tests/unit/atlas-agro-existing-europe-statistics.test.mjs",
+    "tests": 23,
+    "pass": 23,
+    "fail": 0,
+    "skipped": 0
+  },
+  "regionE2E": {
+    "command": "node --test tests/e2e/atlas-europe-farming-water.test.mjs",
+    "tests": 9,
+    "pass": 9,
+    "fail": 0,
+    "skipped": 0
+  },
+  "fullUnitReference": {
+    "command": "npm test",
+    "tests": 1446,
+    "pass": 1442,
+    "fail": 1,
+    "skipped": 3,
+    "phase": "before the final deferred-HTTP loader refinement; the final loader is covered by regionUnit and regionE2E",
+    "failure": "Shared atlas-agro-selected-native.test.mjs hashes the complete EuropeVerifiedStatistics.astro, including authorized selected-product changes. Unselected overview and forestry blocks remain byte-identical. Shared test is unchanged in this branch."
+  },
+  "sharedProposal": {
+    "status": "5 tests passed in a temporary test copy; git apply --check passed",
+    "path": "docs/europe/agro-shared-overview-test-proposal-20261016.patch"
+  },
+  "build": {
+    "status": "passed",
+    "command": "ASTRO_TELEMETRY_DISABLED=1 XDG_CACHE_HOME=/tmp/europe-cache XDG_CONFIG_HOME=/tmp/europe-config npm run build"
+  },
+  "release": {
+    "status": "passed before local commit; final commit metadata checked again at handoff",
+    "command": "node scripts/verify-release.mjs"
+  },
+  "browser": {
+    "status": "blocked by SUID sandbox configuration; zero screenshots; no safety weakening",
+    "report": "browser-report.json",
+    "cssViewports": [
+      [
+        1896,
+        996
+      ],
+      [
+        1280,
+        665
+      ]
+    ],
+    "deviceScaleFactor": 1.5
+  },
+  "wholeRepositoryE2E": "Stopped after updated delegation: integration owner runs the complete suite. No full E2E success claim."
+}

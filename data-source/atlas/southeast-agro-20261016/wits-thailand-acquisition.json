@@ -1,0 +1,9 @@
+{
+  "date": "2026-10-16",
+  "url": "https://wits.worldbank.org/trade/comtrade/en/country/THA/year/2023/tradeflow/Exports/partner/ALL/product/1006",
+  "operation": "urllib.request.urlopen, standard HTTPS GET, timeout 35 seconds, one attempt",
+  "result": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>",
+  "upstreamHttpStatus": null,
+  "stopped": true,
+  "note": "Web parser had read the page before this shell request. No subsequent request to this URL or alternate route was made. Thailand values are not included in the new quantitative trade dataset."
+}

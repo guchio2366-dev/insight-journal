@@ -35,12 +35,13 @@ try{
  check('livestock selection is legible with the regional map');await shot('farming-chicken');
  await page.locator('[data-southeast-trade-reading] summary').click();assert.equal(await page.locator('[data-southeast-rice-trade] tbody tr').count(),11);const riceTrade=await page.locator('[data-southeast-rice-trade]').textContent();assert.match(riceTrade,/タイ.*5,147.3/s);assert.match(riceTrade,/ベトナム.*4,374.6/s);assert.match(riceTrade,/東ティモール.*欠測/s);check('2023 HS1006 rice exports and imports show eleven reporters without inventing bilateral flows or domestic use');await shot('rice-trade-reporters','[data-southeast-trade-reading]');
  await open('agriculture/?topic=forest');await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.southeastFarmTopic==='forest');
- assert.equal(await page.locator('.southeast-forest-connections').isVisible(),true);
+ await page.locator('[data-southeast-agro-statistics][data-ready="true"]').waitFor({state:'visible'});
+ assert.equal(await page.locator('.southeast-forest-connections').isVisible(),false);
  assert.equal(await page.locator('[data-south-central-farm-connections] > .asia-farm-connections-grid').isVisible(),false);
  assert.equal(await page.locator('[data-southeast-crop-priority]').isVisible(),false);
- assert.match(await page.locator('.southeast-forest-connections').textContent(),/森林面積.*丸太材.*木材製品の輸出/s);
- check('forest separates JRC map, FAO forest area and wood production, and HS44 exports');await shot('forest-map');await shot('forest-statistics','.southeast-forest-connections');
- await page.locator('.southeast-forest-connections a[href*="industryKind=wood"]').click();
+ assert.match(await page.locator('[data-southeast-agro-statistics]').textContent(),/丸太.*m³.*木材パルプはt/s);
+ check('selected forest separates roundwood, sawnwood and unavailable pulp from the JRC map and HS44 value');await shot('forest-map');await shot('forest-statistics','[data-southeast-agro-statistics]');
+ await page.locator('[data-southeast-agro-statistics] a[href*="industryKind=wood"]').click();
  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.southeastIndustryKind==='wood');await mapReady();
  assert.equal(new URL(page.url()).searchParams.get('industryKind'),'wood');await page.reload({waitUntil:'networkidle'});
  await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.southeastIndustryKind==='wood');await mapReady();

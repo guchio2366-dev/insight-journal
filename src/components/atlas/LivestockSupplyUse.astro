@@ -16,7 +16,8 @@ const variants:LivestockSupplyId[]=milk?['dairy-fat','dairy-skim']:[id as Livest
     const scale=Math.max(d.totalSupply,supply.reduce((s,r)=>s+r.value,0),uses.reduce((s,r)=>s+r.value,0));
     return <div {...(milk?{'data-milk-panel':key==='dairy-fat'?'fat':'skim'}:{})}>
       <p class="animal-production">米国の{labels.quantity}生産量 <strong>{fmt('rawMilkProduction'in d?d.rawMilkProduction:d.production)} {d.unit}</strong></p>
-      <p class="animal-production">輸出 <strong>{fmt(d.exports)} {d.unit}</strong> · 生産量との比 <strong>{(d.exports/d.production*100).toFixed(1)}%</strong></p>
+      <p class="animal-production">輸出 <strong>{fmt(d.exports)} {d.unit}</strong> · 生産量との比 <strong>{(d.exports/('rawMilkProduction'in d?d.rawMilkProduction:d.production)*100).toFixed(1)}%</strong></p>
+      {milk&&<p class="animal-supply-note">比率の分母は上の生乳生産 {fmt(d.rawMilkProduction)} {d.unit}。農場内利用控除後の市場出荷とは区別します。</p>}
       <p class="animal-supply-note">輸入・持越在庫を含む収支です。国産分を国内利用と輸出へ二分した比率ではありません。</p>
       <p class="animal-supply-total">総供給 <strong>{fmt(d.totalSupply)} {d.unit}</strong> · {d.basis}</p>
       {milk&&<p class="animal-supply-note">乳製品を生乳量に換算。{key==='dairy-skim'?'無脂乳固形分は、たんぱく質・乳糖などです。':'乳脂肪の含有量を基準にしています。'} 実際に液体の生乳が輸出された量ではありません。</p>}

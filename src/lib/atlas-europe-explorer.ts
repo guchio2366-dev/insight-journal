@@ -23,6 +23,7 @@ import drainageManifest from '../../public/assets/atlas/europe/drainage-v1/manif
 import { readEuropeFarmingFocus, writeEuropeFarmingFocus } from '../data/atlas/europe/farming-water-comparisons';
 import { europeIndustryGroupReading, europeIndustryMatches, europeIndustrySectorCopy, europeIndustryInSector, europeIndustryGroupsForSite, europeIndustrySiteRelations, europeIndustryServiceSources, normaliseEuropeIndustrySector, isEuropeIndustryCountry, normaliseEuropeIndustryGroup } from './atlas-europe-industry';
 import { createEuropeFarmingStatistics } from '../scripts/atlas-europe-farming-statistics';
+import { createEuropeSelectedQuantityStatistics, createEuropeQuantityReferences, supportsEuropeSelectedQuantityFlow } from '../scripts/atlas-europe-selected-quantity-flow';
 import { createEuropeCultureOverview, europeCultureOverviewPlaces } from './atlas-europe-culture-overview';
 import { europeReligionRegionalEvidence } from '../data/atlas/europe/religion-regional-evidence';
 import { europeReligionNationalProfiles, europeReligionNationalProfile } from '../data/atlas/europe/religion-national-overview';
@@ -98,6 +99,8 @@ export async function initEuropeAtlas() {
       commit(false);
     },
   });
+  const selectedQuantityStatistics=createEuropeSelectedQuantityStatistics(root);
+  const preserveQuantityReferences=createEuropeQuantityReferences(root);
   const topicCountrySelect=query<HTMLSelectElement>('[data-eu-topic-country]');
   topicCountrySelect.addEventListener('change',()=>selectCountry(topicCountrySelect.value));
   const cultureActive=()=>state.layer==='ethnicity'||state.layer==='religion';
@@ -548,7 +551,12 @@ export async function initEuropeAtlas() {
     query<HTMLElement>('[data-eu-topic-country-control]').hidden=!hasNationalTopic;
     topicCountrySelect.value=hasNationalTopic?state.place:'';
     query<HTMLElement>('[data-eu-verified-wood]').hidden=!forestryStatistics;
+    const pulpGap=root.querySelector<HTMLElement>('[data-eu-forest-pulp-gap]');
+    if(pulpGap)pulpGap.hidden=!forestryStatistics||!state.place;
     const nationalDetail=hasNationalTopic&&!!state.place;
+    const quantitySelection={country:state.place??'',topic:state.layer,active:subject().field==='agriculture',year:state.farmYear};
+    const selectedQuantity=supportsEuropeSelectedQuantityFlow(quantitySelection);
+    preserveQuantityReferences(selectedQuantity);
     const farmNumbers=query<HTMLElement>('[data-eu-farm-numbers]');
     farmNumbers.hidden=!forestryStatistics&&!nationalDetail;
     farmNumbers.classList.toggle('is-topic-country',nationalDetail);
@@ -557,6 +565,7 @@ export async function initEuropeAtlas() {
     all<HTMLElement>('[data-eu-statistics-item]').forEach(el=>{el.textContent=statisticsName;});
     query('#eu-farm-numbers-title').textContent=nationalDetail?statisticsName+'の国別数値・推移':'生産・飼養・木材の国別数量';
     syncAgroStatistics(root,{country:state.place??'',topic:state.layer,active:subject().field==='agriculture',year:state.farmYear??2024});
+    void selectedQuantityStatistics.update(quantitySelection);
     void farmStatistics.update(nationalDetail?{...state,farmYear:undefined,farmCompare:undefined}:state);
     query<HTMLElement>('[data-eu-subject-intro]').hidden=!!feature;
     const card=query<HTMLElement>('[data-eu-feature-card]');card.replaceChildren();card.hidden=!feature;

@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "country": "USA",
+  "year": 2024,
+  "source": {
+    "publisher": "FAO",
+    "title": "Forest product data — Facts and figures (2024)",
+    "url": "https://www.fao.org/forestry/statistics/data/en",
+    "readOn": "2026-10-16",
+    "retrieval": "Manually transcribed numeric facts from the official public HTML page read by the Web connector. Original response bytes and SHA-256 are unavailable. This is a rounded summary, not an exact FAOSTAT country/World extract.",
+    "licenseUrl": "https://www.fao.org/contact-us/terms/db-terms-of-use/",
+    "precision": "Country production shares are published as whole percentages; World quantities as whole millions. Never multiply these rounded figures to manufacture a US production quantity."
+  },
+  "products": [
+    {
+      "id": "industrial-roundwood",
+      "label": "産業用丸太（燃料材を除く）",
+      "publisherProduct": "Industrial roundwood",
+      "unit": "百万m³",
+      "worldProduction": 1956,
+      "usProductionSharePercent": 16,
+      "nationalProduction": null,
+      "imports": null,
+      "exports": null,
+      "actualDomesticUse": null,
+      "apparentConsumption": null,
+      "stocks": null,
+      "exportDestinations": null,
+      "definition": "伐採した原木のうち産業用の丸太。燃料材を含む総丸太（Roundwood）とは別の集計。製材・パルプの加工後数量を加えない。",
+      "reference": "同じ公開表の総丸太は世界3,905百万m³、燃料材は1,949百万m³。米国16%は産業用丸太だけの世界生産比で、総丸太へ流用しない。"
+    },
+    {
+      "id": "sawnwood",
+      "label": "製材",
+      "publisherProduct": "Sawnwood",
+      "unit": "百万m³",
+      "worldProduction": 445,
+      "usProductionSharePercent": 17,
+      "nationalProduction": null,
+      "imports": null,
+      "exports": null,
+      "actualDomesticUse": null,
+      "apparentConsumption": null,
+      "stocks": null,
+      "exportDestinations": null,
+      "definition": "丸太をひいた製材の製品体積。丸太換算体積・立木蓄積・森林面積とは異なる。",
+      "reference": "右欄の全米2017年資料は千m³の丸太換算で、2024年の製材製品体積ではない。NC州2022年の用途比も全国の製材仕向けに掛けない。"
+    },
+    {
+      "id": "wood-pulp",
+      "label": "木材パルプ",
+      "publisherProduct": "Wood pulp",
+      "unit": "百万t",
+      "worldProduction": 189,
+      "usProductionSharePercent": null,
+      "nationalProduction": null,
+      "imports": null,
+      "exports": null,
+      "actualDomesticUse": null,
+      "apparentConsumption": null,
+      "stocks": null,
+      "exportDestinations": null,
+      "definition": "木材から繊維を取り出したパルプの製品重量。パルプ用丸太のm³、紙・板紙、古紙、木材以外の繊維由来パルプと合算しない。",
+      "reference": "同ページの米国19%はPulp for paper（製紙用パルプ）の世界生産比。木材以外の繊維由来パルプを区別する必要があり、木材パルプ単品の米国比としては採用しない。"
+    }
+  ],
+  "limits": [
+    "US production quantities, imports, exports, stocks, domestic uses and partner quantities are not retained for these 2024 products. Missing values remain null, not zero.",
+    "World export shares in the source measure a country's share of global exports, not the fraction of US production exported or a destination share.",
+    "No regional total for North America is constructed. Canada and Mexico are foreign destinations for US national trade, not domestic US shipments.",
+    "The historical USFS 2017 roundwood-equivalent national table and NC 2022 timber-output example remain separate references."
+  ]
+}

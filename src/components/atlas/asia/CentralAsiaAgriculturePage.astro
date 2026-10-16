@@ -1,0 +1,12 @@
+---
+import AsiaAtlasPage from '../AsiaAtlasPage.astro';
+import type {AsiaField} from '../../../lib/atlas-asia-state';
+interface Props {initialField?:AsiaField}
+const {initialField='natural'}=Astro.props;
+---
+<AsiaAtlasPage regionId="south-central-asia" focusId="central-asia" {initialField} />
+<script>
+ import {initCentralAsiaAgro} from '../../../scripts/atlas-central-asia-agro';
+ const root=document.querySelector<HTMLElement>('[data-asia-atlas][data-focus="central-asia"]');
+ if(root)initCentralAsiaAgro(root);
+</script>

@@ -1,0 +1,784 @@
+{
+  "head": "58be943225b7fdef8bb68392c7e377571305007d",
+  "workingTree": "",
+  "chromiumSandbox": true,
+  "deviceScaleFactor": 1.5,
+  "requestedViewports": [
+    {
+      "width": 1896,
+      "height": 996
+    },
+    {
+      "width": 1280,
+      "height": 665
+    }
+  ],
+  "status": "passed",
+  "cases": [
+    {
+      "country": "CHN",
+      "topic": "soybean",
+      "viewport": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 298,
+          "y": 2853.8125,
+          "width": 518.65625
+        },
+        {
+          "x": 830.65625,
+          "y": 2853.8125,
+          "width": 518.671875
+        },
+        {
+          "x": 1363.328125,
+          "y": 2853.8125,
+          "width": 518.671875
+        }
+      ],
+      "map": {
+        "width": 1250,
+        "height": 683,
+        "bottom": 984
+      },
+      "statisticsTop": 2718.03125
+    },
+    {
+      "country": "KOR",
+      "topic": "soybean",
+      "viewport": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 298,
+          "y": 53.546875,
+          "width": 518.65625
+        },
+        {
+          "x": 830.65625,
+          "y": 53.546875,
+          "width": 518.671875
+        },
+        {
+          "x": 1363.328125,
+          "y": 53.546875,
+          "width": 518.671875
+        }
+      ],
+      "map": {
+        "width": 1250,
+        "height": 683,
+        "bottom": -1853
+      },
+      "statisticsTop": -82.234375
+    },
+    {
+      "country": "CHN",
+      "topic": "wheat",
+      "viewport": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 298,
+          "y": 2831.71875,
+          "width": 518.65625
+        },
+        {
+          "x": 830.65625,
+          "y": 2831.71875,
+          "width": 518.671875
+        },
+        {
+          "x": 1363.328125,
+          "y": 2831.71875,
+          "width": 518.671875
+        }
+      ],
+      "map": {
+        "width": 1250,
+        "height": 683,
+        "bottom": 984
+      },
+      "statisticsTop": 2695.9375
+    },
+    {
+      "country": "KOR",
+      "topic": "rice",
+      "viewport": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 298,
+          "y": 2853.8125,
+          "width": 518.65625
+        },
+        {
+          "x": 830.65625,
+          "y": 2853.8125,
+          "width": 518.671875
+        },
+        {
+          "x": 1363.328125,
+          "y": 2853.8125,
+          "width": 518.671875
+        }
+      ],
+      "map": {
+        "width": 1250,
+        "height": 683,
+        "bottom": 984
+      },
+      "statisticsTop": 2718.03125
+    },
+    {
+      "country": "CHN",
+      "topic": "forest",
+      "viewport": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 298,
+          "y": 3598.140625,
+          "width": 518.65625
+        },
+        {
+          "x": 830.65625,
+          "y": 3598.140625,
+          "width": 518.671875
+        },
+        {
+          "x": 1363.328125,
+          "y": 3598.140625,
+          "width": 518.671875
+        }
+      ],
+      "map": {
+        "width": 1250,
+        "height": 683,
+        "bottom": 984
+      },
+      "statisticsTop": 3418.359375
+    },
+    {
+      "country": "PRK",
+      "topic": "forest",
+      "viewport": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 298,
+          "y": 2461.421875,
+          "width": 518.65625
+        },
+        {
+          "x": 830.65625,
+          "y": 2461.421875,
+          "width": 518.671875
+        },
+        {
+          "x": 1363.328125,
+          "y": 2461.421875,
+          "width": 518.671875
+        }
+      ],
+      "map": {
+        "width": 1250,
+        "height": 683,
+        "bottom": 984
+      },
+      "statisticsTop": 2281.640625
+    },
+    {
+      "country": "TWN",
+      "topic": "soybean",
+      "viewport": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 298,
+          "y": 2859.71875,
+          "width": 518.65625
+        },
+        {
+          "x": 830.65625,
+          "y": 2859.71875,
+          "width": 518.671875
+        },
+        {
+          "x": 1363.328125,
+          "y": 2859.71875,
+          "width": 518.671875
+        }
+      ],
+      "map": {
+        "width": 1250,
+        "height": 683,
+        "bottom": 984
+      },
+      "statisticsTop": 2723.9375
+    },
+    {
+      "country": "MNG",
+      "topic": "wheat",
+      "viewport": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 298,
+          "y": 2271.875,
+          "width": 518.65625
+        },
+        {
+          "x": 830.65625,
+          "y": 2271.875,
+          "width": 518.671875
+        },
+        {
+          "x": 1363.328125,
+          "y": 2271.875,
+          "width": 518.671875
+        }
+      ],
+      "map": {
+        "width": 1250,
+        "height": 683,
+        "bottom": 984
+      },
+      "statisticsTop": 2136.09375
+    },
+    {
+      "country": "CHN",
+      "topic": "rice",
+      "viewport": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 298,
+          "y": 2875.90625,
+          "width": 518.65625
+        },
+        {
+          "x": 830.65625,
+          "y": 2875.90625,
+          "width": 518.671875
+        },
+        {
+          "x": 1363.328125,
+          "y": 2875.90625,
+          "width": 518.671875
+        }
+      ],
+      "map": {
+        "width": 1250,
+        "height": 683,
+        "bottom": 984
+      },
+      "statisticsTop": 2740.125
+    },
+    {
+      "country": "KOR",
+      "topic": "maize",
+      "viewport": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 298,
+          "y": 2582.4375,
+          "width": 518.65625
+        },
+        {
+          "x": 830.65625,
+          "y": 2582.4375,
+          "width": 518.671875
+        },
+        {
+          "x": 1363.328125,
+          "y": 2582.4375,
+          "width": 518.671875
+        }
+      ],
+      "map": {
+        "width": 1250,
+        "height": 683,
+        "bottom": 984
+      },
+      "statisticsTop": 2446.65625
+    },
+    {
+      "country": "CHN",
+      "topic": "cotton",
+      "viewport": {
+        "width": 1896,
+        "height": 996,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 298,
+          "y": 1844.515625,
+          "width": 518.65625
+        },
+        {
+          "x": 830.65625,
+          "y": 1844.515625,
+          "width": 518.671875
+        },
+        {
+          "x": 1363.328125,
+          "y": 1844.515625,
+          "width": 518.671875
+        }
+      ],
+      "map": {
+        "width": 1250,
+        "height": 683,
+        "bottom": 984
+      },
+      "statisticsTop": 1708.734375
+    },
+    {
+      "country": "CHN",
+      "topic": "soybean",
+      "viewport": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 247.59375,
+          "y": 2798.921875,
+          "width": 330.125
+        },
+        {
+          "x": 591.71875,
+          "y": 2798.921875,
+          "width": 330.140625
+        },
+        {
+          "x": 935.859375,
+          "y": 2798.921875,
+          "width": 330.125
+        }
+      ],
+      "map": {
+        "width": 714.40625,
+        "height": 352,
+        "bottom": 653
+      },
+      "statisticsTop": 2663.140625
+    },
+    {
+      "country": "KOR",
+      "topic": "soybean",
+      "viewport": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 247.59375,
+          "y": -111.078125,
+          "width": 330.125
+        },
+        {
+          "x": 591.71875,
+          "y": -111.078125,
+          "width": 330.140625
+        },
+        {
+          "x": 935.859375,
+          "y": -111.078125,
+          "width": 330.125
+        }
+      ],
+      "map": {
+        "width": 714.40625,
+        "height": 352,
+        "bottom": -2257
+      },
+      "statisticsTop": -246.859375
+    },
+    {
+      "country": "CHN",
+      "topic": "wheat",
+      "viewport": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 247.59375,
+          "y": 2815.875,
+          "width": 330.125
+        },
+        {
+          "x": 591.71875,
+          "y": 2815.875,
+          "width": 330.140625
+        },
+        {
+          "x": 935.859375,
+          "y": 2815.875,
+          "width": 330.125
+        }
+      ],
+      "map": {
+        "width": 714.40625,
+        "height": 352,
+        "bottom": 653
+      },
+      "statisticsTop": 2680.09375
+    },
+    {
+      "country": "KOR",
+      "topic": "rice",
+      "viewport": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 247.59375,
+          "y": 2800.171875,
+          "width": 330.125
+        },
+        {
+          "x": 591.71875,
+          "y": 2800.171875,
+          "width": 330.140625
+        },
+        {
+          "x": 935.859375,
+          "y": 2800.171875,
+          "width": 330.125
+        }
+      ],
+      "map": {
+        "width": 714.40625,
+        "height": 352,
+        "bottom": 653
+      },
+      "statisticsTop": 2664.390625
+    },
+    {
+      "country": "CHN",
+      "topic": "forest",
+      "viewport": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 247.59375,
+          "y": 3706.921875,
+          "width": 330.125
+        },
+        {
+          "x": 591.71875,
+          "y": 3706.921875,
+          "width": 330.140625
+        },
+        {
+          "x": 935.859375,
+          "y": 3706.921875,
+          "width": 330.125
+        }
+      ],
+      "map": {
+        "width": 714.40625,
+        "height": 352,
+        "bottom": 653
+      },
+      "statisticsTop": 3527.140625
+    },
+    {
+      "country": "PRK",
+      "topic": "forest",
+      "viewport": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 247.59375,
+          "y": 2480.078125,
+          "width": 330.125
+        },
+        {
+          "x": 591.71875,
+          "y": 2480.078125,
+          "width": 330.140625
+        },
+        {
+          "x": 935.859375,
+          "y": 2480.078125,
+          "width": 330.125
+        }
+      ],
+      "map": {
+        "width": 714.40625,
+        "height": 352,
+        "bottom": 653
+      },
+      "statisticsTop": 2300.296875
+    },
+    {
+      "country": "TWN",
+      "topic": "soybean",
+      "viewport": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 247.59375,
+          "y": 2779.671875,
+          "width": 330.125
+        },
+        {
+          "x": 591.71875,
+          "y": 2779.671875,
+          "width": 330.140625
+        },
+        {
+          "x": 935.859375,
+          "y": 2779.671875,
+          "width": 330.125
+        }
+      ],
+      "map": {
+        "width": 714.40625,
+        "height": 352,
+        "bottom": 653
+      },
+      "statisticsTop": 2643.890625
+    },
+    {
+      "country": "MNG",
+      "topic": "wheat",
+      "viewport": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 247.59375,
+          "y": 2151.25,
+          "width": 330.125
+        },
+        {
+          "x": 591.71875,
+          "y": 2151.25,
+          "width": 330.140625
+        },
+        {
+          "x": 935.859375,
+          "y": 2151.25,
+          "width": 330.125
+        }
+      ],
+      "map": {
+        "width": 714.40625,
+        "height": 352,
+        "bottom": 653
+      },
+      "statisticsTop": 2015.46875
+    },
+    {
+      "country": "CHN",
+      "topic": "rice",
+      "viewport": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 247.59375,
+          "y": 2819.96875,
+          "width": 330.125
+        },
+        {
+          "x": 591.71875,
+          "y": 2819.96875,
+          "width": 330.140625
+        },
+        {
+          "x": 935.859375,
+          "y": 2819.96875,
+          "width": 330.125
+        }
+      ],
+      "map": {
+        "width": 714.40625,
+        "height": 352,
+        "bottom": 653
+      },
+      "statisticsTop": 2684.1875
+    },
+    {
+      "country": "KOR",
+      "topic": "maize",
+      "viewport": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 247.59375,
+          "y": 2480.515625,
+          "width": 330.125
+        },
+        {
+          "x": 591.71875,
+          "y": 2480.515625,
+          "width": 330.140625
+        },
+        {
+          "x": 935.859375,
+          "y": 2480.515625,
+          "width": 330.125
+        }
+      ],
+      "map": {
+        "width": 714.40625,
+        "height": 352,
+        "bottom": 653
+      },
+      "statisticsTop": 2344.734375
+    },
+    {
+      "country": "CHN",
+      "topic": "cotton",
+      "viewport": {
+        "width": 1280,
+        "height": 665,
+        "dpr": 1.5
+      },
+      "statisticsOverflow": false,
+      "pageOverflow": false,
+      "columns": [
+        {
+          "x": 247.59375,
+          "y": 1715.6875,
+          "width": 330.125
+        },
+        {
+          "x": 591.71875,
+          "y": 1715.6875,
+          "width": 330.140625
+        },
+        {
+          "x": 935.859375,
+          "y": 1715.6875,
+          "width": 330.125
+        }
+      ],
+      "map": {
+        "width": 714.40625,
+        "height": 352,
+        "bottom": 653
+      },
+      "statisticsTop": 1579.90625
+    }
+  ],
+  "errors": [],
+  "buildIdentity": "58be943225b7fdef8bb68392c7e377571305007d",
+  "sourceIdentity": {
+    "mode": "exact-commit",
+    "baseHead": "58be943225b7fdef8bb68392c7e377571305007d",
+    "buildIdentity": "58be943225b7fdef8bb68392c7e377571305007d",
+    "workingTreeDirty": false,
+    "applicationInputsDirty": false,
+    "inputFiles": 3593,
+    "workingTreeSha256": "43dcbba00136b71738aeaac9282049f8d3aa797b588b257082721a0acda347be",
+    "publishedRelease": false
+  },
+  "runtimeSandbox": {
+    "browserVersion": "151.0.7922.173",
+    "status": "Sandbox Status\nLayer 1 Sandbox\tNamespace\nPID namespaces\tYes\nNetwork namespaces\tYes\nSeccomp-BPF sandbox\tYes\nSeccomp-BPF sandbox supports TSYNC\tYes\nPtrace Protection with Yama LSM (Broker)\tNo\nPtrace Protection with Yama LSM (Non-broker)\tNo\n\nYou are adequately sandboxed.",
+    "verified": true
+  }
+}

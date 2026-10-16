@@ -1,0 +1,39 @@
+New Zealand Semi-bleached or bleached coniferous chemical w exports by country | 2024 | Data (https://wits.worldbank.org/trade/comtrade/en/country/NZL/year/2024/tradeflow/Exports/partner/ALL/product/470321)
+citeturn10view0 [wordlim: 200] Crawled: 2 weeks ago; Content type: text/html; Source: open({"ref_id":"https://wits.worldbank.org/trade/comtrade/en/country/NZL/year/2024/tradeflow/Exports/partner/ALL/product/470321","lineno":15}); Total lines: 55
+L0: # New Zealand Semi-bleached or bleached coniferous chemical w exports by country
+L1:
+L2: in 2024
+L3:
+L4: Share
+L5:
+L6:   * cite0†Facebook L7:   * cite0†Twitter L8:   * cite0†Linkedin L9:   * cite0†Google Plus L10:   * cite0†Reddit L11:   * cite0†Stumble Upon L12:   * cite0†Delicious L13:   * cite0†Email L14:
+L15: Change selection (Reporter, Year, Trade Flow, Partner and HS 6 digit Product)
+L16: New Zealand exports of Semi-bleached or bleached coniferous chemical w was $123,482.80K and quantity 167,289,000Kg.
+L17: New Zealand exported Semi-bleached or bleached coniferous chemical w to China ($55,081.13K , 73,234,000 Kg), Korea, Rep. ($49,525.12K , 67,352,000 Kg), Singapore ($5,892.11K , 8,526,000 Kg), Australia ($5,579.67K , 7,584,000 Kg), Other Asia, nes ($3,957.74K , 5,634,000 Kg).
+L18: cite1†Semi-bleached or bleached coniferous chemical w imports by country in 2024 L19: Reporter  | TradeFlow  | ProductCode  | Product Description  | Year  | Partner  | Trade Value 1000USD  | Quantity  | Quantity Unit
+L20:  New Zealand  | Export  | 470321  | Semi-bleached or bleached coniferous chemical w  | 2024  | cite2†World | 123,482.80  | 167,289,000  | Kg
+L21:  New Zealand  | Export  | 470321  | Semi-bleached or bleached coniferous chemical w  | 2024  | cite3†China | 55,081.13  | 73,234,000  | Kg
+L22:  New Zealand  | Export  | 470321  | Semi-bleached or bleached coniferous chemical w  | 2024  | cite4†Korea, Rep. | 49,525.12  | 67,352,000  | Kg
+L23:  New Zealand  | Export  | 470321  | Semi-bleached or bleached coniferous chemical w  | 2024  | cite5†Singapore | 5,892.11  | 8,526,000  | Kg
+L24:  New Zealand  | Export  | 470321  | Semi-bleached or bleached coniferous chemical w  | 2024  | cite6†Australia | 5,579.67  | 7,584,000  | Kg
+L25:  New Zealand  | Export  | 470321  | Semi-bleached or bleached coniferous chemical w  | 2024  | cite7†Other Asia, nes | 3,957.74  | 5,634,000  | Kg
+L26:  New Zealand  | Export  | 470321  | Semi-bleached or bleached coniferous chemical w  | 2024  | cite8†Indonesia | 3,053.11  | 4,397,000  | Kg
+L27:  New Zealand  | Export  | 470321  | Semi-bleached or bleached coniferous chemical w  | 2024  | cite9†Japan | 277.06  | 393,000  | Kg
+L28:  New Zealand  | Export  | 470321  | Semi-bleached or bleached coniferous chemical w  | 2024  | cite10†Thailand | 76.26  | 113,000  | Kg
+L29:  New Zealand  | Export  | 470321  | Semi-bleached or bleached coniferous chemical w  | 2024  | cite11†Saudi Arabia | 40.60  | 56,000  | Kg
+L30: HS Nomenclature used HS 1988/92 (H0)
+L31: HS Code 470321: Semi-bleached or bleached coniferous chemical w
+L32: Please note: Exports is gross exports and Imports is gross imports
+L33:
+L34:   * cite12†About L35:   * .
+L36:   * cite13†Contact L37:   * .
+L38:   * cite14†Usage Conditions L39:   * .
+L40:   * cite15†Legal†www.worldbank.org L41:   * .
+L42:   * cite16†Data Providers L43:   * .
+L44:   * Page Refreshed : Oct-1-2026 14:43 ET
+L45: Partners
+L46:   * cite17†ITC†www.intracen.org L47:   * .
+L48:   * cite18†UNCTAD†unctad.org L49:   * .
+L50:   * cite19†UNSTATS†unstats.un.org L51:   * .
+L52:   * cite20†World Trade Organization†www.wto.org L53:   * .
+L54:   * cite21†World Bank†www.worldbank.org

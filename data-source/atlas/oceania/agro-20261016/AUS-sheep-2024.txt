@@ -1,0 +1,102 @@
+Australia Frozen boned meat of sheep exports by country | 2024 | Data (https://wits.worldbank.org/trade/comtrade/en/country/AUS/year/2024/tradeflow/Exports/partner/ALL/product/020443)
+citeturn13view0 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"https://wits.worldbank.org/trade/comtrade/en/country/AUS/year/2024/tradeflow/Exports/partner/ALL/product/020443","lineno":15}); Total lines: 118
+L0: # Australia Frozen boned meat of sheep exports by country
+L1:
+L2: in 2024
+L3:
+L4: Share
+L5:
+L6:   * cite0†Facebook L7:   * cite0†Twitter L8:   * cite0†Linkedin L9:   * cite0†Google Plus L10:   * cite0†Reddit L11:   * cite0†Stumble Upon L12:   * cite0†Delicious L13:   * cite0†Email L14:
+L15: Change selection (Reporter, Year, Trade Flow, Partner and HS 6 digit Product)
+L16: Australia exports of Frozen boned meat of sheep was $507,876.56K and quantity 93,342,000Kg.
+L17: Australia exported Frozen boned meat of sheep to United States ($132,435.93K , 17,331,800 Kg), China ($79,582.90K , 20,411,100 Kg), United Kingdom ($42,140.88K , 9,156,140 Kg), Japan ($36,390.69K , 6,161,290 Kg), Korea, Rep. ($25,856.80K , 3,958,290 Kg).
+L18: cite1†Frozen boned meat of sheep imports by country in 2024 L19: Reporter  | TradeFlow  | ProductCode  | Product Description  | Year  | Partner  | Trade Value 1000USD  | Quantity  | Quantity Unit
+L20:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite2†World | 507,876.56  | 93,342,000  | Kg
+L21:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite3†United States | 132,435.93  | 17,331,800  | Kg
+L22:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite4†China | 79,582.90  | 20,411,100  | Kg
+L23:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite5†United Kingdom | 42,140.88  | 9,156,140  | Kg
+L24:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite6†Japan | 36,390.69  | 6,161,290  | Kg
+L25:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite7†Korea, Rep. | 25,856.80  | 3,958,290  | Kg
+L26:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite8†Saudi Arabia | 24,306.02  | 5,527,350  | Kg
+L27:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite9†Singapore | 22,118.28  | 3,747,090  | Kg
+L28:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite10†Malaysia | 21,951.66  | 4,311,750  | Kg
+L29:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite11†Canada | 19,542.93  | 2,861,900  | Kg
+L30:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite12†United Arab Emirates | 13,833.91  | 2,551,530  | Kg
+L31:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite13†Other Asia, nes | 13,212.41  | 3,224,250  | Kg
+L32:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite14†Mauritius | 12,035.15  | 2,279,490  | Kg
+L33:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite15†Netherlands | 9,206.45  | 1,242,900  | Kg
+L34:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite16†Papua New Guinea | 9,019.29  | 2,437,360  | Kg
+L35:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite17†Qatar | 5,068.52  | 744,832  | Kg
+L36:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite18†Oman | 4,983.73  | 999,512  | Kg
+L37:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite19†Germany | 4,780.08  | 366,698  | Kg
+L38:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite20†Indonesia | 4,184.22  | 618,424  | Kg
+L39:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite21†Kuwait | 4,024.60  | 981,908  | Kg
+L40:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite22†Thailand | 3,194.65  | 445,486  | Kg
+L41:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite23†Hong Kong, China | 2,335.88  | 329,358  | Kg
+L42:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite24†Sri Lanka | 1,728.08  | 318,183  | Kg
+L43:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite25†Maldives | 1,671.75  | 197,098  | Kg
+L44:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite26†Egypt, Arab Rep. | 1,528.30  | 218,239  | Kg
+L45:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite27†Vietnam | 1,330.78  | 172,498  | Kg
+L46:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite28†Iraq | 1,319.56  | 693,031  | Kg
+L47:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite29†Switzerland | 1,156.69  | 113,507  | Kg
+L48:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite30†New Zealand | 1,055.43  | 181,335  | Kg
+L49:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite31†Fiji | 1,041.04  | 181,160  | Kg
+L50:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite32†Philippines | 790.75  | 93,044  | Kg
+L51:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite33†Tonga | 665.22  | 188,253  | Kg
+L52:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite34†India | 661.26  | 151,832  | Kg
+L53:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite35†Brunei | 612.86  | 125,018  | Kg
+L54:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite36†Bahrain | 577.23  | 134,599  | Kg
+L55:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite37†Seychelles | 434.87  | 61,095  | Kg
+L56:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite38†Liberia | 332.85  | 44,003  | Kg
+L57:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite39†South Africa | 332.46  | 243,575  | Kg
+L58:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite40†Cambodia | 245.54  | 29,039  | Kg
+L59:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite41†Bahamas, The | 227.01  | 50,000  | Kg
+L60:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite42†Jordan | 201.14  | 75,260  | Kg
+L61:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite43†Samoa | 154.90  | 59,728  | Kg
+L62:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite44†Libya | 153.94  | 45,708  | Kg
+L63:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite45†Israel | 151.79  | 24,987  | Kg
+L64:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite46†Jamaica | 134.71  | 56,770  | Kg
+L65:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite47†Northern Mariana Islands | 134.62  | 14,996  | Kg
+L66:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite48†Solomon Islands | 118.56  | 24,861  | Kg
+L67:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite49†New Caledonia | 113.20  | 6,260  | Kg
+L68:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite50†French Polynesia | 103.61  | 41,500  | Kg
+L69:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite51†Malta | 88.71  | 22,984  | Kg
+L70:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite52†Turkey | 81.79  | 13,041  | Kg
+L71:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite53†Mexico | 65.09  | 9,023  | Kg
+L72:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite54†Curaçao | 61.84  | 6,739  | Kg
+L73:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite55†St. Lucia | 54.44  | 6,452  | Kg
+L74:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite56†St. Kitts and Nevis | 50.41  | 7,465  | Kg
+L75:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite57†Barbados | 44.70  | 6,493  | Kg
+L76:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite58†Ukraine | 41.70  | 8,356  | Kg
+L77:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite59†Ghana | 25.79  | 3,903  | Kg
+L78:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite60†Lao PDR | 23.84  | 2,926  | Kg
+L79:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite61†Norfolk Island | 23.39  | 2,736  | Kg
+L80:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite62†Lebanon | 23.37  | 2,621  | Kg
+L81:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite63†Kiribati | 20.92  | 4,600  | Kg
+L82:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite64†Trinidad and Tobago | 19.50  | 2,867  | Kg
+L83:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite65†Antigua and Barbuda | 19.11  | 2,280  | Kg
+L84:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite66†Vanuatu | 17.80  | 2,213  | Kg
+L85:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite67†Brazil | 8.80  | 773  | Kg
+L86:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite68†Tuvalu | 5.08  | 272  | Kg
+L87:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite69†Nepal | 4.92  | 500  | Kg
+L88:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite70†Grenada | 3.43  | 493  | Kg
+L89:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite71†Dominica | 3.28  | 523  | Kg
+L90:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite72†Chile | 2.86  | 106  | Kg
+L91:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite73†Christmas Island | 2.63  | 650  | Kg
+L92:  Australia  | Export  | 020443  | Frozen boned meat of sheep  | 2024  | cite74†Italy | 0.05  | 43  | Kg
+L93: HS Nomenclature used HS 1988/92 (H0)
+L94: HS Code 020443: Frozen boned meat of sheep
+L95: Please note: Exports is gross exports and Imports is gross imports
+L96:
+L97:   * cite75†About L98:   * .
+L99:   * cite76†Contact L100:   * .
+L101:   * cite77†Usage Conditions L102:   * .
+L103:   * cite78†Legal†www.worldbank.org L104:   * .
+L105:   * cite79†Data Providers L106:   * .
+L107:   * Page Refreshed : Oct-15-2026 23:40 ET
+L108: Partners
+L109:   * cite80†ITC†www.intracen.org L110:   * .
+L111:   * cite81†UNCTAD†unctad.org L112:   * .
+L113:   * cite82†UNSTATS†unstats.un.org L114:   * .
+L115:   * cite83†World Trade Organization†www.wto.org L116:   * .
+L117:   * cite84†World Bank†www.worldbank.org

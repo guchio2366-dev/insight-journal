@@ -1,0 +1,490 @@
+{
+  "head": "a80a153fcf3156de1e089bb95b1b955e6f4ecfd9",
+  "sandbox": true,
+  "deviceScaleFactor": 1.5,
+  "requestedViewports": [
+    {
+      "width": 1896,
+      "height": 996
+    },
+    {
+      "width": 1280,
+      "height": 665
+    }
+  ],
+  "status": "passed",
+  "cases": [
+    {
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "topic": "rice",
+      "y": 1207.171875,
+      "mapBottom": 984,
+      "mapWidth": 1099,
+      "newsRight": 400,
+      "x": 420,
+      "width": 1456,
+      "overflow": false,
+      "pageOverflow": false,
+      "stages": [
+        {
+          "stage": "production",
+          "y": 1383.0625,
+          "font": 14,
+          "metadataFonts": [
+            12,
+            12
+          ]
+        },
+        {
+          "stage": "use",
+          "y": 1383.0625,
+          "font": 14,
+          "metadataFonts": []
+        },
+        {
+          "stage": "destinations",
+          "y": 1383.0625,
+          "font": 14,
+          "metadataFonts": []
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "topic": "oilpalm",
+      "y": 1207.171875,
+      "mapBottom": 984,
+      "mapWidth": 1099,
+      "newsRight": 400,
+      "x": 420,
+      "width": 1456,
+      "overflow": false,
+      "pageOverflow": false,
+      "stages": [
+        {
+          "stage": "production",
+          "y": 1383.0625,
+          "font": 14,
+          "metadataFonts": [
+            12,
+            12
+          ]
+        },
+        {
+          "stage": "use",
+          "y": 1383.0625,
+          "font": 14,
+          "metadataFonts": []
+        },
+        {
+          "stage": "destinations",
+          "y": 1383.0625,
+          "font": 14,
+          "metadataFonts": []
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "topic": "robusta",
+      "y": 1207.171875,
+      "mapBottom": 984,
+      "mapWidth": 1099,
+      "newsRight": 400,
+      "x": 420,
+      "width": 1456,
+      "overflow": false,
+      "pageOverflow": false,
+      "stages": [
+        {
+          "stage": "production",
+          "y": 1383.0625,
+          "font": 14,
+          "metadataFonts": [
+            12,
+            12
+          ]
+        },
+        {
+          "stage": "use",
+          "y": 1383.0625,
+          "font": 14,
+          "metadataFonts": []
+        },
+        {
+          "stage": "destinations",
+          "y": 1383.0625,
+          "font": 14,
+          "metadataFonts": []
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "topic": "cattle",
+      "y": 1207.171875,
+      "mapBottom": 984,
+      "mapWidth": 1099,
+      "newsRight": 400,
+      "x": 420,
+      "width": 1456,
+      "overflow": false,
+      "pageOverflow": false,
+      "stages": [
+        {
+          "stage": "production",
+          "y": 1383.0625,
+          "font": 14,
+          "metadataFonts": [
+            12,
+            12
+          ]
+        },
+        {
+          "stage": "use",
+          "y": 1383.0625,
+          "font": 14,
+          "metadataFonts": []
+        },
+        {
+          "stage": "destinations",
+          "y": 1383.0625,
+          "font": 14,
+          "metadataFonts": []
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "topic": "chicken",
+      "y": 1207.171875,
+      "mapBottom": 984,
+      "mapWidth": 1099,
+      "newsRight": 400,
+      "x": 420,
+      "width": 1456,
+      "overflow": false,
+      "pageOverflow": false,
+      "stages": [
+        {
+          "stage": "production",
+          "y": 1383.0625,
+          "font": 14,
+          "metadataFonts": [
+            12,
+            12
+          ]
+        },
+        {
+          "stage": "use",
+          "y": 1383.0625,
+          "font": 14,
+          "metadataFonts": []
+        },
+        {
+          "stage": "destinations",
+          "y": 1383.0625,
+          "font": 14,
+          "metadataFonts": []
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "topic": "forest",
+      "y": 1146.375,
+      "mapBottom": 984,
+      "mapWidth": 1099,
+      "newsRight": 400,
+      "x": 420,
+      "width": 1456,
+      "overflow": false,
+      "pageOverflow": false,
+      "stages": [
+        {
+          "stage": "production",
+          "y": 1322.265625,
+          "font": 14,
+          "metadataFonts": [
+            12,
+            12
+          ]
+        },
+        {
+          "stage": "use",
+          "y": 1322.265625,
+          "font": 14,
+          "metadataFonts": []
+        },
+        {
+          "stage": "destinations",
+          "y": 1322.265625,
+          "font": 14,
+          "metadataFonts": []
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "topic": "rice",
+      "y": 1063.359375,
+      "mapBottom": 805,
+      "mapWidth": 661.625,
+      "newsRight": 263.1875,
+      "x": 279.1875,
+      "width": 980.8125,
+      "overflow": false,
+      "pageOverflow": false,
+      "stages": [
+        {
+          "stage": "production",
+          "y": 1239.25,
+          "font": 14,
+          "metadataFonts": [
+            12,
+            12
+          ]
+        },
+        {
+          "stage": "use",
+          "y": 1239.25,
+          "font": 14,
+          "metadataFonts": []
+        },
+        {
+          "stage": "destinations",
+          "y": 1239.25,
+          "font": 14,
+          "metadataFonts": []
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "topic": "oilpalm",
+      "y": 1063.359375,
+      "mapBottom": 805,
+      "mapWidth": 661.625,
+      "newsRight": 263.1875,
+      "x": 279.1875,
+      "width": 980.8125,
+      "overflow": false,
+      "pageOverflow": false,
+      "stages": [
+        {
+          "stage": "production",
+          "y": 1239.25,
+          "font": 14,
+          "metadataFonts": [
+            12,
+            12
+          ]
+        },
+        {
+          "stage": "use",
+          "y": 1239.25,
+          "font": 14,
+          "metadataFonts": []
+        },
+        {
+          "stage": "destinations",
+          "y": 1239.25,
+          "font": 14,
+          "metadataFonts": []
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "topic": "robusta",
+      "y": 1063.359375,
+      "mapBottom": 805,
+      "mapWidth": 661.625,
+      "newsRight": 263.1875,
+      "x": 279.1875,
+      "width": 980.8125,
+      "overflow": false,
+      "pageOverflow": false,
+      "stages": [
+        {
+          "stage": "production",
+          "y": 1239.25,
+          "font": 14,
+          "metadataFonts": [
+            12,
+            12
+          ]
+        },
+        {
+          "stage": "use",
+          "y": 1239.25,
+          "font": 14,
+          "metadataFonts": []
+        },
+        {
+          "stage": "destinations",
+          "y": 1239.25,
+          "font": 14,
+          "metadataFonts": []
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "topic": "cattle",
+      "y": 1063.359375,
+      "mapBottom": 805,
+      "mapWidth": 661.625,
+      "newsRight": 263.1875,
+      "x": 279.1875,
+      "width": 980.8125,
+      "overflow": false,
+      "pageOverflow": false,
+      "stages": [
+        {
+          "stage": "production",
+          "y": 1239.25,
+          "font": 14,
+          "metadataFonts": [
+            12,
+            12
+          ]
+        },
+        {
+          "stage": "use",
+          "y": 1239.25,
+          "font": 14,
+          "metadataFonts": []
+        },
+        {
+          "stage": "destinations",
+          "y": 1239.25,
+          "font": 14,
+          "metadataFonts": []
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "topic": "chicken",
+      "y": 1063.359375,
+      "mapBottom": 805,
+      "mapWidth": 661.625,
+      "newsRight": 263.1875,
+      "x": 279.1875,
+      "width": 980.8125,
+      "overflow": false,
+      "pageOverflow": false,
+      "stages": [
+        {
+          "stage": "production",
+          "y": 1239.25,
+          "font": 14,
+          "metadataFonts": [
+            12,
+            12
+          ]
+        },
+        {
+          "stage": "use",
+          "y": 1239.25,
+          "font": 14,
+          "metadataFonts": []
+        },
+        {
+          "stage": "destinations",
+          "y": 1239.25,
+          "font": 14,
+          "metadataFonts": []
+        }
+      ]
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "topic": "forest",
+      "y": 967.375,
+      "mapBottom": 805,
+      "mapWidth": 661.625,
+      "newsRight": 263.1875,
+      "x": 279.1875,
+      "width": 980.8125,
+      "overflow": false,
+      "pageOverflow": false,
+      "stages": [
+        {
+          "stage": "production",
+          "y": 1143.265625,
+          "font": 14,
+          "metadataFonts": [
+            12,
+            12
+          ]
+        },
+        {
+          "stage": "use",
+          "y": 1143.265625,
+          "font": 14,
+          "metadataFonts": []
+        },
+        {
+          "stage": "destinations",
+          "y": 1143.265625,
+          "font": 14,
+          "metadataFonts": []
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "sourceIdentity": {
+    "mode": "exact-commit",
+    "baseHead": "a80a153fcf3156de1e089bb95b1b955e6f4ecfd9",
+    "buildIdentity": "a80a153fcf3156de1e089bb95b1b955e6f4ecfd9",
+    "workingTreeDirty": false,
+    "applicationInputsDirty": false,
+    "inputFiles": 3593,
+    "workingTreeSha256": "ac311ac29376f9b010b20de9778ecebc1000ed43d0a3ce35462effc6c28aebd2",
+    "publishedRelease": false
+  },
+  "runtimeSandbox": {
+    "browserVersion": "151.0.7922.173",
+    "status": "Sandbox Status\nLayer 1 Sandbox\tNamespace\nPID namespaces\tYes\nNetwork namespaces\tYes\nSeccomp-BPF sandbox\tYes\nSeccomp-BPF sandbox supports TSYNC\tYes\nPtrace Protection with Yama LSM (Broker)\tNo\nPtrace Protection with Yama LSM (Non-broker)\tNo\n\nYou are adequately sandboxed.",
+    "verified": true
+  }
+}

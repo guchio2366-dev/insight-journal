@@ -1,0 +1,1165 @@
+{
+  "head": "58be943225b7fdef8bb68392c7e377571305007d",
+  "workingTree": "",
+  "sandbox": true,
+  "deviceScaleFactor": 1.5,
+  "viewports": [
+    {
+      "width": 1896,
+      "height": 996
+    },
+    {
+      "width": 1280,
+      "height": 665
+    }
+  ],
+  "captures": [
+    {
+      "id": "overview",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      },
+      "columns": null
+    },
+    {
+      "id": "corn",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 376,
+        "y": 239,
+        "width": 1136,
+        "height": 638.1875
+      },
+      "columns": {
+        "template": "492px 492px 492px",
+        "rect": {
+          "top": 1553.9375,
+          "left": 376,
+          "right": 1876
+        },
+        "children": [
+          {
+            "left": 376,
+            "right": 868
+          },
+          {
+            "left": 880,
+            "right": 1372
+          },
+          {
+            "left": 1384,
+            "right": 1876
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 376,
+        "y": 239,
+        "width": 1136,
+        "height": 638.1875
+      }
+    },
+    {
+      "id": "soybean",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      },
+      "columns": {
+        "template": "477.328px 477.328px 477.344px",
+        "rect": {
+          "top": 1529.5,
+          "left": 420,
+          "right": 1876
+        },
+        "children": [
+          {
+            "left": 420,
+            "right": 897.328125
+          },
+          {
+            "left": 909.328125,
+            "right": 1386.65625
+          },
+          {
+            "left": 1398.65625,
+            "right": 1876
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      }
+    },
+    {
+      "id": "wheat",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      },
+      "columns": {
+        "template": "477.328px 477.328px 477.344px",
+        "rect": {
+          "top": 1529.5,
+          "left": 420,
+          "right": 1876
+        },
+        "children": [
+          {
+            "left": 420,
+            "right": 897.328125
+          },
+          {
+            "left": 909.328125,
+            "right": 1386.65625
+          },
+          {
+            "left": 1398.65625,
+            "right": 1876
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      }
+    },
+    {
+      "id": "cotton",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      },
+      "columns": {
+        "template": "477.328px 477.328px 477.344px",
+        "rect": {
+          "top": 1529.5,
+          "left": 420,
+          "right": 1876
+        },
+        "children": [
+          {
+            "left": 420,
+            "right": 897.328125
+          },
+          {
+            "left": 909.328125,
+            "right": 1386.65625
+          },
+          {
+            "left": 1398.65625,
+            "right": 1876
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      }
+    },
+    {
+      "id": "rice",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      },
+      "columns": {
+        "template": "477.328px 477.328px 477.344px",
+        "rect": {
+          "top": 1529.5,
+          "left": 420,
+          "right": 1876
+        },
+        "children": [
+          {
+            "left": 420,
+            "right": 897.328125
+          },
+          {
+            "left": 909.328125,
+            "right": 1386.65625
+          },
+          {
+            "left": 1398.65625,
+            "right": 1876
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      }
+    },
+    {
+      "id": "beef",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      },
+      "columns": {
+        "template": "477.328px 477.328px 477.344px",
+        "rect": {
+          "top": 1529.5,
+          "left": 420,
+          "right": 1876
+        },
+        "children": [
+          {
+            "left": 420,
+            "right": 897.328125
+          },
+          {
+            "left": 909.328125,
+            "right": 1386.65625
+          },
+          {
+            "left": 1398.65625,
+            "right": 1876
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      }
+    },
+    {
+      "id": "dairy",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      },
+      "columns": {
+        "template": "477.328px 477.328px 477.344px",
+        "rect": {
+          "top": 1529.5,
+          "left": 420,
+          "right": 1876
+        },
+        "children": [
+          {
+            "left": 420,
+            "right": 897.328125
+          },
+          {
+            "left": 909.328125,
+            "right": 1386.65625
+          },
+          {
+            "left": 1398.65625,
+            "right": 1876
+          },
+          {
+            "left": 420,
+            "right": 1876
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      }
+    },
+    {
+      "id": "hogs",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      },
+      "columns": {
+        "template": "477.328px 477.328px 477.344px",
+        "rect": {
+          "top": 1529.5,
+          "left": 420,
+          "right": 1876
+        },
+        "children": [
+          {
+            "left": 420,
+            "right": 897.328125
+          },
+          {
+            "left": 909.328125,
+            "right": 1386.65625
+          },
+          {
+            "left": 1398.65625,
+            "right": 1876
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      }
+    },
+    {
+      "id": "broilers",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      },
+      "columns": {
+        "template": "477.328px 477.328px 477.344px",
+        "rect": {
+          "top": 1529.5,
+          "left": 420,
+          "right": 1876
+        },
+        "children": [
+          {
+            "left": 420,
+            "right": 897.328125
+          },
+          {
+            "left": 909.328125,
+            "right": 1386.65625
+          },
+          {
+            "left": 1398.65625,
+            "right": 1876
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      }
+    },
+    {
+      "id": "layers",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      },
+      "columns": {
+        "template": "477.328px 477.328px 477.344px",
+        "rect": {
+          "top": 1529.5,
+          "left": 420,
+          "right": 1876
+        },
+        "children": [
+          {
+            "left": 420,
+            "right": 897.328125
+          },
+          {
+            "left": 909.328125,
+            "right": 1386.65625
+          },
+          {
+            "left": 1398.65625,
+            "right": 1876
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      }
+    },
+    {
+      "id": "industrial-roundwood",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      },
+      "columns": {
+        "template": "468.656px 468.672px 468.656px",
+        "rect": {
+          "top": 576,
+          "left": 433,
+          "right": 1863
+        },
+        "children": [
+          {
+            "left": 433,
+            "right": 901.65625
+          },
+          {
+            "left": 913.65625,
+            "right": 1382.328125
+          },
+          {
+            "left": 1394.328125,
+            "right": 1862.984375
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 420,
+        "y": -790,
+        "width": 1092,
+        "height": 613.46875
+      }
+    },
+    {
+      "id": "sawnwood",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      },
+      "columns": {
+        "template": "468.656px 468.672px 468.656px",
+        "rect": {
+          "top": 576,
+          "left": 433,
+          "right": 1863
+        },
+        "children": [
+          {
+            "left": 433,
+            "right": 901.65625
+          },
+          {
+            "left": 913.65625,
+            "right": 1382.328125
+          },
+          {
+            "left": 1394.328125,
+            "right": 1862.984375
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 420,
+        "y": -846,
+        "width": 1092,
+        "height": 613.46875
+      }
+    },
+    {
+      "id": "wood-pulp",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 420,
+        "y": 239,
+        "width": 1092,
+        "height": 613.46875
+      },
+      "columns": {
+        "template": "468.656px 468.672px 468.656px",
+        "rect": {
+          "top": 576,
+          "left": 433,
+          "right": 1863
+        },
+        "children": [
+          {
+            "left": 433,
+            "right": 901.65625
+          },
+          {
+            "left": 913.65625,
+            "right": 1382.328125
+          },
+          {
+            "left": 1394.328125,
+            "right": 1862.984375
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 420,
+        "y": -902,
+        "width": 1092,
+        "height": 613.46875
+      }
+    },
+    {
+      "id": "overview",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      },
+      "columns": null
+    },
+    {
+      "id": "corn",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      },
+      "columns": {
+        "template": "318.938px 318.938px 318.938px",
+        "rect": {
+          "top": 1365.6875,
+          "left": 279.1875,
+          "right": 1260
+        },
+        "children": [
+          {
+            "left": 279.1875,
+            "right": 598.125
+          },
+          {
+            "left": 610.125,
+            "right": 929.0625
+          },
+          {
+            "left": 941.0625,
+            "right": 1260
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      }
+    },
+    {
+      "id": "soybean",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      },
+      "columns": {
+        "template": "318.938px 318.938px 318.938px",
+        "rect": {
+          "top": 1365.6875,
+          "left": 279.1875,
+          "right": 1260
+        },
+        "children": [
+          {
+            "left": 279.1875,
+            "right": 598.125
+          },
+          {
+            "left": 610.125,
+            "right": 929.0625
+          },
+          {
+            "left": 941.0625,
+            "right": 1260
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      }
+    },
+    {
+      "id": "wheat",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      },
+      "columns": {
+        "template": "318.938px 318.938px 318.938px",
+        "rect": {
+          "top": 1365.6875,
+          "left": 279.1875,
+          "right": 1260
+        },
+        "children": [
+          {
+            "left": 279.1875,
+            "right": 598.125
+          },
+          {
+            "left": 610.125,
+            "right": 929.0625
+          },
+          {
+            "left": 941.0625,
+            "right": 1260
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      }
+    },
+    {
+      "id": "cotton",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      },
+      "columns": {
+        "template": "318.938px 318.938px 318.938px",
+        "rect": {
+          "top": 1365.6875,
+          "left": 279.1875,
+          "right": 1260
+        },
+        "children": [
+          {
+            "left": 279.1875,
+            "right": 598.125
+          },
+          {
+            "left": 610.125,
+            "right": 929.0625
+          },
+          {
+            "left": 941.0625,
+            "right": 1260
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      }
+    },
+    {
+      "id": "rice",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      },
+      "columns": {
+        "template": "318.938px 318.938px 318.938px",
+        "rect": {
+          "top": 1365.6875,
+          "left": 279.1875,
+          "right": 1260
+        },
+        "children": [
+          {
+            "left": 279.1875,
+            "right": 598.125
+          },
+          {
+            "left": 610.125,
+            "right": 929.0625
+          },
+          {
+            "left": 941.0625,
+            "right": 1260
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      }
+    },
+    {
+      "id": "beef",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      },
+      "columns": {
+        "template": "318.938px 318.938px 318.938px",
+        "rect": {
+          "top": 1365.6875,
+          "left": 279.1875,
+          "right": 1260
+        },
+        "children": [
+          {
+            "left": 279.1875,
+            "right": 598.125
+          },
+          {
+            "left": 610.125,
+            "right": 929.0625
+          },
+          {
+            "left": 941.0625,
+            "right": 1260
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      }
+    },
+    {
+      "id": "dairy",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      },
+      "columns": {
+        "template": "318.938px 318.938px 318.938px",
+        "rect": {
+          "top": 1365.6875,
+          "left": 279.1875,
+          "right": 1260
+        },
+        "children": [
+          {
+            "left": 279.1875,
+            "right": 598.125
+          },
+          {
+            "left": 610.125,
+            "right": 929.0625
+          },
+          {
+            "left": 941.0625,
+            "right": 1260
+          },
+          {
+            "left": 279.1875,
+            "right": 1260
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      }
+    },
+    {
+      "id": "hogs",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      },
+      "columns": {
+        "template": "318.938px 318.938px 318.938px",
+        "rect": {
+          "top": 1365.6875,
+          "left": 279.1875,
+          "right": 1260
+        },
+        "children": [
+          {
+            "left": 279.1875,
+            "right": 598.125
+          },
+          {
+            "left": 610.125,
+            "right": 929.0625
+          },
+          {
+            "left": 941.0625,
+            "right": 1260
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      }
+    },
+    {
+      "id": "broilers",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      },
+      "columns": {
+        "template": "318.938px 318.938px 318.938px",
+        "rect": {
+          "top": 1365.6875,
+          "left": 279.1875,
+          "right": 1260
+        },
+        "children": [
+          {
+            "left": 279.1875,
+            "right": 598.125
+          },
+          {
+            "left": 610.125,
+            "right": 929.0625
+          },
+          {
+            "left": 941.0625,
+            "right": 1260
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      }
+    },
+    {
+      "id": "layers",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      },
+      "columns": {
+        "template": "318.938px 318.938px 318.938px",
+        "rect": {
+          "top": 1365.6875,
+          "left": 279.1875,
+          "right": 1260
+        },
+        "children": [
+          {
+            "left": 279.1875,
+            "right": 598.125
+          },
+          {
+            "left": 610.125,
+            "right": 929.0625
+          },
+          {
+            "left": 941.0625,
+            "right": 1260
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      }
+    },
+    {
+      "id": "industrial-roundwood",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      },
+      "columns": {
+        "template": "310.266px 310.266px 310.281px",
+        "rect": {
+          "top": 410.265625,
+          "left": 292.1875,
+          "right": 1247
+        },
+        "children": [
+          {
+            "left": 292.1875,
+            "right": 602.453125
+          },
+          {
+            "left": 614.453125,
+            "right": 924.71875
+          },
+          {
+            "left": 936.71875,
+            "right": 1247
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 279.1875,
+        "y": -811,
+        "width": 659.625,
+        "height": 370.5625
+      }
+    },
+    {
+      "id": "sawnwood",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      },
+      "columns": {
+        "template": "310.266px 310.266px 310.281px",
+        "rect": {
+          "top": 410.265625,
+          "left": 292.1875,
+          "right": 1247
+        },
+        "children": [
+          {
+            "left": 292.1875,
+            "right": 602.453125
+          },
+          {
+            "left": 614.453125,
+            "right": 924.71875
+          },
+          {
+            "left": 936.71875,
+            "right": 1247
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 279.1875,
+        "y": -867,
+        "width": 659.625,
+        "height": 370.5625
+      }
+    },
+    {
+      "id": "wood-pulp",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "dpr": 1.5,
+      "frame": {
+        "x": 279.1875,
+        "y": 239,
+        "width": 659.625,
+        "height": 370.5625
+      },
+      "columns": {
+        "template": "310.266px 310.266px 310.281px",
+        "rect": {
+          "top": 410.265625,
+          "left": 292.1875,
+          "right": 1247
+        },
+        "children": [
+          {
+            "left": 292.1875,
+            "right": 602.453125
+          },
+          {
+            "left": 614.453125,
+            "right": 924.71875
+          },
+          {
+            "left": 936.71875,
+            "right": 1247
+          }
+        ]
+      },
+      "mapAfterDisclosure": {
+        "x": 279.1875,
+        "y": -923,
+        "width": 659.625,
+        "height": 370.5625
+      }
+    }
+  ],
+  "pageErrors": [],
+  "status": "passed",
+  "sourceIdentity": {
+    "mode": "exact-commit",
+    "baseHead": "58be943225b7fdef8bb68392c7e377571305007d",
+    "buildIdentity": "58be943225b7fdef8bb68392c7e377571305007d",
+    "workingTreeDirty": false,
+    "applicationInputsDirty": false,
+    "inputFiles": 3593,
+    "workingTreeSha256": "43dcbba00136b71738aeaac9282049f8d3aa797b588b257082721a0acda347be",
+    "publishedRelease": false
+  },
+  "runtimeSandbox": {
+    "browserVersion": "151.0.7922.173",
+    "status": "Sandbox Status\nLayer 1 Sandbox\tNamespace\nPID namespaces\tYes\nNetwork namespaces\tYes\nSeccomp-BPF sandbox\tYes\nSeccomp-BPF sandbox supports TSYNC\tYes\nPtrace Protection with Yama LSM (Broker)\tNo\nPtrace Protection with Yama LSM (Non-broker)\tNo\n\nYou are adequately sandboxed.",
+    "verified": true
+  }
+}

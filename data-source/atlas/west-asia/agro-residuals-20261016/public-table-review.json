@@ -1,0 +1,65 @@
+{
+  "checkedAt": "2026-10-16T03:48:50.174300+00:00",
+  "publicTables": [
+    {
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/SAU/year/2023/tradeflow/Exports/partner/ALL/product/080410",
+      "readMethod": "web reader public HTML table before direct executor attempt",
+      "status": "read",
+      "country": "SAU",
+      "year": 2023,
+      "classification": "H0",
+      "product": "080410",
+      "quantityUnit": "Kg",
+      "worldQuantity": 101911000,
+      "partnerRows": 118,
+      "partnerMinusWorldKg": -64,
+      "rawHtmlRetained": false
+    },
+    {
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/SAU/year/2023/tradeflow/Imports/partner/ALL/product/080410",
+      "readMethod": "web reader, a distinct public import table",
+      "status": "read",
+      "worldQuantity": 222033,
+      "partnerRows": 16,
+      "partnerMinusWorldKg": 2,
+      "rawHtmlRetained": false
+    },
+    {
+      "url": "https://www.fao.org/forestry/statistics/data/en/",
+      "readMethod": "web reader public summary table, distinct from the denied raw ZIP",
+      "status": "read",
+      "result": "Roundwood and sawnwood use million m3; wood pulp and non-wood-fibre pulp have separate million-tonne rows. Rounded World-only summary is not a national or regional balance."
+    },
+    {
+      "url": "https://www.fao.org/forestry/statistics/classifications/en",
+      "readMethod": "web reader",
+      "status": "read",
+      "result": "Official index identifies JFSQ definitions and the 2022 product classification."
+    },
+    {
+      "url": "https://openknowledge.fao.org/handle/20.500.14283/cb4108en",
+      "readMethod": "normal link from FAO classification index",
+      "status": 403,
+      "result": "JFSQ definitions handle refused. No alternate route or retry."
+    },
+    {
+      "url": "https://data.un.org/Data.aspx?d=FAO&f=itemCode%3A577",
+      "readMethod": "web reader, independent official UNSD distribution",
+      "status": "read",
+      "result": "Dates: year filter ends at 2021. Same-vintage 2023/2024 World row unavailable. Older data was not attached to the retained QCL country numerator."
+    },
+    {
+      "url": "https://data.un.org/Data.aspx?d=FAO&f=itemCode%3A260",
+      "readMethod": "web reader, independent official UNSD distribution",
+      "status": "read",
+      "result": "Olives: year filter ends at 2021. Same-vintage 2023/2024 World row unavailable. Older data was not attached to the retained QCL country numerator."
+    }
+  ],
+  "retainedTranscription": {
+    "path": "src/data/atlas/west-asia-sau-dates-trade-2023.json",
+    "sha256": "7aac11cd7fce1a0f275b5c251baa768ad9897a76481da6a6bba302823606ee38",
+    "note": "Checksum identifies our JSON transcription, not a publisher raw archive. All quantity rows were read in the official public HTML table; no missing cells or reporters added."
+  },
+  "deniedActions": "Direct executor FAO API, Forestry bulk ZIP and WITS export HTML downloads ended with tunnel 403; no retry, proxy change, auth change or escalation. Individual acquisition JSON files record exact URLs.",
+  "browser": "Chromium launch with chromiumSandbox:true failed because the installed SUID sandbox is not configured (owner/mode). No sandbox or permission changes were made; cloud screenshot coverage remains 0."
+}

@@ -82,6 +82,8 @@
 .mexico-agriculture-three-columns .mexico-agriculture-column-period{color:#53695d;font-size:13px}
 .mexico-agriculture-three-columns .mexico-agriculture-share{font:700 32px var(--serif);color:#264d3c;line-height:1.2}
 .mexico-agriculture-share span{font-size:20px}
+.mexico-agriculture-three-columns [data-mexico-forest-product-definitions] dt{font-size:14px;font-weight:700;margin-top:10px}
+.mexico-agriculture-three-columns [data-mexico-forest-product-definitions] dd{font-size:14px;line-height:1.8;margin:4px 0 10px}
 @media(max-width:850px){.mexico-agriculture-three-columns{grid-template-columns:1fr}}
 .mexico-agriculture-stat-totals p{font-size:12px;margin:0}.mexico-agriculture-stat-totals strong,.mexico-agriculture-stat-totals small{display:block}
 .mexico-agriculture-stat-totals strong{font-family:var(--serif);font-size:23px}.mexico-agriculture-stat-totals small{color:#647568}

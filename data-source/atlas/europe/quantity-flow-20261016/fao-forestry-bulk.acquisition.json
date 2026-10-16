@@ -1,0 +1,9 @@
+{
+  "url": "https://bulks-faostat.fao.org/production/Forestry_E_All_Data_(Normalized).zip",
+  "action": "ordinary public GET of FAO official bulk Forestry release",
+  "at": "2026-10-16T03:47:02.031591+00:00",
+  "retried": false,
+  "publisherHttpStatus": null,
+  "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>",
+  "denialOrigin": "CONNECT tunnel"
+}

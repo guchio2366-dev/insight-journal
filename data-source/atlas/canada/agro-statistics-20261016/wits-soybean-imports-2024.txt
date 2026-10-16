@@ -1,0 +1,53 @@
+Official public WITS table factual excerpt; not original HTML bytes.
+URL: https://wits.worldbank.org/trade/comtrade/en/country/CAN/year/2024/tradeflow/Imports/partner/ALL/product/120100
+Accessed: 2026-10-16
+L0: # Canada Soya beans imports by country
+L2: in 2024
+L20:  Canada  | Import  | 120100  | Soya beans  | 2024  | World | 170,383.18  | 300,486,000  | Kg
+L21:  Canada  | Import  | 120100  | Soya beans  | 2024  | United States | 121,400.97  | 238,620,000  | Kg
+L22:  Canada  | Import  | 120100  | Soya beans  | 2024  | Ghana | 13,605.66  | 19,343,700  | Kg
+L23:  Canada  | Import  | 120100  | Soya beans  | 2024  | Togo | 12,423.06  | 17,978,300  | Kg
+L24:  Canada  | Import  | 120100  | Soya beans  | 2024  | Nigeria | 11,409.01  | 15,796,500  | Kg
+L25:  Canada  | Import  | 120100  | Soya beans  | 2024  | China | 6,459.01  | 3,734,000  | Kg
+L26:  Canada  | Import  | 120100  | Soya beans  | 2024  | Burkina Faso | 1,924.13  | 2,821,900  | Kg
+L27:  Canada  | Import  | 120100  | Soya beans  | 2024  | India | 901.02  | 314,517  | Kg
+L28:  Canada  | Import  | 120100  | Soya beans  | 2024  | Other Asia, nes | 651.67  | 319,517  | Kg
+L29:  Canada  | Import  | 120100  | Soya beans  | 2024  | Uruguay | 385.29  | 542,025  | Kg
+L30:  Canada  | Import  | 120100  | Soya beans  | 2024  | Chile | 322.90  | 128,112  | Kg
+L31:  Canada  | Import  | 120100  | Soya beans  | 2024  | Benin | 270.05  | 408,600  | Kg
+L32:  Canada  | Import  | 120100  | Soya beans  | 2024  | Japan | 262.10  | 70,037  | Kg
+L33:  Canada  | Import  | 120100  | Soya beans  | 2024  | Argentina | 200.73  | 291,231  | Kg
+L34:  Canada  | Import  | 120100  | Soya beans  | 2024  | Sri Lanka | 48.12  | 14,122  | Kg
+L35:  Canada  | Import  | 120100  | Soya beans  | 2024  | Indonesia | 37.87  | 12,632  | Kg
+L36:  Canada  | Import  | 120100  | Soya beans  | 2024  | Bolivia | 27.62  | 60,561  | Kg
+L37:  Canada  | Import  | 120100  | Soya beans  | 2024  | Austria | 11.08  | 8,269  | Kg
+L38:  Canada  | Import  | 120100  | Soya beans  | 2024  | Korea, Rep. | 10.72  | 3,664  | Kg
+L39:  Canada  | Import  | 120100  | Soya beans  | 2024  | Lebanon | 10.32  | 4,079  | Kg
+L40:  Canada  | Import  | 120100  | Soya beans  | 2024  | Algeria | 6.97  | 8,630  | Kg
+L41:  Canada  | Import  | 120100  | Soya beans  | 2024  | Hong Kong, China | 3.67  | 1,341  | Kg
+L42:  Canada  | Import  | 120100  | Soya beans  | 2024  | Iran, Islamic Rep. | 3.34  | 1,505  | Kg
+L43:  Canada  | Import  | 120100  | Soya beans  | 2024  | Nepal | 2.74  | 657  | Kg
+L44:  Canada  | Import  | 120100  | Soya beans  | 2024  | Canada | 1.74  | 1,152  | Kg
+L45:  Canada  | Import  | 120100  | Soya beans  | 2024  | Mexico | 0.81  | 338  | Kg
+L46:  Canada  | Import  | 120100  | Soya beans  | 2024  | Malaysia | 0.80  | 200  | Kg
+L47:  Canada  | Import  | 120100  | Soya beans  | 2024  | France | 0.69  | 178  | Kg
+L48:  Canada  | Import  | 120100  | Soya beans  | 2024  | Uganda | 0.41  | 320  | Kg
+L49:  Canada  | Import  | 120100  | Soya beans  | 2024  | Hungary | 0.16  | 159  | Kg
+L50:  Canada  | Import  | 120100  | Soya beans  | 2024  | Thailand | 0.16  | 45  | Kg
+L51:  Canada  | Import  | 120100  | Soya beans  | 2024  | Portugal | 0.11  | 84  | Kg
+L52:  Canada  | Import  | 120100  | Soya beans  | 2024  | Netherlands | 0.09  | 24  | Kg
+L53:  Canada  | Import  | 120100  | Soya beans  | 2024  | Brazil | 0.03  | 25  | Kg
+L54:  Canada  | Import  | 120100  | Soya beans  | 2024  | Vietnam | 0.02  | 9  | Kg
+L55:  Canada  | Import  | 120100  | Soya beans  | 2024  | Congo, Dem. Rep. | 0.02  | 10  | Kg
+L56:  Canada  | Import  | 120100  | Soya beans  | 2024  | Cameroon | 0.02  | 16  | Kg
+L57:  Canada  | Import  | 120100  | Soya beans  | 2024  | Germany | 0.02  | 34  | Kg
+L58:  Canada  | Import  | 120100  | Soya beans  | 2024  | Costa Rica | 0.02  | 6  | Kg
+L59:  Canada  | Import  | 120100  | Soya beans  | 2024  | Senegal | 0.01  | 7  | Kg
+L60:  Canada  | Import  | 120100  | Soya beans  | 2024  | United Kingdom | 0.00  | 3  | Kg
+L61:  Canada  | Import  | 120100  | Soya beans  | 2024  | Italy | 0.00  | 1  | Kg
+L62:  Canada  | Import  | 120100  | Soya beans  | 2024  | Niger | 0.00  | 1  | Kg
+L63:  Canada  | Import  | 120100  | Soya beans  | 2024  | Turkey | 0.00  | 1  | Kg
+L64: HS Nomenclature used HS 1988/92 (H0)
+L65: HS Code 120100: Soya beans
+L66: Please note: Exports is gross exports and Imports is gross imports
+L0: URL https://wits.worldbank.org/trade/comtrade/en/country/CAN/year/2024/tradeflow/Exports/partner/ALL/product/4407 is not accessible via this tool.

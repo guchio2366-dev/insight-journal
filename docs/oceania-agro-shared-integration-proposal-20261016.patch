@@ -1,0 +1,26 @@
+--- a/src/components/atlas/RegionalForestryPage.astro
++++ b/src/components/atlas/RegionalForestryPage.astro
+@@ -1,5 +1,6 @@
+ ---
+ import AgroStatistics from './AgroStatistics.astro';
++import OceaniaForestryTrade from './OceaniaForestryTrade.astro';
+ import BaseLayout from '../../layouts/BaseLayout.astro';
+ import RegionalForestryMap from './RegionalForestryMap.astro';
+ import RegionalForestryReading from './RegionalForestryReading.astro';
+@@ -64,3 +65,5 @@
+ </BaseLayout>}
+ 
+ <script>import {initRegionalForestry} from '../../scripts/atlas-regional-forestry';initRegionalForestry();</script>
++
++{region==='oceania'&&<OceaniaForestryTrade />}
+--- a/src/pages/atlas/oceania/agriculture/forestry/index.astro
++++ /dev/null
+@@ -1,8 +0,0 @@
+----
+-// A static regional route takes precedence over the shared [region] route.
+-// Reuse its complete map/reading/layout and attach only Oceania statistics.
+-import RegionalForestryPage from '../../../../../components/atlas/RegionalForestryPage.astro';
+-import OceaniaForestryTrade from '../../../../../components/atlas/OceaniaForestryTrade.astro';
+----
+-<RegionalForestryPage region="oceania"/>
+-<OceaniaForestryTrade/>

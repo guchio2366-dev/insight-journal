@@ -1,0 +1,576 @@
+{
+  "schemaVersion": 1,
+  "country": "SAU",
+  "year": 2023,
+  "classification": "HS 1988/92 (H0)",
+  "item": "080410",
+  "label": "Dates, fresh or dried",
+  "unit": "Kg",
+  "scope": "National gross trade with all foreign partners; not the editorial region total. Imports and re-exports are included.",
+  "sources": {
+    "exports": "https://wits.worldbank.org/trade/comtrade/en/country/SAU/year/2023/tradeflow/Exports/partner/ALL/product/080410",
+    "imports": "https://wits.worldbank.org/trade/comtrade/en/country/SAU/year/2023/tradeflow/Imports/partner/ALL/product/080410"
+  },
+  "retrieval": {
+    "date": "2026-10-16",
+    "method": "Public WITS HTML tables read through the web reader. Quantity columns transcribed in displayed row order; no original CSV or raw HTML retained. Direct executor HTML download failed with tunnel 403 and was not retried.",
+    "pageRefreshed": {
+      "exports": "Sep-30-2026 10:59 ET",
+      "imports": "Sep-15-2026 14:14 ET"
+    }
+  },
+  "exports": {
+    "worldQuantityKg": 101911000,
+    "partners": [
+      {
+        "partner": "United Arab Emirates",
+        "quantityKg": 30523200
+      },
+      {
+        "partner": "Yemen",
+        "quantityKg": 10750400
+      },
+      {
+        "partner": "Kuwait",
+        "quantityKg": 7693530
+      },
+      {
+        "partner": "Oman",
+        "quantityKg": 5309850
+      },
+      {
+        "partner": "Jordan",
+        "quantityKg": 5139730
+      },
+      {
+        "partner": "Morocco",
+        "quantityKg": 4618120
+      },
+      {
+        "partner": "Turkey",
+        "quantityKg": 4003860
+      },
+      {
+        "partner": "Indonesia",
+        "quantityKg": 3822490
+      },
+      {
+        "partner": "India",
+        "quantityKg": 3407180
+      },
+      {
+        "partner": "Somalia",
+        "quantityKg": 2204800
+      },
+      {
+        "partner": "Malaysia",
+        "quantityKg": 2199880
+      },
+      {
+        "partner": "Qatar",
+        "quantityKg": 2119410
+      },
+      {
+        "partner": "China",
+        "quantityKg": 2060200
+      },
+      {
+        "partner": "Lebanon",
+        "quantityKg": 1740600
+      },
+      {
+        "partner": "United States",
+        "quantityKg": 1372730
+      },
+      {
+        "partner": "Bahrain",
+        "quantityKg": 1249180
+      },
+      {
+        "partner": "United Kingdom",
+        "quantityKg": 1204630
+      },
+      {
+        "partner": "Djibouti",
+        "quantityKg": 1136600
+      },
+      {
+        "partner": "Canada",
+        "quantityKg": 1032280
+      },
+      {
+        "partner": "Singapore",
+        "quantityKg": 808197
+      },
+      {
+        "partner": "Syrian Arab Republic",
+        "quantityKg": 802124
+      },
+      {
+        "partner": "Bangladesh",
+        "quantityKg": 791112
+      },
+      {
+        "partner": "Egypt, Arab Rep.",
+        "quantityKg": 784454
+      },
+      {
+        "partner": "Pakistan",
+        "quantityKg": 780010
+      },
+      {
+        "partner": "Netherlands",
+        "quantityKg": 637332
+      },
+      {
+        "partner": "Australia",
+        "quantityKg": 567942
+      },
+      {
+        "partner": "Germany",
+        "quantityKg": 385381
+      },
+      {
+        "partner": "France",
+        "quantityKg": 382796
+      },
+      {
+        "partner": "Sudan",
+        "quantityKg": 345329
+      },
+      {
+        "partner": "South Africa",
+        "quantityKg": 306576
+      },
+      {
+        "partner": "Russian Federation",
+        "quantityKg": 271694
+      },
+      {
+        "partner": "Brunei",
+        "quantityKg": 271122
+      },
+      {
+        "partner": "Tanzania",
+        "quantityKg": 253553
+      },
+      {
+        "partner": "Sri Lanka",
+        "quantityKg": 235289
+      },
+      {
+        "partner": "Sweden",
+        "quantityKg": 207802
+      },
+      {
+        "partner": "Chad",
+        "quantityKg": 165008
+      },
+      {
+        "partner": "Belgium",
+        "quantityKg": 154336
+      },
+      {
+        "partner": "Kenya",
+        "quantityKg": 141653
+      },
+      {
+        "partner": "Mauritania",
+        "quantityKg": 138203
+      },
+      {
+        "partner": "Estonia",
+        "quantityKg": 133658
+      },
+      {
+        "partner": "Kazakhstan",
+        "quantityKg": 117897
+      },
+      {
+        "partner": "Japan",
+        "quantityKg": 93363
+      },
+      {
+        "partner": "Iraq",
+        "quantityKg": 90161
+      },
+      {
+        "partner": "Nigeria",
+        "quantityKg": 69681
+      },
+      {
+        "partner": "Maldives",
+        "quantityKg": 66945
+      },
+      {
+        "partner": "Ethiopia(excludes Eritrea)",
+        "quantityKg": 65890
+      },
+      {
+        "partner": "Libya",
+        "quantityKg": 62089
+      },
+      {
+        "partner": "Albania",
+        "quantityKg": 61870
+      },
+      {
+        "partner": "Hong Kong, China",
+        "quantityKg": 58183
+      },
+      {
+        "partner": "Trinidad and Tobago",
+        "quantityKg": 56143
+      },
+      {
+        "partner": "Korea, Rep.",
+        "quantityKg": 50513
+      },
+      {
+        "partner": "Bosnia and Herzegovina",
+        "quantityKg": 46164
+      },
+      {
+        "partner": "Georgia",
+        "quantityKg": 44255
+      },
+      {
+        "partner": "Cote d'Ivoire",
+        "quantityKg": 41283
+      },
+      {
+        "partner": "Afghanistan",
+        "quantityKg": 40727
+      },
+      {
+        "partner": "Senegal",
+        "quantityKg": 39060
+      },
+      {
+        "partner": "Brazil",
+        "quantityKg": 37001
+      },
+      {
+        "partner": "Belarus",
+        "quantityKg": 36919
+      },
+      {
+        "partner": "Nicaragua",
+        "quantityKg": 36919
+      },
+      {
+        "partner": "Gambia, The",
+        "quantityKg": 36321
+      },
+      {
+        "partner": "Uganda",
+        "quantityKg": 31648
+      },
+      {
+        "partner": "Mauritius",
+        "quantityKg": 30755
+      },
+      {
+        "partner": "Niger",
+        "quantityKg": 26535
+      },
+      {
+        "partner": "Guinea",
+        "quantityKg": 25038
+      },
+      {
+        "partner": "Azerbaijan",
+        "quantityKg": 23978
+      },
+      {
+        "partner": "Mali",
+        "quantityKg": 23699
+      },
+      {
+        "partner": "Switzerland",
+        "quantityKg": 23569
+      },
+      {
+        "partner": "Burkina Faso",
+        "quantityKg": 23515
+      },
+      {
+        "partner": "Thailand",
+        "quantityKg": 21982
+      },
+      {
+        "partner": "Tunisia",
+        "quantityKg": 20027
+      },
+      {
+        "partner": "Uzbekistan",
+        "quantityKg": 19694
+      },
+      {
+        "partner": "Norway",
+        "quantityKg": 18900
+      },
+      {
+        "partner": "Algeria",
+        "quantityKg": 18756
+      },
+      {
+        "partner": "New Zealand",
+        "quantityKg": 18672
+      },
+      {
+        "partner": "Eritrea",
+        "quantityKg": 18550
+      },
+      {
+        "partner": "Zambia",
+        "quantityKg": 18009
+      },
+      {
+        "partner": "Greece",
+        "quantityKg": 17759
+      },
+      {
+        "partner": "Philippines",
+        "quantityKg": 17602
+      },
+      {
+        "partner": "Comoros",
+        "quantityKg": 17097
+      },
+      {
+        "partner": "North Macedonia",
+        "quantityKg": 15071
+      },
+      {
+        "partner": "Ghana",
+        "quantityKg": 15058
+      },
+      {
+        "partner": "Italy",
+        "quantityKg": 13252
+      },
+      {
+        "partner": "Sierra Leone",
+        "quantityKg": 11983
+      },
+      {
+        "partner": "Guinea-Bissau",
+        "quantityKg": 11279
+      },
+      {
+        "partner": "Kyrgyz Republic",
+        "quantityKg": 10266
+      },
+      {
+        "partner": "Bulgaria",
+        "quantityKg": 9379
+      },
+      {
+        "partner": "Burundi",
+        "quantityKg": 9322
+      },
+      {
+        "partner": "Liberia",
+        "quantityKg": 9322
+      },
+      {
+        "partner": "Montenegro",
+        "quantityKg": 9230
+      },
+      {
+        "partner": "Serbia, FR(Serbia/Montenegro)",
+        "quantityKg": 9230
+      },
+      {
+        "partner": "Spain",
+        "quantityKg": 7575
+      },
+      {
+        "partner": "Poland",
+        "quantityKg": 6436
+      },
+      {
+        "partner": "Cameroon",
+        "quantityKg": 6162
+      },
+      {
+        "partner": "Togo",
+        "quantityKg": 5950
+      },
+      {
+        "partner": "Mozambique",
+        "quantityKg": 5097
+      },
+      {
+        "partner": "Argentina",
+        "quantityKg": 4173
+      },
+      {
+        "partner": "Malawi",
+        "quantityKg": 4110
+      },
+      {
+        "partner": "Equatorial Guinea",
+        "quantityKg": 4093
+      },
+      {
+        "partner": "Finland",
+        "quantityKg": 3602
+      },
+      {
+        "partner": "Occ.Pal.Terr",
+        "quantityKg": 3532
+      },
+      {
+        "partner": "Gabon",
+        "quantityKg": 2888
+      },
+      {
+        "partner": "Chile",
+        "quantityKg": 2786
+      },
+      {
+        "partner": "Tajikistan",
+        "quantityKg": 2135
+      },
+      {
+        "partner": "Nepal",
+        "quantityKg": 2040
+      },
+      {
+        "partner": "Cambodia",
+        "quantityKg": 1846
+      },
+      {
+        "partner": "Panama",
+        "quantityKg": 1161
+      },
+      {
+        "partner": "Ireland",
+        "quantityKg": 896
+      },
+      {
+        "partner": "Other Asia, nes",
+        "quantityKg": 664
+      },
+      {
+        "partner": "Vietnam",
+        "quantityKg": 664
+      },
+      {
+        "partner": "Aruba",
+        "quantityKg": 481
+      },
+      {
+        "partner": "Austria",
+        "quantityKg": 430
+      },
+      {
+        "partner": "Mexico",
+        "quantityKg": 299
+      },
+      {
+        "partner": "Peru",
+        "quantityKg": 299
+      },
+      {
+        "partner": "Hungary",
+        "quantityKg": 249
+      },
+      {
+        "partner": "Benin",
+        "quantityKg": 238
+      },
+      {
+        "partner": "Romania",
+        "quantityKg": 164
+      },
+      {
+        "partner": "Cyprus",
+        "quantityKg": 82
+      },
+      {
+        "partner": "Portugal",
+        "quantityKg": 82
+      }
+    ],
+    "partnerMinusWorldKg": -64
+  },
+  "imports": {
+    "worldQuantityKg": 222033,
+    "partners": [
+      {
+        "partner": "Jordan",
+        "quantityKg": 62524
+      },
+      {
+        "partner": "Peru",
+        "quantityKg": 43205
+      },
+      {
+        "partner": "Egypt, Arab Rep.",
+        "quantityKg": 33344
+      },
+      {
+        "partner": "United States",
+        "quantityKg": 26955
+      },
+      {
+        "partner": "Pakistan",
+        "quantityKg": 18076
+      },
+      {
+        "partner": "Namibia",
+        "quantityKg": 14882
+      },
+      {
+        "partner": "United Arab Emirates",
+        "quantityKg": 12796
+      },
+      {
+        "partner": "South Africa",
+        "quantityKg": 4971
+      },
+      {
+        "partner": "Oman",
+        "quantityKg": 1122
+      },
+      {
+        "partner": "Sudan",
+        "quantityKg": 1112
+      },
+      {
+        "partner": "Bangladesh",
+        "quantityKg": 1040
+      },
+      {
+        "partner": "Thailand",
+        "quantityKg": 878
+      },
+      {
+        "partner": "China",
+        "quantityKg": 546
+      },
+      {
+        "partner": "India",
+        "quantityKg": 362
+      },
+      {
+        "partner": "Germany",
+        "quantityKg": 125
+      },
+      {
+        "partner": "Qatar",
+        "quantityKg": 97
+      }
+    ],
+    "partnerMinusWorldKg": 2
+  },
+  "limits": [
+    "Fresh or dried dates in trade are not a validated raw-crop equivalent of QCL 577 or FBS S2619. No P+I-X, export/production ratio, domestic consumption, World production share or domestic-origin allocation is derived.",
+    "All displayed national export partners are retained, including neighbours in the editorial 20-country scope. Only an explicitly labelled national external-destination subtotal excludes those neighbours; it is not a regional total.",
+    "Other Asia, nes remains a separate reporting category; its geographic attribution is not inferred.",
+    "The partner sum rounding difference remains signed and separate; it is never allocated to invented Other or domestic use."
+  ]
+}

@@ -1,0 +1,478 @@
+{
+  "head": "58be943225b7fdef8bb68392c7e377571305007d",
+  "workingTreeDirty": false,
+  "sandboxRequired": true,
+  "status": "passed",
+  "profiles": [
+    {
+      "width": 1896,
+      "height": 996,
+      "deviceScaleFactor": 1.5
+    },
+    {
+      "width": 1280,
+      "height": 665,
+      "deviceScaleFactor": 1.5
+    }
+  ],
+  "operations": [
+    {
+      "name": "unselected",
+      "profile": {
+        "width": 1896,
+        "height": 996,
+        "deviceScaleFactor": 1.5
+      },
+      "geometry": {
+        "x": 376,
+        "y": 1670.625,
+        "width": 1499.984375,
+        "map": {
+          "x": 376,
+          "y": 383,
+          "width": 925.234375,
+          "bottom": 979.921875
+        },
+        "columns": [
+          {
+            "x": 376,
+            "y": 1786.40625,
+            "width": 490.65625
+          },
+          {
+            "x": 880.65625,
+            "y": 1786.40625,
+            "width": 490.65625
+          },
+          {
+            "x": 1385.3125,
+            "y": 1786.40625,
+            "width": 490.671875
+          }
+        ],
+        "overflow": false,
+        "pageOverflow": false,
+        "dpr": 1.5,
+        "viewport": [
+          1896,
+          996
+        ]
+      }
+    },
+    {
+      "name": "wheat-2024",
+      "profile": {
+        "width": 1896,
+        "height": 996,
+        "deviceScaleFactor": 1.5
+      },
+      "geometry": {
+        "x": 376,
+        "y": 280.921875,
+        "width": 1499.984375,
+        "map": {
+          "x": 376,
+          "y": -440,
+          "width": 925.234375,
+          "bottom": 156.921875
+        },
+        "columns": [
+          {
+            "x": 376,
+            "y": 396.703125,
+            "width": 490.65625
+          },
+          {
+            "x": 880.65625,
+            "y": 396.703125,
+            "width": 490.65625
+          },
+          {
+            "x": 1385.3125,
+            "y": 396.703125,
+            "width": 490.671875
+          }
+        ],
+        "overflow": false,
+        "pageOverflow": false,
+        "dpr": 1.5,
+        "viewport": [
+          1896,
+          996
+        ]
+      }
+    },
+    {
+      "name": "cattle-2024",
+      "profile": {
+        "width": 1896,
+        "height": 996,
+        "deviceScaleFactor": 1.5
+      },
+      "geometry": {
+        "x": 376,
+        "y": 280.921875,
+        "width": 1499.984375,
+        "map": {
+          "x": 376,
+          "y": -440,
+          "width": 925.234375,
+          "bottom": 156.921875
+        },
+        "columns": [
+          {
+            "x": 376,
+            "y": 463.453125,
+            "width": 490.65625
+          },
+          {
+            "x": 880.65625,
+            "y": 463.453125,
+            "width": 490.65625
+          },
+          {
+            "x": 1385.3125,
+            "y": 463.453125,
+            "width": 490.671875
+          }
+        ],
+        "overflow": false,
+        "pageOverflow": false,
+        "dpr": 1.5,
+        "viewport": [
+          1896,
+          996
+        ]
+      }
+    },
+    {
+      "name": "roundwood",
+      "profile": {
+        "width": 1896,
+        "height": 996,
+        "deviceScaleFactor": 1.5
+      },
+      "geometry": {
+        "x": 420,
+        "y": 1100.78125,
+        "width": 1456,
+        "map": {
+          "x": 420,
+          "y": 240.5,
+          "width": 925.703125,
+          "bottom": 887.890625
+        },
+        "columns": [
+          {
+            "x": 420,
+            "y": 1280.5625,
+            "width": 476
+          },
+          {
+            "x": 910,
+            "y": 1280.5625,
+            "width": 476
+          },
+          {
+            "x": 1400,
+            "y": 1280.5625,
+            "width": 476
+          }
+        ],
+        "overflow": false,
+        "pageOverflow": false,
+        "dpr": 1.5,
+        "viewport": [
+          1896,
+          996
+        ]
+      }
+    },
+    {
+      "name": "sawnwood",
+      "profile": {
+        "width": 1896,
+        "height": 996,
+        "deviceScaleFactor": 1.5
+      },
+      "geometry": {
+        "x": 420,
+        "y": 210.78125,
+        "width": 1456,
+        "map": {
+          "x": 420,
+          "y": -649.5,
+          "width": 925.703125,
+          "bottom": -2.109375
+        },
+        "columns": [
+          {
+            "x": 420,
+            "y": 390.5625,
+            "width": 476
+          },
+          {
+            "x": 910,
+            "y": 390.5625,
+            "width": 476
+          },
+          {
+            "x": 1400,
+            "y": 390.5625,
+            "width": 476
+          }
+        ],
+        "overflow": false,
+        "pageOverflow": false,
+        "dpr": 1.5,
+        "viewport": [
+          1896,
+          996
+        ]
+      }
+    },
+    {
+      "name": "unselected",
+      "profile": {
+        "width": 1280,
+        "height": 665,
+        "deviceScaleFactor": 1.5
+      },
+      "geometry": {
+        "x": 279.1875,
+        "y": 1499.375,
+        "width": 980.8125,
+        "map": {
+          "x": 279.1875,
+          "y": 383,
+          "width": 601.96875,
+          "bottom": 771.359375
+        },
+        "columns": [
+          {
+            "x": 279.1875,
+            "y": 1615.15625,
+            "width": 317.59375
+          },
+          {
+            "x": 610.78125,
+            "y": 1615.15625,
+            "width": 317.609375
+          },
+          {
+            "x": 942.390625,
+            "y": 1615.15625,
+            "width": 317.59375
+          }
+        ],
+        "overflow": false,
+        "pageOverflow": false,
+        "dpr": 1.5,
+        "viewport": [
+          1280,
+          665
+        ]
+      }
+    },
+    {
+      "name": "wheat-2024",
+      "profile": {
+        "width": 1280,
+        "height": 665,
+        "deviceScaleFactor": 1.5
+      },
+      "geometry": {
+        "x": 279.1875,
+        "y": 103.359375,
+        "width": 980.8125,
+        "map": {
+          "x": 279.1875,
+          "y": -409,
+          "width": 601.96875,
+          "bottom": -20.640625
+        },
+        "columns": [
+          {
+            "x": 279.1875,
+            "y": 219.140625,
+            "width": 317.59375
+          },
+          {
+            "x": 610.78125,
+            "y": 219.140625,
+            "width": 317.609375
+          },
+          {
+            "x": 942.390625,
+            "y": 219.140625,
+            "width": 317.59375
+          }
+        ],
+        "overflow": false,
+        "pageOverflow": false,
+        "dpr": 1.5,
+        "viewport": [
+          1280,
+          665
+        ]
+      }
+    },
+    {
+      "name": "cattle-2024",
+      "profile": {
+        "width": 1280,
+        "height": 665,
+        "deviceScaleFactor": 1.5
+      },
+      "geometry": {
+        "x": 279.1875,
+        "y": 103.359375,
+        "width": 980.8125,
+        "map": {
+          "x": 279.1875,
+          "y": -409,
+          "width": 601.96875,
+          "bottom": -20.640625
+        },
+        "columns": [
+          {
+            "x": 279.1875,
+            "y": 285.890625,
+            "width": 317.59375
+          },
+          {
+            "x": 610.78125,
+            "y": 285.890625,
+            "width": 317.609375
+          },
+          {
+            "x": 942.390625,
+            "y": 285.890625,
+            "width": 317.59375
+          }
+        ],
+        "overflow": false,
+        "pageOverflow": false,
+        "dpr": 1.5,
+        "viewport": [
+          1280,
+          665
+        ]
+      }
+    },
+    {
+      "name": "roundwood",
+      "profile": {
+        "width": 1280,
+        "height": 665,
+        "deviceScaleFactor": 1.5
+      },
+      "geometry": {
+        "x": 279.1875,
+        "y": 923.78125,
+        "width": 980.8125,
+        "map": {
+          "x": 279.1875,
+          "y": 240.5,
+          "width": 608.71875,
+          "bottom": 690.5
+        },
+        "columns": [
+          {
+            "x": 279.1875,
+            "y": 1103.5625,
+            "width": 317.59375
+          },
+          {
+            "x": 610.78125,
+            "y": 1103.5625,
+            "width": 317.609375
+          },
+          {
+            "x": 942.390625,
+            "y": 1103.5625,
+            "width": 317.59375
+          }
+        ],
+        "overflow": false,
+        "pageOverflow": false,
+        "dpr": 1.5,
+        "viewport": [
+          1280,
+          665
+        ]
+      }
+    },
+    {
+      "name": "sawnwood",
+      "profile": {
+        "width": 1280,
+        "height": 665,
+        "deviceScaleFactor": 1.5
+      },
+      "geometry": {
+        "x": 279.1875,
+        "y": 31.78125,
+        "width": 980.8125,
+        "map": {
+          "x": 279.1875,
+          "y": -651.5,
+          "width": 608.71875,
+          "bottom": -201.5
+        },
+        "columns": [
+          {
+            "x": 279.1875,
+            "y": 211.5625,
+            "width": 317.59375
+          },
+          {
+            "x": 610.78125,
+            "y": 211.5625,
+            "width": 317.609375
+          },
+          {
+            "x": 942.390625,
+            "y": 211.5625,
+            "width": 317.59375
+          }
+        ],
+        "overflow": false,
+        "pageOverflow": false,
+        "dpr": 1.5,
+        "viewport": [
+          1280,
+          665
+        ]
+      }
+    }
+  ],
+  "screenshots": [
+    "1896x996-unselected.png",
+    "1896x996-wheat-2024.png",
+    "1896x996-cattle-2024.png",
+    "1896x996-roundwood.png",
+    "1896x996-sawnwood.png",
+    "1280x665-unselected.png",
+    "1280x665-wheat-2024.png",
+    "1280x665-cattle-2024.png",
+    "1280x665-roundwood.png",
+    "1280x665-sawnwood.png"
+  ],
+  "manualReadabilityReview": "required",
+  "sourceIdentity": {
+    "mode": "exact-commit",
+    "baseHead": "58be943225b7fdef8bb68392c7e377571305007d",
+    "buildIdentity": "58be943225b7fdef8bb68392c7e377571305007d",
+    "workingTreeDirty": false,
+    "applicationInputsDirty": false,
+    "inputFiles": 3593,
+    "workingTreeSha256": "43dcbba00136b71738aeaac9282049f8d3aa797b588b257082721a0acda347be",
+    "publishedRelease": false
+  },
+  "runtimeSandbox": {
+    "browserVersion": "151.0.7922.173",
+    "status": "Sandbox Status\nLayer 1 Sandbox\tNamespace\nPID namespaces\tYes\nNetwork namespaces\tYes\nSeccomp-BPF sandbox\tYes\nSeccomp-BPF sandbox supports TSYNC\tYes\nPtrace Protection with Yama LSM (Broker)\tNo\nPtrace Protection with Yama LSM (Non-broker)\tNo\n\nYou are adequately sandboxed.",
+    "verified": true
+  }
+}

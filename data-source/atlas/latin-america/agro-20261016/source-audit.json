@@ -1,0 +1,74 @@
+{
+  "checkedOn": "2026-10-16",
+  "scope": "Latin-only implementation; regional branch commit/push authorized by the follow-up. No PR, merge or publication.",
+  "transcriptions": {
+    "format": "Official public page text returned by the web reader, normalized only for trailing whitespace and final newline. Not original HTML/CSV bytes.",
+    "fingerprints": "Each retained transcription and original saved QCL extract is SHA-256 fingerprinted in public/assets/atlas/latin-agro-quantity-v1/data.json.",
+    "successfulPublicTables": [
+      "WITS / UN Comtrade: 2024 H0 120100 Soya beans, Exports and Imports, World and ALL partners, ARG/BOL/BRA/PRY/URY",
+      "INFOR Chile: 2024 sawnwood production by species, pulp production, roundwood inputs by industry, export quantities by product"
+    ]
+  },
+  "failedAcquisitions": [
+    {
+      "url": "https://bulks-faostat.fao.org/production/Production_Crops_Livestock_E_All_Data_(Normalized).zip",
+      "method": "ordinary unauthenticated execution-environment GET",
+      "result": "Tunnel connection failed: 403 Forbidden",
+      "meaning": "Connection tunnel failure; FAO origin response unknown. No archive bytes acquired. See qcl.acquisition.json."
+    },
+    {
+      "url": "https://fenixservices.fao.org/faostat/api/v1/en/data/FO?area_code=21&item_code=1861&element_code=5516&year=2024&show_codes=true&show_unit=true&show_flags=true&null_values=true&output_type=objects",
+      "method": "ordinary web reader open of official API table",
+      "result": "URL is not accessible via this tool",
+      "meaning": "Not an HTTP 403, a zero observation or evidence of absent data. Independent INFOR HTML tables were used instead."
+    },
+    {
+      "url": "https://www.fao.org/faostat/en/#data/FBS",
+      "method": "ordinary web reader open of official FBS entry",
+      "result": "No table text returned",
+      "meaning": "No 34-country supply/use rows acquired. No food/feed/processing/stock quantities inferred."
+    },
+    {
+      "url": "https://wef.infor.cl/?f=17&format=raw&id=11&n=2025&option=com_wef&task=GetFile",
+      "method": "official Anuario Forestal 2025 download link; then ordinary GET after reader format limitation",
+      "result": "Reader: unsupported application/octet-stream; GET: Tunnel connection failed: 403 Forbidden",
+      "meaning": "The first result was a format limitation, not access denial. The subsequent tunnel denial ended file retrieval. No original PDF acquired; see infor-pdf.acquisition.json."
+    },
+    {
+      "url": "https://api-comexstat.mdic.gov.br/general",
+      "entry": "https://api-comexstat.mdic.gov.br/docs",
+      "method": "ordinary unauthenticated read-only statistical POST, export Jan-Dec 2024, heading 1201, country, metricKG",
+      "result": "Tunnel connection failed: 403 Forbidden",
+      "meaning": "No data rows acquired. Query schema could not be validated by a successful response. mdic-api-2024.acquisition.json retains the exact payload."
+    },
+    {
+      "url": "https://balanca.mdic.gov.br/balanca/bd/comexstat-bd/ncm/EXP_2024.csv",
+      "entry": "https://www.gov.br/mdic/pt-br/assuntos/comercio-exterior/estatisticas/base-de-dados-bruta",
+      "method": "official linked CSV: web reader followed by ordinary GET after non-access-related 502",
+      "result": "Web reader: 502 Bad Gateway; ordinary GET: Tunnel connection failed: 403 Forbidden",
+      "meaning": "No archive or quantity rows acquired. No same-resource retry after the 403. mdic-csv-2024.acquisition.json."
+    },
+    {
+      "url": "https://balanca.mdic.gov.br/balanca/bd/comexstat-bd/ncm/IMP_2024.csv",
+      "method": "official linked CSV via web reader",
+      "result": "Timeout fetching",
+      "meaning": "No quantity rows acquired. Not interpreted as zero imports."
+    }
+  ],
+  "scopeAndReuse": {
+    "fao": "Saved 2025-12-31 QCL release; original archive hash and extract hash preserved; CC BY 4.0 per existing source manifest.",
+    "trade": "Do not label WITS/UN Comtrade observations CC BY 4.0. Official WITS FAQ lists internal-use/re-dissemination conditions. The linked current UN Comtrade license agreement was not accessible to the web reader. Local analysis and review completed; public re-dissemination clearance remains an integration prerequisite.",
+    "tradeTermsUrl": "https://wits.worldbank.org/faqs.html",
+    "unLicenseUrl": "https://comtrade.un.org/db/help/LicenseAgreement.aspx",
+    "infor": "Source and table URLs displayed; INFOR page footer reserves rights. No original report PDF or separate redistribution licence acquired. Confirm reuse conditions before publication.",
+    "contact": "No account creation, authentication, licence acceptance, paid access, permission expansion, or message to a provider was performed."
+  },
+  "neededUserActions": [
+    "From a normal authorized FAOSTAT interface export QCL 2024 for all existing 34 target countries and World, for the seven remaining crop topics, preserving item/area/element codes, units, flags, notes and release metadata. Do not replace missing rows with zero.",
+    "Export FBS or SUA for a single agreed calendar year with Production/Import/Export/Stock Variation/Food/Feed/Seed/Losses/Processing/Other/Residual and definitions of primary-equivalent conversion and stock signs. Export corresponding all-reporter/all-partner trade quantity rows and World totals for the same commodity scope and period. Regional extra-regional totals require all 34 reporters and removal of within-set trade.",
+    "For forestry provide country and World production/import/export rows separately for roundwood, industrial roundwood, sawnwood and each pulp stage, plus all-partner quantities in compatible units. INFOR Chile export tables should identify product, species, period, tonnes or m3, total and all partners, distinguishing simply sawn wood from planed products and pulp subtypes.",
+    "For same-marketing-year WASDE destination comparisons provide all-partner original tables using the actual country-specific marketing-year dates. The public 2024 calendar tables must not be relabelled 2024/25.",
+    "Before public release of the added WITS/UN Comtrade and INFOR tables, verify the provider's applicable redistribution terms or provide the necessary permission. This branch and its evidence have not been published.",
+    "Brazil calendar 2024 alternative: use the official MDIC EXP_2024.csv and IMP_2024.csv with CO_ANO, CO_MES, CO_NCM, CO_PAIS, KG_LIQUIDO plus the official NCM and country dictionaries. Retain all 12 months and all NCM1201 subcodes (seed/other scope must be verified), all partner rows, and the full-file checksum. Do not join a national MDIC total to WITS partner quantities without reconciling scope and revision; use one provider for total and partners."
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "url": "https://www.itto.int/direct/topics/topics_pdf_download/topics_id%3D8460%26no%3D2",
+  "operation": "standard HTTPS GET once, official 2023-2024 table attachment",
+  "at": "2026-10-16T04:03:26.932859+00:00",
+  "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>",
+  "stopped": true
+}
