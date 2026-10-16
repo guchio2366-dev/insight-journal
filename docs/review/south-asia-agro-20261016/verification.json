@@ -64,5 +64,22 @@
     "node --test tests/e2e/atlas-asia-workspace.test.mjs",
     "npm run verify:release",
     "git apply --check docs/patches/south-asia-agro-controller-20261016.patch"
-  ]
+  ],
+  "additionalScopedValidation": {
+    "command": "node --test tests/unit/atlas-south-asia-agro-*.test.mjs",
+    "pass": 14,
+    "skip": 0,
+    "fail": 0,
+    "scope": "Added official Sri Lanka processed-tea production-only supplement and additional source audit; UI and common proposal unchanged",
+    "globalTestsRepeated": false
+  },
+  "delivery": {
+    "branch": "feat/south-asia-agro-statistics-20261016",
+    "remote": "origin",
+    "firstVerifiedRemoteSha": "1cc261b1be96dddae48dfc0d0b13e7e85e1e347a",
+    "commonComponents": "proposal-only",
+    "pullRequestCreated": false,
+    "merged": false,
+    "published": false
+  }
 }

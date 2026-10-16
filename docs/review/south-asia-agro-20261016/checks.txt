@@ -71,3 +71,27 @@ Release verification
 
 Full repository E2E: interrupted (exit 130); no full-suite pass claimed.
 Cloud browser capture: blocked-browser-launch; captured cases/images: 0.
+
+Additional official-source supplement regional validation (14 pass, 0 fail):
+✔ proposed hook shows rice and cotton, retains the separate basmati reference, and clears old country references (226.717051ms)
+✔ selected-to-overview restore is identical to the original shared overview; country clear and field change restore nodes (288.415821ms)
+✔ Central Asia and other region hosts retain their original selected statistics (372.687256ms)
+✔ a late quantity request cannot restore a cleared national selection (80.282011ms)
+✔ South Asia product-only selection shows regional coverage and forest series can switch without a country proxy (260.267355ms)
+✔ South Asia rows match the retained country and World cells, including zero, stock and loss fields (2.911954ms)
+✔ offline regeneration is deterministic and altered source bytes stop extraction (27.126717ms)
+✔ selection keys never relabel paddy or seed cotton statistics and cannot mutate canonical packets (0.357228ms)
+✔ new rice flows keep the reading order, independent domestic use and unavailable partner denominator (36.73993ms)
+✔ cotton separates lint, mill use, imported supply and non-food use (5.269584ms)
+✔ all eight South Asia forests retain m³, apparent-use limits, and separate unretained pulp t (127.322577ms)
+✔ the regional renderer falls back without creating new products, countries, years or overview statistics (0.481836ms)
+✔ regional selected production uses the eight-country scope and explicit incomplete coverage, never an India proxy (45.860751ms)
+✔ Sri Lanka official processed-tea supplement retains the independent annual total and monthly gap without filling missing flow fields (0.683109ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1579.004763

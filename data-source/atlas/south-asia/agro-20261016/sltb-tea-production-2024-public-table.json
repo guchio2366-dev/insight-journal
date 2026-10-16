@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "country": "LKA",
+  "year": 2024,
+  "periodType": "calendar-year",
+  "periodStart": "2024-01-01",
+  "periodEnd": "2024-12-31",
+  "product": "Processed tea, source TOTAL TEA PRODUCTION; includes black and green tea",
+  "unit": "kg",
+  "production": 262693830,
+  "monthlyProduction": [
+    18732299,
+    20094771,
+    19647743,
+    21681090,
+    24646413,
+    23153820,
+    23191795,
+    21336480,
+    24387474,
+    21283429,
+    22727612,
+    21810903
+  ],
+  "monthlySum": 262693829,
+  "monthlySumMinusAnnual": -1,
+  "worldProduction": null,
+  "imports": null,
+  "exports": null,
+  "domesticUse": null,
+  "stocks": null,
+  "partners": null,
+  "status": "verified-official-production-reference-only-not-connected-to-ui",
+  "sources": [
+    {
+      "title": "Revised Tea Production - 2024 (End of December 2024) - Monthly",
+      "url": "https://srilankateaboard.lk/wp-content/uploads/2025/04/Revised-Tea-Production-2024-Monthly.pdf",
+      "page": 1,
+      "row": "TOTAL TEA PRODUCTION - TOTAL",
+      "method": "Public web reader; parsed text; no downloaded original PDF claimed"
+    },
+    {
+      "title": "Revised Tea Production - 2024 (End of December 2024) - Cumulative",
+      "url": "https://srilankateaboard.lk/wp-content/uploads/2025/04/Revised-Tea-Production-2024-Cummulative.pdf",
+      "page": 1,
+      "row": "TOTAL TEA PRODUCTION - TOTAL - December",
+      "rawValue": "262,693,830",
+      "method": "Public web reader; parsed text; no downloaded original PDF claimed"
+    }
+  ],
+  "notes": [
+    "製法別の製茶統計であり、FAO QCL茶生葉の重量やWorldへ接合しない。",
+    "Orthodoxの親行はBio/Reclaimedを含む。内数をTOTALへ再加算しない。",
+    "月別TOTAL合計は年末累計TOTALより1kg小さい。原表差を保持し、月値の修正や国内消費への割当をしない。",
+    "国内利用、輸入、輸出、在庫、World、全相手数量はこの二表にはない。生産−輸出による国内消費は作らない。"
+  ]
+}

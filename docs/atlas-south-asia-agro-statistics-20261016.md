@@ -1,6 +1,6 @@
 # 南アジア：農林業の選択品目統計（2026-10-16）
 
-**部分実装。統合パッチの適用・実画面確認・不足原表の取得が残る。PR・push・マージ・公開はしていない。**
+**部分実装。統合パッチの適用・実画面確認・不足原表の取得が残る。地域専用ブランチのcommit・pushは2026-10-16の受渡し追補により実施。PR・マージ・公開はしていない。**
 
 最新 `origin/main` を通常fetchし、`3fbb4c957c21685bddbf8148a95a2a03ba210553` から `feat/south-asia-agro-statistics-20261016` を作成した。開始時の作業ツリーはclean。`docs/atlas-agro-statistics-implementation-20261014.md`、選択数量仕様・取得監査、南中央アジアproduct-selection、現行米国大豆・WASDE三列、共通統計controllerと原値を照合した。AGENTS.mdはcheckoutと親配下に存在しなかった。
 
@@ -71,3 +71,21 @@ URL・時刻・原エラーと公開ページで確認できた範囲は `data-s
 統合手順：地域実装commitと検証記録を取り込み、`git apply --check docs/patches/south-asia-agro-controller-20261016.patch` 後に統合担当が共通controllerへ適用する。他地域担当の同じcontroller変更があれば地域dispatcherへまとめる。提案パッチのSHA-256は `3570f1c339914d766163e09fae284ef6c7b25d45d1feae8cb3059a4986d80720`。接続時のcontroller SHAと生成JS SHAはverification JSONで追跡できる。
 
 正常なsandbox付きクラウドrunnerで、通常build後に `REVIEW_CHROME_PATH=/path/to/chrome node scripts/capture-south-asia-agro-review.mjs` を実行して22ケース＋操作の画像を確認する。再現用のテストは `node --test tests/unit/atlas-south-asia-agro-*.test.mjs` と `node --test tests/e2e/atlas-south-central-overview.test.mjs tests/e2e/atlas-south-central-focus.test.mjs tests/e2e/atlas-asia-workspace.test.mjs`。利用者PCへの接続は不要。
+
+## 受渡し追補・追加公式資料の照合
+
+専用ブランチを `origin/feat/south-asia-agro-statistics-20261016` へ通常pushし、初回リモートSHA `1cc261b1be96dddae48dfc0d0b13e7e85e1e347a` を `git ls-remote --heads` で照合した。この追補も同じ地域ブランチへcommit・pushし、最終SHAを受渡し報告する。共通controller本体は未変更、提案パッチのみ。全地域E2Eは統合側でまとめて行い、地域側では重複実行しない。
+
+追加調査の経路・結果・不足列は `data-source/atlas/south-asia/agro-20261016/additional-official-source-checks.json` に保存した。
+
+| 資料・正規URL | 試した経路・確認結果 | 追加で必要な列／通常操作 |
+| --- | --- | --- |
+| [APEDA Basmati Rice](https://apeda.gov.in/BasmatiRice)、[Non Basmati Rice](https://apeda.gov.in/NonBasmatiRice) | 公式HTML本文は取得成功。ただし表示年は2025–26で、実装のWASDE2024/25とは別期間。主要相手の割合は数量／金額の基準が本文だけでは確定しないため不採用 | 対応期間の全相手数量・World・商品範囲・数量単位・構成比の分母。バングラデシュ等を地域外に数えない |
+| [APEDA Build Your Own Report](https://agriexchange.apeda.gov.in/India/GenerateAPEDAProductReport/Index) | 公式公開フォームにFinancial／Calendar Year、Product／Country Wise、Country／Region、Product、Period、Year、Month、Quantity In、Values In、Average/Unitを確認。readerには動的選択肢・結果数量行が返らなかった | 通常の承認済みブラウザでBasmati／Non-Basmatiを別々に選び、対象月・年度・全相手＋World・kg/t・分類と改訂metadata付きでCSV/XLSX export。金額や上位相手だけでは不足 |
+| [APEDA All Export Destinations](https://agriexchange.apeda.gov.in/IndiaExport/Home/Index) | 正規リンクの公開本文はNo Data Found。DGCIS Annual Data (All Agri Products)の説明のみで、0を意味しない | 商品別・期間別の全相手数量結果表が必要 |
+| [Sri Lanka Tea Board Tea Statistics](https://srilankateaboard.lk/tea-statistics/) | Category／Year/Monthの公式selectorは読めたが結果行なし | 2024暦年・全相手＋World・kg・加工形態・原産地・再輸出区分・適用年のHS分類。生産との接続には輸入・在庫・国内利用も必要 |
+| [SLTB Annual Report 2024](https://srilankateaboard.lk/wp-content/uploads/2026/04/Annual-Report-2024English.pdf) | [公式刊行物一覧](https://srilankateaboard.lk/publications/)のリンク。readerは103ページPDFを認識するが抽出本文0行、PDF screenshotもこのinterfaceでinspect可能な画像を返さなかった。通常GETは接続トンネル403、原PDF0 bytes。別経路の同資料再取得なし | 通常取得したPDFか公式表export。2024年全相手輸出、国内／外国原産、製法、需給・在庫・World定義の該当表が必要 |
+| [SLTB Revised Tea Production 2024 Monthly](https://srilankateaboard.lk/wp-content/uploads/2025/04/Revised-Tea-Production-2024-Monthly.pdf)、[Cumulative](https://srilankateaboard.lk/wp-content/uploads/2025/04/Revised-Tea-Production-2024-Cummulative.pdf) | 公式1ページ表の本文を取得成功。2024年末累計TOTAL TEA PRODUCTIONは262,693,830kg。月別TOTALの合計262,693,829kgとの−1kg差を保存 | 生産のみの追加参考としてJSON保存。製茶の分類で、生葉QCLへaliasしない。World・輸入・輸出・国内利用・在庫・相手は両表にないためnull。UIの完全フローへは未接続 |
+| [SLTB export HSC circular 2010](https://srilankateaboard.lk/wp-content/uploads/2021/04/hscodes-cusdec-tea-exports-circular-06-09-2010-1.pdf) | 公式5ページ本文は取得成功。国内／外国原産、緑茶／紅茶、instant・飲料形態等を区別する分類を確認 | 歴史資料だけで2024年適用コードや現在の換算を確定しない。2024年metadataと原産地別数量列が必要 |
+
+追加した製茶の生産専用参考は `sltb-tea-production-2024-public-table.json`。月別・累計の原表差、加工段階、未収録の需給・Worldを維持する追加検査を含め、**地域単体14件が通過**した。UI・共通提案パッチは既検証版から変更していないため、全体build・全域E2Eは重複実行していない。数量の不足は継続して部分未達であり、公開ページに年・数量があるだけで三段の同定義フロー完成とはしない。

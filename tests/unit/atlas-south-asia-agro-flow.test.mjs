@@ -134,3 +134,16 @@ test('regional selected production uses the eight-country scope and explicit inc
  changed.countries.IND.series.find(s=>s.id==='rice-production').unit='different-unit';
  assert.equal(southAsiaRegionalProduction(changed,'rice-production').count,6,'a different unit is excluded rather than summed');
 });
+
+test('Sri Lanka official processed-tea supplement retains the independent annual total and monthly gap without filling missing flow fields',()=>{
+ const reference=JSON.parse(readFileSync('data-source/atlas/south-asia/agro-20261016/sltb-tea-production-2024-public-table.json'));
+ assert.equal(reference.country,'LKA');assert.equal(reference.year,2024);assert.equal(reference.unit,'kg');
+ assert.equal(reference.monthlyProduction.length,12);
+ assert.equal(reference.monthlyProduction.reduce((a,b)=>a+b,0),262693829);
+ assert.equal(reference.production,262693830);assert.equal(reference.monthlySumMinusAnnual,-1);
+ assert.ok(reference.sources.every(source=>source.url.startsWith('https://srilankateaboard.lk/')));
+ for(const key of ['worldProduction','imports','exports','domesticUse','stocks','partners'])assert.equal(reference[key],null);
+ assert.equal(reference.status,'verified-official-production-reference-only-not-connected-to-ui');
+ assert.match(reference.notes.join(' '),/QCL茶生葉.*接合しない/);
+ assert.equal(southAsiaAgroFlow('LKA','tea-production'),undefined,'this production-only supplement is not a manufactured complete flow');
+});
