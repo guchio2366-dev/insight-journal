@@ -31,7 +31,12 @@ try{
    if(['russia','oceania'].includes(region))await page.waitForFunction(()=>document.querySelector('[data-regional-forestry]')?.dataset.forestReferenceStatus==='ready');
    if(region==='russia')await page.waitForFunction(()=>document.querySelector('[data-regional-forestry]')?.dataset.forestRasterStatus==='ready');
    assert.equal(await page.locator('[data-forest-raster]').count(),region==='russia'?1:0);
-   assert.equal(await page.locator('select:not([data-agro-series-select]):not([data-agro-country-select])').count(),0);
+   const unexpectedSelectors=await page.locator('select').evaluateAll(nodes=>nodes.filter(node=>!node.matches('[data-agro-series-select],[data-agro-country-select],[data-africa-forest-country]')&&!node.closest('[data-oceania-forest-product]')).map(node=>node.outerHTML));
+   assert.deepEqual(unexpectedSelectors,[],'No new map selectors outside the named statistics controls');
+   if(region==='africa'){
+    const country=page.locator('[data-africa-forest-country]');assert.equal(await country.inputValue(),'');assert.equal(await country.isVisible(),false,'Initial national selector remains in a closed disclosure');
+   }
+   if(region==='oceania')assert.equal(await page.locator('[data-oceania-forest-product]').isVisible(),false,'National product control stays hidden before choosing an example');
    const references=['africa','russia'].includes(region)?2:region==='oceania'?1:0;assert.equal(await page.locator('[data-forest-reference]').count(),references);
    const config=await page.locator('[data-forest-config]').evaluate(element=>JSON.parse(element.textContent));
    const map=page.locator('[data-forest-map]'),camera=await map.getAttribute('viewBox'),locators=await page.locator('svg [data-forest-example]').count();

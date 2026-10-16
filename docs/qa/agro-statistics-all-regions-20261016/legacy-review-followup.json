@@ -1,0 +1,70 @@
+{
+  "status": "local-regressions-passed",
+  "captureMode": "working-tree QA follow-up; not final CI evidence",
+  "applicationCodeCommit": "58be943225b7fdef8bb68392c7e377571305007d",
+  "remoteParentBeforeFollowup": "abfeed838be29b02a16bcffa85c7d7ba196c6396",
+  "applicationAndDataUnchanged": true,
+  "fixes": [
+    "Use the current Canada and Southeast native primary panels in the shared review; count primary columns without closed nested references; use the Southeast native product selector.",
+    "Check selected African tea with its three-column panel, then explicitly return to the unchanged overview and compare the exact original HTML.",
+    "Allow only named national-statistics selectors on regional forestry; retain closed/hidden initial state and all map/reader/marker/camera checks."
+  ],
+  "results": {
+    "common": {
+      "status": "passed",
+      "cases": 63,
+      "operations": 40,
+      "errors": [],
+      "runtimeSandbox": {
+        "browserVersion": "151.0.7922.173",
+        "status": "Sandbox Status\nLayer 1 Sandbox\tNamespace\nPID namespaces\tYes\nNetwork namespaces\tYes\nSeccomp-BPF sandbox\tYes\nSeccomp-BPF sandbox supports TSYNC\tYes\nPtrace Protection with Yama LSM (Broker)\tNo\nPtrace Protection with Yama LSM (Non-broker)\tNo\n\nYou are adequately sandboxed.",
+        "verified": true
+      },
+      "profiles": [
+        {
+          "width": 1440,
+          "height": 900
+        },
+        {
+          "width": 1024,
+          "height": 768
+        },
+        {
+          "width": 390,
+          "height": 844
+        }
+      ]
+    },
+    "africa": {
+      "status": "passed",
+      "cases": 2,
+      "observedLogScenes": 22
+    },
+    "regionalForestry": {
+      "processExitCode": 0,
+      "regionViewportCombinations": 9,
+      "errors": [],
+      "failedRequests": [],
+      "checks": [
+        "9 PC region/viewport combinations, initial and selected: zero-scroll viewport screenshots with left news, complete map/all region labels, right explanation and legend visible simultaneously; exact CSS innerWidth/innerHeight recorded separately from screenshot/preview pixels; no overlap or horizontal overflow; all locators/raster retained on selection; zoom/clear/reset, keyboard, marker click and reload restore; 4 existing forestry entries"
+      ]
+    }
+  },
+  "localReports": {
+    "common": {
+      "path": "/workspace/agro-statistics-local-handoff/legacy-common-final/report.json",
+      "sha256": "5b9bde734ff5c87259981fc871fd8d30265a7180e78408142698ff8bf72fdf51"
+    },
+    "africa": {
+      "path": "/workspace/agro-statistics-local-handoff/legacy-africa-fixed/verification.json",
+      "sha256": "96a5c04828fdad71c0ad25a79362637166d95cacbe0c5ece8494c3e2f6c8af49"
+    },
+    "regionalForestry": {
+      "path": "/workspace/agro-statistics-local-handoff/legacy-forestry-fixed/report.json",
+      "sha256": "a925af9ac37a988efd157e0257c2d0d932af1f63c35e9beddf022431c051ef60"
+    }
+  },
+  "dataGatePassed": false,
+  "publicationAllowed": false,
+  "manualReviewOfAllFollowupImages": false
+}
