@@ -118,7 +118,24 @@ def build():
         world_row = rows.pop('World')
         total = sum(Decimal(str(r['value'])) for r in rows.values())
         trade.append({'countryCode':code,'year':2023,'classification':'HS 1988/92 (H0)','hs':hs,'label':label,'unit':'t','worldExports':world_row['value'],'worldRawLine':world_row['rawLine'],'partners':list(rows.values()),'partnerRoundingGap':float(total-Decimal(str(world_row['value']))),'sourceUrl':f'https://wits.worldbank.org/trade/comtrade/en/country/{code}/year/2023/tradeflow/Exports/partner/ALL/product/{hs}','definition':'Gross exports。再輸出を含み得る通関上の仕向けで、国産由来・最終消費地を追跡しない。未掲載取引を0と仮定しない。'})
-    return {'schemaVersion':1,'year':2024,'countryCodes':CODES,'topics':TOPICS,'countries':countries,'regional':regional,'riceBalances':balances,'tradeReferences':trade,'sources':sources,'method':'同版FAOSTAT保存値。地理的東南アジア11か国。公表地域行と保存国合計を区別し、欠測を0にしない。'}
+    # Independent AFSIS publication, not the unavailable ACO34. Keep the
+    # historical ASEAN10 crop-year outlook as a separate reference table.
+    aco=read('data-source/atlas/southeast-agro-20261016/aco33-tables-web.txt')
+    read('data-source/atlas/southeast-agro-20261016/aco33-publication-web.txt')
+    supply_references=[]
+    for table,page,printed,sid,label,title in [(8,19,7,'rice-production','米（精米）','Rice'),(23,37,25,'maize-production','トウモロコシ','Maize'),(68,87,75,'cassava-production','キャッサバ（生鮮根）','Cassava')]:
+        match=re.search(rf'Table {table} {title} balance sheet of ASEAN countries, 2024.*?\n(L\d+@P{page}: ASEAN ([\d, ]+))\n',aco,re.S)
+        if not match:
+            raise ValueError(f'Missing AFSIS table {table}')
+        cells=match[2].split()
+        if len(cells)!=8:
+            raise ValueError('Unexpected AFSIS quantity columns')
+        values=list(map(lambda x:int(x.replace(',','')),cells))
+        beginning,production,imports,supply,domestic,exports,ending,demand=values
+        if beginning+production+imports!=supply or domestic+exports+ending!=demand or supply!=demand:
+            raise ValueError('AFSIS published aggregate does not close')
+        supply_references.append({'seriesId':sid,'label':label,'year':2024,'period':'提供元の2024作物年度・見通し','scope':'刊行当時のASEAN10か国（東ティモールを含まない）','countryCount':10,'unit':'t','beginningStocks':beginning,'production':production,'imports':imports,'totalSupply':supply,'domesticUse':domestic,'exports':exports,'endingStocks':ending,'totalDemand':demand,'externalExports':None,'worldProduction':None,'rawLine':match[1],'sourceUrl':'https://www.aptfsis.org/wp-content/uploads/aco-pdfs/ACO%20No.33.pdf','table':table,'pdfPage':page+1,'printedPage':printed,'quality':'2024年12月刊行の見通し。国内利用等にAFSIS Secretariat推計を含む。確報ではない。','notes':['域内移動を含む国別輸出入の公表合計。域外貿易へ変換しない。','国内利用は公表Total Domestic Utilization。食用・飼料・加工等の内訳は未収録で、国産由来だけの量でもない。','生産年の期間は国の作期により異なる。FAO2024暦年の地理11か国生産やWASDE2024/25国別需給とは接続しない。']})
+    return {'schemaVersion':1,'year':2024,'countryCodes':CODES,'topics':TOPICS,'countries':countries,'regional':regional,'riceBalances':balances,'tradeReferences':trade,'supplyReferences':supply_references,'sources':sources,'method':'同版FAOSTAT保存値。地理的東南アジア11か国。公表地域行と保存国合計を区別し、欠測を0にしない。'}
 
 if __name__=='__main__':
     OUT.write_text(json.dumps(build(),ensure_ascii=False,indent=2)+'\n')

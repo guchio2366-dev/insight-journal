@@ -57,6 +57,11 @@ function riceDetails(code:string){
  return `<details><summary>販売年度・精米換算・原表の定義</summary>${flow.notes.map(n=>`<p>${esc(n)}</p>`).join('')}<p>原表丸め差 ${num(flow.roundingGap)} 百万t。</p><pre>${esc(flow.rawLine)}</pre><a href="${esc(flow.source.url)}#page=24">USDA WASDE-675 p.24</a></details>`;
 }
 const forestryNote=(id:string)=>id.includes('wood')?'<p class="agro-meta">丸太（燃料材を含む）・製材はm³、木材パルプはtの別加工段階です。足し合わせず、木材パルプの未収録を0としません。森林面積やHS44の金額を製品数量へ変換しません。</p><p><a href="../industry/?industryKind=wood">木材の産地と加工工場・港の立地を比べる →</a></p>':'';
+export function renderSoutheastAfsisSupplyReference(id:string){
+ const ref=packet.supplyReferences.find(r=>r.seriesId===id);if(!ref)return '';
+ const columns:[string,number][]=[['期首在庫',ref.beginningStocks],['生産',ref.production],['国別輸入の公表合計',ref.imports],['供給合計',ref.totalSupply],['国内利用の公表合計',ref.domesticUse],['国別輸出の公表合計',ref.exports],['期末在庫',ref.endingStocks],['需要合計',ref.totalDemand]];
+ return `<details class="southeast-agro-reference" data-southeast-afsis-reference="${ref.table}"><summary>別範囲：当時ASEAN10の需給（2024見通し）</summary><p>${esc(ref.scope)} · ${esc(ref.period)} · ${esc(ref.label)} · t。${esc(ref.quality)}</p><p>①の地理11か国・FAO暦年生産とは別範囲です。${id==='rice-production'?'米は精米で、①の籾米とは加工段階も異なります。':'国ごとの作期も異なるため、同じ2024年という表示だけで数量を接合しません。'}</p><table><caption>AFSIS ACO No.33 表${ref.table} · t。域内貿易を含む公表合計</caption><thead><tr><th>項目</th><th>t</th></tr></thead><tbody>${columns.map(([label,value])=>`<tr><th scope="row">${esc(label)}</th><td>${num(value)}</td></tr>`).join('')}</tbody></table>${ref.notes.map(n=>`<p class="agro-meta">${esc(n)}</p>`).join('')}<p class="agro-meta">この表の輸出は域外輸出ではありません。地域の利用／域外輸出の帯やWorld比を作りません。</p><a href="${esc(ref.sourceUrl)}#page=${ref.pdfPage}">AFSIS ACO No.33 · 印刷p.${ref.printedPage}／PDF p.${ref.pdfPage}</a></details>`;
+}
 export function renderSoutheastAgroColumns(id:string,country=''){
  if(country){
   if(!packet.countryCodes.includes(country))return '<p>東南アジアの対象11か国から選んでください。</p>';
@@ -64,6 +69,6 @@ export function renderSoutheastAgroColumns(id:string,country=''){
   if(flow)return `<p class="agro-flow-period">${esc(flow.countryName)}全国 · 2024/25販売年度 · 米（精米換算）</p><div class="agro-columns"><section data-agro-stage="production">${renderAgroMarketingProduction(flow)}</section><section data-agro-stage="use">${renderAgroMarketingUse(flow)}<p>この輸出は域内相手も含む全外国向けです。</p></section><section data-agro-stage="destinations"><h3>③ 輸出先の量と構成比</h3><p>①②と同じ販売年度・精米換算の全相手数量は未収録です。</p>${tradeReferences(id,country)}</section></div>${riceDetails(country)}`;
   return renderAgroColumns(data,country,id)+ (tradeReferences(id,country)||'')+forestryNote(id);
  }
- const riceReference=id==='rice-production'?`<details class="southeast-agro-reference"><summary>別期間の国別需給：精米・2024/25販売年度</summary><p>統計対象国を選ぶと、ミャンマー・タイ・ベトナム・インドネシア・フィリピンの同表生産／世界比・国内利用・輸出・在庫を確認できます。各国の輸出には域内向けを含み、5か国を地域全体へ合算しません。</p></details>`:'';
+ const riceReference=renderSoutheastAfsisSupplyReference(id)+(id==='rice-production'?`<details class="southeast-agro-reference"><summary>別期間の国別需給：精米・2024/25販売年度</summary><p>統計対象国を選ぶと、ミャンマー・タイ・ベトナム・インドネシア・フィリピンの同表生産／世界比・国内利用・輸出・在庫を確認できます。各国の輸出には域内向けを含み、5か国を地域全体へ合算しません。</p></details>`:'');
  return `<p class="agro-flow-period">地理的な東南アジア11か国（東ティモールを含む） · ${esc(southeastAgroLabel(id))}</p><div class="agro-columns"><section data-agro-stage="production">${production(id)}</section><section data-agro-stage="use"><h3>② 域内利用と域外輸出</h3><p>11か国の同年・同製品の用途・在庫と域内移動を照合できていません。域内利用量と地域外輸出量は未収録です。</p><p>生産−輸出を消費とは呼びません。輸入・再輸出・在庫・飼料・加工は独立した要素として扱います。</p>${riceReference}</section><section data-agro-stage="destinations"><h3>③ 域外輸出先の量と構成比</h3><p>11か国の地域外全相手行列は未収録です。国別の対世界輸出の合計を地域外貿易にしません。</p>${tradeReferences(id)}</section></div>${forestryNote(id)}`;
 }

@@ -63,6 +63,26 @@ test('five national rice balances use the historical milled table, not paddy min
  assert.notEqual(packet.riceBalances.VNM.production-packet.riceBalances.VNM.exports,packet.riceBalances.VNM.domesticUse);
 });
 
+test('independent AFSIS outlook totals remain ASEAN10 references with gross trade and no World ratio',async()=>withDom(w=>{
+ const raw=readFileSync('data-source/atlas/southeast-agro-20261016/aco33-tables-web.txt','utf8');
+ assert.equal(packet.supplyReferences.length,3);
+ for(const ref of packet.supplyReferences){
+  assert.ok(raw.includes(ref.rawLine));assert.equal(ref.countryCount,10);assert.equal(ref.year,2024);assert.equal(ref.unit,'t');
+  const values=ref.rawLine.split(': ASEAN ')[1].split(/\s+/).map(s=>Number(s.replaceAll(',','')));
+  assert.deepEqual(values,[ref.beginningStocks,ref.production,ref.imports,ref.totalSupply,ref.domesticUse,ref.exports,ref.endingStocks,ref.totalDemand]);
+  assert.equal(ref.beginningStocks+ref.production+ref.imports,ref.totalSupply);assert.equal(ref.domesticUse+ref.exports+ref.endingStocks,ref.totalDemand);
+  assert.equal(ref.externalExports,null);assert.equal(ref.worldProduction,null);assert.notEqual(ref.production-ref.exports,ref.domesticUse);
+  const root=parse(w,api.renderSoutheastAfsisSupplyReference(ref.seriesId));
+  assert.match(root.textContent,/ASEAN10.*見通し.*東ティモールを含まない/s);assert.match(root.textContent,/推計.*確報ではない/s);
+  assert.match(root.textContent,/域内移動を含む.*域外貿易へ変換しない/s);assert.equal(root.querySelectorAll('.agro-band,.agro-partner-pie,.agro-world-pie').length,0);
+  assert.equal(root.querySelectorAll('tbody tr').length,8);assert.match(root.querySelector('a').href,new RegExp('#page='+ref.pdfPage+'$'));
+ }
+ assert.equal(packet.supplyReferences.find(r=>r.seriesId==='rice-production').domesticUse,109836889);
+ assert.equal(packet.supplyReferences.find(r=>r.seriesId==='maize-production').domesticUse,54738479);
+ assert.equal(packet.supplyReferences.find(r=>r.seriesId==='cassava-production').domesticUse,48395985);
+ assert.equal(api.renderSoutheastAfsisSupplyReference('qcl-254-production'),'');
+}));
+
 test('all returned WITS quantities exclude eleven-country internal partners and unallocated areas',()=>{
  for(const trade of packet.tradeReferences){
   assert.equal(trade.classification,'HS 1988/92 (H0)');assert.equal(trade.year,2023);assert.equal(trade.unit,'t');

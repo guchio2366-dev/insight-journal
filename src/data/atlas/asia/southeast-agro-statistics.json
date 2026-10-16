@@ -7282,6 +7282,98 @@
       "definition": "Gross exports。再輸出を含み得る通関上の仕向けで、国産由来・最終消費地を追跡しない。未掲載取引を0と仮定しない。"
     }
   ],
+  "supplyReferences": [
+    {
+      "seriesId": "rice-production",
+      "label": "米（精米）",
+      "year": 2024,
+      "period": "提供元の2024作物年度・見通し",
+      "scope": "刊行当時のASEAN10か国（東ティモールを含まない）",
+      "countryCount": 10,
+      "unit": "t",
+      "beginningStocks": 29723978,
+      "production": 128531404,
+      "imports": 10759283,
+      "totalSupply": 169014665,
+      "domesticUse": 109836889,
+      "exports": 19172606,
+      "endingStocks": 40005170,
+      "totalDemand": 169014665,
+      "externalExports": null,
+      "worldProduction": null,
+      "rawLine": "L671@P19: ASEAN 29,723,978 128,531,404 10,759,283 169,014,665 109,836,889 19,172,606 40,005,170 169,014,665",
+      "sourceUrl": "https://www.aptfsis.org/wp-content/uploads/aco-pdfs/ACO%20No.33.pdf",
+      "table": 8,
+      "pdfPage": 20,
+      "printedPage": 7,
+      "quality": "2024年12月刊行の見通し。国内利用等にAFSIS Secretariat推計を含む。確報ではない。",
+      "notes": [
+        "域内移動を含む国別輸出入の公表合計。域外貿易へ変換しない。",
+        "国内利用は公表Total Domestic Utilization。食用・飼料・加工等の内訳は未収録で、国産由来だけの量でもない。",
+        "生産年の期間は国の作期により異なる。FAO2024暦年の地理11か国生産やWASDE2024/25国別需給とは接続しない。"
+      ]
+    },
+    {
+      "seriesId": "maize-production",
+      "label": "トウモロコシ",
+      "year": 2024,
+      "period": "提供元の2024作物年度・見通し",
+      "scope": "刊行当時のASEAN10か国（東ティモールを含まない）",
+      "countryCount": 10,
+      "unit": "t",
+      "beginningStocks": 5307871,
+      "production": 38789891,
+      "imports": 19936579,
+      "totalSupply": 64034341,
+      "domesticUse": 54738479,
+      "exports": 2094627,
+      "endingStocks": 7201235,
+      "totalDemand": 64034341,
+      "externalExports": null,
+      "worldProduction": null,
+      "rawLine": "L1520@P37: ASEAN 5,307,871 38,789,891 19,936,579 64,034,341 54,738,479 2,094,627 7,201,235 64,034,341",
+      "sourceUrl": "https://www.aptfsis.org/wp-content/uploads/aco-pdfs/ACO%20No.33.pdf",
+      "table": 23,
+      "pdfPage": 38,
+      "printedPage": 25,
+      "quality": "2024年12月刊行の見通し。国内利用等にAFSIS Secretariat推計を含む。確報ではない。",
+      "notes": [
+        "域内移動を含む国別輸出入の公表合計。域外貿易へ変換しない。",
+        "国内利用は公表Total Domestic Utilization。食用・飼料・加工等の内訳は未収録で、国産由来だけの量でもない。",
+        "生産年の期間は国の作期により異なる。FAO2024暦年の地理11か国生産やWASDE2024/25国別需給とは接続しない。"
+      ]
+    },
+    {
+      "seriesId": "cassava-production",
+      "label": "キャッサバ（生鮮根）",
+      "year": 2024,
+      "period": "提供元の2024作物年度・見通し",
+      "scope": "刊行当時のASEAN10か国（東ティモールを含まない）",
+      "countryCount": 10,
+      "unit": "t",
+      "beginningStocks": 8711340,
+      "production": 75183936,
+      "imports": 9717540,
+      "totalSupply": 93612816,
+      "domesticUse": 48395985,
+      "exports": 30182113,
+      "endingStocks": 15034718,
+      "totalDemand": 93612816,
+      "externalExports": null,
+      "worldProduction": null,
+      "rawLine": "L3998@P87: ASEAN 8,711,340 75,183,936 9,717,540 93,612,816 48,395,985 30,182,113 15,034,718 93,612,816",
+      "sourceUrl": "https://www.aptfsis.org/wp-content/uploads/aco-pdfs/ACO%20No.33.pdf",
+      "table": 68,
+      "pdfPage": 88,
+      "printedPage": 75,
+      "quality": "2024年12月刊行の見通し。国内利用等にAFSIS Secretariat推計を含む。確報ではない。",
+      "notes": [
+        "域内移動を含む国別輸出入の公表合計。域外貿易へ変換しない。",
+        "国内利用は公表Total Domestic Utilization。食用・飼料・加工等の内訳は未収録で、国産由来だけの量でもない。",
+        "生産年の期間は国の作期により異なる。FAO2024暦年の地理11か国生産やWASDE2024/25国別需給とは接続しない。"
+      ]
+    }
+  ],
   "sources": [
     {
       "path": "public/assets/atlas/regional-production-statistics-v1/statistics.json",
@@ -7314,6 +7406,14 @@
     {
       "path": "data-source/atlas/southeast-agro-20261016/wits-web-tail.txt",
       "sha256": "dd82a90fd24c81e0b8d19809c51a0b8492f1809c2554a56e8cd8b219f48a10d7"
+    },
+    {
+      "path": "data-source/atlas/southeast-agro-20261016/aco33-tables-web.txt",
+      "sha256": "bdd68a8045f1bf3ed768bb000dad73c03661d3bc2301e5dfb5bfef2e75e5fefd"
+    },
+    {
+      "path": "data-source/atlas/southeast-agro-20261016/aco33-publication-web.txt",
+      "sha256": "3a6ab41e9fa5402a622072271c9ea9a761b5f4205215aa8769890dd55698fd52"
     }
   ],
   "method": "同版FAOSTAT保存値。地理的東南アジア11か国。公表地域行と保存国合計を区別し、欠測を0にしない。"
