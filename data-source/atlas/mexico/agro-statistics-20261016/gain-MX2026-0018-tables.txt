@@ -1,0 +1,46 @@
+USDA FAS GAIN MX2026-0018, 2026-03-13
+URL: https://apps.fas.usda.gov/newgainapi/api/Report/DownloadReportByFileName?fileName=Grain+and+Feed+Annual_Mexico+City_Mexico_MX2026-0018
+Retrieval: official public PDF text returned by web tool on 2026-10-16.
+Retained excerpt only, not a downloaded PDF. PDF pages are zero-based after @P; printed page numbers are one greater.
+Numeric columns: 2024/2025 USDA Official, New Post; 2025/2026 USDA Official, New Post; 2026/2027 USDA Official, New Post.
+Only first USDA Official column is adopted. No forecasts or post estimates are substituted.
+L407@P11: WHEAT
+L408@P11: Table 3. Mexico, Wheat Production, Supply and Distribution
+L409@P11: Wheat 2024/2025 2025/2026 2026/2027
+L410@P11: Market Year Begins Jul 2024 Jul 2025 Jul 2026
+L411@P11: Mexico USDA Official New Post USDA Official New Post USDA Official New Post
+L412@P11: Area Harvested (1000 HA) 468 468 320 320 0 390
+L413@P11: Beginning Stocks(1000 MT) 775 775 795 895 0 345
+L414@P11: Production (1000 MT) 2648 2648 1750 1750 0 2100
+L415@P11: MY Imports(1000 MT) 5607 5607 6200 5800 0 6200
+L416@P11: Total Supply (1000 MT) 9030 9030 8745 8445 0 8645
+L417@P11: MY Exports(1000 MT) 135 135 100 100 0 100
+L418@P11: Feed and Residual (1000 MT) 300 200 200 200 0 200
+L419@P11: FSI Consumption (1000 MT) 7800 7800 7900 7800 0 7850
+L420@P11: Total Consumption (1000 MT) 8100 8000 8100 8000 0 8050
+L421@P11: Ending Stocks(1000 MT) 795 895 545 345 0 495
+L422@P11: Total Distribution (1000 MT) 9030 9030 8745 8445 0 8645
+L423@P11: Yield (MT/HA) 5.6581 5.6581 5.4688 5.4688 0 5.3846
+L424@P11: (1000 HA), (1000 MT), (MT/HA)
+L425@P11: MY = Marketing Year, begins with the month listed at the top of each column
+L426@P11: TY = Trade Year, which for Wheat begins in July for all countries. TY 2026/2027 = July 2026 - June 2027
+L676@P20: SORGHUM
+L677@P20: Table 5. Mexico, Sorghum Production, Supply and Distribution
+L678@P20: Sorghum 2024/2025 2025/2026 2026/2027
+L679@P20: Market Year Begins Oct 2024 Oct 2025 Oct 2026
+L680@P20: Mexico USDA Official New Post USDA Official New Post USDA Official New Post
+L681@P20: Area Harvested (1000 HA) 1200 1200 1240 850 0 1000
+L682@P20: Beginning Stocks(1000 MT) 269 269 230 280 0 179
+L683@P20: Production (1000 MT) 4200 4150 4300 2900 0 3500
+L684@P20: MY Imports(1000 MT) 562 562 500 800 0 500
+L685@P20: Total Supply (1000 MT) 5031 4981 5030 3980 0 4179
+L686@P20: MY Exports(1000 MT) 1 1 1 1 0 1
+L687@P20: Feed and Residual (1000 MT) 4700 4600 4700 3700 0 3800
+L688@P20: FSI Consumption (1000 MT) 100 100 100 100 0 100
+L689@P20: Total Consumption (1000 MT) 4800 4700 4800 3800 0 3900
+L690@P20: Ending Stocks(1000 MT) 230 280 229 179 0 278
+L691@P20: Total Distribution (1000 MT) 5031 4981 5030 3980 0 4179
+L692@P20: Yield (MT/HA) 3.5 3.4583 3.4677 3.4118 0 3.5
+L693@P20: (1000 HA), (1000 MT), (MT/HA)
+L694@P20: MY = Marketing Year, begins with the month listed at the top of each column
+L695@P20: TY = Trade Year, which for Sorghum begins in October for all countries. TY 2026/2027 = October 2026 - September 2027

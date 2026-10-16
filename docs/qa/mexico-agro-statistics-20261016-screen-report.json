@@ -1,0 +1,36 @@
+{
+  "status": "blocked",
+  "baseCommit": "3fbb4c957c21685bddbf8148a95a2a03ba210553",
+  "sourceState": "Regional working-tree implementation on the recorded base; no successful screenshot of a clean committed head.",
+  "startedAt": "2026-10-16T03:51:29.447Z",
+  "completedAt": "2026-10-16T03:51:29.772Z",
+  "profiles": [
+    {
+      "width": 1896,
+      "height": 996
+    },
+    {
+      "width": 1280,
+      "height": 665
+    }
+  ],
+  "deviceScaleFactor": 1.5,
+  "scenes": [
+    "overview",
+    "corn",
+    "cotton",
+    "rice",
+    "wheat",
+    "sorghum",
+    "coffee",
+    "pine"
+  ],
+  "capturedSceneCount": 0,
+  "plannedSceneCount": 16,
+  "sandboxEnabled": true,
+  "chromiumError": "[pid=3318][err] [3318:3318:1016/035129.761643:FATAL:sandbox/linux/suid/client/setuid_sandbox_host.cc:166] The SUID sandbox helper binary was found, but is not configured correctly. Rather than run without sandboxing I'm aborting now. You need to make sure that /usr/lib/chromium/chrome-sandbox is owned by root and has mode 4755.",
+  "managedBrowserAction": "cloud-agent-browser-runtime ensure",
+  "managedBrowserError": "BROWSER_CONFIG_AUTH_TOKEN is required",
+  "userPcConnected": false,
+  "configurationOrPermissionsChanged": false
+}

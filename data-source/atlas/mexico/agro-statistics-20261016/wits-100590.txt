@@ -1,0 +1,5 @@
+World Bank WITS / UN Comtrade public table
+URL: https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/100590
+Observed 2026-10-16 through web tool. Transcription of numerical table; not original HTML. No mirror imports or third-party estimates.
+Observed official table: World 12,224,000 Kg; United States 4,230,580 Kg; Cuba 7,972,500 Kg; Costa Rica 20,963 Kg.
+HS Nomenclature used HS 1988/92 (H0). Exports is gross exports. Page Refreshed Sep-19-2026 21:05 ET.

@@ -1,0 +1,23 @@
+World Bank WITS / UN Comtrade public table
+URL: https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/090111
+Observed 2026-10-16 through web tool. Transcription of numerical table; not original HTML. No mirror imports or third-party estimates.
+L19: Reporter  | TradeFlow  | ProductCode  | Product Description  | Year  | Partner  | Trade Value 1000USD  | Quantity  | Quantity Unit
+L20:  Mexico  | Export  | 090111  | Coffee, not roasted or decaffeinated  | 2024  | 【2†World】  | 376,926.26  | 75,024,400  | Kg
+L21:  Mexico  | Export  | 090111  | Coffee, not roasted or decaffeinated  | 2024  | 【3†United States】  | 243,061.40  | 48,135,100  | Kg
+L22:  Mexico  | Export  | 090111  | Coffee, not roasted or decaffeinated  | 2024  | 【4†Belgium】  | 57,755.55  | 11,468,100  | Kg
+L23:  Mexico  | Export  | 090111  | Coffee, not roasted or decaffeinated  | 2024  | 【5†Germany】  | 32,086.02  | 6,570,810  | Kg
+L24:  Mexico  | Export  | 090111  | Coffee, not roasted or decaffeinated  | 2024  | 【6†France】  | 12,557.29  | 2,523,120  | Kg
+L25:  Mexico  | Export  | 090111  | Coffee, not roasted or decaffeinated  | 2024  | 【7†Italy】  | 9,944.16  | 2,066,370  | Kg
+L26:  Mexico  | Export  | 090111  | Coffee, not roasted or decaffeinated  | 2024  | 【8†Canada】  | 8,983.24  | 1,836,270  | Kg
+L27:  Mexico  | Export  | 090111  | Coffee, not roasted or decaffeinated  | 2024  | 【9†Japan】  | 3,393.90  | 647,625  | Kg
+L28:  Mexico  | Export  | 090111  | Coffee, not roasted or decaffeinated  | 2024  | 【10†Australia】  | 3,310.29  | 644,272  | Kg
+L29:  Mexico  | Export  | 090111  | Coffee, not roasted or decaffeinated  | 2024  | 【11†Vietnam】  | 1,669.91  | 322,575  | Kg
+L30:  Mexico  | Export  | 090111  | Coffee, not roasted or decaffeinated  | 2024  | 【12†Spain】  | 1,259.43  | 235,341  | Kg
+L31:  Mexico  | Export  | 090111  | Coffee, not roasted or decaffeinated  | 2024  | 【13†Sweden】  | 966.85  | 205,275  | Kg
+L32:  Mexico  | Export  | 090111  | Coffee, not roasted or decaffeinated  | 2024  | 【14†Switzerland】  | 816.80  | 153,806  | Kg
+L33:  Mexico  | Export  | 090111  | Coffee, not roasted or decaffeinated  | 2024  | 【15†United Kingdom】  | 614.64  | 117,801  | Kg
+L34:  Mexico  | Export  | 090111  | Coffee, not roasted or decaffeinated  | 2024  | 【16†Ireland】  | 491.15  | 94,875  | Kg
+L35:  Mexico  | Export  | 090111  | Coffee, not roasted or decaffeinated  | 2024  | 【17†China】  | 15.65  | 3,030  | Kg
+L36: HS Nomenclature used HS 1988/92 (H0)
+L37: HS Code 090111: Coffee, not roasted or decaffeinated
+L38: Please note: Exports is gross exports and Imports is gross imports
