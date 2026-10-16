@@ -59,3 +59,15 @@ URL・時刻・原エラーと公開ページで確認できた範囲は `data-s
 - 共通ファイルの実変更なし。提案パッチの `git apply --check` 通過。
 - 生産buildは `ASTRO_TELEMETRY_DISABLED=1 npm run build` で成功（通常設定でtelemetryが書込不能なホームへ保存しようとする問題を回避する公式オプトアウト環境変数。依存・設定は変更していない）。統合checkoutでのbuild・静的E2E・release検証結果は下記追記。
 - 指定1896×996／1280×665 CSS px・DPR1.5の撮影scriptを用意。地図のready・三列順序・地図下・横溢れ・参考展開・林産物切替・概説復元を確認し、map／統計の画像とreportを保存する。ローカルクラウドの通常sandbox付きChromiumはSUID helper構成不備で起動失敗。sandbox無効化、所有者／権限変更、利用者PC接続は行っていない。実画像・目視は未達で、正常なsandbox付きクラウドrunnerでこのscriptの実行が必要。
+
+## 最終検証と引継ぎ
+
+実装commit `29f87f73` に提案パッチを適用した隔離worktree `/workspace/south-asia-agro-integration` で検証した。地域専用ブランチ自体の共通部品はmainと同一。生産build成功、地域moduleのJS生成24,337 bytesを確認。全単体は **1,446 pass / 3 skip / 0 fail**（うち新規13件）。南中央アジアとAsia workspaceの静的・DOM E2Eは **7 pass / 4 skip / 0 fail**。4件は実ブラウザの明示的opt-inが必要な既存テストであり、画面検証通過を意味しない。`npm run verify:release` 成功。ローカルbuildのrelease識別子は `local` で、公開物またはdirty proposalを含まない確定commitの画面とは呼ばない。
+
+全95ファイルの `npm run test:e2e` も開始したが、南アジア外のDOM検証が長時間続くため中断（exit130）。全域E2E完走とは報告しない。上記の対象地域・配置のE2Eを個別に完走した。統合担当の通常CIでの全域E2Eは別途必要。
+
+`capture-south-asia-agro-review.mjs` の実行結果は **blocked-browser-launch / 0件撮影**。失敗対象は `/usr/bin/chromium` の通常sandbox起動。エラーは `The SUID sandbox helper binary was found, but is not configured correctly`。実画面の三列配置、横溢れ、地図可読性、DPRは未検証のまま。指定二サイズ・DPRとエラー全文は `docs/review/south-asia-agro-20261016/` に保存した。
+
+統合手順：地域実装commitと検証記録を取り込み、`git apply --check docs/patches/south-asia-agro-controller-20261016.patch` 後に統合担当が共通controllerへ適用する。他地域担当の同じcontroller変更があれば地域dispatcherへまとめる。提案パッチのSHA-256は `3570f1c339914d766163e09fae284ef6c7b25d45d1feae8cb3059a4986d80720`。接続時のcontroller SHAと生成JS SHAはverification JSONで追跡できる。
+
+正常なsandbox付きクラウドrunnerで、通常build後に `REVIEW_CHROME_PATH=/path/to/chrome node scripts/capture-south-asia-agro-review.mjs` を実行して22ケース＋操作の画像を確認する。再現用のテストは `node --test tests/unit/atlas-south-asia-agro-*.test.mjs` と `node --test tests/e2e/atlas-south-central-overview.test.mjs tests/e2e/atlas-south-central-focus.test.mjs tests/e2e/atlas-asia-workspace.test.mjs`。利用者PCへの接続は不要。
