@@ -98,9 +98,16 @@
     "cloud screenshots and human visual review"
   ],
   "remoteActions": {
-    "push": false,
+    "push": true,
     "pullRequest": false,
     "merge": false,
     "publish": false
+  },
+  "delivery": {
+    "implementationCommit": "ee207ff991b32c508a93f6e5f5755faeac4aff5d",
+    "remoteImplementationShaVerified": "ee207ff991b32c508a93f6e5f5755faeac4aff5d",
+    "branch": "origin/codex/central-asia-agro-20261016",
+    "authorization": "Parent follow-up explicitly authorized commit and push of this regional change; PR, merge and publication remain with the integration owner.",
+    "followupScope": "Additional official public-source audit only; tested runtime code is unchanged."
   }
 }

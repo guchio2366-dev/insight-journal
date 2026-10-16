@@ -67,4 +67,19 @@
 
 クラウドの `/usr/bin/chromium` は `chromiumSandbox:true` で起動失敗。`The SUID sandbox helper binary was found, but is not configured correctly`。sandbox無効化・OS権限変更はしない。1896×996 CSS px / 1280×665 CSS px、DPR1.5の実画面は0件で、目視・レイアウト・地図描画の最終確認は未達。ユーザーPCは不要。正常なsandbox付きクラウド環境で `node scripts/verify-central-asia-agro.mjs` を実行すると、地図/三列・ニュース幅除外・はみ出し・林業切替・国選択/戻る/再読込を検査して画像とreportを保存する。
 
-PR作成・push・マージ・公開は行わない。
+PR作成・マージ・公開は行っていない。
+
+## commit・push承認後の追加調査
+
+親担当から今回の地域専用差分のcommit・pushを明示承認されたため、実装を `ee207ff991b32c508a93f6e5f5755faeac4aff5d` にcommitし、`origin/codex/central-asia-agro-20261016` へpushした。`git ls-remote --heads` でこの実装SHAとの一致を確認した。共通hook提案は引き続き未適用で、PR・マージ・公開と実画面確認は統合担当へ引き継ぐ。
+
+追加で取得できた公式公開表の監査記録を `data-source/atlas/central-asia/agriculture/official-source-followup-20261016.json` に保存した。比較可能な中央アジア需給・全相手数量の追加は0件。入手できた資料を以下の理由で不適切に主統計へ接合していない。
+
+|公式別配布先・確認結果|補完できた内容／残る具体的な不足|
+|---|---|
+|[FAO Forest product data](https://www.fao.org/forestry/statistics/data/en)：公開表を取得|2024年Worldの丸め値（丸太3,905百万m³、製材445百万m³、木材パルプ189百万t、非木材繊維パルプ10百万tなど）を監査JSONへ保存。中央アジア5か国の生産/輸入/輸出、全相手数量、在庫、製品コード・旗は掲載されず、同版の精密World原行は取得できていない。木材/非木材パルプを合算せず、既存分母も置き換えない。|
+|[FAO Analytical Brief 121・2010–2024](https://doi.org/10.4060/cd8035en)：公開メタデータからPDF本文まで取得|脚注1は油糧作物集計で未繰綿を綿実換算し、図17もCotton seed表記。この集計をQCL328未繰綿の精密Worldへ転用できない。必要行はWorld/2024/QCL328/5510/t/Value/Flag/同版識別子。羊975・山羊1017についても、5か国＋Worldの同版2024年・5510・t・旗が必要。旧Brief96は2023年で代用不可。|
+|[カザフスタン農産物資源・用途バランス配布一覧](https://stat.gov.kz/ru/industries/businessstatistics/stat-forrest-village-hunt-fish/spreadsheets/)と[2025年XLSX配布リンク](https://stat.gov.kz/api/iblock/element/335599/file/ru/)を特定|2026-08-28公表の2025年版へリンク解決することを確認した。公開readerはセルを解析できずZIPバイナリ文字列を返し、Python通常保存は `Tunnel connection failed: 403 Forbidden` で停止。別経路での再保存はしない。2024年版を公開画面から選ぶ通常ブラウザ操作も行ったが、対象の選択肢へ到達できず正確な2024年URLは未確定。2025年版に歴年2024列があるかも未検証。提供が必要なのは品目コード・年・単位・期首在庫・生産・輸入・輸出・食用/飼料/加工/種子/損失/その他/調整・期末在庫・改訂記号の列。|
+|[UNECE forest production/trade配布ページ](https://unece.org/forests/data-forest-products-production-and-trade)|別の公式配布入口も調査したが `bot_blocked`。stealth/proxy/認証や別tool再試行を行わず停止。必要なのは5か国の2024年実績（予測と区別）、丸太/製材/パルプの製品コード・生産/輸入/輸出・単位・相手・旗・在庫・樹皮基準。|
+
+公開ブラウザの2024年配布先照会runは `daf2586f-2e76-49ae-a2d4-ec7f8ccd9f72`。2025年の既知拒否ファイルを再取得しない条件で、通常の公開フィルタだけを操作した。安全設定は変更していない。repo内の既存CSVも再確認したが、2024年QCL328/975/1017の該当World/5か国行はなかった。
