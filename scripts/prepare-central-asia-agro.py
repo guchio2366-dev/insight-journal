@@ -12,6 +12,7 @@ SOURCE = Path('public/assets/atlas/regional-production-statistics-v1/statistics.
 OUTPUT = Path('src/data/atlas/central-asia-agro-production.json')
 COUNTRIES = ['KAZ', 'KGZ', 'TJK', 'TKM', 'UZB']
 SERIES = ['wheat-production', 'qcl-328-production', 'maize-production',
+          'rice-production',
           'cattle-meat', 'cattle-milk', 'sheep-meat', 'goat-production',
           'roundwood-production', 'sawnwood-production']
 

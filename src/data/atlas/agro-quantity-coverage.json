@@ -348,12 +348,20 @@
           "sourceReportSha256": "7c597dadd4fcb513d31f15588b427e82be05323f039e061fbd314a799bcdd1a9",
           "integrated": true,
           "regionalSourceTestsPassed": true,
-          "regionalApplicationAndDataMatchSource": true,
+          "regionalApplicationAndDataMatchSource": false,
           "sourceAuditVerified": false,
           "sourceAuditNote": "Regional source/hash/extraction tests passed. This does not certify every missing mandatory record or convert all new native packets to the common quantity contract.",
           "integrationAdjustedFiles": [
-            "scripts/verify-central-asia-agro.mjs"
-          ]
+            "scripts/verify-central-asia-agro.mjs",
+            "scripts/prepare-central-asia-agro.py",
+            "src/lib/atlas-central-asia-agro.ts",
+            "src/data/atlas/central-asia-agro-production.json"
+          ],
+          "integrationFollowup": {
+            "baselineIntegratedHead": "a65cf1379edd79586334e9c432548a27a6294612",
+            "reason": "Integration follow-up reuses retained QCL2024 item27 paddy-rice rows for all five countries and the same published World; quantity uses and partners remain unavailable.",
+            "dataCompletionClaimed": false
+          }
         }
       ],
       "records": [
@@ -516,12 +524,21 @@
           "sourceReportSha256": "145bb41f96ed2c8f52d5848814301c510f8274888bab2fd7341c163ad6efd527",
           "integrated": true,
           "regionalSourceTestsPassed": true,
-          "regionalApplicationAndDataMatchSource": true,
+          "regionalApplicationAndDataMatchSource": false,
           "sourceAuditVerified": false,
           "sourceAuditNote": "Regional source/hash/extraction tests passed. This does not certify every missing mandatory record or convert all new native packets to the common quantity contract.",
           "integrationAdjustedFiles": [
+            "scripts/verify-latin-agro-quantity.mjs",
+            "scripts/prepare-latin-agro-quantity.py",
+            "public/assets/atlas/latin-agro-quantity-v1/data.json",
+            "src/styles/atlas-latin-agro-quantity.css",
             "scripts/verify-latin-agro-quantity.mjs"
-          ]
+          ],
+          "integrationFollowup": {
+            "baselineIntegratedHead": "a65cf1379edd79586334e9c432548a27a6294612",
+            "reason": "Integration follow-up changes only Other Asia, nes geography from external to unresolved; all raw quantities, source flags, national totals and partner denominators are preserved. The selected partner table also preserves numeric strings on one line at the requested narrow PC width; page/map dimensions are unchanged.",
+            "dataCompletionClaimed": false
+          }
         }
       ],
       "records": [

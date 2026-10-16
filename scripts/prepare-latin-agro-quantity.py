@@ -19,7 +19,9 @@ INTERNAL = {'Argentina', 'Bolivia', 'Brazil', 'Chile', 'Colombia', 'Costa Rica',
             'Guatemala', 'Guyana', 'Paraguay', 'Peru', 'Uruguay', 'Venezuela',
             'Panama', 'Antigua and Barbuda',
             'Bahamas, The'}
-UNRESOLVED = {'Free Zones'}
+# Statistical/customs areas cannot be assigned to this editorial boundary.
+# Preserve their raw names and quantities; neither is an external country.
+UNRESOLVED = {'Free Zones', 'Other Asia, nes'}
 
 
 def number(raw):

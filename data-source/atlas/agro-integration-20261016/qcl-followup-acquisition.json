@@ -1,0 +1,11 @@
+{
+  "url": "https://bulks-faostat.fao.org/production/Production_Crops_Livestock_E_All_Data_(Normalized).zip",
+  "method": "urllib.request ordinary GET, default TLS and environment network settings",
+  "at": "2026-10-16T05:54:58.825544+00:00",
+  "parentConfirmedNormalOfficialDownload": true,
+  "attemptsThisFollowup": 1,
+  "adopted": false,
+  "result": "blocked-or-failed",
+  "error": "URLError(OSError('Tunnel connection failed: 403 Forbidden'))",
+  "furtherRetrievalStopped": true
+}

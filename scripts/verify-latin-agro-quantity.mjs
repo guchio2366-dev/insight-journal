@@ -43,7 +43,17 @@ try{
    await page.screenshot({path:resolve(out,`${viewport.width}-${code}-map.png`)});
    await primary.scrollIntoViewIfNeeded();await page.screenshot({path:resolve(out,`${viewport.width}-${code}-statistics.png`)});
    if(code==='PRY')assert.match(await marker.innerText(),/Argentina.*対象34国・地域内.*86.19%/s);
-   if(code==='BRA'){assert.equal(await marker.locator('.latin-partner-track').count(),0);assert.match(await marker.innerText(),/販売年度の相手数量は未収録/);}
+   if(code==='BRA'){
+    assert.equal(await marker.locator('.latin-partner-track').count(),0);assert.match(await marker.innerText(),/販売年度の相手数量は未収録/);
+    const unresolved=marker.locator('tbody tr').filter({hasText:'Other Asia, nes'});
+    const summaries=await unresolved.evaluate(row=>{const texts=[];let parent=row.parentElement;while(parent){if(parent.tagName==='DETAILS'&&!parent.open)texts.push(parent.querySelector(':scope > summary').textContent);parent=parent.parentElement;}return texts.reverse();});
+    for(const text of summaries)await page.getByText(text,{exact:true}).click();
+    await unresolved.scrollIntoViewIfNeeded();assert.equal(await unresolved.isVisible(),true);
+    assert.match(await unresolved.innerText(),/地理区分未確定/);assert.doesNotMatch(await unresolved.innerText(),/対象34国・地域外/);
+    assert.equal(await unresolved.locator('td').evaluateAll(cells=>cells.every(cell=>{const range=document.createRange();range.selectNodeContents(cell);return range.getClientRects().length===1;})),true,'quantity and share cells stay on one readable line');
+    await page.screenshot({path:resolve(out,`${viewport.width}-BRA-unassigned-partner.png`)});
+    report.operations.push({name:'unassigned-partner-is-not-external',viewport,passed:true});
+   }
    if(code==='URY')assert.match(await marker.innerText(),/Free Zones/);
    report.cases.push({name:code,viewport,...metrics});
   }

@@ -50,6 +50,7 @@ test('Latin national partner denominators preserve internal trade, null World ce
  assert.equal(row('BRA').exports,null);assert.equal(row('BRA').imports,null);
  assert.equal(row('BRA').partners.find(p=>p.name==='Bulgaria').tonnes,null);
  assert.equal(row('BRA').partners.find(p=>p.name==='Aruba').region,'external','boundary is the existing closed 34-target set');
+ assert.equal(row('BRA').partners.find(p=>p.name==='Other Asia, nes').region,'unresolved','statistical area is not assigned outside the region');
  const brazil=dom(api.renderLatinDestinations(row('BRA'),true));
  assert.equal(brazil.document.querySelectorAll('.latin-partner-track,.agro-partner-pie').length,0);
  assert.match(brazil.document.body.textContent,/販売年度の相手数量は未収録/);

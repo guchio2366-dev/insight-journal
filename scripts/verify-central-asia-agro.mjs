@@ -20,12 +20,14 @@ try{
   const page=await browser.newPage({viewport,deviceScaleFactor:1.5});page.on('pageerror',e=>report.errors.push(e.message));
   const ready=()=>page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true');
   for(const [name,query,host]of [
+   ['regional-rice','?topic=rice','[data-central-agro-region]'],
    ['regional-wheat','?topic=wheat','[data-central-agro-region]'],
    ['regional-cotton','?topic=cotton','[data-central-agro-region]'],
    ['regional-cattle','?topic=cattle','[data-central-agro-region]'],
    ['regional-forest','?topic=forest','[data-central-agro-region]'],
    ['kazakhstan-wheat','?topic=wheat&place=KAZ','[data-agro-statistics]'],
    ['uzbekistan-forest','?topic=forest&place=UZB','[data-agro-statistics]'],
+   ['uzbekistan-rice','?topic=rice&place=UZB','[data-agro-statistics]'],
   ]){
    await page.goto(origin+query,{waitUntil:'networkidle'});await ready();const panel=page.locator(host);await panel.waitFor({state:'visible'});
    if(host==='[data-agro-statistics]')await page.waitForFunction(()=>document.querySelector('[data-agro-statistics]')?.dataset.agroReady==='true');
@@ -33,6 +35,11 @@ try{
    const dimensions=await panel.evaluate(node=>{const r=node.getBoundingClientRect(),map=document.querySelector('.asia-map-frame').getBoundingClientRect(),rail=document.querySelector('.atlas-news-rail')?.getBoundingClientRect();return {dpr:devicePixelRatio,overflow:document.documentElement.scrollWidth>innerWidth,overflowPanel:node.scrollWidth>node.clientWidth+1,left:r.left,top:r.top,mapBottom:map.bottom,railRight:rail?.right,columns:[...node.querySelectorAll('.agro-columns>section')].map(n=>{const b=n.getBoundingClientRect();return {x:b.x,y:b.y,width:b.width};})};});
    assert.equal(dimensions.dpr,1.5);assert.equal(dimensions.overflow,false);assert.equal(dimensions.overflowPanel,false);assert.equal(dimensions.columns.length,3);
    assert(dimensions.columns.every(c=>Math.abs(c.y-dimensions.columns[0].y)<2));assert(dimensions.top>=dimensions.mapBottom-1);
+   if(name==='regional-rice'){
+    assert.match(await panel.innerText(),/米（籾米）/);assert.match(await panel.innerText(),/1,193,722\.7/);
+    assert.match(await panel.innerText(),/820,223,277\.89/);assert.match(await panel.innerText(),/収録 5\/5か国/);
+    assert.equal(await panel.locator('[data-central-agro-series]').getAttribute('data-central-agro-series'),'rice-production');
+   }
    if(dimensions.railRight)assert(dimensions.left>=dimensions.railRight-1);
    await page.screenshot({path:resolve(out,`${viewport.width}-${name}-map.png`)});
    await panel.scrollIntoViewIfNeeded();await page.screenshot({path:resolve(out,`${viewport.width}-${name}-statistics.png`)});
@@ -52,6 +59,8 @@ try{
   await page.goBack();await page.locator('[data-central-agro-region]').waitFor({state:'visible'});
   assert.deepEqual(await page.locator('.asia-map-frame').evaluate(n=>({width:n.clientWidth,height:n.clientHeight})),frame);
   await page.reload({waitUntil:'networkidle'});await ready();await page.locator('[data-central-agro-region]').waitFor({state:'visible'});
+  await page.locator('[data-farming-topic]').selectOption('rice');await page.locator('[data-central-agro-series="rice-production"]').waitFor({state:'visible'});
+  assert.deepEqual(await page.locator('.asia-map-frame').evaluate(n=>({width:n.clientWidth,height:n.clientHeight})),frame);
   await page.goto(origin,{waitUntil:'networkidle'});await ready();assert.equal(await page.locator('[data-central-agro-region]').isVisible(),false);assert.equal(await page.locator('[data-south-central-farm-connections]').isVisible(),true);
   await page.close();
  }

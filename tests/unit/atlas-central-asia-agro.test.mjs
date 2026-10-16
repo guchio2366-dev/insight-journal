@@ -22,6 +22,11 @@ test('Central Asian production preserves all five original rows, World and sourc
   }
  }
  assert.equal(centralAgroProduction('wheat-production').value,28181615.46);
+ const rice=centralAgroProduction('rice-production');
+ assert.equal(rice.value,1193722.7);assert.equal(rice.world,820223277.89);assert.equal(rice.coverage,5);
+ assert.equal(rice.identity.item,'27');assert.equal(rice.identity.unit,'t');assert.match(rice.identity.definition,/籾米/);
+ assert.equal(rice.observations.find(o=>o.code==='TJK').row.flag,'I','retained imputation flag survives regional addition');
+ assert.deepEqual(centralAgroSeries('rice'),['rice-production']);
  assert.equal(centralAgroProduction('qcl-328-production').value,4139508.61);
  assert.equal(centralAgroProduction('qcl-328-production').world,null);
  assert.equal(centralAgroProduction('qcl-328-production').share,null,'cotton lint World cannot substitute for unginned cotton');
@@ -114,6 +119,8 @@ test('region adapter keeps overview, hides on field changes and survives asynchr
   explorer.dataset.field='natural';await settle();assert(region.hidden);
   explorer.dataset.field='agriculture';explorer.dataset.topic='overview';content.innerHTML=overview;await settle();assert(region.hidden);assert.equal(content.innerHTML,overview,'published unselected DOM restored byte for byte');
   assert.equal(root.querySelector('[data-south-central-farm-connections]').parentElement,root,'overview restores the original reference node and its place');
-  assert.deepEqual(centralAgroSeries('overview'),[]);assert.deepEqual(centralAgroSeries('rice'),[]);
+  explorer.dataset.topic='rice';await settle();assert(!region.hidden);assert.equal(region.querySelector('[data-central-agro-series]').dataset.centralAgroSeries,'rice-production');
+  assert.match(region.textContent,/米（籾米）/);assert.match(region.textContent,/1,193,722\.7/);
+  assert.deepEqual(centralAgroSeries('overview'),[]);
  }finally{api.disconnect();await w.happyDOM.close();}
 });

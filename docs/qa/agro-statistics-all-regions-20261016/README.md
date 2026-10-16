@@ -2,6 +2,8 @@
 
 **全域完成・公開済みではない。必須原表の不足が残るため、マージとPages公開は保留。**
 
+追補：以下は初回統合と `a65cf1379edd79586334e9c432548a27a6294612` までの検証記録。以後の [保存済み原表・定義の再確認](../../atlas-agro-residual-triage-20261016.md) で中央アジア籾米の地域接続と中南米Other Asia, nesの区分修正を追加した。これらは担当元SHAとの差分としてcoverage metadataにも明記し、初回の「application/data一致」やCI結果を新差分の検証へ読み替えない。
+
 基準mainは軽量化公開済み `3fbb4c957c21685bddbf8148a95a2a03ba210553`。13地域の最終部分成果を統合したapplication commitは `58be943225b7fdef8bb68392c7e377571305007d`。後続 `a80a153fcf3156de1e089bb95b1b955e6f4ecfd9` は東南アジアの検証scriptで、林業画面の非表示ボタンではなく可視の「農畜産」タブから未選択へ戻る修正だけを含む。src/public/data-sourceとbuild設定は同一。
 
 最終成果の元SHA・原本一致確認は [regional-provenance.json](regional-provenance.json)。地域固有のapplication/dataは担当最終SHAと一致し、共通接続は南アジアcontroller、東アジアの参考、アフリカ林業pageなどの別ファイルへ追加した。日本専用、品目未選択時の新仕様、新しい年度選択UIは追加していない。ロシアの旧試作年度selectorも取り込んでいない。

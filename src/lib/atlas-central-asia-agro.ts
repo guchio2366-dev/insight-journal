@@ -4,8 +4,8 @@ import {agroBand,agroEscape as esc,agroNumber as number,agroUnit} from './atlas-
 import {agroMarketingYearFlow} from '../data/atlas/agro-marketing-year-flow.ts';
 
 export const centralAgroCountries:readonly string[]=production.countries;
-const topics:Record<string,string[]>={wheat:['wheat-production'],cotton:['qcl-328-production'],maize:['maize-production'],cattle:['cattle-meat','cattle-milk'],sheep:['sheep-meat'],goat:['goat-production'],forest:['roundwood-production','sawnwood-production']};
-const labels:Record<string,string>={'wheat-production':'小麦','qcl-328-production':'未繰綿（綿実を含む）','maize-production':'とうもろこし（子実）','cattle-meat':'牛肉','cattle-milk':'牛生乳','sheep-meat':'羊肉','goat-production':'山羊肉','roundwood-production':'丸太（燃料材を含む）','sawnwood-production':'製材'};
+const topics:Record<string,string[]>={rice:['rice-production'],wheat:['wheat-production'],cotton:['qcl-328-production'],maize:['maize-production'],cattle:['cattle-meat','cattle-milk'],sheep:['sheep-meat'],goat:['goat-production'],forest:['roundwood-production','sawnwood-production']};
+const labels:Record<string,string>={'rice-production':'米（籾米）','wheat-production':'小麦','qcl-328-production':'未繰綿（綿実を含む）','maize-production':'とうもろこし（子実）','cattle-meat':'牛肉','cattle-milk':'牛生乳','sheep-meat':'羊肉','goat-production':'山羊肉','roundwood-production':'丸太（燃料材を含む）','sawnwood-production':'製材'};
 const percent=(value:number)=>value>0&&value<.01?'0.01%未満':`${value.toLocaleString('ja-JP',{maximumFractionDigits:2})}%`;
 export const centralAgroSeries=(topic:string)=>topics[topic]??[];
 export const centralAgroLabel=(id:string)=>labels[id]??id;

@@ -8,4 +8,6 @@
 .latin-workspace .latin-partner-track i{display:block;height:100%;background:#3d7666}
 .latin-workspace [data-latin-quantity-error] button{display:block;margin-top:8px}
 .latin-workspace [data-latin-retained-statistics]>.agro-columns{margin-top:12px}
+.latin-workspace [data-latin-quantity-key] .agro-table-scroll table{table-layout:auto}
+.latin-workspace [data-latin-quantity-key] .agro-table-scroll td{white-space:nowrap}
 .latin-workspace [data-latin-forestry-statistics][hidden]{display:none!important}

@@ -344,6 +344,116 @@
       "sourceUrl": "https://www.fao.org/faostat/en/#data/QCL"
     },
     {
+      "id": "rice-production",
+      "label": "米生産量",
+      "year": 2024,
+      "identity": {
+        "domain": "QCL",
+        "item": "27",
+        "element": "5510",
+        "unit": "t",
+        "definition": "FAOSTAT Rice の生産量（籾米）。精米量ではありません。",
+        "archiveSha256": "c5835418c18f9322e7decbd6800f93a216eaae3cdfa31acb08f0518c0c6d6853"
+      },
+      "observations": [
+        {
+          "code": "KAZ",
+          "name": "Kazakhstan",
+          "row": {
+            "year": 2024,
+            "value": 512982.22,
+            "rawValue": "512982.22",
+            "flag": "A",
+            "note": null,
+            "worldValue": 820223277.89,
+            "worldRawValue": "820223277.890000",
+            "worldFlag": "A",
+            "share": 0.06254177780952908,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "KGZ",
+          "name": "Kyrgyzstan",
+          "row": {
+            "year": 2024,
+            "value": 48092.0,
+            "rawValue": "48092.0",
+            "flag": "A",
+            "note": null,
+            "worldValue": 820223277.89,
+            "worldRawValue": "820223277.890000",
+            "worldFlag": "A",
+            "share": 0.0058632815352077355,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "TJK",
+          "name": "Tajikistan",
+          "row": {
+            "year": 2024,
+            "value": 163548.83,
+            "rawValue": "163548.83",
+            "flag": "I",
+            "note": null,
+            "worldValue": 820223277.89,
+            "worldRawValue": "820223277.890000",
+            "worldFlag": "A",
+            "share": 0.01993954992605483,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "TKM",
+          "name": "Turkmenistan",
+          "row": {
+            "year": 2024,
+            "value": 85535.7,
+            "rawValue": "85535.7",
+            "flag": "A",
+            "note": null,
+            "worldValue": 820223277.89,
+            "worldRawValue": "820223277.890000",
+            "worldFlag": "A",
+            "share": 0.010428343392062469,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "UZB",
+          "name": "Uzbekistan",
+          "row": {
+            "year": 2024,
+            "value": 383563.95,
+            "rawValue": "383563.95",
+            "flag": "A",
+            "note": null,
+            "worldValue": 820223277.89,
+            "worldRawValue": "820223277.890000",
+            "worldFlag": "A",
+            "share": 0.046763358263460515,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        }
+      ],
+      "complete": true,
+      "productionRaw": "1193722.70",
+      "worldRaw": "820223277.890000",
+      "worldFlag": "A",
+      "sourceUrl": "https://www.fao.org/faostat/en/#data/QCL"
+    },
+    {
       "id": "cattle-meat",
       "label": "牛肉生産量",
       "year": 2024,
