@@ -19,26 +19,30 @@ async function page(query,run){
  try{await run({window,root,host,requests,settle,ready});}finally{await window.happyDOM.close();}
 }
 
-test('the built Russia page wires explicit years to the shared columns without changing the map or unselected references',async()=>page('',async({window,root,host,requests,settle,ready})=>{
+test('the built Russia page has dated statistics without a year selector and restores unselected references',async()=>page('',async({window,root,host,requests,settle,ready})=>{
  await settle(ready);
- const control=root.querySelector('[data-russia-agro-year-control]'),year=root.querySelector('[data-russia-agro-year]'),layer=root.querySelector('[data-layer]');
- const native=root.querySelector('.russia-farming-trade-grid');assert.equal(control.hidden,true);assert(!native.closest('[data-russia-agro-reference]'));
+ assert.equal(root.querySelector('[data-russia-agro-year-control],[data-russia-agro-year]'),null);
+ const layer=root.querySelector('[data-layer]'),native=root.querySelector('.russia-farming-trade-grid');
+ assert(!native.closest('[data-russia-agro-reference]'));
  layer.value='wheat';layer.dispatchEvent(new window.Event('change',{bubbles:true}));await settle(()=>ready()&&host.querySelector('[data-russia-wheat-supply]'));
- assert.equal(control.hidden,false);assert.equal(host.querySelector('[data-agro-stage="production"] .agro-world-pie'),null);
- const map=root.querySelector('[data-primary-map]').innerHTML,count=requests.length;
- year.value='2022';year.dispatchEvent(new window.Event('change',{bubbles:true}));await settle(()=>ready()&&host.querySelector('[data-agro-stage="production"]').textContent.includes('2022暦年'));
- assert.match(host.querySelector('[data-agro-stage="production"]').textContent,/104,233,944/);assert(host.querySelector('[data-agro-stage="production"] .agro-world-pie'));
- assert.equal(root.querySelector('[data-primary-map]').innerHTML,map);assert.equal(requests.length,count);
- const supply=host.querySelector('[data-russia-wheat-supply]');assert.match(supply.textContent,/2020\/21販売年度/);assert.equal(supply.closest('.agro-other-reference').open,false);
+ assert.match(host.querySelector('[data-agro-stage="production"]').textContent,/2024暦年/);
+ assert.equal(host.querySelector('[data-agro-stage="production"] .agro-world-pie'),null);
+ const map=root.querySelector('[data-primary-map]').innerHTML,count=requests.length,url=window.location.href;
+ const supply=host.querySelector('[data-russia-wheat-supply]');assert.match(supply.textContent,/別期間の参考：小麦2020\/21販売年度/);
+ const reference=supply.closest('.agro-other-reference');assert.equal(reference.open,false);reference.open=true;
+ assert.match(supply.textContent,/上の暦年統計と同じ収支ではありません/);
+ assert.equal(root.querySelector('[data-primary-map]').innerHTML,map);assert.equal(requests.length,count);assert.equal(window.location.href,url);
  layer.value='farming-all';layer.dispatchEvent(new window.Event('change',{bubbles:true}));await settle(ready);
- assert.equal(control.hidden,true);assert.equal(root.querySelector('.russia-farming-trade-grid'),native);assert(!native.closest('[data-russia-agro-reference]'));assert.equal(host.querySelector('[data-russia-wheat-supply]'),null);
+ assert.equal(root.querySelector('.russia-farming-trade-grid'),native);assert(!native.closest('[data-russia-agro-reference]'));assert.equal(host.querySelector('[data-russia-wheat-supply]'),null);
 }));
 
-test('a direct cattle/year URL restores the year and separate milk series, with no wheat supply attached',async()=>page('?layer=cattle&russiaStatsYear=2022',async({window,root,host,settle,ready})=>{
+test('a former cattle/year URL keeps the fixed period and separate milk series without wheat supply',async()=>page('?layer=cattle&russiaStatsYear=2022',async({window,root,host,settle,ready})=>{
  await settle(()=>ready()&&host.querySelector('[data-agro-series="cattle-meat"]'));
- assert.equal(root.querySelector('[data-russia-agro-year]').value,'2022');assert.equal(host.querySelector('[data-russia-wheat-supply]'),null);
+ assert.equal(root.querySelector('[data-russia-agro-year]'),null);assert.equal(host.querySelector('[data-russia-wheat-supply]'),null);
+ assert.match(host.querySelector('[data-agro-stage="production"]').textContent,/2024暦年/);
  const select=host.querySelector('[data-agro-series-select]');select.value='cattle-milk';select.dispatchEvent(new window.Event('change',{bubbles:true}));
  await settle(()=>ready()&&host.querySelector('[data-agro-series="cattle-milk"]'));
- assert.match(host.querySelector('[data-agro-stage="production"]').textContent,/2022暦年.*32,738,522/s);assert.equal(host.querySelector('[data-russia-wheat-supply]'),null);
- assert.match(window.location.search,/layer=cattle/);assert.match(window.location.search,/russiaStatsYear=2022/);
+ assert.match(host.querySelector('[data-agro-stage="production"]').textContent,/2024暦年/);
+ assert.equal(host.querySelector('[data-agro-stage="production"] .agro-world-pie'),null);
+ assert.equal(host.querySelector('[data-russia-wheat-supply]'),null);assert.match(window.location.search,/layer=cattle/);
 }));

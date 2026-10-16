@@ -2,18 +2,15 @@ import {syncAgroStatistics} from './atlas-agro-statistics';
 import {renderRussiaWheatSupplyReference} from '../data/atlas/russia-agro-reference';
 
 type Selection={topic:string;active:boolean};
-const years=[2024,2023,2022,2021,2020];
 type Reference={node:HTMLElement;anchor:Comment;wrapper:HTMLDetailsElement};
 const instances=new WeakMap<HTMLElement,{sync:(selection:Selection)=>void}>();
 
-/** Russia-only controls and source references; the shared renderer owns charts. */
+/** Russia-only source references; the shared renderer owns dated charts. */
 export function syncRussiaAgroStatistics(root:HTMLElement,selection:Selection){
  let instance=instances.get(root);
  if(!instance){
-  const control=root.querySelector<HTMLElement>('[data-russia-agro-year-control]');
-  const select=root.querySelector<HTMLSelectElement>('[data-russia-agro-year]');
   const host=root.querySelector<HTMLElement>('[data-agro-statistics]');
-  if(!control||!select||!host){syncAgroStatistics(root,{country:'RUS',...selection});return;}
+  if(!host){syncAgroStatistics(root,{country:'RUS',...selection});return;}
   let current=selection;
   const references:Reference[]=[];
   const selected=()=>current.active&&current.topic!=='farming-all';
@@ -30,10 +27,7 @@ export function syncRussiaAgroStatistics(root:HTMLElement,selection:Selection){
   observer.observe(host,{childList:true,subtree:true});
   const sync=(next:Selection)=>{
    current=next;
-   const focused=selected();control.hidden=!focused;
-   const requested=Number(new URL(location.href).searchParams.get('russiaStatsYear'));
-   const year=focused&&years.includes(requested)?requested:2024;
-   select.value=String(year);
+   const focused=selected();
    if(focused&&!references.length){
     let tail:HTMLElement=host;
     for(const node of root.querySelectorAll<HTMLElement>('.russia-farming-trade-grid,.russia-farming-candidates,[data-russia-forestry-statistics]')){
@@ -45,16 +39,9 @@ export function syncRussiaAgroStatistics(root:HTMLElement,selection:Selection){
    }
    if(!focused)for(const {node,anchor,wrapper} of references.splice(0)){anchor.before(node);anchor.remove();wrapper.remove();}
    // Preserve the existing unselected wheat presentation and its 2024 gaps.
-   syncAgroStatistics(root,{country:'RUS',topic:next.topic==='farming-all'?'wheat':next.topic,active:next.active,year});
+   syncAgroStatistics(root,{country:'RUS',topic:next.topic==='farming-all'?'wheat':next.topic,active:next.active,year:2024});
    sourceReference();
   };
-  select.addEventListener('change',()=>{
-   if(!selected())return;
-   const url=new URL(location.href),year=Number(select.value);
-   if(!years.includes(year))return;
-   if(year===2024)url.searchParams.delete('russiaStatsYear');else url.searchParams.set('russiaStatsYear',String(year));
-   history.pushState({},'',url);sync(current);
-  });
   instance={sync};instances.set(root,instance);
  }
  instance.sync(selection);

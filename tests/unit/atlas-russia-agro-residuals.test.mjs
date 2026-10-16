@@ -43,31 +43,29 @@ async function harness(run){
  const keys=['document','location','history','MutationObserver','fetch'],old=Object.fromEntries(keys.map(k=>[k,globalThis[k]]));
  for(const key of keys.slice(0,-1))globalThis[key]=window[key];
  const root=window.document.createElement('main');window.document.body.append(root);
- root.innerHTML='<div data-primary-map><svg><text>既存地図</text></svg></div><section class="russia-farming-trade-grid">旧小麦資料</section><section class="russia-farming-candidates">旧候補資料</section><div data-russia-agro-year-control hidden><select data-russia-agro-year>'+[2024,2023,2022,2021,2020].map(y=>`<option>${y}</option>`).join('')+'</select></div><section data-agro-statistics><script data-agro-config type="application/json"></script><h2 data-agro-heading></h2><p data-agro-status></p><label data-agro-series-control><select data-agro-series-select></select></label><button data-agro-retry hidden></button><div data-agro-content></div></section><section data-russia-forestry-statistics>旧森林資料</section>';
+ root.innerHTML='<div data-primary-map><svg><text>既存地図</text></svg></div><section class="russia-farming-trade-grid">旧小麦資料</section><section class="russia-farming-candidates">旧候補資料</section><section data-agro-statistics><script data-agro-config type="application/json"></script><h2 data-agro-heading></h2><p data-agro-status></p><label data-agro-series-control><select data-agro-series-select></select></label><button data-agro-retry hidden></button><div data-agro-content></div></section><section data-russia-forestry-statistics>旧森林資料</section>';
  root.querySelector('[data-agro-config]').textContent=JSON.stringify({scope:'ロシア',country:'RUS',topic:'wheat',topics:[],countries:[{code:'RUS',name:'ロシア'}],nationalOnly:true,url:'/fixture/',files:Object.fromEntries(['wheat-production','cattle-meat','cattle-milk'].map(id=>[id,{file:id+'.json'}])),labels:{}});
  const requests=[];
  globalThis.fetch=async url=>{requests.push(String(url));const name=String(url).split('/').at(-1).replace('.json','');return new Response(gunzipSync(readFileSync(`public/assets/atlas/regional-production-statistics-v1/by-series/${name}.json.gz`)));};
  const module=await import('data:text/javascript;base64,'+Buffer.from(controller.outputFiles[0].text+'\n//'+(++id)).toString('base64'));
  const settle=async predicate=>{for(let n=0;n<150;n++){if(predicate())return;await new Promise(r=>setImmediate(r));}assert.fail('Russia statistics did not settle');};
  const ready=()=>root.querySelector('[data-agro-statistics]').dataset.agroReady==='true';
- try{await run({window,root,requests,select:root.querySelector('[data-russia-agro-year]'),sync:s=>module.syncRussiaAgroStatistics(root,s),settle,ready});}
+ try{await run({window,root,requests,sync:s=>module.syncRussiaAgroStatistics(root,s),settle,ready});}
  finally{for(const key of keys)if(old[key]===undefined)delete globalThis[key];else globalThis[key]=old[key];await window.happyDOM.close();}
 }
 
-test('explicit year choice reveals official wheat while 2024 keeps its non-A gap and selection URL',async()=>harness(async({window,root,requests,select,sync,settle,ready})=>{
- const map=root.querySelector('[data-primary-map]').outerHTML;
+test('the fixed 2024 period retains its non-A gap without adding year or comparison operations',async()=>harness(async({window,root,requests,sync,settle,ready})=>{
+ const map=root.querySelector('[data-primary-map]').outerHTML,url=window.location.href;
  sync({topic:'wheat',active:true});await settle(ready);
- const production=()=>root.querySelector('[data-agro-stage="production"]');
- assert.match(production().textContent,/2024暦年/);assert.equal(production().querySelector('.agro-world-pie'),null);
- assert.equal(root.querySelector('[data-russia-agro-year-control]').hidden,false);
- select.value='2022';select.dispatchEvent(new window.Event('change'));await settle(()=>ready()&&production().textContent.includes('2022暦年'));
- assert.match(production().textContent,/104,233,944/);assert.ok(production().querySelector('.agro-world-pie'));
- assert.equal(new URL(window.location.href).searchParams.get('layer'),'wheat');assert.equal(new URL(window.location.href).searchParams.get('keep'),'source');assert.equal(window.location.hash,'#reference');
- assert.equal(new URL(window.location.href).searchParams.get('russiaStatsYear'),'2022');
- assert.equal(root.querySelector('[data-primary-map]').outerHTML,map);
- assert.equal(requests.length,1,'year choice reuses the same retained product slice');
- select.value='2024';select.dispatchEvent(new window.Event('change'));await settle(()=>ready()&&production().textContent.includes('2024暦年'));
- assert.equal(production().querySelector('.agro-world-pie'),null);assert.equal(new URL(window.location.href).searchParams.has('russiaStatsYear'),false);
+ const production=root.querySelector('[data-agro-stage="production"]');
+ assert.match(production.textContent,/2024暦年/);assert.equal(production.querySelector('.agro-world-pie'),null);
+ assert.equal(root.querySelector('[data-russia-agro-year-control],[data-russia-agro-year]'),null);
+ assert.equal(window.location.href,url);assert.equal(root.querySelector('[data-primary-map]').outerHTML,map);
+ assert.equal(requests.length,1);
+ const template=readFileSync('src/components/atlas/RussiaLearningPage.astro','utf8');
+ assert.doesNotMatch(template,/data-russia-agro-year|全国統計の対象年/);
+ const source=readFileSync('src/scripts/atlas-russia-agro-statistics.ts','utf8');
+ assert.doesNotMatch(source,/russiaStatsYear|pushState|addEventListener/);
 }));
 
 test('source references follow wheat only, stay closed, and restore the original unselected nodes',async()=>harness(async({window,root,sync,settle,ready})=>{
@@ -81,17 +79,22 @@ test('source references follow wheat only, stay closed, and restore the original
  assert.equal(root.querySelectorAll('[data-russia-agro-reference]').length,3);
  for(const n of nodes)assert.equal(n.parentElement.open,false);
  sync({topic:'farming-all',active:true});await settle(()=>ready()&&root.querySelector('[data-agro-series="wheat-production"]'));
- assert.equal(root.querySelector('[data-russia-agro-year-control]').hidden,true);
  assert.equal(root.querySelectorAll('[data-russia-agro-reference]').length,0);
  assert.deepEqual([...root.children],order);nodes.forEach((n,i)=>assert.equal(root.querySelector(selectors[i]),n));
  assert.equal(root.querySelector('[data-russia-wheat-supply]'),null,'unselected presentation is restored');
 }));
 
-test('history restoration and invalid years never replace missing 2024 or trigger a map change',async()=>harness(async({window,root,sync,settle,ready})=>{
- window.history.replaceState({},'','?layer=wheat&russiaStatsYear=2021');sync({topic:'wheat',active:true});await settle(()=>ready()&&root.querySelector('[data-agro-stage="production"]').textContent.includes('2021暦年'));
- window.history.replaceState({},'','?layer=wheat&russiaStatsYear=1900');sync({topic:'wheat',active:true});await settle(()=>ready()&&root.querySelector('[data-agro-stage="production"]').textContent.includes('2024暦年'));
- assert.equal(root.querySelector('[data-agro-stage="production"] .agro-world-pie'),null);
- sync({topic:'wheat',active:false});assert.equal(root.querySelector('[data-agro-statistics]').hidden,true);assert.equal(root.querySelector('[data-russia-agro-year-control]').hidden,true);
+test('former year query parameters cannot replace missing 2024 with an older reference',async()=>harness(async({window,root,sync,settle,ready})=>{
+ for(const year of [2021,2022,1900]){
+  window.history.replaceState({},'','?layer=wheat&russiaStatsYear='+year);
+  sync({topic:'wheat',active:true});
+  // The unchanged main chart may already be ready while its reference refresh settles.
+  await new Promise(resolve=>setImmediate(resolve));
+  await settle(()=>ready()&&root.querySelector('[data-agro-stage="production"]').textContent.includes('2024暦年')&&root.querySelector('[data-russia-wheat-supply]'));
+  assert.equal(root.querySelector('[data-agro-stage="production"] .agro-world-pie'),null);
+  assert.match(root.querySelector('[data-russia-wheat-supply]').textContent,/別期間の参考：小麦2020\/21販売年度/);
+ }
+ sync({topic:'wheat',active:false});assert.equal(root.querySelector('[data-agro-statistics]').hidden,true);
 }));
 
 test('forest definitions preserve product stages, bark basis, pulp moisture and missing national trade',()=>{
