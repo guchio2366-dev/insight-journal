@@ -12,6 +12,7 @@ const ownKeys=['theme','layer','place','scope','view','compare','reading','singl
 export function initOceaniaLearningAtlas(root:HTMLElement):void{
  if(root.dataset.oceaniaReady==='true')return;
  const field=root.dataset.field as OceaniaField;
+ if(field==='agriculture')void import('./atlas-oceania-agro-trade').then(({initOceaniaAgroTrade})=>initOceaniaAgroTrade(root));
  let state=createOceaniaState(location.search,field);
  const climateSelection=createRegionalClimateSelection(root,'oceania',()=>field==='nature'&&state.layer==='climate'&&!state.comparison,mutate=>update(mutate));
  const isSelectedReading=()=>new URLSearchParams(location.search).get('reading')==='selection'||state.place!=='all'||state.scope!=='all'||!!state.industryLocation||!!state.industry||(field==='agriculture'&&state.layer!=='farming-all');

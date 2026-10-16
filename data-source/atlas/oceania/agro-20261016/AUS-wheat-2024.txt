@@ -1,0 +1,72 @@
+Australia Wheat and meslin exports by country | 2024 | Data (https://wits.worldbank.org/trade/comtrade/en/country/AUS/year/2024/tradeflow/Exports/partner/ALL/product/1001)
+citeturn7view0 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"https://wits.worldbank.org/trade/comtrade/en/country/AUS/year/2024/tradeflow/Exports/partner/ALL/product/1001","lineno":15}); Total lines: 88
+L0: # Australia Wheat and meslin exports by country
+L1:
+L2: in 2024
+L3:
+L4: Share
+L5:
+L6:   * cite0†Facebook L7:   * cite0†Twitter L8:   * cite0†Linkedin L9:   * cite0†Google Plus L10:   * cite0†Reddit L11:   * cite0†Stumble Upon L12:   * cite0†Delicious L13:   * cite0†Email L14:
+L15: Change selection (Reporter, Year, Trade Flow, Partner and HS 6 digit Product)
+L16: Australia exports of Wheat and meslin was $5,566,530.48K .
+L17: Australia exported Wheat and meslin to Indonesia ($935,511.63K , 3,456,710,000 Kg), China ($932,744.03K , 3,230,460,000 Kg), Philippines ($668,773.65K , 2,518,300,000 Kg), Yemen ($448,288.21K , 1,583,930,000 Kg), Korea, Rep. ($374,791.45K , 1,292,820,000 Kg).
+L18: cite1†Wheat and meslin imports by country in 2024 L19: Reporter  | TradeFlow  | ProductCode  | Product Description  | Year  | Partner  | Trade Value 1000USD  | Quantity  | Quantity Unit
+L20:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite2†World | 5,566,530.48  |  |
+L21:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite3†Indonesia | 935,511.63  | 3,456,710,000  | Kg
+L22:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite4†China | 932,744.03  | 3,230,460,000  | Kg
+L23:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite5†Philippines | 668,773.65  | 2,518,300,000  | Kg
+L24:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite6†Yemen | 448,288.21  | 1,583,930,000  | Kg
+L25:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite7†Korea, Rep. | 374,791.45  | 1,292,820,000  | Kg
+L26:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite8†Japan | 336,056.55  | 1,106,030,000  | Kg
+L27:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite9†Vietnam | 324,424.51  | 1,147,450,000  | Kg
+L28:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite10†Malaysia | 209,441.30  | 780,424,000  | Kg
+L29:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite11†Thailand | 184,967.20  | 670,906,000  | Kg
+L30:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite12†New Zealand | 179,984.85  | 617,195,000  | Kg
+L31:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite13†South Africa | 125,701.69  | 414,177,000  | Kg
+L32:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite14†Kuwait | 113,814.85  | 408,665,000  | Kg
+L33:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite15†United Arab Emirates | 85,844.55  | 303,096,000  | Kg
+L34:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite16†Papua New Guinea | 78,733.70  | 271,501,000  | Kg
+L35:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite17†Other Asia, nes | 71,602.55  | 244,590,000  | Kg
+L36:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite18†Myanmar | 69,815.40  | 230,393,000  | Kg
+L37:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite19†Fiji | 60,081.66  | 204,736,000  | Kg
+L38:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite20†Oman | 58,351.84  | 197,299,000  | Kg
+L39:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite21†Algeria | 42,750.42  | 114,349,000  | Kg
+L40:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite22†Bahrain | 39,415.34  | 135,543,000  | Kg
+L41:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite23†India | 28,763.47  | 100,924,000  | Kg
+L42:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite24†Qatar | 26,716.51  | 83,570,000  | Kg
+L43:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite25†Singapore | 25,497.59  | 93,434,300  | Kg
+L44:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite26†Iraq | 25,356.13  | 77,722,600  | Kg
+L45:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite27†Zambia | 19,740.12  | 69,218,000  | Kg
+L46:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite28†Mozambique | 16,207.78  | 61,577,700  | Kg
+L47:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite29†Kenya | 15,372.65  | 50,613,800  | Kg
+L48:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite30†Mauritius | 13,914.22  | 46,446,200  | Kg
+L49:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite31†Italy | 12,539.58  | 33,579,400  | Kg
+L50:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite32†Sri Lanka | 10,163.49  | 35,831,200  | Kg
+L51:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite33†New Caledonia | 7,717.72  | 25,039,100  | Kg
+L52:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite34†Malawi | 5,737.36  | 19,800,000  | Kg
+L53:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite35†United Kingdom | 5,279.74  | 12,331,000  | Kg
+L54:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite36†Solomon Islands | 4,589.71  | 16,395,000  | Kg
+L55:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite37†Egypt, Arab Rep. | 3,639.53  | 12,166,900  | Kg
+L56:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite38†Bangladesh | 1,915.39  | 5,241,690  | Kg
+L57:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite39†Saudi Arabia | 1,429.79  | 3,446,380  | Kg
+L58:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite40†Hong Kong, China | 582.94  | 1,552,930  | Kg
+L59:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite41†Tanzania | 269.31  | 1,183,880  | Kg
+L60:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite42†France | 2.00  |  |
+L61:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite43†Samoa | 0.03  | 10  | Kg
+L62:  Australia  | Export  | 1001  | Wheat and meslin  | 2024  | cite44†Vanuatu | 0.02  | 10  | Kg
+L63: HS Nomenclature used HS 1988/92 (H0)
+L64: HS Code 1001: Wheat and meslin
+L65: Please note: Exports is gross exports and Imports is gross imports
+L66:
+L67:   * cite45†About L68:   * .
+L69:   * cite46†Contact L70:   * .
+L71:   * cite47†Usage Conditions L72:   * .
+L73:   * cite48†Legal†www.worldbank.org L74:   * .
+L75:   * cite49†Data Providers L76:   * .
+L77:   * Page Refreshed : Oct-15-2026 23:39 ET
+L78: Partners
+L79:   * cite50†ITC†www.intracen.org L80:   * .
+L81:   * cite51†UNCTAD†unctad.org L82:   * .
+L83:   * cite52†UNSTATS†unstats.un.org L84:   * .
+L85:   * cite53†World Trade Organization†www.wto.org L86:   * .
+L87:   * cite54†World Bank†www.worldbank.org

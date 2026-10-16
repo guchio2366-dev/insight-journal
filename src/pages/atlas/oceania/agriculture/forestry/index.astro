@@ -1,0 +1,8 @@
+---
+// A static regional route takes precedence over the shared [region] route.
+// Reuse its complete map/reading/layout and attach only Oceania statistics.
+import RegionalForestryPage from '../../../../../components/atlas/RegionalForestryPage.astro';
+import OceaniaForestryTrade from '../../../../../components/atlas/OceaniaForestryTrade.astro';
+---
+<RegionalForestryPage region="oceania"/>
+<OceaniaForestryTrade/>
