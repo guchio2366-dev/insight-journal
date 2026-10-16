@@ -1,0 +1,163 @@
+Vietnam Rice exports by country | 2023 | Data (https://wits.worldbank.org/trade/comtrade/en/country/VNM/year/2023/tradeflow/Exports/partner/ALL/product/1006)
+citeturn5view0 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"turn4view0","lineno":80}); Total lines: 131
+L28:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite9†Mozambique | 53,037.45  | 90,148,000  | Kg
+L29:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite10†Hong Kong, China | 41,615.69  | 71,696,800  | Kg
+L30:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite11†Korea, Rep. | 38,631.28  | 69,973,400  | Kg
+L31:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite12†Cambodia | 38,541.40  | 64,210,600  | Kg
+L32:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite13†United Arab Emirates | 36,208.20  | 60,399,900  | Kg
+L33:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite14†Australia | 30,442.44  | 48,305,500  | Kg
+L34:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite15†United States | 28,462.05  | 43,321,700  | Kg
+L35:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite16†Turkey | 25,933.93  | 42,582,600  | Kg
+L36:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite17†Saudi Arabia | 20,861.01  | 33,747,200  | Kg
+L37:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite18†Other Asia, nes | 20,766.79  | 37,173,300  | Kg
+L38:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite19†Germany | 17,610.75  | 27,197,000  | Kg
+L39:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite20†Togo | 16,355.64  | 27,657,300  | Kg
+L40:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite21†Canada | 15,933.42  | 25,182,500  | Kg
+L41:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite22†Lao PDR | 10,881.66  | 20,232,000  | Kg
+L42:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite23†Poland | 9,818.19  | 15,892,000  | Kg
+L43:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite24†Tanzania | 9,737.04  | 14,748,900  | Kg
+L44:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite25†Netherlands | 9,459.18  | 14,859,000  | Kg
+L45:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite26†United Kingdom | 8,953.81  | 13,704,200  | Kg
+L46:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite27†Qatar | 6,868.24  | 11,213,000  | Kg
+L47:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite28†New Zealand | 6,797.55  | 10,986,700  | Kg
+L48:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite29†South Africa | 6,018.27  | 9,769,090  | Kg
+L49:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite30†Senegal | 5,355.79  | 12,429,500  | Kg
+L50:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite31†Cameroon | 4,754.94  | 7,952,520  | Kg
+L51:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite32†Italy | 4,698.39  | 6,986,270  | Kg
+L52:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite33†Kuwait | 3,642.93  | 5,769,140  | Kg
+L53:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite34†Hungary | 3,529.88  | 6,345,240  | Kg
+L54:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite35†Norway | 3,421.63  | 4,946,440  | Kg
+L55:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite36†Chile | 3,383.24  | 7,278,030  | Kg
+L56:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite37†Russian Federation | 3,330.12  | 5,460,570  | Kg
+L57:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite38†Belgium | 3,215.78  | 6,282,760  | Kg
+L58:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite39†France | 2,960.86  | 4,536,590  | Kg
+L59:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite40†Spain | 2,945.24  | 4,728,630  | Kg
+L60:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite41†Czech Republic | 2,822.16  | 4,071,430  | Kg
+L61:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite42†Israel | 2,771.03  | 4,398,110  | Kg
+L62:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite43†Bulgaria | 2,357.92  | 3,679,640  | Kg
+L63:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite44†Portugal | 2,355.11  | 3,811,850  | Kg
+L64:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite45†Brazil | 2,192.44  | 3,487,070  | Kg
+L65:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite46†Sweden | 2,166.11  | 3,229,060  | Kg
+L66:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite47†Romania | 1,840.43  | 2,933,760  | Kg
+L67:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite48†Lithuania | 1,644.87  | 2,817,780  | Kg
+L68:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite49†India | 1,304.88  | 2,536,870  | Kg
+L69:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite50†Congo, Rep. | 1,148.75  | 1,929,340  | Kg
+L70:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite51†Angola | 1,001.71  | 1,774,520  | Kg
+L71:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite52†Kenya | 841.24  | 1,412,690  | Kg
+L72:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite53†Slovenia | 812.92  | 1,344,960  | Kg
+L73:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite54†Greece | 776.73  | 1,056,490  | Kg
+L74:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite55†Mexico | 665.58  | 1,004,710  | Kg
+L75:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite56†Finland | 643.01  | 1,031,840  | Kg
+L76:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite57†Denmark | 578.46  | 799,310  | Kg
+L77:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite58†Bangladesh | 569.87  | 832,328  | Kg
+L78:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite59†Kazakhstan | 515.50  | 882,722  | Kg
+L79:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite60†Ukraine | 477.77  | 852,662  | Kg
+L80:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite61†Nigeria | 394.98  | 640,152  | Kg
+L81:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite62†Latvia | 394.41  | 499,813  | Kg
+L82:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite63†Egypt, Arab Rep. | 392.43  | 527,000  | Kg
+L83:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite64†Morocco | 376.09  | 576,895  | Kg
+L84:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite65†Slovak Republic | 371.89  | 760,000  | Kg
+L85:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite66†Thailand | 329.52  | 494,000  | Kg
+L86:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite67†Dominican Republic | 304.53  | 441,847  | Kg
+L87:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite68†Iraq | 285.74  | 438,803  | Kg
+L88:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite69†Colombia | 260.45  | 375,401  | Kg
+L89:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite70†Japan | 235.72  | 331,041  | Kg
+L90:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite71†Venezuela | 235.71  | 344,303  | Kg
+L91:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite72†Ireland | 206.42  | 292,635  | Kg
+L92:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite73†Brunei | 172.01  | 303,920  | Kg
+L93:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite74†Croatia | 171.22  | 223,800  | Kg
+L94:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite75†Estonia | 103.76  | 138,563  | Kg
+L95:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite76†Cyprus | 100.66  | 125,743  | Kg
+L96:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite77†Austria | 83.85  | 147,314  | Kg
+L97:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite78†Costa Rica | 41.44  | 53,202  | Kg
+L98:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite79†Iceland | 39.54  | 42,000  | Kg
+L99:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite80†Peru | 33.71  | 43,000  | Kg
+L100:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite81†Sri Lanka | 33.37  | 57,401  | Kg
+L101:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite82†Belarus | 28.60  | 52,000  | Kg
+L102:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite83†Malta | 21.29  | 24,000  | Kg
+L103:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite84†Algeria | 16.25  | 25,000  | Kg
+L104:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite85†Tunisia | 7.90  | 3,000  | Kg
+L105:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite86†Uganda | 2.38  | 1,128  | Kg
+L106: HS Nomenclature used HS 1988/92 (H0)
+L107: HS Code 1006: Rice
+L108: Please note: Exports is gross exports and Imports is gross imports
+L109:
+L110:   * cite87†About L111:   * .
+L112:   * cite88†Contact L113:   * .
+L114:   * cite89†Usage Conditions L115:   * .
+L116:   * cite90†Legal†www.worldbank.org L117:   * .
+L118:   * cite91†Data Providers L119:   * .
+L120:   * Page Refreshed : Oct-15-2026 23:39 ET
+L121: Partners
+L122:   * cite92†ITC†www.intracen.org L123:   * .
+L124:   * cite93†UNCTAD†unctad.org L125:   * .
+L126:   * cite94†UNSTATS†unstats.un.org L127:   * .
+L128:   * cite95†World Trade Organization†www.wto.org L129:   * .
+L130:   * cite96†World Bank†www.worldbank.org --------------------------------------------------------------------------------
+Indonesia Palm oil and its fractions; whether or not refined, but not chemically modified exports by country | 2023 | Data (https://wits.worldbank.org/trade/comtrade/en/country/IDN/year/2023/tradeflow/Exports/partner/ALL/product/1511)
+citeturn5view1 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"turn4view1","lineno":15}); Total lines: 188
+L0: # Indonesia Palm oil and its fractions; whether or not refined, but not chemically modified exports by country
+L1:
+L2: in 2023
+L3:
+L4: Share
+L5:
+L6:   * cite0†Facebook L7:   * cite0†Twitter L8:   * cite0†Linkedin L9:   * cite0†Google Plus L10:   * cite0†Reddit L11:   * cite0†Stumble Upon L12:   * cite0†Delicious L13:   * cite0†Email L14:
+L15: Change selection (Reporter, Year, Trade Flow, Partner and HS 6 digit Product)
+L16: Indonesia exports of Palm oil and its fractions; whether or not refined, but not chemically modified was $22,685,184.48K and quantity 26,129,700,000Kg.
+L17: Indonesia exported Palm oil and its fractions; whether or not refined, but not chemically modified to India ($4,516,047.75K , 5,403,480,000 Kg), China ($3,607,866.29K , 4,248,690,000 Kg), Pakistan ($2,173,254.65K , 2,501,990,000 Kg), United States ($1,518,747.11K , 1,763,030,000 Kg), Bangladesh ($1,162,008.93K , 1,362,630,000 Kg).
+L18: cite1†Palm oil and its fractions; whether or not refined, but not chemically modified imports by country in 2023 L19: Reporter  | TradeFlow  | ProductCode  | Product Description  | Year  | Partner  | Trade Value 1000USD  | Quantity  | Quantity Unit
+L20:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite2†World | 22,685,184.48  | 26,129,700,000  | Kg
+L21:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite3†India | 4,516,047.75  | 5,403,480,000  | Kg
+L22:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite4†China | 3,607,866.29  | 4,248,690,000  | Kg
+L23:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite5†Pakistan | 2,173,254.65  | 2,501,990,000  | Kg
+L24:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite6†United States | 1,518,747.11  | 1,763,030,000  | Kg
+L25:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite7†Bangladesh | 1,162,008.93  | 1,362,630,000  | Kg
+L26:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite8†Egypt, Arab Rep. | 798,549.83  | 929,580,000  | Kg
+L27:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite9†Malaysia | 684,455.52  | 788,129,000  | Kg
+L28:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite10†Spain | 581,284.97  | 649,442,000  | Kg
+L29:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite11†Vietnam | 577,215.19  | 667,318,000  | Kg
+L30:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite12†Myanmar | 521,100.67  | 592,467,000  | Kg
+L31:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite13†Russian Federation | 444,639.67  | 510,114,000  | Kg
+L32:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite14†Philippines | 403,353.03  | 462,146,000  | Kg
+L33:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite15†Italy | 366,898.19  | 398,601,000  | Kg
+L34:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite16†South Africa | 358,824.27  | 422,695,000  | Kg
+L35:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite17†Djibouti | 349,602.64  | 378,309,000  | Kg
+L36:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite18†Saudi Arabia | 328,239.59  | 375,438,000  | Kg
+L37:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite19†Kenya | 296,642.76  | 330,709,000  | Kg
+L38:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite20†Netherlands | 265,393.95  | 292,293,000  | Kg
+L39:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite21†Estonia | 265,384.99  | 294,911,000  | Kg
+L40:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite22†Korea, Rep. | 241,703.97  | 287,463,000  | Kg
+L41:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite23†United Arab Emirates | 219,435.23  | 262,547,000  | Kg
+L42:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite24†Tanzania | 193,028.04  | 198,280,000  | Kg
+L43:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite25†Turkey | 191,506.20  | 215,304,000  | Kg
+L44:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite26†Benin | 186,980.85  | 187,986,000  | Kg
+L45:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite27†Oman | 163,250.09  | 181,470,000  | Kg
+L46:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite28†Senegal | 143,173.12  | 138,901,000  | Kg
+L47:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite29†Mauritania | 128,716.41  | 128,867,000  | Kg
+L48:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite30†Togo | 128,634.58  | 134,683,000  | Kg
+L49:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite31†Haiti | 125,169.87  | 134,361,000  | Kg
+L50:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite32†Brazil | 110,629.55  | 129,532,000  | Kg
+L51:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite33†Yemen | 100,068.31  | 104,827,000  | Kg
+L52:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite34†Guinea | 89,896.39  | 101,315,000  | Kg
+L53:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite35†Algeria | 88,818.57  | 105,902,000  | Kg
+L54:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite36†Japan | 84,906.34  | 97,349,400  | Kg
+L55:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite37†Greece | 82,392.59  | 93,909,600  | Kg
+L56:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite2†Cote d'Ivoire | 73,892.74  | 73,503,700  | Kg
+L57:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite38†Angola | 72,496.63  | 72,951,500  | Kg
+L58:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite39†Nigeria | 68,028.78  | 72,144,400  | Kg
+L59:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite40†Congo, Rep. | 67,466.08  | 70,184,700  | Kg
+L60:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite41†Mozambique | 65,291.71  | 76,164,800  | Kg
+L61:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite42†Iraq | 55,709.65  | 64,014,500  | Kg
+L62:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite43†Gambia, The | 49,948.65  | 48,268,900  | Kg
+L63:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite44†Mexico | 48,789.04  | 56,726,900  | Kg
+L64:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite45†United Kingdom | 48,658.01  | 51,931,800  | Kg
+L65:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite46†Ghana | 45,961.78  | 44,160,200  | Kg
+L66:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite47†Germany | 44,818.23  | 53,666,600  | Kg
+L67:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite48†Tunisia | 44,690.68  | 56,938,400  | Kg
+L68:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite49†Sweden | 43,230.94  | 48,295,300  | Kg
+L69:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite50†Cameroon | 42,819.59  | 41,272,800  | Kg
+L70:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite51†Georgia | 36,294.16  | 41,399,900  | Kg
+L71:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite52†Sudan | 36,114.00  | 39,835,800  | Kg
+L72:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite53†Somalia | 32,766.08  | 33,246,600  | Kg
+L73:  Indonesia  | Export  | 1511  | Palm oil and its fractions; whether or not refined, but not chemically modified  | 2023  | cite54†Israel | 27,052.86  | 28,883,400  | Kg

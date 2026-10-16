@@ -1,0 +1,7 @@
+{
+  "url": "https://www.aptfsis.org/wp-content/uploads/aco-pdfs/ACO-No.34.pdf",
+  "operation": "standard HTTPS GET once",
+  "at": "2026-10-16T03:40:19.890587+00:00",
+  "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>",
+  "stopped": true
+}

@@ -1,0 +1,86 @@
+Vietnam Rice exports by country | 2023 | Data (https://wits.worldbank.org/trade/comtrade/en/country/VNM/year/2023/tradeflow/Exports/partner/ALL/product/1006)
+citeturn4view0 [wordlim: 200] Crawled: last week; Content type: text/html; Source: open({"ref_id":"https://wits.worldbank.org/trade/comtrade/en/country/VNM/year/2023/tradeflow/Exports/partner/ALL/product/1006","lineno":null}); Total lines: 131
+L0: # Vietnam Rice exports by country
+L1:
+L2: in 2023
+L3:
+L4: Share
+L5:
+L6:   * cite0†Facebook L7:   * cite0†Twitter L8:   * cite0†Linkedin L9:   * cite0†Google Plus L10:   * cite0†Reddit L11:   * cite0†Stumble Upon L12:   * cite0†Delicious L13:   * cite0†Email L14:
+L15: Change selection (Reporter, Year, Trade Flow, Partner and HS 6 digit Product)
+L16: Vietnam exports of Rice was $4,374,646.50K and quantity 7,746,860,000Kg.
+L17: Vietnam exported Rice to Philippines ($1,753,537.40K , 3,124,490,000 Kg), Indonesia ($640,252.65K , 1,165,820,000 Kg), China ($530,614.11K , 921,383,000 Kg), Ghana ($360,872.54K , 612,874,000 Kg), Cote d'Ivoire ($279,285.47K , 511,227,000 Kg).
+L18: cite1†Rice imports by country in 2023 L19: Reporter  | TradeFlow  | ProductCode  | Product Description  | Year  | Partner  | Trade Value 1000USD  | Quantity  | Quantity Unit
+L20:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite2†World | 4,374,646.50  | 7,746,860,000  | Kg
+L21:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite3†Philippines | 1,753,537.40  | 3,124,490,000  | Kg
+L22:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite4†Indonesia | 640,252.65  | 1,165,820,000  | Kg
+L23:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite5†China | 530,614.11  | 921,383,000  | Kg
+L24:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite6†Ghana | 360,872.54  | 612,874,000  | Kg
+L25:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite2†Cote d'Ivoire | 279,285.47  | 511,227,000  | Kg
+L26:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite7†Malaysia | 205,049.92  | 399,762,000  | Kg
+L27:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite8†Singapore | 78,731.28  | 134,734,000  | Kg
+L28:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite9†Mozambique | 53,037.45  | 90,148,000  | Kg
+L29:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite10†Hong Kong, China | 41,615.69  | 71,696,800  | Kg
+L30:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite11†Korea, Rep. | 38,631.28  | 69,973,400  | Kg
+L31:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite12†Cambodia | 38,541.40  | 64,210,600  | Kg
+L32:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite13†United Arab Emirates | 36,208.20  | 60,399,900  | Kg
+L33:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite14†Australia | 30,442.44  | 48,305,500  | Kg
+L34:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite15†United States | 28,462.05  | 43,321,700  | Kg
+L35:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite16†Turkey | 25,933.93  | 42,582,600  | Kg
+L36:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite17†Saudi Arabia | 20,861.01  | 33,747,200  | Kg
+L37:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite18†Other Asia, nes | 20,766.79  | 37,173,300  | Kg
+L38:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite19†Germany | 17,610.75  | 27,197,000  | Kg
+L39:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite20†Togo | 16,355.64  | 27,657,300  | Kg
+L40:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite21†Canada | 15,933.42  | 25,182,500  | Kg
+L41:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite22†Lao PDR | 10,881.66  | 20,232,000  | Kg
+L42:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite23†Poland | 9,818.19  | 15,892,000  | Kg
+L43:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite24†Tanzania | 9,737.04  | 14,748,900  | Kg
+L44:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite25†Netherlands | 9,459.18  | 14,859,000  | Kg
+L45:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite26†United Kingdom | 8,953.81  | 13,704,200  | Kg
+L46:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite27†Qatar | 6,868.24  | 11,213,000  | Kg
+L47:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite28†New Zealand | 6,797.55  | 10,986,700  | Kg
+L48:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite29†South Africa | 6,018.27  | 9,769,090  | Kg
+L49:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite30†Senegal | 5,355.79  | 12,429,500  | Kg
+L50:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite31†Cameroon | 4,754.94  | 7,952,520  | Kg
+L51:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite32†Italy | 4,698.39  | 6,986,270  | Kg
+L52:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite33†Kuwait | 3,642.93  | 5,769,140  | Kg
+L53:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite34†Hungary | 3,529.88  | 6,345,240  | Kg
+L54:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite35†Norway | 3,421.63  | 4,946,440  | Kg
+L55:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite36†Chile | 3,383.24  | 7,278,030  | Kg
+L56:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite37†Russian Federation | 3,330.12  | 5,460,570  | Kg
+L57:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite38†Belgium | 3,215.78  | 6,282,760  | Kg
+L58:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite39†France | 2,960.86  | 4,536,590  | Kg
+L59:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite40†Spain | 2,945.24  | 4,728,630  | Kg
+L60:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite41†Czech Republic | 2,822.16  | 4,071,430  | Kg
+L61:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite42†Israel | 2,771.03  | 4,398,110  | Kg
+L62:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite43†Bulgaria | 2,357.92  | 3,679,640  | Kg
+L63:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite44†Portugal | 2,355.11  | 3,811,850  | Kg
+L64:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite45†Brazil | 2,192.44  | 3,487,070  | Kg
+L65:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite46†Sweden | 2,166.11  | 3,229,060  | Kg
+L66:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite47†Romania | 1,840.43  | 2,933,760  | Kg
+L67:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite48†Lithuania | 1,644.87  | 2,817,780  | Kg
+L68:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite49†India | 1,304.88  | 2,536,870  | Kg
+L69:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite50†Congo, Rep. | 1,148.75  | 1,929,340  | Kg
+L70:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite51†Angola | 1,001.71  | 1,774,520  | Kg
+L71:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite52†Kenya | 841.24  | 1,412,690  | Kg
+L72:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite53†Slovenia | 812.92  | 1,344,960  | Kg
+L73:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite54†Greece | 776.73  | 1,056,490  | Kg
+L74:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite55†Mexico | 665.58  | 1,004,710  | Kg
+L75:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite56†Finland | 643.01  | 1,031,840  | Kg
+L76:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite57†Denmark | 578.46  | 799,310  | Kg
+L77:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite58†Bangladesh | 569.87  | 832,328  | Kg
+L78:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite59†Kazakhstan | 515.50  | 882,722  | Kg
+L79:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite60†Ukraine | 477.77  | 852,662  | Kg
+L80:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite61†Nigeria | 394.98  | 640,152  | Kg
+L81:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite62†Latvia | 394.41  | 499,813  | Kg
+L82:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite63†Egypt, Arab Rep. | 392.43  | 527,000  | Kg
+L83:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite64†Morocco | 376.09  | 576,895  | Kg
+L84:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite65†Slovak Republic | 371.89  | 760,000  | Kg
+L85:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite66†Thailand | 329.52  | 494,000  | Kg
+L86:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite67†Dominican Republic | 304.53  | 441,847  | Kg
+L87:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite68†Iraq | 285.74  | 438,803  | Kg
+L88:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite69†Colombia | 260.45  | 375,401  | Kg
+L89:  Vietnam  | Export  | 1006  | Rice  | 2023  | cite70†Japan | 235.72  | 331,041  | Kg
+--------------------------------------------------------------------------------
+Indonesia Palm oil and its fractions; whether or not refined, but not chemically modified exports by country | 2023 | Data (https://wits.worldbank.org/trade/comtrade/en/country/IDN/year/2023/tradeflow/Exports/partner/ALL/product/1511)
+citeturn4view1 [wordlim: 200] Crawled: 2 days ago; Content type: text/html; Source: open({"ref_id":"https://wits.worldbank.org/trade/comtrade/en/country/IDN/year/2023/tradeflow/Exports/partner/ALL/product/1511","lineno":null}); Total lines: 188
