@@ -1,0 +1,883 @@
+{
+  "schemaVersion": 1,
+  "countries": [
+    "KAZ",
+    "KGZ",
+    "TJK",
+    "TKM",
+    "UZB"
+  ],
+  "year": 2024,
+  "source": {
+    "path": "public/assets/atlas/regional-production-statistics-v1/statistics.json",
+    "sha256": "256038163170840f5a0a75222f6db3f39463af70a9d2d319046f28fb60e961f7"
+  },
+  "records": [
+    {
+      "id": "wheat-production",
+      "label": "小麦生産量",
+      "year": 2024,
+      "identity": {
+        "domain": "QCL",
+        "item": "15",
+        "element": "5510",
+        "unit": "t",
+        "definition": "FAOSTAT の当該作物の生産量。穀物は乾燥子実の収穫で、青刈り・飼料用サイレージを含みません。",
+        "archiveSha256": "c5835418c18f9322e7decbd6800f93a216eaae3cdfa31acb08f0518c0c6d6853"
+      },
+      "observations": [
+        {
+          "code": "KAZ",
+          "name": "Kazakhstan",
+          "row": {
+            "year": 2024,
+            "value": 18576694.15,
+            "rawValue": "18576694.15",
+            "flag": "A",
+            "note": null,
+            "worldValue": 798481711.07,
+            "worldRawValue": "798481711.070000",
+            "worldFlag": "A",
+            "share": 2.3265021468189206,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "KGZ",
+          "name": "Kyrgyzstan",
+          "row": {
+            "year": 2024,
+            "value": 664830.0,
+            "rawValue": "664830.0",
+            "flag": "A",
+            "note": null,
+            "worldValue": 798481711.07,
+            "worldRawValue": "798481711.070000",
+            "worldFlag": "A",
+            "share": 0.0832617692782342,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "TJK",
+          "name": "Tajikistan",
+          "row": {
+            "year": 2024,
+            "value": 880734.0,
+            "rawValue": "880734.0",
+            "flag": "A",
+            "note": null,
+            "worldValue": 798481711.07,
+            "worldRawValue": "798481711.070000",
+            "worldFlag": "A",
+            "share": 0.11030108614758107,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "TKM",
+          "name": "Turkmenistan",
+          "row": {
+            "year": 2024,
+            "value": 1330000.0,
+            "rawValue": "1330000.0",
+            "flag": "E",
+            "note": null,
+            "worldValue": 798481711.07,
+            "worldRawValue": "798481711.070000",
+            "worldFlag": "A",
+            "share": 0.16656611936893864,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "UZB",
+          "name": "Uzbekistan",
+          "row": {
+            "year": 2024,
+            "value": 6729357.31,
+            "rawValue": "6729357.31",
+            "flag": "A",
+            "note": null,
+            "worldValue": 798481711.07,
+            "worldRawValue": "798481711.070000",
+            "worldFlag": "A",
+            "share": 0.8427691225366164,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        }
+      ],
+      "complete": true,
+      "productionRaw": "28181615.46",
+      "worldRaw": "798481711.070000",
+      "worldFlag": "A",
+      "sourceUrl": "https://www.fao.org/faostat/en/#data/QCL"
+    },
+    {
+      "id": "qcl-328-production",
+      "label": "種子付き綿（未繰綿）生産量",
+      "year": 2024,
+      "identity": {
+        "domain": "QCL",
+        "item": "328",
+        "element": "5510",
+        "unit": "t",
+        "definition": "FAOSTAT QCL の品目コード 328、生産量（t）。加工品や収穫面積と合算しない。",
+        "archiveSha256": "c5835418c18f9322e7decbd6800f93a216eaae3cdfa31acb08f0518c0c6d6853"
+      },
+      "observations": [
+        {
+          "code": "KAZ",
+          "name": "Kazakhstan",
+          "row": {
+            "year": 2024,
+            "value": 301661.43,
+            "rawValue": "301661.43",
+            "flag": "A",
+            "note": null,
+            "worldValue": null,
+            "worldRawValue": null,
+            "worldFlag": null,
+            "share": null,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "KGZ",
+          "name": "Kyrgyzstan",
+          "row": {
+            "year": 2024,
+            "value": 46338.0,
+            "rawValue": "46338.0",
+            "flag": "A",
+            "note": null,
+            "worldValue": null,
+            "worldRawValue": null,
+            "worldFlag": null,
+            "share": null,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "TJK",
+          "name": "Tajikistan",
+          "row": {
+            "year": 2024,
+            "value": 253182.0,
+            "rawValue": "253182.0",
+            "flag": "A",
+            "note": null,
+            "worldValue": null,
+            "worldRawValue": null,
+            "worldFlag": null,
+            "share": null,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "TKM",
+          "name": "Turkmenistan",
+          "row": {
+            "year": 2024,
+            "value": 600238.0,
+            "rawValue": "600238.0",
+            "flag": "A",
+            "note": null,
+            "worldValue": null,
+            "worldRawValue": null,
+            "worldFlag": null,
+            "share": null,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "UZB",
+          "name": "Uzbekistan",
+          "row": {
+            "year": 2024,
+            "value": 2938089.18,
+            "rawValue": "2938089.18",
+            "flag": "A",
+            "note": null,
+            "worldValue": null,
+            "worldRawValue": null,
+            "worldFlag": null,
+            "share": null,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        }
+      ],
+      "complete": true,
+      "productionRaw": "4139508.61",
+      "worldRaw": null,
+      "worldFlag": null,
+      "sourceUrl": "https://www.fao.org/faostat/en/#data/QCL"
+    },
+    {
+      "id": "maize-production",
+      "label": "トウモロコシ生産量",
+      "year": 2024,
+      "identity": {
+        "domain": "QCL",
+        "item": "56",
+        "element": "5510",
+        "unit": "t",
+        "definition": "FAOSTAT の当該作物の生産量。穀物は乾燥子実の収穫で、青刈り・飼料用サイレージを含みません。",
+        "archiveSha256": "c5835418c18f9322e7decbd6800f93a216eaae3cdfa31acb08f0518c0c6d6853"
+      },
+      "observations": [
+        {
+          "code": "KAZ",
+          "name": "Kazakhstan",
+          "row": {
+            "year": 2024,
+            "value": 1005167.21,
+            "rawValue": "1005167.21",
+            "flag": "A",
+            "note": null,
+            "worldValue": 1218205573.82,
+            "worldRawValue": "1218205573.820000",
+            "worldFlag": "A",
+            "share": 0.08251211713373115,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "KGZ",
+          "name": "Kyrgyzstan",
+          "row": {
+            "year": 2024,
+            "value": 805250.0,
+            "rawValue": "805250.0",
+            "flag": "A",
+            "note": null,
+            "worldValue": 1218205573.82,
+            "worldRawValue": "1218205573.820000",
+            "worldFlag": "A",
+            "share": 0.06610132290520798,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "TJK",
+          "name": "Tajikistan",
+          "row": {
+            "year": 2024,
+            "value": 340000.0,
+            "rawValue": "340000.0",
+            "flag": "X",
+            "note": "Unofficial figure",
+            "worldValue": 1218205573.82,
+            "worldRawValue": "1218205573.820000",
+            "worldFlag": "A",
+            "share": 0.027909903493040317,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "TKM",
+          "name": "Turkmenistan",
+          "row": {
+            "year": 2024,
+            "value": 6739.55,
+            "rawValue": "6739.55",
+            "flag": "A",
+            "note": null,
+            "worldValue": 1218205573.82,
+            "worldRawValue": "1218205573.820000",
+            "worldFlag": "A",
+            "share": 0.0005532358531956466,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "UZB",
+          "name": "Uzbekistan",
+          "row": {
+            "year": 2024,
+            "value": 866836.18,
+            "rawValue": "866836.18",
+            "flag": "A",
+            "note": null,
+            "worldValue": 1218205573.82,
+            "worldRawValue": "1218205573.820000",
+            "worldFlag": "A",
+            "share": 0.07115680625904625,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        }
+      ],
+      "complete": true,
+      "productionRaw": "3023992.94",
+      "worldRaw": "1218205573.820000",
+      "worldFlag": "A",
+      "sourceUrl": "https://www.fao.org/faostat/en/#data/QCL"
+    },
+    {
+      "id": "cattle-meat",
+      "label": "牛肉生産量",
+      "year": 2024,
+      "identity": {
+        "domain": "QCL",
+        "item": "867",
+        "element": "5510",
+        "unit": "t",
+        "definition": "骨付き、生鮮・冷蔵の牛肉。生体牛・水牛肉とは別。",
+        "archiveSha256": "c5835418c18f9322e7decbd6800f93a216eaae3cdfa31acb08f0518c0c6d6853"
+      },
+      "observations": [
+        {
+          "code": "KAZ",
+          "name": "Kazakhstan",
+          "row": {
+            "year": 2024,
+            "value": 429335.6,
+            "rawValue": "429335.600000",
+            "flag": "A",
+            "note": null,
+            "worldValue": 69749016.37,
+            "worldRawValue": "69749016.370000",
+            "worldFlag": "A",
+            "share": 0.6155435909267719,
+            "retainedSources": [
+              "data-source/atlas/latin-agriculture/raw/faostat-qcl-2024-selected.csv",
+              "data-source/atlas/livestock/faostat-qcl-2024-extract.json",
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "KGZ",
+          "name": "Kyrgyzstan",
+          "row": {
+            "year": 2024,
+            "value": 125469.0,
+            "rawValue": "125469.000000",
+            "flag": "A",
+            "note": null,
+            "worldValue": 69749016.37,
+            "worldRawValue": "69749016.370000",
+            "worldFlag": "A",
+            "share": 0.179886407765839,
+            "retainedSources": [
+              "data-source/atlas/latin-agriculture/raw/faostat-qcl-2024-selected.csv",
+              "data-source/atlas/livestock/faostat-qcl-2024-extract.json",
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "TJK",
+          "name": "Tajikistan",
+          "row": {
+            "year": 2024,
+            "value": 313638.54,
+            "rawValue": "313638.540000",
+            "flag": "E",
+            "note": null,
+            "worldValue": 69749016.37,
+            "worldRawValue": "69749016.370000",
+            "worldFlag": "A",
+            "share": 0.4496673305559334,
+            "retainedSources": [
+              "data-source/atlas/latin-agriculture/raw/faostat-qcl-2024-selected.csv",
+              "data-source/atlas/livestock/faostat-qcl-2024-extract.json",
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "TKM",
+          "name": "Turkmenistan",
+          "row": {
+            "year": 2024,
+            "value": 209347.02,
+            "rawValue": "209347.020000",
+            "flag": "A",
+            "note": null,
+            "worldValue": 69749016.37,
+            "worldRawValue": "69749016.370000",
+            "worldFlag": "A",
+            "share": 0.30014332946212413,
+            "retainedSources": [
+              "data-source/atlas/latin-agriculture/raw/faostat-qcl-2024-selected.csv",
+              "data-source/atlas/livestock/faostat-qcl-2024-extract.json",
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "UZB",
+          "name": "Uzbekistan",
+          "row": {
+            "year": 2024,
+            "value": 1161390.21,
+            "rawValue": "1161390.210000",
+            "flag": "I",
+            "note": null,
+            "worldValue": 69749016.37,
+            "worldRawValue": "69749016.370000",
+            "worldFlag": "A",
+            "share": 1.6650990514893191,
+            "retainedSources": [
+              "data-source/atlas/latin-agriculture/raw/faostat-qcl-2024-selected.csv",
+              "data-source/atlas/livestock/faostat-qcl-2024-extract.json",
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        }
+      ],
+      "complete": true,
+      "productionRaw": "2239180.370000",
+      "worldRaw": "69749016.370000",
+      "worldFlag": "A",
+      "sourceUrl": "https://www.fao.org/faostat/en/#data/QCL"
+    },
+    {
+      "id": "cattle-milk",
+      "label": "牛の生乳生産量",
+      "year": 2024,
+      "identity": {
+        "domain": "QCL",
+        "item": "882",
+        "element": "5510",
+        "unit": "t",
+        "definition": "牛の未加工の生乳。乳製品・他の動物の乳・L単位とは別。",
+        "archiveSha256": "c5835418c18f9322e7decbd6800f93a216eaae3cdfa31acb08f0518c0c6d6853"
+      },
+      "observations": [
+        {
+          "code": "KAZ",
+          "name": "Kazakhstan",
+          "row": {
+            "year": 2024,
+            "value": 3577376.0,
+            "rawValue": "3577376.000000",
+            "flag": "A",
+            "note": null,
+            "worldValue": 797287454.1,
+            "worldRawValue": "797287454.100000",
+            "worldFlag": "A",
+            "share": 0.4486933767242381,
+            "retainedSources": [
+              "data-source/atlas/latin-agriculture/raw/faostat-qcl-2024-selected.csv",
+              "data-source/atlas/livestock/faostat-qcl-2024-extract.json",
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "KGZ",
+          "name": "Kyrgyzstan",
+          "row": {
+            "year": 2024,
+            "value": 1823796.0,
+            "rawValue": "1823796.000000",
+            "flag": "A",
+            "note": null,
+            "worldValue": 797287454.1,
+            "worldRawValue": "797287454.100000",
+            "worldFlag": "A",
+            "share": 0.22875011899676148,
+            "retainedSources": [
+              "data-source/atlas/latin-agriculture/raw/faostat-qcl-2024-selected.csv",
+              "data-source/atlas/livestock/faostat-qcl-2024-extract.json",
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "TJK",
+          "name": "Tajikistan",
+          "row": {
+            "year": 2024,
+            "value": 1177381.0,
+            "rawValue": "1177381.000000",
+            "flag": "A",
+            "note": null,
+            "worldValue": 797287454.1,
+            "worldRawValue": "797287454.100000",
+            "worldFlag": "A",
+            "share": 0.1476733383857219,
+            "retainedSources": [
+              "data-source/atlas/latin-agriculture/raw/faostat-qcl-2024-selected.csv",
+              "data-source/atlas/livestock/faostat-qcl-2024-extract.json",
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "TKM",
+          "name": "Turkmenistan",
+          "row": {
+            "year": 2024,
+            "value": 2652447.6,
+            "rawValue": "2652447.600000",
+            "flag": "A",
+            "note": null,
+            "worldValue": 797287454.1,
+            "worldRawValue": "797287454.100000",
+            "worldFlag": "A",
+            "share": 0.3326839756928266,
+            "retainedSources": [
+              "data-source/atlas/latin-agriculture/raw/faostat-qcl-2024-selected.csv",
+              "data-source/atlas/livestock/faostat-qcl-2024-extract.json",
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "UZB",
+          "name": "Uzbekistan",
+          "row": {
+            "year": 2024,
+            "value": 12422116.0,
+            "rawValue": "12422116.000000",
+            "flag": "A",
+            "note": null,
+            "worldValue": 797287454.1,
+            "worldRawValue": "797287454.100000",
+            "worldFlag": "A",
+            "share": 1.5580473436675892,
+            "retainedSources": [
+              "data-source/atlas/latin-agriculture/raw/faostat-qcl-2024-selected.csv",
+              "data-source/atlas/livestock/faostat-qcl-2024-extract.json",
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        }
+      ],
+      "complete": true,
+      "productionRaw": "21653116.600000",
+      "worldRaw": "797287454.100000",
+      "worldFlag": "A",
+      "sourceUrl": "https://www.fao.org/faostat/en/#data/QCL"
+    },
+    {
+      "id": "sheep-meat",
+      "label": "sheep-meat",
+      "year": 2024,
+      "identity": null,
+      "observations": [
+        {
+          "code": "KAZ",
+          "name": "Kazakhstan",
+          "row": null
+        },
+        {
+          "code": "KGZ",
+          "name": "Kyrgyzstan",
+          "row": null
+        },
+        {
+          "code": "TJK",
+          "name": "Tajikistan",
+          "row": null
+        },
+        {
+          "code": "TKM",
+          "name": "Turkmenistan",
+          "row": null
+        },
+        {
+          "code": "UZB",
+          "name": "Uzbekistan",
+          "row": null
+        }
+      ],
+      "complete": false,
+      "productionRaw": null,
+      "worldRaw": null,
+      "worldFlag": null,
+      "sourceUrl": null
+    },
+    {
+      "id": "goat-production",
+      "label": "goat-production",
+      "year": 2024,
+      "identity": null,
+      "observations": [
+        {
+          "code": "KAZ",
+          "name": "Kazakhstan",
+          "row": null
+        },
+        {
+          "code": "KGZ",
+          "name": "Kyrgyzstan",
+          "row": null
+        },
+        {
+          "code": "TJK",
+          "name": "Tajikistan",
+          "row": null
+        },
+        {
+          "code": "TKM",
+          "name": "Turkmenistan",
+          "row": null
+        },
+        {
+          "code": "UZB",
+          "name": "Uzbekistan",
+          "row": null
+        }
+      ],
+      "complete": false,
+      "productionRaw": null,
+      "worldRaw": null,
+      "worldFlag": null,
+      "sourceUrl": null
+    },
+    {
+      "id": "roundwood-production",
+      "label": "丸太生産量",
+      "year": 2024,
+      "identity": {
+        "domain": "FO",
+        "item": "1861",
+        "element": "5516",
+        "unit": "m3",
+        "definition": "FAOSTAT Roundwood。林地・樹木から搬出された丸太で、薪材と産業用丸太を含みます。製材と足し合わせません。",
+        "archiveSha256": "c2f7fc99651f620b6c0a16ff07f6c1d80c153fa01d5a3422413d9c89e0d61444"
+      },
+      "observations": [
+        {
+          "code": "KAZ",
+          "name": "Kazakhstan",
+          "row": {
+            "year": 2024,
+            "value": 460700.0,
+            "rawValue": "460700.0",
+            "flag": "A",
+            "note": null,
+            "worldValue": 3904786583.0,
+            "worldRawValue": "3904786583.000000",
+            "worldFlag": "E",
+            "share": 0.011798340068205463,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "KGZ",
+          "name": "Kyrgyzstan",
+          "row": {
+            "year": 2024,
+            "value": 88120.0,
+            "rawValue": "88120.0",
+            "flag": "E",
+            "note": null,
+            "worldValue": 3904786583.0,
+            "worldRawValue": "3904786583.000000",
+            "worldFlag": "E",
+            "share": 0.002256717444780259,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "TJK",
+          "name": "Tajikistan",
+          "row": {
+            "year": 2024,
+            "value": 3674000.0,
+            "rawValue": "3674000.0",
+            "flag": "E",
+            "note": null,
+            "worldValue": 3904786583.0,
+            "worldRawValue": "3904786583.000000",
+            "worldFlag": "E",
+            "share": 0.09408964925241345,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "TKM",
+          "name": "Turkmenistan",
+          "row": {
+            "year": 2024,
+            "value": 10000.0,
+            "rawValue": "10000.0",
+            "flag": "E",
+            "note": null,
+            "worldValue": 3904786583.0,
+            "worldRawValue": "3904786583.000000",
+            "worldFlag": "E",
+            "share": 0.0002560959424398842,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "UZB",
+          "name": "Uzbekistan",
+          "row": {
+            "year": 2024,
+            "value": 17465.0,
+            "rawValue": "17465.0",
+            "flag": "E",
+            "note": null,
+            "worldValue": 3904786583.0,
+            "worldRawValue": "3904786583.000000",
+            "worldFlag": "E",
+            "share": 0.0004472715634712577,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        }
+      ],
+      "complete": true,
+      "productionRaw": "4250285.0",
+      "worldRaw": "3904786583.000000",
+      "worldFlag": "E",
+      "sourceUrl": "https://www.fao.org/faostat/en/#data/FO"
+    },
+    {
+      "id": "sawnwood-production",
+      "label": "製材生産量",
+      "year": 2024,
+      "identity": {
+        "domain": "FO",
+        "item": "1872",
+        "element": "5516",
+        "unit": "m3",
+        "definition": "FAOSTAT Sawnwood。丸太を加工した製材品の生産量。丸太との二重合算を行いません。",
+        "archiveSha256": "c2f7fc99651f620b6c0a16ff07f6c1d80c153fa01d5a3422413d9c89e0d61444"
+      },
+      "observations": [
+        {
+          "code": "KAZ",
+          "name": "Kazakhstan",
+          "row": {
+            "year": 2024,
+            "value": 208600.0,
+            "rawValue": "208600.0",
+            "flag": "A",
+            "note": null,
+            "worldValue": 444970918.0,
+            "worldRawValue": "444970918.000000",
+            "worldFlag": "E",
+            "share": 0.04687946819931275,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "KGZ",
+          "name": "Kyrgyzstan",
+          "row": {
+            "year": 2024,
+            "value": 150000.0,
+            "rawValue": "150000.0",
+            "flag": "E",
+            "note": null,
+            "worldValue": 444970918.0,
+            "worldRawValue": "444970918.000000",
+            "worldFlag": "E",
+            "share": 0.03371006821618846,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "TJK",
+          "name": "Tajikistan",
+          "row": {
+            "year": 2024,
+            "value": 0.0,
+            "rawValue": "0.0",
+            "flag": "E",
+            "note": null,
+            "worldValue": 444970918.0,
+            "worldRawValue": "444970918.000000",
+            "worldFlag": "E",
+            "share": 0.0,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "TKM",
+          "name": "Turkmenistan",
+          "row": {
+            "year": 2024,
+            "value": 0.0,
+            "rawValue": "0.0",
+            "flag": "E",
+            "note": null,
+            "worldValue": 444970918.0,
+            "worldRawValue": "444970918.000000",
+            "worldFlag": "E",
+            "share": 0.0,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        },
+        {
+          "code": "UZB",
+          "name": "Uzbekistan",
+          "row": {
+            "year": 2024,
+            "value": 86703.0,
+            "rawValue": "86703.0",
+            "flag": "E",
+            "note": null,
+            "worldValue": 444970918.0,
+            "worldRawValue": "444970918.000000",
+            "worldFlag": "E",
+            "share": 0.019485093630321252,
+            "retainedSources": [
+              "public/assets/atlas/asia-farming-v1/statistics.json"
+            ]
+          }
+        }
+      ],
+      "complete": true,
+      "productionRaw": "445303.0",
+      "worldRaw": "444970918.000000",
+      "worldFlag": "E",
+      "sourceUrl": "https://www.fao.org/faostat/en/#data/FO"
+    }
+  ]
+}
