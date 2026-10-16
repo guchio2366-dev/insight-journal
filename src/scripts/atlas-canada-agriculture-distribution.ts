@@ -120,6 +120,7 @@ function qualityText(cell: CanadaCensusCell) {
 }
 const nationalReading=$('distribution-overview').innerHTML,nationalTitle=$('reading-title').textContent,nationalIntro=$('reading-intro').textContent;
 function renderReading() {
+  root.closest('[data-canada-agriculture]')?.dispatchEvent(new CustomEvent('canada-agro-selection',{detail:{product:state.metric}}));
   const profile=state.metric?config.readings.products[state.metric]:null;
   $('reading-eyebrow').textContent=state.metric?(dataset.products[state.metric].referenceLabel??'2021年・農業センサス'):'主要品目の産地と用途';
   $('reading-title').textContent=profile?state.metric==='chicken'?'養鶏の集積と鶏肉生産者':profile.label:nationalTitle;

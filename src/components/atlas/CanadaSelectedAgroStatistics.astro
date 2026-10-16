@@ -1,0 +1,22 @@
+---
+import {readFileSync} from 'node:fs';
+import {canadaAgroProducts,renderCanadaAgro} from '../../lib/atlas-canada-agro-statistics';
+import type {AgroData} from '../../lib/atlas-agro-statistics';
+import '../../styles/atlas-canada-agro-statistics.css';
+interface Props {product?:string;forest?:boolean}
+const {product='',forest=false}=Astro.props;
+const data=JSON.parse(readFileSync('public/assets/atlas/regional-production-statistics-v1/statistics.json','utf8')) as AgroData;
+const products=canadaAgroProducts.filter(p=>forest?['roundwood','sawnwood','paper-pulp'].includes(p[0]):!['roundwood','sawnwood','paper-pulp'].includes(p[0]));
+---
+<div class="canada-selected-agro" data-canada-selected-agro data-default-product={product} data-forest={String(forest)}>
+ {forest&&<label class="canada-forest-product">林産物の数量を読む<select data-canada-forest-product><option value="">品目を選択</option>{products.map(p=><option value={p[0]}>{p[1]}</option>)}</select></label>}
+ <section class="agro-statistics" data-canada-selected-statistics hidden aria-label="カナダの選択品目の生産・国内利用・輸出先">
+  <h2 data-canada-agro-heading>カナダ · 品目別の統計</h2>
+  <p class="agro-meta">生産量と世界シェア → 国内での使用・輸出 → 輸出先の量と構成比。期間・加工段階の異なる参考値は閉じた詳細へ示します。</p>
+  <label data-canada-chicken-product hidden>養鶏の生産品<select><option value="chicken">鶏肉</option><option value="eggs">鶏卵</option></select></label>
+  <div data-canada-agro-content></div>
+  <p class="agro-meta">AAFC・Statistics Canada：<a href="https://open.canada.ca/en/open-government-licence-canada">Open Government Licence – Canada</a>／<a href="https://www.statcan.gc.ca/en/terms-conditions/open-licence">Statistics Canada Open Licence</a>。FAOSTAT：<a href="https://www.fao.org/contact-us/terms/db-terms-of-use/">CC BY 4.0</a>。World Bank WITS / UN Comtrade：各原表の利用条件に従います。政府による推奨を意味しません。</p>
+ </section>
+ {products.map(([id,label])=><template data-canada-agro-template={id} data-label={label}><Fragment set:html={renderCanadaAgro(data,id)}/></template>)}
+</div>
+<script>import {initCanadaSelectedAgroStatistics} from '../../scripts/atlas-canada-agro-statistics';for(const host of document.querySelectorAll<HTMLElement>('[data-canada-selected-agro]'))initCanadaSelectedAgroStatistics(host);</script>

@@ -1,0 +1,91 @@
+Official public WITS table factual excerpt; not original HTML bytes.
+Accessed: 2026-10-16
+URL: https://wits.worldbank.org/trade/comtrade/en/country/CAN/year/2024/tradeflow/Exports/partner/ALL/product/440710
+L0: # Canada Coniferous wood sawn or chipped lengthwise, sli exports by country
+L2: in 2024
+L20:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | World | 6,398,903.72  | 31,451,200  | m³
+L21:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | United States | 5,490,678.07  | 28,057,700  | m³
+L22:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Japan | 315,977.09  | 989,868  | m³
+L23:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | China | 195,406.14  | 1,307,300  | m³
+L24:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Philippines | 72,464.07  | 207,966  | m³
+L25:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Other Asia, nes | 56,403.17  | 297,901  | m³
+L26:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Germany | 54,284.89  | 99,353  | m³
+L27:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | New Zealand | 36,238.43  | 20,578  | m³
+L28:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | United Kingdom | 27,707.63  | 20,170  | m³
+L29:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Mexico | 16,089.67  | 61,679  | m³
+L30:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Netherlands | 12,411.84  | 18,522  | m³
+L31:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Korea, Rep. | 12,248.84  | 40,194  | m³
+L32:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Belgium | 12,210.45  | 24,377  | m³
+L33:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Pakistan | 10,931.00  | 32,278  | m³
+L34:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Hong Kong, China | 10,641.16  | 41,975  | m³
+L35:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Australia | 10,320.81  | 10,304  | m³
+L36:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | United Arab Emirates | 5,971.39  | 35,554  | m³
+L37:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Indonesia | 5,663.54  | 16,817  | m³
+L38:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | India | 4,978.20  | 15,675  | m³
+L39:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Thailand | 4,847.13  | 24,711  | m³
+L40:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Saudi Arabia | 4,337.84  | 22,520  | m³
+L41:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | France | 4,111.66  | 3,103  | m³
+L42:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Vietnam | 3,910.21  | 15,992  | m³
+L43:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | French Polynesia | 3,696.34  | 9,681  | m³
+L44:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Malaysia | 3,218.79  | 16,780  | m³
+L45:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Denmark | 2,779.26  | 1,523  | m³
+L46:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Italy | 2,597.47  | 2,191  | m³
+L47:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | El Salvador | 2,049.81  | 6,669  | m³
+L48:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Sweden | 1,599.56  | 841  | m³
+L49:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Czech Republic | 1,461.47  | 1,486  | m³
+L50:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Egypt, Arab Rep. | 1,285.56  | 10,902  | m³
+L51:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Kuwait | 1,258.07  | 7,402  | m³
+L52:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Ireland | 1,106.18  | 724  | m³
+L53:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Spain | 993.57  | 566  | m³
+L54:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Bahrain | 987.71  | 5,676  | m³
+L55:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Iraq | 933.72  | 4,533  | m³
+L56:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Turks and Caicos Isl. | 732.70  | 1,547  | m³
+L57:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Estonia | 470.61  | 1,227  | m³
+L58:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Singapore | 434.38  | 2,058  | m³
+L59:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Norway | 353.86  | 231  | m³
+L60:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Trinidad and Tobago | 331.57  | 729  | m³
+L61:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Morocco | 324.94  | 313  | m³
+L62:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Peru | 304.50  | 1,750  | m³
+L63:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Jordan | 301.00  | 1,855  | m³
+L64:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Switzerland | 291.19  | 590  | m³
+L65:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Bangladesh | 276.83  | 1,013  | m³
+L66:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Bermuda | 256.12  | 341  | m³
+L67:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Cambodia | 255.47  | 1,238  | m³
+L68:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Panama | 251.65  | 647  | m³
+L69:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Dominica | 246.71  | 302  | m³
+L70:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Barbados | 205.97  | 278  | m³
+L71:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Israel | 201.93  | 176  | m³
+L72:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Uruguay | 198.58  | 302  | m³
+L73:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Turkey | 194.44  | 475  | m³
+L74:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | American Samoa | 178.99  | 557  | m³
+L75:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Greece | 155.86  | 110  | m³
+L76:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Grenada | 123.64  | 153  | m³
+L77:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Lebanon | 102.42  | 42  | m³
+L78:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Chile | 97.97  | 137  | m³
+L79:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Maldives | 92.64  | 300  | m³
+L80:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Dominican Republic | 73.96  | 190  | m³
+L81:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Jamaica | 71.92  | 55  | m³
+L82:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Antigua and Barbuda | 66.22  | 77  | m³
+L83:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Austria | 65.28  | 140  | m³
+L84:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Poland | 64.89  | 22  | m³
+L85:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Portugal | 60.62  | 256  | m³
+L86:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Cyprus | 53.91  | 167  | m³
+L87:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Bulgaria | 50.58  | 28  | m³
+L88:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Argentina | 42.27  | 42  | m³
+L89:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Iceland | 27.71  | 17  | m³
+L90:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Cayman Islands | 26.54  | 30  | m³
+L91:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Lithuania | 26.00  | 38  | m³
+L92:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Bahamas, The | 25.20  | 45  | m³
+L93:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Haiti | 17.36  | 29  | m³
+L94:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | United States Minor Outlying I | 14.49  | 54  | m³
+L95:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Cuba | 11.17  | 22  | m³
+L96:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | South Africa | 9.32  | 4  | m³
+L97:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Albania | 4.77  | 41  | m³
+L98:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | St. Kitts and Nevis | 3.80  | 70  | m³
+L99:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Guyana | 1.79  | 1  | m³
+L100:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Saint Pierre and Miquelon | 1.21  | 5  | m³
+L101:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Moldova | 0.03  | 0  | m³
+L102:  Canada  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | Equatorial Guinea | 0.01  | 0  | m³
+L103: HS Nomenclature used HS 1988/92 (H0)
+L104: HS Code 440710: Coniferous wood sawn or chipped lengthwise, sli
+L105: Please note: Exports is gross exports and Imports is gross imports

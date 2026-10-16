@@ -1,0 +1,161 @@
+Official PDF text extraction via web tool; retained factual table excerpt, not original PDF bytes.
+URL: https://agriculture.canada.ca/sites/default/files/documents/2026-09/Canada%20Outlook%20for%20Principal%20Field%20Crops_202609.pdf
+Accessed: 2026-10-16
+Only unflagged 2024-2025 observations are adopted. Page indices are zero based.
+L906@P13: CANADA: GRAINS AND OILSEEDS SUPPLY AND DISPOSITION
+L907@P13: Grain and
+L908@P13: Crop Year
+L909@P13: (a)
+L910@P13: Area
+L911@P13: Seeded
+L912@P13: Area
+L913@P13: Harvested Yield Production
+L914@P13: Imports
+L915@P13: (b)
+L916@P13: Total
+L917@P13: Supply
+L918@P13: Exports
+L919@P13: (c)
+L920@P13: Food &
+L921@P13: Industrial
+L922@P13: Use (d)
+L923@P13: Feed,
+L924@P13: Waste &
+L925@P13: Dockage
+L926@P13: Total
+L927@P13: Domestic
+L928@P13: Use (e)
+L929@P13: Carry-out
+L930@P13: Stocks
+L931@P13: Average
+L932@P13: Price (g)
+L933@P13: t/ha $/t
+L934@P13: Durum
+L935@P13: 2024-2025 2,576 2,565 2.49 6,380 5 7,054 5,821 193 277 722 512 321
+L936@P13: 2025-2026f 2,643 2,593 2.82 7,305 8 7,825 5,845 220 433 878 1,102 282
+L937@P13: 2026-2027f 2,371 2,309 2.78 6,417 5 7,524 5,050 220 525 974 1,500 280
+L938@P13: Wheat Except Durum
+L939@P13: 2024-2025 8,259 8,087 3.66 29,559 80 34,279 23,399 3,351 2,947 7,151 3,728 282
+L940@P13: 2025-2026f 8,297 8,022 4.15 33,257 166 37,151 23,860 3,513 3,411 7,743 5,548 269
+L941@P13: 2026-2027f 7,951 7,712 3.85 29,705 100 35,352 23,450 3,200 3,575 7,602 4,300 310
+L942@P13: All Wheat
+L943@P13: 2024-2025 10,835 10,652 3.37 35,939 85 41,333 29,220 3,543 3,224 7,873 4,240
+L944@P13: 2025-2026f 10,940 10,615 3.82 40,562 174 44,976 29,705 3,733 3,844 8,621 6,650
+L945@P13: 2026-2027f 10,322 10,021 3.60 36,122 105 42,876 28,500 3,420 4,101 8,576 5,800
+L946@P13: Barley
+L947@P13: 2024-2025 2,592 2,394 3.40 8,144 169 9,464 2,842 93 5,067 5,373 1,249 296
+L948@P13: 2025-2026f 2,483 2,277 4.27 9,725 153 11,127 4,181 305 5,467 6,006 940 283
+L949@P13: 2026-2027f 2,743 2,477 3.92 9,713 120 10,773 3,500 305 5,745 6,273 1,000 305
+L950@P13: Corn
+L951@P13: 2024-2025 1,478 1,449 10.59 15,345 1,828 19,169 2,776 5,848 8,946 14,810 1,584 225
+L952@P13: 2025-2026f 1,531 1,460 10.18 14,867 2,100 18,551 1,300 5,950 9,284 15,251 2,000 233
+L953@P13: 2026-2027f 1,604 1,559 10.61 16,549 2,000 20,549 2,600 5,950 9,883 15,849 2,100 260
+L954@P13: Oats
+L955@P13: 2024-2025 1,174 993 3.38 3,358 17 4,045 2,565 76 796 973 507 345
+L956@P13: 2025-2026f 1,213 1,049 3.74 3,920 14 4,441 2,407 83 1,287 1,457 577 307
+L957@P13: 2026-2027f 1,030 840 3.61 3,031 20 3,628 2,361 90 680 867 400 330
+L958@P13: Rye
+L959@P13: 2024-2025 183 117 3.60 421 1 513 154 39 153 216 143 165
+L960@P13: 2025-2026f 276 156 3.94 613 1 757 168 45 161 227 362 142
+L961@P13: 2026-2027f 236 118 3.33 394 2 758 203 55 202 275 280 150
+L962@P13: Mixed Grains
+L963@P13: 2024-2025 149 62 2.46 152 0 152 0 0 152 152 0
+L964@P13: 2025-2026f 123 68 2.69 184 0 184 0 0 184 184 0
+L965@P13: 2026-2027f 144 65 2.65 172 0 172 0 0 172 172 0
+L966@P13: Total Coarse Grains
+L967@P13: 2024-2025 5,575 5,015 5.47 27,419 2,014 33,343 8,337 6,055 15,114 21,524 3,482
+L968@P13: 2025-2026f 5,626 5,010 5.85 29,309 2,269 35,060 8,056 6,383 16,382 23,124 3,880
+L969@P13: 2026-2027f 5,757 5,059 5.90 29,860 2,142 35,881 8,664 6,400 16,681 23,437 3,780
+L970@P13: Canola
+L971@P13: 2024-2025 8,908 8,846 2.17 19,239 131 22,595 9,379 11,412 143 11,619 1,597 677
+L972@P13: 2025-2026f 8,757 8,705 2.55 22,227 109 23,934 8,956 12,891 119 13,078 1,900 711
+L973@P13: 2026-2027f 9,490 9,406 2.34 22,051 130 24,080 7,700 13,900 450 14,401 1,979 775
+L974@P13: Flaxseed
+L975@P13: 2024-2025 204 201 1.28 258 8 431 228 N/A 57 69 134 630
+L976@P13: 2025-2026f 251 249 1.82 454 7 596 284 N/A 88 100 212 625
+L977@P13: 2026-2027f 269 257 1.50 386 10 607 275 N/A 100 111 221 600
+L978@P13: Soybeans
+L979@P13: 2024-2025 2,311 2,290 3.38 7,728 267 8,601 5,531 1,678 540 2,461 511 487
+L980@P13: 2025-2026f 2,340 2,321 2.98 6,918 350 7,779 5,300 1,750 100 2,050 429 552
+L981@P13: 2026-2027f 2,412 2,391 3.12 7,456 400 8,284 5,400 1,750 400 2,350 534 575
+L982@P13: Total Oilseeds
+L983@P13: 2024-2025 11,422 11,337 2.40 27,226 407 31,627 15,138 13,090 740 14,148 2,242
+L984@P13: 2025-2026f 11,347 11,275 2.63 29,600 466 32,308 14,540 14,641 307 15,228 2,540
+L985@P13: 2026-2027f 12,171 12,054 2.48 29,892 540 32,972 13,375 15,650 950 16,862 2,735
+L986@P13: Total Grains And Oilseeds
+L987@P13: 2024-2025 27,831 27,004 3.35 90,584 2,506 106,303 52,695 22,688 19,078 43,545 9,964
+L988@P13: 2025-2026f 27,913 26,900 3.70 99,470 2,909 112,344 52,301 24,756 20,533 46,974 13,069
+L989@P13: 2026-2027f 28,250 27,134 3.53 95,873 2,787 111,729 50,539 25,470 21,732 48,875 12,315
+L990@P13: September 25, 2026
+L991@P13: -------- thousand ha -------- -------------------------------------------------- thousand tonnes --------------------------------------------------
+L992@P13: (a) Crop year is August-July, except corn and soybeans, for which the crop year is September-August.
+L993@P13: (b) Imports exclude products.
+L994@P13: (c) Exports include grain products but exclude oilseed products.
+L995@P13: (d) Food and Industrial use for soybeans is based on data from the Canadian Oilseed Processors Association.
+L996@P13: (e) Total Domestic Use = Food and Industrial Use + Feed Waste & Dockage + Seed Use + Loss in Handling
+L997@P13: (g) Crop year average prices: Wheat (No.1 CWRS, 13.5% protein) and Durum (No.1 CWAD, 13% protein), both are average Saskatchewan producer spot
+L998@P13: prices. Barley (No. 1 feed, cash, I/S Lethbridge), Corn (No.2 CE, cash, I/S Chatham), Oats (US No. 2 Heavy, CBOT nearby futures); Rye (Average Prairie
+L999@P13: producer price, FOB farm); Canola (No. 1 Canada, cash, Track Vancouver); Flaxseed (No. 1 CW, cash, I/S Saskatoon); Soybeans (No. 2 CE, cash, I/S
+L1000@P13: Chatham)
+L1001@P13: Source: Statistics Canada (STC) and Agriculture and Agri-Food Canada (AAFC)
+L1002@P13: f: 2025-26 are STC estimates with the exception of corn and soybeans, which are AAFC. For 2026-27, all forecasts are by AAFC except for area, yield, and
+L1003@P13-14: production, which are STC. Unclassified | Non classifié#
+L1004@P14: CANADA: PULSE AND SPECIAL CROPS SUPPLY AND DISPOSITION
+L1005@P14: Grain and
+L1006@P14: Crop Year (a)
+L1007@P14: Area
+L1008@P14: Seeded
+L1009@P14: Area
+L1010@P14: Harvested Yield Production Imports (b)
+L1011@P14: Total
+L1012@P14: Supply Exports (b)
+L1013@P14: Total
+L1014@P14: Domestic
+L1015@P14: Use (c)
+L1016@P14: Carry-out
+L1017@P14: Stocks
+L1018@P14: Stocks-toUse RatioAverage
+L1019@P14: Price (d)
+L1020@P14: t/ha % $/t
+L1021@P14: Dry Peas
+L1022@P14: 2024-2025 1,300 1,281 2.34 2,997 39 3,335 2,177 670 489 17% 405
+L1023@P14: 2025-2026f 1,420 1,383 2.85 3,934 13 4,436 2,659 595 1,182 36% 300
+L1024@P14: 2026-2027f 1,227 1,194 2.73 3,260 20 4,462 2,700 652 1,110 33% 310
+L1025@P14: Lentils
+L1026@P14: 2024-2025 1,704 1,693 1.44 2,431 126 2,722 1,821 340 561 26% 790
+L1027@P14: 2025-2026f 1,772 1,743 1.93 3,363 50 3,974 2,416 274 1,284 48% 500
+L1028@P14: 2026-2027f 1,579 1,556 1.59 2,467 75 3,825 2,400 280 1,145 43% 520
+L1029@P14: Dry Beans
+L1030@P14: 2024-2025 163 160 2.65 424 71 510 402 73 35 7% 1,075
+L1031@P14: 2025-2026f 172 171 2.55 438 60 533 406 72 55 12% 800
+L1032@P14: 2026-2027f 147 136 2.61 354 70 479 375 74 30 7% 900
+L1033@P14: Chickpeas
+L1034@P14: 2024-2025 194 194 1.48 287 43 360 210 88 62 21% 735
+L1035@P14: 2025-2026f 219 218 2.21 482 32 576 258 82 236 70% 520
+L1036@P14: 2026-2027f 216 211 1.90 400 40 676 250 86 340 101% 450
+L1037@P14: Mustard Seed
+L1038@P14: 2024-2025 245 243 0.79 192 8 288 91 54 143 98% 860
+L1039@P14: 2025-2026f 146 145 0.97 140 7 289 100 41 148 105% 865
+L1040@P14: 2026-2027f 153 149 1.06 158 8 314 100 44 170 118% 815
+L1041@P14: Canary Seed
+L1042@P14: 2024-2025 118 118 1.57 185 0 230 133 13 84 58% 685
+L1043@P14: 2025-2026f 129 129 1.82 235 0 319 148 12 159 99% 435
+L1044@P14: 2026-2027f 96 94 1.52 142 0 301 135 11 155 106% 425
+L1045@P14: Sunflower Seed
+L1046@P14: 2024-2025 24 24 2.13 51 25 251 36 64 151 151% 720
+L1047@P14: 2025-2026f 31 29 2.40 69 28 248 31 59 158 176% 695
+L1048@P14: 2026-2027f 35 31 2.30 72 25 255 35 65 155 155% 705
+L1049@P14: Total Pulse And Special Crops (c)
+L1050@P14: 2024-2025 3,749 3,712 1.77 6,568 312 7,696 4,870 1,301 1,525
+L1051@P14: 2025-2026f 3,890 3,818 2.27 8,661 189 10,375 6,018 1,135 3,221
+L1052@P14: 2026-2027f 3,452 3,370 2.03 6,853 238 10,312 5,995 1,212 3,105
+L1053@P14: September 25, 2026
+L1054@P14: ------- thousand ha ------- ------------------------------ thousand metric tonnes -------------------------------
+L1055@P14: (a) Crop year is August-July. Grains Include pulses (dry peas, lentils, dry beans, chick peas) and special crops (mustard seed, canary seed,
+L1056@P14: sunflower seed).
+L1057@P14: (b) Imports and exports exclude products.
+L1058@P14: (c) Total Domestic Use = Food and Industrial Use + Feed Waste & Dockage + Seed Use + Loss in Handling
+L1059@P14: (d) Producer price, FOB plant, averages over all types, grades and markets.
+L1060@P14: Source: Statistics Canada (STC) and Agriculture and Agri-Food Canada (AAFC)
+L1061@P14: f: 2025-26 are STC estimates with the exception of corn and soybeans, which are AAFC. For 2026-27, all forecasts are by AAFC except for
+L1062@P14: area, yield, and production, which are STC.

@@ -1,0 +1,16 @@
+Official FAO public table factual excerpt; not original HTML bytes.
+URL: https://www.fao.org/forestry/statistics/data/en/
+Accessed: 2026-10-16
+2024 global production shares as published, rounded to whole percent. Do not infer national volume from these shares.
+L48: Percentage of global production (2024)
+L50:   * Industrial roundwood: United States of America (16%); Brazil (10%); Russian Federation (10%); China (10%); Canada (6%); Indonesia (5%); Sweden (3%); Finland (3%); India (3%).
+L53:   * Sawnwood: United States of America (17%); China (14%); Russian Federation (8%); Canada (8%); India (5%); Germany (5%); Sweden (4%).
+L55:   * Pulp for paper: United States of America (19%); China (17%); Brazil (13%); Canada (7%); Sweden (6%); Indonesia (5%); Finland (5%); Russian Federation (5%); Japan (4%); India (3%); Chile (3%).
+L96: Roundwood  | million m³  | 3 905  | 1%  | 0%  | 12%  | 99  | -2%  | -31%  | -16%
+L101:  | million m³  | 1 956  | 2%  | -1%  | 16%  | 93  | -1%  | -32%  | -19%
+L105: Sawnwood  | million m³  | 445  | 0%  | -8%  | 14%  | 129  | -1%  | -17%  | 13%
+L112: Wood pulp  | Million tonnes  | 189  | 3%  | 3%  | 11%  | 73  | 1%  | 7%  | 90%
+L48:  Canada  | Import  | 120100  | Soya beans  | 2024  | Uganda | 0.41  | 320  | Kg
+L50:  Canada  | Import  | 120100  | Soya beans  | 2024  | Thailand | 0.16  | 45  | Kg
+L53:  Canada  | Import  | 120100  | Soya beans  | 2024  | Brazil | 0.03  | 25  | Kg
+L55:  Canada  | Import  | 120100  | Soya beans  | 2024  | Congo, Dem. Rep. | 0.02  | 10  | Kg
