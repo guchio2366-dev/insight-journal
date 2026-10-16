@@ -1,7 +1,14 @@
 --- a/src/scripts/atlas-agro-existing-statistics.ts
 +++ b/src/scripts/atlas-agro-existing-statistics.ts
-@@ -18,6 +18,10 @@
+@@ -16,8 +16,17 @@
+  const trade=content.querySelector<HTMLElement>('[data-agro-existing-trade]'),supply=content.querySelector<HTMLElement>('[data-agro-existing-supply]');
+  if(!trade)return;
   const product=agroExistingTradeProduct(seriesId);
++ if(document.querySelector('[data-east-farm-foundations]')&&showQuantities&&country&&supply){
++  const {renderEastSupplyUseReference}=await import('./atlas-east-supply-use-references.ts');
++  const topic=({'maize-production':'maize','rice-production':'rice','qcl-328-production':'cotton'} as Record<string,string>)[seriesId];
++  if(topic)renderEastSupplyUseReference(supply,topic,country,false);
++ }
   if(document.querySelector('[data-east-farm-foundations]')&&product){
    const {renderEastTrade}=await import('./atlas-east-agri-statistics.ts');
 +  if(showQuantities&&country){

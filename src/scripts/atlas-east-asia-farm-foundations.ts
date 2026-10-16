@@ -1,6 +1,7 @@
 import data from '../../public/assets/atlas/east-asia-v1/farm-foundations.json';
 import statistics from '../../public/assets/atlas/east-asia-v2/food-wood-statistics-2023.json';
 import {renderEastTrade,renderEastFoodInputAudit} from './atlas-east-agri-statistics.ts';
+import {renderEastSupplyUseReference} from './atlas-east-supply-use-references.ts';
 import {japanWheatSupply as wheat} from '../data/atlas/japan-wheat-supply';
 import type {AsiaRegionId} from '../lib/atlas-asia-state';
 
@@ -61,6 +62,7 @@ export function renderEastAsiaFarmFoundations(root:HTMLElement,region:AsiaRegion
   section.querySelector<HTMLElement>('[data-east-partner-title]')!.textContent=selectedQuantities?'主要品目の輸出先数量・域外輸出入相手（金額）':'主要品目の域外輸出入相手';
   section.querySelector<HTMLElement>('[data-east-share-title]')!.textContent='品目群のカロリー構成と自給状況';
   renderEastFoodInputAudit(forest,share,topic??'overview',code);
+  if(code&&topic&&topic!=='overview')renderEastSupplyUseReference(forest,topic,code);
   for(const product of topic==='overview'||!topic?['rice','wheat','maize','soybean']:[topic])renderEastTrade(destinations,product,code,selectedQuantities);
   p(destinations,selectedQuantities?'国別対世界の輸出数量参考と、東アジア域内相手を除いた既存の輸出入金額は別の分母です。食料需給表の原料換算量・食用量へ合算しません。':'相手国の円はHS商品の貿易額です。食料需給表の原料換算量・食用量へ合算しません。');
   forest.append(el('a','FAOSTAT 食料需給表'));forest.querySelector('a')!.href='https://www.fao.org/faostat/en/#data/FBS';

@@ -18,6 +18,12 @@ const amount=(n:number|null)=>n===null?'未掲載':n>=10000?`${(n/10000).toLocal
  <p class="sources"><a href="/insight-journal/assets/atlas/east-asia-v2/food-wood-statistics-2023.json">2023年の相手国集計・対象・分母・出典と不足入力</a>。相手国表はUN Comtrade（© United Nations）、World Bank WITSの公表表。国別の完全表から域内相手を除外し、輸入元・輸出先を別に集計しています。食料需給・カロリーの原行不足と、相手国表の報告区分不足は区別しています。<a href="https://uncomtrade.org/docs/re-dissemination-of-data/">データ利用条件</a>。</p>
 </section>
 <style>
+ :global(.east-supply-use-reference){min-width:0;overflow-wrap:anywhere;margin:12px 0}
+ :global(.east-supply-use-reference summary){min-height:44px;align-content:center;cursor:pointer}
+ .columns :global(.east-supply-use-reference p){font-size:13px;line-height:1.7}
+ :global(.east-supply-use-reference table){width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+ :global(.east-supply-use-reference th),:global(.east-supply-use-reference td){padding:6px 4px;border-bottom:1px solid var(--rule);text-align:right}
+ :global(.east-supply-use-reference th:first-child){text-align:left}
  :global(.east-export-quantities){min-width:0;overflow-wrap:anywhere;margin:12px 0 20px}
  :global(.east-export-quantities .agro-partner-pie){width:min(132px,100%);aspect-ratio:1;border-radius:50%;margin:10px 0}
  .columns :global(.east-export-quantities p),.columns :global(.east-export-quantities li){font-size:13px;line-height:1.7}

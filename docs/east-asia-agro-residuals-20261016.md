@@ -1,6 +1,6 @@
 # 東アジアの農林業残件：地域専用実装・引継ぎ（2026-10-16）
 
-**部分完了。新たに韓国丸大豆1国品目を既存の地図下三列へ接続した。輸出相手数量18表（全447相手行、うち数量完備16表）の地域専用参考表示も追加した。実消費・用途・在庫を追跡した完全フロー、地域全体の域外数量、パルプ原行、指定サイズでの画像目視は未達。PR・push・マージ・公開は行っていない。**
+**部分完了。新たに韓国丸大豆1国品目を既存の地図下三列へ接続した。輸出相手数量18表（全447相手行、うち数量完備16表）の地域専用参考表示も追加した。追補ではWASDE4系列の需給参考を追加（[追補結果・不足表](east-asia/agro-20261016/source-followup.md)）。実消費・用途・在庫を追跡した完全フロー、地域全体の域外数量、パルプ原行、指定サイズでの画像目視は未達。追指示に基づき地域ブランチをpushし、初回remote SHA `4050654072e90a0ab6f2a46ddf67191035ea26c3` の一致を確認した。PR・マージ・公開は行っていない。**
 
 ブランチ：`codex/east-asia-agro-statistics-20261016`。`git fetch origin main` 後の基準 `3fbb4c957c21685bddbf8148a95a2a03ba210553` から開始。開始時worktreeはclean、AGENTS.mdはcheckoutと親ディレクトリに存在しなかった。`atlas-agro-statistics-implementation-20261014.md`、選択品目の数量フロー仕様・取得監査、東アジア既存資料・データ・表示、米国の `CropStatistics.astro` / `CropSupplyUse.astro` を確認した。
 
@@ -21,7 +21,7 @@
 
 ## 共通部品への提案（未適用）
 
-[`patches/east-asia-selected-quantities-common-20261016.patch`](patches/east-asia-selected-quantities-common-20261016.patch) は共通 `renderAgroExistingStatistics` の東アジア分岐に4行を追加し、選択時だけ地域専用数量adapterを、三列の③にある閉じた別資料参考へ呼び出す提案。`git apply --check` 通過。**このブランチの共通コードには適用していない。**
+[`east-asia/agro-20261016/common-integration.patch`](east-asia/agro-20261016/common-integration.patch) は地域専用docsへ保存した未適用提案。共通 `renderAgroExistingStatistics` に9行を追加し、選択時だけ地域専用数量adapterを、三列の②③にある閉じた別資料参考へ呼び出す。②へWASDE4系列、③へ2023年輸出相手数量を参照する。`git apply --check` 通過。**このブランチの共通コードには適用していない。**
 
 韓国丸大豆の主三列は既存の `agroEastQuantityFlow` インターフェースを使い、共通変更なしで接続済み。他品目の2023輸出相手数量は地域専用の既存参考欄に接続済みだが、共通③への接続は上記パッチの統合後となる。同年・同製品の不足注記は消さず、2024年FAO／2024/25 WASDEの輸出内訳へ接合しない。提案パッチは共通ファイルを変更せずメモリ上で適用したコードをesbuildでbundleし、選択時のみ数量が追加され、既存金額カードが残ることをDOMで検証した。
 
@@ -48,4 +48,4 @@
 - `npm run test:e2e`：647成功、11スキップ、失敗0（初回buildの静的成果物・DOM操作検証）。選択時ラベルの最終版は追加の地域47件と再buildで検証。`npm run verify:release` も成功。これらを実ブラウザの画像目視の代用とは扱わない。
 - [`qa/east-asia-agro-20261016/report.json`](qa/east-asia-agro-20261016/report.json)：1896×996、1280×665 CSS px、DPR1.5、`chromiumSandbox:true`。ローカルworking treeのbuild identityは`local`として記録。ChromiumのSUID sandbox設定不備で起動停止、撮影0件。安全なuser namespace sandboxの可否も確認したが `No usable sandbox` で停止。`--no-sandbox`やシステム権限変更は行っていない。画像目視・実レイアウトの可読性を完了とは呼ばない。
 
-クラウド側にsandboxが正常なChromeを用意した後、`REVIEW_CHROME_PATH=/path/to/chrome node scripts/east-asia/capture-selected-quantities.mjs` を実行する。指定2サイズ×8選択状態、日付／単位／全相手表、概説復帰、日本除外、米国大豆基準を記録する。ユーザーPCへの接続は不要。共通提案パッチを統合した場合も、統合後に同じ検査と③の別資料参考の開閉を確認する。
+クラウド側にsandboxが正常なChromeを用意した後、`REVIEW_CHROME_PATH=/path/to/chrome node scripts/east-asia/capture-selected-quantities.mjs` を実行する。指定2サイズ×11選択状態、日付／単位／全相手表、WASDE参考の開閉、概説復帰、日本除外、米国大豆基準を記録する。ユーザーPCへの接続は不要。共通提案パッチを統合した場合も、統合後に同じ検査と②③の別資料参考の開閉を確認する。

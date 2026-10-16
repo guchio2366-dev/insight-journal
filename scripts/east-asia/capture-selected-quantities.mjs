@@ -29,7 +29,7 @@ try{
   const context=await browser.newContext({viewport,deviceScaleFactor:1.5,locale:'ja-JP',timezoneId:'UTC',reducedMotion:'reduce'});
   const page=await context.newPage();page.on('pageerror',error=>report.errors.push(String(error)));
   await page.route('**/*',route=>new URL(route.request().url()).origin===new URL(origin).origin?route.continue():route.abort());
-  for(const [country,topic] of [['CHN','soybean'],['KOR','soybean'],['CHN','wheat'],['KOR','rice'],['CHN','forest'],['PRK','forest'],['TWN','soybean'],['MNG','wheat']]){
+  for(const [country,topic] of [['CHN','soybean'],['KOR','soybean'],['CHN','wheat'],['KOR','rice'],['CHN','forest'],['PRK','forest'],['TWN','soybean'],['MNG','wheat'],['CHN','rice'],['KOR','maize'],['CHN','cotton']]){
    await page.goto(`${origin}/atlas/asia/east-asia/agriculture/?topic=${topic}&place=${country}`,{waitUntil:'networkidle'});
    await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.mapReady==='true'&&document.querySelector('[data-agro-statistics]')?.dataset.agroReady==='true');
    const host=page.locator('[data-agro-statistics]');
@@ -54,6 +54,11 @@ try{
    await host.scrollIntoViewIfNeeded();await page.screenshot({path:resolve(out,`${viewport.width}-${country}-${topic}-statistics.png`)});
    const reference=page.locator('[data-east-export-quantities]').first();
    if(await reference.count()){await reference.scrollIntoViewIfNeeded();await page.screenshot({path:resolve(out,`${viewport.width}-${country}-${topic}-quantity-reference.png`)});}
+   const supply=page.locator('[data-east-forest-flows] [data-east-supply-use-reference]').first();
+   if(await supply.count()){
+    assert.equal(await supply.evaluate(el=>el.open),false);await supply.locator(':scope>summary').click();
+    await supply.scrollIntoViewIfNeeded();await page.screenshot({path:resolve(out,`${viewport.width}-${country}-${topic}-supply-reference.png`)});
+   }
    report.cases.push({country,topic,...measurement});
   }
   await page.goto(`${origin}/atlas/asia/east-asia/agriculture/?topic=rice&place=CHN`,{waitUntil:'networkidle'});
