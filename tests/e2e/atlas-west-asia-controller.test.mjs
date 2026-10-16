@@ -16,7 +16,7 @@ async function setup(route,query='',failBasins=false,viewport={width:1024,height
  const w=new Window({url:`https://example.com/insight-journal/atlas/west-asia/${route}/${query}`,settings:{disableCSSFileLoading:true,disableJavaScriptFileLoading:true,enableJavaScriptEvaluation:true}});
  w.happyDOM.setWindowSize(viewport);
  const media=[],matchMedia=w.matchMedia.bind(w);w.matchMedia=query=>{const result=matchMedia(query);media.push(result);return result;};
- w.document.body.innerHTML=(await readFile(`dist/atlas/west-asia/${route}/index.html`,'utf8')).replace(/<script\b[\s\S]*?<\/script>/g,'');
+ w.document.body.innerHTML=(await readFile(`dist/atlas/west-asia/${route}/index.html`,'utf8')).replace(/<script\b[\s\S]*?<\/script>/g,script=>fixture.preserveAgroConfig&&script.includes('data-agro-config')?script:'');
  const observed=[];w.ResizeObserver=class{constructor(callback){this.callback=callback;}observe(target){observed.push({target,callback:this.callback});}disconnect(){}};Object.defineProperty(w,'crypto',{value:webcrypto});w.Response=Response;w.Blob=Blob;w.DecompressionStream=DecompressionStream;
  w.fetch=async url=>{const injected=fixture.fetch?.(String(url));if(injected!==undefined)return injected;if(failBasins&&String(url).endsWith('basins.json'))throw Error('Test: unavailable vector');return new Response(await readFile('public/'+String(url).replace('/insight-journal/','')));};
  w.eval(bundle.outputFiles[0].text);const q=s=>w.document.querySelector(s);
@@ -493,4 +493,65 @@ test('農畜産分布の格子取得失敗から同じ品目・比較・地点�
   assert.equal(q('[data-west-atlas]').dataset.comparing,'true');
   assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-farm-context]').length,5);
  }finally{await w.happyDOM.close();}
+});
+
+test('西アジア専用品目の三列と共通の肉乳卵統計は選択国へ同期し、別定義参考を保持する',async()=>{
+ const {w,q,select}=await setup('agriculture','?topic=dates&country=SAU',false,{width:1280,height:665},{preserveAgroConfig:true});
+ try{
+  const crop=q('[data-west-product-statistics]'),shared=q('[data-agro-statistics]');
+  assert.equal(crop.hidden,false);assert.equal(shared.hidden,true);
+  assert.deepEqual([...crop.querySelectorAll('.agro-columns>section')].map(s=>s.dataset.agroStage),['production','use','destinations']);
+  assert.match(crop.textContent,/サウジアラビア.*2024暦年.*ナツメヤシ/s);
+  const trade=crop.querySelector('[data-west-dates-trade]');assert.ok(trade);assert.equal(trade.open,false);assert.equal(trade.querySelectorAll('tbody tr').length,118);
+  assert.equal(q('[data-west-farm-supply]').closest('.agro-existing-regional-reference').open,false);
+  const frame=q('[data-west-map]').getAttribute('viewBox');
+  q('[data-west-topic-button=olives]').click();await until(()=>q('[data-west-atlas]').dataset.topic==='olives'&&q('[data-west-loading]').hidden);
+  assert.equal(q('[data-west-map]').getAttribute('viewBox'),frame,'statistics must not change the map view');
+  assert.equal(crop.querySelector('[data-west-dates-trade]'),null);
+  select('[data-west-country]','TUR');await until(()=>q('[data-west-loading]').hidden&&crop.textContent.includes('トルコ'));
+  for(const [topic,id] of [['cattle-milk','cattle-milk'],['hen-eggs','chicken-eggs'],['chicken-meat','chicken-meat'],['cattle-meat','cattle-meat'],['buffalo-milk','buffalo-milk']]){
+   q(`[data-west-topic-button="${topic}"]`).click();
+   await until(()=>shared.dataset.agroReady==='true'&&shared.querySelector(`[data-agro-country=TUR][data-agro-series="${id}"]`));
+   assert.equal(crop.hidden,true);assert.equal(crop.childElementCount,0);assert.equal(shared.hidden,false);
+   assert.doesNotMatch(shared.querySelector('[data-agro-stage=production]').textContent,/国内生産：未収録/);
+  }
+  q('[data-west-topic-button=wheat]').click();await until(()=>q('[data-west-national-fbs=TUR]')&&q('[data-west-loading]').hidden);
+  assert.equal(q('[data-west-national-fbs=TUR]').open,false);assert.match(q('[data-west-national-fbs=TUR]').textContent,/33,402.*4,188/s);
+  select('[data-west-country]','PSE');await until(()=>q('[data-west-country-reference]').hidden&&q('[data-west-loading]').hidden);
+  assert.equal(q('[data-west-national-fbs]'),null,'a country must not inherit Turkey’s FBS example');
+ }finally{await w.happyDOM.close();}
+});
+
+test('品目未選択へ戻ると地域統計の元ノード・順序・内容が復元される',async()=>{
+ const {w,q,select}=await setup('agriculture','',false,{width:1896,height:996},{preserveAgroConfig:true});
+ try{
+  const url=w.location.href,box=q('[data-west-farm-supply]'),home=box.parentNode,markup=box.outerHTML;
+  assert.equal(q('[data-west-regional-flow-slot]').hidden,true);
+  q('[data-west-topic-button=dates]').click();await until(()=>q('[data-west-atlas]').dataset.topic==='dates'&&q('[data-west-loading]').hidden);
+  assert.equal(box.parentNode,q('[data-west-regional-flow-slot]'));
+  assert.match(box.querySelector('[data-regional-flow-stage=production]').textContent,/収録値合計.*t.*／20対象/s);
+  select('[data-west-country]','SAU');await until(()=>!q('[data-west-product-statistics]').hidden&&q('[data-west-loading]').hidden);
+  assert.equal(box.closest('.agro-existing-regional-reference').parentNode,q('[data-west-regional-flow-slot]'));
+  w.history.replaceState({},'',url);w.dispatchEvent(new w.PopStateEvent('popstate'));
+  await until(()=>q('[data-west-atlas]').dataset.topic==='farming-overview'&&q('[data-west-loading]').hidden);
+  assert.equal(q('[data-west-farm-supply]'),box);assert.equal(box.parentNode,home);assert.equal(box.outerHTML,markup);
+  assert.equal(q('[data-west-regional-flow-slot]').hidden,true);assert.equal(q('[data-west-product-statistics]').hidden,true);assert.equal(q('[data-west-product-statistics]').childElementCount,0);
+  assert.equal(q('[data-agro-statistics]').hidden,true);assert.equal(q('.agro-existing-regional-reference'),null);
+  assert.equal(q('[data-west-scene]').querySelectorAll('[data-west-farm-context]').length,5);
+ }finally{await w.happyDOM.close();}
+});
+
+test('遅い共通統計が戻ってもデーツの地域専用表示を上書きしない',async()=>{
+ let release;
+ const pending=new Promise(resolve=>release=resolve);
+ const {w,q}=await setup('agriculture','?topic=dates&country=SAU',false,{width:1280,height:665},{preserveAgroConfig:true,fetch:url=>url.endsWith('/cattle-milk.json.gz')?pending:undefined});
+ try{
+  q('[data-west-topic-button=cattle-milk]').click();
+  await until(()=>!q('[data-agro-statistics]').hidden&&q('[data-agro-statistics]').dataset.agroReady==='false');
+  q('[data-west-topic-button=dates]').click();await until(()=>!q('[data-west-product-statistics]').hidden&&q('[data-west-loading]').hidden);
+  release(new Response(await readFile('public/assets/atlas/regional-production-statistics-v1/by-series/cattle-milk.json.gz')));
+  await new Promise(resolve=>setTimeout(resolve,100));
+  assert.equal(q('[data-agro-statistics]').hidden,true);assert.equal(q('[data-west-product-statistics]').hidden,false);
+  assert.equal(q('[data-west-product-statistics]').dataset.selection,'SAU:dates');assert.ok(q('[data-west-dates-trade]'));
+ }finally{release?.(new Response('{}'));await w.happyDOM.close();}
 });

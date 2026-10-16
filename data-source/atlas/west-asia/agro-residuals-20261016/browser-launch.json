@@ -1,0 +1,23 @@
+{
+  "head": "3fbb4c957c21685bddbf8148a95a2a03ba210553",
+  "status": "blocked",
+  "sandbox": true,
+  "deviceScaleFactor": 1.5,
+  "requestedViewports": [
+    {
+      "width": 1896,
+      "height": 996
+    },
+    {
+      "width": 1280,
+      "height": 665
+    }
+  ],
+  "cases": [],
+  "errors": [],
+  "blocker": "[pid=6230][err] [6230:6230:1016/035249.551660:FATAL:sandbox/linux/suid/client/setuid_sandbox_host.cc:166] The SUID sandbox helper binary was found, but is not configured correctly. Rather than run without sandboxing I'm aborting now. You need to make sure that /usr/lib/chromium/chrome-sandbox is owned by root and has mode 4755.",
+  "action": "chromium.launch({chromiumSandbox:true, headless:true})",
+  "executable": "/usr/bin/chromium",
+  "scope": "Browser launch only; all actual viewport cases remain unexecuted.",
+  "stage": "uncommitted regional implementation on the recorded base head"
+}

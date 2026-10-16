@@ -1,0 +1,95 @@
+{
+  "checkedAt": "2026-10-16T03:59:36.683633+00:00",
+  "baseMain": "3fbb4c957c21685bddbf8148a95a2a03ba210553",
+  "branch": "codex/west-asia-agro-residuals-20261016",
+  "scope": "Partial regional implementation; no complete same-period regional commodity flow added. No push, PR, merge or publication.",
+  "checks": [
+    {
+      "name": "all-unit",
+      "command": "npm test",
+      "status": "passed",
+      "tests": 1441,
+      "pass": 1438,
+      "fail": 0,
+      "skipped": 3,
+      "logSha256": "8d804d5d6be4e89b6c016d2e0f399679f7fc4996ead802b2d4ecf735b98e36ee"
+    },
+    {
+      "name": "final-west-unit",
+      "command": "node --test tests/unit/atlas-west-asia*.test.mjs",
+      "status": "passed",
+      "tests": 51,
+      "pass": 51,
+      "fail": 0,
+      "skipped": 0,
+      "logSha256": "c6c894e337aafd209fa4b5e79adb69a6ea698b5af08639a6a4b563e24ffade2a"
+    },
+    {
+      "name": "west-controller-natural-reading",
+      "command": "node --test --test-concurrency=2 tests/e2e/atlas-west-asia-controller.test.mjs tests/e2e/atlas-west-asia-natural-controller.test.mjs tests/e2e/atlas-west-asia-regional-reading.test.mjs",
+      "status": "passed",
+      "tests": 36,
+      "pass": 36,
+      "fail": 0,
+      "skipped": 0,
+      "logSha256": "e288f84c96865cba4a001e80cc65abb31705a24051c381f00f543da889887f78"
+    },
+    {
+      "name": "remaining-west-e2e",
+      "command": "node --test --test-concurrency=2 tests/e2e/atlas-west-asia.test.mjs tests/e2e/atlas-west-asia-precipitation-controller.test.mjs tests/e2e/atlas-west-asia-natural-pc.test.mjs tests/e2e/atlas-west-asia-pc-reading.test.mjs tests/e2e/atlas-west-asia-industry.test.mjs tests/e2e/atlas-west-asia-industry-pc.test.mjs",
+      "status": "passed",
+      "tests": 16,
+      "pass": 13,
+      "fail": 0,
+      "skipped": 3,
+      "logSha256": "e0dca7640cf0a25af6a7e4e3c5402d08c4311344a1683de48291a1d805ad2bcb"
+    },
+    {
+      "name": "final-build",
+      "command": "ASTRO_TELEMETRY_DISABLED=1 XDG_CONFIG_HOME=/tmp/west-asia-config npm run build",
+      "status": "passed",
+      "logSha256": "d1c24a5bf9032d2ee7dbf3c18f396d8f62d880e9abac35d4c9b4e69f1e289b47"
+    },
+    {
+      "name": "release",
+      "command": "npm run verify:release",
+      "status": "passed",
+      "logSha256": "ae241006ebbba2cc825202cd88f961563a59b5898d6f283a839d001642073230"
+    },
+    {
+      "name": "optional-whole-e2e",
+      "command": "npm run test:e2e",
+      "status": "interrupted",
+      "reason": "SIGINT stopped the optional broader run; it is not counted as a full run or a pass. Logs include cancellation and file-exit errors. Applicable regional checks completed separately.",
+      "logSha256": "6779b089e29e9721db34bfeba40b0c93d9883f105b78a0e588721a05c7034593"
+    }
+  ],
+  "finalCodeSha256": {
+    "src/components/atlas/WestAsiaAtlasPage.astro": "a7530ce5778297f57ac8fbf0a14291b78a38abf59b9257e14a6cfb6c1e9ed009",
+    "src/scripts/atlas-west-asia.ts": "2f66d750516c4a6ac248fc289b5376347657eda30316e4f1a1b4f58ab15fcb82",
+    "src/styles/atlas-west-asia.css": "1fc0c1a2c34b789b3670cadb65c0c6a4a438cb153ad3e2d2f2d1f32800e7534a",
+    "src/lib/atlas-west-asia-agro-statistics.ts": "0684b0b7ceb008f8c1290e948a0b801fa87e4399b5cdbe3ee339464e89f77bb0",
+    "src/data/atlas/west-asia-sau-dates-trade-2023.json": "7aac11cd7fce1a0f275b5c251baa768ad9897a76481da6a6bba302823606ee38",
+    "scripts/capture-west-asia-agro-residuals-review.mjs": "f9115f35f8739c04320ceb776700b99ead7939149a4abd779bdc070a8c93b0a8"
+  },
+  "browser": {
+    "status": "blocked",
+    "executedViewportCases": 0,
+    "screenshots": 0,
+    "viewports": [
+      {
+        "width": 1896,
+        "height": 996
+      },
+      {
+        "width": 1280,
+        "height": 665
+      }
+    ],
+    "deviceScaleFactor": 1.5,
+    "sandbox": true,
+    "evidence": "browser-launch.json",
+    "limitation": "DPR, geometry, contrast, clipping and human visual review were not measured. The requested viewport assertions remain unexecuted."
+  },
+  "incrementalValidation": "The final regional guard and empty-reference cleanup were rechecked by the 51 regional unit tests and final build; applicable controller E2E completed on stable built HTML. Full unit run passed before that final regional-only cleanup."
+}
