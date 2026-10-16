@@ -35,6 +35,8 @@
 
 通常GETでFAO QCL ZIPは接続トンネル403、INFOR年鑑PDFも通常リンクの形式制約に続いて接続トンネル403。公式FAO FO APIはweb reader非アクセス、FBS入口は表本文を返さない。originの拒否やデータ0とは区別する。同じ拒否済み資料をproxy・署名URL・認証・別ホストの同一ファイルへ切り替えて取得していない。許可された**別の公式公開表**としてWITS 2024表とINFOR HTML表を採用した。詳細は `source-audit.json` と各 `.acquisition.json`。
 
+追補の代替公式資料確認では、[MDIC公式データ配布入口](https://www.gov.br/mdic/pt-br/assuntos/comercio-exterior/estatisticas/base-de-dados-bruta)と[ComexStat公式API案内](https://api-comexstat.mdic.gov.br/docs)を閲覧できた。正規リンクの `https://balanca.mdic.gov.br/balanca/bd/comexstat-bd/ncm/EXP_2024.csv` はweb readerで502、`IMP_2024.csv` はタイムアウト。形式・取得処理側エラーの後、輸出CSVを通常GETすると接続トンネル403で停止した。別配布サービスの `https://api-comexstat.mdic.gov.br/general` への通常・無認証の読取統計POSTも接続トンネル403。取得行は0件で、量が0という意味ではない。正確なpayloadと経路は追加の `mdic-*.acquisition.json` に保存した。必要な代替入力は12か月の `CO_ANO / CO_MES / CO_NCM / CO_PAIS / KG_LIQUIDO` と公式国・NCM辞書。NCM1201の種子・その他の範囲を検証し、合計と全相手をMDICの同一版で整える必要がある。MDIC合計だけをWITS相手行へ付け替えない。
+
 FAOは既存manifestのCC BY 4.0。WITS/UN ComtradeとINFORを同ライセンスとは表示しない。WITS公式FAQには再配布条件があり、リンク先UN Comtradeの現行利用契約は今回閲覧できなかった。INFORの別個の再配布ライセンスも未取得。ローカル分析・レビューの成果であり、**追加表の公開・再配布条件の確認は統合前の残件**。新規規約同意・提供元への連絡・アカウント・課金・認証発行は行っていない。
 
 ## 検証
@@ -46,6 +48,7 @@ FAOは既存manifestのCC BY 4.0。WITS/UN ComtradeとINFORを同ライセンス
 - クラウド実Chromium **151.0.7922.173**、`chromiumSandbox:true`、**1896×996 と1280×665 CSS px、DPR1.5**。sandbox内のSUID起動失敗の後、承認された通常実行環境でsandboxを維持して起動できた。ユーザーPC接続・sandbox無効化・権限変更はしていない。
 - 大豆5か国＋チリ3品目×2サイズ＝**16画面成功**。三列配置、本文14px、横はみ出しなし、地図下、既存viewBox維持、JavaScriptエラー0。6操作確認（未選択／履歴、既存とうもろこし保持、林業の解除／URL復元×2サイズ）。36PNGと `review-artifacts/latin-agro-20261016/report.json` を保存。1896pxの大豆統計、1280pxのパラグアイ統計・地図とチリ丸太統計を目視確認した。別の人による独立目視は未実施。
 - 全E2Eの初回は650件中541成功・98失敗・11skip。再ビルドと重なった97件はENOENTによる配信HTMLの欠落で、こちらの検証手順の問題。アフリカ河川は固定ビルドで単独7件成功。残る1件は本変更の林業セレクタが未選択時SSRにも含まれていたため、事例選択後のみ生成し、解除時はDOMからも除去する実装へ修正した。共有テストの期待値は変更していない。追補に従い、全体の重複E2Eは実行せず統合担当へ引き継ぐ。全体suiteがそのまま成功したとは表記しない。
+- 実装コミット `17f76c2ea589ea14135ca58e5f81b3b12aa8535d` をビルドし、release検証成功。その同じ実装で16画面・6操作を再実行して成功し、林業未選択・解除後に追加selectがDOMに存在しないことも確認した。この後の差分はMDIC代替経路の監査資料追記だけで、src・public・scripts・testsの差分はない。
 
 ## 残件と具体的な入力
 

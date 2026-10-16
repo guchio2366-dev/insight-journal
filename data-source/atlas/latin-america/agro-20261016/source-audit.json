@@ -33,6 +33,26 @@
       "method": "official Anuario Forestal 2025 download link; then ordinary GET after reader format limitation",
       "result": "Reader: unsupported application/octet-stream; GET: Tunnel connection failed: 403 Forbidden",
       "meaning": "The first result was a format limitation, not access denial. The subsequent tunnel denial ended file retrieval. No original PDF acquired; see infor-pdf.acquisition.json."
+    },
+    {
+      "url": "https://api-comexstat.mdic.gov.br/general",
+      "entry": "https://api-comexstat.mdic.gov.br/docs",
+      "method": "ordinary unauthenticated read-only statistical POST, export Jan-Dec 2024, heading 1201, country, metricKG",
+      "result": "Tunnel connection failed: 403 Forbidden",
+      "meaning": "No data rows acquired. Query schema could not be validated by a successful response. mdic-api-2024.acquisition.json retains the exact payload."
+    },
+    {
+      "url": "https://balanca.mdic.gov.br/balanca/bd/comexstat-bd/ncm/EXP_2024.csv",
+      "entry": "https://www.gov.br/mdic/pt-br/assuntos/comercio-exterior/estatisticas/base-de-dados-bruta",
+      "method": "official linked CSV: web reader followed by ordinary GET after non-access-related 502",
+      "result": "Web reader: 502 Bad Gateway; ordinary GET: Tunnel connection failed: 403 Forbidden",
+      "meaning": "No archive or quantity rows acquired. No same-resource retry after the 403. mdic-csv-2024.acquisition.json."
+    },
+    {
+      "url": "https://balanca.mdic.gov.br/balanca/bd/comexstat-bd/ncm/IMP_2024.csv",
+      "method": "official linked CSV via web reader",
+      "result": "Timeout fetching",
+      "meaning": "No quantity rows acquired. Not interpreted as zero imports."
     }
   ],
   "scopeAndReuse": {
@@ -48,6 +68,7 @@
     "Export FBS or SUA for a single agreed calendar year with Production/Import/Export/Stock Variation/Food/Feed/Seed/Losses/Processing/Other/Residual and definitions of primary-equivalent conversion and stock signs. Export corresponding all-reporter/all-partner trade quantity rows and World totals for the same commodity scope and period. Regional extra-regional totals require all 34 reporters and removal of within-set trade.",
     "For forestry provide country and World production/import/export rows separately for roundwood, industrial roundwood, sawnwood and each pulp stage, plus all-partner quantities in compatible units. INFOR Chile export tables should identify product, species, period, tonnes or m3, total and all partners, distinguishing simply sawn wood from planed products and pulp subtypes.",
     "For same-marketing-year WASDE destination comparisons provide all-partner original tables using the actual country-specific marketing-year dates. The public 2024 calendar tables must not be relabelled 2024/25.",
-    "Before public release of the added WITS/UN Comtrade and INFOR tables, verify the provider's applicable redistribution terms or provide the necessary permission. This branch and its evidence have not been published."
+    "Before public release of the added WITS/UN Comtrade and INFOR tables, verify the provider's applicable redistribution terms or provide the necessary permission. This branch and its evidence have not been published.",
+    "Brazil calendar 2024 alternative: use the official MDIC EXP_2024.csv and IMP_2024.csv with CO_ANO, CO_MES, CO_NCM, CO_PAIS, KG_LIQUIDO plus the official NCM and country dictionaries. Retain all 12 months and all NCM1201 subcodes (seed/other scope must be verified), all partner rows, and the full-file checksum. Do not join a national MDIC total to WITS partner quantities without reconciling scope and revision; use one provider for total and partners."
   ]
 }

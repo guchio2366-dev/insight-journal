@@ -1,0 +1,27 @@
+{
+  "url": "https://api-comexstat.mdic.gov.br/general",
+  "method": "ordinary unauthenticated POST of a read-only statistical query",
+  "payload": {
+    "flow": "export",
+    "monthDetail": false,
+    "period": {
+      "from": "2024-01",
+      "to": "2024-12"
+    },
+    "filters": [
+      {
+        "filter": "heading",
+        "values": [
+          "1201"
+        ]
+      }
+    ],
+    "details": [
+      "country"
+    ],
+    "metrics": [
+      "metricKG"
+    ]
+  },
+  "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+}
