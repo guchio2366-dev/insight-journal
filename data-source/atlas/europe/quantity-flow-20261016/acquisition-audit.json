@@ -1,0 +1,88 @@
+{
+  "recordedOn": "2026-10-16",
+  "authorizedScope": "Europe agriculture/forestry regional implementation, ordinary read-only access to official public distributions/tables; no authentication or restriction bypass",
+  "failures": [
+    {
+      "action": "ordinary GET with Python urllib",
+      "target": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/for_pp?lang=EN&time=2024",
+      "error": "URLError: <urlopen error Tunnel connection failed: 403 Forbidden>",
+      "denialOrigin": "CONNECT tunnel",
+      "publisherHttpStatus": null,
+      "retried": false
+    },
+    {
+      "action": "web.open",
+      "target": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/for_swpan?lang=EN&time=2024&geo=EU27_2020",
+      "error": "URL is not accessible via this tool",
+      "publisherHttpStatus": null,
+      "retried": false
+    },
+    {
+      "action": "web.open official FAO publication link",
+      "target": "https://openknowledge.fao.org/handle/20.500.14283/cd8005en",
+      "error": "403 Forbidden",
+      "retried": false
+    },
+    {
+      "action": "web.open official WITS table",
+      "target": "https://wits.worldbank.org/trade/comtrade/en/country/ROU/year/2023/tradeflow/Exports/partner/ALL/product/120100",
+      "error": "URL is not accessible via this tool",
+      "retried": false
+    },
+    {
+      "action": "follow EC official cereals production/trade publication links",
+      "target": "https://agriculture.ec.europa.eu/data-and-analysis/markets/overviews/market-observatories/crops/cereals-statistics_en",
+      "error": "CIRCABC linked tables returned Internal Error without content; no refusal status available",
+      "retried": false
+    },
+    {
+      "action": "web.open historical candidate URLs",
+      "target": [
+        "https://www.fao.org/forestry/statistics/data/forestry-production-trade/en",
+        "https://www.fao.org/forestry/statistics/80938/en/"
+      ],
+      "error": "404 Not Found; navigated from current FAO forestry home to discover current independent public data page",
+      "retried": false
+    },
+    {
+      "action": "web.open official UNECE publication listings",
+      "target": [
+        "https://unece.org/forests/forest-products-annual-market-review-2024-2025",
+        "https://unece.org/forests/forest-products-annual-market-reviews"
+      ],
+      "error": "URL is not accessible via this tool; no content or refusal status available",
+      "retried": false
+    },
+    {
+      "action": "follow official FAO JFSQ definitions link from current classifications page",
+      "target": "https://openknowledge.fao.org/handle/20.500.14283/cb4108en",
+      "error": "403 Forbidden",
+      "retried": false
+    }
+  ],
+  "independentOfficialPublicSourcesRead": [
+    {
+      "url": "https://www.fao.org/forestry/statistics/data/en",
+      "result": "Public 2024 global production/trade and rounded national shares read. No Europe complete balance, country pulp tonnes or full destination matrix. Pulp-for-paper shares cannot be joined automatically to the narrower global Wood pulp tonnage."
+    },
+    {
+      "url": "https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Wood_products_-_production_and_trade",
+      "result": "Independent public article read; 2022 EU figures are outside the retained 2024 national balances. Linked XLSX was unsupported by web tool, not used as a parsed table."
+    },
+    {
+      "url": "https://agridata.ec.europa.eu/Reports/Cereals_Dashboard.pdf",
+      "result": "Official public dashboard read. IGC world production and EC EU production, varying forecast/historical years and raw/products scopes cannot be silently joined as a complete Europe supply balance."
+    },
+    {
+      "url": "https://agriculture.ec.europa.eu/data-and-analysis/markets/outlook/short-term_en",
+      "result": "Official page points to EU balances; EU is a separate geography and dynamic table content not retained."
+    },
+    {
+      "url": "https://www.usda.gov/oce/commodity/wasde/wasde0926.pdf",
+      "result": "Official PDF read, including historical national rows, local-marketing-year and domestic-total notes. Retained same-revision TXT used by offline generator."
+    }
+  ],
+  "newQuantities": "Eight complete public WITS soybean tables (Import and Export for UKR/FRA/ITA/DEU), rendered web table transcriptions and exact displayed decimal precision retained in wits/. These are not original raw API bytes.",
+  "extraSafetyActions": "No proxies, signed alternate URLs, credentials, mirrors, auth changes, sandbox disabling or permission escalation used.",
+  "webExtractFormatting": "Trailing whitespace trimmed; web citation/line labels retained. Extract text is not original HTTP response bytes."
+}

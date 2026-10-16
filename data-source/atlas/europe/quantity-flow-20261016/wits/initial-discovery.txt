@@ -1,0 +1,184 @@
+Internal Error ()
+citeturn10view0 [wordlim: 200] Source: open({"ref_id":"https://wits.worldbank.org/trade/comtrade/en/country/ROU/year/2023/tradeflow/Exports/partner/ALL/product/120100","lineno":null}); Total lines: 1
+L0: URL https://wits.worldbank.org/trade/comtrade/en/country/ROU/year/2023/tradeflow/Exports/partner/ALL/product/120100 is not accessible via this tool.
+--------------------------------------------------------------------------------
+
+	Germany Soya beans exports by country | 2023 | Data
+ (https://wits.worldbank.org/trade/comtrade/en/country/DEU/year/2023/tradeflow/Exports/partner/ALL/product/120100)
+citeturn10view1 [wordlim: 200] Crawled: 6 months ago; Content type: text/html; Source: open({"ref_id":"https://wits.worldbank.org/trade/comtrade/en/country/DEU/year/2023/tradeflow/Exports/partner/ALL/product/120100","lineno":null}); Total lines: 157
+L0:
+L1: cite0†WITS L2:
+L3:  Toggle navigation  Toggle navigation
+L4:
+L5:   * Login
+L6:   * cite1† Register L7:
+L8:   *   *   *   *   *   *   *   *
+L9:   * Trade Stats
+L10:     * cite2†By Country L11:     * cite3†By Indicator L12:     * cite4†By Product (HS 6-digit) L13:     * cite5†Visualization L14:     * cite6†Data Download L15:     * cite7†Metadata L16:     * cite8†Data Availability L17:     * cite9†Help L18:   * Tariffs
+L19:     * cite10†GPTAD L20:     * cite11†UNCTAD TRAINS L21:   * Non-Tariff Measures
+L22:     * cite12†Summary L23:     * cite13†By Country L24:     * cite14†Visualization L25:     * cite15†Data Download L26:     * cite16†Metadata L27:     * cite17†Data Availability L28:     * cite18†About NTM L29:   * GVC
+L30:     * cite19†About GVC L31:     * cite20†Visualization L32:     * cite21†GVC Indicator Metadata L33:     * cite22†GVC Data Download L34:   * API
+L35:     * cite23†API overview L36:     * cite24†API documentation L37:   * cite25†Analytical database L38:   * Tools
+L39:     * cite26†Compare Countries L40:     * cite27†Simulation Tool L41:   * cite28†Bulk Download L42:   * cite0†Home L43:   * cite29†About WITS L44:   * Reference
+L45:     * cite30†Methodology L46:     * cite31†Glossary L47:     * cite32†Reference Data L48:     * cite33†Concordances L49:     * cite34†Links L50:   * Training
+L51:     * cite35†Training overview L52:     * cite36†Video Tutorials L53:     * eLearning
+L54:   * Support Links
+L55:     * cite37†Did you know L56:     * cite38†FAQ L57:     * cite39†WITS manual L58:     * cite40†Help L59:     * cite41†eLearning L60:     * cite42†Wits AI†witsqa.worldbank.org L61: # Germany Soya beans exports by country
+L62:
+L63: in 2023
+L64:
+L65:   Share
+L66:
+L67:   * Facebook
+L68:   * Twitter
+L69:   * Linkedin
+L70:   * Google Plus
+L71:   * Reddit
+L72:   * Stumble Upon
+L73:   * Delicious
+L74:   * Email
+L75:
+L76: Change selection (Reporter, Year, Trade Flow, Partner and HS 6 digit Product)
+L77: Germany exports of Soya beans was $24,318.14K and quantity 29,198,000Kg.
+L78: Germany exported Soya beans to Poland ($5,087.96K , 7,873,860 Kg), Netherlands ($4,493.27K , 7,272,210 Kg), Austria ($3,980.60K , 3,704,530 Kg), France ($2,302.31K , 3,187,080 Kg), Switzerland ($2,110.40K , 2,586,630 Kg).
+L79:
+L80: cite43†Soya beans imports by country in 2023 L81:
+L82: cite100†Image: Download Excel Sheet L83: Reporter TradeFlow ProductCode Product Description Year Partner Trade Value 1000USD Quantity Quantity Unit
+L84:  Germany Export 120100 Soya beans 2023cite44† World 24,318.14 29,198,000 Kg
+L85:  Germany Export 120100 Soya beans 2023cite45†Poland 5,087.96 7,873,860 Kg
+L86:  Germany Export 120100 Soya beans 2023cite46†Netherlands 4,493.27 7,272,210 Kg
+L87:  Germany Export 120100 Soya beans 2023cite47†Austria 3,980.60 3,704,530 Kg
+L88:  Germany Export 120100 Soya beans 2023cite48†France 2,302.31 3,187,080 Kg
+L89:  Germany Export 120100 Soya beans 2023cite49†Switzerland 2,110.40 2,586,630 Kg
+L90:  Germany Export 120100 Soya beans 2023cite50†Hungary 1,562.54 1,115,220 Kg
+L91:  Germany Export 120100 Soya beans 2023cite51†Slovak Republic 1,048.57 597,646 Kg
+L92:  Germany Export 120100 Soya beans 2023cite52†Czech Republic 912.80 1,378,450 Kg
+L93:  Germany Export 120100 Soya beans 2023cite53†Italy 419.21 399,470 Kg
+L94:  Germany Export 120100 Soya beans 2023cite54†Spain 416.86 181,207 Kg
+L95:  Germany Export 120100 Soya beans 2023cite55†Belarus 329.07 113,708 Kg
+L96:  Germany Export 120100 Soya beans 2023cite56†Belgium 298.73 115,621 Kg
+L97:  Germany Export 120100 Soya beans 2023cite57†United Kingdom 274.90 94,533 Kg
+L98:  Germany Export 120100 Soya beans 2023cite58†Canada 151.12 180,000 Kg
+L99:  Germany Export 120100 Soya beans 2023cite59†Luxembourg 108.60 48,601 Kg
+L100:  Germany Export 120100 Soya beans 2023cite60†Russian Federation 81.23 24,500 Kg
+L101:  Germany Export 120100 Soya beans 2023cite61†Latvia 78.68 26,745 Kg
+L102:  Germany Export 120100 Soya beans 2023cite62†Denmark 71.68 27,626 Kg
+L103:  Germany Export 120100 Soya beans 2023cite63†Sweden 69.60 28,379 Kg
+L104:  Germany Export 120100 Soya beans 2023cite64†Serbia, FR(Serbia/Montenegro) 56.23 16,400 Kg
+L105:  Germany Export 120100 Soya beans 2023cite65†Greece 50.84 16,759 Kg
+L106:  Germany Export 120100 Soya beans 2023cite66†China 50.54 30,720 Kg
+L107:  Germany Export 120100 Soya beans 2023cite67†Portugal 38.67 12,039 Kg
+L108:  Germany Export 120100 Soya beans 2023cite68†Norway 36.36 13,972 Kg
+L109:  Germany Export 120100 Soya beans 2023cite69†Finland 35.78 11,033 Kg
+L110:  Germany Export 120100 Soya beans 2023cite70†Croatia 29.86 10,472 Kg
+L111:  Germany Export 120100 Soya beans 2023cite71†Romania 28.28 31,115 Kg
+L112:  Germany Export 120100 Soya beans 2023cite72†Ireland 26.55 11,470 Kg
+L113:  Germany Export 120100 Soya beans 2023cite73†Bulgaria 22.57 7,775 Kg
+L114:  Germany Export 120100 Soya beans 2023cite74†Hong Kong, China 22.05 20,973 Kg
+L115:  Germany Export 120100 Soya beans 2023cite75†Bunkers 20.75 7,657 Kg
+L116:  Germany Export 120100 Soya beans 2023cite76†Estonia 19.58 10,816 Kg
+L117:  Germany Export 120100 Soya beans 2023cite77†United States 19.30 15,000 Kg
+L118:  Germany Export 120100 Soya beans 2023cite78†Malta 13.25 7,538 Kg
+L119:  Germany Export 120100 Soya beans 2023cite79†Moldova 7.77 2,200 Kg
+L120:  Germany Export 120100 Soya beans 2023cite80†Albania 7.75 2,372 Kg
+L121:  Germany Export 120100 Soya beans 2023cite81†Georgia 7.11 2,170 Kg
+L122:  Germany Export 120100 Soya beans 2023cite82†Iceland 6.32 1,920 Kg
+L123:  Germany Export 120100 Soya beans 2023cite83†Lithuania 4.87 1,488 Kg
+L124:  Germany Export 120100 Soya beans 2023cite84†Vietnam 4.58 4,242 Kg
+L125:  Germany Export 120100 Soya beans 2023cite85†Ukraine 3.04 1,355 Kg
+L126:  Germany Export 120100 Soya beans 2023cite86†Slovenia 2.94 840 Kg
+L127:  Germany Export 120100 Soya beans 2023cite87†Chile 2.30 183 Kg
+L128:  Germany Export 120100 Soya beans 2023cite88†North Macedonia 1.46 400 Kg
+L129:  Germany Export 120100 Soya beans 2023cite89†Guatemala 1.20 1,080 Kg
+L130:  Germany Export 120100 Soya beans 2023cite90†Cyprus 0.07 11 Kg
+L131: HS Nomenclature used HS 1988/92 (H0)
+L132: HS Code 120100: Soya beans
+L133:
+L134: Please note: Exports is gross exports and Imports is gross imports
+L135:
+L136:   * cite29†About  L137:   * .
+L138:   * cite91†Contact  L139:   * .
+L140:   * cite92†Usage Conditions L141:   * .
+L142:   * cite93†Legal†www.worldbank.org L143:   * .
+L144:   * cite94†Data Providers L145:   * .
+L146:   * Page Refreshed : Mar-23-2026 03:15 ET
+L147:  Partners
+L148:   * cite95†ITC†www.intracen.org L149:   * .
+L150:   * cite96†UNCTAD†unctad.org L151:   * .
+L152:   * cite97†UNSTATS†unstats.un.org L153:   * .
+L154:   * cite98†World Trade Organization†www.wto.org L155:   * .
+L156:   * cite99†World Bank†www.worldbank.org --------------------------------------------------------------------------------
+
+	Ukraine Soya beans imports by country | 2023 | Data
+ (https://wits.worldbank.org/trade/comtrade/en/country/UKR/year/2023/tradeflow/Imports/partner/ALL/product/120100)
+citeturn10view2 [wordlim: 200] Crawled: 7 months ago; Content type: text/html; Source: open({"ref_id":"https://wits.worldbank.org/trade/comtrade/en/country/UKR/year/2023/tradeflow/Imports/partner/ALL/product/120100","lineno":null}); Total lines: 125
+L0:
+L1: cite0†WITS L2:
+L3:  Toggle navigation  Toggle navigation
+L4:
+L5:   * Login
+L6:   * cite1† Register L7:
+L8:   *   *   *   *   *   *   *   *
+L9:   * Trade Stats
+L10:     * cite2†By Country L11:     * cite3†By Indicator L12:     * cite4†By Product (HS 6-digit) L13:     * cite5†Visualization L14:     * cite6†Data Download L15:     * cite7†Metadata L16:     * cite8†Data Availability L17:     * cite9†Help L18:   * Tariffs
+L19:     * cite10†GPTAD L20:     * cite11†UNCTAD TRAINS L21:   * Non-Tariff Measures
+L22:     * cite12†Summary L23:     * cite13†By Country L24:     * cite14†Visualization L25:     * cite15†Data Download L26:     * cite16†Metadata L27:     * cite17†Data Availability L28:     * cite18†About NTM L29:   * GVC
+L30:     * cite19†About GVC L31:     * cite20†Visualization L32:     * cite21†GVC Indicator Metadata L33:     * cite22†GVC Data Download L34:   * API
+L35:     * cite23†API overview L36:     * cite24†API documentation L37:   * cite25†Analytical database L38:   * Tools
+L39:     * cite26†Compare Countries L40:     * cite27†Simulation Tool L41:   * cite28†Bulk Download L42:   * cite0†Home L43:   * cite29†About WITS L44:   * Reference
+L45:     * cite30†Methodology L46:     * cite31†Glossary L47:     * cite32†Reference Data L48:     * cite33†Concordances L49:     * cite34†Links L50:   * Training
+L51:     * cite35†Training overview L52:     * cite36†Video Tutorials L53:     * eLearning
+L54:   * Support Links
+L55:     * cite37†Did you know L56:     * cite38†FAQ L57:     * cite39†WITS manual L58:     * cite40†Help L59:     * cite41†eLearning L60:     * cite42†Wits AI†witsqa.worldbank.org L61: # Ukraine Soya beans imports by country
+L62:
+L63: in 2023
+L64:
+L65:   Share
+L66:
+L67:   * Facebook
+L68:   * Twitter
+L69:   * Linkedin
+L70:   * Google Plus
+L71:   * Reddit
+L72:   * Stumble Upon
+L73:   * Delicious
+L74:   * Email
+L75:
+L76: Change selection (Reporter, Year, Trade Flow, Partner and HS 6 digit Product)
+L77: Ukraine imports of Soya beans was $2,036.06K and quantity 1,875,190Kg.
+L78: Ukraine imported Soya beans from Canada ($733.64K , 381,921 Kg), France ($327.93K , 137,271 Kg), Romania ($250.90K , 380,318 Kg), Poland ($240.99K , 547,517 Kg), Austria ($150.14K , 69,867 Kg).
+L79:
+L80: cite43†Soya beans exports by country in 2023 L81:
+L82: cite68†Image: Download Excel Sheet L83: Reporter TradeFlow ProductCode Product Description Year Partner Trade Value 1000USD Quantity Quantity Unit
+L84:  Ukraine Import 120100 Soya beans 2023cite44† World 2,036.06 1,875,190 Kg
+L85:  Ukraine Import 120100 Soya beans 2023cite45†Canada 733.64 381,921 Kg
+L86:  Ukraine Import 120100 Soya beans 2023cite46†France 327.93 137,271 Kg
+L87:  Ukraine Import 120100 Soya beans 2023cite47†Romania 250.90 380,318 Kg
+L88:  Ukraine Import 120100 Soya beans 2023cite48†Poland 240.99 547,517 Kg
+L89:  Ukraine Import 120100 Soya beans 2023cite49†Austria 150.14 69,867 Kg
+L90:  Ukraine Import 120100 Soya beans 2023cite50†Croatia 110.07 188,880 Kg
+L91:  Ukraine Import 120100 Soya beans 2023cite51†Italy 55.78 17,621 Kg
+L92:  Ukraine Import 120100 Soya beans 2023cite52†Hungary 38.29 75,570 Kg
+L93:  Ukraine Import 120100 Soya beans 2023cite53†China 33.60 16,000 Kg
+L94:  Ukraine Import 120100 Soya beans 2023cite54†United States 29.58 10,171 Kg
+L95:  Ukraine Import 120100 Soya beans 2023cite55†Czech Republic 28.89 17,130 Kg
+L96:  Ukraine Import 120100 Soya beans 2023cite56†Serbia, FR(Serbia/Montenegro) 19.27 26,353 Kg
+L97:  Ukraine Import 120100 Soya beans 2023cite57†Germany 16.81 6,462 Kg
+L98:  Ukraine Import 120100 Soya beans 2023cite58†Switzerland 0.16 110 Kg
+L99: HS Nomenclature used HS 1988/92 (H0)
+L100: HS Code 120100: Soya beans
+L101:
+L102: Please note: Exports is gross exports and Imports is gross imports
+L103:
+L104:   * cite29†About  L105:   * .
+L106:   * cite59†Contact  L107:   * .
+L108:   * cite60†Usage Conditions L109:   * .
+L110:   * cite61†Legal†www.worldbank.org L111:   * .
+L112:   * cite62†Data Providers L113:   * .
+L114:   * Page Refreshed : Mar-11-2026 06:57 ET
+L115:  Partners
+L116:   * cite63†ITC†www.intracen.org L117:   * .
+L118:   * cite64†UNCTAD†unctad.org L119:   * .
+L120:   * cite65†UNSTATS†unstats.un.org L121:   * .
+L122:   * cite66†World Trade Organization†www.wto.org L123:   * .
+L124:   * cite67†World Bank†www.worldbank.org

@@ -28,6 +28,7 @@ const countryName = (code: string) => countries.find(country => country.code ===
       <p>対象：<strong data-eu-statistics-item>欧州の農畜産物</strong>。地図の格子推計と、公表された欧州地域・国全体の統計は別資料です。ロシアの国別値は全土です。</p>
     </header>
     <EuropeVerifiedStatistics />
+    <p class="eu-verified-foot" data-eu-forest-pulp-gap hidden>パルプの同年数量・世界分母・全相手数量は未収録です。丸太・製材はm³、パルプはtで、体積から重量へ推測換算しません。搬出材の「パルプ・板用材」は工業用原料で、完成パルプの生産量とは別です。</p>
     <section class="eu-farm-numbers" data-eu-farm-numbers hidden data-statistics-url={withBase('/assets/atlas/europe/farming-statistics-v1/statistics.json.gz')} aria-labelledby="eu-farm-numbers-title">
       <h3 id="eu-farm-numbers-title">生産・飼養・木材の国別数量</h3>
       <p data-eu-farm-statistics-message role="status">品目を選ぶと、その品目の数量と国別比較を読み込めます。</p>
@@ -72,6 +73,17 @@ const countryName = (code: string) => countries.find(country => country.code ===
       <div><dt>販売総額（米ドル）</dt><dd><span data-eu-statistics-item>欧州の農畜産物</span>の販売総額は未収録です。</dd></div>
       <div><dt>地図と数量の対象</dt><dd>格子の収穫面積・家畜密度と、国全体の生産量・頭羽数は別の資料です。集合的な作物区分を個別品目の統計に置き換えません。</dd></div>
     </dl>
+  </section>
+  <section class="agro-statistics eu-selected-quantity" data-eu-selected-quantity data-statistics-url={withBase('/assets/atlas/europe/selected-quantity-flow-v1/statistics.json')} hidden aria-labelledby="eu-selected-quantity-title">
+    <h2 id="eu-selected-quantity-title">選択品目の全国数量</h2>
+    <p data-eu-quantity-status role="status"></p>
+    <button type="button" data-eu-quantity-retry hidden>全国数量を再読み込み</button>
+    <div data-eu-quantity-content></div>
+    <details data-eu-previous-quantity hidden>
+      <summary>別資料：保存済みFAO生産量・順位・2015〜2024年の推移</summary>
+      <p class="agro-meta">以下は既存のFAO国別資料です。上の2023暦年の貿易比較や2024/25販売年度需給とは年・版が異なるため、それぞれの原表を保った参考として表示します。</p>
+      <div data-eu-previous-quantity-content></div>
+    </details>
   </section>
   <AgroStatistics scope="欧州" {countries} topics={['wheat','barley','maize','rapeseed','sunflower','sugarbeet','potato','rice','soybean','cattle','pig','chicken','sheep','forest']} />
   <slot />

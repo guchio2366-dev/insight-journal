@@ -50,7 +50,7 @@ async function setup(url = 'https://example.com/insight-journal/atlas/europe/agr
   w.DOMPoint = class { constructor(x = 0, y = 0) { this.x = x; this.y = y; } matrixTransform(m) { return new this.constructor(m.a*this.x+m.c*this.y+m.e, m.b*this.x+m.d*this.y+m.f); } };
   w.ResizeObserver = class { observe() {} disconnect() {} };
   w.ImageData = class { constructor(data, width, height) { this.data = data; this.width = width; this.height = height; } };
-  w.Response = Response; w.Blob = Blob; w.DecompressionStream = DecompressionStream; w.TextDecoder = TextDecoder;
+  w.Response = Response; w.Blob = Blob; w.DecompressionStream = DecompressionStream; w.TextDecoder = TextDecoder; w.structuredClone = structuredClone;
   const requests = [], draws = [], warnings = [];
   w.console.warn = (...args) => warnings.push(args.map(String).join(' '));
   w.HTMLCanvasElement.prototype.getContext = function() { return { putImageData: image => draws.push(image) }; };
@@ -69,6 +69,44 @@ async function setup(url = 'https://example.com/insight-journal/atlas/europe/agr
 const route = (field, query) => `https://example.com/insight-journal/atlas/europe/${field}/?${query}`;
 const statisticsReady = app => until(() => !app.q('[data-eu-farm-country-table]').hidden);
 const current = app => new URL(app.w.location.href).searchParams;
+
+test('selected European national quantities follow real country controls and restore the unchanged overview',async()=>{
+  const app=await setup(route('agriculture','layer=soybean&place=UKR&render=static'));
+  const ready=code=>until(()=>app.q('[data-eu-selected-quantity]').dataset.ready==='true'&&app.q('[data-eu-quantity-country]')?.dataset.euQuantityCountry===code);
+  try{
+    await ready('UKR');
+    assert.equal(app.q('[data-agro-statistics]').closest('details'),app.q('[data-eu-previous-quantity]'),'older data remain available as a separate reference');
+    assert.equal(app.q('[data-eu-farm-numbers]').closest('details'),app.q('[data-eu-previous-quantity]'));
+    assert.equal(app.q('[data-eu-farm-quick-summary]').closest('details'),app.q('[data-eu-previous-quantity]'),'the old 2024 quick summary stays with its separately dated reference');
+    assert.equal(app.q('[data-eu-previous-quantity]').open,false,'one primary national quantity panel');
+    assert.match(app.q('[data-eu-selected-quantity]').textContent,/2023暦年.*4,742,550/s);
+    assert.equal(app.q('[data-eu-shape="UKR"]').classList.contains('is-selected'),true);
+    assert.deepEqual([...app.q('[data-eu-selected-quantity]').querySelectorAll('.agro-columns>section')].map(n=>n.dataset.agroStage),['production','use','destinations']);
+    app.select('[data-eu-topic-country]','FRA');await ready('FRA');
+    assert.equal(current(app).get('place'),'FRA');
+    assert.match(app.q('[data-eu-selected-quantity]').textContent,/387,820/);
+    assert.equal(app.q('[data-eu-selected-quantity]').querySelectorAll('tbody tr').length,52);
+    app.select('[data-eu-topic-country]','ITA');app.select('[data-eu-topic-country]','DEU');await ready('DEU');
+    assert.match(app.q('[data-eu-selected-quantity]').textContent,/3,259,380/);
+    assert.equal(app.q('[data-eu-shape="DEU"]').classList.contains('is-selected'),true);
+    assert.equal(app.requests.filter(url=>url.endsWith('/selected-quantity-flow-v1/statistics.json')).length,1,'all supported countries reuse one deferred regional packet');
+    app.q('[data-eu-topic="crops"]').click();await tick();
+    assert.equal(app.q('[data-eu-selected-quantity]').hidden,true);
+    assert.equal(app.q('[data-eu-verified-overview]').hidden,false);
+    assert.equal(app.q('[data-eu-verified-overview]').querySelectorAll('.eu-verified-food-band').length,1);
+    app.restore(route('agriculture','layer=wheat&place=GBR&render=static'));await ready('GBR');
+    assert.match(app.q('[data-eu-selected-quantity]').textContent,/2024\/25販売年度/);
+    assert.match(app.q('[data-eu-selected-quantity]').querySelector('[data-agro-stage="use"]').textContent,/15\.03/);
+    assert.equal(app.q('[data-eu-selected-quantity]').querySelectorAll('.agro-partner-pie').length,0);
+    app.restore(route('agriculture','layer=forest&place=FIN&render=static'));await tick();
+    assert.equal(app.q('[data-eu-selected-quantity]').hidden,true);
+    assert.equal(app.q('[data-eu-forest-pulp-gap]').hidden,false);
+    assert.match(app.q('[data-eu-forest-pulp-gap]').textContent,/丸太・製材はm³、パルプはt/);
+    assert.equal(app.q('[data-eu-verified-wood]').hidden,false);
+    app.restore(route('agriculture','layer=forest&render=static'));await tick();
+    assert.equal(app.q('[data-eu-forest-pulp-gap]').hidden,true,'the unselected forestry presentation remains unchanged');
+  }finally{await app.close();}
+});
 
 test('built field pages expose the statistics/focus contract with unique IDs and clean canonical/OG head URLs', async () => {
   for (const [field, source] of html) {
@@ -100,6 +138,7 @@ test('selected commodity statistics keep one subject and one country through URL
   const app = await setup();
   try {
     assert.equal(app.requests.some(url => url.includes('farming-statistics-v1')), false, 'The overview must not eagerly fetch national statistics');
+    assert.equal(app.requests.some(url => url.includes('selected-quantity-flow-v1')), false, 'The overview must not fetch the new selected-product packet');
     assert.equal(app.q('[data-eu-verified-overview]').hidden,false);
     app.q('[data-eu-layer="wheat"]').click(); await statisticsReady(app);
     assert.equal(current(app).get('layer'), 'wheat');
