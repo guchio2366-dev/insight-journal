@@ -1,0 +1,90 @@
+{
+  "scope": "RUS regional-only",
+  "objectiveStatus": "partial: same-period domestic use and full destinations plus national forestry trade/pulp remain unavailable",
+  "baseCommit": "3fbb4c957c21685bddbf8148a95a2a03ba210553",
+  "branch": "codex/russia-agro-residuals-20261016",
+  "validationDate": "2026-10-16",
+  "checks": {
+    "newUnit": {
+      "pass": 6,
+      "fail": 0
+    },
+    "relatedUnit": {
+      "pass": 47,
+      "fail": 0,
+      "includesNewUnit": true
+    },
+    "allUnit": {
+      "tests": 1442,
+      "pass": 1439,
+      "fail": 0,
+      "skip": 3,
+      "includesNewUnit": true
+    },
+    "newBuiltE2E": {
+      "pass": 2,
+      "fail": 0
+    },
+    "regionalE2E": {
+      "pass": 16,
+      "fail": 0,
+      "includesNewBuiltE2E": true
+    },
+    "allE2E": {
+      "tests": 658,
+      "pass": 647,
+      "fail": 0,
+      "skip": 11,
+      "includesNewBuiltE2E": false,
+      "note": "Already completed when integration handoff asked to avoid duplicates. No redundant global rerun."
+    },
+    "build": "passed with ASTRO_TELEMETRY_DISABLED=1",
+    "release": "passed: local, 1 article",
+    "diffWhitespace": "passed"
+  },
+  "browser": {
+    "status": "blocked-before-browser-start",
+    "sandboxRequired": true,
+    "executable": "/usr/bin/chromium",
+    "reason": "SUID sandbox helper exists but is not configured correctly; launch aborted. No sandbox flags, file permissions or safety settings changed.",
+    "profiles": [
+      {
+        "cssWidth": 1896,
+        "cssHeight": 996,
+        "dpr": 1.5
+      },
+      {
+        "cssWidth": 1280,
+        "cssHeight": 665,
+        "dpr": 1.5
+      }
+    ],
+    "screenshots": 0,
+    "completedBrowserOperations": 0,
+    "manualImageReview": "not-performed",
+    "rerunCommand": "node scripts/verify-russia-agro-review.mjs"
+  },
+  "initialEnvironmentIssues": {
+    "npmCache": "Used writable /tmp/russia-agro-npm-cache; did not change HOME",
+    "initialCheckBuild": "Stopped by non-writable Astro telemetry configuration directory; successful build with telemetry disabled"
+  },
+  "runtimeSourceSha256": {
+    "src/components/atlas/RussiaLearningPage.astro": "b09fb229cedc7310db76cea18f1ebf83451d58bce197055fc55d0876eca41693",
+    "src/components/atlas/RussiaForestryStatistics.astro": "c0b55642f0dc2ee4e3da8d16e1301becee55051ceaf9314f237e7a13c5fd3a14",
+    "src/scripts/atlas-russia-learning.ts": "ae28ad90ad6f1eb15c69e8d1011bdee335a812bf1d3f4223063d6e585666ef0a",
+    "src/scripts/atlas-russia-agro-statistics.ts": "b36252381c7939b1ad6dedf8efcea9dc5a33236a7f5ee0a14b75acc80b419528",
+    "src/styles/atlas-russia-learning.css": "0b8b2a7a0f7aa4490e81ad41e38c8388001a9cd5f0aa73d463037ae383164cb1",
+    "src/data/atlas/russia-agro-reference.ts": "3bb9486d4156a9656a8f0f32e7842e9a036eea8e7acc0c340e0b701c21692ef0",
+    "src/data/atlas/russia-wheat-supply-2020-21.json": "1f803ea820068468e5ccf40c3d74d98bd7816caea6f88b1e99baccfc9a7477ab"
+  },
+  "unchangedAgainstBaseSha256": {
+    "src/data/atlas/russia-learning.ts": "ba5683b8115d9e36dc7b3ba7a7f75fe744e47f73aa5fbcebaa988ddb01ae6655",
+    "src/data/atlas/russia-forestry-statistics.json": "07953cc093da545fbb4a04ea2e8afd981f1f8f95a12af6375b9b3ef889bea45d",
+    "src/lib/atlas-agro-statistics.ts": "7a0d20a9fab46d5cc38fa9ed494895551a09db57a575b0926fa288807dd53ef9",
+    "src/scripts/atlas-agro-statistics.ts": "0023aefc733bb33eea13a67975cbd95eedf4e0c11052b9cf10033ad0b2f72833",
+    "src/components/atlas/AgroStatistics.astro": "c10c8034ac86df7f2a8889395434f10e231a64489332f3d4b7a10a3912f4b149",
+    "src/components/atlas/RegionalForestryPage.astro": "c8ce08d937071e879663aef9435a448499a043137f110e7b9ff3f68b025a25a3"
+  },
+  "sourceAcquisition": "data-source/atlas/russia/agriculture/statistics-20261016/acquisition.json",
+  "remainingWork": "docs/atlas-russia-agro-residuals-20261016.md"
+}

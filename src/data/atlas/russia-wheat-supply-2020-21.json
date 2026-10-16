@@ -1,0 +1,40 @@
+{
+  "countryCode": "RUS",
+  "product": "Wheat",
+  "period": "2020/21",
+  "periodStart": "2020-07-01",
+  "periodEnd": "2021-06-30",
+  "unit": "1000 t",
+  "column": "USDA Official",
+  "beginningStocks": 7228,
+  "production": 85354,
+  "imports": 500,
+  "totalSupply": 93082,
+  "exports": 39500,
+  "feedAndResidual": 18000,
+  "foodSeedIndustrial": 23500,
+  "domesticUse": 41500,
+  "endingStocks": 12082,
+  "totalDistribution": 93082,
+  "exportDestinations": null,
+  "domesticOriginUse": null,
+  "reExports": null,
+  "source": {
+    "publisher": "USDA FAS",
+    "report": "RS2021-0017, Grain and Feed Annual",
+    "publishedAt": "2021-05-12",
+    "page": 6,
+    "table": 1,
+    "url": "https://apps.fas.usda.gov/newgainapi/api/Report/DownloadReportByFileName?fileName=Grain+and+Feed+Annual_Moscow_Russian+Federation_04-15-2021",
+    "retrievalMethod": "Official public PDF read through web tool; Table 1 text checked on 2026-10-16. Original PDF bytes not retained; no PDF hash claimed.",
+    "evidencePath": "data-source/atlas/russia/agriculture/statistics-20261016/usda-wheat-table-1.json"
+  },
+  "notes": [
+    "2021年公表時点のUSDA Official列。現在の確定実績やロシアのFAOSTAT公的報告値Aという意味ではありません。隣のNew Post列と混ぜません。",
+    "国内利用は原表Total Consumption。食用・種子・工業用と飼料・残差の合計で、人の食用だけではありません。飼料・残差を純粋な飼料用途に分離しません。",
+    "輸入・期首在庫を含む全国供給の収支です。国産収穫物だけの仕向けや、輸入原料・再輸出を追跡した量ではありません。",
+    "全国総輸出を用い、西部・シベリア・極東の学習地域間の流通は輸出へ加算しません。輸出先での最終用途は示しません。",
+    "2020/21販売年度とFAOSTAT暦年、地図の2020年収穫面積は別定義です。この年度輸出を暦年生産量から引いたり、暦年Worldを分母へ接合したりしません。",
+    "同年度・同商品範囲の全相手数量は未収録。2020年7月～2021年2月の主要向け先の説明から構成比は作りません。"
+  ]
+}

@@ -1,4 +1,4 @@
-import {syncAgroStatistics} from './atlas-agro-statistics.ts';
+import {syncRussiaAgroStatistics} from './atlas-russia-agro-statistics';
 import {russiaIndustryMarks,russiaIndustrySectors,russiaIndustryMarkSectors,type RussiaIndustrySector} from '../data/atlas/russia-industry-reading';
 import {withBase} from '../lib/urls';
 import {createRegionalClimateSelection} from './atlas-regional-climate-selection';
@@ -72,7 +72,7 @@ export function initRussiaLearningAtlas(root:HTMLElement):void {
   one('source-list').innerHTML=unique.map(source=>`<div class="russia-learning-citation"><a href="${htmlEscape(source.url)}">${htmlEscape(source.title)}</a>${source.note?`<p>${htmlEscape(source.note)}</p>`:''}</div>`).join('');
  };
   const render=()=>{
-   syncAgroStatistics(root,{country:'RUS',topic:state.layer==='farming-all'?'wheat':state.layer,active:field==='agriculture'&&!overview});
+   syncRussiaAgroStatistics(root,{topic:state.layer,active:field==='agriculture'&&!overview});
    climateSelection.beforeRender();
    const active=document.activeElement as Element|null;
    const focusedIndustry=active?.closest<SVGElement>('[data-russia-industry-location]')?.dataset.russiaIndustryLocation;
