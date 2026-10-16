@@ -1,0 +1,19 @@
+{
+  "publisher": "World Bank WITS / UN Comtrade",
+  "url": "https://wits.worldbank.org/trade/comtrade/en/country/ZAF/year/2024/tradeflow/Exports/partner/ALL/product/100590",
+  "retrievedAt": "2026-10-16",
+  "access": "Public WITS table read through web; numerical facts transcribed. Original HTML/CSV download bytes not acquired.",
+  "classification": "HS1988/92 (H0)",
+  "product": "100590",
+  "definition": "Maize (excl. seed); gross exports; calendar year 2024",
+  "file": "data-source/atlas/africa/agro-statistics-20261016/wits-zaf-maize-2024.csv",
+  "sha256": "6b017e44e1282bba506516807e57a83cb5419426262475e44db58cbb85469511",
+  "rowCount": 84,
+  "worldQuantity": null,
+  "limitations": [
+    "World quantity is blank. Saint Helena, Portugal and Bunkers quantities are blank. Preserve null; no total export quantity or whole-export quantity shares.",
+    "Special Categories has a quantity but no geographic destination: never classify it as extra-Africa.",
+    "Country exports can include Africa destinations and re-exports. Not Africa regional external exports.",
+    "WASDE 2024/25 marketing year and product coverage differ: separate reference only."
+  ]
+}
