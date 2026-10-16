@@ -21,6 +21,7 @@ const origin=`http://127.0.0.1:${server.address().port}/insight-journal`;
 const viewports=[{width:1896,height:996},{width:1280,height:665}];
 const report={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),workingDiffSha256:createHash('sha256').update(execFileSync('git',['diff','HEAD'])).digest('hex'),status:'running',sandbox:true,deviceScaleFactor:1.5,requestedViewports:viewports,cases:[],errors:[]};
 const cases=[['overview','','[data-west-farm-supply]'],['regional-wheat','?topic=wheat','[data-west-regional-flow-slot]'],['regional-dates','?topic=dates','[data-west-regional-flow-slot]'],['regional-olives','?topic=olives','[data-west-regional-flow-slot]'],['saudi-dates','?topic=dates&country=SAU','[data-west-product-statistics]'],['turkey-olives','?topic=olives&country=TUR','[data-west-product-statistics]'],['turkey-milk','?topic=cattle-milk&country=TUR','[data-agro-statistics]'],['turkey-eggs','?topic=hen-eggs&country=TUR','[data-agro-statistics]'],['turkey-chicken','?topic=chicken-meat&country=TUR','[data-agro-statistics]'],['turkey-beef','?topic=cattle-meat&country=TUR','[data-agro-statistics]'],['egypt-buffalo','?topic=buffalo-milk&country=EGY','[data-agro-statistics]'],['turkey-wheat','?topic=wheat&country=TUR','[data-agro-statistics]'],['turkey-forest','?topic=forest&country=TUR','[data-agro-statistics]']];
+cases.push(['turkey-barley','?topic=barley&country=TUR','[data-agro-statistics]'],['turkey-rice','?topic=rice&country=TUR','[data-agro-statistics]']);
 let browser;
 try{
  browser=await chromium.launch({headless:true,chromiumSandbox:true,executablePath:process.env.REVIEW_CHROME_PATH??'/usr/bin/chromium'});
@@ -46,6 +47,11 @@ try{
     assert.match(await host.locator('[data-agro-stage=use]').innerText(),/221,253.*2.35%/s);
    }
    if(name==='turkey-wheat'){const reference=page.locator('[data-west-national-fbs=TUR]');assert.equal(await reference.evaluate(el=>el.open),false);await reference.locator(':scope>summary').click();assert.match(await reference.innerText(),/33,402.*4,188/s);}
+   if(['turkey-wheat','turkey-barley','turkey-rice'].includes(name)){
+    const topic=name.slice('turkey-'.length),reference=page.locator(`[data-west-gain="${topic}"]`);assert.equal(await reference.evaluate(el=>el.open),false);await reference.locator(':scope>summary').click();
+    assert.match(await reference.innerText(),/2023\/24.*USDA Official/s);
+    if(topic==='wheat'){const flour=reference.locator('[data-west-gain-flour]');await flour.locator(':scope>summary').click();assert.equal(await flour.locator('tbody tr').count(),9);}
+   }
    await host.scrollIntoViewIfNeeded();const file=`${viewport.width}-${name}.png`;await page.screenshot({path:resolve(out,file),fullPage:true,animations:'disabled'});
    report.cases.push({name,viewport,file,...measurement});
   }

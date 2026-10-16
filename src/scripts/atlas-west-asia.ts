@@ -1,6 +1,6 @@
 import {syncAgroStatistics} from './atlas-agro-statistics.ts';
 import {syncAgroRegionalReferences} from './atlas-agro-regional-reference.ts';
-import {westAgroTopic,westCropProduction,renderWestSelectedCrop,renderWestWheatExample} from '../lib/atlas-west-asia-agro-statistics';
+import {westAgroTopic,westCropProduction,renderWestSelectedCrop,renderWestWheatExample,renderWestGainReference} from '../lib/atlas-west-asia-agro-statistics';
 import {westFields,westTopics,statisticalColors,observation,westReading,westProductionSelection} from '../data/atlas/west-asia-topics.mjs';
 import {readWestState,westSearch,gridIndex,decodeWestGrid,zoomWestView,panWestView} from '../lib/atlas-west-asia-state.mjs';
 import {stationAnnualRainfall,rainfallBreaks,rainfallColors,rainfallColor,isSettlementTopic,settlementSubject,validateSettlementCollection} from '../lib/atlas-west-asia-completion.mjs';
@@ -456,7 +456,7 @@ async function init(root:HTMLElement){
   const host=root.querySelector<HTMLElement>('[data-west-product-statistics]');
   if(host){host.hidden=!custom;const key=custom?code+':'+topic:'';if(host.dataset.selection!==key){host.dataset.selection=key;host.replaceChildren();if(custom){const title=document.createElement('h2');title.textContent='西アジア・中東 · '+(country()?.name??code);host.append(title);const content=document.createElement('div');content.innerHTML=renderWestSelectedCrop(data,topic,code);host.append(content);const source=document.createElement('p');source.className='agro-meta';source.textContent='FAO FAOSTAT QCL · 保存原値・元のフラグを保持。世界分母・在庫・用途・原料換算は未収録です。';host.append(source);}}}
   const reference=root.querySelector<HTMLElement>('[data-west-country-reference]');
-  if(reference){const html=active&&topic==='wheat'&&code?renderWestWheatExample(data,code):active&&topic==='forest'?'<details class="agro-definitions"><summary>林業の加工段階と未収録のパルプ</summary><p>上の丸太（燃料材を含む）・製材は各製品のm³です。パルプは別製品のtで扱い、丸太・製材へ合算・重量換算しません。木材パルプの同年国別生産・World・輸入・輸出・在庫・全相手数量は未収録です。製材の見掛消費を実際の加工投入やパルプ消費と呼びません。</p><a href="https://www.fao.org/forestry/statistics/data/en/">FAOの製品別単位・公開表</a></details>':'';reference.hidden=!html;const key=html?code+':'+topic:'';if(reference.dataset.selection!==key){reference.dataset.selection=key;reference.innerHTML=html;}}
+  if(reference){const html=active&&code&&['wheat','barley','rice'].includes(topic)?(topic==='wheat'?renderWestWheatExample(data,code):'')+renderWestGainReference(topic,code):active&&topic==='forest'?'<details class="agro-definitions"><summary>林業の加工段階と未収録のパルプ</summary><p>上の丸太（燃料材を含む）・製材は各製品のm³です。パルプは別製品のtで扱い、丸太・製材へ合算・重量換算しません。木材パルプの同年国別生産・World・輸入・輸出・在庫・全相手数量は未収録です。製材の見掛消費を実際の加工投入やパルプ消費と呼びません。</p><a href="https://www.fao.org/forestry/statistics/data/en/">FAOの製品別単位・公開表</a></details>':'';reference.hidden=!html;const key=html?code+':'+topic:'';if(reference.dataset.selection!==key){reference.dataset.selection=key;reference.innerHTML=html;}}
  }
  function positionFarmSupply(t:any){
   const slot=root.querySelector<HTMLElement>('[data-west-regional-flow-slot]');if(!slot||!farmSupplyBox||!farmSupplyHome)return;

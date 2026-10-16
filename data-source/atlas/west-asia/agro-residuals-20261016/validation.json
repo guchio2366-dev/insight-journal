@@ -91,5 +91,7 @@
     "evidence": "browser-launch.json",
     "limitation": "DPR, geometry, contrast, clipping and human visual review were not measured. The requested viewport assertions remain unexecuted."
   },
-  "incrementalValidation": "The final regional guard and empty-reference cleanup were rechecked by the 51 regional unit tests and final build; applicable controller E2E completed on stable built HTML. Full unit run passed before that final regional-only cleanup."
+  "incrementalValidation": "The final regional guard and empty-reference cleanup were rechecked by the 51 regional unit tests and final build; applicable controller E2E completed on stable built HTML. Full unit run passed before that final regional-only cleanup.",
+  "appliesToCommit": "823e8e4f9157e2921d7fa8532bfb5d63e0685f5f",
+  "phase": "Initial local implementation before the later push and official-source follow-up authorization. The no-push description and hashes belong to that historical phase."
 }

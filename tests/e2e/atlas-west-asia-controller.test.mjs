@@ -555,3 +555,19 @@ test('遅い共通統計が戻ってもデーツの地域専用表示を上書�
   assert.equal(q('[data-west-product-statistics]').dataset.selection,'SAU:dates');assert.ok(q('[data-west-dates-trade]'));
  }finally{release?.(new Response('{}'));await w.happyDOM.close();}
 });
+
+test('トルコの年度需給参考は選択穀物へ同期し、籾米・精米・小麦粉の数量を接合しない',async()=>{
+ const {w,q,select}=await setup('agriculture','?topic=barley&country=TUR',false,{width:1280,height:665},{preserveAgroConfig:true});
+ try{
+  const reference=q('[data-west-country-reference]');assert.equal(reference.hidden,false);assert.equal(q('[data-west-gain=barley]').open,false);
+  assert.match(q('[data-west-gain=barley]').textContent,/2023\/24.*USDA Official.*7,300/s);
+  const frame=q('[data-west-map]').getAttribute('viewBox');q('[data-west-topic-button=rice]').click();
+  await until(()=>q('[data-west-gain=rice]')&&q('[data-west-loading]').hidden);
+  assert.equal(q('[data-west-map]').getAttribute('viewBox'),frame);assert.equal(q('[data-west-gain=barley]'),null);
+  assert.match(q('[data-west-gain=rice]').textContent,/精米換算.*815.*813千MTの籾生産/s);
+  q('[data-west-topic-button=wheat]').click();await until(()=>q('[data-west-gain=wheat]')&&q('[data-west-loading]').hidden);
+  assert.ok(q('[data-west-national-fbs=TUR]'));assert.equal(q('[data-west-gain-flour]').querySelectorAll('tbody tr').length,9);
+  assert.equal(q('[data-west-gain-flour]').open,false);select('[data-west-country]','ARM');
+  await until(()=>q('[data-west-national-fbs=ARM]')&&q('[data-west-loading]').hidden);assert.equal(q('[data-west-gain]'),null);
+ }finally{await w.happyDOM.close();}
+});

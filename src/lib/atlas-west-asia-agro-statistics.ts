@@ -1,6 +1,7 @@
 import {agroBand,agroEscape as esc,agroNumber as number,renderAgroColumns,type AgroData} from './atlas-agro-statistics';
 import datesTrade from '../data/atlas/west-asia-sau-dates-trade-2023.json';
 import wheat from '../data/atlas/west-asia-wheat-2023.json';
+import gain from '../data/atlas/west-asia-turkiye-gain-2023-24.json';
 
 // Adapt only the regional topic IDs. The shared topic contract and map remain unchanged.
 export function westAgroTopic(id:string){
@@ -63,4 +64,16 @@ export function renderWestWheatExample(data:any,code:string){
  const gap=v['5511']+v['5611']-v['5911']-stock-v['5301'];
  const labels:Record<string,string>={'5142':'食用供給','5521':'飼料','5527':'種子','5123':'損失','5131':'加工','5154':'その他（非食用）','5170':'符号付き残差'};
  return `<details class="west-national-fbs-reference agro-definitions" data-west-national-fbs="${esc(code)}"><summary>別年・製品群の参考：${esc(country?.name??code)}の2023年小麦製品需給</summary><p>2023年 · FBS S2511「Wheat and products」 · 千t。上のQCL原穀の2024年生産・世界比と接合しません。FBS輸出は全外国向けで、編集20対象の域外輸出だけではありません。</p>${agroBand('供給（生産・輸入・在庫取崩し）',supply,'千t')}${agroBand('供給の仕向け（国内供給・輸出・在庫積増し）',disposition,'千t')}<p>在庫変動の原符号 ${number(stock)} 千t（正は積増し、負は取崩し）。生産＋輸入−輸出−在庫変動−公表国内供給：${number(gap)} 千t。国内供給は食用消費そのものでも国産分の仕向けでもありません。</p><div class="agro-table-scroll"><table><caption>国内供給の用途原値（千t）。欠測を0にせず、残差は符号付きで別掲。</caption><thead><tr><th>用途</th><th>千t</th></tr></thead><tbody>${Object.entries(labels).map(([key,label])=>`<tr><th scope="row">${label}</th><td>${number(v[key])}</td></tr>`).join('')}<tr><th scope="row">観光客消費</th><td>未返却（0ではない）</td></tr></tbody></table></div><p>全量の国産由来を追跡する資料、同一定義の世界生産・全相手数量は未収録です。保存済み独立照合ハンドオフ ${esc(row.file)}・データレコード ${row.records.join('–')} を再利用。原CSV未保持・全行I（補完）。SHA-256 ${wheat.sourceFiles[row.file as keyof typeof wheat.sourceFiles].sha256}。</p><a href="https://www.fao.org/faostat/en/#data/FBS">FAOSTAT FBS</a></details>`;
+}
+
+/** A reported national MY balance, kept apart from the main calendar-year QCL
+ * comparison. Never substitute TY trade or the adjacent New Post column. */
+export function renderWestGainReference(topic:string,code:string){
+ const row=code===gain.country?gain.records.find(record=>record.topic===topic):undefined;if(!row)return '';
+ const unit='千t',supply=[{label:'国内生産',value:row.production},{label:'輸入（MY）',value:row.importsMY},{label:'期首在庫',value:row.beginningStocks}];
+ const uses=[{label:row.domesticLabel,value:row.domesticUse},{label:'輸出（MY）',value:row.exportsMY},{label:'期末在庫',value:row.endingStocks}];
+ const breakdown=row.feedAndResidual===null?'<p>米の国内側は「利用・残差」の公表合計です。食用・飼料等の内訳を0として補いません。</p>':`<p>国内利用の内訳：飼料・残差 ${number(row.feedAndResidual)}、食用・種子・工業用（FSI）${number(row.foodSeedIndustrial)} ${unit}。飼料・残差を全て飼料摂取と呼ばず、FSIを全て食用と呼びません。</p>`;
+ const flour=gain.flourExports;
+ const destinations=topic==='wheat'?`<details class="agro-definitions" data-west-gain-flour><summary>加工品の別系列：2023/24年度の小麦粉輸出先</summary><p>小麦粉の製品重量・t。全国総輸出 ${number(flour.total)} tを分母に、公表8相手と原表のOtherを表示します。上のPSD小麦輸出 ${number(row.exportsMY)} 千tへ換算・合算しません。イラク・シリアを含む全国の全外国向けで、地域の域外輸出ではありません。Otherの域内外配分は未収録です。</p><div class="agro-table-scroll"><table><caption>同報告PDF p.20・表5・MY 2023/24列。相手見出しDestination。</caption><thead><tr><th>公表相手</th><th>小麦粉 t</th><th>全国総輸出比</th></tr></thead><tbody>${flour.partners.map(partner=>`<tr><th scope="row">${esc(partner.name)}</th><td>${number(partner.quantity)}</td><td>${(partner.quantity/flour.total*100).toFixed(2)}%</td></tr>`).join('')}</tbody></table></div><p>原表は製品重量で、原穀換算の係数は未保持。輸入小麦を加工した再輸出を国産小麦の仕向けへ割り当てず、相手国の最終用途も推測しません。</p></details>`:'';
+ return `<details class="agro-definitions" data-west-gain="${esc(topic)}"><summary>別年度・原表の参考：トルコの${esc(row.label)}・2023/24販売年度需給</summary><p>2023/24販売年度（${esc(row.marketYearStart)}開始）・USDA FAS TU2025-0015、2025-05-02公表、PDF p.${row.pdfPage}「USDA Official」列。原単位1000 MT＝千t。New Post列・将来年度の0欄は採用しません。主表示のFAO 2024暦年・同版Worldへ接合しません。</p><p>公表輸出 <strong>${number(row.exportsMY)} ${unit}</strong> ／ 同表の生産との数量比 <strong>${(row.exportsMY/row.production*100).toFixed(2)}%</strong>。輸入・持越在庫・再輸出を含む年度全体の量の比較で、国産分の輸出割合ではありません。</p>${agroBand('供給（同じMYの生産・輸入・期首在庫）',supply,unit)}${agroBand('仕向け（公表国内利用・輸出・期末在庫）',uses,unit)}${breakdown}<p>国内側は原表の公表量を使用し、生産−輸出から求めません。${esc(row.basisNote)}</p><p>同版の世界分母と同製品の全相手数量は未収録です。TY輸入 ${number(row.importsTY)}・TY輸出 ${number(row.exportsTY)} 千tは期間が異なり、上のMY帯には加えません。</p>${destinations}<p><a href="${esc(gain.sourceUrl)}#page=${row.pdfPage}">USDA FAS：公開需給表</a>。公開PDF本文の表を転記・検算。PDF原本の保存は接続トンネル403で未達です。</p></details>`;
 }
