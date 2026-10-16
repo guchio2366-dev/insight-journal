@@ -49,7 +49,9 @@ try{
    }
    report.cases.push({viewport,topic,...measure});
   }
-  await page.locator('[data-farm-choice="overview"]').click();await host.waitFor({state:'hidden'});
+  // Forestry hides the farm-product legend, including its return button.
+  // Use the visible native subfield tab to restore the unselected farm view.
+  await page.locator('[data-farm-group="agriculture"]').click();await host.waitFor({state:'hidden'});
   assert.equal(await page.locator('[data-south-central-farm-connections]').isVisible(),true);
   await page.close();
  }
