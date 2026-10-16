@@ -1,0 +1,10 @@
+{
+  "Naoero": {
+    "iso3": "NRU",
+    "name": "Nauru",
+    "scope": "intra",
+    "verifiedOn": "2026-10-16",
+    "sourceUrl": "https://wits.worldbank.org/trade/comtrade/en/country/All/year/2024/tradeflow/Exports/partner/NRU/product/440710",
+    "method": "Followed the official NZ sawnwood table's Naoero partner hyperlink; the public destination URL explicitly identifies NRU. Original partner display name is retained in quantities."
+  }
+}

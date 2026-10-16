@@ -1,0 +1,34 @@
+{
+  "scope": "Common acquisition route review; no acquired data adopted",
+  "events": [
+    {
+      "url": "https://wits.worldbank.org/Default.aspx",
+      "operation": "Official public web reader",
+      "result": "Public page readable; custom-query registration requirement observed; no registration attempted"
+    },
+    {
+      "url": "https://comtradeapi.un.org/",
+      "operation": "Official public web reader",
+      "result": "404 Not Found; no data acquired"
+    },
+    {
+      "url": "https://comtradeapi.un.org/swagger/index.html",
+      "operation": "Official public web reader",
+      "result": "URL not accessible; no data acquired; stopped"
+    },
+    {
+      "url": "https://apps.fas.usda.gov/psdonline/app/index.html#/app/advQuery",
+      "operation": "Official public web reader",
+      "result": "App entry returned no parsed rows; no export or dataset acquired"
+    },
+    {
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/KAZ/year/2023/tradeflow/Exports/partner/ALL/product/100190",
+      "operation": "Web reader before central-Asia acquisition-history review",
+      "result": "Page readable, but subsequent review found the owner had already stopped an ordinary GET of the same URL after tunnel HTTP403",
+      "adopted": false,
+      "furtherRetrievalStopped": true,
+      "correctionReportedToParent": true,
+      "note": "Candidate withdrawn. No numeric extract added or used. Check all owner rejection records before further source operations."
+    }
+  ]
+}

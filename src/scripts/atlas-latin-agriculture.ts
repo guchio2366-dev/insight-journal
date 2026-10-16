@@ -1,4 +1,4 @@
-import {syncAgroStatistics} from './atlas-agro-statistics.ts';
+import {syncLatinAgroStatistics as syncAgroStatistics} from './atlas-latin-agro-quantity';
 import {latinReadingProducts,latinProductReading} from '../data/atlas/latin-america/reading-products';
 import {initLatinMapCamera,latinProductAtPointer} from './atlas-latin-reading-map';
 import cropManifest from '../../public/assets/atlas/latin-america-agriculture-v1/manifest.json';

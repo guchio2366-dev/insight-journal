@@ -1,0 +1,206 @@
+{
+  "checkedAt": "2026-10-16T04:13:31.195590+00:00",
+  "initialRemoteVerification": {
+    "branch": "codex/west-asia-agro-residuals-20261016",
+    "command": "git ls-remote --heads origin refs/heads/codex/west-asia-agro-residuals-20261016",
+    "localSha": "823e8e4f9157e2921d7fa8532bfb5d63e0685f5f",
+    "remoteSha": "823e8e4f9157e2921d7fa8532bfb5d63e0685f5f",
+    "matched": true
+  },
+  "sources": [
+    {
+      "name": "USDA FAS Grain and Feed Annual, Turkiye, TU2025-0015, 2 May 2025",
+      "url": "https://apps.fas.usda.gov/newgainapi/api/Report/DownloadReportByFileName?fileName=Grain+and+Feed+Annual_Ankara_Turkiye_TU2025-0015.pdf",
+      "route": "Public web PDF reader; PSD tables on PDF pp18–19 and annex Table5 on p20. Normal direct executor PDF GET attempted once afterwards.",
+      "readStatus": "web PDF text read; direct preservation blocked by tunnel 403",
+      "adopted": "2023/24 USDA Official column only: Wheat, Barley, Rice Milled. Production, MY imports/exports, opening/closing stocks, reported domestic use; feed/residual and FSI where published. Flour uses the separate annex MY2023/24 column and product MT.",
+      "missingColumns": [
+        "same-vintage World production",
+        "complete raw-wheat / barley / milled-rice partner matrix",
+        "flour Other country split",
+        "raw grain to processed product conversion",
+        "domestic-origin tracing",
+        "publisher PDF bytes and hash"
+      ],
+      "notAdopted": "Adjacent New Post estimates, later-year columns and future official zero placeholders. No MY/TY substitution."
+    },
+    {
+      "name": "FAO Food Balance Sheets – A Handbook, concepts",
+      "url": "https://www.fao.org/4/x9892e/x9892e02.htm",
+      "route": "Ordinary public web HTML reader",
+      "readStatus": "read",
+      "adopted": "Stock changes: positive increase and negative decrease. Processed trade can be expressed as parent-commodity equivalent; units and cutoff period must be specified. Confirms why raw and processed trade weights cannot simply be joined.",
+      "missingColumns": [
+        "no 2023/24 national balance quantities or partner matrix"
+      ]
+    },
+    {
+      "name": "UNECE Forest Products Annual Market Review official entry",
+      "url": "https://unece.org/forests/forest-products-annual-market-review",
+      "route": "Ordinary public web reader, once",
+      "readStatus": "403 reported by reader; response layer not independently identified",
+      "missingColumns": [
+        "national pulp production/imports/exports in tonnes",
+        "same-year World",
+        "stock and processing stage definitions",
+        "partner quantities"
+      ]
+    },
+    {
+      "name": "UNECE country market statements candidate entry",
+      "url": "https://unece.org/forests/market-statements",
+      "route": "Ordinary public web reader, once",
+      "readStatus": "tool reported inaccessible; no HTTP status or publication body obtained",
+      "missingColumns": [
+        "no national forestry statement/table obtained"
+      ]
+    },
+    {
+      "name": "GASTAT official statistics entry; agriculture publication not located",
+      "url": "https://www.stats.gov.sa/en",
+      "route": "Ordinary public web reader",
+      "readStatus": "internal retrieval error; no HTTP status or publication body obtained",
+      "missingColumns": [
+        "dated commodity balance with stocks and uses",
+        "all partner quantities",
+        "product and unit definitions"
+      ]
+    },
+    {
+      "name": "GASTAT category candidate, not a verified publication",
+      "url": "https://www.stats.gov.sa/en/statistics-tabs/-/categories/124135",
+      "route": "Candidate ordinary public page; no authentication",
+      "readStatus": "tool inaccessible; category/publication existence not established",
+      "missingColumns": [
+        "all required quantity columns; do not infer a document title or values"
+      ]
+    },
+    {
+      "name": "Turkish Statistical Institute official data portal",
+      "url": "https://data.tuik.gov.tr/",
+      "resolvedUrl": "https://veriportali.tuik.gov.tr/",
+      "route": "Official public root redirects to portal; web text reader only",
+      "readStatus": "9-line application shell; no numeric table or export link obtained",
+      "missingColumns": [
+        "crop balance table and its MY/units",
+        "full partner quantity matrix",
+        "forestry/pulp table and definitions"
+      ]
+    },
+    {
+      "name": "FAOSTAT definitions public entry",
+      "url": "https://www.fao.org/faostat/en/#definitions",
+      "route": "Official public web entry",
+      "readStatus": "empty application shell, zero parsed lines",
+      "missingColumns": [
+        "QCL577/260 to HS080410/raw-preserved correspondence and conversion"
+      ]
+    },
+    {
+      "name": "UNECE Statistical Database forestry directory",
+      "url": "https://w3.unece.org/PXWeb2015/pxweb/en/STAT/STAT__26-TMSTAT1/",
+      "route": "Independent official data portal https://w3.unece.org/PXWeb/en/ → Forestry data tables → Consumption / Trade",
+      "readStatus": "readable public metadata and variables",
+      "missingColumns": [
+        "the inspected directory did not expose a pulp product tonnes balance or same-year World; no complete editorial 20-country region"
+      ]
+    },
+    {
+      "name": "UNECE Imports indicator c0001250",
+      "url": "https://w3.unece.org/PXWeb2015/pxweb/en/STAT/STAT__26-TMSTAT1__070-TM21_TR/010_en_TM21_15_r.px/",
+      "route": "Official forestry Trade → Imports selector",
+      "readStatus": "readable; current USD aggregate forest-product imports, years 1964–2019, 57 choices incl UNECE aggregate",
+      "missingColumns": [
+        "2023/2024",
+        "pulp-specific quantities in tonnes",
+        "separate processing stage quantities",
+        "partner matrix and World production"
+      ],
+      "notAdopted": "Wood, panels, pulp and paper are aggregated monetary value; never converted to m3 or tonnes"
+    },
+    {
+      "name": "UNECE Exports indicator",
+      "url": "https://w3.unece.org/PXWeb2015/pxweb/en/STAT/STAT__26-TMSTAT1__070-TM21_TR/020_en_TM21_16_r.px/",
+      "route": "Official forestry Trade → Exports selector",
+      "readStatus": "readable description: aggregate forest-product exports in current USD, 56 year choices",
+      "missingColumns": [
+        "pulp-specific tonnes and partner quantities"
+      ],
+      "notAdopted": "No conversion from monetary forest-product exports to wood/pulp quantity"
+    },
+    {
+      "name": "UNECE industrial roundwood consumption indicator c0001247",
+      "url": "https://w3.unece.org/PXWeb2015/pxweb/en/STAT/STAT__26-TMSTAT1__060-TM21_CN/010_en_TM21_12_r.px/",
+      "route": "Official forestry Consumption → Roundwood consumption selector",
+      "readStatus": "readable; years 1964–2019; under-bark thousand m3 and per-capita indicators",
+      "definition": "P+I-X. Industrial roundwood, not total roundwood including fuel.",
+      "missingColumns": [
+        "2023/2024",
+        "pulp tonnes",
+        "stocks and actual processing destinations",
+        "World production and partners"
+      ]
+    },
+    {
+      "name": "UNECE sawnwood consumption indicator",
+      "url": "https://w3.unece.org/PXWeb2015/pxweb/en/STAT/STAT__26-TMSTAT1__060-TM21_CN/020_en_TM21_13_r.px/",
+      "route": "Official forestry Consumption → Sawnwood consumption selector",
+      "readStatus": "readable definition: national P+I-X in cubic metres solid volume",
+      "missingColumns": [
+        "stock adjustment",
+        "actual end uses",
+        "pulp tonnes",
+        "full partner quantities"
+      ]
+    },
+    {
+      "name": "FAO forestry resources candidate entry",
+      "url": "https://www.fao.org/forestry/statistics/resources/en/",
+      "route": "Candidate public HTML resource page",
+      "readStatus": "404; no body; no retry",
+      "missingColumns": [
+        "no publication or quantity table obtained"
+      ]
+    },
+    {
+      "name": "FAO forest statistics Resources publications index",
+      "url": "https://www.fao.org/forestry/statistics/publications/en",
+      "route": "Successful official forestry homepage Resources link; distinct from the 404 guessed resources path",
+      "readStatus": "public index read; identifies exact titles and official handles",
+      "missingColumns": [
+        "index metadata does not supply national commodity quantities"
+      ]
+    },
+    {
+      "name": "FAO Pulp and paper capacities, survey 2023–2025 (2024-09-30)",
+      "url": "https://openknowledge.fao.org/handle/20.500.14283/cd2190t",
+      "route": "Normal link from official Resources index, once",
+      "readStatus": "403 reported by web reader; no publication body or original bytes obtained; no retry",
+      "missingColumns": [
+        "country actual pulp production distinct from capacity",
+        "product definition and tonnes basis",
+        "same-year World actual production",
+        "national imports/exports/stocks",
+        "all partners"
+      ],
+      "notAdopted": "Capacity or future capacity forecast is not production or consumption"
+    },
+    {
+      "name": "FAO Global forest products facts and figures 2024 (2025-12-24)",
+      "url": "https://openknowledge.fao.org/handle/20.500.14283/cd8005en",
+      "route": "Normal link from official Resources index, once",
+      "readStatus": "403 reported by web reader; no publication body or original bytes obtained; no retry",
+      "missingColumns": [
+        "unrounded same-product national and World quantities",
+        "full editorial 20-country coverage",
+        "pulp stocks and partner quantities"
+      ]
+    }
+  ],
+  "limits": "Denied resources were not retried through other hosts, proxies, credentials or tools. Independently readable sources are separate publications. No complete regional commodity flow or pulp balance was obtained.",
+  "transcription": {
+    "path": "src/data/atlas/west-asia-turkiye-gain-2023-24.json",
+    "sha256": "1711319f6431283423f21851713f68520ca8181b7127e3a5251262f09f4bc40e",
+    "publisherFileHash": null
+  }
+}

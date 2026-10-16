@@ -1,0 +1,68 @@
+Official public WITS table text extraction; not original HTML bytes.
+Accessed: 2026-10-16
+URL: https://wits.worldbank.org/trade/comtrade/en/country/CAN/year/2024/tradeflow/Exports/partner/ALL/product/120100
+L0: # Canada Soya beans exports by country
+L2: in 2024
+L20:  Canada  | Export  | 120100  | Soya beans  | 2024  | World | 2,488,017.65  | 5,133,240,000  | Kg
+L21:  Canada  | Export  | 120100  | Soya beans  | 2024  | China | 504,732.46  | 1,158,070,000  | Kg
+L22:  Canada  | Export  | 120100  | Soya beans  | 2024  | Japan | 305,164.61  | 362,935,000  | Kg
+L23:  Canada  | Export  | 120100  | Soya beans  | 2024  | Iran, Islamic Rep. | 271,897.20  | 656,628,000  | Kg
+L24:  Canada  | Export  | 120100  | Soya beans  | 2024  | Algeria | 256,455.68  | 603,857,000  | Kg
+L25:  Canada  | Export  | 120100  | Soya beans  | 2024  | United States | 168,735.38  | 307,626,000  | Kg
+L26:  Canada  | Export  | 120100  | Soya beans  | 2024  | Indonesia | 118,005.76  | 250,610,000  | Kg
+L27:  Canada  | Export  | 120100  | Soya beans  | 2024  | Italy | 81,754.59  | 205,185,000  | Kg
+L28:  Canada  | Export  | 120100  | Soya beans  | 2024  | Turkey | 81,681.04  | 198,815,000  | Kg
+L29:  Canada  | Export  | 120100  | Soya beans  | 2024  | United Kingdom | 75,915.41  | 180,174,000  | Kg
+L30:  Canada  | Export  | 120100  | Soya beans  | 2024  | Belgium | 75,759.31  | 157,674,000  | Kg
+L31:  Canada  | Export  | 120100  | Soya beans  | 2024  | Bangladesh | 73,546.97  | 189,325,000  | Kg
+L32:  Canada  | Export  | 120100  | Soya beans  | 2024  | Malaysia | 67,954.79  | 111,206,000  | Kg
+L33:  Canada  | Export  | 120100  | Soya beans  | 2024  | Vietnam | 63,158.11  | 110,927,000  | Kg
+L34:  Canada  | Export  | 120100  | Soya beans  | 2024  | Other Asia, nes | 49,527.37  | 60,522,200  | Kg
+L35:  Canada  | Export  | 120100  | Soya beans  | 2024  | Netherlands | 49,238.36  | 114,313,000  | Kg
+L36:  Canada  | Export  | 120100  | Soya beans  | 2024  | Thailand | 28,261.43  | 41,700,600  | Kg
+L37:  Canada  | Export  | 120100  | Soya beans  | 2024  | Korea, Rep. | 28,184.03  | 36,620,700  | Kg
+L38:  Canada  | Export  | 120100  | Soya beans  | 2024  | Norway | 28,111.69  | 54,726,400  | Kg
+L39:  Canada  | Export  | 120100  | Soya beans  | 2024  | Egypt, Arab Rep. | 22,180.79  | 57,751,000  | Kg
+L40:  Canada  | Export  | 120100  | Soya beans  | 2024  | Ireland | 20,635.23  | 51,859,400  | Kg
+L41:  Canada  | Export  | 120100  | Soya beans  | 2024  | Israel | 18,751.23  | 39,570,900  | Kg
+L42:  Canada  | Export  | 120100  | Soya beans  | 2024  | Germany | 17,439.31  | 37,034,300  | Kg
+L43:  Canada  | Export  | 120100  | Soya beans  | 2024  | Portugal | 13,431.64  | 33,249,400  | Kg
+L44:  Canada  | Export  | 120100  | Soya beans  | 2024  | Pakistan | 11,696.38  | 24,286,300  | Kg
+L45:  Canada  | Export  | 120100  | Soya beans  | 2024  | Singapore | 10,500.09  | 12,390,100  | Kg
+L46:  Canada  | Export  | 120100  | Soya beans  | 2024  | Philippines | 9,671.52  | 16,055,600  | Kg
+L47:  Canada  | Export  | 120100  | Soya beans  | 2024  | Hong Kong, China | 9,117.87  | 10,772,800  | Kg
+L48:  Canada  | Export  | 120100  | Soya beans  | 2024  | Greece | 7,379.89  | 19,254,000  | Kg
+L49:  Canada  | Export  | 120100  | Soya beans  | 2024  | United Arab Emirates | 5,098.24  | 10,463,600  | Kg
+L50:  Canada  | Export  | 120100  | Soya beans  | 2024  | Spain | 3,764.57  | 6,726,730  | Kg
+L51:  Canada  | Export  | 120100  | Soya beans  | 2024  | Poland | 1,647.93  | 1,938,440  | Kg
+L52:  Canada  | Export  | 120100  | Soya beans  | 2024  | Saudi Arabia | 1,298.73  | 1,543,510  | Kg
+L53:  Canada  | Export  | 120100  | Soya beans  | 2024  | Nepal | 1,189.32  | 2,031,670  | Kg
+L54:  Canada  | Export  | 120100  | Soya beans  | 2024  | France | 912.64  | 1,088,870  | Kg
+L55:  Canada  | Export  | 120100  | Soya beans  | 2024  | New Zealand | 887.87  | 935,297  | Kg
+L56:  Canada  | Export  | 120100  | Soya beans  | 2024  | Czech Republic | 642.66  | 687,120  | Kg
+L57:  Canada  | Export  | 120100  | Soya beans  | 2024  | Morocco | 513.15  | 751,720  | Kg
+L58:  Canada  | Export  | 120100  | Soya beans  | 2024  | Brunei | 494.19  | 573,730  | Kg
+L59:  Canada  | Export  | 120100  | Soya beans  | 2024  | Ukraine | 419.30  | 486,762  | Kg
+L60:  Canada  | Export  | 120100  | Soya beans  | 2024  | Finland | 416.40  | 520,800  | Kg
+L61:  Canada  | Export  | 120100  | Soya beans  | 2024  | Sweden | 408.20  | 462,985  | Kg
+L62:  Canada  | Export  | 120100  | Soya beans  | 2024  | South Africa | 337.29  | 499,690  | Kg
+L63:  Canada  | Export  | 120100  | Soya beans  | 2024  | Jamaica | 231.82  | 281,810  | Kg
+L64:  Canada  | Export  | 120100  | Soya beans  | 2024  | Mauritius | 204.35  | 242,810  | Kg
+L65:  Canada  | Export  | 120100  | Soya beans  | 2024  | Peru | 119.86  | 225,440  | Kg
+L66:  Canada  | Export  | 120100  | Soya beans  | 2024  | Cambodia | 119.32  | 147,000  | Kg
+L67:  Canada  | Export  | 120100  | Soya beans  | 2024  | Trinidad and Tobago | 76.06  | 79,858  | Kg
+L68:  Canada  | Export  | 120100  | Soya beans  | 2024  | Denmark | 72.71  | 61,100  | Kg
+L69:  Canada  | Export  | 120100  | Soya beans  | 2024  | Suriname | 60.47  | 79,625  | Kg
+L70:  Canada  | Export  | 120100  | Soya beans  | 2024  | Colombia | 38.47  | 60,480  | Kg
+L71:  Canada  | Export  | 120100  | Soya beans  | 2024  | Qatar | 34.73  | 40,320  | Kg
+L72:  Canada  | Export  | 120100  | Soya beans  | 2024  | Chile | 32.80  | 36,100  | Kg
+L73:  Canada  | Export  | 120100  | Soya beans  | 2024  | Russian Federation | 32.62  | 51,966  | Kg
+L74:  Canada  | Export  | 120100  | Soya beans  | 2024  | Switzerland | 17.58  | 19,950  | Kg
+L75:  Canada  | Export  | 120100  | Soya beans  | 2024  | Costa Rica | 17.27  | 20,400  | Kg
+L76:  Canada  | Export  | 120100  | Soya beans  | 2024  | Slovak Republic | 16.64  | 18,231  | Kg
+L77:  Canada  | Export  | 120100  | Soya beans  | 2024  | Turks and Caicos Isl. | 14.67  | 18,434  | Kg
+L78:  Canada  | Export  | 120100  | Soya beans  | 2024  | Panama | 5.72  | 7,020  | Kg
+L79:  Canada  | Export  | 120100  | Soya beans  | 2024  | Austria | 3.91  | 4,316  | Kg
+L80: HS Nomenclature used HS 1988/92 (H0)
+L81: HS Code 120100: Soya beans
+L82: Please note: Exports is gross exports and Imports is gross imports

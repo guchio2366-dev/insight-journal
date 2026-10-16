@@ -1,5 +1,6 @@
 ---
 import AgroStatistics from './AgroStatistics.astro';
+import CanadaSelectedAgroStatistics from './CanadaSelectedAgroStatistics.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AtlasRegionNavigation from './AtlasRegionNavigation.astro';
 import AtlasWorkspaceFrame from './AtlasWorkspaceFrame.astro';
@@ -86,6 +87,7 @@ import '../../styles/atlas-canada-country-parity.css';
     </aside>
    </div>
    <AgroStatistics scope="カナダ" country="CAN" topic="forest" />
+   <CanadaSelectedAgroStatistics forest />
    </div>
    <details class="canada-statistics forestry-statistics"><summary>補助統計：木材製品・紙製品の加工業収入</summary>     <section class="forestry-definitions" id="forestry-definitions"><h3>森林と林業を、数字の意味で分ける</h3><dl><dt>森林被覆</dt><dd>地表を樹木が覆う場所。この図の4分類。</dd><dt>森林土地面積</dt><dd>土地利用上の森林の広さ。一時的に樹木被覆が失われた土地を含む場合があり、この図の色面積とは別。</dd><dt>蓄積</dt><dd>立っている木の体積。</dd><dt>伐採量</dt><dd>一定期間に取り出した木材の量。初回版の比較対象外。</dd><dt>製造品収入</dt><dd>加工した製品などの金額。森林の広さ・伐採量・GDP・利益ではない。</dd></dl></section>
      <h2>木材製品と紙製品の加工活動を比べる</h2>

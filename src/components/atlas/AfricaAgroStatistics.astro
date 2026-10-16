@@ -1,0 +1,6 @@
+---
+import AgroStatistics from './AgroStatistics.astro';
+import {countries} from '../../data/atlas/africa-atlas';
+---
+<AgroStatistics scope="アフリカ" {countries} topics={['maize','rice','wheat','cassava','coffee','tea','cattle','goats','sheep']} />
+<section class="agro-statistics africa-selected-agro" data-africa-selected-agro hidden aria-label="アフリカの選択品目の生産・使用・輸出先" aria-live="polite"></section>

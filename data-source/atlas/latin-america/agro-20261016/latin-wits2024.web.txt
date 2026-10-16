@@ -1,0 +1,94 @@
+Brazil Soya beans exports by country | 2024 | Data (https://wits.worldbank.org/trade/comtrade/en/country/BRA/year/2024/tradeflow/Exports/partner/ALL/product/120100)
+citeturn3view0 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"https://wits.worldbank.org/trade/comtrade/en/country/BRA/year/2024/tradeflow/Exports/partner/ALL/product/120100","lineno":null}); Total lines: 107
+L0: # Brazil Soya beans exports by country
+L1:
+L2: in 2024
+L3:
+L4: Share
+L5:
+L6:   * cite0†Facebook L7:   * cite0†Twitter L8:   * cite0†Linkedin L9:   * cite0†Google Plus L10:   * cite0†Reddit L11:   * cite0†Stumble Upon L12:   * cite0†Delicious L13:   * cite0†Email L14:
+L15: Change selection (Reporter, Year, Trade Flow, Partner and HS 6 digit Product)
+L16: Brazil exports of Soya beans was $42,941,655.40K .
+L17: Brazil exported Soya beans to China ($31,499,887.71K , 72,867,700,000 Kg), Spain ($1,802,183.85K , 4,184,300,000 Kg), Thailand ($1,506,603.51K , 3,554,810,000 Kg), Turkey ($1,007,833.95K , 2,332,790,000 Kg), Iran, Islamic Rep. ($826,536.57K , 1,835,780,000 Kg).
+L18: cite1†Soya beans imports by country in 2024 L19: Reporter  | TradeFlow  | ProductCode  | Product Description  | Year  | Partner  | Trade Value 1000USD  | Quantity  | Quantity Unit
+L20:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite2†World | 42,941,655.40  |  |
+L21:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite3†China | 31,499,887.71  | 72,867,700,000  | Kg
+L22:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite4†Spain | 1,802,183.85  | 4,184,300,000  | Kg
+L23:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite5†Thailand | 1,506,603.51  | 3,554,810,000  | Kg
+L24:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite6†Turkey | 1,007,833.95  | 2,332,790,000  | Kg
+L25:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite7†Iran, Islamic Rep. | 826,536.57  | 1,835,780,000  | Kg
+L26:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite8†Mexico | 695,566.26  | 1,600,100,000  | Kg
+L27:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite9†Other Asia, nes | 623,469.75  | 1,449,640,000  | Kg
+L28:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite10†Russian Federation | 484,840.71  | 1,077,270,000  | Kg
+L29:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite11†Bangladesh | 475,137.14  | 1,118,670,000  | Kg
+L30:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite12†Vietnam | 471,565.38  | 1,047,460,000  | Kg
+L31:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite13†Netherlands | 465,330.63  | 1,055,590,000  | Kg
+L32:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite14†Italy | 407,464.73  | 947,152,000  | Kg
+L33:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite15†Algeria | 336,734.84  | 789,816,000  | Kg
+L34:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite16†Japan | 322,620.98  | 743,457,000  | Kg
+L35:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite17†Egypt, Arab Rep. | 297,741.98  | 679,808,000  | Kg
+L36:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite18†United Kingdom | 265,779.66  | 603,634,000  | Kg
+L37:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite19†Iraq | 263,860.62  | 604,477,000  | Kg
+L38:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite20†Korea, Rep. | 213,480.00  | 485,124,000  | Kg
+L39:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite21†Norway | 135,334.10  | 288,513,000  | Kg
+L40:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite22†Tunisia | 116,065.01  | 273,603,000  | Kg
+L41:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite23†Germany | 106,889.08  | 264,625,000  | Kg
+L42:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite24†Argentina | 89,915.96  | 221,307,000  | Kg
+L43:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite25†Portugal | 87,819.56  | 199,898,000  | Kg
+L44:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite26†Saudi Arabia | 85,465.74  | 196,941,000  | Kg
+L45:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite27†Israel | 76,151.93  | 168,299,000  | Kg
+L46:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite28†United States | 57,483.27  | 134,891,000  | Kg
+L47:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite29†Malaysia | 49,544.47  | 109,076,000  | Kg
+L48:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite30†Greece | 46,505.63  | 111,960,000  | Kg
+L49:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite31†Costa Rica | 45,364.68  | 97,688,000  | Kg
+L50:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite32†Venezuela | 21,074.05  | 46,969,000  | Kg
+L51:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite33†United Arab Emirates | 17,597.68  | 40,797,000  | Kg
+L52:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite34†Lebanon | 16,400.38  | 39,000,200  | Kg
+L53:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite35†Uruguay | 9,988.09  | 22,563,100  | Kg
+L54:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite36†Paraguay | 6,058.14  | 5,662,710  | Kg
+L55:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite37†Chile | 4,472.40  | 10,001,000  | Kg
+L56:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite38†Angola | 1,129.30  | 486,182  | Kg
+L57:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite39†Aruba | 546.35  | 1,002,000  | Kg
+L58:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite40†France | 314.39  | 511,012  | Kg
+L59:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite41†Colombia | 211.31  | 100,782  | Kg
+L60:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite42†Senegal | 205.56  | 386,000  | Kg
+L61:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite43†British Virgin Islands | 177.82  | 405,000  | Kg
+L62:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite44†Uganda | 177.18  | 300,000  | Kg
+L63:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite45†Guyana | 88.68  | 151,000  | Kg
+L64:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite46†Peru | 27.36  | 76,000  | Kg
+L65:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite47†South Africa | 3.63  | 2,945  | Kg
+L66:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite48†Marshall Islands | 1.23  | 11,197  | Kg
+L67:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite49†Panama | 1.00  | 18,118  | Kg
+L68:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite50†Liberia | 0.78  | 11,098  | Kg
+L69:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite51†Singapore | 0.74  | 168  | Kg
+L70:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite52†Hong Kong, China | 0.63  | 466  | Kg
+L71:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite53†Malta | 0.36  | 31  | Kg
+L72:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite54†Bahamas, The | 0.23  | 144  | Kg
+L73:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite55†Bermuda | 0.14  | 320  | Kg
+L74:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite56†Denmark | 0.10  | 6  | Kg
+L75:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite57†Kuwait | 0.06  | 10  | Kg
+L76:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite58†Antigua and Barbuda | 0.05  | 5  | Kg
+L77:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite59†Switzerland | 0.02  | 5  | Kg
+L78:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite60†Guinea-Bissau | 0.01  | 5  | Kg
+L79:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite61†Cook Islands | 0.01  | 5  | Kg
+L80:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite62†Belgium | 0.01  | 2  | Kg
+L81:  Brazil  | Export  | 120100  | Soya beans  | 2024  | cite63†Bulgaria | 0.00  |  |
+L82: HS Nomenclature used HS 1988/92 (H0)
+L83: HS Code 120100: Soya beans
+L84: Please note: Exports is gross exports and Imports is gross imports
+L85:
+L86:   * cite64†About L87:   * .
+L88:   * cite65†Contact L89:   * .
+L90:   * cite66†Usage Conditions L91:   * .
+L92:   * cite67†Legal†www.worldbank.org L93:   * .
+L94:   * cite68†Data Providers L95:   * .
+L96:   * Page Refreshed : Oct-15-2026 10:43 ET
+L97: Partners
+L98:   * cite69†ITC†www.intracen.org L99:   * .
+L100:   * cite70†UNCTAD†unctad.org L101:   * .
+--------------------------------------------------------------------------------
+Brazil Soya beans imports by country | 2024 | Data (https://wits.worldbank.org/trade/comtrade/en/country/BRA/year/2024/tradeflow/Imports/partner/ALL/product/120100)
+citeturn3view1 [wordlim: 200] Crawled: last month; Content type: text/html; Source: open({"ref_id":"https://wits.worldbank.org/trade/comtrade/en/country/BRA/year/2024/tradeflow/Imports/partner/ALL/product/120100","lineno":null}); Total lines: 53
+--------------------------------------------------------------------------------
+Paraguay Soya beans exports by country | 2024 | Data (https://wits.worldbank.org/trade/comtrade/en/country/PRY/year/2024/tradeflow/Exports/partner/ALL/product/120100)
+citeturn3view2 [wordlim: 200] Crawled: yesterday; Content type: text/html; Source: open({"ref_id":"https://wits.worldbank.org/trade/comtrade/en/country/PRY/year/2024/tradeflow/Exports/partner/ALL/product/120100","lineno":null}); Total lines: 61

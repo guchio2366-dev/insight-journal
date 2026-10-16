@@ -1,0 +1,97 @@
+New regional unit tests
+✔ proposed hook shows rice and cotton, retains the separate basmati reference, and clears old country references (274.188608ms)
+✔ selected-to-overview restore is identical to the original shared overview; country clear and field change restore nodes (308.80488ms)
+✔ Central Asia and other region hosts retain their original selected statistics (386.551554ms)
+✔ a late quantity request cannot restore a cleared national selection (81.47133ms)
+✔ South Asia product-only selection shows regional coverage and forest series can switch without a country proxy (234.715709ms)
+✔ South Asia rows match the retained country and World cells, including zero, stock and loss fields (3.177699ms)
+✔ offline regeneration is deterministic and altered source bytes stop extraction (26.876951ms)
+✔ selection keys never relabel paddy or seed cotton statistics and cannot mutate canonical packets (0.450966ms)
+✔ new rice flows keep the reading order, independent domestic use and unavailable partner denominator (40.885201ms)
+✔ cotton separates lint, mill use, imported supply and non-food use (5.865113ms)
+✔ all eight South Asia forests retain m³, apparent-use limits, and separate unretained pulp t (147.616225ms)
+✔ the regional renderer falls back without creating new products, countries, years or overview statistics (0.472838ms)
+✔ regional selected production uses the eight-country scope and explicit incomplete coverage, never an India proxy (43.452466ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1625.617695
+
+Integrated complete unit suite
+ℹ tests 1449
+ℹ suites 0
+ℹ pass 1446
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 3
+ℹ todo 0
+ℹ duration_ms 88813.892543
+
+South/Central static/optional-browser E2E
+﹣ 南アジア・中央アジアの入口から選択、復帰、分野往復が地域内に保たれる (0.970478ms) # ATLAS_ASIA_BROWSER=1 with a production build
+﹣ 南アジアの三産業入口と作物重複域を表示する (0.169435ms) # ATLAS_ASIA_BROWSER=1 with a production build
+﹣ 中央アジアの地形操作は国選択を作らず宗教色面の透過度を復元する (0.100621ms) # ATLAS_ASIA_BROWSER=1 with a production build
+﹣ 南アジア産業の全地点とPC三幅の代表選択は表示集合と相対位置を固定する (0.092509ms) # ATLAS_ASIA_BROWSER=1 with a production build
+✔ South/Central overview keeps India as the detailed national industry target (101.525016ms)
+✔ regional readings expose the compared South/Central places and sourced production shares (17.83843ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 4
+ℹ todo 0
+ℹ duration_ms 729.337588
+
+Asia workspace static E2E
+✔ アジア3地域の分野ページは一つの地図・ニュース欄・解説欄を持ち、初期表示がURLと一致する (5248.732877ms)
+✔ アジア統計はニュースの列に広がらず、mobileの国・都市選択は別の行を使う (1556.739448ms)
+✔ 旧アジア地域ページは自然環境の正規URLを示す (38.850258ms)
+✔ 南アジア・中央アジアは別URLと初期範囲を持ち、元資料の範囲を変更しない (1439.907528ms)
+✔ Asia全景と国のfit範囲は既存詳細地理の離島を含み、画像矩形へ切らない (780.948002ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9762.035104
+
+Release verification
+
+> insight-journal@0.1.0 verify:release
+> node scripts/verify-release.mjs
+
+配信情報を確認しました: local, 1 articles
+
+Full repository E2E: interrupted (exit 130); no full-suite pass claimed.
+Cloud browser capture: blocked-browser-launch; captured cases/images: 0.
+
+Additional official-source supplement regional validation (14 pass, 0 fail):
+✔ proposed hook shows rice and cotton, retains the separate basmati reference, and clears old country references (226.717051ms)
+✔ selected-to-overview restore is identical to the original shared overview; country clear and field change restore nodes (288.415821ms)
+✔ Central Asia and other region hosts retain their original selected statistics (372.687256ms)
+✔ a late quantity request cannot restore a cleared national selection (80.282011ms)
+✔ South Asia product-only selection shows regional coverage and forest series can switch without a country proxy (260.267355ms)
+✔ South Asia rows match the retained country and World cells, including zero, stock and loss fields (2.911954ms)
+✔ offline regeneration is deterministic and altered source bytes stop extraction (27.126717ms)
+✔ selection keys never relabel paddy or seed cotton statistics and cannot mutate canonical packets (0.357228ms)
+✔ new rice flows keep the reading order, independent domestic use and unavailable partner denominator (36.73993ms)
+✔ cotton separates lint, mill use, imported supply and non-food use (5.269584ms)
+✔ all eight South Asia forests retain m³, apparent-use limits, and separate unretained pulp t (127.322577ms)
+✔ the regional renderer falls back without creating new products, countries, years or overview statistics (0.481836ms)
+✔ regional selected production uses the eight-country scope and explicit incomplete coverage, never an India proxy (45.860751ms)
+✔ Sri Lanka official processed-tea supplement retains the independent annual total and monthly gap without filling missing flow fields (0.683109ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1579.004763

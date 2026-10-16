@@ -1,0 +1,105 @@
+{
+  "reporter": "UKR",
+  "reporterName": "Ukraine",
+  "flow": "Import",
+  "year": 2023,
+  "classification": "HS1988/92 (H0)",
+  "productCode": "120100",
+  "productDescription": "Soya beans",
+  "sourceUrl": "https://wits.worldbank.org/trade/comtrade/en/country/UKR/year/2023/tradeflow/Imports/partner/ALL/product/120100",
+  "retrievedOn": "2026-10-16",
+  "retention": "Transcription of the complete table delivered by web.open from the official WITS public page; decimal display precision retained. This is not a downloaded Comtrade raw API response.",
+  "rows": [
+    {
+      "partner": "World",
+      "quantityRaw": "1875190",
+      "unit": "Kg",
+      "value1000UsdRaw": "2036.06"
+    },
+    {
+      "partner": "Canada",
+      "quantityRaw": "381921",
+      "unit": "Kg",
+      "value1000UsdRaw": "733.64"
+    },
+    {
+      "partner": "France",
+      "quantityRaw": "137271",
+      "unit": "Kg",
+      "value1000UsdRaw": "327.93"
+    },
+    {
+      "partner": "Romania",
+      "quantityRaw": "380318",
+      "unit": "Kg",
+      "value1000UsdRaw": "250.90"
+    },
+    {
+      "partner": "Poland",
+      "quantityRaw": "547517",
+      "unit": "Kg",
+      "value1000UsdRaw": "240.99"
+    },
+    {
+      "partner": "Austria",
+      "quantityRaw": "69867",
+      "unit": "Kg",
+      "value1000UsdRaw": "150.14"
+    },
+    {
+      "partner": "Croatia",
+      "quantityRaw": "188880",
+      "unit": "Kg",
+      "value1000UsdRaw": "110.07"
+    },
+    {
+      "partner": "Italy",
+      "quantityRaw": "17621",
+      "unit": "Kg",
+      "value1000UsdRaw": "55.78"
+    },
+    {
+      "partner": "Hungary",
+      "quantityRaw": "75570",
+      "unit": "Kg",
+      "value1000UsdRaw": "38.29"
+    },
+    {
+      "partner": "China",
+      "quantityRaw": "16000",
+      "unit": "Kg",
+      "value1000UsdRaw": "33.60"
+    },
+    {
+      "partner": "United States",
+      "quantityRaw": "10171",
+      "unit": "Kg",
+      "value1000UsdRaw": "29.58"
+    },
+    {
+      "partner": "Czech Republic",
+      "quantityRaw": "17130",
+      "unit": "Kg",
+      "value1000UsdRaw": "28.89"
+    },
+    {
+      "partner": "Serbia, FR(Serbia/Montenegro)",
+      "quantityRaw": "26353",
+      "unit": "Kg",
+      "value1000UsdRaw": "19.27"
+    },
+    {
+      "partner": "Germany",
+      "quantityRaw": "6462",
+      "unit": "Kg",
+      "value1000UsdRaw": "16.81"
+    },
+    {
+      "partner": "Switzerland",
+      "quantityRaw": "110",
+      "unit": "Kg",
+      "value1000UsdRaw": "0.16"
+    }
+  ],
+  "pageRefreshedRaw": "Mar-11-2026 06:57 ET"
+}

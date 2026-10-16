@@ -1,0 +1,99 @@
+New Zealand Coniferous wood sawn or chipped lengthwise, sli exports by country | 2024 | Data (https://wits.worldbank.org/trade/comtrade/en/country/NZL/year/2024/tradeflow/Exports/partner/ALL/product/440710)
+citeturn9view0 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"https://wits.worldbank.org/trade/comtrade/en/country/NZL/year/2024/tradeflow/Exports/partner/ALL/product/440710","lineno":15}); Total lines: 115
+L0: # New Zealand Coniferous wood sawn or chipped lengthwise, sli exports by country
+L1:
+L2: in 2024
+L3:
+L4: Share
+L5:
+L6:   * cite0†Facebook L7:   * cite0†Twitter L8:   * cite0†Linkedin L9:   * cite0†Google Plus L10:   * cite0†Reddit L11:   * cite0†Stumble Upon L12:   * cite0†Delicious L13:   * cite0†Email L14:
+L15: Change selection (Reporter, Year, Trade Flow, Partner and HS 6 digit Product)
+L16: New Zealand exports of Coniferous wood sawn or chipped lengthwise, sli was $619,600.41K and quantity 1,667,550m³.
+L17: New Zealand exported Coniferous wood sawn or chipped lengthwise, sli to United States ($187,373.77K , 235,065 m³), Australia ($90,740.45K , 146,162 m³), China ($50,165.38K , 250,364 m³), Korea, Rep. ($37,473.01K , 172,922 m³), Netherlands ($31,072.10K , 45,412 m³).
+L18: cite1†Coniferous wood sawn or chipped lengthwise, sli imports by country in 2024 L19: Reporter  | TradeFlow  | ProductCode  | Product Description  | Year  | Partner  | Trade Value 1000USD  | Quantity  | Quantity Unit
+L20:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite2†World | 619,600.41  | 1,667,550  | m³
+L21:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite3†United States | 187,373.77  | 235,065  | m³
+L22:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite4†Australia | 90,740.45  | 146,162  | m³
+L23:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite5†China | 50,165.38  | 250,364  | m³
+L24:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite6†Korea, Rep. | 37,473.01  | 172,922  | m³
+L25:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite7†Netherlands | 31,072.10  | 45,412  | m³
+L26:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite8†Vietnam | 28,995.74  | 121,223  | m³
+L27:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite9†Thailand | 24,614.51  | 127,396  | m³
+L28:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite10†Other Asia, nes | 24,530.26  | 96,677  | m³
+L29:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite11†Malaysia | 20,142.29  | 91,813  | m³
+L30:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite12†Japan | 11,197.44  | 38,609  | m³
+L31:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite13†Indonesia | 10,225.14  | 45,826  | m³
+L32:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite14†Spain | 10,161.28  | 21,163  | m³
+L33:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite15†Saudi Arabia | 9,856.23  | 56,907  | m³
+L34:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite16†Samoa | 7,446.34  | 23,491  | m³
+L35:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite17†French Polynesia | 6,821.66  | 12,823  | m³
+L36:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite18†Maldives | 6,393.38  | 7,874  | m³
+L37:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite19†Philippines | 5,730.11  | 11,888  | m³
+L38:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite20†Norway | 5,229.06  | 7,602  | m³
+L39:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite21†United Arab Emirates | 5,178.23  | 29,538  | m³
+L40:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite22†Vanuatu | 5,172.69  | 12,885  | m³
+L41:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite23†Belgium | 3,807.63  | 4,616  | m³
+L42:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite24†Estonia | 3,515.44  | 6,318  | m³
+L43:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite25†Tonga | 3,158.18  | 9,409  | m³
+L44:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite26†Mexico | 3,026.05  | 8,384  | m³
+L45:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite27†Cambodia | 2,829.51  | 13,542  | m³
+L46:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite28†Singapore | 2,596.13  | 13,304  | m³
+L47:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite29†Cook Islands | 2,467.75  | 5,302  | m³
+L48:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite30†United Kingdom | 2,364.19  | 2,105  | m³
+L49:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite31†New Caledonia | 2,299.54  | 4,984  | m³
+L50:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite32†American Samoa | 1,607.60  | 3,831  | m³
+L51:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite33†Fiji | 1,276.14  | 3,240  | m³
+L52:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite34†Oman | 1,246.71  | 6,267  | m³
+L53:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite35†Kuwait | 1,091.12  | 5,888  | m³
+L54:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite36†Mauritius | 1,014.65  | 1,583  | m³
+L55:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite37†Canada | 686.13  | 588  | m³
+L56:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite38†India | 659.19  | 2,771  | m³
+L57:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite39†Sri Lanka | 653.19  | 3,562  | m³
+L58:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite40†Marshall Islands | 646.95  | 1,389  | m³
+L59:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite41†Kiribati | 643.31  | 1,879  | m³
+L60:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite42†Denmark | 634.61  | 513  | m³
+L61:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite43†Hong Kong, China | 606.55  | 2,829  | m³
+L62:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite44†Germany | 521.81  | 772  | m³
+L63:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite45†Somalia | 448.87  | 2,204  | m³
+L64:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite46†Wallis and Futura Isl. | 416.89  | 911  | m³
+L65:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite47†Norfolk Island | 399.42  | 1,028  | m³
+L66:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite48†Micronesia, Fed. Sts. | 342.01  | 668  | m³
+L67:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite49†Finland | 318.76  | 608  | m³
+L68:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite50†Turkey | 292.67  | 447  | m³
+L69:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite51†Ireland | 280.50  | 193  | m³
+L70:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite52†Niue | 174.35  | 341  | m³
+L71:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite53†Palau | 165.39  | 314  | m³
+L72:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite54†Italy | 130.64  | 106  | m³
+L73:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite55†Bahrain | 110.74  | 537  | m³
+L74:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite56†Tuvalu | 106.34  | 203  | m³
+L75:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite57†France | 75.02  | 198  | m³
+L76:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite58†Pakistan | 58.90  | 116  | m³
+L77:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite59†Solomon Islands | 58.66  | 170  | m³
+L78:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite60†Naoero | 56.47  | 156  | m³
+L79:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite61†South Africa | 56.07  | 107  | m³
+L80:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite62†Latvia | 48.88  | 72  | m³
+L81:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite63†Portugal | 41.09  | 73  | m³
+L82:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite64†Seychelles | 37.17  | 97  | m³
+L83:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite65†East Timor | 32.48  | 78  | m³
+L84:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite66†Lithuania | 25.03  | 42  | m³
+L85:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite67†Falkland Island | 23.80  | 66  | m³
+L86:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite68†Algeria | 17.67  | 36  | m³
+L87:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite69†Pitcairn | 5.95  | 59  | m³
+L88:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite70†Sweden | 4.54  | 3  | m³
+L89:  New Zealand  | Export  | 440710  | Coniferous wood sawn or chipped lengthwise, sli  | 2024  | cite71†Antarctica | 0.58  | 1  | m³
+L90: HS Nomenclature used HS 1988/92 (H0)
+L91: HS Code 440710: Coniferous wood sawn or chipped lengthwise, sli
+L92: Please note: Exports is gross exports and Imports is gross imports
+L93:
+L94:   * cite72†About L95:   * .
+L96:   * cite73†Contact L97:   * .
+L98:   * cite74†Usage Conditions L99:   * .
+L100:   * cite75†Legal†www.worldbank.org L101:   * .
+L102:   * cite76†Data Providers L103:   * .
+L104:   * Page Refreshed : Oct-15-2026 23:39 ET
+L105: Partners
+L106:   * cite77†ITC†www.intracen.org L107:   * .
+L108:   * cite78†UNCTAD†unctad.org L109:   * .
+L110:   * cite79†UNSTATS†unstats.un.org L111:   * .
+L112:   * cite80†World Trade Organization†www.wto.org L113:   * .
+L114:   * cite81†World Bank†www.worldbank.org

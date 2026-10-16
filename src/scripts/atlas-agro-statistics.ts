@@ -57,8 +57,9 @@ function initialize(host:HTMLElement){
   const changed=selection.country!==next.country||selection.topic!==next.topic;if(changed)chosen='';selection={...next};const token=++generation;
   // Japan's existing, independent display is excluded even on an East Asia map.
   const overview=['overview','all','farming-overview','farming-all','crops'].includes(next.topic);
-  host.hidden=next.active===false||next.country==='JPN'||config.nationalOnly&&!next.country;
-  syncAgroRegionalReferences(referenceRoot,!host.hidden&&!overview&&Boolean(next.country));
+  const southRegionSelected=!overview&&referenceRoot.getAttribute('data-focus')==='south-asia';
+  host.hidden=next.active===false||next.country==='JPN'||config.nationalOnly&&!next.country&&!southRegionSelected;
+  syncAgroRegionalReferences(referenceRoot,!host.hidden&&!overview&&(Boolean(next.country)||southRegionSelected));
   if(host.hidden){content.replaceChildren();return;}
   heading.textContent=config.scope+' · '+(config.countries.find(c=>c.code===next.country)?.name??next.country);
   if(countrySelect)countrySelect.value=next.country;
@@ -73,7 +74,9 @@ function initialize(host:HTMLElement){
    const datasets=await Promise.all(ids.filter(id=>config.files[id]).map(id=>load(config.url+config.files[id].file)));if(token!==generation)return;
    const data:AgroData={countries:{},sources:datasets[0]?.sources??[],method:datasets[0]?.method??'選択品目の保存原表は未収録です。'};
    for(const dataset of datasets)for(const [code,country] of Object.entries(dataset.countries)){const existing=data.countries[code];data.countries[code]={name:country.name,series:existing?[...existing.series,...country.series.filter(s=>!existing.series.some(old=>old.id===s.id))]:country.series};}
-   const available=data.countries[next.country]?.series.filter(s=>agroProduction(s)&&allowed.includes(s.id))??[];
+   const regionalModule=!overview&&referenceRoot.getAttribute('data-region')==='south-central-asia'?(await import('../lib/atlas-south-asia-agro-statistics.ts')):undefined;
+   if(token!==generation)return;
+   const available=next.country?(data.countries[next.country]?.series.filter(s=>agroProduction(s)&&allowed.includes(s.id))??[]):southRegionSelected?(regionalModule?.southAsiaAgroSeries(data,allowed)??[]):[];
    const id=available.find(s=>s.id===chosen)?.id??available[0]?.id??ids[0]??allowed[0];
    const options=overview?allowed.filter(id=>config.files[id]).map(id=>({id,label:available.find(s=>s.id===id)?.label??config.labels[id]??id})):available;
    seriesSelect.replaceChildren(...options.map(series=>{const option=document.createElement('option');option.value=series.id;option.textContent=series.label;return option;}));seriesSelect.value=id;
@@ -82,7 +85,7 @@ function initialize(host:HTMLElement){
    if(token!==generation)return;
    const sourceHost=host.querySelector<HTMLElement>('[data-agro-sources]');if(sourceHost&&config.sources)sourceHost.innerHTML=overview?config.sources.overview:config.sources.selected;
    status.textContent=overview?`${next.year??2024}年・全国値。地図の収穫面積・家畜密度とは別の数量です。左・中央・右の原表と欠測を個別に示します。`:'生産量と世界シェア → 国内での使用・輸出 → 輸出先の量と構成比。年・製品が異なる参考は別掲します。';
-   content.innerHTML=renderer(data,next.country,id,next.year??2024,config.reference);
+   content.innerHTML=regionalModule?.renderSouthAsiaAgroColumns(data,next.country,id,next.year??2024)??renderer(data,next.country,id,next.year??2024,config.reference);
    await refreshReferences(next.country,id,overview,token);
    if(token===generation&&!host.hidden)host.dataset.agroReady='true';
   }catch{if(token!==generation)return;syncAgroRegionalReferences(referenceRoot,false);status.textContent='統計を取得できませんでした。地図の選択は保持しています。';retry.hidden=false;}

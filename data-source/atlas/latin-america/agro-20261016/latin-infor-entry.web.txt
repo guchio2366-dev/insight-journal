@@ -1,0 +1,250 @@
+Infor :: Estadisticas Forestales (https://wef.infor.cl/index.php/publicaciones/boletines-estadisticos/anuario-forestal)
+citeturn5view0 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"https://wef.infor.cl/index.php/publicaciones/boletines-estadisticos/anuario-forestal","lineno":null}); Total lines: 149
+L0: cite0†Image cite1†Image L1: # Anuario Forestal
+L2: Anuario Forestal es publicado por INFOR desde 1971.
+L3: Este documento concentra el conjunto de información estadística del sector, generada por INFOR y por otras instituciones públicas y privadas del país tales como: Corporación Nacional Forestal (CONAF), Banco Central de Chile, Instituto Nacional de Estadísticas (INE), Asociación Chilena de Seguridad (ACHS), Sociedad de Fomento Fabril (SOFOFA), Superintendencia de Seguridad Social (SUSESO), Ferronor y Ferrocarriles del Pacífico (FEPASA), Servicio Nacional de Aduanas y la Corporación Chilena de la Madera (CORMA).
+L4: Se entrega series estadísticas en los siguientes ámbitos: indicadores macroeconómicos nacionales y sectoriales; recursos forestales; consumo industrial de madera en trozas; producción industrial; comercio exterior; precios de bienes en el mercado nacional y de exportación; transporte; disponibilidad de madera y ocupación en la actividad forestal.
+L5: ###### 2026
+L6:
+L7: cite2†Image L8:
+L9: cite3†Descargar L10:
+L11: ###### 2025
+L12:
+L13: cite4†Image L14:
+L15: cite5†Descargar L16:
+L17: ###### 2024
+L18:
+L19: cite6†Image L20:
+L21: cite7†Descargar L22:
+L23: ###### 2023
+L24:
+L25: cite8†Image L26:
+L27: cite9†Descargar L28:
+L29: ###### 2022
+L30:
+L31: cite10†Image L32:
+L33: cite11†Descargar L34:
+L35: ###### 2021
+L36:
+L37: cite12†Image L38:
+L39: cite13†Descargar L40:
+L41: ###### 2020
+L42:
+L43: cite14†Image L44:
+L45: cite15†Descargar L46:
+L47: ###### 2019
+L48:
+L49: cite16†Image L50:
+L51: cite17†Descargar L52:
+L53: ###### 2018
+L54:
+L55: cite18†Image L56:
+L57: cite19†Descargar L58:
+L59: ###### 2017
+L60:
+L61: cite20†Image L62:
+L63: cite21†Descargar L64:
+L65: ###### 2016
+L66:
+L67: cite22†Image L68:
+L69: cite23†Descargar L70:
+L71: ###### 2015
+L72:
+L73: cite24†Image L74:
+L75: cite25†Descargar L76: ###### 2014
+L77:
+L78: cite26†Image L79:
+L80: cite27†Descargar L81:
+L82: ###### 2013
+L83:
+L84: cite28†Image L85:
+L86: cite29†Descargar L87:
+L88: ###### 2012
+L89:
+L90: cite30†Image L91:
+L92: cite31†Descargar L93:
+L94: ###### 2011
+L95:
+L96: cite32†Image L97:
+L98: cite33†Descargar L99:
+L100: ###### 2010
+L101:
+L102: cite34†Image L103:
+L104: cite35†Descargar L105:
+L106: ###### 2009
+L107:
+L108: cite36†Image L109:
+L110: cite37†Descargar L111:
+L112: ###### 2008
+L113:
+L114: cite38†Image L115:
+L116: cite39†Descargar L117:
+L118: # "Creando valor forestal sostenible para Chile."
+L119:
+L120: cite40†Image cite41†Image L121:
+L122: cite1†Image L123: ##### Menú
+L124:
+L125:   * cite42†Inicio L126:   * cite43†Destacados L127:   * cite44†Publicaciones L128:   * cite45†Construcción en Madera L129:   * cite46†Datos en Línea L130:   * cite47†Mapa Industria L131:   * cite48†Sector Forestal en cifras L132:
+L133: ##### Enlaces
+L134:
+L135:   * cite49†Acerca del Área L136:   * cite50†Sitios de interés L137:   * cite51†Calendario L138:   * cite52†Factores de Conversión L139:
+L140: ##### Área de Información y Economía Forestal, Instituto Forestal - INFOR
+L141:
+L142: SEDE METROPOLITANA
+L143: (56-2) 2366 71 20
+L144: info_wef@infor.cl
+L145:
+L146: cite53†OIRS†www.infor.cl L147:
+L148: © 2024 Copyrights. All rights reserved.
+--------------------------------------------------------------------------------
+Infor :: Estadisticas Forestales (https://wef.infor.cl/index.php/sector-forestal)
+citeturn5view1 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"https://wef.infor.cl/index.php/sector-forestal","lineno":null}); Total lines: 172
+L0: cite0†Image cite1†Image L1:
+L2: Sector Forestal en cifras
+L3:
+L4: cite2†Resumen de Indicadores L5:
+L6: ###
+L7:
+L8: ### [Button: Industria Forestal]
+L9:
+L10: ###### Consumo
+L11:
+L12: cite3†Consumo de trozas por industria cite4†Consumo de trozas de pino radiata cite5†Consumo de trozas de Eucalipto cite6†Consumo de trozas de madera nativa cite7†Consumo de trozas otras especies L13:
+L14: ###### Producción
+L15:
+L16: cite8†Madera aserrada por especie cite9†Producción de celulosa cite10†Producción de papeles y cartones cite11†Producción de tableros y chapas cite12†Producción Astillas a nivel nacional L17: ###### Ocupación
+L18:
+L19: cite13†Sector forestal por actividad cite14†De la industria primaria cite15†De la industria secundaria L20:
+L21: ###
+L22:
+L23: ### [Button: Exportaciones]
+L24:
+L25: cite16†Monto Total por Producto cite17†Cantidad Total por Producto cite18†Monto por País de Destino cite19†Monto productos manufacturados cite20†Monto de productos de Madera Nativa L26:
+L27: ###
+L28:
+L29: ### [Button: Importaciones]
+L30:
+L31: cite21†Monto por País de Origen cite22†Monto total por producto cite23†Cantidad total por producto L32:
+L33: ###
+L34: ### [Button: Precios de Productos Forestales]
+L35:
+L36: cite24†Trozas pino radiata cite25†Elaborada pino radiata cite26†Tableros cite27†Elaborada Especies Nativas y otras exóticas L37:
+L38: ###
+L39: ### [Button: Estadísticas Regionales]
+L40:
+L41: cite28†Región de Valparaíso cite29†Región Metropolitana de Santiago cite30†Región del Libertador General Bernardo O'Higgins cite31†Región del Maule cite32†Región de Ñuble cite33†Región del Biobío cite34†Región de la Araucanía cite35†Región de los Ríos cite36†Región de los Lagos cite37†Región de Aysén del General Carlos Ibáñez del Campo cite38†Región de Magallanes y de la Antártica Chilena L42: # Resumen de Indicadores del Sector Forestal
+L43:
+L44: Recursos Forestales (ha)
+L45:
+L46:  | Última cifra disponible
+L47: --- | ---
+L48: Plantaciones Forestales (1)  | 2.224.163
+L49: Pinus radiata  | 1.213.041
+L50: Eucalyptus globulus y Eucalyptus nitens  | 823.816
+L51: Uso Suelo Plantaciones Forestales (2)  | 3.179.373
+L52: Pinus radiata  | 1.841.743
+L53: Eucalyptus sp.  | 1.140.397
+L54: Plantaciones Forestales Anual (3)  | 85.593
+L55: Bosque Nativo (4)  | 15.482.121
+L56: Áreas silvestres (5)  | 18.862.411
+L57: Bosque Nativo en el SNASPE (6)  | 4.521.079
+L58: (1) Fuente INFOR. Cifras de 2023. Ver nota explicativa en Anuario 2025, página 45
+L59:
+L60: (2) Fuente CONAF. Ver nota explicativa y fecha de actualización en Anuario 2025, página 30.
+L61:
+L62: (3) Fuente CONAF. Incluye forestación y reforestación.
+L63:
+L64: (4) Fuente CONAF. Corresponde a bosque en estado adulto, renoval, adulto-renoval y achaparrado.
+L65:
+L66: (5) Fuente CONAF. Corresponde a todos los usos de suelo de las áreas silvestres protegidas por el Estado.
+L67:
+L68: (6) Fuente INFOR, en base a datos de CONAF.
+L69:
+L70: Ocupación (1000 personas)
+L71:  | 2023  | 2024  | Var(24/23)
+L72: --- | --- | --- | ---
+L73: Total Forestal  | 102,1  | 102,5  | 0,4%
+L74: Industria Forestal Primaria  | 31,1  | 30,3  | -2,5%
+L75: Industria Forestal Secundaria  | 26,0  | 25,3  | -2,7%
+L76: Silvicultura y Extracción; Otras actividades silvícolas  | 45,0  | 46,9  | 4,2%
+L77:
+L78: Fuente INFOR.
+L79:
+L80: Precios (*)
+L81:  | 2023  | 2024  | Var 24/23
+L82: --- | --- | --- | ---
+L83: Precios de Exportación  |  |  |
+L84: Pulpa Blanqueada Pino radiata (US$/t FOB)  | 653  | 660  | 1,1%
+L85: Astillas Eucalyptus globulus (US$/t FOB)  | 81  | 84  | 3,7%
+L86: Madera Aserrada Pino radiata (US$/m^{3} FOB)  | 231  | 237  | 2,6%
+L87: Tab. Contrachapado Pino radiata (US$/t FOB)  | 986  | 980  | -0,6%
+L88: Precios Mercado Interno  |  |  |
+L89: Trozas Pulpables Pino radiata (US$/m^{3})  | 28  | 25  | -10,7%
+L90: Trozas Aserrables Pino radiata (US$/m^{3})  | 54  | 49  |  -9,3%
+L91: Madera Aserrada Pino radiata (US$/m^{3})  | 168  | 148  | -11,9%
+L92: Madera Cepillada Pino Radiata (US$/m^{3})  | 261  | 233  | -10,7%
+L93: Fuente INFOR.
+L94:
+L95: (*) Precios medios nominales.
+L96:
+L97: Comercio Exterior (US$ millones)
+L98:
+L99:  | 2023  | 2024  | Var(24/23)
+L100: --- | --- | --- | ---
+L101: Exportaciones Forestales (FOB)  | 5.556  | 6.371  | 14,7%
+L102: Pulpa Química  | 2.644  | 3.336  | 26,2%
+L103: Madera Aserrada  | 467  | 476  | 1,9%
+L104: Tableros y Chapas  | 617  | 671  | 8,8%
+L105: Astillas  | 190  | 188  | -1,1%
+L106: Otros Productos  | 1.638  | 1.700  | 3,8%
+L107: Importaciones Forestales (CIF)  | 1.510  | 1.606  | 6,4%
+L108:
+L109: Fuente INFOR.
+L110:
+L111: Producción Industrial (1000)
+L112:  | 2023  | 2024  | Var(24/23)
+L113: --- | --- | --- | ---
+L114: Pulpa Química (t)  | 5.054  | 5.665  | 12,1%
+L115: Pulpa Mecánica y Termomecánica (t)  | 276  | 273  | -1,1%
+L116: Papeles y Cartones (t)  | 1.291  | 1.319  | 2,2%
+L117: Astillas (m^{3}ssc)  | 8.190  | 8.376  | 2,3%
+L118: Madera Aserrada (m^{3})  | 6.955  | 7.037  | 1,2%
+L119: Tableros y Chapas (m^{3})  | 2.901  | 3.069  | 5,8%
+L120: Postes y Polines impregnados  | 241  | 228  | -5.4%
+L121:
+L122: Fuente INFOR.
+L123:
+L124: Consumo de Trozas (1000 m^{3}ssc)
+L125:  | 2023  | 2024  | Var(24/23)
+L126: --- | --- | --- | ---
+L127: Consumo Industrial  | 40.086  | 42.255  | 5,4%
+L128: Consumo por Industria  |  |  |
+L129: Pulpa  | 17.731  | 19.501  | 10,0%
+L130: Aserrío  | 13.629  | 13.638  | 0,1%
+L131: Astillas  | 4.270  | 4.601  | 7,8%
+L132: Tableros y Chapas  | 4.145  | 4.211  | 1,6%
+L133: Otros Productos  | 311  | 303  | -2,6%
+L134: Consumo por Especies  |  |  |
+L135: Pino radiata  | 25.791  | 26.046  | 1,0%
+L136: Eucalipto (1)  | 14.006  | 15.910  | 13,6%
+L137: Otras Especies  | 289  | 299  | 3,5%
+L138:
+L139: Fuente INFOR.
+L140: (1) Eucalyptus globulus y Eucalyptus nitens.
+L141: # "Creando valor forestal sostenible para Chile."
+L142:
+L143: cite39†Image cite40†Image L144:
+L145: cite1†Image L146:
+L147: ##### Menú
+L148:
+L149:   * cite41†Inicio L150:   * cite42†Destacados L151:   * cite43†Publicaciones L152:   * cite44†Construcción en Madera L153:   * cite45†Datos en Línea L154:   * cite46†Mapa Industria L155:   * cite47†Sector Forestal en cifras L156:
+L157: ##### Enlaces
+L158:
+L159:   * cite48†Acerca del Área L160:   * cite49†Sitios de interés L161:   * cite50†Calendario L162:   * cite51†Factores de Conversión L163: ##### Área de Información y Economía Forestal, Instituto Forestal - INFOR
+L164:
+L165: SEDE METROPOLITANA
+L166: (56-2) 2366 71 20
+L167: info_wef@infor.cl
+L168:
+L169: cite52†OIRS†www.infor.cl L170:
+L171: © 2024 Copyrights. All rights reserved.

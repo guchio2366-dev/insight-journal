@@ -1,0 +1,2593 @@
+{
+  "schemaVersion": 1,
+  "classification": "HS 1988/92 (H0)",
+  "insidePartnerNames": [
+    "China",
+    "Hong Kong, China",
+    "Japan",
+    "Korea, Dem. Rep.",
+    "Korea, Rep.",
+    "Macao",
+    "Mongolia",
+    "Other Asia, nes"
+  ],
+  "records": [
+    {
+      "reporter": "CHN",
+      "topic": "wheat",
+      "label": "小麦・メスリン",
+      "product": "1001",
+      "year": 2023,
+      "unit": "t",
+      "world": 16508.7,
+      "partners": [
+        {
+          "name": "El Salvador",
+          "value": 3780.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Nicaragua",
+          "value": 2813.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Syrian Arab Republic",
+          "value": 2336.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Korea, Dem. Rep.",
+          "value": 2669.68,
+          "boundary": "inside"
+        },
+        {
+          "name": "Eritrea",
+          "value": 1141.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Zimbabwe",
+          "value": 1056.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Mauritania",
+          "value": 1000.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Chad",
+          "value": 901.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Ethiopia(excludes Eritrea)",
+          "value": 461.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Lesotho",
+          "value": 351.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "United States",
+          "value": 0.002,
+          "boundary": "outside"
+        }
+      ],
+      "status": "complete",
+      "partnerRoundingGap": -0.018,
+      "source": {
+        "path": "data-source/atlas/east-asia/statistics-2023/wits/CHN-Export-1001.json",
+        "sha256": "d781881b230fd5af74fe184dccdf3e9585d86db21fb3ecb1d92367e6420b038f",
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/CHN/year/2023/tradeflow/Exports/partner/ALL/product/1001",
+        "retrievedOn": "2026-10-13"
+      }
+    },
+    {
+      "reporter": "CHN",
+      "topic": "maize",
+      "label": "トウモロコシ（種子を含む）",
+      "product": "1005",
+      "year": 2023,
+      "unit": "t",
+      "world": 8648.03,
+      "partners": [
+        {
+          "name": "Vietnam",
+          "value": 507.94,
+          "boundary": "outside"
+        },
+        {
+          "name": "Korea, Dem. Rep.",
+          "value": 6750.02,
+          "boundary": "inside"
+        },
+        {
+          "name": "Other Asia, nes",
+          "value": 46.3,
+          "boundary": "inside"
+        },
+        {
+          "name": "Tajikistan",
+          "value": 188.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Uzbekistan",
+          "value": 224.03,
+          "boundary": "outside"
+        },
+        {
+          "name": "Russian Federation",
+          "value": 660.73,
+          "boundary": "outside"
+        },
+        {
+          "name": "Kyrgyz Republic",
+          "value": 100.04,
+          "boundary": "outside"
+        },
+        {
+          "name": "Angola",
+          "value": 40.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Myanmar",
+          "value": 127.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Mali",
+          "value": 0.997,
+          "boundary": "outside"
+        },
+        {
+          "name": "Cote d'Ivoire",
+          "value": 1.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Iran, Islamic Rep.",
+          "value": 0.25,
+          "boundary": "outside"
+        },
+        {
+          "name": "Kazakhstan",
+          "value": 1.489,
+          "boundary": "outside"
+        },
+        {
+          "name": "India",
+          "value": 0.028,
+          "boundary": "outside"
+        },
+        {
+          "name": "Uganda",
+          "value": 0.06,
+          "boundary": "outside"
+        },
+        {
+          "name": "Tanzania",
+          "value": 0.1,
+          "boundary": "outside"
+        },
+        {
+          "name": "United States",
+          "value": 0.006,
+          "boundary": "outside"
+        },
+        {
+          "name": "Chile",
+          "value": 0.042,
+          "boundary": "outside"
+        }
+      ],
+      "status": "complete",
+      "partnerRoundingGap": 0.002,
+      "source": {
+        "path": "data-source/atlas/east-asia/statistics-2023/wits/CHN-Export-1005.json",
+        "sha256": "ec9b3f86eae73287bad080fae27906a460419a32e86e86edee4720bf43da2036",
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/CHN/year/2023/tradeflow/Exports/partner/ALL/product/1005",
+        "retrievedOn": "2026-10-13"
+      }
+    },
+    {
+      "reporter": "CHN",
+      "topic": "rice",
+      "label": "米（籾・玄米・精米・砕米）",
+      "product": "1006",
+      "year": 2023,
+      "unit": "t",
+      "world": 1625890.0,
+      "partners": [
+        {
+          "name": "Korea, Rep.",
+          "value": 133322.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "Turkey",
+          "value": 203000.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Japan",
+          "value": 72417.3,
+          "boundary": "inside"
+        },
+        {
+          "name": "Papua New Guinea",
+          "value": 166590.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Egypt, Arab Rep.",
+          "value": 169600.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Korea, Dem. Rep.",
+          "value": 164326.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "United States",
+          "value": 63000.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Philippines",
+          "value": 9947.27,
+          "boundary": "outside"
+        },
+        {
+          "name": "Cote d'Ivoire",
+          "value": 90000.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Pakistan",
+          "value": 9666.57,
+          "boundary": "outside"
+        },
+        {
+          "name": "Mongolia",
+          "value": 53777.1,
+          "boundary": "inside"
+        },
+        {
+          "name": "Libya",
+          "value": 50000.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Sudan",
+          "value": 55939.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Mozambique",
+          "value": 46233.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Vietnam",
+          "value": 10797.9,
+          "boundary": "outside"
+        },
+        {
+          "name": "Guinea-Bissau",
+          "value": 40000.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Ghana",
+          "value": 40500.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Hong Kong, China",
+          "value": 21766.5,
+          "boundary": "inside"
+        },
+        {
+          "name": "Congo, Dem. Rep.",
+          "value": 38500.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Sierra Leone",
+          "value": 37117.1,
+          "boundary": "outside"
+        },
+        {
+          "name": "Russian Federation",
+          "value": 24681.3,
+          "boundary": "outside"
+        },
+        {
+          "name": "Cameroon",
+          "value": 29000.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "East Timor",
+          "value": 20600.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Senegal",
+          "value": 16000.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Vanuatu",
+          "value": 9973.91,
+          "boundary": "outside"
+        },
+        {
+          "name": "Solomon Islands",
+          "value": 9478.19,
+          "boundary": "outside"
+        },
+        {
+          "name": "Kiribati",
+          "value": 7417.08,
+          "boundary": "outside"
+        },
+        {
+          "name": "Fiji",
+          "value": 6531.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "El Salvador",
+          "value": 3790.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Bangladesh",
+          "value": 494.028,
+          "boundary": "outside"
+        },
+        {
+          "name": "South Sudan",
+          "value": 2396.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Samoa",
+          "value": 3312.24,
+          "boundary": "outside"
+        },
+        {
+          "name": "Mali",
+          "value": 1937.47,
+          "boundary": "outside"
+        },
+        {
+          "name": "Macao",
+          "value": 1502.8,
+          "boundary": "inside"
+        },
+        {
+          "name": "Kazakhstan",
+          "value": 1260.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Syrian Arab Republic",
+          "value": 1180.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Zimbabwe",
+          "value": 1056.2,
+          "boundary": "outside"
+        },
+        {
+          "name": "Burundi",
+          "value": 934.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Cape Verde",
+          "value": 1042.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Niger",
+          "value": 962.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Bulgaria",
+          "value": 2000.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Chad",
+          "value": 914.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Lesotho",
+          "value": 702.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Nepal",
+          "value": 134.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Micronesia, Fed. Sts.",
+          "value": 817.213,
+          "boundary": "outside"
+        },
+        {
+          "name": "Marshall Islands",
+          "value": 504.073,
+          "boundary": "outside"
+        },
+        {
+          "name": "Indonesia",
+          "value": 10.3,
+          "boundary": "outside"
+        },
+        {
+          "name": "Angola",
+          "value": 27.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "United Arab Emirates",
+          "value": 300.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Uganda",
+          "value": 24.32,
+          "boundary": "outside"
+        },
+        {
+          "name": "Brunei",
+          "value": 13.779,
+          "boundary": "outside"
+        },
+        {
+          "name": "Tuvalu",
+          "value": 124.356,
+          "boundary": "outside"
+        },
+        {
+          "name": "Cook Islands",
+          "value": 144.8,
+          "boundary": "outside"
+        },
+        {
+          "name": "Wallis and Futura Isl.",
+          "value": 116.205,
+          "boundary": "outside"
+        },
+        {
+          "name": "Guinea",
+          "value": 4.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Botswana",
+          "value": 4.125,
+          "boundary": "outside"
+        },
+        {
+          "name": "Nigeria",
+          "value": 1.282,
+          "boundary": "outside"
+        },
+        {
+          "name": "Dominican Republic",
+          "value": 0.45,
+          "boundary": "outside"
+        },
+        {
+          "name": "Uruguay",
+          "value": 0.42,
+          "boundary": "outside"
+        },
+        {
+          "name": "Uzbekistan",
+          "value": 0.037,
+          "boundary": "outside"
+        },
+        {
+          "name": "Ecuador",
+          "value": 0.036,
+          "boundary": "outside"
+        },
+        {
+          "name": "Tanzania",
+          "value": 0.05,
+          "boundary": "outside"
+        },
+        {
+          "name": "Peru",
+          "value": 0.01,
+          "boundary": "outside"
+        },
+        {
+          "name": "India",
+          "value": 0.002,
+          "boundary": "outside"
+        }
+      ],
+      "status": "complete",
+      "partnerRoundingGap": 0.416,
+      "source": {
+        "path": "data-source/atlas/east-asia/statistics-2023/wits/CHN-Export-1006.json",
+        "sha256": "e035398e3e220d32493e2b056b8451db47504289e3ccd120c2f6a103fb944b27",
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/CHN/year/2023/tradeflow/Exports/partner/ALL/product/1006",
+        "retrievedOn": "2026-10-13"
+      }
+    },
+    {
+      "reporter": "CHN",
+      "topic": "soybean",
+      "label": "丸大豆",
+      "product": "120100",
+      "year": 2023,
+      "unit": "t",
+      "world": 71398.1,
+      "partners": [
+        {
+          "name": "Korea, Rep.",
+          "value": 40404.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "Japan",
+          "value": 16511.8,
+          "boundary": "inside"
+        },
+        {
+          "name": "Vietnam",
+          "value": 3786.2,
+          "boundary": "outside"
+        },
+        {
+          "name": "Hong Kong, China",
+          "value": 2237.12,
+          "boundary": "inside"
+        },
+        {
+          "name": "United Kingdom",
+          "value": 2167.45,
+          "boundary": "outside"
+        },
+        {
+          "name": "Australia",
+          "value": 1100.77,
+          "boundary": "outside"
+        },
+        {
+          "name": "Other Asia, nes",
+          "value": 821.652,
+          "boundary": "inside"
+        },
+        {
+          "name": "Malaysia",
+          "value": 931.38,
+          "boundary": "outside"
+        },
+        {
+          "name": "United States",
+          "value": 597.281,
+          "boundary": "outside"
+        },
+        {
+          "name": "Thailand",
+          "value": 254.69,
+          "boundary": "outside"
+        },
+        {
+          "name": "Philippines",
+          "value": 370.75,
+          "boundary": "outside"
+        },
+        {
+          "name": "Nepal",
+          "value": 397.5,
+          "boundary": "outside"
+        },
+        {
+          "name": "Netherlands",
+          "value": 289.25,
+          "boundary": "outside"
+        },
+        {
+          "name": "Canada",
+          "value": 197.417,
+          "boundary": "outside"
+        },
+        {
+          "name": "Singapore",
+          "value": 195.606,
+          "boundary": "outside"
+        },
+        {
+          "name": "Spain",
+          "value": 265.915,
+          "boundary": "outside"
+        },
+        {
+          "name": "New Zealand",
+          "value": 131.7,
+          "boundary": "outside"
+        },
+        {
+          "name": "Russian Federation",
+          "value": 347.15,
+          "boundary": "outside"
+        },
+        {
+          "name": "Germany",
+          "value": 42.323,
+          "boundary": "outside"
+        },
+        {
+          "name": "France",
+          "value": 45.272,
+          "boundary": "outside"
+        },
+        {
+          "name": "Korea, Dem. Rep.",
+          "value": 99.96,
+          "boundary": "inside"
+        },
+        {
+          "name": "Poland",
+          "value": 40.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Italy",
+          "value": 31.437,
+          "boundary": "outside"
+        },
+        {
+          "name": "Saudi Arabia",
+          "value": 24.5,
+          "boundary": "outside"
+        },
+        {
+          "name": "Belgium",
+          "value": 24.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Jordan",
+          "value": 23.25,
+          "boundary": "outside"
+        },
+        {
+          "name": "Mongolia",
+          "value": 19.95,
+          "boundary": "inside"
+        },
+        {
+          "name": "Serbia, FR(Serbia/Montenegro)",
+          "value": 7.5,
+          "boundary": "outside"
+        },
+        {
+          "name": "Indonesia",
+          "value": 6.49,
+          "boundary": "outside"
+        },
+        {
+          "name": "Finland",
+          "value": 9.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Portugal",
+          "value": 5.75,
+          "boundary": "outside"
+        },
+        {
+          "name": "Hungary",
+          "value": 4.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Sweden",
+          "value": 3.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Costa Rica",
+          "value": 2.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Macao",
+          "value": 0.9,
+          "boundary": "inside"
+        },
+        {
+          "name": "Greece",
+          "value": 1.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Panama",
+          "value": 0.046,
+          "boundary": "outside"
+        },
+        {
+          "name": "Tanzania",
+          "value": 0.1,
+          "boundary": "outside"
+        },
+        {
+          "name": "Brazil",
+          "value": 0.001,
+          "boundary": "outside"
+        },
+        {
+          "name": "Cambodia",
+          "value": 0.001,
+          "boundary": "outside"
+        },
+        {
+          "name": "Senegal",
+          "value": 0.002,
+          "boundary": "outside"
+        },
+        {
+          "name": "Pakistan",
+          "value": 0.002,
+          "boundary": "outside"
+        }
+      ],
+      "status": "complete",
+      "partnerRoundingGap": 0.015,
+      "source": {
+        "path": "data-source/atlas/east-asia/statistics-2023/wits/CHN-Export-120100.json",
+        "sha256": "92f1e720b6aeedd164c1ffc5efa749027302193f72a020c160dfd847b58be22b",
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/CHN/year/2023/tradeflow/Exports/partner/ALL/product/120100",
+        "retrievedOn": "2026-10-13"
+      }
+    },
+    {
+      "reporter": "CHN",
+      "topic": "sawnwood",
+      "label": "製材（厚さ6mm超）",
+      "product": "4407",
+      "year": 2023,
+      "unit": "m³",
+      "world": 165441.0,
+      "partners": [
+        {
+          "name": "Japan",
+          "value": 39157.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "Vietnam",
+          "value": 52166.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "United States",
+          "value": 6630.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Malaysia",
+          "value": 14037.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Korea, Rep.",
+          "value": 10007.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "Indonesia",
+          "value": 4254.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Cambodia",
+          "value": 5972.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Australia",
+          "value": 2979.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Thailand",
+          "value": 3695.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Hong Kong, China",
+          "value": 7849.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "Germany",
+          "value": 1244.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Canada",
+          "value": 808.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Italy",
+          "value": 902.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Other Asia, nes",
+          "value": 1969.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "India",
+          "value": 1169.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Myanmar",
+          "value": 4887.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Turkey",
+          "value": 590.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Spain",
+          "value": 377.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Russian Federation",
+          "value": 132.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Czech Republic",
+          "value": 80.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Netherlands",
+          "value": 189.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Portugal",
+          "value": 569.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Kiribati",
+          "value": 298.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Nigeria",
+          "value": 446.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Niger",
+          "value": 34.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "New Zealand",
+          "value": 242.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Saudi Arabia",
+          "value": 586.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Israel",
+          "value": 44.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Singapore",
+          "value": 230.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Brunei",
+          "value": 392.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Romania",
+          "value": 72.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Poland",
+          "value": 54.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Nicaragua",
+          "value": 69.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Greece",
+          "value": 153.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Albania",
+          "value": 134.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Slovenia",
+          "value": 51.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Seychelles",
+          "value": 42.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Bangladesh",
+          "value": 371.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Jamaica",
+          "value": 137.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Estonia",
+          "value": 133.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Mexico",
+          "value": 50.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Morocco",
+          "value": 236.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Kuwait",
+          "value": 43.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Macao",
+          "value": 920.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "United Arab Emirates",
+          "value": 225.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Mauritius",
+          "value": 65.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Malta",
+          "value": 25.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Guatemala",
+          "value": 23.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Lao PDR",
+          "value": 163.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Bulgaria",
+          "value": 8.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "United Kingdom",
+          "value": 45.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Maldives",
+          "value": 27.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Zimbabwe",
+          "value": 73.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "St. Vincent and the Grenadines",
+          "value": 25.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Lithuania",
+          "value": 34.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Philippines",
+          "value": 23.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "France",
+          "value": 15.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Tonga",
+          "value": 46.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Bahamas, The",
+          "value": 33.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Dominican Republic",
+          "value": 63.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Korea, Dem. Rep.",
+          "value": 39.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "Ethiopia(excludes Eritrea)",
+          "value": 20.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Brazil",
+          "value": 4.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Cayman Islands",
+          "value": 22.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Mongolia",
+          "value": 13.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "Vanuatu",
+          "value": 10.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Kazakhstan",
+          "value": 31.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Chile",
+          "value": 3.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Senegal",
+          "value": 2.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Papua New Guinea",
+          "value": 5.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "South Sudan",
+          "value": 2.0,
+          "boundary": "outside"
+        }
+      ],
+      "status": "complete",
+      "partnerRoundingGap": 2.0,
+      "source": {
+        "path": "data-source/atlas/east-asia/statistics-2023/wits/CHN-Export-4407.json",
+        "sha256": "21d5ab085d5c64c184c80ab0ddf0f11089d2890eaf93104946a7fe9c0f9f48ad",
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/CHN/year/2023/tradeflow/Exports/partner/ALL/product/4407",
+        "retrievedOn": "2026-10-13"
+      }
+    },
+    {
+      "reporter": "KOR",
+      "topic": "wheat",
+      "label": "小麦・メスリン",
+      "product": "1001",
+      "year": 2023,
+      "unit": "t",
+      "world": 0.447,
+      "partners": [
+        {
+          "name": "United States",
+          "value": 0.4,
+          "boundary": "outside"
+        },
+        {
+          "name": "Guam",
+          "value": 0.032,
+          "boundary": "outside"
+        },
+        {
+          "name": "Malaysia",
+          "value": 0.004,
+          "boundary": "outside"
+        },
+        {
+          "name": "Philippines",
+          "value": 0.001,
+          "boundary": "outside"
+        },
+        {
+          "name": "France",
+          "value": 0.01,
+          "boundary": "outside"
+        }
+      ],
+      "status": "complete",
+      "partnerRoundingGap": 0.0,
+      "source": {
+        "path": "data-source/atlas/east-asia/statistics-2023/wits/KOR-Export-1001.json",
+        "sha256": "088f159299f805c77ad5e31cc6fd5f0a1cf510d329b90aab01059bc0b7a20315",
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/KOR/year/2023/tradeflow/Exports/partner/ALL/product/1001",
+        "retrievedOn": "2026-10-13"
+      }
+    },
+    {
+      "reporter": "KOR",
+      "topic": "maize",
+      "label": "トウモロコシ（種子を含む）",
+      "product": "1005",
+      "year": 2023,
+      "unit": "t",
+      "world": null,
+      "partners": [
+        {
+          "name": "United States",
+          "value": 70.886,
+          "boundary": "outside"
+        },
+        {
+          "name": "Japan",
+          "value": 1.974,
+          "boundary": "inside"
+        },
+        {
+          "name": "United Arab Emirates",
+          "value": null,
+          "boundary": "outside"
+        },
+        {
+          "name": "Qatar",
+          "value": 0.216,
+          "boundary": "outside"
+        },
+        {
+          "name": "Northern Mariana Islands",
+          "value": 0.1,
+          "boundary": "outside"
+        },
+        {
+          "name": "Vietnam",
+          "value": 0.069,
+          "boundary": "outside"
+        },
+        {
+          "name": "Hong Kong, China",
+          "value": 0.079,
+          "boundary": "inside"
+        },
+        {
+          "name": "Canada",
+          "value": 0.001,
+          "boundary": "outside"
+        },
+        {
+          "name": "Australia",
+          "value": 0.001,
+          "boundary": "outside"
+        },
+        {
+          "name": "China",
+          "value": 0.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "Philippines",
+          "value": 0.0,
+          "boundary": "outside"
+        }
+      ],
+      "status": "incomplete",
+      "partnerRoundingGap": null,
+      "source": {
+        "path": "data-source/atlas/east-asia/statistics-2023/wits/KOR-Export-1005.json",
+        "sha256": "6324b120f216e8ecb494ef2d3e8530b33a84560cf6e99d2e78011f76d09af8fd",
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/KOR/year/2023/tradeflow/Exports/partner/ALL/product/1005",
+        "retrievedOn": "2026-10-13"
+      }
+    },
+    {
+      "reporter": "KOR",
+      "topic": "rice",
+      "label": "米（籾・玄米・精米・砕米）",
+      "product": "1006",
+      "year": 2023,
+      "unit": "t",
+      "world": 60804.5,
+      "partners": [
+        {
+          "name": "United States",
+          "value": 4232.68,
+          "boundary": "outside"
+        },
+        {
+          "name": "Myanmar",
+          "value": 3250.04,
+          "boundary": "outside"
+        },
+        {
+          "name": "Yemen",
+          "value": 18000.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Ethiopia(excludes Eritrea)",
+          "value": 13000.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Kenya",
+          "value": 11000.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Philippines",
+          "value": 765.087,
+          "boundary": "outside"
+        },
+        {
+          "name": "Canada",
+          "value": 589.436,
+          "boundary": "outside"
+        },
+        {
+          "name": "Australia",
+          "value": 446.189,
+          "boundary": "outside"
+        },
+        {
+          "name": "Syrian Arab Republic",
+          "value": 3006.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Lao PDR",
+          "value": 500.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Afghanistan",
+          "value": 2502.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Uganda",
+          "value": 2492.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Netherlands",
+          "value": 193.44,
+          "boundary": "outside"
+        },
+        {
+          "name": "United Kingdom",
+          "value": 106.572,
+          "boundary": "outside"
+        },
+        {
+          "name": "Vietnam",
+          "value": 81.289,
+          "boundary": "outside"
+        },
+        {
+          "name": "United Arab Emirates",
+          "value": 87.62,
+          "boundary": "outside"
+        },
+        {
+          "name": "Mongolia",
+          "value": 121.14,
+          "boundary": "inside"
+        },
+        {
+          "name": "Germany",
+          "value": 75.042,
+          "boundary": "outside"
+        },
+        {
+          "name": "Singapore",
+          "value": 64.105,
+          "boundary": "outside"
+        },
+        {
+          "name": "Uruguay",
+          "value": 29.119,
+          "boundary": "outside"
+        },
+        {
+          "name": "Slovenia",
+          "value": 32.6,
+          "boundary": "outside"
+        },
+        {
+          "name": "Russian Federation",
+          "value": 27.988,
+          "boundary": "outside"
+        },
+        {
+          "name": "Cambodia",
+          "value": 20.784,
+          "boundary": "outside"
+        },
+        {
+          "name": "Malaysia",
+          "value": 15.71,
+          "boundary": "outside"
+        },
+        {
+          "name": "Hong Kong, China",
+          "value": 15.188,
+          "boundary": "inside"
+        },
+        {
+          "name": "New Zealand",
+          "value": 14.992,
+          "boundary": "outside"
+        },
+        {
+          "name": "Oman",
+          "value": 16.8,
+          "boundary": "outside"
+        },
+        {
+          "name": "Colombia",
+          "value": 14.4,
+          "boundary": "outside"
+        },
+        {
+          "name": "Dominican Republic",
+          "value": 20.12,
+          "boundary": "outside"
+        },
+        {
+          "name": "Hungary",
+          "value": 17.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Turkey",
+          "value": 9.298,
+          "boundary": "outside"
+        },
+        {
+          "name": "Iraq",
+          "value": 2.861,
+          "boundary": "outside"
+        },
+        {
+          "name": "Algeria",
+          "value": 2.508,
+          "boundary": "outside"
+        },
+        {
+          "name": "France",
+          "value": 4.467,
+          "boundary": "outside"
+        },
+        {
+          "name": "Kiribati",
+          "value": 2.986,
+          "boundary": "outside"
+        },
+        {
+          "name": "Nigeria",
+          "value": 6.8,
+          "boundary": "outside"
+        },
+        {
+          "name": "Mexico",
+          "value": 6.16,
+          "boundary": "outside"
+        },
+        {
+          "name": "Libya",
+          "value": 0.316,
+          "boundary": "outside"
+        },
+        {
+          "name": "Other Asia, nes",
+          "value": 2.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "Guam",
+          "value": 3.568,
+          "boundary": "outside"
+        },
+        {
+          "name": "Guinea",
+          "value": 3.55,
+          "boundary": "outside"
+        },
+        {
+          "name": "Kuwait",
+          "value": 2.28,
+          "boundary": "outside"
+        },
+        {
+          "name": "Switzerland",
+          "value": 1.51,
+          "boundary": "outside"
+        },
+        {
+          "name": "Argentina",
+          "value": 1.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Bangladesh",
+          "value": 2.126,
+          "boundary": "outside"
+        },
+        {
+          "name": "Italy",
+          "value": 1.455,
+          "boundary": "outside"
+        },
+        {
+          "name": "Mauritius",
+          "value": 2.2,
+          "boundary": "outside"
+        },
+        {
+          "name": "Saudi Arabia",
+          "value": 1.64,
+          "boundary": "outside"
+        },
+        {
+          "name": "Ghana",
+          "value": 1.501,
+          "boundary": "outside"
+        },
+        {
+          "name": "Indonesia",
+          "value": 1.012,
+          "boundary": "outside"
+        },
+        {
+          "name": "South Africa",
+          "value": 1.001,
+          "boundary": "outside"
+        },
+        {
+          "name": "Haiti",
+          "value": 1.497,
+          "boundary": "outside"
+        },
+        {
+          "name": "Israel",
+          "value": 0.339,
+          "boundary": "outside"
+        },
+        {
+          "name": "Spain",
+          "value": 0.592,
+          "boundary": "outside"
+        },
+        {
+          "name": "Guatemala",
+          "value": 1.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "China",
+          "value": 0.578,
+          "boundary": "inside"
+        },
+        {
+          "name": "Thailand",
+          "value": 0.44,
+          "boundary": "outside"
+        },
+        {
+          "name": "Japan",
+          "value": 0.222,
+          "boundary": "inside"
+        },
+        {
+          "name": "Slovak Republic",
+          "value": 0.32,
+          "boundary": "outside"
+        },
+        {
+          "name": "Norway",
+          "value": 0.13,
+          "boundary": "outside"
+        },
+        {
+          "name": "Northern Mariana Islands",
+          "value": 0.334,
+          "boundary": "outside"
+        },
+        {
+          "name": "Micronesia, Fed. Sts.",
+          "value": 0.117,
+          "boundary": "outside"
+        },
+        {
+          "name": "Marshall Islands",
+          "value": 0.19,
+          "boundary": "outside"
+        },
+        {
+          "name": "Jordan",
+          "value": 0.24,
+          "boundary": "outside"
+        },
+        {
+          "name": "Kazakhstan",
+          "value": 0.16,
+          "boundary": "outside"
+        },
+        {
+          "name": "Qatar",
+          "value": 0.1,
+          "boundary": "outside"
+        },
+        {
+          "name": "Nicaragua",
+          "value": 0.153,
+          "boundary": "outside"
+        },
+        {
+          "name": "Tunisia",
+          "value": 0.01,
+          "boundary": "outside"
+        },
+        {
+          "name": "Bulgaria",
+          "value": 0.064,
+          "boundary": "outside"
+        },
+        {
+          "name": "Vanuatu",
+          "value": 0.06,
+          "boundary": "outside"
+        },
+        {
+          "name": "Kyrgyz Republic",
+          "value": 0.323,
+          "boundary": "outside"
+        },
+        {
+          "name": "Angola",
+          "value": 0.04,
+          "boundary": "outside"
+        },
+        {
+          "name": "Tanzania",
+          "value": 0.05,
+          "boundary": "outside"
+        }
+      ],
+      "status": "complete",
+      "partnerRoundingGap": 0.039,
+      "source": {
+        "path": "data-source/atlas/east-asia/statistics-2023/wits/KOR-Export-1006.json",
+        "sha256": "246f80b678f91b83a473d370d75cf296433e020f73cc8f0e77c2a4dccee8da95",
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/KOR/year/2023/tradeflow/Exports/partner/ALL/product/1006",
+        "retrievedOn": "2026-10-13"
+      }
+    },
+    {
+      "reporter": "KOR",
+      "topic": "soybean",
+      "label": "丸大豆",
+      "product": "120100",
+      "year": 2023,
+      "unit": "t",
+      "world": 49.252,
+      "partners": [
+        {
+          "name": "United States",
+          "value": 5.867,
+          "boundary": "outside"
+        },
+        {
+          "name": "China",
+          "value": 40.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "Malaysia",
+          "value": 1.64,
+          "boundary": "outside"
+        },
+        {
+          "name": "United Arab Emirates",
+          "value": 0.32,
+          "boundary": "outside"
+        },
+        {
+          "name": "Australia",
+          "value": 0.18,
+          "boundary": "outside"
+        },
+        {
+          "name": "United Kingdom",
+          "value": 0.36,
+          "boundary": "outside"
+        },
+        {
+          "name": "Algeria",
+          "value": 0.38,
+          "boundary": "outside"
+        },
+        {
+          "name": "Nigeria",
+          "value": 0.144,
+          "boundary": "outside"
+        },
+        {
+          "name": "Libya",
+          "value": 0.135,
+          "boundary": "outside"
+        },
+        {
+          "name": "Guam",
+          "value": 0.054,
+          "boundary": "outside"
+        },
+        {
+          "name": "Northern Mariana Islands",
+          "value": 0.018,
+          "boundary": "outside"
+        },
+        {
+          "name": "Singapore",
+          "value": 0.149,
+          "boundary": "outside"
+        },
+        {
+          "name": "Vanuatu",
+          "value": 0.004,
+          "boundary": "outside"
+        }
+      ],
+      "status": "complete",
+      "partnerRoundingGap": -0.001,
+      "source": {
+        "path": "data-source/atlas/east-asia/statistics-2023/wits/KOR-Export-120100.json",
+        "sha256": "d87ed1b85bf312d6ddf207a195ee243f0c3bb54a194daada4e46240620b97f67",
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/KOR/year/2023/tradeflow/Exports/partner/ALL/product/120100",
+        "retrievedOn": "2026-10-13"
+      }
+    },
+    {
+      "reporter": "KOR",
+      "topic": "coniferous-roundwood",
+      "label": "針葉樹原木（未処理）",
+      "product": "440320",
+      "year": 2023,
+      "unit": "m³",
+      "world": null,
+      "partners": [
+        {
+          "name": "China",
+          "value": 147.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "Samoa",
+          "value": 17.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Singapore",
+          "value": null,
+          "boundary": "outside"
+        },
+        {
+          "name": "Japan",
+          "value": 5.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "United States",
+          "value": 0.0,
+          "boundary": "outside"
+        }
+      ],
+      "status": "incomplete",
+      "partnerRoundingGap": null,
+      "source": {
+        "path": "data-source/atlas/east-asia/statistics-2023/wits/KOR-Export-440320.json",
+        "sha256": "bbdbb3f67c339e9960e7c88e6d22a84a4f712502cfbaea2b51977dc3eac6982c",
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/KOR/year/2023/tradeflow/Exports/partner/ALL/product/440320",
+        "retrievedOn": "2026-10-13"
+      }
+    },
+    {
+      "reporter": "KOR",
+      "topic": "sawnwood",
+      "label": "製材（厚さ6mm超）",
+      "product": "4407",
+      "year": 2023,
+      "unit": "m³",
+      "world": 8372.0,
+      "partners": [
+        {
+          "name": "Japan",
+          "value": 2484.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "Indonesia",
+          "value": 774.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "United States",
+          "value": 1125.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Iraq",
+          "value": 1516.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "China",
+          "value": 2314.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "Germany",
+          "value": 46.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Vietnam",
+          "value": 28.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Micronesia, Fed. Sts.",
+          "value": 38.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "New Zealand",
+          "value": 42.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Philippines",
+          "value": 3.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Spain",
+          "value": 0.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Saudi Arabia",
+          "value": 1.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Myanmar",
+          "value": 1.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Libya",
+          "value": 0.0,
+          "boundary": "outside"
+        }
+      ],
+      "status": "complete",
+      "partnerRoundingGap": 0.0,
+      "source": {
+        "path": "data-source/atlas/east-asia/statistics-2023/wits/KOR-Export-4407.json",
+        "sha256": "d595a22050db2159f6af521adadf601b43f2b24b150da7e336ce6ad6b5aa3c16",
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/KOR/year/2023/tradeflow/Exports/partner/ALL/product/4407",
+        "retrievedOn": "2026-10-13"
+      }
+    },
+    {
+      "reporter": "MNG",
+      "topic": "sawnwood",
+      "label": "製材（厚さ6mm超）",
+      "product": "4407",
+      "year": 2023,
+      "unit": "m³",
+      "world": 262.0,
+      "partners": [
+        {
+          "name": "Latvia",
+          "value": 234.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Poland",
+          "value": 28.0,
+          "boundary": "outside"
+        }
+      ],
+      "status": "complete",
+      "partnerRoundingGap": 0.0,
+      "source": {
+        "path": "data-source/atlas/east-asia/statistics-2023/wits/MNG-Export-4407.json",
+        "sha256": "433e3cd4f0b6fa053a2844f8a80ef51011fb833f1650be4bb05d26eb1b855473",
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/MNG/year/2023/tradeflow/Exports/partner/ALL/product/4407",
+        "retrievedOn": "2026-10-13"
+      }
+    },
+    {
+      "reporter": "OAS",
+      "topic": "wheat",
+      "label": "小麦・メスリン",
+      "product": "1001",
+      "year": 2023,
+      "unit": "t",
+      "world": 160.0,
+      "partners": [
+        {
+          "name": "Hong Kong, China",
+          "value": 160.0,
+          "boundary": "inside"
+        }
+      ],
+      "status": "complete",
+      "partnerRoundingGap": 0.0,
+      "source": {
+        "path": "data-source/atlas/east-asia/statistics-2023/wits/OAS-Export-1001.json",
+        "sha256": "a3fbc464f820515da2a0cf0caa6052a7d89dd9c915f62bd78c7644c36f9b9c63",
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/OAS/year/2023/tradeflow/Exports/partner/ALL/product/1001",
+        "retrievedOn": "2026-10-13"
+      }
+    },
+    {
+      "reporter": "OAS",
+      "topic": "maize",
+      "label": "トウモロコシ（種子を含む）",
+      "product": "1005",
+      "year": 2023,
+      "unit": "t",
+      "world": 175.048,
+      "partners": [
+        {
+          "name": "Palau",
+          "value": 168.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Syrian Arab Republic",
+          "value": 1.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Australia",
+          "value": 3.399,
+          "boundary": "outside"
+        },
+        {
+          "name": "Hong Kong, China",
+          "value": 0.644,
+          "boundary": "inside"
+        },
+        {
+          "name": "Japan",
+          "value": 2.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "Belize",
+          "value": 0.005,
+          "boundary": "outside"
+        }
+      ],
+      "status": "complete",
+      "partnerRoundingGap": 0.0,
+      "source": {
+        "path": "data-source/atlas/east-asia/statistics-2023/wits/OAS-Export-1005.json",
+        "sha256": "b570ddb00886e4d0265016c098d600a13c36a48c0dd664a66fdc44cf10cc5d89",
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/OAS/year/2023/tradeflow/Exports/partner/ALL/product/1005",
+        "retrievedOn": "2026-10-13"
+      }
+    },
+    {
+      "reporter": "OAS",
+      "topic": "rice",
+      "label": "米（籾・玄米・精米・砕米）",
+      "product": "1006",
+      "year": 2023,
+      "unit": "t",
+      "world": 128774.0,
+      "partners": [
+        {
+          "name": "Papua New Guinea",
+          "value": 31506.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Haiti",
+          "value": 9000.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Australia",
+          "value": 9665.6,
+          "boundary": "outside"
+        },
+        {
+          "name": "Solomon Islands",
+          "value": 12536.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "United States",
+          "value": 5883.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Canada",
+          "value": 3992.05,
+          "boundary": "outside"
+        },
+        {
+          "name": "Mozambique",
+          "value": 6367.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Vanuatu",
+          "value": 7013.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Turkey",
+          "value": 5165.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Guatemala",
+          "value": 2120.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Kiribati",
+          "value": 4864.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Hong Kong, China",
+          "value": 1368.06,
+          "boundary": "inside"
+        },
+        {
+          "name": "Lebanon",
+          "value": 3500.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Samoa",
+          "value": 3822.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Philippines",
+          "value": 2275.16,
+          "boundary": "outside"
+        },
+        {
+          "name": "Singapore",
+          "value": 1900.95,
+          "boundary": "outside"
+        },
+        {
+          "name": "Syrian Arab Republic",
+          "value": 2225.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Eswatini",
+          "value": 840.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Sri Lanka",
+          "value": 1500.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Marshall Islands",
+          "value": 1417.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "China",
+          "value": 1530.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "Albania",
+          "value": 1400.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Micronesia, Fed. Sts.",
+          "value": 1140.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Japan",
+          "value": 645.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "South Africa",
+          "value": 666.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Honduras",
+          "value": 800.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Zimbabwe",
+          "value": 600.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Somalia",
+          "value": 300.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Kuwait",
+          "value": 500.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Fiji",
+          "value": 468.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Poland",
+          "value": 400.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Malaysia",
+          "value": 163.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Sierra Leone",
+          "value": 400.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Lesotho",
+          "value": 200.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "United Arab Emirates",
+          "value": 128.372,
+          "boundary": "outside"
+        },
+        {
+          "name": "New Zealand",
+          "value": 251.079,
+          "boundary": "outside"
+        },
+        {
+          "name": "American Samoa",
+          "value": 328.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Netherlands",
+          "value": 70.633,
+          "boundary": "outside"
+        },
+        {
+          "name": "Romania",
+          "value": 250.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "United Kingdom",
+          "value": 62.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Montenegro",
+          "value": 250.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Georgia",
+          "value": 200.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Croatia",
+          "value": 200.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Saint Maarten (Dutch part)",
+          "value": 60.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Germany",
+          "value": 48.083,
+          "boundary": "outside"
+        },
+        {
+          "name": "Cyprus",
+          "value": 40.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Botswana",
+          "value": 100.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Palau",
+          "value": 100.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Macao",
+          "value": 25.473,
+          "boundary": "inside"
+        },
+        {
+          "name": "Unspecified",
+          "value": 33.0,
+          "boundary": "unknown"
+        },
+        {
+          "name": "Togo",
+          "value": 54.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Nauru",
+          "value": 49.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Egypt, Arab Rep.",
+          "value": 3.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Namibia",
+          "value": 20.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Malta",
+          "value": 24.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Vietnam",
+          "value": 52.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "France",
+          "value": 7.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Tuvalu",
+          "value": 40.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Seychelles",
+          "value": 16.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Mauritius",
+          "value": 14.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Kenya",
+          "value": 24.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Korea, Rep.",
+          "value": 13.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "Senegal",
+          "value": 7.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Switzerland",
+          "value": 2.485,
+          "boundary": "outside"
+        },
+        {
+          "name": "French Polynesia",
+          "value": 5.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Madagascar",
+          "value": 120.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Brunei",
+          "value": 2.826,
+          "boundary": "outside"
+        },
+        {
+          "name": "Nicaragua",
+          "value": 2.063,
+          "boundary": "outside"
+        },
+        {
+          "name": "Panama",
+          "value": 0.081,
+          "boundary": "outside"
+        },
+        {
+          "name": "Chile",
+          "value": 0.189,
+          "boundary": "outside"
+        }
+      ],
+      "status": "complete",
+      "partnerRoundingGap": 0.104,
+      "source": {
+        "path": "data-source/atlas/east-asia/statistics-2023/wits/OAS-Export-1006.json",
+        "sha256": "b9680378e717c982b331d1d01529f08ba19c4b29b1ae5fa59654e09b3d36c899",
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/OAS/year/2023/tradeflow/Exports/partner/ALL/product/1006",
+        "retrievedOn": "2026-10-13"
+      }
+    },
+    {
+      "reporter": "OAS",
+      "topic": "soybean",
+      "label": "丸大豆",
+      "product": "120100",
+      "year": 2023,
+      "unit": "t",
+      "world": 53.959,
+      "partners": [
+        {
+          "name": "United States",
+          "value": 9.058,
+          "boundary": "outside"
+        },
+        {
+          "name": "Japan",
+          "value": 24.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "Hong Kong, China",
+          "value": 3.042,
+          "boundary": "inside"
+        },
+        {
+          "name": "Singapore",
+          "value": 4.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Canada",
+          "value": 5.317,
+          "boundary": "outside"
+        },
+        {
+          "name": "Philippines",
+          "value": 2.858,
+          "boundary": "outside"
+        },
+        {
+          "name": "Malaysia",
+          "value": 2.778,
+          "boundary": "outside"
+        },
+        {
+          "name": "Costa Rica",
+          "value": 1.04,
+          "boundary": "outside"
+        },
+        {
+          "name": "Uruguay",
+          "value": 0.58,
+          "boundary": "outside"
+        },
+        {
+          "name": "Macao",
+          "value": 0.3,
+          "boundary": "inside"
+        },
+        {
+          "name": "Brunei",
+          "value": 0.18,
+          "boundary": "outside"
+        },
+        {
+          "name": "Australia",
+          "value": 0.14,
+          "boundary": "outside"
+        },
+        {
+          "name": "Mauritius",
+          "value": 0.12,
+          "boundary": "outside"
+        },
+        {
+          "name": "South Africa",
+          "value": 0.12,
+          "boundary": "outside"
+        },
+        {
+          "name": "Korea, Rep.",
+          "value": 0.1,
+          "boundary": "inside"
+        },
+        {
+          "name": "Chile",
+          "value": 0.1,
+          "boundary": "outside"
+        },
+        {
+          "name": "Guam",
+          "value": 0.127,
+          "boundary": "outside"
+        },
+        {
+          "name": "Fiji",
+          "value": 0.06,
+          "boundary": "outside"
+        },
+        {
+          "name": "Micronesia, Fed. Sts.",
+          "value": 0.02,
+          "boundary": "outside"
+        },
+        {
+          "name": "Marshall Islands",
+          "value": 0.02,
+          "boundary": "outside"
+        }
+      ],
+      "status": "complete",
+      "partnerRoundingGap": 0.001,
+      "source": {
+        "path": "data-source/atlas/east-asia/statistics-2023/wits/OAS-Export-120100.json",
+        "sha256": "e4d6856b68654851e5f1662ed76859be9804ceeb65366df0419e7ed3131937c9",
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/OAS/year/2023/tradeflow/Exports/partner/ALL/product/120100",
+        "retrievedOn": "2026-10-13"
+      }
+    },
+    {
+      "reporter": "OAS",
+      "topic": "coniferous-roundwood",
+      "label": "針葉樹原木（未処理）",
+      "product": "440320",
+      "year": 2023,
+      "unit": "m³",
+      "world": 56.0,
+      "partners": [
+        {
+          "name": "China",
+          "value": 47.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "Vietnam",
+          "value": 9.0,
+          "boundary": "outside"
+        }
+      ],
+      "status": "complete",
+      "partnerRoundingGap": 0.0,
+      "source": {
+        "path": "data-source/atlas/east-asia/statistics-2023/wits/OAS-Export-440320.json",
+        "sha256": "9e26928bfafb2ec94784c30e347861519dac49d63ff4920c567bd20bc759d4cd",
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/OAS/year/2023/tradeflow/Exports/partner/ALL/product/440320",
+        "retrievedOn": "2026-10-13"
+      }
+    },
+    {
+      "reporter": "OAS",
+      "topic": "sawnwood",
+      "label": "製材（厚さ6mm超）",
+      "product": "4407",
+      "year": 2023,
+      "unit": "m³",
+      "world": 7712.0,
+      "partners": [
+        {
+          "name": "Japan",
+          "value": 3540.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "China",
+          "value": 2634.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "Indonesia",
+          "value": 482.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Australia",
+          "value": 249.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Italy",
+          "value": 57.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "United States",
+          "value": 40.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Vietnam",
+          "value": 545.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Philippines",
+          "value": 14.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Netherlands",
+          "value": 12.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "United Kingdom",
+          "value": 9.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "India",
+          "value": 42.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Malaysia",
+          "value": 45.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Greece",
+          "value": 15.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Egypt, Arab Rep.",
+          "value": 15.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Singapore",
+          "value": 6.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Hong Kong, China",
+          "value": 2.0,
+          "boundary": "inside"
+        },
+        {
+          "name": "Turkey",
+          "value": 3.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Canada",
+          "value": 0.0,
+          "boundary": "outside"
+        },
+        {
+          "name": "Senegal",
+          "value": 1.0,
+          "boundary": "outside"
+        }
+      ],
+      "status": "complete",
+      "partnerRoundingGap": -1.0,
+      "source": {
+        "path": "data-source/atlas/east-asia/statistics-2023/wits/OAS-Export-4407.json",
+        "sha256": "1d70ae43b6900ba0d232115aab150fbafb39be378807328edd9bf65a4ec0f9a1",
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/OAS/year/2023/tradeflow/Exports/partner/ALL/product/4407",
+        "retrievedOn": "2026-10-13"
+      }
+    }
+  ]
+}

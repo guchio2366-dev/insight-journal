@@ -19,6 +19,9 @@ on:
       - 'src/styles/atlas-agro-selected-native.css'
       - 'src/styles/atlas-agro-statistics.css'
       - 'scripts/capture-agro-statistics-review.mjs'
+      - 'scripts/run-agro-regional-reviews.mjs'
+      - 'scripts/lib/agro-review-identity.mjs'
+      - 'src/data/atlas/agro-quantity-coverage.json'
       - 'public/assets/atlas/regional-production-statistics-v1/**'
       - '.github/workflows/agro-statistics-review.yml'
 permissions:
@@ -53,6 +56,16 @@ jobs:
         run: |
           sudo apt-get install -y fonts-noto-cjk
           REVIEW_CHROME_PATH="$(command -v google-chrome)" node scripts/capture-agro-statistics-review.mjs
+      - name: Review all thirteen regional quantity panels
+        env:
+          AGRO_REVIEW_ROOT: review-artifacts/agro-statistics/regions
+        run: |
+          REVIEW_CHROME_PATH="$(command -v google-chrome)" node scripts/run-agro-regional-reviews.mjs
+      - name: Check mandatory quantity coverage
+        # A partial candidate must stay red even if layout and regression checks
+        # pass. This gate does not publish or grant any extra permissions.
+        if: always()
+        run: node scripts/verify-agro-quantity-coverage.mjs --out review-artifacts/agro-statistics/data-coverage.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -1,0 +1,55 @@
+{
+  "candidateState": "partial-not-for-publication",
+  "baseCommit": "3fbb4c957c21685bddbf8148a95a2a03ba210553",
+  "regionalDeliveries": 13,
+  "unit": {
+    "total": 1555,
+    "passed": 1552,
+    "skipped": 3,
+    "failed": 0
+  },
+  "build": {
+    "passed": true,
+    "releaseIdentity": "local"
+  },
+  "releaseBoundary": {
+    "passed": true,
+    "releaseIdentity": "local"
+  },
+  "e2eInitial": {
+    "total": 683,
+    "passed": 671,
+    "skipped": 11,
+    "failed": 1,
+    "failure": "Old regional forestry test rejected a new country selector inside a closed statistics disclosure."
+  },
+  "affectedForestryRegressionAfterTestCorrection": {
+    "total": 10,
+    "passed": 10,
+    "failed": 0,
+    "files": [
+      "tests/e2e/atlas-regional-forestry.test.mjs",
+      "tests/e2e/atlas-africa-agro-selected.test.mjs",
+      "tests/e2e/atlas-oceania-agro-trade.test.mjs"
+    ]
+  },
+  "finalQuantityContract": {
+    "passed": 16,
+    "failed": 0
+  },
+  "dataCoverage": {
+    "passed": false,
+    "errors": 0,
+    "sourceHashErrors": 0,
+    "structuralGaps": 78,
+    "note": "22 retained normalized records only. All 13 regional mandatory inventories and source coverage remain partial; gap count is not a count of all missing observations."
+  },
+  "firstBrowserPass": {
+    "regions": 13,
+    "passedRegions": 7,
+    "pendingCorrections": 6,
+    "notes": "Sandbox verified. Incorrect capture geometry/count/font/path assumptions corrected without application/data changes; a new exact-commit capture is required."
+  },
+  "published": false,
+  "mergeAllowed": false
+}

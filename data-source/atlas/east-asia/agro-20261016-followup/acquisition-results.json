@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-16",
+  "policy": "Only normal public official paths; no retries of denied files via mirrors, no credentials/proxy/permission bypass.",
+  "verified": [
+    {"name": "USDA September 2026 WASDE", "route": "Official WASDE landing page -> September 2026 Text", "url": "https://www.usda.gov/oce/commodity/wasde/wasde0926.txt", "result": "Official public text readable. National/World 2024/25 rows p22 (South Korea corn), p24 (China and South Korea rice milled), p26 (China cotton) agree with retained source rows. No new PDF byte identity claimed.", "retainedTextPath": "scripts/data/wasde0926.txt", "retainedTextSha256": "de4baa0dc24769b2d8cc153bac488049d905b5c8aa1fec9696e2d4e13036e285"},
+    {"name": "Taiwan current agricultural statistics portal", "route": "Official root -> current moasdweb book index -> food supply/demand yearbook", "url": "https://agrstat.moa.gov.tw/moasdweb/book/Book.aspx?bookID=1446", "result": "Web reader exposes current 114-year publication table of contents; no numeric download links. 114 is 2025, not the required 2023. No numerical observations adopted."},
+    {"name": "KREI research report index", "url": "https://www.krei.re.kr/eng/page/120", "result": "Public index readable; no food balance rows retained."}
+  ],
+  "failed": [
+    {"name": "USDA PSD public CSV", "url": "https://apps.fas.usda.gov/psdonline/downloads/psd_alldata_csv.zip", "action": "urllib normal download, timeout 40s", "result": "Tunnel connection failed: 403 Forbidden; origin HTTP status unknown"},
+    {"name": "Global forest products facts and figures 2024", "url": "https://openknowledge.fao.org/handle/20.500.14283/cd8005en", "action": "Follow FAO official publications link", "result": "Web reader 403 Forbidden"},
+    {"name": "Global forest products facts and figures 2023", "url": "https://openknowledge.fao.org/handle/20.500.14283/cd3650en", "action": "Follow FAO official publications link", "result": "Web reader 403 Forbidden"},
+    {"name": "Pulp and paper capacities survey 2023–2025", "url": "https://openknowledge.fao.org/handle/20.500.14283/cd2190t", "action": "Follow FAO official pulp publications link", "result": "Web reader 403 Forbidden"},
+    {"name": "Taiwan food yearbook current HTML", "url": "https://agrstat.moa.gov.tw/moasdweb/book/Book.aspx?bookID=1446", "action": "urllib normal public HTML read to inspect published download links", "result": "Tunnel connection failed: 403 Forbidden; not retried after failure"},
+    {"name": "Taiwan former book route", "url": "https://agrstat.moa.gov.tw/sdweb/public/book/Book.aspx", "result": "404; current root separately identifies the replacement /moasdweb/ route"},
+    {"name": "KREI Agriculture in Korea 2025", "url": "https://www.krei.re.kr/eng/page/120?biblioId=544440&cmd=view&pageIndex=1", "action": "Follow official home-page report link", "result": "Web reader 400 Timeout fetching; contents unverified"},
+    {"name": "FAO former resources route", "url": "https://www.fao.org/forestry/statistics/resources/en/", "result": "404; official root links separately identify /publications/ paths"},
+    {"name": "MOA public page candidate", "url": "https://www.moa.gov.tw/ws.php?id=2506894", "result": "Web reader URL not accessible; no observations adopted"},
+    {"name": "USDA China grain annual report candidate", "url": "https://www.fas.usda.gov/data/china-grain-and-feed-annual-2026", "result": "Web reader URL not accessible; no observations adopted"}
+  ],
+  "supplemented": {"newNationalSupplyReferences": 4, "newRawNumericFileDownloads": 0, "samePeriodFullPartnerMatrices": 0},
+  "requiredColumnsAndManualSteps": "docs/east-asia/agro-20261016/source-followup.md"
+}

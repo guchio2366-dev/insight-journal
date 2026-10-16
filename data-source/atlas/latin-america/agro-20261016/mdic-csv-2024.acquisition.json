@@ -1,0 +1,5 @@
+{
+  "url": "https://balanca.mdic.gov.br/balanca/bd/comexstat-bd/ncm/EXP_2024.csv",
+  "method": "ordinary unauthenticated GET of the CSV linked by MDIC (after web-reader 502, not an access denial)",
+  "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+}

@@ -68,8 +68,8 @@ test('the stockless apparent quantity is not actual domestic use or a forced par
  assert.match(flow.notes.join(' '),/提供元・改訂版が異なる/);
 });
 
-test('Japan, overviews, unmatched products and other countries receive no invented fallback; callers cannot mutate retained values',()=>{
- for(const [country,series] of [['JPN','soybean-production'],['','soybean-production'],['east-asia','soybean-production'],['KOR','soybean-production'],['CHN','rice-production'],['CHN','sawnwood-production'],['CHN','236']])assert.equal(agroEastQuantityFlow(country,series),undefined);
+test('Japan, overviews, unmatched products and unverified countries receive no invented fallback; callers cannot mutate retained values',()=>{
+ for(const [country,series] of [['JPN','soybean-production'],['','soybean-production'],['east-asia','soybean-production'],['TWN','soybean-production'],['PRK','soybean-production'],['MNG','soybean-production'],['CHN','rice-production'],['CHN','sawnwood-production'],['CHN','236']])assert.equal(agroEastQuantityFlow(country,series),undefined);
  const first=agroEastQuantityFlow('CHN','soybean-production');first.production=0;first.partners[0].value=0;first.notes.length=0;
  const next=agroEastQuantityFlow('CHN','soybean-production');assert.equal(next.production,20841700);assert.equal(next.partners[0].value,40404);assert.ok(next.notes.length>0);
 });

@@ -1,4 +1,6 @@
 import {syncAgroStatistics} from './atlas-agro-statistics.ts';
+import {syncAgroRegionalReferences} from './atlas-agro-regional-reference.ts';
+import {westAgroTopic,westCropProduction,renderWestSelectedCrop,renderWestWheatExample,renderWestGainReference} from '../lib/atlas-west-asia-agro-statistics';
 import {westFields,westTopics,statisticalColors,observation,westReading,westProductionSelection} from '../data/atlas/west-asia-topics.mjs';
 import {readWestState,westSearch,gridIndex,decodeWestGrid,zoomWestView,panWestView} from '../lib/atlas-west-asia-state.mjs';
 import {stationAnnualRainfall,rainfallBreaks,rainfallColors,rainfallColor,isSettlementTopic,settlementSubject,validateSettlementCollection} from '../lib/atlas-west-asia-completion.mjs';
@@ -58,6 +60,7 @@ async function init(root:HTMLElement){
  if(shell){shell.classList.add('west-layout-shell');statistics.classList.add('west-layout-statistics');shell.append(statistics);statistics.addEventListener('click',event=>{const target=event.target as Element;const country=target.closest<HTMLElement>('[data-west-country-button]');if(country){changeCountry(country.dataset.westCountryButton!);return;}const topic=target.closest<HTMLElement>('[data-west-topic-button]');if(topic){readingOverview=false;changeTopic(topic.dataset.westTopicButton!);}});}
  const anchor=(el:Element)=>{const a=document.createComment('west-comparison-home');el.before(a);return a;};
  const legendHome=anchor(legendBox),mapExtrasHome=anchor(mapExtras),agriHome=anchor(agriSwitches),statHome=anchor(statControls),comparisonKeyHome=anchor(comparisonKey),comparisonDetailsHome=anchor(comparisonDetails);
+ const farmSupplyBox=root.querySelector<HTMLElement>('[data-west-farm-supply]'),farmSupplyHome=farmSupplyBox?anchor(farmSupplyBox):null;
  const desktopComparison=window.matchMedia('(min-width:960px)');
  const cache=new Map<string,Promise<any>>(),grids=new Map<string,Promise<Float32Array>>();
  const esc=(v:unknown)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
@@ -437,10 +440,31 @@ async function init(root:HTMLElement){
   if(!subject||!Object.hasOwn(westWorldShares.rows,id)){box.hidden=true;box.innerHTML='';return;}
   box.hidden=false;
   const latest=rows?.at(-1),trend=rows?.map((r,i)=>`${8+i*16},${45-r.percent/Math.max(1,...rows.map(x=>x.percent))*37}`).join(' ');
+  const production=selected?(westCropProduction(data,id,2024)??westProductionSelection(data,2024).find((row:any)=>row.id===id)):null;
   box.innerHTML=`${id==='wheat'?wheatSupplyPanel():id==='dates'?regionalFoodSupplyPanel('dates'):id==='olives'?regionalFoodSupplyPanel('olives'):'<section><h3>供給元 → 国内仕向け・輸出</h3><p>国別生産量は収録済みです。2024年・同じ品目と単位の輸入、輸出、在庫変化、国内仕向けは保存していません。<a href="https://www.fao.org/4/x9892e/x9892e02.htm">FAOの需給定義</a>に合わせた帯グラフにはこれらが必要です。生産量を輸出量や消費量には換算しません。</p></section>'}${id==='wheat'?wheatTradePanel(selected):id==='olives'?olivesTradePanel():id==='dates'?itemTradePanel('01314','ナツメヤシ','dates'):'<section><h3>輸出先の構成</h3><p><a href="https://data.fao.org/catalog/iso/955a7b61-ce56-4a04-adf5-61a3012eec84">FAOSTAT詳細貿易マトリックス</a>に相手国別数量の資料がありますが、今回の20対象・品目・2024年の原表を取得・照合できていません。分母を確認できるまで円グラフは保留です。</p></section>'}<section><h3>${esc(subject.label.replace('・国別生産量','').replace('の収穫面積',''))}の世界生産比</h3>${latest?`<strong>${selected?`生産 ${format(latest.region,0)} t · 世界比 `:''}${format(latest.percent,2)}%（2024年）</strong><svg viewBox="0 0 165 52" role="img" aria-label="2015～2024年の世界生産比の推移"><polyline fill="none" stroke="#326b76" stroke-width="2" points="${trend}"/></svg><p>2015～2024年。20対象の収録値合計／FAOSTAT世界生産量。2024年は${latest.reported}／20対象の値です。欠測国は0として加えていません。</p>`:'<p>今回保存したFAOSTAT QCL世界合計に、この品目の行がありません。同じ原表・定義・2015～2024年の世界行を再取得・照合するまで未算出です。資料が存在しないという意味ではありません。</p>'}<p><a href="https://www.fao.org/faostat/en/#data/QCL">FAOSTAT QCL・生産量（t）</a></p></section>`;
   const flowSections=[...box.children] as HTMLElement[];
+  if(selected&&!latest&&production){const panel=flowSections[2],heading=panel.querySelector('h3');if(heading)heading.textContent=subject.label.replace('・国別生産量','')+'の生産量と世界比';const amount=document.createElement('p');amount.innerHTML=`収録値合計 <strong>${format(production.sum,0)} t</strong>（2024年 · ${production.reported}／20対象）。欠測は0とせず、地域の完全値とは呼びません。`;heading?.after(amount);}
   if(selected&&flowSections.length===3){box.replaceChildren(flowSections[2],flowSections[0],flowSections[1]);for(const [index,section] of [...box.children].entries()){section.setAttribute('data-regional-flow-stage',['production','use','destinations'][index]);const title=section.querySelector('h3');if(title)title.textContent=['① ','② ','③ '][index]+title.textContent;}const note=document.createElement('p');note.className='west-flow-period-note';note.textContent='地域の参考：生産は2024年、需給・相手先は2023年で、製品・報告国の範囲も異なります。一つの数量フローとして接続しません。';box.prepend(note);}
 
+ }
+ function selectedAgroStatistics(t:any){
+  const topic=t.id.replace(/-(irrigated|rainfed)$/,''),code=state.country??'',active=field==='agriculture';
+  const custom=active&&!!code&&['dates','olives'].includes(topic);
+  // Cancel the shared request before showing a regional product it does not own.
+  syncAgroStatistics(root,{country:code,topic:westAgroTopic(t.id),active:active&&!custom});
+  if(custom)syncAgroRegionalReferences(root,true);
+  const host=root.querySelector<HTMLElement>('[data-west-product-statistics]');
+  if(host){host.hidden=!custom;const key=custom?code+':'+topic:'';if(host.dataset.selection!==key){host.dataset.selection=key;host.replaceChildren();if(custom){const title=document.createElement('h2');title.textContent='西アジア・中東 · '+(country()?.name??code);host.append(title);const content=document.createElement('div');content.innerHTML=renderWestSelectedCrop(data,topic,code);host.append(content);const source=document.createElement('p');source.className='agro-meta';source.textContent='FAO FAOSTAT QCL · 保存原値・元のフラグを保持。世界分母・在庫・用途・原料換算は未収録です。';host.append(source);}}}
+  const reference=root.querySelector<HTMLElement>('[data-west-country-reference]');
+  if(reference){const html=active&&code&&['wheat','barley','rice'].includes(topic)?(topic==='wheat'?renderWestWheatExample(data,code):'')+renderWestGainReference(topic,code):active&&topic==='forest'?'<details class="agro-definitions"><summary>林業の加工段階と未収録のパルプ</summary><p>上の丸太（燃料材を含む）・製材は各製品のm³です。パルプは別製品のtで扱い、丸太・製材へ合算・重量換算しません。木材パルプの同年国別生産・World・輸入・輸出・在庫・全相手数量は未収録です。製材の見掛消費を実際の加工投入やパルプ消費と呼びません。</p><a href="https://www.fao.org/forestry/statistics/data/en/">FAOの製品別単位・公開表</a></details>':'';reference.hidden=!html;const key=html?code+':'+topic:'';if(reference.dataset.selection!==key){reference.dataset.selection=key;reference.innerHTML=html;}}
+ }
+ function positionFarmSupply(t:any){
+  const slot=root.querySelector<HTMLElement>('[data-west-regional-flow-slot]');if(!slot||!farmSupplyBox||!farmSupplyHome)return;
+  const selected=field==='agriculture'&&t.id!=='farming-overview'&&!farmSupplyBox.hidden;
+  const node=farmSupplyBox.closest<HTMLElement>('.agro-existing-regional-reference')??farmSupplyBox;
+  if(selected){if(node.parentElement!==slot)slot.append(node);}else if(farmSupplyBox.parentNode!==farmSupplyHome.parentNode){farmSupplyHome.parentNode?.insertBefore(node,farmSupplyHome.nextSibling);}
+  slot.hidden=!selected;
+  farmSupplyBox.classList.toggle('west-selected-farm-supply',selected);
  }
  function sawnwoodHtml(selectedCode:string){
   const codes=[...new Set([selectedCode,'TUR','EGY','SAU','ARE','IRN'].filter(Boolean))];
@@ -457,8 +481,9 @@ async function init(root:HTMLElement){
  }
  function details(){
   const t=topic(),c=country(),city=data.cities.find((x:any)=>x.id===state.city),urban=data.urban.cities.find((x:any)=>x.id===state.urban);
-  syncAgroStatistics(root,{country:state.country??'',topic:t.id.replace(/-(irrigated|rainfed)$/,''),active:field==='agriculture'});
   farmSupply(t);
+  selectedAgroStatistics(t);
+  positionFarmSupply(t);
   const reading=westReading(t),source=sourceTopic(),comparison=source?westReading(source).comparisons.find((x:any)=>x.topic===t.id):null;
   const waterReading=!source&&Object.hasOwn(westWaterIntroductions,t.id);
   const selectedNatural=naturalSelection&&!readingOverview;

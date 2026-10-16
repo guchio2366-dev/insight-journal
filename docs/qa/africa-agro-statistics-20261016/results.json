@@ -1,0 +1,94 @@
+{
+  "baseSha": "3fbb4c957c21685bddbf8148a95a2a03ba210553",
+  "branch": "feat/africa-agro-statistics-20261016",
+  "status": "partial implementation; verified tests; browser blocked; standalone forestry proposal not applied",
+  "fullCheckStartedBeforeLastDenominatorAdjustment": {
+    "exitCode": 0,
+    "unit": {
+      "pass": 1440,
+      "skip": 3
+    },
+    "builtSiteE2E": {
+      "pass": 649,
+      "skip": 11
+    },
+    "build": "passed",
+    "release": "passed"
+  },
+  "final": {
+    "unit": {
+      "tests": 1444,
+      "pass": 1441,
+      "skip": 3,
+      "fail": 0
+    },
+    "regionalUnit": {
+      "tests": 142,
+      "pass": 142,
+      "fail": 0
+    },
+    "regionalE2E": {
+      "tests": 15,
+      "pass": 15,
+      "fail": 0
+    },
+    "build": "passed",
+    "release": "passed",
+    "astroComponentDiagnostics": 0,
+    "browser": {
+      "capturedScreenshots": 0,
+      "reason": "normal sandbox launch blocked by SUID helper owner configuration",
+      "sizesCssPx": [
+        "1896x996",
+        "1280x665"
+      ],
+      "dpr": 1.5
+    },
+    "sharedForestryIntegration": "proposal only; git apply --check passed",
+    "provenanceNormalization": {
+      "change": "normalize the numerical-excerpt CSV to LF and update its SHA; quantities unchanged",
+      "tests": 8,
+      "pass": 8
+    }
+  },
+  "logs": {
+    "fullCheck": {
+      "localPath": "/tmp/africa-check.log",
+      "sha256": "132beff4a03ab4faa7880667694f990ac0a4b8bb68ff719efb829291f79ba8be"
+    },
+    "finalUnit": {
+      "localPath": "/tmp/africa-final-unit-all.log",
+      "sha256": "5cddecef7df22bfde97caf165c73114009e983206c5b7fbddafa8671f9cd0fc5"
+    },
+    "finalRegionalUnit": {
+      "localPath": "/tmp/africa-final-targeted-unit.log",
+      "sha256": "43175b4d54eebe838deb0fe5e0fec266336e2fe0d5354568659d43511e8a64c4"
+    },
+    "finalBuild": {
+      "localPath": "/tmp/africa-final-build.log",
+      "sha256": "e560396619b803ed762c1c907567b088196b1b8985ff58533025a166d49c8d28"
+    },
+    "finalRegionalE2E": {
+      "localPath": "/tmp/africa-final-e2e.log",
+      "sha256": "1300f006e58d186290093b0d7c634607b503f40116cb150dbc17b954acbf7c89"
+    },
+    "finalRelease": {
+      "localPath": "/tmp/africa-final-release.log",
+      "sha256": "ae241006ebbba2cc825202cd88f961563a59b5898d6f283a839d001642073230"
+    },
+    "finalProvenance": {
+      "localPath": "/tmp/africa-final-provenance.log",
+      "sha256": "b930ec5a470fe84f43508780d26551da4b0aeac9def715f4eae4d5cc94fa29fd"
+    }
+  },
+  "verifiedSourceHashes": {
+    "src/scripts/atlas-africa-agro-statistics.ts": "38facd20e549059de156192986e40285c82ce772f3dc2650ec36ca55d6e05554",
+    "src/scripts/atlas-africa.ts": "948d2d05cc95f56aa96243628e7e6de2705cc5bbbb5b4d0119dfbbda80078d6e",
+    "src/pages/atlas/africa/index.astro": "985fc9cf9e28b7cd06b3026b5e6c16c7ab9fe2663c1ba7c015a1cbb63387f3e1",
+    "src/components/atlas/AfricaAgroStatistics.astro": "7a3cd9d40cf658c497b6a051fde5dfba4e325520ee14212279c5b57fce69bbb8",
+    "src/components/atlas/AfricaForestryStatistics.astro": "2993f61fa759798fc668fc6b5d500a98371d18ac50a42bd06d191d7a6675635f",
+    "src/styles/atlas-africa.css": "9c509097aae26752378157a55f1917e8502f9449a319211f520cb9046315a112",
+    "src/data/atlas/africa-agro-marketing-year.json": "aec2e148bb35f87345162ad97cdc1f64a24b2439ddc0da1b0774d8e449aa9f31",
+    "src/data/atlas/africa-maize-trade-reference.json": "c00f81d17ca2042958a2a50b3ef0d58868d3cca6f63628e46c972cfa57c44be0"
+  }
+}

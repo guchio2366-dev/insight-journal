@@ -1,0 +1,100 @@
+Australia Frozen boneless bovine meat exports by country | 2024 | Data (https://wits.worldbank.org/trade/comtrade/en/country/AUS/year/2024/tradeflow/Exports/partner/ALL/product/020230)
+citeturn12view0 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"https://wits.worldbank.org/trade/comtrade/en/country/AUS/year/2024/tradeflow/Exports/partner/ALL/product/020230","lineno":15}); Total lines: 116
+L0: # Australia Frozen boneless bovine meat exports by country
+L1:
+L2: in 2024
+L3:
+L4: Share
+L5:
+L6:   * cite0†Facebook L7:   * cite0†Twitter L8:   * cite0†Linkedin L9:   * cite0†Google Plus L10:   * cite0†Reddit L11:   * cite0†Stumble Upon L12:   * cite0†Delicious L13:   * cite0†Email L14:
+L15: Change selection (Reporter, Year, Trade Flow, Partner and HS 6 digit Product)
+L16: Australia exports of Frozen boneless bovine meat was $5,337,853.77K and quantity 940,116,000Kg.
+L17: Australia exported Frozen boneless bovine meat to United States ($1,741,487.51K , 285,607,000 Kg), China ($960,519.76K , 130,744,000 Kg), Korea, Rep. ($815,047.53K , 134,091,000 Kg), Japan ($621,144.49K , 149,651,000 Kg), Indonesia ($293,280.08K , 79,023,200 Kg).
+L18: cite1†Frozen boneless bovine meat imports by country in 2024 L19: Reporter  | TradeFlow  | ProductCode  | Product Description  | Year  | Partner  | Trade Value 1000USD  | Quantity  | Quantity Unit
+L20:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite2†World | 5,337,853.77  | 940,116,000  | Kg
+L21:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite3†United States | 1,741,487.51  | 285,607,000  | Kg
+L22:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite4†China | 960,519.76  | 130,744,000  | Kg
+L23:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite5†Korea, Rep. | 815,047.53  | 134,091,000  | Kg
+L24:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite6†Japan | 621,144.49  | 149,651,000  | Kg
+L25:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite7†Indonesia | 293,280.08  | 79,023,200  | Kg
+L26:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite8†Other Asia, nes | 166,218.83  | 25,444,700  | Kg
+L27:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite9†Thailand | 113,472.96  | 16,500,700  | Kg
+L28:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite10†Philippines | 113,095.57  | 35,182,600  | Kg
+L29:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite11†Vietnam | 112,248.17  | 19,167,700  | Kg
+L30:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite12†Canada | 109,230.65  | 22,185,200  | Kg
+L31:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite13†Saudi Arabia | 77,904.38  | 8,801,080  | Kg
+L32:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite14†Malaysia | 37,994.62  | 6,815,890  | Kg
+L33:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite15†United Arab Emirates | 23,912.72  | 4,249,950  | Kg
+L34:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite16†Brazil | 18,460.18  | 1,797,080  | Kg
+L35:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite17†New Zealand | 17,470.04  | 4,210,530  | Kg
+L36:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite18†Hong Kong, China | 15,842.89  | 1,867,770  | Kg
+L37:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite19†Papua New Guinea | 15,305.69  | 3,550,200  | Kg
+L38:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite20†Jamaica | 10,216.44  | 745,219  | Kg
+L39:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite21†Singapore | 7,594.38  | 1,019,640  | Kg
+L40:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite22†Kuwait | 7,252.15  | 1,113,160  | Kg
+L41:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite23†Mexico | 6,624.01  | 598,287  | Kg
+L42:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite24†Brunei | 5,341.17  | 844,163  | Kg
+L43:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite25†Netherlands | 4,723.44  | 586,287  | Kg
+L44:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite26†Spain | 4,299.86  | 198,038  | Kg
+L45:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite27†Israel | 3,877.66  | 297,972  | Kg
+L46:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite28†Mauritius | 3,601.73  | 531,518  | Kg
+L47:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite29†Jordan | 3,492.97  | 1,129,700  | Kg
+L48:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite30†Qatar | 3,322.15  | 345,233  | Kg
+L49:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite31†Maldives | 2,832.64  | 211,615  | Kg
+L50:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite32†Cambodia | 2,475.44  | 248,490  | Kg
+L51:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite33†New Caledonia | 2,339.44  | 301,251  | Kg
+L52:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite34†Lebanon | 2,081.98  | 147,806  | Kg
+L53:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite35†Solomon Islands | 1,864.73  | 404,665  | Kg
+L54:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite36†United Kingdom | 1,732.08  | 279,547  | Kg
+L55:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite37†Fiji | 1,654.26  | 446,995  | Kg
+L56:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite38†French Polynesia | 1,575.76  | 517,129  | Kg
+L57:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite39†Angola | 1,137.69  | 131,190  | Kg
+L58:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite40†Oman | 753.10  | 185,853  | Kg
+L59:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite41†Sri Lanka | 714.89  | 74,894  | Kg
+L60:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite42†Macao | 712.48  | 34,913  | Kg
+L61:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite43†Naoero | 675.03  | 95,084  | Kg
+L62:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite44†Tunisia | 551.97  | 20,438  | Kg
+L63:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite45†Egypt, Arab Rep. | 522.92  | 132,570  | Kg
+L64:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite46†Seychelles | 477.61  | 33,076  | Kg
+L65:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite47†Bahrain | 404.74  | 56,991  | Kg
+L66:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite48†Lao PDR | 245.27  | 33,252  | Kg
+L67:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite49†St. Lucia | 212.91  | 31,829  | Kg
+L68:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite50†Germany | 180.62  | 10,496  | Kg
+L69:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite51†South Africa | 176.01  | 128,997  | Kg
+L70:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite52†India | 164.98  | 25,994  | Kg
+L71:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite53†Samoa | 164.15  | 78,148  | Kg
+L72:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite54†Cook Islands | 140.05  | 15,000  | Kg
+L73:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite55†Kiribati | 127.68  | 21,148  | Kg
+L74:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite56†Ukraine | 122.08  | 24,000  | Kg
+L75:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite57†Switzerland | 120.53  | 10,700  | Kg
+L76:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite58†Chile | 102.40  | 1,771  | Kg
+L77:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite59†Tonga | 95.62  | 18,556  | Kg
+L78:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite60†Cocos (Keeling) Islands | 75.75  | 6,374  | Kg
+L79:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite61†Christmas Island | 70.61  | 5,502  | Kg
+L80:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite62†Iraq | 68.63  | 37,994  | Kg
+L81:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite63†Norfolk Island | 52.44  | 3,708  | Kg
+L82:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite64†East Timor | 46.74  | 9,878  | Kg
+L83:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite65†Vanuatu | 39.11  | 18,960  | Kg
+L84:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite66†Senegal | 32.42  | 518  | Kg
+L85:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite67†Antarctica | 30.41  | 1,361  | Kg
+L86:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite68†Dominica | 24.04  | 4,216  | Kg
+L87:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite69†Myanmar | 23.52  | 1,257  | Kg
+L88:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite70†St. Kitts and Nevis | 18.41  | 3,563  | Kg
+L89:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite71†Bunkers | 15.77  | 267  | Kg
+L90:  Australia  | Export  | 020230  | Frozen boneless bovine meat  | 2024  | cite72†Tuvalu | 14.89  | 1,037  | Kg
+L91: HS Nomenclature used HS 1988/92 (H0)
+L92: HS Code 020230: Frozen boneless bovine meat
+L93: Please note: Exports is gross exports and Imports is gross imports
+L94:
+L95:   * cite73†About L96:   * .
+L97:   * cite74†Contact L98:   * .
+L99:   * cite75†Usage Conditions L100:   * .
+L101:   * cite76†Legal†www.worldbank.org L102:   * .
+L103:   * cite77†Data Providers L104:   * .
+L105:   * Page Refreshed : Oct-15-2026 23:40 ET
+L106: Partners
+L107:   * cite78†ITC†www.intracen.org L108:   * .
+L109:   * cite79†UNCTAD†unctad.org L110:   * .
+L111:   * cite80†UNSTATS†unstats.un.org L112:   * .
+L113:   * cite81†World Trade Organization†www.wto.org L114:   * .
+L115:   * cite82†World Bank†www.worldbank.org

@@ -1,0 +1,9 @@
+.canada-selected-agro{grid-column:1/-1;min-width:0;max-width:100%}
+[data-canada-agro-selected="true"] [data-agro-statistics]{display:none!important}
+.canada-selected-agro .agro-statistics{margin-top:12px}
+.canada-selected-agro [hidden]{display:none!important}
+.canada-forest-product{display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:14px;margin:12px 0}
+.canada-selected-agro select{min-height:44px;max-width:100%;font-size:14px;padding:6px 10px}
+.canada-selected-agro .agro-partner-pie{width:132px;height:132px;max-width:100%}
+.canada-selected-agro :is(.agro-key,details,p){overflow-wrap:anywhere}
+.canada-selected-agro details>h3{margin-top:10px}

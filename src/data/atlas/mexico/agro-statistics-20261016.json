@@ -1,0 +1,549 @@
+{
+  "schemaVersion": 1,
+  "balances": [
+    {
+      "productId": "cotton",
+      "countryCode": "MEX",
+      "countryName": "メキシコ",
+      "label": "綿花（繰綿）",
+      "seriesId": "cotton-lint-production",
+      "year": "2024/25",
+      "periodType": "publisher-marketing-year",
+      "periodStart": null,
+      "periodEnd": null,
+      "unit": "百万480ポンド俵",
+      "beginningStocks": 0.24,
+      "production": 1.0,
+      "imports": 0.6,
+      "domesticUse": 1.35,
+      "exports": 0.18,
+      "lossAdjustment": 0.0,
+      "endingStocks": 0.31,
+      "worldProduction": 119.53,
+      "worldProductionRawValue": "119.53",
+      "rawLine": "     Mexico                 0.24    1.00    0.60    1.35    0.18    0.00    0.31",
+      "worldRawLine": "World                      73.54  119.53   43.03  119.10   42.40   -0.23   74.83",
+      "rawValues": {
+        "beginningStocks": "0.24",
+        "production": "1.00",
+        "imports": "0.60",
+        "domesticUse": "1.35",
+        "exports": "0.18",
+        "lossAdjustment": "0.00",
+        "endingStocks": "0.31"
+      },
+      "domesticParts": [],
+      "roundingTolerance": 0.03,
+      "exportDestinations": null,
+      "source": {
+        "report": "WASDE-675",
+        "releaseDate": "2026-09-11",
+        "page": 26,
+        "path": "scripts/data/wasde0926.txt",
+        "sha256": "de4baa0dc24769b2d8cc153bac488049d905b5c8aa1fec9696e2d4e13036e285",
+        "url": "https://www.usda.gov/oce/commodity/wasde/wasde0926.pdf"
+      },
+      "notes": [
+        "WASDE-675の2024/25年国別行と同じ表のWorld行。2025/26推計・2026/27予測は使用しません。",
+        "販売年度は国ごとに期首が異なり得ます。共通の暦年とは呼びません。",
+        "国内利用は輸入と期首在庫を含む全国供給からの利用。国内生産だけの行き先や人の食用量ではありません。",
+        "輸出に含まれる再輸出・輸入原料の数量は分離できません。同年度の全相手国別数量は未収録です。",
+        "繰綿は綿繊維。DGSIAPの種付き綿や綿実・綿実油と合算せず、俵をtへ換算しません。",
+        "原表Lossは用途へ含めず、丸め差を架空の消費へ押し込みません。"
+      ],
+      "roundingGap": 0.0
+    },
+    {
+      "productId": "rice",
+      "countryCode": "MEX",
+      "countryName": "メキシコ",
+      "label": "米（精米換算）",
+      "seriesId": "rice-milled-production",
+      "year": "2024/25",
+      "periodType": "publisher-marketing-year",
+      "periodStart": null,
+      "periodEnd": null,
+      "unit": "百万t",
+      "beginningStocks": 0.12,
+      "production": 0.17,
+      "imports": 0.89,
+      "domesticUse": 1.0,
+      "exports": 0.03,
+      "endingStocks": 0.15,
+      "lossAdjustment": 0,
+      "worldProduction": 542.3,
+      "worldProductionRawValue": "542.30",
+      "rawLine": "    Mexico                   0.12     0.17     0.89     1.00     0.03     0.15",
+      "worldRawLine": "World  3/                  179.79   542.30    58.03   530.87    61.46   191.22",
+      "rawValues": {
+        "beginningStocks": "0.12",
+        "production": "0.17",
+        "imports": "0.89",
+        "domesticUse": "1.00",
+        "exports": "0.03",
+        "endingStocks": "0.15"
+      },
+      "domesticParts": [],
+      "roundingTolerance": 0.03,
+      "exportDestinations": null,
+      "source": {
+        "report": "WASDE-675",
+        "releaseDate": "2026-09-11",
+        "page": 24,
+        "path": "scripts/data/wasde0926.txt",
+        "sha256": "de4baa0dc24769b2d8cc153bac488049d905b5c8aa1fec9696e2d4e13036e285",
+        "url": "https://www.usda.gov/oce/commodity/wasde/wasde0926.pdf"
+      },
+      "notes": [
+        "WASDE-675の2024/25年国別行と同じ表のWorld行。2025/26推計・2026/27予測は使用しません。",
+        "販売年度は国ごとに期首が異なり得ます。共通の暦年とは呼びません。",
+        "国内利用は輸入と期首在庫を含む全国供給からの利用。国内生産だけの行き先や人の食用量ではありません。",
+        "輸出に含まれる再輸出・輸入原料の数量は分離できません。同年度の全相手国別数量は未収録です。",
+        "全需給量が精米換算（Milled Basis）。DGSIAPの籾米と差し引かず、精米歩留まりを独自に仮定しません。",
+        "原表Lossは用途へ含めず、丸め差を架空の消費へ押し込みません。"
+      ],
+      "roundingGap": 0.0
+    },
+    {
+      "productId": "wheat",
+      "countryCode": "MEX",
+      "countryName": "メキシコ",
+      "label": "小麦",
+      "seriesId": "wheat-production",
+      "year": "2024/25",
+      "periodType": "publisher-marketing-year",
+      "periodStart": "2024-07-01",
+      "periodEnd": "2025-06-30",
+      "unit": "千t",
+      "beginningStocks": 775,
+      "production": 2648,
+      "imports": 5607,
+      "domesticUse": 8100,
+      "exports": 135,
+      "endingStocks": 795,
+      "lossAdjustment": 0,
+      "worldProduction": null,
+      "rawValues": {
+        "beginningStocks": "775",
+        "production": "2648",
+        "imports": "5607",
+        "totalSupply": "9030",
+        "exports": "135",
+        "feedResidual": "300",
+        "fsi": "7800",
+        "domesticUse": "8100",
+        "endingStocks": "795",
+        "totalDistribution": "9030"
+      },
+      "rawLine": "L407@P11: WHEAT\nL408@P11: Table 3. Mexico, Wheat Production, Supply and Distribution\nL409@P11: Wheat 2024/2025 2025/2026 2026/2027\nL410@P11: Market Year Begins Jul 2024 Jul 2025 Jul 2026\nL411@P11: Mexico USDA Official New Post USDA Official New Post USDA Official New Post\nL412@P11: Area Harvested (1000 HA) 468 468 320 320 0 390\nL413@P11: Beginning Stocks(1000 MT) 775 775 795 895 0 345\nL414@P11: Production (1000 MT) 2648 2648 1750 1750 0 2100\nL415@P11: MY Imports(1000 MT) 5607 5607 6200 5800 0 6200\nL416@P11: Total Supply (1000 MT) 9030 9030 8745 8445 0 8645\nL417@P11: MY Exports(1000 MT) 135 135 100 100 0 100\nL418@P11: Feed and Residual (1000 MT) 300 200 200 200 0 200\nL419@P11: FSI Consumption (1000 MT) 7800 7800 7900 7800 0 7850\nL420@P11: Total Consumption (1000 MT) 8100 8000 8100 8000 0 8050\nL421@P11: Ending Stocks(1000 MT) 795 895 545 345 0 495\nL422@P11: Total Distribution (1000 MT) 9030 9030 8745 8445 0 8645\nL423@P11: Yield (MT/HA) 5.6581 5.6581 5.4688 5.4688 0 5.3846\nL424@P11: (1000 HA), (1000 MT), (MT/HA)\nL425@P11: MY = Marketing Year, begins with the month listed at the top of each column\nL426@P11: TY = Trade Year, which for Wheat begins in July for all countries. TY 2026/2027 = July 2026 - June 2027",
+      "worldRawLine": null,
+      "worldProductionRawValue": null,
+      "domesticParts": [
+        {
+          "label": "飼料・残差（Feed and Residual）",
+          "value": 300
+        },
+        {
+          "label": "食用・種子・工業用（FSI）",
+          "value": 7800
+        }
+      ],
+      "roundingTolerance": 0,
+      "exportDestinations": null,
+      "source": {
+        "report": "GAIN MX2026-0018",
+        "releaseDate": "2026-03-13",
+        "page": 12,
+        "path": "data-source/atlas/mexico/agro-statistics-20261016/gain-MX2026-0018-tables.txt",
+        "sha256": "62c88060b4c24f9e5e2e01449a10806641e168712ee38efecbeb940696ee3b94",
+        "url": "https://apps.fas.usda.gov/newgainapi/api/Report/DownloadReportByFileName?fileName=Grain+and+Feed+Annual_Mexico+City_Mexico_MX2026-0018"
+      },
+      "notes": [
+        "GAIN MX2026-0018の2024/25年USDA Official列。New Post列・翌年度推計・予測を混ぜません。",
+        "国内利用は公表Total Consumption。食用・種子・工業用と飼料・残差はその内数で、人の実際の食用量ではありません。",
+        "輸入と期首在庫を含む供給です。国産分だけの国内仕向け・輸出・再輸出は分離できません。",
+        "同じ資料・版の世界生産分母と同年度の全相手国別数量は未収録です。別版の世界量や暦年HS輸出で穴埋めしません。",
+        "小麦・小麦製品の原穀換算貿易は、未製粉小麦のHS1001と自動的に一致しません。"
+      ],
+      "roundingGap": 0.0
+    },
+    {
+      "productId": "sorghum",
+      "countryCode": "MEX",
+      "countryName": "メキシコ",
+      "label": "ソルガム（子実）",
+      "seriesId": "sorghum-production",
+      "year": "2024/25",
+      "periodType": "publisher-marketing-year",
+      "periodStart": "2024-10-01",
+      "periodEnd": "2025-09-30",
+      "unit": "千t",
+      "beginningStocks": 269,
+      "production": 4200,
+      "imports": 562,
+      "domesticUse": 4800,
+      "exports": 1,
+      "endingStocks": 230,
+      "lossAdjustment": 0,
+      "worldProduction": null,
+      "rawValues": {
+        "beginningStocks": "269",
+        "production": "4200",
+        "imports": "562",
+        "totalSupply": "5031",
+        "exports": "1",
+        "feedResidual": "4700",
+        "fsi": "100",
+        "domesticUse": "4800",
+        "endingStocks": "230",
+        "totalDistribution": "5031"
+      },
+      "rawLine": "L676@P20: SORGHUM\nL677@P20: Table 5. Mexico, Sorghum Production, Supply and Distribution\nL678@P20: Sorghum 2024/2025 2025/2026 2026/2027\nL679@P20: Market Year Begins Oct 2024 Oct 2025 Oct 2026\nL680@P20: Mexico USDA Official New Post USDA Official New Post USDA Official New Post\nL681@P20: Area Harvested (1000 HA) 1200 1200 1240 850 0 1000\nL682@P20: Beginning Stocks(1000 MT) 269 269 230 280 0 179\nL683@P20: Production (1000 MT) 4200 4150 4300 2900 0 3500\nL684@P20: MY Imports(1000 MT) 562 562 500 800 0 500\nL685@P20: Total Supply (1000 MT) 5031 4981 5030 3980 0 4179\nL686@P20: MY Exports(1000 MT) 1 1 1 1 0 1\nL687@P20: Feed and Residual (1000 MT) 4700 4600 4700 3700 0 3800\nL688@P20: FSI Consumption (1000 MT) 100 100 100 100 0 100\nL689@P20: Total Consumption (1000 MT) 4800 4700 4800 3800 0 3900\nL690@P20: Ending Stocks(1000 MT) 230 280 229 179 0 278\nL691@P20: Total Distribution (1000 MT) 5031 4981 5030 3980 0 4179\nL692@P20: Yield (MT/HA) 3.5 3.4583 3.4677 3.4118 0 3.5\nL693@P20: (1000 HA), (1000 MT), (MT/HA)\nL694@P20: MY = Marketing Year, begins with the month listed at the top of each column\nL695@P20: TY = Trade Year, which for Sorghum begins in October for all countries. TY 2026/2027 = October 2026 - September 2027",
+      "worldRawLine": null,
+      "worldProductionRawValue": null,
+      "domesticParts": [
+        {
+          "label": "飼料・残差（Feed and Residual）",
+          "value": 4700
+        },
+        {
+          "label": "食用・種子・工業用（FSI）",
+          "value": 100
+        }
+      ],
+      "roundingTolerance": 0,
+      "exportDestinations": null,
+      "source": {
+        "report": "GAIN MX2026-0018",
+        "releaseDate": "2026-03-13",
+        "page": 21,
+        "path": "data-source/atlas/mexico/agro-statistics-20261016/gain-MX2026-0018-tables.txt",
+        "sha256": "62c88060b4c24f9e5e2e01449a10806641e168712ee38efecbeb940696ee3b94",
+        "url": "https://apps.fas.usda.gov/newgainapi/api/Report/DownloadReportByFileName?fileName=Grain+and+Feed+Annual_Mexico+City_Mexico_MX2026-0018"
+      },
+      "notes": [
+        "GAIN MX2026-0018の2024/25年USDA Official列。New Post列・翌年度推計・予測を混ぜません。",
+        "国内利用は公表Total Consumption。食用・種子・工業用と飼料・残差はその内数で、人の実際の食用量ではありません。",
+        "輸入と期首在庫を含む供給です。国産分だけの国内仕向け・輸出・再輸出は分離できません。",
+        "同じ資料・版の世界生産分母と同年度の全相手国別数量は未収録です。別版の世界量や暦年HS輸出で穴埋めしません。",
+        "子実ソルガムの需給。DGSIAPの飼料用青刈りや他の穀物とは別範囲です。"
+      ],
+      "roundingGap": 0.0
+    }
+  ],
+  "tradeReferences": [
+    {
+      "productId": "corn",
+      "year": 2024,
+      "periodType": "calendar-year",
+      "classification": "H0",
+      "hsCode": "100590",
+      "label": "とうもろこし（種子用を除く）",
+      "reporter": "MEX",
+      "tradeFlow": "gross-exports",
+      "unit": "t",
+      "sourceUnit": "Kg",
+      "conversionDivisor": 1000,
+      "worldExports": 12224.0,
+      "worldExportsRawValue": "12224000",
+      "partnerTotal": 12224.043,
+      "partnerRoundingGap": 0.043,
+      "roundingTolerance": 0.1,
+      "partners": [
+        {
+          "name": "米国",
+          "originalName": "United States",
+          "value": 4230.58,
+          "rawValue": "4230580"
+        },
+        {
+          "name": "キューバ",
+          "originalName": "Cuba",
+          "value": 7972.5,
+          "rawValue": "7972500"
+        },
+        {
+          "name": "コスタリカ",
+          "originalName": "Costa Rica",
+          "value": 20.963,
+          "rawValue": "20963"
+        }
+      ],
+      "scope": "national-cross-border",
+      "includedPartners": "All returned partners outside Mexico, including US and Canada",
+      "balanceCompatible": false,
+      "explanation": "①②の2024/25販売年度・種子を含む子実と期間・範囲が異なります。",
+      "source": {
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/100590",
+        "path": "data-source/atlas/mexico/agro-statistics-20261016/wits-100590.csv",
+        "sha256": "b7b4e7be8fca6661691b502b99488be3cb2602c07790c814707f6088c005fa49",
+        "observedTextPath": "data-source/atlas/mexico/agro-statistics-20261016/wits-100590.txt",
+        "observedTextSha256": "04297c5b254815008a5093bbf626606dcea54d8825f167bcefccc5e3439622ae",
+        "retrievedOn": "2026-10-16",
+        "retrievalMode": "Official public table via web; numerical transcription, not raw HTML"
+      }
+    },
+    {
+      "productId": "cotton",
+      "year": 2024,
+      "periodType": "calendar-year",
+      "classification": "H0",
+      "hsCode": "520100",
+      "label": "綿（梳いていない・すいていないもの）",
+      "reporter": "MEX",
+      "tradeFlow": "gross-exports",
+      "unit": "t",
+      "sourceUnit": "Kg",
+      "conversionDivisor": 1000,
+      "worldExports": 9995.06,
+      "worldExportsRawValue": "9995060",
+      "partnerTotal": 9995.062,
+      "partnerRoundingGap": 0.002,
+      "roundingTolerance": 0.1,
+      "partners": [
+        {
+          "name": "パキスタン",
+          "originalName": "Pakistan",
+          "value": 4127.17,
+          "rawValue": "4127170"
+        },
+        {
+          "name": "中国",
+          "originalName": "China",
+          "value": 3030.61,
+          "rawValue": "3030610"
+        },
+        {
+          "name": "ベトナム",
+          "originalName": "Vietnam",
+          "value": 2453.33,
+          "rawValue": "2453330"
+        },
+        {
+          "name": "インドネシア",
+          "originalName": "Indonesia",
+          "value": 383.952,
+          "rawValue": "383952"
+        }
+      ],
+      "scope": "national-cross-border",
+      "includedPartners": "All returned partners outside Mexico, including US and Canada",
+      "balanceCompatible": false,
+      "explanation": "①②の2024/25販売年度・繰綿の俵数とは期間・単位が異なります。種付き綿ではありません。",
+      "source": {
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/520100",
+        "path": "data-source/atlas/mexico/agro-statistics-20261016/wits-520100.csv",
+        "sha256": "545315056d56f236d70c06ddd4511e5d28d40bbaf370f602a4adb5f4382d9582",
+        "observedTextPath": "data-source/atlas/mexico/agro-statistics-20261016/wits-520100.txt",
+        "observedTextSha256": "b4d767bb6e1843c1dd0e799273f418d626404c057ce050a310289494e035c864",
+        "retrievedOn": "2026-10-16",
+        "retrievalMode": "Official public table via web; numerical transcription, not raw HTML"
+      }
+    },
+    {
+      "productId": "coffee",
+      "year": 2024,
+      "periodType": "calendar-year",
+      "classification": "H0",
+      "hsCode": "090111",
+      "label": "コーヒー生豆（カフェイン除去を除く）",
+      "reporter": "MEX",
+      "tradeFlow": "gross-exports",
+      "unit": "t",
+      "sourceUnit": "Kg",
+      "conversionDivisor": 1000,
+      "worldExports": 75024.4,
+      "worldExportsRawValue": "75024400",
+      "partnerTotal": 75024.37,
+      "partnerRoundingGap": -0.03,
+      "roundingTolerance": 0.1,
+      "partners": [
+        {
+          "name": "米国",
+          "originalName": "United States",
+          "value": 48135.1,
+          "rawValue": "48135100"
+        },
+        {
+          "name": "ベルギー",
+          "originalName": "Belgium",
+          "value": 11468.1,
+          "rawValue": "11468100"
+        },
+        {
+          "name": "ドイツ",
+          "originalName": "Germany",
+          "value": 6570.81,
+          "rawValue": "6570810"
+        },
+        {
+          "name": "フランス",
+          "originalName": "France",
+          "value": 2523.12,
+          "rawValue": "2523120"
+        },
+        {
+          "name": "イタリア",
+          "originalName": "Italy",
+          "value": 2066.37,
+          "rawValue": "2066370"
+        },
+        {
+          "name": "カナダ",
+          "originalName": "Canada",
+          "value": 1836.27,
+          "rawValue": "1836270"
+        },
+        {
+          "name": "日本",
+          "originalName": "Japan",
+          "value": 647.625,
+          "rawValue": "647625"
+        },
+        {
+          "name": "オーストラリア",
+          "originalName": "Australia",
+          "value": 644.272,
+          "rawValue": "644272"
+        },
+        {
+          "name": "ベトナム",
+          "originalName": "Vietnam",
+          "value": 322.575,
+          "rawValue": "322575"
+        },
+        {
+          "name": "スペイン",
+          "originalName": "Spain",
+          "value": 235.341,
+          "rawValue": "235341"
+        },
+        {
+          "name": "スウェーデン",
+          "originalName": "Sweden",
+          "value": 205.275,
+          "rawValue": "205275"
+        },
+        {
+          "name": "スイス",
+          "originalName": "Switzerland",
+          "value": 153.806,
+          "rawValue": "153806"
+        },
+        {
+          "name": "英国",
+          "originalName": "United Kingdom",
+          "value": 117.801,
+          "rawValue": "117801"
+        },
+        {
+          "name": "アイルランド",
+          "originalName": "Ireland",
+          "value": 94.875,
+          "rawValue": "94875"
+        },
+        {
+          "name": "中国",
+          "originalName": "China",
+          "value": 3.03,
+          "rawValue": "3030"
+        }
+      ],
+      "scope": "national-cross-border",
+      "includedPartners": "All returned partners outside Mexico, including US and Canada",
+      "balanceCompatible": false,
+      "explanation": "①のFAOSTAT生豆と同じ2024暦年ですが、HS090111はカフェイン除去品を含まない通関分類です。DGSIAPのコーヒー果実とも区別します。",
+      "source": {
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/090111",
+        "path": "data-source/atlas/mexico/agro-statistics-20261016/wits-090111.csv",
+        "sha256": "880daf2f8cac46c4958d463fcd5ef1d55588acd2ac2f0ca6ecfbc776ff8eac37",
+        "observedTextPath": "data-source/atlas/mexico/agro-statistics-20261016/wits-090111.txt",
+        "observedTextSha256": "83e473c212e55865cbdd48f258d075e1509a4c6e6f85282b2bcafa3151293a43",
+        "retrievedOn": "2026-10-16",
+        "retrievalMode": "Official public table via web; numerical transcription, not raw HTML"
+      }
+    },
+    {
+      "productId": "pine",
+      "year": 2024,
+      "periodType": "calendar-year",
+      "classification": "H0",
+      "hsCode": "440710",
+      "label": "針葉樹製材（厚さ6mm超）",
+      "reporter": "MEX",
+      "tradeFlow": "gross-exports",
+      "unit": "m³",
+      "sourceUnit": "m³",
+      "conversionDivisor": 1,
+      "worldExports": 57368.0,
+      "worldExportsRawValue": "57368",
+      "partnerTotal": 57368.0,
+      "partnerRoundingGap": 0.0,
+      "roundingTolerance": 0.5,
+      "partners": [
+        {
+          "name": "米国",
+          "originalName": "United States",
+          "value": 57368.0,
+          "rawValue": "57368"
+        }
+      ],
+      "scope": "national-cross-border",
+      "includedPartners": "All returned partners outside Mexico, including US and Canada",
+      "balanceCompatible": false,
+      "explanation": "全針葉樹の製材で、松だけの統計ではありません。①の2022年松材取得量・製材向け原木量とは年・製品が異なります。",
+      "source": {
+        "url": "https://wits.worldbank.org/trade/comtrade/en/country/MEX/year/2024/tradeflow/Exports/partner/ALL/product/440710",
+        "path": "data-source/atlas/mexico/agro-statistics-20261016/wits-440710.csv",
+        "sha256": "3639d27e868cbe87d32929ebf25ad562c34965791b621e85e03ce214058a72c3",
+        "observedTextPath": "data-source/atlas/mexico/agro-statistics-20261016/wits-440710.txt",
+        "observedTextSha256": "b91d61bd4869f1607e269bb4c08d469e3888e452182b74b93f700bc0bbe28a2f",
+        "retrievedOn": "2026-10-16",
+        "retrievalMode": "Official public table via web; numerical transcription, not raw HTML"
+      }
+    }
+  ],
+  "method": "Mexico-only. Same-table national balances; separate calendar-year HS public-table references. No domestic consumption inferred from production minus exports.",
+  "sources": [
+    {
+      "path": "scripts/data/wasde0926.txt",
+      "sha256": "de4baa0dc24769b2d8cc153bac488049d905b5c8aa1fec9696e2d4e13036e285"
+    },
+    {
+      "path": "data-source/atlas/mexico/agro-statistics-20261016/gain-MX2026-0018-tables.txt",
+      "sha256": "62c88060b4c24f9e5e2e01449a10806641e168712ee38efecbeb940696ee3b94"
+    },
+    {
+      "path": "data-source/atlas/mexico/agro-statistics-20261016/wits-090111.csv",
+      "sha256": "880daf2f8cac46c4958d463fcd5ef1d55588acd2ac2f0ca6ecfbc776ff8eac37"
+    },
+    {
+      "path": "data-source/atlas/mexico/agro-statistics-20261016/wits-090111.txt",
+      "sha256": "83e473c212e55865cbdd48f258d075e1509a4c6e6f85282b2bcafa3151293a43"
+    },
+    {
+      "path": "data-source/atlas/mexico/agro-statistics-20261016/wits-100590.csv",
+      "sha256": "b7b4e7be8fca6661691b502b99488be3cb2602c07790c814707f6088c005fa49"
+    },
+    {
+      "path": "data-source/atlas/mexico/agro-statistics-20261016/wits-100590.txt",
+      "sha256": "04297c5b254815008a5093bbf626606dcea54d8825f167bcefccc5e3439622ae"
+    },
+    {
+      "path": "data-source/atlas/mexico/agro-statistics-20261016/wits-440710.csv",
+      "sha256": "3639d27e868cbe87d32929ebf25ad562c34965791b621e85e03ce214058a72c3"
+    },
+    {
+      "path": "data-source/atlas/mexico/agro-statistics-20261016/wits-440710.txt",
+      "sha256": "b91d61bd4869f1607e269bb4c08d469e3888e452182b74b93f700bc0bbe28a2f"
+    },
+    {
+      "path": "data-source/atlas/mexico/agro-statistics-20261016/wits-520100.csv",
+      "sha256": "545315056d56f236d70c06ddd4511e5d28d40bbaf370f602a4adb5f4382d9582"
+    },
+    {
+      "path": "data-source/atlas/mexico/agro-statistics-20261016/wits-520100.txt",
+      "sha256": "b4d767bb6e1843c1dd0e799273f418d626404c057ce050a310289494e035c864"
+    }
+  ]
+}

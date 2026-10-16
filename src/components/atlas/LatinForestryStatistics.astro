@@ -1,0 +1,10 @@
+---
+import '../../styles/atlas-latin-agro-quantity.css';
+---
+<section class="agro-statistics" data-latin-forestry-statistics hidden aria-label="チリの林産物別数量">
+ <h2>チリ全国 · 林産物の数量</h2>
+ <p data-latin-forest-status role="status"></p>
+ <div class="agro-stat-controls"><div data-latin-forest-controls></div><button type="button" data-latin-forest-retry hidden>数量を再読み込み</button></div>
+ <div data-latin-forest-content></div>
+</section>
+<script>import {initLatinForestryQuantity} from '../../scripts/atlas-latin-agro-quantity';initLatinForestryQuantity();document.addEventListener('astro:page-load',()=>initLatinForestryQuantity());</script>

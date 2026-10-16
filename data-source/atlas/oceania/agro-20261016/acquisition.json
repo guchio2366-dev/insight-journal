@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-16",
+  "baseMain": "3fbb4c957c21685bddbf8148a95a2a03ba210553",
+  "successful": {
+    "publisher": "World Bank WITS / UN Comtrade",
+    "method": "Official public table text via Web connector. Ten complete public table captures retained, nine normalized, eight usable as separate-scope references, one held for quantity verification. Original HTML bytes were not acquired.",
+    "tables": "src/data/atlas/oceania-agro-trade.json",
+    "partnerRows": 420,
+    "unusedCapture": "AUS-nondurum-wheat-2024.txt (World quantity missing; the 2024 full HS1001 table is used instead)",
+    "qualityHold": "PNG-cocoa-2023: missing World/NZ quantities; large partner quantities cannot be independently verified. Raw values retained; no primary quantities, ranks, shares or regional subtotals rendered."
+  },
+  "unavailable": [
+    {"url":"https://www.mpi.govt.nz/forestry/forest-industry-and-workforce/forestry-wood-processing-data/wood-product-markets/","action":"Read official MPI market statistics landing page","result":"Execution-environment urllib: Tunnel connection failed: 403 Forbidden. Web connector: not accessible; no table acquired."},
+    {"url":"https://catalogue.data.govt.nz/api/3/action/package_show?id=annual-forestry-export-statistics","action":"Read independent NZ government catalogue metadata for annual forestry exports","result":"Execution-environment urllib: Tunnel connection failed: 403 Forbidden."},
+    {"url":"https://catalogue.data.govt.nz/dataset/annual-forestry-export-statistics","action":"Read public catalogue page through Web connector","result":"Only iframe returned; no export data."},
+    {"url":"https://www.mpi.govt.nz/forestry/forest-industry-and-workforce/forestry-wood-processing-data/","action":"Read official wood-processing data index through Web connector","result":"403 Forbidden."},
+    {"url":"https://bulks-faostat.fao.org/production/Forestry_E_All_Data_(Normalized).zip","action":"Download official FO normalized archive","result":"Execution-environment urllib: Tunnel connection failed: 403 Forbidden."},
+    {"url":"https://bulks-faostat.fao.org/production/Production_Crops_Livestock_E_All_Data_(Normalized).zip","action":"Download official QCL normalized archive","result":"Execution-environment urllib: Tunnel connection failed: 403 Forbidden."},
+    {"url":"https://fenixservices.fao.org/faostat/api/v1/en/data/FBS?area_code=10&item_code=2511&year=2023","action":"Read separate official public FBS wheat-products table","result":"Execution-environment urllib: Tunnel connection failed: 403 Forbidden. Even if available, this product-equivalent FBS table would not automatically match raw wheat QCL/WASDE."},
+    {"url":"https://data.un.org/Data.aspx?d=FAO&f=itemCode%3A1861%3BcountryCode%3A156","action":"Read independent UNdata distribution of NZ roundwood rows","result":"Web connector: not accessible; no data acquired."},
+    {"url":"https://data.un.org/Data.aspx?d=FAO&f=itemCode%3A977%3BcountryCode%3A10","action":"Read independent UNdata distribution of Australian sheep-meat rows","result":"Web connector: not accessible; no data acquired."},
+    {"url":"https://wits.worldbank.org/trade/comtrade/en/country/PNG/year/2024/tradeflow/Exports/partner/ALL/product/180100","action":"Read 2024 PNG cocoa public table","result":"Web connector: not accessible; independent 2023 public table was available but held for verification."},
+    {"url":"https://wits.worldbank.org/trade/comtrade/en/country/NZL/year/2024/tradeflow/Exports/partner/ALL/product/470329","action":"Read a different pulp product table","result":"Web connector: internal error; no data acquired. Only the separate coniferous product HS470321 was available and used."},
+    {"url":"https://wits.worldbank.org/trade/comtrade/en/country/NZL/year/2024/tradeflow/Exports/partner/ALL/product/440320","action":"Acquire original HTML bytes after readable official Web text table","result":"Execution-environment urllib: Tunnel connection failed: 403 Forbidden. The original HTML was not obtained; hash identifies the separately retained text capture only."}
+  ],
+  "browser": {
+    "requiredViewportsCssPx": [[1896,996],[1280,665]],
+    "deviceScaleFactor": 1.5,
+    "chromiumSandbox": true,
+    "result": "Blocked before page creation: installed SUID sandbox helper is owned by nobody rather than root. No sandbox flags, permissions or ownership were changed.",
+    "alternative": "Official Playwright Firefox installer failed with 403 Domain forbidden. Installer automatically tried its bundled official mirrors; no manual bypass, proxy or authentication change was attempted.",
+    "screenshots": 0
+  }
+}

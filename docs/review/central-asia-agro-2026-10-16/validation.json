@@ -1,0 +1,113 @@
+{
+  "date": "2026-10-16",
+  "status": "partial: production and bounded references implemented; complete use and external-partner flows remain unavailable",
+  "branch": "codex/central-asia-agro-20261016",
+  "baseMain": "3fbb4c957c21685bddbf8148a95a2a03ba210553",
+  "workingTreeBuild": true,
+  "checks": [
+    {
+      "command": "npm test",
+      "status": "passed",
+      "phase": "before final cotton missing-World wording refinement; final related suite rerun below",
+      "tests": 1441,
+      "pass": 1438,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 3
+    },
+    {
+      "command": "node --test tests/unit/atlas-agro*.test.mjs tests/unit/atlas-south-central*.test.mjs tests/unit/atlas-central-asia*.test.mjs",
+      "status": "passed",
+      "phase": "final source",
+      "tests": 66,
+      "pass": 66,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    {
+      "command": "ASTRO_TELEMETRY_DISABLED=1 npm run build",
+      "status": "passed",
+      "phase": "final source",
+      "expectedRoutePriorityWarnings": 4
+    },
+    {
+      "command": "node --test --test-concurrency=4 tests/e2e/atlas-central-asia-agro.test.mjs tests/e2e/atlas-asia-workspace.test.mjs tests/e2e/atlas-asia-overview.test.mjs tests/e2e/atlas-south-central-focus.test.mjs tests/e2e/atlas-south-central-overview.test.mjs tests/e2e/static-release.test.mjs",
+      "status": "passed",
+      "phase": "final build",
+      "tests": 23,
+      "pass": 19,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 4,
+      "skipReason": "four opt-in browser reviews; actual screen verification is separately blocked"
+    },
+    {
+      "command": "npm run verify:release",
+      "status": "passed",
+      "phase": "final build"
+    },
+    {
+      "command": "git apply --check docs/review/central-asia-agro-2026-10-16/common-hook-proposal.patch",
+      "status": "passed",
+      "applied": false
+    },
+    {
+      "command": "node scripts/verify-central-asia-agro.mjs",
+      "status": "blocked-at-sandboxed-browser-launch",
+      "completedCases": 0,
+      "requestedCssViewports": [
+        [
+          1896,
+          996
+        ],
+        [
+          1280,
+          665
+        ]
+      ],
+      "deviceScaleFactor": 1.5,
+      "screenshots": 0,
+      "evidence": "browser-attempt.json"
+    }
+  ],
+  "optionalWholeRepositoryE2E": {
+    "command": "npm run test:e2e",
+    "status": "interrupted; not claimed as a complete pass",
+    "tests": 256,
+    "pass": 192,
+    "fail": 0,
+    "cancelled": 61,
+    "skipped": 3,
+    "reason": "stopped the broad optional run before the final regional build; the final regional/shared Asia/static-release subset completed afterward"
+  },
+  "invalidatedEarlierRun": "An earlier whole-repository E2E attempt overlapped a dist rebuild and encountered ENOENT. It is excluded from regression conclusions.",
+  "sourceSha256": {
+    "src/lib/atlas-central-asia-agro.ts": "028a95fa59e5edbd576fdb1ca7ae356163ca1f50443a69c5630760ab365adf32",
+    "src/scripts/atlas-central-asia-agro.ts": "aa37e56b7563248e721eb52c5a84a0b411cee03eabf5d08faa5d80b53192bcf4",
+    "src/data/atlas/central-asia-agro-production.json": "8281019cd3596b4632c9c13f335bee0f2be8a7ac645620bbd758ccb668b7b797",
+    "src/data/atlas/central-asia-agro-wheat-reference.json": "038692ad3a8475a1f371eae580b270a8a4ab9e1d87ac40b7ab10f535cffa60cd",
+    "src/components/atlas/asia/CentralAsiaAgriculturePage.astro": "8f8b0072a2a8522f47aef022b1859e29d9644c5c3ffec32767734587ee12354a"
+  },
+  "unmet": [
+    "unginned cotton World denominator",
+    "sheep/goat meat observations",
+    "regional FBS/SUA use, stocks and imports",
+    "same-year and same-product complete external-partner matrices",
+    "pulp production, World, balance and partners",
+    "cloud screenshots and human visual review"
+  ],
+  "remoteActions": {
+    "push": true,
+    "pullRequest": false,
+    "merge": false,
+    "publish": false
+  },
+  "delivery": {
+    "implementationCommit": "ee207ff991b32c508a93f6e5f5755faeac4aff5d",
+    "remoteImplementationShaVerified": "ee207ff991b32c508a93f6e5f5755faeac4aff5d",
+    "branch": "origin/codex/central-asia-agro-20261016",
+    "authorization": "Parent follow-up explicitly authorized commit and push of this regional change; PR, merge and publication remain with the integration owner.",
+    "followupScope": "Additional official public-source audit only; tested runtime code is unchanged."
+  }
+}

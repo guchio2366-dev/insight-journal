@@ -1,0 +1,113 @@
+New Zealand Milk and cream in solid forms of >1.5% fat, uns exports by country | 2024 | Data (https://wits.worldbank.org/trade/comtrade/en/country/NZL/year/2024/tradeflow/Exports/partner/ALL/product/040221)
+citeturn14view0 [wordlim: 200] Crawled: last week; Content type: text/html; Source: open({"ref_id":"https://wits.worldbank.org/trade/comtrade/en/country/NZL/year/2024/tradeflow/Exports/partner/ALL/product/040221","lineno":15}); Total lines: 129
+L0: # New Zealand Milk and cream in solid forms of >1.5% fat, uns exports by country
+L1:
+L2: in 2024
+L3:
+L4: Share
+L5:
+L6:   * cite0†Facebook L7:   * cite0†Twitter L8:   * cite0†Linkedin L9:   * cite0†Google Plus L10:   * cite0†Reddit L11:   * cite0†Stumble Upon L12:   * cite0†Delicious L13:   * cite0†Email L14:
+L15: Change selection (Reporter, Year, Trade Flow, Partner and HS 6 digit Product)
+L16: New Zealand exports of Milk and cream in solid forms of >1.5% fat, uns was $4,672,869.92K and quantity 1,372,120,000Kg.
+L17: New Zealand exported Milk and cream in solid forms of >1.5% fat, uns to China ($1,340,833.60K , 387,113,000 Kg), Algeria ($475,383.05K , 142,294,000 Kg), United Arab Emirates ($306,236.03K , 91,389,400 Kg), Indonesia ($241,645.38K , 75,245,300 Kg), Malaysia ($230,301.68K , 62,506,400 Kg).
+L18: cite1†Milk and cream in solid forms of >1.5% fat, uns imports by country in 2024 L19: Reporter  | TradeFlow  | ProductCode  | Product Description  | Year  | Partner  | Trade Value 1000USD  | Quantity  | Quantity Unit
+L20:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite2†World | 4,672,869.92  | 1,372,120,000  | Kg
+L21:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite3†China | 1,340,833.60  | 387,113,000  | Kg
+L22:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite4†Algeria | 475,383.05  | 142,294,000  | Kg
+L23:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite5†United Arab Emirates | 306,236.03  | 91,389,400  | Kg
+L24:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite6†Indonesia | 241,645.38  | 75,245,300  | Kg
+L25:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite7†Malaysia | 230,301.68  | 62,506,400  | Kg
+L26:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite8†Bangladesh | 225,116.09  | 66,798,400  | Kg
+L27:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite9†Singapore | 211,051.41  | 65,343,900  | Kg
+L28:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite10†Thailand | 197,135.20  | 62,938,800  | Kg
+L29:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite11†Saudi Arabia | 193,036.45  | 55,301,200  | Kg
+L30:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite12†Sri Lanka | 188,001.42  | 54,832,900  | Kg
+L31:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite13†Australia | 138,471.76  | 37,995,100  | Kg
+L32:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite14†Other Asia, nes | 114,582.18  | 34,069,900  | Kg
+L33:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite15†Nigeria | 112,765.25  | 32,900,100  | Kg
+L34:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite16†Vietnam | 92,258.73  | 27,244,200  | Kg
+L35:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite17†Oman | 84,567.39  | 24,852,200  | Kg
+L36:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite18†Egypt, Arab Rep. | 52,856.96  | 15,935,200  | Kg
+L37:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite19†Libya | 47,932.85  | 14,693,500  | Kg
+L38:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite20†Mauritius | 44,786.07  | 11,573,800  | Kg
+L39:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite21†Peru | 38,226.42  | 11,582,200  | Kg
+L40:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite22†Guatemala | 32,178.64  | 9,529,180  | Kg
+L41:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite23†Philippines | 29,298.87  | 8,744,680  | Kg
+L42:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite24†Netherlands | 28,479.08  | 8,525,150  | Kg
+L43:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite25†Mexico | 26,026.00  | 8,484,400  | Kg
+L44:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite26†Fiji | 23,112.21  | 6,307,310  | Kg
+L45:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite27†El Salvador | 18,143.76  | 5,434,230  | Kg
+L46:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite28†Korea, Rep. | 16,604.20  | 4,797,400  | Kg
+L47:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite2†Cote d'Ivoire | 15,464.77  | 4,356,680  | Kg
+L48:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite29†Japan | 15,300.48  | 4,357,330  | Kg
+L49:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite30†Guyana | 13,939.54  | 4,066,950  | Kg
+L50:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite31†Jordan | 11,848.09  | 3,517,850  | Kg
+L51:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite32†Belgium | 10,575.41  | 3,310,000  | Kg
+L52:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite33†Yemen | 10,478.57  | 3,061,210  | Kg
+L53:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite34†Panama | 8,072.87  | 2,324,330  | Kg
+L54:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite35†United States | 6,514.17  | 1,973,630  | Kg
+L55:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite36†New Caledonia | 6,413.61  | 936,761  | Kg
+L56:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite37†Hong Kong, China | 5,490.25  | 1,419,460  | Kg
+L57:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite38†South Africa | 5,355.26  | 1,652,620  | Kg
+L58:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite39†Mongolia | 5,161.17  | 1,561,350  | Kg
+L59:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite40†Cameroon | 4,770.15  | 1,465,780  | Kg
+L60:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite41†Honduras | 4,278.75  | 1,248,600  | Kg
+L61:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite42†French Polynesia | 4,138.55  | 600,670  | Kg
+L62:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite43†Papua New Guinea | 3,829.41  | 946,424  | Kg
+L63:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite44†Angola | 3,705.26  | 1,077,950  | Kg
+L64:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite45†Cuba | 3,391.58  | 1,005,100  | Kg
+L65:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite46†Qatar | 3,183.67  | 895,150  | Kg
+L66:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite47†Chile | 2,980.99  | 869,450  | Kg
+L67:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite48†Dominican Republic | 2,175.75  | 602,775  | Kg
+L68:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite49†Solomon Islands | 1,821.13  | 404,255  | Kg
+L69:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite50†Mauritania | 1,755.55  | 527,200  | Kg
+L70:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite51†Djibouti | 1,230.20  | 380,375  | Kg
+L71:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite52†Syrian Arab Republic | 1,084.14  | 300,800  | Kg
+L72:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite53†Senegal | 1,079.95  | 339,300  | Kg
+L73:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite54†Benin | 919.12  | 271,925  | Kg
+L74:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite55†Trinidad and Tobago | 740.94  | 214,114  | Kg
+L75:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite56†Samoa | 666.03  | 174,391  | Kg
+L76:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite57†Madagascar | 663.93  | 204,800  | Kg
+L77:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite58†Congo, Dem. Rep. | 623.65  | 186,350  | Kg
+L78:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite59†Canada | 531.05  | 158,650  | Kg
+L79:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite60†Myanmar | 527.56  | 153,600  | Kg
+L80:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite61†Cook Islands | 523.84  | 74,156  | Kg
+L81:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite62†Wallis and Futura Isl. | 508.79  | 59,345  | Kg
+L82:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite63†Congo, Rep. | 469.27  | 134,025  | Kg
+L83:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite64†Vanuatu | 430.88  | 68,682  | Kg
+L84:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite65†Gabon | 388.63  | 111,200  | Kg
+L85:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite66†Tonga | 373.95  | 49,855  | Kg
+L86:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite67†Kiribati | 370.73  | 46,824  | Kg
+L87:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite68†Lebanon | 333.62  | 100,000  | Kg
+L88:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite69†Mali | 294.51  | 100,350  | Kg
+L89:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite70†Jamaica | 263.83  | 70,800  | Kg
+L90:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite71†United Kingdom | 215.35  | 70,875  | Kg
+L91:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite72†Bahrain | 196.43  | 52,975  | Kg
+L92:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite73†Spain | 181.20  | 51,200  | Kg
+L93:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite74†Tunisia | 177.23  | 54,400  | Kg
+L94:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite75†Ghana | 172.08  | 52,800  | Kg
+L95:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite76†Guam | 92.09  | 8,149  | Kg
+L96:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite77†Aruba | 69.40  | 14,812  | Kg
+L97:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite78†American Samoa | 26.89  | 3,156  | Kg
+L98:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite79†Northern Mariana Islands | 22.77  | 2,275  | Kg
+L99:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite80†Macao | 10.06  | 374  | Kg
+L100:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite81†Niue | 2.29  | 41  | Kg
+L101:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite82†Norfolk Island | 1.96  | 276  | Kg
+L102:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite83†Marshall Islands | 1.63  | 135  | Kg
+L103:  New Zealand  | Export  | 040221  | Milk and cream in solid forms of >1.5% fat, uns  | 2024  | cite84†Tuvalu | 0.27  | 200  | Kg
+L104: HS Nomenclature used HS 1988/92 (H0)
+L105: HS Code 040221: Milk and cream in solid forms of >1.5% fat, uns
+L106: Please note: Exports is gross exports and Imports is gross imports
+L107:
+L108:   * cite85†About L109:   * .
+L110:   * cite86†Contact L111:   * .
+L112:   * cite87†Usage Conditions L113:   * .
+L114:   * cite88†Legal†www.worldbank.org L115:   * .
+L116:   * cite89†Data Providers L117:   * .
+L118:   * Page Refreshed : Oct-8-2026 06:23 ET
+L119: Partners
+L120:   * cite90†ITC†www.intracen.org L121:   * .
+L122:   * cite91†UNCTAD†unctad.org L123:   * .
+L124:   * cite92†UNSTATS†unstats.un.org L125:   * .
+L126:   * cite93†World Trade Organization†www.wto.org L127:   * .
+L128:   * cite94†World Bank†www.worldbank.org

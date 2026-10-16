@@ -1,0 +1,8 @@
+{
+  "url": "https://www.usda.gov/oce/commodity/wasde/wasde0926.pdf",
+  "requestedAt": "2026-10-16T03:40:12.686681+00:00",
+  "method": "public GET",
+  "path": "data-source/atlas/south-asia/agro-20261016/wasde0926.pdf",
+  "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+  "bytes": 0
+}

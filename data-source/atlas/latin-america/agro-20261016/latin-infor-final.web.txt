@@ -1,0 +1,288 @@
+Brazil Soya beans imports by country | 2024 | Data (https://wits.worldbank.org/trade/comtrade/en/country/BRA/year/2024/tradeflow/Imports/partner/ALL/product/120100)
+citeturn10view0 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"turn3view1","lineno":15}); Total lines: 53
+L0: # Brazil Soya beans imports by country
+L1:
+L2: in 2024
+L3:
+L4: Share
+L5:
+L6:   * cite0†Facebook L7:   * cite0†Twitter L8:   * cite0†Linkedin L9:   * cite0†Google Plus L10:   * cite0†Reddit L11:   * cite0†Stumble Upon L12:   * cite0†Delicious L13:   * cite0†Email L14:
+L15: Change selection (Reporter, Year, Trade Flow, Partner and HS 6 digit Product)
+L16: Brazil imports of Soya beans was $332,695.46K .
+L17: Brazil imported Soya beans from Paraguay ($328,278.10K , 810,654,000 Kg), Uruguay ($4,342.81K , 10,752,000 Kg), Bolivia ($35.31K , 134,000 Kg), Argentina ($25.07K , 5,204 Kg), Canada ($8.88K ).
+L18: cite1†Soya beans exports by country in 2024 L19: Reporter  | TradeFlow  | ProductCode  | Product Description  | Year  | Partner  | Trade Value 1000USD  | Quantity  | Quantity Unit
+L20:  Brazil  | Import  | 120100  | Soya beans  | 2024  | cite2†World | 332,695.46  |  |
+L21:  Brazil  | Import  | 120100  | Soya beans  | 2024  | cite3†Paraguay | 328,278.10  | 810,654,000  | Kg
+L22:  Brazil  | Import  | 120100  | Soya beans  | 2024  | cite4†Uruguay | 4,342.81  | 10,752,000  | Kg
+L23:  Brazil  | Import  | 120100  | Soya beans  | 2024  | cite5†Bolivia | 35.31  | 134,000  | Kg
+L24:  Brazil  | Import  | 120100  | Soya beans  | 2024  | cite6†Argentina | 25.07  | 5,204  | Kg
+L25:  Brazil  | Import  | 120100  | Soya beans  | 2024  | cite7†Canada | 8.88  |  |
+L26:  Brazil  | Import  | 120100  | Soya beans  | 2024  | cite8†France | 3.99  | 155  | Kg
+L27:  Brazil  | Import  | 120100  | Soya beans  | 2024  | cite9†United States | 1.31  | 95  | Kg
+L28: HS Nomenclature used HS 1988/92 (H0)
+L29: HS Code 120100: Soya beans
+L30: Please note: Exports is gross exports and Imports is gross imports
+L31:
+L32:   * cite10†About L33:   * .
+L34:   * cite11†Contact L35:   * .
+L36:   * cite12†Usage Conditions L37:   * .
+L38:   * cite13†Legal†www.worldbank.org L39:   * .
+L40:   * cite14†Data Providers L41:   * .
+L42:   * Page Refreshed : Oct-15-2026 23:40 ET
+L43: Partners
+L44:   * cite15†ITC†www.intracen.org L45:   * .
+L46:   * cite16†UNCTAD†unctad.org L47:   * .
+L48:   * cite17†UNSTATS†unstats.un.org L49:   * .
+L50:   * cite18†World Trade Organization†www.wto.org L51:   * .
+L52:   * cite19†World Bank†www.worldbank.org --------------------------------------------------------------------------------
+Infor :: Estadisticas Forestales (https://wef.infor.cl/index.php/sector-forestal/industria-forestal/produccion/produccion-de-celulosa?view=comercio_ind_pro_celulosa)
+citeturn10view1 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"turn6view2","lineno":110}); Total lines: 159
+L69: 1973  | 350,3  | 108,3  | -  | -  | -  | -
+L70: 1974  | 432,8  | 119,0  | -  | -  | -  | -
+L71: 1975  | 435,8  | 110,0  | -  | -  | -  | -
+L72: 1976  | 514,5  | 124,5  | -  | -  | -  | -
+L73: 1977  | 603,3  | 125,3  | -  | -  | -  | -
+L74: 1978  | 665,0  | 129,4  | -  | -  | -  | -
+L75: 1979  | 700,8  | 130,3  | -  | -  | -  | -
+L76: 1980  | 770,7  | 136,7  | -  | -  | -  | -
+L77: 1981  | 750,5  | 130,8  | -  | -  | -  | -
+L78: 1982  | 676,5  | 121,6  | -  | -  | -  | -
+L79: 1983  | 806,7  | 148,1  | -  | -  | -  | -
+L80: 1984  | 851,0  | 166,3  | -  | -  | -  | -
+L81: 1985  | 848,9  | 166,8  | -  | -  | -  | -
+L82: 1986  | 859,0  | 163,0  | -  | -  | -  | -
+L83: 1987  | 883,3  | 170,5  | -  | -  | -  | -
+L84: 1988  | 909,8  | 181,8  | -  | -  | -  | -
+L85: 1989  | 840,8  | 161,0  | -  | -  | -  | -
+L86: 1990  | 804,1  | 159,8  | -  | 614,3  | -  | 30,0
+L87: 1991  | 1.113,0  | 179,0  | -  | 777,6  | -  | 156,4
+L88: 1992  | 1.680,3  | 181,0  | -  | 1.223,3  | -  | 276,0
+L89: 1993  | 1.864,2  | 182,7  | 5,0  | 1.006,1  | 383,4  | 287,0
+L90: 1994  | 1.952,6  | 183,7  | 5,4  | 1.099,9  | 347,5  | 316,1
+L91: 1995  | 2.112,4  | 183,8  | -  | 1.227,1  | 372,9  | 328,6
+L92: 1996  | 2.145,9  | 190,6  | 23,0  | 1.252,9  | 347,5  | 331,9
+L93: 1997  | 2.077,7  | 184,3  | 25,0  | 1.256,5  | 286,7  | 325,2
+L94: 1998  | 2.209,6  | 185,2  | 44,7  | 1.175,6  | 362,3  | 441,8
+L95: 1999  | 2.434,1  | 135,7  | 234,3  | 1.258,1  | 366,0  | 440,0
+L96: 2000  | 2.591,9  | 104,2  | 267,8  | 1.303,4  | 413,1  | 503,4
+L97: 2001  | 2.667,8  | 110,2  | 275,5  | 1.404,3  | 426,1  | 451,7
+L98: 2002  | 2.687,4  | 116,6  | 292,6  | 1.289,7  | 435,2  | 553,3
+L99: 2003  | 2.759,3  | 130,5  | 314,5  | 1.384,6  | 393,8  | 535,9
+L100: 2004  | 3.338,7  | 137,6  | 369,4  | 1.661,7  | 389,4  | 780,6
+L101: 2005  | 3.237,2  | 136,6  | 342,4  | 1.545,5  | 391,0  | 821,7
+L102: 2006  | 3.482,8  | 132,1  | 380,4  | 1.642,3  | 376,0  | 952,0
+L103: 2007  | 4.675,4  | 138,3  | 355,7  | 1.945,8  | 407,3  | 1.828,4
+L104: 2008  | 4.980,5  | 137,6  | 357,4  | 2.041,7  | 393,6  | 2.050,1
+L105: 2009  | 4.992,5  | 134,3  | 368,4  | 2.038,4  | 433,5  | 2.017,9
+L106: 2010  | 4.102,2  | 104,5  | 353,7  | 1.586,9  | 372,7  | 1.684,3
+L107: 2011  | 4.896,2  | 120,6  | 364,5  | 1.941,3  | 441,4  | 2.028,4
+L108: 2012  | 5.080,3  | 127,4  | 321,1  | 1.904,0  | 467,2  | 2.260,6
+L109: 2013  | 5.156,0  | 131,3  | 232,4  | 2.043,4  | 489,5  | 2.259,5
+L110: 2014  | 5.208,8  | 134,3  | 180,0  | 2.166,2  | 489,6  | 2.238,7
+L111: 2015  | 5.116,7  | 127,4  | 183,0  | 2.000,4  | 482,4  | 2.323,4
+L112: 2016  | 5.145,4  | 124,0  | 161,8  | 2.118,9  | 461,5  | 2.279,2
+L113: 2017  | 5.193,0  | 119,8  | 151,7  | 2.039,5  | 467,3  | 2.414,7
+L114: 2018  | 5.362,8  | 129,7  | 180,0  | 2.033,2  | 545,0  | 2.474,9
+L115: 2019  | 5.293,3  | 114,7  | 190,1  | 1.919,5  | 487,6  | 2.581,4
+L116: 2020  | 5.205,5  | 64,5  | 193,7  | 1.735,9  | 483,6  | 2.727,7
+L117: 2021  | 4.979,6  | 29,5  | 187,6  | 1.741,6  | 496,2  | 2.524,7
+L118: 2022  | 4.655,3  | 67,3  | 188,3  | 1.715,8  | 503,0  | 2.180,8
+L119: 2023  | 5.329,4  | 80,7  | 195,0  | 1.700,7  | 346,8  | 3.006,3
+L120: 2024  | 5.938,0  | 75,0  | 197,7  | 1.765,2  | 326,2  | 3.574,0
+L121: Fuente: INFOR, 1975 y 1981; CICEPLA/CORMA, 1982-2021
+L122:
+L123: (-) Sin producción.
+L124:
+L125: (...) Información no disponible.
+L126:
+L127: (*) Entre 1990 y 1992 la producción de pulpa química blanqueada de pino radiata incluye la producción de pulpa sin blanquear de pino radiata
+L128: # "Creando valor forestal sostenible para Chile."
+L129:
+L130: cite39†Image cite40†Image L131:
+L132: cite1†Image L133:
+L134: ##### Menú
+L135:
+L136:   * cite41†Inicio L137:   * cite42†Destacados L138:   * cite43†Publicaciones L139:   * cite44†Construcción en Madera L140:   * cite45†Datos en Línea L141:   * cite46†Mapa Industria L142:   * cite47†Sector Forestal en cifras L143:
+L144: ##### Enlaces
+L145:
+L146:   * cite48†Acerca del Área L147:   * cite49†Sitios de interés L148:   * cite50†Calendario L149:   * cite51†Factores de Conversión L150: ##### Área de Información y Economía Forestal, Instituto Forestal - INFOR
+L151:
+L152: SEDE METROPOLITANA
+L153: (56-2) 2366 71 20
+L154: info_wef@infor.cl
+L155:
+L156: cite52†OIRS†www.infor.cl L157:
+L158: © 2024 Copyrights. All rights reserved.
+--------------------------------------------------------------------------------
+Infor :: Estadisticas Forestales (https://wef.infor.cl/index.php/sector-forestal/exportaciones/cantidad-total-por-producto?view=comercio_exp_volumensegunproducto)
+citeturn10view2 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"turn6view3","lineno":90}); Total lines: 134
+L58: ❯ Trozas para aserrar y chapas ( m3 )  | 258  | 236  | 133  | 189  | 40  | 62  | 68  | 36  | 18
+L59: ❯ Trozas para pulpa ( m3 )  | 0  | 0  | 0  | 0  | 0  | 0  | 0  | 0  | 0
+L60: MADERA ASERRADA (1)  | 2.709  | 2.529  | 2.322  | 2.155  | 2.015  | 2.023  | 2.010  | 1.758  | 1.185
+L61: ❯ Pino radiata ( m3 )  | 2.703  | 2.525  | 2.316  | 2.150  | 2.012  | 2.021  | 2.008  | 1.756  | 1.184
+L62: ❯ Otras especies ( m3 )  | 6  | 4  | 6  | 5  | 3  | 2  | 2  | 2  | 1
+L63: PAPELES, CARTONES Y SUS DERIVADOS  | 607  | 590  | 667  | 538  | 561  | 592  | 612  | 542  | 372
+L64: ❯ Papel periodico ( t )  | 64  | 55  | 41  | 4  | 0  | 2  | 2  | 0  | 0
+L65: ❯ Cartulinas multicapa ( t )  | 328  | 336  | 393  | 361  | 361  | 324  | 355  | 320  | 221
+L66: ❯ Otros papeles, cartones y derivados (3) ( t )  | 215  | 199  | 233  | 173  | 200  | 266  | 255  | 222  | 151
+L67: MADERA ELABORADA CEPILLADA Y CLEAR (2)  | 658  | 454  | 489  | 482  | 466  | 373  | 446  | 386  | 166
+L68: ❯ Pino radiata ( m3 )  | 657  | 453  | 489  | 482  | 466  | 348  | 422  | 386  | 166
+L69: ❯ Otras especies ( m3 )  | 1  | 1  | 0  | 0  | 0  | 25  | 24  | 0  | 0
+L70: MOLDURAS  | 352  | 360  | 371  | 404  | 473  | 279  | 340  | 329  | 215
+L71: ❯ Molduras solidas ( t )  | 141  | 139  | 140  | 167  | 165  | 126  | 141  | 132  | 106
+L72: ❯ Molduras de fibra ( t )  | 211  | 221  | 231  | 237  | 308  | 153  | 192  | 195  | 108
+L73: ❯ Otras Molduras ( t )  | 0  | 0  | 0  | 0  | 0  | 0  | 7  | 2  | 1
+L74: TABLEROS Y CHAPAS  | 883  | 797  | 810  | 774  | 830  | 740  | 790  | 756  | 437
+L75: ❯ Tableros de fibra (MDF,Hardboard) ( t )  | 171  | 182  | 158  | 185  | 115  | 133  | 152  | 158  | 74
+L76: ❯ Tableros de particulas ( t )  | 144  | 125  | 133  | 139  | 163  | 153  | 151  | 147  | 105
+L77: ❯ Tableros contrachapados (3) ( t )  | 516  | 447  | 452  | 400  | 488  | 410  | 443  | 420  | 249
+L78: ❯ Chapas ( t )  | 35  | 32  | 35  | 36  | 38  | 32  | 22  | 9  | 1
+L79: ❯ Tableros OSB ( t )  | 17  | 11  | 32  | 14  | 26  | 12  | 22  | 22  | 8
+L80: ❯ Otros ( t )  | 0  | 0  | 0  | 0  | 0  | 0  | 0  | 0  | 0
+L81: PUERTAS, VENTANAS Y SUS MARCOS  | 61  | 55  | 60  | 64  | 74  | 65  | 64  | 63  | 43
+L82: ❯ Puertas ( t )  | 19  | 18  | 20  | 24  | 24  | 21  | 19  | 17  | 12
+L83: ❯ Marcos para puertas ( t )  | 11  | 10  | 9  | 12  | 14  | 8  | 10  | 11  | 8
+L84: ❯ Otros ( t )  | 31  | 27  | 31  | 28  | 36  | 36  | 35  | 35  | 23
+L85: MUEBLES DE MADERA Y SUS PARTES Y PIEZAS  | 1  | 1  | 1  | 1  | 1  | 1  | 1  | 0  | 0
+L86: ❯ Partes y piezas de muebles ( t )  | 0  | 0  | 0  | 0  | 0  | 0  | 0  | 0  | 0
+L87: ❯ Comodas y veladores ( t )  | 0  | 0  | 0  | 0  | 0  | 0  | 0  | 0  | 0
+L88: ❯ Otros ( t )  | 1  | 1  | 1  | 1  | 1  | 1  | 1  | 0  | 0
+L89: OTROS GRUPOS  | 140  | 132  | 139  | 145  | 155  | 186  | 212  | 202  | 159
+L90: ❯ PRODUCTOS NO MADEREROS (4) ( t )  | 21  | 20  | 17  | 16  | 15  | 13  | 14  | 14  | 9
+L91: ❯ PRODUCTOS PARA CONSTRUCCION ( t )  | 60  | 56  | 74  | 73  | 90  | 83  | 95  | 98  | 53
+L92: ❯ CAJAS Y OTROS ENVASES Y PLATAFORMAS ( t )  | 17  | 14  | 12  | 11  | 7  | 10  | 38  | 11  | 5
+L93: ❯ OTROS ( t )  | 42  | 42  | 36  | 45  | 43  | 80  | 65  | 79  | 92
+L94: Año 2026 incluye datos hasta Agosto correspondiente a la última actualización vigente.
+L95:
+L96: (1) Incluye madera simplemente aserrada, incluye tablones, basas y tapas
+L97:
+L98: (2) Incluye madera en bloques, finger joint y otras maderas cepilladas
+L99:
+L100: (3) Incluye papel de impresión, envolver, tissue, kraft, cartón corrugado, cartulinas para tarjetas, papel higiénico, entre otros
+L101:
+L102: (4) Incluye frutos, semillas, corteza, hojas, hongos, musgo, aceite, extracto, entre otros
+L103: # "Creando valor forestal sostenible para Chile."
+L104:
+L105: cite39†Image cite40†Image L106:
+L107: cite1†Image L108:
+L109: ##### Menú
+L110:
+L111:   * cite41†Inicio L112:   * cite42†Destacados L113:   * cite43†Publicaciones L114:   * cite44†Construcción en Madera L115:   * cite45†Datos en Línea L116:   * cite46†Mapa Industria L117:   * cite47†Sector Forestal en cifras L118:
+L119: ##### Enlaces
+L120:
+L121:   * cite48†Acerca del Área L122:   * cite49†Sitios de interés L123:   * cite50†Calendario L124:   * cite51†Factores de Conversión L125: ##### Área de Información y Economía Forestal, Instituto Forestal - INFOR
+L126:
+L127: SEDE METROPOLITANA
+L128: (56-2) 2366 71 20
+L129: info_wef@infor.cl
+L130:
+L131: cite52†OIRS†www.infor.cl L132:
+L133: © 2024 Copyrights. All rights reserved.
+--------------------------------------------------------------------------------
+Infor :: Estadisticas Forestales (https://wef.infor.cl/index.php/sector-forestal)
+citeturn10view3 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"turn5view1","lineno":115}); Total lines: 172
+L42: # Resumen de Indicadores del Sector Forestal
+L43:
+L58: (1) Fuente INFOR. Cifras de 2023. Ver nota explicativa en Anuario 2025, página 45
+L59:
+L60: (2) Fuente CONAF. Ver nota explicativa y fecha de actualización en Anuario 2025, página 30.
+L61:
+L62: (3) Fuente CONAF. Incluye forestación y reforestación.
+L63:
+L64: (4) Fuente CONAF. Corresponde a bosque en estado adulto, renoval, adulto-renoval y achaparrado.
+L65:
+L66: (5) Fuente CONAF. Corresponde a todos los usos de suelo de las áreas silvestres protegidas por el Estado.
+L67:
+L68: (6) Fuente INFOR, en base a datos de CONAF.
+L69:
+L70: Ocupación (1000 personas)
+L71:  | 2023  | 2024  | Var(24/23)
+L72: --- | --- | --- | ---
+L73: Total Forestal  | 102,1  | 102,5  | 0,4%
+L74: Industria Forestal Primaria  | 31,1  | 30,3  | -2,5%
+L75: Industria Forestal Secundaria  | 26,0  | 25,3  | -2,7%
+L76: Silvicultura y Extracción; Otras actividades silvícolas  | 45,0  | 46,9  | 4,2%
+L77:
+L78: Fuente INFOR.
+L79:
+L80: Precios (*)
+L81:  | 2023  | 2024  | Var 24/23
+L82: --- | --- | --- | ---
+L83: Precios de Exportación  |  |  |
+L84: Pulpa Blanqueada Pino radiata (US$/t FOB)  | 653  | 660  | 1,1%
+L85: Astillas Eucalyptus globulus (US$/t FOB)  | 81  | 84  | 3,7%
+L86: Madera Aserrada Pino radiata (US$/m^{3} FOB)  | 231  | 237  | 2,6%
+L87: Tab. Contrachapado Pino radiata (US$/t FOB)  | 986  | 980  | -0,6%
+L88: Precios Mercado Interno  |  |  |
+L89: Trozas Pulpables Pino radiata (US$/m^{3})  | 28  | 25  | -10,7%
+L90: Trozas Aserrables Pino radiata (US$/m^{3})  | 54  | 49  |  -9,3%
+L91: Madera Aserrada Pino radiata (US$/m^{3})  | 168  | 148  | -11,9%
+L92: Madera Cepillada Pino Radiata (US$/m^{3})  | 261  | 233  | -10,7%
+L93: Fuente INFOR.
+L94:
+L95: (*) Precios medios nominales.
+L96:
+L97: Comercio Exterior (US$ millones)
+L98:
+L99:  | 2023  | 2024  | Var(24/23)
+L100: --- | --- | --- | ---
+L101: Exportaciones Forestales (FOB)  | 5.556  | 6.371  | 14,7%
+L102: Pulpa Química  | 2.644  | 3.336  | 26,2%
+L103: Madera Aserrada  | 467  | 476  | 1,9%
+L104: Tableros y Chapas  | 617  | 671  | 8,8%
+L105: Astillas  | 190  | 188  | -1,1%
+L106: Otros Productos  | 1.638  | 1.700  | 3,8%
+L107: Importaciones Forestales (CIF)  | 1.510  | 1.606  | 6,4%
+L108:
+L109: Fuente INFOR.
+L110:
+L111: Producción Industrial (1000)
+L112:  | 2023  | 2024  | Var(24/23)
+L113: --- | --- | --- | ---
+L114: Pulpa Química (t)  | 5.054  | 5.665  | 12,1%
+L115: Pulpa Mecánica y Termomecánica (t)  | 276  | 273  | -1,1%
+L116: Papeles y Cartones (t)  | 1.291  | 1.319  | 2,2%
+L117: Astillas (m^{3}ssc)  | 8.190  | 8.376  | 2,3%
+L118: Madera Aserrada (m^{3})  | 6.955  | 7.037  | 1,2%
+L119: Tableros y Chapas (m^{3})  | 2.901  | 3.069  | 5,8%
+L120: Postes y Polines impregnados  | 241  | 228  | -5.4%
+L121:
+L122: Fuente INFOR.
+L123:
+L124: Consumo de Trozas (1000 m^{3}ssc)
+L125:  | 2023  | 2024  | Var(24/23)
+L126: --- | --- | --- | ---
+L127: Consumo Industrial  | 40.086  | 42.255  | 5,4%
+L128: Consumo por Industria  |  |  |
+L129: Pulpa  | 17.731  | 19.501  | 10,0%
+L130: Aserrío  | 13.629  | 13.638  | 0,1%
+L131: Astillas  | 4.270  | 4.601  | 7,8%
+L132: Tableros y Chapas  | 4.145  | 4.211  | 1,6%
+L133: Otros Productos  | 311  | 303  | -2,6%
+L134: Consumo por Especies  |  |  |
+L135: Pino radiata  | 25.791  | 26.046  | 1,0%
+L136: Eucalipto (1)  | 14.006  | 15.910  | 13,6%
+L137: Otras Especies  | 289  | 299  | 3,5%
+L138:
+L139: Fuente INFOR.
+L140: (1) Eucalyptus globulus y Eucalyptus nitens.
+L141: # "Creando valor forestal sostenible para Chile."
+L142:
+L143: cite39†Image cite40†Image L144:
+L145: cite1†Image L146:
+L147: ##### Menú
+L148:
+L149:   * cite41†Inicio L150:   * cite42†Destacados L151:   * cite43†Publicaciones L152:   * cite44†Construcción en Madera L153:   * cite45†Datos en Línea L154:   * cite46†Mapa Industria L155:   * cite47†Sector Forestal en cifras L156:
+L157: ##### Enlaces
+L158:
+L159:   * cite48†Acerca del Área L160:   * cite49†Sitios de interés L161:   * cite50†Calendario L162:   * cite51†Factores de Conversión L163: ##### Área de Información y Economía Forestal, Instituto Forestal - INFOR
+L164:
+L165: SEDE METROPOLITANA
+L166: (56-2) 2366 71 20
+L167: info_wef@infor.cl
+L168:
+L169: cite52†OIRS†www.infor.cl L170:
+L171: © 2024 Copyrights. All rights reserved.
+--------------------------------------------------------------------------------
+Infor :: Estadisticas Forestales (https://wef.infor.cl/index.php/sector-forestal/industria-forestal/consumo/consumo-de-trozas-por-industria?view=comercio_ind_con_total)
+citeturn10view4 [wordlim: 200] Crawled: last month; Content type: text/html; Source: click({"ref_id":"turn5view1","id":3}); Total lines: 134

@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-16",
+  "additionalOfficialSources": [
+    {
+      "title": "ITTO Biennial Review and Assessment 2023–2024, tables",
+      "catalogueUrl": "https://www.itto.int/biennal_review/",
+      "tableUrl": "https://www.itto.int/direct/topics/topics_pdf_download/topics_id%3D8460%26no%3D2",
+      "webResult": "unsupported application/octet-stream; not an HTTP access denial",
+      "standardHttpsResult": "CONNECT tunnel 403; stopped, no repeat or alternate host",
+      "required": "Appendix 1 production/import/export/consumption 2020–2024; Appendix 2 tropical primary-timber bilateral volume 2023. Exact product coverage, units, partner completeness, membership and flags must be inspected. Wood-pulp coverage is unconfirmed."
+    },
+    {
+      "title": "MPOB public performance pages",
+      "home": "https://bepi.mpob.gov.my/",
+      "monthlyIndex": "https://bepi.mpob.gov.my/index.php/monthly-release",
+      "summaryIndex": "https://bepi.mpob.gov.my/index.php/summary-2",
+      "monthlyReport": "https://bepi.mpob.gov.my/index.php/monthly-release/341-monthly-release-2026/1254-september-2026",
+      "summaryReport": "https://bepi.mpob.gov.my/index.php/summary-2/344-2026/1260-summary-of-the-malaysian-palm-oil-industry-2026",
+      "result": "Public indices exposed 2026 links only; linked reports yielded no numeric rows in the web parser. Statistics area explicitly requires login. Did not log in, register, inspect protected endpoints, or infer 2024 values. /index.php/en/ returned 404, not 403.",
+      "required": "2024 calendar-year CPO/palm-oil supply-use table with product conversion, opening/closing stocks, imports, domestic uses and exports; whole-world and partner quantities with units. 2026 pages cannot stand in for 2024."
+    },
+    {
+      "title": "AFSIS ACO independent publications",
+      "catalogueUrl": "https://www.aptfsis.org/publication/aco/",
+      "aco33": "https://www.aptfsis.org/wp-content/uploads/aco-pdfs/ACO%20No.33.pdf",
+      "result": "ACO33 official PDF parsed: selected 2024 ASEAN10 rice/maize/cassava totals retained as separate outlook references. No retry of previously denied ACO34. ACO35 click returned Internal Error without a status/URL result; do not classify it as 403. Guessed /aco-reports/ did not yield content; correct catalogue found by official homepage link.",
+      "remaining": "Timor-Leste row; same-period all-reporter bilateral matrix and unallocated partners; stock/use definitions and country-crop-year calendar alignment. No geography-11 external trade is derived."
+    }
+  ]
+}

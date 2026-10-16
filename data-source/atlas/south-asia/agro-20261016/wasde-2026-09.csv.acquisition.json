@@ -1,0 +1,8 @@
+{
+  "url": "https://www.usda.gov/sites/default/files/documents/oce-wasde-report-data-2026-09.csv",
+  "requestedAt": "2026-10-16T03:41:23.707996+00:00",
+  "method": "public GET",
+  "purpose": "Independent official public CSV distribution linked by Historical WASDE Report Data; no retry of failed PDF",
+  "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+  "bytes": 0
+}

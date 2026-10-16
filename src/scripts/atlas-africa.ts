@@ -1,4 +1,4 @@
-import {syncAgroStatistics} from './atlas-agro-statistics.ts';
+import {syncAfricaAgroStatistics} from './atlas-africa-agro-statistics.ts';
 import {countries,fields,metrics,regionNames,years,readState,writeState,africaComparisonSnapshot,canonicalTopic,canonicalWater,canonicalAgriLayers,africaAgriVisibleLayers,metricById,valueAt,latestValueAt,formatValue,fillFor,rankedCountries,palette,sources,defaultYear,cropChoices,livestockChoices,cropMeasureChoices,type Field,type Region,type Metric,type Crop,type Livestock,type CropMeasure} from '../data/atlas/africa-atlas.ts';
 import {projectAfrica,africaWidth,africaHeight} from '../lib/atlas-africa-geometry.ts';
 import {themes,type AfricaTheme} from '../data/atlas/africa-themes.ts';
@@ -168,8 +168,8 @@ export function initializeAfricaAtlas() {
   map.dataset.theme=theme.id;map.dataset.context=state.context;
  }
  function renderRegionalStatistics(){
-  syncAgroStatistics(root!,{country:state.place??'',topic:state.topic==='forestry'?'forest':state.topic==='livestock'?state.livestock:state.crop,active:state.field==='agriculture'&&!state.overview});
-  const host=query<HTMLElement>('[data-africa-regional-statistics]');host.hidden=!isAgriMap();host.replaceChildren();if(host.hidden)return;
+  syncAfricaAgroStatistics(root!,state);
+  const host=query<HTMLElement>('[data-africa-regional-statistics]');host.hidden=!isAgriMap()||!state.overview;host.replaceChildren();if(host.hidden)return;
   host.append(make('h2',`${regionNames[state.region]}の生産・食料供給`),make('p','主要品目の世界シェア · 2024年 · 生産量t。同じ品目・年・単位の地域集計と世界値を比べます。分布地図は2020年基準です。'));
   const table=make('table'),head=make('thead'),header=make('tr');for(const label of ['品目','地域生産量（t）','世界生産量比']){const cell=make('th',label);cell.setAttribute('scope','col');header.append(cell);}head.append(header);table.append(head);const body=make('tbody');
   const rows=regionalStatistics.regions[state.region];

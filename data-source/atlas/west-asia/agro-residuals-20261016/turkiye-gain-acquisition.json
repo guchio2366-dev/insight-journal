@@ -1,0 +1,6 @@
+{
+  "url": "https://apps.fas.usda.gov/newgainapi/api/Report/DownloadReportByFileName?fileName=Grain+and+Feed+Annual_Ankara_Turkiye_TU2025-0015.pdf",
+  "at": "2026-10-16T04:02:44.404855+00:00",
+  "action": "Normal public PDF GET; no credentials or proxy changes",
+  "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+}

@@ -97,6 +97,7 @@ const pieStyle=`conic-gradient(${[...topPartners.map((row,index)=>({share:row.sh
  </div>
 </template>
 <script>
+ import {initSoutheastAgroStatistics} from '../../../scripts/atlas-southeast-agro-statistics';
  const mountRegionalStatistics=()=>{
  const root=document.querySelector('[data-asia-region="southeast-asia"]')??document;
  const section=root.querySelector<HTMLElement>('[data-south-central-farm-connections]');
@@ -124,10 +125,20 @@ const pieStyle=`conic-gradient(${[...topPartners.map((row,index)=>({share:row.sh
   const forest=root.querySelector<HTMLTemplateElement>('[data-southeast-forest-template]');
   if(forest&&!section.querySelector('.southeast-forest-connections'))section.append(forest.content.cloneNode(true));
  }
+ const southeastRoot=document.querySelector<HTMLElement>('.asia-atlas-root[data-region="southeast-asia"]');
+ if(southeastRoot)initSoutheastAgroStatistics(southeastRoot);
  };
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mountRegionalStatistics,{once:true});else mountRegionalStatistics();
 </script>
 <style>
+ :global(.asia-atlas-root[data-region="southeast-asia"][data-southeast-selected-statistics] [data-south-central-farm-connections]),:global(.asia-atlas-root[data-region="southeast-asia"][data-southeast-selected-statistics] [data-agro-statistics]){display:none!important}
+ :global(.southeast-agro-statistics){grid-column:1/-1;min-width:0;width:100%;margin:14px 0 8px}
+ :global(.southeast-agro-statistics[hidden]){display:none!important}
+ :global(.southeast-agro-statistics .agro-columns>section){min-width:0;overflow-wrap:anywhere}
+ :global(.southeast-agro-statistics pre){white-space:pre-wrap;overflow-wrap:anywhere}
+ :global(.southeast-agro-statistics .agro-stat-controls select){max-width:100%;min-height:44px}
+ :global(.southeast-agro-statistics .southeast-agro-reference){margin-top:12px}
+ :global(.southeast-agro-statistics :is(p,li,td,th)){font-size:14px;line-height:1.65}
  :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-climate-key){position:absolute;left:3%;top:57%;z-index:4;display:grid;gap:2px;width:max-content;max-width:145px;padding:5px 7px;background:#eaf4f4e8;border:1px solid #7da5ad;color:#234c58;font:11px/1.35 var(--sans);pointer-events:none}
  :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-climate-key strong){font-size:11px}
  :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-climate-key[hidden]){display:none!important}

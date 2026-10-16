@@ -1,0 +1,1003 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "path": "public/assets/atlas/europe/farming-statistics-v1/statistics.json",
+      "sha256": "6451860ea753bb88c3f41d868769a614a4f38fe46b28bb777124d5a6e5908569"
+    },
+    {
+      "path": "data-source/atlas/europe/farming-statistics/provenance.json",
+      "sha256": "57514e7b6a661b282475ff625b8ba8c58bf3c08c4fb020f8aa0dd1771e444b5a"
+    },
+    {
+      "path": "data-source/atlas/europe/quantity-flow-20261016/wits/UKR-Import-120100.json",
+      "sha256": "21e6e1621a535598a59e3517fbae99ea78e132d4be0f47fc6eb16aa8d59fe0f0"
+    },
+    {
+      "path": "data-source/atlas/europe/quantity-flow-20261016/wits/UKR-Export-120100.json",
+      "sha256": "2349a9057dc8d2db70cf6e2cd8308f50283e3bb41d8f199aac0dac5320cbf6c4"
+    },
+    {
+      "path": "data-source/atlas/europe/quantity-flow-20261016/wits/FRA-Import-120100.json",
+      "sha256": "d4a9d5883fbeae506475bbbc7d8505420db86f1eb8a28ba0ac0a113e99bb36be"
+    },
+    {
+      "path": "data-source/atlas/europe/quantity-flow-20261016/wits/FRA-Export-120100.json",
+      "sha256": "78dd7c4997c6d0d8b89b29dc6d1d8e95a408b358591fc985dff2c025459b19f0"
+    },
+    {
+      "path": "data-source/atlas/europe/quantity-flow-20261016/wits/ITA-Import-120100.json",
+      "sha256": "61ca66b7955c3e484c2ed75c5215c5898e1c5c50cc8ce756a90fbb04883b316b"
+    },
+    {
+      "path": "data-source/atlas/europe/quantity-flow-20261016/wits/ITA-Export-120100.json",
+      "sha256": "118e77f279b7ddc0632ceda572a3741c606cf11725416368e18d08ca35259397"
+    },
+    {
+      "path": "data-source/atlas/europe/quantity-flow-20261016/wits/DEU-Import-120100.json",
+      "sha256": "4f24d6c8284826d45452b80ee2760621d64250895cb44392a89d3cb225809750"
+    },
+    {
+      "path": "data-source/atlas/europe/quantity-flow-20261016/wits/DEU-Export-120100.json",
+      "sha256": "75cedce353c454fe4dc8755caf7c1e474ed1af1a5e762b2e8009cc13a784a52c"
+    },
+    {
+      "path": "scripts/data/wasde0926.txt",
+      "sha256": "de4baa0dc24769b2d8cc153bac488049d905b5c8aa1fec9696e2d4e13036e285"
+    }
+  ],
+  "records": [
+    {
+      "kind": "calendar-quantity-comparison",
+      "countryCode": "UKR",
+      "countryName": "ウクライナ",
+      "topic": "soybean",
+      "seriesId": "soybean-production",
+      "label": "丸大豆（油・粕を除く）",
+      "year": 2023,
+      "unit": "t",
+      "production": 4742550.0,
+      "productionRaw": "4742550.000000",
+      "worldProduction": 370876094.01,
+      "worldProductionRaw": "370876094.010000",
+      "productionFlag": "A",
+      "worldFlag": "A",
+      "imports": 1875.19,
+      "exports": 3489890.0,
+      "partners": [
+        {
+          "name": "Egypt, Arab Rep.",
+          "value": 874235.0
+        },
+        {
+          "name": "Turkey",
+          "value": 969951.0
+        },
+        {
+          "name": "Netherlands",
+          "value": 244869.0
+        },
+        {
+          "name": "Romania",
+          "value": 346376.0
+        },
+        {
+          "name": "Germany",
+          "value": 186161.0
+        },
+        {
+          "name": "Poland",
+          "value": 157579.0
+        },
+        {
+          "name": "Italy",
+          "value": 131956.0
+        },
+        {
+          "name": "Hungary",
+          "value": 98747.6
+        },
+        {
+          "name": "United Kingdom",
+          "value": 68995.0
+        },
+        {
+          "name": "Greece",
+          "value": 53636.5
+        },
+        {
+          "name": "Austria",
+          "value": 28041.1
+        },
+        {
+          "name": "Lebanon",
+          "value": 52606.5
+        },
+        {
+          "name": "Moldova",
+          "value": 41116.3
+        },
+        {
+          "name": "France",
+          "value": 39197.7
+        },
+        {
+          "name": "Cyprus",
+          "value": 28667.5
+        },
+        {
+          "name": "China",
+          "value": 33719.0
+        },
+        {
+          "name": "Slovak Republic",
+          "value": 17900.0
+        },
+        {
+          "name": "United Arab Emirates",
+          "value": 17254.9
+        },
+        {
+          "name": "Israel",
+          "value": 19887.4
+        },
+        {
+          "name": "Spain",
+          "value": 21156.5
+        },
+        {
+          "name": "Switzerland",
+          "value": 4821.29
+        },
+        {
+          "name": "Belgium",
+          "value": 5412.06
+        },
+        {
+          "name": "Georgia",
+          "value": 5992.32
+        },
+        {
+          "name": "Czech Republic",
+          "value": 3674.88
+        },
+        {
+          "name": "Croatia",
+          "value": 5149.84
+        },
+        {
+          "name": "United States",
+          "value": 4262.07
+        },
+        {
+          "name": "Tunisia",
+          "value": 6001.34
+        },
+        {
+          "name": "Thailand",
+          "value": 2697.39
+        },
+        {
+          "name": "Turkmenistan",
+          "value": 3030.3
+        },
+        {
+          "name": "Jordan",
+          "value": 6053.1
+        },
+        {
+          "name": "Korea, Rep.",
+          "value": 1962.6
+        },
+        {
+          "name": "Azerbaijan",
+          "value": 869.15
+        },
+        {
+          "name": "Hong Kong, China",
+          "value": 1426.94
+        },
+        {
+          "name": "Serbia, FR(Serbia/Montenegro)",
+          "value": 1182.3
+        },
+        {
+          "name": "Vietnam",
+          "value": 1125.31
+        },
+        {
+          "name": "Singapore",
+          "value": 1324.9
+        },
+        {
+          "name": "Sweden",
+          "value": 967.14
+        },
+        {
+          "name": "Canada",
+          "value": 734.77
+        },
+        {
+          "name": "Lithuania",
+          "value": 391.67
+        },
+        {
+          "name": "Other Asia, nes",
+          "value": 116.8
+        },
+        {
+          "name": "Slovenia",
+          "value": 220.0
+        },
+        {
+          "name": "Bulgaria",
+          "value": 111.1
+        },
+        {
+          "name": "Malaysia",
+          "value": 48.6
+        },
+        {
+          "name": "Denmark",
+          "value": 46.0
+        },
+        {
+          "name": "Latvia",
+          "value": 45.972
+        },
+        {
+          "name": "Indonesia",
+          "value": 55.14
+        },
+        {
+          "name": "Syrian Arab Republic",
+          "value": 44.15
+        },
+        {
+          "name": "Iraq",
+          "value": 44.92
+        },
+        {
+          "name": "Seychelles",
+          "value": 26.421
+        }
+      ],
+      "partnerRoundingGap": 1.473,
+      "actualDomesticUse": null,
+      "stockVariation": null,
+      "feedUse": null,
+      "crushUse": null,
+      "domesticOriginExports": null,
+      "source": {
+        "productionUrl": "https://www.fao.org/faostat/en/#data/QCL",
+        "productionArchiveSha256": "c5835418c18f9322e7decbd6800f93a216eaae3cdfa31acb08f0518c0c6d6853",
+        "importUrl": "https://wits.worldbank.org/trade/comtrade/en/country/UKR/year/2023/tradeflow/Imports/partner/ALL/product/120100",
+        "exportUrl": "https://wits.worldbank.org/trade/comtrade/en/country/UKR/year/2023/tradeflow/Exports/partner/ALL/product/120100"
+      }
+    },
+    {
+      "kind": "calendar-quantity-comparison",
+      "countryCode": "FRA",
+      "countryName": "フランス",
+      "topic": "soybean",
+      "seriesId": "soybean-production",
+      "label": "丸大豆（油・粕を除く）",
+      "year": 2023,
+      "unit": "t",
+      "production": 387820.0,
+      "productionRaw": "387820.000000",
+      "worldProduction": 370876094.01,
+      "worldProductionRaw": "370876094.010000",
+      "productionFlag": "A",
+      "worldFlag": "A",
+      "imports": 459745.0,
+      "exports": 121735.0,
+      "partners": [
+        {
+          "name": "Spain",
+          "value": 34466.2
+        },
+        {
+          "name": "Belgium",
+          "value": 32857.7
+        },
+        {
+          "name": "Netherlands",
+          "value": 28705.9
+        },
+        {
+          "name": "Italy",
+          "value": 8588.44
+        },
+        {
+          "name": "Germany",
+          "value": 6000.39
+        },
+        {
+          "name": "Switzerland",
+          "value": 3468.12
+        },
+        {
+          "name": "Russian Federation",
+          "value": 368.984
+        },
+        {
+          "name": "Other Asia, nes",
+          "value": 1729.13
+        },
+        {
+          "name": "United Kingdom",
+          "value": 1844.08
+        },
+        {
+          "name": "Thailand",
+          "value": 1164.58
+        },
+        {
+          "name": "Austria",
+          "value": 244.128
+        },
+        {
+          "name": "Serbia, FR(Serbia/Montenegro)",
+          "value": 294.575
+        },
+        {
+          "name": "Czech Republic",
+          "value": 343.056
+        },
+        {
+          "name": "Romania",
+          "value": 208.103
+        },
+        {
+          "name": "Croatia",
+          "value": 159.229
+        },
+        {
+          "name": "Ukraine",
+          "value": 121.726
+        },
+        {
+          "name": "Slovak Republic",
+          "value": 80.217
+        },
+        {
+          "name": "Sweden",
+          "value": 180.132
+        },
+        {
+          "name": "Portugal",
+          "value": 128.403
+        },
+        {
+          "name": "Denmark",
+          "value": 158.68
+        },
+        {
+          "name": "Senegal",
+          "value": 225.835
+        },
+        {
+          "name": "Hungary",
+          "value": 72.078
+        },
+        {
+          "name": "Poland",
+          "value": 119.155
+        },
+        {
+          "name": "United States",
+          "value": 9.465
+        },
+        {
+          "name": "Israel",
+          "value": 50.4
+        },
+        {
+          "name": "Indonesia",
+          "value": 40.0
+        },
+        {
+          "name": "Japan",
+          "value": 18.182
+        },
+        {
+          "name": "Finland",
+          "value": 10.748
+        },
+        {
+          "name": "Luxembourg",
+          "value": 17.087
+        },
+        {
+          "name": "Norway",
+          "value": 11.75
+        },
+        {
+          "name": "Slovenia",
+          "value": 7.427
+        },
+        {
+          "name": "Lithuania",
+          "value": 16.0
+        },
+        {
+          "name": "Cyprus",
+          "value": 10.0
+        },
+        {
+          "name": "Cote d'Ivoire",
+          "value": 1.692
+        },
+        {
+          "name": "Greece",
+          "value": 3.741
+        },
+        {
+          "name": "Malaysia",
+          "value": 2.98
+        },
+        {
+          "name": "Mauritius",
+          "value": 0.726
+        },
+        {
+          "name": "French Polynesia",
+          "value": 1.15
+        },
+        {
+          "name": "Vietnam",
+          "value": 1.05
+        },
+        {
+          "name": "New Caledonia",
+          "value": 1.48
+        },
+        {
+          "name": "Chile",
+          "value": 0.067
+        },
+        {
+          "name": "Saint Maarten (Dutch part)",
+          "value": 0.282
+        },
+        {
+          "name": "Estonia",
+          "value": 1.018
+        },
+        {
+          "name": "Kazakhstan",
+          "value": 0.23
+        },
+        {
+          "name": "Moldova",
+          "value": 0.205
+        },
+        {
+          "name": "Belarus",
+          "value": 0.186
+        },
+        {
+          "name": "Jordan",
+          "value": 0.048
+        },
+        {
+          "name": "Hong Kong, China",
+          "value": 0.069
+        },
+        {
+          "name": "Morocco",
+          "value": 0.061
+        },
+        {
+          "name": "Saint Barthélemy",
+          "value": 0.071
+        },
+        {
+          "name": "Rwanda",
+          "value": 0.012
+        },
+        {
+          "name": "Turkey",
+          "value": 0.003
+        }
+      ],
+      "partnerRoundingGap": -0.029,
+      "actualDomesticUse": null,
+      "stockVariation": null,
+      "feedUse": null,
+      "crushUse": null,
+      "domesticOriginExports": null,
+      "source": {
+        "productionUrl": "https://www.fao.org/faostat/en/#data/QCL",
+        "productionArchiveSha256": "c5835418c18f9322e7decbd6800f93a216eaae3cdfa31acb08f0518c0c6d6853",
+        "importUrl": "https://wits.worldbank.org/trade/comtrade/en/country/FRA/year/2023/tradeflow/Imports/partner/ALL/product/120100",
+        "exportUrl": "https://wits.worldbank.org/trade/comtrade/en/country/FRA/year/2023/tradeflow/Exports/partner/ALL/product/120100"
+      }
+    },
+    {
+      "kind": "calendar-quantity-comparison",
+      "countryCode": "ITA",
+      "countryName": "イタリア",
+      "topic": "soybean",
+      "seriesId": "soybean-production",
+      "label": "丸大豆（油・粕を除く）",
+      "year": 2023,
+      "unit": "t",
+      "production": 1095940.0,
+      "productionRaw": "1095940.000000",
+      "worldProduction": 370876094.01,
+      "worldProductionRaw": "370876094.010000",
+      "productionFlag": "A",
+      "worldFlag": "A",
+      "imports": 2320440.0,
+      "exports": 17047.4,
+      "partners": [
+        {
+          "name": "Romania",
+          "value": 2148.29
+        },
+        {
+          "name": "France",
+          "value": 2514.73
+        },
+        {
+          "name": "Netherlands",
+          "value": 1755.07
+        },
+        {
+          "name": "Germany",
+          "value": 2348.11
+        },
+        {
+          "name": "Belgium",
+          "value": 1429.18
+        },
+        {
+          "name": "Spain",
+          "value": 1117.17
+        },
+        {
+          "name": "Austria",
+          "value": 1749.01
+        },
+        {
+          "name": "Slovak Republic",
+          "value": 829.693
+        },
+        {
+          "name": "Switzerland",
+          "value": 561.064
+        },
+        {
+          "name": "Croatia",
+          "value": 402.102
+        },
+        {
+          "name": "Slovenia",
+          "value": 509.647
+        },
+        {
+          "name": "United Kingdom",
+          "value": 384.0
+        },
+        {
+          "name": "Portugal",
+          "value": 371.611
+        },
+        {
+          "name": "Hungary",
+          "value": 132.032
+        },
+        {
+          "name": "Czech Republic",
+          "value": 121.073
+        },
+        {
+          "name": "Greece",
+          "value": 105.324
+        },
+        {
+          "name": "Sweden",
+          "value": 135.012
+        },
+        {
+          "name": "Congo, Rep.",
+          "value": 49.896
+        },
+        {
+          "name": "Denmark",
+          "value": 108.84
+        },
+        {
+          "name": "Bulgaria",
+          "value": 71.843
+        },
+        {
+          "name": "Estonia",
+          "value": 96.0
+        },
+        {
+          "name": "Serbia, FR(Serbia/Montenegro)",
+          "value": 35.453
+        },
+        {
+          "name": "Ukraine",
+          "value": 17.619
+        },
+        {
+          "name": "Algeria",
+          "value": 20.825
+        },
+        {
+          "name": "Israel",
+          "value": 19.604
+        },
+        {
+          "name": "Poland",
+          "value": 6.514
+        },
+        {
+          "name": "Malta",
+          "value": 2.994
+        },
+        {
+          "name": "Cameroon",
+          "value": 0.6
+        },
+        {
+          "name": "Cyprus",
+          "value": 1.348
+        },
+        {
+          "name": "South Africa",
+          "value": 2.023
+        },
+        {
+          "name": "Finland",
+          "value": 0.324
+        },
+        {
+          "name": "Japan",
+          "value": 0.342
+        },
+        {
+          "name": "Luxembourg",
+          "value": 0.02
+        },
+        {
+          "name": "Lithuania",
+          "value": 0.004
+        }
+      ],
+      "partnerRoundingGap": -0.033,
+      "actualDomesticUse": null,
+      "stockVariation": null,
+      "feedUse": null,
+      "crushUse": null,
+      "domesticOriginExports": null,
+      "source": {
+        "productionUrl": "https://www.fao.org/faostat/en/#data/QCL",
+        "productionArchiveSha256": "c5835418c18f9322e7decbd6800f93a216eaae3cdfa31acb08f0518c0c6d6853",
+        "importUrl": "https://wits.worldbank.org/trade/comtrade/en/country/ITA/year/2023/tradeflow/Imports/partner/ALL/product/120100",
+        "exportUrl": "https://wits.worldbank.org/trade/comtrade/en/country/ITA/year/2023/tradeflow/Exports/partner/ALL/product/120100"
+      }
+    },
+    {
+      "kind": "calendar-quantity-comparison",
+      "countryCode": "DEU",
+      "countryName": "ドイツ",
+      "topic": "soybean",
+      "seriesId": "soybean-production",
+      "label": "丸大豆（油・粕を除く）",
+      "year": 2023,
+      "unit": "t",
+      "production": 129000.0,
+      "productionRaw": "129000.000000",
+      "worldProduction": 370876094.01,
+      "worldProductionRaw": "370876094.010000",
+      "productionFlag": "A",
+      "worldFlag": "A",
+      "imports": 3259380.0,
+      "exports": 29198.0,
+      "partners": [
+        {
+          "name": "Poland",
+          "value": 7873.86
+        },
+        {
+          "name": "Netherlands",
+          "value": 7272.21
+        },
+        {
+          "name": "Austria",
+          "value": 3704.53
+        },
+        {
+          "name": "France",
+          "value": 3187.08
+        },
+        {
+          "name": "Switzerland",
+          "value": 2586.63
+        },
+        {
+          "name": "Hungary",
+          "value": 1115.22
+        },
+        {
+          "name": "Slovak Republic",
+          "value": 597.646
+        },
+        {
+          "name": "Czech Republic",
+          "value": 1378.45
+        },
+        {
+          "name": "Italy",
+          "value": 399.47
+        },
+        {
+          "name": "Spain",
+          "value": 181.207
+        },
+        {
+          "name": "Belarus",
+          "value": 113.708
+        },
+        {
+          "name": "Belgium",
+          "value": 115.621
+        },
+        {
+          "name": "United Kingdom",
+          "value": 94.533
+        },
+        {
+          "name": "Canada",
+          "value": 180.0
+        },
+        {
+          "name": "Luxembourg",
+          "value": 48.601
+        },
+        {
+          "name": "Russian Federation",
+          "value": 24.5
+        },
+        {
+          "name": "Latvia",
+          "value": 26.745
+        },
+        {
+          "name": "Denmark",
+          "value": 27.626
+        },
+        {
+          "name": "Sweden",
+          "value": 28.379
+        },
+        {
+          "name": "Serbia, FR(Serbia/Montenegro)",
+          "value": 16.4
+        },
+        {
+          "name": "Greece",
+          "value": 16.759
+        },
+        {
+          "name": "China",
+          "value": 30.72
+        },
+        {
+          "name": "Portugal",
+          "value": 12.039
+        },
+        {
+          "name": "Norway",
+          "value": 13.972
+        },
+        {
+          "name": "Finland",
+          "value": 11.033
+        },
+        {
+          "name": "Croatia",
+          "value": 10.472
+        },
+        {
+          "name": "Romania",
+          "value": 31.115
+        },
+        {
+          "name": "Ireland",
+          "value": 11.47
+        },
+        {
+          "name": "Bulgaria",
+          "value": 7.775
+        },
+        {
+          "name": "Hong Kong, China",
+          "value": 20.973
+        },
+        {
+          "name": "Bunkers",
+          "value": 7.657
+        },
+        {
+          "name": "Estonia",
+          "value": 10.816
+        },
+        {
+          "name": "United States",
+          "value": 15.0
+        },
+        {
+          "name": "Malta",
+          "value": 7.538
+        },
+        {
+          "name": "Moldova",
+          "value": 2.2
+        },
+        {
+          "name": "Albania",
+          "value": 2.372
+        },
+        {
+          "name": "Georgia",
+          "value": 2.17
+        },
+        {
+          "name": "Iceland",
+          "value": 1.92
+        },
+        {
+          "name": "Lithuania",
+          "value": 1.488
+        },
+        {
+          "name": "Vietnam",
+          "value": 4.242
+        },
+        {
+          "name": "Ukraine",
+          "value": 1.355
+        },
+        {
+          "name": "Slovenia",
+          "value": 0.84
+        },
+        {
+          "name": "Chile",
+          "value": 0.183
+        },
+        {
+          "name": "North Macedonia",
+          "value": 0.4
+        },
+        {
+          "name": "Guatemala",
+          "value": 1.08
+        },
+        {
+          "name": "Cyprus",
+          "value": 0.011
+        }
+      ],
+      "partnerRoundingGap": 0.016,
+      "actualDomesticUse": null,
+      "stockVariation": null,
+      "feedUse": null,
+      "crushUse": null,
+      "domesticOriginExports": null,
+      "source": {
+        "productionUrl": "https://www.fao.org/faostat/en/#data/QCL",
+        "productionArchiveSha256": "c5835418c18f9322e7decbd6800f93a216eaae3cdfa31acb08f0518c0c6d6853",
+        "importUrl": "https://wits.worldbank.org/trade/comtrade/en/country/DEU/year/2023/tradeflow/Imports/partner/ALL/product/120100",
+        "exportUrl": "https://wits.worldbank.org/trade/comtrade/en/country/DEU/year/2023/tradeflow/Exports/partner/ALL/product/120100"
+      }
+    },
+    {
+      "kind": "marketing-year-balance",
+      "countryCode": "UKR",
+      "countryName": "ウクライナ",
+      "topic": "wheat",
+      "seriesId": "wheat-production",
+      "label": "小麦（原表の小麦換算基準）",
+      "year": "2024/25",
+      "unit": "百万t",
+      "beginningStocks": 1.51,
+      "production": 23.4,
+      "imports": 0.07,
+      "domesticSubset": 3.6,
+      "domesticUse": 8.5,
+      "exports": 15.75,
+      "endingStocks": 0.73,
+      "domesticSubsetLabel": "飼料（国内利用の内数）",
+      "worldProduction": 799.1,
+      "roundingGap": 0.0,
+      "partners": null,
+      "rawLine": "    Ukraine                 1.51   23.40    0.07    3.60    8.50   15.75    0.73",
+      "worldRawLine": "World  3/                 269.94  799.10  201.85  157.28  808.45  210.90  260.59",
+      "notes": [
+        "WASDE-675の同じ表・2024/25販売年度の国行とWorld行。各国販売年度の集計で共通暦年ではない。",
+        "国内利用は食用・飼料・加工・種子等と未報告消失を含み得る。輸入・期首在庫を含むため当年国産分の配分ではない。"
+      ],
+      "source": {
+        "url": "https://www.usda.gov/oce/commodity/wasde/wasde0926.pdf",
+        "page": 18,
+        "sha256": "de4baa0dc24769b2d8cc153bac488049d905b5c8aa1fec9696e2d4e13036e285",
+        "path": "scripts/data/wasde0926.txt"
+      }
+    },
+    {
+      "kind": "marketing-year-balance",
+      "countryCode": "GBR",
+      "countryName": "イギリス",
+      "topic": "wheat",
+      "seriesId": "wheat-production",
+      "label": "小麦（原表の小麦換算基準）",
+      "year": "2024/25",
+      "unit": "百万t",
+      "beginningStocks": 3.26,
+      "production": 11.15,
+      "imports": 3.81,
+      "domesticSubset": 6.83,
+      "domesticUse": 15.03,
+      "exports": 0.5,
+      "endingStocks": 2.69,
+      "domesticSubsetLabel": "飼料（国内利用の内数）",
+      "worldProduction": 799.1,
+      "roundingGap": 0.0,
+      "partners": null,
+      "rawLine": "    United Kingdom          3.26   11.15    3.81    6.83   15.03    0.50    2.69",
+      "worldRawLine": "World  3/                 269.94  799.10  201.85  157.28  808.45  210.90  260.59",
+      "notes": [
+        "WASDE-675の同じ表・2024/25販売年度の国行とWorld行。各国販売年度の集計で共通暦年ではない。",
+        "国内利用は食用・飼料・加工・種子等と未報告消失を含み得る。輸入・期首在庫を含むため当年国産分の配分ではない。"
+      ],
+      "source": {
+        "url": "https://www.usda.gov/oce/commodity/wasde/wasde0926.pdf",
+        "page": 18,
+        "sha256": "de4baa0dc24769b2d8cc153bac488049d905b5c8aa1fec9696e2d4e13036e285",
+        "path": "scripts/data/wasde0926.txt"
+      }
+    },
+    {
+      "kind": "marketing-year-balance",
+      "countryCode": "UKR",
+      "countryName": "ウクライナ",
+      "topic": "maize",
+      "seriesId": "maize-production",
+      "label": "とうもろこし（子実）",
+      "year": "2024/25",
+      "unit": "百万t",
+      "beginningStocks": 0.54,
+      "production": 26.8,
+      "imports": 0.02,
+      "domesticSubset": 5.3,
+      "domesticUse": 6.5,
+      "exports": 20.02,
+      "endingStocks": 0.84,
+      "domesticSubsetLabel": "飼料（国内利用の内数）",
+      "worldProduction": 1235.03,
+      "roundingGap": 0.0,
+      "partners": null,
+      "rawLine": "    Ukraine                 0.54   26.80    0.02    5.30    6.50   20.02    0.84",
+      "worldRawLine": "World  3/                 313.84 1235.03  186.55  785.80 1253.17  187.58  295.70",
+      "notes": [
+        "WASDE-675の同じ表・2024/25販売年度の国行とWorld行。各国販売年度の集計で共通暦年ではない。",
+        "国内利用は食用・飼料・加工・種子等と未報告消失を含み得る。輸入・期首在庫を含むため当年国産分の配分ではない。"
+      ],
+      "source": {
+        "url": "https://www.usda.gov/oce/commodity/wasde/wasde0926.pdf",
+        "page": 22,
+        "sha256": "de4baa0dc24769b2d8cc153bac488049d905b5c8aa1fec9696e2d4e13036e285",
+        "path": "scripts/data/wasde0926.txt"
+      }
+    }
+  ],
+  "method": "National references only; no European external-trade aggregation. Calendar soybean quantities use retained FAOSTAT QCL production and official WITS H0 120100 gross trade. P+I-X is stock-unadjusted apparent availability, never actual consumption or allocation of the national harvest. WASDE uses a separate publisher marketing year with independently published domestic use and stocks."
+}

@@ -22,7 +22,7 @@ test('legacy agriculture URLs use fixed crop area, latest indicator values and s
   assert.equal(root.querySelectorAll('[data-africa-commodity],[data-africa-crop-measure],[data-africa-agri-layer]').length,0);
   assert.equal(q('[data-africa-layer-legend] [data-africa-agri-pick="crop-rice-harvested"]').getAttribute('aria-pressed'),'true');
   assert.match(q('[data-period]').textContent,/2020/);assert.match(q('[data-unit]').textContent,/収穫面積.*密度/);assert.match(q('[data-metric-year]').textContent,/最新収録年/);
-  assert.match(q('[data-africa-agri-context]').textContent,/マダガスカル/);assert.match(q('[data-africa-regional-statistics]').textContent,/未取得/);
+  assert.match(q('[data-africa-agri-context]').textContent,/マダガスカル/);assert.equal(q('[data-africa-regional-statistics]').hidden,true,'selected products use the three-stage statistics instead of the overview table');
   const supplement=q('[data-theme-details]');assert.match(supplement.textContent,/75%|25%/);assert.match(supplement.textContent,/2001/);assert.match(supplement.textContent,/耕地割合/);assert.ok([...supplement.querySelectorAll('a')].some(a=>a.href.includes('10.7910/DVN/SWPENT')));
   assert.equal(q('[data-theme-comparison]').hidden,true);assert.equal(q('[data-africa-statistics-key]').hidden,true);
   q('[data-africa-layer-legend] [data-africa-agri-pick="livestock-goats"]').click();

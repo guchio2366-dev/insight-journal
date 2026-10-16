@@ -1,0 +1,85 @@
+{
+  "baseMain": "3fbb4c957c21685bddbf8148a95a2a03ba210553",
+  "implementationCommit": "29f87f73a777b49d3a16e9d5d777506d3d30d9fe",
+  "integrationWorktree": "/workspace/south-asia-agro-integration",
+  "integrationPatch": "docs/patches/south-asia-agro-controller-20261016.patch",
+  "integrationPatchSha256": "3570f1c339914d766163e09fae284ef6c7b25d45d1feae8cb3059a4986d80720",
+  "integrationControllerSha256": "eeb560c4430b1b028e339bce9227749c445aec504600bf6bb6a6227955188bc7",
+  "compiledRegionModule": {
+    "path": "dist/_astro/atlas-south-asia-agro-statistics.BBZR3k3Y.js",
+    "bytes": 24337,
+    "sha256": "52aa1bf5bad5d30953a3757c61dd00677259d33db5384e567f3e27438b6b3c35"
+  },
+  "release": {
+    "articles": [
+      {
+        "payloadHash": "2c6ef0cd92ddb67af00ab81f04d553ca7d072d929e0bf1f277221867ad5bf646",
+        "publicId": "a-11111111-1111-4111-8111-111111111111",
+        "revision": 1
+      }
+    ],
+    "builtAt": "2026-10-16T03:52:35.963Z",
+    "commitSha": "local"
+  },
+  "releaseCaveat": "Local build metadata; implementation commit plus the separately identified proposal. No deployment or exact-commit screenshot is claimed.",
+  "requestedViewportsCssPx": [
+    {
+      "width": 1896,
+      "height": 996
+    },
+    {
+      "width": 1280,
+      "height": 665
+    }
+  ],
+  "deviceScaleFactor": 1.5,
+  "browserStatus": "blocked-browser-launch",
+  "capturedScreenshots": 0,
+  "unit": {
+    "total": 1449,
+    "pass": 1446,
+    "skip": 3,
+    "fail": 0
+  },
+  "newUnit": {
+    "total": 13,
+    "pass": 13,
+    "fail": 0
+  },
+  "build": "passed",
+  "releaseVerification": "passed",
+  "e2e": {
+    "scope": "South/Central overview and Asia workspace static/DOM tests",
+    "pass": 7,
+    "skip": 4,
+    "fail": 0,
+    "browserTestsPassed": false,
+    "fullSuite": "interrupted after starting 95-file suite; exit 130; no complete full-suite result claimed"
+  },
+  "published": false,
+  "checks": [
+    "npm test",
+    "ASTRO_TELEMETRY_DISABLED=1 npm run build",
+    "node --test --test-concurrency=2 tests/e2e/atlas-south-central-overview.test.mjs tests/e2e/atlas-south-central-focus.test.mjs",
+    "node --test tests/e2e/atlas-asia-workspace.test.mjs",
+    "npm run verify:release",
+    "git apply --check docs/patches/south-asia-agro-controller-20261016.patch"
+  ],
+  "additionalScopedValidation": {
+    "command": "node --test tests/unit/atlas-south-asia-agro-*.test.mjs",
+    "pass": 14,
+    "skip": 0,
+    "fail": 0,
+    "scope": "Added official Sri Lanka processed-tea production-only supplement and additional source audit; UI and common proposal unchanged",
+    "globalTestsRepeated": false
+  },
+  "delivery": {
+    "branch": "feat/south-asia-agro-statistics-20261016",
+    "remote": "origin",
+    "firstVerifiedRemoteSha": "1cc261b1be96dddae48dfc0d0b13e7e85e1e347a",
+    "commonComponents": "proposal-only",
+    "pullRequestCreated": false,
+    "merged": false,
+    "published": false
+  }
+}

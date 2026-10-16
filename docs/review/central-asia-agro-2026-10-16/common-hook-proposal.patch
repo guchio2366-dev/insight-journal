@@ -1,0 +1,14 @@
+diff --git a/src/scripts/atlas-asia-explorer.ts b/src/scripts/atlas-asia-explorer.ts
+--- a/src/scripts/atlas-asia-explorer.ts
++++ b/src/scripts/atlas-asia-explorer.ts
+@@ -40,5 +40,8 @@
+ const root=document.querySelector<HTMLElement>('[data-asia-atlas]');
+-if(root) start(root);
+-
++if(root) {
++  start(root);
++  if(root.dataset.focus==='central-asia')void import('./atlas-central-asia-agro.ts').then(module=>module.initCentralAsiaAgro(root));
++}
++
+ function start(root:HTMLElement) {
+   const $=<T extends Element=HTMLElement>(selector:string)=>root.querySelector<T>(selector)!;

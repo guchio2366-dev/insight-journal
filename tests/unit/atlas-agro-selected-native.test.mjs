@@ -13,15 +13,19 @@ test('unselected overview renderer remains exactly the published PR 350 implemen
  assert.equal(sha256(retained),'2f3cc797a573c678cf710334bde7f14dda5aecce242767c5b2f4c6608def5377');
  for(const [path,expected] of [
   ['src/components/atlas/AsiaAtlasPage.astro','5a68ea0822cb9ef80b4225ae97841bba1944cc8608a07fac9c12b9ad65c2f667'],
-  ['src/components/atlas/EuropeVerifiedStatistics.astro','6c0e50bc54884c8793f60bb0962fcffa29c5d540b189ff8f5b7c8ec1214bb8fb']
+  ['src/components/atlas/EuropeVerifiedStatistics.astro','fd7323ed6e91e8c8c287ed2566e51f0e9f713591a7d37acf45b475bf75c087b7']
  ]){
   // The authorized South Asia industry extension adds only these two hooks.
   // Keep the complete agriculture/other-region source under its original hash.
   const text=readFileSync(path,'utf8');
-  const retained=path==='src/components/atlas/AsiaAtlasPage.astro'?text
+  // European selected-item branches may change independently of protected unselected views.
+  const retained=path==='src/components/atlas/EuropeVerifiedStatistics.astro'
+   ?text.slice(text.indexOf('  <div data-eu-verified-overview>'),text.indexOf('  {topics.map'))
+   :path==='src/components/atlas/AsiaAtlasPage.astro'?text
    .replace(/^import SouthAsiaIndustryStatistics from '\.\/asia\/SouthAsiaIndustryStatistics\.astro';\n/m,'')
    .replace(/^     \{focusId==='south-asia'&&<SouthAsiaIndustryStatistics active=\{initialField==='industry'\} \/>\}\n/m,''):text;
   assert.equal(sha256(retained),expected,`${path}: unselected regional views are unchanged`);
+  if(path==='src/components/atlas/EuropeVerifiedStatistics.astro')assert.equal(sha256(text.slice(text.indexOf('<section class="eu-verified-wood"'))),'c8667ed1be68515db33d9f7e3ad9b7c480c9b7eb788e71cceab182f21d630ad3','unselected forestry reference remains unchanged');
  }
 });
 // Industry now has three independent SVG panels. Keep the original agriculture

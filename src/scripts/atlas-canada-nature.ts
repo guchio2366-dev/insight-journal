@@ -12,7 +12,7 @@ import {readCanadaNaturalLayerState,writeCanadaNaturalLayerState,type NaturalLay
 import {initCanadaWaterResources} from './atlas-canada-water-resources';
 import {canadaWaterFullFrame, readCanadaWaterState,writeCanadaWaterState,type CanadaWaterState} from '../lib/atlas-canada-water-state';
 import {renderCanadaWaterOrigin} from './atlas-canada-water-origin';
-import {isCanadaForestryActivity} from '../lib/atlas-canada-forestry';
+import {isCanadaForestryActivity,isCanadaForestryProduct} from '../lib/atlas-canada-forestry';
 export function initCanadaNature(root:HTMLElement){
  const config=JSON.parse(root.querySelector('[data-canada-config]')!.textContent!);
  const ids=config.cities.map((c:any)=>c.id),waters=config.waters;
@@ -69,7 +69,7 @@ export function initCanadaNature(root:HTMLElement){
   for(const button of root.querySelectorAll<HTMLElement>('[data-canada-water-topic]'))button.setAttribute('aria-pressed',String(button.dataset.canadaWaterTopic===waterState.topic));
   waterMap?.render(waterResource?waterState:{...waterState,topic:'surface'});
   const forestryBack=root.querySelector<HTMLAnchorElement>('[data-canada-forestry-return]'),savedForestry=new URL(location.href).searchParams.get('forestryReturn');
-  if(forestryBack){forestryBack.hidden=!savedForestry;if(savedForestry){const back=new URL(forestryBack.getAttribute('href')!,location.href),params=new URLSearchParams(savedForestry);back.search='';for(const key of ['year','province','compare','metric','cover','region','zoom','forestCamera']){const value=params.get(key);if(value)back.searchParams.set(key,value);}const activity=params.get('forestActivity');if(isCanadaForestryActivity(activity))back.searchParams.set('forestActivity',activity);forestryBack.href=back.href;}}
+  if(forestryBack){forestryBack.hidden=!savedForestry;if(savedForestry){const back=new URL(forestryBack.getAttribute('href')!,location.href),params=new URLSearchParams(savedForestry);back.search='';for(const key of ['year','province','compare','metric','cover','region','zoom','forestCamera']){const value=params.get(key);if(value)back.searchParams.set(key,value);}const activity=params.get('forestActivity');if(isCanadaForestryActivity(activity))back.searchParams.set('forestActivity',activity);const product=params.get('forestProduct');if(isCanadaForestryProduct(product))back.searchParams.set('forestProduct',product);forestryBack.href=back.href;}}
   const forestContext=root.querySelector<HTMLElement>('[data-canada-forest-context]'),forestMap=root.querySelector<SVGElement>('[data-canada-forest-context-map]'),forestLegend=root.querySelector<HTMLElement>('[data-canada-forest-context-legend]');
   if(forestContext&&forestMap&&forestLegend){
    forestContext.hidden=!savedForestry;root.classList.toggle('is-learning-comparison',!!savedForestry);forestMap.style.display=savedForestry&&state.view!=='landform'?'':'none';forestLegend.hidden=!savedForestry||state.view==='landform';

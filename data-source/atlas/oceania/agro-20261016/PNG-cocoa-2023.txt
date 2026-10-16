@@ -1,0 +1,48 @@
+Papua New Guinea Cocoa beans, whole or broken, raw or roasted exports by country | 2023 | Data (https://wits.worldbank.org/trade/comtrade/en/country/PNG/year/2023/tradeflow/Exports/partner/ALL/product/180100)
+citeturn15view0 [wordlim: 200] Crawled: today; Content type: text/html; Source: open({"ref_id":"https://wits.worldbank.org/trade/comtrade/en/country/PNG/year/2023/tradeflow/Exports/partner/ALL/product/180100","lineno":15}); Total lines: 64
+L0: # Papua New Guinea Cocoa beans, whole or broken, raw or roasted exports by country
+L1:
+L2: in 2023
+L3:
+L4: Share
+L5:
+L6:   * cite0†Facebook L7:   * cite0†Twitter L8:   * cite0†Linkedin L9:   * cite0†Google Plus L10:   * cite0†Reddit L11:   * cite0†Stumble Upon L12:   * cite0†Delicious L13:   * cite0†Email L14:
+L15: Change selection (Reporter, Year, Trade Flow, Partner and HS 6 digit Product)
+L16: Papua New Guinea exports of Cocoa beans, whole or broken, raw or roasted was $121,160.51K .
+L17: Papua New Guinea exported Cocoa beans, whole or broken, raw or roasted to Indonesia ($53,694.53K , 3,306,860,000 Kg), Malaysia ($26,852.30K , 1,167,830,000 Kg), United States ($22,044.60K , 792,079,000 Kg), China ($10,129.15K , 109,560,000 Kg), Belgium ($5,156.66K , 1,397,000 Kg).
+L18: cite1†Cocoa beans, whole or broken, raw or roasted imports by country in 2023 L19: Reporter  | TradeFlow  | ProductCode  | Product Description  | Year  | Partner  | Trade Value 1000USD  | Quantity  | Quantity Unit
+L20:  Papua New Guinea  | Export  | 180100  | Cocoa beans, whole or broken, raw or roasted  | 2023  | cite2†World | 121,160.51  |  |
+L21:  Papua New Guinea  | Export  | 180100  | Cocoa beans, whole or broken, raw or roasted  | 2023  | cite3†Indonesia | 53,694.53  | 3,306,860,000  | Kg
+L22:  Papua New Guinea  | Export  | 180100  | Cocoa beans, whole or broken, raw or roasted  | 2023  | cite4†Malaysia | 26,852.30  | 1,167,830,000  | Kg
+L23:  Papua New Guinea  | Export  | 180100  | Cocoa beans, whole or broken, raw or roasted  | 2023  | cite5†United States | 22,044.60  | 792,079,000  | Kg
+L24:  Papua New Guinea  | Export  | 180100  | Cocoa beans, whole or broken, raw or roasted  | 2023  | cite6†China | 10,129.15  | 109,560,000  | Kg
+L25:  Papua New Guinea  | Export  | 180100  | Cocoa beans, whole or broken, raw or roasted  | 2023  | cite7†Belgium | 5,156.66  | 1,397,000  | Kg
+L26:  Papua New Guinea  | Export  | 180100  | Cocoa beans, whole or broken, raw or roasted  | 2023  | cite8†Vietnam | 2,119.96  | 50,627,800  | Kg
+L27:  Papua New Guinea  | Export  | 180100  | Cocoa beans, whole or broken, raw or roasted  | 2023  | cite9†Eswatini | 690.47  | 264,160  | Kg
+L28:  Papua New Guinea  | Export  | 180100  | Cocoa beans, whole or broken, raw or roasted  | 2023  | cite10†Australia | 241.79  | 68,668  | Kg
+L29:  Papua New Guinea  | Export  | 180100  | Cocoa beans, whole or broken, raw or roasted  | 2023  | cite11†Georgia | 78.08  | 25,000  | Kg
+L30:  Papua New Guinea  | Export  | 180100  | Cocoa beans, whole or broken, raw or roasted  | 2023  | cite12†Netherlands | 69.65  | 27,503  | Kg
+L31:  Papua New Guinea  | Export  | 180100  | Cocoa beans, whole or broken, raw or roasted  | 2023  | cite13†Germany | 35.79  | 15,006  | Kg
+L32:  Papua New Guinea  | Export  | 180100  | Cocoa beans, whole or broken, raw or roasted  | 2023  | cite14†United Kingdom | 34.13  | 10,000  | Kg
+L33:  Papua New Guinea  | Export  | 180100  | Cocoa beans, whole or broken, raw or roasted  | 2023  | cite15†New Zealand | 11.75  |  |
+L34:  Papua New Guinea  | Export  | 180100  | Cocoa beans, whole or broken, raw or roasted  | 2023  | cite16†Japan | 1.49  | 52,216  | Kg
+L35:  Papua New Guinea  | Export  | 180100  | Cocoa beans, whole or broken, raw or roasted  | 2023  | cite17†Venezuela | 0.08  | 2  | Kg
+L36:  Papua New Guinea  | Export  | 180100  | Cocoa beans, whole or broken, raw or roasted  | 2023  | cite18†Singapore | 0.05  | 26  | Kg
+L37:  Papua New Guinea  | Export  | 180100  | Cocoa beans, whole or broken, raw or roasted  | 2023  | cite19†Italy | 0.02  | 100  | Kg
+L38:  Papua New Guinea  | Export  | 180100  | Cocoa beans, whole or broken, raw or roasted  | 2023  | cite20†Fiji | 0.02  | 100  | Kg
+L39: HS Nomenclature used HS 1988/92 (H0)
+L40: HS Code 180100: Cocoa beans, whole or broken, raw or roasted
+L41: Please note: Exports is gross exports and Imports is gross imports
+L42:
+L43:   * cite21†About L44:   * .
+L45:   * cite22†Contact L46:   * .
+L47:   * cite23†Usage Conditions L48:   * .
+L49:   * cite24†Legal†www.worldbank.org L50:   * .
+L51:   * cite25†Data Providers L52:   * .
+L53:   * Page Refreshed : Oct-15-2026 23:40 ET
+L54: Partners
+L55:   * cite26†ITC†www.intracen.org L56:   * .
+L57:   * cite27†UNCTAD†unctad.org L58:   * .
+L59:   * cite28†UNSTATS†unstats.un.org L60:   * .
+L61:   * cite29†World Trade Organization†www.wto.org L62:   * .
+L63:   * cite30†World Bank†www.worldbank.org

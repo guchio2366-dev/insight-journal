@@ -286,6 +286,146 @@
         "この比較は原料の生産国から最終用途までを追跡したフローではありません。在庫変動と実際の用途別内訳は欠測のまま保持します。",
         "生産の国区分は原表China, mainland（中国本土）、貿易の報告区分はWITS CHN（ページ名China）。香港・マカオを国内生産へ合算せず、相手行のOther Asia, nesを推定国名へ置き換えません。"
       ]
+    },
+    {
+      "countryCode": "KOR",
+      "countryName": "韓国",
+      "seriesId": "soybean-production",
+      "label": "大豆（丸大豆）",
+      "year": 2023,
+      "unit": "t",
+      "production": 141477.0,
+      "worldProduction": 370876094.01,
+      "imports": 1297860.0,
+      "exports": 49.252,
+      "partners": [
+        {
+          "code": "United States",
+          "name": "United States",
+          "value": 5.867
+        },
+        {
+          "code": "China",
+          "name": "China",
+          "value": 40.0
+        },
+        {
+          "code": "Malaysia",
+          "name": "Malaysia",
+          "value": 1.64
+        },
+        {
+          "code": "United Arab Emirates",
+          "name": "United Arab Emirates",
+          "value": 0.32
+        },
+        {
+          "code": "Australia",
+          "name": "Australia",
+          "value": 0.18
+        },
+        {
+          "code": "United Kingdom",
+          "name": "United Kingdom",
+          "value": 0.36
+        },
+        {
+          "code": "Algeria",
+          "name": "Algeria",
+          "value": 0.38
+        },
+        {
+          "code": "Nigeria",
+          "name": "Nigeria",
+          "value": 0.144
+        },
+        {
+          "code": "Libya",
+          "name": "Libya",
+          "value": 0.135
+        },
+        {
+          "code": "Guam",
+          "name": "Guam",
+          "value": 0.054
+        },
+        {
+          "code": "Northern Mariana Islands",
+          "name": "Northern Mariana Islands",
+          "value": 0.018
+        },
+        {
+          "code": "Singapore",
+          "name": "Singapore",
+          "value": 0.149
+        },
+        {
+          "code": "Vanuatu",
+          "name": "Vanuatu",
+          "value": 0.004
+        }
+      ],
+      "partnerRoundingGap": -0.001,
+      "actualDomesticUse": null,
+      "stockVariation": null,
+      "productionFlag": "A",
+      "worldProductionFlag": "A",
+      "source": {
+        "productionUrl": "https://www.fao.org/faostat/en/#data/QCL",
+        "importUrl": "https://wits.worldbank.org/trade/comtrade/en/country/KOR/year/2023/tradeflow/Imports/partner/ALL/product/120100",
+        "exportUrl": "https://wits.worldbank.org/trade/comtrade/en/country/KOR/year/2023/tradeflow/Exports/partner/ALL/product/120100"
+      },
+      "provenance": {
+        "productionPath": "public/assets/atlas/asia-farming-v1/statistics.json",
+        "worldProductionPath": "src/data/atlas/shared-world-statistics.json",
+        "worldKey": "QCL:236:5510:2023:t",
+        "productionArchiveSha256": "c5835418c18f9322e7decbd6800f93a216eaae3cdfa31acb08f0518c0c6d6853",
+        "productionItem": "236",
+        "productionElement": "5510",
+        "productionItemLabel": "Soya beans",
+        "productionRawValue": "141477.0",
+        "worldProductionRawValue": "370876094.010000",
+        "importPath": "data-source/atlas/east-asia/statistics-2023/wits/KOR-Import-120100.json",
+        "exportPath": "data-source/atlas/east-asia/statistics-2023/wits/KOR-Export-120100.json",
+        "importSha256": "f5f8fe5e04c76a0c14387095e29b1ae38b82098da952c1f6b3d6bcc6996e0fc1",
+        "exportSha256": "d87ed1b85bf312d6ddf207a195ee243f0c3bb54a194daada4e46240620b97f67",
+        "tradeClassification": "HS 1988/92 (H0)",
+        "tradeProduct": "120100",
+        "tradeProductDescription": "Soya beans",
+        "tradeQuantityUnit": "Kg",
+        "tradeConversion": "t = Kg / 1000",
+        "importWorldQuantityKg": "1297860000",
+        "exportWorldQuantityKg": "49252",
+        "exportPartnerQuantityKgSum": "49251",
+        "productDescriptionVerification": {
+          "publisher": "World Bank WITS / UN Comtrade",
+          "url": "https://wits.worldbank.org/trade/comtrade/en/country/KOR/year/2023/tradeflow/Exports/partner/ALL/product/120100",
+          "verifiedOn": "2026-10-16",
+          "verifiedBy": "Official public WITS table read in this task",
+          "evidence": "H0 120100: Soya beans; World 49252 Kg; gross exports."
+        },
+        "sourceCountryNames": {
+          "production": "Republic of Korea",
+          "tradeReporter": "KOR",
+          "tradePageCountry": "Korea, Rep."
+        },
+        "importProductDescriptionVerification": {
+          "publisher": "World Bank WITS / UN Comtrade",
+          "url": "https://wits.worldbank.org/trade/comtrade/en/country/KOR/year/2023/tradeflow/Imports/partner/ALL/product/120100",
+          "verifiedOn": "2026-10-16",
+          "verifiedBy": "Official public WITS table read in this task",
+          "evidence": "H0 120100: Soya beans; World 1297860000 Kg; gross imports."
+        }
+      },
+      "notes": [
+        "2023暦年・韓国全国の丸大豆。FAO QCL236のSoya beans生産と、公式WITSでSoya beansと確認したH0 120100の総輸入・総輸出を比較します。油・油かすを加えません。",
+        "FAO国生産とWorld生産は同じ取得版・同年・同品目・t単位。WITSのKgを1,000で割ってtへ換算します。",
+        "生産＋輸入−輸出は在庫未調整の見かけ量。在庫変動・損耗・食用・飼料・搾油・種子等は未収録で、実消費や国産大豆の仕向け割合ではありません。",
+        "生産と貿易は提供元・改訂版が異なる数量比較。輸入・期首在庫由来や再輸出を追跡できず、輸出÷生産は国産分の輸出割合ではありません。",
+        "全13外国相手を保持し、中国など東アジア内の相手も含みます。韓国全国の対世界輸出であり、東アジア域外輸出の地域集計ではありません。",
+        "分母は同じWITS World輸出49.252t。相手合計49.251tとの差−0.001t（−1kg）を別掲し、架空のその他で補いません。",
+        "生産区分Republic of Koreaと貿易報告区分KOR（Korea, Rep.）を対応させます。Other Asia, nes等の相手ラベルを推定国名へ変更しません。"
+      ]
     }
   ]
 }

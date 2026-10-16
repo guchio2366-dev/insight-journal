@@ -1,0 +1,27 @@
+---
+import data from '../../../data-source/atlas/us-agro-20261016/forest-summary-2024.json';
+---
+<section class="us-forest-quantities" data-us-forest-quantities aria-labelledby="us-forest-quantities-title">
+ <h2 id="us-forest-quantities-title">米国の林産物：生産と海外とのつながり</h2>
+ <p>2024年の公式要約。品目を開くと、生産・国内利用と輸出・輸出先を同じ順で確認できます。米国数量の原表は未収録です。</p>
+ {data.products.map(product=><details class="us-forest-product" data-us-forest-product={product.id}>
+  <summary>{product.label}{product.usProductionSharePercent!==null?` · 世界生産の${product.usProductionSharePercent}%（公表丸め値）`:''}</summary>
+  <div class="us-forest-columns">
+   <section data-us-forest-stage="production"><h3>① 生産量と世界シェア</h3>
+    <p class="us-forest-meta">2024年 · {product.publisherProduct} · {product.unit}</p>
+    <p>米国生産量：未収録</p>
+    {product.usProductionSharePercent!==null?<><p>米国の世界シェア <strong>{product.usProductionSharePercent}%</strong>（FAO公表の整数値）</p><div class="us-forest-share" role="img" aria-label={`世界生産に占める米国の割合、FAOの公表丸め値${product.usProductionSharePercent}%`}><span style={`width:${product.usProductionSharePercent}%`}/></div></>:<p>木材パルプ単品の米国シェア：未収録</p>}
+    <p>世界生産 <strong>{product.worldProduction.toLocaleString('ja-JP')} {product.unit}</strong>（公表丸め値）</p>
+    <p class="us-forest-meta">整数の世界比と世界量から米国生産量を逆算していません。</p>
+   </section>
+   <section data-us-forest-stage="use"><h3>② 国内利用と輸出</h3><p>同年・同製品の米国生産・輸入・輸出数量は未収録です。</p><p>国内利用量・輸出／生産比は算出していません。在庫を含む需給原表が必要です。</p><p class="us-forest-meta">生産−輸出を消費と呼ばず、丸太・製材・パルプを相互に換算しません。</p></section>
+   <section data-us-forest-stage="destinations"><h3>③ 輸出先の量と構成比</h3><p>2024年・同製品の全相手数量と総輸出量は未収録です。</p><p class="us-forest-meta">世界輸出に占める米国比を、米国生産の輸出率や相手国の構成比には使いません。米国内の州間移動は海外輸出ではありません。</p></section>
+  </div>
+  <p>{product.definition}</p><p class="us-forest-meta">{product.reference}</p>
+  <a href={data.source.url}>出典：FAO Forest product data（2024年）</a>
+ </details>)}
+ <p class="us-forest-meta">以下のNC州2022年事例は地域の用途参考です。上の2024年全国・世界統計とは接合しません。</p>
+</section>
+<style>
+.us-forest-quantities{margin-bottom:18px;font-size:14px;line-height:1.75}.us-forest-quantities h2{margin:0;font-size:18px}.us-forest-product{margin:10px 0;border:1px solid #d4d9d0;border-radius:5px;padding:0 12px;background:#fbfaf5;min-width:0}.us-forest-product>summary{min-height:44px;align-content:center;cursor:pointer;font-weight:700}.us-forest-columns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.us-forest-columns>section{padding:12px;border:1px solid #d4d9d0;background:#f6f5ed;min-width:0;overflow-wrap:anywhere}.us-forest-columns h3{margin:0;font-size:17px}.us-forest-meta,.us-forest-product>a{font-size:12px;line-height:1.75}.us-forest-share{height:12px;background:#e3e1d7}.us-forest-share>span{display:block;height:100%;background:#426f62}.us-forest-product :focus-visible,.us-forest-product>summary:focus-visible{outline:3px solid #294749;outline-offset:3px}@media(max-width:959px){.us-forest-columns{grid-template-columns:1fr}}@media(forced-colors:active){.us-forest-share,.us-forest-share>span{border:1px solid CanvasText}}
+</style>

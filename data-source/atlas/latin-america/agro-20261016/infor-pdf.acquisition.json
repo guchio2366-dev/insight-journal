@@ -1,0 +1,6 @@
+{
+  "url": "https://wef.infor.cl/?f=17&format=raw&id=11&n=2025&option=com_wef&task=GetFile",
+  "method": "ordinary unauthenticated GET",
+  "reason": "web reader reported unsupported application/octet-stream, no access denial",
+  "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+}

@@ -1,0 +1,70 @@
+{
+  "baseMain": "3fbb4c957c21685bddbf8148a95a2a03ba210553",
+  "branch": "codex/east-asia-agro-statistics-20261016",
+  "runtimeSourceSha256": {
+    "src/components/atlas/asia/EastAsiaFarmFoundations.astro": "2e139a4b670b590fc11efd58a68224edb7be68b5decaa3385f0cdd666c0d2a6a",
+    "src/data/atlas/agro-east-quantity-flow.json": "d916278f75c87056909721cd333da0b9fd83642330771c4b35a3404669838f73",
+    "src/data/atlas/east-asia-export-quantities.json": "c704f494ab2dd6cae0a18a6d4ff78ff71aaa0227f4eee8b842bd46577412aa58",
+    "src/scripts/atlas-east-agri-statistics.ts": "703e746580b13477631f943ad9a224b5755bed9c5a9b78c4052f5d2c21af012a",
+    "src/scripts/atlas-east-asia-farm-foundations.ts": "20aaa99227d251742de44bbabb81e700f4acf72e616100e9dab7ea83b3317b41",
+    "src/scripts/atlas-east-export-quantities.ts": "520f3fe25480631b33c186dae48de6b0affda8eae2a06a10021a2933ce4ce49b",
+    "src/data/atlas/east-asia-supply-use-references.json": "e60155c965c27dafc19e75c68f6b8f92272b40351e092c25d5f6258d8ec7c233",
+    "src/scripts/atlas-east-supply-use-references.ts": "9e4e2bc7cdac553277fdbfad90075d75d39d47d0dab7c8c179ba272f471ffc46"
+  },
+  "commonIntegrationPatchApplied": false,
+  "sourceGeneration": "Offline retained publisher rows; 18 export tables, 447 partner rows; 16 complete quantities",
+  "completedChecks": {
+    "unitSuite": {
+      "passed": 1445,
+      "skipped": 3,
+      "failed": 0
+    },
+    "finalEastAsiaUnit": {
+      "passed": 51,
+      "failed": 0
+    },
+    "build": "passed on follow-up source; final bundle includes processing-stage and cotton-use notes",
+    "generatorByteStability": "passed",
+    "existingChinaRecordUnchanged": "passed",
+    "proposedCommonPatch": "Regional docs patch applies; in-memory bundle and 8 opt-in/overview cases pass; actual shared file untouched",
+    "releaseVerification": "passed on follow-up build",
+    "followupBuiltMarkupIntegration": {
+      "passed": 1,
+      "failed": 0,
+      "scope": "Four selected references, overview/Japan removal and map markup preservation"
+    }
+  },
+  "browser": {
+    "requestedViewports": [
+      {
+        "width": 1896,
+        "height": 996
+      },
+      {
+        "width": 1280,
+        "height": 665
+      }
+    ],
+    "deviceScaleFactor": 1.5,
+    "chromiumSandbox": true,
+    "status": "blocked",
+    "screenshots": 0,
+    "reason": "Chromium SUID helper misconfigured; safe user namespace alternative also unavailable"
+  },
+  "e2e": {
+    "passed": 647,
+    "skipped": 11,
+    "failed": 0,
+    "total": 658,
+    "mode": "Built output and DOM interactions, not sandboxed browser screenshots",
+    "boundary": "647/11 suite belongs to initial implementation 40506540; new four supply references additionally covered by one built-markup integration test and final regional 51 tests; not a full E2E rerun or image review"
+  },
+  "commonProposalPath": "docs/east-asia/agro-20261016/common-integration.patch",
+  "commonProposalSha256": "19423176282194f4ca6ef3ac2c4ee3a4c2f099c0004caf9d0fb6653b86b498bc",
+  "followup": {
+    "supplyReferences": 4,
+    "newRawNumericFileDownloads": 0,
+    "initialPushVerifiedSha": "4050654072e90a0ab6f2a46ddf67191035ea26c3",
+    "acquisitionRecord": "data-source/atlas/east-asia/agro-20261016-followup/acquisition-results.json"
+  }
+}

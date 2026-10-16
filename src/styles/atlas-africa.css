@@ -633,6 +633,11 @@
 .africa-regional-statistics p{font-size:14px;line-height:1.7;margin:6px 0 12px}
 .africa-statistics-unavailable{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:16px}
 .africa-regional-statistics h3{margin:0;font-size:16px}
+.africa-selected-agro{overflow-wrap:anywhere}
+.africa-selected-agro select{min-height:44px;max-width:100%;font-size:14px}
+.africa-selected-agro li{font-size:14px;line-height:1.8;margin-block:8px}
+.africa-selected-agro .agro-track{position:relative}
+.africa-selected-agro .africa-supply-limit{position:absolute;inset-block:-3px;border-inline-start:1px solid #294749}
 .africa-map-pick-label:hover rect,.africa-map-pick-label:focus-visible rect{fill:#fff0df;stroke:#a64e29;stroke-width:2px}
 .africa-map-pick-label:focus-visible{outline:none}
 .africa-map-pick-label:focus-visible circle:last-child{stroke:#a64e29;stroke-width:3px}

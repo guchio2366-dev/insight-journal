@@ -1,0 +1,28 @@
+---
+import AgroStatistics from './AgroStatistics.astro';
+import {countries} from '../../data/atlas/africa-atlas';
+---
+<div data-africa-forestry-statistics>
+ <!-- Keep the published unselected forest statistics and its initial state. -->
+ <AgroStatistics scope="アフリカ" topic="forest" nationalOnly={false}/>
+ <details class="africa-forest-product-definitions"><summary>国別の同製品統計・加工段階と不足資料</summary>
+  <label>林産物統計の対象国 <select data-africa-forest-country><option value="">国未選択</option>{countries.map(country=><option value={country.code}>{country.name}</option>)}</select></label>
+  <p>丸太（燃料材を含む）・製材はm³、木材パルプはt。同じm³でも加工段階が違い、足し合わせません。木材パルプの国別量・World・在庫・相手数量は未収録です。</p>
+  <p>エジプトの丸太・製材は保存済みFAOSTAT FOの2024年生産・輸入・輸出へ接続できます。他国や地域全体の値ではありません。森林面積や地図の樹木被覆から木材量を推計しません。</p>
+ </details>
+</div>
+<script>
+import {syncAgroStatistics} from '../../scripts/atlas-agro-statistics';
+for(const root of document.querySelectorAll<HTMLElement>('[data-africa-forestry-statistics]')){
+ const heading=root.querySelector<HTMLElement>('[data-agro-heading]'),initialHeading=heading?.textContent??'';
+ // No initialization override: an unselected page keeps the existing SSR view.
+ root.querySelector<HTMLSelectElement>('[data-africa-forest-country]')?.addEventListener('change',event=>{
+  const country=(event.target as HTMLSelectElement).value;
+  syncAgroStatistics(root,{country,topic:'forest',active:true});
+  if(!country&&heading)heading.textContent=initialHeading;
+ });
+}
+</script>
+<style>
+[data-africa-forestry-statistics]{min-width:0;overflow-wrap:anywhere}[data-africa-forestry-statistics] select{min-height:44px;max-width:100%;font-size:14px}.africa-forest-product-definitions{font-size:14px;line-height:1.8}.africa-forest-product-definitions summary{min-height:44px;align-content:center;cursor:pointer}
+</style>

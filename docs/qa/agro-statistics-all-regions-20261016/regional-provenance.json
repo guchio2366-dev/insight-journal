@@ -1,0 +1,214 @@
+{
+  "baseCommit": "3fbb4c957c21685bddbf8148a95a2a03ba210553",
+  "generatedAt": "2026-10-16T04:36:08.092468+00:00",
+  "regions": [
+    {
+      "region": "us",
+      "branch": "codex/us-agro-residuals-20261016",
+      "sourceCommit": "c409f7a8a2722ab87c3423ad0c038cef81f0b07d",
+      "sourceReadable": true,
+      "baseAncestor": true,
+      "sourceReport": "docs/atlas-us-agro-residuals-20261016.md",
+      "sourceReportSha256": "7072dfea24c080f6c27b1601af054c09736e793376f3553a56ae21b664476327",
+      "changedFiles": 15,
+      "unchangedRegionalFiles": 14,
+      "integrationAdjustedFiles": [
+        "scripts/capture-us-agro-residuals-review.mjs"
+      ],
+      "integrationState": "integrated-partial-local-candidate",
+      "dataComplete": false
+    },
+    {
+      "region": "canada",
+      "branch": "canada/agro-statistics-20261016",
+      "sourceCommit": "12b55133a2f87942b0e37df39e3a469b1b58fd7c",
+      "sourceReadable": true,
+      "baseAncestor": true,
+      "sourceReport": "docs/canada-agro-statistics-20261016.md",
+      "sourceReportSha256": "984eb20570b4bf40aca4505aa5dc46f948bb916338b5accc1276b50bdb3d7e73",
+      "changedFiles": 28,
+      "unchangedRegionalFiles": 27,
+      "integrationAdjustedFiles": [
+        "scripts/capture-canada-agro-statistics-review.mjs"
+      ],
+      "integrationState": "integrated-partial-local-candidate",
+      "dataComplete": false
+    },
+    {
+      "region": "mexico",
+      "branch": "region/mexico-agro-statistics-20261016",
+      "sourceCommit": "1e4affe2231f08566dc9117797610ce8457d72ce",
+      "sourceReadable": true,
+      "baseAncestor": true,
+      "sourceReport": "docs/atlas-mexico-agro-statistics-20261016.md",
+      "sourceReportSha256": "4798e781a4e1fcff1ffdafbd73178bc7b54aa102ce303bae3d001d2ca116efa9",
+      "changedFiles": 21,
+      "unchangedRegionalFiles": 20,
+      "integrationAdjustedFiles": [
+        "scripts/capture-mexico-agro-statistics.mjs"
+      ],
+      "integrationState": "integrated-partial-local-candidate",
+      "dataComplete": false
+    },
+    {
+      "region": "europe",
+      "branch": "feat/europe-agro-residuals-20261016",
+      "sourceCommit": "ac790cd4137aeea342ccfa885260989539843148",
+      "sourceReadable": true,
+      "baseAncestor": true,
+      "sourceReport": "docs/europe/agro-residuals-20261016.md",
+      "sourceReportSha256": "c1b3a0150e9d3e30c4027c64717f26b2f494d020d973ad6e9463de17cd3a6ff7",
+      "changedFiles": 31,
+      "unchangedRegionalFiles": 30,
+      "integrationAdjustedFiles": [
+        "scripts/europe/capture-selected-quantity-flow-review.mjs"
+      ],
+      "integrationState": "integrated-partial-local-candidate",
+      "dataComplete": false
+    },
+    {
+      "region": "east-asia",
+      "branch": "codex/east-asia-agro-statistics-20261016",
+      "sourceCommit": "33cd6de8030729afb5ace4fbd6a777c924c4cac0",
+      "sourceReadable": true,
+      "baseAncestor": true,
+      "sourceReport": "docs/east-asia-agro-residuals-20261016.md",
+      "sourceReportSha256": "58e40808b0832ef768b94aafc93b2eea7665b4aaccff7606b27c8d5129efa228",
+      "changedFiles": 22,
+      "unchangedRegionalFiles": 21,
+      "integrationAdjustedFiles": [
+        "scripts/east-asia/capture-selected-quantities.mjs"
+      ],
+      "integrationState": "integrated-partial-local-candidate",
+      "dataComplete": false
+    },
+    {
+      "region": "southeast-asia",
+      "branch": "codex/southeast-agro-residuals-20261016",
+      "sourceCommit": "337b381be687cae1029cf58d0ab195b4c5236070",
+      "sourceReadable": true,
+      "baseAncestor": true,
+      "sourceReport": "docs/southeast-agro-residuals-20261016.md",
+      "sourceReportSha256": "c1aa56833a594bd9f7e818d3662cd6b91fc1f801d5e12b52080cd9f40cc316ff",
+      "changedFiles": 22,
+      "unchangedRegionalFiles": 21,
+      "integrationAdjustedFiles": [
+        "scripts/verify-southeast-agro-statistics-pc.mjs"
+      ],
+      "integrationState": "integrated-partial-local-candidate",
+      "dataComplete": false
+    },
+    {
+      "region": "south-asia",
+      "branch": "feat/south-asia-agro-statistics-20261016",
+      "sourceCommit": "03ada49bb9068401a238e54e51e8ae326aa4b0e0",
+      "sourceReadable": true,
+      "baseAncestor": true,
+      "sourceReport": "docs/atlas-south-asia-agro-statistics-20261016.md",
+      "sourceReportSha256": "14b8101a922c80d61700737178e5d3a7fa72eaa23955d2ed88b6243431b8278c",
+      "changedFiles": 19,
+      "unchangedRegionalFiles": 18,
+      "integrationAdjustedFiles": [
+        "scripts/capture-south-asia-agro-review.mjs"
+      ],
+      "integrationState": "integrated-partial-local-candidate",
+      "dataComplete": false
+    },
+    {
+      "region": "central-asia",
+      "branch": "codex/central-asia-agro-20261016",
+      "sourceCommit": "5bda7960d9dd576c6b1df70692b8fcab96ee79be",
+      "sourceReadable": true,
+      "baseAncestor": true,
+      "sourceReport": "docs/atlas-central-asia-agro-20261016.md",
+      "sourceReportSha256": "7c597dadd4fcb513d31f15588b427e82be05323f039e061fbd314a799bcdd1a9",
+      "changedFiles": 18,
+      "unchangedRegionalFiles": 17,
+      "integrationAdjustedFiles": [
+        "scripts/verify-central-asia-agro.mjs"
+      ],
+      "integrationState": "integrated-partial-local-candidate",
+      "dataComplete": false
+    },
+    {
+      "region": "west-asia",
+      "branch": "codex/west-asia-agro-residuals-20261016",
+      "sourceCommit": "5dad43634d9907f0f652fb8ecd68041136855743",
+      "sourceReadable": true,
+      "baseAncestor": true,
+      "sourceReport": "docs/atlas-west-asia-agro-residuals-20261016.md",
+      "sourceReportSha256": "ef3bf0f5afce3930021584949ccb84ce856ab9c368fa12ebbf558397d79d539c",
+      "changedFiles": 20,
+      "unchangedRegionalFiles": 19,
+      "integrationAdjustedFiles": [
+        "scripts/capture-west-asia-agro-residuals-review.mjs"
+      ],
+      "integrationState": "integrated-partial-local-candidate",
+      "dataComplete": false
+    },
+    {
+      "region": "africa",
+      "branch": "feat/africa-agro-statistics-20261016",
+      "sourceCommit": "2116125dd2a9721c27cdaeea65acb8ad267caebb",
+      "sourceReadable": true,
+      "baseAncestor": true,
+      "sourceReport": "docs/atlas-africa-agro-statistics-20261016.md",
+      "sourceReportSha256": "978f68503f394552dbd5175f9829d22610bdb2782ce144c0994f679815c62659",
+      "changedFiles": 20,
+      "unchangedRegionalFiles": 19,
+      "integrationAdjustedFiles": [
+        "scripts/verify-africa-agro-review.mjs"
+      ],
+      "integrationState": "integrated-partial-local-candidate",
+      "dataComplete": false
+    },
+    {
+      "region": "oceania",
+      "branch": "codex/oceania-agro-residuals-20261016",
+      "sourceCommit": "77e41800773be54b25aa87799d243aec4718e218",
+      "sourceReadable": true,
+      "baseAncestor": true,
+      "sourceReport": "docs/oceania-agro-statistics-residuals-20261016.md",
+      "sourceReportSha256": "d158f7140e7adb927c2c7c42c43ed5849ca8ae1a0bc73612a7570759c438d752",
+      "changedFiles": 27,
+      "unchangedRegionalFiles": 26,
+      "integrationAdjustedFiles": [
+        "tests/browser/atlas-oceania-agro-trade.mjs"
+      ],
+      "integrationState": "integrated-partial-local-candidate",
+      "dataComplete": false
+    },
+    {
+      "region": "latin-america",
+      "branch": "codex/latin-agro-residual-20261016",
+      "sourceCommit": "e200563c99cdbad979fc49f450aedaf43ff9f0ec",
+      "sourceReadable": true,
+      "baseAncestor": true,
+      "sourceReport": "docs/atlas-latin-agro-quantity-20261016.md",
+      "sourceReportSha256": "145bb41f96ed2c8f52d5848814301c510f8274888bab2fd7341c163ad6efd527",
+      "changedFiles": 26,
+      "unchangedRegionalFiles": 25,
+      "integrationAdjustedFiles": [
+        "scripts/verify-latin-agro-quantity.mjs"
+      ],
+      "integrationState": "integrated-partial-local-candidate",
+      "dataComplete": false
+    },
+    {
+      "region": "russia",
+      "branch": "codex/russia-agro-residuals-20261016",
+      "sourceCommit": "eace8e1bec3a1bf8656a47988a7ecf5145388102",
+      "sourceReadable": true,
+      "baseAncestor": true,
+      "sourceReport": "docs/atlas-russia-agro-residuals-20261016.md",
+      "sourceReportSha256": "76b59252fb770972a73174aebc65a46505fbfb806286276ee2f1bd213c9b3f14",
+      "changedFiles": 13,
+      "unchangedRegionalFiles": 12,
+      "integrationAdjustedFiles": [
+        "scripts/verify-russia-agro-review.mjs"
+      ],
+      "integrationState": "integrated-partial-local-candidate",
+      "dataComplete": false
+    }
+  ]
+}

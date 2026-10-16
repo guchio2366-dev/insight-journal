@@ -1,6 +1,7 @@
 import {readCanadaForestryState,writeCanadaForestryState,formatCanadaForestryValue,canadaForestryComparisonUrl,type CanadaForestryState} from '../lib/atlas-canada-forestry';
 import {initCanadaForestryMap} from './atlas-canada-forestry-map';
 export function initCanadaForestry(root:HTMLElement){
+ root.addEventListener('canada-forestry-product',()=>render());
  const config=JSON.parse(root.querySelector('[data-forestry-config]')!.textContent!),ids=config.provinces.map((p:any)=>p.id);
  let state=readCanadaForestryState(new URL(location.href),config.years,ids);
  const $=<T extends HTMLElement=HTMLElement>(s:string)=>root.querySelector<T>(s)!;

@@ -1,0 +1,24 @@
+{
+  "source": "https://apps.fas.usda.gov/newgainapi/api/Report/DownloadReportByFileName?fileName=Grain+and+Feed+Annual_Moscow_Russian+Federation_04-15-2021",
+  "report": "RS2021-0017",
+  "publishedAt": "2021-05-12",
+  "page": 6,
+  "table": 1,
+  "period": "2020/2021",
+  "marketYearBegins": "Jul 2020",
+  "column": "USDA Official",
+  "unit": "1000 MT",
+  "rows": {
+    "Beginning Stocks": "7228",
+    "Production": "85354",
+    "MY Imports": "500",
+    "Total Supply": "93082",
+    "MY Exports": "39500",
+    "Feed and Residual": "18000",
+    "FSI Consumption": "23500",
+    "Total Consumption": "41500",
+    "Ending Stocks": "12082",
+    "Total Distribution": "93082"
+  },
+  "retrieval": "2026-10-16: official public PDF text read through web tool. This is a selected-column transcription, not original PDF bytes. No original-file SHA-256 is asserted."
+}

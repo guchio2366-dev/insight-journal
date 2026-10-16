@@ -1,0 +1,58 @@
+{
+  "checkedAt": "2026-10-16",
+  "scope": ["KAZ", "KGZ", "TJK", "TKM", "UZB"],
+  "runtimeStatisticsChanged": false,
+  "sources": [
+    {
+      "title": "FAO Forest product data: Facts and figures 2024",
+      "url": "https://www.fao.org/forestry/statistics/data/en",
+      "readStatus": "official public table retrieved",
+      "observations": [
+        {"area": "World", "year": 2024, "product": "Roundwood", "element": "Production", "value": 3905, "unit": "million m3", "precision": "publisher-rounded"},
+        {"area": "World", "year": 2024, "product": "Sawnwood", "element": "Production", "value": 445, "unit": "million m3", "precision": "publisher-rounded"},
+        {"area": "World", "year": 2024, "product": "Wood pulp", "element": "Production", "value": 189, "unit": "million tonnes", "precision": "publisher-rounded"},
+        {"area": "World", "year": 2024, "product": "Wood pulp", "element": "Exports", "value": 73, "unit": "million tonnes", "precision": "publisher-rounded"},
+        {"area": "World", "year": 2024, "product": "Pulp from fibres other than wood", "element": "Production", "value": 10, "unit": "million tonnes", "precision": "publisher-rounded"}
+      ],
+      "notJoinedBecause": "The public summary supplies rounded World quantities and selected largest-country percentages, not the five Central Asian country rows, full partner quantities, stocks or process inputs. Wood pulp and non-wood-fibre pulp are separate products. These values do not replace the retained exact same-archive FO denominators."
+    },
+    {
+      "title": "FAO Agricultural production statistics 2010-2024, Analytical Brief 121",
+      "url": "https://doi.org/10.4060/cd8035en",
+      "itemUrl": "https://openknowledge.fao.org/items/f9b4475e-6e01-4f64-879c-f2606fed2d4b",
+      "publicPdfUrl": "https://openknowledge.fao.org/server/api/core/bitstreams/23eaa328-ac5a-444e-ac62-80a636acd81f/content",
+      "readStatus": "official publication metadata and PDF text retrieved",
+      "sourceAccessMonth": "2025-12",
+      "binaryRetained": false,
+      "finding": "Footnote 1 expresses seed cotton and kapok in seed equivalent in oil-crop aggregates; Figure 17 is labelled Cotton seed. The paper does not provide the retained QCL item 328 exact, same-version World row or five-country sheep/goat meat observations.",
+      "notJoinedBecause": "Seed equivalent and cotton seed must not be silently equated to unginned seed cotton or cotton lint. The earlier Analytical Brief 96 is 2010-2023, not 2024."
+    },
+    {
+      "title": "Kazakhstan: Balance of resources and use of main agricultural products, 2025 annual release",
+      "archiveUrl": "https://stat.gov.kz/ru/industries/businessstatistics/stat-forrest-village-hunt-fish/spreadsheets/",
+      "releaseDate": "2026-08-28",
+      "fileUrl": "https://stat.gov.kz/api/iblock/element/335599/file/ru/",
+      "resolvedPublicFileUrl": "https://stat.gov.kz/upload/iblock/881/09wh565tqpuwtovpf56q6472smtwqdpu/%D0%A2-03-12-%D0%93%20(2025)%20%D1%80%D1%83%D1%81.xlsx",
+      "publicReaderStatus": "download link resolves to XLSX; text extraction returns binary ZIP characters, not worksheet cells",
+      "binaryDownloadStatus": "Python urllib: Tunnel connection failed: 403 Forbidden; stopped without retrying through another path",
+      "binaryRetained": false,
+      "lookupFor2024": {
+        "method": "ordinary public archive filters in a cloud browser; no credentials, stealth, proxy or security changes",
+        "runId": "daf2586f-2e76-49ae-a2d4-ec7f8ccd9f72",
+        "status": "completed without locating the exact 2024 download URL",
+        "result": "The browser could not reach the requested balance publication through its visible name filter; the public page's linked release was the 2025 workbook. No 2025 binary retry was performed."
+      },
+      "notJoinedBecause": "The release label is 2025. Whether historical 2024 columns exist, the product scope, units and all balance identities remain unverified. It cannot be joined to the 2024 production table or 2024/25 WASDE by filename alone.",
+      "requiredColumns": ["product and classification code", "year", "unit", "opening stocks", "production", "imports", "exports", "food use", "feed use", "processing", "seed", "losses", "other use and adjustment", "closing stocks", "status and revision notes"]
+    },
+    {
+      "title": "UNECE Data on Forest Products Production and Trade",
+      "url": "https://unece.org/forests/data-forest-products-production-and-trade",
+      "readStatus": "bot_blocked",
+      "action": "Stopped. No stealth profile, proxy, login, alternate-tool retry or access-control workaround.",
+      "requiredColumns": ["country", "year", "actual versus forecast", "product code", "production", "imports", "exports", "unit", "flag", "partner", "stock change", "bark basis and process-stage definition"]
+    }
+  ],
+  "numericCoverageExtended": "Rounded World forest-product summary retained as audit evidence only; no new comparable Central Asian use or partner rows verified.",
+  "implementationCommit": "ee207ff991b32c508a93f6e5f5755faeac4aff5d"
+}

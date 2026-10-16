@@ -1,0 +1,22 @@
+--- a/scripts/capture-agro-statistics-review.mjs
++++ b/scripts/capture-agro-statistics-review.mjs
+@@ -47,8 +47,9 @@
+   for(const [name,path,country,series] of cases){
+    try{
+    await page.goto(reviewUrl(path),{waitUntil:'networkidle'});await page.evaluate(()=>document.fonts.ready);
+-   const mexico=name==='mexico-corn',host=page.locator(mexico?'[data-mexico-agriculture-three-columns="corn"]':'[data-agro-statistics]');await host.waitFor({state:'visible'});
++   const southeast=name==='southeast-forest',mexico=name==='mexico-corn',host=page.locator(mexico?'[data-mexico-agriculture-three-columns="corn"]':southeast?'[data-southeast-agro-statistics]':'[data-agro-statistics]');await host.waitFor({state:'visible'});
+    if(mexico)await page.waitForFunction(()=>document.querySelector('[data-mexico-agriculture-atlas]')?.dataset.agricultureReady==='true');
++   else if(southeast)await page.waitForFunction(()=>document.querySelector('[data-southeast-agro-statistics]')?.dataset.ready==='true'&&!document.querySelector('[data-southeast-agro-statistics]').hasAttribute('aria-busy'));
+    else await page.waitForFunction(()=>{const node=document.querySelector('[data-agro-statistics]');return !node.hidden&&node.dataset.agroReady==='true'&&node.querySelector('[data-agro-content]')?.children.length>0&&!node.querySelector('[data-agro-status]').textContent.includes('読み込んで');});
+    if(series&&!mexico){await host.locator(`[data-agro-country="${country}"][data-agro-series="${series}"]`).waitFor();}
+    // Native reference panels settle independently of the primary quantity data.
+@@ -83,7 +84,7 @@
+    if(name==='europe-finland-forest'){assert.match(await host.locator('[data-agro-existing-supply]').innerText(),/62,655.*樹皮あり/s);report.operations.push({name,viewport,firstUseSeparate:true});}
+    if(name==='europe-britain-forest'){await host.locator('[data-agro-series-select]').selectOption('sawnwood-production');await host.locator('[data-agro-series="sawnwood-production"]').waitFor();await page.waitForFunction(()=>document.querySelector('[data-agro-statistics]')?.dataset.agroReady==='true');await host.locator('[data-agro-stage="use"]>.agro-other-reference>summary').click();assert.match(await host.locator('[data-agro-existing-supply]').innerText(),/25,000m³以上/);report.operations.push({name,viewport,restrictedMarketShares:true});}
+    if(name==='southeast-forest'){
+-    await host.locator('[data-agro-series-select]').selectOption('sawnwood-production');await host.locator('[data-agro-series="sawnwood-production"]').waitFor();
++    await host.locator('[data-southeast-agro-series]').selectOption('sawnwood-production');await host.locator('[data-agro-series="sawnwood-production"]').waitFor();
+     await host.locator('.agro-definitions>summary').click();assert.ok(await host.locator('.agro-definitions table').isVisible());
+     report.operations.push({name,viewport,seriesChange:true,definitionToggle:true});
+    }

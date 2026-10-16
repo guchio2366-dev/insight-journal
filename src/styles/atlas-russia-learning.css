@@ -432,3 +432,8 @@
 }
 
 @media(max-width:600px){.russia-learning[data-field=industry] .russia-region-marker{display:none}.russia-workspace .russia-learning[data-field=industry] .russia-learning-scene{height:400px;min-height:400px;max-height:none;aspect-ratio:auto}}
+
+/* Source references only: no map or reading-panel geometry changes. */
+.russia-agro-other-reference{grid-column:1/-1;min-width:0;margin:12px 0}
+.russia-agro-other-reference>summary{min-height:44px;align-content:center;font-size:14px;cursor:pointer}
+.russia-agro-other-reference>summary:focus-visible{outline:3px solid #176f89;outline-offset:3px}

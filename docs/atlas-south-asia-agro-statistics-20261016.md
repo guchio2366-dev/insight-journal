@@ -1,0 +1,91 @@
+# 南アジア：農林業の選択品目統計（2026-10-16）
+
+**部分実装。統合パッチの適用・実画面確認・不足原表の取得が残る。地域専用ブランチのcommit・pushは2026-10-16の受渡し追補により実施。PR・マージ・公開はしていない。**
+
+最新 `origin/main` を通常fetchし、`3fbb4c957c21685bddbf8148a95a2a03ba210553` から `feat/south-asia-agro-statistics-20261016` を作成した。開始時の作業ツリーはclean。`docs/atlas-agro-statistics-implementation-20261014.md`、選択数量仕様・取得監査、南中央アジアproduct-selection、現行米国大豆・WASDE三列、共通統計controllerと原値を照合した。AGENTS.mdはcheckoutと親配下に存在しなかった。
+
+## 成果と統合の境界
+
+- 地域専用JSON・getter・renderer・オフライン生成器・テスト・撮影scriptのみを追加。既存共通ファイル、地図、地理データ、品目リスト、品目未選択rendererは変更していない。
+- 未接続の6件を追加：インド／パキスタン精米換算米、インド／パキスタン／バングラデシュ綿繊維、バングラデシュ小麦。既存インド小麦も同値で再利用し、計7件の国別①②を実装。
+- 明示的に品目を選んで国を選んでいない南アジアfocusでは、既存8か国の同年・同品目の収録生産量を合計する。米は報告7/8か国304,373,038t、同年公表World820,223,277.89tに対し37.11%。欠測MDVを0にしない。製材は8/8か国26,806,827m³（MDVの公表0を含む）。国集合・欠測・推計旗を表で保持し、未収録Worldを合計国値で作らない。地域の使用・域外輸出・相手分母は未収録。
+- 8か国の既存丸太／製材の共通数量図を再利用し、輸入込み・在庫未調整の見掛消費と実消費を区別。丸太・製材m³と木材パルプtは別工程。パルプ数量は未取得のままで、変換・合算しない。
+- ①→②→③の既存三列・色・文字・帯・世界比部品を利用。インド既存バスマティ輸出先は閉じた別年度・別製品参考として既存loaderから再利用する。新7件の同販売年度全相手数量は0件で、③は未算出とする。
+
+**地域ブランチだけでは共通controllerに接続されない。** `docs/patches/south-asia-agro-controller-20261016.patch` は統合担当向けの提案。明示的品目選択時だけ地域moduleを遅延importし、南アジアfocusの国未選択でも地域統計hostを表示する。地域国別参考を閉じ、概説・解除・分野切替で元ノードを復元する。南アジア国以外は既存rendererへfallback。共通controller本体へはこのブランチで適用していない。メモリ内に同じパッチを適用するcontrollerテストで接続を検証した。
+
+## 同じ原表版の国別数量
+
+すべてWASDE-675（2026-09-11公表版）の2024/25販売年度。最新改訂値とは呼ばない。Worldは各国販売年度の公表集計で共通暦年ではない。
+
+| 国・製品 | 単位 | 生産 | 輸入 | 国内利用 | 輸出 | 期首在庫 | 期末在庫 | World生産 |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| IND・小麦（既存同値） | 百万t | 113.29 | 0.16 | 108.96 | 0.19 | 7.50 | 11.80 | 799.10 |
+| BGD・小麦 | 百万t | 1.10 | 5.80 | 7.40 | 0.00 | 1.28 | 0.78 | 799.10 |
+| IND・精米換算米 | 百万t | 150.18 | 0.00 | 121.36 | 22.83 | 42.00 | 48.00 | 542.30 |
+| PAK・精米換算米 | 百万t | 9.72 | 0.02 | 4.20 | 5.13 | 1.22 | 1.63 | 542.30 |
+| IND・綿繊維 | 百万480ポンド俵 | 24.00 | 3.04 | 25.50 | 1.33 | 9.30 | 9.52 | 119.53 |
+| PAK・綿繊維 | 百万480ポンド俵 | 5.00 | 6.10 | 10.60 | 0.05 | 1.85 | 2.30 | 119.53 |
+| BGD・綿繊維 | 百万480ポンド俵 | 0.15 | 8.05 | 8.20 | 0.00 | 1.71 | 1.71 | 119.53 |
+
+国の国内利用は独立公表値。P−Xで作らず、輸入・持越在庫を供給へ含める。綿花は国内紡績投入（mill use）。米Total domesticは国内利用と未報告消失を含み、食用・飼料・加工・損耗を分解できない。小麦Feedは国内利用Totalの内数。0.00は丸め値で厳密ゼロではない。Lossの原符号と供給−仕向けの丸め差を保存し、架空の用途・輸出先で帳尻を合わせない。
+
+籾米（FAO QCL27）→精米換算、種付き綿花（QCL328）→綿繊維の換算は行っていない。地図選択IDはnavigation keyとして保持し、図に別製品基準を明示する。既存QCL原値・World・年度を上書きしない。全国輸出には南アジア内の相手や再輸出を含み得る。国産生産の直接の輸出割合、南アジア地域の域外輸出と解釈しない。
+
+## 出典照合・取得状況
+
+原値は保存済み `scripts/data/wasde0926.txt`、SHA-256 `de4baa0dc24769b2d8cc153bac488049d905b5c8aa1fec9696e2d4e13036e285`。原表p18/24/26の歴史2024/25ブロックだけを抽出。公表World行と国行を同一ページで対応させ、供給・仕向けと原符号をDecimalで照合。別年度・推計／予測・脚注記号を値として扱わず、元ファイルhash不一致で生成を止める。
+
+[USDA公式PDF](https://www.usda.gov/oce/commodity/wasde/wasde0926.pdf)は公開web readerで本文・表・注記を読めた。ローカルへの通常GETは接続トンネル403で原PDFの新規保存は0件。[USDA公式の別配布CSV入口](https://www.usda.gov/historical-wasde-report-data-3)からSeptember2026の公開CSVも調べたが、readerはtext/csv非対応、通常GETは同じトンネル403。失敗したPDFの制限を迂回して再取得していない。
+
+FAO FOの木材パルプAPI参考照会もトンネル403。応答本文・コードmetadataを得ていないため、その照会の国／商品コードを採用していない。別の公式公開表[FAO Forest product data](https://www.fao.org/forestry/statistics/data/en)では丸太・製材million m³と木材パルプmillion tonnesを確認したが、完全な国別P/I/Xと相手行列はない。丸めたIndiaのpulp-for-paper割合を別範囲のwood-pulp Worldへ掛けて国値を捏造しない。[公式分類入口](https://www.fao.org/forestry/statistics/classifications/en)の定義資料リンクはweb readerで403 Forbidden。拒否された資料を別経路で取り直していない。
+
+URL・時刻・原エラーと公開ページで確認できた範囲は `data-source/atlas/south-asia/agro-20261016/` のacquisition JSONと `official-source-checks.json` に保存した。ネットワークのトンネル拒否と原サイトのHTTP403を混同しない。
+
+## 未達と必要ファイル
+
+1. **南アジア8か国の需給**：同一年・版・単位・商品／原品換算基準のFBS/SUA CSV等。P/I/X・期首期末在庫または在庫変動・食用・飼料・種子・加工・損耗・その他／残差・国内供給を、metadata・旗・換算定義とともに通常公式exportする。QCLの茶生葉・サトウキビ茎・種付き綿花を乾燥茶・砂糖・綿繊維と同一視しない。
+2. **域外相手行列**：同年・同商品範囲の報告8か国×Worldと全Partner×輸出入数量、分類版、数量単位、欠測旗。域内8か国を相手から除き、全報告国coverageとWorld・全相手合計の差を保持できるCSVが必要。国別輸出総量だけでは地域域外輸出を作れない。
+3. **今回7件の同年度相手数量**：WASDEに対応する各国2024/25の開始終了日と対象定義を確認した月別または年度CSV。精米換算が必要なら公式換算・包含範囲も添付。2023–24インドバスマティ相手表や2024暦年HS1006重量は代用不可。
+4. **パルプ**：8か国＋Worldの同版FO生産・輸入・輸出と同年全相手原表、木材パルプと非木材繊維パルプの区別、tの重量／含水基準、旗・在庫・加工用途。生産能力調査を実生産として使わない。丸太・製材m³からの換算は不可。
+5. **世界分母**：種付き綿花、ひよこ豆、茶生葉、サトウキビ等、現行保存値に同版Worldがない品目のWorld原行。欠測国も含めた国・World行を同じ版からexportし、既存版と混ぜず検証する。
+
+これらは通常の公式サイトへアクセスできる環境で利用者／統合担当がexportして提供する必要がある。認証発行、追加課金、制限回避は行わない。
+
+## 検証
+
+- 初期mainの全単体：1,433 pass / 3 skip / 0 fail。
+- 新規13テスト：原表全セル・World・hash・原符号・丸め差、生成再現と改ざん停止、地域8国coverage・World不一致・単位不一致・欠測と0、米／綿繊維の独立基準、8国×2林産物、統合パッチのメモリ内接続、同年度相手不足、別年度バスマティ、国切替・非同期古要求・概説復元、中央アジア／他地域fallbackを検証して通過。
+- 共通ファイルの実変更なし。提案パッチの `git apply --check` 通過。
+- 生産buildは `ASTRO_TELEMETRY_DISABLED=1 npm run build` で成功（通常設定でtelemetryが書込不能なホームへ保存しようとする問題を回避する公式オプトアウト環境変数。依存・設定は変更していない）。統合checkoutでのbuild・静的E2E・release検証結果は下記追記。
+- 指定1896×996／1280×665 CSS px・DPR1.5の撮影scriptを用意。地図のready・三列順序・地図下・横溢れ・参考展開・林産物切替・概説復元を確認し、map／統計の画像とreportを保存する。ローカルクラウドの通常sandbox付きChromiumはSUID helper構成不備で起動失敗。sandbox無効化、所有者／権限変更、利用者PC接続は行っていない。実画像・目視は未達で、正常なsandbox付きクラウドrunnerでこのscriptの実行が必要。
+
+## 最終検証と引継ぎ
+
+実装commit `29f87f73` に提案パッチを適用した隔離worktree `/workspace/south-asia-agro-integration` で検証した。地域専用ブランチ自体の共通部品はmainと同一。生産build成功、地域moduleのJS生成24,337 bytesを確認。全単体は **1,446 pass / 3 skip / 0 fail**（うち新規13件）。南中央アジアとAsia workspaceの静的・DOM E2Eは **7 pass / 4 skip / 0 fail**。4件は実ブラウザの明示的opt-inが必要な既存テストであり、画面検証通過を意味しない。`npm run verify:release` 成功。ローカルbuildのrelease識別子は `local` で、公開物またはdirty proposalを含まない確定commitの画面とは呼ばない。
+
+全95ファイルの `npm run test:e2e` も開始したが、南アジア外のDOM検証が長時間続くため中断（exit130）。全域E2E完走とは報告しない。上記の対象地域・配置のE2Eを個別に完走した。統合担当の通常CIでの全域E2Eは別途必要。
+
+`capture-south-asia-agro-review.mjs` の実行結果は **blocked-browser-launch / 0件撮影**。失敗対象は `/usr/bin/chromium` の通常sandbox起動。エラーは `The SUID sandbox helper binary was found, but is not configured correctly`。実画面の三列配置、横溢れ、地図可読性、DPRは未検証のまま。指定二サイズ・DPRとエラー全文は `docs/review/south-asia-agro-20261016/` に保存した。
+
+統合手順：地域実装commitと検証記録を取り込み、`git apply --check docs/patches/south-asia-agro-controller-20261016.patch` 後に統合担当が共通controllerへ適用する。他地域担当の同じcontroller変更があれば地域dispatcherへまとめる。提案パッチのSHA-256は `3570f1c339914d766163e09fae284ef6c7b25d45d1feae8cb3059a4986d80720`。接続時のcontroller SHAと生成JS SHAはverification JSONで追跡できる。
+
+正常なsandbox付きクラウドrunnerで、通常build後に `REVIEW_CHROME_PATH=/path/to/chrome node scripts/capture-south-asia-agro-review.mjs` を実行して22ケース＋操作の画像を確認する。再現用のテストは `node --test tests/unit/atlas-south-asia-agro-*.test.mjs` と `node --test tests/e2e/atlas-south-central-overview.test.mjs tests/e2e/atlas-south-central-focus.test.mjs tests/e2e/atlas-asia-workspace.test.mjs`。利用者PCへの接続は不要。
+
+## 受渡し追補・追加公式資料の照合
+
+専用ブランチを `origin/feat/south-asia-agro-statistics-20261016` へ通常pushし、初回リモートSHA `1cc261b1be96dddae48dfc0d0b13e7e85e1e347a` を `git ls-remote --heads` で照合した。この追補も同じ地域ブランチへcommit・pushし、最終SHAを受渡し報告する。共通controller本体は未変更、提案パッチのみ。全地域E2Eは統合側でまとめて行い、地域側では重複実行しない。
+
+追加調査の経路・結果・不足列は `data-source/atlas/south-asia/agro-20261016/additional-official-source-checks.json` に保存した。
+
+| 資料・正規URL | 試した経路・確認結果 | 追加で必要な列／通常操作 |
+| --- | --- | --- |
+| [APEDA Basmati Rice](https://apeda.gov.in/BasmatiRice)、[Non Basmati Rice](https://apeda.gov.in/NonBasmatiRice) | 公式HTML本文は取得成功。ただし表示年は2025–26で、実装のWASDE2024/25とは別期間。主要相手の割合は数量／金額の基準が本文だけでは確定しないため不採用 | 対応期間の全相手数量・World・商品範囲・数量単位・構成比の分母。バングラデシュ等を地域外に数えない |
+| [APEDA Build Your Own Report](https://agriexchange.apeda.gov.in/India/GenerateAPEDAProductReport/Index) | 公式公開フォームにFinancial／Calendar Year、Product／Country Wise、Country／Region、Product、Period、Year、Month、Quantity In、Values In、Average/Unitを確認。readerには動的選択肢・結果数量行が返らなかった | 通常の承認済みブラウザでBasmati／Non-Basmatiを別々に選び、対象月・年度・全相手＋World・kg/t・分類と改訂metadata付きでCSV/XLSX export。金額や上位相手だけでは不足 |
+| [APEDA All Export Destinations](https://agriexchange.apeda.gov.in/IndiaExport/Home/Index) | 正規リンクの公開本文はNo Data Found。DGCIS Annual Data (All Agri Products)の説明のみで、0を意味しない | 商品別・期間別の全相手数量結果表が必要 |
+| [Sri Lanka Tea Board Tea Statistics](https://srilankateaboard.lk/tea-statistics/) | Category／Year/Monthの公式selectorは読めたが結果行なし | 2024暦年・全相手＋World・kg・加工形態・原産地・再輸出区分・適用年のHS分類。生産との接続には輸入・在庫・国内利用も必要 |
+| [SLTB Annual Report 2024](https://srilankateaboard.lk/wp-content/uploads/2026/04/Annual-Report-2024English.pdf) | [公式刊行物一覧](https://srilankateaboard.lk/publications/)のリンク。readerは103ページPDFを認識するが抽出本文0行、PDF screenshotもこのinterfaceでinspect可能な画像を返さなかった。通常GETは接続トンネル403、原PDF0 bytes。別経路の同資料再取得なし | 通常取得したPDFか公式表export。2024年全相手輸出、国内／外国原産、製法、需給・在庫・World定義の該当表が必要 |
+| [SLTB Revised Tea Production 2024 Monthly](https://srilankateaboard.lk/wp-content/uploads/2025/04/Revised-Tea-Production-2024-Monthly.pdf)、[Cumulative](https://srilankateaboard.lk/wp-content/uploads/2025/04/Revised-Tea-Production-2024-Cummulative.pdf) | 公式1ページ表の本文を取得成功。2024年末累計TOTAL TEA PRODUCTIONは262,693,830kg。月別TOTALの合計262,693,829kgとの−1kg差を保存 | 生産のみの追加参考としてJSON保存。製茶の分類で、生葉QCLへaliasしない。World・輸入・輸出・国内利用・在庫・相手は両表にないためnull。UIの完全フローへは未接続 |
+| [SLTB export HSC circular 2010](https://srilankateaboard.lk/wp-content/uploads/2021/04/hscodes-cusdec-tea-exports-circular-06-09-2010-1.pdf) | 公式5ページ本文は取得成功。国内／外国原産、緑茶／紅茶、instant・飲料形態等を区別する分類を確認 | 歴史資料だけで2024年適用コードや現在の換算を確定しない。2024年metadataと原産地別数量列が必要 |
+
+追加した製茶の生産専用参考は `sltb-tea-production-2024-public-table.json`。月別・累計の原表差、加工段階、未収録の需給・Worldを維持する追加検査を含め、**地域単体14件が通過**した。UI・共通提案パッチは既検証版から変更していないため、全体build・全域E2Eは重複実行していない。数量の不足は継続して部分未達であり、公開ページに年・数量があるだけで三段の同定義フロー完成とはしない。

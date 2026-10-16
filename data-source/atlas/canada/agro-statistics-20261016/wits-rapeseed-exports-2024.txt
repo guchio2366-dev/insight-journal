@@ -1,0 +1,35 @@
+Official public WITS table text extraction; not original HTML bytes.
+Accessed: 2026-10-16
+URL: https://wits.worldbank.org/trade/comtrade/en/country/CAN/year/2024/tradeflow/Exports/partner/ALL/product/120500
+L0: # Canada Rape or colza seeds exports by country
+L2: in 2024
+L20:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | World | 4,366,653.77  | 8,730,940,000  | Kg
+L21:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | China | 2,950,484.83  | 5,928,580,000  | Kg
+L22:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Japan | 518,585.21  | 1,007,130,000  | Kg
+L23:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Mexico | 287,576.33  | 599,902,000  | Kg
+L24:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | United States | 175,867.69  | 281,754,000  | Kg
+L25:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | United Arab Emirates | 165,770.04  | 349,281,000  | Kg
+L26:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | France | 81,525.83  | 173,505,000  | Kg
+L27:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Belgium | 75,704.09  | 160,389,000  | Kg
+L28:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Germany | 27,163.38  | 60,300,000  | Kg
+L29:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Portugal | 20,743.72  | 45,429,400  | Kg
+L30:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Bulgaria | 18,559.94  | 41,330,000  | Kg
+L31:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Bangladesh | 17,413.45  | 35,627,800  | Kg
+L32:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Nepal | 12,309.56  | 21,409,000  | Kg
+L33:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Malaysia | 5,023.57  | 9,553,450  | Kg
+L34:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Netherlands | 4,975.35  | 10,400,000  | Kg
+L35:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Australia | 2,823.62  | 3,428,100  | Kg
+L36:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Korea, Rep. | 1,012.02  | 1,451,840  | Kg
+L37:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Brazil | 692.33  | 999,540  | Kg
+L38:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Chile | 152.13  | 23,218  | Kg
+L39:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Indonesia | 56.25  | 80,673  | Kg
+L40:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Vietnam | 51.10  | 72,993  | Kg
+L41:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Colombia | 47.48  | 78,219  | Kg
+L42:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Philippines | 42.92  | 61,994  | Kg
+L43:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Costa Rica | 40.15  | 84,710  | Kg
+L44:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Guatemala | 21.73  | 48,920  | Kg
+L45:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Italy | 10.82  | 15,370  | Kg
+L46:  Canada  | Export  | 120500  | Rape or colza seeds  | 2024  | Mauritius | 0.21  | 470  | Kg
+L47: HS Nomenclature used HS 1988/92 (H0)
+L48: HS Code 120500: Rape or colza seeds
+L49: Please note: Exports is gross exports and Imports is gross imports

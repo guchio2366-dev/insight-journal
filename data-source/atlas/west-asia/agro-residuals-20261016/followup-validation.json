@@ -1,0 +1,66 @@
+{
+  "checkedAt": "2026-10-16T04:13:31.196152+00:00",
+  "baseCommit": "823e8e4f9157e2921d7fa8532bfb5d63e0685f5f",
+  "branch": "codex/west-asia-agro-residuals-20261016",
+  "checks": [
+    {
+      "name": "regional-unit",
+      "command": "node --test tests/unit/atlas-west-asia*.test.mjs",
+      "status": "passed",
+      "tests": 53,
+      "pass": 53,
+      "fail": 0,
+      "skipped": 0,
+      "logSha256": "0313ce27e460b4e9b8ab55ee027a6edc07a13c4c2181ff17381129b8056b8d75"
+    },
+    {
+      "name": "regional-e2e",
+      "command": "node --test --test-concurrency=4 tests/e2e/atlas-west-asia*.test.mjs",
+      "status": "passed",
+      "tests": 53,
+      "pass": 50,
+      "fail": 0,
+      "skipped": 3,
+      "logSha256": "fec1bdfbad0f0d6a4802460054da6a1faac64853be1a654b2cd06b40ffcf48db"
+    },
+    {
+      "name": "build",
+      "command": "ASTRO_TELEMETRY_DISABLED=1 XDG_CONFIG_HOME=/tmp/west-asia-config npm run build",
+      "status": "passed",
+      "logSha256": "f1005898c9191f6d5d0867d3b7519024e694c9af9cf4b1c041a0aad4ebedea8a"
+    },
+    {
+      "name": "release",
+      "command": "npm run verify:release",
+      "status": "passed",
+      "logSha256": "ae241006ebbba2cc825202cd88f961563a59b5898d6f283a839d001642073230"
+    }
+  ],
+  "newReferenceScope": "TUR 2023/24 USDA Official wheat, barley and milled rice; separately published flour product-tonne destinations. Not a same-vintage regional World/use/destination flow.",
+  "sourcesRecord": "official-followup-sources.json",
+  "codeSha256": {
+    "src/lib/atlas-west-asia-agro-statistics.ts": "d477fdd3547ad5a42fe7fd1dfcf50de5234222bac527efa2c4f35dfada255c65",
+    "src/scripts/atlas-west-asia.ts": "6ccdff121c860788ff3c2d931f7fede88bd15769889bfa642b387a2b5e4e3d7d",
+    "src/data/atlas/west-asia-turkiye-gain-2023-24.json": "1711319f6431283423f21851713f68520ca8181b7127e3a5251262f09f4bc40e",
+    "scripts/capture-west-asia-agro-residuals-review.mjs": "4e5239c7a7fe6c03c5d4cd9ac27d093ca97387ba0f1054e5840d96810beeb854"
+  },
+  "browserReview": {
+    "status": "handed to integrator",
+    "newScreenshots": 0,
+    "requestedViewports": [
+      {
+        "width": 1896,
+        "height": 996
+      },
+      {
+        "width": 1280,
+        "height": 665
+      }
+    ],
+    "deviceScaleFactor": 1.5,
+    "casesPerViewport": 15,
+    "sandbox": true,
+    "note": "Prior sandbox launch blocker is unchanged. No unsafe browser changes or user-PC connection."
+  },
+  "releaseNote": "Build and release validation used these exact code hashes before the follow-up commit. Release metadata is regenerated and checked again after commit; no application code change afterwards."
+}

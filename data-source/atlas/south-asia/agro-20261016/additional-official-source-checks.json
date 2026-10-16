@@ -1,0 +1,69 @@
+{
+  "checkedAt": "2026-10-16T04:05:07.167192+00:00",
+  "method": "Ordinary public web reads of independently published official sources; no login, CAPTCHA bypass, proxy, sandbox weakening or denied-document retrieval",
+  "sources": [
+    {
+      "url": "https://apeda.gov.in/BasmatiRice",
+      "result": "Public commodity summary read. The currently displayed export year is 2025-26; it is not the retained 2024/25 WASDE period.",
+      "missing": [
+        "same-WASDE-period all-partner quantities",
+        "exact counterpart denominator",
+        "processing conversion",
+        "imports/stocks/domestic use"
+      ],
+      "adoptedIntoUi": false
+    },
+    {
+      "url": "https://apeda.gov.in/NonBasmatiRice",
+      "result": "Public commodity summary read. A named South Asia partner appears in the major destination list; summing national export totals would retain regional internal trade. Current summary is 2025-26, not the implemented period.",
+      "missing": [
+        "2024/25 same-defined quantity rows for every partner",
+        "quantity versus value basis for displayed percentages",
+        "all-partner coverage and World denominator"
+      ],
+      "adoptedIntoUi": false
+    },
+    {
+      "url": "https://agriexchange.apeda.gov.in/India/GenerateAPEDAProductReport/Index",
+      "result": "Public form read: Financial/Calendar Year, Product/Country Wise, Country/Region, product/group, period, year, month, Quantity In, Values In, Average/Unit. Dynamic select options and result quantity rows were not returned by the reader.",
+      "requiredUserAction": "Use the ordinary form in an authorized browser and export Basmati and Non-Basmati separately, all countries plus World, month/date and unit/product metadata for the exact chosen period. Do not supply only top destinations or values.",
+      "adoptedIntoUi": false
+    },
+    {
+      "url": "https://agriexchange.apeda.gov.in/IndiaExport/Home/Index",
+      "result": "Public page returned No Data Found and source label DGCIS Annual Data (All Agri Products). Do not interpret absent rows as zero.",
+      "adoptedIntoUi": false
+    },
+    {
+      "url": "https://srilankateaboard.lk/tea-statistics/",
+      "result": "Public Category and Year/Month selectors read; no resulting data rows were returned.",
+      "requiredUserAction": "Ordinary export for 2024 all tea export destinations plus World: kg, current product and origin codes, category, month, national/foreign origin and re-export flags, with imports/stocks/domestic-use definitions.",
+      "adoptedIntoUi": false
+    },
+    {
+      "url": "https://srilankateaboard.lk/publications/",
+      "result": "Official links to 2024 annual report, revised monthly/cumulative production and historical export-code circular discovered.",
+      "adoptedIntoUi": false
+    },
+    {
+      "url": "https://srilankateaboard.lk/wp-content/uploads/2026/04/Annual-Report-2024English.pdf",
+      "result": "Public reader reports 103-page PDF but no extracted text; public PDF screenshot calls did not return inspectable image content in the available interface. Normal local GET failed with Tunnel connection failed: 403 Forbidden; logged separately.",
+      "requiredUserAction": "Provide normally downloaded original annual report or official tabular export; relevant full-year export destinations, origin, production and supply/use tables and definitions are needed.",
+      "adoptedIntoUi": false
+    },
+    {
+      "url": "https://srilankateaboard.lk/wp-content/uploads/2025/04/Revised-Tea-Production-2024-Monthly.pdf",
+      "result": "One-page official processed-tea production table parsed successfully. Preserved as production-only reference."
+    },
+    {
+      "url": "https://srilankateaboard.lk/wp-content/uploads/2025/04/Revised-Tea-Production-2024-Cummulative.pdf",
+      "result": "One-page official cumulative processed-tea table parsed successfully. December total differs from summed monthly total by 1kg; raw values preserved."
+    },
+    {
+      "url": "https://srilankateaboard.lk/wp-content/uploads/2021/04/hscodes-cusdec-tea-exports-circular-06-09-2010-1.pdf",
+      "result": "Official 2010 export-code circular parsed. It distinguishes domestic versus foreign origin and processed categories including instant and beverage forms. Historical document only: not treated as a verified 2024 code concordance.",
+      "requiredUserAction": "Supply the applicable 2024 classification and origin fields before joining production and export statistics.",
+      "adoptedIntoUi": false
+    }
+  ]
+}

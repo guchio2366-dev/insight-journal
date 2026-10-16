@@ -1,0 +1,52 @@
+{
+  "checkedAt": "2026-10-16",
+  "attempts": [
+    {
+      "url": "https://fenixservices.fao.org/faostat/api/v1/en/data/QCL?area_code=5100&item_code=56&element_code=5510&year=2024",
+      "method": "normal urllib GET through environment-configured connection",
+      "result": "URLError: Tunnel connection failed: 403 Forbidden",
+      "sourceBytesAcquired": false,
+      "upstreamHttpStatus": null
+    },
+    {
+      "url": "https://www.fao.org/forestry/statistics/data/en",
+      "method": "normal urllib GET through environment-configured connection",
+      "result": "URLError: Tunnel connection failed: 403 Forbidden",
+      "sourceBytesAcquired": false,
+      "upstreamHttpStatus": null
+    },
+    {
+      "url": "https://www.fao.org/forestry/statistics/data/en",
+      "method": "independent public page text already read with web",
+      "result": "Official 2024 summary and product definitions readable; no Africa production, national P/I/X or partner table in the published text",
+      "originalHtmlBytesAcquired": false
+    },
+    {
+      "url": "https://www.fao.org/forestry/statistics/publications/forest-product-statistics/en",
+      "method": "follow official public publication index",
+      "result": "Read index; identified Global forest products facts and figures 2024, published 2025-12-24"
+    },
+    {
+      "url": "https://openknowledge.fao.org/handle/20.500.14283/cd8005en",
+      "method": "follow publication link in official index",
+      "result": "web fetch 403 Forbidden; stopped; no alternate host/tool/auth retry",
+      "sourceBytesAcquired": false
+    },
+    {
+      "url": "https://www.fao.org/faostat/en/#data/FBS",
+      "method": "normal public landing-page read",
+      "result": "Dynamic landing page returns no extractable balance rows; not an FBS dataset acquisition"
+    },
+    {
+      "url": "https://www.usda.gov/oce/commodity/wasde/wasde0926.pdf",
+      "method": "official public PDF text lookup, pages 18 and 22",
+      "result": "National quantities, World production and marketing-year footnotes agree with retained scripts/data/wasde0926.txt; no new PDF bytes downloaded"
+    },
+    {
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/ZAF/year/2024/tradeflow/Exports/partner/ALL/product/100590",
+      "method": "official public all-partner table text read",
+      "result": "84 numerical rows retained in wits-zaf-maize-2024.csv, including World; whole-export quantity blank. No quantity-share denominator manufactured"
+    }
+  ],
+  "boundaries": "No credentials, proxy changes, alternate route for denied files, permission escalation, PR, merge or publication. Dedicated branch commit/push is explicitly authorized by the integration handoff instruction. Published numerical table facts are distinguished from downloaded raw-source bytes."
+}

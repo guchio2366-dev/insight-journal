@@ -1,0 +1,93 @@
+{
+  "checkedAtDate": "2026-10-16",
+  "retainedNumericAddition": "USDA RS2021-0017 Table 1, 2020/21 USDA Official column only",
+  "originalPdfRetained": false,
+  "attempts": [
+    {
+      "action": "Read independent official public PDF, Table 1 p.6",
+      "url": "https://apps.fas.usda.gov/newgainapi/api/Report/DownloadReportByFileName?fileName=Grain+and+Feed+Annual_Moscow_Russian+Federation_04-15-2021",
+      "method": "web tool public PDF text",
+      "result": "read-success",
+      "evidence": "usda-wheat-table-1.json",
+      "limits": "Selected-column transcription; no original PDF bytes or PDF SHA-256. Report-time USDA assessment, not current Russian official A data."
+    },
+    {
+      "action": "Read official forest product definitions",
+      "url": "https://www.fao.org/forestry-fao/34572-0902b3c041384fd87f2451da2bb9237.pdf",
+      "method": "web tool public PDF text",
+      "result": "read-success",
+      "pagesUsed": [
+        2,
+        3,
+        6,
+        9
+      ],
+      "limits": "Definitions only; no Russian national quantities. No binary hash claimed."
+    },
+    {
+      "action": "Read independent official FAO facts and figures table",
+      "url": "https://www.fao.org/forestry/statistics/data/en",
+      "method": "web tool public page",
+      "result": "read-success",
+      "limits": "Global rounded quantities and country shares do not give exact Russian national P/I/X. Pulp for paper is not interchangeable with all wood pulp. No national quantities inferred."
+    },
+    {
+      "action": "Download Russia 2021 sawnwood exports and all partners",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/RUS/year/2021/tradeflow/Exports/partner/ALL/product/4407",
+      "method": "cloud Python urllib HTTPS GET",
+      "result": "blocked",
+      "error": "URLError: Tunnel connection failed: 403 Forbidden",
+      "limits": "Tunnel error; not evidence that the source lacks data. No response rows obtained. No alternate client or host retry. Existing repository restrictions on Comtrade reuse also remain unresolved."
+    },
+    {
+      "action": "Read independent UNdata 2022 Russian sawnwood public table",
+      "url": "https://data.un.org/Data.aspx?d=FAO&f=itemCode:1872;countryID:185;year:2022",
+      "method": "cloud Python urllib HTTPS GET",
+      "result": "blocked",
+      "error": "URLError: Tunnel connection failed: 403 Forbidden",
+      "limits": "Unfiltered UNdata sawnwood page was readable through web but only first unrelated rows and 2024-01-22 update metadata were returned. No Russian row or same-version World row retained. No values transferred to FAO 2026-01-09 series."
+    },
+    {
+      "action": "Read independent UNECE annual review publication entry",
+      "url": "https://unece.org/forests/forest-products-annual-market-review",
+      "method": "web tool public page",
+      "result": "blocked",
+      "error": "403 Forbidden",
+      "limits": "No retry or alternate host for this resource."
+    },
+    {
+      "action": "Read official FAO Yearbook of Forest Products 2020 DOI",
+      "url": "https://doi.org/10.4060/cc3475m",
+      "method": "web tool official publication link",
+      "result": "blocked",
+      "error": "403 Forbidden",
+      "limits": "No retry or alternate copy of the same publication."
+    },
+    {
+      "action": "Read independent FAO Statistical Yearbook 2024 HTML",
+      "url": "https://openknowledge.fao.org/server/api/core/bitstreams/d784864f-7f28-49d2-903e-6680d09a9d97/content/cd2971en.html",
+      "method": "web tool public publication",
+      "result": "blocked",
+      "error": "403 Forbidden",
+      "limits": "No retry or alternate copy of the same publication."
+    },
+    {
+      "action": "Read independent official ITTO Biennial Review 2023-2024 publication index, tables and usage policy",
+      "url": "https://www.itto.int/biennal_review/",
+      "method": "web tool public page; ordinary cloud urllib GET for the linked table archive",
+      "result": "index-and-policy-read-success-table-download-blocked",
+      "tableUrl": "https://www.itto.int/direct/topics/topics_pdf_download/topics_id%3D8460%26no%3D2",
+      "publicationName": "Biennial Review and Assessment 2023-2024; Appendix 1 Production, Trade and Consumption of Timber, 2020-2024",
+      "webTableError": "400 Unsupported content-type: application/octet-stream (tool format limitation)",
+      "cloudDownloadError": "URLError: Tunnel connection failed: 403 Forbidden",
+      "usagePolicyUrl": "https://www.itto.int/disclaimer_usagepolicy/",
+      "limits": "No table bytes or Russian/World rows obtained. Product/country coverage, estimation marks and edition remain unverified. ITTO permits attributed teaching/research/non-commercial reuse subject to product-specific restrictions; no numbers republished. Appendix 2 is primary tropical timber between major ITTO countries and cannot stand in for all Russian exports. No retry after the cloud 403."
+    }
+  ],
+  "notPerformed": [
+    "Known-blocked FAOSTAT bulk ZIP/catalogue or FBS API retries",
+    "Proxy, authentication, access-control or browser-sandbox changes",
+    "Partner or consumption estimates from unrelated totals, rounded shares, missing years or product stages",
+    "UN Comtrade data redistribution without verified permission"
+  ]
+}
