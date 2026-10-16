@@ -1,0 +1,1174 @@
+{
+  "head": "58be943225b7fdef8bb68392c7e377571305007d",
+  "workingDiffSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "status": "passed",
+  "sandbox": true,
+  "deviceScaleFactor": 1.5,
+  "requestedViewports": [
+    {
+      "width": 1896,
+      "height": 996
+    },
+    {
+      "width": 1280,
+      "height": 665
+    }
+  ],
+  "cases": [
+    {
+      "name": "overview",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "file": "1896-overview.png",
+      "x": 420,
+      "width": 925.703125,
+      "y": 1214.25,
+      "columns": [],
+      "map": {
+        "width": 687.953125,
+        "bottom": 916.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "regional-wheat",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "file": "1896-regional-wheat.png",
+      "x": 420,
+      "width": 1456,
+      "y": 1360.859375,
+      "columns": [
+        {
+          "x": 420,
+          "y": 1404.953125,
+          "width": 476,
+          "font": 13
+        },
+        {
+          "x": 910,
+          "y": 1404.953125,
+          "width": 476,
+          "font": 13
+        },
+        {
+          "x": 1400,
+          "y": 1404.953125,
+          "width": 476,
+          "font": 13
+        }
+      ],
+      "map": {
+        "width": 687.953125,
+        "bottom": 916.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "regional-dates",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "file": "1896-regional-dates.png",
+      "x": 420,
+      "width": 1456,
+      "y": 1359.640625,
+      "columns": [
+        {
+          "x": 420,
+          "y": 1403.734375,
+          "width": 476,
+          "font": 13
+        },
+        {
+          "x": 910,
+          "y": 1403.734375,
+          "width": 476,
+          "font": 13
+        },
+        {
+          "x": 1400,
+          "y": 1403.734375,
+          "width": 476,
+          "font": 13
+        }
+      ],
+      "map": {
+        "width": 687.953125,
+        "bottom": 916.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "regional-olives",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "file": "1896-regional-olives.png",
+      "x": 420,
+      "width": 1456,
+      "y": 1359.640625,
+      "columns": [
+        {
+          "x": 420,
+          "y": 1403.734375,
+          "width": 476,
+          "font": 13
+        },
+        {
+          "x": 910,
+          "y": 1403.734375,
+          "width": 476,
+          "font": 13
+        },
+        {
+          "x": 1400,
+          "y": 1403.734375,
+          "width": 476,
+          "font": 13
+        }
+      ],
+      "map": {
+        "width": 687.953125,
+        "bottom": 916.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "saudi-dates",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "file": "1896-saudi-dates.png",
+      "x": 420,
+      "width": 1456,
+      "y": 1418.390625,
+      "columns": [
+        {
+          "x": 420,
+          "y": 1512.578125,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 910,
+          "y": 1512.578125,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 1400,
+          "y": 1512.578125,
+          "width": 476,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 687.953125,
+        "bottom": 916.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "turkey-olives",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "file": "1896-turkey-olives.png",
+      "x": 420,
+      "width": 1456,
+      "y": 1418.390625,
+      "columns": [
+        {
+          "x": 420,
+          "y": 1512.578125,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 910,
+          "y": 1512.578125,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 1400,
+          "y": 1512.578125,
+          "width": 476,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 687.953125,
+        "bottom": 916.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "turkey-milk",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "file": "1896-turkey-milk.png",
+      "x": 420,
+      "width": 1456,
+      "y": 1346,
+      "columns": [
+        {
+          "x": 420,
+          "y": 1481.78125,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 910,
+          "y": 1481.78125,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 1400,
+          "y": 1481.78125,
+          "width": 476,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 687.953125,
+        "bottom": 916.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "turkey-eggs",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "file": "1896-turkey-eggs.png",
+      "x": 420,
+      "width": 1456,
+      "y": 1346,
+      "columns": [
+        {
+          "x": 420,
+          "y": 1481.78125,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 910,
+          "y": 1481.78125,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 1400,
+          "y": 1481.78125,
+          "width": 476,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 687.953125,
+        "bottom": 916.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "turkey-chicken",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "file": "1896-turkey-chicken.png",
+      "x": 420,
+      "width": 1456,
+      "y": 1346,
+      "columns": [
+        {
+          "x": 420,
+          "y": 1481.78125,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 910,
+          "y": 1481.78125,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 1400,
+          "y": 1481.78125,
+          "width": 476,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 687.953125,
+        "bottom": 916.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "turkey-beef",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "file": "1896-turkey-beef.png",
+      "x": 420,
+      "width": 1456,
+      "y": 1346,
+      "columns": [
+        {
+          "x": 420,
+          "y": 1481.78125,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 910,
+          "y": 1481.78125,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 1400,
+          "y": 1481.78125,
+          "width": 476,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 687.953125,
+        "bottom": 916.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "egypt-buffalo",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "file": "1896-egypt-buffalo.png",
+      "x": 420,
+      "width": 1456,
+      "y": 1346,
+      "columns": [
+        {
+          "x": 420,
+          "y": 1481.78125,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 910,
+          "y": 1481.78125,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 1400,
+          "y": 1481.78125,
+          "width": 476,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 687.953125,
+        "bottom": 916.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "turkey-wheat",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "file": "1896-turkey-wheat.png",
+      "x": 420,
+      "width": 1456,
+      "y": 1419.609375,
+      "columns": [
+        {
+          "x": 420,
+          "y": 1555.390625,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 910,
+          "y": 1555.390625,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 1400,
+          "y": 1555.390625,
+          "width": 476,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 687.953125,
+        "bottom": 916.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "turkey-forest",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "file": "1896-turkey-forest.png",
+      "x": 420,
+      "width": 1456,
+      "y": 1269.0625,
+      "columns": [
+        {
+          "x": 420,
+          "y": 1448.84375,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 910,
+          "y": 1448.84375,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 1400,
+          "y": 1448.84375,
+          "width": 476,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 687.953125,
+        "bottom": 916.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "turkey-barley",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "file": "1896-turkey-barley.png",
+      "x": 420,
+      "width": 1456,
+      "y": 1419.609375,
+      "columns": [
+        {
+          "x": 420,
+          "y": 1555.390625,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 910,
+          "y": 1555.390625,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 1400,
+          "y": 1555.390625,
+          "width": 476,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 687.953125,
+        "bottom": 916.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "turkey-rice",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "file": "1896-turkey-rice.png",
+      "x": 420,
+      "width": 1456,
+      "y": 1346,
+      "columns": [
+        {
+          "x": 420,
+          "y": 1481.78125,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 910,
+          "y": 1481.78125,
+          "width": 476,
+          "font": 14
+        },
+        {
+          "x": 1400,
+          "y": 1481.78125,
+          "width": 476,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 687.953125,
+        "bottom": 916.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "overview",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "file": "1280-overview.png",
+      "x": 279.1875,
+      "width": 601.96875,
+      "y": 970.03125,
+      "columns": [],
+      "map": {
+        "width": 352.59375,
+        "bottom": 585.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "regional-wheat",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "file": "1280-regional-wheat.png",
+      "x": 279.1875,
+      "width": 980.8125,
+      "y": 1096.25,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1140.34375,
+          "width": 317.59375,
+          "font": 13
+        },
+        {
+          "x": 610.78125,
+          "y": 1140.34375,
+          "width": 317.609375,
+          "font": 13
+        },
+        {
+          "x": 942.390625,
+          "y": 1140.34375,
+          "width": 317.59375,
+          "font": 13
+        }
+      ],
+      "map": {
+        "width": 352.59375,
+        "bottom": 585.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "regional-dates",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "file": "1280-regional-dates.png",
+      "x": 279.1875,
+      "width": 980.8125,
+      "y": 1116.03125,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1160.125,
+          "width": 317.59375,
+          "font": 13
+        },
+        {
+          "x": 610.78125,
+          "y": 1160.125,
+          "width": 317.609375,
+          "font": 13
+        },
+        {
+          "x": 942.390625,
+          "y": 1160.125,
+          "width": 317.59375,
+          "font": 13
+        }
+      ],
+      "map": {
+        "width": 352.59375,
+        "bottom": 585.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "regional-olives",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "file": "1280-regional-olives.png",
+      "x": 279.1875,
+      "width": 980.8125,
+      "y": 1116.03125,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1160.125,
+          "width": 317.59375,
+          "font": 13
+        },
+        {
+          "x": 610.78125,
+          "y": 1160.125,
+          "width": 317.609375,
+          "font": 13
+        },
+        {
+          "x": 942.390625,
+          "y": 1160.125,
+          "width": 317.59375,
+          "font": 13
+        }
+      ],
+      "map": {
+        "width": 352.59375,
+        "bottom": 585.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "saudi-dates",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "file": "1280-saudi-dates.png",
+      "x": 279.1875,
+      "width": 980.8125,
+      "y": 1174.78125,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1268.96875,
+          "width": 317.59375,
+          "font": 14
+        },
+        {
+          "x": 610.78125,
+          "y": 1268.96875,
+          "width": 317.609375,
+          "font": 14
+        },
+        {
+          "x": 942.390625,
+          "y": 1268.96875,
+          "width": 317.59375,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 352.59375,
+        "bottom": 585.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "turkey-olives",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "file": "1280-turkey-olives.png",
+      "x": 279.1875,
+      "width": 980.8125,
+      "y": 1174.78125,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1268.96875,
+          "width": 317.59375,
+          "font": 14
+        },
+        {
+          "x": 610.78125,
+          "y": 1268.96875,
+          "width": 317.609375,
+          "font": 14
+        },
+        {
+          "x": 942.390625,
+          "y": 1268.96875,
+          "width": 317.59375,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 352.59375,
+        "bottom": 585.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "turkey-milk",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "file": "1280-turkey-milk.png",
+      "x": 279.1875,
+      "width": 980.8125,
+      "y": 1082,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1217.78125,
+          "width": 317.59375,
+          "font": 14
+        },
+        {
+          "x": 610.78125,
+          "y": 1217.78125,
+          "width": 317.609375,
+          "font": 14
+        },
+        {
+          "x": 942.390625,
+          "y": 1217.78125,
+          "width": 317.59375,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 352.59375,
+        "bottom": 585.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "turkey-eggs",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "file": "1280-turkey-eggs.png",
+      "x": 279.1875,
+      "width": 980.8125,
+      "y": 1082,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1217.78125,
+          "width": 317.59375,
+          "font": 14
+        },
+        {
+          "x": 610.78125,
+          "y": 1217.78125,
+          "width": 317.609375,
+          "font": 14
+        },
+        {
+          "x": 942.390625,
+          "y": 1217.78125,
+          "width": 317.59375,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 352.59375,
+        "bottom": 585.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "turkey-chicken",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "file": "1280-turkey-chicken.png",
+      "x": 279.1875,
+      "width": 980.8125,
+      "y": 1082,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1217.78125,
+          "width": 317.59375,
+          "font": 14
+        },
+        {
+          "x": 610.78125,
+          "y": 1217.78125,
+          "width": 317.609375,
+          "font": 14
+        },
+        {
+          "x": 942.390625,
+          "y": 1217.78125,
+          "width": 317.59375,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 352.59375,
+        "bottom": 585.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "turkey-beef",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "file": "1280-turkey-beef.png",
+      "x": 279.1875,
+      "width": 980.8125,
+      "y": 1082,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1217.78125,
+          "width": 317.59375,
+          "font": 14
+        },
+        {
+          "x": 610.78125,
+          "y": 1217.78125,
+          "width": 317.609375,
+          "font": 14
+        },
+        {
+          "x": 942.390625,
+          "y": 1217.78125,
+          "width": 317.59375,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 352.59375,
+        "bottom": 585.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "egypt-buffalo",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "file": "1280-egypt-buffalo.png",
+      "x": 279.1875,
+      "width": 980.8125,
+      "y": 1082,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1217.78125,
+          "width": 317.59375,
+          "font": 14
+        },
+        {
+          "x": 610.78125,
+          "y": 1217.78125,
+          "width": 317.609375,
+          "font": 14
+        },
+        {
+          "x": 942.390625,
+          "y": 1217.78125,
+          "width": 317.59375,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 352.59375,
+        "bottom": 585.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "turkey-wheat",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "file": "1280-turkey-wheat.png",
+      "x": 279.1875,
+      "width": 980.8125,
+      "y": 1155,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1290.78125,
+          "width": 317.59375,
+          "font": 14
+        },
+        {
+          "x": 610.78125,
+          "y": 1290.78125,
+          "width": 317.609375,
+          "font": 14
+        },
+        {
+          "x": 942.390625,
+          "y": 1290.78125,
+          "width": 317.59375,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 352.59375,
+        "bottom": 585.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "turkey-forest",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "file": "1280-turkey-forest.png",
+      "x": 279.1875,
+      "width": 980.8125,
+      "y": 938.0625,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1117.84375,
+          "width": 317.59375,
+          "font": 14
+        },
+        {
+          "x": 610.78125,
+          "y": 1117.84375,
+          "width": 317.609375,
+          "font": 14
+        },
+        {
+          "x": 942.390625,
+          "y": 1117.84375,
+          "width": 317.59375,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 352.59375,
+        "bottom": 585.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "turkey-barley",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "file": "1280-turkey-barley.png",
+      "x": 279.1875,
+      "width": 980.8125,
+      "y": 1155,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1290.78125,
+          "width": 317.59375,
+          "font": 14
+        },
+        {
+          "x": 610.78125,
+          "y": 1290.78125,
+          "width": 317.609375,
+          "font": 14
+        },
+        {
+          "x": 942.390625,
+          "y": 1290.78125,
+          "width": 317.59375,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 352.59375,
+        "bottom": 585.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "turkey-rice",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "file": "1280-turkey-rice.png",
+      "x": 279.1875,
+      "width": 980.8125,
+      "y": 1082,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1217.78125,
+          "width": 317.59375,
+          "font": 14
+        },
+        {
+          "x": 610.78125,
+          "y": 1217.78125,
+          "width": 317.609375,
+          "font": 14
+        },
+        {
+          "x": 942.390625,
+          "y": 1217.78125,
+          "width": 317.59375,
+          "font": 14
+        }
+      ],
+      "map": {
+        "width": 352.59375,
+        "bottom": 585.96875
+      },
+      "overflow": false,
+      "statisticsOverflow": false,
+      "dpr": 1.5
+    }
+  ],
+  "errors": [],
+  "sourceIdentity": {
+    "mode": "exact-commit",
+    "baseHead": "58be943225b7fdef8bb68392c7e377571305007d",
+    "buildIdentity": "58be943225b7fdef8bb68392c7e377571305007d",
+    "workingTreeDirty": false,
+    "applicationInputsDirty": false,
+    "inputFiles": 3593,
+    "workingTreeSha256": "43dcbba00136b71738aeaac9282049f8d3aa797b588b257082721a0acda347be",
+    "publishedRelease": false
+  },
+  "runtimeSandbox": {
+    "browserVersion": "151.0.7922.173",
+    "status": "Sandbox Status\nLayer 1 Sandbox\tNamespace\nPID namespaces\tYes\nNetwork namespaces\tYes\nSeccomp-BPF sandbox\tYes\nSeccomp-BPF sandbox supports TSYNC\tYes\nPtrace Protection with Yama LSM (Broker)\tNo\nPtrace Protection with Yama LSM (Non-broker)\tNo\n\nYou are adequately sandboxed.",
+    "verified": true
+  },
+  "lastMeasurement": {
+    "name": "turkey-rice",
+    "viewport": {
+      "width": 1280,
+      "height": 665
+    },
+    "x": 279.1875,
+    "width": 980.8125,
+    "y": 1082,
+    "columns": [
+      {
+        "x": 279.1875,
+        "y": 1217.78125,
+        "width": 317.59375,
+        "font": 14
+      },
+      {
+        "x": 610.78125,
+        "y": 1217.78125,
+        "width": 317.609375,
+        "font": 14
+      },
+      {
+        "x": 942.390625,
+        "y": 1217.78125,
+        "width": 317.59375,
+        "font": 14
+      }
+    ],
+    "map": {
+      "width": 352.59375,
+      "bottom": 585.96875
+    },
+    "overflow": false,
+    "statisticsOverflow": false,
+    "dpr": 1.5
+  }
+}

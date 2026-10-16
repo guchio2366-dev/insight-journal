@@ -1,0 +1,963 @@
+{
+  "head": "58be943225b7fdef8bb68392c7e377571305007d",
+  "status": "passed",
+  "deviceScaleFactor": 1.5,
+  "cases": [
+    {
+      "name": "1896-IND-rice",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "country": "IND",
+      "topic": "rice",
+      "basis": "rice-milled-production",
+      "statistics": {
+        "x": 420,
+        "y": 1272.171875,
+        "width": 1456,
+        "overflow": false
+      },
+      "map": {
+        "x": 421,
+        "y": 302,
+        "width": 949.859375,
+        "height": 678,
+        "bottom": 980
+      },
+      "columns": [
+        {
+          "x": 420,
+          "y": 1439.546875,
+          "width": 476
+        },
+        {
+          "x": 910,
+          "y": 1439.546875,
+          "width": 476
+        },
+        {
+          "x": 1400,
+          "y": 1439.546875,
+          "width": 476
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "1896-PAK-rice",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "country": "PAK",
+      "topic": "rice",
+      "basis": "rice-milled-production",
+      "statistics": {
+        "x": 420,
+        "y": 1272.171875,
+        "width": 1456,
+        "overflow": false
+      },
+      "map": {
+        "x": 421,
+        "y": 302,
+        "width": 949.859375,
+        "height": 678,
+        "bottom": 980
+      },
+      "columns": [
+        {
+          "x": 420,
+          "y": 1439.546875,
+          "width": 476
+        },
+        {
+          "x": 910,
+          "y": 1439.546875,
+          "width": 476
+        },
+        {
+          "x": 1400,
+          "y": 1439.546875,
+          "width": 476
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "1896-IND-cotton",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "country": "IND",
+      "topic": "cotton",
+      "basis": "cotton-lint-production",
+      "statistics": {
+        "x": 420,
+        "y": 1254.171875,
+        "width": 1456,
+        "overflow": false
+      },
+      "map": {
+        "x": 421,
+        "y": 302,
+        "width": 949.859375,
+        "height": 678,
+        "bottom": 980
+      },
+      "columns": [
+        {
+          "x": 420,
+          "y": 1421.546875,
+          "width": 476
+        },
+        {
+          "x": 910,
+          "y": 1421.546875,
+          "width": 476
+        },
+        {
+          "x": 1400,
+          "y": 1421.546875,
+          "width": 476
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "1896-PAK-cotton",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "country": "PAK",
+      "topic": "cotton",
+      "basis": "cotton-lint-production",
+      "statistics": {
+        "x": 420,
+        "y": 1254.171875,
+        "width": 1456,
+        "overflow": false
+      },
+      "map": {
+        "x": 421,
+        "y": 302,
+        "width": 949.859375,
+        "height": 678,
+        "bottom": 980
+      },
+      "columns": [
+        {
+          "x": 420,
+          "y": 1421.546875,
+          "width": 476
+        },
+        {
+          "x": 910,
+          "y": 1421.546875,
+          "width": 476
+        },
+        {
+          "x": 1400,
+          "y": 1421.546875,
+          "width": 476
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "1896-BGD-cotton",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "country": "BGD",
+      "topic": "cotton",
+      "basis": "cotton-lint-production",
+      "statistics": {
+        "x": 420,
+        "y": 1254.171875,
+        "width": 1456,
+        "overflow": false
+      },
+      "map": {
+        "x": 421,
+        "y": 302,
+        "width": 949.859375,
+        "height": 678,
+        "bottom": 980
+      },
+      "columns": [
+        {
+          "x": 420,
+          "y": 1421.546875,
+          "width": 476
+        },
+        {
+          "x": 910,
+          "y": 1421.546875,
+          "width": 476
+        },
+        {
+          "x": 1400,
+          "y": 1421.546875,
+          "width": 476
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "1896-BGD-wheat",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "country": "BGD",
+      "topic": "wheat",
+      "basis": "wheat-production",
+      "statistics": {
+        "x": 420,
+        "y": 1254.171875,
+        "width": 1456,
+        "overflow": false
+      },
+      "map": {
+        "x": 421,
+        "y": 302,
+        "width": 949.859375,
+        "height": 678,
+        "bottom": 980
+      },
+      "columns": [
+        {
+          "x": 420,
+          "y": 1421.546875,
+          "width": 476
+        },
+        {
+          "x": 910,
+          "y": 1421.546875,
+          "width": 476
+        },
+        {
+          "x": 1400,
+          "y": 1421.546875,
+          "width": 476
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "1896-IND-wheat",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "country": "IND",
+      "topic": "wheat",
+      "basis": "wheat-production",
+      "statistics": {
+        "x": 420,
+        "y": 1254.171875,
+        "width": 1456,
+        "overflow": false
+      },
+      "map": {
+        "x": 421,
+        "y": 302,
+        "width": 949.859375,
+        "height": 678,
+        "bottom": 980
+      },
+      "columns": [
+        {
+          "x": 420,
+          "y": 1421.546875,
+          "width": 476
+        },
+        {
+          "x": 910,
+          "y": 1421.546875,
+          "width": 476
+        },
+        {
+          "x": 1400,
+          "y": 1421.546875,
+          "width": 476
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "1896-IND-forest",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "country": "IND",
+      "topic": "forest",
+      "basis": null,
+      "statistics": {
+        "x": 420,
+        "y": 1217.375,
+        "width": 1456,
+        "overflow": false
+      },
+      "map": {
+        "x": 421,
+        "y": 302,
+        "width": 949.859375,
+        "height": 678,
+        "bottom": 980
+      },
+      "columns": [
+        {
+          "x": 420,
+          "y": 1397.15625,
+          "width": 476
+        },
+        {
+          "x": 910,
+          "y": 1397.15625,
+          "width": 476
+        },
+        {
+          "x": 1400,
+          "y": 1397.15625,
+          "width": 476
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "1896-regional-rice",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "country": "",
+      "topic": "rice",
+      "basis": "regional",
+      "statistics": {
+        "x": 420,
+        "y": 1272.171875,
+        "width": 1456,
+        "overflow": false
+      },
+      "map": {
+        "x": 421,
+        "y": 302,
+        "width": 949.859375,
+        "height": 678,
+        "bottom": 980
+      },
+      "columns": [
+        {
+          "x": 420,
+          "y": 1407.953125,
+          "width": 476
+        },
+        {
+          "x": 910,
+          "y": 1407.953125,
+          "width": 476
+        },
+        {
+          "x": 1400,
+          "y": 1407.953125,
+          "width": 476
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "1896-regional-cotton",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "country": "",
+      "topic": "cotton",
+      "basis": "regional",
+      "statistics": {
+        "x": 420,
+        "y": 1254.171875,
+        "width": 1456,
+        "overflow": false
+      },
+      "map": {
+        "x": 421,
+        "y": 302,
+        "width": 949.859375,
+        "height": 678,
+        "bottom": 980
+      },
+      "columns": [
+        {
+          "x": 420,
+          "y": 1389.953125,
+          "width": 476
+        },
+        {
+          "x": 910,
+          "y": 1389.953125,
+          "width": 476
+        },
+        {
+          "x": 1400,
+          "y": 1389.953125,
+          "width": 476
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "1896-regional-forest",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "country": "",
+      "topic": "forest",
+      "basis": "regional",
+      "statistics": {
+        "x": 420,
+        "y": 1217.375,
+        "width": 1456,
+        "overflow": false
+      },
+      "map": {
+        "x": 421,
+        "y": 302,
+        "width": 949.859375,
+        "height": 678,
+        "bottom": 980
+      },
+      "columns": [
+        {
+          "x": 420,
+          "y": 1397.15625,
+          "width": 476
+        },
+        {
+          "x": 910,
+          "y": 1397.15625,
+          "width": 476
+        },
+        {
+          "x": 1400,
+          "y": 1397.15625,
+          "width": 476
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "1280-IND-rice",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "country": "IND",
+      "topic": "rice",
+      "basis": "rice-milled-production",
+      "statistics": {
+        "x": 279.1875,
+        "y": 1089.5625,
+        "width": 980.8125,
+        "overflow": false
+      },
+      "map": {
+        "x": 280.1875,
+        "y": 302,
+        "width": 637.078125,
+        "height": 471.390625,
+        "bottom": 773.390625
+      },
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1256.9375,
+          "width": 317.59375
+        },
+        {
+          "x": 610.78125,
+          "y": 1256.9375,
+          "width": 317.609375
+        },
+        {
+          "x": 942.390625,
+          "y": 1256.9375,
+          "width": 317.59375
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "1280-PAK-rice",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "country": "PAK",
+      "topic": "rice",
+      "basis": "rice-milled-production",
+      "statistics": {
+        "x": 279.1875,
+        "y": 1089.5625,
+        "width": 980.8125,
+        "overflow": false
+      },
+      "map": {
+        "x": 280.1875,
+        "y": 302,
+        "width": 637.078125,
+        "height": 471.390625,
+        "bottom": 773.390625
+      },
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1256.9375,
+          "width": 317.59375
+        },
+        {
+          "x": 610.78125,
+          "y": 1256.9375,
+          "width": 317.609375
+        },
+        {
+          "x": 942.390625,
+          "y": 1256.9375,
+          "width": 317.59375
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "1280-IND-cotton",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "country": "IND",
+      "topic": "cotton",
+      "basis": "cotton-lint-production",
+      "statistics": {
+        "x": 279.1875,
+        "y": 1107.5625,
+        "width": 980.8125,
+        "overflow": false
+      },
+      "map": {
+        "x": 280.1875,
+        "y": 302,
+        "width": 637.078125,
+        "height": 471.390625,
+        "bottom": 773.390625
+      },
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1274.9375,
+          "width": 317.59375
+        },
+        {
+          "x": 610.78125,
+          "y": 1274.9375,
+          "width": 317.609375
+        },
+        {
+          "x": 942.390625,
+          "y": 1274.9375,
+          "width": 317.59375
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "1280-PAK-cotton",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "country": "PAK",
+      "topic": "cotton",
+      "basis": "cotton-lint-production",
+      "statistics": {
+        "x": 279.1875,
+        "y": 1107.5625,
+        "width": 980.8125,
+        "overflow": false
+      },
+      "map": {
+        "x": 280.1875,
+        "y": 302,
+        "width": 637.078125,
+        "height": 471.390625,
+        "bottom": 773.390625
+      },
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1274.9375,
+          "width": 317.59375
+        },
+        {
+          "x": 610.78125,
+          "y": 1274.9375,
+          "width": 317.609375
+        },
+        {
+          "x": 942.390625,
+          "y": 1274.9375,
+          "width": 317.59375
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "1280-BGD-cotton",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "country": "BGD",
+      "topic": "cotton",
+      "basis": "cotton-lint-production",
+      "statistics": {
+        "x": 279.1875,
+        "y": 1107.5625,
+        "width": 980.8125,
+        "overflow": false
+      },
+      "map": {
+        "x": 280.1875,
+        "y": 302,
+        "width": 637.078125,
+        "height": 471.390625,
+        "bottom": 773.390625
+      },
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1274.9375,
+          "width": 317.59375
+        },
+        {
+          "x": 610.78125,
+          "y": 1274.9375,
+          "width": 317.609375
+        },
+        {
+          "x": 942.390625,
+          "y": 1274.9375,
+          "width": 317.59375
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "1280-BGD-wheat",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "country": "BGD",
+      "topic": "wheat",
+      "basis": "wheat-production",
+      "statistics": {
+        "x": 279.1875,
+        "y": 1107.5625,
+        "width": 980.8125,
+        "overflow": false
+      },
+      "map": {
+        "x": 280.1875,
+        "y": 302,
+        "width": 637.078125,
+        "height": 471.390625,
+        "bottom": 773.390625
+      },
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1274.9375,
+          "width": 317.59375
+        },
+        {
+          "x": 610.78125,
+          "y": 1274.9375,
+          "width": 317.609375
+        },
+        {
+          "x": 942.390625,
+          "y": 1274.9375,
+          "width": 317.59375
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "1280-IND-wheat",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "country": "IND",
+      "topic": "wheat",
+      "basis": "wheat-production",
+      "statistics": {
+        "x": 279.1875,
+        "y": 1107.5625,
+        "width": 980.8125,
+        "overflow": false
+      },
+      "map": {
+        "x": 280.1875,
+        "y": 302,
+        "width": 637.078125,
+        "height": 471.390625,
+        "bottom": 773.390625
+      },
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1274.9375,
+          "width": 317.59375
+        },
+        {
+          "x": 610.78125,
+          "y": 1274.9375,
+          "width": 317.609375
+        },
+        {
+          "x": 942.390625,
+          "y": 1274.9375,
+          "width": 317.59375
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "1280-IND-forest",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "country": "IND",
+      "topic": "forest",
+      "basis": null,
+      "statistics": {
+        "x": 279.1875,
+        "y": 1010.765625,
+        "width": 980.8125,
+        "overflow": false
+      },
+      "map": {
+        "x": 280.1875,
+        "y": 302,
+        "width": 637.078125,
+        "height": 471.390625,
+        "bottom": 773.390625
+      },
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1190.546875,
+          "width": 317.59375
+        },
+        {
+          "x": 610.78125,
+          "y": 1190.546875,
+          "width": 317.609375
+        },
+        {
+          "x": 942.390625,
+          "y": 1190.546875,
+          "width": 317.59375
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "1280-regional-rice",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "country": "",
+      "topic": "rice",
+      "basis": "regional",
+      "statistics": {
+        "x": 279.1875,
+        "y": 1089.5625,
+        "width": 980.8125,
+        "overflow": false
+      },
+      "map": {
+        "x": 280.1875,
+        "y": 302,
+        "width": 637.078125,
+        "height": 471.390625,
+        "bottom": 773.390625
+      },
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1225.34375,
+          "width": 317.59375
+        },
+        {
+          "x": 610.78125,
+          "y": 1225.34375,
+          "width": 317.609375
+        },
+        {
+          "x": 942.390625,
+          "y": 1225.34375,
+          "width": 317.59375
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "1280-regional-cotton",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "country": "",
+      "topic": "cotton",
+      "basis": "regional",
+      "statistics": {
+        "x": 279.1875,
+        "y": 1107.5625,
+        "width": 980.8125,
+        "overflow": false
+      },
+      "map": {
+        "x": 280.1875,
+        "y": 302,
+        "width": 637.078125,
+        "height": 471.390625,
+        "bottom": 773.390625
+      },
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1243.34375,
+          "width": 317.59375
+        },
+        {
+          "x": 610.78125,
+          "y": 1243.34375,
+          "width": 317.609375
+        },
+        {
+          "x": 942.390625,
+          "y": 1243.34375,
+          "width": 317.59375
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    },
+    {
+      "name": "1280-regional-forest",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "country": "",
+      "topic": "forest",
+      "basis": "regional",
+      "statistics": {
+        "x": 279.1875,
+        "y": 1010.765625,
+        "width": 980.8125,
+        "overflow": false
+      },
+      "map": {
+        "x": 280.1875,
+        "y": 302,
+        "width": 637.078125,
+        "height": 471.390625,
+        "bottom": 773.390625
+      },
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1190.546875,
+          "width": 317.59375
+        },
+        {
+          "x": 610.78125,
+          "y": 1190.546875,
+          "width": 317.609375
+        },
+        {
+          "x": 942.390625,
+          "y": 1190.546875,
+          "width": 317.59375
+        }
+      ],
+      "pageOverflow": false,
+      "dpr": 1.5
+    }
+  ],
+  "operations": [
+    {
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "overviewRestored": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "overviewRestored": true
+    }
+  ],
+  "errors": [],
+  "sourceIdentity": {
+    "mode": "exact-commit",
+    "baseHead": "58be943225b7fdef8bb68392c7e377571305007d",
+    "buildIdentity": "58be943225b7fdef8bb68392c7e377571305007d",
+    "workingTreeDirty": false,
+    "applicationInputsDirty": false,
+    "inputFiles": 3593,
+    "workingTreeSha256": "43dcbba00136b71738aeaac9282049f8d3aa797b588b257082721a0acda347be",
+    "publishedRelease": false
+  },
+  "runtimeSandbox": {
+    "browserVersion": "151.0.7922.173",
+    "status": "Sandbox Status\nLayer 1 Sandbox\tNamespace\nPID namespaces\tYes\nNetwork namespaces\tYes\nSeccomp-BPF sandbox\tYes\nSeccomp-BPF sandbox supports TSYNC\tYes\nPtrace Protection with Yama LSM (Broker)\tNo\nPtrace Protection with Yama LSM (Non-broker)\tNo\n\nYou are adequately sandboxed.",
+    "verified": true
+  }
+}

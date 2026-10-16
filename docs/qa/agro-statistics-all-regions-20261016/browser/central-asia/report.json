@@ -1,0 +1,384 @@
+{
+  "head": "58be943225b7fdef8bb68392c7e377571305007d",
+  "sandbox": true,
+  "deviceScaleFactor": 1.5,
+  "status": "passed",
+  "cases": [
+    {
+      "name": "regional-wheat",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "dpr": 1.5,
+      "overflow": false,
+      "overflowPanel": false,
+      "left": 420,
+      "top": 1254.171875,
+      "mapBottom": 981,
+      "columns": [
+        {
+          "x": 420,
+          "y": 1358.359375,
+          "width": 476
+        },
+        {
+          "x": 910,
+          "y": 1358.359375,
+          "width": 476
+        },
+        {
+          "x": 1400,
+          "y": 1358.359375,
+          "width": 476
+        }
+      ]
+    },
+    {
+      "name": "regional-cotton",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "dpr": 1.5,
+      "overflow": false,
+      "overflowPanel": false,
+      "left": 420,
+      "top": 1254.171875,
+      "mapBottom": 981,
+      "columns": [
+        {
+          "x": 420,
+          "y": 1358.359375,
+          "width": 476
+        },
+        {
+          "x": 910,
+          "y": 1358.359375,
+          "width": 476
+        },
+        {
+          "x": 1400,
+          "y": 1358.359375,
+          "width": 476
+        }
+      ]
+    },
+    {
+      "name": "regional-cattle",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "dpr": 1.5,
+      "overflow": false,
+      "overflowPanel": false,
+      "left": 420,
+      "top": 1254.171875,
+      "mapBottom": 981,
+      "columns": [
+        {
+          "x": 420,
+          "y": 1402.359375,
+          "width": 476
+        },
+        {
+          "x": 910,
+          "y": 1402.359375,
+          "width": 476
+        },
+        {
+          "x": 1400,
+          "y": 1402.359375,
+          "width": 476
+        }
+      ]
+    },
+    {
+      "name": "regional-forest",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "dpr": 1.5,
+      "overflow": false,
+      "overflowPanel": false,
+      "left": 420,
+      "top": 1217.375,
+      "mapBottom": 981,
+      "columns": [
+        {
+          "x": 420,
+          "y": 1365.5625,
+          "width": 476
+        },
+        {
+          "x": 910,
+          "y": 1365.5625,
+          "width": 476
+        },
+        {
+          "x": 1400,
+          "y": 1365.5625,
+          "width": 476
+        }
+      ]
+    },
+    {
+      "name": "kazakhstan-wheat",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "dpr": 1.5,
+      "overflow": false,
+      "overflowPanel": false,
+      "left": 420,
+      "top": 1254.171875,
+      "mapBottom": 981,
+      "columns": [
+        {
+          "x": 420,
+          "y": 1389.953125,
+          "width": 476
+        },
+        {
+          "x": 910,
+          "y": 1389.953125,
+          "width": 476
+        },
+        {
+          "x": 1400,
+          "y": 1389.953125,
+          "width": 476
+        }
+      ]
+    },
+    {
+      "name": "uzbekistan-forest",
+      "viewport": {
+        "width": 1896,
+        "height": 996
+      },
+      "dpr": 1.5,
+      "overflow": false,
+      "overflowPanel": false,
+      "left": 420,
+      "top": 1217.375,
+      "mapBottom": 981,
+      "columns": [
+        {
+          "x": 420,
+          "y": 1397.15625,
+          "width": 476
+        },
+        {
+          "x": 910,
+          "y": 1397.15625,
+          "width": 476
+        },
+        {
+          "x": 1400,
+          "y": 1397.15625,
+          "width": 476
+        }
+      ]
+    },
+    {
+      "name": "regional-wheat",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "dpr": 1.5,
+      "overflow": false,
+      "overflowPanel": false,
+      "left": 279.1875,
+      "top": 1089.5625,
+      "mapBottom": 774.390625,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1193.75,
+          "width": 317.59375
+        },
+        {
+          "x": 610.78125,
+          "y": 1193.75,
+          "width": 317.609375
+        },
+        {
+          "x": 942.390625,
+          "y": 1193.75,
+          "width": 317.59375
+        }
+      ]
+    },
+    {
+      "name": "regional-cotton",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "dpr": 1.5,
+      "overflow": false,
+      "overflowPanel": false,
+      "left": 279.1875,
+      "top": 1089.5625,
+      "mapBottom": 774.390625,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1193.75,
+          "width": 317.59375
+        },
+        {
+          "x": 610.78125,
+          "y": 1193.75,
+          "width": 317.609375
+        },
+        {
+          "x": 942.390625,
+          "y": 1193.75,
+          "width": 317.59375
+        }
+      ]
+    },
+    {
+      "name": "regional-cattle",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "dpr": 1.5,
+      "overflow": false,
+      "overflowPanel": false,
+      "left": 279.1875,
+      "top": 1089.5625,
+      "mapBottom": 774.390625,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1237.75,
+          "width": 317.59375
+        },
+        {
+          "x": 610.78125,
+          "y": 1237.75,
+          "width": 317.609375
+        },
+        {
+          "x": 942.390625,
+          "y": 1237.75,
+          "width": 317.59375
+        }
+      ]
+    },
+    {
+      "name": "regional-forest",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "dpr": 1.5,
+      "overflow": false,
+      "overflowPanel": false,
+      "left": 279.1875,
+      "top": 1010.765625,
+      "mapBottom": 774.390625,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1158.953125,
+          "width": 317.59375
+        },
+        {
+          "x": 610.78125,
+          "y": 1158.953125,
+          "width": 317.609375
+        },
+        {
+          "x": 942.390625,
+          "y": 1158.953125,
+          "width": 317.59375
+        }
+      ]
+    },
+    {
+      "name": "kazakhstan-wheat",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "dpr": 1.5,
+      "overflow": false,
+      "overflowPanel": false,
+      "left": 279.1875,
+      "top": 1089.5625,
+      "mapBottom": 774.390625,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1225.34375,
+          "width": 317.59375
+        },
+        {
+          "x": 610.78125,
+          "y": 1225.34375,
+          "width": 317.609375
+        },
+        {
+          "x": 942.390625,
+          "y": 1225.34375,
+          "width": 317.59375
+        }
+      ]
+    },
+    {
+      "name": "uzbekistan-forest",
+      "viewport": {
+        "width": 1280,
+        "height": 665
+      },
+      "dpr": 1.5,
+      "overflow": false,
+      "overflowPanel": false,
+      "left": 279.1875,
+      "top": 1010.765625,
+      "mapBottom": 774.390625,
+      "columns": [
+        {
+          "x": 279.1875,
+          "y": 1190.546875,
+          "width": 317.59375
+        },
+        {
+          "x": 610.78125,
+          "y": 1190.546875,
+          "width": 317.609375
+        },
+        {
+          "x": 942.390625,
+          "y": 1190.546875,
+          "width": 317.59375
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "sourceIdentity": {
+    "mode": "exact-commit",
+    "baseHead": "58be943225b7fdef8bb68392c7e377571305007d",
+    "buildIdentity": "58be943225b7fdef8bb68392c7e377571305007d",
+    "workingTreeDirty": false,
+    "applicationInputsDirty": false,
+    "inputFiles": 3593,
+    "workingTreeSha256": "43dcbba00136b71738aeaac9282049f8d3aa797b588b257082721a0acda347be",
+    "publishedRelease": false
+  },
+  "runtimeSandbox": {
+    "browserVersion": "151.0.7922.173",
+    "status": "Sandbox Status\nLayer 1 Sandbox\tNamespace\nPID namespaces\tYes\nNetwork namespaces\tYes\nSeccomp-BPF sandbox\tYes\nSeccomp-BPF sandbox supports TSYNC\tYes\nPtrace Protection with Yama LSM (Broker)\tNo\nPtrace Protection with Yama LSM (Non-broker)\tNo\n\nYou are adequately sandboxed.",
+    "verified": true
+  }
+}

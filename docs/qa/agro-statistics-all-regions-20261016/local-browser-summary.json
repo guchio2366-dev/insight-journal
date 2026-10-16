@@ -1,0 +1,131 @@
+{
+  "status": "all-regional-browser-checks-passed",
+  "dataCoveragePassed": false,
+  "publicationAllowed": false,
+  "allCapturesAtOneCommit": false,
+  "applicationCodeCommit": "58be943225b7fdef8bb68392c7e377571305007d",
+  "captureQaFollowup": "a80a153fcf3156de1e089bb95b1b955e6f4ecfd9",
+  "applicationInputsUnchanged": true,
+  "profiles": [
+    {
+      "width": 1896,
+      "height": 996,
+      "deviceScaleFactor": 1.5
+    },
+    {
+      "width": 1280,
+      "height": 665,
+      "deviceScaleFactor": 1.5
+    }
+  ],
+  "regions": [
+    {
+      "region": "africa",
+      "passed": true,
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d",
+      "runtimeSandboxVerified": true,
+      "screenshots": 34,
+      "report": "docs/qa/agro-statistics-all-regions-20261016/browser/africa/report.json"
+    },
+    {
+      "region": "canada",
+      "passed": true,
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d",
+      "runtimeSandboxVerified": true,
+      "screenshots": 22,
+      "report": "docs/qa/agro-statistics-all-regions-20261016/browser/canada/report.json"
+    },
+    {
+      "region": "central-asia",
+      "passed": true,
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d",
+      "runtimeSandboxVerified": true,
+      "screenshots": 26,
+      "report": "docs/qa/agro-statistics-all-regions-20261016/browser/central-asia/report.json"
+    },
+    {
+      "region": "east-asia",
+      "passed": true,
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d",
+      "runtimeSandboxVerified": true,
+      "screenshots": 74,
+      "report": "docs/qa/agro-statistics-all-regions-20261016/browser/east-asia/report.json"
+    },
+    {
+      "region": "europe",
+      "passed": true,
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d",
+      "runtimeSandboxVerified": true,
+      "screenshots": 48,
+      "report": "docs/qa/agro-statistics-all-regions-20261016/browser/europe/report.json"
+    },
+    {
+      "region": "latin-america",
+      "passed": true,
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d",
+      "runtimeSandboxVerified": true,
+      "screenshots": 36,
+      "report": "docs/qa/agro-statistics-all-regions-20261016/browser/latin-america/report.json"
+    },
+    {
+      "region": "mexico",
+      "passed": true,
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d",
+      "runtimeSandboxVerified": true,
+      "screenshots": 38,
+      "report": "docs/qa/agro-statistics-all-regions-20261016/browser/mexico/report.json"
+    },
+    {
+      "region": "oceania",
+      "passed": true,
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d",
+      "runtimeSandboxVerified": true,
+      "screenshots": 32,
+      "report": "docs/qa/agro-statistics-all-regions-20261016/browser/oceania/report.json"
+    },
+    {
+      "region": "russia",
+      "passed": true,
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d",
+      "runtimeSandboxVerified": true,
+      "screenshots": 10,
+      "report": "docs/qa/agro-statistics-all-regions-20261016/browser/russia/verification.json"
+    },
+    {
+      "region": "south-asia",
+      "passed": true,
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d",
+      "runtimeSandboxVerified": true,
+      "screenshots": 50,
+      "report": "docs/qa/agro-statistics-all-regions-20261016/browser/south-asia/report.json"
+    },
+    {
+      "region": "southeast-asia",
+      "passed": true,
+      "captureCommit": "a80a153fcf3156de1e089bb95b1b955e6f4ecfd9",
+      "runtimeSandboxVerified": true,
+      "screenshots": 26,
+      "report": "docs/qa/agro-statistics-all-regions-20261016/browser/southeast-asia/report.json"
+    },
+    {
+      "region": "us",
+      "passed": true,
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d",
+      "runtimeSandboxVerified": true,
+      "screenshots": 54,
+      "report": "docs/qa/agro-statistics-all-regions-20261016/browser/us/report.json"
+    },
+    {
+      "region": "west-asia",
+      "passed": true,
+      "captureCommit": "58be943225b7fdef8bb68392c7e377571305007d",
+      "runtimeSandboxVerified": true,
+      "screenshots": 30,
+      "report": "docs/qa/agro-statistics-all-regions-20261016/browser/west-asia/report.json"
+    }
+  ],
+  "screenshots": 480,
+  "actuallyInspectedImages": 27,
+  "remainingDataRequest": "docs/atlas-agro-source-request-minimum-20261016.md",
+  "ciFinalHeadReview": "Required separately; local QA commit distinction retained rather than relabelled."
+}
