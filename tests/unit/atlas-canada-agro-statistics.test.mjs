@@ -87,7 +87,7 @@ test('same-calendar soybean flow uses FAO production/World and kg→t gross trad
 
 test('crop-year uses and forest processing stages remain separate, with unavailable values explicit',()=>{
  const w=new Window();try{
-  for(const id of ['canola','lentils']){w.document.body.innerHTML=lib.renderCanadaAgro(data,id);assert.match(w.document.body.textContent,/2024\/25/);assert.match(w.document.body.textContent,/世界分母は未収録/);assert.equal(w.document.querySelector('[data-agro-stage="production"] .agro-world-pie'),null);}
+  w.document.body.innerHTML=lib.renderCanadaAgro(data,'lentils');assert.match(w.document.body.textContent,/2024\/25/);assert.match(w.document.body.textContent,/世界分母は未収録/);assert.equal(w.document.querySelector('[data-agro-stage="production"] .agro-world-pie'),null);
   w.document.body.innerHTML=lib.renderCanadaAgro(data,'canola');const ref=w.document.querySelector('[data-agro-stage="destinations"] details');assert.equal(ref.open,false);assert.match(ref.textContent,/期間・範囲が異なります/);
   for(const [id,share,unit] of [['roundwood',null,'m³'],['sawnwood',8,'m³'],['paper-pulp',7,'t']]){
    w.document.body.innerHTML=lib.renderCanadaAgro(data,id);assert.match(w.document.body.textContent,new RegExp(`生産量：未収録（${unit}）`));
@@ -96,6 +96,25 @@ test('crop-year uses and forest processing stages remain separate, with unavaila
   }
   w.document.body.innerHTML=lib.renderCanadaAgro(data,'sawnwood');const forestRef=w.document.querySelector('[data-agro-stage="destinations"] details');assert.equal(forestRef.open,false);assert.match(forestRef.textContent,/針葉樹部分集合/);assert.match(forestRef.textContent,/31,451,200 m³/);assert.match(forestRef.textContent,/89.21%/);
   assert.equal(lib.renderCanadaAgro(data,'invented'), '');
+ }finally{w.happyDOM.close();}
+});
+
+test('Canada rapeseed is supplemented with same-edition USDA seed columns and distinct missing beginning stocks',()=>{
+ const flow=model.usdaRapeseed;
+ assert.equal(flow.production,19239);assert.equal(flow.worldProduction,86275);assert.equal(flow.imports,131);
+ assert.equal(flow.domesticUse,11552);assert.equal(flow.exports,9387);assert.equal(flow.endingStocks,1597);
+ assert.equal(flow.beginningStocks,null);assert.equal(flow.stockVariation,null);assert.equal(flow.exportDestinations,null);
+ const raw=readFileSync('data-source/atlas/canada/agro-statistics-20261016/usda-oilseeds-202610-web-extract.txt','utf8');
+ for(const [key,line] of Object.entries(flow.rawLines)){
+  assert.ok(raw.includes(line));const values=line.replace(/^(?:Canada \(Aug-Jul\)|World Total)\s+/,'').split(/\s+/).map(n=>Number(n.replaceAll(',','')));
+  assert.equal(values.length,9);assert.equal(flow[key],values[6],'Oilseed/Rapeseed 2024/25 column, never Meal or Oil');
+ }
+ const w=new Window();try{
+  w.document.body.innerHTML=lib.renderCanadaAgro(data,'canola');const production=w.document.querySelector('[data-agro-stage="production"]'),use=w.document.querySelector('[data-agro-stage="use"]');
+  assert.match(production.textContent,/86,275/);assert.match(production.textContent,/22.3%/);
+  const top=use.cloneNode(true);top.querySelectorAll('details').forEach(d=>d.remove());assert.match(top.textContent,/11,552.*9,387/s);assert.match(top.textContent,/期首在庫.*逆算しません/);
+  assert.doesNotMatch(top.textContent,/11,619|9,379/);assert.match(use.querySelector('.agro-other-reference').textContent,/11,619.*9,379/s);
+  assert.match(w.document.querySelector('[data-agro-stage="destinations"]').textContent,/同じ2024\/25年度.*未収録/);
  }finally{w.happyDOM.close();}
 });
 

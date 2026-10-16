@@ -20,6 +20,10 @@ test('built Canada overview keeps original unselected content and switches actua
    root.dispatchEvent(new w.CustomEvent('canada-agro-selection',{detail:{product}}));
    assert.equal(original.hidden,true);assert.equal(content.querySelectorAll('.agro-columns>section').length,3,product);
    assert.equal(content.querySelector('[data-agro-country]').dataset.agroCountry,'CAN');
+   if(product==='canola'){
+    assert.match(content.querySelector('[data-agro-stage="production"]').textContent,/86,275.*千t/s);
+    const use=content.querySelector('[data-agro-stage="use"]').cloneNode(true);use.querySelectorAll('details').forEach(d=>d.remove());assert.match(use.textContent,/11,552.*9,387/s);
+   }
   }
   root.dispatchEvent(new w.CustomEvent('canada-agro-selection',{detail:{product:null}}));assert.equal(original.hidden,false);assert.equal(original.innerHTML,before);
   w.eval(overview+';CanadaOverview.initCanadaAgricultureOverview(document.querySelector("[data-canada-agriculture]"));');

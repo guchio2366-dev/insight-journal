@@ -2,6 +2,44 @@
   "schemaVersion": 1,
   "preparedAt": "2026-10-16",
   "country": "CAN",
+  "usdaRapeseed": {
+    "year": "2024/25",
+    "unit": "千t",
+    "classification": "Oilseed, Rapeseed",
+    "countryPeriodStart": "2024-08-01",
+    "countryPeriodEnd": "2025-07-31",
+    "beginningStocks": null,
+    "stockVariation": null,
+    "domesticOriginUse": null,
+    "reexports": null,
+    "exportDestinations": null,
+    "sourceUrl": "https://apps.fas.usda.gov/psdonline/circulars/oilseeds.pdf",
+    "edition": "October 2026",
+    "page": 21,
+    "definitionPage": 7,
+    "rawLines": {
+      "production": "Canada (Aug-Jul) 6,710 7,512 7,954 4,821 5,480 5,868 19,239 22,227 22,500",
+      "worldProduction": "World Total 49,295 52,383 54,413 34,281 36,646 38,102 86,275 96,035 99,571",
+      "imports": "Canada (Aug-Jul) 1 5 10 16 18 20 131 109 150",
+      "worldImports": "World Total 10,147 11,801 11,448 7,096 7,578 8,565 20,057 18,363 19,661",
+      "exports": "Canada (Aug-Jul) 5,855 6,274 6,400 3,327 3,346 4,000 9,387 8,959 7,850",
+      "worldExports": "World Total 10,710 11,968 11,700 7,125 7,891 8,950 19,817 19,354 19,983",
+      "domesticUse": "Canada (Aug-Jul) 870 1,225 1,575 1,330 1,975 1,990 11,552 13,075 14,500",
+      "worldDomesticUse": "World Total 48,801 51,997 54,033 34,399 35,998 37,699 88,453 94,057 98,564",
+      "endingStocks": "Canada (Aug-Jul) 154 172 161 730 907 805 1,597 1,899 2,199",
+      "worldEndingStocks": "World Total 1,426 1,645 1,773 3,325 3,660 3,678 9,927 10,914 11,599"
+    },
+    "production": 19239,
+    "worldProduction": 86275,
+    "imports": 131,
+    "worldImports": 20057,
+    "exports": 9387,
+    "worldExports": 19817,
+    "domesticUse": 11552,
+    "worldDomesticUse": 88453,
+    "endingStocks": 1597,
+    "worldEndingStocks": 9927
+  },
   "aafc": {
     "wheat": {
       "production": 35939,
@@ -878,6 +916,11 @@
     {
       "path": "data-source/atlas/canada/agro-statistics-20261016/fao-forest-facts-2024.txt",
       "sha256": "236fbbaa372f375d427ffa3418bbcee2f7bfeace19ba6fbff0ac1af84d484441",
+      "kind": "official-web-text-extract-not-original-file"
+    },
+    {
+      "path": "data-source/atlas/canada/agro-statistics-20261016/usda-oilseeds-202610-web-extract.txt",
+      "sha256": "0b7e790da11f14144623c22a692a7afbbc15f93fe7bcdb5da5f7b031705b39e1",
       "kind": "official-web-text-extract-not-original-file"
     },
     {

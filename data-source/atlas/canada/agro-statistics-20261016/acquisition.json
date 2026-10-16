@@ -2,34 +2,150 @@
   "date": "2026-10-16",
   "policy": "通常の公式公開入口・別公式配布資料だけを読む。403の同一資料を別経路で再取得せず、認証・proxy・アクセス権・browser sandboxを変更しない。",
   "retained": [
-    {"url":"https://agriculture.canada.ca/sites/default/files/documents/2026-09/Canada%20Outlook%20for%20Principal%20Field%20Crops_202609.pdf","result":"web PDF本文取得成功。原PDF bytesは未保持。p14/15の事実表抜粋を保存"},
-    {"url":"https://wits.worldbank.org/trade/comtrade/en/country/CAN/year/2024/tradeflow/Exports/partner/ALL/product/120100","result":"公開World＋全59相手数量・分類・gross定義取得。HTML bytesは未保持"},
-    {"url":"https://wits.worldbank.org/trade/comtrade/en/country/CAN/year/2024/tradeflow/Imports/partner/ALL/product/120100","result":"公開World輸入数量と戻り取引の相手Canada行を確認。HTML bytesは未保持"},
-    {"url":"https://wits.worldbank.org/trade/comtrade/en/country/CAN/year/2024/tradeflow/Exports/partner/ALL/product/120500","result":"公開World＋全26相手数量。カノーラ年度種子数量とは別期間・菜種全体参考"},
-    {"url":"https://wits.worldbank.org/trade/comtrade/en/country/CAN/year/2024/tradeflow/Exports/partner/ALL/product/440710","result":"公開World＋全82相手数量、m³。全樹種製材とは別製品参考"},
-    {"url":"https://www.fao.org/forestry/statistics/data/en/","result":"2024公式公開表の丸めた製材8%、製紙用パルプ7%を確認。国別数量原行は未取得"}
+    {
+      "url": "https://agriculture.canada.ca/sites/default/files/documents/2026-09/Canada%20Outlook%20for%20Principal%20Field%20Crops_202609.pdf",
+      "result": "web PDF本文取得成功。原PDF bytesは未保持。p14/15の事実表抜粋を保存"
+    },
+    {
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/CAN/year/2024/tradeflow/Exports/partner/ALL/product/120100",
+      "result": "公開World＋全59相手数量・分類・gross定義取得。HTML bytesは未保持"
+    },
+    {
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/CAN/year/2024/tradeflow/Imports/partner/ALL/product/120100",
+      "result": "公開World輸入数量と戻り取引の相手Canada行を確認。HTML bytesは未保持"
+    },
+    {
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/CAN/year/2024/tradeflow/Exports/partner/ALL/product/120500",
+      "result": "公開World＋全26相手数量。カノーラ年度種子数量とは別期間・菜種全体参考"
+    },
+    {
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/CAN/year/2024/tradeflow/Exports/partner/ALL/product/440710",
+      "result": "公開World＋全82相手数量、m³。全樹種製材とは別製品参考"
+    },
+    {
+      "url": "https://www.fao.org/forestry/statistics/data/en/",
+      "result": "2024公式公開表の丸めた製材8%、製紙用パルプ7%を確認。国別数量原行は未取得"
+    },
+    {
+      "url": "https://apps.fas.usda.gov/psdonline/circulars/oilseeds.pdf",
+      "result": "追加調査：USDA FAS Oilseeds: World Markets and Trade October2026、Table12 p21のOilseed,Rapeseed 2024/25列。CAN生産19239/World86275/輸入131/国内利用11552/輸出9387/期末1597千t。期首在庫は未収録。原PDF bytes未保持、公式テキスト抜粋を保存。"
+    },
+    {
+      "url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3210001301",
+      "result": "追加調査：公式表入口とリリース日2026-10-09は閲覧成功。ただし動的な数値セルがweb本文にない。公表分析・WDSの別公式提供経路も調査。"
+    }
   ],
   "unavailable": [
-    {"action":"Python urllib通常GET・timeout25秒","url":"https://agriculture.canada.ca/en/sector/crops/reports-statistics/canada-outlook-principal-field-crops-2026-09-25","result":"URLError: Tunnel connection failed: 403 Forbidden。接続トンネル拒否で原サイトHTTP応答不明。先にwebでHTML公開内容は確認できたが、同HTMLの再試行はしない。独立公式配布PDFを使用"},
-    {"action":"Python urllib通常GET・timeout25秒","url":"https://www.grainscanada.gc.ca/en/grain-research/statistics/","result":"URLError: Tunnel connection failed: 403 Forbidden。接続トンネル拒否で原サイトHTTP応答不明。統計CSVは別の独立公開資料として通常入口から調査"},
-    {"action":"Python urllib通常GET・timeout25秒","url":"https://www150.statcan.gc.ca/n1/tbl/csv/32100013-eng.zip","result":"URLError: Tunnel connection failed: 403 Forbidden。ZIP原物0件"},
-    {"action":"web通常読取","url":"https://www.grainscanada.gc.ca/en/grain-research/statistics/exports-grain-wheat-flour/","result":"404 Not Found。統計トップの現行公式リンクを調査"},
-    {"action":"web通常読取","url":"https://www.grainscanada.gc.ca/en/grain-research/statistics/exports-grain-licensed-facilities/","result":"400 Timeout fetching"},
-    {"action":"公式年次archiveのCSVリンクをweb読取","url":"https://www.grainscanada.gc.ca/en/grain-research/statistics/canadian-grain-exports-annual/2024-25/exports-2024-25-en.csv","result":"400 Timeout fetching。年次archiveは取得成功、CSV原物は未取得"},
-    {"action":"別形式の公式年次表をweb読取","url":"https://www.grainscanada.gc.ca/en/grain-research/statistics/canadian-grain-exports-annual/2024-25/exports-2024-25-en.xlsx","result":"tool: URL is not accessible。XLSX原物未取得"},
-    {"action":"web通常読取","url":"https://natural-resources.canada.ca/forests-forestry/state-canada-forests/state-canada-s-forests-annual-report-2025","result":"403 Forbidden。同資料・同年報の別経路再取得なし。独立FAO公開統計表を調査"},
-    {"action":"web通常読取","url":"https://forest-donnees-data.nrcan-rncan.gc.ca/","result":"tool: URL is not accessible"},
-    {"action":"web通常読取","url":"https://natural-resources.canada.ca/forest-forestry/state-canadas-forests-report/forest-industry-trade","result":"tool: URL is not accessible"},
-    {"action":"web通常読取","url":"https://www.fao.org/forestry/statistics/80938/en/","result":"404 Not Found。現行data/en公開表を調査"},
-    {"action":"web通常読取","url":"https://www.fao.org/forestry/statistics/production-trade/en/","result":"404 Not Found。FAOSTAT入口は動的で原行本文なし"},
-    {"action":"web通常読取","url":"https://unece.org/forests/forest-products-production-and-trade-2024","result":"tool: Internal Error、本文なし"},
-    {"action":"web通常読取","url":"https://unece.org/forests/forest-products-annual-market-review-2024-2025","result":"tool: URL is not accessible"},
-    {"action":"web通常読取","url":"https://wits.worldbank.org/trade/comtrade/en/country/CAN/year/2024/tradeflow/Exports/partner/ALL/product/4407","result":"tool: URL is not accessible。独立下位品目440710を取得したが全樹種の代用にしない"}
+    {
+      "action": "Python urllib通常GET・timeout25秒",
+      "url": "https://agriculture.canada.ca/en/sector/crops/reports-statistics/canada-outlook-principal-field-crops-2026-09-25",
+      "result": "URLError: Tunnel connection failed: 403 Forbidden。接続トンネル拒否で原サイトHTTP応答不明。先にwebでHTML公開内容は確認できたが、同HTMLの再試行はしない。独立公式配布PDFを使用"
+    },
+    {
+      "action": "Python urllib通常GET・timeout25秒",
+      "url": "https://www.grainscanada.gc.ca/en/grain-research/statistics/",
+      "result": "URLError: Tunnel connection failed: 403 Forbidden。接続トンネル拒否で原サイトHTTP応答不明。統計CSVは別の独立公開資料として通常入口から調査"
+    },
+    {
+      "action": "Python urllib通常GET・timeout25秒",
+      "url": "https://www150.statcan.gc.ca/n1/tbl/csv/32100013-eng.zip",
+      "result": "URLError: Tunnel connection failed: 403 Forbidden。ZIP原物0件"
+    },
+    {
+      "action": "web通常読取",
+      "url": "https://www.grainscanada.gc.ca/en/grain-research/statistics/exports-grain-wheat-flour/",
+      "result": "404 Not Found。統計トップの現行公式リンクを調査"
+    },
+    {
+      "action": "web通常読取",
+      "url": "https://www.grainscanada.gc.ca/en/grain-research/statistics/exports-grain-licensed-facilities/",
+      "result": "400 Timeout fetching"
+    },
+    {
+      "action": "公式年次archiveのCSVリンクをweb読取",
+      "url": "https://www.grainscanada.gc.ca/en/grain-research/statistics/canadian-grain-exports-annual/2024-25/exports-2024-25-en.csv",
+      "result": "400 Timeout fetching。年次archiveは取得成功、CSV原物は未取得"
+    },
+    {
+      "action": "別形式の公式年次表をweb読取",
+      "url": "https://www.grainscanada.gc.ca/en/grain-research/statistics/canadian-grain-exports-annual/2024-25/exports-2024-25-en.xlsx",
+      "result": "tool: URL is not accessible。XLSX原物未取得"
+    },
+    {
+      "action": "web通常読取",
+      "url": "https://natural-resources.canada.ca/forests-forestry/state-canada-forests/state-canada-s-forests-annual-report-2025",
+      "result": "403 Forbidden。同資料・同年報の別経路再取得なし。独立FAO公開統計表を調査"
+    },
+    {
+      "action": "web通常読取",
+      "url": "https://forest-donnees-data.nrcan-rncan.gc.ca/",
+      "result": "tool: URL is not accessible"
+    },
+    {
+      "action": "web通常読取",
+      "url": "https://natural-resources.canada.ca/forest-forestry/state-canadas-forests-report/forest-industry-trade",
+      "result": "tool: URL is not accessible"
+    },
+    {
+      "action": "web通常読取",
+      "url": "https://www.fao.org/forestry/statistics/80938/en/",
+      "result": "404 Not Found。現行data/en公開表を調査"
+    },
+    {
+      "action": "web通常読取",
+      "url": "https://www.fao.org/forestry/statistics/production-trade/en/",
+      "result": "404 Not Found。FAOSTAT入口は動的で原行本文なし"
+    },
+    {
+      "action": "web通常読取",
+      "url": "https://unece.org/forests/forest-products-production-and-trade-2024",
+      "result": "tool: Internal Error、本文なし"
+    },
+    {
+      "action": "web通常読取",
+      "url": "https://unece.org/forests/forest-products-annual-market-review-2024-2025",
+      "result": "tool: URL is not accessible"
+    },
+    {
+      "action": "web通常読取",
+      "url": "https://wits.worldbank.org/trade/comtrade/en/country/CAN/year/2024/tradeflow/Exports/partner/ALL/product/4407",
+      "result": "tool: URL is not accessible。独立下位品目440710を取得したが全樹種の代用にしない"
+    },
+    {
+      "action": "web通常読取・新しい公式公表経路",
+      "url": "https://unece.org/forests/country-market-statements-2025",
+      "result": "tool: URL is not accessible。国別statement本文なし"
+    },
+    {
+      "action": "web通常読取・公式データ紹介ページ",
+      "url": "https://www.fao.org/forestry/statistics/resources/en/",
+      "result": "404 Not Found"
+    },
+    {
+      "action": "web通常読取・FAOSTAT公式APIでFO/CAN+World/2024の数量原行を照会",
+      "url": "https://fenixservices.fao.org/faostat/api/v1/en/data/FO?area_code=33%2C5000&item_code=1861%2C1872%2C1875&element_code=5516%2C5616%2C5916&year=2024&page_size=1000",
+      "result": "tool: URL is not accessible。原行0件。1875は木材パルプ候補で、既存Pulp for paper全体と同一視せず、分類定義と併せて必要"
+    },
+    {
+      "action": "StatCan表32-10-0013-01から公式関連分析リンクへ通常遷移",
+      "url": "https://www150.statcan.gc.ca/n1/daily-quotidien/261009/dq261009e-eng.htm",
+      "result": "400 Timeout fetching。数値・98千t差の訂正情報は未取得"
+    },
+    {
+      "action": "CGC公式年次archive 2024–25 MS-Excelリンクを通常click",
+      "url": "https://www.grainscanada.gc.ca/en/grain-research/statistics/canadian-grain-exports-annual/",
+      "result": "tool: Internal Error。リンク表示のMS-Excel,124kbは確認できたが、workbook本文・ダウンロード先詳細を取得できず、以前の手入力xlsx URLを正規hrefとして断定しない"
+    }
   ],
   "browser": {
-    "action":"Playwright chromium.launch({headless:true,chromiumSandbox:true,executablePath:'/usr/bin/chromium'})",
-    "target":"クラウドbuilt dist。1896×996 / 1280×665 CSS px、DPR1.5の予定22画面",
-    "result":"launch前に終了。SUID helper /usr/lib/chromium/chrome-sandbox is not configured correctly; expected root ownership and mode4755。実物はnobody:nogroup。画面0件、画像0件",
-    "workaround":"sandbox無効化・helper権限変更・ユーザーPC接続は行わない。対応するクラウドブラウザ環境でcapture-canada-agro-statistics-review.mjsを実行する必要がある"
+    "action": "Playwright chromium.launch({headless:true,chromiumSandbox:true,executablePath:'/usr/bin/chromium'})",
+    "target": "クラウドbuilt dist。1896×996 / 1280×665 CSS px、DPR1.5の予定22画面",
+    "result": "launch前に終了。SUID helper /usr/lib/chromium/chrome-sandbox is not configured correctly; expected root ownership and mode4755。実物はnobody:nogroup。画面0件、画像0件",
+    "workaround": "sandbox無効化・helper権限変更・ユーザーPC接続は行わない。対応するクラウドブラウザ環境でcapture-canada-agro-statistics-review.mjsを実行する必要がある"
+  },
+  "officialAlternativeExploration": {
+    "statcanDevelopers": "https://www.statcan.gc.ca/en/developers?HPA=1",
+    "statcanWDS": "https://www.statcan.gc.ca/en/developers/wds",
+    "result": "公式の別配布方法としてWDSとSDMXの説明入口を閲覧成功。既に拒否された同一ZIPの別host再取得はしない。用途・在庫原行の取得成功とは扱わない。"
   }
 }
