@@ -1,0 +1,30 @@
+{
+  "country": "USA",
+  "report": "WASDE-675",
+  "releaseDate": "2026-09-11",
+  "checkedOn": "2026-10-16",
+  "url": "https://www.usda.gov/oce/commodity/wasde/wasde0926.pdf",
+  "verification": "Official original PDF readable through the Web connector. Historical US/World rows on printed pages 17, 18, 22, 24, 26, 28 and milk table on page 33 cross-checked with retained values. PDF response bytes were not saved and no PDF SHA-256 is claimed. The retained TXT hash below is a different artifact.",
+  "retainedText": {"path":"scripts/data/wasde0926.txt","sha256":"de4baa0dc24769b2d8cc153bac488049d905b5c8aa1fec9696e2d4e13036e285"},
+  "periods": {
+    "corn":{"start":"2024-09-01","end":"2025-08-31","footnotePage":12,"startMonth":9},
+    "soybean":{"start":"2024-09-01","end":"2025-08-31","footnotePage":15,"startMonth":9},
+    "wheat":{"start":"2024-06-01","end":"2025-05-31","footnotePage":11,"startMonth":6},
+    "rice":{"start":"2024-08-01","end":"2025-07-31","footnotePage":14,"startMonth":8},
+    "cotton":{"start":"2024-08-01","end":"2025-07-31","footnotePage":17,"startMonth":8}
+  },
+  "cottonImportFootnote": {
+    "page": 26,
+    "marker": "3/",
+    "upperExclusiveBales": 5000,
+    "upperExclusiveMillion480lbBales": 0.005,
+    "interpretation": "原表p26の3/は5,000俵未満。p17の0.00百万俵はその公表丸め値のまま使用し、厳密な実量ゼロへ変更しない。",
+    "notAnExactQuantity": true
+  },
+  "limits": [
+    "These are US local marketing-year start/end dates. Do not replace dates or aggregate-period warnings for other countries or for the World collection.",
+    "Country-specific supplementary verification does not change the common canonical rows or silently reinterpret their other countries.",
+    "A domestic-use or trade quantity may include publisher-defined product equivalents and statistical residuals; the US wheat calendar-year unmilled-grain partner table is a separate scope.",
+    "No same-marketing-year destination matrix was obtained."
+  ]
+}
