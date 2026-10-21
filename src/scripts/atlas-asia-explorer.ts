@@ -17,6 +17,7 @@ import {renderAsiaFarmingPanel,renderSouthCentralFarmConnections} from './atlas-
 import {renderEastAsiaFarmFoundations} from './atlas-east-asia-farm-foundations';
 import {createAsiaIndustry} from './atlas-asia-industry';
 import {createSoutheastIndustryLocations} from './atlas-asia-southeast-industry';
+import {createSoutheastNaturePopulationReading} from './atlas-southeast-nature-population';
 import {hasIndustryCountryScope,industryCountryChoices,normalizeScopedIndustryState} from '../data/atlas/asia-industry';
 import {southCentralReligionCensuses,southCentralReligionReports,southCentralReligionLocalCases} from '../data/atlas/asia-south-central-religion';
 import {southCentralLandformOverview,southCentralLandformCases,southCentralFocusPhysicalReading} from '../data/atlas/asia-south-central-landform-reading';
@@ -151,6 +152,7 @@ function start(root:HTMLElement) {
 
   function chooseFarm(topic:string){navigate({...state,field:'agriculture',topic,single:false,farms:config.presentation?.farming.products.some(p=>p.id===topic)?null:state.farms,overlay:null,detail:null,story:null,point:state.point??config.cities.find(c=>c.id===state.city)?.coordinates??null,city:null,camera:camera()},false);}
   function choosePopulation(topic:string){if(config.social?.topics.some(t=>t.id===topic))social?.chooseTopic(topic);else navigate({...state,field:'population',topic,detail:null,story:null,city:null,camera:camera()},false);}
+  const southeastNaturePopulation=config.regionId==='southeast-asia'&&config.population?createSoutheastNaturePopulationReading(root,{population:config.population,cities:config.cities},()=>state,navigate,camera):null;
   const navigation=createAsiaNavigation(root,config.industry,()=>state,navigate,choosePopulation,selectNaturalTopic,chooseFarm,enterCountry);
   let presentation:ReturnType<typeof createAsiaPresentation>|null=null;
   let mainStatus={message:'',error:false},presentationError='',climateDataError='';
@@ -295,6 +297,7 @@ function start(root:HTMLElement) {
     social?.render();
     trade?.render();
     placeReadings.render();
+    southeastNaturePopulation?.render();
     navigation.render();
     comparison.render(state);
     optionalHidden('[data-farming-selector]',state.field!=='agriculture');
@@ -856,3 +859,4 @@ function start(root:HTMLElement) {
   for(const details of $$<HTMLDetailsElement>('details'))details.addEventListener('toggle',()=>requestAnimationFrame(syncLayout));
   sourceText();render();persist(false);syncLayout();void initialiseMap();
 }
+

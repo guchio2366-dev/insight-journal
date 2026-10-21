@@ -1,0 +1,57 @@
+---
+import type {AsiaPopulationRegion} from '../../../data/atlas/asia-population';
+import {southeastUrbanComparison} from '../../../lib/atlas-southeast-nature-population';
+import {baliReligionRegistration, southeastPopulationPlaces, southeastSocietyCoverage} from '../../../data/atlas/asia/southeast-nature-population';
+interface Props {population:AsiaPopulationRegion}
+const {population}=Astro.props;
+const rows=southeastUrbanComparison(population.cities);
+const number=(value:number)=>Math.round(value).toLocaleString('ja-JP');
+const share=(part:number,total:number)=>(part/total*100).toFixed(1);
+---
+<section class="southeast-reading" data-southeast-nature-reading hidden aria-labelledby="southeast-rain-reading-title">
+  <h3 id="southeast-rain-reading-title">年の雨量が似ていても、雨の季節は違う</h3>
+  <p>大陸部のバンコク・プノンペンでは雨季と乾季の差が大きく、赤道に近いシンガポールでは各月に雨があります。南半球のジャカルタでは年の初めに雨が多く、大陸部と多雨の時期がずれます。年降水量だけでなく、雨が増える月・減る月を確かめると、農業用水を考える前提が分かります。</p>
+  <button type="button" class="reading-link" data-southeast-compare="seasonal-precipitation">同じ地点の12か月の雨を読む（7月の地図から） →</button>
+  <p class="small">地点を選んでいない場合は、地域全体の7月の雨から始めます。月別の面はGPCCの0.25°格子、都市の雨温図は観測所の値で、どちらも1991–2020年の平年値です。</p>
+  <details><summary>観測所と格子の収録範囲</summary><p>雨温図には東南アジア10か国・16観測所を掲載しています。東ティモールは、同じ観測所・1991–2020年の12か月の気温と雨量を確認できた系列が未掲載です。地域の月別降水量格子では東ティモールも対象に含まれます。格子を都市の観測値へ置き換えてはいません。</p><p><a href="https://ds.data.jma.go.jp/tcc/tcc/products/climate/climatview/outline.html">気象庁ClimatView・平年値の定義</a> · <a href="https://dnmg.gov.tl/en/climate/">東ティモール気象地球物理局</a></p></details>
+</section>
+
+<section class="southeast-reading" data-southeast-population-reading hidden aria-labelledby="southeast-population-compare-title">
+  <h3 id="southeast-population-compare-title">都市の人数と密度を並べて読む</h3>
+  <p>棒は都市範囲内の人数、右列は同じ範囲の平均密度です。すべて<strong>2020年の推計人口・2025年の固定都市範囲</strong>で比べます。都市名を選ぶと、その輪郭と人数を地図で確認できます。</p>
+  <table class="urban-comparison">
+    <caption>掲載16都市の比較 · 人口は万人、密度は人/km²</caption>
+    <thead><tr><th scope="col">都市範囲</th><th scope="col">人口<br/>（万人）</th><th scope="col">平均密度<br/>（人/km²）</th></tr></thead>
+    <tbody>{rows.map(({city,populationWidth})=><tr data-southeast-urban-row={city.id}><th scope="row"><button type="button" data-southeast-urban={city.id} aria-pressed="false">{city.name}</button></th><td><span aria-label={`約${number(city.population)}人`}>{(city.population/10000).toLocaleString('ja-JP',{minimumFractionDigits:1,maximumFractionDigits:1})}</span><span class="urban-bar" style={`--population-width:${populationWidth}%`} aria-hidden="true"></span></td><td>{city.density===null?'未掲載':number(city.density)}</td></tr>)}</tbody>
+  </table>
+  <p class="small">棒は最大の掲載都市を100％とした共通の長さです。市域・通勤圏・全国人口とは異なり、全都市のランキングでもありません。密度は都市の人口÷資料の都市面積で、地図の5km格子一つの値とは異なります。端数は表示時に丸めています。</p>
+  <p class="small">出典：<a href="https://human-settlement.emergency.copernicus.eu/ghs_ucdb_2024.php">欧州委員会JRC・GHS-UCDB R2024A V1.2</a>。数値は地図と同じ都市資料から表示しています。</p>
+  <div data-southeast-current-city hidden>
+    <h4><span data-southeast-current-city-name></span>を同じ場所で読み比べる</h4>
+    <button type="button" class="reading-link" data-southeast-compare="terrain">都市代表点の標高と低地を見る →</button>
+    <button type="button" class="reading-link" data-southeast-compare="basins">都市代表点を含む流域を見る →</button>
+    <button type="button" class="reading-link" data-southeast-compare="manufacturing">同じ場所の産業と国別製造業を読む →</button>
+    <p class="small">都市の輪郭を比較に残します。標高・流域の値は代表点、製造業の値は国の集計です。都市人口と同じ範囲の産業統計ではありません。</p>
+  </div>
+  {southeastPopulationPlaces.map(place=><article><h4>{place.title}</h4><p>{place.reading}</p><div class="place-cities">{place.cityIds.map(id=>{const city=population.cities.find(c=>c.id===id);return city&&<button type="button" data-southeast-urban={id} aria-pressed="false">{city.name}の範囲と人数 →</button>})}</div><p class="small"><a href={place.source.url}>{place.source.label}</a></p></article>)}
+</section>
+
+<section class="southeast-reading" data-southeast-society-reading hidden aria-labelledby="southeast-society-coverage-title">
+  <div data-southeast-religion-registration hidden>
+    <h3>バリ州｜集団の居住域と住民の宗教登録を分ける</h3>
+    <p>2024年の行政登録では、ヒンドゥー教の割合はバリ州全体で{share(baliReligionRegistration.records[0].counts[3],baliReligionRegistration.records[0].total)}％、デンパサール市で{share(baliReligionRegistration.records[1].counts[3],baliReligionRegistration.records[1].total)}％です。州の割合を各市県へ当てはめると、この差を見落とします。</p>
+    <button type="button" class="reading-link" data-settlement-choice="religion-1" data-settlement-topic="religion" aria-pressed="false">地図のバリ系集団の居住域を確かめる →</button>
+    <p class="small">この選択はGeoEPRの集団の輪郭を強調します。登録統計の州・市県の境界とは一致しません。</p>
+    <table><caption>宗教別登録人口（2024年）· 州と選定した2市県</caption><thead><tr><th scope="col">区域</th><th scope="col">登録人口<br/>（人）</th><th scope="col">ヒンドゥー教<br/>（％）</th></tr></thead><tbody>{baliReligionRegistration.records.map(record=><tr><th scope="row">{record.name}</th><td>{number(record.total)}</td><td>{share(record.counts[3],record.total)}</td></tr>)}</tbody></table>
+    <p class="small">分母は各区域の全登録人口です。国勢調査の回答とは異なります。市と県は州の内数で、3行を合計しません。GeoEPRのバリ系集団の居住域へ、この割合を塗り分けたり配分したりしていません。</p>
+    <details><summary>宗教別の人数と出典</summary>{baliReligionRegistration.records.map(record=><article><h4>{record.name}</h4><dl class="registration-counts">{baliReligionRegistration.categories.map((category,index)=><div><dt>{category}</dt><dd>{number(record.counts[index])}人</dd></div>)}</dl></article>)}<p><a href={baliReligionRegistration.source}>{baliReligionRegistration.publisher}・2024年登録統計</a>。割合は掲載人数÷合計から計算し、小数第1位で表示しています。原表の一部区域に内訳と合計の不一致があるため、内訳の合計を確認できた州・2市県だけを掲載しています。</p></details>
+  </div>
+  <h3 id="southeast-society-coverage-title">11か国のうち、住民統計で読める範囲</h3>
+  <p>地図のGeoEPRは政治的に重要とされる集団の居住域の抜粋です。宗教の面はEPR-EDとの対応による限定事例で、全住民の構成比ではありません。別資料による人数・割合の掲載範囲を、国ごとに分けます。</p>
+  <table class="coverage-table"><caption>このページに掲載した住民統計の補足</caption><thead><tr><th scope="col">国</th><th scope="col">民族</th><th scope="col">宗教</th></tr></thead><tbody>{southeastSocietyCoverage.map(country=><tr><th scope="row">{country.name}</th><td>{country.ethnicity}</td><td>{country.religion}</td></tr>)}</tbody></table>
+  <button type="button" class="reading-link" data-southeast-society-topic="my-ethnicity-bumi_malay">マレーシアの州別民族構成を読む →</button>
+  <p class="small">「補足なし」はこのページに住民統計を掲載していないという意味です。該当する人が0人、国に統計がない、GeoEPRにも居住域がないという意味ではありません。国・年・対象年齢・市民権・調査の設問が異なるため、そのまま国際順位にしません。</p>
+</section>
+<style>
+ .southeast-reading{min-width:0;padding-top:14px;border-top:1px solid var(--rule);margin-top:18px}[hidden]{display:none!important}h3{font-size:16px;line-height:1.65;margin:0 0 10px}h4{font-size:14px;line-height:1.7;margin:20px 0 8px}p{font-size:13px;line-height:1.9;margin:9px 0}.small{font-size:11px;color:var(--ink-soft)}button,summary{min-height:44px;cursor:pointer}button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid #a74830;outline-offset:2px}.reading-link{width:100%;text-align:left;padding:9px 11px;margin:5px 0;background:#edf3f1;border:1px solid #55767a;color:#234f58;font:inherit;font-size:12px;line-height:1.7}table{width:100%;border-collapse:collapse;font-size:11px;font-variant-numeric:tabular-nums;table-layout:fixed}caption{text-align:left;font-size:11px;line-height:1.7;margin:12px 0 8px}th,td{border-bottom:1px solid var(--rule);padding:7px 4px;overflow-wrap:anywhere;text-align:right;vertical-align:top}th:first-child{text-align:left;width:36%}.urban-comparison button,.place-cities button{background:transparent;border:0;color:#285d6b;text-decoration:underline;text-underline-offset:3px;font:inherit;text-align:left;padding:3px 0;line-height:1.6}.urban-comparison button[aria-pressed=true]{font-weight:700;color:#863d29}.urban-comparison tr.is-selected{background:#f3ede7}.urban-bar{display:block;height:5px;margin-top:5px;background:linear-gradient(to right,#438b9f 0 var(--population-width),transparent var(--population-width) 100%)}.coverage-table th:first-child{width:27%}.coverage-table td{text-align:left;font-size:10px;line-height:1.75}.place-cities{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px}summary{display:flex;align-items:center;font-size:12px}details{margin:8px 0}.registration-counts{font-size:11px;line-height:1.8}.registration-counts>div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--rule)}dd{margin:0;font-variant-numeric:tabular-nums}a{overflow-wrap:anywhere}
+</style>

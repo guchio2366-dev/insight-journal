@@ -18,6 +18,8 @@ export type AsiaClimateCity = {
   sourceRetrievedAt: string;
   sourceTermsUrl: string;
   sourceSha256: string[];
+  // Omitted means source HTML; verified-table-tsv hashes the ledger's exact table.
+  sourceHashKind?: 'source-html' | 'verified-table-tsv';
   additionalSourceUrls?: string[];
   missingMonths: { temperature: number[]; precipitation: number[] };
   notes: string[];
@@ -930,6 +932,30 @@ export const asiaClimateCities: AsiaClimateCity[] = [
     "notes": [],
     "summary": "8月の雨が多く、12月との季節差がある。",
     "reading": "月平均気温は1月の23.3℃から4月の29.7℃まで変化する。月降水量は8月が329.5mm、12月が5.0mm。12か月の降水量平年値の合計は1,640.6mm。都市全域の平均ではなく、掲載した観測所の平年値を示す。"
+  },
+  {
+    "id": "phnom-penh",
+    "regionId": "southeast-asia",
+    "countryCode": "KHM",
+    "name": "プノンペン",
+    "stationId": "48991",
+    "stationName": "PHNOM-PENH (KHMOUGH)",
+    "coordinates": [104.87, 11.6],
+    "elevationM": 10,
+    "temperatureC": [27.0, 28.0, 29.7, 30.3, 30.5, 29.6, 29.0, 29.0, 28.4, 28.3, 28.1, 26.9],
+    "precipitationMm": [15.0, 4.6, 31.8, 92.8, 128.4, 166.3, 171.3, 181.4, 266.2, 260.2, 103.5, 33.5],
+    "normalPeriod": "1991–2020",
+    "sourceUrl": "https://www.data.jma.go.jp/tcc/tcc/products/climate/climatview/graph_mkhtml_nrm.php?e=6&k=0&m=9&n=48991&r=0&s=1&y=2025",
+    "sourceName": "気象庁 ClimatView（CLIMAT・GHCNに基づく平年値）",
+    "sourceRetrievedAt": "2026-10-21",
+    "sourceTermsUrl": "https://www.jma.go.jp/jma/kishou/info/coment.html",
+    "sourceSha256": ["9b531d26d8562564cd5e270c2b08ec1331bc4035cfdf0096abebc9ff89b13319"],
+    "sourceHashKind": "verified-table-tsv",
+    "additionalSourceUrls": ["https://ds.data.jma.go.jp/tcc/tcc/products/climate/climatview/outline.html"],
+    "missingMonths": { "temperature": [], "precipitation": [] },
+    "notes": ["観測所名はPHNOM-PENH (KHMOUGH)。都市全域やカンボジア全国の平均ではない。"],
+    "summary": "一年の気温差は3.6℃。9〜10月に雨が多く、2月は乾燥する。",
+    "reading": "月平均気温は12月の26.9℃から5月の30.5℃まで変化する。月降水量は9月が266.2mm、2月が4.6mm。12か月の降水量平年値の合計は1,455.0mm。都市全域の平均ではなく、掲載した観測所の平年値を示す。"
   },
   {
     "id": "haiphong",

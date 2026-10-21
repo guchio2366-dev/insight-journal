@@ -1,7 +1,7 @@
 import {southeastIndustryProfiles} from './southeast-asia-industry-catalog.ts';
 /** Official-source teaching examples, not an inventory of sites or output. */
 export type SoutheastIndustryKind='electronics'|'automotive'|'textiles'|'food'|'metals'|'energy'|'petrochemicals'|'logistics'|'tourism'|'finance'|'it-bpm'|'rubber'|'wood'|'palm'|'rice'|'lng'|'hydro'|'solar';
-export type SoutheastIndustrySite={id:string;label:string;industryName:string;placeName:string;kind:SoutheastIndustryKind;stage:'raw'|'processing'|'service';point:[number,number];reading:string;sourceLabel:string;sourceUrl:string;sourceYear:string;positionScope:'regional-guide';facilityCoordinates:null;operationalStatus:'source-dated-example'};
+export type SoutheastIndustrySite={id:string;label:string;industryName:string;placeName:string;kind:SoutheastIndustryKind;stage:'raw'|'processing'|'service';point:[number,number];reading:string;sourceLabel:string;sourceUrl:string;sourceYear:string;positionScope:'regional-guide'|'published-reference';facilityCoordinates:[number,number]|null;positionEvidence?:{label:string;url:string;note:string};operationalStatus:'source-dated-example'};
 export type SoutheastIndustrySector='resource'|'manufacturing'|'services';
 export const southeastIndustrySectors:{id:SoutheastIndustrySector;label:string;reading:string}[]=[
  {id:'resource',label:'資源・エネルギー',reading:'スラウェシ・カリマンタンの資源域とビントゥル・ラオス中部のエネルギー拠点では、鉱床・ガス供給・水資源が立地に関わる。'},
@@ -17,6 +17,11 @@ export const southeastIndustryKinds:{id:'all'|SoutheastIndustryKind;label:string
  ...southeastIndustryProfiles.map(p=>({id:p.id,label:p.label,reading:p.reading})),
 ];
 const source={
+ lumut:['Brunei LNG・ルムット施設','https://bruneilng.com/the-plant/','2026閲覧・対象年記載なし'],
+ tibar:['Timor Port・ティバール湾港運営マニュアルRev 1.7','https://timor-lestetradeportal.com/upload/files/static_20240215061701.pdf','2023年4月'],
+ rice:['Gentraco・トットノットの精米拠点','https://gentraco.com.vn/en/','2026閲覧・対象年記載なし'],
+ solar:['JinkoSolar・ペライの製造拠点所在地','https://www.jinkosolar.com/en/site/global','2026閲覧・対象年記載なし'],
+ yangon:['JETRO・ヤンゴン周辺の縫製企業事例','https://www.jetro.go.jp/biznews/2021/02/654d7d7a1b8431b7.html','2021年2月'],
  penang:['マレーシア投資開発庁・電気電子産業','https://www.mida.gov.my/industries/manufacturing/electrical-electronics/','2026閲覧'],
  kulim:['マレーシア投資開発庁・クリムの半導体工場','https://www.mida.gov.my/mida-news/infineon-to-invest-additional-rm30b-to-expand-kulim-facility/','2024'],
  bacninh:['ベトナム投資促進庁・バクニンの組立・検査','https://investvietnam.gov.vn/en/news.nd/yen-phong-industrial-park-bac-ninh-successfully--attracted-amkor-investors.html','2023以降'],
@@ -47,6 +52,11 @@ const source={
 } satisfies Record<string,[string,string,string]>;
 function site(id:string,kind:SoutheastIndustryKind,label:string,industryName:string,placeName:string,point:[number,number],stage:SoutheastIndustrySite['stage'],reading:string,src:keyof typeof source):SoutheastIndustrySite{const [sourceLabel,sourceUrl,sourceYear]=source[src];return {id,kind,label,industryName,placeName,point,stage,reading,sourceLabel,sourceUrl,sourceYear,positionScope:'regional-guide',facilityCoordinates:null,operationalStatus:'source-dated-example'};}
 export const southeastIndustrySites:SoutheastIndustrySite[]=[
+ {...site('lumut-lng','lng','ルムットのLNG','天然ガス液化','ルムット',[114.467,4.6698],'processing','ブルネイの沿岸液化拠点。ガス供給を受け、液化・貯蔵・船積みを行う。','lumut'),positionEvidence:{label:'Global Energy Monitor・施設位置データ',url:'https://www.gem.wiki/Brunei_LNG_Terminal',note:'公開位置データの代表点。運営会社の敷地測量ではなく、境界や港湾桟橋の位置を示さない。'}},
+ {...site('tibar-port','logistics','ティバール湾港','コンテナ港','ティバール',[125.4747222222,-8.5708333333],'service','東ティモールのコンテナ港。運営マニュアルの設備と港の参照位置を確認できる。','tibar'),positionScope:'published-reference',facilityCoordinates:[125.4747222222,-8.5708333333],positionEvidence:{label:'Timor Port・公表GPS参照位置（p.5）',url:'https://timor-lestetradeportal.com/upload/files/static_20240215061701.pdf#page=5',note:'運営者が公表する港の参照位置（南緯8°34′15″・東経125°28′29″）。岸壁の端点や敷地境界ではない。'}},
+ {...site('thotnot-rice','rice','トットノットの精米','精米・選別','トットノット',[105.5338,10.27213],'processing','カントーのトットノットにはGentracoが公表する精米拠点がある。原料調達・乾燥・精米・選別・包装を結ぶ。','rice'),positionEvidence:{label:'GeoNames・トットノットの地名位置',url:'https://www.geonames.org/1565136/thot-not.html',note:'GeoNamesの地名代表点。Gentracoの工場座標や敷地ではない。'}},
+ {...site('perai-solar','solar','ペライの太陽電池製造','太陽電池','ペライ',[100.38333,5.38333],'processing','ペナン州の本土側にあるペライ。JinkoSolarの公表するマレーシア製造拠点の所在地。','solar'),positionEvidence:{label:'GeoNames・ペライの地名位置',url:'https://www.geonames.org/1735077/perai.html',note:'GeoNamesの地名代表点。個別工場の敷地や製造能力を示さない。'}},
+ {...site('yangon-textile','textiles','ヤンゴン周辺の衣料','衣料縫製','ヤンゴン周辺',[96.15611,16.80528],'processing','JETROの2021年資料で周辺工業団地の縫製企業を確認。都市圏の案内であり、各社の現在の稼働状況を表さない。','yangon'),positionEvidence:{label:'GeoNames・ヤンゴンの地名位置',url:'https://www.geonames.org/1298824/yangon.html',note:'ヤンゴン市の地名代表点。ミンガラドン・シュエピタ・ティラワの個別工場位置ではない。'}},
  site('penang','electronics','ペナンの電子産業','電子部品・機器','ペナン',[100.3,5.3],'processing','電子企業と人材が集まる。','penang'),
  site('kulim','electronics','クリムの半導体前工程','半導体前工程','クリム',[100.57,5.43],'processing','半導体製造施設。組立・検査と工程が異なります。','kulim'),
  site('bacninh','electronics','バクニンの組立・検査','半導体組立・検査','バクニン',[106.08,21.18],'processing','半導体の組立・検査施設の事例。','bacninh'),
@@ -78,3 +88,4 @@ export const southeastIndustrySites:SoutheastIndustrySite[]=[
  site('north-central-timber','wood','ベトナム北中部の植林材','植林材','ベトナム北中部',[106.8,16.8],'raw','広い植林材地域を読む代表位置。','timber'),
  site('binh-duong-furniture','wood','ビンズオンの家具加工','家具加工','旧ビンズオン',[106.68,11.15],'processing','2020年資料の木材加工・家具集積。旧ビンズオンは2025年の行政再編後のホーチミン市域に含まれ、輸入材も加工する。','furniture'),
 ];
+

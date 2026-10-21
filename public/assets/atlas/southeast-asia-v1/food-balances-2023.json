@@ -1,0 +1,262 @@
+{
+  "schemaVersion": 1,
+  "title": "AFSIS ACO No.33: 2023 commodity balances",
+  "year": 2023,
+  "unit": "t",
+  "scope": {
+    "label": "ASEAN10（当時の加盟国）",
+    "countries": [
+      "BRN",
+      "KHM",
+      "IDN",
+      "LAO",
+      "MYS",
+      "MMR",
+      "PHL",
+      "SGP",
+      "THA",
+      "VNM"
+    ],
+    "excluded": [
+      "TLS"
+    ]
+  },
+  "source": {
+    "publisher": "ASEAN Food Security Information System (AFSIS)",
+    "edition": "ACO No.33, December 2024",
+    "url": "https://www.aptfsis.org/wp-content/uploads/aco-pdfs/ACO%20No.33.pdf",
+    "publicationUrl": "https://www.aptfsis.org/publications/",
+    "retrievedAt": "2026-10-21",
+    "method": "Manual transcription of the published 2023 ASEAN rows and rice country rows; independently checked against the original PDF."
+  },
+  "notes": [
+    "Published 2023 values include AFSIS Secretariat estimates; they are not a table of exclusively observed final values.",
+    "Rice is milled rice, sugar is sugar rather than sugarcane, and cassava is fresh roots.",
+    "Country import/export totals include intra-ASEAN transactions and re-exports; these are not extra-regional trade totals.",
+    "Domestic utilization, stocks, imports and exports refer to calendar years. Production follows the report's crop-year conventions.",
+    "Published totals and their displayed components differ by 1 tonne in some rows. All original values are retained.",
+    "null preserves the source dash (-); its meaning is not specified and it is never converted to zero.",
+    "These commodity weight balances do not measure food-group calories or calorie-based food self-sufficiency.",
+    "For sugar, Table 37 production is 17,985,608 t, while Table 40 shows 18,234,428 t. The published tables conflict; no sugar production/domestic-utilization ratio is displayed."
+  ],
+  "commodities": [
+    {
+      "id": "rice",
+      "label": "米（精米）",
+      "table": 7,
+      "printedPage": 7,
+      "pdfPage": 20,
+      "totals": {
+        "beginningStock": 27496629,
+        "production": 126827439,
+        "imports": 9810876,
+        "totalSupply": 164134944,
+        "domesticUtilization": 114752879,
+        "exports": 19658086,
+        "endingStock": 29723978,
+        "totalDemand": 164134944
+      },
+      "countries": [
+        {
+          "code": "BRN",
+          "beginningStock": 17798,
+          "production": 2422,
+          "imports": 17179,
+          "totalSupply": 37399,
+          "domesticUtilization": 29751,
+          "exports": null,
+          "endingStock": 7648,
+          "totalDemand": 37399,
+          "estimatedFields": []
+        },
+        {
+          "code": "KHM",
+          "beginningStock": 1646059,
+          "production": 7998228,
+          "imports": null,
+          "totalSupply": 9644287,
+          "domesticUtilization": 6384115,
+          "exports": 656323,
+          "endingStock": 2603849,
+          "totalDemand": 9644287,
+          "estimatedFields": [
+            "beginningStock"
+          ]
+        },
+        {
+          "code": "IDN",
+          "beginningStock": 4064238,
+          "production": 34331071,
+          "imports": 2715858,
+          "totalSupply": 41111167,
+          "domesticUtilization": 36975209,
+          "exports": 1559,
+          "endingStock": 4134399,
+          "totalDemand": 41111167,
+          "estimatedFields": []
+        },
+        {
+          "code": "LAO",
+          "beginningStock": 37353,
+          "production": 2340120,
+          "imports": 70815,
+          "totalSupply": 2448288,
+          "domesticUtilization": 2401144,
+          "exports": 16935,
+          "endingStock": 30209,
+          "totalDemand": 2448288,
+          "estimatedFields": []
+        },
+        {
+          "code": "MYS",
+          "beginningStock": null,
+          "production": 1392095,
+          "imports": 1400776,
+          "totalSupply": 2792871,
+          "domesticUtilization": 2669422,
+          "exports": 123449,
+          "endingStock": null,
+          "totalDemand": 2792871,
+          "estimatedFields": [
+            "domesticUtilization"
+          ]
+        },
+        {
+          "code": "MMR",
+          "beginningStock": 12247491,
+          "production": 17634277,
+          "imports": 23,
+          "totalSupply": 29881791,
+          "domesticUtilization": 17523262,
+          "exports": 1002357,
+          "endingStock": 11356172,
+          "totalDemand": 29881791,
+          "estimatedFields": [
+            "production"
+          ]
+        },
+        {
+          "code": "PHL",
+          "beginningStock": 1900000,
+          "production": 13000000,
+          "imports": 3600000,
+          "totalSupply": 18500000,
+          "domesticUtilization": 16400000,
+          "exports": null,
+          "endingStock": 2100000,
+          "totalDemand": 18500000,
+          "estimatedFields": [
+            "beginningStock",
+            "production",
+            "imports",
+            "domesticUtilization"
+          ]
+        },
+        {
+          "code": "SGP",
+          "beginningStock": null,
+          "production": null,
+          "imports": 434027,
+          "totalSupply": 434027,
+          "domesticUtilization": 277230,
+          "exports": 156796,
+          "endingStock": null,
+          "totalDemand": 434027,
+          "estimatedFields": []
+        },
+        {
+          "code": "THA",
+          "beginningStock": 4580470,
+          "production": 21859179,
+          "imports": 15749,
+          "totalSupply": 26455398,
+          "domesticUtilization": 10970250,
+          "exports": 8769044,
+          "endingStock": 6716104,
+          "totalDemand": 26455398,
+          "estimatedFields": []
+        },
+        {
+          "code": "VNM",
+          "beginningStock": 3003220,
+          "production": 28270047,
+          "imports": 1556449,
+          "totalSupply": 32829716,
+          "domesticUtilization": 21122496,
+          "exports": 8931623,
+          "endingStock": 2775597,
+          "totalDemand": 32829716,
+          "estimatedFields": []
+        }
+      ]
+    },
+    {
+      "id": "maize",
+      "label": "トウモロコシ",
+      "table": 22,
+      "printedPage": 25,
+      "pdfPage": 38,
+      "totals": {
+        "beginningStock": 6805061,
+        "production": 36361312,
+        "imports": 17428312,
+        "totalSupply": 60594685,
+        "domesticUtilization": 52881306,
+        "exports": 2405509,
+        "endingStock": 5307871,
+        "totalDemand": 60594685
+      }
+    },
+    {
+      "id": "sugar",
+      "label": "砂糖",
+      "table": 37,
+      "printedPage": 43,
+      "pdfPage": 56,
+      "totals": {
+        "beginningStock": 11214174,
+        "production": 17985608,
+        "imports": 9410004,
+        "totalSupply": 38609786,
+        "domesticUtilization": 16821333,
+        "exports": 7541691,
+        "endingStock": 14246762,
+        "totalDemand": 38609786
+      }
+    },
+    {
+      "id": "soybean",
+      "label": "大豆",
+      "table": 52,
+      "printedPage": 59,
+      "pdfPage": 72,
+      "totals": {
+        "beginningStock": 326742,
+        "production": 519151,
+        "imports": 8318901,
+        "totalSupply": 9164795,
+        "domesticUtilization": 8814958,
+        "exports": 77996,
+        "endingStock": 271841,
+        "totalDemand": 9164795
+      }
+    },
+    {
+      "id": "cassava",
+      "label": "キャッサバ（生いも）",
+      "table": 67,
+      "printedPage": 75,
+      "pdfPage": 88,
+      "totals": {
+        "beginningStock": 7504029,
+        "production": 78840668,
+        "imports": 8488961,
+        "totalSupply": 94833658,
+        "domesticUtilization": 51479775,
+        "exports": 34642543,
+        "endingStock": 8711340,
+        "totalDemand": 94833658
+      }
+    }
+  ]
+}

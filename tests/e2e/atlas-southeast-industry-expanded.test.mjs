@@ -22,6 +22,21 @@ function fixture(query=''){
 const visible=(root,attribute)=>[...root.querySelectorAll('['+attribute+']')].filter(n=>!n.hidden);
 const geometry=f=>({points:visible(f.root,'data-southeast-industry-point').map(n=>[n.dataset.southeastIndustryPoint,n.style.left,n.style.top]),labels:visible(f.root,'data-southeast-industry-label').map(n=>[n.dataset.southeastIndustryLabel,n.style.cssText,n.textContent]),leaders:[...f.root.querySelectorAll('[data-southeast-industry-leader]')].map(n=>[n.dataset.southeastIndustryLeader,n.getAttribute('x1'),n.getAttribute('x2'),n.getAttribute('y1'),n.getAttribute('y2')])});
 
+test('local facts follow the selected place, distinguish company/state scope, and clear on history and sector changes',async()=>{
+ const f=fixture('?industryKind=lng&industrySite=lumut-lng');try{
+  f.show();const baseline=geometry(f);
+  assert.deepEqual(visible(f.root,'data-southeast-local-evidence').map(n=>n.dataset.southeastLocalEvidence),['lumut-lng']);
+  assert.match(f.root.querySelector('[data-southeast-local-evidence="lumut-lng"]').textContent,/7.7.*百万t\/年/s);
+  f.root.querySelector('[data-southeast-stage-site="bintulu-lng"]').click();assert.deepEqual(geometry(f),baseline);assert.deepEqual(visible(f.root,'data-southeast-local-evidence').map(n=>n.dataset.southeastLocalEvidence),['bintulu-lng']);
+  f.sector('manufacturing');f.choose('rice');f.root.querySelector('[data-southeast-stage-site="thotnot-rice"]').click();
+  assert.equal(f.root.querySelector('[data-southeast-local-evidence="thotnot-rice"]').dataset.southeastLocalScope,'company');assert.match(f.root.querySelector('[data-southeast-local-evidence="thotnot-rice"]').textContent,/単独工場.*未取得/);
+  f.choose('solar');f.root.querySelector('[data-southeast-stage-site="perai-solar"]').click();assert.equal(visible(f.root,'data-southeast-local-evidence').length,0);assert.equal(f.root.querySelector('[data-southeast-industry-local-missing]').hidden,false);
+  f.window.history.replaceState(null,'','?industrySector=services&industryKind=logistics&industrySite=tibar-port');f.window.dispatchEvent(new f.window.PopStateEvent('popstate'));await new Promise(r=>setImmediate(r));
+  assert.deepEqual(visible(f.root,'data-southeast-local-evidence').map(n=>n.dataset.southeastLocalEvidence),['tibar-port']);assert.match(f.root.querySelector('[data-southeast-industry-selected-position]').textContent,/公表.*参照位置/);
+  f.sector('resource');assert.equal(f.root.querySelector('[data-southeast-industry-selected]').hidden,true);assert.equal(visible(f.root,'data-southeast-local-evidence').length,0);assert.equal(f.root.querySelector('[data-southeast-industry-comparison-context]').hidden,true);
+ }finally{f.window.happyDOM.abort();}
+});
+
 test('three sector maps replace the mixed overview and keep industry controls and legend outside the map',()=>{
  const f=fixture();try{
   assert.equal(f.root.querySelectorAll('[data-southeast-industry-sector]').length,3);
@@ -83,3 +98,4 @@ test('palm quantities, country outlines and their legends never leak into a diff
   assert.match(f.root.querySelector('[data-southeast-industry-site-scales]').textContent,/2,930万t\/年/);
  }finally{f.window.happyDOM.abort();}
 });
+

@@ -1,5 +1,6 @@
 import {southeastIndustrySectors,southeastIndustrySites,southeastSiteSectors,type SoutheastIndustryKind,type SoutheastIndustrySector} from '../data/atlas/asia/southeast-asia-industry-sites';
 import {southeastIndustryProfiles,southeastIndustryProfile} from '../data/atlas/asia/southeast-asia-industry-catalog';
+import {southeastIndustryLocalEvidence} from '../data/atlas/asia/southeast-asia-industry-learning';
 import {southeastMapKindSectors,southeastPreferredSector,southeastSectorKindLabel,southeastMapLabels} from '../data/atlas/asia/southeast-industry-map-scenes';
 import {placeSoutheastIndustryLabels} from '../lib/atlas-southeast-industry-labels';
 import type {AsiaState} from '../lib/atlas-asia-state';
@@ -101,9 +102,11 @@ export function createSoutheastIndustryLocations(root:HTMLElement,getState:()=>A
   query('[data-southeast-industry-caveat]').textContent=profile?.caveat??'地点は出典年の立地案内位置で、施設の全数や敷地・集積範囲を表さない。規模・設備能力の年、単位と出典は下の統計に示し、地点数・記号面積で産業規模を比較しない。';
   query('[data-southeast-industry-overview-statistics]').hidden=kind!=='all';
   const scaleNotes=[...root.querySelectorAll<HTMLElement>('[data-southeast-industry-scale-kind]')];
-  for(const note of scaleNotes)note.hidden=note.dataset.southeastIndustryScaleSector!==sector||(kind!=='all'&&note.dataset.southeastIndustryScaleKind!==kind);
+  for(const note of scaleNotes)note.hidden=!!selectedId||note.dataset.southeastIndustryScaleSector!==sector||(kind!=='all'&&note.dataset.southeastIndustryScaleKind!==kind);
   query('[data-southeast-industry-site-scales]').hidden=scaleNotes.every(note=>note.hidden);
   for(const node of root.querySelectorAll<HTMLElement>('[data-southeast-industry-facts]'))node.hidden=node.dataset.southeastIndustryFacts!==kind;
+  for(const node of root.querySelectorAll<HTMLElement>('[data-southeast-industry-stages]'))node.hidden=node.dataset.southeastIndustryStages!==kind;
+  for(const button of root.querySelectorAll<HTMLButtonElement>('[data-southeast-stage-site]'))button.setAttribute('aria-pressed',String(button.dataset.southeastStageSite===selectedId));
   for(const node of root.querySelectorAll<HTMLElement>('[data-sea-overview-row]'))node.hidden=!southeastMapKindSectors(node.dataset.seaOverviewRow as SoutheastIndustryKind).includes(sector);
   for(const b of sectors)b.setAttribute('aria-pressed',String(b.dataset.southeastIndustrySector===sector));
   const option=(label:string,value:string)=>{const node=document.createElement('option');node.textContent=label;node.value=value;return node;};
@@ -114,7 +117,10 @@ export function createSoutheastIndustryLocations(root:HTMLElement,getState:()=>A
   for(const group of southeastMapLabels){const label=labels.get(group.id)!;label.hidden=!active||!map||!group.sectors.includes(sector);label.dataset.southeastIndustryLabelSector=sector;label.classList.toggle('muted',kind!=='all'&&kind!==group.kind);label.classList.toggle('chosen',!!selectedId&&group.siteIds.includes(selectedId));label.setAttribute('aria-pressed',String(!!selectedId&&group.siteIds.includes(selectedId)));}
   query('[data-southeast-industry-site-count]').textContent=String(southeastIndustrySites.filter(inSector).length);
   const site=southeastIndustrySites.find(x=>x.id===selectedId);selected.hidden=!site;
-  if(site){query('[data-southeast-industry-selected-title]').textContent=site.label;query('[data-southeast-industry-selected-reading]').textContent=site.reading+' 案内位置であり、工場敷地の数値座標は未確認。資料年時点の事例で、現在の全施設一覧ではない。';query('[data-southeast-industry-selected-year]').textContent=site.sourceYear;const a=query<HTMLAnchorElement>('[data-southeast-industry-selected-source]');a.textContent=site.sourceLabel;a.href=site.sourceUrl;const group=southeastMapLabels.find(g=>g.siteIds.includes(site.id));const note=query('[data-southeast-industry-group-note]');note.hidden=!group||group.siteIds.length===1;note.textContent=group&&group.siteIds.length>1?'同じ産業札に'+group.place+'の'+group.siteIds.length+'案内位置をまとめています。各地点の工程と出典は立地案内に保持しています。':'';}
+  for(const node of root.querySelectorAll<HTMLElement>('[data-southeast-local-evidence]'))node.hidden=node.dataset.southeastLocalEvidence!==site?.id;
+  query('[data-southeast-industry-local-missing]').hidden=!site||!!southeastIndustryLocalEvidence[site.id];
+  const comparison=query('[data-southeast-industry-comparison-context]');comparison.hidden=!site;comparison.textContent=site?site.placeName+'を選択中。立地に結び付く数量は地点の解説に表示し、ここから下は国・産業別の比較資料です。':'';
+  if(site){query('[data-southeast-industry-selected-title]').textContent=site.label;query('[data-southeast-industry-selected-reading]').textContent=site.reading;query('[data-southeast-industry-selected-position]').textContent=site.positionEvidence?.note??'地区・拠点の案内位置。工場敷地の座標ではなく、資料年時点の立地事例です。';query('[data-southeast-industry-position-source-wrap]').hidden=!site.positionEvidence;const positionSource=query<HTMLAnchorElement>('[data-southeast-industry-position-source]');positionSource.textContent=site.positionEvidence?.label??'';positionSource.href=site.positionEvidence?.url??site.sourceUrl;query('[data-southeast-industry-selected-year]').textContent=site.sourceYear;const a=query<HTMLAnchorElement>('[data-southeast-industry-selected-source]');a.textContent=site.sourceLabel;a.href=site.sourceUrl;const group=southeastMapLabels.find(g=>g.siteIds.includes(site.id));const note=query('[data-southeast-industry-group-note]');note.hidden=!group||group.siteIds.length===1;note.textContent=group&&group.siteIds.length>1?'同じ産業札に'+group.place+'の'+group.siteIds.length+'案内位置をまとめています。各地点の工程と出典は立地案内に保持しています。':'';}
   query<HTMLButtonElement>('[data-southeast-industry-clear]').disabled=kind==='all'&&!selectedId;
   position();
  }
@@ -124,7 +130,9 @@ export function createSoutheastIndustryLocations(root:HTMLElement,getState:()=>A
  for(const b of categories)b.addEventListener('click',()=>chooseKind(b.dataset.southeastOverviewKind!));
  picker.addEventListener('change',()=>chooseKind(picker.value));
  for(const b of list)b.addEventListener('click',()=>chooseSite(b.dataset.southeastIndustrySite!));
+ for(const b of root.querySelectorAll<HTMLButtonElement>('[data-southeast-stage-site]'))b.addEventListener('click',()=>chooseSite(b.dataset.southeastStageSite!));
  query('[data-southeast-industry-clear]').addEventListener('click',()=>{kind='all';selectedId=null;save();render();});
  window.addEventListener('popstate',()=>{readURL();queueMicrotask(render);});
  return {render,show(next:import('maplibre-gl').Map|null){if(next&&next!==map){map=next;map.on('move',position);map.on('resize',position);void loadPalm();}render();}};
 }
+

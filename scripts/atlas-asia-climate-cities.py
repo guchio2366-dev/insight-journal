@@ -40,6 +40,7 @@ STATIONS: list[tuple[str, str, str, str, str]] = [
     ("chiang-mai", "southeast-asia", "THA", "チェンマイ", "48327"),
     ("yangon", "southeast-asia", "MMR", "ヤンゴン", "48097"),
     ("vientiane", "southeast-asia", "LAO", "ビエンチャン", "48940"),
+    ("phnom-penh", "southeast-asia", "KHM", "プノンペン", "48991"),
     ("haiphong", "southeast-asia", "VNM", "ハイフォン（フーリエン）", "48826"),
     ("da-nang", "southeast-asia", "VNM", "ダナン", "48855"),
     ("ca-mau", "southeast-asia", "VNM", "カマウ", "48914"),
@@ -328,6 +329,8 @@ export type AsiaClimateCity = {
   sourceRetrievedAt: string;
   sourceTermsUrl: string;
   sourceSha256: string[];
+  // Omitted means source HTML; verified-table-tsv hashes the ledger's exact table.
+  sourceHashKind?: 'source-html' | 'verified-table-tsv';
   additionalSourceUrls?: string[];
   missingMonths: { temperature: number[]; precipitation: number[] };
   notes: string[];

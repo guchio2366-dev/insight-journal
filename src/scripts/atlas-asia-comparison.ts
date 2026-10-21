@@ -52,6 +52,7 @@ function comparisonMeaning(state:AsiaState,config:Config):{label:string;note:str
     return topic==='urban'?{label:'都市範囲と人口密度',note:'都市範囲は行政区域・通勤圏と異なります。'}:{label:'人口密度',note:'密度から民族・信仰・勤務先は分かりません。'};
   }
   if(isTradeTopic(topic))return {label:topic==='trade-imports'?'商品輸入額':'商品輸出額',note:'国全体の金額で、生産地や港の取扱量は示しません。'};
+  if(config.regionId==='southeast-asia'&&state.field==='industry'&&!state.place)return {label:'産業立地',note:'地点は代表的な立地の案内で、生産量や雇用者数の規模を示しません。'};
   const industry=config.industry&&industryTopic(config.industry,state);
   if(!industry)return {label:'産業統計',note:'指標の単位と対象区域を確認します。'};
   const label=industry.title;
@@ -101,6 +102,7 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
   function topicName(s:AsiaState){
     if(s.field==='natural')return asiaNaturalTopics.find(t=>t.id===(s.topic??'climate'))?.label??fieldNames[s.field];
     if(s.field==='agriculture')return s.topic==='overview'||!s.topic&&!s.city?'農畜産物の分布':config.farming?.layers.find(t=>t.id===(s.topic??'rice'))?.title??'米の収穫面積';
+    if(s.field==='industry'&&config.regionId==='southeast-asia'&&!s.place&&!isTradeTopic(s.topic))return '産業立地';
     if(s.field==='industry')return isTradeTopic(s.topic)?s.topic==='trade-imports'?'商品輸入額':'商品輸出額':config.industry?.topics.find(t=>t.id===s.topic)?.title??fieldNames[s.field];
     return config.social?.topics.find(t=>t.id===s.topic)?.title??(s.topic==='ethnicity'?'民族の居住域':s.topic==='religion'&&config.regionId==='south-central-asia'&&!s.detail?'国勢調査による宗教構成':s.topic==='religion'&&config.regionId==='east-asia'?'国別の宗教回答':s.topic==='religion'?'宗教と結びついた居住域':s.topic==='urban'?'都市の広がりと人口':'人口の分布');
   }
@@ -171,6 +173,7 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
         return {...base,period:'2020年の推計',unit:'人/km²（格子面積当たり）',keys:[...asiaPopulationColors.map((color,i)=>({color,label:asiaPopulationLabels[i]})),...(city&&geometry?[{label:`${city.name}の都市範囲（2025年資料の固定境界）`,color:'#9d342c'}]:[])],note:'色なしは推計0・欠測・海を含みます。都市範囲は2025年資料の固定境界で、行政区域や通勤圏とは異なります。',raster:{url:asset(config.populationBase!,record.image),coordinates:record.imageCoordinates},geometry,boundaryOnly:true};}
     }
     if(s.field==='industry'&&config.industry){
+      if(config.regionId==='southeast-asia'&&!s.place&&!isTradeTopic(s.topic))return {...base,title:'東南アジアの産業立地',period:'各事例の資料年',unit:'代表的な立地の案内',keys:[],note:'地点は資源・製造・サービスの立地事例です。記号の大きさは生産量や雇用者数を表しません。産業の種類、選択した工程、地点ごとの数量は元の地図で確認できます。'};
       if(config.regionId==='east-asia'&&s.topic?.startsWith('east-')){
         const industry=eastSectorIndustries.find(i=>'east-'+i.id===s.topic),sector=eastIndustrySector(s.topic,s.sector),items=s.only&&industry?[industry]:eastSectorIndustries.filter(i=>i.sectors.includes(sector));
         return {...base,subject:eastSectorSites.find(c=>c.id===s.detail)?.name,period:'代表的な立地',unit:'産業の種類',keys:items.map(i=>({label:i.label,color:i.color})),compactNote:'● 一定サイズの代表点。複数産業の都市は等分の複数色。大きさは数量を表しません。未掲載の地域にも産業があります。',note:'色は産業の種類。記号は一定サイズで数量を表しません。複数産業の都市は等分の複数色を表示します。未掲載は産業がないという意味ではありません。'};
@@ -205,7 +208,8 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
   function renderMainLegend(state:AsiaState){
     if(!mainLegend)return;
     const agricultureTopic=state.topic??(state.city?'rice':config.presentation?'overview':'rice');
-    const active=!state.back&&(state.field!=='agriculture'||agricultureTopic!=='overview')&&!(config.regionId==='east-asia'&&state.field==='population'&&['ethnicity','religion'].includes(state.topic??''));mainLegend.hidden=!active;
+    const southeastRegionalIndustry=config.regionId==='southeast-asia'&&state.field==='industry'&&!state.place&&!isTradeTopic(state.topic);
+    const active=!southeastRegionalIndustry&&!state.back&&(state.field!=='agriculture'||agricultureTopic!=='overview')&&!(config.regionId==='east-asia'&&state.field==='population'&&['ethnicity','religion'].includes(state.topic??''));mainLegend.hidden=!active;
     if(!active){mainKey='';++mainRevision;mainLegend.replaceChildren();return;}
     const next=[state.field,state.topic,state.detail,state.place,state.city,state.overlay,state.farms].join('|');
     if(next===mainKey)return;mainKey=next;const seq=++mainRevision;mainLegend.textContent='地図の凡例を読み込んでいます。';
@@ -230,7 +234,7 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
     if(next===key)return;key=next;reading=null;hide();showFilled=false;const seq=++revision;
     if(legend)legend.textContent='元の分布と両方の凡例を読み込んでいます。';
     if(compact)compact.textContent='元と比較先の凡例を読み込んでいます。';
-    void Promise.all([describe(from),describe(state)]).then(([original,current])=>{if(seq!==revision||key!==next)return;reading=original;renderCompact(original,current);if(back&&original.subject&&!from.story)back.textContent=`${original.subject}の${topicName(from)}へ戻る`;if(legend){legend.replaceChildren();const hasOriginal=Boolean(original.raster||original.geometry||original.geometryFile||original.geometryFiles);if(hasOriginal){const toggle=document.createElement('button');toggle.type='button';toggle.dataset.comparisonOriginal='';toggle.textContent='元の色面を確認';toggle.setAttribute('aria-pressed','false');toggle.addEventListener('click',()=>{showFilled=!showFilled;toggle.setAttribute('aria-pressed',String(showFilled));toggle.textContent=showFilled?'比較の地図へ戻す':'元の色面を確認';if(map)void show(map);});legend.append(toggle);}const detail=document.createElement('details'),label=document.createElement('summary');detail.open=true;label.textContent='元分布と比較先の全凡例';detail.append(label);detail.append(storyLead(comparisonStory(from,getState(),config)));detail.append(Object.assign(document.createElement('p'),{textContent:hasOriginal?'比較中の色付き輪郭は元の分布の色区分を示します。「元の色面を確認」で元の分布を同じ位置に表示します。比較先の数値は比較先の指標です。':'元の国勢調査円は複数区分の全国構成なので、比較先の地図へ単色の面として重ねません。元の図へ戻ると各国の円を確認できます。'}));appendKeys(detail,original);appendKeys(detail,current);legend.append(detail);}if(map)void show(map);}).catch(()=>{if(seq===revision){if(legend)legend.textContent='元分布・凡例を取得できませんでした。対象名付きの戻るボタンで元の解説を確認できます。';if(compact)compact.textContent='比較凡例を取得できませんでした。';}});
+    void Promise.all([describe(from),describe(state)]).then(([original,current])=>{if(seq!==revision||key!==next)return;reading=original;renderCompact(original,current);if(back&&original.subject&&!from.story)back.textContent=`${original.subject}の${topicName(from)}へ戻る`;if(legend){legend.replaceChildren();const hasOriginal=Boolean(original.raster||original.geometry||original.geometryFile||original.geometryFiles);if(hasOriginal){const toggle=document.createElement('button');toggle.type='button';toggle.dataset.comparisonOriginal='';toggle.textContent='元の色面を確認';toggle.setAttribute('aria-pressed','false');toggle.addEventListener('click',()=>{showFilled=!showFilled;toggle.setAttribute('aria-pressed',String(showFilled));toggle.textContent=showFilled?'比較の地図へ戻す':'元の色面を確認';if(map)void show(map);});legend.append(toggle);}const detail=document.createElement('details'),label=document.createElement('summary');detail.open=true;label.textContent='元分布と比較先の全凡例';detail.append(label);detail.append(storyLead(comparisonStory(from,getState(),config)));detail.append(Object.assign(document.createElement('p'),{textContent:hasOriginal?'比較中の色付き輪郭は元の分布の色区分を示します。「元の色面を確認」で元の分布を同じ位置に表示します。比較先の数値は比較先の指標です。':'元の図はこの比較で単色の面として重ねません。元の図へ戻ると、分類や選択した地点を確認できます。'}));appendKeys(detail,original);appendKeys(detail,current);legend.append(detail);}if(map)void show(map);}).catch(()=>{if(seq===revision){if(legend)legend.textContent='元分布・凡例を取得できませんでした。対象名付きの戻るボタンで元の解説を確認できます。';if(compact)compact.textContent='比較凡例を取得できませんでした。';}});
   }
   function hide(){if(map?.getStyle())for(const id of ids)if(map.getLayer(id))map.setLayoutProperty(id,'visibility','none');}
   async function outlined(url:string):Promise<string>{
@@ -255,3 +259,4 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
   }
   return {render,show};
 }
+

@@ -1,4 +1,5 @@
 import type {PlaceReading} from '../asia-place-readings.ts';
+import {southeastAsiaFarmReadings} from './southeast-asia-farm-readings';
 
 const indonesiaUrban={
  label:'世界銀行・インドネシアの都市化と産業（2019年10月3日）',
@@ -17,6 +18,7 @@ const ghslUrban={label:'欧州委員会JRC・GHS-UCDB R2024A（都市範囲）',
 // Locations guide a regional reading; they are not factory records or new
 // subnational estimates. The national WDI and trade observations stay intact.
 export const southeastAsiaPlaceReadings:PlaceReading[]=[
+ ...southeastAsiaFarmReadings,
  {
   id:'jakarta-industry',region:'southeast-asia',field:'industry',country:'IDN',
   topic:'manufacturing',point:[106.85,-6.2],
@@ -96,3 +98,4 @@ export const southeastAsiaPlaceReadings:PlaceReading[]=[
   ],
  },
 ];
+

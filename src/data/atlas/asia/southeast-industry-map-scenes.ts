@@ -17,6 +17,8 @@ export const southeastSectorKindLabel=(kind:SoutheastIndustryKind,sector:Southea
 }[sector] as Partial<Record<SoutheastIndustryKind,string>>)[kind]??southeastIndustryProfiles.find(p=>p.id===kind)!.label;
 
 const names:Record<string,[string,string]>={
+ 'lumut-lng':['ルムット','LNG液化'],'tibar-port':['ティバール','港湾'],
+ 'thotnot-rice':['トットノット','精米・選別'],'perai-solar':['ペライ','太陽電池'],'yangon-textile':['ヤンゴン周辺','衣料'],
  penang:['ペナン・クリム','電子・半導体'],bacninh:['バクニン','組立・検査'],
  'thai-auto':['タイ東部','自動車'],'java-auto':['ジャワ島西部','自動車'],
  'hcm-textile':['ホーチミン周辺','衣料'],'phnom-textile':['プノンペン','衣料'],
@@ -48,3 +50,4 @@ export const southeastSiteScaleNotes=[
  {id:'singapore-port',text:'シンガポール港：コンテナ取扱量4,466万TEU（2025年）。TEUは20フィートコンテナ換算取扱単位。',source:'port'},
  {id:'port-klang',text:'クラン港：コンテナ取扱量1,514万TEU（2025年）。地域の物品生産量ではない。',source:'malaysiaPorts'},
 ].flatMap(note=>{const site=southeastIndustrySites.find(s=>s.id===note.id)!;const source=note.source?southeastIndustrySources[note.source]:{label:site.sourceLabel,url:site.sourceUrl};return southeastSiteSectors(site).map(sector=>({...note,kind:site.kind,sector,source}));});
+
