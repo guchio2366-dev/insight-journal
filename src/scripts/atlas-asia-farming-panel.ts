@@ -43,11 +43,11 @@ export function renderSouthCentralFarmConnections(root:HTMLElement,region:AsiaRe
    else if(title&&index===0)title.textContent='世界での位置';
   }
  }
- const sectionTitle=section.querySelector('h2');if(sectionTitle)sectionTitle.textContent=selected?(region==='southeast-asia'?'選択品目と地域の農業を比較':'選択品目の生産・使用・輸出先'):'農業の供給と世界での位置';
+ const sectionTitle=section.querySelector('h2');if(sectionTitle)sectionTitle.textContent=selected?(region==='southeast-asia'?(topic==='forest'?'森林面積・木材生産・貿易を比較':'選択品目と地域の農業を比較'):'選択品目の生産・使用・輸出先'):'農業の供給と世界での位置';
  let scopeNote=section.querySelector<HTMLElement>('[data-selected-flow-note]');
  if(selected){
   if(!scopeNote){scopeNote=document.createElement('p');scopeNote.dataset.selectedFlowNote='';scopeNote.className='agro-meta';sectionTitle?.after(scopeNote);}
-  scopeNote.textContent=region==='southeast-asia'?'生産の世界比、ASEAN10か国の食料5品目需給、各国の米貿易額を比較します。年・製品・対象国・単位が異なり、同じ数量の流れとしては接続しません。':'各原表の年・製品・対象範囲を確認してください。異なる範囲の値は同じ数量の内訳には接続しません。';
+  scopeNote.textContent=region==='southeast-asia'?(topic==='forest'?'2024年の森林面積（千ha）・丸太材と製材の数量（万m³）、2023年の木材・木材製品等の貿易額（億米ドル）を11か国で比べます。面積・体積・金額は別の指標です。':'生産の世界比、ASEAN10か国の食料5品目需給、各国の米貿易額を比較します。年・製品・対象国・単位が異なり、同じ数量の流れとしては接続しません。'):'各原表の年・製品・対象範囲を確認してください。異なる範囲の値は同じ数量の内訳には接続しません。';
  }else scopeNote?.remove();
  if(region==='southeast-asia')renderSoutheastFarmConnections(root,topic,country);
  const host=section.querySelector<HTMLElement>('[data-south-central-world-share]')!;host.replaceChildren();
