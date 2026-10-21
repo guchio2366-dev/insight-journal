@@ -30,8 +30,9 @@ const share=(part:number,total:number)=>(part/total*100).toFixed(1);
     <h4><span data-southeast-current-city-name></span>を同じ場所で読み比べる</h4>
     <button type="button" class="reading-link" data-southeast-compare="terrain">都市代表点の標高と低地を見る →</button>
     <button type="button" class="reading-link" data-southeast-compare="basins">都市代表点を含む流域を見る →</button>
-    <button type="button" class="reading-link" data-southeast-compare="manufacturing">同じ場所の産業と国別製造業を読む →</button>
-    <p class="small">都市の輪郭を比較に残します。標高・流域の値は代表点、製造業の値は国の集計です。都市人口と同じ範囲の産業統計ではありません。</p>
+    <button type="button" class="reading-link" data-southeast-compare="manufacturing">同じ地図範囲の産業拠点を読む →</button>
+    <p class="small">都市の輪郭を比較に残します。標高・流域の値は都市の代表点の値です。</p>
+    <p class="small" data-southeast-manufacturing-scope></p>
   </div>
   {southeastPopulationPlaces.map(place=><article><h4>{place.title}</h4><p>{place.reading}</p><div class="place-cities">{place.cityIds.map(id=>{const city=population.cities.find(c=>c.id===id);return city&&<button type="button" data-southeast-urban={id} aria-pressed="false">{city.name}の範囲と人数 →</button>})}</div><p class="small"><a href={place.source.url}>{place.source.label}</a></p></article>)}
 </section>

@@ -1,5 +1,5 @@
 import type {PlaceReading} from '../asia-place-readings.ts';
-import {southeastAsiaFarmReadings} from './southeast-asia-farm-readings';
+import {southeastAsiaFarmReadings} from './southeast-asia-farm-readings.ts';
 
 const indonesiaUrban={
  label:'世界銀行・インドネシアの都市化と産業（2019年10月3日）',

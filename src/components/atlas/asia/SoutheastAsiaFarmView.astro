@@ -72,7 +72,7 @@ const pieStyle=`conic-gradient(${[...topPartners.map((row,index)=>({share:row.sh
  <p>インドネシアのパーム油、ベトナムのコーヒーと木材製品、タイの米と天然ゴムについて、2023年の商品輸出額を同じ米ドル単位で比べます。収穫物と加工品、国際商品分類の4桁と2桁が混在するため、合計した順位ではありません。</p>
  <table><caption>UN Comtrade、2023年、輸出額（億米ドル）。HS44は木材・木材製品・木炭の2桁章</caption><thead><tr><th scope="col">国</th><th scope="col">商品</th><th scope="col">HS</th><th scope="col">億米ドル</th></tr></thead><tbody>{exportRows.map(row=><tr><th scope="row">{row.name}</th><td>{row.label}</td><td>{row.hs}</td><td>{dollars(row.value)}</td></tr>)}</tbody></table>
  <h3>米の国別輸出・輸入報告額</h3><p>同じ2023年のHS1006「米」。輸出と輸入は別の方向で、各国の対世界報告額です。国内で消費された量や、どの輸出国からどの輸入国へ届いたかは分かりません。</p>
- <table data-southeast-rice-trade><caption>UN Comtrade、2023年、HS1006、百万米ドル。輸出10/11か国、輸入11/11か国に値</caption><thead><tr><th scope="col">報告国</th><th scope="col">輸出</th><th scope="col">輸入</th></tr></thead><tbody>{riceTradeRows.map(row=><tr><th scope="row">{row.name}</th><td>{riceTradeAmount(row.exports)}</td><td>{riceTradeAmount(row.imports)}</td></tr>)}</tbody></table>
+ <p><a href="#southeast-rice-trade-comparison">地図下の輸出・輸入比較へ</a></p>
  <p>タイ・ベトナムは輸出報告額が大きく、インドネシア・フィリピンは輸入報告額が大きい一方、ベトナム自身にも輸入があります。11か国分を足すと域内の越境と再輸出を含むため、地域の純供給量にはなりません。東ティモールの輸出欄は欠測で、0ではありません。</p>
  <p>生産量から輸出額を差し引いて国内向け数量を求めることはできません。品目ごとの輸出相手は保持した原資料にないため、この表は輸出先の内訳を表しません。</p>
  <p class="source">出典：<a href="https://comtradeplus.un.org/">UN Comtrade</a>、2023年、各国報告の輸出額（current USD）。<a href="https://uncomtrade.org/docs/policy-on-use-and-re-dissemination/">利用・再配布方針</a>。FAOSTATの2024年生産量とは年・単位が異なります。</p>
@@ -105,7 +105,7 @@ const pieStyle=`conic-gradient(${[...topPartners.map((row,index)=>({share:row.sh
  <div data-south-central-destinations>
   <p>UN Comtrade、2023年、HS1006「米」。各国が世界へ輸出した額、世界から輸入した額を別々に比較します。</p>
   {(['exports','imports'] as const).map(direction=><div class="southeast-rice-trade-leaders"><h4>{direction==='exports'?'輸出額の大きい3か国':'輸入額の大きい3か国'}</h4><ol>{riceTradeLeaders(direction).map(row=><li><span>{row.name}</span><strong>{riceTradeAmount(row[direction])}百万米ドル</strong></li>)}</ol></div>)}
-  <details><summary>11か国の報告額をすべて比較</summary><table data-southeast-rice-trade><caption>2023年、百万米ドル。輸出10/11か国・輸入11/11か国に値</caption><thead><tr><th scope="col">報告国</th><th scope="col">輸出</th><th scope="col">輸入</th></tr></thead><tbody>{riceTradeRows.map(row=><tr><th scope="row">{row.name}</th><td>{riceTradeAmount(row.exports)}</td><td>{riceTradeAmount(row.imports)}</td></tr>)}</tbody></table></details>
+  <details><summary>11か国の報告額をすべて比較</summary><table id="southeast-rice-trade-comparison" data-southeast-rice-trade><caption>2023年、百万米ドル。輸出10/11か国・輸入11/11か国に値</caption><thead><tr><th scope="col">報告国</th><th scope="col">輸出</th><th scope="col">輸入</th></tr></thead><tbody>{riceTradeRows.map(row=><tr><th scope="row">{row.name}</th><td>{riceTradeAmount(row.exports)}</td><td>{riceTradeAmount(row.imports)}</td></tr>)}</tbody></table></details>
   <p>額は数量ではありません。HS1006には籾米・玄米・精米などが含まれ、左の精米需給表とは同じ製品ではありません。東ティモールの輸出は欠測で、0ではありません。</p>
   <details><summary>どこへ輸出したか・どこから輸入したか</summary><p>11か国の米の全相手国行列は未収録です。国別の対世界額から二国間の流れや地域外の数量を推定していません。域内取引を含む国計の合算も、地域外の輸出入にはなりません。</p></details>
   <details><summary>別品目の相手国例：インドネシアの油脂類</summary><p>HS15章（動植物性・微生物性の油脂等）、2023年・輸出額。<strong>パーム油HS1511だけの相手国ではありません。</strong></p>

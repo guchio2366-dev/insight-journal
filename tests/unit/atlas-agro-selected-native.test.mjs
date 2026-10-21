@@ -15,10 +15,14 @@ test('unselected overview renderer remains exactly the published PR 350 implemen
   ['src/components/atlas/AsiaAtlasPage.astro','5a68ea0822cb9ef80b4225ae97841bba1944cc8608a07fac9c12b9ad65c2f667'],
   ['src/components/atlas/EuropeVerifiedStatistics.astro','6c0e50bc54884c8793f60bb0962fcffa29c5d540b189ff8f5b7c8ec1214bb8fb']
  ]){
-  // The authorized South Asia industry extension adds only these two hooks.
+  // Exclude the authorized South Asia industry and Southeast Asia reading hooks.
   // Keep the complete agriculture/other-region source under its original hash.
   const text=readFileSync(path,'utf8');
   const retained=path==='src/components/atlas/AsiaAtlasPage.astro'?text
+   .replace(/^import SoutheastNaturePopulationReading from '\.\/asia\/SoutheastNaturePopulationReading\.astro';\n/m,'')
+   .replace(/^        \{regionId==='southeast-asia'&&<SoutheastNaturePopulationReading \{population\} \/>\}\n/m,'')
+   .replace(/^const southeastGridReading:Record<AsiaField,string>=.*;\n/m,'')
+   .replace("regionId==='southeast-asia'?southeastGridReading[initialField]:(initialField==='natural'?'地図上の陸地を選ぶと、気候区分を確認できます。':'地図上の対象地域を選ぶと、格子内の米の収穫面積を確認できます。')","initialField==='natural'?'地図上の陸地を選ぶと、気候区分を確認できます。':'地図上の対象地域を選ぶと、格子内の米の収穫面積を確認できます。'")
    .replace(/^import SouthAsiaIndustryStatistics from '\.\/asia\/SouthAsiaIndustryStatistics\.astro';\n/m,'')
    .replace(/^     \{focusId==='south-asia'&&<SouthAsiaIndustryStatistics active=\{initialField==='industry'\} \/>\}\n/m,''):text;
   assert.equal(sha256(retained),expected,`${path}: unselected regional views are unchanged`);

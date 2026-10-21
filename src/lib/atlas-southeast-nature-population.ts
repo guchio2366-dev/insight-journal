@@ -11,7 +11,17 @@ export function southeastUrbanState(state:AsiaState, city:AsiaUrbanCentre, camer
   return {...state,field:'population',topic:'urban',place:city.country,detail:city.id,point:city.coordinates,city:null,story:null,camera};
 }
 
-export function southeastNaturePopulationComparison(url:URL,state:AsiaState,topic:'seasonal-precipitation'|'terrain'|'basins'|'manufacturing',camera:AsiaCamera|null,point?:[number,number]|null):AsiaState {
+export function southeastManufacturingScope(country:string|null,industryCountryCodes:readonly string[]) {
+  return country&&industryCountryCodes.includes(country)
+    ? {place:country,button:'同じ場所の産業と国別製造業を読む →',note:'製造業の値は、選択した都市がある国の集計です。都市人口と同じ範囲の産業統計ではありません。'}
+    : {place:null,button:'同じ地図範囲の産業拠点を読む →',note:'この国の国別製造業比較は未掲載です。地図範囲を保って、東南アジアの掲載拠点へ進みます。併記される国別統計も掲載対象国の値で、この都市の値ではありません。'};
+}
+
+type ComparisonContext={point?:[number,number]|null;industryCountryCodes?:readonly string[]};
+export function southeastNaturePopulationComparison(url:URL,state:AsiaState,topic:'seasonal-precipitation'|'terrain'|'basins'|'manufacturing',camera:AsiaCamera|null,{point,industryCountryCodes=[]}:ComparisonContext={}):AsiaState {
   const saved=startAsiaComparison(url,{...state,camera},topic==='manufacturing'?'industry':'natural');
-  return {...saved,topic,detail:topic==='seasonal-precipitation'?'m-07':null,story:null,city:null,point:point??state.point??null,camera};
+  // An unsupported country would be normalized by the industry navigator by
+  // clearing the point and camera. Enter its regional view explicitly instead.
+  const place=topic==='manufacturing'?southeastManufacturingScope(state.place,industryCountryCodes).place:saved.place;
+  return {...saved,place,topic,detail:topic==='seasonal-precipitation'?'m-07':null,story:null,city:null,point:point??state.point??null,camera};
 }

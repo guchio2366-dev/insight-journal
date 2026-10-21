@@ -35,7 +35,11 @@ export function renderSouthCentralFarmConnections(root:HTMLElement,region:AsiaRe
    if(selected)stage.dataset.regionalFlowStage=['production','use','destinations'][index];
    else delete stage.dataset.regionalFlowStage;
    const title=stage.querySelector('h3');
+   // Southeast Asia owns its supply panels. Remember their original headings
+   // before a product selection, including hosts without the new balance data.
+   if(title&&region==='southeast-asia')title.dataset.overviewTitle??=title.textContent??'';
    if(title&&selected)title.textContent=[topic==='forest'?'① 別指標：森林面積と世界比':['cattle','chicken','sheep'].includes(topic!)?'① 別指標：飼養頭数・羽数と世界比':'① 生産量と世界シェア','② 国内・域内使用と輸出','③ 輸出先の量と構成比'][index];
+   else if(title&&region==='southeast-asia')title.textContent=title.dataset.overviewTitle!;
    else if(title&&index===0)title.textContent='世界での位置';
   }
  }

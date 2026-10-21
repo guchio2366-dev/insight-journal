@@ -21,6 +21,23 @@ try{
  const open=async(path)=>{await page.goto(base+'/insight-journal/atlas/asia/southeast-asia/'+path,{waitUntil:'networkidle'});await mapReady();};
  const shot=async(name,selector)=>{await page.evaluate(async()=>{await document.fonts.ready;scrollTo(0,0);await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));});const filename=name+'.jpg',bytes=selector?await page.locator(selector).screenshot({path:join(out,filename),type:'jpeg',quality:76,animations:'disabled'}):await page.screenshot({path:join(out,filename),type:'jpeg',quality:72,animations:'disabled'});images.push({file:filename,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')});};
  const check=label=>checks.push(label);
+ const riceReporters=['インドネシア','ベトナム','タイ','ミャンマー','マレーシア','フィリピン','カンボジア','ラオス','ブルネイ','シンガポール','東ティモール'];
+ const verifyRiceTrade=async(scope)=>{
+  const table=scope.locator('[data-southeast-rice-trade]');
+  assert.equal(await table.count(),1,'each rice trade panel must contain one reporter table');
+  const rows=await table.locator('tbody tr').evaluateAll(nodes=>nodes.map(row=>[...row.querySelectorAll('th,td')].map(cell=>cell.textContent.trim())));
+  assert.equal(rows.length,11);
+  assert.deepEqual(rows.map(row=>row[0]).sort(),[...riceReporters].sort(),'each of the eleven reporters must appear once');
+  assert(rows.every(row=>row.length===3),'each reporter needs separate export and import columns');
+  assert.deepEqual(await table.locator('thead th').allTextContents(),['報告国','輸出','輸入']);
+  assert.equal(rows.find(row=>row[0]==='タイ')[1],'5,147.3');
+  assert.equal(rows.find(row=>row[0]==='ベトナム')[1],'4,374.6');
+  assert.equal(rows.find(row=>row[0]==='東ティモール')[1],'欠測');
+  assert.equal(rows.filter(row=>row[1]!=='欠測').length,10);
+  assert.equal(rows.filter(row=>row[2]!=='欠測').length,11);
+  assert.match(await table.locator('caption').textContent(),/2023年.*百万米ドル/s);
+  return rows;
+ };
  await open('agriculture/');await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmView==='all');
  const frame=await page.locator('.asia-map-frame').boundingBox();assert(frame&&frame.width>=650&&frame.height>=460,JSON.stringify(frame));
  assert.equal(await page.locator('[data-southeast-part="all"]').getAttribute('aria-pressed'),'true');
@@ -30,10 +47,45 @@ try{
  assert.equal(await page.locator('.asia-livestock-point:visible').count()>0,true);assert.equal(await page.locator('[data-farm-choice]').count()>0,true);
  check('regional farming opens with crop and livestock distributions together');await shot('farming-overview');
  await page.locator('[data-farm-choice="maize"]').click();await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmSelected==='maize');
+ const balances=page.locator('[data-southeast-food-balances]');
+ assert.equal(await balances.count(),1);
+ assert.deepEqual(await balances.locator('[data-southeast-balance]').evaluateAll(nodes=>nodes.map(node=>node.dataset.southeastBalance)),['rice','maize','sugar','soybean','cassava']);
+ assert.deepEqual(await balances.locator('[data-southeast-balance][open]').evaluateAll(nodes=>nodes.map(node=>node.dataset.southeastBalance)),['maize']);
+ assert.match(await balances.locator(':scope > p').first().textContent(),/2023年.*ASEAN10.*東ティモールは含まず.*11か国とは範囲が異なります/s);
+ const maizeValues=await balances.locator('[data-southeast-balance="maize"] .southeast-balance-exact tbody tr').evaluateAll(nodes=>nodes.map(row=>[...row.querySelectorAll('th,td')].map(cell=>cell.textContent.trim())));
+ assert.deepEqual(maizeValues,[['期首在庫','6,805,061'],['生産','36,361,312'],['輸入','17,428,312'],['国内利用','52,881,306'],['輸出','2,405,509'],['期末在庫','5,307,871'],['公表合計（供給・利用とも）','60,594,685']]);
+ const sugarBalance=await balances.locator('[data-southeast-balance="sugar"]').textContent();
+ assert.match(sugarBalance,/需給表37と比率表40で生産値が異なる.*比率を表示していません/s);
+ assert.doesNotMatch(sugarBalance,/生産 ÷ 国内利用/);
+ check('five 2023 ASEAN10 commodity balances retain original totals and distinguish sugar source inconsistencies');
  assert.equal(await page.locator('.asia-livestock-point:visible').count()>0,true);check('selected maize retains lighter livestock points');await shot('farming-maize');
+ await shot('maize-food-balance','[data-southeast-food-balances]');
  await page.locator('[data-farm-choice="chicken"]').click();await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmSelected==='chicken');
+ assert.equal(await balances.count(),1,'changing to an unsupported commodity must preserve the regional balance panel');
+ assert.equal(await balances.locator('[data-southeast-balance-context]').isVisible(),true);
+ assert.match(await balances.locator('[data-southeast-balance-context]').textContent(),/鶏の需給は未収録.*食料5品目の比較/s);
+ assert.doesNotMatch(await balances.textContent(),/国別参考例（地域集計ではありません）/);
  check('livestock selection is legible with the regional map');await shot('farming-chicken');
- await page.locator('[data-southeast-trade-reading] summary').click();assert.equal(await page.locator('[data-southeast-rice-trade] tbody tr').count(),11);const riceTrade=await page.locator('[data-southeast-rice-trade]').textContent();assert.match(riceTrade,/タイ.*5,147.3/s);assert.match(riceTrade,/ベトナム.*4,374.6/s);assert.match(riceTrade,/東ティモール.*欠測/s);check('2023 HS1006 rice exports and imports show eleven reporters without inventing bilateral flows or domestic use');await shot('rice-trade-reporters','[data-southeast-trade-reading]');
+ const riceReading=page.locator('[data-southeast-trade-reading]');
+ await riceReading.locator(':scope > summary').click();
+ assert.equal(await riceReading.isVisible(),true);
+ assert.equal(await riceReading.locator('[data-southeast-rice-trade]').count(),0,'the reading sidebar must link to the full table rather than duplicate it');
+ assert.match(await riceReading.textContent(),/2023年.*HS1006.*各国の対世界報告額/s);
+ const riceComparisonLink=riceReading.locator('a[href="#southeast-rice-trade-comparison"]');
+ assert.equal(await riceComparisonLink.count(),1);
+ assert.equal(await riceComparisonLink.isVisible(),true);
+ const riceConnections=page.locator('[data-south-central-farm-connections] [data-south-central-destinations]');
+ assert.equal(await riceConnections.count(),1);
+ assert.equal(await page.locator('[data-southeast-rice-trade]').count(),1,'the complete rice reporter table belongs below the map only');
+ assert.equal(await riceConnections.locator('table#southeast-rice-trade-comparison').count(),1);
+ await riceComparisonLink.click();
+ assert.equal(new URL(page.url()).hash,'#southeast-rice-trade-comparison');
+ await riceConnections.locator('table#southeast-rice-trade-comparison').waitFor({state:'visible'});
+ assert.equal(await riceConnections.locator('table#southeast-rice-trade-comparison').evaluate(table=>table.closest('details').open),true,'the native fragment link must reveal the table inside its disclosure');
+ await verifyRiceTrade(riceConnections);
+ assert.equal(await riceConnections.locator('[data-southeast-rice-trade]').isVisible(),true);
+ assert.match(await riceConnections.textContent(),/HS1006.*額は数量ではありません.*精米需給表とは同じ製品ではありません/s);
+ check('the reading sidebar links to one lower 2023 HS1006 table with eleven distinct reporters and separate export/import coverage');await shot('rice-trade-reading','[data-southeast-trade-reading]');await shot('rice-trade-statistics','[data-south-central-farm-connections] [data-south-central-destinations]');
  await open('agriculture/?topic=forest');await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.southeastFarmTopic==='forest');
  assert.equal(await page.locator('.southeast-forest-connections').isVisible(),true);
  assert.equal(await page.locator('[data-south-central-farm-connections] > .asia-farm-connections-grid').isVisible(),false);
@@ -115,3 +167,4 @@ try{
 
 // Reuse this existing read-only regional job for the 18 adopted industries.
 await import('./verify-southeast-industry-expanded.mjs');
+

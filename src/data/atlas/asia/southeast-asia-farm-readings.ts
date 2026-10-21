@@ -1,4 +1,4 @@
-import type {PlaceReading} from '../asia-place-readings';
+import type {PlaceReading} from '../asia-place-readings.ts';
 
 // Reading locations, not farms, factories, measured irrigation sites or new estimates.
 export const southeastAsiaFarmReadings:PlaceReading[]=[
@@ -36,7 +36,7 @@ export const southeastAsiaFarmReadings:PlaceReading[]=[
   scope:'説明の根拠はマレーシア全体の研究で、選択点を調査農園として示しません。地図から個別農園の水使用量・土地転換時期・持続可能性は判定できません。FAOSTATの油ヤシ生産は果実重量、HS15は各種油脂を含む貿易額です。両者を直接割り算しません。',
   source:{label:'MPOB・油ヤシ栽培とパーム油生産の水利用研究紹介（2020年公開）',url:'https://opb.mpob.gov.my/consumptive-water-use-assessment-and-life-cycle-assessment-based-water-footprint-for-palm-oil/'},
   bridges:[
-   {field:'natural',topic:'seasonal-precipitation',detail:'m-02',label:'油ヤシの地点で12か月の雨を比べる',question:'年降水量だけでなく、月ごとの少雨期と多雨期を確かめます。雨の分布を農園の取水量と混同しないで読みます。'},
+   {field:'natural',topic:'seasonal-precipitation',detail:'m-02',label:'油ヤシの地点の2月から、12か月の雨を比べる',question:'年降水量だけでなく、月ごとの少雨期と多雨期を確かめます。雨の分布を農園の取水量と混同しないで読みます。'},
    {field:'agriculture',topic:'forest',label:'同じ地点の森林参考図を比べる'},
    {field:'industry',topic:'trade-exports',detail:'t-15',label:'マレーシア全体の油脂類輸出を比べる'},
   ],

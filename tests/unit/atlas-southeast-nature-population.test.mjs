@@ -1,11 +1,39 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {southeastUrbanComparison,southeastUrbanState,southeastNaturePopulationComparison} from '../../src/lib/atlas-southeast-nature-population.ts';
-import {restoreAsiaComparison} from '../../src/lib/atlas-asia-state.ts';
+import {southeastUrbanComparison,southeastUrbanState,southeastNaturePopulationComparison,southeastManufacturingScope} from '../../src/lib/atlas-southeast-nature-population.ts';
+import {readAsiaAtlasState,writeAsiaAtlasState,restoreAsiaComparison} from '../../src/lib/atlas-asia-state.ts';
 import {baliReligionRegistration,southeastPopulationPlaces,southeastSocietyCoverage} from '../../src/data/atlas/asia/southeast-nature-population.ts';
 const manifest=JSON.parse(readFileSync(new URL('../../public/assets/atlas/asia-population-v1/manifest.json',import.meta.url),'utf8'));
 const cities=manifest.regions['southeast-asia'].cities;
+
+test('製造業比較の対象外8か国も、地域拠点へ同じ地点・カメラで進み元の都市へ戻れる',()=>{
+  const industryCountryCodes=['IDN','VNM','THA'];
+  const countries=[...new Set(cities.map(city=>city.country))];
+  assert.equal(countries.filter(country=>!industryCountryCodes.includes(country)).length,8);
+  const context={countries,cities:[],bounds:[90,-12,142,28],fields:['industry','population'],topics:{population:['density','urban'],industry:['manufacturing']},details:{population:cities.map(city=>city.id)}};
+  const url=new URL('https://example.org/atlas/asia/southeast-asia/population/');
+  for(const city of cities){
+    const camera={lng:city.coordinates[0],lat:city.coordinates[1],zoom:6};
+    const base={field:'population',topic:'density',place:null,city:null,point:null,detail:null,story:null,back:null,camera};
+    const selected=southeastUrbanState(base,city,camera);
+    const next=southeastNaturePopulationComparison(url,selected,'manufacturing',camera,{industryCountryCodes});
+    const scope=southeastManufacturingScope(city.country,industryCountryCodes);
+    assert.equal(next.field,'industry',city.name);assert.equal(next.topic,'manufacturing');
+    assert.equal(next.place,industryCountryCodes.includes(city.country)?city.country:null,city.name);
+    assert.equal(scope.place,next.place,'比較ボタンが示す国範囲と遷移先をそろえる');
+    assert.equal(next.detail,null);assert.equal(next.city,null);
+    assert.deepEqual(next.point,city.coordinates,city.name);assert.deepEqual(next.camera,camera,city.name);
+    const nextUrl=writeAsiaAtlasState(url,next),reloaded=readAsiaAtlasState(nextUrl,context);
+    assert.equal(reloaded.place,next.place,city.name);
+    assert.deepEqual(reloaded.point,city.coordinates.map(value=>Number(value.toFixed(5))),city.name);
+    assert.deepEqual(reloaded.camera,{lng:Number(camera.lng.toFixed(5)),lat:Number(camera.lat.toFixed(5)),zoom:6},city.name);
+    const returned=restoreAsiaComparison(nextUrl,reloaded,context);
+    assert.equal(returned.field,'population');assert.equal(returned.topic,'urban');
+    assert.equal(returned.place,city.country);assert.equal(returned.detail,city.id);assert.equal(returned.back,null);
+    assert.deepEqual(returned.point,reloaded.point,city.name);assert.deepEqual(returned.camera,reloaded.camera,city.name);
+  }
+});
 
 test('都市比較は地図と同じ16都市の2020年人口・2025年範囲を使い、人数だけを共通幅にする',()=>{
   const original=cities.map(c=>c.id),rows=southeastUrbanComparison(cities);
