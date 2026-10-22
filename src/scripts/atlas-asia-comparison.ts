@@ -213,7 +213,9 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
     if(!active){mainKey='';++mainRevision;mainLegend.replaceChildren();return;}
     const next=[state.field,state.topic,state.detail,state.place,state.city,state.overlay,state.farms].join('|');
     if(next===mainKey)return;mainKey=next;const seq=++mainRevision;mainLegend.textContent='地図の凡例を読み込んでいます。';
-    void describe(state).then(current=>{if(seq!==mainRevision||next!==mainKey)return;mainLegend.replaceChildren();appendCompact(mainLegend,current,'main','地図');}).catch(()=>{if(seq===mainRevision)mainLegend.textContent='地図の凡例を取得できませんでした。詳細の資料を確認してください。';});
+    // Southeast settlement choices below the map already provide the color key.
+    const settlementChoices=config.regionId==='southeast-asia'&&state.field==='population'&&['ethnicity','religion'].includes(state.topic??'');
+    void describe(state).then(current=>{if(seq!==mainRevision||next!==mainKey)return;mainLegend.replaceChildren();appendCompact(mainLegend,settlementChoices?{...current,keys:[]}:current,'main','地図');}).catch(()=>{if(seq===mainRevision)mainLegend.textContent='地図の凡例を取得できませんでした。詳細の資料を確認してください。';});
   }
   function storyLead(story:ReturnType<typeof comparisonStory>){
     const lead=document.createElement('p');lead.dataset.comparisonStoryLead='';lead.hidden=!story;lead.textContent=story?.lead??'';return lead;
