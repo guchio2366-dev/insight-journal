@@ -83,3 +83,21 @@
 }
 
 .asia-atlas-root[data-region=southeast-asia][data-southeast-industry-active=true] [data-industry-navigation]{display:none!important}
+
+.sea-industry-local-evidence{margin-block:1rem;padding:.85rem;border:1px solid #c9d5c8;border-radius:10px;background:#f3f7ef}
+.sea-industry-local-evidence h4,.sea-industry-local-figure h5{margin:.1rem 0 .4rem;font-size:1rem}
+.sea-industry-local-scope{font-weight:700;color:#35543b}
+.sea-industry-local-figure{padding-block:.65rem;border-top:1px solid #d6dfd1}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-local-figure .sea-industry-value{margin:.3rem 0;font-size:1.35rem;font-weight:700;line-height:1.4;color:#284f44}
+.sea-industry-local-figure a,.sea-industry-stages a{overflow-wrap:anywhere}
+.sea-industry-stages{margin-block:1.25rem}
+.sea-industry-stages ol{padding-left:1.4rem;margin:.6rem 0}
+.sea-industry-stages li{padding:0 0 .8rem .2rem}
+.sea-industry-stages h4{margin:0 0 .3rem;font-size:1rem}
+.sea-industry-stages li p{margin:.2rem 0 .5rem}
+.sea-industry-stage-actions{display:flex;flex-wrap:wrap;gap:.4rem}
+.sea-industry-stage-actions button{border:1px solid #8da292;border-radius:7px;background:#fff;color:#284c35;padding:.45rem .65rem;font:inherit;cursor:pointer;min-height:40px}
+.asia-atlas-root[data-region=southeast-asia] .sea-industry-stage-actions button[aria-pressed="true"]{background:#dbe9d9;border-color:#376b46;font-weight:700}
+.sea-industry-stage-actions button:focus-visible{outline:3px solid #335f99;outline-offset:2px}
+.sea-industry-comparison-context{border-left:3px solid #8da292;padding:.65rem 1rem;background:#f4f7f2}
+.asia-atlas-root[data-region=southeast-asia] :is([data-southeast-local-evidence],[data-southeast-industry-stages],[data-southeast-industry-selected],[data-southeast-industry-comparison-context])[hidden]{display:none!important}

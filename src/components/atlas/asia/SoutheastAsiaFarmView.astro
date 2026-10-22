@@ -5,12 +5,14 @@ import {resolve} from 'node:path';
 import {southeastCropPriority} from '../../../data/atlas/asia/southeast-asia-crop-priority.mjs';
 import {southeastStudyCountries,southeastCountryNames,southeastExportExamples} from '../../../data/atlas/asia/southeast-asia-forestry-trade';
 import shares from '../../../../public/assets/atlas/southeast-asia-v1/world-shares.json';
+import foodBalances from '../../../../public/assets/atlas/southeast-asia-v1/food-balances-2023.json';
 
 const statistics=JSON.parse(gunzipSync(readFileSync(resolve(process.cwd(),'public/assets/atlas/asia-farming-v1/statistics.json.gz'))).toString('utf8'));
 const priority=southeastCropPriority(statistics);
 const amount=(tonnes:number)=>tonnes>0&&tonnes<5000?'<1':Math.round(tonnes/10000).toLocaleString('ja-JP');
 const mapLabels:Record<string,string>={arabica:'アラビカ分布',robusta:'ロブスタ分布'};
 const studyCountries=southeastStudyCountries;
+const allCountries=Object.entries(southeastCountryNames);
 const shareText=(value:number|undefined)=>value===undefined?'欠測':value>0&&value<.01?'0.01%未満':`${value.toLocaleString('ja-JP',{maximumFractionDigits:2})}%`;
 const worldRows=shares.series.filter(series=>['rice-production','maize-production','soybean-production'].includes(series.id)).flatMap(series=>studyCountries.map(([code,name])=>({
  item:series.label,country:name,initial:series.years.find(row=>row.year===2020)?.countries[code]?.share,
@@ -20,17 +22,19 @@ const riceShare=(country:string)=>shareText(worldRows.find(row=>row.item==='米'
 const trade=JSON.parse(gunzipSync(readFileSync(resolve(process.cwd(),'public/assets/atlas/asia-trade-v1/southeast-asia.json.gz'))).toString('utf8'));
 const faoValue=(code:string,item:string,element='Production')=>statistics.countries[code]?.observations.find((o:{domain:string;item:string;element:string;year:number;value:number})=>o.domain===(item==='6646'?'Inputs_LandUse':item==='27'?'Production_Crops_Livestock':'Forestry')&&o.item===item&&o.element===element&&o.year===2024)?.value as number|undefined;
 const countryNames=southeastCountryNames;
-const quantity=(value:number|undefined)=>value===undefined?'欠測':Math.round(value/10000).toLocaleString('ja-JP');
-const dollars=(value:number|undefined)=>value===undefined?'欠測':(value/1e8).toLocaleString('ja-JP',{maximumFractionDigits:1});
+const quantity=(value:number|undefined)=>value===undefined?'欠測':value>0&&value<1000?'0.1未満':(value/10000).toLocaleString('ja-JP',{maximumFractionDigits:1});
+const dollars=(value:number|undefined)=>value===undefined?'欠測':value>0&&value<1e7?'0.1未満':(value/1e8).toLocaleString('ja-JP',{maximumFractionDigits:1});
 const forestItems=[['1861','丸太材'],['1872','製材']] as const;
-const forestRows=forestItems.flatMap(([item,label])=>studyCountries.map(([code,name])=>({item:label,name,value:faoValue(code,item),flag:statistics.countries[code]?.observations.find((o:{domain:string;item:string;element:string;year:number;flag:string})=>o.domain==='Forestry'&&o.item===item&&o.element==='Production'&&o.year===2024)?.flag,share:shares.series.find(s=>s.id===(item==='1861'?'roundwood-production':'sawnwood-production'))?.years.find(y=>y.year===2024)?.countries[code]?.share})));
+const forestRows=forestItems.flatMap(([item,label])=>allCountries.map(([code,name])=>({item:label,name,value:faoValue(code,item),flag:statistics.countries[code]?.observations.find((o:{domain:string;item:string;element:string;year:number;flag:string})=>o.domain==='Forestry'&&o.item===item&&o.element==='Production'&&o.year===2024)?.flag,share:shares.series.find(s=>s.id===(item==='1861'?'roundwood-production':'sawnwood-production'))?.years.find(y=>y.year===2024)?.countries[code]?.share})));
 const tradeItems=southeastExportExamples;
 const exportRows=tradeItems.map(([code,hs,label])=>({name:countryNames[code],hs,label,value:trade.countries[code].products[hs]?.X as number|undefined}));
 const riceTradeRows=Object.entries(countryNames).map(([code,name])=>({code,name,imports:trade.countries[code]?.products['1006']?.M as number|undefined,exports:trade.countries[code]?.products['1006']?.X as number|undefined}));
 const riceTradeAmount=(value:number|undefined)=>value===undefined?'欠測':value===0?'0':value<100000?'<0.1':(value/1e6).toLocaleString('ja-JP',{maximumFractionDigits:1});
-const woodExportRows=studyCountries.map(([code,name])=>({name,value:trade.countries[code].products['44']?.X as number|undefined}));
-const riceProducers=Object.keys(countryNames).map(code=>({code,name:countryNames[code],value:faoValue(code,'27')})).filter((r):r is {code:string;name:string;value:number}=>r.value!==undefined).sort((a,b)=>b.value-a.value).slice(0,5);
-const riceMax=riceProducers[0]?.value??1;
+const woodExportRows=allCountries.map(([code,name])=>({name,exports:trade.countries[code]?.products['44']?.X as number|undefined,imports:trade.countries[code]?.products['44']?.M as number|undefined}));
+const riceTradeLeaders=(direction:'exports'|'imports')=>riceTradeRows.filter(row=>row[direction]!==undefined).sort((a,b)=>b[direction]!-a[direction]!).slice(0,3);
+const balanceAmount=(value:number|null)=>value===null?'—':(value/10000).toLocaleString('ja-JP',{maximumFractionDigits:1,minimumFractionDigits:1});
+const balanceGroups=[{name:'供給',total:'totalSupply',cells:[['beginningStock','期首在庫','#b4a474'],['production','生産','#397765'],['imports','輸入','#647da5']]},{name:'利用・繰越',total:'totalDemand',cells:[['domesticUtilization','国内利用','#397765'],['exports','輸出','#a65f46'],['endingStock','期末在庫','#b4a474']]}] as const;
+const riceBalanceCountries=foodBalances.commodities.find(row=>row.id==='rice')?.countries??[];
 const fatPartners=trade.countries.IDN.partners['15'];
 const partnerLabels:Record<number,string>={156:'中国',699:'インド',586:'パキスタン',842:'米国',458:'マレーシア'};
 const topPartners=(fatPartners.values as [number,number][]).slice(0,4).map(([code,value])=>({label:partnerLabels[code]??trade.partners[String(code)]?.name,value,share:value/fatPartners.world*100}));
@@ -68,37 +72,66 @@ const pieStyle=`conic-gradient(${[...topPartners.map((row,index)=>({share:row.sh
  <p>インドネシアのパーム油、ベトナムのコーヒーと木材製品、タイの米と天然ゴムについて、2023年の商品輸出額を同じ米ドル単位で比べます。収穫物と加工品、国際商品分類の4桁と2桁が混在するため、合計した順位ではありません。</p>
  <table><caption>UN Comtrade、2023年、輸出額（億米ドル）。HS44は木材・木材製品・木炭の2桁章</caption><thead><tr><th scope="col">国</th><th scope="col">商品</th><th scope="col">HS</th><th scope="col">億米ドル</th></tr></thead><tbody>{exportRows.map(row=><tr><th scope="row">{row.name}</th><td>{row.label}</td><td>{row.hs}</td><td>{dollars(row.value)}</td></tr>)}</tbody></table>
  <h3>米の国別輸出・輸入報告額</h3><p>同じ2023年のHS1006「米」。輸出と輸入は別の方向で、各国の対世界報告額です。国内で消費された量や、どの輸出国からどの輸入国へ届いたかは分かりません。</p>
- <table data-southeast-rice-trade><caption>UN Comtrade、2023年、HS1006、百万米ドル。輸出10/11か国、輸入11/11か国に値</caption><thead><tr><th scope="col">報告国</th><th scope="col">輸出</th><th scope="col">輸入</th></tr></thead><tbody>{riceTradeRows.map(row=><tr><th scope="row">{row.name}</th><td>{riceTradeAmount(row.exports)}</td><td>{riceTradeAmount(row.imports)}</td></tr>)}</tbody></table>
+ <p><a href="#southeast-rice-trade-comparison">地図下の輸出・輸入比較へ</a></p>
  <p>タイ・ベトナムは輸出報告額が大きく、インドネシア・フィリピンは輸入報告額が大きい一方、ベトナム自身にも輸入があります。11か国分を足すと域内の越境と再輸出を含むため、地域の純供給量にはなりません。東ティモールの輸出欄は欠測で、0ではありません。</p>
  <p>生産量から輸出額を差し引いて国内向け数量を求めることはできません。品目ごとの輸出相手は保持した原資料にないため、この表は輸出先の内訳を表しません。</p>
  <p class="source">出典：<a href="https://comtradeplus.un.org/">UN Comtrade</a>、2023年、各国報告の輸出額（current USD）。<a href="https://uncomtrade.org/docs/policy-on-use-and-re-dissemination/">利用・再配布方針</a>。FAOSTATの2024年生産量とは年・単位が異なります。</p>
 </details>
 <template data-southeast-supply-template>
- <h3>地域の供給と仕向け</h3><p>地理的な東南アジア11か国の同年・原料換算の需給表と域内移動の対応行は未収録です。国内用途・地域外輸出入・在庫の横帯は未算出です。数量比をカロリー自給率とは呼びません。</p><details><summary>参考：米を生産する国（需給ではありません）</summary><p>FAOSTAT、2024年・籾米の生産重量。11か国の有効値から上位5か国。輸出や国内向けの割合ではありません。</p>
- <ol class="southeast-supply-bars">{riceProducers.map(row=><li><span>{row.name}</span><strong>{quantity(row.value)}万t</strong><i style={`--bar-width:${row.value/riceMax*100}%`}></i></li>)}</ol>
- <p>メコン・紅河の低地やジャワなどで生産を比べます。地図の色は2020年の収穫面積で、この2024年の国計とは別です。</p></details>
+ <h3 data-southeast-supply-title>食料5品目の供給と利用</h3>
+ <div data-south-central-supply data-southeast-food-balances>
+  <p>2023年・当時のASEAN10か国。米などを<strong>同じ品目の重量</strong>で比べます。東ティモールは含まず、地図の11か国とは範囲が異なります。</p>
+  <p data-southeast-balance-context hidden></p>
+  {foodBalances.commodities.map(row=><details class="southeast-food-balance" data-southeast-balance={row.id} open={row.id==='rice'}>
+   <summary>{row.label}<span>生産 {balanceAmount(row.totals.production)}万t</span></summary>
+   <p class="balance-takeaway">{row.id==='rice'?'米の地域生産は国内利用を上回りますが、輸入もあります。国ごとの不足と余剰は同じではありません。':row.id==='maize'?'トウモロコシは、生産だけでは国内利用を満たさず、輸入も供給を支えます。':row.id==='soybean'?'大豆は国内生産に対して輸入が大きい品目です。食用・飼料用などの用途内訳はこの表にありません。':row.id==='cassava'?'キャッサバは生産と輸出の両方が大きい品目です。生いも換算の重量を、でん粉の製品重量と混同しません。':'砂糖の需給です。地図のサトウキビの収穫面積や原料重量とは別の製品を扱います。'}</p>
+   {balanceGroups.map(group=><div class="southeast-balance-group">
+    <strong>{group.name}　{balanceAmount(row.totals[group.total])}万t</strong>
+    <div class="southeast-balance-track" aria-hidden="true">{group.cells.map(([key,label,color])=><i style={`width:${row.totals[key]/row.totals[group.total]*100}%;background:${color}`} title={label}></i>)}</div>
+    <dl class="southeast-balance-values">{group.cells.map(([key,label,color])=><div><dt><i style={`background:${color}`}></i>{label}</dt><dd>{balanceAmount(row.totals[key])}万t</dd></div>)}</dl>
+   </div>)}
+   {row.id!=='sugar'?<p>生産 ÷ 国内利用：<strong>{(row.totals.production/row.totals.domesticUtilization*100).toFixed(2)}%</strong>（この需給表から計算）。食料全体のカロリー自給率ではありません。</p>:<p>砂糖は原資料の需給表37と比率表40で生産値が異なるため、比率を表示していません。ここでは表37の値を保持しています。</p>}
+   <details class="southeast-balance-exact"><summary>原表の値をt単位で確認</summary><table><caption>AFSIS ACO No.33、表{row.table}、本文{row.printedPage}頁。2023年、t</caption><thead><tr><th scope="col">項目</th><th scope="col">t</th></tr></thead><tbody>{balanceGroups.flatMap(group=>group.cells.map(([key,label])=><tr><th scope="row">{label}</th><td>{row.totals[key].toLocaleString('ja-JP')}</td></tr>))}<tr><th scope="row">公表合計（供給・利用とも）</th><td>{row.totals.totalSupply.toLocaleString('ja-JP')}</td></tr></tbody></table></details>
+  </details>)}
+  <p>国内利用は食用だけではありません。輸出入には域内の取引も含まれ、地域外への出入りではありません。生産は作物年、利用・在庫・貿易は暦年という原資料の区分を保持しています。</p>
+  <details><summary>対象国・推計・原表の差を確認</summary><p>対象：ブルネイ、カンボジア、インドネシア、ラオス、マレーシア、ミャンマー、フィリピン、シンガポール、タイ、ベトナム。2024年12月版に掲載された2023年の値で、一部にAFSIS事務局の推計を含みます。2024年推計・2025年予測はここに混ぜていません。</p><p>米は利用側、トウモロコシは利用側、大豆は供給側で、公表合計と構成値に1tの差があります。修正せず、帯は各公表合計を分母にしています。国表の「—」は原資料の「-」を保持し、0と解釈しません。</p>
+   <div class="southeast-table-scroll"><table><caption>米（精米）の国別生産と国内利用。2023年、万t。*＝AFSIS事務局推計</caption><thead><tr><th scope="col">国</th><th scope="col">生産</th><th scope="col">国内利用</th></tr></thead><tbody>{riceBalanceCountries.map(row=><tr><th scope="row">{countryNames[row.code]}</th><td>{balanceAmount(row.production)}{row.estimatedFields.includes('production')?'*':''}</td><td>{balanceAmount(row.domesticUtilization)}{row.estimatedFields.includes('domesticUtilization')?'*':''}</td></tr>)}</tbody></table></div>
+  </details>
+  <p class="source">出典：<a href={foodBalances.source.url}>AFSIS ACO No.33（2024年12月）</a>、表7・22・37・52・67。<a href="/insight-journal/assets/atlas/southeast-asia-v1/food-balances-2023.json">収録した原表値・注記</a>。籾米のFAOSTAT生産量・HS1006貿易額とは別の定義です。</p>
+ </div>
 </template>
 <template data-southeast-partner-template>
- <h3>地域外の輸出先・輸入元</h3><p>11か国の同一品目・同年の全相手行列は未収録です。域内相手を除く地域外数量の分母と円は未算出です。国別対世界額の合算は地域外貿易ではありません。</p><details><summary>別定義の国の例：インドネシアの油脂類輸出額</summary><p>インドネシアからのHS15章（動植物性・微生物性の油脂等）、2023年・輸出額。<strong>パーム油HS1511だけの相手国ではありません。</strong></p>
- <div class="southeast-partner-pie" role="img" aria-label="インドネシアのHS15章輸出額に占める相手国の割合。正確な値は直後の一覧を参照。" style={`background:${pieStyle}`}></div>
- <ul class="southeast-partner-list">{topPartners.map((row,index)=><li><i style={`background:${pieColors[index]}`}></i>{row.label} {shareText(row.share)}</li>)}<li><i style={`background:${pieColors[4]}`}></i>その他 {shareText(otherPartnerShare)}</li></ul>
- <p>分母は同国のHS15章の対世界輸出額、約{dollars(fatPartners.world)}億米ドル。その他には掲載した4相手国以外と統計上の差分を含みます。国内向けではありません。</p>
-</details>
+ <h3 data-southeast-partner-title>各国の米の輸出・輸入</h3>
+ <div data-south-central-destinations>
+  <p>UN Comtrade、2023年、HS1006「米」。各国が世界へ輸出した額、世界から輸入した額を別々に比較します。</p>
+  {(['exports','imports'] as const).map(direction=><div class="southeast-rice-trade-leaders"><h4>{direction==='exports'?'輸出額の大きい3か国':'輸入額の大きい3か国'}</h4><ol>{riceTradeLeaders(direction).map(row=><li><span>{row.name}</span><strong>{riceTradeAmount(row[direction])}百万米ドル</strong></li>)}</ol></div>)}
+  <details><summary>11か国の報告額をすべて比較</summary><table id="southeast-rice-trade-comparison" data-southeast-rice-trade><caption>2023年、百万米ドル。輸出10/11か国・輸入11/11か国に値</caption><thead><tr><th scope="col">報告国</th><th scope="col">輸出</th><th scope="col">輸入</th></tr></thead><tbody>{riceTradeRows.map(row=><tr><th scope="row">{row.name}</th><td>{riceTradeAmount(row.exports)}</td><td>{riceTradeAmount(row.imports)}</td></tr>)}</tbody></table></details>
+  <p>額は数量ではありません。HS1006には籾米・玄米・精米などが含まれ、左の精米需給表とは同じ製品ではありません。東ティモールの輸出は欠測で、0ではありません。</p>
+  <details><summary>どこへ輸出したか・どこから輸入したか</summary><p>11か国の米の全相手国行列は未収録です。国別の対世界額から二国間の流れや地域外の数量を推定していません。域内取引を含む国計の合算も、地域外の輸出入にはなりません。</p></details>
+  <details><summary>別品目の相手国例：インドネシアの油脂類</summary><p>HS15章（動植物性・微生物性の油脂等）、2023年・輸出額。<strong>パーム油HS1511だけの相手国ではありません。</strong></p>
+   <div class="southeast-partner-pie" role="img" aria-label="インドネシアのHS15章輸出額の相手国割合。正確な値は直後の一覧を参照。" style={`background:${pieStyle}`}></div>
+   <ul class="southeast-partner-list">{topPartners.map((row,index)=><li><i style={`background:${pieColors[index]}`}></i>{row.label} {shareText(row.share)}</li>)}<li><i style={`background:${pieColors[4]}`}></i>その他 {shareText(otherPartnerShare)}</li></ul>
+   <p>分母は同国のHS15章の対世界輸出額、約{dollars(fatPartners.world)}億米ドル。その他には4相手国以外と統計上の差分を含みます。</p>
+  </details>
+  <p class="source">出典：<a href="https://comtradeplus.un.org/">UN Comtrade</a>、2023年、HS2017、current USD。米の需給量や食料全体の自給率を示す表ではありません。</p>
+ </div>
 </template>
 <template data-southeast-forest-template>
  <div class="southeast-forest-connections">
-  <h2>林業の土地・木材生産・輸出を分けて読む</h2>
+  <h2>森林の広さ・木材の量・貿易額を11か国で比べる</h2>
   <div class="asia-farm-connections-grid">
-   <section><h3>森林面積と衛星画像</h3><p>FAOSTATの2024年森林面積。3か国の国計（千ha）で、緑の画素を足した値ではありません。</p><ul>{studyCountries.map(([code,name])=><li>{name}：<strong>{faoValue(code,'6646','Area')===undefined?'欠測':Math.round(faoValue(code,'6646','Area')!).toLocaleString('ja-JP')}千ha</strong></li>)}</ul><p>地図はJRCの2020年森林分類。東カリマンタンでは樹木作物を一部誤分類します。FAOの土地利用上の森林面積とも、油ヤシ・ゴム農園の面積とも同一視しません。</p></section>
-   <section><h3>丸太材と製材の生産</h3><p>FAOSTAT Forestry、2024年。万m³。国計であり地図の画素ごとの生産量ではありません。</p><table><thead><tr><th>国</th><th>丸太材</th><th>製材</th></tr></thead><tbody>{studyCountries.map(([code,name])=><tr><th scope="row">{name}</th><td>{quantity(faoValue(code,'1861'))}</td><td>{quantity(faoValue(code,'1872'))}</td></tr>)}</tbody></table><p>製材は丸太材の加工品なので、生産量を足し合わせません。</p></section>
-   <section><h3>木材製品の輸出</h3><p>UN Comtrade、2023年、HS44章「木材・木材製品・木炭」の国別輸出額（億米ドル）。</p><ul>{woodExportRows.map(row=><li>{row.name}：<strong>{dollars(row.value)}億米ドル</strong></li>)}</ul><p>輸出額は2024年の木材生産量や国内仕向けとは年・単位・品目範囲が異なります。<a href="../industry/?industryKind=wood">木材・家具の加工拠点を地図で見る →</a></p></section>
+   <section><h3>森林面積と衛星画像</h3><p>FAOSTAT、2024年の国計。森林面積は土地利用の区分で、地図の緑の画素や農園の面積を足した値ではありません。</p><table><caption>2024年、千ha。対象11か国</caption><thead><tr><th scope="col">国</th><th scope="col">森林面積</th></tr></thead><tbody>{allCountries.map(([code,name])=><tr><th scope="row">{name}</th><td>{faoValue(code,'6646','Area')===undefined?'欠測':faoValue(code,'6646','Area')!.toLocaleString('ja-JP',{maximumFractionDigits:1})}</td></tr>)}</tbody></table><p>地図はJRCの2020年森林分類。東カリマンタンでは樹木作物を一部誤分類します。油ヤシ・ゴム農園と森林を見分ける際は、作物図にも切り替えて確かめます。</p></section>
+   <section><h3>丸太材・製材の生産と出入り</h3><p>FAOSTAT Forestry、2024年。生産・輸入・輸出を同じ品目・体積で比較します。国内利用や在庫変動は収録していません。</p>{forestItems.map(([item,label],index)=><details open={index===0}><summary>{label}の数量</summary><div class="southeast-table-scroll"><table><caption>{label}、2024年、万m³</caption><thead><tr><th scope="col">国</th><th scope="col">生産</th><th scope="col">輸入</th><th scope="col">輸出</th></tr></thead><tbody>{allCountries.map(([code,name])=><tr><th scope="row">{name}</th><td>{quantity(faoValue(code,item))}</td><td>{quantity(faoValue(code,item,'Import quantity'))}</td><td>{quantity(faoValue(code,item,'Export quantity'))}</td></tr>)}</tbody></table></div></details>)}<p>丸太材には燃料用も含み、製材は加工後の製品です。両者は足し合わせません。純輸出を生産から引いただけの値も、実際の国内利用とは呼びません。</p></section>
+   <section><h3>木材製品の輸出・輸入額</h3><p>UN Comtrade、2023年、HS44章「木材・木材製品・木炭」。家具（HS94）はこの章に含みません。</p><table><caption>2023年、億米ドル。欠測は0ではありません</caption><thead><tr><th scope="col">国</th><th scope="col">輸出</th><th scope="col">輸入</th></tr></thead><tbody>{woodExportRows.map(row=><tr><th scope="row">{row.name}</th><td>{dollars(row.exports)}</td><td>{dollars(row.imports)}</td></tr>)}</tbody></table><p>貿易額と2024年の木材体積は年・単位・製品範囲が異なります。<a href="../industry/?industryKind=wood">木材・家具の加工拠点を地図で見る →</a></p></section>
   </div>
-  <p class="source">出典：<a href="https://www.fao.org/faostat/en/#data/RL">FAOSTAT 土地利用</a>・<a href="https://www.fao.org/faostat/en/#data/FO">林業</a>、<a href="https://comtradeplus.un.org/">UN Comtrade</a>、<a href="https://forobs.jrc.ec.europa.eu/GFC/v3">JRC GFC2020</a>。国計はインドネシア・ベトナム・タイの事例で、東南アジア11か国合計ではありません。</p>
+  <details><summary>原数値・推計区分と世界比</summary><p>林業の国別値には公的報告と推計が含まれます。小さい正の値を0にせず、原数値と各観測のフラグは<a href="/insight-journal/assets/atlas/asia-farming-v1/statistics.json">保存済みの林業統計</a>で確認できます。<a href="/insight-journal/assets/atlas/southeast-asia-v1/world-shares.json">同年・同品目の世界比</a>は別系列です。</p></details>
+  <p class="source">出典：<a href="https://www.fao.org/faostat/en/#data/RL">FAOSTAT 土地利用</a>・<a href="https://www.fao.org/faostat/en/#data/FO">林業</a>、<a href="https://comtradeplus.un.org/">UN Comtrade</a>、<a href="https://forobs.jrc.ec.europa.eu/GFC/v3">JRC GFC2020</a>。東ティモールを含む地理的な東南アジア11か国です。</p>
  </div>
 </template>
 <script>
+ import {renderSoutheastFarmConnections} from '../../../scripts/atlas-southeast-farm-connections';
  const mountRegionalStatistics=()=>{
- const root=document.querySelector('[data-asia-region="southeast-asia"]')??document;
+ const root=document.querySelector<HTMLElement>('.asia-atlas-root[data-region="southeast-asia"]')??document;
  const section=root.querySelector<HTMLElement>('[data-south-central-farm-connections]');
  if(section){
   // Bound the sticky reading panel to the map row. The following statistics
@@ -123,11 +156,34 @@ const pieStyle=`conic-gradient(${[...topPartners.map((row,index)=>({share:row.sh
   if(headings[1]&&partners)headings[1].replaceChildren(partners.content.cloneNode(true));
   const forest=root.querySelector<HTMLTemplateElement>('[data-southeast-forest-template]');
   if(forest&&!section.querySelector('.southeast-forest-connections'))section.append(forest.content.cloneNode(true));
+  if(root instanceof HTMLElement)renderSoutheastFarmConnections(root,root.dataset.southeastFarmTopic??'overview');
  }
  };
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mountRegionalStatistics,{once:true});else mountRegionalStatistics();
 </script>
 <style>
+ .southeast-food-balance{border-top:1px solid #cbd4ca;padding:8px 0}
+ .southeast-food-balance>summary{font-weight:700;min-height:44px;cursor:pointer}
+ .southeast-food-balance>summary>span{display:block;margin:3px 0 0 18px;font-size:12px;font-weight:400;color:#425751}
+ .southeast-food-balance[open]>summary{color:#255b4c}
+ .southeast-balance-group{margin:12px 0}
+ .southeast-balance-group>strong{font-size:13px}
+ .southeast-balance-track{display:flex;height:16px;margin:5px 0;border:1px solid #677b72;overflow:hidden}
+ .southeast-balance-track>i{display:block;flex-shrink:0;border-right:1px solid #fff}
+ .southeast-balance-values{margin:0;font-variant-numeric:tabular-nums;font-size:12px}
+ .southeast-balance-values>div{display:flex;justify-content:space-between;gap:8px;margin:3px 0}
+ .southeast-balance-values dt{display:flex;align-items:center;gap:6px}
+ .southeast-balance-values dt>i{width:10px;height:10px;display:inline-block;border:1px solid #617168}
+ .southeast-balance-values dd{margin:0;white-space:nowrap}
+ .southeast-balance-exact table,[data-south-central-destinations] table,[data-southeast-food-balances] table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
+ .southeast-balance-exact :is(th,td),[data-south-central-destinations] :is(th,td),[data-southeast-food-balances] :is(th,td){padding:6px 3px;border-bottom:1px solid #d4d8cb;text-align:right}
+ .southeast-balance-exact th:first-child,[data-south-central-destinations] th:first-child,[data-southeast-food-balances] th:first-child{text-align:left}
+ .southeast-table-scroll{overflow-x:auto;max-width:100%}
+ .southeast-rice-trade-leaders h4{margin:12px 0 5px;font-size:14px}
+ .southeast-rice-trade-leaders ol{list-style:none;padding:0}
+ .southeast-rice-trade-leaders li{display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px 8px;margin:6px 0;padding-bottom:5px;border-bottom:1px solid #d4d8cb}
+ .southeast-rice-trade-leaders strong{font-size:12px;font-variant-numeric:tabular-nums}
+ :global(.asia-atlas-root[data-region="southeast-asia"] .asia-farm-connections-grid>section){min-width:0}
  :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-climate-key){position:absolute;left:3%;top:57%;z-index:4;display:grid;gap:2px;width:max-content;max-width:145px;padding:5px 7px;background:#eaf4f4e8;border:1px solid #7da5ad;color:#234c58;font:11px/1.35 var(--sans);pointer-events:none}
  :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-climate-key strong){font-size:11px}
  :global(.asia-atlas-root[data-region="southeast-asia"] .southeast-climate-key[hidden]){display:none!important}
@@ -163,3 +219,4 @@ const pieStyle=`conic-gradient(${[...topPartners.map((row,index)=>({share:row.sh
  :global(.asia-atlas-root[data-region="southeast-asia"] .asia-farm-connections-grid>section :is(p,li)){font-size:14px;line-height:1.65}
  :global(.asia-atlas-root[data-region="southeast-asia"] .asia-farm-connections-grid>section h3){font-size:16px;line-height:1.45}
 </style>
+

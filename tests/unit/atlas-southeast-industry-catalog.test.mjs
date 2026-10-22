@@ -5,6 +5,7 @@ import {readFileSync} from 'node:fs';
 import {southeastIndustrySites as sites,southeastSiteSectors} from '../../src/data/atlas/asia/southeast-asia-industry-sites.ts';
 import {placeSoutheastIndustryLabels,southeastLabelIntersects} from '../../src/lib/atlas-southeast-industry-labels.ts';
 import {southeastMapLabels,southeastMapKindSectors} from '../../src/data/atlas/asia/southeast-industry-map-scenes.ts';
+import {southeastIndustryStages,southeastIndustryLocalEvidence} from '../../src/data/atlas/asia/southeast-asia-industry-learning.ts';
 
 test('14 main proposals and all four additions retain separate product stages and evidence scopes',()=>{
  assert.deepEqual(new Set(profiles.map(p=>p.id)),new Set(['metals','energy','lng','palm','rice','electronics','automotive','textiles','rubber','wood','food','logistics','tourism','it-bpm','hydro','finance','petrochemicals','solar']));
@@ -29,8 +30,8 @@ test('processing and capacity use their own quantitative evidence; national quan
  assert.match(palm.caveat,/82.1%.*転用しない/);assert.equal(rice.scale[0].value,859.319);assert.match(rice.scale[0].scope,/HS100630/);
  assert.deepEqual(rice.countryEvidence,['THA','VNM','MMR','KHM']);
  assert.deepEqual(profiles.find(p=>p.id==='solar').countryEvidence,['KHM','MYS','THA','VNM']);
- assert.equal(sites.length,30);assert(!sites.some(s=>['solar','rice'].includes(s.kind)));
- for(const s of sites){assert.equal(s.facilityCoordinates,null);assert.equal(s.positionScope,'regional-guide');assert(southeastSiteSectors(s).length);assert(profiles.some(p=>p.id===s.kind));}
+ assert.equal(sites.length,35);assert(profiles.every(p=>sites.some(s=>s.kind===p.id)),'Every industry has a sourced locality example');
+ for(const s of sites){if(s.positionScope==='published-reference'){assert.deepEqual(s.facilityCoordinates,s.point);assert(s.positionEvidence?.url);}else assert.equal(s.facilityCoordinates,null);assert(southeastSiteSectors(s).length);assert(profiles.some(p=>p.id===s.kind));}
  assert.equal(sites.find(s=>s.id==='johor-food').kind,'palm');assert.equal(sites.find(s=>s.id==='bintulu-lng').kind,'lng');assert.equal(sites.find(s=>s.id==='namtheun-hydro').kind,'hydro');
 });
 test('dense label placement is deterministic, in bounds, non-overlapping and clears controls and anchors',()=>{
@@ -46,7 +47,7 @@ test('each original point belongs to one stage-specific map, with no energy or r
  const ids=sector=>sites.filter(s=>southeastSiteSectors(s).includes(sector)).map(s=>s.id);
  assert.deepEqual(ids('resource'),sites.filter(s=>s.stage==='raw'||profiles.find(p=>p.id===s.kind).sectors.includes('resource')).map(s=>s.id));
  for(const id of ['morowali-smelter','bintulu-lng','jurong-petro','maptaphut-petro','pengerang-petro','rayong-tires','binh-duong-furniture'])for(const sector of ['resource','manufacturing'])assert(ids(sector).includes(id),'Meaningful shared processing role: '+id);
- assert.equal(ids('manufacturing').length,16);assert.equal(ids('services').length,9);
+ assert.equal(ids('manufacturing').length,20);assert.equal(ids('services').length,10);
  assert(ids('manufacturing').includes('morowali-smelter'));assert(ids('manufacturing').includes('rayong-tires'));assert(ids('manufacturing').includes('binh-duong-furniture'));
  assert(ids('services').includes('singapore-port'));assert(ids('services').includes('singapore-finance'));
  assert(sites.every(s=>southeastSiteSectors(s).length>0));
@@ -54,7 +55,7 @@ test('each original point belongs to one stage-specific map, with no energy or r
  assert.deepEqual(southeastMapKindSectors('rice'),['manufacturing']);assert.deepEqual(southeastMapKindSectors('solar'),['manufacturing']);
 });
 test('short labels group nearby examples of the same industry without relocating or aggregating their evidence',()=>{
- assert.equal(southeastMapLabels.length,28);
+ assert.equal(southeastMapLabels.length,33);
  assert.deepEqual(southeastMapLabels.flatMap(g=>g.siteIds).sort(),sites.map(s=>s.id).sort());
  for(const g of southeastMapLabels){
   assert.deepEqual(g.point,sites.find(s=>s.id===g.id).point);
@@ -64,3 +65,23 @@ test('short labels group nearby examples of the same industry without relocating
  assert.deepEqual(southeastMapLabels.find(g=>g.id==='penang').siteIds,['penang','kulim']);
  assert.deepEqual(southeastMapLabels.find(g=>g.id==='jurong-petro').siteIds,['jurong-petro','pengerang-petro']);
 });
+
+test('local quantities retain facility, port, state and company scopes instead of inheriting national figures',()=>{
+ assert.equal(southeastIndustryLocalEvidence['lumut-lng'].figures[0].value,7.7);
+ assert.equal(southeastIndustryLocalEvidence['tibar-port'].figures[0].unit,'m');
+ assert.equal(southeastIndustryLocalEvidence['thotnot-rice'].scopeType,'company');
+ assert.equal(southeastIndustryLocalEvidence['johor-food'].scopeType,'state');
+ assert.equal(southeastIndustryLocalEvidence['port-klang'].figures[0].value,15.14);
+ assert(!southeastIndustryLocalEvidence['perai-solar'],'A manufacturing address must not acquire country-level import capacity');
+ assert(!southeastIndustryLocalEvidence['phuket-tourism'],'Philippine GDP must not become a Phuket statistic');
+ for(const [id,e]of Object.entries(southeastIndustryLocalEvidence)){assert(sites.some(s=>s.id===id));assert(e.reading&&e.scope);for(const f of e.figures){assert(f.scope&&f.year&&f.definition);assert(sources[f.source]?.url);}}
+});
+
+test('every explanatory stage retains evidence and links only to its own industry; new positions have separate provenance',()=>{
+ assert.deepEqual(Object.keys(southeastIndustryStages).sort(),profiles.map(p=>p.id).sort());
+ for(const [kind,stages]of Object.entries(southeastIndustryStages)){assert.equal(stages.length,3);for(const stage of stages){assert(stage.title&&stage.reading&&stage.sources.length);assert(stage.sources.every(id=>sources[id]));assert(stage.sites.every(id=>sites.some(s=>s.id===id&&s.kind===kind)));}}
+ const reference=sites.find(s=>s.id==='tibar-port');assert.equal(reference.positionScope,'published-reference');assert(Math.abs(reference.point[0]-(125+28/60+29/3600))<1e-9);assert(Math.abs(reference.point[1]-(-8-34/60-15/3600))<1e-9);
+ for(const id of ['lumut-lng','thotnot-rice','perai-solar','yangon-textile']){const s=sites.find(s=>s.id===id);assert.equal(s.positionScope,'regional-guide');assert.equal(s.facilityCoordinates,null);assert(s.positionEvidence.url&&s.positionEvidence.note);}
+ assert.match(sites.find(s=>s.id==='yangon-textile').sourceYear,/2021/);
+});
+

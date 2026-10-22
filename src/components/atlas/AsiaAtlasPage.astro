@@ -22,6 +22,7 @@ import EastAsiaIndustryStatistics from './asia/EastAsiaIndustryStatistics.astro'
 import {eastSectorTopics as eastClusterTopics} from '../../data/atlas/east-asia-industry-sectors';
 import AsiaIndustryPanel from './AsiaIndustryPanel.astro';
 import SoutheastAsiaFarmView from './asia/SoutheastAsiaFarmView.astro';
+import SoutheastNaturePopulationReading from './asia/SoutheastNaturePopulationReading.astro';
 import EastAsiaFarmFoundations from './asia/EastAsiaFarmFoundations.astro';
 import {southeastIndustryCountryScope} from '../../data/atlas/asia/southeast-asia-industry';
 import {southeastAsiaInitialReadings} from '../../data/atlas/asia/southeast-asia-reading';
@@ -118,6 +119,7 @@ const farmInsight={...asiaFarmInsights[regionId],...(focusId?{title:asiaFocusFie
 Object.assign(config,{farmInsight,focusWaterRivers:focusId?asiaFocusWaterRivers[focusId]:null,focusWaterOverview:focusId?asiaFocusWaterOverview[focusId]:null,focusShareExample:focusId?asiaFocusShareExample[focusId]:null,focusFarmKindReading:focusId?asiaFocusFarmKindReading[focusId]:null,focusReadings:focusId?asiaFocusFieldReadings[focusId]??null:regionId==='southeast-asia'?southeastAsiaInitialReadings():regionId==='south-central-asia'?southCentralFieldReadings:null});
 Object.assign(config,{social,socialBase:withBase('/assets/atlas/asia-social-v1/')});
 Object.assign(config,{trade:{...tradeManifest.regions[regionId],...(focusId?{countries:asiaFocusCountries[focusId]}:{})},tradeBase:withBase('/assets/atlas/asia-trade-v1/'),tradeChapters:tradeManifest.chapters});
+const southeastGridReading:Record<AsiaField,string>={industry:'地図上の産業地点を選ぶと、立地と工程を確認できます。',population:'地図上の地点を選ぶと、人口密度と都市の広がりを確認できます。',natural:'地図上の陸地を選ぶと、気候区分を確認できます。',agriculture:'地図上の対象地域を選ぶと、農林業の分布を確認できます。'};
 const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林業'},{id:'natural',label:'自然環境'},{id:'industry',label:'主要産業'},{id:'population',label:'人口'}];
 ---
 <BaseLayout title={`${region.label}地図｜自然環境・農林業・主要産業・人口`} description={reading.summary} compactAtlas canonicalPath={`/atlas/asia/${pageId}/${asiaFieldPaths[initialField]}/`}>
@@ -154,7 +156,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
         <div class="asia-map-legend" data-asia-map-legend></div>
         <section class="asia-legend asia-farm-key" data-farm-overview-legend hidden={initialField!=='agriculture'} aria-label="農畜産物の品目一覧"><p class="asia-farm-period">2020年・概略分布</p><button class="asia-farm-return" type="button" data-farm-choice="overview" hidden>全品目の分布へ</button>{['crop','livestock'].map(kind=><div class="asia-farm-key-row"><strong>{kind==='crop'?'作物':'家畜'}</strong><div class="asia-farm-products">{presentation.farming.products.filter(p=>p.kind===kind).map(p=><button type="button" data-farm-choice={p.id} data-kind={p.kind} aria-pressed="false" style={`--product-color:${p.color}`} title={`${p.title}の詳しい分布を表示`}><i></i>{p.title}</button>)}</div></div>)}<p class="asia-farm-density-key" data-farm-density-key>{focusId==='central-asia'?<><span>2020年の相対的な概略分布</span><span>色面：作物・家畜の分布。濃さは一律で数量を表しません</span><span>細い点：家畜の資料に基づく代表位置</span></>:<><span>2020年の概略分布</span><span><i class="core"></i>作物の集中域</span><span><i class="spread"></i>周辺の分布</span><span>● 畜産の代表点（数量を表しません）</span></>}</p></section>
         <div class="asia-map-items" data-asia-map-items aria-label="地図に表示する項目">{regionId==='south-central-asia'&&<><label class="asia-topic-picker asia-south-central-product-picker" data-farming-selector hidden={initialField!=='agriculture'}>品目別の詳しい分布<select data-farming-topic aria-label="農林業の主題"><option value="overview">農畜産物の分布</option><option value="rice">米</option>{farming.layers.map(t=><option value={t.id}>{t.title}</option>)}</select></label><label class="asia-topic-picker" data-sc-industry-picker hidden={initialField!=='industry'}>地域の産業分布<select data-sc-industry-topic aria-label="南・中央アジアの産業を選ぶ"><option value="sc-overview">全体の産業分布</option>{regionalIndustryGroups.map(g=><option value={g.id}>{g.title}</option>)}{focusId!=='central-asia'&&<><option value="in-manufacturing">インドの州別製造業</option><option value="in-services">インドの州別サービス業</option></>}</select></label></>}</div>
-        <div class="asia-map-selection" aria-live="polite"><span class="selection-dot"></span><span data-grid-reading>{initialField==='natural'?'地図上の陸地を選ぶと、気候区分を確認できます。':'地図上の対象地域を選ぶと、格子内の米の収穫面積を確認できます。'}</span></div>
+        <div class="asia-map-selection" aria-live="polite"><span class="selection-dot"></span><span data-grid-reading>{regionId==='southeast-asia'?southeastGridReading[initialField]:(initialField==='natural'?'地図上の陸地を選ぶと、気候区分を確認できます。':'地図上の対象地域を選ぶと、格子内の米の収穫面積を確認できます。')}</span></div>
         <p class="asia-gesture" data-map-gesture>都市の点を選ぶと雨温図が開きます。地図は2本指で移動・拡大できます。</p>
         {(regionId==='south-central-asia'||regionId==='southeast-asia')&&<section class="asia-farm-connections" data-south-central-farm-connections hidden={initialField!=='agriculture'} aria-label="農業の供給と世界での位置">
           <h2>農業の供給と世界での位置</h2>
@@ -194,6 +196,7 @@ const fieldTabs:{id:AsiaField;label:string}[]=[{id:'agriculture',label:'農林�
        <div class="atlas-national asia-reading-scroll" tabindex="0" role="region" aria-label="選択した場所の詳しい解説">
         <details class="asia-comparison-method" data-comparison-method hidden><summary>比較区分の正式名称・説明・出典を読む</summary><p>元の選択と地図の位置を保存しています。</p><div data-comparison-legend></div></details>
         <section data-focus-reading hidden><h3 data-focus-reading-title></h3><p data-focus-reading-body></p><p class="asia-small">出典：<a data-focus-reading-source></a></p></section>
+        {regionId==='southeast-asia'&&<SoutheastNaturePopulationReading {population} />}
         <AsiaPopulationPanel {regionId} {population} active={initialField==='population'} />
         <AsiaIndustryPanel {regionId} active={initialField==='industry'} />
         {regionId==='southeast-asia'&&<SoutheastAsiaFarmView />}

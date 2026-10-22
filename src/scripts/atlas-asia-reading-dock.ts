@@ -40,8 +40,12 @@ export function createAsiaReadingDock(root:HTMLElement) {
   if(focusPanel){
    focusPanel.hidden=!focused||!overview||Boolean(config?.focusId&&['agriculture','population'].includes(state.field));
    if(focused){
-    focusPanel.querySelector<HTMLElement>('[data-focus-reading-title]')!.textContent=focused.title;
-    focusPanel.querySelector<HTMLElement>('[data-focus-reading-body]')!.textContent=focused.reading;
+    const focusTitle=focusPanel.querySelector<HTMLElement>('[data-focus-reading-title]')!;
+    const focusBody=focusPanel.querySelector<HTMLElement>('[data-focus-reading-body]')!;
+    focusTitle.textContent=focused.title;focusBody.textContent=focused.reading;
+    const climateOverview=config?.regionId==='southeast-asia'&&state.field==='natural'&&(!state.topic||state.topic==='climate')&&overview&&!state.back;
+    focusTitle.hidden=climateOverview&&focusTitle.textContent.trim()===title.textContent?.trim();
+    focusBody.hidden=climateOverview&&focusBody.textContent.trim()===summary.textContent?.trim();
     const link=focusPanel.querySelector<HTMLAnchorElement>('[data-focus-reading-source]')!;
     link.textContent=focused.source.label;link.href=focused.source.url;
    }

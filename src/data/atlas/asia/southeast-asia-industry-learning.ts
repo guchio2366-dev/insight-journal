@@ -1,0 +1,41 @@
+import {southeastIndustryProfile,type SoutheastIndustryFigure} from './southeast-asia-industry-catalog.ts';
+import type {SoutheastIndustryKind} from './southeast-asia-industry-sites.ts';
+
+/** These are explanatory stages, not measured shipment routes between the map points. */
+export type SoutheastIndustryStage={title:string;reading:string;sites:string[];sources:string[]};
+const stage=(title:string,reading:string,sites:string[],...sources:string[]):SoutheastIndustryStage=>({title,reading,sites,sources});
+export const southeastIndustryStages:Record<SoutheastIndustryKind,SoutheastIndustryStage[]>={
+ metals:[stage('鉱床から採掘','スラウェシの鉱床は鉱石の供給源。鉱石の重さと、その中のニッケル量を分けて捉える。',['sulawesi-nickel'],'nickel'),stage('製錬で中間製品へ','モロワリなどで鉱石を製錬する。採掘地点と加工地区では、必要な設備と工程が異なる。',['morowali-smelter'],'nickel'),stage('鋼材・電池の需要へ','ニッケルは用途で需要が変わる。LFP（リン酸鉄リチウム）電池はニッケルを使わず、電気自動車の増加が全て同じ原料需要になるわけではない。',[],'battery')],
+ energy:[stage('炭田から供給','東・南カリマンタンの資源域が、インドネシアの一般炭供給を支える。',['kalimantan-coal'],'coal'),stage('発電用の燃料として輸送','一般炭は主に発電などの燃料となる。製鉄に使う原料炭を含む「全石炭」と統計の範囲を分ける。',[],'coal'),stage('域内外の需要へ','輸出国インドネシアと輸入国ベトナムなどが域内に共存する。地域輸入量を、特定の輸出国からの量とは読み替えない。',[],'coal')],
+ lng:[stage('ガス供給を受ける','液化拠点はガス供給と沿岸の船積み設備を結ぶ。ブルネイのルムットには国内のガス供給者から原料が届く。',['lumut-lng'],'bruneiLNG'),stage('冷却して液化・貯蔵','LNGは液化天然ガス。ビントゥルとルムットは液化する側の拠点で、ガス田そのものではない。',['bintulu-lng','lumut-lng'],'bruneiLNG'),stage('船で受入市場へ','マレーシア・インドネシア・ブルネイから日本への供給を国別貿易表で確認できる。設備能力と実際の供給量は別の数値。',[],'lng')],
+ palm:[stage('農園から粗油へ','アブラヤシ由来の粗パーム油と、種子由来の粗パーム核油が精製の原料となる。',[],'palmProcessing'),stage('港湾近くで精製','ジョホール州の粗油処理量は州内精製所の投入量合計。パシルグダンの一工場の量ではない。',['johor-food'],'palmProcessing'),stage('食用・産業用油脂へ','粗油を除いた加工品の輸出は別の貿易分類で確認する。農園の生産シェアと加工品の輸出シェアを分ける。',[],'palmTrade','palmPartners')],
+ rice:[stage('産地から集荷・乾燥','カントー周辺では米の集荷と乾燥が加工につながる。Gentracoは原料調達から加工・輸出までを紹介している。',['thotnot-rice'],'gentraco'),stage('精米・選別・品質確認','精米でぬか層を除き、研磨や色彩選別で品質を整える。栽培量とは異なる加工工程の能力を見る。',['thotnot-rice'],'gentraco','riceSurvey'),stage('包装して販売・輸出','包装後の米は国内外の市場へ向かう。地図の青い国境は加工品貿易を確認した国を示す。',[],'gentraco','rice')],
+ electronics:[stage('部品・前工程','ペナンの電子産業とクリムの半導体製造は、人材・企業の集積に支えられる異なる工程。',['penang','kulim'],'semiconductor'),stage('組立・検査・封止','バクニンは半導体の組立・検査の事例。ATPは組立・検査・封止を指し、回路を作る前工程と区別する。',['bacninh'],'semiconductor'),stage('機器と部品の国際分業','ベトナムは電子製品・部品を輸出するとともに輸入も多い。輸出額全体を国内で生まれた付加価値とは扱わない。',[],'electronics')],
+ automotive:[stage('部品網・工業団地','タイ東部とジャワ島西部では、部品企業と完成車企業が大都市市場や港への接続を利用する。',['thai-auto','java-auto'],'auto'),stage('部品から完成車へ','自動車・部品の集積には内燃機関車とEV（電気自動車）の工程が重なる。地図の点をEV専用工場とは扱わない。',['thai-auto'],'auto'),stage('販売と輸出を分ける','生産台数は工場で作った四輪車の数。国内販売台数・輸出台数や部品売上とは異なる。',[],'auto')],
+ textiles:[stage('資材と注文を受ける','衣料・履物の企業は海外ブランドの調達網に組み込まれる。ブランド別の調達比は世界全体の生産比ではない。',[],'nike','adidas'),stage('都市圏で縫製・製造','プノンペンとホーチミン市周辺では、都市の労働力と物流を背景に衣料生産が集まる。',['phnom-textile','hcm-textile'],'garments'),stage('海外ブランド・市場へ','カンボジアのGFT（衣料・履物・旅行用品）輸出では米国とEUが大きな市場。衣料だけの数量と混同しない。',[],'garments')],
+ rubber:[stage('南部で天然ゴム','タイ南部の栽培地域が天然ゴム原料を供給する。原料の生産比とタイヤの輸出比は別の指標。',['southern-rubber'],'rubber'),stage('工業地域でタイヤへ','ラヨーンのタイヤ製造は自動車産業と港湾のある工業地域に位置する。農園の広がりとは異なる。',['rayong-tires'],'tires'),stage('自動車・交換用市場へ','タイヤは完成品として輸出される。タイの新品タイヤ輸出では米国向けを確認でき、天然ゴム原料の輸出額とは区別する。',[],'tires')],
+ wood:[stage('植林材と輸入材','ベトナム北中部の植林地と、輸入材を受け入れる加工業は異なる地理を持つ。',['north-central-timber'],'pellets'),stage('家具・木材製品へ加工','旧ビンズオンの家具集積はホーチミン市周辺の加工拠点。植林域の代表点から特定工場への供給量は未確認。',['binh-duong-furniture'],'wood'),stage('製品ごとに市場が違う','家具・合板・木質ペレットでは顧客と用途が異なる。燃料用木材の世界比を家具産業の比率へ転用しない。',[],'wood','pellets')],
+ food:[stage('養殖・漁獲と輸入原料','メコンデルタでは養殖と加工が近接する一方、タイの缶詰産業は域外の魚原料も受け入れる。',[],'seafood','tunaRaw'),stage('産地近くで加工','メコンデルタの加工立地は原料を製品にする段階。地図の位置は漁場や養殖池の範囲ではない。',['kiengiang-food'],'seafood'),stage('冷凍品・調製品を販売','原料・冷凍品を含む水産輸出と、マグロなどの調製・保存品輸出は分類が異なる。',[],'seafood','tuna')],
+ logistics:[stage('背後の経済と接続','レムチャバンはタイ東部の工業地域、ティバールは東ティモールのコンテナ物流を海と結ぶ。',['laem-chabang','tibar-port'],'tibarPort'),stage('荷役・積み替え','シンガポールやクランで貨物を扱う。積み替えは途中の港で別の船へ積み直すことで、港が貨物の原産地という意味ではない。',['singapore-port','port-klang'],'transshipment'),stage('輸送・関連サービスへ','港の取扱量はTEU（20フィートコンテナ換算）で測る。同じ貨物が複数港で扱われるので、生産量として合算しない。',[],'port','malaysiaPorts')],
+ tourism:[stage('自然・文化が訪問目的に','バリ・プーケットは海浜など、シェムリアップはアンコールの遺産に結び付く観光地。',['bali-tourism','phuket-tourism','siemreap-tourism'],'tourism'),stage('交通・宿泊・飲食の仕事','観光客の支出は複数のサービス業を支える。到着数、観光産業の雇用、観光の直接付加価値は異なる指標。',[],'tourism'),stage('国内客と海外客の需要','タイへのマレーシア客は域内の国際観光、中国客は域外からの国際観光。国内旅行は別に数える。',[],'tourismPartners')],
+ 'it-bpm':[stage('人材・通信・オフィス','マニラとセブでは英語対応人材と通信環境が企業の業務受託を支える。',['manila-itbpm','cebu-itbpm'],'bpoWorld'),stage('顧客対応・事務・専門業務','IT–BPMは情報技術・業務プロセス管理。商品を製造する代わりに、他社の業務を継続して引き受ける。',[],'bpoWorld'),stage('海外顧客から収入','フィリピンの受託市場では北米が大きい。業界売上は付加価値と異なり、物品の輸出入式では説明しない。',[],'bpo','bpoMarkets')],
+ hydro:[stage('水資源を発電へ','ラオス中部のナムトゥン2は水力発電事業。水力は燃料の採掘・輸送とは異なる電源。',['namtheun-hydro'],'hydro'),stage('設備容量と発電量','MWは設備が供給できる電力の大きさ。一定期間に実際に作った電力量とは異なる。',['namtheun-hydro'],'hydro'),stage('国内・タイ向けに供給','ナムトゥン2の設備にはタイ向けと国内向けの割当がある。ラオス全体の電力輸出には水力以外も含まれる。',[],'hydro','power')],
+ finance:[stage('国際企業・資金が集まる','シンガポールには銀行・運用会社などの金融機能が集積する。都市の代表点は特定企業の建物ではない。',['singapore-finance'],'finance'),stage('運用・資金配分・為替管理','資産運用は顧客の資金を運用する業務。外国為替取引は通貨交換などで、取引額そのものが利益にはならない。',[],'finance','fx'),stage('残高と日次取引を区別','運用資産は年末の残高、外国為替は調査月の1日平均取引額。単位と期間をそろえず合算しない。',[],'finance','fx')],
+ petrochemicals:[stage('港から原料を受け入れる','ジュロン島・ペンゲラン・マプタプットは原料受入港と加工設備が結び付く工業地区。',['jurong-petro','pengerang-petro','maptaphut-petro'],'jurong'),stage('精製と化学加工','石油精製と化学産業が共用設備を利用して集積する。原油産地と、輸入原料を加工する地区を分ける。',['jurong-petro'],'jurong'),stage('燃料・化学製品を供給','燃料・化学製品の販売につながる。エネルギー・化学産業全体のGDP比を、製油所だけの付加価値とは扱わない。',[],'chemicals')],
+ solar:[stage('部材と製造拠点','Jinkoの公表する製造拠点の一つがペナン州ペライ。国別の輸出表と、企業の所在地資料を別に確かめる。',['perai-solar'],'jinkoLocations'),stage('セルとモジュール','セルは発電する素子、モジュールはセルを組み合わせた製品。地図の拠点案内だけから生産能力は推定しない。',['perai-solar'],'solar'),stage('設置市場への輸出','米国の調査は4か国からの特定製品輸入を対象とする。その容量は工場能力や発電実績ではなく、貿易措置も供給網に関わる。',[],'solar','solarOrder')],
+};
+
+export type SoutheastLocalEvidence={scope:string;scopeType:'facility'|'port'|'state'|'company'|'city';reading:string;figures:SoutheastIndustryFigure[]};
+const figure=(label:string,value:number,unit:string,year:string,scope:string,definition:string,source:string):SoutheastIndustryFigure=>({label,value,unit,year,scope,definition,source});
+export const southeastIndustryLocalEvidence:Record<string,SoutheastLocalEvidence>={
+ 'bintulu-lng':{scope:'ビントゥルLNG施設',scopeType:'facility',reading:'選択した液化拠点の設備能力。マレーシア全国の年間供給量とは対象が異なる。',figures:[figure('液化設備能力',29.3,'百万t/年','2026年閲覧・対象年記載なし','ビントゥルLNG施設','年間の設備能力で、実際の生産量ではない。','bintuluLNG')]},
+ 'lumut-lng':{scope:'ルムットのBrunei LNG施設',scopeType:'facility',reading:'運営会社が公表する液化能力。ブルネイ全国の年間貿易量とは分けて読む。',figures:[figure('液化設備能力',7.7,'百万t/年','2026年閲覧・対象年記載なし','ルムットのBrunei LNG施設','運営会社のTotal Plant Capacity。実生産量ではない。','bruneiLNG')]},
+ 'namtheun-hydro':{scope:'ナムトゥン2水力事業',scopeType:'facility',reading:'単独の事業に対応する設備値。タイが輸入する電力量全体の値ではない。',figures:[southeastIndustryProfile('hydro')!.market[0]]},
+ 'jurong-petro':{scope:'ジュロン島',scopeType:'facility',reading:'島内の企業集積。地図の同じ札に含まれるペンゲランの企業は含まない。',figures:[southeastIndustryProfile('petrochemicals')!.position[0]]},
+ 'johor-food':{scope:'ジョホール州の全精製所',scopeType:'state',reading:'パシルグダンの一施設の値は未取得。ここで確認できるのは、所在地を含むジョホール州全体の投入量。',figures:[figure('粗油処理量',4198241,'t','2025','ジョホール州の全精製所','粗パーム油3,819,238t＋粗パーム核油379,003t。工場の製品生産量ではない。','palmProcessing')]},
+ 'singapore-port':{scope:'シンガポール港全体',scopeType:'port',reading:'港全体のコンテナ取扱実績。地図の点にある単一ターミナルの値ではない。',figures:[southeastIndustryProfile('logistics')!.scale[0]]},
+ 'port-klang':{scope:'クラン港全体',scopeType:'port',reading:'クラン港全体の取扱実績。他港の数字や貨物の生産量を含めない。',figures:[figure('コンテナ取扱量',15.14,'百万TEU','2025','クラン港','20フィートコンテナ換算取扱単位。貨物重量・付加価値ではない。','malaysiaPorts')]},
+ 'tibar-port':{scope:'ティバール湾港',scopeType:'port',reading:'港の運営マニュアルに記された岸壁設備。年間の取扱実績は別の指標。',figures:[figure('岸壁延長',630,'m','2023年4月・運営マニュアルRev 1.7','ティバール湾港','2バースに分かれた岸壁の延長。TEUや年間処理能力ではない。','tibarPort')]},
+ 'thotnot-rice':{scope:'Gentraco企業全体',scopeType:'company',reading:'トットノットに加工拠点を持つ企業の全体能力。トットノット単独工場の能力は未取得。',figures:[figure('企業の加工能力',2500,'t/日','2026年閲覧・対象年記載なし','Gentraco企業全体','複数拠点を持つ企業の公表値。日次能力で、年間実生産量ではない。','gentraco')]},
+ 'singapore-finance':{scope:'シンガポール',scopeType:'city',reading:'都市国家全体の金融業務の指標。特定の金融機関や地図の地点だけの資産ではない。',figures:[southeastIndustryProfile('finance')!.scale[0],southeastIndustryProfile('finance')!.position[0]]},
+};

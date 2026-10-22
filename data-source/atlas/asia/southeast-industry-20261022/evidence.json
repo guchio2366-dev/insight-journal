@@ -1,0 +1,30 @@
+{
+  "verifiedDate": "2026-10-22",
+  "baseCommit": "3fbb4c957c21685bddbf8148a95a2a03ba210553",
+  "method": "Primary operators/publishers establish locations and quantities. GeoNames and Global Energy Monitor supply separately attributed representative coordinates. Existing 30 points and existing national figures are retained.",
+  "sources": [
+    {"id":"bruneiLNG","url":"https://bruneilng.com/the-plant/","publisher":"Brunei LNG","date":"undated; accessed 2026-10-22","facts":{"location":"Lumut, Belait, Brunei","annualCapacityMillionTonnes":7.7},"scope":"single LNG plant capacity, not actual annual production","conflict":"GEM lists 7.2 mtpa from a different source. Quantity uses the operator's current capacity page; GEM is used only for location."},
+    {"id":"lumutPosition","url":"https://www.gem.wiki/Brunei_LNG_Terminal","publisher":"Global Energy Monitor / Global Gas Infrastructure Tracker","pointLonLat":[114.467,4.6698],"scope":"published facility representative point; not operator-surveyed boundary or berth position"},
+    {"id":"tibarPort","url":"https://timor-lestetradeportal.com/upload/files/static_20240215061701.pdf","publisher":"Timor Port SA, hosted by Timor-Leste Trade Portal","date":"2023-04-20, TPSA-HSE-MAN-0001 Rev 1.7","facts":{"quayLengthMetres":630,"berths":2,"publishedGPS":"S08°34′15″ E125°28′29″"},"pointLonLat":[125.4747222222,-8.5708333333],"pages":{"position":5,"quay":6},"scope":"port reference coordinate and quay infrastructure, not throughput or boundary","storage":"Facts and link only; source PDF not reproduced."},
+    {"id":"gentraco","url":"https://gentraco.com.vn/en/","publisher":"Gentraco","date":"undated; accessed 2026-10-22","facts":{"location":"Thot Not, Can Tho","companyProcessingCapacityTonnesPerDay":2500,"stages":["procurement","drying","milling","colour sorting","quality inspection","packaging","export"]},"scope":"company-wide capacity across facilities, not Thot Not plant capacity","omissions":"Homepage and About page disagree on cluster count; no cluster count or annual actual output adopted."},
+    {"id":"thotnotPosition","url":"https://www.geonames.org/1565136/thot-not.html","publisher":"GeoNames","pointLonLat":[105.5338,10.27213],"scope":"populated-place representative point, not mill coordinates; CC BY attribution in UI"},
+    {"id":"jinkoLocations","url":"https://www.jinkosolar.com/en/site/global","publisher":"JinkoSolar","date":"undated; accessed 2026-10-22","facts":{"location":"Plot 538, Tingkat Perusahaan 4B, Kawasan Perusahaan Bebas Perai, Penang"},"scope":"operator's manufacturing address only; no current capacity or utilisation adopted"},
+    {"id":"peraiPosition","url":"https://www.geonames.org/1735077/perai.html","publisher":"GeoNames","pointLonLat":[100.38333,5.38333],"scope":"populated-place representative point, not Jinko factory coordinates; CC BY attribution in UI"},
+    {"id":"yangonGarments","url":"https://www.jetro.go.jp/biznews/2021/02/654d7d7a1b8431b7.html","publisher":"JETRO","date":"2021-02-16","facts":{"locations":["Mingaladon industrial estate","Shwe Pyi Thar industrial estate"],"industry":"garment manufacturers"},"scope":"dated examples around Yangon; no claim of present individual-company operation"},
+    {"id":"yangonPosition","url":"https://www.geonames.org/1298824/yangon.html","publisher":"GeoNames","pointLonLat":[96.15611,16.80528],"scope":"Yangon city representative point, not industrial estate or factory coordinates; CC BY attribution in UI"}
+  ],
+  "localQuantityScopes": {
+    "bintulu-lng":"single facility capacity, existing PETRONAS source",
+    "lumut-lng":"single facility capacity, new operator source",
+    "namtheun-hydro":"single project capacity, existing World Bank source",
+    "jurong-petro":"Jurong Island enterprise count; Pengerang excluded",
+    "johor-food":"Johor state refinery input; individual Pasir Gudang refinery unknown",
+    "singapore-port":"whole Singapore port container throughput",
+    "port-klang":"whole Port Klang container throughput",
+    "tibar-port":"quay length; no annual throughput stated",
+    "thotnot-rice":"company-wide daily capacity; individual mill unknown",
+    "singapore-finance":"city-state financial assets and foreign exchange; no firm attribution"
+  },
+  "noQuantityPolicy":"No compatible local figure means unavailable. National import capacity, GDP, trade or company totals are never silently assigned to a point.",
+  "stageEvidence":"The 18 three-stage explanations use the existing national/product sources plus new operator sources and each linked locality's existing source. They describe stages, not verified point-to-point shipment flows."
+}

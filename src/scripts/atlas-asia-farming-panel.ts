@@ -4,6 +4,8 @@ import type {AsiaRegionId} from '../lib/atlas-asia-state';
 import southCentralShares from '../../public/assets/atlas/south-central-asia-v1/world-shares.json';
 import southeastShares from '../../public/assets/atlas/southeast-asia-v1/world-shares.json';
 import {renderSouthCentralRiceFlow} from './atlas-south-central-rice-flow';
+import {renderSoutheastFarmConnections} from './atlas-southeast-farm-connections';
+import {southeastFarmGuide} from '../data/atlas/asia/southeast-asia-farm-guide';
 import {farmWorldComparison,validFarmValue} from '../lib/atlas-shared-world-statistics';
 type ShareYear={year:number;world?:number;countries:Record<string,{value?:number;share:number;flag:string}>};
 type ShareSeries={id:string;label:string;definition:string;unit?:string;years:ShareYear[]};
@@ -17,7 +19,7 @@ const svgNode=(tag:string,attrs:Record<string,string>)=>{const node=document.cre
 export function renderSouthCentralFarmConnections(root:HTMLElement,region:AsiaRegionId,active:boolean,topic:string|null,country:{code:string;name:string}|undefined,focusExample?:{country:string;product:string},focusId?:string){
  const section=root.querySelector<HTMLElement>('[data-south-central-farm-connections]');if(!section)return;
  section.hidden=!active||(region!=='south-central-asia'&&region!=='southeast-asia');if(section.hidden)return;
- renderSouthCentralRiceFlow(section,region,topic,country?.code??focusExample?.country,focusId,Boolean(topic&&topic!=='overview'));
+ if(region==='south-central-asia')renderSouthCentralRiceFlow(section,region,topic,country?.code??focusExample?.country,focusId,Boolean(topic&&topic!=='overview'));
  // Preserve the published overview; only an explicit product selection owns the
  // production → use/export → partner reading order.
  const selected=Boolean(topic&&topic!=='overview');
@@ -33,16 +35,21 @@ export function renderSouthCentralFarmConnections(root:HTMLElement,region:AsiaRe
    if(selected)stage.dataset.regionalFlowStage=['production','use','destinations'][index];
    else delete stage.dataset.regionalFlowStage;
    const title=stage.querySelector('h3');
+   // Southeast Asia owns its supply panels. Remember their original headings
+   // before a product selection, including hosts without the new balance data.
+   if(title&&region==='southeast-asia')title.dataset.overviewTitle??=title.textContent??'';
    if(title&&selected)title.textContent=[topic==='forest'?'① 別指標：森林面積と世界比':['cattle','chicken','sheep'].includes(topic!)?'① 別指標：飼養頭数・羽数と世界比':'① 生産量と世界シェア','② 国内・域内使用と輸出','③ 輸出先の量と構成比'][index];
+   else if(title&&region==='southeast-asia')title.textContent=title.dataset.overviewTitle!;
    else if(title&&index===0)title.textContent='世界での位置';
   }
  }
- const sectionTitle=section.querySelector('h2');if(sectionTitle)sectionTitle.textContent=selected?'選択品目の生産・使用・輸出先':'農業の供給と世界での位置';
+ const sectionTitle=section.querySelector('h2');if(sectionTitle)sectionTitle.textContent=selected?(region==='southeast-asia'?(topic==='forest'?'森林面積・木材生産・貿易を比較':'選択品目と地域の農業を比較'):'選択品目の生産・使用・輸出先'):'農業の供給と世界での位置';
  let scopeNote=section.querySelector<HTMLElement>('[data-selected-flow-note]');
  if(selected){
   if(!scopeNote){scopeNote=document.createElement('p');scopeNote.dataset.selectedFlowNote='';scopeNote.className='agro-meta';sectionTitle?.after(scopeNote);}
-  scopeNote.textContent='各原表の年・製品・対象範囲を確認してください。異なる範囲の値は同じ数量の内訳には接続しません。';
+  scopeNote.textContent=region==='southeast-asia'?(topic==='forest'?'2024年の森林面積（千ha）・丸太材と製材の数量（万m³）、2023年の木材・木材製品等の貿易額（億米ドル）を11か国で比べます。面積・体積・金額は別の指標です。':'生産の世界比、ASEAN10か国の食料5品目需給、各国の米貿易額を比較します。年・製品・対象国・単位が異なり、同じ数量の流れとしては接続しません。'):'各原表の年・製品・対象範囲を確認してください。異なる範囲の値は同じ数量の内訳には接続しません。';
  }else scopeNote?.remove();
+ if(region==='southeast-asia')renderSoutheastFarmConnections(root,topic,country);
  const host=section.querySelector<HTMLElement>('[data-south-central-world-share]')!;host.replaceChildren();
  if(!country&&!focusExample){
   const name=region==='southeast-asia'?'東南アジア':'南・中央アジア';
@@ -60,7 +67,7 @@ export function renderSouthCentralFarmConnections(root:HTMLElement,region:AsiaRe
    const p=document.createElement('p');p.textContent='対象国集合・欠測を照合した地域全体の生産シェアは未集計です。国を選ぶとその国の同年・同品目のWorld比を表示します。';host.append(p);
    // Preserve the verified India rice example as a labelled reference, not the
    // regional supply balance or a default country's regional world share.
-   for(const selector of ['[data-south-central-supply]','[data-south-central-destinations]']){const target=section.querySelector<HTMLElement>(selector);if(!target||!target.childNodes.length)continue;const details=document.createElement('details'),summary=document.createElement('summary');summary.textContent='国別参考例（地域集計ではありません）';details.append(summary,...target.childNodes);target.replaceChildren();const p=document.createElement('p');p.textContent='地域全体の同年・同品目の供給用途・地域外相手数量は未収録です。';target.append(p,details);}
+   if(region==='south-central-asia')for(const selector of ['[data-south-central-supply]','[data-south-central-destinations]']){const target=section.querySelector<HTMLElement>(selector);if(!target||!target.childNodes.length)continue;const details=document.createElement('details'),summary=document.createElement('summary');summary.textContent='国別参考例（地域集計ではありません）';details.append(summary,...target.childNodes);target.replaceChildren();const p=document.createElement('p');p.textContent='地域全体の同年・同品目の供給用途・地域外相手数量は未収録です。';target.append(p,details);}
   }
   return;
  }
@@ -130,7 +137,7 @@ export function renderAsiaFarmingPanel(root:HTMLElement,region:AsiaRegionId,topi
  $('[data-farming-extra]').hidden=!layer;$('[data-farming-map-method]').hidden=!layer;
  if(layer){
   $('[data-farming-title]').textContent=`${country?country.name+'の':''}${layer.title}を読む`;
-  $('[data-farming-takeaway]').textContent=region==='east-asia'&&topic==='forest'&&country?.code==='JPN'?'日本列島では山地に森林が広がり、天然林と人工林が併存します。森林面積と丸太・製材の統計を分けて読みます。':focusKindReading?.[layer.kind]??asiaFarmRegionReading[region][layer.kind];
+  $('[data-farming-takeaway]').textContent=region==='southeast-asia'&&southeastFarmGuide[topic]?southeastFarmGuide[topic].reading:region==='east-asia'&&topic==='forest'&&country?.code==='JPN'?'日本列島では山地に森林が広がり、天然林と人工林が併存します。森林面積と丸太・製材の統計を分けて読みます。':focusKindReading?.[layer.kind]??asiaFarmRegionReading[region][layer.kind];
   $('[data-farming-definition]').textContent=definition.definition;
   const coverage=country?layer.countryCoverage?.[country.code]:null;
   $('[data-farming-coverage]').textContent=coverage?.maskPixels===0?'この国・地域の島は、広域図の格子の中心に収まりません。地図の空白から生産がないと判断せず、下の国別統計を参照してください。':coverage?.validPixels===0?'この国・地域の範囲には、採用した資料の有効な表示格子がありません。統計がある場合は下の表で確認できます。':coverage?.positivePixels===0?'この国・地域の範囲では、採用した表示格子に正の値がありません。ほかの品目や農業全体の不存在を意味するものではありません。':'';
@@ -139,6 +146,7 @@ export function renderAsiaFarmingPanel(root:HTMLElement,region:AsiaRegionId,topi
   const link=document.createElement('a');link.textContent=layer.kind==='crop'?'IFPRI MapSPAM 2020 v2r2（CC BY 4.0）':layer.kind==='livestock'?'FAO GLW4 / CGIAR（CC BY 4.0）':'JRC Global Forest Cover 2020 v3';link.href=layer.kind==='crop'?'https://doi.org/10.7910/DVN/SWPENT':layer.kind==='livestock'?'https://cgiar-climate-data-hub.github.io/catalog/glw4-2020/':'https://forobs.jrc.ec.europa.eu/GFC/v3';sources.append(link,document.createTextNode((layer.kind==='forest'?'。European Union, Copernicus Land Monitoring Service / JRC。':'。')+'地域の抽出・表示：Insight Journal。'));
   const reference=$('[data-farming-reference]');reference.replaceChildren();if(region==='east-asia'&&topic==='forest'){const reason=document.createElement('p');reason.dataset.eastForestReason='';reason.textContent=country?.code==='JPN'?'山地の降水と森林管理が森林の維持に関わります。林野庁の統計では天然林・人工林の面積と木材需要を別々に集計します。製紙工場は木材を加工する拠点、港は原料の流通拠点で、周辺の森林だけが供給源という意味ではありません。':'東北の冷温帯と南部の湿潤な山地では樹木が育つ気候条件が異なり、日本・朝鮮半島も降水と山地の広がりが関わります。乾燥内陸では水の制約が大きくなります。耕地への転換や森林管理も分布に関わるため、気候だけで森林の有無を決めません。';$('[data-farming-takeaway]').after(reason);if(country)for(const site of eastForestSites.filter(s=>s.country===country.code)){const row=document.createElement('p'),a=document.createElement('a');row.id='forest-site-'+site.id;a.href=site.source;a.textContent=site.name;row.append(a,document.createTextNode('：'+site.role));reference.append(row);}else{const note=document.createElement('p');note.textContent='点は日本と常熟の製紙拠点、清水の木材チップ取扱港の事例です。工場・港の網羅分布や生産量ではありません。';const a=document.createElement('a');a.href='https://www.upmspecialtymaterials.com/about-upm-specialty-materials/';a.textContent='中国のUPM常熟工場は長江沿いの常熟港近くに立地すると公式に案内されています。';note.append(a);reference.append(note);}}if(layer.kind==='forest')for(const source of focusId==='central-asia'?[{label:'UNECE・中央アジアの森林と燃料材（2019年）',url:'https://unece.org/fileadmin/DAM/timber/meetings/2019/20191216/Forest_Landscape_Restoration_in_Central_Asia_and_the_Caucasus.pdf'}]:[...asiaForestSources[region],...(focusId==='south-asia'?[{label:'FAO・ネパールの住民林業事例',url:'https://www.fao.org/4/ai412e/AI412E09.htm'}]:[])]){const p=document.createElement('p'),a=document.createElement('a');a.href=source.url;a.textContent=source.label;p.append(a);reference.append(p);}
  }
+ if(region==='southeast-asia'&&southeastFarmGuide[topic]?.source){const source=southeastFarmGuide[topic].source!,p=document.createElement('p'),a=document.createElement('a');a.href=source.url;a.textContent=source.label;p.append(a);$('[data-farming-reference]').append(p);}
  $('[data-farming-statistics-title]').textContent=country?`${country.name}の${definition.statName}`:'国・地域の統計を読む';$('[data-farming-statistics-definition]').textContent=definition.definition;
  const tables=$('[data-farming-statistics-tables]');tables.replaceChildren();
  const status=$('[data-farming-statistics-status]');
@@ -226,3 +234,4 @@ export function renderAsiaFarmingPanel(root:HTMLElement,region:AsiaRegionId,topi
  }
  tables.append(details);
 }
+

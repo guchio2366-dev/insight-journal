@@ -14,7 +14,7 @@ export type SoutheastIndustryProfile = {
  position:SoutheastIndustryFigure[]; market:SoutheastIndustryFigure[];
  caveat:string; countryEvidence?:string[];
 };
-export const southeastIndustryEvidenceDate='2026-10-14';
+export const southeastIndustryEvidenceDate='2026-10-22（立地・工程を追加確認。既存国別統計は10月14日確認）';
 /** Annual refinery INPUT, by Malaysian state; blanks in other states stay absent. */
 export const southeastPalmProcessing=[
  {id:'MY-01',name:'ジョホール',cpo:3819238,cpko:379003},
@@ -26,6 +26,11 @@ export const southeastPalmProcessing=[
  {id:'MY-13',name:'サラワク',cpo:2341635,cpko:95349},
 ].map(s=>({...s,inputTonnes:s.cpo+s.cpko}));
 export const southeastIndustrySources:Record<string,{label:string;url:string}>={
+ bintuluLNG:{label:'PETRONAS・ビントゥルLNG設備',url:'https://www.petronas.com/progressing-energy/liquefied-natural-gas'},
+ bruneiLNG:{label:'Brunei LNG・ルムットの設備能力',url:'https://bruneilng.com/the-plant/'},
+ tibarPort:{label:'Timor Port・ティバール湾港運営マニュアル（2023年）',url:'https://timor-lestetradeportal.com/upload/files/static_20240215061701.pdf'},
+ gentraco:{label:'Gentraco・精米工程と企業の加工能力',url:'https://gentraco.com.vn/en/'},
+ jinkoLocations:{label:'JinkoSolar・製造拠点所在地',url:'https://www.jinkosolar.com/en/site/global'},
  nickel:{label:'USGS・インドネシア国別資料',url:'https://www.usgs.gov/centers/national-minerals-information-center/indonesia'},
  nickel2026:{label:'USGS・MCS 2026 ニッケル（原表未取得）',url:'https://pubs.usgs.gov/periodicals/mcs2026/mcs2026-nickel.pdf'},
  philippinesNickel:{label:'USGS・フィリピン国別資料',url:'https://www.usgs.gov/centers/national-minerals-information-center/philippines'},
@@ -88,7 +93,7 @@ export const southeastIndustryProfiles:SoutheastIndustryProfile[]=[
  {id:'lng',label:'天然ガス液化・LNG',sectors:['resource','manufacturing'],reading:'ビントゥル、ボンタン、タングー、ブルネイの沿岸拠点ではガス田と液化・船積み設備が結び付き、日本を含む海上市場へ供給する。',why:'日本のLNG受入の約4分の1を地域内3か国が担う。',
   scale:[f('LNG供給量',27.3,'百万t','2025','マレーシア','GIIGNL貿易表。インドネシア15.9、ブルネイ5.0百万tは別国。','lng')],
   position:[f('日本受入に占める3か国比',15.8/65.9*100,'%（約）','2025','マレーシア・インドネシア・ブルネイ／日本','15.8百万t／日本65.9百万t。表の丸め値で計算。','lng',{numerator:15.8,denominator:65.9})],
-  market:[f('日本向け3か国供給',15.8,'百万t','2025','マレーシア9.6・インドネシア3.5・ブルネイ2.7','域外。タイ・シンガポール等は域内受入市場。','lng')],caveat:'インドネシア供給15.9百万tは国内沿岸輸送約5.2百万tを含む。3国供給量をそのまま国際輸出量として足さない。地図のビントゥルは確認済み拠点例。'},
+  market:[f('日本向け3か国供給',15.8,'百万t','2025','マレーシア9.6・インドネシア3.5・ブルネイ2.7','域外。タイ・シンガポール等は域内受入市場。','lng')],caveat:'インドネシア供給15.9百万tは国内沿岸輸送約5.2百万tを含む。3国供給量をそのまま国際輸出量として足さない。地図にはビントゥルとルムットの拠点例を示す。'},
  {id:'palm',label:'パーム油の搾油・精製',sectors:['manufacturing'],reading:'ジョホール・セランゴールの精製所は2025年のマレーシア粗油処理量の約52%を担い、原料集荷と港湾物流に結び付く加工集積を形成する。',why:'食用・産業用油脂の加工品供給を、農園の生産とは別に捉える。',
   scale:[f('精製所の実粗油処理量',17.266555,'百万t','2025','マレーシア','粗パーム油15.629912＋粗パーム核油1.636643百万t。投入量。','palmProcessing'),f('稼働精製所',54,'か所','2025年末','マレーシア','稼働設備能力26.1532百万t/年は実処理量と異なる。','palmCapacity')],
   position:[f('ジョホール・セランゴールの処理比',8.975912/17.266555*100,'%','2025','2州／マレーシア粗油処理量','8.975912／17.266555百万t。世界原料生産比ではない。','palmProcessing',{numerator:8.975912,denominator:17.266555}),f('加工品輸出',173.3132914,'億米ドル','2024','インドネシア・HS151190','粗油を除くパーム油・液状分別油。掲載報告国中1位、マレーシア102.4694967億米ドルで2位。','palmTrade')],
@@ -96,7 +101,7 @@ export const southeastIndustryProfiles:SoutheastIndustryProfile[]=[
  {id:'rice',label:'精米・研磨・選別',sectors:['manufacturing'],reading:'メコンデルタの旧ティエンザン・アンザン・カントー周辺では集荷に結び付く精米・研磨拠点が集まり、国内市場と輸出市場の品質要求に合わせて加工する。',why:'保存・品質調整・加工が域内の食料供給と域外販売を支える。',
   scale:[f('半精米・精米輸出',859.319,'万t','2024','タイ・HS100630','57.0685208億米ドル。籾や全コメの精米換算量ではない。','rice'),f('精米設備能力',300,'万t/年（約）','2025年発表','旧ティエンザン省','約200加工施設。旧省域の能力で、全国実生産ではない。本文未取得。','riceMills',{evidence:'indexed'})],
   position:[f('工程を調査した精米業者',147,'業者','2024年調査／2025年公表','メコンデルタ調査標本','2段階精米・多段階研磨を確認。全地域施設数ではない。','riceSurvey'),f('世界の加工量シェア',null,'','未取得','精米加工','原料生産比や全コメの貿易比を転用しない。','rice')],
-  market:[f('インドネシア向け',124.412,'万t','2024','タイ・HS100630','域内。フィリピン60.126万tも域内、米国84.1281万tは域外。','rice')],countryEvidence:['THA','VNM','MMR','KHM'],caveat:'輪郭は国別加工品輸出の確認範囲。国内全域の集積面ではない。工場座標未確認のため新しい工場点は作らない。'},
+  market:[f('インドネシア向け',124.412,'万t','2024','タイ・HS100630','域内。フィリピン60.126万tも域内、米国84.1281万tは域外。','rice')],countryEvidence:['THA','VNM','MMR','KHM'],caveat:'輪郭は国別加工品輸出の確認範囲。トットノットの点は企業資料で加工を確認した地区の案内で、工場敷地ではない。企業全体の能力を一工場の値にしない。'},
  {id:'electronics',label:'電子機器・半導体',sectors:['manufacturing'],reading:'ペナン・クリムの部品・半導体製造と、バクニンの組立・検査には異なる工程の企業・装置・人材が集まる。',why:'米中対立による拠点分散と、製造・後工程・組立で異なる価値獲得を示す。',
   scale:[f('電子製品・部品等の輸出',1077,'億米ドル','2025','ベトナム','コンピューター・電子製品・部品。全国物品輸出の22.7%。半導体単独ではない。','electronics')],
   position:[f('半導体ATP活動の世界比',13,'%（約）','2026年5月の政府説明','マレーシア／世界の組立・検査・封止','ATP＝組立・検査・封止。基準年と集計方法未記載。','semiconductor',{evidence:'basis-unspecified'})],
@@ -148,7 +153,8 @@ export const southeastIndustryProfiles:SoutheastIndustryProfile[]=[
  {id:'solar',label:'太陽電池セル・モジュール',sectors:['manufacturing'],reading:'カンボジア・マレーシア・タイ・ベトナムは米国向け太陽電池供給網を形成し、工場所在地・企業所有・貿易措置が別々に供給を左右する。',why:'脱炭素の設備調達と米中対立による供給網再編を結び付ける。',
   scale:[f('米国の4か国からの輸入額',119.0839533,'億米ドル','2023','米国調査対象のセル・モジュール','4か国総輸出や国内付加価値ではない。','solar')],
   position:[f('輸入製品の定格容量合計',36.384170777,'GW','2023','米国輸入・4か国調査対象製品','GW＝100万kW。工場の年間能力・発電電力量ではない。世界生産比は未確認。','solar')],
-  market:[f('タイからの米国輸入',10.604923142,'GW','2023','同じ米国調査対象','域外。カンボジア6.722269986、マレーシア6.755457166、ベトナム12.301520483GW。2025年に関税命令。','solar')],countryEvidence:['KHM','MYS','THA','VNM'],caveat:'国別貿易の根拠だけで工場点を作らない。国境輪郭は確認国で、国土全域が工業集積という意味ではない。全社共通の関税率は表示しない。'},
+  market:[f('タイからの米国輸入',10.604923142,'GW','2023','同じ米国調査対象','域外。カンボジア6.722269986、マレーシア6.755457166、ベトナム12.301520483GW。2025年に関税命令。','solar')],countryEvidence:['KHM','MYS','THA','VNM'],caveat:'ペライは企業の所在地資料で確認した製造地区の案内。国境輪郭は加工品貿易の確認国で、工業集積面ではない。設備能力と現時点の稼働率は未取得。全社共通の関税率は表示しない。'},
 ];
 export function southeastIndustryProfile(kind:string){return southeastIndustryProfiles.find(p=>p.id===kind);}
 export function southeastFigureValue(figure:SoutheastIndustryFigure){return figure.value===null?'未取得':figure.value.toLocaleString('ja-JP',{maximumFractionDigits:2})+(figure.unit?' '+figure.unit:'');}
+
