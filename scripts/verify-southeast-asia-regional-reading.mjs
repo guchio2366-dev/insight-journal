@@ -104,7 +104,7 @@ async function checkSoutheastAsiaRegion(page,{source,capture:takePicture,backgro
  assert.equal(new URL(page.url()).searchParams.get('detail'),'t-85');record('regional supply view retains all 11 reporters and the HS chapter on reload');await capture('regional-supply');
 
  await open('agriculture/');await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmContextStatus==='ready');
- await page.waitForFunction(()=>document.querySelector('.asia-farm-connections-grid > section:first-child h3')?.textContent==='米を生産する国');
+ await page.waitForFunction(()=>document.querySelector('[data-southeast-supply-title]')?.textContent==='食料5品目の供給と利用');
  const layout=await page.evaluate(()=>{
   const rectangle=selector=>{const r=document.querySelector(selector).getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,bottom:r.bottom};};
   return {news:rectangle('.atlas-news'),grid:rectangle('.asia-layout'),workspace:rectangle('[data-southeast-top-workspace]'),map:rectangle('[data-southeast-top-workspace]>.atlas-map-column'),reading:rectangle('[data-southeast-top-workspace]>.asia-reading-panel'),statistics:rectangle('.asia-layout>.asia-farm-connections')};
@@ -134,27 +134,42 @@ async function checkSoutheastAsiaRegion(page,{source,capture:takePicture,backgro
  assert(lower.readingBottom<=lower.statisticsTop+1&&lower.cards.length===3&&lower.cards.every(card=>card.visible&&card.uncovered),`All three statistics cards must remain visible and uncovered: ${JSON.stringify(lower)}`);
  await page.evaluate(()=>{scrollTo({top:0,behavior:'instant'});document.querySelector('[data-southeast-top-workspace]>.asia-reading-panel').scrollTop=0;});
  record('news rail, independent right reading scroll, and full-width regional statistics');
- assert.equal(await page.locator('.southeast-supply-bars li').count(),5);
+ assert.deepEqual((await page.locator('[data-southeast-food-balances] [data-southeast-balance]:visible').evaluateAll(nodes=>nodes.map(node=>node.dataset.southeastBalance))).sort(),['cassava','maize','rice','soybean','sugar']);
  assert.match(await page.locator('.asia-farm-connections-grid > section:nth-child(2)').textContent(),/HS15章.*パーム油HS1511だけの相手国ではありません/s);
  assert.equal(await page.locator('.southeast-partner-list li').count(),5);
  assert.match(await page.locator('[data-southeast-forest-reading]').textContent(),/丸太材.*製材.*世界比/s);
  assert.match(await page.locator('[data-southeast-trade-reading]').textContent(),/2023年.*パーム油.*コーヒー.*木材製品.*天然ゴム/s);
- record('Southeast production bars, correctly scoped HS15 partner pie, forestry ratios and export examples');
+ record('Southeast five-commodity food balances, correctly scoped HS15 partner pie, forestry ratios and export examples');
  assert.equal(await country.isVisible(),false);assert.equal(await page.locator('.asia-country-list').isVisible(),false);
- const livestock=page.locator('.asia-livestock-point:visible'),count=await livestock.count();assert(count>0);
- await page.locator('[data-farm-choice="maize"]').click();await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmSelected==='maize');
+ const livestock=page.locator('.asia-southeast-livestock-marker[data-southeast-livestock]:visible'),cropNames=page.locator('.asia-farm-label[data-kind="crop"][data-product]:visible');
+ const waitCrops=products=>page.waitForFunction(expected=>{
+  const shown=[...document.querySelectorAll('.asia-farm-label[data-kind="crop"][data-product]')].filter(node=>!node.hidden&&node.getClientRects().length>0);
+  return JSON.stringify([...new Set(shown.map(node=>node.dataset.product))].sort())===JSON.stringify(expected);
+ },[...products].sort());
+ const cropPositions=()=>cropNames.evaluateAll(nodes=>nodes.map(node=>({name:node.getAttribute('aria-label'),x:parseFloat(node.style.left),y:parseFloat(node.style.top)})).sort((a,b)=>a.name.localeCompare(b.name)||a.x-b.x||a.y-b.y));
+ const mapCamera=()=>page.locator('[data-asia-atlas]').evaluate(node=>JSON.parse(node.dataset.mapCamera));
+ const sameCamera=(before,after)=>{for(const key of ['lng','lat','zoom'])assert(Number.isFinite(before[key])&&Number.isFinite(after[key])&&Math.abs(after[key]-before[key])<.01,'Farm views retain the regional map camera');};
+ assert.equal(await page.locator('[data-asia-atlas]').getAttribute('data-southeast-farm-group'),'farm-grains');
+ assert.deepEqual((await page.locator('[data-farm-choice][data-kind]:visible').evaluateAll(nodes=>nodes.map(node=>node.dataset.farmChoice))).sort(),['maize','rice']);
+ await waitCrops(['rice','maize']);assert.equal(await livestock.count(),0);
+ await page.locator('[data-farm-choice="maize"]').click();await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmSelected==='maize');await waitCrops(['rice','maize']);
  assert.doesNotMatch(await page.locator('[data-map-gesture]').textContent(),/国の選択欄/,'Agriculture guidance must not direct learners to a hidden country control');
- const projected=await livestock.evaluateAll(n=>n.map(x=>({name:x.getAttribute('aria-label'),x:parseFloat(x.style.left),y:parseFloat(x.style.top)})));
+ const projected=await cropPositions(),camera=await mapCamera();
  await page.locator('[data-southeast-farm-single]').click();await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmView==='single');
- await page.waitForFunction(()=>document.querySelectorAll('.asia-livestock-point:not([hidden])').length===0);assert.equal(await livestock.count(),0);assert.equal(new URL(page.url()).searchParams.get('farmview'),'single');
- await page.reload({waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmView==='single');
+ await waitCrops(['maize']);assert.equal(await livestock.count(),0);assert.equal(new URL(page.url()).searchParams.get('farmview'),'single');
+ const singleState=new URL(page.url()),stateKeys=['topic','place','city','at','part','farmview','lng','lat','z'];
+ await page.reload({waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmView==='single');await waitCrops(['maize']);
+ for(const key of stateKeys)assert.equal(new URL(page.url()).searchParams.get(key),singleState.searchParams.get(key),'Reload retains '+key);sameCamera(camera,await mapCamera());
  await page.locator('[data-dock-compare="population"]').click();await page.locator('[data-comparison-back]').click();
- await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmView==='single');
- assert.equal(new URL(page.url()).searchParams.get('farmview'),'single');record('right-column single-product control survives reload and comparison');await capture('farm-single');
- await page.locator('[data-southeast-farm-single]').click();await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmView==='all');
- await page.waitForFunction(count=>document.querySelectorAll('.asia-livestock-point:not([hidden])').length===count,count);assert.equal(await livestock.count(),count);const restored=await livestock.evaluateAll(n=>n.map(x=>({name:x.getAttribute('aria-label'),x:parseFloat(x.style.left),y:parseFloat(x.style.top)})));
- assert.equal(restored.length,projected.length);for(let i=0;i<restored.length;i++){assert.equal(restored[i].name,projected[i].name);for(const key of ['x','y'])assert(Math.abs(restored[i][key]-projected[i][key])<=1);}
- record('returning to all products restores livestock and the regional camera');await capture('farm-all-restored');
+ await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmView==='single');await waitCrops(['maize']);
+ for(const key of stateKeys)assert.equal(new URL(page.url()).searchParams.get(key),singleState.searchParams.get(key),'Comparison return retains '+key);sameCamera(camera,await mapCamera());
+ assert.equal(await page.locator('[data-asia-atlas]').getAttribute('data-southeast-farm-group'),'farm-grains');
+ record('grain single-product control retains maize, group and camera through reload and comparison');await capture('farm-single');
+ await page.locator('[data-southeast-farm-single]').click();await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmView==='group');await waitCrops(['rice','maize']);
+ assert.equal(await livestock.count(),0);assert.equal(new URL(page.url()).searchParams.get('topic'),'maize');assert.equal(new URL(page.url()).searchParams.get('farmview'),null);
+ const restored=await cropPositions();
+ assert.equal(restored.length,projected.length);for(let i=0;i<restored.length;i++){assert.equal(restored[i].name,projected[i].name);for(const key of ['x','y'])assert(Math.abs(restored[i][key]-projected[i][key])<=1);}sameCamera(camera,await mapCamera());
+ record('returning to the grain group restores rice and maize labels at the same camera without livestock');await capture('farm-all-restored');
 
  await page.locator('[data-farm-group="forestry"]').click();await expand('[data-reading-details]');await page.locator('[data-place-story]').selectOption('peninsula-forest');
  assert.match(await page.locator('[data-south-central-world-share]').textContent(),/森林面積.*2024年.*世界の森林面積/s);

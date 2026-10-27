@@ -1,4 +1,5 @@
 ---
+import SoutheastAsiaFarmNavigation from './asia/SoutheastAsiaFarmNavigation.astro';
 import {eastSectorIndustries,eastSectors} from '../../data/atlas/east-asia-industry-sectors';
 import {southIndustrySectors} from '../../data/atlas/south-asia-industry-sectors';
 import {southIndustryCatalog} from '../../data/atlas/south-asia-major-industries';
@@ -14,7 +15,7 @@ const availableSectors=new Set(industry.topics.map(industryTopicGroup).map(group
 const industryFeatures=majorAsiaIndustries[regionId].map(feature=>({...feature,sector:industryTopicGroup({id:feature.id}).sector}));
 const industryCountries=industryCountryChoices(industry),industryLabel=industry.countryScope?.label??'東アジア';
 ---
-<nav class="asia-agriculture-tabs asia-primary-topics" data-agriculture-topics hidden={initialField!=='agriculture'} aria-label="農林業の主題"><button type="button" data-farm-group="agriculture" data-farm-group-topic="overview" aria-pressed="true">農畜産</button><button type="button" data-farm-group="forestry" data-farm-group-topic={forestTopic} aria-pressed="false" disabled={!forestTopic}>林業{!forestTopic&&<small>資料を整備中</small>}</button></nav>
+{regionId==='southeast-asia'?<SoutheastAsiaFarmNavigation active={initialField==='agriculture'} {forestTopic}/>:<nav class="asia-agriculture-tabs asia-primary-topics" data-agriculture-topics hidden={initialField!=='agriculture'} aria-label="農林業の主題"><button type="button" data-farm-group="agriculture" data-farm-group-topic="overview" aria-pressed="true">農畜産</button><button type="button" data-farm-group="forestry" data-farm-group-topic={forestTopic} aria-pressed="false" disabled={!forestTopic}>林業{!forestTopic&&<small>資料を整備中</small>}</button></nav>}
 <div class="asia-natural-controls" data-natural-topics hidden={initialField!=='natural'}>
  <nav class="asia-primary-topics" aria-label="自然環境の主題">{naturalGroups.map(t=><button type="button" data-natural-group={t.id} aria-pressed={t.id==='climate'}>{t.label}</button>)}</nav>
  <nav class="asia-secondary-topics" data-water-topics hidden aria-label="水資源の種類">{[{id:'water',label:'河川・地下水'},{id:'precipitation',label:'年降水量'},{id:'basins',label:'河川の流域'}].map(t=><button type="button" data-water-view={t.id} data-natural-topic={t.id} aria-pressed="false">{t.label}</button>)}</nav>

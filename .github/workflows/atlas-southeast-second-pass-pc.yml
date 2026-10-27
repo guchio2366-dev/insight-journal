@@ -45,8 +45,13 @@ jobs:
           chrome_path="$(command -v google-chrome || command -v google-chrome-stable || true)"
           if [[ -z "$chrome_path" ]]; then echo 'Chrome is required'; exit 1; fi
           if [[ -z "$(fc-list ':lang=ja' family)" ]]; then
-            sudo apt-get update
-            sudo apt-get install --yes --no-install-recommends fonts-noto-cjk
+            # The Azure mirror can stall large CJK font downloads on temporary runners.
+            # Use Ubuntu's primary HTTPS mirror; APT still verifies signed metadata/packages.
+            if [[ -f /etc/apt/sources.list.d/ubuntu.sources ]]; then
+              sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g' /etc/apt/sources.list.d/ubuntu.sources
+            fi
+            sudo apt-get -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 -o Acquire::Retries=1 update
+            sudo apt-get -o Acquire::http::Timeout=30 -o Acquire::https::Timeout=30 -o Acquire::Retries=1 install --yes --no-install-recommends fonts-noto-cjk
           fi
           if [[ -z "$(fc-list ':lang=ja' family)" ]]; then echo 'Japanese fonts are required'; exit 1; fi
           printf 'REVIEW_CHROME_PATH=%s\n' "$chrome_path" >> "$GITHUB_ENV"

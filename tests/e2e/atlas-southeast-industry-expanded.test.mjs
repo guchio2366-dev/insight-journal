@@ -4,6 +4,8 @@ import {readFile} from 'node:fs/promises';
 import {build} from 'esbuild';
 import {Window} from 'happy-dom';
 import {southeastIndustrySites,southeastSiteSectors} from '../../src/data/atlas/asia/southeast-asia-industry-sites.ts';
+import {southeastMapLabels,southeastIndustryAppearance} from '../../src/data/atlas/asia/southeast-industry-map-scenes.ts';
+import {southeastLeaderIntersectsBox} from '../../src/lib/atlas-southeast-industry-labels.ts';
 const html=await readFile(new URL('../../dist/atlas/asia/southeast-asia/industry/index.html',import.meta.url),'utf8');
 const {outputFiles}=await build({entryPoints:['src/scripts/atlas-asia-southeast-industry.ts'],bundle:true,write:false,format:'iife',globalName:'SEA',platform:'browser',define:{'import.meta.env.BASE_URL':'"/insight-journal/"'}});
 function fixture(query=''){
@@ -99,3 +101,38 @@ test('palm quantities, country outlines and their legends never leak into a diff
  }finally{f.window.happyDOM.abort();}
 });
 
+
+test('compact industry labels retain place names accessibly and fan out to each original grouped point',()=>{
+ const f=fixture(),seenGroups=new Set();try{
+  f.show();
+  for(const sector of ['resource','manufacturing','services']){
+   f.sector(sector);
+   const visibleLabels=visible(f.root,'data-southeast-industry-label');
+   const boxes=new Map(visibleLabels.map(label=>[label.dataset.southeastIndustryLabel,{left:parseFloat(label.style.left),top:parseFloat(label.style.top),right:parseFloat(label.style.left)+parseFloat(label.style.width),bottom:parseFloat(label.style.top)+parseFloat(label.style.height)}]));
+   for(const label of visibleLabels){
+    const group=southeastMapLabels.find(g=>g.id===label.dataset.southeastIndustryLabel),style=southeastIndustryAppearance(group.kind);
+    assert.equal(label.textContent,group.industry);assert.equal(label.querySelector('small'),null);
+    assert(label.getAttribute('aria-label').includes(group.place));assert(label.title.includes(group.place));
+    assert.equal(label.dataset.southeastIndustryFamily,style.id);assert.equal(label.style.getPropertyValue('--sea-industry-color'),style.color);
+    const lines=[...f.root.querySelectorAll('[data-southeast-industry-leader="'+group.id+'"]')];
+    assert.deepEqual(lines.map(line=>line.dataset.southeastIndustryLeaderSite).sort(),[...group.siteIds].sort());
+    if(group.siteIds.length>1)seenGroups.add(group.id);
+    for(const line of lines){
+     const site=southeastIndustrySites.find(s=>s.id===line.dataset.southeastIndustryLeaderSite),point=f.root.querySelector('[data-southeast-industry-point="'+site.id+'"]');
+     assert(Math.abs(Number(line.getAttribute('x1'))-parseFloat(point.style.left))<1e-5);assert(Math.abs(Number(line.getAttribute('y1'))-parseFloat(point.style.top))<1e-5);
+     assert.equal(point.dataset.southeastIndustryFamily,style.id);assert.equal(line.style.getPropertyValue('--sea-industry-color'),style.color);
+     const start={x:Number(line.getAttribute('x1')),y:Number(line.getAttribute('y1'))},end={x:Number(line.getAttribute('x2')),y:Number(line.getAttribute('y2'))};
+     assert(Math.hypot(end.x-start.x,end.y-start.y)<=48);
+     for(const [id,box]of boxes)if(id!==group.id)assert(!southeastLeaderIntersectsBox(start,end,box,2));
+    }
+   }
+  }
+  assert.deepEqual([...seenGroups].sort(),['jurong-petro','penang']);
+  f.sector('manufacturing');const baseline=geometry(f);
+  f.root.querySelector('[data-southeast-industry-point="kulim"]').click();
+  assert.equal(new URL(f.window.location.href).searchParams.get('industrySite'),'kulim');
+  assert.equal(f.root.querySelector('[data-southeast-industry-label="penang"]').getAttribute('aria-pressed'),'true');
+  assert.deepEqual(geometry(f),baseline);
+  assert.match(f.root.querySelector('[data-southeast-industry-selected-title]').textContent,/クリム/);
+ }finally{f.window.happyDOM.abort();}
+});

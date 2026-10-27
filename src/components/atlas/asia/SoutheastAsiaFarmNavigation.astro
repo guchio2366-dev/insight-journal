@@ -1,0 +1,9 @@
+---
+import {southeastFarmGroups} from '../../../data/atlas/asia/southeast-asia-farm-groups';
+import '../../../styles/atlas-southeast-farming.css';
+const {active=false,forestTopic='forest'}=Astro.props as {active?:boolean;forestTopic?:string};
+---
+<nav class="asia-agriculture-tabs asia-primary-topics southeast-farm-tabs" data-agriculture-topics hidden={!active} aria-label="東南アジアの農林業を分類で選ぶ">
+ {southeastFarmGroups.map((group,index)=><button type="button" data-southeast-farm-group={group.id} data-farm-group-topic={group.id} aria-pressed={index===0}>{group.label}</button>)}
+ <button type="button" data-farm-group="forestry" data-farm-group-topic={forestTopic} aria-pressed="false" disabled={!forestTopic}>林業</button>
+</nav>

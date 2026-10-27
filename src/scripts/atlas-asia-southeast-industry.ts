@@ -1,8 +1,8 @@
 import {southeastIndustrySectors,southeastIndustrySites,southeastSiteSectors,type SoutheastIndustryKind,type SoutheastIndustrySector} from '../data/atlas/asia/southeast-asia-industry-sites';
 import {southeastIndustryProfiles,southeastIndustryProfile} from '../data/atlas/asia/southeast-asia-industry-catalog';
 import {southeastIndustryLocalEvidence} from '../data/atlas/asia/southeast-asia-industry-learning';
-import {southeastMapKindSectors,southeastPreferredSector,southeastSectorKindLabel,southeastMapLabels} from '../data/atlas/asia/southeast-industry-map-scenes';
-import {placeSoutheastIndustryLabels} from '../lib/atlas-southeast-industry-labels';
+import {southeastMapKindSectors,southeastPreferredSector,southeastSectorKindLabel,southeastMapLabels,southeastIndustryAppearance} from '../data/atlas/asia/southeast-industry-map-scenes';
+import {placeSoutheastIndustryLabels,southeastLabelLeaderEnd} from '../lib/atlas-southeast-industry-labels';
 import type {AsiaState} from '../lib/atlas-asia-state';
 
 /** Regional evidence stays separate from national GDP and legacy trade layers. */
@@ -48,12 +48,15 @@ export function createSoutheastIndustryLocations(root:HTMLElement,getState:()=>A
  const legend=document.createElement('div');legend.className='southeast-industry-map-legend';legend.dataset.southeastIndustryLegend='';statistics.prepend(legend);
  const family=(site:typeof southeastIndustrySites[number])=>southeastSiteSectors(site).includes('resource')?'resource':southeastSiteSectors(site).includes('services')?site.kind==='logistics'?'network':'service':'factory';
  const inSector=(site:typeof southeastIndustrySites[number])=>southeastSiteSectors(site).includes(sector);
+ function appearance(node:HTMLElement|SVGElement,industry:SoutheastIndustryKind){const style=southeastIndustryAppearance(industry);node.dataset.southeastIndustryFamily=style.id;node.style.setProperty('--sea-industry-color',style.color);}
  for(const site of southeastIndustrySites){
-  const button=document.createElement('button');button.type='button';button.hidden=true;button.className=`southeast-industry-map-point ${family(site)} ${site.stage}`;button.setAttribute('aria-label',site.industryName+'・'+site.placeName+'の案内位置');button.title=site.label;button.dataset.southeastIndustryPoint=site.id;button.addEventListener('click',event=>{event.stopPropagation();chooseSite(site.id);});overlay.append(button);points.set(site.id,button);
+  const button=document.createElement('button');button.type='button';button.hidden=true;button.className=`southeast-industry-map-point ${family(site)} ${site.stage}`;button.setAttribute('aria-label',site.industryName+'・'+site.placeName+'の案内位置');button.title=site.label;button.dataset.southeastIndustryPoint=site.id;appearance(button,site.kind);button.addEventListener('click',event=>{event.stopPropagation();chooseSite(site.id);});overlay.append(button);points.set(site.id,button);
  }
  for(const group of southeastMapLabels){
-  const label=document.createElement('button');label.type='button';label.hidden=true;label.className='southeast-industry-map-label';label.dataset.southeastIndustryLabel=group.id;label.dataset.southeastIndustryLabelSector=group.sector;label.setAttribute('aria-label',group.place+'の'+group.industry+'（'+group.siteIds.length+'案内位置）の解説');
-  const industry=document.createElement('strong');industry.textContent=group.industry;const place=document.createElement('small');place.textContent=group.place;label.append(industry,place);
+  const label=document.createElement('button');label.type='button';label.hidden=true;label.className='southeast-industry-map-label';label.dataset.southeastIndustryLabel=group.id;label.dataset.southeastIndustryLabelSector=group.sector;label.setAttribute('aria-label',group.place+'の'+group.industry+'（'+group.siteIds.length+'案内位置）の解説');label.title=group.place+'：'+group.industry;appearance(label,group.kind);
+  label.dataset.southeastIndustryStage=southeastIndustrySites.find(site=>site.id===group.id)!.stage;
+  const symbol=document.createElement('span');symbol.className='sea-industry-label-symbol';symbol.setAttribute('aria-hidden','true');
+  const industry=document.createElement('strong');industry.textContent=group.industry;label.append(symbol,industry);
   label.addEventListener('click',event=>{event.stopPropagation();chooseSite(group.id);});overlay.append(label);labels.set(group.id,label);
  }
  function countryEvidence(active:boolean){
@@ -73,13 +76,13 @@ export function createSoutheastIndustryLocations(root:HTMLElement,getState:()=>A
   for(const {site,p} of locations){const point=points.get(site.id)!;point.style.left=p.x+'px';point.style.top=p.y+'px';point.hidden=p.x<8||p.x>width-8||p.y<8||p.y>height-8;}
   // Fixed groups belong to this sector; selection only changes emphasis.
   const compact=width<600;
-  const candidates=southeastMapLabels.filter(g=>g.sectors.includes(sector)).map(group=>({group,p:map!.project(group.point)})).filter(({p})=>p.x>=8&&p.x<=width-8&&p.y>=8&&p.y<=height-8);
+  const candidates=southeastMapLabels.filter(g=>g.sectors.includes(sector)).map(group=>({group,p:map!.project(group.point),members:locations.filter(({site,p})=>group.siteIds.includes(site.id)&&p.x>=8&&p.x<=width-8&&p.y>=8&&p.y<=height-8)})).filter(({p,members})=>members.length&&p.x>=8&&p.x<=width-8&&p.y>=8&&p.y<=height-8);
   const frame=overlay.getBoundingClientRect();
   const reserved=[root.querySelector<HTMLElement>('.asia-map-tools')].filter((node):node is HTMLElement=>!!node).map(node=>{const r=node.getBoundingClientRect();return {left:r.left-frame.left-3,top:r.top-frame.top-3,right:r.right-frame.left+3,bottom:r.bottom-frame.top+3};});
   const font=compact?11:12;
-  const boxes=placeSoutheastIndustryLabels(candidates.map(({group,p})=>({id:group.id,x:p.x,y:p.y,width:Math.max(70,Math.max(group.place.length*10,group.industry.length*font)+12),height:32})),width,height,reserved,locations.map(x=>x.p));
-  for(const {group,p} of candidates){const box=boxes.get(group.id);if(!box)continue;const label=labels.get(group.id)!;label.hidden=false;Object.assign(label.style,{left:box.left+'px',top:box.top+'px',width:box.right-box.left+'px',height:box.bottom-box.top+'px'});Object.assign(label.querySelector('strong')!.style,{fontSize:font+'px',letterSpacing:'normal'});
-   const line=document.createElementNS('http://www.w3.org/2000/svg','line');line.dataset.southeastIndustryLeader=group.id;line.setAttribute('x1',String(p.x));line.setAttribute('y1',String(p.y));line.setAttribute('x2',String(Math.max(box.left,Math.min(p.x,box.right))));line.setAttribute('y2',String(Math.max(box.top,Math.min(p.y,box.bottom))));line.classList.toggle('muted',kind!=='all'&&kind!==group.kind);leaders.append(line);
+  const boxes=placeSoutheastIndustryLabels(candidates.map(({group,p,members})=>({id:group.id,x:p.x,y:p.y,width:group.industry.length*font+28,height:22,leaderPoints:members.map(member=>member.p)})),width,height,reserved,locations.map(x=>x.p));
+  for(const {group,members} of candidates){const box=boxes.get(group.id);if(!box)continue;const label=labels.get(group.id)!;label.hidden=false;Object.assign(label.style,{left:box.left+'px',top:box.top+'px',width:box.right-box.left+'px',height:box.bottom-box.top+'px'});Object.assign(label.querySelector('strong')!.style,{fontSize:font+'px',letterSpacing:'normal'});
+   for(const {site,p} of members){const end=southeastLabelLeaderEnd(p,box),line=document.createElementNS('http://www.w3.org/2000/svg','line');line.dataset.southeastIndustryLeader=group.id;line.dataset.southeastIndustryLeaderSite=site.id;appearance(line,group.kind);line.setAttribute('x1',String(p.x));line.setAttribute('y1',String(p.y));line.setAttribute('x2',String(end.x));line.setAttribute('y2',String(end.y));line.classList.toggle('muted',kind!=='all'&&kind!==group.kind);line.classList.toggle('chosen',selectedId===site.id);leaders.append(line);}
   }
   root.dataset.southeastIndustryLayoutReady='true';
  }
@@ -91,8 +94,8 @@ export function createSoutheastIndustryLocations(root:HTMLElement,getState:()=>A
   overlay.hidden=!active||!map;controls.hidden=!active;story.hidden=!active;statistics.hidden=!active;countryEvidence(active);
   query('[data-southeast-palm-map-key]').hidden=!active||sector!=='manufacturing'||kind!=='palm';
   if(palmLoaded&&map)for(const id of ['southeast-palm-processing','southeast-palm-processing-lines'])map.setLayoutProperty(id,'visibility',active&&sector==='manufacturing'&&kind==='palm'?'visible':'none');
-  legend.textContent=sector==='resource'?'■ 原料地域　● 加工・LNG・水力の案内位置':sector==='services'?'● 港湾・観光・業務都市の案内位置':'● 加工地区・LNG液化の案内位置';
-  legend.textContent+='。記号の大きさは数量を表しません。短い細線は産業札との対応で、取引経路ではありません。';
+  legend.textContent=sector==='resource'?'◆ 原料地域　● 加工・LNG・水力の案内位置':sector==='services'?'● 港湾・観光・業務都市の案内位置':'● 加工地区・LNG液化の案内位置';
+  legend.textContent+='。札・点・引出線の色は産業の系統に対応します。記号の大きさは数量を表しません。複数の線は同じ札にまとめた各案内位置を結び、取引経路ではありません。';
   if(sector==='manufacturing'&&kind!=='all'&&southeastIndustryProfile(kind)?.countryEvidence?.length)legend.textContent+=' 青い国境は国単位の加工品貿易資料の確認範囲です。';
   query('[data-southeast-industry-map-stage]').textContent=sector==='resource'?'原料産地・LNG・水力と、関連する製錬・精製・原料加工の確認位置。共有する加工拠点も実工程名で区別。':sector==='manufacturing'?'製錬・精製・製品加工・LNG液化の地区。鉱床・植林・ゴム栽培地は資源・エネルギーの図で背景として読む。':'港湾・観光・金融・業務受託の都市。原料産地や製造地区はそれぞれ別の地図に表示。';
   const profile=kind==='all'?null:southeastIndustryProfile(kind)!;

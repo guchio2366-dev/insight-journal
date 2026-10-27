@@ -15,10 +15,16 @@ test('unselected overview renderer remains exactly the published PR 350 implemen
   ['src/components/atlas/AsiaAtlasPage.astro','5a68ea0822cb9ef80b4225ae97841bba1944cc8608a07fac9c12b9ad65c2f667'],
   ['src/components/atlas/EuropeVerifiedStatistics.astro','6c0e50bc54884c8793f60bb0962fcffa29c5d540b189ff8f5b7c8ec1214bb8fb']
  ]){
-  // Exclude the authorized South Asia industry and Southeast Asia reading hooks.
-  // Keep the complete agriculture/other-region source under its original hash.
+  // Exclude the authorized regional hooks and the Southeast Asia-only four views/view window.
+  // All remaining agriculture and other-region source keeps its published hash.
   const text=readFileSync(path,'utf8');
   const retained=path==='src/components/atlas/AsiaAtlasPage.astro'?text
+   .replace("import { asiaFieldPaths, type AsiaRegionId, type AsiaField } from '../../lib/atlas-asia-state';\nimport {southeastMapViewBounds} from '../../lib/atlas-southeast-viewport';","import { asiaFieldPaths, type AsiaRegionId, type AsiaField } from '../../lib/atlas-asia-state';")
+   .replace("const bounds=focusId?contentExtent:regionId==='southeast-asia'?[...southeastMapViewBounds.all]:reading.bounds;","const bounds=focusId?contentExtent:reading.bounds;")
+   .replace("<div class=\"asia-farm-key-row\" hidden={regionId==='southeast-asia'&&kind==='livestock'}>","<div class=\"asia-farm-key-row\">")
+   .replace("<button type=\"button\" data-farm-choice={p.id} data-kind={p.kind} hidden={regionId==='southeast-asia'&&!['rice','maize'].includes(p.id)}","<button type=\"button\" data-farm-choice={p.id} data-kind={p.kind}")
+   .replace("<p data-farm-insight-body>{farmInsight.body}</p><a class=\"asia-small\" data-farm-insight-source href={farmInsight.source}>","<p>{farmInsight.body}</p><a class=\"asia-small\" href={farmInsight.source}>")
+   .replace("<p class=\"asia-small\" data-farm-overview-method-summary>色面で作物の栽培域を示し","<p class=\"asia-small\">色面で作物の栽培域を示し")
    .replace(/^import SoutheastNaturePopulationReading from '\.\/asia\/SoutheastNaturePopulationReading\.astro';\n/m,'')
    .replace(/^        \{regionId==='southeast-asia'&&<SoutheastNaturePopulationReading \{population\} \/>\}\n/m,'')
    .replace(/^const southeastGridReading:Record<AsiaField,string>=.*;\n/m,'')
