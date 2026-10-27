@@ -45,12 +45,15 @@ try{
  await page.locator('[data-southeast-part="islands"]').click();await page.waitForFunction(()=>new URL(location.href).searchParams.get('part')==='islands');await shot('island-view');
  await page.locator('[data-southeast-part="all"]').click();await page.waitForFunction(()=>!new URL(location.href).searchParams.has('part'));check('full, mainland and island views share data and use undistorted map fitting');
  assert.equal(await page.locator('[data-southeast-livestock]:visible').count(),0);
- assert.equal(await page.locator('[data-southeast-farm-group]').count(),4);
+ assert.equal(await page.locator('button[data-southeast-farm-group]').count(),4);
  assert.equal(await page.locator('[data-asia-atlas]').getAttribute('data-southeast-farm-group'),'farm-grains');
  assert.deepEqual(await page.locator('[data-farm-overview-legend] [data-farm-choice]:visible').evaluateAll(nodes=>nodes.map(n=>n.dataset.farmChoice).filter(x=>x!=='overview').sort()),['maize','rice']);
+ for(const product of ['rice','maize'])assert((await page.locator('.asia-farm-label[data-product="'+product+'"]:visible').count())>0);
+ const cropStyles=await page.locator('.asia-farm-label:visible').evaluateAll(nodes=>nodes.map(n=>({size:parseFloat(getComputedStyle(n).fontSize),background:getComputedStyle(n).backgroundColor})));
+ assert(cropStyles.every(s=>s.size>=14&&s.background==='rgba(0, 0, 0, 0)'),JSON.stringify(cropStyles));
  check('farming opens with the two grains only and four separate crop/livestock views');await shot('farming-overview');
  for(const group of ['farm-oil-rubber','farm-sugar-roots-coffee','farm-livestock']){
-  await page.locator('[data-southeast-farm-group="'+group+'"]').click();
+  await page.locator('button[data-southeast-farm-group="'+group+'"]').click();
   await page.waitForFunction(value=>document.querySelector('[data-asia-atlas]')?.dataset.southeastFarmGroup===value,group);
   const groupFrame=await page.locator('.asia-map-frame').boundingBox();
   assert(Math.abs(groupFrame.width-frame.width)<1&&Math.abs(groupFrame.height-frame.height)<1,'group changes preserve the map frame');
@@ -63,7 +66,7 @@ try{
   await page.reload({waitUntil:'networkidle'});await mapReady();
   assert.equal(await page.locator('[data-asia-atlas]').getAttribute('data-southeast-farm-group'),group);
  }
- await page.locator('[data-southeast-farm-group="farm-grains"]').click();
+ await page.locator('button[data-southeast-farm-group="farm-grains"]').click();
  await page.locator('[data-farm-choice="maize"]').click();await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmSelected==='maize');
  const balances=page.locator('[data-southeast-food-balances]');
  assert.equal(await balances.count(),1);
@@ -78,7 +81,7 @@ try{
  check('five 2023 ASEAN10 commodity balances retain original totals and distinguish sugar source inconsistencies');
  assert.equal(await page.locator('[data-southeast-livestock]:visible').count(),0);check('selected maize keeps only its crop group');await shot('farming-maize');
  await shot('maize-food-balance','[data-southeast-food-balances]');
- await page.locator('[data-southeast-farm-group="farm-livestock"]').click();
+ await page.locator('button[data-southeast-farm-group="farm-livestock"]').click();
  await page.locator('[data-farm-choice="chicken"]').click();await page.waitForFunction(()=>document.querySelector('[data-asia-atlas]')?.dataset.farmSelected==='chicken');
  assert.equal(await balances.count(),1,'changing to an unsupported commodity must preserve the regional balance panel');
  assert.equal(await balances.locator('[data-southeast-balance-context]').isVisible(),true);
@@ -175,12 +178,14 @@ try{
  await page.waitForFunction(()=>new URL(location.href).searchParams.get('detail')==='mekong-delta');
  assert.equal(new URL(page.url()).searchParams.get('topic'),'terrain');
  assert.equal(await page.locator('[data-southeast-landform="mekong-delta"]').getAttribute('aria-pressed'),'true');
+ assert.equal(await page.locator('[data-landform-extent="mekong-delta"]').first().getAttribute('stroke-width'),'2.8');
  assert.equal(await page.locator('.asia-point-marker:visible').count(),0);
  assert.equal(await page.locator('[data-asia-atlas]').getAttribute('data-map-camera'),terrainCamera);
  await shot('terrain-delta-selected');
  await page.reload({waitUntil:'networkidle'});await mapReady();
  assert.equal(new URL(page.url()).searchParams.get('detail'),'mekong-delta');
  assert.equal(await page.locator('[data-southeast-landform="mekong-delta"]').getAttribute('aria-pressed'),'true');
+ assert.equal(await page.locator('[data-landform-extent="mekong-delta"]').first().getAttribute('stroke-width'),'2.8');
  check('clicking the actual Mekong delta outline selects its landform, keeps terrain and camera, and shows no country marker');
  const seasonalLabels=async()=>page.locator('.asia-marine-process-label:visible').evaluateAll(nodes=>{
   const bounds=document.querySelector('[data-map-annotations]').getBoundingClientRect();

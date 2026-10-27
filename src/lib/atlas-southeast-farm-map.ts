@@ -9,10 +9,11 @@ export function southeastFarmMapFilter(topic?:string|null,single=false){
 }
 
 /** Repeat names only at source anchors; the screen layout may move the label. */
-export function southeastFarmCropLabels(labels:readonly FarmLabel[],topic?:string|null,single=false):FarmLabel[]{
+export function southeastFarmCropLabels(labels:readonly FarmLabel[],topic?:string|null,single=false,view?:{project:(coordinate:[number,number])=>Point;bounds:Box}):FarmLabel[]{
  const products=southeastFarmVisibleProducts(topic,single),counts=new Map<string,number>();
  return labels.filter(label=>{
   if(label.kind!=='crop'||!label.product||!products.includes(label.product))return false;
+  if(view){const point=view.project(label.coordinate),b=view.bounds;if(point.x<b.left+12||point.x>b.right-12||point.y<b.top+12||point.y>b.bottom-12)return false;}
   const count=counts.get(label.product)??0;counts.set(label.product,count+1);
   return count<(label.product===topic?3:2);
  }).sort((a,b)=>Number(b.product===topic)-Number(a.product===topic));

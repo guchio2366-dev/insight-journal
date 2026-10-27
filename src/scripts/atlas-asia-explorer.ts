@@ -91,6 +91,7 @@ function start(root:HTMLElement) {
     let restored=normalizeScopedIndustryState(config.industry,readAsiaAtlasState(new URL(location.href),context));
     if(restored.field==='industry'&&config.industry&&hasIndustryCountryScope(config.industry)&&restored.place&&!industryCountryChoices(config.industry).some(c=>c.code===restored.place))restored={...restored,place:null,detail:null,point:null,story:null};
     if(restored.field==='natural'&&restored.topic==='water'&&restored.detail?.startsWith('b-'))restored={...restored,topic:'basins'};
+    if(config.regionId==='southeast-asia'&&restored.field==='natural'&&restored.topic==='water'&&restored.detail)restored={...restored,detail:southeastRiverId(restored.detail)};
     if(restored.field==='industry'&&config.trade&&isTradeTopic(restored.topic))return normalizeTradeState(restored,config.tradeChapters!);
     if(restored.field==='industry'&&config.industry)return industry?.normalize(restored)??normalizeIndustryState(config.industry,restored);
     if(restored.field==='population'){
@@ -100,13 +101,13 @@ function start(root:HTMLElement) {
       return {...restored,detail:urban?.id??null,place:urban?.country??restored.place,point:restored.point??config.cities.find(c=>c.id===restored.city)?.coordinates??null,city:null};
     }
     if(restored.field!=='natural')return restored;
-    if(config.focusId==='central-asia'&&['terrain','landform'].includes(restored.topic??''))restored={...restored,place:null};
+    if((config.focusId==='central-asia'||config.regionId==='southeast-asia')&&['terrain','landform'].includes(restored.topic??''))restored={...restored,place:null};
     if(restored.topic==='seasonal-precipitation')return seasonal?.normalize(restored)??{...restored,detail:/^m-(0[1-9]|1[0-2])$/.test(restored.detail??'')?restored.detail:'m-07',city:null};
     if(config.water&&isWaterTopic(restored.topic)&&!(restored.topic==='water'&&config.physical?.waterFeatures.some((f:any)=>f.id===restored.detail)))return hydrology?.normalize(restored)??normalizeWaterState(config.regionId,restored);
     if(!restored.topic||restored.topic==='climate')return {...restored,detail:null};
     const focus=config.physicalFocus?.find(f=>f.id===restored.detail),water=config.physical?.waterFeatures.find((f:any)=>f.id===restored.detail);
     const detailAllowed=focus?['terrain','landform'].includes(restored.topic??'')&&(!restored.place||restored.place===focus.country):water?restored.topic==='water'&&(!restored.place||water.countries.includes(restored.place)):false;
-    if(focus&&detailAllowed)return {...restored,place:config.focusId==='central-asia'||config.regionId==='east-asia'?null:focus.country,point:focus.coordinates,city:null};
+    if(focus&&detailAllowed)return {...restored,place:config.focusId==='central-asia'||['east-asia','southeast-asia'].includes(config.regionId)?null:focus.country,point:focus.coordinates,city:null};
     const city=config.cities.find(c=>c.id===restored.city);
     return {...restored,detail:detailAllowed?restored.detail:null,point:restored.point??city?.coordinates??null,city:null};
   }
@@ -198,7 +199,7 @@ function start(root:HTMLElement) {
     history[push?'pushState':'replaceState']({},'',url);
   }
   function navigate(next:AsiaState,fit=true) {
-    if(config.focusId==='central-asia'&&next.field==='natural'&&['terrain','landform'].includes(next.topic??''))next={...next,place:null};
+    if((config.focusId==='central-asia'||config.regionId==='southeast-asia')&&next.field==='natural'&&['terrain','landform'].includes(next.topic??''))next={...next,place:null};
     const scoped=normalizeScopedIndustryState(config.industry,next);if(scoped!==next)fit=true;next=scoped;
     if(next.field!=='agriculture'||next.topic&&next.topic!=='overview')next={...next,overlay:null};
     if(next.field!=='industry')next={...next,sector:null,subsector:null,only:false};
@@ -815,7 +816,7 @@ function start(root:HTMLElement) {
   $<HTMLSelectElement>('[data-population-topic]')?.addEventListener('change',event=>{const topic=(event.target as HTMLSelectElement).value;if(config.social?.topics.some(t=>t.id===topic))social?.chooseTopic(topic);else navigate({...state,field:'population',topic,city:null,camera:camera()},false);});
   $<HTMLSelectElement>('[data-population-city]')?.addEventListener('change',event=>selectUrban((event.target as HTMLSelectElement).value));
   $('[data-population-centroid]')?.addEventListener('click',()=>{const city=urbanCity();if(city)navigate({...state,point:city.coordinates,camera:camera()},false);});
-  $<HTMLSelectElement>('[data-physical-focus]')?.addEventListener('change',event=>{const id=(event.target as HTMLSelectElement).value;if(!id){clearDetail();return;}const focus=config.physicalFocus?.find(f=>f.id===id);if(focus)navigate({...state,field:'natural',topic:naturalTopic()==='landform'?'landform':'terrain',detail:focus.id,place:config.regionId==='east-asia'||config.focusId==='central-asia'?null:focus.country,point:focus.coordinates,city:null,camera:config.regionId==='east-asia'?camera():null},config.regionId!=='east-asia');});
+  $<HTMLSelectElement>('[data-physical-focus]')?.addEventListener('change',event=>{const id=(event.target as HTMLSelectElement).value;if(!id){clearDetail();return;}if(config.regionId==='southeast-asia'){selectLandform(id);return;}const focus=config.physicalFocus?.find(f=>f.id===id);if(focus)navigate({...state,field:'natural',topic:naturalTopic()==='landform'?'landform':'terrain',detail:focus.id,place:config.regionId==='east-asia'||config.focusId==='central-asia'?null:focus.country,point:focus.coordinates,city:null,camera:config.regionId==='east-asia'?camera():null},config.regionId!=='east-asia');});
   $<HTMLSelectElement>('[data-water-select]')?.addEventListener('change',event=>selectWater((event.target as HTMLSelectElement).value));
   citySelect.addEventListener('change',()=>{if(citySelect.value)selectCity(citySelect.value);else navigate({...state,city:null,camera:config.regionId==='southeast-asia'?camera():null,...(config.regionId==='southeast-asia'?{place:null,point:null}:{})},config.regionId!=='southeast-asia');});
   $$<HTMLButtonElement>('[data-country-button]').forEach(b=>b.addEventListener('click',()=>selectCountry(b.dataset.countryButton!)));

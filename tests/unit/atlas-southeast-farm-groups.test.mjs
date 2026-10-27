@@ -63,6 +63,7 @@ test('common navigation switches the group, limits its choices and returns a pro
   assert.equal(state.topic,'forest');assert.equal(root.dataset.southeastFarmGroup,'forest');assert.equal(root.querySelector('[data-farming-selector]').hidden,true);
   root.querySelector('[data-southeast-farm-group="farm-grains"]').click();
   assert.equal(root.querySelector('[data-farming-selector]').hidden,false);assert.deepEqual(visible(),['rice','maize']);
+  state={...base,overlay:'water'};render();assert.deepEqual(visible(),['rice']);assert.match(root.querySelector('[data-reading-dock-title]').textContent,/米.*雨.*川/);
  }finally{await window.happyDOM.close();}
 });
 
@@ -95,4 +96,15 @@ test('small livestock badges retain source points, names and keyboard buttons wi
   assert.ok(leaders.every(([x,y])=>points.has(`${x},${y}`)));
   render('chicken');assert.equal([...buttons.values()].filter(element=>!element.hidden&&element.dataset.southeastLivestock==='chicken').length,3);
  }finally{await window.happyDOM.close();}
+});
+
+
+test('crop label limits apply after the viewport filter, keeping real mainland and island anchors',()=>{
+ const islands={bounds:{left:0,top:0,right:1000,bottom:400},project:([lon,lat])=>({x:(lon-90)*20,y:(5-lat)*20})};
+ const mainland={bounds:{left:0,top:0,right:400,bottom:320},project:([lon,lat])=>({x:(lon-90)*20,y:(26-lat)*20})};
+ const rice=southeastFarmCropLabels(farm.labels,'farm-grains',false,islands).filter(label=>label.product==='rice');
+ const maize=southeastFarmCropLabels(farm.labels,'farm-grains',false,mainland).filter(label=>label.product==='maize');
+ assert.equal(rice.length,2);assert.ok(rice.some(label=>label.id==='rice-4'));
+ assert.equal(maize.length,2);assert.ok(maize.some(label=>label.id==='maize-4'));
+ for(const label of [...rice,...maize])assert.ok(farm.labels.includes(label),'retained source point, never a guessed label position');
 });

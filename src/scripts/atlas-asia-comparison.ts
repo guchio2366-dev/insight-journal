@@ -1,4 +1,5 @@
 import {restoreAsiaComparison,type AsiaState,type AsiaStateContext,type AsiaField} from '../lib/atlas-asia-state';
+import {southeastFarmGroup,isSoutheastFarmOverview,southeastFarmVisibleProducts,southeastFarmMapNote} from '../data/atlas/asia/southeast-asia-farm-groups';
 import {asiaRiceLegend,getAsiaRiceLayer} from '../data/atlas/asia-agriculture';
 import {asiaNaturalTopics} from '../data/atlas/asia-physical-reading';
 import {asiaPopulationColors,asiaPopulationLabels,type AsiaPopulationRegion} from '../data/atlas/asia-population';
@@ -40,6 +41,7 @@ function comparisonMeaning(state:AsiaState,config:Config):{label:string;note:str
   }
   if(state.field==='agriculture'){
     const selected=topic??(state.city?'rice':config.presentation?'overview':'rice'),layer=config.farming?.layers.find(t=>t.id===selected);
+    if(config.regionId==='southeast-asia'&&isSoutheastFarmOverview(selected)&&state.overlay!=='water')return {label:southeastFarmGroup(selected)!.title,note:'概略分布の重なりだけで、灌漑利用や飼料の調達先は分かりません。'};
     if(layer?.kind==='forest')return {label:'森林の分布',note:'森林分布は木材生産量・用途を示しません。'};
     if(layer?.kind==='livestock')return {label:layer.title,note:'家畜密度は肉・乳の生産量や飼育方法を示しません。'};
     if(selected==='overview')return {label:state.overlay==='water'?'米・雨・川の概略分布':state.farms==='none'?'農畜産の表示':state.farms==='livestock'?'家畜の代表地点':state.farms==='crop'?'作物の概略分布':'作物・家畜の概略分布',note:'分布の重なりだけで灌漑利用や飼料の調達先は分かりません。'};
@@ -102,6 +104,7 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
   const sourceState=()=>restoreAsiaComparison(new URL(location.href),getState(),context);
   function topicName(s:AsiaState){
     if(s.field==='natural')return asiaNaturalTopics.find(t=>t.id===(s.topic??'climate'))?.label??fieldNames[s.field];
+    if(s.field==='agriculture'&&config.regionId==='southeast-asia'&&s.overlay!=='water'&&isSoutheastFarmOverview(s.topic??(s.city?'rice':'overview')))return southeastFarmGroup(s.topic)!.title;
     if(s.field==='agriculture')return s.topic==='overview'||!s.topic&&!s.city?'農畜産物の分布':config.farming?.layers.find(t=>t.id===(s.topic??'rice'))?.title??'米の収穫面積';
     if(s.field==='industry'&&config.regionId==='southeast-asia'&&!s.place&&!isTradeTopic(s.topic))return '産業立地';
     if(s.field==='industry')return isTradeTopic(s.topic)?s.topic==='trade-imports'?'商品輸入額':'商品輸出額':config.industry?.topics.find(t=>t.id===s.topic)?.title??fieldNames[s.field];
@@ -124,6 +127,18 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
     if(s.field==='agriculture'){
       const topic=s.topic??(s.city?'rice':config.presentation?'overview':'rice'),layer=config.farming?.layers.find(t=>t.id===topic);
       if(layer&&(!config.presentation?.farming||layer.kind==='forest'))return {...base,title:layer.title,period:String(layer.year)+'年',unit:layer.unit??'森林参考図',keys:layer.kind==='forest'?[{label:'資料で森林と分類された場所',color:'#4d9221'}]:bins(layer.colors??[],layer.breaks??[]),note:layer.kind==='forest'?'森林の参考図です。管理方式や木材生産量を色から求めません。':'色なしは推計0・欠測・海を含みます。色は収穫面積（ha/格子）または家畜密度で、個別の農場の境界ではありません。',raster:{url:asset(config.farmingBase!,layer.image),coordinates:layer.imageCoordinates}};
+      if(config.regionId==='southeast-asia'&&config.presentation?.farming&&topic!=='forest'&&s.overlay!=='water'){
+        const p=config.presentation.farming,group=southeastFarmGroup(topic)!,products=southeastFarmVisibleProducts(topic,s.single),selected=p.products.find(product=>product.id===topic),data=await json(config.presentationBase!+p.file);
+        const features=data.features.filter((feature:any)=>feature.properties.kind==='crop'&&products.includes(feature.properties.id)).map((feature:any)=>({...feature,properties:{...feature.properties,selected:feature.properties.id===selected?.id}}));
+        const counts=new Map<string,number>(),canvas=map?.getCanvas?.(),width=canvas?.clientWidth??0,height=canvas?.clientHeight??0;
+        const animals=p.labels.filter(label=>{
+          if(label.kind!=='livestock'||!label.product||!products.includes(label.product))return false;
+          if(map&&width>0&&height>0){const point=map.project(label.coordinate);if(point.x<12||point.x>width-12||point.y<12||point.y>height-12)return false;}
+          const count=counts.get(label.product)??0;counts.set(label.product,count+1);return count<(label.product===topic?3:2);
+        });
+        features.push(...animals.map(label=>({type:'Feature',properties:{id:label.product,kind:'livestock',color:label.color,opacity:1},geometry:{type:'Point',coordinates:label.coordinate}})));
+        return {...base,title:selected?.title??group.title,period:'2020年の推計から作成',unit:group.kind==='livestock'?'家畜の代表地点':'作物の概略分布',farmContext:true,keys:p.products.filter(product=>products.includes(product.id)).map(product=>({label:product.title,color:product.color})),note:southeastFarmMapNote(topic,s.single),geometry:{...data,features}};
+      }
       if(config.presentation?.farming&&(topic==='overview'||config.presentation.farming.products.some(p=>p.id===topic))){const p=config.presentation.farming,selected=p.products.find(p=>p.id===topic),data=await json(config.presentationBase!+p.file),water=s.overlay==='water';const features=data.features.filter((f:any)=>f.properties.kind==='crop'&&(water?f.properties.id==='rice':s.farms!=='none'&&s.farms!=='livestock')).map((f:any)=>({...f,properties:{...f.properties,selected:f.properties.id===selected?.id}}));
         if(!water&&s.farms!=='none'&&s.farms!=='crop')features.push(...p.labels.filter(a=>a.kind==='livestock'&&Number(a.id.split('-').at(-1))<3).map(a=>({type:'Feature',properties:{kind:'livestock',color:a.color,opacity:selected?.kind==='crop'?.2:1},geometry:{type:'Point',coordinates:a.coordinate}})));
         if(water){const [rain,rivers]=await Promise.all([json(config.presentationBase!+config.presentation.rainfall.file),config.physical?json(asset(config.physicalBase!,config.physical.water)):Promise.resolve({features:[]})]);features.push(...rain.features.map((f:any)=>({...f,properties:{...f.properties,color:'#347d9c'}})),...rivers.features.filter((f:any)=>config.farmInsight?.rivers.includes(f.properties.id)).map((f:any)=>({...f,properties:{...f.properties,color:'#17688b'}})));}
@@ -210,9 +225,9 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
     if(!mainLegend)return;
     const agricultureTopic=state.topic??(state.city?'rice':config.presentation?'overview':'rice');
     const southeastRegionalIndustry=config.regionId==='southeast-asia'&&state.field==='industry'&&!state.place&&!isTradeTopic(state.topic);
-    const active=!southeastRegionalIndustry&&!state.back&&(state.field!=='agriculture'||agricultureTopic!=='overview')&&!(config.regionId==='east-asia'&&state.field==='population'&&['ethnicity','religion'].includes(state.topic??''));mainLegend.hidden=!active;
+    const active=!southeastRegionalIndustry&&!state.back&&(state.field!=='agriculture'||!(agricultureTopic==='overview'||config.regionId==='southeast-asia'&&isSoutheastFarmOverview(agricultureTopic)))&&!(config.regionId==='east-asia'&&state.field==='population'&&['ethnicity','religion'].includes(state.topic??''));mainLegend.hidden=!active;
     if(!active){mainKey='';++mainRevision;mainLegend.replaceChildren();return;}
-    const next=[state.field,state.topic,state.detail,state.place,state.city,state.overlay,state.farms].join('|');
+    const next=[state.field,state.topic,state.detail,state.place,state.city,state.overlay,state.farms,state.single].join('|');
     if(next===mainKey)return;mainKey=next;const seq=++mainRevision;mainLegend.textContent='地図の凡例を読み込んでいます。';
     // Southeast settlement choices below the map already provide the color key.
     const settlementChoices=config.regionId==='southeast-asia'&&state.field==='population'&&['ethnicity','religion'].includes(state.topic??'');
@@ -227,7 +242,7 @@ export function createAsiaComparison(root:HTMLElement,config:Config,context:Asia
     if(method)method.hidden=!state.back;
     if(compact)compact.hidden=!state.back;
     if(!state.back){key='';reading=null;compact?.replaceChildren();hide();return;}
-    const from=sourceState(),next=state.back+'|'+state.field+'|'+state.topic+'|'+state.detail+'|'+state.overlay+'|'+state.farms;
+    const from=sourceState(),next=state.back+'|'+state.field+'|'+state.topic+'|'+state.detail+'|'+state.overlay+'|'+state.farms+'|'+state.single;
     if(back)back.textContent=next===key&&reading?.subject&&!from.story?`${reading.subject}の${topicName(from)}へ戻る`:`${subject(from)}へ戻る`;
     if(title)title.textContent=`${topicName(from)} × ${topicName(state)}`;
     const story=comparisonStory(from,state,config);
