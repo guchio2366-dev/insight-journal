@@ -99,8 +99,15 @@ test('regional agriculture, nature/water and population controls preserve the le
           assert.equal(d.querySelectorAll('[data-west-chart]').length,18,'the topic retains all 18 original station normal series');
         }
       }else{
-        const selector=field==='agriculture'?'[data-farm-group]':field==='nature'?'[data-natural-group]':'[data-population-group]';
-        assert.equal(d.querySelectorAll(selector).length,field==='agriculture'?2:field==='nature'?4:3);
+        if(region==='asia/southeast-asia'&&field==='agriculture'){
+          const groups=[...d.querySelectorAll('button[data-southeast-farm-group]')],forest=[...d.querySelectorAll('[data-farm-group]')];
+          assert.deepEqual(groups.map(button=>button.dataset.southeastFarmGroup),['farm-grains','farm-oil-rubber','farm-sugar-roots-coffee','farm-livestock'],'Southeast Asia exposes four separate agricultural views');
+          assert.equal(forest.length,1);assert.equal(forest[0].dataset.farmGroup,'forestry');assert.equal(forest[0].dataset.farmGroupTopic,'forest');
+          assert.ok([...groups,...forest].every(button=>!button.disabled&&!button.closest('[hidden]')),'All four views and the separate forest view are visible and enabled');
+        }else{
+          const selector=field==='agriculture'?'[data-farm-group]':field==='nature'?'[data-natural-group]':'[data-population-group]';
+          assert.equal(d.querySelectorAll(selector).length,field==='agriculture'?2:field==='nature'?4:3);
+        }
         if(field==='nature'){
           const waterTopics=[...d.querySelectorAll('[data-water-topics] button')];
           assert.deepEqual(waterTopics.map(button=>button.dataset.waterView),['water','precipitation','basins']);

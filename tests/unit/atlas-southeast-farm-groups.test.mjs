@@ -43,7 +43,7 @@ test('each group and selected product survives URL reload, comparison and return
 
 test('common navigation switches the group, limits its choices and returns a product to its own group',async()=>{
  const window=new Window(),document=window.document,root=document.body;
- root.innerHTML=`<div data-agriculture-topics>${southeastFarmGroups.map(group=>`<button data-southeast-farm-group="${group.id}" data-farm-group-topic="${group.id}"></button>`).join('')}<button data-farm-group="forestry" data-farm-group-topic="forest"></button></div><button data-farm-choice="overview" hidden></button>${['crop','livestock'].map(kind=>`<div class="asia-farm-key-row">${farm.products.filter(product=>product.kind===kind).map(product=>`<button data-farm-choice="${product.id}" data-kind="${kind}"></button>`).join('')}</div>`).join('')}<label data-farming-selector><select data-farming-topic><option value="overview"></option>${[...farm.products.map(product=>product.id),'forest'].map(id=>`<option value="${id}">${id}</option>`).join('')}</select></label><p data-reading-dock-title></p><p data-reading-dock-summary></p><p data-farm-density-key></p><div data-farm-switches></div>`;
+ root.innerHTML=`<div data-agriculture-topics>${southeastFarmGroups.map(group=>`<button data-southeast-farm-group="${group.id}" data-farm-group-topic="${group.id}"></button>`).join('')}<button data-farm-group="forestry" data-farm-group-topic="forest"></button></div><button data-farm-choice="overview" hidden></button>${['crop','livestock'].map(kind=>`<div class="asia-farm-key-row">${farm.products.filter(product=>product.kind===kind).map(product=>`<button data-farm-choice="${product.id}" data-kind="${kind}"></button>`).join('')}</div>`).join('')}<label data-farming-selector><select data-farming-topic><option value="overview"></option>${[...farm.products.map(product=>product.id),'forest'].map(id=>`<option value="${id}">${id}</option>`).join('')}</select></label><a data-farm-insight-source href="https://example.test/source">source</a><p data-reading-dock-title></p><p data-reading-dock-summary></p><p data-farm-density-key></p><div data-farm-switches></div>`;
  let state={...base},common;
  const navigation=createSoutheastFarmNavigation(root,()=>state);
  const render=()=>{common?.render();navigation.render();};
@@ -51,13 +51,13 @@ test('common navigation switches the group, limits its choices and returns a pro
  common=createAsiaNavigation(root,undefined,()=>state,next=>{state=next;render();},()=>{},()=>{},chooseFarm);
  const visible=()=>[...root.querySelectorAll('[data-farm-choice][data-kind]')].filter(button=>!button.hidden).map(button=>button.dataset.farmChoice);
  try{
-  render();assert.deepEqual(visible(),['rice','maize']);
+  render();assert.deepEqual(visible(),['rice','maize']);assert.equal(root.querySelector('[data-farm-insight-source]').hidden,true);
   for(const group of southeastFarmGroups){
    root.querySelector(`[data-southeast-farm-group="${group.id}"]`).click();
    assert.equal(state.topic,group.id);assert.equal(root.dataset.southeastFarmGroup,group.id);assert.deepEqual(visible(),farm.products.filter(product=>group.products.includes(product.id)).map(product=>product.id));
    const product=group.products.at(-1);root.querySelector(`[data-farm-choice="${product}"]`).click();
-   assert.equal(state.topic,product);assert.equal(root.dataset.southeastFarmGroup,group.id);
-   const back=root.querySelector(`[data-farm-choice="${group.id}"]`);assert.equal(back.hidden,false);back.click();assert.equal(state.topic,group.id);assert.equal(back.hidden,true);
+   assert.equal(state.topic,product);assert.equal(root.dataset.southeastFarmGroup,group.id);assert.equal(root.querySelector('[data-farm-insight-source]').hidden,false);
+   const back=root.querySelector(`[data-farm-choice="${group.id}"]`);assert.equal(back.hidden,false);back.click();assert.equal(state.topic,group.id);assert.equal(back.hidden,true);assert.equal(root.querySelector('[data-farm-insight-source]').hidden,true);
   }
   root.querySelector('[data-farm-group="forestry"]').click();
   assert.equal(state.topic,'forest');assert.equal(root.dataset.southeastFarmGroup,'forest');assert.equal(root.querySelector('[data-farming-selector]').hidden,true);

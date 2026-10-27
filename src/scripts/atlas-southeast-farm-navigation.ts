@@ -24,6 +24,7 @@ export function createSoutheastFarmNavigation(root:HTMLElement,getState:()=>Asia
   setText('[data-farm-density-key]',southeastFarmMapNote(topic,state.single));
   const single=root.querySelector<HTMLButtonElement>('[data-southeast-farm-single]');if(single&&state.single)single.textContent='この分類の分布に戻す';
   for(const switches of all('[data-farm-switches]'))switches.hidden=true;
+  for(const source of all('[data-farm-insight-source]'))source.hidden=overview;
   if(overview&&water){
    setText('[data-farm-insight-title],[data-reading-dock-title]','米・雨・川を重ねて読む');
    setText('[data-farm-insight-lead],[data-reading-dock-summary]','米の栽培域と年降水量・河川を、同じ地図で読み比べます。');
@@ -36,7 +37,6 @@ export function createSoutheastFarmNavigation(root:HTMLElement,getState:()=>Asia
    setText('[data-farm-insight-lead],[data-reading-dock-summary]',group.lead);
    setText('[data-farm-insight-body]',group.reading);
    setText('[data-farm-overview-method-summary]',southeastFarmMapNote(topic));
-   for(const source of all('[data-farm-insight-source]'))source.hidden=true;
    for(const panel of all('[data-focus-reading]'))panel.hidden=true;
   }
  }
