@@ -16,6 +16,25 @@ export const southeastSectorKindLabel=(kind:SoutheastIndustryKind,sector:Southea
  services:{},
 }[sector] as Partial<Record<SoutheastIndustryKind,string>>)[kind]??southeastIndustryProfiles.find(p=>p.id===kind)!.label;
 
+/** Industry colours supplement process names and the raw/processing symbols. */
+export const southeastIndustryFamilies={
+ energy:{label:'エネルギー',color:'#a36a00'},metals:{label:'金属',color:'#555d68'},
+ petrochemicals:{label:'石油化学',color:'#8c4c2f'},electronics:{label:'電子・太陽電池',color:'#2563a6'},
+ automotive:{label:'自動車',color:'#6445a1'},textiles:{label:'繊維・衣料',color:'#b03d78'},
+ food:{label:'食品加工',color:'#3b7d36'},rubber:{label:'ゴム',color:'#7b7025'},wood:{label:'木材',color:'#73523a'},
+ logistics:{label:'物流',color:'#007f91'},tourism:{label:'観光',color:'#16866e'},
+ finance:{label:'金融',color:'#7b4c89'},'it-bpm':{label:'IT・業務受託',color:'#4763a5'},
+};
+const industryFamily:Record<SoutheastIndustryKind,keyof typeof southeastIndustryFamilies>={
+ energy:'energy',lng:'energy',hydro:'energy',metals:'metals',petrochemicals:'petrochemicals',
+ electronics:'electronics',solar:'electronics',automotive:'automotive',textiles:'textiles',
+ food:'food',palm:'food',rice:'food',rubber:'rubber',wood:'wood',logistics:'logistics',
+ tourism:'tourism',finance:'finance','it-bpm':'it-bpm',
+};
+export function southeastIndustryAppearance(kind:SoutheastIndustryKind){
+ const id=industryFamily[kind];return {id,...southeastIndustryFamilies[id]};
+}
+
 const names:Record<string,[string,string]>={
  'lumut-lng':['ルムット','LNG液化'],'tibar-port':['ティバール','港湾'],
  'thotnot-rice':['トットノット','精米・選別'],'perai-solar':['ペライ','太陽電池'],'yangon-textile':['ヤンゴン周辺','衣料'],

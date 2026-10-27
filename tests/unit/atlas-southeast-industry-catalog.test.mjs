@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import {southeastIndustryProfiles as profiles,southeastIndustrySources as sources,southeastFigureValue,southeastPalmProcessing} from '../../src/data/atlas/asia/southeast-asia-industry-catalog.ts';
 import {readFileSync} from 'node:fs';
 import {southeastIndustrySites as sites,southeastSiteSectors} from '../../src/data/atlas/asia/southeast-asia-industry-sites.ts';
-import {placeSoutheastIndustryLabels,southeastLabelIntersects} from '../../src/lib/atlas-southeast-industry-labels.ts';
-import {southeastMapLabels,southeastMapKindSectors} from '../../src/data/atlas/asia/southeast-industry-map-scenes.ts';
+import {placeSoutheastIndustryLabels,southeastLabelIntersects,southeastLabelLeaderEnd,southeastLeaderIntersectsBox} from '../../src/lib/atlas-southeast-industry-labels.ts';
+import {southeastMapLabels,southeastMapKindSectors,southeastIndustryAppearance} from '../../src/data/atlas/asia/southeast-industry-map-scenes.ts';
 import {southeastIndustryStages,southeastIndustryLocalEvidence} from '../../src/data/atlas/asia/southeast-asia-industry-learning.ts';
 
 test('14 main proposals and all four additions retain separate product stages and evidence scopes',()=>{
@@ -85,3 +85,32 @@ test('every explanatory stage retains evidence and links only to its own industr
  assert.match(sites.find(s=>s.id==='yangon-textile').sourceYear,/2021/);
 });
 
+
+test('industry families supplement process names without changing sector or point membership',()=>{
+ const appearances=profiles.map(p=>southeastIndustryAppearance(p.id));
+ assert(appearances.every(a=>a.id&&a.label&&/^#[0-9a-f]{6}$/.test(a.color)));
+ assert.equal(southeastIndustryAppearance('lng').id,southeastIndustryAppearance('hydro').id);
+ assert.equal(southeastIndustryAppearance('solar').id,southeastIndustryAppearance('electronics').id);
+ assert.equal(southeastIndustryAppearance('palm').id,southeastIndustryAppearance('rice').id);
+ assert.equal(new Set(['energy','textiles','electronics','automotive'].map(kind=>southeastIndustryAppearance(kind).color)).size,4);
+ for(const group of southeastMapLabels)for(const id of group.siteIds)assert.equal(southeastIndustryAppearance(sites.find(s=>s.id===id).kind).id,southeastIndustryAppearance(group.kind).id);
+});
+test('group leaders reach every original point within 48px and do not cut through labels or controls',()=>{
+ const entries=[
+  {id:'cluster',x:140,y:140,width:94,height:22,leaderPoints:[{x:140,y:140},{x:153,y:143}]},
+  {id:'neighbor',x:215,y:172,width:70,height:22},
+  {id:'third',x:230,y:115,width:82,height:22},
+ ];
+ const reserved=[{left:8,top:8,right:190,bottom:55}],points=entries.flatMap(p=>p.leaderPoints??[p]);
+ const boxes=placeSoutheastIndustryLabels(entries,400,300,reserved,points);
+ assert.equal(boxes.size,3);
+ assert.deepEqual([...boxes],[...placeSoutheastIndustryLabels([...entries].reverse(),400,300,reserved,points)]);
+ for(const entry of entries){const box=boxes.get(entry.id);for(const start of entry.leaderPoints??[entry]){
+  const end=southeastLabelLeaderEnd(start,box);
+  assert(Math.hypot(end.x-start.x,end.y-start.y)<=48);
+  for(const [otherId,otherBox] of boxes)if(otherId!==entry.id)assert(!southeastLeaderIntersectsBox(start,end,otherBox,2));
+  assert(!reserved.some(control=>southeastLeaderIntersectsBox(start,end,control,2)));
+ }}
+ assert.equal(southeastLeaderIntersectsBox({x:0,y:20},{x:100,y:20},{left:40,top:10,right:60,bottom:30}),true);
+ assert.equal(southeastLeaderIntersectsBox({x:0,y:5},{x:100,y:5},{left:40,top:10,right:60,bottom:30}),false);
+});
