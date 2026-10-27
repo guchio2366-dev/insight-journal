@@ -170,11 +170,11 @@ try{
   const rect=document.querySelector('.maplibregl-canvas').getBoundingClientRect();
   const merc=lat=>(1-Math.log(Math.tan(Math.PI/4+lat*Math.PI/360))/Math.PI)/2;
   const size=512*Math.pow(2,c.zoom);
-  const layer=document.querySelector('[data-map-annotations]');layer.style.pointerEvents='none';
+  const block=document.createElement('style');block.id='review-map-click';block.textContent='[data-map-annotations], [data-map-annotations] * {pointer-events:none!important}';document.head.append(block);
   return {x:rect.width/2+(105.9-c.lng)/360*size,y:rect.height/2+(merc(10.3)-merc(c.lat))*size};
  });
  await page.locator('.maplibregl-canvas').click({position:deltaPoint,force:true});
- await page.evaluate(()=>document.querySelector('[data-map-annotations]').style.pointerEvents='');
+ await page.evaluate(()=>document.getElementById('review-map-click')?.remove());
  await page.waitForFunction(()=>new URL(location.href).searchParams.get('detail')==='mekong-delta');
  assert.equal(new URL(page.url()).searchParams.get('topic'),'terrain');
  assert.equal(await page.locator('[data-southeast-landform="mekong-delta"]').getAttribute('aria-pressed'),'true');
